@@ -2,11 +2,9 @@
 #include "Engine/Types/EnumsUtils.h"
 #include "DataTypes/Hash.h"
 
-#include "../..\Applications/BlackVision/Source/Rendering/RenderLogic.h"
-//#include "../../Applications/EnginePrototyper/Source/Prototypes/Engine/Common/MultipassNodeBuilder.h"
-//#include "../../Applications/EnginePrototyper/Source/Prototypes/Engine/Common/Scenes/ScenePrototype3.h"
-//#include "../../Applications/EnginePrototyper/Source/Prototypes/Engine/Common/ScenePrototype.h"
-//#include "../../Applications/EnginePrototyper/Source/Prototypes/Engine/Multipass/MultipassTest.h"
+#include "MultipassTest.h"
+#include "Common\Scenes\ScenePrototype3.h"
+#include "Common\ScenePrototype.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine\Graphics\SceneGraph\RenderableEntity.h"
@@ -15,6 +13,8 @@
 #include "VisualTester\WinApplicationTester.h"
 
 
+const std::string AssetsPath = "../../../../Test/Assets/Multipass/";
+
 namespace bv {
 
 
@@ -22,24 +22,30 @@ namespace bv {
 
 TEST(MultipassAlphaBlending, Multipass)
 {
-	//RenderLogic renderLogic;
+	Renderer* renderer = application->getRenderer();
 
-	//RendererInput _rendererInput;
-	//Renderer renderer( _rendererInput, 0, 0 );		// Fake renderer
-	//
-	//ScenePrototype* scene = ScenePrototype::CreateNewPrototype( 3, &renderer );
-	//ScenePrototype3* scene3 = dynamic_cast<ScenePrototype3*>( scene );
+	std::string sand( "sand.jpg" );
+	std::string cubeMap( "Penguins.jpg" );
 
-	//SceneNode* root = scene->GetRootNode();
+	sand = AssetsPath + sand;
+	cubeMap = AssetsPath + cubeMap;
 
-	//RenderableEntity* ent = dynamic_cast<RenderableEntity*>( root->GetTransformable() );
+	ScenePrototype3 scene( renderer );
+	SceneNode* root = scene.CreateScene( sand, cubeMap );
 
-	//ASSERT_FALSE( ent );		// Dynamic_cast failed
+	ASSERT_TRUE( root != nullptr );
 
-	//auto effect = ent->GetRenderableEffect();
+	RenderableEntity* ent = dynamic_cast<RenderableEntity*>( root->GetTransformable() );
 
-	//ASSERT_TRUE( effect == nullptr );
-	//ASSERT_FALSE( effect->NumPasses() != (unsigned int)scene3->getNumPasses() );
+	ASSERT_TRUE( ent != nullptr );		// Dynamic_cast failed
+
+	auto effect = ent->GetRenderableEffect();
+
+	ASSERT_TRUE( effect != nullptr );
+	ASSERT_EQ( effect->NumPasses(), (unsigned int)scene.getNumPasses() );
+
+
+	application->testRender( AssetsPath + "MultipassTest", root, false );
 }
 
 

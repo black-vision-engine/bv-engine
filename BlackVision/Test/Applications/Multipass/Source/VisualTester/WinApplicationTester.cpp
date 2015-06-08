@@ -1,26 +1,32 @@
 #include "WinApplicationTester.h"
 #include "System/InitSubsystem.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
+#include "Engine/Graphics/SceneGraph/Camera.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/glutils.h"
+#include "BVConfig.h"
 
 
 
-const int defaultWindowWidth = 100;
-const int defaultWindowHeight = 100;
+const int defaultWindowWidth = 700;
+const int defaultWindowHeight = 700;
 const bool fullscreenMode = false;
 
+ 
 
 LRESULT CALLBACK DefaultWindowEventHandler ( HWND handle, UINT msg, WPARAM wParam, LPARAM lParam );
 
 namespace bv
 {
 
+WinApplicationTester* application = nullptr;
+
+
 
 // *********************************
 // FIXME: move it to a valid BV windowed version of engine and wrap with a macro
 void			WinApplicationTester::StaticInitializer	()
 {
-    bv::ApplicationBase::MainFun = &bv::WinApplicationTester::MainImpl;
+	bv::ApplicationBase::MainFun = &bv::WindowedApplication::MainImpl;
     bv::ApplicationBase::ApplicationInstance = new WinApplicationTester();
 }
 
@@ -39,15 +45,73 @@ bool WinApplicationTester::m_sWindowedApplicationInitialized = WinApplicationTes
 
 
 WinApplicationTester::WinApplicationTester()
-	:	WindowedApplication( "BlackVision prealpha test app", 0, 0, defaultWindowWidth, defaultWindowHeight, fullscreenMode )
+	:	WindowedApplication( "Rendering test", 0, 0, DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight(), DefaultConfig.FullScreenMode() )
 {
+	application = this;
 }
 
 
 WinApplicationTester::~WinApplicationTester(void)
 {
+	if( m_renderLogic )
+		delete m_renderLogic;
 }
 
+void WinApplicationTester::InitCamera         ( unsigned int w, unsigned int h )
+{
+    Camera * cam = new bv::Camera();
+
+    cam->SetFrame( DefaultConfig.CameraPosition(), DefaultConfig.CameraDirection(), DefaultConfig.CameraUp() );
+    
+    if( cam->IsPerspective() )
+    {
+        cam->SetPerspective( DefaultConfig.FOV(), w, h, DefaultConfig.NearClippingPlane(), DefaultConfig.FarClippingPlane() );
+    }
+    else
+    {
+        cam->SetViewportSize( w, h );
+    }
+
+    m_Renderer->SetCamera( cam );
+    m_renderLogic->SetCamera( cam );
+
+    //FIXME: read from configuration file and change the camera appropriately when current resoultion changes
+}
+
+
+bool WinApplicationTester::OnInitialize()
+{
+	m_renderLogic = new VisualTesterRenderLogic();
+
+	InitCamera( DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight() );
+
+	return WindowedApplication::OnInitialize();
+}
+
+/**@brief Function used to test rendering. It compares reference image with image rendered from
+SceneNode given in parameter. If images are diffrent, function creates image that shows the difference.
+
+If you want to render refenrence image, set parameter makeReferenceImage to true, and specify
+fileName, where you want to place it. Reference image has name:
+fileName + "RereferenceImage" + file_ext.
+When specifying name by testing, you shuldn't give a full name, but only the first part.
+
+@param[in] fileName Reference image to compare (or create depending on parameter makeReferenceImage). See description above, how to make a name.
+@param[in] node Scene node to render.
+@param[in] makeReferenceImage By setting true you can render reference image instead of making test. Default: false.*/
+void WinApplicationTester::testRender( const std::string fileName, SceneNode* node, bool makeReferenceImage )
+{
+	if( makeReferenceImage )
+		m_renderLogic->renderReferenceImage( m_Renderer, node, fileName );
+	else
+		m_renderLogic->renderCompareWithReferenceImage( m_Renderer, node, fileName );
+}
+
+
+Renderer* WinApplicationTester::getRenderer()
+{
+	return m_Renderer;
+}
 
 
 namespace {
@@ -266,7 +330,7 @@ void DestroyApplicationWindow( WindowedApplication * app, HWND handle )
 int WinApplicationTester::MainFun( int argc, char ** argv )
 {
 	::testing::InitGoogleTest( &argc, argv );		// Change comparing to normal WindowedApplication::MainFun
-
+	argc;	argv;
 
     WinApplicationTester * app = static_cast< WinApplicationTester * >( ApplicationBase::ApplicationInstance );
 
@@ -296,6 +360,8 @@ int WinApplicationTester::MainFun( int argc, char ** argv )
     assert( !m_Renderer );
     m_Renderer = new bv::Renderer( ri, app->Width(), app->Height() );
 
+
+
     if ( app->OnInitialize() )
     {
         GLUtils::DumpGLInfo();
@@ -303,10 +369,12 @@ int WinApplicationTester::MainFun( int argc, char ** argv )
 
         app->OnPreidle();
 
-        ShowWindow	( handle, SW_SHOW );
-        UpdateWindow( handle );
+		// W zasadzie nie musimy pokazywaæ okna, bo i tak do niego nie renderujemy.
+        //ShowWindow	( handle, SW_SHOW );
+        //UpdateWindow( handle );
 
-        app->OnIdle();
+        //app->OnIdle();
+
 
         app->OnPreMainLoop();
 
@@ -343,6 +411,7 @@ int WinApplicationTester::MainFun( int argc, char ** argv )
     delete m_Renderer;
 
     DestroyApplicationWindow( app, handle );
+	application = nullptr;
 
 	return 0;
 }

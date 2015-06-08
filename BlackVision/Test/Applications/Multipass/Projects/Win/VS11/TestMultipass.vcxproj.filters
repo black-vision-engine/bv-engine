@@ -5,15 +5,157 @@
     <ClCompile Include="..\..\..\Source\VisualTester\WinApplicationTester.cpp">
       <Filter>VisualTester</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\VisualTester\RenderLogic.cpp">
+      <Filter>VisualTester</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\VisualTester\OffscreenRenderLogic.cpp">
+      <Filter>VisualTester</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\VisualTester\BVConfig.cpp">
+      <Filter>VisualTester</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Common\ExperimentalNodeDeleter.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Common\GeometryBuilder.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Common\MultipassNodeBuilder.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Common\SceneExampleBuilder.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Common\ScenePrototype.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Common\ShaderDataSourceCreator.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Common\ShaderDataSourceImpl.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Common\SimpleNodeBuilder.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Common\TexturesDataImpl.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Common\Transformations.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Common\Scenes\ScenePrototype0.cpp">
+      <Filter>Common\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Common\Scenes\ScenePrototype1.cpp">
+      <Filter>Common\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Common\Scenes\ScenePrototype2.cpp">
+      <Filter>Common\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Common\Scenes\ScenePrototype3.cpp">
+      <Filter>Common\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\MultipassTest.cpp" />
+    <ClCompile Include="..\..\..\Source\Common\GLSLProgram.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Common\VBORect.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\VisualTester\VisualTesterRenderLogic.cpp">
+      <Filter>VisualTester</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="VisualTester">
       <UniqueIdentifier>{f98e0415-9d5b-4022-959c-cb1b9931f06f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{eb37bf63-a96e-46b6-8251-e0c161a8541e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Scenes">
+      <UniqueIdentifier>{b79929a1-8536-4226-89e4-9ab367f27a61}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\VisualTester\WinApplicationTester.h">
       <Filter>VisualTester</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\VisualTester\RenderLogic.h">
+      <Filter>VisualTester</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\VisualTester\OffscreenRenderLogic.h">
+      <Filter>VisualTester</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\VisualTester\BVConfig.h">
+      <Filter>VisualTester</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\ExperimentalNodeDeleter.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\GeometryBuilder.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\MultipassNodeBuilder.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\SceneExampleBuilder.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\ScenePrototype.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\ShaderDataSourceCreator.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\ShaderDataSourceImpl.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\SimpleNodeBuilder.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\TexturesDataImpl.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\Transformations.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\Scenes\ScenePrototype0.h">
+      <Filter>Common\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\Scenes\ScenePrototype1.h">
+      <Filter>Common\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\Scenes\ScenePrototype2.h">
+      <Filter>Common\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\Scenes\ScenePrototype3.h">
+      <Filter>Common\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\MultipassTest.h" />
+    <ClInclude Include="..\..\..\Source\Common\GLSLprogram.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\IAppLogicPrototype.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\IRenderable.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\PrototyperCore.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Common\VBORect.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\VisualTester\VisualTesterRenderLogic.h">
+      <Filter>VisualTester</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Source\VisualTester\BVConfig.inl">
+      <Filter>VisualTester</Filter>
+    </None>
   </ItemGroup>
 </Project>

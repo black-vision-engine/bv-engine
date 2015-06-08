@@ -510,7 +510,7 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
 
-        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
+		node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
 
     return node;
@@ -536,7 +536,7 @@ model::BasicNodePtr     TestScenesFactory::CreateTestScene      ( const model::P
 		case TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE:
 			return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
 		case TestSceneSelector::TSS_TEXT:
-			return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 5, false );
+			return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
 		case TestSceneSelector::TSS_ANIMATION_RECTANGLE:
 			return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, false );
 		case TestSceneSelector::TSS_SOLID_RECTANGLE:

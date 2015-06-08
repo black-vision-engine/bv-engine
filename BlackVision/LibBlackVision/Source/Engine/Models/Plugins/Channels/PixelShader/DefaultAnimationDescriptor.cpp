@@ -44,7 +44,7 @@ unsigned int            DefaultAnimationDescriptor::NumTextures         () const
 
 // *******************************
 //
-MemoryChunkConstPtr      DefaultAnimationDescriptor::GetBits             ( unsigned int idx ) const
+MemoryChunkConstPtr      DefaultAnimationDescriptor::GetBits            ( unsigned int idx ) const
 {
     assert( idx < NumTextures() );
 
@@ -99,7 +99,7 @@ const std::string       DefaultAnimationDescriptor::GetName             () const
 
 // *******************************
 //
-SizeType				DefaultAnimationDescriptor::GetWidth            ( UInt32 level ) const
+UInt32				    DefaultAnimationDescriptor::GetWidth            ( UInt32 level ) const
 {
     { level; }
 	assert( level == 0 ); // No mipmaps for animation
@@ -108,7 +108,7 @@ SizeType				DefaultAnimationDescriptor::GetWidth            ( UInt32 level ) con
 
 // *******************************
 //
-SizeType				DefaultAnimationDescriptor::GetHeight           ( UInt32 level ) const
+UInt32				    DefaultAnimationDescriptor::GetHeight           ( UInt32 level ) const
 {
     { level; }
 	assert( level == 0 ); // No mipmaps for animation
@@ -117,7 +117,7 @@ SizeType				DefaultAnimationDescriptor::GetHeight           ( UInt32 level ) con
 
 // *******************************
 //
-SizeType	            DefaultAnimationDescriptor::GetDepth            ( UInt32 level ) const
+UInt32	                DefaultAnimationDescriptor::GetDepth            ( UInt32 level ) const
 {
     { level; }
 	assert( level == 0 ); // No mipmaps for animation

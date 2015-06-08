@@ -7,7 +7,7 @@ namespace bv {
 
 // *********************************
 //
-Texture2DImpl::Texture2DImpl  ( TextureFormat format, SizeType width, SizeType height, DataBuffer::Semantic semantic )
+Texture2DImpl::Texture2DImpl  ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic )
     : Texture2D( format, width, height, semantic )
 	, m_data( 1 )
 {
@@ -21,7 +21,7 @@ Texture2DImpl::~Texture2DImpl  ()
 
 // *********************************
 //
-SizeType Texture2DImpl::GetNumLevels			() const
+UInt32 Texture2DImpl::GetNumLevels		    () const
 {
 	return ( UInt32 ) m_data.size();
 }
@@ -58,7 +58,7 @@ MemoryChunkConstPtr Texture2DImpl::GetData  ( UInt32 level ) const
 
 // *********************************
 //
-bool            Texture2DImpl::SetRawData    ( const std::vector< MemoryChunkConstPtr > & data, TextureFormat format, SizeType width, SizeType height )
+bool            Texture2DImpl::SetRawData    ( const std::vector< MemoryChunkConstPtr > & data, TextureFormat format, UInt32 width, UInt32 height )
 {
     SetFormat( format );
     SetWidth( width );
@@ -81,7 +81,7 @@ bool            Texture2DImpl::SetRawData    ( const std::vector< MemoryChunkCon
 
 // *********************************
 //
-SizeType		Texture2DImpl::SizeInBytes     ( TextureFormat format, SizeType width, SizeType height )
+SizeType		Texture2DImpl::SizeInBytes     ( TextureFormat format, UInt32 width, UInt32 height )
 {
     return GetPixelSize( format ) * width * height;
 }

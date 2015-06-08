@@ -15,8 +15,9 @@ Common:
     ToolsDir          - $(SolutionRoot)/Tools               - katalog główny bibliotek/aplikacji narzędziowych
     TestDir           - $(SolutionRoot)/Test                - katalog główny testów
     ThirdPartyDir     - $(DepDir)\3rdParty                  - katalog główny bibliotek 3rdParty, z których korzystamy
+    AssetsDir         - $(SolutionRoot)\Assets              - katalog z assetami niezbędnymi do uruchomienia projektu
     
-- Definiuje strukturę katalogóe wyjściowego i tymczasowego:
+- Definiuje strukturę katalogów wyjściowego i tymczasowego:
     <OutDir>$(BuildDir)\$(Platform)-$(PlatformToolset)-$(Configuration)\$(ProjectCategory)\$(ProjectName)\</OutDir>
     <IntDir>$(TempDir)\$(Platform)-$(PlatformToolset)-$(Configuration)\$(ProjectCategory)\$(ProjectName)\</IntDir>
 

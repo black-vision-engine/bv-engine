@@ -32,8 +32,8 @@ SequenceAnimationUpdater::~SequenceAnimationUpdater       ()
 //
 void    SequenceAnimationUpdater::DoUpdate                ()
 {
-    SizeType txFrame    = m_out->GetActiveTextureNum();
-    SizeType srcFrame   = m_in->CurrentFrame();
+    auto txFrame    = m_out->GetActiveTextureNum();
+    auto srcFrame   = m_in->CurrentFrame();
 
     if( txFrame != srcFrame )
     {

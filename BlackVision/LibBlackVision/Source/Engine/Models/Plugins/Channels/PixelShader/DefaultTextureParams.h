@@ -10,42 +10,55 @@ class DefaultTextureParams : public ITextureParams
 private:
 
     std::string             m_name;
-    SizeType				m_width;
-    SizeType				m_height;
-	SizeType				m_depth;
+
+    UInt32				    m_width;
+    UInt32				    m_height;
+	UInt32				    m_depth;
+   
     TextureFormat           m_format;
+    
     TextureWrappingMode     m_wrappingModeY;
     TextureWrappingMode     m_wrappingModeX;
 	TextureWrappingMode     m_wrappingModeZ;
+    
     TextureFilteringMode    m_filteringMode;
+    
     glm::vec4               m_borderColor;
 
 public:
 
             DefaultTextureParams ();
-            DefaultTextureParams ( const std::string & name, SizeType w, SizeType h, SizeType d, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureWrappingMode wmz, TextureFilteringMode fm, const glm::vec4 & bc );
+            DefaultTextureParams ( const std::string & name, UInt32 w, UInt32 h, UInt32 d, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureWrappingMode wmz, TextureFilteringMode fm, const glm::vec4 & bc );
             ~DefaultTextureParams();
 
     virtual const std::string       GetName         () const override;
-    virtual SizeType				GetWidth        ( UInt32 level = 0 ) const override;
-    virtual SizeType				GetHeight       ( UInt32 level = 0 ) const override;
-	virtual SizeType				GetDepth		( UInt32 level = 0 ) const override;
+
+    virtual UInt32				    GetWidth        ( UInt32 level = 0 ) const override;
+    virtual UInt32				    GetHeight       ( UInt32 level = 0 ) const override;
+	virtual UInt32				    GetDepth		( UInt32 level = 0 ) const override;
+
     virtual TextureFormat           GetFormat       () const override;
+
     virtual TextureWrappingMode     GetWrappingModeX() const override;
     virtual TextureWrappingMode     GetWrappingModeY() const override;
 	virtual TextureWrappingMode     GetWrappingModeZ() const override;
+
     virtual TextureFilteringMode    GetFilteringMode() const override;
+
     virtual glm::vec4               BorderColor     () const override;
 
     void                            SetName         ( const std::string & name );
-    void                            SetWidth        ( SizeType w );
-    void                            SetHeight       ( SizeType h );
-	void                            SetDepth		( SizeType z );
+    void                            SetWidth        ( UInt32 w );
+    void                            SetHeight       ( UInt32 h );
+	void                            SetDepth		( UInt32 z );
     void                            SetFormat       ( TextureFormat fmt );
+
     void                            SetWrappingModeX( TextureWrappingMode wm );
     void                            SetWrappingModeY( TextureWrappingMode wm );
 	void                            SetWrappingModeZ( TextureWrappingMode wm );
+
     void                            SetFilteringMode( TextureFilteringMode fm );
+
     void                            SetBorderColor  ( const glm::vec4 & bc );
 
 };

@@ -25,7 +25,7 @@ private:
 
 protected:
  
-    SizeType                    m_numTargets;
+    UInt32                      m_numTargets;
     
     bool                        m_hasMipmaps;
     bool                        m_hasDepthBuffer;
@@ -36,18 +36,18 @@ protected:
 
 public:
 
-                RenderTarget    ( const std::vector< TextureFormat > & formats, SizeType w, SizeType h, bool hasDepthBuffer, bool hasMipmaps = false, RenderTarget::RTSemantic semantic = RenderTarget::RTSemantic::S_DRAW_ONLY );
+                RenderTarget    ( const std::vector< TextureFormat > & formats, UInt32 w, UInt32 h, bool hasDepthBuffer, bool hasMipmaps = false, RenderTarget::RTSemantic semantic = RenderTarget::RTSemantic::S_DRAW_ONLY );
     virtual     ~RenderTarget   ();
 
     RenderTarget::RTSemantic    Semantic        () const;
 
-    SizeType					NumTargets      () const;
+    UInt32					    NumTargets      () const;
     TextureFormat               Format          () const;
 
-    SizeType					Width           () const;
-    SizeType					Height          () const;
+    UInt32					    Width           () const;
+    UInt32					    Height          () const;
 
-    Texture2DPtr                ColorTexture    ( int i ) const;
+    Texture2DPtr                ColorTexture    ( UInt32 i ) const;
 
     bool                        HasMipmaps      () const;
     bool                        HasDepthBuffer  () const;
