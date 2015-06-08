@@ -5,6 +5,7 @@
 #include "MultipassTest.h"
 #include "Common\Scenes\ScenePrototype3.h"
 #include "Common\ScenePrototype.h"
+#include "System\Env.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine\Graphics\SceneGraph\RenderableEntity.h"
@@ -12,8 +13,9 @@
 #include "gtest/gtest.h"
 #include "VisualTester\WinApplicationTester.h"
 
-
-const std::string AssetsPath = "../../../../Test/Assets/Multipass/";
+//const std::string TestDir = bv::Env::GetVar("TestDir");
+const std::string TestDir = "../../../../Test";
+const std::string AssetsPath = TestDir + "/Assets/Multipass/";
 
 namespace bv {
 
@@ -45,7 +47,7 @@ TEST(MultipassAlphaBlending, Multipass)
 	ASSERT_EQ( effect->NumPasses(), (unsigned int)scene.getNumPasses() );
 
 
-	application->testRender( AssetsPath + "MultipassTest/MultipassTest", root, false );
+	application->testRender( "Multipass/MultipassTest", root, false );
 }
 
 

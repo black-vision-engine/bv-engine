@@ -5,8 +5,11 @@
 #include "System\Env.h"
 
 
-const std::string AssetsPath = "../../../../Test/Assets/Multipass/";
-const std::string TestsResultsDir = "";
+//const std::string TestDir = bv::Env::GetVar("TestDir");
+const std::string TestDir = "../../../../Test";
+const std::string AssetsPath = TestDir + "/Assets/";
+//const std::string TestsResultsDir = bv::Env::GetVar("TestsResultsDir");
+const std::string TestsResultsDir = "../../../../_TestsResults/";
 const std::string file_ext = ".bmp";
 const std::string ref_image = "ReferenceImage";
 const std::string diff_image = "DiffToReference";
