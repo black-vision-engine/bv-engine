@@ -2,13 +2,35 @@ from DataCategory import DataCategory
 from LoadableDataDesc import LoadableDataDesc
 from SceneAccessor import SceneAccessor
 
+from FSSceneAccessor import FSSceneAccessor
+from FSTextureDataAccessor import FSTextureDataAccessor
+from FSFontDataAccessor import FSFontDataAccessor
+from FSSequenceDataAccessor import FSSequenceDataAccessor
+from FSSurfaceDataAccessor import FSSurfaceDataAccessor
+
+import os
+
 class Project:
 
-    def __init__(self, name):
+    def __init__(self, rootDir, name):
         assert name not in ["project", "global"]  # TODO: Make better constraints for project name
         self.name = name
-        self.categories = {}
-        self.sceneAccessor = None
+        self.rootDir = os.path.abspath(rootDir)
+        self.__initialize()
+
+    def __initialize(self):
+        self.__createDir()
+
+        self.categories = DataCategory("textures", FSTextureDataAccessor(os.path.join(self.rootDir, "textures", self.name), ['jpg', 'tga']))
+        self.categories = DataCategory("fonts", FSFontDataAccessor(os.path.join(self.rootDir, "fonts", self.name)))
+        self.categories = DataCategory("sequences", FSSequenceDataAccessor(os.path.join(self.rootDir, "sequences", self.name), ['jpg', 'tga']))
+        self.categories = DataCategory("surfaces", FSSurfaceDataAccessor(os.path.join(self.rootDir, "surfaces", self.name), ['bvsur']))
+
+        self.sceneAccessor = FSSceneAccessor(os.path.join(self.rootDir, "scenes", self.name), self)
+
+    def __createDir(self):
+        if not os.path.exists(os.path.join(self.rootDir, "projects", self.name)):
+            os.makedirs(os.path.join(self.rootDir, "projects", self.name))
 
     def getName(self):
         return self.name
