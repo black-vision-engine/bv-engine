@@ -40,15 +40,13 @@ class FSSceneAccessor(SceneAccessor):
         assert isinstance(scene, Scene)
         res = scene.listResources()
 
-        resourcesToPack = [r for r in res if self.isProjectResource(r)]
-
         sw = SceneWriter(scene, outputFile)
         sStr = sw.dumpsScene()
 
         resultData = {'sceneJson': sStr, 'resourcesData': {}}
 
-        for r in resourcesToPack:
-            loc = Location(r)
+        for r in res:
+            loc = Location(r[0], r[1])
             tmp = tempfile.NamedTemporaryFile(delete=False)
             filename = tmp.name
             tmp.close()
@@ -64,7 +62,7 @@ class FSSceneAccessor(SceneAccessor):
         assert isinstance(res, str)
         assert self.project
         projectName = self.project.getName()
-        return res[1:len(projectName)] == projectName
+        return res[0] == projectName
 
 
     def unpackSceneAndResources(self, scenePackedFile, toProject, scenePath):

@@ -35,6 +35,8 @@ class FSFontDataAccessor(FontDataAccessor):
         absPath = os.path.join(self.rootPath, internalPath)
 
         try:
+            if not os.path.exists(os.path.dirname(absPath)):
+                os.makedirs(os.path.dirname(absPath))
             shutil.copyfile(loadableDataDesc.absPath, absPath)
             return True
         except Exception as exc:

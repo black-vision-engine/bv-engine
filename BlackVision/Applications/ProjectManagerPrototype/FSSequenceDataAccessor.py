@@ -15,7 +15,7 @@ class LoadableSequenceDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc l
         return len(self.frames)
 
     def getFrames(self):
-        return self.frames
+        return [os.path.join(self.absPath, f) for f in self.frames]
 
 class FSSequenceDataAccessor(SequenceDataAccessor):
     def __init__(self, rootPath, supportedFileExt):
@@ -43,6 +43,8 @@ class FSSequenceDataAccessor(SequenceDataAccessor):
         absPath = os.path.join(self.rootPath, internalPath)
 
         try:
+            if not os.path.exists(absPath):
+                os.makedirs(absPath)
             for f in loadableDataDesc.getFrames():
                 shutil.copyfile(f, os.path.join(absPath, os.path.basename(f)))
             return True

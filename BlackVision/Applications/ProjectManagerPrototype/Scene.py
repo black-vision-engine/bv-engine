@@ -46,7 +46,10 @@ class SceneReader:
 class Plugin:
     def __init__(self, name):
         self.name = name
-        self.resources = []
+        self.resources = [()]
+
+    def addResource(self, projectName, path):
+        self.resources.append((projectName, path))
 
 class Node:
     def __init__(self, name):
