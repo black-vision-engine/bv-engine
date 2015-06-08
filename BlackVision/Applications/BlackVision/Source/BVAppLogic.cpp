@@ -297,8 +297,9 @@ void BVAppLogic::OnKey           ( unsigned char c )
     else if( c == 's' )
     {
         auto sob = new SerializeObject();
-        //m_bvScene->Serialize( sob );
+        m_bvScene->Serialize( *sob );
         sob->Save( "text.xml" );
+        delete sob;
     }
 
 /*

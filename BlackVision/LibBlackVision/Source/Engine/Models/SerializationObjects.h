@@ -18,6 +18,9 @@ class SerializeObject
 public:
     SerializeObject() { }
     void Save( std::string filename );
+
+    void                                                    SetName( std::string name );
+    void                                                    SetValue( std::string name, std::string value );
 };
 
 
