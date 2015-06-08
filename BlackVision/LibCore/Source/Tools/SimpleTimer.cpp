@@ -9,12 +9,14 @@ namespace bv
 SimpleTimer::SimpleTimer            ()
 {
     Start();
+	timeBeginPeriod( 1 );
 }
 
 // *********************************
 //
 SimpleTimer::~SimpleTimer           ()
 {
+	timeEndPeriod( 1 );
 }
 
 // *********************************
