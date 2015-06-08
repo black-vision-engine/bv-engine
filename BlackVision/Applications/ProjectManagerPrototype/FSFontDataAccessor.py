@@ -12,7 +12,7 @@ class LoadableFontDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc lepie
         #  TODO: Pewnie jeszcze duzo wiecej memberow w, h, bpp, takie tam
 
 
-class FSTextureDataAccessor(FontDataAccessor):
+class FSFontDataAccessor(FontDataAccessor):
     def __init__(self, rootPath):
         FontDataAccessor.__init__(self)
         self.rootPath = rootPath

@@ -12,31 +12,32 @@ class LocationParser:
         self.currentProjectName = currentProjectName
         self.location = location
 
-    def parseLocationString(self, string):
-        assert isinstance(string, str)
+    def parseLocationString(self, projectName, pathInProject):
+        assert isinstance(projectName, str)
+        assert isinstance(pathInProject, str)
         try:
-            projName = ""
+            projName = projectName
             categoryName = ""
             internalPath = ""
             isGlobal = False
-            if string.startswith("./"):
+            if projectName == ".":
                 if self.currentProjectName:
                     self.location.projectName = self.currentProjectName
-                    self.location.categoryName = string.split("/", 2)[1]
-                    self.location.internalPath = string.split("/", 2)[2]
-            elif string.startswith("/"):
-                if string[1:7] == "global":
+                    self.location.categoryName = pathInProject.split("/", 2)[1]
+                    self.location.internalPath = pathInProject.split("/", 2)[2]
+            elif len(projectName) == 0:
+                if pathInProject[1:7] == "global":
                     self.location.isGlobalLocation = True
                 else:
-                    self.location.projectName = string.split("/", 2)[0]
-                self.location.categoryName = string.split("/", 2)[1]
-                self.location.internalPath = string.split("/", 2)[2]
-            elif string.startswith("file://"):
+                    self.location.projectName = pathInProject.split("/", 2)[0]
+                self.location.categoryName = pathInProject.split("/", 2)[1]
+                self.location.internalPath = pathInProject.split("/", 2)[2]
+            elif pathInProject.startswith("file://"):
                 self.location.prefix = "file"
-                self.location.internalPath = string[7:]
-            elif string.startswith("seq://"):
+                self.location.internalPath = pathInProject[7:]
+            elif pathInProject.startswith("seq://"):
                 self.location.prefix = "seq"
-                self.location.internalPath = string[6:]
+                self.location.internalPath = pathInProject[6:]
 
         except Exception as exc:
             print("Parsing location error: {}".format(exc))

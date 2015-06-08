@@ -3,18 +3,27 @@ from Project import Project
 from Location import Location
 from SceneAccessor import SceneAccessor
 
+import os
+
 class ProjectManager:
 
-    def __init__(self):
+    def __init__(self, rootDir):
         self.projects       = {}
         self.currentProject = None
         self.globalCategories = {}
         self.globalSceneAccessor = None
+        self.rootDir        = os.path.abspath(rootDir)
+        self.__createDir()
 
-    def getAssetDesc(self, path):
-        assert isinstance(path, str)
+    def __createDir(self):
+        if not os.path.exists(self.rootDir):
+            os.makedirs(self.rootDir)
 
-        loc = Location(path, self.currentProject.getName() if self.currentProject else "")
+    def getAssetDesc(self, projectName, pathInProject):
+        assert isinstance(projectName, str)
+        assert isinstance(pathInProject, str)
+
+        loc = Location(projectName, pathInProject, self.currentProject.getName() if self.currentProject else "")
 
         if loc:
             if loc.getIsGlobalLocation():
@@ -26,13 +35,14 @@ class ProjectManager:
                 if proj:
                     return proj.getData(loc.getCategoryName(), loc.getInternalPath())
 
-        print("Cannot find asset '{}'".format(path))
+        print("Cannot find asset '{}  {}'".format(projectName, pathInProject))
         return None
 
-    def getSceneDesc(self, path):
-        assert isinstance(path, str)
+    def getSceneDesc(self, projectName, pathInProject):
+        assert isinstance(projectName, str)
+        assert isinstance(pathInProject, str)
 
-        loc = Location(path, self.currentProject.getName() if self.currentProject else "")
+        loc = Location(projectName, pathInProject, self.currentProject.getName() if self.currentProject else "")
 
         if loc:
             if loc.getIsGlobalLocation():
@@ -47,7 +57,7 @@ class ProjectManager:
                 if proj:
                     return proj.getSceneDesc(loc.getInternalPath())
 
-        print("Cannot find scene '{}'".format(path))
+        print("Cannot find scene '{}  {}'".format(projectName, pathInProject))
         return None
 
     def setGlobalSceneAccessor(self, sceneAccessor):
@@ -85,6 +95,9 @@ class ProjectManager:
         else:
              print("Cannot register global category '{}'. Already registered.".format(category.getId()))
 
+
+    def getRootDir(self):
+        return self.rootDir
 
     def moveAsset(self, fromProjectName, fromInternalPath, toProjectName, toInternalPath):
         assert False  # TODO: Implement

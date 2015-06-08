@@ -1,6 +1,5 @@
 from SceneAccessor import SceneAccessor
 from Scene import loadScene, saveScene, Scene, SceneWriter, SceneReader
-from Project import Project
 from Location import Location
 
 import os, json, tempfile, shutil
@@ -14,6 +13,11 @@ class FSSceneAccessor(SceneAccessor):
         SceneAccessor.__init__(self)
         self.rootPath = rootPath
         self.project = project
+        self.__createDir()
+
+    def __createDir(self):
+        if not os.path.exists(self.rootPath):
+            os.makedirs(self.rootPath)
 
     def getSceneDesc(self, path):
         absPath = os.path.join(self.rootPath, path)
@@ -64,7 +68,6 @@ class FSSceneAccessor(SceneAccessor):
 
 
     def unpackSceneAndResources(self, scenePackedFile, toProject, scenePath):
-        assert isinstance(toProject, Project)
 
         sceneAndResources = json.load(scenePackedFile)
 
