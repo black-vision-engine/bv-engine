@@ -870,6 +870,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCogWheelPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\SerializationObjects.cpp">
+      <Filter>Engine\Models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1754,16 +1757,16 @@
     <ClInclude Include="..\..\..\Source\Engine\Interfaces\ISerializable.h">
       <Filter>Engine\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\SerializationObjects.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>  
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\DefaultMultipassEffect.h">
       <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>  
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCogWheelPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\SceneModel.h">
+      <Filter>Engine\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\SerializationObjects.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
   </ItemGroup>

@@ -34,6 +34,13 @@ BVScenePtr    BVScene::Create( model::BasicNodePtr modelRootNode, Camera * cam, 
     return bvScene;
 }
 
+void            BVScene::Serialize           ( SerializeObject &doc) const
+{
+    static std::string name = "scene";
+    doc.SetName( name );
+}
+
+
 // *******************************
 //
 BVScene::BVScene    ( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer )

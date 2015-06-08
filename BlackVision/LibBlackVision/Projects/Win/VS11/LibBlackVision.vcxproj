@@ -307,6 +307,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTrianglePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\SerializationObjects.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\DefaultTimeline.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventLoop.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventNull.cpp" />
@@ -599,6 +600,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\SceneModel.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\SerializationObjects.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\DefaultTimeline.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventLoop.h" />
@@ -620,7 +622,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Processes\ProcessManager.h" />
     <ClInclude Include="..\..\..\Source\Engine\Processes\ProcessThreaded.h" />
     <ClInclude Include="..\..\..\Source\Engine\Processes\ProcessThreadedEvents.h" />
-    <ClInclude Include="..\..\..\Source\Engine\SerializationObjects.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Enums.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\EnumsUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\BaseValue.h" />

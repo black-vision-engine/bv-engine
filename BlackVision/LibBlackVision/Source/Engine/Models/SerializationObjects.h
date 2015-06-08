@@ -2,21 +2,27 @@
 
 #include "rapidxml/RapidXml.hpp"
 #include "Engine/Models/Timeline/TimelineManager.h"
+#include <fstream>
+
 //#include "Models/Plugins/Manager/PluginsManager.h"
 
 namespace bv
 {
 
-//class SerializeObject
-//{
-//    rapidxml::xml_document<> m_doc;
-//
-//public:
-//    SerializeObject( rapidxml::xml_document<> doc ) : m_doc( doc ) { }
-//};
-//
-
 namespace model { class PluginsManager; }
+
+class SerializeObject
+{
+    rapidxml::xml_document<> m_doc;
+
+public:
+    SerializeObject() { }
+    void Save( std::string filename );
+
+    void                                                    SetName( std::string name );
+    void                                                    SetValue( std::string name, std::string value );
+};
+
 
 class DeserializeObject
 {

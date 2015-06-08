@@ -5,7 +5,7 @@
 
 #include "Engine/Interfaces/IUpdatable.h"
 #include "Engine/Interfaces/ISerializable.h"
-#include "Engine/SerializationObjects.h"
+#include "Engine/Models/SerializationObjects.h"
 
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
@@ -54,7 +54,8 @@ public:
                             ~BVScene            ();
 
     static BVScenePtr       Create              ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
-    static ISerializablePtr Create                  ( DeserializeObject& doc );
+    static ISerializablePtr Create              ( DeserializeObject& doc );
+    virtual void            Serialize           ( SerializeObject &doc) const override;
 
     virtual void            Update              ( TimeType t );
 
@@ -69,7 +70,6 @@ public:
 
     const std::string &     GetName             ()  const;
 
-    virtual void                Serialize       (SerializeObject &/*doc*/) const override {}
 
 private:
 
