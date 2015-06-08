@@ -15,14 +15,18 @@ public:
 
     virtual const std::string       GetName         () const = 0;
 
-    virtual SizeType				GetWidth        ( UInt32 level = 0  ) const = 0;
-    virtual SizeType				GetHeight       ( UInt32 level = 0  ) const = 0;
-	virtual SizeType				GetDepth		( UInt32 level = 0  ) const = 0;
+    virtual UInt32				    GetWidth        ( UInt32 level = 0  ) const = 0;
+    virtual UInt32				    GetHeight       ( UInt32 level = 0  ) const = 0;
+	virtual UInt32				    GetDepth		( UInt32 level = 0  ) const = 0;
+
     virtual TextureFormat           GetFormat       () const = 0;
+
     virtual TextureWrappingMode     GetWrappingModeX() const = 0;
     virtual TextureWrappingMode     GetWrappingModeY() const = 0;
 	virtual TextureWrappingMode     GetWrappingModeZ() const = 0;
+
     virtual TextureFilteringMode    GetFilteringMode() const = 0;
+
     virtual glm::vec4               BorderColor     () const = 0;
 
     virtual ~ITextureParams () {}

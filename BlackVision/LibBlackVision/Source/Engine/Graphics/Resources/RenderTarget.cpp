@@ -10,8 +10,8 @@ namespace bv {
 
 // *********************************
 //
-RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, SizeType w, SizeType h, bool hasDepthBuffer, bool hasMipmaps, RenderTarget::RTSemantic semantic )
-    : m_numTargets( formats.size() )
+RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, UInt32 w, UInt32 h, bool hasDepthBuffer, bool hasMipmaps, RenderTarget::RTSemantic semantic )
+    : m_numTargets( (UInt32) formats.size() )
     , m_hasMipmaps( hasMipmaps )
     , m_hasDepthBuffer( hasDepthBuffer )
     , m_semantic( semantic )
@@ -49,7 +49,7 @@ RenderTarget::RTSemantic  RenderTarget::Semantic  () const
 
 // *********************************
 //
-SizeType RenderTarget::NumTargets () const
+UInt32  RenderTarget::NumTargets () const
 {
     return (unsigned int) m_numTargets;
 }
@@ -63,21 +63,21 @@ TextureFormat RenderTarget::Format () const
 
 // *********************************
 //
-SizeType RenderTarget::Width () const
+UInt32  RenderTarget::Width () const
 {
     return m_ColorTextures[ 0 ]->GetWidth();
 }
 
 // *********************************
 //
-SizeType RenderTarget::Height () const
+UInt32  RenderTarget::Height () const
 {
     return m_ColorTextures[ 0 ]->GetHeight();
 }
 
 // *********************************
 //
-Texture2DPtr RenderTarget::ColorTexture ( int i ) const
+Texture2DPtr RenderTarget::ColorTexture ( UInt32 i ) const
 {
     return m_ColorTextures[ i ];
 }

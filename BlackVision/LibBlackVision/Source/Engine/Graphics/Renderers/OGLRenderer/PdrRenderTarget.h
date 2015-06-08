@@ -30,8 +30,8 @@ private:
 
     SizeType	                    m_numTargets;
 
-    SizeType						m_width;
-    SizeType						m_height;
+    UInt32						    m_width;
+    UInt32						    m_height;
 
     bool                            m_hasDepthBuffer;
 

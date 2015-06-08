@@ -13,21 +13,21 @@ private:
 
     std::vector< MemoryChunkConstPtr >      m_data;
 
-    SizeType								m_activeTexture;
+    UInt32								    m_activeTexture;
 
 public:
 
-                                Texture2DSequenceImpl   ( TextureFormat format, SizeType width, SizeType height );
+                                Texture2DSequenceImpl   ( TextureFormat format, UInt32 width, UInt32 height );
     virtual                     ~Texture2DSequenceImpl  ();
     
-    bool                        AddTextureSettingRawData( MemoryChunkConstPtr data, TextureFormat format, SizeType width, SizeType height );
+    bool                        AddTextureSettingRawData( MemoryChunkConstPtr data, TextureFormat format, UInt32 width, UInt32 height );
 
-	virtual SizeType			GetNumLevels			() const override;
+	virtual UInt32			    GetNumLevels			() const override;
 
-    SizeType                    NumTextures             () const;
+    UInt32                      NumTextures             () const;
 
-    void                        SetActiveTexture        ( SizeType txNum );
-    SizeType					GetActiveTextureNum     () const;
+    void                        SetActiveTexture        ( UInt32 txNum );
+    UInt32					    GetActiveTextureNum     () const;
 
 	virtual SizeType            GetDataSize             ( UInt32 level = 0 ) const override;
 

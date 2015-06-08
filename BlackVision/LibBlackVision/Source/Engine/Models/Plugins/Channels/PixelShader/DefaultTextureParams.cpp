@@ -10,7 +10,7 @@ DefaultTextureParams::DefaultTextureParams ()
 
 // **************************
 //
-DefaultTextureParams::DefaultTextureParams ( const std::string & name, SizeType w, SizeType h, SizeType z, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureWrappingMode wmz, TextureFilteringMode fm, const glm::vec4 & bc )
+DefaultTextureParams::DefaultTextureParams ( const std::string & name, UInt32 w, UInt32 h, UInt32 z, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureWrappingMode wmz, TextureFilteringMode fm, const glm::vec4 & bc )
 {
     SetName( name );
     SetWidth( w );
@@ -39,21 +39,21 @@ const std::string       DefaultTextureParams::GetName           () const
 
 // **************************
 //
-SizeType				DefaultTextureParams::GetWidth          ( UInt32 level ) const
+UInt32				    DefaultTextureParams::GetWidth          ( UInt32 level ) const
 {
     return m_width >> level;
 }
 
 // **************************
 //
-SizeType				DefaultTextureParams::GetHeight         ( UInt32 level ) const
+UInt32				    DefaultTextureParams::GetHeight         ( UInt32 level ) const
 {
     return m_height >> level;
 }
 
 // **************************
 //
-SizeType				DefaultTextureParams::GetDepth          ( UInt32 level ) const
+UInt32				    DefaultTextureParams::GetDepth          ( UInt32 level ) const
 {
     return m_depth >> level;
 }
@@ -108,21 +108,21 @@ void                    DefaultTextureParams::SetName           ( const std::str
 }
 // **************************
 //
-void                    DefaultTextureParams::SetWidth          ( SizeType w )
+void                    DefaultTextureParams::SetWidth          ( UInt32 w )
 {
     m_width = w;
 }
 
 // **************************
 //
-void                    DefaultTextureParams::SetHeight         ( SizeType h )
+void                    DefaultTextureParams::SetHeight         ( UInt32 h )
 {
     m_height = h;
 }
 
 // **************************
 //
-void                    DefaultTextureParams::SetDepth          ( SizeType d )
+void                    DefaultTextureParams::SetDepth          ( UInt32 d )
 {
     m_depth = d;
 }
