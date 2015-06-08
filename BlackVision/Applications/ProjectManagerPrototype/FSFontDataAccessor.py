@@ -12,7 +12,7 @@ class LoadableFontDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc lepie
         #  TODO: Pewnie jeszcze duzo wiecej memberow w, h, bpp, takie tam
 
 
-class FSTextureDataAccessor(FontDataAccessor):
+class FSFontDataAccessor(FontDataAccessor):
     def __init__(self, rootPath):
         FontDataAccessor.__init__(self)
         self.rootPath = rootPath
@@ -35,6 +35,8 @@ class FSTextureDataAccessor(FontDataAccessor):
         absPath = os.path.join(self.rootPath, internalPath)
 
         try:
+            if not os.path.exists(os.path.dirname(absPath)):
+                os.makedirs(os.path.dirname(absPath))
             shutil.copyfile(loadableDataDesc.absPath, absPath)
             return True
         except Exception as exc:
