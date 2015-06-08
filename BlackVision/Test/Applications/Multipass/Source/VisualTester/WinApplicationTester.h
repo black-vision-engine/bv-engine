@@ -50,6 +50,7 @@ public:
 
 
 	bv::Renderer* getRenderer();
+	VisualTesterRenderLogic* getRenderLogic() { return m_renderLogic; }
 };
 
 
