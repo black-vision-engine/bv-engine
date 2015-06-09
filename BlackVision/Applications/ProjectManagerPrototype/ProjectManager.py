@@ -134,7 +134,7 @@ class ProjectManager:
         assert False  # TODO: Implement
 
     def importSceneFromFile(self, importToProjectName, importToPath, importDataFilePath):
-        assert False  # TODO: Implement
+        self.getProject(importToProjectName).importScene(importDataFilePath, importToPath)
 
 
 PM = ProjectManager("bv_media")

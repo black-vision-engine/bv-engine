@@ -1,6 +1,8 @@
 from SceneAccessor import SceneAccessor
 from Scene import loadScene, saveScene, Scene, Node, SceneWriter, SceneReader
 
+from Location import Location
+
 import os, pickle, tempfile, shutil
 
 class SceneDesc:
@@ -8,9 +10,10 @@ class SceneDesc:
         self.absPath = absPath
 
 class FSSceneAccessor(SceneAccessor):
-    def __init__(self, rootPath, project):
+    def __init__(self, projectManager, project):
         SceneAccessor.__init__(self)
-        self.rootPath = rootPath
+        self.projectManager = projectManager
+        self.rootPath = projectManager.getRootDir()
         self.project = project
         self.__createDir()
 
@@ -70,8 +73,8 @@ class FSSceneAccessor(SceneAccessor):
             return False
 
     def importScene(self, impSceneFile, importToPath):
-
-        pass
+        absPath = os.path.join(self.rootPath, importToPath)
+        self.unpackSceneAndResources(impSceneFile, self.project, importToPath)
 
     def exportScene(self, expSceneFilePath, internalPath):
         absPath = os.path.join(self.rootPath, internalPath)
@@ -83,10 +86,7 @@ class FSSceneAccessor(SceneAccessor):
         assert isinstance(scene, Scene)
         res = scene.listResources()
 
-        sw = SceneWriter(scene, outputFile)
-        sStr = sw.dumpsScene()
-
-        resultData = {'sceneJson': sStr, 'resourcesData': {}}
+        resultData = {"ownerProjectName": self.project.getName(), "sceneJson": scene, "resourcesData": {}}
 
         for r in res:
             tmp = tempfile.NamedTemporaryFile(delete=False)
@@ -110,11 +110,36 @@ class FSSceneAccessor(SceneAccessor):
 
 
     def unpackSceneAndResources(self, scenePackedFile, toProject, scenePath):
+        try:
+            with open(scenePackedFile, "rb") as f:
+                sceneAndResources = pickle.load(f)
 
-        sceneAndResources = pickle.load(scenePackedFile)
+            scene = sceneAndResources["sceneJson"]
+            assert False  # TODO: Add remaping project name to the new one. toProject.getName()
+            toProject.saveScene(scene, scenePath)
 
-        scene = sceneAndResources['sceneJson']
+            resources = sceneAndResources["resourcesData"]
 
-        resources = sceneAndResources['resourcesData']
+            ownerProjectName = sceneAndResources["ownerProjectName"]
 
-        toProject.appendScene(scene, scenePath)
+            assert isinstance(resources, dict)
+            for r in resources.keys():
+                if(ownerProjectName == r[0][0]):
+                    loc = Location(r[0][0], r[0][1])
+                    tmp = tempfile.NamedTemporaryFile(delete=False)
+                    filename = tmp.name
+                    tmp.close()
+
+                    with open(filename, "wb") as f:
+                        f.write(resources[r[0]])
+                    toProject.importData(filename, loc.getCategoryName(), loc.getInternalPath())
+                    os.remove(filename)
+                else:
+                    loc = Location(r[0][0], r[0][1])
+                    self.projectManager
+
+            return True
+        except Exception as exc:
+            print("Cannot unpack scene file '{}'".format(scenePackedFile))
+            print(exc)
+            return False

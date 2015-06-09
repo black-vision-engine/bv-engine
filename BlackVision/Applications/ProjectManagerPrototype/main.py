@@ -35,7 +35,7 @@ def generateScene1(projectName1, projectName2):
 
 def test():
 
-    proj1 = Project.Project(pm.getRootDir(), "proj1")
+    proj1 = Project.Project(pm, "proj1")
 
     pm.addProject(proj1)
 
@@ -48,7 +48,7 @@ def test():
     pm.getProject("proj1").appendData("sequences", "jedzie", LoadableSequenceDataDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq",f))]))
 
 
-    proj2 = Project.Project(pm.getRootDir(), "proj2")
+    proj2 = Project.Project(pm, "proj2")
 
     pm.addProject(proj2)
 
@@ -66,6 +66,13 @@ def test():
 
     pm.listProjectsNames()
 
+
+    from ProjectManager import ProjectManager
+    pm1 = ProjectManager("bv_media1")
+
+    proj11 = Project.Project(pm1, "1proj1")
+    pm1.addProject(proj11)
+    pm1.importSceneFromFile("1proj1", "imported_scene/p1s1.scn", "exportedScene1")
 
 if __name__ == "__main__":
     test()

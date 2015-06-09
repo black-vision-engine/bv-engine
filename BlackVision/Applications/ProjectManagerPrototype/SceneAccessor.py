@@ -1,8 +1,8 @@
 from abc import abstractmethod
 
 class SceneAccessor:
-    def __init__(self):
-        pass
+    def __init__(self, projectManager):
+        self.projectManager = projectManager
 
     @abstractmethod
     def getScene(self, path):

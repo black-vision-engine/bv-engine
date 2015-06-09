@@ -12,10 +12,11 @@ import os
 
 class Project:
 
-    def __init__(self, rootDir, name):
+    def __init__(self, projectManager, name):
         assert name not in ["project", "global"]  # TODO: Make better constraints for project name
         self.name = name
-        self.rootDir = os.path.abspath(rootDir)
+        self.projectManager = projectManager
+        self.rootDir = os.path.abspath(projectManager.getRootDir())
         self.categories = {}
         self.__initialize()
 
@@ -27,7 +28,7 @@ class Project:
         self.categories["sequences"]    = DataCategory("sequences", FSSequenceDataAccessor(os.path.join(self.rootDir, "sequences", self.name), ['jpg', 'tga']))
         self.categories["surfaces"]     = DataCategory("surfaces", FSSurfaceDataAccessor(os.path.join(self.rootDir, "surfaces", self.name), ['bvsur']))
 
-        self.sceneAccessor = FSSceneAccessor(os.path.join(self.rootDir, "scenes", self.name), self)
+        self.sceneAccessor = FSSceneAccessor(self.projectManager, os.path.join(self.rootDir, "scenes", self.name), self)
 
     def __createDir(self):
         if not os.path.exists(os.path.join(self.rootDir, "projects", self.name)):
@@ -85,6 +86,9 @@ class Project:
 
     def exportScene(self,  expDataFilePath, path):
         self.sceneAccessor.exportScene(expDataFilePath, path)
+
+    def importScene(self,  impDataFilePath, path):
+        self.sceneAccessor.importScene(impDataFilePath, path)
 
     def getScene(self, path):
         assert isinstance(self.sceneAccessor, SceneAccessor)
