@@ -1,8 +1,7 @@
 from SceneAccessor import SceneAccessor
 from Scene import loadScene, saveScene, Scene, Node, SceneWriter, SceneReader
-from Location import Location
 
-import os, json, tempfile, shutil
+import os, pickle, tempfile, shutil
 
 class SceneDesc:
     def __init__(self, absPath):
@@ -90,16 +89,17 @@ class FSSceneAccessor(SceneAccessor):
         resultData = {'sceneJson': sStr, 'resourcesData': {}}
 
         for r in res:
-            loc = Location(r[0], r[1])
             tmp = tempfile.NamedTemporaryFile(delete=False)
             filename = tmp.name
             tmp.close()
-            self.project.exportData(filename, loc.getCategoryName(), loc.getInternalPath())
+            from ProjectManager import PM
+            PM.exportAssetToFile(r[0], r[1], filename)
 
-            resultData['resourcesData'][r] = open(filename, "r").read()
+            resultData['resourcesData'][r] = open(filename, "rb").read()
             os.remove(filename)
 
-        json.dump(resultData, outputFile)
+        with open(outputFile, "wb") as f:
+            pickle.dump(resultData, f)
 
 
     def isProjectResource(self, res):
@@ -111,7 +111,7 @@ class FSSceneAccessor(SceneAccessor):
 
     def unpackSceneAndResources(self, scenePackedFile, toProject, scenePath):
 
-        sceneAndResources = json.load(scenePackedFile)
+        sceneAndResources = pickle.load(scenePackedFile)
 
         scene = sceneAndResources['sceneJson']
 

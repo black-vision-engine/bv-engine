@@ -1,4 +1,4 @@
-import LocationParser
+from LocationParser import LocationParser
 
 
 class Location:

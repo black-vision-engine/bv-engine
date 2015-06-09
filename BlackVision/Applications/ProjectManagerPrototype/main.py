@@ -1,4 +1,4 @@
-﻿import ProjectManager
+﻿from ProjectManager import PM as pm
 import Project
 
 from FSTextureDataAccessor import LoadableTextureDataDesc
@@ -6,10 +6,34 @@ from FSFontDataAccessor import LoadableFontDataDesc
 from FSSurfaceDataAccessor import LoadableSurfaceDataDesc
 from FSSequenceDataAccessor import LoadableSequenceDataDesc
 
+from Scene import Scene, Node, Plugin
+
 import os
 
+def generateScene1(projectName1, projectName2):
+    rootNode = Node("p1s1_root")
+
+    n0 = Node("ch0")
+    n1 = Node("ch1")
+
+    p0 = Plugin("texture")
+    p0.addResource(projectName1, "sequences/jedzie")
+    p0.addResource(projectName2, "sequences/jedzie1")
+
+    p1 = Plugin("texture")
+    p1.addResource(projectName1, "textures/flagi/pol.jpg")
+    p1.addResource(projectName2, "textures/flags/pol1.jpg")
+
+    n0.addPlugin(p0)
+    n1.addPlugin(p1)
+
+    rootNode.addChildNode(n0)
+    rootNode.addChildNode(n1)
+
+
+    return Scene("p1s1", rootNode)
+
 def test():
-    pm = ProjectManager.ProjectManager("bv_media")
 
     proj1 = Project.Project(pm.getRootDir(), "proj1")
 
@@ -36,9 +60,12 @@ def test():
     pm.getProject("proj2").appendData("surfaces", "animals1/cat1.bvsur", LoadableSurfaceDataDesc("test_data.file"))
     pm.getProject("proj2").appendData("sequences", "jedzie1", LoadableSequenceDataDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq",f))]))
 
+    pm.getProject("proj1").saveScene(generateScene1("proj1", "proj2"), "test_scenes/p1s1.scn")
 
+    pm.getProject("proj1").exportScene("exportedScene1", "test_scenes/p1s1.scn")
 
     pm.listProjectsNames()
+
 
 if __name__ == "__main__":
     test()

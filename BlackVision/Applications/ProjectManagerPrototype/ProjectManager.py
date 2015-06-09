@@ -109,7 +109,8 @@ class ProjectManager:
         assert False  # TODO: Implement
 
     def exportAssetToFile(self, projectName, assetPath, outputFile):
-        assert False  # TODO: Implement
+        loc = Location(projectName, assetPath, self.currentProject.getName() if self.currentProject else "")
+        self.getProject(projectName).exportData(outputFile, loc.getCategoryName(), loc.getInternalPath())
 
     def importAssetFromFile(self, importToProjectName, importToPath, importData):
         assert False  # TODO: Implement
@@ -134,3 +135,6 @@ class ProjectManager:
 
     def importSceneFromFile(self, importToProjectName, importToPath, importDataFilePath):
         assert False  # TODO: Implement
+
+
+PM = ProjectManager("bv_media")

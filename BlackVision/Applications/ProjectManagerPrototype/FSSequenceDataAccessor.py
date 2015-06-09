@@ -3,7 +3,7 @@ from LoadableDataDesc import LoadableDataDesc
 
 import os
 import shutil
-import json
+import pickle
 
 class LoadableSequenceDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::SequenceAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableDataDesc
     def __init__(self, absPath, frames):
@@ -82,7 +82,7 @@ class FSSequenceDataAccessor(SequenceDataAccessor):
             resultFileContent = None
 
             with open(impDataFile, "r") as fi:
-                resultFileContent = json.load(fi)
+                resultFileContent = pickle.load(fi)
 
             desc = resultFileContent["desc"]
 
@@ -110,15 +110,15 @@ class FSSequenceDataAccessor(SequenceDataAccessor):
 
             resultFileContent = {}
 
-            resultFileContent["desc"] = json.dumps(desc)
+            resultFileContent["desc"] = pickle.dumps(desc)
 
             resultFileContent["resourceData"] = []
             for frame in desc.getFrames():
-                with open(frame, "r") as fi:
+                with open(frame, "rb") as fi:
                     resultFileContent["resourceData"].append(fi.read())
 
-            with open(expDataFilePath, "w") as f:
-                json.dump(resultFileContent, f)
+            with open(expDataFilePath, "wb") as f:
+                pickle.dump(resultFileContent, f)
 
             return True
         except Exception as exc:

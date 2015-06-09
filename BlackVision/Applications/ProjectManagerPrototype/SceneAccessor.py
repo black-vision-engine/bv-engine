@@ -20,7 +20,6 @@ class SceneAccessor:
     def saveScene(self, path, scene):
         pass
 
-
     @abstractmethod
     def importScene(self, impSceneFile, project, importToPath):
         pass

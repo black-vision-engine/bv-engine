@@ -1,4 +1,3 @@
-import Location
 
 # ./            == current project
 # /             == global                                   TODO
@@ -8,7 +7,6 @@ import Location
 
 class LocationParser:
     def __init__(self, location, currentProjectName):
-        assert  isinstance(location, Location)
         self.currentProjectName = currentProjectName
         self.location = location
 
@@ -20,24 +18,23 @@ class LocationParser:
             categoryName = ""
             internalPath = ""
             isGlobal = False
-            if projectName == ".":
-                if self.currentProjectName:
-                    self.location.projectName = self.currentProjectName
-                    self.location.categoryName = pathInProject.split("/", 2)[1]
-                    self.location.internalPath = pathInProject.split("/", 2)[2]
-            elif len(projectName) == 0:
+            if len(projectName) > 0:
+                if projectName == ".":
+                    if self.currentProjectName:
+                        self.location.projectName = self.currentProjectName
+                self.location.categoryName = pathInProject.split("/", 2)[0]
+                self.location.internalPath = pathInProject.split("/", 2)[1]
+            else:
                 if pathInProject[1:7] == "global":
                     self.location.isGlobalLocation = True
-                else:
-                    self.location.projectName = pathInProject.split("/", 2)[0]
-                self.location.categoryName = pathInProject.split("/", 2)[1]
-                self.location.internalPath = pathInProject.split("/", 2)[2]
-            elif pathInProject.startswith("file://"):
-                self.location.prefix = "file"
-                self.location.internalPath = pathInProject[7:]
-            elif pathInProject.startswith("seq://"):
-                self.location.prefix = "seq"
-                self.location.internalPath = pathInProject[6:]
+                    self.location.categoryName = pathInProject.split("/", 2)[1]
+                    self.location.internalPath = pathInProject.split("/", 2)[2]
+                elif pathInProject.startswith("file://"):
+                    self.location.prefix = "file"
+                    self.location.internalPath = pathInProject[7:]
+                elif pathInProject.startswith("seq://"):
+                    self.location.prefix = "seq"
+                    self.location.internalPath = pathInProject[6:]
 
         except Exception as exc:
             print("Parsing location error: {}".format(exc))

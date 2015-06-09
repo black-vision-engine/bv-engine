@@ -90,9 +90,13 @@ class Project:
         assert isinstance(self.sceneAccessor, SceneAccessor)
         return self.sceneAccessor.getSceneDesc()
 
-    def appendScene(self, scene, path):
+    def appendSceneFromFile(self, sceneFilePath, path):
         assert isinstance(self.sceneAccessor, SceneAccessor)
-        self.sceneAccessor.addScene(path, scene)
+        self.sceneAccessor.addSceneFromFile(path, sceneFilePath)
+
+    def saveScene(self, scene, path):
+        assert isinstance(self.sceneAccessor, SceneAccessor)
+        self.sceneAccessor.saveScene(path, scene)
 
     def copyScene(self, path):
         assert isinstance(self.sceneAccessor, SceneAccessor)
