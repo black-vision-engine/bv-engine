@@ -4,6 +4,9 @@
 
 #include "CoreDEF.h"
 
+
+//#define QPF_TIMER
+
       
 namespace bv
 {
@@ -18,8 +21,9 @@ private:
     unsigned long   m_startPause;
     unsigned long   m_totalPausedTime;
 
+#ifdef QPF_TIMER
 	unsigned long	m_timerFrequency;
-
+#endif
 public:
 
                             SimpleTimer     ();
