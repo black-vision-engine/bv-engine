@@ -714,6 +714,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     auto success = SetParameter( prism->GetPlugin( "prism" )->GetParameter( "n" ), 0.f, 4 );
     { success; }
     assert( success );
+	{success;}
 
     SetParameter( prism->GetPlugin( "prism" )->GetParameter( "n" ), 10.f, 10 );
     prism->GetPlugin( "prism" )->GetParameter( "n" )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );

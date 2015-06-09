@@ -148,7 +148,17 @@ public:
 
 	static void                 bvglVertexAttribPointer     ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
 
+	//pablito
+	static void					bvglBindFramebufferEXT		(GLenum target, GLuint framebuffer);
+	static void					bvglBindRenderbufferEXT		(GLenum target, GLuint renderbuffer);
+	static void					bvglDeleteFramebuffersEXT	(GLsizei n, const GLuint *framebuffers);
+	static void					bvglDeleteRenderbuffersEXT	(GLsizei n, const GLuint *renderbuffers);
+	//static GLuint				bvglGetError				();
+	static void					bvglFlush					();
+	static void					bvglFinish					();
+
 	static void					bvglVertexAttribDivisor		( GLuint index,  GLuint divisor );
+
 
 };
 

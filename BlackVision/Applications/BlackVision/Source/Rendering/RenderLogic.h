@@ -1,5 +1,8 @@
 #pragma once
 
+//pablito:
+#include "VideoCardManager.h"
+
 namespace bv {
 
 class Renderer;
@@ -12,6 +15,7 @@ class RenderLogic
 private:
 
     OffscreenRenderLogic *  m_offscreenRenderLogic;
+	bv::videocards::VideoCardManager *      m_VideoCardManager;
 
 public:
 
@@ -21,6 +25,10 @@ public:
     void    SetCamera       ( Camera * cam );
 
     void    RenderFrame     ( Renderer * renderer, SceneNode * node );
+
+	//pablito
+	void	SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager, Renderer * renderer);
+	void	InitVideoCards     ( Renderer * renderer );
 
 private:
 

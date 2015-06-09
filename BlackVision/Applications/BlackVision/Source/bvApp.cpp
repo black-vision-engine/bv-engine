@@ -22,6 +22,7 @@
 // FIXME: move it to a valid BV windowed version of engine and wrap with a macro
 void			bv::BlackVisionApp::StaticInitializer	()
 {
+	
     bv::ApplicationBase::MainFun = &bv::WindowedApplication::MainImpl;
     bv::ApplicationBase::ApplicationInstance = new bv::BlackVisionApp();
 }
@@ -43,7 +44,7 @@ namespace bv {
 // *********************************
 //
 BlackVisionApp::BlackVisionApp	()
-    : WindowedApplication( "BlackVision prealpha test app", 0, 0, DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight(), DefaultConfig.FullScreenMode() )
+    : WindowedApplication( "BlackVision prealpha test app", 0, 0, DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight(), DefaultConfig.GetWindowMode(), DefaultConfig.GetRendererInput() )
     , m_processManager( nullptr )
     , m_app( nullptr )
 {
@@ -53,6 +54,8 @@ BlackVisionApp::BlackVisionApp	()
 //
 BlackVisionApp::~BlackVisionApp ()
 {
+	m_videoCardManager.Black();
+
     m_processManager->AbortAll( true );
     delete m_processManager;
 
@@ -107,10 +110,18 @@ void BlackVisionApp::OnPreMainLoop  ()
 bool BlackVisionApp::OnInitialize       ()
 {
     m_processManager = new ProcessManager();
+		//pablito
+    InitializeLogger        ();
+    InitializeLicenses      ();
+    InitializeSocketServer  ();
+    InitializeConfig        ();
+
 
     InitializeConsole       ();
     InitializeAppLogic      ();
     InitializeSelfState     ();
+
+
 
     return WindowedApplication::OnInitialize();
 }
@@ -146,6 +157,54 @@ void    BlackVisionApp::InitializeConsole   ()
     }
 }
 
+//pablito
+// *********************************
+//`
+void BlackVisionApp::InitializeLogger        ()
+{
+    //Log::Connect();
+    Log::EnableConsoleOutput();
+    Log::A(L"Connection Initialized");
+}
+
+// *********************************
+//
+bool    BlackVisionApp::InitializeLicenses   ()
+{
+    LicenseManager::LoadLicenses();
+    bool license = LicenseManager::VerifyLicense();
+
+    Log::A(L"license");
+	if(license)
+	{
+        Log::A(L"tools",L"license",L"License is valid. Proceeding...");
+	}else{
+        Log::A(L"tools",L"license",L"License is not valid. Please contact your administrator or sales representative");
+
+	}
+    return license;
+}
+
+// *********************************
+//
+void    BlackVisionApp::InitializeSocketServer  ()
+{
+    SocketWrapper Server;
+	Server.InitServer();
+}
+
+// *********************************
+//
+void    BlackVisionApp::InitializeConfig  ()
+{
+    //ConfigManager::LoadConfig();
+    ConfigManager::LoadXMLConfig();
+    BB::AssetManager::SetMediaFolderPath(ConfigManager::GetString("MediaFolder"));
+
+	BB::AssetManager::LoadSurfaces();
+
+}
+
 // *********************************
 //
 void    BlackVisionApp::InitializeAppLogic  ()
@@ -160,6 +219,7 @@ void    BlackVisionApp::InitializeAppLogic  ()
     m_app = new BVAppLogic( m_Renderer );
 
     // FIXME: InitCamera depends implicitly ond LoadScene - which suxx (as camera is created by LoadScene and passed to bvScene)
+	m_app->SetVideoCardManager(&m_videoCardManager);
     m_app->Initialize();
     m_app->LoadScene();
     m_app->InitCamera( m_Width, m_Height );

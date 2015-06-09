@@ -95,7 +95,9 @@ bool	InitializeVSync( const RendererInput & ri )
     if ( ri.m_DisableVerticalSync )
     {
         wglSwapIntervalEXT( 0 );
-    }
+    }else{
+		wglSwapIntervalEXT( ri.m_VerticalBufferFrameCount );
+	}
 
     return true;
 }
@@ -107,6 +109,9 @@ bool	InitializeVSync( const RendererInput & ri )
 Renderer::Renderer ( RendererInput & ri, int w, int h, TextureFormat colorFormat )
 {
     Initialize( w, h, colorFormat );
+	m_EnableGLFinish = ri.m_EnableGLFinish;
+	m_EnableGLFlush = ri.m_EnableGLFlush;
+
 
     WGLRendererData * data = new WGLRendererData();
     m_RendererData = static_cast< RendererData * >( data );
@@ -162,6 +167,12 @@ Renderer::~Renderer ()
 void Renderer::DisplayColorBuffer ()
 {
     SwapBuffers( static_cast< WGLRendererData * >( m_RendererData )->m_WindowDC );
+	if(m_EnableGLFlush)
+		BVGL::bvglFlush();
+	if(m_EnableGLFinish)
+		BVGL::bvglFinish();
+
+	//bvgl da fuck
 }
 
 } //bv

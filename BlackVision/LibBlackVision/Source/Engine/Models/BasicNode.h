@@ -67,6 +67,9 @@ public:
     virtual IModelNodePtr                   GetNode                 ( const std::string & path, const std::string & separator = "/" ) override;
     virtual IModelNodePtr                   GetChild                ( const std::string & name ) override;
 
+	//pablito:
+	INodeLogicPtr							GetLogic				(){return m_nodeLogic;}
+
     virtual const IPluginListFinalized *    GetPluginList           () const override;
 
     virtual unsigned int                    GetNumChildren          () const override;

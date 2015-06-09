@@ -118,6 +118,17 @@ std::string             DefaultTextPluginDesc::UID                      ()
     return "DEFAULT_TEXT";
 }
 
+
+
+//pablito
+// *************************************
+//
+std::wstring DefaultTextPlugin::GetText                     () const
+{
+    return m_text;
+}
+
+
 // *******************************
 //
 std::string             DefaultTextPluginDesc::TextureName              ()
