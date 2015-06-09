@@ -10,9 +10,10 @@ const std::string TestDir = "../../../../Test";
 const std::string AssetsPath = TestDir + "/Assets/";
 //const std::string TestsResultsDir = bv::Env::GetVar("TestsResultsDir");
 const std::string TestsResultsDir = "../../../../_TestsResults/";
-const std::string file_ext = ".bmp";
-const std::string ref_image = "ReferenceImage";
-const std::string diff_image = "DiffToReference";
+const std::string FileExt = ".bmp";
+const std::string FileExtLoad = ".png";
+const std::string RefImageString = "ReferenceImage";
+const std::string DiffImageString = "DiffToReference";
 
 
 double imageRGBA8BitsPerChannelIgnoreAlpha( const char* refImage, const char* renderedImage )
@@ -72,7 +73,7 @@ void VisualTesterRenderLogic::renderReferenceImage( Renderer* renderer, SceneNod
 
 	Texture2DConstPtr renderTarget = renderImage( renderer, node );
 
-	std::string fullName = AssetsPath + fileName + ref_image + file_ext;
+	std::string fullName = AssetsPath + fileName + RefImageString + FileExt;
 	bool succes = image::SaveBMPImage( fullName, renderTarget->GetData(), (UInt32)renderTarget->GetWidth(), (UInt32)renderTarget->GetHeight(), 32 );
 	{ succes; }
 	ASSERT_TRUE( succes );
@@ -86,7 +87,7 @@ void VisualTesterRenderLogic::renderCompareWithReferenceImage( Renderer* rendere
 
 	Texture2DConstPtr renderTarget = renderImage( renderer, node );
 
-	std::string fullName = AssetsPath + fileName + ref_image + file_ext;
+	std::string fullName = AssetsPath + fileName + RefImageString + FileExt;		// In future maybe it will be FileExtLoad. We want to load .png, because it has smaller size.
 	UInt32 imageWidth;
 	UInt32 imageHeight;
 	UInt32 imageBPP;
@@ -127,7 +128,7 @@ void VisualTesterRenderLogic::renderCompareWithReferenceImage( Renderer* rendere
 
 	if( makeDiffImage && imageError > errorTolerance )
 	{
-		fullName = TestsResultsDir + fileName + diff_image + file_ext;
+		fullName = TestsResultsDir + fileName + DiffImageString + FileExt;
 		MemoryChunkConstPtr diffImageChunk = std::make_shared<MemoryChunk>( diffImage, imageHeight * imageWidth * BytesPP);
 
 		image::SaveBMPImage( fullName, diffImageChunk, imageWidth, imageHeight, imageBPP );
