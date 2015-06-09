@@ -26,6 +26,32 @@ class FSSceneAccessor(SceneAccessor):
         else:
             return None
 
+    def addSceneFromFile(self, path, sceneFilePath):
+        absPath = os.path.join(self.rootPath, path)
+        dirname = os.path.dirname(absPath)
+        try:
+            if not os.path.exists(dirname):
+                os.makedirs(dirname)
+
+            shutil.copyfile(sceneFilePath, absPath)
+            return True
+        except Exception as exc:
+            print(exc)
+            return False
+
+    def saveScene(self, path, scene):
+        absPath = os.path.join(self.rootPath, path)
+        dirname = os.path.dirname(absPath)
+        try:
+            if not os.path.exists(dirname):
+                os.makedirs(dirname)
+            sw = SceneWriter(scene, absPath)
+            sw.saveScene()
+            return True
+        except Exception as exc:
+            print(exc)
+            return False
+
     def importScene(self, impSceneFile, importToPath):
 
         pass
