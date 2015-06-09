@@ -1,5 +1,5 @@
 from SceneAccessor import SceneAccessor
-from Scene import loadScene, saveScene, Scene, SceneWriter, SceneReader
+from Scene import loadScene, saveScene, Scene, Node, SceneWriter, SceneReader
 from Location import Location
 
 import os, json, tempfile, shutil
@@ -46,6 +46,24 @@ class FSSceneAccessor(SceneAccessor):
             if not os.path.exists(dirname):
                 os.makedirs(dirname)
             sw = SceneWriter(scene, absPath)
+            sw.saveScene()
+            return True
+        except Exception as exc:
+            print(exc)
+            return False
+
+    def createScene(self, name, path):
+        absPath = os.path.join(self.rootPath, path)
+
+        if os.path.exists(absPath):
+            print("Cannot create. Scene '{}' already exists.".format(absPath))
+            return False
+
+        dirname = os.path.dirname(absPath)
+        try:
+            if not os.path.exists(dirname):
+                os.makedirs(dirname)
+            sw = SceneWriter(Scene(name, Node(name)), absPath)
             sw.saveScene()
             return True
         except Exception as exc:

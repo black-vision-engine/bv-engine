@@ -9,12 +9,17 @@ class SceneAccessor:
         pass
 
     @abstractmethod
+    def createScene(self, name, path):
+        pass
+
+    @abstractmethod
     def addSceneFromFile(self, path, sceneFilePath):
         pass
 
     @abstractmethod
     def saveScene(self, path, scene):
         pass
+
 
     @abstractmethod
     def importScene(self, impSceneFile, project, importToPath):
