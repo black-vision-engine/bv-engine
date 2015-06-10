@@ -17,12 +17,12 @@ def generateScene1(projectName1, projectName2):
     n1 = Node("ch1")
 
     p0 = Plugin("texture")
-    p0.addResource(projectName1, "sequences/jedzie")
-    p0.addResource(projectName2, "sequences/jedzie1")
+    p0.addResource(projectName1, "sequences", "jedzie")
+    p0.addResource(projectName2, "sequences", "jedzie1")
 
     p1 = Plugin("texture")
-    p1.addResource(projectName1, "textures/flagi/pol.jpg")
-    p1.addResource(projectName2, "textures/flags/pol1.jpg")
+    p1.addResource(projectName1, "textures", "flagi/pol.jpg")
+    p1.addResource(projectName2, "textures", "flags/pol1.jpg")
 
     n0.addPlugin(p0)
     n1.addPlugin(p1)

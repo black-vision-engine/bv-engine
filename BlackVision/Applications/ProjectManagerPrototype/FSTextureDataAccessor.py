@@ -3,7 +3,7 @@ from LoadableDataDesc import LoadableDataDesc
 
 import os
 import shutil
-import json
+import pickle
 
 class LoadableTextureDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::TextureAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableDataDesc
     def __init__(self, absPath):
@@ -69,18 +69,21 @@ class FSTextureDataAccessor(TextureDataAccessor):
         try:
             resultFileContent = None
 
-            with open(impDataFile, "r") as fi:
-                resultFileContent = json.load(fi)
+            with open(impDataFile, "rb") as fi:
+                resultFileContent = pickle.load(fi)
 
             desc = resultFileContent["desc"]
 
             assert isinstance(desc, LoadableTextureDataDesc)
-            assert(desc.absPath. str)
-            filename = desc.absPath.split('/')[-1]
+            assert isinstance(desc.absPath, str)
 
-            toPath = os.path.join(self.rootPath, importToPath, filename)
+            dirName = os.path.join(self.rootPath, os.path.dirname(importToPath))
+            if not os._exists(dirName):
+                os.makedirs(dirName)
 
-            with open(toPath, "w") as f:
+            toPath = os.path.join(self.rootPath, importToPath)
+
+            with open(toPath, "wb") as f:
                 f.write(resultFileContent["resourceData"])
 
             return True
@@ -98,13 +101,13 @@ class FSTextureDataAccessor(TextureDataAccessor):
 
             resultFileContent = {}
 
-            resultFileContent["desc"] = json.dumps(desc)
+            resultFileContent["desc"] = desc
 
-            with open(absPath, "r") as fi:
+            with open(absPath, "rb") as fi:
                 resultFileContent["resourceData"] = fi.read()
 
-            with open(expDataFilePath, "w") as f:
-                json.dump(resultFileContent, f)
+            with open(expDataFilePath, "wb") as f:
+                pickle.dump(resultFileContent, f)
 
             return True
         except Exception as exc:

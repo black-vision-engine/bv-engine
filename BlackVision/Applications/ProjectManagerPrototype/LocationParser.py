@@ -22,13 +22,15 @@ class LocationParser:
                 if projectName == ".":
                     if self.currentProjectName:
                         self.location.projectName = self.currentProjectName
-                self.location.categoryName = pathInProject.split("/", 2)[0]
-                self.location.internalPath = pathInProject.split("/", 2)[1]
+                splited = pathInProject.split("/", 1)
+                self.location.categoryName = splited[0]
+                self.location.internalPath = splited[1]
             else:
                 if pathInProject[1:7] == "global":
                     self.location.isGlobalLocation = True
-                    self.location.categoryName = pathInProject.split("/", 2)[1]
-                    self.location.internalPath = pathInProject.split("/", 2)[2]
+                    splited = pathInProject.split("/", 3)
+                    self.location.categoryName = splited[2]
+                    self.location.internalPath = splited[3]
                 elif pathInProject.startswith("file://"):
                     self.location.prefix = "file"
                     self.location.internalPath = pathInProject[7:]

@@ -79,22 +79,25 @@ class FSSequenceDataAccessor(SequenceDataAccessor):
     def importData(self, impDataFile, importToPath):
 
         try:
-            resultFileContent = None
 
-            with open(impDataFile, "r") as fi:
+            with open(impDataFile, "rb") as fi:
                 resultFileContent = pickle.load(fi)
 
             desc = resultFileContent["desc"]
 
             assert isinstance(desc, LoadableSequenceDataDesc)
-            assert(desc.absPath. str)
+            assert isinstance(desc.absPath, str)
 
-            toPath = os.path.join(self.rootPath, importToPath)
+            dirName = os.path.join(self.rootPath, importToPath)
 
-            for frame, i in desc.getFrames():
+            if not os.path.exists(dirName):
+                os.makedirs(dirName)
+
+            for i , frame in enumerate(desc.getFrames()):
                 assert isinstance(frame, str)
                 filename = os.path.basename(frame)
-                with open(filename, "w") as f:
+                absPath = os.path.join(dirName, filename)
+                with open(absPath, "wb") as f:
                     f.write(resultFileContent["resourceData"][i])
 
             return True
@@ -110,7 +113,7 @@ class FSSequenceDataAccessor(SequenceDataAccessor):
 
             resultFileContent = {}
 
-            resultFileContent["desc"] = pickle.dumps(desc)
+            resultFileContent["desc"] = desc
 
             resultFileContent["resourceData"] = []
             for frame in desc.getFrames():

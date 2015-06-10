@@ -11,9 +11,9 @@ class SceneDesc:
 
 class FSSceneAccessor(SceneAccessor):
     def __init__(self, projectManager, project):
-        SceneAccessor.__init__(self)
+        SceneAccessor.__init__(self, projectManager)
         self.projectManager = projectManager
-        self.rootPath = projectManager.getRootDir()
+        self.rootPath = os.path.join(projectManager.getRootDir(), "scenes", project.getName() if project else "")
         self.project = project
         self.__createDir()
 
@@ -93,7 +93,7 @@ class FSSceneAccessor(SceneAccessor):
             filename = tmp.name
             tmp.close()
             from ProjectManager import PM
-            PM.exportAssetToFile(r[0], r[1], filename)
+            PM.exportAssetToFile(r[0], r[1], r[2], filename)
 
             resultData['resourcesData'][r] = open(filename, "rb").read()
             os.remove(filename)
@@ -115,7 +115,7 @@ class FSSceneAccessor(SceneAccessor):
                 sceneAndResources = pickle.load(f)
 
             scene = sceneAndResources["sceneJson"]
-            assert False  # TODO: Add remaping project name to the new one. toProject.getName()
+            # assert False  # TODO: Add remaping project name to the new one. toProject.getName()
             toProject.saveScene(scene, scenePath)
 
             resources = sceneAndResources["resourcesData"]
@@ -124,19 +124,24 @@ class FSSceneAccessor(SceneAccessor):
 
             assert isinstance(resources, dict)
             for r in resources.keys():
-                if(ownerProjectName == r[0][0]):
-                    loc = Location(r[0][0], r[0][1])
+                if(ownerProjectName == r[0]):
                     tmp = tempfile.NamedTemporaryFile(delete=False)
                     filename = tmp.name
                     tmp.close()
 
                     with open(filename, "wb") as f:
-                        f.write(resources[r[0]])
-                    toProject.importData(filename, loc.getCategoryName(), loc.getInternalPath())
+                        f.write(resources[r])
+                    toProject.importData(filename, r[1], r[2])
                     os.remove(filename)
                 else:
-                    loc = Location(r[0][0], r[0][1])
-                    self.projectManager
+                    tmp = tempfile.NamedTemporaryFile(delete=False)
+                    filename = tmp.name
+                    tmp.close()
+
+                    with open(filename, "wb") as f:
+                        f.write(resources[r])
+                    self.projectManager.importAssetFromFile("", r[1], r[0] + "/" + r[2], filename)
+                    os.remove(filename)
 
             return True
         except Exception as exc:

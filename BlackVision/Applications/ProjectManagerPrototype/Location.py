@@ -2,7 +2,7 @@ from LocationParser import LocationParser
 
 
 class Location:
-    def __init__(self, projectName, pathInProject, currentProjectName = ""):
+    def __init__(self, projectName, categoryName, pathInProject, currentProjectName = ""):
         self.projectName = projectName
         self.categoryName = ""
         self.internalPath = ""

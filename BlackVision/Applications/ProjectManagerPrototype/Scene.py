@@ -1,5 +1,4 @@
 
-import json
 import pickle
 import traceback
 
@@ -50,8 +49,8 @@ class Plugin:
         self.name = name
         self.resources = []
 
-    def addResource(self, projectName, path):
-        self.resources.append((projectName, path))
+    def addResource(self, projectName, categoryName, path):
+        self.resources.append((projectName, categoryName, path))
 
 class Node:
     def __init__(self, name):

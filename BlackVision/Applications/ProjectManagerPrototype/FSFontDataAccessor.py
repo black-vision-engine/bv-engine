@@ -3,7 +3,7 @@ from LoadableDataDesc import LoadableDataDesc
 
 import os
 import shutil
-import json
+import pickle
 
 class LoadableFontDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::TextureAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableDataDesc
     def __init__(self, absPath):
@@ -65,8 +65,8 @@ class FSFontDataAccessor(FontDataAccessor):
         try:
             resultFileContent = None
 
-            with open(impDataFile, "r") as fi:
-                resultFileContent = json.load(fi)
+            with open(impDataFile, "rb") as fi:
+                resultFileContent = pickle.load(fi)
 
             desc = resultFileContent["desc"]
 
@@ -94,13 +94,13 @@ class FSFontDataAccessor(FontDataAccessor):
 
             resultFileContent = {}
 
-            resultFileContent["desc"] = json.dumps(desc)
+            resultFileContent["desc"] = desc
 
             with open(absPath, "r") as fi:
                 resultFileContent["resourceData"] = fi.read()
 
             with open(expDataFilePath, "w") as f:
-                json.dump(resultFileContent, f)
+                pickle.dump(resultFileContent, f)
 
             return True
         except Exception as exc:
