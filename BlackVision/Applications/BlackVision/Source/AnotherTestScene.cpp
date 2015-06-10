@@ -938,57 +938,12 @@ model::BasicNodePtr      TestScenesFactory::SequenceAnimationTestScene  ()
     return nullptr;
 }
 
-// ******************************
-//
-model::BasicNodePtr          TestScenesFactory::XMLTestScene()
-{
-    /*auto root =  Text1();
-    root->AddChild( GreenRect() );
-    root->AddChild( TexturedRect() );
-    root->AddChild( ExtrudedTexturedRing() ); // To nie dziala na mojej karcie.
-    root->AddChild( TexturedRing() );
-    root->AddChild( ExtrudedRedRect() );
-    root->AddChild( Text2() );
-	*/
-
-	TreeBuilder *XMLTree = new TreeBuilder();
-
-	auto root = XMLTree->BuildTree("e:\\temp\\test2.xml");
-
-    return root;
-}
-
-model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager )
-{
-    assert( File::Exists( filename ) );
-
-    xml_document<> doc;
-    std::ifstream file( filename );
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    file.close();
-    std::string content( buffer.str() );
-    doc.parse<0>( &content[0] );
-
-    //ISerializablePtr scene = BVScene::Create( deDoc );
-    //BVScene* realScene = reinterpret_cast<BVScene*>( scene.get() );
-    //BVScenePtr realScene = reinterpret_cast<BVScenePtr>( scene );
-    //auto root = realScene->GetModelSceneRoot();
-
-    auto docNode = doc.first_node()->first_node( "nodes" )->first_node( "node" );
-
-    auto deDoc = DeserializeObject( *docNode, *timelineManager, *pluginsManager );
-
-    ISerializablePtr node = model::BasicNode::Create( deDoc );
-
-    auto root = static_cast< model::BasicNode* >( node.get() );
-    assert( root );
-    return BasicNodePtr( root );
-}
 
 model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager )
 {
-    return LoadSceneFromFile( "Assets/07_Results.xml", pluginsManager, timelineManager );
+	{pluginsManager;}
+	{timelineManager;}
+	return nullptr;
 }
 
 } // bv
