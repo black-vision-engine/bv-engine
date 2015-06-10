@@ -56,6 +56,8 @@ RenderableEffectPtr MultipassNodeBuilder::CreateMultipassRenderableEffect( Shade
 
 		IShaderDataSourceConstPtr fsds = ShaderDataSourceCreator::FragmentShader( sdst, alfa, *(textureFile[pass]), textureName + std::to_string(pass) );
 		dummyFuckerReferenceKeeper.push_back( fsds );
+		if( fsds == nullptr )
+			return nullptr;
 
 		if( pass == 0 )
 		{
