@@ -1,18 +1,19 @@
 #pragma once
 
 #include <vector>
+#include "CoreDEF.h"
 #include "Mathematics/glm_inc.h"
 
 
 namespace bv { namespace model {
 
 
-typedef unsigned short INDEX_TYPE;
+typedef UInt16 INDEX_TYPE;
 
 class IndexedGeometry
 {
 private:
-	std::vector<INDEX_TYPE>		indicies;
+	std::vector<INDEX_TYPE>			indicies;
 	std::vector<glm::vec3>			verticies;
 public:
 	IndexedGeometry() {}
