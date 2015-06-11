@@ -16,23 +16,29 @@ class SerializeObject
     rapidxml::xml_document<> m_doc;
 
 public:
-    SerializeObject() { }
-    void Save( std::string filename );
 
-    void                                                    SetName( std::string name );
-    void                                                    SetValue( std::string name, std::string value );
+			SerializeObject	() { }
+    
+	void	Save			( std::string filename );
+
+    void    SetName			( std::string name );
+    void    SetValue		( std::string name, std::string value );
 };
-
 
 class DeserializeObject
 {
-    rapidxml::xml_node<>* m_doc;
-public:
-    model::TimelineManager* m_tm; // FIXME(?)
-    const model::PluginsManager* m_pm; // FIXME(?)
+private:
+
+	rapidxml::xml_node<> *			m_doc;
 
 public:
-    DeserializeObject( rapidxml::xml_node<>& doc, model::TimelineManager& tm, const model::PluginsManager& pm ) : m_doc( &doc ), m_tm( &tm ), m_pm( &pm ) { }
+
+    model::TimelineManager *		m_tm; // FIXME(?)
+    const model::PluginsManager *	m_pm; // FIXME(?)
+
+public:
+    
+	DeserializeObject( rapidxml::xml_node<>& doc, model::TimelineManager& tm, const model::PluginsManager& pm ) : m_doc( &doc ), m_tm( &tm ), m_pm( &pm ) { }
 
     std::string                                             GetName()
     {
