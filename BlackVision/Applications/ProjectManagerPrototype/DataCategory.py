@@ -1,5 +1,5 @@
 from DataAccessor import DataAccessor
-import LoadableDataDesc
+from  LoadableDataDesc import LoadableDataDesc
 
 class DataCategory:
     def __init__(self, id, dataAccessor):
@@ -12,7 +12,7 @@ class DataCategory:
 
     def appendData(self, path, loadableData):
         assert isinstance(loadableData, LoadableDataDesc)
-        assert False # TODO: Implement
+        self.accessor.appendData(path, loadableData)
 
     def getData(self, path):
         assert isinstance(path, str)
