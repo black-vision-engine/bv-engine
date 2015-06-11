@@ -203,6 +203,9 @@ void RenderLogic::InitVideoCards     ( Renderer * renderer )
 //
 void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
 {
+
+
+
     renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
     renderer->ClearBuffers();

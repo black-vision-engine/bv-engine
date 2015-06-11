@@ -12,6 +12,9 @@
 #include "Solution.h"
 #include "VideoCardManager.h"
 
+//hackvideoinput
+#include "VideoInput/DefaultVideoInputResourceDescr.h"
+#include "hack_videoinput/TestVideoInput.h"
 
 #define HIDE_PROFILE_STATS
 
@@ -37,6 +40,9 @@ enum class BVAppState : int
 class BVAppLogic
 {
 private:
+
+    //hackvideoinput
+    TestVideoInput*                  VideoInput;
 
     BVAppState                      m_state;
 

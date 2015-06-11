@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Helpers">
@@ -24,6 +24,9 @@
     </Filter>
     <Filter Include="PieCharts">
       <UniqueIdentifier>{fd129272-37d9-42a7-b86d-f8a467b2b2d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hack_videoinput">
+      <UniqueIdentifier>{7f69fce6-91f9-48b4-b144-634e189e9d1b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +88,9 @@
     <ClCompile Include="..\..\..\Source\PerformanceMonitor.cpp" />
     <ClCompile Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp">
       <Filter>VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp">
+      <Filter>hack_videoinput</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +157,9 @@
     <ClInclude Include="..\..\..\Source\PerformanceMonitor.h" />
     <ClInclude Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h">
       <Filter>VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\hack_videoinput\TestVideoInput.h">
+      <Filter>hack_videoinput</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

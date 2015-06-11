@@ -465,7 +465,7 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 //
 model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    auto scene = std::string("TWO_TEXTURED_RECTANGLES");//Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
+    auto scene = std::string("VIDEO_INPUT_TEST_SCENE");//Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
 
     model::BasicNodePtr node = nullptr;
 

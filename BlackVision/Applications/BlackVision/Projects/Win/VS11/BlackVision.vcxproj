@@ -264,6 +264,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\DefaultPlugins.cpp" />
     <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
     <ClCompile Include="..\..\..\Source\FrameStatsService.cpp" />
+    <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp" />
     <ClCompile Include="..\..\..\Source\Helpers\RectNodeBuilder.cpp" />
     <ClCompile Include="..\..\..\Source\MainInitProcess.cpp" />
     <ClCompile Include="..\..\..\Source\MainLoopProcess.cpp" />
@@ -297,6 +298,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\DefaultPlugins.h" />
     <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
     <ClInclude Include="..\..\..\Source\FrameStatsService.h" />
+    <ClInclude Include="..\..\..\Source\hack_videoinput\TestVideoInput.h" />
     <ClInclude Include="..\..\..\Source\Helpers\RectNodeBuilder.h" />
     <ClInclude Include="..\..\..\Source\MainInitProcess.h" />
     <ClInclude Include="..\..\..\Source\MainLoopProcess.h" />
