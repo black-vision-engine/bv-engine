@@ -88,13 +88,13 @@ typedef SimpleParameterImpl< Vec2Interpolator, glm::vec2, ModelParamType::MPT_VE
 //template<typename T>
 //using ParamEnumPtr<T> = std::shared_ptr<T>;
 
-DEFINE_PTR_TYPE(ParamBool)
-DEFINE_PTR_TYPE(ParamInt)
-DEFINE_PTR_TYPE(ParamFloat)
-DEFINE_PTR_TYPE(ParamVec4)
-DEFINE_PTR_TYPE(ParamVec3)
-DEFINE_PTR_TYPE(ParamVec2)
-DEFINE_PTR_TYPE(ParamMat2)
+DEFINE_PTR_TYPE( ParamBool )
+DEFINE_PTR_TYPE( ParamInt )
+DEFINE_PTR_TYPE( ParamFloat )
+DEFINE_PTR_TYPE( ParamVec4 )
+DEFINE_PTR_TYPE( ParamVec3 )
+DEFINE_PTR_TYPE( ParamVec2 )
+DEFINE_PTR_TYPE( ParamMat2 )
 
 } //model
 } //bv
