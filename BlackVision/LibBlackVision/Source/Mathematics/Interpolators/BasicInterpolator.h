@@ -30,12 +30,16 @@ public:
 template<class TimeValueT>
 class Interpolator
 {
-    model::IParameter::InterpolationMethod m_method;
+private:
+
+	model::IParameter::InterpolationMethod m_method;
+
 public:
 
     typedef TimeValueT TimeType;
 
 public:
+
     virtual void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method ) { m_method = method; }
     virtual model::IParameter::InterpolationMethod     GetInterpolationMethod () const { return m_method; }
 
@@ -96,6 +100,8 @@ public:
     void SetWrapMethod( WrapMethod pre, WrapMethod post );
 
     virtual int EvalToCBuffer( TimeValueT time, char * buf ) const;
+
+	const std::vector<Key<TimeValueT, ValueT>> & AccessKeys() const;
 
     const KeyType &     FirstKey    () const;
     const KeyType &     LastKey     () const;

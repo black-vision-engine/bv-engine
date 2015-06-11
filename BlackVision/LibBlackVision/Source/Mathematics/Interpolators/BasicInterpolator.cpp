@@ -455,6 +455,14 @@ int BasicInterpolator<TimeValueT, ValueT, FloatT>::EvalToCBuffer( TimeValueT tim
 // *************************************
 //
 template<class TimeValueT, class ValueT, class FloatT>
+const std::vector<Key<TimeValueT, ValueT>> & BasicInterpolator<TimeValueT, ValueT, FloatT>::AccessKeys() const
+{
+	return keys;
+}
+
+// *************************************
+//
+template<class TimeValueT, class ValueT, class FloatT>
 const typename BasicInterpolator<TimeValueT, ValueT, FloatT>::KeyType &     BasicInterpolator<TimeValueT, ValueT, FloatT>::FirstKey    () const
 {
     return keys[ 0 ];

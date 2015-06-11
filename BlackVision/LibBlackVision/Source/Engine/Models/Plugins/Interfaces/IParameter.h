@@ -27,16 +27,16 @@ namespace bv { namespace model {
 			COSINE
 		};
 
-		virtual const std::string &     GetName         () const = 0;
-		virtual ModelParamType          GetType         () const = 0;
+		virtual const std::string &     GetName         () const								= 0;
+		virtual ModelParamType          GetType         () const								= 0;
 
-		virtual void                    SetInterpolationMethod ( InterpolationMethod method ) = 0;
-		virtual InterpolationMethod     GetInterpolationMethod () const = 0;
+		virtual void                    SetInterpolationMethod ( InterpolationMethod method )	= 0;
+		virtual InterpolationMethod     GetInterpolationMethod () const							= 0;
 
-		virtual ITimeEvaluatorPtr       GetTimeEvaluator() = 0;
-		virtual void                    SetTimeEvaluator( ITimeEvaluatorPtr timeEvaluator ) = 0;
+		virtual ITimeEvaluatorPtr       GetTimeEvaluator()										= 0;
+		virtual void                    SetTimeEvaluator( ITimeEvaluatorPtr timeEvaluator )		= 0;
 
-		virtual VoidPtr                 QueryParamTyped () = 0;
+		virtual VoidPtr                 QueryParamTyped ()										= 0;
 
 		virtual ~IParameter() {}
 

@@ -17,7 +17,7 @@ namespace bv
     typedef BasicInterpolator<TimeType, glm::vec3>  Vec3Interpolator;
     typedef BasicInterpolator<TimeType, glm::vec4>  Vec4Interpolator;
 
-    typedef Interpolator<float>                     BaseInterpolator;
+//    typedef Interpolator<float>                     BaseInterpolator;
 
 
 class InterpolatorsHelper

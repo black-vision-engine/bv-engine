@@ -88,37 +88,37 @@ public:
         SetValues( t, v[ 0 ], v[ 1 ], v[ 2 ] );
     }
 
-    TransformKind   KindKurwaMac()
+    TransformKind		KindKurwaMac()
     {
         return kind;
     }
 
-    ParamT&          GetP0MotylaNoga()// const
+    ParamT &			GetP0MotylaNoga()// const
     {
         return p0;
     }
 
-    ParamT&          GetP1MotylaNoga()// const
+    ParamT &			GetP1MotylaNoga()// const
     {
         return p1;
     }
 
-    ParamT&          GetP2MotylaNoga()// const
+    ParamT &			GetP2MotylaNoga()// const
     {
         return p2;
     }
 
-    const ParamT&          GetP0MotylaNoga() const
+    const ParamT &		GetP0MotylaNoga() const
     {
         return p0;
     }
 
-    const ParamT&          GetP1MotylaNoga() const
+    const ParamT &      GetP1MotylaNoga() const
     {
         return p1;
     }
 
-    const ParamT&          GetP2MotylaNoga() const
+    const ParamT &		GetP2MotylaNoga() const
     {
         return p2;
     }
@@ -131,7 +131,7 @@ private:
 
     bool                m_hasRotAxisInterpolator;
 
-    ParamT              angle;
+    ParamT              m_angle;
     Vec3Interpolator    m_rotationAxis;
 
 public:
@@ -144,9 +144,24 @@ public:
 
     void                        SetRotation ( TimeType t, const glm::vec3 & rotAxis, float angle_ )
     {
-        angle.AddKey( t, angle_ );
+        m_angle.AddKey( t, angle_ );
         m_rotationAxis.AddKey( t, rotAxis );
     }
+
+	Vec3Interpolator &			AccessRotAxis	()
+	{
+		return m_rotationAxis;
+	}
+
+	ParamT	& 					AccessAngle		()
+	{
+		return m_angle;
+	}
+
+	bool						IsAxisVec3		() const
+	{
+		return m_hasRotAxisInterpolator;
+	}
 };
 
 template<typename ParamT>
@@ -199,11 +214,11 @@ glm::mat4x4 Rotation<ParamT>::Evaluate(typename ParamT::TimeT t) const
 {
     if( m_hasRotAxisInterpolator )
     {
-        return glm::rotate( glm::mat4( 1.0f ), (float) angle.Evaluate( t ), m_rotationAxis.Evaluate( t ) );        
+        return glm::rotate( glm::mat4( 1.0f ), (float) m_angle.Evaluate( t ), m_rotationAxis.Evaluate( t ) );        
     }
     else
     {
-        return glm::rotate( glm::mat4( 1.0f ), (float) angle.Evaluate( t ), glm::vec3( p0.Evaluate ( t ), p1.Evaluate( t ), p2.Evaluate( t ) ) );
+        return glm::rotate( glm::mat4( 1.0f ), (float) m_angle.Evaluate( t ), glm::vec3( p0.Evaluate ( t ), p1.Evaluate( t ), p2.Evaluate( t ) ) );
     }
 }
 

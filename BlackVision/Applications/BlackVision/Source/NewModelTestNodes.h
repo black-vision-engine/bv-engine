@@ -55,6 +55,9 @@ public:
 
 	static model::BasicNodePtr	CreateBasicShapesTestNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 	static model::BasicNodePtr	CreateBasicShapeShow( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string& uid, glm::vec3 translation );
+
+	static void					TestTypedParamQueries	( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+
 };
 
 } //bv

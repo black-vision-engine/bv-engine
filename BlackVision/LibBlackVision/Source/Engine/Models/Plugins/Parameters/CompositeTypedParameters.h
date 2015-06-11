@@ -9,7 +9,7 @@
 namespace bv { namespace model {
 
 class ParamTransform;
-DEFINE_PTR_TYPE(ParamTransform)
+DEFINE_PTR_TYPE( ParamTransform )
 
 // *******************************************
 class ParamTransform : public AbstractModelParameter

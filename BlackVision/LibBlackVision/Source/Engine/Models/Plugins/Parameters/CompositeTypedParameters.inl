@@ -228,7 +228,7 @@ inline  void        ParamTransformVec::SetCenter   ( unsigned int transformNum, 
 
 // *******************************
 // FIXME: reimplement with SQT paramter model
-inline  TransformF& ParamTransformVec::Transform        ( unsigned int transformNum )
+inline  TransformF & ParamTransformVec::Transform       ( unsigned int transformNum )
 {
     assert( transformNum < NumTransforms() );
 

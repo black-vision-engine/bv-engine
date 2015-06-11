@@ -37,6 +37,14 @@ inline  void        SimpleParameterImpl< InterpolatorType, ValueType, type >::Se
 // *******************************
 //
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
+InterpolatorType &		SimpleParameterImpl< InterpolatorType, ValueType, type >::AccessInterpolator	()
+{
+	return m_interpolator;
+}
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
 VoidPtr     SimpleParameterImpl< InterpolatorType, ValueType, type >::QueryParamTyped  ()
 {
     return std::static_pointer_cast< void >( shared_from_this() );
