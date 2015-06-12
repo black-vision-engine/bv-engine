@@ -78,6 +78,19 @@ BasicNodePtr                    BasicNode::Create                   ( const std:
 
 // ********************************
 //
+void                            BasicNode::Serialize               ( SerializeObject& doc ) const
+{
+    doc.SetName( "node" );
+    doc.SetValue( "name", GetName() );
+
+    doc.Push();
+    for( auto child : m_children )
+        child->Serialize( doc );
+    doc.Pop();
+}
+
+// ********************************
+//
 ISerializablePtr BasicNode::Create( DeserializeObject& dob )
 {
     assert( dob.GetName() == "node" );

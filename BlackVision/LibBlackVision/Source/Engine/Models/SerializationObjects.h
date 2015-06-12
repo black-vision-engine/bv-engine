@@ -6,6 +6,8 @@
 
 //#include "Models/Plugins/Manager/PluginsManager.h"
 
+#include <stack>
+
 namespace bv
 {
 
@@ -13,14 +15,18 @@ namespace model { class PluginsManager; }
 
 class SerializeObject
 {
-    rapidxml::xml_document<> m_doc;
+    rapidxml::xml_document<>                                m_doc;
+    std::stack< rapidxml::xml_node<>* >                     m_roots;
+    rapidxml::xml_node<>*                                   m_curRoot;
 
 public:
-    SerializeObject() { }
+    SerializeObject();
     void Save( std::string filename );
 
     void                                                    SetName( std::string name );
     void                                                    SetValue( std::string name, std::string value );
+    void                                                    Push();
+    void                                                    Pop();
 };
 
 
