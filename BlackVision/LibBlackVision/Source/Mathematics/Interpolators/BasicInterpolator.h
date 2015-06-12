@@ -4,6 +4,8 @@
 
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
 
+#include "Engine/Interfaces/ISerializable.h"
+
 namespace bv
 {
 
@@ -48,7 +50,7 @@ public:
 };
 
 template<class TimeValueT, class ValueT, class FloatT = float >
-class BasicInterpolator : public Interpolator<TimeValueT>
+class BasicInterpolator : public Interpolator<TimeValueT>, public ISerializable
 {
 public:
 
@@ -79,7 +81,10 @@ public:
     explicit BasicInterpolator  ( TimeValueT tolerance = 0.0001 );
     virtual ~BasicInterpolator  () {};
 
-	//void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method ) override;
+    virtual void                Serialize       ( SerializeObject & doc ) const override;
+    static ISerializablePtr     Create          ( DeserializeObject & doc );
+
+    //void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method ) override;
 	//model::IParameter::InterpolationMethod     GetInterpolationMethod () const override;
 
     void AddKey             ( TimeValueT t, const ValueT & v );

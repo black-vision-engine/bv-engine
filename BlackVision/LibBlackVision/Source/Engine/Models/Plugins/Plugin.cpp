@@ -65,6 +65,29 @@ void                                BasePlugin< IPlugin >::Serialize            
     doc.SetValue( "uid", GetTypeUid() );
     doc.SetValue( "name", GetName() );
 
+
+    doc.SetName( "params" );
+    {
+        IPluginParamValModelPtr pvm =    GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
+    
+        IParamValModelPtr models[] = {    pvm->GetPluginModel()
+                                        , pvm->GetTransformChannelModel()
+                                        , pvm->GetVertexAttributesChannelModel()
+                                        , pvm->GetPixelShaderChannelModel()
+                                        , pvm->GetVertexShaderChannelModel()
+                                        , pvm->GetGeometryShaderChannelModel() 
+                                    };
+    
+        for( auto model : models )
+            if( model ) for( auto param_ : model->GetParameters() )
+            {
+                auto param = std::static_pointer_cast< AbstractModelParameter >( param_ );
+                assert( param );
+                param->Serialize( doc );
+            }
+    }
+    doc.Pop();
+
     doc.Pop();
 }
 
