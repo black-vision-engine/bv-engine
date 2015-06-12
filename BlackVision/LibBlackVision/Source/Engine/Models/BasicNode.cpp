@@ -83,7 +83,6 @@ void                            BasicNode::Serialize               ( SerializeOb
     doc.SetName( "node" );
     doc.SetValue( "name", GetName() );
 
-    doc.Push();
     for( auto child : m_children )
         child->Serialize( doc );
     doc.Pop();

@@ -4,8 +4,6 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include <fstream>
 
-//#include "Models/Plugins/Manager/PluginsManager.h"
-
 #include <stack>
 
 namespace bv
@@ -17,15 +15,13 @@ class SerializeObject
 {
     rapidxml::xml_document<>                                m_doc;
     std::stack< rapidxml::xml_node<>* >                     m_roots;
-    rapidxml::xml_node<>*                                   m_curRoot;
 
 public:
     SerializeObject();
-    void Save( std::string filename );
+    void Save( const std::string & filename );
 
-    void                                                    SetName( std::string name );
-    void                                                    SetValue( std::string name, std::string value );
-    void                                                    Push();
+    void                                                    SetName( const std::string & name );
+    void                                                    SetValue( const std::string & name, const std::string & value );
     void                                                    Pop();
 };
 
