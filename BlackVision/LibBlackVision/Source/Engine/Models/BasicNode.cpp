@@ -83,6 +83,14 @@ void                            BasicNode::Serialize               ( SerializeOb
     doc.SetName( "node" );
     doc.SetValue( "name", GetName() );
 
+    for( unsigned int  i = 0; i < m_pluginList->NumPlugins(); i++ )
+    {
+        auto plugin_ = m_pluginList->GetPlugin( i );
+        auto plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
+        assert( plugin );
+        plugin->Serialize( doc );
+    }
+
     for( auto child : m_children )
         child->Serialize( doc );
     doc.Pop();

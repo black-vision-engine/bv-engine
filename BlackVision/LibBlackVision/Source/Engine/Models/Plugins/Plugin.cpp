@@ -59,6 +59,17 @@ void SetParameter( IPluginParamValModelPtr pvm, AbstractModelParameterPtr param 
 
 // *******************************
 //
+void                                BasePlugin< IPlugin >::Serialize                   ( SerializeObject & doc ) const
+{
+    doc.SetName( "plugin" );
+    doc.SetValue( "uid", GetTypeUid() );
+    doc.SetValue( "name", GetName() );
+
+    doc.Pop();
+}
+
+// *******************************
+//
 template <>
 ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
 {
