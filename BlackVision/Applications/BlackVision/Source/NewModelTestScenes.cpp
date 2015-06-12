@@ -483,8 +483,7 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
     }
     else if( scene == "CREED_TEST_SCENE" )
     {
-        // FIXME: there was no implementation of CreedTestScene
-        node = TestScenesFactory::CreedVideoInputTestScene( pluginsManager, timelineManager, timeEvaluator );
+        node = TestScenesFactory::CreedPieChartTestScene( pluginsManager, timelineManager, timeEvaluator );
     }
     else if( scene == "VIDEO_INPUT_TEST_SCENE" )
     {

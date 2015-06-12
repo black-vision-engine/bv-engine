@@ -34,12 +34,6 @@ BVScenePtr    BVScene::Create( model::BasicNodePtr modelRootNode, Camera * cam, 
     return bvScene;
 }
 
-void            BVScene::Serialize           ( SerializeObject &doc) const
-{
-    static std::string name = "scene";
-    doc.SetName( name );
-}
-
 
 // *******************************
 //
@@ -126,6 +120,15 @@ BVSceneEditor *         BVScene::GetSceneEditor     ()
 const std::string &     BVScene::GetName            () const
 {
     return m_name;
+}
+
+// *******************************
+//
+void            BVScene::Serialize           ( SerializeObject &doc) const
+{
+    doc.SetName( "scene" );
+
+    m_pModelSceneRoot->Serialize( doc );
 }
 
 // *******************************

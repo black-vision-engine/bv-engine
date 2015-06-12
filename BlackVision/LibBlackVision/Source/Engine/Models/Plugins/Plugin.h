@@ -36,8 +36,8 @@ protected:
     explicit                                    BasePlugin                  ( const std::string & name, const std::string & uid, IPluginPtr prevPlugin, IPluginParamValModelPtr model );
 
 public:
-    virtual void                                Serialize                   ( SerializeObject &/*doc*/ ) const override {}
-    static ISerializablePtr                     Create                      ( DeserializeObject&/*doc*/ );
+    virtual void                                Serialize                   ( SerializeObject & doc ) const override;
+    static ISerializablePtr                     Create                      ( DeserializeObject & doc );
 
     virtual                                     ~BasePlugin                 ();
 
