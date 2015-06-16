@@ -162,23 +162,23 @@ void BVAppLogic::LoadScene          ( void )
 	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
 	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE );
    
- model::BasicNodePtr root = model::BasicNode::Create( "rootNode", m_globalTimeline );
-    root->AddPlugin( "DEFAULT_TRANSFORM", m_globalTimeline );
-    root->AddPlugin( "DEFAULT_RECTANGLE", m_globalTimeline );
+ //model::BasicNodePtr root = model::BasicNode::Create( "rootNode", m_globalTimeline );
+ //   root->AddPlugin( "DEFAULT_TRANSFORM", m_globalTimeline );
+ //   root->AddPlugin( "DEFAULT_RECTANGLE", m_globalTimeline );
 
-    root->AddPlugin( "DEFAULT_VIDEOINPUT", m_globalTimeline );
-    auto plugin = root->GetPlugin( "video input" );
-    VideoInput = new TestVideoInput( 10, 10, 1.f );
-    auto success = plugin->LoadResource( AssetDescConstPtr( new model::DefaultVideoInputResourceDescr( VideoInput->GetTexture(), VideoInput ) ) );
-    assert(success);
-	{ success; }
-    //auto vi2 = new ExampleVideoInput( 20, 20, 1.f );
-    //success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi2->GetTexture(), vi2 ) ) );
-    //assert(success);
+ //   root->AddPlugin( "DEFAULT_VIDEOINPUT", m_globalTimeline );
+ //   auto plugin = root->GetPlugin( "video input" );
+ //   VideoInput = new TestVideoInput( 10, 10, 1.f );
+ //   auto success = plugin->LoadResource( AssetDescConstPtr( new model::DefaultVideoInputResourceDescr( VideoInput->GetTexture(), VideoInput ) ) );
+ //   assert(success);
+	//{ success; }
+ //   //auto vi2 = new ExampleVideoInput( 20, 20, 1.f );
+ //   //success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi2->GetTexture(), vi2 ) ) );
+ //   //assert(success);
 
-    model::SetParameter( plugin->GetParameter( "source" ), 0.f, 1.f );
+ //   model::SetParameter( plugin->GetParameter( "source" ), 0.f, 1.f );
 
-    //auto root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, m_timelineManager, m_globalTimeline );
+    auto root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, m_timelineManager, m_globalTimeline );
 #endif
 
 	assert( root );
@@ -349,7 +349,7 @@ void BVAppLogic::OnKey           ( unsigned char c )
     {
         auto sob = new SerializeObject();
         m_bvScene->Serialize( *sob );
-        sob->Save( "text.xml" );
+        sob->Save( "test.xml" );
         delete sob;
     }
 

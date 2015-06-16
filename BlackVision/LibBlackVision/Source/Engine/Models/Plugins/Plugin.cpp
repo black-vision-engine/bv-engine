@@ -96,7 +96,7 @@ void                                BasePlugin< IPlugin >::Serialize            
 template <>
 ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
 {
-    std::string pluginType = PluginsSerialization::SerialNameToUID( doc.GetValue( "name" ) );
+    std::string pluginType = doc.GetValue( "uid" );//PluginsSerialization::SerialNameToUID( doc.GetValue( "name" ) );
 
     std::string pluginName = ""; // FIXME
 
