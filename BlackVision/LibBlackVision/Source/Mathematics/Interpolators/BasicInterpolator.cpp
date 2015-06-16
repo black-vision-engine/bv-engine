@@ -10,6 +10,15 @@
 #include "Mathematics/Core/mathfuncs.h"
 #include "Mathematics/Defines.h"
 
+// FIXME
+namespace std
+{
+    string to_string( const glm::vec2 & v ) { return to_string( v[0] ) + ", " + to_string( v[1] ); }
+    string to_string( const glm::vec3 & v ) { return to_string( v[0] ) + ", " + to_string( v[1] ) + ", " + to_string( v[2] ); }
+    string to_string( const glm::vec4 & v ) { return to_string( v[0] ) + ", " + to_string( v[1] ) + ", " + to_string( v[2] ) + ", " + to_string( v[3] ); }
+}
+
+
 namespace bv {
 
 namespace {
@@ -135,6 +144,34 @@ BasicInterpolator<TimeValueT, ValueT, FloatT>::BasicInterpolator(TimeValueT tole
     SetInterpolationMethod( model::IParameter::InterpolationMethod::LINEAR );
     //SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
 }
+
+// *************************************
+//
+template<class TimeValueT, class ValueT, class FloatT >
+void                BasicInterpolator<TimeValueT, ValueT, FloatT>::Serialize       ( SerializeObject & doc ) const
+{
+    doc.SetName( "intepolator" );
+    
+    for( auto key : keys )
+    {
+        doc.SetName( "key" );
+        doc.SetValue( "time", std::to_string( key.t ) );
+        doc.SetValue( "val", std::to_string( key.val ) );
+        doc.Pop();
+    }
+
+    doc.Pop();
+}
+
+// *************************************
+//
+template<class TimeValueT, class ValueT, class FloatT >
+ISerializablePtr     BasicInterpolator<TimeValueT, ValueT, FloatT>::Create          ( DeserializeObject &/*doc*/ )
+{
+    assert(!"Implement me please!");
+    return nullptr;
+}
+
 
 // *************************************
 //
@@ -450,6 +487,14 @@ int BasicInterpolator<TimeValueT, ValueT, FloatT>::EvalToCBuffer( TimeValueT tim
     memcpy( buf, &val, value_size );
 
     return value_size;
+}
+
+// *************************************
+//
+template<class TimeValueT, class ValueT, class FloatT>
+const std::vector<Key<TimeValueT, ValueT>> & BasicInterpolator<TimeValueT, ValueT, FloatT>::AccessKeys() const
+{
+	return keys;
 }
 
 // *************************************

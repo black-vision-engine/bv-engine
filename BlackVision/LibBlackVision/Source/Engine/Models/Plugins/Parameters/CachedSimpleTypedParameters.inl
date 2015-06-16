@@ -10,7 +10,7 @@ inline ValueType CachedSimpleTypedParameters< InterpolatorType, ValueType, type 
     prevValue = curValue;
     curValue = val;
 
-    changed = CachedSimpleTypedParametersHelper::isDifferent( prevValue, curValue ); // FIXME: is this the semantic we want?
+    changed = CachedSimpleTypedParametersHelper::IsDifferent( prevValue, curValue ); // FIXME: is this the semantic we want?
     
     return val;
 }
@@ -21,14 +21,18 @@ inline ValueType CachedSimpleTypedParameters< InterpolatorType, ValueType, type 
 //    return (curValue != prevValue);
 //}
 
+// *******************************
+//
 template< typename T >
-static inline bool CachedSimpleTypedParametersHelper::isDifferent( T& a, T& b )
+static inline bool CachedSimpleTypedParametersHelper::IsDifferent( T & a, T & b )
 {
     return ( a != b );
 }
 
+// *******************************
+//
 template<>
-static inline bool CachedSimpleTypedParametersHelper::isDifferent< float >( float& a, float& b )
+static inline bool CachedSimpleTypedParametersHelper::IsDifferent< float >( float & a, float & b )
 {
     return ( fabs( a - b ) > feps );
 }
@@ -62,7 +66,7 @@ inline  void        ParamEnum<T>::SetVal    ( const T & val, TimeType t )
 // *******************************
 //
 template<class T>
-inline ModelParamType  ParamEnum<T>::Type     ()
+inline ModelParamType  ParamEnum<T>::Type	()
 {
     return ModelParamType::MPT_ENUM;
 }

@@ -29,6 +29,7 @@
 #include "Widgets/Crawler/Crawler.h"
 #include "Helpers/RectNodeBuilder.h"
 
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/FillContext.h"
 
 #include "BVConfig.h"
@@ -481,6 +482,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::TimelineMana
     return root;
 }
 
+// *****************************
+//
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
 	auto offset5Timeline = timelineManager->CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
@@ -555,6 +558,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::TimelineMa
 	return root;
 }
 
+// *****************************
+//
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPrismNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
     { timelineManager; } // FIXME: suppress unuse warning
@@ -615,6 +620,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPrismNode( model::Tim
 	return root;
 }
 
+// *****************************
+//
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPrismNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
     { timelineManager; } // FIXME: suppress unuse warning
@@ -679,6 +686,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPrismNode( model::Time
 	return root;
 }
 
+// *****************************
+//
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
     { timelineManager; } // FIXME: suppress unuse warning
@@ -740,6 +749,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::Ti
 	return root;
 }
 
+// *****************************
+//
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPieChartNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
     { timelineManager; } // FIXME: suppress unuse warning
@@ -808,6 +819,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPieChartNode( model::
 	return root;
 }
 
+// *****************************
+//
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPieChartNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
     { timelineManager; } // FIXME: suppress unuse warning
@@ -874,7 +887,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPieChartNode( model::T
 	return root;
 }
 
-
+// *****************************
+//
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator)
 {
 	auto offset5Timeline = timelineManager->CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
@@ -927,6 +941,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::TimelineMan
     return root;
 }
 
+// *****************************
+//
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator)
 {
 	auto offset5Timeline = timelineManager->CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
@@ -989,7 +1005,6 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTextNode( model::TimelineMan
     assert( success );
 
 	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"1238" );
-
 
 //return root;
 // LINEAR GRADIENT plugin
@@ -1130,6 +1145,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
     return node;    
 }
 
+// *****************************
+//
 model::BasicNodePtr  SimpleNodesFactory::CreateTexturedTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
 {
     //Timeline stuff
@@ -1382,6 +1399,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     return node;    
 }
 
+// *****************************
+//
 model::BasicNodePtr	SimpleNodesFactory::CreateCrawlerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
 	//model::BasicNode::Create( "Root", timeEvaluator );
@@ -1538,7 +1557,6 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
     return node;    
 }
 
-
 // *****************************
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedTimerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, bool useAlphaMask )
@@ -1621,7 +1639,6 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTimerNode( model::TimelineMa
 
     return node;    
 }
-
 
 // *****************************
 //
@@ -1741,8 +1758,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
 #endif
 }
 
-
-
+// *****************************
+//
 model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
 
@@ -2033,6 +2050,8 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 #undef VERSION_COLOR
 }
 
+// *****************************
+//
 model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string& uid, glm::vec3 translation )
 {
 
@@ -2072,7 +2091,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineMan
 	#endif
 #endif
 
-    auto root = model::BasicNode::Create( "Root", timeEvaluator );
+    auto root = model::BasicNode::Create( uid, timeEvaluator );
 
     auto success = root->AddPlugins( uids, localTimeline );
     assert( success );
@@ -2102,7 +2121,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineMan
 	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
 	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
 
-	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
+	success = model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/sand.jpg", MipMapFilterType::BILINEAR );
 	assert( success );
 	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
 	model::SetParameter( texturePlugin->GetParameter("borderColor"), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
@@ -2115,6 +2134,95 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineMan
 #undef VERSION_TEXTURE
 #undef NO_PERSPECTIVE
 #undef VERSION_COLOR
+}
+
+// *****************************
+//
+void					SimpleNodesFactory::TestTypedParamQueries	( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+	auto node = CreateSolidRectNode( "rect_node", 1.0f, 1.0f, glm::vec3( 0.f, 0.f, 0.f ), glm::vec4( 1.f, 1.f, 1.f, 1.f ), timelineManager, timeEvaluator );
+
+	///////////////////////////////////////////////////
+	// Acessing simple interpolator and time evaluator for float parmameter
+    auto paramWidth					= node->GetPlugin( "rectangle" )->GetParameter( "width" );
+	auto paramWidth_Float			= model::QueryTypedParam< model::ParamFloatPtr >( paramWidth );
+	auto & paramWidth_Interpolator	= paramWidth_Float->AccessInterpolator(); // auto & is necessary as AccessInterpolator returns reference to the interpolator
+	auto paramWidt_timeline			= paramWidth_Float->GetTimeEvaluator();
+	
+	paramWidth_Interpolator.AddKey( 0.f, 3.f );
+	auto & keys = paramWidth_Interpolator.AccessKeys(); // returns const reference to keys, to change keys use: paramWidth_Interpolator.AddKey(...)
+
+	auto & key_val	= keys.at( 0 ); // equal to: keys[ 0 ]
+	TimeType time	= key_val.t;
+	float value		= key_val.val;
+
+	///////////////////////////////////////////////////
+	// Acessing simple interpolator for vec4 parmameter
+    auto paramColor					= node->GetPlugin( "solid color" )->GetParameter( "color" );
+	auto paramColor_Float			= model::QueryTypedParam< model::ParamVec4Ptr >( paramColor );
+	auto & paramColor_Interpolator	= paramColor_Float->AccessInterpolator();
+
+	auto & paramColor_keys			= paramColor_Interpolator.AccessKeys();
+	
+	// inspect the first key (TimeType, glm::vec4)
+	TimeType paramColor_keys_0_t	= paramColor_keys[ 0 ].t;
+	glm::vec4 paramColor_keys_0_val = paramColor_keys[ 0 ].val;
+
+
+	///////////////////////////////////////////////////
+	// Acessing simple interpolator for transform parameter
+	auto paramTrans					= node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+	auto paramTrans_TV				= model::QueryTypedParam< model::ParamTransformVecPtr >( paramTrans );
+	
+	auto & transform				= paramTrans_TV->Transform( 0 );
+	auto translation				= transform[ 1 ];								// translation
+	auto rotation					= static_cast<RotationF *>( transform[ 2 ] );	// rotation transform[ 2 ] == SimpleTransformF * but can be cast to RotationF, as it is a rotation by default
+
+	auto & transform_x_interpolator = translation->GetP0MotylaNoga();
+	auto & transform_y_interpolator = translation->GetP1MotylaNoga();
+	auto & transform_z_interpolator = translation->GetP2MotylaNoga();
+
+	auto & t_x_keys					= transform_x_interpolator.AccessKeys();
+
+	// inspect the first key (TimeType, float)
+	TimeType t_x_0_key_time			= t_x_keys[ 0 ].t;
+	float	 t_x_0_key_val			= t_x_keys[ 0 ].val;
+
+	// Make sure that vec4 interpolator is used for rotation axis interpolation
+	assert( rotation->IsAxisVec3() );
+
+	auto & rot_angle_interpolator	= rotation->AccessAngle();
+	auto & rot_angle_keys			= rot_angle_interpolator.AccessKeys();
+
+	// inspect the first key (TimeType, float)
+	TimeType rot_angle_key_0_time	= rot_angle_keys[ 0 ].t; 
+	float rot_angle_key_0_value		= rot_angle_keys[ 0 ].val; 
+	
+	auto & rot_axis_interpolator	= rotation->AccessRotAxis();
+	auto & rot_axis_keys			= rot_axis_interpolator.AccessKeys();
+
+	// inspect the first key (TimeType, glm::vec3)
+	TimeType rot_axis_key_0_time	= rot_axis_keys[ 0 ].t; 
+	glm::vec3 rot_axis_key_0_value	= rot_axis_keys[ 0 ].val; 
+	
+	// suppress warnings
+	{ transform_y_interpolator; }
+	{ transform_z_interpolator; }
+
+	{ time; }
+	{ value; }
+
+	{ t_x_0_key_time; }
+	{ t_x_0_key_val; }
+
+	{ paramColor_keys_0_t; }
+	{ paramColor_keys_0_val; }
+
+	{ rot_angle_key_0_time; }
+	{ rot_angle_key_0_value; }
+
+	{ rot_axis_key_0_time; }
+	{ rot_axis_key_0_value; }
 }
 
 } //bv

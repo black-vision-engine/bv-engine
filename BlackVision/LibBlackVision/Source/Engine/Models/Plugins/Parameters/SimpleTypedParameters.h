@@ -26,15 +26,20 @@ public:
     explicit                SimpleParameterImpl ( const std::string & name, const InterpolatorType & interpolator, ITimeEvaluatorPtr evaluator );
                             ~SimpleParameterImpl();
 
+    void                    Serialize       ( SerializeObject & doc ) const;
+
+
     virtual void                SetInterpolationMethod ( InterpolationMethod method ) override;
     virtual InterpolationMethod GetInterpolationMethod () const override;
 
     inline  ValueType       Evaluate            () const;
     inline  void            SetVal              ( const ValueType & val, TimeType t );
 
-    virtual VoidPtr         QueryParamTyped     () override;
+	InterpolatorType &		AccessInterpolator	();
 
-    inline static  ModelParamType  Type         ();
+	virtual VoidPtr         QueryParamTyped     () override;
+
+	inline static  ModelParamType  Type         ();
 
 };
 
@@ -67,6 +72,7 @@ template<class T>
 class ParamEnum : public SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_ENUM >
 {
 public:
+
     ParamEnum( const std::string & name, const IntInterpolator & interpolator, ITimeEvaluatorPtr evaluator );
 
     inline  T               Evaluate        () const;
@@ -88,13 +94,13 @@ typedef SimpleParameterImpl< Vec2Interpolator, glm::vec2, ModelParamType::MPT_VE
 //template<typename T>
 //using ParamEnumPtr<T> = std::shared_ptr<T>;
 
-DEFINE_PTR_TYPE(ParamBool)
-DEFINE_PTR_TYPE(ParamInt)
-DEFINE_PTR_TYPE(ParamFloat)
-DEFINE_PTR_TYPE(ParamVec4)
-DEFINE_PTR_TYPE(ParamVec3)
-DEFINE_PTR_TYPE(ParamVec2)
-DEFINE_PTR_TYPE(ParamMat2)
+DEFINE_PTR_TYPE( ParamBool )
+DEFINE_PTR_TYPE( ParamInt )
+DEFINE_PTR_TYPE( ParamFloat )
+DEFINE_PTR_TYPE( ParamVec4 )
+DEFINE_PTR_TYPE( ParamVec3 )
+DEFINE_PTR_TYPE( ParamVec2 )
+DEFINE_PTR_TYPE( ParamMat2 )
 
 } //model
 } //bv
