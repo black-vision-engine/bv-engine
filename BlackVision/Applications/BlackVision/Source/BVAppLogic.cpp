@@ -145,41 +145,21 @@ void BVAppLogic::LoadScene          ( void )
 
  m_timelineManager->RegisterRootTimeline( m_globalTimeline );
 
-
+ model::BasicNodePtr root;
 
 //pabllito
-#ifdef XML_N
+if(!ConfigManager::GetBool("Debug/LoadSceneFromEnv"))
+{
     m_solution.SetTimeline(m_timelineManager);
     m_solution.LoadSolution(ConfigManager::GetString("solution"));
-    model::BasicNodePtr root = m_solution.GetRoot();
+    root = m_solution.GetRoot();
     if(ConfigManager::GetBool("hm"))
     root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
-#else
-    //model::BasicNodePtr root = TestScenesFactory::OlafTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
-    //model::BasicNodePtr root = TestScenesFactory::OlafTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
-    //model::BasicNodePtr root = TestScenesFactory::CreedTestScene(m_pluginsManager, m_timelineManager, m_globalTimeline);
-    //model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
-	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
-	//model::BasicNodePtr root = TestScenesFactory::CreateTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline, TestScenesFactory::TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE );
-   
- //model::BasicNodePtr root = model::BasicNode::Create( "rootNode", m_globalTimeline );
- //   root->AddPlugin( "DEFAULT_TRANSFORM", m_globalTimeline );
- //   root->AddPlugin( "DEFAULT_RECTANGLE", m_globalTimeline );
-
- //   root->AddPlugin( "DEFAULT_VIDEOINPUT", m_globalTimeline );
- //   auto plugin = root->GetPlugin( "video input" );
- //   VideoInput = new TestVideoInput( 10, 10, 1.f );
- //   auto success = plugin->LoadResource( AssetDescConstPtr( new model::DefaultVideoInputResourceDescr( VideoInput->GetTexture(), VideoInput ) ) );
- //   assert(success);
-	//{ success; }
- //   //auto vi2 = new ExampleVideoInput( 20, 20, 1.f );
- //   //success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi2->GetTexture(), vi2 ) ) );
- //   //assert(success);
-
- //   model::SetParameter( plugin->GetParameter( "source" ), 0.f, 1.f );
-
-    auto root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, m_timelineManager, m_globalTimeline );
-#endif
+}
+else
+{
+    root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, m_timelineManager, m_globalTimeline );
+}
 
 	assert( root );
 
