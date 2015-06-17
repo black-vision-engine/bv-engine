@@ -12,6 +12,24 @@ ParamTransform::ParamTransform  ( const std::string & name, const TransformF & t
 {
 }
 
+
+// *******************************
+//
+void    ParamTransform::Serialize       ( SerializeObject & doc ) const
+{
+    doc.SetName( "param" );
+    doc.SetValue( "name", GetName() );
+    doc.SetValue( "type", Type2String( GetType() ) );
+
+    for( int i = 0; i < m_transformModel.Size(); i++ )
+    {
+        m_transformModel[ i ]->GetP0MotylaNoga().Serialize( doc );
+        m_transformModel[ i ]->GetP1MotylaNoga().Serialize( doc );
+        m_transformModel[ i ]->GetP2MotylaNoga().Serialize( doc );
+    }
+
+    doc.Pop();
+}
 // *******************************
 //
 VoidPtr    ParamTransform::QueryParamTyped  ()
@@ -37,6 +55,25 @@ ParamTransformVec::ParamTransformVec                ( const std::string & name, 
 {
 }
 
+// *******************************
+//
+void ParamTransformVec::Serialize       ( SerializeObject & doc ) const
+{
+    doc.SetName( "param" );
+    doc.SetValue( "name", GetName() );
+    doc.SetValue( "type", Type2String( GetType() ) );
+
+    //m_interpolator.Serialize( doc );
+    for( auto t : m_transformModelVec )
+        for( int i = 0; i < t.Size(); i++ )
+        {
+            t[ i ]->GetP0MotylaNoga().Serialize( doc );
+            t[ i ]->GetP1MotylaNoga().Serialize( doc );
+            t[ i ]->GetP2MotylaNoga().Serialize( doc );
+        }
+
+    doc.Pop();
+}
 // *******************************
 //
 void    ParamTransformVec::AppendTransform          ( const TransformF & transform )

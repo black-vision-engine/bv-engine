@@ -4,6 +4,8 @@
 
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
 
+#include "Engine/Interfaces/ISerializable.h"
+
 namespace bv
 {
 
@@ -30,12 +32,16 @@ public:
 template<class TimeValueT>
 class Interpolator
 {
-    model::IParameter::InterpolationMethod m_method;
+private:
+
+	model::IParameter::InterpolationMethod m_method;
+
 public:
 
     typedef TimeValueT TimeType;
 
 public:
+
     virtual void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method ) { m_method = method; }
     virtual model::IParameter::InterpolationMethod     GetInterpolationMethod () const { return m_method; }
 
@@ -44,7 +50,7 @@ public:
 };
 
 template<class TimeValueT, class ValueT, class FloatT = float >
-class BasicInterpolator : public Interpolator<TimeValueT>
+class BasicInterpolator : public Interpolator<TimeValueT>, public ISerializable
 {
 public:
 
@@ -75,7 +81,10 @@ public:
     explicit BasicInterpolator  ( TimeValueT tolerance = 0.0001 );
     virtual ~BasicInterpolator  () {};
 
-	//void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method ) override;
+    virtual void                Serialize       ( SerializeObject & doc ) const override;
+    static ISerializablePtr     Create          ( DeserializeObject & doc );
+
+    //void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method ) override;
 	//model::IParameter::InterpolationMethod     GetInterpolationMethod () const override;
 
     void AddKey             ( TimeValueT t, const ValueT & v );
@@ -96,6 +105,8 @@ public:
     void SetWrapMethod( WrapMethod pre, WrapMethod post );
 
     virtual int EvalToCBuffer( TimeValueT time, char * buf ) const;
+
+	const std::vector<Key<TimeValueT, ValueT>> & AccessKeys() const;
 
     const KeyType &     FirstKey    () const;
     const KeyType &     LastKey     () const;

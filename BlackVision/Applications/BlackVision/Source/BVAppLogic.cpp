@@ -187,9 +187,9 @@ void BVAppLogic::LoadScene          ( void )
     //success = plugin->LoadResource( model::IPluginResourceDescrConstPtr( new model::DefaultVideoInputResourceDescr( vi2->GetTexture(), vi2 ) ) );
     //assert(success);
 
-    model::SetParameter( plugin->GetParameter( "source" ), 0.f, 1.f );
+ //   model::SetParameter( plugin->GetParameter( "source" ), 0.f, 1.f );
 
-    //auto root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, m_timelineManager, m_globalTimeline );
+   // auto root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, m_timelineManager, m_globalTimeline );
 #endif
 
 	assert( root );
@@ -360,7 +360,7 @@ void BVAppLogic::OnKey           ( unsigned char c )
     {
         auto sob = new SerializeObject();
         m_bvScene->Serialize( *sob );
-        sob->Save( "text.xml" );
+        sob->Save( "test.xml" );
         delete sob;
     }
 

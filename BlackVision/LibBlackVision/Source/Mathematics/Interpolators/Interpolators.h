@@ -8,16 +8,16 @@
 
 namespace bv
 {
-    typedef bv::BasicInterpolator<TimeType, TimeType>   TimeInterpolator;
+    typedef BasicInterpolator<TimeType, TimeType>   TimeInterpolator;
 
-    typedef bv::BasicInterpolator<TimeType, bool>       BoolInterpolator;
-    typedef bv::BasicInterpolator<TimeType, int>        IntInterpolator;
-    typedef bv::BasicInterpolator<TimeType, float>      FloatInterpolator;
-    typedef bv::BasicInterpolator<TimeType, glm::vec2>  Vec2Interpolator;
-    typedef bv::BasicInterpolator<TimeType, glm::vec3>  Vec3Interpolator;
-    typedef bv::BasicInterpolator<TimeType, glm::vec4>  Vec4Interpolator;
+    typedef BasicInterpolator<TimeType, bool>       BoolInterpolator;
+    typedef BasicInterpolator<TimeType, int>        IntInterpolator;
+    typedef BasicInterpolator<TimeType, float>      FloatInterpolator;
+    typedef BasicInterpolator<TimeType, glm::vec2>  Vec2Interpolator;
+    typedef BasicInterpolator<TimeType, glm::vec3>  Vec3Interpolator;
+    typedef BasicInterpolator<TimeType, glm::vec4>  Vec4Interpolator;
 
-    typedef bv::Interpolator<float>                     BaseInterpolator;
+//    typedef Interpolator<float>                     BaseInterpolator;
 
 
 class InterpolatorsHelper

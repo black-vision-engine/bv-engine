@@ -3,6 +3,15 @@
 
 namespace bv { namespace model {
 
+std::string Type2String( ModelParamType type )
+{
+    if( type == ModelParamType::MPT_FLOAT )
+        return "float";
+
+    //assert( false );
+    return std::to_string( int ( type ) );
+}
+
 // *******************************
 //
 VoidPtr ParamMat2::QueryParamTyped ()

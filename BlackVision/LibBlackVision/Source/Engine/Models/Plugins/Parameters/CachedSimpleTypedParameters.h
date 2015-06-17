@@ -6,19 +6,19 @@ namespace bv { namespace model {
 
 namespace CachedSimpleTypedParametersHelper
 {
-    const float feps = 0.0000001f; // FIXME: make this non-const?
+    const float feps = 0.0000001f; // FIXME: make this non-const? // FIXME: do not define it here in the first place???
 
     template< typename T > 
-        static inline bool isDifferent( T& a, T& b );
+	static inline bool IsDifferent( T& a, T& b );
 }
 
 // *******************************************
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
-class CachedSimpleTypedParameters : 
-    public SimpleParameterImpl< InterpolatorType, ValueType, type >
-    , public ICachedParameter
+class CachedSimpleTypedParameters : public SimpleParameterImpl< InterpolatorType, ValueType, type >, public ICachedParameter
 {
     typedef SimpleParameterImpl< InterpolatorType, ValueType, type > ParentImpl;
+
+private:
 
     mutable bool                    changed;
 
@@ -28,10 +28,12 @@ class CachedSimpleTypedParameters :
     //template< typename T > 
     //    static inline bool isDifferent( T& a, T& b );
 public:
+
     CachedSimpleTypedParameters( const std::string & name, const InterpolatorType & interpolator, ITimeEvaluatorPtr evaluator );
 
     inline  ValueType               Evaluate            () const;
     virtual bool                    Changed             () const override;
+
 };
 
 //template<class T>

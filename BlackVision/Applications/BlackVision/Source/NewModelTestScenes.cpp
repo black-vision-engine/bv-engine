@@ -465,7 +465,7 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 //
 model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    auto scene = std::string("VIDEO_INPUT_TEST_SCENE");//Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
+    auto scene = Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
 
     model::BasicNodePtr node = nullptr;
 
@@ -483,8 +483,7 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
     }
     else if( scene == "CREED_TEST_SCENE" )
     {
-        // FIXME: there was no implementation of CreedTestScene
-        node = TestScenesFactory::CreedVideoInputTestScene( pluginsManager, timelineManager, timeEvaluator );
+        node = TestScenesFactory::CreedPieChartTestScene( pluginsManager, timelineManager, timeEvaluator );
     }
     else if( scene == "VIDEO_INPUT_TEST_SCENE" )
     {
@@ -778,7 +777,7 @@ model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const mod
 
     root->AddPlugin( "DEFAULT_VIDEOINPUT", timeEvaluator );
     auto plugin = root->GetPlugin( "video input" );
-    auto vi = new ExampleVideoInput( 10, 10, 1.f );
+    auto vi = new ExampleVideoInput( 1920, 1080, 1.f );
     auto success = plugin->LoadResource( AssetDescConstPtr( new model::DefaultVideoInputResourceDescr( vi->GetTexture(), vi ) ) );
     assert(success);
 	{ success; }

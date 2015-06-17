@@ -59,7 +59,7 @@ SimpleTransform<ParamT>::SimpleTransform( TransformKind kind )
 template<typename ParamT>
 Rotation<ParamT>::Rotation    ( ParamT angle, const Vec3Interpolator & rotAxis )
     : SimpleTransform( TransformKind::rotation )
-    , angle( angle )
+    , m_angle( angle )
     , m_hasRotAxisInterpolator( true )
     , m_rotationAxis( rotAxis ) 
 {
@@ -70,7 +70,7 @@ Rotation<ParamT>::Rotation    ( ParamT angle, const Vec3Interpolator & rotAxis )
 template<typename ParamT>
 Rotation<ParamT>::Rotation( ParamT angle, ParamT p0, ParamT p1, ParamT p2 )
     : SimpleTransform( TransformKind::rotation, p0, p1, p2 )
-    , angle( angle )
+    , m_angle( angle )
     , m_hasRotAxisInterpolator( false )
 {
 }
