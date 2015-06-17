@@ -31,6 +31,7 @@ namespace bv
         model::ITimeEvaluatorPtr        timeline_default;
         model::ITimeEvaluatorPtr        timeline_default_alpha;
         BlackNode*                      ProcessedNode;
+
 		void PrepareNode();
 	public:
 		TreeBuilder(void);
@@ -46,6 +47,7 @@ namespace bv
 		bool                            AttachSolidPlugin               (model::BasicNodePtr node,XMLPlugin* plugin);
 		bool                            AttachLinearGradientPlugin      (model::BasicNodePtr node,XMLPlugin* plugin);
 		bool                            AttachTexturePlugin             (model::BasicNodePtr node,XMLPlugin* plugin);
+        bool                            AttachVideoInputPlugin            (model::BasicNodePtr node,XMLPlugin* plugin);
 		bool                            AttachTexturePixelShader        (model::BasicNodePtr node);
 		bool                            AttachTextPlugin                (model::BasicNodePtr node,XMLPlugin* plugin);
 		bool                            AttachPrismPlugin                (model::BasicNodePtr node,XMLPlugin* plugin);

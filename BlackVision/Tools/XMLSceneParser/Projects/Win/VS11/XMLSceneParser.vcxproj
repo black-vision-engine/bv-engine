@@ -193,6 +193,7 @@
     <ClInclude Include="..\..\..\Source\plugins\texture\PluginSequence.h" />
     <ClInclude Include="..\..\..\Source\plugins\texture\PluginSolid.h" />
     <ClInclude Include="..\..\..\Source\plugins\texture\PluginTexture.h" />
+    <ClInclude Include="..\..\..\Source\plugins\texture\PluginVideoInput.h" />
     <ClInclude Include="..\..\..\Source\plugins\transform\PluginTransform.h" />
     <ClInclude Include="..\..\..\Source\Scena.h" />
     <ClInclude Include="..\..\..\Source\Solution.h" />

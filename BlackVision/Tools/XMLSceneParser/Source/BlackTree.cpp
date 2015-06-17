@@ -350,6 +350,15 @@ PluginRadialGradient* BlackTree::CreatePluginRadialGradient(xml_node<> *NewNode)
 
 // *********************************
 //
+PluginVideoInput* BlackTree::CreatePluginVideoInput(xml_node<> *NewNode)
+{
+	PluginVideoInput *plugin = new PluginVideoInput();
+	ParsePluginProperties(plugin,NewNode);
+	return plugin;
+}
+
+// *********************************
+//
 PluginTransform *BlackTree::CreatePluginTransform(xml_node<> *NewNode)
 {
 	PluginTransform *plugin = new PluginTransform();;
@@ -641,6 +650,9 @@ bool BlackTree::CreatePlugin(BlackNode &node, xml_node<> *NewNode)
 	if(type=="geometry")
 	{
 		plugin = CreatePluginTransform(NewNode);
+	}else if(type=="video_input")
+	{
+		plugin = CreatePluginVideoInput(NewNode);
 	}else if(type=="solid")
 	{
 		plugin = CreatePluginSolid(NewNode);

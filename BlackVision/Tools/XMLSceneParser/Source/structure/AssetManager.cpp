@@ -77,6 +77,8 @@ namespace bv{
     std::string AssetManager::MediaFolderPath;
 	SurfaceDescriptor AssetManager::DefaultSurface;
 	std::vector<SurfaceDescriptor*> AssetManager::AvailableSurfaces;
+    TestVideoInput* AssetManager::VideoInput = new TestVideoInput( 1920, 1080, 1.f );
+    //AssetManager::VideoInput = new TestVideoInput( 1920, 1080, 1.f );
 
 	AssetManager::AssetManager(void)
 	{

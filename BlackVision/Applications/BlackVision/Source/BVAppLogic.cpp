@@ -144,11 +144,13 @@ void BVAppLogic::LoadScene          ( void )
 {
 
  m_timelineManager->RegisterRootTimeline( m_globalTimeline );
-
+ 
+ //todo: move to some initialization
+ //VideoInput = new TestVideoInput( 1920, 1080, 1.f );
 
 
 //pabllito
-#ifdef XML_N
+#ifdef XML
     m_solution.SetTimeline(m_timelineManager);
     m_solution.LoadSolution(ConfigManager::GetString("solution"));
     model::BasicNodePtr root = m_solution.GetRoot();
@@ -179,8 +181,7 @@ void BVAppLogic::LoadScene          ( void )
 
 
     auto plugin = root->GetPlugin( "video input" );
-    VideoInput = new TestVideoInput( 1920, 1080, 1.f );
-    success &= plugin->LoadResource( AssetDescConstPtr( new model::DefaultVideoInputResourceDescr( VideoInput->GetTexture(), VideoInput ) ) );
+    success &= plugin->LoadResource( AssetDescConstPtr( new model::DefaultVideoInputResourceDescr(bv::BB::AssetManager::VideoInput->GetTexture(), (bv::BB::AssetManager::VideoInput ) ) ) );
     assert(success);
 	{ success; }
     //auto vi2 = new ExampleVideoInput( 20, 20, 1.f );
@@ -261,7 +262,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
             FRAME_STATS_SECTION( "Render" );
             HPROFILER_SECTION( "Render" );
 
-            VideoInput->RefreshData(m_videoCardManager->GetCaptureBufferForShaderProccessing(0,"A"));
+            BB::AssetManager::VideoInput->RefreshData(m_videoCardManager->GetCaptureBufferForShaderProccessing(0,"A"));
 
             m_renderLogic->RenderFrame  ( renderer, m_bvScene->GetEngineSceneRoot() );
             m_renderLogic->FrameRendered( renderer );

@@ -382,7 +382,7 @@ bool BlueFishVideoCard::ActivateVideoCard()
 void BlueFishVideoCard::Black()
 {
     for(auto &it:Channels) it->GenerateBlack(); 
-
+    DeactivateVideoCard();
 }
 
 //**************************************

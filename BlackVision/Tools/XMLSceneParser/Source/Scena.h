@@ -44,6 +44,7 @@
 #include "plugins/texture/PluginSequence.h"
 #include "plugins/texture/PluginSolid.h"
 #include "plugins/texture/PluginTexture.h"
+#include "plugins/texture/PluginVideoInput.h"
 
 //transform
 

@@ -55,6 +55,7 @@ BlackVisionApp::BlackVisionApp	()
 BlackVisionApp::~BlackVisionApp ()
 {
 	m_videoCardManager.Black();
+    
 
     m_processManager->AbortAll( true );
     delete m_processManager;

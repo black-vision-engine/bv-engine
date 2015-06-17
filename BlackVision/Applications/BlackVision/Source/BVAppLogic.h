@@ -11,6 +11,7 @@
 //pablito
 #include "Solution.h"
 #include "VideoCardManager.h"
+#include "structure/AssetManager.h"
 
 //hackvideoinput
 #include "VideoInput/DefaultVideoInputResourceDescr.h"

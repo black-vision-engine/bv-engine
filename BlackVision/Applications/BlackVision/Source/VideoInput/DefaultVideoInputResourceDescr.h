@@ -1,3 +1,4 @@
+#pragma once
 #include "IVideoInput.h"
 
 namespace bv { namespace model {

@@ -20,6 +20,10 @@
 //#include "Helpers/RectNodeBuilder.h"
 
 
+//video input
+#include "../../../../Applications/BlackVision/Source/VideoInput/DefaultVideoInputResourceDescr.h"
+#include "../../../../Applications/BlackVision/Source/hack_videoinput/TestVideoInput.h"
+
 // Log
 #include "Log.h"
 //#include "../BVConfig.h"
@@ -285,6 +289,23 @@ namespace bv{
         return result;
         
 	}
+
+
+    //**********************************
+	bool TreeBuilder::AttachVideoInputPlugin(model::BasicNodePtr node,XMLPlugin* plugin)
+	{
+		PluginVideoInput *texture		= (PluginVideoInput*)plugin;
+        {texture;}
+        bool result = node->AddPlugin( "DEFAULT_VIDEOINPUT", "video input", GetTimeline(plugin->timeline) ); 
+
+
+       auto vi = node->GetPlugin( "video input" );
+       result &= vi->LoadResource( AssetDescConstPtr( new model::DefaultVideoInputResourceDescr( bv::BB::AssetManager::VideoInput->GetTexture(), bv::BB::AssetManager::VideoInput ) ) );
+             
+       
+        return result;
+        
+	}
     //**********************************
     bool SetTransformParams(IParameterPtr transform, XMLPlugin* plugin, bool ZeroParam=true)
     {
@@ -486,6 +507,10 @@ namespace bv{
 		{
 			//cout<<"loading texture plugin"<<endl;
 			AttachTexturePlugin(node,plugin);
+		}else if(pluginName=="video_input")
+		{
+			//cout<<"loading texture plugin"<<endl;
+			AttachVideoInputPlugin(node,plugin);
 		}else if(pluginName=="crawl")
 		{
 			//cout<<"loading text plugin"<<endl;

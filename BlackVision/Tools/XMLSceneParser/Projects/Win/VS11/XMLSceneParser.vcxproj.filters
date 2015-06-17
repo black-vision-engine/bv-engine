@@ -133,6 +133,9 @@
     <ClInclude Include="..\..\..\Source\plugins\transform\PluginTransform.h">
       <Filter>plugins\transform</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\plugins\texture\PluginVideoInput.h">
+      <Filter>plugins\texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\structure\SurfaceDescriptor.cpp">
