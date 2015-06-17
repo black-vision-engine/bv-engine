@@ -33,10 +33,10 @@ void VeryHackishMethodToUpdateConstVideoInputBeacuseLifeSucksSoMuchAndIWantToDie
 void		TestVideoInput::RefreshData( unsigned char *data)
 {
 	
-    for(int i=1920*100;i<1920*800;i++)
+    /*for(int i=1920*100;i<1920*800;i++)
     {
         data[i]=(unsigned char)16*8;
-    }
+    }*/
 
 	MemoryChunkPtr chunk = std::make_shared < MemoryChunk >( (char*)data, 1920*1080*4 );
 	bits = chunk;

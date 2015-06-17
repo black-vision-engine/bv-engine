@@ -63,6 +63,7 @@ public:
 	PluginLinearGradient*   CreatePluginLinearGradient      (xml_node<> *NewNode);
     PluginReplicator*       CreatePluginReplicator          (xml_node<> *NewNode);
     PluginVideoInput*       CreatePluginVideoInput          (xml_node<> *NewNode);
+    PluginCube*             CreatePluginCube                (xml_node<> *NewNode);
     
     vector<PluginReplicator*> ActiveReplicators;
 

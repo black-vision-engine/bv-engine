@@ -55,6 +55,7 @@ namespace bv
 		bool                            AttachCrawlPlugin               (model::BasicNodePtr node,XMLPlugin* plugin);
 		bool                            AttachPixelShader               (model::BasicNodePtr node, ParamVec4 color);
 		bool                            AttachSequencePlugin            (model::BasicNodePtr node,XMLPlugin* plugin);
+        bool                            AttachCubePlugin                (model::BasicNodePtr node,XMLPlugin* plugin);
         bool                            GenerateTimelines               ();
         bool                            AfterPlugins                    (model::BasicNodePtr node,BlackNode &CurrentNode);
         model::ITimeEvaluatorPtr        GetTimeline                   (string name); 
