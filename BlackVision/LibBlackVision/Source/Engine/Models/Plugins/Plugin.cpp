@@ -91,6 +91,8 @@ void                                BasePlugin< IPlugin >::Serialize            
     doc.Pop();
 }
 
+
+
 // *******************************
 //
 template <>
@@ -104,7 +106,8 @@ ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
     std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin__ );
 
 // params
-    auto params = doc.LoadProperties< AbstractModelParameter >( "property" );
+    //auto params = doc.LoadProperties< AbstractModelParameter >( "property" );
+	auto params = doc.LoadArray< AbstractModelParameter >( "params" );
     for( auto param : params )
     {
         if( param->GetName() == "position" // some clever remap!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
