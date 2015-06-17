@@ -24,6 +24,8 @@
 #include "../../../../Applications/BlackVision/Source/VideoInput/DefaultVideoInputResourceDescr.h"
 #include "../../../../Applications/BlackVision/Source/hack_videoinput/TestVideoInput.h"
 
+#include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
+
 // Log
 #include "Log.h"
 //#include "../BVConfig.h"
@@ -416,6 +418,30 @@ namespace bv{
 
         return true;
 	}
+    //**********************************
+	bool TreeBuilder::AttachCubePlugin(model::BasicNodePtr node,XMLPlugin* plugin)
+	{
+		// cast to proper object
+		PluginCube *rect = (PluginCube*)plugin;
+		
+		// get dimensions
+		int tessalation = (int)atoi(rect->Tesselation.c_str());
+
+        if(!node->AddPlugin( "DEFAULT_CUBE", "cube", GetTimeline(plugin->timeline) )){ return false; }
+          auto plugin_cube = node->GetPlugin( "cube" );
+
+          for(unsigned int h=0;h<rect->Bevel.size();h++)
+		{
+
+            TimeType time =  (TimeType)((float)atof(rect->Bevel[h].time.c_str()));
+
+            float value = (float)atof(rect->Bevel[h].value.c_str());
+
+            model::SetParameter( plugin_cube->GetParameter( model::DefaultCube::PN::BEVEL ),time, value);
+        }
+          model::SetParameter( plugin_cube->GetParameter( model::DefaultCube::PN::TESSELATION ), 0.f, tessalation );
+        return true;
+	}
 
 	//**********************************
 	bool TreeBuilder::AttachPrismPlugin(model::BasicNodePtr node,XMLPlugin* plugin)
@@ -477,6 +503,10 @@ namespace bv{
 		{
 			//cout<<"loading rectangle plugin"<<endl;
 			AttachRectanglePlugin(node,plugin);
+		}else if(pluginName=="cube")
+		{
+			//cout<<"loading rectangle plugin"<<endl;
+			AttachCubePlugin(node,plugin);
 		}	
         /*
 		else if(pluginName=="ring")
