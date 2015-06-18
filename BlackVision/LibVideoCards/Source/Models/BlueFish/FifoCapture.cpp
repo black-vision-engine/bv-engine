@@ -317,11 +317,15 @@ unsigned int __stdcall CFifoCapture::CaptureThread(void * pArg)
 		else
 			pThis->m_pSDK->wait_input_video_synch(pThis->m_nUpdateFormat, CurrentFieldCount);
 	}
-	pThis->m_pSDK->video_capture_stop();
+    
+	cout << "Capture Thread Stopped..." << endl;
+    
+    pThis->m_pSDK->video_capture_stop();
 
 	_endthreadex(0);
 	return 0;
 }
+
 
 unsigned int __stdcall CFifoCapture::InputMidgardThread(void * pArg)
 {

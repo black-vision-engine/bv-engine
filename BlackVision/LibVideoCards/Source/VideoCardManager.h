@@ -114,7 +114,9 @@ public:
 	void                    DeliverFrameFromRAM     (std::shared_ptr<CFrame> buffer);
 	VideoMidgard*           GetMidgard				();
 	void					GetBufferFromRenderer	(Texture2DConstPtr buffer);
-	unsigned char *			GetCaptureBufferForShaderProccessing    (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);
+	unsigned char *			GetCaptureBufferForShaderProccessing    (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);    
+    size_t	                CheckIfNewFrameArrived                  (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);    
+    void	                UnblockCaptureQueue                     (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);
 	bool					UpdateReferenceMode		(unsigned int VideoCardID, std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/ );
 	bool					UpdateReferenceOffset	(unsigned int VideoCardID, std::string ChannelName/*A,B,C,D,E,F*/, int refH, int refV);
     bool                    StopMidgardThread       ();

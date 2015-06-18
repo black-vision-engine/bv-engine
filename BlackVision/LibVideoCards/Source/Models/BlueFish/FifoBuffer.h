@@ -14,6 +14,7 @@ namespace videocards{
 
 class CFifoBuffer
 {
+
 public:
 	CFifoBuffer();
 	~CFifoBuffer();

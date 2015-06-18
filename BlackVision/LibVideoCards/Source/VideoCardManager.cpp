@@ -50,7 +50,7 @@ VideoCardManager::~VideoCardManager(void)
         delete m_Midgard;
 
 		cout << "VideoCardManager deleted" << endl;
-        //system("pause");
+        system("pause");
 	}
 
 }
@@ -447,6 +447,7 @@ void VideoCardManager::DisableVideoCard(int i)
 
 void VideoCardManager::Black()
 {
+    //DO NOT USE WHILE CLOSING APP OR WHILE DELETING VIDEOCARDS MANAGER
     for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
     {
         m_VideoCards[i]->Black();
@@ -503,7 +504,15 @@ unsigned char * VideoCardManager::GetCaptureBufferForShaderProccessing( unsigned
 {
 	return GetVideoCard(VideCardID)->GetCaptureBufferForShaderProccessing(ChannelName);
 }
-
+  
+size_t VideoCardManager::CheckIfNewFrameArrived                  (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/)
+{
+    return GetVideoCard(VideCardID)->CheckIfNewFrameArrived(ChannelName);
+}
+void   VideoCardManager::UnblockCaptureQueue                     (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/)
+{
+    return GetVideoCard(VideCardID)->UnblockCaptureQueue(ChannelName);
+}
 //**************************************
 //
 bool VideoCardManager::UpdateReferenceMode( unsigned int VideoCardID, std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/ )

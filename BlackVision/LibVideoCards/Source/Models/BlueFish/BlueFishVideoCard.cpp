@@ -901,26 +901,27 @@ int BlueFishVideoCard::InitDuplexPlayback()
             }
 
 			//Channels[i]->GetCaptureChannel()->RouteChannel((ChannelOptions.at(Channels[i]->GetName()))[1], (ChannelOptions.at(Channels[i]->GetName()))[2], BLUE_CONNECTOR_PROP_SINGLE_LINK);
-            if(Channels[i]->m_Capture)
-		    {
-			    if(Channels[i]->GetInputType()=="FILL")
-			    {
-				    Channels[i]->GetCaptureChannel()->RouteChannel((ChannelOptions.at(Channels[i]->GetName()))[1], (ChannelOptions.at(Channels[i]->GetName()))[2], BLUE_CONNECTOR_PROP_SINGLE_LINK);
-			    }
-			    else if(Channels[i]->GetInputType()=="KEY")
-			    {				
-				    Channels[i]->GetCaptureChannel()->RouteChannel((ChannelOptions.at(Channels[i]->GetName()))[1], (ChannelOptions.at(Channels[i]->GetName()))[2], BLUE_CONNECTOR_PROP_SINGLE_LINK);
-			    }
-			    if(Channels[i]->GetCaptureChannel()->InitThread())
-			    {
-				    cout << "Error on Capture InitThread Channel " << Channels[i]->GetName()  << endl;
+            
+            Channels[i]->GetCaptureChannel()->m_playthrough = Channels[i]->m_playthrough;
+
+			if(Channels[i]->GetInputType()=="FILL")
+			{
+				Channels[i]->GetCaptureChannel()->RouteChannel((ChannelOptions.at(Channels[i]->GetName()))[1], (ChannelOptions.at(Channels[i]->GetName()))[2], BLUE_CONNECTOR_PROP_SINGLE_LINK);
+			}
+			else if(Channels[i]->GetInputType()=="KEY")
+			{				
+				Channels[i]->GetCaptureChannel()->RouteChannel((ChannelOptions.at(Channels[i]->GetName()))[1], (ChannelOptions.at(Channels[i]->GetName()))[2], BLUE_CONNECTOR_PROP_SINGLE_LINK);
+			}
+			if(Channels[i]->GetCaptureChannel()->InitThread())
+			{
+				cout << "Error on Capture InitThread Channel " << Channels[i]->GetName()  << endl;
                 
-                    Channels[i]->m_playthrough = false;
-                    Channels[i]->m_Capture = false;
-				    system("pause");
-				    return 0;
-			    }
-            }
+                Channels[i]->m_playthrough = false;
+                Channels[i]->m_Capture = false;
+				system("pause");
+				return 0;
+			}
+            
 		}
 
 		if(Channels[i]->m_Playback)
@@ -1022,12 +1023,23 @@ void BlueFishVideoCard::AddChannel( std::string name, std::string type, unsigned
 
 	Channels.push_back(new Channel(name, type, renderer, resolution, refresh, interlaced, flipped, playback, capture, playthrough, inputType, m_referenceMode, refH, refV )); 
 }
-
+//**************************************
+//
+size_t	BlueFishVideoCard::CheckIfNewFrameArrived(std::string ChannelName/*A,B,C,D,E,F*/)
+{
+    return GetChannelByName(ChannelName)->GetCaptureBuffer()->m_threadsafebuffer.getSize();
+}
 //**************************************
 //
 unsigned char*	BlueFishVideoCard::GetCaptureBufferForShaderProccessing(std::string ChannelName/*A,B,C,D,E,F*/)
 {
-	return GetChannelByName(ChannelName)->GetCaptureBuffer()->m_threadsafebuffer.pop()->m_pBuffer;
+    return GetChannelByName(ChannelName)->GetCaptureBuffer()->m_threadsafebuffer.TakeDeleteDontWait()->m_pBuffer;
+}
+//**************************************
+//
+void	BlueFishVideoCard::UnblockCaptureQueue(std::string ChannelName/*A,B,C,D,E,F*/)
+{
+    return GetChannelByName(ChannelName)->GetCaptureBuffer()->m_threadsafebuffer.unblockPush();
 }
 
 //**************************************

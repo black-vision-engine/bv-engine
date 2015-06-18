@@ -54,16 +54,13 @@ BlackVisionApp::BlackVisionApp	()
 //
 BlackVisionApp::~BlackVisionApp ()
 {
-	m_videoCardManager.Black();
-    
-
     m_processManager->AbortAll( true );
     delete m_processManager;
 
     m_app->ShutDown();
     delete m_app;
 
-    FreeConsole();
+    //FreeConsole();
 }
 
 // *********************************

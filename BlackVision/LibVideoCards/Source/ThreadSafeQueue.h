@@ -16,6 +16,7 @@ namespace bv
 {
 
 namespace videocards{
+    
 template <class T, std::size_t N>
 class ThreadSafeQueue {
 
@@ -54,7 +55,13 @@ public:
 		cv_pop_.notify_one();
 		return result;
 	}
-
+    value_type TakeDeleteDontWait()
+	{
+        value_type result = q_.front();
+        q_.pop_front();
+        cv_pop_.notify_one();
+		return result;
+	}
 	void popInnerVector()
 	{
 		std::unique_lock<std::mutex> lk(mtx_);
@@ -78,13 +85,18 @@ public:
 		std::unique_lock<std::mutex> lk(mtx_);
 		while (!q_.empty())q_.pop_back();
 		cv_pop_.notify_one();    
-		//cv_pop_.notify_all();
 	}
 
 
-    int getSize()
+    size_t getSize()
     {
+        std::unique_lock<std::mutex> lk(mtx_);
         return q_.size();
+    }
+
+    void unblockPush()
+    {
+		cv_pop_.notify_one();
     }
 
 private:

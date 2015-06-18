@@ -230,7 +230,14 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
             HPROFILER_SECTION( "Render" );
 			if(ConfigManager::GetBool("Debug/UseVideoInputFeeding"))
 			{
-				BB::AssetManager::VideoInput->RefreshData(m_videoCardManager->GetCaptureBufferForShaderProccessing(0,"A"));
+                if(m_videoCardManager->CheckIfNewFrameArrived(0,"A") > 0)
+                {
+				    BB::AssetManager::VideoInput->RefreshData(m_videoCardManager->GetCaptureBufferForShaderProccessing(0,"A"));
+                }
+                else
+                {
+                    m_videoCardManager->UnblockCaptureQueue(0,"A");
+                }
 			}
             m_renderLogic->RenderFrame  ( renderer, m_bvScene->GetEngineSceneRoot() );
             m_renderLogic->FrameRendered( renderer );

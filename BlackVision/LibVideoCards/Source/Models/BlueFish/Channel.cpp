@@ -50,6 +50,7 @@ Channel::~Channel()
     if(m_Capture)
     {
         m_CaptureChannel->m_pFifoBuffer->m_threadsafebuffer.clear();
+
 	    m_CaptureChannel->StopCaptureThread();
 	    delete m_CaptureChannel;
 	    m_CaptureChannel = NULL;

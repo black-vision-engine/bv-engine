@@ -48,6 +48,8 @@ public:
 	BLUE_UINT32		m_nMidgardInputThreadStopping;
 
 	OVERLAPPED		m_Overlap;
+
+    bool            m_playthrough;
 };
 }
 }
