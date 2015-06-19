@@ -71,7 +71,7 @@ public:
     virtual void			SuspendVideoCardProccessing                 ()								{};
     virtual void			ResumeVideoCardProccessing                  ()								{};
 	virtual unsigned char *	GetCaptureBufferForShaderProccessing		(std::string ChannelName/*A,B,C,D,E,F*/){return 0;};
-    virtual size_t	        CheckIfNewFrameArrived                      (std::string ChannelName/*A,B,C,D,E,F*/){return false;};
+    virtual bool	        CheckIfNewFrameArrived                      (std::string ChannelName/*A,B,C,D,E,F*/){return false;};
     virtual void	        UnblockCaptureQueue                         (std::string ChannelName/*A,B,C,D,E,F*/){};
 
     ///GPUDirect

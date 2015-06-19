@@ -59,8 +59,7 @@ BlackVisionApp::~BlackVisionApp ()
 
     m_app->ShutDown();
     delete m_app;
-
-    //FreeConsole();
+    FreeConsole();
 }
 
 // *********************************

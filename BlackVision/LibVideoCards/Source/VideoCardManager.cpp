@@ -25,10 +25,12 @@ VideoCardManager::VideoCardManager(void)
     m_VideoCardConfig = VideoConfig();
 	
 }
+
 //**************************************
 //
 VideoCardManager::~VideoCardManager(void)
 {	
+	m_Enabled = false;
     m_IsEnding = true;
 	if( m_midgardThreadStopping == false )
 	{
@@ -50,7 +52,7 @@ VideoCardManager::~VideoCardManager(void)
         delete m_Midgard;
 
 		cout << "VideoCardManager deleted" << endl;
-        system("pause");
+        //system("pause");
 	}
 
 }
@@ -70,6 +72,34 @@ bool VideoCardManager::StopMidgardThread()
     return true;
 }
 
+//**************************************
+//
+void VideoCardManager::DestroyVideoCardManager()
+{
+	m_Enabled = false;
+    m_IsEnding = true;
+	if( m_midgardThreadStopping == false )
+	{
+        m_Midgard->PushKillerFrame();
+        m_Midgard->PushKillerFrame();
+
+		m_midgardThreadStopping = TRUE;
+        StopMidgardThread();
+        
+        cout << "Deleting videoCards.... " << endl;
+       	for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
+		{
+			m_VideoCards[i]->Disable();
+		}
+
+		for(auto &it:m_VideoCards) delete it; 
+		m_VideoCards.clear();
+
+        delete m_Midgard;
+
+		cout << "VideoCardManager deleted" << endl;
+	}
+}
 //**************************************
 //
 
@@ -505,7 +535,7 @@ unsigned char * VideoCardManager::GetCaptureBufferForShaderProccessing( unsigned
 	return GetVideoCard(VideCardID)->GetCaptureBufferForShaderProccessing(ChannelName);
 }
   
-size_t VideoCardManager::CheckIfNewFrameArrived                  (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/)
+bool VideoCardManager::CheckIfNewFrameArrived                  (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/)
 {
     return GetVideoCard(VideCardID)->CheckIfNewFrameArrived(ChannelName);
 }

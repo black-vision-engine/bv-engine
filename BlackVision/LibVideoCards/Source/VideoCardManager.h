@@ -68,7 +68,6 @@ struct VideoConfig
     unsigned int blackMagicCount;
     vector<VideoCardConfig>	m_BlueFishConfig;
     vector<VideoCardConfig>	m_BlackMagicConfig;
-
 };
 
 
@@ -83,6 +82,7 @@ private:
 	HANDLE					m_midgardThreadHandle;
 	unsigned int			m_midgardThreadID;
 	bool					m_midgardThreadStopping;
+	bool					m_Enabled;
 
     
 public:
@@ -91,7 +91,6 @@ public:
     VideoConfig             m_VideoCardConfig;
     VideoCard_Modes         m_CurrentDislpayMode;
     VideoCard_RAM_GPU       m_CurrentTransferMode;
-	bool					m_Enabled;
     
     bool                    m_IsEnding;
 	void					Black();
@@ -100,6 +99,7 @@ public:
 	                        ~VideoCardManager       (void);
 
     bool                    InitVideoCardManager    (const std::vector<int> & hackBuffersUids);
+    void                    DestroyVideoCardManager ();
     void                    ReadConfig              ();
     void                    Enable                  ();
     void                    Disable                 ();
@@ -115,11 +115,11 @@ public:
 	VideoMidgard*           GetMidgard				();
 	void					GetBufferFromRenderer	(Texture2DConstPtr buffer);
 	unsigned char *			GetCaptureBufferForShaderProccessing    (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);    
-    size_t	                CheckIfNewFrameArrived                  (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);    
+    bool	                CheckIfNewFrameArrived                  (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);    
     void	                UnblockCaptureQueue                     (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);
 	bool					UpdateReferenceMode		(unsigned int VideoCardID, std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/ );
 	bool					UpdateReferenceOffset	(unsigned int VideoCardID, std::string ChannelName/*A,B,C,D,E,F*/, int refH, int refV);
-    bool                    StopMidgardThread       ();
+    bool                    IsEnabled               (){return m_Enabled;}
 
 private:
 	void                    DetectVideoCards        ();
@@ -133,6 +133,7 @@ private:
 	void                    RegisterVideoCards      ();
     void                    RegisterBlueFishCards   ();
     void                    RegisterBlackMagicCards ();    
+    bool                    StopMidgardThread       ();
 	unsigned int static __stdcall copy_buffer_thread      (void *args);
 };
 

@@ -411,7 +411,7 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
 	auto FrameNo = m_offscreenRenderLogic->ReadDisplayTarget( renderer, 0 );
 
     //GPUDirect;
-	if(m_VideoCardManager->m_Enabled)
+	if(m_VideoCardManager->IsEnabled())
 	{
 		if( m_VideoCardManager->m_CurrentTransferMode == bv::videocards::VideoCard_RAM_GPU::GPU )
 		{          

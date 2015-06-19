@@ -69,7 +69,7 @@ public:
     void                SuspendVideoCardProccessing                ();
     void                ResumeVideoCardProccessing                  ();
 	unsigned char *		GetCaptureBufferForShaderProccessing    (std::string ChannelName/*A,B,C,D,E,F*/);
-    size_t	            CheckIfNewFrameArrived                  (std::string ChannelName/*A,B,C,D,E,F*/);
+    bool	            CheckIfNewFrameArrived                  (std::string ChannelName/*A,B,C,D,E,F*/);
     void	            UnblockCaptureQueue                     (std::string ChannelName/*A,B,C,D,E,F*/);
 	virtual bool        UpdateReferenceOffset  (std::string ChannelName/*A,B,C,D,E,F*/, int refH, int refV)		override;
     virtual bool        UpdateReferenceMode    (std::string ChannelName/*A,B,C,D,E,F*/, std::string ReferenceModeName/*FREERUN,IN_A,IN_B,ANALOG,GENLOCK*/)	override;

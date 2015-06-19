@@ -1025,9 +1025,9 @@ void BlueFishVideoCard::AddChannel( std::string name, std::string type, unsigned
 }
 //**************************************
 //
-size_t	BlueFishVideoCard::CheckIfNewFrameArrived(std::string ChannelName/*A,B,C,D,E,F*/)
+bool	BlueFishVideoCard::CheckIfNewFrameArrived(std::string ChannelName/*A,B,C,D,E,F*/)
 {
-    return GetChannelByName(ChannelName)->GetCaptureBuffer()->m_threadsafebuffer.getSize();
+    return (GetChannelByName(ChannelName)->GetCaptureBuffer()->m_threadsafebuffer.getSize() > 0 ? true : false);
 }
 //**************************************
 //

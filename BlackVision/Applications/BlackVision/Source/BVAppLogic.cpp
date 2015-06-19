@@ -228,23 +228,31 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
         {
             FRAME_STATS_SECTION( "Render" );
             HPROFILER_SECTION( "Render" );
-			if(ConfigManager::GetBool("Debug/UseVideoInputFeeding"))
-			{
-                if(m_videoCardManager->CheckIfNewFrameArrived(0,"A") > 0)
-                {
-				    BB::AssetManager::VideoInput->RefreshData(m_videoCardManager->GetCaptureBufferForShaderProccessing(0,"A"));
-                }
-                else
-                {
-                    m_videoCardManager->UnblockCaptureQueue(0,"A");
-                }
-			}
+			
+            RefreshVideoInputScene();
+
             m_renderLogic->RenderFrame  ( renderer, m_bvScene->GetEngineSceneRoot() );
             m_renderLogic->FrameRendered( renderer );
         }
     }
 
     GTimer.StartTimer();
+}
+// *********************************
+//
+void BVAppLogic::RefreshVideoInputScene()
+{
+    if(ConfigManager::GetBool("Debug/UseVideoInputFeeding") && m_videoCardManager->IsEnabled())
+    {
+        if(m_videoCardManager->CheckIfNewFrameArrived(0,"A"))
+        {
+			BB::AssetManager::VideoInput->RefreshData(m_videoCardManager->GetCaptureBufferForShaderProccessing(0,"A"));
+        }
+        else
+        {
+            m_videoCardManager->UnblockCaptureQueue(0,"A");
+        }
+    }
 }
 
 // *********************************
@@ -339,7 +347,10 @@ void BVAppLogic::OnKey           ( unsigned char c )
         sob->Save( "test.xml" );
         delete sob;
     }
-
+    else if( c == 'd' )
+    {
+        m_videoCardManager->DestroyVideoCardManager();
+    }   
 /*
     // FIXME: the code below is must be used with an animation plugin
     unsigned char d = c - '0';
