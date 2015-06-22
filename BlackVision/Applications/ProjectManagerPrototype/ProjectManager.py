@@ -1,20 +1,30 @@
 from DataCategory import DataCategory
 from Project import Project
 from Location import Location
-from SceneAccessor import SceneAccessor
+from FSSceneAccessor import FSSceneAccessor
+
+import os
 
 class ProjectManager:
 
-    def __init__(self):
+    def __init__(self, rootDir):
         self.projects       = {}
         self.currentProject = None
         self.globalCategories = {}
         self.globalSceneAccessor = None
+        self.rootDir        = os.path.abspath(rootDir)
+        self.__createDir()
+        self.setGlobalSceneAccessor(FSSceneAccessor(self, None))
 
-    def getAssetDesc(self, path):
-        assert isinstance(path, str)
+    def __createDir(self):
+        if not os.path.exists(self.rootDir):
+            os.makedirs(self.rootDir)
 
-        loc = Location(path, self.currentProject.getName() if self.currentProject else "")
+    def getAssetDesc(self, projectName, pathInProject):
+        assert isinstance(projectName, str)
+        assert isinstance(pathInProject, str)
+
+        loc = Location(projectName, pathInProject, self.currentProject.getName() if self.currentProject else "")
 
         if loc:
             if loc.getIsGlobalLocation():
@@ -26,13 +36,14 @@ class ProjectManager:
                 if proj:
                     return proj.getData(loc.getCategoryName(), loc.getInternalPath())
 
-        print("Cannot find asset '{}'".format(path))
+        print("Cannot find asset '{}  {}'".format(projectName, pathInProject))
         return None
 
-    def getSceneDesc(self, path):
-        assert isinstance(path, str)
+    def getSceneDesc(self, projectName, pathInProject):
+        assert isinstance(projectName, str)
+        assert isinstance(pathInProject, str)
 
-        loc = Location(path, self.currentProject.getName() if self.currentProject else "")
+        loc = Location(projectName, pathInProject, self.currentProject.getName() if self.currentProject else "")
 
         if loc:
             if loc.getIsGlobalLocation():
@@ -47,11 +58,10 @@ class ProjectManager:
                 if proj:
                     return proj.getSceneDesc(loc.getInternalPath())
 
-        print("Cannot find scene '{}'".format(path))
+        print("Cannot find scene '{}  {}'".format(projectName, pathInProject))
         return None
 
     def setGlobalSceneAccessor(self, sceneAccessor):
-        assert isinstance(sceneAccessor, SceneAccessor)
         self.globalSceneAccessor = sceneAccessor
 
     def getProject(self, name):
@@ -86,6 +96,9 @@ class ProjectManager:
              print("Cannot register global category '{}'. Already registered.".format(category.getId()))
 
 
+    def getRootDir(self):
+        return self.rootDir
+
     def moveAsset(self, fromProjectName, fromInternalPath, toProjectName, toInternalPath):
         assert False  # TODO: Implement
 
@@ -95,14 +108,21 @@ class ProjectManager:
     def exportAsset(self, projectName, assetPath):
         assert False  # TODO: Implement
 
-    def exportAssetToFile(self, projectName, assetPath, outputFile):
+    def exportAssetToFile(self, projectName, categoryName, assetPath, outputFile):
+        self.getProject(projectName).exportData(outputFile, categoryName, assetPath)
+
+    def importAsset(self, importToProjectName, importToPath, importData):
         assert False  # TODO: Implement
 
-    def importAssetFromFile(self, importToProjectName, importToPath, importData):
-        assert False  # TODO: Implement
+    def importAssetFromFile(self, importToProjectName, importToCategoryName, importToPath, importDataFilePath):
+        if importToProjectName == ".":
+            importToProjectName == self.currentProject.getName()
 
-    def importAssetFromFile(self, importToProjectName, importToPath, importDataFilePath):
-        assert False  # TODO: Implement
+        if len(importToProjectName) == 0:
+            if importToCategoryName in self.globalCategories:
+                self.globalCategories[importToCategoryName].importData(importDataFilePath, importToPath)
+        else:
+            self.getProject(importToProjectName).importData(importDataFilePath, importToCategoryName, importToPath)
 
     def moveScene(self, fromProjectName, fromInternalPath, toProjectName, toInternalPath):
         assert False  # TODO: Implement
@@ -120,4 +140,7 @@ class ProjectManager:
         assert False  # TODO: Implement
 
     def importSceneFromFile(self, importToProjectName, importToPath, importDataFilePath):
-        assert False  # TODO: Implement
+        self.getProject(importToProjectName).importScene(importDataFilePath, importToPath)
+
+
+PM = ProjectManager("bv_media")

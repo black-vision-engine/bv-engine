@@ -3,7 +3,7 @@ from LoadableDataDesc import LoadableDataDesc
 
 import os
 import shutil
-import json
+import pickle
 
 class LoadableSequenceDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::SequenceAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableDataDesc
     def __init__(self, absPath, frames):
@@ -15,7 +15,7 @@ class LoadableSequenceDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc l
         return len(self.frames)
 
     def getFrames(self):
-        return self.frames
+        return [os.path.join(self.absPath, f) for f in self.frames]
 
 class FSSequenceDataAccessor(SequenceDataAccessor):
     def __init__(self, rootPath, supportedFileExt):
@@ -43,6 +43,8 @@ class FSSequenceDataAccessor(SequenceDataAccessor):
         absPath = os.path.join(self.rootPath, internalPath)
 
         try:
+            if not os.path.exists(absPath):
+                os.makedirs(absPath)
             for f in loadableDataDesc.getFrames():
                 shutil.copyfile(f, os.path.join(absPath, os.path.basename(f)))
             return True
@@ -77,22 +79,25 @@ class FSSequenceDataAccessor(SequenceDataAccessor):
     def importData(self, impDataFile, importToPath):
 
         try:
-            resultFileContent = None
 
-            with open(impDataFile, "r") as fi:
-                resultFileContent = json.load(fi)
+            with open(impDataFile, "rb") as fi:
+                resultFileContent = pickle.load(fi)
 
             desc = resultFileContent["desc"]
 
             assert isinstance(desc, LoadableSequenceDataDesc)
-            assert(desc.absPath. str)
+            assert isinstance(desc.absPath, str)
 
-            toPath = os.path.join(self.rootPath, importToPath)
+            dirName = os.path.join(self.rootPath, importToPath)
 
-            for frame, i in desc.getFrames():
+            if not os.path.exists(dirName):
+                os.makedirs(dirName)
+
+            for i , frame in enumerate(desc.getFrames()):
                 assert isinstance(frame, str)
                 filename = os.path.basename(frame)
-                with open(filename, "w") as f:
+                absPath = os.path.join(dirName, filename)
+                with open(absPath, "wb") as f:
                     f.write(resultFileContent["resourceData"][i])
 
             return True
@@ -108,15 +113,15 @@ class FSSequenceDataAccessor(SequenceDataAccessor):
 
             resultFileContent = {}
 
-            resultFileContent["desc"] = json.dumps(desc)
+            resultFileContent["desc"] = desc
 
             resultFileContent["resourceData"] = []
             for frame in desc.getFrames():
-                with open(frame, "r") as fi:
+                with open(frame, "rb") as fi:
                     resultFileContent["resourceData"].append(fi.read())
 
-            with open(expDataFilePath, "w") as f:
-                json.dump(resultFileContent, f)
+            with open(expDataFilePath, "wb") as f:
+                pickle.dump(resultFileContent, f)
 
             return True
         except Exception as exc:

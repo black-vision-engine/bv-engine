@@ -1,11 +1,23 @@
 from abc import abstractmethod
 
 class SceneAccessor:
-    def __init__(self):
-        pass
+    def __init__(self, projectManager):
+        self.projectManager = projectManager
 
     @abstractmethod
     def getScene(self, path):
+        pass
+
+    @abstractmethod
+    def createScene(self, name, path):
+        pass
+
+    @abstractmethod
+    def addSceneFromFile(self, path, sceneFilePath):
+        pass
+
+    @abstractmethod
+    def saveScene(self, path, scene):
         pass
 
     @abstractmethod

@@ -3,7 +3,7 @@ from LoadableDataDesc import LoadableDataDesc
 
 import os
 import shutil
-import json
+import pickle
 
 class LoadableSurfaceDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::SurfaceAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableDataDesc
     def __init__(self, absPath):
@@ -35,6 +35,8 @@ class FSSurfaceDataAccessor(SurfaceDataAccessor):
         absPath = os.path.join(self.rootPath, internalPath)
 
         try:
+            if not os.path.exists(os.path.dirname(absPath)):
+                os.makedirs(os.path.dirname(absPath))
             shutil.copyfile(loadableDataDesc.absPath, absPath)
             return True
         except Exception as exc:
@@ -63,8 +65,8 @@ class FSSurfaceDataAccessor(SurfaceDataAccessor):
         try:
             resultFileContent = None
 
-            with open(impDataFile, "r") as fi:
-                resultFileContent = json.load(fi)
+            with open(impDataFile, "rb") as fi:
+                resultFileContent = pickle.load(fi)
 
             desc = resultFileContent["desc"]
 
@@ -74,7 +76,7 @@ class FSSurfaceDataAccessor(SurfaceDataAccessor):
 
             toPath = os.path.join(self.rootPath, importToPath, filename)
 
-            with open(toPath, "w") as f:
+            with open(toPath, "wb") as f:
                 f.write(resultFileContent["resourceData"])
 
             return True
@@ -92,13 +94,13 @@ class FSSurfaceDataAccessor(SurfaceDataAccessor):
 
             resultFileContent = {}
 
-            resultFileContent["desc"] = json.dumps(desc)
+            resultFileContent["desc"] = desc
 
             with open(absPath, "r") as fi:
                 resultFileContent["resourceData"] = fi.read()
 
-            with open(expDataFilePath, "w") as f:
-                json.dump(resultFileContent, f)
+            with open(expDataFilePath, "wb") as f:
+                pickle.dump(resultFileContent, f)
 
             return True
         except Exception as exc:

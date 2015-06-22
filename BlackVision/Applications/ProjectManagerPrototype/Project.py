@@ -2,13 +2,42 @@ from DataCategory import DataCategory
 from LoadableDataDesc import LoadableDataDesc
 from SceneAccessor import SceneAccessor
 
+from FSSceneAccessor import FSSceneAccessor
+from FSTextureDataAccessor import FSTextureDataAccessor
+from FSFontDataAccessor import FSFontDataAccessor
+from FSSequenceDataAccessor import FSSequenceDataAccessor
+from FSSurfaceDataAccessor import FSSurfaceDataAccessor
+
+import os
+
 class Project:
 
-    def __init__(self, name):
+    def __init__(self, projectManager, name):
         assert name not in ["project", "global"]  # TODO: Make better constraints for project name
         self.name = name
+        self.projectManager = projectManager
+        self.rootDir = os.path.abspath(projectManager.getRootDir())
         self.categories = {}
-        self.sceneAccessor = None
+        self.__initialize()
+
+    def __initialize(self):
+        self.__createDir()
+
+        self.categories["textures"]     = DataCategory("textures", FSTextureDataAccessor(os.path.join(self.rootDir, "textures", self.name), ['jpg', 'tga']))
+        self.categories["fonts"]        = DataCategory("fonts", FSFontDataAccessor(os.path.join(self.rootDir, "fonts", self.name)))
+        self.categories["sequences"]    = DataCategory("sequences", FSSequenceDataAccessor(os.path.join(self.rootDir, "sequences", self.name), ['jpg', 'tga']))
+        self.categories["surfaces"]     = DataCategory("surfaces", FSSurfaceDataAccessor(os.path.join(self.rootDir, "surfaces", self.name), ['bvsur']))
+
+        self.projectManager.registerGlobalCategory(DataCategory("textures", FSTextureDataAccessor(os.path.join(self.rootDir, "textures"), ['jpg', 'tga'])))
+        self.projectManager.registerGlobalCategory(DataCategory("fonts", FSFontDataAccessor(os.path.join(self.rootDir, "fonts"))))
+        self.projectManager.registerGlobalCategory(DataCategory("sequences", FSSequenceDataAccessor(os.path.join(self.rootDir, "sequences"), ['jpg', 'tga'])))
+        self.projectManager.registerGlobalCategory(DataCategory("surfaces", FSSurfaceDataAccessor(os.path.join(self.rootDir, "surfaces"), ['bvsur'])))
+
+        self.sceneAccessor = FSSceneAccessor(self.projectManager, self)
+
+    def __createDir(self):
+        if not os.path.exists(os.path.join(self.rootDir, "projects", self.name)):
+            os.makedirs(os.path.join(self.rootDir, "projects", self.name))
 
     def getName(self):
         return self.name
@@ -60,17 +89,23 @@ class Project:
             print("There is no category named {} in project {}".format(categoryId, self.name))
             return None
 
+    def exportScene(self,  expDataFilePath, path):
+        self.sceneAccessor.exportScene(expDataFilePath, path)
+
+    def importScene(self,  impDataFilePath, path):
+        self.sceneAccessor.importScene(impDataFilePath, path)
+
     def getScene(self, path):
         assert isinstance(self.sceneAccessor, SceneAccessor)
         return self.sceneAccessor.getSceneDesc()
 
-    def setSceneAccessor(self, sceneAccessor):
-        assert isinstance(sceneAccessor, SceneAccessor)
-        self.sceneAccessor = sceneAccessor
-
-    def appendScene(self, scene, path):
+    def appendSceneFromFile(self, sceneFilePath, path):
         assert isinstance(self.sceneAccessor, SceneAccessor)
-        self.sceneAccessor.addScene(path, scene)
+        self.sceneAccessor.addSceneFromFile(path, sceneFilePath)
+
+    def saveScene(self, scene, path):
+        assert isinstance(self.sceneAccessor, SceneAccessor)
+        self.sceneAccessor.saveScene(path, scene)
 
     def copyScene(self, path):
         assert isinstance(self.sceneAccessor, SceneAccessor)

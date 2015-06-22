@@ -1,5 +1,6 @@
 
-import json
+import pickle
+import traceback
 
 class SceneWriter:
     def __init__(self, scene, outputFile = None):
@@ -13,16 +14,16 @@ class SceneWriter:
         assert self.outputFile
         try:
             s = None
-            with open(self.outputFile, 'w') as f:
-                json.dump(self.scene, f)
+            with open(self.outputFile, 'wb') as f:
+                pickle.dump(self.scene, f, protocol = 0)
             return True
         except Exception as exc:
             print("Cannot save scene '{}' to file '{}':". format(self.scene.getName(), self.outputFile))
-            print(exc)
+            print(traceback.format_exc())
             return False
 
     def dumpsScene(self):
-        return json.dumps(self.scene)
+        return pickle.dumps(self.scene)
 
 
 class SceneReader:
@@ -35,8 +36,8 @@ class SceneReader:
     def __parseSceneFileDef(self):
         try:
             s = None
-            with open(self.sceneFileDef) as f:
-                s = json.load(f)
+            with open(self.sceneFileDef, "rb") as f:
+                s = pickle.load(f)
             return s
         except Exception as exc:
             print("Cannot load scene from file '{}':". format(self.sceneFileDef))
@@ -47,6 +48,9 @@ class Plugin:
     def __init__(self, name):
         self.name = name
         self.resources = []
+
+    def addResource(self, projectName, categoryName, path):
+        self.resources.append((projectName, categoryName, path))
 
 class Node:
     def __init__(self, name):
@@ -60,7 +64,7 @@ class Node:
 
     def addChildNode(self, node):
         assert isinstance(node, Node)
-        self.plugins.append(node)
+        self.childrenNode.append(node)
 
 class Scene:
     def __init__(self, name, rootNode):
@@ -70,17 +74,16 @@ class Scene:
     def getName(self):
         return self.name
 
-    @staticmethod
-    def __listResourceInTree(cls, node, resources):
+    def __listResourceInTree(self, node, resources):
         for pl in node.plugins:
-            resources.append(pl.resources)
+            resources += (pl.resources)
 
         for n in node.childrenNode:
-            Scene.__listResourceInTree(n, resources)
+            self.__listResourceInTree(n, resources)
 
     def listResources(self):
         resources = []
-        Scene.__listResourceInTree(self.rootNode, resources)
+        self.__listResourceInTree(self.rootNode, resources)
 
         return resources
 
