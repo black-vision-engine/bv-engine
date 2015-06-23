@@ -37,3 +37,10 @@ class DataAccessor:
     def exportData(self, expDataFilePath, internalPath):
         pass
 
+    @abstractmethod
+    def exportAll(self, expDataFilePath):
+        pass
+
+    @abstractmethod
+    def listAll(self):
+        pass

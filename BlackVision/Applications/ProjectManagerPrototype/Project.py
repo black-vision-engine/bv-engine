@@ -111,6 +111,9 @@ class Project:
         assert isinstance(self.sceneAccessor, SceneAccessor)
         return self.sceneAccessor.copyScene(path)
 
+    def exportToFile(self, outputFileName):
+        for c in self.categories.values():
+            c.exportAll(outputFileName)
 
     def __str__(self):
         print("Project {} \n\t".format(self.name))

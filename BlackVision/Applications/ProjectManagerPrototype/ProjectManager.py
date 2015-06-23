@@ -111,6 +111,14 @@ class ProjectManager:
     def exportAssetToFile(self, projectName, categoryName, assetPath, outputFile):
         self.getProject(projectName).exportData(outputFile, categoryName, assetPath)
 
+    def exportProjectToFile(self, projectName, outputFileName):
+        proj = self.getProject(projectName)
+        if proj:
+            return proj.exportToFile(outputFileName)
+        else:
+            print("Cannot export project '{}'".format(projectName))
+            return False
+
     def importAsset(self, importToProjectName, importToPath, importData):
         assert False  # TODO: Implement
 
