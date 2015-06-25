@@ -62,17 +62,20 @@ def test():
 
     pm.getProject("proj1").saveScene(generateScene1("proj1", "proj2"), "test_scenes/p1s1.scn")
 
-    pm.getProject("proj1").exportScene("exportedScene1", "test_scenes/p1s1.scn")
+    #pm.getProject("proj1").exportScene("exportedScene1", "test_scenes/p1s1.scn")
 
     pm.listProjectsNames()
 
+    pm.getProject("proj1").exportToFile("proj1.exp")
 
-    from ProjectManager import ProjectManager
-    pm1 = ProjectManager("bv_media1")
+    # from ProjectManager import ProjectManager
+    # pm1 = ProjectManager("bv_media1")
+    #
+    # proj11 = Project.Project(pm1, "1proj1")
+    # pm1.addProject(proj11)
+    # pm1.importSceneFromFile("1proj1", "imported_scene/p1s1.scn", "exportedScene1")
 
-    proj11 = Project.Project(pm1, "1proj1")
-    pm1.addProject(proj11)
-    pm1.importSceneFromFile("1proj1", "imported_scene/p1s1.scn", "exportedScene1")
+
 
 if __name__ == "__main__":
     test()
