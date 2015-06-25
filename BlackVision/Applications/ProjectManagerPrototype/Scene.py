@@ -74,16 +74,16 @@ class Scene:
     def getName(self):
         return self.name
 
-    def __listResourceInTree(self, node, resources):
+    def __listAssetsInTree(self, node, resources):
         for pl in node.plugins:
             resources += (pl.resources)
 
         for n in node.childrenNode:
-            self.__listResourceInTree(n, resources)
+            self.__listAssetsInTree(n, resources)
 
-    def listResources(self):
+    def listAssets(self):
         resources = []
-        self.__listResourceInTree(self.rootNode, resources)
+        self.__listAssetsInTree(self.rootNode, resources)
 
         return resources
 

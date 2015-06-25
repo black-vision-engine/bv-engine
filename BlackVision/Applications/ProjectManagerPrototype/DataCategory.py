@@ -29,3 +29,6 @@ class DataCategory:
     def importData(self, impDataFilePath, toPath):
         assert isinstance(toPath, str)
         return self.accessor.importData(impDataFilePath, toPath)
+
+    def exportAll(self, expDataFilePath):
+        return self.accessor.exportAll(expDataFilePath)

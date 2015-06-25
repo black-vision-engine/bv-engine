@@ -27,3 +27,11 @@ class SceneAccessor:
     @abstractmethod
     def exportScene(self, expSceneFilePath, project, internalPath):
         pass
+
+    @abstractmethod
+    def listScenes(self):
+        pass
+
+    @abstractmethod
+    def listAllUniqueExportDesc(self):
+        pass
