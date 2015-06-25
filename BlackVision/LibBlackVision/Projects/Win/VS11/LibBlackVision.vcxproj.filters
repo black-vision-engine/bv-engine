@@ -873,6 +873,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\SerializationObjects.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\ParameterSerialization.cpp">
+      <Filter>Engine\Models\Plugins\Parameters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">

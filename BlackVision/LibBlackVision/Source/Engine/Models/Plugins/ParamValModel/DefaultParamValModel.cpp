@@ -4,6 +4,7 @@
 #include "Engine/Interfaces/IValue.h"
 #include "Engine/Models/Plugins/Interfaces/IParamValEvaluator.h"
 
+#include <algorithm>
 
 namespace bv { namespace model {
 
@@ -90,6 +91,15 @@ void                                        DefaultParamValModel::Update        
     {
         updater->DoUpdate();
     }
+}
+
+// *******************************
+//
+void                                        DefaultParamValModel::SetParameter      ( IParameterPtr param )
+{
+    auto prevParam = GetParameter( param->GetName() );
+    m_parameters.erase( std::remove( m_parameters.begin(), m_parameters.end(), prevParam ) );
+    AddParameter( param );
 }
 
 // *******************************

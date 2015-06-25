@@ -150,7 +150,7 @@ BasicInterpolator<TimeValueT, ValueT, FloatT>::BasicInterpolator(TimeValueT tole
 template<class TimeValueT, class ValueT, class FloatT >
 void                BasicInterpolator<TimeValueT, ValueT, FloatT>::Serialize       ( SerializeObject & doc ) const
 {
-    doc.SetName( "intepolator" );
+    doc.SetName( "interpolator" );
     
     for( auto key : keys )
     {

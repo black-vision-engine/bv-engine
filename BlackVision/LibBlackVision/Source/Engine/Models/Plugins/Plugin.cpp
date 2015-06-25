@@ -53,7 +53,7 @@ void SetParameter( IPluginParamValModelPtr pvm, AbstractModelParameterPtr param 
         if( model_ && model_->GetParameter( param->GetName() ) )
             {
                 auto model = std::static_pointer_cast< DefaultParamValModel >( model_ ); // FIXME: this should not really be assumed here, I think
-                model->AddParameter( param ); // FIXME: SetParameter instead of AddParameter
+                model->SetParameter( param ); // FIXME: SetParameter instead of AddParameter
             }
 }
 
