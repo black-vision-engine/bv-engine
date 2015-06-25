@@ -1,6 +1,9 @@
 from DataCategory import DataCategory
 from LoadableDataDesc import LoadableDataDesc
 from SceneAccessor import SceneAccessor
+from ProjectExportDesc import ProjectExportDesc
+
+from SceneExportDesc import SceneExportDesc
 
 from FSSceneAccessor import FSSceneAccessor
 from FSTextureDataAccessor import FSTextureDataAccessor
@@ -21,17 +24,18 @@ class Project:
         self.__initialize()
 
     def __initialize(self):
+
         self.__createDir()
 
         self.categories["textures"]     = DataCategory("textures", FSTextureDataAccessor(os.path.join(self.rootDir, "textures", self.name), ['jpg', 'tga']))
-        self.categories["fonts"]        = DataCategory("fonts", FSFontDataAccessor(os.path.join(self.rootDir, "fonts", self.name)))
-        self.categories["sequences"]    = DataCategory("sequences", FSSequenceDataAccessor(os.path.join(self.rootDir, "sequences", self.name), ['jpg', 'tga']))
-        self.categories["surfaces"]     = DataCategory("surfaces", FSSurfaceDataAccessor(os.path.join(self.rootDir, "surfaces", self.name), ['bvsur']))
+        # self.categories["fonts"]        = DataCategory("fonts", FSFontDataAccessor(os.path.join(self.rootDir, "fonts", self.name)))
+        # self.categories["sequences"]    = DataCategory("sequences", FSSequenceDataAccessor(os.path.join(self.rootDir, "sequences", self.name), ['jpg', 'tga']))
+        # self.categories["surfaces"]     = DataCategory("surfaces", FSSurfaceDataAccessor(os.path.join(self.rootDir, "surfaces", self.name), ['bvsur']))
 
         self.projectManager.registerGlobalCategory(DataCategory("textures", FSTextureDataAccessor(os.path.join(self.rootDir, "textures"), ['jpg', 'tga'])))
-        self.projectManager.registerGlobalCategory(DataCategory("fonts", FSFontDataAccessor(os.path.join(self.rootDir, "fonts"))))
-        self.projectManager.registerGlobalCategory(DataCategory("sequences", FSSequenceDataAccessor(os.path.join(self.rootDir, "sequences"), ['jpg', 'tga'])))
-        self.projectManager.registerGlobalCategory(DataCategory("surfaces", FSSurfaceDataAccessor(os.path.join(self.rootDir, "surfaces"), ['bvsur'])))
+        # self.projectManager.registerGlobalCategory(DataCategory("fonts", FSFontDataAccessor(os.path.join(self.rootDir, "fonts"))))
+        # self.projectManager.registerGlobalCategory(DataCategory("sequences", FSSequenceDataAccessor(os.path.join(self.rootDir, "sequences"), ['jpg', 'tga'])))
+        # self.projectManager.registerGlobalCategory(DataCategory("surfaces", FSSurfaceDataAccessor(os.path.join(self.rootDir, "surfaces"), ['bvsur'])))
 
         self.sceneAccessor = FSSceneAccessor(self.projectManager, self)
 
@@ -111,8 +115,22 @@ class Project:
         assert isinstance(self.sceneAccessor, SceneAccessor)
         return self.sceneAccessor.copyScene(path)
 
+    def buildExportDesc(self):
+        assetsDescs = set()
+        for c in self.categories.values():
+            expDescs = c.accessor.listAllUniqueExportDesc(self.rootDir)
+            for ed in expDescs:
+                assetsDescs.add(ed)
+
+        scenesDescs = []
+        for sd in self.sceneAccessor.listAllExportDesc():
+            scenesDescs.append(sd)
+
+        return ProjectExportDesc(self.rootDir, scenesDescs, assetsDescs)
+
+    def exportToFile(self, outputFileName):
+        desc = self.buildExportDesc()
+        desc.saveExportPackageToFile(outputFileName)
 
     def __str__(self):
         print("Project {} \n\t".format(self.name))
-        print("Scenes: {}".format(self.projectScenes.keys()))
-        print("Used assets: {}".format(self.projectAssets))

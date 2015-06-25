@@ -1,5 +1,6 @@
 from TextureDataAccessor import TextureDataAccessor
 from LoadableDataDesc import LoadableDataDesc
+from AssetExportDesc import AssetExportDesc
 
 import os
 import shutil
@@ -115,6 +116,32 @@ class FSTextureDataAccessor(TextureDataAccessor):
             print(exc)
             return False
 
+    def buildExportDesc(self, internalPath):
+        return AssetExportDesc(internalPath)
+
+    def listAll(self):
+        try:
+            absPath = os.path.join(self.rootPath)
+            res = []
+            for root, dirs, files in os.walk(absPath):
+                for file in files:
+                    res.append(os.path.join(root, file))
+
+            return res
+        except Exception as exc:
+            print("""Cannot list all textures data in path '{}'""".format(self.rootPath))
+            print(exc)
+            return []
+
+    def listAllUniqueExportDesc(self, relativeTo):
+        textures = self.listAll()
+        res = set()
+
+        for t in textures:
+            res.add(self.buildExportDesc(os.path.relpath(t, relativeTo)))
+
+        #  returns set id TextureAssetExportDesc
+        return res
 
     def __createDir(self):
         if not os.path.exists(self.rootPath):

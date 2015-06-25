@@ -1,4 +1,5 @@
 from SceneAccessor import SceneAccessor
+from SceneExportDesc import SceneExportDesc
 from Scene import loadScene, saveScene, Scene, Node, SceneWriter, SceneReader
 
 from Location import Location
@@ -76,15 +77,16 @@ class FSSceneAccessor(SceneAccessor):
         absPath = os.path.join(self.rootPath, importToPath)
         self.unpackSceneAndResources(impSceneFile, self.project, importToPath)
 
-    def exportScene(self, expSceneFilePath, internalPath):
+    def exportScene(self, internalPath):
         absPath = os.path.join(self.rootPath, internalPath)
         s = loadScene(absPath)
-        self.packSceneAndResources(s, expSceneFilePath)
+
+        return SceneExportDesc(s, self.project.getName(), internalPath)
 
     def packSceneAndResources(self, scene, outputFile):
         assert self.project
         assert isinstance(scene, Scene)
-        res = scene.listResources()
+        res = scene.listAssets()
 
         resultData = {"ownerProjectName": self.project.getName(), "sceneJson": scene, "resourcesData": {}}
 
@@ -148,3 +150,29 @@ class FSSceneAccessor(SceneAccessor):
             print("Cannot unpack scene file '{}'".format(scenePackedFile))
             print(exc)
             return False
+
+    def listScenes(self):
+        try:
+            absPath = os.path.join(self.rootPath)
+            res = []
+            for root, dirs, files in os.walk(absPath):
+                for file in files:
+                    if file.endswith(".scn"):
+                        res.append(os.path.join(root, file))
+
+            return res
+        except Exception as exc:
+            print("""Cannot list all scenes data in path '{}'""".format(self.rootPath))
+            print(exc)
+            return []
+
+    def listAllExportDesc(self):
+        scenes = self.listScenes()
+
+        scenesExpDescs = []
+
+        for sf in scenes:
+            s = SceneReader(sf).loadScene()
+            scenesExpDescs.append(SceneExportDesc(s, self.project.getName(), os.path.dirname(sf)))
+
+        return scenesExpDescs

@@ -4,6 +4,7 @@ from LoadableDataDesc import LoadableDataDesc
 import os
 import shutil
 import pickle
+import tempfile
 
 class LoadableFontDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::TextureAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableDataDesc
     def __init__(self, absPath):
@@ -107,6 +108,41 @@ class FSFontDataAccessor(FontDataAccessor):
             print("""Cannot export font '{}'""".format(internalPath))
             print(exc)
             return False
+
+    def listAll(self):
+        try:
+            absPath = os.path.join(self.rootPath)
+            res = []
+            for root, dirs, files in os.walk(absPath):
+                for file in files:
+                    if file.endswith(".ttf"):
+                        res.append(os.path.join(root, file))
+
+            return res
+        except Exception as exc:
+            print("""Cannot list all fonts data in path '{}'""".format(self.rootPath))
+            print(exc)
+            return []
+
+    def exportAll(self, expDataFilePath):
+
+        allAssets = self.listAll()
+
+        resultData = {}
+
+        for a in allAssets:
+
+            tmp = tempfile.NamedTemporaryFile(delete=False)
+            filename = tmp.name
+            tmp.close()
+            self.exportData(filename, a)
+
+            resultData[a] = open(filename, "rb").read()
+            os.remove(filename)
+
+        with open(expDataFilePath, "wb") as f:
+            pickle.dump(resultData, f)
+
 
     def __createDir(self):
         if not os.path.exists(self.rootPath):
