@@ -114,6 +114,13 @@ void CopyParameter( IParameterPtr out, IParameterPtr in )
 
         outT->AccessInterpolator() = inT->AccessInterpolator();
     } 
+    if( out->GetType() == ModelParamType::MPT_FLOAT )
+    {
+        auto inT = QueryTypedParam< ParamFloatPtr >( in );
+        auto outT = QueryTypedParam< ParamFloatPtr >( out );
+
+        outT->AccessInterpolator() = inT->AccessInterpolator();
+    } 
     else
     {
         //assert( false );
