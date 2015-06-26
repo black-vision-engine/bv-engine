@@ -4,7 +4,7 @@
 #include "Engine/Interfaces/IValue.h"
 #include "Engine/Models/Plugins/Interfaces/IParamValEvaluator.h"
 
-#include <algorithm>
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 
 namespace bv { namespace model {
 
@@ -93,13 +93,42 @@ void                                        DefaultParamValModel::Update        
     }
 }
 
+void CopyParameter( IParameterPtr out, IParameterPtr in )
+{
+    //assert( out->GetType() == in->GetType() );
+    
+    if( out->GetType() != in->GetType() )
+        return;
+
+    if( out->GetType() == ModelParamType::MPT_VEC4 )
+    {
+        auto inT = QueryTypedParam< ParamVec4Ptr >( in );
+        auto outT = QueryTypedParam< ParamVec4Ptr >( out );
+
+        outT->AccessInterpolator() = inT->AccessInterpolator();
+    }
+    if( out->GetType() == ModelParamType::MPT_VEC2 )
+    {
+        auto inT = QueryTypedParam< ParamVec2Ptr >( in );
+        auto outT = QueryTypedParam< ParamVec2Ptr >( out );
+
+        outT->AccessInterpolator() = inT->AccessInterpolator();
+    } 
+    else
+    {
+        //assert( false );
+        return;
+    }
+}
+
 // *******************************
 //
 void                                        DefaultParamValModel::SetParameter      ( IParameterPtr param )
 {
-    auto prevParam = GetParameter( param->GetName() );
-    m_parameters.erase( std::remove( m_parameters.begin(), m_parameters.end(), prevParam ) );
-    AddParameter( param );
+    std::string name = param->GetName(); // FIXME: make this an argument
+
+    auto prevParam = GetParameter( name );
+    CopyParameter( prevParam, param );
 }
 
 // *******************************
