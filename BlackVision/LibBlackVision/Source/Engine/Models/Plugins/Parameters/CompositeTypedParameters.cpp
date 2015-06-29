@@ -19,7 +19,7 @@ void    ParamTransform::Serialize       ( SerializeObject & doc ) const
 {
     doc.SetName( "param" );
     doc.SetValue( "name", GetName() );
-    doc.SetValue( "type", Type2String( GetType() ) );
+    doc.SetValue( "type", "transform" );
 
     for( int i = 0; i < m_transformModel.Size(); i++ )
     {
@@ -55,22 +55,43 @@ ParamTransformVec::ParamTransformVec                ( const std::string & name, 
 {
 }
 
+std::string Kind2String( TransformKind kind )
+{
+    if( kind == TransformKind::fwd_center )
+        return "fwd_center";
+    else if( kind == TransformKind::inv_center )
+        return "inv_center";
+    else if( kind == TransformKind::rotation )
+        return "rotation";
+    else if( kind == TransformKind::scale )
+        return "scale";
+    else if( kind == TransformKind::translation )
+        return "translation";
+
+    assert( false );
+    return "";
+}
+
 // *******************************
 //
 void ParamTransformVec::Serialize       ( SerializeObject & doc ) const
 {
     doc.SetName( "param" );
     doc.SetValue( "name", GetName() );
-    doc.SetValue( "type", Type2String( GetType() ) );
+    doc.SetValue( "type", "transform_vec" );
 
-    //m_interpolator.Serialize( doc );
     for( auto t : m_transformModelVec )
+    {
         for( int i = 0; i < t.Size(); i++ )
         {
-            t[ i ]->GetP0MotylaNoga().Serialize( doc );
-            t[ i ]->GetP1MotylaNoga().Serialize( doc );
-            t[ i ]->GetP2MotylaNoga().Serialize( doc );
+            doc.SetName( "transform" );
+            doc.SetValue( "kind", Kind2String( t[ i ]->KindKurwaMac() ) );
+                t[ i ]->GetP0MotylaNoga().Serialize( doc );
+                t[ i ]->GetP1MotylaNoga().Serialize( doc );
+                t[ i ]->GetP2MotylaNoga().Serialize( doc );
+            doc.Pop();
         }
+    }
 
     doc.Pop();
 }

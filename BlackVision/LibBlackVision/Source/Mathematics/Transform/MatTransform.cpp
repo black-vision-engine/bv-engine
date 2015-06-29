@@ -261,6 +261,43 @@ CompositeTransform<ParamT>::CompositeTransform  ( const CompositeTransform & src
 // *************************************
 //
 template<typename ParamT>
+ISerializablePtr                     CompositeTransform<ParamT>::Create                  ( const DeserializeObject & dob )
+{
+    auto transform = std::make_shared< CompositeTransform< ParamT > >();
+
+    auto kind = dob.GetValue( "kind" );
+    auto params = dob.LoadProperties< ParamT >( "interpolator" );
+    
+    if( params.size() != 3 )
+    {
+        std::cerr << "[ERROR] CompositeTransform<ParamT>::Create failed";
+        return nullptr;
+    }
+
+    if( kind == "fwd_center" )
+        transform->AddTranslationCFwd( *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    else if( kind == "translation" )
+        transform->AddTranslation( *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //fwd_center,
+    //rotation,
+    //scale,
+    //translation,
+    //inv_center
+
+    return transform;
+}
+
+// *************************************
+//
+template<typename ParamT>
+void                                CompositeTransform<ParamT>::Serialize               ( SerializeObject & doc ) const
+{
+    doc;
+}
+
+// *************************************
+//
+template<typename ParamT>
 SizeType    CompositeTransform<ParamT>::Size() const
 {
     return m_transformations.size();

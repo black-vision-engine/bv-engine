@@ -5,6 +5,7 @@
 #include "Engine/Models/Plugins/Interfaces/IParamValEvaluator.h"
 
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
+#include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 
 namespace bv { namespace model {
 
@@ -95,7 +96,7 @@ void                                        DefaultParamValModel::Update        
 
 void CopyParameter( IParameterPtr out, IParameterPtr in )
 {
-    //assert( out->GetType() == in->GetType() );
+    //assert( out->GetType() == in->GetType() ); // FIXME: uncomment when parameter deserialization is finished
     
     if( out->GetType() != in->GetType() )
         return;
@@ -107,19 +108,26 @@ void CopyParameter( IParameterPtr out, IParameterPtr in )
 
         outT->AccessInterpolator() = inT->AccessInterpolator();
     }
-    if( out->GetType() == ModelParamType::MPT_VEC2 )
+    else if( out->GetType() == ModelParamType::MPT_VEC2 )
     {
         auto inT = QueryTypedParam< ParamVec2Ptr >( in );
         auto outT = QueryTypedParam< ParamVec2Ptr >( out );
 
         outT->AccessInterpolator() = inT->AccessInterpolator();
     } 
-    if( out->GetType() == ModelParamType::MPT_FLOAT )
+    else if( out->GetType() == ModelParamType::MPT_FLOAT )
     {
         auto inT = QueryTypedParam< ParamFloatPtr >( in );
         auto outT = QueryTypedParam< ParamFloatPtr >( out );
 
         outT->AccessInterpolator() = inT->AccessInterpolator();
+    } 
+    else if( out->GetType() == ModelParamType::MPT_TRANSFORM_VEC )
+    {
+        auto inT = QueryTypedParam< ParamTransformVecPtr >( in );
+        auto outT = QueryTypedParam< ParamFloatPtr >( out );
+
+        //outT->AccessInterpolator() = inT->AccessInterpolator();
     } 
     else
     {

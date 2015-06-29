@@ -21,7 +21,7 @@ std::vector<std::string> split(const std::string &s, char delim) {
     return elems;
 }
 
-class KeyFrame : public ISerializable
+class KeyFrame : public ISerializable // FIXME: to remove!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 {
 public:
     std::string time, value; // FIXME
@@ -77,6 +77,14 @@ ISerializablePtr AbstractModelParameter::Create( DeserializeObject& dob )
             param->SetVal( val , t );
         }
 
+        return param;
+    } else if( type == "6" || type == "transform_vec" ) // FIXME: this should be made a constant somewhere
+    {
+        auto param = ParametersFactory::CreateParameterTransformVec( name, te );
+
+        //dob.LoadArray< TransformF >( "transform" );
+        dob.LoadProperties< TransformF >( "transform" );
+        
         return param;
     }
 

@@ -165,7 +165,7 @@ public:
 };
 
 template<typename ParamT>
-class CompositeTransform : public Interpolator<typename ParamT::TimeT>
+class CompositeTransform : public Interpolator<typename ParamT::TimeT>, public ISerializable
 {
 private:
 
@@ -179,6 +179,9 @@ public:
 
     explicit        CompositeTransform  ();
                     CompositeTransform  ( const CompositeTransform & src );
+
+    static ISerializablePtr                     Create                  ( const DeserializeObject & dob );
+    virtual void                                Serialize               ( SerializeObject & doc ) const;
 
     void            InitializeDefaultSRT();
 

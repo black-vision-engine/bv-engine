@@ -41,7 +41,7 @@ public:
         return m_doc->name();
     }
 
-    std::string                                             GetValue( std::string name )
+    std::string                                             GetValue( std::string name ) const
     {
         auto node = m_doc->first_attribute( name.c_str() );
         assert( node ); // FIXME: error handling
@@ -49,7 +49,7 @@ public:
     }
 
     template< typename T >
-    std::shared_ptr< T >                                    Load( rapidxml::xml_node<>* node )
+    std::shared_ptr< T >                                    Load( rapidxml::xml_node<>* node ) const
     {
         auto dob = DeserializeObject( *node, *this->m_tm, *this->m_pm ); // FIXME for God's sake!!!
         auto obj = T::Create( dob );
@@ -57,7 +57,7 @@ public:
     }
 
     template< typename T >
-    std::vector< std::shared_ptr< T > >                     LoadArray( std::string name )
+    std::vector< std::shared_ptr< T > >                     LoadArray( std::string name ) const
     {
         std::vector< std::shared_ptr< T > > ret;
 
@@ -74,7 +74,7 @@ public:
     }
 
     template< typename T >
-    std::vector< std::shared_ptr< T > >                     LoadProperties( std::string name )
+    std::vector< std::shared_ptr< T > >                     LoadProperties( std::string name ) const
     {
         std::vector< std::shared_ptr< T > > ret;
 
