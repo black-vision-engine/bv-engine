@@ -156,7 +156,7 @@ ISerializablePtr     Key< bv::TimeType, float >::Create          ( DeserializeOb
 {
     auto time = doc.GetValue( "time" );
     auto val = doc.GetValue( "val" );
-    auto key = std::make_shared< Key< bv::TimeType, float > >( 0.f, 0.f );
+    auto key = std::make_shared< Key< bv::TimeType, float > >( std::stof( time ), std::stof( val ) );
     return key;
 }
 
