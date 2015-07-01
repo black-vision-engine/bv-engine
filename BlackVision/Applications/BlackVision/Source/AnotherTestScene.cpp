@@ -973,7 +973,15 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::Plugin
 model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager )
 {
     //return LoadSceneFromFile( "Assets/07_Results.xml", pluginsManager, timelineManager );
-    return LoadSceneFromFile( "test.xml", pluginsManager, timelineManager );
+    auto scene = LoadSceneFromFile( "test.xml", pluginsManager, timelineManager );
+
+    //scene-> // = root
+    //    GetChild( 0 )-> // = CreedScene
+    //        GetChild( 0 )-> // = root
+    //            GetChild( 0 ) // = dziecko
+    //                ->SetVisible( false );
+
+    return scene;
 }
 
 } // bv

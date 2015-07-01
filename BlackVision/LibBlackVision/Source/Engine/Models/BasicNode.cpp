@@ -91,7 +91,7 @@ void                            BasicNode::Serialize               ( SerializeOb
             assert( plugin );
             plugin->Serialize( doc );
         }
-    doc.Pop();
+    doc.Pop(); // plugins
 
     doc.SetName( "nodes" );
         for( auto child : m_children )

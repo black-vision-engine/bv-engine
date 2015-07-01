@@ -39,7 +39,7 @@ public:
 
 // ********************************************************************************************************************
 
-ISerializablePtr AbstractModelParameter::Create( DeserializeObject& dob )
+ISerializablePtr AbstractModelParameter::Create( DeserializeObject& dob ) // FIXME: rethink if is might be done cleaner
 {
     ITimeEvaluatorPtr te = dob.m_tm->GetRootTimeline();
 
@@ -82,8 +82,11 @@ ISerializablePtr AbstractModelParameter::Create( DeserializeObject& dob )
     {
         auto param = ParametersFactory::CreateParameterTransformVec( name, te );
 
-        //dob.LoadArray< TransformF >( "transform" );
-        dob.LoadProperties< TransformF >( "transform" );
+        auto transes = dob.LoadProperties< TransformF >( "composite_transform" );
+        for( auto trans : transes )
+        {
+            param->AppendTransform( *trans.get() ); // FIXME (?)
+        }
         
         return param;
     }

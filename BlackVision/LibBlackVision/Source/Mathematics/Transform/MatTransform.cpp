@@ -265,26 +265,50 @@ ISerializablePtr                     CompositeTransform<ParamT>::Create         
 {
     auto transform = std::make_shared< CompositeTransform< ParamT > >();
 
-    auto kind = dob.GetValue( "kind" );
-    auto params = dob.LoadProperties< ParamT >( "interpolator" );
-    
-    if( params.size() != 3 )
-    {
-        std::cerr << "[ERROR] CompositeTransform<ParamT>::Create failed";
-        return nullptr;
-    }
+    //auto transes = dob.LoadProperties< SimpleTransform< ParamT > >( "transform" );
+    dob;
+    auto transes = std::vector< std::shared_ptr< SimpleTransform< ParamT > > >();
 
-    if( kind == "fwd_center" )
-        transform->AddTranslationCFwd( *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    else if( kind == "translation" )
-        transform->AddTranslation( *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //fwd_center,
-    //rotation,
-    //scale,
-    //translation,
-    //inv_center
+    for( auto trans : transes )
+        transform->AddTransform( trans.get() ); // FIXME: ugly get()
+
+    //auto kind = dob.GetValue( "kind" );
+    //auto params = dob.LoadProperties< ParamT >( "interpolator" );
+    //
+    //if( params.size() != 3 )
+    //{
+    //    std::cerr << "[ERROR] CompositeTransform<ParamT>::Create failed";
+    //    return nullptr;
+    //}
+
+    //if( kind == "fwd_center" )
+    //    transform->AddTranslationCFwd( *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //else if( kind == "translation" )
+    //    transform->AddTranslation( *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    ////fwd_center,
+    ////rotation,
+    ////scale,
+    ////translation,
+    ////inv_center
 
     return transform;
+}
+
+std::string Kind2String( TransformKind kind )
+{
+    if( kind == TransformKind::fwd_center )
+        return "fwd_center";
+    else if( kind == TransformKind::inv_center )
+        return "inv_center";
+    else if( kind == TransformKind::rotation )
+        return "rotation";
+    else if( kind == TransformKind::scale )
+        return "scale";
+    else if( kind == TransformKind::translation )
+        return "translation";
+
+    assert( false );
+    return "";
 }
 
 // *************************************
@@ -292,7 +316,21 @@ ISerializablePtr                     CompositeTransform<ParamT>::Create         
 template<typename ParamT>
 void                                CompositeTransform<ParamT>::Serialize               ( SerializeObject & doc ) const
 {
-    doc;
+    doc.SetName( "composite_transform" );
+
+    for( auto trans : m_transformations )
+    {
+        doc.SetName( "transform" );
+        doc.SetValue( "kind", Kind2String( trans->KindKurwaMac() ) );
+        
+        trans->GetP0MotylaNoga().Serialize( doc );
+        trans->GetP1MotylaNoga().Serialize( doc );
+        trans->GetP2MotylaNoga().Serialize( doc );
+
+        doc.Pop(); // transform
+    }
+
+    doc.Pop(); // composite_transform
 }
 
 // *************************************
