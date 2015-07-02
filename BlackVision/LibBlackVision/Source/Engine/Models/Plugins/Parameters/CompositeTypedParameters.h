@@ -72,6 +72,7 @@ public:
 	InterpolationMethod GetInterpolationMethod () const override;
 
     void                AppendTransform     ( const TransformF & transform );
+    void                InsertTransform     ( unsigned int transformNum, const TransformF & transform );
 
     inline unsigned int NumTransforms       () const;
 

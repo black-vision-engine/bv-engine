@@ -65,8 +65,8 @@ bv::IValueConstPtr                         TransformVecParamValEvaluator::GetVal
 void                                        TransformVecParamValEvaluator::Evaluate        ()
 {
 // \begin{FIXME}
-    while( m_mat4Values.size() < m_param->NumTransforms() )
-        m_mat4Values.push_back( std::make_shared< ValueMat4 >( "" ) );
+    //while( m_mat4Values.size() < m_param->NumTransforms() )
+    //    m_mat4Values.push_back( std::make_shared< ValueMat4 >( "" ) );
 // \end{FIXME}
     assert( m_param->NumTransforms() == m_mat4Values.size() );
     for( unsigned int i = 0; i < m_param->NumTransforms(); ++i )

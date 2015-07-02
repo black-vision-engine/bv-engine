@@ -173,7 +173,6 @@ class CompositeTransform : public Interpolator<typename ParamT::TimeT>, public I
 private:
 
     std::vector< std::shared_ptr< SimpleTransform<ParamT> > > m_transformations;
-    //std::vector< SimpleTransform<ParamT> * > m_transformations;
 
 public:
 

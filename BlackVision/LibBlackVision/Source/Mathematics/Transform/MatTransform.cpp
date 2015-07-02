@@ -262,6 +262,10 @@ void CompositeTransform<ParamT>::InsertTransform     ( int i, std::shared_ptr< S
         auto it = m_transformations.begin();
         m_transformations.insert( it + i - 1, trans );
     }
+    else if( i == (int)m_transformations.size() )
+        AddTransform( trans );
+    else
+        assert( false );
 }
 
 // *************************************
@@ -293,11 +297,11 @@ ISerializablePtr                     CompositeTransform<ParamT>::Create         
 
     auto transes = dob.LoadProperties< SimpleTransform< ParamT > >( "transform" );
 
+    int i = 0;
     for( auto trans : transes )
     {
-        //std::shared_ptr< SimpleTransform< ParamT > > fake_ptr;
-        //fake_ptr.swap( trans );
-        transform->AddTransform( trans ); // FIXME: ugly get()
+        transform->InsertTransform( i, trans );
+        i++;
     }
 
     return transform;

@@ -130,7 +130,7 @@ void CopyParameter( IParameterPtr out, IParameterPtr in )
         for( unsigned int i = 0; i < inT->NumTransforms(); i++ )
         {
             auto trans = inT->Transform( i );
-            outT->AppendTransform( trans );
+            outT->InsertTransform( i, trans );
         }
     } 
     else

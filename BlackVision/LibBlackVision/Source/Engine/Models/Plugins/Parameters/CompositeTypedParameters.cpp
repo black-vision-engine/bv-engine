@@ -89,6 +89,18 @@ void    ParamTransformVec::AppendTransform          ( const TransformF & transfo
 
 // *******************************
 //
+void                ParamTransformVec::InsertTransform     ( unsigned int transformNum, const TransformF & transform )
+{
+    if( transformNum < m_transformModelVec.size() )
+        m_transformModelVec[ transformNum ] = transform;
+    else if( transformNum == m_transformModelVec.size() )
+        AppendTransform( transform );
+    else
+        assert( false );
+}
+
+// *******************************
+//
 VoidPtr         ParamTransformVec::QueryParamTyped  ()
 {
     return std::static_pointer_cast< void >( shared_from_this() );

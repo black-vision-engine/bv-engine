@@ -83,9 +83,11 @@ ISerializablePtr AbstractModelParameter::Create( DeserializeObject& dob ) // FIX
         auto param = ParametersFactory::CreateParameterTransformVec( name, te );
 
         auto transes = dob.LoadProperties< TransformF >( "composite_transform" );
+
+        int i = 0;
         for( auto trans : transes )
         {
-            param->AppendTransform( *trans.get() ); // FIXME (?)
+            param->InsertTransform( i++, *trans.get() ); // FIXME (?)
         }
         
         return param;
