@@ -56,6 +56,46 @@ SimpleTransform<ParamT>::SimpleTransform( TransformKind kind )
 {
 }
 
+// *************************************
+//
+template<typename ParamT>
+void                SimpleTransform<ParamT>::Serialize       ( SerializeObject & sob ) const
+{
+    assert( !"Tell me why I'm not implemented ;)" );
+    sob;
+}
+
+// *************************************
+//
+template<typename ParamT>
+ISerializablePtr     SimpleTransform<ParamT>::Create          ( DeserializeObject & dob )
+{
+    if( dob.GetName() != "transform" )
+        std::cerr << "SimpleTransform<ParamT>::Create failed" << std::endl;
+
+    auto kind = dob.GetValue( "kind" );
+    auto params = dob.LoadProperties< ParamT >( "interpolator" );
+    
+    if( params.size() != 3 )
+    {
+        std::cerr << "[ERROR] CompositeTransform<ParamT>::Create failed";
+        return nullptr;
+    }
+
+    if( kind == "fwd_center" )
+        return std::make_shared< SimpleTransform< ParamT > >( TransformKind::fwd_center, *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    else if( kind == "translation" )
+        return std::make_shared< SimpleTransform< ParamT > >( TransformKind::translation, *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //rotation,
+    //scale,
+    //inv_center
+
+    //assert( false ); // FIXME
+    //return nullptr;
+    return std::make_shared< SimpleTransform< ParamT > >( TransformKind::translation, *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+}
+
+
 template<typename ParamT>
 Rotation<ParamT>::Rotation    ( ParamT angle, const Vec3Interpolator & rotAxis )
     : SimpleTransform( TransformKind::rotation )
@@ -81,11 +121,6 @@ template<typename ParamT>
 void            CompositeTransform<ParamT>::InitializeDefaultSRT()
 {
     auto t =  TimeType( 0.0 );
-
-    for( auto tr : m_transformations )
-    {
-        delete tr;
-    }
 
     ParamT ctx, cty, ctz;
     ParamT ictx, icty, ictz;
@@ -116,10 +151,6 @@ void            CompositeTransform<ParamT>::InitializeDefaultSRT()
 template<typename ParamT>
 CompositeTransform<ParamT>::~CompositeTransform()
 {
-    for( auto t : m_transformations )
-    {
-        delete t;
-    }
 }
 
 // *************************************
@@ -186,7 +217,7 @@ void CompositeTransform<ParamT>::AddScale( ParamT s0, ParamT s1, ParamT s2 )
 template<typename ParamT>
 void CompositeTransform<ParamT>::AddRotation( ParamT angle, ParamT r0, ParamT r1, ParamT r2 )
 {
-    m_transformations.push_back( new Rotation<ParamT>( angle, r0, r1, r2 ) );
+    m_transformations.push_back( std::make_shared< Rotation<ParamT> >( angle, r0, r1, r2 ) );
 }
 
 // *************************************
@@ -194,7 +225,7 @@ void CompositeTransform<ParamT>::AddRotation( ParamT angle, ParamT r0, ParamT r1
 template<typename ParamT>
 void            CompositeTransform<ParamT>::AddRotation         ( ParamT angle, const Vec3Interpolator & rotAxis )
 {
-    m_transformations.push_back( new Rotation<ParamT>( angle, rotAxis ) );    
+    m_transformations.push_back( std::make_shared< Rotation< ParamT > >( angle, rotAxis ) );    
 }
 
 // *************************************
@@ -216,7 +247,7 @@ void            CompositeTransform<ParamT>::AddTranslationCInv  ( ParamT x0, Par
 // *************************************
 //
 template<typename ParamT>
-void CompositeTransform<ParamT>::AddTransform( SimpleTransform<ParamT> * trans )
+void CompositeTransform<ParamT>::AddTransform( std::shared_ptr< SimpleTransform<ParamT> > trans )
 {
     m_transformations.push_back( trans );
 }
@@ -224,7 +255,7 @@ void CompositeTransform<ParamT>::AddTransform( SimpleTransform<ParamT> * trans )
 // *************************************
 //
 template<typename ParamT>
-void CompositeTransform<ParamT>::InsertTransform     ( int i, SimpleTransform<ParamT> * trans )
+void CompositeTransform<ParamT>::InsertTransform     ( int i, std::shared_ptr< SimpleTransform<ParamT> > trans )
 {
     if( i < (int)m_transformations.size() )
     {
@@ -245,16 +276,11 @@ CompositeTransform<ParamT>::CompositeTransform()
 template<typename ParamT>
 CompositeTransform<ParamT>::CompositeTransform  ( const CompositeTransform & src )
 {
-    for ( auto t : m_transformations )
-    {
-        delete t;
-    }
-
     m_transformations.clear();
 
     for ( auto st : src.m_transformations )
     {
-        m_transformations.push_back( st->Clone() );
+        m_transformations.push_back( st );
     }
 }
 
@@ -265,31 +291,14 @@ ISerializablePtr                     CompositeTransform<ParamT>::Create         
 {
     auto transform = std::make_shared< CompositeTransform< ParamT > >();
 
-    //auto transes = dob.LoadProperties< SimpleTransform< ParamT > >( "transform" );
-    dob;
-    auto transes = std::vector< std::shared_ptr< SimpleTransform< ParamT > > >();
+    auto transes = dob.LoadProperties< SimpleTransform< ParamT > >( "transform" );
 
     for( auto trans : transes )
-        transform->AddTransform( trans.get() ); // FIXME: ugly get()
-
-    //auto kind = dob.GetValue( "kind" );
-    //auto params = dob.LoadProperties< ParamT >( "interpolator" );
-    //
-    //if( params.size() != 3 )
-    //{
-    //    std::cerr << "[ERROR] CompositeTransform<ParamT>::Create failed";
-    //    return nullptr;
-    //}
-
-    //if( kind == "fwd_center" )
-    //    transform->AddTranslationCFwd( *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //else if( kind == "translation" )
-    //    transform->AddTranslation( *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    ////fwd_center,
-    ////rotation,
-    ////scale,
-    ////translation,
-    ////inv_center
+    {
+        //std::shared_ptr< SimpleTransform< ParamT > > fake_ptr;
+        //fake_ptr.swap( trans );
+        transform->AddTransform( trans ); // FIXME: ugly get()
+    }
 
     return transform;
 }
@@ -346,13 +355,13 @@ SizeType    CompositeTransform<ParamT>::Size() const
 template<typename ParamT>
 SimpleTransform<ParamT> * CompositeTransform<ParamT>::operator[]( unsigned int i )
 {
-    return m_transformations[ i ];
+    return m_transformations[ i ].get();
 }
 
 template<typename ParamT>
 const SimpleTransform<ParamT> * CompositeTransform<ParamT>::operator[]( unsigned int i ) const
 {
-    return m_transformations[ i ];
+    return m_transformations[ i ].get();
 }
 
 // *************************************
