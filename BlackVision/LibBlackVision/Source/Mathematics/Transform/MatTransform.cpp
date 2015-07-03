@@ -86,13 +86,27 @@ ISerializablePtr     SimpleTransform<ParamT>::Create          ( DeserializeObjec
         return std::make_shared< SimpleTransform< ParamT > >( TransformKind::fwd_center, *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     else if( kind == "translation" )
         return std::make_shared< SimpleTransform< ParamT > >( TransformKind::translation, *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //rotation,
-    //scale,
-    //inv_center
+    else if( kind == "scale" )
+        return std::make_shared< SimpleTransform< ParamT > >( TransformKind::scale, *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    else if( kind == "rotation" )
+    // NO
+    // NO
+    // NO
+    // NO
+    // NO
+    // NO
+    // NO
+    // NO
+    // NO
+    // NO
+    // NO
+        return std::make_shared< SimpleTransform< ParamT > >( TransformKind::translation, *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //return std::make_shared< Rotation< ParamT > >( *params[0].get(), *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    else if( kind == "inv_center" )
+        return std::make_shared< SimpleTransform< ParamT > >( TransformKind::inv_center, *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    //assert( false ); // FIXME
-    //return nullptr;
-    return std::make_shared< SimpleTransform< ParamT > >( TransformKind::translation, *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    assert( false );
+    return nullptr;
 }
 
 
@@ -332,16 +346,20 @@ void                                CompositeTransform<ParamT>::Serialize       
     doc.SetName( "composite_transform" );
 
     for( auto trans : m_transformations )
-    {
-        doc.SetName( "transform" );
-        doc.SetValue( "kind", Kind2String( trans->KindKurwaMac() ) );
+        if( trans->KindKurwaMac() == TransformKind::rotation )
+        {
+        }
+        else
+        {
+            doc.SetName( "transform" );
+            doc.SetValue( "kind", Kind2String( trans->KindKurwaMac() ) );
         
-        trans->GetP0MotylaNoga().Serialize( doc );
-        trans->GetP1MotylaNoga().Serialize( doc );
-        trans->GetP2MotylaNoga().Serialize( doc );
+            trans->GetP0MotylaNoga().Serialize( doc );
+            trans->GetP1MotylaNoga().Serialize( doc );
+            trans->GetP2MotylaNoga().Serialize( doc );
 
-        doc.Pop(); // transform
-    }
+            doc.Pop(); // transform
+        }
 
     doc.Pop(); // composite_transform
 }
