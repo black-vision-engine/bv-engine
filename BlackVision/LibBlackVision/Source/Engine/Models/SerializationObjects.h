@@ -29,6 +29,14 @@ public:
 class DeserializeObject
 {
     rapidxml::xml_node<>* m_doc;
+
+    template< typename T >
+    std::shared_ptr< T >                                    Load( rapidxml::xml_node<>* node ) const
+    {
+        auto dob = DeserializeObject( *node, *this->m_tm, *this->m_pm ); // FIXME for God's sake!!!
+        auto obj = T::Create( dob );
+        return std::static_pointer_cast< T >( obj );
+    }
 public:
     model::TimelineManager* m_tm; // FIXME(?)
     const model::PluginsManager* m_pm; // FIXME(?)
@@ -49,11 +57,11 @@ public:
     }
 
     template< typename T >
-    std::shared_ptr< T >                                    Load( rapidxml::xml_node<>* node ) const
+    std::shared_ptr< T >                                    Load( std::string name ) const
     {
-        auto dob = DeserializeObject( *node, *this->m_tm, *this->m_pm ); // FIXME for God's sake!!!
-        auto obj = T::Create( dob );
-        return std::static_pointer_cast< T >( obj );
+        auto node = m_doc->first_node( name.c_str() );
+        assert( node ); // FIXME: error handling
+        return Load< T >( node );
     }
 
     template< typename T >
