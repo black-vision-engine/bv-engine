@@ -71,14 +71,32 @@ template<typename ParamT>
 ISerializablePtr     SimpleTransform<ParamT>::Create          ( DeserializeObject & dob )
 {
     if( dob.GetName() != "transform" )
+    {
         std::cerr << "SimpleTransform<ParamT>::Create failed" << std::endl;
+        return nullptr; // FIXME so much: error handling
+    }
 
     auto kind = dob.GetValue( "kind" );
 
     if( kind == "rotation" ) // very special case indeed :)
     {
-        auto angle = dob.Load< ParamT >( "interpolator" );
-        auto rotAxis = dob.Load< Vec3Interpolator >( "interpolator2" ); // FIXME: WTF is that? are you kiddin' man???????????????
+        auto angleArray = dob.LoadArray< ParamT >( "angle" );
+        auto rotAxisArray = dob.LoadArray< Vec3Interpolator >( "rotaxis" );
+
+        if( angleArray.size() != 1 )
+        {
+            std::cerr << "SimpleTransform<ParamT>::Create failed" << std::endl;
+            return nullptr;
+        }
+        if( rotAxisArray.size() != 1 )
+        {
+            std::cerr << "SimpleTransform<ParamT>::Create failed" << std::endl;
+            return nullptr;
+        }
+
+        auto angle = angleArray[0];
+        auto rotAxis = rotAxisArray[0];
+
         return std::make_shared< Rotation< ParamT > >( *angle.get(), *rotAxis ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
@@ -349,8 +367,15 @@ void                                CompositeTransform<ParamT>::Serialize       
             auto rotation = std::static_pointer_cast< Rotation< ParamT > >( trans );
             if( rotation->IsAxisVec3() )
             {
-                rotation->AccessAngle().Serialize( doc );
-                rotation->AccessRotAxis().Serialize( doc );
+                doc.SetValue( "isaxisvec3", "true" );
+
+                doc.SetName( "angle" );
+                    rotation->AccessAngle().Serialize( doc );
+                doc.Pop();
+
+                doc.SetName( "rotaxis" );
+                    rotation->AccessRotAxis().Serialize( doc );
+                doc.Pop();
             }
             else
                 assert( false );
