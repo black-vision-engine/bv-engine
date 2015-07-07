@@ -173,6 +173,7 @@ class FSSceneAccessor(SceneAccessor):
 
         for sf in scenes:
             s = SceneReader(sf).loadScene()
-            scenesExpDescs.append(SceneExportDesc(s, self.project.getName(), os.path.dirname(sf)))
+            relPath = os.path.relpath(sf, self.projectManager.getRootDir())
+            scenesExpDescs.append(SceneExportDesc(s, self.project.getName(), relPath))
 
         return scenesExpDescs

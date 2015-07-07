@@ -2,8 +2,17 @@ from DataCategory import DataCategory
 from Project import Project
 from Location import Location
 from FSSceneAccessor import FSSceneAccessor
+from ProjectExportDesc import ProjectExportDesc
+from SceneExportDesc import SceneExportDesc
+from Scene import SceneWriter
+
+
+import pickle
+import zipfile
+import uuid
 
 import os
+
 
 class ProjectManager:
 
@@ -149,6 +158,36 @@ class ProjectManager:
 
     def importSceneFromFile(self, importToProjectName, importToPath, importDataFilePath):
         self.getProject(importToProjectName).importScene(importDataFilePath, importToPath)
+
+    def importFromFile(self, expFilePath):
+
+        # {"projectDesc": self, "assetsArchiveData": open(filename, "rb").read()}
+
+        with open(expFilePath, "rb") as f:
+            expDescDict = pickle.load(f)
+
+        if isinstance(expDescDict, dict):
+            if "projectDesc" in expDescDict:  # project importing
+                if "assetsArchiveData" in expDescDict:
+
+                    filename = "{}".format(uuid.uuid4())
+                    with open(filename, "wb") as f:
+                        f.write(expDescDict["assetsArchiveData"])
+
+                    myZipFile = zipfile.ZipFile(filename, "r")
+
+                    myZipFile.extractall(path=self.rootDir)
+                    myZipFile.close()
+
+                    os.remove(filename)
+
+                projDesc = expDescDict["projectDesc"]
+                assert isinstance(projDesc, ProjectExportDesc)
+                for scenesDesc in projDesc.projectScenesDescs:
+                    assert isinstance(scenesDesc, SceneExportDesc)
+
+                    SceneWriter(scenesDesc.scene, os.path.join(self.rootDir, scenesDesc.relativePath)).saveScene()
+
 
 
 PM = ProjectManager("bv_media")

@@ -68,8 +68,11 @@ def test():
 
     pm.getProject("proj1").exportToFile("proj1.exp")
 
-    # from ProjectManager import ProjectManager
-    # pm1 = ProjectManager("bv_media1")
+    from ProjectManager import ProjectManager
+    pm1 = ProjectManager("bv_media1")
+
+    pm1.importFromFile("proj1.exp")
+
     #
     # proj11 = Project.Project(pm1, "1proj1")
     # pm1.addProject(proj11)

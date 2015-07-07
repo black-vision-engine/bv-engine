@@ -1,7 +1,7 @@
 
 import pickle
 import traceback
-
+import os
 class SceneWriter:
     def __init__(self, scene, outputFile = None):
         self.outputFile = outputFile
@@ -13,7 +13,11 @@ class SceneWriter:
     def __serializeScene(self):
         assert self.outputFile
         try:
-            s = None
+
+            dirName = os.path.dirname(self.outputFile)
+            if not os.path.exists(dirName):
+                os.makedirs(dirName)
+
             with open(self.outputFile, 'wb') as f:
                 pickle.dump(self.scene, f, protocol = 0)
             return True

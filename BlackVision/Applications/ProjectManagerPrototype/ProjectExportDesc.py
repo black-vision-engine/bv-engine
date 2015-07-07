@@ -8,10 +8,11 @@ import os
 import uuid
 
 class ProjectExportDesc:
-    def __init__(self, rootDir, projectScenesDescs, projectAssetsDescs):
+    def __init__(self, name, rootDir, projectScenesDescs, projectAssetsDescs):
         assert isinstance(projectScenesDescs, list)
         assert isinstance(projectAssetsDescs, set)
 
+        self.name               = name
         self.rootDir            = rootDir
         self.projectScenesDescs = projectScenesDescs
         self.projectAssetsDescs = projectAssetsDescs
@@ -30,7 +31,7 @@ class ProjectExportDesc:
         for sd in self.projectScenesDescs:
             assetesDescs = assetesDescs.union(sd.sceneAssetsDescs)
 
-        filename = uuid.uuid4()
+        filename = "{}".format(uuid.uuid4())
 
         myZipFile = zipfile.ZipFile(filename, "w")
 

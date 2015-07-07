@@ -126,7 +126,7 @@ class Project:
         for sd in self.sceneAccessor.listAllExportDesc():
             scenesDescs.append(sd)
 
-        return ProjectExportDesc(self.rootDir, scenesDescs, assetsDescs)
+        return ProjectExportDesc(self.name, self.rootDir, scenesDescs, assetsDescs)
 
     def exportToFile(self, outputFileName):
         desc = self.buildExportDesc()
