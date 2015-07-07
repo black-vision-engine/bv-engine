@@ -1,6 +1,7 @@
 #include "AbstractModelParameter.h"
 #include "ParametersFactory.h"
 #include "SimpleTypedParameters.h"
+#include "Engine/Models/Timeline/TimelineManager.h"
 #include <sstream>
 
 namespace bv { namespace model {

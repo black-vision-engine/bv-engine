@@ -10,6 +10,8 @@
 
 #include "Engine/Models/Plugins/Plugin.h"
 
+#include "Engine/Models/Timeline/TimelineManager.h"
+
 namespace bv { namespace model {
 
 // FIXME: hack

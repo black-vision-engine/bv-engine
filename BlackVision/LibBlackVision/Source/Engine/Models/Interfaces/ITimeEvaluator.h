@@ -6,16 +6,16 @@
 
 #include "CoreDEF.h" //FIXME: store in PCH
 
+#include "Engine/Interfaces/ISerializable.h" // FIXME(?)
 
 namespace bv { namespace model {
 
 class ITimeEvaluator;
 DEFINE_PTR_TYPE(ITimeEvaluator)
 
-class ITimeEvaluator
+class ITimeEvaluator : public ISerializable
 {
 public:
-
     virtual const std::string &                         GetName         () const						= 0;
 
     virtual void                                        SetGlobalTime   ( TimeType t )					= 0;

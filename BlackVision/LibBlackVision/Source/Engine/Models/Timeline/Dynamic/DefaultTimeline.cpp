@@ -49,6 +49,22 @@ DefaultTimeline::~DefaultTimeline    ()
 
 // *********************************
 //
+void                                DefaultTimeline::Serialize           ( SerializeObject & sob ) const
+{
+    sob.SetName( "timeline" );
+    sob.SetValue( "name", GetName() );
+    sob.Pop();
+}
+
+// *********************************
+//
+ISerializablePtr                     DefaultTimeline::Create              ( DeserializeObject & dob )
+{
+    dob; return nullptr;
+}
+
+// *********************************
+//
 TimeType                            DefaultTimeline::GetDuration        () const
 {
     return m_timeEvalImpl.GetDuration();

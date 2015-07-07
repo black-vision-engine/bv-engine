@@ -2,6 +2,8 @@
 
 #include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 
+#include "Engine/Models/Timeline/TimelineManager.h"
+
 namespace bv { namespace model {
 
 namespace PluginsSerialization

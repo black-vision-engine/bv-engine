@@ -1,15 +1,16 @@
 #pragma once
 
-#include "rapidxml/RapidXml.hpp"
-#include "Engine/Models/Timeline/TimelineManager.h"
-#include <fstream>
+#include "CoreDEF.h"
 
+#include "rapidxml/RapidXml.hpp" // FIXME
+
+#include <fstream>
 #include <stack>
 
 namespace bv
 {
 
-namespace model { class PluginsManager; }
+namespace model { class PluginsManager; class TimelineManager; }
 
 class SerializeObject
 {

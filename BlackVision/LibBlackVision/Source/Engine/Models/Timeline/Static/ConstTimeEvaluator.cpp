@@ -18,6 +18,22 @@ ConstTimeEvaluator::~ConstTimeEvaluator                     ()
 
 // *******************************
 //
+void                ConstTimeEvaluator::Serialize           ( SerializeObject & sob ) const
+{
+    sob.SetName( "timeline" );
+    sob.SetValue( "name", GetName() );
+    sob.Pop();
+}
+
+// *******************************
+//
+ISerializablePtr     ConstTimeEvaluator::Create              ( DeserializeObject & dob )
+{
+    dob; return nullptr;
+}
+
+// *******************************
+//
 void                ConstTimeEvaluator::SetConstTimeValue   ( TimeType t )
 {
     m_timeVal = t;

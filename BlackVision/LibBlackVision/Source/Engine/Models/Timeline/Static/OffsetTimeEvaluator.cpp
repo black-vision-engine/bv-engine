@@ -19,6 +19,22 @@ OffsetTimeEvaluator::~OffsetTimeEvaluator                   ()
 
 // *******************************
 //
+void                OffsetTimeEvaluator::Serialize           ( SerializeObject & sob ) const
+{
+    sob.SetName( "timeline" );
+    sob.SetValue( "name", GetName() );
+    sob.Pop();
+}
+
+// *******************************
+//
+ISerializablePtr     OffsetTimeEvaluator::Create              ( DeserializeObject & dob )
+{
+    dob; return nullptr;
+}
+
+// *******************************
+//
 void                OffsetTimeEvaluator::SetTimeOffset      ( TimeType t )
 {
     m_timeOffset = t;
