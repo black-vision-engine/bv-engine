@@ -159,7 +159,7 @@ class ProjectManager:
     def importSceneFromFile(self, importToProjectName, importToPath, importDataFilePath):
         self.getProject(importToProjectName).importScene(importDataFilePath, importToPath)
 
-    def importFromFile(self, expFilePath):
+    def importFromFile(self, expFilePath, importToPath=None):
 
         # {"projectDesc": self, "assetsArchiveData": open(filename, "rb").read()}
 
@@ -168,6 +168,10 @@ class ProjectManager:
 
         if isinstance(expDescDict, dict):
             if "projectDesc" in expDescDict:  # project importing
+
+                projDesc = expDescDict["projectDesc"]
+                assert isinstance(projDesc, ProjectExportDesc)
+
                 if "assetsArchiveData" in expDescDict:
 
                     filename = "{}".format(uuid.uuid4())
@@ -176,17 +180,34 @@ class ProjectManager:
 
                     myZipFile = zipfile.ZipFile(filename, "r")
 
-                    myZipFile.extractall(path=self.rootDir)
+                    if importToPath:
+                        for n in myZipFile.namelist():
+                            assert isinstance(n, str)
+                            with myZipFile.open(n, "r") as f:
+                                nn = os.path.normpath(n)
+                                outputFileName = os.path.join(self.rootDir, nn.replace("\\" + projDesc.name + "\\", "\\" + importToPath + "\\") )
+                                dirName = os.path.dirname(outputFileName)
+                                if not os.path.exists(dirName):
+                                    os.makedirs(dirName)
+
+                                with open(outputFileName, "wb") as of:
+                                    of.write(f.read())
+                    else:
+                        myZipFile.extractall(path=self.rootDir)
                     myZipFile.close()
 
                     os.remove(filename)
 
-                projDesc = expDescDict["projectDesc"]
-                assert isinstance(projDesc, ProjectExportDesc)
+
                 for scenesDesc in projDesc.projectScenesDescs:
                     assert isinstance(scenesDesc, SceneExportDesc)
+                    if importToPath:
+                        scenOutputFileName = os.path.join(self.rootDir, scenesDesc.relativePath.replace("\\" + projDesc.name + "\\", "\\" + importToPath + "\\"))
+                        # TODO: Add changing names od assets in scene.
+                    else:
+                        scenOutputFileName = os.path.join(self.rootDir, scenesDesc.relativePath)
 
-                    SceneWriter(scenesDesc.scene, os.path.join(self.rootDir, scenesDesc.relativePath)).saveScene()
+                    SceneWriter(scenesDesc.scene, scenOutputFileName).saveScene()
 
 
 

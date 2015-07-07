@@ -71,7 +71,7 @@ def test():
     from ProjectManager import ProjectManager
     pm1 = ProjectManager("bv_media1")
 
-    pm1.importFromFile("proj1.exp")
+    pm1.importFromFile("proj1.exp", "proj3")
 
     #
     # proj11 = Project.Project(pm1, "1proj1")
