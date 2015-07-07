@@ -209,6 +209,9 @@ class ProjectManager:
 
                     SceneWriter(scenesDesc.scene, scenOutputFileName).saveScene()
 
+                if not self.getProject(importToPath):
+                    self.addProject(Project(self, importToPath))
+
 
 
 PM = ProjectManager("bv_media")
