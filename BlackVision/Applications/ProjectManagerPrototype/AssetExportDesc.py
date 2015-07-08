@@ -1,4 +1,4 @@
-import os
+import os, zipfile
 
 class AssetExportDesc:
     def __init__(self, relativePath):
@@ -9,6 +9,24 @@ class AssetExportDesc:
 
     def __hash__(self):
         return hash(self.relativePath)
+
+    @staticmethod
+    def packAssetsToFile(cls, rootDir, filename, assetsDescs):
+
+        myZipFile = zipfile.ZipFile(filename, "w")
+
+        for ad in assetsDescs:
+            path = os.path.join(rootDir, ad.relativePath)
+            if os.path.isfile(path):
+                name = os.path.normpath(ad.relativePath)
+                myZipFile.write(path, name, zipfile.ZIP_DEFLATED )
+            else:
+                files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+                for f in files:
+                    name = os.path.normpath(os.path.join(ad.relativePath, f))
+                    myZipFile.write(os.path.join(path, f), name, zipfile.ZIP_DEFLATED )
+
+        myZipFile.close()
 
 # class TextureAssetExportDesc(AssetExportDesc):
 #     def __init__(self, relativePath):

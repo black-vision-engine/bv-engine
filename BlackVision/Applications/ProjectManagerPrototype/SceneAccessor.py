@@ -25,6 +25,10 @@ class SceneAccessor:
         pass
 
     @abstractmethod
+    def exportSceneToFile(self, internalPath, outputFileName):
+        pass
+
+    @abstractmethod
     def exportScene(self, expSceneFilePath, project, internalPath):
         pass
 

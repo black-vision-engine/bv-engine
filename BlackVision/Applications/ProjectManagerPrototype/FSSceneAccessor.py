@@ -1,8 +1,9 @@
 from SceneAccessor import SceneAccessor
 from SceneExportDesc import SceneExportDesc
-from Scene import loadScene, saveScene, Scene, Node, SceneWriter, SceneReader
+from AssetExportDesc import AssetExportDesc
+from Scene import loadScene, Scene, Node, SceneWriter, SceneReader
 
-from Location import Location
+import uuid, zipfile
 
 import os, pickle, tempfile, shutil
 
@@ -77,7 +78,19 @@ class FSSceneAccessor(SceneAccessor):
         absPath = os.path.join(self.rootPath, importToPath)
         self.unpackSceneAndResources(impSceneFile, self.project, importToPath)
 
-    def exportScene(self, internalPath):
+    def exportSceneToFile(self, internalPath, outputFileName):
+        expDesc = self.getExportDesc(internalPath)
+
+        filename = "{}".format(uuid.uuid4())
+
+        AssetExportDesc.packAssetsToFile(self.rootDir, filename, expDesc.sceneAssetsDescs)
+
+        with open(outputFileName, "wb") as f:
+            pickle.dump({"sceneDesc": self, "assetsArchiveData": open(filename, "rb").read()}, f)
+
+        os.remove(filename)
+
+    def getExportDesc(self, internalPath):
         absPath = os.path.join(self.rootPath, internalPath)
         s = loadScene(absPath)
 

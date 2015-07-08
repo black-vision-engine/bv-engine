@@ -116,7 +116,7 @@ class FSTextureDataAccessor(TextureDataAccessor):
             print(exc)
             return False
 
-    def buildExportDesc(self, internalPath):
+    def getExportDesc(self, internalPath):
         return AssetExportDesc(internalPath)
 
     def listAll(self):
@@ -138,7 +138,7 @@ class FSTextureDataAccessor(TextureDataAccessor):
         res = set()
 
         for t in textures:
-            res.add(self.buildExportDesc(os.path.relpath(t, relativeTo)))
+            res.add(self.getExportDesc(os.path.relpath(t, relativeTo)))
 
         #  returns set id TextureAssetExportDesc
         return res

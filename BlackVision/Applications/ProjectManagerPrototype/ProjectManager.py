@@ -1,7 +1,7 @@
 from DataCategory import DataCategory
 from Project import Project
 from Location import Location
-from FSSceneAccessor import FSSceneAccessor
+from FSSceneAccessor import FSSceneAccessor, SceneAccessor
 from ProjectExportDesc import ProjectExportDesc
 from SceneExportDesc import SceneExportDesc
 from Scene import SceneWriter
@@ -151,7 +151,18 @@ class ProjectManager:
         assert False  # TODO: Implement
 
     def exportSceneToFile(self, projectName, scenePath, outputFile):
-        assert False  # TODO: Implement
+
+        assert isinstance(self.globalSceneAccessor, SceneAccessor)
+
+        if len(projectName) == 0:
+            assert False  # TODO: Implement global accessor case
+        else:
+            proj = self.getProject(projectName)
+            if proj:
+                proj.exportSceneToFile(outputFile, scenePath)
+            else:
+                print("Cannot export scene '{}' from project '{}'".format(scenePath, projectName))
+                return False
 
     def importSceneFromFile(self, importToProjectName, importToPath, importData):
         assert False  # TODO: Implement
@@ -159,7 +170,16 @@ class ProjectManager:
     def importSceneFromFile(self, importToProjectName, importToPath, importDataFilePath):
         self.getProject(importToProjectName).importScene(importDataFilePath, importToPath)
 
-    def importFromFile(self, expFilePath, importToPath=None):
+    def exportProjectToFile(self, projectName, outputFilePath):
+        proj = self.getProject(projectName)
+        if proj:
+            proj.exportToFile(outputFilePath)
+            return True
+        else:
+            print("Cannot export project '{}'. It doesn't exist.".format(projectName))
+            return False
+
+    def importProjectFromFile(self, expFilePath, importToPath=None):
 
         # {"projectDesc": self, "assetsArchiveData": open(filename, "rb").read()}
 
@@ -203,7 +223,7 @@ class ProjectManager:
                     assert isinstance(scenesDesc, SceneExportDesc)
                     if importToPath:
                         scenOutputFileName = os.path.join(self.rootDir, scenesDesc.relativePath.replace("\\" + projDesc.name + "\\", "\\" + importToPath + "\\"))
-                        # TODO: Add changing names od assets in scene.
+                        # TODO: Add changing names of assets in scene.
                     else:
                         scenOutputFileName = os.path.join(self.rootDir, scenesDesc.relativePath)
 

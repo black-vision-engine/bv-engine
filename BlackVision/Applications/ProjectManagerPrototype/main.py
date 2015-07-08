@@ -66,14 +66,13 @@ def test():
 
     pm.listProjectsNames()
 
-    pm.getProject("proj1").exportToFile("proj1.exp")
+    pm.exportToFile("proj1", "proj1.exp")
 
     from ProjectManager import ProjectManager
     pm1 = ProjectManager("bv_media1")
 
     pm1.importFromFile("proj1.exp", "proj3")
 
-    #
     # proj11 = Project.Project(pm1, "1proj1")
     # pm1.addProject(proj11)
     # pm1.importSceneFromFile("1proj1", "imported_scene/p1s1.scn", "exportedScene1")

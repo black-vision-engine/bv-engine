@@ -93,8 +93,8 @@ class Project:
             print("There is no category named {} in project {}".format(categoryId, self.name))
             return None
 
-    def exportScene(self,  expDataFilePath, path):
-        self.sceneAccessor.exportScene(expDataFilePath, path)
+    def exportSceneToFile(self,  expDataFilePath, path):
+        self.sceneAccessor.exportSceneToFile(path, expDataFilePath)
 
     def importScene(self,  impDataFilePath, path):
         self.sceneAccessor.importScene(impDataFilePath, path)
@@ -115,7 +115,7 @@ class Project:
         assert isinstance(self.sceneAccessor, SceneAccessor)
         return self.sceneAccessor.copyScene(path)
 
-    def buildExportDesc(self):
+    def getExportDesc(self):
         assetsDescs = set()
         for c in self.categories.values():
             expDescs = c.accessor.listAllUniqueExportDesc(self.rootDir)
@@ -129,7 +129,7 @@ class Project:
         return ProjectExportDesc(self.name, self.rootDir, scenesDescs, assetsDescs)
 
     def exportToFile(self, outputFileName):
-        desc = self.buildExportDesc()
+        desc = self.getExportDesc()
         desc.saveExportPackageToFile(outputFileName)
 
     def __str__(self):

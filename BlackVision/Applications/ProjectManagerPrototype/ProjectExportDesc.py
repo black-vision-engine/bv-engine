@@ -33,20 +33,7 @@ class ProjectExportDesc:
 
         filename = "{}".format(uuid.uuid4())
 
-        myZipFile = zipfile.ZipFile(filename, "w")
-
-        for ad in assetesDescs:
-            path = os.path.join(self.rootDir, ad.relativePath)
-            if os.path.isfile(path):
-                name = os.path.normpath(ad.relativePath)
-                myZipFile.write(path, name, zipfile.ZIP_DEFLATED )
-            else:
-                files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
-                for f in files:
-                    name = os.path.normpath(os.path.join(ad.relativePath, f))
-                    myZipFile.write(os.path.join(path, f), name, zipfile.ZIP_DEFLATED )
-
-        myZipFile.close()
+        AssetExportDesc.packAssetsToFile(self.rootDir, filename, assetesDescs)
 
         with open(outputFileName, "wb") as f:
             pickle.dump({"projectDesc": self, "assetsArchiveData": open(filename, "rb").read()}, f)
