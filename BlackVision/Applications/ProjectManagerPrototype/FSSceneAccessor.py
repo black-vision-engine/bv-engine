@@ -74,9 +74,32 @@ class FSSceneAccessor(SceneAccessor):
             print(exc)
             return False
 
-    def importScene(self, impSceneFile, importToPath):
-        absPath = os.path.join(self.rootPath, importToPath)
-        self.unpackSceneAndResources(impSceneFile, self.project, importToPath)
+    def importSceneFromFile(self, expFilePath, importToPath):
+
+        absSceneFilePath = os.path.join(self.rootPath, importToPath)
+
+        with open(expFilePath, "rb") as f:
+            expDescDict = pickle.load(f)
+
+        if isinstance(expDescDict, dict):
+            if "sceneDesc" in expDescDict:  # project importing
+
+                sceneDesc = expDescDict["sceneDesc"]
+                assert isinstance(sceneDesc, SceneExportDesc)
+
+                if "assetsArchiveData" in expDescDict:
+
+                    filename = "{}".format(uuid.uuid4())
+                    with open(filename, "wb") as f:
+                        f.write(expDescDict["assetsArchiveData"])
+
+                    myZipFile = zipfile.ZipFile(filename, "r")
+                    myZipFile.extractall(path=self.projectManager.getRootDir())
+                    myZipFile.close()
+
+                    os.remove(filename)
+
+                SceneWriter(sceneDesc.scene, absSceneFilePath).saveScene()
 
     def exportSceneToFile(self, internalPath, outputFileName):
         expDesc = self.getExportDesc(internalPath)
