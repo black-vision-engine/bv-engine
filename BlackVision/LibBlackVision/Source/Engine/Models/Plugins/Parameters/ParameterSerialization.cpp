@@ -42,11 +42,11 @@ public:
 
 ISerializablePtr AbstractModelParameter::Create( DeserializeObject& dob ) // FIXME: rethink if is might be done cleaner
 {
-    ITimeEvaluatorPtr te = dob.m_tm->GetRootTimeline();
-
     auto name = dob.GetValue( "name" );
-    
     auto type = dob.GetValue( "type" );
+    //ITimeEvaluatorPtr te = dob.m_tm->GetRootTimeline();
+    auto timeline = dob.GetValue( "timeline" );
+    ITimeEvaluatorPtr te = dob.m_tm->GetTimeline( timeline );
     
     auto values = dob.LoadArray< KeyFrame >( "interpolator" );
 

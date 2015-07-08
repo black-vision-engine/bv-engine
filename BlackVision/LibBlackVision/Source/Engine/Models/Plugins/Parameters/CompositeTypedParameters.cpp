@@ -62,6 +62,7 @@ void ParamTransformVec::Serialize       ( SerializeObject & doc ) const
     doc.SetName( "param" );
     doc.SetValue( "name", GetName() );
     doc.SetValue( "type", "transform_vec" );
+    doc.SetValue( "timeline", m_timeEvaluator->GetName() );
 
     for( auto t : m_transformModelVec )
     {

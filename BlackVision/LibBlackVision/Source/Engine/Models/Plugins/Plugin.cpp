@@ -67,7 +67,6 @@ void                                BasePlugin< IPlugin >::Serialize            
     doc.SetValue( "uid", GetTypeUid() );
     doc.SetValue( "name", GetName() );
 
-
     doc.SetName( "params" );
     {
         IPluginParamValModelPtr pvm =    GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors

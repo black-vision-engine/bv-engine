@@ -22,6 +22,7 @@ void                ConstTimeEvaluator::Serialize           ( SerializeObject & 
 {
     sob.SetName( "timeline" );
     sob.SetValue( "name", GetName() );
+    sob.SetValue( "type", "const" );
     sob.Pop();
 }
 

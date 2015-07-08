@@ -26,6 +26,7 @@ void                SimpleParameterImpl< InterpolatorType, ValueType, type >::Se
     doc.SetName( "param" );
     doc.SetValue( "name", GetName() );
     doc.SetValue( "type", Type2String( GetType() ) );
+    doc.SetValue( "timeline", m_timeEvaluator->GetName() );
 
     m_interpolator.Serialize( doc );
 

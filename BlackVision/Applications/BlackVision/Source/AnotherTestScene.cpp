@@ -959,9 +959,17 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::Plugin
     //BVScenePtr realScene = reinterpret_cast<BVScenePtr>( scene );
     //auto root = realScene->GetModelSceneRoot();
 
-    auto docNode = doc.first_node()->first_node( "node" );
-
+// /begin{FIXME}
+    auto docNode = doc.first_node( "scene" );
     auto deDoc = DeserializeObject( *docNode, *timelineManager, *pluginsManager );
+
+    auto timelines = deDoc.LoadArray< TimeEvaluatorBase< ITimeEvaluator > >( "timelines" );
+    for( auto timeline : timelines )
+        timelineManager->AddTimeline( timeline );
+// /end{FIXME}
+
+    /*auto */docNode = doc.first_node( "scene" )->first_node( "node" );
+    /*auto */deDoc = DeserializeObject( *docNode, *timelineManager, *pluginsManager );
 
     ISerializablePtr node = model::BasicNode::Create( deDoc );
 
