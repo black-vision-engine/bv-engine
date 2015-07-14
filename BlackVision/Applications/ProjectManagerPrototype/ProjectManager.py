@@ -1,4 +1,4 @@
-from DataCategory import DataCategory
+from AssetCategory import AssetCategory
 from Project import Project
 from Location import Location
 from FSSceneAccessor import FSSceneAccessor, SceneAccessor
@@ -23,11 +23,14 @@ class ProjectManager:
         self.globalSceneAccessor = None
         self.rootDir        = os.path.abspath(rootDir)
         self.__createDir()
-        self.setGlobalSceneAccessor(FSSceneAccessor(self, None))
+        self.__setGlobalSceneAccessor(FSSceneAccessor(self, None))
 
     def __createDir(self):
         if not os.path.exists(self.rootDir):
             os.makedirs(self.rootDir)
+
+    def __setGlobalSceneAccessor(self, sceneAccessor):
+        self.globalSceneAccessor = sceneAccessor
 
     def getAssetDesc(self, projectName, pathInProject):
         assert isinstance(projectName, str)
@@ -70,9 +73,6 @@ class ProjectManager:
         print("Cannot find scene '{}  {}'".format(projectName, pathInProject))
         return None
 
-    def setGlobalSceneAccessor(self, sceneAccessor):
-        self.globalSceneAccessor = sceneAccessor
-
     def getProject(self, name):
         assert isinstance(name, str)
         if name in self.projects:
@@ -90,46 +90,46 @@ class ProjectManager:
         else:
             print("Cannot set current project. Project '{}' doesn't exist".format(projectName))
 
-    def addProject(self, project):
-        assert isinstance(project, Project)
-        if not project.getName() in self.projects:
-            self.projects[project.getName()] = project
+    def addNewProject(self, projectName):
+        assert isinstance(projectName, str)
+        if not projectName in self.projects:
+            self.projects[projectName] = Project(self, projectName)
         else:
-            print("Project '{}' already exists. Cannot add".format(project.getName()))
+            print("Project '{}' already exists. Cannot add".format(projectName))
 
     def registerGlobalCategory(self, category):
-        assert isinstance(category, DataCategory)
+        assert isinstance(category, AssetCategory)
         if not category.getId() in self.globalCategories:
             self.globalCategories[category.getId()] = category
         else:
              print("Cannot register global category '{}'. Already registered.".format(category.getId()))
 
-
     def getRootDir(self):
         return self.rootDir
 
+    ###########################################################################
+    # Operations inside one project manager
+    # TODO: Implement
     def moveAsset(self, fromProjectName, fromInternalPath, toProjectName, toInternalPath):
         assert False  # TODO: Implement
 
     def copyAsset(self, fromProjectName, fromInternalPath, toProjectName, toInternalPath):
         assert False  # TODO: Implement
 
-    def exportAsset(self, projectName, assetPath):
+    def moveScene(self, fromProjectName, fromInternalPath, toProjectName, toInternalPath):
         assert False  # TODO: Implement
 
+    def copyScene(self, fromProjectName, fromInternalPath, toProjectName, toInternalPath):
+        assert False  # TODO: Implement
+
+    ###########################################################################
+    # Exporting and importing
+    ###########################################################################
+
+    ###########################################################################
+    # Exporting and importing assets (textures, sequences etc.)
     def exportAssetToFile(self, projectName, categoryName, assetPath, outputFile):
         self.getProject(projectName).exportData(outputFile, categoryName, assetPath)
-
-    def exportProjectToFile(self, projectName, outputFileName):
-        proj = self.getProject(projectName)
-        if proj:
-            return proj.exportToFile(outputFileName)
-        else:
-            print("Cannot export project '{}'".format(projectName))
-            return False
-
-    def importAsset(self, importToProjectName, importToPath, importData):
-        assert False  # TODO: Implement
 
     def importAssetFromFile(self, importToProjectName, importToCategoryName, importToPath, importDataFilePath):
         if importToProjectName == ".":
@@ -141,15 +141,8 @@ class ProjectManager:
         else:
             self.getProject(importToProjectName).importData(importDataFilePath, importToCategoryName, importToPath)
 
-    def moveScene(self, fromProjectName, fromInternalPath, toProjectName, toInternalPath):
-        assert False  # TODO: Implement
-
-    def copyScene(self, fromProjectName, fromInternalPath, toProjectName, toInternalPath):
-        assert False  # TODO: Implement
-
-    def exportScene(self, projectName, scenePath):
-        assert False  # TODO: Implement
-
+    ###########################################################################
+    # Exporting and importing whole scenes
     def exportSceneToFile(self, projectName, scenePath, outputFile):
 
         assert isinstance(self.globalSceneAccessor, SceneAccessor)
@@ -164,12 +157,11 @@ class ProjectManager:
                 print("Cannot export scene '{}' from project '{}'".format(scenePath, projectName))
                 return False
 
-    def importSceneFromFile(self, importToProjectName, importToPath, importData):
-        assert False  # TODO: Implement
-
     def importSceneFromFile(self, importToProjectName, importToPath, importDataFilePath):
         self.getProject(importToProjectName).importSceneFromFile(importDataFilePath, importToPath)
 
+    ###########################################################################
+    # Exporting and importing whole projects
     def exportProjectToFile(self, projectName, outputFilePath):
         proj = self.getProject(projectName)
         if proj:
@@ -230,8 +222,9 @@ class ProjectManager:
                     SceneWriter(scenesDesc.scene, scenOutputFileName).saveScene()
 
                 if not self.getProject(importToPath):
-                    self.addProject(Project(self, importToPath))
+                    self.addNewProject(importToPath)
 
 
-
+#######################################
+# project manager instance
 PM = ProjectManager("bv_media")

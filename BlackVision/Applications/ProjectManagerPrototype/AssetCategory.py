@@ -1,18 +1,18 @@
-from DataAccessor import DataAccessor
-from  LoadableDataDesc import LoadableDataDesc
+from AssetAccessor import AssetAccessor
+from AssetDesc import AssetDesc
 
-class DataCategory:
+class AssetCategory:
     def __init__(self, id, dataAccessor):
-        assert isinstance(dataAccessor, DataAccessor)
+        assert isinstance(dataAccessor, AssetAccessor)
         self.id = id
         self.accessor = dataAccessor
 
     def getId(self):
         return self.id
 
-    def appendData(self, path, loadableData):
-        assert isinstance(loadableData, LoadableDataDesc)
-        self.accessor.appendData(path, loadableData)
+    def appendData(self, path, assetDesc):
+        assert isinstance(assetDesc, AssetDesc)
+        self.accessor.appendData(path, assetDesc)
 
     def getData(self, path):
         assert isinstance(path, str)

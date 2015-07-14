@@ -1,11 +1,7 @@
 ﻿from ProjectManager import PM as pm
-import Project
 
-from FSTextureDataAccessor import LoadableTextureDataDesc
-from FSFontDataAccessor import LoadableFontDataDesc
-from FSSurfaceDataAccessor import LoadableSurfaceDataDesc
-from FSSequenceDataAccessor import LoadableSequenceDataDesc
-
+from FSTextureAssetAccessor import TextureDesc
+from FSSequenceAssetAccessor import SequenceDesc
 from Scene import Scene, Node, Plugin
 
 import os
@@ -35,35 +31,24 @@ def generateScene1(projectName1, projectName2):
 
 def test():
 
-    proj1 = Project.Project(pm, "proj1")
+    pm.addNewProject("proj1")
 
-    pm.addProject(proj1)
-
-    pm.getProject("proj1").appendData("textures", "flagi/pol.jpg", LoadableTextureDataDesc("test_data.file")) # polak
-    pm.getProject("proj1").appendData("textures", "flagi/ger.jpg", LoadableTextureDataDesc("test_data.file")) # niemiec
-    pm.getProject("proj1").appendData("textures", "flagi/rus.jpg", LoadableTextureDataDesc("test_data.file")) # i rusek
-
-    # pm.getProject("proj1").appendData("fonts", "pol/arial.tff", LoadableFontDataDesc("test_data.file"))
-    # pm.getProject("proj1").appendData("surfaces", "animals/cat.bvsur", LoadableSurfaceDataDesc("test_data.file"))
-    pm.getProject("proj1").appendData("sequences", "jedzie", LoadableSequenceDataDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq",f))]))
+    pm.getProject("proj1").appendData("textures", "flagi/pol.jpg", TextureDesc("test_data.file")) # polak
+    pm.getProject("proj1").appendData("textures", "flagi/ger.jpg", TextureDesc("test_data.file")) # niemiec
+    pm.getProject("proj1").appendData("textures", "flagi/rus.jpg", TextureDesc("test_data.file")) # i rusek
+    pm.getProject("proj1").appendData("sequences", "jedzie", SequenceDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq",f))]))
 
 
-    proj2 = Project.Project(pm, "proj2")
 
-    pm.addProject(proj2)
+    pm.addNewProject("proj2")
 
-    pm.getProject("proj2").appendData("textures", "flags/pol1.jpg", LoadableTextureDataDesc("test_data.file")) # polak
-    pm.getProject("proj2").appendData("textures", "flags/ger1.jpg", LoadableTextureDataDesc("test_data.file")) # niemiec
-    pm.getProject("proj2").appendData("textures", "flags/rus1.jpg", LoadableTextureDataDesc("test_data.file")) # i rusek
-
-    pm.getProject("proj2").appendData("fonts", "pol1/arial1.tff", LoadableFontDataDesc("test_data.file"))
-    pm.getProject("proj2").appendData("surfaces", "animals1/cat1.bvsur", LoadableSurfaceDataDesc("test_data.file"))
-    pm.getProject("proj2").appendData("sequences", "jedzie1", LoadableSequenceDataDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq",f))]))
+    pm.getProject("proj2").appendData("textures", "flags/pol1.jpg", TextureDesc("test_data.file")) # polak
+    pm.getProject("proj2").appendData("textures", "flags/ger1.jpg", TextureDesc("test_data.file")) # niemiec
+    pm.getProject("proj2").appendData("textures", "flags/rus1.jpg", TextureDesc("test_data.file")) # i rusek
+    pm.getProject("proj2").appendData("sequences", "jedzie1", SequenceDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq", f))]))
 
     pm.getProject("proj1").saveScene(generateScene1("proj1", "proj2"), "test_scenes/p1s1.scn")
     pm.getProject("proj2").saveScene(generateScene1("proj1", "proj2"), "test_scenes1/p1s2.scn")
-
-    #pm.getProject("proj1").exportScene("exportedScene1", "test_scenes/p1s1.scn")
 
     pm.listProjectsNames()
 
@@ -73,14 +58,10 @@ def test():
     from ProjectManager import ProjectManager
     pm1 = ProjectManager("bv_media1")
 
+    pm1.addNewProject("proj3")
+
     pm1.importProjectFromFile("proj1.exp", "proj3")
     pm1.importSceneFromFile("proj3", "test_scenes5/p1s2.scn", "proj1.expscene")
-
-    # proj11 = Project.Project(pm1, "1proj1")
-    # pm1.addProject(proj11)
-    # pm1.importSceneFromFile("1proj1", "imported_scene/p1s1.scn", "exportedScene1")
-
-
 
 if __name__ == "__main__":
     test()

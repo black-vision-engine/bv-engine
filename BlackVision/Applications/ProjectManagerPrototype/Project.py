@@ -1,15 +1,11 @@
-from DataCategory import DataCategory
-from LoadableDataDesc import LoadableDataDesc
+from AssetCategory import AssetCategory
+from AssetDesc import AssetDesc
 from SceneAccessor import SceneAccessor
 from ProjectExportDesc import ProjectExportDesc
 
-from SceneExportDesc import SceneExportDesc
-
 from FSSceneAccessor import FSSceneAccessor
-from FSTextureDataAccessor import FSTextureDataAccessor
-from FSFontDataAccessor import FSFontDataAccessor
-from FSSequenceDataAccessor import FSSequenceDataAccessor
-from FSSurfaceDataAccessor import FSSurfaceDataAccessor
+from FSTextureAssetAccessor import FSTextureAssetAccessor
+from FSSequenceAssetAccessor import FSSequenceDataAccessor
 
 import os
 
@@ -27,15 +23,11 @@ class Project:
 
         self.__createDir()
 
-        self.categories["textures"]     = DataCategory("textures", FSTextureDataAccessor(os.path.join(self.rootDir, "textures", self.name), ['jpg', 'tga']))
-        # self.categories["fonts"]        = DataCategory("fonts", FSFontDataAccessor(os.path.join(self.rootDir, "fonts", self.name)))
-        self.categories["sequences"]    = DataCategory("sequences", FSSequenceDataAccessor(os.path.join(self.rootDir, "sequences", self.name), ['jpg', 'tga']))
-        # self.categories["surfaces"]     = DataCategory("surfaces", FSSurfaceDataAccessor(os.path.join(self.rootDir, "surfaces", self.name), ['bvsur']))
+        self.categories["textures"]     = AssetCategory("textures", FSTextureAssetAccessor(os.path.join(self.rootDir, "textures", self.name), ['jpg', 'tga']))
+        self.categories["sequences"]    = AssetCategory("sequences", FSSequenceDataAccessor(os.path.join(self.rootDir, "sequences", self.name), ['jpg', 'tga']))
 
-        self.projectManager.registerGlobalCategory(DataCategory("textures", FSTextureDataAccessor(os.path.join(self.rootDir, "textures"), ['jpg', 'tga'])))
-        # self.projectManager.registerGlobalCategory(DataCategory("fonts", FSFontDataAccessor(os.path.join(self.rootDir, "fonts"))))
-        self.projectManager.registerGlobalCategory(DataCategory("sequences", FSSequenceDataAccessor(os.path.join(self.rootDir, "sequences"), ['jpg', 'tga'])))
-        # self.projectManager.registerGlobalCategory(DataCategory("surfaces", FSSurfaceDataAccessor(os.path.join(self.rootDir, "surfaces"), ['bvsur'])))
+        self.projectManager.registerGlobalCategory(AssetCategory("textures", FSTextureAssetAccessor(os.path.join(self.rootDir, "textures"), ['jpg', 'tga'])))
+        self.projectManager.registerGlobalCategory(AssetCategory("sequences", FSSequenceDataAccessor(os.path.join(self.rootDir, "sequences"), ['jpg', 'tga'])))
 
         self.sceneAccessor = FSSceneAccessor(self.projectManager, self)
 
@@ -47,7 +39,7 @@ class Project:
         return self.name
 
     def registerCategory(self, category):
-        assert isinstance(category, DataCategory)
+        assert isinstance(category, AssetCategory)
         if category.getId() not in self.categories:
             self.categories[category.getId()] = category
         else:
@@ -55,7 +47,7 @@ class Project:
 
     def appendData(self, categoryId, path, loadableData):
         assert isinstance(path, str)
-        assert isinstance(loadableData, LoadableDataDesc)
+        assert isinstance(loadableData, AssetDesc)
         if categoryId in self.categories:
             self.categories[categoryId].appendData(path, loadableData)
         else:

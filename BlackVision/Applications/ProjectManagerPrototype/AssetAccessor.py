@@ -1,7 +1,7 @@
 from abc import abstractmethod
 
 
-class DataAccessor:
+class AssetAccessor:
     def __init__(self):
         self.internalPathAliases = {}
 

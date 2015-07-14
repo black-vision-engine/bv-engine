@@ -1,19 +1,20 @@
-from SurfaceDataAccessor import SurfaceDataAccessor
-from LoadableDataDesc import LoadableDataDesc
+from TextureAssetAccessor import TextureAssetAccessor
+from AssetDesc import AssetDesc
+from AssetExportDesc import AssetExportDesc
 
 import os
 import shutil
 import pickle
 
-class LoadableSurfaceDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::SurfaceAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableDataDesc
+class TextureDesc(AssetDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::TextureAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableDataDesc
     def __init__(self, absPath):
-        LoadableDataDesc.__init__(self)
+        AssetDesc.__init__(self)
         self.absPath = absPath
+        #  TODO: Pewnie jeszcze duzo wiecej memberow w, h, bpp, takie tam
 
-
-class FSSurfaceDataAccessor(SurfaceDataAccessor):
+class FSTextureAssetAccessor(TextureAssetAccessor):
     def __init__(self, rootPath, supportedFileExt):
-        SurfaceDataAccessor.__init__(self)
+        TextureAssetAccessor.__init__(self)
         self.rootPath = rootPath
         self.supportedFileExt = supportedFileExt
         self.__createDir()
@@ -24,20 +25,20 @@ class FSSurfaceDataAccessor(SurfaceDataAccessor):
         absPath = os.path.join(self.rootPath, internalPath)
 
         if os.path.exists(absPath):
-            return LoadableSurfaceDataDesc(absPath)
+            return TextureDesc(absPath)
         else:
             None
 
-    def appendData(self, internalPath, loadableDataDesc):
+    def appendData(self, internalPath, loadableAssetDesc):
         assert isinstance(internalPath, str)
-        assert isinstance(loadableDataDesc, LoadableSurfaceDataDesc )
+        assert isinstance(loadableAssetDesc, TextureDesc)
 
         absPath = os.path.join(self.rootPath, internalPath)
 
         try:
             if not os.path.exists(os.path.dirname(absPath)):
                 os.makedirs(os.path.dirname(absPath))
-            shutil.copyfile(loadableDataDesc.absPath, absPath)
+            shutil.copyfile(loadableAssetDesc.absPath, absPath)
             return True
         except Exception as exc:
             print(exc)
@@ -60,6 +61,10 @@ class FSSurfaceDataAccessor(SurfaceDataAccessor):
             print(exc)
             return False
 
+    def copyData(self, internalPath):
+        assert False  # TODO: Implement
+        pass
+
     def importData(self, impDataFile, importToPath):
 
         try:
@@ -70,18 +75,21 @@ class FSSurfaceDataAccessor(SurfaceDataAccessor):
 
             desc = resultFileContent["desc"]
 
-            assert isinstance(desc, LoadableSurfaceDataDesc)
-            assert(desc.absPath. str)
-            filename = desc.absPath.split('/')[-1]
+            assert isinstance(desc, TextureDesc)
+            assert isinstance(desc.absPath, str)
 
-            toPath = os.path.join(self.rootPath, importToPath, filename)
+            dirName = os.path.join(self.rootPath, os.path.dirname(importToPath))
+            if not os._exists(dirName):
+                os.makedirs(dirName)
+
+            toPath = os.path.join(self.rootPath, importToPath)
 
             with open(toPath, "wb") as f:
                 f.write(resultFileContent["resourceData"])
 
             return True
         except Exception as exc:
-            print("Cannot import surface from '{}'".format(impDataFile))
+            print("Cannot import texture from '{}'".format(impDataFile))
             print(exc)
             return False
 
@@ -96,7 +104,7 @@ class FSSurfaceDataAccessor(SurfaceDataAccessor):
 
             resultFileContent["desc"] = desc
 
-            with open(absPath, "r") as fi:
+            with open(absPath, "rb") as fi:
                 resultFileContent["resourceData"] = fi.read()
 
             with open(expDataFilePath, "wb") as f:
@@ -104,9 +112,36 @@ class FSSurfaceDataAccessor(SurfaceDataAccessor):
 
             return True
         except Exception as exc:
-            print("""Cannot export surface '{}'""".format(internalPath))
+            print("""Cannot export texture '{}'""".format(internalPath))
             print(exc)
             return False
+
+    def getExportDesc(self, internalPath):
+        return AssetExportDesc(internalPath)
+
+    def listAll(self):
+        try:
+            absPath = os.path.join(self.rootPath)
+            res = []
+            for root, dirs, files in os.walk(absPath):
+                for file in files:
+                    res.append(os.path.join(root, file))
+
+            return res
+        except Exception as exc:
+            print("""Cannot list all textures data in path '{}'""".format(self.rootPath))
+            print(exc)
+            return []
+
+    def listAllUniqueExportDesc(self, relativeTo):
+        textures = self.listAll()
+        res = set()
+
+        for t in textures:
+            res.add(self.getExportDesc(os.path.relpath(t, relativeTo)))
+
+        #  returns set id TextureAssetExportDesc
+        return res
 
     def __createDir(self):
         if not os.path.exists(self.rootPath):

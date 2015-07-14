@@ -1,20 +1,26 @@
-from TextureDataAccessor import TextureDataAccessor
-from LoadableDataDesc import LoadableDataDesc
+from SequenceAssetAccessor import SequenceAssetAccessor
+from AssetDesc import AssetDesc
 from AssetExportDesc import AssetExportDesc
 
 import os
 import shutil
 import pickle
 
-class LoadableTextureDataDesc(LoadableDataDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::TextureAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableDataDesc
-    def __init__(self, absPath):
-        LoadableDataDesc.__init__(self)
+class SequenceDesc(AssetDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::SequenceAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableDataDesc
+    def __init__(self, absPath, frames):
+        AssetDesc.__init__(self)
         self.absPath = absPath
-        #  TODO: Pewnie jeszcze duzo wiecej memberow w, h, bpp, takie tam
+        self.frames = frames
 
-class FSTextureDataAccessor(TextureDataAccessor):
+    def getFramesNum(self):
+        return len(self.frames)
+
+    def getFrames(self):
+        return [os.path.join(self.absPath, f) for f in self.frames]
+
+class FSSequenceDataAccessor(SequenceAssetAccessor):
     def __init__(self, rootPath, supportedFileExt):
-        TextureDataAccessor.__init__(self)
+        SequenceAssetAccessor.__init__(self)
         self.rootPath = rootPath
         self.supportedFileExt = supportedFileExt
         self.__createDir()
@@ -24,21 +30,24 @@ class FSTextureDataAccessor(TextureDataAccessor):
 
         absPath = os.path.join(self.rootPath, internalPath)
 
+        frames = [ name for name in os.listdir(absPath) if os.path.isfile(os.path.join(absPath, name)) ]
+
         if os.path.exists(absPath):
-            return LoadableTextureDataDesc(absPath)
+            return SequenceDesc(absPath, frames)
         else:
             None
 
-    def appendData(self, internalPath, loadableDataDesc):
+    def appendData(self, internalPath, sequenceDesc):
         assert isinstance(internalPath, str)
-        assert isinstance(loadableDataDesc, LoadableTextureDataDesc)
+        assert isinstance(sequenceDesc, SequenceDesc)
 
         absPath = os.path.join(self.rootPath, internalPath)
 
         try:
-            if not os.path.exists(os.path.dirname(absPath)):
-                os.makedirs(os.path.dirname(absPath))
-            shutil.copyfile(loadableDataDesc.absPath, absPath)
+            if not os.path.exists(absPath):
+                os.makedirs(absPath)
+            for f in sequenceDesc.getFrames():
+                shutil.copyfile(f, os.path.join(absPath, os.path.basename(f)))
             return True
         except Exception as exc:
             print(exc)
@@ -46,73 +55,78 @@ class FSTextureDataAccessor(TextureDataAccessor):
 
     def removeData(self, internalPath):
         assert isinstance(internalPath, str)
+
+        absPath = os.path.join(self.rootPath, internalPath)
+
         try:
-            os.remove(internalPath)
+            os.remove(absPath)
             return True
         except Exception as exc:
             print(exc)
             return False
 
     def renameData(self, oldPath, newPath):
+
+        oldAbsPath = os.path.join(self.rootPath, oldPath)
+        newAbsPath = os.path.join(self.rootPath, newPath)
+
         try:
-            shutil.move(oldPath, newPath)
+            shutil.move(oldAbsPath, newAbsPath)
             return True
         except Exception as exc:
             print(exc)
             return False
 
-    def copyData(self, internalPath):
-        assert False  # TODO: Implement
-        pass
-
     def importData(self, impDataFile, importToPath):
 
         try:
-            resultFileContent = None
 
             with open(impDataFile, "rb") as fi:
                 resultFileContent = pickle.load(fi)
 
             desc = resultFileContent["desc"]
 
-            assert isinstance(desc, LoadableTextureDataDesc)
+            assert isinstance(desc, SequenceDesc)
             assert isinstance(desc.absPath, str)
 
-            dirName = os.path.join(self.rootPath, os.path.dirname(importToPath))
-            if not os._exists(dirName):
+            dirName = os.path.join(self.rootPath, importToPath)
+
+            if not os.path.exists(dirName):
                 os.makedirs(dirName)
 
-            toPath = os.path.join(self.rootPath, importToPath)
-
-            with open(toPath, "wb") as f:
-                f.write(resultFileContent["resourceData"])
+            for i , frame in enumerate(desc.getFrames()):
+                assert isinstance(frame, str)
+                filename = os.path.basename(frame)
+                absPath = os.path.join(dirName, filename)
+                with open(absPath, "wb") as f:
+                    f.write(resultFileContent["resourceData"][i])
 
             return True
         except Exception as exc:
-            print("Cannot import texture from '{}'".format(impDataFile))
+            print("Cannot import sequence from '{}'".format(impDataFile))
             print(exc)
             return False
 
 
     def exportData(self, expDataFilePath, internalPath):
         try:
-            absPath = os.path.join(self.rootPath, internalPath)
-
             desc = self.getLoadableDataDesc(internalPath)
 
             resultFileContent = {}
 
             resultFileContent["desc"] = desc
 
-            with open(absPath, "rb") as fi:
-                resultFileContent["resourceData"] = fi.read()
+            resultFileContent["resourceData"] = []
+            for frame in desc.getFrames():
+                with open(frame, "rb") as fi:
+                    resultFileContent["resourceData"].append(fi.read())
 
             with open(expDataFilePath, "wb") as f:
                 pickle.dump(resultFileContent, f)
 
             return True
         except Exception as exc:
-            print("""Cannot export texture '{}'""".format(internalPath))
+            print("""Cannot export sequence '{}'""".format(internalPath))
             print(exc)
             return False
 
@@ -124,8 +138,8 @@ class FSTextureDataAccessor(TextureDataAccessor):
             absPath = os.path.join(self.rootPath)
             res = []
             for root, dirs, files in os.walk(absPath):
-                for file in files:
-                    res.append(os.path.join(root, file))
+                if len(files) > 0:  # TODO: Add better checking if it's a sequence.
+                    res.append(root)
 
             return res
         except Exception as exc:
@@ -134,13 +148,12 @@ class FSTextureDataAccessor(TextureDataAccessor):
             return []
 
     def listAllUniqueExportDesc(self, relativeTo):
-        textures = self.listAll()
+        sequences = self.listAll()
         res = set()
 
-        for t in textures:
+        for t in sequences:
             res.add(self.getExportDesc(os.path.relpath(t, relativeTo)))
 
-        #  returns set id TextureAssetExportDesc
         return res
 
     def __createDir(self):
