@@ -1,5 +1,6 @@
 from SequenceDataAccessor import SequenceDataAccessor
 from LoadableDataDesc import LoadableDataDesc
+from AssetExportDesc import AssetExportDesc
 
 import os
 import shutil
@@ -128,6 +129,32 @@ class FSSequenceDataAccessor(SequenceDataAccessor):
             print("""Cannot export sequence '{}'""".format(internalPath))
             print(exc)
             return False
+
+    def getExportDesc(self, internalPath):
+        return AssetExportDesc(internalPath)
+
+    def listAll(self):
+        try:
+            absPath = os.path.join(self.rootPath)
+            res = []
+            for root, dirs, files in os.walk(absPath):
+                if len(files) > 0:  # TODO: Add better checking if it's a sequence.
+                    res.append(root)
+
+            return res
+        except Exception as exc:
+            print("""Cannot list all textures data in path '{}'""".format(self.rootPath))
+            print(exc)
+            return []
+
+    def listAllUniqueExportDesc(self, relativeTo):
+        sequences = self.listAll()
+        res = set()
+
+        for t in sequences:
+            res.add(self.getExportDesc(os.path.relpath(t, relativeTo)))
+
+        return res
 
     def __createDir(self):
         if not os.path.exists(self.rootPath):

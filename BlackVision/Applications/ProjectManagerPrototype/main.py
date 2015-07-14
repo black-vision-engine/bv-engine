@@ -43,8 +43,8 @@ def test():
     pm.getProject("proj1").appendData("textures", "flagi/ger.jpg", LoadableTextureDataDesc("test_data.file")) # niemiec
     pm.getProject("proj1").appendData("textures", "flagi/rus.jpg", LoadableTextureDataDesc("test_data.file")) # i rusek
 
-    pm.getProject("proj1").appendData("fonts", "pol/arial.tff", LoadableFontDataDesc("test_data.file"))
-    pm.getProject("proj1").appendData("surfaces", "animals/cat.bvsur", LoadableSurfaceDataDesc("test_data.file"))
+    # pm.getProject("proj1").appendData("fonts", "pol/arial.tff", LoadableFontDataDesc("test_data.file"))
+    # pm.getProject("proj1").appendData("surfaces", "animals/cat.bvsur", LoadableSurfaceDataDesc("test_data.file"))
     pm.getProject("proj1").appendData("sequences", "jedzie", LoadableSequenceDataDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq",f))]))
 
 
@@ -61,20 +61,20 @@ def test():
     pm.getProject("proj2").appendData("sequences", "jedzie1", LoadableSequenceDataDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq",f))]))
 
     pm.getProject("proj1").saveScene(generateScene1("proj1", "proj2"), "test_scenes/p1s1.scn")
-    pm.getProject("proj1").saveScene(generateScene1("proj1", "proj2"), "test_scenes1/p1s2.scn")
+    pm.getProject("proj2").saveScene(generateScene1("proj1", "proj2"), "test_scenes1/p1s2.scn")
 
     #pm.getProject("proj1").exportScene("exportedScene1", "test_scenes/p1s1.scn")
 
     pm.listProjectsNames()
 
     pm.exportProjectToFile("proj1", "proj1.exp")
-    pm.exportSceneToFile("proj1", "test_scenes1/p1s2.scn", "proj1.expscene")
+    pm.exportSceneToFile("proj2", "test_scenes1/p1s2.scn", "proj1.expscene")
 
     from ProjectManager import ProjectManager
     pm1 = ProjectManager("bv_media1")
 
     pm1.importProjectFromFile("proj1.exp", "proj3")
-    pm1.importSceneFromFile("proj2", "test_scenes5/p1s2.scn", "proj1.expscene")
+    pm1.importSceneFromFile("proj3", "test_scenes5/p1s2.scn", "proj1.expscene")
 
     # proj11 = Project.Project(pm1, "1proj1")
     # pm1.addProject(proj11)

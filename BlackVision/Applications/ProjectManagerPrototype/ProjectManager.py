@@ -168,7 +168,7 @@ class ProjectManager:
         assert False  # TODO: Implement
 
     def importSceneFromFile(self, importToProjectName, importToPath, importDataFilePath):
-        self.getProject(importToProjectName).importScene(importDataFilePath, importToPath)
+        self.getProject(importToProjectName).importSceneFromFile(importDataFilePath, importToPath)
 
     def exportProjectToFile(self, projectName, outputFilePath):
         proj = self.getProject(projectName)

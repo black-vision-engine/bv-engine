@@ -46,5 +46,5 @@ class DataAccessor:
         pass
 
     @abstractmethod
-    def listAllUniqueExportDesc(self):
+    def listAllUniqueExportDesc(self, relativeTo):
         pass

@@ -106,10 +106,10 @@ class FSSceneAccessor(SceneAccessor):
 
         filename = "{}".format(uuid.uuid4())
 
-        AssetExportDesc.packAssetsToFile(self.rootDir, filename, expDesc.sceneAssetsDescs)
+        AssetExportDesc.packAssetsToFile(self.projectManager.getRootDir(), filename, expDesc.sceneAssetsDescs)
 
         with open(outputFileName, "wb") as f:
-            pickle.dump({"sceneDesc": self, "assetsArchiveData": open(filename, "rb").read()}, f)
+            pickle.dump({"sceneDesc": expDesc, "assetsArchiveData": open(filename, "rb").read()}, f)
 
         os.remove(filename)
 

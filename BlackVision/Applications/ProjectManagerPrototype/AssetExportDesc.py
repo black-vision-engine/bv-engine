@@ -11,7 +11,7 @@ class AssetExportDesc:
         return hash(self.relativePath)
 
     @staticmethod
-    def packAssetsToFile(cls, rootDir, filename, assetsDescs):
+    def packAssetsToFile(rootDir, filename, assetsDescs):
 
         myZipFile = zipfile.ZipFile(filename, "w")
 

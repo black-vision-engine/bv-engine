@@ -29,12 +29,12 @@ class Project:
 
         self.categories["textures"]     = DataCategory("textures", FSTextureDataAccessor(os.path.join(self.rootDir, "textures", self.name), ['jpg', 'tga']))
         # self.categories["fonts"]        = DataCategory("fonts", FSFontDataAccessor(os.path.join(self.rootDir, "fonts", self.name)))
-        # self.categories["sequences"]    = DataCategory("sequences", FSSequenceDataAccessor(os.path.join(self.rootDir, "sequences", self.name), ['jpg', 'tga']))
+        self.categories["sequences"]    = DataCategory("sequences", FSSequenceDataAccessor(os.path.join(self.rootDir, "sequences", self.name), ['jpg', 'tga']))
         # self.categories["surfaces"]     = DataCategory("surfaces", FSSurfaceDataAccessor(os.path.join(self.rootDir, "surfaces", self.name), ['bvsur']))
 
         self.projectManager.registerGlobalCategory(DataCategory("textures", FSTextureDataAccessor(os.path.join(self.rootDir, "textures"), ['jpg', 'tga'])))
         # self.projectManager.registerGlobalCategory(DataCategory("fonts", FSFontDataAccessor(os.path.join(self.rootDir, "fonts"))))
-        # self.projectManager.registerGlobalCategory(DataCategory("sequences", FSSequenceDataAccessor(os.path.join(self.rootDir, "sequences"), ['jpg', 'tga'])))
+        self.projectManager.registerGlobalCategory(DataCategory("sequences", FSSequenceDataAccessor(os.path.join(self.rootDir, "sequences"), ['jpg', 'tga'])))
         # self.projectManager.registerGlobalCategory(DataCategory("surfaces", FSSurfaceDataAccessor(os.path.join(self.rootDir, "surfaces"), ['bvsur'])))
 
         self.sceneAccessor = FSSceneAccessor(self.projectManager, self)
@@ -96,8 +96,8 @@ class Project:
     def exportSceneToFile(self,  expDataFilePath, path):
         self.sceneAccessor.exportSceneToFile(path, expDataFilePath)
 
-    def importScene(self,  impDataFilePath, path):
-        self.sceneAccessor.importScene(impDataFilePath, path)
+    def importSceneFromFile(self,  impDataFilePath, path):
+        self.sceneAccessor.importSceneFromFile(impDataFilePath, path)
 
     def getScene(self, path):
         assert isinstance(self.sceneAccessor, SceneAccessor)
