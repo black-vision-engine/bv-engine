@@ -233,7 +233,7 @@ class ProjectManager:
                     assert isinstance(scenesDesc, SceneExportDesc)
                     if importToPath:
                         scenOutputFileName = os.path.join(self.rootDir, scenesDesc.relativePath.replace("\\" + projDesc.name + "\\", "\\" + importToPath + "\\"))
-                        # TODO: Add changing names of assets in scene.
+                        scenesDesc.scene.remapResourcesPaths(projDesc.name, importToPath)
                     else:
                         scenOutputFileName = os.path.join(self.rootDir, scenesDesc.relativePath)
 

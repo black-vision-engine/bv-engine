@@ -30,6 +30,8 @@ class SceneWriter:
         return pickle.dumps(self.scene)
 
 
+
+
 class SceneReader:
     def __init__(self, sceneFileDef):
         self.sceneFileDef = sceneFileDef
@@ -56,6 +58,11 @@ class Plugin:
     def addResource(self, projectName, categoryName, path):
         self.resources.append((projectName, categoryName, path))
 
+    def remapResourcesPaths(self, oldProjectName, newProjectName):
+        for i in range(len(self.resources)):
+            if self.resources[i][0] == oldProjectName:
+                self.resources[i] = (newProjectName, self.resources[i][1], self.resources[i][2])
+
     def check(self, rootPath):
         for r in self.resources:
             path = os.path.join(rootPath, r[1], r[0], r[2])
@@ -77,6 +84,13 @@ class Node:
     def addChildNode(self, node):
         assert isinstance(node, Node)
         self.childrenNode.append(node)
+
+    def remapResourcesPaths(self, oldProjectName, newProjectName):
+        for pl in self.plugins:
+            pl.remapResourcesPaths(oldProjectName, newProjectName)
+
+        for n in self.childrenNode:
+            n.remapResourcesPaths(oldProjectName, newProjectName)
 
     def check(self, rootPath):
         for pl in self.plugins:
@@ -109,6 +123,9 @@ class Scene:
         self.__listAssetsInTree(self.rootNode, resources)
 
         return resources
+
+    def remapResourcesPaths(self, oldProjectName, newProjectName):
+        self.rootNode.remapResourcesPaths(oldProjectName, newProjectName)
 
     def check(self, rootPath):
         self.rootNode.check(rootPath)
