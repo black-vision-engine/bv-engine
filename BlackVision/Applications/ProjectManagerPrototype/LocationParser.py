@@ -10,33 +10,27 @@ class LocationParser:
         self.currentProjectName = currentProjectName
         self.location = location
 
-    def parseLocationString(self, projectName, pathInProject):
+    def parseLocationString(self, projectName, categoryName, internelPath):
         assert isinstance(projectName, str)
-        assert isinstance(pathInProject, str)
+        assert isinstance(internelPath, str)
         try:
             projName = projectName
-            categoryName = ""
-            internalPath = ""
+            categoryName = categoryName
+            internalPath = internelPath
             isGlobal = False
             if len(projectName) > 0:
                 if projectName == ".":
                     if self.currentProjectName:
                         self.location.projectName = self.currentProjectName
-                splited = pathInProject.split("/", 1)
-                self.location.categoryName = splited[0]
-                self.location.internalPath = splited[1]
             else:
-                if pathInProject[1:7] == "global":
+                if projectName == "global":
                     self.location.isGlobalLocation = True
-                    splited = pathInProject.split("/", 3)
-                    self.location.categoryName = splited[2]
-                    self.location.internalPath = splited[3]
-                elif pathInProject.startswith("file://"):
+                elif internelPath.startswith("file://"):
                     self.location.prefix = "file"
-                    self.location.internalPath = pathInProject[7:]
-                elif pathInProject.startswith("seq://"):
+                    self.location.internalPath = internelPath[7:]
+                elif internelPath.startswith("seq://"):
                     self.location.prefix = "seq"
-                    self.location.internalPath = pathInProject[6:]
+                    self.location.internalPath = internelPath[6:]
 
         except Exception as exc:
             print("Parsing location error: {}".format(exc))

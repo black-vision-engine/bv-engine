@@ -56,6 +56,14 @@ class Plugin:
     def addResource(self, projectName, categoryName, path):
         self.resources.append((projectName, categoryName, path))
 
+    def check(self, rootPath):
+        for r in self.resources:
+            path = os.path.join(rootPath, r[1], r[0], r[2])
+            if not os.path.exists(path):
+                print("Checking Plugin: Cannot find resource {}".format(path))
+                return False
+        return True
+
 class Node:
     def __init__(self, name):
         self.name = name
@@ -69,6 +77,17 @@ class Node:
     def addChildNode(self, node):
         assert isinstance(node, Node)
         self.childrenNode.append(node)
+
+    def check(self, rootPath):
+        for pl in self.plugins:
+            if not pl.check(rootPath):
+                return False
+
+        for n in self.childrenNode:
+            if not n.check(rootPath):
+                return False
+
+        return True
 
 class Scene:
     def __init__(self, name, rootNode):
@@ -90,6 +109,10 @@ class Scene:
         self.__listAssetsInTree(self.rootNode, resources)
 
         return resources
+
+    def check(self, rootPath):
+        self.rootNode.check(rootPath)
+
 
 def saveScene(scene, outputFile):
     sr = SceneWriter(scene, outputFile)

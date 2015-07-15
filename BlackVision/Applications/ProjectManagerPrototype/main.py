@@ -1,10 +1,11 @@
-﻿from ProjectManager import PM as pm
+﻿
 
 from FSTextureAssetAccessor import TextureDesc
 from FSSequenceAssetAccessor import SequenceDesc
-from Scene import Scene, Node, Plugin
+from Scene import Scene, Node, Plugin, SceneReader
 
 import os
+import shutil
 
 def generateScene1(projectName1, projectName2):
     rootNode = Node("p1s1_root")
@@ -30,6 +31,14 @@ def generateScene1(projectName1, projectName2):
     return Scene("p1s1", rootNode)
 
 def test():
+
+    if os.path.exists("bv_media"):
+        shutil.rmtree("bv_media")
+
+    if os.path.exists("bv_media1"):
+        shutil.rmtree("bv_media1")
+
+    from ProjectManager import PM as pm
 
     pm.addNewProject("proj1")
 
@@ -61,7 +70,22 @@ def test():
     pm1.addNewProject("proj3")
 
     pm1.importProjectFromFile("proj1.exp", "proj3")
+
+
+    sceneFilePath = pm1.getSceneDesc("proj3", "test_scenes/p1s1.scn").absPath
+
+    s = SceneReader(sceneFilePath).loadScene()
+    r = s.check("bv_media1")
+
+
     pm1.importSceneFromFile("proj3", "test_scenes5/p1s2.scn", "proj1.expscene")
+
+
+    sceneFilePath = pm1.getSceneDesc("proj3", "test_scenes5/p1s2.scn").absPath
+
+    s = SceneReader(sceneFilePath).loadScene()
+    r = s.check("bv_media1")
+
 
 if __name__ == "__main__":
     test()

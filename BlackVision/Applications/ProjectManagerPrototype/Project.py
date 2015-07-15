@@ -33,7 +33,10 @@ class Project:
 
     def __createDir(self):
         if not os.path.exists(os.path.join(self.rootDir, "projects", self.name)):
-            os.makedirs(os.path.join(self.rootDir, "projects", self.name))
+            projPath = os.path.join(self.rootDir, "projects", self.name)
+            os.makedirs(projPath)
+            with open(os.path.join(projPath, ".bvproj"), "w"):
+                pass
 
     def getName(self):
         return self.name
@@ -91,9 +94,9 @@ class Project:
     def importSceneFromFile(self,  impDataFilePath, path):
         self.sceneAccessor.importSceneFromFile(impDataFilePath, path)
 
-    def getScene(self, path):
+    def getSceneDesc(self, path):
         assert isinstance(self.sceneAccessor, SceneAccessor)
-        return self.sceneAccessor.getSceneDesc()
+        return self.sceneAccessor.getSceneDesc(path)
 
     def appendSceneFromFile(self, sceneFilePath, path):
         assert isinstance(self.sceneAccessor, SceneAccessor)

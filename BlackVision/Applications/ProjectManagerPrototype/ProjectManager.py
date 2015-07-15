@@ -22,8 +22,8 @@ class ProjectManager:
         self.globalCategories = {}
         self.globalSceneAccessor = None
         self.rootDir        = os.path.abspath(rootDir)
-        self.__createDir()
-        self.__setGlobalSceneAccessor(FSSceneAccessor(self, None))
+
+        self.__initializeProjectManager()
 
     def __createDir(self):
         if not os.path.exists(self.rootDir):
@@ -31,6 +31,24 @@ class ProjectManager:
 
     def __setGlobalSceneAccessor(self, sceneAccessor):
         self.globalSceneAccessor = sceneAccessor
+
+    def __initializeProjectManager(self):
+        self.__createDir()
+        self.__setGlobalSceneAccessor(FSSceneAccessor(self, None))
+
+        if os.path.exists(self.rootDir):
+            self.__initializeProjects()
+
+    def __initializeProjects(self):
+        projectsPath = os.path.join(self.rootDir, "projects")
+        if os.path.exists(projectsPath):
+            for dirpath, dirnames, filenames in os.walk(projectsPath):
+                for fn in filenames:
+                    if fn == ".bvproj":
+                        projName = os.path.normpath(os.path.relpath(dirpath, projectsPath))
+                        if projName not in self.projects:
+                            self.projects[projName] = Project(self, projName)
+
 
     def getAssetDesc(self, projectName, pathInProject):
         assert isinstance(projectName, str)
@@ -55,7 +73,7 @@ class ProjectManager:
         assert isinstance(projectName, str)
         assert isinstance(pathInProject, str)
 
-        loc = Location(projectName, pathInProject, self.currentProject.getName() if self.currentProject else "")
+        loc = Location(projectName, "scenes", pathInProject, self.currentProject.getName() if self.currentProject else "")
 
         if loc:
             if loc.getIsGlobalLocation():

@@ -2,20 +2,20 @@ from LocationParser import LocationParser
 
 
 class Location:
-    def __init__(self, projectName, categoryName, pathInProject, currentProjectName = ""):
+    def __init__(self, projectName, categoryName, internelPath, currentProjectName = ""):
         self.projectName = projectName
-        self.categoryName = ""
-        self.internalPath = ""
+        self.categoryName = categoryName
+        self.internalPath = internelPath
         self.isGlobalLocation = False
         self.prefix = ""
-        self.__parseString(projectName, pathInProject, currentProjectName)
+        self.__parseString(projectName, categoryName, internelPath, currentProjectName)
 
-    def __parseString(self, projectName, pathInProject, currentProjectName):
+    def __parseString(self, projectName, categoryName, internelPath, currentProjectName):
         assert isinstance(projectName, str)
-        assert isinstance(pathInProject, str)
+        assert isinstance(internelPath, str)
 
         locParser = LocationParser(self, currentProjectName)
-        locParser.parseLocationString(projectName, pathInProject)
+        locParser.parseLocationString(projectName, categoryName, internelPath)
 
     def getProjectName(self):
         return self.projectName;
