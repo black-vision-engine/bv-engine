@@ -91,6 +91,8 @@ def test():
     s = SceneReader(sceneFilePath).loadScene()
     r = s.check("bv_media1")
 
+    return 0
+
 
 if __name__ == "__main__":
     test()
