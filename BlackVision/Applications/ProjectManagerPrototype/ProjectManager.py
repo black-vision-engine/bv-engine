@@ -49,7 +49,6 @@ class ProjectManager:
                         if projName not in self.projects:
                             self.projects[projName] = Project(self, projName)
 
-
     def getAssetDesc(self, projectName, pathInProject):
         assert isinstance(projectName, str)
         assert isinstance(pathInProject, str)
@@ -112,6 +111,30 @@ class ProjectManager:
                 return proj.listScenes()
             else:
                 print("Project named {} doesn't exist".format(projectName))
+
+    def listCategories(self, projectName = None):
+        if not projectName:
+            return [c for c in self.globalCategories.keys()]
+        else:
+            proj = self.getProject(projectName)
+            if proj:
+                return proj.listCategories()
+            else:
+                print("Project named {} doesn't exist".format(projectName))
+
+    def listAssets(self, projectName = None, categoryName = None ):
+        assert False  # TODO: Implement
+        # if not projectName:
+        #     if not categoryName:
+        #         if categoryName in self.globalCategories:
+        #             self.globalCategories[categoryName].
+        # else:
+        #     proj = self.getProject(projectName)
+        #     if proj:
+        #         return proj.listCategories()
+        #     else:
+        #         print("Project named {} doesn't exist".format(projectName))
+
 
     def setCurrentProject(self, projectName):
         if projectName in self.projects:

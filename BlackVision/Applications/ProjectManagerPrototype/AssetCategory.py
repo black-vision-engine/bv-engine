@@ -2,33 +2,36 @@ from AssetAccessor import AssetAccessor
 from AssetDesc import AssetDesc
 
 class AssetCategory:
-    def __init__(self, id, dataAccessor):
-        assert isinstance(dataAccessor, AssetAccessor)
+    def __init__(self, id, assetAccessor):
+        assert isinstance(assetAccessor, AssetAccessor)
         self.id = id
-        self.accessor = dataAccessor
+        self.accessor = assetAccessor
 
     def getId(self):
         return self.id
 
-    def appendData(self, path, assetDesc):
+    def appendAsset(self, path, assetDesc):
         assert isinstance(assetDesc, AssetDesc)
-        self.accessor.appendData(path, assetDesc)
+        self.accessor.appendAsset(path, assetDesc)
 
-    def getData(self, path):
+    def getAsset(self, path):
         assert isinstance(path, str)
-        return self.accessor.getLoadableDataDesc(path)
+        return self.accessor.getLoadableAssetDesc(path)
 
-    def copyData(self, path):
+    def copyAsset(self, path):
         assert isinstance(path, str)
-        return self.accessor.copyData(path)
+        return self.accessor.copyAsset(path)
 
-    def exportData(self, expDataFilePath, path):
+    def exportAsset(self, expAssetFilePath, path):
         assert isinstance(path, str)
-        return self.accessor.exportData(expDataFilePath, path)
+        return self.accessor.exportAsset(expAssetFilePath, path)
 
-    def importData(self, impDataFilePath, toPath):
+    def importAsset(self, impAssetFilePath, toPath):
         assert isinstance(toPath, str)
-        return self.accessor.importData(impDataFilePath, toPath)
+        return self.accessor.importAsset(impAssetFilePath, toPath)
 
-    def exportAll(self, expDataFilePath):
-        return self.accessor.exportAll(expDataFilePath)
+    def exportAll(self, expAssetFilePath):
+        return self.accessor.exportAll(expAssetFilePath)
+
+    def listAssets(self):
+        self.accessor.listAll

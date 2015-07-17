@@ -130,5 +130,8 @@ class Project:
     def listScenes(self):
         return self.sceneAccessor.listScenes()
 
+    def listCategories(self):
+        return [c for c in self.categories.keys()]
+
     def __str__(self):
         print("Project {} \n\t".format(self.name))
