@@ -102,6 +102,17 @@ class ProjectManager:
     def listProjectsNames(self):
         return self.projects.keys()
 
+    def listScenes(self, projectName = None):
+        if not projectName:
+            return self.globalSceneAccessor.listScenes()
+        else:
+            assert isinstance(projectName, str)
+            proj = self.getProject(projectName)
+            if proj:
+                return proj.listScenes()
+            else:
+                print("Project named {} doesn't exist".format(projectName))
+
     def setCurrentProject(self, projectName):
         if projectName in self.projects:
             self.currentProject = self.projects[projectName]

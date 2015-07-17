@@ -61,6 +61,10 @@ def test():
 
     pm.listProjectsNames()
 
+    print(pm.listScenes())
+    print(pm.listScenes("proj1"))
+    print(pm.listScenes("proj2"))
+
     pm.exportProjectToFile("proj1", "proj1.exp")
     pm.exportSceneToFile("proj2", "test_scenes1/p1s2.scn", "proj1.expscene")
 
@@ -71,6 +75,7 @@ def test():
 
     pm1.importProjectFromFile("proj1.exp", "proj3")
 
+    print(pm1.listScenes())
 
     sceneFilePath = pm1.getSceneDesc("proj3", "test_scenes/p1s1.scn").absPath
 

@@ -127,5 +127,8 @@ class Project:
         desc = self.getExportDesc()
         desc.saveExportPackageToFile(outputFileName)
 
+    def listScenes(self):
+        return self.sceneAccessor.listScenes()
+
     def __str__(self):
         print("Project {} \n\t".format(self.name))
