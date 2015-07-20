@@ -229,7 +229,7 @@ class ProjectManager:
     def removeScene(self, projectName, path):
         path = self.__toRelativePath(projectName, path)
         if path:
-            os.remove(path)
+            self.globalSceneAccessor.removeScene(path)
         else:
             print("Scene {} : {} doesn't exist".format(projectName, path))
 
