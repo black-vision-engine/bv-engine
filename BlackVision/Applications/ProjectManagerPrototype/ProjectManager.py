@@ -225,7 +225,6 @@ class ProjectManager:
         else:
             print("Scene {} : {} doesn't exist".format(inProjectName, inPath))
 
-
     def removeScene(self, projectName, path):
         path = self.__toRelativePath(projectName, path)
         if path:
@@ -236,6 +235,31 @@ class ProjectManager:
     def moveScene(self, inProjectName, inPath, outProjectName, outPath):
         self.copyScene(inProjectName, inPath, outProjectName, outPath)
         self.removeScene(inProjectName, inPath)
+
+    def listAllUsedAssets(self):
+        scenesFiles = self.globalSceneAccessor.listScenes()
+
+        scenesAssets = set()
+
+        for sf in scenesFiles:
+            s = self.globalSceneAccessor.getScene(sf)
+            for a in s.listAssets():
+                scenesAssets.add(os.path.normpath(os.path.join(a[1], a[0], a[2])))
+
+        return [a for a in scenesAssets]
+
+    def listAllUnusedAssets(self, projectName, categoryName):
+        assets = set(self.listAssets(projectName, categoryName))
+        usedAssets = set(self.listAllUsedAssets())
+        unusedAssets = assets.difference_update(usedAssets)
+        return [a for a in unusedAssets]
+
+    def removeUnusedAssets(self, projectName = None, categoryName = None):
+        unusedAssets = self.listAllUnusedAssets(projectName, categoryName)
+        for ua in unusedAssets:
+            self.removeAsset(None, None, ua)
+
+
 
     ###########################################################################
     # Exporting and importing
