@@ -139,7 +139,7 @@ class FSSequenceAssetAccessor(SequenceAssetAccessor):
             res = []
             for root, dirs, files in os.walk(absPath):
                 if len(files) > 0:  # TODO: Add better checking if it's a sequence.
-                    res.append(root)
+                    res.append(os.path.relpath(root, absPath))
 
             return res
         except Exception as exc:
@@ -148,7 +148,7 @@ class FSSequenceAssetAccessor(SequenceAssetAccessor):
             return []
 
     def listAllUniqueExportDesc(self, relativeTo):
-        sequences = self.listAll()
+        sequences = [os.path.normpath(os.path.join(self.rootPath, s)) for s in self.listAll()]
         res = set()
 
         for t in sequences:

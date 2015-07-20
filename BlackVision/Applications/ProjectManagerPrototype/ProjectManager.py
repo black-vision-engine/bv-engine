@@ -123,11 +123,13 @@ class ProjectManager:
                 print("Project named {} doesn't exist".format(projectName))
 
     def listAssets(self, projectName = None, categoryName = None ):
-        assert False  # TODO: Implement
-        # if not projectName:
-        #     if not categoryName:
-        #         if categoryName in self.globalCategories:
-        #             self.globalCategories[categoryName].
+        if not projectName:
+            if not categoryName:
+                res = []
+                for cn in self.globalCategories.keys():
+                    res.append(self.globalCategories[cn].listAssets())
+                return res
+
         # else:
         #     proj = self.getProject(projectName)
         #     if proj:

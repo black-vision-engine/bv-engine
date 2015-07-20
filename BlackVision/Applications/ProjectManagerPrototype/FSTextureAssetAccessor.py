@@ -125,7 +125,7 @@ class FSTextureAssetAccessor(TextureAssetAccessor):
             res = []
             for root, dirs, files in os.walk(absPath):
                 for file in files:
-                    res.append(os.path.join(root, file))
+                    res.append(os.path.relpath(os.path.join(root, file), absPath))
 
             return res
         except Exception as exc:
@@ -134,7 +134,7 @@ class FSTextureAssetAccessor(TextureAssetAccessor):
             return []
 
     def listAllUniqueExportDesc(self, relativeTo):
-        textures = self.listAll()
+        textures = [os.path.normpath(os.path.join(self.rootPath, t)) for t in self.listAll()]
         res = set()
 
         for t in textures:
