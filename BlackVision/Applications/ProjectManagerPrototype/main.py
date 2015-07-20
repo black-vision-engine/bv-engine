@@ -67,7 +67,7 @@ def test():
     print(pm.listCategories())
     print(pm.listCategories("proj1"))
     print(pm.listCategories("proj2"))
-    #print(pm.listAssets())
+    print(pm.listAssets())
 
     pm.exportProjectToFile("proj1", "proj1.exp")
     pm.exportSceneToFile("proj2", "test_scenes1/p1s2.scn", "proj1.expscene")

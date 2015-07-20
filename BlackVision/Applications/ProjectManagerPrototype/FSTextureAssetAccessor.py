@@ -29,7 +29,7 @@ class FSTextureAssetAccessor(TextureAssetAccessor):
         else:
             None
 
-    def appenAsset(self, internalPath, loadableAssetDesc):
+    def appendAsset(self, internalPath, loadableAssetDesc):
         assert isinstance(internalPath, str)
         assert isinstance(loadableAssetDesc, TextureDesc)
 
