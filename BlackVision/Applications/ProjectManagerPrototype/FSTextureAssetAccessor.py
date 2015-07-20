@@ -61,15 +61,9 @@ class FSTextureAssetAccessor(TextureAssetAccessor):
             print(exc)
             return False
 
-    def copyAsset(self, internalPath):
-        assert False  # TODO: Implement
-        pass
-
     def importAsset(self, impAssetFile, importToPath):
 
         try:
-            resultFileContent = None
-
             with open(impAssetFile, "rb") as fi:
                 resultFileContent = pickle.load(fi)
 

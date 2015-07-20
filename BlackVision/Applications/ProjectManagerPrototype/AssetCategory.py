@@ -14,13 +14,13 @@ class AssetCategory:
         assert isinstance(assetDesc, AssetDesc)
         self.accessor.appendAsset(path, assetDesc)
 
-    def getAsset(self, path):
+    def getAssetDesc(self, path):
         assert isinstance(path, str)
         return self.accessor.getLoadableAssetDesc(path)
 
-    def copyAsset(self, path):
+    def removeAsset(self, path):
         assert isinstance(path, str)
-        return self.accessor.copyAsset(path)
+        return self.accessor.removeAsset(path)
 
     def exportAsset(self, expAssetFilePath, path):
         assert isinstance(path, str)

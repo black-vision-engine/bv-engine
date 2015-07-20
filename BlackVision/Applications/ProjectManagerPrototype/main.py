@@ -70,6 +70,7 @@ def test():
     print(pm.listAssets())
     print(pm.listAssets("proj1", "textures"))
     print(pm.listAssets("proj2", "sequences"))
+    print(pm.listAssets("proj2"))
 
     pm.exportProjectToFile("proj1", "proj1.exp")
     pm.exportSceneToFile("proj2", "test_scenes1/p1s2.scn", "proj1.expscene")

@@ -56,18 +56,10 @@ class Project:
         else:
             print("There is no category named {} in project {}".format(categoryId, self.name))
 
-    def getAsset(self, categoryId, path):
+    def getAssetDesc(self, categoryId, path):
         assert isinstance(path, str)
         if categoryId in self.categories:
-            return self.categories[categoryId].getAsset(path)
-        else:
-            print("There is no category named {} in project {}".format(categoryId, self.name))
-            return None
-
-    def copyAsset(self, categoryId, path):
-        assert isinstance(path, str)
-        if categoryId in self.categories:
-            return self.categories[categoryId].copyAsset(path)
+            return self.categories[categoryId].getAssetDesc(path)
         else:
             print("There is no category named {} in project {}".format(categoryId, self.name))
             return None

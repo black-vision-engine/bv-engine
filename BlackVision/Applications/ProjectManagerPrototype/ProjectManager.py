@@ -49,7 +49,27 @@ class ProjectManager:
                         if projName not in self.projects:
                             self.projects[projName] = Project(self, projName)
 
-    def getAssetDesc(self, projectName, pathInProject):
+    def __isProjectName(self, projectName):
+        return projectName in self.projects
+
+    def __toRelativePath(self, projectName, path):
+        if not projectName:
+            return os.path.normpath(path)
+
+        if projectName:
+            if projectName == ".":
+                if self.currentProject:
+                    return os.path.normpath(os.path.join(self.currentProject.getName(), path))
+                else:
+                    print("Current project isn't set.")
+            else:
+                    return os.path.normpath(os.path.join(projectName, path))
+
+        print("Wrong asset access {} : {}", projectName, path)
+        return None
+
+    def getAssetDesc(self, projectName, categoryName, pathInProject):
+        assert False  # TODO Rewrite using new Location model
         assert isinstance(projectName, str)
         assert isinstance(pathInProject, str)
 
@@ -144,7 +164,6 @@ class ProjectManager:
              else:
                  print("Project named {} doesn't exist".format(projectName))
 
-
     def setCurrentProject(self, projectName):
         if projectName in self.projects:
             self.currentProject = self.projects[projectName]
@@ -170,12 +189,26 @@ class ProjectManager:
 
     ###########################################################################
     # Operations inside one project manager
-    # TODO: Implement
-    def moveAsset(self, fromProjectName, fromInternalPath, toProjectName, toInternalPath):
-        assert False  # TODO: Implement
+    def moveAsset(self, inProjectName, inCategoryName, inPath, outProjectName, outPath):
+        self.copyAsset(inProjectName, inCategoryName, inPath, outProjectName, outPath)
+        self.removeAsset(inProjectName, inCategoryName, inPath)
 
-    def copyAsset(self, fromProjectName, fromInternalPath, toProjectName, toInternalPath):
-        assert False  # TODO: Implement
+    def copyAsset(self, inProjectName, inCategoryName, inPath, outProjectName, outPath):
+        assetDesc = self.getAssetDesc(inProjectName, inCategoryName, inPath)
+
+        if assetDesc:
+            path = self.__toRelativePath(outProjectName, outPath)
+            if path:
+                self.globalCategories[inCategoryName].appendAsset(path, assetDesc)
+        else:
+            print("Asset {} : {} : {} doesn't exist".format(inProjectName, inCategoryName, inPath))
+
+    def removeAsset(self, projectName, categoryName, path):
+        path = self.__toRelativePath(projectName, path)
+        if categoryName in self.globalCategories:
+            self.globalCategories[categoryName].removeAsset(path)
+        else:
+            print("Category {} doesn't exist".format(categoryName))
 
     def moveScene(self, fromProjectName, fromInternalPath, toProjectName, toInternalPath):
         assert False  # TODO: Implement
