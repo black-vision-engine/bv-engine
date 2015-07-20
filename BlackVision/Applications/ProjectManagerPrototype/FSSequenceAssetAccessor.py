@@ -6,7 +6,7 @@ import os
 import shutil
 import pickle
 
-class SequenceDesc(AssetDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::SequenceAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableDataDesc
+class SequenceDesc(AssetDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::SequenceAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableAssetDesc
     def __init__(self, absPath, frames):
         AssetDesc.__init__(self)
         self.absPath = absPath
@@ -18,14 +18,14 @@ class SequenceDesc(AssetDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba bę
     def getFrames(self):
         return [os.path.join(self.absPath, f) for f in self.frames]
 
-class FSSequenceDataAccessor(SequenceAssetAccessor):
+class FSSequenceAssetAccessor(SequenceAssetAccessor):
     def __init__(self, rootPath, supportedFileExt):
         SequenceAssetAccessor.__init__(self)
         self.rootPath = rootPath
         self.supportedFileExt = supportedFileExt
         self.__createDir()
 
-    def getLoadableDataDesc(self, internalPath):
+    def getLoadableAssetDesc(self, internalPath):
         assert isinstance(internalPath, str)
 
         absPath = os.path.join(self.rootPath, internalPath)
@@ -37,7 +37,7 @@ class FSSequenceDataAccessor(SequenceAssetAccessor):
         else:
             None
 
-    def appendData(self, internalPath, sequenceDesc):
+    def appendAsset(self, internalPath, sequenceDesc):
         assert isinstance(internalPath, str)
         assert isinstance(sequenceDesc, SequenceDesc)
 
@@ -53,7 +53,7 @@ class FSSequenceDataAccessor(SequenceAssetAccessor):
             print(exc)
             return False
 
-    def removeData(self, internalPath):
+    def removeAsset(self, internalPath):
         assert isinstance(internalPath, str)
 
         absPath = os.path.join(self.rootPath, internalPath)
@@ -65,7 +65,7 @@ class FSSequenceDataAccessor(SequenceAssetAccessor):
             print(exc)
             return False
 
-    def renameData(self, oldPath, newPath):
+    def renameAsset(self, oldPath, newPath):
 
         oldAbsPath = os.path.join(self.rootPath, oldPath)
         newAbsPath = os.path.join(self.rootPath, newPath)
@@ -77,11 +77,11 @@ class FSSequenceDataAccessor(SequenceAssetAccessor):
             print(exc)
             return False
 
-    def importData(self, impDataFile, importToPath):
+    def importAsset(self, impAssetFile, importToPath):
 
         try:
 
-            with open(impDataFile, "rb") as fi:
+            with open(impAssetFile, "rb") as fi:
                 resultFileContent = pickle.load(fi)
 
             desc = resultFileContent["desc"]
@@ -99,29 +99,29 @@ class FSSequenceDataAccessor(SequenceAssetAccessor):
                 filename = os.path.basename(frame)
                 absPath = os.path.join(dirName, filename)
                 with open(absPath, "wb") as f:
-                    f.write(resultFileContent["resourceData"][i])
+                    f.write(resultFileContent["resourceAsset"][i])
 
             return True
         except Exception as exc:
-            print("Cannot import sequence from '{}'".format(impDataFile))
+            print("Cannot import sequence from '{}'".format(impAssetFile))
             print(exc)
             return False
 
 
-    def exportData(self, expDataFilePath, internalPath):
+    def exportAsset(self, expAssetFilePath, internalPath):
         try:
-            desc = self.getLoadableDataDesc(internalPath)
+            desc = self.getLoadableAssetDesc(internalPath)
 
             resultFileContent = {}
 
             resultFileContent["desc"] = desc
 
-            resultFileContent["resourceData"] = []
+            resultFileContent["resourceAsset"] = []
             for frame in desc.getFrames():
                 with open(frame, "rb") as fi:
-                    resultFileContent["resourceData"].append(fi.read())
+                    resultFileContent["resourceAsset"].append(fi.read())
 
-            with open(expDataFilePath, "wb") as f:
+            with open(expAssetFilePath, "wb") as f:
                 pickle.dump(resultFileContent, f)
 
             return True
@@ -143,7 +143,7 @@ class FSSequenceDataAccessor(SequenceAssetAccessor):
 
             return res
         except Exception as exc:
-            print("""Cannot list all textures data in path '{}'""".format(self.rootPath))
+            print("""Cannot list all textures Asset in path '{}'""".format(self.rootPath))
             print(exc)
             return []
 

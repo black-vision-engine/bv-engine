@@ -169,7 +169,7 @@ class FSSceneAccessor(SceneAccessor):
 
                     with open(filename, "wb") as f:
                         f.write(resources[r])
-                    toProject.importData(filename, r[1], r[2])
+                    toProject.importAsset(filename, r[1], r[2])
                     os.remove(filename)
                 else:
                     tmp = tempfile.NamedTemporaryFile(delete=False)

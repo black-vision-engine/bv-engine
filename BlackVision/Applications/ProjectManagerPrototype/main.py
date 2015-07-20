@@ -42,19 +42,19 @@ def test():
 
     pm.addNewProject("proj1")
 
-    pm.getProject("proj1").appendData("textures", "flagi/pol.jpg", TextureDesc("test_data.file")) # polak
-    pm.getProject("proj1").appendData("textures", "flagi/ger.jpg", TextureDesc("test_data.file")) # niemiec
-    pm.getProject("proj1").appendData("textures", "flagi/rus.jpg", TextureDesc("test_data.file")) # i rusek
-    pm.getProject("proj1").appendData("sequences", "jedzie", SequenceDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq",f))]))
+    pm.getProject("proj1").appendAsset("textures", "flagi/pol.jpg", TextureDesc("test_data.file")) # polak
+    pm.getProject("proj1").appendAsset("textures", "flagi/ger.jpg", TextureDesc("test_data.file")) # niemiec
+    pm.getProject("proj1").appendAsset("textures", "flagi/rus.jpg", TextureDesc("test_data.file")) # i rusek
+    pm.getProject("proj1").appendAsset("sequences", "jedzie", SequenceDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq",f))]))
 
 
 
     pm.addNewProject("proj2")
 
-    pm.getProject("proj2").appendData("textures", "flags/pol1.jpg", TextureDesc("test_data.file")) # polak
-    pm.getProject("proj2").appendData("textures", "flags/ger1.jpg", TextureDesc("test_data.file")) # niemiec
-    pm.getProject("proj2").appendData("textures", "flags/rus1.jpg", TextureDesc("test_data.file")) # i rusek
-    pm.getProject("proj2").appendData("sequences", "jedzie1", SequenceDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq", f))]))
+    pm.getProject("proj2").appendAsset("textures", "flags/pol1.jpg", TextureDesc("test_data.file")) # polak
+    pm.getProject("proj2").appendAsset("textures", "flags/ger1.jpg", TextureDesc("test_data.file")) # niemiec
+    pm.getProject("proj2").appendAsset("textures", "flags/rus1.jpg", TextureDesc("test_data.file")) # i rusek
+    pm.getProject("proj2").appendAsset("sequences", "jedzie1", SequenceDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq", f))]))
 
     pm.getProject("proj1").saveScene(generateScene1("proj1", "proj2"), "test_scenes/p1s1.scn")
     pm.getProject("proj2").saveScene(generateScene1("proj1", "proj2"), "test_scenes1/p1s2.scn")
@@ -67,7 +67,7 @@ def test():
     print(pm.listCategories())
     print(pm.listCategories("proj1"))
     print(pm.listCategories("proj2"))
-    print(pm.listAssets())
+    #print(pm.listAssets())
 
     pm.exportProjectToFile("proj1", "proj1.exp")
     pm.exportSceneToFile("proj2", "test_scenes1/p1s2.scn", "proj1.expscene")

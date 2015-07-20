@@ -14,31 +14,31 @@ class AssetAccessor:
             print("Alias '{}' already exist and points to '{}'".format(src, self.internalPathAliases[src]))
 
     @abstractmethod
-    def getLoadableDataDesc(self, location):
+    def getLoadableAssetDesc(self, location):
         pass
 
     @abstractmethod
-    def appendData(self, internalPath, loadableDataDesc):
+    def appendAsset(self, internalPath, loadableAssetDesc):
         pass
 
     @abstractmethod
-    def removeData(self, internalPath):
+    def removeAsset(self, internalPath):
         pass
 
     @abstractmethod
-    def renameData(self, oldPath, newPath):
+    def renameAsset(self, oldPath, newPath):
         pass
 
     @abstractmethod
-    def importData(self, impDataFile, importToPath):
+    def importAsset(self, impAssetFile, importToPath):
         pass
 
     @abstractmethod
-    def exportData(self, expDataFilePath, internalPath):
+    def exportAsset(self, expAssetFilePath, internalPath):
         pass
 
     @abstractmethod
-    def exportAll(self, expDataFilePath):
+    def exportAll(self, expAssetFilePath):
         pass
 
     @abstractmethod

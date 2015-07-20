@@ -6,7 +6,7 @@ import os
 import shutil
 import pickle
 
-class TextureDesc(AssetDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::TextureAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableDataDesc
+class TextureDesc(AssetDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będzie to samo co bv::TextureAssetDesc, które podziedziczymo po czymś co nazwiemy LoadableAssetDesc
     def __init__(self, absPath):
         AssetDesc.__init__(self)
         self.absPath = absPath
@@ -19,7 +19,7 @@ class FSTextureAssetAccessor(TextureAssetAccessor):
         self.supportedFileExt = supportedFileExt
         self.__createDir()
 
-    def getLoadableDataDesc(self, internalPath):
+    def getAssetDesc(self, internalPath):
         assert isinstance(internalPath, str)
 
         absPath = os.path.join(self.rootPath, internalPath)
@@ -29,7 +29,7 @@ class FSTextureAssetAccessor(TextureAssetAccessor):
         else:
             None
 
-    def appendData(self, internalPath, loadableAssetDesc):
+    def appenAsset(self, internalPath, loadableAssetDesc):
         assert isinstance(internalPath, str)
         assert isinstance(loadableAssetDesc, TextureDesc)
 
@@ -44,7 +44,7 @@ class FSTextureAssetAccessor(TextureAssetAccessor):
             print(exc)
             return False
 
-    def removeData(self, internalPath):
+    def removeAsset(self, internalPath):
         assert isinstance(internalPath, str)
         try:
             os.remove(internalPath)
@@ -53,7 +53,7 @@ class FSTextureAssetAccessor(TextureAssetAccessor):
             print(exc)
             return False
 
-    def renameData(self, oldPath, newPath):
+    def renameAsset(self, oldPath, newPath):
         try:
             shutil.move(oldPath, newPath)
             return True
@@ -61,16 +61,16 @@ class FSTextureAssetAccessor(TextureAssetAccessor):
             print(exc)
             return False
 
-    def copyData(self, internalPath):
+    def copyAsset(self, internalPath):
         assert False  # TODO: Implement
         pass
 
-    def importData(self, impDataFile, importToPath):
+    def importAsset(self, impAssetFile, importToPath):
 
         try:
             resultFileContent = None
 
-            with open(impDataFile, "rb") as fi:
+            with open(impAssetFile, "rb") as fi:
                 resultFileContent = pickle.load(fi)
 
             desc = resultFileContent["desc"]
@@ -85,29 +85,29 @@ class FSTextureAssetAccessor(TextureAssetAccessor):
             toPath = os.path.join(self.rootPath, importToPath)
 
             with open(toPath, "wb") as f:
-                f.write(resultFileContent["resourceData"])
+                f.write(resultFileContent["resourceAsset"])
 
             return True
         except Exception as exc:
-            print("Cannot import texture from '{}'".format(impDataFile))
+            print("Cannot import texture from '{}'".format(impAssetFile))
             print(exc)
             return False
 
 
-    def exportData(self, expDataFilePath, internalPath):
+    def exportAsset(self, expAssetFilePath, internalPath):
         try:
             absPath = os.path.join(self.rootPath, internalPath)
 
-            desc = self.getLoadableDataDesc(internalPath)
+            desc = self.getLoadableAssetDesc(internalPath)
 
             resultFileContent = {}
 
             resultFileContent["desc"] = desc
 
             with open(absPath, "rb") as fi:
-                resultFileContent["resourceData"] = fi.read()
+                resultFileContent["resourceAsset"] = fi.read()
 
-            with open(expDataFilePath, "wb") as f:
+            with open(expAssetFilePath, "wb") as f:
                 pickle.dump(resultFileContent, f)
 
             return True
@@ -129,7 +129,7 @@ class FSTextureAssetAccessor(TextureAssetAccessor):
 
             return res
         except Exception as exc:
-            print("""Cannot list all textures data in path '{}'""".format(self.rootPath))
+            print("""Cannot list all textures Asset in path '{}'""".format(self.rootPath))
             print(exc)
             return []
 

@@ -5,7 +5,7 @@ from ProjectExportDesc import ProjectExportDesc
 
 from FSSceneAccessor import FSSceneAccessor
 from FSTextureAssetAccessor import FSTextureAssetAccessor
-from FSSequenceAssetAccessor import FSSequenceDataAccessor
+from FSSequenceAssetAccessor import FSSequenceAssetAccessor
 
 import os
 
@@ -24,10 +24,10 @@ class Project:
         self.__createDir()
 
         self.categories["textures"]     = AssetCategory("textures", FSTextureAssetAccessor(os.path.join(self.rootDir, "textures", self.name), ['jpg', 'tga']))
-        self.categories["sequences"]    = AssetCategory("sequences", FSSequenceDataAccessor(os.path.join(self.rootDir, "sequences", self.name), ['jpg', 'tga']))
+        self.categories["sequences"]    = AssetCategory("sequences", FSSequenceAssetAccessor(os.path.join(self.rootDir, "sequences", self.name), ['jpg', 'tga']))
 
         self.projectManager.registerGlobalCategory(AssetCategory("textures", FSTextureAssetAccessor(os.path.join(self.rootDir, "textures"), ['jpg', 'tga'])))
-        self.projectManager.registerGlobalCategory(AssetCategory("sequences", FSSequenceDataAccessor(os.path.join(self.rootDir, "sequences"), ['jpg', 'tga'])))
+        self.projectManager.registerGlobalCategory(AssetCategory("sequences", FSSequenceAssetAccessor(os.path.join(self.rootDir, "sequences"), ['jpg', 'tga'])))
 
         self.sceneAccessor = FSSceneAccessor(self.projectManager, self)
 
@@ -48,51 +48,51 @@ class Project:
         else:
             print("Category '{}' already registered".format(category.getId()))
 
-    def appendData(self, categoryId, path, loadableData):
+    def appendAsset(self, categoryId, path, assetDesc):
         assert isinstance(path, str)
-        assert isinstance(loadableData, AssetDesc)
+        assert isinstance(assetDesc, AssetDesc)
         if categoryId in self.categories:
-            self.categories[categoryId].appendData(path, loadableData)
+            self.categories[categoryId].appendAsset(path, assetDesc)
         else:
             print("There is no category named {} in project {}".format(categoryId, self.name))
 
-    def getData(self, categoryId, path):
+    def getAsset(self, categoryId, path):
         assert isinstance(path, str)
         if categoryId in self.categories:
-            return self.categories[categoryId].getData(path)
-        else:
-            print("There is no category named {} in project {}".format(categoryId, self.name))
-            return None
-
-    def copyData(self, categoryId, path):
-        assert isinstance(path, str)
-        if categoryId in self.categories:
-            return self.categories[categoryId].copyData(path)
+            return self.categories[categoryId].getAsset(path)
         else:
             print("There is no category named {} in project {}".format(categoryId, self.name))
             return None
 
-    def exportData(self, expDataFilePath, categoryId, path):
+    def copyAsset(self, categoryId, path):
         assert isinstance(path, str)
         if categoryId in self.categories:
-            return self.categories[categoryId].exportData(expDataFilePath, path)
+            return self.categories[categoryId].copyAsset(path)
         else:
             print("There is no category named {} in project {}".format(categoryId, self.name))
             return None
 
-    def importData(self, impDataFilePath, categoryId, toPath):
+    def exportAsset(self, expAssetFilePath, categoryId, path):
+        assert isinstance(path, str)
+        if categoryId in self.categories:
+            return self.categories[categoryId].exportAsset(expAssetFilePath, path)
+        else:
+            print("There is no category named {} in project {}".format(categoryId, self.name))
+            return None
+
+    def importAsset(self, impAssetFilePath, categoryId, toPath):
         assert isinstance(toPath, str)
         if categoryId in self.categories:
-            return self.categories[categoryId].importData(impDataFilePath, toPath)
+            return self.categories[categoryId].importAsset(impAssetFilePath, toPath)
         else:
             print("There is no category named {} in project {}".format(categoryId, self.name))
             return None
 
-    def exportSceneToFile(self,  expDataFilePath, path):
-        self.sceneAccessor.exportSceneToFile(path, expDataFilePath)
+    def exportSceneToFile(self,  expAssetFilePath, path):
+        self.sceneAccessor.exportSceneToFile(path, expAssetFilePath)
 
-    def importSceneFromFile(self,  impDataFilePath, path):
-        self.sceneAccessor.importSceneFromFile(impDataFilePath, path)
+    def importSceneFromFile(self,  impSceneFilePath, path):
+        self.sceneAccessor.importSceneFromFile(impSceneFilePath, path)
 
     def getSceneDesc(self, path):
         assert isinstance(self.sceneAccessor, SceneAccessor)

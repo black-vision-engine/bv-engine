@@ -59,11 +59,11 @@ class ProjectManager:
             if loc.getIsGlobalLocation():
                 catName = loc.getCategoryName()
                 if catName in self.globalCategories:
-                    return self.globalCategories[catName].getData(loc.getInternalPath())
+                    return self.globalCategories[catName].getAssetDesc(loc.getInternalPath())
             else:
                 proj = self.getProject(loc.getProjectName())
                 if proj:
-                    return proj.getData(loc.getCategoryName(), loc.getInternalPath())
+                    return proj.getAssetDesc(loc.getCategoryName(), loc.getInternalPath())
 
         print("Cannot find asset '{}  {}'".format(projectName, pathInProject))
         return None
@@ -181,17 +181,17 @@ class ProjectManager:
     ###########################################################################
     # Exporting and importing assets (textures, sequences etc.)
     def exportAssetToFile(self, projectName, categoryName, assetPath, outputFile):
-        self.getProject(projectName).exportData(outputFile, categoryName, assetPath)
+        self.getProject(projectName).exportAsset(outputFile, categoryName, assetPath)
 
-    def importAssetFromFile(self, importToProjectName, importToCategoryName, importToPath, importDataFilePath):
+    def importAssetFromFile(self, importToProjectName, importToCategoryName, importToPath, importAssetFilePath):
         if importToProjectName == ".":
             importToProjectName == self.currentProject.getName()
 
         if len(importToProjectName) == 0:
             if importToCategoryName in self.globalCategories:
-                self.globalCategories[importToCategoryName].importData(importDataFilePath, importToPath)
+                self.globalCategories[importToCategoryName].importAsset(importAssetFilePath, importToPath)
         else:
-            self.getProject(importToProjectName).importData(importDataFilePath, importToCategoryName, importToPath)
+            self.getProject(importToProjectName).importAsset(importAssetFilePath, importToCategoryName, importToPath)
 
     ###########################################################################
     # Exporting and importing whole scenes
@@ -209,8 +209,8 @@ class ProjectManager:
                 print("Cannot export scene '{}' from project '{}'".format(scenePath, projectName))
                 return False
 
-    def importSceneFromFile(self, importToProjectName, importToPath, importDataFilePath):
-        self.getProject(importToProjectName).importSceneFromFile(importDataFilePath, importToPath)
+    def importSceneFromFile(self, importToProjectName, importToPath, importAssetFilePath):
+        self.getProject(importToProjectName).importSceneFromFile(importAssetFilePath, importToPath)
 
     ###########################################################################
     # Exporting and importing whole projects
