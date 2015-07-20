@@ -21,6 +21,10 @@ class SceneAccessor:
         pass
 
     @abstractmethod
+    def removeScene(self, path):
+        pass
+
+    @abstractmethod
     def importScene(self, impSceneFile, project, importToPath):
         pass
 

@@ -59,6 +59,9 @@ def test():
     pm.getProject("proj1").saveScene(generateScene1("proj1", "proj2"), "test_scenes/p1s1.scn")
     pm.getProject("proj2").saveScene(generateScene1("proj1", "proj2"), "test_scenes1/p1s2.scn")
 
+    pm.copyScene("proj1", "test_scenes/p1s1.scn", "proj1", "test_scenes/p1s1copy.scn")
+    pm.copyScene("proj1", "test_scenes/p1s1.scn", "proj2", "test_scenes/p1s1copy.scn")
+
     pm.listProjectsNames()
 
     print(pm.listScenes())

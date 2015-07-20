@@ -189,10 +189,6 @@ class ProjectManager:
 
     ###########################################################################
     # Operations inside one project manager
-    def moveAsset(self, inProjectName, inCategoryName, inPath, outProjectName, outPath):
-        self.copyAsset(inProjectName, inCategoryName, inPath, outProjectName, outPath)
-        self.removeAsset(inProjectName, inCategoryName, inPath)
-
     def copyAsset(self, inProjectName, inCategoryName, inPath, outProjectName, outPath):
         assetDesc = self.getAssetDesc(inProjectName, inCategoryName, inPath)
 
@@ -210,11 +206,36 @@ class ProjectManager:
         else:
             print("Category {} doesn't exist".format(categoryName))
 
-    def moveScene(self, fromProjectName, fromInternalPath, toProjectName, toInternalPath):
-        assert False  # TODO: Implement
+    def moveAsset(self, inProjectName, inCategoryName, inPath, outProjectName, outPath):
+        self.copyAsset(inProjectName, inCategoryName, inPath, outProjectName, outPath)
+        self.removeAsset(inProjectName, inCategoryName, inPath)
 
-    def copyScene(self, fromProjectName, fromInternalPath, toProjectName, toInternalPath):
-        assert False  # TODO: Implement
+    def copyScene(self, inProjectName, inPath, outProjectName, outPath):
+        path = self.__toRelativePath(inProjectName, inPath)
+        if path:
+            s = self.globalSceneAccessor.getScene(path)
+        else:
+            print("Scene {} : {} doesn't exist".format(inProjectName, inPath))
+            return
+
+        if s:
+            opath = self.__toRelativePath(outProjectName, outPath)
+            if opath:
+                self.globalSceneAccessor.saveScene(opath, s)
+        else:
+            print("Scene {} : {} doesn't exist".format(inProjectName, inPath))
+
+
+    def removeScene(self, projectName, path):
+        path = self.__toRelativePath(projectName, path)
+        if path:
+            os.remove(path)
+        else:
+            print("Scene {} : {} doesn't exist".format(projectName, path))
+
+    def moveScene(self, inProjectName, inPath, outProjectName, outPath):
+        self.copyScene(inProjectName, inPath, outProjectName, outPath)
+        self.removeScene(inProjectName, inPath)
 
     ###########################################################################
     # Exporting and importing

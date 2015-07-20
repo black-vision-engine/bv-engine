@@ -56,6 +56,13 @@ class FSSceneAccessor(SceneAccessor):
             print(exc)
             return False
 
+    def removeScene(self, path):
+        absPath = os.path.join(self.rootPath, path)
+        if os.path.exists(absPath) and os.path.isfile(absPath) and absPath.endswith(".scn"):
+            os.remove(absPath)
+        else:
+            print("Cannot remove scene {}".format(path))
+
     def createScene(self, name, path):
         absPath = os.path.join(self.rootPath, path)
 
@@ -214,3 +221,6 @@ class FSSceneAccessor(SceneAccessor):
             scenesExpDescs.append(SceneExportDesc(s, self.project.getName(), relPath))
 
         return scenesExpDescs
+
+    def getScene(self, path):
+        return SceneReader(os.path.join(self.rootPath, path)).loadScene()
