@@ -133,5 +133,13 @@ class Project:
     def listCategories(self):
         return [c for c in self.categories.keys()]
 
+    def listAssets(self, categoryName):
+        if categoryName in self.categories:
+            return self.categories[categoryName].listAssets()
+        else:
+            print("Category named {} doesn't exist".format(categoryName))
+            return None
+
+
     def __str__(self):
         print("Project {} \n\t".format(self.name))

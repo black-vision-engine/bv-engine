@@ -129,13 +129,20 @@ class ProjectManager:
                 for cn in self.globalCategories.keys():
                     res.append(self.globalCategories[cn].listAssets())
                 return res
+            else:
+                if categoryName in self.globalCategories:
+                    return self.globalCategories[categoryName].listAssets()
+        else:
+             proj = self.getProject(projectName)
 
-        # else:
-        #     proj = self.getProject(projectName)
-        #     if proj:
-        #         return proj.listCategories()
-        #     else:
-        #         print("Project named {} doesn't exist".format(projectName))
+             if not categoryName:
+                 print("categoryName cannot be None whether projectName isn't None")
+                 return None
+
+             if proj and categoryName:
+                 return proj.listAssets(categoryName)
+             else:
+                 print("Project named {} doesn't exist".format(projectName))
 
 
     def setCurrentProject(self, projectName):
