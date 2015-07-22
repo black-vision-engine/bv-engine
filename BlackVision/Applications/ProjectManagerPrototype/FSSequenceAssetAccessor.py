@@ -37,7 +37,7 @@ class FSSequenceAssetAccessor(SequenceAssetAccessor):
         else:
             None
 
-    def appendAsset(self, internalPath, sequenceDesc):
+    def addAsset(self, internalPath, sequenceDesc):
         assert isinstance(internalPath, str)
         assert isinstance(sequenceDesc, SequenceDesc)
 

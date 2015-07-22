@@ -48,7 +48,6 @@ def test():
     pm.addAsset("proj1", "sequences", "jedzie", SequenceDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq",f))]))
 
 
-
     pm.addNewProject("proj2")
 
     pm.addAsset("proj2", "textures", "flags/pol1.jpg", TextureDesc("test_data.file")) # polak
@@ -105,11 +104,19 @@ def test():
 
     pm1.importSceneFromFile("proj3", "test_scenes5/p1s2.scn", "proj1.expscene")
 
-
     sceneFilePath = pm1.getSceneDesc("proj3", "test_scenes5/p1s2.scn").absPath
 
     s = SceneReader(sceneFilePath).loadScene()
     r = s.check("bv_media1")
+
+    print(pm1.listScenes())
+    print(pm1.listScenes("proj1"))
+    print(pm1.listScenes("proj2"))
+    print(pm1.listCategories())
+    print(pm1.listAssets())
+    print(pm1.listAssets("proj1", "textures"))
+    print(pm1.listAssets("proj2", "sequences"))
+    print(pm1.listAssets("proj2"))
 
     return 0
 

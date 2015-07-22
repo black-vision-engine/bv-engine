@@ -10,9 +10,9 @@ class AssetCategory:
     def getId(self):
         return self.id
 
-    def appendAsset(self, path, assetDesc):
+    def addAsset(self, path, assetDesc):
         assert isinstance(assetDesc, AssetDesc)
-        self.accessor.appendAsset(path, assetDesc)
+        self.accessor.addAsset(path, assetDesc)
 
     def getAssetDesc(self, path):
         assert isinstance(path, str)

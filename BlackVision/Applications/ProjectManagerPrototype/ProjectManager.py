@@ -191,7 +191,7 @@ class ProjectManager:
         assert isinstance(assetDesc, AssetDesc)
         pathInCategory = self.__toRelativePath(projectName, path)
         if categoryName in self.globalCategories:
-            self.globalCategories[categoryName].appendAsset(pathInCategory, assetDesc)
+            self.globalCategories[categoryName].addAsset(pathInCategory, assetDesc)
         else:
             print("Category '{}' doesn't exist".format(categoryName))
 
@@ -201,7 +201,7 @@ class ProjectManager:
         if assetDesc:
             path = self.__toRelativePath(outProjectName, outPath)
             if path:
-                self.globalCategories[inCategoryName].appendAsset(path, assetDesc)
+                self.globalCategories[inCategoryName].addAsset(path, assetDesc)
         else:
             print("Asset {} : {} : {} doesn't exist".format(inProjectName, inCategoryName, inPath))
 

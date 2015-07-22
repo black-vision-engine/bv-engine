@@ -45,11 +45,11 @@ class Project:
     #     else:
     #         print("Category '{}' already registered".format(category.getId()))
 
-    # def appendAsset(self, categoryId, path, assetDesc):
+    # def addAsset(self, categoryId, path, assetDesc):
     #     assert isinstance(path, str)
     #     assert isinstance(assetDesc, AssetDesc)
     #     if categoryId in self.categories:
-    #         self.categories[categoryId].appendAsset(path, assetDesc)
+    #         self.categories[categoryId].addAsset(path, assetDesc)
     #     else:
     #         print("There is no category named {} in project {}".format(categoryId, self.name))
 

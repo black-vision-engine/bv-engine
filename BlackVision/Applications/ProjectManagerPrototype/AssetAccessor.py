@@ -18,7 +18,7 @@ class AssetAccessor:
         pass
 
     @abstractmethod
-    def appendAsset(self, internalPath, loadableAssetDesc):
+    def addAsset(self, internalPath, loadableAssetDesc):
         pass
 
     @abstractmethod
