@@ -142,7 +142,7 @@ class ProjectManager:
                 return res
             else:
                 if categoryName in self.globalCategories:
-                    [os.path.join(categoryName, a) for a in
+                    return [os.path.join(categoryName, a) for a in
                         self.globalCategories[categoryName].listAssets()]
         else:
 
