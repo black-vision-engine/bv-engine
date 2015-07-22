@@ -1,6 +1,5 @@
 from AssetCategory import AssetCategory
 from Project import Project
-from Location import Location
 from FSSceneAccessor import FSSceneAccessor, SceneAccessor
 from ProjectExportDesc import ProjectExportDesc
 from SceneExportDesc import SceneExportDesc
@@ -77,24 +76,12 @@ class ProjectManager:
         return None
 
     def getAssetDesc(self, projectName, categoryName, pathInProject):
-        assert False  # TODO Rewrite using new Location model
-        assert isinstance(projectName, str)
-        assert isinstance(pathInProject, str)
-
-        loc = Location(projectName, pathInProject, self.currentProject.getName() if self.currentProject else "")
-
-        if loc:
-            if loc.getIsGlobalLocation():
-                catName = loc.getCategoryName()
-                if catName in self.globalCategories:
-                    return self.globalCategories[catName].getAssetDesc(loc.getInternalPath())
-            else:
-                proj = self.getProject(loc.getProjectName())
-                if proj:
-                    return proj.getAssetDesc(loc.getCategoryName(), loc.getInternalPath())
-
-        print("Cannot find asset '{}  {}'".format(projectName, pathInProject))
-        return None
+        if categoryName in self.globalCategories:
+            pathInCategory = self.__toRelativePath(projectName, pathInProject)
+            return self.globalCategories[categoryName].getAssetDesc(pathInCategory)
+        else:
+            print("Category '{}' doesn't exist.".format(categoryName))
+            return None
 
     def getSceneDesc(self, projectName, pathInProject):
         assert isinstance(projectName, str)
