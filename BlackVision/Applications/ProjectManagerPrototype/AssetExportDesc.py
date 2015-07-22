@@ -27,13 +27,3 @@ class AssetExportDesc:
                     myZipFile.write(os.path.join(path, f), name, zipfile.ZIP_DEFLATED )
 
         myZipFile.close()
-
-# class TextureAssetExportDesc(AssetExportDesc):
-#     def __init__(self, relativePath):
-#         self.relativePath   = relativePath
-#
-#     def __eq__(self, another):
-#         return ( hasattr(another, 'relativePath') and self.relativePath == another.relativePath )
-#
-#     def __hash__(self):
-#         return hash(self.relativePath)
