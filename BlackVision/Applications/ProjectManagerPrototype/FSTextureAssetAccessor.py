@@ -113,13 +113,13 @@ class FSTextureAssetAccessor(TextureAssetAccessor):
     def getExportDesc(self, internalPath):
         return AssetExportDesc(internalPath)
 
-    def listAll(self, projectName):
+    def listAll(self, path):
         try:
-            absPath = os.path.join(self.rootPath)
+            absPath = os.path.join(self.rootPath, path)
             res = []
             for root, dirs, files in os.walk(absPath):
                 for file in files:
-                    res.append(os.path.relpath(os.path.join(root, file), absPath))
+                    res.append(os.path.relpath(os.path.join(root, file), self.rootPath))
 
             return res
         except Exception as exc:
@@ -127,12 +127,12 @@ class FSTextureAssetAccessor(TextureAssetAccessor):
             print(exc)
             return []
 
-    def listAllUniqueExportDesc(self, relativeTo):
-        textures = [os.path.normpath(os.path.join(self.rootPath, t)) for t in self.listAll()]
+    def listAllUniqueExportDesc(self, path):
+        textures = [os.path.normpath(os.path.join(self.rootPath, t)) for t in self.listAll(path)]
         res = set()
 
         for t in textures:
-            res.add(self.getExportDesc(os.path.relpath(t, relativeTo)))
+            res.add(self.getExportDesc(t))
 
         #  returns set id TextureAssetExportDesc
         return res

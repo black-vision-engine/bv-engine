@@ -128,7 +128,7 @@ class Scene:
         self.rootNode.remapResourcesPaths(oldProjectName, newProjectName)
 
     def check(self, rootPath):
-        self.rootNode.check(rootPath)
+        return self.rootNode.check(rootPath)
 
 
 def saveScene(scene, outputFile):

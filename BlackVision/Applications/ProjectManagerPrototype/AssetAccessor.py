@@ -46,5 +46,5 @@ class AssetAccessor:
         pass
 
     @abstractmethod
-    def listAllUniqueExportDesc(self, relativeTo):
+    def listAllUniqueExportDesc(self, path):
         pass

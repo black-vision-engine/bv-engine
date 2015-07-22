@@ -17,7 +17,7 @@ class SceneAccessor:
         pass
 
     @abstractmethod
-    def saveScene(self, path, scene):
+    def addScene(self, scene, outPath):
         pass
 
     @abstractmethod
@@ -37,7 +37,7 @@ class SceneAccessor:
         pass
 
     @abstractmethod
-    def listScenes(self):
+    def listScenes(self, projectName):
         pass
 
     @abstractmethod

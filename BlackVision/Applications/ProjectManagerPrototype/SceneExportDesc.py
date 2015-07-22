@@ -1,9 +1,8 @@
 from AssetExportDesc import AssetExportDesc
 
 class SceneExportDesc:
-    def __init__(self, scene, ownerProjectName, relativePath):
+    def __init__(self, scene, relativePath):
         self.scene              = scene
-        self.ownerProjectName   = ownerProjectName
         self.relativePath       = relativePath
         self.sceneAssetsDescs   = set()
         self.__initializeAssetsDescs()

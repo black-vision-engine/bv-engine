@@ -42,22 +42,22 @@ def test():
 
     pm.addNewProject("proj1")
 
-    pm.getProject("proj1").appendAsset("textures", "flagi/pol.jpg", TextureDesc("test_data.file")) # polak
-    pm.getProject("proj1").appendAsset("textures", "flagi/ger.jpg", TextureDesc("test_data.file")) # niemiec
-    pm.getProject("proj1").appendAsset("textures", "flagi/rus.jpg", TextureDesc("test_data.file")) # i rusek
-    pm.getProject("proj1").appendAsset("sequences", "jedzie", SequenceDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq",f))]))
+    pm.addAsset("proj1", "textures", "flagi/pol.jpg", TextureDesc("test_data.file")) # polak
+    pm.addAsset("proj1", "textures", "flagi/ger.jpg", TextureDesc("test_data.file")) # niemiec
+    pm.addAsset("proj1", "textures", "flagi/rus.jpg", TextureDesc("test_data.file")) # i rusek
+    pm.addAsset("proj1", "sequences", "jedzie", SequenceDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq",f))]))
 
 
 
     pm.addNewProject("proj2")
 
-    pm.getProject("proj2").appendAsset("textures", "flags/pol1.jpg", TextureDesc("test_data.file")) # polak
-    pm.getProject("proj2").appendAsset("textures", "flags/ger1.jpg", TextureDesc("test_data.file")) # niemiec
-    pm.getProject("proj2").appendAsset("textures", "flags/rus1.jpg", TextureDesc("test_data.file")) # i rusek
-    pm.getProject("proj2").appendAsset("sequences", "jedzie1", SequenceDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq", f))]))
+    pm.addAsset("proj2", "textures", "flags/pol1.jpg", TextureDesc("test_data.file")) # polak
+    pm.addAsset("proj2", "textures", "flags/ger1.jpg", TextureDesc("test_data.file")) # niemiec
+    pm.addAsset("proj2", "textures", "flags/rus1.jpg", TextureDesc("test_data.file")) # i rusek
+    pm.addAsset("proj2", "sequences", "jedzie1", SequenceDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq", f))]))
 
-    pm.getProject("proj1").saveScene(generateScene1("proj1", "proj2"), "test_scenes/p1s1.scn")
-    pm.getProject("proj2").saveScene(generateScene1("proj1", "proj2"), "test_scenes1/p1s2.scn")
+    pm.addScene(generateScene1("proj1", "proj2"), "proj1", "test_scenes/p1s1.scn")
+    pm.addScene(generateScene1("proj1", "proj2"), "proj2", "test_scenes1/p1s2.scn")
 
     pm.copyScene("proj1", "test_scenes/p1s1.scn", "proj1", "test_scenes/p1s1copy.scn")
     pm.copyScene("proj1", "test_scenes/p1s1.scn", "proj2", "test_scenes/p1s1copy.scn")
@@ -72,8 +72,6 @@ def test():
     print(pm.listScenes("proj1"))
     print(pm.listScenes("proj2"))
     print(pm.listCategories())
-    print(pm.listCategories("proj1"))
-    print(pm.listCategories("proj2"))
     print(pm.listAssets())
     print(pm.listAssets("proj1", "textures"))
     print(pm.listAssets("proj2", "sequences"))

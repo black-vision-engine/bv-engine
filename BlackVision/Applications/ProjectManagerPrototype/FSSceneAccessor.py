@@ -12,11 +12,10 @@ class SceneDesc:
         self.absPath = absPath
 
 class FSSceneAccessor(SceneAccessor):
-    def __init__(self, projectManager, project):
+    def __init__(self, projectManager):
         SceneAccessor.__init__(self, projectManager)
         self.projectManager = projectManager
-        self.rootPath = os.path.join(projectManager.getRootDir(), "scenes", project.getName() if project else "")
-        self.project = project
+        self.rootPath = os.path.join(projectManager.getRootDir(), "scenes")
         self.__createDir()
 
     def __createDir(self):
@@ -43,8 +42,8 @@ class FSSceneAccessor(SceneAccessor):
             print(exc)
             return False
 
-    def saveScene(self, path, scene):
-        absPath = os.path.join(self.rootPath, path)
+    def addScene(self, scene, outPath):
+        absPath = os.path.join(self.rootPath, outPath)
         dirname = os.path.dirname(absPath)
         try:
             if not os.path.exists(dirname):
@@ -124,7 +123,7 @@ class FSSceneAccessor(SceneAccessor):
         absPath = os.path.join(self.rootPath, internalPath)
         s = loadScene(absPath)
 
-        return SceneExportDesc(s, self.project.getName(), internalPath)
+        return SceneExportDesc(s, internalPath)
 
     def packSceneAndResources(self, scene, outputFile):
         assert self.project
@@ -194,10 +193,10 @@ class FSSceneAccessor(SceneAccessor):
             print(exc)
             return False
 
-    def listScenes(self):
+    def listScenes(self, path):
         try:
             res = []
-            for root, dirs, files in os.walk(self.rootPath):
+            for root, dirs, files in os.walk(self.rootPath, path):
                 for file in files:
                     if file.endswith(".scn"):
                         absPath = os.path.join(root, file)
@@ -209,8 +208,8 @@ class FSSceneAccessor(SceneAccessor):
             print(exc)
             return []
 
-    def listAllExportDesc(self):
-        scenes = self.listScenes()
+    def listAllExportDesc(self, path):
+        scenes = self.listScenes(path)
 
         scenesExpDescs = []
 
@@ -218,7 +217,7 @@ class FSSceneAccessor(SceneAccessor):
             absPath = os.path.join(self.rootPath, sf)
             s = SceneReader(absPath).loadScene()
             relPath = os.path.relpath(absPath, self.projectManager.getRootDir())
-            scenesExpDescs.append(SceneExportDesc(s, self.project.getName(), relPath))
+            scenesExpDescs.append(SceneExportDesc(s, relPath))
 
         return scenesExpDescs
 

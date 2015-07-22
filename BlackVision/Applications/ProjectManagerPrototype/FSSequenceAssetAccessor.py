@@ -133,13 +133,13 @@ class FSSequenceAssetAccessor(SequenceAssetAccessor):
     def getExportDesc(self, internalPath):
         return AssetExportDesc(internalPath)
 
-    def listAll(self):
+    def listAll(self, path):
         try:
-            absPath = os.path.join(self.rootPath)
+            absPath = os.path.join(self.rootPath, path)
             res = []
             for root, dirs, files in os.walk(absPath):
                 if len(files) > 0:  # TODO: Add better checking if it's a sequence.
-                    res.append(os.path.relpath(root, absPath))
+                    res.append(os.path.relpath(root, self.rootPath))
 
             return res
         except Exception as exc:
@@ -147,12 +147,12 @@ class FSSequenceAssetAccessor(SequenceAssetAccessor):
             print(exc)
             return []
 
-    def listAllUniqueExportDesc(self, relativeTo):
-        sequences = [os.path.normpath(os.path.join(self.rootPath, s)) for s in self.listAll()]
+    def listAllUniqueExportDesc(self, path):
+        sequences = [os.path.normpath(os.path.join(self.rootPath, s)) for s in self.listAll(path)]
         res = set()
 
         for t in sequences:
-            res.add(self.getExportDesc(os.path.relpath(t, relativeTo)))
+            res.add(self.getExportDesc(t))
 
         return res
 

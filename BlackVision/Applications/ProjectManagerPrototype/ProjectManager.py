@@ -34,7 +34,7 @@ class ProjectManager:
 
     def __initializeProjectManager(self):
         self.__createDir()
-        self.__setGlobalSceneAccessor(FSSceneAccessor(self, None))
+        self.__setGlobalSceneAccessor(FSSceneAccessor(self))
 
         if os.path.exists(self.rootDir):
             self.__initializeProjects()
@@ -92,23 +92,15 @@ class ProjectManager:
         assert isinstance(projectName, str)
         assert isinstance(pathInProject, str)
 
-        loc = Location(projectName, "scenes", pathInProject, self.currentProject.getName() if self.currentProject else "")
+        if len(projectName) > 0:
+            proj = self.getProject(projectName)
+            if not proj:
+                print("Cannot find scene '{}  {}'".format(projectName, pathInProject))
+                return None
 
-        if loc:
-            if loc.getIsGlobalLocation():
-                catName = loc.getCategoryName()
+        pathInScenes = self.__toRelativePath(projectName, pathInProject)
 
-                assert catName == "scenes"
-
-                if self.self.globalSceneAccessor:
-                    return self.self.globalSceneAccessor.getSceneDesc(loc.getInternalPath())
-            else:
-                proj = self.getProject(loc.getProjectName())
-                if proj:
-                    return proj.getSceneDesc(loc.getInternalPath())
-
-        print("Cannot find scene '{}  {}'".format(projectName, pathInProject))
-        return None
+        return self.globalSceneAccessor.getSceneDesc(pathInScenes)
 
     def getProject(self, name):
         assert isinstance(name, str)
@@ -121,47 +113,43 @@ class ProjectManager:
     def listProjectsNames(self):
         return self.projects.keys()
 
-    def listScenes(self, projectName = None):
-        if not projectName:
-            return self.globalSceneAccessor.listScenes()
-        else:
-            assert isinstance(projectName, str)
-            proj = self.getProject(projectName)
-            if proj:
-                return proj.listScenes()
-            else:
+    def listScenes(self, projectName = ""):
+        if len(projectName) > 0:
+            if projectName not in self.projects:
                 print("Project named {} doesn't exist".format(projectName))
+                return None
 
-    def listCategories(self, projectName = None):
-        if not projectName:
-            return [c for c in self.globalCategories.keys()]
-        else:
-            proj = self.getProject(projectName)
-            if proj:
-                return proj.listCategories()
-            else:
-                print("Project named {} doesn't exist".format(projectName))
+        return self.globalSceneAccessor.listScenes(projectName)
+
+    def listCategories(self):
+        return [c for c in self.globalCategories.keys()]
 
     def listAssets(self, projectName = None, categoryName = None ):
         if not projectName:
             if not categoryName:
                 res = []
                 for cn in self.globalCategories.keys():
-                    res += self.globalCategories[cn].listAssets()
+                    res += [os.path.join(cn, a) for a in
+                        self.globalCategories[cn].listAssets()]
                 return res
             else:
                 if categoryName in self.globalCategories:
-                    return self.globalCategories[categoryName].listAssets()
+                    [os.path.join(categoryName, a) for a in
+                        self.globalCategories[categoryName].listAssets()]
         else:
 
             if not categoryName:
-                print("categoryName cannot be None whether projectName isn't None")
-                return None
+                res = []
+                for cn in self.globalCategories.keys():
+                    res += [os.path.join(cn, a) for a in
+                        self.globalCategories[cn].listAssets(projectName)]
+                return res
 
             proj = self.getProject(projectName)
 
             if proj:
-                return self.globalCategories[categoryName].listAssets(proj.getName())
+                return [os.path.join(categoryName, a) for a in
+                        self.globalCategories[categoryName].listAssets(proj.getName())]
             else:
                 print("Project named {} doesn't exist".format(projectName))
 
@@ -190,6 +178,15 @@ class ProjectManager:
 
     ###########################################################################
     # Operations inside one project manager
+    def addAsset(self, projectName, categoryName, path, assetDesc):
+        from AssetDesc import AssetDesc
+        assert isinstance(assetDesc, AssetDesc)
+        pathInCategory = self.__toRelativePath(projectName, path)
+        if categoryName in self.globalCategories:
+            self.globalCategories[categoryName].appendAsset(pathInCategory, assetDesc)
+        else:
+            print("Category '{}' doesn't exist".format(categoryName))
+
     def copyAsset(self, inProjectName, inCategoryName, inPath, outProjectName, outPath):
         assetDesc = self.getAssetDesc(inProjectName, inCategoryName, inPath)
 
@@ -211,6 +208,14 @@ class ProjectManager:
         self.copyAsset(inProjectName, inCategoryName, inPath, outProjectName, outPath)
         self.removeAsset(inProjectName, inCategoryName, inPath)
 
+    def addScene(self, scene, projectName, outPath):
+        from Scene import Scene
+        assert isinstance(scene, Scene)
+        if len(projectName) > 0 and projectName in self.projects:
+            return self.globalSceneAccessor.addScene(scene, self.__toRelativePath(projectName, outPath))
+        else:
+            print("Project named {} doesn't exist".format(projectName))
+
     def copyScene(self, inProjectName, inPath, outProjectName, outPath):
         path = self.__toRelativePath(inProjectName, inPath)
         if path:
@@ -222,7 +227,7 @@ class ProjectManager:
         if s:
             opath = self.__toRelativePath(outProjectName, outPath)
             if opath:
-                self.globalSceneAccessor.saveScene(opath, s)
+                self.globalSceneAccessor.addScene(s, opath)
         else:
             print("Scene {} : {} doesn't exist".format(inProjectName, inPath))
 
@@ -292,21 +297,32 @@ class ProjectManager:
         else:
             proj = self.getProject(projectName)
             if proj:
-                proj.exportSceneToFile(outputFile, scenePath)
+                pathInScenes = self.__toRelativePath(projectName, scenePath)
+                self.globalSceneAccessor.exportSceneToFile(pathInScenes, outputFile)
             else:
                 print("Cannot export scene '{}' from project '{}'".format(scenePath, projectName))
                 return False
 
-    def importSceneFromFile(self, importToProjectName, importToPath, importAssetFilePath):
-        self.getProject(importToProjectName).importSceneFromFile(importAssetFilePath, importToPath)
+    def importSceneFromFile(self, importToProjectName, importToPath, impSceneFilePath):
+        self.globalSceneAccessor.importSceneFromFile(impSceneFilePath, self.__toRelativePath(importToProjectName, importToPath))
 
     ###########################################################################
     # Exporting and importing whole projects
     def exportProjectToFile(self, projectName, outputFilePath):
         proj = self.getProject(projectName)
         if proj:
-            proj.exportToFile(outputFilePath)
-            return True
+            assetsDescs = set()
+            for c in self.globalCategories.values():
+                expDescs = c.accessor.listAllUniqueExportDesc(projectName)
+                for ed in expDescs:
+                    assetsDescs.add(ed)
+
+            scenesDescs = []
+            for sd in self.globalSceneAccessor.listAllExportDesc(projectName):
+                scenesDescs.append(sd)
+
+            expDesc = ProjectExportDesc(projectName, self.rootDir, scenesDescs, assetsDescs)
+            expDesc.saveExportPackageToFile(outputFilePath)
         else:
             print("Cannot export project '{}'. It doesn't exist.".format(projectName))
             return False
