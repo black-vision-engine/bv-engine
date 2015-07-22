@@ -68,6 +68,14 @@ class ProjectManager:
         print("Wrong asset access {} : {}", projectName, path)
         return None
 
+    def __getCategoryName(self, path):
+        path = os.path.normpath(path)
+        for c in self.globalCategories:
+            if path.startswith(c + """\\"""):
+                return c
+
+        return None
+
     def getAssetDesc(self, projectName, categoryName, pathInProject):
         assert False  # TODO Rewrite using new Location model
         assert isinstance(projectName, str)
@@ -199,6 +207,12 @@ class ProjectManager:
 
     def removeAsset(self, projectName, categoryName, path):
         path = self.__toRelativePath(projectName, path)
+
+        if categoryName == None:
+            categoryName = self.__getCategoryName(path)
+            if categoryName:
+                path = path[len(categoryName) + 1:]
+
         if categoryName in self.globalCategories:
             self.globalCategories[categoryName].removeAsset(path)
         else:
@@ -243,7 +257,7 @@ class ProjectManager:
         self.removeScene(inProjectName, inPath)
 
     def listAllUsedAssets(self):
-        scenesFiles = self.globalSceneAccessor.listScenes()
+        scenesFiles = self.globalSceneAccessor.listScenes("")
 
         scenesAssets = set()
 
@@ -257,8 +271,8 @@ class ProjectManager:
     def listAllUnusedAssets(self, projectName, categoryName):
         assets = set(self.listAssets(projectName, categoryName))
         usedAssets = set(self.listAllUsedAssets())
-        unusedAssets = assets.difference_update(usedAssets)
-        return [a for a in unusedAssets]
+        assets.difference_update(usedAssets)
+        return [a for a in assets]
 
     def removeUnusedAssets(self, projectName = None, categoryName = None):
         unusedAssets = self.listAllUnusedAssets(projectName, categoryName)

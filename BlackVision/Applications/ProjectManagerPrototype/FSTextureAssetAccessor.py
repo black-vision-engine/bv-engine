@@ -47,7 +47,7 @@ class FSTextureAssetAccessor(TextureAssetAccessor):
     def removeAsset(self, internalPath):
         assert isinstance(internalPath, str)
         try:
-            os.remove(internalPath)
+            os.remove(os.path.join(self.rootPath, internalPath))
             return True
         except Exception as exc:
             print(exc)
