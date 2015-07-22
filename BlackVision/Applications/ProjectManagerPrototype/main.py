@@ -67,6 +67,8 @@ def test():
     print(pm.listAssets())
 
     pm.removeUnusedAssets("proj1", "textures")
+    pm.removeUnusedAssets("proj2", "textures")
+    pm.removeUnusedAssets()
 
     print(pm.listAssets())
 
