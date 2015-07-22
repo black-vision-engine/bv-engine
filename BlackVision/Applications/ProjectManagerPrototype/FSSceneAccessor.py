@@ -1,8 +1,9 @@
 from SceneAccessor import SceneAccessor
 from SceneExportDesc import SceneExportDesc
-from Scene import loadScene, saveScene, Scene, Node, SceneWriter, SceneReader
+from AssetExportDesc import AssetExportDesc
+from Scene import loadScene, Scene, Node, SceneWriter, SceneReader
 
-from Location import Location
+import uuid, zipfile
 
 import os, pickle, tempfile, shutil
 
@@ -11,11 +12,10 @@ class SceneDesc:
         self.absPath = absPath
 
 class FSSceneAccessor(SceneAccessor):
-    def __init__(self, projectManager, project):
+    def __init__(self, projectManager):
         SceneAccessor.__init__(self, projectManager)
         self.projectManager = projectManager
-        self.rootPath = os.path.join(projectManager.getRootDir(), "scenes", project.getName() if project else "")
-        self.project = project
+        self.rootPath = os.path.join(projectManager.getRootDir(), "scenes")
         self.__createDir()
 
     def __createDir(self):
@@ -42,8 +42,8 @@ class FSSceneAccessor(SceneAccessor):
             print(exc)
             return False
 
-    def saveScene(self, path, scene):
-        absPath = os.path.join(self.rootPath, path)
+    def addScene(self, scene, outPath):
+        absPath = os.path.join(self.rootPath, outPath)
         dirname = os.path.dirname(absPath)
         try:
             if not os.path.exists(dirname):
@@ -54,6 +54,13 @@ class FSSceneAccessor(SceneAccessor):
         except Exception as exc:
             print(exc)
             return False
+
+    def removeScene(self, path):
+        absPath = os.path.join(self.rootPath, path)
+        if os.path.exists(absPath) and os.path.isfile(absPath) and absPath.endswith(".scn"):
+            os.remove(absPath)
+        else:
+            print("Cannot remove scene {}".format(path))
 
     def createScene(self, name, path):
         absPath = os.path.join(self.rootPath, path)
@@ -73,15 +80,50 @@ class FSSceneAccessor(SceneAccessor):
             print(exc)
             return False
 
-    def importScene(self, impSceneFile, importToPath):
-        absPath = os.path.join(self.rootPath, importToPath)
-        self.unpackSceneAndResources(impSceneFile, self.project, importToPath)
+    def importSceneFromFile(self, expFilePath, importToPath):
 
-    def exportScene(self, internalPath):
+        absSceneFilePath = os.path.join(self.rootPath, importToPath)
+
+        with open(expFilePath, "rb") as f:
+            expDescDict = pickle.load(f)
+
+        if isinstance(expDescDict, dict):
+            if "sceneDesc" in expDescDict:  # project importing
+
+                sceneDesc = expDescDict["sceneDesc"]
+                assert isinstance(sceneDesc, SceneExportDesc)
+
+                if "assetsArchiveData" in expDescDict:
+
+                    filename = "{}".format(uuid.uuid4())
+                    with open(filename, "wb") as f:
+                        f.write(expDescDict["assetsArchiveData"])
+
+                    myZipFile = zipfile.ZipFile(filename, "r")
+                    myZipFile.extractall(path=self.projectManager.getRootDir())
+                    myZipFile.close()
+
+                    os.remove(filename)
+
+                SceneWriter(sceneDesc.scene, absSceneFilePath).saveScene()
+
+    def exportSceneToFile(self, internalPath, outputFileName):
+        expDesc = self.getExportDesc(internalPath)
+
+        filename = "{}".format(uuid.uuid4())
+
+        AssetExportDesc.packAssetsToFile(self.projectManager.getRootDir(), filename, expDesc.sceneAssetsDescs)
+
+        with open(outputFileName, "wb") as f:
+            pickle.dump({"sceneDesc": expDesc, "assetsArchiveData": open(filename, "rb").read()}, f)
+
+        os.remove(filename)
+
+    def getExportDesc(self, internalPath):
         absPath = os.path.join(self.rootPath, internalPath)
         s = loadScene(absPath)
 
-        return SceneExportDesc(s, self.project.getName(), internalPath)
+        return SceneExportDesc(s, internalPath)
 
     def packSceneAndResources(self, scene, outputFile):
         assert self.project
@@ -133,7 +175,7 @@ class FSSceneAccessor(SceneAccessor):
 
                     with open(filename, "wb") as f:
                         f.write(resources[r])
-                    toProject.importData(filename, r[1], r[2])
+                    toProject.importAsset(filename, r[1], r[2])
                     os.remove(filename)
                 else:
                     tmp = tempfile.NamedTemporaryFile(delete=False)
@@ -151,14 +193,14 @@ class FSSceneAccessor(SceneAccessor):
             print(exc)
             return False
 
-    def listScenes(self):
+    def listScenes(self, path):
         try:
-            absPath = os.path.join(self.rootPath)
             res = []
-            for root, dirs, files in os.walk(absPath):
+            for root, dirs, files in os.walk(self.rootPath, path):
                 for file in files:
                     if file.endswith(".scn"):
-                        res.append(os.path.join(root, file))
+                        absPath = os.path.join(root, file)
+                        res.append(os.path.relpath(absPath, self.rootPath))
 
             return res
         except Exception as exc:
@@ -166,13 +208,18 @@ class FSSceneAccessor(SceneAccessor):
             print(exc)
             return []
 
-    def listAllExportDesc(self):
-        scenes = self.listScenes()
+    def listAllExportDesc(self, path):
+        scenes = self.listScenes(path)
 
         scenesExpDescs = []
 
         for sf in scenes:
-            s = SceneReader(sf).loadScene()
-            scenesExpDescs.append(SceneExportDesc(s, self.project.getName(), os.path.dirname(sf)))
+            absPath = os.path.join(self.rootPath, sf)
+            s = SceneReader(absPath).loadScene()
+            relPath = os.path.relpath(absPath, self.projectManager.getRootDir())
+            scenesExpDescs.append(SceneExportDesc(s, relPath))
 
         return scenesExpDescs
+
+    def getScene(self, path):
+        return SceneReader(os.path.join(self.rootPath, path)).loadScene()

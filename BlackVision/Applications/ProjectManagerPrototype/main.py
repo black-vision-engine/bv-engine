@@ -1,14 +1,11 @@
-﻿from ProjectManager import PM as pm
-import Project
+﻿
 
-from FSTextureDataAccessor import LoadableTextureDataDesc
-from FSFontDataAccessor import LoadableFontDataDesc
-from FSSurfaceDataAccessor import LoadableSurfaceDataDesc
-from FSSequenceDataAccessor import LoadableSequenceDataDesc
-
-from Scene import Scene, Node, Plugin
+from FSTextureAssetAccessor import TextureDesc
+from FSSequenceAssetAccessor import SequenceDesc
+from Scene import Scene, Node, Plugin, SceneReader
 
 import os
+import shutil
 
 def generateScene1(projectName1, projectName2):
     rootNode = Node("p1s1_root")
@@ -35,46 +32,93 @@ def generateScene1(projectName1, projectName2):
 
 def test():
 
-    proj1 = Project.Project(pm, "proj1")
+    if os.path.exists("bv_media"):
+        shutil.rmtree("bv_media")
 
-    pm.addProject(proj1)
+    if os.path.exists("bv_media1"):
+        shutil.rmtree("bv_media1")
 
-    pm.getProject("proj1").appendData("textures", "flagi/pol.jpg", LoadableTextureDataDesc("test_data.file")) # polak
-    pm.getProject("proj1").appendData("textures", "flagi/ger.jpg", LoadableTextureDataDesc("test_data.file")) # niemiec
-    pm.getProject("proj1").appendData("textures", "flagi/rus.jpg", LoadableTextureDataDesc("test_data.file")) # i rusek
+    from ProjectManager import PM as pm
 
-    pm.getProject("proj1").appendData("fonts", "pol/arial.tff", LoadableFontDataDesc("test_data.file"))
-    pm.getProject("proj1").appendData("surfaces", "animals/cat.bvsur", LoadableSurfaceDataDesc("test_data.file"))
-    pm.getProject("proj1").appendData("sequences", "jedzie", LoadableSequenceDataDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq",f))]))
+    pm.addNewProject("proj1")
+
+    pm.addAsset("proj1", "textures", "flagi/pol.jpg", TextureDesc("test_data.file")) # polak
+    pm.addAsset("proj1", "textures", "flagi/ger.jpg", TextureDesc("test_data.file")) # niemiec
+    pm.addAsset("proj1", "textures", "flagi/rus.jpg", TextureDesc("test_data.file")) # i rusek
+    pm.addAsset("proj1", "sequences", "jedzie", SequenceDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq",f))]))
 
 
-    proj2 = Project.Project(pm, "proj2")
+    pm.addNewProject("proj2")
 
-    pm.addProject(proj2)
+    pm.addAsset("proj2", "textures", "flags/pol1.jpg", TextureDesc("test_data.file")) # polak
+    pm.addAsset("proj2", "textures", "flags/ger1.jpg", TextureDesc("test_data.file")) # niemiec
+    pm.addAsset("proj2", "textures", "flags/rus1.jpg", TextureDesc("test_data.file")) # i rusek
+    pm.addAsset("proj2", "sequences", "jedzie1", SequenceDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq", f))]))
 
-    pm.getProject("proj2").appendData("textures", "flags/pol1.jpg", LoadableTextureDataDesc("test_data.file")) # polak
-    pm.getProject("proj2").appendData("textures", "flags/ger1.jpg", LoadableTextureDataDesc("test_data.file")) # niemiec
-    pm.getProject("proj2").appendData("textures", "flags/rus1.jpg", LoadableTextureDataDesc("test_data.file")) # i rusek
+    pm.addScene(generateScene1("proj1", "proj2"), "proj1", "test_scenes/p1s1.scn")
+    pm.addScene(generateScene1("proj1", "proj2"), "proj2", "test_scenes1/p1s2.scn")
 
-    pm.getProject("proj2").appendData("fonts", "pol1/arial1.tff", LoadableFontDataDesc("test_data.file"))
-    pm.getProject("proj2").appendData("surfaces", "animals1/cat1.bvsur", LoadableSurfaceDataDesc("test_data.file"))
-    pm.getProject("proj2").appendData("sequences", "jedzie1", LoadableSequenceDataDesc("test_seq", [f for f in os.listdir("test_seq") if os.path.isfile(os.path.join("test_seq",f))]))
+    pm.copyScene("proj1", "test_scenes/p1s1.scn", "proj1", "test_scenes/p1s1copy.scn")
+    pm.copyScene("proj1", "test_scenes/p1s1.scn", "proj2", "test_scenes/p1s1copy.scn")
+    pm.removeScene("proj2", "test_scenes/p1s1copy.scn")
+    pm.moveScene("proj1", "test_scenes/p1s1copy.scn", "proj2", "test_scenes/p1s1moved.scn")
 
-    pm.getProject("proj1").saveScene(generateScene1("proj1", "proj2"), "test_scenes/p1s1.scn")
+    print(pm.listAssets())
 
-    #pm.getProject("proj1").exportScene("exportedScene1", "test_scenes/p1s1.scn")
+    pm.removeUnusedAssets("proj1", "textures")
+    pm.removeUnusedAssets("proj2", "textures")
+    pm.removeUnusedAssets(None, "textures")
+    pm.removeUnusedAssets("proj2", None)
+    pm.removeUnusedAssets()
+
+    print(pm.listAssets())
 
     pm.listProjectsNames()
 
-    pm.getProject("proj1").exportToFile("proj1.exp")
+    print(pm.listScenes())
+    print(pm.listScenes("proj1"))
+    print(pm.listScenes("proj2"))
+    print(pm.listCategories())
+    print(pm.listAssets())
+    print(pm.listAssets("proj1", "textures"))
+    print(pm.listAssets("proj2", "sequences"))
+    print(pm.listAssets("proj2"))
 
-    # from ProjectManager import ProjectManager
-    # pm1 = ProjectManager("bv_media1")
-    #
-    # proj11 = Project.Project(pm1, "1proj1")
-    # pm1.addProject(proj11)
-    # pm1.importSceneFromFile("1proj1", "imported_scene/p1s1.scn", "exportedScene1")
+    pm.exportProjectToFile("proj1", "proj1.exp")
+    pm.exportSceneToFile("proj2", "test_scenes1/p1s2.scn", "proj1.expscene")
 
+    from ProjectManager import ProjectManager
+    pm1 = ProjectManager("bv_media1")
+
+    pm1.addNewProject("proj3")
+
+    pm1.importProjectFromFile("proj1.exp", "proj3")
+
+    print(pm1.listScenes())
+
+    sceneFilePath = pm1.getSceneDesc("proj3", "test_scenes/p1s1.scn").absPath
+
+    s = SceneReader(sceneFilePath).loadScene()
+    r = s.check("bv_media1")
+
+
+    pm1.importSceneFromFile("proj3", "test_scenes5/p1s2.scn", "proj1.expscene")
+
+    sceneFilePath = pm1.getSceneDesc("proj3", "test_scenes5/p1s2.scn").absPath
+
+    s = SceneReader(sceneFilePath).loadScene()
+    r = s.check("bv_media1")
+
+    print(pm1.listScenes())
+    print(pm1.listScenes("proj1"))
+    print(pm1.listScenes("proj2"))
+    print(pm1.listCategories())
+    print(pm1.listAssets())
+    print(pm1.listAssets("proj1", "textures"))
+    print(pm1.listAssets("proj2", "sequences"))
+    print(pm1.listAssets("proj2"))
+
+    return 0
 
 
 if __name__ == "__main__":

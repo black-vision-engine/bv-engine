@@ -17,7 +17,11 @@ class SceneAccessor:
         pass
 
     @abstractmethod
-    def saveScene(self, path, scene):
+    def addScene(self, scene, outPath):
+        pass
+
+    @abstractmethod
+    def removeScene(self, path):
         pass
 
     @abstractmethod
@@ -25,11 +29,15 @@ class SceneAccessor:
         pass
 
     @abstractmethod
+    def exportSceneToFile(self, internalPath, outputFileName):
+        pass
+
+    @abstractmethod
     def exportScene(self, expSceneFilePath, project, internalPath):
         pass
 
     @abstractmethod
-    def listScenes(self):
+    def listScenes(self, projectName):
         pass
 
     @abstractmethod

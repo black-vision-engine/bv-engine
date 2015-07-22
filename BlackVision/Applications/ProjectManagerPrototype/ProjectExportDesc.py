@@ -8,10 +8,11 @@ import os
 import uuid
 
 class ProjectExportDesc:
-    def __init__(self, rootDir, projectScenesDescs, projectAssetsDescs):
+    def __init__(self, name, rootDir, projectScenesDescs, projectAssetsDescs):
         assert isinstance(projectScenesDescs, list)
         assert isinstance(projectAssetsDescs, set)
 
+        self.name               = name
         self.rootDir            = rootDir
         self.projectScenesDescs = projectScenesDescs
         self.projectAssetsDescs = projectAssetsDescs
@@ -30,20 +31,9 @@ class ProjectExportDesc:
         for sd in self.projectScenesDescs:
             assetesDescs = assetesDescs.union(sd.sceneAssetsDescs)
 
-        filename = uuid.uuid4()
+        filename = "{}".format(uuid.uuid4())
 
-        myZipFile = zipfile.ZipFile(filename, "w")
-
-        for ad in assetesDescs:
-            path = os.path.join(self.rootDir, ad.relativePath)
-            if os.path.isfile(path):
-                myZipFile.write(path, ad.relativePath, zipfile.ZIP_DEFLATED )
-            else:
-                files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
-                for f in files:
-                    myZipFile.write(os.path.join(path, f), os.path.join(ad.relativePath, f), zipfile.ZIP_DEFLATED )
-
-        myZipFile.close()
+        AssetExportDesc.packAssetsToFile(self.rootDir, filename, assetesDescs)
 
         with open(outputFileName, "wb") as f:
             pickle.dump({"projectDesc": self, "assetsArchiveData": open(filename, "rb").read()}, f)
