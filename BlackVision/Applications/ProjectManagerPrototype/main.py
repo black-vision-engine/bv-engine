@@ -64,7 +64,7 @@ def test():
     pm.removeScene("proj2", "test_scenes/p1s1copy.scn")
     pm.moveScene("proj1", "test_scenes/p1s1copy.scn", "proj2", "test_scenes/p1s1moved.scn")
 
-    pm.removeUnusedAssets("proj1", "textures")
+    # pm.removeUnusedAssets("proj1", "textures")
 
     pm.listProjectsNames()
 

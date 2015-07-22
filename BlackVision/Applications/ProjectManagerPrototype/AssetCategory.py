@@ -33,5 +33,5 @@ class AssetCategory:
     def exportAll(self, expAssetFilePath):
         return self.accessor.exportAll(expAssetFilePath)
 
-    def listAssets(self):
-        return self.accessor.listAll()
+    def listAssets(self, projectName = None):
+        return self.accessor.listAll(projectName)

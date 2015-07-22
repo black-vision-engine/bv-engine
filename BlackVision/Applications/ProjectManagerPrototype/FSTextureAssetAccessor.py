@@ -113,7 +113,7 @@ class FSTextureAssetAccessor(TextureAssetAccessor):
     def getExportDesc(self, internalPath):
         return AssetExportDesc(internalPath)
 
-    def listAll(self):
+    def listAll(self, projectName):
         try:
             absPath = os.path.join(self.rootPath)
             res = []
