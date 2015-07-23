@@ -152,51 +152,10 @@ class FSSceneAccessor(SceneAccessor):
         projectName = self.project.getName()
         return res[0] == projectName
 
-
-    def unpackSceneAndResources(self, scenePackedFile, toProject, scenePath):
-        try:
-            with open(scenePackedFile, "rb") as f:
-                sceneAndResources = pickle.load(f)
-
-            scene = sceneAndResources["sceneJson"]
-            # assert False  # TODO: Add remaping project name to the new one. toProject.getName()
-            toProject.saveScene(scene, scenePath)
-
-            resources = sceneAndResources["resourcesData"]
-
-            ownerProjectName = sceneAndResources["ownerProjectName"]
-
-            assert isinstance(resources, dict)
-            for r in resources.keys():
-                if(ownerProjectName == r[0]):
-                    tmp = tempfile.NamedTemporaryFile(delete=False)
-                    filename = tmp.name
-                    tmp.close()
-
-                    with open(filename, "wb") as f:
-                        f.write(resources[r])
-                    toProject.importAsset(filename, r[1], r[2])
-                    os.remove(filename)
-                else:
-                    tmp = tempfile.NamedTemporaryFile(delete=False)
-                    filename = tmp.name
-                    tmp.close()
-
-                    with open(filename, "wb") as f:
-                        f.write(resources[r])
-                    self.projectManager.importAssetFromFile("", r[1], r[0] + "/" + r[2], filename)
-                    os.remove(filename)
-
-            return True
-        except Exception as exc:
-            print("Cannot unpack scene file '{}'".format(scenePackedFile))
-            print(exc)
-            return False
-
     def listScenes(self, path):
         try:
             res = []
-            for root, dirs, files in os.walk(self.rootPath, path):
+            for root, dirs, files in os.walk(os.path.join(self.rootPath, path)):
                 for file in files:
                     if file.endswith(".scn"):
                         absPath = os.path.join(root, file)

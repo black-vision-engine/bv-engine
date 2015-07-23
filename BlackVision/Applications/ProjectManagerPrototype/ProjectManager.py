@@ -61,7 +61,12 @@ class ProjectManager:
                     return os.path.normpath(os.path.join(self.currentProject.getName(), path))
                 else:
                     print("Current project isn't set.")
+                    return None
             else:
+                if projectName not in self.projects:
+                    print("Project '{}' doesn't exist.".format(projectName))
+                    return None
+                else:
                     return os.path.normpath(os.path.join(projectName, path))
 
         print("Wrong asset access {} : {}", projectName, path)
@@ -106,7 +111,7 @@ class ProjectManager:
             return None
 
     def listProjectsNames(self):
-        return self.projects.keys()
+        return [n for n in self.projects.keys()]
 
     def listScenes(self, projectName = ""):
         if len(projectName) > 0:
@@ -293,16 +298,14 @@ class ProjectManager:
 
         assert isinstance(self.globalSceneAccessor, SceneAccessor)
 
-        if len(projectName) == 0:
-            assert False  # TODO: Implement global accessor case
-        else:
+        if len(projectName) > 0:
             proj = self.getProject(projectName)
-            if proj:
-                pathInScenes = self.__toRelativePath(projectName, scenePath)
-                self.globalSceneAccessor.exportSceneToFile(pathInScenes, outputFile)
-            else:
-                print("Cannot export scene '{}' from project '{}'".format(scenePath, projectName))
+            if not proj:
+                print("Cannot find project '{}'".format(projectName))
                 return False
+
+        pathInScenes = self.__toRelativePath(projectName, scenePath)
+        self.globalSceneAccessor.exportSceneToFile(pathInScenes, outputFile)
 
     def importSceneFromFile(self, importToProjectName, importToPath, impSceneFilePath):
         self.globalSceneAccessor.importSceneFromFile(impSceneFilePath, self.__toRelativePath(importToProjectName, importToPath))

@@ -73,7 +73,7 @@ def test():
 
     print(pm.listAssets())
 
-    pm.listProjectsNames()
+    print(pm.listProjectsNames())
 
     print(pm.listScenes())
     print(pm.listScenes("proj1"))

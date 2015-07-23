@@ -21,8 +21,8 @@ class Project:
 
         self.__createDir()
 
-        self.projectManager.registerGlobalCategory(AssetCategory("textures", FSTextureAssetAccessor(os.path.join(self.rootDir, "textures"), ['jpg', 'tga'])))
-        self.projectManager.registerGlobalCategory(AssetCategory("sequences", FSSequenceAssetAccessor(os.path.join(self.rootDir, "sequences"), ['jpg', 'tga'])))
+        self.projectManager.registerGlobalCategory(AssetCategory("textures", FSTextureAssetAccessor(self.projectManager, os.path.join(self.rootDir, "textures"), ['jpg', 'tga'])))
+        self.projectManager.registerGlobalCategory(AssetCategory("sequences", FSSequenceAssetAccessor(self.projectManager, os.path.join(self.rootDir, "sequences"), ['jpg', 'tga'])))
 
     def __createDir(self):
         if not os.path.exists(os.path.join(self.rootDir, "projects", self.name)):
