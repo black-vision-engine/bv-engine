@@ -111,7 +111,7 @@ class ProjectManager:
             return None
 
     def listProjectsNames(self):
-        return self.projects.keys()
+        return [n for n in self.projects.keys()]
 
     def listScenes(self, projectName = ""):
         if len(projectName) > 0:
@@ -300,7 +300,7 @@ class ProjectManager:
 
         if len(projectName) > 0:
             proj = self.getProject(projectName)
-            if proj:
+            if not proj:
                 print("Cannot find project '{}'".format(projectName))
                 return False
 

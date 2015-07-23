@@ -19,8 +19,8 @@ class SequenceDesc(AssetDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba bę
         return [os.path.join(self.absPath, f) for f in self.frames]
 
 class FSSequenceAssetAccessor(SequenceAssetAccessor):
-    def __init__(self, rootPath, supportedFileExt):
-        SequenceAssetAccessor.__init__(self)
+    def __init__(self, projectManager, rootPath, supportedFileExt):
+        SequenceAssetAccessor.__init__(self, projectManager)
         self.rootPath = rootPath
         self.supportedFileExt = supportedFileExt
         self.__createDir()
@@ -152,7 +152,7 @@ class FSSequenceAssetAccessor(SequenceAssetAccessor):
         res = set()
 
         for t in sequences:
-            res.add(self.getExportDesc(t))
+            res.add(self.getExportDesc(os.path.relpath(t, self.projectManeger.getRootDir())))
 
         return res
 

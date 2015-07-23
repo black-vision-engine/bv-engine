@@ -2,8 +2,9 @@ from abc import abstractmethod
 
 
 class AssetAccessor:
-    def __init__(self):
+    def __init__(self, projectManager):
         self.internalPathAliases = {}
+        self.projectManeger = projectManager
 
     def addAlias(self, src, dst):
         assert isinstance(src, str)

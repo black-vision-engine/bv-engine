@@ -155,7 +155,7 @@ class FSSceneAccessor(SceneAccessor):
     def listScenes(self, path):
         try:
             res = []
-            for root, dirs, files in os.walk(self.rootPath, path):
+            for root, dirs, files in os.walk(os.path.join(self.rootPath, path)):
                 for file in files:
                     if file.endswith(".scn"):
                         absPath = os.path.join(root, file)

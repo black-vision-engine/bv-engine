@@ -13,8 +13,8 @@ class TextureDesc(AssetDesc): # Cos tu z nazwa mogloby byc lepiej. To chyba będ
         #  TODO: Pewnie jeszcze duzo wiecej memberow w, h, bpp, takie tam
 
 class FSTextureAssetAccessor(TextureAssetAccessor):
-    def __init__(self, rootPath, supportedFileExt):
-        TextureAssetAccessor.__init__(self)
+    def __init__(self, projectManager, rootPath, supportedFileExt):
+        TextureAssetAccessor.__init__(self, projectManager)
         self.rootPath = rootPath
         self.supportedFileExt = supportedFileExt
         self.__createDir()
@@ -132,7 +132,7 @@ class FSTextureAssetAccessor(TextureAssetAccessor):
         res = set()
 
         for t in textures:
-            res.add(self.getExportDesc(t))
+            res.add(self.getExportDesc(os.path.relpath(t, self.projectManeger.getRootDir())))
 
         #  returns set id TextureAssetExportDesc
         return res
