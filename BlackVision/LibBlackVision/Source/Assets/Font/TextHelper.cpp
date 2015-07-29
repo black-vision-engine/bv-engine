@@ -16,9 +16,9 @@ namespace bv {
 
 ///////////////////////////////
 //
-FontAssetConstPtr      TextHelper::LoadFont( const std::string & fontFileName, UInt32 size, UInt32 blurSize, UInt32 outlineSize, bool generateMipMaps )
+FontAssetConstPtr      TextHelper::LoadFont( const FontAssetDescConstPtr & fontAssetDesc )
 {
-	return LoadFontAsset( fontFileName, size, blurSize, outlineSize, generateMipMaps );
+	return std::static_pointer_cast< const FontAsset >( AssetManager::GetInstance().LoadAsset( fontAssetDesc ) );
 }
 
 // *********************************
