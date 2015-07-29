@@ -319,7 +319,7 @@ bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr
         auto txData = m_psc->GetTexturesDataImpl();
         assert( txData->GetTextures().size() <= 1 );
 
-		auto fontResource = TextHelper::LoadFont( txAssetDescr->GetFontFileName(), txAssetDescr->GetFontSize(), txAssetDescr->GetBlurSize(), txAssetDescr->GetOutlineSize() );
+		auto fontResource = TextHelper::LoadFont( txAssetDescr->GetFontFileName(), txAssetDescr->GetFontSize(), txAssetDescr->GetBlurSize(), txAssetDescr->GetOutlineSize(), txAssetDescr->GetGenerateMipmaps() );
 
         m_textAtlas = TextHelper::GetAtlas( fontResource );
 

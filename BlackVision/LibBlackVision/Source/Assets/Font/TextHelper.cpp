@@ -16,9 +16,9 @@ namespace bv {
 
 ///////////////////////////////
 //
-FontAssetConstPtr      TextHelper::LoadFont( const std::string & fontFileName, UInt32 size, UInt32 blurSize, UInt32 outlineSize )
+FontAssetConstPtr      TextHelper::LoadFont( const std::string & fontFileName, UInt32 size, UInt32 blurSize, UInt32 outlineSize, bool generateMipMaps )
 {
-	return LoadFontAsset( fontFileName, size, blurSize, outlineSize, false ); // TODO: pass generate mipmaps argument
+	return LoadFontAsset( fontFileName, size, blurSize, outlineSize, generateMipMaps );
 }
 
 // *********************************

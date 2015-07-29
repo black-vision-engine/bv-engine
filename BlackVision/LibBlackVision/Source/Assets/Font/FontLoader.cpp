@@ -23,8 +23,9 @@ AssetConstPtr FontLoader::LoadAsset( const bv::AssetDescConstPtr & desc ) const
     auto fontSize			= typedDesc->GetFontSize();
     auto blurSize			= typedDesc->GetBlurSize();
 	auto outlineSize		= typedDesc->GetOutlineSize();
+	auto generateMipMaps	= typedDesc->GetGenerateMipmaps();
 
-    auto text				= TryLoadFont( filePath, fontSize, blurSize, outlineSize, atlasCharSetFile );
+    auto text				= TryLoadFont( filePath, fontSize, blurSize, outlineSize, generateMipMaps, atlasCharSetFile );
 
     if( text )
     {
@@ -81,10 +82,10 @@ std::wstring LoadUtf8FileToString(const std::wstring& filename)
 
 // *******************************
 //
-TextConstPtr        LoadFontFile( const std::string & file, UInt32 size, UInt32 blurSize, UInt32 outlineSize, const std::wstring & atlasCharSetFile )
+TextConstPtr        LoadFontFile( const std::string & file, UInt32 size, UInt32 blurSize, UInt32 outlineSize, bool generateMipMaps, const std::wstring & atlasCharSetFile )
 {
     auto t = LoadUtf8FileToString( atlasCharSetFile );
-	return Text::Create( t, file, size, blurSize, outlineSize, true ); // FIXME: Text constructor makes to much.
+	return Text::Create( t, file, size, blurSize, outlineSize, generateMipMaps ); // FIXME: Text constructor makes to much.
 }
 
 // *******************************
@@ -103,11 +104,11 @@ std::string         AddPostfixToFileName( const std::string & file, const std::s
 
 ///////////////////////////////
 //
-TextConstPtr		FontLoader::TryLoadFont( const std::string & file, UInt32 size, UInt32 blurSize, UInt32 oulineSize, const std::wstring & atlasCharSetFile ) const
+TextConstPtr		FontLoader::TryLoadFont( const std::string & file, UInt32 size, UInt32 blurSize, UInt32 oulineSize, bool generateMipMaps, const std::wstring & atlasCharSetFile ) const
 {
     if( File::Exists(file) )
     {
-        return LoadFontFile( file, size, blurSize, oulineSize, atlasCharSetFile );
+        return LoadFontFile( file, size, blurSize, oulineSize, generateMipMaps, atlasCharSetFile );
     }
     else
     {

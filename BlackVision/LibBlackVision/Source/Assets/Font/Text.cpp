@@ -61,14 +61,14 @@ Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, 
 
 // *********************************
 //
-TextAtlasConstPtr Text::LoadFromCache( bool useMipMaps )
+TextAtlasConstPtr Text::LoadFromCache()
 {
     auto fac = FontAtlasCache::Load( CACHE_DIRECTORY + CACHE_DB_FILE_NAME );
 
     boost::filesystem::path fontPath( m_fontFile );
     auto fontName = fontPath.filename().string();
 
-	auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_outlineWidth, useMipMaps );
+	auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_outlineWidth, m_withMipmaps );
 
     if( entry != nullptr )
 	{
@@ -129,8 +129,7 @@ UInt32 CalculatePadding( UInt32 fontSize, UInt32 blurSize, bool withMipMaps )
 //
 void Text::BuildAtlas        ()
 {
-	bool useMipMaps = true;
-    m_atlas = LoadFromCache( useMipMaps );
+    m_atlas = LoadFromCache();
 
     if( m_atlas != nullptr )
 	{
@@ -138,9 +137,9 @@ void Text::BuildAtlas        ()
 		return;
 	}
 
-	auto  padding = CalculatePadding( m_fontSize, m_blurSize, useMipMaps ); // Update padding in case of bluring the atlas.
+	auto  padding = CalculatePadding( m_fontSize, m_blurSize, m_withMipmaps ); // Update padding in case of bluring the atlas.
 
-	m_atlas = m_fontEngine->CreateAtlas( padding, m_outlineWidth, m_supportedCharsSet, useMipMaps );
+	m_atlas = m_fontEngine->CreateAtlas( padding, m_outlineWidth, m_supportedCharsSet, m_withMipmaps );
 
 	BlurAtlas();
 
@@ -165,22 +164,25 @@ void Text::BuildAtlas        ()
 //
 void Text::GenerateMipMaps()
 {
-	UInt32 levelsNum = GetMMLevelsNum( m_fontSize );
-
-	if( levelsNum > 0 )
+	if( m_withMipmaps )
 	{
-		tools::Image img = { m_atlas->m_textureAsset->GetOriginal()->GetData(), m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel() };
-		auto mipmap = tools::GenerateMipmaps( img, levelsNum, image::FilterType::FT_BILINEAR ); // FIXME: filter type is hardcoded.
+		UInt32 levelsNum = GetMMLevelsNum( m_fontSize );
 
-		std::vector< SingleTextureAssetConstPtr > mipMapsRes;
-		for( SizeType i = 0; i < mipmap.size(); ++i )
-		{		
-			mipMapsRes.push_back( SingleTextureAsset::Create( mipmap[ i ].data, "", mipmap[ i ].width, mipmap[ i ].height, TextureFormat::F_A8R8G8B8, true ) );
+		if( levelsNum > 0 )
+		{
+			tools::Image img = { m_atlas->m_textureAsset->GetOriginal()->GetData(), m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel() };
+			auto mipmap = tools::GenerateMipmaps( img, levelsNum, image::FilterType::FT_BILINEAR ); // FIXME: filter type is hardcoded.
+
+			std::vector< SingleTextureAssetConstPtr > mipMapsRes;
+			for( SizeType i = 0; i < mipmap.size(); ++i )
+			{		
+				mipMapsRes.push_back( SingleTextureAsset::Create( mipmap[ i ].data, "", mipmap[ i ].width, mipmap[ i ].height, TextureFormat::F_A8R8G8B8, true ) );
+			}
+
+			auto mipmaps = MipMapAsset::Create( mipMapsRes );
+
+			std::const_pointer_cast< TextAtlas >( m_atlas )->m_textureAsset = TextureAsset::Create( m_atlas->m_textureAsset->GetOriginal(), mipmaps );
 		}
-
-		auto mipmaps = MipMapAsset::Create( mipMapsRes );
-
-		std::const_pointer_cast< TextAtlas >( m_atlas )->m_textureAsset = TextureAsset::Create( m_atlas->m_textureAsset->GetOriginal(), mipmaps );
 	}
 }
 
@@ -192,7 +194,7 @@ void Text::AddTexturesKey()
 	auto atlasW = m_atlas->GetWidth();
 	auto atlasH = m_atlas->GetHeight();
 
-	UInt32 levelsNum = GetMMLevelsNum( m_fontSize );
+	UInt32 levelsNum = m_withMipmaps ? GetMMLevelsNum( m_fontSize ) : 0;
 
 	auto atlasAssetDesc = TextAtlas::GenerateTextAtlasAssetDescriptor( m_fontFile, atlasW, atlasH, m_fontSize, m_blurSize, m_outlineWidth, MipMapFilterType::BILINEAR, levelsNum );
 
@@ -200,21 +202,30 @@ void Text::AddTexturesKey()
 
 	auto newOrigTexture = SingleTextureAsset::Create( oldTA->GetOriginal()->GetData(), origKey, atlasW, atlasH, TextureFormat::F_A8R8G8B8, true );
 
-	std::vector< SingleTextureAssetConstPtr > mmsSTAs;
+	auto mmAssetDesc = atlasAssetDesc->GetMipMapsDesc();
 
-	for( SizeType i = 0; i < atlasAssetDesc->GetMipMapsDesc()->GetLevelsNum(); ++i )
+	if( mmAssetDesc )
 	{
-		auto key			= TextureCache::GenKeyForSingleTexture( atlasAssetDesc->GetMipMapsDesc()->GetLevelDesc( i ) );
+		std::vector< SingleTextureAssetConstPtr > mmsSTAs;
 
-		auto mm = oldTA->GetMipMaps()->GetLevel( i );
-		auto w = mm->GetWidth();
-		auto h = mm->GetHeight();
-		auto f = mm->GetFormat();
+		for( SizeType i = 0; i < mmAssetDesc->GetLevelsNum(); ++i )
+		{
+			auto key			= TextureCache::GenKeyForSingleTexture( mmAssetDesc->GetLevelDesc( i ) );
 
-		mmsSTAs.push_back( SingleTextureAsset::Create( mm->GetData(), key, w, h, f, true ) );
+			auto mm = oldTA->GetMipMaps()->GetLevel( i );
+			auto w = mm->GetWidth();
+			auto h = mm->GetHeight();
+			auto f = mm->GetFormat();
+
+			mmsSTAs.push_back( SingleTextureAsset::Create( mm->GetData(), key, w, h, f, true ) );
+		}
+
+		std::const_pointer_cast< TextAtlas >( m_atlas )->m_textureAsset = TextureAsset::Create( newOrigTexture, MipMapAsset::Create( mmsSTAs ) );
 	}
-	
-	std::const_pointer_cast< TextAtlas >( m_atlas )->m_textureAsset = TextureAsset::Create( newOrigTexture, MipMapAsset::Create( mmsSTAs ) );
+	else
+	{
+		std::const_pointer_cast< TextAtlas >( m_atlas )->m_textureAsset = TextureAsset::Create( newOrigTexture, nullptr );
+	}
 }
 
 // *********************************
