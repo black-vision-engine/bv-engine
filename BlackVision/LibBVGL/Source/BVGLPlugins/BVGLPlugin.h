@@ -154,6 +154,51 @@ public:
 
 	virtual void				VertexAttribDivisor								( GLuint index,  GLuint divisor );
 	
+	// new
+	virtual void				BindImageTexture			( GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format );
+	virtual void				BindImageTextures			( GLuint first, GLsizei count, const GLuint textures );
+
+	virtual void				BindSampler					( GLuint unit, GLuint sampler );
+	virtual void				BindSamplers				( GLuint first, GLsizei count, const GLuint* samplers );
+
+	virtual void				BindTextures				( GLuint first, GLsizei count, const GLuint* textures );
+	virtual void				BindTextureUnit				( GLuint unit, GLuint texture );
+
+	virtual void				GenTransformFeedbacks		( GLsizei n, GLuint* ids );
+	virtual void				BindTransformFeedback		( GLenum target, GLuint id );
+	virtual void				BeginTransformFeedback		( GLenum primitiveMode );
+	virtual void				EndTransformFeedback		();
+	virtual void				DrawTransformFeedback		( GLenum mode, GLuint id );
+
+	virtual void				NamedBufferData				( GLuint buffer, GLsizei size, const void* data, GLenum usage );
+	virtual void				NamedBufferStorage			( GLuint buffer, GLsizei size, const void* data, GLbitfield flags );
+	virtual void				NamedBufferSubData			( GLuint bufferm, GLintptr offset, GLsizei size, const void* data );
+	virtual void				BufferStorage				( GLenum target, GLsizeiptr size, const GLvoid* data, GLbitfield flags );
+
+	virtual void				BindBufferBase				( GLenum target, GLuint index, GLuint buffer );
+	virtual void				BindBuffersBase				( GLenum target, GLuint first, GLsizei count, const GLuint* buffer );
+
+	virtual void				BindBufferRange				( GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size );
+	virtual void				BindBuffersRange			( GLenum target, GLuint first, GLsizei count, const GLuint* buffers, const GLintptr* offset, const GLsizeiptr* sizes );
+
+	virtual void				BindVertexBuffer			( GLuint bindingIndex, GLuint buffer, GLintptr offset, GLintptr stride );
+	virtual void				BindVertexBuffers			( GLuint first, GLsizei count, const GLuint* buffers, const GLintptr* offsets, const GLintptr* strides );
+
+	virtual void				BindVertexArrayVertexBuffer				( GLuint vaobj, GLuint bindingIndex, GLuint buffer, GLintptr offset, GLintptr stride );
+	virtual void				BindVertexArrayVertexBuffers			( GLuint vaobj, GLuint first, GLsizei count, const GLuint* buffers, const GLintptr* offsets, const GLintptr* strides );
+
+	virtual void				BlendEquation				( GLenum mode );
+	virtual void				BlendEquationi				( GLuint buf, GLenum mode );
+	virtual void				BlendEquationSparate		( GLenum modeRGB, GLenum modeAlpha );
+	virtual void				BlendEquationSparatei		( GLuint buf, GLenum modeRGB, GLenum modeAlpha );
+	virtual void				BlendFunci					( GLuint buf, GLenum sfactor, GLenum dfactor );
+	virtual void				BlendFuncSeparate			( GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha );
+	virtual void				BlendFuncSeparatei			( GLuint buf, GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha );
+
+	virtual void				BlitFramebuffer				( GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter );
+	virtual void				BlitNamedFramebuffer		( GLuint readFramebuffer, GLuint drawFramebuffer, GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter );
+
+
 };
 
 } //bv
