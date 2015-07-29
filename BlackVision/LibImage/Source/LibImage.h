@@ -11,13 +11,14 @@ enum class ImageFormat : int
 	IF_A32FR32FG32FB32F = 0	,
 	IF_R32FG32FB32F			,
 	IF_A32F					,
-	IF_A16R16G16B16			,
-	IF_R16G16B16			,
-	IF_A16					,
     IF_A8R8G8B8				,
     IF_R8G8B8				,
     IF_A8					,
     IF_L8					,
+	// All below this line are always converted to floating point texture
+	IF_A16R16G16B16			, 
+	IF_R16G16B16			,
+	IF_A16					,
     IF_TOTAL
 };
 
