@@ -326,7 +326,16 @@ void					SaveRAWImageImpl( const std::string & filePath, const char * data, Size
 //
 char *		            ResizeImpl		( const char * in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 newWidth, UInt32 newHeight, FilterType ft )
 {
-	auto inBitmap = FreeImage_AllocateT( FIT_RGBAF, ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+	FIBITMAP * inBitmap = nullptr;
+	if( bpp <= 32 )
+	{
+		inBitmap = FreeImage_Allocate( ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+	}
+	else
+	{
+		inBitmap = FreeImage_AllocateT( FIT_RGBAF, ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+	}
+
 	memcpy( FreeImage_GetBits( inBitmap ), in, width * height * bpp / 8 );
 
 	auto b = FreeImage_GetBPP( inBitmap );
