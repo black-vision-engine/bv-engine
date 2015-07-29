@@ -248,12 +248,12 @@ void							DefaultTextPlugin::LoadTexture(	DefaultTexturesDataPtr txData,
 
 // *************************************
 // 
-void							DefaultTextPlugin::LoadAtlas	( const std::string & fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize )
+void							DefaultTextPlugin::LoadAtlas	( const std::string & fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps )
 {
 	auto txData = m_psc->GetTexturesDataImpl();
     assert( txData->GetTextures().size() <= 1 );
 
-	auto fontResource = TextHelper::LoadFont( fontFile, fontSize, blurSize, outlineSize ); // TODO:
+	auto fontResource = TextHelper::LoadFont( fontFile, fontSize, blurSize, outlineSize, generateMipmaps ); // TODO:
 
 	m_atlas = TextHelper::GetAtlas( fontResource );
 
@@ -288,7 +288,7 @@ bool                            DefaultTextPlugin::LoadResource  ( AssetDescCons
 		m_fontSize = txAssetDescr->GetFontSize();
 		m_blurSize = txAssetDescr->GetBlurSize();
 		m_outlineSize = txAssetDescr->GetOutlineSize();
-		LoadAtlas( txAssetDescr->GetFontFileName(), m_fontSize, m_blurSize, m_outlineSize );
+		LoadAtlas( txAssetDescr->GetFontFileName(), m_fontSize, m_blurSize, m_outlineSize, txAssetDescr->GetGenerateMipmaps() );
 		InitAttributesChannel( m_prevPlugin );
 
 		return true;

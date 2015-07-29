@@ -31,7 +31,7 @@ private:
 	void								GenerateMipMaps		();
 	void								BlurAtlas			();
 	void								AddTexturesKey		();
-    TextAtlasConstPtr                   LoadFromCache		( bool useMipMaps );
+    TextAtlasConstPtr                   LoadFromCache		();
 	void								AddToCache			();
 
 public:

@@ -23,7 +23,7 @@ public:
     /////////////////////////////////////
     // This function loads font definition from file. Builds font atlases with the specified size.
     // Returns AssetHandle of this font
-    static FontAssetConstPtr			LoadFont            ( const std::string & fontFileName, UInt32 size, UInt32 blurSize, UInt32 outlineSize );
+    static FontAssetConstPtr			LoadFont            ( const std::string & fontFileName, UInt32 size, UInt32 blurSize, UInt32 outlineSize, bool generateMipMaps );
 
     /////////////////////////////////////
     // This function creates TextAtlas from specified FontReasource.
