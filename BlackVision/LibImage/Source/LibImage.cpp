@@ -82,6 +82,12 @@ ImageProperties GetImageProps( const std::string & imageFilePath )
 		format = bv::image::ImageFormat::IF_R32FG32FB32F;
 	else if ( imageType == FIT_RGBAF )
 		format = bv::image::ImageFormat::IF_A32FR32FG32FB32F;
+	else if ( imageType == FIT_INT16 )
+		format = bv::image::ImageFormat::IF_A16;
+	else if ( imageType == FIT_RGB16 )
+		format = bv::image::ImageFormat::IF_R16G16B16;
+	else if ( imageType == FIT_RGBA16 )
+		format = bv::image::ImageFormat::IF_A16R16G16B16;
 	else
 	{
 		ImageProperties iprops;
