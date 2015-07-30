@@ -155,21 +155,46 @@ public:
 	virtual void				VertexAttribDivisor								( GLuint index,  GLuint divisor );
 	
 	// new
+// Images and textures
 	virtual void				BindImageTexture			( GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format );
 	virtual void				BindImageTextures			( GLuint first, GLsizei count, const GLuint textures );
-
-	virtual void				BindSampler					( GLuint unit, GLuint sampler );
-	virtual void				BindSamplers				( GLuint first, GLsizei count, const GLuint* samplers );
 
 	virtual void				BindTextures				( GLuint first, GLsizei count, const GLuint* textures );
 	virtual void				BindTextureUnit				( GLuint unit, GLuint texture );
 
+	virtual void				CompressedTexImage1D		( GLenum target, GLint level, GLenum internalFormat, GLsizei width, GLint border, GLsizei imageSize, const GLvoid* data );
+	virtual void				CompressedTexImage2D		( GLenum target, GLint level, GLenum internalFormat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid* data );
+	virtual void				CompressedTexImage2D		( GLenum target, GLint level, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, const GLvoid* data );
+	virtual void				CompressedTexSubImage1D		( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei ImageSize, const GLvoid* data );
+	virtual void				CompressedTexSubImage2D		( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei ImageSize, const GLvoid* data );
+	virtual void				CompressedTexSubImage3D		( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei ImageSize, const GLvoid* data );
+
+	virtual void				CompressedTextureSubImage1D	( GLuint texture, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei ImageSize, const GLvoid* data );
+	virtual void				CompressedTextureSubImage2D	( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei ImageSize, const GLvoid* data );
+	virtual void				CompressedTextureSubImage3D	( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei ImageSize, const GLvoid* data );
+
+	virtual void				TexImage1D					( GLenum target, GLint level, GLint internalFormat, GLsizei width, GLint border, GLenum format, GLenum type, const GLvoid* data );
+	virtual void				TexImage3D					( GLenum target, GLint level, GLint internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const GLvoid* data );
+	virtual void				TexImage2DMultisample		( GLenum target, GLsizei samples, GLint internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocations );
+	virtual void				TexImage3DMultisample		( GLenum target, GLsizei samples, GLint internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedSampleLocations );
+
+	virtual void				TexStorage1D				( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width );
+	virtual void				TexStorage3D				( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width );
+	virtual void				TexStorage1D				( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width );
+	virtual void				TexStorage1D				( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width );
+
+// Sampler
+	virtual void				BindSampler					( GLuint unit, GLuint sampler );
+	virtual void				BindSamplers				( GLuint first, GLsizei count, const GLuint* samplers );
+
+// Transform Feedback
 	virtual void				GenTransformFeedbacks		( GLsizei n, GLuint* ids );
 	virtual void				BindTransformFeedback		( GLenum target, GLuint id );
 	virtual void				BeginTransformFeedback		( GLenum primitiveMode );
 	virtual void				EndTransformFeedback		();
 	virtual void				DrawTransformFeedback		( GLenum mode, GLuint id );
 
+// Buffer
 	virtual void				NamedBufferData				( GLuint buffer, GLsizei size, const void* data, GLenum usage );
 	virtual void				NamedBufferStorage			( GLuint buffer, GLsizei size, const void* data, GLbitfield flags );
 	virtual void				NamedBufferSubData			( GLuint bufferm, GLintptr offset, GLsizei size, const void* data );
@@ -187,6 +212,7 @@ public:
 	virtual void				BindVertexArrayVertexBuffer				( GLuint vaobj, GLuint bindingIndex, GLuint buffer, GLintptr offset, GLintptr stride );
 	virtual void				BindVertexArrayVertexBuffers			( GLuint vaobj, GLuint first, GLsizei count, const GLuint* buffers, const GLintptr* offsets, const GLintptr* strides );
 
+// Blending
 	virtual void				BlendEquation				( GLenum mode );
 	virtual void				BlendEquationi				( GLuint buf, GLenum mode );
 	virtual void				BlendEquationSparate		( GLenum modeRGB, GLenum modeAlpha );
@@ -195,8 +221,37 @@ public:
 	virtual void				BlendFuncSeparate			( GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha );
 	virtual void				BlendFuncSeparatei			( GLuint buf, GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha );
 
+// Framebuffer
 	virtual void				BlitFramebuffer				( GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter );
 	virtual void				BlitNamedFramebuffer		( GLuint readFramebuffer, GLuint drawFramebuffer, GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter );
+	/// Wystarczy zestaw FramebufferTexture, FramebufferTextureLayer oraz FramebufferTexture2D ewentualnie ich wersje z DSA
+	virtual void				FramebufferTexture			( GLenum target, GLenum attachment, GLuint texture, GLint level );
+	virtual void				NamedFramebufferTexture		( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level );
+	virtual void				NamedFramebufferTextureLayer		( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level, GLint layer );
+	virtual void				NamedFramebufferRenderbuffer		( GLuint framebuffer, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer );
+
+	virtual GLenum				CheckNamedFramebufferStatus	( GLuint framebuffer, GLenum target );
+	virtual void				ClearBufferiv				( GLenum buffer, GLint drawbuffer, const GLint* value );
+	virtual void				ClearBufferuiv				( GLenum buffer, GLint drawbuffer, const GLuint* value );
+	virtual void				ClearBufferfv				( GLenum buffer, GLint drawbuffer, const GLfloat* value );
+	virtual void				ClearBufferfi				( GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil );
+	virtual void				ClearNamedFramebufferiv		( GLuint framebuffer, GLenum buffer, GLint drawbuffer, const GLint* value );
+	virtual void				ClearNamedFramebufferuiv	( GLuint framebuffer, GLenum buffer, GLint drawbuffer, const GLuint* value );
+	virtual void				ClearNamedFramebufferfv		( GLuint framebuffer, GLenum buffer, GLint drawbuffer, const GLfloat* value );
+	virtual void				ClearvNamedFramebufferfi	( GLuint framebuffer, GLenum buffer, GLfloat depth, GLint stencil );
+
+	virtual void				NamedFramebufferDrawBuffer	( GLuint framebuffer, GLenum buf );
+	virtual void				NamedFramebufferDrawBuffers	( GLuint framebuffer, GLsizei n, const GLenum* bufs );
+	virtual void				NamedFramebufferReadBuffer	( GLuint framebuffer, GLenum mode );
+	virtual void				NamedRenderbufferStorage	( GLuint renderbuffer, GLenum internalFormat, GLsizei width, GLsizei height );
+	virtual void				NamedRenderbufferStorageMultisample	( GLuint renderbuffer, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height );
+	virtual void				RenderbufferStorageMultisample		( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height );
+
+
+
+
+// Stencil
+	virtual void				ClearStencil				( GLint s );
 
 
 };
