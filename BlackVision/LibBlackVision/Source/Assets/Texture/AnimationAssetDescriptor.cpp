@@ -13,7 +13,7 @@ AnimationAssetDesc::AnimationAssetDesc							( const std::vector< std::string > 
 {
 	for( auto f : frames )
 	{
-		m_frames.push_back( TextureAssetDesc::Create( f, false ) );
+		m_frames.push_back( TextureAssetDesc::Create( f, true ) );
 	}
 }
 
