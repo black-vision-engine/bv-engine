@@ -46,7 +46,7 @@ public:
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const override;
     virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const override;
     virtual IStatedValuePtr                     GetState                    ( const std::string & name ) const;
-
+    virtual std::vector< IParameterPtr >        GetParameters               () const; // FIXME: ugly hack for serialization
 
     virtual void                                Update                      ( TimeType t );
 
@@ -80,12 +80,12 @@ public:
 
 protected:
 
-    IParamValModelPtr                           PluginModel                 ();
-    IParamValModelPtr                           TransformChannelModel       ();
-    IParamValModelPtr                           VertexAttributesChannelModel();
-    IParamValModelPtr                           PixelShaderChannelModel     ();
-    IParamValModelPtr                           VertexShaderChannelModel    ();
-    IParamValModelPtr                           GeometryShaderChannelModel  ();
+    IParamValModelPtr                           PluginModel                 () const;
+    IParamValModelPtr                           TransformChannelModel       () const;
+    IParamValModelPtr                           VertexAttributesChannelModel() const;
+    IParamValModelPtr                           PixelShaderChannelModel     () const;
+    IParamValModelPtr                           VertexShaderChannelModel    () const;
+    IParamValModelPtr                           GeometryShaderChannelModel  () const;
 
     bool                                        ParameterChanged            ( const std::string & name );
 };
@@ -358,7 +358,7 @@ bool                                BasePlugin< Iface >::LoadResource           
 // *******************************
 //
 template< class Iface >
-IParamValModelPtr                           BasePlugin< Iface >::PluginModel            ()
+IParamValModelPtr                           BasePlugin< Iface >::PluginModel            () const
 {
     return m_pluginParamValModel->GetPluginModel();
 }
@@ -366,7 +366,7 @@ IParamValModelPtr                           BasePlugin< Iface >::PluginModel    
 // *******************************
 //
 template< class Iface >
-IParamValModelPtr                           BasePlugin< Iface >::TransformChannelModel        ()
+IParamValModelPtr                           BasePlugin< Iface >::TransformChannelModel        () const
 {
     return m_pluginParamValModel->GetTransformChannelModel();
 }
@@ -374,7 +374,7 @@ IParamValModelPtr                           BasePlugin< Iface >::TransformChanne
 // *******************************
 //
 template< class Iface >
-IParamValModelPtr                           BasePlugin< Iface >::VertexAttributesChannelModel ()
+IParamValModelPtr                           BasePlugin< Iface >::VertexAttributesChannelModel () const
 {
     return m_pluginParamValModel->GetVertexAttributesChannelModel();
 }
@@ -382,7 +382,7 @@ IParamValModelPtr                           BasePlugin< Iface >::VertexAttribute
 // *******************************
 //
 template< class Iface >
-IParamValModelPtr                           BasePlugin< Iface >::PixelShaderChannelModel      ()
+IParamValModelPtr                           BasePlugin< Iface >::PixelShaderChannelModel      () const
 {
     return m_pluginParamValModel->GetPixelShaderChannelModel();
 }
@@ -390,7 +390,7 @@ IParamValModelPtr                           BasePlugin< Iface >::PixelShaderChan
 // *******************************
 //
 template< class Iface >
-IParamValModelPtr                           BasePlugin< Iface >::VertexShaderChannelModel     ()
+IParamValModelPtr                           BasePlugin< Iface >::VertexShaderChannelModel     () const
 {
     return m_pluginParamValModel->GetVertexShaderChannelModel();
 }
@@ -398,7 +398,7 @@ IParamValModelPtr                           BasePlugin< Iface >::VertexShaderCha
 // *******************************
 //
 template< class Iface >
-IParamValModelPtr                           BasePlugin< Iface >::GeometryShaderChannelModel   ()
+IParamValModelPtr                           BasePlugin< Iface >::GeometryShaderChannelModel   () const
 {
     return m_pluginParamValModel->GetGeometryShaderChannelModel();
 }

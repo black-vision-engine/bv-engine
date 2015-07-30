@@ -93,6 +93,8 @@ ISerializablePtr                     DefaultTimeline::Create              ( Dese
     for( auto child : children )
         te->AddChild( child );
 
+    te->Play(); // FIXME, this should be deserialized
+
     return te;
 }
 
