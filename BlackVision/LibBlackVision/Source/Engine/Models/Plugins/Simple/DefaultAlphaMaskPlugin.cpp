@@ -211,10 +211,16 @@ void								DefaultAlphaMaskPlugin::SetPrevPlugin               ( IPluginPtr pre
 
     if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() || prev->GetTypeUid() == DefaultAnimationPluginDesc::UID() || prev->GetTypeUid() == DefaultTextPluginDesc::UID() )
     {
-        //FIXME: set textures data from prev plugin to this plugin
-        auto prev_psc = std::const_pointer_cast< ITexturesData >( prev->GetPixelShaderChannel()->GetTexturesData() );
-        //FIXME: this line causes changes to Texture Plugin data via current pointer - quite shitty
+		auto psc = prev->GetPixelShaderChannel();
+		auto td  = psc->GetTexturesData();
+
+        auto prev_psc = std::const_pointer_cast< ITexturesData >( td );
         m_psc->OverrideTexturesData( std::static_pointer_cast< DefaultTexturesData >( prev_psc ) );
+        
+        //FIXME: set textures data from prev plugin to this plugin
+		//auto prev_psc = std::const_pointer_cast< ITexturesData >( prev->GetPixelShaderChannel()->GetTexturesData() );
+        //FIXME: this line causes changes to Texture Plugin data via current pointer - quite shitty
+        //m_psc->OverrideTexturesData( std::static_pointer_cast< DefaultTexturesData >( prev_psc ) );
     }
 }
 
@@ -229,10 +235,10 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
     , m_textureWidth( 0 )
     , m_textureHeight( 0 )
 {
-    SetPrevPlugin( prev );
-
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
     m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
+
+	SetPrevPlugin( prev );
 
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
