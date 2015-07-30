@@ -269,6 +269,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CompositeTypedParameters.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\GenericParameterSetters.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\ParameterSerialization.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\ParametersFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\SimpleTypedParameters.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\DefaultParamValModel.cpp" />
@@ -316,6 +317,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\SimpleIParamSet.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Static\ConstTimeEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Static\OffsetTimeEvaluator.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimelineManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\GeometryUpdater.cpp" />

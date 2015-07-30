@@ -1,15 +1,16 @@
 #pragma once
 
-#include "rapidxml/RapidXml.hpp"
-#include "Engine/Models/Timeline/TimelineManager.h"
-#include <fstream>
+#include "CoreDEF.h"
 
+#include "rapidxml/RapidXml.hpp" // FIXME
+
+#include <fstream>
 #include <stack>
 
 namespace bv
 {
 
-namespace model { class PluginsManager; }
+namespace model { class PluginsManager; class TimelineManager; }
 
 class SerializeObject
 {
@@ -29,6 +30,14 @@ public:
 class DeserializeObject
 {
     rapidxml::xml_node<>* m_doc;
+
+    template< typename T >
+    std::shared_ptr< T >                                    Load( rapidxml::xml_node<>* node ) const
+    {
+        auto dob = DeserializeObject( *node, *this->m_tm, *this->m_pm ); // FIXME for God's sake!!!
+        auto obj = T::Create( dob );
+        return std::static_pointer_cast< T >( obj );
+    }
 public:
     model::TimelineManager* m_tm; // FIXME(?)
     const model::PluginsManager* m_pm; // FIXME(?)
@@ -41,7 +50,7 @@ public:
         return m_doc->name();
     }
 
-    std::string                                             GetValue( std::string name )
+    std::string                                             GetValue( std::string name ) const
     {
         auto node = m_doc->first_attribute( name.c_str() );
         assert( node ); // FIXME: error handling
@@ -49,15 +58,15 @@ public:
     }
 
     template< typename T >
-    std::shared_ptr< T >                                    Load( rapidxml::xml_node<>* node )
+    std::shared_ptr< T >                                    Load( std::string name ) const
     {
-        auto dob = DeserializeObject( *node, *this->m_tm, *this->m_pm ); // FIXME for God's sake!!!
-        auto obj = T::Create( dob );
-        return std::static_pointer_cast< T >( obj );
+        auto node = m_doc->first_node( name.c_str() );
+        assert( node ); // FIXME: error handling
+        return Load< T >( node );
     }
 
     template< typename T >
-    std::vector< std::shared_ptr< T > >                     LoadArray( std::string name )
+    std::vector< std::shared_ptr< T > >                     LoadArray( std::string name ) const
     {
         std::vector< std::shared_ptr< T > > ret;
 
@@ -74,7 +83,7 @@ public:
     }
 
     template< typename T >
-    std::vector< std::shared_ptr< T > >                     LoadProperties( std::string name )
+    std::vector< std::shared_ptr< T > >                     LoadProperties( std::string name ) const
     {
         std::vector< std::shared_ptr< T > > ret;
 

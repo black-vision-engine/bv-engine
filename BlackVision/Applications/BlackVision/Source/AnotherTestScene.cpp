@@ -959,9 +959,17 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::Plugin
     //BVScenePtr realScene = reinterpret_cast<BVScenePtr>( scene );
     //auto root = realScene->GetModelSceneRoot();
 
-    auto docNode = doc.first_node()->first_node( "node" );
-
+// /begin{FIXME}
+    auto docNode = doc.first_node( "scene" );
     auto deDoc = DeserializeObject( *docNode, *timelineManager, *pluginsManager );
+
+    auto timelines = deDoc.LoadArray< TimeEvaluatorBase< ITimeEvaluator > >( "timelines" );
+    for( auto timeline : timelines )
+        timelineManager->AddTimeline( timeline );
+// /end{FIXME}
+
+    /*auto */docNode = doc.first_node( "scene" )->first_node( "node" );
+    /*auto */deDoc = DeserializeObject( *docNode, *timelineManager, *pluginsManager );
 
     ISerializablePtr node = model::BasicNode::Create( deDoc );
 
@@ -972,7 +980,16 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::Plugin
 
 model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager )
 {
-    return LoadSceneFromFile( "Assets/07_Results.xml", pluginsManager, timelineManager );
+    //return LoadSceneFromFile( "Assets/07_Results.xml", pluginsManager, timelineManager );
+    auto scene = LoadSceneFromFile( "test.xml", pluginsManager, timelineManager );
+
+    //scene-> // = root
+    //    GetChild( 0 )-> // = CreedScene
+    //        GetChild( 0 )-> // = root
+    //            GetChild( 0 ) // = dziecko
+    //                ->SetVisible( false );
+
+    return scene;
 }
 
 } // bv

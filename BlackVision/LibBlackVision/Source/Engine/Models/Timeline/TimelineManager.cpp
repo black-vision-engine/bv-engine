@@ -24,6 +24,30 @@ TimelineManager::~TimelineManager        ()
 
 // *********************************
 //
+void            TimelineManager::Serialize                       ( SerializeObject & sob ) const
+{
+    sob.SetName( "timelines" );
+
+    m_rootTimeline->Serialize( sob );
+
+    for( auto i : m_registeredParams )
+    {
+        i.first->Serialize( sob );
+    }
+
+    sob.Pop();
+}
+
+// *********************************
+//
+ISerializablePtr TimelineManager::Create                          ( DeserializeObject & dob )
+{
+    dob;
+    return nullptr;
+}
+
+// *********************************
+//
 ITimeEvaluatorPtr       TimelineManager::CreateOffsetTimeEvaluator      ( const std::string & name, TimeType startTime )
 {
     return CreateOffsetTimeEvaluatorImpl( name, startTime );

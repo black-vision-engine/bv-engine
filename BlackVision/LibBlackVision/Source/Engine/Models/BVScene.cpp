@@ -126,9 +126,9 @@ const std::string &     BVScene::GetName            () const
 //
 void            BVScene::Serialize           ( SerializeObject &doc) const
 {
-    doc.SetName( "scene" );
-
+    //doc.SetName( "scene" ); // FIXME when model is fixed
     m_pModelSceneRoot->Serialize( doc );
+    //doc.Pop(); // FIXME when model is fixed
 }
 
 // *******************************

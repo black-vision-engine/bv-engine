@@ -2,6 +2,8 @@
 
 #include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 
+#include "Engine/Models/Timeline/TimelineManager.h"
+
 namespace bv { namespace model {
 
 namespace PluginsSerialization
@@ -53,7 +55,7 @@ void SetParameter( IPluginParamValModelPtr pvm, AbstractModelParameterPtr param 
         if( model_ && model_->GetParameter( param->GetName() ) )
             {
                 auto model = std::static_pointer_cast< DefaultParamValModel >( model_ ); // FIXME: this should not really be assumed here, I think
-                model->AddParameter( param ); // FIXME: SetParameter instead of AddParameter
+                model->SetParameter( param );
             }
 }
 
@@ -64,7 +66,6 @@ void                                BasePlugin< IPlugin >::Serialize            
     doc.SetName( "plugin" );
     doc.SetValue( "uid", GetTypeUid() );
     doc.SetValue( "name", GetName() );
-
 
     doc.SetName( "params" );
     {
@@ -86,9 +87,9 @@ void                                BasePlugin< IPlugin >::Serialize            
                 param->Serialize( doc );
             }
     }
-    doc.Pop();
+    doc.Pop(); // params
 
-    doc.Pop();
+    doc.Pop(); // plugin
 }
 
 
@@ -98,12 +99,12 @@ void                                BasePlugin< IPlugin >::Serialize            
 template <>
 ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
 {
-    std::string pluginType = doc.GetValue( "uid" );//PluginsSerialization::SerialNameToUID( doc.GetValue( "name" ) );
+    std::string pluginType = doc.GetValue( "uid" );
 
-    std::string pluginName = ""; // FIXME
+    std::string pluginName = doc.GetValue( "name" );
 
-    IPluginPtr plugin__ = doc.m_pm->CreatePlugin( pluginType, pluginName, doc.m_tm->GetRootTimeline() );
-    std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin__ );
+    IPluginPtr plugin_ = doc.m_pm->CreatePlugin( pluginType, pluginName, doc.m_tm->GetRootTimeline() );
+    std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
 
 // params
     //auto params = doc.LoadProperties< AbstractModelParameter >( "property" );

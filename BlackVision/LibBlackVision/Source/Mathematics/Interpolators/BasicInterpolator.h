@@ -17,7 +17,7 @@ enum class WrapMethod : int
 };
 
 template<class TimeValueT, class ValueT>
-class Key
+class Key : public ISerializable
 {
 public:
 
@@ -27,6 +27,9 @@ public:
 public:
 
     explicit Key( TimeValueT t, ValueT val );
+
+    virtual void                Serialize       ( SerializeObject & doc ) const override;
+    static ISerializablePtr     Create          ( DeserializeObject & doc );
 };
 
 template<class TimeValueT>

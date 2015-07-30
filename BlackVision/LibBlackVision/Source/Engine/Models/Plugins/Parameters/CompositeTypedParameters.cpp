@@ -19,7 +19,7 @@ void    ParamTransform::Serialize       ( SerializeObject & doc ) const
 {
     doc.SetName( "param" );
     doc.SetValue( "name", GetName() );
-    doc.SetValue( "type", Type2String( GetType() ) );
+    doc.SetValue( "type", "transform" );
 
     for( int i = 0; i < m_transformModel.Size(); i++ )
     {
@@ -61,24 +61,43 @@ void ParamTransformVec::Serialize       ( SerializeObject & doc ) const
 {
     doc.SetName( "param" );
     doc.SetValue( "name", GetName() );
-    doc.SetValue( "type", Type2String( GetType() ) );
+    doc.SetValue( "type", "transform_vec" );
+    doc.SetValue( "timeline", m_timeEvaluator->GetName() );
 
-    //m_interpolator.Serialize( doc );
     for( auto t : m_transformModelVec )
-        for( int i = 0; i < t.Size(); i++ )
-        {
-            t[ i ]->GetP0MotylaNoga().Serialize( doc );
-            t[ i ]->GetP1MotylaNoga().Serialize( doc );
-            t[ i ]->GetP2MotylaNoga().Serialize( doc );
-        }
+    {
+        t.Serialize( doc );
+        //for( int i = 0; i < t.Size(); i++ )
+        //{
+        //    t[ i ]->Ser
+        //    //doc.SetName( "transform" );
+        //    //doc.SetValue( "kind", Kind2String( t[ i ]->KindKurwaMac() ) );
+        //    //    t[ i ]->GetP0MotylaNoga().Serialize( doc );
+        //    //    t[ i ]->GetP1MotylaNoga().Serialize( doc );
+        //    //    t[ i ]->GetP2MotylaNoga().Serialize( doc );
+        //    //doc.Pop();
+        //}
+    }
 
-    doc.Pop();
+    doc.Pop(); // param
 }
 // *******************************
 //
 void    ParamTransformVec::AppendTransform          ( const TransformF & transform )
 {
     m_transformModelVec.push_back( transform );
+}
+
+// *******************************
+//
+void                ParamTransformVec::InsertTransform     ( unsigned int transformNum, const TransformF & transform )
+{
+    if( transformNum < m_transformModelVec.size() )
+        m_transformModelVec[ transformNum ] = transform;
+    else if( transformNum == m_transformModelVec.size() )
+        AppendTransform( transform );
+    else
+        assert( false );
 }
 
 // *******************************

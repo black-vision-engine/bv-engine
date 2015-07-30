@@ -10,6 +10,8 @@
 
 #include "Engine/Models/Plugins/Plugin.h"
 
+#include "Engine/Models/Timeline/TimelineManager.h"
+
 namespace bv { namespace model {
 
 // FIXME: hack
@@ -84,17 +86,20 @@ void                            BasicNode::Serialize               ( SerializeOb
     doc.SetValue( "name", GetName() );
 
     doc.SetName( "plugins" );
-    for( unsigned int  i = 0; i < m_pluginList->NumPlugins(); i++ )
-    {
-        auto plugin_ = m_pluginList->GetPlugin( i );
-        auto plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
-        assert( plugin );
-        plugin->Serialize( doc );
-    }
+        for( unsigned int  i = 0; i < m_pluginList->NumPlugins(); i++ )
+        {
+            auto plugin_ = m_pluginList->GetPlugin( i );
+            auto plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
+            assert( plugin );
+            plugin->Serialize( doc );
+        }
+    doc.Pop(); // plugins
+
+    doc.SetName( "nodes" );
+        for( auto child : m_children )
+            child->Serialize( doc );
     doc.Pop();
 
-    for( auto child : m_children )
-        child->Serialize( doc );
     doc.Pop();
 }
 

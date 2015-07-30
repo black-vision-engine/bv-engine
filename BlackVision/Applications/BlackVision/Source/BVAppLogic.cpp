@@ -343,7 +343,12 @@ void BVAppLogic::OnKey           ( unsigned char c )
     else if( c == 's' )
     {
         auto sob = new SerializeObject();
+
+        sob->SetName( "scene" );
+        m_timelineManager->Serialize( *sob ); // FIXME: timelines should be moved to m_bvScene
         m_bvScene->Serialize( *sob );
+        sob->Pop();
+
         sob->Save( "test.xml" );
         delete sob;
     }
