@@ -973,7 +973,7 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::Plugin
 
     ISerializablePtr node = model::BasicNode::Create( deDoc );
 
-    auto root = static_cast< model::BasicNode* >( node.get() );
+    auto root = std::static_pointer_cast< model::BasicNode >( node );
     assert( root );
     return BasicNodePtr( root );
 }

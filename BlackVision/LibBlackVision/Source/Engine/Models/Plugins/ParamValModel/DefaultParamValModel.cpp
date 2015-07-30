@@ -94,7 +94,7 @@ void                                        DefaultParamValModel::Update        
     }
 }
 
-void CopyParameter( IParameterPtr out, IParameterPtr in )
+void CopyParameter( IParameterPtr out, IParameterPtr in ) // FIXME: don't forget about copying timelines!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 {
     //assert( out->GetType() == in->GetType() ); // FIXME: uncomment when parameter deserialization is finished
     
@@ -135,7 +135,7 @@ void CopyParameter( IParameterPtr out, IParameterPtr in )
     } 
     else
     {
-        //assert( false );
+        assert( false );
         return;
     }
 }
