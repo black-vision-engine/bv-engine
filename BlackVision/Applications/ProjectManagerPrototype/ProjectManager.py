@@ -121,7 +121,7 @@ class ProjectManager:
 
         return self.globalSceneAccessor.listScenes(projectName)
 
-    def listCategories(self):
+    def listCategoriesNames(self):
         return [c for c in self.globalCategories.keys()]
 
     def listAssets(self, projectName = None, categoryName = None ):
@@ -134,24 +134,24 @@ class ProjectManager:
                 return res
             else:
                 if categoryName in self.globalCategories:
-                    return [os.path.join(categoryName, a) for a in
-                        self.globalCategories[categoryName].listAssets()]
+                    return self.globalCategories[categoryName].listAssets()
         else:
-
             if not categoryName:
                 res = []
                 for cn in self.globalCategories.keys():
                     res += [os.path.join(cn, a) for a in
                         self.globalCategories[cn].listAssets(projectName)]
                 return res
-
-            proj = self.getProject(projectName)
-
-            if proj:
-                return [os.path.join(categoryName, a) for a in
-                        self.globalCategories[categoryName].listAssets(proj.getName())]
             else:
-                print("Project named {} doesn't exist".format(projectName))
+                proj = self.getProject(projectName)
+
+                if proj:
+                    pn = proj.getName()
+                    return [an[len(pn) + 1:] for an in self.globalCategories[categoryName].listAssets(pn)]
+                else:
+                    print("Project named {} doesn't exist".format(projectName))
+
+        return None
 
     def setCurrentProject(self, projectName):
         if projectName in self.projects:

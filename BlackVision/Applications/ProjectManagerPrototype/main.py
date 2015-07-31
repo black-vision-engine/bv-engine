@@ -78,7 +78,7 @@ def test():
     print(pm.listScenes())
     print(pm.listScenes("proj1"))
     print(pm.listScenes("proj2"))
-    print(pm.listCategories())
+    print(pm.listCategoriesNames())
     print(pm.listAssets())
     print(pm.listAssets("proj1", "textures"))
     print(pm.listAssets("proj2", "sequences"))
