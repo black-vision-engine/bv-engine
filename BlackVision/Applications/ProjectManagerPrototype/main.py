@@ -3,6 +3,7 @@
 from FSTextureAssetAccessor import TextureDesc
 from FSSequenceAssetAccessor import SequenceDesc
 from Scene import Scene, Node, Plugin, SceneReader
+from Location import Location
 
 import os
 import shutil
@@ -75,11 +76,14 @@ def test():
 
     print(pm.listProjectsNames())
 
+
     print(pm.listScenes())
+    print([pm.getSceneDescLoc(Location.pathToLocation(p, pm)) for p in pm.listScenes()])
     print(pm.listScenes("proj1"))
     print(pm.listScenes("proj2"))
     print(pm.listCategoriesNames())
     print(pm.listAssets())
+    print([pm.getAssetDescLoc(Location.pathToLocation(p, pm)) for p in pm.listAssets()])
     print(pm.listAssets("proj1", "textures"))
     print(pm.listAssets("proj2", "sequences"))
     print(pm.listAssets("proj2"))
@@ -112,7 +116,7 @@ def test():
     print(pm1.listScenes())
     print(pm1.listScenes("proj1"))
     print(pm1.listScenes("proj2"))
-    print(pm1.listCategories())
+    print(pm1.listCategoriesNames())
     print(pm1.listAssets())
     print(pm1.listAssets("proj1", "textures"))
     print(pm1.listAssets("proj2", "sequences"))

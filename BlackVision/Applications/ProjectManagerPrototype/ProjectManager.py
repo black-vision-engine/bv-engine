@@ -80,6 +80,9 @@ class ProjectManager:
 
         return None
 
+    def getAssetDescLoc(self, loc):
+        return self.getAssetDesc(loc.projectName, loc.categoryName, loc.path)
+
     def getAssetDesc(self, projectName, categoryName, pathInProject):
         if categoryName in self.globalCategories:
             pathInCategory = self.__toRelativePath(projectName, pathInProject)
@@ -87,6 +90,9 @@ class ProjectManager:
         else:
             print("Category '{}' doesn't exist.".format(categoryName))
             return None
+
+    def getSceneDescLoc(self, loc):
+        return self.getSceneDesc(loc.projectName, loc.path)
 
     def getSceneDesc(self, projectName, pathInProject):
         assert isinstance(projectName, str)
@@ -134,7 +140,8 @@ class ProjectManager:
                 return res
             else:
                 if categoryName in self.globalCategories:
-                    return self.globalCategories[categoryName].listAssets()
+                    return [os.path.join(categoryName, a) for a in
+                        self.globalCategories[categoryName].listAssets()]
         else:
             if not categoryName:
                 res = []
@@ -147,7 +154,8 @@ class ProjectManager:
 
                 if proj:
                     pn = proj.getName()
-                    return [an[len(pn) + 1:] for an in self.globalCategories[categoryName].listAssets(pn)]
+                    return [os.path.join(categoryName, a) for a in
+                        self.globalCategories[categoryName].listAssets(pn)]
                 else:
                     print("Project named {} doesn't exist".format(projectName))
 

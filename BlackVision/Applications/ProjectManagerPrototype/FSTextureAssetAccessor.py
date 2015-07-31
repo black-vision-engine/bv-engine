@@ -19,7 +19,7 @@ class FSTextureAssetAccessor(TextureAssetAccessor):
         self.supportedFileExt = supportedFileExt
         self.__createDir()
 
-    def getAssetDesc(self, internalPath):
+    def getLoadableAssetDesc(self, internalPath):
         assert isinstance(internalPath, str)
 
         absPath = os.path.join(self.rootPath, internalPath)
