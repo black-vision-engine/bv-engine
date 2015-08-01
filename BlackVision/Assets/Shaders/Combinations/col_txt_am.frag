@@ -13,8 +13,8 @@ uniform float       alpha;
 
 void main()
 {
-	vec4 col = texture( AtlasTex0, uvCoord );
+    float col1 = texture( AtlasTex0, uvCoord ).b;
+    float col2 = texture( AtlasTex0, uvCoord ).g;
 	vec4 alphaMask = texture( AlphaTex0, uvAlphaCoord );
-
-	FragColor = col * color * alpha * alphaMask.a;
+	FragColor = alphaMask.a * alpha * ( color * col1 + outlineColor * ( col2 * ( 1.0 - col1 ) ) );
 }
