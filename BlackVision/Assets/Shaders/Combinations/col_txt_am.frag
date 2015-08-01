@@ -9,6 +9,7 @@ uniform sampler2D   AtlasTex0;
 uniform sampler2D   AlphaTex0;
 
 uniform vec4        color;
+uniform vec4        outlineColor;
 uniform float       alpha;
 
 void main()
