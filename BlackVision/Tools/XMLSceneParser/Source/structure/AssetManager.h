@@ -33,6 +33,8 @@ namespace bv{
         static	string				GetSolution(string SceneName);
 		static	string				GetFont(string SceneName);
 		static	string				GetTexture(string SceneName);
+
+		static	string				GetBlankTexture();
         static	string				GetSequence(string SceneName);
 		static	SurfaceDescriptor*	GetSurface(string SurfacePath, string SurfaceName);
         static	SurfaceDescriptor*	GetSurface(string SurfaceName);
