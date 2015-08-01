@@ -477,6 +477,7 @@ void                                DefaultAlphaMaskPlugin::Update              
                     {
                         float u0 = verts[ j ].x;
                         float v0 = verts[ j ].y;
+						{u0;v0;}
 
                         float u1 = pixelsPerUnitUVSpace * ( verts[ j ].x - minX ) / txWidth;
                         float v1 = pixelsPerUnitUVSpace * ( verts[ j ].y - minY ) / txHeight;
@@ -484,9 +485,10 @@ void                                DefaultAlphaMaskPlugin::Update              
                         //float tmp[] = { u0, v0, u1, v1 };
 
                         uvs[ j ].x = u1;
+
                         uvs[ j ].y = v1;
 
-                        printf( "   Vertex %d (%.3f, %.3f, %.3f) -> (%.3f, %3f), (%.3f, %3f)\n", j, verts[ j ].x, verts[ j ].y, verts[ j ].z, u0, v0, u1, v1 );
+                        //printf( "   Vertex %d (%.3f, %.3f, %.3f) -> (%.3f, %3f), (%.3f, %3f)\n", j, verts[ j ].x, verts[ j ].y, verts[ j ].z, u0, v0, u1, v1 );
                     }
                 }
             }
@@ -700,6 +702,7 @@ void     DefaultAlphaMaskPlugin::RecalculateAttrChannel         ()
             uvVec[ j ].x = pixelsPerUnitUVSpace * ( pos[ j ].x - minX ) / txWidth;
             uvVec[ j ].y = pixelsPerUnitUVSpace * ( pos[ j ].y - minY ) / txHeight;
 
+			
             //printf( "   Vertex %d (%.3f, %.3f, %.3f) -> (%.3f, %3f)\n", j, pos[ j ].x, pos[ j ].y, pos[ j ].z,uvVec[ j ].x, uvVec[ j ].y );
         }
     }
