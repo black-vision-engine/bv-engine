@@ -81,7 +81,8 @@ public:
 };
 
 
-typedef SimpleParameterImpl< FloatInterpolator, float, ModelParamType::MPT_FLOAT >      ParamFloat;
+typedef SimpleParameterImpl< CompositeBezierInterpolator, float, ModelParamType::MPT_FLOAT > ParamFloat;
+//typedef SimpleParameterImpl< FloatInterpolator, float, ModelParamType::MPT_FLOAT >      ParamFloat;
 typedef SimpleParameterImpl< IntInterpolator, int, ModelParamType::MPT_INT >            ParamInt;
 typedef SimpleParameterImpl< BoolInterpolator, bool, ModelParamType::MPT_BOOL >         ParamBool;
 typedef SimpleParameterImpl< Vec4Interpolator, glm::vec4, ModelParamType::MPT_VEC4 >    ParamVec4;
@@ -98,6 +99,7 @@ DEFINE_PTR_TYPE( ParamVec4 )
 DEFINE_PTR_TYPE( ParamVec3 )
 DEFINE_PTR_TYPE( ParamVec2 )
 DEFINE_PTR_TYPE( ParamMat2 )
+
 
 } //model
 } //bv
