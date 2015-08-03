@@ -696,14 +696,13 @@ void			BVGLPlugin::PrintShortSummary           ( const std::string & )
 void			BVGLPlugin::PrintCompleteSummary        ( const std::string & )
 {
 }
-
+#ifdef GL_VERSION_4_4
 // Images and textures
 void BVGLPlugin::BindImageTexture			( GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format )
 {
 	glBindImageTexture( unit, texture, level, layered, layer, access, format );
 }
 
-#ifdef GL_VERSION_4_4
 
 void BVGLPlugin::BindImageTextures			( GLuint first, GLsizei count, const GLuint textures )
 {
@@ -1094,20 +1093,20 @@ void BVGLPlugin::BindBufferRange				( GLenum target, GLuint index, GLuint buffer
 }
 
 /**GL4.3*/
-void BVGLPlugin::BindVertexBuffer			( GLuint bindingIndex, GLuint buffer, GLintptr offset, GLintptr stride )
+void BVGLPlugin::BindVertexBuffer			( GLuint bindingIndex, GLuint buffer, GLintptr offset, GLsizei stride )
 {
-	BindVertexBuffer( bindingIndex, buffer, offset, stride );
+	glBindVertexBuffer( bindingIndex, buffer, offset, stride );
 }
 
 #ifdef GL_VERSION_4_4
-void BVGLPlugin::BindVertexBuffers			( GLuint first, GLsizei count, const GLuint* buffers, const GLintptr* offsets, const GLintptr* strides )
+void BVGLPlugin::BindVertexBuffers			( GLuint first, GLsizei count, const GLuint* buffers, const GLintptr* offsets, const GLsizei* strides )
 {
 	glBindVertexBuffers( first, count buffers, offsets, strides );
 }
 #endif
 
 #ifdef GL_VERSION_4_5
-void BVGLPlugin::BindVertexArrayVertexBuffer				( GLuint vaobj, GLuint bindingIndex, GLuint buffer, GLintptr offset, GLintptr stride )
+void BVGLPlugin::BindVertexArrayVertexBuffer				( GLuint vaobj, GLuint bindingIndex, GLuint buffer, GLintptr offset, GLsizei stride )
 {
 	glBindVertexArrayVertexBuffer( vaobj, bindingIndex, buffer, offset, stride );
 }
