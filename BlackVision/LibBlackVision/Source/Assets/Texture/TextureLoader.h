@@ -33,6 +33,7 @@ private:
 
 	static TextureFormat				ToTextureFormat					( UInt32 bpp, UInt32 channelNum );
 	static TextureFormat				NearestSupportedTextureFormat	( TextureFormat format );
+	static UInt32						ToBPP							( TextureFormat format );
 };
 
 } // bv

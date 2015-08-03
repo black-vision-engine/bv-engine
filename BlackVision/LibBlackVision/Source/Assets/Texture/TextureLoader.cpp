@@ -110,6 +110,30 @@ TextureFormat				TextureLoader::NearestSupportedTextureFormat	( TextureFormat fo
 	}
 }
 
+UInt32						TextureLoader::ToBPP							( TextureFormat format )
+{
+	switch( format )
+	{
+	case TextureFormat::F_A32FR32FG32FB32F:
+		return 128;
+	case TextureFormat::F_R32FG32FB32F:
+		return 96;
+	case TextureFormat::F_A32F:
+		return 32;
+	case TextureFormat::F_A8R8G8B8:
+		return 32;
+	case TextureFormat::F_R8G8B8:
+		return 24;
+	case TextureFormat::F_A8:
+		return 8;
+	case TextureFormat::F_L8:
+		return 8;
+	default:
+		assert( !"Should never be here !" );
+		return 0;
+	}
+}
+
 // ******************************
 //
 SingleTextureAssetConstPtr	TextureLoader::LoadSingleTexture( const SingleTextureAssetDescConstPtr & sinlgeTextureResDesc, bool loadFromCache )
@@ -210,34 +234,65 @@ TextureAssetConstPtr TextureLoader::LoadTextureAndGenerateMipMaps	( const Textur
 {
 	assert( desc->GetLoadingType() == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS );
 
+	if( desc->IsCacheable() )  // check if already in cache
+	{
+		auto cachedTextureAsset = TextureCache::GetInstance().Get( desc );
+
+		if( cachedTextureAsset )
+		{
+			return cachedTextureAsset;
+		}
+	}
+
 	auto origW = desc->GetOrigTextureDesc()->GetWidth();
 	auto origH = desc->GetOrigTextureDesc()->GetHeight();
 
-	auto mm = tools::GenerateMipmaps(	desc->GetOrigTextureDesc()->GetImagePath(),
-										(int)desc->GetMipMapsDesc()->GetLevelsNum(),
-										ToMMBuilderFilterType( desc->GetMipMapsDesc()->GetFilter() ) );
-
+	SingleTextureAssetConstPtr origRes = LoadSingleTexture( desc->GetOrigTextureDesc(), desc->GetOrigTextureDesc()->IsCacheable() );
 
 	std::vector< SingleTextureAssetConstPtr > mipMapsRes;
 
-	SingleTextureAssetConstPtr origRes = LoadSingleTexture( desc->GetOrigTextureDesc(), desc->GetOrigTextureDesc()->IsCacheable() );
-
-	SizeType i = 0;
-	if( mm[ 0 ].width == origW && mm[ 0 ].height == origH )
+	if( desc->IsCacheable() )  // check if already in cache
 	{
-		mipMapsRes.push_back( origRes );
-		i = 1;
+		auto mmDesc = desc->GetMipMapsDesc();
+
+		if( mmDesc )
+		{
+			mipMapsRes.resize( mmDesc->GetLevelsNum() );
+			for(SizeType i = 0; i < mmDesc->GetLevelsNum(); ++i )
+			{
+				auto cachedMMAsset = LoadSingleTexture( mmDesc->GetLevelDesc( i ) );
+				if( cachedMMAsset )
+				{
+					mipMapsRes[ i ] = cachedMMAsset;
+				}
+				else
+				{
+					auto data	= ( i > 0 ) ? mipMapsRes[ i ]->GetData()	: origRes->GetData();
+					auto w		= ( i > 0 ) ? mipMapsRes[ i ]->GetWidth()	: origW;
+					auto h		= ( i > 0 ) ? mipMapsRes[ i ]->GetHeight()	: origH;
+					auto bpp	= ( i > 0 ) ?	TextureLoader::ToBPP( mipMapsRes[ i ]->GetFormat() ) : 
+												TextureLoader::ToBPP( origRes->GetFormat() );
+
+					tools::Image img = { data, w, h, bpp };
+					auto mm = tools::GenerateMipmaps(	img,
+														2,
+														ToMMBuilderFilterType( desc->GetMipMapsDesc()->GetFilter() ) );
+
+					auto key = TextureCache::GenKeyForGeneratedMipMap( desc->GetOrigTextureDesc()->GetImagePath(), w, h, origRes->GetFormat(), i, desc->GetMipMapsDesc()->GetFilter() );
+					mipMapsRes[ i ] = SingleTextureAsset::Create( mm[ 1 ].data, key, w, h, origRes->GetFormat(), true );
+				}
+			}
+		}
 	}
 
-	for(; i < mm.size(); ++i )
+	auto textureAsset = TextureAsset::Create( origRes, MipMapAsset::Create( mipMapsRes ) );
+
+	if( desc->IsCacheable() )  // Cache the texture asset
 	{
-		auto w = mm[ i ].width;
-		auto h = mm[ i ].height;
-		auto key = TextureCache::GenKeyForGeneratedMipMap( desc->GetOrigTextureDesc()->GetImagePath(), w, h, TextureFormat::F_A8R8G8B8, i, desc->GetMipMapsDesc()->GetFilter() );
-		mipMapsRes.push_back( SingleTextureAsset::Create( mm[ i ].data, key, w, h, TextureFormat::F_A8R8G8B8 ) );
+		TextureCache::GetInstance().Add( desc, textureAsset );
 	}
 
-	return TextureAsset::Create( origRes, MipMapAsset::Create( mipMapsRes ) );
+	return textureAsset;
 }
 
 } // bv
