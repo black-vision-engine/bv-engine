@@ -3,13 +3,20 @@
 namespace bv
 {
 
+template< class TimeValueT, class ValueT >
+class IInterpolator
+{
+public:
+    virtual ValueT Evaluate( TimeValueT t ) const = 0;
+};
+
 class CompositeBezierInterpolator
 {
     typedef float TimeValueT;
     typedef float ValueT;
 
-//    BasicInterpolator< float, float > i;
-    std::vector<Key<TimeValueT, ValueT>>    keys;
+    std::vector< Key<TimeValueT, ValueT> >    keys;
+    std::vector< IInterpolator<TimeValueT, ValueT >* > interpolators; // FIXME: ptr-ize
     TimeValueT                              tolerance;
 
 public:

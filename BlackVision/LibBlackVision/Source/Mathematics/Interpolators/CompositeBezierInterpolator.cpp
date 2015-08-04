@@ -2,9 +2,32 @@
 
 namespace bv {
 
+template< class TimeValueT, class ValueT >
+class ConstEvaluator : public IInterpolator< TimeValueT, ValueT >
+{
+    ValueT value;
+public:
+    ConstEvaluator( ValueT v ) : value( v ) {}
+    ValueT Evaluate( TimeValueT ) const override { return value; }
+};
+
+template< class TimeValueT, class ValueT >
+class LinearEvaluator : public IInterpolator< TimeValueT, ValueT >
+{
+    typedef Key< TimeValueT, ValueT > Key;
+
+    Key key1, key2;
+public:
+    LinearEvaluator( Key k1, Key k2 ) : key1( k1 ), key2( k2 ) {}
+    ValueT Evaluate( TimeValueT ) const override { return value; }
+};
+
 void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const ValueT & v ) 
 { 
+    assert( keys.size() == 0 || keys[ keys.size()-1 ].t <= t ); // FIXME don't assume that for God's sake!
     keys.push_back( Key<TimeValueT, ValueT>( t, v ) ); // FIXME sortme
+    if( keys.size() > 1 )
+        interpolators.push_back( new ConstEvaluator< TimeValueT, ValueT >( v ) );
 }
 
 float CompositeBezierInterpolator::PreEvaluate( float /*t*/ ) const { return keys[ 0 ].val; } // never FIXME :P
@@ -28,7 +51,7 @@ CompositeBezierInterpolator::ValueT CompositeBezierInterpolator::Evaluate       
     if( t > keys[i].t )
         return PostEvaluate( t );
 
-    return keys[ i ].val;
+    return interpolators[ i-1 ]->Evaluate( t );
 }
 
 } // bv
