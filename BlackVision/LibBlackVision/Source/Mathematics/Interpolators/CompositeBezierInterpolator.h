@@ -28,6 +28,10 @@ public:
     model::IParameter::InterpolationMethod     GetInterpolationMethod () const { return model::IParameter::InterpolationMethod::LINEAR; } // WTF
     void SetWrapPostMethod  ( WrapMethod ) {}
     void SetWrapPreMethod   ( WrapMethod ) {}
+
+private:
+    float PreEvaluate( float t ) const;
+    float PostEvaluate( float t ) const;
 };
 
 }
