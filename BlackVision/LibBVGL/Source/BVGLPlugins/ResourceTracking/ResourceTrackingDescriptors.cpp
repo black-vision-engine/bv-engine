@@ -84,9 +84,19 @@ TextureDesc::TextureDesc()
     : ID( 0 )
     , width( 0 )
     , height( 0 )
+	, depth( 0 )
+	, type( 0 )
     , format( 0 )
     , pixels( nullptr )
 {
+}
+
+// *****************************
+//
+void	TextureDesc::SetTypeIfFirstBind		( GLenum target )
+{
+	if( this->type == 0 )
+		type = target;		// Texture has the same type, as first bind target.
 }
 
 // *****************************
@@ -98,10 +108,11 @@ void    TextureDesc::SetID  ( GLuint ID )
 
 // *****************************
 //
-void    TextureDesc::Set    ( GLsizei width, GLsizei height, GLenum format, const GLvoid * pixels )
+void    TextureDesc::Set    ( GLsizei width, GLsizei height, GLsizei depth, GLenum format, const GLvoid * pixels )
 {
     this->width     = width;
     this->height    = height;
+	this->depth		= depth;
     this->format    = format;
     this->pixels    = pixels;
 }

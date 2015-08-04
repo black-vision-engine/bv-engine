@@ -91,6 +91,12 @@ public:
 	virtual void		FramebufferTexture			( GLenum target, GLenum attachment, GLuint texture, GLint level );
 	virtual void		FramebufferTextureLayer		( GLenum target, GLenum attachment, GLuint texture, GLint level, GLint layer );
 	virtual void		RenderbufferStorageMultisample			( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height );
+
+#ifdef GL_VERSION_4_5
+	virtual void		NamedFramebufferTexture		( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level );
+	virtual void		NamedFramebufferTextureLayer( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level, GLint layer );
+	virtual void		NamedFramebufferRenderbuffer( GLuint framebuffer, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer );
+#endif
 };
 
 } //bv

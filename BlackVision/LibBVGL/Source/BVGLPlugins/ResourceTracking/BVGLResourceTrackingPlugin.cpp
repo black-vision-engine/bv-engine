@@ -81,7 +81,7 @@ void    BVGLResourceTrackingPlugin::TexImage2D					( GLenum target, GLint level,
 {
     Parent::TexImage2D( target, level, internalformat, width, height, border, format, type, pixels );
 
-    m_textures.GetBoundResource( target ).Set( width, height, format, pixels );
+	m_textures.GetBoundResource( target ).Set( width, height, 0, format, pixels );
 
     PrintCompleteSummary( "TexImage2D() called" );
 }
@@ -107,6 +107,7 @@ void    BVGLResourceTrackingPlugin::BindTexture					( GLenum target, GLuint text
     Parent::BindTexture( target, texture );
 
     m_textures.BindResource( target, texture );
+	m_textures.GetBoundResource( target ).SetTypeIfFirstBind( target );
 }
 
 // *****************************
@@ -268,7 +269,7 @@ void BVGLResourceTrackingPlugin::CompressedTexImage1D		( GLenum target, GLint le
 {
 	Parent::CompressedTexImage1D( target, level, internalFormat, width, border, imageSize, data );
 	
-    m_textures.GetBoundResource( target ).Set( width, 0, internalFormat, data );
+	m_textures.GetBoundResource( target ).Set( width, 0, 0, internalFormat, data );
     PrintCompleteSummary( "CompressedTexImage1D() called" );
 }
 
@@ -276,7 +277,7 @@ void BVGLResourceTrackingPlugin::CompressedTexImage2D		( GLenum target, GLint le
 {
 	Parent::CompressedTexImage2D( target, level, internalFormat, width, height, border, imageSize, data );
 
-	m_textures.GetBoundResource( target ).Set( width, height, internalFormat, data );
+	m_textures.GetBoundResource( target ).Set( width, height, 0, internalFormat, data );
     PrintCompleteSummary( "CompressedTexImage2D() called" );
 }
 
@@ -285,7 +286,7 @@ void BVGLResourceTrackingPlugin::CompressedTexImage3D		( GLenum target, GLint le
 	Parent::CompressedTexImage3D( target, level, internalFormat, width, height, depth, border, imageSize, data );
 
 	// @todo Textures can't be 3-dimmensional in curretn implementation.
-	m_textures.GetBoundResource( target ).Set( width, height, internalFormat, data );
+	m_textures.GetBoundResource( target ).Set( width, height, depth, internalFormat, data );
     PrintCompleteSummary( "CompressedTexImage3D() called" );
 }
 
@@ -311,7 +312,7 @@ void BVGLResourceTrackingPlugin::TexImage1D					( GLenum target, GLint level, GL
 {
 	Parent::TexImage1D( target, level, internalFormat, width, border, format, type, data );
 	
-	m_textures.GetBoundResource( target ).Set( width, 0, format, data );
+	m_textures.GetBoundResource( target ).Set( width, 0, 0, format, data );
     PrintCompleteSummary( "TexImage1D() called" );
 }
 
@@ -320,7 +321,7 @@ void BVGLResourceTrackingPlugin::TexImage3D					( GLenum target, GLint level, GL
 	Parent::TexImage3D( target, level, internalFormat, width, height, depth, border, format, type, data );
 		
 	// @todo Textures can't be 3-dimmensional in curretn implementation.
-	m_textures.GetBoundResource( target ).Set( width, height, format, data );
+	m_textures.GetBoundResource( target ).Set( width, height, 0, format, data );
     PrintCompleteSummary( "TexImage3D() called" );
 }
 
@@ -384,6 +385,29 @@ void BVGLResourceTrackingPlugin::RenderbufferStorageMultisample			( GLenum targe
 	Parent::RenderbufferStorageMultisample( target, samples, internalFormat, width, height );
 	m_renderbuffers.GetBoundResource( target ).Set( internalFormat, width, height );
 }
+
+#ifdef GL_VERSION_4_5
+
+void BVGLResourceTrackingPlugin::NamedFramebufferTexture		( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level )
+{
+	Parent::NamedFramebufferTexture( framebuffer, attachment, texture, level );
+
+
+}
+
+void BVGLResourceTrackingPlugin::NamedFramebufferTextureLayer( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level, GLint layer )
+{
+	Parent::NamedFramebufferTextureLayer( framebuffer, attachment, texture, level, layer );
+
+}
+
+void BVGLResourceTrackingPlugin::NamedFramebufferRenderbuffer( GLuint framebuffer, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer )
+{
+	Parent::NamedFramebufferRenderbuffer( framebuffer, attachment, renderbuffertarget, renderbuffer );
+
+}
+
+#endif
 
 // *****************************
 //
