@@ -43,6 +43,8 @@ public:
 
 	virtual bool								IsCacheable					() const override;
 
+	virtual std::string							GetKey						() const override;
+
 	static SingleTextureAssetDescConstPtr		Create						( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );
 
 	explicit									SingleTextureAssetDesc		( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );

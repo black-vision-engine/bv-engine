@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Assets/AssetDescriptor.h"
-#include "Assets/Texture/SingleTextureAssetDescriptor.h"
+#include "Assets/Texture/GeneratedSingleTextureAssetDescriptor.h"
 #include "Engine/Types/Enums.h"
 
 #include "CoreDEF.h"
@@ -47,6 +47,9 @@ public:
 	static MipMapAssetDescConstPtr		Create				( const std::vector< SingleTextureAssetDescConstPtr > & mipMaps, MipMapFilterType ft = MipMapFilterType::BOX );
 	explicit							MipMapAssetDesc		( MipMapFilterType ft, const SingleTextureAssetDescConstPtr & origTexture );
 	explicit							MipMapAssetDesc		( const std::vector< SingleTextureAssetDescConstPtr > & mipMaps, MipMapFilterType ft );
+
+	static std::string					GenKeyForGeneratedMipMap( const std::string & origPath, SizeType width, SizeType height, TextureFormat format, SizeType mmLevel, MipMapFilterType mmFiletType );
+
 
 private:
 

@@ -39,6 +39,8 @@ public:
 
 	virtual VoidConstPtr				QueryThis			() const override;
 
+	virtual std::string					GetKey				() const override;
+
 	TextureAssetLoadingType				GetLoadingType		() const;
 	SingleTextureAssetDescConstPtr		GetOrigTextureDesc	() const;
 	MipMapAssetDescConstPtr				GetMipMapsDesc		() const;

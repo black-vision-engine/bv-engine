@@ -198,7 +198,7 @@ void Text::AddTexturesKey()
 
 	auto atlasAssetDesc = TextAtlas::GenerateTextAtlasAssetDescriptor( m_fontFile, atlasW, atlasH, m_fontSize, m_blurSize, m_outlineWidth, MipMapFilterType::BILINEAR, levelsNum );
 
-	auto origKey = TextureCache::GenKeyForSingleTexture( atlasAssetDesc->GetOrigTextureDesc() );
+	auto origKey = atlasAssetDesc->GetOrigTextureDesc()->GetKey();
 
 	auto newOrigTexture = SingleTextureAsset::Create( oldTA->GetOriginal()->GetData(), origKey, atlasW, atlasH, TextureFormat::F_A8R8G8B8, true );
 
@@ -210,7 +210,7 @@ void Text::AddTexturesKey()
 
 		for( SizeType i = 0; i < mmAssetDesc->GetLevelsNum(); ++i )
 		{
-			auto key			= TextureCache::GenKeyForSingleTexture( mmAssetDesc->GetLevelDesc( i ) );
+			auto key			= mmAssetDesc->GetLevelDesc( i )->GetKey();
 
 			auto mm = oldTA->GetMipMaps()->GetLevel( i );
 			auto w = mm->GetWidth();

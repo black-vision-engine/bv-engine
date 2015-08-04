@@ -1,6 +1,7 @@
 #include "TextureAssetDescriptor.h"
 #include "LibImage.h"
 #include "Engine/Types/EnumsUtils.h"
+#include "Tools/Utils.h"
 #include <cassert>
 
 namespace bv
@@ -155,6 +156,33 @@ TextureAssetDesc::TextureAssetDesc( const SingleTextureAssetDescConstPtr & origD
 TextureAssetLoadingType TextureAssetDesc::GetLoadingType() const
 {
 	return m_loadingType;
+}
+
+// ***********************
+//
+std::string				TextureAssetDesc::GetKey		() const
+{
+	switch( GetLoadingType() )
+	{
+		case TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
+			return this->GetOrigTextureDesc()->GetKey();
+		case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
+			return this->GetOrigTextureDesc()->GetKey() + toString( this->GetMipMapsDesc()->GetLevelsNum() ) + toString( (int)this->GetMipMapsDesc()->GetFilter() );
+		case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
+		{
+			auto ret = this->GetOrigTextureDesc()->GetKey();
+
+			for( SizeType i = 0; i < this->GetMipMapsDesc()->GetLevelsNum(); ++i )
+				ret += this->GetMipMapsDesc()->GetLevelDesc( i )->GetKey();
+
+			ret += toString( this->GetMipMapsDesc()->GetLevelsNum() ) + toString( (int)this->GetMipMapsDesc()->GetFilter() );
+
+			return ret;
+		}
+		default:
+			assert( !"Imposible enum value" );
+			return "";
+	}
 }
 
 // ***********************

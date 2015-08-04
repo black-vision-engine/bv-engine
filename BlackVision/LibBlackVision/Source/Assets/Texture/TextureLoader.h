@@ -25,7 +25,7 @@ public:
 private:
 
 	static MemoryChunkConstPtr		    LoadImage			( const std::string & path, UInt32 * width, UInt32 * height, UInt32 * bpp, UInt32 * channelNum );
-	static SingleTextureAssetConstPtr	LoadSingleTexture	( const SingleTextureAssetDescConstPtr & sinlgeTextureResDesc, bool loadFromCache = true );
+	static SingleTextureAssetConstPtr	LoadSingleTexture	( const SingleTextureAssetDescConstPtr & singleTextureResDesc, bool loadFromCache = true );
 
 	static TextureAssetConstPtr			LoadOrginalTextureOnly			( const TextureAssetDescConstPtr & desc );
 	static TextureAssetConstPtr			LoadTextureAndMipMaps			( const TextureAssetDescConstPtr & desc );

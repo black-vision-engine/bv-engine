@@ -1,6 +1,9 @@
 #include "MipMapAssetDescriptor.h"
 #include "MipMapBuilder.h"
 
+#include <sstream>
+#include <cassert>
+
 namespace bv
 {
 
@@ -64,8 +67,11 @@ void MipMapAssetDesc::GenereateLevelsDescs( const SingleTextureAssetDescConstPtr
 {
 	auto mmSizes = tools::GenerateMipmapsSizes( tools::ImageSize( (unsigned int)origTexture->GetWidth(), (unsigned int)origTexture->GetHeight() ) );
 
-	for( auto mms : mmSizes )
-		m_mipMapDescs.push_back( SingleTextureAssetDesc::Create( origTexture->GetImagePath(), mms.width, mms.height, origTexture->GetFormat(), origTexture->IsCacheable() ) );
+	for( SizeType i = 0; i < mmSizes.size(); ++i )
+	{
+		auto key = GenKeyForGeneratedMipMap( origTexture->GetImagePath(), mmSizes[ i ].width, mmSizes[ i ].height, origTexture->GetFormat(), i, m_filterType );
+		m_mipMapDescs.push_back( GeneratedSingleTextureAssetDesc::Create( key, mmSizes[ i ].width, mmSizes[ i ].height, origTexture->GetFormat(), origTexture->IsCacheable() ) );
+	}
 }
 
 // *******************************
@@ -94,6 +100,35 @@ bool MipMapAssetDesc::IsCacheable() const
 const std::string &	MipMapAssetDesc::UID()
 {
 	return MipMapAssetDesc::uid;
+}
+
+
+// ******************************
+//
+namespace 
+{
+	// FIXME: Should be moved to some core module.
+	template< typename T > 
+	std::string toString( const T & t )
+	{
+		std::ostringstream ss;
+		ss << t;
+		return ss.str();
+	}
+
+	template<> 
+	std::string toString< std::string >( const std::string & t )
+	{
+		return t;
+	}
+
+} // anonymous
+
+// ******************************
+//
+std::string	MipMapAssetDesc::GenKeyForGeneratedMipMap( const std::string & origPath, SizeType width, SizeType height, TextureFormat format, SizeType mmLevel, MipMapFilterType mmFiletType )
+{
+	return toString( origPath ) + "W" + toString( width ) + "H" + toString( height ) + "F" + toString( (int)format ) + "ML" + toString( mmLevel ) + "MFT" + toString( (int)mmFiletType );
 }
 
 } // bv
