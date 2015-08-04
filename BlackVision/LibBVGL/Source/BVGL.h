@@ -22,9 +22,30 @@ public:
 
 	static void                 bvglDepthRange              ( GLclampd zNear, GLclampd zFar );
 
+// Shaders
+	static GLuint               bvglCreateProgram           ();
+	static void                 bvglDeleteProgram           ( GLuint program );
+
+	static GLuint               bvglCreateShader            ( GLenum type );
+	static void                 bvglDeleteShader            ( GLuint shader );
+
 	static void                 bvglLinkProgram             ( GLuint program );
 	static void                 bvglUseProgram              ( GLuint program );
 	static void                 bvglValidateProgram         ( GLuint program );
+
+	static void                 bvglShaderSource            ( GLuint shader, GLsizei count, const GLchar ** strings, const GLint * length );
+	static void                 bvglCompileShader           ( GLuint shader );
+	static void                 bvglAttachShader            ( GLuint program, GLuint shader );
+
+	static void                 bvglGetProgramiv            ( GLuint program, GLenum pname, GLint * param );
+	static void                 bvglGetProgramInfoLog       ( GLuint program, GLsizei bufSize, GLsizei * length, GLchar * infoLog );
+
+	static void                 bvglGetShaderiv             ( GLuint shader, GLenum pname, GLint * param );
+	static void                 bvglGetShaderInfoLog        ( GLuint shader, GLsizei bufSize, GLsizei * length, GLchar * infoLog );
+
+// uniforms
+	static void                 bvglGetActiveUniform        ( GLuint program, GLuint index, GLsizei bufSize, GLsizei * length, GLint * size, GLenum * type, GLchar * name );
+	static GLint                bvglGetUniformLocation      ( GLuint program, const GLchar * name );
 
 	static void                 bvglUniform1i               ( GLint location, GLint v );
 
@@ -37,21 +58,9 @@ public:
 	static void                 bvglUniformMatrix3fv        ( GLint location, GLsizei count, GLboolean transpose, const GLfloat * value );
 	static void                 bvglUniformMatrix4fv        ( GLint location, GLsizei count, GLboolean transpose, const GLfloat * value );
 
-	static void                 bvglShaderSource            ( GLuint shader, GLsizei count, const GLchar ** strings, const GLint * length );
-	static void                 bvglCompileShader           ( GLuint shader );
-	static void                 bvglAttachShader            ( GLuint program, GLuint shader );
-
-	static void                 bvglGetProgramiv            ( GLuint program, GLenum pname, GLint * param );
-	static void                 bvglGetProgramInfoLog       ( GLuint program, GLsizei bufSize, GLsizei * length, GLchar * infoLog );
-
-	static void                 bvglGetActiveUniform        ( GLuint program, GLuint index, GLsizei bufSize, GLsizei * length, GLint * size, GLenum * type, GLchar * name );
-	static GLint                bvglGetUniformLocation      ( GLuint program, const GLchar * name );
-
 	static void                 bvglGetActiveAttrib         ( GLuint program, GLuint index, GLsizei bufSize, GLsizei * length, GLint * size, GLenum * type, GLchar * name );
 	static GLint                bvglGetAttribLocation       ( GLuint program, const GLchar * name );
 
-	static void                 bvglGetShaderiv             ( GLuint shader, GLenum pname, GLint * param );
-	static void                 bvglGetShaderInfoLog        ( GLuint shader, GLsizei bufSize, GLsizei * length, GLchar * infoLog );
 
 	static void                 bvglGetIntegerv             ( GLenum pname, GLint * params );
 	static void                 bvglGetDoublev              ( GLenum pname, GLdouble * params );
@@ -59,50 +68,8 @@ public:
 	static void                 bvglBindAttribLocation      ( GLuint program, GLuint index, const GLchar * name );
 	static void                 bvglBindFragDataLocation    ( GLuint program, GLuint colorNumber, const GLchar * name );
 
-	static GLuint               bvglCreateProgram           ();
-	static void                 bvglDeleteProgram           ( GLuint program );
-
-	static GLuint               bvglCreateShader            ( GLenum type );
-	static void                 bvglDeleteShader            ( GLuint shader );
-
-	static void                 bvglGenBuffers              ( GLsizei n, GLuint * buffers );
-	static void                 bvglDeleteBuffers           ( GLsizei n, const GLuint * buffers );
-
-	static void                 bvglBindBuffer              ( GLenum target, GLuint buffer );
-	static void                 bvglBufferData              ( GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage );
-	static void					bvglBufferSubData			( GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid * data );
-
-	static GLvoid *             bvglMapBuffer               ( GLenum target, GLenum access );
-	static GLboolean            bvglUnmapBuffer             ( GLenum target );
-
-	static void                 bvglGenTextures             ( GLsizei n, GLuint * textures );
-	static void                 bvglDeleteTextures          ( GLsizei n, const GLuint * textures );
-
-	static void                 bvglTexImage2D              ( GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid * pixels );
-	static void                 bvglActiveTexture           ( GLenum texture );
-
-	static void                 bvglTexSubImage2D           ( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid * pixels );
-	static void                 bvglBindTexture             ( GLenum target, GLuint texture );
-	static void                 bvglTexParameteri           ( GLenum target, GLenum pname, GLint param );
-	static void                 bvglTexParameterfv          ( GLenum target, GLenum pname, const GLfloat * params );
-
 	static void                 bvglReadBuffer              ( GLenum mode );
 	static void                 bvglReadPixels              ( GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid * pixels );
-
-	static void                 bvglGenFramebuffers         ( GLsizei n, GLuint * framebuffers );
-	static void                 bvglDeleteFramebuffers      ( GLsizei n, const GLuint * framebuffers );
-
-	static void                 bvglGenRenderbuffers        ( GLsizei n, GLuint * renderbuffers );
-	static void                 bvglDeleteRenderbuffers     ( GLsizei n, const GLuint * renderbuffers );
-
-	static void                 bvglBindRenderbuffer        ( GLenum target, GLuint renderbuffer );
-	static void                 bvglRenderbufferStorage     ( GLenum target, GLenum internalformat, GLsizei width, GLsizei height );
-
-	static void                 bvglBindFramebuffer         ( GLenum target, GLuint framebuffer );
-	static void                 bvglFramebufferTexture2D    ( GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level ) ;
-	static void                 bvglFramebufferRenderbuffer ( GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer );
-
-	static GLenum               bvglCheckFramebufferStatus  ( GLenum target );
 
 	static void                 bvglEnable                  ( GLenum cap );
 	static void                 bvglDisable                 ( GLenum cap );
@@ -137,6 +104,12 @@ public:
 	static void					bvglVertexAttribDivisor		( GLuint index,  GLuint divisor );
 
 // Images and textures
+	static void                 bvglGenTextures             ( GLsizei n, GLuint * textures );
+	static void                 bvglDeleteTextures          ( GLsizei n, const GLuint * textures );
+
+	static void                 bvglActiveTexture           ( GLenum texture );
+	
+	static void                 bvglBindTexture             ( GLenum target, GLuint texture );
 #ifdef GL_VERSION_4_4
 	static void					bvglBindImageTexture			( GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format );
 	static void					bvglBindImageTextures			( GLuint first, GLsizei count, const GLuint textures );
@@ -154,16 +127,19 @@ public:
 	static void					bvglCompressedTexSubImage3D		( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid* data );
 
 	static void					bvglTexImage1D					( GLenum target, GLint level, GLint internalFormat, GLsizei width, GLint border, GLenum format, GLenum type, const GLvoid* data );
+	static void                 bvglTexImage2D					( GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid * pixels );
 	static void					bvglTexImage3D					( GLenum target, GLint level, GLint internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const GLvoid* data );
 	static void					bvglTexImage2DMultisample		( GLenum target, GLsizei samples, GLint internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocations );
 	static void					bvglTexImage3DMultisample		( GLenum target, GLsizei samples, GLint internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedSampleLocations );
 
 	static void					bvglTexStorage1D				( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width );
+	static void					bvglTexStorage2D				( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height );
 	static void					bvglTexStorage3D				( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth );
 	static void					bvglTexStorage2DMultisample		( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSasmpleLocations );
 	static void					bvglTexStorage3DMultisample		( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedSasmpleLocations );
 
 	static void					bvglTexSubImage1D				( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const GLvoid* pixels );
+	static void                 bvglTexSubImage2D				( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid * pixels );
 	static void					bvglTexSubImage3D				( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const GLvoid* pixels );
 
 #ifdef GL_VERSION_4_5
@@ -194,6 +170,8 @@ public:
     static void					bvglTextureParameteri			( GLuint texture, GLenum pname, GLint param );
     static void					bvglTextureParameterfv			( GLuint texture, GLenum pname, const GLfloat * params );
 #endif
+	static void                 bvglTexParameteri           ( GLenum target, GLenum pname, GLint param );
+	static void                 bvglTexParameterfv          ( GLenum target, GLenum pname, const GLfloat * params );
 
 	static void					bvglCopyTexSubImage1D			( GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width );
 	static void					bvglCopyTexSubImage2D			( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height );
@@ -231,7 +209,13 @@ public:
 
 	static void					bvglDrawTransformFeedback				( GLenum mode, GLuint id );
 	static void					bvglDrawTransformFeedbackInstanced		( GLenum mode, GLuint id, GLsizei primCount );
+
 // Buffer
+	static void                 bvglGenBuffers					( GLsizei n, GLuint * buffers );
+	static void                 bvglDeleteBuffers				( GLsizei n, const GLuint * buffers );
+
+	static void                 bvglBufferData					( GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage );
+	static void					bvglBufferSubData				( GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid * data );
 #ifdef GL_VERSION_4_5
 	static void					bvglNamedBufferData				( GLuint buffer, GLsizei size, const void* data, GLenum usage );
 	static void					bvglNamedBufferStorage			( GLuint buffer, GLsizei size, const void* data, GLbitfield flags );
@@ -248,6 +232,7 @@ public:
 	static void					bvglBindBufferBase				( GLenum target, GLuint index, GLuint buffer );
 	static void					bvglBindBufferRange				( GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size );
 	static void					bvglBindVertexBuffer			( GLuint bindingIndex, GLuint buffer, GLintptr offset, GLsizei stride );
+	static void                 bvglBindBuffer					( GLenum target, GLuint buffer );
 #ifdef GL_VERSION_4_5
 	static void					bvglBindVertexArrayVertexBuffer				( GLuint vaobj, GLuint bindingIndex, GLuint buffer, GLintptr offset, GLsizei stride );
 	static void					bvglBindVertexArrayVertexBuffers			( GLuint vaobj, GLuint first, GLsizei count, const GLuint* buffers, const GLintptr* offsets, const GLsizei* strides );
@@ -258,6 +243,8 @@ public:
 	static GLboolean			bvglUnmapNamedBuffer			( GLuint buffer );
 	static void					bvglCopyNamedBufferSubData		( GLuint readBuffer, GLuint writeBuffer, GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size );
 #endif
+	static GLvoid *             bvglMapBuffer               ( GLenum target, GLenum access );
+	static GLboolean            bvglUnmapBuffer             ( GLenum target );
 	static void*				bvglMapBufferRange				( GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access );
 	static void					bvglCopyBufferSubData			( GLuint readBuffer, GLuint writeBuffer, GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size );
 
@@ -271,8 +258,21 @@ public:
 	static void					bvglBlendFuncSeparatei			( GLuint buf, GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha );
 
 // Framebuffer
-	static void					bvglBlitFramebuffer				( GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter );
+	static void                 bvglGenFramebuffers         ( GLsizei n, GLuint * framebuffers );
+	static void                 bvglDeleteFramebuffers      ( GLsizei n, const GLuint * framebuffers );
+
+	static void                 bvglGenRenderbuffers        ( GLsizei n, GLuint * renderbuffers );
+	static void                 bvglDeleteRenderbuffers     ( GLsizei n, const GLuint * renderbuffers );
+
+	static void                 bvglBindRenderbuffer        ( GLenum target, GLuint renderbuffer );
+	static void                 bvglBindFramebuffer         ( GLenum target, GLuint framebuffer );
+	static void                 bvglFramebufferRenderbuffer ( GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer );
+
 	static void					bvglFramebufferTexture			( GLenum target, GLenum attachment, GLuint texture, GLint level );
+	static void                 bvglFramebufferTexture2D		( GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level ) ;
+	static void					bvglFramebufferTextureLayer		( GLenum target, GLenum attachment, GLuint texture, GLint level, GLint layer );
+
+	static void					bvglBlitFramebuffer				( GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter );
 #ifdef GL_VERSION_4_5
 	static void					bvglBlitNamedFramebuffer		( GLuint readFramebuffer, GLuint drawFramebuffer, GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter );
 	static void					bvglNamedFramebufferTexture		( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level );
@@ -281,6 +281,8 @@ public:
 
 	static GLenum				bvglCheckNamedFramebufferStatus	( GLuint framebuffer, GLenum target );
 #endif
+	static GLenum               bvglCheckFramebufferStatus		( GLenum target );
+
 
 	static void					bvglClearBufferiv				( GLenum buffer, GLint drawbuffer, const GLint* value );
 	static void					bvglClearBufferuiv				( GLenum buffer, GLint drawbuffer, const GLuint* value );
@@ -300,7 +302,7 @@ public:
 	static void					bvglNamedRenderbufferStorageMultisample		( GLuint renderbuffer, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height );
 #endif	
 	static void					bvglRenderbufferStorageMultisample			( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height );
-
+	static void                 bvglRenderbufferStorage						( GLenum target, GLenum internalformat, GLsizei width, GLsizei height );
 // Drawing
     static void					bvglDrawBuffers										( GLsizei n, const GLenum * bufs );
     static void					bvglDrawArrays										( GLenum mode, GLint first, GLsizei count );

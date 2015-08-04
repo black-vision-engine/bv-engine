@@ -87,7 +87,7 @@ void    BVGLResourceTrackingPlugin::TexImage2D					( GLenum target, GLint level,
 }
 
 // *****************************
-//
+// It's texture unit not texture realy.
 void    BVGLResourceTrackingPlugin::ActiveTexture				( GLenum texture )
 {
     Parent::ActiveTexture( texture );
@@ -101,7 +101,7 @@ void    BVGLResourceTrackingPlugin::TexSubImage2D				( GLenum target, GLint leve
 }
 
 // *****************************
-//
+// @todo It should take into account binding to multiple texture units.
 void    BVGLResourceTrackingPlugin::BindTexture					( GLenum target, GLuint texture )
 {
     Parent::BindTexture( target, texture );
@@ -244,6 +244,145 @@ void    BVGLResourceTrackingPlugin::DisableVertexAttribArray	( GLuint index )
     Parent::DisableVertexAttribArray( index );
 
     m_vertexarrays.GetBoundResource( 1 ).Disable( index );
+}
+
+#ifdef GL_VERSION_4_4
+// *****************************
+// @todo This should be implemented when binding to multiple texture units will be done.
+void	BVGLResourceTrackingPlugin::BindTextures				( GLuint first, GLsizei count, const GLuint* textures )
+{
+	Parent::BindTextures( first, count, textures );
+}
+#endif
+#ifdef GL_VERSION_4_5
+// *****************************
+// @todo This should be implemented when binding to multiple texture units will be done.
+void	BVGLResourceTrackingPlugin::BindTextureUnit				( GLuint unit, GLuint texture )
+{
+	Parent::BindTextureUnit( unit, texture );
+}
+#endif
+
+
+void BVGLResourceTrackingPlugin::CompressedTexImage1D		( GLenum target, GLint level, GLenum internalFormat, GLsizei width, GLint border, GLsizei imageSize, const GLvoid* data )
+{
+	Parent::CompressedTexImage1D( target, level, internalFormat, width, border, imageSize, data );
+	
+    m_textures.GetBoundResource( target ).Set( width, 0, internalFormat, data );
+    PrintCompleteSummary( "CompressedTexImage1D() called" );
+}
+
+void BVGLResourceTrackingPlugin::CompressedTexImage2D		( GLenum target, GLint level, GLenum internalFormat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid* data )
+{
+	Parent::CompressedTexImage2D( target, level, internalFormat, width, height, border, imageSize, data );
+
+	m_textures.GetBoundResource( target ).Set( width, height, internalFormat, data );
+    PrintCompleteSummary( "CompressedTexImage2D() called" );
+}
+
+void BVGLResourceTrackingPlugin::CompressedTexImage3D		( GLenum target, GLint level, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, const GLvoid* data )
+{
+	Parent::CompressedTexImage3D( target, level, internalFormat, width, height, depth, border, imageSize, data );
+
+	// @todo Textures can't be 3-dimmensional in curretn implementation.
+	m_textures.GetBoundResource( target ).Set( width, height, internalFormat, data );
+    PrintCompleteSummary( "CompressedTexImage3D() called" );
+}
+
+void BVGLResourceTrackingPlugin::CompressedTexSubImage1D		( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, const GLvoid* data )
+{
+	Parent::CompressedTexSubImage1D( target, level, xoffset, width, format, imageSize, data );
+	// @todo TexSubImage2D calls only parent implementation too.Maybe smth should be done here.
+}
+
+void BVGLResourceTrackingPlugin::CompressedTexSubImage2D		( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const GLvoid* data )
+{
+	Parent::CompressedTexSubImage2D( target, level, xoffset, yoffset, width, height, format, imageSize, data );
+	// @todo TexSubImage2D calls only parent implementation too.Maybe smth should be done here.
+}
+
+void BVGLResourceTrackingPlugin::CompressedTexSubImage3D		( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid* data )
+{
+	Parent::CompressedTexSubImage3D( target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, data );
+	// @todo TexSubImage2D calls only parent implementation too.Maybe smth should be done here.
+}
+
+void BVGLResourceTrackingPlugin::TexImage1D					( GLenum target, GLint level, GLint internalFormat, GLsizei width, GLint border, GLenum format, GLenum type, const GLvoid* data )
+{
+	Parent::TexImage1D( target, level, internalFormat, width, border, format, type, data );
+	
+	m_textures.GetBoundResource( target ).Set( width, 0, format, data );
+    PrintCompleteSummary( "TexImage1D() called" );
+}
+
+void BVGLResourceTrackingPlugin::TexImage3D					( GLenum target, GLint level, GLint internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const GLvoid* data )
+{
+	Parent::TexImage3D( target, level, internalFormat, width, height, depth, border, format, type, data );
+		
+	// @todo Textures can't be 3-dimmensional in curretn implementation.
+	m_textures.GetBoundResource( target ).Set( width, height, format, data );
+    PrintCompleteSummary( "TexImage3D() called" );
+}
+
+/**GL4.3*/
+void BVGLResourceTrackingPlugin::TexImage2DMultisample		( GLenum target, GLsizei samples, GLint internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocations )
+{
+	Parent::TexImage2DMultisample( target, samples, internalFormat, width, height, fixedSampleLocations );
+}
+/**GL4.3*/
+void BVGLResourceTrackingPlugin::TexImage3DMultisample		( GLenum target, GLsizei samples, GLint internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedSampleLocations )
+{
+	Parent::TexImage3DMultisample( target, samples, internalFormat, width, height, depth, fixedSampleLocations );
+}
+
+void BVGLResourceTrackingPlugin::TexSubImage1D				( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const GLvoid* pixels )
+{
+	Parent::TexSubImage1D( target, level, xoffset, width, format, type, pixels );
+	// @todo TexSubImage2D calls only parent implementation too.Maybe smth should be done here.
+}
+
+void BVGLResourceTrackingPlugin::TexSubImage3D				( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const GLvoid* pixels )
+{
+	Parent::TexSubImage3D( target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels );
+	// @todo TexSubImage2D calls only parent implementation too.Maybe smth should be done here.
+}
+
+void BVGLResourceTrackingPlugin::TexBuffer					( GLenum target, GLenum /*internalFormat*/, GLuint buffer )
+{
+	m_buffers.BindResource( target, buffer );
+}
+
+void BVGLResourceTrackingPlugin::TexBufferRange				( GLenum target, GLenum /*internalFormat*/, GLuint buffer, GLintptr /*offset*/, GLsizeiptr /*size*/ )
+{
+	m_buffers.BindResource( target, buffer );
+}
+
+void BVGLResourceTrackingPlugin::BindBufferBase				( GLenum target, GLuint /*index*/, GLuint buffer )
+{
+	m_buffers.BindResource( target, buffer );
+}
+
+void BVGLResourceTrackingPlugin::BindBufferRange				( GLenum target, GLuint /*index*/, GLuint buffer, GLintptr /*offset*/, GLsizeiptr /*size*/ )
+{
+	m_buffers.BindResource( target, buffer );
+}
+
+void BVGLResourceTrackingPlugin::FramebufferTexture			( GLenum target, GLenum attachment, GLuint texture, GLint level )
+{
+	Parent::FramebufferTexture( target, attachment, texture, level );
+	m_framebuffers.GetBoundResource( target ).AttachTexture2D( attachment, target, texture, level );
+}
+
+void BVGLResourceTrackingPlugin::FramebufferTextureLayer		( GLenum target, GLenum attachment, GLuint texture, GLint level, GLint layer )
+{
+	Parent::FramebufferTextureLayer( target, attachment, texture, level, layer );
+	m_framebuffers.GetBoundResource( target ).AttachTexture2D( attachment, target, texture, level );
+}
+
+void BVGLResourceTrackingPlugin::RenderbufferStorageMultisample			( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height )
+{
+	Parent::RenderbufferStorageMultisample( target, samples, internalFormat, width, height );
+	m_renderbuffers.GetBoundResource( target ).Set( internalFormat, width, height );
 }
 
 // *****************************

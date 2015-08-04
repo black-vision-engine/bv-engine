@@ -164,6 +164,7 @@ public:
 	virtual void				TexImage3DMultisample		( GLenum target, GLsizei samples, GLint internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedSampleLocations );
 
 	virtual void				TexStorage1D				( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width );
+	virtual void				TexStorage2D				( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height );
 	virtual void				TexStorage3D				( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth );
 	virtual void				TexStorage2DMultisample		( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSasmpleLocations );
 	virtual void				TexStorage3DMultisample		( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedSasmpleLocations );
@@ -278,6 +279,7 @@ public:
 // Framebuffer
 	virtual void				BlitFramebuffer				( GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter );
 	virtual void				FramebufferTexture			( GLenum target, GLenum attachment, GLuint texture, GLint level );
+	virtual void				FramebufferTextureLayer		( GLenum target, GLenum attachment, GLuint texture, GLint level, GLint layer );
 #ifdef GL_VERSION_4_5
 	virtual void				BlitNamedFramebuffer		( GLuint readFramebuffer, GLuint drawFramebuffer, GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter );
 	virtual void				NamedFramebufferTexture		( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level );

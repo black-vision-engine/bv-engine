@@ -806,6 +806,11 @@ void BVGL::bvglTexStorage1D				( GLenum target, GLsizei levels, GLenum internalF
 	bvgl.TexStorage1D( target, levels, internalFormat, width );
 }
 
+void BVGL::bvglTexStorage2D				( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height )
+{
+	bvgl.TexStorage2D( target, levels, internalFormat, width, height );
+}
+
 /**GL4.2*/
 void BVGL::bvglTexStorage3D				( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth )
 {
@@ -1212,6 +1217,11 @@ void BVGL::bvglBlitNamedFramebuffer		( GLuint readFramebuffer, GLuint drawFrameb
 void BVGL::bvglFramebufferTexture			( GLenum target, GLenum attachment, GLuint texture, GLint level )
 {
 	bvgl.FramebufferTexture( target, attachment, texture, level );
+}
+
+void BVGL::bvglFramebufferTextureLayer		( GLenum target, GLenum attachment, GLuint texture, GLint level, GLint layer )
+{
+	bvgl.FramebufferTextureLayer( target, attachment, texture, level, layer );
 }
 
 #ifdef GL_VERSION_4_5
