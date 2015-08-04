@@ -1,3 +1,5 @@
+#include "BasicInterpolator.h"
+
 namespace bv
 {
 
@@ -6,7 +8,10 @@ class CompositeBezierInterpolator
     typedef float TimeValueT;
     typedef float ValueT;
 
-    BasicInterpolator< float, float > i;
+//    BasicInterpolator< float, float > i;
+    std::vector<Key<TimeValueT, ValueT>>    keys;
+    TimeValueT                              tolerance;
+
 public:
     typedef TimeValueT  TimeType;
     typedef ValueT      ValueType;
@@ -14,8 +19,8 @@ public:
     typedef TimeValueT                  TimeT;
     typedef ValueT                      ValT;
 public:
-    void AddKey             ( TimeValueT t, const ValueT & v ) { i.AddKey( t, v ); }
-    ValueT Evaluate         ( TimeValueT t ) const { return i.Evaluate( t ); }
+    void AddKey             ( TimeValueT t, const ValueT & v );
+    ValueT Evaluate         ( TimeValueT t ) const;
 
 // FIXME: below is to remove
     const std::vector<Key<TimeValueT, ValueT>> & AccessKeys() const { static std::vector<Key<TimeValueT, ValueT>> ret; return ret; };
