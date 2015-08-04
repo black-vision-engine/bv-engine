@@ -873,6 +873,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\SerializationObjects.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeBezierInterpolator.cpp">
+      <Filter>Mathematics\Interpolators</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1768,6 +1771,10 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\SerializationObjects.h">
       <Filter>Engine\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeBezierInterpolator.h">
+      <Filter>Mathematics\Interpolators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
