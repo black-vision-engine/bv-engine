@@ -19,6 +19,8 @@ class CompositeBezierInterpolator
     std::vector< IInterpolator<TimeValueT, ValueT >* > interpolators; // FIXME: ptr-ize
     TimeValueT                              tolerance;
 
+    BasicInterpolator< TimeValueT, ValueT > i; // never FIXME :P
+
 public:
     typedef TimeValueT  TimeType;
     typedef ValueT      ValueType;

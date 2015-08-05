@@ -28,6 +28,8 @@ public:
 
 void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const ValueT & v ) 
 { 
+    i.AddKey( t, v ); // never FIXME :P
+
     assert( keys.size() == 0 || keys[ keys.size()-1 ].t <= t ); // FIXME don't assume that for God's sake!
     keys.push_back( Key<TimeValueT, ValueT>( t, v ) ); // FIXME sortme
     if( keys.size() > 1 )
@@ -38,13 +40,13 @@ void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const Value
 float CompositeBezierInterpolator::PreEvaluate( float /*t*/ ) const { return keys[ 0 ].val; } // never FIXME :P
 float CompositeBezierInterpolator::PostEvaluate( float /*t*/ ) const { return keys[ keys.size()-1 ].val; } // never FIXME :P
 
-//BasicInterpolator< float, float > BIFK( const std::vector< Key<float, float> >& keys )
-//{
-//    BasicInterpolator< float, float> bi;
-//    for( auto key : keys )
-//        bi.AddKey( key );
-//    return bi;
-//}
+BasicInterpolator< float, float > BIFK( const std::vector< Key<float, float> >& keys )
+{
+    BasicInterpolator< float, float> bi;
+    for( auto key : keys )
+        bi.AddKey( key );
+    return bi;
+}
 
 CompositeBezierInterpolator::ValueT CompositeBezierInterpolator::Evaluate         ( TimeValueT t ) const 
 { 
@@ -67,11 +69,13 @@ CompositeBezierInterpolator::ValueT CompositeBezierInterpolator::Evaluate       
     if( t > keys[ i+1 ].t )
         return PostEvaluate( t );
 
-    return interpolators[ i ]->Evaluate( t );
-    //auto v = interpolators[ i ]->Evaluate( t );
-    //auto vv = BIFK( keys ).Evaluate( t );
-    //assert( fabs( v - vv ) < 0.000001 );
-    //return v;
+    //return interpolators[ i ]->Evaluate( t );
+    auto v = interpolators[ i ]->Evaluate( t );
+    auto vv = BIFK( keys ).Evaluate( t );
+    auto vvv = this->i.Evaluate( t );
+    assert( fabs( v - vv ) < 0.0001 );
+    assert( fabs( v - vvv ) < 0.0001 );
+    return v;
 }
 
 } // bv
