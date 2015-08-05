@@ -70,7 +70,6 @@ public:
 												SizeType fontSize, 
 												SizeType blurSize,
 												SizeType outlineSize,
-												MipMapFilterType mmFilterType,
 												SizeType mmLevels );
 
     friend class Text;

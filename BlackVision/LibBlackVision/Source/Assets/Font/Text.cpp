@@ -196,7 +196,7 @@ void Text::AddTexturesKey()
 
 	UInt32 levelsNum = m_withMipmaps ? GetMMLevelsNum( m_fontSize ) : 0;
 
-	auto atlasAssetDesc = TextAtlas::GenerateTextAtlasAssetDescriptor( m_fontFile, atlasW, atlasH, m_fontSize, m_blurSize, m_outlineWidth, MipMapFilterType::BILINEAR, levelsNum );
+	auto atlasAssetDesc = TextAtlas::GenerateTextAtlasAssetDescriptor( m_fontFile, atlasW, atlasH, m_fontSize, m_blurSize, m_outlineWidth, levelsNum );
 
 	auto origKey = atlasAssetDesc->GetOrigTextureDesc()->GetKey();
 

@@ -36,7 +36,7 @@ bool SingleTextureAssetDesc::IsCacheable	() const
 //
 std::string	SingleTextureAssetDesc::GetKey	() const
 {
-	return m_imagePath;
+	return GetImagePath();
 }
 
 // ***********************

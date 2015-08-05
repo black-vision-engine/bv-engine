@@ -3,6 +3,7 @@
 
 #include <sstream>
 #include <cassert>
+#include <algorithm>
 
 namespace bv
 {
@@ -41,9 +42,9 @@ MipMapAssetDescConstPtr	MipMapAssetDesc::Create( const std::vector< SingleTextur
 
 // *******************************
 //
-MipMapAssetDescConstPtr	MipMapAssetDesc::Create( MipMapFilterType ft, const SingleTextureAssetDescConstPtr & origTexture )
+MipMapAssetDescConstPtr	MipMapAssetDesc::Create( MipMapFilterType ft, const SingleTextureAssetDescConstPtr & origTexture, Int32 maxLevelsNum )
 {
-	return std::make_shared< MipMapAssetDesc >( ft, origTexture );
+	return std::make_shared< MipMapAssetDesc >( ft, origTexture, maxLevelsNum );
 }
 
 // *******************************
@@ -55,21 +56,23 @@ MipMapAssetDesc::MipMapAssetDesc	( const std::vector< SingleTextureAssetDescCons
 
 // *******************************
 //
-MipMapAssetDesc::MipMapAssetDesc	( MipMapFilterType ft, const SingleTextureAssetDescConstPtr & origTextureDesc )
+MipMapAssetDesc::MipMapAssetDesc	( MipMapFilterType ft, const SingleTextureAssetDescConstPtr & origTextureDesc, Int32 maxLevelsNum )
 	: m_filterType( ft )
 {
-	GenereateLevelsDescs( origTextureDesc );
+	GenereateLevelsDescs( origTextureDesc, maxLevelsNum );
 }
 
 // *******************************
 //
-void MipMapAssetDesc::GenereateLevelsDescs( const SingleTextureAssetDescConstPtr & origTexture )
+void MipMapAssetDesc::GenereateLevelsDescs( const SingleTextureAssetDescConstPtr & origTexture, Int32 maxLevelsNum )
 {
 	auto mmSizes = tools::GenerateMipmapsSizes( tools::ImageSize( (unsigned int)origTexture->GetWidth(), (unsigned int)origTexture->GetHeight() ) );
 
-	for( SizeType i = 0; i < mmSizes.size(); ++i )
+	auto levelsNum = maxLevelsNum < 0 ? mmSizes.size() : std::min( mmSizes.size(), (SizeType)maxLevelsNum );
+
+	for( SizeType i = 0; i < levelsNum; ++i )
 	{
-		auto key = GenKeyForGeneratedMipMap( origTexture->GetImagePath(), mmSizes[ i ].width, mmSizes[ i ].height, origTexture->GetFormat(), i, m_filterType );
+		auto key = GenKeyForGeneratedMipMap( origTexture->GetKey(), mmSizes[ i ].width, mmSizes[ i ].height, origTexture->GetFormat(), i, m_filterType );
 		m_mipMapDescs.push_back( GeneratedSingleTextureAssetDesc::Create( key, mmSizes[ i ].width, mmSizes[ i ].height, origTexture->GetFormat(), origTexture->IsCacheable() ) );
 	}
 }

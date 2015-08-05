@@ -213,27 +213,19 @@ TextureAssetConstPtr	TextAtlas::GetAsset() const
 
 // *********************************
 //
-TextureAssetDescConstPtr TextAtlas::GenerateTextAtlasAssetDescriptor( const std::string & fontFileName, UInt32 width, UInt32 height, SizeType fontSize, SizeType blurSize, SizeType outlineSize, MipMapFilterType mmFilterType, SizeType mmLevels )
+TextureAssetDescConstPtr TextAtlas::GenerateTextAtlasAssetDescriptor( const std::string & fontFileName, UInt32 width, UInt32 height, SizeType fontSize, SizeType blurSize, SizeType outlineSize, SizeType mmLevels )
 {
-	auto namePrefix = fontFileName + "FS" + std::to_string( fontSize ) + "BS" + std::to_string( blurSize ) + "OS" + std::to_string( outlineSize );
+	auto namePrefix = fontFileName + "W" + std::to_string( width ) + "H" + std::to_string( height ) + "FS" + std::to_string( fontSize ) + "BS" + std::to_string( blurSize ) + "OS" + std::to_string( outlineSize );
 
-	namePrefix += "FT" + std::to_string( (UInt32)mmFilterType );
-
-	auto zeroLevelDesc = SingleTextureAssetDesc::Create( namePrefix, width, height, TextureFormat::F_A8R8G8B8, true );
-
-	auto mmSizes = tools::GenerateMipmapsSizes( tools::ImageSize( width, height ) );
+	auto zeroLevelDesc = GeneratedSingleTextureAssetDesc::Create( namePrefix, width, height, TextureFormat::F_A8R8G8B8, true );
 
 	MipMapAssetDescConstPtr mmDesc = nullptr;
 
-	std::vector< SingleTextureAssetDescConstPtr > mipMapsDescs;
-	for( SizeType i = 0; i < std::min( mmSizes.size(), (SizeType)mmLevels); ++i )
+	if ( mmLevels > 0 )
 	{
-		mipMapsDescs.push_back( SingleTextureAssetDesc::Create( namePrefix, mmSizes[ i ].width, mmSizes[ i ].height, TextureFormat::F_A8R8G8B8, true ) );
-	}
+		auto mmSizes = tools::GenerateMipmapsSizes( tools::ImageSize( width, height ) );
 
-	if( mipMapsDescs.size() > 0 )
-	{
-		mmDesc = MipMapAssetDesc::Create( mipMapsDescs, MipMapFilterType::BILINEAR );
+		mmDesc = MipMapAssetDesc::Create( MipMapFilterType::BILINEAR, zeroLevelDesc, ( Int32 )mmLevels );
 	}
 
 	return TextureAssetDesc::Create( zeroLevelDesc, mmDesc );
