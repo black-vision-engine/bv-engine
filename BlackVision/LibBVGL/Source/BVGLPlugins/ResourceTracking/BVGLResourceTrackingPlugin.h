@@ -66,6 +66,12 @@ public:
 #endif
 #ifdef GL_VERSION_4_5
 	virtual void		BindTextureUnit				( GLuint unit, GLuint texture ) override;
+
+	virtual void		TextureStorage1D			( GLuint texture, GLsizei levels, GLenum internalFormat, GLsizei width ) override;
+	virtual void		TextureStorage2D			( GLuint texture, GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height ) override;
+	virtual void		TextureStorage3D			( GLuint texture, GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth ) override;
+	virtual void		TextureStorage2DMultisample	( GLuint texture, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocations ) override;
+	virtual void		TextureStorage3DMultisample	( GLuint texture, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedSampleLocations ) override;
 #endif
 
 	virtual void		CompressedTexImage1D		( GLenum target, GLint level, GLenum internalFormat, GLsizei width, GLint border, GLsizei imageSize, const GLvoid* data ) override;
@@ -102,6 +108,9 @@ public:
 	virtual void		NamedFramebufferTexture		( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level ) override;
 	virtual void		NamedFramebufferTextureLayer( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level, GLint layer ) override;
 	virtual void		NamedFramebufferRenderbuffer( GLuint framebuffer, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer ) override;
+
+	virtual void		NamedRenderbufferStorage				( GLuint renderbuffer, GLenum internalFormat, GLsizei width, GLsizei height ) override;
+	virtual void		NamedRenderbufferStorageMultisample		( GLuint renderbuffer, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height ) override;
 #endif
 #ifdef GL_VERSION_4_4
 	virtual void		BufferStorage				( GLenum target, GLsizeiptr size, const GLvoid* data, GLbitfield flags ) override;
