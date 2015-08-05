@@ -46,13 +46,14 @@ struct TextureDesc
 	GLsizei			depth;
     GLenum          format;
 	GLenum			type;
+	GLint			mipmapLevels;
     const GLvoid *  pixels;
 
     TextureDesc         ();
 
 	void	SetTypeIfFirstBind		( GLenum target );
     void    SetID					( GLuint ID );
-    void    Set						( GLsizei width, GLsizei height, GLsizei depth, GLenum format, const GLvoid * pixels );
+    void    Set						( GLsizei width, GLsizei height, GLsizei depth, GLint level, GLenum format, const GLvoid * pixels );
 
     GLuint  DataSize    () const;
     GLuint  PixelSize   ( GLenum format ) const;

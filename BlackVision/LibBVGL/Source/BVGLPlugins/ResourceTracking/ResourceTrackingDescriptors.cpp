@@ -88,6 +88,7 @@ TextureDesc::TextureDesc()
 	, type( 0 )
     , format( 0 )
     , pixels( nullptr )
+	, mipmapLevels( 0 )
 {
 }
 
@@ -108,13 +109,22 @@ void    TextureDesc::SetID  ( GLuint ID )
 
 // *****************************
 //
-void    TextureDesc::Set    ( GLsizei width, GLsizei height, GLsizei depth, GLenum format, const GLvoid * pixels )
+void    TextureDesc::Set    ( GLsizei width, GLsizei height, GLsizei depth, GLint level, GLenum format, const GLvoid * pixels )
 {
-    this->width     = width;
-    this->height    = height;
-	this->depth		= depth;
-    this->format    = format;
-    this->pixels    = pixels;
+	if( level == 0 )
+	{// We need width, height and depth from base image not mipmap
+		this->width     = width;
+		this->height    = height;
+		this->depth		= depth;
+		this->format    = format;
+		this->pixels    = pixels;
+	}
+	else
+	{
+		// Counts mipmap levels that are filled with data
+		if( level > mipmapLevels )
+			mipmapLevels = level;
+	}
 }
 
 // *****************************
@@ -151,7 +161,9 @@ std::string  TextureDesc::Summary   () const
 
     ss << "ID: " << std::setw( ID_W ) << std::setfill( ' ' ) << ID << " (" << std::setw( 4 ) << width << ", " << std::setw( 4 ) << height << "), ";
     ss << "Size: " << std::setw( SIZE_W ) << FormatSizeString( DataSize() ) << " ";
-    ss << "Format: " << std::setw( 4 ) << TranslateNoGLPrefix( BVGLTranslator::TranslateTextureFormat, format );
+    ss << "Format: " << std::setw( 4 ) << TranslateNoGLPrefix( BVGLTranslator::TranslateTextureFormat, format ) << " ";
+	ss << "Type: " << std::setw( 4 ) << TranslateNoGLPrefix( BVGLTranslator::TranslateTextureTarget, type ) << " ";
+	ss << "Mipmaps: " << std::setw( 3 ) << this->mipmapLevels;
 
     return ss.str();
 }

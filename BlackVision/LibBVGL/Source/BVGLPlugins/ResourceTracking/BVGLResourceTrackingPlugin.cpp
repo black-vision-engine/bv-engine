@@ -81,7 +81,7 @@ void    BVGLResourceTrackingPlugin::TexImage2D					( GLenum target, GLint level,
 {
     Parent::TexImage2D( target, level, internalformat, width, height, border, format, type, pixels );
 
-	m_textures.GetBoundResource( target ).Set( width, height, 0, format, pixels );
+	m_textures.GetBoundResource( target ).Set( width, height, 0, level, format, pixels );
 
     PrintCompleteSummary( "TexImage2D() called" );
 }
@@ -270,7 +270,7 @@ void BVGLResourceTrackingPlugin::CompressedTexImage1D		( GLenum target, GLint le
 {
 	Parent::CompressedTexImage1D( target, level, internalFormat, width, border, imageSize, data );
 	
-	m_textures.GetBoundResource( target ).Set( width, 0, 0, internalFormat, data );
+	m_textures.GetBoundResource( target ).Set( width, 0, 0, level, internalFormat, data );
     PrintCompleteSummary( "CompressedTexImage1D() called" );
 }
 
@@ -278,7 +278,7 @@ void BVGLResourceTrackingPlugin::CompressedTexImage2D		( GLenum target, GLint le
 {
 	Parent::CompressedTexImage2D( target, level, internalFormat, width, height, border, imageSize, data );
 
-	m_textures.GetBoundResource( target ).Set( width, height, 0, internalFormat, data );
+	m_textures.GetBoundResource( target ).Set( width, height, 0, level, internalFormat, data );
     PrintCompleteSummary( "CompressedTexImage2D() called" );
 }
 
@@ -287,7 +287,7 @@ void BVGLResourceTrackingPlugin::CompressedTexImage3D		( GLenum target, GLint le
 	Parent::CompressedTexImage3D( target, level, internalFormat, width, height, depth, border, imageSize, data );
 
 	// @todo Textures can't be 3-dimmensional in curretn implementation.
-	m_textures.GetBoundResource( target ).Set( width, height, depth, internalFormat, data );
+	m_textures.GetBoundResource( target ).Set( width, height, depth, level, internalFormat, data );
     PrintCompleteSummary( "CompressedTexImage3D() called" );
 }
 
@@ -313,7 +313,7 @@ void BVGLResourceTrackingPlugin::TexImage1D					( GLenum target, GLint level, GL
 {
 	Parent::TexImage1D( target, level, internalFormat, width, border, format, type, data );
 	
-	m_textures.GetBoundResource( target ).Set( width, 0, 0, format, data );
+	m_textures.GetBoundResource( target ).Set( width, 0, 0, level, format, data );
     PrintCompleteSummary( "TexImage1D() called" );
 }
 
@@ -321,8 +321,7 @@ void BVGLResourceTrackingPlugin::TexImage3D					( GLenum target, GLint level, GL
 {
 	Parent::TexImage3D( target, level, internalFormat, width, height, depth, border, format, type, data );
 		
-	// @todo Textures can't be 3-dimmensional in curretn implementation.
-	m_textures.GetBoundResource( target ).Set( width, height, 0, format, data );
+	m_textures.GetBoundResource( target ).Set( width, height, depth, level, format, data );
     PrintCompleteSummary( "TexImage3D() called" );
 }
 
@@ -349,23 +348,27 @@ void BVGLResourceTrackingPlugin::TexSubImage3D				( GLenum target, GLint level, 
 	// @todo TexSubImage2D calls only parent implementation too.Maybe smth should be done here.
 }
 
-void BVGLResourceTrackingPlugin::TexBuffer					( GLenum target, GLenum /*internalFormat*/, GLuint buffer )
+void BVGLResourceTrackingPlugin::TexBuffer					( GLenum target, GLenum internalFormat, GLuint buffer )
 {
+	Parent::TexBuffer( target, internalFormat, buffer );
 	m_buffers.BindResource( target, buffer );
 }
 
-void BVGLResourceTrackingPlugin::TexBufferRange				( GLenum target, GLenum /*internalFormat*/, GLuint buffer, GLintptr /*offset*/, GLsizeiptr /*size*/ )
+void BVGLResourceTrackingPlugin::TexBufferRange				( GLenum target, GLenum internalFormat, GLuint buffer, GLintptr offset, GLsizeiptr size )
 {
+	Parent::TexBufferRange( target, internalFormat, buffer, offset, size );
 	m_buffers.BindResource( target, buffer );
 }
 
-void BVGLResourceTrackingPlugin::BindBufferBase				( GLenum target, GLuint /*index*/, GLuint buffer )
+void BVGLResourceTrackingPlugin::BindBufferBase				( GLenum target, GLuint index, GLuint buffer )
 {
+	Parent::BindBufferBase( target, index, buffer );
 	m_buffers.BindResource( target, buffer );
 }
 
-void BVGLResourceTrackingPlugin::BindBufferRange				( GLenum target, GLuint /*index*/, GLuint buffer, GLintptr /*offset*/, GLsizeiptr /*size*/ )
+void BVGLResourceTrackingPlugin::BindBufferRange				( GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size )
 {
+	Parent::BindBufferRange( target, index, buffer, offset, size );
 	m_buffers.BindResource( target, buffer );
 }
 
