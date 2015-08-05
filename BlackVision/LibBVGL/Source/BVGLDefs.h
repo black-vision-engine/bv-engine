@@ -191,12 +191,16 @@ namespace bv {
 #define GL_TEXTURE_BINDING_2D					0x8069
 #define GL_TEXTURE_BINDING_3D					0x806A
 #define GL_TEXTURE_BORDER_COLOR					0x1004
+#define GL_READ_WRITE					0x88BA
 #define GL_STREAM_DRAW					0x88E0
 #define GL_STREAM_READ					0x88E1
-#define GL_READ_WRITE					0x88BA
+#define GL_STREAM_COPY					0x88E2
 #define GL_DYNAMIC_DRAW					0x88E8
+#define GL_DYNAMIC_READ					0x88E9
+#define GL_DYNAMIC_COPY					0x88EA
 #define GL_STATIC_DRAW					0x88E4
 #define GL_STATIC_READ					0x88E5
+#define GL_STATIC_COPY					0x88E6
 
 // Buffer binding target
 #define GL_ARRAY_BUFFER					0x8892

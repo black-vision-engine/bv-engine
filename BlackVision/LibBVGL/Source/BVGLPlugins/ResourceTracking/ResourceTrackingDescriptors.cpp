@@ -109,22 +109,22 @@ void    TextureDesc::SetID  ( GLuint ID )
 
 // *****************************
 //
-void    TextureDesc::Set    ( GLsizei width, GLsizei height, GLsizei depth, GLint level, GLenum format, const GLvoid * pixels )
+void    TextureDesc::Set    ( GLsizei width, GLsizei height, GLsizei depth, GLenum format, const GLvoid * pixels )
 {
-	if( level == 0 )
-	{// We need width, height and depth from base image not mipmap
-		this->width     = width;
-		this->height    = height;
-		this->depth		= depth;
-		this->format    = format;
-		this->pixels    = pixels;
-	}
-	else
-	{
-		// Counts mipmap levels that are filled with data
-		if( level > mipmapLevels )
-			mipmapLevels = level;
-	}
+	this->width     = width;
+	this->height    = height;
+	this->depth		= depth;
+	this->format    = format;
+	this->pixels    = pixels;
+}
+
+// *****************************
+//
+void TextureDesc::NewMipmapLevel( GLint level )
+{
+	// Counts mipmap levels that are filled with data
+	if( level > mipmapLevels )
+		mipmapLevels = level;
 }
 
 // *****************************

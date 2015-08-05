@@ -815,15 +815,15 @@ void BVGLPlugin::TexStorage3D				( GLenum target, GLsizei levels, GLenum interna
 }
 
 /**GL4.3*/
-void BVGLPlugin::TexStorage2DMultisample		( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSasmpleLocations )
+void BVGLPlugin::TexStorage2DMultisample		( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocations )
 {
-	glTexStorage2DMultisample( target, samples, internalFormat, width, height, fixedSasmpleLocations );
+	glTexStorage2DMultisample( target, samples, internalFormat, width, height, fixedSampleLocations );
 }
 
 /**GL4.3*/
-void BVGLPlugin::TexStorage3DMultisample		( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedSasmpleLocations )
+void BVGLPlugin::TexStorage3DMultisample		( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedSampleLocations )
 {
-	glTexStorage3DMultisample( target, samples, internalFormat, width, height, depth, fixedSasmpleLocations );
+	glTexStorage3DMultisample( target, samples, internalFormat, width, height, depth, fixedSampleLocations );
 }
 
 
