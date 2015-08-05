@@ -19,7 +19,11 @@ class LinearEvaluator : public IInterpolator< TimeValueT, ValueT >
     Key key1, key2;
 public:
     LinearEvaluator( Key k1, Key k2 ) : key1( k1 ), key2( k2 ) {}
-    ValueT Evaluate( TimeValueT ) const override { return value; }
+    ValueT Evaluate( TimeValueT t ) const override 
+    { 
+        float alpha = ( t - key1.t ) / ( key2.t - key1.t );
+        return alpha * key2.val + (1-alpha) * key1.val;
+    }
 };
 
 void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const ValueT & v ) 
@@ -27,11 +31,20 @@ void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const Value
     assert( keys.size() == 0 || keys[ keys.size()-1 ].t <= t ); // FIXME don't assume that for God's sake!
     keys.push_back( Key<TimeValueT, ValueT>( t, v ) ); // FIXME sortme
     if( keys.size() > 1 )
-        interpolators.push_back( new ConstEvaluator< TimeValueT, ValueT >( v ) );
+        //interpolators.push_back( new ConstEvaluator< TimeValueT, ValueT >( v ) );
+        interpolators.push_back( new LinearEvaluator< TimeValueT, ValueT >( keys[ keys.size()-2 ], keys[ keys.size()-1 ] ) );
 }
 
 float CompositeBezierInterpolator::PreEvaluate( float /*t*/ ) const { return keys[ 0 ].val; } // never FIXME :P
 float CompositeBezierInterpolator::PostEvaluate( float /*t*/ ) const { return keys[ keys.size()-1 ].val; } // never FIXME :P
+
+//BasicInterpolator< float, float > BIFK( const std::vector< Key<float, float> >& keys )
+//{
+//    BasicInterpolator< float, float> bi;
+//    for( auto key : keys )
+//        bi.AddKey( key );
+//    return bi;
+//}
 
 CompositeBezierInterpolator::ValueT CompositeBezierInterpolator::Evaluate         ( TimeValueT t ) const 
 { 
@@ -55,6 +68,10 @@ CompositeBezierInterpolator::ValueT CompositeBezierInterpolator::Evaluate       
         return PostEvaluate( t );
 
     return interpolators[ i ]->Evaluate( t );
+    //auto v = interpolators[ i ]->Evaluate( t );
+    //auto vv = BIFK( keys ).Evaluate( t );
+    //assert( fabs( v - vv ) < 0.000001 );
+    //return v;
 }
 
 } // bv
