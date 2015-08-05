@@ -140,7 +140,6 @@ public:
 
 	virtual void				VertexAttribDivisor								( GLuint index,  GLuint divisor );
 	
-	// new
 // Images and textures
 #ifdef GL_VERSION_4_4
 	virtual void				BindImageTexture			( GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format );

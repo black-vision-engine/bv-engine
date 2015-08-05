@@ -22,6 +22,29 @@ public:
 
 	static void                 bvglDepthRange              ( GLclampd zNear, GLclampd zFar );
 
+	static void                 bvglEnable                  ( GLenum cap );
+	static void                 bvglDisable                 ( GLenum cap );
+
+	static void                 bvglDepthFunc               ( GLenum func );
+	static void                 bvglDepthMask               ( GLboolean flag );
+
+	static void                 bvglBlendFunc               ( GLenum sfactor, GLenum dfactor );
+	static void                 bvglBlendColor              ( GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha );
+
+	static void                 bvglFrontFace               ( GLenum mode );
+	static void                 bvglCullFace                ( GLenum mode );
+
+	static void                 bvglPolygonMode             ( GLenum face, GLenum mode );
+	static void                 bvglPolygonOffset           ( GLfloat factor, GLfloat units );
+
+	static GLenum               bvglGetError                ();
+
+	static const GLubyte *      bvglGetString               ( GLenum name );
+	static const GLubyte *      bvglGetStringi              ( GLenum name, GLuint index );
+	
+	static void                 bvglReadBuffer              ( GLenum mode );
+	static void                 bvglReadPixels              ( GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid * pixels );
+
 // Shaders
 	static GLuint               bvglCreateProgram           ();
 	static void                 bvglDeleteProgram           ( GLuint program );
@@ -42,6 +65,15 @@ public:
 
 	static void                 bvglGetShaderiv             ( GLuint shader, GLenum pname, GLint * param );
 	static void                 bvglGetShaderInfoLog        ( GLuint shader, GLsizei bufSize, GLsizei * length, GLchar * infoLog );
+	
+	static void                 bvglGetActiveAttrib         ( GLuint program, GLuint index, GLsizei bufSize, GLsizei * length, GLint * size, GLenum * type, GLchar * name );
+	static GLint                bvglGetAttribLocation       ( GLuint program, const GLchar * name );
+
+	static void                 bvglBindAttribLocation      ( GLuint program, GLuint index, const GLchar * name );
+	static void                 bvglBindFragDataLocation    ( GLuint program, GLuint colorNumber, const GLchar * name );
+
+	static void                 bvglGetIntegerv             ( GLenum pname, GLint * params );
+	static void                 bvglGetDoublev              ( GLenum pname, GLdouble * params );
 
 // uniforms
 	static void                 bvglGetActiveUniform        ( GLuint program, GLuint index, GLsizei bufSize, GLsizei * length, GLint * size, GLenum * type, GLchar * name );
@@ -58,39 +90,8 @@ public:
 	static void                 bvglUniformMatrix3fv        ( GLint location, GLsizei count, GLboolean transpose, const GLfloat * value );
 	static void                 bvglUniformMatrix4fv        ( GLint location, GLsizei count, GLboolean transpose, const GLfloat * value );
 
-	static void                 bvglGetActiveAttrib         ( GLuint program, GLuint index, GLsizei bufSize, GLsizei * length, GLint * size, GLenum * type, GLchar * name );
-	static GLint                bvglGetAttribLocation       ( GLuint program, const GLchar * name );
 
-
-	static void                 bvglGetIntegerv             ( GLenum pname, GLint * params );
-	static void                 bvglGetDoublev              ( GLenum pname, GLdouble * params );
-
-	static void                 bvglBindAttribLocation      ( GLuint program, GLuint index, const GLchar * name );
-	static void                 bvglBindFragDataLocation    ( GLuint program, GLuint colorNumber, const GLchar * name );
-
-	static void                 bvglReadBuffer              ( GLenum mode );
-	static void                 bvglReadPixels              ( GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid * pixels );
-
-	static void                 bvglEnable                  ( GLenum cap );
-	static void                 bvglDisable                 ( GLenum cap );
-
-	static void                 bvglDepthFunc               ( GLenum func );
-	static void                 bvglDepthMask               ( GLboolean flag );
-
-	static void                 bvglBlendFunc               ( GLenum sfactor, GLenum dfactor );
-	static void                 bvglBlendColor              ( GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha );
-
-	static void                 bvglFrontFace               ( GLenum mode );
-	static void                 bvglCullFace                ( GLenum mode );
-
-	static void                 bvglPolygonMode             ( GLenum face, GLenum mode );
-	static void                 bvglPolygonOffset           ( GLfloat factor, GLfloat units );
-
-	static GLenum               bvglGetError                ();
-
-	static const GLubyte *      bvglGetString               ( GLenum name );
-	static const GLubyte *      bvglGetStringi              ( GLenum name, GLuint index );
-
+// Vertex Array Object
 	static void                 bvglGenVertexArrays         ( GLsizei n, GLuint * arrays );
 	static void                 bvglDeleteVertexArrays      ( GLsizei n, const GLuint * arrays );
 
