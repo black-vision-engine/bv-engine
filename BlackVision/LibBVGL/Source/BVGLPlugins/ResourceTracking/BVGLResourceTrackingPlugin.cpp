@@ -107,7 +107,8 @@ void    BVGLResourceTrackingPlugin::BindTexture					( GLenum target, GLuint text
     Parent::BindTexture( target, texture );
 
     m_textures.BindResource( target, texture );
-	m_textures.GetBoundResource( target ).SetTypeIfFirstBind( target );
+	if( texture != 0 )		// Set format only for real texture
+		m_textures.GetBoundResource( target ).SetTypeIfFirstBind( target );
 }
 
 // *****************************
