@@ -41,17 +41,20 @@ CompositeBezierInterpolator::ValueT CompositeBezierInterpolator::Evaluate       
         return 0.f;
     }
 
+    if( keys.size() == 1 )
+        return keys[ 0 ].val;
+
     if( t < keys[0].t )
         return PreEvaluate( t );
 
     int i = 0;
-    while( t > keys[ i ].t && i < keys.size()-1 )
+    while( t > keys[ i+1 ].t && i < keys.size()-2 )
         i++;
 
-    if( t > keys[i].t )
+    if( t > keys[ i+1 ].t )
         return PostEvaluate( t );
 
-    return interpolators[ i-1 ]->Evaluate( t );
+    return interpolators[ i ]->Evaluate( t );
 }
 
 } // bv
