@@ -22,6 +22,8 @@ private:
 
 	std::string					m_key;
 
+	explicit										GeneratedSingleTextureAssetDesc( const std::string & key, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );
+
 protected:
 
 	virtual VoidConstPtr							QueryThis					() const override;
@@ -33,8 +35,6 @@ public:
 	virtual std::string								GetKey						() const override;
 
 	static GeneratedSingleTextureAssetDescConstPtr	Create						( const std::string & key, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );
-
-	explicit										GeneratedSingleTextureAssetDesc( const std::string & key, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );
 
 	static const std::string &						UID							();
 };

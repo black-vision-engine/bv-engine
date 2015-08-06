@@ -45,13 +45,14 @@ public:
 
 	static MipMapAssetDescConstPtr		Create				( MipMapFilterType ft, const SingleTextureAssetDescConstPtr & origTexture, Int32 maxLevelsNum = -1 );
 	static MipMapAssetDescConstPtr		Create				( const std::vector< SingleTextureAssetDescConstPtr > & mipMaps, MipMapFilterType ft = MipMapFilterType::BOX );
-	explicit							MipMapAssetDesc		( MipMapFilterType ft, const SingleTextureAssetDescConstPtr & origTexture, Int32 maxLevelsNum );
-	explicit							MipMapAssetDesc		( const std::vector< SingleTextureAssetDescConstPtr > & mipMaps, MipMapFilterType ft );
 
 	static std::string					GenKeyForGeneratedMipMap( const std::string & origPath, SizeType width, SizeType height, TextureFormat format, SizeType mmLevel, MipMapFilterType mmFiletType );
 
 
 private:
+
+	explicit							MipMapAssetDesc		( MipMapFilterType ft, const SingleTextureAssetDescConstPtr & origTexture, Int32 maevelsNum );
+	explicit							MipMapAssetDesc		( const std::vector< SingleTextureAssetDescConstPtr > & mipMaps, MipMapFilterType ft );
 
 	void								GenereateLevelsDescs( const SingleTextureAssetDescConstPtr & origTexture, Int32 maxLevelsNum );
 };

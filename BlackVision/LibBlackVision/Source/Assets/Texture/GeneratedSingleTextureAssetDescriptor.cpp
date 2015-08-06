@@ -36,7 +36,7 @@ std::string	GeneratedSingleTextureAssetDesc::GetKey	() const
 //
 GeneratedSingleTextureAssetDescConstPtr GeneratedSingleTextureAssetDesc::Create( const std::string & key, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable )
 {
-	return std::make_shared< GeneratedSingleTextureAssetDesc >( key, width, height, format, isCacheable );
+	return GeneratedSingleTextureAssetDescConstPtr( new GeneratedSingleTextureAssetDesc( key, width, height, format, isCacheable ) );
 }
 
 // ***********************

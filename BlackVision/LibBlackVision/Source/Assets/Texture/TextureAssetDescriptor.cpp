@@ -99,21 +99,21 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFile
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const SingleTextureAssetDescConstPtr & origDesc, const MipMapAssetDescConstPtr & mipmapsDesc )
 {
-	return std::make_shared< TextureAssetDesc >( origDesc, mipmapsDesc );
+	return TextureAssetDescConstPtr( new TextureAssetDesc( origDesc, mipmapsDesc ) );
 }
 
 // ***********************
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const SingleTextureAssetDescConstPtr & origDesc, MipMapFilterType mmFilter )
 {
-	return std::make_shared< TextureAssetDesc >( origDesc, mmFilter );
+	return TextureAssetDescConstPtr( new TextureAssetDesc( origDesc, mmFilter ) );
 }
 
 // ***********************
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const SingleTextureAssetDescConstPtr & origDesc )
 {
-	return std::make_shared< TextureAssetDesc >( origDesc );
+	return TextureAssetDescConstPtr( new TextureAssetDesc( origDesc ) );
 }
 
 // ***********************

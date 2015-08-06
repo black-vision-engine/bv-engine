@@ -38,7 +38,7 @@ AnimationAssetDescConstPtr		AnimationAssetDesc::CreateFromDirFrames( const std::
 
     if ( files.size() > 0 )
     {
-        return std::make_shared< AnimationAssetDesc >( files );
+        return AnimationAssetDescConstPtr( new AnimationAssetDesc ( files ) );
     }
 
     return nullptr;

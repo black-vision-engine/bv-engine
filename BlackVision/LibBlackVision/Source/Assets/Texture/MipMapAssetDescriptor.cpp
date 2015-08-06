@@ -37,14 +37,14 @@ MipMapFilterType MipMapAssetDesc::GetFilter() const
 //
 MipMapAssetDescConstPtr	MipMapAssetDesc::Create( const std::vector< SingleTextureAssetDescConstPtr > & mipMaps, MipMapFilterType ft )
 {
-	return std::make_shared< MipMapAssetDesc >( mipMaps, ft );
+	return MipMapAssetDescConstPtr( new MipMapAssetDesc( mipMaps, ft ) );
 }
 
 // *******************************
 //
 MipMapAssetDescConstPtr	MipMapAssetDesc::Create( MipMapFilterType ft, const SingleTextureAssetDescConstPtr & origTexture, Int32 maxLevelsNum )
 {
-	return std::make_shared< MipMapAssetDesc >( ft, origTexture, maxLevelsNum );
+	return MipMapAssetDescConstPtr( new MipMapAssetDesc( ft, origTexture, maxLevelsNum ) );
 }
 
 // *******************************

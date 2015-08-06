@@ -32,14 +32,14 @@ public:
 	bool						HasMipMaps		() const;
 
 	static TextureAssetConstPtr	Create			( const SingleTextureAssetConstPtr & originalTexture, const MipMapAssetConstPtr & mipMaps );
-
-	explicit					TextureAsset	( const SingleTextureAssetConstPtr & originalTexture, const MipMapAssetConstPtr & mipMaps );
 	
 	virtual const std::string &	GetUID			() const override;
 
 	static const std::string &	UID				();
 
 private:
+
+	explicit					TextureAsset	( const SingleTextureAssetConstPtr & originalTexture, const MipMapAssetConstPtr & mipMaps );
 
 	SingleTextureAssetConstPtr	m_originalTexture;
 	MipMapAssetConstPtr			m_mipMaps;
