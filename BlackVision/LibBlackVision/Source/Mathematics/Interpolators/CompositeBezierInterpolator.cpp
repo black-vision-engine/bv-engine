@@ -78,9 +78,18 @@ void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const Value
     assert( keys.size() == 0 || keys[ keys.size()-1 ].t < t ); // FIXME don't assume that for God's sake!
     keys.push_back( Key<TimeValueT, ValueT>( t, v ) ); // FIXME sortme
     if( keys.size() > 1 )
+    {
         //interpolators.push_back( new ConstEvaluator< TimeValueT, ValueT >( v ) );
         //interpolators.push_back( new LinearEvaluator< TimeValueT, ValueT >( keys[ keys.size()-2 ], keys[ keys.size()-1 ] ) );
-        interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ keys.size()-2 ], keys[ keys.size()-1 ], Key<TimeValueT, ValueT>( 0, 0 ), Key<TimeValueT, ValueT>( 0, 0 ) ) );
+        
+        size_t last = keys.size()-1;
+
+        Key<TimeValueT, ValueT> left( 0, 0 );
+        if( keys.size() > 2 )
+            left = keys[ last ] - keys[ last-2 ];
+        
+        interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], left, Key<TimeValueT, ValueT>( 0, 0 ) ) );
+    }
 }
 
 float CompositeBezierInterpolator::PreEvaluate( float /*t*/ ) const { return keys[ 0 ].val; } // never FIXME :P

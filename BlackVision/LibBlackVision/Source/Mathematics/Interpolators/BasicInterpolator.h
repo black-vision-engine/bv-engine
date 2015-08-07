@@ -27,6 +27,7 @@ public:
     explicit Key( TimeValueT t, ValueT val );
 
     Key< TimeValueT, ValueT > operator+( const Key< TimeValueT, ValueT > &that ) const { return Key< TimeValueT, ValueT >( t + that.t, val + that.val ); }
+    Key< TimeValueT, ValueT > operator-( const Key< TimeValueT, ValueT > &that ) const { return Key< TimeValueT, ValueT >( t - that.t, val - that.val ); }
 };
 
 template<class TimeValueT, class ValueT>
