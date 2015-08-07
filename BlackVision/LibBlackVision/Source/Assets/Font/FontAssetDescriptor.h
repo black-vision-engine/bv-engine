@@ -42,6 +42,10 @@ public:
 																bool generateMipmaps,
 																const std::wstring & atlasCharSetFile = SUPPROTED_CHARS_FILE );
 
+	static const std::string &			UID();
+
+private:
+
 	explicit							FontAssetDesc	(	const std::string & fontFileName,
 																UInt32 fontSize,
 																UInt32 blurSize,
@@ -49,9 +53,6 @@ public:
 																bool generateMipmaps,
 																const std::wstring & atlasCharSetFile );
 
-	static const std::string &			UID();
-
-private:
 	std::string		m_fontFileName;
 	UInt32			m_fontSize;
 	UInt32			m_blurSize;

@@ -25,14 +25,14 @@ public:
 	TextConstPtr					GetText			() const;
 
 	static FontAssetConstPtr		Create			( const TextConstPtr & textAtlas );
-
-	explicit						FontAsset		( const TextConstPtr & textAtlas );
 	
 	virtual const std::string &		GetUID			() const override;
 
 	static const std::string &		UID				();
 
 private:
+
+	explicit						FontAsset		( const TextConstPtr & textAtlas );
 
 	TextConstPtr					m_text;
 };
