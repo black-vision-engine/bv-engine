@@ -128,6 +128,7 @@
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Texture\TextureUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\BaseEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\EventManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\Events.cpp" />
@@ -339,6 +340,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\DefaultMultipassEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.h" />

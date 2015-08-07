@@ -20,12 +20,10 @@
 #include "Glyph.h"
 #include "AtlasCache.h"
 #include "IO/FileIO.h"
-#include "LibImage.h"
 #include "LibEffect.h"
 #include "Assets/Assets.h"
 #include "Assets/Font/Engines/FreeTypeEngine.h"
-#include "MipMapBuilder.h"
-#include "Assets/Texture/TextureCache.h"
+#include "Assets/Texture/TextureUtils.h"
 
 
 namespace bv { 
@@ -166,23 +164,11 @@ void Text::GenerateMipMaps()
 {
 	if( m_withMipmaps )
 	{
-		UInt32 levelsNum = GetMMLevelsNum( m_fontSize );
+		UInt32 numLevels = GetMMLevelsNum( m_fontSize );
 
-		if( levelsNum > 0 )
-		{
-			tools::Image img = { m_atlas->m_textureAsset->GetOriginal()->GetData(), m_atlas->GetWidth(), m_atlas->GetHeight(), m_atlas->GetBitsPerPixel() };
-			auto mipmap = tools::GenerateMipmaps( img, levelsNum, image::FilterType::FT_BILINEAR ); // FIXME: filter type is hardcoded.
+		auto texWithMipMaps = TextureUtils::GenerateMipMaps( m_atlas->m_textureAsset->GetOriginal(), numLevels, MipMapFilterType::BILINEAR );
 
-			std::vector< SingleTextureAssetConstPtr > mipMapsRes;
-			for( SizeType i = 0; i < mipmap.size(); ++i )
-			{		
-				mipMapsRes.push_back( SingleTextureAsset::Create( mipmap[ i ].data, "", mipmap[ i ].width, mipmap[ i ].height, TextureFormat::F_A8R8G8B8, true ) );
-			}
-
-			auto mipmaps = MipMapAsset::Create( mipMapsRes );
-
-			std::const_pointer_cast< TextAtlas >( m_atlas )->m_textureAsset = TextureAsset::Create( m_atlas->m_textureAsset->GetOriginal(), mipmaps );
-		}
+		std::const_pointer_cast< TextAtlas >( m_atlas )->m_textureAsset = texWithMipMaps;
 	}
 }
 
