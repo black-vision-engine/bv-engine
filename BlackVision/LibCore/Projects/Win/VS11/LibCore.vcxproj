@@ -33,6 +33,7 @@
     <ClInclude Include="..\..\..\Source\Threading\Thread.h" />
     <ClInclude Include="..\..\..\Source\Tools\HerarchicalProfiler.h" />
     <ClInclude Include="..\..\..\Source\Tools\HRTimer.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Logger\Logger.h" />
     <ClInclude Include="..\..\..\Source\Tools\SimpleTimer.h" />
     <ClInclude Include="..\..\..\Source\Tools\StringHeplers.h" />
     <ClInclude Include="..\..\..\Source\Tools\Utils.h" />
@@ -49,6 +50,7 @@
     <ClCompile Include="..\..\..\Source\Threading\Thread.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\HerarchicalProfiler.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\HRTimer.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\Logger\Logger.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\SimpleTimer.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\StringHeplers.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Utils.cpp" />
