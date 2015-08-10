@@ -14,10 +14,10 @@ DefaultTransformChannel::DefaultTransformChannel( IPluginPtr prev, const ValueMa
     , m_prevValues( nullptr )
 {
     if( prev != nullptr && prev->GetTransformChannel() != nullptr )
-    {
-        assert( m_prevValues->size() == values.size() );
-
+	{
         m_prevValues = static_cast< const ValueMat4PtrVec * >( &prev->GetTransformChannel()->GetTransformValues() );
+
+		assert( m_prevValues->size() == values.size() );
     }
 }
 
