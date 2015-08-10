@@ -208,7 +208,6 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & f
 																				ret->m_fontSize,
 																				ret->m_blurSize,
 																				ret->m_outlineWidth,
-																				MipMapFilterType::BILINEAR,
 																				ret->m_mmLevelsNum );
 
 		auto asset = TextureCache::GetInstance().Get( atlasTextureDesc ); 
@@ -281,7 +280,6 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
 																			data.m_fontSize,
 																			data.m_blurSize,
 																			data.m_outlineWidth,
-																			MipMapFilterType::BILINEAR,
 																			mmLevelsNum );
 
 	TextureCache::GetInstance().Add( atlasTextureDesc, data.m_textAtlas->m_textureAsset );

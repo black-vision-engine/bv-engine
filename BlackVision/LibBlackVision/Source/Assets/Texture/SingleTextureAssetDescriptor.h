@@ -28,6 +28,8 @@ private:
 
 protected:
 
+	explicit									SingleTextureAssetDesc		( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );
+
 	virtual VoidConstPtr						QueryThis					() const override;
 
 public:
@@ -43,9 +45,9 @@ public:
 
 	virtual bool								IsCacheable					() const override;
 
-	static SingleTextureAssetDescConstPtr		Create						( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );
+	virtual std::string							GetKey						() const override;
 
-	explicit									SingleTextureAssetDesc		( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );
+	static SingleTextureAssetDescConstPtr		Create						( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );
 
 	static const std::string &					UID							();
 };

@@ -29,14 +29,14 @@ public:
 	SizeType						GetFramesNum	() const;
 
 	static AnimationAssetConstPtr	Create			( const std::vector< TextureAssetConstPtr > & frames );
-
-	explicit						AnimationAsset	( const std::vector< TextureAssetConstPtr > & frames );
 	
 	virtual const std::string &		GetUID			() const override;
 
 	static const std::string &		UID				();
 
 private:
+
+	explicit						AnimationAsset	( const std::vector< TextureAssetConstPtr > & frames );
 
 	std::vector< TextureAssetConstPtr >	m_frames;
 };

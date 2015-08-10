@@ -38,7 +38,7 @@ VoidConstPtr FontAssetDesc::QueryThis() const
 //
 FontAssetDescConstPtr FontAssetDesc::Create( const std::string & fontFileName, UInt32 size, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps, const std::wstring & atlasCharSetFile )
 {
-	return std::make_shared< FontAssetDesc >( fontFileName, size, blurSize, outlineSize, generateMipmaps, atlasCharSetFile );
+	return FontAssetDescConstPtr( new FontAssetDesc( fontFileName, size, blurSize, outlineSize, generateMipmaps, atlasCharSetFile ) );
 }
 
 // ***********************

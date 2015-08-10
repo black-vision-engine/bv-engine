@@ -11,9 +11,9 @@ ExampleVideoInput::ExampleVideoInput( int x, int y, float fps, int maskAnd, int 
 
 	GenerateBits( x, y );
 
-    auto asset = new TextureAsset( SingleTextureAsset::Create( bits, "key", x, y, TextureFormat::F_A8R8G8B8, false ), nullptr );
+	auto asset = TextureAsset::Create( SingleTextureAsset::Create( bits, "key", x, y, TextureFormat::F_A8R8G8B8, false ), nullptr );
 
-    desc = new model::DefaultTextureDescriptor( TextureAssetConstPtr( asset ),
+    desc = new model::DefaultTextureDescriptor( asset,
 		//"Tex0", TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_LINEAR, glm::vec4( 1, 1, 1, 1), DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
         "Tex0", TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_POINT, glm::vec4( 1, 1, 1, 1), DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
 }

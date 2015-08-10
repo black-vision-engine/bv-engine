@@ -34,9 +34,16 @@ bool SingleTextureAssetDesc::IsCacheable	() const
 
 // ***********************
 //
+std::string	SingleTextureAssetDesc::GetKey	() const
+{
+	return GetImagePath();
+}
+
+// ***********************
+//
 SingleTextureAssetDescConstPtr SingleTextureAssetDesc::Create( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable )
 {
-	return std::make_shared< SingleTextureAssetDesc >( imagePath, width, height, format, isCacheable );
+	return SingleTextureAssetDescConstPtr( new SingleTextureAssetDesc( imagePath, width, height, format, isCacheable ) );
 }
 
 // ***********************

@@ -20,6 +20,8 @@ public:
 
 	virtual bool					IsCacheable	() const = 0;
 
+	virtual std::string				GetKey		() const;
+
 
 	template< typename DescTypeConstPtr >
 	friend DescTypeConstPtr  QueryTypedDesc( AssetDescConstPtr desc );

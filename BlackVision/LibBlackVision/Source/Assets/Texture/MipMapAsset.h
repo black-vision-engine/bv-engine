@@ -21,9 +21,9 @@ public:
 
 	static MipMapAssetConstPtr		Create			( const std::vector< SingleTextureAssetConstPtr > & mipMaps );
 
-	explicit						MipMapAsset	( const std::vector< SingleTextureAssetConstPtr > & mipMaps );
-
 private:
+
+	explicit						MipMapAsset	( const std::vector< SingleTextureAssetConstPtr > & mipMaps );
 
 	std::vector< SingleTextureAssetConstPtr > m_mipMaps;
 };
