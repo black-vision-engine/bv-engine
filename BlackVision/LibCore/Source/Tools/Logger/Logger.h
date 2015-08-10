@@ -2,22 +2,30 @@
 
 #include <string>
 
-#pragma warning( disable : 4714 )
+//#pragma warning( disable : 4714 )
 // warning: funcion marked as __forceinline not inlined
+
 
 #include <boost\log\sinks\text_ostream_backend.hpp>
 #include <boost\log\sinks\sync_frontend.hpp>
 #include <boost\log\sources\logger.hpp>
 #include <boost\log\sources\record_ostream.hpp>
 
-#pragma warning( default : 4714 )
+//#pragma warning( default : 4714 )
+
 
 
 namespace bv{
 
 class Logger;
 
-#define LOG_MESSAGE BOOST_LOG( (bv::Logger::GetLogger().Get()) )
+
+typedef boost::log::sources::logger::char_type char_type;
+::boost::log::aux::record_pump< boost::log::sources::logger >& Log();
+
+#define LOG_MESSAGE (Log().stream())
+
+//#define LOG_MESSAGE BOOST_LOG( (bv::Logger::GetLogger().Get()) )
 
 class Logger
 {
@@ -40,3 +48,5 @@ public:
 
 
 } // bv
+
+

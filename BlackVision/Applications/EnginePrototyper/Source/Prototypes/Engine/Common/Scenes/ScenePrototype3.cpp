@@ -2,6 +2,9 @@
 #include "Mathematics\Defines.h"
 
 
+#include "Tools\Logger\Logger.h"
+
+
 namespace bv {
 
 // **************************
@@ -30,6 +33,9 @@ void        ScenePrototype3::OnKey               ( unsigned char c )
 //
 SceneNode * ScenePrototype3::BuildSceneImpl      ()
 {
+	Logger::GetLogger().AddLogFile( "testLog.log" );
+	Logger::GetLogger().AddLogFile( "testLog2.log" );
+
 	std::string sand( "sand.jpg" );
 	std::string cubeMap( "Penguins.jpg" );
 
@@ -39,6 +45,8 @@ SceneNode * ScenePrototype3::BuildSceneImpl      ()
 
 	SceneNode * root = MultipassNodeBuilder::CreateMultipassRectNodeTexture( 1.f, 1.f, -1.1f, textures.data(), (unsigned short)textures.size() );
 	numPasses = 2;
+
+	LOG_MESSAGE << "Multipass begin";
 
 	float alfa = 45.0f;
 
