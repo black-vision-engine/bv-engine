@@ -5,6 +5,8 @@
 //#pragma warning( disable : 4714 )
 // warning: funcion marked as __forceinline not inlined
 
+//#pragma warning ( disable : 4996 )
+// warning '_vsnprintf': This function or variable may be unsafe. Consider using _vsnprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS.
 
 #include <boost\log\sinks\text_ostream_backend.hpp>
 #include <boost\log\sinks\sync_frontend.hpp>

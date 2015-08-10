@@ -61,6 +61,8 @@ SceneNode * ScenePrototype3::BuildSceneImpl      ()
 		alfa += 360.0f;
 	}
 
+	LOG_MESSAGE << "Multipass end";
+
     return root;
 }
 
