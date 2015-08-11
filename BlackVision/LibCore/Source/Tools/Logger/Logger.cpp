@@ -5,9 +5,10 @@
 
 #pragma warning ( disable : 4996 )
 // warning '_vsnprintf': This function or variable may be unsafe. Consider using _vsnprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS.
+#pragma warning( disable : 4714 )
+// warning: funcion marked as __forceinline not inlined
 
-
-
+#include <boost/log/support/date_time.hpp>
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/smart_ptr/make_shared_object.hpp>
 #include <boost/log/core.hpp>
@@ -24,21 +25,16 @@ template<>
 }
 
 
+typedef boost::log::sources::logger::char_type char_type;
+
 
 namespace bv{
 
 
-
-//	 ZLO
-::boost::log::aux::record_pump< boost::log::sources::logger >& Log()
+::boost::log::aux::record_pump< boost::log::sources::logger > 		LoggingObject::recordPump()
 {
-	auto logger = (bv::Logger::GetLogger().Get());
-	static ::boost::log::record rec_var = (logger).open_record();
-
-	static auto pump = ::boost::log::aux::make_record_pump((logger), rec_var);
-	return pump;
+	return ::boost::log::aux::make_record_pump((m_logger), m_record);
 }
-
 
 
 Logger& Logger::GetLogger()
@@ -67,8 +63,8 @@ void Logger::AddLogFile( const std::string& fileName )
 
     boost::log::formatter formatter =
         expr::stream
-            << expr::attr< unsigned int >("LineID") << ": "
-            //<< expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d %H:%M:%S") << " *"
+            << std::hex << std::setw(8) << std::setfill('0') << expr::attr< unsigned int >("LineID") << ": "
+            << expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d %H:%M:%S") << " "
             << expr::message;
     newSink->set_formatter( formatter );
 

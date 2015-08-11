@@ -22,13 +22,32 @@ namespace bv{
 class Logger;
 
 
-typedef boost::log::sources::logger::char_type char_type;
-::boost::log::aux::record_pump< boost::log::sources::logger >& Log();
+/** This object must hide boost implementation of
+opening record and creating record pump. Otherwise warnings occures.*/
+class LoggingObject
+{
+private:
+	boost::log::record				m_record;
+	boost::log::sources::logger&	m_logger;
+public:
+	LoggingObject( boost::log::sources::logger& logger )
+	:	m_record( logger.open_record() ),
+		m_logger( logger )
+	{}
 
-#define LOG_MESSAGE (Log().stream())
 
-//#define LOG_MESSAGE BOOST_LOG( (bv::Logger::GetLogger().Get()) )
+	::boost::log::aux::record_pump< boost::log::sources::logger > 		recordPump();
+	bool																operator!()	{ return !m_record; }
+};
 
+
+#define LOG_MESSAGE \
+for( LoggingObject loggingObject( bv::Logger::GetLogger().Get() ); !!loggingObject; )		\
+	loggingObject.recordPump().stream()
+
+				
+
+/**This is singleton logger object.*/
 class Logger
 {
 	typedef boost::log::sinks::synchronous_sink< boost::log::sinks::text_ostream_backend > SyncSink;
