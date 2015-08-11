@@ -25,7 +25,13 @@ public:
 public:
 
     explicit Key( TimeValueT t, ValueT val );
+
+    Key< TimeValueT, ValueT > operator+( const Key< TimeValueT, ValueT > &that ) const { return Key< TimeValueT, ValueT >( t + that.t, val + that.val ); }
+    Key< TimeValueT, ValueT > operator-( const Key< TimeValueT, ValueT > &that ) const { return Key< TimeValueT, ValueT >( t - that.t, val - that.val ); }
 };
+
+template<class TimeValueT, class ValueT>
+Key< TimeValueT, ValueT > operator*( float a, Key< TimeValueT, ValueT > &that ) { return Key< TimeValueT, ValueT >( a * that.t, a * that.val ); }
 
 template<class TimeValueT>
 class Interpolator
