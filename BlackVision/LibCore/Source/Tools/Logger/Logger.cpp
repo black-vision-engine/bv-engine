@@ -3,6 +3,9 @@
 #include <fstream>
 #include <iomanip>
 
+#pragma warning( disable : 4512 )
+#pragma warning( disable : 4100 )
+
 #pragma warning ( disable : 4996 )
 // warning '_vsnprintf': This function or variable may be unsafe. Consider using _vsnprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS.
 #pragma warning( disable : 4714 )
@@ -16,26 +19,56 @@
 #include <boost/log/expressions.hpp>
 #include <boost/log/attributes.hpp>
 
+
+typedef bv::LoggerType::char_type char_type;
+
 // Template specializaion is used to supress warning
 // warning: funcion marked as __forceinline not inlined
 template<>
-::boost::log::aux::record_pump< boost::log::sources::logger > boost::log::aux::make_record_pump( ::boost::log::sources::logger& lg, ::boost::log::record& rec )
+::boost::log::aux::record_pump< bv::LoggerType >
+	boost::log::aux::make_record_pump( bv::LoggerType& lg, ::boost::log::record& rec )
 {
-    return ::boost::log::aux::record_pump< boost::log::sources::logger >(lg, rec);
+    return ::boost::log::aux::record_pump< bv::LoggerType >(lg, rec);
 }
 
 
-typedef boost::log::sources::logger::char_type char_type;
+std::ostream& operator<< (std::ostream& strm, bv::Level::SeverityLevel level)
+{
+    static const char* strings[] =
+    {
+        "debug",
+        "info",
+        "warning",
+        "error",
+        "critical"
+    };
 
+    if (static_cast< std::size_t >(level) < sizeof(strings) / sizeof(*strings))
+        strm << strings[level];
+    else
+        strm << static_cast< int >(level);
+
+    return strm;
+}
 
 namespace bv{
 
 
-::boost::log::aux::record_pump< boost::log::sources::logger > 		LoggingObject::recordPump()
+
+
+// ==================================================================== //
+
+LoggingObject::LoggingObject( LoggerType& logger, Level::SeverityLevel level )
+:	m_record( logger.open_record( boost::log::keywords::severity = level ) ),
+	m_logger( logger )
+{}
+
+::boost::log::aux::record_pump< LoggerType > 		LoggingObject::recordPump()
 {
 	return ::boost::log::aux::make_record_pump((m_logger), m_record);
 }
 
+// ==================================================================== //
 
 Logger& Logger::GetLogger()
 {
