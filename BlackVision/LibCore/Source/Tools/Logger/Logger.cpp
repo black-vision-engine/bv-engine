@@ -77,6 +77,7 @@ boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream& str
 
 boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream& strm, boost::log::to_log_manip< bv::ModuleEnum, module_tag > const& manip )
 {
+	// @todo mapowanie na stringi
     bv::ModuleEnum level = manip.get();
 
 	switch( level )
@@ -163,16 +164,31 @@ void Logger::InitForamatter()
             << expr::message;
 }
 
-void Logger::AddLogFile( const std::string& fileName )
+void Logger::AddLogFile( const std::string& fileName, SeverityLevel minLevel, int modules )
 {
 	boost::shared_ptr< SyncSink > newSink = boost::make_shared< SyncSink >();
 	newSink->locked_backend()->add_stream( boost::make_shared< std::ofstream >( fileName.c_str() ) );
 
     newSink->set_formatter( m_formatter );
+
+	newSink->set_filter
+	(
+		(severity >= minLevel)
+		&&
+		(
+			(module == (modules & ModuleEnum::BlackVisionApp))
+			|| (module == (modules & ModuleEnum::LibBlackVision))
+			|| (module == (modules & ModuleEnum::LibCore))
+			|| (module == (modules & ModuleEnum::LibImage))
+			|| (module == (modules & ModuleEnum::LibImage))
+			|| (module == (modules & ModuleEnum::Prototyper))
+		)
+	);
+
 	boost::log::core::get()->add_sink( newSink );
 }
 
-void Logger::AddConsole			()
+void Logger::AddConsole			( SeverityLevel minLevel, int modules )
 {
 	boost::shared_ptr< SyncSink > newSink = boost::make_shared< SyncSink >();
 	boost::shared_ptr< std::ostream > stream(&std::clog, boost::null_deleter());

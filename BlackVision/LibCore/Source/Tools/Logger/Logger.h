@@ -38,7 +38,7 @@ enum ModuleEnum : int
 };
 
 BOOST_LOG_ATTRIBUTE_KEYWORD(severity, "Severity", ::bv::SeverityLevel)
-BOOST_LOG_ATTRIBUTE_KEYWORD(channel, "Channel", ::bv::ModuleEnum)
+BOOST_LOG_ATTRIBUTE_KEYWORD(module, "Channel", ::bv::ModuleEnum)
 
 
 typedef ::boost::log::sources::severity_channel_logger_mt < bv::SeverityLevel, bv::ModuleEnum > LoggerType;
@@ -57,6 +57,8 @@ public:
 	bool												operator!()	{ return !m_record; }
 };
 
+
+///@todo makro które produkuje linijkê i plik z której wyœ³ano loga
 
 #define LOG_MESSAGE( severityLevel ) \
 for( LoggingHelper loggingHelper( bv::Logger::GetLogger().Get(), severityLevel, LOG_MODULE ); !!loggingHelper; )		\
@@ -77,8 +79,8 @@ private:
 
 	void InitForamatter();
 public:
-	void									AddLogFile			( const std::string& fileName );
-	void									AddConsole			();
+	void									AddLogFile			( const std::string& fileName, SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
+	void									AddConsole			( SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
 
 	// Logowanie
 	LoggerType&								Get()									{ return m_logger; }
