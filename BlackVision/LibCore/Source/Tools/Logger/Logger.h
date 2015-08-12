@@ -78,6 +78,7 @@ private:
 	void InitForamatter();
 public:
 	void									AddLogFile			( const std::string& fileName );
+	void									AddConsole			();
 
 	// Logowanie
 	LoggerType&								Get()									{ return m_logger; }

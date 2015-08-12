@@ -22,6 +22,7 @@
 #include <boost/log/expressions.hpp>
 #include <boost/log/attributes.hpp>
 #include <boost\log\sinks\text_ostream_backend.hpp>
+#include <boost/core/null_deleter.hpp>
 
 typedef boost::log::sinks::synchronous_sink< boost::log::sinks::text_ostream_backend > SyncSink;
 typedef bv::LoggerType::char_type char_type;
@@ -142,6 +143,7 @@ Logger& Logger::GetLogger()
 Logger::Logger()
 {
 	InitForamatter();
+	boost::log::add_common_attributes();
 }
 
 
@@ -168,8 +170,16 @@ void Logger::AddLogFile( const std::string& fileName )
 
     newSink->set_formatter( m_formatter );
 	boost::log::core::get()->add_sink( newSink );
+}
 
-	boost::log::add_common_attributes();
+void Logger::AddConsole			()
+{
+	boost::shared_ptr< SyncSink > newSink = boost::make_shared< SyncSink >();
+	boost::shared_ptr< std::ostream > stream(&std::clog, boost::null_deleter());
+	newSink->locked_backend()->add_stream( stream );
+
+    newSink->set_formatter( m_formatter );
+	boost::log::core::get()->add_sink( newSink );
 }
 
 } //bv

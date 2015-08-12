@@ -36,6 +36,7 @@ SceneNode * ScenePrototype3::BuildSceneImpl      ()
 {
 	Logger::GetLogger().AddLogFile( "testLog.log" );
 	Logger::GetLogger().AddLogFile( "testLog2.log" );
+	Logger::GetLogger().AddConsole();
 
 	std::string sand( "sand.jpg" );
 	std::string cubeMap( "Penguins.jpg" );
