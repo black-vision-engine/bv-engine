@@ -76,6 +76,9 @@
     <ClInclude Include="..\..\..\Source\Tools\Logger\Logger.h">
       <Filter>Tools\Logger</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Logger\UseLogger.h">
+      <Filter>Tools\Logger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">

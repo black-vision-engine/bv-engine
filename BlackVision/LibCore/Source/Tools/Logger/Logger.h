@@ -2,6 +2,7 @@
 
 #include <string>
 
+
 #pragma warning( disable : 4512 )
 // warning: could not generate contructor for...
 #pragma warning( disable : 4100 )
@@ -17,8 +18,6 @@
 namespace bv{
 
 class Logger;
-
-
 
 enum SeverityLevel : int
 {
@@ -60,7 +59,7 @@ public:
 
 
 #define LOG_MESSAGE( severityLevel ) \
-for( LoggingHelper loggingHelper( bv::Logger::GetLogger().Get(), severityLevel, ModuleEnum::Prototyper ); !!loggingHelper; )		\
+for( LoggingHelper loggingHelper( bv::Logger::GetLogger().Get(), severityLevel, LOG_MODULE ); !!loggingHelper; )		\
 	loggingHelper.recordPump().stream()
 
 				

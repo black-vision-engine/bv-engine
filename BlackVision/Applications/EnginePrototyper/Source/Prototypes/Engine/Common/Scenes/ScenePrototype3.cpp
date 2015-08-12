@@ -3,6 +3,7 @@
 
 
 #include "Tools\Logger\Logger.h"
+#define LOG_MODULE ModuleEnum::Prototyper
 
 
 namespace bv {

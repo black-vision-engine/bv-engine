@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iomanip>
+#include "UseLogger.h"
 
 #pragma warning( disable : 4512 )
 // warning: could not generate contructor for...
@@ -126,7 +127,8 @@ LoggingHelper::LoggingHelper( LoggerType& logger, SeverityLevel level, ModuleEnu
 
 void								Logger::LoggerTest()
 {
-	BOOST_LOG_CHANNEL_SEV( Logger::GetLogger().Get(), ModuleEnum::Prototyper, SeverityLevel::critical ) << "Channel";
+	//BOOST_LOG_CHANNEL_SEV( Logger::GetLogger().Get(), ModuleEnum::Prototyper, SeverityLevel::critical ) << "Channel";
+	LOG_MESSAGE(SeverityLevel::info) << "Logger test passed";
 }
 
 
