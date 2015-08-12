@@ -20,41 +20,39 @@ namespace bv{
 class Logger;
 
 
-struct Level
+
+enum SeverityLevel : int
 {
-	enum SeverityLevel : int
-	{
-		debug			= 0,
-		info			= 1,
-		warning			= 2,
-		error			= 3,
-		critical		= 4
-	};
+	debug			= 0,
+	info			= 1,
+	warning			= 2,
+	error			= 3,
+	critical		= 4
 };
 
-BOOST_LOG_ATTRIBUTE_KEYWORD(severity, "Severity", bv::Level::SeverityLevel)
+BOOST_LOG_ATTRIBUTE_KEYWORD(severity, "Severity", ::bv::SeverityLevel)
 
 
-typedef ::boost::log::sources::severity_channel_logger_mt < bv::Level::SeverityLevel, std::string > LoggerType;
+typedef ::boost::log::sources::severity_channel_logger_mt < bv::SeverityLevel, std::string > LoggerType;
 
 /** This object must hide boost implementation of
 opening record and creating record pump. Otherwise warnings occures.*/
-class LoggingObject
+class LoggingHelper
 {
 private:
 	boost::log::record										m_record;
 	LoggerType&												m_logger;
 public:
-	LoggingObject( LoggerType& logger, Level::SeverityLevel level );
+	LoggingHelper( LoggerType& logger, SeverityLevel level );
 
 	::boost::log::aux::record_pump< LoggerType > 		recordPump();
 	bool												operator!()	{ return !m_record; }
 };
 
 
-#define LOG_MESSAGE \
-for( LoggingObject loggingObject( bv::Logger::GetLogger().Get(), bv::Level::SeverityLevel::info ); !!loggingObject; )		\
-	loggingObject.recordPump().stream()
+#define LOG_MESSAGE( severityLevel ) \
+for( LoggingHelper loggingHelper( bv::Logger::GetLogger().Get(), severityLevel ); !!loggingHelper; )		\
+	loggingHelper.recordPump().stream()
 
 				
 
@@ -65,10 +63,12 @@ class Logger
 private:
 	LoggerType				m_logger;
 
+	boost::log::formatter	m_formatter;
 private:
 	Logger();
 	~Logger();
 
+	void InitForamatter();
 public:
 	void									AddLogFile			( const std::string& fileName );
 
@@ -81,7 +81,6 @@ public:
 
 } // bv
 
-std::ostream& operator<< (std::ostream& strm, bv::Level::SeverityLevel level);
 
 
 #pragma warning( default : 4512 )

@@ -46,7 +46,7 @@ SceneNode * ScenePrototype3::BuildSceneImpl      ()
 	SceneNode * root = MultipassNodeBuilder::CreateMultipassRectNodeTexture( 1.f, 1.f, -1.1f, textures.data(), (unsigned short)textures.size() );
 	numPasses = 2;
 
-	LOG_MESSAGE << "Multipass begin";
+	LOG_MESSAGE( SeverityLevel::debug ) << "Multipass begin";
 
 	float alfa = 45.0f;
 
@@ -61,7 +61,9 @@ SceneNode * ScenePrototype3::BuildSceneImpl      ()
 		alfa += 360.0f;
 	}
 
-	LOG_MESSAGE << "Multipass end";
+	LOG_MESSAGE( SeverityLevel::critical ) << "Multipass end";
+	LOG_MESSAGE( SeverityLevel::error ) << "Multipass end";
+	LOG_MESSAGE( SeverityLevel::warning ) << "Multipass end";
 
     return root;
 }
