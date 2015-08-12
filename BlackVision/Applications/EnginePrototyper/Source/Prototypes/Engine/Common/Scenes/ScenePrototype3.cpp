@@ -65,6 +65,8 @@ SceneNode * ScenePrototype3::BuildSceneImpl      ()
 	LOG_MESSAGE( SeverityLevel::error ) << "Multipass end";
 	LOG_MESSAGE( SeverityLevel::warning ) << "Multipass end";
 
+	Logger::GetLogger().LoggerTest();
+
     return root;
 }
 

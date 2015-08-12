@@ -20,13 +20,17 @@
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/expressions.hpp>
 #include <boost/log/attributes.hpp>
+#include <boost\log\sinks\text_ostream_backend.hpp>
+
+typedef boost::log::sinks::synchronous_sink< boost::log::sinks::text_ostream_backend > SyncSink;
+typedef bv::LoggerType::char_type char_type;
 
 
 const char* SEVERITY_DEBUG_STRING = "debug";
 const char* SEVERITY_INFO_STRING = "info";
 const char* SEVERITY_WARNING_STRING = "warning";
 const char* SEVERITY_ERROR_STRING = "error";
-const char* SEVERITY_CRITICAL_STRING = "cirtical";
+const char* SEVERITY_CRITICAL_STRING = "critical";
 
 static const char* SEVERITY_STRINGS[] =
 {
@@ -37,7 +41,12 @@ static const char* SEVERITY_STRINGS[] =
     SEVERITY_CRITICAL_STRING
 };
 
-typedef bv::LoggerType::char_type char_type;
+
+const char* MODULE_LIBBLACKVISION_STRING = "LibBlackVision";
+const char* MODULE_LIBCORE_STRING = "LibCore";
+const char* MODULE_LIBIMAGE_STRING = "LibImage";
+const char* MODULE_PROTOTYPER_STRING = "Prototyper";
+const char* MODULE_BLACKVISIONAPP_STRING = "BlackVisionApp";
 
 // Template specializaion is used to supress warning
 // warning: funcion marked as __forceinline not inlined
@@ -51,6 +60,7 @@ template<>
 
 
 struct severity_tag;
+struct module_tag;
 
 boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream& strm, boost::log::to_log_manip< bv::SeverityLevel, severity_tag > const& manip )
 {
@@ -63,6 +73,36 @@ boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream& str
     return strm;
 }
 
+boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream& strm, boost::log::to_log_manip< bv::ModuleEnum, module_tag > const& manip )
+{
+    bv::ModuleEnum level = manip.get();
+
+	switch( level )
+	{
+	case bv::ModuleEnum::LibBlackVision:
+		strm << MODULE_LIBBLACKVISION_STRING;
+		break;
+	case bv::ModuleEnum::LibCore:
+		strm << MODULE_LIBCORE_STRING;
+		break;
+	case bv::ModuleEnum::LibImage:
+		strm << MODULE_LIBIMAGE_STRING;
+		break;
+	case bv::ModuleEnum::BlackVisionApp:
+		strm << MODULE_BLACKVISIONAPP_STRING;
+		break;
+	case bv::ModuleEnum::Prototyper:
+		strm << MODULE_PROTOTYPER_STRING;
+		break;
+	default:
+		strm << "Unknown Module";
+	}
+
+
+    return strm;
+}
+
+
 namespace bv{
 
 
@@ -70,9 +110,9 @@ namespace bv{
 
 // ==================================================================== //
 //					Logging object
-
-LoggingHelper::LoggingHelper( LoggerType& logger, SeverityLevel level )
-:	m_record( logger.open_record( boost::log::keywords::severity = level ) ),
+	//, boost::log::keywords::channel = ModuleEnum::Prototyper
+LoggingHelper::LoggingHelper( LoggerType& logger, SeverityLevel level, ModuleEnum module )
+	:	m_record( logger.open_record( (boost::log::keywords::channel = module, boost::log::keywords::severity = level) ) ),
 	m_logger( logger )
 {}
 
@@ -83,6 +123,12 @@ LoggingHelper::LoggingHelper( LoggerType& logger, SeverityLevel level )
 
 // ==================================================================== //
 //					Logger class
+
+void								Logger::LoggerTest()
+{
+	BOOST_LOG_CHANNEL_SEV( Logger::GetLogger().Get(), ModuleEnum::Prototyper, SeverityLevel::critical ) << "Channel";
+}
+
 
 Logger& Logger::GetLogger()
 {
@@ -108,7 +154,8 @@ void Logger::InitForamatter()
     m_formatter = expr::stream
             //<< std::hex << std::setw(8) << std::setfill('0') << expr::attr< unsigned int >("LineID") << ": "
             << expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d %H:%M:%S") << " "
-			<< expr::attr< bv::SeverityLevel, severity_tag >("Severity") << ": "
+			<< std::setw(8) << expr::attr< bv::SeverityLevel, severity_tag >("Severity") << ": "
+			<< "[" << expr::attr< bv::ModuleEnum, module_tag >("Channel") << "] "
             << expr::message;
 }
 

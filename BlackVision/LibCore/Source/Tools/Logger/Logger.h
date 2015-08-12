@@ -7,11 +7,10 @@
 #pragma warning( disable : 4100 )
 // warning: unreferenced formal parameter x
 
-#include <boost\log\sinks\text_ostream_backend.hpp>
-#include <boost\log\sinks\sync_frontend.hpp>
+
 #include <boost/log/sources/severity_channel_logger.hpp>
 #include <boost\log\sources\record_ostream.hpp>
-
+#include <boost\log\sinks\sync_frontend.hpp>
 
 
 
@@ -30,20 +29,30 @@ enum SeverityLevel : int
 	critical		= 4
 };
 
+enum ModuleEnum : int
+{
+	LibBlackVision	= 1 << 0,
+	LibCore			= 1 << 1,
+	LibImage		= 1 << 2,
+	Prototyper		= 1 << 3,
+	BlackVisionApp	= 1 << 4
+};
+
 BOOST_LOG_ATTRIBUTE_KEYWORD(severity, "Severity", ::bv::SeverityLevel)
+BOOST_LOG_ATTRIBUTE_KEYWORD(channel, "Channel", ::bv::ModuleEnum)
 
 
-typedef ::boost::log::sources::severity_channel_logger_mt < bv::SeverityLevel, std::string > LoggerType;
+typedef ::boost::log::sources::severity_channel_logger_mt < bv::SeverityLevel, bv::ModuleEnum > LoggerType;
 
 /** This object must hide boost implementation of
-opening record and creating record pump. Otherwise warnings occures.*/
+opening record and creating record pump. Otherwise warnings occur.*/
 class LoggingHelper
 {
 private:
 	boost::log::record										m_record;
 	LoggerType&												m_logger;
 public:
-	LoggingHelper( LoggerType& logger, SeverityLevel level );
+	LoggingHelper( LoggerType& logger, SeverityLevel level, ModuleEnum module );
 
 	::boost::log::aux::record_pump< LoggerType > 		recordPump();
 	bool												operator!()	{ return !m_record; }
@@ -51,7 +60,7 @@ public:
 
 
 #define LOG_MESSAGE( severityLevel ) \
-for( LoggingHelper loggingHelper( bv::Logger::GetLogger().Get(), severityLevel ); !!loggingHelper; )		\
+for( LoggingHelper loggingHelper( bv::Logger::GetLogger().Get(), severityLevel, ModuleEnum::Prototyper ); !!loggingHelper; )		\
 	loggingHelper.recordPump().stream()
 
 				
@@ -59,7 +68,6 @@ for( LoggingHelper loggingHelper( bv::Logger::GetLogger().Get(), severityLevel )
 /**This is singleton logger object.*/
 class Logger
 {
-	typedef boost::log::sinks::synchronous_sink< boost::log::sinks::text_ostream_backend > SyncSink;
 private:
 	LoggerType				m_logger;
 
@@ -75,6 +83,9 @@ public:
 	// Logowanie
 	LoggerType&								Get()									{ return m_logger; }
 	static Logger&							GetLogger();
+
+
+	static void								LoggerTest();
 };
 
 
