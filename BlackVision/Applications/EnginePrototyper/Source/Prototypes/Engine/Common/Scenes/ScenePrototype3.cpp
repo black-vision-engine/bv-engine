@@ -34,8 +34,8 @@ void        ScenePrototype3::OnKey               ( unsigned char c )
 //
 SceneNode * ScenePrototype3::BuildSceneImpl      ()
 {
-	Logger::GetLogger().AddLogFile( "testLog.log" );
-	Logger::GetLogger().AddLogFile( "testLog2.log" );
+	Logger::GetLogger().AddLogFile( "testLog.log", SeverityLevel::info, ModuleEnum::LibCore );
+	Logger::GetLogger().AddLogFile( "testLog2.log", SeverityLevel::warning );
 	Logger::GetLogger().AddConsole();
 
 	std::string sand( "sand.jpg" );

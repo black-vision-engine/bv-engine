@@ -106,14 +106,63 @@ boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream& str
 }
 
 
-namespace bv{
 
+namespace bv{
+	
+// ==================================================================== //
+//					Helper function
+
+/**Sets filter*/
+template<typename Type>
+void SetFilter( boost::shared_ptr<Type> sink, SeverityLevel minLevel, int modules )
+{
+	//I don't know how to do this with loop. It don't want to work.
+	//Operator & isn't defined for filters, so I can't do this like this ( module & modules )
+	auto filter = 
+		(severity >= minLevel) &&
+		(
+			(module == (modules & ( modules & (0x1 << 0) )))
+			|| (module == (modules & ( modules & (0x1 << 1) )))
+			|| (module == (modules & ( modules & (0x1 << 2) )))
+			|| (module == (modules & ( modules & (0x1 << 3) )))
+			|| (module == (modules & ( modules & (0x1 << 4) )))
+			//|| (module == (modules & ( modules & (0x1 << 5) )))
+			//|| (module == (modules & ( modules & (0x1 << 6) )))
+			//|| (module == (modules & ( modules & (0x1 << 7) )))
+			//|| (module == (modules & ( modules & (0x1 << 8) )))
+			//|| (module == (modules & ( modules & (0x1 << 9) )))
+			//|| (module == (modules & ( modules & (0x1 << 10) )))
+			//|| (module == (modules & ( modules & (0x1 << 11) )))
+			//|| (module == (modules & ( modules & (0x1 << 12) )))
+			//|| (module == (modules & ( modules & (0x1 << 13) )))
+			//|| (module == (modules & ( modules & (0x1 << 14) )))
+			//|| (module == (modules & ( modules & (0x1 << 15) )))
+			//|| (module == (modules & ( modules & (0x1 << 16) )))
+			//|| (module == (modules & ( modules & (0x1 << 17) )))
+			//|| (module == (modules & ( modules & (0x1 << 18) )))
+			//|| (module == (modules & ( modules & (0x1 << 19) )))
+			//|| (module == (modules & ( modules & (0x1 << 20) )))
+			//|| (module == (modules & ( modules & (0x1 << 21) )))
+			//|| (module == (modules & ( modules & (0x1 << 22) )))
+			//|| (module == (modules & ( modules & (0x1 << 23) )))
+			//|| (module == (modules & ( modules & (0x1 << 24) )))
+			//|| (module == (modules & ( modules & (0x1 << 25) )))
+			//|| (module == (modules & ( modules & (0x1 << 26) )))
+			//|| (module == (modules & ( modules & (0x1 << 27) )))
+			//|| (module == (modules & ( modules & (0x1 << 28) )))
+			//|| (module == (modules & ( modules & (0x1 << 29) )))
+			//|| (module == (modules & ( modules & (0x1 << 30) )))
+			//|| (module == (modules & ( modules & (0x1 << 31) )))
+		);
+
+	sink->set_filter( filter );
+}
 
 
 
 // ==================================================================== //
 //					Logging object
-	//, boost::log::keywords::channel = ModuleEnum::Prototyper
+
 LoggingHelper::LoggingHelper( LoggerType& logger, SeverityLevel level, ModuleEnum module )
 	:	m_record( logger.open_record( (boost::log::keywords::channel = module, boost::log::keywords::severity = level) ) ),
 	m_logger( logger )
@@ -164,6 +213,8 @@ void Logger::InitForamatter()
             << expr::message;
 }
 
+
+
 void Logger::AddLogFile( const std::string& fileName, SeverityLevel minLevel, int modules )
 {
 	boost::shared_ptr< SyncSink > newSink = boost::make_shared< SyncSink >();
@@ -171,19 +222,7 @@ void Logger::AddLogFile( const std::string& fileName, SeverityLevel minLevel, in
 
     newSink->set_formatter( m_formatter );
 
-	newSink->set_filter
-	(
-		(severity >= minLevel)
-		&&
-		(
-			(module == (modules & ModuleEnum::BlackVisionApp))
-			|| (module == (modules & ModuleEnum::LibBlackVision))
-			|| (module == (modules & ModuleEnum::LibCore))
-			|| (module == (modules & ModuleEnum::LibImage))
-			|| (module == (modules & ModuleEnum::LibImage))
-			|| (module == (modules & ModuleEnum::Prototyper))
-		)
-	);
+	SetFilter( newSink, minLevel, modules );
 
 	boost::log::core::get()->add_sink( newSink );
 }

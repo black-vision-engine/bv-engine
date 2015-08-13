@@ -37,11 +37,18 @@ enum ModuleEnum : int
 	BlackVisionApp	= 1 << 4
 };
 
+/**Adding modules instruction:
+- Add new constant to ModuleEnum
+- Add string with the name of module in operator<< function (.cpp file)
+- Uncomment line with module number in function SetFilter. Otherwise all messages from new module
+will be filtered.*/
+
+
 BOOST_LOG_ATTRIBUTE_KEYWORD(severity, "Severity", ::bv::SeverityLevel)
 BOOST_LOG_ATTRIBUTE_KEYWORD(module, "Channel", ::bv::ModuleEnum)
 
-
 typedef ::boost::log::sources::severity_channel_logger_mt < bv::SeverityLevel, bv::ModuleEnum > LoggerType;
+
 
 /** This object must hide boost implementation of
 opening record and creating record pump. Otherwise warnings occur.*/
