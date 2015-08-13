@@ -30,16 +30,16 @@ enum SeverityLevel : int
 
 enum ModuleEnum : int
 {
-	LibBlackVision	= 1 << 0,
-	LibCore			= 1 << 1,
-	LibImage		= 1 << 2,
-	Prototyper		= 1 << 3,
-	BlackVisionApp	= 1 << 4
+	ME_LibBlackVision	= 1 << 0,
+	ME_LibCore			= 1 << 1,
+	ME_LibImage		= 1 << 2,
+	ME_Prototyper		= 1 << 3,
+	ME_BlackVisionApp	= 1 << 4
 };
 
-/**Adding modules instruction:
+/**Adding new modules - instruction:
 - Add new constant to ModuleEnum
-- Add string with the name of module in operator<< function (.cpp file)
+- Add string with the name of module in InitializeModuleMapping function (.cpp file).
 - Uncomment line with module number in function SetFilter. Otherwise all messages from new module
 will be filtered.*/
 
@@ -65,13 +65,21 @@ public:
 };
 
 
-///@todo makro które produkuje linijkê i plik z której wyœ³ano loga
+namespace LogHelperString
+{
+
+extern const char* FILE_DESC_STRING;
+extern const char* LINE_DESC_STRING;
+
+}
 
 #define LOG_MESSAGE( severityLevel ) \
 for( LoggingHelper loggingHelper( bv::Logger::GetLogger().Get(), severityLevel, LOG_MODULE ); !!loggingHelper; )		\
 	loggingHelper.recordPump().stream()
 
-				
+#define LOG_MESSAGE_FILE_LINE( severityLevel ) \
+for( LoggingHelper loggingHelper( bv::Logger::GetLogger().Get(), severityLevel, LOG_MODULE ); !!loggingHelper; )		\
+	loggingHelper.recordPump().stream()	<< ::bv::LogHelperString::FILE_DESC_STRING << __FILE__ << ::bv::LogHelperString::LINE_DESC_STRING << __LINE__ << ": "
 
 /**This is singleton logger object.*/
 class Logger
@@ -80,21 +88,25 @@ private:
 	LoggerType				m_logger;
 
 	boost::log::formatter	m_formatter;
+
+	unsigned int			m_fileRotationSize;
 private:
 	Logger();
 	~Logger();
 
-	void InitForamatter();
+	void						InitForamatter		();
 public:
-	void									AddLogFile			( const std::string& fileName, SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
-	void									AddConsole			( SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
-
-	// Logowanie
-	LoggerType&								Get()									{ return m_logger; }
-	static Logger&							GetLogger();
+	void						AddLogFile			( const std::string& fileName, SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
+	void						AddConsole			( SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
 
 
-	static void								LoggerTest();
+	/// Affects all files, that will be added after this call.
+	void						SetFileRotationSize	( unsigned int newSize )	{ m_fileRotationSize = newSize; }
+	
+	LoggerType&					Get					()							{ return m_logger; }
+	static Logger&				GetLogger			();
+
+	/*static void					LoggerTest();*/
 };
 
 

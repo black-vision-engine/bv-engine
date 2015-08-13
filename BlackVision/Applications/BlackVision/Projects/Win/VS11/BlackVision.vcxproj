@@ -179,6 +179,7 @@
     <ClInclude Include="..\..\..\Source\Xml\TreeBuilder.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\Source\bvAppLogInitializer.inl" />
     <None Include="..\..\..\Source\BVConfig.inl" />
     <None Include="..\..\..\Source\FrameStatsService.inl" />
   </ItemGroup>

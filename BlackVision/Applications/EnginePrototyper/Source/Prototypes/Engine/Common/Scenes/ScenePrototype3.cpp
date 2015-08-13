@@ -34,10 +34,6 @@ void        ScenePrototype3::OnKey               ( unsigned char c )
 //
 SceneNode * ScenePrototype3::BuildSceneImpl      ()
 {
-	Logger::GetLogger().AddLogFile( "testLog.log", SeverityLevel::info, ModuleEnum::LibCore );
-	Logger::GetLogger().AddLogFile( "testLog2.log", SeverityLevel::warning );
-	Logger::GetLogger().AddConsole();
-
 	std::string sand( "sand.jpg" );
 	std::string cubeMap( "Penguins.jpg" );
 
@@ -48,7 +44,6 @@ SceneNode * ScenePrototype3::BuildSceneImpl      ()
 	SceneNode * root = MultipassNodeBuilder::CreateMultipassRectNodeTexture( 1.f, 1.f, -1.1f, textures.data(), (unsigned short)textures.size() );
 	numPasses = 2;
 
-	LOG_MESSAGE( SeverityLevel::debug ) << "Multipass begin";
 
 	float alfa = 45.0f;
 
@@ -62,12 +57,6 @@ SceneNode * ScenePrototype3::BuildSceneImpl      ()
 
 		alfa += 360.0f;
 	}
-
-	LOG_MESSAGE( SeverityLevel::critical ) << "Multipass end";
-	LOG_MESSAGE( SeverityLevel::error ) << "Multipass end";
-	LOG_MESSAGE( SeverityLevel::warning ) << "Multipass end";
-
-	Logger::GetLogger().LoggerTest();
 
     return root;
 }

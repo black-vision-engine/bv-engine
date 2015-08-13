@@ -1,6 +1,7 @@
 #include "Logger.h"
 
 #include <fstream>
+#include <unordered_map>
 #include <iomanip>
 #include "UseLogger.h"
 
@@ -22,17 +23,26 @@
 #include <boost/log/expressions.hpp>
 #include <boost/log/attributes.hpp>
 #include <boost\log\sinks\text_ostream_backend.hpp>
+#include <boost\log\sinks\text_file_backend.hpp>
 #include <boost/core/null_deleter.hpp>
 
-typedef boost::log::sinks::synchronous_sink< boost::log::sinks::text_ostream_backend > SyncSink;
+typedef boost::log::sinks::synchronous_sink< boost::log::sinks::text_file_backend > SyncFileSink;
+typedef boost::log::sinks::synchronous_sink< boost::log::sinks::text_ostream_backend > SyncStreamSink;
 typedef bv::LoggerType::char_type char_type;
+typedef std::unordered_map< bv::ModuleEnum, std::string > ModuleMapping;
+
+namespace bv { namespace LogHelperString {
+	const char* FILE_DESC_STRING = "In File: ";
+	const char* LINE_DESC_STRING = ", Line ";
+}}
 
 
-const char* SEVERITY_DEBUG_STRING = "debug";
-const char* SEVERITY_INFO_STRING = "info";
-const char* SEVERITY_WARNING_STRING = "warning";
-const char* SEVERITY_ERROR_STRING = "error";
-const char* SEVERITY_CRITICAL_STRING = "critical";
+
+const char* SEVERITY_DEBUG_STRING		= "debug";
+const char* SEVERITY_INFO_STRING		= "info";
+const char* SEVERITY_WARNING_STRING		= "warning";
+const char* SEVERITY_ERROR_STRING		= "error";
+const char* SEVERITY_CRITICAL_STRING	= "critical";
 
 static const char* SEVERITY_STRINGS[] =
 {
@@ -44,11 +54,17 @@ static const char* SEVERITY_STRINGS[] =
 };
 
 
-const char* MODULE_LIBBLACKVISION_STRING = "LibBlackVision";
-const char* MODULE_LIBCORE_STRING = "LibCore";
-const char* MODULE_LIBIMAGE_STRING = "LibImage";
-const char* MODULE_PROTOTYPER_STRING = "Prototyper";
-const char* MODULE_BLACKVISIONAPP_STRING = "BlackVisionApp";
+ModuleMapping moduleString;
+
+void InitializeModuleMapping()
+{
+	moduleString[bv::ModuleEnum::ME_LibBlackVision]		= "LibBlackVision";
+	moduleString[bv::ModuleEnum::ME_LibCore]				= "LibCore";
+	moduleString[bv::ModuleEnum::ME_LibImage]				= "LibImage";
+	moduleString[bv::ModuleEnum::ME_Prototyper]			= "Prototyper";
+	moduleString[bv::ModuleEnum::ME_BlackVisionApp]		= "BlackVisionApp";
+}
+
 
 // Template specializaion is used to supress warning
 // warning: funcion marked as __forceinline not inlined
@@ -77,30 +93,13 @@ boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream& str
 
 boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream& strm, boost::log::to_log_manip< bv::ModuleEnum, module_tag > const& manip )
 {
-	// @todo mapowanie na stringi
     bv::ModuleEnum level = manip.get();
 
-	switch( level )
-	{
-	case bv::ModuleEnum::LibBlackVision:
-		strm << MODULE_LIBBLACKVISION_STRING;
-		break;
-	case bv::ModuleEnum::LibCore:
-		strm << MODULE_LIBCORE_STRING;
-		break;
-	case bv::ModuleEnum::LibImage:
-		strm << MODULE_LIBIMAGE_STRING;
-		break;
-	case bv::ModuleEnum::BlackVisionApp:
-		strm << MODULE_BLACKVISIONAPP_STRING;
-		break;
-	case bv::ModuleEnum::Prototyper:
-		strm << MODULE_PROTOTYPER_STRING;
-		break;
-	default:
+	auto module = moduleString.find( level );
+	if( module != moduleString.end() )
+		strm << module->second;
+	else
 		strm << "Unknown Module";
-	}
-
 
     return strm;
 }
@@ -176,11 +175,11 @@ LoggingHelper::LoggingHelper( LoggerType& logger, SeverityLevel level, ModuleEnu
 // ==================================================================== //
 //					Logger class
 
-void								Logger::LoggerTest()
-{
-	//BOOST_LOG_CHANNEL_SEV( Logger::GetLogger().Get(), ModuleEnum::Prototyper, SeverityLevel::critical ) << "Channel";
-	LOG_MESSAGE(SeverityLevel::info) << "Logger test passed";
-}
+//void								Logger::LoggerTest()
+//{
+//	//BOOST_LOG_CHANNEL_SEV( Logger::GetLogger().Get(), ModuleEnum::Prototyper, SeverityLevel::critical ) << "Channel";
+//	LOG_MESSAGE(SeverityLevel::info) << "Logger test passed";
+//}
 
 
 Logger& Logger::GetLogger()
@@ -192,8 +191,12 @@ Logger& Logger::GetLogger()
 
 Logger::Logger()
 {
+	InitializeModuleMapping();
+
 	InitForamatter();
 	boost::log::add_common_attributes();
+
+	m_fileRotationSize = 5 * 1024 * 1024;
 }
 
 
@@ -206,7 +209,6 @@ void Logger::InitForamatter()
 	namespace expr = boost::log::expressions;
 
     m_formatter = expr::stream
-            //<< std::hex << std::setw(8) << std::setfill('0') << expr::attr< unsigned int >("LineID") << ": "
             << expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d %H:%M:%S") << " "
 			<< std::setw(8) << expr::attr< bv::SeverityLevel, severity_tag >("Severity") << ": "
 			<< "[" << expr::attr< bv::ModuleEnum, module_tag >("Channel") << "] "
@@ -217,11 +219,15 @@ void Logger::InitForamatter()
 
 void Logger::AddLogFile( const std::string& fileName, SeverityLevel minLevel, int modules )
 {
-	boost::shared_ptr< SyncSink > newSink = boost::make_shared< SyncSink >();
-	newSink->locked_backend()->add_stream( boost::make_shared< std::ofstream >( fileName.c_str() ) );
+    boost::shared_ptr< boost::log::sinks::text_file_backend > backend =
+        boost::make_shared< boost::log::sinks::text_file_backend >(
+            boost::log::keywords::file_name = fileName,
+			boost::log::keywords::rotation_size = m_fileRotationSize,
+			boost::log::keywords::open_mode = std::ios_base::app );
+
+	boost::shared_ptr< SyncFileSink > newSink = boost::make_shared< SyncFileSink >( backend );
 
     newSink->set_formatter( m_formatter );
-
 	SetFilter( newSink, minLevel, modules );
 
 	boost::log::core::get()->add_sink( newSink );
@@ -229,7 +235,7 @@ void Logger::AddLogFile( const std::string& fileName, SeverityLevel minLevel, in
 
 void Logger::AddConsole			( SeverityLevel minLevel, int modules )
 {
-	boost::shared_ptr< SyncSink > newSink = boost::make_shared< SyncSink >();
+	boost::shared_ptr< SyncStreamSink > newSink = boost::make_shared< SyncStreamSink >();
 	boost::shared_ptr< std::ostream > stream(&std::clog, boost::null_deleter());
 	newSink->locked_backend()->add_stream( stream );
 
