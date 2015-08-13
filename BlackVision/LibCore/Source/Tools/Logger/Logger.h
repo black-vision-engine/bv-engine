@@ -106,8 +106,6 @@ public:
 	
 	LoggerType&					Get					()							{ return m_logger; }
 	static Logger&				GetLogger			();
-
-	/*static void					LoggerTest();*/
 };
 
 

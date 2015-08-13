@@ -26,4 +26,4 @@ LOG_MESSAGE( SeverityLevel::warning ) << "Message";
     #error LOG_MODULE already defined.
 #endif
 
-#define LOG_MODULE ModuleEnum::LibCore
+#define LOG_MODULE ModuleEnum::ME_LibCore

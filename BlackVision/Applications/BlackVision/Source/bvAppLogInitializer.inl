@@ -9,7 +9,7 @@
 // Default file path and init message constats
 
 const std::string DEFAULT_LOG_FILE_PATH = "../../../../Logs/DefaultLog.txt";
-const std::string INIT_TEXT_STRING = "Initialized BlackVision, version: ";
+const std::string INIT_TEXT_STRING = "BlackVision initialized, version: ";
 
 #ifdef _DEBUG
 	const std::string VERSION_DEBUG_STRING = " Debug";

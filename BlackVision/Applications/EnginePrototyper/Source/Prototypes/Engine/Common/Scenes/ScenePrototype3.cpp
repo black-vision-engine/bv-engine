@@ -3,7 +3,7 @@
 
 
 #include "Tools\Logger\Logger.h"
-#define LOG_MODULE ModuleEnum::Prototyper
+#define LOG_MODULE ModuleEnum::ME_Prototyper
 
 
 namespace bv {
@@ -57,6 +57,7 @@ SceneNode * ScenePrototype3::BuildSceneImpl      ()
 
 		alfa += 360.0f;
 	}
+
 
     return root;
 }

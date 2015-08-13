@@ -55,6 +55,8 @@ static const char* SEVERITY_STRINGS[] =
 
 
 ModuleMapping moduleString;
+unsigned int modulesStringAlignment = 14;
+unsigned int severityLevelAlignment = 8;
 
 void InitializeModuleMapping()
 {
@@ -63,6 +65,8 @@ void InitializeModuleMapping()
 	moduleString[bv::ModuleEnum::ME_LibImage]			= "LibImage";
 	moduleString[bv::ModuleEnum::ME_Prototyper]			= "Prototyper";
 	moduleString[bv::ModuleEnum::ME_BlackVisionApp]		= "BlackVisionApp";
+
+	modulesStringAlignment = 14;
 }
 
 
@@ -175,13 +179,6 @@ LoggingHelper::LoggingHelper( LoggerType& logger, SeverityLevel level, ModuleEnu
 // ==================================================================== //
 //					Logger class
 
-//void								Logger::LoggerTest()
-//{
-//	//BOOST_LOG_CHANNEL_SEV( Logger::GetLogger().Get(), ModuleEnum::Prototyper, SeverityLevel::critical ) << "Channel";
-//	LOG_MESSAGE(SeverityLevel::info) << "Logger test passed";
-//}
-
-
 Logger& Logger::GetLogger()
 {
 	static Logger sEngineLogger;
@@ -209,9 +206,11 @@ void Logger::InitForamatter()
 	namespace expr = boost::log::expressions;
 
     m_formatter = expr::stream
+			<< std::left
+			<< "[" << std::setw( modulesStringAlignment ) << expr::attr< bv::ModuleEnum, module_tag >("Channel") << "] "
+			<< std::right
             << expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d %H:%M:%S") << " "
-			<< std::setw(8) << expr::attr< bv::SeverityLevel, severity_tag >("Severity") << ": "
-			<< "[" << expr::attr< bv::ModuleEnum, module_tag >("Channel") << "] "
+			<< std::setw( severityLevelAlignment ) << expr::attr< bv::SeverityLevel, severity_tag >("Severity") << ": "
             << expr::message;
 }
 
