@@ -4,6 +4,8 @@
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 
+#include "Assets/AssetSerialization.h"
+
 namespace bv { namespace model {
 
 namespace PluginsSerialization
@@ -193,6 +195,13 @@ ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
         SetParameter( plugin->GetPluginParamValModel(), param );
     }
     
+    auto assets = doc.LoadArray< AssetSerialization >( "assets" );
+    for( auto asset : assets )
+    {
+        plugin->AddAsset( asset );
+        plugin->LoadResource( asset );
+    }
+
     ISerializablePtr serializablePlugin = std::static_pointer_cast< ISerializable >( plugin );
     return serializablePlugin;
 }

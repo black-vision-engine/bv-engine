@@ -879,6 +879,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.cpp">
       <Filter>Engine\Models\Timeline</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\AssetSerialization.cpp">
+      <Filter>Assets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1774,6 +1777,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\SerializationObjects.h">
       <Filter>Engine\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\AssetSerialization.h">
+      <Filter>Assets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

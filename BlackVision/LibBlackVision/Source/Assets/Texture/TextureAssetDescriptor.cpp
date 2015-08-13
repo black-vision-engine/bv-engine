@@ -10,17 +10,23 @@ const std::string TextureAssetDesc::uid = "TEXTURE_ASSET_DESC";
 
 // ***********************
 //
-void                TextureAssetDesc::Serialize       ( SerializeObject & /*sob*/ ) const
+void                TextureAssetDesc::Serialize       ( SerializeObject & sob ) const
 {
-    assert( !"implement me" );
+    sob.SetName( "asset" );
+    sob.SetValue( "path", m_originalTextureDesc->GetImagePath() );
+        
+    sob.Pop();
 }
 
 // ***********************
 //
-ISerializablePtr     TextureAssetDesc::Create          ( DeserializeObject & /*dob*/ )
+ISerializablePtr     TextureAssetDesc::Create          ( DeserializeObject & dob )
 {
-    assert( !"implement me" );
-    return nullptr;
+    auto a = Create( dob.GetValue( "path" ), false ).get();
+    auto as = (TextureAssetDesc*)a;
+    auto asset = std::shared_ptr< TextureAssetDesc >( as );
+
+    return asset;
 }
 
 // ***********************

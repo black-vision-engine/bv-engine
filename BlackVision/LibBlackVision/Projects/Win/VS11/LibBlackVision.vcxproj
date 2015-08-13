@@ -106,6 +106,7 @@
     <ClCompile Include="..\..\..\Source\Assets\AssetLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\AssetManager.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Assets.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\AssetSerialization.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Cache\HardDriveRawDataCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Cache\RawDataCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\AtlasCache.cpp" />
@@ -339,6 +340,7 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Assets\AssetSerialization.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\DefaultMultipassEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.h" />
