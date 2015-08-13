@@ -90,6 +90,20 @@ ITimeEvaluatorPtr GetTimeline( const BasePlugin< IPlugin >* plugin )
 
 // *******************************
 //
+std::vector< AssetDescConstPtr >    BasePlugin< IPlugin >::GetAssets                   () const
+{
+    return m_assets;
+}
+
+// *******************************
+//
+void                                BasePlugin< IPlugin >::AddAsset                    ( AssetDescConstPtr asset )
+{
+    m_assets.push_back( asset );
+}
+
+// *******************************
+//
 void                                BasePlugin< IPlugin >::Serialize                   ( SerializeObject & doc ) const
 {
     doc.SetName( "plugin" );
@@ -118,6 +132,11 @@ void                                BasePlugin< IPlugin >::Serialize            
             }
     }
     doc.Pop(); // params
+
+    doc.SetName( "assets" );
+        for( auto asset : GetAssets() )
+            asset->Serialize( doc );
+    doc.Pop(); // assets
 
     doc.Pop(); // plugin
 }

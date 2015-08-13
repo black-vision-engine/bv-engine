@@ -24,6 +24,9 @@ protected:
 	virtual const std::string &			GetUID				() const override;
 
 public:
+    virtual void                Serialize       ( SerializeObject & sob ) const;
+    static ISerializablePtr     Create          ( DeserializeObject & dob );
+
 	virtual bool						IsCacheable			() const override;
 
 	virtual VoidConstPtr				QueryThis			() const override;

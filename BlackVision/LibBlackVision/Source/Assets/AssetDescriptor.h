@@ -2,6 +2,8 @@
 
 #include "CoreDEF.h"
 
+#include "Engine/Interfaces/ISerializable.h"
+
 #include <string>
 
 namespace bv
@@ -10,7 +12,7 @@ namespace bv
 class AssetDesc;
 DEFINE_CONST_PTR_TYPE( AssetDesc )
 
-class AssetDesc
+class AssetDesc : public ISerializable
 {
 protected:
 	virtual VoidConstPtr            QueryThis	() const = 0;

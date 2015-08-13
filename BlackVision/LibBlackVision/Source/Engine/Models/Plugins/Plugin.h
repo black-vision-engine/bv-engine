@@ -30,6 +30,7 @@ protected:
     std::string                                 m_uid;
 
     IPluginParamValModelPtr                     m_pluginParamValModel;
+    std::vector< AssetDescConstPtr >            m_assets;
 
 protected:
 
@@ -46,7 +47,10 @@ public:
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const override;
     virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const override;
     virtual IStatedValuePtr                     GetState                    ( const std::string & name ) const;
+    
     virtual std::vector< IParameterPtr >        GetParameters               () const; // FIXME: ugly hack for serialization
+    virtual std::vector< AssetDescConstPtr >    GetAssets                   () const; // FIXME: ugly hack for serialization
+    virtual void                                AddAsset                    ( AssetDescConstPtr asset ); // FIXME: ugly hack for serialization
 
     virtual void                                Update                      ( TimeType t );
 

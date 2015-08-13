@@ -8,6 +8,21 @@ const std::string FontAssetDesc::uid = "FONT_ASSET_DESC";
 
 // ***********************
 //
+void                FontAssetDesc::Serialize       ( SerializeObject & /*sob*/ ) const
+{
+    assert( !"implement me" );
+}
+
+// ***********************
+//
+ISerializablePtr     FontAssetDesc::Create          ( DeserializeObject & /*dob*/ )
+{
+    assert( !"implement me" );
+    return nullptr;
+}
+
+// ***********************
+//
 const std::string &	FontAssetDesc::GetUID() const
 {
 	return FontAssetDesc::UID();

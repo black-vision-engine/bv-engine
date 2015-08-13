@@ -10,6 +10,21 @@ const std::string TextureAssetDesc::uid = "TEXTURE_ASSET_DESC";
 
 // ***********************
 //
+void                TextureAssetDesc::Serialize       ( SerializeObject & /*sob*/ ) const
+{
+    assert( !"implement me" );
+}
+
+// ***********************
+//
+ISerializablePtr     TextureAssetDesc::Create          ( DeserializeObject & /*dob*/ )
+{
+    assert( !"implement me" );
+    return nullptr;
+}
+
+// ***********************
+//
 const std::string &	TextureAssetDesc::GetUID() const
 {
 	return TextureAssetDesc::UID();
