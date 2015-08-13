@@ -16,7 +16,7 @@ TextConstPtr FontAsset::GetText() const
 // 
 FontAssetConstPtr FontAsset::Create( const TextConstPtr & text )
 {
-	return std::make_shared< FontAsset >( text );
+	return FontAssetConstPtr( new FontAsset( text ) );
 }
 
 // *******************************

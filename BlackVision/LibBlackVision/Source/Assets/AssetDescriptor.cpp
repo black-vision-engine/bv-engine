@@ -4,12 +4,22 @@
 
 namespace bv
 {
-namespace {
-    int dummy_symbol()
-    {
-        assert( false );
-        return 0;
-    }
+
+// *********************************
+//
+std::string			AssetDesc::GetKey		() const
+{
+	return "";
 }
+
+// *********************************
+//
+//namespace {
+//    int dummy_symbol()
+//    {
+//        assert( false );
+//        return 0;
+//    }
+//}
 
 } // bv

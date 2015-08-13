@@ -28,8 +28,7 @@ public:
 	static const std::string &		UID			();
 
 public:
-
-                                                AnimationAssetDesc	( const std::vector< std::string > & frames );
+                                                
                                                 ~AnimationAssetDesc	();
 
 	const std::vector< TextureAssetDescConstPtr > &  GetFrames		() const;
@@ -37,6 +36,7 @@ public:
     static AnimationAssetDescConstPtr			CreateFromDirFrames ( const std::string & path, const std::string & filter );
 
 private:
+	explicit						AnimationAssetDesc	( const std::vector< std::string > & frames );
 
     std::vector< TextureAssetDescConstPtr >  m_frames;
 

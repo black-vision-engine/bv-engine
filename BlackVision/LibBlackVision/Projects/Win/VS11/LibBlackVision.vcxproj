@@ -119,6 +119,7 @@
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\MipMapAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\MipMapAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\SingleTextureAsset.cpp" />
@@ -127,6 +128,7 @@
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Texture\TextureUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\BaseEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\EventManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\Events.cpp" />
@@ -337,6 +339,8 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\DefaultMultipassEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.h" />

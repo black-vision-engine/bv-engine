@@ -1102,7 +1102,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "4float.exr" );
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "4float.exr", MipMapFilterType::BILINEAR );
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
-	success = model::LoadTexture( node->GetPlugin( "texture" ), "marker2.png", MipMapFilterType::BILINEAR );
+	success = model::LoadTexture( node->GetPlugin( "texture" ), "64bit.png", MipMapFilterType::BILINEAR );
+	//success = model::LoadTexture( node->GetPlugin( "texture" ), "64bit.png" );
+
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "sand.jpg" );
 
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "0level.bmp", MipMapFilterType::BILINEAR );
@@ -1372,7 +1374,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
 
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/courbi.ttf" );
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/cour.ttf" );
-    success = model::LoadFont( node->GetPlugin( "text" ), "Assets/Fonts/digital.TTF", 60, blurSize, 4, false );
+    success = model::LoadFont( node->GetPlugin( "text" ), "Assets/Fonts/digital.TTF", 60, blurSize, 4, true );
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/ARIALUNI.TTF" );
     assert( success );
 

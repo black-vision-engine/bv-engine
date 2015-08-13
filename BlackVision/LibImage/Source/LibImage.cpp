@@ -421,7 +421,7 @@ MemoryChunkConstPtr LoadImage( const std::string & filePath, UInt32 * width, UIn
     auto pixels = LoadImageImpl( filePath, width, height, bpp, channelNum, loadFromMemory );
     auto numBytes = ( *width ) * ( *height ) * ( *bpp ) / 8;
 
-    return MemoryChunk::Create( pixels, numBytes );
+    return pixels ? MemoryChunk::Create( pixels, numBytes ) : nullptr;
 }
 
 // *********************************
@@ -431,7 +431,7 @@ MemoryChunkConstPtr LoadRAWImage( const std::string & filePath )
     SizeType size = 0;
     auto buffer = LoadRAWImageImpl( filePath, &size );
 
-    return MemoryChunk::Create( buffer, size );
+    return buffer ? MemoryChunk::Create( buffer, size ) : nullptr;
 }
 
 // *********************************
