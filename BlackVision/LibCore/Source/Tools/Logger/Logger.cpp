@@ -26,8 +26,8 @@
 #include <boost\log\sinks\text_file_backend.hpp>
 #include <boost/core/null_deleter.hpp>
 
-typedef boost::log::sinks::synchronous_sink< boost::log::sinks::text_file_backend > SyncFileSink;
-typedef boost::log::sinks::synchronous_sink< boost::log::sinks::text_ostream_backend > SyncStreamSink;
+typedef boost::log::sinks::asynchronous_sink< boost::log::sinks::text_file_backend > ASyncFileSink;
+typedef boost::log::sinks::asynchronous_sink< boost::log::sinks::text_ostream_backend > ASyncStreamSink;
 typedef bv::LoggerType::char_type char_type;
 typedef std::unordered_map< bv::ModuleEnum, std::string > ModuleMapping;
 
@@ -59,8 +59,8 @@ ModuleMapping moduleString;
 void InitializeModuleMapping()
 {
 	moduleString[bv::ModuleEnum::ME_LibBlackVision]		= "LibBlackVision";
-	moduleString[bv::ModuleEnum::ME_LibCore]				= "LibCore";
-	moduleString[bv::ModuleEnum::ME_LibImage]				= "LibImage";
+	moduleString[bv::ModuleEnum::ME_LibCore]			= "LibCore";
+	moduleString[bv::ModuleEnum::ME_LibImage]			= "LibImage";
 	moduleString[bv::ModuleEnum::ME_Prototyper]			= "Prototyper";
 	moduleString[bv::ModuleEnum::ME_BlackVisionApp]		= "BlackVisionApp";
 }
@@ -225,7 +225,9 @@ void Logger::AddLogFile( const std::string& fileName, SeverityLevel minLevel, in
 			boost::log::keywords::rotation_size = m_fileRotationSize,
 			boost::log::keywords::open_mode = std::ios_base::app );
 
-	boost::shared_ptr< SyncFileSink > newSink = boost::make_shared< SyncFileSink >( backend );
+	backend->auto_flush( true );			// Needed when critical errors occure.
+
+	boost::shared_ptr< ASyncFileSink > newSink = boost::make_shared< ASyncFileSink >( backend );
 
     newSink->set_formatter( m_formatter );
 	SetFilter( newSink, minLevel, modules );
@@ -235,7 +237,7 @@ void Logger::AddLogFile( const std::string& fileName, SeverityLevel minLevel, in
 
 void Logger::AddConsole			( SeverityLevel minLevel, int modules )
 {
-	boost::shared_ptr< SyncStreamSink > newSink = boost::make_shared< SyncStreamSink >();
+	boost::shared_ptr< ASyncStreamSink > newSink = boost::make_shared< ASyncStreamSink >();
 	boost::shared_ptr< std::ostream > stream(&std::clog, boost::null_deleter());
 	newSink->locked_backend()->add_stream( stream );
 

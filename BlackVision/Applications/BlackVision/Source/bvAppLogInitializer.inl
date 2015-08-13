@@ -37,6 +37,7 @@ void			bv::BlackVisionApp::LoggerInitializer	()
 {
 	auto& logger = Logger::GetLogger();
 	logger.SetFileRotationSize( 1024 * 1024 );		// Affects files added after that.
+	logger.AddConsole();
 
 #ifdef _DEBUG
 	logger.AddLogFile( DEFAULT_LOG_FILE_PATH, bv::SeverityLevel::debug );
