@@ -89,7 +89,7 @@ private:
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
-	//virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
+	virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
 
 	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & trans ) const override;
 
