@@ -2,6 +2,10 @@
 #include "Mathematics\Defines.h"
 
 
+#include "Tools\Logger\Logger.h"
+#define LOG_MODULE ModuleEnum::ME_Prototyper
+
+
 namespace bv {
 
 // **************************
@@ -40,6 +44,7 @@ SceneNode * ScenePrototype3::BuildSceneImpl      ()
 	SceneNode * root = MultipassNodeBuilder::CreateMultipassRectNodeTexture( 1.f, 1.f, -1.1f, textures.data(), (unsigned short)textures.size() );
 	numPasses = 2;
 
+
 	float alfa = 45.0f;
 
 	for( unsigned int i = 0; i < 4; ++i )
@@ -52,6 +57,7 @@ SceneNode * ScenePrototype3::BuildSceneImpl      ()
 
 		alfa += 360.0f;
 	}
+
 
     return root;
 }

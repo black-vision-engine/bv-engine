@@ -19,6 +19,9 @@
     <Filter Include="Tools">
       <UniqueIdentifier>{acaec9cd-6541-4c9d-b24d-30491987af65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\Logger">
+      <UniqueIdentifier>{486e0344-793b-4e99-a7ab-70c551821e1e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\CoreDEF.h" />
@@ -70,6 +73,12 @@
     <ClInclude Include="..\..\..\Source\Tools\Utils.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Logger\Logger.h">
+      <Filter>Tools\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Logger\UseLogger.h">
+      <Filter>Tools\Logger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">
@@ -113,6 +122,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Tools\Utils.cpp">
       <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\Logger\Logger.cpp">
+      <Filter>Tools\Logger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

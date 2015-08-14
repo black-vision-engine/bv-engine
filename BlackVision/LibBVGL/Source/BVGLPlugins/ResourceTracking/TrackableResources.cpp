@@ -54,6 +54,7 @@ void            TrackableResources< ResourceDesc >::DeleteResources     ( GLsize
     }    
 }
 
+
 // *****************************
 //
 template< typename ResourceDesc >
@@ -70,6 +71,16 @@ template< typename ResourceDesc >
 ResourceDesc &  TrackableResources< ResourceDesc >::GetBoundResource    ( GLenum target )
 {
     return m_allocatedResources[ GetBoundResourceID( target ) ];
+}
+
+// *****************************
+//
+template< typename ResourceDesc >
+ResourceDesc&	TrackableResources< ResourceDesc >::GetResource			( GLuint resource )
+{
+	assert( m_allocatedResources.find( resource ) != m_allocatedResources.end() );
+
+	return m_allocatedResources[ resource ];
 }
 
 // *****************************
