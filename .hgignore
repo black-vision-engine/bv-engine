@@ -12,6 +12,6 @@ workspace.xml
 BlackVision/_TestsResults/*
 BlackVision/Assets/BasicShapes/*
 BlackVision/Applications/ProjectManagerPrototype/bv_media/*
-BlackVision/Logs/DefaultLog.txt
 BlackVision/Test/Assets/Multipass/MultipassTestReferenceImage.png
 BlackVision/Assets/ModelNodeEditor/Desert.jpg
+BlackVision/Logs/DefaultLog.txt
