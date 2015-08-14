@@ -362,6 +362,10 @@ void                                DefaultTextPlugin::Update                   
     { t; } // FIXME: suppress unused warning
     m_paramValModel->Update();
 
+	m_scaleMat = glm::mat4( 1.0 );
+
+	ScaleToMaxTextLength();
+
 	m_scaleValue->SetValue( m_scaleMat );
 
     if( m_vaChannel) // FUNKED for serialization
