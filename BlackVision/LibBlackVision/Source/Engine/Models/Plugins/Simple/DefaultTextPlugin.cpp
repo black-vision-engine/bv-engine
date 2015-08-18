@@ -443,9 +443,9 @@ namespace
 glm::mat4 BuildScaleMatrix( const glm::vec3 & center, const glm::vec3 & scale )
 {
 	{ center; }
-    return  glm::translate( glm::mat4( 1.f ), -center ) *
+    return  glm::translate( glm::mat4( 1.f ), center ) *
             glm::scale( glm::mat4( 1.f ), scale ) *
-            glm::translate( glm::mat4( 1.f ), center );
+            glm::translate( glm::mat4( 1.f ), -center );
 }
 
 // *************************************
@@ -494,21 +494,21 @@ void DefaultTextPlugin::ScaleToMaxTextLength		()
 
     if( maxTextLenght > 0.f && m_textLength > 0.f && m_textLength > maxTextLenght )
     {
-        auto center = glm::vec3( 0.f, 0.f, 0.f );
+        //auto center = glm::vec3( 0.f, 0.f, 0.f );
 
-        switch( EvaluateAsInt< TextAlignmentType >( m_alignmentParam ) )
-        {
-        case TextAlignmentType::Center:
-            center = glm::vec3( m_textLength / 2.f, 0.f, 0.f );
-            break;
-        case TextAlignmentType::Right:
-            center = glm::vec3( m_textLength, 0.f, 0.f );
-            break;
-        default:
-            break;
-        }
+        //switch( EvaluateAsInt< TextAlignmentType >( m_alignmentParam ) )
+        //{
+        //case TextAlignmentType::Center:
+        //    center = glm::vec3( m_textLength / 2.f, 0.f, 0.f );
+        //    break;
+        //case TextAlignmentType::Right:
+        //    center = glm::vec3( m_textLength, 0.f, 0.f );
+        //    break;
+        //default:
+        //    break;
+        //}
 
-        m_scaleMat = BuildScaleMatrix( center, glm::vec3( maxTextLenght / m_textLength, 1.f, 1.f ) );
+        m_scaleMat = glm::scale( glm::mat4( 1.f ), glm::vec3( maxTextLenght / m_textLength, 1.f, 1.f ) );
 
 		m_scaleValue->SetValue( m_scaleMat );
     }
