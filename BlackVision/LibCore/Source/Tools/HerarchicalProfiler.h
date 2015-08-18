@@ -18,11 +18,11 @@ enum class AutoProfileType : int
     APT_SECTION
 };
 
-enum class AutoProfileState : int
-{
-    APS_START = 0,
-    APS_END
-};
+//enum class AutoProfileState : int
+//{
+//    APS_START = 0,
+//    APS_END
+//};
 
 struct ProfilerSample
 {

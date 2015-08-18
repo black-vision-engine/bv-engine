@@ -1,11 +1,8 @@
-#include <limits>
-
-
-#undef min
-const int64_t INVALID_TIME = std::numeric_limits<int64_t>::min();
+#include <climits>
 
 namespace bv
 {
+const int64_t INVALID_TIME = LLONG_MIN;
 
 // *********************************
 //

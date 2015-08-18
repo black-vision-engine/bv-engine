@@ -51,11 +51,14 @@ void MovingAverageData::RecalculateStats        ()
 {
     ResetAccumStats();
 
-    // double numEltsDouble = (double) samples.size();
+	unsigned int validSample = 0;
+	// Skip all useless samples.
+	while( samples[ validSample ].frame == 0 )
+		++validSample;
 
-    for( const auto & sample : samples )
+	for( ; validSample < samples.size(); ++validSample )
     {
-        AccumulateSample( sample );
+        AccumulateSample( samples[ validSample ] );
     }
 }
 
@@ -257,7 +260,7 @@ FrameStatsSample    FrameStatsCalculator::RecentSample( const char * name ) cons
     assert( m_samplers.find( name ) != m_samplers.end() );
 
     const auto it = m_samplers.find( name );
-    return it->second->samples.front();
+    return it->second->samples.back();
 }
 
 // *********************************

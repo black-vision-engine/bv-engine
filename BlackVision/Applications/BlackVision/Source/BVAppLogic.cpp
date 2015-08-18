@@ -180,17 +180,18 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 {
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate" );
 
-	for( int i = 0; i < 100000000; ++i )
-	{
-		double k = 3.2 * 3.3;
-		k;
-	}
-
     assert( m_state != BVAppState::BVS_INVALID );
     if( m_state == BVAppState::BVS_RUNNING )
     {
         FRAME_STATS_FRAME();
         FRAME_STATS_SECTION( DefaultConfig.FrameStatsSection() );
+
+		
+		//for( int i = 0; i < 100000000; ++i )
+		//{
+		//	double k = 3.2 * 3.3;
+		//	k;
+		//}
 
         //FIXME: debug timer - don't get fooled
         //float t = float(frame) * 0.1f; ///10 fps
@@ -379,9 +380,9 @@ void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int m
 {
     if( m_statsCalculator.WasSampledMaxVal( DefaultConfig.FrameStatsSection() ) )
     {
-#ifndef HIDE_PROFILE_STATS
         unsigned int frame = m_statsCalculator.CurFrame() - 1;
 
+#ifndef HIDE_PROFILE_STATS
         FrameStatsFormatter::PrintFrameStatsToConsole( frame, m_statsCalculator, "LONGEST FRAME SO FAR", 10 );
         HPROFILER_SET_FORCED_DISPLAY();
 #endif
