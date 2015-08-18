@@ -22,9 +22,8 @@ void                TextureAssetDesc::Serialize       ( SerializeObject & sob ) 
 //
 ISerializablePtr     TextureAssetDesc::Create          ( DeserializeObject & dob )
 {
-    auto a = Create( dob.GetValue( "path" ), false ).get();
-    auto as = (TextureAssetDesc*)a;
-    auto asset = std::shared_ptr< TextureAssetDesc >( as );
+    auto a = Create( dob.GetValue( "path" ), true );
+    auto asset = std::const_pointer_cast< TextureAssetDesc, const TextureAssetDesc >( a ); // FIXME: design flaw
 
     return asset;
 }
