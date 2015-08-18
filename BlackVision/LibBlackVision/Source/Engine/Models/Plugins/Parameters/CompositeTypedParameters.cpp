@@ -20,6 +20,7 @@ void    ParamTransform::Serialize       ( SerializeObject & doc ) const
     doc.SetName( "param" );
     doc.SetValue( "name", GetName() );
     doc.SetValue( "type", "transform" );
+    doc.SetValue( "timeline", m_timeEvaluator->GetName() );
 
     for( int i = 0; i < m_transformModel.Size(); i++ )
     {
