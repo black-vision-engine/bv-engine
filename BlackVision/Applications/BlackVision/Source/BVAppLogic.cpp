@@ -186,13 +186,6 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
         FRAME_STATS_FRAME();
         FRAME_STATS_SECTION( DefaultConfig.FrameStatsSection() );
 
-		
-		//for( int i = 0; i < 100000000; ++i )
-		//{
-		//	double k = 3.2 * 3.3;
-		//	k;
-		//}
-
         //FIXME: debug timer - don't get fooled
         //float t = float(frame) * 0.1f; ///10 fps
 

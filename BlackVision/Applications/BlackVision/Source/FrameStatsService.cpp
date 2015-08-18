@@ -6,6 +6,7 @@
 namespace bv
 {
 
+
 // *********************************
 //
 MovingAverageData::MovingAverageData            ( unsigned int numSamples )
@@ -23,7 +24,7 @@ void MovingAverageData::Initialize              ( unsigned int numSamples )
 
     FrameStatsSample sample;
     sample.duration = 0.0;
-    sample.frame = 0;
+    sample.frame = INVALID_FRAME;
 
     for( unsigned int i = 0; i < numSamples; ++i )
     {
@@ -36,10 +37,10 @@ void MovingAverageData::Initialize              ( unsigned int numSamples )
 void MovingAverageData::ResetAccumStats         ()
 {
     minDuration             = 10000000.0;
-    minDurationFrame        = 0xFFFFFFFF;
+    minDurationFrame        = INVALID_FRAME;
 
     maxDuration             = 0.0;
-    maxDurationFrame        = 0xFFFFFFFF;
+    maxDurationFrame        = INVALID_FRAME;
 
     accumDuration           = 0.0;
     accumDurationSquares    = 0.0;
@@ -51,11 +52,7 @@ void MovingAverageData::RecalculateStats        ()
 {
     ResetAccumStats();
 
-	unsigned int validSample = 0;
-	// Skip all useless samples.
-	while( samples[ validSample ].frame == 0 )
-		++validSample;
-
+	unsigned int validSample = CountUselessSamples();
 	for( ; validSample < samples.size(); ++validSample )
     {
         AccumulateSample( samples[ validSample ] );
@@ -86,7 +83,7 @@ void    MovingAverageData::AccumulateSample     ( const FrameStatsSample & sampl
 //
 double  MovingAverageData::ExpectedValue        () const
 {
-    return accumDuration / (double) samples.size();
+	return accumDuration / ( (double) samples.size() - CountUselessSamples() );
 }
 
 // *********************************
@@ -96,7 +93,7 @@ double  MovingAverageData::Variance             () const
     double EX2 = ExpectedValue();
     EX2 *= EX2;
 
-    return accumDurationSquares / (double) samples.size() - EX2;
+	return accumDurationSquares / ( (double) samples.size() - CountUselessSamples() ) - EX2;
 }
 
 // *********************************
