@@ -13,6 +13,7 @@ unsigned int    AutoProfile::m_curSample = 0;
 unsigned int    AutoProfile::m_curFrame = 0;
 unsigned int    AutoProfile::m_activeFrame = 0;
 unsigned int    AutoProfile::m_displayStatsWaitMillis = 500;
+unsigned int	AutoProfile::m_depth = 0;			// new TMP
 
 bool            AutoFrameProfile::m_showStats = false;
 
@@ -55,9 +56,10 @@ unsigned int    AutoProfile::GetStatsDisplayWaitMs   ()
 //
 unsigned int    AutoProfile::NumSamples         ()
 {
-    assert( m_curSample % 2 == 0 );
+	//@todo nieaktualne
+    //assert( m_curSample % 2 == 0 );
 
-    return m_curSample / 2;
+    return m_curSample;
 }
 
 // *******************************
@@ -94,40 +96,49 @@ const ProfilerSample *   AutoProfile::OneFrameSamples ( unsigned int frame )
     LARGE_INTEGER freq = QueryCounterFrequency();
     double freqd = (double) freq.QuadPart;
 
-    ProfilerSample * stack[ MAX_PROFILER_SAMPLES ];
+    //ProfilerSample * stack[ MAX_PROFILER_SAMPLES ];
 
     unsigned int numSamples = NumSamples();
-    unsigned int numLiveSamples = 2 * numSamples;
+    unsigned int numLiveSamples = numSamples;
 
     assert( numSamples <= MAX_PROFILER_SAMPLES );
 
-    ProfilerLiveSample * liveSamples = &m_liveSamples[ frame * 2 * MAX_PROFILER_SAMPLES ];
+    ProfilerLiveSample * liveSamples = &m_liveSamples[ frame * MAX_PROFILER_SAMPLES ];
     ProfilerSample * samples = &m_samples[ frame * MAX_PROFILER_SAMPLES ];
 
-    unsigned int depth = 0;
+    //unsigned int depth = 0;
     for( unsigned int i = 0, k = 0; i < numLiveSamples; ++i )
     {
         ProfilerLiveSample & liveSample = liveSamples[ i ];
         ProfilerSample & sample = samples[ k ];
 
-        if( liveSample.state == AutoProfileState::APS_START )
-        {
-            stack[ depth ] = &sample;
+		sample.depth = liveSample.depth;
+		sample.name = liveSample.name;
+		sample.type = liveSample.type;
 
-            sample.depth = depth;
-            sample.name = liveSample.name;
-            sample.type = liveSample.type;
-            sample.duration = liveSample.timestamp;
-            
-            ++depth;
-            ++k;
-        }
-        else //APS_END
-        {
-            --depth;
-            stack[ depth ]->duration.QuadPart = liveSample.timestamp.QuadPart - stack[ depth ]->duration.QuadPart;
-            stack[ depth ]->durationSecs = (double) stack[ depth ]->duration.QuadPart / freqd;
-        }
+		sample.duration.QuadPart = liveSample.timeEnd.QuadPart - liveSample.timeStart.QuadPart;
+		sample.durationSecs = (double)sample.duration.QuadPart / freqd;
+
+		++k;
+
+        //if( liveSample.state == AutoProfileState::APS_START )
+        //{
+        //    stack[ depth ] = &sample;
+
+        //    sample.depth = depth;
+        //    sample.name = liveSample.name;
+        //    sample.type = liveSample.type;
+        //    sample.duration = liveSample.timestamp;
+        //    
+        //    ++depth;
+        //    ++k;
+        //}
+        //else //APS_END
+        //{
+        //    --depth;
+        //    stack[ depth ]->duration.QuadPart = liveSample.timestamp.QuadPart - stack[ depth ]->duration.QuadPart;
+        //    stack[ depth ]->durationSecs = (double) stack[ depth ]->duration.QuadPart / freqd;
+        //}
     }
 
     return samples;

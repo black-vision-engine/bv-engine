@@ -1,3 +1,9 @@
+#include <limits>
+
+
+#undef min
+const int64_t INVALID_TIME = std::numeric_limits<int64_t>::min();
+
 namespace bv
 {
 
@@ -5,25 +11,31 @@ namespace bv
 //
 inline                     AutoProfile::AutoProfile     ( const char * name, AutoProfileType type )
 {
-    ProfilerLiveSample & sample = m_liveSamples[ 2 * m_curFrame * MAX_PROFILER_SAMPLES + m_curSample++ ];
+    ProfilerLiveSample & sample = m_liveSamples[ m_curFrame * MAX_PROFILER_SAMPLES + m_curSample++ ];
 
     m_name = name;
 
     sample.name = name;
     sample.type = type;
-    sample.state = AutoProfileState::APS_START;
-    QueryPerformanceCounter( &sample.timestamp );
+	sample.depth = m_depth++;
+	sample.timeEnd.QuadPart = INVALID_TIME;
+    QueryPerformanceCounter( &sample.timeStart );
 }
 
 // *********************************
 //
 inline                     AutoProfile::~AutoProfile    ()
 {
-    ProfilerLiveSample & sample = m_liveSamples[ 2 * m_curFrame * MAX_PROFILER_SAMPLES + m_curSample++ ];
+	int sampleCounter = m_curFrame * MAX_PROFILER_SAMPLES + m_curSample - 1;
     
+	while( m_liveSamples[ sampleCounter ].timeEnd.QuadPart != INVALID_TIME )
+		--sampleCounter;
+
+	ProfilerLiveSample & sample = m_liveSamples[ sampleCounter ];
     sample.name = m_name;
-    sample.state = AutoProfileState::APS_END;
-    QueryPerformanceCounter( &sample.timestamp );
+    QueryPerformanceCounter( &sample.timeEnd );
+
+	--m_depth;
 }
 
 // *********************************

@@ -40,9 +40,11 @@ struct ProfilerLiveSample
 {
     const char *        name;
    
-    LARGE_INTEGER       timestamp;
+    LARGE_INTEGER       timeStart;
+	LARGE_INTEGER		timeEnd;
     AutoProfileType     type;
-    AutoProfileState    state;
+	unsigned int		depth;
+    //AutoProfileState    state;
 
 };
 
@@ -57,6 +59,8 @@ private:
     static unsigned int         m_curFrame;
     static unsigned int         m_activeFrame;
     static unsigned int         m_displayStatsWaitMillis;
+
+	static unsigned int			m_depth;			// new TMP
 
     const char *                m_name;
 
