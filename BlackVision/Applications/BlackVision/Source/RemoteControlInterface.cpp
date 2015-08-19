@@ -885,7 +885,7 @@ void            RemoteControlInterface::OnNoMoreNodes   ( IEventPtr evt )
 void            RemoteControlInterface::HMSetCyclistPosition    ( int cyclistPos, float km )
 {
     assert( cyclistPos > 0 );
-    assert( cyclistPos <= m_cyclistPos.size() );
+    assert( size_t(cyclistPos) <= m_cyclistPos.size() );
 
     if(cyclistPos==1)
     {
