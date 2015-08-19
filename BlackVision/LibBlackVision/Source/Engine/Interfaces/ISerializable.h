@@ -11,6 +11,7 @@ class SerializeObject;
 
 class ISerializable;
 DEFINE_PTR_TYPE(ISerializable);
+DEFINE_CONST_PTR_TYPE(ISerializable);
 
 class ISerializable
 {

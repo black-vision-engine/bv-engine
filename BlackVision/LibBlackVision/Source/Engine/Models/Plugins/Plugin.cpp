@@ -195,7 +195,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
         SetParameter( plugin->GetPluginParamValModel(), param );
     }
     
-    auto assets = doc.LoadArray< AssetSerialization >( "assets" );
+    auto assets = doc.LoadArray< const AssetSerialization >( "assets" );
     for( auto asset : assets )
     {
         plugin->AddAsset( asset );

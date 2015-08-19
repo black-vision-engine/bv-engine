@@ -8,7 +8,7 @@ namespace model {
 
 class AssetSerialization : public AssetDesc {
 public:
-    static ISerializablePtr Create( DeserializeObject& dob )
+    static ISerializableConstPtr Create( DeserializeObject& dob )
     {
         return TextureAssetDesc::Create( dob );
     }

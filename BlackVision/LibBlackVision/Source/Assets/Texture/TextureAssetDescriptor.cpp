@@ -43,15 +43,12 @@ MipMapFilterType String2Filter( std::string string )
 
 // ***********************
 //
-ISerializablePtr     TextureAssetDesc::Create          ( DeserializeObject & dob )
+ISerializableConstPtr TextureAssetDesc::Create          ( DeserializeObject & dob )
 {
     auto path = dob.GetValue( "path" );
     auto filter = String2Filter( dob.GetValue( "mipmap" ) );
 
-    auto a = Create( path, filter, true );
-    auto asset = std::const_pointer_cast< TextureAssetDesc, const TextureAssetDesc >( a ); // FIXME: design flaw
-
-    return asset;
+    return Create( path, filter, true );
 }
 
 // ***********************
