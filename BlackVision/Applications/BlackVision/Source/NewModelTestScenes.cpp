@@ -23,6 +23,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultConePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
 
+#include "Mathematics/Interpolators/CompositeBezierInterpolator.h"
+
 #include "Engine/Models/Plugins/PluginUtils.h"
 
 #include "System/Env.h"
@@ -506,6 +508,10 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
 	{
 		node = TestScenesFactory::BasicShapesTest(  pluginsManager, timelineManager, timeEvaluator );
 	}
+    else if( scene == "INTERPOLATION_TEST_SCENE" )
+    {
+        node = TestScenesFactory::CreedCosineDemoScene( pluginsManager, timelineManager, timeEvaluator );
+    }
     else
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
@@ -831,7 +837,7 @@ void BoolParamTest()
     model::SetParameter( param, 0.f, true );
 }
 
-model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr timeEvaluator, CompositeBezierInterpolator::CurveType type )
 {
     model::BasicNodePtr node = model::BasicNode::Create( "rect", timeEvaluator );
     node->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -841,6 +847,7 @@ model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr t
     model::SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
 
     auto param = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+    param->SetInterpolationMethod( (model::IParameter::InterpolationMethod) type ); // WTF?!?!?
     model::SetParameterTranslation( param, 0, 0.f, offset );
     model::SetParameterTranslation( param, 0, 1.f, offset );
     model::SetParameterTranslation( param, 0, 10.f, offset + glm::vec3( 2, 0, 0 ) );
@@ -854,9 +861,9 @@ model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model
     model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
-    auto node1 = CosineDemoRect( glm::vec3( -1, 0.5, 0 ) , timeEvaluator );
-    auto node2 = CosineDemoRect( glm::vec3( -1, -0.5, 0 ) , timeEvaluator );
-    node2->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
+    auto node1 = CosineDemoRect( glm::vec3( -1, 0.5, 0 ) , timeEvaluator, CompositeBezierInterpolator::LINEAR );
+    auto node2 = CosineDemoRect( glm::vec3( -1, -0.5, 0 ) , timeEvaluator, CompositeBezierInterpolator::BEZIER );
+    //node2->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
 
     root->AddChildToModelOnly( node1 );
     root->AddChildToModelOnly( node2 );

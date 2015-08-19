@@ -35,6 +35,9 @@ class BezierEvaluator : public IInterpolator< TimeValueT, ValueT >
     Key v1, v2;
 public:
     BezierEvaluator( Key k1, Key k2, Key v1_, Key v2_ ) : key1( k1 ), key2( k2 ), v1( v1_ ), v2( v2_ ) {}
+    
+    void SetV2( Key v2 ) { this->v2 = v2; }
+    
     ValueT Evaluate( TimeValueT t ) const override 
     {
         Key A = key1,
@@ -79,8 +82,16 @@ void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const Value
     keys.push_back( Key<TimeValueT, ValueT>( t, v ) ); // FIXME sortme
     if( keys.size() > 1 )
     {
-        //interpolators.push_back( new ConstEvaluator< TimeValueT, ValueT >( v ) );
-        //interpolators.push_back( new LinearEvaluator< TimeValueT, ValueT >( keys[ keys.size()-2 ], keys[ keys.size()-1 ] ) );
+        if( m_type == CurveType::POINT )
+        {
+            interpolators.push_back( new ConstEvaluator< TimeValueT, ValueT >( v ) );
+            return;
+        }
+        if( m_type == CurveType::LINEAR )
+        {
+            interpolators.push_back( new LinearEvaluator< TimeValueT, ValueT >( keys[ keys.size()-2 ], keys[ keys.size()-1 ] ) );
+            return;
+        }
         
         size_t last = keys.size()-1;
 
@@ -88,9 +99,21 @@ void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const Value
         if( keys.size() > 2 )
             left = keys[ last ] - keys[ last-2 ];
         
-        interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], left, Key<TimeValueT, ValueT>( 0, 0 ) ) );
+        interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], 10*left, Key<TimeValueT, ValueT>( 0, 0 ) ) );
+
+        if( keys.size() > 2 )
+        {
+            auto bi = ( BezierEvaluator< TimeValueT, ValueT >* )interpolators[ last-1 ];
+            bi->SetV2( -1 * left );
+        }
     }
 }
+
+void                    CompositeBezierInterpolator::SetCurveType( CurveType type )
+{
+    m_type = type;
+}
+
 
 float CompositeBezierInterpolator::PreEvaluate( float /*t*/ ) const { return keys[ 0 ].val; } // never FIXME :P
 
