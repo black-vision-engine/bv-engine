@@ -126,6 +126,8 @@
     <ClCompile Include="..\..\..\Source\NewModelTestNodes.cpp" />
     <ClCompile Include="..\..\..\Source\NewModelTestScenes.cpp" />
     <ClCompile Include="..\..\..\Source\PieChartNode.cpp" />
+    <ClCompile Include="..\..\..\Source\ProjectManager\Impl\ProjectManagerImpl.cpp" />
+    <ClCompile Include="..\..\..\Source\ProjectManager\ProjectManager.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\OffscreenRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\RenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\StatsFormatters.cpp" />
@@ -160,6 +162,8 @@
     <ClInclude Include="..\..\..\Source\ModelInteractionLayer.h" />
     <ClInclude Include="..\..\..\Source\NewModelTestNodes.h" />
     <ClInclude Include="..\..\..\Source\PieChartNode.h" />
+    <ClInclude Include="..\..\..\Source\ProjectManager\Impl\ProjectManagerImpl.h" />
+    <ClInclude Include="..\..\..\Source\ProjectManager\ProjectManager.h" />
     <ClInclude Include="..\..\..\Source\Rendering\OffscreenRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\RenderLogic.h" />
     <ClInclude Include="..\..\..\Source\StatsFormatters.h" />

@@ -34,6 +34,9 @@
     <Filter Include="ProjectManager">
       <UniqueIdentifier>{8d774044-4e50-4ebe-a502-ade66de01917}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ProjectManager\Impl">
+      <UniqueIdentifier>{5dd67f42-156b-4dab-82bf-81a4f21fdf29}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -104,6 +107,12 @@
     <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
     <ClCompile Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp">
       <Filter>VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\ProjectManager\ProjectManager.cpp">
+      <Filter>ProjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\ProjectManager\Impl\ProjectManagerImpl.cpp">
+      <Filter>ProjectManager\Impl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +189,12 @@
     <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
     <ClInclude Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h">
       <Filter>VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\ProjectManager\Impl\ProjectManagerImpl.h">
+      <Filter>ProjectManager\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\ProjectManager\ProjectManager.h">
+      <Filter>ProjectManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
