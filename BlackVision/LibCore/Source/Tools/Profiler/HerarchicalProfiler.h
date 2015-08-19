@@ -84,20 +84,10 @@ private:
 	static CPUThreadSamples		m_threads[ MAX_PROFILER_THREADS ];
 
 	unsigned int				m_threadID;
-
-	// old but mybe usefull
-    //static unsigned int         m_curFrame;
-    //static unsigned int         m_activeFrame;
     static unsigned int         m_displayStatsWaitMillis;
 
-	// old end useless
-    //static ProfilerLiveSample   m_liveSamples[ MAX_PROFILER_SAMPLES * MAX_PROFILER_FRAMES ];
+	// @todo Zlikwidowaæ. To jest potrzebne na razie tylko po to, ¿eby wypisywaæ dane na konsolê.
     static ProfilerSample       m_samples[ MAX_PROFILER_SAMPLES * MAX_PROFILER_FRAMES ];
-
-    //static unsigned int         m_curSample;
-
-    const char *                m_name;
-
 public:
 
     inline                  AutoProfile             ( const char * name, AutoProfileType type, unsigned int threadID = 0 );

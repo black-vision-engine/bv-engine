@@ -10,8 +10,6 @@ inline                     AutoProfile::AutoProfile     ( const char * name, Aut
 	m_threadID = threadID;
 	ProfilerLiveSample & sample = m_threads[ m_threadID ].m_liveSamples[ m_threads[ m_threadID ].m_curFrame * MAX_PROFILER_SAMPLES + m_threads[ m_threadID ].m_curSample++ ];
 
-    m_name = name;
-
     sample.name = name;
     sample.type = type;
 	sample.depth = m_threads[ m_threadID ].m_curDepth++;

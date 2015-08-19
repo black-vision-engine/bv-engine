@@ -11,7 +11,7 @@
 #include "Assets/Texture/AnimationLoader.h"
 #include "Assets/Font/FontAssetDescriptor.h"
 
-#include "Tools/HerarchicalProfiler.h"
+#include "Tools/Profiler/HerarchicalProfiler.h"
 
 #include "StatsFormatters.h"
 #include "BVAppLogic.h"

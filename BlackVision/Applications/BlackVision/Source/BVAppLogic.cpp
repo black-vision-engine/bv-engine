@@ -7,7 +7,7 @@
 #include "Engine/Models/BVSceneEditor.h"
 
 #include "Tools/SimpleTimer.h"
-#include "Tools/HerarchicalProfiler.h"
+#include "Tools/Profiler/HerarchicalProfiler.h"
 
 #include "Rendering/RenderLogic.h"
 #include "ModelInteractionEvents.h"

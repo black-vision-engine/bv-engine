@@ -31,7 +31,7 @@
     <ClInclude Include="..\..\..\Source\Threading\CriticalSection.h" />
     <ClInclude Include="..\..\..\Source\Threading\ScopedCriticalSection.h" />
     <ClInclude Include="..\..\..\Source\Threading\Thread.h" />
-    <ClInclude Include="..\..\..\Source\Tools\HerarchicalProfiler.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.h" />
     <ClInclude Include="..\..\..\Source\Tools\HRTimer.h" />
     <ClInclude Include="..\..\..\Source\Tools\Logger\Logger.h" />
     <ClInclude Include="..\..\..\Source\Tools\Logger\UseLogger.h" />
@@ -49,7 +49,7 @@
     <ClCompile Include="..\..\..\Source\Threading\CriticalSection.cpp" />
     <ClCompile Include="..\..\..\Source\Threading\ScopedCriticalSection.cpp" />
     <ClCompile Include="..\..\..\Source\Threading\Thread.cpp" />
-    <ClCompile Include="..\..\..\Source\Tools\HerarchicalProfiler.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\HRTimer.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Logger\Logger.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\SimpleTimer.cpp" />
@@ -57,7 +57,7 @@
     <ClCompile Include="..\..\..\Source\Tools\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Source\Tools\HerarchicalProfiler.inl" />
+    <None Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ECABCE66-F47E-4889-8A4C-20DCB97C86B8}</ProjectGuid>

@@ -7,16 +7,9 @@ namespace bv
 {
 
 CPUThreadSamples	AutoProfile::m_threads[ MAX_PROFILER_THREADS ];
-
-// old 
-//ProfilerLiveSample  AutoProfile::m_liveSamples[ MAX_PROFILER_SAMPLES * MAX_PROFILER_FRAMES ];
 ProfilerSample      AutoProfile::m_samples[ MAX_PROFILER_SAMPLES * MAX_PROFILER_FRAMES ];
 
-//unsigned int    AutoProfile::m_curSample = 0;
-//unsigned int    AutoProfile::m_curFrame = 0;
-//unsigned int    AutoProfile::m_activeFrame = 0;
 unsigned int    AutoProfile::m_displayStatsWaitMillis = 500;
-
 bool            AutoFrameProfile::m_showStats = false;
 
 AutoFrameProfile::PtrDisplayCallback  AutoFrameProfile::m_displayCallback = nullptr;
@@ -29,7 +22,6 @@ void            AutoProfile::StartFrame         ( unsigned int threadID )
 	assert( threadID < MAX_PROFILER_THREADS );
 
 	m_threads[ threadID ].m_curSample = 0;
-
     m_threads[ threadID ].m_activeFrame = m_threads[ threadID ].m_curFrame;
 }
 
