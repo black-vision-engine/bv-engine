@@ -1,20 +1,20 @@
-#include <climits>
+#include <assert.h>
 
 namespace bv
 {
-const int64_t INVALID_TIME = LLONG_MIN;
 
 // *********************************
 //
-inline                     AutoProfile::AutoProfile     ( const char * name, AutoProfileType type )
+inline                     AutoProfile::AutoProfile     ( const char * name, AutoProfileType type, unsigned int threadID )
 {
-    ProfilerLiveSample & sample = m_liveSamples[ m_curFrame * MAX_PROFILER_SAMPLES + m_curSample++ ];
+	m_threadID = threadID;
+	ProfilerLiveSample & sample = m_threads[ m_threadID ].m_liveSamples[ m_threads[ m_threadID ].m_curFrame * MAX_PROFILER_SAMPLES + m_threads[ m_threadID ].m_curSample++ ];
 
     m_name = name;
 
     sample.name = name;
     sample.type = type;
-	sample.depth = m_depth++;
+	sample.depth = m_threads[ m_threadID ].m_curDepth++;
 	sample.timeEnd.QuadPart = INVALID_TIME;
     QueryPerformanceCounter( &sample.timeStart );
 }
@@ -23,23 +23,24 @@ inline                     AutoProfile::AutoProfile     ( const char * name, Aut
 //
 inline                     AutoProfile::~AutoProfile    ()
 {
-	int sampleCounter = m_curFrame * MAX_PROFILER_SAMPLES + m_curSample - 1;
+	int sampleCounter = m_threads[ m_threadID ].m_curFrame * MAX_PROFILER_SAMPLES + m_threads[ m_threadID ].m_curSample - 1;
     
-	while( m_liveSamples[ sampleCounter ].timeEnd.QuadPart != INVALID_TIME )
+	while( m_threads[ m_threadID ].m_liveSamples[ sampleCounter ].timeEnd.QuadPart != INVALID_TIME )
 		--sampleCounter;
 
-	ProfilerLiveSample & sample = m_liveSamples[ sampleCounter ];
-    sample.name = m_name;
+	ProfilerLiveSample & sample = m_threads[ m_threadID ].m_liveSamples[ sampleCounter ];
     QueryPerformanceCounter( &sample.timeEnd );
 
-	--m_depth;
+	--m_threads[ m_threadID ].m_curDepth;
 }
 
 // *********************************
 //
-inline  AutoFrameProfile::AutoFrameProfile    ()
+inline  AutoFrameProfile::AutoFrameProfile    ( unsigned int threadID )
 {
-    AutoProfile::StartFrame();
+	assert( threadID < MAX_PROFILER_THREADS );
+	m_threadID = threadID;
+    AutoProfile::StartFrame( threadID );
 }
 
 // *********************************
@@ -48,7 +49,7 @@ inline  AutoFrameProfile::~AutoFrameProfile   ()
 {
     static unsigned long startMillis = timeGetTime();
 
-    AutoProfile::EndFrame();
+	AutoProfile::EndFrame( m_threadID );
 
     unsigned int timestamp = timeGetTime();
 

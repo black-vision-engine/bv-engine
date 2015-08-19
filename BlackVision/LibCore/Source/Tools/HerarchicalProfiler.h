@@ -3,14 +3,23 @@
 #include <windows.h>
 
 #include "CoreDEF.h"
+#include <climits>
 
+#define MAX_PROFILER_SAMPLES		120
+#define MAX_PROFILER_FRAMES			10
+#define MAX_PROFILER_THREADS		1
 
-#define MAX_PROFILER_SAMPLES 120
-#define MAX_PROFILER_FRAMES 10
-
+#define PROFILER_THREAD1			0
+#define PROFILER_THREAD2			1
+#define PROFILER_THREAD3			2
+#define PROFILER_THREAD4			3
+#define PROFILER_THREAD5			4
+#define PROFILER_THREAD6			5
 
 namespace bv
 {
+
+const int64_t INVALID_TIME = LLONG_MIN;
 
 enum class AutoProfileType : int
 {
@@ -18,11 +27,7 @@ enum class AutoProfileType : int
     APT_SECTION
 };
 
-//enum class AutoProfileState : int
-//{
-//    APS_START = 0,
-//    APS_END
-//};
+
 
 struct ProfilerSample
 {
@@ -44,44 +49,73 @@ struct ProfilerLiveSample
 	LARGE_INTEGER		timeEnd;
     AutoProfileType     type;
 	unsigned int		depth;
-    //AutoProfileState    state;
 
+	ProfilerLiveSample()
+	{
+		timeStart.QuadPart = INVALID_TIME;
+		timeEnd.QuadPart = INVALID_TIME;
+		name = nullptr;
+		depth = 0;
+	}
+};
+
+
+struct CPUThreadSamples
+{
+	ProfilerLiveSample			m_liveSamples[ MAX_PROFILER_SAMPLES * MAX_PROFILER_FRAMES ];
+	
+	unsigned int				m_curDepth;
+	unsigned int				m_curSample;
+	unsigned int				m_curFrame;
+	unsigned int				m_activeFrame;
+
+	CPUThreadSamples()
+	{
+		m_curSample = 0;
+		m_curDepth = 0;
+		m_curFrame = 0;
+		m_activeFrame = 0;
+	}
 };
 
 class AutoProfile
 {
 private:
+	static CPUThreadSamples		m_threads[ MAX_PROFILER_THREADS ];
 
-    static ProfilerLiveSample   m_liveSamples[ 2 * MAX_PROFILER_SAMPLES * MAX_PROFILER_FRAMES ];
-    static ProfilerSample       m_samples[ MAX_PROFILER_SAMPLES * MAX_PROFILER_FRAMES ];
+	unsigned int				m_threadID;
 
-    static unsigned int         m_curSample;
-    static unsigned int         m_curFrame;
-    static unsigned int         m_activeFrame;
+	// old but mybe usefull
+    //static unsigned int         m_curFrame;
+    //static unsigned int         m_activeFrame;
     static unsigned int         m_displayStatsWaitMillis;
 
-	static unsigned int			m_depth;			// new TMP
+	// old end useless
+    //static ProfilerLiveSample   m_liveSamples[ MAX_PROFILER_SAMPLES * MAX_PROFILER_FRAMES ];
+    static ProfilerSample       m_samples[ MAX_PROFILER_SAMPLES * MAX_PROFILER_FRAMES ];
+
+    //static unsigned int         m_curSample;
 
     const char *                m_name;
 
 public:
 
-    inline                  AutoProfile             ( const char * name, AutoProfileType type );
+    inline                  AutoProfile             ( const char * name, AutoProfileType type, unsigned int threadID = 0 );
     inline                  ~AutoProfile            ();
 
 private:
 
-    static  void            StartFrame              ();
-    static  void            EndFrame                ();
+    static  void            StartFrame              ( unsigned int threadID = 0 );
+    static  void            EndFrame                ( unsigned int threadID = 0 );
 
 public:
 
     static void             SetStatsDisplayWaitMs   ( unsigned int millis );
     static unsigned int     GetStatsDisplayWaitMs   ();
 
-    static unsigned int     NumSamples              ();
-    static unsigned int     NumFrames               ();
-    static unsigned int     ActiveFrame             ();
+    static unsigned int     NumSamples              ( unsigned int threadID = 0 );
+    static unsigned int     NumFrames               ( unsigned int threadID = 0 );
+    static unsigned int     ActiveFrame             ( unsigned int threadID = 0 );
 
     static LARGE_INTEGER    QueryCounterFrequency   ();
 
@@ -98,13 +132,13 @@ public:
     typedef void (*PtrDisplayCallback)( const char * );
 
 private:
-
+	unsigned int				m_threadID;
     static bool                 m_showStats;
     static PtrDisplayCallback   m_displayCallback;
 
 public:
 
-    inline  AutoFrameProfile    ();
+    inline  AutoFrameProfile    ( unsigned int threadID = 0 );
     inline  ~AutoFrameProfile   ();
 
     static void    SetDisplayStats          ();
@@ -114,10 +148,10 @@ public:
 
 } //bv
 
-#define HPROFILER_NEW_FRAME()                       AutoFrameProfile COMBINE(frame_sample_,__LINE__)
+#define HPROFILER_NEW_FRAME( thread )               AutoFrameProfile COMBINE(frame_sample_,__LINE__) ( thread )
 
-#define HPROFILER_FUNCTION( name )                  AutoProfile COMBINE(function_sample_,__LINE__) ( name, AutoProfileType::APT_FUNCTION )
-#define HPROFILER_SECTION( name )                   AutoProfile COMBINE(section_sample_,__LINE__) ( name, AutoProfileType::APT_SECTION )
+#define HPROFILER_FUNCTION( name, thread )          AutoProfile COMBINE(function_sample_,__LINE__) ( name, AutoProfileType::APT_FUNCTION, thread )
+#define HPROFILER_SECTION( name, thread )           AutoProfile COMBINE(section_sample_,__LINE__) ( name, AutoProfileType::APT_SECTION, thread )
 
 #define HPROFILER_GET_ONE_FRAME_SAMPLES( frame )    AutoProfile::OneFrameSamples( frame )
 #define HPROFILER_GET_AVERAGED_SAMPLES()            AutoProfile::AveragedSamples()

@@ -85,8 +85,8 @@ void BlackVisionApp::OnPreidle  ()
 //
 void BlackVisionApp::OnIdle		()
 {
-    HPROFILER_NEW_FRAME();
-    HPROFILER_FUNCTION( "BlackVisionApp::OnIdle" );
+    HPROFILER_NEW_FRAME( PROFILER_THREAD1 );
+    HPROFILER_FUNCTION( "BlackVisionApp::OnIdle", PROFILER_THREAD1 );
 
     unsigned long millis = m_timer.ElapsedMillis();
 

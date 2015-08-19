@@ -178,7 +178,7 @@ void BVAppLogic::SetStartTime       ( unsigned long millis )
 //
 void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 {
-    HPROFILER_FUNCTION( "BVAppLogic::OnUpdate" );
+    HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
 
     assert( m_state != BVAppState::BVS_INVALID );
     if( m_state == BVAppState::BVS_RUNNING )
@@ -194,14 +194,14 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 
         {
             FRAME_STATS_SECTION( "Update" );
-            HPROFILER_SECTION( "update total" );
+            HPROFILER_SECTION( "update total", PROFILER_THREAD1 );
 
             m_globalTimeline->SetGlobalTime( t );
             m_bvScene->Update( t );
         }
         {
             FRAME_STATS_SECTION( "Render" );
-            HPROFILER_SECTION( "Render" );
+            HPROFILER_SECTION( "Render", PROFILER_THREAD1 );
 
             m_renderLogic->RenderFrame  ( renderer, m_bvScene->GetEngineSceneRoot() );
             m_renderLogic->FrameRendered( renderer );

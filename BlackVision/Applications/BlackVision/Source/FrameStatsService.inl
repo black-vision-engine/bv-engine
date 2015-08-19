@@ -40,7 +40,7 @@ inline void MovingAverageData::AddNextSample        ( const FrameStatsSample & s
 
 
 // *********************************
-//
+// Assumes there's at least one valid sample.
 inline unsigned int MovingAverageData::CountUselessSamples() const
 {
 	// Skip all useless samples.

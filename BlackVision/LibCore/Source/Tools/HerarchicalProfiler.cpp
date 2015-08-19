@@ -6,14 +6,16 @@
 namespace bv
 {
 
-ProfilerLiveSample  AutoProfile::m_liveSamples[ 2 * MAX_PROFILER_SAMPLES * MAX_PROFILER_FRAMES ];
+CPUThreadSamples	AutoProfile::m_threads[ MAX_PROFILER_THREADS ];
+
+// old 
+//ProfilerLiveSample  AutoProfile::m_liveSamples[ MAX_PROFILER_SAMPLES * MAX_PROFILER_FRAMES ];
 ProfilerSample      AutoProfile::m_samples[ MAX_PROFILER_SAMPLES * MAX_PROFILER_FRAMES ];
 
-unsigned int    AutoProfile::m_curSample = 0;
-unsigned int    AutoProfile::m_curFrame = 0;
-unsigned int    AutoProfile::m_activeFrame = 0;
+//unsigned int    AutoProfile::m_curSample = 0;
+//unsigned int    AutoProfile::m_curFrame = 0;
+//unsigned int    AutoProfile::m_activeFrame = 0;
 unsigned int    AutoProfile::m_displayStatsWaitMillis = 500;
-unsigned int	AutoProfile::m_depth = 0;			// new TMP
 
 bool            AutoFrameProfile::m_showStats = false;
 
@@ -22,18 +24,22 @@ AutoFrameProfile::PtrDisplayCallback  AutoFrameProfile::m_displayCallback = null
 
 // *******************************
 //
-void            AutoProfile::StartFrame         ()
+void            AutoProfile::StartFrame         ( unsigned int threadID )
 {
-    m_curSample = 0;
-    m_activeFrame = m_curFrame;
+	assert( threadID < MAX_PROFILER_THREADS );
+
+	m_threads[ threadID ].m_curSample = 0;
+
+    m_threads[ threadID ].m_activeFrame = m_threads[ threadID ].m_curFrame;
 }
 
 // *******************************
 //
-void            AutoProfile::EndFrame           ()
+void            AutoProfile::EndFrame           ( unsigned int threadID )
 {
     assert( NumSamples() <= MAX_PROFILER_SAMPLES );
-    m_curFrame = ( m_curFrame + 1 ) % MAX_PROFILER_FRAMES;
+
+    m_threads[ threadID ].m_curFrame = ( m_threads[ threadID ].m_curFrame + 1 ) % MAX_PROFILER_FRAMES;
 
     //TODO: anything useful
 }
@@ -54,12 +60,10 @@ unsigned int    AutoProfile::GetStatsDisplayWaitMs   ()
 
 // *******************************
 //
-unsigned int    AutoProfile::NumSamples         ()
+unsigned int    AutoProfile::NumSamples         ( unsigned int threadID )
 {
-	//@todo nieaktualne
-    //assert( m_curSample % 2 == 0 );
-
-    return m_curSample;
+	assert( threadID < MAX_PROFILER_THREADS );
+	return m_threads[ threadID ].m_curSample - 1;
 }
 
 // *******************************
@@ -75,32 +79,35 @@ LARGE_INTEGER    AutoProfile::QueryCounterFrequency   ()
 
 // *******************************
 //
-unsigned int    AutoProfile::NumFrames          ()
+unsigned int    AutoProfile::NumFrames          ( unsigned int threadID )
 {
-    assert( m_curFrame <= MAX_PROFILER_FRAMES );
+	assert( threadID < MAX_PROFILER_THREADS );
+    assert( m_threads[ threadID ].m_curFrame <= MAX_PROFILER_FRAMES );
 
-    return m_activeFrame + 1;
+    return m_threads[ threadID ].m_activeFrame + 1;
 }
 
 // *******************************
 //
-unsigned int     AutoProfile::ActiveFrame             ()
+unsigned int     AutoProfile::ActiveFrame             ( unsigned int threadID )
 {
-    return m_activeFrame;
+	assert( threadID < MAX_PROFILER_THREADS );
+    return m_threads[ threadID ].m_activeFrame;
 }
 
+
 // *******************************
-//
+// This function survived only for compatibility. Averages samples from first thread.
 const ProfilerSample *   AutoProfile::OneFrameSamples ( unsigned int frame )
 {
     LARGE_INTEGER freq = QueryCounterFrequency();
     double freqd = (double) freq.QuadPart;
 
-    unsigned int numLiveSamples = NumSamples();
+    unsigned int numLiveSamples = NumSamples( 0 );		// Num samples for first thread
 
     assert( numLiveSamples <= MAX_PROFILER_SAMPLES );
 
-    ProfilerLiveSample * liveSamples = &m_liveSamples[ frame * MAX_PROFILER_SAMPLES ];
+	ProfilerLiveSample * liveSamples = &m_threads[ 0 ].m_liveSamples[ frame * MAX_PROFILER_SAMPLES ];
     ProfilerSample * samples = &m_samples[ frame * MAX_PROFILER_SAMPLES ];
 
     for( unsigned int i = 0, k = 0; i < numLiveSamples; ++i )

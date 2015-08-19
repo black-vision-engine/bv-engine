@@ -186,7 +186,7 @@ void    RenderLogic::RenderNodeMask1 ( Renderer * renderer, SceneNode * node )
 //
 void    RenderLogic::DrawNode        ( Renderer * renderer, SceneNode * node )
 {
-    HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor" );
+	HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor", PROFILER_THREAD1 );
     DrawNodeOnly( renderer, node );
 
     DrawChildren( renderer, node );
@@ -205,7 +205,7 @@ void    RenderLogic::DrawChildren   ( Renderer * renderer, SceneNode * node, int
 {
     for ( unsigned int i = firstChildIdx; i < (unsigned int) node->NumChildNodes(); i++ )
     {
-        HPROFILER_SECTION( "RenderNode::RenderNode" );
+        HPROFILER_SECTION( "RenderNode::RenderNode", PROFILER_THREAD1 );
         RenderNode( renderer, node->GetChild( i ) ); 
     }
 }
