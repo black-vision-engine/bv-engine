@@ -31,6 +31,9 @@
     <Filter Include="PieCharts">
       <UniqueIdentifier>{fd129272-37d9-42a7-b86d-f8a467b2b2d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ProjectManager">
+      <UniqueIdentifier>{8d774044-4e50-4ebe-a502-ade66de01917}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
