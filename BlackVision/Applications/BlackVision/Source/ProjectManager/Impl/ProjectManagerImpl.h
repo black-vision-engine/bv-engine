@@ -2,89 +2,73 @@
 
 #include "CoreDEF.h"
 
+#include "ProjectManager/ProjectManager.h"
+
 namespace bv
 {
-
-class Project;
-class AssetDesc;
-class ProjectManager;
 
 class ProjectManagerImpl
 {
 private:
 
 	// listing
-	StringVector					ListProjectsNames	() const;
-	StringVector					ListScenesNames		( const std::string & projectName = "" ) const;
-	StringVector					ListCategoriesNames	() const;
-	StringVector					ListAssetsPaths		( const std::string & projectName,  const std::string & categoryName = ""  ) const;
+	NormalizedPathVec				ListProjectsNames	() const;
+	NormalizedPathVec				ListScenesNames		( const NormalizedPath & projectName = NormalizedPath("") ) const;
+	NormalizedPathVec				ListCategoriesNames	() const;
+	NormalizedPathVec				ListAssetsPaths		( const NormalizedPath & projectName,  const std::string & categoryName = "" ) const;
 
-	/*
-	def listAllUsedAssets(self)
-	def listAllUnusedAssets(self, projectName, categoryName)
-	*/
+	NormalizedPathVec				ListAllUsedAssets	() const;
+	NormalizedPathVec				ListAllUnusedAssets	( const NormalizedPath & projectName, const std::string & categoryName ) const;
 
-	std::string						GetRootDir			() const;
+	NormalizedPath					GetRootDir			() const;
 
 	// projects
-	void							AddNewProject		( const std::string & projectName );
-	const Project *					GetProject			() const;
-	void							SetCurrentProject	( const std::string & projectName );
+	void							AddNewProject		( const NormalizedPath & projectName );
+	const Project *					GetProject			( const NormalizedPath & projectName ) const;
+	void							SetCurrentProject	( const NormalizedPath & projectName );
 
 	// assets
-	void							AddAsset			( const std::string & projectName, const std::string & categoryName, const std::string & path, const AssetDesc & assetDesc );
+	void							AddAsset			( const NormalizedPath & projectName, const std::string & categoryName, const NormalizedPath & path, const AssetDesc & assetDesc );
 
 	// 
-	/*
-	def copyAsset(self, inProjectName, inCategoryName, inPath, outProjectName, outPath)
-	def removeAsset(self, projectName, categoryName, path)
-	def moveAsset(self, inProjectName, inCategoryName, inPath, outProjectName, outPath)
+	void							CopyAsset			( const NormalizedPath & inProjectName, const std::string & inCategoryName, const NormalizedPath & inPath, const NormalizedPath & outProjectName, const NormalizedPath & outPath );
+	void							RemoveAsset			( const NormalizedPath & projectName, const std::string & categoryName, const NormalizedPath & path );
+	void							MoveAsset			( const NormalizedPath & inProjectName, const std::string & inCategoryName, const NormalizedPath & inPath, const NormalizedPath & outProjectName, const NormalizedPath & outPath );
+	void							RemoveUnusedAssets	( const NormalizedPath & projectName, const std::string & categoryName );
+	void							RemoveUnusedAssets	( const NormalizedPath & projectName );
 
-	def removeUnusedAssets(self, projectName = None, categoryName = None)
-
-	def addScene(self, scene, projectName, outPath)
-	def copyScene(self, inProjectName, inPath, outProjectName, outPath)
-	def removeScene(self, projectName, path)
-	def moveScene(self, inProjectName, inPath, outProjectName, outPath)
-	*/
+	void							AddScene			( const model::BasicNode & sceneRootNode, const NormalizedPath & projectName, const NormalizedPath & outPath );
+	void							CopyScene			( const NormalizedPath & inProjectName, const NormalizedPath & inPath, const NormalizedPath & outProjectName, const NormalizedPath & outPath );
+	void							RemoveScene			( const NormalizedPath & projectName, const NormalizedPath & path );
+	void							MoveScene			( const NormalizedPath & inProjectName, const NormalizedPath & inPath, const NormalizedPath & outProjectName, const NormalizedPath & outPath );
 
 	// categories
-	/*
-	def registerGlobalCategory(self, category)
-	*/
+	void							RegisterGlobalCategory( const Category & category);
 
 
 	// *********************************
 	// exporting importing
 
 	// assets
-	/*
-	def exportAssetToFile(self, projectName, categoryName, assetPath, outputFile)
-	def importAssetFromFile(self, importToProjectName, importToCategoryName, importToPath, importAssetFilePath)
-	*/
-
+	void							ExportAssetToFile	( const NormalizedPath & projectName, const std::string & categoryName, const NormalizedPath & assetPath, const NormalizedPath & outputFile );
+	void							ImportAssetFromFile	( const NormalizedPath & importToProjectName, const std::string & importToCategoryName, const NormalizedPath & importToPath, const NormalizedPath & importAssetFilePath );
+	
 	// scenes
-	/*
-	def exportSceneToFile(self, projectName, scenePath, outputFile)
-	def importSceneFromFile(self, importToProjectName, importToPath, impSceneFilePath)
-	*/
+	void							ExportSceneToFile	( const NormalizedPath & projectName, const NormalizedPath & scenePath, const NormalizedPath & outputFile ) const;
+	void							ImportSceneFromFile	( const NormalizedPath & importToProjectName, const NormalizedPath & importToPath, const NormalizedPath & impSceneFilePath );
 
 	// projects
-	/*
-	def exportProjectToFile(self, projectName, outputFilePath)
-	def importProjectFromFile(self, expFilePath, importToPath=None)
-	*/
+	void							ExportProjectToFile	( const NormalizedPath & projectName, const NormalizedPath &  outputFilePath ) const;
+	void							ImportProjectFromFile( const NormalizedPath & expFilePath, const NormalizedPath & importToPath );
 
 	// *********************************
 	// getting scenes and assets descriptors
-	/*
-	def getAssetDescLoc(self, loc)
-	def getAssetDesc(self, projectName, categoryName, pathInProject)
+	
+	//AssetDesc						getAssetDescLoc		( loc );
+	AssetDesc *						GetAssetDesc		( const NormalizedPath & projectName, const std::string & categoryName, const NormalizedPath & pathInProject ) const;
 
-	def getSceneDescLoc(self, loc)
-	def getSceneDesc(self, projectName, pathInProject)
-	*/
-
+	//SceneDesc						GetSceneDescLoc		( loc )
+	SceneDesc *						GetSceneDesc		( const NormalizedPath & projectName, const NormalizedPath & pathInProject ) const;
 
 	explicit ProjectManagerImpl() {} // TODO: implement
 
