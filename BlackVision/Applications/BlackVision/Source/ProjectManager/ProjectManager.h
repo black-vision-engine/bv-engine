@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreDEF.h"
+#include "NormalizedPath.h"
 
 namespace bv
 {
@@ -15,16 +16,6 @@ namespace model
 {
 	class BasicNode;
 } // model
-
-class NormalizedPath
-{
-public:
-
-	NormalizedPath( const std::string path ) {};
-
-};
-
-typedef std::vector< NormalizedPath > NormalizedPathVec;
 
 class ProjectManager
 {
