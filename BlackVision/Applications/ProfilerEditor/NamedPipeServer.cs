@@ -20,8 +20,9 @@ namespace ProfilerEditor
 
     class NamedPipeServer
     {
-		public const uint PIPE_ACCESS_INBOUND = (0x00000001);
-		public const uint FILE_FLAG_OVERLAPPED = (0x40000000);
+		public const uint PIPE_ACCESS_INBOUND	= (0x00000001);
+		public const uint FILE_FLAG_OVERLAPPED	= (0x40000000);
+		public const uint PIPE_TYPE_MESSAGE		= (0x00000004);
 
         private uint				m_inBufferSize				= 5000;
         private uint				m_outBufferSize				= 0;
@@ -61,21 +62,30 @@ namespace ProfilerEditor
 		{
 			m_endThread = true;
 
-			DisconnectNamedPipe( m_pipeHandle );
 			m_listenThread.Join();
+			DisconnectNamedPipe( m_pipeHandle );
 		}
 
 
         private void ListenerFunction()
         {
-			string pipeFullName = "\\.\\pipe\\" + m_pipeName;
+			string pipeFullName = "\\\\.\\pipe\\" + m_pipeName;
 
-			m_pipeHandle = CreateNamedPipe( pipeFullName, PIPE_ACCESS_INBOUND, FILE_FLAG_OVERLAPPED, 0, 1, m_outBufferSize, m_inBufferSize, IntPtr.Zero );
+			m_pipeHandle = CreateNamedPipe( pipeFullName, PIPE_ACCESS_INBOUND, PIPE_TYPE_MESSAGE, 1, m_outBufferSize, m_inBufferSize, 0, IntPtr.Zero );
 
 			if( m_pipeHandle.IsInvalid )
-				return ;
+			{
+				uint error = GetLastError();
+				return;
+			}
 
-			m_pipeStream = new FileStream( m_pipeHandle, FileAccess.Read, (int)m_inBufferSize, true );
+			int success = ConnectNamedPipe( m_pipeHandle, IntPtr.Zero );
+
+			// Could not conect client
+			if( success == 0 )
+				return;
+
+			m_pipeStream = new FileStream( m_pipeHandle, FileAccess.Read, (int)m_inBufferSize, false );
 
 			// Reading form stream
 			while( !m_endThread )
@@ -151,5 +161,8 @@ namespace ProfilerEditor
         [DllImport( "kernel32.dll", SetLastError = true )]
         public static extern int DisconnectNamedPipe(
            SafeFileHandle hNamedPipe );
+
+		[DllImport( "kernel32.dll", SetLastError = true )]
+		public static extern uint GetLastError();
     }
 }

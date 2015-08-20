@@ -1,6 +1,6 @@
 #include "NamedPipe.h"
 
-
+#include "assert.h"
 #include "windows.h"
 
 
@@ -23,7 +23,7 @@ NamedPipe::~NamedPipe()
 @param pipeName Name of pipe. Should not contain \\.\pipe\ in begining. This string will be added.*/
 bool NamedPipe::ConnectToNamedPipe( const std::wstring& pipeName, NamedPipeAccess access )
 {
-	std::wstring pipeFullName = L"\\.\\pipe\\" + pipeName;
+	std::wstring pipeFullName = L"\\\\.\\pipe\\" + pipeName;
 
 	int pipeAccess;
 	if( access == NamedPipeAccess::PipeRead )
@@ -40,11 +40,12 @@ bool NamedPipe::ConnectToNamedPipe( const std::wstring& pipeName, NamedPipeAcces
 	return true;
 }
 
-void NamedPipe::WriteToPipe( char* buffer, unsigned int bytesNum )
+void NamedPipe::WriteToPipe( const char* buffer, unsigned int bytesNum )
 {
 	unsigned long int bytesWritten;
 
-	WriteFile( m_pipeHandle, buffer, bytesNum, &bytesWritten, nullptr );
+	BOOL success = WriteFile( m_pipeHandle, buffer, bytesNum, &bytesWritten, nullptr );
+	assert( success == TRUE ); { success; }
 }
 
 } //bv

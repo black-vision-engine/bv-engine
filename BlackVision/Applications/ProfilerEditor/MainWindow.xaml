@@ -4,7 +4,9 @@
         Title="MainWindow" Height="536.521" Width="735.658">
     <Grid>
         <TextBlock x:Name="Input" HorizontalAlignment="Left" Margin="36,23,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="35" Width="154"/>
-        <Button x:Name="startButton" Content="Start" HorizontalAlignment="Left" Margin="488,20,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.701,-0.712" Click="startButton_Click"/>
+        <Button x:Name="startButton" Content="Start Server" HorizontalAlignment="Left" Margin="488,20,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.701,-0.712" Click="startButton_Click"/>
+        <Button x:Name="endServer" Content="End Server" HorizontalAlignment="Left" Margin="488,58,0,0" VerticalAlignment="Top" Width="75" Click="endServer_Click"/>
+        <Button x:Name="getMessage" Content="Get Message" HorizontalAlignment="Left" Margin="488,99,0,0" VerticalAlignment="Top" Width="75" Click="getMessage_Click"/>
 
     </Grid>
 </Window>

@@ -33,10 +33,18 @@ namespace ProfilerEditor
 			m_pipedServer = new NamedPipeServer( pipeName, 0 );
 
 			m_pipedServer.StartServer();
+		}
 
+		private void getMessage_Click( object sender, RoutedEventArgs e )
+		{
 			ReadDataObject data = m_pipedServer.ReadBytes();
-			this.Input.Text = data.m_data.ToString();
 
+			string message = System.Text.Encoding.Default.GetString( data.m_data );
+			this.Input.Text = message;
+		}
+
+		private void endServer_Click( object sender, RoutedEventArgs e )
+		{
 			m_pipedServer.EndServer();
 		}
     }
