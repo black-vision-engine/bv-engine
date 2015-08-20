@@ -82,6 +82,9 @@
     <ClInclude Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.h">
       <Filter>Tools\Profiler</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\IO\NamedPipe.h">
+      <Filter>IO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">
@@ -128,6 +131,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.cpp">
       <Filter>Tools\Profiler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\IO\NamedPipe.cpp">
+      <Filter>IO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

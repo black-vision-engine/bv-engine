@@ -20,9 +20,24 @@ namespace ProfilerEditor
     /// </summary>
     public partial class MainWindow : Window
     {
+		NamedPipeServer			m_pipedServer;
+
         public MainWindow()
         {
             InitializeComponent();
         }
+
+		private void startButton_Click( object sender, RoutedEventArgs e )
+		{
+			string pipeName = "ProfilerPipeTest";
+			m_pipedServer = new NamedPipeServer( pipeName, 0 );
+
+			m_pipedServer.StartServer();
+
+			ReadDataObject data = m_pipedServer.ReadBytes();
+			this.Input.Text = data.m_data.ToString();
+
+			m_pipedServer.EndServer();
+		}
     }
 }
