@@ -3,6 +3,7 @@
 #include "assert.h"
 #include "windows.h"
 
+#include "../Tools/Logger/UseLogger.h"
 
 namespace bv {
 
@@ -24,6 +25,7 @@ NamedPipe::~NamedPipe()
 bool NamedPipe::ConnectToNamedPipe( const std::wstring& pipeName, NamedPipeAccess access )
 {
 	std::wstring pipeFullName = L"\\\\.\\pipe\\" + pipeName;
+	m_pipeName = pipeName;
 
 	int pipeAccess;
 	if( access == NamedPipeAccess::PipeRead )
@@ -42,10 +44,21 @@ bool NamedPipe::ConnectToNamedPipe( const std::wstring& pipeName, NamedPipeAcces
 
 void NamedPipe::WriteToPipe( const char* buffer, unsigned int bytesNum )
 {
+	if( m_pipeHandle == INVALID_HANDLE_VALUE )
+	{
+		//LOG_MESSAGE( bv::SeverityLevel::error ) << "Named Pipe: " << m_pipeName << " Message could not be sent. Invalid pipe handle.";
+		return;
+	}
+
 	unsigned long int bytesWritten;
 
 	BOOL success = WriteFile( m_pipeHandle, buffer, bytesNum, &bytesWritten, nullptr );
-	assert( success == TRUE ); { success; }
+	assert( success == TRUE );
+
+	//if( success != TRUE )
+	//{
+	//	LOG_MESSAGE( bv::SeverityLevel::error ) << "Named Pipe: " << m_pipeName << " Message could not be sent. Unalbe to write to stream.";
+	//}
 }
 
 } //bv

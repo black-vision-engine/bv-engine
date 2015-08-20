@@ -19,6 +19,8 @@ class NamedPipe
 {
 private:
 	HANDLE			m_pipeHandle;
+
+	std::wstring	m_pipeName;
 protected:
 
 public:

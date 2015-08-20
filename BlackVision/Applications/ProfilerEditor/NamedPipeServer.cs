@@ -63,7 +63,6 @@ namespace ProfilerEditor
 			m_endThread = true;
 
 			m_listenThread.Join();
-			DisconnectNamedPipe( m_pipeHandle );
 		}
 
 
@@ -114,6 +113,7 @@ namespace ProfilerEditor
 			}
 
 			m_pipeStream.Close();
+			m_pipeHandle.Close();
         }
 
 		/**Reads last message from queue. [thread-safe]*/
