@@ -47,7 +47,7 @@ private:
 
 
 	// *********************************
-	// exporting importing
+	// exporting/importing
 
 	// assets
 	void							ExportAssetToFile	( const NormalizedPath & projectName, const std::string & categoryName, const NormalizedPath & assetPath, const NormalizedPath & outputFile );
@@ -70,7 +70,8 @@ private:
 	//SceneDesc						GetSceneDescLoc		( loc )
 	SceneDesc *						GetSceneDesc		( const NormalizedPath & projectName, const NormalizedPath & pathInProject ) const;
 
-	explicit ProjectManagerImpl() {} // TODO: implement
+	explicit ProjectManagerImpl();
+			~ProjectManagerImpl();
 
 	friend ProjectManager;
 };
