@@ -1,5 +1,5 @@
 #include "TextureAssetAccessor.h"
-
+#include "Assets/Texture/SingleTextureAssetDescriptor.h"
 #include "IO/DirIO.h"
 
 namespace bv
@@ -22,14 +22,14 @@ TextureAssetAccessor::~TextureAssetAccessor				()
 
 // ********************************
 //
-const AssetDesc *	TextureAssetAccessor::GetAssetDesc	( const Path & path ) const
+AssetDescConstPtr	TextureAssetAccessor::GetAssetDesc	( const Path & path ) const
 {
 	return nullptr;
 }
 
 // ********************************
 //
-void			 	TextureAssetAccessor::AddAsset		( const Path & internalPath, const AssetDesc & assetDesc )
+void			 	TextureAssetAccessor::AddAsset		( const Path & internalPath, const AssetDescConstPtr & assetDesc )
 {
 }
 

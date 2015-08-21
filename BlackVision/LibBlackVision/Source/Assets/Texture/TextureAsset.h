@@ -7,9 +7,6 @@
 namespace bv
 {
 
-class TextureAsset;
-DEFINE_CONST_PTR_TYPE( TextureAsset )
-
 // *******************************
 // Implements texture asset with original image and all its mimmaps.
 class TextureAsset : public Asset, public std::enable_shared_from_this< TextureAsset >

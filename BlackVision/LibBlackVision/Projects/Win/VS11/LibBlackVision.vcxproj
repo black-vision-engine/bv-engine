@@ -339,6 +339,7 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\DefaultMultipassEffect.h" />

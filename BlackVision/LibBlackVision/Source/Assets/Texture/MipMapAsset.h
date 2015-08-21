@@ -7,9 +7,6 @@
 namespace bv
 {
 
-class MipMapAsset;
-DEFINE_CONST_PTR_TYPE(MipMapAsset)
-
 // *******************************
 // Implements assets of mipmaps levels.
 class MipMapAsset

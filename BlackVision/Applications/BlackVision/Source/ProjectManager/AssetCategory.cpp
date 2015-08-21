@@ -24,14 +24,14 @@ const std::string &		AssetCategory::GetId() const
 
 // ********************************
 //
-void					AssetCategory::AddAsset	( const Path & path, const AssetDesc & assetDesc )
+void					AssetCategory::AddAsset	( const Path & path, const AssetDescConstPtr & assetDesc )
 {
 	m_assetAccessor->AddAsset( path, assetDesc );
 }
 
 // ********************************
 //
-const AssetDesc *		AssetCategory::GetAssetDesc	( const Path & path ) const
+AssetDescConstPtr		AssetCategory::GetAssetDesc	( const Path & path ) const
 {
 	return m_assetAccessor->GetAssetDesc( path );
 }

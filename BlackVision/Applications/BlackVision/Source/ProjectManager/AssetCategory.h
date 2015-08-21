@@ -1,10 +1,12 @@
 #pragma once
+
+#include "Assets/FwdDecls.h"
+
 #include "System/Path.h"
 
 namespace bv
 {
 
-class AssetDesc;
 class AssetAccessor;
 
 class AssetCategory
@@ -21,9 +23,9 @@ public:
 
 	const std::string &		GetId			() const;
 
-	void					AddAsset		( const Path & path, const AssetDesc & assetDesc );
+	void					AddAsset		( const Path & path, const AssetDescConstPtr & assetDesc );
 	
-	const AssetDesc *		GetAssetDesc	( const Path & path ) const;
+	AssetDescConstPtr		GetAssetDesc	( const Path & path ) const;
 	
 	void					RemoveAsset		( const Path & path );
 	

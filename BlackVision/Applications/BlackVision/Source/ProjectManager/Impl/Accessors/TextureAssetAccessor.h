@@ -1,8 +1,7 @@
 #pragma once
 
 #include "ProjectManager/AssetAccessor.h"
-
-#include "CoreDEF.h"
+#include "Assets/FwdDecls.h"
 
 namespace bv
 {
@@ -17,9 +16,9 @@ public:
 	explicit					TextureAssetAccessor	( const ProjectManager * projectManager, const Path & rootPath, const StringVector & fileExts );
 								~TextureAssetAccessor	();
 
-	virtual const AssetDesc *	GetAssetDesc		( const Path & path ) const override;
+	virtual AssetDescConstPtr	GetAssetDesc		( const Path & path ) const override;
 
-    virtual void			 	AddAsset			( const Path & internalPath, const AssetDesc & assetDesc ) override;
+    virtual void			 	AddAsset			( const Path & internalPath, const AssetDescConstPtr & assetDesc ) override;
 
     virtual void			 	RemoveAsset			( const Path & internalPath ) override;
 
