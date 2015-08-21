@@ -7,9 +7,18 @@ using Microsoft.Win32.SafeHandles;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Collections;
+using System.ComponentModel;
+
 
 namespace ProfilerEditor
 {
+	//class Synchronize : ISynchronizeInvoke
+	//{
+	//	//bool IsInvokeRequired()
+	//	//{
+	//	//	return InvokeRequired.get;
+	//	//}
+	//}
 
 	// Helper data object to queue
 	class ReadDataObject
@@ -20,9 +29,11 @@ namespace ProfilerEditor
 
     class NamedPipeServer
     {
-		public const uint PIPE_ACCESS_INBOUND	= (0x00000001);
-		public const uint FILE_FLAG_OVERLAPPED	= (0x40000000);
-		public const uint PIPE_TYPE_MESSAGE		= (0x00000004);
+		public delegate void MessageSentDelegate();
+
+		public const uint			PIPE_ACCESS_INBOUND		= (0x00000001);
+		public const uint			FILE_FLAG_OVERLAPPED	= (0x40000000);
+		public const uint			PIPE_TYPE_MESSAGE		= (0x00000004);
 
         private uint				m_inBufferSize				= 5000;
         private uint				m_outBufferSize				= 0;
@@ -39,6 +50,11 @@ namespace ProfilerEditor
 
 		private Queue				m_queue;
 
+		//public MessageSentDelegate			onMessageSent;
+		public SynchronizationContext		m_syncContext;
+		//public event EventHandler			onMessageSent;
+		public SendOrPostCallback			onMessageSent;
+		//public ISynchronizeInvoke	m_syncObject { get; set; }
 
 	//Contructor
         public NamedPipeServer( string pipeName, int openMode )
@@ -49,6 +65,7 @@ namespace ProfilerEditor
 			// Makes queue thread-safe.
 			m_queue = new Queue();
 			m_queue = Queue.Synchronized( m_queue );
+			//m_syncObject = new Synchronize();
         }
 
 	// Members
@@ -110,6 +127,9 @@ namespace ProfilerEditor
 				//client has disconnected
 				if( bytesRead == 0 )
 					break;				// @todo Better error handling here.
+				
+				// Asynchronously invokes delegate added by user of this class.
+				NotifyDelegate();
 			}
 
 			m_pipeStream.Close();
@@ -138,7 +158,35 @@ namespace ProfilerEditor
 		}
 
 
+		private void NotifyDelegate()
+		{
+			m_syncContext.Send( onMessageSent, this );
 
+			//EventHandler eventHandler = onMessageSent;
+			//if( eventHandler != null )
+			//	eventHandler.Invoke( this, null );
+
+			//ISynchronizeInvoke sync = onMessageSent.Target as ISynchronizeInvoke;
+			//if( sync == null )
+			//{
+			//	onMessageSent.DynamicInvoke();
+			//}
+			//else
+			//{
+			//	sync.BeginInvoke( onMessageSent, null );
+			//}
+
+			//if( m_syncObject != null && m_syncObject.InvokeRequired )
+			//{
+			//	ThreadStart ts = () => { onMessageSent(); };
+			//	m_syncObject.BeginInvoke( ts, null );
+			//}
+			//else
+			//{
+			//	if( onMessageSent != null )
+			//		onMessageSent();
+			//}
+		}
 
 
     // Loaded fucntions

@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
+using System.Threading;
 
 namespace ProfilerEditor
 {
@@ -20,7 +22,7 @@ namespace ProfilerEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-		NamedPipeServer			m_pipedServer;
+		private NamedPipeServer			m_pipedServer;
 
         public MainWindow()
         {
@@ -32,20 +34,59 @@ namespace ProfilerEditor
 			string pipeName = "ProfilerPipeTest";
 			m_pipedServer = new NamedPipeServer( pipeName, 0 );
 
+			//m_pipedServer.onMessageSent += new EventHandler( GetMessageFromPipe );
+			m_pipedServer.onMessageSent = GetMessageFromPipe;
+			m_pipedServer.m_syncContext = SynchronizationContext.Current;
 			m_pipedServer.StartServer();
+			//m_pipedServer.m_syncObject = (ISynchronizeInvoke)this.ProfilerTree1;
 		}
 
 		private void getMessage_Click( object sender, RoutedEventArgs e )
 		{
 			ReadDataObject data = m_pipedServer.ReadBytes();
-
-			string message = System.Text.Encoding.Default.GetString( data.m_data );
-			this.Input.Text = message;
+			if( data.m_bytesRead > 0 )
+			{
+				string message = System.Text.Encoding.Default.GetString( data.m_data );
+				this.Input.Text = message;
+			}
 		}
 
 		private void endServer_Click( object sender, RoutedEventArgs e )
 		{
 			m_pipedServer.EndServer();
+		}
+
+		//private void GetMessageFromPipe( object sender, EventArgs e )
+		//{
+		//	ReadDataObject data = m_pipedServer.ReadBytes();
+
+			//if( data.m_bytesRead > 0 )
+			//{
+			//	string message = System.Text.Encoding.Default.GetString( data.m_data );
+			//	this.Input.Text = message;
+			//}
+		//}
+
+		//private void GetMessageFromPipe()
+		//{
+		//	ReadDataObject data = m_pipedServer.ReadBytes();
+
+			//if( data.m_bytesRead > 0 )
+			//{
+			//	string message = System.Text.Encoding.Default.GetString( data.m_data );
+			//	this.Input.Text = message;
+			//}
+		//}
+
+		private void GetMessageFromPipe( object state )
+		{
+			ReadDataObject data = m_pipedServer.ReadBytes();
+
+			if( data.m_bytesRead > 0 )
+			{
+				string message = System.Text.Encoding.Default.GetString( data.m_data );
+				this.Input.Text = message;
+			}
 		}
     }
 }
