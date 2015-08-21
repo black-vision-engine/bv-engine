@@ -8,6 +8,8 @@
 
 #include "BVConfig.h"
 
+#include "IO/NamedPipe.h"
+
 
 namespace bv
 {
@@ -40,6 +42,35 @@ void    ProfilerDataFormatter::PrintToConsole  ( const char * msg )
 void    ProfilerDataFormatter::PrintToDevNull   ( const char * msg )
 {
     { msg; } // FIXME: suppress unused warning
+}
+
+// *********************************
+//
+NamedPipe& GetNamedPipe()
+{
+	static NamedPipe pipe;
+	static bool firstTime = true;
+	if( firstTime )
+	{
+		pipe.ConnectToNamedPipe( std::wstring( L"ProfilerPipeTest" ), NamedPipeAccess::PipeWrite );
+		firstTime = false;
+	}
+	return pipe;
+}
+
+//static char buffer[ MAX_PROFILER_SAMPLES * MAX_PROFILER_FRAMES * sizeof( ProfilerSample )];
+
+
+void	ProfilerDataFormatter::SendToExternApp	( const char * msg )
+{
+	{ msg; } // FIXME: suppress unused warning
+	NamedPipe& pipe = GetNamedPipe();
+
+    unsigned int frame = HPROFILER_GET_ACTIVE_FRAME();
+    const ProfilerSample * samples = HPROFILER_GET_ONE_FRAME_SAMPLES( frame );
+    unsigned int numSamples = HPROFILER_GET_NUM_SAMPLES();
+
+	pipe.WriteToPipe( (const char*)samples, numSamples * sizeof( ProfilerSample ) );
 }
 
 // *********************************

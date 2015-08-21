@@ -12,7 +12,7 @@ public:
 
     static void     PrintToConsole  ( const char * msg );
     static void     PrintToDevNull  ( const char * msg );
-
+	static void		SendToExternApp	( const char * msg );
 };
 
 class FrameStatsFormatter

@@ -3,7 +3,7 @@
 #include "assert.h"
 #include "windows.h"
 
-#include "../Tools/Logger/UseLogger.h"
+//#include "../Tools/Logger/UseLogger.h"
 
 namespace bv {
 

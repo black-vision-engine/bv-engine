@@ -155,7 +155,8 @@ void    BlackVisionApp::InitializeAppLogic  ()
 {
     HPROFILER_SET_DISPLAY_WAIT_MILLIS( DefaultConfig.ProfilerDispWaitMillis() );
 #ifndef HIDE_PROFILE_STATS
-    HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::PrintToConsole );
+    //HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::PrintToConsole );
+	HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::SendToExternApp );
 #else
     HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::PrintToDevNull );
 #endif
