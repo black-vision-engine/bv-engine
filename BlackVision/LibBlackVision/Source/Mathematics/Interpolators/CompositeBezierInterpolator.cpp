@@ -95,15 +95,14 @@ void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const Value
         
         size_t last = keys.size()-1;
 
-        Key<TimeValueT, ValueT> left( 0, 0 );
-        if( keys.size() > 2 )
-            left = keys[ last ] - keys[ last-2 ];
-        
-        interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], 10*left, Key<TimeValueT, ValueT>( 0, 0 ) ) );
+        Key<TimeValueT, ValueT> left = ( last > 1 ) ? keys[ last ] - keys[ last-2 ] : keys[ last ] - keys[ last-1 ];
+        Key<TimeValueT, ValueT> right = keys[ last ] - keys[ last-1 ];
 
-        if( keys.size() > 2 )
+        interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], left, right ) );
+
+        if( last > 1 )
         {
-            auto bi = ( BezierEvaluator< TimeValueT, ValueT >* )interpolators[ last-1 ];
+            auto bi = ( BezierEvaluator< TimeValueT, ValueT >* )interpolators[ last-2 ];
             bi->SetV2( -1 * left );
         }
     }

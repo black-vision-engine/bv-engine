@@ -847,7 +847,7 @@ model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr t
     model::SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
 
     auto param = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-    param->SetInterpolationMethod( (model::IParameter::InterpolationMethod) type ); // WTF?!?!?
+    param->SetInterpolationMethod( (model::IParameter::InterpolationMethod) type ); // FIXME: WTF?!?!?
     model::SetParameterTranslation( param, 0, 0.f, offset );
     model::SetParameterTranslation( param, 0, 1.f, offset );
     model::SetParameterTranslation( param, 0, 10.f, offset + glm::vec3( 2, 0, 0 ) );
@@ -856,7 +856,7 @@ model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr t
     return node;
 }
 
-model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model::PluginsManager * , model::TimelineManager * , model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model::PluginsManager * , model::TimelineManager * /*tm*/, model::ITimeEvaluatorPtr timeEvaluator )
 {
     model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
