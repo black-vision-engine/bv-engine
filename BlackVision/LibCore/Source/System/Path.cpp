@@ -24,6 +24,16 @@ std::string		Path::Str		() const
 
 // *********************************
 //
+Path			Path::Join		( const Path & p ) const
+{
+	boost::filesystem::path bp( p.Str() );
+	bp /= boost::filesystem::path( p.Str() );
+
+	return Path( bp.string() );
+}
+
+// *********************************
+//
 Path			Path::Join		( int count, ... ) const
 {
 	va_list args;
@@ -32,17 +42,15 @@ Path			Path::Join		( int count, ... ) const
 	if( count > 0 )
 	{
 		Path p = va_arg( args, Path );
-		boost::filesystem::path bp( p.Str() );
 
 		for( int i = 1; i < count; ++i )
 		{
-			Path p = va_arg( args, Path );
-			bp /= boost::filesystem::path( p.Str() );
+			p = p.Join( va_arg( args, Path ) );
 		}
 
 		va_end( args );
 
-		return Path( bp.string() );
+		return p;
 	}
 	else
 	{
