@@ -78,7 +78,7 @@ namespace ProfilerEditor
 			if( data.m_bytesRead > 0 )
 			{
 				string message = System.Text.Encoding.Default.GetString( data.m_data );
-				this.Input.Text = message;
+				//this.Input.Text = message;
 			}
 		}
 
@@ -87,27 +87,6 @@ namespace ProfilerEditor
 			m_pipedServer.EndServer();
 		}
 
-		//private void GetMessageFromPipe( object sender, EventArgs e )
-		//{
-		//	ReadDataObject data = m_pipedServer.ReadBytes();
-
-			//if( data.m_bytesRead > 0 )
-			//{
-			//	string message = System.Text.Encoding.Default.GetString( data.m_data );
-			//	this.Input.Text = message;
-			//}
-		//}
-
-		//private void GetMessageFromPipe()
-		//{
-		//	ReadDataObject data = m_pipedServer.ReadBytes();
-
-			//if( data.m_bytesRead > 0 )
-			//{
-			//	string message = System.Text.Encoding.Default.GetString( data.m_data );
-			//	this.Input.Text = message;
-			//}
-		//}
 
 		private void GetMessageFromPipe( object state )
 		{
@@ -144,12 +123,25 @@ namespace ProfilerEditor
 			return structureObj;
 		}
 
-		void MakeTree( ProfilerSample[] samples )
+		// Tree maker
+		private int GetTreeExpansionLevel()
+		{
+			int maxDepthLevel;
+			bool success = Int32.TryParse( depthLevels.Text, out maxDepthLevel );
+			if( !success )
+				maxDepthLevel = 0;
+			return maxDepthLevel;
+		}
+
+		private void MakeTree( ProfilerSample[] samples )
 		{
 			Stack<TreeViewItem> treeStack = new Stack<TreeViewItem>();
+
+			int maxDepthLevel = GetTreeExpansionLevel();
 			
 			TreeViewItem currentParent = new TreeViewItem();
 			currentParent.Header = "Thread1 Profiler data";
+			currentParent.IsExpanded = true;
 
 			int currentDepth = 0;
 			TreeViewItem newItem = currentParent;
@@ -170,10 +162,34 @@ namespace ProfilerEditor
 					currentParent = treeStack.Pop();
 				}
 
-				newItem = new TreeViewItem();
-				newItem.Header = sample.durationSecs;
-				currentParent.Items.Add( newItem );
+				// Item already added, but reference needed outside this function.
+				newItem = AddSampleToTree( sample, currentParent, maxDepthLevel );
 			}
+		}
+
+
+		public TreeViewItem AddSampleToTree( ProfilerSample sample, TreeViewItem currentParent, int maxDepthLevel )
+		{
+			TreeViewItem newItem = new TreeViewItem();
+
+			StackPanel stack = new StackPanel();
+			stack.Orientation = Orientation.Horizontal;
+
+			Label nameLabel = new Label();
+			nameLabel.Content = sample.name;
+			stack.Children.Add( nameLabel );
+
+			Label durationLabel = new Label();
+			durationLabel.Content = sample.durationSecs;
+			stack.Children.Add( durationLabel );
+
+			newItem.Header = stack;
+
+			if( sample.depth <= maxDepthLevel )
+				newItem.IsExpanded = true;
+
+			currentParent.Items.Add( newItem );
+			return newItem;
 		}
     }
 }

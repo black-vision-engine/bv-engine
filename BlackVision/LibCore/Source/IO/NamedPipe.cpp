@@ -61,4 +61,9 @@ void NamedPipe::WriteToPipe( const char* buffer, unsigned int bytesNum )
 	//}
 }
 
+bool NamedPipe::IsValid					()
+{
+	return ( m_pipeHandle != INVALID_HANDLE_VALUE );
+}
+
 } //bv

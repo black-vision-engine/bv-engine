@@ -29,6 +29,8 @@ public:
 
 	bool			ConnectToNamedPipe		( const std::wstring& pipeName, NamedPipeAccess access );
 	void			WriteToPipe				( const char* buffer, unsigned int bytesNum );
+
+	bool			IsValid					();
 };
 
 
