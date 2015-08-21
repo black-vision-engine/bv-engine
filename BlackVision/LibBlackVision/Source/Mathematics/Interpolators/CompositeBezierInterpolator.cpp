@@ -49,7 +49,7 @@ public:
         {
             Key middle = 1./8 * A + 3./8 * B + 3./8 * C + 1./8 * D;
             
-            if( fabs( middle.t - t ) < 0.0001 ) // FIXME!!!
+            if( fabs( middle.t - t ) < 0.000001 ) // FIXME!!!
                 return middle.val;
             else
             {
