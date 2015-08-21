@@ -58,4 +58,11 @@ Path			Path::Join		( int count, ... ) const
 	}
 }
 
+// *********************************
+//
+Path			Path::operator /		( const Path & p ) const
+{
+	return this->Join( p );
+}
+
 } // bv

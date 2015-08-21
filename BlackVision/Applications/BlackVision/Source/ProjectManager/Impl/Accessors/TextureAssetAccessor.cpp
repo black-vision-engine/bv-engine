@@ -1,5 +1,7 @@
 #include "TextureAssetAccessor.h"
 #include "Assets/Texture/SingleTextureAssetDescriptor.h"
+#include "LibImage.h"
+#include "Engine/Types/EnumsUtils.h"
 #include "IO/DirIO.h"
 
 namespace bv
@@ -24,7 +26,11 @@ TextureAssetAccessor::~TextureAssetAccessor				()
 //
 AssetDescConstPtr	TextureAssetAccessor::GetAssetDesc	( const Path & path ) const
 {
-	return nullptr;
+	auto p = m_rootPath / path;
+
+	auto props = image::GetImageProps( p.Str() );
+
+	return SingleTextureAssetDesc::Create( p.Str(), props.width, props.height, EnumsUtils::Convert( props.format ), true );
 }
 
 // ********************************

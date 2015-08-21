@@ -17,6 +17,8 @@ public:
 	Path				Join			( const Path & p ) const;
 	Path				Join			( int count, /* list of Path instacies */... ) const;
 
+	Path				operator /		( const Path & p ) const;
+
 private:
 	std::string			m_path;
 };
