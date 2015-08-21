@@ -37,6 +37,9 @@
     <Filter Include="ProjectManager\Impl">
       <UniqueIdentifier>{5dd67f42-156b-4dab-82bf-81a4f21fdf29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ProjectManager\Impl\Accessors">
+      <UniqueIdentifier>{ebce4b58-98c9-4e46-8693-865db7bcdcb6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -122,6 +125,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\ProjectManager\NormalizedPath.cpp">
       <Filter>ProjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\ProjectManager\Impl\Accessors\TextureAssetAccessor.cpp">
+      <Filter>ProjectManager\Impl\Accessors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -213,6 +219,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\ProjectManager\NormalizedPath.h">
       <Filter>ProjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\ProjectManager\Impl\Accessors\TextureAssetAccessor.h">
+      <Filter>ProjectManager\Impl\Accessors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

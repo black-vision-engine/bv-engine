@@ -28,6 +28,8 @@ public:
     virtual NormalizedPathVec			ListAll				( const NormalizedPath & path ) const = 0;
 
     virtual NormalizedPathVec			ListAllUnique		( const NormalizedPath & path ) const = 0;
+
+	virtual								~AssetAccessor		() = 0 {};
 };
 
 } // bv

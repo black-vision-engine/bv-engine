@@ -128,6 +128,7 @@
     <ClCompile Include="..\..\..\Source\PieChartNode.cpp" />
     <ClCompile Include="..\..\..\Source\ProjectManager\AssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\ProjectManager\AssetCategory.cpp" />
+    <ClCompile Include="..\..\..\Source\ProjectManager\Impl\Accessors\TextureAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\ProjectManager\Impl\ProjectManagerImpl.cpp" />
     <ClCompile Include="..\..\..\Source\ProjectManager\NormalizedPath.cpp" />
     <ClCompile Include="..\..\..\Source\ProjectManager\ProjectManager.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="..\..\..\Source\PieChartNode.h" />
     <ClInclude Include="..\..\..\Source\ProjectManager\AssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\ProjectManager\AssetCategory.h" />
+    <ClInclude Include="..\..\..\Source\ProjectManager\Impl\Accessors\TextureAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\ProjectManager\Impl\ProjectManagerImpl.h" />
     <ClInclude Include="..\..\..\Source\ProjectManager\NormalizedPath.h" />
     <ClInclude Include="..\..\..\Source\ProjectManager\ProjectManager.h" />
