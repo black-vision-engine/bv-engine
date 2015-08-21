@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NormalizedPath.h"
+#include "System/Path.h"
 
 namespace bv
 {
@@ -11,23 +11,23 @@ class AssetAccessor
 {
 public:
 
-	virtual const AssetDesc *			GetAssetDesc		( const NormalizedPath & path ) const  = 0 ;
+	virtual const AssetDesc *			GetAssetDesc		( const Path & path ) const  = 0 ;
 
-    virtual void						AddAsset			( const NormalizedPath & internalPath, const AssetDesc & assetDesc ) = 0;
+    virtual void						AddAsset			( const Path & internalPath, const AssetDesc & assetDesc ) = 0;
 
-    virtual void						RemoveAsset			( const NormalizedPath & internalPath ) = 0;
+    virtual void						RemoveAsset			( const Path & internalPath ) = 0;
 
-    virtual void						RenameAsset			( const NormalizedPath & oldPath, const NormalizedPath & newPath) = 0;
+    virtual void						RenameAsset			( const Path & oldPath, const Path & newPath) = 0;
 
-    virtual void						ImportAsset			( const NormalizedPath & impAssetFile, const NormalizedPath &  importToPath ) = 0;
+    virtual void						ImportAsset			( const Path & impAssetFile, const Path &  importToPath ) = 0;
 
-    virtual void						ExportAsset			( const NormalizedPath & expAssetFilePath, const NormalizedPath &  internalPath) const = 0;
+    virtual void						ExportAsset			( const Path & expAssetFilePath, const Path &  internalPath) const = 0;
 
-    virtual void						ExportAll			( const NormalizedPath & expAssetFilePath ) const = 0;
+    virtual void						ExportAll			( const Path & expAssetFilePath ) const = 0;
 
-    virtual NormalizedPathVec			ListAll				( const NormalizedPath & path ) const = 0;
+    virtual PathVec			ListAll				( const Path & path ) const = 0;
 
-    virtual NormalizedPathVec			ListAllUnique		( const NormalizedPath & path ) const = 0;
+    virtual PathVec			ListAllUnique		( const Path & path ) const = 0;
 
 	virtual								~AssetAccessor		() = 0 {};
 };

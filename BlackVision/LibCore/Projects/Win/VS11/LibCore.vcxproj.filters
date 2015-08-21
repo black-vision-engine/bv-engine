@@ -79,6 +79,9 @@
     <ClInclude Include="..\..\..\Source\Tools\Logger\UseLogger.h">
       <Filter>Tools\Logger</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\System\Path.h">
+      <Filter>System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">
@@ -125,6 +128,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Tools\Logger\Logger.cpp">
       <Filter>Tools\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\System\Path.cpp">
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,5 @@
 #pragma once
-#include "NormalizedPath.h"
+#include "System/Path.h"
 
 namespace bv
 {
@@ -21,19 +21,19 @@ public:
 
 	const std::string &		GetId			() const;
 
-	void					AddAsset		( const NormalizedPath & path, const AssetDesc & assetDesc );
+	void					AddAsset		( const Path & path, const AssetDesc & assetDesc );
 	
-	const AssetDesc *		GetAssetDesc	( const NormalizedPath & path ) const;
+	const AssetDesc *		GetAssetDesc	( const Path & path ) const;
 	
-	void					RemoveAsset		( const NormalizedPath & path );
+	void					RemoveAsset		( const Path & path );
 	
-	void					ExportAsset		( const NormalizedPath & expAssetFilePath, const NormalizedPath & path ) const;
+	void					ExportAsset		( const Path & expAssetFilePath, const Path & path ) const;
 	
-	void					ImportAsset		( const NormalizedPath & impAssetFilePath, const NormalizedPath & toPath );
+	void					ImportAsset		( const Path & impAssetFilePath, const Path & toPath );
 	
-	void					ExportAll		( const NormalizedPath & expAssetFilePath ) const;
+	void					ExportAll		( const Path & expAssetFilePath ) const;
 	
-	void					ListAssets		( const NormalizedPath & projectName ) const;
+	void					ListAssets		( const Path & projectName ) const;
 
 };
 

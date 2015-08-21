@@ -123,9 +123,6 @@
     <ClCompile Include="..\..\..\Source\ProjectManager\AssetAccessor.cpp">
       <Filter>ProjectManager</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\ProjectManager\NormalizedPath.cpp">
-      <Filter>ProjectManager</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\ProjectManager\Impl\Accessors\TextureAssetAccessor.cpp">
       <Filter>ProjectManager\Impl\Accessors</Filter>
     </ClCompile>
@@ -215,9 +212,6 @@
       <Filter>ProjectManager</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\ProjectManager\AssetAccessor.h">
-      <Filter>ProjectManager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\ProjectManager\NormalizedPath.h">
       <Filter>ProjectManager</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\ProjectManager\Impl\Accessors\TextureAssetAccessor.h">

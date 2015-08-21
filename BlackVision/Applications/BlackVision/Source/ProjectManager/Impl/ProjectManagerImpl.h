@@ -12,35 +12,35 @@ class ProjectManagerImpl
 private:
 
 	// listing
-	NormalizedPathVec				ListProjectsNames	() const;
-	NormalizedPathVec				ListScenesNames		( const NormalizedPath & projectName = NormalizedPath("") ) const;
-	NormalizedPathVec				ListCategoriesNames	() const;
-	NormalizedPathVec				ListAssetsPaths		( const NormalizedPath & projectName,  const std::string & categoryName = "" ) const;
+	PathVec				ListProjectsNames	() const;
+	PathVec				ListScenesNames		( const Path & projectName = Path("") ) const;
+	PathVec				ListCategoriesNames	() const;
+	PathVec				ListAssetsPaths		( const Path & projectName,  const std::string & categoryName = "" ) const;
 
-	NormalizedPathVec				ListAllUsedAssets	() const;
-	NormalizedPathVec				ListAllUnusedAssets	( const NormalizedPath & projectName, const std::string & categoryName ) const;
+	PathVec				ListAllUsedAssets	() const;
+	PathVec				ListAllUnusedAssets	( const Path & projectName, const std::string & categoryName ) const;
 
-	NormalizedPath					GetRootDir			() const;
+	Path					GetRootDir			() const;
 
 	// projects
-	void							AddNewProject		( const NormalizedPath & projectName );
-	const Project *					GetProject			( const NormalizedPath & projectName ) const;
-	void							SetCurrentProject	( const NormalizedPath & projectName );
+	void							AddNewProject		( const Path & projectName );
+	const Project *					GetProject			( const Path & projectName ) const;
+	void							SetCurrentProject	( const Path & projectName );
 
 	// assets
-	void							AddAsset			( const NormalizedPath & projectName, const std::string & categoryName, const NormalizedPath & path, const AssetDesc & assetDesc );
+	void							AddAsset			( const Path & projectName, const std::string & categoryName, const Path & path, const AssetDesc & assetDesc );
 
 	// 
-	void							CopyAsset			( const NormalizedPath & inProjectName, const std::string & inCategoryName, const NormalizedPath & inPath, const NormalizedPath & outProjectName, const NormalizedPath & outPath );
-	void							RemoveAsset			( const NormalizedPath & projectName, const std::string & categoryName, const NormalizedPath & path );
-	void							MoveAsset			( const NormalizedPath & inProjectName, const std::string & inCategoryName, const NormalizedPath & inPath, const NormalizedPath & outProjectName, const NormalizedPath & outPath );
-	void							RemoveUnusedAssets	( const NormalizedPath & projectName, const std::string & categoryName );
-	void							RemoveUnusedAssets	( const NormalizedPath & projectName );
+	void							CopyAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath );
+	void							RemoveAsset			( const Path & projectName, const std::string & categoryName, const Path & path );
+	void							MoveAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath );
+	void							RemoveUnusedAssets	( const Path & projectName, const std::string & categoryName );
+	void							RemoveUnusedAssets	( const Path & projectName );
 
-	void							AddScene			( const model::BasicNode & sceneRootNode, const NormalizedPath & projectName, const NormalizedPath & outPath );
-	void							CopyScene			( const NormalizedPath & inProjectName, const NormalizedPath & inPath, const NormalizedPath & outProjectName, const NormalizedPath & outPath );
-	void							RemoveScene			( const NormalizedPath & projectName, const NormalizedPath & path );
-	void							MoveScene			( const NormalizedPath & inProjectName, const NormalizedPath & inPath, const NormalizedPath & outProjectName, const NormalizedPath & outPath );
+	void							AddScene			( const model::BasicNode & sceneRootNode, const Path & projectName, const Path & outPath );
+	void							CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
+	void							RemoveScene			( const Path & projectName, const Path & path );
+	void							MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 
 	// categories
 	void							RegisterGlobalCategory( const Category & category);
@@ -50,25 +50,25 @@ private:
 	// exporting/importing
 
 	// assets
-	void							ExportAssetToFile	( const NormalizedPath & projectName, const std::string & categoryName, const NormalizedPath & assetPath, const NormalizedPath & outputFile );
-	void							ImportAssetFromFile	( const NormalizedPath & importToProjectName, const std::string & importToCategoryName, const NormalizedPath & importToPath, const NormalizedPath & importAssetFilePath );
+	void							ExportAssetToFile	( const Path & projectName, const std::string & categoryName, const Path & assetPath, const Path & outputFile );
+	void							ImportAssetFromFile	( const Path & importToProjectName, const std::string & importToCategoryName, const Path & importToPath, const Path & importAssetFilePath );
 	
 	// scenes
-	void							ExportSceneToFile	( const NormalizedPath & projectName, const NormalizedPath & scenePath, const NormalizedPath & outputFile ) const;
-	void							ImportSceneFromFile	( const NormalizedPath & importToProjectName, const NormalizedPath & importToPath, const NormalizedPath & impSceneFilePath );
+	void							ExportSceneToFile	( const Path & projectName, const Path & scenePath, const Path & outputFile ) const;
+	void							ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath );
 
 	// projects
-	void							ExportProjectToFile	( const NormalizedPath & projectName, const NormalizedPath &  outputFilePath ) const;
-	void							ImportProjectFromFile( const NormalizedPath & expFilePath, const NormalizedPath & importToPath );
+	void							ExportProjectToFile	( const Path & projectName, const Path &  outputFilePath ) const;
+	void							ImportProjectFromFile( const Path & expFilePath, const Path & importToPath );
 
 	// *********************************
 	// getting scenes and assets descriptors
 	
 	//AssetDesc						getAssetDescLoc		( loc );
-	AssetDesc *						GetAssetDesc		( const NormalizedPath & projectName, const std::string & categoryName, const NormalizedPath & pathInProject ) const;
+	AssetDesc *						GetAssetDesc		( const Path & projectName, const std::string & categoryName, const Path & pathInProject ) const;
 
 	//SceneDesc						GetSceneDescLoc		( loc )
-	SceneDesc *						GetSceneDesc		( const NormalizedPath & projectName, const NormalizedPath & pathInProject ) const;
+	SceneDesc *						GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
 
 	explicit ProjectManagerImpl();
 			~ProjectManagerImpl();

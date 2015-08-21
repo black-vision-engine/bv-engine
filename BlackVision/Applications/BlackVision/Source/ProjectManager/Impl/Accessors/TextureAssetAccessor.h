@@ -14,31 +14,34 @@ class TextureAssetAccessor : public AssetAccessor
 
 public:
 
-	explicit					TextureAssetAccessor	( const ProjectManager * projectManager, const NormalizedPath & rootPath, const StringVector & fileExts );
+	explicit					TextureAssetAccessor	( const ProjectManager * projectManager, const Path & rootPath, const StringVector & fileExts );
 								~TextureAssetAccessor	();
 
-	virtual const AssetDesc *	GetAssetDesc		( const NormalizedPath & path ) const override;
+	virtual const AssetDesc *	GetAssetDesc		( const Path & path ) const override;
 
-    virtual void			 	AddAsset			( const NormalizedPath & internalPath, const AssetDesc & assetDesc ) override;
+    virtual void			 	AddAsset			( const Path & internalPath, const AssetDesc & assetDesc ) override;
 
-    virtual void			 	RemoveAsset			( const NormalizedPath & internalPath ) override;
+    virtual void			 	RemoveAsset			( const Path & internalPath ) override;
 
-    virtual void			 	RenameAsset			( const NormalizedPath & oldPath, const NormalizedPath & newPath) override;
+    virtual void			 	RenameAsset			( const Path & oldPath, const Path & newPath) override;
 
-    virtual void			 	ImportAsset			( const NormalizedPath & impAssetFile, const NormalizedPath &  importToPath ) override;
+    virtual void			 	ImportAsset			( const Path & impAssetFile, const Path &  importToPath ) override;
 
-    virtual void			 	ExportAsset			( const NormalizedPath & expAssetFilePath, const NormalizedPath &  internalPath) const override;
+    virtual void			 	ExportAsset			( const Path & expAssetFilePath, const Path &  internalPath) const override;
 
-    virtual void			 	ExportAll			( const NormalizedPath & expAssetFilePath ) const override;
+    virtual void			 	ExportAll			( const Path & expAssetFilePath ) const override;
 
-    virtual NormalizedPathVec	ListAll				( const NormalizedPath & path ) const override;
+    virtual PathVec	ListAll				( const Path & path ) const override;
 
-    virtual NormalizedPathVec	ListAllUnique		( const NormalizedPath & path ) const override;
+    virtual PathVec	ListAllUnique		( const Path & path ) const override;
 
 
 private:
+
+	void						CreateDir			() const;
+
 	const ProjectManager *		m_projectManager;
-	NormalizedPath				m_rootPath;
+	Path				m_rootPath;
 	StringVector				m_fileExts;
 };
 

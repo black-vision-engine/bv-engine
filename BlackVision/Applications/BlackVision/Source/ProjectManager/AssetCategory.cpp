@@ -24,49 +24,49 @@ const std::string &		AssetCategory::GetId() const
 
 // ********************************
 //
-void					AssetCategory::AddAsset	( const NormalizedPath & path, const AssetDesc & assetDesc )
+void					AssetCategory::AddAsset	( const Path & path, const AssetDesc & assetDesc )
 {
 	m_assetAccessor->AddAsset( path, assetDesc );
 }
 
 // ********************************
 //
-const AssetDesc *		AssetCategory::GetAssetDesc	( const NormalizedPath & path ) const
+const AssetDesc *		AssetCategory::GetAssetDesc	( const Path & path ) const
 {
 	return m_assetAccessor->GetAssetDesc( path );
 }
 
 // ********************************
 //
-void					AssetCategory::RemoveAsset	( const NormalizedPath & path )
+void					AssetCategory::RemoveAsset	( const Path & path )
 {
 	m_assetAccessor->RemoveAsset( path );
 }
 
 // ********************************
 //
-void					AssetCategory::ExportAsset	( const NormalizedPath & expAssetFilePath, const NormalizedPath & path ) const
+void					AssetCategory::ExportAsset	( const Path & expAssetFilePath, const Path & path ) const
 {
 	m_assetAccessor->ExportAsset( expAssetFilePath, path );
 }
 
 // ********************************
 //
-void					AssetCategory::ImportAsset	( const NormalizedPath & impAssetFilePath, const NormalizedPath & toPath )
+void					AssetCategory::ImportAsset	( const Path & impAssetFilePath, const Path & toPath )
 {
 	m_assetAccessor->ImportAsset( impAssetFilePath, toPath );
 }
 
 // ********************************
 //
-void					AssetCategory::ExportAll	( const NormalizedPath & expAssetFilePath ) const
+void					AssetCategory::ExportAll	( const Path & expAssetFilePath ) const
 {
 	m_assetAccessor->ExportAll( expAssetFilePath );
 }
 
 // ********************************
 //
-void					AssetCategory::ListAssets	( const NormalizedPath & projectName ) const
+void					AssetCategory::ListAssets	( const Path & projectName ) const
 {
 	m_assetAccessor->ListAll( projectName );
 }

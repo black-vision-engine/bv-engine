@@ -1,15 +1,19 @@
 #include "TextureAssetAccessor.h"
 
+#include "IO/DirIO.h"
+
 namespace bv
 {
 
 // ********************************
 //
-TextureAssetAccessor::TextureAssetAccessor				( const ProjectManager * projectManager, const NormalizedPath & rootPath, const StringVector & fileExts )
+TextureAssetAccessor::TextureAssetAccessor				( const ProjectManager * projectManager, const Path & rootPath, const StringVector & fileExts )
 	: m_projectManager( projectManager )
 	, m_rootPath( rootPath )
 	, m_fileExts( fileExts )
-{}
+{
+	CreateDir();
+}
 
 // ********************************
 //
@@ -18,57 +22,69 @@ TextureAssetAccessor::~TextureAssetAccessor				()
 
 // ********************************
 //
-const AssetDesc *	TextureAssetAccessor::GetAssetDesc	( const NormalizedPath & path ) const
+const AssetDesc *	TextureAssetAccessor::GetAssetDesc	( const Path & path ) const
 {
-
+	return nullptr;
 }
 
 // ********************************
 //
-void			 	TextureAssetAccessor::AddAsset		( const NormalizedPath & internalPath, const AssetDesc & assetDesc )
-{
-}
-
-// ********************************
-//
-void			 	TextureAssetAccessor::RemoveAsset	( const NormalizedPath & internalPath )
+void			 	TextureAssetAccessor::AddAsset		( const Path & internalPath, const AssetDesc & assetDesc )
 {
 }
 
 // ********************************
 //
-void			 	TextureAssetAccessor::RenameAsset	( const NormalizedPath & oldPath, const NormalizedPath & newPath )
+void			 	TextureAssetAccessor::RemoveAsset	( const Path & internalPath )
 {
 }
 
 // ********************************
 //
-void			 	TextureAssetAccessor::ImportAsset	( const NormalizedPath & impAssetFile, const NormalizedPath &  importToPath )
+void			 	TextureAssetAccessor::RenameAsset	( const Path & oldPath, const Path & newPath )
 {
 }
 
 // ********************************
 //
-void			 	TextureAssetAccessor::ExportAsset	( const NormalizedPath & expAssetFilePath, const NormalizedPath &  internalPath) const
+void			 	TextureAssetAccessor::ImportAsset	( const Path & impAssetFile, const Path &  importToPath )
 {
 }
 
 // ********************************
 //
-void			 	TextureAssetAccessor::ExportAll		( const NormalizedPath & expAssetFilePath ) const
+void			 	TextureAssetAccessor::ExportAsset	( const Path & expAssetFilePath, const Path &  internalPath) const
 {
 }
 
 // ********************************
 //
-NormalizedPathVec	TextureAssetAccessor::ListAll		( const NormalizedPath & path ) const
+void			 	TextureAssetAccessor::ExportAll		( const Path & expAssetFilePath ) const
 {
 }
 
 // ********************************
 //
-NormalizedPathVec	TextureAssetAccessor::ListAllUnique	( const NormalizedPath & path ) const
+PathVec	TextureAssetAccessor::ListAll		( const Path & path ) const
 {
+		return PathVec();
+}
+
+// ********************************
+//
+PathVec	TextureAssetAccessor::ListAllUnique	( const Path & path ) const
+{
+			return PathVec();
+}
+
+// ********************************
+//
+void				TextureAssetAccessor::CreateDir		() const
+{
+	if( !Dir::Exists( m_rootPath.Str() ) )
+	{
+		Dir::CreateDir( m_rootPath.Str(), true );
+	}
 }
 
 } // bv

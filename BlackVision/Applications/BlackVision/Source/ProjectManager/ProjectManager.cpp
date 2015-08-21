@@ -27,126 +27,126 @@ ProjectManager *			ProjectManager::GetInstance		()
 
 // ********************************
 //
-NormalizedPathVec			ProjectManager::ListProjectsNames	() const
+PathVec			ProjectManager::ListProjectsNames	() const
 {
 	return m_impl->ListProjectsNames();
 }
 
 // ********************************
 //
-NormalizedPathVec			ProjectManager::ListScenesNames		( const NormalizedPath & projectName ) const
+PathVec			ProjectManager::ListScenesNames		( const Path & projectName ) const
 {
 	return m_impl->ListScenesNames( projectName );
 }
 
 // ********************************
 //
-NormalizedPathVec			ProjectManager::ListCategoriesNames	() const
+PathVec			ProjectManager::ListCategoriesNames	() const
 {
 	return m_impl->ListCategoriesNames();
 }
 
 // ********************************
 //
-NormalizedPathVec			ProjectManager::ListAssetsPaths		( const NormalizedPath & projectName,  const std::string & categoryName ) const
+PathVec			ProjectManager::ListAssetsPaths		( const Path & projectName,  const std::string & categoryName ) const
 {
 	return m_impl->ListAssetsPaths( projectName, categoryName );
 }
 
 // ********************************
 //
-NormalizedPath				ProjectManager::GetRootDir			() const
+Path				ProjectManager::GetRootDir			() const
 {
 	return m_impl->GetRootDir();
 }
 
 // ********************************
 //
-void						ProjectManager::AddNewProject		( const NormalizedPath & projectName )
+void						ProjectManager::AddNewProject		( const Path & projectName )
 {
 	m_impl->AddNewProject( projectName );
 }
 
 // ********************************
 //
-const Project *				ProjectManager::GetProject			( const NormalizedPath & projectName ) const
+const Project *				ProjectManager::GetProject			( const Path & projectName ) const
 {
 	return m_impl->GetProject( projectName );
 }
 
 // ********************************
 //
-void						ProjectManager::SetCurrentProject	( const NormalizedPath & projectName )
+void						ProjectManager::SetCurrentProject	( const Path & projectName )
 {
 	m_impl->SetCurrentProject( projectName );
 }
 
 // ********************************
 //
-void						ProjectManager::AddAsset			( const NormalizedPath & projectName, const std::string & categoryName, const NormalizedPath & path, const AssetDesc & assetDesc )
+void						ProjectManager::AddAsset			( const Path & projectName, const std::string & categoryName, const Path & path, const AssetDesc & assetDesc )
 {
 	m_impl->AddAsset( projectName, categoryName, path, assetDesc );
 }
 
 // ********************************
 //
-void						ProjectManager::CopyAsset			( const NormalizedPath & inProjectName, const std::string & inCategoryName, const NormalizedPath & inPath, const NormalizedPath & outProjectName, const NormalizedPath & outPath )
+void						ProjectManager::CopyAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
 	m_impl->CopyAsset( inProjectName, inCategoryName, inPath, outProjectName, outPath );
 }
 
 // ********************************
 //
-void						ProjectManager::RemoveAsset			( const NormalizedPath & projectName, const std::string & categoryName, const NormalizedPath & path )
+void						ProjectManager::RemoveAsset			( const Path & projectName, const std::string & categoryName, const Path & path )
 {
 	m_impl->RemoveAsset( projectName, categoryName, path );
 }
 
 // ********************************
 //
-void						ProjectManager::MoveAsset			( const NormalizedPath & inProjectName, const std::string & inCategoryName, const NormalizedPath & inPath, const NormalizedPath & outProjectName, const NormalizedPath & outPath )
+void						ProjectManager::MoveAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
 	m_impl->MoveAsset( inProjectName, inCategoryName, inPath, outProjectName, outPath );
 }
 
 // ********************************
 //
-void						ProjectManager::RemoveUnusedAssets	( const NormalizedPath & projectName, const std::string & categoryName )
+void						ProjectManager::RemoveUnusedAssets	( const Path & projectName, const std::string & categoryName )
 {
 	m_impl->RemoveUnusedAssets( projectName, categoryName );
 }
 
 // ********************************
 //
-void						ProjectManager::RemoveUnusedAssets	( const NormalizedPath & projectName )
+void						ProjectManager::RemoveUnusedAssets	( const Path & projectName )
 {
 	m_impl->RemoveUnusedAssets( projectName );
 }
 
 // ********************************
 //
-void						ProjectManager::AddScene			( const model::BasicNode & sceneRootNode, const NormalizedPath & projectName, const NormalizedPath & outPath )
+void						ProjectManager::AddScene			( const model::BasicNode & sceneRootNode, const Path & projectName, const Path & outPath )
 {
 	m_impl->AddScene( sceneRootNode, projectName, outPath );
 }
 
 // ********************************
 //
-void						ProjectManager::CopyScene			( const NormalizedPath & inProjectName, const NormalizedPath & inPath, const NormalizedPath & outProjectName, const NormalizedPath & outPath )
+void						ProjectManager::CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
 	m_impl->CopyScene( inProjectName, inPath, outProjectName, outPath );
 }
 
 // ********************************
 //
-void						ProjectManager::RemoveScene			( const NormalizedPath & projectName, const NormalizedPath & path )
+void						ProjectManager::RemoveScene			( const Path & projectName, const Path & path )
 {
 	m_impl->RemoveScene( projectName, path );
 }
 
 // ********************************
 //
-void						ProjectManager::MoveScene			( const NormalizedPath & inProjectName, const NormalizedPath & inPath, const NormalizedPath & outProjectName, const NormalizedPath & outPath )
+void						ProjectManager::MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
 	m_impl->MoveScene( inProjectName, inPath, outProjectName, outPath );
 }
@@ -160,56 +160,56 @@ void						ProjectManager::RegisterGlobalCategory( const Category & category)
 
 // ********************************
 //
-void						ProjectManager::ExportAssetToFile	( const NormalizedPath & projectName, const std::string & categoryName, const NormalizedPath & assetPath, const NormalizedPath & outputFile )
+void						ProjectManager::ExportAssetToFile	( const Path & projectName, const std::string & categoryName, const Path & assetPath, const Path & outputFile )
 {
 	m_impl->ExportAssetToFile( projectName, categoryName, assetPath, outputFile );
 }
 
 // ********************************
 //
-void						ProjectManager::ImportAssetFromFile	( const NormalizedPath & importToProjectName, const std::string & importToCategoryName, const NormalizedPath & importToPath, const NormalizedPath & importAssetFilePath )
+void						ProjectManager::ImportAssetFromFile	( const Path & importToProjectName, const std::string & importToCategoryName, const Path & importToPath, const Path & importAssetFilePath )
 {
 	m_impl->ImportAssetFromFile( importToProjectName, importToCategoryName, importToPath, importAssetFilePath );
 }
 	
 // ********************************
 //
-void						ProjectManager::ExportSceneToFile	( const NormalizedPath & projectName, const NormalizedPath & scenePath, const NormalizedPath & outputFile ) const
+void						ProjectManager::ExportSceneToFile	( const Path & projectName, const Path & scenePath, const Path & outputFile ) const
 {
 	m_impl->ExportSceneToFile( projectName, scenePath, outputFile );
 }
 
 // ********************************
 //
-void						ProjectManager::ImportSceneFromFile	( const NormalizedPath & importToProjectName, const NormalizedPath & importToPath, const NormalizedPath & impSceneFilePath )
+void						ProjectManager::ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath )
 {
 	m_impl->ImportSceneFromFile( importToProjectName, importToPath, impSceneFilePath );
 }
 
 // ********************************
 //
-void						ProjectManager::ExportProjectToFile	( const NormalizedPath & projectName, const NormalizedPath & outputFilePath ) const
+void						ProjectManager::ExportProjectToFile	( const Path & projectName, const Path & outputFilePath ) const
 {
 	m_impl->ExportProjectToFile( projectName, outputFilePath );
 }
 
 // ********************************
 //
-void						ProjectManager::ImportProjectFromFile( const NormalizedPath & expFilePath, const NormalizedPath & importToPath )
+void						ProjectManager::ImportProjectFromFile( const Path & expFilePath, const Path & importToPath )
 {
 	m_impl->ImportProjectFromFile( expFilePath, importToPath );
 }
 
 // ********************************
 //
-AssetDesc *					ProjectManager::GetAssetDesc		( const NormalizedPath & projectName, const std::string & categoryName, const NormalizedPath & pathInProject ) const
+AssetDesc *					ProjectManager::GetAssetDesc		( const Path & projectName, const std::string & categoryName, const Path & pathInProject ) const
 {
 	return m_impl->GetAssetDesc( projectName, categoryName, pathInProject );
 }
 
 // ********************************
 //
-SceneDesc *					ProjectManager::GetSceneDesc		( const NormalizedPath & projectName, const NormalizedPath & pathInProject ) const
+SceneDesc *					ProjectManager::GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const
 {
 	return m_impl->GetSceneDesc( projectName, pathInProject );
 }
