@@ -16,7 +16,7 @@ public:
 
 	std::string			Str				() const;
 
-	Path				Join			( int count, ... ) const;
+	Path				Join			( int count, /* list of Path instacies */... ) const;
 
 private:
 	std::string			m_path;
