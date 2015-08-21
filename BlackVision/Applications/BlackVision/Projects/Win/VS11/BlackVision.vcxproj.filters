@@ -114,6 +114,15 @@
     <ClCompile Include="..\..\..\Source\ProjectManager\Impl\ProjectManagerImpl.cpp">
       <Filter>ProjectManager\Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\ProjectManager\AssetCategory.cpp">
+      <Filter>ProjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\ProjectManager\AssetAccessor.cpp">
+      <Filter>ProjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\ProjectManager\NormalizedPath.cpp">
+      <Filter>ProjectManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -194,6 +203,15 @@
       <Filter>ProjectManager\Impl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\ProjectManager\ProjectManager.h">
+      <Filter>ProjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\ProjectManager\AssetCategory.h">
+      <Filter>ProjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\ProjectManager\AssetAccessor.h">
+      <Filter>ProjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\ProjectManager\NormalizedPath.h">
       <Filter>ProjectManager</Filter>
     </ClInclude>
   </ItemGroup>

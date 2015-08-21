@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string>
 #include <vector>
 
@@ -14,4 +16,4 @@ public:
 
 typedef std::vector< NormalizedPath > NormalizedPathVec;
 
-}
+} // bv

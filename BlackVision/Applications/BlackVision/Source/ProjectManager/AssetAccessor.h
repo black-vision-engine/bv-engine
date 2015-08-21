@@ -9,7 +9,9 @@ class AssetDesc;
 
 class AssetAccessor
 {
-	virtual const AssetDesc *			GetLoadableAssetDesc( const NormalizedPath & path ) const  = 0 ;
+public:
+
+	virtual const AssetDesc *			GetAssetDesc		( const NormalizedPath & path ) const  = 0 ;
 
     virtual void						AddAsset			( const NormalizedPath & internalPath, const AssetDesc & assetDesc ) = 0;
 
@@ -23,9 +25,9 @@ class AssetAccessor
 
     virtual void						ExportAll			( const NormalizedPath & expAssetFilePath ) const = 0;
 
-    virtual NormalizedPathVec			ListAll				() const = 0;
+    virtual NormalizedPathVec			ListAll				( const NormalizedPath & path ) const = 0;
 
-    virtual NormalizedPathVec			ListAllUnique		( const NormalizedPath & path) const = 0;
+    virtual NormalizedPathVec			ListAllUnique		( const NormalizedPath & path ) const = 0;
 };
 
 } // bv
