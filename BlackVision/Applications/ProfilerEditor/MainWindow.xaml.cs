@@ -20,18 +20,27 @@ namespace ProfilerEditor
 {
 
 	[StructLayout(LayoutKind.Explicit, Size = 32, Pack = 1)]
-	struct ProfilerSample
+	public struct ProfilerSample
 	{
+		[MarshalAs( UnmanagedType.I8 )]
 		[FieldOffset( 0 )]
-		Int64	name;
+		public Int64	name;
+
+		[MarshalAs( UnmanagedType.I8 )]
 		[FieldOffset( 8 )]
-		Int64	duration;
+		public Int64	duration;
+
+		[MarshalAs( UnmanagedType.R8 )]
 		[FieldOffset( 16 )]
-		double	durationSecs;
-		[FieldOffset( 20 )]
-		Int32	type;
+		public double	durationSecs;
+
+		[MarshalAs( UnmanagedType.I4 )]
 		[FieldOffset( 24 )]
-		UInt32	depth;
+		public Int32	type;
+
+		[MarshalAs( UnmanagedType.I4)]
+		[FieldOffset( 28 )]
+		public UInt32	depth;
 
 	};
 
@@ -121,6 +130,7 @@ namespace ProfilerEditor
 					samples[ i ] = (ProfilerSample)ByteArrayToStructure( data.m_data, sample, (int)i * sampleSize );
 				}
 
+				MakeTree( samples );
 			}
 		}
 
@@ -132,6 +142,38 @@ namespace ProfilerEditor
 			structureObj = Marshal.PtrToStructure( Marshal.UnsafeAddrOfPinnedArrayElement( bytearray, position ), structureObj.GetType() );
 			Marshal.FreeHGlobal( ptr );
 			return structureObj;
-		}   
+		}
+
+		void MakeTree( ProfilerSample[] samples )
+		{
+			Stack<TreeViewItem> treeStack = new Stack<TreeViewItem>();
+			
+			TreeViewItem currentParent = new TreeViewItem();
+			currentParent.Header = "Thread1 Profiler data";
+
+			int currentDepth = 0;
+			TreeViewItem newItem = currentParent;
+
+			ProfilerTree1.Items.Add( currentParent );
+
+			foreach( var sample in samples )
+			{
+				if( sample.depth > currentDepth )
+				{
+					currentDepth = (int)sample.depth;
+					treeStack.Push( currentParent );
+					currentParent = newItem;
+				}
+				else if( sample.depth < currentDepth )
+				{
+					currentDepth = (int)sample.depth;
+					currentParent = treeStack.Pop();
+				}
+
+				newItem = new TreeViewItem();
+				newItem.Header = sample.durationSecs;
+				currentParent.Items.Add( newItem );
+			}
+		}
     }
 }
