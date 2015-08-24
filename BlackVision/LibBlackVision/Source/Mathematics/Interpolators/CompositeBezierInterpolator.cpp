@@ -95,8 +95,10 @@ void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const Value
         
         size_t last = keys.size()-1;
 
-        Key<TimeValueT, ValueT> left = ( last > 1 ) ? keys[ last ] - keys[ last-2 ] : keys[ last ] - keys[ last-1 ];
-        Key<TimeValueT, ValueT> right = keys[ last ] - keys[ last-1 ];
+        const float scale = 0.3f;
+
+        Key<TimeValueT, ValueT> left = ( last > 1 ) ? scale * ( keys[ last ] - keys[ last-2 ] ) : scale * ( keys[ last ] - keys[ last-1 ] );
+        Key<TimeValueT, ValueT> right = scale * ( keys[ last ] - keys[ last-1 ] );
 
         interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], left, right ) );
 

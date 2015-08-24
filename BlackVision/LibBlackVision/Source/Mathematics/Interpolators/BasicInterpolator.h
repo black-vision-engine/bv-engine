@@ -31,7 +31,7 @@ public:
 };
 
 template<class TimeValueT, class ValueT>
-Key< TimeValueT, ValueT > operator*( float a, Key< TimeValueT, ValueT > &that ) { return Key< TimeValueT, ValueT >( a * that.t, a * that.val ); }
+Key< TimeValueT, ValueT > operator*( const float a, const Key< TimeValueT, ValueT > &that ) { return Key< TimeValueT, ValueT >( a * that.t, a * that.val ); }
 
 template<class TimeValueT>
 class Interpolator
