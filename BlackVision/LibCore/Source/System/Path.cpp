@@ -7,6 +7,8 @@
 
 #include <cstdarg>
 
+#include <sys/stat.h>
+
 namespace bv
 {
 
@@ -120,6 +122,27 @@ bool			Path::Rename			( const Path & oldPath, const Path & newPath )
 	{
 		return true;
 	}
+}
+
+// *********************************
+//
+bool			Path::IsFile			( const Path & path )
+{
+	return boost::filesystem::is_regular_file( path.Str() );
+}
+
+// *********************************
+//
+bool			Path::IsDir				( const Path & path )
+{
+	return boost::filesystem::is_directory( path.Str() );
+}
+
+// *********************************
+//
+bool			Path::Exists			( const Path & path )
+{
+    return boost::filesystem::exists( path.Str() );
 }
 
 } // bv

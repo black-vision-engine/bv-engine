@@ -25,8 +25,10 @@ public:
     virtual void			 	RenameAsset			( const Path & oldPath, const Path & newPath) override;
 
     virtual void			 	ImportAsset			( const Path & impAssetFile, const Path &  importToPath ) override;
+	virtual void				ImportAsset			( std::istream & in, const Path &  importToPath ) override;
 
     virtual void			 	ExportAsset			( const Path & expAssetFilePath, const Path &  internalPath) const override;
+	virtual void				ExportAsset			( std::ostream & out, const Path &  internalPath) const override;
 
     virtual void			 	ExportAll			( const Path & expAssetFilePath ) const override;
 

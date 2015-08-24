@@ -1,5 +1,6 @@
 #include "AtlasCache.h"
 
+#include "System/Path.h"
 #include "IO/FileIO.h"
 #include "IO/DirIO.h"
 #include <fstream>
@@ -71,7 +72,7 @@ FontAtlasCache::FontAtlasCache()
 //
 FontAtlasCache*     FontAtlasCache::Load            ( const std::string& filePath )
 {
-    if( File::Exists( filePath ) )
+    if( Path::Exists( filePath ) )
     {
         return new FontAtlasCache( filePath );
     }
@@ -82,7 +83,7 @@ FontAtlasCache*     FontAtlasCache::Load            ( const std::string& filePat
 
         auto dir = File::GetDirName( filePath );
 
-        if( (! File::Exists( dir ) ) && ( ! dir.empty() ) )
+        if( ( !Path::Exists( dir ) ) && ( !dir.empty() ) )
             Dir::CreateDir( dir );
 
         std::ofstream file;

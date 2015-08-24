@@ -34,16 +34,17 @@ public:
     SizeType            Write       ( std::istream & in );
     SizeType            Write       ( std::istream & in , SizeType numBytes );
     void                Write       ( const char * in , SizeType numBytes );
+	void                Write       ( const std::string & str );
 
     void                Close       ();
 
     void                operator << ( std::istream & );
     void                operator >> ( std::ostream & );
 
+	std::fstream *		StreamBuf	();
 
     virtual             ~File       ();
 
-    static bool         Exists      ( const std::string & fileName );
     static File         Open        ( const std::string & fileName, OpenMode openMode = FOMReadOnly );
     static SizeType     Read        ( std::ostream & out, const std::string & fileName );
     static SizeType     Read        ( char * out, const std::string & fileName );

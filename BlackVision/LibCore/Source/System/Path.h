@@ -22,6 +22,9 @@ public:
 	static bool			Copy			( const Path & from, const Path & to );
 	static bool			Remove			( const Path & path );
 	static bool			Rename			( const Path & oldPath, const Path & newPath );
+	static bool			IsFile			( const Path & path );
+	static bool			IsDir			( const Path & path );
+	static bool			Exists			( const Path & path );
 
 private:
 	std::string			m_path;

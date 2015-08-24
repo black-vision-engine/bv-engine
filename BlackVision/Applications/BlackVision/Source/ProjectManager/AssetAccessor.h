@@ -4,6 +4,8 @@
 
 #include "System/Path.h"
 
+#include <ostream>
+
 namespace bv
 {
 
@@ -20,8 +22,10 @@ public:
     virtual void				RenameAsset			( const Path & oldPath, const Path & newPath) = 0;
 
     virtual void				ImportAsset			( const Path & impAssetFile, const Path &  importToPath ) = 0;
+	virtual void				ImportAsset			( std::istream & in, const Path &  importToPath ) = 0;
 
     virtual void				ExportAsset			( const Path & expAssetFilePath, const Path &  internalPath) const = 0;
+	virtual void				ExportAsset			( std::ostream & out, const Path &  internalPath) const = 0;
 
     virtual void				ExportAll			( const Path & expAssetFilePath ) const = 0;
 
