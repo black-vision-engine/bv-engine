@@ -37,6 +37,13 @@ namespace ProfilerEditor.ProfilerModel
 		public ProfilerSampleModel( ProfilerSampleModel parent, ProfilerSample[] samples, ref uint curSampleIndex, uint maxTreeExpansionLevel )
 		{
 			m_childSamples = new Collection<ProfilerSampleModel>();
+			AddSamples( parent, samples, ref curSampleIndex, maxTreeExpansionLevel );
+		}
+
+#endregion
+
+		private void AddSamples( ProfilerSampleModel parent, ProfilerSample[] samples, ref uint curSampleIndex, uint maxTreeExpansionLevel )
+		{
 			m_sampleData = samples[ curSampleIndex++ ];
 			m_parent = parent;
 			if( m_sampleData.depth < maxTreeExpansionLevel )
@@ -48,7 +55,12 @@ namespace ProfilerEditor.ProfilerModel
 				m_childSamples.Add( new ProfilerSampleModel( this, samples, ref curSampleIndex, maxTreeExpansionLevel ) );
 		}
 
-#endregion
+		public void Update( ProfilerSample[] samples, ref uint curSampleIndex, uint maxTreeExpansionLevel )
+		{
+			m_childSamples.Clear();
+
+			AddSamples( m_parent, samples, ref curSampleIndex, maxTreeExpansionLevel );
+		}
 
 
 #region Sample Properties

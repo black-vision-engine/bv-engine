@@ -117,11 +117,11 @@ namespace ProfilerEditor
 
 		private void MakeTree( ProfilerSample[] samples )
 		{
-			if( !m_firstTime )
-				return;
-			m_firstTime = false;
-
 			int maxDepthLevel = GetTreeExpansionLevel();
+
+			if( !m_firstTime )
+				m_profilerTreeView.Update( samples, (uint)maxDepthLevel );
+			m_firstTime = false;
 
 			m_profilerTreeView = new ProfilerModel.ProfilerTreeViewModel( samples, (uint)maxDepthLevel );
 			ProfilerTree1.DataContext = m_profilerTreeView;
@@ -159,7 +159,7 @@ namespace ProfilerEditor
 			//}
 		}
 
-
+		// @fixme unused
 		public TreeViewItem AddSampleToTree( ProfilerSample sample, TreeViewItem currentParent, int maxDepthLevel )
 		{
 			TreeViewItem newItem = new TreeViewItem();

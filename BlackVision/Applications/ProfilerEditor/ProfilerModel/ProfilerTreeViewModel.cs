@@ -24,6 +24,14 @@ namespace ProfilerEditor.ProfilerModel
 
 #endregion
 
+		public void Update( ProfilerSample[] samples, uint maxTreeExpansionLevel )
+		{
+			uint curSampleIdx = 0;
+
+			foreach( ProfilerSampleModel sampleModel in m_topLevelSamples )
+				sampleModel.Update( samples, ref curSampleIdx, maxTreeExpansionLevel );
+		}
+
 		public Collection<ProfilerSampleModel> TopLevelSamples
 		{
 			get { return m_topLevelSamples; }
