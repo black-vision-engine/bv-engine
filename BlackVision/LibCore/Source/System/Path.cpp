@@ -86,4 +86,40 @@ bool			Path::Copy				( const Path & from, const Path & to )
 	}
 }
 
+// *********************************
+//
+bool			Path::Remove			( const Path & path )
+{
+	boost::system::error_code ec;
+	boost::filesystem::remove_all( path.Str(), ec );
+
+	if( ec )
+	{
+		LOG_MESSAGE( SeverityLevel::error ) << "Cannot remove: " << ec.message();
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+// *********************************
+//
+bool			Path::Rename			( const Path & oldPath, const Path & newPath )
+{
+	boost::system::error_code ec;
+	boost::filesystem::rename( oldPath.Str(), newPath.Str(), ec );
+
+	if( ec )
+	{
+		LOG_MESSAGE( SeverityLevel::error ) << "Cannot remove: " << ec.message();
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
 } // bv

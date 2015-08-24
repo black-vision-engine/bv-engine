@@ -62,12 +62,14 @@ void			 	TextureAssetAccessor::AddAsset		( const Path & internalPath, const Asse
 //
 void			 	TextureAssetAccessor::RemoveAsset	( const Path & internalPath )
 {
+	Path::Remove( m_rootPath / internalPath );
 }
 
 // ********************************
 //
 void			 	TextureAssetAccessor::RenameAsset	( const Path & oldPath, const Path & newPath )
 {
+	Path::Rename( oldPath, newPath );
 }
 
 // ********************************

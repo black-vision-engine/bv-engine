@@ -20,6 +20,8 @@ public:
 	Path				operator /		( const Path & p ) const;
 
 	static bool			Copy			( const Path & from, const Path & to );
+	static bool			Remove			( const Path & path );
+	static bool			Rename			( const Path & oldPath, const Path & newPath );
 
 private:
 	std::string			m_path;
