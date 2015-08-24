@@ -19,6 +19,8 @@ public:
 
 	Path				operator /		( const Path & p ) const;
 
+	static bool			Copy			( const Path & from, const Path & to );
+
 private:
 	std::string			m_path;
 };

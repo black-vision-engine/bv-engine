@@ -1,5 +1,8 @@
 #include "Path.h"
 
+#include "Tools/Logger/Logger.h"
+#define LOG_MODULE ModuleEnum::ME_LibCore
+
 #include "boost/filesystem/operations.hpp"
 
 #include <cstdarg>
@@ -63,6 +66,24 @@ Path			Path::Join		( int count, ... ) const
 Path			Path::operator /		( const Path & p ) const
 {
 	return this->Join( p );
+}
+
+// *********************************
+//
+bool			Path::Copy				( const Path & from, const Path & to )
+{
+	boost::system::error_code ec;
+	boost::filesystem::copy( boost::filesystem::path( from.Str() ), boost::filesystem::path( to.Str() ), ec );
+
+	if( ec )
+	{
+		LOG_MESSAGE( SeverityLevel::error ) << "Cannot copy: " << ec.message();
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }
 
 } // bv

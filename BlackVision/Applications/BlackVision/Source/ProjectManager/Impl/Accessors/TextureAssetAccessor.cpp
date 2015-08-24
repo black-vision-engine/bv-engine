@@ -1,8 +1,13 @@
 #include "TextureAssetAccessor.h"
 #include "Assets/Texture/SingleTextureAssetDescriptor.h"
+#include "Assets/Texture/TextureAssetDescriptor.h"
+#include "Assets/Texture/GeneratedSingleTextureAssetDescriptor.h"
 #include "LibImage.h"
 #include "Engine/Types/EnumsUtils.h"
 #include "IO/DirIO.h"
+#include "IO/FileIO.h"
+
+#include <cassert>
 
 namespace bv
 {
@@ -37,6 +42,20 @@ AssetDescConstPtr	TextureAssetAccessor::GetAssetDesc	( const Path & path ) const
 //
 void			 	TextureAssetAccessor::AddAsset		( const Path & internalPath, const AssetDescConstPtr & assetDesc )
 {
+	auto uid = assetDesc->GetUID();
+
+	if( uid == SingleTextureAssetDesc::UID() )
+	{
+		auto typedDesc = QueryTypedDesc< SingleTextureAssetDescConstPtr >( assetDesc );
+
+		auto path = typedDesc->GetImagePath();
+
+		Path::Copy( path, m_rootPath / internalPath );
+	}
+	else
+	{
+		assert( !"Wrong asset descriptor type" );
+	}
 }
 
 // ********************************
