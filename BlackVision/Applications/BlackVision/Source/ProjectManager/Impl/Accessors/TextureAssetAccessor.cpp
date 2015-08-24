@@ -146,18 +146,21 @@ void				TextureAssetAccessor::ImportAsset	( std::istream & in, const Path &  imp
 //
 void			 	TextureAssetAccessor::ExportAll		( const Path & expAssetFilePath ) const
 {
+	{expAssetFilePath;}
 }
 
 // ********************************
 //
 PathVec	TextureAssetAccessor::ListAll		( const Path & path ) const
 {
+	return PathVec();
 }
 
 // ********************************
 //
 PathVec	TextureAssetAccessor::ListAllUnique	( const Path & path ) const
 {
+	return PathVec();
 }
 
 // ********************************

@@ -334,7 +334,7 @@ void        File::operator >> ( std::ostream & out )
 //
 std::fstream *	File::StreamBuf	()
 {
-	m_impl->StreamBuf();
+	return m_impl->StreamBuf();
 }
 
 // *******************************

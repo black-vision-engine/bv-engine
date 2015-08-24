@@ -69,7 +69,7 @@ void						ProjectManagerImpl::SetCurrentProject	( const Path & projectName )
 
 // ********************************
 //
-void						ProjectManagerImpl::AddAsset			( const Path & projectName, const std::string & categoryName, const Path & path, const AssetDesc & assetDesc )
+void						ProjectManagerImpl::AddAsset			( const Path & projectName, const std::string & categoryName, const Path & path, const AssetDescConstPtr & assetDesc )
 {
 }
 
@@ -171,9 +171,9 @@ void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, c
 
 // ********************************
 //
-AssetDesc *					ProjectManagerImpl::GetAssetDesc		( const Path & projectName, const std::string & categoryName, const Path & pathInProject ) const
+AssetDescConstPtr			ProjectManagerImpl::GetAssetDesc		( const Path & projectName, const std::string & categoryName, const Path & pathInProject ) const
 {
-	return nullptr;
+	return AssetDescConstPtr();
 }
 
 // ********************************

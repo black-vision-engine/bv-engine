@@ -28,7 +28,7 @@ private:
 	void							SetCurrentProject	( const Path & projectName );
 
 	// assets
-	void							AddAsset			( const Path & projectName, const std::string & categoryName, const Path & path, const AssetDesc & assetDesc );
+	void							AddAsset			( const Path & projectName, const std::string & categoryName, const Path & path, const AssetDescConstPtr & assetDesc );
 
 	// 
 	void							CopyAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath );
@@ -65,7 +65,7 @@ private:
 	// getting scenes and assets descriptors
 	
 	//AssetDesc						getAssetDescLoc		( loc );
-	AssetDesc *						GetAssetDesc		( const Path & projectName, const std::string & categoryName, const Path & pathInProject ) const;
+	AssetDescConstPtr				GetAssetDesc		( const Path & projectName, const std::string & categoryName, const Path & pathInProject ) const;
 
 	//SceneDesc						GetSceneDescLoc		( loc )
 	SceneDesc *						GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
