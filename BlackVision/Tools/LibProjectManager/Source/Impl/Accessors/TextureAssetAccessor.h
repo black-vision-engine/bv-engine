@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ProjectManager/AssetAccessor.h"
+#include "AssetAccessor.h"
 #include "Assets/FwdDecls.h"
 
 namespace bv

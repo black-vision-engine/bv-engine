@@ -1,5 +1,5 @@
 #include "ProjectManager.h"
-#include "ProjectManager/Impl/ProjectManagerImpl.h"
+#include "Impl/ProjectManagerImpl.h"
 
 namespace bv
 {

@@ -2,7 +2,7 @@
 
 #include "CoreDEF.h"
 
-#include "ProjectManager/ProjectManager.h"
+#include "ProjectManager.h"
 
 namespace bv
 {
