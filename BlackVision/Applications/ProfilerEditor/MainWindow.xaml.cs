@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using System.Threading;
-using System.Runtime.InteropServices;
+
 
 namespace ProfilerEditor
 {
@@ -76,33 +76,11 @@ namespace ProfilerEditor
 
 			if( data.m_bytesRead > 0 )
 			{
-				//string message = System.Text.Encoding.Default.GetString( data.m_data );
-				//this.Input.Text = message;
 				ProfilerSample[] samples;
-				ProfilerSample sam = new ProfilerSample();		// This shit is only to obtain size of ProfilerSample;
-				int sampleSize = Marshal.SizeOf( sam );
-				long numStructs = data.m_bytesRead / sampleSize;
-
-				samples = new ProfilerSample[numStructs];
-
-				for( long i = 0; i < numStructs; ++i )
-				{
-					ProfilerSample sample = new ProfilerSample();
-					samples[ i ] = (ProfilerSample)ByteArrayToStructure( data.m_data, sample, (int)i * sampleSize );
-				}
+				samples = DataProtocol.SamplesLoader.LoadSamples( data );
 
 				MakeTree( samples );
 			}
-		}
-
-		object ByteArrayToStructure( byte[] bytearray, object structureObj, int position )
-		{
-			int length = Marshal.SizeOf( structureObj );
-			IntPtr ptr = Marshal.AllocHGlobal( length );
-			Marshal.Copy( bytearray, 0, ptr, length );
-			structureObj = Marshal.PtrToStructure( Marshal.UnsafeAddrOfPinnedArrayElement( bytearray, position ), structureObj.GetType() );
-			Marshal.FreeHGlobal( ptr );
-			return structureObj;
 		}
 
 		// Tree maker

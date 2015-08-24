@@ -69,14 +69,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataProtocol\SamplesLoader.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NamedPipeServer.cs" />
-    <Compile Include="ProfilerModel\ProfilerSample.cs" />
+    <Compile Include="DataProtocol\NamedPipeServer.cs" />
+    <Compile Include="DataProtocol\ProfilerSample.cs" />
     <Compile Include="ProfilerModel\ProfilerSampleModel.cs" />
     <Compile Include="ProfilerModel\ProfilerTreeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
