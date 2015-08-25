@@ -45,7 +45,7 @@ AssetDescConstPtr	TextureAssetAccessor::GetAssetDesc	( const Path & path ) const
 
 // ********************************
 //
-void			 	TextureAssetAccessor::AddAsset		( const Path & internalPath, const AssetDescConstPtr & assetDesc )
+void			 	TextureAssetAccessor::AddAsset		( const Path & internalPath, const AssetDescConstPtr & assetDesc ) const
 {
 	auto uid = assetDesc->GetUID();
 
@@ -65,14 +65,14 @@ void			 	TextureAssetAccessor::AddAsset		( const Path & internalPath, const Asse
 
 // ********************************
 //
-void			 	TextureAssetAccessor::RemoveAsset	( const Path & internalPath )
+void			 	TextureAssetAccessor::RemoveAsset	( const Path & internalPath ) const
 {
 	Path::Remove( m_rootPath / internalPath );
 }
 
 // ********************************
 //
-void			 	TextureAssetAccessor::RenameAsset	( const Path & oldPath, const Path & newPath )
+void			 	TextureAssetAccessor::RenameAsset	( const Path & oldPath, const Path & newPath ) const
 {
 	Path::Rename( m_rootPath / oldPath, m_rootPath / newPath );
 }
@@ -117,7 +117,7 @@ void			 	TextureAssetAccessor::ExportAsset	( std::ostream & out, const Path & in
 
 // ********************************
 //
-void			 	TextureAssetAccessor::ImportAsset	( const Path & impAssetFile, const Path & importToPath )
+void			 	TextureAssetAccessor::ImportAsset	( const Path & impAssetFile, const Path & importToPath ) const
 {
 	auto impAsset = File::Open( impAssetFile.Str(), File::OpenMode::FOMReadOnly );
 
@@ -128,7 +128,7 @@ void			 	TextureAssetAccessor::ImportAsset	( const Path & impAssetFile, const Pa
 
 // ********************************
 //
-void				TextureAssetAccessor::ImportAsset	( std::istream & in, const Path &  importToPath )
+void				TextureAssetAccessor::ImportAsset	( std::istream & in, const Path &  importToPath ) const
 {
 	auto absPath = m_rootPath / importToPath;
 

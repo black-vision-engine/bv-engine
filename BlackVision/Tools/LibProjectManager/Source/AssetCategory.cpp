@@ -6,8 +6,9 @@ namespace bv
 
 // ********************************
 //
-AssetCategory::AssetCategory( AssetAccessor * aa )
+AssetCategory::AssetCategory( const std::string & id, const AssetAccessorConstPtr & aa )
 	: m_assetAccessor( aa )
+	, m_id( id )
 {}
 
 // ********************************
@@ -24,7 +25,7 @@ const std::string &		AssetCategory::GetId() const
 
 // ********************************
 //
-void					AssetCategory::AddAsset	( const Path & path, const AssetDescConstPtr & assetDesc )
+void					AssetCategory::AddAsset	( const Path & path, const AssetDescConstPtr & assetDesc ) const
 {
 	m_assetAccessor->AddAsset( path, assetDesc );
 }
@@ -38,7 +39,7 @@ AssetDescConstPtr		AssetCategory::GetAssetDesc	( const Path & path ) const
 
 // ********************************
 //
-void					AssetCategory::RemoveAsset	( const Path & path )
+void					AssetCategory::RemoveAsset	( const Path & path ) const
 {
 	m_assetAccessor->RemoveAsset( path );
 }
@@ -52,7 +53,7 @@ void					AssetCategory::ExportAsset	( const Path & expAssetFilePath, const Path 
 
 // ********************************
 //
-void					AssetCategory::ImportAsset	( const Path & impAssetFilePath, const Path & toPath )
+void					AssetCategory::ImportAsset	( const Path & impAssetFilePath, const Path & toPath ) const
 {
 	m_assetAccessor->ImportAsset( impAssetFilePath, toPath );
 }

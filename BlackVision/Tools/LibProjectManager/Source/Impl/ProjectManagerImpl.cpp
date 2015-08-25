@@ -1,5 +1,8 @@
 #include "ProjectManagerImpl.h"
 
+#include "Tools/Logger/Logger.h"
+#define LOG_MODULE ModuleEnum::ME_LibProjectManager
+
 namespace bv
 {
 
@@ -24,6 +27,7 @@ PathVec			ProjectManagerImpl::ListProjectsNames	() const
 //
 PathVec			ProjectManagerImpl::ListScenesNames		( const Path & projectName ) const
 {
+	{projectName;}
 	return PathVec();
 }
 
@@ -38,6 +42,7 @@ PathVec			ProjectManagerImpl::ListCategoriesNames	() const
 //
 PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  const std::string & categoryName ) const
 {
+	{projectName;}{categoryName;}
 	return PathVec();
 }
 
@@ -52,12 +57,14 @@ Path				ProjectManagerImpl::GetRootDir			() const
 //
 void						ProjectManagerImpl::AddNewProject		( const Path & projectName )
 {
+	{projectName;}
 }
 
 // ********************************
 //
 const Project *				ProjectManagerImpl::GetProject			( const Path & projectName ) const
 {
+	{projectName;}
 	return nullptr;
 }
 
@@ -65,42 +72,63 @@ const Project *				ProjectManagerImpl::GetProject			( const Path & projectName )
 //
 void						ProjectManagerImpl::SetCurrentProject	( const Path & projectName )
 {
+	{projectName;}
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::AddAsset			( const Path & projectName, const std::string & categoryName, const Path & path, const AssetDescConstPtr & assetDesc )
 {
+	{projectName;}
+	{categoryName;}
+	{path;}
+	{assetDesc;}
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::CopyAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
+	{inProjectName;}
+	{inCategoryName;}
+	{inPath;}
+	{outProjectName;}
+	{outPath;}
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::RemoveAsset			( const Path & projectName, const std::string & categoryName, const Path & path )
 {
+	{projectName;}
+	{categoryName;}
+	{path;}
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::MoveAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
+	{inProjectName;}
+	{inCategoryName;}
+	{inPath;}
+	{outProjectName;}
+	{outPath;}
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::RemoveUnusedAssets	( const Path & projectName, const std::string & categoryName )
 {
+	{projectName;}
+	{categoryName;}
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::RemoveUnusedAssets	( const Path & projectName )
 {
+	{projectName;}
 }
 
 // ********************************
@@ -129,14 +157,30 @@ void						ProjectManagerImpl::MoveScene			( const Path & inProjectName, const Pa
 
 // ********************************
 //
-void						ProjectManagerImpl::RegisterGlobalCategory( const Category & category)
+void						ProjectManagerImpl::RegisterCategory( const AssetCategoryConstPtr & category )
 {
+	auto it = m_categories.find( category->GetId() );
+
+	if( it == m_categories.end() )
+	{
+		m_categories[ category->GetId() ] = category;
+	}
+	else
+	{
+		LOG_MESSAGE( SeverityLevel::error ) << "Cannot register category: " << category->GetId() << ". Already registered.";
+	}
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::ExportAssetToFile	( const Path & projectName, const std::string & categoryName, const Path & assetPath, const Path & outputFile )
 {
+	auto it = m_categories.find( categoryName );
+	
+	if( it != m_categories.end() )
+	{
+		it->second->ExportAsset( outputFile, projectName / assetPath );
+	}
 }
 
 // ********************************

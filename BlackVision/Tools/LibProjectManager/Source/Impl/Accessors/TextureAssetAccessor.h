@@ -18,14 +18,14 @@ public:
 
 	virtual AssetDescConstPtr	GetAssetDesc		( const Path & path ) const override;
 
-    virtual void			 	AddAsset			( const Path & internalPath, const AssetDescConstPtr & assetDesc ) override;
+    virtual void			 	AddAsset			( const Path & internalPath, const AssetDescConstPtr & assetDesc ) const override;
 
-    virtual void			 	RemoveAsset			( const Path & internalPath ) override;
+    virtual void			 	RemoveAsset			( const Path & internalPath ) const override;
 
-    virtual void			 	RenameAsset			( const Path & oldPath, const Path & newPath) override;
+    virtual void			 	RenameAsset			( const Path & oldPath, const Path & newPath) const override;
 
-    virtual void			 	ImportAsset			( const Path & impAssetFile, const Path &  importToPath ) override;
-	virtual void				ImportAsset			( std::istream & in, const Path &  importToPath ) override;
+    virtual void			 	ImportAsset			( const Path & impAssetFile, const Path &  importToPath ) const override;
+	virtual void				ImportAsset			( std::istream & in, const Path &  importToPath ) const override;
 
     virtual void			 	ExportAsset			( const Path & expAssetFilePath, const Path &  internalPath) const override;
 	virtual void				ExportAsset			( std::ostream & out, const Path &  internalPath) const override;

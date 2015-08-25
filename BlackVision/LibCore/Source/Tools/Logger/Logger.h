@@ -33,9 +33,10 @@ enum ModuleEnum : int
 {
 	ME_LibBlackVision	= 1 << 0,
 	ME_LibCore			= 1 << 1,
-	ME_LibImage		= 1 << 2,
+	ME_LibImage			= 1 << 2,
 	ME_Prototyper		= 1 << 3,
-	ME_BlackVisionApp	= 1 << 4
+	ME_BlackVisionApp	= 1 << 4,
+	ME_LibProjectManager= 1 << 5
 };
 
 /**Adding new modules - instruction:

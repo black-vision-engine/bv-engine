@@ -1,5 +1,7 @@
 #pragma once
 
+#include "AssetCategory.h"
+
 #include "Assets/FwdDecls.h"
 
 #include "System/Path.h"
@@ -8,7 +10,7 @@ namespace bv
 {
 
 class Project;
-class Category;
+class AssetCategory;
 class SceneDesc;
 class ProjectManagerImpl;
 
@@ -53,7 +55,7 @@ public:
 	void					MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 
 	// categories
-	void					RegisterGlobalCategory( const Category & category);
+	void					RegisterCategory	( const AssetCategoryConstPtr & category);
 
 
 	// *********************************

@@ -153,9 +153,9 @@ void						ProjectManager::MoveScene			( const Path & inProjectName, const Path &
 
 // ********************************
 //
-void						ProjectManager::RegisterGlobalCategory( const Category & category)
+void						ProjectManager::RegisterCategory( const AssetCategoryConstPtr & category)
 {
-	m_impl->RegisterGlobalCategory( category );
+	m_impl->RegisterCategory( category );
 }
 
 // ********************************

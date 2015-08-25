@@ -65,8 +65,9 @@ void InitializeModuleMapping()
 	moduleString[bv::ModuleEnum::ME_LibImage]			= "LibImage";
 	moduleString[bv::ModuleEnum::ME_Prototyper]			= "Prototyper";
 	moduleString[bv::ModuleEnum::ME_BlackVisionApp]		= "BlackVisionApp";
+	moduleString[bv::ModuleEnum::ME_LibProjectManager]	= "LibProjectManager";
 
-	modulesStringAlignment = 14;
+	modulesStringAlignment = 17;
 }
 
 
@@ -129,7 +130,7 @@ void SetFilter( boost::shared_ptr<Type> sink, SeverityLevel minLevel, int module
 			|| (module == (modules & ( modules & (0x1 << 2) )))
 			|| (module == (modules & ( modules & (0x1 << 3) )))
 			|| (module == (modules & ( modules & (0x1 << 4) )))
-			//|| (module == (modules & ( modules & (0x1 << 5) )))
+			|| (module == (modules & ( modules & (0x1 << 5) )))
 			//|| (module == (modules & ( modules & (0x1 << 6) )))
 			//|| (module == (modules & ( modules & (0x1 << 7) )))
 			//|| (module == (modules & ( modules & (0x1 << 8) )))
