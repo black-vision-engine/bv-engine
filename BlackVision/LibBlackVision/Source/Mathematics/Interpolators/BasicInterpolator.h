@@ -7,6 +7,13 @@
 namespace bv
 {
 
+template< class TimeValueT, class ValueT >
+class IInterpolator
+{
+public:
+    virtual ValueT Evaluate( TimeValueT t ) const = 0;
+};
+
 enum class WrapMethod : int
 {
     clamp = 0,
@@ -36,25 +43,20 @@ Key< TimeValueT, ValueT > operator*( const float a, const Key< TimeValueT, Value
 template<class TimeValueT>
 class Interpolator
 {
-private:
-
-	model::IParameter::InterpolationMethod m_method;
-
+    typedef model::IParameter::CurveType CurveType; // FIXME
 public:
 
-    typedef TimeValueT TimeType;
+    //typedef TimeValueT TimeType;
 
 public:
-
-    virtual void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method ) { m_method = method; }
-    virtual model::IParameter::InterpolationMethod     GetInterpolationMethod () const { return m_method; }
+    virtual void                    SetCurveType    ( CurveType type )                      = 0;
 
     virtual int EvalToCBuffer( TimeValueT time, char * buf ) const = 0;
 
 };
 
 template<class TimeValueT, class ValueT, class FloatT = float >
-class BasicInterpolator : public Interpolator<TimeValueT>
+class BasicInterpolator : public Interpolator<TimeValueT> // FIXME: this class will be removed
 {
 public:
 
@@ -62,8 +64,6 @@ public:
     typedef ValueT      ValueType;
 
 private:
-	//model::IParameter::InterpolationMethod			method;
-
     std::vector<Key<TimeValueT, ValueT>>    keys;
     TimeValueT                              tolerance;
 
@@ -85,9 +85,6 @@ public:
     explicit BasicInterpolator  ( TimeValueT tolerance = 0.0001 );
     virtual ~BasicInterpolator  () {};
 
-	//void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method ) override;
-	//model::IParameter::InterpolationMethod     GetInterpolationMethod () const override;
-
     void AddKey             ( TimeValueT t, const ValueT & v );
     void AddKey             ( const Key<TimeValueT, ValueT> & key );
 
@@ -106,6 +103,7 @@ public:
     void SetWrapMethod( WrapMethod pre, WrapMethod post );
 
     virtual int EvalToCBuffer( TimeValueT time, char * buf ) const;
+    virtual void                SetCurveType    ( model::IParameter::CurveType /*type*/ ) override { } // remember, this class will be removed ;)
 
 	const std::vector<Key<TimeValueT, ValueT>> & AccessKeys() const;
 

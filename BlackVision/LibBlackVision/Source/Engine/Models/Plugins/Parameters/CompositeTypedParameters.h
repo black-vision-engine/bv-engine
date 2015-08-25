@@ -22,8 +22,9 @@ public:
 
     explicit            ParamTransform  ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator );
 
-	void                SetInterpolationMethod ( InterpolationMethod method ) override;
-	InterpolationMethod GetInterpolationMethod () const override;
+    virtual void                SetCurveType    ( CurveType type ) override { m_transformModel.SetCurveType( type ); }
+	//void                SetInterpolationMethod ( InterpolationMethod method ) override;
+	//InterpolationMethod GetInterpolationMethod () const override;
 
     inline  void        SetRotation     ( const glm::vec3 & rotAxis, float angle, TimeType t );
     inline  void        SetScale        ( const glm::vec3 & scale, TimeType t );
@@ -64,8 +65,9 @@ public:
     explicit            ParamTransformVec   ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator );
     explicit            ParamTransformVec   ( const std::string & name, const ITimeEvaluatorPtr evaluator );
 
-	void                SetInterpolationMethod ( InterpolationMethod method ) override;
-	InterpolationMethod GetInterpolationMethod () const override;
+    virtual void                SetCurveType    ( CurveType type ) override { for( auto trans : m_transformModelVec ) trans.SetCurveType( type ); }
+	//void                SetInterpolationMethod ( InterpolationMethod method ) override;
+	//InterpolationMethod GetInterpolationMethod () const override;
 
     void                AppendTransform     ( const TransformF & transform );
 

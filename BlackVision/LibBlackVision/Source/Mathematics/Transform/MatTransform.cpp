@@ -43,7 +43,7 @@ namespace bv { namespace model {
 // *************************************
 //
 template<typename ParamT>
-SimpleTransform<ParamT>::SimpleTransform( TransformKind kind, ParamT p0, ParamT p1, ParamT p2 )
+SimpleTransform<ParamT>::SimpleTransform( const TransformKind kind, const ParamT p0, const ParamT p1, const ParamT p2 )
     : kind( kind ), p0( p0 ), p1( p1 ), p2 (p2 )
 {
 }
@@ -122,36 +122,35 @@ CompositeTransform<ParamT>::~CompositeTransform()
     }
 }
 
-// *************************************
+//// *************************************
+////
+//template<typename ParamT>
+//void                    CompositeTransform<ParamT>::SetInterpolationMethod ( model::IParameter::InterpolationMethod method )
+//{
+//    for( auto& transformation : m_transformations )
+//    {
+//        transformation->GetP0MotylaNoga().SetInterpolationMethod( method );
+//        transformation->GetP1MotylaNoga().SetInterpolationMethod( method );
+//        transformation->GetP2MotylaNoga().SetInterpolationMethod( method );
+//    }
+//}
 //
-template<typename ParamT>
-void                    CompositeTransform<ParamT>::SetInterpolationMethod ( model::IParameter::InterpolationMethod method )
-{
-    __super::SetInterpolationMethod( method );
-    for( auto& transformation : m_transformations )
-    {
-        transformation->GetP0MotylaNoga().SetInterpolationMethod( method );
-        transformation->GetP1MotylaNoga().SetInterpolationMethod( method );
-        transformation->GetP2MotylaNoga().SetInterpolationMethod( method );
-    }
-}
-
-// *************************************
-//
-template<typename ParamT>
-model::IParameter::InterpolationMethod     CompositeTransform<ParamT>::GetInterpolationMethod () const
-{
-    auto ret = __super::GetInterpolationMethod();
-    for( auto& transformation : m_transformations )
-    {
-        assert( ret == transformation->GetP0MotylaNoga().GetInterpolationMethod() );
-        assert( ret == transformation->GetP1MotylaNoga().GetInterpolationMethod() );
-        assert( ret == transformation->GetP2MotylaNoga().GetInterpolationMethod() );
-    
-        { transformation; }
-    }
-    return ret;
-}
+//// *************************************
+////
+//template<typename ParamT>
+//model::IParameter::InterpolationMethod     CompositeTransform<ParamT>::GetInterpolationMethod () const
+//{
+//    //auto ret = __super::GetInterpolationMethod();
+//    for( auto& transformation : m_transformations )
+//    {
+//        assert( ret == transformation->GetP0MotylaNoga().GetInterpolationMethod() );
+//        assert( ret == transformation->GetP1MotylaNoga().GetInterpolationMethod() );
+//        assert( ret == transformation->GetP2MotylaNoga().GetInterpolationMethod() );
+//    
+//        { transformation; }
+//    }
+//    return ret;
+//}
 
 // *************************************
 //
@@ -322,7 +321,8 @@ glm::mat4x4 SimpleTransform<ParamT>::Evaluate( typename ParamT::TimeT t ) const
 template<typename ParamT>
 SimpleTransform<ParamT> * SimpleTransform<ParamT>::Clone() const
 {
-    return new SimpleTransform( *this );
+    //return new SimpleTransform( *this );
+    return new SimpleTransform( kind, p0, p1, p2 );
 }
 
 } //bv

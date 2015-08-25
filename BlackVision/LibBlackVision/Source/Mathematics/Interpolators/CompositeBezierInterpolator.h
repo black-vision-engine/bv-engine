@@ -5,17 +5,9 @@
 namespace bv
 {
 
-template< class TimeValueT, class ValueT >
-class IInterpolator
-{
-public:
-    virtual ValueT Evaluate( TimeValueT t ) const = 0;
-};
-
 class CompositeBezierInterpolator
 {
-public:
-    enum CurveType { POINT, LINEAR, BEZIER };
+    typedef model::IParameter::CurveType CurveType;
 
 private:
     typedef float TimeValueT;
@@ -25,7 +17,7 @@ private:
     std::vector< IInterpolator<TimeValueT, ValueT >* > interpolators; // FIXME: ptr-ize
     TimeValueT                              tolerance;
 
-    CurveType                               m_type;
+    model::IParameter::CurveType                   m_type;
 
 public:
     typedef TimeValueT  TimeType;
@@ -35,6 +27,9 @@ public:
     typedef ValueT                      ValT;
 
 public:
+    CompositeBezierInterpolator() { }
+    CompositeBezierInterpolator( const CompositeBezierInterpolator& that ) { keys = that.keys; interpolators = that.interpolators; tolerance = that.tolerance; m_type = that.m_type; }
+
     void AddKey             ( TimeValueT t, const ValueT & v );
     ValueT Evaluate         ( TimeValueT t ) const;
 
@@ -42,8 +37,8 @@ public:
 
 // FIXME: below is to remove
     const std::vector<Key<TimeValueT, ValueT>> & AccessKeys() const { static std::vector<Key<TimeValueT, ValueT>> ret; return ret; };
-    void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method ) { SetCurveType( (CurveType)method ); } // FIXME: co pan ja nie jestem rolnikiem!!!!!!!!!!!!!!!!!!!!!!!!!
-    model::IParameter::InterpolationMethod     GetInterpolationMethod () const { return model::IParameter::InterpolationMethod::LINEAR; } // WTF
+    //void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method ) { SetCurveType( (CurveType)method ); } // FIXME: co pan ja nie jestem rolnikiem!!!!!!!!!!!!!!!!!!!!!!!!!
+    //model::IParameter::InterpolationMethod     GetInterpolationMethod () const { return model::IParameter::InterpolationMethod::LINEAR; } // WTF
     void SetWrapPostMethod  ( WrapMethod ) {}
     void SetWrapPreMethod   ( WrapMethod ) {}
 

@@ -726,7 +726,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     assert( success );
 
     SetParameter( prism->GetPlugin( "prism" )->GetParameter( "n" ), 10.f, 10 );
-    prism->GetPlugin( "prism" )->GetParameter( "n" )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
+    //prism->GetPlugin( "prism" )->GetParameter( "n" )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
 
     SetParameterScale( prism->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  5.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
     SetParameterScale( prism->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 10.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
@@ -742,7 +742,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 
     auto param = prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-    param->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
+    //param->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
 
 //SetParameterRotation( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 50.f, glm::vec3( 1, 0, 0 ), -10000.f );
 
@@ -837,7 +837,7 @@ void BoolParamTest()
     model::SetParameter( param, 0.f, true );
 }
 
-model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr timeEvaluator, CompositeBezierInterpolator::CurveType type )
+model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr timeEvaluator, model::IParameter::CurveType type )
 {
     model::BasicNodePtr node = model::BasicNode::Create( "rect", timeEvaluator );
     node->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -847,7 +847,7 @@ model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr t
     model::SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
 
     auto param = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-    param->SetInterpolationMethod( (model::IParameter::InterpolationMethod) type ); // FIXME: WTF?!?!?
+    param->SetCurveType( type );
     model::SetParameterTranslation( param, 0, 0.f, offset );
     model::SetParameterTranslation( param, 0, 1.f, offset );
     model::SetParameterTranslation( param, 0, 10.f, offset + glm::vec3( 2, 0, 0 ) );
@@ -861,8 +861,8 @@ model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model
     model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
-    auto node1 = CosineDemoRect( glm::vec3( -1, 0.5, 0 ) , timeEvaluator, CompositeBezierInterpolator::LINEAR );
-    auto node2 = CosineDemoRect( glm::vec3( -1, -0.5, 0 ) , timeEvaluator, CompositeBezierInterpolator::BEZIER );
+    auto node1 = CosineDemoRect( glm::vec3( -1, 0.5, 0 ) , timeEvaluator, model::IParameter::LINEAR );
+    auto node2 = CosineDemoRect( glm::vec3( -1, -0.5, 0 ) , timeEvaluator, model::IParameter::BEZIER );
     //node2->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
 
     root->AddChildToModelOnly( node1 );
