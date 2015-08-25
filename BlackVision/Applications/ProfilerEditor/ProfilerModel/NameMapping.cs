@@ -23,7 +23,7 @@ namespace ProfilerEditor.ProfilerModel
 			m_randomGenerator = new Random();
 		}
 
-		public void update( ProfilerSample[] samples )
+		public void Update( ProfilerSample[] samples )
 		{
 			foreach( var sample in samples )
 				if( !m_colorMap.ContainsKey( sample.name ) )
@@ -32,6 +32,15 @@ namespace ProfilerEditor.ProfilerModel
 					m_colorMap.Add( sample.name, randomColor );
 				}
 				
+		}
+
+		public Color GetColorOf( Int64 nameID )
+		{
+			Color retColor = new Color();
+			if( m_colorMap.TryGetValue( nameID, out retColor ) )
+				return retColor;
+			else
+				return Color.FromArgb( 255, (byte)m_randomGenerator.Next( 255 ), (byte)m_randomGenerator.Next( 255 ), (byte)m_randomGenerator.Next( 255 ) );
 		}
 	}
 }

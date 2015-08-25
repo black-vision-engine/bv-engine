@@ -17,7 +17,7 @@ namespace ProfilerEditor.ProfilerModel
 		bool												m_isExpanded;
 
 
-
+		public ProfilerSample GetData() { return m_sampleData; }
 
 #region Constructor
 

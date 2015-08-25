@@ -13,9 +13,15 @@ namespace ProfilerEditor.PresentationLayer
 		public object Convert( object value, Type targetType, object parameter,
 								System.Globalization.CultureInfo culture )
 		{
-			//ProfilerModel.ProfilerSampleModel sample = (ProfilerModel.ProfilerSampleModel)value;
-			Brush color = new SolidColorBrush( Color.FromArgb( 255, 200, 100, 40 ) );
-			return color;
+			ProfilerModel.ProfilerSampleModel sample = (ProfilerModel.ProfilerSampleModel)value;
+			MainWindow mainWindow = (MainWindow)parameter;
+
+			Int64 name = sample.GetData().name;
+			ProfilerModel.NameMapping colorMap = mainWindow.ColorMapping;
+
+			Color color = colorMap.GetColorOf( name );
+			Brush brush = new SolidColorBrush( color );
+			return brush;
 		}
 
 		public object ConvertBack( object value, Type targetType, object parameter,

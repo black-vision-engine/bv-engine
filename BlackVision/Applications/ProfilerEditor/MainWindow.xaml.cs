@@ -32,14 +32,31 @@ namespace ProfilerEditor
     {
 		private NamedPipeServer								m_pipedServer;
 		private ProfilerModel.ProfilerTreeViewModel			m_profilerTreeView;
+		private ProfilerModel.NameMapping					m_namesMap;
 
 		private bool										m_firstTime;
 
-        public MainWindow()
+#region Properties
+		public ProfilerModel.NameMapping ColorMapping
+		{
+			get { return m_namesMap; }
+		}
+
+		public ProfilerModel.NameMapping NameMapping
+		{
+			get { return m_namesMap; }
+		}
+
+#endregion
+
+
+
+		public MainWindow()
         {
             InitializeComponent();
 
 			m_firstTime = true;
+			m_namesMap = new ProfilerModel.NameMapping();
         }
 
 		private void startButton_Click( object sender, RoutedEventArgs e )
@@ -85,6 +102,7 @@ namespace ProfilerEditor
 				ProfilerSample[] samples;
 				samples = DataProtocol.SamplesLoader.LoadSamples( data );
 
+				m_namesMap.Update( samples );
 				MakeTree( samples );
 			}
 		}

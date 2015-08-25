@@ -4,9 +4,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:layer="clr-namespace:ProfilerEditor.PresentationLayer"
-        Title="Profiler Editor" Height="536.521" Width="735.658" Closing="Window_Closing">
+        Title="Profiler Editor" Height="536.521" Width="735.658" Closing="Window_Closing" Name="mainWindow">
     <Window.Resources>
-        <layer:NameColorConverter x:Key="NameColorConverter"></layer:NameColorConverter>
+        <layer:NameColorConverter x:Key="NameColorConverter">
+        </layer:NameColorConverter>
     </Window.Resources>
     <Grid>
         <Button x:Name="startButton" Content="Start Server" HorizontalAlignment="Left" Margin="488,20,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.701,-0.712" Click="startButton_Click"/>
@@ -24,7 +25,7 @@
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                                 <StackPanel Orientation="Horizontal">
-                                    <Rectangle Height="10" Width="30" Fill="{Binding Converter={StaticResource NameColorConverter}}"/>
+                                    <Rectangle Height="10" Width="30" Fill="{Binding Converter={StaticResource NameColorConverter}, ConverterParameter={x:Reference mainWindow} }"/>
                                     <TextBlock Text="{Binding DurationSecs}"></TextBlock>
                                 </StackPanel>
                             </HierarchicalDataTemplate>
