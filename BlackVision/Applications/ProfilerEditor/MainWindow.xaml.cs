@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using System.Threading;
+using ProfilerEditor.PresentationLayer;
 
 
 namespace ProfilerEditor
@@ -30,7 +31,6 @@ namespace ProfilerEditor
     public partial class MainWindow : Window
     {
 		private NamedPipeServer								m_pipedServer;
-
 		private ProfilerModel.ProfilerTreeViewModel			m_profilerTreeView;
 
 		private bool										m_firstTime;
@@ -47,13 +47,12 @@ namespace ProfilerEditor
 			string pipeName = "ProfilerPipeTest";
 			m_pipedServer = new NamedPipeServer( pipeName, 0 );
 
-			//m_pipedServer.onMessageSent += new EventHandler( GetMessageFromPipe );
 			m_pipedServer.onMessageSent = GetMessageFromPipe;
 			m_pipedServer.m_syncContext = SynchronizationContext.Current;
 			m_pipedServer.StartServer();
-			//m_pipedServer.m_syncObject = (ISynchronizeInvoke)this.ProfilerTree1;
 		}
 
+		// @todo Usunąć w ostatecznej wersji
 		private void getMessage_Click( object sender, RoutedEventArgs e )
 		{
 			ReadDataObject data = m_pipedServer.ReadBytes();
@@ -70,6 +69,13 @@ namespace ProfilerEditor
 		}
 
 
+		private void Window_Closing( object sender, CancelEventArgs e )
+		{
+			if( m_pipedServer != null )
+				m_pipedServer.EndServer();
+		}
+
+
 		private void GetMessageFromPipe( object state )
 		{
 			ReadDataObject data = m_pipedServer.ReadBytes();
@@ -83,7 +89,6 @@ namespace ProfilerEditor
 			}
 		}
 
-		// Tree maker
 		private int GetTreeExpansionLevel()
 		{
 			int maxDepthLevel;
@@ -103,69 +108,7 @@ namespace ProfilerEditor
 
 			m_profilerTreeView = new ProfilerModel.ProfilerTreeViewModel( samples, (uint)maxDepthLevel );
 			ProfilerTree1.DataContext = m_profilerTreeView;
-
-
-			//Stack<TreeViewItem> treeStack = new Stack<TreeViewItem>();
-
-			//int maxDepthLevel = GetTreeExpansionLevel();
-			
-			//TreeViewItem currentParent = new TreeViewItem();
-			//currentParent.Header = "Thread1 Profiler data";
-			//currentParent.IsExpanded = true;
-
-			//int currentDepth = 0;
-			//TreeViewItem newItem = currentParent;
-
-			//ProfilerTree1.Items.Add( currentParent );
-
-			//foreach( var sample in samples )
-			//{
-			//	if( sample.depth > currentDepth )
-			//	{
-			//		currentDepth = (int)sample.depth;
-			//		treeStack.Push( currentParent );
-			//		currentParent = newItem;
-			//	}
-			//	else if( sample.depth < currentDepth )
-			//	{
-			//		currentDepth = (int)sample.depth;
-			//		currentParent = treeStack.Pop();
-			//	}
-
-			//	// Item already added, but reference needed outside this function.
-			//	newItem = AddSampleToTree( sample, currentParent, maxDepthLevel );
-			//}
 		}
 
-		// @fixme unused
-		public TreeViewItem AddSampleToTree( ProfilerSample sample, TreeViewItem currentParent, int maxDepthLevel )
-		{
-			TreeViewItem newItem = new TreeViewItem();
-
-			StackPanel stack = new StackPanel();
-			stack.Orientation = Orientation.Horizontal;
-
-			Label nameLabel = new Label();
-			nameLabel.Content = sample.name;
-			stack.Children.Add( nameLabel );
-
-			Label durationLabel = new Label();
-			durationLabel.Content = sample.durationSecs;
-			stack.Children.Add( durationLabel );
-
-			newItem.Header = stack;
-
-			if( sample.depth <= maxDepthLevel )
-				newItem.IsExpanded = true;
-
-			currentParent.Items.Add( newItem );
-			return newItem;
-		}
-
-		private void Window_Closing( object sender, CancelEventArgs e )
-		{
-			if( m_pipedServer != null )
-				m_pipedServer.EndServer();
-		}
     }
 }
