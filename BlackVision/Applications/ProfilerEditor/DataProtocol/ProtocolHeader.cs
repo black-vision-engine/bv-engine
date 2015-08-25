@@ -9,11 +9,11 @@ namespace ProfilerEditor.DataProtocol
 {
 
 	[StructLayout( LayoutKind.Explicit, Size = 6, Pack = 1 )]
-	struct ProtocolHeader
+	public struct ProtocolHeader
 	{
 		[MarshalAs( UnmanagedType.I2 )]
 		[FieldOffset( 0 )]
-		public Int16	threadID;
+		public UInt16	threadID;
 
 		[MarshalAs( UnmanagedType.I2 )]
 		[FieldOffset( 2 )]

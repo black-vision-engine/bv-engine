@@ -9,8 +9,8 @@ namespace ProfilerEditor.DataProtocol
 	public class LoadedData
 	{
 		public UInt16					m_threadID;
-		public string[]					m_nameStrings;
 		public UInt16[]					m_nameIDs;
+		public string[]					m_nameStrings;
 
 		public ProfilerSample[]			m_samples;
 	}
