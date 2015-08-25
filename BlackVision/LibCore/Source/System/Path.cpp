@@ -4,6 +4,7 @@
 #define LOG_MODULE ModuleEnum::ME_LibCore
 
 #include "boost/filesystem/operations.hpp"
+#include "boost/regex.hpp"
 
 #include <cstdarg>
 
@@ -143,6 +144,30 @@ bool			Path::IsDir				( const Path & path )
 bool			Path::Exists			( const Path & path )
 {
     return boost::filesystem::exists( path.Str() );
+}
+
+// *********************************
+//
+PathVec			Path::List				( const Path & path, const std::string exp )
+{
+	boost::filesystem::path cp( path.Str() ); 
+	boost::regex pattern( exp );
+
+	PathVec ret;
+
+	for (	boost::filesystem::recursive_directory_iterator iter( cp ), end;
+			iter != end;
+			++iter)
+	{
+		std::string name = iter->path().filename().string();
+		if (regex_match(name, pattern))
+		{
+			auto p = iter->path();
+			ret.push_back( Path( iter->path().string() ) );
+		}
+	}
+
+	return ret;
 }
 
 } // bv

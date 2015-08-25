@@ -10,6 +10,7 @@
 #include "Tools/Logger/Logger.h"
 #define LOG_MODULE ModuleEnum::ME_LibBlackVision
 
+#include <set>
 #include <fstream>
 #include <cassert>
 
@@ -85,6 +86,8 @@ void			 	TextureAssetAccessor::ExportAsset	( const Path & expAssetFilePath, cons
 	auto out = expFile.StreamBuf();
 
 	ExportAsset( *out, internalPath );
+
+	expFile.Close();
 }
 
 // ********************************
@@ -144,23 +147,67 @@ void				TextureAssetAccessor::ImportAsset	( std::istream & in, const Path &  imp
 
 // ********************************
 //
+void			 	TextureAssetAccessor::ExportAll		( std::ostream & out ) const
+{
+	for( auto p : ListAllUnique( m_rootPath ) )
+	{
+		ExportAsset( out, p );
+	}
+}
+
+// ********************************
+//
 void			 	TextureAssetAccessor::ExportAll		( const Path & expAssetFilePath ) const
 {
-	{expAssetFilePath;}
+	auto expFile = File::Open( expAssetFilePath.Str(), File::OpenMode::FOMWriteAppend );
+
+	auto out = expFile.StreamBuf();
+
+	ExportAll( *out );
+
+	expFile.Close();
 }
 
 // ********************************
 //
 PathVec	TextureAssetAccessor::ListAll		( const Path & path ) const
 {
-	return PathVec();
+	PathVec ret;
+	for( auto ext : m_fileExts )
+	{
+		auto l = Path::List( path, ext );
+		ret.insert( ret.end(), l.begin(), l.end() );
+	}
+	
+	return ret;
+}
+
+// ********************************
+//
+namespace
+{
+
+bool PathCompare( const Path & a, const Path & b ) 
+{
+    return a.Str() < b.Str();
+}
+
 }
 
 // ********************************
 //
 PathVec	TextureAssetAccessor::ListAllUnique	( const Path & path ) const
 {
-	return PathVec();
+	auto l = ListAll( path );
+
+	std::set< Path, bool (*)( const Path & a, const Path & b )  > unique( PathCompare );
+
+	for( auto p : l )
+	{
+		unique.insert( p );
+	}
+
+	return PathVec( unique.begin(), unique.end() );	
 }
 
 // ********************************

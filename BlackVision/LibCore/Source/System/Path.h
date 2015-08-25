@@ -9,6 +9,7 @@ namespace bv
 class Path
 {
 public:
+	typedef std::vector< Path > PathVec;
 
 						Path			( const std::string & str );
 
@@ -25,11 +26,12 @@ public:
 	static bool			IsFile			( const Path & path );
 	static bool			IsDir			( const Path & path );
 	static bool			Exists			( const Path & path );
+	static PathVec		List			( const Path & path, const std::string exp = "*" );
 
 private:
 	std::string			m_path;
 };
 
-typedef std::vector< Path > PathVec;
+typedef Path::PathVec PathVec;
 
 } // bv

@@ -30,6 +30,7 @@ public:
     virtual void			 	ExportAsset			( const Path & expAssetFilePath, const Path &  internalPath) const override;
 	virtual void				ExportAsset			( std::ostream & out, const Path &  internalPath) const override;
 
+	virtual void			 	ExportAll			( std::ostream & out ) const override;
     virtual void			 	ExportAll			( const Path & expAssetFilePath ) const override;
 
     virtual PathVec	ListAll				( const Path & path ) const override;
@@ -42,7 +43,7 @@ private:
 	void						CreateDir			() const;
 
 	const ProjectManager *		m_projectManager;
-	Path				m_rootPath;
+	Path						m_rootPath;
 	StringVector				m_fileExts;
 };
 

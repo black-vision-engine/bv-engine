@@ -27,6 +27,7 @@ public:
     virtual void				ExportAsset			( const Path & expAssetFilePath, const Path &  internalPath) const = 0;
 	virtual void				ExportAsset			( std::ostream & out, const Path &  internalPath) const = 0;
 
+	virtual void			 	ExportAll			( std::ostream & out ) const = 0;
     virtual void				ExportAll			( const Path & expAssetFilePath ) const = 0;
 
     virtual PathVec				ListAll				( const Path & path ) const = 0;
