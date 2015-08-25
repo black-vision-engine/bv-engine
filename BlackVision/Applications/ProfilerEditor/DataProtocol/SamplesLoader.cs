@@ -10,7 +10,21 @@ namespace ProfilerEditor.DataProtocol
 	class SamplesLoader
 	{
 
-		public static ProfilerSample[] LoadSamples( ReadDataObject data )
+		public static ProfilerSample[] Load( ReadDataObject data )
+		{
+			UInt32 offset = 0;
+			return LoadSamples( data, offset );
+		}
+
+		public static LoadedData NewLoad( ReadDataObject data )
+		{
+			LoadedData loadedData = new LoadedData();
+
+
+			return loadedData;
+		}
+
+		public static ProfilerSample[] LoadSamples( ReadDataObject data, UInt32 offset )
 		{
 			ProfilerSample[] samples;
 			ProfilerSample sam = new ProfilerSample();		// This shit is only to obtain size of ProfilerSample;

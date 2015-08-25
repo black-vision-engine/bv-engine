@@ -69,16 +69,6 @@ namespace ProfilerEditor
 			m_pipedServer.StartServer();
 		}
 
-		// @todo Usunąć w ostatecznej wersji
-		private void getMessage_Click( object sender, RoutedEventArgs e )
-		{
-			ReadDataObject data = m_pipedServer.ReadBytes();
-			if( data.m_bytesRead > 0 )
-			{
-				string message = System.Text.Encoding.Default.GetString( data.m_data );
-				//this.Input.Text = message;
-			}
-		}
 
 		private void endServer_Click( object sender, RoutedEventArgs e )
 		{
@@ -100,7 +90,7 @@ namespace ProfilerEditor
 			if( data.m_bytesRead > 0 )
 			{
 				ProfilerSample[] samples;
-				samples = DataProtocol.SamplesLoader.LoadSamples( data );
+				samples = DataProtocol.SamplesLoader.Load( data );
 
 				m_namesMap.Update( samples );
 				MakeTree( samples );

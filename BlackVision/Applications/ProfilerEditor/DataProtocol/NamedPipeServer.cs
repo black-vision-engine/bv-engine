@@ -12,14 +12,6 @@ using System.ComponentModel;
 
 namespace ProfilerEditor
 {
-	//class Synchronize : ISynchronizeInvoke
-	//{
-	//	//bool IsInvokeRequired()
-	//	//{
-	//	//	return InvokeRequired.get;
-	//	//}
-	//}
-
 	// Helper data object to queue
 	class ReadDataObject
 	{
@@ -65,7 +57,6 @@ namespace ProfilerEditor
 			// Makes queue thread-safe.
 			m_queue = new Queue();
 			m_queue = Queue.Synchronized( m_queue );
-			//m_syncObject = new Synchronize();
         }
 
 	// Members

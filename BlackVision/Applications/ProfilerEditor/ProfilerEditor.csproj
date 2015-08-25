@@ -69,6 +69,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataProtocol\LoadedData.cs" />
+    <Compile Include="DataProtocol\ProtocolHeader.cs" />
     <Compile Include="DataProtocol\SamplesLoader.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

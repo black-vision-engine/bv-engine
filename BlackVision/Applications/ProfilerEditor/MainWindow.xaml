@@ -12,7 +12,6 @@
     <Grid>
         <Button x:Name="startButton" Content="Start Server" HorizontalAlignment="Left" Margin="488,20,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.701,-0.712" Click="startButton_Click"/>
         <Button x:Name="endServer" Content="End Server" HorizontalAlignment="Left" Margin="488,58,0,0" VerticalAlignment="Top" Width="75" Click="endServer_Click"/>
-        <Button x:Name="getMessage" Content="Get Message" HorizontalAlignment="Left" Margin="488,99,0,0" VerticalAlignment="Top" Width="75" Click="getMessage_Click"/>
         <TabControl HorizontalAlignment="Left" Height="461" Margin="36,20,0,0" VerticalAlignment="Top" Width="415">
             <TabItem Header="Thread 1">
                 <Grid Background="#FFE5E5E5">
@@ -25,7 +24,7 @@
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                                 <StackPanel Orientation="Horizontal">
-                                    <Rectangle Height="10" Width="30" Fill="{Binding Converter={StaticResource NameColorConverter}, ConverterParameter={x:Reference mainWindow} }"/>
+                                    <Rectangle Height="10" Width="30" Margin="3" Fill="{Binding Converter={StaticResource NameColorConverter}, ConverterParameter={x:Reference mainWindow} }"/>
                                     <TextBlock Text="{Binding DurationSecs}"></TextBlock>
                                 </StackPanel>
                             </HierarchicalDataTemplate>
