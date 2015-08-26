@@ -62,6 +62,14 @@ Path::Path( const std::string & str )
 
 // *********************************
 //
+Path::Path( const char * str )
+{
+	boost::filesystem::path p( str );
+	m_path = p.normalize().string();
+}
+
+// *********************************
+//
 std::string		Path::Str		() const
 {
 	return m_path;

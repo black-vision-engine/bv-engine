@@ -12,6 +12,7 @@ public:
 	typedef std::vector< Path > PathVec;
 
 						Path			( const std::string & str );
+						Path			( const char * str );
 
 	std::string			Str				() const;
 
