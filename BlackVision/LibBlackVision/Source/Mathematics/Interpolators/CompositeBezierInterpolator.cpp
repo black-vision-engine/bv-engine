@@ -72,6 +72,18 @@ public:
     }
 };
 
+CompositeBezierInterpolator::CompositeBezierInterpolator()
+    : m_type( CurveType::LINEAR )
+{
+}
+
+CompositeBezierInterpolator::CompositeBezierInterpolator( const CompositeBezierInterpolator& that )
+{ 
+    keys = that.keys; 
+    interpolators = that.interpolators; 
+    tolerance = that.tolerance; 
+    m_type = that.m_type; 
+}
 
 void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const ValueT & v ) 
 { 

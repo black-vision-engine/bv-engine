@@ -65,7 +65,7 @@ public:
     explicit            ParamTransformVec   ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator );
     explicit            ParamTransformVec   ( const std::string & name, const ITimeEvaluatorPtr evaluator );
 
-    virtual void                SetCurveType    ( CurveType type ) override { for( auto trans : m_transformModelVec ) trans.SetCurveType( type ); }
+    virtual void                SetCurveType    ( CurveType type ) override { for( auto& trans : m_transformModelVec ) trans.SetCurveType( type ); }
 	//void                SetInterpolationMethod ( InterpolationMethod method ) override;
 	//InterpolationMethod GetInterpolationMethod () const override;
 

@@ -27,8 +27,8 @@ public:
     typedef ValueT                      ValT;
 
 public:
-    CompositeBezierInterpolator() { }
-    CompositeBezierInterpolator( const CompositeBezierInterpolator& that ) { keys = that.keys; interpolators = that.interpolators; tolerance = that.tolerance; m_type = that.m_type; }
+    CompositeBezierInterpolator();
+    CompositeBezierInterpolator( const CompositeBezierInterpolator& that ); //{ keys = that.keys; interpolators = that.interpolators; tolerance = that.tolerance; m_type = that.m_type; }
 
     void AddKey             ( TimeValueT t, const ValueT & v );
     ValueT Evaluate         ( TimeValueT t ) const;
