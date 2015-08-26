@@ -11,6 +11,7 @@ class Path
 public:
 	typedef std::vector< Path > PathVec;
 
+						Path			();
 						Path			( const std::string & str );
 						Path			( const char * str );
 

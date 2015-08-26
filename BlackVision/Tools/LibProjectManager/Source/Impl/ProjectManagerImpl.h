@@ -27,7 +27,7 @@ private:
 
 	// projects
 	void					AddNewProject		( const Path & projectName );
-	const Project *			GetProject			( const Path & projectName ) const;
+	ProjectConstPtr			GetProject			( const Path & projectName ) const;
 	void					SetCurrentProject	( const Path & projectName );
 
 	// assets
@@ -75,12 +75,17 @@ private:
 
 	void					InitializeProjects	();
 
+	Path					TranslateToPathCaegory( const Path & projectName, const Path & path ) const;
+	Path					TranslateToPathInPMRootFolder( const Path & projectName, const std::string & categoryName, const Path & path ) const;
+
 	explicit ProjectManagerImpl( const Path & rootPath );
 			~ProjectManagerImpl();
 
 
 	typedef std::map< std::string, AssetCategoryConstPtr >	CategoryMap;
 	typedef std::map< std::string, ProjectConstPtr >		ProjectMap;
+
+	ProjectConstPtr			m_currentProject;
 
 	CategoryMap				m_categories;
 	ProjectMap				m_projects;

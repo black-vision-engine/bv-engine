@@ -85,7 +85,7 @@ void						ProjectManager::AddNewProject		( const Path & projectName )
 
 // ********************************
 //
-const Project *				ProjectManager::GetProject			( const Path & projectName ) const
+ProjectConstPtr 			ProjectManager::GetProject			( const Path & projectName ) const
 {
 	return m_impl->GetProject( projectName );
 }

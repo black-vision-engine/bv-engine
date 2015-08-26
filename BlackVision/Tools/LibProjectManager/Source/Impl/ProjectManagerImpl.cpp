@@ -34,7 +34,13 @@ ProjectManagerImpl::~ProjectManagerImpl	()
 //
 PathVec			ProjectManagerImpl::ListProjectsNames	() const
 {
-	return PathVec();
+	PathVec ret;
+	for( auto it : m_projects )
+	{
+		ret.push_back( it.first );
+	}
+
+	return ret;
 }
 
 // ********************************
@@ -49,7 +55,13 @@ PathVec			ProjectManagerImpl::ListScenesNames		( const Path & projectName ) cons
 //
 PathVec			ProjectManagerImpl::ListCategoriesNames	() const
 {
-	return PathVec();
+	PathVec ret;
+	for( auto it : m_categories )
+	{
+		ret.push_back( it.first );
+	}
+
+	return ret;
 }
 
 // ********************************
@@ -64,7 +76,7 @@ PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  cons
 //
 Path				ProjectManagerImpl::GetRootDir			() const
 {
-	return Path( "" );
+	return m_rootPath;
 }
 
 // ********************************
@@ -81,27 +93,49 @@ void						ProjectManagerImpl::AddNewProject		( const Path & projectName )
 
 // ********************************
 //
-const Project *				ProjectManagerImpl::GetProject			( const Path & projectName ) const
+ProjectConstPtr				ProjectManagerImpl::GetProject			( const Path & projectName ) const
 {
-	{projectName;}
-	return nullptr;
+	auto it = m_projects.find( projectName.Str() );
+	if( it != m_projects.end() )
+	{
+		return it->second;
+	}
+	else
+	{
+		return nullptr;
+	}
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::SetCurrentProject	( const Path & projectName )
 {
-	{projectName;}
+	auto p = GetProject( projectName );
+	if( p )
+	{
+		m_currentProject = p;
+	}
+	else
+	{
+		LOG_MESSAGE( SeverityLevel::error ) << "Cannot set current project: " << projectName.Str() << ". It doesn't exist.";
+	}
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::AddAsset			( const Path & projectName, const std::string & categoryName, const Path & path, const AssetDescConstPtr & assetDesc )
 {
-	{projectName;}
-	{categoryName;}
-	{path;}
-	{assetDesc;}
+	auto cit = m_categories.find( categoryName );
+
+	if( cit != m_categories.end() )
+	{
+		auto pInCategory = TranslateToPathCaegory( projectName, path );
+		cit->second->AddAsset( pInCategory, assetDesc );
+	}
+	else
+	{
+		LOG_MESSAGE( SeverityLevel::error ) << "Cannot add asset to category '" << categoryName << "'. Category doesn't exist.";
+	}
 }
 
 // ********************************
@@ -278,6 +312,59 @@ void						ProjectManagerImpl::InitializeProjects	()
 	else
 	{
 		Dir::CreateDir( m_projectsPath.Str() );
+	}
+}
+
+// ********************************
+//
+Path						ProjectManagerImpl::TranslateToPathCaegory			( const Path & projectName, const Path & path ) const
+{
+	Path ret;
+
+	if( !projectName.Str().empty() )
+	{
+		if( projectName.Str() == "." )
+		{
+			if( m_currentProject )
+			{
+				ret = ret / m_currentProject->GetName();
+			}
+			else
+			{
+				LOG_MESSAGE( SeverityLevel::error ) << "Current project's not set.";
+			}
+		}
+		else
+		{
+			auto p = GetProject( projectName );
+			if( p )
+			{
+				ret = ret / projectName;
+			}
+			else
+			{
+				LOG_MESSAGE( SeverityLevel::error ) << "Project '" << projectName.Str() << "' doesn't exist.";
+			}
+		}
+	}
+
+	return ret / path;
+}
+
+// ********************************
+//
+Path						ProjectManagerImpl::TranslateToPathInPMRootFolder( const Path & projectName, const std::string & categoryName, const Path & path ) const
+{
+	auto ret = TranslateToPathCaegory( projectName, path );
+
+	if( !categoryName.empty() )
+	{
+		return Path( categoryName ) / ret;
+	}
+	else
+	{
+		LOG_MESSAGE( SeverityLevel::error ) << "Category name cannot be empty.";
+		return Path();
 	}
 }
 

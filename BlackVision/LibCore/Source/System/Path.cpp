@@ -54,6 +54,11 @@ namespace bv
 
 // *********************************
 //
+Path::Path()
+{}
+
+// *********************************
+//
 Path::Path( const std::string & str )
 {
 	boost::filesystem::path p( str );
@@ -107,7 +112,7 @@ Path			Path::Join		( int count, ... ) const
 	}
 	else
 	{
-		return Path( "" );
+		return Path();
 	}
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AssetCategory.h"
+#include "Project.h"
 
 #include "Assets/FwdDecls.h"
 
@@ -36,7 +37,7 @@ public:
 
 	// projects
 	void					AddNewProject		( const Path & projectName );
-	const Project *			GetProject			( const Path & projectName ) const;
+	ProjectConstPtr			GetProject			( const Path & projectName ) const;
 	void					SetCurrentProject	( const Path & projectName );
 
 	// assets
