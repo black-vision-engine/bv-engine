@@ -39,7 +39,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestMultipass", "..\..\..\T
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibProjectManager", "..\..\..\Tools\LibProjectManager\Projects\Win\VS11\LibProjectManager.vcxproj", "{9FA5A3B8-FA25-4AA0-A3AC-DFCA1283D6D2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProjectManagerTest", "..\..\..\Test\Tools\ProjectManager\Projects\Win\VS11\ProjectManagerTest.vcxproj", "{C7749607-3EB2-4F74-B453-FD859F41E8C1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestProjectManager", "..\..\..\Test\Tools\ProjectManager\Projects\Win\VS11\TestProjectManager.vcxproj", "{C7749607-3EB2-4F74-B453-FD859F41E8C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
