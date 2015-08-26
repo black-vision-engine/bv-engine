@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\..\Source\AssetCategory.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\ProjectManagerImpl.cpp" />
+    <ClCompile Include="..\..\..\Source\Project.cpp" />
     <ClCompile Include="..\..\..\Source\ProjectManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -29,6 +30,7 @@
     <ClInclude Include="..\..\..\Source\AssetCategory.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\ProjectManagerImpl.h" />
+    <ClInclude Include="..\..\..\Source\Project.h" />
     <ClInclude Include="..\..\..\Source\ProjectManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -1,5 +1,7 @@
 #include "ProjectManagerImpl.h"
 
+#include "IO/DirIO.h"
+
 #include "Tools/Logger/Logger.h"
 #define LOG_MODULE ModuleEnum::ME_LibProjectManager
 
@@ -8,8 +10,20 @@ namespace bv
 
 // ********************************
 //
-ProjectManagerImpl::ProjectManagerImpl	()
-{}
+ProjectManagerImpl::ProjectManagerImpl	( const Path & rootPath )
+	: m_rootPath( rootPath )
+	, m_projectsPath( m_rootPath / Path( "projects" ) )
+{
+	if( Path::Exists( rootPath ) )
+	{
+		InitializeProjects();
+	}
+	else
+	{
+		Dir::CreateDir( rootPath.Str(), true );
+		Dir::CreateDir( m_projectsPath.Str() );
+	}
+}
 
 // ********************************
 //
@@ -57,7 +71,12 @@ Path				ProjectManagerImpl::GetRootDir			() const
 //
 void						ProjectManagerImpl::AddNewProject		( const Path & projectName )
 {
-	{projectName;}
+	auto it = m_projects.find( projectName.Str() );
+	
+	if( it == m_projects.end() )
+	{
+		m_projects[ projectName.Str() ] = Project::Create( projectName, GetRootDir() );
+	}
 }
 
 // ********************************
@@ -187,6 +206,12 @@ void						ProjectManagerImpl::ExportAssetToFile	( const Path & projectName, cons
 //
 void						ProjectManagerImpl::ImportAssetFromFile	( const Path & importToProjectName, const std::string & importToCategoryName, const Path & importToPath, const Path & importAssetFilePath )
 {
+	auto it = m_categories.find( importToCategoryName );
+	
+	if( it != m_categories.end() )
+	{
+		it->second->ImportAsset( importAssetFilePath, importToProjectName / importToPath );
+	}
 }
 
 // ********************************
@@ -217,7 +242,16 @@ void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, c
 //
 AssetDescConstPtr			ProjectManagerImpl::GetAssetDesc		( const Path & projectName, const std::string & categoryName, const Path & pathInProject ) const
 {
-	return AssetDescConstPtr();
+	auto it = m_categories.find( categoryName );
+	
+	if( it != m_categories.end() )
+	{
+		return it->second->GetAssetDesc( projectName / pathInProject );
+	}
+	else
+	{
+		return AssetDescConstPtr();
+	}
 }
 
 // ********************************
@@ -225,6 +259,26 @@ AssetDescConstPtr			ProjectManagerImpl::GetAssetDesc		( const Path & projectName
 SceneDesc *					ProjectManagerImpl::GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const
 {
 	return nullptr;
+}
+
+// ********************************
+//
+void						ProjectManagerImpl::InitializeProjects	()
+{
+	if( Path::Exists( m_projectsPath ) )
+	{
+		auto l = Path::List( m_projectsPath, "*./.bvproj" );
+
+		for( auto p : l )
+		{
+			auto n = Path::RelativePath( p, m_projectsPath );
+			AddNewProject( n );
+		}
+	}
+	else
+	{
+		Dir::CreateDir( m_projectsPath.Str() );
+	}
 }
 
 } // bv

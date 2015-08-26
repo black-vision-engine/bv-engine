@@ -3,6 +3,7 @@
 #include "CoreDEF.h"
 
 #include "ProjectManager.h"
+#include "Project.h"
 
 #include <map>
 
@@ -72,13 +73,20 @@ private:
 	//SceneDesc				GetSceneDescLoc		( loc )
 	SceneDesc *				GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
 
-	explicit ProjectManagerImpl();
+	void					InitializeProjects	();
+
+	explicit ProjectManagerImpl( const Path & rootPath );
 			~ProjectManagerImpl();
 
 
-	typedef std::map< std::string, AssetCategoryConstPtr > CategoryMap;
+	typedef std::map< std::string, AssetCategoryConstPtr >	CategoryMap;
+	typedef std::map< std::string, ProjectConstPtr >		ProjectMap;
 
 	CategoryMap				m_categories;
+	ProjectMap				m_projects;
+
+	Path					m_rootPath;
+	Path					m_projectsPath;
 
 	friend ProjectManager;
 };

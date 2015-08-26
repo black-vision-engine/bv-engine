@@ -27,6 +27,7 @@ public:
 	static bool			IsDir			( const Path & path );
 	static bool			Exists			( const Path & path );
 	static PathVec		List			( const Path & path, const std::string exp = "*" );
+	static Path			RelativePath	( const Path & path, const Path & start );
 
 private:
 	std::string			m_path;

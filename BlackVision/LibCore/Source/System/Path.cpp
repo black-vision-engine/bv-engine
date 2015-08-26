@@ -10,6 +10,45 @@
 
 #include <sys/stat.h>
 
+// *********************************
+// a shity fragment of source code implemting getting relative path in boost. (http://stackoverflow.com/questions/10167382/boostfilesystem-get-relative-path)
+template < >
+boost::filesystem::path & boost::filesystem::path::append< typename boost::filesystem::path::iterator >( typename boost::filesystem::path::iterator begin, typename boost::filesystem::path::iterator end, const codecvt_type & )
+{ 
+    for( ; begin != end ; ++begin )
+	{
+		*this /= *begin;
+	}
+
+    return *this;
+}
+
+namespace 
+{
+
+// Return path when appended to a_From will resolve to same as a_To
+boost::filesystem::path make_relative( boost::filesystem::path a_From, boost::filesystem::path a_To )
+{
+    a_From = boost::filesystem::absolute( a_From ); a_To = boost::filesystem::absolute( a_To );
+    boost::filesystem::path ret;
+    boost::filesystem::path::const_iterator itrFrom( a_From.begin() ), itrTo( a_To.begin() );
+    // Find common base
+    for( boost::filesystem::path::const_iterator toEnd( a_To.end() ), fromEnd( a_From.end() ) ; itrFrom != fromEnd && itrTo != toEnd && *itrFrom == *itrTo; ++itrFrom, ++itrTo );
+    // Navigate backwards in directory to reach previously found base
+    for( boost::filesystem::path::const_iterator fromEnd( a_From.end() ); itrFrom != fromEnd; ++itrFrom )
+    {
+        if( (*itrFrom) != "." )
+            ret /= "..";
+    }
+    // Now navigate down the directory branch
+    ret.append( itrTo, a_To.end() );
+    return ret;
+}
+
+} // anonymous
+
+// *********************************
+// bv namespace begin
 namespace bv
 {
 
@@ -168,6 +207,16 @@ PathVec			Path::List				( const Path & path, const std::string exp )
 	}
 
 	return ret;
+}
+
+
+// *********************************
+//
+Path			Path::RelativePath		( const Path & path, const Path & start )
+{
+	auto rel = make_relative( boost::filesystem::path( start.Str() ), boost::filesystem::path( path.Str() ) );
+
+	return Path( rel.string() );
 }
 
 } // bv

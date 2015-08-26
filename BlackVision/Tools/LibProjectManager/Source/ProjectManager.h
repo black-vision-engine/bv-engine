@@ -82,12 +82,12 @@ public:
 	//SceneDesc				GetSceneDescLoc		( loc )
 	SceneDesc *				GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
 
-	static ProjectManager *	GetInstance		();
+	static ProjectManager *	GetInstance			( const Path & rootPath );
 
 private:
 	ProjectManagerImpl * m_impl;
 
-	ProjectManager	();
+	ProjectManager	( const Path & rootPath );
 	~ProjectManager	();
 };
 

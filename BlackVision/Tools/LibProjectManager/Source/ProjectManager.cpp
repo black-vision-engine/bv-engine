@@ -5,8 +5,8 @@ namespace bv
 {
 // ********************************
 //
-ProjectManager::ProjectManager	()
-	: m_impl( new ProjectManagerImpl() )
+ProjectManager::ProjectManager	( const Path & rootPath )
+	: m_impl( new ProjectManagerImpl( rootPath ) )
 {}
 
 // ********************************
@@ -18,11 +18,27 @@ ProjectManager::~ProjectManager	()
 
 // ********************************
 //
-ProjectManager *			ProjectManager::GetInstance		()
+namespace
 {
-	static auto instance = new ProjectManager();
+	static std::map< std::string, ProjectManager * > g_pms;
+}
 
-	return instance;
+// ********************************
+//
+ProjectManager *			ProjectManager::GetInstance		( const Path & rootPath )
+{
+	auto it = g_pms.find( rootPath.Str() );
+
+	if( it != g_pms.end() )
+	{
+		return it->second;
+	}
+	else
+	{
+		auto npm = new ProjectManager( rootPath );
+		g_pms[ rootPath.Str() ] = npm;
+		return npm;
+	}
 }
 
 // ********************************
