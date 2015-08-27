@@ -9,17 +9,24 @@ const std::string AnimationAssetDesc::uid = "ANIMATION_ASSET_DESC";
 
 // ***********************
 //
-void                AnimationAssetDesc::Serialize       ( SerializeObject & /*sob*/ ) const
+void                AnimationAssetDesc::Serialize       ( SerializeObject & sob ) const
 {
-    assert( !"implement me" );
+sob.SetName( "asset" );
+    sob.SetValue( "type", "anim" );
+    
+    for( auto frame : GetFrames() )
+        frame->Serialize( sob );
+                
+sob.Pop();
 }
 
 // ***********************
 //
-ISerializablePtr     AnimationAssetDesc::Create          ( DeserializeObject & /*dob*/ )
+ISerializableConstPtr     AnimationAssetDesc::Create          ( DeserializeObject & dob )
 {
-    assert( !"implement me" );
-    return nullptr;
+    auto frames = dob.LoadProperties< const TextureAssetDesc >( "asset" );
+
+    return AnimationAssetDescConstPtr( new AnimationAssetDesc ( frames ) );
 }
 
 // *******************************
@@ -34,6 +41,14 @@ AnimationAssetDesc::AnimationAssetDesc							( const std::vector< std::string > 
 
 // *******************************
 //
+AnimationAssetDesc::AnimationAssetDesc	( const std::vector< TextureAssetDescConstPtr > & frames )
+    : m_frames( frames )
+{
+}
+
+
+// *******************************
+//
 AnimationAssetDesc::~AnimationAssetDesc							()
 {
 }
@@ -44,6 +59,13 @@ const std::vector< TextureAssetDescConstPtr > & AnimationAssetDesc::GetFrames		(
 {
     return m_frames;
 }
+
+//// *******************************
+////
+//AnimationAssetDescConstPtr			AnimationAssetDesc::Create ( const std::vector< TextureAssetDescConstPtr > & frames )
+//{
+//    return AnimationAssetDescConstPtr( new AnimationAssetDesc ( frames ) );
+//}
 
 // *******************************
 //

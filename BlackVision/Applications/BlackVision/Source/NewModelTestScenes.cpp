@@ -494,6 +494,10 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
     {
         node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
+    else if( scene == "TSS_ANIMATION_RECTANGLE" )
+    {
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_ANIMATION_RECTANGLE );
+    }
     else if( scene == "SERIALIZED_TEST" )
     {
         node = TestScenesFactory::CreateSerializedTestScene( pluginsManager, timelineManager );

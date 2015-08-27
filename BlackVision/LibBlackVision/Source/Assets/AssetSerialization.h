@@ -1,6 +1,7 @@
 #include "Engine/Interfaces/ISerializable.h"
 
 #include "Texture/TextureAssetDescriptor.h"
+#include "Texture/AnimationAssetDescriptor.h"
 
 namespace bv {
 
@@ -10,7 +11,15 @@ class AssetSerialization : public AssetDesc {
 public:
     static ISerializableConstPtr Create( DeserializeObject& dob )
     {
-        return TextureAssetDesc::Create( dob );
+        if( dob.GetValue( "type" ) == "tx" )
+            return TextureAssetDesc::Create( dob );
+        else if( dob.GetValue( "type" ) == "anim" )
+            return AnimationAssetDesc::Create( dob );
+        else
+        {
+            assert( false );
+            return nullptr;
+        }
     }
 };
 

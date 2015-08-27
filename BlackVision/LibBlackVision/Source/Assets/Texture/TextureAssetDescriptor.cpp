@@ -24,11 +24,15 @@ std::string Filter2String( MipMapFilterType filter )
 //
 void                TextureAssetDesc::Serialize       ( SerializeObject & sob ) const
 {
-    sob.SetName( "asset" );
+sob.SetName( "asset" );
+    sob.SetValue( "type", "tx" );
     sob.SetValue( "path", m_originalTextureDesc->GetImagePath() );
-    sob.SetValue( "mipmap", Filter2String( m_mipMapsDescs->GetFilter() ) );
-        
-    sob.Pop();
+
+    if( m_mipMapsDescs )
+        sob.SetValue( "mipmap", Filter2String( m_mipMapsDescs->GetFilter() ) );
+    else
+        sob.SetValue( "mipmap", "none" );
+sob.Pop();
 }
 
 MipMapFilterType String2Filter( std::string string )
