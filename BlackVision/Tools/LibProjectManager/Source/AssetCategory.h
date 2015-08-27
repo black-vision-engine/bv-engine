@@ -35,7 +35,7 @@ public:
 	
 	void					ExportAll		( const Path & expAssetFilePath ) const;
 	
-	void					ListAssets		( const Path & projectName ) const;
+	PathVec					ListAssets		( const Path & projectName ) const;
 
 };
 

@@ -68,8 +68,30 @@ PathVec			ProjectManagerImpl::ListCategoriesNames	() const
 //
 PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  const std::string & categoryName ) const
 {
-	{projectName;}{categoryName;}
-	return PathVec();
+	if( !categoryName.empty() )
+	{
+		auto cit = m_categories.find( categoryName );
+
+		if( cit != m_categories.end() )
+		{
+			return cit->second->ListAssets( projectName );
+		}
+		else
+		{
+			LOG_MESSAGE( SeverityLevel::error ) << "Category '" << categoryName << " doesn't exist.";
+			return PathVec();
+		}
+	}
+	else
+	{
+		PathVec ret;
+		for( auto c : m_categories )
+		{
+			auto cv = c.second->ListAssets( projectName );
+			ret.insert( ret.end(), cv.begin(), cv.end() );
+		}
+		return ret;
+	}
 }
 
 // ********************************
@@ -142,31 +164,44 @@ void						ProjectManagerImpl::AddAsset			( const Path & projectName, const std::
 //
 void						ProjectManagerImpl::CopyAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
-	{inProjectName;}
-	{inCategoryName;}
-	{inPath;}
-	{outProjectName;}
-	{outPath;}
+	auto a = GetAssetDesc( inProjectName, inCategoryName, inPath );
+
+	if( a )
+	{
+		auto cit = m_categories.find( inCategoryName );
+
+		auto pInCategory = TranslateToPathCaegory( outProjectName, outPath );
+		cit->second->AddAsset( pInCategory, a );
+	}
+	else
+	{
+		LOG_MESSAGE( SeverityLevel::error ) << "Asset '" << ( inProjectName / inCategoryName / inPath ).Str() << "' doesn't exist.";
+	}
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::RemoveAsset			( const Path & projectName, const std::string & categoryName, const Path & path )
 {
-	{projectName;}
-	{categoryName;}
-	{path;}
+	auto cit = m_categories.find( categoryName );
+
+	if( cit != m_categories.end() )
+	{
+		auto pInCategory = TranslateToPathCaegory( projectName, path );
+		cit->second->RemoveAsset( pInCategory );
+	}
+	else
+	{
+		LOG_MESSAGE( SeverityLevel::error ) << "Cannot remove. Category " << categoryName << " doesn't exist.";
+	}
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::MoveAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
-	{inProjectName;}
-	{inCategoryName;}
-	{inPath;}
-	{outProjectName;}
-	{outPath;}
+	CopyAsset( inProjectName, inCategoryName, inPath, outProjectName, outPath );
+	RemoveAsset( inProjectName, inCategoryName, inPath );
 }
 
 // ********************************
