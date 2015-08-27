@@ -3,8 +3,11 @@
 #include "Tools/Logger/Logger.h"
 #define LOG_MODULE ModuleEnum::ME_LibCore
 
+#pragma warning(push)
+#pragma warning(disable : 4100)
 #include "boost/filesystem/operations.hpp"
 #include "boost/regex.hpp"
+#pragma warning(pop)
 
 #include <cstdarg>
 
@@ -29,7 +32,9 @@ namespace
 // Return path when appended to a_From will resolve to same as a_To
 boost::filesystem::path make_relative( boost::filesystem::path a_From, boost::filesystem::path a_To )
 {
-    a_From = boost::filesystem::absolute( a_From ); a_To = boost::filesystem::absolute( a_To );
+    a_From = boost::filesystem::absolute( a_From ); 
+	a_To = boost::filesystem::absolute( a_To );
+
     boost::filesystem::path ret;
     boost::filesystem::path::const_iterator itrFrom( a_From.begin() ), itrTo( a_To.begin() );
     // Find common base
@@ -41,7 +46,8 @@ boost::filesystem::path make_relative( boost::filesystem::path a_From, boost::fi
             ret /= "..";
     }
     // Now navigate down the directory branch
-    ret.append( itrTo, a_To.end() );
+	for(auto iter = itrTo; iter != a_To.end(); ++iter)
+		ret /= *iter;
     return ret;
 }
 
