@@ -1,3 +1,4 @@
+#pragma once
 #include <deque>
 #include <hash_map>
 

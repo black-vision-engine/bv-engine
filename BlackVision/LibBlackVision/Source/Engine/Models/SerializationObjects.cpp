@@ -1,38 +1,42 @@
 #include "SerializationObjects.h"
 
 #include <rapidxml/RapidXml_Print.hpp>
-
+#include <iostream>
 
 namespace bv {
 
-// *******************************
-//
-void SerializeObject::Save( std::string filename )
+SerializeObject::SerializeObject()
+{
+    m_roots.push( &m_doc );
+}
+
+void SerializeObject::Save( const std::string & filename )
 {
     std::ofstream file( filename );
-
-    file << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
+    //file << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
     file << m_doc;
     file.close();
-    
-	m_doc.clear();
+    m_doc.clear();
 }
 
-// *******************************
-//
-void	SerializeObject::SetName( std::string name )
+void                                                    SerializeObject::SetName( const std::string & name )
 {
-    char * node_name = m_doc.allocate_string( name.c_str() );
-    
-	rapidxml::xml_node<> * node = m_doc.allocate_node( rapidxml::node_element, node_name );
-    
-	m_doc.append_node( node );
+    char *node_name = m_doc.allocate_string( name.c_str() );
+    rapidxml::xml_node<>* node = m_doc.allocate_node( rapidxml::node_element, node_name );
+
+    m_roots.top()->append_node( node );
+    m_roots.push( node );
 }
 
-// *******************************
-//
-void	SerializeObject::SetValue( std::string name, std::string value )
+void                                                    SerializeObject::SetValue( const std::string & name, const std::string & value )
 {
+    auto attr = m_doc.allocate_attribute( m_doc.allocate_string( name.c_str() ), m_doc.allocate_string( value.c_str() ) );
+    m_roots.top()->append_attribute( attr );
 }
 
-} // bv
+void                                                    SerializeObject::Pop()
+{
+    m_roots.pop();
+}
+
+}

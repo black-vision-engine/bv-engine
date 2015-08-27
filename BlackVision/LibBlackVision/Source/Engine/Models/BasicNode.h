@@ -59,13 +59,16 @@ public:
 
     static BasicNodePtr                     Create                  ( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager = nullptr );
     static ISerializablePtr                 Create                  ( DeserializeObject& doc );
-    virtual void                            Serialize               ( SerializeObject& /*doc*/ ) const { assert( !"implement" ); }
+    virtual void                            Serialize               ( SerializeObject& doc ) const;
 
     virtual IPluginPtr                      GetPlugin               ( const std::string & name ) const override;
     virtual IFinalizePluginConstPtr         GetFinalizePlugin       () const override;
 
     virtual IModelNodePtr                   GetNode                 ( const std::string & path, const std::string & separator = "/" ) override;
     virtual IModelNodePtr                   GetChild                ( const std::string & name ) override;
+
+	//pablito:
+	INodeLogicPtr							GetLogic				(){return m_nodeLogic;}
 
     virtual const IPluginListFinalized *    GetPluginList           () const override;
 

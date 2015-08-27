@@ -13,7 +13,7 @@
 
 #include <algorithm>
 
-#include <Windows.h>
+#include "win_sock.h"
 
 namespace bv { namespace model {
 

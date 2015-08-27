@@ -1,6 +1,6 @@
 #include "PrototyperApp.h"
 
-#include <windows.h>
+#include "win_sock.h"
 
 #include <iostream>
 
@@ -43,7 +43,7 @@ bool PrototyperApp::m_sWindowedApplicationInitialized = PrototyperApp::RegisterI
 // *********************************
 //
 PrototyperApp::PrototyperApp	()
-    : WindowedApplication( "BlackVision prototyper", 0, 0, DefaultPrototypeWidth(), DefaultPrototypeHeight(), DefaultPrototypeFullscreenSetting() )
+    : WindowedApplication( "BlackVision prototyper", 0, 0, DefaultPrototypeWidth(), DefaultPrototypeHeight(), DefaultPrototypeWindowModeSetting(),DefaultPrototypeRendererInput() )
     , m_appLogicPrototype( nullptr )
 {
 }

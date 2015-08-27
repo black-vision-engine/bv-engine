@@ -1,3 +1,4 @@
+#pragma once
 #include "IVideoInput.h"
 
 namespace bv { namespace model {
@@ -8,6 +9,9 @@ namespace bv { namespace model {
 		IVideoInput *input;
 
 	public:
+        virtual void                Serialize       ( SerializeObject & /*sob*/ ) const { assert( !"implement me" ); return; }
+        static ISerializablePtr     Create          ( DeserializeObject & /*dob*/ ) { assert( !"implement me" ); return nullptr; }
+
 		DefaultVideoInputResourceDescr( DefaultTextureDescriptor* d, IVideoInput *i ) : descr( d ), input( i ) {}
 
 		virtual PluginResourceType      GetResourceType () const { return PluginResourceType::PRT_VIDEOINPUT; }

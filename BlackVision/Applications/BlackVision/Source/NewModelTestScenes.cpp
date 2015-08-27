@@ -465,7 +465,8 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 //
 model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    auto scene = Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
+    //auto scene = Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
+    auto scene = ConfigManager::GetString( "Debug/SceneFromEnvName" );
 
     model::BasicNodePtr node = nullptr;
 
@@ -483,8 +484,7 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
     }
     else if( scene == "CREED_TEST_SCENE" )
     {
-        // FIXME: there was no implementation of CreedTestScene
-        node = TestScenesFactory::CreedVideoInputTestScene( pluginsManager, timelineManager, timeEvaluator );
+        node = TestScenesFactory::CreedPieChartTestScene( pluginsManager, timelineManager, timeEvaluator );
     }
     else if( scene == "VIDEO_INPUT_TEST_SCENE" )
     {
@@ -722,6 +722,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     auto success = SetParameter( prism->GetPlugin( "prism" )->GetParameter( "n" ), 0.f, 4 );
     { success; }
     assert( success );
+	{success;}
 
     SetParameter( prism->GetPlugin( "prism" )->GetParameter( "n" ), 10.f, 10 );
     prism->GetPlugin( "prism" )->GetParameter( "n" )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
@@ -785,7 +786,7 @@ model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const mod
 
     root->AddPlugin( "DEFAULT_VIDEOINPUT", timeEvaluator );
     auto plugin = root->GetPlugin( "video input" );
-    auto vi = new ExampleVideoInput( 10, 10, 1.f );
+    auto vi = new ExampleVideoInput( 1920, 1080, 1.f );
     auto success = plugin->LoadResource( AssetDescConstPtr( new model::DefaultVideoInputResourceDescr( vi->GetTexture(), vi ) ) );
     assert(success);
 	{ success; }

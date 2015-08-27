@@ -19,10 +19,12 @@
 #include "Engine/Models/Timeline/Dynamic/TimelineEventNull.h"
 #include "Engine/Models/Timeline/Dynamic/TimelineEventStop.h"
 
+#include "Engine/Interfaces/ISerializable.h"
+
 
 namespace bv { namespace model {
 
-class TimelineManager
+class TimelineManager : public ISerializable
 {
 private:
 
@@ -34,6 +36,9 @@ public:
 
                             TimelineManager                 ();
                             ~TimelineManager                ();
+
+    virtual void            Serialize                       ( SerializeObject & sob ) const;
+    static ISerializablePtr Create                          ( DeserializeObject & dob );
 
     ITimeEvaluatorPtr       CreateOffsetTimeEvaluator       ( const std::string & name, TimeType startTime );
     ITimeEvaluatorPtr       CreateConstTimeEvaluator        ( const std::string & name, TimeType timeVal );

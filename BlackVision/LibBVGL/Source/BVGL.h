@@ -325,6 +325,46 @@ public:
 // Stencil
 	static void					bvglClearStencil				( GLint s );
 
+	//static const GLubyte *      bvglGetString               ( GLenum name );
+	//static const GLubyte *      bvglGetStringi              ( GLenum name, GLuint index );
+
+	//static void                 bvglGenVertexArrays         ( GLsizei n, GLuint * arrays );
+	//static void                 bvglDeleteVertexArrays      ( GLsizei n, const GLuint * arrays );
+
+	//static void                 bvglEnableVertexAttribArray ( GLuint index );
+	//static void                 bvglDisableVertexAttribArray( GLuint index );
+
+	//static void                 bvglBindVertexArray         ( GLuint array );
+
+	//static void                 bvglVertexAttribPointer     ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
+
+	//static void					bvglVertexAttribDivisor		( GLuint index,  GLuint divisor );
+
+	//static const GLubyte *      bvglGetString               ( GLenum name );
+	//static const GLubyte *      bvglGetStringi              ( GLenum name, GLuint index );
+
+	//static void                 bvglGenVertexArrays         ( GLsizei n, GLuint * arrays );
+	//static void                 bvglDeleteVertexArrays      ( GLsizei n, const GLuint * arrays );
+
+	//static void                 bvglEnableVertexAttribArray ( GLuint index );
+	//static void                 bvglDisableVertexAttribArray( GLuint index );
+
+	//static void                 bvglBindVertexArray         ( GLuint array );
+
+	//static void                 bvglVertexAttribPointer     ( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid * pointer );
+
+	//pablito
+	static void					bvglBindFramebufferEXT		(GLenum target, GLuint framebuffer);
+	static void					bvglBindRenderbufferEXT		(GLenum target, GLuint renderbuffer);
+	static void					bvglDeleteFramebuffersEXT	(GLsizei n, const GLuint *framebuffers);
+	static void					bvglDeleteRenderbuffersEXT	(GLsizei n, const GLuint *renderbuffers);
+	//static GLuint				bvglGetError				();
+	static void					bvglFlush					();
+	static void					bvglFinish					();
+
+//	static void					bvglVertexAttribDivisor		( GLuint index,  GLuint divisor );
+
+
 	static void					bvglStencilFunc					( GLenum func, GLint ref, GLuint mask );
 	static void					bvglStencilFuncSeparate			( GLenum face, GLenum func, GLint ref, GLuint mask );
 	static void					bvglStencilMask					( GLuint mask );

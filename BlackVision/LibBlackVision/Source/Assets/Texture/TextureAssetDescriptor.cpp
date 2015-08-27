@@ -9,6 +9,49 @@ namespace bv
 
 const std::string TextureAssetDesc::uid = "TEXTURE_ASSET_DESC";
 
+std::string Filter2String( MipMapFilterType filter )
+{
+    if( filter == MipMapFilterType::BILINEAR )
+        return "bilinear";
+    else
+    {
+        assert( false );
+        return std::to_string( (int) filter );
+    }
+}
+
+// ***********************
+//
+void                TextureAssetDesc::Serialize       ( SerializeObject & sob ) const
+{
+    sob.SetName( "asset" );
+    sob.SetValue( "path", m_originalTextureDesc->GetImagePath() );
+    sob.SetValue( "mipmap", Filter2String( m_mipMapsDescs->GetFilter() ) );
+        
+    sob.Pop();
+}
+
+MipMapFilterType String2Filter( std::string string )
+{
+    if( string == "bilinear" )
+        return MipMapFilterType::BILINEAR;
+    else
+    {
+        assert( false );
+        return (MipMapFilterType) std::stoi( string );
+    }
+}
+
+// ***********************
+//
+ISerializableConstPtr TextureAssetDesc::Create          ( DeserializeObject & dob )
+{
+    auto path = dob.GetValue( "path" );
+    auto filter = String2Filter( dob.GetValue( "mipmap" ) );
+
+    return Create( path, filter, true );
+}
+
 // ***********************
 //
 const std::string &	TextureAssetDesc::GetUID() const

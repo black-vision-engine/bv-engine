@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Helpers">
+      <UniqueIdentifier>{3f5a4eb8-cb3d-4c5d-bc26-28c35193f25c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MockFonts">
+      <UniqueIdentifier>{ceba7f6b-4fd0-4b43-88b3-de290fd3103c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{6252f54e-7116-4e67-8704-8ea2ea4b9e51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestAI">
+      <UniqueIdentifier>{f52b80a1-39e9-49c1-bce8-68f1ab601129}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Widgets">
+      <UniqueIdentifier>{a40b34a5-8104-4523-b976-a18c9886873d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Widgets\Crawler">
+      <UniqueIdentifier>{a5c51410-4f01-4c1b-a9e6-c93795ac17ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VideoInput">
+      <UniqueIdentifier>{f67ab42f-30e0-4d7a-90ee-0cfaed68a769}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PieCharts">
+      <UniqueIdentifier>{fd129272-37d9-42a7-b86d-f8a467b2b2d0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
+    <ClCompile Include="..\..\..\Source\bvApp.cpp" />
+    <ClCompile Include="..\..\..\Source\BVAppLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\BVConfig.cpp" />
+    <ClCompile Include="..\..\..\Source\DefaultPlugins.cpp" />
+    <ClCompile Include="..\..\..\Source\FrameStatsService.cpp" />
+    <ClCompile Include="..\..\..\Source\MainInitProcess.cpp" />
+    <ClCompile Include="..\..\..\Source\MainLoopProcess.cpp" />
+    <ClCompile Include="..\..\..\Source\MockScenes.cpp" />
+    <ClCompile Include="..\..\..\Source\ModelInteractionEvents.cpp" />
+    <ClCompile Include="..\..\..\Source\ModelInteractionLayer.cpp" />
+    <ClCompile Include="..\..\..\Source\NewModelTestNodes.cpp" />
+    <ClCompile Include="..\..\..\Source\NewModelTestScenes.cpp" />
+    <ClCompile Include="..\..\..\Source\StatsFormatters.cpp" />
+    <ClCompile Include="..\..\..\Source\Helpers\RectNodeBuilder.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\MockFonts\FTTester.cpp">
+      <Filter>MockFonts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\OffscreenRenderLogic.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\RenderLogic.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestAI\AICommands.cpp">
+      <Filter>TestAI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestAI\TestAI.cpp">
+      <Filter>TestAI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestAI\TestAIManager.cpp">
+      <Filter>TestAI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\Crawler\Crawler.cpp">
+      <Filter>Widgets\Crawler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerEvents.cpp">
+      <Filter>Widgets\Crawler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.cpp">
+      <Filter>Widgets\Crawler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\PieChartNode.cpp">
+      <Filter>PieCharts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp">
+      <Filter>VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.cpp">
+      <Filter>VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
+    <ClCompile Include="..\..\..\Source\RemoteControlInterface.cpp" />
+    <ClCompile Include="..\..\..\Source\PerformanceMonitor.cpp" />
+    <ClCompile Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp">
+      <Filter>VideoInput</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\bvApp.h" />
+    <ClInclude Include="..\..\..\Source\BVAppLogic.h" />
+    <ClInclude Include="..\..\..\Source\BVConfig.h" />
+    <ClInclude Include="..\..\..\Source\BVForwards.h" />
+    <ClInclude Include="..\..\..\Source\DefaultPlugins.h" />
+    <ClInclude Include="..\..\..\Source\FrameStatsService.h" />
+    <ClInclude Include="..\..\..\Source\MainInitProcess.h" />
+    <ClInclude Include="..\..\..\Source\MainLoopProcess.h" />
+    <ClInclude Include="..\..\..\Source\MockScenes.h" />
+    <ClInclude Include="..\..\..\Source\ModelInteractionEvents.h" />
+    <ClInclude Include="..\..\..\Source\ModelInteractionLayer.h" />
+    <ClInclude Include="..\..\..\Source\NewModelTestNodes.h" />
+    <ClInclude Include="..\..\..\Source\StatsFormatters.h" />
+    <ClInclude Include="..\..\..\Source\Helpers\RectNodeBuilder.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\MockFonts\FTTester.h">
+      <Filter>MockFonts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\OffscreenRenderLogic.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\RenderLogic.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestAI\AICommands.h">
+      <Filter>TestAI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestAI\IAICommand.h">
+      <Filter>TestAI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestAI\TestAI.h">
+      <Filter>TestAI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestAI\TestAIManager.h">
+      <Filter>TestAI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\Crawler\Crawler.h">
+      <Filter>Widgets\Crawler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerEvents.h">
+      <Filter>Widgets\Crawler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.h">
+      <Filter>Widgets\Crawler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\PieChartNode.h">
+      <Filter>PieCharts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\VideoInput\IVideoInput.h">
+      <Filter>VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.h">
+      <Filter>VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h">
+      <Filter>VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
+    <ClInclude Include="..\..\..\Source\RemoteControlInterface.h" />
+    <ClInclude Include="..\..\..\Source\PerformanceMonitor.h" />
+    <ClInclude Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h">
+      <Filter>VideoInput</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Source\BVConfig.inl" />
+    <None Include="..\..\..\Source\FrameStatsService.inl" />
+  </ItemGroup>
+</Project>

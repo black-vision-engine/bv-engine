@@ -19,6 +19,38 @@ OffsetTimeEvaluator::~OffsetTimeEvaluator                   ()
 
 // *******************************
 //
+void                OffsetTimeEvaluator::Serialize           ( SerializeObject & sob ) const
+{
+    sob.SetName( "timeline" );
+    sob.SetValue( "name", GetName() );
+    sob.SetValue( "type", "offset" );
+
+    sob.SetName( "children" );
+    for( auto child : m_children )
+        child->Serialize( sob );
+    sob.Pop(); // children
+
+    sob.Pop();
+}
+
+// *******************************
+//
+ISerializablePtr     OffsetTimeEvaluator::Create              ( DeserializeObject & dob )
+{
+    auto name = dob.GetValue( "name" );
+
+    auto te = std::make_shared< OffsetTimeEvaluator >( name, 0.f ); // FIXME load offset
+
+    auto children = dob.LoadArray< TimeEvaluatorBase< ITimeEvaluator > >( "children" );
+
+    for( auto child : children )
+        te->AddChild( child );
+
+    return te;
+}
+
+// *******************************
+//
 void                OffsetTimeEvaluator::SetTimeOffset      ( TimeType t )
 {
     m_timeOffset = t;

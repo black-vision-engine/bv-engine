@@ -3,12 +3,14 @@
 #include "CoreDEF.h"
 #include "Assets/FwdDecls.h"
 
+#include "Engine/Interfaces/ISerializable.h"
+
 #include <string>
 
 namespace bv
 {
 
-class AssetDesc
+class AssetDesc : public ISerializable
 {
 protected:
 	virtual VoidConstPtr            QueryThis	() const = 0;

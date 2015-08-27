@@ -7,6 +7,21 @@ namespace bv {
 
 const std::string AnimationAssetDesc::uid = "ANIMATION_ASSET_DESC";
 
+// ***********************
+//
+void                AnimationAssetDesc::Serialize       ( SerializeObject & /*sob*/ ) const
+{
+    assert( !"implement me" );
+}
+
+// ***********************
+//
+ISerializablePtr     AnimationAssetDesc::Create          ( DeserializeObject & /*dob*/ )
+{
+    assert( !"implement me" );
+    return nullptr;
+}
+
 // *******************************
 //
 AnimationAssetDesc::AnimationAssetDesc							( const std::vector< std::string > & frames )

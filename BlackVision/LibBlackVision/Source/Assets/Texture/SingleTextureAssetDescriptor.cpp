@@ -7,6 +7,21 @@ const std::string SingleTextureAssetDesc::uid = "SINGLE_TEXTURE_ASSET_DESC";
 
 // ***********************
 //
+void                SingleTextureAssetDesc::Serialize       ( SerializeObject & /*sob*/ ) const
+{
+    assert( !"implement me" );
+}
+
+// ***********************
+//
+ISerializablePtr     SingleTextureAssetDesc::Create          ( DeserializeObject & /*dob*/ )
+{
+    assert( !"implement me" );
+    return nullptr;
+}
+
+// ***********************
+//
 const std::string &	SingleTextureAssetDesc::GetUID() const
 {
 	return SingleTextureAssetDesc::UID();

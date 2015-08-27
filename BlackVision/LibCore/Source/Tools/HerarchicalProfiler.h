@@ -1,11 +1,11 @@
 #pragma once
 
-#include <windows.h>
+#include "win_sock.h"
 
 #include "CoreDEF.h"
 
 
-#define MAX_PROFILER_SAMPLES 120
+#define MAX_PROFILER_SAMPLES 2024
 #define MAX_PROFILER_FRAMES 10
 
 

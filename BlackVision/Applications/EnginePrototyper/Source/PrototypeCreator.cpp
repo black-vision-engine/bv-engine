@@ -3,6 +3,7 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 
 
+
 namespace bv {
 
 namespace  {
@@ -44,6 +45,25 @@ unsigned int        DefaultPrototypeWidth               ()
 unsigned int        DefaultPrototypeHeight              ()
 {
     return DefaultHeight;
+}
+
+// ****************************
+// FIXME: fatalna imitacja nedznej namiastki configa
+WindowMode       DefaultPrototypeWindowModeSetting             ()
+{
+	return WindowMode::WINDOWED;
+}
+
+// ****************************
+// FIXME: fatalna imitacja nedznej namiastki configa
+RendererInput       DefaultPrototypeRendererInput             ()
+{
+	RendererInput ri;
+	ri.m_WindowHandle			= nullptr;
+    ri.m_PixelFormat			= 0;
+    ri.m_RendererDC				= 0;
+    ri.m_DisableVerticalSync	= true;
+	return ri;
 }
 
 // ****************************
