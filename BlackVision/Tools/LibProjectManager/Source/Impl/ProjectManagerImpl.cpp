@@ -221,26 +221,38 @@ void						ProjectManagerImpl::RemoveUnusedAssets	( const Path & projectName )
 
 // ********************************
 //
-void						ProjectManagerImpl::AddScene			( const model::BasicNode & sceneRootNode, const Path & projectName, const Path & outPath )
+void						ProjectManagerImpl::AddScene			( const model::BasicNode & , const Path & projectName, const Path & outPath )
 {
+	{projectName;}
+	{outPath;}
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
+	{inProjectName;}
+	{inPath;}
+	{outProjectName;}
+	{outPath;}
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::RemoveScene			( const Path & projectName, const Path & path )
 {
+	{projectName;}
+	{path;}
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
+	{inProjectName;}
+	{inPath;}
+	{outProjectName;}
+	{outPath;}
 }
 
 // ********************************
@@ -287,24 +299,34 @@ void						ProjectManagerImpl::ImportAssetFromFile	( const Path & importToProject
 //
 void						ProjectManagerImpl::ExportSceneToFile	( const Path & projectName, const Path & scenePath, const Path & outputFile ) const
 {
+	{projectName;}
+	{scenePath;}
+	{outputFile;}
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath )
 {
+	{importToProjectName;}
+	{importToPath;}
+	{impSceneFilePath;}
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, const Path & outputFilePath ) const
 {
+	{projectName;}
+	{outputFilePath;}
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, const Path & importToPath )
 {
+	{expFilePath;}
+	{importToPath;}
 }
 
 // ********************************
@@ -327,6 +349,8 @@ AssetDescConstPtr			ProjectManagerImpl::GetAssetDesc		( const Path & projectName
 //
 SceneDesc *					ProjectManagerImpl::GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const
 {
+	{projectName;}
+	{pathInProject;}
 	return nullptr;
 }
 
