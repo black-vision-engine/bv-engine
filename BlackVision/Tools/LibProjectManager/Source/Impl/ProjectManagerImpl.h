@@ -17,7 +17,7 @@ private:
 	// listing
 	PathVec					ListProjectsNames	() const;
 	PathVec					ListScenesNames		( const Path & projectName = Path("") ) const;
-	PathVec					ListCategoriesNames	() const;
+	StringVector			ListCategoriesNames	() const;
 	PathVec					ListAssetsPaths		( const Path & projectName,  const std::string & categoryName = "" ) const;
 
 	PathVec					ListAllUsedAssets	() const;

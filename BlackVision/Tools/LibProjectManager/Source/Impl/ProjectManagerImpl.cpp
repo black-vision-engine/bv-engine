@@ -53,9 +53,9 @@ PathVec			ProjectManagerImpl::ListScenesNames		( const Path & projectName ) cons
 
 // ********************************
 //
-PathVec			ProjectManagerImpl::ListCategoriesNames	() const
+StringVector	ProjectManagerImpl::ListCategoriesNames	() const
 {
-	PathVec ret;
+	StringVector ret;
 	for( auto it : m_categories )
 	{
 		ret.push_back( it.first );

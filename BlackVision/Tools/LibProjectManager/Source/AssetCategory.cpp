@@ -6,6 +6,13 @@ namespace bv
 
 // ********************************
 //
+AssetCategoryConstPtr	AssetCategory::Create( const std::string & id, const AssetAccessorConstPtr & aa )
+{
+	return AssetCategoryConstPtr( new AssetCategory( id, aa ) );
+}
+
+// ********************************
+//
 AssetCategory::AssetCategory( const std::string & id, const AssetAccessorConstPtr & aa )
 	: m_assetAccessor( aa )
 	, m_id( id )
