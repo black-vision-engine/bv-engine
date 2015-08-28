@@ -1,5 +1,6 @@
 #include "ProjectManager.h"
 #include "Impl/Accessors/TextureAssetAccessor.h"
+#include "Assets/Texture/SingleTextureAssetDescriptor.h"
 
 #include "gtest/gtest.h"
 
@@ -62,6 +63,21 @@ TEST( RegisteringCategories, ProjectManager )
 
 	ASSERT_TRUE( cns.size() == 1 );
 	ASSERT_TRUE( cns[ 0 ] == "textures" );
+
+	taa = TextureAssetAccessor::Create( g_pm1, g_pm1->GetRootDir() / "textures", exts );
+
+	g_pm1->RegisterCategory( AssetCategory::Create( "textures", taa ) );
+
+	cns = g_pm1->ListCategoriesNames();
+
+	ASSERT_TRUE( cns.size() == 1 );
+	ASSERT_TRUE( cns[ 0 ] == "textures" );
+
+}
+
+TEST( AddingAssets, ProjectManager )
+{
+	g_pm0->AddAsset( "proj00", "textures", "flagi/pol.jpg", SingleTextureAssetDesc::Create( "test_data.file", 0, 0, TextureFormat::F_A8R8G8B8, false ) );
 }
 
 int main( int argc, char **argv )

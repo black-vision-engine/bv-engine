@@ -90,7 +90,7 @@ std::string		Path::Str		() const
 //
 Path			Path::Join		( const Path & p ) const
 {
-	boost::filesystem::path bp( p.Str() );
+	boost::filesystem::path bp( this->Str() );
 	bp /= boost::filesystem::path( p.Str() );
 
 	return Path( bp.string() );
