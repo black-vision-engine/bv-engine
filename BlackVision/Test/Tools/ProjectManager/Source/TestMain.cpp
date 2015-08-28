@@ -97,6 +97,14 @@ TEST( AddingAssets, ProjectManager )
 
 	auto assets = g_pm0->ListAssetsPaths( "", "" );
 
+	ASSERT_TRUE( g_pm0->GetAssetDesc( "proj00", "textures", "flagi/pol.jpg" ) );
+	ASSERT_TRUE( g_pm0->GetAssetDesc( "proj01", "textures", "flagi/ger.jpg" ) );
+	ASSERT_TRUE( g_pm0->GetAssetDesc( "proj02", "textures", "flagi/rus.jpg" ) );
+
+	ASSERT_FALSE( g_pm0->GetAssetDesc( "proj02", "textures", "flagi/pol.jpg" ) );
+	ASSERT_FALSE( g_pm0->GetAssetDesc( "proj00", "textures", "flagi/ger.jpg" ) );
+	ASSERT_FALSE( g_pm0->GetAssetDesc( "proj01", "textures", "flagi/rus.jpg" ) );
+
 	ASSERT_TRUE( assets.size() == 3 );
 }
 
