@@ -53,9 +53,9 @@ PathVec			ProjectManagerImpl::ListScenesNames		( const Path & projectName ) cons
 
 // ********************************
 //
-PathVec			ProjectManagerImpl::ListCategoriesNames	() const
+StringVector	ProjectManagerImpl::ListCategoriesNames	() const
 {
-	PathVec ret;
+	StringVector ret;
 	for( auto it : m_categories )
 	{
 		ret.push_back( it.first );
@@ -74,7 +74,8 @@ PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  cons
 
 		if( cit != m_categories.end() )
 		{
-			return cit->second->ListAssets( projectName );
+			auto pathInCategory = TranslateToPathCaegory( projectName, "" );
+			return cit->second->ListAssets( pathInCategory );
 		}
 		else
 		{
@@ -87,7 +88,8 @@ PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  cons
 		PathVec ret;
 		for( auto c : m_categories )
 		{
-			auto cv = c.second->ListAssets( projectName );
+			auto pathInCategory = TranslateToPathCaegory( projectName, "" );
+			auto cv = c.second->ListAssets( pathInCategory );
 			ret.insert( ret.end(), cv.begin(), cv.end() );
 		}
 		return ret;
@@ -109,7 +111,7 @@ void						ProjectManagerImpl::AddNewProject		( const Path & projectName )
 	
 	if( it == m_projects.end() )
 	{
-		m_projects[ projectName.Str() ] = Project::Create( projectName, GetRootDir() );
+		m_projects[ projectName.Str() ] = Project::Create( projectName, m_projectsPath );
 	}
 }
 
@@ -360,7 +362,7 @@ void						ProjectManagerImpl::InitializeProjects	()
 {
 	if( Path::Exists( m_projectsPath ) )
 	{
-		auto l = Path::List( m_projectsPath, "*./.bvproj" );
+		auto l = Path::List( m_projectsPath, ".*bvproj" );
 
 		for( auto p : l )
 		{
@@ -403,6 +405,7 @@ Path						ProjectManagerImpl::TranslateToPathCaegory			( const Path & projectNam
 			else
 			{
 				LOG_MESSAGE( SeverityLevel::error ) << "Project '" << projectName.Str() << "' doesn't exist.";
+				return ret;
 			}
 		}
 	}

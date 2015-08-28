@@ -57,7 +57,7 @@ PathVec			ProjectManager::ListScenesNames		( const Path & projectName ) const
 
 // ********************************
 //
-PathVec			ProjectManager::ListCategoriesNames	() const
+StringVector	ProjectManager::ListCategoriesNames	() const
 {
 	return m_impl->ListCategoriesNames();
 }

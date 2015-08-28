@@ -1,4 +1,5 @@
 #include "Path.h"
+#include "IO/DirIO.h"
 
 #include "Tools/Logger/Logger.h"
 #define LOG_MODULE ModuleEnum::ME_LibCore
@@ -90,7 +91,7 @@ std::string		Path::Str		() const
 //
 Path			Path::Join		( const Path & p ) const
 {
-	boost::filesystem::path bp( p.Str() );
+	boost::filesystem::path bp( this->Str() );
 	bp /= boost::filesystem::path( p.Str() );
 
 	return Path( bp.string() );
@@ -134,6 +135,14 @@ Path			Path::operator /		( const Path & p ) const
 bool			Path::Copy				( const Path & from, const Path & to )
 {
 	boost::system::error_code ec;
+
+	auto parent = boost::filesystem::path( to.Str() ).parent_path();
+
+	if( !Path::Exists( parent.string() ) )
+	{
+		Dir::CreateDir( parent.string(), true );
+	}
+
 	boost::filesystem::copy( boost::filesystem::path( from.Str() ), boost::filesystem::path( to.Str() ), ec );
 
 	if( ec )

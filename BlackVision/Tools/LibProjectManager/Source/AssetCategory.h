@@ -9,6 +9,9 @@
 namespace bv
 {
 
+class AssetCategory;
+DEFINE_CONST_PTR_TYPE( AssetCategory )
+
 class AssetCategory
 {
 private:
@@ -16,9 +19,12 @@ private:
 	std::string				m_id;
 	AssetAccessorConstPtr	m_assetAccessor;
 
+	explicit				AssetCategory	( const std::string & id, const AssetAccessorConstPtr & aa );
+
 public:
 
-	explicit				AssetCategory	( const std::string & id, const AssetAccessorConstPtr & aa );
+	static AssetCategoryConstPtr	Create	( const std::string & id, const AssetAccessorConstPtr & aa );
+							
 							~AssetCategory	();
 
 	const std::string &		GetId			() const;
@@ -38,7 +44,5 @@ public:
 	PathVec					ListAssets		( const Path & projectName ) const;
 
 };
-
-DEFINE_CONST_PTR_TYPE( AssetCategory )
 
 } // bv

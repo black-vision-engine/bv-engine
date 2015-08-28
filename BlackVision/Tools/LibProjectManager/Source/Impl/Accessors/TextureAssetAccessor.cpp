@@ -19,6 +19,13 @@ namespace bv
 
 // ********************************
 //
+TextureAssetAccessorConstPtr TextureAssetAccessor::Create( const ProjectManager * projectManager, const Path & rootPath, const StringVector & fileExts )
+{
+	return TextureAssetAccessorConstPtr( new TextureAssetAccessor( projectManager, rootPath, fileExts ) );
+}
+
+// ********************************
+//
 TextureAssetAccessor::TextureAssetAccessor				( const ProjectManager * projectManager, const Path & rootPath, const StringVector & fileExts )
 	: m_projectManager( projectManager )
 	, m_rootPath( rootPath )
@@ -38,9 +45,17 @@ AssetDescConstPtr	TextureAssetAccessor::GetAssetDesc	( const Path & path ) const
 {
 	auto p = m_rootPath / path;
 
-	auto props = image::GetImageProps( p.Str() );
-
-	return SingleTextureAssetDesc::Create( p.Str(), props.width, props.height, EnumsUtils::Convert( props.format ), true );
+	if( Path::Exists( p ) )
+	{
+		auto props = image::GetImageProps( p.Str() );
+	
+		return SingleTextureAssetDesc::Create( p.Str(), props.width, props.height, EnumsUtils::Convert( props.format ), true );
+	}
+	else
+	{
+		LOG_MESSAGE( SeverityLevel::warning ) << "Asset '" << p.Str() << "' doesn't exist.";
+		return nullptr;
+	}
 }
 
 // ********************************
@@ -175,7 +190,7 @@ PathVec	TextureAssetAccessor::ListAll		( const Path & path ) const
 	PathVec ret;
 	for( auto ext : m_fileExts )
 	{
-		auto l = Path::List( path, ext );
+		auto l = Path::List( m_rootPath / path, ext );
 		ret.insert( ret.end(), l.begin(), l.end() );
 	}
 	
