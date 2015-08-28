@@ -74,9 +74,9 @@ void					AssetCategory::ExportAll	( const Path & expAssetFilePath ) const
 
 // ********************************
 //
-PathVec					AssetCategory::ListAssets	( const Path & projectName ) const
+PathVec					AssetCategory::ListAssets	( const Path & path ) const
 {
-	return m_assetAccessor->ListAll( projectName );
+	return m_assetAccessor->ListAll( path );
 }
 
 } // bv

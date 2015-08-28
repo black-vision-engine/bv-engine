@@ -9,6 +9,20 @@ using namespace bv;
 static ProjectManager * g_pm0 = nullptr;
 static ProjectManager * g_pm1 = nullptr;
 
+TEST( CleanAll, ProjectManager )
+{
+	if( Path::Exists( "bv_media" ) )
+	{
+		Path::Remove( "bv_media" );
+	}
+
+	if( Path::Exists( "bv_media1" ) )
+	{
+		Path::Remove( "bv_media1" );
+	}
+
+}
+
 TEST( CreatingPM, ProjectManager )
 {
 	g_pm0 = ProjectManager::GetInstance( "bv_media" );
@@ -51,9 +65,9 @@ TEST( AddingProjects, ProjectManager )
 TEST( RegisteringCategories, ProjectManager )
 {
 	StringVector exts;
-	exts.push_back( "*./.jpg" );
-	exts.push_back( "*./.tga" );
-	exts.push_back( "*./.png" );
+	exts.push_back( ".*\\.jpg" );
+	exts.push_back( ".*\\.tga" );
+	exts.push_back( ".*\\.png" );
 
 	auto taa = TextureAssetAccessor::Create( g_pm0, g_pm0->GetRootDir() / "textures", exts );
 
@@ -78,6 +92,12 @@ TEST( RegisteringCategories, ProjectManager )
 TEST( AddingAssets, ProjectManager )
 {
 	g_pm0->AddAsset( "proj00", "textures", "flagi/pol.jpg", SingleTextureAssetDesc::Create( "test_data.file", 0, 0, TextureFormat::F_A8R8G8B8, false ) );
+	g_pm0->AddAsset( "proj01", "textures", "flagi/ger.jpg", SingleTextureAssetDesc::Create( "test_data.file", 0, 0, TextureFormat::F_A8R8G8B8, false ) );
+	g_pm0->AddAsset( "proj02", "textures", "flagi/rus.jpg", SingleTextureAssetDesc::Create( "test_data.file", 0, 0, TextureFormat::F_A8R8G8B8, false ) );
+
+	auto assets = g_pm0->ListAssetsPaths( "", "" );
+
+	ASSERT_TRUE( assets.size() == 3 );
 }
 
 int main( int argc, char **argv )

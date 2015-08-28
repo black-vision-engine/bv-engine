@@ -74,7 +74,8 @@ PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  cons
 
 		if( cit != m_categories.end() )
 		{
-			return cit->second->ListAssets( projectName );
+			auto pathInCategory = TranslateToPathCaegory( projectName, "" );
+			return cit->second->ListAssets( pathInCategory );
 		}
 		else
 		{
@@ -87,7 +88,8 @@ PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  cons
 		PathVec ret;
 		for( auto c : m_categories )
 		{
-			auto cv = c.second->ListAssets( projectName );
+			auto pathInCategory = TranslateToPathCaegory( projectName, "" );
+			auto cv = c.second->ListAssets( pathInCategory );
 			ret.insert( ret.end(), cv.begin(), cv.end() );
 		}
 		return ret;
