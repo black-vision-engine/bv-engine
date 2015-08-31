@@ -18,6 +18,10 @@
       <Filter>Impl\Accessors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Project.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\SceneAccessor.cpp">
+      <Filter>Impl\Accessors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\SceneDescriptor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\AssetAccessor.h" />
@@ -30,5 +34,9 @@
       <Filter>Impl\Accessors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Project.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\SceneAccessor.h">
+      <Filter>Impl\Accessors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\SceneDescriptor.h" />
   </ItemGroup>
 </Project>

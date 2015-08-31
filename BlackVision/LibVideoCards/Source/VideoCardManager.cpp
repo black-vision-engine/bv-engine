@@ -319,7 +319,7 @@ unsigned int __stdcall VideoCardManager::copy_buffer_thread(void *args)
 
 		pParams->DeliverFrameFromRAM( frameBuf ); 
 
-        cur_buf = ( cur_buf + 1 ) % frames_count;
+        cur_buf = ( cur_buf + 1 ) % frames_count; 
     }
 	cout << "Midgard Thread stopped..." << endl;
     _endthreadex(0);

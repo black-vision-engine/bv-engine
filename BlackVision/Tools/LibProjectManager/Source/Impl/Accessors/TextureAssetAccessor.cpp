@@ -19,16 +19,15 @@ namespace bv
 
 // ********************************
 //
-TextureAssetAccessorConstPtr TextureAssetAccessor::Create( const ProjectManager * projectManager, const Path & rootPath, const StringVector & fileExts )
+TextureAssetAccessorConstPtr TextureAssetAccessor::Create( const Path & rootPath, const StringVector & fileExts )
 {
-	return TextureAssetAccessorConstPtr( new TextureAssetAccessor( projectManager, rootPath, fileExts ) );
+	return TextureAssetAccessorConstPtr( new TextureAssetAccessor( rootPath, fileExts ) );
 }
 
 // ********************************
 //
-TextureAssetAccessor::TextureAssetAccessor				( const ProjectManager * projectManager, const Path & rootPath, const StringVector & fileExts )
-	: m_projectManager( projectManager )
-	, m_rootPath( rootPath )
+TextureAssetAccessor::TextureAssetAccessor				( const Path & rootPath, const StringVector & fileExts )
+	: m_rootPath( rootPath )
 	, m_fileExts( fileExts )
 {
 	CreateDir();

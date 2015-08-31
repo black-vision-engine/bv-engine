@@ -639,6 +639,8 @@ void RemoteControlInterface::OnSetParam ( bv::IEventPtr evt )
 					 {result;}
                 } else {
                     f.close();
+					 bool result = model::LoadTexture( plugin, BB::AssetManager::GetBlankTexture() );
+					 {result;}
                     Log::A("error", "Error OnSetParam() texture ["+  BB::AssetManager::GetTexture(TexturePathStr )+"] not found");
                     return;
                 }   

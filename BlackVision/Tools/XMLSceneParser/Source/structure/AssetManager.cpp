@@ -270,6 +270,11 @@ namespace bv{
 
 		return MediaFolderPath+"textures/"+CurrentProject+"/"+CurrentDirectory+TextureName;
 	}
+	string AssetManager::GetBlankTexture()
+	{
+
+		return MediaFolderPath+"textures/blank.png";
+	}
 	string AssetManager::GetSequence(string directory)
 	{
 

@@ -254,7 +254,7 @@ namespace bv{
             node->GetPlugin( "animation" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
             node->GetPlugin( "animation" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
         }else{
-			node->GetPlugin( "animation" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
+			node->GetPlugin( "animation" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
             node->GetPlugin( "animation" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
 		}
 
@@ -291,6 +291,16 @@ namespace bv{
                 }
             }
         }
+
+		if(ProcessedNode->blend_mode==BLEND_MODES::ADD)
+        {
+            node->GetPlugin( "texture" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
+            node->GetPlugin( "texture" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+        }else{
+			node->GetPlugin( "texture" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
+            node->GetPlugin( "texture" )->GetPixelShaderChannel()->GetRendererContext()->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+		}
+
         return result;
         
 	}

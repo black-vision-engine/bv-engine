@@ -14,16 +14,17 @@ namespace model { class PluginsManager; class TimelineManager; }
 
 class SerializeObject
 {
-    rapidxml::xml_document<>                                m_doc;
-    std::stack< rapidxml::xml_node<>* >                     m_roots;
+    rapidxml::xml_document<>                    m_doc;
+    std::stack< rapidxml::xml_node<>* >         m_roots; // FIXME: Move it to implementation class to prevent including RapidXml.hpp in every header using this class.
 
 public:
     SerializeObject();
-    void Save( const std::string & filename );
+    void										Save( const std::string & filename );
+	void										Save( std::ostream & out );
 
-    void                                                    SetName( const std::string & name );
-    void                                                    SetValue( const std::string & name, const std::string & value );
-    void                                                    Pop();
+    void                                        SetName( const std::string & name );
+    void                                        SetValue( const std::string & name, const std::string & value );
+    void                                        Pop();
 };
 
 
