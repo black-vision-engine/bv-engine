@@ -35,10 +35,16 @@ sob.SetName( "asset" );
 sob.Pop();
 }
 
-MipMapFilterType String2Filter( std::string string )
+MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
 {
+//std::pair< MipMapFilterType, std::string > p[] =
+//    { std::make_pair( MipMapFilterType::BICUBIC, "bicubic" ),
+//    std::make_pair( MipMapFilterType::BILINEAR, "bilinear" ) };
+
     if( string == "bilinear" )
         return MipMapFilterType::BILINEAR;
+    //else if( string == "none" )
+    //    return MipMapFilterType::MMFT_TOTAL;
     else
     {
         assert( false );
@@ -51,9 +57,12 @@ MipMapFilterType String2Filter( std::string string )
 ISerializableConstPtr TextureAssetDesc::Create          ( DeserializeObject & dob )
 {
     auto path = dob.GetValue( "path" );
-    auto filter = String2Filter( dob.GetValue( "mipmap" ) );
 
-    return Create( path, filter, true );
+    auto filterS = dob.GetValue( "mipmap" );
+    if( filterS == "none" )
+        return Create( path, true );
+    else
+        return Create( path, String2Filter( filterS ), true );
 }
 
 // ***********************
