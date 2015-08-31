@@ -40,6 +40,7 @@ enum class BVAppState : int
 //FIXME: possibly add an interface such as IAppLogic (if necessary)
 class BVAppLogic
 {
+    static model::TimelineManager * ms_timelineManager; // I'm so static it hurts ;)
 private:
 
     //hackvideoinput
@@ -49,7 +50,6 @@ private:
 
     FrameStatsCalculator            m_statsCalculator;
 
-    model::TimelineManager *        m_timelineManager;
     const model::PluginsManager *   m_pluginsManager;
     model::OffsetTimeEvaluatorPtr   m_globalTimeline;
 
@@ -86,8 +86,7 @@ public:
 	//pablito:
 	void			SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager);
 	FrameStatsCalculator* GetStatsCalculator(){return &m_statsCalculator;};
-	model::TimelineManager* GetTimeLineManager(){return m_timelineManager;};
-
+    static model::TimelineManager* GetTimeLineManager() { return GetTimelineManager(); }
 
     virtual void    OnUpdate        ( unsigned int millis, Renderer * renderer );
     virtual void    OnKey           ( unsigned char c );
@@ -117,7 +116,7 @@ private:
 public:
 
     //Convenience API - generalized model accessors
-    model::TimelineManager *        GetTimelineManager  ();
+    static model::TimelineManager * GetTimelineManager  ();
 
     BVScenePtr                      GetBVScene          ();
 
