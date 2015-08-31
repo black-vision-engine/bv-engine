@@ -496,6 +496,10 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
     {
         node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
+    else if( scene == "TSS_ANIMATION_RECTANGLE" )
+    {
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_ANIMATION_RECTANGLE );
+    }
     else if( scene == "SERIALIZED_TEST" )
     {
         node = TestScenesFactory::CreateSerializedTestScene( pluginsManager, timelineManager );
@@ -861,7 +865,7 @@ model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model
     model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
-    auto node1 = CosineDemoRect( glm::vec3( -1, 0.5, 0 ) , timeEvaluator, model::IParameter::LINEAR );
+    auto node1 = CosineDemoRect( glm::vec3( -1, 0.5, 0 ) , timeEvaluator, model::IParameter::COSINE_LIKE );
     auto node2 = CosineDemoRect( glm::vec3( -1, -0.5, 0 ) , timeEvaluator, model::IParameter::BEZIER );
     //node2->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
 

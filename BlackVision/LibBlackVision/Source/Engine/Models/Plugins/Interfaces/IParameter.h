@@ -25,7 +25,8 @@ namespace bv { namespace model {
         { 
             POINT, 
             LINEAR, 
-            BEZIER 
+            BEZIER,
+            COSINE_LIKE
         };
 
 		virtual const std::string &     GetName         () const								= 0;

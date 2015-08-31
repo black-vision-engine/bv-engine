@@ -87,38 +87,47 @@ CompositeBezierInterpolator::CompositeBezierInterpolator( const CompositeBezierI
 
 void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const ValueT & v ) 
 { 
+    typedef Key< TimeValueT, ValueT > Key;
+
     if( keys.size() > 0 && keys[ keys.size()-1 ].t == t )
         keys.pop_back();
 
     assert( keys.size() == 0 || keys[ keys.size()-1 ].t < t ); // FIXME don't assume that for God's sake!
-    keys.push_back( Key<TimeValueT, ValueT>( t, v ) ); // FIXME sortme
+    keys.push_back( Key( t, v ) ); // FIXME sortme
     if( keys.size() > 1 )
     {
+        size_t last = keys.size()-1;
+        const float scale = 0.3f;
+
         if( m_type == CurveType::POINT )
         {
             interpolators.push_back( new ConstEvaluator< TimeValueT, ValueT >( v ) );
-            return;
         }
-        if( m_type == CurveType::LINEAR )
+        else if( m_type == CurveType::LINEAR )
         {
-            interpolators.push_back( new LinearEvaluator< TimeValueT, ValueT >( keys[ keys.size()-2 ], keys[ keys.size()-1 ] ) );
-            return;
+            interpolators.push_back( new LinearEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ] ) );
         }
-        
-        size_t last = keys.size()-1;
-
-        const float scale = 0.3f;
-
-        Key<TimeValueT, ValueT> left = ( last > 1 ) ? scale * ( keys[ last ] - keys[ last-2 ] ) : scale * ( keys[ last ] - keys[ last-1 ] );
-        Key<TimeValueT, ValueT> right = scale * ( keys[ last ] - keys[ last-1 ] );
-
-        interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], left, right ) );
-
-        if( last > 1 )
+        else if( m_type == CurveType::COSINE_LIKE )
         {
-            auto bi = ( BezierEvaluator< TimeValueT, ValueT >* )interpolators[ last-2 ];
-            bi->SetV2( -1 * left );
+            float length = keys[ last ].t - keys[ last-1 ].t;
+
+            interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], Key( length/3, 0 ), Key( -length/3, 0 ) ) );
         }
+        else if( m_type == CurveType::BEZIER )
+        {
+            Key left = ( last > 1 ) ? scale * ( keys[ last ] - keys[ last-2 ] ) : scale * ( keys[ last ] - keys[ last-1 ] );
+            Key right = scale * ( keys[ last ] - keys[ last-1 ] );
+
+            interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], left, right ) );
+
+            if( last > 1 )
+            {
+                auto bi = ( BezierEvaluator< TimeValueT, ValueT >* )interpolators[ last-2 ];
+                bi->SetV2( -1 * left );
+            }
+        }
+        else
+            assert( false );
     }
 }
 
