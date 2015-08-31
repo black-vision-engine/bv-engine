@@ -1,5 +1,7 @@
 #include "ProjectManagerImpl.h"
 
+#include "Engine/Models/BVScene.h"
+
 #include "IO/DirIO.h"
 
 #include "Tools/Logger/Logger.h"
@@ -223,8 +225,10 @@ void						ProjectManagerImpl::RemoveUnusedAssets	( const Path & projectName )
 
 // ********************************
 //
-void						ProjectManagerImpl::AddScene			( const model::BasicNode & , const Path & projectName, const Path & outPath )
+void						ProjectManagerImpl::AddScene			( const BVScene & , const Path & projectName, const Path & outPath )
 {
+
+
 	{projectName;}
 	{outPath;}
 }

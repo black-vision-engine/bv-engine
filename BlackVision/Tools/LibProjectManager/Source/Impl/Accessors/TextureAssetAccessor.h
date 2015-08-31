@@ -16,7 +16,7 @@ class TextureAssetAccessor : public AssetAccessor
 
 public:
 
-	static TextureAssetAccessorConstPtr Create( const ProjectManager * projectManager, const Path & rootPath, const StringVector & fileExts );
+	static TextureAssetAccessorConstPtr Create( const Path & rootPath, const StringVector & fileExts );
 
 								~TextureAssetAccessor	();
 
@@ -44,11 +44,10 @@ public:
 
 private:
 
-	explicit					TextureAssetAccessor	( const ProjectManager * projectManager, const Path & rootPath, const StringVector & fileExts );
+	explicit					TextureAssetAccessor	( const Path & rootPath, const StringVector & fileExts );
 
 	void						CreateDir			() const;
 
-	const ProjectManager *		m_projectManager;
 	Path						m_rootPath;
 	StringVector				m_fileExts;
 };

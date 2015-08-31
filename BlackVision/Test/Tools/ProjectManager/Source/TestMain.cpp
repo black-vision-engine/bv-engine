@@ -69,7 +69,7 @@ TEST( RegisteringCategories, ProjectManager )
 	exts.push_back( ".*\\.tga" );
 	exts.push_back( ".*\\.png" );
 
-	auto taa = TextureAssetAccessor::Create( g_pm0, g_pm0->GetRootDir() / "textures", exts );
+	auto taa = TextureAssetAccessor::Create( g_pm0->GetRootDir() / "textures", exts );
 
 	g_pm0->RegisterCategory( AssetCategory::Create( "textures", taa ) );
 
@@ -78,7 +78,7 @@ TEST( RegisteringCategories, ProjectManager )
 	ASSERT_TRUE( cns.size() == 1 );
 	ASSERT_TRUE( cns[ 0 ] == "textures" );
 
-	taa = TextureAssetAccessor::Create( g_pm1, g_pm1->GetRootDir() / "textures", exts );
+	taa = TextureAssetAccessor::Create( g_pm1->GetRootDir() / "textures", exts );
 
 	g_pm1->RegisterCategory( AssetCategory::Create( "textures", taa ) );
 

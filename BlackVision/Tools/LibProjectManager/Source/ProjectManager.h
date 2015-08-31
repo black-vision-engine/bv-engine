@@ -14,6 +14,7 @@ class Project;
 class AssetCategory;
 class SceneDesc;
 class ProjectManagerImpl;
+class BVScene;
 
 namespace model 
 {
@@ -50,7 +51,7 @@ public:
 	void					RemoveUnusedAssets	( const Path & projectName, const std::string & categoryName );
 	void					RemoveUnusedAssets	( const Path & projectName );
 
-	void					AddScene			( const model::BasicNode & sceneRootNode, const Path & projectName, const Path & outPath );
+	void					AddScene			( const BVScene & sceneRootNode, const Path & projectName, const Path & outPath );
 	void					CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 	void					RemoveScene			( const Path & projectName, const Path & path );
 	void					MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );

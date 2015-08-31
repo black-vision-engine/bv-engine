@@ -19,6 +19,11 @@ void SerializeObject::Save( const std::string & filename )
     m_doc.clear();
 }
 
+void SerializeObject::Save( std::ostream & out )
+{
+    out << m_doc;
+}
+
 void                                                    SerializeObject::SetName( const std::string & name )
 {
     char *node_name = m_doc.allocate_string( name.c_str() );
