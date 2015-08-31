@@ -50,6 +50,7 @@ public:
 public:
 
     static void			StaticInitializer		();
+	static void			LoggerInitializer		();
     static bool			RegisterInitializer		();
 
 public:

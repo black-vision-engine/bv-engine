@@ -7,6 +7,21 @@ const std::string SingleTextureAssetDesc::uid = "SINGLE_TEXTURE_ASSET_DESC";
 
 // ***********************
 //
+void                SingleTextureAssetDesc::Serialize       ( SerializeObject & /*sob*/ ) const
+{
+    assert( !"implement me" );
+}
+
+// ***********************
+//
+ISerializablePtr     SingleTextureAssetDesc::Create          ( DeserializeObject & /*dob*/ )
+{
+    assert( !"implement me" );
+    return nullptr;
+}
+
+// ***********************
+//
 const std::string &	SingleTextureAssetDesc::GetUID() const
 {
 	return SingleTextureAssetDesc::UID();
@@ -34,9 +49,16 @@ bool SingleTextureAssetDesc::IsCacheable	() const
 
 // ***********************
 //
+std::string	SingleTextureAssetDesc::GetKey	() const
+{
+	return GetImagePath();
+}
+
+// ***********************
+//
 SingleTextureAssetDescConstPtr SingleTextureAssetDesc::Create( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable )
 {
-	return std::make_shared< SingleTextureAssetDesc >( imagePath, width, height, format, isCacheable );
+	return SingleTextureAssetDescConstPtr( new SingleTextureAssetDesc( imagePath, width, height, format, isCacheable ) );
 }
 
 // ***********************

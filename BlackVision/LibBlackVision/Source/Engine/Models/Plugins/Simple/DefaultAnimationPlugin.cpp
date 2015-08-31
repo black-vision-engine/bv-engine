@@ -190,6 +190,7 @@ bool                            DefaultAnimationPlugin::LoadResource  ( AssetDes
     {
         auto txData = m_psc->GetTexturesDataImpl();
         assert( txData->GetAnimations().size() <= 1 );
+        AddAsset( animAssetDescr );
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto animDesc = DefaultAnimationDescriptor::LoadAnimation( animAssetDescr, DefaultAnimationPluginDesc::TextureName() );

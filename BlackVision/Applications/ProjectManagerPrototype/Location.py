@@ -1,34 +1,42 @@
-import LocationParser
-
 
 class Location:
-    def __init__(self, path = "", currentProjectName = ""):
-        self.projectName = ""
-        self.categoryName = ""
-        self.internalPath = ""
-        self.isGlobalLocation = False
-        self.prefix = ""
-        self.__parseString(path, currentProjectName)
+    def __init__(self, projectName, categoryName, path):
+        self.projectName    = projectName  # If None == All projects
+        self.categoryName   = categoryName # If None == All categories
+        self.path           = path
 
-    def __parseString(self, path, currentProjectName):
+    def __repr__(self):
+        return "{} : {} : {}".format(self.projectName if self.projectName else "*", self.categoryName if self.categoryName else "*", self.path)
+
+    @staticmethod
+    def pathToLocation(path, projectManager):
         assert isinstance(path, str)
+        projectsNames   = projectManager.listProjectsNames()
+        categoriesNames = projectManager.listCategoriesNames() + ["scenes"]
 
-        locParser = LocationParser(self, currentProjectName)
-        locParser.parseLocationString(path)
+        categoryName = None
 
-    def getProjectName(self):
-        return self.projectName;
+        tmpPath = path
 
-    def getCategoryName(self):
-        return self.categoryName
+        for cn in categoriesNames:
+            if tmpPath.startswith(cn + "\\"):
+                categoryName = cn
 
-    def getInternalPath(self):
-        return self.internalPath
+        if categoryName:
+            tmpPath = tmpPath[len(categoryName) + 1:]
 
-    def getPrefix(self):
-        return self.prefix
+        projectName = None
 
-    def getIsGlobalLocation(self):
-        return self.isGlobalLocation
+        for pn in projectsNames:
+            if tmpPath.startswith(pn + "\\"):
+                projectName = pn
+
+        if projectName:
+            tmpPath = tmpPath[len(projectName) + 1:]
+
+        return Location(projectName, categoryName, tmpPath)
+
+
+
 
 

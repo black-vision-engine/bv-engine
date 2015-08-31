@@ -4,6 +4,7 @@
 
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/Transform/DefaultTransformChannel.h"
 
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 
@@ -46,6 +47,8 @@ private:
     DefaultVertexShaderChannelPtr   m_vsc;
 
     VertexAttributesChannelPtr      m_vaChannel;
+	DefaultTransformChannelPtr		m_transformChannel;
+	glm::mat4						m_scaleMat;
 
     DefaultTexturesDataPtr          m_texturesData;
 
@@ -63,6 +66,7 @@ private:
     ParamFloatPtr                   m_spacingParam;
     ParamFloatPtr                   m_alignmentParam;
     ParamFloatPtr                   m_maxTextLengthParam;
+	ValueMat4Ptr					m_scaleValue;
 
     //delegates
     void                                        OnSetText                   ( IEventPtr evt );
@@ -90,12 +94,15 @@ public:
 	//pablito
 	std::wstring                                GetText                     () const;
 private:
+	virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
 
 	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & trans ) const override;
 
     virtual void                                Update                      ( TimeType t ) override;
 
     void                                        InitAttributesChannel       ( IPluginPtr prev );
+
+	void										ScaleToMaxTextLength		();
 
 public:
 	explicit                                    DefaultTextPlugin           ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );

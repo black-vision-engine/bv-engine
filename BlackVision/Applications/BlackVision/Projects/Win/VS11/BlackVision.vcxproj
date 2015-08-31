@@ -325,6 +325,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\Source\bvAppLogInitializer.inl" />
     <None Include="..\..\..\Source\BVConfig.inl" />
     <None Include="..\..\..\Source\FrameStatsService.inl" />
   </ItemGroup>

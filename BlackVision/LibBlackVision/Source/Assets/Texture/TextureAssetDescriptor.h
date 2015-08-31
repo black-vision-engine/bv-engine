@@ -18,9 +18,6 @@ enum class TextureAssetLoadingType : int
 	LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS,
 };
 
-class TextureAssetDesc;
-DEFINE_CONST_PTR_TYPE( TextureAssetDesc )
-
 class TextureAssetDesc : public AssetDesc,  public std::enable_shared_from_this< AssetDesc >
 {
 private:
@@ -31,13 +28,22 @@ private:
 	SingleTextureAssetDescConstPtr					m_originalTextureDesc;
 	MipMapAssetDescConstPtr							m_mipMapsDescs;
 
+	explicit							TextureAssetDesc	( const SingleTextureAssetDescConstPtr & origDesc, const MipMapAssetDescConstPtr & mipmapsDesc );
+	explicit							TextureAssetDesc	( const SingleTextureAssetDescConstPtr & origDesc, MipMapFilterType mmFilter );
+	explicit							TextureAssetDesc	( const SingleTextureAssetDescConstPtr & origDesc );
+
 protected:
 	virtual const std::string &			GetUID				() const override;
 
 public:
+    virtual void                        Serialize       ( SerializeObject & sob ) const;
+    static ISerializableConstPtr        Create          ( DeserializeObject & dob );
+
 	virtual bool						IsCacheable			() const override;
 
 	virtual VoidConstPtr				QueryThis			() const override;
+
+	virtual std::string					GetKey				() const override;
 
 	TextureAssetLoadingType				GetLoadingType		() const;
 	SingleTextureAssetDescConstPtr		GetOrigTextureDesc	() const;
@@ -50,10 +56,6 @@ public:
 	static TextureAssetDescConstPtr		Create				( const SingleTextureAssetDescConstPtr & origDesc, const MipMapAssetDescConstPtr & mipmapsDesc );
 	static TextureAssetDescConstPtr		Create				( const SingleTextureAssetDescConstPtr & origDesc, MipMapFilterType mmFilter );
 	static TextureAssetDescConstPtr		Create				( const SingleTextureAssetDescConstPtr & origDesc );
-
-	explicit							TextureAssetDesc	( const SingleTextureAssetDescConstPtr & origDesc, const MipMapAssetDescConstPtr & mipmapsDesc );
-	explicit							TextureAssetDesc	( const SingleTextureAssetDescConstPtr & origDesc, MipMapFilterType mmFilter );
-	explicit							TextureAssetDesc	( const SingleTextureAssetDescConstPtr & origDesc );
 
 	static const std::string &			UID					();
 };

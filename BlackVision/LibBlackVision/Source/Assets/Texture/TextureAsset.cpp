@@ -30,7 +30,7 @@ bool TextureAsset::HasMipMaps() const
 // 
 TextureAssetConstPtr	TextureAsset::Create( const SingleTextureAssetConstPtr & originalTexture, const MipMapAssetConstPtr & mipMaps )
 {
-	return std::make_shared< TextureAsset >( originalTexture, mipMaps );
+	return TextureAssetConstPtr( new TextureAsset( originalTexture, mipMaps ) );
 }
 
 // *******************************

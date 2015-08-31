@@ -876,6 +876,18 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\ParameterSerialization.cpp">
       <Filter>Engine\Models\Plugins\Parameters</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.cpp">
+      <Filter>Engine\Models\Timeline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\AssetSerialization.cpp">
+      <Filter>Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.cpp">
+      <Filter>Assets\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Texture\TextureUtils.cpp">
+      <Filter>Assets\Texture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1771,6 +1783,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\SerializationObjects.h">
       <Filter>Engine\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\AssetSerialization.h">
+	  <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h">
+      <Filter>Assets\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h">
+      <Filter>Assets\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h">
+      <Filter>Assets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -416,8 +416,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Tim
 
     //SetDefaultTransformAnim( node->GetPlugin( "transform" ) );
 
-    model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 2.f );
-    model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ),  2.f );
+    model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 0.2f );
+    model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ),  0.2f );
 
     if( useAlphaMask )
     {
@@ -1102,7 +1102,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "4float.exr" );
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "4float.exr", MipMapFilterType::BILINEAR );
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
-	success = model::LoadTexture( node->GetPlugin( "texture" ), "marker2.png", MipMapFilterType::BILINEAR );
+	success = model::LoadTexture( node->GetPlugin( "texture" ), "64bit.png", MipMapFilterType::BILINEAR );
+	//success = model::LoadTexture( node->GetPlugin( "texture" ), "64bit.png" );
+
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "sand.jpg" );
 
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "0level.bmp", MipMapFilterType::BILINEAR );
@@ -1259,11 +1261,12 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
 {
     //Timeline stuff
     auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-    //timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 2.0 ) );
-    //timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 2.0 ) );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    //auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
-    //someTimelineWithEvents->AddChild( localTimeline );
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+
+    someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( someTimelineWithEvents );
 
     //Plugin stuf
@@ -1276,21 +1279,21 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
 
     auto node = model::BasicNode::Create( "Root", timeEvaluator );
 
-    auto success = node->AddPlugins( GSimplePluginsUIDS, timeEvaluator );
+    auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
 
     SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 0.f ), 0.f );
-    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 10.f ), 10.6f );
+    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 10.f ), 100.f );
 
-    node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( someTimelineWithEvents );
+    node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( timeEvaluator );
 
     //SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
 
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 1.f );
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
 
-	success = model::LoadAnimation( node->GetPlugin( "animation" ), "rsrcy/test_anim", "*.jpg" );
-    //success = model::LoadAnimation( node->GetPlugin( "animation" ), "d:/src/media/sequences/FullHD/IntroTGA", "*.tga" );
+	success = model::LoadAnimation( node->GetPlugin( "animation" ), "rsrcy/test_anim", "*.png" );
+    //success = model::LoadAnimation( node->GetPlugin( "animation" ), "d:/src/media/sequences/FullHD/alfai/", "*.tga" );
     assert( success );
 
     if( useAlphaMask )
@@ -1340,21 +1343,21 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     assert( success );
 
     //SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
-    node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( timeEvaluator );
-    auto plugin = node->GetPlugin( "transform" );
-    auto param = plugin->GetParameter( "simple_transform" );
+    //node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( timeEvaluator );
+    //auto plugin = node->GetPlugin( "transform" );
+    //auto param = plugin->GetParameter( "simple_transform" );
 
-    SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.f, 0.f ) );
+    //SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.f, 0.f ) );
 	//SetParameterTranslation( param, 0, 10.0f, glm::vec3( 0.005f, 0.f, 0.f ) );
 
-	SetParameterScale ( param, 0, 0.0f, glm::vec3( 2.f, 2.f, 1.f ) );
+	//SetParameterScale ( param, 0, 0.0f, glm::vec3( 2.f, 2.f, 1.f ) );
 	//SetParameterScale ( param, 0, 30.0f, glm::vec3( 12.f, 12.f, 1.f ) );
 	//SetParameterScale ( param, 0, 15.0f, glm::vec3( 1.f, 1.f, 1.f ) );
 	////SetParameterScale ( param, 0, 30.0f, glm::vec3( 1.5f, 1.5f, 1.f ) );
 	//SetParameterScale ( param, 0, 7.5f, glm::vec3( 0.1f, 0.1f, 1.f ) );
 	//SetParameterScale ( param, 0, 0.0f, glm::vec3( 0.002f, 0.002f, 1.f ) );
 
-	SetParameterRotation ( param, 0, 100.0f, glm::vec3( 0.0f, 0.0f, -1.f ), 360 );
+	//SetParameterRotation ( param, 0, 100.0f, glm::vec3( 0.0f, 0.0f, -1.f ), 360 );
 
 	node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( timeEvaluator );
 	node->GetPlugin( "text" )->GetParameter( "outlineColor" )->SetTimeEvaluator( timeEvaluator );
@@ -1367,11 +1370,15 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
 
 	SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
-    SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 0.0 ), 0.2f );
+	node->GetPlugin( "text" )->GetParameter( "maxTextLenght" )->SetTimeEvaluator( timeEvaluator );
+    //SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 0.0 ), 0.2f );
+	//SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 5.0 ), 0.1f );
+	//SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 10.0 ), 0.5f );
+
 
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/courbi.ttf" );
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/cour.ttf" );
-    success = model::LoadFont( node->GetPlugin( "text" ), "Assets/Fonts/digital.TTF", 60, blurSize, 4, false );
+    success = model::LoadFont( node->GetPlugin( "text" ), "Assets/Fonts/arial.TTF", 60, blurSize, 0, true );
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/ARIALUNI.TTF" );
     assert( success );
 
@@ -1380,7 +1387,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AV::11A-AAAA\nBBBBCCCC\nDDD333DD88\nAAAAAAAA\nB3BBCCCC\nDDDD888DDD" );
 //    model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAABBBBCCCCDDDD" );
 	//model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"AV::11A-AAAABBBBCCCCDDD333DD88AAAAAAAAB3BBCCCCDDDD888DDD" );
-	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"\nza¿ó³æ \n gêœl¹ jaŸñ" );
+	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"zadsó³æ111 \n gêœl¹ jaŸñ11" );
 
     if( useAlphaMask )
     {

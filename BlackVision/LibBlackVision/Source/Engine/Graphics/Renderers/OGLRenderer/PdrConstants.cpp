@@ -113,7 +113,7 @@ namespace
 
     GLuint TextureFormatGL[] =
     {
-		GL_BGRA,		// F_A32FR32FG32FB32F
+		GL_RGBA,		// F_A32FR32FG32FB32F
 		GL_BGR,			// F_R32FG32FB32F
 		GL_R32F,		// F_A32F
 		GL_BGRA,		// F_A8R8G8B8

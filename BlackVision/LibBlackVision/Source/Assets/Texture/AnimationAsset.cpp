@@ -9,7 +9,7 @@ const std::string AnimationAsset::uid = "ANIMATION_ASSET";
 // 
 AnimationAssetConstPtr	AnimationAsset::Create( const std::vector< TextureAssetConstPtr > & frames )
 {
-	return std::make_shared< AnimationAsset >( frames );
+	return AnimationAssetConstPtr( new AnimationAsset( frames ) );
 }
 
 // *******************************

@@ -3,12 +3,14 @@
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"
 
+#include "System/Path.h"
+
 namespace bv { namespace model {
 
 std::string         StaticShaderGenerator::GenerateShaderSource( const std::vector< std::string > & uids ) const
 {
     std::string filename = GenerateFilename( uids );
-    if( File::Exists( filename ) )
+    if( Path::Exists( filename ) )
     {
         std::cout << "Loading pixel shader from: " << filename << std::endl;
         return ReadShaderContentsFromFile( filename );
@@ -19,7 +21,7 @@ std::string         StaticShaderGenerator::GenerateShaderSource( const std::vect
 		
 		filename = m_shadersDir + "default." + m_shaderExtension;
 
-		if( File::Exists( filename ) )
+		if( Path::Exists( filename ) )
 			return ReadShaderContentsFromFile( filename );
 		else
 		{

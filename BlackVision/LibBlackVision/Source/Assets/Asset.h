@@ -2,12 +2,10 @@
 
 #include <string>
 #include "CoreDEF.h"
+#include "Assets/FwdDecls.h"
 #include "Memory/MemoryChunk.h"
 
 namespace bv {
-
-class Asset;
-DEFINE_CONST_PTR_TYPE( Asset )
 
 class Asset
 {

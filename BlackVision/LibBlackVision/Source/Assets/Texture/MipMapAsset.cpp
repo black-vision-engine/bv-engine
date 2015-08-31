@@ -24,7 +24,7 @@ SizeType MipMapAsset::GetLevelsNum() const
 //
 MipMapAssetConstPtr MipMapAsset::Create( const std::vector< SingleTextureAssetConstPtr > & mipMaps )
 {
-	return std::make_shared< MipMapAsset >( mipMaps );
+	return MipMapAssetConstPtr( new MipMapAsset( mipMaps ) );
 }
 
 // *******************************

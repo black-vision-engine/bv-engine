@@ -25,4 +25,13 @@ UInt32		RoundUpToPowerOfTwo( UInt32 v )
 	return v;
 }
 
+// ******************************
+//
+template<> 
+std::string toString< std::string >( const std::string & t )
+{
+	return t;
+}
+
+
 } // bv

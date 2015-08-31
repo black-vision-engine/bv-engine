@@ -61,6 +61,60 @@ public:
     virtual void		PrintShortSummary           ( const std::string & message ) override;
     virtual void		PrintCompleteSummary        ( const std::string & message ) override;
 
+#ifdef GL_VERSION_4_4
+	virtual void		BindTextures				( GLuint first, GLsizei count, const GLuint* textures ) override;
+#endif
+#ifdef GL_VERSION_4_5
+	virtual void		BindTextureUnit				( GLuint unit, GLuint texture ) override;
+
+	virtual void		TextureStorage1D			( GLuint texture, GLsizei levels, GLenum internalFormat, GLsizei width ) override;
+	virtual void		TextureStorage2D			( GLuint texture, GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height ) override;
+	virtual void		TextureStorage3D			( GLuint texture, GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth ) override;
+	virtual void		TextureStorage2DMultisample	( GLuint texture, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocations ) override;
+	virtual void		TextureStorage3DMultisample	( GLuint texture, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedSampleLocations ) override;
+#endif
+
+	virtual void		CompressedTexImage1D		( GLenum target, GLint level, GLenum internalFormat, GLsizei width, GLint border, GLsizei imageSize, const GLvoid* data ) override;
+	virtual void		CompressedTexImage2D		( GLenum target, GLint level, GLenum internalFormat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid* data ) override;
+	virtual void		CompressedTexImage3D		( GLenum target, GLint level, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, const GLvoid* data ) override;
+	virtual void		CompressedTexSubImage1D		( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, const GLvoid* data ) override;
+	virtual void		CompressedTexSubImage2D		( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const GLvoid* data ) override;
+	virtual void		CompressedTexSubImage3D		( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid* data ) override;
+
+	virtual void		TexImage1D					( GLenum target, GLint level, GLint internalFormat, GLsizei width, GLint border, GLenum format, GLenum type, const GLvoid* data ) override;
+	virtual void		TexImage3D					( GLenum target, GLint level, GLint internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const GLvoid* data ) override;
+	virtual void		TexImage2DMultisample		( GLenum target, GLsizei samples, GLint internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocations ) override;
+	virtual void		TexImage3DMultisample		( GLenum target, GLsizei samples, GLint internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedSampleLocations ) override;
+
+	virtual void		TexSubImage1D				( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const GLvoid* pixels ) override;
+	virtual void		TexSubImage3D				( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const GLvoid* pixels ) override;
+
+	virtual void		TexStorage1D				( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width ) override;
+	virtual void		TexStorage2D				( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height ) override;
+	virtual void		TexStorage3D				( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth ) override;
+	virtual void		TexStorage2DMultisample		( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocations ) override;
+	virtual void		TexStorage3DMultisample		( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedSampleLocations ) override;
+
+	virtual void		TexBuffer					( GLenum target, GLenum internalFormat, GLuint buffer ) override;	
+	virtual void		TexBufferRange				( GLenum target, GLenum internalFormat, GLuint buffer, GLintptr offset, GLsizeiptr size ) override;
+
+	virtual void		BindBufferBase				( GLenum target, GLuint index, GLuint buffer ) override;
+	virtual void		BindBufferRange				( GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size ) override;
+	virtual void		FramebufferTexture			( GLenum target, GLenum attachment, GLuint texture, GLint level ) override;
+	virtual void		FramebufferTextureLayer		( GLenum target, GLenum attachment, GLuint texture, GLint level, GLint layer ) override;
+	virtual void		RenderbufferStorageMultisample			( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height ) override;
+
+#ifdef GL_VERSION_4_5
+	virtual void		NamedFramebufferTexture		( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level ) override;
+	virtual void		NamedFramebufferTextureLayer( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level, GLint layer ) override;
+	virtual void		NamedFramebufferRenderbuffer( GLuint framebuffer, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer ) override;
+
+	virtual void		NamedRenderbufferStorage				( GLuint renderbuffer, GLenum internalFormat, GLsizei width, GLsizei height ) override;
+	virtual void		NamedRenderbufferStorageMultisample		( GLuint renderbuffer, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height ) override;
+#endif
+#ifdef GL_VERSION_4_4
+	virtual void		BufferStorage				( GLenum target, GLsizeiptr size, const GLvoid* data, GLbitfield flags ) override;
+#endif
 };
 
 } //bv

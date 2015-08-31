@@ -2,14 +2,14 @@
 #include "Engine/Types/EnumsUtils.h"
 #include "DataTypes/Hash.h"
 
+#include "LibImage.h"
+
 #include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultColorPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultGradientPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
@@ -92,10 +92,10 @@ model::BasicNodePtr TwoTexturedRectangles       ( const model::PluginsManager * 
                                                       "DEFAULT_TEXTURE" );
 
     assert( rootNode && childNode );
-
+	
     auto rootTransform  = rootNode->GetPlugin( "transform" )->GetParameter( "simple_transform" );
     auto childTransform = childNode->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-
+	
     bool success = true;
 
     success &= model::SetParameterTranslation( rootTransform, 0, 0.0f, glm::vec3( -1.f, 0.f, -1.f ) );
@@ -105,10 +105,11 @@ model::BasicNodePtr TwoTexturedRectangles       ( const model::PluginsManager * 
 
     assert( success );
 
-    std::string txFileName = "Assets/ModelNodeEditor/Desert.jpg";
+	const std::string img = "test";
+	image::SaveBMPImage( img, MemoryChunk::Create( 100 ), 100, 100, 4 );
 
-    success &= model::LoadTexture( rootNode->GetPlugin( "texture" ), txFileName );
-    success &= model::LoadTexture( childNode->GetPlugin( "texture" ), txFileName );
+    success &= model::LoadTexture( rootNode->GetPlugin( "texture" ), img, false );
+    success &= model::LoadTexture( childNode->GetPlugin( "texture" ), img, false );
 
     assert( success );
 
