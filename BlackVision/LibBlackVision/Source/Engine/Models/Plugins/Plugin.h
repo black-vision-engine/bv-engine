@@ -420,5 +420,7 @@ bool                                        BasePlugin< Iface >::ParameterChange
 
 ParamTransformVecPtr						GetCurrentParamTransform( const IPlugin * pl );
 
+typedef std::shared_ptr< const BasePlugin< IPlugin > > BasePluginConstPtr;
+
 } // model
 } // bv

@@ -28,6 +28,9 @@ private:
 
 	explicit			SceneAccessor			( const Path & path, const model::TimelineManager * tm, const model::PluginsManager * pm );
 
+	static PathVec		GetAllUsedAssetPaths	( const BVSceneConstPtr & scene );
+	static PathVec		GetAllPathsFromAssets	( const AssetDescConstPtr & assetDesc );
+
 public:
 
 	SceneDescriptor		GetSceneDesc			( const Path & path ) const;
@@ -44,6 +47,8 @@ public:
 	void				ExportSceneToFile		( const Path & outputFileName, const Path & path ) const;
 
 	PathVec				ListScenes				( const Path & path ) const;
+
+	PathVec				ListAllUsedAssets		( const Path & path ) const;
 
 	static SceneAccessorConstPtr Create			( const Path & path, const model::TimelineManager * tm, const model::PluginsManager * pm );
 };

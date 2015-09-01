@@ -1,5 +1,9 @@
 #include "SceneAccessor.h"
 
+#include "Engine/Models/Plugins/Plugin.h"
+
+#include <set>
+
 namespace bv
 {
 
@@ -122,6 +126,79 @@ void			SceneAccessor::ExportSceneToFile( const Path & outputFileName, const Path
 PathVec			SceneAccessor::ListScenes( const Path & path ) const
 {
 	return Path::List( m_rootDir / path, SceneFileExt );
+}
+
+// ********************************
+//
+PathVec			SceneAccessor::ListAllUsedAssets( const Path & path ) const
+{
+	SceneDescriptor desc( path );
+	auto scene = desc.LoadScene();
+
+
+	return GetAllUsedAssetPaths( scene );
+}
+
+// ********************************
+//
+PathVec			SceneAccessor::GetAllUsedAssetPaths( const BVSceneConstPtr & scene )
+{
+	auto rootNode = scene->GetModelSceneRoot();
+
+	auto lastPlugin = rootNode->GetPlugins()->GetLastPlugin();
+
+	std::vector< AssetDescConstPtr > allDescs;
+
+	while( lastPlugin )
+	{
+		auto assetsDescs = std::static_pointer_cast< model::BasePlugin< model::IPlugin > >( lastPlugin )->GetAssets();
+		allDescs.insert( allDescs.end(), assetsDescs.begin(), assetsDescs.end() );
+	}
+
+	std::set< Path > allPaths;
+
+	for( auto ad : allDescs )
+	{
+		auto paths = GetAllPathsFromAssets( ad );
+		allPaths.insert( paths.begin(), paths.end() );
+	}
+
+	return PathVec( allPaths.begin(), allPaths.end() );
+}
+
+// ********************************
+//
+PathVec			SceneAccessor::GetAllPathsFromAssets( const AssetDescConstPtr & assetDesc )
+{
+	std::set< Path > uniqueAssetsPath;
+	if( auto stad = std::dynamic_pointer_cast< SingleTextureAssetDescConstPtr::element_type >( assetDesc ) )
+	{
+		uniqueAssetsPath.insert( stad->GetImagePath() );
+	}
+	else if( auto tad = std::dynamic_pointer_cast< TextureAssetDescConstPtr::element_type >( assetDesc ) )
+	{
+		auto stad = tad->GetOrigTextureDesc();
+		if( stad )
+		{
+			uniqueAssetsPath.insert( stad->GetImagePath() );
+		}
+
+		auto mmad = tad->GetMipMapsDesc();
+		if( mmad )
+		{
+			for( SizeType i = 0; i < mmad->GetLevelsNum(); ++i )
+			{
+				uniqueAssetsPath.insert( mmad->GetLevelDesc( i )->GetImagePath() );
+			}
+		}
+	}
+	else
+	{
+		assert( !"Not implemented" );  // TODO: Implement for the rest of AssetDesc types
+		return PathVec();
+	}
+
+	return PathVec( uniqueAssetsPath.begin(), uniqueAssetsPath.end() );
 }
 
 } // bv
