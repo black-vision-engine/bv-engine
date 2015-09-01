@@ -1,3 +1,4 @@
+#pragma warning(disable :4996)
 #include "Engine/Models/Interfaces/IOverrideState.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/BasicNode.h"
