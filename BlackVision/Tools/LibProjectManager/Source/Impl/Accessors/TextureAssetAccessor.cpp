@@ -198,23 +198,11 @@ PathVec	TextureAssetAccessor::ListAll		( const Path & path ) const
 
 // ********************************
 //
-namespace
-{
-
-bool PathCompare( const Path & a, const Path & b ) 
-{
-    return a.Str() < b.Str();
-}
-
-}
-
-// ********************************
-//
 PathVec	TextureAssetAccessor::ListAllUnique	( const Path & path ) const
 {
 	auto l = ListAll( path );
 
-	std::set< Path, bool (*)( const Path & a, const Path & b )  > unique( PathCompare );
+	std::set< Path  > unique;
 
 	for( auto p : l )
 	{

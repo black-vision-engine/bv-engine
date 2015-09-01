@@ -53,8 +53,8 @@ PathVec			ProjectManagerImpl::ListProjectsNames	() const
 //
 PathVec			ProjectManagerImpl::ListScenesNames		( const Path & projectName ) const
 {
-	{projectName;}
-	return PathVec();
+	auto pathInScenes = TranslateToPathCategory( projectName, "" );
+	return m_sceneAccessor->ListScenes( pathInScenes );
 }
 
 // ********************************
@@ -325,16 +325,18 @@ void						ProjectManagerImpl::ImportSceneFromFile	( const Path & importToProject
 //
 void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, const Path & outputFilePath ) const
 {
+	auto projectAssets = ListAssetsPaths( projectName );
+	auto projectScenes = ListScenesNames( projectName );
 	{projectName;}
 	{outputFilePath;}
 }
 
 // ********************************
 //
-void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, const Path & importToPath )
+void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, const Path & projectName )
 {
 	{expFilePath;}
-	{importToPath;}
+	{projectName;}
 }
 
 // ********************************

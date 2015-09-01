@@ -64,7 +64,7 @@ private:
 
 	// projects
 	void					ExportProjectToFile	( const Path & projectName, const Path &  outputFilePath ) const;
-	void					ImportProjectFromFile( const Path & expFilePath, const Path & importToPath );
+	void					ImportProjectFromFile( const Path & expFilePath, const Path & projectName );
 
 	// *********************************
 	// getting scenes and assets descriptors

@@ -211,9 +211,9 @@ void						ProjectManager::ExportProjectToFile	( const Path & projectName, const 
 
 // ********************************
 //
-void						ProjectManager::ImportProjectFromFile( const Path & expFilePath, const Path & importToPath )
+void						ProjectManager::ImportProjectFromFile( const Path & expFilePath, const Path & projectName )
 {
-	m_impl->ImportProjectFromFile( expFilePath, importToPath );
+	m_impl->ImportProjectFromFile( expFilePath, projectName );
 }
 
 // ********************************
