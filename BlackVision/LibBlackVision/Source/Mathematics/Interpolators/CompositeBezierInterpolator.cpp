@@ -33,8 +33,9 @@ class BezierEvaluator : public IInterpolator< TimeValueT, ValueT >
 
     Key key1, key2;
     Key v1, v2;
+    TimeValueT m_tolerance;
 public:
-    BezierEvaluator( Key k1, Key k2, Key v1_, Key v2_ ) : key1( k1 ), key2( k2 ), v1( v1_ ), v2( v2_ ) {}
+    BezierEvaluator( Key k1, Key k2, Key v1_, Key v2_, TimeValueT tolerance ) : key1( k1 ), key2( k2 ), v1( v1_ ), v2( v2_ ), m_tolerance( tolerance ) {}
     
     void SetV2( Key v2 ) { this->v2 = v2; }
     
@@ -49,7 +50,7 @@ public:
         {
             Key middle = 1./8 * A + 3./8 * B + 3./8 * C + 1./8 * D;
             
-            if( fabs( middle.t - t ) < 0.000001 ) // FIXME!!!
+            if( fabs( middle.t - t ) < m_tolerance )
                 return middle.val;
             else
             {
@@ -72,8 +73,9 @@ public:
     }
 };
 
-CompositeBezierInterpolator::CompositeBezierInterpolator()
+CompositeBezierInterpolator::CompositeBezierInterpolator( float tolerance )
     : m_type( CurveType::LINEAR )
+    , m_tolerance( tolerance )
 {
 }
 
@@ -81,7 +83,7 @@ CompositeBezierInterpolator::CompositeBezierInterpolator( const CompositeBezierI
 { 
     keys = that.keys; 
     interpolators = that.interpolators; 
-    tolerance = that.tolerance; 
+    m_tolerance = that.m_tolerance; 
     m_type = that.m_type; 
 }
 
@@ -111,14 +113,14 @@ void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const Value
         {
             float length = keys[ last ].t - keys[ last-1 ].t;
 
-            interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], Key( length/3, 0 ), Key( -length/3, 0 ) ) );
+            interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], Key( length/3, 0 ), Key( -length/3, 0 ), m_tolerance ) );
         }
         else if( m_type == CurveType::BEZIER )
         {
             Key left = ( last > 1 ) ? scale * ( keys[ last ] - keys[ last-2 ] ) : scale * ( keys[ last ] - keys[ last-1 ] );
             Key right = scale * ( keys[ last ] - keys[ last-1 ] );
 
-            interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], left, right ) );
+            interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], left, right, m_tolerance ) );
 
             if( last > 1 )
             {

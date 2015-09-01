@@ -13,11 +13,11 @@ private:
     typedef float TimeValueT;
     typedef float ValueT;
 
-    std::vector< Key<TimeValueT, ValueT> >    keys;
-    std::vector< IInterpolator<TimeValueT, ValueT >* > interpolators; // FIXME: ptr-ize
-    TimeValueT                              tolerance;
+    std::vector< Key<TimeValueT, ValueT> >              keys;
+    std::vector< IInterpolator<TimeValueT, ValueT >* >  interpolators; // FIXME: ptr-ize
+    TimeValueT                                          m_tolerance;
 
-    model::IParameter::CurveType                   m_type;
+    model::IParameter::CurveType                        m_type;
 
 public:
     typedef TimeValueT  TimeType;
@@ -27,8 +27,8 @@ public:
     typedef ValueT                      ValT;
 
 public:
-    CompositeBezierInterpolator();
-    CompositeBezierInterpolator( const CompositeBezierInterpolator& that ); //{ keys = that.keys; interpolators = that.interpolators; tolerance = that.tolerance; m_type = that.m_type; }
+    CompositeBezierInterpolator( float tolerance = 0.000001 );
+    CompositeBezierInterpolator( const CompositeBezierInterpolator& that );
 
     void AddKey             ( TimeValueT t, const ValueT & v );
     ValueT Evaluate         ( TimeValueT t ) const;
