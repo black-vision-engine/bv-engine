@@ -14,7 +14,9 @@ namespace bv
 //
 ProjectManagerImpl::ProjectManagerImpl	( const Path & rootPath )
 	: m_rootPath( rootPath )
-	, m_projectsPath( m_rootPath / Path( "projects" ) )
+	, m_projectsPath( m_rootPath / "projects" )
+	, m_scenesPath( m_rootPath / "scenes" )
+
 {
 	if( Path::Exists( rootPath ) )
 	{
@@ -25,6 +27,8 @@ ProjectManagerImpl::ProjectManagerImpl	( const Path & rootPath )
 		Dir::CreateDir( rootPath.Str(), true );
 		Dir::CreateDir( m_projectsPath.Str() );
 	}
+
+	InitializeScenes();
 }
 
 // ********************************
@@ -225,40 +229,40 @@ void						ProjectManagerImpl::RemoveUnusedAssets	( const Path & projectName )
 
 // ********************************
 //
-void						ProjectManagerImpl::AddScene			( const BVScene & , const Path & projectName, const Path & outPath )
+void						ProjectManagerImpl::AddScene			( const BVSceneConstPtr & scene, const Path & projectName, const Path & outPath )
 {
+	auto pathInScenes = TranslateToPathCaegory( projectName, outPath );
 
-
-	{projectName;}
-	{outPath;}
+	m_sceneAccessor->AddScene( scene, pathInScenes );
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
-	{inProjectName;}
-	{inPath;}
-	{outProjectName;}
-	{outPath;}
+	auto inPathInScenes = TranslateToPathCaegory( inProjectName, inPath );
+	auto outPathInScenes = TranslateToPathCaegory( outProjectName, outPath );
+
+	auto sceneDesc = m_sceneAccessor->GetSceneDesc( inPathInScenes );
+
+	Path::Copy( sceneDesc.GetPath(), outPathInScenes );
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::RemoveScene			( const Path & projectName, const Path & path )
 {
-	{projectName;}
-	{path;}
+	auto pathInScenes = TranslateToPathCaegory( projectName, path );
+
+	Path::Remove( m_rootPath / pathInScenes );
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
-	{inProjectName;}
-	{inPath;}
-	{outProjectName;}
-	{outPath;}
+	CopyScene( inProjectName, inPath, outProjectName, outPath );
+	RemoveScene( inProjectName, inPath );
 }
 
 // ********************************
@@ -378,6 +382,18 @@ void						ProjectManagerImpl::InitializeProjects	()
 	{
 		Dir::CreateDir( m_projectsPath.Str() );
 	}
+}
+
+// ********************************
+//
+void						ProjectManagerImpl::InitializeScenes	()
+{
+	if( !Path::Exists( m_scenesPath ) )
+	{
+		Dir::CreateDir( m_scenesPath.Str() );
+	}
+
+	m_sceneAccessor = SceneAccessor::Create( m_scenesPath, nullptr, nullptr ); // FIXME: TM and PM cannot be null.
 }
 
 // ********************************

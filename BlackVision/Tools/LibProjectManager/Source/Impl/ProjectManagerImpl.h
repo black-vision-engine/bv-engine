@@ -5,6 +5,8 @@
 #include "ProjectManager.h"
 #include "Project.h"
 
+#include  "Accessors/SceneAccessor.h"
+
 #include <map>
 
 namespace bv
@@ -42,7 +44,7 @@ private:
 	void					RemoveUnusedAssets	( const Path & projectName, const std::string & categoryName );
 	void					RemoveUnusedAssets	( const Path & projectName );
 
-	void					AddScene			( const BVScene & sceneRootNode, const Path & projectName, const Path & outPath );
+	void					AddScene			( const BVSceneConstPtr & sceneRootNode, const Path & projectName, const Path & outPath );
 	void					CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 	void					RemoveScene			( const Path & projectName, const Path & path );
 	void					MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
@@ -76,6 +78,7 @@ private:
 	SceneDesc *				GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
 
 	void					InitializeProjects	();
+	void					InitializeScenes	();
 
 	Path					TranslateToPathCaegory( const Path & projectName, const Path & path ) const;
 	Path					TranslateToPathInPMRootFolder( const Path & projectName, const std::string & categoryName, const Path & path ) const;
@@ -92,8 +95,11 @@ private:
 	CategoryMap				m_categories;
 	ProjectMap				m_projects;
 
+	SceneAccessorConstPtr	m_sceneAccessor;
+
 	Path					m_rootPath;
 	Path					m_projectsPath;
+	Path					m_scenesPath;
 
 	friend ProjectManager;
 };
