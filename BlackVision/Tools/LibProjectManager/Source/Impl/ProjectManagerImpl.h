@@ -12,8 +12,6 @@
 namespace bv
 {
 
-class BVScene;
-
 class ProjectManagerImpl
 {
 private:
@@ -80,7 +78,7 @@ private:
 	void					InitializeProjects	();
 	void					InitializeScenes	();
 
-	Path					TranslateToPathCaegory( const Path & projectName, const Path & path ) const;
+	Path					TranslateToPathCategory( const Path & projectName, const Path & path ) const;
 	Path					TranslateToPathInPMRootFolder( const Path & projectName, const std::string & categoryName, const Path & path ) const;
 
 	explicit ProjectManagerImpl( const Path & rootPath );

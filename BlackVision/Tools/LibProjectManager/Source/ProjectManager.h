@@ -3,6 +3,8 @@
 #include "AssetCategory.h"
 #include "Project.h"
 
+#include "Engine/Models/BVScene.h"
+
 #include "Assets/FwdDecls.h"
 
 #include "System/Path.h"
@@ -14,7 +16,6 @@ class Project;
 class AssetCategory;
 class SceneDesc;
 class ProjectManagerImpl;
-class BVScene;
 
 namespace model 
 {
@@ -51,7 +52,7 @@ public:
 	void					RemoveUnusedAssets	( const Path & projectName, const std::string & categoryName );
 	void					RemoveUnusedAssets	( const Path & projectName );
 
-	void					AddScene			( const BVScene & sceneRootNode, const Path & projectName, const Path & outPath );
+	void					AddScene			( const BVSceneConstPtr & sceneRootNode, const Path & projectName, const Path & outPath );
 	void					CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 	void					RemoveScene			( const Path & projectName, const Path & path );
 	void					MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );

@@ -141,7 +141,7 @@ void						ProjectManager::RemoveUnusedAssets	( const Path & projectName )
 
 // ********************************
 //
-void						ProjectManager::AddScene			( const BVScene & sceneRootNode, const Path & projectName, const Path & outPath )
+void						ProjectManager::AddScene			( const BVSceneConstPtr & sceneRootNode, const Path & projectName, const Path & outPath )
 {
 	m_impl->AddScene( sceneRootNode, projectName, outPath );
 }
