@@ -14,7 +14,9 @@ namespace bv
 //
 ProjectManagerImpl::ProjectManagerImpl	( const Path & rootPath )
 	: m_rootPath( rootPath )
-	, m_projectsPath( m_rootPath / Path( "projects" ) )
+	, m_projectsPath( m_rootPath / "projects" )
+	, m_scenesPath( m_rootPath / "scenes" )
+
 {
 	if( Path::Exists( rootPath ) )
 	{
@@ -25,6 +27,8 @@ ProjectManagerImpl::ProjectManagerImpl	( const Path & rootPath )
 		Dir::CreateDir( rootPath.Str(), true );
 		Dir::CreateDir( m_projectsPath.Str() );
 	}
+
+	InitializeScenes();
 }
 
 // ********************************
@@ -49,8 +53,8 @@ PathVec			ProjectManagerImpl::ListProjectsNames	() const
 //
 PathVec			ProjectManagerImpl::ListScenesNames		( const Path & projectName ) const
 {
-	{projectName;}
-	return PathVec();
+	auto pathInScenes = TranslateToPathCategory( projectName, "" );
+	return m_sceneAccessor->ListScenes( pathInScenes );
 }
 
 // ********************************
@@ -76,7 +80,7 @@ PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  cons
 
 		if( cit != m_categories.end() )
 		{
-			auto pathInCategory = TranslateToPathCaegory( projectName, "" );
+			auto pathInCategory = TranslateToPathCategory( projectName, "" );
 			return cit->second->ListAssets( pathInCategory );
 		}
 		else
@@ -90,7 +94,7 @@ PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  cons
 		PathVec ret;
 		for( auto c : m_categories )
 		{
-			auto pathInCategory = TranslateToPathCaegory( projectName, "" );
+			auto pathInCategory = TranslateToPathCategory( projectName, "" );
 			auto cv = c.second->ListAssets( pathInCategory );
 			ret.insert( ret.end(), cv.begin(), cv.end() );
 		}
@@ -155,7 +159,7 @@ void						ProjectManagerImpl::AddAsset			( const Path & projectName, const std::
 
 	if( cit != m_categories.end() )
 	{
-		auto pInCategory = TranslateToPathCaegory( projectName, path );
+		auto pInCategory = TranslateToPathCategory( projectName, path );
 		cit->second->AddAsset( pInCategory, assetDesc );
 	}
 	else
@@ -174,7 +178,7 @@ void						ProjectManagerImpl::CopyAsset			( const Path & inProjectName, const st
 	{
 		auto cit = m_categories.find( inCategoryName );
 
-		auto pInCategory = TranslateToPathCaegory( outProjectName, outPath );
+		auto pInCategory = TranslateToPathCategory( outProjectName, outPath );
 		cit->second->AddAsset( pInCategory, a );
 	}
 	else
@@ -191,7 +195,7 @@ void						ProjectManagerImpl::RemoveAsset			( const Path & projectName, const st
 
 	if( cit != m_categories.end() )
 	{
-		auto pInCategory = TranslateToPathCaegory( projectName, path );
+		auto pInCategory = TranslateToPathCategory( projectName, path );
 		cit->second->RemoveAsset( pInCategory );
 	}
 	else
@@ -225,40 +229,40 @@ void						ProjectManagerImpl::RemoveUnusedAssets	( const Path & projectName )
 
 // ********************************
 //
-void						ProjectManagerImpl::AddScene			( const BVScene & , const Path & projectName, const Path & outPath )
+void						ProjectManagerImpl::AddScene			( const BVSceneConstPtr & scene, const Path & projectName, const Path & outPath )
 {
+	auto pathInScenes = TranslateToPathCategory( projectName, outPath );
 
-
-	{projectName;}
-	{outPath;}
+	m_sceneAccessor->AddScene( scene, pathInScenes );
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
-	{inProjectName;}
-	{inPath;}
-	{outProjectName;}
-	{outPath;}
+	auto inPathInScenes = TranslateToPathCategory( inProjectName, inPath );
+	auto outPathInScenes = TranslateToPathCategory( outProjectName, outPath );
+
+	auto sceneDesc = m_sceneAccessor->GetSceneDesc( inPathInScenes );
+
+	Path::Copy( sceneDesc.GetPath(), outPathInScenes );
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::RemoveScene			( const Path & projectName, const Path & path )
 {
-	{projectName;}
-	{path;}
+	auto pathInScenes = TranslateToPathCategory( projectName, path );
+
+	Path::Remove( m_rootPath / pathInScenes );
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
-	{inProjectName;}
-	{inPath;}
-	{outProjectName;}
-	{outPath;}
+	CopyScene( inProjectName, inPath, outProjectName, outPath );
+	RemoveScene( inProjectName, inPath );
 }
 
 // ********************************
@@ -305,34 +309,34 @@ void						ProjectManagerImpl::ImportAssetFromFile	( const Path & importToProject
 //
 void						ProjectManagerImpl::ExportSceneToFile	( const Path & projectName, const Path & scenePath, const Path & outputFile ) const
 {
-	{projectName;}
-	{scenePath;}
-	{outputFile;}
+	auto pathInCategory = TranslateToPathCategory( projectName, scenePath );
+	m_sceneAccessor->ExportSceneToFile( pathInCategory, outputFile );
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath )
 {
-	{importToProjectName;}
-	{importToPath;}
-	{impSceneFilePath;}
+	auto pathInCategory = TranslateToPathCategory( importToProjectName, importToPath );
+	m_sceneAccessor->ImportSceneFromFile( pathInCategory, impSceneFilePath );
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, const Path & outputFilePath ) const
 {
+	auto projectAssets = ListAssetsPaths( projectName );
+	auto projectScenes = ListScenesNames( projectName );
 	{projectName;}
 	{outputFilePath;}
 }
 
 // ********************************
 //
-void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, const Path & importToPath )
+void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, const Path & projectName )
 {
 	{expFilePath;}
-	{importToPath;}
+	{projectName;}
 }
 
 // ********************************
@@ -382,7 +386,19 @@ void						ProjectManagerImpl::InitializeProjects	()
 
 // ********************************
 //
-Path						ProjectManagerImpl::TranslateToPathCaegory			( const Path & projectName, const Path & path ) const
+void						ProjectManagerImpl::InitializeScenes	()
+{
+	if( !Path::Exists( m_scenesPath ) )
+	{
+		Dir::CreateDir( m_scenesPath.Str() );
+	}
+
+	m_sceneAccessor = SceneAccessor::Create( m_scenesPath, nullptr, nullptr ); // FIXME: TM and PM cannot be null.
+}
+
+// ********************************
+//
+Path						ProjectManagerImpl::TranslateToPathCategory			( const Path & projectName, const Path & path ) const
 {
 	Path ret;
 
@@ -421,7 +437,7 @@ Path						ProjectManagerImpl::TranslateToPathCaegory			( const Path & projectNam
 //
 Path						ProjectManagerImpl::TranslateToPathInPMRootFolder( const Path & projectName, const std::string & categoryName, const Path & path ) const
 {
-	auto ret = TranslateToPathCaegory( projectName, path );
+	auto ret = TranslateToPathCategory( projectName, path );
 
 	if( !categoryName.empty() )
 	{

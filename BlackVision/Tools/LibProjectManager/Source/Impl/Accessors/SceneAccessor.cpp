@@ -1,11 +1,16 @@
 #include "SceneAccessor.h"
 
-//#include "Engine/Models/Timeline/TimelineManager.h"
-
 namespace bv
 {
 
 const std::string SceneAccessor::SceneFileExt = ".*/.scn";
+
+// ********************************
+//
+SceneAccessorConstPtr SceneAccessor::Create( const Path & path, const model::TimelineManager * tm, const model::PluginsManager * pm )
+{
+	return SceneAccessorConstPtr( new SceneAccessor( path, tm, pm ) );
+}
 
 // ********************************
 //

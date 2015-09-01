@@ -329,7 +329,7 @@ void		Crawler::HackNoMoreNodes( )
 	}else
 		if(m_messages_displayed.size()>0)
 		{
-			if(m_displayed_index >= m_messages_displayed.size())
+			if((SizeType)m_displayed_index >= m_messages_displayed.size())
 			{
 				m_displayed_index = 0;
 			}

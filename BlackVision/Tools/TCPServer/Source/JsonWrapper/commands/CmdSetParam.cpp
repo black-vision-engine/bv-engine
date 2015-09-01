@@ -1,3 +1,5 @@
+#pragma warning(disable :4503)
+#pragma warning(disable :4996)
 #include "CmdSetParam.h"
 
 

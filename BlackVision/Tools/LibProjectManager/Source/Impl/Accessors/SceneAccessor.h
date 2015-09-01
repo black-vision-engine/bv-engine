@@ -13,6 +13,9 @@ namespace model
 	class PluginsManager;
 } // model
 
+class SceneAccessor;
+DEFINE_CONST_PTR_TYPE( SceneAccessor )
+
 class SceneAccessor
 {
 private:
@@ -42,7 +45,8 @@ public:
 
 	PathVec				ListScenes				( const Path & path ) const;
 
-
+	static SceneAccessorConstPtr Create			( const Path & path, const model::TimelineManager * tm, const model::PluginsManager * pm );
 };
+
 
 } // bv

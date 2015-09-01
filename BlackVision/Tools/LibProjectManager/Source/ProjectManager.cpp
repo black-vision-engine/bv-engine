@@ -141,7 +141,7 @@ void						ProjectManager::RemoveUnusedAssets	( const Path & projectName )
 
 // ********************************
 //
-void						ProjectManager::AddScene			( const BVScene & sceneRootNode, const Path & projectName, const Path & outPath )
+void						ProjectManager::AddScene			( const BVSceneConstPtr & sceneRootNode, const Path & projectName, const Path & outPath )
 {
 	m_impl->AddScene( sceneRootNode, projectName, outPath );
 }
@@ -211,9 +211,9 @@ void						ProjectManager::ExportProjectToFile	( const Path & projectName, const 
 
 // ********************************
 //
-void						ProjectManager::ImportProjectFromFile( const Path & expFilePath, const Path & importToPath )
+void						ProjectManager::ImportProjectFromFile( const Path & expFilePath, const Path & projectName )
 {
-	m_impl->ImportProjectFromFile( expFilePath, importToPath );
+	m_impl->ImportProjectFromFile( expFilePath, projectName );
 }
 
 // ********************************

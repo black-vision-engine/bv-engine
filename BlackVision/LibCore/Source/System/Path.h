@@ -22,6 +22,9 @@ public:
 
 	Path				operator /		( const Path & p ) const;
 
+	bool				operator <		( const Path & b ) const; // used by std::set
+	bool				operator ==		( const Path & b ) const; // used by std::set
+
 	static bool			Copy			( const Path & from, const Path & to );
 	static bool			Remove			( const Path & path );
 	static bool			Rename			( const Path & oldPath, const Path & newPath );
