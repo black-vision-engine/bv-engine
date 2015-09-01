@@ -357,11 +357,10 @@ AssetDescConstPtr			ProjectManagerImpl::GetAssetDesc		( const Path & projectName
 
 // ********************************
 //
-SceneDesc *					ProjectManagerImpl::GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const
+SceneDescriptor				ProjectManagerImpl::GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const
 {
-	{projectName;}
-	{pathInProject;}
-	return nullptr;
+	auto pathInCategory = TranslateToPathCategory( projectName, pathInProject );
+	return m_sceneAccessor->GetSceneDesc( pathInCategory );
 }
 
 // ********************************

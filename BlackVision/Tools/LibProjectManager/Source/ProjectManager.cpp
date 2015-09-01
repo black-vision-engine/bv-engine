@@ -225,7 +225,7 @@ AssetDescConstPtr			ProjectManager::GetAssetDesc		( const Path & projectName, co
 
 // ********************************
 //
-SceneDesc *					ProjectManager::GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const
+SceneDescriptor				ProjectManager::GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const
 {
 	return m_impl->GetSceneDesc( projectName, pathInProject );
 }

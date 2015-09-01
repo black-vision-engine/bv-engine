@@ -1,3 +1,4 @@
+#pragma once
 #include "System/Path.h"
 
 #include "Engine/Models/BVScene.h"

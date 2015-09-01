@@ -2,6 +2,7 @@
 
 #include "AssetCategory.h"
 #include "Project.h"
+#include "SceneDescriptor.h"
 
 #include "Engine/Models/BVScene.h"
 
@@ -14,7 +15,6 @@ namespace bv
 
 class Project;
 class AssetCategory;
-class SceneDesc;
 class ProjectManagerImpl;
 
 namespace model 
@@ -83,7 +83,7 @@ public:
 	AssetDescConstPtr		GetAssetDesc		( const Path & projectName, const std::string & categoryName, const Path & pathInProject ) const;
 
 	//SceneDesc				GetSceneDescLoc		( loc )
-	SceneDesc *				GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
+	SceneDescriptor			GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
 
 	static ProjectManager *	GetInstance			( const Path & rootPath );
 
