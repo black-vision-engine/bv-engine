@@ -60,9 +60,23 @@ void					AssetCategory::ExportAsset	( const Path & expAssetFilePath, const Path 
 
 // ********************************
 //
+void					AssetCategory::ExportAsset	( std::ostream & out, const Path & path ) const
+{
+	m_assetAccessor->ExportAsset( out, path );
+}
+
+// ********************************
+//
 void					AssetCategory::ImportAsset	( const Path & impAssetFilePath, const Path & toPath ) const
 {
 	m_assetAccessor->ImportAsset( impAssetFilePath, toPath );
+}
+
+// ********************************
+//
+void					AssetCategory::ImportAsset	( std::istream & in, const Path & toPath ) const
+{
+	m_assetAccessor->ImportAsset( in, toPath );
 }
 
 // ********************************

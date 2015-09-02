@@ -46,6 +46,7 @@ public:
     virtual             ~File       ();
 
     static File         Open        ( const std::string & fileName, OpenMode openMode = FOMReadOnly );
+	static File         OpenTmp     ();
     static SizeType     Read        ( std::ostream & out, const std::string & fileName );
     static SizeType     Read        ( char * out, const std::string & fileName );
 	static SizeType		Write       ( const char * in, SizeType size, const std::string & fileName, bool append );

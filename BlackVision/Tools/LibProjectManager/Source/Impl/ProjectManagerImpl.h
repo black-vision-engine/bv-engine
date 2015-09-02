@@ -81,6 +81,9 @@ private:
 	Path					TranslateToPathCategory( const Path & projectName, const Path & path ) const;
 	Path					TranslateToPathInPMRootFolder( const Path & projectName, const std::string & categoryName, const Path & path ) const;
 
+	std::string				GetCategoryName		( const Path & path ) const;
+	Path					GetProjectName		( const Path & path ) const;
+
 	explicit ProjectManagerImpl( const Path & rootPath );
 			~ProjectManagerImpl();
 
@@ -100,6 +103,16 @@ private:
 	Path					m_scenesPath;
 
 	friend ProjectManager;
+
+	struct Location
+	{
+		std::string		categoryName;
+		Path			projectName;
+		Path			path;
+	};
+
+	Location				Path2Location		( const Path & path ) const;
+	Path					Location2Path		( const Location & loc ) const;
 };
 
 

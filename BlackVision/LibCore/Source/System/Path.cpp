@@ -1,14 +1,15 @@
+#pragma warning(disable : 4100)
+#pragma warning(disable : 4996)
+
 #include "Path.h"
 #include "IO/DirIO.h"
 
 #include "Tools/Logger/Logger.h"
 #define LOG_MODULE ModuleEnum::ME_LibCore
 
-#pragma warning(push)
-#pragma warning(disable : 4100)
 #include "boost/filesystem/operations.hpp"
 #include "boost/regex.hpp"
-#pragma warning(pop)
+#include <boost/algorithm/string.hpp>
 
 #include <cstdarg>
 
@@ -261,4 +262,15 @@ Path			Path::RelativePath		( const Path & path, const Path & start )
 	return Path( rel.string() );
 }
 
+// *********************************
+//
+StringVector    Path::Split				() const
+{
+    StringVector results;
+    boost::split(results, m_path, boost::is_any_of("//"));
+
+	return results;
+}
+
 } // bv
+

@@ -7,6 +7,8 @@
 #include "Tools/Logger/Logger.h"
 #define LOG_MODULE ModuleEnum::ME_LibProjectManager
 
+#include <set>
+
 namespace bv
 {
 
@@ -327,7 +329,33 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 {
 	auto projectAssets = ListAssetsPaths( projectName );
 	auto projectScenes = ListScenesNames( projectName );
-	{projectName;}
+
+	std::set< Path > uniqueAssets;
+
+	uniqueAssets.insert( projectAssets.begin(), projectAssets.end() );
+
+	for( auto ps : projectScenes )
+	{
+		auto sa = m_sceneAccessor->ListAllUsedAssets( ps );
+		uniqueAssets.insert( sa.begin(), sa.end() );
+	}
+
+	auto assetsFile = File::OpenTmp();
+
+	for( auto ua : uniqueAssets)
+	{
+		auto loc = Path2Location( ua );
+
+		if( loc.categoryName == "scenes" ) 
+			assert( false );
+
+		auto out = assetsFile.StreamBuf();
+
+		m_categories.at( loc.categoryName )->ExportAsset( *out, loc.projectName / loc.path );
+	}
+
+	// TODO: Implement
+
 	{outputFilePath;}
 }
 
@@ -447,6 +475,99 @@ Path						ProjectManagerImpl::TranslateToPathInPMRootFolder( const Path & projec
 		LOG_MESSAGE( SeverityLevel::error ) << "Category name cannot be empty.";
 		return Path();
 	}
+}
+
+// ********************************
+//
+std::string					ProjectManagerImpl::GetCategoryName( const Path & path ) const
+{
+	auto categoriesNames = ListCategoriesNames();
+
+	categoriesNames.push_back( "scenes" );
+
+	auto splitedPath =  path.Split();
+	if( !splitedPath.empty() )
+	{
+		for( auto cn : categoriesNames )
+		{
+			if( splitedPath[ 0 ] == cn )
+			{
+				return cn;
+			}
+		}
+	}
+
+	return "";
+}
+
+// ********************************
+//
+Path						ProjectManagerImpl::GetProjectName( const Path & path ) const
+{
+	//auto projectsNames = ListProjectsNames();
+
+	//auto cn = GetCategoryName( path );
+
+	//for( auto pn : projectsNames )
+	//{
+	//	auto str = path.Str();
+
+	//	auto pos = str.find( pn.Str() );
+	//	if( pos != std::string::npos )
+	//	{
+
+	//	}
+	//}
+	{path;}
+	return Path();
+}
+
+// ********************************
+//
+ProjectManagerImpl::Location ProjectManagerImpl::Path2Location( const Path & path ) const
+{
+	auto strPath = path.Str();
+
+	auto categoriesNames = ListCategoriesNames();
+
+	categoriesNames.push_back( "scenes" ); // Adding scenes to categories
+
+	std::string categoryName = "";
+
+	for( auto cn : categoriesNames )
+	{
+		auto pos = strPath.find( cn );
+		if( pos == cn.size() )
+		{
+			categoryName = cn;
+			break;
+		}
+	}
+
+	assert( !categoryName.empty() );
+
+	Path projectName = "";
+
+	for( auto pn : ListProjectsNames() )
+	{
+		auto pos = strPath.find( pn.Str() );
+		if( pos == pn.Str().size() + categoryName.size() + 1 )
+		{
+			projectName = pn;
+			break;
+		}
+	}
+
+	Location lok = { categoryName, projectName, strPath.substr( projectName.Str().size() + categoryName.size() + 2 ) };
+	
+	return lok;
+}
+
+// ********************************
+//
+Path						ProjectManagerImpl::Location2Path( const Location & loc ) const
+{
+	return Path( loc.categoryName ) / loc.projectName / loc.path;
 }
 
 } // bv
