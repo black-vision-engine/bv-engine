@@ -852,8 +852,8 @@ model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr t
 
     auto param = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
     param->SetCurveType( type );
-    model::SetParameterTranslation( param, 0, 0.f, offset );
     model::SetParameterTranslation( param, 0, 1.f, offset );
+    model::SetParameterTranslation( param, 0, 0.f, offset );
     model::SetParameterTranslation( param, 0, 10.f, offset + glm::vec3( 2, 0, 0 ) );
     model::SetParameterScale( param, 0, 0.f, glm::vec3( 0.5f, 0.5f, 1.f ) );
 

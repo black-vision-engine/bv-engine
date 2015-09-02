@@ -91,11 +91,36 @@ void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const Value
 { 
     typedef Key< TimeValueT, ValueT > Key;
 
-    if( keys.size() > 0 && keys[ keys.size()-1 ].t == t )
-        keys.pop_back();
+    //if( keys.size() > 0 && keys[ keys.size()-1 ].t == t )
+    //    keys.pop_back();
+    //assert( keys.size() == 0 || keys[ keys.size()-1 ].t < t ); // FIXME don't assume that for God's sake!
 
-    assert( keys.size() == 0 || keys[ keys.size()-1 ].t < t ); // FIXME don't assume that for God's sake!
-    keys.push_back( Key( t, v ) ); // FIXME sortme
+    if( keys.empty() )
+    {
+        keys.push_back( Key( t, v ) );
+        return;
+    }
+
+// find the proper key
+    static_assert(std::numeric_limits<float>::is_iec559, "IEEE 754 required");
+    Key left( -std::numeric_limits<float>::infinity(), 0 );
+    Key right = keys.front();
+    auto it = keys.begin();
+
+    while( t > right.t)
+    {
+        left = right;
+        it++;
+        if( it == keys.end() )
+            right = Key( std::numeric_limits< float >::infinity(), 0 );
+        else
+            right = *it; // ;)
+    }
+
+    assert( left.t <= t && t <= right.t );
+    keys.insert( it, Key( t, v ) );
+    //keys.push_back( Key( t, v ) ); // FIXME sortme
+
     if( keys.size() > 1 )
     {
         size_t last = keys.size()-1;
@@ -113,7 +138,7 @@ void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const Value
         {
             float length = keys[ last ].t - keys[ last-1 ].t;
 
-            interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], Key( length/3, 0 ), Key( -length/3, 0 ), m_tolerance ) );
+            interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], Key( scale * length, 0 ), Key( -scale * length, 0 ), m_tolerance ) );
         }
         else if( m_type == CurveType::BEZIER )
         {
