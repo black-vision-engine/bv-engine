@@ -41,6 +41,8 @@ public:
     
     ValueT Evaluate( TimeValueT t ) const override 
     {
+        assert( key1.t <= t && t <= key2.t );
+
         Key A = key1,
             B = key1 + v1,
             C = key2 + v2,
@@ -87,13 +89,24 @@ CompositeBezierInterpolator::CompositeBezierInterpolator( const CompositeBezierI
     m_type = that.m_type; 
 }
 
+typedef model::IParameter::CurveType CurveType; // FIXME
+template< class TimeValueT, class ValueT >
+IInterpolator<TimeValueT, ValueT >* CreateDummyInterpolator( CurveType type, Key< TimeValueT, ValueT > k1, Key< TimeValueT, ValueT > k2, TimeValueT tolerance ) // FIXME maybe
+{
+    if( type == CurveType::BEZIER )
+        return new BezierEvaluator< TimeValueT, ValueT >( k1, k2, Key< TimeValueT, ValueT >( 0, 0 ), Key< TimeValueT, ValueT >( 0, 0 ), tolerance );
+    else if( type == CurveType::COSINE_LIKE )
+        return new BezierEvaluator< TimeValueT, ValueT >( k1, k2, Key< TimeValueT, ValueT >( 0, 0 ), Key< TimeValueT, ValueT >( 0, 0 ), tolerance );
+    else
+    {
+        assert( false );
+        return nullptr;
+    }
+}
+
 void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const ValueT & v ) 
 { 
     typedef Key< TimeValueT, ValueT > Key;
-
-    //if( keys.size() > 0 && keys[ keys.size()-1 ].t == t )
-    //    keys.pop_back();
-    //assert( keys.size() == 0 || keys[ keys.size()-1 ].t < t ); // FIXME don't assume that for God's sake!
 
     if( keys.empty() )
     {
@@ -105,9 +118,9 @@ void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const Value
     static_assert(std::numeric_limits<float>::is_iec559, "IEEE 754 required");
     Key left( -std::numeric_limits<float>::infinity(), 0 );
     Key right = keys.front();
-    auto it = keys.begin();
+    auto it = keys.begin(); // FIXME: "i" would be better
 
-    while( t > right.t)
+    while( t > right.t) // FIXME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     {
         left = right;
         it++;
@@ -118,44 +131,61 @@ void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const Value
     }
 
     assert( left.t <= t && t <= right.t );
-    keys.insert( it, Key( t, v ) );
-    //keys.push_back( Key( t, v ) ); // FIXME sortme
+    bool isSame = fabs( t - right.t ) < m_tolerance;
 
-    if( keys.size() > 1 )
+    if( isSame )
+        it->val = v;
+    else
     {
-        size_t last = keys.size()-1;
-        const float scale = 0.3f;
+        auto key = Key( t, v );
+        auto i = it - keys.begin(); i = i-1;
+        keys.insert( it, key );
 
-        if( m_type == CurveType::POINT )
-        {
-            interpolators.push_back( new ConstEvaluator< TimeValueT, ValueT >( v ) );
-        }
-        else if( m_type == CurveType::LINEAR )
-        {
-            interpolators.push_back( new LinearEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ] ) );
-        }
-        else if( m_type == CurveType::COSINE_LIKE )
-        {
-            float length = keys[ last ].t - keys[ last-1 ].t;
-
-            interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], Key( scale * length, 0 ), Key( -scale * length, 0 ), m_tolerance ) );
-        }
-        else if( m_type == CurveType::BEZIER )
-        {
-            Key left = ( last > 1 ) ? scale * ( keys[ last ] - keys[ last-2 ] ) : scale * ( keys[ last ] - keys[ last-1 ] );
-            Key right = scale * ( keys[ last ] - keys[ last-1 ] );
-
-            interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], left, right, m_tolerance ) );
-
-            if( last > 1 )
-            {
-                auto bi = ( BezierEvaluator< TimeValueT, ValueT >* )interpolators[ last-2 ];
-                bi->SetV2( -1 * left );
-            }
-        }
+        if( i < 0 )
+            interpolators.insert( interpolators.begin(), CreateDummyInterpolator( m_type, key, right, m_tolerance ) );
+        else if( size_t(i) > keys.size()-1 )
+            interpolators.push_back( CreateDummyInterpolator( m_type, left, key, m_tolerance ) );
         else
-            assert( false );
+        {
+            interpolators.erase( interpolators.begin() + i );
+            interpolators.insert( interpolators.begin() + i, CreateDummyInterpolator( m_type, left, key, m_tolerance ) );
+            interpolators.insert( interpolators.begin() + i, CreateDummyInterpolator( m_type, key, right, m_tolerance ) );
+        }
     }
+
+// update interpolators
+    //size_t last = keys.size()-1;
+    //const float scale = 0.3f;
+
+///*    if( m_type == CurveType::POINT )
+//    {
+//        interpolators.push_back( new ConstEvaluator< TimeValueT, ValueT >( v ) );
+//    }
+//    else if( m_type == CurveType::LINEAR )
+//    {
+//        interpolators.push_back( new LinearEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ] ) );
+//    }
+//    else*/ if( m_type == CurveType::COSINE_LIKE )
+//    {
+//        //float length = keys[ last ].t - keys[ last-1 ].t;
+//
+//        //interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], Key( scale * length, 0 ), Key( -scale * length, 0 ), m_tolerance ) );
+//    }
+//    else if( m_type == CurveType::BEZIER )
+//    {
+//        //Key left = ( last > 1 ) ? scale * ( keys[ last ] - keys[ last-2 ] ) : scale * ( keys[ last ] - keys[ last-1 ] );
+//        //Key right = scale * ( keys[ last ] - keys[ last-1 ] );
+//
+//        //interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], left, right, m_tolerance ) );
+//
+//        //if( last > 1 )
+//        //{
+//        //    auto bi = ( BezierEvaluator< TimeValueT, ValueT >* )interpolators[ last-2 ];
+//        //    bi->SetV2( -1 * left );
+//        //}
+//    }
+//    else
+//        assert( false );
 }
 
 void                    CompositeBezierInterpolator::SetCurveType( CurveType type )
