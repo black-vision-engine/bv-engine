@@ -1,4 +1,3 @@
-#include <math.h>
 #include <boost/algorithm/string/replace.hpp>
 #include "BlackTree.h"
 #include "win_sock.h"
@@ -222,7 +221,7 @@ bool BlackTree::ParsePluginProperties(XMLPlugin *plugin, xml_node<> *NewNode)
                 Property *prop = FindPropertyInstance(plugin,name);
                 if(prop!=NULL)
                 {
-                    for(int i=0;i<ActiveReplicators.size();i++)
+                    for(size_t i=0;i<ActiveReplicators.size();i++)
                     {
                          
                          boost::replace_all(tm, "$COUNT" , to_string(ActiveReplicators[i]->Iteration));
@@ -252,9 +251,9 @@ bool BlackTree::ParsePluginProperties(XMLPlugin *plugin, xml_node<> *NewNode)
                    
                     if(v.find("$")!=std::string::npos || t.find("$")!=std::string::npos )
                     {
-                        for(int i=0;i<ActiveReplicators.size();i++)
+                        for(size_t i=0;i<ActiveReplicators.size();i++)
                         {
-                            for(int j=0;j<ActiveReplicators[i]->Offsets.size();j++)
+                            for(size_t j=0;j<ActiveReplicators[i]->Offsets.size();j++)
                             {
                                 boost::replace_all(v, "$"+ActiveReplicators[i]->Offsets[j].OffsetName , to_string(ActiveReplicators[i]->Offsets[j].currentValue));
                                 boost::replace_all(t, "$"+ActiveReplicators[i]->Offsets[j].OffsetName , to_string(ActiveReplicators[i]->Offsets[j].currentValue));
@@ -292,9 +291,9 @@ bool BlackTree::ParsePluginProperties(XMLPlugin *plugin, xml_node<> *NewNode)
                         
                     if(v.find("$")!=std::string::npos )
                     {
-                        for(int i=0;i<ActiveReplicators.size();i++)
+                        for(size_t i=0;i<ActiveReplicators.size();i++)
                         {
-                            for(int j=0;j<ActiveReplicators[i]->Offsets.size();j++)
+                            for(size_t j=0;j<ActiveReplicators[i]->Offsets.size();j++)
                             {
                                 boost::replace_all(v, "$"+ActiveReplicators[i]->Offsets[j].OffsetName , to_string(ActiveReplicators[i]->Offsets[j].currentValue));
                               
@@ -736,7 +735,7 @@ bool BlackTree::CreatePlugin(BlackNode &node, xml_node<> *NewNode)
     }else{
         
                string tm = timeline->value() ;
-                    for(int i=0;i<ActiveReplicators.size();i++)
+                    for(size_t i=0;i<ActiveReplicators.size();i++)
                     {
                          
                          boost::replace_all(tm, "$COUNT" , to_string(ActiveReplicators[i]->Iteration));
@@ -887,7 +886,7 @@ bool BlackTree::CreateNode(BlackNode &parrent, xml_node<> *NewNode, string node_
                                 CreateNode(node, CurrentNode,node_name+to_string(i));
                             }
                             
-                            for(int w=0;w<ActiveReplicators[j]->Offsets.size();w++)
+                            for(size_t w=0;w<ActiveReplicators[j]->Offsets.size();w++)
                             {
                                 ActiveReplicators[j]->Offsets[w].currentValue = ActiveReplicators[j]->Offsets[w].currentValue + ActiveReplicators[j]->Offsets[w].OffsetValue;
                                 

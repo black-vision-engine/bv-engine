@@ -2,6 +2,7 @@
 
 #include <sstream>
 
+#include "System/Path.h"
 #include "IO/FileIO.h"
 
 #include "Common/PrototyperCore.h"
@@ -187,7 +188,7 @@ std::string                 ShaderDataSourceCreator::ShadersRootDir     ()
 //
 std::string                 ShaderDataSourceCreator::ReadSourceFromFile ( const std::string & filename )
 {
-    if( File::Exists( filename ) )
+    if( Path::Exists( filename ) )
     {
         File f = File::Open( filename );
 

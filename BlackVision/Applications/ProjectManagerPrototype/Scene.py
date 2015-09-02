@@ -1,6 +1,7 @@
 
-import json
-
+import pickle
+import traceback
+import os
 class SceneWriter:
     def __init__(self, scene, outputFile = None):
         self.outputFile = outputFile
@@ -12,17 +13,23 @@ class SceneWriter:
     def __serializeScene(self):
         assert self.outputFile
         try:
-            s = None
-            with open(self.outputFile, 'w') as f:
-                json.dump(self.scene, f)
+
+            dirName = os.path.dirname(self.outputFile)
+            if not os.path.exists(dirName):
+                os.makedirs(dirName)
+
+            with open(self.outputFile, 'wb') as f:
+                pickle.dump(self.scene, f, protocol = 0)
             return True
         except Exception as exc:
             print("Cannot save scene '{}' to file '{}':". format(self.scene.getName(), self.outputFile))
-            print(exc)
+            print(traceback.format_exc())
             return False
 
     def dumpsScene(self):
-        return json.dumps(self.scene)
+        return pickle.dumps(self.scene)
+
+
 
 
 class SceneReader:
@@ -35,8 +42,8 @@ class SceneReader:
     def __parseSceneFileDef(self):
         try:
             s = None
-            with open(self.sceneFileDef) as f:
-                s = json.load(f)
+            with open(self.sceneFileDef, "rb") as f:
+                s = pickle.load(f)
             return s
         except Exception as exc:
             print("Cannot load scene from file '{}':". format(self.sceneFileDef))
@@ -47,6 +54,22 @@ class Plugin:
     def __init__(self, name):
         self.name = name
         self.resources = []
+
+    def addResource(self, projectName, categoryName, path):
+        self.resources.append((projectName, categoryName, path))
+
+    def remapResourcesPaths(self, oldProjectName, newProjectName):
+        for i in range(len(self.resources)):
+            if self.resources[i][0] == oldProjectName:
+                self.resources[i] = (newProjectName, self.resources[i][1], self.resources[i][2])
+
+    def check(self, rootPath):
+        for r in self.resources:
+            path = os.path.join(rootPath, r[1], r[0], r[2])
+            if not os.path.exists(path):
+                print("Checking Plugin: Cannot find resource {}".format(path))
+                return False
+        return True
 
 class Node:
     def __init__(self, name):
@@ -60,7 +83,25 @@ class Node:
 
     def addChildNode(self, node):
         assert isinstance(node, Node)
-        self.plugins.append(node)
+        self.childrenNode.append(node)
+
+    def remapResourcesPaths(self, oldProjectName, newProjectName):
+        for pl in self.plugins:
+            pl.remapResourcesPaths(oldProjectName, newProjectName)
+
+        for n in self.childrenNode:
+            n.remapResourcesPaths(oldProjectName, newProjectName)
+
+    def check(self, rootPath):
+        for pl in self.plugins:
+            if not pl.check(rootPath):
+                return False
+
+        for n in self.childrenNode:
+            if not n.check(rootPath):
+                return False
+
+        return True
 
 class Scene:
     def __init__(self, name, rootNode):
@@ -70,19 +111,25 @@ class Scene:
     def getName(self):
         return self.name
 
-    @staticmethod
-    def __listResourceInTree(cls, node, resources):
+    def __listAssetsInTree(self, node, resources):
         for pl in node.plugins:
-            resources.append(pl.resources)
+            resources += (pl.resources)
 
         for n in node.childrenNode:
-            Scene.__listResourceInTree(n, resources)
+            self.__listAssetsInTree(n, resources)
 
-    def listResources(self):
+    def listAssets(self):
         resources = []
-        Scene.__listResourceInTree(self.rootNode, resources)
+        self.__listAssetsInTree(self.rootNode, resources)
 
         return resources
+
+    def remapResourcesPaths(self, oldProjectName, newProjectName):
+        self.rootNode.remapResourcesPaths(oldProjectName, newProjectName)
+
+    def check(self, rootPath):
+        return self.rootNode.check(rootPath)
+
 
 def saveScene(scene, outputFile):
     sr = SceneWriter(scene, outputFile)

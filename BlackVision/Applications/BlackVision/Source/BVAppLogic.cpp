@@ -85,9 +85,10 @@ namespace
 
 // *********************************
 //
+model::TimelineManager * BVAppLogic::ms_timelineManager = new model::TimelineManager();
+//
 BVAppLogic::BVAppLogic              ( Renderer * renderer )
     : m_startTime( 0 )
-    , m_timelineManager( new model::TimelineManager() )
     , m_bvScene( nullptr )
     , m_pluginsManager( nullptr )
     , m_renderer( nullptr )
@@ -95,7 +96,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
     , m_globalTimeline( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) )
-	, m_solution(m_timelineManager) //pablito
+    , m_solution( GetTimelineManager() ) //pablito
 {
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
@@ -113,7 +114,7 @@ BVAppLogic::~BVAppLogic             ()
     GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
     GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
 
-    delete m_timelineManager;
+    //delete m_timelineManager;
 
     delete m_renderLogic;
 }
@@ -129,7 +130,7 @@ void BVAppLogic::Initialize         ()
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNoMoreNodes ), widgets::NoMoreNodesCrawlerEvent::Type() );
 
-	m_timelineManager->RegisterRootTimeline( m_globalTimeline );
+    GetTimelineManager()->RegisterRootTimeline( m_globalTimeline );
 
 	model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
     m_pluginsManager = &model::PluginsManager::DefaultInstance();
@@ -143,21 +144,21 @@ void BVAppLogic::Initialize         ()
 void BVAppLogic::LoadScene          ( void )
 {
 
- m_timelineManager->RegisterRootTimeline( m_globalTimeline );
+ //m_bvScene->GetTimelineManager()->RegisterRootTimeline( m_globalTimeline );
 
  model::BasicNodePtr root;
 //pabllito
 if(!ConfigManager::GetBool("Debug/LoadSceneFromEnv"))
 {
-    m_solution.SetTimeline(m_timelineManager);
+    //m_solution.SetTimeline(m_timelineManager);
     m_solution.LoadSolution(ConfigManager::GetString("solution"));
     root = m_solution.GetRoot();
-    if(ConfigManager::GetBool("hm"))
-    root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
+    //if(ConfigManager::GetBool("hm"))
+    //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
 }
 else
 {
-    root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, m_timelineManager, m_globalTimeline );
+    root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, GetTimelineManager(), m_globalTimeline );
 }
 
 	assert( root );
@@ -259,7 +260,7 @@ void BVAppLogic::RefreshVideoInputScene()
 //
 model::IModelNodePtr BVAppLogic::CreateTestModelNodeInSomeSpecificScope( const std::string & name )
 {
-    model::BasicNodePtr node = TestScenesFactory::CreateTestRandomNode( name, m_pluginsManager, m_timelineManager, m_globalTimeline );
+    model::BasicNodePtr node = TestScenesFactory::CreateTestRandomNode( name, m_pluginsManager, GetTimelineManager(), m_globalTimeline );
 
     return node;
 }
@@ -345,7 +346,7 @@ void BVAppLogic::OnKey           ( unsigned char c )
         auto sob = new SerializeObject();
 
         sob->SetName( "scene" );
-        m_timelineManager->Serialize( *sob ); // FIXME: timelines should be moved to m_bvScene
+        GetTimelineManager()->Serialize( *sob );
         m_bvScene->Serialize( *sob );
         sob->Pop();
 
@@ -512,12 +513,12 @@ void            BVAppLogic::OnNoMoreNodes   ( IEventPtr evt )
 {
 }
 
-// *********************************
-//
-model::TimelineManager *    BVAppLogic::GetTimelineManager  ()
-{
-    return m_timelineManager;
-}
+//// *********************************
+////
+//model::TimelineManager *    BVAppLogic::GetTimelineManager  ()
+//{
+//    return m_timelineManager;
+//}
 
 // *********************************
 //FIXME: unsafe - consider returning const variant of this class (IParameters * without const should be accessible anyway)
@@ -533,6 +534,12 @@ const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
     return m_pluginsManager;
 }
 
+// *********************************
+//
+model::TimelineManager* BVAppLogic::GetTimelineManager()
+{
+    return ms_timelineManager;
+}
 
 
 //// *********************************

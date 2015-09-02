@@ -11,9 +11,6 @@
 namespace bv
 {
 
-class SingleTextureAssetDesc;
-DEFINE_CONST_PTR_TYPE( SingleTextureAssetDesc )
-
 class SingleTextureAssetDesc : public AssetDesc, public std::enable_shared_from_this< SingleTextureAssetDesc >
 {
 private:
@@ -28,9 +25,14 @@ private:
 
 protected:
 
+	explicit									SingleTextureAssetDesc		( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );
+
 	virtual VoidConstPtr						QueryThis					() const override;
 
 public:
+
+    virtual void                Serialize       ( SerializeObject & sob ) const;
+    static ISerializablePtr     Create          ( DeserializeObject & dob );
 
 	virtual const std::string &					GetUID						() const override;
 
@@ -43,9 +45,9 @@ public:
 
 	virtual bool								IsCacheable					() const override;
 
-	static SingleTextureAssetDescConstPtr		Create						( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );
+	virtual std::string							GetKey						() const override;
 
-	explicit									SingleTextureAssetDesc		( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );
+	static SingleTextureAssetDescConstPtr		Create						( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );
 
 	static const std::string &					UID							();
 };

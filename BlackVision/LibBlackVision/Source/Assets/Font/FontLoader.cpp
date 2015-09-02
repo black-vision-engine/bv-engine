@@ -2,6 +2,7 @@
 #include "Text.h"
 #include "Assets/Font/FontAssetDescriptor.h"
 #include "Assets/Font/FontAsset.h"
+#include "System/Path.h"
 #include "IO/FileIO.h"
 
 
@@ -106,7 +107,7 @@ std::string         AddPostfixToFileName( const std::string & file, const std::s
 //
 TextConstPtr		FontLoader::TryLoadFont( const std::string & file, UInt32 size, UInt32 blurSize, UInt32 oulineSize, bool generateMipMaps, const std::wstring & atlasCharSetFile ) const
 {
-    if( File::Exists(file) )
+    if( Path::Exists(file) )
     {
         return LoadFontFile( file, size, blurSize, oulineSize, generateMipMaps, atlasCharSetFile );
     }

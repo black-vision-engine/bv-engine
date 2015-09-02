@@ -5,10 +5,6 @@
 
 namespace bv {
 
-class AnimationAssetDesc;
-DEFINE_PTR_TYPE(AnimationAssetDesc)
-DEFINE_CONST_PTR_TYPE(AnimationAssetDesc)
-
 class AnimationAssetDesc : public AssetDesc, public std::enable_shared_from_this< AnimationAssetDesc >
 {
 private:
@@ -21,6 +17,9 @@ protected:
 
 public:
 
+    virtual void                Serialize       ( SerializeObject & sob ) const;
+    static ISerializableConstPtr     Create          ( DeserializeObject & dob );
+
 	virtual const std::string &		GetUID		() const override;
 
 	virtual bool					IsCacheable	() const override;
@@ -28,15 +27,17 @@ public:
 	static const std::string &		UID			();
 
 public:
-
-                                                AnimationAssetDesc	( const std::vector< std::string > & frames );
+                                                
                                                 ~AnimationAssetDesc	();
 
 	const std::vector< TextureAssetDescConstPtr > &  GetFrames		() const;
 
     static AnimationAssetDescConstPtr			CreateFromDirFrames ( const std::string & path, const std::string & filter );
+    //static AnimationAssetDescConstPtr			Create ( const std::vector< TextureAssetDescConstPtr > & frames );
 
 private:
+	explicit						AnimationAssetDesc	( const std::vector< std::string > & frames );
+	explicit						AnimationAssetDesc	( const std::vector< TextureAssetDescConstPtr > & frames );
 
     std::vector< TextureAssetDescConstPtr >  m_frames;
 

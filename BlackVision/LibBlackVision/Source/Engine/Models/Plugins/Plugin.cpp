@@ -4,6 +4,8 @@
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 
+#include "Assets/AssetSerialization.h"
+
 namespace bv { namespace model {
 
 namespace PluginsSerialization
@@ -59,6 +61,49 @@ void SetParameter( IPluginParamValModelPtr pvm, AbstractModelParameterPtr param 
             }
 }
 
+std::vector< IParameterPtr >        BasePlugin< IPlugin >::GetParameters               () const
+{
+    std::vector< IParameterPtr > ret;
+
+    IPluginParamValModelPtr pvm =    GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
+    
+    IParamValModelPtr models[] = {    pvm->GetPluginModel()
+                                    , pvm->GetTransformChannelModel()
+                                    , pvm->GetVertexAttributesChannelModel()
+                                    , pvm->GetPixelShaderChannelModel()
+                                    , pvm->GetVertexShaderChannelModel()
+                                    , pvm->GetGeometryShaderChannelModel() 
+                                };
+    
+    for( auto model : models )
+        if( model ) for( auto param : model->GetParameters() )
+            ret.push_back( param );
+
+    return ret;
+}
+
+
+ITimeEvaluatorPtr GetTimeline( const BasePlugin< IPlugin >* plugin )
+{
+    auto ps = plugin->GetParameters();
+    assert( ps.size() > 0 );
+    return ps[ 0 ]->GetTimeEvaluator();
+}
+
+// *******************************
+//
+std::vector< AssetDescConstPtr >    BasePlugin< IPlugin >::GetAssets                   () const
+{
+    return m_assets;
+}
+
+// *******************************
+//
+void                                BasePlugin< IPlugin >::AddAsset                    ( AssetDescConstPtr asset )
+{
+    m_assets.push_back( asset );
+}
+
 // *******************************
 //
 void                                BasePlugin< IPlugin >::Serialize                   ( SerializeObject & doc ) const
@@ -66,6 +111,7 @@ void                                BasePlugin< IPlugin >::Serialize            
     doc.SetName( "plugin" );
     doc.SetValue( "uid", GetTypeUid() );
     doc.SetValue( "name", GetName() );
+    doc.SetValue( "timeline", GetTimeline( this )->GetName() );
 
     doc.SetName( "params" );
     {
@@ -89,6 +135,11 @@ void                                BasePlugin< IPlugin >::Serialize            
     }
     doc.Pop(); // params
 
+    doc.SetName( "assets" );
+        for( auto asset : GetAssets() )
+            asset->Serialize( doc );
+    doc.Pop(); // assets
+
     doc.Pop(); // plugin
 }
 
@@ -100,10 +151,12 @@ template <>
 ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
 {
     std::string pluginType = doc.GetValue( "uid" );
-
     std::string pluginName = doc.GetValue( "name" );
+    auto timeline = doc.GetValue( "timeline" );
+    ITimeEvaluatorPtr te = doc.m_tm->GetTimeline( timeline );
+    if( te == nullptr ) te = doc.m_tm->GetRootTimeline();
 
-    IPluginPtr plugin_ = doc.m_pm->CreatePlugin( pluginType, pluginName, doc.m_tm->GetRootTimeline() );
+    IPluginPtr plugin_ = doc.m_pm->CreatePlugin( pluginType, pluginName, te );
     std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
 
 // params
@@ -142,6 +195,13 @@ ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
         SetParameter( plugin->GetPluginParamValModel(), param );
     }
     
+    auto assets = doc.LoadArray< const AssetSerialization >( "assets" );
+    for( auto asset : assets )
+    {
+        plugin->AddAsset( asset );
+        plugin->LoadResource( asset );
+    }
+
     ISerializablePtr serializablePlugin = std::static_pointer_cast< ISerializable >( plugin );
     return serializablePlugin;
 }

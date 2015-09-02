@@ -381,14 +381,6 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 
 				char * startRasterizeHere = currAddress;
 
-				//pablito: radek fixme plz
-				if(glyph == NULL || glyph == nullptr)
-				{
-						
-					ch = L'a';
-					sps = spans[ ch ];
-					glyph = glyphs[ ch ];
-				}
 				if( outlineWidth != 0 )
 				{
 					auto & osps = outlineSpans[ ch ];

@@ -1,5 +1,6 @@
 #include "AtlasCache.h"
 
+#include "System/Path.h"
 #include "IO/FileIO.h"
 #include "IO/DirIO.h"
 #include <fstream>
@@ -71,7 +72,7 @@ FontAtlasCache::FontAtlasCache()
 //
 FontAtlasCache*     FontAtlasCache::Load            ( const std::string& filePath )
 {
-    if( File::Exists( filePath ) )
+    if( Path::Exists( filePath ) )
     {
         return new FontAtlasCache( filePath );
     }
@@ -82,7 +83,7 @@ FontAtlasCache*     FontAtlasCache::Load            ( const std::string& filePat
 
         auto dir = File::GetDirName( filePath );
 
-        if( (! File::Exists( dir ) ) && ( ! dir.empty() ) )
+        if( ( !Path::Exists( dir ) ) && ( !dir.empty() ) )
             Dir::CreateDir( dir );
 
         std::ofstream file;
@@ -208,7 +209,6 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & f
 																				ret->m_fontSize,
 																				ret->m_blurSize,
 																				ret->m_outlineWidth,
-																				MipMapFilterType::BILINEAR,
 																				ret->m_mmLevelsNum );
 
 		auto asset = TextureCache::GetInstance().Get( atlasTextureDesc ); 
@@ -281,7 +281,6 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
 																			data.m_fontSize,
 																			data.m_blurSize,
 																			data.m_outlineWidth,
-																			MipMapFilterType::BILINEAR,
 																			mmLevelsNum );
 
 	TextureCache::GetInstance().Add( atlasTextureDesc, data.m_textAtlas->m_textureAsset );

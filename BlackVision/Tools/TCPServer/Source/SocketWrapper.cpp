@@ -1,3 +1,4 @@
+#pragma warning(disable :4996)
 #include <codecvt>
 #include<locale>
 #include<boost/lexical_cast.hpp>

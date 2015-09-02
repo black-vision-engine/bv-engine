@@ -1,12 +1,69 @@
 #include "TextureAssetDescriptor.h"
 #include "LibImage.h"
 #include "Engine/Types/EnumsUtils.h"
+#include "Tools/Utils.h"
 #include <cassert>
 
 namespace bv
 {
 
 const std::string TextureAssetDesc::uid = "TEXTURE_ASSET_DESC";
+
+std::string Filter2String( MipMapFilterType filter )
+{
+    if( filter == MipMapFilterType::BILINEAR )
+        return "bilinear";
+    else
+    {
+        assert( false );
+        return std::to_string( (int) filter );
+    }
+}
+
+// ***********************
+//
+void                TextureAssetDesc::Serialize       ( SerializeObject & sob ) const
+{
+sob.SetName( "asset" );
+    sob.SetValue( "type", "tx" );
+    sob.SetValue( "path", m_originalTextureDesc->GetImagePath() );
+
+    if( m_mipMapsDescs )
+        sob.SetValue( "mipmap", Filter2String( m_mipMapsDescs->GetFilter() ) );
+    else
+        sob.SetValue( "mipmap", "none" );
+sob.Pop();
+}
+
+MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
+{
+//std::pair< MipMapFilterType, std::string > p[] =
+//    { std::make_pair( MipMapFilterType::BICUBIC, "bicubic" ),
+//    std::make_pair( MipMapFilterType::BILINEAR, "bilinear" ) };
+
+    if( string == "bilinear" )
+        return MipMapFilterType::BILINEAR;
+    //else if( string == "none" )
+    //    return MipMapFilterType::MMFT_TOTAL;
+    else
+    {
+        assert( false );
+        return (MipMapFilterType) std::stoi( string );
+    }
+}
+
+// ***********************
+//
+ISerializableConstPtr TextureAssetDesc::Create          ( DeserializeObject & dob )
+{
+    auto path = dob.GetValue( "path" );
+
+    auto filterS = dob.GetValue( "mipmap" );
+    if( filterS == "none" )
+        return Create( path, true );
+    else
+        return Create( path, String2Filter( filterS ), true );
+}
 
 // ***********************
 //
@@ -98,21 +155,21 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFile
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const SingleTextureAssetDescConstPtr & origDesc, const MipMapAssetDescConstPtr & mipmapsDesc )
 {
-	return std::make_shared< TextureAssetDesc >( origDesc, mipmapsDesc );
+	return TextureAssetDescConstPtr( new TextureAssetDesc( origDesc, mipmapsDesc ) );
 }
 
 // ***********************
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const SingleTextureAssetDescConstPtr & origDesc, MipMapFilterType mmFilter )
 {
-	return std::make_shared< TextureAssetDesc >( origDesc, mmFilter );
+	return TextureAssetDescConstPtr( new TextureAssetDesc( origDesc, mmFilter ) );
 }
 
 // ***********************
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const SingleTextureAssetDescConstPtr & origDesc )
 {
-	return std::make_shared< TextureAssetDesc >( origDesc );
+	return TextureAssetDescConstPtr( new TextureAssetDesc( origDesc ) );
 }
 
 // ***********************
@@ -155,6 +212,33 @@ TextureAssetDesc::TextureAssetDesc( const SingleTextureAssetDescConstPtr & origD
 TextureAssetLoadingType TextureAssetDesc::GetLoadingType() const
 {
 	return m_loadingType;
+}
+
+// ***********************
+//
+std::string				TextureAssetDesc::GetKey		() const
+{
+	switch( GetLoadingType() )
+	{
+		case TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE:
+			return this->GetOrigTextureDesc()->GetKey();
+		case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS:
+			return this->GetOrigTextureDesc()->GetKey() + toString( this->GetMipMapsDesc()->GetLevelsNum() ) + toString( (int)this->GetMipMapsDesc()->GetFilter() );
+		case TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS:
+		{
+			auto ret = this->GetOrigTextureDesc()->GetKey();
+
+			for( SizeType i = 0; i < this->GetMipMapsDesc()->GetLevelsNum(); ++i )
+				ret += this->GetMipMapsDesc()->GetLevelDesc( i )->GetKey();
+
+			ret += toString( this->GetMipMapsDesc()->GetLevelsNum() ) + toString( (int)this->GetMipMapsDesc()->GetFilter() );
+
+			return ret;
+		}
+		default:
+			assert( !"Imposible enum value" );
+			return "";
+	}
 }
 
 // ***********************

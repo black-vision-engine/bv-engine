@@ -174,5 +174,6 @@
   <ItemGroup>
     <None Include="..\..\..\Source\BVConfig.inl" />
     <None Include="..\..\..\Source\FrameStatsService.inl" />
+    <None Include="..\..\..\Source\bvAppLogInitializer.inl" />
   </ItemGroup>
 </Project>

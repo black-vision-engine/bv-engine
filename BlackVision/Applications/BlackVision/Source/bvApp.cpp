@@ -1,3 +1,4 @@
+#pragma warning(disable :4996)
 #include "bvApp.h"
 
 #include "System/InitSubsystem.h"
@@ -17,6 +18,8 @@
 #include "BVAppLogic.h"
 #include "BVConfig.h"
 
+// Log initializer
+#include "bvAppLogInitializer.inl"
 
 // *********************************
 // FIXME: move it to a valid BV windowed version of engine and wrap with a macro
@@ -33,6 +36,7 @@ void			bv::BlackVisionApp::StaticInitializer	()
 bool			bv::BlackVisionApp::RegisterInitializer	()
 {
     bv::InitSubsystem::AddInitializer( bv::BlackVisionApp::StaticInitializer );
+	bv::InitSubsystem::AddInitializer( bv::BlackVisionApp::LoggerInitializer );
 
     return true;
 }

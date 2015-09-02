@@ -1,19 +1,26 @@
 from SceneAccessor import SceneAccessor
-from Scene import loadScene, saveScene, Scene, SceneWriter, SceneReader
-from Project import Project
-from Location import Location
+from SceneExportDesc import SceneExportDesc
+from AssetExportDesc import AssetExportDesc
+from Scene import loadScene, Scene, Node, SceneWriter, SceneReader
 
-import os, json, tempfile, shutil
+import uuid, zipfile
+
+import os, pickle, tempfile, shutil
 
 class SceneDesc:
     def __init__(self, absPath):
         self.absPath = absPath
 
 class FSSceneAccessor(SceneAccessor):
-    def __init__(self, rootPath, project):
-        SceneAccessor.__init__(self)
-        self.rootPath = rootPath
-        self.project = project
+    def __init__(self, projectManager):
+        SceneAccessor.__init__(self, projectManager)
+        self.projectManager = projectManager
+        self.rootPath = os.path.join(projectManager.getRootDir(), "scenes")
+        self.__createDir()
+
+    def __createDir(self):
+        if not os.path.exists(self.rootPath):
+            os.makedirs(self.rootPath)
 
     def getSceneDesc(self, path):
         absPath = os.path.join(self.rootPath, path)
@@ -22,54 +29,156 @@ class FSSceneAccessor(SceneAccessor):
         else:
             return None
 
-    def importScene(self, impSceneFile, importToPath):
+    def addSceneFromFile(self, path, sceneFilePath):
+        absPath = os.path.join(self.rootPath, path)
+        dirname = os.path.dirname(absPath)
+        try:
+            if not os.path.exists(dirname):
+                os.makedirs(dirname)
 
-        pass
+            shutil.copyfile(sceneFilePath, absPath)
+            return True
+        except Exception as exc:
+            print(exc)
+            return False
 
-    def exportScene(self, expSceneFilePath, internalPath):
+    def addScene(self, scene, outPath):
+        absPath = os.path.join(self.rootPath, outPath)
+        dirname = os.path.dirname(absPath)
+        try:
+            if not os.path.exists(dirname):
+                os.makedirs(dirname)
+            sw = SceneWriter(scene, absPath)
+            sw.saveScene()
+            return True
+        except Exception as exc:
+            print(exc)
+            return False
+
+    def removeScene(self, path):
+        absPath = os.path.join(self.rootPath, path)
+        if os.path.exists(absPath) and os.path.isfile(absPath) and absPath.endswith(".scn"):
+            os.remove(absPath)
+        else:
+            print("Cannot remove scene {}".format(path))
+
+    def createScene(self, name, path):
+        absPath = os.path.join(self.rootPath, path)
+
+        if os.path.exists(absPath):
+            print("Cannot create. Scene '{}' already exists.".format(absPath))
+            return False
+
+        dirname = os.path.dirname(absPath)
+        try:
+            if not os.path.exists(dirname):
+                os.makedirs(dirname)
+            sw = SceneWriter(Scene(name, Node(name)), absPath)
+            sw.saveScene()
+            return True
+        except Exception as exc:
+            print(exc)
+            return False
+
+    def importSceneFromFile(self, expFilePath, importToPath):
+
+        absSceneFilePath = os.path.join(self.rootPath, importToPath)
+
+        with open(expFilePath, "rb") as f:
+            expDescDict = pickle.load(f)
+
+        if isinstance(expDescDict, dict):
+            if "sceneDesc" in expDescDict:  # project importing
+
+                sceneDesc = expDescDict["sceneDesc"]
+                assert isinstance(sceneDesc, SceneExportDesc)
+
+                if "assetsArchiveData" in expDescDict:
+
+                    filename = "{}".format(uuid.uuid4())
+                    with open(filename, "wb") as f:
+                        f.write(expDescDict["assetsArchiveData"])
+
+                    myZipFile = zipfile.ZipFile(filename, "r")
+                    myZipFile.extractall(path=self.projectManager.getRootDir())
+                    myZipFile.close()
+
+                    os.remove(filename)
+
+                SceneWriter(sceneDesc.scene, absSceneFilePath).saveScene()
+
+    def exportSceneToFile(self, internalPath, outputFileName):
+        expDesc = self.getExportDesc(internalPath)
+
+        filename = "{}".format(uuid.uuid4())
+
+        AssetExportDesc.packAssetsToFile(self.projectManager.getRootDir(), filename, expDesc.sceneAssetsDescs)
+
+        with open(outputFileName, "wb") as f:
+            pickle.dump({"sceneDesc": expDesc, "assetsArchiveData": open(filename, "rb").read()}, f)
+
+        os.remove(filename)
+
+    def getExportDesc(self, internalPath):
         absPath = os.path.join(self.rootPath, internalPath)
         s = loadScene(absPath)
-        self.packSceneAndResources(s, expSceneFilePath)
+
+        return SceneExportDesc(s, internalPath)
 
     def packSceneAndResources(self, scene, outputFile):
         assert self.project
         assert isinstance(scene, Scene)
-        res = scene.listResources()
+        res = scene.listAssets()
 
-        resourcesToPack = [r for r in res if self.isProjectResource(r)]
+        resultData = {"ownerProjectName": self.project.getName(), "sceneJson": scene, "resourcesData": {}}
 
-        sw = SceneWriter(scene, outputFile)
-        sStr = sw.dumpsScene()
-
-        resultData = {'sceneJson': sStr, 'resourcesData': {}}
-
-        for r in resourcesToPack:
-            loc = Location(r)
+        for r in res:
             tmp = tempfile.NamedTemporaryFile(delete=False)
             filename = tmp.name
             tmp.close()
-            self.project.exportData(filename, loc.getCategoryName(), loc.getInternalPath())
+            from ProjectManager import PM
+            PM.exportAssetToFile(r[0], r[1], r[2], filename)
 
-            resultData['resourcesData'][r] = open(filename, "r").read()
+            resultData['resourcesData'][r] = open(filename, "rb").read()
             os.remove(filename)
 
-        json.dump(resultData, outputFile)
+        with open(outputFile, "wb") as f:
+            pickle.dump(resultData, f)
 
 
     def isProjectResource(self, res):
         assert isinstance(res, str)
         assert self.project
         projectName = self.project.getName()
-        return res[1:len(projectName)] == projectName
+        return res[0] == projectName
 
+    def listScenes(self, path):
+        try:
+            res = []
+            for root, dirs, files in os.walk(os.path.join(self.rootPath, path)):
+                for file in files:
+                    if file.endswith(".scn"):
+                        absPath = os.path.join(root, file)
+                        res.append(os.path.relpath(absPath, self.rootPath))
 
-    def unpackSceneAndResources(self, scenePackedFile, toProject, scenePath):
-        assert isinstance(toProject, Project)
+            return res
+        except Exception as exc:
+            print("""Cannot list all scenes data in path '{}'""".format(self.rootPath))
+            print(exc)
+            return []
 
-        sceneAndResources = json.load(scenePackedFile)
+    def listAllExportDesc(self, path):
+        scenes = self.listScenes(path)
 
-        scene = sceneAndResources['sceneJson']
+        scenesExpDescs = []
 
-        resources = sceneAndResources['resourcesData']
+        for sf in scenes:
+            absPath = os.path.join(self.rootPath, sf)
+            s = SceneReader(absPath).loadScene()
+            relPath = os.path.relpath(absPath, self.projectManager.getRootDir())
+            scenesExpDescs.append(SceneExportDesc(s, relPath))
 
-        toProject.appendScene(scene, scenePath)
+        return scenesExpDescs
+
+    def getScene(self, path):
+        return SceneReader(os.path.join(self.rootPath, path)).loadScene()

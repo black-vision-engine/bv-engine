@@ -27,6 +27,7 @@ public:
 
     GLuint          GetBoundResourceID  ( GLenum target ) const;
     ResourceDesc &  GetBoundResource    ( GLenum target );
+	ResourceDesc&	GetResource			( GLuint resource );
 
     std::string     ShortSummary        ( const std::string & header ) const;
     std::string     CompleteSummary     ( const std::string & header ) const;

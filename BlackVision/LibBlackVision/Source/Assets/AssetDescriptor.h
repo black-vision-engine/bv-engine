@@ -1,16 +1,16 @@
 #pragma once
 
 #include "CoreDEF.h"
+#include "Assets/FwdDecls.h"
+
+#include "Engine/Interfaces/ISerializable.h"
 
 #include <string>
 
 namespace bv
 {
 
-class AssetDesc;
-DEFINE_CONST_PTR_TYPE( AssetDesc )
-
-class AssetDesc
+class AssetDesc : public ISerializable
 {
 protected:
 	virtual VoidConstPtr            QueryThis	() const = 0;
@@ -19,6 +19,8 @@ public:
 	virtual const std::string &		GetUID		() const = 0;
 
 	virtual bool					IsCacheable	() const = 0;
+
+	virtual std::string				GetKey		() const;
 
 
 	template< typename DescTypeConstPtr >

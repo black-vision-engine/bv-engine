@@ -24,13 +24,30 @@ BVGLTranslator::BVGLTranslator                                      ()
     ms_bufferUsage[ (GLenum) GL_STREAM_READ  ]	= "GL_STREAM_READ";
     ms_bufferUsage[ (GLenum) GL_STREAM_DRAW  ]	= "GL_STREAM_DRAW";
 
-    ms_bufferTarget[ (GLenum) GL_ARRAY_BUFFER ]			= "GL_ARRAY_BUFFER";
-    ms_bufferTarget[ (GLenum) GL_ELEMENT_ARRAY_BUFFER ]	= "GL_ELEMENT_ARRAY_BUFFER";
-    ms_bufferTarget[ (GLenum) GL_PIXEL_PACK_BUFFER ]	= "GL_PIXEL_PACK_BUFFER";
-    ms_bufferTarget[ (GLenum) GL_PIXEL_UNPACK_BUFFER ]	= "GL_PIXEL_UNPACK_BUFFER";
-    ms_bufferTarget[ (GLenum) GL_DRAW_INDIRECT_BUFFER ]	= "GL_DRAW_INDIRECT_BUFFER";
+    ms_bufferTarget[ (GLenum) GL_ARRAY_BUFFER ]						= "GL_ARRAY_BUFFER";
+    ms_bufferTarget[ (GLenum) GL_ELEMENT_ARRAY_BUFFER ]				= "GL_ELEMENT_ARRAY_BUFFER";
+    ms_bufferTarget[ (GLenum) GL_PIXEL_PACK_BUFFER ]				= "GL_PIXEL_PACK_BUFFER";
+    ms_bufferTarget[ (GLenum) GL_PIXEL_UNPACK_BUFFER ]				= "GL_PIXEL_UNPACK_BUFFER";
+    ms_bufferTarget[ (GLenum) GL_DRAW_INDIRECT_BUFFER ]				= "GL_DRAW_INDIRECT_BUFFER";
+	ms_bufferTarget[ (GLenum) GL_UNIFORM_BUFFER ]					= "GL_UNIFORM_BUFFER";
+	ms_bufferTarget[ (GLenum) GL_TRANSFORM_FEEDBACK_BUFFER ]		= "GL_TRANSFORM_FEEDBACK_BUFFER";
+	ms_bufferTarget[ (GLenum) GL_SHADER_STORAGE_BUFFER ]			= "GL_SHADER_STORAGE_BUFFER";
+	ms_bufferTarget[ (GLenum) GL_TEXTURE_BUFFER ]					= "GL_TEXTURE_BUFFER";
+	ms_bufferTarget[ (GLenum) GL_COPY_READ_BUFFER ]					= "GL_COPY_READ_BUFFER";
+	ms_bufferTarget[ (GLenum) GL_COPY_WRITE_BUFFER ]				= "GL_COPY_WRITE_BUFFER";
+	ms_bufferTarget[ (GLenum) GL_ATOMIC_COUNTER_BUFFER ]			= "GL_ATOMIC_COUNTER_BUFFER";
 
-    ms_textureTarget[ (GLenum) GL_TEXTURE_2D ]  = "GL_TEXTURE_2D";
+    ms_textureTarget[ (GLenum) GL_TEXTURE_2D ]						= "GL_TEXTURE_2D";
+	ms_textureTarget[ (GLenum) GL_TEXTURE_1D ]						= "GL_TEXTURE_1D";
+	ms_textureTarget[ (GLenum) GL_TEXTURE_2D ]						= "GL_TEXTURE_2D";
+	ms_textureTarget[ (GLenum) GL_TEXTURE_3D ]						= "GL_TEXTURE_3D";
+	ms_textureTarget[ (GLenum) GL_TEXTURE_1D_ARRAY ]				= "GL_TEXTURE_1D_ARRAY";
+	ms_textureTarget[ (GLenum) GL_TEXTURE_2D_ARRAY ]				= "GL_TEXTURE_2D_ARRAY";
+	ms_textureTarget[ (GLenum) GL_TEXTURE_CUBE_MAP ]				= "GL_TEXTURE_CUBE_MAP";
+	ms_textureTarget[ (GLenum) GL_TEXTURE_2D_MULTISAMPLE ]			= "GL_TEXTURE_2D_MULTISAMPLE";
+	ms_textureTarget[ (GLenum) GL_TEXTURE_2D_MULTISAMPLE_ARRAY ]	= "GL_TEXTURE_2D_MULTISAMPLE_ARRAY";
+	ms_textureTarget[ (GLenum) GL_TEXTURE_BUFFER ]					= "GL_TEXTURE_BUFFER";
+	ms_textureTarget[ (GLenum) GL_TEXTURE_CUBE_MAP_ARRAY ]			= "GL_TEXTURE_CUBE_MAP_ARRAY";
 
 	ms_textureFormat[ (GLenum) GL_ALPHA ]		= "GL_ALPHA"; 
 	ms_textureFormat[ (GLenum) GL_RGBA ]		= "GL_RGBA"; 

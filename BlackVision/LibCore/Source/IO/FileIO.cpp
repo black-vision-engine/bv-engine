@@ -31,6 +31,9 @@ public:
     bool                Write       ( std::istream & in );
     bool                Write       ( std::istream & in , SizeType numBytes );
     void                Write       ( const char * in , SizeType numBytes );
+	void                Write       ( const std::string & str );
+
+	std::fstream *		StreamBuf	();
 
     void                Close       ();
 
@@ -127,6 +130,20 @@ bool        FileImpl::Write       ( std::istream & in , SizeType numBytes)
 void        FileImpl::Write       ( const char * in , SizeType numBytes)
 {
     m_fileHandle->write( in, numBytes );
+}
+
+// *******************************
+//
+std::fstream *	FileImpl::StreamBuf()
+{
+	return m_fileHandle;
+}
+
+// *******************************
+//
+void        FileImpl::Write       ( const std::string & str )
+{
+	m_fileHandle->write( str.c_str(), str.length() );
 }
 
 // *******************************
@@ -287,6 +304,13 @@ void         File::Write       ( const char * in , SizeType numBytes )
 
 // *******************************
 //
+void		 File::Write       ( const std::string & str )
+{
+	m_impl->Write( str );
+}
+
+// *******************************
+//
 void        File::Close       ()
 {
     return m_impl->Close();
@@ -308,16 +332,16 @@ void        File::operator >> ( std::ostream & out )
 
 // *******************************
 //
-SizeType    File::Size        ( const std::string & fileName )
+std::fstream *	File::StreamBuf	()
 {
-    return FileImpl::Size( fileName );
+	return m_impl->StreamBuf();
 }
 
 // *******************************
 //
-bool        File::Exists      ( const std::string & fileName )
+SizeType    File::Size        ( const std::string & fileName )
 {
-    return FileImpl::Exists( fileName );
+    return FileImpl::Size( fileName );
 }
 
 // *******************************

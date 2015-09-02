@@ -1,3 +1,4 @@
+#pragma warning(disable :4996)
 #include "Engine/Models/Interfaces/IOverrideState.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/BasicNode.h"
@@ -882,7 +883,7 @@ namespace bv{
 	//
     bool TreeBuilder::GenerateTimelines()
     {
-        for(int i=0;i<Tree.Scene.Timelines.size();i++)
+        for(size_t i=0;i<Tree.Scene.Timelines.size();i++)
         {
             TimelineWrapMethod WrapMethod = TimelineWrapMethod::TWM_CLAMP;
 
@@ -895,7 +896,7 @@ namespace bv{
             auto timeline_offset = timelineManager->CreateOffsetTimeEvaluator( Tree.Scene.Meta.SceneName+"*"+Tree.Scene.Timelines[i]->name , TimeType( 0.0 ) );
             timeline->AddChild(timeline_offset);
 
-            for(int j=0;j<Tree.Scene.Timelines[i]->keyframes.size();j++)
+            for(size_t j=0;j<Tree.Scene.Timelines[i]->keyframes.size();j++)
             {
                 BlackKeyframe *keyframe = Tree.Scene.Timelines[i]->keyframes[j];
 

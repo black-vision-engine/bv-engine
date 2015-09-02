@@ -198,7 +198,9 @@ enum class MipMapFilterType : int
 	B_SPLINE,
 	BICUBIC,
 	CATMULL_ROM,
-	LANCZOS
+	LANCZOS,
+
+    MMFT_TOTAL
 };
 
 } // bv
