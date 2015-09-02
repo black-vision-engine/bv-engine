@@ -18,8 +18,5 @@ public:
 	}
 
 	vector<TimeProperty> alpha;
-	void DefaultPluginProperties()
-    {
-        alpha.push_back(TimeProperty("0","1"));
-    }
+	
 };

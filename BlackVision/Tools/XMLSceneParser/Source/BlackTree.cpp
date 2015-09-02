@@ -430,6 +430,15 @@ PluginCrawl* BlackTree::CreatePluginCrawl(xml_node<> *NewNode)
 
 // *********************************
 //
+PluginCounter* BlackTree::CreatePluginCounter(xml_node<> *NewNode)
+{
+	PluginCounter *plugin = new PluginCounter();
+	ParsePluginProperties(plugin,NewNode);
+	return plugin;
+}
+
+// *********************************
+//
 PluginMask* BlackTree::CreatePluginMask(xml_node<> *NewNode)
 {
 	PluginMask *plugin = new PluginMask();
@@ -677,6 +686,9 @@ bool BlackTree::CreatePlugin(BlackNode &node, xml_node<> *NewNode)
 	}else if(type=="crawl")
 	{
 		plugin = CreatePluginCrawl(NewNode);	
+	}else if(type=="counter")
+	{
+		plugin = CreatePluginCounter(NewNode);	
 	}else if(type=="sequence")
 	{
 		plugin = CreatePluginSequence(NewNode);	

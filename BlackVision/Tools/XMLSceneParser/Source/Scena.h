@@ -36,6 +36,7 @@
 #include "plugins/logic/PluginAlpha.h"
 #include "plugins/logic/PluginReplicator.h"
 #include "plugins/logic/PluginCrawl.h"
+#include "plugins/logic/PluginCounter.h"
 #include "plugins/logic/PluginMask.h"
 #include "plugins/logic/PluginInstance.h"
 //texture

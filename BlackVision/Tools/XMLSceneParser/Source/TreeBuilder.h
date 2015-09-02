@@ -53,6 +53,7 @@ namespace bv
 		bool                            AttachPrismPlugin                (model::BasicNodePtr node,XMLPlugin* plugin);
         bool                            AttachTimerPlugin               (model::BasicNodePtr node,XMLPlugin* plugin);
 		bool                            AttachCrawlPlugin               (model::BasicNodePtr node,XMLPlugin* plugin);
+		bool                            AttachCounterPlugin             (model::BasicNodePtr node,XMLPlugin* plugin);
 		bool                            AttachPixelShader               (model::BasicNodePtr node, ParamVec4 color);
 		bool                            AttachSequencePlugin            (model::BasicNodePtr node,XMLPlugin* plugin);
         bool                            AttachCubePlugin                (model::BasicNodePtr node,XMLPlugin* plugin);
