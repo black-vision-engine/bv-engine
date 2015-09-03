@@ -44,6 +44,12 @@ private:
 
 };
 
+std::ostream & operator << ( std::ostream & os, const Path & p )
+{
+    return os << p.Str();
+}
+
+
 typedef Path::PathVec PathVec;
 
 } // bv

@@ -312,7 +312,7 @@ void						ProjectManagerImpl::ImportAssetFromFile	( const Path & importToProject
 void						ProjectManagerImpl::ExportSceneToFile	( const Path & projectName, const Path & scenePath, const Path & outputFile ) const
 {
 	auto pathInCategory = TranslateToPathCategory( projectName, scenePath );
-	m_sceneAccessor->ExportSceneToFile( pathInCategory, outputFile );
+	m_sceneAccessor->ExportSceneToFile( pathInCategory, outputFile, true );
 }
 
 // ********************************
@@ -327,36 +327,52 @@ void						ProjectManagerImpl::ImportSceneFromFile	( const Path & importToProject
 //
 void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, const Path & outputFilePath ) const
 {
-	auto projectAssets = ListAssetsPaths( projectName );
-	auto projectScenes = ListScenesNames( projectName );
+	auto project = GetProject( projectName );
 
-	std::set< Path > uniqueAssets;
-
-	uniqueAssets.insert( projectAssets.begin(), projectAssets.end() );
-
-	for( auto ps : projectScenes )
+	if( project )
 	{
-		auto sa = m_sceneAccessor->ListAllUsedAssets( ps );
-		uniqueAssets.insert( sa.begin(), sa.end() );
-	}
+		auto projectAssets = ListAssetsPaths( projectName );
+		auto projectScenes = ListScenesNames( projectName );
 
-	auto assetsFile = File::OpenTmp();
+		std::set< Path > uniqueAssets;
 
-	for( auto ua : uniqueAssets)
-	{
-		auto loc = Path2Location( ua );
+		uniqueAssets.insert( projectAssets.begin(), projectAssets.end() );
 
-		if( loc.categoryName == "scenes" ) 
-			assert( false );
+		for( auto ps : projectScenes )
+		{
+			auto sa = m_sceneAccessor->ListAllUsedAssets( ps );
+			uniqueAssets.insert( sa.begin(), sa.end() );
+		}
+
+		std::string tmpFileName;
+
+		auto assetsFile = File::OpenTmp( &tmpFileName );
 
 		auto out = assetsFile.StreamBuf();
 
-		m_categories.at( loc.categoryName )->ExportAsset( *out, loc.projectName / loc.path );
+		for( auto ua : uniqueAssets)
+		{
+			auto loc = Path2Location( ua );
+
+			if( loc.categoryName == "scenes" ) 
+				assert( false );
+
+			m_categories.at( loc.categoryName )->ExportAsset( *out, loc.projectName / loc.path );
+		}
+
+		for( auto s : projectScenes )
+		{
+			m_sceneAccessor->ExportScene( *out, s, false );
+		}
+
+		// TODO: Implement
+
+		{outputFilePath;}
 	}
-
-	// TODO: Implement
-
-	{outputFilePath;}
+	else
+	{
+		LOG_MESSAGE( SeverityLevel::error ) << "Cannot export project '" << projectName << "'. It doesn't exist.";
+	}
 }
 
 // ********************************

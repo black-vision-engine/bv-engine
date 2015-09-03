@@ -41,6 +41,7 @@ public:
 
     static bool         Exists      ( const std::string & fileName );
     static FileImpl *   Open        ( const std::string & fileName, File::OpenMode openMode );
+	static FileImpl *	OpenTmp     ( std::string * name );
     static SizeType     Read        ( std::ostream & out, const std::string & fileName );
     static SizeType     Read        ( char* out, const std::string & fileName );
     static SizeType     Write       ( std::istream & in, const std::string & fileName );
@@ -198,6 +199,20 @@ FileImpl *  FileImpl::Open        ( const std::string & fileName, File::OpenMode
 
 // *******************************
 //
+FileImpl *	FileImpl::OpenTmp     ( std::string * name )
+{
+	auto p = boost::filesystem::unique_path();
+
+	if( name )
+	{
+		*name = p.string();
+	}
+
+	return Open( p.string(), File::OpenMode::FOMReadWrite );
+}
+
+// *******************************
+//
 SizeType    FileImpl::Read        ( std::ostream & out, const std::string & fileName )
 {
     auto f = Open( fileName, File::FOMReadOnly );
@@ -349,6 +364,13 @@ SizeType    File::Size        ( const std::string & fileName )
 File        File::Open        ( const std::string & fileName, OpenMode openMode )
 {
     return File( FileImpl::Open( fileName, openMode ) );
+}
+
+// *******************************
+//
+File         File::OpenTmp     ( std::string * name )
+{
+	return File( FileImpl::OpenTmp( name ) );
 }
 
 // *******************************

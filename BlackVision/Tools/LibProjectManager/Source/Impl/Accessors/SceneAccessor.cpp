@@ -87,18 +87,25 @@ void			SceneAccessor::ImportScene( std::istream & in, const Path & importToPath 
 
 // ********************************
 //
-void			SceneAccessor::ExportScene( std::ostream & out, const Path & path ) const
+void			SceneAccessor::ExportScene( std::ostream & out, const Path & path, bool withAssets ) const
 {
-	SceneDescriptor sceneDesc( m_rootDir / path );
+	if( !withAssets )
+	{
+		SceneDescriptor sceneDesc( m_rootDir / path );
 
-	auto scene = sceneDesc.LoadScene();
+		auto scene = sceneDesc.LoadScene();
 
-	auto sob = new SerializeObject();
+		auto sob = new SerializeObject();
 
-	sob->SetName( "scene" );
-	scene->Serialize( *sob );
-	sob->Pop();
-	sob->Save( out );
+		sob->SetName( "scene" );
+		scene->Serialize( *sob );
+		sob->Pop();
+		sob->Save( out );
+	}
+	else
+	{
+		assert( !"Not implemented." );
+	}
 }
 
 // ********************************
@@ -113,11 +120,11 @@ void			SceneAccessor::ImportSceneFromFile( const Path & expFilePath, const Path 
 
 // ********************************
 //
-void			SceneAccessor::ExportSceneToFile( const Path & outputFileName, const Path & path ) const
+void			SceneAccessor::ExportSceneToFile( const Path & outputFileName, const Path & path, bool withAssets ) const
 {
 	auto f = File::Open( outputFileName.Str(), File::OpenMode::FOMReadOnly );
 	auto out = f.StreamBuf();
-	ExportScene( *out, path );
+	ExportScene( *out, path, withAssets );
 	f.Close();
 }
 
