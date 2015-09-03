@@ -1,5 +1,5 @@
 #include "FileIO.h"
-
+#include "DirIO.h"
 #include <sys/stat.h>
 
 #include "boost/filesystem/path.hpp"
@@ -182,6 +182,13 @@ bool        FileImpl::Exists      ( const std::string & fileName )
 FileImpl *  FileImpl::Open        ( const std::string & fileName, File::OpenMode openMode )
 {
     FileImpl * impl = new FileImpl( fileName );
+
+    auto parent = boost::filesystem::path( fileName ).parent_path();
+
+    if( !boost::filesystem::exists( parent ) )
+    {
+        Dir::CreateDir( parent.string(), true );
+    }
 
     if( openMode == File::FOMReadOnly )
         impl->m_fileHandle = new std::fstream( fileName, std::ios::in | std::ios::binary );

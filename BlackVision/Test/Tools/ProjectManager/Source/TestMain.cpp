@@ -110,7 +110,12 @@ TEST( AddingAssets, ProjectManager )
 
 TEST( ExportingProject, ProjectManager )
 {
-    g_pm0->ExportProjectToFile( "proj00", "" );
+    g_pm0->ExportProjectToFile( "proj00", "test.exp" );
+}
+
+TEST( ImportingProject, ProjectManager )
+{
+    g_pm1->ImportProjectFromFile( "test.exp", "proj00" );
 }
 
 int main( int argc, char **argv )

@@ -115,9 +115,9 @@ void			 	TextureAssetAccessor::ExportAsset	( std::ostream & out, const Path & in
 		auto assetFile = File::Open( absPath.Str(), File::OpenMode::FOMReadOnly );
 
 		out << internalPath.Str();
-        out << '|';
+        out << '\n';
 		out << std::to_string( File::Size( absPath.Str() ) );
-        out << '|';
+        out << '\n';
 
         assetFile.Read( out );
 
@@ -148,13 +148,20 @@ void				TextureAssetAccessor::ImportAsset	( std::istream & in, const Path &  imp
 
 	auto assetFile = File::Open( absPath.Str(), File::OpenMode::FOMReadWrite );
 
-	std::string filename;
-	bv::SizeType fileSize;
-	
-	in >> filename;
-	in >> fileSize;
+	std::stringbuf buf;
 
-	*assetFile.StreamBuf() << in;
+    in.get( buf, '\n' );
+    in.ignore();
+
+    Path path = buf.str();
+
+    buf.str("");
+    in.get( buf, '\n' );
+    in.ignore();
+
+    SizeType size = stoul( buf.str() );
+
+	assetFile.Write( in, size );
 
 	assetFile.Close();
 }

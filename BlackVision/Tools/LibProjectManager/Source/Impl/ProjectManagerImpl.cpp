@@ -8,6 +8,7 @@
 #define LOG_MODULE ModuleEnum::ME_LibProjectManager
 
 #include <set>
+#include <sstream>
 
 namespace bv
 {
@@ -356,19 +357,17 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 		//	uniqueAssets.insert( sa.begin(), sa.end() );
 		//}
 
-		std::string tmpFileName;
-
-		auto assetsFile = File::OpenTmp( &tmpFileName );
+        auto assetsFile = File::Open( outputFilePath.Str(), File::OpenMode::FOMReadWrite );
 
 		auto out = assetsFile.StreamBuf();
 
         *out << "assets";
 
-        *out << '|';
+        *out << '\n';
 
         *out << std::to_string( uniqueAssets.size() );
 
-        *out << '|';
+        *out << '\n';
 
 		for( auto ua : uniqueAssets)
 		{
@@ -376,6 +375,14 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 
 			if( loc.categoryName == "scenes" ) 
 				assert( false );
+
+            *out << loc.categoryName;
+
+            *out << '\n';
+
+            *out << loc.path;
+
+            *out << '\n';
 
 			m_categories.at( loc.categoryName )->ExportAsset( *out, loc.projectName / loc.path );
 		}
@@ -386,8 +393,6 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 		//}
 
         assetsFile.Close();
-
-		{outputFilePath;}
 	}
 	else
 	{
@@ -399,6 +404,45 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 //
 void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, const Path & projectName )
 {
+    auto f = File::Open( expFilePath.Str() );
+
+    std::stringbuf buf;
+
+    f.StreamBuf()->get( buf, '\n');
+    f.StreamBuf()->ignore();
+
+    if( buf.str() == "assets" )
+    {
+        std::stringbuf buf;
+        f.StreamBuf()->get( buf, '\n');
+        f.StreamBuf()->ignore();
+
+        auto size = stoul( buf.str() );
+
+        for( SizeType i = 0; i < size; ++i )
+        {
+            std::stringbuf buf;
+            f.StreamBuf()->get( buf, '\n');
+            f.StreamBuf()->ignore();
+
+            auto categoryName = buf.str();
+            buf.str("");
+
+            f.StreamBuf()->get( buf, '\n');
+            f.StreamBuf()->ignore();
+            auto path = Path( buf.str() );
+
+            m_categories.at( categoryName )->ImportAsset( *( f.StreamBuf() ), projectName / path );
+        }
+
+        f.Close();
+    }
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Cannot import project '" << projectName << "'. Wrong format.";
+    }
+
+
 	{expFilePath;}
 	{projectName;}
 }
