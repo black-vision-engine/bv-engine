@@ -184,6 +184,7 @@
     <ClInclude Include="..\..\..\Source\plugins\geometry\PluginTimer.h" />
     <ClInclude Include="..\..\..\Source\plugins\geometry\PluginTriangle.h" />
     <ClInclude Include="..\..\..\Source\plugins\logic\PluginAlpha.h" />
+    <ClInclude Include="..\..\..\Source\plugins\logic\PluginCounter.h" />
     <ClInclude Include="..\..\..\Source\plugins\logic\PluginCrawl.h" />
     <ClInclude Include="..\..\..\Source\plugins\logic\PluginInstance.h" />
     <ClInclude Include="..\..\..\Source\plugins\logic\PluginMask.h" />

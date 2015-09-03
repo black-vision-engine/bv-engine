@@ -18,6 +18,7 @@
 #include "Assets/Font/TextHelper.h"
 //FIXME: as you can see - THIS IS A HACK
 #include "../../../../Applications/BlackVision/Source/Widgets/Crawler/Crawler.h"
+#include "../../../../Applications/BlackVision/Source/Widgets/Counter/Counter.h"
 //#include "Helpers/RectNodeBuilder.h"
 
 
@@ -559,6 +560,10 @@ namespace bv{
 		{
 			//cout<<"loading text plugin"<<endl;
 			AttachCrawlPlugin(node,plugin);
+		}else if(pluginName=="counter")
+		{
+			//cout<<"loading text plugin"<<endl;
+			AttachCounterPlugin(node,plugin);
 		}else if(pluginName=="text")
 		{
 			//cout<<"loading text plugin"<<endl;
@@ -713,6 +718,45 @@ namespace bv{
 
 	    if(autostart)
 		    crawler->Start();
+
+        return true;
+	}
+
+	//**********************************
+	bool TreeBuilder::AttachCounterPlugin(model::BasicNodePtr node,XMLPlugin* plugin)
+	{		 
+		PluginCounter * counter_meta	= (PluginCounter*)plugin;
+
+		{counter_meta;}
+      
+		auto counter = widgets::WidgetCounter::Create( node.get(),GetTimeline(plugin->timeline));
+		node->SetLogic(counter);
+
+		 auto counter_param = counter->GetValueParam();
+
+		for(unsigned int i=0;i<plugin->properties.size();i++)
+		{
+            vector<TimeProperty> *timevals  = plugin->properties[i].timeproperty;				
+			string propertyName             = plugin->properties[i].name;
+            if(propertyName		==	"values")
+			{
+                for(unsigned int h=0;h<timevals->size();h++)
+				{
+					
+					auto tF		        =	atof(timevals->operator[](h).time.c_str());
+					string temp	        =	timevals->operator[](h).value;
+                    float counter_value   =   (float)atof(temp.c_str());
+                    
+					SetParameter( counter_param, (bv::TimeType)tF, counter_value );
+                }
+            }
+             
+        }
+
+
+		 //
+
+        //alpha->SetTimeEvaluator(GetTimeline(plugin->timeline));
 
         return true;
 	}

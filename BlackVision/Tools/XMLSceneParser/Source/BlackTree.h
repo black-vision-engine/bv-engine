@@ -52,6 +52,7 @@ public:
     PluginInstance*         CreatePluginInstance            (BlackNode* node, xml_node<> *NewNode);
 	PluginSequence*         CreatePluginSequence            (xml_node<> *NewNode);
 	PluginCrawl*			CreatePluginCrawl	            (xml_node<> *NewNode);
+	PluginCounter*			CreatePluginCounter	            (xml_node<> *NewNode);
     PluginMask*             CreatePluginMask                (xml_node<> *NewNode);
 	PluginText*             CreatePluginText                (xml_node<> *NewNode);
     PluginTimer*            CreatePluginTimer               (xml_node<> *NewNode);

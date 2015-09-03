@@ -28,6 +28,9 @@
     <Filter Include="hack_videoinput">
       <UniqueIdentifier>{7f69fce6-91f9-48b4-b144-634e189e9d1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Widgets\Counter">
+      <UniqueIdentifier>{a43fa586-3aea-4556-b75d-89f716af2be6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -91,6 +94,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp">
       <Filter>hack_videoinput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\Counter\Counter.cpp">
+      <Filter>Widgets\Counter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +166,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\hack_videoinput\TestVideoInput.h">
       <Filter>hack_videoinput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\Counter\Counter.h">
+      <Filter>Widgets\Counter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

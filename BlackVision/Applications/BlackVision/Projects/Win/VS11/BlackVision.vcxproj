@@ -285,6 +285,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\TestAI\TestAIManager.cpp" />
     <ClCompile Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.cpp" />
     <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\Counter\Counter.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Crawler\Crawler.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerEvents.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.cpp" />
@@ -320,6 +321,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\IVideoInput.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\Counter\Counter.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Crawler\Crawler.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerEvents.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.h" />
