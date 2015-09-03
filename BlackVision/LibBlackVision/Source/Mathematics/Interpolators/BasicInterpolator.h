@@ -7,13 +7,6 @@
 namespace bv
 {
 
-template< class TimeValueT, class ValueT >
-class IInterpolator
-{
-public:
-    virtual ValueT Evaluate( TimeValueT t ) const = 0;
-};
-
 enum class WrapMethod : int
 {
     clamp = 0,

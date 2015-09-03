@@ -5,6 +5,14 @@
 namespace bv
 {
 
+template< class TimeValueT, class ValueT >
+class IEvaluator
+{
+public:
+    virtual ValueT Evaluate( TimeValueT t ) const = 0;
+    virtual void SetValue( TimeValueT t, ValueT v ) = 0;
+};
+
 class CompositeBezierInterpolator
 {
     typedef model::IParameter::CurveType CurveType;
@@ -14,7 +22,7 @@ private:
     typedef float ValueT;
 
     std::vector< Key<TimeValueT, ValueT> >              keys;
-    std::vector< IInterpolator<TimeValueT, ValueT >* >  interpolators; // FIXME: ptr-ize
+    std::vector< IEvaluator<TimeValueT, ValueT >* >  interpolators; // FIXME: ptr-ize
     TimeValueT                                          m_tolerance;
 
     model::IParameter::CurveType                        m_type;
@@ -37,8 +45,6 @@ public:
 
 // FIXME: below is to remove
     const std::vector<Key<TimeValueT, ValueT>> & AccessKeys() const { static std::vector<Key<TimeValueT, ValueT>> ret; return ret; };
-    //void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method ) { SetCurveType( (CurveType)method ); } // FIXME: co pan ja nie jestem rolnikiem!!!!!!!!!!!!!!!!!!!!!!!!!
-    //model::IParameter::InterpolationMethod     GetInterpolationMethod () const { return model::IParameter::InterpolationMethod::LINEAR; } // WTF
     void SetWrapPostMethod  ( WrapMethod ) {}
     void SetWrapPreMethod   ( WrapMethod ) {}
 

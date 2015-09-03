@@ -3,22 +3,34 @@
 namespace bv {
 
 template< class TimeValueT, class ValueT >
-class ConstEvaluator : public IInterpolator< TimeValueT, ValueT >
+class ConstEvaluator : public IEvaluator< TimeValueT, ValueT >
 {
     ValueT value;
 public:
     ConstEvaluator( ValueT v ) : value( v ) {}
+
+    virtual void SetValue( TimeValueT t, ValueT v ) override
+    {
+        assert( !"implement me" );
+    }
+
     ValueT Evaluate( TimeValueT ) const override { return value; }
 };
 
 template< class TimeValueT, class ValueT >
-class LinearEvaluator : public IInterpolator< TimeValueT, ValueT >
+class LinearEvaluator : public IEvaluator< TimeValueT, ValueT >
 {
     typedef Key< TimeValueT, ValueT > Key;
 
     Key key1, key2;
 public:
     LinearEvaluator( Key k1, Key k2 ) : key1( k1 ), key2( k2 ) {}
+
+    virtual void SetValue( TimeValueT t, ValueT v ) override
+    {
+        assert( !"implement me" );
+    }
+
     ValueT Evaluate( TimeValueT t ) const override 
     { 
         float alpha = ( t - key1.t ) / ( key2.t - key1.t );
@@ -27,7 +39,7 @@ public:
 };
 
 template< class TimeValueT, class ValueT >
-class BezierEvaluator : public IInterpolator< TimeValueT, ValueT >
+class BezierEvaluator : public IEvaluator< TimeValueT, ValueT >
 {
     typedef Key< TimeValueT, ValueT > Key;
 
@@ -39,6 +51,16 @@ public:
     
     void SetV2( Key v2 ) { this->v2 = v2; }
     
+    virtual void SetValue( TimeValueT t, ValueT v ) override
+    {
+        if( key1.t == t )
+            key1.val = v;
+        else if( key2.t == t )
+            key2.val = v;
+        else
+            assert( false );
+    }
+
     ValueT Evaluate( TimeValueT t ) const override 
     {
         assert( key1.t <= t && t <= key2.t );
@@ -91,7 +113,7 @@ CompositeBezierInterpolator::CompositeBezierInterpolator( const CompositeBezierI
 
 typedef model::IParameter::CurveType CurveType; // FIXME
 template< class TimeValueT, class ValueT >
-IInterpolator<TimeValueT, ValueT >* CreateDummyInterpolator( CurveType type, Key< TimeValueT, ValueT > k1, Key< TimeValueT, ValueT > k2, TimeValueT tolerance ) // FIXME maybe
+IEvaluator<TimeValueT, ValueT >* CreateDummyInterpolator( CurveType type, Key< TimeValueT, ValueT > k1, Key< TimeValueT, ValueT > k2, TimeValueT tolerance ) // FIXME maybe
 {
     if( type == CurveType::BEZIER )
         return new BezierEvaluator< TimeValueT, ValueT >( k1, k2, Key< TimeValueT, ValueT >( 0, 0 ), Key< TimeValueT, ValueT >( 0, 0 ), tolerance );
@@ -116,39 +138,47 @@ void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const Value
 
 // find the proper key
     static_assert(std::numeric_limits<float>::is_iec559, "IEEE 754 required");
-    Key left( -std::numeric_limits<float>::infinity(), 0 );
+    Key left( -std::numeric_limits< float >::infinity(), 444.f );
     Key right = keys.front();
-    auto it = keys.begin(); // FIXME: "i" would be better
+    size_t i = 0, last = keys.size()-1;
 
-    while( t > right.t) // FIXME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    while( t > right.t+m_tolerance )
     {
         left = right;
-        it++;
-        if( it == keys.end() )
-            right = Key( std::numeric_limits< float >::infinity(), 0 );
+        if( i++ == last )
+        {
+            right = Key( std::numeric_limits< float >::infinity(), 444.f );
+            break;
+        }
         else
-            right = *it; // ;)
+            right = keys[ i ];
     }
 
     assert( left.t <= t && t <= right.t );
     bool isSame = fabs( t - right.t ) < m_tolerance;
 
     if( isSame )
-        it->val = v;
+    {
+        keys[ i ].val = v;
+
+        if( i != 0 )
+            interpolators[ i-1 ]->SetValue( t, v );
+        if( i != last )
+            interpolators[ i ]->SetValue( t, v );
+    }
     else
     {
         auto key = Key( t, v );
-        auto i = it - keys.begin(); i = i-1;
-        keys.insert( it, key );
+        keys.insert( keys.begin() + i, key );
 
-        if( i < 0 )
+        if( i == 0 )
             interpolators.insert( interpolators.begin(), CreateDummyInterpolator( m_type, key, right, m_tolerance ) );
-        else if( size_t(i) > keys.size()-1 )
+        else if( i == last+1 )
             interpolators.push_back( CreateDummyInterpolator( m_type, left, key, m_tolerance ) );
         else
         {
-            interpolators.erase( interpolators.begin() + i );
-            interpolators.insert( interpolators.begin() + i, CreateDummyInterpolator( m_type, left, key, m_tolerance ) );
+            interpolators.erase( interpolators.begin() + (i-1) );
+            interpolators.insert( interpolators.begin() + (i-1), CreateDummyInterpolator( m_type, left, key, m_tolerance ) );
             interpolators.insert( interpolators.begin() + i, CreateDummyInterpolator( m_type, key, right, m_tolerance ) );
         }
     }
