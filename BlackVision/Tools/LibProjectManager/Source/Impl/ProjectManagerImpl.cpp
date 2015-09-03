@@ -83,7 +83,13 @@ PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  cons
 		if( cit != m_categories.end() )
 		{
 			auto pathInCategory = TranslateToPathCategory( projectName, "" );
-			return cit->second->ListAssets( pathInCategory );
+			auto cv = cit->second->ListAssets( pathInCategory );
+            for( auto & p : cv )
+            {
+                p = Path( categoryName ) / p;
+            }
+
+            return cv;
 		}
 		else
 		{
@@ -98,6 +104,12 @@ PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  cons
 		{
 			auto pathInCategory = TranslateToPathCategory( projectName, "" );
 			auto cv = c.second->ListAssets( pathInCategory );
+
+            for( auto & p : cv )
+            {
+                p = Path( c.second->GetId() ) / p;
+            }
+
 			ret.insert( ret.end(), cv.begin(), cv.end() );
 		}
 		return ret;
@@ -332,23 +344,31 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 	if( project )
 	{
 		auto projectAssets = ListAssetsPaths( projectName );
-		auto projectScenes = ListScenesNames( projectName );
+		//auto projectScenes = ListScenesNames( projectName );
 
 		std::set< Path > uniqueAssets;
 
 		uniqueAssets.insert( projectAssets.begin(), projectAssets.end() );
 
-		for( auto ps : projectScenes )
-		{
-			auto sa = m_sceneAccessor->ListAllUsedAssets( ps );
-			uniqueAssets.insert( sa.begin(), sa.end() );
-		}
+		//for( auto ps : projectScenes )
+		//{
+		//	auto sa = m_sceneAccessor->ListAllUsedAssets( ps );
+		//	uniqueAssets.insert( sa.begin(), sa.end() );
+		//}
 
 		std::string tmpFileName;
 
 		auto assetsFile = File::OpenTmp( &tmpFileName );
 
 		auto out = assetsFile.StreamBuf();
+
+        *out << "assets";
+
+        *out << '|';
+
+        *out << std::to_string( uniqueAssets.size() );
+
+        *out << '|';
 
 		for( auto ua : uniqueAssets)
 		{
@@ -360,12 +380,12 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 			m_categories.at( loc.categoryName )->ExportAsset( *out, loc.projectName / loc.path );
 		}
 
-		for( auto s : projectScenes )
-		{
-			m_sceneAccessor->ExportScene( *out, s, false );
-		}
+		//for( auto s : projectScenes )
+		//{
+		//	m_sceneAccessor->ExportScene( *out, s, false );
+		//}
 
-		// TODO: Implement
+        assetsFile.Close();
 
 		{outputFilePath;}
 	}
@@ -553,7 +573,7 @@ ProjectManagerImpl::Location ProjectManagerImpl::Path2Location( const Path & pat
 	for( auto cn : categoriesNames )
 	{
 		auto pos = strPath.find( cn );
-		if( pos == cn.size() )
+		if( pos == 0 )
 		{
 			categoryName = cn;
 			break;
@@ -567,7 +587,7 @@ ProjectManagerImpl::Location ProjectManagerImpl::Path2Location( const Path & pat
 	for( auto pn : ListProjectsNames() )
 	{
 		auto pos = strPath.find( pn.Str() );
-		if( pos == pn.Str().size() + categoryName.size() + 1 )
+		if( pos == categoryName.size() + 1 )
 		{
 			projectName = pn;
 			break;

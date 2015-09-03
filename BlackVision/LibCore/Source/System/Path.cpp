@@ -272,5 +272,12 @@ StringVector    Path::Split				() const
 	return results;
 }
 
+// *********************************
+//
+std::ostream & operator << ( std::ostream & os, const Path & p )
+{
+    return os << p.Str();
+}
+
 } // bv
 

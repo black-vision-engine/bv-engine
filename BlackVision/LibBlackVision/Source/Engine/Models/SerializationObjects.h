@@ -24,6 +24,7 @@ public:
 
     void                                        SetName( const std::string & name );
     void                                        SetValue( const std::string & name, const std::string & value );
+	void                                        SetContent( const std::string & value );
     void                                        Pop();
 };
 

@@ -108,6 +108,11 @@ TEST( AddingAssets, ProjectManager )
 	ASSERT_TRUE( assets.size() == 3 );
 }
 
+TEST( ExportingProject, ProjectManager )
+{
+    g_pm0->ExportProjectToFile( "proj00", "" );
+}
+
 int main( int argc, char **argv )
 {
 	::testing::InitGoogleTest( &argc, argv );

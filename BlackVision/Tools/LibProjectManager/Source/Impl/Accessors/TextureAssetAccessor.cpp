@@ -115,11 +115,11 @@ void			 	TextureAssetAccessor::ExportAsset	( std::ostream & out, const Path & in
 		auto assetFile = File::Open( absPath.Str(), File::OpenMode::FOMReadOnly );
 
 		out << internalPath.Str();
-		out << File::Size( absPath.Str() );
+        out << '|';
+		out << std::to_string( File::Size( absPath.Str() ) );
+        out << '|';
 
-		auto in = assetFile.StreamBuf();
-
-		out << *in;
+        assetFile.Read( out );
 
 		assetFile.Close();
 	}
@@ -190,6 +190,12 @@ PathVec	TextureAssetAccessor::ListAll		( const Path & path ) const
 	for( auto ext : m_fileExts )
 	{
 		auto l = Path::List( m_rootPath / path, ext );
+
+        for( auto & p : l )
+        {
+            p = Path::RelativePath( p, m_rootPath );
+        }
+
 		ret.insert( ret.end(), l.begin(), l.end() );
 	}
 	
