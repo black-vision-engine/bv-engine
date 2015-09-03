@@ -232,24 +232,31 @@ bool			Path::Exists			( const Path & path )
 //
 PathVec			Path::List				( const Path & path, const std::string exp )
 {
-	boost::filesystem::path cp( path.Str() ); 
-	boost::regex pattern( exp );
+    if( Path::Exists( path ) )
+    {
+	    boost::filesystem::path cp( path.Str() ); 
+	    boost::regex pattern( exp );
 
-	PathVec ret;
+	    PathVec ret;
 
-	for (	boost::filesystem::recursive_directory_iterator iter( cp ), end;
-			iter != end;
-			++iter)
-	{
-		std::string name = iter->path().filename().string();
-		if (regex_match(name, pattern))
-		{
-			auto p = iter->path();
-			ret.push_back( Path( iter->path().string() ) );
-		}
-	}
+	    for (	boost::filesystem::recursive_directory_iterator iter( cp ), end;
+			    iter != end;
+			    ++iter)
+	    {
+		    std::string name = iter->path().filename().string();
+		    if (regex_match(name, pattern))
+		    {
+			    auto p = iter->path();
+			    ret.push_back( Path( iter->path().string() ) );
+		    }
+	    }
 
-	return ret;
+        return ret;
+    }
+    else
+    {
+        return PathVec();
+    }
 }
 
 

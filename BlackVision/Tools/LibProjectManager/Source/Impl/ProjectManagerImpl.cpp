@@ -345,17 +345,17 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 	if( project )
 	{
 		auto projectAssets = ListAssetsPaths( projectName );
-		//auto projectScenes = ListScenesNames( projectName );
+		auto projectScenes = ListScenesNames( projectName );
 
 		std::set< Path > uniqueAssets;
 
 		uniqueAssets.insert( projectAssets.begin(), projectAssets.end() );
 
-		//for( auto ps : projectScenes )
-		//{
-		//	auto sa = m_sceneAccessor->ListAllUsedAssets( ps );
-		//	uniqueAssets.insert( sa.begin(), sa.end() );
-		//}
+		for( auto ps : projectScenes )
+		{
+			auto sa = m_sceneAccessor->ListAllUsedAssets( ps );
+			uniqueAssets.insert( sa.begin(), sa.end() );
+		}
 
         auto assetsFile = File::Open( outputFilePath.Str(), File::OpenMode::FOMReadWrite );
 
