@@ -5,12 +5,20 @@
 namespace bv
 {
 
+enum class EvaluatorType : int
+{ 
+    CONSTANT, 
+    LINEAR, 
+    BEZIER 
+};
+
 template< class TimeValueT, class ValueT >
 class IEvaluator
 {
 public:
-    virtual ValueT Evaluate( TimeValueT t ) const = 0;
-    virtual void SetValue( TimeValueT t, ValueT v ) = 0;
+    virtual ValueT                              Evaluate( TimeValueT t ) const                      = 0;
+    virtual void                                SetValue( TimeValueT t, ValueT v )                  = 0;
+    virtual EvaluatorType                       GetType()                                           = 0;
 };
 
 class CompositeBezierInterpolator

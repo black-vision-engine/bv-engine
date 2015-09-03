@@ -9,9 +9,11 @@ class ConstEvaluator : public IEvaluator< TimeValueT, ValueT >
 public:
     ConstEvaluator( ValueT v ) : value( v ) {}
 
-    virtual void SetValue( TimeValueT t, ValueT v ) override
+    virtual EvaluatorType GetType() override { return EvaluatorType::CONSTANT; }
+
+    virtual void SetValue( TimeValueT /*t*/, ValueT v ) override
     {
-        assert( !"implement me" );
+        value = v;
     }
 
     ValueT Evaluate( TimeValueT ) const override { return value; }
@@ -26,9 +28,16 @@ class LinearEvaluator : public IEvaluator< TimeValueT, ValueT >
 public:
     LinearEvaluator( Key k1, Key k2 ) : key1( k1 ), key2( k2 ) {}
 
+    virtual EvaluatorType GetType() override { return EvaluatorType::LINEAR; }
+
     virtual void SetValue( TimeValueT t, ValueT v ) override
     {
-        assert( !"implement me" );
+        if( key1.t == t )
+            key1.val = v;
+        else if( key2.t == t )
+            key2.val = v;
+        else
+            assert( false );
     }
 
     ValueT Evaluate( TimeValueT t ) const override 
@@ -43,10 +52,13 @@ class BezierEvaluator : public IEvaluator< TimeValueT, ValueT >
 {
     typedef Key< TimeValueT, ValueT > Key;
 
+public: // FIXME
     Key key1, key2;
     Key v1, v2;
     TimeValueT m_tolerance;
 public:
+    virtual EvaluatorType GetType() override { return EvaluatorType::BEZIER; }
+
     BezierEvaluator( Key k1, Key k2, Key v1_, Key v2_, TimeValueT tolerance ) : key1( k1 ), key2( k2 ), v1( v1_ ), v2( v2_ ), m_tolerance( tolerance ) {}
     
     void SetV2( Key v2 ) { this->v2 = v2; }
@@ -115,7 +127,11 @@ typedef model::IParameter::CurveType CurveType; // FIXME
 template< class TimeValueT, class ValueT >
 IEvaluator<TimeValueT, ValueT >* CreateDummyInterpolator( CurveType type, Key< TimeValueT, ValueT > k1, Key< TimeValueT, ValueT > k2, TimeValueT tolerance ) // FIXME maybe
 {
-    if( type == CurveType::BEZIER )
+    if( type == CurveType::POINT )
+        return new ConstEvaluator< TimeValueT, ValueT >( k1.val );
+    else if( type == CurveType::LINEAR )
+        return new LinearEvaluator< TimeValueT, ValueT >( k1, k2 );
+    else if( type == CurveType::BEZIER )
         return new BezierEvaluator< TimeValueT, ValueT >( k1, k2, Key< TimeValueT, ValueT >( 0, 0 ), Key< TimeValueT, ValueT >( 0, 0 ), tolerance );
     else if( type == CurveType::COSINE_LIKE )
         return new BezierEvaluator< TimeValueT, ValueT >( k1, k2, Key< TimeValueT, ValueT >( 0, 0 ), Key< TimeValueT, ValueT >( 0, 0 ), tolerance );
@@ -124,6 +140,42 @@ IEvaluator<TimeValueT, ValueT >* CreateDummyInterpolator( CurveType type, Key< T
         assert( false );
         return nullptr;
     }
+}
+
+template< class TimeValueT, class ValueT >
+void UpdateInterpolator( std::vector< IEvaluator<TimeValueT, ValueT >* > interpolators, size_t i, CurveType cType )
+{
+    typedef Key< TimeValueT, ValueT > Key;
+
+    const float scale = 0.3f;
+
+    auto iType = interpolators[ i ]->GetType();
+
+    if( iType == EvaluatorType::CONSTANT || iType == EvaluatorType::LINEAR )
+        return;
+
+    assert( iType == EvaluatorType::BEZIER );
+    auto be = ( BezierEvaluator< TimeValueT, ValueT >* ) interpolators[ i ];
+
+    if( cType == CurveType::COSINE_LIKE )
+    {
+        float length = be->key2.t - be->key1.t;
+        be->v1 = Key( scale * length, 0 );
+        be->v2 = Key( -scale * length, 0 );
+    }
+    else if( cType == CurveType::BEZIER )
+    {
+        auto prevE = ( i == 0 ) ? interpolators[ 0 ] : interpolators[ i-1 ];
+        auto nextE = ( i == interpolators.size()-1 ) ? interpolators.back() : interpolators[ i+1 ];
+
+        auto prevBE = ( BezierEvaluator< TimeValueT, ValueT >* ) prevE;
+        auto nextBE = ( BezierEvaluator< TimeValueT, ValueT >* ) nextE;
+
+        be->v1 = scale * ( be->key2 - prevBE->key1 );
+        be->v2 = scale * ( nextBE->key2 - be->key1 );
+    }
+    else
+        assert( false );
 }
 
 void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const ValueT & v ) 
@@ -184,38 +236,10 @@ void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const Value
     }
 
 // update interpolators
-    //size_t last = keys.size()-1;
-    //const float scale = 0.3f;
-
-///*    if( m_type == CurveType::POINT )
-//    {
-//        interpolators.push_back( new ConstEvaluator< TimeValueT, ValueT >( v ) );
-//    }
-//    else if( m_type == CurveType::LINEAR )
-//    {
-//        interpolators.push_back( new LinearEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ] ) );
-//    }
-//    else*/ if( m_type == CurveType::COSINE_LIKE )
-//    {
-//        //float length = keys[ last ].t - keys[ last-1 ].t;
-//
-//        //interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], Key( scale * length, 0 ), Key( -scale * length, 0 ), m_tolerance ) );
-//    }
-//    else if( m_type == CurveType::BEZIER )
-//    {
-//        //Key left = ( last > 1 ) ? scale * ( keys[ last ] - keys[ last-2 ] ) : scale * ( keys[ last ] - keys[ last-1 ] );
-//        //Key right = scale * ( keys[ last ] - keys[ last-1 ] );
-//
-//        //interpolators.push_back( new BezierEvaluator< TimeValueT, ValueT >( keys[ last-1 ], keys[ last ], left, right, m_tolerance ) );
-//
-//        //if( last > 1 )
-//        //{
-//        //    auto bi = ( BezierEvaluator< TimeValueT, ValueT >* )interpolators[ last-2 ];
-//        //    bi->SetV2( -1 * left );
-//        //}
-//    }
-//    else
-//        assert( false );
+    if( i != 0 )
+        UpdateInterpolator( interpolators, i-1, m_type );
+    if( i != interpolators.size() )
+        UpdateInterpolator( interpolators, i, m_type );
 }
 
 void                    CompositeBezierInterpolator::SetCurveType( CurveType type )

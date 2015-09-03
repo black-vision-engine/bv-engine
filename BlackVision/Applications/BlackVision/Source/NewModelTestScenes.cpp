@@ -855,7 +855,7 @@ model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr t
     model::SetParameterTranslation( param, 0, 1.f, offset );
     model::SetParameterTranslation( param, 0, 0.f, offset );
     model::SetParameterTranslation( param, 0, 10.f, offset + glm::vec3( 2, 0, 0 ) );
-    model::SetParameterScale( param, 0, 0.f, glm::vec3( 0.5f, 0.5f, 1.f ) );
+    model::SetParameterScale( param, 0, 0.f, glm::vec3( 0.25f, 0.25f, 1.f ) );
 
     return node;
 }
@@ -865,12 +865,15 @@ model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model
     model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
-    auto node1 = CosineDemoRect( glm::vec3( -1, 0.5, 0 ) , timeEvaluator, model::IParameter::COSINE_LIKE );
-    auto node2 = CosineDemoRect( glm::vec3( -1, -0.5, 0 ) , timeEvaluator, model::IParameter::BEZIER );
-    //node2->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
+    auto node1 = CosineDemoRect( glm::vec3( -1, -0.6, 0 ) , timeEvaluator, model::IParameter::POINT );
+    auto node2 = CosineDemoRect( glm::vec3( -1, -0.2, 0 ) , timeEvaluator, model::IParameter::LINEAR );
+    auto node3 = CosineDemoRect( glm::vec3( -1, 0.2, 0 ) , timeEvaluator, model::IParameter::COSINE_LIKE );
+    auto node4 = CosineDemoRect( glm::vec3( -1, 0.6, 0 ) , timeEvaluator, model::IParameter::BEZIER );
 
     root->AddChildToModelOnly( node1 );
     root->AddChildToModelOnly( node2 );
+    root->AddChildToModelOnly( node3 );
+    root->AddChildToModelOnly( node4 );
 
     return root;
 }
