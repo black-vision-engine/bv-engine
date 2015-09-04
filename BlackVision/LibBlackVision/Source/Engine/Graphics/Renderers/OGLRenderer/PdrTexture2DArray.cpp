@@ -48,14 +48,13 @@ void    PdrTexture2DArray::Initialize      ( const Texture2DArray * textureArray
 
 	BVGL::bvglTexStorage3D( GL_TEXTURE_2D_ARRAY, numLevels, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height, ( GLsizei )m_layers );
 
-	unsigned int numLayers = textureArray->GetNumLayers();
-	for( unsigned int layer = 0; layer < numLayers; ++layer )
+	for( unsigned int layer = 0; layer < m_layers; ++layer )
 	{
 		for (unsigned int lvl = 0; lvl < numLevels; ++lvl)
 		{
 			BVGL::bvglTexSubImage3D( GL_TEXTURE_2D_ARRAY, lvl, 0, 0, ( GLint )layer,
 				( GLsizei )textureArray->GetWidth( lvl ), ( GLsizei )textureArray->GetHeight( lvl ), GLsizei( 1 ),
-				m_format, m_type, textureArray->GetData( lvl, layer )->Get() );
+				m_format, m_type, textureArray->GetData( layer, lvl )->Get() );
 		}
 	}
 
@@ -83,8 +82,10 @@ PdrTexture2DArray::~PdrTexture2DArray         ()
 //
 void        PdrTexture2DArray::Update            ( const Texture2DArray * textureArray )
 {
-    if ( textureArray->GetFormat() != m_txFormat || m_width != textureArray->GetWidth() 
-		|| m_height != textureArray->GetHeight() || m_layers != textureArray->GetNumLayers()  )
+    if ( textureArray->GetFormat() != m_txFormat || 
+		m_width != textureArray->GetWidth() ||
+		m_height != textureArray->GetHeight() ||
+		m_layers != textureArray->GetNumLayers() )
     {
         Deinitialize();
         Initialize( textureArray );

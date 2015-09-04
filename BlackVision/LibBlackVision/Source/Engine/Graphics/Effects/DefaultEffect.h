@@ -3,8 +3,7 @@
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 #include "Engine/Models/Interfaces/ITexturesData.h"
 
-#include "Engine/Graphics/Resources/Texture2DImpl.h"
-#include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
+#include "Engine/Graphics/Resources/Texture2D.h"
 
 
 namespace bv {

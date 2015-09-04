@@ -7,7 +7,7 @@ namespace bv
 
 // *******************************
 //
-PdrTextureCube::PdrTextureCube                      ( const Texture2D * texture )
+PdrTextureCube::PdrTextureCube                      ( const TextureCube * texture )
     : m_width( 0 )
 	, m_height( 0 )
 {
@@ -16,7 +16,7 @@ PdrTextureCube::PdrTextureCube                      ( const Texture2D * texture 
 
 // *******************************
 //
-void    PdrTextureCube::Initialize      ( const Texture2D * texture )
+void    PdrTextureCube::Initialize      ( const TextureCube * texture )
 {
     assert( texture );
 
@@ -55,7 +55,7 @@ void    PdrTextureCube::Initialize      ( const Texture2D * texture )
 		}
 	}
 
-BVGL::bvglBindTexture( GL_TEXTURE_CUBE_MAP, prevTex );
+	BVGL::bvglBindTexture( GL_TEXTURE_CUBE_MAP, prevTex );
 }
 
 // *******************************
@@ -77,7 +77,7 @@ PdrTextureCube::~PdrTextureCube         ()
 
 // *******************************
 //
-void        PdrTextureCube::Update            ( const Texture2D * texture )
+void        PdrTextureCube::Update            ( const TextureCube * texture )
 {
 	if ( texture->GetFormat() != m_txFormat || 
 		m_width != texture->GetWidth() ||
@@ -112,7 +112,7 @@ void        PdrTextureCube::Unbind            ()
 
 // *******************************
 //
-PdrTextureCube *  PdrTextureCube::Create            ( const Texture2D * texture )
+PdrTextureCube *  PdrTextureCube::Create            ( const TextureCube * texture )
 {
     return new PdrTextureCube( texture );
 }

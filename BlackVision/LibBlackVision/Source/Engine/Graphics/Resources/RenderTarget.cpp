@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include "Engine/Graphics/Resources/Texture2DImpl.h"
+#include "Engine/Graphics/Resources/Texture2D.h"
 #include "Memory/MemoryChunk.h"
 
 
@@ -23,10 +23,10 @@ RenderTarget::RenderTarget ( const std::vector< TextureFormat > & formats, UInt3
 
     for( SizeType i = 0; i < m_numTargets; ++i )
     {
-        auto tx = std::make_shared< Texture2DImpl >( formats[ i ], w, h, DataBuffer::Semantic::S_TEXTURE_STATIC );
+        auto tx = std::make_shared< Texture2D >( formats[ i ], w, h, DataBuffer::Semantic::S_TEXTURE_STATIC );
 		std::vector< MemoryChunkConstPtr > txs;
 		txs.push_back( MemoryChunk::EMPTY() );
-        tx->SetRawData( txs, formats[ i ], w, h ); //FIXME: empty pointer (this memory was never used as it is supposed only to serve as a key for Renderer).
+        tx->SetData( txs ); //FIXME: empty pointer (this memory was never used as it is supposed only to serve as a key for Renderer).
         tx->SetChanged( false );
         m_ColorTextures.push_back( tx );    
     }

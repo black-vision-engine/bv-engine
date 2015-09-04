@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/Textures/TextureCube.h"
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrTexture.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
@@ -18,9 +18,9 @@ private:
 
 private:
 
-    explicit			PdrTextureCube  ( const Texture2D * texture );
+    explicit			PdrTextureCube  ( const TextureCube * texture );
 
-    void				Initialize      ( const Texture2D * texture );
+    void				Initialize      ( const TextureCube * texture );
     void				Deinitialize    ();
 
 public:
@@ -30,9 +30,9 @@ public:
     virtual GLuint		Bind			();
     virtual void		Unbind			();
 
-    void				Update          ( const Texture2D * texture );
+    void				Update          ( const TextureCube * texture );
 
-    static PdrTextureCube *   Create	( const Texture2D * texture );
+    static PdrTextureCube *   Create	( const TextureCube * texture );
 
 };
 

@@ -1,7 +1,7 @@
 #include "FBOProfilingPrototype0.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
-#include "Engine/Graphics/Resources/Texture2DImpl.h"
+#include "Engine/Graphics/Resources/Texture2D.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrTexture2D.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 
@@ -245,10 +245,10 @@ MemoryChunkConstPtr FBOProfilingPrototype0::ReadColor()
 //
 void	FBOProfilingPrototype0::AddColorAttachments()
 {
-	auto tx = std::make_shared< Texture2DImpl >( TextureFormat::F_A8R8G8B8, m_width, m_height, DataBuffer::Semantic::S_TEXTURE_STATIC );
+	auto tx = std::make_shared< Texture2D >( TextureFormat::F_A8R8G8B8, m_width, m_height, DataBuffer::Semantic::S_TEXTURE_STATIC );
 	std::vector< MemoryChunkConstPtr > v;
 	v.push_back( MemoryChunk::Create( m_width * m_height * 4 ) );
-	tx->SetRawData( v, TextureFormat::F_A8R8G8B8, m_width, m_height );
+	tx->SetData( v );
     assert( !m_renderer->IsRegistered( tx.get() ) );
 
     PdrTexture2D * pdrTx = PdrTexture2D::Create( tx.get() );

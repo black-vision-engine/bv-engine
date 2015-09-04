@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/Resources/Texture2DArray.h"
+#include "Engine/Graphics/Resources/Textures/Texture2DArray.h"
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrTexture.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"

@@ -11,8 +11,8 @@ class Renderer;
 class PdrTexture
 {
 protected:
-	bool            m_prevFrameUpdated;	//?
-    bool            m_curFrameUpdated;	//?
+	//bool            m_prevFrameUpdated;	//?
+    //bool            m_curFrameUpdated;	//?
 
     GLuint          m_textureID;
     GLuint          m_prevTextureID;
@@ -33,7 +33,7 @@ public:
     virtual GLuint      Bind            () = 0;
     virtual void        Unbind          () = 0;
 
-    void				SetUpdated      ( bool updated );
+    //void				SetUpdated      ( bool updated );
 
     GLuint				GetTextureID    () const;
 };

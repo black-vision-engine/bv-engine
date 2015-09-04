@@ -20,6 +20,8 @@ enum class TextureFormat : int
 enum class TextureType : int
 {
     T_2D = 0        ,
+    T_3D = 0        ,
+    T_1D = 0        ,
     T_CUBE          ,
 
     T_TOTAL

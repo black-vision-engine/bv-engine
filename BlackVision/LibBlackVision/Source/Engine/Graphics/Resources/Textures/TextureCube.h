@@ -1,0 +1,39 @@
+#pragma once
+
+#include "Engine/Graphics/Resources/Texture.h"
+
+namespace bv
+{
+
+class TextureCube : public Texture
+{
+private:
+
+    UInt32			m_width;
+    UInt32			m_height;
+
+	const UInt32	CUBEMAP_FACES_NUM = 6;
+
+public:
+
+                        TextureCube     ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic );
+                        TextureCube     ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, UInt32 levels );
+    virtual             ~TextureCube    () = 0;
+
+    UInt32			    GetWidth        ( UInt32 level = 0 ) const;
+    UInt32			    GetHeight       ( UInt32 level = 0 ) const;
+
+	MemoryChunkConstPtr	GetData			( UInt32 face, UInt32 level = 0 ) const;
+
+	void				SetData			( MemoryChunkConstPtr data, UInt32 face, UInt32 level = 0 );
+	void				SetData			( const std::vector< MemoryChunkConstPtr > & data );
+
+    SizeType			RawFrameSize    ( UInt32 level = 0 ) const;
+    static SizeType		RawFrameSize    ( TextureFormat format, UInt32 width, UInt32 height, UInt32 level = 0 );
+
+};
+
+DEFINE_PTR_TYPE(TextureCube)
+DEFINE_CONST_PTR_TYPE(TextureCube)
+
+} //bv

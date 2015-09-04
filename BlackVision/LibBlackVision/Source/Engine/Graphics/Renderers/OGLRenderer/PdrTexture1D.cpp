@@ -7,7 +7,7 @@ namespace bv
 
 // *******************************
 //
-PdrTexture1D::PdrTexture1D                      ( const Texture2D * texture )
+PdrTexture1D::PdrTexture1D                      ( const Texture1D * texture )
     : m_width( 0 )
 {
     Update( texture );
@@ -15,7 +15,7 @@ PdrTexture1D::PdrTexture1D                      ( const Texture2D * texture )
 
 // *******************************
 //
-void    PdrTexture1D::Initialize      ( const Texture2D * texture )
+void    PdrTexture1D::Initialize      ( const Texture1D * texture )
 {
     assert( texture );
 
@@ -45,7 +45,11 @@ void    PdrTexture1D::Initialize      ( const Texture2D * texture )
 
 	for (unsigned int lvl = 0; lvl < numLevels; ++lvl)
 	{
-		BVGL::bvglTexSubImage1D( GL_TEXTURE_1D, lvl, 0, ( GLsizei )texture->GetWidth( lvl ), m_format, m_type, texture->GetData( lvl )->Get() );
+		auto data = texture->GetData( lvl )->Get();
+		if( data )
+		{
+			BVGL::bvglTexSubImage1D( GL_TEXTURE_1D, lvl, 0, ( GLsizei )texture->GetWidth( lvl ), m_format, m_type, data );
+		}
 	}
 
     BVGL::bvglBindTexture( GL_TEXTURE_1D, prevTex );
@@ -70,9 +74,10 @@ PdrTexture1D::~PdrTexture1D         ()
 
 // *******************************
 //
-void        PdrTexture1D::Update            ( const Texture2D * texture )
+void        PdrTexture1D::Update            ( const Texture1D * texture )
 {
-    if ( texture->GetFormat() != m_txFormat || m_width != texture->GetWidth() )
+    if ( texture->GetFormat() != m_txFormat ||
+		m_width != texture->GetWidth() )
     {
         Deinitialize();
         Initialize( texture );
@@ -100,7 +105,7 @@ void        PdrTexture1D::Unbind            ()
 
 // *******************************
 //
-PdrTexture1D *  PdrTexture1D::Create            ( const Texture2D * texture )
+PdrTexture1D *  PdrTexture1D::Create            ( const Texture1D * texture )
 {
     return new PdrTexture1D( texture );
 }

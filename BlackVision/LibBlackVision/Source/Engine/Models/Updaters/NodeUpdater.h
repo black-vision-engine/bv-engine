@@ -17,8 +17,7 @@
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 
-#include "Engine/Graphics/Resources/Texture2DImpl.h"
-#include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
+#include "Engine/Graphics/Resources/Texture2D.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 
 //FIXME: this part suxx as hell
@@ -44,8 +43,7 @@ class ShaderParameters;
 class IShaderDataSource;
 class ITextureDescriptor;
 class IAnimationDescriptor;
-class Texture2DImpl;
-class Texture2DSequenceImpl;
+class Texture2D;
 
 namespace model
 {
@@ -55,8 +53,8 @@ namespace model
 }
 
 typedef std::pair< ITexturesDataConstPtr, ShaderParameters * > TexData2ShaderParams;
-typedef std::pair< const ITextureDescriptor *, Texture2DImpl * > Tex2Tex2DPair;
-typedef std::pair< const IAnimationDescriptor *, Texture2DSequenceImpl * > Anim2Tex2DPair;
+typedef std::pair< const ITextureDescriptor *, Texture2D * > Tex2Tex2DPair;
+typedef std::pair< const IAnimationDescriptor *, Texture2D * > Anim2Tex2DPair;
 
 class NodeUpdater;
 DEFINE_CONST_PTR_TYPE(NodeUpdater)

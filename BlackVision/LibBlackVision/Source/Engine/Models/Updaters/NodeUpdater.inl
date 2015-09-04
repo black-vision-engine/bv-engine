@@ -208,7 +208,7 @@ inline void    NodeUpdater::UpdateTexturesData  ()
 
             if ( texDesc->BitsChanged() )
             {
-                auto tex2D  = std::static_pointer_cast< Texture2DImpl >( shaderParams->GetTexture( j ) );
+                auto tex2D  = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
 
                  //Stored in cache which means that proper 2D texture has to be created for current texDesc (possibly alread stored in the cache)
                 if( GTexture2DCache.IsStored( tex2D ) && tex2D != GTexture2DCache.GetTexture( texDesc ) )
@@ -219,23 +219,25 @@ inline void    NodeUpdater::UpdateTexturesData  ()
                 }
                 else //Some other texture type which just requires contents to be swapped
                 {
-                    auto format = texDesc->GetFormat();
-
-					tex2D->SetRawData( texDesc->GetBits(), format, texDesc->GetWidth(), texDesc->GetHeight() );
+					tex2D->SetData( texDesc->GetBits() );
                 }
 
                 texDesc->ResetBitsChanged();
             }
         }
 
+
         for( unsigned int i = 0; i < animations.size(); ++i, ++j )
         {
-            auto tex2DSeq   = std::static_pointer_cast< Texture2DSequenceImpl >( shaderParams->GetTexture( j ) );
+            auto tex2DSeq   = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
             auto animDesc   = animations[ i ];
 
             if ( animDesc->CurrentFrame() != animDesc->PreviousFrame() )
             {
-                tex2DSeq->SetActiveTexture( animDesc->CurrentFrame() );
+				auto frame = animDesc->CurrentFrame() % animDesc->NumTextures();
+				tex2DSeq->SetData( animDesc->GetBits( frame ) );
+                //@SEQUENCE
+				//tex2DSeq->SetActiveTexture( animDesc->CurrentFrame() );
             }
         }
 

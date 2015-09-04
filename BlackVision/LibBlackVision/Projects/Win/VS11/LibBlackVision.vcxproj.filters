@@ -291,15 +291,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Texture2D.cpp">
       <Filter>Engine\Graphics\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Texture2DImpl.cpp">
-      <Filter>Engine\Graphics\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Texture2DSequenceImpl.cpp">
-      <Filter>Engine\Graphics\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\TextureBase.cpp">
-      <Filter>Engine\Graphics\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexArray.cpp">
       <Filter>Engine\Graphics\Resources</Filter>
     </ClCompile>
@@ -879,6 +870,36 @@
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureUtils.cpp">
       <Filter>Assets\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture1D.cpp">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture3D.cpp">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrSampler.cpp">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture.cpp">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1D.cpp">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture3D.cpp">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2DArray.cpp">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture2DArray.cpp">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1DArray.cpp">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture1DArray.cpp">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -968,9 +989,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrShader.h">
       <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture2D.h">
-      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObject.h">
       <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
     </ClInclude>
@@ -1017,15 +1035,6 @@
       <Filter>Engine\Graphics\Resources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Texture2D.h">
-      <Filter>Engine\Graphics\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Texture2DImpl.h">
-      <Filter>Engine\Graphics\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Texture2DSequenceImpl.h">
-      <Filter>Engine\Graphics\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\TextureBase.h">
       <Filter>Engine\Graphics\Resources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\VertexArray.h">
@@ -1179,9 +1188,6 @@
       <Filter>Engine\Models\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IOverrideState.h">
-      <Filter>Engine\Models\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITextureDescriptor.h">
       <Filter>Engine\Models\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITextureParams.h">
@@ -1780,6 +1786,39 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h">
       <Filter>Assets\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture1D.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture3D.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrSampler.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture2D.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1D.h">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture3D.h">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2DArray.h">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture2DArray.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1DArray.h">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture1DArray.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

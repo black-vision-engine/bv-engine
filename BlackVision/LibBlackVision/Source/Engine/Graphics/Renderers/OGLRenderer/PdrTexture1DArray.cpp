@@ -7,23 +7,22 @@ namespace bv
 
 // *******************************
 //
-PdrTexture1DArray::PdrTexture1DArray                      ( const Texture2D * texture )
+PdrTexture1DArray::PdrTexture1DArray                      ( const Texture1DArray * textureArray )
     : m_width( 0 )
 	, m_layers( 0 )
 {
-    Update( texture );
+    Update( textureArray );
 }
 
 // *******************************
 //
-void    PdrTexture1DArray::Initialize      ( const Texture2D * textureArray )
+void    PdrTexture1DArray::Initialize      ( const Texture1DArray * textureArray )
 {
     assert( textureArray );
 
     m_txFormat  = textureArray->GetFormat();
 
     m_width     = textureArray->GetWidth();
-
 	m_layers	= textureArray->GetNumLayers();
 
     //FIXME: allow more texture types here
@@ -46,8 +45,7 @@ void    PdrTexture1DArray::Initialize      ( const Texture2D * textureArray )
 
 	BVGL::bvglTexStorage2D( GL_TEXTURE_1D_ARRAY, numLevels, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_layers );
 
-	unsigned int numLayers = textureArray->GetNumLayers();
-	for( unsigned int layer = 0; layer < numLayers; ++layer )
+	for( unsigned int layer = 0; layer < m_layers; ++layer )
 	{
 		for (unsigned int lvl = 0; lvl < numLevels; ++lvl)
 		{
@@ -79,12 +77,14 @@ PdrTexture1DArray::~PdrTexture1DArray         ()
 
 // *******************************
 //
-void        PdrTexture1DArray::Update            ( const Texture2D * texture )
+void        PdrTexture1DArray::Update            ( const Texture1DArray * textureArray )
 {
-    if ( texture->GetFormat() != m_txFormat || m_width != texture->GetWidth() )
+    if ( textureArray->GetFormat() != m_txFormat || 
+		m_width != textureArray->GetWidth() || 
+		m_layers != textureArray->GetNumLayers() )
     {
         Deinitialize();
-        Initialize( texture );
+        Initialize( textureArray );
     }
 }
 
@@ -109,9 +109,9 @@ void        PdrTexture1DArray::Unbind            ()
 
 // *******************************
 //
-PdrTexture1DArray *  PdrTexture1DArray::Create            ( const Texture2D * texture )
+PdrTexture1DArray *  PdrTexture1DArray::Create            ( const Texture1DArray * textureArray )
 {
-    return new PdrTexture1DArray( texture );
+    return new PdrTexture1DArray( textureArray );
 }
 
 } // bv
