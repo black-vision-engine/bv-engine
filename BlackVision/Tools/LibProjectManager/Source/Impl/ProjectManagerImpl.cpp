@@ -359,15 +359,11 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 
         auto assetsFile = File::Open( outputFilePath.Str(), File::OpenMode::FOMReadWrite );
 
-		auto out = assetsFile.StreamBuf();
+		auto & out = *assetsFile.StreamBuf();
 
-        *out << "assets";
+        out << "assets" << '\n';
 
-        *out << '\n';
-
-        *out << std::to_string( uniqueAssets.size() );
-
-        *out << '\n';
+        out << std::to_string( uniqueAssets.size() ) << '\n';
 
 		for( auto ua : uniqueAssets)
 		{
@@ -376,21 +372,27 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 			if( loc.categoryName == "scenes" ) 
 				assert( false );
 
-            *out << loc.categoryName;
+            out << loc.categoryName << '\n';
 
-            *out << '\n';
+            out << loc.path << '\n';
 
-            *out << loc.path;
-
-            *out << '\n';
-
-			m_categories.at( loc.categoryName )->ExportAsset( *out, loc.projectName / loc.path );
+			m_categories.at( loc.categoryName )->ExportAsset( out, loc.projectName / loc.path );
 		}
 
-		//for( auto s : projectScenes )
-		//{
-		//	m_sceneAccessor->ExportScene( *out, s, false );
-		//}
+        out << '\n';
+        
+        out << "scenes" << '\n';
+
+        out << std::to_string( projectScenes.size() ) << '\n';
+
+		for( auto s : projectScenes )
+		{
+            auto loc = Path2Location( s );
+
+            out << loc.path << '\n';
+
+			m_sceneAccessor->ExportScene( out, s, false );
+		}
 
         assetsFile.Close();
 	}
@@ -408,31 +410,33 @@ void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, c
 
     std::stringbuf buf;
 
-    f.StreamBuf()->get( buf, '\n');
-    f.StreamBuf()->ignore();
+    auto & in = *f.StreamBuf();
+
+    in.get( buf, '\n');
+    in.ignore();
 
     if( buf.str() == "assets" )
     {
         std::stringbuf buf;
-        f.StreamBuf()->get( buf, '\n');
-        f.StreamBuf()->ignore();
+        in.get( buf, '\n');
+        in.ignore();
 
         auto size = stoul( buf.str() );
 
         for( SizeType i = 0; i < size; ++i )
         {
             std::stringbuf buf;
-            f.StreamBuf()->get( buf, '\n');
-            f.StreamBuf()->ignore();
+            in.get( buf, '\n');
+            in.ignore();
 
             auto categoryName = buf.str();
             buf.str("");
 
-            f.StreamBuf()->get( buf, '\n');
-            f.StreamBuf()->ignore();
+            in.get( buf, '\n');
+            in.ignore();
             auto path = Path( buf.str() );
 
-            m_categories.at( categoryName )->ImportAsset( *( f.StreamBuf() ), projectName / path );
+            m_categories.at( categoryName )->ImportAsset( in, projectName / path );
         }
 
         f.Close();
@@ -442,9 +446,33 @@ void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, c
         LOG_MESSAGE( SeverityLevel::error ) << "Cannot import project '" << projectName << "'. Wrong format.";
     }
 
+    buf.str("");
 
-	{expFilePath;}
-	{projectName;}
+    in.get( buf, '\n');
+    assert( buf.str().empty() );
+    in.ignore();
+
+
+    f.StreamBuf()->get( buf, '\n');
+    f.StreamBuf()->ignore();
+    if( buf.str() == "scenes" )
+    {
+        buf.str("");
+        f.StreamBuf()->get( buf, '\n');
+        f.StreamBuf()->ignore();
+
+        SizeType size = stoul( buf.str() );
+
+        for( SizeType i = 0; i < size; ++i )
+        {
+            buf.str("");
+            f.StreamBuf()->get( buf, '\n');
+            f.StreamBuf()->ignore();
+            Path path = buf.str();
+
+            m_sceneAccessor->ImportScene( *f.StreamBuf(), projectName / path );
+        }
+    }
 }
 
 // ********************************

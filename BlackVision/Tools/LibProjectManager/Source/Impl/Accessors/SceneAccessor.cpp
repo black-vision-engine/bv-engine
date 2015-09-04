@@ -2,6 +2,9 @@
 
 #include "Engine/Models/Plugins/Plugin.h"
 
+#include "Tools/Logger/Logger.h"
+#define LOG_MODULE ModuleEnum::ME_LibBlackVision
+
 #include <set>
 
 namespace bv
@@ -71,18 +74,34 @@ void			SceneAccessor::RemoveScene( const Path & path ) const
 //
 void			SceneAccessor::ImportScene( std::istream & in, const Path & importToPath ) const
 {
-	auto f = File::Open( ( m_rootDir / importToPath ).Str(), File::OpenMode::FOMReadWrite );
-    rapidxml::xml_document<> doc;
-    std::stringstream buffer;
-    buffer << in;
-    std::string content( buffer.str() );
-    doc.parse<0>( &content[0] );
+    std::stringbuf buf;
+    in.get( buf, '\n' );
+    in.ignore();
 
-    auto docNode = doc.first_node( "scene" );
+    if( buf.str() == "serialized_scene_begin" )
+    {    
+	    auto f = File::Open( ( m_rootDir / importToPath ).Str(), File::OpenMode::FOMReadWrite );
+        rapidxml::xml_document<> doc;
+        std::stringstream buffer;
+        buffer << in;
+        std::string content( buffer.str() );
+        doc.parse<0>( &content[0] );
 
-	f.Write( docNode->value(), docNode->value_size() );
+        auto docNode = doc.first_node( "scene" );
 
-	f.Close();
+	    f.Write( docNode->value(), docNode->value_size() );
+
+        f.Close();
+
+        buf.str( "" );
+        in.get( buf, '\n' );
+        in.ignore();
+
+        if( buf.str() != "serialized_scene_end" )
+        {
+            LOG_MESSAGE_FILE_LINE( SeverityLevel::error ) << "Cannot import scene: '" << importToPath.Str() << "'. Wrong format.";
+        }
+    }
 }
 
 // ********************************
@@ -91,6 +110,8 @@ void			SceneAccessor::ExportScene( std::ostream & out, const Path & path, bool w
 {
 	if( !withAssets )
 	{
+        out << "serialized_scene_begin" << '\n';
+
 		SceneDescriptor sceneDesc( m_rootDir / path );
 
 		auto scene = sceneDesc.LoadScene();
@@ -101,6 +122,8 @@ void			SceneAccessor::ExportScene( std::ostream & out, const Path & path, bool w
 		scene->Serialize( *sob );
 		sob->Pop();
 		sob->Save( out );
+
+        out << "serialized_scene_end" << '\n';
 	}
 	else
 	{

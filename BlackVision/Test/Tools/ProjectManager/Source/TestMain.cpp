@@ -1,6 +1,12 @@
 #include "ProjectManager.h"
 #include "Impl/Accessors/TextureAssetAccessor.h"
 #include "Assets/Texture/SingleTextureAssetDescriptor.h"
+#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
+
+#include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
+#include "Engine/Graphics/Renderers/Renderer.h"
+
+#include "Assets/FwdDecls.h"
 
 #include "gtest/gtest.h"
 
@@ -8,6 +14,49 @@ using namespace bv;
 
 static ProjectManager * g_pm0 = nullptr;
 static ProjectManager * g_pm1 = nullptr;
+
+// *******************************
+//
+bool    LoadTexture     ( model::IPluginPtr plugin, const Path & projectName, const Path & path )
+{
+    auto texDesc = std::static_pointer_cast< const SingleTextureAssetDesc >( g_pm0->GetAssetDesc( projectName, "textures", path ) );
+
+    return plugin->LoadResource( TextureAssetDesc::Create( texDesc ) );
+}
+
+bv::BVSceneConstPtr CreateTestScene0()
+{
+    auto globalTimeline = model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) );
+    auto root = model::BasicNode::Create( "textured_rect", globalTimeline );
+
+    StringVector plugins;
+    plugins.push_back( "DEFAULT_TRANSFORM" );
+    plugins.push_back( "DEFAULT_RECTANGLE" );
+    plugins.push_back( "DEFAULT_TEXTURE" );
+
+    auto success = root->AddPlugins( plugins, globalTimeline );
+    assert( success );
+
+    auto wp = root->GetPlugin( "rectangle" )->GetParameter( "width" );
+    auto hp = root->GetPlugin( "rectangle" )->GetParameter( "height" );
+    auto tr = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+
+    success &= SetParameter( wp, 0.f, 1.f );
+    success &= SetParameter( hp, 0.f, 1.f );
+    success &= SetParameterTranslation( tr, 0, 0.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+
+    success = LoadTexture( root->GetPlugin( "texture" ), "proj00", "flagi/pol.jpg" );
+    assert( success );    
+
+    RendererInput ri;
+    ri.m_WindowHandle			= 0;
+    ri.m_PixelFormat			= 0;
+    ri.m_RendererDC				= 0;
+    ri.m_DisableVerticalSync	= true;
+	auto renderer = new bv::Renderer( ri, 100, 100 );
+
+    return BVScene::Create( root, new Camera( false ), "BasicScene", globalTimeline, renderer );
+}
 
 TEST( CleanAll, ProjectManager )
 {
@@ -106,6 +155,12 @@ TEST( AddingAssets, ProjectManager )
 	ASSERT_FALSE( g_pm0->GetAssetDesc( "proj01", "textures", "flagi/rus.jpg" ) );
 
 	ASSERT_TRUE( assets.size() == 3 );
+}
+
+TEST( AddingScene, ProjectManager )
+{
+
+    g_pm0->AddScene( CreateTestScene0(), "proj00", "scene1/s.scn" );
 }
 
 TEST( ExportingProject, ProjectManager )
