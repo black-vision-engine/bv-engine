@@ -865,10 +865,10 @@ model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model
     model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
-    auto node1 = CosineDemoRect( glm::vec3( -1, -0.6, 0 ) , timeEvaluator, model::IParameter::POINT );
-    auto node2 = CosineDemoRect( glm::vec3( -1, -0.2, 0 ) , timeEvaluator, model::IParameter::LINEAR );
-    auto node3 = CosineDemoRect( glm::vec3( -1, 0.2, 0 ) , timeEvaluator, model::IParameter::COSINE_LIKE );
-    auto node4 = CosineDemoRect( glm::vec3( -1, 0.6, 0 ) , timeEvaluator, model::IParameter::BEZIER );
+    auto node1 = CosineDemoRect( glm::vec3( -1, 0.6, 0 ) , timeEvaluator, model::IParameter::POINT );
+    auto node2 = CosineDemoRect( glm::vec3( -1, 0.2, 0 ) , timeEvaluator, model::IParameter::LINEAR );
+    auto node3 = CosineDemoRect( glm::vec3( -1, -0.2, 0 ) , timeEvaluator, model::IParameter::COSINE_LIKE );
+    auto node4 = CosineDemoRect( glm::vec3( -1, -0.6, 0 ) , timeEvaluator, model::IParameter::BEZIER );
 
     root->AddChildToModelOnly( node1 );
     root->AddChildToModelOnly( node2 );

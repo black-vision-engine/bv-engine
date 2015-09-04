@@ -143,7 +143,7 @@ IEvaluator<TimeValueT, ValueT >* CreateDummyInterpolator( CurveType type, Key< T
 }
 
 template< class TimeValueT, class ValueT >
-void UpdateInterpolator( std::vector< IEvaluator<TimeValueT, ValueT >* > interpolators, size_t i, CurveType cType )
+void UpdateInterpolator( std::vector< IEvaluator<TimeValueT, ValueT >* >& interpolators, size_t i, CurveType cType )
 {
     typedef Key< TimeValueT, ValueT > Key;
 
@@ -172,7 +172,7 @@ void UpdateInterpolator( std::vector< IEvaluator<TimeValueT, ValueT >* > interpo
         auto nextBE = ( BezierEvaluator< TimeValueT, ValueT >* ) nextE;
 
         be->v1 = scale * ( be->key2 - prevBE->key1 );
-        be->v2 = scale * ( nextBE->key2 - be->key1 );
+        be->v2 = -scale * ( nextBE->key2 - be->key1 );
     }
     else
         assert( false );
@@ -236,10 +236,9 @@ void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const Value
     }
 
 // update interpolators
-    if( i != 0 )
-        UpdateInterpolator( interpolators, i-1, m_type );
-    if( i != interpolators.size() )
-        UpdateInterpolator( interpolators, i, m_type );
+    for( size_t j = i-2; j < i+1; j++ )
+        if( j >= 0 && j < interpolators.size() )
+            UpdateInterpolator( interpolators, j, m_type );
 }
 
 void                    CompositeBezierInterpolator::SetCurveType( CurveType type )
