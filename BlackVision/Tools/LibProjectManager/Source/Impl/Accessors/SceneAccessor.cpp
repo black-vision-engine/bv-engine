@@ -11,6 +11,7 @@ namespace bv
 {
 
 const std::string SceneAccessor::SceneFileExt = ".*\\.scn";
+extern model::TimelineManager * global_tm;
 
 // ********************************
 //
@@ -22,7 +23,8 @@ SceneAccessorConstPtr SceneAccessor::Create( const Path & path, model::TimelineM
 // ********************************
 //
 SceneAccessor::SceneAccessor( const Path & path, model::TimelineManager * tm, const model::PluginsManager * pm )
-	: m_rootDir( path )
+	: m_rootDirPM( path )
+    , m_rootDir( path / "scenes" )
 	, m_tm( tm )
 	, m_pm( pm )
 {}
@@ -43,7 +45,7 @@ SceneDescriptor	SceneAccessor::GetSceneDesc( const Path & path ) const
 
 // ********************************
 //
-BVSceneConstPtr	SceneAccessor::GetScene( const Path & path ) const
+model::BasicNodeConstPtr	SceneAccessor::GetScene( const Path & path ) const
 {
 	auto desc = GetSceneDesc( path );
 	return desc.LoadScene();
@@ -58,7 +60,7 @@ void			SceneAccessor::AddSceneFromFile( const Path & srcPath, const Path & path 
 
 // ********************************
 //
-void			SceneAccessor::AddScene( const BVSceneConstPtr & scene, const Path & path ) const
+void			SceneAccessor::AddScene( const model::BasicNodeConstPtr & scene, const Path & path ) const
 {
 	SceneDescriptor::SaveScene( scene, m_rootDir / path );
 }
@@ -80,16 +82,33 @@ void			SceneAccessor::ImportScene( std::istream & in, const Path & importToPath 
 
     if( buf.str() == "serialized_scene_begin" )
     {    
+        buf.str("");
+        in.get( buf, '\n' );
+        in.ignore();
+        Path oldPMRootDir = buf.str();
+
 	    auto f = File::Open( ( m_rootDir / importToPath ).Str(), File::OpenMode::FOMReadWrite );
         rapidxml::xml_document<> doc;
-        std::stringstream buffer;
-        buffer << in;
-        std::string content( buffer.str() );
-        doc.parse<0>( &content[0] );
 
-        auto docNode = doc.first_node( "scene" );
+        buf.str("");
+        in.get( buf, '\n' );
+        auto size = stoul( buf.str() );
+        in.ignore();
+        //char * cbuf = new char[ size ];
 
-	    f.Write( docNode->value(), docNode->value_size() );
+        //in.read( cbuf, size );
+
+        //std::string tmpFileName;
+        //auto tmpFile = File::OpenTmp( &tmpFileName );
+        //tmpFile.Write( cbuf, size );
+        //tmpFile.Close();
+
+        //auto desc = SceneDescriptor( tmpFileName, bv::global_tm, &model::PluginsManager::DefaultInstanceRef() );
+        //auto scene = desc.LoadScene();
+
+        //auto docNode = doc.first_node( "scene" );
+
+	    f.Write( in, size );
 
         f.Close();
 
@@ -112,6 +131,8 @@ void			SceneAccessor::ExportScene( std::ostream & out, const Path & path, bool w
 	{
         out << "serialized_scene_begin" << '\n';
 
+        out << m_rootDirPM << '\n';
+
 		SceneDescriptor sceneDesc( m_rootDir / path, m_tm, m_pm );
 
 		auto scene = sceneDesc.LoadScene();
@@ -121,7 +142,16 @@ void			SceneAccessor::ExportScene( std::ostream & out, const Path & path, bool w
 		sob->SetName( "scene" );
 		scene->Serialize( *sob );
 		sob->Pop();
-		sob->Save( out );
+
+        std::stringstream serScene;
+
+		sob->Save( serScene );
+
+        auto serSceneString = serScene.str();
+
+        out << std::to_string( serSceneString.size() ) << '\n';
+
+        out << serSceneString;
 
         out << "serialized_scene_end" << '\n';
 	}
@@ -155,27 +185,34 @@ void			SceneAccessor::ExportSceneToFile( const Path & outputFileName, const Path
 //
 PathVec			SceneAccessor::ListScenes( const Path & path ) const
 {
-	return Path::List( m_rootDir / path, SceneFileExt );
+	auto sceneList = Path::List( m_rootDir / path, SceneFileExt );
+
+    for( auto & s : sceneList )
+    {
+        s = Path::RelativePath( s, m_rootDir );
+    }
+
+    return sceneList;
 }
 
 // ********************************
 //
 PathVec			SceneAccessor::ListAllUsedAssets( const Path & path ) const
 {
-	SceneDescriptor desc( path, m_tm, m_pm  );
+	SceneDescriptor desc( m_rootDir / path, m_tm, m_pm  );
 	auto scene = desc.LoadScene();
 
 
-	return GetAllUsedAssetPaths( scene );
+	return GetAllUsedAssetPaths( scene, m_rootDirPM );
 }
 
 // ********************************
 //
-PathVec			SceneAccessor::GetAllUsedAssetPaths( const BVSceneConstPtr & scene )
+PathVec			SceneAccessor::GetAllUsedAssetPaths( const model::BasicNodeConstPtr & scene, const Path & relativeTo )
 {
-	auto rootNode = scene->GetModelSceneRoot();
+	auto rootNode = std::const_pointer_cast< model::BasicNode >( scene );
 
-	auto lastPlugin = rootNode->GetPlugins()->GetLastPlugin();
+    auto lastPlugin = rootNode->GetPlugins()->GetLastPlugin();
 
 	std::vector< AssetDescConstPtr > allDescs;
 
@@ -183,13 +220,14 @@ PathVec			SceneAccessor::GetAllUsedAssetPaths( const BVSceneConstPtr & scene )
 	{
 		auto assetsDescs = std::static_pointer_cast< model::BasePlugin< model::IPlugin > >( lastPlugin )->GetAssets();
 		allDescs.insert( allDescs.end(), assetsDescs.begin(), assetsDescs.end() );
+        lastPlugin = lastPlugin->GetPrevPlugin();
 	}
 
 	std::set< Path > allPaths;
 
 	for( auto ad : allDescs )
 	{
-		auto paths = GetAllPathsFromAssets( ad );
+        auto paths = GetAllPathsFromAssets( ad, relativeTo );
 		allPaths.insert( paths.begin(), paths.end() );
 	}
 
@@ -198,19 +236,19 @@ PathVec			SceneAccessor::GetAllUsedAssetPaths( const BVSceneConstPtr & scene )
 
 // ********************************
 //
-PathVec			SceneAccessor::GetAllPathsFromAssets( const AssetDescConstPtr & assetDesc )
+PathVec			SceneAccessor::GetAllPathsFromAssets( const AssetDescConstPtr & assetDesc, const Path & relativeTo )
 {
 	std::set< Path > uniqueAssetsPath;
 	if( auto stad = std::dynamic_pointer_cast< SingleTextureAssetDescConstPtr::element_type >( assetDesc ) )
 	{
-		uniqueAssetsPath.insert( stad->GetImagePath() );
+		uniqueAssetsPath.insert( Path::RelativePath( stad->GetImagePath(), relativeTo ) );
 	}
 	else if( auto tad = std::dynamic_pointer_cast< TextureAssetDescConstPtr::element_type >( assetDesc ) )
 	{
 		auto stad = tad->GetOrigTextureDesc();
 		if( stad )
 		{
-			uniqueAssetsPath.insert( stad->GetImagePath() );
+			uniqueAssetsPath.insert( Path::RelativePath( stad->GetImagePath(), relativeTo ) );
 		}
 
 		auto mmad = tad->GetMipMapsDesc();
@@ -218,7 +256,7 @@ PathVec			SceneAccessor::GetAllPathsFromAssets( const AssetDescConstPtr & assetD
 		{
 			for( SizeType i = 0; i < mmad->GetLevelsNum(); ++i )
 			{
-				uniqueAssetsPath.insert( mmad->GetLevelDesc( i )->GetImagePath() );
+				uniqueAssetsPath.insert( Path::RelativePath( mmad->GetLevelDesc( i )->GetImagePath(), relativeTo ) );
 			}
 		}
 	}

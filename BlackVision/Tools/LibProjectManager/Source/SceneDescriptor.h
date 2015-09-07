@@ -17,9 +17,9 @@ public:
 
 	Path				GetPath			() const;
 
-	BVSceneConstPtr		LoadScene		() const;
+	model::BasicNodeConstPtr		LoadScene		() const;
 
-	static void			SaveScene		( const BVSceneConstPtr & scene, const Path & outPath );
+	static void			SaveScene		( const model::BasicNodeConstPtr & scene, const Path & outPath );
 
 	explicit			SceneDescriptor	( const Path & path, model::TimelineManager * tm, const model::PluginsManager * pm );
 

@@ -1,13 +1,15 @@
 #include "SceneDescriptor.h"
 
 #include "Engine/Models/BasicNode.h"
+#include "Engine/Models/Timeline/TimelineManager.h"
 
 namespace bv
 {
+extern model::TimelineManager * global_tm;
 
 // ********************************
 //
-BVSceneConstPtr	SceneDescriptor::LoadScene() const
+model::BasicNodeConstPtr SceneDescriptor::LoadScene() const
 {
     auto f = File::Open( m_path.Str(), File::OpenMode::FOMReadOnly );
     rapidxml::xml_document<> doc;
@@ -19,19 +21,25 @@ BVSceneConstPtr	SceneDescriptor::LoadScene() const
     doc.parse<0>( &content[0] );
 
     auto docNode = doc.first_node( "scene" );
+    auto deDoc = DeserializeObject( *docNode, *m_tm, *m_pm );
 
-    auto deDoc = DeserializeObject( *docNode, *m_tm, *m_pm);
+    auto timelines = deDoc.LoadArray< model::TimeEvaluatorBase< model::ITimeEvaluator > >( "timelines" );
+    for( auto timeline : timelines )
+        m_tm->AddTimeline( timeline );
+
+    docNode = doc.first_node( "scene" )->first_node( "node" );
+    deDoc = DeserializeObject( *docNode, *m_tm, *m_pm );
 
     ISerializablePtr node = model::BasicNode::Create( deDoc );
 
     f.Close();
 
-    return std::static_pointer_cast< const BVScene >( node );
+    return std::static_pointer_cast< const model::BasicNode >( node );
 }
 
 // ********************************
 //
-void			SceneDescriptor::SaveScene		( const BVSceneConstPtr & scene, const Path & outPath )
+void			SceneDescriptor::SaveScene		( const model::BasicNodeConstPtr & scene, const Path & outPath )
 {
     if( !Path::Exists( outPath ) )
     {
@@ -42,6 +50,7 @@ void			SceneDescriptor::SaveScene		( const BVSceneConstPtr & scene, const Path &
 	auto sob = new SerializeObject();
 
 	sob->SetName( "scene" );
+    global_tm->Serialize( *sob );
 	scene->Serialize( *sob );
 	sob->Pop();
 	sob->Save( outPath.Str() );

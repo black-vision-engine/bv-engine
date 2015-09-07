@@ -2,6 +2,7 @@
 #include "Impl/Accessors/TextureAssetAccessor.h"
 #include "Assets/Texture/SingleTextureAssetDescriptor.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
+#include "Engine/Models/Timeline/TimelineManager.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
@@ -19,6 +20,11 @@ using namespace bv;
 static ProjectManager * g_pm0 = nullptr;
 static ProjectManager * g_pm1 = nullptr;
 
+namespace bv
+{
+    extern model::TimelineManager * global_tm;
+} // bv
+
 // *******************************
 //
 bool    LoadTexture     ( model::IPluginPtr plugin, const Path & projectName, const Path & path )
@@ -28,7 +34,7 @@ bool    LoadTexture     ( model::IPluginPtr plugin, const Path & projectName, co
     return plugin->LoadResource( TextureAssetDesc::Create( texDesc ) );
 }
 
-bv::BVSceneConstPtr CreateTestScene0()
+bv::model::BasicNodeConstPtr CreateTestScene0()
 {
     std::vector< model::IPluginDescriptor * > descriptors;
 
@@ -66,8 +72,8 @@ bv::BVSceneConstPtr CreateTestScene0()
  //   ri.m_RendererDC				= 0;
  //   ri.m_DisableVerticalSync	= true;
 	//auto renderer = new bv::Renderer( ri, 100, 100 );
-
-    return BVScene::CreateFakeSceneForTestingOnly( root, new Camera( false ), "BasicScene", globalTimeline );
+    return root;
+    //return BVScene::CreateFakeSceneForTestingOnly( std::const_pointer_cast< model::BasicNode >( , new Camera( false ), "BasicScene", globalTimeline );
 }
 
 TEST( CleanAll, ProjectManager )
@@ -86,6 +92,8 @@ TEST( CleanAll, ProjectManager )
 
 TEST( CreatingPM, ProjectManager )
 {
+    global_tm->RegisterRootTimeline( model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) ) );
+
 	g_pm0 = ProjectManager::GetInstance( "bv_media" );
 	g_pm1 = ProjectManager::GetInstance( "bv_media1" );
 }

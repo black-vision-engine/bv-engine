@@ -1,6 +1,8 @@
 #include "ProjectManagerImpl.h"
 
 #include "Engine/Models/BVScene.h"
+#include "Engine/Models/Timeline/TimelineManager.h"
+#include "Engine/Models/Plugins/Manager/PluginsManager.h"
 
 #include "IO/DirIO.h"
 
@@ -12,6 +14,8 @@
 
 namespace bv
 {
+
+auto global_tm = new model::TimelineManager();
 
 // ********************************
 //
@@ -57,7 +61,14 @@ PathVec			ProjectManagerImpl::ListProjectsNames	() const
 PathVec			ProjectManagerImpl::ListScenesNames		( const Path & projectName ) const
 {
 	auto pathInScenes = TranslateToPathCategory( projectName, "" );
-	return m_sceneAccessor->ListScenes( pathInScenes );
+	auto scenes = m_sceneAccessor->ListScenes( pathInScenes );
+
+    for( auto & s : scenes )
+    {
+        s = Path( "scenes" ) / s;
+    }
+
+    return scenes;
 }
 
 // ********************************
@@ -244,7 +255,7 @@ void						ProjectManagerImpl::RemoveUnusedAssets	( const Path & projectName )
 
 // ********************************
 //
-void						ProjectManagerImpl::AddScene			( const BVSceneConstPtr & scene, const Path & projectName, const Path & outPath )
+void						ProjectManagerImpl::AddScene			( const model::BasicNodeConstPtr & scene, const Path & projectName, const Path & outPath )
 {
 	auto pathInScenes = TranslateToPathCategory( projectName, outPath );
 
@@ -353,7 +364,8 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 
 		for( auto ps : projectScenes )
 		{
-			auto sa = m_sceneAccessor->ListAllUsedAssets( ps );
+            auto loc = Path2Location( ps );
+            auto sa = m_sceneAccessor->ListAllUsedAssets( loc.projectName / loc.path );
 			uniqueAssets.insert( sa.begin(), sa.end() );
 		}
 
@@ -391,7 +403,7 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 
             out << loc.path << '\n';
 
-			m_sceneAccessor->ExportScene( out, s, false );
+			m_sceneAccessor->ExportScene( out, loc.projectName / loc.path, false );
 		}
 
         assetsFile.Close();
@@ -406,6 +418,8 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 //
 void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, const Path & projectName )
 {
+    AddNewProject( projectName );
+
     auto f = File::Open( expFilePath.Str() );
 
     std::stringbuf buf;
@@ -438,8 +452,6 @@ void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, c
 
             m_categories.at( categoryName )->ImportAsset( in, projectName / path );
         }
-
-        f.Close();
     }
     else
     {
@@ -448,31 +460,30 @@ void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, c
 
     buf.str("");
 
+    in.ignore(); // ignoring new line after asset data
+
     in.get( buf, '\n');
-    assert( buf.str().empty() );
     in.ignore();
-
-
-    f.StreamBuf()->get( buf, '\n');
-    f.StreamBuf()->ignore();
     if( buf.str() == "scenes" )
     {
         buf.str("");
-        f.StreamBuf()->get( buf, '\n');
-        f.StreamBuf()->ignore();
+        in.get( buf, '\n');
+        in.ignore();
 
         SizeType size = stoul( buf.str() );
 
         for( SizeType i = 0; i < size; ++i )
         {
             buf.str("");
-            f.StreamBuf()->get( buf, '\n');
-            f.StreamBuf()->ignore();
+            in.get( buf, '\n');
+            in.ignore();
             Path path = buf.str();
 
-            m_sceneAccessor->ImportScene( *f.StreamBuf(), projectName / path );
+            m_sceneAccessor->ImportScene( in, projectName / path );
         }
     }
+
+    f.Close();
 }
 
 // ********************************
@@ -528,7 +539,7 @@ void						ProjectManagerImpl::InitializeScenes	()
 		Dir::CreateDir( m_scenesPath.Str() );
 	}
 
-	m_sceneAccessor = SceneAccessor::Create( m_scenesPath, nullptr, nullptr ); // FIXME: TM and PM cannot be null.
+    m_sceneAccessor = SceneAccessor::Create( m_rootPath, bv::global_tm, &model::PluginsManager::DefaultInstanceRef() ); // FIXME: TM and PM cannot be null.
 }
 
 // ********************************
