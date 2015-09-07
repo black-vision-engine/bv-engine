@@ -46,7 +46,7 @@ ISerializablePtr AbstractModelParameter::Create( DeserializeObject& dob ) // FIX
     auto type = dob.GetValue( "type" );
     //ITimeEvaluatorPtr te = dob.m_tm->GetRootTimeline();
     auto timeline = dob.GetValue( "timeline" );
-    ITimeEvaluatorPtr te = dob.m_tm->GetTimeline( timeline );
+    ITimeEvaluatorPtr te = dob.GetTimelineManager()->GetTimeline( timeline );
     
     auto values = dob.LoadArray< KeyFrame >( "interpolator" );
 

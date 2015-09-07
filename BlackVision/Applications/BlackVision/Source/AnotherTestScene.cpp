@@ -939,7 +939,7 @@ model::BasicNodePtr      TestScenesFactory::SequenceAnimationTestScene  ()
     return nullptr;
 }
 
-model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager )
+model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::PluginsManager * /*pluginsManager*/, model::TimelineManager * timelineManager )
 {
     if( !Path::Exists( filename ) )
 	{
@@ -963,7 +963,7 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::Plugin
 
 // /begin{FIXME}
     auto docNode = doc.first_node( "scene" );
-    auto deDoc = DeserializeObject( *docNode, *timelineManager, *pluginsManager );
+    auto deDoc = DeserializeObject( *docNode, timelineManager );
 
     auto timelines = deDoc.LoadArray< TimeEvaluatorBase< ITimeEvaluator > >( "timelines" );
     for( auto timeline : timelines )
@@ -971,7 +971,7 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::Plugin
 // /end{FIXME}
 
     /*auto */docNode = doc.first_node( "scene" )->first_node( "node" );
-    /*auto */deDoc = DeserializeObject( *docNode, *timelineManager, *pluginsManager );
+    /*auto */deDoc = DeserializeObject( *docNode, timelineManager );
 
     ISerializablePtr node = model::BasicNode::Create( deDoc );
 

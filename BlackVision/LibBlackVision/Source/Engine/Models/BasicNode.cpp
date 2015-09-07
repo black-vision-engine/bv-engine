@@ -110,7 +110,7 @@ ISerializablePtr BasicNode::Create( DeserializeObject& dob )
     assert( dob.GetName() == "node" );
 
     auto name = dob.GetValue( "name" );
-    auto timeEvaluator = dob.m_tm->GetRootTimeline();
+    auto timeEvaluator = dob.GetTimelineManager()->GetRootTimeline();
     
     auto node = Create( name, timeEvaluator );
 
