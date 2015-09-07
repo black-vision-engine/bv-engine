@@ -10,18 +10,18 @@
 namespace bv
 {
 
-const std::string SceneAccessor::SceneFileExt = ".*/.scn";
+const std::string SceneAccessor::SceneFileExt = ".*\\.scn";
 
 // ********************************
 //
-SceneAccessorConstPtr SceneAccessor::Create( const Path & path, const model::TimelineManager * tm, const model::PluginsManager * pm )
+SceneAccessorConstPtr SceneAccessor::Create( const Path & path, model::TimelineManager * tm, const model::PluginsManager * pm )
 {
 	return SceneAccessorConstPtr( new SceneAccessor( path, tm, pm ) );
 }
 
 // ********************************
 //
-SceneAccessor::SceneAccessor( const Path & path, const model::TimelineManager * tm, const model::PluginsManager * pm )
+SceneAccessor::SceneAccessor( const Path & path, model::TimelineManager * tm, const model::PluginsManager * pm )
 	: m_rootDir( path )
 	, m_tm( tm )
 	, m_pm( pm )
@@ -33,11 +33,11 @@ SceneDescriptor	SceneAccessor::GetSceneDesc( const Path & path ) const
 {
 	if( Path::Exists( m_rootDir / path ) )
 	{
-		return SceneDescriptor( m_rootDir / path );
+		return SceneDescriptor( m_rootDir / path, m_tm, m_pm );
 	}
 	else
 	{
-		return SceneDescriptor( "" );
+		return SceneDescriptor( "", m_tm, m_pm  );
 	}
 }
 
@@ -112,7 +112,7 @@ void			SceneAccessor::ExportScene( std::ostream & out, const Path & path, bool w
 	{
         out << "serialized_scene_begin" << '\n';
 
-		SceneDescriptor sceneDesc( m_rootDir / path );
+		SceneDescriptor sceneDesc( m_rootDir / path, m_tm, m_pm );
 
 		auto scene = sceneDesc.LoadScene();
 
@@ -162,7 +162,7 @@ PathVec			SceneAccessor::ListScenes( const Path & path ) const
 //
 PathVec			SceneAccessor::ListAllUsedAssets( const Path & path ) const
 {
-	SceneDescriptor desc( path );
+	SceneDescriptor desc( path, m_tm, m_pm  );
 	auto scene = desc.LoadScene();
 
 

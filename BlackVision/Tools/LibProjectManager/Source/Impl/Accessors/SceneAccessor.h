@@ -23,10 +23,10 @@ private:
 	static const std::string SceneFileExt;
 
 	Path							m_rootDir;
-	const model::TimelineManager *	m_tm;
+	model::TimelineManager *	    m_tm;
 	const model::PluginsManager *	m_pm;
 
-	explicit			SceneAccessor			( const Path & path, const model::TimelineManager * tm, const model::PluginsManager * pm );
+	explicit			SceneAccessor			( const Path & path, model::TimelineManager * tm, const model::PluginsManager * pm );
 
 	static PathVec		GetAllUsedAssetPaths	( const BVSceneConstPtr & scene );
 	static PathVec		GetAllPathsFromAssets	( const AssetDescConstPtr & assetDesc );
@@ -50,7 +50,7 @@ public:
 
 	PathVec				ListAllUsedAssets		( const Path & path ) const;
 
-	static SceneAccessorConstPtr Create			( const Path & path, const model::TimelineManager * tm, const model::PluginsManager * pm );
+	static SceneAccessorConstPtr Create			( const Path & path, model::TimelineManager * tm, const model::PluginsManager * pm );
 };
 
 

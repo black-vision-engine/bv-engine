@@ -3,6 +3,10 @@
 #include "Assets/Texture/SingleTextureAssetDescriptor.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
+#include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
+
 #include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
 
@@ -26,6 +30,14 @@ bool    LoadTexture     ( model::IPluginPtr plugin, const Path & projectName, co
 
 bv::BVSceneConstPtr CreateTestScene0()
 {
+    std::vector< model::IPluginDescriptor * > descriptors;
+
+    descriptors.push_back( new model::DefaultTransformPluginDesc() );
+    descriptors.push_back( new model::DefaultRectPluginDesc() );
+    descriptors.push_back( new model::DefaultTexturePluginDesc() );
+
+    model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( descriptors );
+
     auto globalTimeline = model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) );
     auto root = model::BasicNode::Create( "textured_rect", globalTimeline );
 
@@ -48,14 +60,14 @@ bv::BVSceneConstPtr CreateTestScene0()
     success = LoadTexture( root->GetPlugin( "texture" ), "proj00", "flagi/pol.jpg" );
     assert( success );    
 
-    RendererInput ri;
-    ri.m_WindowHandle			= 0;
-    ri.m_PixelFormat			= 0;
-    ri.m_RendererDC				= 0;
-    ri.m_DisableVerticalSync	= true;
-	auto renderer = new bv::Renderer( ri, 100, 100 );
+ //   RendererInput ri;
+ //   ri.m_WindowHandle			= 0;
+ //   ri.m_PixelFormat			= 0;
+ //   ri.m_RendererDC				= 0;
+ //   ri.m_DisableVerticalSync	= true;
+	//auto renderer = new bv::Renderer( ri, 100, 100 );
 
-    return BVScene::Create( root, new Camera( false ), "BasicScene", globalTimeline, renderer );
+    return BVScene::CreateFakeSceneForTestingOnly( root, new Camera( false ), "BasicScene", globalTimeline );
 }
 
 TEST( CleanAll, ProjectManager )
@@ -159,7 +171,6 @@ TEST( AddingAssets, ProjectManager )
 
 TEST( AddingScene, ProjectManager )
 {
-
     g_pm0->AddScene( CreateTestScene0(), "proj00", "scene1/s.scn" );
 }
 

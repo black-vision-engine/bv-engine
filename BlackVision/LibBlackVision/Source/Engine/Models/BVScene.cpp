@@ -34,6 +34,24 @@ BVScenePtr    BVScene::Create( model::BasicNodePtr modelRootNode, Camera * cam, 
     return bvScene;
 }
 
+// *******************************
+//
+BVScenePtr    BVScene::CreateFakeSceneForTestingOnly( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    return BVScenePtr( new BVScene( modelRootNode, cam, name, timeEvaluator ) );
+}
+
+// *******************************
+//
+BVScene::BVScene    ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator )
+    : m_pCamera( cam )
+    , m_pModelSceneRoot( modelRootNode )
+    , m_pEngineSceneRoot( nullptr )
+    , m_cameraPosition( "camera_position", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 1.0f ) ), timeEvaluator )
+    , m_cameraDirection( "camera_direction", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 0.f ) ), timeEvaluator )
+    , m_cameraUp( "camera_up", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 1.f, 0.f ) ), timeEvaluator )
+    , m_name( name )
+{}
 
 // *******************************
 //

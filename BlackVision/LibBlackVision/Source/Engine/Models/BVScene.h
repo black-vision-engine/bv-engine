@@ -48,6 +48,7 @@ private:
 private:
 
     explicit                BVScene             ( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
+    explicit                BVScene             ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator );
 
 public:
 
@@ -70,6 +71,7 @@ public:
 
     const std::string &     GetName             ()  const;
 
+    static BVScenePtr       CreateFakeSceneForTestingOnly( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator );
 
 private:
 
