@@ -123,7 +123,6 @@ CompositeBezierInterpolator::CompositeBezierInterpolator( const CompositeBezierI
     m_type = that.m_type; 
 }
 
-typedef model::IParameter::CurveType CurveType; // FIXME
 template< class TimeValueT, class ValueT >
 IEvaluator<TimeValueT, ValueT >* CreateDummyInterpolator( CurveType type, Key< TimeValueT, ValueT > k1, Key< TimeValueT, ValueT > k2, TimeValueT tolerance ) // FIXME maybe
 {

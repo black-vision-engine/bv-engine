@@ -23,7 +23,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultConePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
 
-#include "Mathematics/Interpolators/CompositeBezierInterpolator.h"
+//#include "Mathematics/Interpolators/CompositeBezierInterpolator.h"
+//#include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 
 #include "Engine/Models/Plugins/PluginUtils.h"
 
@@ -841,7 +842,7 @@ void BoolParamTest()
     model::SetParameter( param, 0.f, true );
 }
 
-model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr timeEvaluator, model::IParameter::CurveType type )
+model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr timeEvaluator, CurveType type )
 {
     model::BasicNodePtr node = model::BasicNode::Create( "rect", timeEvaluator );
     node->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -851,11 +852,14 @@ model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr t
     model::SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
 
     auto param = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-    param->SetCurveType( type );
     model::SetParameterTranslation( param, 0, 1.f, offset );
     model::SetParameterTranslation( param, 0, 0.f, offset );
     model::SetParameterTranslation( param, 0, 10.f, offset + glm::vec3( 2, 0, 0 ) );
     model::SetParameterScale( param, 0, 0.f, glm::vec3( 0.25f, 0.25f, 1.f ) );
+
+    auto qParam = model::QueryTypedParam< model::ParamTransformVecPtr >( param );
+    assert( qParam );
+    qParam->SetCurveType( type );
 
     return node;
 }
@@ -865,10 +869,10 @@ model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model
     model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
-    auto node1 = CosineDemoRect( glm::vec3( -1, 0.6, 0 ) , timeEvaluator, model::IParameter::POINT );
-    auto node2 = CosineDemoRect( glm::vec3( -1, 0.2, 0 ) , timeEvaluator, model::IParameter::LINEAR );
-    auto node3 = CosineDemoRect( glm::vec3( -1, -0.2, 0 ) , timeEvaluator, model::IParameter::COSINE_LIKE );
-    auto node4 = CosineDemoRect( glm::vec3( -1, -0.6, 0 ) , timeEvaluator, model::IParameter::BEZIER );
+    auto node1 = CosineDemoRect( glm::vec3( -1, 0.6, 0 ) , timeEvaluator, CurveType::POINT );
+    auto node2 = CosineDemoRect( glm::vec3( -1, 0.2, 0 ) , timeEvaluator, CurveType::LINEAR );
+    auto node3 = CosineDemoRect( glm::vec3( -1, -0.2, 0 ) , timeEvaluator, CurveType::COSINE_LIKE );
+    auto node4 = CosineDemoRect( glm::vec3( -1, -0.6, 0 ) , timeEvaluator, CurveType::BEZIER );
 
     root->AddChildToModelOnly( node1 );
     root->AddChildToModelOnly( node2 );

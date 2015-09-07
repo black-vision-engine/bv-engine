@@ -62,7 +62,7 @@ protected:
     explicit SimpleTransform( TransformKind kind );
 
 public:
-    virtual void                SetCurveType    ( model::IParameter::CurveType type ) { p0.SetCurveType( type ); p1.SetCurveType( type ); p2.SetCurveType( type ); }
+    virtual void                SetCurveType        ( CurveType type );
 
     virtual glm::mat4x4         Evaluate            ( typename ParamT::TimeT t ) const;
     virtual SimpleTransform *   Clone               () const;
@@ -136,6 +136,7 @@ private:
     Vec3Interpolator    m_rotationAxis;
 
 public:
+    virtual void                SetCurveType        ( CurveType type );
 
     explicit                    Rotation    ( ParamT angle, const Vec3Interpolator & rotAxis );
     explicit                    Rotation    ( ParamT angle, ParamT p0, ParamT p1, ParamT p2 );
@@ -185,9 +186,7 @@ public:
 
     virtual         ~CompositeTransform ();
 
-    virtual void                SetCurveType    ( model::IParameter::CurveType type ) override { for( auto trans : m_transformations ) trans->SetCurveType( type ); }
-	//void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method );
-	//model::IParameter::InterpolationMethod     GetInterpolationMethod () const;
+    void            SetCurveType        ( CurveType type );
 
     void            AddTranslation      ( ParamT x0, ParamT x1, ParamT x2 );
     void            AddScale            ( ParamT s0, ParamT s1, ParamT s2 );

@@ -20,21 +20,8 @@ namespace bv { namespace model {
 	class IParameter
 	{
 	public:
-
-        enum CurveType 
-        { 
-            POINT, 
-            LINEAR, 
-            BEZIER,
-            COSINE_LIKE
-        };
-
 		virtual const std::string &     GetName         () const								= 0;
 		virtual ModelParamType          GetType         () const								= 0;
-
-        virtual void                    SetCurveType    ( CurveType type )                      = 0;
-		//virtual void                    SetInterpolationMethod ( InterpolationMethod method )	= 0;
-		//virtual InterpolationMethod     GetInterpolationMethod () const							= 0;
 
 		virtual ITimeEvaluatorPtr       GetTimeEvaluator()										= 0;
 		virtual void                    SetTimeEvaluator( ITimeEvaluatorPtr timeEvaluator )		= 0;

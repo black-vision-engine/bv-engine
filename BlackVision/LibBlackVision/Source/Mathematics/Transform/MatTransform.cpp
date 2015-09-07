@@ -56,6 +56,18 @@ SimpleTransform<ParamT>::SimpleTransform( TransformKind kind )
 {
 }
 
+// *************************************
+//
+template<typename ParamT>
+void SimpleTransform<ParamT>::SetCurveType    ( CurveType type ) 
+{ 
+    p0.SetCurveType( type ); 
+    p1.SetCurveType( type ); 
+    p2.SetCurveType( type ); 
+}
+
+// *************************************
+//
 template<typename ParamT>
 Rotation<ParamT>::Rotation    ( ParamT angle, const Vec3Interpolator & rotAxis )
     : SimpleTransform( TransformKind::rotation )
@@ -73,6 +85,16 @@ Rotation<ParamT>::Rotation( ParamT angle, ParamT p0, ParamT p1, ParamT p2 )
     , m_angle( angle )
     , m_hasRotAxisInterpolator( false )
 {
+}
+
+// *************************************
+//
+template<typename ParamT>
+void Rotation<ParamT>::SetCurveType( CurveType type )
+{
+    m_angle.SetCurveType( type );
+    assert( false );
+    //m_rotationAxis.SetCurveType( type );
 }
 
 // *************************************
@@ -122,35 +144,14 @@ CompositeTransform<ParamT>::~CompositeTransform()
     }
 }
 
-//// *************************************
-////
-//template<typename ParamT>
-//void                    CompositeTransform<ParamT>::SetInterpolationMethod ( model::IParameter::InterpolationMethod method )
-//{
-//    for( auto& transformation : m_transformations )
-//    {
-//        transformation->GetP0MotylaNoga().SetInterpolationMethod( method );
-//        transformation->GetP1MotylaNoga().SetInterpolationMethod( method );
-//        transformation->GetP2MotylaNoga().SetInterpolationMethod( method );
-//    }
-//}
+// *************************************
 //
-//// *************************************
-////
-//template<typename ParamT>
-//model::IParameter::InterpolationMethod     CompositeTransform<ParamT>::GetInterpolationMethod () const
-//{
-//    //auto ret = __super::GetInterpolationMethod();
-//    for( auto& transformation : m_transformations )
-//    {
-//        assert( ret == transformation->GetP0MotylaNoga().GetInterpolationMethod() );
-//        assert( ret == transformation->GetP1MotylaNoga().GetInterpolationMethod() );
-//        assert( ret == transformation->GetP2MotylaNoga().GetInterpolationMethod() );
-//    
-//        { transformation; }
-//    }
-//    return ret;
-//}
+template<typename ParamT>
+void CompositeTransform<ParamT>::SetCurveType        ( CurveType type )  
+{ 
+    for( auto& trans : m_transformations ) 
+        trans->SetCurveType( type ); 
+}
 
 // *************************************
 //

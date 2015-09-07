@@ -36,16 +36,8 @@ Key< TimeValueT, ValueT > operator*( const float a, const Key< TimeValueT, Value
 template<class TimeValueT>
 class Interpolator
 {
-    typedef model::IParameter::CurveType CurveType; // FIXME
 public:
-
-    //typedef TimeValueT TimeType;
-
-public:
-    virtual void                    SetCurveType    ( CurveType type )                      = 0;
-
     virtual int EvalToCBuffer( TimeValueT time, char * buf ) const = 0;
-
 };
 
 template<class TimeValueT, class ValueT, class FloatT = float >
@@ -96,7 +88,6 @@ public:
     void SetWrapMethod( WrapMethod pre, WrapMethod post );
 
     virtual int EvalToCBuffer( TimeValueT time, char * buf ) const;
-    virtual void                SetCurveType    ( model::IParameter::CurveType /*type*/ ) override { } // remember, this class will be removed ;)
 
 	const std::vector<Key<TimeValueT, ValueT>> & AccessKeys() const;
 

@@ -19,6 +19,15 @@ SimpleParameterImpl< InterpolatorType, ValueType, type >::~SimpleParameterImpl  
 // *******************************
 //
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
+void SimpleParameterImpl< InterpolatorType, ValueType, type >::SetCurveType    ( CurveType type )
+{ 
+    m_interpolator.SetCurveType( type ); 
+}
+
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
 inline ValueType SimpleParameterImpl< InterpolatorType, ValueType, type >::Evaluate () const
 {
     auto t = GetLocalEvaluationTime();

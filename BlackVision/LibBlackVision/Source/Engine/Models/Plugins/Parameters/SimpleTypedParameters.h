@@ -6,6 +6,7 @@
 #include "Engine/Models/Plugins/Parameters/AbstractModelParameter.h"
 #include "Engine/Interfaces/ISerializable.h"
 
+#include "Mathematics/Interpolators/Interpolators.h"
 
 namespace bv { namespace model {
 
@@ -19,17 +20,14 @@ public:
 
 protected:
 
-    InterpolatorType m_interpolator;
+    InterpolatorType        m_interpolator;
 
 public:
 
     explicit                SimpleParameterImpl ( const std::string & name, const InterpolatorType & interpolator, ITimeEvaluatorPtr evaluator );
                             ~SimpleParameterImpl();
 
-    virtual void                SetCurveType    ( CurveType type ) override { m_interpolator.SetCurveType( type ); }
-    //virtual void                SetInterpolationMethod ( InterpolationMethod method ) override;
-    //virtual InterpolationMethod GetInterpolationMethod () const override;
-
+    void                    SetCurveType        ( CurveType type );
 
     inline  ValueType       Evaluate            () const;
     inline  void            SetVal              ( const ValueType & val, TimeType t );

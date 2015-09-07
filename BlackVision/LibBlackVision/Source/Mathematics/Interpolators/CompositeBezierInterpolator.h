@@ -5,6 +5,14 @@
 namespace bv
 {
 
+enum CurveType 
+{ 
+    POINT, 
+    LINEAR, 
+    BEZIER,
+    COSINE_LIKE
+};
+
 enum class EvaluatorType : int
 { 
     CONSTANT, 
@@ -23,17 +31,15 @@ public:
 
 class CompositeBezierInterpolator
 {
-    typedef model::IParameter::CurveType CurveType;
-
 private:
     typedef float TimeValueT;
     typedef float ValueT;
 
     std::vector< Key<TimeValueT, ValueT> >              keys;
-    std::vector< IEvaluator<TimeValueT, ValueT >* >  interpolators; // FIXME: ptr-ize
+    std::vector< IEvaluator<TimeValueT, ValueT >* >     interpolators; // FIXME: ptr-ize
     TimeValueT                                          m_tolerance;
 
-    model::IParameter::CurveType                        m_type;
+    CurveType                                           m_type;
 
 public:
     typedef TimeValueT  TimeType;
