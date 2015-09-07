@@ -13,17 +13,17 @@ namespace bv {
 
 // *******************************
 //
-BVScenePtr    BVScene::Create( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer )
+BVScenePtr    BVScene::Create( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager )
 {
     struct make_shared_enabler_BVScene : public BVScene
     {
-        make_shared_enabler_BVScene( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer )
-            : BVScene( cam, name, timeEvaluator, renderer )
+        make_shared_enabler_BVScene( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager )
+            : BVScene( cam, name, timeEvaluator, renderer, pTimelineManager )
         {
         }
     };
 
-    auto bvScene    = std::make_shared< make_shared_enabler_BVScene >( cam, name, timeEvaluator, renderer );
+    auto bvScene    = std::make_shared< make_shared_enabler_BVScene >( cam, name, timeEvaluator, renderer, pTimelineManager );
 
     if( modelRootNode )
     {
@@ -37,7 +37,7 @@ BVScenePtr    BVScene::Create( model::BasicNodePtr modelRootNode, Camera * cam, 
 
 // *******************************
 //
-BVScene::BVScene    ( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer )
+BVScene::BVScene    ( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager )
     : m_pCamera( cam )
     , m_renderer( renderer )
     , m_pModelSceneRoot( nullptr )
@@ -46,6 +46,7 @@ BVScene::BVScene    ( Camera * cam, const std::string & name, model::ITimeEvalua
     , m_cameraDirection( "camera_direction", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 0.f ) ), timeEvaluator )
     , m_cameraUp( "camera_up", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 1.f, 0.f ) ), timeEvaluator )
     , m_name( name )
+    , m_pTimelineManager( pTimelineManager )
 {
     m_pSceneEditor = new BVSceneEditor( this );
 }

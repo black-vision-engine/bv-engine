@@ -500,7 +500,7 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
     }
     else if( scene == "SERIALIZED_TEST" )
     {
-        node = TestScenesFactory::CreateSerializedTestScene( pluginsManager, timelineManager );
+        node = TestScenesFactory::CreateSerializedTestScene( timelineManager );
     }
 	else if( scene == "ALL_BASIC_SHAPES_SHOW" )
 	{

@@ -43,17 +43,19 @@ private:
     //SceneModelPtr       m_pModelSceneRoot;
     SceneNode *         m_pEngineSceneRoot;
 
+    model::TimelineManager * m_pTimelineManager;
+
     std::string         m_name;
 
 private:
 
-    explicit                BVScene             ( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
+    explicit                BVScene             ( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager );
 
 public:
 
                             ~BVScene            ();
 
-    static BVScenePtr       Create              ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
+    static BVScenePtr       Create              ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager );
     static ISerializablePtr Create              ( DeserializeObject& doc );
     virtual void            Serialize           ( SerializeObject &doc) const override;
 

@@ -939,7 +939,7 @@ model::BasicNodePtr      TestScenesFactory::SequenceAnimationTestScene  ()
     return nullptr;
 }
 
-model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::PluginsManager * /*pluginsManager*/, model::TimelineManager * timelineManager )
+model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineManager * timelineManager )
 {
     if( !Path::Exists( filename ) )
 	{
@@ -980,16 +980,10 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::Plugin
     return BasicNodePtr( root );
 }
 
-model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager )
+model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( model::TimelineManager * timelineManager )
 {
-    //return LoadSceneFromFile( "Assets/07_Results.xml", pluginsManager, timelineManager );
-    auto scene = LoadSceneFromFile( "test.xml", pluginsManager, timelineManager );
-
-    //scene-> // = root
-    //    GetChild( 0 )-> // = CreedScene
-    //        GetChild( 0 )-> // = root
-    //            GetChild( 0 ) // = dziecko
-    //                ->SetVisible( false );
+    //return LoadSceneFromFile( "Assets/07_Results.xml", timelineManager );
+    auto scene = LoadSceneFromFile( "test.xml", timelineManager );
 
     return scene;
 }
