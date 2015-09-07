@@ -7,11 +7,10 @@ namespace bv {
 // *********************************
 //
 Texture2DArray::Texture2DArray                    ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, UInt32 layers, UInt32 levels )
-	: Texture( format, TextureType::T_2D, semantic, layers, levels )
+	: Texture( format, TextureType::T_2D, semantic, layers, levels, layers * levels )
     , m_width( width )
     , m_height( height )
 {
-	m_data.resize( m_layers * m_levels );
 }
 
 // *********************************

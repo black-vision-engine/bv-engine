@@ -32,7 +32,6 @@ public:
     virtual                         ~Texture2DCache     ();
 
     Texture2DPtr                    GetTexture          ( const ITextureDescriptor * txParams );
-	//@SEQUENCE
     Texture2DPtr                    GetSequence         ( const IAnimationDescriptor * animParams );
 
     bool                            IsRegistered        ( const ITextureDescriptor * txParams ) const;
@@ -42,9 +41,6 @@ public:
 
     static Texture2DPtr				CreateEmptyTexture  ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic );
     static Texture2DPtr				CreateTexture       ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, MemoryChunkConstPtr data );
-
-	//@SEQUENCE
-    //static Texture2DSequenceImplPtr CreateEmptySequence ( TextureFormat format, UInt32 width, UInt32 height  );
 
 };
 

@@ -62,15 +62,43 @@ void    PdrTexture2D::Initialize      ( const Texture2D * texture )
     BVGL::bvglGenTextures   ( 1, &m_textureID );
     GLuint prevTex = Bind();
 
+
+	BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+
+	if( m_pboMem )
+    {
+		//for PBO streaming
+		BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1 );
+		BVGL::bvglTexStorage2D( GL_TEXTURE_2D, 1, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height );
+	}
+	else 
+	{
+		auto numLevels = texture->GetNumLevels();
+		BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, numLevels );
+
+		BVGL::bvglTexStorage2D( GL_TEXTURE_2D, numLevels, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height );
+
+		for (unsigned int lvl = 0; lvl < numLevels; ++lvl)
+		{
+			auto data = texture->GetData( lvl )->Get();
+			if( data )
+			{
+				BVGL::bvglTexSubImage2D( GL_TEXTURE_2D, lvl, 0, 0, ( GLsizei )texture->GetWidth( lvl ), ( GLsizei )texture->GetHeight( lvl ), m_format, m_type, data );
+			}
+		}
+	}
+
+	/*
     if( m_pboMem )
     {
         //NOTE: wystarczy tylko tak, bo update i tak pojdzie dwa razy (raz przy tworzeniu tekstury, a raz przy jej enablowaniu, co oznacza, ze oba PBO zosatana zaladowane poprawnie danymi tekstury i nie bedzie
         //NOTE: jednej pustej ramki z pustym przebiegiem renderera (czyli dokladnie tak, jak byc powinno) - pesymistycznie nalezy tutaj zaladowac od razu jedno PBO, i z niego poprawnie odczytaja sie dane w pierwszym feczu
-        BVGL::bvglTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height, 0, m_format, m_type, 0 );
+        
+		BVGL::bvglTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height, 0, m_format, m_type, 0 );
     }
     else
     {
-		/*if( texture->GetNumLevels() == 1 )
+		if( texture->GetNumLevels() == 1 )
 		{
 			BVGL::bvglTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height, 0, m_format, m_type, texture->GetData()->Get() );
 		}
@@ -86,24 +114,9 @@ void    PdrTexture2D::Initialize      ( const Texture2D * texture )
 			{
 				BVGL::bvglTexImage2D( GL_TEXTURE_2D, i, m_internalFormat, ( GLsizei )texture->GetWidth( i ), ( GLsizei )texture->GetHeight( i ), 0, m_format, m_type, texture->GetData( i )->Get() );
 			}
-		}*/
-
-		auto numLevels = texture->GetNumLevels();
-		
-		BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-		BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, GLint( numLevels - 1 ) );
-		
-		BVGL::bvglTexStorage2D( GL_TEXTURE_2D, numLevels, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height );
-
-		for (unsigned int lvl = 0; lvl < numLevels; ++lvl)
-		{
-			auto data = texture->GetData( lvl )->Get();
-			if( data )
-			{
-				BVGL::bvglTexSubImage2D( GL_TEXTURE_2D, lvl, 0, 0, ( GLsizei )texture->GetWidth( lvl ), ( GLsizei )texture->GetHeight( lvl ), m_format, m_type, data );
-			}
 		}
     }
+	*/
 
     BVGL::bvglBindTexture( GL_TEXTURE_2D, prevTex );
 }

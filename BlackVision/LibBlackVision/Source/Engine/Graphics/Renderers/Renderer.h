@@ -79,6 +79,8 @@ private:
     typedef std::hash_map<const Texture2D *, PdrTexture2D * >                                   PdrTexture2DMap;
     typedef std::hash_map<const RenderTarget *, PdrRenderTarget * >                             PdrRenderTargetMap;
 
+    typedef std::hash_map<const Texture *, UInt32 >												TextureUpdateIDMapType;
+
     PdrShaderMapType                    m_PdrShaderMap;
     PdrVertexBufferMapType              m_PdrVertexBufferMap;
     PdrIndexBufferMapType               m_PdrIndexBufferMap;
@@ -87,6 +89,8 @@ private:
     PdrTexture2DMap                     m_PdrTextures2DMap;
     PdrVertexArrayObjectSingleVBMapType m_PdrVertexArrayObjectSingleVBMap;
     PdrRenderTargetMap                  m_PdrRenderTargetMap;
+
+    TextureUpdateIDMapType              m_TextureUpdateIDMap;
 
     PdrPBOMemTransfer *                 m_PdrPBOMemTransferRT;
 

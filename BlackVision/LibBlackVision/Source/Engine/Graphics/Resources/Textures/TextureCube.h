@@ -12,7 +12,7 @@ private:
     UInt32			m_width;
     UInt32			m_height;
 
-	const UInt32	CUBEMAP_FACES_NUM = 6;
+	static const UInt32	CUBEMAP_FACES_NUM;
 
 public:
 

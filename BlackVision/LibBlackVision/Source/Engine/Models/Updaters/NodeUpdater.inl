@@ -234,10 +234,7 @@ inline void    NodeUpdater::UpdateTexturesData  ()
 
             if ( animDesc->CurrentFrame() != animDesc->PreviousFrame() )
             {
-				auto frame = animDesc->CurrentFrame() % animDesc->NumTextures();
-				tex2DSeq->SetData( animDesc->GetBits( frame ) );
-                //@SEQUENCE
-				//tex2DSeq->SetActiveTexture( animDesc->CurrentFrame() );
+				tex2DSeq->SetData( animDesc->GetBits( animDesc->CurrentFrame() ) );
             }
         }
 

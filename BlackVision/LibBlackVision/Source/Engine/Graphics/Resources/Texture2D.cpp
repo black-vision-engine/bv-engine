@@ -7,21 +7,19 @@ namespace bv {
 // *********************************
 //
 Texture2D::Texture2D                    ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic )
-	: Texture( format, TextureType::T_2D, semantic, 1, 1 )
+	: Texture( format, TextureType::T_2D, semantic, 1, 1, 1 )
     , m_width( width )
     , m_height( height )
 {
-	m_data.resize( m_layers * m_levels );
 }
 
 // *********************************
 //
 Texture2D::Texture2D                    ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, UInt32 levels )
-	: Texture( format, TextureType::T_2D, semantic, 1, levels )
+	: Texture( format, TextureType::T_2D, semantic, 1, levels, levels )
     , m_width( width )
     , m_height( height )
 {
-	m_data.resize( m_layers * m_levels );
 }
 
 // *********************************

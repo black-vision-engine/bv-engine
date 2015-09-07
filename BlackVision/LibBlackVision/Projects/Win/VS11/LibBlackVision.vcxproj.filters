@@ -657,9 +657,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.cpp">
       <Filter>Engine\Models\Updaters</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\SequenceAnimationUpdater.cpp">
-      <Filter>Engine\Models\Updaters</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\UpdatersManager.cpp">
       <Filter>Engine\Models\Updaters</Filter>
     </ClCompile>
@@ -899,6 +896,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture1DArray.cpp">
       <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCube.cpp">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1535,9 +1535,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.h">
       <Filter>Engine\Models\Updaters</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\SequenceAnimationUpdater.h">
-      <Filter>Engine\Models\Updaters</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\UpdatersManager.h">
       <Filter>Engine\Models\Updaters</Filter>
     </ClInclude>
@@ -1819,6 +1816,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture1DArray.h">
       <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCube.h">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

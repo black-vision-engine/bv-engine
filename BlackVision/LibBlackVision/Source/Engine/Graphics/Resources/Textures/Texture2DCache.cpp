@@ -65,7 +65,6 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
     return tx;
 }
 
-//@SEQUENCE
 // *********************************
 //
 Texture2DPtr    Texture2DCache::GetSequence             ( const IAnimationDescriptor * animParams )

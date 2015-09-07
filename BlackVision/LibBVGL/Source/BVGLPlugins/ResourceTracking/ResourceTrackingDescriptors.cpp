@@ -160,8 +160,11 @@ std::string  TextureDesc::Summary   () const
     std::stringstream ss;
 
     ss << "ID: " << std::setw( ID_W ) << std::setfill( ' ' ) << ID << " (" << std::setw( 4 ) << width << ", " << std::setw( 4 ) << height << "), ";
-    //ss << "Size: " << std::setw( SIZE_W ) << FormatSizeString( DataSize() ) << " ";
-    //ss << "Format: " << std::setw( 4 ) << TranslateNoGLPrefix( BVGLTranslator::TranslateTextureFormat, format ) << " ";
+
+    //FIXME: glTexStorage uses internalFormat not format (from glTexSubImage2D) as expected here
+	//ss << "Size: " << std::setw( SIZE_W ) << FormatSizeString( DataSize() ) << " ";
+	//ss << "Format: " << std::setw( 4 ) << TranslateNoGLPrefix( BVGLTranslator::TranslateTextureFormat, format ) << " ";
+
 	ss << "Type: " << std::setw( 4 ) << TranslateNoGLPrefix( BVGLTranslator::TranslateTextureTarget, type ) << " ";
 	ss << "Mipmaps: " << std::setw( 3 ) << this->mipmapLevels;
 

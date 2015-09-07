@@ -381,10 +381,15 @@ void    Renderer::Enable              ( const Texture2D * texture, int textureUn
 {
     PdrTexture2D * pdrTex2D = GetPdrTexture2D( texture );
 
-    if( texture->Changed() )
+	if( m_TextureUpdateIDMap.count( texture ) == 0 )
+	{
+		m_TextureUpdateIDMap[ texture ] = 0;
+	}
+
+    if( texture->Changed( m_TextureUpdateIDMap[ texture ] ) )
     {
         pdrTex2D->Update( texture );
-        texture->SetChanged( false );
+		m_TextureUpdateIDMap[ texture ] = texture->GetUpdateID();
         pdrTex2D->SetUpdated( true );
     }
     else

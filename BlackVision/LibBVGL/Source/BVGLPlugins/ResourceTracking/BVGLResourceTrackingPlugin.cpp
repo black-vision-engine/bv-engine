@@ -115,7 +115,10 @@ void    BVGLResourceTrackingPlugin::ActiveTexture				( GLenum texture )
 //
 void    BVGLResourceTrackingPlugin::TexSubImage2D				( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid * pixels )
 {
-    Parent::TexSubImage2D( target, level, xoffset, yoffset, width, height, format, type, pixels );
+	Parent::TexSubImage2D( target, level, xoffset, yoffset, width, height, format, type, pixels );
+
+	auto& texture = m_textures.GetBoundResource( target );
+	texture.format = format;
 }
 
 // *****************************
@@ -387,19 +390,25 @@ void BVGLResourceTrackingPlugin::CompressedTexImage3D		( GLenum target, GLint le
 void BVGLResourceTrackingPlugin::CompressedTexSubImage1D		( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, const GLvoid* data )
 {
 	Parent::CompressedTexSubImage1D( target, level, xoffset, width, format, imageSize, data );
-	// @todo TexSubImage2D calls only parent implementation too.Maybe smth should be done here.
+	
+	auto& texture = m_textures.GetBoundResource( target );
+	texture.format = format;
 }
 
 void BVGLResourceTrackingPlugin::CompressedTexSubImage2D		( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const GLvoid* data )
 {
 	Parent::CompressedTexSubImage2D( target, level, xoffset, yoffset, width, height, format, imageSize, data );
-	// @todo TexSubImage2D calls only parent implementation too.Maybe smth should be done here.
+	
+	auto& texture = m_textures.GetBoundResource( target );
+	texture.format = format;
 }
 
 void BVGLResourceTrackingPlugin::CompressedTexSubImage3D		( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid* data )
 {
 	Parent::CompressedTexSubImage3D( target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, data );
-	// @todo TexSubImage2D calls only parent implementation too.Maybe smth should be done here.
+	
+	auto& texture = m_textures.GetBoundResource( target );
+	texture.format = format;
 }
 
 void BVGLResourceTrackingPlugin::TexImage1D					( GLenum target, GLint level, GLint internalFormat, GLsizei width, GLint border, GLenum format, GLenum type, const GLvoid* data )
@@ -454,13 +463,17 @@ void BVGLResourceTrackingPlugin::TexImage3DMultisample		( GLenum target, GLsizei
 void BVGLResourceTrackingPlugin::TexSubImage1D				( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const GLvoid* pixels )
 {
 	Parent::TexSubImage1D( target, level, xoffset, width, format, type, pixels );
-	// @todo TexSubImage2D calls only parent implementation too.Maybe smth should be done here.
+
+	auto& texture = m_textures.GetBoundResource( target );
+	texture.format = format;
 }
 
 void BVGLResourceTrackingPlugin::TexSubImage3D				( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const GLvoid* pixels )
 {
 	Parent::TexSubImage3D( target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels );
-	// @todo TexSubImage2D calls only parent implementation too.Maybe smth should be done here.
+	
+	auto& texture = m_textures.GetBoundResource( target );
+	texture.format = format;
 }
 
 void BVGLResourceTrackingPlugin::TexStorage1D				( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width )

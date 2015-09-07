@@ -21,15 +21,15 @@ int Texture::m_sPixelSize[ TextureFormat::F_TOTAL ] =
 
 // *********************************
 //  
-Texture::Texture                                ( TextureFormat format, TextureType type, DataBuffer::Semantic semantic, UInt32 layers, UInt32 levels )
+Texture::Texture                                ( TextureFormat format, TextureType type, DataBuffer::Semantic semantic, UInt32 layers, UInt32 levels, UInt32 dataSize )
     : m_format( format )
     , m_type( type )
     , m_semantic( semantic )
-    , m_changed( true )
 	, m_layers( layers ) 
-	, m_levels( levels ) 
+	, m_levels( levels )
+	, m_updateID( 1 )
 {
-	m_data.resize( layers * levels );
+	m_data.resize( dataSize, nullptr );
 }
 
 // *********************************
@@ -147,21 +147,22 @@ void					Texture::SetDataChunk		( MemoryChunkConstPtr data, UInt32 layer, UInt32
 	if( idx < m_data.size() )
 	{
 		m_data[ idx ] = data;
+		m_updateID++;
 	}
 }
 
 // *********************************
 //
-void                    Texture::SetChanged     ( bool changed ) const
+UInt32                    Texture::GetUpdateID      () const
 {
-    m_changed = changed;
+	return m_updateID;
 }
 
 // *********************************
 //
-bool                    Texture::Changed        () const
+bool                    Texture::Changed			( UInt32 updateID ) const
 {
-    return m_changed;
+	return m_updateID != updateID;
 }
 
 } //bv

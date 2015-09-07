@@ -3,25 +3,26 @@
 #include <algorithm>
 
 namespace bv {
-	
+
+const UInt32	TextureCube::CUBEMAP_FACES_NUM = 6;
+
+
 // *********************************
 //
 TextureCube::TextureCube                ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic )
-	: Texture( format, TextureType::T_CUBE, semantic, 1, 1 )
+	: Texture( format, TextureType::T_CUBE, semantic, 1, 1, CUBEMAP_FACES_NUM )
     , m_width( width )
     , m_height( height )
 {
-	m_data.resize( CUBEMAP_FACES_NUM * m_levels * m_layers );
 }
 
 // *********************************
 //
 TextureCube::TextureCube                ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, UInt32 levels )
-	: Texture( format, TextureType::T_CUBE, semantic, 1, levels )
+	: Texture( format, TextureType::T_CUBE, semantic, 1, levels, CUBEMAP_FACES_NUM * levels )
     , m_width( width )
     , m_height( height )
 {
-	m_data.resize( CUBEMAP_FACES_NUM * m_levels * m_layers );
 }
 
 // *********************************

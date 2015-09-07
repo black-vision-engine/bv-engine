@@ -174,6 +174,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2DArray.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2DCache.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture3D.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCube.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexArray.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexDescriptor.cpp" />
@@ -329,7 +330,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\GeometryUpdater.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\SequenceAnimationUpdater.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\UpdatersManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Processes\InitProcess.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Processes\Process.cpp" />
@@ -360,6 +360,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1DArray.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2DArray.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture3D.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCube.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.h" />
@@ -632,7 +633,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\GeometryUpdater.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\SequenceAnimationUpdater.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\UpdatersManager.h" />
     <ClInclude Include="..\..\..\Source\Engine\Processes\InitProcess.h" />
     <ClInclude Include="..\..\..\Source\Engine\Processes\Process.h" />
