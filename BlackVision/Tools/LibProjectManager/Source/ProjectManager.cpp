@@ -5,8 +5,8 @@ namespace bv
 {
 // ********************************
 //
-ProjectManager::ProjectManager	( const Path & rootPath )
-	: m_impl( new ProjectManagerImpl( rootPath ) )
+ProjectManager::ProjectManager	( const Path & rootPath, model::TimelineManager * tm )
+	: m_impl( new ProjectManagerImpl( rootPath, tm ) )
 {}
 
 // ********************************
@@ -25,7 +25,7 @@ namespace
 
 // ********************************
 //
-ProjectManager *			ProjectManager::GetInstance		( const Path & rootPath )
+ProjectManager *			ProjectManager::GetInstance		( const Path & rootPath, model::TimelineManager * tm )
 {
 	auto it = g_pms.find( rootPath.Str() );
 
@@ -35,7 +35,7 @@ ProjectManager *			ProjectManager::GetInstance		( const Path & rootPath )
 	}
 	else
 	{
-		auto npm = new ProjectManager( rootPath );
+		auto npm = new ProjectManager( rootPath, tm );
 		g_pms[ rootPath.Str() ] = npm;
 		return npm;
 	}
@@ -141,7 +141,7 @@ void						ProjectManager::RemoveUnusedAssets	( const Path & projectName )
 
 // ********************************
 //
-void						ProjectManager::AddScene			( const BVSceneConstPtr & sceneRootNode, const Path & projectName, const Path & outPath )
+void						ProjectManager::AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath )
 {
 	m_impl->AddScene( sceneRootNode, projectName, outPath );
 }

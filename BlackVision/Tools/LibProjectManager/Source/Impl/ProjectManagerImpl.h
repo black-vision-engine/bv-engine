@@ -42,7 +42,7 @@ private:
 	void					RemoveUnusedAssets	( const Path & projectName, const std::string & categoryName );
 	void					RemoveUnusedAssets	( const Path & projectName );
 
-	void					AddScene			( const BVSceneConstPtr & sceneRootNode, const Path & projectName, const Path & outPath );
+	void					AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath );
 	void					CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 	void					RemoveScene			( const Path & projectName, const Path & path );
 	void					MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
@@ -84,7 +84,7 @@ private:
 	std::string				GetCategoryName		( const Path & path ) const;
 	Path					GetProjectName		( const Path & path ) const;
 
-	explicit ProjectManagerImpl( const Path & rootPath );
+	explicit ProjectManagerImpl( const Path & rootPath, model::TimelineManager * tm );
 			~ProjectManagerImpl();
 
 
@@ -101,6 +101,8 @@ private:
 	Path					m_rootPath;
 	Path					m_projectsPath;
 	Path					m_scenesPath;
+
+    model::TimelineManager * m_timelineManager; 
 
 	friend ProjectManager;
 

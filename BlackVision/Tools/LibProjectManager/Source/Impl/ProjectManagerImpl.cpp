@@ -1,6 +1,8 @@
 #include "ProjectManagerImpl.h"
 
 #include "Engine/Models/BVScene.h"
+#include "Engine/Models/Timeline/TimelineManager.h"
+#include "Engine/Models/Plugins/Manager/PluginsManager.h"
 
 #include "IO/DirIO.h"
 
@@ -15,10 +17,11 @@ namespace bv
 
 // ********************************
 //
-ProjectManagerImpl::ProjectManagerImpl	( const Path & rootPath )
+ProjectManagerImpl::ProjectManagerImpl	( const Path & rootPath, model::TimelineManager * tm )
 	: m_rootPath( rootPath )
 	, m_projectsPath( m_rootPath / "projects" )
 	, m_scenesPath( m_rootPath / "scenes" )
+    , m_timelineManager( tm )
 
 {
 	if( Path::Exists( rootPath ) )
@@ -57,7 +60,14 @@ PathVec			ProjectManagerImpl::ListProjectsNames	() const
 PathVec			ProjectManagerImpl::ListScenesNames		( const Path & projectName ) const
 {
 	auto pathInScenes = TranslateToPathCategory( projectName, "" );
-	return m_sceneAccessor->ListScenes( pathInScenes );
+	auto scenes = m_sceneAccessor->ListScenes( pathInScenes );
+
+    for( auto & s : scenes )
+    {
+        s = Path( "scenes" ) / s;
+    }
+
+    return scenes;
 }
 
 // ********************************
@@ -244,7 +254,7 @@ void						ProjectManagerImpl::RemoveUnusedAssets	( const Path & projectName )
 
 // ********************************
 //
-void						ProjectManagerImpl::AddScene			( const BVSceneConstPtr & scene, const Path & projectName, const Path & outPath )
+void						ProjectManagerImpl::AddScene			( const model::BasicNodeConstPtr & scene, const Path & projectName, const Path & outPath )
 {
 	auto pathInScenes = TranslateToPathCategory( projectName, outPath );
 
@@ -324,16 +334,14 @@ void						ProjectManagerImpl::ImportAssetFromFile	( const Path & importToProject
 //
 void						ProjectManagerImpl::ExportSceneToFile	( const Path & projectName, const Path & scenePath, const Path & outputFile ) const
 {
-	auto pathInCategory = TranslateToPathCategory( projectName, scenePath );
-	m_sceneAccessor->ExportSceneToFile( pathInCategory, outputFile, true );
+	m_sceneAccessor->ExportSceneToFile( scenePath, projectName, outputFile, true );
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath )
 {
-	auto pathInCategory = TranslateToPathCategory( importToProjectName, importToPath );
-	m_sceneAccessor->ImportSceneFromFile( pathInCategory, impSceneFilePath );
+	m_sceneAccessor->ImportSceneFromFile( impSceneFilePath, importToProjectName, importToPath );
 }
 
 // ********************************
@@ -345,29 +353,26 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 	if( project )
 	{
 		auto projectAssets = ListAssetsPaths( projectName );
-		//auto projectScenes = ListScenesNames( projectName );
+		auto projectScenes = ListScenesNames( projectName );
 
 		std::set< Path > uniqueAssets;
 
 		uniqueAssets.insert( projectAssets.begin(), projectAssets.end() );
 
-		//for( auto ps : projectScenes )
-		//{
-		//	auto sa = m_sceneAccessor->ListAllUsedAssets( ps );
-		//	uniqueAssets.insert( sa.begin(), sa.end() );
-		//}
+		for( auto ps : projectScenes )
+		{
+            auto loc = Path2Location( ps );
+            auto sa = m_sceneAccessor->ListAllUsedAssets( loc.projectName / loc.path );
+			uniqueAssets.insert( sa.begin(), sa.end() );
+		}
 
         auto assetsFile = File::Open( outputFilePath.Str(), File::OpenMode::FOMReadWrite );
 
-		auto out = assetsFile.StreamBuf();
+		auto & out = *assetsFile.StreamBuf();
 
-        *out << "assets";
+        out << "assets" << '\n';
 
-        *out << '\n';
-
-        *out << std::to_string( uniqueAssets.size() );
-
-        *out << '\n';
+        out << std::to_string( uniqueAssets.size() ) << '\n';
 
 		for( auto ua : uniqueAssets)
 		{
@@ -376,21 +381,27 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 			if( loc.categoryName == "scenes" ) 
 				assert( false );
 
-            *out << loc.categoryName;
+            out << loc.categoryName << '\n';
 
-            *out << '\n';
+            out << loc.path << '\n';
 
-            *out << loc.path;
-
-            *out << '\n';
-
-			m_categories.at( loc.categoryName )->ExportAsset( *out, loc.projectName / loc.path );
+			m_categories.at( loc.categoryName )->ExportAsset( out, loc.projectName / loc.path );
 		}
 
-		//for( auto s : projectScenes )
-		//{
-		//	m_sceneAccessor->ExportScene( *out, s, false );
-		//}
+        out << '\n';
+        
+        out << "scenes" << '\n';
+
+        out << std::to_string( projectScenes.size() ) << '\n';
+
+		for( auto s : projectScenes )
+		{
+            auto loc = Path2Location( s );
+
+            out << loc.path << '\n';
+
+			m_sceneAccessor->ExportScene( out, loc.projectName, loc.path, false );
+		}
 
         assetsFile.Close();
 	}
@@ -404,47 +415,72 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 //
 void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, const Path & projectName )
 {
+    AddNewProject( projectName );
+
     auto f = File::Open( expFilePath.Str() );
 
     std::stringbuf buf;
 
-    f.StreamBuf()->get( buf, '\n');
-    f.StreamBuf()->ignore();
+    auto & in = *f.StreamBuf();
+
+    in.get( buf, '\n');
+    in.ignore();
 
     if( buf.str() == "assets" )
     {
         std::stringbuf buf;
-        f.StreamBuf()->get( buf, '\n');
-        f.StreamBuf()->ignore();
+        in.get( buf, '\n');
+        in.ignore();
 
         auto size = stoul( buf.str() );
 
         for( SizeType i = 0; i < size; ++i )
         {
             std::stringbuf buf;
-            f.StreamBuf()->get( buf, '\n');
-            f.StreamBuf()->ignore();
+            in.get( buf, '\n');
+            in.ignore();
 
             auto categoryName = buf.str();
             buf.str("");
 
-            f.StreamBuf()->get( buf, '\n');
-            f.StreamBuf()->ignore();
+            in.get( buf, '\n');
+            in.ignore();
             auto path = Path( buf.str() );
 
-            m_categories.at( categoryName )->ImportAsset( *( f.StreamBuf() ), projectName / path );
+            m_categories.at( categoryName )->ImportAsset( in, projectName / path );
         }
-
-        f.Close();
     }
     else
     {
         LOG_MESSAGE( SeverityLevel::error ) << "Cannot import project '" << projectName << "'. Wrong format.";
     }
 
+    buf.str("");
 
-	{expFilePath;}
-	{projectName;}
+    in.ignore(); // ignoring new line after asset data
+
+    in.get( buf, '\n');
+    in.ignore();
+    if( buf.str() == "scenes" )
+    {
+        buf.str("");
+        in.get( buf, '\n');
+        in.ignore();
+
+        SizeType size = stoul( buf.str() );
+
+        for( SizeType i = 0; i < size; ++i )
+        {
+            buf.str("");
+            in.get( buf, '\n');
+            in.ignore();
+            Path path = buf.str();
+
+            m_sceneAccessor->ImportScene( in, projectName, path );
+        }
+    }
+
+    f.Close();
 }
 
 // ********************************
@@ -500,7 +536,7 @@ void						ProjectManagerImpl::InitializeScenes	()
 		Dir::CreateDir( m_scenesPath.Str() );
 	}
 
-	m_sceneAccessor = SceneAccessor::Create( m_scenesPath, nullptr, nullptr ); // FIXME: TM and PM cannot be null.
+    m_sceneAccessor = SceneAccessor::Create( m_rootPath, m_timelineManager );
 }
 
 // ********************************

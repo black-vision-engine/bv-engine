@@ -45,6 +45,7 @@ public:
 
     virtual             ~File       ();
 
+    static void         Touch       ( const std::string & fileName );
     static File         Open        ( const std::string & fileName, OpenMode openMode = FOMReadOnly );
 	static File         OpenTmp     ( std::string * name = nullptr );
     static SizeType     Read        ( std::ostream & out, const std::string & fileName );
