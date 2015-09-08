@@ -639,51 +639,6 @@ Path						ProjectManagerImpl::TranslateToPathInPMRootFolder( const Path & projec
 
 // ********************************
 //
-std::string					ProjectManagerImpl::GetCategoryName( const Path & path ) const
-{
-	auto categoriesNames = ListCategoriesNames();
-
-	categoriesNames.push_back( "scenes" );
-
-	auto splitedPath =  path.Split();
-	if( !splitedPath.empty() )
-	{
-		for( auto cn : categoriesNames )
-		{
-			if( splitedPath[ 0 ] == cn )
-			{
-				return cn;
-			}
-		}
-	}
-
-	return "";
-}
-
-// ********************************
-//
-Path						ProjectManagerImpl::GetProjectName( const Path & path ) const
-{
-	//auto projectsNames = ListProjectsNames();
-
-	//auto cn = GetCategoryName( path );
-
-	//for( auto pn : projectsNames )
-	//{
-	//	auto str = path.Str();
-
-	//	auto pos = str.find( pn.Str() );
-	//	if( pos != std::string::npos )
-	//	{
-
-	//	}
-	//}
-	{path;}
-	return Path();
-}
-
-// ********************************
-//
 ProjectManagerImpl::Location ProjectManagerImpl::Path2Location( const Path & path ) const
 {
 	auto strPath = path.Str();
