@@ -31,6 +31,12 @@ private:
 
 	static PathVec		GetAllUsedAssetPaths	( const model::BasicNodeConstPtr & scene, const Path & relativeTo );
 	static PathVec		GetAllPathsFromAssets	( const AssetDescConstPtr & assetDesc, const Path & relativeTo );
+    static std::vector< AssetDescConstPtr >     ListSceneAssetsDescs( const model::BasicNodeConstPtr & scene );
+    static std::vector< AssetDescConstPtr >     UnpackSimpleAssets( const AssetDescConstPtr & assetDesc );
+    static Path         AssetDescToPath         ( const AssetDescConstPtr & desc );
+    static void         ReplaceRootDir          ( const AssetDescConstPtr & p, const Path & oldPMRootDir, const Path & newPMRootDir );
+    static void         ReplaceProjectName      ( const AssetDescConstPtr & p, const Path & oldProjectName, const Path & newProjectName );
+    static void         ReplacePathInSimpleAsset( const AssetDescConstPtr & ad, const Path & newAssetPath );
 
 public:
 
@@ -41,7 +47,7 @@ public:
 	void				AddScene				( const model::BasicNodeConstPtr & scene, const Path & path ) const;
 	void				RemoveScene				( const Path & path ) const;
 
-	void				ImportScene				( std::istream & in, const Path & importToPath ) const;
+	void				ImportScene				( std::istream & in,  const Path & importToProject, const Path & importToPath ) const;
 	void				ExportScene				( std::ostream & out, const Path & path, bool withAssets ) const;
 
 	void				ImportSceneFromFile		( const Path & expFilePath, const Path & importToPath ) const;

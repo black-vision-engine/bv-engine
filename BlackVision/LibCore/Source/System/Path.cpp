@@ -140,6 +140,13 @@ bool			Path::operator ==		( const Path & l ) const
 
 // *********************************
 //
+bool			Path::operator !=		( const Path & l ) const
+{
+    return this->Str() != l.Str();
+}
+
+// *********************************
+//
 Path			Path::operator /		( const Path & p ) const
 {
 	return this->Join( p );

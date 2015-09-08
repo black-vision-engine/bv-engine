@@ -2,6 +2,8 @@
 
 #include "Engine/Models/Plugins/Plugin.h"
 
+#include "Assets/FwdDecls.h"
+
 #include "Tools/Logger/Logger.h"
 #define LOG_MODULE ModuleEnum::ME_LibBlackVision
 
@@ -74,7 +76,7 @@ void			SceneAccessor::RemoveScene( const Path & path ) const
 
 // ********************************
 //
-void			SceneAccessor::ImportScene( std::istream & in, const Path & importToPath ) const
+void			SceneAccessor::ImportScene( std::istream & in, const Path & importToProject, const Path & importToPath ) const
 {
     std::stringbuf buf;
     in.get( buf, '\n' );
@@ -87,13 +89,29 @@ void			SceneAccessor::ImportScene( std::istream & in, const Path & importToPath 
         in.ignore();
         Path oldPMRootDir = buf.str();
 
-	    auto f = File::Open( ( m_rootDir / importToPath ).Str(), File::OpenMode::FOMReadWrite );
+        buf.str("");
+        in.get( buf, '\n' );
+        in.ignore();
+        Path oldOwnerProjectName = buf.str();
+
+	    auto f = File::Open( ( m_rootDir / importToProject / importToPath ).Str(), File::OpenMode::FOMReadWrite );
         rapidxml::xml_document<> doc;
 
         buf.str("");
         in.get( buf, '\n' );
         auto size = stoul( buf.str() );
         in.ignore();
+
+        auto scene = SceneDescriptor::LoadScene( in, size, bv::global_tm, &model::PluginsManager::DefaultInstanceRef() );
+        
+        auto sceneAssertDescs = ListSceneAssetsDescs( scene );
+        
+        for( auto ad : sceneAssertDescs )
+        {
+            ReplaceRootDir( ad, oldPMRootDir, m_rootDirPM );
+            ReplaceProjectName( ad, oldOwnerProjectName, importToProject );
+        }
+
         //char * cbuf = new char[ size ];
 
         //in.read( cbuf, size );
@@ -212,6 +230,15 @@ PathVec			SceneAccessor::GetAllUsedAssetPaths( const model::BasicNodeConstPtr & 
 {
 	auto rootNode = std::const_pointer_cast< model::BasicNode >( scene );
 
+    auto sceneSimpleAssetsDescs = ListSceneAssetsDescs( scene );
+
+    std::set< Path > assetsPathsSet;
+
+    for( auto a : sceneSimpleAssetsDescs )
+    {
+        assetsPathsSet.insert( AssetDescToPath( a ) );
+    }
+
     auto lastPlugin = rootNode->GetPlugins()->GetLastPlugin();
 
 	std::vector< AssetDescConstPtr > allDescs;
@@ -236,19 +263,19 @@ PathVec			SceneAccessor::GetAllUsedAssetPaths( const model::BasicNodeConstPtr & 
 
 // ********************************
 //
-PathVec			SceneAccessor::GetAllPathsFromAssets( const AssetDescConstPtr & assetDesc, const Path & relativeTo )
+std::vector< AssetDescConstPtr > SceneAccessor::UnpackSimpleAssets( const AssetDescConstPtr & assetDesc )
 {
-	std::set< Path > uniqueAssetsPath;
+    std::vector< AssetDescConstPtr > simpleAssets;
 	if( auto stad = std::dynamic_pointer_cast< SingleTextureAssetDescConstPtr::element_type >( assetDesc ) )
 	{
-		uniqueAssetsPath.insert( Path::RelativePath( stad->GetImagePath(), relativeTo ) );
+		simpleAssets.push_back( stad );
 	}
 	else if( auto tad = std::dynamic_pointer_cast< TextureAssetDescConstPtr::element_type >( assetDesc ) )
 	{
 		auto stad = tad->GetOrigTextureDesc();
 		if( stad )
 		{
-			uniqueAssetsPath.insert( Path::RelativePath( stad->GetImagePath(), relativeTo ) );
+            simpleAssets.push_back( stad );
 		}
 
 		auto mmad = tad->GetMipMapsDesc();
@@ -256,17 +283,133 @@ PathVec			SceneAccessor::GetAllPathsFromAssets( const AssetDescConstPtr & assetD
 		{
 			for( SizeType i = 0; i < mmad->GetLevelsNum(); ++i )
 			{
-				uniqueAssetsPath.insert( Path::RelativePath( mmad->GetLevelDesc( i )->GetImagePath(), relativeTo ) );
+                simpleAssets.push_back( mmad->GetLevelDesc( i ) );
 			}
 		}
 	}
 	else
 	{
 		assert( !"Not implemented" );  // TODO: Implement for the rest of AssetDesc types
-		return PathVec();
+		return std::vector< AssetDescConstPtr >();
 	}
 
-	return PathVec( uniqueAssetsPath.begin(), uniqueAssetsPath.end() );
+    return simpleAssets;
+}
+
+// ********************************
+//
+std::vector< AssetDescConstPtr > SceneAccessor::ListSceneAssetsDescs( const model::BasicNodeConstPtr & scene )
+{
+    auto rootNode = std::const_pointer_cast< model::BasicNode >( scene );
+
+    auto lastPlugin = rootNode->GetPlugins()->GetLastPlugin();
+
+	std::vector< AssetDescConstPtr > allDescs;
+
+	while( lastPlugin )
+	{
+		auto assetsDescs = std::static_pointer_cast< model::BasePlugin< model::IPlugin > >( lastPlugin )->GetAssets();
+		allDescs.insert( allDescs.end(), assetsDescs.begin(), assetsDescs.end() );
+        lastPlugin = lastPlugin->GetPrevPlugin();
+	}
+
+    std::vector< AssetDescConstPtr > simpleAssetsDescs;
+
+    for( auto ad : allDescs )
+    {
+        auto sa = UnpackSimpleAssets( ad );
+        simpleAssetsDescs.insert( simpleAssetsDescs. end(), sa.begin(), sa.end() );
+    }
+
+	return simpleAssetsDescs;
+}
+
+// ********************************
+//
+PathVec			SceneAccessor::GetAllPathsFromAssets( const AssetDescConstPtr & assetDesc, const Path & relativeTo )
+{
+    auto simpleAssetsDescs = UnpackSimpleAssets( assetDesc );
+
+    std::set< Path > uniqueAssetsPath;
+
+    for( auto a : simpleAssetsDescs )
+    {
+        uniqueAssetsPath.insert( Path::RelativePath( AssetDescToPath( a ), relativeTo ) );
+    }
+
+    return PathVec( uniqueAssetsPath.begin(), uniqueAssetsPath.end() );
+}
+
+// ********************************
+//
+Path         SceneAccessor::AssetDescToPath( const AssetDescConstPtr & desc )
+{
+    if( auto typedDesc = std::dynamic_pointer_cast< const SingleTextureAssetDesc >( desc ) )
+    {
+        return Path( typedDesc->GetImagePath() );
+    }
+    else
+    {
+        assert( !"Not implemented" );  // TODO: Implement for the rest of AssetDesc types
+		return Path();
+    }
+}
+
+// ********************************
+//
+void         SceneAccessor::ReplaceRootDir( const AssetDescConstPtr & ad, const Path & oldPMRootDir, const Path & newPMRootDir )
+{
+    auto p = AssetDescToPath( ad );
+
+    auto pstr = p.Str();
+
+    auto pos = pstr.find( oldPMRootDir.Str() );
+
+    if( pos != std::string::npos )
+    {
+        if( pos == 0 )
+        {
+            auto oldPMRootDirSize = oldPMRootDir.Str().size();
+            auto oldRelPath = pstr.substr( oldPMRootDirSize, std::string::npos );
+
+            Path newAssetPath = newPMRootDir / oldRelPath;   
+
+            ReplacePathInSimpleAsset( ad, newAssetPath );
+        }
+        else
+        {
+            assert( false ); // FIXME: What should be done in such a situation?
+        }
+    }
+}
+
+// ********************************
+//
+void         SceneAccessor::ReplaceProjectName( const AssetDescConstPtr & ad, const Path & oldProjectName, const Path & newProjectName )
+{
+    auto p = AssetDescToPath( ad );
+
+    auto pstr = p.Str();
+
+    auto pos = pstr.find( oldProjectName.Str() );
+
+    if( pos != std::string::npos )
+    {
+        auto oldProjectNameSize = oldProjectName.Str().size();
+        auto oldRelPath = pstr.substr( pos, pos + oldProjectNameSize );
+        auto prefix = pstr.substr( 0, pos );
+
+        Path newAssetPath = Path( prefix ) / newProjectName / oldRelPath;   
+
+        ReplacePathInSimpleAsset( ad, newAssetPath );
+    }
+}
+
+// ********************************
+//
+void         SceneAccessor::ReplacePathInSimpleAsset( const AssetDescConstPtr & ad, const Path & newAssetPath )
+{
+    assert( false );  // TODO: Implement.
 }
 
 } // bv

@@ -27,6 +27,7 @@ public:
 
 	bool				operator <		( const Path & b ) const; // used by std::set
 	bool				operator ==		( const Path & b ) const; // used by std::set
+    bool				operator !=		( const Path & b ) const;
 
 	StringVector        Split			() const;
 
