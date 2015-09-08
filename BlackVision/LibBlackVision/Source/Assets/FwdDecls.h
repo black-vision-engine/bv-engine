@@ -16,7 +16,11 @@ class SingleTextureAsset;
 class SingleTextureAssetDesc;
 class TextureAsset;
 class TextureAssetDesc;
+class FontAsset;
+class FontAssetDesc;
 
+DEFINE_CONST_PTR_TYPE( FontAssetDesc )
+DEFINE_CONST_PTR_TYPE( FontAsset )
 DEFINE_CONST_PTR_TYPE( TextureAssetDesc )
 DEFINE_CONST_PTR_TYPE( TextureAsset )
 DEFINE_CONST_PTR_TYPE( SingleTextureAssetDesc )

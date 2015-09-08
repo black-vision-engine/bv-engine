@@ -335,8 +335,7 @@ void						ProjectManagerImpl::ImportAssetFromFile	( const Path & importToProject
 //
 void						ProjectManagerImpl::ExportSceneToFile	( const Path & projectName, const Path & scenePath, const Path & outputFile ) const
 {
-	auto pathInCategory = TranslateToPathCategory( projectName, scenePath );
-	m_sceneAccessor->ExportSceneToFile( pathInCategory, outputFile, true );
+	m_sceneAccessor->ExportSceneToFile( scenePath, projectName, outputFile, true );
 }
 
 // ********************************
@@ -402,7 +401,7 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 
             out << loc.path << '\n';
 
-			m_sceneAccessor->ExportScene( out, loc.projectName / loc.path, false );
+			m_sceneAccessor->ExportScene( out, loc.projectName, loc.path, false );
 		}
 
         assetsFile.Close();

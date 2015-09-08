@@ -56,15 +56,12 @@ Path SceneDescriptor::GetPath() const
 //
 void			            SceneDescriptor::SaveScene		( const model::BasicNodeConstPtr & scene, const Path & outputFilePath )
 {
-    if( !Path::Exists( outputFilePath ) )
-    {
-        auto f = File::Open( outputFilePath.Str() );
-        f.Close();
-    }
+    File::Touch( outputFilePath.Str() );
 
     auto f = File::Open( outputFilePath.Str(), File::OpenMode::FOMReadWrite );
 
     SaveScene( scene, *f.StreamBuf() );
+    f.Close();
 }
 
 // ********************************
@@ -75,7 +72,10 @@ model::BasicNodeConstPtr	SceneDescriptor::LoadScene		( const Path & inputFilePat
 
     auto size = File::Size( inputFilePath.Str() );
 
-    return LoadScene( *f.StreamBuf(), size, tm, pm );
+    auto ret = LoadScene( *f.StreamBuf(), size, tm, pm );
+    f.Close();
+
+    return ret;
 }
 
 // ********************************

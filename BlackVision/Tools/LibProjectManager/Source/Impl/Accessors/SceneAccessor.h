@@ -48,10 +48,10 @@ public:
 	void				RemoveScene				( const Path & path ) const;
 
 	void				ImportScene				( std::istream & in,  const Path & importToProject, const Path & importToPath ) const;
-	void				ExportScene				( std::ostream & out, const Path & path, bool withAssets ) const;
+	void				ExportScene				( std::ostream & out, const Path & projectName, const Path & path, bool withAssets ) const;
 
 	void				ImportSceneFromFile		( const Path & expFilePath, const Path & importToProject, const Path & importToPath ) const;
-	void				ExportSceneToFile		( const Path & outputFileName, const Path & path, bool withAssets ) const;
+	void				ExportSceneToFile		( const Path & projectName, const Path & outputFileName, const Path & path, bool withAssets ) const;
 
 	PathVec				ListScenes				( const Path & path ) const;
 

@@ -1,5 +1,6 @@
 #include "FileIO.h"
 #include "DirIO.h"
+#include "System/Path.h"
 #include <sys/stat.h>
 
 #include "boost/filesystem/path.hpp"
@@ -430,6 +431,17 @@ std::string  File::GetFileName ( const std::string & path )
 {
 	boost::filesystem::path p( path );
 	return p.stem().string();
+}
+
+// *******************************
+//
+void         File::Touch       ( const std::string & fileName )
+{
+    if( !Path::Exists( fileName ) )
+    {
+        auto f = File::Open( fileName, OpenMode::FOMReadWrite );
+        f.Close();
+    }
 }
 
 } //bv

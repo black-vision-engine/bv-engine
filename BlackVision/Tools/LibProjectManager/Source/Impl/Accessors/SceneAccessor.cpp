@@ -94,7 +94,6 @@ void			SceneAccessor::ImportScene( std::istream & in, const Path & importToProje
         in.ignore();
         Path oldOwnerProjectName = buf.str();
 
-	    auto f = File::Open( ( m_rootDir / importToProject / importToPath ).Str(), File::OpenMode::FOMReadWrite );
         rapidxml::xml_document<> doc;
 
         buf.str("");
@@ -106,29 +105,18 @@ void			SceneAccessor::ImportScene( std::istream & in, const Path & importToProje
         
         auto sceneAssertDescs = ListSceneAssetsDescs( scene );
         
-        for( auto ad : sceneAssertDescs )
+        std::set< AssetDescConstPtr > assetsDescsSet;
+        assetsDescsSet.insert( sceneAssertDescs.begin(), sceneAssertDescs.end() );
+
+        for( auto ad : assetsDescsSet )
         {
             ReplaceRootDir( ad, oldPMRootDir, m_rootDirPM );
             ReplaceProjectName( ad, oldOwnerProjectName, importToProject );
         }
 
-        //char * cbuf = new char[ size ];
+        auto outFilePath = ( m_rootDir / importToProject / importToPath ).Str();
 
-        //in.read( cbuf, size );
-
-        //std::string tmpFileName;
-        //auto tmpFile = File::OpenTmp( &tmpFileName );
-        //tmpFile.Write( cbuf, size );
-        //tmpFile.Close();
-
-        //auto desc = SceneDescriptor( tmpFileName, bv::global_tm, &model::PluginsManager::DefaultInstanceRef() );
-        //auto scene = desc.LoadScene();
-
-        //auto docNode = doc.first_node( "scene" );
-
-	    f.Write( in, size );
-
-        f.Close();
+        SceneDescriptor::SaveScene( scene, outFilePath );
 
         buf.str( "" );
         in.get( buf, '\n' );
@@ -143,7 +131,7 @@ void			SceneAccessor::ImportScene( std::istream & in, const Path & importToProje
 
 // ********************************
 //
-void			SceneAccessor::ExportScene( std::ostream & out, const Path & path, bool withAssets ) const
+void			SceneAccessor::ExportScene( std::ostream & out, const Path & projectName, const Path & path, bool withAssets ) const
 {
 	if( !withAssets )
 	{
@@ -151,7 +139,7 @@ void			SceneAccessor::ExportScene( std::ostream & out, const Path & path, bool w
 
         out << m_rootDirPM << '\n';
 
-		SceneDescriptor sceneDesc( m_rootDir / path, m_tm, m_pm );
+		SceneDescriptor sceneDesc( m_rootDir/ projectName / path, m_tm, m_pm );
 
 		auto scene = sceneDesc.LoadScene();
 
@@ -167,7 +155,9 @@ void			SceneAccessor::ExportScene( std::ostream & out, const Path & path, bool w
 
         auto serSceneString = serScene.str();
 
-        out << std::to_string( serSceneString.size() ) << '\n';
+        out << projectName << '\n';
+
+        out << std::to_string( serSceneString.size() ) << '\n';    
 
         out << serSceneString;
 
@@ -191,11 +181,11 @@ void			SceneAccessor::ImportSceneFromFile( const Path & expFilePath, const Path 
 
 // ********************************
 //
-void			SceneAccessor::ExportSceneToFile( const Path & outputFileName, const Path & path, bool withAssets ) const
+void			SceneAccessor::ExportSceneToFile( const Path & projectName, const Path & outputFileName, const Path & path, bool withAssets ) const
 {
 	auto f = File::Open( outputFileName.Str(), File::OpenMode::FOMReadOnly );
 	auto out = f.StreamBuf();
-	ExportScene( *out, path, withAssets );
+	ExportScene( *out, projectName, path, withAssets );
 	f.Close();
 }
 
@@ -396,7 +386,7 @@ void         SceneAccessor::ReplaceProjectName( const AssetDescConstPtr & ad, co
     if( pos != std::string::npos )
     {
         auto oldProjectNameSize = oldProjectName.Str().size();
-        auto oldRelPath = pstr.substr( pos, pos + oldProjectNameSize );
+        auto oldRelPath = pstr.substr( pos + oldProjectNameSize, std::string::npos );
         auto prefix = pstr.substr( 0, pos );
 
         Path newAssetPath = Path( prefix ) / newProjectName / oldRelPath;   
@@ -407,9 +397,16 @@ void         SceneAccessor::ReplaceProjectName( const AssetDescConstPtr & ad, co
 
 // ********************************
 //
-void         SceneAccessor::ReplacePathInSimpleAsset( const AssetDescConstPtr &, const Path & )
+void         SceneAccessor::ReplacePathInSimpleAsset( const AssetDescConstPtr & ad, const Path & path )
 {
-    assert( false );  // TODO: Implement.
+    if( auto adTyped = std::dynamic_pointer_cast< const SingleTextureAssetDesc >( ad ) )
+    {
+        std::const_pointer_cast< SingleTextureAssetDesc >( adTyped )->m_imagePath = path.Str();  // FIXME: Very ugly hack.
+    }
+    else
+    {
+        assert( false );  // TODO: Implement.
+    }
 }
 
 } // bv

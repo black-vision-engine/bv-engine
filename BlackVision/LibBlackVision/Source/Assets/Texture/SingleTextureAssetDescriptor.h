@@ -11,6 +11,8 @@
 namespace bv
 {
 
+class SceneAccessor;
+
 class SingleTextureAssetDesc : public AssetDesc, public std::enable_shared_from_this< SingleTextureAssetDesc >
 {
 private:
@@ -50,6 +52,8 @@ public:
 	static SingleTextureAssetDescConstPtr		Create						( const std::string & imagePath, UInt32 width, UInt32 height, TextureFormat format, bool isCacheable );
 
 	static const std::string &					UID							();
+
+    friend SceneAccessor;
 };
 
 } // bv
