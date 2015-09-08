@@ -141,6 +141,13 @@ void						ProjectManager::RemoveUnusedAssets	( const Path & projectName )
 
 // ********************************
 //
+void						ProjectManager::RemoveUnusedAssets	()
+{
+	m_impl->RemoveUnusedAssets();
+}
+
+// ********************************
+//
 void						ProjectManager::AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath )
 {
 	m_impl->AddScene( sceneRootNode, projectName, outPath );

@@ -190,6 +190,14 @@ TEST( ExportingProject, ProjectManager )
 TEST( ImportingProject, ProjectManager )
 {
     g_pm1->ImportProjectFromFile( "test.exp", "proj00" );
+    g_pm1->ImportProjectFromFile( "test.exp", "proj01" );
+}
+
+TEST( RemovingUnusedAssets, ProjectManager )
+{
+    g_pm0->RemoveUnusedAssets( "proj01", "textures" );
+    g_pm0->RemoveUnusedAssets( "proj00" );
+    g_pm0->RemoveUnusedAssets();
 }
 
 int main( int argc, char **argv )

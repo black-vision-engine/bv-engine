@@ -214,7 +214,7 @@ void						ProjectManagerImpl::CopyAsset			( const Path & inProjectName, const st
 
 // ********************************
 //
-void						ProjectManagerImpl::RemoveAsset			( const Path & projectName, const std::string & categoryName, const Path & path )
+void						ProjectManagerImpl::RemoveAsset			( const Path & projectName, const std::string & categoryName, const Path & path ) const
 {
 	auto cit = m_categories.find( categoryName );
 
@@ -239,17 +239,61 @@ void						ProjectManagerImpl::MoveAsset			( const Path & inProjectName, const st
 
 // ********************************
 //
-void						ProjectManagerImpl::RemoveUnusedAssets	( const Path & projectName, const std::string & categoryName )
+void						ProjectManagerImpl::RemoveUnusedAssets	( const Path & projectName, const std::string & categoryName ) const
 {
-	{projectName;}
-	{categoryName;}
+    auto it = m_categories.find( categoryName );
+
+    if( GetProject( projectName ) )
+    {
+        if( it != m_categories.end() )
+        {
+            auto assetsInCategory = it->second->ListAssets( projectName );
+
+            auto scenes = m_sceneAccessor->ListScenes( "" );
+
+            std::set< Path > usedAssets;
+
+            for( auto s : scenes )
+            {
+                auto as = m_sceneAccessor->ListAllUsedAssets( s );
+                usedAssets.insert( as.begin(), as.end() );
+            }
+
+            for( auto aInCat : assetsInCategory )
+            {
+                if( usedAssets.find( Path( categoryName ) / aInCat ) == usedAssets.end() )
+                {
+                    RemoveAsset( "", categoryName, aInCat );
+                }
+            }
+        }
+    }    
+}
+
+// ********************************
+// 
+void						ProjectManagerImpl::RemoveUnusedAssets	( const Path & projectName ) const
+{
+    if( GetProject( projectName ) )
+    {
+        for( auto k : m_categories )
+        {
+            RemoveUnusedAssets( projectName, k.first );
+        }
+    }
 }
 
 // ********************************
 //
-void						ProjectManagerImpl::RemoveUnusedAssets	( const Path & projectName )
+void						ProjectManagerImpl::RemoveUnusedAssets	() const
 {
-	{projectName;}
+    for( auto p : m_projects )
+    {
+        for( auto k : m_categories )
+        {
+            RemoveUnusedAssets( p.second->GetName(), k.first );
+        }
+    }
 }
 
 // ********************************

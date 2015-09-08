@@ -37,10 +37,11 @@ private:
 
 	// 
 	void					CopyAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath );
-	void					RemoveAsset			( const Path & projectName, const std::string & categoryName, const Path & path );
+	void					RemoveAsset			( const Path & projectName, const std::string & categoryName, const Path & path ) const;
 	void					MoveAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath );
-	void					RemoveUnusedAssets	( const Path & projectName, const std::string & categoryName );
-	void					RemoveUnusedAssets	( const Path & projectName );
+	void					RemoveUnusedAssets	( const Path & projectName, const std::string & categoryName ) const;
+	void					RemoveUnusedAssets	( const Path & projectName ) const;
+    void				    RemoveUnusedAssets	() const;
 
 	void					AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath );
 	void					CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
