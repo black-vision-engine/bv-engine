@@ -343,8 +343,7 @@ void						ProjectManagerImpl::ExportSceneToFile	( const Path & projectName, cons
 //
 void						ProjectManagerImpl::ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath )
 {
-	auto pathInCategory = TranslateToPathCategory( importToProjectName, importToPath );
-	m_sceneAccessor->ImportSceneFromFile( pathInCategory, impSceneFilePath );
+	m_sceneAccessor->ImportSceneFromFile( impSceneFilePath, importToProjectName, importToPath );
 }
 
 // ********************************
@@ -479,7 +478,7 @@ void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, c
             in.ignore();
             Path path = buf.str();
 
-            m_sceneAccessor->ImportScene( in, projectName / path );
+            m_sceneAccessor->ImportScene( in, projectName, path );
         }
     }
 

@@ -181,11 +181,11 @@ void			SceneAccessor::ExportScene( std::ostream & out, const Path & path, bool w
 
 // ********************************
 //
-void			SceneAccessor::ImportSceneFromFile( const Path & expFilePath, const Path & importToPath ) const
+void			SceneAccessor::ImportSceneFromFile( const Path & expFilePath, const Path & importToProject, const Path & importToPath ) const
 {
 	auto f = File::Open( expFilePath.Str(), File::OpenMode::FOMReadOnly );
 	auto in = f.StreamBuf();
-	ImportScene( *in, importToPath );
+	ImportScene( *in, importToProject, importToPath );
 	f.Close();
 }
 
@@ -407,7 +407,7 @@ void         SceneAccessor::ReplaceProjectName( const AssetDescConstPtr & ad, co
 
 // ********************************
 //
-void         SceneAccessor::ReplacePathInSimpleAsset( const AssetDescConstPtr & ad, const Path & newAssetPath )
+void         SceneAccessor::ReplacePathInSimpleAsset( const AssetDescConstPtr &, const Path & )
 {
     assert( false );  // TODO: Implement.
 }
