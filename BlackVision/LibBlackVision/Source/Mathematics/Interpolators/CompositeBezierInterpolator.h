@@ -35,11 +35,15 @@ private:
     typedef float TimeValueT;
     typedef float ValueT;
 
-    std::vector< Key<TimeValueT, ValueT> >              keys;
-    std::vector< IEvaluator<TimeValueT, ValueT >* >     interpolators; // FIXME: ptr-ize
+    typedef Key< TimeValueT, ValueT >                   Key;
+    typedef IEvaluator< TimeValueT, ValueT >            IEvaluator;
+
+    std::vector< Key >                                  keys;
+    std::vector< IEvaluator* >                          interpolators; // FIXME: ptr-ize
     TimeValueT                                          m_tolerance;
 
     CurveType                                           m_type;
+    WrapMethod                                          m_preMethod, m_postMethod;
 
 public:
     typedef TimeValueT  TimeType;
@@ -52,19 +56,27 @@ public:
     CompositeBezierInterpolator( float tolerance = 0.000001 );
     CompositeBezierInterpolator( const CompositeBezierInterpolator& that );
 
-    void AddKey             ( TimeValueT t, const ValueT & v );
-    ValueT Evaluate         ( TimeValueT t ) const;
+    void                                                AddKey             ( TimeValueT t, const ValueT & v );
+    ValueT                                              Evaluate         ( TimeValueT t ) const;
 
-    void                    SetCurveType( CurveType type );
+    const std::vector< Key > &                          GetKeys();
+    const std::vector< IEvaluator* > &                  GetInterpolators();
+
+    void                                                SetCurveType( CurveType type );
+    void                                                SetWrapPostMethod  ( WrapMethod method );
+    void                                                SetWrapPreMethod   ( WrapMethod method );
+
+    void                                                SetKey1( int i, Key key );
+    void                                                SetKey2( int i, Key key );
+    void                                                SetV1( int i, Key v );
+    void                                                SetV2( int i, Key v );
 
 // FIXME: below is to remove
-    const std::vector<Key<TimeValueT, ValueT>> & AccessKeys() const { static std::vector<Key<TimeValueT, ValueT>> ret; return ret; };
-    void SetWrapPostMethod  ( WrapMethod ) {}
-    void SetWrapPreMethod   ( WrapMethod ) {}
+    const std::vector<Key> & AccessKeys() const { static std::vector<Key> ret; return ret; };
 
 private:
-    float PreEvaluate( float t ) const;
-    float PostEvaluate( float t ) const;
+    float                                               PreEvaluate( float t ) const;
+    float                                               PostEvaluate( float t ) const;
 };
 
 }
