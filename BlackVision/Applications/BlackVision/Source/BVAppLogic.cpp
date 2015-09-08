@@ -133,11 +133,16 @@ void BVAppLogic::Initialize         ()
 //
 void BVAppLogic::LoadScene          ( void )
 {
-    m_timelineManager->RegisterRootTimeline( m_globalTimeline );
-    auto root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, m_timelineManager, m_globalTimeline );
+    //auto te = m_timelineManager->CreateDefaultTimeline( "", 10.f, TimelineWrapMethod::TWM_MIRROR, TimelineWrapMethod::TWM_MIRROR );
+    //te->Play();
+    //m_globalTimeline->AddChild( te );
+    auto te = m_globalTimeline;
+
+    m_timelineManager->RegisterRootTimeline( te );
+    auto root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, m_timelineManager, te );
 	assert( root );
 
-    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline, m_renderer );
+    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", te, m_renderer );
     assert( m_bvScene );
 }
 
