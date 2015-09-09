@@ -188,7 +188,7 @@ void			SceneAccessor::ExportSceneToFile( const Path & projectName, const Path & 
 //
 PathVec			SceneAccessor::ListScenes( const Path & path ) const
 {
-	auto sceneList = Path::List( m_rootDir / path, SceneFileExt );
+	auto sceneList = Path::List( m_rootDir / path, true, SceneFileExt );
 
     for( auto & s : sceneList )
     {

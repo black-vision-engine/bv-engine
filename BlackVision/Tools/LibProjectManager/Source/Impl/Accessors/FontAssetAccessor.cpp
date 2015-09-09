@@ -1,9 +1,5 @@
-#include "TextureAssetAccessor.h"
-#include "Assets/Texture/SingleTextureAssetDescriptor.h"
-#include "Assets/Texture/TextureAssetDescriptor.h"
-#include "Assets/Texture/GeneratedSingleTextureAssetDescriptor.h"
-#include "LibImage.h"
-#include "Engine/Types/EnumsUtils.h"
+#include "FontAssetAccessor.h"
+#include "Assets/Font/FontAssetDescriptor.h"
 #include "IO/DirIO.h"
 #include "IO/FileIO.h"
 
@@ -19,14 +15,14 @@ namespace bv
 
 // ********************************
 //
-TextureAssetAccessorConstPtr TextureAssetAccessor::Create( const Path & rootPath, const StringVector & fileExts )
+FontAssetAccessorConstPtr FontAssetAccessor::Create( const Path & rootPath, const StringVector & fileExts )
 {
-	return TextureAssetAccessorConstPtr( new TextureAssetAccessor( rootPath, fileExts ) );
+	return FontAssetAccessorConstPtr( new FontAssetAccessor( rootPath, fileExts ) );
 }
 
 // ********************************
 //
-TextureAssetAccessor::TextureAssetAccessor				( const Path & rootPath, const StringVector & fileExts )
+FontAssetAccessor::FontAssetAccessor				( const Path & rootPath, const StringVector & fileExts )
 	: m_rootPath( rootPath )
 	, m_fileExts( fileExts )
 {
@@ -35,20 +31,18 @@ TextureAssetAccessor::TextureAssetAccessor				( const Path & rootPath, const Str
 
 // ********************************
 //
-TextureAssetAccessor::~TextureAssetAccessor				()
+FontAssetAccessor::~FontAssetAccessor				()
 {}
 
 // ********************************
 //
-AssetDescConstPtr	TextureAssetAccessor::GetAssetDesc	( const Path & path ) const
+AssetDescConstPtr	FontAssetAccessor::GetAssetDesc	( const Path & path ) const
 {
 	auto p = m_rootPath / path;
 
 	if( Path::Exists( p ) )
 	{
-		auto props = image::GetImageProps( p.Str() );
-	
-		return SingleTextureAssetDesc::Create( p.Str(), props.width, props.height, EnumsUtils::Convert( props.format ), true );
+		return FontAssetDesc::Create( p.Str(), 0, 0, 0, false );
 	}
 	else
 	{
@@ -59,15 +53,15 @@ AssetDescConstPtr	TextureAssetAccessor::GetAssetDesc	( const Path & path ) const
 
 // ********************************
 //
-void			 	TextureAssetAccessor::AddAsset		( const Path & internalPath, const AssetDescConstPtr & assetDesc ) const
+void			 	FontAssetAccessor::AddAsset		( const Path & internalPath, const AssetDescConstPtr & assetDesc ) const
 {
 	auto uid = assetDesc->GetUID();
 
-	if( uid == SingleTextureAssetDesc::UID() )
+	if( uid == FontAssetDesc::UID() )
 	{
-		auto typedDesc = QueryTypedDesc< SingleTextureAssetDescConstPtr >( assetDesc );
+		auto typedDesc = QueryTypedDesc< FontAssetDescConstPtr >( assetDesc );
 
-		auto path = typedDesc->GetImagePath();
+        auto path = typedDesc->GetFontFileName();
 
 		Path::Copy( path, m_rootPath / internalPath );
 	}
@@ -79,21 +73,21 @@ void			 	TextureAssetAccessor::AddAsset		( const Path & internalPath, const Asse
 
 // ********************************
 //
-void			 	TextureAssetAccessor::RemoveAsset	( const Path & internalPath ) const
+void			 	FontAssetAccessor::RemoveAsset	( const Path & internalPath ) const
 {
 	Path::Remove( m_rootPath / internalPath );
 }
 
 // ********************************
 //
-void			 	TextureAssetAccessor::RenameAsset	( const Path & oldPath, const Path & newPath ) const
+void			 	FontAssetAccessor::RenameAsset	( const Path & oldPath, const Path & newPath ) const
 {
 	Path::Rename( m_rootPath / oldPath, m_rootPath / newPath );
 }
 
 // ********************************
 //
-void			 	TextureAssetAccessor::ExportAsset	( const Path & expAssetFilePath, const Path & internalPath) const
+void			 	FontAssetAccessor::ExportAsset	( const Path & expAssetFilePath, const Path & internalPath) const
 {
 	auto expFile = File::Open( expAssetFilePath.Str(), File::OpenMode::FOMWriteAppend );
 
@@ -106,7 +100,7 @@ void			 	TextureAssetAccessor::ExportAsset	( const Path & expAssetFilePath, cons
 
 // ********************************
 //
-void			 	TextureAssetAccessor::ExportAsset	( std::ostream & out, const Path & internalPath) const
+void			 	FontAssetAccessor::ExportAsset	( std::ostream & out, const Path & internalPath) const
 {
 	auto absPath = m_rootPath / internalPath;
 
@@ -131,7 +125,7 @@ void			 	TextureAssetAccessor::ExportAsset	( std::ostream & out, const Path & in
 
 // ********************************
 //
-void			 	TextureAssetAccessor::ImportAsset	( const Path & impAssetFile, const Path & importToPath ) const
+void			 	FontAssetAccessor::ImportAsset	( const Path & impAssetFile, const Path & importToPath ) const
 {
 	auto impAsset = File::Open( impAssetFile.Str(), File::OpenMode::FOMReadOnly );
 
@@ -142,7 +136,7 @@ void			 	TextureAssetAccessor::ImportAsset	( const Path & impAssetFile, const Pa
 
 // ********************************
 //
-void				TextureAssetAccessor::ImportAsset	( std::istream & in, const Path &  importToPath ) const
+void				FontAssetAccessor::ImportAsset	( std::istream & in, const Path &  importToPath ) const
 {
 	auto absPath = m_rootPath / importToPath;
 
@@ -168,7 +162,7 @@ void				TextureAssetAccessor::ImportAsset	( std::istream & in, const Path &  imp
 
 // ********************************
 //
-void			 	TextureAssetAccessor::ExportAll		( std::ostream & out ) const
+void			 	FontAssetAccessor::ExportAll		( std::ostream & out ) const
 {
 	for( auto p : ListAllUnique( m_rootPath ) )
 	{
@@ -178,7 +172,7 @@ void			 	TextureAssetAccessor::ExportAll		( std::ostream & out ) const
 
 // ********************************
 //
-void			 	TextureAssetAccessor::ExportAll		( const Path & expAssetFilePath ) const
+void			 	FontAssetAccessor::ExportAll		( const Path & expAssetFilePath ) const
 {
 	auto expFile = File::Open( expAssetFilePath.Str(), File::OpenMode::FOMWriteAppend );
 
@@ -191,7 +185,7 @@ void			 	TextureAssetAccessor::ExportAll		( const Path & expAssetFilePath ) cons
 
 // ********************************
 //
-PathVec	TextureAssetAccessor::ListAll		( const Path & path ) const
+PathVec	FontAssetAccessor::ListAll		( const Path & path ) const
 {
 	PathVec ret;
 	for( auto ext : m_fileExts )
@@ -211,7 +205,7 @@ PathVec	TextureAssetAccessor::ListAll		( const Path & path ) const
 
 // ********************************
 //
-PathVec	TextureAssetAccessor::ListAllUnique	( const Path & path ) const
+PathVec	FontAssetAccessor::ListAllUnique	( const Path & path ) const
 {
 	auto l = ListAll( path );
 
@@ -227,7 +221,7 @@ PathVec	TextureAssetAccessor::ListAllUnique	( const Path & path ) const
 
 // ********************************
 //
-void				TextureAssetAccessor::CreateDir		() const
+void				FontAssetAccessor::CreateDir		() const
 {
 	if( !Dir::Exists( m_rootPath.Str() ) )
 	{

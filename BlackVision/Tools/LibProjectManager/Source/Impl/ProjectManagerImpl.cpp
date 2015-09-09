@@ -557,7 +557,7 @@ void						ProjectManagerImpl::InitializeProjects	()
 {
 	if( Path::Exists( m_projectsPath ) )
 	{
-		auto l = Path::List( m_projectsPath, ".*bvproj" );
+		auto l = Path::List( m_projectsPath, true, ".*bvproj" );
 
 		for( auto p : l )
 		{
