@@ -15,6 +15,7 @@
 
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Widgets/Crawler/CrawlerEvents.h"
+#include "Widgets/Counter/Counter.h"
 #include "Engine/Events/Events.h"
 
 #include "Log.h"
@@ -98,7 +99,7 @@ std::string SerializeNode( model::BasicNodePtr node )
 		model::IModelNodePtr ptr   = node->GetChild(i);
         model::IModelNodePtr ptr2    = ptr;
         model::BasicNodePtr nod      = std::static_pointer_cast< model::BasicNode >( ptr2 );
-        if(children!="")children+=",";
+        if(children!="") children+=",";
         children            +=  SerializeNode(nod);
     }
 
@@ -721,6 +722,39 @@ void RemoteControlInterface::OnSetParam ( bv::IEventPtr evt )
                 }
             }
 
+        
+        } else {
+			string plugin_name_cast= string(evtSetParam->PluginName.begin(), evtSetParam->PluginName.end());
+			string param_name_cast= string(evtSetParam->ParamName.begin(), evtSetParam->ParamName.end());
+            auto plugin = node->GetPlugin( plugin_name_cast ).get();
+			if(plugin==nullptr)
+			{
+				Log::A("error", "Error OnSetParam() plugin ["+ plugin_name_cast+"] not found");
+
+			}else{
+				auto param = plugin->GetParameter( param_name_cast );
+				if(param==nullptr)
+				{
+					Log::A("error", "Error OnSetParam() plugin ["+ plugin_name_cast+"] param ["+param_name_cast+"] not found");
+
+				}else{
+
+					 wstring value = evtSetParam->Value;
+				 
+					 float float_value = 1.0f;
+
+					 try{
+						float_value =  boost::lexical_cast<float>(value);
+					 }catch(boost::bad_lexical_cast&)
+					 {
+						float_value = 0.0f;
+					 }
+
+					 SetParameter( param, (bv::TimeType)evtSetParam->time, float_value);
+				}
+
+			}
+
         }   
     }
 }
@@ -756,21 +790,29 @@ void RemoteControlInterface::OnWidgetCmd ( bv::IEventPtr evt )
             Log::A("error", "Error OnSetParam() node ["+ NodeNameStr+"] not found");
             return;
         }
+		
+		BasicNodePtr nod      = std::static_pointer_cast< bv::model::BasicNode >(node);
+			
+		
+        if(nod == nullptr)
+        {
+                Log::A("error", "Error OnWidgetCmd () node ["+ NodeNameStr+"] not found");
+                return;
+        }
+
+		INodeLogicPtr logic = nod->GetLogic();
+		if(logic==nullptr)
+		{
+			 Log::A("error", "Error OnWidgetCmd () node ["+ NodeNameStr+"] , logic [] not found");
+                return;
+
+		}
+		
+		INodeLogic* logic__ptr = logic.get();
+
+
         if(evtWidget->WidgetName == L"crawl")
         {
-        
-			BasicNodePtr nod      = std::static_pointer_cast< bv::model::BasicNode >(node);
-			
-			
-			
-
-            if(nod == nullptr)
-            {
-                 Log::A("error", "Error OnWidgetCmd () node ["+ NodeNameStr+"] , logic [] not found");
-                 return;
-            }
-			INodeLogicPtr logic = nod->GetLogic();
-			INodeLogic* logic__ptr = logic.get();
 			bv::widgets::Crawler* crawler =  (bv::widgets::Crawler*)logic__ptr;
 			if(evtWidget->Action==L"stop")
 			{
@@ -804,6 +846,32 @@ void RemoteControlInterface::OnWidgetCmd ( bv::IEventPtr evt )
 
 			}
 
+		}else if(evtWidget->WidgetName == L"counter")
+        {
+			bv::widgets::WidgetCounter * counter =  (bv::widgets::WidgetCounter*)logic__ptr;
+
+			string param_name_cast= string(evtWidget->Param.begin(), evtWidget->Param.end());
+
+			auto param = counter->GetValueParam();
+			if(param==nullptr)
+			{
+				Log::A("error", "Error OnSetParam() plugin [counter] param ["+param_name_cast+"] not found");
+
+			}else{
+
+					wstring value = evtWidget->Value;
+				 
+					float float_value = 1.0f;
+
+					try{
+					float_value =  boost::lexical_cast<float>(value);
+					}catch(boost::bad_lexical_cast&)
+					{
+					float_value = 0.0f;
+					}
+
+					SetParameter( param, (bv::TimeType)evtWidget->Time, float_value);
+			}
 		}
     }
 }

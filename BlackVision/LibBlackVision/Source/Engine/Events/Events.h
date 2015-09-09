@@ -505,6 +505,8 @@ public:
     std::wstring                Param;      // move to private
     std::wstring                NodeName;
 	std::wstring                Action;
+	float						Time;
+	std::wstring                Value;
 	std::wstring                WidgetName;
    
 

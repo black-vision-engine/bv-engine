@@ -401,6 +401,8 @@ namespace bv{
 							ev->WidgetName = cmd->WidgetName;
 							ev->Action = cmd->Action;
 							ev->Param = cmd->Param;
+							ev->Time = cmd->Time;
+							ev->Value = cmd->Value;
 
                             GetDefaultEventManager().ConcurrentQueueEvent( ev );
                         }
