@@ -13,7 +13,7 @@ public:
 		BlurSize="0";
 		Font="";
         max_size="null";
-		OutlineColor_RGBA="1,1,1,1";
+		OutlineColor_RGBA="1,0,0,1";
 		non_linear_properties.push_back(NonLinearProperty(Text,"text"));
 		non_linear_properties.push_back(NonLinearProperty(OutlineSize,"outline_size"));
 		non_linear_properties.push_back(NonLinearProperty(OutlineColor_RGBA,"outline_color"));

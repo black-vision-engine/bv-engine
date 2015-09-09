@@ -44,9 +44,9 @@ WidgetCounter::~WidgetCounter(void)
 //
 void		WidgetCounter::Update				( TimeType T)
 {
-	
+	{T;}
 	 m_value->SetValue( m_param->Evaluate() );
-	 printf( "counter %f - %f - %f\r\n", T, m_param->Evaluate(),m_value->GetValue());
+	 //printf( "counter %f - %f - %f\r\n", T, m_param->Evaluate(),m_value->GetValue());
 	 bv::model::DefaultTextPlugin* txt = dynamic_cast< bv::model::DefaultTextPlugin* >( m_parentNode->GetPlugin("text").get() );
 	 std::wstring text;
 	 wchar_t buffer[12];
