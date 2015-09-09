@@ -9,6 +9,8 @@
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
+#include "Engine/Models/Timeline/TimelineManager.h"
+
 namespace bv {
 
 // *******************************
@@ -145,9 +147,10 @@ const std::string &     BVScene::GetName            () const
 //
 void            BVScene::Serialize           ( SerializeObject &doc) const
 {
-    //doc.SetName( "scene" ); // FIXME when model is fixed
+    doc.SetName( "scene" );
+    m_pTimelineManager->Serialize( doc );
     m_pModelSceneRoot->Serialize( doc );
-    //doc.Pop(); // FIXME when model is fixed
+    doc.Pop();
 }
 
 // *******************************
