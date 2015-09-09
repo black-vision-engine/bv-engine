@@ -6,17 +6,17 @@
 namespace bv
 {
 
-class TextureAssetAccessor;
-DEFINE_CONST_PTR_TYPE( TextureAssetAccessor )
+class FontAssetAccessor;
+DEFINE_CONST_PTR_TYPE( FontAssetAccessor )
 
-class TextureAssetAccessor : public AssetAccessor
+class FontAssetAccessor : public AssetAccessor
 {
 
 public:
 
-	static TextureAssetAccessorConstPtr Create( const Path & rootPath, const StringVector & fileExts );
+	static FontAssetAccessorConstPtr Create( const Path & rootPath, const StringVector & fileExts );
 
-								~TextureAssetAccessor	();
+								~FontAssetAccessor	();
 
 	virtual AssetDescConstPtr	GetAssetDesc		( const Path & path ) const override;
 
@@ -42,7 +42,7 @@ public:
 
 private:
 
-	explicit					TextureAssetAccessor	( const Path & rootPath, const StringVector & fileExts );
+	explicit					FontAssetAccessor	( const Path & rootPath, const StringVector & fileExts );
 
 	void						CreateDir			() const;
 
