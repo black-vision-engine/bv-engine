@@ -1,9 +1,5 @@
-#include "TextureAssetAccessor.h"
-#include "Assets/Texture/SingleTextureAssetDescriptor.h"
-#include "Assets/Texture/TextureAssetDescriptor.h"
-#include "Assets/Texture/GeneratedSingleTextureAssetDescriptor.h"
-#include "LibImage.h"
-#include "Engine/Types/EnumsUtils.h"
+#include "FontAssetAccessor.h"
+#include "Assets/Font/FontAssetDescriptor.h"
 #include "IO/DirIO.h"
 #include "IO/FileIO.h"
 
@@ -19,9 +15,9 @@ namespace bv
 
 // ********************************
 //
-TextureAssetAccessorConstPtr FontAssetAccessor::Create( const Path & rootPath, const StringVector & fileExts )
+FontAssetAccessorConstPtr FontAssetAccessor::Create( const Path & rootPath, const StringVector & fileExts )
 {
-	return TextureAssetAccessorConstPtr( new FontAssetAccessor( rootPath, fileExts ) );
+	return FontAssetAccessorConstPtr( new FontAssetAccessor( rootPath, fileExts ) );
 }
 
 // ********************************
@@ -46,9 +42,7 @@ AssetDescConstPtr	FontAssetAccessor::GetAssetDesc	( const Path & path ) const
 
 	if( Path::Exists( p ) )
 	{
-		auto props = image::GetImageProps( p.Str() );
-	
-		return SingleTextureAssetDesc::Create( p.Str(), props.width, props.height, EnumsUtils::Convert( props.format ), true );
+		return FontAssetDesc::Create( p.Str(), 0, 0, 0, false );
 	}
 	else
 	{
@@ -63,11 +57,11 @@ void			 	FontAssetAccessor::AddAsset		( const Path & internalPath, const AssetDe
 {
 	auto uid = assetDesc->GetUID();
 
-	if( uid == SingleTextureAssetDesc::UID() )
+	if( uid == FontAssetDesc::UID() )
 	{
-		auto typedDesc = QueryTypedDesc< SingleTextureAssetDescConstPtr >( assetDesc );
+		auto typedDesc = QueryTypedDesc< FontAssetDescConstPtr >( assetDesc );
 
-		auto path = typedDesc->GetImagePath();
+        auto path = typedDesc->GetFontFileName();
 
 		Path::Copy( path, m_rootPath / internalPath );
 	}
