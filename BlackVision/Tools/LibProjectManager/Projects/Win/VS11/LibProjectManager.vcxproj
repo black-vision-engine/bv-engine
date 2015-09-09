@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AssetCategory.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\AnimationAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\SceneAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\ProjectManagerImpl.cpp" />
@@ -30,6 +31,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\AssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\AssetCategory.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\AnimationAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\SceneAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\ProjectManagerImpl.h" />

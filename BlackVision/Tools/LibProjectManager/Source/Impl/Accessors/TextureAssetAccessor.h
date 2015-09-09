@@ -6,8 +6,6 @@
 namespace bv
 {
 
-class ProjectManager;
-
 class TextureAssetAccessor;
 DEFINE_CONST_PTR_TYPE( TextureAssetAccessor )
 
