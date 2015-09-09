@@ -11,27 +11,18 @@ const std::string AnimationAssetDesc::uid = "ANIMATION_ASSET_DESC";
 //
 void                AnimationAssetDesc::Serialize       ( SerializeObject & sob ) const
 {
-    assert( false );  // TODO: Needs rewriting. Serializa only m_path
-    { sob; }
-//sob.SetName( "asset" );
-//    sob.SetValue( "type", "anim" );
-//    
-//    for( auto frame : GetFrames() )
-//        frame->Serialize( sob );
-//                
-//sob.Pop();
+sob.SetName( "asset" );
+    sob.SetValue( "type", "anim" );
+    sob.SetValue( "path", m_path );
+    sob.SetValue( "filter", m_filter );
+sob.Pop();
 }
 
 // ***********************
 //
 ISerializableConstPtr     AnimationAssetDesc::Create          ( DeserializeObject & dob )
 {
-    assert( false );  // TODO: Needs rewriting. Serializa only m_path
-    { dob; }
-    //auto frames = dob.LoadProperties< const TextureAssetDesc >( "asset" );
-
-    //return AnimationAssetDescConstPtr( new AnimationAssetDesc ( frames ) );
-    return nullptr;
+    return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetValue( "path" ), dob.GetValue( "filter" ) ) );
 }
 
 // *******************************
