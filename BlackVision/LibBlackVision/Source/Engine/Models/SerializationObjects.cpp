@@ -39,6 +39,13 @@ void                                                    SerializeObject::SetValu
     m_roots.top()->append_attribute( attr );
 }
 
+void                                                    SerializeObject::SetContent( const std::string & value )
+{
+    char * node_name = m_doc.allocate_string( value.c_str() );
+    m_roots.top()->value( node_name, value.size() );
+}
+
+
 void                                                    SerializeObject::Pop()
 {
     m_roots.pop();

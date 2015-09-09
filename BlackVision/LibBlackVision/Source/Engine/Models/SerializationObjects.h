@@ -24,6 +24,7 @@ public:
 
     void                                        SetName( const std::string & name );
     void                                        SetValue( const std::string & name, const std::string & value );
+	void                                        SetContent( const std::string & value );
     void                                        Pop();
 };
 
@@ -35,16 +36,17 @@ class DeserializeObject
     template< typename T >
     std::shared_ptr< T >                                    Load( rapidxml::xml_node<>* node ) const
     {
-        auto dob = DeserializeObject( *node, *this->m_tm, *this->m_pm ); // FIXME for God's sake!!!
+        auto dob = DeserializeObject( *node, this->m_tm ); // FIXME for God's sake!!!
         auto obj = T::Create( dob );
         return std::static_pointer_cast< T >( obj );
     }
-public:
-    model::TimelineManager* m_tm; // FIXME(?)
-    const model::PluginsManager* m_pm; // FIXME(?)
+
+    model::TimelineManager* m_tm;
 
 public:
-    DeserializeObject( rapidxml::xml_node<>& doc, model::TimelineManager& tm, const model::PluginsManager& pm ) : m_doc( &doc ), m_tm( &tm ), m_pm( &pm ) { }
+    DeserializeObject( rapidxml::xml_node<>& doc, model::TimelineManager* tm ) : m_doc( &doc ), m_tm( tm ) { }
+
+    model::TimelineManager*                                 GetTimelineManager() { return m_tm; }
 
     std::string                                             GetName()
     {

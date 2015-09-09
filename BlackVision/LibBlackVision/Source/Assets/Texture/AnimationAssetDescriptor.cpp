@@ -13,10 +13,8 @@ void                AnimationAssetDesc::Serialize       ( SerializeObject & sob 
 {
 sob.SetName( "asset" );
     sob.SetValue( "type", "anim" );
-    
-    for( auto frame : GetFrames() )
-        frame->Serialize( sob );
-                
+    sob.SetValue( "path", m_path );
+    sob.SetValue( "filter", m_filter );
 sob.Pop();
 }
 
@@ -24,27 +22,33 @@ sob.Pop();
 //
 ISerializableConstPtr     AnimationAssetDesc::Create          ( DeserializeObject & dob )
 {
-    auto frames = dob.LoadProperties< const TextureAssetDesc >( "asset" );
-
-    return AnimationAssetDescConstPtr( new AnimationAssetDesc ( frames ) );
+    return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetValue( "path" ), dob.GetValue( "filter" ) ) );
 }
 
 // *******************************
 //
-AnimationAssetDesc::AnimationAssetDesc							( const std::vector< std::string > & frames )
+AnimationAssetDesc::AnimationAssetDesc							( const std::string & path, const std::string & filter )
+    : m_path( path )
+    , m_filter( filter )
 {
-	for( auto f : frames )
-	{
-		m_frames.push_back( TextureAssetDesc::Create( f, true ) );
-	}
+    auto files = Dir::ListFiles( m_path, m_filter );
+
+    if ( files.size() > 0 )
+    {
+	    for( auto f : files )
+	    {
+		    m_frames.push_back( TextureAssetDesc::Create( f, true ) );
+        }
+    }
 }
 
-// *******************************
-//
-AnimationAssetDesc::AnimationAssetDesc	( const std::vector< TextureAssetDescConstPtr > & frames )
-    : m_frames( frames )
-{
-}
+//// *******************************
+////
+//AnimationAssetDesc::AnimationAssetDesc	( const std::vector< TextureAssetDescConstPtr > & frames )
+//    : m_frames( frames )
+//    , m_path( "" )
+//{
+//}
 
 
 // *******************************
@@ -69,16 +73,16 @@ const std::vector< TextureAssetDescConstPtr > & AnimationAssetDesc::GetFrames		(
 
 // *******************************
 //
+std::string                     AnimationAssetDesc::GetKey      () const
+{
+    return m_path;
+}
+
+// *******************************
+//
 AnimationAssetDescConstPtr		AnimationAssetDesc::CreateFromDirFrames( const std::string & path, const std::string & filter )
 {
-    auto files = Dir::ListFiles( path, filter );
-
-    if ( files.size() > 0 )
-    {
-        return AnimationAssetDescConstPtr( new AnimationAssetDesc ( files ) );
-    }
-
-    return nullptr;
+    return AnimationAssetDescConstPtr( new AnimationAssetDesc ( path, filter ) );
 }
 
 // *******************************

@@ -1,6 +1,17 @@
 #include "ProjectManager.h"
 #include "Impl/Accessors/TextureAssetAccessor.h"
 #include "Assets/Texture/SingleTextureAssetDescriptor.h"
+#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
+#include "Engine/Models/Timeline/TimelineManager.h"
+
+#include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
+
+#include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
+#include "Engine/Graphics/Renderers/Renderer.h"
+
+#include "Assets/FwdDecls.h"
 
 #include "gtest/gtest.h"
 
@@ -8,6 +19,62 @@ using namespace bv;
 
 static ProjectManager * g_pm0 = nullptr;
 static ProjectManager * g_pm1 = nullptr;
+
+namespace bv
+{
+    auto global_tm = new model::TimelineManager();
+} // bv
+
+// *******************************
+//
+bool    LoadTexture     ( model::IPluginPtr plugin, const Path & projectName, const Path & path )
+{
+    auto texDesc = std::static_pointer_cast< const SingleTextureAssetDesc >( g_pm0->GetAssetDesc( projectName, "textures", path ) );
+
+    return plugin->LoadResource( TextureAssetDesc::Create( texDesc ) );
+}
+
+bv::model::BasicNodeConstPtr CreateTestScene0()
+{
+    std::vector< model::IPluginDescriptor * > descriptors;
+
+    descriptors.push_back( new model::DefaultTransformPluginDesc() );
+    descriptors.push_back( new model::DefaultRectPluginDesc() );
+    descriptors.push_back( new model::DefaultTexturePluginDesc() );
+
+    model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( descriptors );
+
+    auto globalTimeline = model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) );
+    auto root = model::BasicNode::Create( "textured_rect", globalTimeline );
+
+    StringVector plugins;
+    plugins.push_back( "DEFAULT_TRANSFORM" );
+    plugins.push_back( "DEFAULT_RECTANGLE" );
+    plugins.push_back( "DEFAULT_TEXTURE" );
+
+    auto success = root->AddPlugins( plugins, globalTimeline );
+    assert( success );
+
+    auto wp = root->GetPlugin( "rectangle" )->GetParameter( "width" );
+    auto hp = root->GetPlugin( "rectangle" )->GetParameter( "height" );
+    auto tr = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+
+    success &= SetParameter( wp, 0.f, 1.f );
+    success &= SetParameter( hp, 0.f, 1.f );
+    success &= SetParameterTranslation( tr, 0, 0.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+
+    success = LoadTexture( root->GetPlugin( "texture" ), "proj00", "flagi/pol.jpg" );
+    assert( success );    
+
+ //   RendererInput ri;
+ //   ri.m_WindowHandle			= 0;
+ //   ri.m_PixelFormat			= 0;
+ //   ri.m_RendererDC				= 0;
+ //   ri.m_DisableVerticalSync	= true;
+	//auto renderer = new bv::Renderer( ri, 100, 100 );
+    return root;
+    //return BVScene::CreateFakeSceneForTestingOnly( std::const_pointer_cast< model::BasicNode >( , new Camera( false ), "BasicScene", globalTimeline );
+}
 
 TEST( CleanAll, ProjectManager )
 {
@@ -25,8 +92,10 @@ TEST( CleanAll, ProjectManager )
 
 TEST( CreatingPM, ProjectManager )
 {
-	g_pm0 = ProjectManager::GetInstance( "bv_media" );
-	g_pm1 = ProjectManager::GetInstance( "bv_media1" );
+    global_tm->RegisterRootTimeline( model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) ) );
+
+    g_pm0 = ProjectManager::GetInstance( "bv_media", global_tm );
+	g_pm1 = ProjectManager::GetInstance( "bv_media1", global_tm );
 }
 
 TEST( ProjectsListing, ProjectManager )
@@ -106,6 +175,29 @@ TEST( AddingAssets, ProjectManager )
 	ASSERT_FALSE( g_pm0->GetAssetDesc( "proj01", "textures", "flagi/rus.jpg" ) );
 
 	ASSERT_TRUE( assets.size() == 3 );
+}
+
+TEST( AddingScene, ProjectManager )
+{
+    g_pm0->AddScene( CreateTestScene0(), "proj00", "scene1/s.scn" );
+}
+
+TEST( ExportingProject, ProjectManager )
+{
+    g_pm0->ExportProjectToFile( "proj00", "test.exp" );
+}
+
+TEST( ImportingProject, ProjectManager )
+{
+    g_pm1->ImportProjectFromFile( "test.exp", "proj00" );
+    g_pm1->ImportProjectFromFile( "test.exp", "proj01" );
+}
+
+TEST( RemovingUnusedAssets, ProjectManager )
+{
+    g_pm0->RemoveUnusedAssets( "proj01", "textures" );
+    g_pm0->RemoveUnusedAssets( "proj00" );
+    g_pm0->RemoveUnusedAssets();
 }
 
 int main( int argc, char **argv )

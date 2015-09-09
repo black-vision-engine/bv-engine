@@ -2,6 +2,7 @@
 
 #include "AssetCategory.h"
 #include "Project.h"
+#include "SceneDescriptor.h"
 
 #include "Engine/Models/BVScene.h"
 
@@ -14,12 +15,12 @@ namespace bv
 
 class Project;
 class AssetCategory;
-class SceneDesc;
 class ProjectManagerImpl;
 
 namespace model 
 {
 	class BasicNode;
+    class TimelineManager;
 } // model
 
 class ProjectManager
@@ -50,9 +51,10 @@ public:
 	void					RemoveAsset			( const Path & projectName, const std::string & categoryName, const Path & path );
 	void					MoveAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 	void					RemoveUnusedAssets	( const Path & projectName, const std::string & categoryName );
-	void					RemoveUnusedAssets	( const Path & projectName );
+    void					RemoveUnusedAssets	( const Path & projectName );
+	void					RemoveUnusedAssets	();
 
-	void					AddScene			( const BVSceneConstPtr & sceneRootNode, const Path & projectName, const Path & outPath );
+	void					AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath );
 	void					CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 	void					RemoveScene			( const Path & projectName, const Path & path );
 	void					MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
@@ -83,14 +85,14 @@ public:
 	AssetDescConstPtr		GetAssetDesc		( const Path & projectName, const std::string & categoryName, const Path & pathInProject ) const;
 
 	//SceneDesc				GetSceneDescLoc		( loc )
-	SceneDesc *				GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
+	SceneDescriptor			GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
 
-	static ProjectManager *	GetInstance			( const Path & rootPath );
+	static ProjectManager *	GetInstance			( const Path & rootPath, model::TimelineManager * tm );
 
 private:
 	ProjectManagerImpl * m_impl;
 
-	ProjectManager	( const Path & rootPath );
+	ProjectManager	( const Path & rootPath, model::TimelineManager * tm );
 	~ProjectManager	();
 };
 

@@ -37,12 +37,13 @@ private:
 
 	// 
 	void					CopyAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath );
-	void					RemoveAsset			( const Path & projectName, const std::string & categoryName, const Path & path );
+	void					RemoveAsset			( const Path & projectName, const std::string & categoryName, const Path & path ) const;
 	void					MoveAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath );
-	void					RemoveUnusedAssets	( const Path & projectName, const std::string & categoryName );
-	void					RemoveUnusedAssets	( const Path & projectName );
+	void					RemoveUnusedAssets	( const Path & projectName, const std::string & categoryName ) const;
+	void					RemoveUnusedAssets	( const Path & projectName ) const;
+    void				    RemoveUnusedAssets	() const;
 
-	void					AddScene			( const BVSceneConstPtr & sceneRootNode, const Path & projectName, const Path & outPath );
+	void					AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath );
 	void					CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 	void					RemoveScene			( const Path & projectName, const Path & path );
 	void					MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
@@ -73,7 +74,7 @@ private:
 	AssetDescConstPtr		GetAssetDesc		( const Path & projectName, const std::string & categoryName, const Path & pathInProject ) const;
 
 	//SceneDesc				GetSceneDescLoc		( loc )
-	SceneDesc *				GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
+	SceneDescriptor			GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
 
 	void					InitializeProjects	();
 	void					InitializeScenes	();
@@ -81,7 +82,7 @@ private:
 	Path					TranslateToPathCategory( const Path & projectName, const Path & path ) const;
 	Path					TranslateToPathInPMRootFolder( const Path & projectName, const std::string & categoryName, const Path & path ) const;
 
-	explicit ProjectManagerImpl( const Path & rootPath );
+	explicit ProjectManagerImpl( const Path & rootPath, model::TimelineManager * tm );
 			~ProjectManagerImpl();
 
 
@@ -99,7 +100,19 @@ private:
 	Path					m_projectsPath;
 	Path					m_scenesPath;
 
+    model::TimelineManager * m_timelineManager; 
+
 	friend ProjectManager;
+
+	struct Location
+	{
+		std::string		categoryName;
+		Path			projectName;
+		Path			path;
+	};
+
+	Location				Path2Location		( const Path & path ) const;
+	Path					Location2Path		( const Location & loc ) const;
 };
 
 

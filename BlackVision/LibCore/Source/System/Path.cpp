@@ -1,14 +1,15 @@
+#pragma warning(disable : 4100)
+#pragma warning(disable : 4996)
+
 #include "Path.h"
 #include "IO/DirIO.h"
 
 #include "Tools/Logger/Logger.h"
 #define LOG_MODULE ModuleEnum::ME_LibCore
 
-#pragma warning(push)
-#pragma warning(disable : 4100)
 #include "boost/filesystem/operations.hpp"
 #include "boost/regex.hpp"
-#pragma warning(pop)
+#include <boost/algorithm/string.hpp>
 
 #include <cstdarg>
 
@@ -139,6 +140,13 @@ bool			Path::operator ==		( const Path & l ) const
 
 // *********************************
 //
+bool			Path::operator !=		( const Path & l ) const
+{
+    return this->Str() != l.Str();
+}
+
+// *********************************
+//
 Path			Path::operator /		( const Path & p ) const
 {
 	return this->Join( p );
@@ -231,24 +239,31 @@ bool			Path::Exists			( const Path & path )
 //
 PathVec			Path::List				( const Path & path, const std::string exp )
 {
-	boost::filesystem::path cp( path.Str() ); 
-	boost::regex pattern( exp );
+    if( Path::Exists( path ) )
+    {
+	    boost::filesystem::path cp( path.Str() ); 
+	    boost::regex pattern( exp );
 
-	PathVec ret;
+	    PathVec ret;
 
-	for (	boost::filesystem::recursive_directory_iterator iter( cp ), end;
-			iter != end;
-			++iter)
-	{
-		std::string name = iter->path().filename().string();
-		if (regex_match(name, pattern))
-		{
-			auto p = iter->path();
-			ret.push_back( Path( iter->path().string() ) );
-		}
-	}
+	    for (	boost::filesystem::recursive_directory_iterator iter( cp ), end;
+			    iter != end;
+			    ++iter)
+	    {
+		    std::string name = iter->path().filename().string();
+		    if (regex_match(name, pattern))
+		    {
+			    auto p = iter->path();
+			    ret.push_back( Path( iter->path().string() ) );
+		    }
+	    }
 
-	return ret;
+        return ret;
+    }
+    else
+    {
+        return PathVec();
+    }
 }
 
 
@@ -261,4 +276,22 @@ Path			Path::RelativePath		( const Path & path, const Path & start )
 	return Path( rel.string() );
 }
 
+// *********************************
+//
+StringVector    Path::Split				() const
+{
+    StringVector results;
+    boost::split(results, m_path, boost::is_any_of("//"));
+
+	return results;
+}
+
+// *********************************
+//
+std::ostream & operator << ( std::ostream & os, const Path & p )
+{
+    return os << p.Str();
+}
+
 } // bv
+

@@ -36,8 +36,10 @@ public:
 	void					RemoveAsset		( const Path & path ) const;
 	
 	void					ExportAsset		( const Path & expAssetFilePath, const Path & path ) const;
-	
+	void					ExportAsset		( std::ostream & out, const Path &  path ) const;
+
 	void					ImportAsset		( const Path & impAssetFilePath, const Path & toPath ) const;
+	void					ImportAsset		( std::istream & in, const Path &  toPath ) const;
 	
 	void					ExportAll		( const Path & expAssetFilePath ) const;
 	

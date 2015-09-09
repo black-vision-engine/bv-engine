@@ -1,7 +1,10 @@
 #pragma once
 
+#include "CoreDEF.h"
+
 #include <string>
 #include <vector>
+#include <iterator>
 
 namespace bv
 {
@@ -24,6 +27,9 @@ public:
 
 	bool				operator <		( const Path & b ) const; // used by std::set
 	bool				operator ==		( const Path & b ) const; // used by std::set
+    bool				operator !=		( const Path & b ) const;
+
+	StringVector        Split			() const;
 
 	static bool			Copy			( const Path & from, const Path & to );
 	static bool			Remove			( const Path & path );
@@ -36,7 +42,10 @@ public:
 
 private:
 	std::string			m_path;
+
 };
+
+std::ostream & operator << ( std::ostream & os, const Path & p );
 
 typedef Path::PathVec PathVec;
 
