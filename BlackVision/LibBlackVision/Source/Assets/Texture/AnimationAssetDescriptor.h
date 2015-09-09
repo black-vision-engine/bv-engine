@@ -17,12 +17,14 @@ protected:
 
 public:
 
-    virtual void                Serialize       ( SerializeObject & sob ) const;
-    static ISerializableConstPtr     Create          ( DeserializeObject & dob );
+    virtual void                    Serialize       ( SerializeObject & sob ) const;
+    static ISerializableConstPtr    Create          ( DeserializeObject & dob );
 
 	virtual const std::string &		GetUID		() const override;
 
 	virtual bool					IsCacheable	() const override;
+
+    virtual std::string             GetKey      () const override;
 
 	static const std::string &		UID			();
 
@@ -36,10 +38,11 @@ public:
     //static AnimationAssetDescConstPtr			Create ( const std::vector< TextureAssetDescConstPtr > & frames );
 
 private:
-	explicit						AnimationAssetDesc	( const std::vector< std::string > & frames );
-	explicit						AnimationAssetDesc	( const std::vector< TextureAssetDescConstPtr > & frames );
+	explicit						AnimationAssetDesc	( const std::string & frames, const std::string & filter );
+	//explicit						AnimationAssetDesc	( const std::vector< TextureAssetDescConstPtr > & frames );
 
-    std::vector< TextureAssetDescConstPtr >  m_frames;
+    std::vector< TextureAssetDescConstPtr > m_frames;
+    std::string                             m_path;
 
 };
 

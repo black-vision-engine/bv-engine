@@ -160,7 +160,7 @@ void			SceneAccessor::ExportScene( std::ostream & out, const Path & projectName,
 	}
 	else
 	{
-		assert( !"Not implemented." );
+		assert( !"Not implemented." );  // TODO: Implement.
 	}
 }
 
