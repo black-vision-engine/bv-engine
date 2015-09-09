@@ -196,7 +196,7 @@ PathVec	TextureAssetAccessor::ListAll		( const Path & path ) const
 	PathVec ret;
 	for( auto ext : m_fileExts )
 	{
-		auto l = Path::List( m_rootPath / path, ext );
+		auto l = Path::List( m_rootPath / path, true, ext );
 
         for( auto & p : l )
         {
