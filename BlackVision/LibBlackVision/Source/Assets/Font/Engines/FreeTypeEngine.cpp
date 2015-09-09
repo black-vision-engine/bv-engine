@@ -376,6 +376,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 
 				if( glyph == nullptr )
 				{
+                    currAddress += ( m_maxWidth + padding ) * 4;
 					continue;
 				}
 

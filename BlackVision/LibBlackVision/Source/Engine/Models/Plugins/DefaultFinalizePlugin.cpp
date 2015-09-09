@@ -237,6 +237,15 @@ bool                                DefaultFinalizePlugin::LoadResource         
 
 // *******************************
 //
+std::vector< AssetDescConstPtr >    DefaultFinalizePlugin::GetAssets                   () const
+{
+    assert( false && "how did you get here?");
+    return std::vector< AssetDescConstPtr >();
+}
+
+
+// *******************************
+//
 void                                DefaultFinalizePlugin::Update                       ( TimeType t )
 {
     { t; } // FIXME: suppress unuse warning

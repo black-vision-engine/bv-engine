@@ -25,6 +25,9 @@
     <ClCompile Include="..\..\..\Source\Impl\Accessors\AnimationAssetAccessor.cpp">
       <Filter>Impl\Accessors</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\FontAssetAccessor.cpp">
+      <Filter>Impl\Accessors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\AssetAccessor.h" />
@@ -42,6 +45,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\SceneDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\AnimationAssetAccessor.h">
+      <Filter>Impl\Accessors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\FontAssetAccessor.h">
       <Filter>Impl\Accessors</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,8 +2,13 @@
 
 #include "Assets/Texture/AnimationAssetDescriptor.h"
 
+#include "IO/FileIO.h"
+#include "IO/DirIO.h"
+
 #include "Tools/Logger/Logger.h"
 #define LOG_MODULE ModuleEnum::ME_LibBlackVision
+
+#include <set>
 
 namespace bv
 {
@@ -90,54 +95,140 @@ void				AnimationAssetAccessor::RenameAsset	        ( const Path & oldPath, cons
 //
 void				AnimationAssetAccessor::ImportAsset			( const Path & impAssetFile, const Path &  importToPath ) const
 {
-    {impAssetFile;}
-    {importToPath;}
+	auto impAsset = File::Open( impAssetFile.Str(), File::OpenMode::FOMReadOnly );
+
+	ImportAsset( *impAsset.StreamBuf(), importToPath );
 }
 
 // ********************************
 //
 void				AnimationAssetAccessor::ImportAsset			( std::istream & in, const Path &  importToPath ) const
 {
-    {in;}
-    {importToPath;}
+    auto absPath = m_rootPath / importToPath;
+
+	Dir::CreateDir( absPath.Str(), true );
+
+    std::stringbuf buf;
+    in.get( buf, '\n' );
+    in.ignore();
+
+    Path internalPath = buf.str();
+    buf.str( "" );
+
+    in.get( buf, '\n' );
+    in.ignore();
+
+    auto numFrames = stoul( buf.str() );
+    buf.str( "" );
+
+    for( SizeType i = 0; i < numFrames; ++i )
+    {
+        in.get( buf, '\n' );
+        in.ignore();
+
+        auto frame = buf.str();
+        buf.str( "" );
+                
+        in.get( buf, '\n' );
+        in.ignore();
+        auto size = stoul( buf.str() );
+
+        auto assetFile = File::Open( ( absPath / frame ).Str(), File::OpenMode::FOMReadWrite );
+
+        assetFile.Write( in, size );
+
+        assetFile.Close();
+    }
 }
 
 // ********************************
 //
 void				AnimationAssetAccessor::ExportAsset			( const Path & expAssetFilePath, const Path & internalPath ) const
 {
-    {expAssetFilePath;}
-    {internalPath;}
+    auto expFile = File::Open( expAssetFilePath.Str(), File::OpenMode::FOMReadWrite );
+
+    ExportAsset( *expFile.StreamBuf(), internalPath );
+
+	expFile.Close();
 }
 
 // ********************************
 //
 void				AnimationAssetAccessor::ExportAsset			( std::ostream & out, const Path &  internalPath) const
 {
-    {out;}
-    {internalPath;}
+    auto absPath = m_rootPath / internalPath;
+
+    if( Path::Exists( absPath ) && Path::IsDir( absPath ) )
+    {
+        PathVec frames;
+        for( auto fe : m_fileExts )
+        {
+            frames = Path::List( absPath, false, fe );
+            if( frames.size() > 0 )
+            {
+                break;
+            }
+        }
+
+        out << internalPath << '\n';
+        out << std::to_string( frames.size() ) << '\n';
+
+        for( auto f : frames )
+        {
+            out << f << '\n';
+            out << std::to_string( File::Size( f.Str() ) ) << '\n';
+
+            auto frameFile = File::Open( f.Str(), File::OpenMode::FOMReadOnly );
+
+            frameFile.Read( out );
+
+            frameFile.Close();
+        }
+    }
 }
 
 // ********************************
 //
 void			 	AnimationAssetAccessor::ExportAll			( std::ostream & out ) const
 {
-    {out;}
+	for( auto p : ListAllUnique( m_rootPath ) )
+	{
+		ExportAsset( out, p );
+	}
 }
 
 // ********************************
 //
 void				AnimationAssetAccessor::ExportAll			( const Path & expAssetFilePath ) const
 {
-    {expAssetFilePath;}
+    auto expFile = File::Open( expAssetFilePath.Str(), File::OpenMode::FOMReadWrite );
+
+	ExportAll( *expFile.StreamBuf() );
+
+	expFile.Close();
 }
 
 // ********************************
 //
 PathVec				AnimationAssetAccessor::ListAll				( const Path & path ) const
 {
-    {path;}
-    return PathVec();
+    auto pathList = Path::List( m_rootPath / path, true );
+
+    PathVec ret; 
+
+    for( auto p : pathList )
+    {
+        if( Path::IsDir( p ) )
+        {
+            auto ext = PathContainsAnimation( p );
+            if( !ext.empty() )
+            {
+                ret.push_back( p );
+            }
+        }
+    }
+    
+    return ret;
 }
 
 
@@ -145,8 +236,33 @@ PathVec				AnimationAssetAccessor::ListAll				( const Path & path ) const
 //
 PathVec				AnimationAssetAccessor::ListAllUnique		( const Path & path ) const
 {
-    {path;}
-    return PathVec();
+	auto l = ListAll( path );
+
+	std::set< Path  > unique;
+
+	for( auto p : l )
+	{
+		unique.insert( p );
+	}
+
+	return PathVec( unique.begin(), unique.end() );	
+}
+
+// ********************************
+//
+std::string         AnimationAssetAccessor::PathContainsAnimation( const Path & path ) const
+{
+    for( auto fe : m_fileExts )
+    {
+        auto l = Path::List( path, false, fe );
+
+        if( l.size() > 0 )
+        {
+            return fe;
+        }
+    }
+
+    return "";
 }
 
 } // bv

@@ -9,6 +9,8 @@
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
+#include "Engine/Models/Timeline/TimelineManager.h"
+
 namespace bv {
 
 // *******************************
@@ -143,11 +145,42 @@ const std::string &     BVScene::GetName            () const
 
 // *******************************
 //
+void GetAssetsWithUIDs( std::map< AssetDescConstPtr, std::string >& map, model::BasicNodePtr root )
+{
+    auto plugins = root->GetPlugins();
+    for( unsigned int i = 0; i < root->GetNumPlugins(); i++ )
+    {
+        auto assets = root->GetPlugins()->GetPlugin( i )->GetAssets();
+        for( auto asset : assets )
+            map[ asset ] = std::to_string( map.size() ); // FIXME: sensible uids would be more sensible
+    }
+
+    for( unsigned int i = 0; i < root->GetNumChildren(); i++ )
+        GetAssetsWithUIDs( map, root->GetChild( i ) );
+}
+
+// *******************************
+//
 void            BVScene::Serialize           ( SerializeObject &doc) const
 {
-    //doc.SetName( "scene" ); // FIXME when model is fixed
+    doc.SetName( "scene" );
+
+    std::map< AssetDescConstPtr, std::string > assets;
+    GetAssetsWithUIDs( assets, m_pModelSceneRoot );
+
+    //doc.SetAsset2UIDMap( assets );
+
+    doc.SetName( "assets" );
+    for( auto asset2uid : assets )
+    {
+        asset2uid.first->Serialize( doc );
+    }
+    doc.Pop(); // assets
+
+    m_pTimelineManager->Serialize( doc );
     m_pModelSceneRoot->Serialize( doc );
-    //doc.Pop(); // FIXME when model is fixed
+
+    doc.Pop();
 }
 
 // *******************************

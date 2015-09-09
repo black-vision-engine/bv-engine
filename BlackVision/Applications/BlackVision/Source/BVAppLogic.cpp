@@ -345,10 +345,7 @@ void BVAppLogic::OnKey           ( unsigned char c )
     {
         auto sob = new SerializeObject();
 
-        sob->SetName( "scene" );
-        GetTimelineManager()->Serialize( *sob );
         m_bvScene->Serialize( *sob );
-        sob->Pop();
 
         sob->Save( "test.xml" );
         delete sob;

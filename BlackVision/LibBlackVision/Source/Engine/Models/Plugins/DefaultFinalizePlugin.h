@@ -56,6 +56,7 @@ public:
 	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & currentTransformation ) const override;
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
+    virtual std::vector< AssetDescConstPtr >    GetAssets                   () const;
 
     virtual void                                Update                      ( TimeType t ) override;
 
