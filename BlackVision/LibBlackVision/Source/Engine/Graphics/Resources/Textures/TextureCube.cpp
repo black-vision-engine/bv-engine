@@ -87,4 +87,11 @@ SizeType    TextureCube::RawFrameSize		( TextureFormat format, UInt32 width, UIn
     return GetPixelSize( format ) * ( width >> level ) * ( height >> level );
 }
 
+// *********************************
+//
+UInt32		TextureCube::GetFacesNum		()
+{
+	return CUBEMAP_FACES_NUM;
+}
+
 } //bv

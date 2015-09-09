@@ -73,7 +73,7 @@ void    PdrTexture2D::Initialize      ( const Texture2D * texture )
 	}
 	else 
 	{
-		auto numLevels = texture->GetNumLevels();
+		unsigned int numLevels = texture->GetNumLevels();
 		BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, numLevels );
 
 		BVGL::bvglTexStorage2D( GL_TEXTURE_2D, numLevels, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height );
@@ -83,6 +83,8 @@ void    PdrTexture2D::Initialize      ( const Texture2D * texture )
 			auto data = texture->GetData( lvl )->Get();
 			if( data )
 			{
+				auto h = ( GLsizei )texture->GetHeight( lvl ); {h;}
+				auto w = ( GLsizei )texture->GetWidth( lvl ); {w;}
 				BVGL::bvglTexSubImage2D( GL_TEXTURE_2D, lvl, 0, 0, ( GLsizei )texture->GetWidth( lvl ), ( GLsizei )texture->GetHeight( lvl ), m_format, m_type, data );
 			}
 		}

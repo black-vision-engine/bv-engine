@@ -90,6 +90,27 @@
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\Common\MultipassNodeBuilder.cpp">
       <Filter>Prototypes\Engine\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTest.cpp">
+      <Filter>Prototypes\TextureTest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture2DTest.cpp">
+      <Filter>Prototypes\TextureTest\TextureTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\BaseTextureTest.cpp">
+      <Filter>Prototypes\TextureTest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture2DArrayTest.cpp">
+      <Filter>Prototypes\TextureTest\TextureTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture1DTest.cpp">
+      <Filter>Prototypes\TextureTest\TextureTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture1DArrayTest.cpp">
+      <Filter>Prototypes\TextureTest\TextureTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture3DTest.cpp">
+      <Filter>Prototypes\TextureTest\TextureTests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
@@ -194,6 +215,27 @@
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\Common\MultipassNodeBuilder.h">
       <Filter>Prototypes\Engine\Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTest.h">
+      <Filter>Prototypes\TextureTest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture2DTest.h">
+      <Filter>Prototypes\TextureTest\TextureTests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\BaseTextureTest.h">
+      <Filter>Prototypes\TextureTest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture2DArrayTest.h">
+      <Filter>Prototypes\TextureTest\TextureTests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture1DTest.h">
+      <Filter>Prototypes\TextureTest\TextureTests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture1DArrayTest.h">
+      <Filter>Prototypes\TextureTest\TextureTests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture3DTest.h">
+      <Filter>Prototypes\TextureTest\TextureTests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
@@ -237,6 +279,12 @@
     </Filter>
     <Filter Include="Prototypes\Engine\Multipass">
       <UniqueIdentifier>{38fab6c5-9694-499e-a003-cb93f3012ca5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prototypes\TextureTest">
+      <UniqueIdentifier>{88043ed0-00c1-4438-adbe-942429d3f9a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prototypes\TextureTest\TextureTests">
+      <UniqueIdentifier>{1e5bc395-2c7b-4f56-ab74-9857ece0c4ee}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

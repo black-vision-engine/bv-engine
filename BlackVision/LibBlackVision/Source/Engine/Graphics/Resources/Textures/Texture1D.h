@@ -15,7 +15,7 @@ public:
 
                         Texture1D       ( TextureFormat format, UInt32 width, DataBuffer::Semantic semantic );
                         Texture1D       ( TextureFormat format, UInt32 width, DataBuffer::Semantic semantic, UInt32 levels );
-    virtual             ~Texture1D      () = 0;
+    virtual             ~Texture1D      ();
 
     UInt32			    GetWidth        ( UInt32 level = 0 ) const;
 

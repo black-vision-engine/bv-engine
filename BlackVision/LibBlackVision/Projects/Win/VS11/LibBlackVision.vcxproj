@@ -155,6 +155,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture2D.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture2DArray.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture3D.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCube.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCubeArray.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObject.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObjectSingleVB.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrVertexBuffer.cpp" />
@@ -175,6 +177,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2DCache.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture3D.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCube.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCubeArray.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexArray.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexDescriptor.cpp" />
@@ -356,11 +359,14 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture2D.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture2DArray.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture3D.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCube.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCubeArray.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1D.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1DArray.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2DArray.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture3D.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCube.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCubeArray.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.h" />

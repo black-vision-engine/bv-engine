@@ -536,7 +536,8 @@ model::BasicNodePtr     TestScenesFactory::CreateTestScene      ( const model::P
         case TestSceneSelector::TSS_ONE_SOLID_COLOR_RECTANGLE:
             return SolidRect( pluginsManager, timelineManager, timeEvaluator );
         case TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES:
-            return TwoTexturedRectangles( pluginsManager, timelineManager, timeEvaluator );
+			return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, false );
+			//return TwoTexturedRectangles( pluginsManager, timelineManager, timeEvaluator );
 		case TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE:
 			return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
 		case TestSceneSelector::TSS_TEXT:

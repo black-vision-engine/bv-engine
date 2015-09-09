@@ -900,6 +900,15 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCube.cpp">
       <Filter>Engine\Graphics\Resources\Textures</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCubeArray.cpp">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCube.cpp">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCubeArray.cpp">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1819,6 +1828,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCube.h">
       <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCubeArray.h">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCube.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCubeArray.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

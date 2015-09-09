@@ -15,7 +15,7 @@ private:
 public:
 
                         Texture1DArray  ( TextureFormat format, UInt32 width, DataBuffer::Semantic semantic, UInt32 layers, UInt32 levels );
-    virtual             ~Texture1DArray () = 0;
+    virtual             ~Texture1DArray ();
 
     UInt32			    GetWidth        ( UInt32 level = 0 ) const;
 

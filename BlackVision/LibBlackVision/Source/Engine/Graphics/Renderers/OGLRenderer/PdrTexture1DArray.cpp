@@ -51,7 +51,7 @@ void    PdrTexture1DArray::Initialize      ( const Texture1DArray * textureArray
 		{
 			BVGL::bvglTexSubImage2D( GL_TEXTURE_1D_ARRAY, lvl, 0, ( GLint )layer,
 				( GLsizei )textureArray->GetWidth( lvl ), GLsizei( 1 ),
-				m_format, m_type, textureArray->GetData( lvl )->Get() );
+				m_format, m_type, textureArray->GetData( layer, lvl )->Get() );
 		}
 	}
 

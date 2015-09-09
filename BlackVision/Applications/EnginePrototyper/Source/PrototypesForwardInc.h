@@ -9,5 +9,6 @@
 #include "Prototypes/Engine/MemManagement/PboUpdatesInspector.h"
 #include "Prototypes/DrawingCommands/DrawingPrototype.h"
 #include "Prototypes/Engine/Multipass/MultipassTest.h"
+#include "Prototypes/TextureTest/TextureTest.h"
 
 #include "PrototypeCreator.h"

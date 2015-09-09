@@ -16,7 +16,7 @@ private:
 public:
 
                         Texture2DArray  ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, UInt32 layers, UInt32 levels );
-    virtual             ~Texture2DArray () = 0;
+    virtual             ~Texture2DArray ();
 
     UInt32			    GetWidth        ( UInt32 level = 0 ) const;
     UInt32              GetHeight       ( UInt32 level = 0 ) const;

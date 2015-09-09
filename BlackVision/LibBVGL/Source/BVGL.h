@@ -186,6 +186,9 @@ public:
 	static void					bvglCopyTexImage1D				( GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLint border );
 	static void					bvglCopyImageSubData			( GLuint srcName, GLenum srcTarget, GLint srcLevel, GLint srcX, GLint srcY, GLint srcZ, GLuint dstName, GLenum dstTarget, GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ, GLsizei srcWidth, GLsizei srcHeight, GLsizei srcDepth );
 
+	static void					bvglGetTexImage					( GLenum target, GLint level, GLenum format, GLenum type, GLvoid * data );
+	static void					bvglGenerateMipmap				( GLenum target );
+
 // Sampler
 #ifdef GL_VERSION_4_5
 	static void					bvglCreateSamplers				( GLsizei n, GLuint* samplers );
