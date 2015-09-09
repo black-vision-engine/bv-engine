@@ -160,34 +160,12 @@ ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
     std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
 
 // params
-    //auto params = doc.LoadProperties< AbstractModelParameter >( "property" );
 	auto params = doc.LoadArray< AbstractModelParameter >( "params" );
     for( auto param : params )
     {
-        if( param->GetName() == "position" // some clever remap!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            || param->GetName() == "alpha" // node parameter indeed!!!
-            || param->GetName() == "size" // "fontSize" indeed ;)
-            || param->GetName() == "font" // RESOURCE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            || param->GetName() == "text" // DefaultTextPlugin::SetText indeed!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            || param->GetName() == "align" // "alignment" indeed ;)
-            
-            || param->GetName() == "mask_file_path"
-            || param->GetName() == "scaling"
-            || param->GetName() == "path"
-            || param->GetName() == "extension"
-            || param->GetName() == "frame_count"
-            || param->GetName() == "frame_begin"
-            || param->GetName() == "frames_maping"
-            
-            || param->GetName() == "count" // DEFAULT_TRANSFORM
-            || param->GetName() == "target_name" // DEFAULT_TRANSFORM
-            || param->GetName() == "rotation" // DEFAULT_TRANSFORM
-            )
-            continue;
-        
         if( plugin->GetParameter( param->GetName() ) == nullptr )
         {
-            std::cout << "[ERROR] Parameter " << param->GetName() << " is not a parameter of " << pluginType << std::endl;
+            std::cout << "[ERROR] Parameter " << param->GetName() << " is not a parameter of " << pluginType << std::endl; // FIXME: error handling :D
             assert( false );
             continue;
         }
@@ -198,7 +176,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
     auto assets = doc.LoadArray< const AssetSerialization >( "assets" );
     for( auto asset : assets )
     {
-        plugin->AddAsset( asset );
+        //plugin->AddAsset( asset );
         plugin->LoadResource( asset );
     }
 
