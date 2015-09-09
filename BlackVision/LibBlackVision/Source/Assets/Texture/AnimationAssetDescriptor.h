@@ -43,6 +43,7 @@ private:
 
     std::vector< TextureAssetDescConstPtr > m_frames;
     std::string                             m_path;
+    std::string                             m_filter;
 
 };
 

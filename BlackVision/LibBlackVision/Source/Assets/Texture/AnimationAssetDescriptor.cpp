@@ -38,8 +38,9 @@ ISerializableConstPtr     AnimationAssetDesc::Create          ( DeserializeObjec
 //
 AnimationAssetDesc::AnimationAssetDesc							( const std::string & path, const std::string & filter )
     : m_path( path )
+    , m_filter( filter )
 {
-    auto files = Dir::ListFiles( path, filter );
+    auto files = Dir::ListFiles( m_path, m_filter );
 
     if ( files.size() > 0 )
     {
