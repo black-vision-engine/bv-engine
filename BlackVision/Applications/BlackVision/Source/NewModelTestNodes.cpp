@@ -1378,7 +1378,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
 
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/courbi.ttf" );
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/cour.ttf" );
-    success = model::LoadFont( node->GetPlugin( "text" ), "Assets/Fonts/arial.TTF", 60, blurSize, 0, true );
+    success = model::LoadFont( node->GetPlugin( "text" ), "Assets/Fonts/astera.TTF", 30, blurSize, 0, true );
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/ARIALUNI.TTF" );
     assert( success );
 
@@ -1387,7 +1387,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AV::11A-AAAA\nBBBBCCCC\nDDD333DD88\nAAAAAAAA\nB3BBCCCC\nDDDD888DDD" );
 //    model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAABBBBCCCCDDDD" );
 	//model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"AV::11A-AAAABBBBCCCCDDD333DD88AAAAAAAAB3BBCCCCDDDD888DDD" );
-	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"zadsó³æ111 \n gêœl¹ jaŸñ11" );
+	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"123456789" );
 
     if( useAlphaMask )
     {
