@@ -624,6 +624,9 @@ namespace bv{
         }else if(text->Align=="right")
         {
              SetParameter(txt->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Right )) ;
+        }else if(text->Align=="dot")
+        {
+             SetParameter(txt->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Dot )) ;
         }
         if(text->max_size!="null")
         {
