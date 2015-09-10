@@ -75,14 +75,14 @@ model::BasicNodeConstPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeTy
     doc.parse<0>( buf );
 
     auto docNode = doc.first_node( "scene" );
-    auto deDoc = DeserializeObject( *docNode, tm );
+    auto deDoc = DeserializeObject( docNode, tm );
 
     auto timelines = deDoc.LoadArray< model::TimeEvaluatorBase< model::ITimeEvaluator > >( "timelines" );
     for( auto timeline : timelines )
         tm->AddTimeline( timeline );
 
     docNode = doc.first_node( "scene" )->first_node( "node" );
-    deDoc = DeserializeObject( *docNode, tm );
+    deDoc = DeserializeObject( docNode, tm );
 
     ISerializablePtr node = model::BasicNode::Create( deDoc );
 

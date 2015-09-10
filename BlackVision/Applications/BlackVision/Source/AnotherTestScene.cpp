@@ -31,8 +31,8 @@
 #include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
-
 #include "Engine/Models/Plugins/PluginsFactory.h"
+#include "Assets/AssetDescsWithUIDs.h"
 
 #include "Engine/Models/SerializationObjects.h"
 #include "Engine/Models/BVScene.h"
@@ -939,8 +939,9 @@ model::BasicNodePtr      TestScenesFactory::SequenceAnimationTestScene  ()
     return nullptr;
 }
 
-model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineManager * timelineManager )
+model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineManager * timelineManager ) // FIXME: maybe should be moved to BVScene::Create
 {
+// open file
     if( !Path::Exists( filename ) )
 	{
 		std::cout << "[ERROR] File " << filename << " does not exist" << std::endl;
@@ -956,24 +957,20 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineMana
     std::string content( buffer.str() );
     doc.parse<0>( &content[0] );
 
-    //ISerializablePtr scene = BVScene::Create( deDoc );
-    //BVScene* realScene = reinterpret_cast<BVScene*>( scene.get() );
-    //BVScenePtr realScene = reinterpret_cast<BVScenePtr>( scene );
-    //auto root = realScene->GetModelSceneRoot();
+// begin serialization
+    auto doc2 = doc.first_node( "scene" );
+    auto dob = DeserializeObject( doc2, timelineManager );
 
-// /begin{FIXME}
-    auto docNode = doc.first_node( "scene" );
-    auto deDoc = DeserializeObject( *docNode, timelineManager );
+// assets
+    auto assets = dob.Load< AssetDescsWithUIDs >( "assets" );
+    AssetDescsWithUIDs::SetInstance( *assets );
 
-    auto timelines = deDoc.LoadArray< TimeEvaluatorBase< ITimeEvaluator > >( "timelines" );
+// timelines
+    auto timelines = dob.LoadArray< TimeEvaluatorBase< ITimeEvaluator > >( "timelines" );
     for( auto timeline : timelines )
         timelineManager->AddTimeline( timeline );
-// /end{FIXME}
 
-    /*auto */docNode = doc.first_node( "scene" )->first_node( "node" );
-    /*auto */deDoc = DeserializeObject( *docNode, timelineManager );
-
-    ISerializablePtr node = model::BasicNode::Create( deDoc );
+    auto node = dob.Load< model::BasicNode >( "node" );
 
     auto root = std::static_pointer_cast< model::BasicNode >( node );
     assert( root );

@@ -10,43 +10,51 @@
 namespace bv
 {
 
-namespace model { class PluginsManager; class TimelineManager; }
+//class AssetDescsWithUIDs;
+namespace model { class TimelineManager; }
 
 class SerializeObject
 {
-    rapidxml::xml_document<>                    m_doc;
-    std::stack< rapidxml::xml_node<>* >         m_roots; // FIXME: Move it to implementation class to prevent including RapidXml.hpp in every header using this class.
+    rapidxml::xml_document<>                                m_doc;
+    std::stack< rapidxml::xml_node<>* >                     m_roots; // FIXME: Move it to implementation class to prevent including RapidXml.hpp in every header using this class.
+    //AssetDescsWithUIDs*                                     m_assets;
 
 public:
     SerializeObject();
-    void										Save( const std::string & filename );
-	void										Save( std::ostream & out );
+    void										            Save( const std::string & filename );
+	void										            Save( std::ostream & out );
 
-    void                                        SetName( const std::string & name );
-    void                                        SetValue( const std::string & name, const std::string & value );
-	void                                        SetContent( const std::string & value );
-    void                                        Pop();
+    //void                                                    SetAssetsWithUIDs( AssetDescsWithUIDs* );
+    //AssetDescsWithUIDs*                                     GetAssetsWithUIDs();
+
+    void                                                    SetName( const std::string & name );
+    void                                                    SetValue( const std::string & name, const std::string & value );
+	void                                                    SetContent( const std::string & value );
+    void                                                    Pop();
 };
 
 
 class DeserializeObject
 {
-    rapidxml::xml_node<>* m_doc;
+    rapidxml::xml_node<>*                                   m_doc;
 
     template< typename T >
     std::shared_ptr< T >                                    Load( rapidxml::xml_node<>* node ) const
     {
-        auto dob = DeserializeObject( *node, this->m_tm ); // FIXME for God's sake!!!
+        auto dob = DeserializeObject( node, this->m_tm ); // FIXME for God's sake!!!
         auto obj = T::Create( dob );
         return std::static_pointer_cast< T >( obj );
     }
 
     model::TimelineManager* m_tm;
+    //AssetDescsWithUIDs*                                     m_assets;
 
 public:
-    DeserializeObject( rapidxml::xml_node<>& doc, model::TimelineManager* tm ) : m_doc( &doc ), m_tm( tm ) { }
+    DeserializeObject( rapidxml::xml_node<>* doc, model::TimelineManager* tm ) : m_doc( doc ), m_tm( tm ) { }
 
     model::TimelineManager*                                 GetTimelineManager() { return m_tm; }
+    //void                                                    SetAssetsWithUIDs( AssetDescsWithUIDs* );
+    //AssetDescsWithUIDs*                                     GetAssetsWithUIDs();
 
     std::string                                             GetName()
     {

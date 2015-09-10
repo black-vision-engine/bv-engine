@@ -888,6 +888,9 @@
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureUtils.cpp">
       <Filter>Assets\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\AssetDescsWithUIDs.cpp">
+      <Filter>Assets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1785,7 +1788,7 @@
       <Filter>Engine\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\AssetSerialization.h">
-	  <Filter>Assets</Filter>
+      <Filter>Assets</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h">
       <Filter>Assets\Texture</Filter>
@@ -1794,6 +1797,9 @@
       <Filter>Assets\Texture</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h">
+      <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\AssetDescsWithUIDs.h">
       <Filter>Assets</Filter>
     </ClInclude>
   </ItemGroup>

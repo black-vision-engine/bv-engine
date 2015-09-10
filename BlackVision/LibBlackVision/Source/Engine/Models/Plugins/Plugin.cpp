@@ -5,41 +5,9 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 
 #include "Assets/AssetSerialization.h"
+#include "Assets/AssetDescsWithUIDs.h"
 
 namespace bv { namespace model {
-
-namespace PluginsSerialization
-{
-    //std::shared_ptr< BasePlugin< IPlugin > >                                            CreatePluginByName( std::string name, ITimeEvaluatorPtr te );
-    std::string SerialNameToUID( std::string serialName )
-    {
-        if( serialName == "geometry" // FIXME: deprecated, to remove
-            || serialName == "transform" )
-            return "DEFAULT_TRANSFORM";
-        else if( serialName == "rectangle" )
-            return "DEFAULT_RECTANGLE";
-        else if( serialName == "texture" )
-            return "DEFAULT_TEXTURE";
-        else if( serialName == "alpha" )
-            return "DEFAULT_TRANSFORM"; // FIXME
-        else if( serialName == "solid" )
-            return "DEFAULT_COLOR";
-        else if( serialName == "text" )
-            return "DEFAULT_TEXT";
-        else if( serialName == "mask" )
-            return "DEFAULT_ALPHA_MASK";
-        else if( serialName == "sequence" )
-            return "DEFAULT_ANIMATION";
-        else if( serialName == "replicator" )
-            return "DEFAULT_TRANSFORM"; // FIXME
-        else
-        {
-            std::cout << "[ERROR] Unable to deserialize plugin: " << serialName << std::endl;
-            assert( false );
-            return "";
-        }
-    }
-};
 
 // *******************************
 //
@@ -135,10 +103,17 @@ void                                BasePlugin< IPlugin >::Serialize            
     }
     doc.Pop(); // params
 
-    doc.SetName( "assets" );
+    auto assets = GetAssets();
+    if( assets.size() > 0 )
+    {
+        doc.SetName( "assets" );
         for( auto asset : GetAssets() )
-            asset->Serialize( doc );
-    doc.Pop(); // assets
+        {
+            auto uid = AssetDescsWithUIDs::GetInstance().Asset2UID( asset );
+            SerializedAssetUID( uid ).Serialize( doc );
+        }
+        doc.Pop(); // assets
+    }
 
     doc.Pop(); // plugin
 }
@@ -173,10 +148,10 @@ ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
         SetParameter( plugin->GetPluginParamValModel(), param );
     }
     
-    auto assets = doc.LoadArray< const AssetSerialization >( "assets" );
-    for( auto asset : assets )
+    auto uids = doc.LoadArray< SerializedAssetUID >( "assets" );
+    for( auto uid : uids )
     {
-        //plugin->AddAsset( asset );
+        auto asset = AssetDescsWithUIDs::GetInstance().UID2Asset( uid->GetUID() );
         plugin->LoadResource( asset );
     }
 
