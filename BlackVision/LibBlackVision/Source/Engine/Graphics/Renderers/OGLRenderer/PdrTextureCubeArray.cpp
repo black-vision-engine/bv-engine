@@ -46,19 +46,21 @@ void    PdrTextureCubeArray::Initialize      ( const TextureCubeArray * textureA
 	BVGL::bvglTexParameteri( GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_BASE_LEVEL, 0);
 	BVGL::bvglTexParameteri( GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_MAX_LEVEL, GLint( numLevels - 1 ) );
 
-	BVGL::bvglTexStorage3D( GL_TEXTURE_CUBE_MAP_ARRAY, numLevels, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height, ( GLsizei )m_layers );
+	auto faces = TextureCubeArray::GetFacesNum();
+	BVGL::bvglTexStorage3D( GL_TEXTURE_CUBE_MAP_ARRAY, numLevels, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height, ( GLsizei )m_layers * faces );
 
 	for( unsigned int layer = 0; layer < m_layers; ++layer )
 	{
-		for ( unsigned int face = 0; face < TextureCubeArray::GetFacesNum(); ++face )
+		for ( unsigned int face = 0; face < faces; ++face )
 		{
 			for ( unsigned int lvl = 0; lvl < numLevels; ++lvl )
 			{
-				auto data = textureArray->GetData( face, layer, lvl )->Get();
+				auto data = textureArray->GetData( layer, face, lvl );
 				if( data )
 				{
-					BVGL::bvglTexSubImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_X + GLenum( face ), lvl, 0, 0,
-						( GLsizei )textureArray->GetWidth( lvl ), ( GLsizei )textureArray->GetHeight( lvl ), m_format, m_type, data );
+					BVGL::bvglTexSubImage3D( GL_TEXTURE_CUBE_MAP_ARRAY, lvl, 0, 0, ( GLint )layer * faces + face,
+						( GLsizei )textureArray->GetWidth( lvl ), ( GLsizei )textureArray->GetHeight( lvl ), GLsizei( 1 ),
+						m_format, m_type, data->Get() );
 				}
 			}
 		}

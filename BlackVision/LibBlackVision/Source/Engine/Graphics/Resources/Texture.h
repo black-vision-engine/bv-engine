@@ -4,6 +4,8 @@
 #include "Engine/Types/Enums.h"
 #include "Memory/MemoryChunk.h"
 
+#include <cassert>
+
 namespace bv
 {
 
@@ -17,7 +19,6 @@ protected:
     TextureFormat						m_format;
     TextureType							m_type;
 
-	UInt32								m_layers;
 	UInt32								m_levels;
 
     std::vector< MemoryChunkConstPtr >	m_data;
@@ -26,15 +27,10 @@ protected:
 
 public:
 
-                                Texture         ( TextureFormat format, TextureType type, DataBuffer::Semantic semantic = DataBuffer::Semantic::S_TEXTURE_DYNAMIC, 
-													UInt32 layers = 1, UInt32 levels = 1, UInt32 dataSize = 1 );
+                                Texture         ( TextureFormat format, TextureType type, DataBuffer::Semantic semantic, UInt32 levels, UInt32 dataNum );
     virtual			            ~Texture	    () = 0;
 
-	UInt32						GetNumLayers    () const;
 	UInt32						GetNumLevels    () const;
-
-	void						SetNumLayers    ( UInt32 );
-	void						SetNumLevels    ( UInt32 );
 
 	TextureFormat				GetFormat	    () const;
     TextureType					GetType         () const;
@@ -45,14 +41,11 @@ public:
     static SizeType				GetPixelSize    ( TextureFormat format );
 
 	UInt32						GetUpdateID		() const;
-	bool						Changed			( UInt32 updateID ) const;
 	
 protected:
 
-	const char *			GetRawData		( UInt32 layer, UInt32 level ) const;
-	
-	MemoryChunkConstPtr		GetDataChunk    ( UInt32 layer, UInt32 level ) const;
-	void					SetDataChunk    ( MemoryChunkConstPtr data, UInt32 layer, UInt32 level );
+	MemoryChunkConstPtr		GetDataChunk    ( UInt32 idx ) const;
+	void					SetDataChunk    ( MemoryChunkConstPtr data, UInt32 idx );
 
     void                    SetFormat       ( TextureFormat format );
     void                    SetType         ( TextureType type );

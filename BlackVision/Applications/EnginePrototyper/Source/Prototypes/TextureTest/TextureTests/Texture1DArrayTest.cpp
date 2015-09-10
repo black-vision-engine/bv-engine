@@ -97,32 +97,18 @@ void    Texture1DArrayTest::Initialize          ( Renderer * renderer, glm::mat4
 
 	m_renderer = renderer;
 
-	m_mvp.push_back( projMat * glm::translate( glm::mat4(), 0.0f, -2.0f, -2.0f )
-		* glm::rotate( glm::mat4(), 0.0f, glm::vec3( 0, 0, 1 ) )
-		* glm::rotate( glm::mat4(), -90.0f, glm::vec3( 1, 0, 0 ) ) );
+	m_mvp.push_back( projMat * glm::translate( glm::mat4(), 0.0f, 0.0f, -2.0f ) * 
+		glm::rotate( glm::mat4(), -75.0f, glm::vec3( 1, 0, 0 ) ) );
 
-	m_mvp.push_back( projMat * glm::translate( glm::mat4(), 2.0f, 0.0f, -2.0f )
-		* glm::rotate( glm::mat4(), 90.0f, glm::vec3( 0, 0, 1 ) )
-		* glm::rotate( glm::mat4(), -90.0f, glm::vec3( 1, 0, 0 ) ) );
-
-	m_mvp.push_back( projMat * glm::translate( glm::mat4(), 0.0f, 2.0f, -2.0f )
-		* glm::rotate( glm::mat4(), 180.0f, glm::vec3( 0, 0, 1 ) )
-		* glm::rotate( glm::mat4(), -90.0f, glm::vec3( 1, 0, 0 ) ) );
-
-	m_mvp.push_back( projMat * glm::translate( glm::mat4(), -2.0f, 0.0f, -2.0f )
-		* glm::rotate( glm::mat4(), 270.0f, glm::vec3( 0, 0, 1 ) )
-		* glm::rotate( glm::mat4(), -90.0f, glm::vec3( 1, 0, 0 ) ) );
+	m_mvp.push_back( projMat * glm::translate( glm::mat4(), 8.0f, 4.0f, -10.0f ) );
+	m_mvp.push_back( projMat * glm::translate( glm::mat4(), 0.0f, 4.0f, -10.0f ) );
+	m_mvp.push_back( projMat * glm::translate( glm::mat4(), -8.0f, 4.0f, -10.0f ) );
 
 	InitTexture();
 
     BVGL::bvglClearColor( 0.f, 0.f, 0.f, 0.f );
 
-	std::string vsFile = config::PROTOTYPES_SHADERS_ROOT + "TextureTest/" + "defaultArray.vert";
-    std::string psFile = config::PROTOTYPES_SHADERS_ROOT + "TextureTest/" + "defaultArray1D.frag";
-
-    m_program.CompileShaderFromFile( vsFile.c_str(), GL_VERTEX_SHADER );
-	m_program.CompileShaderFromFile( psFile.c_str(), GL_FRAGMENT_SHADER );
-    m_program.Link();
+	PrepareShader( "defaultArray", "defaultArray1D" );
 }
 
 // *****************************
@@ -141,6 +127,13 @@ void    Texture1DArrayTest::Render              ()
 		BVGL::bvglUniform1i( 1, i );
 		m_rct.Render();
 	}
+}
+
+// *****************************
+//
+void    Texture1DArrayTest::Update              ( TimeType t )
+{
+	{ t; }
 }
 
 } // bv

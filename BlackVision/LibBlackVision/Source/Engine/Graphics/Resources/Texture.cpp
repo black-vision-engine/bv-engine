@@ -1,8 +1,6 @@
 #include "Texture.h"
 
-#include <cassert>
 #include <cstring>
-
 
 namespace bv
 {
@@ -21,15 +19,14 @@ int Texture::m_sPixelSize[ TextureFormat::F_TOTAL ] =
 
 // *********************************
 //  
-Texture::Texture                                ( TextureFormat format, TextureType type, DataBuffer::Semantic semantic, UInt32 layers, UInt32 levels, UInt32 dataSize )
+Texture::Texture                                ( TextureFormat format, TextureType type, DataBuffer::Semantic semantic, UInt32 levels, UInt32 dataNum )
     : m_format( format )
     , m_type( type )
     , m_semantic( semantic )
-	, m_layers( layers ) 
 	, m_levels( levels )
 	, m_updateID( 1 )
 {
-	m_data.resize( dataSize, nullptr );
+	m_data.resize( dataNum, nullptr );
 }
 
 // *********************************
@@ -40,30 +37,9 @@ Texture::~Texture	                            ()
 
 // *********************************
 //
-UInt32					Texture::GetNumLayers    () const
-{
-    return m_layers;
-}
-
-// *********************************
-//
 UInt32					Texture::GetNumLevels    () const
 {
     return m_levels;
-}
-
-// *********************************
-//
-void					Texture::SetNumLayers    ( UInt32 layers )
-{
-	m_layers = layers;
-}
-
-// *********************************
-//
-void					Texture::SetNumLevels    ( UInt32 levels )
-{
-    m_levels = levels;
 }
 
 // *********************************
@@ -117,38 +93,21 @@ void					Texture::SetType         ( TextureType type )
 
 // *********************************
 //
-const char *			Texture::GetRawData     ( UInt32 layer, UInt32 level ) const
+MemoryChunkConstPtr		Texture::GetDataChunk		( UInt32 idx ) const
 {
-	UInt32 idx = layer * m_levels + level;
-	if( idx < m_data.size() )
-	{
-		return m_data[ idx ]->Get();
-	}
-	return nullptr;
+	assert( idx < m_data.size() );
+
+	return m_data[ idx ];
 }
 
 // *********************************
 //
-MemoryChunkConstPtr		Texture::GetDataChunk		( UInt32 layer, UInt32 level ) const
+void					Texture::SetDataChunk		( MemoryChunkConstPtr data, UInt32 idx )
 {
-	UInt32 idx = layer * m_levels + level;
-	if( idx < m_data.size() )
-	{
-		return m_data[ idx ];
-	}
-	return nullptr;
-}
+	assert( idx < m_data.size() );
 
-// *********************************
-//
-void					Texture::SetDataChunk		( MemoryChunkConstPtr data, UInt32 layer, UInt32 level )
-{
-	UInt32 idx = layer * m_levels + level;
-	if( idx < m_data.size() )
-	{
-		m_data[ idx ] = data;
-		m_updateID++;
-	}
+	m_data[ idx ] = data;
+	m_updateID++;
 }
 
 // *********************************
@@ -156,13 +115,6 @@ void					Texture::SetDataChunk		( MemoryChunkConstPtr data, UInt32 layer, UInt32
 UInt32                    Texture::GetUpdateID      () const
 {
 	return m_updateID;
-}
-
-// *********************************
-//
-bool                    Texture::Changed			( UInt32 updateID ) const
-{
-	return m_updateID != updateID;
 }
 
 } //bv

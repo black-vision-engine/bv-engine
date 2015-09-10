@@ -23,7 +23,6 @@ private:
 	TextureSampler *		m_sampler;
 	PdrSampler *			m_pdrSampler;
 
-	GLSLProgram				m_program;
     VBORect					m_rct;
 
 	Renderer *				m_renderer;
@@ -35,7 +34,8 @@ public:
 	virtual			~Texture1DTest	();
 
     virtual     void    Initialize	( Renderer *, glm::mat4 projMat )	override;
-    virtual     void    Render      ()								override;
+    virtual     void    Render      ()									override;
+    virtual     void    Update      ( TimeType t )						override;
 
 private:
 	void				InitTexture	();

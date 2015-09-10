@@ -1,23 +1,11 @@
 #include "Texture3D.h"
 
-#include <algorithm>
-
 namespace bv {
 
 // *********************************
 //
-Texture3D::Texture3D                    ( TextureFormat format, UInt32 width, UInt32 height, UInt32 depth, DataBuffer::Semantic semantic )
-    : Texture( format, TextureType::T_3D, semantic, 1, 1, 1 )
-    , m_width( width )
-    , m_height( height )
-    , m_depth( depth )
-{
-}
-
-// *********************************
-//
 Texture3D::Texture3D                    ( TextureFormat format, UInt32 width, UInt32 height, UInt32 depth, DataBuffer::Semantic semantic, UInt32 levels )
-    : Texture( format, TextureType::T_3D, semantic, 1, levels, levels )
+    : Texture( format, TextureType::T_3D, semantic, levels, levels )
     , m_width( width )
     , m_height( height )
     , m_depth( depth )
@@ -55,28 +43,29 @@ UInt32    Texture3D::GetDepth         ( UInt32 level ) const
 //
 MemoryChunkConstPtr    Texture3D::GetData        ( UInt32 level ) const
 {
-	return GetDataChunk( 0, level );
+	return GetDataChunk( level );
 }
 
 // *********************************
 //
 void				    Texture3D::SetData      ( MemoryChunkConstPtr data, UInt32 level ) 
 {
-	return SetDataChunk( data, 0, level );
+	assert( data->Size() == RawFrameSize( level ) );
+	SetDataChunk( data, level );
 }
 
 // *********************************
 //
 void				    Texture3D::SetData		( const std::vector< MemoryChunkConstPtr > & data )
 {
+	assert( ( UInt32 )data.size() == m_levels );
+
 	m_data.clear();
-
-	for( auto & chunk : data )
+	for( unsigned int lvl = 0; lvl < m_levels; ++lvl )
 	{
-		m_data.push_back( chunk );
+		assert( data[ lvl ]->Size() == RawFrameSize( lvl ) );
+		m_data.push_back( data[ lvl ] );
 	}
-
-    m_levels = ( UInt32 )m_data.size();
 }
 
 // *********************************

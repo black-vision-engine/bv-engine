@@ -2,7 +2,6 @@
 
 #include "Engine/Graphics/Resources/Texture.h"
 
-
 namespace bv
 {
 
@@ -15,7 +14,6 @@ private:
 
 public:
 
-                        Texture2D       ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic );
                         Texture2D       ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, UInt32 levels );
     virtual             ~Texture2D      ();
 

@@ -80,12 +80,11 @@ void    PdrTexture2D::Initialize      ( const Texture2D * texture )
 
 		for (unsigned int lvl = 0; lvl < numLevels; ++lvl)
 		{
-			auto data = texture->GetData( lvl )->Get();
+			auto data = texture->GetData( lvl );
 			if( data )
 			{
-				auto h = ( GLsizei )texture->GetHeight( lvl ); {h;}
-				auto w = ( GLsizei )texture->GetWidth( lvl ); {w;}
-				BVGL::bvglTexSubImage2D( GL_TEXTURE_2D, lvl, 0, 0, ( GLsizei )texture->GetWidth( lvl ), ( GLsizei )texture->GetHeight( lvl ), m_format, m_type, data );
+				BVGL::bvglTexSubImage2D( GL_TEXTURE_2D, lvl, 0, 0, 
+					( GLsizei )texture->GetWidth( lvl ), ( GLsizei )texture->GetHeight( lvl ), m_format, m_type, data->Get() );
 			}
 		}
 	}

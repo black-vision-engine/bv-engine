@@ -49,9 +49,13 @@ void    PdrTexture1DArray::Initialize      ( const Texture1DArray * textureArray
 	{
 		for (unsigned int lvl = 0; lvl < numLevels; ++lvl)
 		{
-			BVGL::bvglTexSubImage2D( GL_TEXTURE_1D_ARRAY, lvl, 0, ( GLint )layer,
-				( GLsizei )textureArray->GetWidth( lvl ), GLsizei( 1 ),
-				m_format, m_type, textureArray->GetData( layer, lvl )->Get() );
+			auto data = textureArray->GetData( layer, lvl );
+			if( data )
+			{
+				BVGL::bvglTexSubImage2D( GL_TEXTURE_1D_ARRAY, lvl, 0, ( GLint )layer,
+					( GLsizei )textureArray->GetWidth( lvl ), GLsizei( 1 ),
+					m_format, m_type, data->Get() );
+			}
 		}
 	}
 

@@ -256,10 +256,8 @@ MemoryChunkConstPtr FBOProfilingPrototype2::ReadColor( )
 //
 void	FBOProfilingPrototype2::AddTextureForAttachment( SizeType i )
 {
-	auto tx = new Texture2D( TextureFormat::F_A8R8G8B8, m_width, m_height, DataBuffer::Semantic::S_TEXTURE_STATIC );
-	std::vector< MemoryChunkConstPtr > v;
-	v.push_back( MemoryChunk::Create( m_width * m_height * 4 ) );
-	tx->SetData( v );
+	auto tx = new Texture2D( TextureFormat::F_A8R8G8B8, m_width, m_height, DataBuffer::Semantic::S_TEXTURE_STATIC, 1 );
+	tx->SetData( MemoryChunk::Create( m_width * m_height * 4 ) );
     assert( !m_renderer->IsRegistered( tx ) );
 
     PdrTexture2D * pdrTx = PdrTexture2D::Create( tx );

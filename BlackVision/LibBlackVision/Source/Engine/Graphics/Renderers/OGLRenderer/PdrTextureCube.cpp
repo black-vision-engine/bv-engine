@@ -49,11 +49,11 @@ void    PdrTextureCube::Initialize      ( const TextureCube * texture )
 	{
 		for ( unsigned int lvl = 0; lvl < numLevels; ++lvl )
 		{
-			auto data = texture->GetData( face, lvl )->Get();
+			auto data = texture->GetData( face, lvl );
 			if( data )
 			{
 				BVGL::bvglTexSubImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_X + GLenum( face ), lvl, 0, 0,
-					( GLsizei )texture->GetWidth( lvl ), ( GLsizei )texture->GetHeight( lvl ), m_format, m_type, data );
+					( GLsizei )texture->GetWidth( lvl ), ( GLsizei )texture->GetHeight( lvl ), m_format, m_type, data->Get() );
 			}
 		}
 	}

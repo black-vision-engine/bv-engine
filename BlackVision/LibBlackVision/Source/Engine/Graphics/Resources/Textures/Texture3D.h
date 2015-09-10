@@ -15,7 +15,6 @@ private:
 
 public:
 
-                        Texture3D       ( TextureFormat format, UInt32 width, UInt32 height, UInt32 depth, DataBuffer::Semantic semantic );
                         Texture3D       ( TextureFormat format, UInt32 width, UInt32 height, UInt32 depth, DataBuffer::Semantic semantic, UInt32 levels );
     virtual             ~Texture3D      ();
 

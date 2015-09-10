@@ -77,12 +77,7 @@ void    Texture2DTest::Initialize          ( Renderer * renderer, glm::mat4 proj
 
     BVGL::bvglClearColor( 0.f, 0.f, 0.f, 0.f );
 
-	std::string vsFile = config::PROTOTYPES_SHADERS_ROOT + "TextureTest/" + "default.vert";
-    std::string psFile = config::PROTOTYPES_SHADERS_ROOT + "TextureTest/" + "default2D.frag";
-
-    m_program.CompileShaderFromFile( vsFile.c_str(), GL_VERTEX_SHADER );
-	m_program.CompileShaderFromFile( psFile.c_str(), GL_FRAGMENT_SHADER );
-    m_program.Link();
+	PrepareShader( "defaultArray", "default2D" );
 }
 
 // *****************************
@@ -98,6 +93,13 @@ void    Texture2DTest::Render              ()
 	BVGL::bvglUniformMatrix4fv( 0, 1, GL_FALSE, &m_mvp[ 0 ][ 0 ] );
 
     m_rct.Render();
+}
+
+// *****************************
+//
+void    Texture2DTest::Update              ( TimeType t )
+{
+	{ t; }
 }
 
 } // bv

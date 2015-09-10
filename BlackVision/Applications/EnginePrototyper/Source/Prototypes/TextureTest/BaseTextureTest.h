@@ -24,13 +24,19 @@ namespace semantic
 
 class BaseTextureTest
 {
+protected:
+	GLSLProgram			m_program;
+
 public:
 	virtual			~BaseTextureTest();
 
     virtual     void    Initialize	( Renderer *, glm::mat4 mvp ) = 0;
     virtual     void    Render      () = 0;
+    virtual     void    Update      ( TimeType t ) = 0;
 
 protected:
+	void				PrepareShader( const std::string & vs, const std::string & fs );
+	
 	GLuint				Checkboard	( GLubyte * data, unsigned int width, unsigned int height );
 	void				ClearColor	( GLubyte * data, unsigned int width, unsigned int height, glm::uvec3 color );
 

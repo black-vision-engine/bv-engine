@@ -32,7 +32,7 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
     auto format     = txParams->GetFormat();
     auto width      = txParams->GetWidth();
     auto height     = txParams->GetHeight();
-    
+
     Texture2DPtr tx = nullptr;
 
     if( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC )
@@ -48,7 +48,7 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
         }
     }
 
-    tx = CreateEmptyTexture( format, width, height, semantic );
+	tx = CreateEmptyTexture( format, width, height, semantic, txParams->GetNumLevels() );
 	tx->SetData( txParams->GetBits() );
 
     if( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC )
@@ -72,8 +72,9 @@ Texture2DPtr    Texture2DCache::GetSequence             ( const IAnimationDescri
     auto format     = animParams->GetFormat();
     auto width      = animParams->GetWidth();
     auto height     = animParams->GetHeight();
-    
-    auto sequence   = CreateEmptyTexture( format, width, height, DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE ); //FIXME: are there any chances that other semantics can be used for animations??
+	
+	//FIXME: assumption that animation texture has only one level (anim desc doesn't provide that info)
+    auto sequence   = CreateEmptyTexture( format, width, height, DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE, 1 ); //FIXME: are there any chances that other semantics can be used for animations??
 	sequence->SetData( animParams->GetBits( animParams->CurrentFrame() ) );
 
     return sequence;
@@ -106,9 +107,9 @@ void            Texture2DCache::ClearCache              ()
 
 // *********************************
 //
-Texture2DPtr         Texture2DCache::CreateEmptyTexture    ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic )
+Texture2DPtr         Texture2DCache::CreateEmptyTexture    ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, UInt32 levels )
 {
-    auto texture = std::make_shared< Texture2D >( format, width, height, semantic );
+    auto texture = std::make_shared< Texture2D >( format, width, height, semantic, levels );
 
     return texture;
 }
@@ -117,10 +118,9 @@ Texture2DPtr         Texture2DCache::CreateEmptyTexture    ( TextureFormat forma
 //
 Texture2DPtr         Texture2DCache::CreateTexture          ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, MemoryChunkConstPtr data )
 {
-    auto texture = CreateEmptyTexture( format, width, height, semantic );
-	std::vector< MemoryChunkConstPtr > tex;
-	tex.push_back( data );
-	texture->SetData( tex );
+	//FIXME assumption that texture has only one level
+    auto texture = CreateEmptyTexture( format, width, height, semantic, 1 );
+	texture->SetData( data );
 
     return texture;
 }

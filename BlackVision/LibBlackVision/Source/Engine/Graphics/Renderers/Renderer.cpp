@@ -386,7 +386,7 @@ void    Renderer::Enable              ( const Texture2D * texture, int textureUn
 		m_TextureUpdateIDMap[ texture ] = 0;
 	}
 
-    if( texture->Changed( m_TextureUpdateIDMap[ texture ] ) )
+	if( texture->GetUpdateID() != m_TextureUpdateIDMap[ texture ] )
     {
         pdrTex2D->Update( texture );
 		m_TextureUpdateIDMap[ texture ] = texture->GetUpdateID();

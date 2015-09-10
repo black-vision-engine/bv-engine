@@ -111,6 +111,15 @@
     <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture3DTest.cpp">
       <Filter>Prototypes\TextureTest\TextureTests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\TextureCubeTest.cpp">
+      <Filter>Prototypes\TextureTest\TextureTests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\VBOCube.cpp">
+      <Filter>Prototypes\TextureTest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\TextureCubeArrayTest.cpp">
+      <Filter>Prototypes\TextureTest\TextureTests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
@@ -234,6 +243,15 @@
       <Filter>Prototypes\TextureTest\TextureTests</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\Texture3DTest.h">
+      <Filter>Prototypes\TextureTest\TextureTests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\TextureCubeTest.h">
+      <Filter>Prototypes\TextureTest\TextureTests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\VBOCube.h">
+      <Filter>Prototypes\TextureTest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Prototypes\TextureTest\TextureTests\TextureCubeArrayTest.h">
       <Filter>Prototypes\TextureTest\TextureTests</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,36 +2,39 @@
 
 #include "Interfaces/IAppLogicPrototype.h"
 #include "../BaseTextureTest.h"
-#include "Engine/Graphics/Renderers/OGLRenderer/PdrTexture2D.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrTextureCube.h"
 #include "Engine\Graphics\Renderers\OGLRenderer\PdrSampler.h"
 
 #include "Common/GLSLProgram.h"
-#include "Common/VBORect.h"
+#include "../VBOCube.h"
 
 namespace bv {
 
 class Renderer;
 
-class Texture2DTest : public BaseTextureTest
+class TextureCubeTest : public BaseTextureTest
 {
 private:
 	glm::uvec2				m_texSize;
 
-	Texture2D *				m_texture;
-	PdrTexture2D *			m_pdrTexture;
+	TextureCube *			m_texture;
+	PdrTextureCube *		m_pdrTexture;
 
 	TextureSampler *		m_sampler;
 	PdrSampler *			m_pdrSampler;
 
-    VBORect					m_rct;
+    VBOCube					m_cube;
 
 	Renderer *				m_renderer;
 	glm::mat4				m_mvp;
 
+	float					m_angleX;
+	float					m_angleY;
+
 public:
 
-					Texture2DTest	();
-	virtual			~Texture2DTest	();
+					TextureCubeTest	();
+	virtual			~TextureCubeTest	();
 
     virtual     void    Initialize	( Renderer *, glm::mat4 projMat )	override;
     virtual     void    Render      ()									override;

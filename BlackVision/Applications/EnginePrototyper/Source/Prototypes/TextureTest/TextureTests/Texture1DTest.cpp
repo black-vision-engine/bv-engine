@@ -83,12 +83,7 @@ void    Texture1DTest::Initialize          ( Renderer * renderer, glm::mat4 proj
 
     BVGL::bvglClearColor( 0.f, 0.f, 0.f, 0.f );
 
-	std::string vsFile = config::PROTOTYPES_SHADERS_ROOT + "TextureTest/" + "default.vert";
-    std::string psFile = config::PROTOTYPES_SHADERS_ROOT + "TextureTest/" + "default1D.frag";
-
-    m_program.CompileShaderFromFile( vsFile.c_str(), GL_VERTEX_SHADER );
-	m_program.CompileShaderFromFile( psFile.c_str(), GL_FRAGMENT_SHADER );
-    m_program.Link();
+	PrepareShader( "defaultArray", "default1D" );
 }
 
 // *****************************
@@ -104,6 +99,13 @@ void    Texture1DTest::Render              ()
 	BVGL::bvglUniformMatrix4fv( 0, 1, GL_FALSE, &m_mvp[ 0 ][ 0 ] );
 
     m_rct.Render();
+}
+
+// *****************************
+//
+void    Texture1DTest::Update              ( TimeType t )
+{
+	{ t; }
 }
 
 } // bv

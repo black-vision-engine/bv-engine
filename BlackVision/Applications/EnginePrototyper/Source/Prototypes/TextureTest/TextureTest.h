@@ -20,6 +20,10 @@ private:
 	Renderer *				m_renderer;
 
 	BaseTextureTest *		m_test;
+	UInt32					m_currTestIdx;
+
+	UInt32					m_width;
+	UInt32					m_height;
 
 public:
 

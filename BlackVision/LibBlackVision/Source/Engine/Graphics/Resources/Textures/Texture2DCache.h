@@ -39,7 +39,7 @@ public:
 
     void                            ClearCache          ();
 
-    static Texture2DPtr				CreateEmptyTexture  ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic );
+    static Texture2DPtr				CreateEmptyTexture  ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, UInt32 levels );
     static Texture2DPtr				CreateTexture       ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, MemoryChunkConstPtr data );
 
 };

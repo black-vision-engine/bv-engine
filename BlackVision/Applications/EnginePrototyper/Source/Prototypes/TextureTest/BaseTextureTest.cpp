@@ -4,8 +4,10 @@
 #include "TextureTests\Texture1DTest.h"
 #include "TextureTests\Texture2DTest.h"
 #include "TextureTests\Texture3DTest.h"
+#include "TextureTests\TextureCubeTest.h"
 #include "TextureTests\Texture1DArrayTest.h"
 #include "TextureTests\Texture2DArrayTest.h"
+#include "TextureTests\TextureCubeArrayTest.h"
 
 namespace bv {
 
@@ -13,6 +15,18 @@ namespace bv {
 //
 BaseTextureTest::~BaseTextureTest()
 {
+}
+
+// *************************
+//
+void					BaseTextureTest::PrepareShader				( const std::string & vs, const std::string & fs )
+{
+	std::string vsFile = config::PROTOTYPES_SHADERS_ROOT + "TextureTest/" + vs + ".vert";
+    std::string psFile = config::PROTOTYPES_SHADERS_ROOT + "TextureTest/" + fs + ".frag";
+
+    m_program.CompileShaderFromFile( vsFile.c_str(), GL_VERTEX_SHADER );
+	m_program.CompileShaderFromFile( psFile.c_str(), GL_FRAGMENT_SHADER );
+    m_program.Link();
 }
 
 // *************************
@@ -85,6 +99,8 @@ void						BaseTextureTest::Initialize				()
 	m_tests[2] = &BaseTextureTest::CreateInstance< Texture1DTest >;
 	m_tests[3] = &BaseTextureTest::CreateInstance< Texture1DArrayTest >;
 	m_tests[4] = &BaseTextureTest::CreateInstance< Texture3DTest >;
+	m_tests[5] = &BaseTextureTest::CreateInstance< TextureCubeTest >;
+	m_tests[6] = &BaseTextureTest::CreateInstance< TextureCubeArrayTest >;
 	
 	m_currentTest = (unsigned int)m_tests.size() - 1;
 }

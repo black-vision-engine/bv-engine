@@ -100,12 +100,7 @@ void    Texture3DTest::Initialize          ( Renderer * renderer, glm::mat4 proj
 
     BVGL::bvglClearColor( 0.f, 0.f, 0.f, 0.f );
 
-	std::string vsFile = config::PROTOTYPES_SHADERS_ROOT + "TextureTest/" + "default.vert";
-    std::string psFile = config::PROTOTYPES_SHADERS_ROOT + "TextureTest/" + "default3D.frag";
-
-    m_program.CompileShaderFromFile( vsFile.c_str(), GL_VERTEX_SHADER );
-	m_program.CompileShaderFromFile( psFile.c_str(), GL_FRAGMENT_SHADER );
-    m_program.Link();
+	PrepareShader( "defaultArray", "default3D" );
 }
 
 // *****************************
@@ -124,6 +119,13 @@ void    Texture3DTest::Render              ()
 		BVGL::bvglUniform1i( 1, (int)i );
 		m_rct.Render();
 	}
+}
+
+// *****************************
+//
+void    Texture3DTest::Update              ( TimeType t )
+{
+	{ t; }
 }
 
 } // bv

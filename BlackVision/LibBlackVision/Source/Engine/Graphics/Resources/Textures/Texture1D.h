@@ -9,11 +9,10 @@ class Texture1D : public Texture
 {
 private:
 
-    UInt32		m_width;
+    UInt32				m_width;
 
 public:
 
-                        Texture1D       ( TextureFormat format, UInt32 width, DataBuffer::Semantic semantic );
                         Texture1D       ( TextureFormat format, UInt32 width, DataBuffer::Semantic semantic, UInt32 levels );
     virtual             ~Texture1D      ();
 

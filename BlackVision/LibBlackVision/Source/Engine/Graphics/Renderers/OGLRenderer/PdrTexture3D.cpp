@@ -49,12 +49,12 @@ void    PdrTexture3D::Initialize      ( const Texture3D * texture )
 
 	for (unsigned int lvl = 0; lvl < numLevels; ++lvl)
 	{
-		auto data = texture->GetData( lvl )->Get();
+		auto data = texture->GetData( lvl );
 		if( data )
 		{
 			BVGL::bvglTexSubImage3D(GL_TEXTURE_3D, lvl,	0, 0, 0, 
 				( GLsizei )texture->GetWidth( lvl ), ( GLsizei )texture->GetHeight( lvl ), ( GLsizei )texture->GetDepth( lvl ),
-				m_format, m_type, data );
+				m_format, m_type, data->Get() );
 		}
 	}
 

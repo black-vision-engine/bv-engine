@@ -1,22 +1,11 @@
 #include "Texture2D.h"
 
-#include <algorithm>
-
 namespace bv {
 
 // *********************************
 //
-Texture2D::Texture2D                    ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic )
-	: Texture( format, TextureType::T_2D, semantic, 1, 1, 1 )
-    , m_width( width )
-    , m_height( height )
-{
-}
-
-// *********************************
-//
 Texture2D::Texture2D                    ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, UInt32 levels )
-	: Texture( format, TextureType::T_2D, semantic, 1, levels, levels )
+	: Texture( format, TextureType::T_2D, semantic, levels, levels )
     , m_width( width )
     , m_height( height )
 {
@@ -46,28 +35,29 @@ UInt32    Texture2D::GetHeight        ( UInt32 level ) const
 //
 MemoryChunkConstPtr    Texture2D::GetData        ( UInt32 level ) const
 {
-	return GetDataChunk( 0, level );
+	return GetDataChunk( level );
 }
 
 // *********************************
 //
 void				    Texture2D::SetData      ( MemoryChunkConstPtr data, UInt32 level ) 
 {
-	return SetDataChunk( data, 0, level );
+	assert( data->Size() == RawFrameSize( level ) );
+	SetDataChunk( data, level );
 }
 
 // *********************************
 //
 void				    Texture2D::SetData		( const std::vector< MemoryChunkConstPtr > & data )
 {
+	assert( ( UInt32 )data.size() == m_levels );
+
 	m_data.clear();
-
-	for( auto & chunk : data )
+	for( unsigned int lvl = 0; lvl < m_levels; ++lvl )
 	{
-		m_data.push_back( chunk );
+		assert( data[ lvl ]->Size() == RawFrameSize( lvl ) );
+		m_data.push_back( data[ lvl ] );
 	}
-
-    m_levels = ( UInt32 )m_data.size();
 }
 
 // *********************************

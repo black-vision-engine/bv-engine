@@ -16,7 +16,6 @@ private:
 
 public:
 
-                        TextureCube     ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic );
                         TextureCube     ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, UInt32 levels );
     virtual             ~TextureCube    ();
 
@@ -32,6 +31,10 @@ public:
     static SizeType		RawFrameSize    ( TextureFormat format, UInt32 width, UInt32 height, UInt32 level = 0 );
 
 	static UInt32		GetFacesNum		();
+
+private:
+
+	UInt32				GetIndex		( UInt32 face, UInt32 level ) const;
 };
 
 DEFINE_PTR_TYPE(TextureCube)

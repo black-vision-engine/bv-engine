@@ -45,10 +45,10 @@ void    PdrTexture1D::Initialize      ( const Texture1D * texture )
 
 	for (unsigned int lvl = 0; lvl < numLevels; ++lvl)
 	{
-		auto data = texture->GetData( lvl )->Get();
+		auto data = texture->GetData( lvl );
 		if( data )
 		{
-			BVGL::bvglTexSubImage1D( GL_TEXTURE_1D, lvl, 0, ( GLsizei )texture->GetWidth( lvl ), m_format, m_type, data );
+			BVGL::bvglTexSubImage1D( GL_TEXTURE_1D, lvl, 0, ( GLsizei )texture->GetWidth( lvl ), m_format, m_type, data->Get() );
 		}
 	}
 
