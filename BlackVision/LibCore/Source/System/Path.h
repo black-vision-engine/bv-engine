@@ -37,7 +37,7 @@ public:
 	static bool			IsFile			( const Path & path );
 	static bool			IsDir			( const Path & path );
 	static bool			Exists			( const Path & path );
-	static PathVec		List			( const Path & path, bool recursive, const std::string exp = "*" );
+	static PathVec		List			( const Path & path, bool recursive, const std::string exp = ".*" );
 	static Path			RelativePath	( const Path & path, const Path & start );
 
 private:
