@@ -116,8 +116,8 @@ void			SceneAccessor::ImportScene( std::istream & in, const Path & importToProje
         SceneDescriptor::SaveScene( scene, m_tm, outFilePath );
 
         buf.str( "" );
-        in.get( buf, '\n' );
         in.ignore();
+        in.get( buf, '\n' );
 
         if( buf.str() != "serialized_scene_end" )
         {
@@ -136,25 +136,31 @@ void			SceneAccessor::ExportScene( std::ostream & out, const Path & projectName,
 
         out << m_rootDirPM << '\n';
 
-		auto scene = SceneDescriptor::LoadScene( m_rootDir/ projectName / path, m_tm );
+  //      m_rootDir/ projectName / path
 
-		auto sob = new SerializeObject();
+		//auto scene = SceneDescriptor::LoadScene( m_rootDir/ projectName / path, m_tm );
 
-		sob->SetName( "scene" );
-		scene->Serialize( *sob );
-		sob->Pop();
+		//auto sob = new SerializeObject();
 
-        std::stringstream serScene;
+		//sob->SetName( "scene" );
+		//scene->Serialize( *sob );
+		//sob->Pop();
 
-		sob->Save( serScene );
+  //      std::stringstream serScene;
 
-        auto serSceneString = serScene.str();
+		//sob->Save( serScene );
+
+  //      auto serSceneString = serScene.str();
+
+        auto sceneFileName = ( m_rootDir/ projectName / path ).Str();
 
         out << projectName << '\n';
 
-        out << std::to_string( serSceneString.size() ) << '\n';    
+        out << std::to_string( File::Size( sceneFileName ) ) << '\n';    
 
-        out << serSceneString;
+        File::Read( out, sceneFileName );
+
+        out << '\n';
 
         out << "serialized_scene_end" << '\n';
 	}
