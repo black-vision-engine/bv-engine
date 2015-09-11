@@ -1,5 +1,7 @@
 #include "ProjectManager.h"
 #include "Impl/Accessors/TextureAssetAccessor.h"
+#include "Impl/Accessors/FontAssetAccessor.h"
+#include "Impl/Accessors/AnimationAssetAccessor.h"
 #include "Assets/Texture/SingleTextureAssetDescriptor.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
@@ -66,14 +68,7 @@ bv::model::BasicNodeConstPtr CreateTestScene0()
     success = LoadTexture( root->GetPlugin( "texture" ), "proj00", "flagi/pol.jpg" );
     assert( success );    
 
- //   RendererInput ri;
- //   ri.m_WindowHandle			= 0;
- //   ri.m_PixelFormat			= 0;
- //   ri.m_RendererDC				= 0;
- //   ri.m_DisableVerticalSync	= true;
-	//auto renderer = new bv::Renderer( ri, 100, 100 );
     return root;
-    //return BVScene::CreateFakeSceneForTestingOnly( std::const_pointer_cast< model::BasicNode >( , new Camera( false ), "BasicScene", globalTimeline );
 }
 
 TEST( CleanAll, ProjectManager )
@@ -139,7 +134,6 @@ TEST( RegisteringCategories, ProjectManager )
 	exts.push_back( ".*\\.png" );
 
 	auto taa = TextureAssetAccessor::Create( g_pm0->GetRootDir() / "textures", exts );
-
 	g_pm0->RegisterCategory( AssetCategory::Create( "textures", taa ) );
 
 	auto cns = g_pm0->ListCategoriesNames();
@@ -148,7 +142,6 @@ TEST( RegisteringCategories, ProjectManager )
 	ASSERT_TRUE( cns[ 0 ] == "textures" );
 
 	taa = TextureAssetAccessor::Create( g_pm1->GetRootDir() / "textures", exts );
-
 	g_pm1->RegisterCategory( AssetCategory::Create( "textures", taa ) );
 
 	cns = g_pm1->ListCategoriesNames();
@@ -156,6 +149,26 @@ TEST( RegisteringCategories, ProjectManager )
 	ASSERT_TRUE( cns.size() == 1 );
 	ASSERT_TRUE( cns[ 0 ] == "textures" );
 
+    StringVector fontsExts;
+	fontsExts.push_back( ".*\\.ttf" );
+
+    auto faa = FontAssetAccessor::Create( g_pm0->GetRootDir() / "fonts", fontsExts );
+	g_pm0->RegisterCategory( AssetCategory::Create( "fonts", faa ) );
+
+    auto aaa = AnimationAssetAccessor::Create( g_pm0->GetRootDir() / "sequences", exts );
+	g_pm0->RegisterCategory( AssetCategory::Create( "sequences", aaa ) );
+
+    cns = g_pm0->ListCategoriesNames();
+    ASSERT_TRUE( cns.size() == 3 );
+
+    faa = FontAssetAccessor::Create( g_pm1->GetRootDir() / "fonts", fontsExts );
+	g_pm1->RegisterCategory( AssetCategory::Create( "fonts", faa ) );
+
+    aaa = AnimationAssetAccessor::Create( g_pm1->GetRootDir() / "sequences", exts );
+	g_pm1->RegisterCategory( AssetCategory::Create( "sequences", aaa ) );
+
+    cns = g_pm1->ListCategoriesNames();
+    ASSERT_TRUE( cns.size() == 3 );
 }
 
 TEST( AddingAssets, ProjectManager )

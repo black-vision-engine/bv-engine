@@ -18,7 +18,9 @@ namespace bv
 AnimationAssetAccessor::AnimationAssetAccessor( const Path & rootPath, const StringVector & fileExts )
     : m_rootPath( rootPath )
     , m_fileExts( fileExts )
-{}
+{
+    CreateDir();
+}
 
 // ********************************
 //
@@ -263,6 +265,16 @@ std::string         AnimationAssetAccessor::PathContainsAnimation( const Path & 
     }
 
     return "";
+}
+
+// ********************************
+//
+void				AnimationAssetAccessor::CreateDir() const
+{
+	if( !Dir::Exists( m_rootPath.Str() ) )
+	{
+		Dir::CreateDir( m_rootPath.Str(), true );
+	}
 }
 
 } // bv

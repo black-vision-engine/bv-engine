@@ -45,6 +45,8 @@ private:
 
     std::string                 PathContainsAnimation( const Path & path ) const;
 
+    void				        CreateDir           () const;
+
     Path                        m_rootPath;
     StringVector                m_fileExts;
 };
