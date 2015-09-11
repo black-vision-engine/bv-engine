@@ -968,7 +968,8 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineMana
 // timelines
     auto timelines = dob.LoadArray< TimeEvaluatorBase< ITimeEvaluator > >( "timelines" );
     for( auto timeline : timelines )
-        timelineManager->AddTimeline( timeline );
+        for( auto child : timeline->GetChildren() )
+            timelineManager->AddTimeline( child );
 
     auto node = dob.Load< model::BasicNode >( "node" );
 
