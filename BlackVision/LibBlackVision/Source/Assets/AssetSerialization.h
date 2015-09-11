@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Engine/Interfaces/ISerializable.h"
 
 #include "Texture/TextureAssetDescriptor.h"
@@ -5,9 +7,29 @@
 
 namespace bv {
 
-namespace model {
+class SerializedAssetUID : public ISerializable
+{
+    std::string uid;
 
-class AssetSerialization : public AssetDesc {
+public:
+    SerializedAssetUID( std::string uid ) : uid( uid ) {}
+
+    std::string                         GetUID() { return uid; }
+
+    virtual void                Serialize       ( SerializeObject & sob ) const
+    {
+        sob.SetName( "asset" );
+        sob.SetValue( "uid", uid );
+        sob.Pop(); // asset
+    }
+
+    static ISerializablePtr             Create( DeserializeObject& dob )
+    {
+        return ISerializablePtr( new SerializedAssetUID( dob.GetValue( "uid" ) ) ); // make_shared does not work for some reason ;)
+    }
+};
+
+class SerializedAssetDesc : public AssetDesc {
 public:
     static ISerializableConstPtr Create( DeserializeObject& dob )
     {
@@ -23,4 +45,4 @@ public:
     }
 };
 
-} }
+}

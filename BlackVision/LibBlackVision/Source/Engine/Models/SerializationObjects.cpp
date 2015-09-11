@@ -24,6 +24,17 @@ void SerializeObject::Save( std::ostream & out )
     out << m_doc;
 }
 
+//void                                                    SerializeObject::SetAssetsWithUIDs( AssetDescsWithUIDs* assets ) // FIXME singletonize
+//{
+//    m_assets = assets;
+//}
+//
+//AssetDescsWithUIDs*                                     SerializeObject::GetAssetsWithUIDs() // FIXME singletonize
+//{
+//    return m_assets;
+//}
+
+
 void                                                    SerializeObject::SetName( const std::string & name )
 {
     char *node_name = m_doc.allocate_string( name.c_str() );
@@ -50,5 +61,15 @@ void                                                    SerializeObject::Pop()
 {
     m_roots.pop();
 }
+
+//void                                                    DeserializeObject::SetAssetsWithUIDs( AssetDescsWithUIDs* assets ) // FIXME singletonize
+//{
+//    m_assets = assets;
+//}
+//
+//AssetDescsWithUIDs*                                     DeserializeObject::GetAssetsWithUIDs() // FIXME singletonize
+//{
+//    return m_assets;
+//}
 
 }

@@ -66,7 +66,7 @@ private:
 	bv::videocards::VideoCardManager* m_videoCardManager;
 	std::string                     m_grabFramePath;
     
-    void            LoadSceneFromFile       ( std::string filename );
+    //void            LoadSceneFromFile       ( std::string filename );
     
     void            RefreshVideoInputScene  ();
 
