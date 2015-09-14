@@ -25,7 +25,7 @@ protected:
 
 public:
     virtual void                Serialize       ( SerializeObject & sob ) const;
-    static ISerializablePtr     Create          ( DeserializeObject & dob );
+    static ISerializableConstPtr Create          ( DeserializeObject & dob );
 
 	virtual bool						IsCacheable			() const override;
 

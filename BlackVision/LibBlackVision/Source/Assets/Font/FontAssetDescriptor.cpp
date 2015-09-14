@@ -8,17 +8,33 @@ const std::string FontAssetDesc::uid = "FONT_ASSET_DESC";
 
 // ***********************
 //
-void                FontAssetDesc::Serialize       ( SerializeObject & /*sob*/ ) const
+void                FontAssetDesc::Serialize       ( SerializeObject & sob ) const
 {
-    assert( !"implement me" );
+    sob.SetName( "asset" );
+
+    sob.SetValue( "type", "font" );
+    sob.SetValue( "path", m_fontFileName );
+    sob.SetValue( "size", std::to_string( m_fontSize ) );
+    sob.SetValue( "blur", std::to_string( m_blurSize ) );
+    sob.SetValue( "outline", std::to_string( m_outlineSize ) );
+    sob.SetValue( "mipmaps", std::to_string( m_generateMipmaps ) );
+
+    sob.Pop();
 }
 
 // ***********************
 //
-ISerializablePtr     FontAssetDesc::Create          ( DeserializeObject & /*dob*/ )
+ISerializableConstPtr FontAssetDesc::Create          ( DeserializeObject & dob )
 {
-    assert( !"implement me" );
-    return nullptr;
+    assert( dob.GetValue( "type" ) == "font" );
+
+    auto path = dob.GetValue( "path" );
+    auto size = stoul( dob.GetValue( "size" ) );
+    auto blurSize = stoul( dob.GetValue( "blur" ) );
+    auto outSize = stoul( dob.GetValue( "outline" ) );
+    auto mipmaps = stoul( dob.GetValue( "mipmaps" ) ) > 0 ? true : false;
+
+    return FontAssetDesc::Create( path, size, blurSize, outSize, mipmaps );
 }
 
 // ***********************
