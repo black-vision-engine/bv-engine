@@ -96,9 +96,12 @@ model::BasicNodeConstPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeTy
     // assets
     auto assets = deDoc.Load< AssetDescsWithUIDs >( "assets" );
     AssetDescsWithUIDs::SetInstance( *assets );
+
     auto timelines = deDoc.LoadArray< model::TimeEvaluatorBase< model::ITimeEvaluator > >( "timelines" );
     for( auto timeline : timelines )
-        tm->AddTimeline( timeline );
+        for( auto child : timeline->GetChildren() )
+            tm->AddTimeline( child );
+
 
     auto node = deDoc.Load< model::BasicNode >( "node" );
     assert( node );
