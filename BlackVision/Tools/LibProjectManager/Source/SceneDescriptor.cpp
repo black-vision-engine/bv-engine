@@ -3,7 +3,6 @@
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
 
-#include "rapidxml/RapidXml.hpp"
 #include "Assets/AssetDescsWithUIDs.h"
 
 namespace bv

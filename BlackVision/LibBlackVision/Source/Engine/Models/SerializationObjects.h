@@ -16,6 +16,7 @@ class SerializeObject
 
 public:
     SerializeObject();
+    ~SerializeObject();
     void										            Save( const std::string & filename );
 	void										            Save( std::ostream & out );
 

@@ -18,11 +18,17 @@ public:
 };
 
 SerializeObject::SerializeObject()
+    : pimpl_( new SerializeObjectImpl() )
 {
     auto& m_doc = pimpl_->m_doc;
     auto& m_roots = pimpl_->m_roots;
 
     m_roots.push( &m_doc );
+}
+
+SerializeObject::~SerializeObject()
+{
+    delete pimpl_;
 }
 
 void SerializeObject::Save( const std::string & filename )
@@ -128,11 +134,13 @@ DeserializeObjectImpl::DeserializeObjectImpl( std::istream & in, SizeType numByt
     in.read( buf, numBytes );
 
     m_rootDoc->parse<0>( buf );
+    m_doc = m_rootDoc->first_node();
 }
 
 DeserializeObjectImpl::DeserializeObjectImpl( rapidxml::xml_node<> * node, model::TimelineManager* tm )
     : m_doc( node )
     , m_tm( tm )
+    , m_rootDoc( nullptr )
 {
 }
 
