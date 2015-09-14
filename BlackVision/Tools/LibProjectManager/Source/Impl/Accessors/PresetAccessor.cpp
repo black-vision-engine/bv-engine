@@ -3,38 +3,49 @@
 namespace bv
 {
 
+std::string PresetAccessor::m_fileExt = ".*\\.bvpreset";
+
 // ********************************
 //
-PresetAccessor::PresetAccessor	( const Path & path )
+PresetAccessor::PresetAccessor	( const Path & path, model::TimelineManager * tm )
     : m_path( path )
+    , m_tm( tm )
 {}
 
 // ********************************
 //
-void                        PresetAccessor::SavePreset ( const model::BasicNodeConstPtr /*node*/, const Path & /*path*/ ) const
+void                        PresetAccessor::SavePreset ( const model::BasicNodeConstPtr node, const Path & path ) const
 {
+    File::Touch( ( m_path / path ).Str() );
 
+    auto sob = SerializeObject();
+
+    node->Serialize( sob );
+
+    sob.Save( ( m_path / path ).Str() );
 }
     
 // ********************************
 //
-model::BasicNodeConstPtr    PresetAccessor::LoadPreset( const Path & /*path*/ ) const
+model::BasicNodePtr         PresetAccessor::LoadPreset( const Path & path ) const
 {
-    return nullptr;
+    auto dos = DeserializeObject( ( m_path / path ).Str(), m_tm );
+
+    return std::static_pointer_cast< model::BasicNode >( model::BasicNode::Create( dos ) );
 }
 
 // ********************************
 //
-PathVec                     PresetAccessor::ListPresets( const Path & /*path*/ ) const
+PathVec                     PresetAccessor::ListPresets( const Path & path ) const
 {
-    return PathVec();
+    return Path::List( ( m_path / path ).Str(), true, m_fileExt );
 }
 
 // ********************************
 //
 PathVec                     PresetAccessor::ListPresets() const
 {
-    return PathVec();
+    return Path::List( m_path, true, m_fileExt );
 }
 
 } // bv
