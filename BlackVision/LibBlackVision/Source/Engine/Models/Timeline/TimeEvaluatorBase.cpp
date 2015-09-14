@@ -4,7 +4,14 @@
 #include "Static/ConstTimeEvaluator.h"
 #include "Static/OffsetTimeEvaluator.h"
 
-namespace bv { namespace model {
+#include "Engine/Models/SerializationObjects.inl"
+
+namespace bv { 
+    
+// serialization stuff
+template std::vector< std::shared_ptr< model::TimeEvaluatorBase< model::ITimeEvaluator > > >                         DeserializeObjectLoadArrayImpl( DeserializeObjectImpl*, std::string name );
+
+namespace model {
 
 // *******************************
 //
