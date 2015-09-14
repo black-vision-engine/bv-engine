@@ -12,7 +12,14 @@
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 
-namespace bv { namespace model {
+#include "Engine/Models/SerializationObjects.inl"
+
+namespace bv { 
+    
+// serialization stuff
+template std::shared_ptr< model::BasicNode >                                        DeserializeObjectLoadImpl( DeserializeObjectImpl* pimpl, std::string name );
+    
+namespace model {
 
 // FIXME: hack
 std::hash_map< IModelNode *, SceneNode * >    BasicNode::ms_nodesMapping;

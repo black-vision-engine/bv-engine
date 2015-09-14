@@ -3,6 +3,7 @@
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
 
+#include "rapidxml/RapidXml.hpp"
 #include "Assets/AssetDescsWithUIDs.h"
 
 namespace bv
@@ -89,34 +90,26 @@ void			            SceneDescriptor::SaveScene		( const model::BasicNodeConstPtr 
 //
 model::BasicNodeConstPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeType numBytes, model::TimelineManager * tm )
 {
-    rapidxml::xml_document<> doc;
-    std::stringstream buffer;
+    //auto docNode = doc.first_node( "scene" );
+    auto deDoc = DeserializeObject( in, numBytes, tm );
 
-    auto buf = new char[ numBytes + 1 ];
-
-    buf[ numBytes ] = '\0';
-
-    in.read( buf, numBytes );
-
-    doc.parse<0>( buf );
-
-    auto docNode = doc.first_node( "scene" );
-    auto deDoc = DeserializeObject( docNode, tm );
 
     // assets
     auto assets = deDoc.Load< AssetDescsWithUIDs >( "assets" );
     AssetDescsWithUIDs::SetInstance( *assets );
-
     auto timelines = deDoc.LoadArray< model::TimeEvaluatorBase< model::ITimeEvaluator > >( "timelines" );
     for( auto timeline : timelines )
         tm->AddTimeline( timeline );
 
-    docNode = doc.first_node( "scene" )->first_node( "node" );
-    deDoc = DeserializeObject( docNode, tm );
+    auto node = deDoc.Load< model::BasicNode >( "node" );
+    assert( node );
+    return node;
+    //docNode = doc.first_node( "scene" )->first_node( "node" );
+    //deDoc = DeserializeObject( docNode, tm );
 
-    ISerializablePtr node = model::BasicNode::Create( deDoc );
+    //ISerializablePtr node = model::BasicNode::Create( deDoc );
 
-    return std::static_pointer_cast< const model::BasicNode >( node );
+    //return std::static_pointer_cast< const model::BasicNode >( node );
 }
 
 

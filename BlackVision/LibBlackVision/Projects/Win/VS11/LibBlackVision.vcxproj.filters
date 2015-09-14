@@ -1802,6 +1802,9 @@
     <ClInclude Include="..\..\..\Source\Assets\AssetDescsWithUIDs.h">
       <Filter>Assets</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\DeserializeObjectImpl.h">
+      <Filter>Engine\Models</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
@@ -1863,6 +1866,9 @@
     </None>
     <None Include="..\..\..\Source\Engine\Models\Plugins\Descriptor\ModelHelper.h">
       <Filter>Engine\Models\Plugins\Descriptor</Filter>
+    </None>
+    <None Include="..\..\..\Source\Engine\Models\SerializationObjects.inl">
+      <Filter>Engine\Models</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -4,6 +4,8 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include <sstream>
 
+#include "Engine/Models/SerializationObjects.inl"
+
 namespace bv { namespace model {
 
 std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
@@ -37,6 +39,7 @@ public:
         return std::make_shared< KeyFrame >( time, value );
     }
 };
+
 
 // ********************************************************************************************************************
 

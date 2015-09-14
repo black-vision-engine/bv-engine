@@ -1,5 +1,7 @@
 #include "SingleTextureAssetDescriptor.h"
 
+#include <assert.h>
+
 namespace bv
 {
 

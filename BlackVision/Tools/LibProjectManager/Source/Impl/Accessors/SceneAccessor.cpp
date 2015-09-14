@@ -9,6 +9,8 @@
 
 #include <set>
 
+#include "rapidxml/RapidXml.hpp"
+
 namespace bv
 {
 

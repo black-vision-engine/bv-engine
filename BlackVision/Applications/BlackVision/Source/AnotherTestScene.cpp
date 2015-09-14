@@ -941,25 +941,15 @@ model::BasicNodePtr      TestScenesFactory::SequenceAnimationTestScene  ()
 
 model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineManager * timelineManager ) // FIXME: maybe should be moved to BVScene::Create
 {
-// open file
     if( !Path::Exists( filename ) )
 	{
 		std::cout << "[ERROR] File " << filename << " does not exist" << std::endl;
 		return nullptr;
 	}
-    assert( Path::Exists( filename ) );
-
-    rapidxml::xml_document<> doc;
-    std::ifstream file( filename );
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    file.close();
-    std::string content( buffer.str() );
-    doc.parse<0>( &content[0] );
-
 // begin serialization
-    auto doc2 = doc.first_node( "scene" );
-    auto dob = DeserializeObject( doc2, timelineManager );
+    //auto doc2 = doc.first_node( "scene" );
+    //auto dob = DeserializeObject( filename, timelineManager );
+    DeserializeObject dob( filename, timelineManager );
 
 // assets
     auto assets = dob.Load< AssetDescsWithUIDs >( "assets" );
@@ -968,13 +958,12 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineMana
 // timelines
     auto timelines = dob.LoadArray< TimeEvaluatorBase< ITimeEvaluator > >( "timelines" );
     for( auto timeline : timelines )
-        timelineManager->AddTimeline( timeline );
+        for( auto child : timeline->GetChildren() )
+            timelineManager->AddTimeline( child );
 
     auto node = dob.Load< model::BasicNode >( "node" );
-
-    auto root = std::static_pointer_cast< model::BasicNode >( node );
-    assert( root );
-    return BasicNodePtr( root );
+    assert( node );
+    return node;
 }
 
 model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( model::TimelineManager * timelineManager )

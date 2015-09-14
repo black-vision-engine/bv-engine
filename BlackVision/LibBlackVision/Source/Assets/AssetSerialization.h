@@ -1,5 +1,7 @@
 #pragma once
 
+#include <assert.h>
+
 #include "Engine/Interfaces/ISerializable.h"
 
 #include "Texture/TextureAssetDescriptor.h"

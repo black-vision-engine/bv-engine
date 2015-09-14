@@ -1,7 +1,13 @@
 #include "Mathematics/Transform/MatTransform.h"
 
+#include "Engine/Models/SerializationObjects.inl"
 
-namespace bv { namespace model {
+namespace bv { 
+    
+// serialization stuff
+template std::vector< std::shared_ptr< SimpleTransformF > >                         DeserializeObjectLoadPropertiesImpl( DeserializeObjectImpl* pimpl, std::string name );
+
+namespace model {
 
     // *************************************
     //

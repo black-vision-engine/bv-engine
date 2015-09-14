@@ -10,6 +10,8 @@
 #include "Mathematics/Core/mathfuncs.h"
 #include "Mathematics/Defines.h"
 
+#include "Engine/Models/SerializationObjects.inl"
+
 // FIXME
 namespace std
 {
@@ -22,6 +24,9 @@ namespace std
 
 
 namespace bv {
+
+// serialization stuff
+template std::vector< std::shared_ptr< Key< float, float > > >                         DeserializeObjectLoadPropertiesImpl( DeserializeObjectImpl*, std::string name );
 
 namespace {
 
