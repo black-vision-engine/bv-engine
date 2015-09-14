@@ -349,6 +349,7 @@
     <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\DefaultMultipassEffect.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\DeserializeObjectImpl.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.h" />
@@ -664,6 +665,7 @@
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\SimpleTypedParameters.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.inl" />
+    <None Include="..\..\..\Source\Engine\Models\SerializationObjects.inl" />
     <None Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.inl" />
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.inl" />
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.inl" />

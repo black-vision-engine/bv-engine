@@ -2,30 +2,22 @@
 
 #include "CoreDEF.h"
 
-#include "rapidxml/RapidXml.hpp" // FIXME
-
 #include <fstream>
 #include <stack>
 
 namespace bv
 {
 
-//class AssetDescsWithUIDs;
-namespace model { class TimelineManager; }
+class SerializeObjectImpl;
 
 class SerializeObject
 {
-    rapidxml::xml_document<>                                m_doc;
-    std::stack< rapidxml::xml_node<>* >                     m_roots; // FIXME: Move it to implementation class to prevent including RapidXml.hpp in every header using this class.
-    //AssetDescsWithUIDs*                                     m_assets;
+    SerializeObjectImpl                                     *pimpl_;
 
 public:
     SerializeObject();
     void										            Save( const std::string & filename );
 	void										            Save( std::ostream & out );
-
-    //void                                                    SetAssetsWithUIDs( AssetDescsWithUIDs* );
-    //AssetDescsWithUIDs*                                     GetAssetsWithUIDs();
 
     void                                                    SetName( const std::string & name );
     void                                                    SetValue( const std::string & name, const std::string & value );
@@ -34,80 +26,52 @@ public:
 };
 
 
+namespace model { class TimelineManager; } // FIXME maybe
+
+class DeserializeObjectImpl;
+
+template< typename T >
+std::shared_ptr< T >                                        DeserializeObjectLoadImpl( DeserializeObjectImpl*, std::string name );
+
+template< typename T >
+std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( DeserializeObjectImpl*, std::string name );
+
+template< typename T >
+std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( DeserializeObjectImpl*, std::string name );
+
 class DeserializeObject
 {
-    rapidxml::xml_node<>*                                   m_doc;
+    friend class DeserializeObjectImpl;
+    DeserializeObjectImpl                                   *pimpl_;
 
-    template< typename T >
-    std::shared_ptr< T >                                    Load( rapidxml::xml_node<>* node ) const
-    {
-        auto dob = DeserializeObject( node, this->m_tm ); // FIXME for God's sake!!!
-        auto obj = T::Create( dob );
-        return std::static_pointer_cast< T >( obj );
-    }
-
-    model::TimelineManager* m_tm;
-    //AssetDescsWithUIDs*                                     m_assets;
-
+    DeserializeObject( DeserializeObjectImpl * );
 public:
-    DeserializeObject( rapidxml::xml_node<>* doc, model::TimelineManager* tm ) : m_doc( doc ), m_tm( tm ) { }
+    DeserializeObject( std::string filename, model::TimelineManager* tm );
+    DeserializeObject( std::istream & in, SizeType numBytes, model::TimelineManager* tm );
+    ~DeserializeObject();
 
-    model::TimelineManager*                                 GetTimelineManager() { return m_tm; }
-    //void                                                    SetAssetsWithUIDs( AssetDescsWithUIDs* );
-    //AssetDescsWithUIDs*                                     GetAssetsWithUIDs();
+    model::TimelineManager*                                 GetTimelineManager();
 
-    std::string                                             GetName()
-    {
-        return m_doc->name();
-    }
+    std::string                                             GetName();
 
-    std::string                                             GetValue( std::string name ) const
-    {
-        auto node = m_doc->first_attribute( name.c_str() );
-        assert( node ); // FIXME: error handling
-        return node->value();
-    }
+    std::string                                             GetValue( std::string name ) const;
 
     template< typename T >
     std::shared_ptr< T >                                    Load( std::string name ) const
     {
-        auto node = m_doc->first_node( name.c_str() );
-        assert( node ); // FIXME: error handling
-        return Load< T >( node );
+        return DeserializeObjectLoadImpl< T >( pimpl_, name );
     }
 
     template< typename T >
     std::vector< std::shared_ptr< T > >                     LoadArray( std::string name ) const
     {
-        std::vector< std::shared_ptr< T > > ret;
-
-        auto children = m_doc->first_node( name.c_str() );
-
-        if( children )
-            for( auto child = children->first_node(); child; child = child->next_sibling() )
-            {
-                auto childNode = Load< T >( child );
-                ret.push_back( childNode );
-            }
-
-        return ret;
+        return DeserializeObjectLoadArrayImpl< T >( pimpl_, name );
     }
 
     template< typename T >
     std::vector< std::shared_ptr< T > >                     LoadProperties( std::string name ) const
     {
-        std::vector< std::shared_ptr< T > > ret;
-
-        for( auto child = m_doc->first_node(); child; child = child->next_sibling() )
-        {
-            if( !strcmp( child->name(), name.c_str() ) )
-            {
-                auto childNode = Load< T >( child );
-                ret.push_back( childNode );
-            }
-        }
-
-        return ret;
+        return DeserializeObjectLoadPropertiesImpl< T >( pimpl_, name );
     }
 };
 
