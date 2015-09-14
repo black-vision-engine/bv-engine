@@ -86,7 +86,7 @@ TextureDesc::TextureDesc()
     , height( 0 )
 	, depth( 0 )
 	, type( 0 )
-    , format( 0 )
+    , internalFormat( 0 )
     , pixels( nullptr )
 	, mipmapLevels( 0 )
 {
@@ -109,12 +109,12 @@ void    TextureDesc::SetID  ( GLuint ID )
 
 // *****************************
 //
-void    TextureDesc::Set    ( GLsizei width, GLsizei height, GLsizei depth, GLenum format, const GLvoid * pixels )
+void    TextureDesc::Set    ( GLsizei width, GLsizei height, GLsizei depth, GLenum internalFormat, const GLvoid * pixels )
 {
 	this->width     = width;
 	this->height    = height;
 	this->depth		= depth;
-	this->format    = format;
+	this->internalFormat    = internalFormat;
 	this->pixels    = pixels;
 }
 
@@ -131,17 +131,7 @@ void TextureDesc::NewMipmapLevel( GLint level )
 //
 GLuint TextureDesc::DataSize() const
 {
-    return width * height * PixelSize( format );
-}
-
-// *****************************
-//
-GLuint TextureDesc::PixelSize( GLenum format ) const
-{
-    { format; }
-    assert( format == GL_RGBA || format == GL_BGRA );
-
-    return 4;
+    return width * height * BVGLTranslator::GetPixelSize( internalFormat );
 }
 
 // *****************************
@@ -160,11 +150,8 @@ std::string  TextureDesc::Summary   () const
     std::stringstream ss;
 
     ss << "ID: " << std::setw( ID_W ) << std::setfill( ' ' ) << ID << " (" << std::setw( 4 ) << width << ", " << std::setw( 4 ) << height << "), ";
-
-    //FIXME: glTexStorage uses internalFormat not format (from glTexSubImage2D) as expected here
-	//ss << "Size: " << std::setw( SIZE_W ) << FormatSizeString( DataSize() ) << " ";
-	//ss << "Format: " << std::setw( 4 ) << TranslateNoGLPrefix( BVGLTranslator::TranslateTextureFormat, format ) << " ";
-
+	ss << "Size: " << std::setw( SIZE_W ) << FormatSizeString( DataSize() ) << " ";
+	ss << "InternalFormat: " << std::setw( 4 ) << TranslateNoGLPrefix( BVGLTranslator::TranslateTextureInternalFormat, internalFormat ) << " ";
 	ss << "Type: " << std::setw( 4 ) << TranslateNoGLPrefix( BVGLTranslator::TranslateTextureTarget, type ) << " ";
 	ss << "Mipmaps: " << std::setw( 3 ) << this->mipmapLevels;
 

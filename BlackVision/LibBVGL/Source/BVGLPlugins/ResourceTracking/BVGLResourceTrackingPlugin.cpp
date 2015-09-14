@@ -98,10 +98,66 @@ void    BVGLResourceTrackingPlugin::TexImage2D					( GLenum target, GLint level,
 	auto& texture = m_textures.GetBoundResource( target );
 
 	if( level == 0 )		// We set size only for base texture. Otherwise textures would be 1x1.
-		texture.Set( width, height, 0, format, pixels );
+		texture.Set( width, height, 0, internalformat, pixels );
 	texture.NewMipmapLevel( level );
 
     PrintCompleteSummary( "TexImage2D() called" );
+}
+
+// *****************************
+//
+void BVGLResourceTrackingPlugin::TexImage1D					( GLenum target, GLint level, GLint internalFormat, GLsizei width, GLint border, GLenum format, GLenum type, const GLvoid* data )
+{
+	Parent::TexImage1D( target, level, internalFormat, width, border, format, type, data );
+			
+	auto& texture = m_textures.GetBoundResource( target );
+	
+	if( level == 0 )		// We set size only for base texture. Otherwise textures would be 1x1.
+		texture.Set( width, 0, 0, internalFormat, data );
+	texture.NewMipmapLevel( level );
+
+    PrintCompleteSummary( "TexImage1D() called" );
+}
+
+// *****************************
+//
+void BVGLResourceTrackingPlugin::TexImage3D					( GLenum target, GLint level, GLint internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const GLvoid* data )
+{
+	Parent::TexImage3D( target, level, internalFormat, width, height, depth, border, format, type, data );
+				
+	auto& texture = m_textures.GetBoundResource( target );
+
+	if( level == 0 )		// We set size only for base texture. Otherwise textures would be 1x1.
+		texture.Set( width, height, depth, internalFormat, data );
+	texture.NewMipmapLevel( level );
+
+    PrintCompleteSummary( "TexImage3D() called" );
+}
+
+// *****************************
+//**GL4.3*/
+void BVGLResourceTrackingPlugin::TexImage2DMultisample		( GLenum target, GLsizei samples, GLint internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocations )
+{
+	Parent::TexImage2DMultisample( target, samples, internalFormat, width, height, fixedSampleLocations );
+					
+	auto& texture = m_textures.GetBoundResource( target );
+	
+	// Multisample texture can't have mipmaps
+	texture.Set( width, height, 0, internalFormat, nullptr );
+	texture.NewMipmapLevel( 0 );
+}
+
+// *****************************
+//**GL4.3*/
+void BVGLResourceTrackingPlugin::TexImage3DMultisample		( GLenum target, GLsizei samples, GLint internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedSampleLocations )
+{
+	Parent::TexImage3DMultisample( target, samples, internalFormat, width, height, depth, fixedSampleLocations );
+						
+	auto& texture = m_textures.GetBoundResource( target );
+	
+	// Multisample texture can't have mipmaps
+	texture.Set( width, height, depth, internalFormat, nullptr );
+	texture.NewMipmapLevel( 0 );
 }
 
 // *****************************
@@ -116,9 +172,6 @@ void    BVGLResourceTrackingPlugin::ActiveTexture				( GLenum texture )
 void    BVGLResourceTrackingPlugin::TexSubImage2D				( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid * pixels )
 {
 	Parent::TexSubImage2D( target, level, xoffset, yoffset, width, height, format, type, pixels );
-
-	auto& texture = m_textures.GetBoundResource( target );
-	texture.format = format;
 }
 
 // *****************************
@@ -387,93 +440,30 @@ void BVGLResourceTrackingPlugin::CompressedTexImage3D		( GLenum target, GLint le
     PrintCompleteSummary( "CompressedTexImage3D() called" );
 }
 
+
 void BVGLResourceTrackingPlugin::CompressedTexSubImage1D		( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, const GLvoid* data )
 {
 	Parent::CompressedTexSubImage1D( target, level, xoffset, width, format, imageSize, data );
-	
-	auto& texture = m_textures.GetBoundResource( target );
-	texture.format = format;
 }
 
 void BVGLResourceTrackingPlugin::CompressedTexSubImage2D		( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const GLvoid* data )
 {
 	Parent::CompressedTexSubImage2D( target, level, xoffset, yoffset, width, height, format, imageSize, data );
-	
-	auto& texture = m_textures.GetBoundResource( target );
-	texture.format = format;
 }
 
 void BVGLResourceTrackingPlugin::CompressedTexSubImage3D		( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid* data )
 {
 	Parent::CompressedTexSubImage3D( target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, data );
-	
-	auto& texture = m_textures.GetBoundResource( target );
-	texture.format = format;
-}
-
-void BVGLResourceTrackingPlugin::TexImage1D					( GLenum target, GLint level, GLint internalFormat, GLsizei width, GLint border, GLenum format, GLenum type, const GLvoid* data )
-{
-	Parent::TexImage1D( target, level, internalFormat, width, border, format, type, data );
-			
-	auto& texture = m_textures.GetBoundResource( target );
-
-	if( level == 0 )		// We set size only for base texture. Otherwise textures would be 1x1.
-		texture.Set( width, 0, 0, format, data );
-	texture.NewMipmapLevel( level );
-
-    PrintCompleteSummary( "TexImage1D() called" );
-}
-
-void BVGLResourceTrackingPlugin::TexImage3D					( GLenum target, GLint level, GLint internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const GLvoid* data )
-{
-	Parent::TexImage3D( target, level, internalFormat, width, height, depth, border, format, type, data );
-				
-	auto& texture = m_textures.GetBoundResource( target );
-
-	if( level == 0 )		// We set size only for base texture. Otherwise textures would be 1x1.
-		texture.Set( width, height, depth, format, data );
-	texture.NewMipmapLevel( level );
-
-    PrintCompleteSummary( "TexImage3D() called" );
-}
-
-/**GL4.3*/
-void BVGLResourceTrackingPlugin::TexImage2DMultisample		( GLenum target, GLsizei samples, GLint internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocations )
-{
-	Parent::TexImage2DMultisample( target, samples, internalFormat, width, height, fixedSampleLocations );
-					
-	auto& texture = m_textures.GetBoundResource( target );
-	
-	// Multisample texture can't have mipmaps
-	texture.Set( width, height, 0, internalFormat, nullptr );
-	texture.NewMipmapLevel( 0 );
-}
-/**GL4.3*/
-void BVGLResourceTrackingPlugin::TexImage3DMultisample		( GLenum target, GLsizei samples, GLint internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedSampleLocations )
-{
-	Parent::TexImage3DMultisample( target, samples, internalFormat, width, height, depth, fixedSampleLocations );
-						
-	auto& texture = m_textures.GetBoundResource( target );
-	
-	// Multisample texture can't have mipmaps
-	texture.Set( width, height, depth, internalFormat, nullptr );
-	texture.NewMipmapLevel( 0 );
 }
 
 void BVGLResourceTrackingPlugin::TexSubImage1D				( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const GLvoid* pixels )
 {
 	Parent::TexSubImage1D( target, level, xoffset, width, format, type, pixels );
-
-	auto& texture = m_textures.GetBoundResource( target );
-	texture.format = format;
 }
 
 void BVGLResourceTrackingPlugin::TexSubImage3D				( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const GLvoid* pixels )
 {
 	Parent::TexSubImage3D( target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels );
-	
-	auto& texture = m_textures.GetBoundResource( target );
-	texture.format = format;
 }
 
 void BVGLResourceTrackingPlugin::TexStorage1D				( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width )
