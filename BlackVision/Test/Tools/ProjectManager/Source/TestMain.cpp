@@ -218,7 +218,7 @@ TEST( SavingPreset, ProjectManager )
     g_pm0->SavePreset( CreateTestScene0(), "proj00", "pres/proj1.bvpreset" );
 }
 
-TEST( ListingPreset, ProjectManager )
+TEST( ListingPresets, ProjectManager )
 {
     ASSERT_TRUE( g_pm0->ListPresets( "proj00", "pres" ).size() == 1 );
     ASSERT_TRUE( g_pm0->ListPresets( "proj00" ).size() == 1 );
