@@ -92,4 +92,11 @@ void    MultipassTest::DrawNode            ( Renderer * renderer, SceneNode * no
     }
 }
 
+// **************************
+//
+IBasicLogicUnqPtr    MultipassTest::Create  ( Renderer * renderer )
+{
+	return IBasicLogicUnqPtr( new MultipassTest( renderer ) );
+}
+
 } // bv

@@ -5,10 +5,12 @@ namespace bv {
 
 // **************************
 //
-SimpleVAOPrototype0::SimpleVAOPrototype0    ()
+SimpleVAOPrototype0::SimpleVAOPrototype0    ( Renderer * renderer )
     : m_rct( 1.f, 1.f )
     , m_paused( false )
 {
+	{ renderer; }
+
     if( !PrepareShader() )
     {
         exit( 1 );
@@ -101,6 +103,13 @@ bool    SimpleVAOPrototype0::PrepareShader  ()
     m_prog.Use();
 
     return true;
+}
+
+// **************************
+//
+IBasicLogicUnqPtr    SimpleVAOPrototype0::Create  ( Renderer * renderer )
+{
+	return IBasicLogicUnqPtr( new SimpleVAOPrototype0( renderer ) );
 }
 
 } // bv

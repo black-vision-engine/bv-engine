@@ -96,4 +96,11 @@ void    MemManagementInspector::DrawNode            ( Renderer * renderer, Scene
     }
 }
 
+// **************************
+//
+IBasicLogicUnqPtr    MemManagementInspector::Create  ( Renderer * renderer )
+{
+	return IBasicLogicUnqPtr( new MemManagementInspector( renderer ) );
+}
+
 } // bv

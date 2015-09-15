@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Interfaces/IAppLogicPrototype.h"
+#include "Interfaces/IBasicLogic.h"
 #include "Common/DrawingMode.h"
 #include "Common/DrawingTestScene.h"
 
@@ -10,7 +10,7 @@ namespace bv {
 
 class Renderer;
 
-class DrawingPrototype : public IAppLogicPrototype
+class DrawingPrototype : public IBasicLogic
 {
 private:
 
@@ -28,6 +28,7 @@ public:
     virtual     void    Key                 ( unsigned char c )     override;
     virtual     void    Resize              ( UInt32 w, UInt32 h )  override;
 
+	static IBasicLogicUnqPtr	Create			( Renderer * renderer );
 };
 
 } //bv

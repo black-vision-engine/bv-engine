@@ -4,7 +4,7 @@ namespace bv {
 
 // ****************************
 //
-bool TestLogic::ms_appInitialized = BasicWindowApp::RegisterInitializer( new TestLogic(), "TEST", 800, 600 );
+bool TestLogic::ms_appInitialized = BasicWindowApp::RegisterInitializer( &TestLogic::Create, "TEST", 800, 600 );
 
 // ****************************
 //
@@ -16,16 +16,21 @@ bool TestLogic::ms_debugConsole = BasicWindowApp::InitializeConsole( "Debug Cons
 
 // ****************************
 //
+				TestLogic::TestLogic			( Renderer * renderer )
+{
+	{ renderer; }
+}
+
+// ****************************
+//
 				TestLogic::~TestLogic			()
 {
 }
 
 // ****************************
 //
-void			TestLogic::Initialize			( Renderer * renderer )
+void			TestLogic::Initialize			()
 {
-	{ renderer; }
-
     BVGL::bvglClearColor( 0.f, 0.f, 0.f, 0.f );
 }
 
@@ -55,6 +60,13 @@ void			TestLogic::Key					( unsigned char c )
 void			TestLogic::Resize				( UInt32 w, UInt32 h )
 {
     BVGL::bvglViewport( 0, 0, w, h );
+}
+
+// **************************
+//
+IBasicLogicUnqPtr    TestLogic::Create  ( Renderer * renderer )
+{
+	return IBasicLogicUnqPtr( new TestLogic( renderer ) );
 }
 
 } // bv

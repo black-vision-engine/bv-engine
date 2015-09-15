@@ -15,15 +15,18 @@ private:
 #endif
 
 public:
-	virtual     void    Initialize          ( Renderer * renderer );
+	TestLogic			( Renderer * renderer );
+    ~TestLogic			();
+	
+	virtual     void    Initialize          () override;
 
-	virtual     void    Render              ();
-	virtual     void    Update              ( TimeType t );
-	virtual     void    Key                 ( unsigned char c );
+	virtual     void    Render              () override;
+	virtual     void    Update              ( TimeType t ) override;
+	virtual     void    Key                 ( unsigned char c ) override;
 
-	virtual     void    Resize              ( UInt32 w, UInt32 h );
+	virtual     void    Resize              ( UInt32 w, UInt32 h ) override;
 
-    virtual             ~TestLogic			();
+	static IBasicLogicUnqPtr	Create			( Renderer * renderer );
 };
 
 

@@ -292,4 +292,11 @@ void	FBOProfilingPrototype0::DisableFrameBuffer	()
     BVGL::bvglDepthRange( m_prevDepthRange[ 0 ], m_prevDepthRange[ 1 ] );
 }
 
+// **************************
+//
+IBasicLogicUnqPtr    FBOProfilingPrototype0::Create  ( Renderer * renderer )
+{
+	return IBasicLogicUnqPtr( new FBOProfilingPrototype0( renderer ) );
+}
+
 } // bv

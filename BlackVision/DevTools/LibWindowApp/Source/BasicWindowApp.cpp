@@ -30,14 +30,12 @@ void			BasicWindowApp::StaticInitializer	()
 
 // *********************************
 //
-bool			BasicWindowApp::RegisterInitializer	( IBasicLogic * appLogic, const char * title, int width, int height, bool fullScreen, int xOffset , int yOffset )
+bool			BasicWindowApp::RegisterInitializer	( CreateLogicFunc logicFunc, const char * title, int width, int height, bool fullScreen, int xOffset , int yOffset )
 {
 	if( AppInstance ) delete AppInstance;
-	AppInstance = new BasicWindowApp( appLogic, title, xOffset, yOffset, width, height, fullScreen );
-    bv::InitSubsystem::AddInitializer( BasicWindowApp::StaticInitializer );
+	AppInstance = new BasicWindowApp( logicFunc, title, xOffset, yOffset, width, height, fullScreen );
 
-	//FIXME: why is console always created for WinApplication?
-	FreeConsole();
+    bv::InitSubsystem::AddInitializer( BasicWindowApp::StaticInitializer );
 
     return true;
 }
@@ -62,9 +60,9 @@ bool			BasicWindowApp::InitializeConsole		( const char * title )
 
 // *********************************
 //
-BasicWindowApp::BasicWindowApp	( IBasicLogic * appLogic, const char * title, int xOffset, int yOffset, int width, int height, bool fullScreen )
+BasicWindowApp::BasicWindowApp	( CreateLogicFunc logicFunc, const char * title, int xOffset, int yOffset, int width, int height, bool fullScreen )
     : WindowedApplication( title, xOffset, yOffset, width, height, fullScreen )
-    , m_appLogic( appLogic )
+	, CreateLogic( logicFunc )
 {
 }
 
@@ -73,8 +71,6 @@ BasicWindowApp::BasicWindowApp	( IBasicLogic * appLogic, const char * title, int
 BasicWindowApp::~BasicWindowApp ()
 {
     FreeConsole();
-
-    delete m_appLogic;
 }
 
 // *********************************
@@ -118,7 +114,8 @@ bool BasicWindowApp::OnInitialize       ()
 
     m_Renderer->SetCamera( cam );
 
-	m_appLogic->Initialize( m_Renderer );
+	m_appLogic = CreateLogic( m_Renderer );
+	m_appLogic->Initialize();
 
     return true;
 }
