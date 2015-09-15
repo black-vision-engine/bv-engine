@@ -10,6 +10,10 @@ class TestLogic : public IBasicLogic
 private:
 	static bool			ms_appInitialized;
 
+#ifdef _DEBUG
+	static bool			ms_debugConsole;
+#endif
+
 public:
 	virtual     void    Initialize          ( Renderer * renderer );
 

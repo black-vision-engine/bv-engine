@@ -17,6 +17,8 @@ public:
     static void			StaticInitializer	();
     static bool			RegisterInitializer ( IBasicLogic * appLogic, const char * title, int width, int height, bool fullScreen = false, int xOffset = 0, int yOffset = 0 );
 
+	static bool			InitializeConsole	( const char * title );
+
 protected:
 
     explicit        BasicWindowApp		( IBasicLogic * appLogic, const char * title, int xOffset, int yOffset, int width, int height, bool fullScreen );

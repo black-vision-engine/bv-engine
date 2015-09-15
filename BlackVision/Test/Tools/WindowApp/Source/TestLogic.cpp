@@ -8,6 +8,14 @@ bool TestLogic::ms_appInitialized = BasicWindowApp::RegisterInitializer( new Tes
 
 // ****************************
 //
+#ifdef _DEBUG
+
+bool TestLogic::ms_debugConsole = BasicWindowApp::InitializeConsole( "Debug Console" );
+
+#endif
+
+// ****************************
+//
 				TestLogic::~TestLogic			()
 {
 }

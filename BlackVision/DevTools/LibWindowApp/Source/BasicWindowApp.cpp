@@ -35,7 +35,29 @@ bool			BasicWindowApp::RegisterInitializer	( IBasicLogic * appLogic, const char 
 	if( AppInstance ) delete AppInstance;
 	AppInstance = new BasicWindowApp( appLogic, title, xOffset, yOffset, width, height, fullScreen );
     bv::InitSubsystem::AddInitializer( BasicWindowApp::StaticInitializer );
+
+	//FIXME: why is console always created for WinApplication?
+	FreeConsole();
+
     return true;
+}
+
+// ****************************
+//
+bool			BasicWindowApp::InitializeConsole		( const char * title )
+{
+	if( AllocConsole() )
+	{
+		FILE * dummy;
+
+		SetConsoleTitleA( title );
+    
+		freopen_s( &dummy, "CONOUT$", "wb", stdout );
+		freopen_s( &dummy, "CONOUT$", "wb", stderr );
+
+		return true;
+	}
+	return false;
 }
 
 // *********************************
@@ -95,17 +117,6 @@ bool BasicWindowApp::OnInitialize       ()
     bv::Camera * cam = new bv::Camera();
 
     m_Renderer->SetCamera( cam );
-
-    // Allocate console
-    if( AllocConsole() )
-    {
-        FILE * dummy;
-
-        SetConsoleTitleA( "Debug Console" );
-    
-        freopen_s( &dummy, "CONOUT$", "wb", stdout );
-        freopen_s( &dummy, "CONOUT$", "wb", stderr );
-    }
 
 	m_appLogic->Initialize( m_Renderer );
 
