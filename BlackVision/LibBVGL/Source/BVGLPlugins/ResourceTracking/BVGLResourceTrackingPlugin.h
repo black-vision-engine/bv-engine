@@ -61,10 +61,10 @@ public:
     virtual void		PrintShortSummary           ( const std::string & message ) override;
     virtual void		PrintCompleteSummary        ( const std::string & message ) override;
 
-#ifdef GL_VERSION_4_4
+#ifdef BV_GL_VERSION_4_4
 	virtual void		BindTextures				( GLuint first, GLsizei count, const GLuint* textures ) override;
 #endif
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 	virtual void		BindTextureUnit				( GLuint unit, GLuint texture ) override;
 
 	virtual void		TextureStorage1D			( GLuint texture, GLsizei levels, GLenum internalFormat, GLsizei width ) override;
@@ -104,7 +104,7 @@ public:
 	virtual void		FramebufferTextureLayer		( GLenum target, GLenum attachment, GLuint texture, GLint level, GLint layer ) override;
 	virtual void		RenderbufferStorageMultisample			( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height ) override;
 
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 	virtual void		NamedFramebufferTexture		( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level ) override;
 	virtual void		NamedFramebufferTextureLayer( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level, GLint layer ) override;
 	virtual void		NamedFramebufferRenderbuffer( GLuint framebuffer, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer ) override;
@@ -112,7 +112,7 @@ public:
 	virtual void		NamedRenderbufferStorage				( GLuint renderbuffer, GLenum internalFormat, GLsizei width, GLsizei height ) override;
 	virtual void		NamedRenderbufferStorageMultisample		( GLuint renderbuffer, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height ) override;
 #endif
-#ifdef GL_VERSION_4_4
+#ifdef BV_GL_VERSION_4_4
 	virtual void		BufferStorage				( GLenum target, GLsizeiptr size, const GLvoid* data, GLbitfield flags ) override;
 #endif
 };
