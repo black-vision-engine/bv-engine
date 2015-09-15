@@ -578,6 +578,13 @@ std::string                         BasicNode::SplitPrefix              ( std::s
     return ret[ 0 ];
 }
 
+// ********************************
+//
+INodeLogicPtr                       BasicNode::GetLogic				    ()
+{
+    return m_nodeLogic;
+}
+
 } // model
 
 } // bv

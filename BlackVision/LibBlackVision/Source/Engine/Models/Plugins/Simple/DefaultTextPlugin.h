@@ -91,8 +91,7 @@ public:
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
-	//pablito
-	std::wstring                                GetText                     () const;
+
 private:
 	virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
 
@@ -108,9 +107,12 @@ public:
 	explicit                                    DefaultTextPlugin           ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
 												~DefaultTextPlugin          ();
 
-	static bool									SetText						( IPluginPtr, const std::wstring& );
-
     virtual void								SetPrevPlugin               ( IPluginPtr plugin );
+
+	const std::wstring &                        GetText                     () const;
+
+    static bool									SetText						( IPluginPtr, const std::wstring& );
+
 };
 
 } // model

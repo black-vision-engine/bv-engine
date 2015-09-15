@@ -213,7 +213,7 @@ TEST( RemovingUnusedAssets, ProjectManager )
     g_pm0->RemoveUnusedAssets();
 }
 
-TEST( SavingPreset, ProjectManager )
+TEST( SavingPresets, ProjectManager )
 {
     g_pm0->SavePreset( CreateTestScene0(), "proj00", "pres/proj1.bvpreset" );
 }

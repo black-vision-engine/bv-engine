@@ -118,12 +118,9 @@ std::string             DefaultTextPluginDesc::UID                      ()
     return "DEFAULT_TEXT";
 }
 
-
-
-//pablito
 // *************************************
 //
-std::wstring DefaultTextPlugin::GetText                     () const
+const std::wstring &    DefaultTextPlugin::GetText                      () const
 {
     return m_text;
 }
