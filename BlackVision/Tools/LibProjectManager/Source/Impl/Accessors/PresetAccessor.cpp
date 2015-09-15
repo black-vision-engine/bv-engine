@@ -1,9 +1,17 @@
 #include "PresetAccessor.h"
+#include "SceneDescriptor.h"
 
 namespace bv
 {
 
 std::string PresetAccessor::m_fileExt = ".*\\.bvpreset";
+
+// ********************************
+//
+PresetAccessorConstPtr PresetAccessor::Create( const Path & path, model::TimelineManager * tm )
+{
+    return PresetAccessorConstPtr( new PresetAccessor( path, tm ) );
+}
 
 // ********************************
 //
@@ -17,21 +25,14 @@ PresetAccessor::PresetAccessor	( const Path & path, model::TimelineManager * tm 
 void                        PresetAccessor::SavePreset ( const model::BasicNodeConstPtr node, const Path & path ) const
 {
     File::Touch( ( m_path / path ).Str() );
-
-    auto sob = SerializeObject();
-
-    node->Serialize( sob );
-
-    sob.Save( ( m_path / path ).Str() );
+    SceneDescriptor::SaveScene( node, m_tm, ( m_path / path ).Str() );
 }
     
 // ********************************
 //
-model::BasicNodePtr         PresetAccessor::LoadPreset( const Path & path ) const
+model::BasicNodeConstPtr    PresetAccessor::LoadPreset( const Path & path ) const
 {
-    auto dos = DeserializeObject( ( m_path / path ).Str(), m_tm );
-
-    return std::static_pointer_cast< model::BasicNode >( model::BasicNode::Create( dos ) );
+    return SceneDescriptor::LoadScene( ( m_path / path ).Str(), m_tm );
 }
 
 // ********************************

@@ -213,6 +213,26 @@ TEST( RemovingUnusedAssets, ProjectManager )
     g_pm0->RemoveUnusedAssets();
 }
 
+TEST( SavingPreset, ProjectManager )
+{
+    g_pm0->SavePreset( CreateTestScene0(), "proj00", "pres/proj1.bvpreset" );
+}
+
+TEST( ListingPreset, ProjectManager )
+{
+    ASSERT_TRUE( g_pm0->ListPresets( "proj00", "pres" ).size() == 1 );
+    ASSERT_TRUE( g_pm0->ListPresets( "proj00" ).size() == 1 );
+    ASSERT_TRUE( g_pm0->ListPresets().size() == 1 );
+
+    ASSERT_TRUE( g_pm0->ListPresets( "proj01" ).size() == 0 );
+    ASSERT_TRUE( g_pm0->ListPresets( "proj01", "pres" ).size() == 0 );
+}
+
+TEST( LoadingPresets, ProjectManager )
+{
+    ASSERT_TRUE( g_pm0->LoadPreset( "proj00", "pres/proj1.bvpreset" ) );
+}
+
 int main( int argc, char **argv )
 {
 	::testing::InitGoogleTest( &argc, argv );

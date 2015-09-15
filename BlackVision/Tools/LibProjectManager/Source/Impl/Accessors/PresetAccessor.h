@@ -7,18 +7,24 @@
 namespace bv
 {
 
+class PresetAccessor;
+DEFINE_CONST_PTR_TYPE( PresetAccessor )
+
 class PresetAccessor
 {
 public:
-    explicit                    PresetAccessor		( const Path & path, model::TimelineManager * tm );
-
     void                        SavePreset          ( const model::BasicNodeConstPtr node, const Path & path ) const;
-    model::BasicNodePtr         LoadPreset          ( const Path & path ) const;
+    model::BasicNodeConstPtr    LoadPreset          ( const Path & path ) const;
 
     PathVec                     ListPresets         ( const Path & path ) const;
     PathVec                     ListPresets         () const;
 
+    static PresetAccessorConstPtr Create            ( const Path & path, model::TimelineManager * tm );
+
 private:
+
+    explicit                    PresetAccessor		( const Path & path, model::TimelineManager * tm );
+
 
     static std::string          m_fileExt;
 

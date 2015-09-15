@@ -21,6 +21,7 @@ ProjectManagerImpl::ProjectManagerImpl	( const Path & rootPath, model::TimelineM
 	: m_rootPath( rootPath )
 	, m_projectsPath( m_rootPath / "projects" )
 	, m_scenesPath( m_rootPath / "scenes" )
+    , m_presetsPath( m_rootPath / "presets" )
     , m_timelineManager( tm )
 
 {
@@ -35,6 +36,7 @@ ProjectManagerImpl::ProjectManagerImpl	( const Path & rootPath, model::TimelineM
 	}
 
 	InitializeScenes();
+    InitializePresets();
 }
 
 // ********************************
@@ -585,6 +587,18 @@ void						ProjectManagerImpl::InitializeScenes	()
 
 // ********************************
 //
+void						ProjectManagerImpl::InitializePresets	()
+{
+	if( !Path::Exists( m_presetsPath ) )
+	{
+		Dir::CreateDir( m_presetsPath.Str() );
+	}
+
+    m_presetAccessor = PresetAccessor::Create( m_presetsPath, m_timelineManager );
+}
+
+// ********************************
+//
 Path						ProjectManagerImpl::TranslateToPathCategory			( const Path & projectName, const Path & path ) const
 {
 	Path ret;
@@ -683,6 +697,45 @@ ProjectManagerImpl::Location ProjectManagerImpl::Path2Location( const Path & pat
 Path						ProjectManagerImpl::Location2Path( const Location & loc ) const
 {
 	return Path( loc.categoryName ) / loc.projectName / loc.path;
+}
+
+// ********************************
+//
+model::BasicNodeConstPtr    ProjectManagerImpl::LoadPreset          ( const Path & projectName, const Path & path ) const
+{
+    auto pathInCategory = TranslateToPathCategory( projectName, path );
+    return m_presetAccessor->LoadPreset( pathInCategory );
+}
+
+// ********************************
+//
+void                        ProjectManagerImpl::SavePreset          ( const model::BasicNodeConstPtr & node, const Path & projectName, const Path & path ) const
+{
+    auto pathInCategory = TranslateToPathCategory( projectName, path );
+    return m_presetAccessor->SavePreset( node, pathInCategory );
+}
+
+// ********************************
+//
+PathVec                     ProjectManagerImpl::ListPresets         ( const Path & projectName, const Path & path ) const
+{
+    auto pathInCategory = TranslateToPathCategory( projectName, path );
+    return m_presetAccessor->ListPresets( pathInCategory );
+}
+
+// ********************************
+//
+PathVec                     ProjectManagerImpl::ListPresets         ( const Path & projectName ) const
+{
+    auto pathInCategory = TranslateToPathCategory( projectName, "" );
+    return m_presetAccessor->ListPresets( pathInCategory );
+}
+
+// ********************************
+//
+PathVec                     ProjectManagerImpl::ListPresets         () const
+{
+    return m_presetAccessor->ListPresets( "" );
 }
 
 } // bv

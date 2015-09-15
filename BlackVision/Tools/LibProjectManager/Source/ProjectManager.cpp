@@ -237,5 +237,41 @@ SceneDescriptor				ProjectManager::GetSceneDesc		( const Path & projectName, con
 	return m_impl->GetSceneDesc( projectName, pathInProject );
 }
 
+// ********************************
+//
+model::BasicNodeConstPtr     ProjectManager::LoadPreset          ( const Path & projectName, const Path & path ) const
+{
+    return m_impl->LoadPreset( projectName, path );
+}
+
+// ********************************
+//
+void                        ProjectManager::SavePreset          ( const model::BasicNodeConstPtr & node, const Path & projectName, const Path & path ) const
+{
+    m_impl->SavePreset( node, projectName, path );
+}
+
+// ********************************
+//
+PathVec                     ProjectManager::ListPresets         ( const Path & projectName, const Path & path ) const
+{
+    return m_impl->ListPresets( projectName, path );
+}
+
+// ********************************
+//
+PathVec                     ProjectManager::ListPresets         ( const Path & projectName ) const
+{
+    return m_impl->ListPresets( projectName );
+}
+
+// ********************************
+//
+PathVec                     ProjectManager::ListPresets         () const
+{
+    return m_impl->ListPresets();
+}
+
+
 } // bv
 

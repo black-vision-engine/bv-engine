@@ -87,6 +87,14 @@ public:
 	//SceneDesc				GetSceneDescLoc		( loc )
 	SceneDescriptor			GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
 
+	// *********************************
+	// loading, saving presets
+    model::BasicNodeConstPtr LoadPreset          ( const Path & projectName, const Path & path ) const;
+    void                    SavePreset          ( const model::BasicNodeConstPtr & node, const Path & projectName, const Path & path ) const;
+    PathVec                 ListPresets         ( const Path & projectName, const Path & path ) const;
+    PathVec                 ListPresets         ( const Path & projectName ) const;
+    PathVec                 ListPresets         () const;
+
 	static ProjectManager *	GetInstance			( const Path & rootPath, model::TimelineManager * tm );
 
 private:

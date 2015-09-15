@@ -6,6 +6,7 @@
 #include "Project.h"
 
 #include  "Accessors/SceneAccessor.h"
+#include  "Accessors/PresetAccessor.h"
 
 #include <map>
 
@@ -76,8 +77,17 @@ private:
 	//SceneDesc				GetSceneDescLoc		( loc )
 	SceneDescriptor			GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
 
+    // *********************************
+	// loading, saving presets
+    model::BasicNodeConstPtr LoadPreset          ( const Path & projectName, const Path & path ) const;
+    void                    SavePreset          ( const model::BasicNodeConstPtr & node, const Path & projectName, const Path & path ) const;
+    PathVec                 ListPresets         ( const Path & projectName, const Path & path ) const;
+    PathVec                 ListPresets         ( const Path & projectName ) const;
+    PathVec                 ListPresets         () const;
+
 	void					InitializeProjects	();
 	void					InitializeScenes	();
+    void				    InitializePresets	();
 
 	Path					TranslateToPathCategory( const Path & projectName, const Path & path ) const;
 	Path					TranslateToPathInPMRootFolder( const Path & projectName, const std::string & categoryName, const Path & path ) const;
@@ -95,10 +105,12 @@ private:
 	ProjectMap				m_projects;
 
 	SceneAccessorConstPtr	m_sceneAccessor;
+    PresetAccessorConstPtr  m_presetAccessor;
 
 	Path					m_rootPath;
 	Path					m_projectsPath;
 	Path					m_scenesPath;
+    Path					m_presetsPath;
 
     model::TimelineManager * m_timelineManager; 
 
