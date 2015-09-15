@@ -753,7 +753,7 @@ void			BVGL::bvglVertexAttribDivisor		( GLuint index,  GLuint divisor )
 
 //
 // Images and textures
-#ifdef GL_VERSION_4_4
+#ifdef BV_GL_VERSION_4_4
 
 void BVGL::bvglBindImageTexture			( GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format )
 {
@@ -761,7 +761,7 @@ void BVGL::bvglBindImageTexture			( GLuint unit, GLuint texture, GLint level, GL
 }
 
 
-void BVGL::bvglBindImageTextures			( GLuint first, GLsizei count, const GLuint textures )
+void BVGL::bvglBindImageTextures			( GLuint first, GLsizei count, const GLuint * textures )
 {
 	bvgl.BindImageTextures( first, count, textures );
 }
@@ -775,7 +775,7 @@ void BVGL::bvglBindTextures				( GLuint first, GLsizei count, const GLuint* text
 
 #endif
 
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 
 void BVGL::bvglBindTextureUnit				( GLuint unit, GLuint texture )
 {
@@ -814,7 +814,7 @@ void BVGL::bvglCompressedTexSubImage3D		( GLenum target, GLint level, GLint xoff
 	bvgl.CompressedTexSubImage3D( target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, data );
 }
 
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 
 void BVGL::bvglCompressedTextureSubImage1D	( GLuint texture, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, const GLvoid* data )
 {
@@ -823,7 +823,7 @@ void BVGL::bvglCompressedTextureSubImage1D	( GLuint texture, GLint level, GLint 
 
 void BVGL::bvglCompressedTextureSubImage2D	( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const GLvoid* data )
 {
-	bvgl.CompressedTextureSubImage2D( texture, level, xoffset, width, height, format, imageSize, data );
+	bvgl.CompressedTextureSubImage2D( texture, level, xoffset, yoffset, width, height, format, imageSize, data );
 }
 
 void BVGL::bvglCompressedTextureSubImage3D	( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid* data )
@@ -894,7 +894,7 @@ void BVGL::bvglTexSubImage3D				( GLenum target, GLint level, GLint xoffset, GLi
 	bvgl.TexSubImage3D( target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels );
 }
 
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 
 void BVGL::bvglTextureStorage1D			( GLuint texture, GLsizei levels, GLenum internalFormat, GLsizei width )
 {
@@ -966,7 +966,7 @@ void BVGL::bvglTextureView					( GLuint texture, GLenum target, GLuint origTextu
 	bvgl.TextureView( texture, target, origTexture, internalFormat, minLevel, numLevels, minLayer, numLayers );
 }
 
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 void BVGL::bvglTextureParameteri			( GLuint texture, GLenum pname, GLint param )
 {
 	bvgl.TextureParameteri( texture, pname, param );
@@ -994,7 +994,7 @@ void BVGL::bvglCopyTexSubImage3D			( GLenum target, GLint level, GLint xoffset, 
 	bvgl.CopyTexSubImage3D( target, level, xoffset, yoffset, zoffset, x, y, width, height );
 }
 
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 void BVGL::bvglCopyTextureSubImage1D		( GLuint texture, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width )
 {
 	bvgl.CopyTextureSubImage1D( texture, level, xoffset, x, y, width );
@@ -1029,10 +1029,10 @@ void BVGL::bvglCopyImageSubData			( GLuint srcName, GLenum srcTarget, GLint srcL
 
 // Sampler
 
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 void BVGL::bvglCreateSamplers				( GLsizei n, GLuint* samplers )
 {
-	bvgl.CreateSampler( n, samplers );
+	bvgl.CreateSamplers( n, samplers );
 }
 #endif
 
@@ -1052,10 +1052,10 @@ void BVGL::bvglBindSampler					( GLuint unit, GLuint sampler )
 	bvgl.BindSampler( unit, sampler );
 }
 
-#ifdef GL_VERSION_4_4
+#ifdef BV_GL_VERSION_4_4
 void BVGL::bvglBindSamplers				( GLuint first, GLsizei count, const GLuint* samplers )
 {
-	bvgl.BindSamplers( first, count samplers );
+	bvgl.BindSamplers( first, count, samplers );
 }
 #endif
 
@@ -1108,7 +1108,7 @@ void BVGL::bvglDrawTransformFeedbackInstanced		( GLenum mode, GLuint id, GLsizei
 }
 
 // Buffer
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 void BVGL::bvglNamedBufferData				( GLuint buffer, GLsizei size, const void* data, GLenum usage )
 {
 	bvgl.NamedBufferData( buffer, size, data, usage );
@@ -1125,7 +1125,7 @@ void BVGL::bvglNamedBufferSubData			( GLuint buffer, GLintptr offset, GLsizei si
 }
 #endif
 
-#ifdef GL_VERSION_4_4
+#ifdef BV_GL_VERSION_4_4
 void BVGL::bvglBufferStorage				( GLenum target, GLsizeiptr size, const GLvoid* data, GLbitfield flags )
 {
 	bvgl.BufferStorage( target, size, data, flags );
@@ -1137,7 +1137,7 @@ void BVGL::bvglBindBufferBase				( GLenum target, GLuint index, GLuint buffer )
 	bvgl.BindBufferBase( target, index, buffer );
 }
 
-#ifdef GL_VERSION_4_4
+#ifdef BV_GL_VERSION_4_4
 void BVGL::bvglBindBuffersBase				( GLenum target, GLuint first, GLsizei count, const GLuint* buffer )
 {
 	bvgl.BindBuffersBase( target, first, count, buffer );
@@ -1160,22 +1160,18 @@ void BVGL::bvglBindVertexBuffer			( GLuint bindingIndex, GLuint buffer, GLintptr
 	bvgl.BindVertexBuffer( bindingIndex, buffer, offset, stride );
 }
 
-#ifdef GL_VERSION_4_4
-void BVGL::bvglBindVertexBuffers			( GLuint first, GLsizei count, const GLuint* buffers, const GLintptr* offsets, const GLintptr* strides )
+#ifdef BV_GL_VERSION_4_4
+void BVGL::bvglBindVertexBuffers			( GLuint first, GLsizei count, const GLuint * buffers, const GLintptr * offsets, const GLsizei * strides )
 {
-	bvgl.BindVertexBuffers( first, count buffers, offsets, strides );
+	bvgl.BindVertexBuffers( first, count, buffers, offsets, strides );
 }
 #endif
 
-#ifdef GL_VERSION_4_5
-void BVGL::bvglBindVertexArrayVertexBuffer				( GLuint vaobj, GLuint bindingIndex, GLuint buffer, GLintptr offset, GLintptr stride )
-{
-	bvgl.BindVertexArrayVertexBuffer( vaobj, bindingIndex, buffer, offset, stride );
-}
+#ifdef BV_GL_VERSION_4_5
 
-void BVGL::bvglBindVertexArrayVertexBuffers			( GLuint vaobj, GLuint first, GLsizei count, const GLuint* buffers, const GLintptr* offsets, const GLintptr* strides )
+void BVGL::bvglVertexArrayVertexBuffers			( GLuint vaobj, GLuint first, GLsizei count, const GLuint * buffers, const GLintptr * offsets, const GLsizei * strides )
 {
-	bvgl.BindVertexArrayVertexBuffers( vaobj, first, sount, buffers, offsets, strides );
+	bvgl.VertexArrayVertexBuffers( vaobj, first, count, buffers, offsets, strides );
 }
 
 
@@ -1207,7 +1203,7 @@ void BVGL::bvglCopyBufferSubData			( GLuint readBuffer, GLuint writeBuffer, GLin
 	bvgl.CopyBufferSubData( readBuffer, writeBuffer, readOffset, writeOffset, size );
 }
 
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 void BVGL::bvglCopyNamedBufferSubData		( GLuint readBuffer, GLuint writeBuffer, GLintptr readOffset, GLintptr writeOffset, GLsizeiptr size )
 {
 	bvgl.CopyNamedBufferSubData( readBuffer, writeBuffer, readOffset, writeOffset, size );
@@ -1260,7 +1256,7 @@ void BVGL::bvglBlitFramebuffer				( GLint srcX0, GLint srcY0, GLint srcX1, GLint
 	bvgl.BlitFramebuffer( srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask, filter );
 }
 
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 void BVGL::bvglBlitNamedFramebuffer		( GLuint readFramebuffer, GLuint drawFramebuffer, GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter )
 {
 	bvgl.BlitNamedFramebuffer( readFramebuffer, drawFramebuffer, srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask, filter );
@@ -1278,7 +1274,7 @@ void BVGL::bvglFramebufferTextureLayer		( GLenum target, GLenum attachment, GLui
 	bvgl.FramebufferTextureLayer( target, attachment, texture, level, layer );
 }
 
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 void BVGL::bvglNamedFramebufferTexture		( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level )
 {
 	bvgl.NamedFramebufferTexture( framebuffer, attachment, texture, level );
@@ -1287,18 +1283,18 @@ void BVGL::bvglNamedFramebufferTexture		( GLuint framebuffer, GLenum attachment,
 
 void BVGL::bvglNamedFramebufferTextureLayer			( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level, GLint layer )
 {
-	bvgl.NamedFrambufferTextureLayer( framebuffer, attachment, texture, level, layer );
+	bvgl.NamedFramebufferTextureLayer( framebuffer, attachment, texture, level, layer );
 }
 
 void BVGL::bvglNamedFramebufferRenderbuffer			( GLuint framebuffer, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer )
 {
-	bvgl.NamedFramebufferRenderbuffer( framebuffer, attchment, renderbuffertarget, renderbuffer );
+	bvgl.NamedFramebufferRenderbuffer( framebuffer, attachment, renderbuffertarget, renderbuffer );
 }
 
 
 GLenum BVGL::bvglCheckNamedFramebufferStatus	( GLuint framebuffer, GLenum target )
 {
-	bvgl.CheckNamedFramebufferStatus( framebuffer, target );
+	return bvgl.CheckNamedFramebufferStatus( framebuffer, target );
 }
 #endif
 
@@ -1322,7 +1318,7 @@ void BVGL::bvglClearBufferfi				( GLenum buffer, GLint drawbuffer, GLfloat depth
 	bvgl.ClearBufferfi( buffer, drawbuffer, depth, stencil );
 }
 
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 
 void BVGL::bvglClearNamedFramebufferiv		( GLuint framebuffer, GLenum buffer, GLint drawbuffer, const GLint* value )
 {
@@ -1331,7 +1327,7 @@ void BVGL::bvglClearNamedFramebufferiv		( GLuint framebuffer, GLenum buffer, GLi
 
 void BVGL::bvglClearNamedFramebufferuiv		( GLuint framebuffer, GLenum buffer, GLint drawbuffer, const GLuint* value )
 {
-	bvgl.ClearNamedFramebufferiv( framebuffer, buffer, drawbuffer, value );
+	bvgl.ClearNamedFramebufferuiv( framebuffer, buffer, drawbuffer, value );
 }
 
 void BVGL::bvglClearNamedFramebufferfv		( GLuint framebuffer, GLenum buffer, GLint drawbuffer, const GLfloat* value )

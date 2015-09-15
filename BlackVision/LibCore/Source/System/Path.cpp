@@ -7,9 +7,12 @@
 #include "Tools/Logger/Logger.h"
 #define LOG_MODULE ModuleEnum::ME_LibCore
 
+#pragma warning(push)
+#pragma warning(disable : 4100)
 #include "boost/filesystem/operations.hpp"
 #include "boost/regex.hpp"
-#include <boost/algorithm/string.hpp>
+#include "boost/algorithm/string.hpp"
+#pragma warning(pop)
 
 #include <cstdarg>
 

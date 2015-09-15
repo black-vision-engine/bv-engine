@@ -111,12 +111,12 @@ public:
 	static void                 bvglActiveTexture           ( GLenum texture );
 	
 	static void                 bvglBindTexture             ( GLenum target, GLuint texture );
-#ifdef GL_VERSION_4_4
+#ifdef BV_GL_VERSION_4_4
 	static void					bvglBindImageTexture			( GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format );
-	static void					bvglBindImageTextures			( GLuint first, GLsizei count, const GLuint textures );
+	static void					bvglBindImageTextures			( GLuint first, GLsizei count, const GLuint* textures );
 	static void					bvglBindTextures				( GLuint first, GLsizei count, const GLuint* textures );
 #endif
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 	static void					bvglBindTextureUnit				( GLuint unit, GLuint texture );
 #endif
 
@@ -143,7 +143,7 @@ public:
 	static void                 bvglTexSubImage2D				( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid * pixels );
 	static void					bvglTexSubImage3D				( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const GLvoid* pixels );
 
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 	static void					bvglCompressedTextureSubImage1D	( GLuint texture, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, const GLvoid* data );
 	static void					bvglCompressedTextureSubImage2D	( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const GLvoid* data );
 	static void					bvglCompressedTextureSubImage3D	( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid* data );
@@ -167,7 +167,7 @@ public:
 
 	static void					bvglTextureView					( GLuint texture, GLenum target, GLuint origTexture, GLenum internalFormat, GLuint minLevel, GLuint numLevels, GLuint minLayer, GLuint numLayers );
 
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
     static void					bvglTextureParameteri			( GLuint texture, GLenum pname, GLint param );
     static void					bvglTextureParameterfv			( GLuint texture, GLenum pname, const GLfloat * params );
 #endif
@@ -177,7 +177,7 @@ public:
 	static void					bvglCopyTexSubImage1D			( GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width );
 	static void					bvglCopyTexSubImage2D			( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height );
 	static void					bvglCopyTexSubImage3D			( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height );
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 	static void					bvglCopyTextureSubImage1D		( GLuint texture, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width );
 	static void					bvglCopyTextureSubImage2D		( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height );
 	static void					bvglCopyTextureSubImage3D		( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height );
@@ -187,14 +187,14 @@ public:
 	static void					bvglCopyImageSubData			( GLuint srcName, GLenum srcTarget, GLint srcLevel, GLint srcX, GLint srcY, GLint srcZ, GLuint dstName, GLenum dstTarget, GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ, GLsizei srcWidth, GLsizei srcHeight, GLsizei srcDepth );
 
 // Sampler
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 	static void					bvglCreateSamplers				( GLsizei n, GLuint* samplers );
 #endif
 	static void					bvglGenSamplers					( GLsizei n, GLuint* samplers );
 	static void					bvglDeleteSamplers				( GLsizei n, GLuint* samplers );
 
 	static void					bvglBindSampler					( GLuint unit, GLuint sampler );
-#ifdef GL_VERSION_4_4
+#ifdef BV_GL_VERSION_4_4
 	static void					bvglBindSamplers				( GLuint first, GLsizei count, const GLuint* samplers );
 #endif
 
@@ -217,26 +217,25 @@ public:
 
 	static void                 bvglBufferData					( GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage );
 	static void					bvglBufferSubData				( GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid * data );
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 	static void					bvglNamedBufferData				( GLuint buffer, GLsizei size, const void* data, GLenum usage );
 	static void					bvglNamedBufferStorage			( GLuint buffer, GLsizei size, const void* data, GLbitfield flags );
 	static void					bvglNamedBufferSubData			( GLuint buffer, GLintptr offset, GLsizei size, const void* data );
 #endif
-#ifdef GL_VERSION_4_4
+#ifdef BV_GL_VERSION_4_4
 	static void					bvglBufferStorage				( GLenum target, GLsizeiptr size, const GLvoid* data, GLbitfield flags );
 
 
 	static void					bvglBindBuffersBase				( GLenum target, GLuint first, GLsizei count, const GLuint* buffer );
 	static void					bvglBindBuffersRange			( GLenum target, GLuint first, GLsizei count, const GLuint* buffers, const GLintptr* offset, const GLsizeiptr* sizes );
-	static void					bvglBindVertexBuffers			( GLuint first, GLsizei count, const GLuint* buffers, const GLintptr* offsets, const GLsizei* strides );
+	static void					bvglBindVertexBuffers			( GLuint first, GLsizei count, const GLuint * buffers, const GLintptr * offsets, const GLsizei * strides );
 #endif
 	static void					bvglBindBufferBase				( GLenum target, GLuint index, GLuint buffer );
 	static void					bvglBindBufferRange				( GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size );
 	static void					bvglBindVertexBuffer			( GLuint bindingIndex, GLuint buffer, GLintptr offset, GLsizei stride );
 	static void                 bvglBindBuffer					( GLenum target, GLuint buffer );
-#ifdef GL_VERSION_4_5
-	static void					bvglBindVertexArrayVertexBuffer				( GLuint vaobj, GLuint bindingIndex, GLuint buffer, GLintptr offset, GLsizei stride );
-	static void					bvglBindVertexArrayVertexBuffers			( GLuint vaobj, GLuint first, GLsizei count, const GLuint* buffers, const GLintptr* offsets, const GLsizei* strides );
+#ifdef BV_GL_VERSION_4_5
+	static void					bvglVertexArrayVertexBuffers	( GLuint vaobj, GLuint first, GLsizei count, const GLuint* buffers, const GLintptr* offsets, const GLsizei* strides );
 
 
 	static void*				bvglMapNamedBuffer				( GLuint buffer, GLenum access );
@@ -274,7 +273,7 @@ public:
 	static void					bvglFramebufferTextureLayer		( GLenum target, GLenum attachment, GLuint texture, GLint level, GLint layer );
 
 	static void					bvglBlitFramebuffer				( GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter );
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 	static void					bvglBlitNamedFramebuffer		( GLuint readFramebuffer, GLuint drawFramebuffer, GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter );
 	static void					bvglNamedFramebufferTexture		( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level );
 	static void					bvglNamedFramebufferTextureLayer( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level, GLint layer );
@@ -289,7 +288,7 @@ public:
 	static void					bvglClearBufferuiv				( GLenum buffer, GLint drawbuffer, const GLuint* value );
 	static void					bvglClearBufferfv				( GLenum buffer, GLint drawbuffer, const GLfloat* value );
 	static void					bvglClearBufferfi				( GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil );
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 	static void					bvglClearNamedFramebufferiv		( GLuint framebuffer, GLenum buffer, GLint drawbuffer, const GLint* value );
 	static void					bvglClearNamedFramebufferuiv	( GLuint framebuffer, GLenum buffer, GLint drawbuffer, const GLuint* value );
 	static void					bvglClearNamedFramebufferfv		( GLuint framebuffer, GLenum buffer, GLint drawbuffer, const GLfloat* value );

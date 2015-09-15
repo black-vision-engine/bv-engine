@@ -2,13 +2,11 @@
 
 #include <crtdefs.h>
 
-
-namespace bv {
-
-#ifdef GL_VERSION_4_5
-	#define GL_VERSION_4_4
+#ifdef BV_GL_VERSION_4_5
+	#define BV_GL_VERSION_4_4
 #endif
 
+namespace bv {
 
 #define GL_FALSE 0
 #define GL_TRUE 1
