@@ -19,6 +19,11 @@
 #include "Engine/Events/Events.h"
 #include "ProjectManager.h"
 
+#pragma warning(push)
+#pragma warning( disable: 4512 )
+#include "json/json.h"
+#pragma warning(pop)
+
 #include "Log.h"
 #include "SocketWrapper.h"
 
@@ -331,24 +336,16 @@ namespace
 //
 std::string PathVecToJSONArray( const PathVec & v )
 {
-    std::string pList;
-    pList += "[ ";
+    Json::Value root;
 
     for( auto pn : v )
     {
-        pList += "{ \"name\":" + std::string( "\"" ) + pn.Str() + "\" }" + ",";
+        Json::Value entry;
+        entry[ "name" ] = pn.Str();
+        root.append( entry );
     }
 
-    if( pList.size() > 2 )
-    {
-        pList[ pList.size() - 1 ] = ']';
-    }
-    else
-    {
-        pList += "]";
-    }
-
-    return pList;
+    return root.toStyledString();
 }
 
 }
