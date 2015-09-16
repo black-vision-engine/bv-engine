@@ -96,6 +96,7 @@ public:
     PathVec                 ListPresets         () const;
 
 	static ProjectManager *	GetInstance			( const Path & rootPath, model::TimelineManager * tm );
+    static ProjectManager *	GetInstance			( model::TimelineManager * tm );
 
 private:
 	ProjectManagerImpl * m_impl;

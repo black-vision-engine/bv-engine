@@ -38,7 +38,10 @@ void				Project::Init		() const
 {
 	if( !Path::Exists( m_rootDir ) )
 	{
-		Dir::CreateDir( m_rootDir.Str(), true );
+        if( !Dir::CreateDir( m_rootDir.Str(), true ) )
+        {
+            return;
+        }
 	}
 
 	if( !Path::Exists( m_rootDir / ".bvproj" ) )

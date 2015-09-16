@@ -43,6 +43,11 @@
     <ClInclude Include="..\..\..\Source\ProjectManager.h" />
     <ClInclude Include="..\..\..\Source\SceneDescriptor.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ConfigReader\Projects\Win\VS11\ConfigReader.vcxproj">
+      <Project>{00218970-e820-4bcc-b1da-48348059f6fe}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9FA5A3B8-FA25-4AA0-A3AC-DFCA1283D6D2}</ProjectGuid>
     <RootNamespace>LibProjectManager</RootNamespace>
@@ -122,6 +127,24 @@
     <ClCompile />
     <ClCompile />
     <ClCompile />
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ToolsDir)/RapidXML/Source;$(ToolsDir)/ConfigReader/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ToolsDir)/RapidXML/Source;$(ToolsDir)/ConfigReader/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ToolsDir)/RapidXML/Source;$(ToolsDir)/ConfigReader/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ToolsDir)/RapidXML/Source;$(ToolsDir)/ConfigReader/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -17,6 +17,7 @@
 #include "Widgets/Crawler/CrawlerEvents.h"
 #include "Widgets/Counter/Counter.h"
 #include "Engine/Events/Events.h"
+#include "ProjectManager.h"
 
 #include "Log.h"
 #include "SocketWrapper.h"
@@ -109,11 +110,14 @@ std::string SerializeNode( model::BasicNodePtr node )
     return S;
 }
 
-void ReqPrint(model::BasicNodePtr node,int level)
+void ReqPrint( model::BasicNodePtr node, int level )
 {
     string temp="-";
-    for(int i=1;i<level;i++)
+    for( int i = 1; i < level; i++ )
+    {
         temp+="-";
+    }
+
     Log::A("OK",temp+node->GetName());
     
     int NumChildren = (node)->GetNumChildren();
@@ -319,6 +323,36 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 }
 
 
+namespace 
+{
+
+
+// *********************************
+//
+std::string PathVecToJSONArray( const PathVec & v )
+{
+    std::string pList;
+    pList += "[ ";
+
+    for( auto pn : v )
+    {
+        pList += "{ \"name\":" + std::string( "\"" ) + pn.Str() + "\" }" + ",";
+    }
+
+    if( pList.size() > 2 )
+    {
+        pList[ pList.size() - 1 ] = ']';
+    }
+    else
+    {
+        pList += "]";
+    }
+
+    return pList;
+}
+
+}
+
 // *********************************
 //
 void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
@@ -377,7 +411,7 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
 
 			m_AppLogic->GetBVScene()->GetSceneEditor()->AddChildNode(node,newNode);
         }
-		if(evtStructure->command==L"DETACH_PLUGIN")
+		if( evtStructure->command == L"DETACH_PLUGIN" )
         {
             wstring NodeName = evtStructure->NodeName;
 			string NodeNameStr( NodeName.begin(), NodeName.end() );
@@ -400,6 +434,54 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
 
 			node_ptr->GetModelNodeEditor()->DetachPlugin("text");
 			
+        }
+        else if( evtStructure->command == L"LIST_PROJECTS" )
+        {
+            auto pm = ProjectManager::GetInstance( m_AppLogic->GetTimeLineManager() );
+
+            auto pns = pm->ListProjectsNames();
+
+            std::string pList = PathVecToJSONArray( pns );
+
+            // [czesio]
+            // [{"name":"czesio", "scenes_count":123},{...},...]
+
+            Log::A( "OK", "Projects list:" );
+			
+//            ReqPrint( m_AppLogic->GetBVScene()->GetModelSceneRoot(), 1 );
+
+            std::string S = "{ \
+                                \"cmd\" : \"projects_list\" , \
+                                \"list\": " + pList + 
+                           " }";
+
+            Log::A( "OK", S );
+            wstring WS = wstring( S.begin(), S.end() );
+
+            ResponseMsg msg;
+            msg.msg     = WS;
+            msg.sock_id = evtStructure->sock_id;
+            SocketWrapper::AddMsg( msg );
+        }
+        else if( evtStructure->command == L"NEW_PROJECT" )
+        {
+            auto name = std::string( evtStructure->request.begin(), evtStructure->request.end() );
+            auto pm = ProjectManager::GetInstance( m_AppLogic->GetTimeLineManager() );
+
+            pm->AddNewProject( name );
+
+            std::string S = "{ \
+                                \"cmd\" : \"NEW_PROJECT\" , \
+                                \"status\": \"OK\" \
+                             }";
+
+            Log::A( "OK", S );
+            wstring WS = wstring( S.begin(), S.end() );
+
+            ResponseMsg msg;
+            msg.msg     = WS;
+            msg.sock_id = evtStructure->sock_id;
+            SocketWrapper::AddMsg( msg );
         }
     }
 }

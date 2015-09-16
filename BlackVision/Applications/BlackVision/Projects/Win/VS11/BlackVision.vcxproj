@@ -245,6 +245,9 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ProjectReference Include="..\..\..\..\..\Tools\ConfigReader\Projects\Win\VS11\ConfigReader.vcxproj">
       <Project>{00218970-e820-4bcc-b1da-48348059f6fe}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Tools\LibProjectManager\Projects\Win\VS11\LibProjectManager.vcxproj">
+      <Project>{9fa5a3b8-fa25-4aa0-a3ac-dfca1283d6d2}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Tools\RapidXML\Projects\Win\VS11\RapidXML.vcxproj">
       <Project>{09c5ee56-18d0-4625-b632-b4980a620f4e}</Project>
     </ProjectReference>

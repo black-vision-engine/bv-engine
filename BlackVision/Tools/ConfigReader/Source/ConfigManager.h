@@ -3,14 +3,12 @@
 #include <string>
 #include <vector>
 
-#include "rapidxml.hpp"
 #include "helpers/auxiliary.hpp"
 #include "helpers/KeyValue.h"
 
-using namespace rapidxml;
-
 namespace bv
 {
+
 class ConfigManager
 {
 private:
@@ -18,7 +16,7 @@ private:
 	
 public:
     
-    static vector<KeyValue> Properties; 
+    static std::vector<KeyValue> Properties; 
 	static bool LoadConfig();
 
     static bool LoadXMLConfig();
@@ -28,8 +26,6 @@ public:
     static int GetInt(std::string key);
     static std::string GetString(std::string key);
     static float GetFloat(std::string key);
-
-    static void ParseProperties(xml_node<> * node,std::string name);
 
 	static std::string GetPath(){return MediaFolder;}
     

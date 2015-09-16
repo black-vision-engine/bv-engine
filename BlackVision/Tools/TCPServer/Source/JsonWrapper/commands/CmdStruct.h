@@ -10,15 +10,15 @@ public:
 	wstring NodeParam1;
 	wstring NodeParam2;
 	wstring PluginName;
-	wstring ParamName;
-	wstring TimeLineName;
-	wstring WidgetName;
+	
+    wstring Request;
 
     void parse(const wObject& obj){
         
         Command = ParseWstring( obj, L"command" );
 		NodeParam1 = ParseWstring( obj, L"node" );
 		NodeParam2 = ParseWstring( obj, L"node2" );
+        Request = ParseWstring( obj, L"request" );
 	}
 	CmdStruct(void);
 	~CmdStruct(void);

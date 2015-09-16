@@ -1,5 +1,6 @@
 #include "ProjectManager.h"
 #include "Impl/ProjectManagerImpl.h"
+#include "ConfigManager.h"
 
 namespace bv
 {
@@ -39,6 +40,15 @@ ProjectManager *			ProjectManager::GetInstance		( const Path & rootPath, model::
 		g_pms[ rootPath.Str() ] = npm;
 		return npm;
 	}
+}
+
+// ********************************
+//
+ProjectManager *	        ProjectManager::GetInstance		( model::TimelineManager * tm )
+{
+    auto pmRootFolder = ConfigManager::GetString( "PMFolder" );
+    static auto instance = ProjectManager( pmRootFolder, tm );
+    return &instance;
 }
 
 // ********************************

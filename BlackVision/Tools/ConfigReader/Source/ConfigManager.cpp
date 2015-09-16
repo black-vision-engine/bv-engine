@@ -1,4 +1,7 @@
 #include "ConfigManager.h"
+
+#include "rapidxml.hpp"
+
 #include "win_sock.h"
 #include "INIReader.h"
 #include <iostream>
@@ -6,63 +9,84 @@
 
 #define GetCurrentDir _getcwd
 
-using namespace std;
+//using namespace std;
+using namespace rapidxml;
 
 namespace bv
 {
-	std::string ConfigManager::MediaFolder = "";
-    std::vector<KeyValue> ConfigManager::Properties;
-	ConfigManager::ConfigManager(void)
-	{
-		 
-	}
 
+std::string             ConfigManager::MediaFolder = "";
+std::vector<KeyValue>   ConfigManager::Properties;
 
-	ConfigManager::~ConfigManager(void)
-	{
-	}
+namespace 
+{
 
-	wstring ExePath() {
-		WCHAR szFilePath	[_MAX_PATH];
-		GetModuleFileName	(NULL, szFilePath, _MAX_PATH);
-		wstring::size_type pos = wstring( szFilePath ).find_last_of( L"\\/" );
-		wstring temp = wstring( szFilePath ).substr(0,pos);
-		printf("Executable directory is : %s\n",string(temp.begin(),temp.end()).c_str());
-		return temp;
-	}
-
-    void ConfigManager::ParseProperties(xml_node<> * node, std::string current_name)
-    {
-        xml_node<> *CurrentProperty = node;
+// ********************************
+//
+void ParseProperties( xml_node<> * node, std::string current_name )
+{
+    xml_node<> * CurrentProperty = node;
         
-        while(CurrentProperty!=NULL)
-		{
-            std::string node_name = CurrentProperty->name();
-            if(node_name=="property")
-            {
-			    xml_attribute<> *name   = CurrentProperty->first_attribute("name");
-                xml_attribute<> *value  = CurrentProperty->first_attribute("value");
-                string name_s             = name->value();;
-                if(current_name!="")
-                {
-                    name_s = current_name+"/"+name->value();
-                }
-                
-                
-                if(value==NULL)
-                {
-                    ParseProperties(CurrentProperty->first_node("property"),name_s);
-                }else{
-                    string value_s            = value->value();
-                    Properties.push_back(KeyValue(name_s,value_s));
-					ParseProperties(CurrentProperty->first_node("property"),name_s);
-                }
-            }
-           
-            CurrentProperty = CurrentProperty->next_sibling();
-		}
-    }
+    while( CurrentProperty != nullptr )
+	{
+        std::string node_name = CurrentProperty->name();
 
+        if( node_name == "property" )
+        {
+			xml_attribute<> * name   = CurrentProperty->first_attribute( "name" );
+            xml_attribute<> * value  = CurrentProperty->first_attribute( "value" );
+            string name_s            = name->value();
+
+            if( current_name != "" )
+            {
+                name_s = current_name + "/" + name->value();
+            }
+                
+                
+            if( value == nullptr )
+            {
+                ParseProperties(CurrentProperty->first_node("property"),name_s);
+            }
+            else
+            {
+                string value_s = value->value();
+
+                ConfigManager::Properties.push_back( KeyValue( name_s, value_s ) );
+				ParseProperties( CurrentProperty->first_node( "property" ), name_s );
+            }
+        }
+
+        CurrentProperty = CurrentProperty->next_sibling();
+	}
+}
+
+} // anonymous
+
+// ********************************
+//
+ConfigManager::ConfigManager(void)
+{
+		 
+}
+
+
+// ********************************
+//
+ConfigManager::~ConfigManager(void)
+{
+}
+
+// ********************************
+//
+wstring ExePath()
+{
+	WCHAR szFilePath	[_MAX_PATH];
+	GetModuleFileName	(NULL, szFilePath, _MAX_PATH);
+	wstring::size_type pos = wstring( szFilePath ).find_last_of( L"\\/" );
+	wstring temp = wstring( szFilePath ).substr(0,pos);
+	printf("Executable directory is : %s\n",string(temp.begin(),temp.end()).c_str());
+	return temp;
+}
 
 	bool ConfigManager::LoadXMLConfig()
     {

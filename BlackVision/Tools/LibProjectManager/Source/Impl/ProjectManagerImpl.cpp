@@ -144,7 +144,11 @@ void						ProjectManagerImpl::AddNewProject		( const Path & projectName )
 	
 	if( it == m_projects.end() )
 	{
-		m_projects[ projectName.Str() ] = Project::Create( projectName, m_projectsPath );
+        auto p = Project::Create( projectName, m_projectsPath );
+        if( Path::Exists( m_projectsPath / projectName ) )
+        {
+            m_projects[ projectName.Str() ] = p;
+        }
 	}
 }
 
@@ -559,12 +563,12 @@ void						ProjectManagerImpl::InitializeProjects	()
 {
 	if( Path::Exists( m_projectsPath ) )
 	{
-		auto l = Path::List( m_projectsPath, true, ".*bvproj" );
+		auto l = Path::List( m_projectsPath, true, "\\.bvproj" );
 
 		for( auto p : l )
 		{
 			auto n = Path::RelativePath( p, m_projectsPath );
-			AddNewProject( n );
+            AddNewProject( n.Str().substr( 0, n.Str().size() - 9 ) );
 		}
 	}
 	else

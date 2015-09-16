@@ -5,7 +5,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ToolsDir)\LibEffect\Source;$(ToolsDir)\LibMipMapBuilder\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ToolsDir)\LibEffect\Source;$(ToolsDir)\LibMipMapBuilder\Source;$(ToolsDir)\LibProjectManager\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />

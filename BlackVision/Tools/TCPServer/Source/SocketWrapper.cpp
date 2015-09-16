@@ -285,7 +285,7 @@ namespace bv{
 				fprintf(stderr, "Error receiving data %d\n", ierr);
 				fprintf(stderr, "Closing socket...");
 				Sleep(50);
-				free(csock);
+				//free(csock);
 				Sleep(50);
 				return 0;
 			}
@@ -364,6 +364,7 @@ namespace bv{
                              ev->command = cmd->Command;
 							 ev->NodeName = cmd->NodeParam1;
 							 ev->NodeName2 = cmd->NodeParam2;
+                             ev->request = cmd->Request;
 							 
                              ev->sock_id = (int)*csock;
  

@@ -48,6 +48,8 @@ model::BasicNodeConstPtr	SceneDescriptor::LoadScene		( const Path & inputFilePat
     return ret;
 }
 
+namespace 
+{
 // *******************************
 //
 void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root )
@@ -64,6 +66,7 @@ void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root )
         GetAssetsWithUIDs( map, root->GetChild( i ) );
 }
 
+} // anonymous
 // ********************************
 //
 void			            SceneDescriptor::SaveScene		( const model::BasicNodeConstPtr & scene, model::TimelineManager * tm, std::ostream & out )
