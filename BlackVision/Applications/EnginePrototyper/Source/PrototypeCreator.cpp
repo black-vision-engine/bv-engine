@@ -33,7 +33,7 @@ bool			CreatePrototype			()
 
 	//success = BasicWindowApp::RegisterInitializer( &MultipassTest::Create, "MultipassTest", 800, 600 );
 
-	success &= BasicWindowApp::InitializeConsole( "EnginePrototyper" );
+	BasicWindowApp::RegisterConsoleInitializer();
 
 	assert( success );
 

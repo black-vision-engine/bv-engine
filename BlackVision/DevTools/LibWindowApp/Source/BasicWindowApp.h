@@ -18,10 +18,8 @@ private:
 
 public:
 
-    static void			StaticInitializer	();
-    static bool			RegisterInitializer ( CreateLogicFunc logicFunc, const char * title, int width, int height, bool fullScreen = false, int xOffset = 0, int yOffset = 0 );
-
-	static bool			InitializeConsole	( const char * title );
+    static bool			RegisterInitializer			( CreateLogicFunc logicFunc, const char * title, int width, int height, bool fullScreen = false, int xOffset = 0, int yOffset = 0 );
+	static bool			RegisterConsoleInitializer	();
 
 protected:
 
