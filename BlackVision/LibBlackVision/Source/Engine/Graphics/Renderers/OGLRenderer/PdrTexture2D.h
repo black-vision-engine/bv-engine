@@ -2,6 +2,7 @@
 
 #include "Engine/Graphics/Resources/Texture2D.h"
 
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrTexture.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrPBOMemTransfer.h"
 
@@ -10,25 +11,14 @@ namespace bv
 
 class Renderer;
 
-class PdrTexture2D
+class PdrTexture2D : public PdrTexture
 {
 private:
 
-    PdrPBOMemTransfer * m_pboMem;
-    bool                m_prevFrameUpdated;
-    bool                m_curFrameUpdated;
-
-    GLuint          m_textureID;
-    GLuint          m_prevTextureID;
+    std::vector< PdrUploadPBO * > m_pboMem;
 
     SizeType		m_width;
     SizeType		m_height;
-
-    TextureFormat   m_txFormat;
-
-    GLuint          m_format;
-    GLuint          m_internalFormat;
-    GLuint          m_type;
 
 private:
 
@@ -38,24 +28,16 @@ private:
     void            Deinitialize    ();
 
     void            UpdateTexData   ( const Texture2D * texture );
+    void            PBOUploadData	( const Texture2D * texture, UInt32 lvl );
 
 public:
 
                     ~PdrTexture2D   ();
 
-    void            Enable          ( Renderer * renderer, int textureUnit );
-    void            Disable         ( Renderer * renderer, int textureUnit );
-
-    void *          Lock            ( MemoryLockingType mlt );
-    void            Unlock          ();
-
     void            Update          ( const Texture2D * texture );
-    void            SetUpdated      ( bool updated );
 
-    GLuint          Bind            ();
-    void            Unbind          ();
-
-    GLuint          GetTextureID    () const;
+    virtual GLuint  Bind            () override;
+    virtual void    Unbind          () override;
 
     static PdrTexture2D *   Create  ( const Texture2D * texture );
 

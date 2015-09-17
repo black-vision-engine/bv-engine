@@ -41,6 +41,7 @@ public:
     static SizeType				GetPixelSize    ( TextureFormat format );
 
 	UInt32						GetUpdateID		() const;
+	void						ForceUpdate		();
 	
 protected:
 

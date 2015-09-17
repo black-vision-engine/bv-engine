@@ -44,7 +44,7 @@ class PdrVertexArrayObjectSingleVB;
 class PdrVertexDescriptor;
 class PdrVertexArrayObject;
 class PdrRenderTarget;
-class PdrPBOMemTransfer;
+class PdrDownloadPBO;
 
 class TransformableEntity;
 
@@ -92,7 +92,7 @@ private:
 
     TextureUpdateIDMapType              m_TextureUpdateIDMap;
 
-    PdrPBOMemTransfer *                 m_PdrPBOMemTransferRT;
+    PdrDownloadPBO *					m_PdrPBOMemTransferRT;
 
 public:
 

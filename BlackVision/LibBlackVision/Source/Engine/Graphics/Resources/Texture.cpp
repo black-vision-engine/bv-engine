@@ -112,9 +112,16 @@ void					Texture::SetDataChunk		( MemoryChunkConstPtr data, UInt32 idx )
 
 // *********************************
 //
-UInt32                    Texture::GetUpdateID      () const
+UInt32                  Texture::GetUpdateID      () const
 {
 	return m_updateID;
+}
+
+// *********************************
+//
+void					Texture::ForceUpdate      ()
+{
+	m_updateID++;
 }
 
 } //bv

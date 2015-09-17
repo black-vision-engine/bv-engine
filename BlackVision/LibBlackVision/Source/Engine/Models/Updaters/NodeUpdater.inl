@@ -229,12 +229,24 @@ inline void    NodeUpdater::UpdateTexturesData  ()
 
         for( unsigned int i = 0; i < animations.size(); ++i, ++j )
         {
-            auto tex2DSeq   = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
+            auto tex2D   = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
             auto animDesc   = animations[ i ];
 
-            if ( animDesc->CurrentFrame() != animDesc->PreviousFrame() )
+			auto currFrame = animDesc->CurrentFrame();
+			auto numTextures = animDesc->NumTextures();
+
+			assert( currFrame <= numTextures );
+
+            if ( currFrame != animDesc->PreviousFrame() )
             {
-				tex2DSeq->SetData( animDesc->GetBits( animDesc->CurrentFrame() ) );
+				if( currFrame < numTextures )
+				{
+					tex2D->SetData( animDesc->GetBits( currFrame ) );
+				}
+				else if ( currFrame == numTextures )
+				{
+					tex2D->ForceUpdate();
+				}
             }
         }
 

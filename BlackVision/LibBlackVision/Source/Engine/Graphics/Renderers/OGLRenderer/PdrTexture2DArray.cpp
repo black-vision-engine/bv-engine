@@ -43,25 +43,40 @@ void    PdrTexture2DArray::Initialize      ( const Texture2DArray * textureArray
 
 	auto numLevels = textureArray->GetNumLevels();
 
+    auto txSemantic     = textureArray->GetSemantic();
+	if( PdrPBOMemTransfer::PBORequired( txSemantic ) )
+    {
+		m_pboMem.reserve( numLevels );
+		for( unsigned int layer = 0; layer < m_layers; ++layer )
+		{
+			for( unsigned int lvl = 0; lvl < numLevels; ++lvl )
+			{
+				m_pboMem.push_back( new PdrUploadPBO( txSemantic, textureArray->RawFrameSize( lvl ) ) );
+			}
+		}
+    }
+
 	BVGL::bvglTexParameteri( GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BASE_LEVEL, 0);
 	BVGL::bvglTexParameteri( GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, GLint( numLevels - 1 ) );
 
 	BVGL::bvglTexStorage3D( GL_TEXTURE_2D_ARRAY, numLevels, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height, ( GLsizei )m_layers );
 
-	for( unsigned int layer = 0; layer < m_layers; ++layer )
+	if( m_pboMem.empty() )
 	{
-		for (unsigned int lvl = 0; lvl < numLevels; ++lvl)
+		for( unsigned int layer = 0; layer < m_layers; ++layer )
 		{
-			auto data = textureArray->GetData( layer, lvl );
-			if( data )
+			for( unsigned int lvl = 0; lvl < numLevels; ++lvl )
 			{
-				BVGL::bvglTexSubImage3D( GL_TEXTURE_2D_ARRAY, lvl, 0, 0, ( GLint )layer,
-					( GLsizei )textureArray->GetWidth( lvl ), ( GLsizei )textureArray->GetHeight( lvl ), GLsizei( 1 ),
-					m_format, m_type, data->Get() );
+				auto data = textureArray->GetData( layer, lvl );
+				if( data )
+				{
+					BVGL::bvglTexSubImage3D( GL_TEXTURE_2D_ARRAY, lvl, 0, 0, ( GLint )layer,
+						( GLsizei )textureArray->GetWidth( lvl ), ( GLsizei )textureArray->GetHeight( lvl ), GLsizei( 1 ),
+						m_format, m_type, data->Get() );
+				}
 			}
 		}
 	}
-
     BVGL::bvglBindTexture( GL_TEXTURE_2D_ARRAY, prevTex );
 }
 
@@ -73,6 +88,36 @@ void    PdrTexture2DArray::Deinitialize    ()
     {
         BVGL::bvglDeleteTextures( 1, &m_textureID );
     }
+}
+
+// *******************************
+//
+void    PdrTexture2DArray::UpdateTexData     ( const Texture2DArray * textureArray )
+{
+    assert( !m_pboMem.empty() );
+
+	for( unsigned int layer = 0; layer < m_layers; ++layer )
+	{
+		for( unsigned int lvl = 0; lvl < textureArray->GetNumLevels(); ++lvl )
+		{
+			auto pbo = m_pboMem[ lvl ];
+
+			pbo->LockUpload( textureArray->GetData( layer, lvl )->Get(), textureArray->RawFrameSize( lvl ) );
+			PBOUploadData( textureArray, layer, lvl );
+			pbo->UnlockUpload();
+		}
+	}
+}
+
+// *******************************
+//
+void    PdrTexture2DArray::PBOUploadData     ( const Texture2DArray * textureArray, UInt32 layer, UInt32 lvl )
+{
+	GLint prevTex = Bind();
+	BVGL::bvglTexSubImage3D( GL_TEXTURE_2D_ARRAY, lvl, 0, 0, ( GLint )layer,
+			( GLsizei )textureArray->GetWidth( lvl ), ( GLsizei )textureArray->GetHeight( lvl ), GLsizei( 1 ),
+			m_format, m_type, 0 );
+	BVGL::bvglBindTexture( GL_TEXTURE_2D, prevTex );
 }
 
 // *******************************
@@ -93,6 +138,11 @@ void        PdrTexture2DArray::Update            ( const Texture2DArray * textur
     {
         Deinitialize();
         Initialize( textureArray );
+    }
+
+	if( !m_pboMem.empty() )
+    {
+        UpdateTexData( textureArray );
     }
 }
 

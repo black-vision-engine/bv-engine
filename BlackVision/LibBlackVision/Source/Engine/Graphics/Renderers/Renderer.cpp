@@ -390,12 +390,12 @@ void    Renderer::Enable              ( const Texture2D * texture, int textureUn
     {
         pdrTex2D->Update( texture );
 		m_TextureUpdateIDMap[ texture ] = texture->GetUpdateID();
-        pdrTex2D->SetUpdated( true );
+        //pdrTex2D->SetUpdated( true );
     }
-    else
-    {
-        pdrTex2D->SetUpdated( false );        
-    }
+    //else
+    //{
+        //pdrTex2D->SetUpdated( false );        
+    //}
 
     pdrTex2D->Enable( this, textureUnit );
 }
@@ -432,10 +432,10 @@ void    Renderer::ReadColorTexture    ( unsigned int i, const RenderTarget * rt,
 
     if( !m_PdrPBOMemTransferRT )
     {
-        m_PdrPBOMemTransferRT = new PdrPBOMemTransfer( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( i )->RawFrameSize() );
+		m_PdrPBOMemTransferRT = new PdrDownloadPBO( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( i )->RawFrameSize() );
     }
 
-    assert( m_PdrPBOMemTransferRT->DataSize() == rt->ColorTexture( i )->RawFrameSize() );
+    //assert( m_PdrPBOMemTransferRT->DataSize() == rt->ColorTexture( i )->RawFrameSize() );
 
     pdrRt->ReadColorTexture( i, this, m_PdrPBOMemTransferRT, outputTex );
 }
