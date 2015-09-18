@@ -334,7 +334,7 @@ namespace
 
 // *********************************
 //
-std::string PathVecToJSONArray( const PathVec & v )
+Json::Value PathVecToJSONArray( const PathVec & v )
 {
     Json::Value root;
 
@@ -345,7 +345,31 @@ std::string PathVecToJSONArray( const PathVec & v )
         root.append( entry );
     }
 
-    return root.toStyledString();
+    return root;
+}
+
+std::string GetRequestParamValue( const bv::SceneStructureEventPtr & evtStructure )
+{
+    return std::string( evtStructure->request.begin(), evtStructure->request.end() );
+}
+
+void SendOnSceneStructureResponse( const bv::SceneStructureEventPtr & evtStructure, const std::string & cmd, const std::string & msgKey, const Json::Value & msgVal )
+{
+    Log::A( "OK", cmd );
+
+    Json::Value scenes;
+
+    scenes[ "cmd" ] = cmd;
+    scenes[ msgKey ] = msgVal;
+
+    std::string S = scenes.toStyledString();
+
+    wstring WS = wstring( S.begin(), S.end() );
+
+    ResponseMsg msg;
+    msg.msg     = WS;
+    msg.sock_id = evtStructure->sock_id;
+    SocketWrapper::AddMsg( msg );
 }
 
 }
@@ -357,6 +381,8 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
     if( evt->GetEventType() == bv::SceneStructureEvent::m_sEventType)
     {
 		bv::SceneStructureEventPtr evtStructure = std::static_pointer_cast<bv::SceneStructureEvent>( evt );
+
+        auto pm = ProjectManager::GetInstance( m_AppLogic->GetTimeLineManager() );
 
         if(evtStructure->command==L"REMOVE_NODE")
         {
@@ -434,52 +460,33 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
         }
         else if( evtStructure->command == L"LIST_PROJECTS" )
         {
-            auto pm = ProjectManager::GetInstance( m_AppLogic->GetTimeLineManager() );
-
             auto pns = pm->ListProjectsNames();
 
-            std::string pList = PathVecToJSONArray( pns );
+            auto pList = PathVecToJSONArray( pns );
+
+            SendOnSceneStructureResponse( evtStructure, "LIST_PROJECTS", "list", pList );
 
             // [czesio]
             // [{"name":"czesio", "scenes_count":123},{...},...]
-
-            Log::A( "OK", "Projects list:" );
-			
-//            ReqPrint( m_AppLogic->GetBVScene()->GetModelSceneRoot(), 1 );
-
-            std::string S = "{ \
-                                \"cmd\" : \"projects_list\" , \
-                                \"list\": " + pList + 
-                           " }";
-
-            Log::A( "OK", S );
-            wstring WS = wstring( S.begin(), S.end() );
-
-            ResponseMsg msg;
-            msg.msg     = WS;
-            msg.sock_id = evtStructure->sock_id;
-            SocketWrapper::AddMsg( msg );
         }
         else if( evtStructure->command == L"NEW_PROJECT" )
         {
-            auto name = std::string( evtStructure->request.begin(), evtStructure->request.end() );
-            auto pm = ProjectManager::GetInstance( m_AppLogic->GetTimeLineManager() );
+            auto name = GetRequestParamValue( evtStructure );
 
             pm->AddNewProject( name );
 
-            std::string S = "{ \
-                                \"cmd\" : \"NEW_PROJECT\" , \
-                                \"status\": \"OK\" \
-                             }";
-
-            Log::A( "OK", S );
-            wstring WS = wstring( S.begin(), S.end() );
-
-            ResponseMsg msg;
-            msg.msg     = WS;
-            msg.sock_id = evtStructure->sock_id;
-            SocketWrapper::AddMsg( msg );
+            SendOnSceneStructureResponse( evtStructure, "NEW_PROJECT", "status", "OK" );
         }
+        else if( evtStructure->command == L"LIST_SCENES" )
+        {
+            auto name = GetRequestParamValue( evtStructure );
+            auto sns = pm->ListScenesNames( name );
+
+            auto pList = PathVecToJSONArray( sns );
+
+            SendOnSceneStructureResponse( evtStructure, "LIST_SCENES", "list", pList );
+        }
+
     }
 }
 

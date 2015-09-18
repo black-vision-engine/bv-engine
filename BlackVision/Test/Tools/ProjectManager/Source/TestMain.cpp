@@ -126,50 +126,50 @@ TEST( AddingProjects, ProjectManager )
 	ASSERT_TRUE( ps1[ 3 ].Str() == "proj13" );
 }
 
-TEST( RegisteringCategories, ProjectManager )
-{
-	StringVector exts;
-	exts.push_back( ".*\\.jpg" );
-	exts.push_back( ".*\\.tga" );
-	exts.push_back( ".*\\.png" );
-
-	auto taa = TextureAssetAccessor::Create( g_pm0->GetRootDir() / "textures", exts );
-	g_pm0->RegisterCategory( AssetCategory::Create( "textures", taa ) );
-
-	auto cns = g_pm0->ListCategoriesNames();
-
-	ASSERT_TRUE( cns.size() == 1 );
-	ASSERT_TRUE( cns[ 0 ] == "textures" );
-
-	taa = TextureAssetAccessor::Create( g_pm1->GetRootDir() / "textures", exts );
-	g_pm1->RegisterCategory( AssetCategory::Create( "textures", taa ) );
-
-	cns = g_pm1->ListCategoriesNames();
-
-	ASSERT_TRUE( cns.size() == 1 );
-	ASSERT_TRUE( cns[ 0 ] == "textures" );
-
-    StringVector fontsExts;
-	fontsExts.push_back( ".*\\.ttf" );
-
-    auto faa = FontAssetAccessor::Create( g_pm0->GetRootDir() / "fonts", fontsExts );
-	g_pm0->RegisterCategory( AssetCategory::Create( "fonts", faa ) );
-
-    auto aaa = AnimationAssetAccessor::Create( g_pm0->GetRootDir() / "sequences", exts );
-	g_pm0->RegisterCategory( AssetCategory::Create( "sequences", aaa ) );
-
-    cns = g_pm0->ListCategoriesNames();
-    ASSERT_TRUE( cns.size() == 3 );
-
-    faa = FontAssetAccessor::Create( g_pm1->GetRootDir() / "fonts", fontsExts );
-	g_pm1->RegisterCategory( AssetCategory::Create( "fonts", faa ) );
-
-    aaa = AnimationAssetAccessor::Create( g_pm1->GetRootDir() / "sequences", exts );
-	g_pm1->RegisterCategory( AssetCategory::Create( "sequences", aaa ) );
-
-    cns = g_pm1->ListCategoriesNames();
-    ASSERT_TRUE( cns.size() == 3 );
-}
+//TEST( RegisteringCategories, ProjectManager )
+//{
+//	StringVector exts;
+//	exts.push_back( ".*\\.jpg" );
+//	exts.push_back( ".*\\.tga" );
+//	exts.push_back( ".*\\.png" );
+//
+//	auto taa = TextureAssetAccessor::Create( g_pm0->GetRootDir() / "textures", exts );
+//	g_pm0->RegisterCategory( AssetCategory::Create( "textures", taa ) );
+//
+//	auto cns = g_pm0->ListCategoriesNames();
+//
+//	ASSERT_TRUE( cns.size() == 1 );
+//	ASSERT_TRUE( cns[ 0 ] == "textures" );
+//
+//	taa = TextureAssetAccessor::Create( g_pm1->GetRootDir() / "textures", exts );
+//	g_pm1->RegisterCategory( AssetCategory::Create( "textures", taa ) );
+//
+//	cns = g_pm1->ListCategoriesNames();
+//
+//	ASSERT_TRUE( cns.size() == 1 );
+//	ASSERT_TRUE( cns[ 0 ] == "textures" );
+//
+//    StringVector fontsExts;
+//	fontsExts.push_back( ".*\\.ttf" );
+//
+//    auto faa = FontAssetAccessor::Create( g_pm0->GetRootDir() / "fonts", fontsExts );
+//	g_pm0->RegisterCategory( AssetCategory::Create( "fonts", faa ) );
+//
+//    auto aaa = AnimationAssetAccessor::Create( g_pm0->GetRootDir() / "sequences", exts );
+//	g_pm0->RegisterCategory( AssetCategory::Create( "sequences", aaa ) );
+//
+//    cns = g_pm0->ListCategoriesNames();
+//    ASSERT_TRUE( cns.size() == 3 );
+//
+//    faa = FontAssetAccessor::Create( g_pm1->GetRootDir() / "fonts", fontsExts );
+//	g_pm1->RegisterCategory( AssetCategory::Create( "fonts", faa ) );
+//
+//    aaa = AnimationAssetAccessor::Create( g_pm1->GetRootDir() / "sequences", exts );
+//	g_pm1->RegisterCategory( AssetCategory::Create( "sequences", aaa ) );
+//
+//    cns = g_pm1->ListCategoriesNames();
+//    ASSERT_TRUE( cns.size() == 3 );
+//}
 
 TEST( AddingAssets, ProjectManager )
 {

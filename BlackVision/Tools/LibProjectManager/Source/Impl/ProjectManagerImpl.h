@@ -88,6 +88,7 @@ private:
 	void					InitializeProjects	();
 	void					InitializeScenes	();
     void				    InitializePresets	();
+    void				    InitializeAssets	();
 
 	Path					TranslateToPathCategory( const Path & projectName, const Path & path ) const;
 	Path					TranslateToPathInPMRootFolder( const Path & projectName, const std::string & categoryName, const Path & path ) const;
