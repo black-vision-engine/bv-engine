@@ -186,7 +186,7 @@ FileImpl *  FileImpl::Open        ( const std::string & fileName, File::OpenMode
 
     auto parent = boost::filesystem::path( fileName ).parent_path();
 
-    if( !boost::filesystem::exists( parent ) )
+    if( !parent.empty() && !boost::filesystem::exists( parent ) )
     {
         Dir::CreateDir( parent.string(), true );
     }

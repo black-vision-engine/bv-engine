@@ -73,9 +73,9 @@ bv::model::BasicNodeConstPtr CreateTestScene0()
 
 TEST( CleanAll, ProjectManager )
 {
-	if( Path::Exists( "bv_media" ) )
+	if( Path::Exists( "d:\\bv_media" ) )
 	{
-		Path::Remove( "bv_media" );
+		Path::Remove( "d:\\bv_media" );
 	}
 
 	if( Path::Exists( "bv_media1" ) )
@@ -89,7 +89,7 @@ TEST( CreatingPM, ProjectManager )
 {
     global_tm->RegisterRootTimeline( model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) ) );
 
-    g_pm0 = ProjectManager::GetInstance( "bv_media", global_tm );
+    g_pm0 = ProjectManager::GetInstance( "d:\\bv_media", global_tm );
 	g_pm1 = ProjectManager::GetInstance( "bv_media1", global_tm );
 }
 

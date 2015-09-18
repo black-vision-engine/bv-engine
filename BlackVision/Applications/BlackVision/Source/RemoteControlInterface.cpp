@@ -348,11 +348,15 @@ Json::Value PathVecToJSONArray( const PathVec & v )
     return root;
 }
 
+// *********************************
+//
 std::string GetRequestParamValue( const bv::SceneStructureEventPtr & evtStructure )
 {
     return std::string( evtStructure->request.begin(), evtStructure->request.end() );
 }
 
+// *********************************
+//
 void SendOnSceneStructureResponse( const bv::SceneStructureEventPtr & evtStructure, const std::string & cmd, const std::string & msgKey, const Json::Value & msgVal )
 {
     Log::A( "OK", cmd );

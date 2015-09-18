@@ -96,18 +96,13 @@ bool						Dir::CreateDir			( const std::string & path, bool createRecusive )
 
 
 	if( createRecusive )
-	{
-		boost::filesystem::path currPath("");
-		for( auto it : p )
+	{    
+        boost::filesystem::create_directories( path, ec );
+
+		if( ec )
 		{
-			currPath += it;
-			currPath += "/";
-			boost::filesystem::create_directory( currPath, ec );
-			if( ec )
-			{
-				std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
-				return false;
-			}
+			std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
+			return false;
 		}
 
 		return true;
