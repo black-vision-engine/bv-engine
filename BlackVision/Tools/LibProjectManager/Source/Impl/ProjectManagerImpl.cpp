@@ -4,6 +4,10 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 
+#include "Impl/Accessors/TextureAssetAccessor.h"
+#include "Impl/Accessors/FontAssetAccessor.h"
+#include "Impl/Accessors/AnimationAssetAccessor.h"
+
 #include "IO/DirIO.h"
 
 #include "Tools/Logger/Logger.h"
@@ -37,6 +41,7 @@ ProjectManagerImpl::ProjectManagerImpl	( const Path & rootPath, model::TimelineM
 
 	InitializeScenes();
     InitializePresets();
+    InitializeAssets();
 }
 
 // ********************************
@@ -599,6 +604,28 @@ void						ProjectManagerImpl::InitializePresets	()
 	}
 
     m_presetAccessor = PresetAccessor::Create( m_presetsPath, m_timelineManager );
+}
+
+// ********************************
+//
+void				        ProjectManagerImpl::InitializeAssets	()
+{
+	StringVector exts;
+	exts.push_back( ".*\\.jpg" );
+	exts.push_back( ".*\\.tga" );
+	exts.push_back( ".*\\.png" );
+
+	auto taa = TextureAssetAccessor::Create( GetRootDir() / "textures", exts );
+	RegisterCategory( AssetCategory::Create( "textures", taa ) );
+
+    auto aaa = AnimationAssetAccessor::Create( GetRootDir() / "sequences", exts );
+	RegisterCategory( AssetCategory::Create( "sequences", aaa ) );
+
+    StringVector fontsExts;
+	fontsExts.push_back( ".*\\.ttf" );
+
+    auto faa = FontAssetAccessor::Create( GetRootDir() / "fonts", fontsExts );
+	RegisterCategory( AssetCategory::Create( "fonts", faa ) );
 }
 
 // ********************************
