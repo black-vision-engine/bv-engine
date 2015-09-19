@@ -23,6 +23,7 @@ VideoCardManager::VideoCardManager(void)
     m_CurrentDislpayMode = VideoCard_Modes::HD;
     m_CurrentTransferMode = VideoCard_RAM_GPU::RAM;
     m_VideoCardConfig = VideoConfig();
+	m_key_active= true;
 	
 }
 
@@ -313,8 +314,21 @@ unsigned int __stdcall VideoCardManager::copy_buffer_thread(void *args)
 
             unsigned int cur_scanline = width_bytes * cur_i;
             unsigned int prev_scanline = width_bytes * prev_i;
+
             memcpy(&frameBuf[ cur_scanline ], &prevFrameBuf[ prev_scanline ], width_bytes );
+			
+
         }
+		if(!pParams->m_key_active)
+			{
+				for(int i=0;i<1920*1080*4;i+=4)
+				{
+					/*[ +i+0]=0;
+					frameBuf[ cur_scanline+i+1]=0;
+					frameBuf[ cur_scanline+i+2]=0;*/
+					frameBuf[ i+3 ]=0;
+				}
+			}
         //std::shared_ptr<CFrame>  LastFrame = std::make_shared<CFrame>(frameBuf, 1, fhd, width_bytes);
 
 		pParams->DeliverFrameFromRAM( frameBuf ); 
