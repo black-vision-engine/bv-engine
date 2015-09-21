@@ -10,6 +10,9 @@
     <Filter Include="BVGLPlugins\ResourceTracking">
       <UniqueIdentifier>{e92096c8-ba80-46f3-b194-86a47febca8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GLCore">
+      <UniqueIdentifier>{a7931b99-08b0-44fb-bc33-df2c549effe4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\BVGL.h" />
@@ -38,6 +41,12 @@
     <ClInclude Include="..\..\..\Source\BVGLTools\BVGLStringFormatters.h">
       <Filter>BVGLTools</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\GLCore\include\glad\glad.h">
+      <Filter>GLCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\GLCore\include\KHR\khrplatform.h">
+      <Filter>GLCore</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\BVGLTools\BVGLTranslator.cpp">
@@ -64,6 +73,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\BVGLTools\BVGLStringFormatters.cpp">
       <Filter>BVGLTools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\GLCore\src\glad.c">
+      <Filter>GLCore</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
