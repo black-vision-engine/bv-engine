@@ -1199,6 +1199,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IOverrideState.h">
       <Filter>Engine\Models\Interfaces</Filter>
     </ClInclude>
+	<ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITextureDescriptor.h">
+      <Filter>Engine\Models\Interfaces</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITextureParams.h">
       <Filter>Engine\Models\Interfaces</Filter>
     </ClInclude>
@@ -1837,6 +1840,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCubeArray.h">
       <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h">
+      <Filter>Assets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

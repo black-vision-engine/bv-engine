@@ -36,6 +36,7 @@
 
 #include "Engine/Models/SerializationObjects.h"
 #include "Engine/Models/BVScene.h"
+#include "System/Path.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -960,7 +961,7 @@ model::BasicNodePtr          TestScenesFactory::XMLTestScene()
 
 model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager )
 {
-    assert( File::Exists( filename ) );
+    assert( Path::Exists( filename ) );
 
     xml_document<> doc;
     std::ifstream file( filename );

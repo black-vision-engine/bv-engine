@@ -349,6 +349,7 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\DefaultMultipassEffect.h" />
@@ -505,6 +506,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelNode.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\INodeLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IOverrideState.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITextureDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITextureParams.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITexturesData.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITimeEvaluator.h" />

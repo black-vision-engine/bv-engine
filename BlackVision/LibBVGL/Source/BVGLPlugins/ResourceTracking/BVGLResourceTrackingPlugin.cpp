@@ -57,7 +57,7 @@ void    BVGLResourceTrackingPlugin::BufferData                  ( GLenum target,
     PrintCompleteSummary( "BufferData() called" );
 }
 
-#ifdef GL_VERSION_4_4
+#ifdef BV_GL_VERSION_4_4
 // *****************************
 //
 void BVGLResourceTrackingPlugin::BufferStorage				( GLenum target, GLsizeiptr size, const GLvoid* data, GLbitfield flags )
@@ -322,7 +322,7 @@ void    BVGLResourceTrackingPlugin::DisableVertexAttribArray	( GLuint index )
     m_vertexarrays.GetBoundResource( 1 ).Disable( index );
 }
 
-#ifdef GL_VERSION_4_4
+#ifdef BV_GL_VERSION_4_4
 // *****************************
 // @todo This should be implemented when binding to multiple texture units will be done.
 void	BVGLResourceTrackingPlugin::BindTextures				( GLuint first, GLsizei count, const GLuint* textures )
@@ -330,7 +330,7 @@ void	BVGLResourceTrackingPlugin::BindTextures				( GLuint first, GLsizei count, 
 	Parent::BindTextures( first, count, textures );
 }
 #endif
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 // *****************************
 // @todo This should be implemented when binding to multiple texture units will be done.
 void	BVGLResourceTrackingPlugin::BindTextureUnit				( GLuint unit, GLuint texture )
@@ -344,10 +344,10 @@ void BVGLResourceTrackingPlugin::TextureStorage1D			( GLuint texture, GLsizei le
 {
 	Parent::TextureStorage1D( texture, levels, internalFormat, width );
 		
-	auto& texture = m_textures.GetResource( texture );
+	auto& tex = m_textures.GetResource( texture );
 
-	texture.Set( width, 0, 0, internalFormat, nullptr );
-	texture.NewMipmapLevel( levels - 1 );	// Base level is counted in.
+	tex.Set( width, 0, 0, internalFormat, nullptr );
+	tex.NewMipmapLevel( levels - 1 );	// Base level is counted in.
 }
 
 // *****************************
@@ -356,10 +356,10 @@ void BVGLResourceTrackingPlugin::TextureStorage2D			( GLuint texture, GLsizei le
 {
 	Parent::TextureStorage2D( texture, levels, internalFormat, width, height );
 		
-	auto& texture = m_textures.GetResource( texture );
+	auto& tex = m_textures.GetResource( texture );
 
-	texture.Set( width, height, 0, internalFormat, nullptr );
-	texture.NewMipmapLevel( levels - 1 );	// Base level is counted in.
+	tex.Set( width, height, 0, internalFormat, nullptr );
+	tex.NewMipmapLevel( levels - 1 );	// Base level is counted in.
 }
 
 // *****************************
@@ -368,34 +368,32 @@ void BVGLResourceTrackingPlugin::TextureStorage3D			( GLuint texture, GLsizei le
 {
 	Parent::TextureStorage3D( texture, levels, internalFormat, width, height, depth );
 		
-	auto& texture = m_textures.GetResource( texture );
+	auto& tex = m_textures.GetResource( texture );
 
-	texture.Set( width, height, depth, internalFormat, nullptr );
-	texture.NewMipmapLevel( levels - 1 );	// Base level is counted in.
+	tex.Set( width, height, depth, internalFormat, nullptr );
+	tex.NewMipmapLevel( levels - 1 );	// Base level is counted in.
 }
 
 // *****************************
 //
 void BVGLResourceTrackingPlugin::TextureStorage2DMultisample	( GLuint texture, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLboolean fixedSampleLocations )
 {
-	Parent::TextureStorage2DMutlisample( texture, levels, internalFormat, width, height );
+	Parent::TextureStorage2DMultisample( texture, samples, internalFormat, width, height, fixedSampleLocations );
 		
-	auto& texture = m_textures.GetResource( texture );
+	auto& tex = m_textures.GetResource( texture );
 
-	texture.Set( width, height, depth, internalFormat, nullptr );
-	texture.NewMipmapLevel( levels - 1 );	// Base level is counted in.
+	tex.Set( width, height, 0, internalFormat, nullptr );
 }
 
 // *****************************
 //
 void BVGLResourceTrackingPlugin::TextureStorage3DMultisample	( GLuint texture, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedSampleLocations )
 {
-	Parent::TextureStorage3DMultisample( texture, levels, internalFormat, width, height, depth );
+	Parent::TextureStorage3DMultisample( texture, samples, internalFormat, width, height, depth, fixedSampleLocations );
 		
-	auto& texture = m_textures.GetResource( texture );
+	auto& tex = m_textures.GetResource( texture );
 
-	texture.Set( width, height, depth, internalFormat, nullptr );
-	texture.NewMipmapLevel( levels - 1 );	// Base level is counted in.
+	tex.Set( width, height, depth, internalFormat, nullptr );
 }
 
 #endif
@@ -503,7 +501,6 @@ void BVGLResourceTrackingPlugin::TexStorage2DMultisample		( GLenum target, GLsiz
 	auto& texture = m_textures.GetBoundResource( target );
 
 	texture.Set( width, height, 0, internalFormat, nullptr );
-	texture.NewMipmapLevel( 0 );	// Base level is counted in.
 }
 
 void BVGLResourceTrackingPlugin::TexStorage3DMultisample		( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedSampleLocations )
@@ -513,7 +510,6 @@ void BVGLResourceTrackingPlugin::TexStorage3DMultisample		( GLenum target, GLsiz
 	auto& texture = m_textures.GetBoundResource( target );
 
 	texture.Set( width, height, depth, internalFormat, nullptr );
-	texture.NewMipmapLevel( 0 );	// Base level is counted in.
 }
 
 
@@ -559,29 +555,21 @@ void BVGLResourceTrackingPlugin::RenderbufferStorageMultisample			( GLenum targe
 	m_renderbuffers.GetBoundResource( target ).Set( internalFormat, width, height );
 }
 
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 
 void BVGLResourceTrackingPlugin::NamedFramebufferTexture		( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level )
 {
 	Parent::NamedFramebufferTexture( framebuffer, attachment, texture, level );
 
-	auto& resource = m_framebuffers.GetReaource( framebuffer );
-	resource.AttachTexture2D( attachment, target, texture, level );
-}
-
-void BVGLResourceTrackingPlugin::NamedFramebufferTextureLayer( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level, GLint layer )
-{
-	Parent::NamedFramebufferTextureLayer( framebuffer, attachment, texture, level, layer );
-	
-	auto& resource = m_framebuffers.GetReaource( framebuffer );
-	resource.AttachTexture2D( attachment, target, texture, level );
+	auto& resource = m_framebuffers.GetResource( framebuffer );
+	resource.AttachTexture2D( attachment, m_framebuffers.BoundTo( framebuffer ), texture, level );
 }
 
 void BVGLResourceTrackingPlugin::NamedFramebufferRenderbuffer( GLuint framebuffer, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer )
 {
 	Parent::NamedFramebufferRenderbuffer( framebuffer, attachment, renderbuffertarget, renderbuffer );
 
-	auto& resource = m_framebuffers.GetReaource( framebuffer );
+	auto& resource = m_framebuffers.GetResource( framebuffer );
 
 	resource.AttachRenderbuffer( attachment, renderbuffertarget, renderbuffer );
 }
@@ -590,16 +578,16 @@ void BVGLResourceTrackingPlugin::NamedRenderbufferStorage				( GLuint renderbuff
 {
 	Parent::NamedRenderbufferStorage( renderbuffer, internalFormat, width, height );
 
-	auto& resource = m_renderbuffers.GetReaource( renderbuffer );
-	resource.Set( internalformat, width, height );
+	auto& resource = m_renderbuffers.GetResource( renderbuffer );
+	resource.Set( internalFormat, width, height );
 }
 
 void BVGLResourceTrackingPlugin::NamedRenderbufferStorageMultisample		( GLuint renderbuffer, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height )
 {
 	Parent::NamedRenderbufferStorageMultisample( renderbuffer, samples, internalFormat, width, height );
 
-	auto& resource = m_renderbuffers.GetReaource( renderbuffer );
-	resource.Set( internalformat, width, height );
+	auto& resource = m_renderbuffers.GetResource( renderbuffer );
+	resource.Set( internalFormat, width, height );
 }
 
 #endif

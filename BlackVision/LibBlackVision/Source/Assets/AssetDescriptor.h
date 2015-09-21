@@ -1,14 +1,12 @@
 #pragma once
 
 #include "CoreDEF.h"
+#include "Assets/FwdDecls.h"
 
 #include <string>
 
 namespace bv
 {
-
-class AssetDesc;
-DEFINE_CONST_PTR_TYPE( AssetDesc )
 
 class AssetDesc
 {

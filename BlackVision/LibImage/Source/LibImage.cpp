@@ -1,5 +1,6 @@
 #include "LibImage.h"
 #include "IO/FileIO.h"
+#include "System/Path.h"
 
 #include "FreeImage.h"
 
@@ -35,7 +36,7 @@ struct Float4
 //
 ImageProperties GetImageProps( const std::string & imageFilePath )
 {
-	if( !File::Exists( imageFilePath ) )
+	if( !Path::Exists( imageFilePath ) )
 	{
 		ImageProperties iprops;
 		iprops.error = std::string("File doesn't exist");
@@ -229,7 +230,7 @@ char *		            LoadImageImpl	( const std::string & filePath, UInt32 * width
 {
 	FIBITMAP * bitmap = nullptr;
 
-	if( !File::Exists( filePath ) )
+	if( !Path::Exists( filePath ) )
 		return nullptr;
 
 	auto size = File::Size( filePath );

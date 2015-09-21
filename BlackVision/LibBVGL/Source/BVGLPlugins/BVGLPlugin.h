@@ -141,12 +141,12 @@ public:
 	virtual void				VertexAttribDivisor								( GLuint index,  GLuint divisor );
 	
 // Images and textures
-#ifdef GL_VERSION_4_4
+#ifdef BV_GL_VERSION_4_4
 	virtual void				BindImageTexture			( GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format );
-	virtual void				BindImageTextures			( GLuint first, GLsizei count, const GLuint textures );
-	virtual void				BindTextures				( GLuint first, GLsizei count, const GLuint* textures );
+	virtual void				BindImageTextures			( GLuint first, GLsizei count, const GLuint * textures );
+	virtual void				BindTextures				( GLuint first, GLsizei count, const GLuint * textures );
 #endif
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 	virtual void				BindTextureUnit				( GLuint unit, GLuint texture );
 #endif
 
@@ -171,7 +171,7 @@ public:
 	virtual void				TexSubImage1D				( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const GLvoid* pixels );
 	virtual void				TexSubImage3D				( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const GLvoid* pixels );
 
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 	virtual void				CompressedTextureSubImage1D	( GLuint texture, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, const GLvoid* data );
 	virtual void				CompressedTextureSubImage2D	( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const GLvoid* data );
 	virtual void				CompressedTextureSubImage3D	( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid* data );
@@ -195,7 +195,7 @@ public:
 
 	virtual void				TextureView					( GLuint texture, GLenum target, GLuint origTexture, GLenum internalFormat, GLuint minLevel, GLuint numLevels, GLuint minLayer, GLuint numLayers );
 
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
     virtual void                TextureParameteri			( GLuint texture, GLenum pname, GLint param );
     virtual void                TextureParameterfv			( GLuint texture, GLenum pname, const GLfloat * params );
 #endif
@@ -203,7 +203,7 @@ public:
 	virtual void				CopyTexSubImage1D			( GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width );
 	virtual void				CopyTexSubImage2D			( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height );
 	virtual void				CopyTexSubImage3D			( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height );
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 	virtual void				CopyTextureSubImage1D		( GLuint texture, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width );
 	virtual void				CopyTextureSubImage2D		( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height );
 	virtual void				CopyTextureSubImage3D		( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height );
@@ -216,14 +216,14 @@ public:
 	virtual void				GenerateMipmap				( GLenum target );
 	
 // Sampler
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 	virtual void				CreateSamplers				( GLsizei n, GLuint* samplers );
 #endif
 	virtual void				GenSamplers					( GLsizei n, GLuint* samplers );
 	virtual void				DeleteSamplers				( GLsizei n, GLuint* samplers );
 
 	virtual void				BindSampler					( GLuint unit, GLuint sampler );
-#ifdef GL_VERSION_4_4
+#ifdef BV_GL_VERSION_4_4
 	virtual void				BindSamplers				( GLuint first, GLsizei count, const GLuint* samplers );
 #endif
 
@@ -240,26 +240,24 @@ public:
 	virtual void				DrawTransformFeedback				( GLenum mode, GLuint id );
 	virtual void				DrawTransformFeedbackInstanced		( GLenum mode, GLuint id, GLsizei primCount );
 // Buffer
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 	virtual void				NamedBufferData				( GLuint buffer, GLsizei size, const void* data, GLenum usage );
 	virtual void				NamedBufferStorage			( GLuint buffer, GLsizei size, const void* data, GLbitfield flags );
 	virtual void				NamedBufferSubData			( GLuint buffer, GLintptr offset, GLsizei size, const void* data );
 #endif
-#ifdef GL_VERSION_4_4
+#ifdef BV_GL_VERSION_4_4
 	virtual void				BufferStorage				( GLenum target, GLsizeiptr size, const GLvoid* data, GLbitfield flags );
 
 
 	virtual void				BindBuffersBase				( GLenum target, GLuint first, GLsizei count, const GLuint* buffer );
 	virtual void				BindBuffersRange			( GLenum target, GLuint first, GLsizei count, const GLuint* buffers, const GLintptr* offset, const GLsizeiptr* sizes );
-	virtual void				BindVertexBuffers			( GLuint first, GLsizei count, const GLuint* buffers, const GLintptr* offsets, const GLsizei* strides );
+	virtual void				BindVertexBuffers			( GLuint first, GLsizei count, const GLuint * buffers, const GLintptr * offsets, const GLsizei * strides );
 #endif
 	virtual void				BindBufferBase				( GLenum target, GLuint index, GLuint buffer );
 	virtual void				BindBufferRange				( GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size );
 	virtual void				BindVertexBuffer			( GLuint bindingIndex, GLuint buffer, GLintptr offset, GLsizei stride );
-#ifdef GL_VERSION_4_5
-	virtual void				BindVertexArrayVertexBuffer				( GLuint vaobj, GLuint bindingIndex, GLuint buffer, GLintptr offset, GLsizei stride );
-	virtual void				BindVertexArrayVertexBuffers			( GLuint vaobj, GLuint first, GLsizei count, const GLuint* buffers, const GLintptr* offsets, const GLsizei* strides );
-
+#ifdef BV_GL_VERSION_4_5
+	virtual void				VertexArrayVertexBuffers	( GLuint vaobj, GLuint first, GLsizei count, const GLuint* buffers, const GLintptr* offsets, const GLsizei* strides );
 
 	virtual void*				MapNamedBuffer				( GLuint buffer, GLenum access );
 	virtual void*				MapNamedBufferRange			( GLuint buffer, GLintptr offset, GLsizeiptr length, GLbitfield access );
@@ -282,7 +280,7 @@ public:
 	virtual void				BlitFramebuffer				( GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter );
 	virtual void				FramebufferTexture			( GLenum target, GLenum attachment, GLuint texture, GLint level );
 	virtual void				FramebufferTextureLayer		( GLenum target, GLenum attachment, GLuint texture, GLint level, GLint layer );
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 	virtual void				BlitNamedFramebuffer		( GLuint readFramebuffer, GLuint drawFramebuffer, GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter );
 	virtual void				NamedFramebufferTexture		( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level );
 	virtual void				NamedFramebufferTextureLayer( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level, GLint layer );
@@ -295,11 +293,11 @@ public:
 	virtual void				ClearBufferuiv				( GLenum buffer, GLint drawbuffer, const GLuint* value );
 	virtual void				ClearBufferfv				( GLenum buffer, GLint drawbuffer, const GLfloat* value );
 	virtual void				ClearBufferfi				( GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil );
-#ifdef GL_VERSION_4_5
+#ifdef BV_GL_VERSION_4_5
 	virtual void				ClearNamedFramebufferiv		( GLuint framebuffer, GLenum buffer, GLint drawbuffer, const GLint* value );
 	virtual void				ClearNamedFramebufferuiv	( GLuint framebuffer, GLenum buffer, GLint drawbuffer, const GLuint* value );
 	virtual void				ClearNamedFramebufferfv		( GLuint framebuffer, GLenum buffer, GLint drawbuffer, const GLfloat* value );
-	virtual void				ClearvNamedFramebufferfi	( GLuint framebuffer, GLenum buffer, GLfloat depth, GLint stencil );
+	virtual void				ClearNamedFramebufferfi		( GLuint framebuffer, GLenum buffer, GLfloat depth, GLint stencil );
 
 
 	virtual void				NamedFramebufferDrawBuffer				( GLuint framebuffer, GLenum buf );
