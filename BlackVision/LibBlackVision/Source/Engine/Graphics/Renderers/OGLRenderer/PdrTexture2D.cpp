@@ -49,16 +49,15 @@ void    PdrTexture2D::Initialize      ( const Texture2D * texture )
     m_format            = ConstantsMapper::GLConstantTextureFormat( m_txFormat );
     m_type              = ConstantsMapper::GLConstantTextureType( m_txFormat );
 
-    auto txSemantic     = texture->GetSemantic();
-
 	auto levels			= texture->GetNumLevels();
 
+    auto txSemantic     = texture->GetSemantic();
     if( PdrPBOMemTransfer::PBORequired( txSemantic ) )
     {
 		m_pboMem.reserve( levels );
 		for( unsigned int lvl = 0; lvl < levels; ++lvl )
 		{
-			m_pboMem.push_back( new PdrUploadPBO( txSemantic, texture->RawFrameSize( lvl ) ) );
+			m_pboMem.push_back( std::unique_ptr< PdrUploadPBO >( new PdrUploadPBO( txSemantic, texture->RawFrameSize( lvl ) ) ) );
 		}
     }
 
@@ -96,11 +95,6 @@ void    PdrTexture2D::Deinitialize    ()
         BVGL::bvglDeleteTextures( 1, &m_textureID );
     }
 
-
-	for( auto it = m_pboMem.begin(); it != m_pboMem.end(); ++it )
-	{
-		delete *it;
-	} 
 	m_pboMem.clear();
 }
 
@@ -116,11 +110,9 @@ void    PdrTexture2D::UpdateTexData     ( const Texture2D * texture )
 
 	for( unsigned int lvl = 0; lvl < texture->GetNumLevels(); ++lvl )
 	{
-		auto pbo = m_pboMem[ lvl ];
-
-		pbo->LockUpload( texture->GetData( lvl )->Get(), texture->RawFrameSize( lvl ) );
+		m_pboMem[ lvl ]->LockUpload( texture->GetData( lvl )->Get(), texture->RawFrameSize( lvl ) );
 		PBOUploadData( texture, lvl );
-		pbo->UnlockUpload();
+		m_pboMem[ lvl ]->UnlockUpload();
 	}
 
 #ifdef POOR_PROFILE_TEXTURE_STREAMING

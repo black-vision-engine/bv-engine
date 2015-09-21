@@ -38,6 +38,8 @@ protected:
 
 };
 
+// ******************************
+//
 class PdrUploadPBO : public PdrPBOMemTransfer
 {
 public:
@@ -48,6 +50,10 @@ public:
 
 };
 
+DEFINE_UPTR_TYPE( PdrUploadPBO )
+
+// ******************************
+//
 class PdrDownloadPBO : public PdrPBOMemTransfer
 {
 public:
@@ -57,5 +63,7 @@ public:
 	void 	UnlockDownload		( char * dest, SizeType dataSize );
 
 };
+
+DEFINE_UPTR_TYPE( PdrDownloadPBO )
 
 } //bv

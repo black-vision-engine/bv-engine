@@ -13,6 +13,8 @@ class Renderer;
 class PdrTextureCubeArray : public PdrTexture
 {
 private:
+    std::vector< PdrUploadPBOUPtr > m_pboMem;
+
     SizeType		m_width;
     SizeType		m_height;
 
@@ -24,6 +26,9 @@ private:
 
     void				Initialize			( const TextureCubeArray * textureArray );
     void				Deinitialize		();
+
+    void				UpdateTexData   ( const TextureCubeArray * textureArray );
+    void				PBOUploadData	( const TextureCubeArray * textureArray, UInt32 layer, UInt32 face, UInt32 lvl );
 
 public:
 

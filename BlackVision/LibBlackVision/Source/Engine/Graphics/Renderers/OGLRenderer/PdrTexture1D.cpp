@@ -36,19 +36,32 @@ void    PdrTexture1D::Initialize      ( const Texture1D * texture )
     BVGL::bvglGenTextures   ( 1, &m_textureID );
     GLuint prevTex = Bind();
 
-	auto numLevels = texture->GetNumLevels();
+	auto numLevels			= texture->GetNumLevels();
+
+    auto txSemantic     = texture->GetSemantic();
+	if( PdrPBOMemTransfer::PBORequired( txSemantic ) )
+    {
+		m_pboMem.reserve( numLevels );
+		for( unsigned int lvl = 0; lvl < numLevels; ++lvl )
+		{
+			m_pboMem.push_back( std::unique_ptr< PdrUploadPBO >( new PdrUploadPBO( txSemantic, texture->RawFrameSize( lvl ) ) ) );
+		}
+    }
 
 	BVGL::bvglTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_BASE_LEVEL, 0);
 	BVGL::bvglTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_MAX_LEVEL, GLint( numLevels - 1 ) );
 
 	BVGL::bvglTexStorage1D( GL_TEXTURE_1D, numLevels, m_internalFormat, ( GLsizei )m_width );
 
-	for (unsigned int lvl = 0; lvl < numLevels; ++lvl)
+	if( m_pboMem.empty() )
 	{
-		auto data = texture->GetData( lvl );
-		if( data )
+		for (unsigned int lvl = 0; lvl < numLevels; ++lvl)
 		{
-			BVGL::bvglTexSubImage1D( GL_TEXTURE_1D, lvl, 0, ( GLsizei )texture->GetWidth( lvl ), m_format, m_type, data->Get() );
+			auto data = texture->GetData( lvl );
+			if( data )
+			{
+				BVGL::bvglTexSubImage1D( GL_TEXTURE_1D, lvl, 0, ( GLsizei )texture->GetWidth( lvl ), m_format, m_type, data->Get() );
+			}
 		}
 	}
 
@@ -63,6 +76,8 @@ void    PdrTexture1D::Deinitialize    ()
     {
         BVGL::bvglDeleteTextures( 1, &m_textureID );
     }
+
+	m_pboMem.clear();
 }
 
 // *******************************
@@ -74,6 +89,29 @@ PdrTexture1D::~PdrTexture1D         ()
 
 // *******************************
 //
+void		PdrTexture1D::UpdateTexData     ( const Texture1D * texture )
+{
+    assert( !m_pboMem.empty() );
+
+	for( unsigned int lvl = 0; lvl < texture->GetNumLevels(); ++lvl )
+	{
+		m_pboMem[ lvl ]->LockUpload( texture->GetData( lvl )->Get(), texture->RawFrameSize( lvl ) );
+		PBOUploadData( texture, lvl );
+		m_pboMem[ lvl ]->UnlockUpload();
+	}
+}
+
+// *******************************
+//
+void		PdrTexture1D::PBOUploadData     ( const Texture1D * texture, UInt32 lvl )
+{
+	GLint prevTex = Bind();
+	BVGL::bvglTexSubImage1D( GL_TEXTURE_1D, lvl, 0, ( GLsizei )texture->GetWidth( lvl ), m_format, m_type, 0 );
+	BVGL::bvglBindTexture( GL_TEXTURE_1D, prevTex );
+}
+
+// *******************************
+//
 void        PdrTexture1D::Update            ( const Texture1D * texture )
 {
     if ( texture->GetFormat() != m_txFormat ||
@@ -81,6 +119,11 @@ void        PdrTexture1D::Update            ( const Texture1D * texture )
     {
         Deinitialize();
         Initialize( texture );
+    }
+
+	if( !m_pboMem.empty() )
+    {
+        UpdateTexData( texture );
     }
 }
 

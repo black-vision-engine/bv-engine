@@ -40,21 +40,34 @@ void    PdrTexture3D::Initialize      ( const Texture3D * texture )
     BVGL::bvglGenTextures   ( 1, &m_textureID );
     GLuint prevTex = Bind();
 
-	auto numLevels = texture->GetNumLevels();
+	auto numLevels		= texture->GetNumLevels();
+
+	auto txSemantic     = texture->GetSemantic();
+    if( PdrPBOMemTransfer::PBORequired( txSemantic ) )
+    {
+		m_pboMem.reserve( numLevels );
+		for( unsigned int lvl = 0; lvl < numLevels; ++lvl )
+		{
+			m_pboMem.push_back( std::unique_ptr< PdrUploadPBO >( new PdrUploadPBO( txSemantic, texture->RawFrameSize( lvl ) ) ) );
+		}
+    }
 
 	BVGL::bvglTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_BASE_LEVEL, 0);
 	BVGL::bvglTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_MAX_LEVEL, GLint( numLevels - 1 ) );
 
 	BVGL::bvglTexStorage3D( GL_TEXTURE_3D, numLevels, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height, ( GLsizei )m_depth );
 
-	for (unsigned int lvl = 0; lvl < numLevels; ++lvl)
+	if( m_pboMem.empty() )
 	{
-		auto data = texture->GetData( lvl );
-		if( data )
+		for (unsigned int lvl = 0; lvl < numLevels; ++lvl)
 		{
-			BVGL::bvglTexSubImage3D(GL_TEXTURE_3D, lvl,	0, 0, 0, 
-				( GLsizei )texture->GetWidth( lvl ), ( GLsizei )texture->GetHeight( lvl ), ( GLsizei )texture->GetDepth( lvl ),
-				m_format, m_type, data->Get() );
+			auto data = texture->GetData( lvl );
+			if( data )
+			{
+				BVGL::bvglTexSubImage3D( GL_TEXTURE_3D, lvl, 0, 0, 0, 
+					( GLsizei )texture->GetWidth( lvl ), ( GLsizei )texture->GetHeight( lvl ), ( GLsizei )texture->GetDepth( lvl ),
+					m_format, m_type, data->Get() );
+			}
 		}
 	}
 
@@ -69,6 +82,7 @@ void    PdrTexture3D::Deinitialize    ()
     {
         BVGL::bvglDeleteTextures( 1, &m_textureID );
     }
+	m_pboMem.clear();
 }
 
 // *******************************
@@ -76,6 +90,31 @@ void    PdrTexture3D::Deinitialize    ()
 PdrTexture3D::~PdrTexture3D         ()
 {
     Deinitialize();
+}
+
+// *******************************
+//
+void		PdrTexture3D::UpdateTexData     ( const Texture3D * texture )
+{
+    assert( !m_pboMem.empty() );
+
+	for( unsigned int lvl = 0; lvl < texture->GetNumLevels(); ++lvl )
+	{
+		m_pboMem[ lvl ]->LockUpload( texture->GetData( lvl )->Get(), texture->RawFrameSize( lvl ) );
+		PBOUploadData( texture, lvl );
+		m_pboMem[ lvl ]->UnlockUpload();
+	}
+}
+
+// *******************************
+//
+void		PdrTexture3D::PBOUploadData     ( const Texture3D * texture, UInt32 lvl )
+{
+	GLint prevTex = Bind();
+	BVGL::bvglTexSubImage3D( GL_TEXTURE_3D, lvl, 0, 0, 0, 
+		( GLsizei )texture->GetWidth( lvl ), ( GLsizei )texture->GetHeight( lvl ), ( GLsizei )texture->GetDepth( lvl ),
+		m_format, m_type, 0 );
+	BVGL::bvglBindTexture( GL_TEXTURE_3D, prevTex );
 }
 
 // *******************************
@@ -89,6 +128,11 @@ void        PdrTexture3D::Update            ( const Texture3D * texture )
     {
         Deinitialize();
         Initialize( texture );
+    }
+	
+	if( !m_pboMem.empty() )
+    {
+        UpdateTexData( texture );
     }
 }
 

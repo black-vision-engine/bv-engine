@@ -4,6 +4,7 @@
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrTexture.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrPBOMemTransfer.h"
 
 namespace bv
 {
@@ -13,6 +14,8 @@ class Renderer;
 class PdrTexture3D : public PdrTexture
 {
 private:
+    std::vector< PdrUploadPBOUPtr > m_pboMem;
+
     SizeType		m_width;
     SizeType		m_height;
     SizeType		m_depth;
@@ -23,6 +26,9 @@ private:
 
     void            Initialize      ( const Texture3D * texture );
     void            Deinitialize    ();
+
+	void            UpdateTexData   ( const Texture3D * texture );
+    void            PBOUploadData	( const Texture3D * texture, UInt32 lvl );
 
 public:
 

@@ -41,26 +41,46 @@ void    PdrTextureCubeArray::Initialize      ( const TextureCubeArray * textureA
     BVGL::bvglGenTextures   ( 1, &m_textureID );
     GLuint prevTex = Bind();
 
-	auto numLevels = textureArray->GetNumLevels();
+	auto numLevels		= textureArray->GetNumLevels();
+	auto numFaces		= TextureCubeArray::GetFacesNum();
+
+	auto txSemantic     = textureArray->GetSemantic();
+    if( PdrPBOMemTransfer::PBORequired( txSemantic ) )
+    {
+		m_pboMem.reserve( m_layers * numFaces * numLevels );
+		for ( unsigned int layer = 0; layer < m_layers; ++layer )
+		{
+			for ( unsigned int face = 0; face < numFaces; ++face )
+			{
+				for( unsigned int lvl = 0; lvl < numLevels; ++lvl )
+				{
+					m_pboMem.push_back( std::unique_ptr< PdrUploadPBO >( new PdrUploadPBO( txSemantic, textureArray->RawFrameSize( lvl ) ) ) );
+				}
+			}
+		}
+    }
 
 	BVGL::bvglTexParameteri( GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_BASE_LEVEL, 0);
 	BVGL::bvglTexParameteri( GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_MAX_LEVEL, GLint( numLevels - 1 ) );
 
 	auto faces = TextureCubeArray::GetFacesNum();
 	BVGL::bvglTexStorage3D( GL_TEXTURE_CUBE_MAP_ARRAY, numLevels, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height, ( GLsizei )m_layers * faces );
-
-	for( unsigned int layer = 0; layer < m_layers; ++layer )
+	
+	if( m_pboMem.empty() )
 	{
-		for ( unsigned int face = 0; face < faces; ++face )
+		for( unsigned int layer = 0; layer < m_layers; ++layer )
 		{
-			for ( unsigned int lvl = 0; lvl < numLevels; ++lvl )
+			for ( unsigned int face = 0; face < faces; ++face )
 			{
-				auto data = textureArray->GetData( layer, face, lvl );
-				if( data )
+				for ( unsigned int lvl = 0; lvl < numLevels; ++lvl )
 				{
-					BVGL::bvglTexSubImage3D( GL_TEXTURE_CUBE_MAP_ARRAY, lvl, 0, 0, ( GLint )layer * faces + face,
-						( GLsizei )textureArray->GetWidth( lvl ), ( GLsizei )textureArray->GetHeight( lvl ), GLsizei( 1 ),
-						m_format, m_type, data->Get() );
+					auto data = textureArray->GetData( layer, face, lvl );
+					if( data )
+					{
+						BVGL::bvglTexSubImage3D( GL_TEXTURE_CUBE_MAP_ARRAY, lvl, 0, 0, ( GLint )layer * faces + face,
+							( GLsizei )textureArray->GetWidth( lvl ), ( GLsizei )textureArray->GetHeight( lvl ), GLsizei( 1 ),
+							m_format, m_type, data->Get() );
+					}
 				}
 			}
 		}
@@ -77,6 +97,7 @@ void    PdrTextureCubeArray::Deinitialize    ()
     {
         BVGL::bvglDeleteTextures( 1, &m_textureID );
     }
+	m_pboMem.clear();
 }
 
 // *******************************
@@ -84,6 +105,40 @@ void    PdrTextureCubeArray::Deinitialize    ()
 PdrTextureCubeArray::~PdrTextureCubeArray         ()
 {
     Deinitialize();
+}
+
+// *******************************
+//
+void		PdrTextureCubeArray::UpdateTexData     ( const TextureCubeArray * textureArray )
+{
+    assert( !m_pboMem.empty() );
+
+	auto numLevels = textureArray->GetNumLevels();
+	auto numFaces = TextureCubeArray::GetFacesNum();
+	for( unsigned int layer = 0; layer < m_layers; ++layer )
+	{
+		for( unsigned int face = 0; face < numFaces; ++face )
+		{
+			for( unsigned int lvl = 0; lvl < numLevels; ++lvl )
+			{
+				unsigned int idx = layer * numFaces * numLevels + face * numLevels + lvl;
+				m_pboMem[ idx ]->LockUpload( textureArray->GetData( layer, face, lvl )->Get(), textureArray->RawFrameSize( lvl ) );
+				PBOUploadData( textureArray, layer, face, lvl );
+				m_pboMem[ idx ]->UnlockUpload();
+			}
+		}
+	}
+}
+
+// *******************************
+//
+void		PdrTextureCubeArray::PBOUploadData     ( const TextureCubeArray * textureArray, UInt32 layer, UInt32 face, UInt32 lvl )
+{
+	GLint prevTex = Bind();
+	BVGL::bvglTexSubImage3D( GL_TEXTURE_CUBE_MAP_ARRAY, lvl, 0, 0, ( GLint )layer * TextureCubeArray::GetFacesNum() + face,
+		( GLsizei )textureArray->GetWidth( lvl ), ( GLsizei )textureArray->GetHeight( lvl ), GLsizei( 1 ),
+		m_format, m_type, 0 );
+	BVGL::bvglBindTexture( GL_TEXTURE_CUBE_MAP_ARRAY, prevTex );
 }
 
 // *******************************
@@ -97,6 +152,11 @@ void        PdrTextureCubeArray::Update            ( const TextureCubeArray * te
     {
         Deinitialize();
         Initialize( textureArray );
+    }
+
+	if( !m_pboMem.empty() )
+    {
+        UpdateTexData( textureArray );
     }
 }
 

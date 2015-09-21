@@ -15,7 +15,7 @@ class PdrTexture2DArray : public PdrTexture
 {
 private:
 
-    std::vector< PdrUploadPBO * > m_pboMem;
+    std::vector< PdrUploadPBOUPtr > m_pboMem;
     
 	SizeType		m_width;
     SizeType		m_height;
