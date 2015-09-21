@@ -7,7 +7,7 @@
 #include "Engine/Models/Interfaces/ITextureDescriptor.h"
 #include "Engine/Models/Interfaces/IAnimationDescriptor.h"
 
-#include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 namespace bv
 {

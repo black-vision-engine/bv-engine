@@ -4,7 +4,7 @@
 
 #include "BVGL.h"
 
-#include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Graphics/Resources/RenderTarget.h"
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"

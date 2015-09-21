@@ -10,7 +10,7 @@
 
 #include "Engine/Models/Plugins/EngineConstantsMapper.h"
 
-#include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 
 #include "Engine/Graphics/Shaders/Parameters/ShaderParameters.h"

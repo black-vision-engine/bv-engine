@@ -3,7 +3,7 @@
 #include "Assets/Texture/TextureLoader.h"
 #include "Assets/Texture/AnimationAsset.h"
 #include "Assets/AssetManager.h"
-#include "Engine/Graphics/Resources/Texture.h"
+#include "Engine/Graphics/Resources/Textures/Texture.h"
 
 namespace bv { namespace model {
 

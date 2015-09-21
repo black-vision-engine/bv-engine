@@ -7,13 +7,13 @@
 #include "Engine/Graphics/Shaders/GeometryShader.h"
 
 #include "Engine/Graphics/Shaders/TextureSampler.h"
-#include "Engine/Graphics/Resources/Texture.h"
+#include "Engine/Graphics/Resources/Textures/Texture.h"
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 
 //FIXME: implement those textures
 //#include "Engine/Graphics/Resources/Texture1D.h"
-#include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 //#include "Engine/Graphics/Resources/Texture3D.h"
 //#include "Engine/Graphics/Resources/TextureCubic.h"
 

@@ -169,10 +169,10 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\RenderableArrayDataArrays.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\RenderableArrayDataElements.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\RenderTarget.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Texture.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Texture2D.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1D.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1DArray.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2D.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2DArray.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2DCache.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture3D.cpp" />
@@ -362,8 +362,10 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture3D.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCube.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCubeArray.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1D.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1DArray.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2D.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2DArray.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture3D.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCube.h" />
@@ -448,8 +450,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\RenderableArrayDataArrays.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\RenderableArrayDataElements.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\RenderTarget.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Texture.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Texture2D.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2DCache.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\VertexArray.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\VertexBuffer.h" />

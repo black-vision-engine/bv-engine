@@ -1,7 +1,7 @@
 #include "FBOProfilingPrototype0.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
-#include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrTexture2D.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 

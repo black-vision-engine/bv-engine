@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/Resources/Texture.h"
-#include "Engine/Graphics/Resources/Textures/Texture1D.h"
+#include "Engine/Graphics/Resources/Textures/Texture.h"
 
 namespace bv
 {

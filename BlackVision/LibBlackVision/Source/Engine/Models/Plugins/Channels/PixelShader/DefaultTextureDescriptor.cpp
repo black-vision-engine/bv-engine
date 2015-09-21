@@ -2,8 +2,7 @@
 
 #include "Assets/AssetManager.h"
 #include "Assets/Texture/TextureLoader.h"
-#include "Engine/Graphics/Resources/Texture.h"
-
+#include "Engine/Graphics/Resources/Textures/Texture.h"
 
 namespace bv { namespace model {
 

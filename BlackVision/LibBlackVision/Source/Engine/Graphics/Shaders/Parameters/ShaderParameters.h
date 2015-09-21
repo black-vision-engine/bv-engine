@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Engine/Graphics/Shaders/Parameters/GenericShaderParam.h"
-#include "Engine/Graphics/Resources/Texture2D.h" //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
+#include "Engine/Graphics/Resources/Textures/Texture2D.h" //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
 
 
 namespace bv {
