@@ -82,6 +82,9 @@
     <ClInclude Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.h">
       <Filter>Tools\Profiler</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\System\Path.h">
+      <Filter>System</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\IO\NamedPipe.h">
       <Filter>IO</Filter>
     </ClInclude>
@@ -128,6 +131,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Tools\Logger\Logger.cpp">
       <Filter>Tools\Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\System\Path.cpp">
+      <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.cpp">
       <Filter>Tools\Profiler</Filter>

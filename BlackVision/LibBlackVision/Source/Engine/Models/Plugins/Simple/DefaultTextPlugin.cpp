@@ -185,6 +185,12 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
     m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
 
+	m_scaleValue =  ValuesFactory::CreateValueMat4( "" );
+	m_scaleValue->SetValue( glm::mat4( 1.0 ) );
+    ValueMat4PtrVec values;
+	values.push_back( m_scaleValue );
+	m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( m_prevPlugin, values, false ) ); //<3
+
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
 
@@ -318,6 +324,12 @@ IVertexShaderChannelConstPtr        DefaultTextPlugin::GetVertexShaderChannel   
     return m_vsc;
 }
 
+ITransformChannelConstPtr           DefaultTextPlugin::GetTransformChannel         () const
+{
+	return m_transformChannel;
+}
+
+
 // *************************************
 // 
 mathematics::RectConstPtr			DefaultTextPlugin::GetAABB						( const glm::mat4 & trans ) const
@@ -350,6 +362,12 @@ void                                DefaultTextPlugin::Update                   
     { t; } // FIXME: suppress unused warning
     m_paramValModel->Update();
 
+	m_scaleMat = glm::mat4( 1.0 );
+
+	ScaleToMaxTextLength();
+
+	m_scaleValue->SetValue( m_scaleMat );
+
     if( m_vaChannel) // FUNKED for serialization
         m_vaChannel->SetNeedsTopologyUpdate( m_textSet );
 
@@ -366,6 +384,7 @@ void                                DefaultTextPlugin::Update                   
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
+	m_transformChannel->PostUpdate();
 }
 
 namespace {
@@ -423,9 +442,10 @@ namespace
 //
 glm::mat4 BuildScaleMatrix( const glm::vec3 & center, const glm::vec3 & scale )
 {
-    return  glm::translate( glm::mat4( 1.f ), -center ) *
+	{ center; }
+    return  glm::translate( glm::mat4( 1.f ), center ) *
             glm::scale( glm::mat4( 1.f ), scale ) *
-            glm::translate( glm::mat4( 1.f ), center );
+            glm::translate( glm::mat4( 1.f ), -center );
 }
 
 // *************************************
@@ -468,6 +488,34 @@ void TransformPosChannel( VertexAttributesChannelPtr vaChannel, const glm::mat4 
 
 // *************************************
 //
+void DefaultTextPlugin::ScaleToMaxTextLength		()
+{
+	auto maxTextLenght = m_maxTextLengthParam->Evaluate();
+
+    if( maxTextLenght > 0.f && m_textLength > 0.f && m_textLength > maxTextLenght )
+    {
+        //auto center = glm::vec3( 0.f, 0.f, 0.f );
+
+        //switch( EvaluateAsInt< TextAlignmentType >( m_alignmentParam ) )
+        //{
+        //case TextAlignmentType::Center:
+        //    center = glm::vec3( m_textLength / 2.f, 0.f, 0.f );
+        //    break;
+        //case TextAlignmentType::Right:
+        //    center = glm::vec3( m_textLength, 0.f, 0.f );
+        //    break;
+        //default:
+        //    break;
+        //}
+
+        m_scaleMat = glm::scale( glm::mat4( 1.f ), glm::vec3( maxTextLenght / m_textLength, 1.f, 1.f ) );
+
+		m_scaleValue->SetValue( m_scaleMat );
+    }
+}
+
+// *************************************
+//
 void DefaultTextPlugin::SetText                     ( const std::wstring & newText )
 {
     m_textSet = true;
@@ -479,28 +527,7 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 
     m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_text, m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, false );
 
-    auto maxTextLenght = m_maxTextLengthParam->Evaluate();
-
-    if( maxTextLenght > 0.f && m_textLength > 0.f && m_textLength > maxTextLenght )
-    {
-        auto center = glm::vec3( 0.f, 0.f, 0.f );
-
-        switch( EvaluateAsInt< TextAlignmentType >( m_alignmentParam ) )
-        {
-        case TextAlignmentType::Center:
-            center = glm::vec3( m_textLength / 2.f, 0.f, 0.f );
-            break;
-        case TextAlignmentType::Right:
-            center = glm::vec3( m_textLength, 0.f, 0.f );
-            break;
-        default:
-            break;
-        }
-
-        auto scaleMat = BuildScaleMatrix( center, glm::vec3( maxTextLenght / m_textLength, 1.f, 1.f ) );
-
-        TransformPosChannel( m_vaChannel, scaleMat );
-    }
+	ScaleToMaxTextLength();
 
     m_vaChannel->SetNeedsTopologyUpdate( true );
 }

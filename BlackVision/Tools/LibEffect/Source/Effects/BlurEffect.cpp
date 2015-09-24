@@ -6,6 +6,7 @@
 #include "Engine/Types/Values/ValuesFactory.h"
 
 #include "IO/FileIO.h"
+#include "System/Path.h"
 #include <sstream>
 
 namespace bv { namespace effect
@@ -131,7 +132,7 @@ std::string			BlurEffect::GetVSSource		() const
 //
 std::string				BlurEffect::ReadFile		( const std::string & fileName )
 {
-	if( File::Exists( fileName ) )
+	if( Path::Exists( fileName ) )
     {
         std::cout << "BlurEffect: Loading pixel shader from: " << fileName << std::endl;
 

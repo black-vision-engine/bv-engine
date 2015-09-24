@@ -121,7 +121,7 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
     float texPadding = 1.f;
 
     auto spaceGlyphWidth    = (float)textAtlas->GetGlyph( L'0', outline )->width / viewWidth  + spacing;
-	auto newLineShift       = -(float)textAtlas->GetGlyph( L'0', outline )->height / viewHeight;
+	auto newLineShift       = -(float) 1.5f * textAtlas->GetGlyph( L'0', outline )->height / viewHeight;
 
     for( unsigned int i = 0; i < text.size(); ++i )
     {

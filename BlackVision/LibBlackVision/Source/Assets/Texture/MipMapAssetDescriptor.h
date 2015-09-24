@@ -12,9 +12,6 @@
 namespace bv
 {
 
-class MipMapAssetDesc;
-DEFINE_CONST_PTR_TYPE( MipMapAssetDesc )
-
 class MipMapAssetDesc : public AssetDesc, public std::enable_shared_from_this< MipMapAssetDesc >
 {
 private:

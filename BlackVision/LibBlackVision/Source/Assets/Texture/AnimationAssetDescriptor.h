@@ -5,10 +5,6 @@
 
 namespace bv {
 
-class AnimationAssetDesc;
-DEFINE_PTR_TYPE(AnimationAssetDesc)
-DEFINE_CONST_PTR_TYPE(AnimationAssetDesc)
-
 class AnimationAssetDesc : public AssetDesc, public std::enable_shared_from_this< AnimationAssetDesc >
 {
 private:

@@ -18,9 +18,6 @@ enum class TextureAssetLoadingType : int
 	LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS,
 };
 
-class TextureAssetDesc;
-DEFINE_CONST_PTR_TYPE( TextureAssetDesc )
-
 class TextureAssetDesc : public AssetDesc,  public std::enable_shared_from_this< AssetDesc >
 {
 private:

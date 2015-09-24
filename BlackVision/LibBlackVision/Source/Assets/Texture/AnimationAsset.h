@@ -6,9 +6,6 @@
 namespace bv
 {
 
-class AnimationAsset;
-DEFINE_CONST_PTR_TYPE( AnimationAsset )
-
 // *******************************
 // Implements animation asset.
 class AnimationAsset : public Asset, public std::enable_shared_from_this< AnimationAsset >

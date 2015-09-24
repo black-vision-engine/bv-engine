@@ -1,5 +1,6 @@
 #include "HardDriveRawDataCache.h"
 
+#include "System/Path.h"
 #include "IO/FileIO.h"
 #include "IO/DirIO.h"
 
@@ -44,7 +45,7 @@ MemoryChunkConstPtr	HardDriveRawDataCache::Load	( const Hash & key ) const
 {
 	auto fileName = RAW_DATA_CACHE_DIR + key.Get();
 
-	if( File::Exists( fileName ) )
+	if( Path::Exists( fileName ) )
 	{
 		auto size	= File::Size( fileName );
 
@@ -109,7 +110,7 @@ bool HardDriveRawDataCache::Add					( const Hash & key, const MemoryChunkConstPt
 {
 	auto fileName = RAW_DATA_CACHE_DIR + key.Get();
 
-	auto exists = File::Exists( fileName );
+	auto exists = Path::Exists( fileName );
 
 	if( !exists || rewriteIfExists )
 	{

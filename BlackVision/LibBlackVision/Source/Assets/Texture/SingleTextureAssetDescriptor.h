@@ -11,9 +11,6 @@
 namespace bv
 {
 
-class SingleTextureAssetDesc;
-DEFINE_CONST_PTR_TYPE( SingleTextureAssetDesc )
-
 class SingleTextureAssetDesc : public AssetDesc, public std::enable_shared_from_this< SingleTextureAssetDesc >
 {
 private:
