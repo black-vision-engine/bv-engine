@@ -90,7 +90,9 @@ namespace ProfilerEditor
 			if( data.m_bytesRead > 0 )
 			{
 				ProfilerSample[] samples;
-				samples = DataProtocol.SamplesLoader.Load( data );
+				DataProtocol.LoadedData loadedData;
+				loadedData = DataProtocol.SamplesLoader.NewLoad( data );
+				samples = loadedData.m_samples;
 
 				m_namesMap.Update( samples );
 				MakeTree( samples );

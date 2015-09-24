@@ -30,9 +30,10 @@ void            AutoProfile::StartFrame         ( unsigned int threadID )
 void            AutoProfile::EndFrame           ( unsigned int threadID )
 {
     assert( NumSamples() <= MAX_PROFILER_SAMPLES );
-
+	
+	m_threads[ threadID ].m_numFrameSamples[ m_threads[ threadID ].m_curFrame ] = m_threads[ threadID ].m_curSample;		//Remember number of samples in frame.
     m_threads[ threadID ].m_curFrame = ( m_threads[ threadID ].m_curFrame + 1 ) % MAX_PROFILER_FRAMES;
-
+	m_threads[ threadID ].m_framesToSend++;
     //TODO: anything useful
 }
 
@@ -55,7 +56,7 @@ unsigned int    AutoProfile::GetStatsDisplayWaitMs   ()
 unsigned int    AutoProfile::NumSamples         ( unsigned int threadID )
 {
 	assert( threadID < MAX_PROFILER_THREADS );
-	return m_threads[ threadID ].m_curSample - 1;
+	return m_threads[ threadID ].m_curSample/* - 1*/;
 }
 
 // *******************************
@@ -87,9 +88,15 @@ unsigned int     AutoProfile::ActiveFrame             ( unsigned int threadID )
     return m_threads[ threadID ].m_activeFrame;
 }
 
+// *******************************
+//
+CPUThreadSamples*	AutoProfile::GetCPUThreadSamples		( unsigned int thread )
+{
+	return &m_threads[ thread ];
+}
 
 // *******************************
-// This function survived only for compatibility. Averages samples from first thread.
+// This function survived only for compatibility.
 const ProfilerSample *   AutoProfile::OneFrameSamples ( unsigned int frame )
 {
     LARGE_INTEGER freq = QueryCounterFrequency();

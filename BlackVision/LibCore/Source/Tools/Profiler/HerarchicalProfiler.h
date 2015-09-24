@@ -28,6 +28,13 @@ enum class AutoProfileType : int
 };
 
 
+struct ProtocolHeader
+{
+	UInt16		threadID;
+	UInt16		numSamples;
+	UInt16		numNameStrings;
+};
+
 
 struct ProfilerSample
 {
@@ -63,18 +70,23 @@ struct ProfilerLiveSample
 struct CPUThreadSamples
 {
 	ProfilerLiveSample			m_liveSamples[ MAX_PROFILER_SAMPLES * MAX_PROFILER_FRAMES ];
+	unsigned int				m_numFrameSamples[ MAX_PROFILER_FRAMES ];
 	
 	unsigned int				m_curDepth;
 	unsigned int				m_curSample;
 	unsigned int				m_curFrame;
 	unsigned int				m_activeFrame;
+	unsigned int				m_framesToSend;
 
 	CPUThreadSamples()
 	{
+		for( auto& numSamples : m_numFrameSamples )
+			numSamples = 0;
 		m_curSample = 0;
 		m_curDepth = 0;
 		m_curFrame = 0;
 		m_activeFrame = 0;
+		m_framesToSend = 0;
 	}
 };
 
@@ -109,8 +121,9 @@ public:
 
     static LARGE_INTEGER    QueryCounterFrequency   ();
 
-    static const ProfilerSample *   OneFrameSamples ( unsigned int frame );
-    static const ProfilerSample *   AveragedSamples ();
+	static CPUThreadSamples*	GetCPUThreadSamples			( unsigned int thread );
+    static const ProfilerSample *   OneFrameSamples				( unsigned int frame );
+    static const ProfilerSample *   AveragedSamples				();
 
     friend class AutoFrameProfile;
 };

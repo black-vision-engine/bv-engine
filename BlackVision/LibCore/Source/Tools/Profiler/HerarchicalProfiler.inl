@@ -55,12 +55,20 @@ inline  AutoFrameProfile::~AutoFrameProfile   ()
     {
         m_displayCallback( "FRAME TIME - FORCED DISPLAY" );
         startMillis = timestamp;
-        m_showStats = false;   
+        m_showStats = false;
+		AutoProfile::m_threads[ m_threadID ].m_framesToSend = 0;
     }
+	else if( AutoProfile::m_threads[ m_threadID ].m_framesToSend >= MAX_PROFILER_FRAMES )
+	{
+		m_displayCallback( "FRAME TIME - REGULAR SAMPLE" );
+        startMillis = timestamp;
+		AutoProfile::m_threads[ m_threadID ].m_framesToSend = 0;
+	}
     else if( timestamp - startMillis > AutoProfile::GetStatsDisplayWaitMs() )
     {
         m_displayCallback( "FRAME TIME - REGULAR SAMPLE" );
         startMillis = timestamp;
+		AutoProfile::m_threads[ m_threadID ].m_framesToSend = 0;
     }
 }
 

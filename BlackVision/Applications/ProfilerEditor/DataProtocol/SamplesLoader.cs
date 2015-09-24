@@ -48,7 +48,7 @@ namespace ProfilerEditor.DataProtocol
 			for( long i = 0; i < numStructs; ++i )
 			{
 				ProfilerSample sample = new ProfilerSample();
-				samples[ i ] = (ProfilerSample)ByteArrayToStructure( data.m_data, sample, (int)i * sampleSize );
+				samples[ i ] = (ProfilerSample)ByteArrayToStructure( data.m_data, sample, (int)i * sampleSize + offset );
 			}
 
 			offset += (int)numStructs * sampleSize;
@@ -58,7 +58,7 @@ namespace ProfilerEditor.DataProtocol
 		private static ProtocolHeader LoadHeader( ReadDataObject data, ref Int32 offset )
 		{
 			ProtocolHeader header = new ProtocolHeader();
-			ByteArrayToStructure( data.m_data, header, 0 );
+			header = (ProtocolHeader)ByteArrayToStructure( data.m_data, header, 0 );
 			
 			offset += Marshal.SizeOf( header );
 			return header;

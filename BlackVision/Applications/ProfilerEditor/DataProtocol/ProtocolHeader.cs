@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 namespace ProfilerEditor.DataProtocol
 {
 
-	[StructLayout( LayoutKind.Explicit, Size = 6, Pack = 1 )]
+	[StructLayout( LayoutKind.Explicit, Size = 8, Pack = 1 )]
 	public struct ProtocolHeader
 	{
 		[MarshalAs( UnmanagedType.I2 )]
