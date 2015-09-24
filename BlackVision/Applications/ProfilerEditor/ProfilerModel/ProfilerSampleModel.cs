@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace ProfilerEditor.ProfilerModel
 {
-	class ProfilerSampleModel : INotifyPropertyChanged
+	public class ProfilerSampleModel : INotifyPropertyChanged
 	{
 		private Collection<ProfilerSampleModel>				m_childSamples;
 		private ProfilerSampleModel							m_parent;
@@ -29,7 +29,7 @@ namespace ProfilerEditor.ProfilerModel
 			m_parent = null;
 
 			m_sampleData.depth = 0;
-			m_sampleData.duration = 0;
+			//m_sampleData.duration = 0;
 			m_sampleData.durationSecs = 0;
 			m_sampleData.name = 0;
 		}
@@ -55,11 +55,50 @@ namespace ProfilerEditor.ProfilerModel
 				m_childSamples.Add( new ProfilerSampleModel( this, samples, ref curSampleIndex, maxTreeExpansionLevel ) );
 		}
 
+		private void UpdateSamples( ProfilerSampleModel parent, ProfilerSample[] samples, ref uint curSampleIndex, uint maxTreeExpansionLevel )
+		{
+			//m_sampleData = samples[ curSampleIndex++ ];
+
+			m_sampleData.durationSecs += samples[ curSampleIndex++ ].durationSecs;
+			m_parent = parent;
+			if( m_sampleData.depth < maxTreeExpansionLevel )
+				m_isExpanded = true;
+			else
+				m_isExpanded = false;
+
+			while( curSampleIndex < samples.Length && samples[ curSampleIndex ].depth > m_sampleData.depth )
+			{
+				bool found = false;
+				bool[] updated = new bool[ m_childSamples.Count ];
+				updated = Enumerable.Repeat( false, m_childSamples.Count ).ToArray();
+
+				for( int i = 0; i < m_childSamples.Count; ++i )
+				{
+					if( m_childSamples[ i ].m_sampleData.name == samples[ curSampleIndex ].name && !updated[ i ] )
+					{
+						curSampleIndex++;
+						m_childSamples[ i ].UpdateSamples( this, samples, ref curSampleIndex, maxTreeExpansionLevel );
+
+						found = true;
+						updated[ i ] = true;
+					}
+				}
+
+				if( !found )
+					m_childSamples.Add( new ProfilerSampleModel( this, samples, ref curSampleIndex, maxTreeExpansionLevel ) );
+			}
+		}
+
 		public void Update( ProfilerSample[] samples, ref uint curSampleIndex, uint maxTreeExpansionLevel )
 		{
-			m_childSamples.Clear();
+			UpdateSamples( m_parent, samples, ref curSampleIndex, maxTreeExpansionLevel );
+		}
 
-			AddSamples( m_parent, samples, ref curSampleIndex, maxTreeExpansionLevel );
+		public void Average( uint numFrames )
+		{
+			m_sampleData.durationSecs = m_sampleData.durationSecs / numFrames;
+			foreach( var child in m_childSamples )
+				child.Average( numFrames );
 		}
 
 

@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace ProfilerEditor.ProfilerModel
 {
-	class ProfilerTreeViewModel
+	public class ProfilerTreeViewModel
 	{
 		private Collection<ProfilerSampleModel>				m_topLevelSamples;
 
@@ -30,6 +30,12 @@ namespace ProfilerEditor.ProfilerModel
 
 			foreach( ProfilerSampleModel sampleModel in m_topLevelSamples )
 				sampleModel.Update( samples, ref curSampleIdx, maxTreeExpansionLevel );
+		}
+
+		public void Average( uint numFrames )
+		{
+			foreach( ProfilerSampleModel sampleModel in m_topLevelSamples )
+				sampleModel.Average( numFrames );
 		}
 
 		public Collection<ProfilerSampleModel> TopLevelSamples

@@ -33,15 +33,16 @@ struct ProtocolHeader
 	UInt16		threadID;
 	UInt16		numSamples;
 	UInt16		numNameStrings;
+	UInt16		unused;
 };
 
 
 struct ProfilerSample
 {
-    const char *        name;
+    const char*			name;
 
     LARGE_INTEGER       duration;
-    double              durationSecs;
+    double				durationSecs;
 
     AutoProfileType     type;
     unsigned int        depth;

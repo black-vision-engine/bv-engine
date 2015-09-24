@@ -69,6 +69,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataAnalysis\AverageSamples.cs" />
     <Compile Include="DataProtocol\LoadedData.cs" />
     <Compile Include="DataProtocol\ProtocolHeader.cs" />
     <Compile Include="DataProtocol\SamplesLoader.cs" />

@@ -26,8 +26,9 @@ namespace ProfilerEditor
 		public const uint			PIPE_ACCESS_INBOUND		= (0x00000001);
 		public const uint			FILE_FLAG_OVERLAPPED	= (0x40000000);
 		public const uint			PIPE_TYPE_MESSAGE		= (0x00000004);
+		public const uint			PIPE_READMODE_MESSAGE	= (0x00000002);
 
-        private uint				m_inBufferSize				= 5000;
+        private uint				m_inBufferSize				= 376;
         private uint				m_outBufferSize				= 0;
 
 
@@ -78,13 +79,14 @@ namespace ProfilerEditor
         {
 			string pipeFullName = "\\\\.\\pipe\\" + m_pipeName;
 
-			m_pipeHandle = CreateNamedPipe( pipeFullName, PIPE_ACCESS_INBOUND, PIPE_TYPE_MESSAGE, 1, m_outBufferSize, m_inBufferSize, 0, IntPtr.Zero );
+			m_pipeHandle = CreateNamedPipe( pipeFullName, PIPE_ACCESS_INBOUND, PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE, 1, m_outBufferSize, m_inBufferSize, 0, IntPtr.Zero );
 
 			if( m_pipeHandle.IsInvalid )
 			{
 				uint error = GetLastError();
 				return;
 			}
+
 
 			int success = ConnectNamedPipe( m_pipeHandle, IntPtr.Zero );
 

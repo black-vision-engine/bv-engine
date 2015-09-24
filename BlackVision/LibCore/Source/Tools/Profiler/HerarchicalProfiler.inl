@@ -51,6 +51,8 @@ inline  AutoFrameProfile::~AutoFrameProfile   ()
 
     unsigned int timestamp = timeGetTime();
 
+	m_showStats = true;		/// test
+
     if( m_showStats )
     {
         m_displayCallback( "FRAME TIME - FORCED DISPLAY" );
@@ -58,12 +60,12 @@ inline  AutoFrameProfile::~AutoFrameProfile   ()
         m_showStats = false;
 		AutoProfile::m_threads[ m_threadID ].m_framesToSend = 0;
     }
-	else if( AutoProfile::m_threads[ m_threadID ].m_framesToSend >= MAX_PROFILER_FRAMES )
-	{
-		m_displayCallback( "FRAME TIME - REGULAR SAMPLE" );
-        startMillis = timestamp;
-		AutoProfile::m_threads[ m_threadID ].m_framesToSend = 0;
-	}
+	//else if( AutoProfile::m_threads[ m_threadID ].m_framesToSend >= MAX_PROFILER_FRAMES )
+	//{
+	//	m_displayCallback( "FRAME TIME - REGULAR SAMPLE" );
+ //       startMillis = timestamp;
+	//	AutoProfile::m_threads[ m_threadID ].m_framesToSend = 0;
+	//}
     else if( timestamp - startMillis > AutoProfile::GetStatsDisplayWaitMs() )
     {
         m_displayCallback( "FRAME TIME - REGULAR SAMPLE" );

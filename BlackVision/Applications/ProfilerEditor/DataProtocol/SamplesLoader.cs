@@ -7,22 +7,17 @@ using System.Runtime.InteropServices;
 
 namespace ProfilerEditor.DataProtocol
 {
-	/**@todo What will happen if there will be diffrent number encodings (big endian and little endian).*/
+	/**@todo What will happen if there will be diffrent numbers encodings (big endian and little endian).*/
 	class SamplesLoader
 	{
-
-		public static ProfilerSample[] Load( ReadDataObject data )
-		{
-			Int32 offset = 0;
-			return LoadSamples( data, ref offset );
-		}
-
-		/**Future version of loading data.
-		 @todo Use this function instead of Load and start sending compatibile data.*/
+		/**Future version of loading data.*/
 		public static LoadedData NewLoad( ReadDataObject data )
 		{
 			LoadedData loadedData = new LoadedData();
 			Int32 offset = 0;
+
+			if( data.m_bytesRead < 8 )
+				return null;
 
 			ProtocolHeader header = LoadHeader( data, ref offset );
 			loadedData.m_threadID = header.threadID;
@@ -31,34 +26,33 @@ namespace ProfilerEditor.DataProtocol
 			loadedData.m_nameIDs = LoadStringsIDs( data, header, ref offset );
 			loadedData.m_nameStrings = LoadNameStrings( data, header, nameStringsLengths, ref offset );
 
-			loadedData.m_samples = LoadSamples( data, ref offset );
+			loadedData.m_samples = LoadSamples( data, ref offset, header.numSamples );
 
 			return loadedData;
 		}
 
-		private static ProfilerSample[] LoadSamples( ReadDataObject data, ref Int32 offset )
+		private static ProfilerSample[] LoadSamples( ReadDataObject data, ref Int32 offset, UInt16 numSamples )
 		{
 			ProfilerSample[] samples;
 			ProfilerSample sam = new ProfilerSample();		// This shit is created only to obtain size of ProfilerSample;
 			int sampleSize = Marshal.SizeOf( sam );
-			long numStructs = data.m_bytesRead / sampleSize;
 
-			samples = new ProfilerSample[ numStructs ];
+			samples = new ProfilerSample[ numSamples ];
 
-			for( long i = 0; i < numStructs; ++i )
+			for( long i = 0; i < numSamples; ++i )
 			{
 				ProfilerSample sample = new ProfilerSample();
 				samples[ i ] = (ProfilerSample)ByteArrayToStructure( data.m_data, sample, (int)i * sampleSize + offset );
 			}
 
-			offset += (int)numStructs * sampleSize;
+			offset += (int)numSamples * sampleSize;
 			return samples;
 		}
 
 		private static ProtocolHeader LoadHeader( ReadDataObject data, ref Int32 offset )
 		{
 			ProtocolHeader header = new ProtocolHeader();
-			header = (ProtocolHeader)ByteArrayToStructure( data.m_data, header, 0 );
+			header = (ProtocolHeader)ByteArrayToStructure( data.m_data, header, offset );
 			
 			offset += Marshal.SizeOf( header );
 			return header;
@@ -106,9 +100,13 @@ namespace ProfilerEditor.DataProtocol
 		{
 			int length = Marshal.SizeOf( structureObj );
 			IntPtr ptr = Marshal.AllocHGlobal( length );
-			Marshal.Copy( bytearray, 0, ptr, length );
-			structureObj = Marshal.PtrToStructure( Marshal.UnsafeAddrOfPinnedArrayElement( bytearray, position ), structureObj.GetType() );
+			Marshal.Copy( bytearray, position, ptr, length );
+			//GCHandle gcHandle = GCHandle.Alloc( bytearray );
+			//GCHandle.ToIntPtr( bytearray )
+			//structureObj = Marshal.PtrToStructure( Marshal.UnsafeAddrOfPinnedArrayElement( bytearray, position ), structureObj.GetType() );
+			structureObj = Marshal.PtrToStructure( ptr, structureObj.GetType() );
 			Marshal.FreeHGlobal( ptr );
+			//gcHandle.Free();
 			return structureObj;
 		}
 	}

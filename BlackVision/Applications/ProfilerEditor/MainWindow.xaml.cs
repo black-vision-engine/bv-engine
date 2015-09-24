@@ -33,6 +33,7 @@ namespace ProfilerEditor
 		private NamedPipeServer								m_pipedServer;
 		private ProfilerModel.ProfilerTreeViewModel			m_profilerTreeView;
 		private ProfilerModel.NameMapping					m_namesMap;
+		private DataAnalysis.AverageSamples					m_dataProcessor;
 
 		private bool										m_firstTime;
 
@@ -57,6 +58,7 @@ namespace ProfilerEditor
 
 			m_firstTime = true;
 			m_namesMap = new ProfilerModel.NameMapping();
+			m_dataProcessor = new DataAnalysis.AverageSamples();
         }
 
 		private void startButton_Click( object sender, RoutedEventArgs e )
@@ -95,7 +97,13 @@ namespace ProfilerEditor
 				samples = loadedData.m_samples;
 
 				m_namesMap.Update( samples );
-				MakeTree( samples );
+				ProfilerModel.ProfilerTreeViewModel newTreeView = m_dataProcessor.AddNewData( loadedData );
+				if( newTreeView != null )
+				{
+					m_profilerTreeView = newTreeView;
+					ProfilerTree1.DataContext = m_profilerTreeView;
+				}
+				//MakeTree( samples );
 			}
 		}
 
@@ -113,11 +121,15 @@ namespace ProfilerEditor
 			int maxDepthLevel = GetTreeExpansionLevel();
 
 			if( !m_firstTime )
+			{
 				m_profilerTreeView.Update( samples, (uint)maxDepthLevel );
-			m_firstTime = false;
-
-			m_profilerTreeView = new ProfilerModel.ProfilerTreeViewModel( samples, (uint)maxDepthLevel );
-			ProfilerTree1.DataContext = m_profilerTreeView;
+				m_firstTime = false;
+			}
+			else
+			{
+				m_profilerTreeView = new ProfilerModel.ProfilerTreeViewModel( samples, (uint)maxDepthLevel );
+				ProfilerTree1.DataContext = m_profilerTreeView;
+			}
 		}
 
     }

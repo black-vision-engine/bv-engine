@@ -73,6 +73,14 @@ NamedPipe& GetNamedPipe()
 //	pipe.WriteToPipe( (const char*)samples, numSamples * sizeof( ProfilerSample ) );
 //}
 
+struct ProtocolSample
+{
+    const char*			name;
+    float				durationSecs;
+    unsigned int        depth;
+};
+
+
 /**Just for now only for first thread.*/
 void	ProfilerDataFormatter::SendToExternApp	( const char * msg )
 {
@@ -84,38 +92,50 @@ void	ProfilerDataFormatter::SendToExternApp	( const char * msg )
 	CPUThreadSamples* CPUsamples =  AutoProfile::GetCPUThreadSamples( thread );
 	char buffer[ sizeof( ProtocolHeader ) + MAX_PROFILER_SAMPLES * sizeof( ProfilerSample ) ];
 
-	ProtocolHeader* header = (ProtocolHeader*)buffer;
-	header->threadID = thread;
-	header->numSamples = (UInt16)CPUsamples->m_curSample;
-	header->numNameStrings = 0;
-
 	LARGE_INTEGER freq = AutoProfile::QueryCounterFrequency();
 	double freqd = (double) freq.QuadPart;
 
-	unsigned int frame = CPUsamples->m_activeFrame;
-	unsigned int numLiveSamples = CPUsamples->m_numFrameSamples[ frame ];
+	//unsigned int frame = CPUsamples->m_activeFrame;
+	unsigned int activeFrame = CPUsamples->m_activeFrame;
+	unsigned int framesToSend = CPUsamples->m_framesToSend;
+	if( framesToSend >= MAX_PROFILER_FRAMES )
+		framesToSend = MAX_PROFILER_FRAMES - 1;
 
-	assert( numLiveSamples <= MAX_PROFILER_SAMPLES );
-
-	ProfilerLiveSample* liveSamples = &CPUsamples->m_liveSamples[ frame * MAX_PROFILER_SAMPLES ];
-	ProfilerSample* samples = (ProfilerSample*)( buffer + sizeof( header ) );
-
-	for( unsigned int i = 0, k = 0; i < numLiveSamples; ++i )
+	//Sends all frames from first that wasn't send yet to active frame.
+	for( ; framesToSend > 0; framesToSend-- )
 	{
-		ProfilerLiveSample & liveSample = liveSamples[ i ];
-		ProfilerSample & sample = samples[ k ];
+		int frame = activeFrame - framesToSend + 1;
+		if( frame < 0 )
+			frame += MAX_PROFILER_FRAMES - 1;
 
-		sample.depth = liveSample.depth;
-		sample.name = liveSample.name;
-		sample.type = liveSample.type;
+		ProtocolHeader* header = (ProtocolHeader*)buffer;
+		header->threadID = thread;
+		header->numSamples = (UInt16)CPUsamples->m_numFrameSamples[ frame ];
+		header->numNameStrings = 0;
+		header->unused = 0;
 
-		sample.duration.QuadPart = liveSample.timeEnd.QuadPart - liveSample.timeStart.QuadPart;
-		sample.durationSecs = (double)sample.duration.QuadPart / freqd;
+		unsigned int numLiveSamples = CPUsamples->m_numFrameSamples[ frame ];
+		assert( numLiveSamples <= MAX_PROFILER_SAMPLES );
 
-		++k;
+		ProfilerLiveSample* liveSamples = &CPUsamples->m_liveSamples[ frame * MAX_PROFILER_SAMPLES ];
+		ProtocolSample* samples = (ProtocolSample*)( buffer + sizeof( header ) );
+
+		for( unsigned int i = 0, k = 0; i < numLiveSamples; ++i )
+		{
+			ProfilerLiveSample & liveSample = liveSamples[ i ];
+			ProtocolSample & sample = samples[ k ];
+
+			sample.depth = liveSample.depth;
+			sample.name = liveSample.name;
+
+			double duration = double( liveSample.timeEnd.QuadPart - liveSample.timeStart.QuadPart );
+			sample.durationSecs = float( duration / freqd );
+
+			++k;
+		}
+
+		pipe.WriteToPipe( (const char*)buffer, sizeof( ProtocolHeader ) + sizeof( ProtocolSample ) * header->numSamples );
 	}
-
-	pipe.WriteToPipe( (const char*)buffer, sizeof( ProtocolHeader ) + sizeof( ProfilerSample ) * header->numSamples );
 }
 
 // *********************************
