@@ -93,7 +93,6 @@ namespace ProfilerEditor.ProfilerModel
 				{
 					if( m_childSamples[ i ].m_sampleData.name == samples[ curSampleIndex ].name && !updated[ i ] )
 					{
-						curSampleIndex++;
 						m_childSamples[ i ].Update( samples, ref curSampleIndex, maxTreeExpansionLevel );
 
 						found = true;
