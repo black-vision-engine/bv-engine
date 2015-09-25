@@ -75,7 +75,6 @@ namespace ProfilerEditor.ProfilerModel
 				m_childSamples.Add( new ProfilerSampleModel( this, child, maxTreeExpansionLevel ) );
 		}
 
-
 		public void Update( ProfilerSample[] samples, ref uint curSampleIndex, uint maxTreeExpansionLevel )
 		{
 			m_sampleData.averageDuration += samples[ curSampleIndex++ ].durationSecs;
@@ -159,6 +158,10 @@ namespace ProfilerEditor.ProfilerModel
 			get { return m_childSamples; }
 		}
 
+		public bool HasItems
+		{
+			get { if( m_childSamples.Count == 0 ) return false; else return true; }
+		}
 #endregion
 
 		public bool IsExpanded

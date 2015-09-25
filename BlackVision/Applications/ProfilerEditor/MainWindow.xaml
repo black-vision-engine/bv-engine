@@ -73,11 +73,8 @@
                 <TextBlock Text="{Binding Name}"/>
             </DockPanel>
             <DataTemplate.Triggers>
-                <DataTrigger Binding="{Binding Path=HasItems,RelativeSource={RelativeSource AncestorType={x:Type layer:TreeListViewItem}}}" 
-                     Value="False">
-                    <Setter TargetName="Expander"
-                  Property="Visibility"
-                  Value="Hidden"/>
+                <DataTrigger Binding="{Binding Path=HasItems,RelativeSource={RelativeSource AncestorType={x:Type layer:TreeListViewItem}}}" Value="False">
+                    <Setter TargetName="Expander" Property="Visibility" Value="Hidden"/>
                 </DataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
@@ -87,71 +84,45 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type layer:TreeListViewItem}">
                         <StackPanel>
-                            <Border Name="Bd"
-                      Background="{TemplateBinding Background}"
-                      BorderBrush="{TemplateBinding BorderBrush}"
-                      BorderThickness="{TemplateBinding BorderThickness}"
-                      Padding="{TemplateBinding Padding}">
-                                <GridViewRowPresenter x:Name="PART_Header" 
-                                      Content="{TemplateBinding Header}" 
+                            <Border Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                <GridViewRowPresenter x:Name="PART_Header" Content="{TemplateBinding Header}" 
                                       Columns="{Binding Path=Columns,RelativeSource={RelativeSource AncestorType={x:Type layer:TreeListView}}}" />
                             </Border>
                             <ItemsPresenter x:Name="ItemsHost" />
                         </StackPanel>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsExpanded"
-                       Value="false">
-                                <Setter TargetName="ItemsHost"
-                        Property="Visibility"
-                        Value="Collapsed"/>
+                            <Trigger Property="IsExpanded" Value="false">
+                                <Setter TargetName="ItemsHost" Property="Visibility" Value="Collapsed"/>
                             </Trigger>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
-                                    <Condition Property="HasHeader"
-                             Value="false"/>
-                                    <Condition Property="Width"
-                             Value="Auto"/>
+                                    <Condition Property="HasHeader" Value="false"/>
+                                    <Condition Property="Width" Value="Auto"/>
                                 </MultiTrigger.Conditions>
-                                <Setter TargetName="PART_Header"
-                        Property="MinWidth"
-                        Value="75"/>
+                                <Setter TargetName="PART_Header" Property="MinWidth" Value="75"/>
                             </MultiTrigger>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
-                                    <Condition Property="HasHeader"
-                             Value="false"/>
-                                    <Condition Property="Height"
-                             Value="Auto"/>
+                                    <Condition Property="HasHeader" Value="false"/>
+                                    <Condition Property="Height" Value="Auto"/>
                                 </MultiTrigger.Conditions>
-                                <Setter TargetName="PART_Header"
-                        Property="MinHeight"
-                        Value="19"/>
+                                <Setter TargetName="PART_Header" Property="MinHeight" Value="19"/>
                             </MultiTrigger>
-                            <Trigger Property="IsSelected"
-                       Value="true">
-                                <Setter TargetName="Bd"
-                        Property="Background"
-                        Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                                <Setter Property="Foreground"
-                        Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
                             </Trigger>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
-                                    <Condition Property="IsSelected"
-                             Value="true"/>
-                                    <Condition Property="IsSelectionActive"
-                             Value="false"/>
+                                    <Condition Property="IsSelected" Value="true"/>
+                                    <Condition Property="IsSelectionActive" Value="false"/>
                                 </MultiTrigger.Conditions>
-                                <Setter TargetName="Bd"
-                        Property="Background"
-                        Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-                                <Setter Property="Foreground"
-                        Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
                             </MultiTrigger>
-                            <Trigger Property="IsEnabled"
-                       Value="false">
-                                <Setter Property="Foreground"
-                        Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -164,11 +135,9 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type layer:TreeListView}">
-                        <Border BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
                             <DockPanel>
-                                <GridViewHeaderRowPresenter Columns="{Binding Path=Columns,RelativeSource={RelativeSource TemplatedParent}}"
-                                            DockPanel.Dock="Top"/>
+                                <GridViewHeaderRowPresenter Columns="{Binding Path=Columns,RelativeSource={RelativeSource TemplatedParent}}" DockPanel.Dock="Top"/>
                                 <ItemsPresenter/>
                             </DockPanel>
                         </Border>
@@ -177,6 +146,8 @@
             </Setter>
         </Style>
     </Window.Resources>
+    
+    
     <Grid>
         <Button x:Name="startButton" Content="Start Server" HorizontalAlignment="Left" Margin="488,20,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.701,-0.712" Click="startButton_Click"/>
         <Button x:Name="endServer" Content="End Server" HorizontalAlignment="Left" Margin="488,58,0,0" VerticalAlignment="Top" Width="75" Click="endServer_Click"/>
@@ -186,22 +157,22 @@
                     <layer:TreeListView x:Name="ProfilerTree1" HorizontalAlignment="Left" Height="409" Margin="10,10,0,0" VerticalAlignment="Top"
                               Width="385" Background="#FFE4E4E4" ItemsSource="{Binding TopLevelSamples}" IsTextSearchCaseSensitive="True" >
                         <layer:TreeListView.Columns>
-                                <GridViewColumn Header="Call Stack" CellTemplate="{StaticResource CellTemplateName}"></GridViewColumn>
-                                <GridViewColumn Header="Average Time" DisplayMemberBinding="{Binding AverageDuration}"></GridViewColumn>
+                                <GridViewColumn Header="Call Stack" Width="Auto" CellTemplate="{StaticResource CellTemplateName}"></GridViewColumn>
+                                <GridViewColumn Header="Average Time" Width="Auto" DisplayMemberBinding="{Binding AverageDuration}"></GridViewColumn>
                         </layer:TreeListView.Columns>
                         <layer:TreeListView.ItemContainerStyle>
                             <Style TargetType="{x:Type TreeViewItem}">
                                 <Setter Property="IsExpanded" Value="{Binding IsExpanded}" ></Setter>
                             </Style>
                         </layer:TreeListView.ItemContainerStyle>
-                        <layer:TreeListView.ItemTemplate>
+                        <!--<layer:TreeListView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                                 <StackPanel Orientation="Horizontal">
                                     <Rectangle Height="10" Width="30" Margin="3" Fill="{Binding Converter={StaticResource NameColorConverter}, ConverterParameter={x:Reference mainWindow} }"/>
                                     <TextBlock Text="{Binding AverageDuration, StringFormat=N6}"></TextBlock>
                                 </StackPanel>
                             </HierarchicalDataTemplate>
-                        </layer:TreeListView.ItemTemplate>
+                        </layer:TreeListView.ItemTemplate>-->
                     </layer:TreeListView>
                 </Grid>
             </TabItem>
