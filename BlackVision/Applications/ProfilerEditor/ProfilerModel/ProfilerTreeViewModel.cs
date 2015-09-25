@@ -9,7 +9,7 @@ namespace ProfilerEditor.ProfilerModel
 {
 	public class ProfilerTreeViewModel
 	{
-		private Collection<ProfilerSampleModel>				m_topLevelSamples;
+		private Collection<ProfilerSampleModel>		m_topLevelSamples;
 
 #region Constructor
 		public ProfilerTreeViewModel( ProfilerSample[] samples, uint maxTreeExpansionLevel )
@@ -30,6 +30,13 @@ namespace ProfilerEditor.ProfilerModel
 
 			foreach( ProfilerSampleModel sampleModel in m_topLevelSamples )
 				sampleModel.Update( samples, ref curSampleIdx, maxTreeExpansionLevel );
+		}
+
+		/**This funnction is used to update tree, on basis of data from another tree.*/
+		public void Update( ProfilerTreeViewModel treeView, uint maxTreeExpansionLevel )
+		{
+			for( int i = 0; i < m_topLevelSamples.Count; ++i )
+				m_topLevelSamples[ i ].Update( treeView.m_topLevelSamples[ i ], maxTreeExpansionLevel );
 		}
 
 		public void Average( uint numFrames )

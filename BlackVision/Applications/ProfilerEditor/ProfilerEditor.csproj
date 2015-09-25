@@ -85,6 +85,7 @@
     <Compile Include="ProfilerModel\NameMapping.cs" />
     <Compile Include="ProfilerModel\ProfilerSampleModel.cs" />
     <Compile Include="ProfilerModel\ProfilerTreeViewModel.cs" />
+    <Compile Include="ProfilerModel\SampleData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

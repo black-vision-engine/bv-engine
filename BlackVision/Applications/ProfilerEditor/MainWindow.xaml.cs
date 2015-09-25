@@ -99,11 +99,7 @@ namespace ProfilerEditor
 				m_namesMap.Update( samples );
 				ProfilerModel.ProfilerTreeViewModel newTreeView = m_dataProcessor.AddNewData( loadedData );
 				if( newTreeView != null )
-				{
-					m_profilerTreeView = newTreeView;
-					ProfilerTree1.DataContext = m_profilerTreeView;
-				}
-				//MakeTree( samples );
+					MakeTree( newTreeView );
 			}
 		}
 
@@ -116,18 +112,18 @@ namespace ProfilerEditor
 			return maxDepthLevel;
 		}
 
-		private void MakeTree( ProfilerSample[] samples )
+		private void MakeTree( ProfilerModel.ProfilerTreeViewModel treeView )
 		{
 			int maxDepthLevel = GetTreeExpansionLevel();
 
 			if( !m_firstTime )
 			{
-				m_profilerTreeView.Update( samples, (uint)maxDepthLevel );
+				m_profilerTreeView.Update( treeView, (uint)maxDepthLevel );
 				m_firstTime = false;
 			}
 			else
 			{
-				m_profilerTreeView = new ProfilerModel.ProfilerTreeViewModel( samples, (uint)maxDepthLevel );
+				m_profilerTreeView = treeView;
 				ProfilerTree1.DataContext = m_profilerTreeView;
 			}
 		}
