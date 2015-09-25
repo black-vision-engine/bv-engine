@@ -83,6 +83,7 @@ private:
 	unsigned int			m_midgardThreadID;
 	bool					m_midgardThreadStopping;
 	bool					m_Enabled;
+	bool					m_key_active;
 
     
 public:
@@ -94,6 +95,7 @@ public:
     
     bool                    m_IsEnding;
 	void					Black();
+	void					SetKey(bool active){m_key_active=active;};
 
 	                        VideoCardManager        (void);
 	                        ~VideoCardManager       (void);

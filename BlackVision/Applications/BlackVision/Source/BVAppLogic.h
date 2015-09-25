@@ -105,6 +105,7 @@ public:
     void            ReloadScene     ();
 
 	void            GrabCurrentFrame(  const std::string & path );
+	void            SetKey			( bool active);
 
 private:
 

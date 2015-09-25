@@ -324,6 +324,17 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 
             m_AppLogic->GrabCurrentFrame( s_path );
 		}
+		else if( evtInfo->request==L"key_on" )
+		{
+			Log::A("KEY","ON");
+            m_AppLogic->SetKey( true );
+		}
+		else if( evtInfo->request==L"key_off" )
+		{
+			Log::A("KEY","OFF");
+			
+            m_AppLogic->SetKey( false );
+		}
     }
 }
 

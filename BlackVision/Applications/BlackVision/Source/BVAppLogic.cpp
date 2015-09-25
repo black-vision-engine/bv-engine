@@ -485,6 +485,13 @@ void            BVAppLogic::GrabCurrentFrame(  const std::string & path )
 {
     m_grabFramePath = path;
 }
+//pablito
+// *********************************
+//
+void            BVAppLogic::SetKey(  bool active)
+{
+    m_videoCardManager->SetKey(active);
+}
 
 // *********************************
 //
