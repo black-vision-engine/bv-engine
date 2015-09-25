@@ -28,7 +28,7 @@ namespace ProfilerEditor
 		public const uint			PIPE_TYPE_MESSAGE		= (0x00000004);
 		public const uint			PIPE_READMODE_MESSAGE	= (0x00000002);
 
-        private uint				m_inBufferSize				= 376;
+		private uint				m_inBufferSize				= 2000;//376;
         private uint				m_outBufferSize				= 0;
 
 

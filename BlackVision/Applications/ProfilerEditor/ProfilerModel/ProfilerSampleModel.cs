@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+//using System.Windows.Data;
 
 namespace ProfilerEditor.ProfilerModel
 {
@@ -182,11 +183,30 @@ namespace ProfilerEditor.ProfilerModel
 			get { return m_parent; }
 		}
 
-		public double DurationSecs
+		public Int64 Name
+		{
+			get { return m_sampleData.name; }
+		}
+		public SampleData Sample
+		{
+			get { return m_sampleData; }
+		}
+		public float AverageDuration
+		{
+			get { return m_sampleData.averageDuration; }
+		}
+		public float TotalDuration
 		{
 			get { return m_sampleData.durationSecs; }
 		}
-
+		public float MaxDuration
+		{
+			get { return m_sampleData.maxDuration; }
+		}
+		public float MinDuration
+		{
+			get { return m_sampleData.minDuration; }
+		}
 
 #region INotifyPropertyChanged Members
 

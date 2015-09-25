@@ -81,7 +81,9 @@
   <ItemGroup>
     <Compile Include="DataProtocol\NamedPipeServer.cs" />
     <Compile Include="DataProtocol\ProfilerSample.cs" />
+    <Compile Include="PresentationLayer\Converters.cs" />
     <Compile Include="PresentationLayer\NameColorConverter.cs" />
+    <Compile Include="PresentationLayer\TreeListView.cs" />
     <Compile Include="ProfilerModel\NameMapping.cs" />
     <Compile Include="ProfilerModel\ProfilerSampleModel.cs" />
     <Compile Include="ProfilerModel\ProfilerTreeViewModel.cs" />

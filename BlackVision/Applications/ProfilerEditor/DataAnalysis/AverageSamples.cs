@@ -11,7 +11,7 @@ namespace ProfilerEditor.DataAnalysis
 	{
 		private DataProtocol.LoadedData[]					m_waitingFrames;
 		private uint										m_numWaitingFrames;
-		private const uint									m_maxWaitingFrames = 100;
+		private const uint									m_maxWaitingFrames = 200;
 
 		public AverageSamples()
 		{
