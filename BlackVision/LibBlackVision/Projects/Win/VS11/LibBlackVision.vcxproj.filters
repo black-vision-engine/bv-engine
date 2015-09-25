@@ -160,6 +160,12 @@
     <Filter Include="Assets\Font\Engines">
       <UniqueIdentifier>{65752d9b-561f-4f02-b982-e20eca291b13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\VideoStream">
+      <UniqueIdentifier>{db50faef-f596-48b9-9c90-ea7b5fbdc2ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Models\Plugins\Simple\VideoStreamDecoder">
+      <UniqueIdentifier>{2e59aefe-5105-4fc8-87df-8a8c3bbbb08d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -878,6 +884,21 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureUtils.cpp">
       <Filter>Assets\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamAsset.cpp">
+      <Filter>Assets\VideoStream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamAssetDescriptor.cpp">
+      <Filter>Assets\VideoStream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\DefaultVideoStreamDecoderPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\VideoStreamDecoderThread.cpp">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultVideoStreamDescriptor.cpp">
+      <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1783,6 +1804,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h">
       <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamAsset.h">
+      <Filter>Assets\VideoStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamAssetDescriptor.h">
+      <Filter>Assets\VideoStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\DefaultVideoStreamDecoderPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\VideoStreamDecoderThread.h">
+      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultVideoStreamDescriptor.h">
+      <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

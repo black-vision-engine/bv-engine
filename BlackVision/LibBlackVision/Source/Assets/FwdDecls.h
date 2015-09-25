@@ -20,7 +20,7 @@ class TextureAssetDesc;
 DEFINE_CONST_PTR_TYPE( TextureAssetDesc )
 DEFINE_CONST_PTR_TYPE( TextureAsset )
 DEFINE_CONST_PTR_TYPE( SingleTextureAssetDesc )
-DEFINE_CONST_PTR_TYPE(SingleTextureAsset)
+DEFINE_CONST_PTR_TYPE( SingleTextureAsset )
 DEFINE_CONST_PTR_TYPE( MipMapAssetDesc )
 DEFINE_CONST_PTR_TYPE( MipMapAsset )
 DEFINE_CONST_PTR_TYPE( GeneratedSingleTextureAssetDesc )

@@ -43,6 +43,7 @@ namespace {
     std::string GSimplePlugins4[] = { "DEFAULT_TRANSFORM", "DEFAULT_TEXT" };
     std::string GSimplePlugins5[] = { "DEFAULT_TRANSFORM", "DEFAULT_COLOR", "DEFAULT_TIMER" };
     std::string GSimplePlugins6[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_HEIGHT_MAP" };
+    std::string GSimplePlugins7[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_VIDEO_STREAM_DECODER" };
 
 
     // *****************************
@@ -1292,8 +1293,8 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 1.f );
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
 
-	//success = model::LoadAnimation( node->GetPlugin( "animation" ), "rsrcy/test_anim", "*.jpg" );
-    success = model::LoadAnimation( node->GetPlugin( "animation" ), "d:/src/media/sequences/FullHD/alfai/", "*.tga" );
+	success = model::LoadAnimation( node->GetPlugin( "animation" ), "rsrcy/test_anim", "*.jpg" );
+    //success = model::LoadAnimation( node->GetPlugin( "animation" ), "d:/src/media/sequences/FullHD/alfai/", "*.tga" );
     assert( success );
 
     if( useAlphaMask )
@@ -1308,6 +1309,47 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
 
     auto ai = TestAIManager::Instance().GetAIPreset( 2 );
     ai->SetTimeline( someTimelineWithEvents );
+
+    return node;    
+}
+
+
+// *****************************
+//
+model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
+{
+	{ useAlphaMask; }
+    //Timeline stuff
+    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    //timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 2.0 ) );
+    //timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+
+    someTimelineWithEvents->AddChild( localTimeline );
+    timeEvaluator->AddChild( someTimelineWithEvents );
+
+    //Plugin stuf
+    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins7, GSimplePlugins7 + 3 );
+
+    auto node = model::BasicNode::Create( "Root", timeEvaluator );
+
+    auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
+    assert( success );
+
+    //SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 0.f ), 0.f );
+    //SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 10.f ), 100.f );
+
+    //node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( timeEvaluator );
+
+    //SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
+
+    model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 1.f );
+    model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
+
+	//success = model::LoadAnimation( node->GetPlugin( "animation" ), "rsrcy/test_anim", "*.jpg" );
+	success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/ActivisionLogo.bik" );
+    assert( success );
 
     return node;    
 }

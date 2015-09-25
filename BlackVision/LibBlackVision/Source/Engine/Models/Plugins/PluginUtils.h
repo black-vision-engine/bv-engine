@@ -12,6 +12,8 @@ bool    LoadTexture     ( IPluginPtr plugin, const std::string & textureFile, co
 
 bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, const std::string & filter );
 
+bool    LoadVideoStream ( IPluginPtr plugin, const std::string & streamPath );
+
 bool    LoadFont        ( IPluginPtr plugin, const std::string & fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps );
 
 } //model
