@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using System.Runtime.InteropServices;
 
-namespace ProfilerEditor
+namespace ProfilerEditor.DataProtocol
 {
 	[StructLayout( LayoutKind.Explicit, Size = 16, Pack = 1 )]
 	public struct ProfilerSample

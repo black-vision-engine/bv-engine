@@ -12,7 +12,7 @@ namespace ProfilerEditor.ProfilerModel
 		private Collection<ProfilerSampleModel>		m_topLevelSamples;
 
 #region Constructor
-		public ProfilerTreeViewModel( ProfilerSample[] samples, uint maxTreeExpansionLevel )
+		public ProfilerTreeViewModel( DataProtocol.ProfilerSample[] samples, uint maxTreeExpansionLevel )
 		{
 			m_topLevelSamples = new Collection<ProfilerSampleModel>();
 
@@ -24,7 +24,7 @@ namespace ProfilerEditor.ProfilerModel
 
 #endregion
 
-		public void Update( ProfilerSample[] samples, uint maxTreeExpansionLevel )
+		public void Update( DataProtocol.ProfilerSample[] samples, uint maxTreeExpansionLevel )
 		{
 			uint curSampleIdx = 0;
 

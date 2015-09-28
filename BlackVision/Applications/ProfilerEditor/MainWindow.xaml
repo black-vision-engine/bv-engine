@@ -4,175 +4,85 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:layer="clr-namespace:ProfilerEditor.PresentationLayer"
-        Title="Profiler Editor" Height="540" Width="740" Closing="Window_Closing" Name="mainWindow">
+        Title="Profiler Editor" Height="540" Width="1077" Closing="Window_Closing" Name="mainWindow">
     <Window.Resources>
         <layer:NameColorConverter x:Key="NameColorConverter">
         </layer:NameColorConverter>
-
-        <Style x:Key="ExpandCollapseToggleStyle"
-           TargetType="{x:Type ToggleButton}">
-            <Setter Property="Focusable"
-              Value="False"/>
-            <Setter Property="Width"
-              Value="19"/>
-            <Setter Property="Height"
-              Value="13"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ToggleButton}">
-                        <Border Width="19"
-                    Height="13"
-                    Background="Transparent">
-                            <Border Width="9"
-                      Height="9"
-                      BorderThickness="1"
-                      BorderBrush="#FF7898B5"
-                      CornerRadius="1"
-                      SnapsToDevicePixels="true">
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0,0"
-                                       EndPoint="1,1">
-                                        <LinearGradientBrush.GradientStops>
-                                            <GradientStop Color="White"
-                                    Offset=".2"/>
-                                            <GradientStop Color="#FFC0B7A6"
-                                    Offset="1"/>
-                                        </LinearGradientBrush.GradientStops>
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                                <Path x:Name="ExpandPath"
-                      Margin="1,1,1,1"
-                      Fill="Black"
-                      Data="M 0 2 L 0 3 L 2 3 L 2 5 L 3 5 L 3 3 L 5 3 L 5 2 L 3 2 L 3 0 L 2 0 L 2 2 Z"/>
-                            </Border>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked"
-                       Value="True">
-                                <Setter Property="Data"
-                        TargetName="ExpandPath"
-                        Value="M 0 2 L 0 3 L 5 3 L 5 2 Z"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-
-        <layer:LevelToIndentConverter x:Key="LevelToIndentConverter"/>
-
-
-        <DataTemplate x:Key="CellTemplateName">
-            <DockPanel>
-                <ToggleButton x:Name="Expander" 
-                      Style="{StaticResource ExpandCollapseToggleStyle}" 
-                      Margin="{Binding Level,Converter={StaticResource LevelToIndentConverter},RelativeSource={RelativeSource AncestorType={x:Type layer:TreeListViewItem}}}"
-                      IsChecked="{Binding Path=IsExpanded,RelativeSource={RelativeSource AncestorType={x:Type layer:TreeListViewItem}}}"
-                      ClickMode="Press"/>
-                <TextBlock Text="{Binding Name}"/>
-            </DockPanel>
-            <DataTemplate.Triggers>
-                <DataTrigger Binding="{Binding Path=HasItems,RelativeSource={RelativeSource AncestorType={x:Type layer:TreeListViewItem}}}" Value="False">
-                    <Setter TargetName="Expander" Property="Visibility" Value="Hidden"/>
-                </DataTrigger>
-            </DataTemplate.Triggers>
-        </DataTemplate>
-
-        <Style TargetType="{x:Type layer:TreeListViewItem}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type layer:TreeListViewItem}">
-                        <StackPanel>
-                            <Border Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
-                                <GridViewRowPresenter x:Name="PART_Header" Content="{TemplateBinding Header}" 
-                                      Columns="{Binding Path=Columns,RelativeSource={RelativeSource AncestorType={x:Type layer:TreeListView}}}" />
-                            </Border>
-                            <ItemsPresenter x:Name="ItemsHost" />
-                        </StackPanel>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsExpanded" Value="false">
-                                <Setter TargetName="ItemsHost" Property="Visibility" Value="Collapsed"/>
-                            </Trigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="HasHeader" Value="false"/>
-                                    <Condition Property="Width" Value="Auto"/>
-                                </MultiTrigger.Conditions>
-                                <Setter TargetName="PART_Header" Property="MinWidth" Value="75"/>
-                            </MultiTrigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="HasHeader" Value="false"/>
-                                    <Condition Property="Height" Value="Auto"/>
-                                </MultiTrigger.Conditions>
-                                <Setter TargetName="PART_Header" Property="MinHeight" Value="19"/>
-                            </MultiTrigger>
-                            <Trigger Property="IsSelected" Value="true">
-                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-                            </Trigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsSelected" Value="true"/>
-                                    <Condition Property="IsSelectionActive" Value="false"/>
-                                </MultiTrigger.Conditions>
-                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-                            </MultiTrigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-
-        <Style TargetType="{x:Type layer:TreeListView}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type layer:TreeListView}">
-                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                            <DockPanel>
-                                <GridViewHeaderRowPresenter Columns="{Binding Path=Columns,RelativeSource={RelativeSource TemplatedParent}}" DockPanel.Dock="Top"/>
-                                <ItemsPresenter/>
-                            </DockPanel>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </Window.Resources>
-    
-    
+
+
     <Grid>
-        <Button x:Name="startButton" Content="Start Server" HorizontalAlignment="Left" Margin="488,20,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.701,-0.712" Click="startButton_Click"/>
-        <Button x:Name="endServer" Content="End Server" HorizontalAlignment="Left" Margin="488,58,0,0" VerticalAlignment="Top" Width="75" Click="endServer_Click"/>
-        <TabControl HorizontalAlignment="Left" Height="461" Margin="36,20,0,0" VerticalAlignment="Top" Width="415">
+        <Button x:Name="startButton" Content="Start Server" HorizontalAlignment="Left" Margin="930,20,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.701,-0.712" Click="startButton_Click"/>
+        <Button x:Name="endServer" Content="End Server" HorizontalAlignment="Left" Margin="930,58,0,0" VerticalAlignment="Top" Width="75" Click="endServer_Click"/>
+        <TabControl HorizontalAlignment="Left" Height="461" Margin="36,20,0,0" VerticalAlignment="Top" Width="867">
             <TabItem Header="Thread 1">
                 <Grid Background="#FFE5E5E5">
-                    <layer:TreeListView x:Name="ProfilerTree1" HorizontalAlignment="Left" Height="409" Margin="10,10,0,0" VerticalAlignment="Top"
-                              Width="385" Background="#FFE4E4E4" ItemsSource="{Binding TopLevelSamples}" IsTextSearchCaseSensitive="True" >
+                    <layer:TreeListView x:Name="ProfilerTree1" ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="409" Margin="10,10,0,0" VerticalAlignment="Top" Width="837">
+                        <layer:TreeListView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
+                        </layer:TreeListView.ItemTemplate>
                         <layer:TreeListView.Columns>
-                                <GridViewColumn Header="Call Stack" Width="Auto" CellTemplate="{StaticResource CellTemplateName}"></GridViewColumn>
-                                <GridViewColumn Header="Average Time" Width="Auto" DisplayMemberBinding="{Binding AverageDuration}"></GridViewColumn>
+                            <GridViewColumn Header="" Width="40">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Rectangle Height="10" Width="30" Margin="3" Fill="{Binding Converter={StaticResource NameColorConverter}, ConverterParameter={x:Reference mainWindow} }"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Call Stack" Width="390">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <layer:TreeListViewExpander/>
+                                            <TextBlock Text="{Binding SampleName}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Average Time" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding AverageDuration, StringFormat=N6}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Max Time" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding MaxDuration, StringFormat=N6}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Min Time" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding MinDuration, StringFormat=N6}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Total Time" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding TotalDuration, StringFormat=N6}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </layer:TreeListView.Columns>
-                        <layer:TreeListView.ItemContainerStyle>
+                        <!--<layer:TreeListView.ItemContainerStyle>
                             <Style TargetType="{x:Type TreeViewItem}">
                                 <Setter Property="IsExpanded" Value="{Binding IsExpanded}" ></Setter>
                             </Style>
-                        </layer:TreeListView.ItemContainerStyle>
-                        <!--<layer:TreeListView.ItemTemplate>
-                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                                <StackPanel Orientation="Horizontal">
-                                    <Rectangle Height="10" Width="30" Margin="3" Fill="{Binding Converter={StaticResource NameColorConverter}, ConverterParameter={x:Reference mainWindow} }"/>
-                                    <TextBlock Text="{Binding AverageDuration, StringFormat=N6}"></TextBlock>
-                                </StackPanel>
-                            </HierarchicalDataTemplate>
-                        </layer:TreeListView.ItemTemplate>-->
+                        </layer:TreeListView.ItemContainerStyle>-->
                     </layer:TreeListView>
                 </Grid>
             </TabItem>
@@ -180,9 +90,9 @@
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
         </TabControl>
-        <TextBox x:Name="depthLevels" HorizontalAlignment="Left" Height="23" Margin="488,196,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="44"/>
-        <Label Content="Show depth levels" HorizontalAlignment="Left" Margin="488,170,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.263,0.231" Width="120"/>
-        <Rectangle Fill="#FF6161FF" HorizontalAlignment="Left" Height="100" Margin="543,339,0,0" Stroke="Black" VerticalAlignment="Top" Width="100"/>
+        <TextBox x:Name="depthLevels" HorizontalAlignment="Left" Height="23" Margin="930,128,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="44"/>
+        <Label Content="Show depth levels" HorizontalAlignment="Left" Margin="930,97,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.263,0.231" Width="120"/>
+        <Rectangle Fill="#FF6161FF" HorizontalAlignment="Left" Height="100" Margin="930,176,0,0" Stroke="Black" VerticalAlignment="Top" Width="100"/>
 
     </Grid>
 </Window>

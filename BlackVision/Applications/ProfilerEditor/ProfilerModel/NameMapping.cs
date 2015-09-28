@@ -23,7 +23,7 @@ namespace ProfilerEditor.ProfilerModel
 			m_randomGenerator = new Random();
 		}
 
-		public void Update( ProfilerSample[] samples )
+		public void Update( DataProtocol.ProfilerSample[] samples )
 		{
 			foreach( var sample in samples )
 				if( !m_colorMap.ContainsKey( sample.name ) )

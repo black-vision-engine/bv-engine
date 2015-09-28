@@ -10,7 +10,7 @@ using System.Collections;
 using System.ComponentModel;
 
 
-namespace ProfilerEditor
+namespace ProfilerEditor.DataProtocol
 {
 	// Helper data object to queue
 	class ReadDataObject

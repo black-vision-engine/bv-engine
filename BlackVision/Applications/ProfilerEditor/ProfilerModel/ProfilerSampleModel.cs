@@ -35,7 +35,7 @@ namespace ProfilerEditor.ProfilerModel
 			m_sampleData.name = 0;
 		}
 
-		public ProfilerSampleModel( ProfilerSampleModel parent, ProfilerSample[] samples, ref uint curSampleIndex, uint maxTreeExpansionLevel )
+		public ProfilerSampleModel( ProfilerSampleModel parent, DataProtocol.ProfilerSample[] samples, ref uint curSampleIndex, uint maxTreeExpansionLevel )
 		{
 			m_childSamples = new Collection<ProfilerSampleModel>();
 			AddSamples( parent, samples, ref curSampleIndex, maxTreeExpansionLevel );
@@ -49,7 +49,7 @@ namespace ProfilerEditor.ProfilerModel
 
 #endregion
 
-		private void AddSamples( ProfilerSampleModel parent, ProfilerSample[] samples, ref uint curSampleIndex, uint maxTreeExpansionLevel )
+		private void AddSamples( ProfilerSampleModel parent, DataProtocol.ProfilerSample[] samples, ref uint curSampleIndex, uint maxTreeExpansionLevel )
 		{
 			m_sampleData = new SampleData( samples[ curSampleIndex++ ] );
 			m_parent = parent;
@@ -75,7 +75,7 @@ namespace ProfilerEditor.ProfilerModel
 				m_childSamples.Add( new ProfilerSampleModel( this, child, maxTreeExpansionLevel ) );
 		}
 
-		public void Update( ProfilerSample[] samples, ref uint curSampleIndex, uint maxTreeExpansionLevel )
+		public void Update( DataProtocol.ProfilerSample[] samples, ref uint curSampleIndex, uint maxTreeExpansionLevel )
 		{
 			m_sampleData.averageDuration += samples[ curSampleIndex++ ].durationSecs;
 			if( m_sampleData.depth < maxTreeExpansionLevel )
@@ -186,7 +186,7 @@ namespace ProfilerEditor.ProfilerModel
 			get { return m_parent; }
 		}
 
-		public Int64 Name
+		public Int64 SampleName
 		{
 			get { return m_sampleData.name; }
 		}

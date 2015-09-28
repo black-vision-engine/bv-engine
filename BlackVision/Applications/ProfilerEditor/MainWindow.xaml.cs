@@ -30,7 +30,7 @@ namespace ProfilerEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-		private NamedPipeServer								m_pipedServer;
+		private DataProtocol.NamedPipeServer				m_pipedServer;
 		private ProfilerModel.ProfilerTreeViewModel			m_profilerTreeView;
 		private ProfilerModel.NameMapping					m_namesMap;
 		private DataAnalysis.AverageSamples					m_dataProcessor;
@@ -64,7 +64,7 @@ namespace ProfilerEditor
 		private void startButton_Click( object sender, RoutedEventArgs e )
 		{
 			string pipeName = "ProfilerPipeTest";
-			m_pipedServer = new NamedPipeServer( pipeName, 0 );
+			m_pipedServer = new DataProtocol.NamedPipeServer( pipeName, 0 );
 
 			m_pipedServer.onMessageSent = GetMessageFromPipe;
 			m_pipedServer.m_syncContext = SynchronizationContext.Current;
@@ -87,11 +87,11 @@ namespace ProfilerEditor
 
 		private void GetMessageFromPipe( object state )
 		{
-			ReadDataObject data = m_pipedServer.ReadBytes();
+			DataProtocol.ReadDataObject data = m_pipedServer.ReadBytes();
 
 			if( data.m_bytesRead > 0 )
 			{
-				ProfilerSample[] samples;
+				DataProtocol.ProfilerSample[] samples;
 				DataProtocol.LoadedData loadedData;
 				loadedData = DataProtocol.SamplesLoader.NewLoad( data );
 				samples = loadedData.m_samples;

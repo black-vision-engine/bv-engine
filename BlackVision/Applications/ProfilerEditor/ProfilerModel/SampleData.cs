@@ -25,7 +25,7 @@ namespace ProfilerEditor.ProfilerModel
 			minDuration = float.MaxValue;
 		}
 
-		public SampleData( ProfilerSample sample )
+		public SampleData( DataProtocol.ProfilerSample sample )
 		{
 			name = sample.name;
 			depth = sample.depth;
