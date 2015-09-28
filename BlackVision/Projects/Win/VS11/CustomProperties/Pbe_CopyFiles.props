@@ -6,7 +6,7 @@
   <ItemDefinitionGroup>
     <PostBuildEvent>
       <Command>xcopy $(ThirdPartyDir)\FreeImage\Dist\$(PlatformName)\FreeImage.dll $(OutDir) /c /y
-xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName) $(OutDir) /c /y
+xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 mkdir $(OutDir)\Assets &gt; nul  2&gt; nul
 xcopy $(AssetsDir) $(OutDir)\Assets /e /c /y</Command>
       <Message>Copying required dll files.</Message>
