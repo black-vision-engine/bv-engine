@@ -55,7 +55,7 @@ inline  AutoFrameProfile::~AutoFrameProfile   ()
 
     if( m_showStats )
     {
-        m_displayCallback( "FRAME TIME - FORCED DISPLAY" );
+		m_displayCallback( "FRAME TIME - FORCED DISPLAY", m_threadID );
         startMillis = timestamp;
         m_showStats = false;
 		AutoProfile::m_threads[ m_threadID ].m_framesToSend = 0;
@@ -68,7 +68,7 @@ inline  AutoFrameProfile::~AutoFrameProfile   ()
 	//}
     else if( timestamp - startMillis > AutoProfile::GetStatsDisplayWaitMs() )
     {
-        m_displayCallback( "FRAME TIME - REGULAR SAMPLE" );
+		m_displayCallback( "FRAME TIME - REGULAR SAMPLE", m_threadID );
         startMillis = timestamp;
 		AutoProfile::m_threads[ m_threadID ].m_framesToSend = 0;
     }

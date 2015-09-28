@@ -8,29 +8,22 @@ using System.Runtime.InteropServices;
 
 namespace ProfilerEditor.DataProtocol
 {
-	[StructLayout( LayoutKind.Explicit, Size = 16, Pack = 1 )]
+	[StructLayout( LayoutKind.Explicit, Size = 8, Pack = 1 )]
 	public struct ProfilerSample
 	{
-		[MarshalAs( UnmanagedType.I8 )]
+		[MarshalAs( UnmanagedType.I2 )]
 		[FieldOffset( 0 )]
-		public Int64	name;
+		public Int16	name;
 
-		//[MarshalAs( UnmanagedType.I8 )]
-		//[FieldOffset( 8 )]
-		//public Int64	duration;
+
+		[MarshalAs( UnmanagedType.I2 )]
+		[FieldOffset( 2 )]
+		public UInt16	depth;
+
 
 		[MarshalAs( UnmanagedType.R4 )]
-		[FieldOffset( 8 )]
+		[FieldOffset( 4 )]
 		public float	durationSecs;
-
-		//[MarshalAs( UnmanagedType.I4 )]
-		//[FieldOffset( 24 )]
-		//public Int32	type;
-
-		[MarshalAs( UnmanagedType.I4 )]
-		[FieldOffset( 12 )]
-		public UInt32	depth;
-
 	};
 
 }

@@ -143,7 +143,8 @@ namespace ProfilerEditor.ProfilerModel
 			}
 		}
 
-
+		/**Use only with function Update( DataProtocol.ProfilerSample[] samples ...).
+		Devides field m_sampleData.averageDuration.*/
 		public void Average( uint numFrames )
 		{
 			m_sampleData.averageDuration = m_sampleData.averageDuration / numFrames;

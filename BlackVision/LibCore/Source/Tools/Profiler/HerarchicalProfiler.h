@@ -28,15 +28,6 @@ enum class AutoProfileType : int
 };
 
 
-struct ProtocolHeader
-{
-	UInt16		threadID;
-	UInt16		numSamples;
-	UInt16		numNameStrings;
-	UInt16		unused;
-};
-
-
 struct ProfilerSample
 {
     const char*			name;
@@ -133,7 +124,7 @@ class AutoFrameProfile
 {
 public:
 
-    typedef void (*PtrDisplayCallback)( const char * );
+	typedef void (*PtrDisplayCallback)( const char *, unsigned int );
 
 private:
 	unsigned int				m_threadID;
