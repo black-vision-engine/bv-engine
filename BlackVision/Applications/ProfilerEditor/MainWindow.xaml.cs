@@ -119,10 +119,11 @@ namespace ProfilerEditor
 			if( !m_firstTime )
 			{
 				m_profilerTreeView.Update( treeView, (uint)maxDepthLevel );
-				m_firstTime = false;
+				//ProfilerTree1.DataContext = m_profilerTreeView;
 			}
 			else
 			{
+				m_firstTime = false;
 				m_profilerTreeView = treeView;
 				ProfilerTree1.DataContext = m_profilerTreeView;
 			}

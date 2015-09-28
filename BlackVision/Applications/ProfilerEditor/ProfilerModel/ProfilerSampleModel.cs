@@ -108,12 +108,12 @@ namespace ProfilerEditor.ProfilerModel
 		/**This funnction is used to update tree, on basis of data from another tree.*/
 		public void Update( ProfilerSampleModel sampleModel, uint maxTreeExpansionLevel )
 		{
-			m_sampleData.durationSecs += sampleModel.m_sampleData.durationSecs;
-			m_sampleData.averageDuration = sampleModel.m_sampleData.averageDuration;
-			if( m_sampleData.maxDuration < sampleModel.m_sampleData.maxDuration )
-				m_sampleData.maxDuration = sampleModel.m_sampleData.maxDuration;
-			if( m_sampleData.minDuration > sampleModel.m_sampleData.minDuration )
-				m_sampleData.minDuration = sampleModel.m_sampleData.minDuration;
+			TotalDuration = sampleModel.m_sampleData.durationSecs + TotalDuration;
+			AverageDuration = sampleModel.m_sampleData.averageDuration;
+			if( MaxDuration < sampleModel.m_sampleData.maxDuration )
+				MaxDuration = sampleModel.m_sampleData.maxDuration;
+			if( MinDuration > sampleModel.m_sampleData.minDuration )
+				MinDuration = sampleModel.m_sampleData.minDuration;
 
 
 			if( m_sampleData.depth < maxTreeExpansionLevel )
@@ -197,18 +197,50 @@ namespace ProfilerEditor.ProfilerModel
 		public float AverageDuration
 		{
 			get { return m_sampleData.averageDuration; }
+			set
+			{
+				if( m_sampleData.averageDuration != value )
+				{
+					m_sampleData.averageDuration = value;
+					OnPropertyChanged( "AverageDuration" );
+				}
+			}
 		}
 		public float TotalDuration
 		{
 			get { return m_sampleData.durationSecs; }
+			set
+			{
+				if( m_sampleData.durationSecs != value )
+				{
+					m_sampleData.durationSecs = value;
+					OnPropertyChanged( "TotalDuration" );
+				}
+			}
 		}
 		public float MaxDuration
 		{
 			get { return m_sampleData.maxDuration; }
+			set
+			{
+				if( m_sampleData.maxDuration != value )
+				{
+					m_sampleData.maxDuration = value;
+					OnPropertyChanged( "MaxDuration" );
+				}
+			}
 		}
 		public float MinDuration
 		{
 			get { return m_sampleData.minDuration; }
+			set
+			{
+				if( m_sampleData.minDuration != value )
+				{
+					m_sampleData.minDuration = value;
+					OnPropertyChanged( "MinDuration" );
+				}
+			}
 		}
 
 #region INotifyPropertyChanged Members

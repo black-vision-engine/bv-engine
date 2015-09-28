@@ -17,7 +17,7 @@
         <TabControl HorizontalAlignment="Left" Height="461" Margin="36,20,0,0" VerticalAlignment="Top" Width="867">
             <TabItem Header="Thread 1">
                 <Grid Background="#FFE5E5E5">
-                    <layer:TreeListView x:Name="ProfilerTree1" ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="409" Margin="10,10,0,0" VerticalAlignment="Top" Width="837">
+                    <layer:TreeListView x:Name="ProfilerTree1" ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
                         <layer:TreeListView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
                         </layer:TreeListView.ItemTemplate>
@@ -26,7 +26,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Rectangle Height="10" Width="30" Margin="3" Fill="{Binding Converter={StaticResource NameColorConverter}, ConverterParameter={x:Reference mainWindow} }"/>
+                                            <Rectangle Height="10" Width="30" Margin="3" Fill="{Binding Converter={StaticResource NameColorConverter}, ConverterParameter={x:Reference mainWindow}, Mode=OneWay }"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -36,7 +36,7 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <layer:TreeListViewExpander/>
-                                            <TextBlock Text="{Binding SampleName}"/>
+                                            <TextBlock Text="{Binding Path=SampleName, Mode=OneWay}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -45,7 +45,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding AverageDuration, StringFormat=N6}"/>
+                                            <TextBlock Text="{Binding Path=AverageDuration, StringFormat=N6, Mode=OneWay}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -54,7 +54,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding MaxDuration, StringFormat=N6}"/>
+                                            <TextBlock Text="{Binding Path=MaxDuration, StringFormat=N6, Mode=OneWay}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -63,7 +63,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding MinDuration, StringFormat=N6}"/>
+                                            <TextBlock Text="{Binding Path=MinDuration, StringFormat=N6, Mode=OneWay}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -72,7 +72,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding TotalDuration, StringFormat=N6}"/>
+                                            <TextBlock Text="{Binding Path=TotalDuration, StringFormat=N6, Mode=OneWay}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
