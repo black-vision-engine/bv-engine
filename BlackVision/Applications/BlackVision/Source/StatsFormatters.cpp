@@ -80,13 +80,18 @@ void ProfilerNamedPipeSender::SendNewNames		( unsigned int thread )
 		UInt16 stringsLegths = 0;
 		UInt16* curStringLength = (UInt16*)( buffer + sizeof( ProtocolHeader ) );
 		unsigned int stringNum = 0;
-		for( ; stringNum < numNames && stringsLegths < MAX_NAMES_SENDER_BUFFER + sizeof( ProtocolHeader ) + sizeof( UInt32 ) *( stringNum + 1 ); stringNum++ )
+		for( ; stringNum < numNames; stringNum++ )
 		{
-			*curStringLength = (UInt16)strlen( m_namesToSend[ stringNum ] );
-			stringsLegths += *curStringLength;
-
-			curStringLength++;
+			UInt16 nextStringLength = (UInt16)strlen( m_namesToSend[ stringNum ] );
+			if( stringsLegths + nextStringLength < MAX_NAMES_SENDER_BUFFER - sizeof( ProtocolHeader ) - sizeof( UInt32 ) * ( stringNum + 1 ) )
+			{
+				curStringLength[ stringNum ] = nextStringLength;
+				stringsLegths += nextStringLength;
+			}
+			else
+				break;
 		}
+		curStringLength += stringNum;
 		header->numNameStrings = (UInt16)stringNum;
 
 		// Writing string IDs to buffer.
