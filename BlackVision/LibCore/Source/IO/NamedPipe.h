@@ -27,7 +27,7 @@ public:
 	NamedPipe();
 	~NamedPipe();
 
-	bool			ConnectToNamedPipe		( const std::wstring& pipeName, NamedPipeAccess access );
+	bool			ConnectToNamedPipe		( const std::wstring& pipeName, NamedPipeAccess access, unsigned int waitMillis );
 	void			WriteToPipe				( const char* buffer, unsigned int bytesNum );
 
 	bool			IsValid					();

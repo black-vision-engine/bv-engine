@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Collections;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 
 namespace ProfilerEditor.DataProtocol
@@ -34,30 +35,31 @@ namespace ProfilerEditor.DataProtocol
 
         private string				m_pipeName;
         private int                 m_openMode;
+		private uint				m_maxConnectedClients;
 
         private Thread				m_listenThread;
-		private bool				m_endThread = false;
+		private Collection<Thread>	m_readThreads;
+		private bool				m_endThreads = false;
 
 		private SafeFileHandle		m_pipeHandle;
-		private FileStream			m_pipeStream;
 
 		private Queue				m_queue;
 
-		//public MessageSentDelegate			onMessageSent;
 		public SynchronizationContext		m_syncContext;
-		//public event EventHandler			onMessageSent;
 		public SendOrPostCallback			onMessageSent;
-		//public ISynchronizeInvoke	m_syncObject { get; set; }
 
 	//Contructor
-        public NamedPipeServer( string pipeName, int openMode )
+        public NamedPipeServer( string pipeName, int openMode, uint maxClients )
         {
+			m_maxConnectedClients = maxClients;
             m_pipeName = pipeName;
             m_openMode = openMode;//0 Reading Pipe, 1 Writing Pipe
 
 			// Makes queue thread-safe.
 			m_queue = new Queue();
 			m_queue = Queue.Synchronized( m_queue );
+
+			m_readThreads = new Collection<Thread>();
         }
 
 	// Members
@@ -69,9 +71,14 @@ namespace ProfilerEditor.DataProtocol
 
 		public void EndServer()
 		{
-			m_endThread = true;
+			m_endThreads = true;
+			//string pipeFullName = "\\\\.\\pipe\\" + m_pipeName;
+			//DeleteFile( pipeFullName );
+			m_pipeHandle.Close();
 
-			m_listenThread.Join();
+			foreach( var thread in m_readThreads )
+				thread.Join();
+			m_listenThread.Abort();				// It's not pleasent, but these threads always wait for next messages and connections. There's no other way.
 		}
 
 
@@ -79,31 +86,42 @@ namespace ProfilerEditor.DataProtocol
         {
 			string pipeFullName = "\\\\.\\pipe\\" + m_pipeName;
 
-			m_pipeHandle = CreateNamedPipe( pipeFullName, PIPE_ACCESS_INBOUND, PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE, 1, m_outBufferSize, m_inBufferSize, 0, IntPtr.Zero );
-
-			if( m_pipeHandle.IsInvalid )
+			while( !m_endThreads )
 			{
-				uint error = GetLastError();
-				return;
+				m_pipeHandle = CreateNamedPipe( pipeFullName, PIPE_ACCESS_INBOUND, PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE, m_maxConnectedClients, m_outBufferSize, m_inBufferSize, 0, IntPtr.Zero );
+
+				if( m_pipeHandle.IsInvalid )
+				{
+					uint error = GetLastError();
+					return;
+				}
+
+				int success = ConnectNamedPipe( m_pipeHandle, IntPtr.Zero );
+
+				// Could not connect clients
+				if( success == 0 )
+					return;
+
+				Thread newReadThread = new Thread( new ParameterizedThreadStart( ReadThreadFunction ) );
+				newReadThread.Start( m_pipeHandle );
+				m_readThreads.Add( newReadThread );
 			}
+			m_pipeHandle.Close();
+        }
 
-
-			int success = ConnectNamedPipe( m_pipeHandle, IntPtr.Zero );
-
-			// Could not conect client
-			if( success == 0 )
-				return;
-
-			m_pipeStream = new FileStream( m_pipeHandle, FileAccess.Read, (int)m_inBufferSize, false );
+		public void ReadThreadFunction( object handle )
+		{
+			SafeFileHandle pipeHandle = (SafeFileHandle)handle;
+			FileStream pipeStream = new FileStream( pipeHandle, FileAccess.Read, (int)m_inBufferSize, false );
 
 			// Reading form stream
-			while( !m_endThread )
+			while( !m_endThreads )
 			{
 				uint bytesRead = 0;
 				try
 				{
 					byte[] buffer = new byte[ m_inBufferSize ];
-					bytesRead = (uint)m_pipeStream.Read( buffer, 0, (int)m_inBufferSize );
+					bytesRead = (uint)pipeStream.Read( buffer, 0, (int)m_inBufferSize );
 
 					ReadDataObject readBuffer = new ReadDataObject();
 					readBuffer.m_data = buffer;
@@ -125,9 +143,9 @@ namespace ProfilerEditor.DataProtocol
 				NotifyDelegate();
 			}
 
-			m_pipeStream.Close();
-			m_pipeHandle.Close();
-        }
+			pipeStream.Close();
+			pipeHandle.Close();
+		}
 
 		/**Reads last message from queue. [thread-safe]*/
 		public ReadDataObject ReadBytes()
@@ -205,5 +223,8 @@ namespace ProfilerEditor.DataProtocol
 
 		[DllImport( "kernel32.dll", SetLastError = true )]
 		public static extern uint GetLastError();
+
+		[DllImport( "kernel32.dll", SetLastError = true )]
+		public static extern bool DeleteFile( string name );
     }
 }

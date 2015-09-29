@@ -22,7 +22,7 @@ NamedPipe::~NamedPipe()
 /**Connects to existing named pipe.
 
 @param pipeName Name of pipe. Should not contain \\.\pipe\ in begining. This string will be added.*/
-bool NamedPipe::ConnectToNamedPipe( const std::wstring& pipeName, NamedPipeAccess access )
+bool NamedPipe::ConnectToNamedPipe( const std::wstring& pipeName, NamedPipeAccess access, unsigned int waitMillis )
 {
 	std::wstring pipeFullName = L"\\\\.\\pipe\\" + pipeName;
 	m_pipeName = pipeName;
@@ -35,10 +35,19 @@ bool NamedPipe::ConnectToNamedPipe( const std::wstring& pipeName, NamedPipeAcces
 	else
 		pipeAccess = GENERIC_READ | GENERIC_WRITE;
 
+	WaitNamedPipe( pipeFullName.c_str(), waitMillis );
 	m_pipeHandle = CreateFile( pipeFullName.c_str(), pipeAccess, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 
 	if( m_pipeHandle == INVALID_HANDLE_VALUE )
+	{
+		DWORD error = GetLastError();
+		{ error; }
 		return false;
+	}
+	
+	DWORD mode = PIPE_READMODE_MESSAGE;
+	SetNamedPipeHandleState( m_pipeHandle, &mode, nullptr, nullptr );
+
 	return true;
 }
 

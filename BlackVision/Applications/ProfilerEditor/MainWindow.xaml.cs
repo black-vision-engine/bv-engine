@@ -27,7 +27,7 @@ namespace ProfilerEditor
 		private ProfilerModel.NameMapping					m_namesMap;
 		private DataAnalysis.AverageSamples[]				m_dataProcessor;
 
-		private bool										m_firstTime;
+		private bool[]										m_firstTime;
 		private uint										m_numThreads = 6;
 
 #region Properties
@@ -49,8 +49,11 @@ namespace ProfilerEditor
         {
             InitializeComponent();
 
-			m_firstTime = true;
 			m_namesMap = new ProfilerModel.NameMapping();
+
+			m_firstTime = new bool[ m_numThreads ];
+			for( int i = 0; i < m_firstTime.Length; ++i )
+				m_firstTime[ i ] = true;
 
 			m_dataProcessor = new DataAnalysis.AverageSamples[ m_numThreads ];
 			for( int i = 0; i < m_numThreads; ++i )
@@ -62,7 +65,7 @@ namespace ProfilerEditor
 		private void startButton_Click( object sender, RoutedEventArgs e )
 		{
 			string pipeName = "ProfilerPipeTest";
-			m_pipedServer = new DataProtocol.NamedPipeServer( pipeName, 0 );
+			m_pipedServer = new DataProtocol.NamedPipeServer( pipeName, 0, m_numThreads );
 
 			m_pipedServer.onMessageSent = GetMessageFromPipe;
 			m_pipedServer.m_syncContext = SynchronizationContext.Current;
@@ -112,14 +115,11 @@ namespace ProfilerEditor
 		{
 			int maxDepthLevel = GetTreeExpansionLevel();
 
-			if( !m_firstTime )
-			{
+			if( !m_firstTime[ thread ] )
 				m_profilerTreeView[ thread ].Update( treeView, (uint)maxDepthLevel );
-				//ProfilerTree1.DataContext = m_profilerTreeView;
-			}
 			else
 			{
-				m_firstTime = false;
+				m_firstTime[ thread ] = false;
 				m_profilerTreeView[ thread ] = treeView;
 				switch( thread )
 				{

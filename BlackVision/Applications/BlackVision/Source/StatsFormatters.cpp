@@ -51,7 +51,7 @@ void    ProfilerDataFormatter::PrintToDevNull   ( const char * msg, unsigned int
 ProfilerNamedPipeSender ProfilerDataFormatter::s_namedPipeSender[ MAX_PROFILER_THREADS ] = 
 {
 	ProfilerNamedPipeSender( 0 ),
-	//ProfilerNamedPipeSender( 1 ),
+	ProfilerNamedPipeSender( 1 ),
 	//ProfilerNamedPipeSender( 2 ),
 	//ProfilerNamedPipeSender( 3 ),
 	//ProfilerNamedPipeSender( 4 ),
@@ -133,7 +133,8 @@ NamedPipe& ProfilerNamedPipeSender::GetNamedPipe()
 {
 	if( m_firstPipeUse )
 	{
-		m_pipe.ConnectToNamedPipe( std::wstring( L"ProfilerPipeTest" ), NamedPipeAccess::PipeWrite );
+		// waits 2 miliseconds for connection
+		m_pipe.ConnectToNamedPipe( std::wstring( L"ProfilerPipeTest" ), NamedPipeAccess::PipeWrite, 2 );
 		m_firstPipeUse = false;
 	}
 	return m_pipe;
