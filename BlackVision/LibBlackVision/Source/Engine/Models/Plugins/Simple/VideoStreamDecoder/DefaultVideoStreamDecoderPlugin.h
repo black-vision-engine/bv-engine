@@ -11,7 +11,7 @@
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
-#include "VideoStreamDecoderThread.h"
+#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegVideoDecoder.h"
 
 namespace bv { namespace model {
 
@@ -51,8 +51,13 @@ private:
 
     unsigned int                    m_texCoordChannelIndex;
 
-	VideoStreamDecoderThread *		m_decoderThread;
-	UInt32							m_frameId;
+    ParamFloatPtr                   m_paramAttachMode;
+
+	IVideoDecoderPtr				m_decoder;
+
+	UInt32							m_prevFrameId;
+	UInt32							m_currFrameId;
+
 	bool							m_started;
 
 public:
@@ -73,6 +78,7 @@ private:
 
     void                                        InitAttributesChannel       ( IPluginPtr prev );
 
+    TextureAttachmentMode                       GetAttachementMode          () const;
 };
 
 } }

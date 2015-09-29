@@ -41,8 +41,28 @@ VideoStreamAssetDescConstPtr VideoStreamAssetDesc::Create	( const std::string & 
 
 // ***********************
 //
+VideoStreamAssetDescConstPtr VideoStreamAssetDesc::Create	( const std::string & streamPath, UInt32 width, UInt32 height, UInt32 frameRate )
+{
+	return std::make_shared< VideoStreamAssetDesc >( streamPath, width, height, frameRate );
+}
+
+// ***********************
+//
 VideoStreamAssetDesc::VideoStreamAssetDesc					( const std::string & streamPath )
 	: m_streamPath( streamPath )
+	, m_width( 0 )
+	, m_height( 0 )
+	, m_frameRate( 0 )
+{
+}
+
+// ***********************
+//
+VideoStreamAssetDesc::VideoStreamAssetDesc					( const std::string & streamPath, UInt32 width, UInt32 height, UInt32 frameRate )
+	: m_streamPath( streamPath )
+	, m_width( width )
+	, m_height( height )
+	, m_frameRate( frameRate )
 {
 }
 
@@ -51,6 +71,20 @@ VideoStreamAssetDesc::VideoStreamAssetDesc					( const std::string & streamPath 
 const std::string &		VideoStreamAssetDesc::GetStreamPath	() const
 {
 	return m_streamPath;
+}
+
+// ***********************
+//
+UInt32					VideoStreamAssetDesc::GetWidth	() const
+{
+	return m_width;
+}
+
+// ***********************
+//
+UInt32					VideoStreamAssetDesc::GetHeight	() const
+{
+	return m_height;
 }
 
 } // bv

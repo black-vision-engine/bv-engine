@@ -1321,15 +1321,12 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
 	{ useAlphaMask; }
     //Timeline stuff
     auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-    //timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 2.0 ) );
-    //timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
     auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
 
     someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( someTimelineWithEvents );
 
-    //Plugin stuf
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins7, GSimplePlugins7 + 3 );
 
     auto node = model::BasicNode::Create( "Root", timeEvaluator );
@@ -1337,18 +1334,18 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
 
-    //SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 0.f ), 0.f );
-    //SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 10.f ), 100.f );
-
-    //node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( timeEvaluator );
-
-    //SetDefaultTransformAnim     ( node->GetPlugin( "transform" ) );
-
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 1.f );
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
 
-	//success = model::LoadAnimation( node->GetPlugin( "animation" ), "rsrcy/test_anim", "*.jpg" );
-	success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/ActivisionLogo.bik" );
+	//http://samples.ffmpeg.org/game-formats/bink/ActivisionLogo.bik
+	//success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/ActivisionLogo.bik" );
+
+	//http://www.cinemartin.com/cinec/_Sample_Videos/Samsung_Galaxy_Note_3/20140117_142047_CINEC_ProRes4444.mov
+	//success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/20140117_142047_CINEC_ProRes4444.mov" );
+
+	//http://download.openbricks.org/sample/H264/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4
+	success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4" );
+	
     assert( success );
 
     return node;    

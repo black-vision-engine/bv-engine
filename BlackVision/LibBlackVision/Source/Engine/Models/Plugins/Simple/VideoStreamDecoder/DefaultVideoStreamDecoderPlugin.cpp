@@ -64,11 +64,11 @@ DefaultPluginParamValModelPtr   DefaultVideoStreamDecoderPluginDesc::CreateDefau
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
-	wrapModeXEvaluator->Parameter()->SetVal( static_cast<int>( TextureWrappingMode::TWM_REPEAT ), TimeType( 0.0 ) ); 
-	wrapModeYEvaluator->Parameter()->SetVal( static_cast<int>( TextureWrappingMode::TWM_REPEAT ), TimeType( 0.0 ) ); 
+	wrapModeXEvaluator->Parameter()->SetVal( static_cast< float >( TextureWrappingMode::TWM_REPEAT ), TimeType( 0.0 ) ); 
+	wrapModeYEvaluator->Parameter()->SetVal( static_cast< float >( TextureWrappingMode::TWM_REPEAT ), TimeType( 0.0 ) ); 
 
-    paramFilteringMode->SetVal( (float) TextureFilteringMode::TFM_LINEAR, TimeType( 0.f ) );
-    paramAttachMode->SetVal( (float) TextureAttachmentMode::MM_ATTACHED, TimeType( 0.f ) );
+    paramFilteringMode->SetVal( static_cast< float >( TextureFilteringMode::TFM_LINEAR ), TimeType( 0.f ) );
+    paramAttachMode->SetVal( static_cast< float >( TextureAttachmentMode::MM_ATTACHED ), TimeType( 0.f ) );
 
     return model;
 }
@@ -88,11 +88,11 @@ bool                   DefaultVideoStreamDecoderPluginDesc::CanBeAttachedTo     
         return false;
     }
 
-    //auto numChannels = vac->GetDescriptor()->GetNumVertexChannels();
-    //if ( numChannels != 1 ) //only vertex attribute data allowed here
-    //{
-    //    return false;
-    //}
+    auto numChannels = vac->GetDescriptor()->GetNumVertexChannels();
+    if ( numChannels != 1 ) //only vertex attribute data allowed here
+    {
+        return false;
+    }
 
     return true;
 }
@@ -132,12 +132,13 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
 	, m_vsc( nullptr )
 	, m_vaChannel( nullptr )
 	, m_paramValModel( model )
-	, m_decoderThread( nullptr )
-	, m_frameId( 0 )
+	, m_decoder( nullptr )
+	, m_prevFrameId( 0 )
+	, m_currFrameId( 0 )
 	, m_started( false )
 {
-    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
-	m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
+    m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr );
+	m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
 	SetPrevPlugin( prev );
 
@@ -152,17 +153,13 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
 
 	//Direct param state access (to bypass model querying)
 	auto psModel = PixelShaderChannelModel();
+    m_paramAttachMode       = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "attachmentMode" ) );
 }
 
 // *************************************
 // 
 DefaultVideoStreamDecoderPlugin::~DefaultVideoStreamDecoderPlugin					()
 {
-	if( m_decoderThread )
-	{
-		m_decoderThread->Join();
-		delete m_decoderThread;
-	}
 }
 
 // *************************************
@@ -173,11 +170,11 @@ bool                            DefaultVideoStreamDecoderPlugin::LoadResource		(
 
     if ( vstreamAssetDescr != nullptr )
     {
-		m_decoderThread = new VideoStreamDecoderThread( vstreamAssetDescr->GetStreamPath() );
+		m_decoder = std::make_shared< FFmpegVideoDecoder >( vstreamAssetDescr );
 
-		auto data = m_decoderThread->GetFrameData( m_frameId );
+		//auto data = m_decoder->GetFrameData( m_frameId );
 
-		auto vsDesc = new DefaultVideoStreamDescriptor( DefaultVideoStreamDecoderPluginDesc::TextureName(), data, m_decoderThread->GetWidth(), m_decoderThread->GetHeight(), TextureFormat::F_A8R8G8B8, DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE );
+		auto vsDesc = new DefaultVideoStreamDescriptor( DefaultVideoStreamDecoderPluginDesc::TextureName(), MemoryChunk::Create( m_decoder->GetWidth() * m_decoder->GetHeight() * 4 ), m_decoder->GetWidth(), m_decoder->GetHeight(), TextureFormat::F_A8R8G8B8, DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE );
 
 		auto txData = m_psc->GetTexturesDataImpl();
         if( vsDesc != nullptr )
@@ -227,35 +224,40 @@ void                                DefaultVideoStreamDecoderPlugin::Update     
 
 	if( !m_started )
 	{
-		m_decoderThread->Start();
+		m_decoder->StartDecoding();
 		m_started = true;
 	}
 
     m_paramValModel->Update();
 
-    if( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
-    {
-        for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
-        {
-            auto connComp = m_vaChannel->GetConnectedComponent( i );
-            auto compChannels = connComp->GetAttributeChannels();
+    auto attachmentMode = GetAttachementMode();
 
-            if( auto posChannel = AttributeChannel::GetPositionChannel( compChannels ) )
-            {
-                if( auto uvChannel = AttributeChannel::GetUVChannel( compChannels, m_texCoordChannelIndex ) )
-                {
-                    auto & verts  = std::dynamic_pointer_cast< Float3AttributeChannel >( posChannel )->GetVertices();
-                    auto & uvs    = std::dynamic_pointer_cast< Float2AttributeChannel >( uvChannel )->GetVertices();
+    if( attachmentMode == TextureAttachmentMode::MM_FREE )
+	{
+		if( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
+		{
+			for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
+			{
+				auto connComp = m_vaChannel->GetConnectedComponent( i );
+				auto compChannels = connComp->GetAttributeChannels();
 
-                    for( unsigned int i = 0; i < verts.size(); ++i )
-                    {
-                        uvs[ i ].x = verts[ i ].x;
-                        uvs[ i ].y = verts[ i ].y;
-                    }
-                }
-            }
-        }
-    }
+				if( auto posChannel = AttributeChannel::GetPositionChannel( compChannels ) )
+				{
+					if( auto uvChannel = AttributeChannel::GetUVChannel( compChannels, m_texCoordChannelIndex ) )
+					{
+						auto & verts  = std::dynamic_pointer_cast< Float3AttributeChannel >( posChannel )->GetVertices();
+						auto & uvs    = std::dynamic_pointer_cast< Float2AttributeChannel >( uvChannel )->GetVertices();
+
+						for( unsigned int i = 0; i < verts.size(); ++i )
+						{
+							uvs[ i ].x = verts[ i ].x;
+							uvs[ i ].y = verts[ i ].y;
+						}
+					}
+				}
+			}
+		}
+	}
 
     if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
     {
@@ -266,12 +268,12 @@ void                                DefaultVideoStreamDecoderPlugin::Update     
         m_vaChannel->SetNeedsAttributesUpdate( false );
     }
 	
-	auto txData = m_psc->GetTexturesDataImpl();
-	auto vsDesc = static_cast< DefaultVideoStreamDescriptor * >( txData->GetTexture( 0 ) );
-
-	if( m_decoderThread->NewVideoFrameArrived( m_frameId ) )
+	auto data = m_decoder->GetCurrentFrameData( m_currFrameId );
+	if( m_prevFrameId < m_currFrameId )
 	{
-		vsDesc->SetBits( m_decoderThread->GetFrameData( m_frameId ) );
+		m_prevFrameId = m_currFrameId;
+		auto vsDesc = static_cast< DefaultVideoStreamDescriptor * >( m_psc->GetTexturesDataImpl()->GetTexture( 0 ) );
+		vsDesc->SetBits( data );
 	}
 
     m_vsc->PostUpdate();
@@ -311,7 +313,7 @@ void									DefaultVideoStreamDecoderPlugin::InitAttributesChannel		( IPluginPt
             //Only one texture
             vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-            auto vaChannel = VertexAttributesChannelPtr( new VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() ) );
+			auto vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
             m_vaChannel = vaChannel;
         }
 
@@ -342,6 +344,37 @@ void									DefaultVideoStreamDecoderPlugin::InitAttributesChannel		( IPluginPt
 
         m_vaChannel->AddConnectedComponent( connComp );
     }
+}
+
+namespace {
+
+// *************************************
+// FIXME: implement int parameters and bool parameters
+template< typename EnumClassType >
+inline EnumClassType EvaluateAsInt( ParamFloat * param )
+{
+    int val = int( param->Evaluate() );
+
+    return EnumClassType( val );
+}
+
+// *************************************
+// FIXME: implement int parameters and bool parameters
+template< typename EnumClassType >
+inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
+{
+    int val = int( param->Evaluate() );
+
+    return EnumClassType( val );
+}
+
+} //anonymous
+
+// *************************************
+// 
+TextureAttachmentMode                       DefaultVideoStreamDecoderPlugin::GetAttachementMode      () const
+{
+    return EvaluateAsInt< TextureAttachmentMode >( m_paramAttachMode );
 }
 
 } }

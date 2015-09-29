@@ -22,6 +22,11 @@ private:
 
 	std::string					m_streamPath;
 
+	UInt32						m_width;
+	UInt32						m_height;
+
+	UInt32						m_frameRate;
+
 protected:
 
 
@@ -29,6 +34,7 @@ protected:
 
 public:
 	explicit									VideoStreamAssetDesc		( const std::string & streamPath );
+	explicit									VideoStreamAssetDesc		( const std::string & streamPath, UInt32 width, UInt32 height, UInt32 frameRate );
 
 	virtual const std::string &					GetUID						() const override;
 	
@@ -37,8 +43,12 @@ public:
 	static const std::string &					UID							();
 
 	const std::string &							GetStreamPath				() const;
+	UInt32										GetWidth					() const;
+	UInt32										GetHeight					() const;
+	UInt32										GetFrameRate				() const;
 	
 	static VideoStreamAssetDescConstPtr			Create						( const std::string & streamPath );
+	static VideoStreamAssetDescConstPtr			Create						( const std::string & streamPath, UInt32 width, UInt32 height, UInt32 frameRate );
 
 };
 
