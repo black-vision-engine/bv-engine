@@ -93,6 +93,42 @@
                     </layer:TreeListView>
                 </Grid>
             </TabItem>
+            <TabItem Header="Thread 3">
+                <Grid Background="#FFE5E5E5">
+                    <layer:TreeListView x:Name="ProfilerTree3" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
+                        <layer:TreeListView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
+                        </layer:TreeListView.ItemTemplate>
+                    </layer:TreeListView>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Thread 4">
+                <Grid Background="#FFE5E5E5">
+                    <layer:TreeListView x:Name="ProfilerTree4" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
+                        <layer:TreeListView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
+                        </layer:TreeListView.ItemTemplate>
+                    </layer:TreeListView>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Thread 5">
+                <Grid Background="#FFE5E5E5">
+                    <layer:TreeListView x:Name="ProfilerTree5" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
+                        <layer:TreeListView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
+                        </layer:TreeListView.ItemTemplate>
+                    </layer:TreeListView>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Thread 6">
+                <Grid Background="#FFE5E5E5">
+                    <layer:TreeListView x:Name="ProfilerTree6" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
+                        <layer:TreeListView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
+                        </layer:TreeListView.ItemTemplate>
+                    </layer:TreeListView>
+                </Grid>
+            </TabItem>
         </TabControl>
         <TextBox x:Name="depthLevels" HorizontalAlignment="Left" Height="23" Margin="930,128,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="44"/>
         <Label Content="Show depth levels" HorizontalAlignment="Left" Margin="930,97,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.263,0.231" Width="120"/>

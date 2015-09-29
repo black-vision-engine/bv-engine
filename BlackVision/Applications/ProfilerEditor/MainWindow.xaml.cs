@@ -20,22 +20,15 @@ using ProfilerEditor.PresentationLayer;
 namespace ProfilerEditor
 {
 
-
-
-
-
-
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
 		private DataProtocol.NamedPipeServer				m_pipedServer;
-		private ProfilerModel.ProfilerTreeViewModel			m_profilerTreeView;
+		private ProfilerModel.ProfilerTreeViewModel[]		m_profilerTreeView;
 		private ProfilerModel.NameMapping					m_namesMap;
-		private DataAnalysis.AverageSamples					m_dataProcessor;
+		private DataAnalysis.AverageSamples[]				m_dataProcessor;
 
 		private bool										m_firstTime;
+		private uint										m_numThreads = 6;
 
 #region Properties
 		public ProfilerModel.NameMapping ColorMapping
@@ -58,7 +51,12 @@ namespace ProfilerEditor
 
 			m_firstTime = true;
 			m_namesMap = new ProfilerModel.NameMapping();
-			m_dataProcessor = new DataAnalysis.AverageSamples();
+
+			m_dataProcessor = new DataAnalysis.AverageSamples[ m_numThreads ];
+			for( int i = 0; i < m_numThreads; ++i )
+				m_dataProcessor[ i ] = new DataAnalysis.AverageSamples();
+
+			m_profilerTreeView = new ProfilerModel.ProfilerTreeViewModel[ m_numThreads ];
         }
 
 		private void startButton_Click( object sender, RoutedEventArgs e )
@@ -95,9 +93,9 @@ namespace ProfilerEditor
 				loadedData = DataProtocol.SamplesLoader.NewLoad( data );
 
 				m_namesMap.Update( loadedData );
-				ProfilerModel.ProfilerTreeViewModel newTreeView = m_dataProcessor.AddNewData( loadedData );
+				ProfilerModel.ProfilerTreeViewModel newTreeView = m_dataProcessor[ loadedData.m_threadID ].AddNewData( loadedData );
 				if( newTreeView != null )
-					MakeTree( newTreeView );
+					MakeTree( newTreeView, loadedData.m_threadID );
 			}
 		}
 
@@ -110,20 +108,40 @@ namespace ProfilerEditor
 			return maxDepthLevel;
 		}
 
-		private void MakeTree( ProfilerModel.ProfilerTreeViewModel treeView )
+		private void MakeTree( ProfilerModel.ProfilerTreeViewModel treeView, uint thread )
 		{
 			int maxDepthLevel = GetTreeExpansionLevel();
 
 			if( !m_firstTime )
 			{
-				m_profilerTreeView.Update( treeView, (uint)maxDepthLevel );
+				m_profilerTreeView[ thread ].Update( treeView, (uint)maxDepthLevel );
 				//ProfilerTree1.DataContext = m_profilerTreeView;
 			}
 			else
 			{
 				m_firstTime = false;
-				m_profilerTreeView = treeView;
-				ProfilerTree1.DataContext = m_profilerTreeView;
+				m_profilerTreeView[ thread ] = treeView;
+				switch( thread )
+				{
+					case 0:
+						ProfilerTree1.DataContext = treeView;
+						break;
+					case 1:
+						ProfilerTree2.DataContext = treeView;;
+						break;
+					case 2:
+						ProfilerTree3.DataContext = treeView;
+						break;
+					case 3:
+						ProfilerTree4.DataContext = treeView;
+						break;
+					case 4:
+						ProfilerTree5.DataContext = treeView;
+						break;
+					case 5:
+						ProfilerTree6.DataContext = treeView;
+						break;
+				}
 			}
 		}
 

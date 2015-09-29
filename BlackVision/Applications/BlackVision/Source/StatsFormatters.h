@@ -27,23 +27,33 @@ struct ProtocolSample
 #define MAX_NAMES_SENDER_BUFFER 512
 
 
+/**This class sends samples to named pipe and stores functions/sections
+names and identifiers.
+
+Max number of threads shouldn't be greater than 15.
+Max number of functions/sections names shouldn't be greater than 4095.*/
 class ProfilerNamedPipeSender
 {
 private:
 	std::unordered_map<const char*, UInt16>	m_names;
 	UInt16									m_nameCounter;
 	std::vector<const char*>				m_namesToSend;
+
+	UInt16									m_thread;
+
 	NamedPipe								m_pipe;
 	bool									m_firstPipeUse;
 public:
-	ProfilerNamedPipeSender()
+	ProfilerNamedPipeSender( UInt16 thread )
 	{
+		m_thread = thread;
 		m_nameCounter = 0;
 		m_firstPipeUse = true;
 	}
 
 	UInt16				GetNameID		( const char* name );
-	void				SendNewNames	( unsigned int thread );
+	void				SendNewNames	();
+	void				SendSamples		();
 
 	NamedPipe&			GetNamedPipe();
 };

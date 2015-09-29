@@ -48,7 +48,15 @@ void    ProfilerDataFormatter::PrintToDevNull   ( const char * msg, unsigned int
 
 // *********************************
 //
-ProfilerNamedPipeSender ProfilerDataFormatter::s_namedPipeSender[ MAX_PROFILER_THREADS ];
+ProfilerNamedPipeSender ProfilerDataFormatter::s_namedPipeSender[ MAX_PROFILER_THREADS ] = 
+{
+	ProfilerNamedPipeSender( 0 ),
+	//ProfilerNamedPipeSender( 1 ),
+	//ProfilerNamedPipeSender( 2 ),
+	//ProfilerNamedPipeSender( 3 ),
+	//ProfilerNamedPipeSender( 4 ),
+	//ProfilerNamedPipeSender( 5 ),
+};
 
 UInt16 ProfilerNamedPipeSender::GetNameID		( const char* name )
 {
@@ -57,15 +65,18 @@ UInt16 ProfilerNamedPipeSender::GetNameID		( const char* name )
 		return iterator->second;
 
 	++m_nameCounter;
-	m_names.insert( std::make_pair( name, m_nameCounter ) );
+	// ID should be unique even for different threads. 
+	UInt16 newID = m_nameCounter | ( m_thread << 12 );
+
+	m_names.insert( std::make_pair( name, newID ) );
 	m_namesToSend.push_back( name );
-	return m_nameCounter;
+	return newID;
 }
 
 
 // *********************************
 //
-void ProfilerNamedPipeSender::SendNewNames		( unsigned int thread )
+void ProfilerNamedPipeSender::SendNewNames		()
 {
 	unsigned int numNames = (unsigned int)m_namesToSend.size();
 	if( numNames > 0 )
@@ -73,7 +84,7 @@ void ProfilerNamedPipeSender::SendNewNames		( unsigned int thread )
 		char buffer[ sizeof( ProtocolHeader ) + MAX_NAMES_SENDER_BUFFER ];
 
 		ProtocolHeader* header = (ProtocolHeader*)buffer;
-		header->threadID = (UInt16)thread;
+		header->threadID = (UInt16)m_thread;
 		header->numSamples = 0;
 
 		//Writing string lengths to buffer.
@@ -128,18 +139,11 @@ NamedPipe& ProfilerNamedPipeSender::GetNamedPipe()
 	return m_pipe;
 }
 
-
-
 // *********************************
 //
-/**Just for now only for first thread.*/
-void	ProfilerDataFormatter::SendToExternApp	( const char * msg, unsigned int thread )
+void ProfilerNamedPipeSender::SendSamples		()
 {
-	{ msg; } // FIXME: suppress unused warning
-	///@fixme add multithreading to named pipe.
-	NamedPipe& pipe = s_namedPipeSender[ thread ].GetNamedPipe();
-
-	CPUThreadSamples* CPUsamples =  AutoProfile::GetCPUThreadSamples( thread );
+	CPUThreadSamples* CPUsamples =  AutoProfile::GetCPUThreadSamples( m_thread );
 	char buffer[ sizeof( ProtocolHeader ) + MAX_PROFILER_SAMPLES * sizeof( ProfilerSample ) ];
 
 	LARGE_INTEGER freq = AutoProfile::QueryCounterFrequency();
@@ -158,7 +162,7 @@ void	ProfilerDataFormatter::SendToExternApp	( const char * msg, unsigned int thr
 			frame += MAX_PROFILER_FRAMES - 1;
 
 		ProtocolHeader* header = (ProtocolHeader*)buffer;
-		header->threadID = (UInt16)thread;
+		header->threadID = (UInt16)m_thread;
 		header->numSamples = (UInt16)CPUsamples->m_numFrameSamples[ frame ];
 		header->numNameStrings = 0;
 		header->unused = 0;
@@ -175,18 +179,28 @@ void	ProfilerDataFormatter::SendToExternApp	( const char * msg, unsigned int thr
 			ProtocolSample & sample = samples[ k ];
 
 			sample.depth = (UInt16)liveSample.depth;
-			sample.name = s_namedPipeSender[ thread ].GetNameID( liveSample.name );
+			sample.name = GetNameID( liveSample.name );
 
 			double duration = double( liveSample.timeEnd.QuadPart - liveSample.timeStart.QuadPart );
 			sample.durationSecs = float( duration / freqd );
 
 			++k;
 		}
-
+		
+		NamedPipe& pipe = GetNamedPipe();
 		pipe.WriteToPipe( (const char*)buffer, sizeof( ProtocolHeader ) + sizeof( ProtocolSample ) * header->numSamples );
 	}
+}
 
-	s_namedPipeSender[ thread ].SendNewNames( thread );
+// *********************************
+//
+/**Just for now only for first thread.*/
+void	ProfilerDataFormatter::SendToExternApp	( const char * msg, unsigned int thread )
+{
+	{ msg; } // FIXME: suppress unused warning
+
+	s_namedPipeSender[ thread ].SendSamples();
+	s_namedPipeSender[ thread ].SendNewNames();
 }
 
 // *********************************
