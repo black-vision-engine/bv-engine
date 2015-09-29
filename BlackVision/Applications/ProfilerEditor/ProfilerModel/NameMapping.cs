@@ -10,37 +10,47 @@ namespace ProfilerEditor.ProfilerModel
 {
 	public class NameMapping
 	{
-		Dictionary<Int64, string>			m_namesMap;
-		Dictionary<Int64, Color>			m_colorMap;
+		Dictionary<UInt16, string>			m_namesMap;
+		Dictionary<UInt16, Color>			m_colorMap;
 
 		Random								m_randomGenerator;
 
 		public NameMapping()
 		{
-			m_namesMap = new Dictionary<Int64, string>();
-			m_colorMap = new Dictionary<Int64, Color>();
+			m_namesMap = new Dictionary<UInt16, string>();
+			m_colorMap = new Dictionary<UInt16, Color>();
 
 			m_randomGenerator = new Random();
 		}
 
-		public void Update( DataProtocol.ProfilerSample[] samples )
+		public void Update( ProfilerEditor.DataProtocol.LoadedData loadedData )
 		{
-			foreach( var sample in samples )
-				if( !m_colorMap.ContainsKey( sample.name ) )
+			for( int i = 0; i < loadedData.m_nameIDs.Length; i++ )
+				if( !m_colorMap.ContainsKey( loadedData.m_nameIDs[ i ] ) )
 				{
 					Color randomColor = Color.FromArgb( 255, (byte)m_randomGenerator.Next( 255 ), (byte)m_randomGenerator.Next( 255 ), (byte)m_randomGenerator.Next( 255 ) );
-					m_colorMap.Add( sample.name, randomColor );
+					m_colorMap.Add( loadedData.m_nameIDs[ i ], randomColor );
+					m_namesMap.Add( loadedData.m_nameIDs[ i ], loadedData.m_nameStrings[ i ] );
 				}
 				
 		}
 
-		public Color GetColorOf( Int64 nameID )
+		public Color GetColorOf( UInt16 nameID )
 		{
 			Color retColor = new Color();
 			if( m_colorMap.TryGetValue( nameID, out retColor ) )
 				return retColor;
 			else
 				return Color.FromArgb( 255, (byte)m_randomGenerator.Next( 255 ), (byte)m_randomGenerator.Next( 255 ), (byte)m_randomGenerator.Next( 255 ) );
+		}
+
+		public string GetStringOf( UInt16 nameID )
+		{
+			string retString;
+			if( m_namesMap.TryGetValue( nameID, out retString ) )
+				return retString;
+			else
+				return "Name not sent";
 		}
 	}
 }

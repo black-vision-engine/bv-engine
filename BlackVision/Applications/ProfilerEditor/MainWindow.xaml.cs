@@ -91,12 +91,10 @@ namespace ProfilerEditor
 
 			if( data.m_bytesRead > 0 )
 			{
-				DataProtocol.ProfilerSample[] samples;
 				DataProtocol.LoadedData loadedData;
 				loadedData = DataProtocol.SamplesLoader.NewLoad( data );
-				samples = loadedData.m_samples;
 
-				m_namesMap.Update( samples );
+				m_namesMap.Update( loadedData );
 				ProfilerModel.ProfilerTreeViewModel newTreeView = m_dataProcessor.AddNewData( loadedData );
 				if( newTreeView != null )
 					MakeTree( newTreeView );

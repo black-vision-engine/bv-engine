@@ -21,6 +21,9 @@ namespace ProfilerEditor.DataAnalysis
 
 		public ProfilerModel.ProfilerTreeViewModel AddNewData( DataProtocol.LoadedData loadedData )
 		{
+			if( loadedData.m_samples.Length == 0 )	//Probably loadedData contains only name strings.
+				return null;
+
 			m_waitingFrames[ m_numWaitingFrames++ ] = loadedData;
 			if( m_numWaitingFrames < m_maxWaitingFrames )
 				return null;

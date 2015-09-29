@@ -18,7 +18,7 @@ namespace ProfilerEditor.PresentationLayer
 			ProfilerModel.ProfilerSampleModel sample = (ProfilerModel.ProfilerSampleModel)value;
 			MainWindow mainWindow = (MainWindow)parameter;
 
-			Int64 name = sample.GetData().name;
+			UInt16 name = sample.GetData().name;
 			ProfilerModel.NameMapping colorMap = mainWindow.ColorMapping;
 
 			Color color = colorMap.GetColorOf( name );

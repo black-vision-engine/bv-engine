@@ -65,7 +65,7 @@ UInt16 ProfilerNamedPipeSender::GetNameID		( const char* name )
 
 // *********************************
 //
-void ProfilerNamedPipeSender::SendNames		( unsigned int thread )
+void ProfilerNamedPipeSender::SendNewNames		( unsigned int thread )
 {
 	unsigned int numNames = (unsigned int)m_namesToSend.size();
 	if( numNames > 0 )
@@ -103,6 +103,11 @@ void ProfilerNamedPipeSender::SendNames		( unsigned int thread )
 			memmove( stringPtr, m_namesToSend[ i ], length );
 			stringPtr += length;
 		}
+
+		m_namesToSend.erase( m_namesToSend.begin(), m_namesToSend.begin() + stringNum );
+
+		NamedPipe& pipe = GetNamedPipe();
+		pipe.WriteToPipe( (const char*)buffer, sizeof( ProtocolHeader ) + stringsLegths + sizeof( UInt32 ) * stringNum );
 	}
 }
 
@@ -176,7 +181,7 @@ void	ProfilerDataFormatter::SendToExternApp	( const char * msg, unsigned int thr
 		pipe.WriteToPipe( (const char*)buffer, sizeof( ProtocolHeader ) + sizeof( ProtocolSample ) * header->numSamples );
 	}
 
-	s_namedPipeSender[ thread ].SendNames( thread );
+	s_namedPipeSender[ thread ].SendNewNames( thread );
 }
 
 // *********************************

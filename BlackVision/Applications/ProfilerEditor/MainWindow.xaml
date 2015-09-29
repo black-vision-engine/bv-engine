@@ -6,8 +6,8 @@
         xmlns:layer="clr-namespace:ProfilerEditor.PresentationLayer"
         Title="Profiler Editor" Height="540" Width="1077" Closing="Window_Closing" Name="mainWindow">
     <Window.Resources>
-        <layer:NameColorConverter x:Key="NameColorConverter">
-        </layer:NameColorConverter>
+        <layer:NameColorConverter x:Key="NameColorConverter"></layer:NameColorConverter>
+        <layer:NameStringConverter x:Key="NameStringConverter"></layer:NameStringConverter>
     </Window.Resources>
 
 
@@ -36,7 +36,7 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <layer:TreeListViewExpander/>
-                                            <TextBlock Text="{Binding Path=SampleName, Mode=OneWay}"/>
+                                            <TextBlock Text="{Binding Converter={StaticResource NameStringConverter}, ConverterParameter={x:Reference mainWindow}, Mode=OneWay}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

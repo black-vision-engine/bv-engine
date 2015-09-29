@@ -43,7 +43,7 @@ public:
 	}
 
 	UInt16				GetNameID		( const char* name );
-	void				SendNames		( unsigned int thread );
+	void				SendNewNames	( unsigned int thread );
 
 	NamedPipe&			GetNamedPipe();
 };

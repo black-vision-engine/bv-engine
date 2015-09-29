@@ -8,7 +8,7 @@ namespace ProfilerEditor.ProfilerModel
 {
 	public class SampleData
 	{
-		public Int64 name;
+		public UInt16 name;
 		public uint depth;
 		public float durationSecs;
 		public float averageDuration;
