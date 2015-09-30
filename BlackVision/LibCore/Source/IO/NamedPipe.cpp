@@ -16,7 +16,8 @@ NamedPipe::NamedPipe()
 
 NamedPipe::~NamedPipe()
 {
-	CloseHandle( m_pipeHandle );
+	if( m_pipeHandle != nullptr )
+		CloseHandle( m_pipeHandle );
 }
 
 /**Connects to existing named pipe.
@@ -51,23 +52,23 @@ bool NamedPipe::ConnectToNamedPipe( const std::wstring& pipeName, NamedPipeAcces
 	return true;
 }
 
+/**Funciotn writes message from buffer to pipe, if connection is valid.
+If connection has broken, this function sets pipe handle to invalid state and returns.*/
 void NamedPipe::WriteToPipe( const char* buffer, unsigned int bytesNum )
 {
-	if( m_pipeHandle == INVALID_HANDLE_VALUE )
-	{
-		//LOG_MESSAGE( bv::SeverityLevel::error ) << "Named Pipe: " << m_pipeName << " Message could not be sent. Invalid pipe handle.";
+	if( !IsValid() )
 		return;
-	}
 
 	unsigned long int bytesWritten;
 
 	BOOL success = WriteFile( m_pipeHandle, buffer, bytesNum, &bytesWritten, nullptr );
-	assert( success == TRUE );
-
-	//if( success != TRUE )
-	//{
-	//	LOG_MESSAGE( bv::SeverityLevel::error ) << "Named Pipe: " << m_pipeName << " Message could not be sent. Unalbe to write to stream.";
-	//}
+	if( success != TRUE )
+	{
+		m_pipeHandle = INVALID_HANDLE_VALUE;
+		// Uncomment if you want to know, that sth is wrong with pipe.
+		// In normal work, application shouldn't break, even if writing to pipe failed.
+		//assert( success == TRUE );
+	}
 }
 
 bool NamedPipe::IsValid					()

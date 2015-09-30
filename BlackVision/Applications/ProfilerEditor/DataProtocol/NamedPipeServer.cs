@@ -29,21 +29,22 @@ namespace ProfilerEditor.DataProtocol
 		public const uint			PIPE_TYPE_MESSAGE		= (0x00000004);
 		public const uint			PIPE_READMODE_MESSAGE	= (0x00000002);
 
-		private uint				m_inBufferSize				= 2000;//376;
-        private uint				m_outBufferSize				= 0;
+		private uint						m_inBufferSize				= 2000;//376;
+        private uint						m_outBufferSize				= 0;
 
 
-        private string				m_pipeName;
-        private int                 m_openMode;
-		private uint				m_maxConnectedClients;
+        private string						m_pipeName;
+        private int							m_openMode;
+		private uint						m_maxConnectedClients;
 
-        private Thread				m_listenThread;
-		private Collection<Thread>	m_readThreads;
-		private bool				m_endThreads = false;
+        private Thread						m_listenThread;
+		private Collection<Thread>			m_readThreads;
+		private Collection<SafeFileHandle>	m_allHandles;
+		private bool						m_endThreads = false;
 
-		private SafeFileHandle		m_pipeHandle;
+		private SafeFileHandle				m_pipeHandle;
 
-		private Queue				m_queue;
+		private Queue						m_queue;
 
 		public SynchronizationContext		m_syncContext;
 		public SendOrPostCallback			onMessageSent;
@@ -60,6 +61,7 @@ namespace ProfilerEditor.DataProtocol
 			m_queue = Queue.Synchronized( m_queue );
 
 			m_readThreads = new Collection<Thread>();
+			m_allHandles = new Collection<SafeFileHandle>();
         }
 
 	// Members
@@ -72,13 +74,17 @@ namespace ProfilerEditor.DataProtocol
 		public void EndServer()
 		{
 			m_endThreads = true;
-			
-			string pipeFullName = "\\\\.\\pipe\\" + m_pipeName;
-			DeleteFile( pipeFullName );
+
+			foreach( var pipeHandle in m_allHandles )
+				if( !pipeHandle.IsClosed )
+					DisconnectNamedPipe( pipeHandle );
 
 			foreach( var thread in m_readThreads )
 				thread.Join();
-			m_listenThread.Join();				// It's not pleasent, but these threads always wait for next messages and connections. There's no other way.
+
+			string pipeFullName = "\\\\.\\pipe\\" + m_pipeName;
+			DeleteFile( pipeFullName );
+			m_listenThread.Join();
 		}
 
 
@@ -106,6 +112,7 @@ namespace ProfilerEditor.DataProtocol
 				}
 
 				Thread newReadThread = new Thread( new ParameterizedThreadStart( ReadThreadFunction ) );
+				m_allHandles.Add( m_pipeHandle );
 				newReadThread.Start( m_pipeHandle );
 				m_readThreads.Add( newReadThread );
 			}
@@ -173,7 +180,7 @@ namespace ProfilerEditor.DataProtocol
 
 		private void NotifyDelegate()
 		{
-			m_syncContext.Send( onMessageSent, this );
+			m_syncContext.Post( onMessageSent, this );
 
 			//EventHandler eventHandler = onMessageSent;
 			//if( eventHandler != null )
