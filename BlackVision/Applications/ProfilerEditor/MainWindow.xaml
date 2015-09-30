@@ -6,10 +6,10 @@
         xmlns:layer="clr-namespace:ProfilerEditor.PresentationLayer"
         Title="Profiler Editor" Height="540" Width="1077" Closing="Window_Closing" Name="mainWindow">
     <Window.Resources>
-        
+
         <layer:NameColorConverter x:Key="NameColorConverter"></layer:NameColorConverter>
         <layer:NameStringConverter x:Key="NameStringConverter"></layer:NameStringConverter>
-        
+
         <GridViewColumnCollection x:Key="SamplesColumnsCollection">
             <GridViewColumn Header="" Width="40">
                 <GridViewColumn.CellTemplate>
@@ -67,7 +67,7 @@
                 </GridViewColumn.CellTemplate>
             </GridViewColumn>
         </GridViewColumnCollection>
-        
+
     </Window.Resources>
 
 
@@ -77,11 +77,11 @@
                 <MenuItem Header="Profiling Tool" Name="ProfilingTool" Click="ProfilingTool_Click"></MenuItem>
             </MenuItem>
         </Menu>
-        
-        
-        <Button x:Name="startButton" Content="Start Server" HorizontalAlignment="Left" Margin="930,20,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.701,-0.712" Click="startButton_Click"/>
-        <Button x:Name="endServer" Content="End Server" HorizontalAlignment="Left" Margin="930,58,0,0" VerticalAlignment="Top" Width="75" Click="endServer_Click"/>
-        <TabControl HorizontalAlignment="Left" Height="461" Margin="28,34,0,0" VerticalAlignment="Top" Width="867">
+
+
+        <Button x:Name="startButton" Content="Start BlackVision" HorizontalAlignment="Left" Margin="930,20,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="0.701,-0.712" Click="startButton_Click"/>
+        <Button x:Name="endServer" Content="End BlackVision" HorizontalAlignment="Left" Margin="930,47,0,0" VerticalAlignment="Top" Width="100" Click="endServer_Click"/>
+        <TabControl Name="ThreadsTabControl" HorizontalAlignment="Left" Height="461" Margin="28,34,0,0" VerticalAlignment="Top" Width="867">
             <TabItem Header="Thread 1">
                 <Grid Background="#FFE5E5E5">
                     <layer:TreeListView x:Name="ProfilerTree1" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
@@ -137,9 +137,14 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <TextBox x:Name="depthLevels" HorizontalAlignment="Left" Height="23" Margin="930,128,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="44"/>
-        <Label Content="Show depth levels" HorizontalAlignment="Left" Margin="930,97,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.263,0.231" Width="120"/>
-        <Rectangle Fill="#FF6161FF" HorizontalAlignment="Left" Height="100" Margin="930,176,0,0" Stroke="Black" VerticalAlignment="Top" Width="100"/>
+        <TextBox x:Name="depthLevels" HorizontalAlignment="Left" Height="23" Margin="930,293,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="44"/>
+        <Label Content="Show depth levels" HorizontalAlignment="Left" Margin="930,267,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.263,0.231" Width="120"/>
+        <Rectangle Fill="#FF6161FF" HorizontalAlignment="Left" Height="100" Margin="930,337,0,0" Stroke="Black" VerticalAlignment="Top" Width="100"/>
+        <Button Name="ClearMaxTimeButton" Content="Clear Max Time" HorizontalAlignment="Left" Margin="930,107,0,0" VerticalAlignment="Top" Width="106" Click="ClearMaxTimeButton_Click"/>
+        <Button Name="ClearMinTimeButton" Content="Clear Min Time" HorizontalAlignment="Left" Margin="930,134,0,0" VerticalAlignment="Top" Width="106" Click="ClearMinTimeButton_Click"/>
+        <Button Name="ClearTotalTimeButton" Content="Clear Total Time" HorizontalAlignment="Left" Margin="930,161,0,0" VerticalAlignment="Top" Width="106" Click="ClearTotalTimeButton_Click"/>
+        <Button Name="ClearTreeButton" Content="Clear Tree" HorizontalAlignment="Left" Margin="930,188,0,0" VerticalAlignment="Top" Width="106" Click="ClearTreeButton_Click"/>
+        <CheckBox Name="AffectAllCheckBox" Content="Affect all threads" HorizontalAlignment="Left" Margin="930,215,0,0" VerticalAlignment="Top" Width="120"/>
 
     </Grid>
 </Window>

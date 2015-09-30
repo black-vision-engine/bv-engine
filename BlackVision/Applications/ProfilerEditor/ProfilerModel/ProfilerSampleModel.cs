@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
-//using System.Windows.Data;
+
 
 namespace ProfilerEditor.ProfilerModel
 {
@@ -30,7 +30,6 @@ namespace ProfilerEditor.ProfilerModel
 			m_parent = null;
 
 			m_sampleData.depth = 0;
-			//m_sampleData.duration = 0;
 			m_sampleData.durationSecs = 0;
 			m_sampleData.name = 0;
 		}
@@ -150,6 +149,27 @@ namespace ProfilerEditor.ProfilerModel
 			m_sampleData.averageDuration = m_sampleData.averageDuration / numFrames;
 			foreach( var child in m_childSamples )
 				child.Average( numFrames );
+		}
+
+		public void ClearMaxTime()
+		{
+			MaxDuration = 0.0F;
+			foreach( var child in m_childSamples )
+				child.ClearMaxTime();
+		}
+
+		public void ClearMinTime()
+		{
+			MinDuration = float.MaxValue;
+			foreach( var child in m_childSamples )
+				child.ClearMinTime();
+		}
+
+		public void ClearTotalTime()
+		{
+			TotalDuration = 0.0F;
+			foreach( var child in m_childSamples )
+				child.ClearTotalTime();
 		}
 
 

@@ -45,6 +45,24 @@ namespace ProfilerEditor.ProfilerModel
 				sampleModel.Average( numFrames );
 		}
 
+		public void ClearMaxTime()
+		{
+			foreach( var child in m_topLevelSamples )
+				child.ClearMaxTime();
+		}
+
+		public void ClearMinTime()
+		{
+			foreach( var child in m_topLevelSamples )
+				child.ClearMinTime();
+		}
+
+		public void ClearTotalTime()
+		{
+			foreach( var child in m_topLevelSamples )
+				child.ClearTotalTime();
+		}
+
 		public Collection<ProfilerSampleModel> TopLevelSamples
 		{
 			get { return m_topLevelSamples; }

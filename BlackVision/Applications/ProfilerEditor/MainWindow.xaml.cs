@@ -55,6 +55,7 @@ namespace ProfilerEditor
             InitializeComponent();
 
 			m_BlackVisionProcess = null;
+			// Default names
 			m_pipeName = "BlackVisionProfiler";
 			m_BlackVisionPathName = "C:\\Users\\WitekD\\BV\\BlackVision\\_Builds\\x64-v110-Debug\\Applications\\BlackVision\\BlackVision.exe";
 
@@ -90,6 +91,8 @@ namespace ProfilerEditor
 
 		private void endServer_Click( object sender, RoutedEventArgs e )
 		{
+			if( m_pipedServer == null )
+				return;
 			m_pipedServer.EndServer();
 			m_pipedServer = null;
 
@@ -111,7 +114,7 @@ namespace ProfilerEditor
 		private void GetMessageFromPipe( object state )
 		{
 			if( m_pipedServer == null )
-				return;
+				return;	// It happens, when connection ends, but there are still messages form piped server in windows events queue.
 			DataProtocol.ReadDataObject data = m_pipedServer.ReadBytes();
 
 			if( data.m_bytesRead > 0 )
@@ -145,27 +148,32 @@ namespace ProfilerEditor
 			{
 				m_firstTime[ thread ] = false;
 				m_profilerTreeView[ thread ] = treeView;
-				switch( thread )
-				{
-					case 0:
-						ProfilerTree1.DataContext = treeView;
-						break;
-					case 1:
-						ProfilerTree2.DataContext = treeView;;
-						break;
-					case 2:
-						ProfilerTree3.DataContext = treeView;
-						break;
-					case 3:
-						ProfilerTree4.DataContext = treeView;
-						break;
-					case 4:
-						ProfilerTree5.DataContext = treeView;
-						break;
-					case 5:
-						ProfilerTree6.DataContext = treeView;
-						break;
-				}
+				SetTreeDataContext( thread, treeView );
+			}
+		}
+
+		private void SetTreeDataContext( uint thread, ProfilerModel.ProfilerTreeViewModel treeView )
+		{
+			switch( thread )
+			{
+				case 0:
+					ProfilerTree1.DataContext = treeView;
+					break;
+				case 1:
+					ProfilerTree2.DataContext = treeView;
+					break;
+				case 2:
+					ProfilerTree3.DataContext = treeView;
+					break;
+				case 3:
+					ProfilerTree4.DataContext = treeView;
+					break;
+				case 4:
+					ProfilerTree5.DataContext = treeView;
+					break;
+				case 5:
+					ProfilerTree6.DataContext = treeView;
+					break;
 			}
 		}
 
@@ -178,6 +186,71 @@ namespace ProfilerEditor
 			dialog.ShowDialog();
 			m_BlackVisionPathName = dialog.BlackVisionPathTextBox.Text;
 			m_pipeName = dialog.NamedPipeTextBox.Text;
+		}
+
+		private void ClearMaxTimeButton_Click( object sender, RoutedEventArgs e )
+		{
+			if( AffectAllCheckBox.IsChecked == true )
+			{
+				foreach( var treeViewModel in m_profilerTreeView )
+					if( treeViewModel != null )
+						treeViewModel.ClearMaxTime();
+			}
+			else
+			{
+				int thread = ThreadsTabControl.SelectedIndex;
+				m_profilerTreeView[ thread ].ClearMaxTime();
+			}
+		}
+
+		private void ClearMinTimeButton_Click( object sender, RoutedEventArgs e )
+		{
+			if( AffectAllCheckBox.IsChecked == true )
+			{
+				foreach( var treeViewModel in m_profilerTreeView )
+					if( treeViewModel != null )
+						treeViewModel.ClearMinTime();
+			}
+			else
+			{
+				int thread = ThreadsTabControl.SelectedIndex;
+				m_profilerTreeView[ thread ].ClearMinTime();
+			}
+		}
+
+		private void ClearTotalTimeButton_Click( object sender, RoutedEventArgs e )
+		{
+			if( AffectAllCheckBox.IsChecked == true )
+			{
+				foreach( var treeViewModel in m_profilerTreeView )
+					if( treeViewModel != null )
+						treeViewModel.ClearTotalTime();
+			}
+			else
+			{
+				int thread = ThreadsTabControl.SelectedIndex;
+				m_profilerTreeView[ thread ].ClearTotalTime();
+			}
+		}
+
+		private void ClearTreeButton_Click( object sender, RoutedEventArgs e )
+		{
+			if( AffectAllCheckBox.IsChecked == true )
+			{
+				for( int i = 0; i < m_profilerTreeView.Length; ++i )
+				{
+					m_profilerTreeView[ i ] = null;
+					m_firstTime[ i ] = true;
+					SetTreeDataContext( (uint)i, null );
+				}
+			}
+			else
+			{
+				int thread = ThreadsTabControl.SelectedIndex;
+				m_profilerTreeView[ thread ] = null;
+				m_firstTime[ thread ] = true;
+				SetTreeDataContext( (uint)thread, null );
+			}
 		}
 
     }
