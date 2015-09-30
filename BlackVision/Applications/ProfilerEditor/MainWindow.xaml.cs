@@ -106,8 +106,7 @@ namespace ProfilerEditor
 
 		private void Window_Closing( object sender, CancelEventArgs e )
 		{
-			if( m_pipedServer != null )
-				m_pipedServer.EndServer();
+			endServer_Click( null, null );
 		}
 
 

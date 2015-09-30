@@ -5,6 +5,36 @@
 
     <!--Converter for Indentation of items-->
     <local:TreeListViewConverter x:Key="TreeListViewConverter"/>
+    <SolidColorBrush x:Key="GlyphBrush" Color="#444" />
+
+    <Style x:Key="ExpandCollapseToggleStyle" TargetType="ToggleButton">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid
+          Width="15"
+          Height="13"
+          Background="Transparent">
+                        <Path x:Name="ExpandPath"
+            HorizontalAlignment="Left" 
+            VerticalAlignment="Center" 
+            Margin="1,1,1,1"
+            Fill="{StaticResource GlyphBrush}"
+            Data="M 4 0 L 8 4 L 4 8 Z"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked"
+               Value="True">
+                            <Setter Property="Data"
+                TargetName="ExpandPath"
+                Value="M 0 4 L 8 4 L 4 8 Z"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <!--Control Template for TreeViewItem's.-->
     <ControlTemplate TargetType="TreeViewItem" x:Key="TreeListViewItem">
@@ -64,8 +94,8 @@
             <FrameworkElement Width="{Binding RelativeSource={x:Static RelativeSource.Self}, 
                 Converter={StaticResource TreeListViewConverter}}"/>
             <!--Use a standard toggle button-->
-            <ToggleButton IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource Mode=FindAncestor,
-                AncestorType=TreeViewItem}}" Width="9" Height="9" VerticalAlignment="Center" Margin="1"/>
+            <ToggleButton Style="{StaticResource ExpandCollapseToggleStyle}" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource Mode=FindAncestor,
+                AncestorType=TreeViewItem}}" Width="12" Height="12" VerticalAlignment="Center" Margin="1"/>
         </StackPanel>
         <ControlTemplate.Triggers>
             <!--Trigger used to show/hide the expand button-->
