@@ -72,13 +72,13 @@ namespace ProfilerEditor.DataProtocol
 		public void EndServer()
 		{
 			m_endThreads = true;
-			//string pipeFullName = "\\\\.\\pipe\\" + m_pipeName;
-			//DeleteFile( pipeFullName );
-			m_pipeHandle.Close();
+			
+			string pipeFullName = "\\\\.\\pipe\\" + m_pipeName;
+			DeleteFile( pipeFullName );
 
 			foreach( var thread in m_readThreads )
 				thread.Join();
-			m_listenThread.Abort();				// It's not pleasent, but these threads always wait for next messages and connections. There's no other way.
+			m_listenThread.Join();				// It's not pleasent, but these threads always wait for next messages and connections. There's no other way.
 		}
 
 
@@ -99,14 +99,16 @@ namespace ProfilerEditor.DataProtocol
 				int success = ConnectNamedPipe( m_pipeHandle, IntPtr.Zero );
 
 				// Could not connect clients
-				if( success == 0 )
+				if( success == 0 || m_endThreads )
+				{
+					m_pipeHandle.Close();
 					return;
+				}
 
 				Thread newReadThread = new Thread( new ParameterizedThreadStart( ReadThreadFunction ) );
 				newReadThread.Start( m_pipeHandle );
 				m_readThreads.Add( newReadThread );
 			}
-			m_pipeHandle.Close();
         }
 
 		public void ReadThreadFunction( object handle )
