@@ -53,9 +53,9 @@ namespace ProfilerEditor.ProfilerModel
 			m_sampleData = new SampleData( samples[ curSampleIndex++ ] );
 			m_parent = parent;
 			if( m_sampleData.depth < maxTreeExpansionLevel )
-				m_isExpanded = true;
+				IsExpanded = true;
 			else
-				m_isExpanded = false;
+				IsExpanded = false;
 
 			while( curSampleIndex < samples.Length && samples[ curSampleIndex ].depth > m_sampleData.depth )
 				m_childSamples.Add( new ProfilerSampleModel( this, samples, ref curSampleIndex, maxTreeExpansionLevel ) );
@@ -66,9 +66,9 @@ namespace ProfilerEditor.ProfilerModel
 			m_sampleData = new SampleData( referenceSample .m_sampleData );
 			m_parent = parent;
 			if( m_sampleData.depth < maxTreeExpansionLevel )
-				m_isExpanded = true;
+				IsExpanded = true;
 			else
-				m_isExpanded = false;
+				IsExpanded = false;
 
 			foreach( var child in referenceSample.m_childSamples )
 				m_childSamples.Add( new ProfilerSampleModel( this, child, maxTreeExpansionLevel ) );
@@ -78,9 +78,9 @@ namespace ProfilerEditor.ProfilerModel
 		{
 			m_sampleData.averageDuration += samples[ curSampleIndex++ ].durationSecs;
 			if( m_sampleData.depth < maxTreeExpansionLevel )
-				m_isExpanded = true;
+				IsExpanded = true;
 			else
-				m_isExpanded = false;
+				IsExpanded = false;
 
 			while( curSampleIndex < samples.Length && samples[ curSampleIndex ].depth > m_sampleData.depth )
 			{
@@ -116,9 +116,9 @@ namespace ProfilerEditor.ProfilerModel
 
 
 			if( m_sampleData.depth < maxTreeExpansionLevel )
-				m_isExpanded = true;
+				IsExpanded = true;
 			else
-				m_isExpanded = false;
+				IsExpanded = false;
 
 			foreach( var childSample in sampleModel.m_childSamples )
 			{

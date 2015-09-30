@@ -75,6 +75,9 @@ namespace ProfilerEditor
 
 		private void startButton_Click( object sender, RoutedEventArgs e )
 		{
+			if( m_pipedServer != null )
+				endServer_Click( null, null );
+
 			m_pipedServer = new DataProtocol.NamedPipeServer( m_pipeName, 0, m_numThreads );
 
 			m_pipedServer.onMessageSent = GetMessageFromPipe;
@@ -153,27 +156,28 @@ namespace ProfilerEditor
 
 		private void SetTreeDataContext( uint thread, ProfilerModel.ProfilerTreeViewModel treeView )
 		{
+			TreeListView treeListView = GetThreadTreeView( thread );
+			treeListView.DataContext = treeView;
+		}
+
+		private TreeListView GetThreadTreeView( uint thread )
+		{
 			switch( thread )
 			{
 				case 0:
-					ProfilerTree1.DataContext = treeView;
-					break;
+					return ProfilerTree1;
 				case 1:
-					ProfilerTree2.DataContext = treeView;
-					break;
+					return ProfilerTree2;
 				case 2:
-					ProfilerTree3.DataContext = treeView;
-					break;
+					return ProfilerTree3;
 				case 3:
-					ProfilerTree4.DataContext = treeView;
-					break;
+					return ProfilerTree4;
 				case 4:
-					ProfilerTree5.DataContext = treeView;
-					break;
+					return ProfilerTree5;
 				case 5:
-					ProfilerTree6.DataContext = treeView;
-					break;
+					return ProfilerTree6;
 			}
+			return null;
 		}
 
 		private void ProfilingTool_Click( object sender, RoutedEventArgs e )
@@ -198,7 +202,8 @@ namespace ProfilerEditor
 			else
 			{
 				int thread = ThreadsTabControl.SelectedIndex;
-				m_profilerTreeView[ thread ].ClearMaxTime();
+				if( m_profilerTreeView[ thread ] != null )
+					m_profilerTreeView[ thread ].ClearMaxTime();
 			}
 		}
 
@@ -213,7 +218,8 @@ namespace ProfilerEditor
 			else
 			{
 				int thread = ThreadsTabControl.SelectedIndex;
-				m_profilerTreeView[ thread ].ClearMinTime();
+				if( m_profilerTreeView[ thread ] != null )
+					m_profilerTreeView[ thread ].ClearMinTime();
 			}
 		}
 
@@ -228,7 +234,8 @@ namespace ProfilerEditor
 			else
 			{
 				int thread = ThreadsTabControl.SelectedIndex;
-				m_profilerTreeView[ thread ].ClearTotalTime();
+				if( m_profilerTreeView[ thread ] != null )
+					m_profilerTreeView[ thread ].ClearTotalTime();
 			}
 		}
 
@@ -251,6 +258,7 @@ namespace ProfilerEditor
 				SetTreeDataContext( (uint)thread, null );
 			}
 		}
+
 
     }
 }
