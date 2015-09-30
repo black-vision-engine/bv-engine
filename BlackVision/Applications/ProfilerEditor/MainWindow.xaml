@@ -71,10 +71,17 @@
     </Window.Resources>
 
 
-    <Grid>
+    <Grid Name="mainWindowGrid">
+        <Menu IsMainMenu="True" VerticalAlignment="Top" HorizontalAlignment="Left" Height="20" Width="500">
+            <MenuItem Header="Options">
+                <MenuItem Header="Profiling Tool" Name="ProfilingTool" Click="ProfilingTool_Click"></MenuItem>
+            </MenuItem>
+        </Menu>
+        
+        
         <Button x:Name="startButton" Content="Start Server" HorizontalAlignment="Left" Margin="930,20,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.701,-0.712" Click="startButton_Click"/>
         <Button x:Name="endServer" Content="End Server" HorizontalAlignment="Left" Margin="930,58,0,0" VerticalAlignment="Top" Width="75" Click="endServer_Click"/>
-        <TabControl HorizontalAlignment="Left" Height="461" Margin="36,20,0,0" VerticalAlignment="Top" Width="867">
+        <TabControl HorizontalAlignment="Left" Height="461" Margin="28,34,0,0" VerticalAlignment="Top" Width="867">
             <TabItem Header="Thread 1">
                 <Grid Background="#FFE5E5E5">
                     <layer:TreeListView x:Name="ProfilerTree1" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">

@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.ComponentModel;
 using System.Threading;
 using ProfilerEditor.PresentationLayer;
+using System.Diagnostics;
 
 
 namespace ProfilerEditor
@@ -29,6 +30,10 @@ namespace ProfilerEditor
 
 		private bool[]										m_firstTime;
 		private uint										m_numThreads = 6;
+
+		string												m_pipeName;
+		string												m_BlackVisionPathName;
+		Process												m_BlackVisionProcess;
 
 #region Properties
 		public ProfilerModel.NameMapping ColorMapping
@@ -49,6 +54,11 @@ namespace ProfilerEditor
         {
             InitializeComponent();
 
+			m_BlackVisionProcess = null;
+			m_pipeName = "BlackVisionProfiler";
+			m_BlackVisionPathName = "C:\\Users\\WitekD\\BV\\BlackVision\\_Builds\\x64-v110-Debug\\Applications\\BlackVision\\BlackVision.exe";
+
+			m_pipedServer = null;
 			m_namesMap = new ProfilerModel.NameMapping();
 
 			m_firstTime = new bool[ m_numThreads ];
@@ -64,18 +74,30 @@ namespace ProfilerEditor
 
 		private void startButton_Click( object sender, RoutedEventArgs e )
 		{
-			string pipeName = "ProfilerPipeTest";
-			m_pipedServer = new DataProtocol.NamedPipeServer( pipeName, 0, m_numThreads );
+			m_pipedServer = new DataProtocol.NamedPipeServer( m_pipeName, 0, m_numThreads );
 
 			m_pipedServer.onMessageSent = GetMessageFromPipe;
 			m_pipedServer.m_syncContext = SynchronizationContext.Current;
 			m_pipedServer.StartServer();
+
+			m_BlackVisionProcess = new Process();
+			m_BlackVisionProcess.StartInfo.FileName = m_BlackVisionPathName;
+			m_BlackVisionProcess.StartInfo.Arguments = "";
+			m_BlackVisionProcess.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName( m_BlackVisionPathName );
+			m_BlackVisionProcess.Start();
 		}
 
 
 		private void endServer_Click( object sender, RoutedEventArgs e )
 		{
 			m_pipedServer.EndServer();
+			m_pipedServer = null;
+
+			if( !m_BlackVisionProcess.HasExited )
+			{
+				m_BlackVisionProcess.CloseMainWindow();
+				m_BlackVisionProcess.WaitForExit();
+			}
 		}
 
 
@@ -88,6 +110,8 @@ namespace ProfilerEditor
 
 		private void GetMessageFromPipe( object state )
 		{
+			if( m_pipedServer == null )
+				return;
 			DataProtocol.ReadDataObject data = m_pipedServer.ReadBytes();
 
 			if( data.m_bytesRead > 0 )
@@ -143,6 +167,17 @@ namespace ProfilerEditor
 						break;
 				}
 			}
+		}
+
+		private void ProfilingTool_Click( object sender, RoutedEventArgs e )
+		{
+			ProfilingToolDialog dialog = new ProfilingToolDialog();
+			dialog.BlackVisionPathTextBox.Text = m_BlackVisionPathName;
+			dialog.NamedPipeTextBox.Text = m_pipeName;
+
+			dialog.ShowDialog();
+			m_BlackVisionPathName = dialog.BlackVisionPathTextBox.Text;
+			m_pipeName = dialog.NamedPipeTextBox.Text;
 		}
 
     }

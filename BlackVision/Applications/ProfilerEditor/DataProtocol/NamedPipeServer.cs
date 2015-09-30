@@ -75,16 +75,17 @@ namespace ProfilerEditor.DataProtocol
 		{
 			m_endThreads = true;
 
+			string pipeFullName = "\\\\.\\pipe\\" + m_pipeName;
+			DeleteFile( pipeFullName );
+			m_listenThread.Join();
+
+
 			foreach( var pipeHandle in m_allHandles )
 				if( !pipeHandle.IsClosed )
 					DisconnectNamedPipe( pipeHandle );
 
 			foreach( var thread in m_readThreads )
 				thread.Join();
-
-			string pipeFullName = "\\\\.\\pipe\\" + m_pipeName;
-			DeleteFile( pipeFullName );
-			m_listenThread.Join();
 		}
 
 

@@ -134,7 +134,7 @@ NamedPipe& ProfilerNamedPipeSender::GetNamedPipe()
 	if( m_firstPipeUse )
 	{
 		// waits 2 miliseconds for connection
-		m_pipe.ConnectToNamedPipe( std::wstring( L"ProfilerPipeTest" ), NamedPipeAccess::PipeWrite, 2 );
+		m_pipe.ConnectToNamedPipe( std::wstring( L"BlackVisionProfiler" ), NamedPipeAccess::PipeWrite, 2 );
 		m_firstPipeUse = false;
 	}
 	return m_pipe;
