@@ -35,7 +35,7 @@ std::string                             AssetDescsWithUIDs::GenerateUID( AssetDe
     while( uid2asset.find( key + std::to_string( nTry ) ) != uid2asset.end() )
         nTry++;
 
-    return key + std::to_string( nTry ) + "444";
+    return key + std::to_string( nTry );
 }
 
 
