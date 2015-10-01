@@ -34,7 +34,7 @@
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Assets/AssetDescsWithUIDs.h"
 
-#include "Engine/Models/SerializationObjects.h"
+#include "Engine/Serialization/SerializationObjects.h"
 #include "Engine/Models/BVScene.h"
 #include "System/Path.h"
 

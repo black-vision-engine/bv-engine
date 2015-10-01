@@ -5,6 +5,8 @@
 
 #include "Assets/AssetDescsWithUIDs.h"
 
+#include <fstream>
+
 namespace bv
 {
 

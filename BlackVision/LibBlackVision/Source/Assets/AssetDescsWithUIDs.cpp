@@ -1,6 +1,6 @@
 #include "AssetDescsWithUIDs.h"
 
-#include "Engine/Models/SerializationObjects.inl"
+#include "Engine/Serialization/SerializationObjects.inl"
 
 namespace bv {
 

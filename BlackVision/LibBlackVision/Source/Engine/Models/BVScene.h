@@ -5,7 +5,7 @@
 
 #include "Engine/Interfaces/IUpdatable.h"
 #include "Engine/Interfaces/ISerializable.h"
-#include "Engine/Models/SerializationObjects.h"
+#include "Engine/Serialization/SerializationObjects.h"
 
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"

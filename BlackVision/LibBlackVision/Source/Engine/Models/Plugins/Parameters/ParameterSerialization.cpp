@@ -4,7 +4,7 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include <sstream>
 
-#include "Engine/Models/SerializationObjects.inl"
+#include "Engine/Serialization/SerializationObjects.inl"
 
 namespace bv { namespace model {
 

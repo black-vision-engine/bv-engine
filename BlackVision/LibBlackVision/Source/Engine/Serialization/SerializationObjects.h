@@ -2,9 +2,6 @@
 
 #include "CoreDEF.h"
 
-#include <fstream>
-#include <stack>
-
 namespace bv
 {
 

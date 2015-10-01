@@ -1,6 +1,6 @@
 #include "Mathematics/Transform/MatTransform.h"
 
-#include "Engine/Models/SerializationObjects.inl"
+#include "Engine/Serialization/SerializationObjects.inl"
 
 namespace bv { 
     

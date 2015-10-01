@@ -160,6 +160,9 @@
     <Filter Include="Assets\Font\Engines">
       <UniqueIdentifier>{65752d9b-561f-4f02-b982-e20eca291b13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Serialization">
+      <UniqueIdentifier>{dca44309-048d-4821-af2f-7fb79b0730f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -870,9 +873,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCogWheelPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\SerializationObjects.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\ParameterSerialization.cpp">
       <Filter>Engine\Models\Plugins\Parameters</Filter>
     </ClCompile>
@@ -890,6 +890,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\AssetDescsWithUIDs.cpp">
       <Filter>Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Serialization\SerializationObjects.cpp">
+      <Filter>Engine\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Serialization\DeserializeObject.cpp">
+      <Filter>Engine\Serialization</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1784,9 +1790,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\SceneModel.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\SerializationObjects.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\AssetSerialization.h">
       <Filter>Assets</Filter>
     </ClInclude>
@@ -1802,8 +1805,11 @@
     <ClInclude Include="..\..\..\Source\Assets\AssetDescsWithUIDs.h">
       <Filter>Assets</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\DeserializeObjectImpl.h">
-      <Filter>Engine\Models</Filter>
+    <ClInclude Include="..\..\..\Source\Engine\Serialization\DeserializeObjectImpl.h">
+      <Filter>Engine\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Serialization\SerializationObjects.h">
+      <Filter>Engine\Serialization</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1867,8 +1873,8 @@
     <None Include="..\..\..\Source\Engine\Models\Plugins\Descriptor\ModelHelper.h">
       <Filter>Engine\Models\Plugins\Descriptor</Filter>
     </None>
-    <None Include="..\..\..\Source\Engine\Models\SerializationObjects.inl">
-      <Filter>Engine\Models</Filter>
+    <None Include="..\..\..\Source\Engine\Serialization\SerializationObjects.inl">
+      <Filter>Engine\Serialization</Filter>
     </None>
   </ItemGroup>
 </Project>

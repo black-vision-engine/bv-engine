@@ -9,6 +9,7 @@
 #define LOG_MODULE ModuleEnum::ME_LibBlackVision
 
 #include <set>
+#include <fstream>
 
 namespace bv
 {

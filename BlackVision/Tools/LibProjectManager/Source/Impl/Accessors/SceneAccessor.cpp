@@ -11,6 +11,8 @@
 
 #include "rapidxml/RapidXml.hpp"
 
+#include <fstream>
+
 namespace bv
 {
 

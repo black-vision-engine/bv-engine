@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreDEF.h" //FIXME: store in PCH
-#include "Engine/Models/SerializationObjects.h"
+#include "Engine/Serialization/SerializationObjects.h"
 
 namespace bv
 {

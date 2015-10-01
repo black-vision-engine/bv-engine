@@ -15,6 +15,7 @@
 
 #include <set>
 #include <sstream>
+#include <fstream>
 
 namespace bv
 {
