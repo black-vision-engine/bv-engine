@@ -35,6 +35,9 @@ namespace ProfilerEditor
 		string												m_BlackVisionPathName;
 		Process												m_BlackVisionProcess;
 
+		public int											m_timeFormatUnits;
+		public string										m_timeFormatString;
+
 #region Properties
 		public ProfilerModel.NameMapping ColorMapping
 		{
@@ -54,14 +57,22 @@ namespace ProfilerEditor
         {
             InitializeComponent();
 
+			// BlackVision process handle and default names
 			m_BlackVisionProcess = null;
-			// Default names
 			m_pipeName = "BlackVisionProfiler";
 			m_BlackVisionPathName = "C:\\Users\\WitekD\\BV\\BlackVision\\_Builds\\x64-v110-Debug\\Applications\\BlackVision\\BlackVision.exe";
 
+			// Default formatting
+			m_timeFormatUnits = 0;
+			TimeUnitsComboBox.SelectedIndex = m_timeFormatUnits;
+			m_timeFormatString = "0.000000 s";
+			TimeDigitsTextBox.Text = "6";
+
+			// Pipe server
 			m_pipedServer = null;
 			m_namesMap = new ProfilerModel.NameMapping();
 
+			// treeViews and data processor
 			m_firstTime = new bool[ m_numThreads ];
 			for( int i = 0; i < m_firstTime.Length; ++i )
 				m_firstTime[ i ] = true;
@@ -257,6 +268,32 @@ namespace ProfilerEditor
 				m_firstTime[ thread ] = true;
 				SetTreeDataContext( (uint)thread, null );
 			}
+		}
+
+		private void UpdateTimeFormatButton_Click( object sender, RoutedEventArgs e )
+		{
+			int decimalDigits;
+			bool success = Int32.TryParse( TimeDigitsTextBox.Text, out decimalDigits );
+			if( !success )
+				return;
+
+			string units;
+			string format = "0.";
+
+			m_timeFormatUnits = TimeUnitsComboBox.SelectedIndex;
+			if( m_timeFormatUnits == 0 )
+				units = " s";
+			else
+				units = " ms";
+
+			for( int i = 0; i < decimalDigits; ++i )
+				format += "0";
+			format += units;
+			m_timeFormatString = format;
+
+			foreach( var tree in m_profilerTreeView )
+				if( tree != null )
+					tree.RefreshTree();
 		}
 
 

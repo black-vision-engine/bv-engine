@@ -9,6 +9,7 @@
 
         <layer:NameColorConverter x:Key="NameColorConverter"></layer:NameColorConverter>
         <layer:NameStringConverter x:Key="NameStringConverter"></layer:NameStringConverter>
+        <layer:TimeFormatter x:Key="TimeFormatter"></layer:TimeFormatter>
 
         <GridViewColumnCollection x:Key="SamplesColumnsCollection">
             <GridViewColumn Header="" Width="40">
@@ -34,7 +35,7 @@
                 <GridViewColumn.CellTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Path=AverageDuration, StringFormat=N6, Mode=OneWay}"/>
+                            <TextBlock Text="{Binding Path=AverageDuration, Converter={StaticResource TimeFormatter}, ConverterParameter={x:Reference mainWindow}, Mode=OneWay}"/>
                         </StackPanel>
                     </DataTemplate>
                 </GridViewColumn.CellTemplate>
@@ -43,7 +44,7 @@
                 <GridViewColumn.CellTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Path=MaxDuration, StringFormat=N6, Mode=OneWay}"/>
+                            <TextBlock Text="{Binding Path=MaxDuration, Converter={StaticResource TimeFormatter}, ConverterParameter={x:Reference mainWindow}, Mode=OneWay}"/>
                         </StackPanel>
                     </DataTemplate>
                 </GridViewColumn.CellTemplate>
@@ -52,16 +53,16 @@
                 <GridViewColumn.CellTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Path=MinDuration, StringFormat=N6, Mode=OneWay}"/>
+                            <TextBlock Text="{Binding Path=MinDuration, Converter={StaticResource TimeFormatter}, ConverterParameter={x:Reference mainWindow}, Mode=OneWay}"/>
                         </StackPanel>
                     </DataTemplate>
                 </GridViewColumn.CellTemplate>
             </GridViewColumn>
-            <GridViewColumn Header="Total Time" Width="100">
+            <GridViewColumn Header="Total Time" Width="125">
                 <GridViewColumn.CellTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Path=TotalDuration, StringFormat=N6, Mode=OneWay}"/>
+                            <TextBlock Text="{Binding Path=TotalDuration, Converter={StaticResource TimeFormatter}, ConverterParameter={x:Reference mainWindow}, Mode=OneWay}"/>
                         </StackPanel>
                     </DataTemplate>
                 </GridViewColumn.CellTemplate>
@@ -137,19 +138,20 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <TextBox x:Name="depthLevels" HorizontalAlignment="Left" Height="23" Margin="930,356,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="44"/>
-        <Label Content="Show depth levels" HorizontalAlignment="Left" Margin="930,325,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.263,0.231" Width="120"/>
-        <Rectangle Fill="#FF6161FF" HorizontalAlignment="Left" Height="100" Margin="930,384,0,0" Stroke="Black" VerticalAlignment="Top" Width="100"/>
+        <TextBox x:Name="depthLevels" HorizontalAlignment="Left" Height="23" Margin="930,445,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="44" MaxLines="1" MaxLength="8"/>
+        <Label Content="Show depth levels" HorizontalAlignment="Left" Margin="930,414,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.263,0.231" Width="120"/>
         <Button Name="ClearMaxTimeButton" Content="Clear Max Time" HorizontalAlignment="Left" Margin="930,107,0,0" VerticalAlignment="Top" Width="106" Click="ClearMaxTimeButton_Click"/>
         <Button Name="ClearMinTimeButton" Content="Clear Min Time" HorizontalAlignment="Left" Margin="930,134,0,0" VerticalAlignment="Top" Width="106" Click="ClearMinTimeButton_Click"/>
         <Button Name="ClearTotalTimeButton" Content="Clear Total Time" HorizontalAlignment="Left" Margin="930,161,0,0" VerticalAlignment="Top" Width="106" Click="ClearTotalTimeButton_Click"/>
         <Button Name="ClearTreeButton" Content="Clear Tree" HorizontalAlignment="Left" Margin="930,188,0,0" VerticalAlignment="Top" Width="106" Click="ClearTreeButton_Click"/>
         <CheckBox Name="AffectAllCheckBox" Content="Affect all threads" HorizontalAlignment="Left" Margin="930,215,0,0" VerticalAlignment="Top" Width="120"/>
-        <ComboBox HorizontalAlignment="Left" Margin="930,269,0,0" VerticalAlignment="Top" Width="120">
+        <ComboBox Name="TimeUnitsComboBox" HorizontalAlignment="Left" Margin="930,299,0,0" VerticalAlignment="Top" Width="120">
             <ComboBoxItem IsSelected="True">Seconds</ComboBoxItem>
             <ComboBoxItem>Milliseconds</ComboBoxItem>
         </ComboBox>
-        <TextBox HorizontalAlignment="Left" Height="24" Margin="1026,296,0,0" TextWrapping="Wrap" Text="6" VerticalAlignment="Top" Width="24"/>
-        <Label Content="Decimal digits" HorizontalAlignment="Left" Height="29" Margin="930,296,0,0" VerticalAlignment="Top" Width="91"/>
+        <TextBox Name="TimeDigitsTextBox" HorizontalAlignment="Left" Height="24" Margin="1026,331,0,0" TextWrapping="Wrap" Text="6" VerticalAlignment="Top" Width="24"/>
+        <Label Content="Decimal digits" HorizontalAlignment="Left" Height="29" Margin="930,326,0,0" VerticalAlignment="Top" Width="91"/>
+        <Button Name="UpdateTimeFormatButton" Content="Update format" HorizontalAlignment="Left" Margin="961,360,0,0" VerticalAlignment="Top" Width="89" Click="UpdateTimeFormatButton_Click"/>
+        <Label Content="Time format:" HorizontalAlignment="Left" Margin="930,268,0,0" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>

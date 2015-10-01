@@ -172,6 +172,13 @@ namespace ProfilerEditor.ProfilerModel
 				child.ClearTotalTime();
 		}
 
+		public void Refresh()
+		{
+			OnPropertyChanged( "" );
+			foreach( var child in m_childSamples )
+				child.Refresh();
+		}
+
 
 #region Sample Properties
 		public Collection<ProfilerSampleModel> Children

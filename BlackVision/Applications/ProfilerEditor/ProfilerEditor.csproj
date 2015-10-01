@@ -92,6 +92,7 @@
     <Compile Include="PresentationLayer\Converters.cs" />
     <Compile Include="PresentationLayer\NameColorConverter.cs" />
     <Compile Include="PresentationLayer\NameStringConverter.cs" />
+    <Compile Include="PresentationLayer\TimeFormatter.cs" />
     <Compile Include="PresentationLayer\TreeListView.cs" />
     <Compile Include="ProfilerModel\NameMapping.cs" />
     <Compile Include="ProfilerModel\ProfilerSampleModel.cs" />

@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+
 
 namespace ProfilerEditor.ProfilerModel
 {
-	public class ProfilerTreeViewModel
+	public class ProfilerTreeViewModel : INotifyPropertyChanged
 	{
 		private Collection<ProfilerSampleModel>		m_topLevelSamples;
 
@@ -68,6 +70,24 @@ namespace ProfilerEditor.ProfilerModel
 			get { return m_topLevelSamples; }
 		}
 
+		public void RefreshTree()
+		{
+			OnPropertyChanged( "TopLevelSamples" );
+			foreach( var child in m_topLevelSamples )
+				child.Refresh();
+		}
 
+
+		#region INotifyPropertyChanged Members
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		protected virtual void OnPropertyChanged( string propertyName )
+		{
+			if( this.PropertyChanged != null )
+				this.PropertyChanged( this, new PropertyChangedEventArgs( propertyName ) );
+		}
+
+		#endregion // INotifyPropertyChanged Members
 	}
 }
