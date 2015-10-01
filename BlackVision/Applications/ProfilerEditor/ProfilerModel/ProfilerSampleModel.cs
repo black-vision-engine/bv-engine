@@ -76,7 +76,15 @@ namespace ProfilerEditor.ProfilerModel
 
 		public void Update( DataProtocol.ProfilerSample[] samples, ref uint curSampleIndex, uint maxTreeExpansionLevel )
 		{
-			m_sampleData.averageDuration += samples[ curSampleIndex++ ].durationSecs;
+			float sampleDuration = samples[ curSampleIndex++ ].durationSecs;
+
+			m_sampleData.durationSecs += sampleDuration;
+			m_sampleData.averageDuration += sampleDuration;		// Call Average function to divide this value by number of samples
+			if( MaxDuration < sampleDuration )
+				MaxDuration = sampleDuration;
+			if( MinDuration > sampleDuration )
+				MinDuration = sampleDuration;
+			
 			if( m_sampleData.depth < maxTreeExpansionLevel )
 				IsExpanded = true;
 			else

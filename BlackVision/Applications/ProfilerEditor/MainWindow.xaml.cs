@@ -94,6 +94,7 @@ namespace ProfilerEditor
 			m_pipedServer.onMessageSent = GetMessageFromPipe;
 			m_pipedServer.m_syncContext = SynchronizationContext.Current;
 			m_pipedServer.StartServer();
+			Thread.Sleep( 10 );		//Let's give named pipe server time, to start work.
 
 			m_BlackVisionProcess = new Process();
 			m_BlackVisionProcess.StartInfo.FileName = m_BlackVisionPathName;
