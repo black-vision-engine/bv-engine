@@ -11,6 +11,8 @@ ProfilerSample      AutoProfile::m_samples[ MAX_PROFILER_SAMPLES * MAX_PROFILER_
 
 unsigned int    AutoProfile::m_displayStatsWaitMillis = 500;
 bool            AutoFrameProfile::m_showStats = false;
+ProfilerMode	AutoFrameProfile::m_mode = ProfilerMode::PM_EVERY_N_FRAMES_AND_FORCE_DISPLAY;
+unsigned int	AutoFrameProfile::m_framesToShow = 100;
 
 AutoFrameProfile::PtrDisplayCallback  AutoFrameProfile::m_displayCallback = nullptr;
 

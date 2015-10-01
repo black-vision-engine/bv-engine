@@ -35,6 +35,8 @@ Max number of functions/sections names shouldn't be greater than 4095.*/
 class ProfilerNamedPipeSender
 {
 private:
+	static std::wstring						s_pipeName;
+
 	std::unordered_map<const char*, UInt16>	m_names;
 	UInt16									m_nameCounter;
 	std::vector<const char*>				m_namesToSend;
@@ -56,6 +58,7 @@ public:
 	void				SendSamples		();
 
 	NamedPipe&			GetNamedPipe();
+	static void			SetNamedPipeName( const std::wstring& name ) { s_pipeName = name; }
 };
 
 

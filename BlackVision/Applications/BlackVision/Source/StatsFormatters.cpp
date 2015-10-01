@@ -58,6 +58,8 @@ ProfilerNamedPipeSender ProfilerDataFormatter::s_namedPipeSender[ MAX_PROFILER_T
 	//ProfilerNamedPipeSender( 5 ),
 };
 
+std::wstring ProfilerNamedPipeSender::s_pipeName = L"BlackVisionProfiler";
+
 UInt16 ProfilerNamedPipeSender::GetNameID		( const char* name )
 {
 	auto iterator = m_names.find( name );
@@ -134,7 +136,7 @@ NamedPipe& ProfilerNamedPipeSender::GetNamedPipe()
 	if( m_firstPipeUse )
 	{
 		// waits 2 miliseconds for connection
-		m_pipe.ConnectToNamedPipe( std::wstring( L"BlackVisionProfiler" ), NamedPipeAccess::PipeWrite, 2 );
+		m_pipe.ConnectToNamedPipe( s_pipeName, NamedPipeAccess::PipeWrite, 2 );
 		m_firstPipeUse = false;
 	}
 	return m_pipe;

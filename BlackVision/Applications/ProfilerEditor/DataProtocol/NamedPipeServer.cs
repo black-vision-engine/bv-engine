@@ -29,7 +29,7 @@ namespace ProfilerEditor.DataProtocol
 		public const uint			PIPE_TYPE_MESSAGE		= (0x00000004);
 		public const uint			PIPE_READMODE_MESSAGE	= (0x00000002);
 
-		private uint						m_inBufferSize				= 2000;//376;
+		private uint						m_inBufferSize				= 2048;//376;
         private uint						m_outBufferSize				= 0;
 
 
@@ -39,6 +39,7 @@ namespace ProfilerEditor.DataProtocol
 
         private Thread						m_listenThread;
 		private Collection<Thread>			m_readThreads;
+		private Semaphore					m_allHandlesSemaphore;
 		private Collection<SafeFileHandle>	m_allHandles;
 		private bool						m_endThreads = false;
 
@@ -61,6 +62,7 @@ namespace ProfilerEditor.DataProtocol
 			m_queue = Queue.Synchronized( m_queue );
 
 			m_readThreads = new Collection<Thread>();
+			m_allHandlesSemaphore = new Semaphore( 1, 1 );
 			m_allHandles = new Collection<SafeFileHandle>();
         }
 
@@ -80,9 +82,13 @@ namespace ProfilerEditor.DataProtocol
 			m_listenThread.Join();
 
 
-			//foreach( var pipeHandle in m_allHandles )
-			//	if( !pipeHandle.IsClosed )
-			//		DisconnectNamedPipe( pipeHandle );
+			foreach( var pipeHandle in m_allHandles )
+			{
+				m_allHandlesSemaphore.WaitOne();
+				if( !pipeHandle.IsClosed )
+					DisconnectNamedPipe( pipeHandle );
+				m_allHandlesSemaphore.Release();
+			}
 
 			foreach( var thread in m_readThreads )
 				thread.Join();
@@ -113,7 +119,11 @@ namespace ProfilerEditor.DataProtocol
 				}
 
 				Thread newReadThread = new Thread( new ParameterizedThreadStart( ReadThreadFunction ) );
+
+				m_allHandlesSemaphore.WaitOne();
 				m_allHandles.Add( m_pipeHandle );
+				m_allHandlesSemaphore.Release();
+				
 				newReadThread.Start( m_pipeHandle );
 				m_readThreads.Add( newReadThread );
 			}
@@ -154,7 +164,10 @@ namespace ProfilerEditor.DataProtocol
 			}
 
 			pipeStream.Close();
-			pipeHandle.Close();
+			m_allHandlesSemaphore.WaitOne();
+			if( !pipeHandle.IsClosed )
+				pipeHandle.Close();
+			m_allHandlesSemaphore.Release();
 		}
 
 		/**Reads last message from queue. [thread-safe]*/

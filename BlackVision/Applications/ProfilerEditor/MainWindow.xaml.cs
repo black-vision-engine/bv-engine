@@ -16,6 +16,7 @@ using System.ComponentModel;
 using System.Threading;
 using ProfilerEditor.PresentationLayer;
 using System.Diagnostics;
+using System.IO;
 
 
 namespace ProfilerEditor
@@ -34,6 +35,7 @@ namespace ProfilerEditor
 		string												m_pipeName;
 		string												m_BlackVisionPathName;
 		Process												m_BlackVisionProcess;
+		string												m_commandLineArg;
 
 		public int											m_timeFormatUnits;
 		public string										m_timeFormatString;
@@ -61,6 +63,7 @@ namespace ProfilerEditor
 			m_BlackVisionProcess = null;
 			m_pipeName = "BlackVisionProfiler";
 			m_BlackVisionPathName = "C:\\Users\\WitekD\\BV\\BlackVision\\_Builds\\x64-v110-Debug\\Applications\\BlackVision\\BlackVision.exe";
+			m_commandLineArg = "-EnableProfiler";
 
 			// Default formatting
 			m_timeFormatUnits = 0;
@@ -96,26 +99,22 @@ namespace ProfilerEditor
 			m_pipedServer.StartServer();
 			Thread.Sleep( 20 );		//Let's give named pipe server time, to start work.
 
-			m_BlackVisionProcess = new Process();
-			m_BlackVisionProcess.StartInfo.FileName = m_BlackVisionPathName;
-			m_BlackVisionProcess.StartInfo.Arguments = "";
-			m_BlackVisionProcess.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName( m_BlackVisionPathName );
-			m_BlackVisionProcess.Start();
+			StartBlackVisionProcess();
 		}
 
 
 		private void endServer_Click( object sender, RoutedEventArgs e )
 		{
-			if( m_pipedServer == null )
-				return;
-			m_pipedServer.EndServer();
-			m_pipedServer = null;
-
 			if( !m_BlackVisionProcess.HasExited )
 			{
 				m_BlackVisionProcess.CloseMainWindow();
 				m_BlackVisionProcess.WaitForExit();
 			}
+
+			if( m_pipedServer == null )
+				return;
+			m_pipedServer.EndServer();
+			m_pipedServer = null;
 		}
 
 
@@ -304,6 +303,16 @@ namespace ProfilerEditor
 			}
 		}
 
+		private void StartBlackVisionProcess()
+		{
+			if( !File.Exists( m_BlackVisionPathName ) )
+				return;
 
+			m_BlackVisionProcess = new Process();
+			m_BlackVisionProcess.StartInfo.FileName = m_BlackVisionPathName;
+			m_BlackVisionProcess.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName( m_BlackVisionPathName );
+			m_BlackVisionProcess.StartInfo.Arguments = m_commandLineArg;
+			m_BlackVisionProcess.Start();
+		}
     }
 }

@@ -20,6 +20,7 @@ namespace bv
 {
 
 const int64_t INVALID_TIME = LLONG_MIN;
+const std::wstring PROFILER_ENABLE_ARGUMENT_STRING = L"-EnableProfiler";
 
 enum class AutoProfileType : int
 {
@@ -27,6 +28,13 @@ enum class AutoProfileType : int
     APT_SECTION
 };
 
+
+enum class ProfilerMode
+{
+	PM_EVERY_FRAME,
+	PM_EVERY_N_FRAMES_AND_FORCE_DISPLAY,
+	PM_WAIT_TIME_AND_FORCE_DISPLAY
+};
 
 struct ProfilerSample
 {
@@ -130,16 +138,28 @@ private:
 	unsigned int				m_threadID;
     static bool                 m_showStats;
     static PtrDisplayCallback   m_displayCallback;
+	static ProfilerMode			m_mode;
+	static unsigned int			m_framesToShow;		// Show data after this number of frames. Only for mode PM_EVERY_N_FRAMES_AND_FORCE_DISPLAY.
 
 public:
 
     inline  AutoFrameProfile    ( unsigned int threadID = 0 );
     inline  ~AutoFrameProfile   ();
 
-    static void    SetDisplayStats          ();
-    static void    RegisterDisplayCallback  ( PtrDisplayCallback callback );
+	static void		SetFramesToShow			 ( unsigned int frames ) { m_framesToShow = frames; }
+	static void		SetDisplayMode			 ( ProfilerMode mode ) { m_mode = mode; }
+    static void		SetDisplayStats          ();
+    static void		RegisterDisplayCallback  ( PtrDisplayCallback callback );
 
 };
+
+inline bool IsProfilerEnabled( const std::wstring& commandLineArgs )
+{
+	if( commandLineArgs.find( PROFILER_ENABLE_ARGUMENT_STRING ) != std::wstring::npos )
+		return true;
+	return false;
+}
+
 
 } //bv
 
@@ -155,6 +175,8 @@ public:
 #define HPROFILER_GET_NUM_FRAMES()                  AutoProfile::NumFrames()
 #define HPROFILER_GET_ACTIVE_FRAME()                AutoProfile::ActiveFrame()
 
+#define HPROFILER_SET_DISPLAY_AFTER_FRAMES_NUM( n )	AutoFrameProfile::SetFramesToShow( n )
+#define HPROFILER_SET_DISPLAY_MODE( mode )			AutoFrameProfile::SetDisplayMode( mode )
 #define HPROFILER_SET_DISPLAY_WAIT_MILLIS( millis ) AutoProfile::SetStatsDisplayWaitMs( millis )
 #define HPROFILER_REGISTER_DISPLAY_CALLBACK( cb )   AutoFrameProfile::RegisterDisplayCallback( cb )
 #define HPROFILER_SET_FORCED_DISPLAY()              AutoFrameProfile::SetDisplayStats()

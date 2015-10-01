@@ -86,9 +86,7 @@ void BlackVisionApp::OnPreidle  ()
 void BlackVisionApp::OnIdle		()
 {
     HPROFILER_NEW_FRAME( PROFILER_THREAD1 );
-	HPROFILER_NEW_FRAME( PROFILER_THREAD2 );							// test
     HPROFILER_FUNCTION( "BlackVisionApp::OnIdle", PROFILER_THREAD1 );
-	HPROFILER_FUNCTION( "BlackVisionApp::OnIdle", PROFILER_THREAD2 );	// test
 
     unsigned long millis = m_timer.ElapsedMillis();
 
@@ -155,13 +153,16 @@ void    BlackVisionApp::InitializeConsole   ()
 //
 void    BlackVisionApp::InitializeAppLogic  ()
 {
+	std::wstring commandLineString = GetCommandLineW();
+
     HPROFILER_SET_DISPLAY_WAIT_MILLIS( DefaultConfig.ProfilerDispWaitMillis() );
-#ifndef HIDE_PROFILE_STATS
-    //HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::PrintToConsole );
-	HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::SendToExternApp );
-#else
-    HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::PrintToDevNull );
-#endif
+	if( IsProfilerEnabled( commandLineString ) )
+	{
+		HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::SendToExternApp );
+		HPROFILER_SET_DISPLAY_MODE( ProfilerMode::PM_EVERY_FRAME );
+	}
+	else
+		HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::PrintToDevNull );
 
     m_app = new BVAppLogic( m_Renderer );
 

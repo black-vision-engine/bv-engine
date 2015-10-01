@@ -51,7 +51,8 @@ inline  AutoFrameProfile::~AutoFrameProfile   ()
 
     unsigned int timestamp = timeGetTime();
 
-	m_showStats = true;		/// test
+	if( m_mode == ProfilerMode::PM_EVERY_FRAME )
+		m_showStats = true;			// Force display every frame
 
     if( m_showStats )
     {
@@ -60,13 +61,13 @@ inline  AutoFrameProfile::~AutoFrameProfile   ()
         m_showStats = false;
 		AutoProfile::m_threads[ m_threadID ].m_framesToSend = 0;
     }
-	//else if( AutoProfile::m_threads[ m_threadID ].m_framesToSend >= MAX_PROFILER_FRAMES )
-	//{
-	//	m_displayCallback( "FRAME TIME - REGULAR SAMPLE" );
- //       startMillis = timestamp;
-	//	AutoProfile::m_threads[ m_threadID ].m_framesToSend = 0;
-	//}
-    else if( timestamp - startMillis > AutoProfile::GetStatsDisplayWaitMs() )
+	else if( m_mode == ProfilerMode::PM_EVERY_N_FRAMES_AND_FORCE_DISPLAY && AutoProfile::m_threads[ m_threadID ].m_framesToSend >= MAX_PROFILER_FRAMES )
+	{
+		m_displayCallback( "FRAME TIME - REGULAR SAMPLE", m_threadID );
+        startMillis = timestamp;
+		AutoProfile::m_threads[ m_threadID ].m_framesToSend = 0;
+	}
+	else if( m_mode == ProfilerMode::PM_WAIT_TIME_AND_FORCE_DISPLAY && timestamp - startMillis > AutoProfile::GetStatsDisplayWaitMs() )
     {
 		m_displayCallback( "FRAME TIME - REGULAR SAMPLE", m_threadID );
         startMillis = timestamp;
