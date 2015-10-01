@@ -94,7 +94,7 @@ namespace ProfilerEditor
 			m_pipedServer.onMessageSent = GetMessageFromPipe;
 			m_pipedServer.m_syncContext = SynchronizationContext.Current;
 			m_pipedServer.StartServer();
-			Thread.Sleep( 10 );		//Let's give named pipe server time, to start work.
+			Thread.Sleep( 20 );		//Let's give named pipe server time, to start work.
 
 			m_BlackVisionProcess = new Process();
 			m_BlackVisionProcess.StartInfo.FileName = m_BlackVisionPathName;
@@ -143,21 +143,10 @@ namespace ProfilerEditor
 			}
 		}
 
-		private int GetTreeExpansionLevel()
-		{
-			int maxDepthLevel;
-			bool success = Int32.TryParse( depthLevels.Text, out maxDepthLevel );
-			if( !success )
-				maxDepthLevel = 0;
-			return maxDepthLevel;
-		}
-
 		private void MakeTree( ProfilerModel.ProfilerTreeViewModel treeView, uint thread )
 		{
-			int maxDepthLevel = GetTreeExpansionLevel();
-
 			if( !m_firstTime[ thread ] )
-				m_profilerTreeView[ thread ].Update( treeView, (uint)maxDepthLevel );
+				m_profilerTreeView[ thread ].Update( treeView );
 			else
 			{
 				m_firstTime[ thread ] = false;
@@ -295,6 +284,24 @@ namespace ProfilerEditor
 			foreach( var tree in m_profilerTreeView )
 				if( tree != null )
 					tree.RefreshTree();
+		}
+
+		private void Button_Click( object sender, RoutedEventArgs e )
+		{
+			if( AffectAllCheckBox.IsChecked == true )
+			{
+				for( int i = 0; i < m_profilerTreeView.Length; ++i )
+				{
+					TreeListView treeListView = GetThreadTreeView( (uint)i );
+					treeListView.ExpandTree();
+				}
+			}
+			else
+			{
+				int thread = ThreadsTabControl.SelectedIndex;
+				TreeListView treeListView = GetThreadTreeView( (uint)thread );
+				treeListView.ExpandTree();
+			}
 		}
 
 

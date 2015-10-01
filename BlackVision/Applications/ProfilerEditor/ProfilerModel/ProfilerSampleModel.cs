@@ -34,47 +34,39 @@ namespace ProfilerEditor.ProfilerModel
 			m_sampleData.name = 0;
 		}
 
-		public ProfilerSampleModel( ProfilerSampleModel parent, DataProtocol.ProfilerSample[] samples, ref uint curSampleIndex, uint maxTreeExpansionLevel )
+		public ProfilerSampleModel( ProfilerSampleModel parent, DataProtocol.ProfilerSample[] samples, ref uint curSampleIndex )
 		{
 			m_childSamples = new Collection<ProfilerSampleModel>();
-			AddSamples( parent, samples, ref curSampleIndex, maxTreeExpansionLevel );
+			AddSamples( parent, samples, ref curSampleIndex );
 		}
 
-		public ProfilerSampleModel( ProfilerSampleModel parent, ProfilerSampleModel referenceSample, uint maxTreeExpansionLevel )
+		public ProfilerSampleModel( ProfilerSampleModel parent, ProfilerSampleModel referenceSample )
 		{
 			m_childSamples = new Collection<ProfilerSampleModel>();
-			AddSamples( parent, referenceSample, maxTreeExpansionLevel );
+			AddSamples( parent, referenceSample );
 		}
 
 #endregion
 
-		private void AddSamples( ProfilerSampleModel parent, DataProtocol.ProfilerSample[] samples, ref uint curSampleIndex, uint maxTreeExpansionLevel )
+		private void AddSamples( ProfilerSampleModel parent, DataProtocol.ProfilerSample[] samples, ref uint curSampleIndex )
 		{
 			m_sampleData = new SampleData( samples[ curSampleIndex++ ] );
 			m_parent = parent;
-			if( m_sampleData.depth < maxTreeExpansionLevel )
-				IsExpanded = true;
-			else
-				IsExpanded = false;
 
 			while( curSampleIndex < samples.Length && samples[ curSampleIndex ].depth > m_sampleData.depth )
-				m_childSamples.Add( new ProfilerSampleModel( this, samples, ref curSampleIndex, maxTreeExpansionLevel ) );
+				m_childSamples.Add( new ProfilerSampleModel( this, samples, ref curSampleIndex ) );
 		}
 
-		private void AddSamples( ProfilerSampleModel parent, ProfilerSampleModel referenceSample, uint maxTreeExpansionLevel )
+		private void AddSamples( ProfilerSampleModel parent, ProfilerSampleModel referenceSample )
 		{
 			m_sampleData = new SampleData( referenceSample .m_sampleData );
 			m_parent = parent;
-			if( m_sampleData.depth < maxTreeExpansionLevel )
-				IsExpanded = true;
-			else
-				IsExpanded = false;
 
 			foreach( var child in referenceSample.m_childSamples )
-				m_childSamples.Add( new ProfilerSampleModel( this, child, maxTreeExpansionLevel ) );
+				m_childSamples.Add( new ProfilerSampleModel( this, child ) );
 		}
 
-		public void Update( DataProtocol.ProfilerSample[] samples, ref uint curSampleIndex, uint maxTreeExpansionLevel )
+		public void Update( DataProtocol.ProfilerSample[] samples, ref uint curSampleIndex )
 		{
 			float sampleDuration = samples[ curSampleIndex++ ].durationSecs;
 
@@ -84,11 +76,7 @@ namespace ProfilerEditor.ProfilerModel
 				MaxDuration = sampleDuration;
 			if( MinDuration > sampleDuration )
 				MinDuration = sampleDuration;
-			
-			if( m_sampleData.depth < maxTreeExpansionLevel )
-				IsExpanded = true;
-			else
-				IsExpanded = false;
+		
 
 			while( curSampleIndex < samples.Length && samples[ curSampleIndex ].depth > m_sampleData.depth )
 			{
@@ -100,7 +88,7 @@ namespace ProfilerEditor.ProfilerModel
 				{
 					if( m_childSamples[ i ].m_sampleData.name == samples[ curSampleIndex ].name && !updated[ i ] )
 					{
-						m_childSamples[ i ].Update( samples, ref curSampleIndex, maxTreeExpansionLevel );
+						m_childSamples[ i ].Update( samples, ref curSampleIndex );
 
 						found = true;
 						updated[ i ] = true;
@@ -108,12 +96,12 @@ namespace ProfilerEditor.ProfilerModel
 				}
 
 				if( !found )
-					m_childSamples.Add( new ProfilerSampleModel( this, samples, ref curSampleIndex, maxTreeExpansionLevel ) );
+					m_childSamples.Add( new ProfilerSampleModel( this, samples, ref curSampleIndex ) );
 			}
 		}
 
 		/**This funnction is used to update tree, on basis of data from another tree.*/
-		public void Update( ProfilerSampleModel sampleModel, uint maxTreeExpansionLevel )
+		public void Update( ProfilerSampleModel sampleModel )
 		{
 			TotalDuration = sampleModel.m_sampleData.durationSecs + TotalDuration;
 			AverageDuration = sampleModel.m_sampleData.averageDuration;
@@ -121,12 +109,6 @@ namespace ProfilerEditor.ProfilerModel
 				MaxDuration = sampleModel.m_sampleData.maxDuration;
 			if( MinDuration > sampleModel.m_sampleData.minDuration )
 				MinDuration = sampleModel.m_sampleData.minDuration;
-
-
-			if( m_sampleData.depth < maxTreeExpansionLevel )
-				IsExpanded = true;
-			else
-				IsExpanded = false;
 
 			foreach( var childSample in sampleModel.m_childSamples )
 			{
@@ -138,7 +120,7 @@ namespace ProfilerEditor.ProfilerModel
 				{
 					if( m_childSamples[ i ].m_sampleData.name == childSample.m_sampleData.name && !updated[ i ] )
 					{
-						m_childSamples[ i ].Update( childSample, maxTreeExpansionLevel );
+						m_childSamples[ i ].Update( childSample );
 
 						found = true;
 						updated[ i ] = true;
@@ -146,7 +128,7 @@ namespace ProfilerEditor.ProfilerModel
 				}
 
 				if( !found )
-					m_childSamples.Add( new ProfilerSampleModel( this, childSample, maxTreeExpansionLevel ) );
+					m_childSamples.Add( new ProfilerSampleModel( this, childSample ) );
 			}
 		}
 

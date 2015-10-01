@@ -36,6 +36,11 @@ namespace ProfilerEditor.PresentationLayer
 			Columns = new GridViewColumnCollection();
 		}
 
+		public void ExpandTree()
+		{
+			ExpandSubtree( (TreeViewItem)ItemContainerGenerator.ContainerFromIndex( 0 ) );
+		}
+
 		#region Properties
 		/// <summary>
 		/// Gets or sets the collection of System.Windows.Controls.GridViewColumn 
