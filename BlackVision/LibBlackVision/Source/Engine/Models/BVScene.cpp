@@ -153,7 +153,10 @@ void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root )
     {
         auto assets = root->GetPlugins()->GetPlugin( i )->GetAssets();
         for( auto asset : assets )
-            map.AddAssetDescWithUID( asset, std::to_string( map.GetNum() ) ); // FIXME: sensible uids would be more sensible
+        {
+            auto uid = map.GenerateUID( asset );
+            map.AddAssetDescWithUID( asset, uid );
+        }
     }
 
     for( unsigned int i = 0; i < root->GetNumChildren(); i++ )
@@ -168,6 +171,7 @@ void            BVScene::Serialize           ( SerializeObject &doc) const
 
     AssetDescsWithUIDs assets;
     GetAssetsWithUIDs( assets, m_pModelSceneRoot );
+    AssetDescsWithUIDs::SetInstance( assets );
 
     assets.Serialize( doc );
 

@@ -135,7 +135,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
     std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
 
 // params
-	auto params = doc.LoadArray< AbstractModelParameter >( "params" );
+    auto params = doc.LoadArray< AbstractModelParameter >( "params" );
     for( auto param : params )
     {
         if( plugin->GetParameter( param->GetName() ) == nullptr )

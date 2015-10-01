@@ -40,6 +40,8 @@ class AssetDescsWithUIDs : public ISerializable
     std::map< AssetDescConstPtr, std::string > asset2uid;
     std::map< std::string, AssetDescConstPtr > uid2asset;
 
+
+
 public:
     static AssetDescsWithUIDs&              GetInstance() { return instance; }
     static void                             SetInstance( AssetDescsWithUIDs& i ) { instance = i; }
@@ -68,7 +70,8 @@ public:
         asset2uid[ asset ] = uid;
         uid2asset[ uid ] = asset;
     }
-    size_t                                  GetNum() { assert( asset2uid.size() == uid2asset.size() ); return asset2uid.size(); } // FIXME(?) just for "lazy" uid generation
+
+    std::string                             GenerateUID( AssetDescConstPtr asset );
 
     std::string                             Asset2UID( AssetDescConstPtr asset ) { return asset2uid[ asset ]; }
     AssetDescConstPtr                       UID2Asset( std::string uid ) { return uid2asset[ uid ]; }
