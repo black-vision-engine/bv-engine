@@ -11,7 +11,7 @@ namespace ProfilerEditor.ProfilerModel
 {
 	public class ProfilerSampleModel : INotifyPropertyChanged
 	{
-		private Collection<ProfilerSampleModel>				m_childSamples;
+		private ObservableCollection<ProfilerSampleModel>	m_childSamples;
 		private ProfilerSampleModel							m_parent;
 		private SampleData									m_sampleData;
 
@@ -25,7 +25,7 @@ namespace ProfilerEditor.ProfilerModel
 		// Root sample
 		public ProfilerSampleModel()
 		{
-			m_childSamples = new Collection<ProfilerSampleModel>();
+			m_childSamples = new ObservableCollection<ProfilerSampleModel>();
 			m_sampleData = new SampleData();
 			m_parent = null;
 
@@ -36,13 +36,13 @@ namespace ProfilerEditor.ProfilerModel
 
 		public ProfilerSampleModel( ProfilerSampleModel parent, DataProtocol.ProfilerSample[] samples, ref uint curSampleIndex )
 		{
-			m_childSamples = new Collection<ProfilerSampleModel>();
+			m_childSamples = new ObservableCollection<ProfilerSampleModel>();
 			AddSamples( parent, samples, ref curSampleIndex );
 		}
 
 		public ProfilerSampleModel( ProfilerSampleModel parent, ProfilerSampleModel referenceSample )
 		{
-			m_childSamples = new Collection<ProfilerSampleModel>();
+			m_childSamples = new ObservableCollection<ProfilerSampleModel>();
 			AddSamples( parent, referenceSample );
 		}
 
@@ -54,7 +54,7 @@ namespace ProfilerEditor.ProfilerModel
 			m_parent = parent;
 
 			while( curSampleIndex < samples.Length && samples[ curSampleIndex ].depth > m_sampleData.depth )
-				m_childSamples.Add( new ProfilerSampleModel( this, samples, ref curSampleIndex ) );
+				AddChild( new ProfilerSampleModel( this, samples, ref curSampleIndex ) );
 		}
 
 		private void AddSamples( ProfilerSampleModel parent, ProfilerSampleModel referenceSample )
@@ -63,7 +63,7 @@ namespace ProfilerEditor.ProfilerModel
 			m_parent = parent;
 
 			foreach( var child in referenceSample.m_childSamples )
-				m_childSamples.Add( new ProfilerSampleModel( this, child ) );
+				AddChild( new ProfilerSampleModel( this, child ) );
 		}
 
 		public void Update( DataProtocol.ProfilerSample[] samples, ref uint curSampleIndex )
@@ -92,11 +92,12 @@ namespace ProfilerEditor.ProfilerModel
 
 						found = true;
 						updated[ i ] = true;
+						break;
 					}
 				}
 
 				if( !found )
-					m_childSamples.Add( new ProfilerSampleModel( this, samples, ref curSampleIndex ) );
+					AddChild( new ProfilerSampleModel( this, samples, ref curSampleIndex ) );
 			}
 		}
 
@@ -124,11 +125,12 @@ namespace ProfilerEditor.ProfilerModel
 
 						found = true;
 						updated[ i ] = true;
+						break;
 					}
 				}
 
 				if( !found )
-					m_childSamples.Add( new ProfilerSampleModel( this, childSample ) );
+					AddChild( new ProfilerSampleModel( this, childSample ) );
 			}
 		}
 
@@ -171,9 +173,16 @@ namespace ProfilerEditor.ProfilerModel
 
 
 #region Sample Properties
-		public Collection<ProfilerSampleModel> Children
+		public ObservableCollection<ProfilerSampleModel> Children
 		{
 			get { return m_childSamples; }
+			set { m_childSamples = value; }
+		}
+
+		public void AddChild( ProfilerSampleModel sampleModel )
+		{
+			m_childSamples.Add( sampleModel );
+			OnPropertyChanged( "Children" );
 		}
 
 		public bool HasItems

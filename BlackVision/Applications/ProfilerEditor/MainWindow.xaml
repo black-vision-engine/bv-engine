@@ -151,6 +151,6 @@
         <Label Content="Decimal digits" HorizontalAlignment="Left" Height="29" Margin="930,372,0,0" VerticalAlignment="Top" Width="91"/>
         <Button Name="UpdateTimeFormatButton" Content="Update format" HorizontalAlignment="Left" Margin="961,406,0,0" VerticalAlignment="Top" Width="89" Click="UpdateTimeFormatButton_Click"/>
         <Label Content="Time format:" HorizontalAlignment="Left" Margin="930,319,0,0" VerticalAlignment="Top" Width="120"/>
-        <Button Content="Expand Tree" HorizontalAlignment="Left" Margin="930,217,0,0" VerticalAlignment="Top" Width="106" Click="Button_Click"/>
+        <Button Content="Expand Tree" HorizontalAlignment="Left" Margin="930,217,0,0" VerticalAlignment="Top" Width="106" Click="ExpandButton_Click"/>
     </Grid>
 </Window>

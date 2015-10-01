@@ -285,7 +285,7 @@ namespace ProfilerEditor
 					tree.RefreshTree();
 		}
 
-		private void Button_Click( object sender, RoutedEventArgs e )
+		private void ExpandButton_Click( object sender, RoutedEventArgs e )
 		{
 			if( AffectAllCheckBox.IsChecked == true )
 			{

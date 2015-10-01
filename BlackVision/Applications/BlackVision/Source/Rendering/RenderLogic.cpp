@@ -57,6 +57,10 @@ void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
     if( node )
         RenderNode( renderer, node );
 
+	static unsigned int luckyShot = 1;
+	if( !(luckyShot++ % 880) )
+		HPROFILER_FUNCTION( "Lucky function", PROFILER_THREAD1 );
+
     m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
     m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
 
