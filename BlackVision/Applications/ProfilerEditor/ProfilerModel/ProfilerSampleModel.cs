@@ -76,13 +76,14 @@ namespace ProfilerEditor.ProfilerModel
 				MaxDuration = sampleDuration;
 			if( MinDuration > sampleDuration )
 				MinDuration = sampleDuration;
-		
+
+			
+			bool[] updated = new bool[ m_childSamples.Count ];
+			updated = Enumerable.Repeat( false, m_childSamples.Count ).ToArray();
 
 			while( curSampleIndex < samples.Length && samples[ curSampleIndex ].depth > m_sampleData.depth )
 			{
 				bool found = false;
-				bool[] updated = new bool[ m_childSamples.Count ];
-				updated = Enumerable.Repeat( false, m_childSamples.Count ).ToArray();
 
 				for( int i = 0; i < m_childSamples.Count; ++i )
 				{
@@ -111,11 +112,13 @@ namespace ProfilerEditor.ProfilerModel
 			if( MinDuration > sampleModel.m_sampleData.minDuration )
 				MinDuration = sampleModel.m_sampleData.minDuration;
 
+
+			bool[] updated = new bool[ m_childSamples.Count ];
+			updated = Enumerable.Repeat( false, m_childSamples.Count ).ToArray();
+			
 			foreach( var childSample in sampleModel.m_childSamples )
 			{
 				bool found = false;
-				bool[] updated = new bool[ m_childSamples.Count ];
-				updated = Enumerable.Repeat( false, m_childSamples.Count ).ToArray();
 
 				for( int i = 0; i < m_childSamples.Count; ++i )
 				{

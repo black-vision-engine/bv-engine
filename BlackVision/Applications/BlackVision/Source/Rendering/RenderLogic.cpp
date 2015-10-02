@@ -54,12 +54,9 @@ void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
 
     renderer->ClearBuffers();
 
-    if( node )
-        RenderNode( renderer, node );
 
-	static unsigned int luckyShot = 1;
-	if( !(luckyShot++ % 880) )
-		HPROFILER_FUNCTION( "Lucky function", PROFILER_THREAD1 );
+	if( node )
+		RenderNode( renderer, node );
 
     m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
     m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
@@ -90,7 +87,7 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
         }
         else
         {
-            RenderVanilla( renderer, node );
+			RenderVanilla( renderer, node );
         }
     }
 }
