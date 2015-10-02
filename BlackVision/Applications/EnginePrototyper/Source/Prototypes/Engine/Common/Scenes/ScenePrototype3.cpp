@@ -1,6 +1,7 @@
 #include "ScenePrototype3.h"
 #include "Mathematics\Defines.h"
 
+#include "IO\NamedPipe.h"
 
 #include "Tools\Logger\Logger.h"
 #define LOG_MODULE ModuleEnum::ME_Prototyper
@@ -34,6 +35,14 @@ void        ScenePrototype3::OnKey               ( unsigned char c )
 //
 SceneNode * ScenePrototype3::BuildSceneImpl      ()
 {
+	NamedPipe pipe;
+	pipe.ConnectToNamedPipe( std::wstring( L"ProfilerPipeTest" ), NamedPipeAccess::PipeWrite );
+	
+	const char* message = "Wiadomoœæ dosz³a, yupi";
+	unsigned int messageLength = 25;
+
+	pipe.WriteToPipe( message, messageLength );
+
 	std::string sand( "sand.jpg" );
 	std::string cubeMap( "Penguins.jpg" );
 

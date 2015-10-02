@@ -7,7 +7,7 @@
 #include "Engine/Models/BVSceneEditor.h"
 
 #include "Tools/SimpleTimer.h"
-#include "Tools/HerarchicalProfiler.h"
+#include "Tools/Profiler/HerarchicalProfiler.h"
 
 #include "Rendering/RenderLogic.h"
 #include "ModelInteractionEvents.h"
@@ -25,6 +25,8 @@
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "BVGL.h"
 //FIXME: end of remove
+
+#include"StatsFormatters.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -176,7 +178,7 @@ void BVAppLogic::SetStartTime       ( unsigned long millis )
 //
 void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 {
-    HPROFILER_FUNCTION( "BVAppLogic::OnUpdate" );
+    HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
 
     assert( m_state != BVAppState::BVS_INVALID );
     if( m_state == BVAppState::BVS_RUNNING )
@@ -192,14 +194,14 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 
         {
             FRAME_STATS_SECTION( "Update" );
-            HPROFILER_SECTION( "update total" );
+            HPROFILER_SECTION( "update total", PROFILER_THREAD1 );
 
             m_globalTimeline->SetGlobalTime( t );
             m_bvScene->Update( t );
         }
         {
             FRAME_STATS_SECTION( "Render" );
-            HPROFILER_SECTION( "Render" );
+            HPROFILER_SECTION( "Render", PROFILER_THREAD1 );
 
             m_renderLogic->RenderFrame  ( renderer, m_bvScene->GetEngineSceneRoot() );
             m_renderLogic->FrameRendered( renderer );
@@ -371,8 +373,8 @@ void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int m
 {
     if( m_statsCalculator.WasSampledMaxVal( DefaultConfig.FrameStatsSection() ) )
     {
-        //unsigned int frame = m_statsCalculator.CurFrame() - 1;
-        
+        unsigned int frame = m_statsCalculator.CurFrame() - 1;
+
 #ifndef HIDE_PROFILE_STATS
         FrameStatsFormatter::PrintFrameStatsToConsole( frame, m_statsCalculator, "LONGEST FRAME SO FAR", 10 );
         HPROFILER_SET_FORCED_DISPLAY();

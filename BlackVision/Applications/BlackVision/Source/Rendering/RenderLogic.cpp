@@ -4,7 +4,7 @@
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
-#include "Tools/HerarchicalProfiler.h"
+#include "Tools/Profiler/HerarchicalProfiler.h"
 #include "Tools/HRTimer.h"
 
 #include "OffscreenRenderLogic.h"
@@ -54,8 +54,9 @@ void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
 
     renderer->ClearBuffers();
 
-    if( node )
-        RenderNode( renderer, node );
+
+	if( node )
+		RenderNode( renderer, node );
 
     m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
     m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
@@ -86,7 +87,7 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
         }
         else
         {
-            RenderVanilla( renderer, node );
+			RenderVanilla( renderer, node );
         }
     }
 }
@@ -186,7 +187,7 @@ void    RenderLogic::RenderNodeMask1 ( Renderer * renderer, SceneNode * node )
 //
 void    RenderLogic::DrawNode        ( Renderer * renderer, SceneNode * node )
 {
-    HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor" );
+	HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor", PROFILER_THREAD1 );
     DrawNodeOnly( renderer, node );
 
     DrawChildren( renderer, node );
@@ -205,7 +206,7 @@ void    RenderLogic::DrawChildren   ( Renderer * renderer, SceneNode * node, int
 {
     for ( unsigned int i = firstChildIdx; i < (unsigned int) node->NumChildNodes(); i++ )
     {
-        HPROFILER_SECTION( "RenderNode::RenderNode" );
+        HPROFILER_SECTION( "RenderNode::RenderNode", PROFILER_THREAD1 );
         RenderNode( renderer, node->GetChild( i ) ); 
     }
 }
