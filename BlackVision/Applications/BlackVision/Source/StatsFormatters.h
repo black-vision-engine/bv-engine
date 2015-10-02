@@ -24,14 +24,16 @@ struct ProtocolSample
 };
 
 
-#define MAX_NAMES_SENDER_BUFFER 512
+#define MAX_NAMES_SENDER_BUFFER 256
 
 
 /**This class sends samples to named pipe and stores functions/sections
 names and identifiers.
 
 Max number of threads shouldn't be greater than 15.
-Max number of functions/sections names shouldn't be greater than 4095.*/
+Max number of functions/sections names shouldn't be greater than 4095.
+Max name string length can't be greater than MAX_NAMES_SENDER_BUFFER. Otherwise all names
+that come after it, won't be send.*/
 class ProfilerNamedPipeSender
 {
 private:
@@ -53,12 +55,15 @@ public:
 		m_firstPipeUse = true;
 	}
 
-	UInt16				GetNameID		( const char* name );
 	void				SendNewNames	();
 	void				SendSamples		();
 
-	NamedPipe&			GetNamedPipe();
+	// Use before you send samples for the first time.
 	static void			SetNamedPipeName( const std::wstring& name ) { s_pipeName = name; }
+
+private:
+	UInt16				GetNameID		( const char* name );
+	NamedPipe&			GetNamedPipe();
 };
 
 
@@ -68,7 +73,7 @@ private:
 	static ProfilerNamedPipeSender			s_namedPipeSender[ MAX_PROFILER_THREADS ];
 public:
 
-    static void     PrintToConsole  ( const char * msg, unsigned int thread );
+    //static void     PrintToConsole  ( const char * msg, unsigned int thread );
     static void     PrintToDevNull  ( const char * msg, unsigned int thread );
 	static void		SendToExternApp	( const char * msg, unsigned int thread );
 

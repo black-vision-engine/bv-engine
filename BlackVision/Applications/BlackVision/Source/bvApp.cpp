@@ -155,14 +155,17 @@ void    BlackVisionApp::InitializeAppLogic  ()
 {
 	std::wstring commandLineString = GetCommandLineW();
 
-    HPROFILER_SET_DISPLAY_WAIT_MILLIS( DefaultConfig.ProfilerDispWaitMillis() );
 	if( IsProfilerEnabled( commandLineString ) )
 	{
 		HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::SendToExternApp );
 		HPROFILER_SET_DISPLAY_MODE( ProfilerMode::PM_EVERY_FRAME );
 	}
 	else
+	{
 		HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::PrintToDevNull );
+		HPROFILER_SET_DISPLAY_MODE( ProfilerMode::PM_WAIT_TIME_AND_FORCE_DISPLAY );
+		HPROFILER_SET_DISPLAY_WAIT_MILLIS( DefaultConfig.ProfilerDispWaitMillis() );
+	}
 
     m_app = new BVAppLogic( m_Renderer );
 

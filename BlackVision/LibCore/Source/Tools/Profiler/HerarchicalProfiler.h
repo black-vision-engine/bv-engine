@@ -7,7 +7,7 @@
 
 #define MAX_PROFILER_SAMPLES		120
 #define MAX_PROFILER_FRAMES			10
-#define MAX_PROFILER_THREADS		2
+#define MAX_PROFILER_THREADS		1
 
 #define PROFILER_THREAD1			0
 #define PROFILER_THREAD2			1
@@ -20,7 +20,7 @@ namespace bv
 {
 
 const int64_t INVALID_TIME = LLONG_MIN;
-const std::wstring PROFILER_ENABLE_ARGUMENT_STRING = L"-EnableProfiler";
+const std::wstring PROFILER_ENABLE_ARGUMENT_STRING = L"-EnableProfiler";		///<This string should contain main function arguments.
 
 enum class AutoProfileType : int
 {
@@ -36,17 +36,6 @@ enum class ProfilerMode
 	PM_WAIT_TIME_AND_FORCE_DISPLAY
 };
 
-struct ProfilerSample
-{
-    const char*			name;
-
-    LARGE_INTEGER       duration;
-    double				durationSecs;
-
-    AutoProfileType     type;
-    unsigned int        depth;
-
-};
 
 struct ProfilerLiveSample
 {
@@ -97,9 +86,6 @@ private:
 
 	unsigned int				m_threadID;
     static unsigned int         m_displayStatsWaitMillis;
-
-	// @todo Zlikwidowaæ. To jest potrzebne na razie tylko po to, ¿eby wypisywaæ dane na konsolê.
-    static ProfilerSample       m_samples[ MAX_PROFILER_SAMPLES * MAX_PROFILER_FRAMES ];
 public:
 
     inline                  AutoProfile             ( const char * name, AutoProfileType type, unsigned int threadID = 0 );
@@ -107,23 +93,21 @@ public:
 
 private:
 
-    static  void            StartFrame              ( unsigned int threadID = 0 );
-    static  void            EndFrame                ( unsigned int threadID = 0 );
+    static  void            StartFrame              ( unsigned int threadID );
+    static  void            EndFrame                ( unsigned int threadID );
 
 public:
 
     static void             SetStatsDisplayWaitMs   ( unsigned int millis );
     static unsigned int     GetStatsDisplayWaitMs   ();
 
-    static unsigned int     NumSamples              ( unsigned int threadID = 0 );
-    static unsigned int     NumFrames               ( unsigned int threadID = 0 );
-    static unsigned int     ActiveFrame             ( unsigned int threadID = 0 );
+    static unsigned int     NumSamples              ( unsigned int threadID );
+    static unsigned int     NumFrames               ( unsigned int threadID );
+    static unsigned int     ActiveFrame             ( unsigned int threadID );
 
-    static LARGE_INTEGER    QueryCounterFrequency   ();
+    static LARGE_INTEGER		QueryCounterFrequency   ();
 
 	static CPUThreadSamples*	GetCPUThreadSamples			( unsigned int thread );
-    static const ProfilerSample *   OneFrameSamples				( unsigned int frame );
-    static const ProfilerSample *   AveragedSamples				();
 
     friend class AutoFrameProfile;
 };
@@ -136,18 +120,18 @@ public:
 
 private:
 	unsigned int				m_threadID;
-    static bool                 m_showStats;
+    static bool                 m_showStats;		///< Force showing data.
     static PtrDisplayCallback   m_displayCallback;
 	static ProfilerMode			m_mode;
-	static unsigned int			m_framesToShow;		// Show data after this number of frames. Only for mode PM_EVERY_N_FRAMES_AND_FORCE_DISPLAY.
+	static unsigned int			m_framesToShow;		///< Show data after this number of frames. Only for mode PM_EVERY_N_FRAMES_AND_FORCE_DISPLAY.
 
 public:
 
-    inline  AutoFrameProfile    ( unsigned int threadID = 0 );
+    inline  AutoFrameProfile    ( unsigned int threadID );
     inline  ~AutoFrameProfile   ();
 
-	static void		SetFramesToShow			 ( unsigned int frames ) { m_framesToShow = frames; }
-	static void		SetDisplayMode			 ( ProfilerMode mode ) { m_mode = mode; }
+	static void		SetFramesToShow			 ( unsigned int frames )		{ m_framesToShow = frames; }
+	static void		SetDisplayMode			 ( ProfilerMode mode )			{ m_mode = mode; }
     static void		SetDisplayStats          ();
     static void		RegisterDisplayCallback  ( PtrDisplayCallback callback );
 
@@ -168,17 +152,11 @@ inline bool IsProfilerEnabled( const std::wstring& commandLineArgs )
 #define HPROFILER_FUNCTION( name, thread )          AutoProfile COMBINE(function_sample_,__LINE__) ( name, AutoProfileType::APT_FUNCTION, thread )
 #define HPROFILER_SECTION( name, thread )           AutoProfile COMBINE(section_sample_,__LINE__) ( name, AutoProfileType::APT_SECTION, thread )
 
-#define HPROFILER_GET_ONE_FRAME_SAMPLES( frame )    AutoProfile::OneFrameSamples( frame )
-#define HPROFILER_GET_AVERAGED_SAMPLES()            AutoProfile::AveragedSamples()
+#define HPROFILER_SET_FORCED_DISPLAY()              AutoFrameProfile::SetDisplayStats()
+#define HPROFILER_REGISTER_DISPLAY_CALLBACK( cb )   AutoFrameProfile::RegisterDisplayCallback( cb )
 
-#define HPROFILER_GET_NUM_SAMPLES()                 AutoProfile::NumSamples()
-#define HPROFILER_GET_NUM_FRAMES()                  AutoProfile::NumFrames()
-#define HPROFILER_GET_ACTIVE_FRAME()                AutoProfile::ActiveFrame()
-
-#define HPROFILER_SET_DISPLAY_AFTER_FRAMES_NUM( n )	AutoFrameProfile::SetFramesToShow( n )
+#define HPROFILER_SET_DISPLAY_AFTER_NUM_FRAMES( n )	AutoFrameProfile::SetFramesToShow( n )
 #define HPROFILER_SET_DISPLAY_MODE( mode )			AutoFrameProfile::SetDisplayMode( mode )
 #define HPROFILER_SET_DISPLAY_WAIT_MILLIS( millis ) AutoProfile::SetStatsDisplayWaitMs( millis )
-#define HPROFILER_REGISTER_DISPLAY_CALLBACK( cb )   AutoFrameProfile::RegisterDisplayCallback( cb )
-#define HPROFILER_SET_FORCED_DISPLAY()              AutoFrameProfile::SetDisplayStats()
 
 #include "HerarchicalProfiler.inl"

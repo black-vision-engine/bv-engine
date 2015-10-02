@@ -216,7 +216,7 @@ namespace ProfilerEditor.ProfilerModel
 			get { return m_parent; }
 		}
 
-		public Int64 SampleName
+		public UInt16 SampleName
 		{
 			get { return m_sampleData.name; }
 		}

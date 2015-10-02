@@ -14,50 +14,24 @@
 namespace bv
 {
 
-// *********************************
-//
-void    ProfilerDataFormatter::PrintToConsole  ( const char * msg, unsigned int thread )
-{
-	{ thread; }
+//====================================================================//
+//							HerarchicalProfiler						  //
+//====================================================================//
 
-    unsigned int frame = HPROFILER_GET_ACTIVE_FRAME();
-    const ProfilerSample * samples = HPROFILER_GET_ONE_FRAME_SAMPLES( frame );
-    unsigned int numSamples = HPROFILER_GET_NUM_SAMPLES();
-
-    printf( "%s\n", msg );
-
-    for( unsigned int i = 0; i < numSamples; ++i )
-    {
-        const ProfilerSample & sample = samples[ i ];
-        const char * section = sample.type == AutoProfileType::APT_FUNCTION ? "F" : "S";
-
-        for( unsigned int k = 0; k < sample.depth * 2; ++k )
-            printf( " " );
-
-        printf( "%s %s    %2.4f ms\n", section, sample.name, sample.durationSecs * 1000.0 );
-        //printf( "%*s %s duration: %2.4f ms\n", sample.depth * 6, section, sample.name, sample.durationSecs * 1000.0 );
-    }
-}
-
-// *********************************
-//
-void    ProfilerDataFormatter::PrintToDevNull   ( const char * msg, unsigned int thread )
-{
-    { msg; thread; } // FIXME: suppress unused warning
-}
 
 // *********************************
 //
 ProfilerNamedPipeSender ProfilerDataFormatter::s_namedPipeSender[ MAX_PROFILER_THREADS ] = 
 {
 	ProfilerNamedPipeSender( 0 ),
-	ProfilerNamedPipeSender( 1 ),
+	//ProfilerNamedPipeSender( 1 ),
 	//ProfilerNamedPipeSender( 2 ),
 	//ProfilerNamedPipeSender( 3 ),
 	//ProfilerNamedPipeSender( 4 ),
 	//ProfilerNamedPipeSender( 5 ),
 };
 
+// Default profiler named pipe name
 std::wstring ProfilerNamedPipeSender::s_pipeName = L"BlackVisionProfiler";
 
 UInt16 ProfilerNamedPipeSender::GetNameID		( const char* name )
@@ -75,6 +49,19 @@ UInt16 ProfilerNamedPipeSender::GetNameID		( const char* name )
 	return newID;
 }
 
+
+// *********************************
+//
+NamedPipe& ProfilerNamedPipeSender::GetNamedPipe()
+{
+	if( m_firstPipeUse )
+	{
+		// waits 2 miliseconds for connection
+		m_pipe.ConnectToNamedPipe( s_pipeName, NamedPipeAccess::PipeWrite, 2 );
+		m_firstPipeUse = false;
+	}
+	return m_pipe;
+}
 
 // *********************************
 //
@@ -131,23 +118,10 @@ void ProfilerNamedPipeSender::SendNewNames		()
 
 // *********************************
 //
-NamedPipe& ProfilerNamedPipeSender::GetNamedPipe()
-{
-	if( m_firstPipeUse )
-	{
-		// waits 2 miliseconds for connection
-		m_pipe.ConnectToNamedPipe( s_pipeName, NamedPipeAccess::PipeWrite, 2 );
-		m_firstPipeUse = false;
-	}
-	return m_pipe;
-}
-
-// *********************************
-//
 void ProfilerNamedPipeSender::SendSamples		()
 {
 	CPUThreadSamples* CPUsamples =  AutoProfile::GetCPUThreadSamples( m_thread );
-	char buffer[ sizeof( ProtocolHeader ) + MAX_PROFILER_SAMPLES * sizeof( ProfilerSample ) ];
+	char buffer[ sizeof( ProtocolHeader ) + MAX_PROFILER_SAMPLES * sizeof( ProtocolSample ) ];
 
 	LARGE_INTEGER freq = AutoProfile::QueryCounterFrequency();
 	double freqd = (double) freq.QuadPart;
@@ -198,13 +172,20 @@ void ProfilerNamedPipeSender::SendSamples		()
 // *********************************
 //
 /**Just for now only for first thread.*/
-void	ProfilerDataFormatter::SendToExternApp	( const char * msg, unsigned int thread )
+void	ProfilerDataFormatter::SendToExternApp	( const char*, unsigned int thread )
 {
-	{ msg; } // FIXME: suppress unused warning
-
 	s_namedPipeSender[ thread ].SendSamples();
 	s_namedPipeSender[ thread ].SendNewNames();
 }
+
+// *********************************
+//
+void    ProfilerDataFormatter::PrintToDevNull   ( const char*, unsigned int )
+{}
+
+//====================================================================//
+//							FrameStatsFormatter						  //
+//====================================================================//
 
 // *********************************
 //
