@@ -37,25 +37,26 @@ class AssetDescsWithUIDs : public ISerializable
 {
     static AssetDescsWithUIDs instance;
 
-    std::map< AssetDescConstPtr, std::string > asset2uid;
-    std::map< std::string, AssetDescConstPtr > uid2asset;
+    //std::map< AssetDescConstPtr, std::string >              asset2uid;
+    std::map< std::string, AssetDescConstPtr >              m_uid2asset;
+    std::map< std::string, std::string >                    m_key2uid;
 
 
 
 public:
-    static AssetDescsWithUIDs&              GetInstance() { return instance; }
-    static void                             SetInstance( AssetDescsWithUIDs& i ) { instance = i; }
+    static AssetDescsWithUIDs&                              GetInstance() { return instance; }
+    static void                                             SetInstance( AssetDescsWithUIDs& i ) { instance = i; }
 
-    virtual void                            Serialize       ( SerializeObject & sob ) const
+    virtual void                                            Serialize       ( SerializeObject & sob ) const
     {
         sob.SetName( "assets" );
-        for( auto asset : asset2uid )
+        for( auto asset : m_uid2asset )
         {
-            AssetDescWithUID( asset.first, asset.second ).Serialize( sob );
+            AssetDescWithUID( asset.second, asset.first ).Serialize( sob );
         }
         sob.Pop();
     }
-    static ISerializablePtr                 Create          ( DeserializeObject & dob )
+    static ISerializablePtr                                 Create          ( DeserializeObject & dob )
     {
         auto assetsWithUIDs = dob.LoadProperties< AssetDescWithUID >( "uid" );
 
@@ -65,16 +66,22 @@ public:
         return assets;
     }
 
-    void                                    AddAssetDescWithUID( AssetDescConstPtr asset, std::string uid )
+    void                                                    AddAssetDescWithUID( AssetDescConstPtr asset, std::string uid )
     {
-        asset2uid[ asset ] = uid;
-        uid2asset[ uid ] = asset;
+        if( m_key2uid.find( asset->GetKey() ) == m_key2uid.end() )
+        {
+            m_key2uid[ asset->GetKey() ] = uid;
+            m_uid2asset[ uid ] = asset;
+        }
+        else
+            assert( false );
     }
 
-    std::string                             GenerateUID( AssetDescConstPtr asset );
+    std::string                                             GenerateUID( AssetDescConstPtr asset );
 
-    std::string                             Asset2UID( AssetDescConstPtr asset ) { return asset2uid[ asset ]; }
-    AssetDescConstPtr                       UID2Asset( std::string uid ) { return uid2asset[ uid ]; }
+    //std::string                                             Asset2UID( AssetDescConstPtr asset ) { return asset2uid[ asset ]; }
+    std::string                                             Key2UID( std::string key ) { return m_key2uid[ key ]; }
+    AssetDescConstPtr                                       UID2Asset( std::string uid ) { return m_uid2asset[ uid ]; }
 };
 
 } // bv

@@ -109,7 +109,7 @@ void                                BasePlugin< IPlugin >::Serialize            
         doc.SetName( "assets" );
         for( auto asset : GetAssets() )
         {
-            auto uid = AssetDescsWithUIDs::GetInstance().Asset2UID( asset );
+            auto uid = AssetDescsWithUIDs::GetInstance().Key2UID( asset->GetKey() );
             SerializedAssetUID( uid ).Serialize( doc );
         }
         doc.Pop(); // assets

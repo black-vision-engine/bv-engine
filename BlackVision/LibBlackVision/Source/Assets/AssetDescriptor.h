@@ -21,6 +21,7 @@ public:
 	virtual bool					IsCacheable	() const = 0;
 
 	virtual std::string				GetKey		() const;
+    virtual std::string             GetProposedShortKey () const;
 
 
 	template< typename DescTypeConstPtr >
