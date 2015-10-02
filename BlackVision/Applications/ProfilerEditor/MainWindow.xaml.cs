@@ -62,7 +62,8 @@ namespace ProfilerEditor
 			// BlackVision process handle and default names
 			m_BlackVisionProcess = null;
 			m_pipeName = "BlackVisionProfiler";
-			m_BlackVisionPathName = "C:\\Users\\WitekD\\BV\\BlackVision\\_Builds\\x64-v110-Debug\\Applications\\BlackVision\\BlackVision.exe";
+			m_BlackVisionPathName = "..\\BlackVision\\BlackVision.exe";
+			m_BlackVisionPathName = System.IO.Path.GetFullPath( m_BlackVisionPathName );
 			m_commandLineArg = "-EnableProfiler";
 
 			// Default formatting
@@ -105,10 +106,14 @@ namespace ProfilerEditor
 
 		private void endServer_Click( object sender, RoutedEventArgs e )
 		{
-			if( !m_BlackVisionProcess.HasExited )
+			if( m_BlackVisionProcess != null )
 			{
-				m_BlackVisionProcess.CloseMainWindow();
-				m_BlackVisionProcess.WaitForExit();
+				if( !m_BlackVisionProcess.HasExited )
+				{
+					m_BlackVisionProcess.CloseMainWindow();
+					m_BlackVisionProcess.WaitForExit();
+				}
+				m_BlackVisionProcess = null;
 			}
 
 			if( m_pipedServer == null )
@@ -145,7 +150,11 @@ namespace ProfilerEditor
 		private void MakeTree( ProfilerModel.ProfilerTreeViewModel treeView, uint thread )
 		{
 			if( !m_firstTime[ thread ] )
+			{
 				m_profilerTreeView[ thread ].Update( treeView );
+				var tree = GetThreadTreeView( thread );
+				tree.ExpandTree();
+			}
 			else
 			{
 				m_firstTime[ thread ] = false;

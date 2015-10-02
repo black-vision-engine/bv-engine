@@ -30,6 +30,7 @@ namespace ProfilerEditor
 		private void OpenBlackVision_Click( object sender, RoutedEventArgs e )
 		{
 			OpenFileDialog openFileDialog = new OpenFileDialog();
+			openFileDialog.InitialDirectory = BlackVisionPathTextBox.Text;
 			if( openFileDialog.ShowDialog() == true )
 			{
 				if( openFileDialog.CheckFileExists )
