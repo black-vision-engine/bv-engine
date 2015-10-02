@@ -8,17 +8,36 @@ AssetDescsWithUIDs AssetDescsWithUIDs::instance;
 
 template std::shared_ptr< AssetDescsWithUIDs >                                        DeserializeObjectLoadImpl( DeserializeObjectImpl*, std::string name );
 
-
-std::string                             AssetDescsWithUIDs::GenerateUID( AssetDescConstPtr asset )
+void                                                    AssetDescsWithUIDs::AddAssetDesc( AssetDescConstPtr asset )
 {
-    //std::string key = GetBasename( asset->GetKey() );
+    auto uid = asset->GetProposedShortKey();
+    if( m_uid2asset.find( uid ) == m_uid2asset.end() )
+        AddAssetDescWithUID( AssetDescWithUID( asset, uid ) );
+    else
+        {
+            auto baseUID = asset->GetProposedShortKey();
+            int nTry = 1;
+            std::string uid;
+            while( uid = baseUID + std::to_string( nTry ), m_uid2asset.find( uid ) != m_uid2asset.end() )
+            {
+                if( m_uid2asset[ uid ]->GetKey() == asset->GetKey() )
+                    return;
+                nTry++;
+            }
+            AddAssetDescWithUID( AssetDescWithUID( asset, uid ) );            
+        }
+}
 
-    //int nTry = 0;
-    //while( uid2asset.find( key + std::to_string( nTry ) ) != uid2asset.end() )
-    //    nTry++;
+void                                                    AssetDescsWithUIDs::AddAssetDescWithUID( const AssetDescWithUID& assetWithUID )
+{
+    auto asset = assetWithUID.GetDesc();
+    auto uid = assetWithUID.GetUID();
 
-    //return key + std::to_string( nTry );
-    return asset->GetProposedShortKey();
+    assert( m_key2uid.find( asset->GetKey() ) == m_key2uid.end() );
+    assert( m_uid2asset.find( uid ) == m_uid2asset.end() );
+
+    m_key2uid[ asset->GetKey() ] = uid;
+    m_uid2asset[ uid ] = asset;
 }
 
 

@@ -61,7 +61,7 @@ void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root )
     {
         auto assets = root->GetPlugins()->GetPlugin( i )->GetAssets();
         for( auto asset : assets )
-            map.AddAssetDescWithUID( asset, map.GenerateUID( asset ) );
+            map.AddAssetDesc( asset );
     }
 
     for( unsigned int i = 0; i < root->GetNumChildren(); i++ )

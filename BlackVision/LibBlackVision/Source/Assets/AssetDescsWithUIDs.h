@@ -29,20 +29,18 @@ public:
         return std::make_shared< AssetDescWithUID >( desc, uid );
     }
 
-    AssetDescConstPtr                       GetDesc() { return desc; }
-    std::string                             GetUID() { return uid; }
+    AssetDescConstPtr                       GetDesc() const { return desc; }
+    std::string                             GetUID() const { return uid; }
 };
 
 class AssetDescsWithUIDs : public ISerializable
 {
     static AssetDescsWithUIDs instance;
 
-    //std::map< AssetDescConstPtr, std::string >              asset2uid;
     std::map< std::string, AssetDescConstPtr >              m_uid2asset;
     std::map< std::string, std::string >                    m_key2uid;
 
-
-
+    void                                                    AddAssetDescWithUID( const AssetDescWithUID& asset );
 public:
     static AssetDescsWithUIDs&                              GetInstance() { return instance; }
     static void                                             SetInstance( AssetDescsWithUIDs& i ) { instance = i; }
@@ -62,24 +60,12 @@ public:
 
         auto assets = std::make_shared< AssetDescsWithUIDs >();
         for( auto asset : assetsWithUIDs )
-            assets->AddAssetDescWithUID( asset->GetDesc(), asset->GetUID() );
+            assets->AddAssetDescWithUID( *asset );
         return assets;
     }
 
-    void                                                    AddAssetDescWithUID( AssetDescConstPtr asset, std::string uid )
-    {
-        if( m_key2uid.find( asset->GetKey() ) == m_key2uid.end() )
-        {
-            m_key2uid[ asset->GetKey() ] = uid;
-            m_uid2asset[ uid ] = asset;
-        }
-        else
-            assert( false );
-    }
+    void                                                    AddAssetDesc( AssetDescConstPtr asset );
 
-    std::string                                             GenerateUID( AssetDescConstPtr asset );
-
-    //std::string                                             Asset2UID( AssetDescConstPtr asset ) { return asset2uid[ asset ]; }
     std::string                                             Key2UID( std::string key ) { return m_key2uid[ key ]; }
     AssetDescConstPtr                                       UID2Asset( std::string uid ) { return m_uid2asset[ uid ]; }
 };
