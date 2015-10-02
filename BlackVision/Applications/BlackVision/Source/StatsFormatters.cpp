@@ -83,7 +83,7 @@ void ProfilerNamedPipeSender::SendNewNames		()
 		for( ; stringNum < numNames; stringNum++ )
 		{
 			UInt16 nextStringLength = (UInt16)strlen( m_namesToSend[ stringNum ] );
-			if( stringsLegths + nextStringLength < MAX_NAMES_SENDER_BUFFER - sizeof( ProtocolHeader ) - sizeof( UInt32 ) * ( stringNum + 1 ) )
+			if( stringsLegths + nextStringLength < static_cast<UInt16>(MAX_NAMES_SENDER_BUFFER - sizeof( ProtocolHeader ) - sizeof( UInt32 ) * ( stringNum + 1 )) )
 			{
 				curStringLength[ stringNum ] = nextStringLength;
 				stringsLegths += nextStringLength;

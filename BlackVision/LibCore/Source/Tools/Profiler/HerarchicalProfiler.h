@@ -16,6 +16,98 @@
 #define PROFILER_THREAD5			4
 #define PROFILER_THREAD6			5
 
+
+/**
+@section HerarchicalProfiler - instruction
+
+##Simple use case
+Profiler uses extern application to present data from profiler.
+EditorProfiler launches BlackVision executable and initializes profiler from
+command line parameter (see bvApp.cpp InitializeAppLogic).
+
+To profile part of code call HPROFILER_NEW_FRAME on the begining of each frame.
+
+Use macro HPROFILER_FUNCTION or HPROFILER_SECTION to profile code section or function
+and specify name of section and thread number which executes this part of code.
+
+@attention Profiler doesn't copy name string from parameter. It only saves pointer for itself.
+You have to ensure that this pointer still exists, when profiler sends informations to external app.
+
+@note To see max number of names take a look at ProfilerNamedPipeSender in file StatsFormatters.h (project BlackVision).
+
+@code
+void BlackVisionApp::OnIdle		()
+{
+    HPROFILER_NEW_FRAME( PROFILER_THREAD1 );
+    HPROFILER_FUNCTION( "BlackVisionApp::OnIdle", PROFILER_THREAD1 );
+	// code1
+
+	HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
+	// code2
+
+}
+@endcode
+
+HPROFILER_FUNCTION / HPROFILER_SECTION creates an object on stack which messures time
+from beginning of its live, to the moment when it is deleted.
+In this example both HPROFILER_FUNCTIONs will be deleted on the end of function.
+
+"BlackVisionApp::OnIdle" will messure time of executing code1 + code2
+and "BVAppLogic::OnUpdate" will messure time of executing only code2.
+
+When you want to profile only part of function, you can use {} like this
+
+@code 
+void BlackVisionApp::OnIdle		()
+{
+    HPROFILER_NEW_FRAME( PROFILER_THREAD1 );
+
+	{
+    HPROFILER_FUNCTION( "BlackVisionApp::OnIdle", PROFILER_THREAD1 );
+	
+	// code1
+	
+	}
+
+	{
+	HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
+	
+	// code2
+
+	}
+}
+@endcode
+
+In this example "BlackVisionApp::OnIdle" will messure only code1 execution time.
+
+##Multithreading
+To avoid synchronization, profiler have different dataset for every thread. It doesn't use mutex or semaphores.
+You have to specify explicitly, which thread executes profilers functions, otherwise unexpected errors can occur.
+
+Use macros PROFILER_THREAD1 - PROFILER_THREAD6. Remember to change MAX_PROFILER_THREADS value.
+
+Theese macros can be used not only for different threads. You can set them in one thread
+to have different hierarchies of samples.
+
+
+##Profiler modes
+There're three profiler modes:
+- ProfilerMode::PM_EVERY_FRAME							- Samples are sent every frame.
+- ProfilerMode::PM_EVERY_N_FRAMES_AND_FORCE_DISPLAY		- You can set number of frames after that samples are sent. Profiler will sent only MAX_PROFILER_FRAMES samples.
+- ProfilerMode::PM_WAIT_TIME_AND_FORCE_DISPLAY			- You can set time after that samples are sent. Profiler will sent only MAX_PROFILER_FRAMES samples.
+
+Mode can be set with macro HPROFILER_SET_DISPLAY_MODE.
+Number of samples in ProfilerMode::PM_EVERY_N_FRAMES_AND_FORCE_DISPLAY can be set with macro HPROFILER_SET_DISPLAY_AFTER_NUM_FRAMES.
+Time period used in mode ProfilerMode::PM_WAIT_TIME_AND_FORCE_DISPLAY can be sest with macro HPROFILER_SET_DISPLAY_WAIT_MILLIS.
+
+##Force display
+In some of theese modes not all samples are sent to external application.
+Sometimes there's need to force profiler to send interesting data (for example: frame was the longest one).
+Use macro HPROFILER_SET_FORCED_DISPLAY to do this.
+
+*/
+
+
 namespace bv
 {
 
@@ -31,9 +123,9 @@ enum class AutoProfileType : int
 
 enum class ProfilerMode
 {
-	PM_EVERY_FRAME,
-	PM_EVERY_N_FRAMES_AND_FORCE_DISPLAY,
-	PM_WAIT_TIME_AND_FORCE_DISPLAY
+	PM_EVERY_FRAME,								///<Samples are sent every frame.
+	PM_EVERY_N_FRAMES_AND_FORCE_DISPLAY,		///<You can set number of frames after that samples are sent. Profiler will sent only MAX_PROFILER_FRAMES samples.
+	PM_WAIT_TIME_AND_FORCE_DISPLAY				///<You can set time after that samples are sent. Profiler will sent only MAX_PROFILER_FRAMES samples.
 };
 
 

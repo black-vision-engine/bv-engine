@@ -10,7 +10,7 @@ CPUThreadSamples	AutoProfile::m_threads[ MAX_PROFILER_THREADS ];
 
 unsigned int    AutoProfile::m_displayStatsWaitMillis = 500;
 bool            AutoFrameProfile::m_showStats = false;
-ProfilerMode	AutoFrameProfile::m_mode = ProfilerMode::PM_EVERY_N_FRAMES_AND_FORCE_DISPLAY;
+ProfilerMode	AutoFrameProfile::m_mode = ProfilerMode::PM_EVERY_FRAME;
 unsigned int	AutoFrameProfile::m_framesToShow = 100;
 
 AutoFrameProfile::PtrDisplayCallback  AutoFrameProfile::m_displayCallback = nullptr;
