@@ -12,7 +12,7 @@
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 
-#include "Engine/Serialization/SerializationObjects.inl"
+#include "Serialization/SerializationObjects.inl"
 
 namespace bv { 
     

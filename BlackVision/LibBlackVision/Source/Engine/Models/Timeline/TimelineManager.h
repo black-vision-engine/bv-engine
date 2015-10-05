@@ -19,7 +19,7 @@
 #include "Engine/Models/Timeline/Dynamic/TimelineEventNull.h"
 #include "Engine/Models/Timeline/Dynamic/TimelineEventStop.h"
 
-#include "Engine/Interfaces/ISerializable.h"
+#include "Serialization/ISerializable.h"
 
 
 namespace bv { namespace model {

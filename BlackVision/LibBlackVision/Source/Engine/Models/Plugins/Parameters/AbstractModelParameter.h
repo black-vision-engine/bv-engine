@@ -6,7 +6,7 @@
 #include "Engine/Types/Enums.h"
 
 #include "CoreDEF.h"
-#include <Engine/Interfaces/ISerializable.h>
+#include <Serialization/ISerializable.h>
 
 
 namespace bv { namespace model {

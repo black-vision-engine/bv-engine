@@ -10,7 +10,7 @@
 #include "Mathematics/Core/mathfuncs.h"
 #include "Mathematics/Defines.h"
 
-#include "Engine/Serialization/SerializationObjects.inl"
+#include "Serialization/SerializationObjects.inl"
 
 // FIXME
 namespace std

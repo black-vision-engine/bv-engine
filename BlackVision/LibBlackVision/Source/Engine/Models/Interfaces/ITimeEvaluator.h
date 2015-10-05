@@ -6,7 +6,7 @@
 
 #include "CoreDEF.h" //FIXME: store in PCH
 
-#include "Engine/Interfaces/ISerializable.h" // FIXME(?)
+#include "Serialization/ISerializable.h"
 
 namespace bv { namespace model {
 

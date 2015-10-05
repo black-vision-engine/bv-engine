@@ -13,7 +13,7 @@
 #include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
 #include "TextureInfo.h"
 
-#include "Engine/Interfaces/ISerializable.h"
+#include "Serialization/ISerializable.h"
 //#include "Engine/Models/Plugins/PluginsFactory.h"
 
 namespace bv { namespace model {

@@ -4,8 +4,8 @@
 #include "Mathematics/Interpolators/Interpolators.h"
 
 #include "Engine/Interfaces/IUpdatable.h"
-#include "Engine/Interfaces/ISerializable.h"
-#include "Engine/Serialization/SerializationObjects.h"
+#include "Serialization/ISerializable.h"
+#include "Serialization/ISerializable.h"
 
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"

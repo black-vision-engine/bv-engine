@@ -3,7 +3,7 @@
 #include "CoreDEF.h"
 #include "Assets/FwdDecls.h"
 
-#include "Engine/Interfaces/ISerializable.h"
+#include "Serialization/ISerializable.h"
 
 #include <string>
 

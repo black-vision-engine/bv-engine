@@ -4,7 +4,7 @@
 
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
 
-#include "Engine/Interfaces/ISerializable.h"
+#include "Serialization/ISerializable.h"
 
 namespace bv
 {

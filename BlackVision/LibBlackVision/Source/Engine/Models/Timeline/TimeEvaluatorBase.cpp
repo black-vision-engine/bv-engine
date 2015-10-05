@@ -4,7 +4,7 @@
 #include "Static/ConstTimeEvaluator.h"
 #include "Static/OffsetTimeEvaluator.h"
 
-#include "Engine/Serialization/SerializationObjects.inl"
+#include "Serialization/SerializationObjects.inl"
 
 namespace bv { 
     

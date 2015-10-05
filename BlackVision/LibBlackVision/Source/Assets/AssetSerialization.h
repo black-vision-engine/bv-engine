@@ -2,7 +2,7 @@
 
 #include <assert.h>
 
-#include "Engine/Interfaces/ISerializable.h"
+#include "Serialization/ISerializable.h"
 
 #include "Texture/TextureAssetDescriptor.h"
 #include "Texture/AnimationAssetDescriptor.h"

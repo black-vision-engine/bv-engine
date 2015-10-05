@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine/Models/Timeline/TimelineManager.h" // FIXME
+
 #include "CoreDEF.h"
 #include "rapidxml/RapidXml.hpp"
 #include <iostream>

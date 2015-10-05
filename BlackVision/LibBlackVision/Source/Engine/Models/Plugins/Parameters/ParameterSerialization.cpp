@@ -4,7 +4,7 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include <sstream>
 
-#include "Engine/Serialization/SerializationObjects.inl"
+#include "Serialization/SerializationObjects.inl" // FIXME there is no apparent reason for this to be here
 
 namespace bv { namespace model {
 
