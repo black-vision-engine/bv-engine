@@ -33,6 +33,8 @@ private:
     ITimeEvaluatorPtr                                       m_rootTimeline;
 
 public:
+    static TimelineManager* GetInstance                     ();
+    static void             SetInstance                     ( TimelineManager* );
 
                             TimelineManager                 ();
                             ~TimelineManager                ();
@@ -92,6 +94,7 @@ private:
     SimpleIParamSet *       GetParamSet                     ( ITimeEvaluatorPtr timeline );
     bool                    DeregisterParam                 ( IParameterPtr param, ITimeEvaluatorPtr timeline );
 
+    static TimelineManager* instance;
 };
 
 } //model

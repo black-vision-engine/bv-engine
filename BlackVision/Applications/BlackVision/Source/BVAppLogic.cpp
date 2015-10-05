@@ -83,9 +83,6 @@ namespace
     }
 }
 
-// *********************************
-//
-model::TimelineManager * BVAppLogic::ms_timelineManager = new model::TimelineManager();
 //
 BVAppLogic::BVAppLogic              ( Renderer * renderer )
     : m_startTime( 0 )
@@ -542,7 +539,7 @@ const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
 //
 model::TimelineManager* BVAppLogic::GetTimelineManager()
 {
-    return ms_timelineManager;
+    return TimelineManager::GetInstance();
 }
 
 

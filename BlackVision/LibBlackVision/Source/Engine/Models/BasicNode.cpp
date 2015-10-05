@@ -117,7 +117,8 @@ ISerializablePtr BasicNode::Create( DeserializeObject& dob )
     assert( dob.GetName() == "node" );
 
     auto name = dob.GetValue( "name" );
-    auto timeEvaluator = dob.GetTimelineManager()->GetRootTimeline();
+
+    auto timeEvaluator = TimelineManager::GetInstance()->GetRootTimeline(); // FIXME: probably this should be serialized
     
     auto node = Create( name, timeEvaluator );
 

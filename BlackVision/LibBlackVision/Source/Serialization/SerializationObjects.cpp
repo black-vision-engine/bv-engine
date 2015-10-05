@@ -16,6 +16,8 @@ public:
     std::stack< rapidxml::xml_node<>* >                     m_roots;
 };
 
+// *******************************
+//
 SerializeObject::SerializeObject()
     : pimpl_( new SerializeObjectImpl() )
 {
@@ -25,11 +27,15 @@ SerializeObject::SerializeObject()
     m_roots.push( &m_doc );
 }
 
+// *******************************
+//
 SerializeObject::~SerializeObject()
 {
     delete pimpl_;
 }
 
+// *******************************
+//
 void SerializeObject::Save( const std::string & filename )
 {
     auto& m_doc = pimpl_->m_doc;
@@ -41,6 +47,8 @@ void SerializeObject::Save( const std::string & filename )
     m_doc.clear();
 }
 
+// *******************************
+//
 void SerializeObject::Save( std::ostream & out )
 {
     auto& m_doc = pimpl_->m_doc;
@@ -48,6 +56,8 @@ void SerializeObject::Save( std::ostream & out )
     out << m_doc;
 }
 
+// *******************************
+//
 void                                                    SerializeObject::SetName( const std::string & name )
 {
     auto& m_doc = pimpl_->m_doc;
@@ -60,6 +70,8 @@ void                                                    SerializeObject::SetName
     m_roots.push( node );
 }
 
+// *******************************
+//
 void                                                    SerializeObject::SetValue( const std::string & name, const std::string & value )
 {
     auto& m_doc = pimpl_->m_doc;
@@ -69,6 +81,8 @@ void                                                    SerializeObject::SetValu
     m_roots.top()->append_attribute( attr );
 }
 
+// *******************************
+//
 void                                                    SerializeObject::SetContent( const std::string & value )
 {
     auto& m_doc = pimpl_->m_doc;
@@ -79,6 +93,8 @@ void                                                    SerializeObject::SetCont
 }
 
 
+// *******************************
+//
 void                                                    SerializeObject::Pop()
 {
     auto& m_roots = pimpl_->m_roots;

@@ -24,8 +24,6 @@ public:
 };
 
 
-namespace model { class TimelineManager; } // FIXME maybe
-
 class DeserializeObjectImpl;
 
 template< typename T >
@@ -44,11 +42,9 @@ class DeserializeObject
 
     DeserializeObject( DeserializeObjectImpl * );
 public:
-    DeserializeObject( std::string filename, model::TimelineManager* tm );
-    DeserializeObject( std::istream & in, SizeType numBytes, model::TimelineManager* tm );
+    DeserializeObject( std::string filename );
+    DeserializeObject( std::istream & in, SizeType numBytes );
     ~DeserializeObject();
-
-    model::TimelineManager*                                 GetTimelineManager();
 
     std::string                                             GetName();
 

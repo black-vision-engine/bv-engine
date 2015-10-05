@@ -9,6 +9,7 @@
 
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
+#include "Engine/Models/Timeline/TimelineManager.h"
 
 #include "Engine/Graphics/SceneGraph/Camera.h"
 

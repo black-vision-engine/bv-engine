@@ -94,8 +94,7 @@ void			            SceneDescriptor::SaveScene		( const model::BasicNodeConstPtr 
 //
 model::BasicNodeConstPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeType numBytes, model::TimelineManager * tm )
 {
-    //auto docNode = doc.first_node( "scene" );
-    auto deDoc = DeserializeObject( in, numBytes, tm );
+    auto deDoc = DeserializeObject( in, numBytes );
 
 
     // assets

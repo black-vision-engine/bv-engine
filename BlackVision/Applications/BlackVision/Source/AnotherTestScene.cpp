@@ -949,7 +949,7 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineMana
 // begin serialization
     //auto doc2 = doc.first_node( "scene" );
     //auto dob = DeserializeObject( filename, timelineManager );
-    DeserializeObject dob( filename, timelineManager );
+    DeserializeObject dob( filename );
 
 // assets
     auto assets = dob.Load< AssetDescsWithUIDs >( "assets" );

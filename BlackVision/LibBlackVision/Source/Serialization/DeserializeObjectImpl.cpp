@@ -7,9 +7,8 @@
 
 namespace bv {
 
-DeserializeObjectImpl::DeserializeObjectImpl( std::string filename, model::TimelineManager* tm  )
+DeserializeObjectImpl::DeserializeObjectImpl( std::string filename  )
     : m_rootDoc( new rapidxml::xml_document<>() )
-    , m_tm( tm )
 {
     assert( Path::Exists( filename ) );
 
@@ -22,9 +21,8 @@ DeserializeObjectImpl::DeserializeObjectImpl( std::string filename, model::Timel
     m_doc = m_rootDoc->first_node();
 }
 
-DeserializeObjectImpl::DeserializeObjectImpl( std::istream & in, SizeType numBytes, model::TimelineManager* tm )
+DeserializeObjectImpl::DeserializeObjectImpl( std::istream & in, SizeType numBytes )
     : m_rootDoc( new rapidxml::xml_document<>() )
-    , m_tm( tm )
 {
     std::stringstream buffer;
 
@@ -38,9 +36,8 @@ DeserializeObjectImpl::DeserializeObjectImpl( std::istream & in, SizeType numByt
     m_doc = m_rootDoc->first_node();
 }
 
-DeserializeObjectImpl::DeserializeObjectImpl( rapidxml::xml_node<> * node, model::TimelineManager* tm )
+DeserializeObjectImpl::DeserializeObjectImpl( rapidxml::xml_node<> * node )
     : m_doc( node )
-    , m_tm( tm )
     , m_rootDoc( nullptr )
 {
 }

@@ -5,6 +5,22 @@
 
 namespace bv { namespace model {
 
+TimelineManager* TimelineManager::instance = new TimelineManager(); // FIXME: this may be moved to static initilizer
+
+// *********************************
+//
+TimelineManager* TimelineManager::GetInstance                     ()
+{
+    return instance;
+}
+
+// *********************************
+//
+void             TimelineManager::SetInstance                     ( TimelineManager* i )
+{
+    instance = i;
+}
+    
 // *********************************
 //
 TimelineManager::TimelineManager         ()

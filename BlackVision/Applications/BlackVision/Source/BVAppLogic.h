@@ -40,7 +40,6 @@ enum class BVAppState : int
 //FIXME: possibly add an interface such as IAppLogic (if necessary)
 class BVAppLogic
 {
-    static model::TimelineManager * ms_timelineManager; // I'm so static it hurts ;)
 private:
 
     //hackvideoinput

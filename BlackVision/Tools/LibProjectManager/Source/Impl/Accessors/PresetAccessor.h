@@ -3,6 +3,7 @@
 #include "System/Path.h"
 
 #include "Engine/Models/BasicNode.h"
+#include "Engine/Models/Timeline/TimelineManager.h"
 
 namespace bv
 {
