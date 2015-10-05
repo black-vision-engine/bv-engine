@@ -168,8 +168,10 @@ void            BVScene::Serialize           ( SerializeObject &doc) const
 {
     doc.SetName( "scene" );
 
-    auto& assets = AssetDescsWithUIDs::GetInstance();
+    //auto& assets = AssetDescsWithUIDs::GetInstance();
+    AssetDescsWithUIDs assets;
     GetAssetsWithUIDs( assets, m_pModelSceneRoot );
+    AssetDescsWithUIDs::SetInstance( assets );
 
     assets.Serialize( doc );
 

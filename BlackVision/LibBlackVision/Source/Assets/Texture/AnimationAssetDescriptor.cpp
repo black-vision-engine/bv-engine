@@ -75,7 +75,8 @@ const std::vector< TextureAssetDescConstPtr > & AnimationAssetDesc::GetFrames		(
 //
 std::string                     AnimationAssetDesc::GetKey      () const
 {
-    return m_path;
+    //return m_path + '/' + m_filter;
+    return m_path; // assuming there's only one sequence in one directory
 }
 
 // *******************************

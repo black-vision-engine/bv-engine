@@ -243,6 +243,13 @@ std::string				TextureAssetDesc::GetKey		() const
 
 // ***********************
 //
+std::string             TextureAssetDesc::GetProposedShortKey () const
+{
+    auto basename = AssetDesc::GetProposedShortKey();
+    return basename.substr( 0, basename.find( '.' ) );
+}
+// ***********************
+//
 SingleTextureAssetDescConstPtr TextureAssetDesc::GetOrigTextureDesc() const
 {
 	return m_originalTextureDesc;

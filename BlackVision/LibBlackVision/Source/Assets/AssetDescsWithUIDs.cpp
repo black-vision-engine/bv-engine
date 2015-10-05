@@ -10,20 +10,18 @@ template std::shared_ptr< AssetDescsWithUIDs >                                  
 
 void                                                    AssetDescsWithUIDs::AddAssetDesc( AssetDescConstPtr asset )
 {
-    auto uid = asset->GetProposedShortKey();
+    if( m_key2uid.find( asset->GetKey() ) != m_key2uid.end() )
+        return;
+
+    auto baseUID = asset->GetProposedShortKey();
+    std::string uid = baseUID;
     if( m_uid2asset.find( uid ) == m_uid2asset.end() )
         AddAssetDescWithUID( AssetDescWithUID( asset, uid ) );
     else
         {
-            auto baseUID = asset->GetProposedShortKey();
             int nTry = 1;
-            std::string uid;
             while( uid = baseUID + std::to_string( nTry ), m_uid2asset.find( uid ) != m_uid2asset.end() )
-            {
-                if( m_uid2asset[ uid ]->GetKey() == asset->GetKey() )
-                    return;
                 nTry++;
-            }
             AddAssetDescWithUID( AssetDescWithUID( asset, uid ) );            
         }
 }
