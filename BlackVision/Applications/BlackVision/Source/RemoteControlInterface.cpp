@@ -345,15 +345,13 @@ namespace
 
 // *********************************
 //
-Json::Value PathVecToJSONArray( const PathVec & v )
+Json::Value ToJSONArray( const PathVec & v )
 {
     Json::Value root;
 
     for( auto pn : v )
     {
-        Json::Value entry;
-        entry[ "name" ] = pn.Str();
-        root.append( entry );
+        root.append( pn.Str() );
     }
 
     return root;
@@ -361,9 +359,31 @@ Json::Value PathVecToJSONArray( const PathVec & v )
 
 // *********************************
 //
-std::string GetRequestParamValue( const bv::SceneStructureEventPtr & evtStructure )
+Json::Value ToJSONArray( const StringVector & v )
 {
-    return std::string( evtStructure->request.begin(), evtStructure->request.end() );
+    Json::Value root;
+
+    for( auto s : v )
+    {
+        root.append( s );
+    }
+
+    return root;
+}
+
+
+// *********************************
+//
+Json::Value Str2Json( const std::string & data )
+{
+    return Json::Value( data );
+}
+
+// *********************************
+//
+Json::Value GetRequestParamValue( const bv::SceneStructureEventPtr & evtStructure )
+{
+    return Str2Json( std::string( evtStructure->request.begin(), evtStructure->request.end() ) );
 }
 
 // *********************************
@@ -473,20 +493,20 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
 			node_ptr->GetModelNodeEditor()->DetachPlugin("text");
 			
         }
-        else if( evtStructure->command == L"LIST_PROJECTS" )
+        else if( evtStructure->command == L"LIST_PROJECTS_NAMES" )
         {
             auto pns = pm->ListProjectsNames();
 
-            auto pList = PathVecToJSONArray( pns );
+            auto pList = ToJSONArray( pns );
 
-            SendOnSceneStructureResponse( evtStructure, "LIST_PROJECTS", "list", pList );
+            SendOnSceneStructureResponse( evtStructure, "LIST_PROJECTS_NAMES", "list", pList );
 
             // [czesio]
             // [{"name":"czesio", "scenes_count":123},{...},...]
         }
         else if( evtStructure->command == L"NEW_PROJECT" )
         {
-            auto name = GetRequestParamValue( evtStructure );
+            auto name = GetRequestParamValue( evtStructure )[ "projectName" ].asString();
 
             pm->AddNewProject( name );
 
@@ -494,14 +514,69 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
         }
         else if( evtStructure->command == L"LIST_SCENES" )
         {
-            auto name = GetRequestParamValue( evtStructure );
+            auto name = GetRequestParamValue( evtStructure )[ "projectName" ].asString();
             auto sns = pm->ListScenesNames( name );
 
-            auto pList = PathVecToJSONArray( sns );
+            auto pList = ToJSONArray( sns );
 
             SendOnSceneStructureResponse( evtStructure, "LIST_SCENES", "list", pList );
         }
+        else if( evtStructure->command == L"LIST_ASSETS_PATH" )
+        {
+            auto projName = GetRequestParamValue( evtStructure )[ "projectName" ].asString();
+            auto catName = GetRequestParamValue( evtStructure )[ "categoryName" ].asString();
 
+            auto sns = pm->ListAssetsPaths( projName, catName );
+
+            auto pList = ToJSONArray( sns );
+
+            SendOnSceneStructureResponse( evtStructure, "LIST_ASSETS_PATH", "list", pList );
+        }
+        else if( evtStructure->command == L"LIST_CATEGORIES_NAMES" )
+        {
+            auto sns = pm->ListCategoriesNames();
+
+            auto pList = ToJSONArray( sns );
+
+            SendOnSceneStructureResponse( evtStructure, "LIST_CATEGORIES_NAMES", "list", pList );
+        }
+        else if( evtStructure->command == L"LIST_CATEGORIES_NAMES" )
+        {
+            auto sns = pm->ListCategoriesNames();
+
+            auto pList = ToJSONArray( sns );
+
+            SendOnSceneStructureResponse( evtStructure, "LIST_CATEGORIES_NAMES", "list", pList );
+        }
+        else if( evtStructure->command == L"SET_CURRENT_PROJECT" )
+        {
+            auto projName = GetRequestParamValue( evtStructure )[ "projectName" ].asString();
+
+            pm->SetCurrentProject( projName );
+
+            SendOnSceneStructureResponse( evtStructure, "SET_CURRENT_PROJECT", "status", "OK" );
+        }
+        else if( evtStructure->command == L"LIST_PROJECTS" )
+        {
+            auto pns = pm->ListProjectsNames();
+
+            Json::Value list;
+
+            for( auto p : pns )
+            {
+                auto scenesCount = pm->ListScenesNames( p ).size();
+
+                Json::Value entry;
+                entry[ "name" ] = p.Str();
+                entry[ "scenes_count" ] = scenesCount;
+
+                list.append( entry );
+            }
+
+            SendOnSceneStructureResponse( evtStructure, "LIST_PROJECTS", "list", list );
+            // [czesio]
+            // [{"name":"czesio", "scenes_count":123},{...},...]
+        }
     }
 }
 
