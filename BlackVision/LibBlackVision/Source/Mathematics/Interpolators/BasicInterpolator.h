@@ -25,30 +25,23 @@ public:
 public:
 
     explicit Key( TimeValueT t, ValueT val );
+
+    Key< TimeValueT, ValueT > operator+( const Key< TimeValueT, ValueT > &that ) const { return Key< TimeValueT, ValueT >( t + that.t, val + that.val ); }
+    Key< TimeValueT, ValueT > operator-( const Key< TimeValueT, ValueT > &that ) const { return Key< TimeValueT, ValueT >( t - that.t, val - that.val ); }
 };
+
+template<class TimeValueT, class ValueT>
+Key< TimeValueT, ValueT > operator*( const float a, const Key< TimeValueT, ValueT > &that ) { return Key< TimeValueT, ValueT >( a * that.t, a * that.val ); }
 
 template<class TimeValueT>
 class Interpolator
 {
-private:
-
-	model::IParameter::InterpolationMethod m_method;
-
 public:
-
-    typedef TimeValueT TimeType;
-
-public:
-
-    virtual void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method ) { m_method = method; }
-    virtual model::IParameter::InterpolationMethod     GetInterpolationMethod () const { return m_method; }
-
     virtual int EvalToCBuffer( TimeValueT time, char * buf ) const = 0;
-
 };
 
 template<class TimeValueT, class ValueT, class FloatT = float >
-class BasicInterpolator : public Interpolator<TimeValueT>
+class BasicInterpolator : public Interpolator<TimeValueT> // FIXME: this class will be removed
 {
 public:
 
@@ -56,8 +49,6 @@ public:
     typedef ValueT      ValueType;
 
 private:
-	//model::IParameter::InterpolationMethod			method;
-
     std::vector<Key<TimeValueT, ValueT>>    keys;
     TimeValueT                              tolerance;
 
@@ -78,9 +69,6 @@ public:
 
     explicit BasicInterpolator  ( TimeValueT tolerance = 0.0001 );
     virtual ~BasicInterpolator  () {};
-
-	//void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method ) override;
-	//model::IParameter::InterpolationMethod     GetInterpolationMethod () const override;
 
     void AddKey             ( TimeValueT t, const ValueT & v );
     void AddKey             ( const Key<TimeValueT, ValueT> & key );
