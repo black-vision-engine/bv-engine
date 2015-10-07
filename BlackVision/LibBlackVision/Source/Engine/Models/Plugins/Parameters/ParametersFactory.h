@@ -37,6 +37,11 @@ public:
 
     template< typename T >
     static IParameterPtr        CreateTypedParameter                ( const std::string & name, ITimeEvaluatorPtr timeline );
+
+    template< typename ParamType >
+    static std::shared_ptr< ParamType >
+                                CreateTypedSimpleParameter          ( const std::string & name, ITimeEvaluatorPtr timeline );
+
 };
 
 } // model

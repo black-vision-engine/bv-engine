@@ -649,6 +649,7 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Transform\MatTransform.h" />
     <ClInclude Include="..\..\..\Source\Serialization\DeserializeObjectImpl.h" />
     <ClInclude Include="..\..\..\Source\Serialization\ISerializable.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h" />
     <ClInclude Include="..\..\..\Source\Serialization\SerializationObjects.h" />
   </ItemGroup>
   <ItemGroup>

@@ -78,7 +78,7 @@ public:
     inline  T               Evaluate        () const;
     inline  void            SetVal          ( const T & val, TimeType t );
 
-    virtual VoidPtr         QueryParamTyped () override;
+    virtual VoidPtr         QueryParamTyped () override { return std::static_pointer_cast< void >( shared_from_this() ); }
 
     inline static  ModelParamType  Type     ();
 };

@@ -4,25 +4,12 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include <sstream>
 
-#include "Serialization/SerializationObjects.inl" // FIXME there is no apparent reason for this to be here
+#include "Serialization/SerializationObjects.inl"
+#include "Serialization/SerializationHelper.h"
+//#include "Serialization/SerializationObjects.h"
 
 namespace bv { namespace model {
 
-std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
-    std::stringstream ss(s);
-    std::string item;
-    while (std::getline(ss, item, delim)) {
-        elems.push_back(item);
-    }
-    return elems;
-}
-
-
-std::vector<std::string> split(const std::string &s, char delim) {
-    std::vector<std::string> elems;
-    split(s, delim, elems);
-    return elems;
-}
 
 class KeyFrame : public ISerializable // FIXME: to remove!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 {
@@ -43,6 +30,16 @@ public:
 
 // ********************************************************************************************************************
 
+//template< typename T >
+//std::shared_ptr< T > DeserializeTypedParam( std::vector< KeyFrame >& values, std::string name, ITimeEvaluatorPtr te )
+//{
+//    auto param = ParametersFactory::CreateTypedSimpleParameter< T >( name, te );
+//
+//    for( auto value : values )
+//    {
+//        float val = 
+//}
+
 ISerializablePtr AbstractModelParameter::Create( DeserializeObject& dob ) // FIXME: rethink if is might be done cleaner
 {
     auto name = dob.GetValue( "name" );
@@ -53,7 +50,7 @@ ISerializablePtr AbstractModelParameter::Create( DeserializeObject& dob ) // FIX
     auto tm = TimelineManager::GetInstance();
     ITimeEvaluatorPtr te = tm->GetTimeline( timeline );
     if( te == nullptr ) te = tm->GetRootTimeline();
-    
+
     auto values = dob.LoadArray< KeyFrame >( "interpolator" );
 
     if( type == "float" )
@@ -68,24 +65,58 @@ ISerializablePtr AbstractModelParameter::Create( DeserializeObject& dob ) // FIX
         }
 
         return param;
-    } else if( type == "4" || type == "vec4" )
+    } 
+    else if( type == "2" || type == "vec2" )
     {
-        auto param = ParametersFactory::CreateParameterVec4( name, te );
+        auto param = ParametersFactory::CreateParameterVec2( name, te );
         
         for( auto value : values )
         {
-            auto vals = split( value->value, ',' );
-            assert( vals.size() == 4 );
-            glm::vec4 val( std::stof( vals[0] ), 
-                std::stof( vals[1] ), 
-                std::stof( vals[2] ), 
-                std::stof( vals[3] ) );
+            auto val = SerializationHelper::String2Vec2( value->value );
             float t = std::stof( value->time );
             param->SetVal( val , t );
         }
 
         return param;
-    } else if( type == "6" || type == "transform_vec" ) // FIXME: this should be made a constant somewhere
+    } 
+    else if( type == "3" || type == "vec3" )
+    {
+        auto param = ParametersFactory::CreateParameterVec3( name, te );
+        
+        for( auto value : values )
+        {
+            auto val = SerializationHelper::String2Vec3( value->value );
+            float t = std::stof( value->time );
+            param->SetVal( val , t );
+        }
+
+        return param;
+    } 
+    else if( type == "4" || type == "vec4" )
+    {
+        auto param = ParametersFactory::CreateParameterVec4( name, te );
+        
+        for( auto value : values )
+        {
+            auto val = SerializationHelper::String2Vec4( value->value );
+            float t = std::stof( value->time );
+            param->SetVal( val , t );
+        }
+
+        return param;
+    } 
+    else if( type == "transform" )
+    {
+        auto param = ParametersFactory::CreateParameterTransform( name, te );
+
+        auto transform = dob.Load< TransformF >( "composite_transform" );
+
+        param->Transform() = *transform;
+
+        return param;
+
+    }
+    else if( type == "6" || type == "transform_vec" ) // FIXME: this should be made a constant somewhere
     {
         auto param = ParametersFactory::CreateParameterTransformVec( name, te );
 
@@ -98,32 +129,37 @@ ISerializablePtr AbstractModelParameter::Create( DeserializeObject& dob ) // FIX
         }
         
         return param;
+    } 
+    else if( type == "7" || type == "int" )
+    {
+        auto param = ParametersFactory::CreateTypedSimpleParameter< ParamInt >( name, te );
+        for( auto value : values )
+        {
+            auto val = std::stoi( value->value );
+            auto time = std::stof( value->time );
+            param->SetVal( val, time );
+        }
+        return param;
+    } 
+    else if( type == "bool" )
+    {
+        auto param = ParametersFactory::CreateTypedSimpleParameter< ParamBool >( name, te );
+        for( auto value : values )
+        {
+            bool val = std::stoi( value->value ) == 1;
+            auto time = std::stof( value->time );
+            param->SetVal( val, time );
+        }
+        return param;
+    } 
+    else if( type == "9" ) // FIXME
+    {
+        return ParametersFactory::CreateParameterEnum< bool >( name, te );
+        //return nullptr;
     }
 
-    //assert( false ); // FIXME
+    assert( false ); // FIXME
     return ParametersFactory::CreateParameterBool( name, te );
-
-    //auto values = dob.LoadProperties< KeyFrame >( "timeval" );
-
-    //if( values.size() == 0 )
-    //    values.push_back( std::make_shared< KeyFrame >( "0", dob.GetValue( "value" ) ) );
-
-    //auto param = ParametersFactory::CreateParameterFloat( name, te ); // FIXME
-
-    //try
-    //{
-    //    for( auto value : values )
-    //    {
-    //        float val = std::stof( value->value );
-    //        float t = std::stof( value->time );
-    //        param->SetVal( val , t );
-    //    }
-    //}catch( std::invalid_argument & )
-    //{
-    //    return ParametersFactory::CreateParameterBool( name, te ); // FIXME
-    //}
-
-    //return param;
 }
 
 } }

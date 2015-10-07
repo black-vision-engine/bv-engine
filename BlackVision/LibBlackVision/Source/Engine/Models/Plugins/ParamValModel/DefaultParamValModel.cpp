@@ -96,10 +96,10 @@ void                                        DefaultParamValModel::Update        
 
 void CopyParameter( IParameterPtr out, IParameterPtr in ) // FIXME: don't forget about copying timelines!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 {
-    //assert( out->GetType() == in->GetType() ); // FIXME: uncomment when parameter deserialization is finished
+    assert( out->GetType() == in->GetType() ); // FIXME: uncomment when parameter deserialization is finished
     
-    if( out->GetType() != in->GetType() )
-        return;
+    //if( out->GetType() != in->GetType() )
+    //    return;
 
     if( out->GetType() == ModelParamType::MPT_VEC4 )
     {
@@ -108,6 +108,13 @@ void CopyParameter( IParameterPtr out, IParameterPtr in ) // FIXME: don't forget
 
         outT->AccessInterpolator() = inT->AccessInterpolator();
     }
+    else if( out->GetType() == ModelParamType::MPT_VEC3 )
+    {
+        auto inT = QueryTypedParam< ParamVec3Ptr >( in );
+        auto outT = QueryTypedParam< ParamVec3Ptr >( out );
+
+        outT->AccessInterpolator() = inT->AccessInterpolator();
+    } 
     else if( out->GetType() == ModelParamType::MPT_VEC2 )
     {
         auto inT = QueryTypedParam< ParamVec2Ptr >( in );
@@ -122,6 +129,20 @@ void CopyParameter( IParameterPtr out, IParameterPtr in ) // FIXME: don't forget
 
         outT->AccessInterpolator() = inT->AccessInterpolator();
     } 
+    else if( out->GetType() == ModelParamType::MPT_INT )
+    {
+        auto inT = QueryTypedParam< ParamIntPtr >( in );
+        auto outT = QueryTypedParam< ParamIntPtr >( out );
+
+        outT->AccessInterpolator() = inT->AccessInterpolator();
+    } 
+    else if( out->GetType() == ModelParamType::MPT_BOOL )
+    {
+        auto inT = QueryTypedParam< ParamBoolPtr >( in );
+        auto outT = QueryTypedParam< ParamBoolPtr >( out );
+
+        outT->AccessInterpolator() = inT->AccessInterpolator();
+    } 
     else if( out->GetType() == ModelParamType::MPT_TRANSFORM_VEC )
     {
         auto inT = QueryTypedParam< ParamTransformVecPtr >( in );
@@ -133,6 +154,17 @@ void CopyParameter( IParameterPtr out, IParameterPtr in ) // FIXME: don't forget
             outT->InsertTransform( i, trans );
         }
     } 
+    else if( out->GetType() == ModelParamType::MPT_TRANSFORM )
+    {
+        auto inT = QueryTypedParam< ParamTransformPtr >( in );
+        auto outT = QueryTypedParam< ParamTransformPtr >( out );
+
+        outT->Transform() = inT->Transform();
+    }
+    else if( out->GetType() == ModelParamType::MPT_ENUM )
+    {
+        // FIXME so much :)
+    }
     else
     {
         assert( false );

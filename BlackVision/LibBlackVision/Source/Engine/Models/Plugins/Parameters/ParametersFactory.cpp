@@ -3,12 +3,6 @@
 
 namespace bv { namespace model {
 
-    template<>
-    static IParameterPtr        ParametersFactory::CreateTypedParameter<int>                 ( const std::string & name, ITimeEvaluatorPtr timeline )
-    {
-        return CreateParameterInt( name, timeline );
-    }
-
 // *******************************
 //
 ParamMat2                          ParametersFactory::CreateParameterMat2                 ( const std::string & name, const Vec4Interpolator & interpolator, ITimeEvaluatorPtr timeline )
@@ -128,6 +122,29 @@ ParamTransformVecPtr                 ParametersFactory::CreateParameterTransform
 
     return ptv;
 }
+
+// *******************************
+//
+
+template<>
+static ParamIntPtr          ParametersFactory::CreateTypedSimpleParameter< ParamInt > (const std::string& name, ITimeEvaluatorPtr te )
+{
+    return CreateParameterInt( name, te );
+}
+
+template<>
+static ParamFloatPtr          ParametersFactory::CreateTypedSimpleParameter< ParamFloat > (const std::string& name, ITimeEvaluatorPtr te )
+{
+    return CreateParameterFloat( name, te );
+}
+
+template<>
+static ParamBoolPtr          ParametersFactory::CreateTypedSimpleParameter< ParamBool > (const std::string& name, ITimeEvaluatorPtr te )
+{
+    return CreateParameterBool( name, te );
+}
+
+
 
 } // model
 } // bv

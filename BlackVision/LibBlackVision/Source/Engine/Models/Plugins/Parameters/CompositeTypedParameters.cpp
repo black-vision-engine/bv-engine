@@ -22,12 +22,13 @@ void    ParamTransform::Serialize       ( SerializeObject & doc ) const
     doc.SetValue( "type", "transform" );
     doc.SetValue( "timeline", m_timeEvaluator->GetName() );
 
-    for( unsigned int i = 0; i < m_transformModel.Size(); i++ )
-    {
-        m_transformModel[ i ]->GetP0MotylaNoga().Serialize( doc );
-        m_transformModel[ i ]->GetP1MotylaNoga().Serialize( doc );
-        m_transformModel[ i ]->GetP2MotylaNoga().Serialize( doc );
-    }
+    m_transformModel.Serialize( doc );
+    //for( unsigned int i = 0; i < m_transformModel.Size(); i++ )
+    //{
+    //    m_transformModel[ i ]->GetP0MotylaNoga().Serialize( doc );
+    //    m_transformModel[ i ]->GetP1MotylaNoga().Serialize( doc );
+    //    m_transformModel[ i ]->GetP2MotylaNoga().Serialize( doc );
+    //}
 
     doc.Pop();
 }
