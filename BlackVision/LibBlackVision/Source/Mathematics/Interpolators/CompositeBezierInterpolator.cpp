@@ -1,4 +1,5 @@
 #include "CompositeBezierInterpolator.h"
+#include "Mathematics/Core/mathfuncs.h"
 
 namespace bv {
 
@@ -120,6 +121,7 @@ public:
 CompositeBezierInterpolator::CompositeBezierInterpolator( float tolerance )
     : m_type( CurveType::LINEAR )
     , m_tolerance( tolerance )
+    , m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
 {
 }
 
@@ -131,6 +133,8 @@ CompositeBezierInterpolator::CompositeBezierInterpolator( const CompositeBezierI
     interpolators = that.interpolators; 
     m_tolerance = that.m_tolerance; 
     m_type = that.m_type; 
+    m_preMethod = that.m_preMethod;
+    m_postMethod = that.m_postMethod;
 }
 
 // *******************************
@@ -257,11 +261,81 @@ void CompositeBezierInterpolator::AddKey             ( TimeValueT t, const Value
 
 // *******************************
 //
-float CompositeBezierInterpolator::PreEvaluate( float /*t*/ ) const { return keys[ 0 ].val; } // never FIXME :P
+float CompositeBezierInterpolator::PreEvaluate( float t ) const 
+{ 
+    TimeValueT tStart = keys.front().t;
+    TimeValueT tEnd = keys.back().t;
+
+    auto interval = tEnd - tStart;
+    if( interval <= m_tolerance )
+        return tStart;
+
+    t = t - tStart;
+
+    if( m_preMethod == WrapMethod::clamp )
+        return tStart;
+    else if( m_preMethod == WrapMethod::repeat )
+    {
+        TimeValueT q = interval;
+        TimeValueT r = std::modf( t, &q );
+        return tStart + r;
+    }
+    else if ( m_preMethod == WrapMethod::pingPong )
+    {
+        TimeValueT q = interval;
+        TimeValueT r = std::modf( t, &q );
+
+        if( round( q ) % 2 == 0 )
+        {
+            return tStart + r;
+        }
+        else
+        {
+            return tStart + interval - r;
+        }
+    }
+
+    return Evaluate( t );
+}
 
 // *******************************
 //
-float CompositeBezierInterpolator::PostEvaluate( float /*t*/ ) const { return keys[ keys.size()-1 ].val; } // never FIXME :P
+float CompositeBezierInterpolator::PostEvaluate( float t ) const 
+{ 
+    TimeValueT tStart = keys.front().t;
+    TimeValueT tEnd = keys.back().t;
+
+    auto interval = tEnd - tStart;
+    if( interval <= m_tolerance )
+        return tEnd;
+
+    t = t - tStart;
+
+    if( m_postMethod == WrapMethod::clamp )
+        return tEnd;
+    else if( m_postMethod == WrapMethod::repeat )
+    {
+        TimeValueT q = interval;
+        TimeValueT r = divmod( t, &q );
+        return tStart + r;
+    }
+    else if( m_postMethod == WrapMethod::pingPong )
+    {
+        TimeValueT q = interval;
+        TimeValueT r = divmod(t, &q);
+
+        if( round( q ) % 2 == 0 )
+        {
+            return tStart + r;
+        }
+        else
+        {
+            return tStart + interval - r;
+        }
+    }
+
+    return Evaluate( t );
+}
 
 // *******************************
 //
