@@ -289,15 +289,7 @@ void                    DefaultAnimationDescriptor::SetBorderColor      ( const 
 //
 DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const AnimationAssetDescConstPtr & animResDesc, const std::string & name )
 {
-	auto res = AssetManager::GetInstance().LoadAsset( animResDesc );
-
-	if ( res == nullptr )
-    {
-        return nullptr;
-    }
-
-
-	auto animRes = QueryTypedRes< AnimationAssetConstPtr >( res );
+	auto animRes = LoadTypedAsset<AnimationAsset>( animResDesc );
 
     if ( animRes == nullptr )
     {
