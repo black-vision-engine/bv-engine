@@ -10,6 +10,7 @@ class AssetLoader
 public:
 
 	virtual AssetConstPtr		LoadAsset        ( const AssetDescConstPtr & desc )  const = 0;
+	virtual AssetDescConstPtr	CreateDescriptor ( const std::string& jsonString )  const { jsonString; return nullptr; }
 
             AssetLoader			();
     virtual ~AssetLoader		();

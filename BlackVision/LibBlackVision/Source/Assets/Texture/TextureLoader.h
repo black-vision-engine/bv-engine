@@ -19,6 +19,7 @@ class TextureLoader : public AssetLoader
 public:
 
 	AssetConstPtr						LoadAsset			( const AssetDescConstPtr & desc ) const override;
+	AssetDescConstPtr					CreateDescriptor	( const std::string& jsonString )  const override;
 
     virtual								~TextureLoader		(){}
 };
