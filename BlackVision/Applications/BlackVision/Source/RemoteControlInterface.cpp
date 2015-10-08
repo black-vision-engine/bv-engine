@@ -249,7 +249,8 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
             msg.sock_id = evtInfo->sock_id;
             SocketWrapper::AddMsg(msg);
 
-        }else if(evtInfo->request==L"node_info")
+        }
+        else if(evtInfo->request==L"node_info")
         {
             wstring NodeName = evtInfo->NodeName;
 			string NodeNameStr( NodeName.begin(), NodeName.end() );
@@ -258,12 +259,12 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 			auto node = root->GetNode(NodeNameStr);
 			if(node==nullptr &&root->GetName()==NodeNameStr)
 			{
-				Log::A("OK", "root node is node you're looking for ["+ NodeNameStr+"] Applying jedi fix now.");
+				Log::A( "OK", "root node is node you're looking for ["+ NodeNameStr+"] Applying jedi fix now." );
 				node = root;
 			}
 			if(node==nullptr)
 			{
-				Log::A("error", "Error NodeInfo() node ["+ NodeNameStr+"] not found");
+				Log::A( "error", "Error NodeInfo() node ["+ NodeNameStr+"] not found" );
 				return;
 			}
 
@@ -271,39 +272,79 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 
 			auto pluginlist = node->GetPluginList();
 
+            Json::Value jsonParams;
+
 			for( unsigned int i = 0; i < pluginlist->NumPlugins(); ++i )
 			{
 				IPluginPtr plugin = pluginlist->GetPlugin( i );
 				string plugin_name = plugin->GetName();
 
-				/*std::vector< IParameterPtr > & params = plugin->GetPluginParamValModel()->GetPluginModel()->GetParameters();
-				for(unsigned int i=0;i<params.size();i++)
-				{
-					IParameterPtr param = params[i];
-					string s_name = param->GetName();
+				auto & params = plugin->GetPluginParamValModel()->GetPluginModel()->GetParameters();
 
-					//param->QueryParamTyped();
+				for( auto p : params )
+				{
+					string s_name = p->GetName();
+                    auto paramType = p->GetType();
+
+                    Json::Value entry;
+                    entry[ "name" ] = s_name;
+
+                    switch( paramType )
+                    {
+                        case ModelParamType::MPT_FLOAT:
+                        {
+                            entry[ "type" ] = "float";
+                            Json::Value jsonKeys;
+                            auto typedParam = QueryTypedParam< ParamFloatPtr >( p );
+                            auto accessIntepolator = typedParam->AccessInterpolator();
+                            auto keys = accessIntepolator.AccessKeys();
+                            for( auto & k : keys )
+                            {
+                                jsonKeys.append( to_string( k.t ) );
+                                jsonKeys.append( to_string( k.val ) );
+                            }
+
+                            entry[ "keys" ] = jsonKeys;
+                        }
+                    //case ModelParamType::MPT_MAT2:
+                    //case ModelParamType::MPT_VEC2:
+                    //case ModelParamType::MPT_VEC3:
+                    //case ModelParamType::MPT_VEC4:
+                    //case ModelParamType::MPT_TRANSFORM:
+                    //case ModelParamType::MPT_TRANSFORM_VEC:
+                    //case ModelParamType::MPT_INT:
+                    //case ModelParamType::MPT_BOOL:
+                    //case ModelParamType::MPT_ENUM:
+                    }
+
+                    jsonParams.append( entry );
 
 					//pablito: nie dzialaja paramy
 					//ParamFloat valueFloat = model::QueryTypedParam<ParamFloat>(param);
 
 					// value ?!?!?!
-					IValueConstPtr value =  plugin->GetPluginParamValModel()->GetPluginModel()->GetValue(s_name); 
+					//IValueConstPtr value =  plugin->GetPluginParamValModel()->GetPluginModel()->GetValue(s_name); 
 					//value->
-				}	*/	
-			}
+                }
+            }
 			
-			string S = "{\"cmd\":\"node_info\",\"visible\":\""+to_string(visible)+"\" }";
+            Json::Value res;
+            res[ "cmd" ]        = "node_info";
+            res[ "visible" ]    = visible;
+            res[ "params" ]     = jsonParams;
            
-            Log::A("SENDING",S);
-            wstring WS = wstring(S.begin(),S.end());
+            auto resStr = res.toStyledString();
+
+            Log::A( "SENDING", resStr );
+            wstring WS = wstring( resStr.begin(), resStr.end() );
 
             ResponseMsg msg;
             msg.msg     = WS;
             msg.sock_id = evtInfo->sock_id;
             SocketWrapper::AddMsg(msg);
 
-        }else if(evtInfo->request==L"videocards")
+        }
+        else if(evtInfo->request==L"videocards")
         {
             
 			string S = "{\"cmd\":\"videocards\",\"visible\":\""+string(" no diggy diggy ")+"\" }";
@@ -500,9 +541,6 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
             auto pList = ToJSONArray( pns );
 
             SendOnSceneStructureResponse( evtStructure, "LIST_PROJECTS_NAMES", "list", pList );
-
-            // [czesio]
-            // [{"name":"czesio", "scenes_count":123},{...},...]
         }
         else if( evtStructure->command == L"NEW_PROJECT" )
         {
@@ -521,7 +559,7 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
 
             SendOnSceneStructureResponse( evtStructure, "LIST_SCENES", "list", pList );
         }
-        else if( evtStructure->command == L"LIST_ASSETS_PATH" )
+        else if( evtStructure->command == L"LIST_ASSETS_PATHS" )
         {
             auto projName = GetRequestParamValue( evtStructure )[ "projectName" ].asString();
             auto catName = GetRequestParamValue( evtStructure )[ "categoryName" ].asString();
@@ -530,7 +568,7 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
 
             auto pList = ToJSONArray( sns );
 
-            SendOnSceneStructureResponse( evtStructure, "LIST_ASSETS_PATH", "list", pList );
+            SendOnSceneStructureResponse( evtStructure, "LIST_ASSETS_PATHS", "list", pList );
         }
         else if( evtStructure->command == L"LIST_CATEGORIES_NAMES" )
         {
