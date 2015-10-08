@@ -136,6 +136,117 @@ void ReqPrint( model::BasicNodePtr node, int level )
     }
 
 }
+
+// *********************************
+//
+namespace 
+{
+// *********************************
+//
+std::string ParamTypeToString( ModelParamType pType )
+{
+    switch( pType )
+    {
+    case ModelParamType::MPT_FLOAT:
+        return "float";
+    case ModelParamType::MPT_MAT2:
+        return "mat2";
+    case ModelParamType::MPT_VEC2:
+        return "vec2";
+    case ModelParamType::MPT_VEC3:
+        return "vec3";
+    case ModelParamType::MPT_VEC4:
+        return "vec4";
+    case ModelParamType::MPT_TRANSFORM:
+        return "transform";
+    case ModelParamType::MPT_TRANSFORM_VEC:
+        return "transform_vec";
+    case ModelParamType::MPT_INT:
+        return "int";
+    case ModelParamType::MPT_BOOL:
+        return "bool";
+    case ModelParamType::MPT_ENUM:
+        return "enum";
+    default:
+        assert( !"Should never be here" );
+        return "";
+    }
+}
+
+namespace 
+{
+	// FIXME: Should be moved to some core module.
+	template< typename T > 
+	std::string toString( const T & t )
+	{
+		return std::to_string( t );
+	}
+
+    // *********************************
+    //
+	template<> 
+	std::string toString< std::string >( const std::string & t )
+	{
+		return t;
+	}
+
+    // *********************************
+    //
+    template<> 
+	std::string toString< glm::vec4 >( const glm::vec4 & v )
+	{
+		return toString( v[ 0 ] ) + ", " + toString( v[ 1 ] ) + ", "  + toString( v[ 2 ] ) + ", "  + toString( v[ 3 ] );
+	}
+
+    // *********************************
+    //
+    template<> 
+	std::string toString< glm::vec3 >( const glm::vec3 & v )
+	{
+		return toString( v[ 0 ] ) + ", " + toString( v[ 1 ] ) + ", "  + toString( v[ 2 ] );
+	}
+    
+    // *********************************
+    //
+    template<> 
+	std::string toString< glm::vec2 >( const glm::vec2 & v )
+	{
+		return toString( v[ 0 ] ) + ", " + toString( v[ 1 ] );
+	}
+
+} // anonymous
+
+// *********************************
+//
+template< typename ParamTypePtr >
+Json::Value GetParamDescription( IParameterPtr p )
+{
+    string s_name = p->GetName();
+    auto paramType = p->GetType();
+
+    Json::Value entry;
+
+    entry[ "name" ] = s_name;
+    entry[ "type" ] = ParamTypeToString( paramType );
+
+    Json::Value jsonKeys;
+
+    auto typedParam = QueryTypedParam< ParamTypePtr >( p );
+    auto accessIntepolator = typedParam->AccessInterpolator();
+    auto keys = accessIntepolator.AccessKeys();
+    for( auto & k : keys )
+    {
+        jsonKeys.append( toString( k.t ) );
+        jsonKeys.append( toString( k.val ) );
+    }
+
+    entry[ "keys" ] = jsonKeys;
+
+    return entry;
+}
+
+} // anonymous
+
 // *********************************
 //
 void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
@@ -250,27 +361,32 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
             SocketWrapper::AddMsg(msg);
 
         }
-        else if(evtInfo->request==L"node_info")
+        else if( evtInfo->request == L"node_info" )
         {
-            wstring NodeName = evtInfo->NodeName;
-			string NodeNameStr( NodeName.begin(), NodeName.end() );
+            wstring nodeName = evtInfo->NodeName;
+			string nodeNameStr( nodeName.begin(), nodeName.end() );
 			//todo: //fixme: wstring -> string
 		    auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot();
-			auto node = root->GetNode(NodeNameStr);
-			if(node==nullptr &&root->GetName()==NodeNameStr)
+			auto node = root->GetNode( nodeNameStr );
+
+			if( node == nullptr && root->GetName() == nodeNameStr )
 			{
-				Log::A( "OK", "root node is node you're looking for ["+ NodeNameStr+"] Applying jedi fix now." );
+				Log::A( "OK", "root node is node you're looking for [" + nodeNameStr + "] Applying jedi fix now." );
 				node = root;
 			}
-			if(node==nullptr)
+
+			if( node==nullptr )
 			{
-				Log::A( "error", "Error NodeInfo() node ["+ NodeNameStr+"] not found" );
+				Log::A( "error", "Error NodeInfo() node [" + nodeNameStr + "] not found" );
 				return;
 			}
 
-			bool visible = node->IsVisible();
-
+			bool visible    = node->IsVisible();
 			auto pluginlist = node->GetPluginList();
+
+            Json::Value res;
+            res[ "cmd" ]        = "node_info";
+            res[ "visible" ]    = visible;
 
             Json::Value jsonParams;
 
@@ -283,56 +399,35 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 
 				for( auto p : params )
 				{
-					string s_name = p->GetName();
-                    auto paramType = p->GetType();
-
-                    Json::Value entry;
-                    entry[ "name" ] = s_name;
-
-                    switch( paramType )
+                    switch( p->GetType() )
                     {
                         case ModelParamType::MPT_FLOAT:
-                        {
-                            entry[ "type" ] = "float";
-                            Json::Value jsonKeys;
-                            auto typedParam = QueryTypedParam< ParamFloatPtr >( p );
-                            auto accessIntepolator = typedParam->AccessInterpolator();
-                            auto keys = accessIntepolator.AccessKeys();
-                            for( auto & k : keys )
-                            {
-                                jsonKeys.append( to_string( k.t ) );
-                                jsonKeys.append( to_string( k.val ) );
-                            }
-
-                            entry[ "keys" ] = jsonKeys;
-                        }
-                    //case ModelParamType::MPT_MAT2:
-                    //case ModelParamType::MPT_VEC2:
-                    //case ModelParamType::MPT_VEC3:
-                    //case ModelParamType::MPT_VEC4:
-                    //case ModelParamType::MPT_TRANSFORM:
-                    //case ModelParamType::MPT_TRANSFORM_VEC:
-                    //case ModelParamType::MPT_INT:
-                    //case ModelParamType::MPT_BOOL:
-                    //case ModelParamType::MPT_ENUM:
+                            jsonParams.append( GetParamDescription< ParamFloatPtr >( p ) );
+                        case ModelParamType::MPT_MAT2:
+                            assert( !"Not imeplemented" );  // TODO: Implement this case.
+                            //jsonParams.append( GetParamDescription< ParamMat2Ptr >( p ) );
+                        case ModelParamType::MPT_VEC2:
+                            jsonParams.append( GetParamDescription< ParamVec2Ptr >( p ) );
+                        case ModelParamType::MPT_VEC3:
+                            jsonParams.append( GetParamDescription< ParamVec3Ptr >( p ) );
+                        case ModelParamType::MPT_VEC4:
+                            jsonParams.append( GetParamDescription< ParamVec4Ptr >( p ) );
+                        case ModelParamType::MPT_TRANSFORM:
+                            assert( !"Not imeplemented" );  // TODO: Implement this case. AccessInterpolator' : is not a member of 'bv::model::ParamTransform'
+                        case ModelParamType::MPT_TRANSFORM_VEC:
+                            assert( !"Not imeplemented" );  // TODO: Implement this case. AccessInterpolator' : is not a member of 'bv::model::ParamTransformVec'
+                        case ModelParamType::MPT_INT:
+                            jsonParams.append( GetParamDescription< ParamIntPtr >( p ) );
+                        case ModelParamType::MPT_BOOL:
+                            jsonParams.append( GetParamDescription< ParamBoolPtr >( p ) );
+                        case ModelParamType::MPT_ENUM:
+                            assert( !"Not imeplemented" );  // TODO: Implement this case. No idea how TypeEnum is a tamplate class.
                     }
-
-                    jsonParams.append( entry );
-
-					//pablito: nie dzialaja paramy
-					//ParamFloat valueFloat = model::QueryTypedParam<ParamFloat>(param);
-
-					// value ?!?!?!
-					//IValueConstPtr value =  plugin->GetPluginParamValModel()->GetPluginModel()->GetValue(s_name); 
-					//value->
                 }
             }
-			
-            Json::Value res;
-            res[ "cmd" ]        = "node_info";
-            res[ "visible" ]    = visible;
-            res[ "params" ]     = jsonParams;
            
+            res[ "params" ]     = jsonParams;
+
             auto resStr = res.toStyledString();
 
             Log::A( "SENDING", resStr );
@@ -342,15 +437,17 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
             msg.msg     = WS;
             msg.sock_id = evtInfo->sock_id;
             SocketWrapper::AddMsg(msg);
-
         }
         else if(evtInfo->request==L"videocards")
         {
-            
-			string S = "{\"cmd\":\"videocards\",\"visible\":\""+string(" no diggy diggy ")+"\" }";
+            Json::Value val;
+            val[ "cmd" ]        = "videocards";
+            val[ "visible" ]    = " no diggy diggy ";
+
+            string S = val.toStyledString();
            
-            Log::A("SENDING",S);
-            wstring WS = wstring(S.begin(),S.end());
+            Log::A( "SENDING", S );
+            wstring WS = wstring( S.begin(),S.end() );
 
             ResponseMsg msg;
             msg.msg     = WS;
@@ -358,21 +455,21 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
             SocketWrapper::AddMsg(msg);
 
         }
-        else if( evtInfo->request==L"grab_that_frame" )
+        else if( evtInfo->request == L"grab_that_frame" )
 		{
             const std::wstring & path = evtInfo->GetAddStrData();
-			string s_path(path.begin(),path.end());
+			string s_path( path.begin(),path.end() );
 
             m_AppLogic->GrabCurrentFrame( s_path );
 		}
-		else if( evtInfo->request==L"key_on" )
+		else if( evtInfo->request == L"key_on" )
 		{
-			Log::A("KEY","ON");
+			Log::A("KEY", "ON");
             m_AppLogic->SetKey( true );
 		}
-		else if( evtInfo->request==L"key_off" )
+		else if( evtInfo->request == L"key_off" )
 		{
-			Log::A("KEY","OFF");
+			Log::A("KEY", "OFF");
 			
             m_AppLogic->SetKey( false );
 		}
