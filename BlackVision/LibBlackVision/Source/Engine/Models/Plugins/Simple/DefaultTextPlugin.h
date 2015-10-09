@@ -54,7 +54,8 @@ private:
 
     unsigned int                    m_texCoordChannelIndex;
 
-    std::wstring                    m_text;
+    ParamWStringPtr                 m_textParam;
+    //std::wstring                    m_text;
     TextAtlasConstPtr				m_atlas;
     bool                            m_textSet;
 	Float32							m_textLength;
@@ -109,7 +110,7 @@ public:
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin );
 
-	const std::wstring &                        GetText                     () const;
+	std::wstring                                GetText                     () const;
 
     static bool									SetText						( IPluginPtr, const std::wstring& );
 

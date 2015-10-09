@@ -8,6 +8,12 @@ std::string Type2String( ModelParamType type )
     if( type == ModelParamType::MPT_FLOAT )
         return "float";
 
+    if( type == ModelParamType::MPT_STRING )
+        return "string";
+
+    if( type == ModelParamType::MPT_WSTRING )
+        return "wstring";
+
     //assert( false );
     return std::to_string( int ( type ) );
 }

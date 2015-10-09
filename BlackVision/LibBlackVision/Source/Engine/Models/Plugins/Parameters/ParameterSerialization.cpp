@@ -157,6 +157,33 @@ ISerializablePtr AbstractModelParameter::Create( DeserializeObject& dob ) // FIX
         return ParametersFactory::CreateParameterEnum< bool >( name, te );
         //return nullptr;
     }
+    else if( type == "wstring" ) 
+    {
+        auto param = ParametersFactory::CreateParameterWString( name, te );
+
+        for( auto value : values )
+        {
+            auto val = value->value;
+            float t = std::stof( value->time );
+            param->SetVal( std::wstring( val.begin(), val.end() ) , t );
+        }
+
+        return param;
+
+    }
+    else if( type == "string" ) 
+    {
+        auto param = ParametersFactory::CreateParameterString( name, te );
+
+        for( auto value : values )
+        {
+            auto val = value->value;
+            float t = std::stof( value->time );
+            param->SetVal( val, t );
+        }
+
+        return param;
+    }
 
     assert( false ); // FIXME
     return ParametersFactory::CreateParameterBool( name, te );
