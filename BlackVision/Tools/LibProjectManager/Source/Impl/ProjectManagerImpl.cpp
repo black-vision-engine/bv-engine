@@ -559,6 +559,7 @@ AssetDescConstPtr			ProjectManagerImpl::GetAssetDesc		( const Path & projectName
 //
 SceneDescriptor				ProjectManagerImpl::GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const
 {
+
 	auto pathInCategory = TranslateToPathCategory( projectName, pathInProject );
 	return m_sceneAccessor->GetSceneDesc( pathInCategory );
 }
@@ -574,7 +575,8 @@ void						ProjectManagerImpl::InitializeProjects	()
 		for( auto p : l )
 		{
 			auto n = Path::RelativePath( p, m_projectsPath );
-            AddNewProject( n.Str().substr( 0, n.Str().size() - 9 ) );
+            auto newProjectName = n.ParentPath();
+            AddNewProject( newProjectName );
 		}
 	}
 	else
@@ -633,19 +635,18 @@ void				        ProjectManagerImpl::InitializeAssets	()
 //
 Path						ProjectManagerImpl::TranslateToPathCategory			( const Path & projectName, const Path & path ) const
 {
-	Path ret;
-
 	if( !projectName.Str().empty() )
 	{
 		if( projectName.Str() == "." )
 		{
 			if( m_currentProject )
 			{
-				ret = ret / m_currentProject->GetName();
+				return m_currentProject->GetName() / path;
 			}
 			else
 			{
 				LOG_MESSAGE( SeverityLevel::error ) << "Current project's not set.";
+                return "";
 			}
 		}
 		else
@@ -653,17 +654,20 @@ Path						ProjectManagerImpl::TranslateToPathCategory			( const Path & projectNa
 			auto p = GetProject( projectName );
 			if( p )
 			{
-				ret = ret / projectName;
+				return projectName;
 			}
 			else
 			{
 				LOG_MESSAGE( SeverityLevel::error ) << "Project '" << projectName.Str() << "' doesn't exist.";
-				return ret;
+				return "";
 			}
 		}
 	}
-
-	return ret / path;
+    else
+    {
+        auto loc = Path2Location( path );
+        return loc.projectName / loc.path;
+    }
 }
 
 // ********************************
@@ -711,8 +715,8 @@ ProjectManagerImpl::Location ProjectManagerImpl::Path2Location( const Path & pat
 
 	for( auto pn : ListProjectsNames() )
 	{
-		auto pos = strPath.find( pn.Str() );
-		if( pos == categoryName.size() + 1 )
+		auto pos = strPath.find( "\\" + pn.Str() + "\\" );
+		if( pos == categoryName.size() )
 		{
 			projectName = pn;
 			break;

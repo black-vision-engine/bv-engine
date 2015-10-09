@@ -3,6 +3,7 @@
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/BVScene.h"
+#include "System/Path.h"
 
 #include "Engine/Events/Events.h"
 
@@ -112,6 +113,8 @@ private:
 	void            OnNodeAppearing ( IEventPtr evt );
 	void            OnNodeLeaving   ( IEventPtr evt );
 	void            OnNoMoreNodes   ( IEventPtr evt );
+
+    model::BasicNodePtr LoadScenes( const PathVec & pathVec );
 
 public:
 

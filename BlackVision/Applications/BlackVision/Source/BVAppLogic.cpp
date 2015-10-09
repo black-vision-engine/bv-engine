@@ -15,6 +15,7 @@
 #include "Widgets/Crawler/CrawlerEvents.h"
 
 #include "BVConfig.h"
+#include "ProjectManager.h"
 
 #include "MockScenes.h"
 #include "DefaultPlugins.h"
@@ -135,28 +136,53 @@ void BVAppLogic::Initialize         ()
 	bv::effect::InitializeLibEffect( m_renderer );
 }
 
+// *********************************
+//
+model::BasicNodePtr BVAppLogic::LoadScenes( const PathVec & pathVec )
+{
+    auto pm = ProjectManager::GetInstance( GetTimeLineManager() );
+
+    auto root = model::BasicNode::Create( "root", m_globalTimeline );
+    root->AddPlugin( "DEFAULT_TRANSFORM", "transform", m_globalTimeline ); 
+
+    for( auto p : pathVec )
+    {
+        auto scene = SceneDescriptor::LoadScene( pm->GetSceneDesc( "", p ).GetPath(), GetTimeLineManager() );
+
+        root->AddChildToModelOnly( std::const_pointer_cast< model::BasicNode >( scene ) );
+    }
+
+    return root;
+}
 
 // *********************************
 //
 void BVAppLogic::LoadScene          ( void )
 {
 
- //m_bvScene->GetTimelineManager()->RegisterRootTimeline( m_globalTimeline );
+     //m_bvScene->GetTimelineManager()->RegisterRootTimeline( m_globalTimeline );
 
- model::BasicNodePtr root;
-//pabllito
-if(!ConfigManager::GetBool("Debug/LoadSceneFromEnv"))
-{
-    //m_solution.SetTimeline(m_timelineManager);
-    m_solution.LoadSolution(ConfigManager::GetString("solution"));
-    root = m_solution.GetRoot();
-    //if(ConfigManager::GetBool("hm"))
-    //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
-}
-else
-{
-    root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, GetTimelineManager(), m_globalTimeline );
-}
+     model::BasicNodePtr root;
+    
+    if( !ConfigManager::GetBool( "Debug/LoadSceneFromEnv" ) )
+    {
+        auto pm = ProjectManager::GetInstance( GetTimeLineManager() );
+
+        auto projectName = ConfigManager::GetString( "default_project_name" );
+        auto projectScenesNames = pm->ListScenesNames( projectName );
+
+        root = LoadScenes( projectScenesNames );
+
+        //m_solution.SetTimeline(m_timelineManager);
+        //m_solution.LoadSolution(  );
+        //root = m_solution.GetRoot();
+        //if(ConfigManager::GetBool("hm"))
+        //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
+    }
+    else
+    {
+        root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, GetTimelineManager(), m_globalTimeline );
+    }
 
 	assert( root );
 

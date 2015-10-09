@@ -6,6 +6,7 @@
 
 #include "Texture/TextureAssetDescriptor.h"
 #include "Texture/AnimationAssetDescriptor.h"
+#include "Font/FontAssetDescriptor.h"
 
 namespace bv {
 
@@ -39,6 +40,8 @@ public:
             return TextureAssetDesc::Create( dob );
         else if( dob.GetValue( "type" ) == "anim" )
             return AnimationAssetDesc::Create( dob );
+        else if( dob.GetValue( "type" ) == "font" )
+            return FontAssetDesc::Create( dob );
         else
         {
             assert( false );

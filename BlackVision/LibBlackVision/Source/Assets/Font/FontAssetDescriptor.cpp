@@ -125,5 +125,24 @@ const std::wstring & FontAssetDesc::GetAtlasCharSetFile () const
 	return m_atlasCharSetFile;
 }
 
+
+// ***********************
+//
+std::string           FontAssetDesc::GetKey		() const
+{
+    return  m_fontFileName + "_" +
+            std::to_string( m_fontSize ) + "_" +
+            std::to_string( m_blurSize ) + "_" +
+            std::to_string( m_outlineSize ) + "_" +
+            std::to_string( m_generateMipmaps );
+}
+
+// ***********************
+//
+std::string             FontAssetDesc::GetProposedShortKey () const
+{
+    return GetKey();
+}
+
 } // bv
 
