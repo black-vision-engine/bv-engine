@@ -118,6 +118,7 @@
     <ClCompile Include="..\..\..\Source\Assets\Font\Text.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\TextAtlas.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\TextHelper.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\JsonSerializationObjects.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationLoader.cpp" />
@@ -348,6 +349,8 @@
     <ClInclude Include="..\..\..\Source\Assets\AssetDescsWithUIDs.h" />
     <ClInclude Include="..\..\..\Source\Assets\AssetSerialization.h" />
     <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h" />
+    <ClInclude Include="..\..\..\Source\Assets\JsonDeserializeObjectImpl.inl" />
+    <ClInclude Include="..\..\..\Source\Assets\JsonSerializationObjects.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\DefaultMultipassEffect.h" />
@@ -653,6 +656,7 @@
     <ClInclude Include="..\..\..\Source\Serialization\SerializationObjects.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\Source\Assets\JsonSerializeObjectImpl.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrShader.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\SceneGraph\TransformableEntity.inl" />

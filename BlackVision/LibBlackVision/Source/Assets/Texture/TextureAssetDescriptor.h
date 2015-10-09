@@ -2,6 +2,7 @@
 
 #include "Assets/AssetDescriptor.h"
 #include "MipMapAssetDescriptor.h"
+#include "Assets/JsonSerializationObjects.h"
 
 #include "CoreDEF.h"
 
@@ -37,7 +38,9 @@ protected:
 
 public:
     virtual void                        Serialize       ( SerializeObject & sob ) const;
-    static ISerializableConstPtr        Create          ( DeserializeObject & dob );
+    virtual void                        Serialize       ( JsonSerializeObject & sob ) const;
+	static ISerializableConstPtr        Create          ( DeserializeObject & dob );
+	static ISerializableConstPtr        Create          ( JsonDeserializeObject & dob );
 
 	virtual bool						IsCacheable			() const override;
 
@@ -59,6 +62,11 @@ public:
 	static TextureAssetDescConstPtr		Create				( const SingleTextureAssetDescConstPtr & origDesc );
 
 	static const std::string &			UID					();
+
+private:
+	//For internal use only
+	template<class Serializer>		void							SerializeAsset			( Serializer& sob ) const;
+	template<class Deserializer>	static TextureAssetDescConstPtr	DeserializeAsset		( Deserializer& dob );
 };
 
 } // bv

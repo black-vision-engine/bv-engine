@@ -9,6 +9,38 @@ namespace bv
 
 const std::string TextureAssetDesc::uid = "TEXTURE_ASSET_DESC";
 
+// ***********************
+//
+template<class Serializer>
+void TextureAssetDesc::SerializeAsset( Serializer& sob ) const
+{
+sob.SetName( "asset" );
+    sob.SetValue( "type", "tx" );
+    sob.SetValue( "path", m_originalTextureDesc->GetImagePath() );
+
+    if( m_mipMapsDescs )
+        sob.SetValue( "mipmap", Filter2String( m_mipMapsDescs->GetFilter() ) );
+    else
+        sob.SetValue( "mipmap", "none" );
+sob.Pop();
+}
+
+// ***********************
+//
+template<class Deserializer>
+TextureAssetDescConstPtr TextureAssetDesc::DeserializeAsset( Deserializer& dob )
+{
+    auto path = dob.GetValue( "path" );
+
+    auto filterS = dob.GetValue( "mipmap" );
+    if( filterS == "none" )
+        return Create( path, true );
+    else
+        return Create( path, String2Filter( filterS ), true );
+}
+
+// ***********************
+//
 std::string Filter2String( MipMapFilterType filter )
 {
     if( filter == MipMapFilterType::BILINEAR )
@@ -65,6 +97,18 @@ ISerializableConstPtr TextureAssetDesc::Create          ( DeserializeObject & do
         return Create( path, String2Filter( filterS ), true );
 }
 
+// ***********************
+//
+void TextureAssetDesc::Serialize       ( JsonSerializeObject & sob ) const
+{
+	SerializeAsset( sob );
+}
+// ***********************
+//
+ISerializableConstPtr TextureAssetDesc::Create          ( JsonDeserializeObject & dob )
+{
+	return DeserializeAsset( dob );
+}
 // ***********************
 //
 const std::string &	TextureAssetDesc::GetUID() const

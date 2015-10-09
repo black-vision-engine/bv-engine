@@ -8,6 +8,19 @@ namespace bv
 
 // ***********************
 //
+AssetDescConstPtr AssetManager::CreateDesc( const std::string& jsonString, const std::string& assetUID )
+{
+	auto it = m_loaders.find( assetUID );
+
+	if( it != m_loaders.end() )
+		return it->second->CreateDescriptor( jsonString );
+
+	return nullptr;
+}
+
+
+// ***********************
+//
 AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc ) const
 {
 	auto it = m_loaders.find( desc->GetUID() );

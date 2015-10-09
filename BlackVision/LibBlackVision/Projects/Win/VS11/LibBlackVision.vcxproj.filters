@@ -900,6 +900,9 @@
     <ClCompile Include="..\..\..\Source\Serialization\DeserializeObjectImpl.cpp">
       <Filter>Serialization</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\JsonSerializationObjects.cpp">
+      <Filter>Assets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1820,6 +1823,12 @@
     <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h">
       <Filter>Serialization</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\JsonSerializationObjects.h">
+      <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\JsonDeserializeObjectImpl.inl">
+      <Filter>Assets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
@@ -1884,6 +1893,9 @@
     </None>
     <None Include="..\..\..\Source\Serialization\SerializationObjects.inl">
       <Filter>Serialization</Filter>
+    </None>
+    <None Include="..\..\..\Source\Assets\JsonSerializeObjectImpl.inl">
+      <Filter>Assets</Filter>
     </None>
   </ItemGroup>
 </Project>

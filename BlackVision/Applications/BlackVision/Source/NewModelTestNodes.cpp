@@ -2042,6 +2042,16 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
 	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
 
+
+	auto texDesc = TextureAssetDesc::Create( "sand.jpg", MipMapFilterType::BILINEAR, true );
+	
+	JsonSerializeObject serializeObject;
+	texDesc->Serialize( serializeObject );
+	serializeObject.Save( "textureSerialize.txt" );
+
+    root->GetPlugin( "texture" )->LoadResource( texDesc );
+
+
 	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg" );	//, MipMapFilterType::BOX
 	//success = model::LoadTexture( root->GetPlugin( "texture" ), "Skybox.jpg", MipMapFilterType::BILINEAR );
 	assert( success );
