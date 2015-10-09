@@ -2,7 +2,7 @@
 
 #include "Assets/AssetDescriptor.h"
 #include "MipMapAssetDescriptor.h"
-#include "Assets/JsonSerializationObjects.h"
+#include "Serialization/Json/JsonSerializationObjects.h"
 
 #include "CoreDEF.h"
 

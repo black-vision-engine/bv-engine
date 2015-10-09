@@ -118,7 +118,6 @@
     <ClCompile Include="..\..\..\Source\Assets\Font\Text.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\TextAtlas.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\TextHelper.cpp" />
-    <ClCompile Include="..\..\..\Source\Assets\JsonSerializationObjects.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\AnimationLoader.cpp" />
@@ -343,14 +342,13 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\DeserializeObject.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\DeserializeObjectImpl.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\Json\JsonSerializationObjects.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\SerializationObjects.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Assets\AssetDescsWithUIDs.h" />
     <ClInclude Include="..\..\..\Source\Assets\AssetSerialization.h" />
     <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h" />
-    <ClInclude Include="..\..\..\Source\Assets\JsonDeserializeObjectImpl.inl" />
-    <ClInclude Include="..\..\..\Source\Assets\JsonSerializationObjects.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\DefaultMultipassEffect.h" />
@@ -652,11 +650,11 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Transform\MatTransform.h" />
     <ClInclude Include="..\..\..\Source\Serialization\DeserializeObjectImpl.h" />
     <ClInclude Include="..\..\..\Source\Serialization\ISerializable.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\Json\JsonSerializationObjects.h" />
     <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h" />
     <ClInclude Include="..\..\..\Source\Serialization\SerializationObjects.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Source\Assets\JsonSerializeObjectImpl.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrShader.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\SceneGraph\TransformableEntity.inl" />
@@ -677,6 +675,8 @@
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.inl" />
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.inl" />
     <None Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.inl" />
+    <None Include="..\..\..\Source\Serialization\Json\JsonDeserializeObjectImpl.inl" />
+    <None Include="..\..\..\Source\Serialization\Json\JsonSerializeObjectImpl.inl" />
     <None Include="..\..\..\Source\Serialization\SerializationObjects.inl" />
   </ItemGroup>
   <ItemGroup>
