@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <iostream>
 
 namespace bv
 {
@@ -32,10 +33,14 @@ private:
 	JsonDeserializeObjectImpl*		pimpl_;
 public:
 	JsonDeserializeObject( const std::string& jsonString );
+	JsonDeserializeObject( std::istream& stream );
 	~JsonDeserializeObject();
 
 	std::string					GetName();
 	std::string					GetValue( std::string name ) const;
+
+	bool						Push( const std::string& name );
+	void						Pop();
 };
 
 } //bv

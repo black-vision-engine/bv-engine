@@ -50,6 +50,7 @@ inline void JsonSerializeObjectImpl::Save( const std::string& filename )
 	std::ofstream file;
 	file.open( filename, std::ios_base::out );
 	Save( file );
+	file.close();
 }
 
 inline void JsonSerializeObjectImpl::Save( std::ostream& out )

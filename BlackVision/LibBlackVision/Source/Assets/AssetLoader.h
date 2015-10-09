@@ -2,6 +2,7 @@
 
 #include "AssetDescriptor.h"
 #include "Asset.h"
+#include "Serialization/Json/JsonSerializationObjects.h"
 
 namespace bv { 
 
@@ -10,7 +11,7 @@ class AssetLoader
 public:
 
 	virtual AssetConstPtr		LoadAsset        ( const AssetDescConstPtr & desc )  const = 0;
-	virtual AssetDescConstPtr	CreateDescriptor ( const std::string& jsonString )  const { jsonString; return nullptr; }
+	virtual AssetDescConstPtr	CreateDescriptor ( JsonDeserializeObject& deserializeObject ) const = 0;
 
             AssetLoader			();
     virtual ~AssetLoader		();

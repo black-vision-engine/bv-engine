@@ -6,9 +6,11 @@ namespace bv
 
 const std::string FontAssetDesc::uid = "FONT_ASSET_DESC";
 
+
 // ***********************
 //
-void                FontAssetDesc::Serialize       ( SerializeObject & sob ) const
+template<class Serializer>
+void FontAssetDesc::SerializeAsset( Serializer& sob ) const
 {
     sob.SetName( "asset" );
 
@@ -24,7 +26,8 @@ void                FontAssetDesc::Serialize       ( SerializeObject & sob ) con
 
 // ***********************
 //
-ISerializableConstPtr FontAssetDesc::Create          ( DeserializeObject & dob )
+template<class Deserializer>
+FontAssetDescConstPtr FontAssetDesc::DeserializeAsset( Deserializer& dob )
 {
     assert( dob.GetValue( "type" ) == "font" );
 
@@ -35,6 +38,35 @@ ISerializableConstPtr FontAssetDesc::Create          ( DeserializeObject & dob )
     auto mipmaps = dob.GetValue( "mipmaps" ) == "true" ? true : false;
 
     return FontAssetDesc::Create( path, size, blurSize, outSize, mipmaps );
+}
+
+
+// ***********************
+//
+void                FontAssetDesc::Serialize       ( SerializeObject & sob ) const
+{
+	SerializeAsset( sob );
+}
+
+// ***********************
+//
+ISerializableConstPtr FontAssetDesc::Create          ( DeserializeObject & dob )
+{
+	return DeserializeAsset( dob );
+}
+
+// ***********************
+//
+void FontAssetDesc::Serialize( JsonSerializeObject & sob ) const
+{
+	SerializeAsset( sob );
+}
+
+// ***********************
+//
+ISerializableConstPtr FontAssetDesc::Create( JsonDeserializeObject & dob )
+{
+	return DeserializeAsset( dob );
 }
 
 // ***********************

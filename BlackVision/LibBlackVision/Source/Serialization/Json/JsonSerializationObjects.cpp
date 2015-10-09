@@ -14,6 +14,11 @@ JsonDeserializeObject::JsonDeserializeObject( const std::string& jsonString )
 	pimpl_ = new JsonDeserializeObjectImpl( jsonString );
 }
 
+JsonDeserializeObject::JsonDeserializeObject( std::istream& stream )
+{
+	pimpl_ = new JsonDeserializeObjectImpl( stream );
+}
+
 
 JsonDeserializeObject::~JsonDeserializeObject()
 {
@@ -24,8 +29,7 @@ JsonDeserializeObject::~JsonDeserializeObject()
 //
 std::string JsonDeserializeObject::GetName()
 {
-	assert( !"Implement me" );
-	return "";
+	return std::move( pimpl_->GetName() );
 }
 
 // ***********************
@@ -34,6 +38,12 @@ std::string JsonDeserializeObject::GetValue( std::string name ) const
 {
 	return pimpl_->GetValue( name );
 }
+
+bool JsonDeserializeObject::Push( const std::string& name )
+{ return pimpl_->Push( name ); }
+
+void JsonDeserializeObject::Pop()
+{ pimpl_->Pop(); }
 
 // ******************************************************************************************
 //

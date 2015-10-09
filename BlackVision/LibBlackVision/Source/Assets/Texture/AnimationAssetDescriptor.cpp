@@ -9,7 +9,8 @@ const std::string AnimationAssetDesc::uid = "ANIMATION_ASSET_DESC";
 
 // ***********************
 //
-void                AnimationAssetDesc::Serialize       ( SerializeObject & sob ) const
+template<class Serializer>
+void AnimationAssetDesc::SerializeAsset( Serializer& sob ) const
 {
 sob.SetName( "asset" );
     sob.SetValue( "type", "anim" );
@@ -20,9 +21,40 @@ sob.Pop();
 
 // ***********************
 //
-ISerializableConstPtr     AnimationAssetDesc::Create          ( DeserializeObject & dob )
+template<class Deserializer>
+AnimationAssetDescConstPtr AnimationAssetDesc::DeserializeAsset( Deserializer& dob )
 {
     return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetValue( "path" ), dob.GetValue( "filter" ) ) );
+}
+
+
+// ***********************
+//
+void                AnimationAssetDesc::Serialize       ( SerializeObject & sob ) const
+{
+	SerializeAsset( sob );
+}
+
+// ***********************
+//
+ISerializableConstPtr     AnimationAssetDesc::Create          ( DeserializeObject & dob )
+{
+	return DeserializeAsset( dob );
+}
+
+
+// ***********************
+//
+void AnimationAssetDesc::Serialize( JsonSerializeObject & sob ) const
+{
+	SerializeAsset( sob );
+}
+
+// ***********************
+//
+ISerializableConstPtr AnimationAssetDesc::Create( JsonDeserializeObject & dob )
+{
+	return DeserializeAsset( dob );
 }
 
 // *******************************

@@ -56,15 +56,7 @@ std::string Filter2String( MipMapFilterType filter )
 //
 void                TextureAssetDesc::Serialize       ( SerializeObject & sob ) const
 {
-sob.SetName( "asset" );
-    sob.SetValue( "type", "tx" );
-    sob.SetValue( "path", m_originalTextureDesc->GetImagePath() );
-
-    if( m_mipMapsDescs )
-        sob.SetValue( "mipmap", Filter2String( m_mipMapsDescs->GetFilter() ) );
-    else
-        sob.SetValue( "mipmap", "none" );
-sob.Pop();
+	SerializeAsset( sob );
 }
 
 MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
@@ -88,13 +80,7 @@ MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
 //
 ISerializableConstPtr TextureAssetDesc::Create          ( DeserializeObject & dob )
 {
-    auto path = dob.GetValue( "path" );
-
-    auto filterS = dob.GetValue( "mipmap" );
-    if( filterS == "none" )
-        return Create( path, true );
-    else
-        return Create( path, String2Filter( filterS ), true );
+	return DeserializeAsset( dob );
 }
 
 // ***********************
@@ -107,6 +93,7 @@ void TextureAssetDesc::Serialize       ( JsonSerializeObject & sob ) const
 //
 ISerializableConstPtr TextureAssetDesc::Create          ( JsonDeserializeObject & dob )
 {
+	/*dob.Push( "asset" );*/
 	return DeserializeAsset( dob );
 }
 // ***********************

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Assets/AssetDescriptor.h"
+#include "Serialization/Json/JsonSerializationObjects.h"
 
 #include "CoreDEF.h"
 
@@ -24,8 +25,10 @@ protected:
 	virtual const std::string &			GetUID				() const override;
 
 public:
-    virtual void                Serialize       ( SerializeObject & sob ) const;
-    static ISerializableConstPtr Create          ( DeserializeObject & dob );
+    virtual void						Serialize       ( SerializeObject & sob ) const;
+	virtual void						Serialize       ( JsonSerializeObject & sob ) const;
+    static ISerializableConstPtr		Create          ( DeserializeObject & dob );
+	static ISerializableConstPtr		Create          ( JsonDeserializeObject & dob );
 
 	virtual bool						IsCacheable			() const override;
 
@@ -63,6 +66,10 @@ private:
 	bool			m_generateMipmaps;
 	std::wstring	m_atlasCharSetFile;
 
+private:
+	//For internal use only
+	template<class Serializer>		void								SerializeAsset			( Serializer& sob ) const;
+	template<class Deserializer>	static FontAssetDescConstPtr		DeserializeAsset		( Deserializer& dob );
 };
 
 } // bv

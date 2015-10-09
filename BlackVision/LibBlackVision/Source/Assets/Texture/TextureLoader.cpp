@@ -43,14 +43,9 @@ AssetConstPtr TextureLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 
 // ******************************
 //
-AssetDescConstPtr TextureLoader::CreateDescriptor( const std::string& jsonString ) const
+AssetDescConstPtr TextureLoader::CreateDescriptor( JsonDeserializeObject& deserializeObject ) const
 {
-	Json::Value jsonDescriptor;
-	Json::Reader reader;
-	reader.parse( jsonString, jsonDescriptor );
-	
-	
-	return nullptr;
+	return std::static_pointer_cast<const AssetDesc>( TextureAssetDesc::Create( deserializeObject ) );
 }
 
 
