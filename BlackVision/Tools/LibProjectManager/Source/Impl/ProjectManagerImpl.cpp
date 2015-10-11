@@ -776,17 +776,18 @@ PathVec                     ProjectManagerImpl::ListPresets         () const
 //
 Path                        ProjectManagerImpl::ToAbsPath           ( const Path & path ) const
 {
-    if( path.Str().find( "file:" ) == 0 )
+    auto p = path.Str().find( "file:/" );
+    if( p == 0 )
     {
-        return path;
+        return path.Str().substr( 6 );
     }
-    else if ( path.Str().find( "seq:" ) == 0 )
+    else if ( path.Str().find( "seq:/" ) == 0 )
     {
-        return path;
+        return path.Str().substr( 4 );
     }
-    else if ( path.Str().find( "stream:" ) == 0 )
+    else if ( path.Str().find( "stream:/" ) == 0 )
     {
-        return path;
+        return path.Str().substr( 8 );
     }
     else
     {

@@ -2,6 +2,7 @@
 #include "LibImage.h"
 #include "Engine/Types/EnumsUtils.h"
 #include "Tools/Utils.h"
+#include "ProjectManager.h"
 #include <cassert>
 
 namespace bv
@@ -97,7 +98,7 @@ VoidConstPtr TextureAssetDesc::QueryThis() const
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFilePath, bool isCacheable )
 {
-	auto props = image::GetImageProps( imageFilePath );
+    auto props = image::GetImageProps( ProjectManager::GetInstance()->ToAbsPath( imageFilePath ).Str() );
 
 	if( !props.error.empty() )
 	{
@@ -111,7 +112,7 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFile
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFilePath, MipMapFilterType mmFilter, bool isCacheable )
 {
-	auto props = image::GetImageProps( imageFilePath );
+    auto props = image::GetImageProps( ProjectManager::GetInstance()->ToAbsPath( imageFilePath ).Str() );
 
 	if( !props.error.empty() )
 	{
@@ -125,7 +126,7 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFile
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFilePath, const StringVector & mipMapsPaths, bool isCacheable )
 {
-	auto props = image::GetImageProps( imageFilePath );
+	auto props = image::GetImageProps( ProjectManager::GetInstance()->ToAbsPath( imageFilePath ).Str() );
 
 	if( !props.error.empty() )
 	{
