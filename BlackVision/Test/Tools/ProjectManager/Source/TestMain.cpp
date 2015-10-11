@@ -89,8 +89,8 @@ TEST( CreatingPM, ProjectManager )
 {
     global_tm->RegisterRootTimeline( model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) ) );
 
-    g_pm0 = ProjectManager::GetInstance( "d:\\bv_media", global_tm );
-	g_pm1 = ProjectManager::GetInstance( "bv_media1", global_tm );
+    g_pm0 = ProjectManager::GetInstance( "d:\\bv_media" );
+	g_pm1 = ProjectManager::GetInstance( "bv_media1" );
 }
 
 TEST( ProjectsListing, ProjectManager )
@@ -192,7 +192,7 @@ TEST( AddingAssets, ProjectManager )
 
 TEST( AddingScene, ProjectManager )
 {
-    g_pm0->AddScene( CreateTestScene0(), "proj00", "scene1/s.scn" );
+    g_pm0->AddScene( CreateTestScene0(), "proj00", "scene1/s.scn", global_tm );
 }
 
 TEST( ExportingProject, ProjectManager )
@@ -202,8 +202,8 @@ TEST( ExportingProject, ProjectManager )
 
 TEST( ImportingProject, ProjectManager )
 {
-    g_pm1->ImportProjectFromFile( "test.exp", "proj00" );
-    g_pm1->ImportProjectFromFile( "test.exp", "proj01" );
+    g_pm1->ImportProjectFromFile( "test.exp", "proj00", global_tm );
+    g_pm1->ImportProjectFromFile( "test.exp", "proj01", global_tm );
 }
 
 TEST( RemovingUnusedAssets, ProjectManager )

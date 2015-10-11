@@ -4,7 +4,7 @@
 #include "Assets/Font/FontAsset.h"
 #include "System/Path.h"
 #include "IO/FileIO.h"
-
+#include "ProjectManager.h"
 
 #include <boost/filesystem/convenience.hpp>
 #include <assert.h>
@@ -19,7 +19,7 @@ AssetConstPtr FontLoader::LoadAsset( const bv::AssetDescConstPtr & desc ) const
 
 	assert( typedDesc );
 
-	auto filePath			= typedDesc->GetFontFileName();
+    auto filePath			= ProjectManager::GetInstance()->ToAbsPath( typedDesc->GetFontFileName() ).Str();
     auto atlasCharSetFile	= typedDesc->GetAtlasCharSetFile();
     auto fontSize			= typedDesc->GetFontSize();
     auto blurSize			= typedDesc->GetBlurSize();

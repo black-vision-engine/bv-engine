@@ -315,6 +315,13 @@ Path            Path::ParentPath        () const
 
 // *********************************
 //
+Path            Path::Absolute          () const
+{
+    return boost::filesystem::absolute( m_path ).string();
+}
+
+// *********************************
+//
 std::ostream & operator << ( std::ostream & os, const Path & p )
 {
     return os << p.Str();

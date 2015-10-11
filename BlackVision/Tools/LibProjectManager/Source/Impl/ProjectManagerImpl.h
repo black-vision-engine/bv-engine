@@ -44,7 +44,7 @@ private:
 	void					RemoveUnusedAssets	( const Path & projectName ) const;
     void				    RemoveUnusedAssets	() const;
 
-	void					AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath );
+	void					AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath, model::TimelineManager * tm );
 	void					CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 	void					RemoveScene			( const Path & projectName, const Path & path );
 	void					MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
@@ -62,11 +62,11 @@ private:
 	
 	// scenes
 	void					ExportSceneToFile	( const Path & projectName, const Path & scenePath, const Path & outputFile ) const;
-	void					ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath );
+	void					ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath, model::TimelineManager * tm );
 
 	// projects
 	void					ExportProjectToFile	( const Path & projectName, const Path &  outputFilePath ) const;
-	void					ImportProjectFromFile( const Path & expFilePath, const Path & projectName );
+	void					ImportProjectFromFile( const Path & expFilePath, const Path & projectName, model::TimelineManager * tm );
 
 	// *********************************
 	// getting scenes and assets descriptors
@@ -93,7 +93,9 @@ private:
 	Path					TranslateToPathCategory( const Path & projectName, const Path & path ) const;
 	Path					TranslateToPathInPMRootFolder( const Path & projectName, const std::string & categoryName, const Path & path ) const;
 
-	explicit ProjectManagerImpl( const Path & rootPath, model::TimelineManager * tm );
+    Path                    ToAbsPath           ( const Path & path ) const;
+
+	explicit ProjectManagerImpl( const Path & rootPath );
 			~ProjectManagerImpl();
 
 

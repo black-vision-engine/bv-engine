@@ -555,7 +555,7 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
     {
 		bv::SceneStructureEventPtr evtStructure = std::static_pointer_cast<bv::SceneStructureEvent>( evt );
 
-        auto pm = ProjectManager::GetInstance( m_AppLogic->GetTimeLineManager() );
+        auto pm = ProjectManager::GetInstance();
 
         if(evtStructure->command==L"REMOVE_NODE")
         {

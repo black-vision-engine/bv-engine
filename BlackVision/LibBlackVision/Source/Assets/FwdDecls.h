@@ -35,5 +35,7 @@ DEFINE_CONST_PTR_TYPE( Asset )
 
 DEFINE_PTR_TYPE( AnimationAssetDesc )
 
+typedef std::vector< AssetDescConstPtr >   AssetDescVec;
+typedef std::vector< AssetConstPtr >       AssetVec;
 
 } // bv

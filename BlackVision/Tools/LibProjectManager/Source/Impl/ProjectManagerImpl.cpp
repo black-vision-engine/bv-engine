@@ -22,13 +22,11 @@ namespace bv
 
 // ********************************
 //
-ProjectManagerImpl::ProjectManagerImpl	( const Path & rootPath, model::TimelineManager * tm )
-	: m_rootPath( rootPath )
+ProjectManagerImpl::ProjectManagerImpl	( const Path & rootPath )
+    : m_rootPath( rootPath.Absolute() )
 	, m_projectsPath( m_rootPath / "projects" )
 	, m_scenesPath( m_rootPath / "scenes" )
     , m_presetsPath( m_rootPath / "presets" )
-    , m_timelineManager( tm )
-
 {
 	if( Path::Exists( rootPath ) )
 	{
@@ -310,11 +308,11 @@ void						ProjectManagerImpl::RemoveUnusedAssets	() const
 
 // ********************************
 //
-void						ProjectManagerImpl::AddScene			( const model::BasicNodeConstPtr & scene, const Path & projectName, const Path & outPath )
+void						ProjectManagerImpl::AddScene			( const model::BasicNodeConstPtr & scene, const Path & projectName, const Path & outPath, model::TimelineManager * tm )
 {
 	auto pathInScenes = TranslateToPathCategory( projectName, outPath );
 
-	m_sceneAccessor->AddScene( scene, pathInScenes );
+	m_sceneAccessor->AddScene( scene, pathInScenes, tm );
 }
 
 // ********************************
@@ -395,9 +393,9 @@ void						ProjectManagerImpl::ExportSceneToFile	( const Path & projectName, cons
 
 // ********************************
 //
-void						ProjectManagerImpl::ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath )
+void						ProjectManagerImpl::ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath, model::TimelineManager * tm )
 {
-	m_sceneAccessor->ImportSceneFromFile( impSceneFilePath, importToProjectName, importToPath );
+	m_sceneAccessor->ImportSceneFromFile( impSceneFilePath, importToProjectName, importToPath, tm );
 }
 
 // ********************************
@@ -469,7 +467,7 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 
 // ********************************
 //
-void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, const Path & projectName )
+void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, const Path & projectName, model::TimelineManager * tm )
 {
     AddNewProject( projectName );
 
@@ -532,7 +530,7 @@ void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, c
             in.ignore();
             Path path = buf.str();
 
-            m_sceneAccessor->ImportScene( in, projectName, path );
+            m_sceneAccessor->ImportScene( in, projectName, path, tm );
         }
     }
 
@@ -594,7 +592,7 @@ void						ProjectManagerImpl::InitializeScenes	()
 		Dir::CreateDir( m_scenesPath.Str() );
 	}
 
-    m_sceneAccessor = SceneAccessor::Create( m_rootPath, m_timelineManager );
+    m_sceneAccessor = SceneAccessor::Create( m_rootPath );
 }
 
 // ********************************
@@ -772,6 +770,28 @@ PathVec                     ProjectManagerImpl::ListPresets         ( const Path
 PathVec                     ProjectManagerImpl::ListPresets         () const
 {
     return m_presetAccessor->ListPresets( "" );
+}
+
+// ********************************
+//
+Path                        ProjectManagerImpl::ToAbsPath           ( const Path & path ) const
+{
+    if( path.Str().find( "file:" ) == 0 )
+    {
+        return path;
+    }
+    else if ( path.Str().find( "seq:" ) == 0 )
+    {
+        return path;
+    }
+    else if ( path.Str().find( "stream:" ) == 0 )
+    {
+        return path;
+    }
+    else
+    {
+        return m_rootPath / path;
+    }
 }
 
 } // bv

@@ -98,6 +98,9 @@
     <ProjectReference Include="..\..\..\..\..\LibBlackVision\Projects\Win\VS11\LibBlackVision.vcxproj">
       <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Tools\LibProjectManager\Projects\Win\VS11\LibProjectManager.vcxproj">
+      <Project>{9fa5a3b8-fa25-4aa0-a3ac-dfca1283d6d2}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Common\GLSLProgram.cpp" />

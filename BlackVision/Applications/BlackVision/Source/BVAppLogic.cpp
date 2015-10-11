@@ -140,7 +140,7 @@ void BVAppLogic::Initialize         ()
 //
 model::BasicNodePtr BVAppLogic::LoadScenes( const PathVec & pathVec )
 {
-    auto pm = ProjectManager::GetInstance( GetTimeLineManager() );
+    auto pm = ProjectManager::GetInstance();
 
     auto root = model::BasicNode::Create( "root", m_globalTimeline );
     root->AddPlugin( "DEFAULT_TRANSFORM", "transform", m_globalTimeline ); 
@@ -166,7 +166,7 @@ void BVAppLogic::LoadScene          ( void )
     
     if( !ConfigManager::GetBool( "Debug/LoadSceneFromEnv" ) )
     {
-        auto pm = ProjectManager::GetInstance( GetTimeLineManager() );
+        auto pm = ProjectManager::GetInstance();
 
         auto projectName = ConfigManager::GetString( "default_project_name" );
         auto projectScenesNames = pm->ListScenesNames( projectName );

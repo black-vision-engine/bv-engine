@@ -2,6 +2,7 @@
 #include "System/Path.h"
 
 #include "Engine/Models/BVScene.h"
+#include "Assets/FwdDecls.h"
 
 namespace bv
 {
@@ -10,7 +11,6 @@ class SceneDescriptor
 {
 private:
 	Path				            m_path;
-	model::TimelineManager *	    m_tm;
 
 public:
 
@@ -22,7 +22,10 @@ public:
     static void			            SaveScene		( const model::BasicNodeConstPtr & scene, model::TimelineManager * tm, std::ostream & out );
     static model::BasicNodeConstPtr	LoadScene		( std::istream & in, SizeType numBytes, model::TimelineManager * tm );
 
-	explicit			SceneDescriptor	( const Path & path, model::TimelineManager * tm );
+    static AssetDescVec             ListSceneAssets ( const Path & inputFilePath );
+    static AssetDescVec             ListSceneAssets ( std::istream & in, SizeType numBytes );
+
+	explicit			            SceneDescriptor	( const Path & path );
 
 };
 
