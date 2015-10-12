@@ -10,6 +10,8 @@ class AssetLoader
 public:
 
 	virtual AssetConstPtr		LoadAsset        ( const AssetDescConstPtr & desc )  const = 0;
+	//virtual AssetDescConstPtr	CreateDesc		 ( const std::string& jsonString ) = 0;
+
 
             AssetLoader			();
     virtual ~AssetLoader		();
@@ -17,5 +19,8 @@ public:
 };
 
 DEFINE_CONST_PTR_TYPE( AssetLoader )
+
+
+
 
 } // bv
