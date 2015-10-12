@@ -94,7 +94,7 @@ public:
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
 private:
-	virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
+	//virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
 
 	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & trans ) const override;
 
