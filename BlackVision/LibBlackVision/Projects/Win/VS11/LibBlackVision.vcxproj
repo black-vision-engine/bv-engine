@@ -102,6 +102,7 @@
     <ClCompile Include="..\..\..\Source\Application\ConsoleApplication.cpp" />
     <ClCompile Include="..\..\..\Source\Application\Win32\WinApplication.cpp" />
     <ClCompile Include="..\..\..\Source\Application\WindowedApplication.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\AssetCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\AssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\AssetDescsWithUIDs.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\AssetLoader.cpp" />
@@ -354,6 +355,7 @@
     <ClCompile Include="..\..\..\Source\Serialization\SerializationObjects.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Assets\AssetCache.h" />
     <ClInclude Include="..\..\..\Source\Assets\AssetDescsWithUIDs.h" />
     <ClInclude Include="..\..\..\Source\Assets\AssetSerialization.h" />
     <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h" />
