@@ -120,6 +120,8 @@ xcopy $(DepDir)\Common\VideoCards\BlueFish\Bin\win32\BlueHancUtils_d.dll $(OutDi
 xcopy $(DepDir)\Common\VideoCards\BlueFish\Bin\win32\BlueGpuDirect_d.dll $(OutDir) /c /y
 
 xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
+
+xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir)
 </Command>
       <Message>Copying assets and dll files to the working directory.</Message>
     </PostBuildEvent>
@@ -150,8 +152,7 @@ xcopy $(DepDir)\Common\VideoCards\BlueFish\Bin\x64\BlueVelvet64_d.dll $(OutDir) 
 xcopy $(DepDir)\Common\VideoCards\BlueFish\Bin\x64\BlueHancUtils64_d.dll $(OutDir) /c /y
 xcopy $(DepDir)\Common\VideoCards\BlueFish\Bin\x64\BlueGpuDirect64_d.dll $(OutDir) /c /y
 
-xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
-</Command>
+xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir)</Command>
       <Message>Copying assets and dll files to the working directory.</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -182,6 +183,8 @@ xcopy $(DepDir)\Common\VideoCards\BlueFish\Bin\win32\BlueHancUtils.dll $(OutDir)
 xcopy $(DepDir)\Common\VideoCards\BlueFish\Bin\win32\BlueGpuDirect.dll $(OutDir) /c /y
 
 xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
+
+xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir)
 </Command>
       <Message>Copying assets and dll files to the working directory.</Message>
     </PostBuildEvent>
@@ -219,6 +222,8 @@ xcopy $(DepDir)\Common\VideoCards\BlueFish\Bin\x64\BlueHancUtils64.dll $(OutDir)
 xcopy $(DepDir)\Common\VideoCards\BlueFish\Bin\x64\BlueGpuDirect64.dll $(OutDir) /c /y
 
 xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
+
+xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir)
 </Command>
       <Message>Copying assets and dll files to the working directory.</Message>
     </PostBuildEvent>
