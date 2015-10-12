@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Mathematics/Transform/MatTransform.h"
-
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
 
@@ -58,8 +56,6 @@ private:
 	UInt32							m_prevFrameId;
 	UInt32							m_currFrameId;
 
-	bool							m_started;
-
 public:
 
     explicit							DefaultVideoStreamDecoderPlugin		( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
@@ -74,6 +70,11 @@ public:
     virtual void                                Update                      ( TimeType t ) override;
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
+
+	void										StartDecoding				();
+	void										PauseDecoding				();
+	void										StopDecoding				();
+
 private:
 
     void                                        InitAttributesChannel       ( IPluginPtr prev );

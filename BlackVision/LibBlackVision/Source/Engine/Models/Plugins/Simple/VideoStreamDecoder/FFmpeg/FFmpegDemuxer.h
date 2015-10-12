@@ -3,29 +3,25 @@
 #include <map>
 #include <deque>
 
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IDemuxer.h"
-
 #include "FFmpegDef.h"
 
 namespace bv
 {
 
-class FFmpegDemuxer : public IDemuxer
+class FFmpegDemuxer
 {
+
 private:
-	typedef std::map< AVMediaType, std::vector< Int32 > >	StreamMap;
 	typedef std::deque< AVPacket * >						PacketQueue;
 	typedef std::map< Int32, PacketQueue >					PacketQueueMap;
 
 private:
 	//FIXME: threadsafety
-
 	AVFormatContext *			m_formatCtx;
 
 	std::string					m_streamPath;
 	bool						m_isOpened;
 
-	StreamMap					m_streams;
 	
 	PacketQueueMap				m_packetQueue;
 
@@ -33,23 +29,24 @@ private:
 	AVPacket *					m_lastPacket;
 
 public:
-									FFmpegDemuxer			( const std::string & streamPath );
-    virtual							~FFmpegDemuxer			();
+								FFmpegDemuxer			( const std::string & streamPath );
+								~FFmpegDemuxer			();
 
-	AVPacket *						GetPacket				( Int32 streamIdx );
+	bool						IsOpened				() const;
+	AVFormatContext *			GetFormatContext		() const;
+	UInt32						GetDuration				() const;
 
-	virtual bool					IsOpened				() const override;
+	AVPacket *					GetPacket				( Int32 streamIdx );
+	void						Seek					( Float32 time );
 
-	virtual bool					HasVideoStream			() const override;
-    virtual Int32					GetVideoStreamIndex		( UInt32 idx = 0 ) const override;
-	
-	virtual void					Seek					( Float32 time ) override;
-
-	AVFormatContext *				GetFormatContext		() const;
+	Int32						GetStreamIndex			( AVMediaType type, UInt32 idx = 0 );
 
 private:
+	void						ClearPacketQueue		();
 
-    Int32							FindStreamIndex			( AVMediaType type, UInt32 idx = 0 ) const;
+    Int32						FindStreamIndex			( AVMediaType type, UInt32 idx = 0 ) const;
 };
+
+DEFINE_UPTR_TYPE( FFmpegDemuxer )
 
 } //bv

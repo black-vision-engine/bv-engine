@@ -45,10 +45,6 @@ FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath )
 	m_isOpened = true;
 
 	av_dump_format( m_formatCtx, 0, streamPath.c_str(), 0 );
-	
-	auto videoIdx = FindStreamIndex( AVMEDIA_TYPE_VIDEO );
-	m_streams[ AVMEDIA_TYPE_VIDEO ].push_back( videoIdx );
-	m_packetQueue[ videoIdx ] = PacketQueue();
 }
 
 // *******************************
@@ -62,18 +58,29 @@ FFmpegDemuxer::~FFmpegDemuxer    ()
 
 	avformat_close_input( &m_formatCtx );
 
-	for( auto it = m_packetQueue.begin(); it != m_packetQueue.end(); ++it )
-	{
-		auto queue = it->second;
+	ClearPacketQueue();
+}
 
-		for( auto qit = queue.begin(); qit != queue.end(); ++qit )
-		{
-			av_free_packet( *qit );
-			delete *qit;
-		}
 
-		queue.clear();
-	}
+// *******************************
+//
+bool				FFmpegDemuxer::IsOpened				() const
+{
+	return m_isOpened;
+}
+
+// *******************************
+//
+AVFormatContext *	FFmpegDemuxer::GetFormatContext		() const
+{
+	return m_formatCtx;
+}
+
+// *******************************
+//
+UInt32				FFmpegDemuxer::GetDuration			() const
+{
+	return ( UInt32 )( m_formatCtx->duration / 1000 );
 }
 
 // *******************************
@@ -106,7 +113,7 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 			currStream = packet->stream_index;
 			if ( currStream != streamIdx )
 			{
-                if ( m_packetQueue.count( packet->stream_index ) <= 0 )
+                if ( m_packetQueue.count( packet->stream_index ) > 0 )
 				{
                     av_dup_packet( packet );
 					m_packetQueue[ packet->stream_index ].push_back( packet );
@@ -132,8 +139,41 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 void				FFmpegDemuxer::Seek					( Float32 time )
 {
 	//FIXME
-	int flags = AVSEEK_FLAG_BACKWARD;
-	av_seek_frame( m_formatCtx, -1, ( long long )( time * AV_TIME_BASE ), flags );
+	av_seek_frame( m_formatCtx, -1, ( long long )( time * AV_TIME_BASE ), AVSEEK_FLAG_BACKWARD );
+	ClearPacketQueue();
+}
+
+// *******************************
+//
+Int32				FFmpegDemuxer::GetStreamIndex	( AVMediaType type, UInt32 idx )
+{
+	auto streamIdx = FindStreamIndex( type, idx );
+	assert( streamIdx >= 0 );
+	
+	if( m_packetQueue.count( streamIdx ) == 0 )
+	{
+		m_packetQueue[ streamIdx ] = PacketQueue();
+	}
+
+	return streamIdx;
+}
+
+// *******************************
+//
+void				FFmpegDemuxer::ClearPacketQueue		()
+{
+	for( auto it = m_packetQueue.begin(); it != m_packetQueue.end(); ++it )
+	{
+		auto queue = it->second;
+
+		for( auto qit = queue.begin(); qit != queue.end(); ++qit )
+		{
+			av_free_packet( *qit );
+			delete *qit;
+		}
+
+		queue.clear();
+	}
 }
 
 // *******************************
@@ -155,37 +195,6 @@ Int32				FFmpegDemuxer::FindStreamIndex		( AVMediaType type, UInt32 idx ) const
 		}
 	}
 	return last;
-}
-
-
-// *******************************
-//
-bool				FFmpegDemuxer::IsOpened				() const
-{
-	return m_isOpened;
-}
-
-// *******************************
-//
-bool				FFmpegDemuxer::HasVideoStream		() const
-{
-	return ( m_streams.count( AVMEDIA_TYPE_VIDEO ) > 0 );
-}
-
-// *******************************
-//
-Int32				FFmpegDemuxer::GetVideoStreamIndex	( UInt32 idx ) const
-{
-	assert( m_streams.count( AVMEDIA_TYPE_VIDEO ) > 0 );
-	assert( m_streams.at( AVMEDIA_TYPE_VIDEO ).size() >= idx );
-	return m_streams.at( AVMEDIA_TYPE_VIDEO ).at( idx );
-}
-
-// *******************************
-//
-AVFormatContext *	FFmpegDemuxer::GetFormatContext		() const
-{
-	return m_formatCtx;
 }
 
 } //bv

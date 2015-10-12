@@ -1838,12 +1838,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDef.h">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces\IVideoStreamDecoder.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces\IDemuxer.h">
-      <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoStreamDecoder.h">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClInclude>

@@ -620,8 +620,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoStreamDecoder.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDemuxer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces\IVideoDecoder.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces\IVideoStreamDecoder.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces\IDemuxer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\VideoDecoderThread.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\SceneModel.h" />

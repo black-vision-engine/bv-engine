@@ -135,7 +135,6 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
 	, m_decoder( nullptr )
 	, m_prevFrameId( 0 )
 	, m_currFrameId( 0 )
-	, m_started( false )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr );
 	m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
@@ -221,12 +220,6 @@ IVertexShaderChannelConstPtr        DefaultVideoStreamDecoderPlugin::GetVertexSh
 void                                DefaultVideoStreamDecoderPlugin::Update                      ( TimeType t )
 {
     { t; } // FIXME: suppress unused variable
-
-	if( !m_started )
-	{
-		m_decoder->StartDecoding();
-		m_started = true;
-	}
 
     m_paramValModel->Update();
 
@@ -326,10 +319,10 @@ void									DefaultVideoStreamDecoderPlugin::InitAttributesChannel		( IPluginPt
         {
             const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() );
 
-            minX = std::min( minX, pos[ j ].x );
-            minY = std::min( minY, pos[ j ].y );
-            maxX = std::max( maxX, pos[ j ].x );
-            maxY = std::max( maxY, pos[ j ].y );
+            minX = min( minX, pos[ j ].x );
+            minY = min( minY, pos[ j ].y );
+            maxX = max( maxX, pos[ j ].x );
+            maxY = max( maxY, pos[ j ].y );
         }
 
         auto verTexAttrChannel = new model::Float2AttributeChannel( desc, DefaultVideoStreamDecoderPluginDesc::TextureName(), true );
@@ -344,6 +337,29 @@ void									DefaultVideoStreamDecoderPlugin::InitAttributesChannel		( IPluginPt
 
         m_vaChannel->AddConnectedComponent( connComp );
     }
+}
+
+// *************************************
+//
+void								DefaultVideoStreamDecoderPlugin::StartDecoding		()
+{
+	m_decoder->Start();
+}
+
+// *************************************
+//
+void								DefaultVideoStreamDecoderPlugin::PauseDecoding		()
+{
+	m_decoder->Pause();
+}
+
+// *************************************
+//
+void								DefaultVideoStreamDecoderPlugin::StopDecoding		()
+{
+	m_decoder->Stop();
+	m_currFrameId = 0;
+	m_prevFrameId = 0;
 }
 
 namespace {

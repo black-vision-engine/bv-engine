@@ -41,8 +41,8 @@ FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder     ( AVFormatContext * forma
 
 	m_width = ( UInt32 )m_codecCtx->width;
 	m_height = ( UInt32 )m_codecCtx->height;
-	m_frameRate = 25; //FIXME
-
+	m_frameRate = ( UInt32 )av_q2d( m_codecCtx->framerate );
+	
 	/*m_frame = av_frame_alloc();
 
 	m_outFrame = new AVPicture();
@@ -134,6 +134,13 @@ Int32					FFmpegVideoStreamDecoder::GetStreamIdx	() const
 UInt32					FFmpegVideoStreamDecoder::GetCurrentFrameId	() const
 {
 	return m_currFrame;
+}
+
+// *******************************
+//
+void					FFmpegVideoStreamDecoder::Reset			()
+{
+	m_currFrame = 0;
 }
 
 } //bv

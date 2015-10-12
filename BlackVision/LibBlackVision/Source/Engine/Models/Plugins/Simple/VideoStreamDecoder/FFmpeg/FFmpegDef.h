@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CoreDEF.h"
+
 extern "C"
 {
 	//#ifndef __STDC_CONSTANT_MACROS

@@ -13,26 +13,29 @@
 namespace bv
 {
 
-class FFmpegVideoDecoder : public IVideoDecoder
+class FFmpegVideoDecoder : public IVideoDecoder, public std::enable_shared_from_this< IVideoDecoder >
 {
 private:
-	FFmpegDemuxer *				m_demuxer;
-	FFmpegVideoStreamDecoder *	m_vstreamDecoder;
+	FFmpegDemuxerUPtr				m_demuxer;
 
-	AVFrame *					m_frame;
-	AVFrame *					m_outFrame;
+	FFmpegVideoStreamDecoderUPtr	m_vstreamDecoder;
+	//audio stream decoder
 
-	VideoDecoderThreadUPtr		m_decoderThread;
+	AVFrame *						m_frame;
+	AVFrame *						m_outFrame;
 
-	MemoryChunkPtr				m_frameData;
+	VideoDecoderThreadUPtr			m_decoderThread;
 
-	mutable std::mutex			m_dataMutex;
+	MemoryChunkPtr					m_frameData;
+	mutable std::mutex				m_dataMutex;
 
 public:
 								FFmpegVideoDecoder		( VideoStreamAssetDescConstPtr desc );
 								~FFmpegVideoDecoder		();
 
-	virtual void				StartDecoding			() override;
+	virtual void				Start					() override;
+	virtual void				Pause					() override;
+	virtual void				Stop					() override;
 
 	virtual MemoryChunkConstPtr	GetCurrentFrameData		( UInt32 & outFrameId ) const override;
 	virtual bool				GetNextFrameData		() override;
@@ -40,6 +43,7 @@ public:
 	virtual UInt32				GetWidth				() const override;
 	virtual UInt32				GetHeight				() const override;
 	virtual UInt32				GetFrameRate			() const override;
+	virtual UInt32				GetDuration				() const override;
 
 };
 
