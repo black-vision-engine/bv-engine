@@ -47,6 +47,20 @@ bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, 
 
 // *******************************
 //
+bool    LoadVideoStream ( IPluginPtr plugin, const std::string & streamPath )
+{
+	auto desc = VideoStreamAssetDesc::Create( streamPath );
+
+    if( desc == nullptr )
+    {
+        return false;
+    }
+
+    return plugin->LoadResource( desc );
+}
+
+// *******************************
+//
 bool    LoadFont        ( IPluginPtr plugin, const std::string & fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps )
 {
 	auto desc = FontAssetDesc::Create( fontFile, fontSize, blurSize, outlineSize, generateMipmaps );

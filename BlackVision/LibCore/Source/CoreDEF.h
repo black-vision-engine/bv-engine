@@ -17,6 +17,8 @@
 #define DEFINE_PTR_TYPE(Type) typedef std::shared_ptr< Type > Type##Ptr;
 #define DEFINE_CONST_PTR_TYPE(Type) typedef std::shared_ptr< const Type > Type##ConstPtr;
 
+#define DEFINE_UPTR_TYPE(Type) typedef std::unique_ptr< Type > Type##UPtr;
+
 #define COMBINE1(X,Y) X##Y  // helper macro
 #define COMBINE(X,Y) COMBINE1(X,Y)
 
