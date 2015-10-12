@@ -1,6 +1,7 @@
 #include "TextureLoader.h"
 #include "LibImage.h"
 #include "TextureUtils.h"
+#include "Tools/IncludeJSON.h"
 
 #include <cassert>
 
@@ -39,5 +40,13 @@ AssetConstPtr TextureLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 		}
 	}
 }
+
+// ******************************
+//
+AssetDescConstPtr TextureLoader::CreateDescriptor( JsonDeserializeObject& deserializeObject ) const
+{
+	return std::static_pointer_cast<const AssetDesc>( TextureAssetDesc::Create( deserializeObject ) );
+}
+
 
 } // bv

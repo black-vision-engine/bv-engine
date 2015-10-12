@@ -12,6 +12,7 @@ namespace bv
 class AssetManager
 {
 public:
+	AssetDescConstPtr				CreateDesc		( const std::string& jsonString );
 	AssetConstPtr					LoadAsset		( const AssetDescConstPtr & desc ) const;
 	bool							RegisterLoader	( const std::string & assetDescUID, const AssetLoaderConstPtr & loader );
 	bool							UnregisterLoader( const std::string & assetDescUID );

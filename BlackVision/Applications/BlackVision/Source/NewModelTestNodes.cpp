@@ -34,6 +34,8 @@
 
 #include "BVConfig.h"
 
+#include <fstream>
+
 namespace {
 
     std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR", "DEFAULT_GRADIENT" };
@@ -2041,6 +2043,21 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 
 	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
 	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+
+
+	//auto texDesc = TextureAssetDesc::Create( "sand.jpg", MipMapFilterType::BILINEAR, true );
+	//JsonSerializeObject serializeObject;
+	//texDesc->Serialize( serializeObject );
+	//serializeObject.Save( "textureSerialize.txt" );
+
+	//fstream file;
+	//file.open( "textureSerialize.txt", std::ios_base::in );
+	//JsonDeserializeObject deserializeObject( file );
+	//file.close();
+	//auto texDesc = TextureAssetDesc::Create( deserializeObject );
+
+ //   root->GetPlugin( "texture" )->LoadResource( std::static_pointer_cast<const AssetDesc>( texDesc ) );
+
 
 	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg" );	//, MipMapFilterType::BOX
 	//success = model::LoadTexture( root->GetPlugin( "texture" ), "Skybox.jpg", MipMapFilterType::BILINEAR );

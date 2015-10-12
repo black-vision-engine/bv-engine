@@ -163,6 +163,9 @@
     <Filter Include="Serialization">
       <UniqueIdentifier>{68a74c00-da93-4352-a146-be6b6ea74fd8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Serialization\Json">
+      <UniqueIdentifier>{e844025f-aef2-44c2-bbb0-ee813866268e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -899,6 +902,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Serialization\DeserializeObjectImpl.cpp">
       <Filter>Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\Json\JsonSerializationObjects.cpp">
+      <Filter>Serialization\Json</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1820,6 +1826,9 @@
     <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h">
       <Filter>Serialization</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\Json\JsonSerializationObjects.h">
+      <Filter>Serialization\Json</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
@@ -1884,6 +1893,12 @@
     </None>
     <None Include="..\..\..\Source\Serialization\SerializationObjects.inl">
       <Filter>Serialization</Filter>
+    </None>
+    <None Include="..\..\..\Source\Serialization\Json\JsonDeserializeObjectImpl.inl">
+      <Filter>Serialization\Json</Filter>
+    </None>
+    <None Include="..\..\..\Source\Serialization\Json\JsonSerializeObjectImpl.inl">
+      <Filter>Serialization\Json</Filter>
     </None>
   </ItemGroup>
 </Project>

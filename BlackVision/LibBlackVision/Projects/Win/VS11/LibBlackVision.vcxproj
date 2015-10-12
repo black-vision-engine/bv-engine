@@ -342,6 +342,7 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\DeserializeObject.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\DeserializeObjectImpl.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\Json\JsonSerializationObjects.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\SerializationObjects.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -649,6 +650,7 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Transform\MatTransform.h" />
     <ClInclude Include="..\..\..\Source\Serialization\DeserializeObjectImpl.h" />
     <ClInclude Include="..\..\..\Source\Serialization\ISerializable.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\Json\JsonSerializationObjects.h" />
     <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h" />
     <ClInclude Include="..\..\..\Source\Serialization\SerializationObjects.h" />
   </ItemGroup>
@@ -673,6 +675,8 @@
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.inl" />
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.inl" />
     <None Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.inl" />
+    <None Include="..\..\..\Source\Serialization\Json\JsonDeserializeObjectImpl.inl" />
+    <None Include="..\..\..\Source\Serialization\Json\JsonSerializeObjectImpl.inl" />
     <None Include="..\..\..\Source\Serialization\SerializationObjects.inl" />
   </ItemGroup>
   <ItemGroup>

@@ -1,10 +1,34 @@
 #include "AssetManager.h"
 #include "Assets.h"
+#include "Serialization/Json/JsonSerializationObjects.h"
 
 #include <memory>
 
+#include <cassert>	//Delete after implementing function CreateDesc
+
 namespace bv
 {
+
+// ***********************
+//
+AssetDescConstPtr AssetManager::CreateDesc( const std::string& jsonString )
+{
+	JsonDeserializeObject deserializeObject( jsonString );
+	bool success = deserializeObject.Push( "asset" );
+	if( !success )
+		return nullptr;
+
+	assert( !"Implement!!!!!" );
+	std::string assetUID;		// = deserializeObject.GetValue( "uid" );
+
+	auto it = m_loaders.find( assetUID );
+
+	if( it != m_loaders.end() )
+		return it->second->CreateDescriptor( deserializeObject );
+
+	return nullptr;
+}
+
 
 // ***********************
 //
