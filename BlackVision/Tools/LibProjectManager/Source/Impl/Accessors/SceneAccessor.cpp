@@ -131,46 +131,23 @@ void			SceneAccessor::ImportScene( std::istream & in, const Path & importToProje
 
 // ********************************
 //
-void			SceneAccessor::ExportScene( std::ostream & out, const Path & projectName, const Path & path, bool withAssets ) const
+void			SceneAccessor::ExportScene( std::ostream & out, const Path & projectName, const Path & path ) const
 {
-	if( !withAssets )
-	{
-        out << "serialized_scene_begin" << '\n';
+    out << "serialized_scene_begin" << '\n';
 
-        out << m_rootDirPM << '\n';
+    out << m_rootDirPM << '\n';
 
-  //      m_rootDir/ projectName / path
+    auto sceneFileName = ( m_rootDir/ projectName / path ).Str();
 
-		//auto scene = SceneDescriptor::LoadScene( m_rootDir/ projectName / path, m_tm );
+    out << projectName << '\n';
 
-		//auto sob = new SerializeObject();
+    out << std::to_string( File::Size( sceneFileName ) ) << '\n';    
 
-		//sob->SetName( "scene" );
-		//scene->Serialize( *sob );
-		//sob->Pop();
+    File::Read( out, sceneFileName );
 
-  //      std::stringstream serScene;
+    out << '\n';
 
-		//sob->Save( serScene );
-
-  //      auto serSceneString = serScene.str();
-
-        auto sceneFileName = ( m_rootDir/ projectName / path ).Str();
-
-        out << projectName << '\n';
-
-        out << std::to_string( File::Size( sceneFileName ) ) << '\n';    
-
-        File::Read( out, sceneFileName );
-
-        out << '\n';
-
-        out << "serialized_scene_end" << '\n';
-	}
-	else
-	{
-		assert( !"Not implemented." );  // TODO: Implement.
-	}
+    out << "serialized_scene_end" << '\n';
 }
 
 // ********************************
@@ -185,11 +162,11 @@ void			SceneAccessor::ImportSceneFromFile( const Path & expFilePath, const Path 
 
 // ********************************
 //
-void			SceneAccessor::ExportSceneToFile( const Path & projectName, const Path & outputFileName, const Path & path, bool withAssets ) const
+void			SceneAccessor::ExportSceneToFile( const Path & projectName, const Path & outputFileName, const Path & path ) const
 {
 	auto f = File::Open( outputFileName.Str(), File::OpenMode::FOMReadOnly );
 	auto out = f.StreamBuf();
-	ExportScene( *out, projectName, path, withAssets );
+	ExportScene( *out, projectName, path );
 	f.Close();
 }
 

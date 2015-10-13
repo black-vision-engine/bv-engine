@@ -388,13 +388,77 @@ void						ProjectManagerImpl::ImportAssetFromFile	( const Path & importToProject
 //
 void						ProjectManagerImpl::ExportSceneToFile	( const Path & projectName, const Path & scenePath, const Path & outputFile ) const
 {
-	m_sceneAccessor->ExportSceneToFile( scenePath, projectName, outputFile, true );
+    auto f = File::Open( outputFile.Str(), File::OpenMode::FOMReadOnly );
+	auto & out = *f.StreamBuf();
+
+    out << "assets" << '\n';
+
+    auto uniqueAssets = m_sceneAccessor->ListAllUsedAssets( projectName / scenePath );
+
+    out << std::to_string( uniqueAssets.size() ) << '\n';
+
+    for( auto ua : uniqueAssets)
+    {
+        auto loc = Path2Location( ua );
+
+        if( loc.categoryName == "scenes" ) 
+	        assert( false );
+
+        out << loc.categoryName << '\n';
+
+        out << loc.path << '\n';
+
+        m_categories.at( loc.categoryName )->ExportAsset( out, loc.projectName / loc.path );
+    }
+
+    out << '\n';
+
+    m_sceneAccessor->ExportScene( out, projectName, scenePath );
+  	f.Close();
 }
 
 // ********************************
 //
 void						ProjectManagerImpl::ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath, model::TimelineManager * tm )
 {
+    auto f = File::Open( impSceneFilePath.Str() );
+
+    std::stringbuf buf;
+
+    auto & in = *f.StreamBuf();
+
+    in.get( buf, '\n');
+    in.ignore();
+
+    if( buf.str() == "assets" )
+    {
+        std::stringbuf buf;
+        in.get( buf, '\n');
+        in.ignore();
+
+        auto size = stoul( buf.str() );
+
+        for( SizeType i = 0; i < size; ++i )
+        {
+            std::stringbuf buf;
+            in.get( buf, '\n');
+            in.ignore();
+
+            auto categoryName = buf.str();
+            buf.str("");
+
+            in.get( buf, '\n');
+            in.ignore();
+            auto path = Path( buf.str() );
+
+            m_categories.at( categoryName )->ImportAsset( in, importToProjectName / importToPath );
+        }
+    }
+    else
+    {
+        in.seekg( 0 );
+    }
+
 	m_sceneAccessor->ImportSceneFromFile( impSceneFilePath, importToProjectName, importToPath, tm );
 }
 
@@ -454,7 +518,7 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 
             out << loc.path << '\n';
 
-			m_sceneAccessor->ExportScene( out, loc.projectName, loc.path, false );
+			m_sceneAccessor->ExportScene( out, loc.projectName, loc.path );
 		}
 
         assetsFile.Close();
