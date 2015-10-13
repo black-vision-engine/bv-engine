@@ -6,7 +6,6 @@
 
 #include "Engine/Models/Interfaces/IModelNode.h"
 #include "Engine/Models/Interfaces/INodeLogic.h"
-
 #include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
 
 #include "Engine/Interfaces/ISerializable.h"
