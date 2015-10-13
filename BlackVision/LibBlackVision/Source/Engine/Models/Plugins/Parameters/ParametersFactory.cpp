@@ -125,6 +125,19 @@ ParamTransformVecPtr                 ParametersFactory::CreateParameterTransform
 
 // *******************************
 //
+ParamStringPtr                      ParametersFactory::CreateParameterString               ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return std::make_shared< ParamString >( name, StringInterpolator(), timeline );
+}
+
+ParamWStringPtr                     ParametersFactory::CreateParameterWString              ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return std::make_shared< ParamWString >( name, WStringInterpolator(), timeline );
+}
+
+
+// *******************************
+//
 
 template<>
 static ParamIntPtr          ParametersFactory::CreateTypedSimpleParameter< ParamInt > (const std::string& name, ITimeEvaluatorPtr te )
@@ -144,7 +157,17 @@ static ParamBoolPtr          ParametersFactory::CreateTypedSimpleParameter< Para
     return CreateParameterBool( name, te );
 }
 
+template<>
+static ParamStringPtr        ParametersFactory::CreateTypedSimpleParameter< ParamString > (const std::string& name, ITimeEvaluatorPtr te )
+{
+    return CreateParameterString( name, te );
+}
 
+template<>
+static ParamWStringPtr       ParametersFactory::CreateTypedSimpleParameter< ParamWString > (const std::string& name, ITimeEvaluatorPtr te )
+{
+    return CreateParameterWString( name, te );
+}
 
 } // model
 } // bv

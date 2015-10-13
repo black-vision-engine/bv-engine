@@ -165,6 +165,20 @@ void CopyParameter( IParameterPtr out, IParameterPtr in ) // FIXME: don't forget
     {
         // FIXME so much :)
     }
+    else if( out->GetType() == ModelParamType::MPT_STRING )
+    {
+        auto inT = QueryTypedParam< ParamStringPtr >( in );
+        auto outT = QueryTypedParam< ParamStringPtr >( out );
+
+        outT->AccessInterpolator() = inT->AccessInterpolator();
+    }
+    else if( out->GetType() == ModelParamType::MPT_WSTRING )
+    {
+        auto inT = QueryTypedParam< ParamWStringPtr >( in );
+        auto outT = QueryTypedParam< ParamWStringPtr >( out );
+
+        outT->AccessInterpolator() = inT->AccessInterpolator();
+    }
     else
     {
         assert( false );

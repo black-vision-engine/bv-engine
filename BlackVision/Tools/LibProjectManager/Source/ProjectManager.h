@@ -54,7 +54,7 @@ public:
     void					RemoveUnusedAssets	( const Path & projectName );
 	void					RemoveUnusedAssets	();
 
-	void					AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath );
+	void					AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath, model::TimelineManager * tm );
 	void					CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 	void					RemoveScene			( const Path & projectName, const Path & path );
 	void					MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
@@ -72,11 +72,11 @@ public:
 	
 	// scenes
 	void					ExportSceneToFile	( const Path & projectName, const Path & scenePath, const Path & outputFile ) const;
-	void					ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath );
+	void					ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath, model::TimelineManager * tm );
 
 	// projects
 	void					ExportProjectToFile	( const Path & projectName, const Path &  outputFilePath ) const;
-	void					ImportProjectFromFile( const Path & expFilePath, const Path & projectName );
+	void					ImportProjectFromFile( const Path & expFilePath, const Path & projectName, model::TimelineManager * tm );
 
 	// *********************************
 	// getting scenes and assets descriptors
@@ -95,13 +95,15 @@ public:
     PathVec                 ListPresets         ( const Path & projectName ) const;
     PathVec                 ListPresets         () const;
 
-	static ProjectManager *	GetInstance			( const Path & rootPath, model::TimelineManager * tm );
-    static ProjectManager *	GetInstance			( model::TimelineManager * tm );
+    Path                    ToAbsPath           ( const Path & path ) const;
+
+	static ProjectManager *	GetInstance			( const Path & rootPath );
+    static ProjectManager *	GetInstance			(  );
 
 private:
 	ProjectManagerImpl * m_impl;
 
-	ProjectManager	( const Path & rootPath, model::TimelineManager * tm );
+	ProjectManager	( const Path & rootPath );
 	~ProjectManager	();
 };
 

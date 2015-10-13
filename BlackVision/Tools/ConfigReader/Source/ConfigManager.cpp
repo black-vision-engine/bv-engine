@@ -127,12 +127,14 @@ wstring ExePath()
         KeyValue value = GetValue(key);
         return value.value;
     }
+
     int ConfigManager::GetInt(std::string key)
     {
         KeyValue value = GetValue(key);
         if(value.value=="")return 0;
         return atoi(value.value.c_str());
     }
+
     float ConfigManager::GetFloat(std::string key)
     {
         KeyValue value = GetValue(key);

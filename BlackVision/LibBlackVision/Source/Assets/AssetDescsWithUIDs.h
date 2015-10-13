@@ -66,6 +66,8 @@ public:
 
     void                                                    AddAssetDesc( AssetDescConstPtr asset );
 
+    AssetDescVec                                            GetAssetsDescs() const;
+
     std::string                                             Key2UID( std::string key ) { return m_key2uid[ key ]; }
     AssetDescConstPtr                                       UID2Asset( std::string uid ) { return m_uid2asset[ uid ]; }
 };

@@ -1,8 +1,5 @@
 #include "AnimationAssetDescriptor.h"
 
-#include "IO/DirIO.h"
-
-
 namespace bv {
 
 const std::string AnimationAssetDesc::uid = "ANIMATION_ASSET_DESC";
@@ -30,17 +27,7 @@ ISerializableConstPtr     AnimationAssetDesc::Create          ( DeserializeObjec
 AnimationAssetDesc::AnimationAssetDesc							( const std::string & path, const std::string & filter )
     : m_path( path )
     , m_filter( filter )
-{
-    auto files = Dir::ListFiles( m_path, m_filter );
-
-    if ( files.size() > 0 )
-    {
-	    for( auto f : files )
-	    {
-		    m_frames.push_back( TextureAssetDesc::Create( f, true ) );
-        }
-    }
-}
+{}
 
 //// *******************************
 ////
@@ -59,10 +46,10 @@ AnimationAssetDesc::~AnimationAssetDesc							()
 
 // *******************************
 //
-const std::vector< TextureAssetDescConstPtr > & AnimationAssetDesc::GetFrames		() const
-{
-    return m_frames;
-}
+//const std::vector< TextureAssetDescConstPtr > & AnimationAssetDesc::GetFrames		() const
+//{
+//    return m_frames;
+//}
 
 //// *******************************
 ////
@@ -112,6 +99,20 @@ bool AnimationAssetDesc::IsCacheable() const
 const std::string &	AnimationAssetDesc::UID()
 {
 	return AnimationAssetDesc::uid;
+}
+
+// *******************************
+//
+std::string         AnimationAssetDesc::GetPath		() const
+{
+    return m_path;
+}
+
+// *******************************
+//
+std::string         AnimationAssetDesc::GetFilter   () const
+{
+    return m_filter;
 }
 
 } //bv

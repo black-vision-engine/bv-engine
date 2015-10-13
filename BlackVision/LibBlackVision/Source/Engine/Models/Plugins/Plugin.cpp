@@ -142,8 +142,8 @@ ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
     {
         if( plugin->GetParameter( param->GetName() ) == nullptr )
         {
-            std::cout << "[ERROR] Parameter " << param->GetName() << " is not a parameter of " << pluginType << std::endl; // FIXME: error handling :D
-            assert( false );
+            //std::cout << "[ERROR] Parameter " << param->GetName() << " is not a parameter of " << pluginType << std::endl; // FIXME: error handling :D
+            //assert( false );  // TODO: text plugin has parameters registered in runtime. This rule doesn't apply here.
             continue;
         }
 

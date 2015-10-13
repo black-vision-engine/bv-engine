@@ -65,9 +65,19 @@ void				AnimationAssetAccessor::AddAsset( const Path & internalPath, const Asset
 	{
 		auto typedDesc = QueryTypedDesc< AnimationAssetDescConstPtr >( assetDesc );
 
-        auto frames = typedDesc->GetFrames();
+        auto files = Dir::ListFiles( typedDesc->GetPath(), typedDesc->GetFilter() );
 
-        for( auto f : frames )
+        TextureAssetDescVec framesDesc;
+
+        if ( files.size() > 0 )
+        {
+	        for( auto f : files )
+	        {
+                framesDesc.push_back( TextureAssetDesc::Create( f, true ) );
+            }
+        }
+
+        for( auto f : framesDesc )
         {
             auto path = f->GetOrigTextureDesc()->GetImagePath();
             Path::Copy( path, m_rootPath / internalPath );

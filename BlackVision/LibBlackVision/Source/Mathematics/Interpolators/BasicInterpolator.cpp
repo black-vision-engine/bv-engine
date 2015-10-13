@@ -18,6 +18,8 @@ namespace std
     string to_string( const glm::vec2 & v ) { return to_string( v[0] ) + ", " + to_string( v[1] ); }
     string to_string( const glm::vec3 & v ) { return to_string( v[0] ) + ", " + to_string( v[1] ) + ", " + to_string( v[2] ); }
     string to_string( const glm::vec4 & v ) { return to_string( v[0] ) + ", " + to_string( v[1] ) + ", " + to_string( v[2] ) + ", " + to_string( v[3] ); }
+    string to_string( const std::string & val ) { return val; }
+    string to_string( const std::wstring & val ) { return std::string( val.begin(), val.end() ); }
 }
 // FIXME
 #include <sstream>
@@ -78,6 +80,24 @@ bool EvaluateLinear< bv::TimeType, bool, float > ( const Key<bv::TimeType, bool>
 
 // *************************************
 //
+//template<class TimeValueT, class ValueT, class FloatT >
+template<>
+std::string EvaluateLinear< bv::TimeType, std::string, float > ( const Key< bv::TimeType, std::string > & k0, const Key< bv::TimeType, std::string > & , bv::TimeType  )
+{
+    return k0.val;
+}
+
+// *************************************
+//
+//template<class TimeValueT, class ValueT, class FloatT >
+template<>
+std::wstring EvaluateLinear< bv::TimeType, std::wstring, float > ( const Key< bv::TimeType, std::wstring > & k0, const Key< bv::TimeType, std::wstring > & , bv::TimeType  )
+{
+    return k0.val;
+}
+
+// *************************************
+//
 template<class TimeValueT, class ValueT, class FloatT>
 ValueT EvaluateCosine( const Key<TimeValueT, ValueT> & k0, const Key<TimeValueT, ValueT> & k1, TimeValueT t )
 {
@@ -109,6 +129,24 @@ bool EvaluateCosine< bv::TimeType, bool, float > ( const Key<bv::TimeType, bool>
 {
     int intVal = EvaluateCosine< bv::TimeType, int, float > ( Key< bv::TimeType, int >( k0.t, int( k0.val ) ), Key< bv::TimeType, int >( k1.t, int( k1.val ) ), t );
     return Int2Bool( intVal );
+}
+
+// *************************************
+//
+//template<class TimeValueT, class ValueT, class FloatT >
+template<>
+std::string EvaluateCosine< bv::TimeType, std::string, float > ( const Key<bv::TimeType, std::string> & k0, const Key<bv::TimeType, std::string> &, bv::TimeType )
+{
+    return k0.val;
+}
+
+// *************************************
+//
+//template<class TimeValueT, class ValueT, class FloatT >
+template<>
+std::wstring EvaluateCosine< bv::TimeType, std::wstring, float > ( const Key<bv::TimeType, std::wstring> & k0, const Key<bv::TimeType, std::wstring> &, bv::TimeType )
+{
+    return k0.val;
 }
 
 // *************************************
@@ -605,5 +643,7 @@ template bv::BasicInterpolator<bv::TimeType, double>;
 template bv::BasicInterpolator<bv::TimeType, glm::vec2>;
 template bv::BasicInterpolator<bv::TimeType, glm::vec3>;
 template bv::BasicInterpolator<bv::TimeType, glm::vec4>;
+template bv::BasicInterpolator<bv::TimeType, std::string>;
+template bv::BasicInterpolator<bv::TimeType, std::wstring>;
 
 #undef INSTANTIATE

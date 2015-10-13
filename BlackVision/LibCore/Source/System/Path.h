@@ -30,6 +30,8 @@ public:
     bool				operator !=		( const Path & b ) const;
 
 	StringVector        Split			() const;
+    Path                ParentPath      () const;
+    Path                Absolute        () const;
 
 	static bool			Copy			( const Path & from, const Path & to );
 	static bool			Remove			( const Path & path );

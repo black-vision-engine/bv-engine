@@ -308,6 +308,20 @@ StringVector    Path::Split				() const
 
 // *********************************
 //
+Path            Path::ParentPath        () const
+{
+    return boost::filesystem::path( m_path ).parent_path().string();
+}
+
+// *********************************
+//
+Path            Path::Absolute          () const
+{
+    return boost::filesystem::absolute( m_path ).string();
+}
+
+// *********************************
+//
 std::ostream & operator << ( std::ostream & os, const Path & p )
 {
     return os << p.Str();

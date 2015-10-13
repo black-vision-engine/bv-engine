@@ -22,13 +22,11 @@ namespace bv
 
 // ********************************
 //
-ProjectManagerImpl::ProjectManagerImpl	( const Path & rootPath, model::TimelineManager * tm )
-	: m_rootPath( rootPath )
+ProjectManagerImpl::ProjectManagerImpl	( const Path & rootPath )
+    : m_rootPath( rootPath.Absolute() )
 	, m_projectsPath( m_rootPath / "projects" )
 	, m_scenesPath( m_rootPath / "scenes" )
     , m_presetsPath( m_rootPath / "presets" )
-    , m_timelineManager( tm )
-
 {
 	if( Path::Exists( rootPath ) )
 	{
@@ -310,11 +308,11 @@ void						ProjectManagerImpl::RemoveUnusedAssets	() const
 
 // ********************************
 //
-void						ProjectManagerImpl::AddScene			( const model::BasicNodeConstPtr & scene, const Path & projectName, const Path & outPath )
+void						ProjectManagerImpl::AddScene			( const model::BasicNodeConstPtr & scene, const Path & projectName, const Path & outPath, model::TimelineManager * tm )
 {
 	auto pathInScenes = TranslateToPathCategory( projectName, outPath );
 
-	m_sceneAccessor->AddScene( scene, pathInScenes );
+	m_sceneAccessor->AddScene( scene, pathInScenes, tm );
 }
 
 // ********************************
@@ -395,9 +393,9 @@ void						ProjectManagerImpl::ExportSceneToFile	( const Path & projectName, cons
 
 // ********************************
 //
-void						ProjectManagerImpl::ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath )
+void						ProjectManagerImpl::ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath, model::TimelineManager * tm )
 {
-	m_sceneAccessor->ImportSceneFromFile( impSceneFilePath, importToProjectName, importToPath );
+	m_sceneAccessor->ImportSceneFromFile( impSceneFilePath, importToProjectName, importToPath, tm );
 }
 
 // ********************************
@@ -469,7 +467,7 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 
 // ********************************
 //
-void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, const Path & projectName )
+void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, const Path & projectName, model::TimelineManager * tm )
 {
     AddNewProject( projectName );
 
@@ -532,7 +530,7 @@ void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, c
             in.ignore();
             Path path = buf.str();
 
-            m_sceneAccessor->ImportScene( in, projectName, path );
+            m_sceneAccessor->ImportScene( in, projectName, path, tm );
         }
     }
 
@@ -559,6 +557,7 @@ AssetDescConstPtr			ProjectManagerImpl::GetAssetDesc		( const Path & projectName
 //
 SceneDescriptor				ProjectManagerImpl::GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const
 {
+
 	auto pathInCategory = TranslateToPathCategory( projectName, pathInProject );
 	return m_sceneAccessor->GetSceneDesc( pathInCategory );
 }
@@ -574,7 +573,8 @@ void						ProjectManagerImpl::InitializeProjects	()
 		for( auto p : l )
 		{
 			auto n = Path::RelativePath( p, m_projectsPath );
-            AddNewProject( n.Str().substr( 0, n.Str().size() - 9 ) );
+            auto newProjectName = n.ParentPath();
+            AddNewProject( newProjectName );
 		}
 	}
 	else
@@ -592,7 +592,7 @@ void						ProjectManagerImpl::InitializeScenes	()
 		Dir::CreateDir( m_scenesPath.Str() );
 	}
 
-    m_sceneAccessor = SceneAccessor::Create( m_rootPath, m_timelineManager );
+    m_sceneAccessor = SceneAccessor::Create( m_rootPath );
 }
 
 // ********************************
@@ -633,19 +633,18 @@ void				        ProjectManagerImpl::InitializeAssets	()
 //
 Path						ProjectManagerImpl::TranslateToPathCategory			( const Path & projectName, const Path & path ) const
 {
-	Path ret;
-
 	if( !projectName.Str().empty() )
 	{
 		if( projectName.Str() == "." )
 		{
 			if( m_currentProject )
 			{
-				ret = ret / m_currentProject->GetName();
+				return m_currentProject->GetName() / path;
 			}
 			else
 			{
 				LOG_MESSAGE( SeverityLevel::error ) << "Current project's not set.";
+                return "";
 			}
 		}
 		else
@@ -653,17 +652,20 @@ Path						ProjectManagerImpl::TranslateToPathCategory			( const Path & projectNa
 			auto p = GetProject( projectName );
 			if( p )
 			{
-				ret = ret / projectName;
+				return projectName;
 			}
 			else
 			{
 				LOG_MESSAGE( SeverityLevel::error ) << "Project '" << projectName.Str() << "' doesn't exist.";
-				return ret;
+				return "";
 			}
 		}
 	}
-
-	return ret / path;
+    else
+    {
+        auto loc = Path2Location( path );
+        return loc.projectName / loc.path;
+    }
 }
 
 // ********************************
@@ -711,8 +713,8 @@ ProjectManagerImpl::Location ProjectManagerImpl::Path2Location( const Path & pat
 
 	for( auto pn : ListProjectsNames() )
 	{
-		auto pos = strPath.find( pn.Str() );
-		if( pos == categoryName.size() + 1 )
+		auto pos = strPath.find( "\\" + pn.Str() + "\\" );
+		if( pos == categoryName.size() )
 		{
 			projectName = pn;
 			break;
@@ -768,6 +770,29 @@ PathVec                     ProjectManagerImpl::ListPresets         ( const Path
 PathVec                     ProjectManagerImpl::ListPresets         () const
 {
     return m_presetAccessor->ListPresets( "" );
+}
+
+// ********************************
+//
+Path                        ProjectManagerImpl::ToAbsPath           ( const Path & path ) const
+{
+    auto p = path.Str().find( "file:/" );
+    if( p == 0 )
+    {
+        return path.Str().substr( 6 );
+    }
+    else if ( path.Str().find( "seq:/" ) == 0 )
+    {
+        return path.Str().substr( 4 );
+    }
+    else if ( path.Str().find( "stream:/" ) == 0 )
+    {
+        return path.Str().substr( 8 );
+    }
+    else
+    {
+        return m_rootPath / path;
+    }
 }
 
 } // bv

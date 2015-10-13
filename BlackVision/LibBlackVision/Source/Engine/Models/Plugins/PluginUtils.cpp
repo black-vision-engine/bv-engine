@@ -49,7 +49,7 @@ bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, 
 //
 bool    LoadFont        ( IPluginPtr plugin, const std::string & fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps )
 {
-	auto desc = FontAssetDesc::Create( fontFile, fontSize, blurSize, outlineSize, generateMipmaps );
+	auto desc = FontAssetDesc::Create( fontFile, fontSize, blurSize, outlineSize, generateMipmaps, L"fonts/SupportedChars.txt" );
 
     return plugin->LoadResource( desc );
 }

@@ -8,6 +8,8 @@ AssetDescsWithUIDs AssetDescsWithUIDs::instance;
 
 template std::shared_ptr< AssetDescsWithUIDs >                                        DeserializeObjectLoadImpl( DeserializeObjectImpl*, std::string name );
 
+// ********************************
+//
 void                                                    AssetDescsWithUIDs::AddAssetDesc( AssetDescConstPtr asset )
 {
     if( m_key2uid.find( asset->GetKey() ) != m_key2uid.end() )
@@ -26,6 +28,8 @@ void                                                    AssetDescsWithUIDs::AddA
         }
 }
 
+// ********************************
+//
 void                                                    AssetDescsWithUIDs::AddAssetDescWithUID( const AssetDescWithUID& assetWithUID )
 {
     auto asset = assetWithUID.GetDesc();
@@ -38,5 +42,18 @@ void                                                    AssetDescsWithUIDs::AddA
     m_uid2asset[ uid ] = asset;
 }
 
+// ********************************
+//
+AssetDescVec                                            AssetDescsWithUIDs::GetAssetsDescs() const
+{
+    AssetDescVec ret;
+
+    for( auto p : m_uid2asset )
+    {
+        ret.push_back( p.second );
+    }
+
+    return ret;
+}
 
 }

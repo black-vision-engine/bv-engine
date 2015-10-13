@@ -12,9 +12,8 @@ namespace bv
 
 // ********************************
 //
-SceneDescriptor::SceneDescriptor( const Path & path, model::TimelineManager * tm )
+SceneDescriptor::SceneDescriptor( const Path & path )
 	: m_path( path )
-    , m_tm( tm )
 {}
 
 // ********************************
@@ -118,5 +117,30 @@ model::BasicNodeConstPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeTy
     //return std::static_pointer_cast< const model::BasicNode >( node );
 }
 
+// ********************************
+//
+AssetDescVec SceneDescriptor::ListSceneAssets ( const Path & sceneFile )
+{
+    auto f = File::Open( sceneFile.Str() );
+
+    auto size = File::Size( sceneFile.Str() );
+
+    auto ret = ListSceneAssets( *f.StreamBuf(), size );
+    f.Close();
+
+    return ret;
+}
+
+// ********************************
+//
+AssetDescVec SceneDescriptor::ListSceneAssets ( std::istream & in, SizeType numBytes )
+{
+    auto deDoc = DeserializeObject( in, numBytes );
+
+    // assets
+    auto assets = deDoc.Load< AssetDescsWithUIDs >( "assets" );
+
+    return assets->GetAssetsDescs();
+}
 
 } // bv

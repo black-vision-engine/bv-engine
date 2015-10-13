@@ -20,17 +20,16 @@ const std::string SceneAccessor::SceneFileExt = ".*\\.scn";
 
 // ********************************
 //
-SceneAccessorConstPtr SceneAccessor::Create( const Path & path, model::TimelineManager * tm )
+SceneAccessorConstPtr SceneAccessor::Create( const Path & path )
 {
-	return SceneAccessorConstPtr( new SceneAccessor( path, tm ) );
+	return SceneAccessorConstPtr( new SceneAccessor( path ) );
 }
 
 // ********************************
 //
-SceneAccessor::SceneAccessor( const Path & path, model::TimelineManager * tm )
+SceneAccessor::SceneAccessor( const Path & path )
 	: m_rootDirPM( path )
     , m_rootDir( path / "scenes" )
-	, m_tm( tm )
 {}
 
 // ********************************
@@ -39,19 +38,19 @@ SceneDescriptor	SceneAccessor::GetSceneDesc( const Path & path ) const
 {
 	if( Path::Exists( m_rootDir / path ) )
 	{
-		return SceneDescriptor( m_rootDir / path, m_tm );
+		return SceneDescriptor( m_rootDir / path );
 	}
 	else
 	{
-		return SceneDescriptor( "", m_tm  );
+		return SceneDescriptor( "" );
 	}
 }
 
 // ********************************
 //
-model::BasicNodeConstPtr	SceneAccessor::GetScene( const Path & path ) const
+model::BasicNodeConstPtr	SceneAccessor::GetScene( const Path & path, model::TimelineManager * tm ) const
 {
-    return SceneDescriptor::LoadScene( path, m_tm );
+    return SceneDescriptor::LoadScene( path, tm );
 }
 
 // ********************************
@@ -63,9 +62,9 @@ void			SceneAccessor::AddSceneFromFile( const Path & srcPath, const Path & path 
 
 // ********************************
 //
-void			SceneAccessor::AddScene( const model::BasicNodeConstPtr & scene, const Path & path ) const
+void			SceneAccessor::AddScene( const model::BasicNodeConstPtr & scene, const Path & path, model::TimelineManager * tm ) const
 {
-	SceneDescriptor::SaveScene( scene, m_tm, m_rootDir / path );
+	SceneDescriptor::SaveScene( scene, tm, m_rootDir / path );
 }
 
 // ********************************
@@ -77,7 +76,7 @@ void			SceneAccessor::RemoveScene( const Path & path ) const
 
 // ********************************
 //
-void			SceneAccessor::ImportScene( std::istream & in, const Path & importToProject, const Path & importToPath ) const
+void			SceneAccessor::ImportScene( std::istream & in, const Path & importToProject, const Path & importToPath, model::TimelineManager * tm ) const
 {
     std::stringbuf buf;
     in.get( buf, '\n' );
@@ -102,7 +101,7 @@ void			SceneAccessor::ImportScene( std::istream & in, const Path & importToProje
         auto size = stoul( buf.str() );
         in.ignore();
 
-        auto scene = SceneDescriptor::LoadScene( in, size, m_tm );
+        auto scene = SceneDescriptor::LoadScene( in, size, tm );
         
         auto sceneAssertDescs = ListSceneAssetsDescs( scene );
         
@@ -117,7 +116,7 @@ void			SceneAccessor::ImportScene( std::istream & in, const Path & importToProje
 
         auto outFilePath = ( m_rootDir / importToProject / importToPath ).Str();
 
-        SceneDescriptor::SaveScene( scene, m_tm, outFilePath );
+        SceneDescriptor::SaveScene( scene, tm, outFilePath );
 
         buf.str( "" );
         in.ignore();
@@ -176,11 +175,11 @@ void			SceneAccessor::ExportScene( std::ostream & out, const Path & projectName,
 
 // ********************************
 //
-void			SceneAccessor::ImportSceneFromFile( const Path & expFilePath, const Path & importToProject, const Path & importToPath ) const
+void			SceneAccessor::ImportSceneFromFile( const Path & expFilePath, const Path & importToProject, const Path & importToPath, model::TimelineManager * tm ) const
 {
 	auto f = File::Open( expFilePath.Str(), File::OpenMode::FOMReadOnly );
 	auto in = f.StreamBuf();
-	ImportScene( *in, importToProject, importToPath );
+	ImportScene( *in, importToProject, importToPath, tm );
 	f.Close();
 }
 
@@ -212,42 +211,13 @@ PathVec			SceneAccessor::ListScenes( const Path & path ) const
 //
 PathVec			SceneAccessor::ListAllUsedAssets( const Path & path ) const
 {
-	auto scene = SceneDescriptor::LoadScene( m_rootDir / path, m_tm );
+    auto simpleAssets = ListSceneAssetsDescs( m_rootDir / path );
 
-	return GetAllUsedAssetPaths( scene, m_rootDirPM );
-}
+    std::set< Path > allPaths;
 
-// ********************************
-//
-PathVec			SceneAccessor::GetAllUsedAssetPaths( const model::BasicNodeConstPtr & scene, const Path & relativeTo )
-{
-	auto rootNode = std::const_pointer_cast< model::BasicNode >( scene );
-
-    auto sceneSimpleAssetsDescs = ListSceneAssetsDescs( scene );
-
-    std::set< Path > assetsPathsSet;
-
-    for( auto a : sceneSimpleAssetsDescs )
-    {
-        assetsPathsSet.insert( AssetDescToPath( a ) );
-    }
-
-    auto lastPlugin = rootNode->GetPlugins()->GetLastPlugin();
-
-	std::vector< AssetDescConstPtr > allDescs;
-
-	while( lastPlugin )
+	for( auto ad : simpleAssets )
 	{
-		auto assetsDescs = std::static_pointer_cast< model::BasePlugin< model::IPlugin > >( lastPlugin )->GetAssets();
-		allDescs.insert( allDescs.end(), assetsDescs.begin(), assetsDescs.end() );
-        lastPlugin = lastPlugin->GetPrevPlugin();
-	}
-
-	std::set< Path > allPaths;
-
-	for( auto ad : allDescs )
-	{
-        auto paths = GetAllPathsFromAssets( ad, relativeTo );
+        auto paths = GetAllPathsFromAssets( ad, m_rootDir );
 		allPaths.insert( paths.begin(), paths.end() );
 	}
 
@@ -256,7 +226,44 @@ PathVec			SceneAccessor::GetAllUsedAssetPaths( const model::BasicNodeConstPtr & 
 
 // ********************************
 //
-std::vector< AssetDescConstPtr > SceneAccessor::UnpackSimpleAssets( const AssetDescConstPtr & assetDesc )
+//PathVec			SceneAccessor::GetAllUsedAssetPaths( const model::BasicNodeConstPtr & scene, const Path & relativeTo )
+//{
+//	auto rootNode = std::const_pointer_cast< model::BasicNode >( scene );
+//
+//    auto sceneSimpleAssetsDescs = ListSceneAssetsDescs( scene );
+//
+//    std::set< Path > assetsPathsSet;
+//
+//    for( auto a : sceneSimpleAssetsDescs )
+//    {
+//        assetsPathsSet.insert( AssetDescToPath( a ) );
+//    }
+//
+//    auto lastPlugin = rootNode->GetPlugins()->GetLastPlugin();
+//
+//	std::vector< AssetDescConstPtr > allDescs;
+//
+//	while( lastPlugin )
+//	{
+//		auto assetsDescs = std::static_pointer_cast< model::BasePlugin< model::IPlugin > >( lastPlugin )->GetAssets();
+//		allDescs.insert( allDescs.end(), assetsDescs.begin(), assetsDescs.end() );
+//        lastPlugin = lastPlugin->GetPrevPlugin();
+//	}
+//
+//	std::set< Path > allPaths;
+//
+//	for( auto ad : allDescs )
+//	{
+//        auto paths = GetAllPathsFromAssets( ad, relativeTo );
+//		allPaths.insert( paths.begin(), paths.end() );
+//	}
+//
+//	return PathVec( allPaths.begin(), allPaths.end() );
+//}
+
+// ********************************
+//
+AssetDescVec SceneAccessor::UnpackSimpleAssets( const AssetDescConstPtr & assetDesc )
 {
     std::vector< AssetDescConstPtr > simpleAssets;
 	if( auto stad = std::dynamic_pointer_cast< SingleTextureAssetDescConstPtr::element_type >( assetDesc ) )
@@ -291,7 +298,41 @@ std::vector< AssetDescConstPtr > SceneAccessor::UnpackSimpleAssets( const AssetD
 
 // ********************************
 //
-std::vector< AssetDescConstPtr > SceneAccessor::ListSceneAssetsDescs( const model::BasicNodeConstPtr & scene )
+AssetDescVec SceneAccessor::ListSceneAssetsDescs( const Path & sceneFile )
+{
+    auto assets = SceneDescriptor::ListSceneAssets( sceneFile );
+
+    std::vector< AssetDescConstPtr > simpleAssetsDescs;
+
+    for( auto ad : assets )
+    {
+        auto sa = UnpackSimpleAssets( ad );
+        simpleAssetsDescs.insert( simpleAssetsDescs. end(), sa.begin(), sa.end() );
+    }
+
+	return simpleAssetsDescs;
+}
+
+// ********************************
+//
+AssetDescVec SceneAccessor::ListSceneAssetsDescs( std::istream & in, SizeType numBytes  )
+{
+    auto assets = SceneDescriptor::ListSceneAssets( in, numBytes );
+
+    std::vector< AssetDescConstPtr > simpleAssetsDescs;
+
+    for( auto ad : assets )
+    {
+        auto sa = UnpackSimpleAssets( ad );
+        simpleAssetsDescs.insert( simpleAssetsDescs. end(), sa.begin(), sa.end() );
+    }
+
+	return simpleAssetsDescs;
+}
+
+// ********************************
+//
+AssetDescVec SceneAccessor::ListSceneAssetsDescs( const model::BasicNodeConstPtr & scene )
 {
     auto rootNode = std::const_pointer_cast< model::BasicNode >( scene );
 
