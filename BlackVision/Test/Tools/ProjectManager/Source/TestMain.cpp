@@ -24,7 +24,11 @@ static ProjectManager * g_pm1 = nullptr;
 
 namespace bv
 {
-    auto global_tm = new model::TimelineManager();
+    void ChangeProjectManagerInstanceTo( const std::string & newPath )
+    {
+        ProjectManager::SetPMInstanceOnlyForTests( new ProjectManager( newPath ) );
+    }
+
 } // bv
 
 // *******************************
@@ -87,16 +91,16 @@ TEST( CleanAll, ProjectManager )
 
 TEST( CreatingPM, ProjectManager )
 {
-    global_tm->RegisterRootTimeline( model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) ) );
+    model::TimelineManager::GetInstance()->RegisterRootTimeline( model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) ) );
 
-    g_pm0 = ProjectManager::GetInstance( "d:\\bv_media" );
-	g_pm1 = ProjectManager::GetInstance( "bv_media1" );
+    ChangeProjectManagerInstanceTo( "d:\\bv_media" );
+
+    g_pm0 = ProjectManager::GetInstance();
 }
 
 TEST( ProjectsListing, ProjectManager )
 {
 	ASSERT_TRUE( g_pm0->ListProjectsNames().empty() );
-	ASSERT_TRUE( g_pm1->ListProjectsNames().empty() );
 }
 
 TEST( AddingProjects, ProjectManager )
@@ -111,19 +115,6 @@ TEST( AddingProjects, ProjectManager )
 	ASSERT_TRUE( ps0[ 0 ].Str() == "proj00" );
 	ASSERT_TRUE( ps0[ 1 ].Str() == "proj01" );
 	ASSERT_TRUE( ps0[ 2 ].Str() == "proj02" );
-
-	g_pm1->AddNewProject( "proj10" );
-	g_pm1->AddNewProject( "proj11" );
-	g_pm1->AddNewProject( "proj12" );
-	g_pm1->AddNewProject( "proj13" );
-
-	auto ps1 = g_pm1->ListProjectsNames();
-
-	ASSERT_TRUE( ps1.size() == 4 );
-	ASSERT_TRUE( ps1[ 0 ].Str() == "proj10" );
-	ASSERT_TRUE( ps1[ 1 ].Str() == "proj11" );
-	ASSERT_TRUE( ps1[ 2 ].Str() == "proj12" );
-	ASSERT_TRUE( ps1[ 3 ].Str() == "proj13" );
 }
 
 //TEST( RegisteringCategories, ProjectManager )
@@ -192,7 +183,7 @@ TEST( AddingAssets, ProjectManager )
 
 TEST( AddingScene, ProjectManager )
 {
-    g_pm0->AddScene( CreateTestScene0(), "proj00", "scene1/s.scn", global_tm );
+    g_pm0->AddScene( CreateTestScene0(), "proj00", "scene1/s.scn" );
 }
 
 TEST( ExportingProject, ProjectManager )
@@ -200,10 +191,9 @@ TEST( ExportingProject, ProjectManager )
     g_pm0->ExportProjectToFile( "proj00", "test.exp" );
 }
 
-TEST( ImportingProject, ProjectManager )
+TEST( ExportingScene, ProjectManager )
 {
-    g_pm1->ImportProjectFromFile( "test.exp", "proj00", global_tm );
-    g_pm1->ImportProjectFromFile( "test.exp", "proj01", global_tm );
+    g_pm0->ExportSceneToFile( "proj00", "scene1/s.scn", "exported_scene1.exp" );
 }
 
 TEST( RemovingUnusedAssets, ProjectManager )
@@ -231,6 +221,45 @@ TEST( ListingPresets, ProjectManager )
 TEST( LoadingPresets, ProjectManager )
 {
     ASSERT_TRUE( g_pm0->LoadPreset( "proj00", "pres/proj1.bvpreset" ) );
+}
+
+TEST( CreatingSecondPM, ProjectManager )
+{
+    ChangeProjectManagerInstanceTo( "bv_media1" );
+    g_pm1 = ProjectManager::GetInstance();
+    ASSERT_TRUE( g_pm1 != g_pm0 );
+}
+
+TEST( ProjectsListing2, ProjectManager )
+{
+    ASSERT_TRUE( g_pm1->ListProjectsNames().empty() );
+}
+
+TEST( AddingPorjects2, ProjectManager )
+{
+	g_pm1->AddNewProject( "proj10" );
+	g_pm1->AddNewProject( "proj11" );
+	g_pm1->AddNewProject( "proj12" );
+    g_pm1->AddNewProject( "proj13" );
+
+	auto ps1 = g_pm1->ListProjectsNames();
+
+	ASSERT_TRUE( ps1.size() == 4 );
+	ASSERT_TRUE( ps1[ 0 ].Str() == "proj10" );
+	ASSERT_TRUE( ps1[ 1 ].Str() == "proj11" );
+	ASSERT_TRUE( ps1[ 2 ].Str() == "proj12" );
+    ASSERT_TRUE( ps1[ 3 ].Str() == "proj13" );
+}
+
+TEST( ImportingScene, ProjectManager )
+{
+    g_pm1->ImportSceneFromFile( "proj01", "scene1exp/s.scn", "exported_scene1.exp" );
+}
+
+TEST( ImportingProject, ProjectManager )
+{
+    g_pm1->ImportProjectFromFile( "test.exp", "proj00" );
+    g_pm1->ImportProjectFromFile( "test.exp", "proj01" );
 }
 
 int main( int argc, char **argv )

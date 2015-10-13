@@ -4,6 +4,8 @@
 
 namespace bv
 {
+std::shared_ptr< ProjectManager > ProjectManager::_instance = nullptr;
+
 // ********************************
 //
 ProjectManager::ProjectManager	( const Path & rootPath )
@@ -26,30 +28,31 @@ namespace
 
 // ********************************
 //
-ProjectManager *			ProjectManager::GetInstance		( const Path & rootPath )
-{
-	auto it = g_pms.find( rootPath.Str() );
-
-	if( it != g_pms.end() )
-	{
-		return it->second;
-	}
-	else
-	{
-		auto npm = new ProjectManager( rootPath );
-		g_pms[ rootPath.Str() ] = npm;
-		return npm;
-	}
-}
-
-// ********************************
-//
 ProjectManager *	        ProjectManager::GetInstance		()
 {
     auto pmRootFolder = ConfigManager::GetString( "PMFolder" );
-    static auto instance = ProjectManager( pmRootFolder );
-    return &instance;
+
+    if( pmRootFolder.empty() )
+    {
+        pmRootFolder = "DefaultPMDir";
+    }
+
+    if( !_instance )
+    {
+        _instance = std::shared_ptr< ProjectManager >( new ProjectManager( pmRootFolder ) );
+    }
+
+    return _instance.get();
 }
+
+
+// ********************************
+// DO NOT USE, IF NOT TESTING MORE THAN ONE PM
+void                        ProjectManager::SetPMInstanceOnlyForTests( ProjectManager * inst )
+{
+    ProjectManager::_instance = std::shared_ptr< ProjectManager >( inst );
+}
+
 
 // ********************************
 //
@@ -158,9 +161,9 @@ void						ProjectManager::RemoveUnusedAssets	()
 
 // ********************************
 //
-void						ProjectManager::AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath, model::TimelineManager * tm )
+void						ProjectManager::AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath )
 {
-	m_impl->AddScene( sceneRootNode, projectName, outPath, tm );
+	m_impl->AddScene( sceneRootNode, projectName, outPath );
 }
 
 // ********************************
@@ -214,9 +217,9 @@ void						ProjectManager::ExportSceneToFile	( const Path & projectName, const Pa
 
 // ********************************
 //
-void						ProjectManager::ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath, model::TimelineManager * tm )
+void						ProjectManager::ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath )
 {
-	m_impl->ImportSceneFromFile( importToProjectName, importToPath, impSceneFilePath, tm );
+	m_impl->ImportSceneFromFile( importToProjectName, importToPath, impSceneFilePath );
 }
 
 // ********************************
@@ -228,9 +231,9 @@ void						ProjectManager::ExportProjectToFile	( const Path & projectName, const 
 
 // ********************************
 //
-void						ProjectManager::ImportProjectFromFile( const Path & expFilePath, const Path & projectName, model::TimelineManager * tm )
+void						ProjectManager::ImportProjectFromFile( const Path & expFilePath, const Path & projectName )
 {
-	m_impl->ImportProjectFromFile( expFilePath, projectName, tm );
+	m_impl->ImportProjectFromFile( expFilePath, projectName );
 }
 
 // ********************************
@@ -245,6 +248,13 @@ AssetDescConstPtr			ProjectManager::GetAssetDesc		( const Path & projectName, co
 SceneDescriptor				ProjectManager::GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const
 {
 	return m_impl->GetSceneDesc( projectName, pathInProject );
+}
+
+// ********************************
+//
+SceneDescriptor			    ProjectManager::GetSceneDesc		( const Path & path ) const
+{
+    return m_impl->GetSceneDesc( path );
 }
 
 // ********************************

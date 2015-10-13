@@ -20,16 +20,15 @@ public:
     PathVec                     ListPresets         ( const Path & path ) const;
     PathVec                     ListPresets         () const;
 
-    static PresetAccessorConstPtr Create            ( const Path & path, model::TimelineManager * tm );
+    static PresetAccessorConstPtr Create            ( const Path & path );
 
 private:
 
-    explicit                    PresetAccessor		( const Path & path, model::TimelineManager * tm );
+    explicit                    PresetAccessor		( const Path & path );
 
 
     static std::string          m_fileExt;
 
-    model::TimelineManager *    m_tm;
     Path                        m_path;
 };
 

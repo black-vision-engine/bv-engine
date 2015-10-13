@@ -140,14 +140,12 @@ void BVAppLogic::Initialize         ()
 //
 model::BasicNodePtr BVAppLogic::LoadScenes( const PathVec & pathVec )
 {
-    auto pm = ProjectManager::GetInstance();
-
     auto root = model::BasicNode::Create( "root", m_globalTimeline );
     root->AddPlugin( "DEFAULT_TRANSFORM", "transform", m_globalTimeline ); 
 
     for( auto p : pathVec )
     {
-        auto scene = SceneDescriptor::LoadScene( pm->GetSceneDesc( "", p ).GetPath(), GetTimeLineManager() );
+        auto scene = SceneDescriptor::LoadScene( ProjectManager::GetInstance()->ToAbsPath( p ), GetTimeLineManager() );
 
         root->AddChildToModelOnly( std::const_pointer_cast< model::BasicNode >( scene ) );
     }

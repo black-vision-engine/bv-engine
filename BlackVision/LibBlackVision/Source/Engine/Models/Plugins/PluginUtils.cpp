@@ -35,7 +35,7 @@ bool    LoadTexture     ( IPluginPtr plugin, const std::string & textureFile, co
 //
 bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, const std::string & filter )
 {
-	auto desc = AnimationAssetDesc::CreateFromDirFrames( animationPath, filter );
+	auto desc = AnimationAssetDesc::Create( animationPath, filter );
 
     if( desc == nullptr )
     {

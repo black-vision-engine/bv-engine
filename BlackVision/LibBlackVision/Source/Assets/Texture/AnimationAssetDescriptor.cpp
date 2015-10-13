@@ -68,7 +68,7 @@ std::string                     AnimationAssetDesc::GetKey      () const
 
 // *******************************
 //
-AnimationAssetDescConstPtr		AnimationAssetDesc::CreateFromDirFrames( const std::string & path, const std::string & filter )
+AnimationAssetDescConstPtr		AnimationAssetDesc::Create( const std::string & path, const std::string & filter )
 {
     return AnimationAssetDescConstPtr( new AnimationAssetDesc ( path, filter ) );
 }

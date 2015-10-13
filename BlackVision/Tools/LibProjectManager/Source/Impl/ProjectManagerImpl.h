@@ -44,7 +44,7 @@ private:
 	void					RemoveUnusedAssets	( const Path & projectName ) const;
     void				    RemoveUnusedAssets	() const;
 
-	void					AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath, model::TimelineManager * tm );
+	void					AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath );
 	void					CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 	void					RemoveScene			( const Path & projectName, const Path & path );
 	void					MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
@@ -62,11 +62,11 @@ private:
 	
 	// scenes
 	void					ExportSceneToFile	( const Path & projectName, const Path & scenePath, const Path & outputFile ) const;
-	void					ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath, model::TimelineManager * tm );
+	void					ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath );
 
 	// projects
 	void					ExportProjectToFile	( const Path & projectName, const Path &  outputFilePath ) const;
-	void					ImportProjectFromFile( const Path & expFilePath, const Path & projectName, model::TimelineManager * tm );
+	void					ImportProjectFromFile( const Path & expFilePath, const Path & projectName );
 
 	// *********************************
 	// getting scenes and assets descriptors
@@ -75,6 +75,7 @@ private:
 	AssetDescConstPtr		GetAssetDesc		( const Path & projectName, const std::string & categoryName, const Path & pathInProject ) const;
 
 	//SceneDesc				GetSceneDescLoc		( loc )
+	SceneDescriptor			GetSceneDesc		( const Path & path ) const;
 	SceneDescriptor			GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
 
     // *********************************
@@ -115,8 +116,6 @@ private:
 	Path					m_projectsPath;
 	Path					m_scenesPath;
     Path					m_presetsPath;
-
-    model::TimelineManager * m_timelineManager; 
 
 	friend ProjectManager;
 
