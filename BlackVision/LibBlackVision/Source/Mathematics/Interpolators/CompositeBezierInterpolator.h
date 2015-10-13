@@ -29,12 +29,10 @@ public:
     virtual EvaluatorType                       GetType()                                           = 0;
 };
 
+template< class TimeValueT, class ValueT >
 class CompositeBezierInterpolator
 {
 private:
-    typedef float TimeValueT;
-    typedef float ValueT;
-
     typedef Key< TimeValueT, ValueT >                   Key;
     typedef IEvaluator< TimeValueT, ValueT >            IEvaluator;
 
@@ -75,8 +73,8 @@ public:
     const std::vector<Key> & AccessKeys() const { static std::vector<Key> ret; return ret; };
 
 private:
-    float                                               PreEvaluate( float t ) const;
-    float                                               PostEvaluate( float t ) const;
+    ValueT                                              PreEvaluate( TimeValueT t ) const;
+    ValueT                                              PostEvaluate( TimeValueT t ) const;
 };
 
 }

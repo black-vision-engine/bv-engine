@@ -93,7 +93,7 @@ template<typename ParamT>
 void Rotation<ParamT>::SetCurveType( CurveType type )
 {
     m_angle.SetCurveType( type );
-    //m_rotationAxis.SetCurveType( type ); // FIXME when BasicInterpolator becomes CompositeBezierInterpolator
+    m_rotationAxis.SetCurveType( type );
 }
 
 // *************************************

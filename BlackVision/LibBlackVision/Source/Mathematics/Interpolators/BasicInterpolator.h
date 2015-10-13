@@ -14,7 +14,7 @@ enum class WrapMethod : int
     pingPong = 2,
 };
 
-template<class TimeValueT, class ValueT>
+template<class TimeValueT/* = bv::TimeType*/, class ValueT>
 class Key
 {
 public:
@@ -26,12 +26,13 @@ public:
 
     explicit Key( TimeValueT t, ValueT val );
 
-    Key< TimeValueT, ValueT > operator+( const Key< TimeValueT, ValueT > &that ) const { return Key< TimeValueT, ValueT >( t + that.t, val + that.val ); }
-    Key< TimeValueT, ValueT > operator-( const Key< TimeValueT, ValueT > &that ) const { return Key< TimeValueT, ValueT >( t - that.t, val - that.val ); }
+    Key< TimeValueT, ValueT > operator+( const Key< TimeValueT, ValueT > &that ) const { return Key< TimeValueT, ValueT >( t + that.t, ValueT( val + that.val ) ); }
+    Key< TimeValueT, ValueT > operator-( const Key< TimeValueT, ValueT > &that ) const { return Key< TimeValueT, ValueT >( t - that.t, ValueT( val - that.val ) ); }
+    //Key< TimeValueT, ValueT > operator*( const TimeValueT a ) { return Key< TimeValueT, ValueT >( TimeValueT( a * t ), ValueT( a * val ) ); }
 };
 
 template<class TimeValueT, class ValueT>
-Key< TimeValueT, ValueT > operator*( const float a, const Key< TimeValueT, ValueT > &that ) { return Key< TimeValueT, ValueT >( a * that.t, a * that.val ); }
+Key< TimeValueT, ValueT > operator*( const TimeValueT & a, const Key< TimeValueT, ValueT > &that ) { return Key< TimeValueT, ValueT >( TimeValueT( a * that.t ), ValueT( a * that.val ) ); }
 
 template<class TimeValueT>
 class Interpolator

@@ -71,7 +71,9 @@ namespace {
 //    
 void TestParametersFactory::CameraAnimation_ver1( Vec3Interpolator * direction, Vec3Interpolator * position, Vec3Interpolator * up )
 {
-    position->SetWrapMethod(WrapMethod::repeat, WrapMethod::repeat);
+    //position->SetWrapMethod(WrapMethod::repeat, WrapMethod::repeat);
+    position->SetWrapPreMethod( WrapMethod::repeat );
+    position->SetWrapPostMethod( WrapMethod::repeat );
 
     float t = 0.f;
     double endTime = 2. * M_PI;
@@ -105,7 +107,9 @@ void TestParametersFactory::CameraAnimation_ver1( Vec3Interpolator * direction, 
 //    
 void TestParametersFactory::CameraAnimation_ver2( Vec3Interpolator * direction, Vec3Interpolator * position, Vec3Interpolator * up )
 {
-    position->SetWrapMethod(WrapMethod::repeat, WrapMethod::pingPong);
+    //position->SetWrapMethod(WrapMethod::repeat, WrapMethod::pingPong);
+    position->SetWrapPreMethod( WrapMethod::repeat );
+    position->SetWrapPostMethod( WrapMethod::pingPong );
 
     /*
     float t = 0.f;
