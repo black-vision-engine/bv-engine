@@ -19,7 +19,7 @@ private:
 	FFmpegDemuxerUPtr				m_demuxer;
 
 	FFmpegVideoStreamDecoderUPtr	m_vstreamDecoder;
-	//audio stream decoder
+	//FFmpegAudioStreamDecoderUPtr
 
 	AVFrame *						m_frame;
 	AVFrame *						m_outFrame;
@@ -27,6 +27,8 @@ private:
 	VideoDecoderThreadUPtr			m_decoderThread;
 
 	MemoryChunkPtr					m_frameData;
+	SizeType						m_frameSize;
+
 	mutable std::mutex				m_dataMutex;
 
 public:
@@ -37,14 +39,23 @@ public:
 	virtual void				Pause					() override;
 	virtual void				Stop					() override;
 
-	virtual MemoryChunkConstPtr	GetCurrentFrameData		( UInt32 & outFrameId ) const override;
-	virtual bool				GetNextFrameData		() override;
+	virtual MemoryChunkConstPtr	GetCurrentFrameData		( UInt64 & outFrameId ) const override;
+
+	virtual bool				NextFrameDataReady		() override;
+
+	virtual SizeType			GetFrameSize			() const override;
 
 	virtual UInt32				GetWidth				() const override;
 	virtual UInt32				GetHeight				() const override;
-	virtual UInt32				GetFrameRate			() const override;
-	virtual UInt32				GetDuration				() const override;
+	virtual Float64				GetFrameRate			() const override;
+	virtual UInt64				GetDuration				() const override;
 
+	virtual void				Reset					() override;
+
+private:
+	void						ClearFrameData			();
+
+	static AVPixelFormat		ToFFmpegPixelFormat		( TextureFormat format );
 };
 
 } //bv

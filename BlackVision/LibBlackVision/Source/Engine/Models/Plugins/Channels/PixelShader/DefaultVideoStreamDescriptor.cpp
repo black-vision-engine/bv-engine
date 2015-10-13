@@ -206,7 +206,7 @@ void                    DefaultVideoStreamDescriptor::SetFormat         ( Textur
 
 // **************************
 //
-void                        DefaultVideoStreamDescriptor::SetSemantic     ( DataBuffer::Semantic semantic )
+void                        DefaultVideoStreamDescriptor::SetSemantic	( DataBuffer::Semantic semantic )
 {
     m_semantic = semantic;
 }

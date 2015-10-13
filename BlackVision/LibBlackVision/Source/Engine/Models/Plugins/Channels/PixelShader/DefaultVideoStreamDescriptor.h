@@ -41,7 +41,6 @@ public:
     
 	virtual DataBuffer::Semantic    GetSemantic     () const override;
 
-//---this is not useful but required by interfaces
 	virtual UInt32				    GetNumLevels    () const override;
 
 	virtual UInt32				    GetDepth		( UInt32 level = 0 ) const override;
@@ -53,7 +52,6 @@ public:
     virtual TextureFilteringMode    GetFilteringMode() const override;
     
     virtual glm::vec4               BorderColor     () const override;
-//---
 
 
     void                            SetBits         ( MemoryChunkConstPtr data );
@@ -66,18 +64,6 @@ public:
     void                            SetFormat       ( TextureFormat fmt );
 
     void                            SetSemantic     ( DataBuffer::Semantic semantic );
-
-////---
-//	void                            SetDepth        ( UInt32 z );
-//    
-//    void                            SetWrappingModeX( TextureWrappingMode wm );
-//    void                            SetWrappingModeY( TextureWrappingMode wm );
-//	void                            SetWrappingModeZ( TextureWrappingMode wm );
-//    
-//    void                            SetFilteringMode( TextureFilteringMode fm );
-//    
-//    void                            SetBorderColor  ( const glm::vec4 & bc );
-////---
 
 };
 

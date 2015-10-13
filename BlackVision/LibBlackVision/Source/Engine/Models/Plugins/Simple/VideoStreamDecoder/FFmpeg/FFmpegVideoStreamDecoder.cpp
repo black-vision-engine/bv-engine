@@ -7,18 +7,18 @@ namespace bv
 
 // *******************************
 //
-FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder     ( AVFormatContext * formatCtx, Int32 streamIdx )
-	: m_codecCtx( nullptr )
+FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder     ( VideoStreamAssetDescConstPtr desc, AVFormatContext * formatCtx, Int32 streamIdx )
+	: m_stream( nullptr )
+	, m_codecCtx( nullptr )
 	, m_codec( nullptr )
 	, m_swsCtx( nullptr )
 	, m_width( 0 )
 	, m_height( 0 )
 	, m_frameRate( 0 )
-	, m_currFrame( 0 )
 	, m_streamIdx( streamIdx )
 {
-	m_codecCtx = formatCtx->streams[ streamIdx ]->codec;
-
+	m_stream = formatCtx->streams[ streamIdx ];
+	m_codecCtx = m_stream->codec;
 	m_codec = avcodec_find_decoder( m_codecCtx->codec_id );
 	assert( m_codec != nullptr );
 
@@ -26,42 +26,29 @@ FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder     ( AVFormatContext * forma
 	assert( !error ); { error; }
 
 	//FIXME
-	m_swsCtx = sws_getContext( 
-		m_codecCtx->width,
-		m_codecCtx->height,
-		m_codecCtx->pix_fmt,
-		m_codecCtx->width,
-		m_codecCtx->height,
-		AV_PIX_FMT_BGRA,
-		SWS_BILINEAR,
-		nullptr,
-		nullptr,
-		nullptr
-	);
-
-	m_width = ( UInt32 )m_codecCtx->width;
-	m_height = ( UInt32 )m_codecCtx->height;
-	m_frameRate = ( UInt32 )av_q2d( m_codecCtx->framerate );
+	//m_swsCtx = sws_getContext( 
+	//	m_codecCtx->width,
+	//	m_codecCtx->height,
+	//	m_codecCtx->pix_fmt,
+	//	m_codecCtx->width,
+	//	m_codecCtx->height,
+	//	AV_PIX_FMT_BGRA,
+	//	SWS_BILINEAR,
+	//	nullptr,
+	//	nullptr,
+	//	nullptr
+	//);
 	
-	/*m_frame = av_frame_alloc();
+	//raw video desc should provide width, height & format
+	m_width = m_codecCtx->width > 0 ? ( UInt32 )m_codecCtx->width : desc->GetWidth();
+	m_height = m_codecCtx->height > 0 ? ( UInt32 )m_codecCtx->height : desc->GetHeight();
 
-	m_outFrame = new AVPicture();
-	avpicture_alloc( m_outFrame, AV_PIX_FMT_BGRA, m_width, m_height );
-	int size = avpicture_get_size( AV_PIX_FMT_BGRA, m_width, m_height );
-	m_frameData = MemoryChunk::Create( ( char * )m_outFrame->data[ 0 ], SizeType( size ) );
+	assert( m_width > 0 );
+	assert( m_height > 0 );
 
-	m_swsCtx = sws_getContext( m_codecCtx->width,
-		m_codecCtx->height,
-		m_codecCtx->pix_fmt,
-		m_codecCtx->width,
-		m_codecCtx->height,
-		AV_PIX_FMT_BGRA,
-		SWS_BILINEAR,
-		nullptr,
-		nullptr,
-		nullptr
-	);
-	*/
+	m_frameRate = ( Float64 )av_q2d( m_stream->avg_frame_rate );
+	m_duration = ( UInt64 )m_stream->duration;
+
 }
 
 // *******************************
@@ -81,10 +68,6 @@ bool				FFmpegVideoStreamDecoder::DecodePacket		( AVPacket * packet, AVFrame * f
 
 	int frameReady = 0;
 	avcodec_decode_video2( m_codecCtx, frame, &frameReady, packet );
-	if ( frameReady )
-	{
-		m_currFrame++;
-	}
 
     av_free_packet( packet );
     return ( frameReady != 0 );
@@ -94,7 +77,6 @@ bool				FFmpegVideoStreamDecoder::DecodePacket		( AVPacket * packet, AVFrame * f
 //
 void				FFmpegVideoStreamDecoder::ConvertFrame		( AVFrame * inFrame, AVFrame * outFrame )
 {
-	//FIXME
 	m_swsCtx = sws_getCachedContext( m_swsCtx, inFrame->width, inFrame->height, static_cast< AVPixelFormat >( inFrame->format ),
 		outFrame->width, outFrame->height, static_cast< AVPixelFormat >( outFrame->format ), SWS_BILINEAR, nullptr, nullptr, nullptr );
 
@@ -117,14 +99,21 @@ UInt32					FFmpegVideoStreamDecoder::GetHeight	() const
 
 // *******************************
 //
-UInt32					FFmpegVideoStreamDecoder::GetFrameRate	() const
+Float64					FFmpegVideoStreamDecoder::GetFrameRate		() const
 {
 	return m_frameRate;
 }
 
 // *******************************
 //
-Int32					FFmpegVideoStreamDecoder::GetStreamIdx	() const
+UInt64					FFmpegVideoStreamDecoder::GetDuration		() const
+{
+	return m_duration;
+}
+
+// *******************************
+//
+Int32					FFmpegVideoStreamDecoder::GetStreamIdx		() const
 {
 	return m_streamIdx;
 }
@@ -133,14 +122,7 @@ Int32					FFmpegVideoStreamDecoder::GetStreamIdx	() const
 //
 UInt32					FFmpegVideoStreamDecoder::GetCurrentFrameId	() const
 {
-	return m_currFrame;
-}
-
-// *******************************
-//
-void					FFmpegVideoStreamDecoder::Reset			()
-{
-	m_currFrame = 0;
+	return ( UInt32 )m_codecCtx->frame_number;
 }
 
 } //bv

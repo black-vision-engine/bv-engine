@@ -25,7 +25,9 @@ private:
 	UInt32						m_width;
 	UInt32						m_height;
 
-	UInt32						m_frameRate;
+	Float64						m_frameRate;
+
+	TextureFormat				m_textureFormat;
 
 protected:
 
@@ -33,8 +35,8 @@ protected:
 	virtual VoidConstPtr						QueryThis					() const override;
 
 public:
-	explicit									VideoStreamAssetDesc		( const std::string & streamPath );
-	explicit									VideoStreamAssetDesc		( const std::string & streamPath, UInt32 width, UInt32 height, UInt32 frameRate );
+	explicit									VideoStreamAssetDesc		( const std::string & streamPath, TextureFormat textureFormat );
+	explicit									VideoStreamAssetDesc		( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate );
 
 	virtual const std::string &					GetUID						() const override;
 	
@@ -45,10 +47,12 @@ public:
 	const std::string &							GetStreamPath				() const;
 	UInt32										GetWidth					() const;
 	UInt32										GetHeight					() const;
-	UInt32										GetFrameRate				() const;
+	Float64										GetFrameRate				() const;
+
+	TextureFormat								GetTextureFormat			() const;
 	
-	static VideoStreamAssetDescConstPtr			Create						( const std::string & streamPath );
-	static VideoStreamAssetDescConstPtr			Create						( const std::string & streamPath, UInt32 width, UInt32 height, UInt32 frameRate );
+	static VideoStreamAssetDescConstPtr			Create						( const std::string & streamPath, TextureFormat textureFormat );
+	static VideoStreamAssetDescConstPtr			Create						( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate );
 
 };
 

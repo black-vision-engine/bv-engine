@@ -8,10 +8,8 @@ namespace bv
 // *******************************
 //FIXME: pass which stream we want - now only video
 FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath )
-	: m_formatCtx( nullptr )
-	, m_streamPath( streamPath )
-	, m_isOpened( false )
-	, m_lastPacket( nullptr )
+	: m_streamPath( streamPath )
+	, m_formatCtx( nullptr )
 {
 	av_register_all();
 
@@ -42,8 +40,6 @@ FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath )
 	}
 	assert( !error );*/
 
-	m_isOpened = true;
-
 	av_dump_format( m_formatCtx, 0, streamPath.c_str(), 0 );
 }
 
@@ -51,22 +47,9 @@ FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath )
 //
 FFmpegDemuxer::~FFmpegDemuxer    ()
 {
-	if ( m_lastPacket )
-	{
-        av_free_packet( m_lastPacket );
-    }
-
 	avformat_close_input( &m_formatCtx );
 
 	ClearPacketQueue();
-}
-
-
-// *******************************
-//
-bool				FFmpegDemuxer::IsOpened				() const
-{
-	return m_isOpened;
 }
 
 // *******************************
@@ -74,13 +57,6 @@ bool				FFmpegDemuxer::IsOpened				() const
 AVFormatContext *	FFmpegDemuxer::GetFormatContext		() const
 {
 	return m_formatCtx;
-}
-
-// *******************************
-//
-UInt32				FFmpegDemuxer::GetDuration			() const
-{
-	return ( UInt32 )( m_formatCtx->duration / 1000 );
 }
 
 // *******************************
@@ -139,8 +115,25 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 void				FFmpegDemuxer::Seek					( Float32 time )
 {
 	//FIXME
-	av_seek_frame( m_formatCtx, -1, ( long long )( time * AV_TIME_BASE ), AVSEEK_FLAG_BACKWARD );
+	av_seek_frame( m_formatCtx, -1, ( long long )( time * AV_TIME_BASE ), AVSEEK_FLAG_ANY );
 	ClearPacketQueue();
+}
+
+// *******************************
+//
+void				FFmpegDemuxer::Reset				()
+{
+	Seek( 0 );
+
+	for( unsigned int i = 0; i < m_formatCtx->nb_streams; ++i )
+	{
+		auto codecCtx = m_formatCtx->streams[ i ]->codec;
+		if( codecCtx->codec )
+		{
+			avcodec_flush_buffers( codecCtx );
+		}
+		codecCtx->frame_number = 0;
+	}
 }
 
 // *******************************

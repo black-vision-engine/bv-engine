@@ -1338,13 +1338,13 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
 
 	//http://samples.ffmpeg.org/game-formats/bink/ActivisionLogo.bik
-	//success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/ActivisionLogo.bik" );
+	success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/ActivisionLogo.bik", TextureFormat::F_A8R8G8B8 );
 
 	//http://www.cinemartin.com/cinec/_Sample_Videos/Samsung_Galaxy_Note_3/20140117_142047_CINEC_ProRes4444.mov
-	//success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/20140117_142047_CINEC_ProRes4444.mov" );
+	//success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/20140117_142047_CINEC_ProRes4444.mov", TextureFormat::F_A8R8G8B8 );
 
 	//http://download.openbricks.org/sample/H264/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4
-	success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4" );
+	//success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4", TextureFormat::F_A8R8G8B8 );
 	
     assert( success );
 

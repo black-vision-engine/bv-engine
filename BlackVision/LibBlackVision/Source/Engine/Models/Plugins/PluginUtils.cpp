@@ -47,9 +47,9 @@ bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, 
 
 // *******************************
 //
-bool    LoadVideoStream ( IPluginPtr plugin, const std::string & streamPath )
+bool    LoadVideoStream ( IPluginPtr plugin, const std::string & streamPath, TextureFormat textureFormat )
 {
-	auto desc = VideoStreamAssetDesc::Create( streamPath );
+	auto desc = VideoStreamAssetDesc::Create( streamPath, textureFormat );
 
     if( desc == nullptr )
     {

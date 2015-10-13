@@ -16,30 +16,23 @@ private:
 	typedef std::map< Int32, PacketQueue >					PacketQueueMap;
 
 private:
-	//FIXME: threadsafety
+	std::string					m_streamPath;
+
 	AVFormatContext *			m_formatCtx;
 
-	std::string					m_streamPath;
-	bool						m_isOpened;
-
-	
 	PacketQueueMap				m_packetQueue;
-
-	//FIXEME: shared_ptr
-	AVPacket *					m_lastPacket;
 
 public:
 								FFmpegDemuxer			( const std::string & streamPath );
 								~FFmpegDemuxer			();
 
-	bool						IsOpened				() const;
 	AVFormatContext *			GetFormatContext		() const;
-	UInt32						GetDuration				() const;
-
 	AVPacket *					GetPacket				( Int32 streamIdx );
+	Int32						GetStreamIndex			( AVMediaType type, UInt32 idx = 0 );
+
 	void						Seek					( Float32 time );
 
-	Int32						GetStreamIndex			( AVMediaType type, UInt32 idx = 0 );
+	void						Reset					();
 
 private:
 	void						ClearPacketQueue		();

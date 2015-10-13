@@ -26,7 +26,6 @@ private:
 	std::atomic< bool >			m_stopped;
 
     SimpleTimer					m_timer;
-	UInt64						m_totalTime;
 
 public:
 								VideoDecoderThread	( IVideoDecoderPtr decoder );

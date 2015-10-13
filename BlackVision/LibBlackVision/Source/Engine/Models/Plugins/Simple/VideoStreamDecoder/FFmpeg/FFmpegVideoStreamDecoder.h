@@ -2,6 +2,8 @@
 
 #include "FFmpegDef.h"
 
+#include "Assets/VideoStream/VideoStreamAssetDescriptor.h"
+
 namespace bv
 {
 
@@ -9,6 +11,7 @@ class FFmpegVideoStreamDecoder
 {
 
 private:
+	AVStream *				m_stream;
 	AVCodecContext *		m_codecCtx;
 	AVCodec *				m_codec;
 
@@ -16,19 +19,19 @@ private:
 
 	UInt32					m_width;
 	UInt32					m_height;
-	UInt32					m_frameRate;
-
-	UInt32					m_currFrame;
+	Float64					m_frameRate;
+	UInt64					m_duration;
 
 	Int32					m_streamIdx;
 
 public:
-							FFmpegVideoStreamDecoder	( AVFormatContext * formatCtx, Int32 streamIdx );
+							FFmpegVideoStreamDecoder	( VideoStreamAssetDescConstPtr desc, AVFormatContext * formatCtx, Int32 streamIdx );
 							~FFmpegVideoStreamDecoder	();
 
 	UInt32					GetWidth					() const;	
 	UInt32					GetHeight					() const;	
-	UInt32					GetFrameRate				() const;	
+	Float64					GetFrameRate				() const;	
+	UInt64					GetDuration					() const;	
 
 	bool					DecodePacket				( AVPacket * packet, AVFrame * frame );
 	void					ConvertFrame				( AVFrame * inFrame, AVFrame * outFrame );
@@ -36,8 +39,6 @@ public:
 	Int32					GetStreamIdx				() const;
 
 	UInt32					GetCurrentFrameId			() const;
-
-	void					Reset						();
 };
 
 DEFINE_UPTR_TYPE( FFmpegVideoStreamDecoder )

@@ -133,7 +133,7 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
 	, m_vaChannel( nullptr )
 	, m_paramValModel( model )
 	, m_decoder( nullptr )
-	, m_prevFrameId( 0 )
+	, m_prevFrameId( UINT32_MAX )
 	, m_currFrameId( 0 )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr );
@@ -171,9 +171,7 @@ bool                            DefaultVideoStreamDecoderPlugin::LoadResource		(
     {
 		m_decoder = std::make_shared< FFmpegVideoDecoder >( vstreamAssetDescr );
 
-		//auto data = m_decoder->GetFrameData( m_frameId );
-
-		auto vsDesc = new DefaultVideoStreamDescriptor( DefaultVideoStreamDecoderPluginDesc::TextureName(), MemoryChunk::Create( m_decoder->GetWidth() * m_decoder->GetHeight() * 4 ), m_decoder->GetWidth(), m_decoder->GetHeight(), TextureFormat::F_A8R8G8B8, DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE );
+		auto vsDesc = new DefaultVideoStreamDescriptor( DefaultVideoStreamDecoderPluginDesc::TextureName(), MemoryChunk::Create( m_decoder->GetFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), vstreamAssetDescr->GetTextureFormat(), DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE );
 
 		auto txData = m_psc->GetTexturesDataImpl();
         if( vsDesc != nullptr )
@@ -260,13 +258,13 @@ void                                DefaultVideoStreamDecoderPlugin::Update     
     {
         m_vaChannel->SetNeedsAttributesUpdate( false );
     }
-	
+
+	//update texture with video data
 	auto data = m_decoder->GetCurrentFrameData( m_currFrameId );
-	if( m_prevFrameId < m_currFrameId )
+	if( m_prevFrameId != m_currFrameId )
 	{
+		static_cast< DefaultVideoStreamDescriptor * >( m_psc->GetTexturesDataImpl()->GetTexture( 0 ) )->SetBits( data );
 		m_prevFrameId = m_currFrameId;
-		auto vsDesc = static_cast< DefaultVideoStreamDescriptor * >( m_psc->GetTexturesDataImpl()->GetTexture( 0 ) );
-		vsDesc->SetBits( data );
 	}
 
     m_vsc->PostUpdate();
@@ -350,6 +348,7 @@ void								DefaultVideoStreamDecoderPlugin::StartDecoding		()
 //
 void								DefaultVideoStreamDecoderPlugin::PauseDecoding		()
 {
+
 	m_decoder->Pause();
 }
 
@@ -358,8 +357,6 @@ void								DefaultVideoStreamDecoderPlugin::PauseDecoding		()
 void								DefaultVideoStreamDecoderPlugin::StopDecoding		()
 {
 	m_decoder->Stop();
-	m_currFrameId = 0;
-	m_prevFrameId = 0;
 }
 
 namespace {

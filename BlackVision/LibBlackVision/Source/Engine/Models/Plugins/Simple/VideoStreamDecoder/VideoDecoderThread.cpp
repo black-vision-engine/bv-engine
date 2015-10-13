@@ -1,6 +1,5 @@
 #include "VideoDecoderThread.h"
 
-
 #include "Tools/HRTimer.h"
 
 namespace bv
@@ -12,7 +11,6 @@ VideoDecoderThread::VideoDecoderThread				( IVideoDecoderPtr decoder )
 	: m_decoder( decoder )
 	, m_paused( false )
 	, m_stopped( false )
-	, m_totalTime( 0 )
 {
 }
 
@@ -21,6 +19,7 @@ VideoDecoderThread::VideoDecoderThread				( IVideoDecoderPtr decoder )
 VideoDecoderThread::~VideoDecoderThread				()
 {
 	Stop();
+	Join();
 }
 
 // *******************************
@@ -30,8 +29,6 @@ void				VideoDecoderThread::Stop		()
 	std::unique_lock< std::mutex > lock( m_mutex );
 	m_stopped = true;
 	m_cond.notify_one();
-
-	Join();
 }
 
 // *******************************
@@ -57,12 +54,10 @@ void				VideoDecoderThread::Resume		()
 void				VideoDecoderThread::Run			()
 {
     m_timer.Start();
-	auto frameDuration = 1000 / m_decoder->GetFrameRate();
 
-	auto t = m_decoder->GetDuration();
-	{t;}
-
-	while( !m_stopped && m_totalTime < m_decoder->GetDuration() )
+	auto frameDuration = 1000.0 / m_decoder->GetFrameRate();
+	auto frames = m_decoder->GetDuration();
+	while( !m_stopped && frames > 0 )
 	{
 		if ( m_paused )
 		{
@@ -73,20 +68,23 @@ void				VideoDecoderThread::Run			()
 			}
 		}
 
-		if( m_decoder->GetNextFrameData() )
+		if( m_decoder->NextFrameDataReady() )
 		{
-			//FIXME
+			//
 			auto time = m_timer.ElapsedMillis();
 			while( time < frameDuration )
 			{
-				Sleep( frameDuration - time );
+				Sleep( ( UInt32 )frameDuration - time );
 				time = m_timer.ElapsedMillis();
 			}
 
-			m_totalTime += frameDuration;
 			m_timer.Start();
 		}
+		
+		frames--;
 	}
+
+	Stop();
 }
 
 } //bv

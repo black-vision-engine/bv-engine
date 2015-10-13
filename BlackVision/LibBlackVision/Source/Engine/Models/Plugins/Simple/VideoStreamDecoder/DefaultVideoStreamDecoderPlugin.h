@@ -53,8 +53,8 @@ private:
 
 	IVideoDecoderPtr				m_decoder;
 
-	UInt32							m_prevFrameId;
-	UInt32							m_currFrameId;
+	UInt64							m_prevFrameId;
+	UInt64							m_currFrameId;
 
 public:
 
@@ -76,7 +76,6 @@ public:
 	void										StopDecoding				();
 
 private:
-
     void                                        InitAttributesChannel       ( IPluginPtr prev );
 
     TextureAttachmentMode                       GetAttachementMode          () const;
