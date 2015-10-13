@@ -7,7 +7,8 @@ namespace bv {
 
 // *********************************
 //
-NodeEffect::NodeEffect  ()
+NodeEffect::NodeEffect  ( NodeEffect::Type type )
+    : m_type( type )
 {
 }
 
@@ -46,6 +47,13 @@ IValuePtr   NodeEffect::GetValue    ( const std::string & name )
     }
 
     return nullptr;
+}
+
+// *********************************
+//
+NodeEffect::Type    NodeEffect::GetType     () const
+{
+    return m_type;
 }
 
 // *********************************

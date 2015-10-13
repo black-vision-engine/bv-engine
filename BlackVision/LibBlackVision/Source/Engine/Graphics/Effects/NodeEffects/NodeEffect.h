@@ -23,16 +23,19 @@ public:
 private:
 
     std::vector< IValuePtr >    m_modelValues;
+    Type                        m_type;
 
 public:
 
-                    NodeEffect  ();
-                    ~NodeEffect ();
+                    NodeEffect  ( Type type );
+    virtual         ~NodeEffect ();
 
     SizeType        GetNumValues() const;
 
     IValuePtr       GetValue    ( unsigned int i );
     IValuePtr       GetValue    ( const std::string & name );
+
+    Type            GetType     () const;
 
 protected:
 
