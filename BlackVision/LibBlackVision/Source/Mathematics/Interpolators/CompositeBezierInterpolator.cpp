@@ -268,17 +268,17 @@ float CompositeBezierInterpolator::PreEvaluate( float t ) const
 
     auto interval = tEnd - tStart;
     if( interval <= m_tolerance )
-        return tStart;
+        return Evaluate( tStart );
 
     t = t - tStart;
 
     if( m_preMethod == WrapMethod::clamp )
-        return tStart;
+        return Evaluate( tStart );
     else if( m_preMethod == WrapMethod::repeat )
     {
         TimeValueT q = interval;
         TimeValueT r = std::modf( t, &q );
-        return tStart + r;
+        return Evaluate( tStart + r );
     }
     else if ( m_preMethod == WrapMethod::pingPong )
     {
@@ -287,11 +287,11 @@ float CompositeBezierInterpolator::PreEvaluate( float t ) const
 
         if( round( q ) % 2 == 0 )
         {
-            return tStart + r;
+            return Evaluate( tStart + r );
         }
         else
         {
-            return tStart + interval - r;
+            return Evaluate( tStart + interval - r );
         }
     }
 
@@ -307,17 +307,18 @@ float CompositeBezierInterpolator::PostEvaluate( float t ) const
 
     auto interval = tEnd - tStart;
     if( interval <= m_tolerance )
-        return tEnd;
+        return Evaluate( tEnd );
 
     t = t - tStart;
 
     if( m_postMethod == WrapMethod::clamp )
-        return tEnd;
+        //return Evaluate( tEnd );
+        return keys.back().val; // FIXME(?)
     else if( m_postMethod == WrapMethod::repeat )
     {
         TimeValueT q = interval;
         TimeValueT r = divmod( t, &q );
-        return tStart + r;
+        return Evaluate( tStart + r );
     }
     else if( m_postMethod == WrapMethod::pingPong )
     {
@@ -326,11 +327,11 @@ float CompositeBezierInterpolator::PostEvaluate( float t ) const
 
         if( round( q ) % 2 == 0 )
         {
-            return tStart + r;
+            return Evaluate( tStart + r );
         }
         else
         {
-            return tStart + interval - r;
+            return Evaluate( tStart + interval - r );
         }
     }
 
