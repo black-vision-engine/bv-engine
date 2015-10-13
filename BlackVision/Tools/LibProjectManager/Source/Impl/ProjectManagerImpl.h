@@ -94,6 +94,7 @@ private:
 	Path					TranslateToPathInPMRootFolder( const Path & projectName, const std::string & categoryName, const Path & path ) const;
 
     Path                    ToAbsPath           ( const Path & path ) const;
+    bool                    IsExternalPath      ( const Path & path ) const;
 
 	explicit ProjectManagerImpl( const Path & rootPath );
 			~ProjectManagerImpl();

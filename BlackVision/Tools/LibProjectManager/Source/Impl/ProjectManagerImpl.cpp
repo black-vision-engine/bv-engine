@@ -399,6 +399,11 @@ void						ProjectManagerImpl::ExportSceneToFile	( const Path & projectName, cons
 
     for( auto ua : uniqueAssets)
     {
+        if( IsExternalPath( ua ) )
+        {
+            continue;
+        }
+
         auto loc = Path2Location( ua );
 
         if( loc.categoryName == "scenes" ) 
@@ -494,6 +499,11 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 
 		for( auto ua : uniqueAssets)
 		{
+            if( IsExternalPath( ua ) )
+            {
+                continue;
+            }
+
 			auto loc = Path2Location( ua );
 
 			if( loc.categoryName == "scenes" ) 
@@ -840,8 +850,7 @@ PathVec                     ProjectManagerImpl::ListPresets         () const
 //
 Path                        ProjectManagerImpl::ToAbsPath           ( const Path & path ) const
 {
-    auto p = path.Str().find( "file:/" );
-    if( p == 0 )
+    if( path.Str().find( "file:/" ) == 0 )
     {
         return path.Str().substr( 6 );
     }
@@ -856,6 +865,28 @@ Path                        ProjectManagerImpl::ToAbsPath           ( const Path
     else
     {
         return m_rootPath / path;
+    }
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::IsExternalPath      ( const Path & path ) const
+{
+    if( path.Str().find( "file:/" ) == 0 )
+    {
+        return true;
+    }
+    else if ( path.Str().find( "seq:/" ) == 0 )
+    {
+        return true;
+    }
+    else if ( path.Str().find( "stream:/" ) == 0 )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
 
