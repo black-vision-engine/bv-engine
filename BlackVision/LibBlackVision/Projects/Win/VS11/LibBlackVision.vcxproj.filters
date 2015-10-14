@@ -162,6 +162,7 @@
     </Filter>
     <Filter Include="Serialization">
       <UniqueIdentifier>{68a74c00-da93-4352-a146-be6b6ea74fd8}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Graphics\Effects\NodeEffects">
       <UniqueIdentifier>{926a5c13-9933-41dd-b4b9-d446aeeba1cd}</UniqueIdentifier>
     </Filter>
