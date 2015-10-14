@@ -15,6 +15,7 @@ SceneNode::SceneNode           ( TransformableEntity * transformable )
     , m_overridenStateAlphaMask( false )
     , m_overridenStateNodeMask( false )
     , m_overrideAlphaVal( nullptr )
+    , m_nodeEffect( nullptr )
 {
 }
 
@@ -106,6 +107,21 @@ TransformableEntity *   SceneNode::GetTransformable     ()
 {
     return m_transformable;
 }
+
+// ********************************
+//
+NodeEffectPtr           SceneNode::GetNodeEffect       ()
+{
+    return m_nodeEffect;
+}
+
+// ********************************
+//
+void                    SceneNode::SetNodeEffect       ( NodeEffectPtr nodeEffect )
+{
+    m_nodeEffect = nodeEffect;
+}
+
 
 // ********************************
 //
