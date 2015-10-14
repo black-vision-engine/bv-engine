@@ -36,11 +36,15 @@ protected:
 	virtual const std::string &			GetUID				() const override;
 
 public:
+    virtual void                        Serialize       ( SerializeObject & sob ) const;
+    static ISerializableConstPtr        Create          ( DeserializeObject & dob );
+
 	virtual bool						IsCacheable			() const override;
 
 	virtual VoidConstPtr				QueryThis			() const override;
 
 	virtual std::string					GetKey				() const override;
+    virtual std::string                 GetProposedShortKey () const override;
 
 	TextureAssetLoadingType				GetLoadingType		() const;
 	SingleTextureAssetDescConstPtr		GetOrigTextureDesc	() const;

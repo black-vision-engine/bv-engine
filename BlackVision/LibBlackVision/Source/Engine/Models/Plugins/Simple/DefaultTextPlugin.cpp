@@ -48,6 +48,7 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 
 
     //Create all parameters and evaluators
+    SimpleWStringEvaluatorPtr   textEvaluator           = ParamValEvaluatorFactory::CreateSimpleWStringEvaluator( "text", timeEvaluator );
     SimpleVec4EvaluatorPtr      borderColorEvaluator    = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
     SimpleFloatEvaluatorPtr     alphaEvaluator          = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator           = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
@@ -66,6 +67,7 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     psModel->RegisterAll( borderColorEvaluator );
 	psModel->RegisterAll( outlineColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
+    plModel->RegisterAll( textEvaluator );
     plModel->RegisterAll( blurSizeEvaluator );
 	plModel->RegisterAll( outlineSizeEvaluator );
     plModel->RegisterAll( spacingEvaluator );
@@ -79,6 +81,7 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     model->SetPluginModel( plModel );
 
     //Set default values of all parameters
+    textEvaluator->Parameter()->SetVal( L"", TimeType( 0.f ) );
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     blurSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
 	outlineSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
@@ -117,6 +120,14 @@ std::string             DefaultTextPluginDesc::UID                      ()
 {
     return "DEFAULT_TEXT";
 }
+
+// *************************************
+//
+std::wstring            DefaultTextPlugin::GetText                      () const
+{
+    return m_textParam->Evaluate();
+}
+
 
 // *******************************
 //
@@ -177,7 +188,6 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     , m_paramValModel( model )
     , m_textSet( true )
     , m_atlas( nullptr )
-    , m_text( L"" )
 	, m_textLength( 0.f )
 {
     SetPrevPlugin( prev );
@@ -189,7 +199,7 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
 	m_scaleValue->SetValue( glm::mat4( 1.0 ) );
     ValueMat4PtrVec values;
 	values.push_back( m_scaleValue );
-	m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( m_prevPlugin, values, false ) ); //<3
+	//m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( m_prevPlugin, values, false ) ); //<3
 
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
@@ -205,6 +215,7 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     m_spacingParam          = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
     m_alignmentParam        = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "alignment" ) );
     m_maxTextLengthParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "maxTextLenght" ) );
+    m_textParam             = QueryTypedParam< ParamWStringPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "text" ) );
 }
 
 // *************************************
@@ -291,6 +302,8 @@ bool                            DefaultTextPlugin::LoadResource  ( AssetDescCons
 
     if ( txAssetDescr != nullptr )
     {
+        AddAsset( assetDescr );
+
 		m_fontSize = txAssetDescr->GetFontSize();
 		m_blurSize = txAssetDescr->GetBlurSize();
 		m_outlineSize = txAssetDescr->GetOutlineSize();
@@ -324,10 +337,10 @@ IVertexShaderChannelConstPtr        DefaultTextPlugin::GetVertexShaderChannel   
     return m_vsc;
 }
 
-ITransformChannelConstPtr           DefaultTextPlugin::GetTransformChannel         () const
-{
-	return m_transformChannel;
-}
+//ITransformChannelConstPtr           DefaultTextPlugin::GetTransformChannel         () const
+//{
+//	return m_transformChannel;
+//}
 
 
 // *************************************
@@ -384,7 +397,7 @@ void                                DefaultTextPlugin::Update                   
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
-	m_transformChannel->PostUpdate();
+	//m_transformChannel->PostUpdate();
 }
 
 namespace {
@@ -408,7 +421,7 @@ void DefaultTextPlugin::InitAttributesChannel( IPluginPtr prev )
 
     auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
-    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_text, m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, false );
+    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_textParam->Evaluate(), m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, false );
 }
 
 // *************************************
@@ -422,15 +435,16 @@ void DefaultTextPlugin::OnSetText                   ( IEventPtr evt )
 
         if( c[0] == L'\b' )
         {
-            if( !m_text.empty() )
+            if( !m_textParam->Evaluate().empty() )
             {
-                m_text.pop_back();
-                SetText( m_text );
+                auto text = m_textParam->Evaluate();
+                text.pop_back();
+                SetText( text );
             }
         }
         else
 		{
-			SetText( m_text + std::wstring( c ) );
+			SetText( m_textParam->Evaluate() + std::wstring( c ) );
 		}
     }
 }
@@ -519,13 +533,13 @@ void DefaultTextPlugin::ScaleToMaxTextLength		()
 void DefaultTextPlugin::SetText                     ( const std::wstring & newText )
 {
     m_textSet = true;
-    m_text = newText;
+    m_textParam->SetVal( newText, TimeType( 0.f ) );
 
     m_vaChannel->ClearConnectedComponent();
 
     auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
-    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_text, m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, false );
+    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_textParam->Evaluate(), m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, false );
 
 	ScaleToMaxTextLength();
 

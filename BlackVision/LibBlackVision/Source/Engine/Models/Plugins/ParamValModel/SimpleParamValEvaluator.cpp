@@ -17,3 +17,5 @@ template class bv::model::SimpleParamValEvaluator<bv::model::ParamVec3Ptr, bv::V
 template class bv::model::SimpleParamValEvaluator<bv::model::ParamVec2Ptr, bv::ValueVec2Ptr>;
 template class bv::model::SimpleParamValEvaluator<bv::model::ParamMat2Ptr, bv::ValueMat2Ptr>;
 template class bv::model::SimpleParamValEvaluator<bv::model::ParamTransformPtr, bv::ValueMat4Ptr>;
+template class bv::model::SimpleParamValEvaluator<bv::model::ParamStringPtr, bv::ValueStringPtr>;
+template class bv::model::SimpleParamValEvaluator<bv::model::ParamWStringPtr, bv::ValueWStringPtr>;

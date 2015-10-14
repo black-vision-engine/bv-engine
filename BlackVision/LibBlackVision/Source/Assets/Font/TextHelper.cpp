@@ -104,6 +104,7 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
     assert( textAtlas );
 
     glm::vec3 translate(0.f);
+	glm::vec3 translateDot(0.f);
     glm::vec3 interspace( spacing, 0.f ,0.f );
     glm::vec3 newLineTranslation( 0.f );
 
@@ -111,6 +112,8 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
 
 	if( outlineSize != 0 )
 		outline = true;
+
+	
 
     float blurTexSize = float( blurSize );
     float blurLenghtX = float( blurSize ) / viewWidth;
@@ -121,6 +124,7 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
 
     float texPadding = 1.f;
 
+	// Space width should be get form : https://www.mail-archive.com/freetype@nongnu.org/msg01384.html
     auto spaceGlyphWidth    = (float)textAtlas->GetGlyph( L'0', outline )->width / viewWidth  + spacing;
 	auto newLineShift       = -(float) 1.5f * textAtlas->GetGlyph( L'0', outline )->height / viewHeight;
 
@@ -205,9 +209,15 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
 
             vertexAttributeChannel->AddConnectedComponent( connComp );
 
+			if(wch==L'.' && tat==TextAlignmentType::Dot)
+			{
+				translateDot = translate;
+			}
+
             {
 				translate += glm::vec3( ( glyph->advanceX ) / (float)viewWidth, 0.f, 0.f ) + interspace;
             }
+
         }
         else
         {
@@ -224,6 +234,9 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
             break;
         case TextAlignmentType::Right:
             alignmentTranslation = -translate.x;
+            break;
+		case TextAlignmentType::Dot:
+            alignmentTranslation = -translateDot.x;
             break;
 
     }

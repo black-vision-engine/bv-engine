@@ -108,7 +108,8 @@ inline TimeType TimeSegmentEvalImpl::EvalPre             ( TimeType t ) const
 //
 inline TimeType TimeSegmentEvalImpl::EvalPost            ( TimeType t ) const
 {
-    return m_wrapEvaluatorPost( t );
+    return m_wrapEvaluatorsPost[ (int) m_wrapPostBehavior ]( t );
+    //return m_wrapEvaluatorPost( t );
 }
 
 } //model

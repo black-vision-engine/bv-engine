@@ -219,7 +219,7 @@ TEST(ModelNodeEditor, BVSceneEditor)
     ri.m_DisableVerticalSync	= true;
 	auto renderer = new bv::Renderer( ri, 100, 100 );
 
-    auto bvScene = BVScene::Create( root, new Camera( false ), "BasicScene", globalTimeline, renderer );
+    auto bvScene = BVScene::Create( root, new Camera( false ), "BasicScene", globalTimeline, renderer, timelineManager );
 
 	auto bvSceneEditor = bvScene->GetSceneEditor();
 

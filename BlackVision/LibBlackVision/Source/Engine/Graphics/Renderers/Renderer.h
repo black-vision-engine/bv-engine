@@ -90,6 +90,9 @@ private:
 
     PdrPBOMemTransfer *                 m_PdrPBOMemTransferRT;
 
+	bool								m_EnableGLFinish;
+	bool								m_EnableGLFlush;
+
 public:
 
     void	Initialize			( int w, int h, TextureFormat colorFormat );

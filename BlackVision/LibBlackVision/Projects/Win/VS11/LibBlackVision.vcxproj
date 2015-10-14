@@ -103,9 +103,11 @@
     <ClCompile Include="..\..\..\Source\Application\Win32\WinApplication.cpp" />
     <ClCompile Include="..\..\..\Source\Application\WindowedApplication.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\AssetDescriptor.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\AssetDescsWithUIDs.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\AssetLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\AssetManager.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Assets.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\AssetSerialization.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Cache\HardDriveRawDataCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Cache\RawDataCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\AtlasCache.cpp" />
@@ -274,6 +276,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CompositeTypedParameters.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\GenericParameterSetters.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\ParameterSerialization.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\ParametersFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\SimpleTypedParameters.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\DefaultParamValModel.cpp" />
@@ -312,7 +315,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTrianglePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\SerializationObjects.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\DefaultTimeline.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventLoop.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventNull.cpp" />
@@ -321,6 +323,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\SimpleIParamSet.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Static\ConstTimeEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Static\OffsetTimeEvaluator.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimelineManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\GeometryUpdater.cpp" />
@@ -340,8 +343,13 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\DeserializeObject.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\DeserializeObjectImpl.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\SerializationObjects.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Assets\AssetDescsWithUIDs.h" />
+    <ClInclude Include="..\..\..\Source\Assets\AssetSerialization.h" />
     <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h" />
@@ -611,7 +619,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\SceneModel.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\SerializationObjects.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\DefaultTimeline.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventLoop.h" />
@@ -646,6 +653,10 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Rect.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Transform\MatTransform.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\DeserializeObjectImpl.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\ISerializable.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\SerializationObjects.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl" />
@@ -668,6 +679,7 @@
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.inl" />
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.inl" />
     <None Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.inl" />
+    <None Include="..\..\..\Source\Serialization\SerializationObjects.inl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\LibBVGL\Projects\Win\VS11\LibBVGL.vcxproj">

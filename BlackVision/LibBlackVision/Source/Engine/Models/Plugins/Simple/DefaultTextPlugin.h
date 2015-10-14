@@ -54,7 +54,8 @@ private:
 
     unsigned int                    m_texCoordChannelIndex;
 
-    std::wstring                    m_text;
+    ParamWStringPtr                 m_textParam;
+    //std::wstring                    m_text;
     TextAtlasConstPtr				m_atlas;
     bool                            m_textSet;
 	Float32							m_textLength;
@@ -86,10 +87,14 @@ private:
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
+public:
+
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
-	virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
+
+private:
+	//virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
 
 	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & trans ) const override;
 
@@ -103,9 +108,12 @@ public:
 	explicit                                    DefaultTextPlugin           ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
 												~DefaultTextPlugin          ();
 
-	static bool									SetText						( IPluginPtr, const std::wstring& );
-
     virtual void								SetPrevPlugin               ( IPluginPtr plugin );
+
+	std::wstring                                GetText                     () const;
+
+    static bool									SetText						( IPluginPtr, const std::wstring& );
+
 };
 
 } // model

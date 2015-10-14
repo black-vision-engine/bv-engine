@@ -16,6 +16,8 @@ public:
     static ValueVec4Ptr         CreateValueVec4     ( const std::string & name );
     static ValueMat2Ptr         CreateValueMat2     ( const std::string & name );
     static ValueMat4Ptr         CreateValueMat4     ( const std::string & name ); 
+    static ValueStringPtr       CreateValueString   ( const std::string & name );
+    static ValueWStringPtr      CreateValueWString  ( const std::string & name );
 };
 
 } // bv

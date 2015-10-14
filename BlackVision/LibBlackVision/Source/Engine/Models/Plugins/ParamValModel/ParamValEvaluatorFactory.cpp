@@ -416,5 +416,75 @@ TransformVecParamValEvaluatorPtr   ParamValEvaluatorFactory::CreateTransformVecE
     return CreateTransformVecEvaluator( ptv, values );
 }
 
+// *******************************
+//
+SimpleStringEvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleStringEvaluator( ParamStringPtr param, ValueStringPtr value )
+{
+    return std::make_shared< SimpleStringEvaluator >( param, value );
+}
+
+// *******************************
+//
+SimpleStringEvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleStringEvaluator     ( ParamStringPtr param, const std::string & valueName )
+{
+    return CreateSimpleStringEvaluator( param, ValuesFactory::CreateValueString( valueName ) );
+}
+
+// *******************************
+//
+SimpleStringEvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleStringEvaluator     ( ParamStringPtr param )
+{
+    return CreateSimpleStringEvaluator( param, param->GetName() );
+}
+
+// *******************************
+//
+SimpleStringEvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleStringEvaluator     ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator )
+{
+    return CreateSimpleStringEvaluator( ParametersFactory::CreateTypedSimpleParameter< ParamString >( paramName, timeEvaluator ), paramName );
+}
+
+// *******************************
+//
+SimpleStringEvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleStringEvaluator     ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName )
+{
+    return CreateSimpleStringEvaluator( ParametersFactory::CreateTypedSimpleParameter< ParamString >( paramName, timeEvaluator ), valueName );
+}
+
+// *******************************
+//
+SimpleWStringEvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleWStringEvaluator    ( ParamWStringPtr param, ValueWStringPtr value )
+{
+    return std::make_shared< SimpleWStringEvaluator >( param, value );
+}
+
+// *******************************
+//
+SimpleWStringEvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleWStringEvaluator    ( ParamWStringPtr param, const std::string & valueName )
+{
+    return CreateSimpleWStringEvaluator( param, ValuesFactory::CreateValueWString( valueName ) );
+}
+
+// *******************************
+//
+SimpleWStringEvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleWStringEvaluator    ( ParamWStringPtr param )
+{
+    return CreateSimpleWStringEvaluator( param, param->GetName() );
+}
+
+// *******************************
+//
+SimpleWStringEvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleWStringEvaluator    ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator )
+{
+    return CreateSimpleWStringEvaluator( ParametersFactory::CreateTypedSimpleParameter< ParamWString >( paramName, timeEvaluator ), paramName );
+}
+
+// *******************************
+//
+SimpleWStringEvaluatorPtr        ParamValEvaluatorFactory::CreateSimpleWStringEvaluator    ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName )
+{
+    return CreateSimpleWStringEvaluator( ParametersFactory::CreateTypedSimpleParameter< ParamWString >( paramName, timeEvaluator ), valueName );
+}
+
 } //model
 } //bv

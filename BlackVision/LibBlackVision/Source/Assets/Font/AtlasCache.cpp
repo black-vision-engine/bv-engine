@@ -41,7 +41,8 @@ FontAtlasCacheEntry::FontAtlasCacheEntry(   const TextAtlasConstPtr & textAtlas
                                          ,  SizeType blurSize
 										 ,  SizeType outlineWidth
                                          ,  const std::string& fontFilePath
-										 ,  UInt32 mmLevelsNum )
+										 ,  UInt32 mmLevelsNum
+                                         ,  const std::wstring & charSetFileName)
     : m_textAtlas( textAtlas )
     , m_fontName( fontName )
     , m_fontSize( fontSize )
@@ -49,6 +50,7 @@ FontAtlasCacheEntry::FontAtlasCacheEntry(   const TextAtlasConstPtr & textAtlas
 	, m_outlineWidth( outlineWidth )
     , m_fontFilePath( fontFilePath )
 	, m_mmLevelsNum( mmLevelsNum )
+    , m_charSetFileName( charSetFileName ) 
 {}
 
 // *********************************
@@ -124,7 +126,7 @@ void                    FontAtlasCache::InitFontCachedTable ()
     if ( m_dataBase != nullptr )
     {
         static std::string sql = "CREATE TABLE IF NOT EXISTS cached_fonts(font_name TEXT, font_size INTEGER, blur_size INTEGER, outline_width INTEGER, font_file_name TEXT \
-                            , atlas_width INTEGER, atlas_height INTEGER, mm_levels_num INTEGER, text_atlas BLOB, PRIMARY KEY( font_name , font_size, blur_size, mm_levels_num ) )";
+                            , atlas_width INTEGER, atlas_height INTEGER, mm_levels_num INTEGER, char_set TEXT, text_atlas BLOB, PRIMARY KEY( font_name , font_size, blur_size, mm_levels_num, char_set ) )";
 
         char* err = nullptr;
 
@@ -150,7 +152,7 @@ int GetEntryCallback( void * data, int argsNum, char ** args, char ** columnName
 
     auto out = static_cast< FontAtlasCacheEntry * >( data );
 
-    assert( argsNum == 9 );
+    assert( argsNum == 10 );
 
     out->m_fontName     = args[ 0 ];
     out->m_fontSize     = std::atoi( args[ 1 ] );
@@ -160,8 +162,9 @@ int GetEntryCallback( void * data, int argsNum, char ** args, char ** columnName
 	out->m_atlasWidth   = std::atoi( args[ 5 ] );
     out->m_atlasHeight  = std::atoi( args[ 6 ] );
 	out->m_mmLevelsNum  = std::atoi( args[ 7 ] );
+    out->m_charSetFileName  = ( wchar_t * )( args[ 8 ] );
 	out->m_textAtlas    = TextAtlas::Create(0,0,0,0,0);
-    std::stringstream str(  args[ 8 ] );
+    std::stringstream str(  args[ 9 ] );
 
 	std::const_pointer_cast< TextAtlas >( out->m_textAtlas )->Load( str );    
 
@@ -171,7 +174,7 @@ int GetEntryCallback( void * data, int argsNum, char ** args, char ** columnName
 }
 // *********************************
 //
-FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & fontName, SizeType fontSize, SizeType blurSize, SizeType outlineWidth, bool withMipMaps )
+FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & fontName, SizeType fontSize, SizeType blurSize, SizeType outlineWidth, bool withMipMaps, const std::wstring & charSet )
 {
     if( !m_dataBase )
     {
@@ -184,7 +187,8 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & f
                             " AND font_size = " + std::to_string( fontSize ) +
                             " AND blur_Size = " + std::to_string( blurSize ) +
 							" AND outline_width = " + std::to_string( outlineWidth ) +
-							" AND mm_levels_num " + ( withMipMaps  ? " > 0 " : " = 0 " ) + ";";
+							" AND mm_levels_num " + ( withMipMaps  ? " > 0 " : " = 0 " ) +
+                            " AND char_set = \'" + std::string( charSet.begin(), charSet.end() )  + "\';";
 
     char* err = nullptr;
 
@@ -209,7 +213,8 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & f
 																				ret->m_fontSize,
 																				ret->m_blurSize,
 																				ret->m_outlineWidth,
-																				ret->m_mmLevelsNum );
+																				ret->m_mmLevelsNum,
+                                                                                charSet );
 
 		auto asset = TextureCache::GetInstance().Get( atlasTextureDesc ); 
 
@@ -272,6 +277,7 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
 		+ std::to_string( data.m_textAtlas->GetWidth() ) + ", " 
 		+ std::to_string( data.m_textAtlas->GetHeight() ) + ", " 
 		+ std::to_string( mmLevelsNum ) + ", " 
+        + "\'" + std::string( data.m_charSetFileName.begin(), data.m_charSetFileName.end() ) + "\'" + ", "
         + "?)";
 
 	
@@ -281,7 +287,8 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
 																			data.m_fontSize,
 																			data.m_blurSize,
 																			data.m_outlineWidth,
-																			mmLevelsNum );
+																			mmLevelsNum,
+                                                                            data.m_charSetFileName );
 
 	TextureCache::GetInstance().Add( atlasTextureDesc, data.m_textAtlas->m_textureAsset );
 

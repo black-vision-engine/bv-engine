@@ -312,10 +312,15 @@ namespace bv {
 #define GL_GEQUAL						0x0206
 #define GL_ALWAYS						0x0207
 
+//pablito
+#define GL_RGB10 0x8052
 #define GL_POINT						0x1B00
 #define GL_LINE							0x1B01
 #define GL_FILL							0x1B02
 
+#define GL_RGB16 0x8054
+#define GL_RGBA16 0x805B
+//#define GL_ALPHA16
 #define GL_BGR							0x80E0
 #define GL_BGRA							0x80E1
 #define GL_RGBA							0x1908
@@ -354,6 +359,11 @@ namespace bv {
 #define GL_CULL_FACE					0x0B44
 #define GL_CULL_FACE_MODE				0x0B45
 
+//pablito
+#define GL_FRAMEBUFFER_EXT 0x8D40
+#define GL_RENDERBUFFER_EXT 0x8D41
+#define GL_FRAMEBUFFER_EXT 0x8D40
+#define GL_FRAMEBUFFER_EXT 0x8D40
 #define GL_VIEWPORT						0x0BA2
 #define GL_COLOR_BUFFER_BIT				0x00004000
 #define GL_DEPTH_BUFFER_BIT				0x00000100

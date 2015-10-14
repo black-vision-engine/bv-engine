@@ -38,6 +38,8 @@ enum class ParamType : int
     PT_INT,
     PT_BOOL,
     PT_ENUM,
+    PT_STRING,
+    PT_WSTRING,
     PT_TOTAL
 };
 
@@ -53,6 +55,8 @@ enum class ModelParamType : int
     MPT_INT,
     MPT_BOOL,
     MPT_ENUM,
+    MPT_STRING,
+    MPT_WSTRING,
     MPT_TOTAL
 };
 
@@ -198,7 +202,9 @@ enum class MipMapFilterType : int
 	B_SPLINE,
 	BICUBIC,
 	CATMULL_ROM,
-	LANCZOS
+	LANCZOS,
+
+    MMFT_TOTAL
 };
 
 } // bv
