@@ -795,7 +795,11 @@ ProjectManagerImpl::Location ProjectManagerImpl::Path2Location( const Path & pat
 		}
 	}
 
-	assert( !categoryName.empty() );
+    if( categoryName.empty() )
+    {
+        LOG_MESSAGE( SeverityLevel::warning ) << "'" << path << "' is not valid path inside project manager.";
+        return Location();
+    }
 
 	Path projectName = "";
 
@@ -878,7 +882,15 @@ Path                        ProjectManagerImpl::ToAbsPath           ( const Path
     }
     else
     {
-        return m_rootPath / path;
+        if( IsValidPMPath( path ) )
+        {
+            return m_rootPath / path;
+        }
+        else
+        {
+            // FIXME: This else is needed only for testing old mechanism with pablito's solutions
+            return path;
+        }
     }
 }
 
@@ -897,6 +909,27 @@ bool                        ProjectManagerImpl::IsExternalPath      ( const Path
     else if ( path.Str().find( "stream:/" ) == 0 )
     {
         return true;
+    }
+    else
+    {
+        return IsValidPMPath( path );
+    }
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::IsValidPMPath       ( const Path & path ) const
+{
+    return Path2Location( path ).IsValid();
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::PathExistsInPM      ( const Path & path ) const
+{
+    if( !IsExternalPath( path ) )
+    {
+        return Path::Exists( ToAbsPath( path ) );
     }
     else
     {

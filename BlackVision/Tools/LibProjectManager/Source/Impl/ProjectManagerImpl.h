@@ -124,10 +124,17 @@ private:
 		std::string		categoryName;
 		Path			projectName;
 		Path			path;
+
+        bool            IsValid () const
+        {
+            return !categoryName.empty();
+        }
 	};
 
 	Location				Path2Location		( const Path & path ) const;
 	Path					Location2Path		( const Location & loc ) const;
+    bool                    IsValidPMPath       ( const Path & path ) const;
+    bool                    PathExistsInPM      ( const Path & path ) const;
 };
 
 

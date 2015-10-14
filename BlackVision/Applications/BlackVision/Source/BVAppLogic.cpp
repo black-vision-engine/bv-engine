@@ -164,18 +164,24 @@ void BVAppLogic::LoadScene          ( void )
     
     if( !ConfigManager::GetBool( "Debug/LoadSceneFromEnv" ) )
     {
-        auto pm = ProjectManager::GetInstance();
+        if( ConfigManager::GetBool( "Debug/LoadSolution" ) )
+        {
+            //m_solution.SetTimeline(m_timelineManager);
+            m_solution.LoadSolution( ConfigManager::GetString("solution") );
+            root = m_solution.GetRoot();
+            //if(ConfigManager::GetBool("hm"))
+            //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
+        }
+        else
+        {
+            auto pm = ProjectManager::GetInstance();
 
-        auto projectName = ConfigManager::GetString( "default_project_name" );
-        auto projectScenesNames = pm->ListScenesNames( projectName );
+            auto projectName = ConfigManager::GetString( "default_project_name" );
+            auto projectScenesNames = pm->ListScenesNames( projectName );
 
-        root = LoadScenes( projectScenesNames );
+            root = LoadScenes( projectScenesNames );
+        }
 
-        //m_solution.SetTimeline(m_timelineManager);
-        //m_solution.LoadSolution(  );
-        //root = m_solution.GetRoot();
-        //if(ConfigManager::GetBool("hm"))
-        //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
     }
     else
     {
