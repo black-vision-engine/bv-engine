@@ -40,6 +40,7 @@ namespace bv {
 #define GL_MAX_TEXTURE_IMAGE_UNITS							0x8872
 
 #define GL_STENCIL_TEST										0x0B90
+#define GL_CURRENT_PROGRAM                                  0x8B8D
 
 #define GL_NO_ERROR 0
 #define GL_INVALID_ENUM										0x0500

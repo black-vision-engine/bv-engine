@@ -194,6 +194,8 @@ bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
     unsigned int firstVertex = 0;
     for( unsigned int i = 0; i < vao->GetNumConnectedComponents(); ++i )
     {
+        PassCCNumUniform( i );
+
         unsigned int numVertices = vao->GetNumVertices( i );
         BVGL::bvglDrawArrays( mode, firstVertex, numVertices );
         firstVertex += numVertices;
@@ -813,6 +815,21 @@ void    Renderer::DeleteSinglePDR   ( MapType & resMap, typename MapType::key_ty
         delete res;
 
         resMap.erase( it );
+    }
+}
+
+// *********************************
+//
+void    Renderer::PassCCNumUniform  ( int i )
+{
+    GLint id;
+    BVGL::bvglGetIntegerv( GL_CURRENT_PROGRAM, &id );
+
+    auto loc = BVGL::bvglGetUniformLocation( id, "cc_num" );
+
+    if( loc >= 0 )
+    {
+        BVGL::bvglUniform1i( loc, i );
     }
 }
 
