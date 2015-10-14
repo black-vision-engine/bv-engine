@@ -22,6 +22,8 @@ private:
 
 	PacketQueueMap				m_packetQueue;
 
+	bool						m_isEOF;
+
 public:
 								FFmpegDemuxer			( const std::string & streamPath );
 								~FFmpegDemuxer			();
@@ -33,6 +35,8 @@ public:
 	void						Seek					( Float32 time );
 
 	void						Reset					();
+	
+	bool						IsEOF					() const;
 
 private:
 	void						ClearPacketQueue		();

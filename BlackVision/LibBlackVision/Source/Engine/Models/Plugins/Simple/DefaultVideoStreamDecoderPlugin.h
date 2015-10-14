@@ -27,9 +27,6 @@ public:
 
 	static  std::string                     UID                 ();
 
-	//static  std::string                     VertexShaderSource  ();
-	//static  std::string                     PixelShaderSource   ();
-
 	static  std::string                     TextureName         ();
 
 };
@@ -47,7 +44,7 @@ private:
 
     DefaultTexturesDataPtr          m_texturesData;
 
-    unsigned int                    m_texCoordChannelIndex;
+    UInt32		                    m_texCoordChannelIndex;
 
     ParamFloatPtr                   m_paramAttachMode;
 
@@ -70,6 +67,8 @@ public:
     virtual void                                Update                      ( TimeType t ) override;
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
+
+//---controlling events
 
 	void										StartDecoding				();
 	void										PauseDecoding				();

@@ -10,6 +10,7 @@ namespace bv
 FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath )
 	: m_streamPath( streamPath )
 	, m_formatCtx( nullptr )
+	, m_isEOF( false )
 {
 	av_register_all();
 
@@ -19,26 +20,7 @@ FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath )
 	assert( !error );
 
 	error = avformat_find_stream_info( m_formatCtx, nullptr ) < 0;
-	assert( !error );
-
-	//FIXME: handle raw
-	/*bool error = avformat_find_stream_info( formatCtx, nullptr ) < 0;
-	if( error && 
-		desc->GetWidth() > 0 && 
-		desc->GetHeight() > 0 &&
-		desc->GetFrameRate() > 0 )
-	{
-		m_codecCtx->width = desc->GetWidth();
-		m_codecCtx->height = desc->GetHeight();
-
-		AVRational frameRate;
-		frameRate.num = desc->GetFrameRate();
-		frameRate.den = 1;
-		m_codecCtx->framerate = frameRate;
-
-		error = false;
-	}
-	assert( !error );*/
+	//assert( !error ); //raw video
 
 	av_dump_format( m_formatCtx, 0, streamPath.c_str(), 0 );
 }
@@ -81,6 +63,7 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 			auto error = av_read_frame( m_formatCtx, packet );
 			if( error < 0 ) {
 				assert( error == AVERROR_EOF );	//FIXME: error decoding video
+				m_isEOF = true;
                 av_free_packet( packet );
                 delete packet;
                 return nullptr;
@@ -124,6 +107,7 @@ void				FFmpegDemuxer::Seek					( Float32 time )
 void				FFmpegDemuxer::Reset				()
 {
 	Seek( 0 );
+	m_isEOF = false; 
 
 	for( unsigned int i = 0; i < m_formatCtx->nb_streams; ++i )
 	{
@@ -149,6 +133,13 @@ Int32				FFmpegDemuxer::GetStreamIndex	( AVMediaType type, UInt32 idx )
 	}
 
 	return streamIdx;
+}
+
+// *******************************
+//
+bool				FFmpegDemuxer::IsEOF				() const
+{
+	return m_isEOF;
 }
 
 // *******************************

@@ -1,5 +1,7 @@
 #include "FFmpegVideoDecoder.h"
 
+#include "FFmpegUtils.h"
+
 namespace bv
 {
 
@@ -20,10 +22,10 @@ FFmpegVideoDecoder::FFmpegVideoDecoder		( VideoStreamAssetDescConstPtr desc )
 	auto width = m_vstreamDecoder->GetWidth();
 	auto height = m_vstreamDecoder->GetHeight();
 	
-	auto ffmpegFormat = ToFFmpegPixelFormat( desc->GetTextureFormat() );
+	auto ffmpegFormat = FFmpegUtils::ToFFmpegPixelFormat( desc->GetTextureFormat() );
 	m_outFrame = av_frame_alloc();
 	auto numBytes = avpicture_get_size( ffmpegFormat, width, height );
-	auto buffer = (uint8_t *)av_malloc( numBytes * sizeof( uint8_t ) );
+	auto buffer = ( uint8_t * )av_malloc( numBytes * sizeof( uint8_t ) );
 	avpicture_fill( ( AVPicture * )m_outFrame, buffer, ffmpegFormat, width, height );
 	
 	m_outFrame->width = width;
@@ -41,6 +43,7 @@ FFmpegVideoDecoder::~FFmpegVideoDecoder		()
 	if( m_decoderThread )
 	{
 		m_decoderThread->Stop();
+		m_decoderThread = nullptr;
 	}
 
 	av_free( m_frame );
@@ -50,14 +53,11 @@ FFmpegVideoDecoder::~FFmpegVideoDecoder		()
 //
 void						FFmpegVideoDecoder::Start				()
 {
-	if( m_decoderThread == nullptr )
+	if( m_decoderThread == nullptr || m_decoderThread->Stopped() )
 	{
+		Reset();
 		m_decoderThread = std::unique_ptr< VideoDecoderThread >( new VideoDecoderThread( shared_from_this() ) );
 		m_decoderThread->Start();
-	}
-	else
-	{
-		m_decoderThread->Resume();
 	}
 }
 
@@ -97,10 +97,10 @@ MemoryChunkConstPtr			FFmpegVideoDecoder::GetCurrentFrameData		( UInt64 & outFra
 //
 bool						FFmpegVideoDecoder::NextFrameDataReady		()
 {
+	std::lock_guard< std::mutex > guard( m_dataMutex );
 	auto packet = m_demuxer->GetPacket( m_vstreamDecoder->GetStreamIdx() );
 	if( packet != nullptr )
 	{
-		std::lock_guard< std::mutex > guard( m_dataMutex );
 		if( m_vstreamDecoder->DecodePacket( packet, m_frame ) )
 		{
 			m_vstreamDecoder->ConvertFrame( m_frame, m_outFrame );
@@ -145,17 +145,18 @@ Float64						FFmpegVideoDecoder::GetFrameRate			() const
 
 // *********************************
 //
-UInt64						FFmpegVideoDecoder::GetDuration				() const
-{
-	return m_vstreamDecoder->GetDuration();
-}
-
-// *********************************
-//
 void						FFmpegVideoDecoder::Reset					() 
 {
 	m_demuxer->Reset();
 	ClearFrameData();
+}
+
+// *********************************
+//
+bool						FFmpegVideoDecoder::IsEOF					() const
+{
+	std::lock_guard< std::mutex > guard( m_dataMutex );
+	return m_demuxer->IsEOF();
 }
 
 // *********************************
@@ -165,28 +166,6 @@ void						FFmpegVideoDecoder::ClearFrameData			()
 	char * rawData = new char[ m_frameSize ];
 	memset( rawData, 0, m_frameSize );
 	m_frameData = MemoryChunk::Create( rawData, m_frameSize );
-}
-
-// *********************************
-//
-AVPixelFormat				FFmpegVideoDecoder::ToFFmpegPixelFormat		( TextureFormat format ) 
-{
-	switch( format )
-	{
-	//FIXME
-	//case TextureFormat::F_A32FR32FG32FB32F:
-	//case TextureFormat::F_R32FG32FB32F:
-	//case TextureFormat::F_A32F:
-	case TextureFormat::F_A8R8G8B8:
-		return AVPixelFormat::AV_PIX_FMT_BGRA;
-	case TextureFormat::F_R8G8B8:
-		return AVPixelFormat::AV_PIX_FMT_BGR24;
-	//case TextureFormat::F_A8:
-	//case TextureFormat::F_L8:
-	default:
-		assert( false );
-		return AVPixelFormat::AV_PIX_FMT_NONE;
-	}
 }
 
 } //bv

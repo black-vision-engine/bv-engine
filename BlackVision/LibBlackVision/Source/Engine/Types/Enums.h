@@ -201,4 +201,32 @@ enum class MipMapFilterType : int
 	LANCZOS
 };
 
+enum class VideoPixelFormat : int 
+{
+	//RGB
+	VPF_RGBA = 0,
+	VPF_RGB24,
+	VPF_RGB8,
+	VPF_RGB4,
+	VPF_BGRA,
+	VPF_BGR24,
+	VPF_BGR8,
+	VPF_BGR4,
+
+	//planar YUV
+	VPF_YUV420P,
+	VPF_YUV422P,
+	VPF_YUV444P,
+	VPF_YUV410P,
+	VPF_YUV411P,
+	VPF_YUVA420P,
+	VPF_YUVA422P,
+	VPF_YUVA444P,
+
+	//packed YUV
+	VPF_YVYU422,
+	VPF_YUYV422,
+	VPF_UYVY422,
+};
+
 } // bv

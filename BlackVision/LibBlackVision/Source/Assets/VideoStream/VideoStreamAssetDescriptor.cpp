@@ -41,9 +41,9 @@ VideoStreamAssetDescConstPtr VideoStreamAssetDesc::Create	( const std::string & 
 
 // ***********************
 //
-VideoStreamAssetDescConstPtr VideoStreamAssetDesc::Create	( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate )
+VideoStreamAssetDescConstPtr VideoStreamAssetDesc::Create	( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat )
 {
-	return std::make_shared< VideoStreamAssetDesc >( streamPath, textureFormat, width, height, frameRate );
+	return std::make_shared< VideoStreamAssetDesc >( streamPath, textureFormat, width, height, frameRate, videoFormat );
 }
 
 // ***********************
@@ -59,12 +59,13 @@ VideoStreamAssetDesc::VideoStreamAssetDesc					( const std::string & streamPath,
 
 // ***********************
 //
-VideoStreamAssetDesc::VideoStreamAssetDesc					( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate )
+VideoStreamAssetDesc::VideoStreamAssetDesc					( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat )
 	: m_streamPath( streamPath )
 	, m_width( width )
 	, m_height( height )
 	, m_frameRate( frameRate )
 	, m_textureFormat( textureFormat )
+	, m_videoFormat( videoFormat )
 {
 }
 
@@ -103,5 +104,11 @@ TextureFormat			VideoStreamAssetDesc::GetTextureFormat	() const
 	return m_textureFormat;
 }
 
-} // bv
+// ***********************
+//
+VideoPixelFormat		VideoStreamAssetDesc::GetVideoFormat	() const
+{
+	return m_videoFormat;
+}
 
+} // bv

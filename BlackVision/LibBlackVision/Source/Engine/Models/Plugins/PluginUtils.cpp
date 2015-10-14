@@ -61,6 +61,20 @@ bool    LoadVideoStream ( IPluginPtr plugin, const std::string & streamPath, Tex
 
 // *******************************
 //
+bool    LoadVideoStream ( IPluginPtr plugin, const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat )
+{
+	auto desc = VideoStreamAssetDesc::Create( streamPath, textureFormat, width, height, frameRate, videoFormat );
+
+    if( desc == nullptr )
+    {
+        return false;
+    }
+
+    return plugin->LoadResource( desc );
+}
+
+// *******************************
+//
 bool    LoadFont        ( IPluginPtr plugin, const std::string & fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps )
 {
 	auto desc = FontAssetDesc::Create( fontFile, fontSize, blurSize, outlineSize, generateMipmaps );

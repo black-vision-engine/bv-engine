@@ -22,10 +22,11 @@ private:
 
 	std::string					m_streamPath;
 
+	//raw videos data
 	UInt32						m_width;
 	UInt32						m_height;
-
 	Float64						m_frameRate;
+	VideoPixelFormat			m_videoFormat;
 
 	TextureFormat				m_textureFormat;
 
@@ -36,7 +37,7 @@ protected:
 
 public:
 	explicit									VideoStreamAssetDesc		( const std::string & streamPath, TextureFormat textureFormat );
-	explicit									VideoStreamAssetDesc		( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate );
+	explicit									VideoStreamAssetDesc		( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat );
 
 	virtual const std::string &					GetUID						() const override;
 	
@@ -48,11 +49,12 @@ public:
 	UInt32										GetWidth					() const;
 	UInt32										GetHeight					() const;
 	Float64										GetFrameRate				() const;
+	VideoPixelFormat							GetVideoFormat				() const;
 
 	TextureFormat								GetTextureFormat			() const;
 	
 	static VideoStreamAssetDescConstPtr			Create						( const std::string & streamPath, TextureFormat textureFormat );
-	static VideoStreamAssetDescConstPtr			Create						( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate );
+	static VideoStreamAssetDescConstPtr			Create						( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat  );
 
 };
 

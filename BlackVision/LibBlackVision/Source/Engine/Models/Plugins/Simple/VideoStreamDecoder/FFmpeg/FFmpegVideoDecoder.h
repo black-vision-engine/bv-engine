@@ -48,14 +48,14 @@ public:
 	virtual UInt32				GetWidth				() const override;
 	virtual UInt32				GetHeight				() const override;
 	virtual Float64				GetFrameRate			() const override;
-	virtual UInt64				GetDuration				() const override;
 
 	virtual void				Reset					() override;
+
+	virtual bool				IsEOF					() const override;
 
 private:
 	void						ClearFrameData			();
 
-	static AVPixelFormat		ToFFmpegPixelFormat		( TextureFormat format );
 };
 
 } //bv

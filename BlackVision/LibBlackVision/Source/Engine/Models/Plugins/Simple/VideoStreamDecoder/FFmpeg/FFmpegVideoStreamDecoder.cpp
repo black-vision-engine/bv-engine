@@ -1,6 +1,7 @@
 #include "FFmpegVideoStreamDecoder.h"
 
 #include <cassert>
+#include "FFmpegUtils.h"
 
 namespace bv
 {
@@ -25,29 +26,26 @@ FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder     ( VideoStreamAssetDescCon
 	bool error = ( avcodec_open2( m_codecCtx, m_codec, nullptr ) < 0 );
 	assert( !error ); { error; }
 
-	//FIXME
-	//m_swsCtx = sws_getContext( 
-	//	m_codecCtx->width,
-	//	m_codecCtx->height,
-	//	m_codecCtx->pix_fmt,
-	//	m_codecCtx->width,
-	//	m_codecCtx->height,
-	//	AV_PIX_FMT_BGRA,
-	//	SWS_BILINEAR,
-	//	nullptr,
-	//	nullptr,
-	//	nullptr
-	//);
-	
 	//raw video desc should provide width, height & format
-	m_width = m_codecCtx->width > 0 ? ( UInt32 )m_codecCtx->width : desc->GetWidth();
-	m_height = m_codecCtx->height > 0 ? ( UInt32 )m_codecCtx->height : desc->GetHeight();
+
+	if( m_codecCtx->width == 0 || m_codecCtx->height == 0 )
+	{
+		m_codecCtx->width = desc->GetWidth();
+		m_codecCtx->height = desc->GetHeight();
+
+		m_codecCtx->framerate = av_d2q( desc->GetFrameRate(), ( int )desc->GetFrameRate() );
+		m_stream->avg_frame_rate = m_codecCtx->framerate;
+
+		m_codecCtx->pix_fmt = FFmpegUtils::ToFFmpegPixelFormat( desc->GetVideoFormat() );
+	}
+
+	m_width = ( UInt32 )m_codecCtx->width;
+	m_height = ( UInt32 )m_codecCtx->height;
+	
+	m_frameRate = ( Float64 )av_q2d( m_stream->avg_frame_rate );
 
 	assert( m_width > 0 );
 	assert( m_height > 0 );
-
-	m_frameRate = ( Float64 )av_q2d( m_stream->avg_frame_rate );
-	m_duration = ( UInt64 )m_stream->duration;
 
 }
 
@@ -79,7 +77,7 @@ void				FFmpegVideoStreamDecoder::ConvertFrame		( AVFrame * inFrame, AVFrame * o
 {
 	m_swsCtx = sws_getCachedContext( m_swsCtx, inFrame->width, inFrame->height, static_cast< AVPixelFormat >( inFrame->format ),
 		outFrame->width, outFrame->height, static_cast< AVPixelFormat >( outFrame->format ), SWS_BILINEAR, nullptr, nullptr, nullptr );
-
+	
 	sws_scale( m_swsCtx, ( const uint8_t ** const )inFrame->data, inFrame->linesize, 0,	inFrame->height, outFrame->data, outFrame->linesize );
 }
 
@@ -102,13 +100,6 @@ UInt32					FFmpegVideoStreamDecoder::GetHeight	() const
 Float64					FFmpegVideoStreamDecoder::GetFrameRate		() const
 {
 	return m_frameRate;
-}
-
-// *******************************
-//
-UInt64					FFmpegVideoStreamDecoder::GetDuration		() const
-{
-	return m_duration;
 }
 
 // *******************************

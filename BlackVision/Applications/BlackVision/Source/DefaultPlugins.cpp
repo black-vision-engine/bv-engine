@@ -8,7 +8,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultGradientPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
-#include "Engine/Models/Plugins/Simple/VideoStreamDecoder/DefaultVideoStreamDecoderPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultVideoStreamDecoderPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultAlphaMaskPlugin.h"

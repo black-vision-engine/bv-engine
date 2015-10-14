@@ -22,9 +22,10 @@ public:
 	virtual UInt32					GetWidth				() const = 0;
 	virtual UInt32					GetHeight				() const = 0;
 	virtual Float64					GetFrameRate			() const = 0;
-	virtual UInt64					GetDuration				() const = 0;
 
 	virtual void					Reset					() = 0;
+
+	virtual bool					IsEOF					() const = 0;
 };
 
 DEFINE_PTR_TYPE( IVideoDecoder )

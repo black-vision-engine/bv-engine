@@ -19,7 +19,7 @@ class VideoDecoderThread : public Thread
 private:
 	IVideoDecoderPtr			m_decoder;
 
-	std::mutex					m_mutex;
+	mutable std::mutex			m_mutex;
 	std::condition_variable		m_cond;
 
 	std::atomic< bool >			m_paused;
@@ -29,11 +29,12 @@ private:
 
 public:
 								VideoDecoderThread	( IVideoDecoderPtr decoder );
-    virtual						~VideoDecoderThread	();
+	virtual						~VideoDecoderThread	();
 
 	void						Pause				();
-	void						Resume				();
 	void						Stop				();
+
+	bool						Stopped				() const;
 
 protected:
 	virtual void				Run					() override;

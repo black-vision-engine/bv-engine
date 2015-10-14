@@ -19,7 +19,6 @@ VideoDecoderThread::VideoDecoderThread				( IVideoDecoderPtr decoder )
 VideoDecoderThread::~VideoDecoderThread				()
 {
 	Stop();
-	Join();
 }
 
 // *******************************
@@ -27,6 +26,7 @@ VideoDecoderThread::~VideoDecoderThread				()
 void				VideoDecoderThread::Stop		()
 {
 	std::unique_lock< std::mutex > lock( m_mutex );
+	m_paused = false;
 	m_stopped = true;
 	m_cond.notify_one();
 }
@@ -36,17 +36,16 @@ void				VideoDecoderThread::Stop		()
 void				VideoDecoderThread::Pause		()
 {
 	std::unique_lock< std::mutex > lock( m_mutex );
-	m_paused = true;
+	m_paused = !m_paused;
 	m_cond.notify_one();
 }
 
 // *******************************
 //
-void				VideoDecoderThread::Resume		()
+bool				VideoDecoderThread::Stopped		() const
 {
 	std::unique_lock< std::mutex > lock( m_mutex );
-	m_paused = false;
-	m_cond.notify_one();
+	return m_stopped;
 }
 
 // *******************************
@@ -55,10 +54,16 @@ void				VideoDecoderThread::Run			()
 {
     m_timer.Start();
 
+	//FIXME
 	auto frameDuration = 1000.0 / m_decoder->GetFrameRate();
-	auto frames = m_decoder->GetDuration();
-	while( !m_stopped && frames > 0 )
+	while( !m_stopped )
 	{
+		if( m_decoder->IsEOF() )
+		{
+			Stop();
+			break;
+		}
+
 		if ( m_paused )
 		{
 			std::unique_lock< std::mutex > lock( m_mutex );
@@ -70,7 +75,6 @@ void				VideoDecoderThread::Run			()
 
 		if( m_decoder->NextFrameDataReady() )
 		{
-			//
 			auto time = m_timer.ElapsedMillis();
 			while( time < frameDuration )
 			{
@@ -80,11 +84,7 @@ void				VideoDecoderThread::Run			()
 
 			m_timer.Start();
 		}
-		
-		frames--;
 	}
-
-	Stop();
 }
 
 } //bv

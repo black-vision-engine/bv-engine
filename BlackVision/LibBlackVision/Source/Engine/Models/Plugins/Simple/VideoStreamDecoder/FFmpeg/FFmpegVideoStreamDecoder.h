@@ -31,7 +31,6 @@ public:
 	UInt32					GetWidth					() const;	
 	UInt32					GetHeight					() const;	
 	Float64					GetFrameRate				() const;	
-	UInt64					GetDuration					() const;	
 
 	bool					DecodePacket				( AVPacket * packet, AVFrame * frame );
 	void					ConvertFrame				( AVFrame * inFrame, AVFrame * outFrame );
