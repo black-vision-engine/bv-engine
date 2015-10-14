@@ -45,7 +45,6 @@ void    RenderLogic::SetCamera       ( Camera * cam )
 void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
 {
     renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
-
     renderer->ClearBuffers();
     renderer->PreDraw();
 
@@ -58,6 +57,45 @@ void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
 	if( node )
 		RenderNode( renderer, node );
 
+    m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
+    m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
+
+    m_offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
+
+    renderer->PostDraw();
+    renderer->DisplayColorBuffer();
+}
+
+// *********************************
+//
+void    RenderLogic::RenderFrameTM   ( Renderer * renderer, SceneNode * node )
+{
+    PreFrameSetupTM( renderer );
+
+	if( node )
+		RenderNode( renderer, node );
+
+    PostFrameSetupTM( renderer );
+}
+
+// *********************************
+//
+void    RenderLogic::PreFrameSetupTM ( Renderer * renderer )
+{
+    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+    renderer->ClearBuffers();
+    renderer->PreDraw();
+
+    m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
+    m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
+
+    renderer->ClearBuffers();
+}
+
+// *********************************
+//
+void    RenderLogic::PostFrameSetupTM( Renderer * renderer )
+{
     m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
     m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
 
@@ -90,6 +128,27 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 			RenderVanilla( renderer, node );
         }
     }
+}
+
+// *********************************
+//
+bool    RenderLogic::UseDefaultMask  ( SceneNode * node ) const
+{
+    return !( UseAlphaMask( node ) || UseNodeMask( node ) );
+}
+
+// *********************************
+//
+bool    RenderLogic::UseAlphaMask    ( SceneNode * node ) const
+{
+    return node->IsOverridenAM();
+}
+
+// *********************************
+//
+bool    RenderLogic::UseNodeMask     ( SceneNode * node ) const
+{
+    return node->IsOverridenNM();
 }
 
 // *********************************

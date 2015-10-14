@@ -22,10 +22,23 @@ public:
 
     void    RenderFrame     ( Renderer * renderer, SceneNode * node );
 
+// Temporary transition code START
+    void    RenderFrameTM   ( Renderer * renderer, SceneNode * node );
+    void    PreFrameSetupTM ( Renderer * renderer );
+    void    PostFrameSetupTM( Renderer * renderer );
+// Temporary transition code END
+
 private:
 
     void    RenderNode      ( Renderer * renderer, SceneNode * node );
-    
+
+// Temporary transition code START
+    void    RenderNodeTM    ( Renderer * renderer, SceneNode * node );
+    bool    UseDefaultMask  ( SceneNode * node ) const;
+    bool    UseAlphaMask    ( SceneNode * node ) const;
+    bool    UseNodeMask     ( SceneNode * node ) const;
+// Temporary transition code END
+
     void    RenderVanilla   ( Renderer * renderer, SceneNode * node );
     void    RenderAlphaMask ( Renderer * renderer, SceneNode * node );
     void    RenderNodeMask  ( Renderer * renderer, SceneNode * node );

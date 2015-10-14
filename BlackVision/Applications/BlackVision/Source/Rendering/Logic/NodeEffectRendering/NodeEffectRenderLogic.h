@@ -13,7 +13,14 @@ public:
                     NodeEffectRenderLogic   ();
     virtual         ~NodeEffectRenderLogic  ();
 
-    virtual void    Render                  ( Renderer * renderer, SceneNode * node, OffscreenRenderLogic * offscreenRenderLogic ) = 0;
+    virtual void    RenderNode              ( Renderer * renderer, SceneNode * node, OffscreenRenderLogic * offscreenRenderLogic ) = 0;
+
+protected:
+
+    void            DrawNode                ( Renderer * renderer, SceneNode * node, OffscreenRenderLogic * offscreenRenderLogic );
+
+    void            DrawNodeOnly            ( Renderer * renderer, SceneNode * node );
+    void            DrawChildren            ( Renderer * renderer, SceneNode * node, int firstChildIdx, OffscreenRenderLogic * offscreenRenderLogic );
 
 };
 

@@ -13,7 +13,7 @@ public:
                     DefaultEffectRenderLogic    ();
     virtual         ~DefaultEffectRenderLogic   ();
 
-    virtual void    Render                      ( Renderer * renderer, SceneNode * node, OffscreenRenderLogic * offscreenRenderLogic ) override;
+    virtual void    RenderNode                  ( Renderer * renderer, SceneNode * node, OffscreenRenderLogic * offscreenRenderLogic ) override;
 
 };
 
