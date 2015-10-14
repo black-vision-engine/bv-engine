@@ -36,10 +36,6 @@ public:
 
 	AssetConstPtr					Get		( const std::string& key ) const;
 	AssetConstPtr					Get		( const AssetDescConstPtr& descriptor ) const;
-
-	// **************************
-	// Returns reference to singleton of TextureCache class instance.
-	static AssetCache&				GetInstance				();
 };
 
 

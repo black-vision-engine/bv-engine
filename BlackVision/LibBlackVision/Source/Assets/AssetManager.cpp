@@ -32,20 +32,26 @@ AssetDescConstPtr AssetManager::CreateDesc( const std::string& jsonString )
 
 // ***********************
 //
-AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc ) const
+AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc )
 {
-	auto it = m_loaders.find( desc->GetUID() );
-
-	if( it != m_loaders.end() )
+	if( m_assetCache.Exists( desc ) )
+		return m_assetCache.Get( desc );
+	else
 	{
-		auto asset = it->second->LoadAsset( desc );
-		if( asset != nullptr )
-		{
-			return asset;
-		}
-	}
+		auto it = m_loaders.find( desc->GetUID() );
 
-	return nullptr;
+		if( it != m_loaders.end() )
+		{
+			auto asset = it->second->LoadAsset( desc );
+			if( asset != nullptr )
+			{
+				m_assetCache.Add( desc, asset );
+				return asset;
+			}
+		}
+
+		return nullptr;
+	}
 }
 
 // ***********************

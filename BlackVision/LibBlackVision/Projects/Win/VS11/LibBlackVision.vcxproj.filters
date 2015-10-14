@@ -942,7 +942,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\VideoDecoderThread.cpp">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\AssetCache.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\AssetCache.cpp">
+      <Filter>Assets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1902,7 +1904,9 @@
     <ClInclude Include="..\..\..\Source\Serialization\Json\JsonSerializationObjects.h">
       <Filter>Serialization\Json</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\AssetCache.h" />
+    <ClInclude Include="..\..\..\Source\Assets\AssetCache.h">
+      <Filter>Assets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

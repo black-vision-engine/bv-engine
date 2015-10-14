@@ -69,15 +69,6 @@ AssetConstPtr	AssetCache::Get( const AssetDescConstPtr& descriptor ) const
 	return asset;
 }
 
-
-// ******************************
-//
-AssetCache& AssetCache::GetInstance()
-{
-	static auto innstance = AssetCache();
-	return innstance;
-}
-
 // ******************************
 //
 AssetConstPtr	AssetCache::Find( const std::string& key ) const
