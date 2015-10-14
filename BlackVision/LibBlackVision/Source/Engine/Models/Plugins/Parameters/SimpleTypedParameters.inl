@@ -19,6 +19,15 @@ SimpleParameterImpl< InterpolatorType, ValueType, type >::~SimpleParameterImpl  
 // *******************************
 //
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
+void SimpleParameterImpl< InterpolatorType, ValueType, type >::SetCurveType    ( CurveType type )
+{ 
+    m_interpolator.SetCurveType( type ); 
+}
+
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
 inline ValueType SimpleParameterImpl< InterpolatorType, ValueType, type >::Evaluate () const
 {
     auto t = GetLocalEvaluationTime();
@@ -58,23 +67,23 @@ inline ModelParamType  SimpleParameterImpl< InterpolatorType, ValueType, type >:
     return type;
 }
 
-// *******************************
+//// *******************************
+////
+//template< typename InterpolatorType, typename ValueType, ModelParamType type >
+//void                SimpleParameterImpl< InterpolatorType, ValueType, type >::SetInterpolationMethod ( IParameter::InterpolationMethod method )
+//{
+//    __super::SetInterpolationMethod( method );
+//    m_interpolator.SetInterpolationMethod( method );
+//}
 //
-template< typename InterpolatorType, typename ValueType, ModelParamType type >
-void                SimpleParameterImpl< InterpolatorType, ValueType, type >::SetInterpolationMethod ( IParameter::InterpolationMethod method )
-{
-    __super::SetInterpolationMethod( method );
-    m_interpolator.SetInterpolationMethod( method );
-}
-
-// *******************************
-//
-template< typename InterpolatorType, typename ValueType, ModelParamType type >
-IParameter::InterpolationMethod SimpleParameterImpl< InterpolatorType, ValueType, type >::GetInterpolationMethod () const
-{
-    assert( __super::GetInterpolationMethod() == m_interpolator.GetInterpolationMethod() ); // just to make sure we're consistent
-    return __super::GetInterpolationMethod();
-}
+//// *******************************
+////
+//template< typename InterpolatorType, typename ValueType, ModelParamType type >
+//IParameter::InterpolationMethod SimpleParameterImpl< InterpolatorType, ValueType, type >::GetInterpolationMethod () const
+//{
+//    assert( __super::GetInterpolationMethod() == m_interpolator.GetInterpolationMethod() ); // just to make sure we're consistent
+//    return __super::GetInterpolationMethod();
+//}
 
 
 // *******************************
