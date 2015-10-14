@@ -34,6 +34,9 @@
     <Filter Include="Rendering\Logic">
       <UniqueIdentifier>{f1ca2f90-831f-4cb3-8ecc-247f7d455325}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering\Logic\NodeEffectRendering">
+      <UniqueIdentifier>{779e4a57-6fa2-46f1-bba2-31541f4a8920}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -104,6 +107,18 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogic.cpp">
       <Filter>Rendering\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\AlphaMaskRenderLogic.cpp">
+      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeMaskRenderLogic.cpp">
+      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeEffectRenderLogic.cpp">
+      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\DefaultEffectRenderLogic.cpp">
+      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +195,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogic.h">
       <Filter>Rendering\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\AlphaMaskRenderLogic.h">
+      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeMaskRenderLogic.h">
+      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeEffectRenderLogic.h">
+      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\DefaultEffectRenderLogic.h">
+      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
