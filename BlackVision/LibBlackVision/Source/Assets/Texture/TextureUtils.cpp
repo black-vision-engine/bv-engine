@@ -198,8 +198,10 @@ TextureAssetConstPtr TextureUtils::LoadOrginalTextureOnly			( const TextureAsset
 	assert( desc->GetLoadingType() == TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE );
 
 	auto origRes = LoadSingleTexture( desc->GetOrigTextureDesc(), false );
-	
-	return TextureAsset::Create( origRes, nullptr );
+	if( origRes != nullptr )
+		return TextureAsset::Create( origRes, nullptr );
+	else
+		return nullptr;
 }
 
 // ******************************
@@ -209,6 +211,8 @@ TextureAssetConstPtr TextureUtils::LoadTextureAndMipMaps			( const TextureAssetD
 	assert( desc->GetLoadingType() == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS );
 
 	auto origRes = LoadSingleTexture( desc->GetOrigTextureDesc(), false );
+	if( origRes == nullptr )
+		return nullptr;
 
 	auto mipMapsSize = desc->GetMipMapsDesc()->GetLevelsNum();
 
@@ -217,7 +221,11 @@ TextureAssetConstPtr TextureUtils::LoadTextureAndMipMaps			( const TextureAssetD
 	for( SizeType i = 0; i < mipMapsSize; ++i )
 	{
 		auto levelDesc = desc->GetMipMapsDesc()->GetLevelDesc( i );
-		mipMapsRes.push_back( LoadSingleTexture( levelDesc, false ) );
+		auto newMipMap = LoadSingleTexture( levelDesc, false );
+		if( newMipMap != nullptr )
+			mipMapsRes.push_back( newMipMap );
+		else
+			return nullptr;
 	}
 
 	auto mipMapRes = MipMapAsset::Create( mipMapsRes );
@@ -244,6 +252,8 @@ TextureAssetConstPtr TextureUtils::LoadTextureAndGenerateMipMaps	( const Texture
 	}
 
 	SingleTextureAssetConstPtr origRes = LoadSingleTexture( desc->GetOrigTextureDesc(), false );
+	if( origRes == nullptr )
+		return nullptr;
 
 	std::vector< SingleTextureAssetConstPtr > mipMapsRes;
 

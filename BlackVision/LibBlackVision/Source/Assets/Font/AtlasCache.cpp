@@ -211,7 +211,7 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & f
 																				ret->m_outlineWidth,
 																				ret->m_mmLevelsNum );
 
-		auto asset = TextureCache::GetInstance().Get( atlasTextureDesc ); 
+		auto asset = std::static_pointer_cast<const TextureAsset>( AssetManager::GetInstance().LoadAsset( atlasTextureDesc ) );
 
 		if( asset != nullptr )
 		{

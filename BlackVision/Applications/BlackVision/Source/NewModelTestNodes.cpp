@@ -2098,7 +2098,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
  //   root->GetPlugin( "texture" )->LoadResource( std::static_pointer_cast<const AssetDesc>( texDesc ) );
 
 
-	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg" );	//, MipMapFilterType::BOX
+	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );	//, MipMapFilterType::BOX
 	//success = model::LoadTexture( root->GetPlugin( "texture" ), "Skybox.jpg", MipMapFilterType::BILINEAR );
 	assert( success );
 	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
