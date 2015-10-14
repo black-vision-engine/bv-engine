@@ -56,7 +56,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-	<Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
   </ImportGroup>
@@ -64,7 +64,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-	<Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
   </ImportGroup>
@@ -72,7 +72,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-	<Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
   </ImportGroup>
@@ -80,9 +80,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common_ToolLib.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
-	<Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
-    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />	
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -106,7 +106,6 @@
     <Link />
     <ClCompile>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <AdditionalIncludeDirectories>$(ToolsDir)\RapidXML\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -116,14 +115,12 @@
     </Link>
     <ClCompile>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <AdditionalIncludeDirectories>$(ToolsDir)\RapidXML\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FunctionLevelLinking>false</FunctionLevelLinking>
-      <AdditionalIncludeDirectories>$(ToolsDir)\RapidXML\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
