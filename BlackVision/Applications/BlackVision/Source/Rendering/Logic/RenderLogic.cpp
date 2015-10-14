@@ -7,7 +7,7 @@
 #include "Tools/Profiler/HerarchicalProfiler.h"
 #include "Tools/HRTimer.h"
 
-#include "OffscreenRenderLogic.h"
+#include "Rendering/OffscreenRenderLogic.h"
 #include "BVConfig.h"
 
 #include "BVGL.h"

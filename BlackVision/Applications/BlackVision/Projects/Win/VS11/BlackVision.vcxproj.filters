@@ -31,6 +31,9 @@
     <Filter Include="PieCharts">
       <UniqueIdentifier>{fd129272-37d9-42a7-b86d-f8a467b2b2d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering\Logic">
+      <UniqueIdentifier>{f1ca2f90-831f-4cb3-8ecc-247f7d455325}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -54,9 +57,6 @@
       <Filter>MockFonts</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\OffscreenRenderLogic.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\RenderLogic.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\TestAI\AICommands.cpp">
@@ -102,6 +102,9 @@
     <ClCompile Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp">
       <Filter>VideoInput</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogic.cpp">
+      <Filter>Rendering\Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -124,9 +127,6 @@
       <Filter>MockFonts</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\OffscreenRenderLogic.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\RenderLogic.h">
       <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\TestAI\AICommands.h">
@@ -177,6 +177,9 @@
     <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
     <ClInclude Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h">
       <Filter>VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogic.h">
+      <Filter>Rendering\Logic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
