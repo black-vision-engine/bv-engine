@@ -166,7 +166,7 @@ void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root )
 //
 void            BVScene::Serialize           ( ISerializer&doc) const
 {
-    doc.SetName( "scene" );
+    doc.EnterChild( "scene" );
 
     model::TimelineManager::SetInstance( m_pTimelineManager );
 

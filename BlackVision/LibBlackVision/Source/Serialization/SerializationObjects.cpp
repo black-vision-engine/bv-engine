@@ -7,7 +7,11 @@
 
 #include "System/Path.h"
 
+#include "ISerializable.h"
+
 namespace bv {
+
+    void ISerializable::Deserialize( ISerializer& ) {} //FIXME taki ch*j
 
 class SerializeObjectImpl
 {

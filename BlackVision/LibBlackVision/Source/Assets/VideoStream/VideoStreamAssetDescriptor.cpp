@@ -26,6 +26,7 @@ void VideoStreamAssetDesc::Deserialize     ( ISerializer& /*sob*/ )
 ISerializableConstPtr VideoStreamAssetDesc::Create          ( ISerializer& /*dob*/ )
 {
 	assert( !"Implement me" );
+    return nullptr;
 }
 
 

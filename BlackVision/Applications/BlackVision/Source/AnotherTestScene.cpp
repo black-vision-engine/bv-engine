@@ -941,29 +941,30 @@ model::BasicNodePtr      TestScenesFactory::SequenceAnimationTestScene  ()
 
 model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineManager * timelineManager ) // FIXME: maybe should be moved to BVScene::Create
 {
-    if( !Path::Exists( filename ) )
-	{
-		std::cout << "[ERROR] File " << filename << " does not exist" << std::endl;
-		return nullptr;
-	}
-// begin serialization
-    DeserializeObject dob( filename );
-
-    model::TimelineManager::SetInstance( timelineManager );
-
-// assets
-    auto assets = dob.Load< AssetDescsWithUIDs >( "assets" );
-    AssetDescsWithUIDs::SetInstance( *assets );
-
-// timelines
-    auto timelines = dob.LoadArray< TimeEvaluatorBase< ITimeEvaluator > >( "timelines" );
-    for( auto timeline : timelines )
-        for( auto child : timeline->GetChildren() )
-            timelineManager->AddTimeline( child );
-
-    auto node = dob.Load< model::BasicNode >( "node" );
-    assert( node );
-    return node;
+    assert( false ); filename; timelineManager; return nullptr;
+//    if( !Path::Exists( filename ) )
+//	{
+//		std::cout << "[ERROR] File " << filename << " does not exist" << std::endl;
+//		return nullptr;
+//	}
+//// begin serialization
+//    DeserializeObject dob( filename );
+//
+//    model::TimelineManager::SetInstance( timelineManager );
+//
+//// assets
+//    auto assets = dob.Load< AssetDescsWithUIDs >( "assets" );
+//    AssetDescsWithUIDs::SetInstance( *assets );
+//
+//// timelines
+//    auto timelines = dob.LoadArray< TimeEvaluatorBase< ITimeEvaluator > >( "timelines" );
+//    for( auto timeline : timelines )
+//        for( auto child : timeline->GetChildren() )
+//            timelineManager->AddTimeline( child );
+//
+//    auto node = dob.Load< model::BasicNode >( "node" );
+//    assert( node );
+//    return node;
 }
 
 model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( model::TimelineManager * timelineManager )

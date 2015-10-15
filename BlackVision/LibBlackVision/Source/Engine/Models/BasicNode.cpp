@@ -114,7 +114,7 @@ void                            BasicNode::Serialize               ( ISerializer
 //
 ISerializablePtr BasicNode::Create( ISerializer& dob )
 {
-    assert( dob.GetName() == "node" );
+    //assert( dob.GetName() == "node" ); FIXME
 
     auto name = dob.GetAttribute( "name" );
 
@@ -123,13 +123,13 @@ ISerializablePtr BasicNode::Create( ISerializer& dob )
     auto node = Create( name, timeEvaluator );
 
 // plugins
-    auto plugins = dob.LoadArray< BasePlugin< IPlugin > >( "plugins" );
+    auto plugins = DeserializeObjectLoadArrayImpl< BasePlugin< IPlugin > >( dob, "plugins" );
 
     for( auto plugin : plugins )
         node->AddPlugin( plugin );
 
 // children
-    auto children = dob.LoadArray< BasicNode >( "nodes" );
+    auto children = DeserializeObjectLoadArrayImpl< BasicNode >( dob, "nodes" );
 
     for( auto child : children )
         node->AddChildToModelOnly( child );

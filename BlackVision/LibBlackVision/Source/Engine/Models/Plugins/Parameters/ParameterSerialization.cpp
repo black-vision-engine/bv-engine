@@ -21,8 +21,8 @@ public:
     virtual void                Serialize       ( ISerializer&/*doc*/ ) const {}
     static ISerializablePtr     Create          ( ISerializer&doc )
     {
-        auto time = doc.GetValue( "time" );
-        auto value = doc.GetValue( "val" );
+        auto time = doc.GetAttribute( "time" );
+        auto value = doc.GetAttribute( "val" );
         return std::make_shared< KeyFrame >( time, value );
     }
 };
@@ -51,7 +51,7 @@ ISerializablePtr AbstractModelParameter::Create( ISerializer& dob ) // FIXME: re
     ITimeEvaluatorPtr te = tm->GetTimeline( timeline );
     if( te == nullptr ) te = tm->GetRootTimeline();
 
-    auto values = dob.LoadArray< KeyFrame >( "interpolator" );
+    auto values = DeserializeObjectLoadArrayImpl< KeyFrame >( dob, "interpolator" );
 
     if( type == "float" )
     {
@@ -109,7 +109,7 @@ ISerializablePtr AbstractModelParameter::Create( ISerializer& dob ) // FIXME: re
     {
         auto param = ParametersFactory::CreateParameterTransform( name, te );
 
-        auto transform = dob.Load< TransformF >( "composite_transform" );
+        auto transform = DeserializeObjectLoadImpl< TransformF >( dob, "composite_transform" );
 
         param->Transform() = *transform;
 

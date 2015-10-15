@@ -22,6 +22,12 @@ public:
     void                                                    SetValue( const std::string & name, const std::string & value );
 	void                                                    SetContent( const std::string & value );
     void                                                    Pop();
+
+    virtual void				SetAttribute        ( const std::string& /*name*/, const std::string& /*value*/ ) {}
+    virtual std::string			GetAttribute        ( const std::string& /*name*/ ) { return ""; }
+    //virtual bool                EnterChild          ( const std::string& name ) { return true; }
+    virtual bool                ExitChild           () { return true; }
+
 };
 
 
@@ -68,6 +74,11 @@ public:
     {
         return DeserializeObjectLoadPropertiesImpl< T >( pimpl_, name );
     }
+
+    virtual void				SetAttribute        ( const std::string& /*name*/, const std::string& /*value*/ ) {}
+    virtual std::string			GetAttribute        ( const std::string& /*name*/ ) { return ""; }
+    virtual bool                EnterChild          ( const std::string& /*name*/ ) { return true; }
+    virtual bool                ExitChild           () { return true; }
 };
 
 }

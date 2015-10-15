@@ -374,12 +374,13 @@ void BVAppLogic::OnKey           ( unsigned char c )
     }
     else if( c == 's' )
     {
-        auto sob = new SerializeObject();
+        assert( false );
+        //auto sob = new SerializeObject();
 
-        m_bvScene->Serialize( *sob );
+        //m_bvScene->Serialize( *sob );
 
-        sob->Save( "test.xml" );
-        delete sob;
+        //sob->Save( "test.xml" );
+        //delete sob;
     }
     else if( c == 'd' )
     {
