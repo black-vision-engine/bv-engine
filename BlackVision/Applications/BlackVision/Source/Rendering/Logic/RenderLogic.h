@@ -1,17 +1,35 @@
 #pragma once
 
+#include <vector>
+
+
 namespace bv {
 
 class Renderer;
 class OffscreenRenderLogic;
 class SceneNode;
 class Camera;
+class NodeEffectRenderLogic;
+
 
 class RenderLogic
 {
 private:
 
-    OffscreenRenderLogic *  m_offscreenRenderLogic;
+    enum CustomLogicType
+    {
+        CLT_DEFAULT = 0,
+        CLT_ALPHA_MASK,
+        CLT_NODE_MASK,
+
+        CLT_TOTAL
+    };
+
+private:
+
+    OffscreenRenderLogic *                  m_offscreenRenderLogic;
+
+    std::vector< NodeEffectRenderLogic * >  m_customNodeRenderLogic;
 
 public:
 
@@ -28,7 +46,7 @@ public:
     void    PostFrameSetupTM( Renderer * renderer );
 // Temporary transition code END
 
-private:
+public:
 
     void    RenderNode      ( Renderer * renderer, SceneNode * node );
 
@@ -37,6 +55,8 @@ private:
     bool    UseDefaultMask  ( SceneNode * node ) const;
     bool    UseAlphaMask    ( SceneNode * node ) const;
     bool    UseNodeMask     ( SceneNode * node ) const;
+
+    NodeEffectRenderLogic *     GetNodeEffectRenderLogic    ( SceneNode * node ) const;
 // Temporary transition code END
 
     void    RenderVanilla   ( Renderer * renderer, SceneNode * node );

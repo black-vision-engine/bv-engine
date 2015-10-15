@@ -12,6 +12,10 @@
 
 #include "BVGL.h"
 
+#include "Rendering/Logic/NodeEffectRendering/NodeEffectRenderLogic.h"
+#include "Rendering/Logic/NodeEffectRendering/DefaultEffectRenderLogic.h"
+#include "Rendering/Logic/NodeEffectRendering/AlphaMaskRenderLogic.h"
+#include "Rendering/Logic/NodeEffectRendering/NodeMaskRenderLogic.h"
 
 #define USE_HACK_FRIEND_NODE_MASK_IMPL
 
@@ -24,12 +28,19 @@ extern HighResolutionTimer GTimer;
 RenderLogic::RenderLogic     ()
 {
     m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffersPerRT() );
+
+    m_customNodeRenderLogic.push_back( new DefaultEffectRenderLogic( this, m_offscreenRenderLogic ) );
+    m_customNodeRenderLogic.push_back( new AlphaMaskRenderLogic( this, m_offscreenRenderLogic ) );
+    m_customNodeRenderLogic.push_back( new NodeMaskRenderLogic( this, m_offscreenRenderLogic ) );
 }
 
 // *********************************
 //
 RenderLogic::~RenderLogic    ()
 {
+    for ( auto rl : m_customNodeRenderLogic )
+        delete rl;
+
     delete m_offscreenRenderLogic;
 }
 
@@ -73,7 +84,7 @@ void    RenderLogic::RenderFrameTM   ( Renderer * renderer, SceneNode * node )
     PreFrameSetupTM( renderer );
 
 	if( node )
-		RenderNode( renderer, node );
+		RenderNodeTM( renderer, node );
 
     PostFrameSetupTM( renderer );
 }
@@ -132,6 +143,16 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 
 // *********************************
 //
+void    RenderLogic::RenderNodeTM       ( Renderer * renderer, SceneNode * node )
+{
+    if ( node->IsVisible() )
+    {
+        GetNodeEffectRenderLogic( node )->RenderNode( renderer, node );
+    }
+}
+
+// *********************************
+//
 bool    RenderLogic::UseDefaultMask  ( SceneNode * node ) const
 {
     return !( UseAlphaMask( node ) || UseNodeMask( node ) );
@@ -149,6 +170,28 @@ bool    RenderLogic::UseAlphaMask    ( SceneNode * node ) const
 bool    RenderLogic::UseNodeMask     ( SceneNode * node ) const
 {
     return node->IsOverridenNM();
+}
+
+// *********************************
+//
+NodeEffectRenderLogic *     RenderLogic::GetNodeEffectRenderLogic    ( SceneNode * node ) const
+{
+    if( UseAlphaMask( node ) )
+    {
+        m_customNodeRenderLogic[ CLT_ALPHA_MASK ];
+    }
+    else if ( UseNodeMask( node ) )
+    {
+        m_customNodeRenderLogic[ CLT_NODE_MASK ];
+    }
+    else
+    {
+        assert( UseDefaultMask( node ) );
+
+        m_customNodeRenderLogic[ CLT_DEFAULT ];
+    }
+
+    return nullptr;
 }
 
 // *********************************
