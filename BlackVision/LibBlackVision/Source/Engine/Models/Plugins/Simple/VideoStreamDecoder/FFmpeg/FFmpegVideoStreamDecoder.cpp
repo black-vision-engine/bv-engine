@@ -33,8 +33,8 @@ FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder     ( VideoStreamAssetDescCon
 		m_codecCtx->width = desc->GetWidth();
 		m_codecCtx->height = desc->GetHeight();
 
-		m_codecCtx->framerate = av_d2q( desc->GetFrameRate(), ( int )desc->GetFrameRate() );
-		m_stream->avg_frame_rate = m_codecCtx->framerate;
+		m_stream->avg_frame_rate = av_d2q( desc->GetFrameRate(), INT_MAX );
+		m_stream->time_base = av_inv_q( m_stream->avg_frame_rate );
 
 		m_codecCtx->pix_fmt = FFmpegUtils::ToFFmpegPixelFormat( desc->GetVideoFormat() );
 	}
