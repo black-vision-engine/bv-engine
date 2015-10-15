@@ -27,6 +27,13 @@ void                FontAssetDesc::Serialize       ( ISerializer& sob ) const
 
 // ***********************
 //
+void FontAssetDesc::Deserialize     ( ISerializer& sob )
+{
+
+}
+
+// ***********************
+//
 ISerializableConstPtr FontAssetDesc::Create          ( ISerializer& dob )
 {
     assert( dob.GetAttribute( "type" ) == "font" );

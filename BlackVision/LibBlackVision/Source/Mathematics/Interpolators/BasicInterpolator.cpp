@@ -200,8 +200,8 @@ ISerializablePtr     Key<TimeValueT, ValueT>::Create          ( ISerializer& /*d
 template<>
 ISerializablePtr     Key< bv::TimeType, float >::Create          ( ISerializer& doc )
 {
-    auto time = doc.GetValue( "time" );
-    auto val = doc.GetValue( "val" );
+    auto time = doc.GetAttribute( "time" );
+    auto val = doc.GetAttribute( "val" );
     auto key = std::make_shared< Key< bv::TimeType, float > >( std::stof( time ), std::stof( val ) );
     return key;
 }

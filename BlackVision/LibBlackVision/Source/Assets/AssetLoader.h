@@ -2,7 +2,7 @@
 
 #include "AssetDescriptor.h"
 #include "Asset.h"
-#include "Serialization/Json/JsonSerializationObjects.h"
+#include "Serialization/ISerializer.h"
 
 namespace bv { 
 

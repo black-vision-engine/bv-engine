@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Assets/AssetDescriptor.h"
-#include "Serialization/Json/JsonSerializationObjects.h"
+#include "Serialization/ISerializer.h"
 
 #include "CoreDEF.h"
 
@@ -26,6 +26,7 @@ protected:
 
 public:
     virtual void						Serialize       ( ISerializer& sob ) const;
+    virtual void                        Deserialize     ( ISerializer& sob );
     static ISerializableConstPtr		Create          ( ISerializer& dob );
 
 	virtual bool						IsCacheable			() const override;

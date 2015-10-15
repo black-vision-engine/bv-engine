@@ -55,6 +55,15 @@ MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
     }
 }
 
+
+// ***********************
+//
+void TextureAssetDesc::Deserialize     ( ISerializer& sob )
+{
+
+}
+
+
 // ***********************
 //
 ISerializableConstPtr TextureAssetDesc::Create          ( ISerializer& dob )

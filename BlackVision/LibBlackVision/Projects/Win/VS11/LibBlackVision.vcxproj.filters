@@ -939,9 +939,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultVideoStreamDescriptor.cpp">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\Json\JsonSerializationObjects.cpp">
-      <Filter>Serialization\Json</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDemuxer.cpp">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClCompile>
@@ -956,6 +953,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\AssetCache.cpp">
       <Filter>Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\Json\JsonSerializeObject.cpp">
+      <Filter>Serialization\Json</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1913,9 +1913,6 @@
     <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h">
       <Filter>Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\Json\JsonSerializationObjects.h">
-      <Filter>Serialization\Json</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\AssetCache.h">
       <Filter>Assets</Filter>
     </ClInclude>
@@ -1930,6 +1927,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Serialization\ISerializer.h">
       <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\Json\JsonSerializeObject.h">
+      <Filter>Serialization\Json</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1996,14 +1996,14 @@
     <None Include="..\..\..\Source\Serialization\SerializationObjects.inl">
       <Filter>Serialization</Filter>
     </None>
-    <None Include="..\..\..\Source\Serialization\Json\JsonDeserializeObjectImpl.inl">
-      <Filter>Serialization\Json</Filter>
-    </None>
-    <None Include="..\..\..\Source\Serialization\Json\JsonSerializeObjectImpl.inl">
-      <Filter>Serialization\Json</Filter>
-    </None>
     <None Include="..\..\..\Source\Serialization\SerializationObjects.inl">
       <Filter>Serialization</Filter>
+    </None>
+    <None Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.h">
+      <Filter>Serialization\Json</Filter>
+    </None>
+    <None Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.cpp">
+      <Filter>Serialization\Json</Filter>
     </None>
   </ItemGroup>
 </Project>

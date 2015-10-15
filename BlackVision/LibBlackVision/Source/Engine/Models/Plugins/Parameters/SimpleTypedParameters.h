@@ -5,6 +5,7 @@
 
 #include "Engine/Models/Plugins/Parameters/AbstractModelParameter.h"
 #include "Serialization/ISerializable.h"
+#include "Serialization/ISerializer.h"
 
 
 namespace bv { namespace model {
