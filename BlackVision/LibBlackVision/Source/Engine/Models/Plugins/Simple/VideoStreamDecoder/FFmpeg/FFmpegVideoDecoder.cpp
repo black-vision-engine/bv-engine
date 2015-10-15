@@ -145,9 +145,19 @@ Float64						FFmpegVideoDecoder::GetFrameRate			() const
 
 // *********************************
 //
+void						FFmpegVideoDecoder::Seek					( Float64 time ) 
+{
+	m_demuxer->Seek( m_vstreamDecoder->ConvertTime( time ), m_vstreamDecoder->GetStreamIdx() );
+	m_vstreamDecoder->Reset();
+	ClearFrameData();
+}
+
+// *********************************
+//
 void						FFmpegVideoDecoder::Reset					() 
 {
 	m_demuxer->Reset();
+	m_vstreamDecoder->Reset();
 	ClearFrameData();
 }
 

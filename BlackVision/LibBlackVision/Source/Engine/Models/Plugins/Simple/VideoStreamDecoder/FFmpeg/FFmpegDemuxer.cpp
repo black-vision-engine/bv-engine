@@ -62,7 +62,8 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 			packet = new AVPacket();
 			auto error = av_read_frame( m_formatCtx, packet );
 			if( error < 0 ) {
-				assert( error == AVERROR_EOF );	//FIXME: error decoding video
+				assert( error == AVERROR_EOF ); //error reading frame
+				
 				m_isEOF = true;
                 av_free_packet( packet );
                 delete packet;
@@ -85,7 +86,6 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 			else
 			{
                 av_dup_packet( packet );
-				//queue packet?
             }
 		}
 	}
@@ -95,10 +95,9 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 
 // *******************************
 //
-void				FFmpegDemuxer::Seek					( Float32 time )
+void				FFmpegDemuxer::Seek					( Int64 timestamp, Int32 streamIdx )
 {
-	//FIXME
-	av_seek_frame( m_formatCtx, -1, ( long long )( time * AV_TIME_BASE ), AVSEEK_FLAG_ANY );
+	av_seek_frame( m_formatCtx, streamIdx, timestamp, AVSEEK_FLAG_ANY );
 	ClearPacketQueue();
 }
 
@@ -108,16 +107,7 @@ void				FFmpegDemuxer::Reset				()
 {
 	Seek( 0 );
 	m_isEOF = false; 
-
-	for( unsigned int i = 0; i < m_formatCtx->nb_streams; ++i )
-	{
-		auto codecCtx = m_formatCtx->streams[ i ]->codec;
-		if( codecCtx->codec )
-		{
-			avcodec_flush_buffers( codecCtx );
-		}
-		codecCtx->frame_number = 0;
-	}
+	ClearPacketQueue();
 }
 
 // *******************************

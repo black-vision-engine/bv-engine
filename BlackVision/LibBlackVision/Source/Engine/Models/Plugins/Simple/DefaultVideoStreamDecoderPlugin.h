@@ -70,9 +70,11 @@ public:
 
 //---controlling events
 
-	void										StartDecoding				();
-	void										PauseDecoding				();
-	void										StopDecoding				();
+	void										Start						();
+	void										Pause						();
+	void										Stop						();
+	/** @param[time] in seconds from the beginning of video */
+	void										Seek						( Float64 time );
 
 private:
     void                                        InitAttributesChannel       ( IPluginPtr prev );

@@ -340,25 +340,32 @@ void									DefaultVideoStreamDecoderPlugin::InitAttributesChannel		( IPluginPt
 
 // *************************************
 //
-void								DefaultVideoStreamDecoderPlugin::StartDecoding		()
+void								DefaultVideoStreamDecoderPlugin::Start		()
 {
 	m_decoder->Start();
 }
 
 // *************************************
 //
-void								DefaultVideoStreamDecoderPlugin::PauseDecoding		()
+void								DefaultVideoStreamDecoderPlugin::Pause		()
 {
-
 	m_decoder->Pause();
 }
 
 // *************************************
 //
-void								DefaultVideoStreamDecoderPlugin::StopDecoding		()
+void								DefaultVideoStreamDecoderPlugin::Stop		()
 {
 	m_decoder->Stop();
 }
+
+// *************************************
+//
+void								DefaultVideoStreamDecoderPlugin::Seek		( Float64 time )
+{
+	m_decoder->Seek( time );
+}
+
 
 namespace {
 

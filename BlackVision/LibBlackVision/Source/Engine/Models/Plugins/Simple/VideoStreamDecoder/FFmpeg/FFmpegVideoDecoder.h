@@ -49,6 +49,9 @@ public:
 	virtual UInt32				GetHeight				() const override;
 	virtual Float64				GetFrameRate			() const override;
 
+	/** @param[time] in seconds */
+	virtual void				Seek					( Float64 time ) override;
+
 	virtual void				Reset					() override;
 
 	virtual bool				IsEOF					() const override;

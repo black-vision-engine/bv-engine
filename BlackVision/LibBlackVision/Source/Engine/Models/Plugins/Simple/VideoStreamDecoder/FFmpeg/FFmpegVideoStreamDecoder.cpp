@@ -46,7 +46,6 @@ FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder     ( VideoStreamAssetDescCon
 
 	assert( m_width > 0 );
 	assert( m_height > 0 );
-
 }
 
 // *******************************
@@ -100,6 +99,21 @@ UInt32					FFmpegVideoStreamDecoder::GetHeight	() const
 Float64					FFmpegVideoStreamDecoder::GetFrameRate		() const
 {
 	return m_frameRate;
+}
+
+// *******************************
+//
+Int64					FFmpegVideoStreamDecoder::ConvertTime		( Float64 time )
+{
+	return ( Int64 )( time / av_q2d( m_codecCtx->time_base ) );
+}
+
+// *******************************
+//
+void					FFmpegVideoStreamDecoder::Reset				()
+{
+	avcodec_flush_buffers( m_codecCtx );
+	//m_codecCtx->frame_number = 0;
 }
 
 // *******************************

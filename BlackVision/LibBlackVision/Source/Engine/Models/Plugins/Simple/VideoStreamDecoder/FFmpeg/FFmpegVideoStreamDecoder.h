@@ -20,7 +20,6 @@ private:
 	UInt32					m_width;
 	UInt32					m_height;
 	Float64					m_frameRate;
-	UInt64					m_duration;
 
 	Int32					m_streamIdx;
 
@@ -31,9 +30,14 @@ public:
 	UInt32					GetWidth					() const;	
 	UInt32					GetHeight					() const;	
 	Float64					GetFrameRate				() const;	
+	
+	/** Converts time from seconds to the stream specific time base timestamp */
+	Int64					ConvertTime					( Float64 time );
 
 	bool					DecodePacket				( AVPacket * packet, AVFrame * frame );
 	void					ConvertFrame				( AVFrame * inFrame, AVFrame * outFrame );
+
+	void					Reset						();
 
 	Int32					GetStreamIdx				() const;
 
