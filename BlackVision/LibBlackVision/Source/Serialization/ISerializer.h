@@ -11,7 +11,7 @@ class ISerializer
 private:
 protected:
 public:
-	virtual ~ISerializer();
+    virtual ~ISerializer() {};
 
 	virtual void				SetAttribute        ( const std::string& name, const std::string& value ) = 0;
 	virtual std::string			GetAttribute        ( const std::string& name ) = 0;
