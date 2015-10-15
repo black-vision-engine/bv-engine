@@ -10,6 +10,21 @@ uniform vec4        color;
 uniform vec4        outlineColor;
 uniform float       alpha;
 uniform int         cc_num;
+uniform int         cc_num_total;
+
+uniform float       time;
+
+// linearly colorize characters
+uniform vec4        rcc_beginColor;
+uniform vec4        rcc_endColor;
+
+vec4 linearColorInterpolation( vec4 begin, vec4 end, int i, int total )
+{   
+    float t = float( i + 1 ) / float( total );
+    
+    return begin * ( 1.0 - t ) + end * t;
+}
+
 
 void main()
 {
@@ -18,10 +33,12 @@ void main()
     
     vec4 c = color;
     
-    if( cc_num % 2 == 0 )
+    if( int( time ) % 2 == 0 )
     {
-        c = vec4( 1.0, 1.0, 1.0, 1.0 );
+        c = linearColorInterpolation( rcc_beginColor, rcc_endColor, cc_num, cc_num_total );
     }
     
 	FragColor = alpha * ( c * col1 + outlineColor * ( col2 * ( 1.0 - col1 ) ) );
 }
+
+

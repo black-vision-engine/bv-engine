@@ -30,6 +30,7 @@ model::VertexAttributesChannel *   TextHelper::CreateEmptyVACForText()
 
     vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION, ChannelRole::CR_GENERATOR );
     vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
     return new model::VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP, vacDesc);
 }
@@ -40,10 +41,10 @@ namespace
 // Helper function for getting proper atlas from font asset.
 TextConstPtr				GetFont( const AssetConstPtr & asset )
 {
-	auto fontRes = QueryTypedRes< FontAssetConstPtr >( asset );
+    auto fontRes = QueryTypedRes< FontAssetConstPtr >( asset );
     assert( fontRes != nullptr );
 
-	return fontRes->GetText();
+    return fontRes->GetText();
 }
 
 model::ConnectedComponentPtr         CreateEmptyCC()
@@ -71,6 +72,17 @@ model::ConnectedComponentPtr         CreateEmptyCC()
     verTex0AttrChannel->AddAttribute( glm::vec2() );
 
     connComp->AddAttributeChannel( model::AttributeChannelPtr( verTex0AttrChannel ) );
+
+    model::AttributeChannelDescriptor * desc2 = new model::AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+
+    auto ccCenterChannel = new model::Float2AttributeChannel( desc2, "ccCenter", true );
+
+    ccCenterChannel->AddAttribute( glm::vec2() );
+    ccCenterChannel->AddAttribute( glm::vec2() );
+    ccCenterChannel->AddAttribute( glm::vec2() );
+    ccCenterChannel->AddAttribute( glm::vec2() );
+
+    connComp->AddAttributeChannel( model::AttributeChannelPtr( ccCenterChannel ) );
 
     return connComp;
 }
@@ -169,6 +181,8 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
                 translate += kerningShift;
             }
 
+            // XYZ
+
 			{
                 quadBottomLeft     = glm::vec3( 0.f, 0.f, 0.f ) + glm::vec3( -blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( -ccPaddingX, -ccPaddingY, 0.f );
                 quadBottomRight    = glm::vec3( (float)glyph->width / (float)viewWidth, 0.f, 0.f ) +  glm::vec3( blurLenghtX, -blurLenghtY, 0.f ) + glm::vec3( ccPaddingX, -ccPaddingY, 0.f );
@@ -182,6 +196,8 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
             posAttribChannel->AddAttribute( quadTopRight      + translate + bearing + newLineTranslation );
 
             connComp->AddAttributeChannel( model::AttributeChannelPtr( posAttribChannel ) );
+            
+            // UV
 
             model::AttributeChannelDescriptor * desc1 = new model::AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
@@ -206,6 +222,25 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
             verTex0AttrChannel->AddAttribute( glm::vec2( texLeft + texWidth, texTop ) );
 
             connComp->AddAttributeChannel( model::AttributeChannelPtr( verTex0AttrChannel ) );
+
+            // CC CENTER
+
+            model::AttributeChannelDescriptor * desc2 = new model::AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+
+            auto ccCenterAttrChannel = new model::Float2AttributeChannel( desc2, "ccCenter", true );
+
+            auto bottomLeft = ( quadBottomLeft + translate + bearing + newLineTranslation );
+            auto topRight   = ( quadTopRight   + translate + bearing + newLineTranslation );
+
+            float centerX = ( bottomLeft.x + topRight.x ) / 2.f;
+            float centerY = ( bottomLeft.y + topRight.y ) / 2.f;
+            
+            ccCenterAttrChannel->AddAttribute( glm::vec2( centerX, centerY ) );
+            ccCenterAttrChannel->AddAttribute( glm::vec2( centerX, centerY ) );
+            ccCenterAttrChannel->AddAttribute( glm::vec2( centerX, centerY ) );
+            ccCenterAttrChannel->AddAttribute( glm::vec2( centerX, centerY ) );
+            
+            connComp->AddAttributeChannel( model::AttributeChannelPtr( ccCenterAttrChannel ) );
 
             vertexAttributeChannel->AddConnectedComponent( connComp );
 
@@ -235,7 +270,7 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
         case TextAlignmentType::Right:
             alignmentTranslation = -translate.x;
             break;
-		case TextAlignmentType::Dot:
+		case TextAlignmentType::Dot: 
             alignmentTranslation = -translateDot.x;
             break;
 
@@ -251,6 +286,13 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
             for ( auto & v : verts )
             {
                 v.x += alignmentTranslation;
+            }
+
+            auto & centers = std::static_pointer_cast< model::Float2AttributeChannel >( cc->GetAttributeChannels()[ 2 ] )->GetVertices();
+
+            for ( auto & c : centers )
+            {
+                c.x += alignmentTranslation;
             }
         }
 

@@ -67,6 +67,7 @@ private:
     ParamFloatPtr                   m_spacingParam;
     ParamFloatPtr                   m_alignmentParam;
     ParamFloatPtr                   m_maxTextLengthParam;
+    ParamFloatPtr                   m_timeParam;
 	ValueMat4Ptr					m_scaleValue;
 
     //delegates

@@ -210,7 +210,7 @@ private:
     template< typename MapType >
     void                        DeleteSinglePDR                 ( MapType & resMap, typename MapType::key_type & key );
 
-    void                        PassCCNumUniform                ( int i );
+    void                        PassCCNumUniform                ( int i, SizeType num );
 
 };
 
