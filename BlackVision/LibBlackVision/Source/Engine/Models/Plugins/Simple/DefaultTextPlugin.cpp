@@ -259,7 +259,7 @@ void							DefaultTextPlugin::LoadAtlas	( const FontAssetDescConstPtr & fontAsse
 	auto txData = m_psc->GetTexturesDataImpl();
     assert( txData->GetTextures().size() <= 1 );
 
-	auto fontResource = TextHelper::LoadFont( fontAssetDesc );
+	auto fontResource = LoadTypedAsset<FontAsset>( fontAssetDesc );
 
 	m_atlas = TextHelper::GetAtlas( fontResource );
 

@@ -112,7 +112,7 @@ void    NodeUpdater::DoUpdate        ()
     {
         m_sceneNode->SetVisible( true );
 
-        //FIXME: untill global effect is implemented, only one state can be used
+        //FIXME: until global effect is implemented, only one state can be used
         assert( !(m_modelNode->IsStateOverridenAM() && m_modelNode->IsStateOverridenNM()) );
 
         m_sceneNode->SetOverridenAM( m_modelNode->IsStateOverridenAM() );

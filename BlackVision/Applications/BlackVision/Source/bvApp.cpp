@@ -11,7 +11,7 @@
 #include "Assets/Texture/AnimationLoader.h"
 #include "Assets/Font/FontAssetDescriptor.h"
 
-#include "Tools/HerarchicalProfiler.h"
+#include "Tools/Profiler/HerarchicalProfiler.h"
 
 #include "StatsFormatters.h"
 #include "BVAppLogic.h"
@@ -85,8 +85,8 @@ void BlackVisionApp::OnPreidle  ()
 //
 void BlackVisionApp::OnIdle		()
 {
-    HPROFILER_NEW_FRAME();
-    HPROFILER_FUNCTION( "BlackVisionApp::OnIdle" );
+    HPROFILER_NEW_FRAME( PROFILER_THREAD1 );
+    HPROFILER_FUNCTION( "BlackVisionApp::OnIdle", PROFILER_THREAD1 );
 
     unsigned long millis = m_timer.ElapsedMillis();
 
@@ -153,12 +153,19 @@ void    BlackVisionApp::InitializeConsole   ()
 //
 void    BlackVisionApp::InitializeAppLogic  ()
 {
-    HPROFILER_SET_DISPLAY_WAIT_MILLIS( DefaultConfig.ProfilerDispWaitMillis() );
-#ifndef HIDE_PROFILE_STATS
-    HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::PrintToConsole );
-#else
-    HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::PrintToDevNull );
-#endif
+	std::wstring commandLineString = GetCommandLineW();
+
+	if( IsProfilerEnabled( commandLineString ) )
+	{
+		HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::SendToExternApp );
+		HPROFILER_SET_DISPLAY_MODE( ProfilerMode::PM_EVERY_FRAME );
+	}
+	else
+	{
+		HPROFILER_REGISTER_DISPLAY_CALLBACK( ProfilerDataFormatter::PrintToDevNull );
+		HPROFILER_SET_DISPLAY_MODE( ProfilerMode::PM_WAIT_TIME_AND_FORCE_DISPLAY );
+		HPROFILER_SET_DISPLAY_WAIT_MILLIS( DefaultConfig.ProfilerDispWaitMillis() );
+	}
 
     m_app = new BVAppLogic( m_Renderer );
 

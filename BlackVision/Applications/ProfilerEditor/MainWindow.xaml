@@ -1,0 +1,156 @@
+﻿<Window x:Class="ProfilerEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:layer="clr-namespace:ProfilerEditor.PresentationLayer"
+        Title="Profiler Editor" Height="540" Width="1077" Closing="Window_Closing" Name="mainWindow">
+    <Window.Resources>
+
+        <layer:NameColorConverter x:Key="NameColorConverter"></layer:NameColorConverter>
+        <layer:NameStringConverter x:Key="NameStringConverter"></layer:NameStringConverter>
+        <layer:TimeFormatter x:Key="TimeFormatter"></layer:TimeFormatter>
+
+        <GridViewColumnCollection x:Key="SamplesColumnsCollection">
+            <GridViewColumn Header="" Width="40">
+                <GridViewColumn.CellTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Height="10" Width="30" Margin="3" Fill="{Binding Converter={StaticResource NameColorConverter}, ConverterParameter={x:Reference mainWindow}, Mode=OneWay }"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </GridViewColumn.CellTemplate>
+            </GridViewColumn>
+            <GridViewColumn Header="Call Stack" Width="390">
+                <GridViewColumn.CellTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <layer:TreeListViewExpander/>
+                            <TextBlock Text="{Binding Converter={StaticResource NameStringConverter}, ConverterParameter={x:Reference mainWindow}, Mode=OneWay}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </GridViewColumn.CellTemplate>
+            </GridViewColumn>
+            <GridViewColumn Header="Average Time" Width="100">
+                <GridViewColumn.CellTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Path=AverageDuration, Converter={StaticResource TimeFormatter}, ConverterParameter={x:Reference mainWindow}, Mode=OneWay}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </GridViewColumn.CellTemplate>
+            </GridViewColumn>
+            <GridViewColumn Header="Max Time" Width="100">
+                <GridViewColumn.CellTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Path=MaxDuration, Converter={StaticResource TimeFormatter}, ConverterParameter={x:Reference mainWindow}, Mode=OneWay}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </GridViewColumn.CellTemplate>
+            </GridViewColumn>
+            <GridViewColumn Header="Min Time" Width="100">
+                <GridViewColumn.CellTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Path=MinDuration, Converter={StaticResource TimeFormatter}, ConverterParameter={x:Reference mainWindow}, Mode=OneWay}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </GridViewColumn.CellTemplate>
+            </GridViewColumn>
+            <GridViewColumn Header="Total Time" Width="125">
+                <GridViewColumn.CellTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Path=TotalDuration, Converter={StaticResource TimeFormatter}, ConverterParameter={x:Reference mainWindow}, Mode=OneWay}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </GridViewColumn.CellTemplate>
+            </GridViewColumn>
+        </GridViewColumnCollection>
+
+    </Window.Resources>
+
+
+    <Grid Name="mainWindowGrid">
+        <Menu IsMainMenu="True" VerticalAlignment="Top" HorizontalAlignment="Left" Height="20" Width="500">
+            <MenuItem Header="Options">
+                <MenuItem Header="Profiling Tool" Name="ProfilingTool" Click="ProfilingTool_Click"></MenuItem>
+            </MenuItem>
+        </Menu>
+
+
+        <Button x:Name="startButton" Content="Start BlackVision" HorizontalAlignment="Left" Margin="930,20,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="0.701,-0.712" Click="startButton_Click"/>
+        <Button x:Name="endServer" Content="End BlackVision" HorizontalAlignment="Left" Margin="930,47,0,0" VerticalAlignment="Top" Width="100" Click="endServer_Click"/>
+        <TabControl Name="ThreadsTabControl" HorizontalAlignment="Left" Height="461" Margin="28,34,0,0" VerticalAlignment="Top" Width="867">
+            <TabItem Header="Thread 1">
+                <Grid Background="#FFE5E5E5">
+                    <layer:TreeListView x:Name="ProfilerTree1" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
+                        <layer:TreeListView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
+                        </layer:TreeListView.ItemTemplate>
+                    </layer:TreeListView>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Thread 2">
+                <Grid Background="#FFE5E5E5">
+                    <layer:TreeListView x:Name="ProfilerTree2" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
+                        <layer:TreeListView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
+                        </layer:TreeListView.ItemTemplate>
+                    </layer:TreeListView>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Thread 3">
+                <Grid Background="#FFE5E5E5">
+                    <layer:TreeListView x:Name="ProfilerTree3" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
+                        <layer:TreeListView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
+                        </layer:TreeListView.ItemTemplate>
+                    </layer:TreeListView>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Thread 4">
+                <Grid Background="#FFE5E5E5">
+                    <layer:TreeListView x:Name="ProfilerTree4" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
+                        <layer:TreeListView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
+                        </layer:TreeListView.ItemTemplate>
+                    </layer:TreeListView>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Thread 5">
+                <Grid Background="#FFE5E5E5">
+                    <layer:TreeListView x:Name="ProfilerTree5" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
+                        <layer:TreeListView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
+                        </layer:TreeListView.ItemTemplate>
+                    </layer:TreeListView>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Thread 6">
+                <Grid Background="#FFE5E5E5">
+                    <layer:TreeListView x:Name="ProfilerTree6" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
+                        <layer:TreeListView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
+                        </layer:TreeListView.ItemTemplate>
+                    </layer:TreeListView>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <Button Name="ClearMaxTimeButton" Content="Clear Max Time" HorizontalAlignment="Left" Margin="930,107,0,0" VerticalAlignment="Top" Width="106" Click="ClearMaxTimeButton_Click"/>
+        <Button Name="ClearMinTimeButton" Content="Clear Min Time" HorizontalAlignment="Left" Margin="930,134,0,0" VerticalAlignment="Top" Width="106" Click="ClearMinTimeButton_Click"/>
+        <Button Name="ClearTotalTimeButton" Content="Clear Total Time" HorizontalAlignment="Left" Margin="930,161,0,0" VerticalAlignment="Top" Width="106" Click="ClearTotalTimeButton_Click"/>
+        <Button Name="ClearTreeButton" Content="Clear Tree" HorizontalAlignment="Left" Margin="930,188,0,0" VerticalAlignment="Top" Width="106" Click="ClearTreeButton_Click"/>
+        <CheckBox Name="AffectAllCheckBox" Content="Affect all threads" HorizontalAlignment="Left" Margin="930,244,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox Name="TimeUnitsComboBox" HorizontalAlignment="Left" Margin="930,350,0,0" VerticalAlignment="Top" Width="120">
+            <ComboBoxItem IsSelected="True">Seconds</ComboBoxItem>
+            <ComboBoxItem>Milliseconds</ComboBoxItem>
+        </ComboBox>
+        <TextBox Name="TimeDigitsTextBox" HorizontalAlignment="Left" Height="24" Margin="1026,377,0,0" TextWrapping="Wrap" Text="6" VerticalAlignment="Top" Width="24"/>
+        <Label Content="Decimal digits" HorizontalAlignment="Left" Height="29" Margin="930,372,0,0" VerticalAlignment="Top" Width="91"/>
+        <Button Name="UpdateTimeFormatButton" Content="Update format" HorizontalAlignment="Left" Margin="961,406,0,0" VerticalAlignment="Top" Width="89" Click="UpdateTimeFormatButton_Click"/>
+        <Label Content="Time format:" HorizontalAlignment="Left" Margin="930,319,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button Content="Expand Tree" HorizontalAlignment="Left" Margin="930,217,0,0" VerticalAlignment="Top" Width="106" Click="ExpandButton_Click"/>
+    </Grid>
+</Window>

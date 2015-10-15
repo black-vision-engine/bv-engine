@@ -32,7 +32,7 @@ public:
     std::string     ShortSummary        ( const std::string & header ) const;
     std::string     CompleteSummary     ( const std::string & header ) const;
 
-private:
+//private:
 
     GLenum          BoundTo             ( GLuint resID ) const;
 

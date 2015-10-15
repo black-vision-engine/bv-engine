@@ -36,7 +36,7 @@ bool			CreatePrototype			()
 	BasicWindowApp::RegisterConsoleInitializer();
 
 	assert( success );
-
+	
 	return success;
 }
 
