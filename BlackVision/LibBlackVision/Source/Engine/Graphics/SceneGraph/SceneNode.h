@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Engine/Graphics/SceneGraph/TransformableEntity.h"
+#include "Engine/Graphics/Effects/NodeEffects/NodeEffect.h"
 
 #include "CoreDEF.h"
 
@@ -21,6 +22,8 @@ class SceneNode
 private:
 
     SceneNodeVec            m_sceneNodes;
+    
+    NodeEffectPtr           m_nodeEffect;
 
     TransformableEntity *   m_transformable;
 
@@ -40,6 +43,9 @@ public:
 
     TransformableEntity *   GetTransformable    ();
    
+    NodeEffectPtr           GetNodeEffect       ();
+    void                    SetNodeEffect       ( NodeEffectPtr nodeEffect );
+
 private:
 
     void                    SetTransformable    ( TransformableEntity * transformable );

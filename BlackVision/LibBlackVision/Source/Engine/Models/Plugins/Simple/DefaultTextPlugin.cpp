@@ -199,7 +199,7 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
 	m_scaleValue->SetValue( glm::mat4( 1.0 ) );
     ValueMat4PtrVec values;
 	values.push_back( m_scaleValue );
-	m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( m_prevPlugin, values, false ) ); //<3
+	//m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( m_prevPlugin, values, false ) ); //<3
 
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
@@ -270,7 +270,7 @@ void							DefaultTextPlugin::LoadAtlas	( const FontAssetDescConstPtr & fontAsse
 	auto txData = m_psc->GetTexturesDataImpl();
     assert( txData->GetTextures().size() <= 1 );
 
-	auto fontResource = TextHelper::LoadFont( fontAssetDesc );
+	auto fontResource = LoadTypedAsset<FontAsset>( fontAssetDesc );
 
 	m_atlas = TextHelper::GetAtlas( fontResource );
 
@@ -337,10 +337,10 @@ IVertexShaderChannelConstPtr        DefaultTextPlugin::GetVertexShaderChannel   
     return m_vsc;
 }
 
-ITransformChannelConstPtr           DefaultTextPlugin::GetTransformChannel         () const
-{
-	return m_transformChannel;
-}
+//ITransformChannelConstPtr           DefaultTextPlugin::GetTransformChannel         () const
+//{
+//	return m_transformChannel;
+//}
 
 
 // *************************************
@@ -397,7 +397,7 @@ void                                DefaultTextPlugin::Update                   
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
-	m_transformChannel->PostUpdate();
+	//m_transformChannel->PostUpdate();
 }
 
 namespace {

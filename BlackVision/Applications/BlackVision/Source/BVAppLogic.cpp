@@ -7,9 +7,9 @@
 #include "Engine/Models/BVSceneEditor.h"
 
 #include "Tools/SimpleTimer.h"
-#include "Tools/HerarchicalProfiler.h"
+#include "Tools/Profiler/HerarchicalProfiler.h"
 
-#include "Rendering/RenderLogic.h"
+#include "Rendering/Logic/RenderLogic.h"
 #include "ModelInteractionEvents.h"
 
 #include "Widgets/Crawler/CrawlerEvents.h"
@@ -26,6 +26,8 @@
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "BVGL.h"
 //FIXME: end of remove
+
+#include"StatsFormatters.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -140,14 +142,12 @@ void BVAppLogic::Initialize         ()
 //
 model::BasicNodePtr BVAppLogic::LoadScenes( const PathVec & pathVec )
 {
-    auto pm = ProjectManager::GetInstance();
-
     auto root = model::BasicNode::Create( "root", m_globalTimeline );
     root->AddPlugin( "DEFAULT_TRANSFORM", "transform", m_globalTimeline ); 
 
     for( auto p : pathVec )
     {
-        auto scene = SceneDescriptor::LoadScene( pm->GetSceneDesc( "", p ).GetPath(), GetTimeLineManager() );
+        auto scene = SceneDescriptor::LoadScene( ProjectManager::GetInstance()->ToAbsPath( p ), GetTimeLineManager() );
 
         root->AddChildToModelOnly( std::const_pointer_cast< model::BasicNode >( scene ) );
     }
@@ -166,18 +166,24 @@ void BVAppLogic::LoadScene          ( void )
     
     if( !ConfigManager::GetBool( "Debug/LoadSceneFromEnv" ) )
     {
-        auto pm = ProjectManager::GetInstance();
+        if( ConfigManager::GetBool( "Debug/LoadSolution" ) )
+        {
+            //m_solution.SetTimeline(m_timelineManager);
+            m_solution.LoadSolution( ConfigManager::GetString("solution") );
+            root = m_solution.GetRoot();
+            //if(ConfigManager::GetBool("hm"))
+            //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
+        }
+        else
+        {
+            auto pm = ProjectManager::GetInstance();
 
-        auto projectName = ConfigManager::GetString( "default_project_name" );
-        auto projectScenesNames = pm->ListScenesNames( projectName );
+            auto projectName = ConfigManager::GetString( "default_project_name" );
+            auto projectScenesNames = pm->ListScenesNames( projectName );
 
-        root = LoadScenes( projectScenesNames );
+            root = LoadScenes( projectScenesNames );
+        }
 
-        //m_solution.SetTimeline(m_timelineManager);
-        //m_solution.LoadSolution(  );
-        //root = m_solution.GetRoot();
-        //if(ConfigManager::GetBool("hm"))
-        //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
     }
     else
     {
@@ -225,7 +231,7 @@ void BVAppLogic::SetStartTime       ( unsigned long millis )
 //
 void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 {
-    HPROFILER_FUNCTION( "BVAppLogic::OnUpdate" );
+    HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
 
     assert( m_state != BVAppState::BVS_INVALID );
     if( m_state == BVAppState::BVS_RUNNING )
@@ -241,7 +247,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 
         {
             FRAME_STATS_SECTION( "Update" );
-            HPROFILER_SECTION( "update total" );
+            HPROFILER_SECTION( "update total", PROFILER_THREAD1 );
 
             m_globalTimeline->SetGlobalTime( t );
             m_bvScene->Update( t );
@@ -251,9 +257,9 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 
         {
             FRAME_STATS_SECTION( "Render" );
-            HPROFILER_SECTION( "Render" );
-			
-            RefreshVideoInputScene();
+			HPROFILER_SECTION( "Render", PROFILER_THREAD1 );			
+            
+			RefreshVideoInputScene();
 
             m_renderLogic->RenderFrame  ( renderer, m_bvScene->GetEngineSceneRoot() );
             m_renderLogic->FrameRendered( renderer );
@@ -453,8 +459,8 @@ void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int m
 {
     if( m_statsCalculator.WasSampledMaxVal( DefaultConfig.FrameStatsSection() ) )
     {
-        //unsigned int frame = m_statsCalculator.CurFrame() - 1;
-        
+        unsigned int frame = m_statsCalculator.CurFrame() - 1;
+
 #ifndef HIDE_PROFILE_STATS
         FrameStatsFormatter::PrintFrameStatsToConsole( frame, m_statsCalculator, "LONGEST FRAME SO FAR", 10 );
         HPROFILER_SET_FORCED_DISPLAY();

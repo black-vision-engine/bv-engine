@@ -16,6 +16,7 @@ namespace bv {
 
 ///////////////////////////////
 //
+// @todo Raplace all references with LoadTypedAsset
 FontAssetConstPtr      TextHelper::LoadFont( const FontAssetDescConstPtr & fontAssetDesc )
 {
 	return std::static_pointer_cast< const FontAsset >( AssetManager::GetInstance().LoadAsset( fontAssetDesc ) );
@@ -123,7 +124,7 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
 
     float texPadding = 1.f;
 
-	// Space with should be get form : https://www.mail-archive.com/freetype@nongnu.org/msg01384.html
+	// Space width should be get form : https://www.mail-archive.com/freetype@nongnu.org/msg01384.html
     auto spaceGlyphWidth    = (float)textAtlas->GetGlyph( L'0', outline )->width / viewWidth  + spacing;
 	auto newLineShift       = -(float) 1.5f * textAtlas->GetGlyph( L'0', outline )->height / viewHeight;
 

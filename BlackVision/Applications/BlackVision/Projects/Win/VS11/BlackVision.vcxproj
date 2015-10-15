@@ -100,7 +100,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ToolsDir)/LibEffect/Source;$(ToolsDir)/XMLSceneParser/Source;$(ToolsDir)/TCPServer/Source;$(ToolsDir)/ConfigReader/Source;$(ToolsDir)/RapidXML/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -120,8 +119,6 @@ xcopy $(DepDir)\Common\VideoCards\BlueFish\Bin\win32\BlueHancUtils_d.dll $(OutDi
 xcopy $(DepDir)\Common\VideoCards\BlueFish\Bin\win32\BlueGpuDirect_d.dll $(OutDir) /c /y
 
 xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
-
-xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 </Command>
       <Message>Copying assets and dll files to the working directory.</Message>
     </PostBuildEvent>
@@ -129,12 +126,10 @@ xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ToolsDir)/LibEffect/Source;$(ToolsDir)/XMLSceneParser/Source;$(ToolsDir)/TCPServer/Source;$(ToolsDir)/ConfigReader/Source;$(ToolsDir)/RapidXML/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-D_SCL_SECURE_NO_WARNINGS</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>sqliteD.lib;hashlib2plusD.lib;freetype250_D.lib;opengl32.lib;glu32.lib;FreeImage.lib;libboost_filesystem.lib;libboost_system.lib;libboost_thread.lib;libboost_serialization.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>
       </SubSystem>
     </Link>
@@ -153,8 +148,7 @@ xcopy $(DepDir)\Common\VideoCards\BlueFish\Bin\x64\BlueHancUtils64_d.dll $(OutDi
 xcopy $(DepDir)\Common\VideoCards\BlueFish\Bin\x64\BlueGpuDirect64_d.dll $(OutDir) /c /y
 
 xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
-
-xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir)  /c /y</Command>
+</Command>
       <Message>Copying assets and dll files to the working directory.</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -163,7 +157,6 @@ xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir)  /c /y</Comman
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(ToolsDir)/LibEffect/Source;$(ToolsDir)/XMLSceneParser/Source;$(ToolsDir)/TCPServer/Source;$(ToolsDir)/ConfigReader/Source;$(ToolsDir)/RapidXML/Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -185,14 +178,21 @@ xcopy $(DepDir)\Common\VideoCards\BlueFish\Bin\win32\BlueHancUtils.dll $(OutDir)
 xcopy $(DepDir)\Common\VideoCards\BlueFish\Bin\win32\BlueGpuDirect.dll $(OutDir) /c /y
 
 xcopy $(DepDir)\Common\Rockey\dll\Rockey2.dll $(OutDir) /c /y
-
-xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 </Command>
       <Message>Copying assets and dll files to the working directory.</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+      <AdditionalOptions>-SCL_SECURE_NO_WARNINGS</AdditionalOptions>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -224,9 +224,9 @@ xcopy $(DepDir)\Common\VideoCards\BlueFish\Bin\x64\BlueHancUtils64.dll $(OutDir)
 xcopy $(DepDir)\Common\VideoCards\BlueFish\Bin\x64\BlueGpuDirect64.dll $(OutDir) /c /y
 
 xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
-
-xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
 </Command>
+      <Message>Copying assets and dll files to the working directory.</Message>
+    </PostBuildEvent>
       <Message>Copying assets and dll files to the working directory.</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -287,8 +287,12 @@ xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\PerformanceMonitor.cpp" />
     <ClCompile Include="..\..\..\Source\PieChartNode.cpp" />
     <ClCompile Include="..\..\..\Source\RemoteControlInterface.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\AlphaMaskRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\DefaultEffectRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeEffectRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeMaskRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\OffscreenRenderLogic.cpp" />
-    <ClCompile Include="..\..\..\Source\Rendering\RenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\StatsFormatters.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\AICommands.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestAI.cpp" />
@@ -321,8 +325,12 @@ xcopy $(ThirdPartyDir)\FFmpeg\lib\$(PlatformName)\*.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\PerformanceMonitor.h" />
     <ClInclude Include="..\..\..\Source\PieChartNode.h" />
     <ClInclude Include="..\..\..\Source\RemoteControlInterface.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\AlphaMaskRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\DefaultEffectRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeEffectRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeMaskRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\OffscreenRenderLogic.h" />
-    <ClInclude Include="..\..\..\Source\Rendering\RenderLogic.h" />
     <ClInclude Include="..\..\..\Source\StatsFormatters.h" />
     <ClInclude Include="..\..\..\Source\TestAI\AICommands.h" />
     <ClInclude Include="..\..\..\Source\TestAI\IAICommand.h" />

@@ -308,11 +308,11 @@ void						ProjectManagerImpl::RemoveUnusedAssets	() const
 
 // ********************************
 //
-void						ProjectManagerImpl::AddScene			( const model::BasicNodeConstPtr & scene, const Path & projectName, const Path & outPath, model::TimelineManager * tm )
+void						ProjectManagerImpl::AddScene			( const model::BasicNodeConstPtr & scene, const Path & projectName, const Path & outPath )
 {
 	auto pathInScenes = TranslateToPathCategory( projectName, outPath );
 
-	m_sceneAccessor->AddScene( scene, pathInScenes, tm );
+	m_sceneAccessor->AddScene( scene, pathInScenes );
 }
 
 // ********************************
@@ -388,14 +388,84 @@ void						ProjectManagerImpl::ImportAssetFromFile	( const Path & importToProject
 //
 void						ProjectManagerImpl::ExportSceneToFile	( const Path & projectName, const Path & scenePath, const Path & outputFile ) const
 {
-	m_sceneAccessor->ExportSceneToFile( scenePath, projectName, outputFile, true );
+    auto f = File::Open( outputFile.Str(), File::OpenMode::FOMReadWrite );
+
+    auto & out = *f.StreamBuf();
+
+    out << "assets" << '\n';
+
+    auto uniqueAssets = m_sceneAccessor->ListAllUsedAssets( projectName / scenePath );
+
+    out << std::to_string( uniqueAssets.size() ) << '\n';
+
+    for( auto ua : uniqueAssets)
+    {
+        if( IsExternalPath( ua ) )
+        {
+            continue;
+        }
+
+        auto loc = Path2Location( ua );
+
+        if( loc.categoryName == "scenes" ) 
+	        assert( false );
+
+        out << loc.categoryName << '\n';
+
+        out << loc.path << '\n';
+
+        m_categories.at( loc.categoryName )->ExportAsset( out, loc.projectName / loc.path );
+    }
+
+    out << '\n';
+
+    m_sceneAccessor->ExportScene( out, projectName, scenePath );
+  	f.Close();
 }
 
 // ********************************
 //
-void						ProjectManagerImpl::ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath, model::TimelineManager * tm )
+void						ProjectManagerImpl::ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath )
 {
-	m_sceneAccessor->ImportSceneFromFile( impSceneFilePath, importToProjectName, importToPath, tm );
+    auto f = File::Open( impSceneFilePath.Str() );
+
+    std::stringbuf buf;
+
+    auto & in = *f.StreamBuf();
+
+    in.get( buf, '\n');
+    in.ignore();
+
+    if( buf.str() == "assets" )
+    {
+        std::stringbuf buf;
+        in.get( buf, '\n');
+        in.ignore();
+
+        auto size = stoul( buf.str() );
+
+        for( SizeType i = 0; i < size; ++i )
+        {
+            std::stringbuf buf;
+            in.get( buf, '\n');
+            in.ignore();
+
+            auto categoryName = buf.str();
+            buf.str("");
+
+            in.get( buf, '\n');
+            in.ignore();
+            auto path = Path( buf.str() );
+
+            m_categories.at( categoryName )->ImportAsset( in, importToProjectName / importToPath );
+        }
+    }
+    else
+    {
+        in.seekg( 0 );
+    }
+
+	m_sceneAccessor->ImportSceneFromFile( impSceneFilePath, importToProjectName, importToPath );
 }
 
 // ********************************
@@ -430,6 +500,11 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 
 		for( auto ua : uniqueAssets)
 		{
+            if( IsExternalPath( ua ) )
+            {
+                continue;
+            }
+
 			auto loc = Path2Location( ua );
 
 			if( loc.categoryName == "scenes" ) 
@@ -454,7 +529,7 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 
             out << loc.path << '\n';
 
-			m_sceneAccessor->ExportScene( out, loc.projectName, loc.path, false );
+			m_sceneAccessor->ExportScene( out, loc.projectName, loc.path );
 		}
 
         assetsFile.Close();
@@ -467,7 +542,7 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 
 // ********************************
 //
-void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, const Path & projectName, model::TimelineManager * tm )
+void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, const Path & projectName )
 {
     AddNewProject( projectName );
 
@@ -530,7 +605,7 @@ void						ProjectManagerImpl::ImportProjectFromFile( const Path & expFilePath, c
             in.ignore();
             Path path = buf.str();
 
-            m_sceneAccessor->ImportScene( in, projectName, path, tm );
+            m_sceneAccessor->ImportScene( in, projectName, path );
         }
     }
 
@@ -557,10 +632,19 @@ AssetDescConstPtr			ProjectManagerImpl::GetAssetDesc		( const Path & projectName
 //
 SceneDescriptor				ProjectManagerImpl::GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const
 {
-
 	auto pathInCategory = TranslateToPathCategory( projectName, pathInProject );
 	return m_sceneAccessor->GetSceneDesc( pathInCategory );
 }
+
+// ********************************
+//
+SceneDescriptor			    ProjectManagerImpl::GetSceneDesc		( const Path & path ) const
+{
+    auto loc = Path2Location( path );
+    auto pathInCategory = TranslateToPathCategory( loc.projectName, loc.path );
+	return m_sceneAccessor->GetSceneDesc( pathInCategory );
+}
+
 
 // ********************************
 //
@@ -604,7 +688,7 @@ void						ProjectManagerImpl::InitializePresets	()
 		Dir::CreateDir( m_presetsPath.Str() );
 	}
 
-    m_presetAccessor = PresetAccessor::Create( m_presetsPath, m_timelineManager );
+    m_presetAccessor = PresetAccessor::Create( m_presetsPath );
 }
 
 // ********************************
@@ -652,7 +736,7 @@ Path						ProjectManagerImpl::TranslateToPathCategory			( const Path & projectNa
 			auto p = GetProject( projectName );
 			if( p )
 			{
-				return projectName;
+				return projectName / path;
 			}
 			else
 			{
@@ -663,8 +747,7 @@ Path						ProjectManagerImpl::TranslateToPathCategory			( const Path & projectNa
 	}
     else
     {
-        auto loc = Path2Location( path );
-        return loc.projectName / loc.path;
+        return path;
     }
 }
 
@@ -689,6 +772,11 @@ Path						ProjectManagerImpl::TranslateToPathInPMRootFolder( const Path & projec
 //
 ProjectManagerImpl::Location ProjectManagerImpl::Path2Location( const Path & path ) const
 {
+    if( path.Str().empty() )
+    {
+        return Location();
+    }
+
 	auto strPath = path.Str();
 
 	auto categoriesNames = ListCategoriesNames();
@@ -707,7 +795,11 @@ ProjectManagerImpl::Location ProjectManagerImpl::Path2Location( const Path & pat
 		}
 	}
 
-	assert( !categoryName.empty() );
+    if( categoryName.empty() )
+    {
+        LOG_MESSAGE( SeverityLevel::warning ) << "'" << path << "' is not valid path inside project manager.";
+        return Location();
+    }
 
 	Path projectName = "";
 
@@ -776,8 +868,7 @@ PathVec                     ProjectManagerImpl::ListPresets         () const
 //
 Path                        ProjectManagerImpl::ToAbsPath           ( const Path & path ) const
 {
-    auto p = path.Str().find( "file:/" );
-    if( p == 0 )
+    if( path.Str().find( "file:/" ) == 0 )
     {
         return path.Str().substr( 6 );
     }
@@ -791,7 +882,58 @@ Path                        ProjectManagerImpl::ToAbsPath           ( const Path
     }
     else
     {
-        return m_rootPath / path;
+        if( IsValidPMPath( path ) )
+        {
+            return m_rootPath / path;
+        }
+        else
+        {
+            // FIXME: This else is needed only for testing old mechanism with pablito's solutions
+            return path;
+        }
+    }
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::IsExternalPath      ( const Path & path ) const
+{
+    if( path.Str().find( "file:/" ) == 0 )
+    {
+        return true;
+    }
+    else if ( path.Str().find( "seq:/" ) == 0 )
+    {
+        return true;
+    }
+    else if ( path.Str().find( "stream:/" ) == 0 )
+    {
+        return true;
+    }
+    else
+    {
+        return IsValidPMPath( path );
+    }
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::IsValidPMPath       ( const Path & path ) const
+{
+    return Path2Location( path ).IsValid();
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::PathExistsInPM      ( const Path & path ) const
+{
+    if( !IsExternalPath( path ) )
+    {
+        return Path::Exists( ToAbsPath( path ) );
+    }
+    else
+    {
+        return false;
     }
 }
 

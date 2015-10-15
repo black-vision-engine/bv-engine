@@ -45,7 +45,7 @@ AssetDescConstPtr AnimationAssetAccessor::GetAssetDesc( const Path & path ) cons
         {
             if( Path::List( path, false, fe ).size() > 0 )
             {
-                return AnimationAssetDesc::CreateFromDirFrames( path.Str(), fe );
+                return AnimationAssetDesc::Create( ( Path( "sequences" ) / path ).Str(), fe );
             }
         }
     }

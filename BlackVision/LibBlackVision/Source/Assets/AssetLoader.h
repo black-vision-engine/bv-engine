@@ -13,11 +13,15 @@ public:
 	virtual AssetConstPtr		LoadAsset        ( const AssetDescConstPtr & desc )  const = 0;
 	virtual AssetDescConstPtr	CreateDescriptor ( JsonDeserializeObject& deserializeObject ) const = 0;
 
+
             AssetLoader			();
     virtual ~AssetLoader		();
 
 };
 
 DEFINE_CONST_PTR_TYPE( AssetLoader )
+
+
+
 
 } // bv

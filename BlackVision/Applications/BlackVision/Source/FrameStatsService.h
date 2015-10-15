@@ -49,9 +49,11 @@ private:
     double  MinVal              ( unsigned int * frame = nullptr ) const;
     double  MaxVal              ( unsigned int * frame = nullptr ) const;
 
-    FrameStatsSample FrameStats ( unsigned int frame ) const;
+    FrameStatsSample			FrameStats		( unsigned int frame ) const;
 
-    inline void AddNextSample   ( const FrameStatsSample & sample, bool * minFlag, bool * maxFlag );
+    inline void					AddNextSample   ( const FrameStatsSample & sample, bool * minFlag, bool * maxFlag );
+
+	inline unsigned int			CountUselessSamples() const;
 
     friend class FrameStatsCalculator;
 

@@ -13,6 +13,8 @@
 namespace bv
 {
 
+void ChangeProjectManagerInstanceTo( const std::string & );
+
 class Project;
 class AssetCategory;
 class ProjectManagerImpl;
@@ -54,7 +56,7 @@ public:
     void					RemoveUnusedAssets	( const Path & projectName );
 	void					RemoveUnusedAssets	();
 
-	void					AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath, model::TimelineManager * tm );
+	void					AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath );
 	void					CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 	void					RemoveScene			( const Path & projectName, const Path & path );
 	void					MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
@@ -72,11 +74,11 @@ public:
 	
 	// scenes
 	void					ExportSceneToFile	( const Path & projectName, const Path & scenePath, const Path & outputFile ) const;
-	void					ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath, model::TimelineManager * tm );
+	void					ImportSceneFromFile	( const Path & importToProjectName, const Path & importToPath, const Path & impSceneFilePath );
 
 	// projects
 	void					ExportProjectToFile	( const Path & projectName, const Path &  outputFilePath ) const;
-	void					ImportProjectFromFile( const Path & expFilePath, const Path & projectName, model::TimelineManager * tm );
+	void					ImportProjectFromFile( const Path & expFilePath, const Path & projectName );
 
 	// *********************************
 	// getting scenes and assets descriptors
@@ -85,6 +87,7 @@ public:
 	AssetDescConstPtr		GetAssetDesc		( const Path & projectName, const std::string & categoryName, const Path & pathInProject ) const;
 
 	//SceneDesc				GetSceneDescLoc		( loc )
+	SceneDescriptor			GetSceneDesc		( const Path & path ) const;
 	SceneDescriptor			GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
 
 	// *********************************
@@ -97,14 +100,19 @@ public:
 
     Path                    ToAbsPath           ( const Path & path ) const;
 
-	static ProjectManager *	GetInstance			( const Path & rootPath );
     static ProjectManager *	GetInstance			(  );
+
+	~ProjectManager	();
 
 private:
 	ProjectManagerImpl * m_impl;
 
 	ProjectManager	( const Path & rootPath );
-	~ProjectManager	();
+
+    static std::shared_ptr< ProjectManager > _instance;
+
+    static void             SetPMInstanceOnlyForTests( ProjectManager * inst );
+    friend void             bv::ChangeProjectManagerInstanceTo( const std::string & );
 };
 
 } // bv

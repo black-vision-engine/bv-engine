@@ -168,6 +168,8 @@ void            BVScene::Serialize           ( SerializeObject &doc) const
 {
     doc.SetName( "scene" );
 
+    model::TimelineManager::SetInstance( m_pTimelineManager );
+
     //auto& assets = AssetDescsWithUIDs::GetInstance();
     AssetDescsWithUIDs assets;
     GetAssetsWithUIDs( assets, m_pModelSceneRoot );
@@ -185,7 +187,7 @@ void            BVScene::Serialize           ( SerializeObject &doc) const
 //
 ISerializablePtr        BVScene::Create          ( DeserializeObject &/*doc*/ )
 {
-    assert( !"Will not implement (probably)" );
+    assert( !"Will not implement (probably) (see LoadSceneFromFile)" );
     return nullptr;
     //auto& tm = *doc.m_tm; // FIXME(?)
     //auto nRoot = doc.m_doc->first_node();

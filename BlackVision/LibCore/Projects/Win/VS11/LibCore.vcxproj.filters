@@ -22,6 +22,9 @@
     <Filter Include="Tools\Logger">
       <UniqueIdentifier>{486e0344-793b-4e99-a7ab-70c551821e1e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\Profiler">
+      <UniqueIdentifier>{9d5799c7-b685-4bd8-8d11-3be2322f86e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\CoreDEF.h" />
@@ -42,9 +45,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Memory\MemoryChunk.h">
       <Filter>Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Tools\HerarchicalProfiler.h">
-      <Filter>Tools</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\HRTimer.h">
       <Filter>Tools</Filter>
@@ -80,11 +80,17 @@
     <ClInclude Include="..\..\..\Source\Tools\Logger\UseLogger.h">
       <Filter>Tools\Logger</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.h">
+      <Filter>Tools\Profiler</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\System\Path.h">
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\IncludeJSON.h">
       <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\IO\NamedPipe.h">
+      <Filter>IO</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -99,9 +105,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Memory\MemoryChunk.cpp">
       <Filter>Memory</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Tools\HerarchicalProfiler.cpp">
-      <Filter>Tools</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Tools\HRTimer.cpp">
       <Filter>Tools</Filter>
@@ -136,10 +139,16 @@
     <ClCompile Include="..\..\..\Source\System\Path.cpp">
       <Filter>System</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.cpp">
+      <Filter>Tools\Profiler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\IO\NamedPipe.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Source\Tools\HerarchicalProfiler.inl">
-      <Filter>Tools</Filter>
+    <None Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.inl">
+      <Filter>Tools\Profiler</Filter>
     </None>
   </ItemGroup>
 </Project>

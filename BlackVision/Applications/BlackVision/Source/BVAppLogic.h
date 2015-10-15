@@ -9,6 +9,8 @@
 
 #include "FrameStatsService.h"
 
+//#define HIDE_PROFILE_STATS
+
 //pablito
 #include "Solution.h"
 #include "VideoCardManager.h"
@@ -18,7 +20,6 @@
 #include "VideoInput/DefaultVideoInputResourceDescr.h"
 #include "hack_videoinput/TestVideoInput.h"
 
-#define HIDE_PROFILE_STATS
 
 
 namespace bv

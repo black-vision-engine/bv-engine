@@ -18,6 +18,8 @@ public:
 	bool							RegisterLoader	( const std::string & assetDescUID, const AssetLoaderConstPtr & loader );
 	bool							UnregisterLoader( const std::string & assetDescUID );
 
+
+
 	static AssetManager &			GetInstance		();
 
 private:
@@ -29,6 +31,18 @@ private:
 	AssetCache										m_assetCache;
 
 	void							RegisterBasicLoaders();
+
+public:
 };
+
+// ***********************
+//
+template<typename AssetType>
+std::shared_ptr<const AssetType> LoadTypedAsset		(  const AssetDescConstPtr & )
+{
+	return nullptr;
+}
+
+
 
 } // bv

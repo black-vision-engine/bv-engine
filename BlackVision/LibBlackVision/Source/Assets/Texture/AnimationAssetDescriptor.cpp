@@ -54,6 +54,9 @@ ISerializableConstPtr AnimationAssetDesc::Create( JsonDeserializeObject & dob )
 	return DeserializeAsset( dob );
 }
 
+
+
+
 // *******************************
 //
 AnimationAssetDesc::AnimationAssetDesc							( const std::string & path, const std::string & filter )
@@ -70,22 +73,19 @@ AnimationAssetDesc::AnimationAssetDesc							( const std::string & path, const s
 //}
 
 
+
+
 // *******************************
 //
 AnimationAssetDesc::~AnimationAssetDesc							()
 {
 }
 
-// *******************************
-//
-//const std::vector< TextureAssetDescConstPtr > & AnimationAssetDesc::GetFrames		() const
-//{
-//    return m_frames;
-//}
 
-//// *******************************
-////
-//AnimationAssetDescConstPtr			AnimationAssetDesc::Create ( const std::vector< TextureAssetDescConstPtr > & frames )
+
+
+
+//const std::vector< TextureAssetDescConstPtr > & AnimationAssetDesc::GetFrames		() const
 //{
 //    return AnimationAssetDescConstPtr( new AnimationAssetDesc ( frames ) );
 //}
@@ -100,7 +100,7 @@ std::string                     AnimationAssetDesc::GetKey      () const
 
 // *******************************
 //
-AnimationAssetDescConstPtr		AnimationAssetDesc::CreateFromDirFrames( const std::string & path, const std::string & filter )
+AnimationAssetDescConstPtr		AnimationAssetDesc::Create( const std::string & path, const std::string & filter )
 {
     return AnimationAssetDescConstPtr( new AnimationAssetDesc ( path, filter ) );
 }

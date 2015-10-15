@@ -1,6 +1,7 @@
 #include "ScenePrototype3.h"
 #include "Mathematics\Defines.h"
 
+#include "IO\NamedPipe.h"
 
 #include "Tools\Logger\Logger.h"
 #define LOG_MODULE ModuleEnum::ME_Prototyper

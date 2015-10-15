@@ -8,16 +8,15 @@ std::string PresetAccessor::m_fileExt = ".*\\.bvpreset";
 
 // ********************************
 //
-PresetAccessorConstPtr PresetAccessor::Create( const Path & path, model::TimelineManager * tm )
+PresetAccessorConstPtr PresetAccessor::Create( const Path & path )
 {
-    return PresetAccessorConstPtr( new PresetAccessor( path, tm ) );
+    return PresetAccessorConstPtr( new PresetAccessor( path ) );
 }
 
 // ********************************
 //
-PresetAccessor::PresetAccessor	( const Path & path, model::TimelineManager * tm )
+PresetAccessor::PresetAccessor	( const Path & path )
     : m_path( path )
-    , m_tm( tm )
 {}
 
 // ********************************
@@ -25,14 +24,14 @@ PresetAccessor::PresetAccessor	( const Path & path, model::TimelineManager * tm 
 void                        PresetAccessor::SavePreset ( const model::BasicNodeConstPtr node, const Path & path ) const
 {
     File::Touch( ( m_path / path ).Str() );
-    SceneDescriptor::SaveScene( node, m_tm, ( m_path / path ).Str() );
+    SceneDescriptor::SaveScene( node, model::TimelineManager::GetInstance(), ( m_path / path ).Str() );
 }
     
 // ********************************
 //
 model::BasicNodeConstPtr    PresetAccessor::LoadPreset( const Path & path ) const
 {
-    return SceneDescriptor::LoadScene( ( m_path / path ).Str(), m_tm );
+    return SceneDescriptor::LoadScene( ( m_path / path ).Str(), model::TimelineManager::GetInstance() );
 }
 
 // ********************************
