@@ -9,7 +9,7 @@
 #include "Tools/SimpleTimer.h"
 #include "Tools/Profiler/HerarchicalProfiler.h"
 
-#include "Rendering/RenderLogic.h"
+#include "Rendering/Logic/RenderLogic.h"
 #include "ModelInteractionEvents.h"
 
 #include "Widgets/Crawler/CrawlerEvents.h"
