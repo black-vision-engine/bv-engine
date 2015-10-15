@@ -11,6 +11,7 @@
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Assets/AssetDescsWithUIDs.h"
+#include "Serialization/SerializationObjects.inl"
 
 namespace bv {
 
@@ -185,34 +186,28 @@ void            BVScene::Serialize           ( SerializeObject &doc) const
 
 // *******************************
 //
-ISerializablePtr        BVScene::Create          ( DeserializeObject &/*doc*/ )
+ISerializablePtr        BVScene::Create          ( DeserializeObject &dob )
 {
-    assert( !"Will not implement (probably) (see LoadSceneFromFile)" );
-    return nullptr;
-    //auto& tm = *doc.m_tm; // FIXME(?)
-    //auto nRoot = doc.m_doc->first_node();
+// assets
+    auto assets = dob.Load< AssetDescsWithUIDs >( "assets" );
+    AssetDescsWithUIDs::SetInstance( *assets );
 
-    //if( strcmp( nRoot->name(), "scene" ) )
-    //{
-    //    std::cerr << "[SceneLoader] ERROR: XML root node is not \"scene\"" << std::endl;
-    //    return nullptr;
-    //}
+// timelines
+    auto tm = model::TimelineManager::GetInstance();
 
-    //auto nNodes = nRoot->first_node( "nodes" );
-    //if( !nNodes )
-    //{
-    //    std::cerr << "[SceneLoader] ERROR: scene has no node \"nodes\"" << std::endl;
-    //    return nullptr;
-    //}
+    auto timelines = dob.LoadArray< model::TimeEvaluatorBase< model::ITimeEvaluator > >( "timelines" );
+    for( auto timeline : timelines )
+        for( auto child : timeline->GetChildren() )
+            tm->AddTimeline( child );
 
-    //auto nNode = nNodes->first_node( "node" );
-    //auto aName = nNode->first_attribute( "name" ); assert( aName );
-    //model::BasicNodePtr root = model::BasicNode::Create( aName->value(), tm.GetRootTimeline() );
+// nodes
+    auto node = dob.Load< model::BasicNode >( "node" );
+    assert( node );
 
-    //root->AddPlugin( "DEFAULT_TRANSFORM", tm.GetRootTimeline() ); // FIXME
-
-    //return Create( root, nullptr, "", tm.GetRootTimeline(), nullptr ); // FIXME
+    return Create( node, nullptr, "", tm->GetRootTimeline(), nullptr, tm );
 }
+
+template std::shared_ptr< BVScene >                                        DeserializeObjectLoadImpl( DeserializeObjectImpl*, std::string name );
 
 
 } // bv

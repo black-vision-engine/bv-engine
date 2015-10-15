@@ -939,7 +939,7 @@ model::BasicNodePtr      TestScenesFactory::SequenceAnimationTestScene  ()
     return nullptr;
 }
 
-model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineManager * timelineManager ) // FIXME: maybe should be moved to BVScene::Create
+model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineManager * tm )
 {
     if( !Path::Exists( filename ) )
 	{
@@ -949,21 +949,10 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineMana
 // begin serialization
     DeserializeObject dob( filename );
 
-    model::TimelineManager::SetInstance( timelineManager );
+    model::TimelineManager::SetInstance( tm );
+    auto scene = dob.Load< BVScene >( "scene" );
 
-// assets
-    auto assets = dob.Load< AssetDescsWithUIDs >( "assets" );
-    AssetDescsWithUIDs::SetInstance( *assets );
-
-// timelines
-    auto timelines = dob.LoadArray< TimeEvaluatorBase< ITimeEvaluator > >( "timelines" );
-    for( auto timeline : timelines )
-        for( auto child : timeline->GetChildren() )
-            timelineManager->AddTimeline( child );
-
-    auto node = dob.Load< model::BasicNode >( "node" );
-    assert( node );
-    return node;
+    return scene->GetModelSceneRoot();
 }
 
 model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( model::TimelineManager * timelineManager )
