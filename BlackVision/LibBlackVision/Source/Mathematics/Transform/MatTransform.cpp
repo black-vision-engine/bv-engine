@@ -5,7 +5,7 @@
 namespace bv { 
     
 // serialization stuff
-template std::vector< std::shared_ptr< SimpleTransformF > >                         DeserializeObjectLoadPropertiesImpl( DeserializeObjectImpl* pimpl, std::string name );
+template std::vector< std::shared_ptr< SimpleTransformF > >                         DeserializeObjectLoadPropertiesImpl( ISerializer& pimpl, std::string name );
 
 namespace model {
 
@@ -106,7 +106,7 @@ ISerializablePtr     SimpleTransform<ParamT>::Create          ( ISerializer& dob
         return std::make_shared< Rotation< ParamT > >( *angle.get(), *rotAxis ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
-    auto params = dob.LoadProperties< ParamT >( "interpolator" );
+    auto params = DeserializeObjectLoadPropertiesImpl< ParamT >( dob, "interpolator" );
     
     if( params.size() != 3 && ( kind != "rotation" || params.size() != 2 ) ) // de Morgan FTW!
     {
@@ -323,11 +323,11 @@ CompositeTransform<ParamT>::CompositeTransform  ( const CompositeTransform & src
 // *************************************
 //
 template<typename ParamT>
-ISerializablePtr                     CompositeTransform<ParamT>::Create                  ( const ISerializer& dob )
+ISerializablePtr                     CompositeTransform<ParamT>::Create                  ( ISerializer& dob )
 {
     auto transform = std::make_shared< CompositeTransform< ParamT > >();
 
-    auto transes = dob.LoadProperties< SimpleTransform< ParamT > >( "transform" );
+    auto transes = DeserializeObjectLoadPropertiesImpl< SimpleTransform< ParamT > >( dob, "transform" );
 
     int i = 0;
     for( auto trans : transes )

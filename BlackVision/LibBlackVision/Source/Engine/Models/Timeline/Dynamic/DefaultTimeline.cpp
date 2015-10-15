@@ -11,7 +11,7 @@
 #include "Engine/Models/Timeline/Dynamic/TimelineEventStop.h"
 
 #include "Serialization/ISerializer.h"
-
+#include "Serialization/SerializationObjects.h"
 
 namespace bv { namespace model {
 
@@ -90,7 +90,7 @@ ISerializablePtr                     DefaultTimeline::Create              ( ISer
 
     auto te = std::make_shared< DefaultTimeline >( name, duration, preWrap, postWrap );
 
-    auto children = dob.LoadArray< TimeEvaluatorBase< ITimeEvaluator > >( "children" );
+    auto children = DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( dob, "children" );
 
     for( auto child : children )
         te->AddChild( child );

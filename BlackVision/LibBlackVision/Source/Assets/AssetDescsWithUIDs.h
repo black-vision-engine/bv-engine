@@ -4,6 +4,7 @@
 
 #include "AssetDescriptor.h"
 #include "AssetSerialization.h"
+#include "Serialization/SerializationObjects.h"
 
 namespace bv {
 
@@ -25,7 +26,7 @@ public:
     static ISerializablePtr                 Create          ( ISerializer& dob )
     {
         auto uid = dob.GetAttribute( "uid" );
-        auto desc = dob.Load< const SerializedAssetDesc >( "asset" );
+        auto desc = DeserializeObjectLoadImpl< const SerializedAssetDesc >( dob, "asset" );
         return std::make_shared< AssetDescWithUID >( desc, uid );
     }
 
@@ -56,7 +57,7 @@ public:
     }
     static ISerializablePtr                                 Create          ( ISerializer& dob )
     {
-        auto assetsWithUIDs = dob.LoadProperties< AssetDescWithUID >( "uid" );
+        auto assetsWithUIDs = DeserializeObjectLoadPropertiesImpl< AssetDescWithUID >( dob, "uid" );
 
         auto assets = std::make_shared< AssetDescsWithUIDs >();
         for( auto asset : assetsWithUIDs )

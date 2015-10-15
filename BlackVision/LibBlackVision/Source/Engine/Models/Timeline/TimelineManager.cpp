@@ -1,4 +1,5 @@
 #include "TimelineManager.h"
+#include "Serialization/ISerializer.h"
 
 #include <cassert>
 

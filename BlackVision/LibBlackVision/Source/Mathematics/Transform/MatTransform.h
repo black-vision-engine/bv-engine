@@ -183,7 +183,7 @@ public:
     explicit        CompositeTransform  ();
                     CompositeTransform  ( const CompositeTransform & src );
 
-    static ISerializablePtr                     Create                  ( const ISerializer& dob );
+    static ISerializablePtr                     Create                  ( ISerializer& dob );
     virtual void                                Serialize               ( ISerializer& doc ) const;
 
     void            InitializeDefaultSRT();

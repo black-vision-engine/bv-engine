@@ -58,17 +58,17 @@ void SerializeObject::Save( std::ostream & out )
 
 // *******************************
 //
-void                                                    SerializeObject::SetName( const std::string & name )
-{
-    auto& m_doc = pimpl_->m_doc;
-    auto& m_roots = pimpl_->m_roots;
-
-    char *node_name = m_doc.allocate_string( name.c_str() );
-    rapidxml::xml_node<>* node = m_doc.allocate_node( rapidxml::node_element, node_name );
-
-    m_roots.top()->append_node( node );
-    m_roots.push( node );
-}
+//void                                                    SerializeObject::SetName( const std::string & name )
+//{
+//    auto& m_doc = pimpl_->m_doc;
+//    auto& m_roots = pimpl_->m_roots;
+//
+//    char *node_name = m_doc.allocate_string( name.c_str() );
+//    rapidxml::xml_node<>* node = m_doc.allocate_node( rapidxml::node_element, node_name );
+//
+//    m_roots.top()->append_node( node );
+//    m_roots.push( node );
+//}
 
 // *******************************
 //

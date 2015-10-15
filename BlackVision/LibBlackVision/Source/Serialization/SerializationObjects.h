@@ -28,13 +28,13 @@ public:
 class DeserializeObjectImpl;
 
 template< typename T >
-std::shared_ptr< T >                                        DeserializeObjectLoadImpl( DeserializeObjectImpl*, std::string name );
+std::shared_ptr< T >                                        DeserializeObjectLoadImpl( ISerializer&, std::string name );
 
 template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( DeserializeObjectImpl*, std::string name );
+std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( ISerializer&, std::string name );
 
 template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( DeserializeObjectImpl*, std::string name );
+std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( ISerializer&, std::string name );
 
 class DeserializeObject  : public ISerializer
 {

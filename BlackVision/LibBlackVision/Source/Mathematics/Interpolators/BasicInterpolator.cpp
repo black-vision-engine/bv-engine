@@ -29,7 +29,7 @@ namespace std
 namespace bv {
 
 // serialization stuff
-template std::vector< std::shared_ptr< Key< float, float > > >                         DeserializeObjectLoadPropertiesImpl( DeserializeObjectImpl*, std::string name );
+template std::vector< std::shared_ptr< Key< float, float > > >                         DeserializeObjectLoadPropertiesImpl( ISerializer&, std::string name );
 
 namespace {
 
@@ -265,8 +265,8 @@ void                BasicInterpolator<TimeValueT, ValueT, FloatT>::Serialize    
     for( auto key : keys )
     {
         doc.EnterChild( "key" );
-        doc.GetAttribute( "time", std::to_string( key.t ) );
-        doc.GetAttribute( "val", std::to_string( key.val ) );
+        doc.SetAttribute( "time", std::to_string( key.t ) );
+        doc.SetAttribute( "val", std::to_string( key.val ) );
         doc.ExitChild();
     }
 
@@ -278,7 +278,7 @@ void                BasicInterpolator<TimeValueT, ValueT, FloatT>::Serialize    
 template<class TimeValueT, class ValueT, class FloatT >
 ISerializablePtr     BasicInterpolator<TimeValueT, ValueT, FloatT>::Create          ( ISerializer& doc ) // FIXME: this works for floats only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 {
-    auto keys = doc.LoadProperties< Key<TimeValueT, ValueT> >( "key" );
+    auto keys = DeserializeObjectLoadPropertiesImpl< Key<TimeValueT, ValueT> >( doc, "key" );
 
     auto interpolator = std::make_shared< BasicInterpolator<TimeValueT, ValueT, FloatT> >();
 

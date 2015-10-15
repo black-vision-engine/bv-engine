@@ -17,7 +17,7 @@
 namespace bv { 
     
 // serialization stuff
-template std::shared_ptr< model::BasicNode >                                        DeserializeObjectLoadImpl( DeserializeObjectImpl* pimpl, std::string name );
+template std::shared_ptr< model::BasicNode >                                        DeserializeObjectLoadImpl( ISerializer& pimpl, std::string name );
     
 namespace model {
 
