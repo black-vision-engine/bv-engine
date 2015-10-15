@@ -1928,6 +1928,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeMaskNodeEffect.h">
       <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\ISerializer.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
