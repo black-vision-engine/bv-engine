@@ -171,6 +171,13 @@ unsigned int                    BasicNode::GetNumChildren           () const
 
 // ********************************
 //
+IModelNodeEffect *              BasicNode::GetNodeEffect            () const
+{
+    return nullptr;
+}
+
+// ********************************
+//
 void                            BasicNode::EnableOverrideStateAM    ()
 {
     m_overrideState->EnableAlphaAM();
