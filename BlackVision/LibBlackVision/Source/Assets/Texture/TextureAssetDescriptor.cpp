@@ -12,36 +12,6 @@ const std::string TextureAssetDesc::uid = "TEXTURE_ASSET_DESC";
 
 // ***********************
 //
-template<class Serializer>
-void TextureAssetDesc::SerializeAsset( Serializer& sob ) const
-{
-sob.SetName( "asset" );
-    sob.SetValue( "type", "tx" );
-    sob.SetValue( "path", m_originalTextureDesc->GetImagePath() );
-
-    if( m_mipMapsDescs )
-        sob.SetValue( "mipmap", Filter2String( m_mipMapsDescs->GetFilter() ) );
-    else
-        sob.SetValue( "mipmap", "none" );
-sob.Pop();
-}
-
-// ***********************
-//
-template<class Deserializer>
-TextureAssetDescConstPtr TextureAssetDesc::DeserializeAsset( Deserializer& dob )
-{
-    auto path = dob.GetValue( "path" );
-
-    auto filterS = dob.GetValue( "mipmap" );
-    if( filterS == "none" )
-        return Create( path, true );
-    else
-        return Create( path, String2Filter( filterS ), true );
-}
-
-// ***********************
-//
 std::string Filter2String( MipMapFilterType filter )
 {
     if( filter == MipMapFilterType::BILINEAR )
@@ -55,9 +25,17 @@ std::string Filter2String( MipMapFilterType filter )
 
 // ***********************
 //
-void                TextureAssetDesc::Serialize       ( SerializeObject & sob ) const
+void                TextureAssetDesc::Serialize       ( ISerializer& sob ) const
 {
-	SerializeAsset( sob );
+sob.EnterChild( "asset" );
+    sob.SetAttribute( "type", "tx" );
+    sob.SetAttribute( "path", m_originalTextureDesc->GetImagePath() );
+
+    if( m_mipMapsDescs )
+        sob.SetAttribute( "mipmap", Filter2String( m_mipMapsDescs->GetFilter() ) );
+    else
+        sob.SetAttribute( "mipmap", "none" );
+sob.ExitChild();
 }
 
 MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
@@ -79,24 +57,18 @@ MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
 
 // ***********************
 //
-ISerializableConstPtr TextureAssetDesc::Create          ( DeserializeObject & dob )
+ISerializableConstPtr TextureAssetDesc::Create          ( ISerializer& dob )
 {
-	return DeserializeAsset( dob );
+    auto path = dob.GetAttribute( "path" );
+
+    auto filterS = dob.GetAttribute( "mipmap" );
+    if( filterS == "none" )
+        return Create( path, true );
+    else
+        return Create( path, String2Filter( filterS ), true );
 }
 
-// ***********************
-//
-void TextureAssetDesc::Serialize       ( JsonSerializeObject & sob ) const
-{
-	SerializeAsset( sob );
-}
-// ***********************
-//
-ISerializableConstPtr TextureAssetDesc::Create          ( JsonDeserializeObject & dob )
-{
-	/*dob.Push( "asset" );*/
-	return DeserializeAsset( dob );
-}
+
 // ***********************
 //
 const std::string &	TextureAssetDesc::GetUID() const

@@ -17,10 +17,8 @@ protected:
 
 public:
 
-    virtual void                    Serialize       ( SerializeObject & sob ) const;
-	virtual void                    Serialize       ( JsonSerializeObject & sob ) const;
-    static ISerializableConstPtr    Create          ( DeserializeObject & dob );
-	static ISerializableConstPtr	Create          ( JsonDeserializeObject & dob );
+    virtual void                    Serialize       ( ISerializer& sob ) const;
+    static ISerializableConstPtr    Create          ( ISerializer& dob );
 
 	virtual const std::string &		GetUID		() const override;
 
@@ -51,11 +49,6 @@ private:
     //std::vector< TextureAssetDescConstPtr > m_frames;
     std::string                             m_path;
     std::string                             m_filter;
-
-private:
-	//For internal use only
-	template<class Serializer>		void								SerializeAsset			( Serializer& sob ) const;
-	template<class Deserializer>	static AnimationAssetDescConstPtr	DeserializeAsset		( Deserializer& dob );
 };
 
 } //bv

@@ -20,8 +20,8 @@ public:
             ConstTimeEvaluator                      ( const std::string & name, TimeType val );
             ~ConstTimeEvaluator                     ();
 
-    virtual void                Serialize           ( SerializeObject & sob ) const;
-    static ISerializablePtr     Create              ( DeserializeObject & dob );
+    virtual void                Serialize           ( ISerializer& sob ) const;
+    static ISerializablePtr     Create              ( ISerializer& dob );
 
     void    SetConstTimeValue                       ( TimeType t );
 

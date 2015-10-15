@@ -22,7 +22,7 @@ public:
     virtual bool                EnterChild          ( const std::string& name ) = 0;
     
     /**@brief Pop.*/
-    virtual void                ExitChild           ( const std::string& name ) = 0;
+    virtual bool                ExitChild           () = 0;
 };
 
 

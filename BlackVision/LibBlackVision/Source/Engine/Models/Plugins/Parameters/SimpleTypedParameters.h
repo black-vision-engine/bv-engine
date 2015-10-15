@@ -26,7 +26,7 @@ public:
     explicit                SimpleParameterImpl ( const std::string & name, const InterpolatorType & interpolator, ITimeEvaluatorPtr evaluator );
                             ~SimpleParameterImpl();
 
-    void                    Serialize       ( SerializeObject & doc ) const;
+    void                    Serialize       ( ISerializer& doc ) const;
 
 
     virtual void                SetInterpolationMethod ( InterpolationMethod method ) override;

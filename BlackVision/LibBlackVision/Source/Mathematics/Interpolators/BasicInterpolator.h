@@ -84,8 +84,8 @@ public:
     explicit BasicInterpolator  ( TimeValueT tolerance = 0.0001 );
     virtual ~BasicInterpolator  () {};
 
-    virtual void                Serialize       ( SerializeObject & doc ) const override;
-    static ISerializablePtr     Create          ( DeserializeObject & doc );
+    virtual void                Serialize       ( ISerializer& doc ) const override;
+    static ISerializablePtr     Create          ( ISerializer& doc );
 
     //void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method ) override;
 	//model::IParameter::InterpolationMethod     GetInterpolationMethod () const override;

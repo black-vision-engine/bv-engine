@@ -87,10 +87,10 @@ BasicNodePtr                    BasicNode::Create                   ( const std:
 
 // ********************************
 //
-void                            BasicNode::Serialize               ( SerializeObject& doc ) const
+void                            BasicNode::Serialize               ( ISerializer& doc ) const
 {
     doc.SetName( "node" );
-    doc.SetValue( "name", GetName() );
+    doc.SetAttribute( "name", GetName() );
 
     doc.SetName( "plugins" );
         for( unsigned int  i = 0; i < m_pluginList->NumPlugins(); i++ )
@@ -100,23 +100,23 @@ void                            BasicNode::Serialize               ( SerializeOb
             assert( plugin );
             plugin->Serialize( doc );
         }
-    doc.Pop(); // plugins
+    doc.ExitChild(); // plugins
 
     doc.SetName( "nodes" );
         for( auto child : m_children )
             child->Serialize( doc );
-    doc.Pop();
+    doc.ExitChild();
 
-    doc.Pop();
+    doc.ExitChild();
 }
 
 // ********************************
 //
-ISerializablePtr BasicNode::Create( DeserializeObject& dob )
+ISerializablePtr BasicNode::Create( ISerializer& dob )
 {
     assert( dob.GetName() == "node" );
 
-    auto name = dob.GetValue( "name" );
+    auto name = dob.GetAttribute( "name" );
 
     auto timeEvaluator = TimelineManager::GetInstance()->GetRootTimeline(); // FIXME: probably this should be serialized
     

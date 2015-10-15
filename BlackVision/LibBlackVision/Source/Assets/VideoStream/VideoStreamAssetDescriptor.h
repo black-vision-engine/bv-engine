@@ -38,10 +38,10 @@ public:
 	explicit									VideoStreamAssetDesc		( const std::string & streamPath, UInt32 width, UInt32 height, UInt32 frameRate );
 
 
-    virtual void								Serialize					( SerializeObject & sob ) const;
-    virtual void							    Serialize					( JsonSerializeObject & sob ) const;
-	static ISerializableConstPtr			    Create						( DeserializeObject & dob );
-	static ISerializableConstPtr				Create						( JsonDeserializeObject & dob );
+    virtual void								Serialize					( ISerializer& sob ) const;
+    virtual void							    Serialize					( JsonISerializer& sob ) const;
+	static ISerializableConstPtr			    Create						( ISerializer& dob );
+	static ISerializableConstPtr				Create						( JsonISerializer& dob );
 
 	virtual const std::string &					GetUID						() const override;
 	

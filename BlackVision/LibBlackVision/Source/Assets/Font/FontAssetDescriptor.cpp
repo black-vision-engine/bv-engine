@@ -7,66 +7,37 @@ namespace bv
 const std::string FontAssetDesc::uid = "FONT_ASSET_DESC";
 
 
+
+
 // ***********************
 //
-template<class Serializer>
-void FontAssetDesc::SerializeAsset( Serializer& sob ) const
+void                FontAssetDesc::Serialize       ( ISerializer& sob ) const
 {
-    sob.SetName( "asset" );
+    sob.EnterChild( "asset" );
 
-    sob.SetValue( "type", "font" );
-    sob.SetValue( "path", m_fontFileName );
-    sob.SetValue( "size", std::to_string( m_fontSize ) );
-    sob.SetValue( "blur", std::to_string( m_blurSize ) );
-    sob.SetValue( "outline", std::to_string( m_outlineSize ) );
-    sob.SetValue( "mipmaps", m_generateMipmaps ? "true" : "false" );
+    sob.SetAttribute( "type", "font" );
+    sob.SetAttribute( "path", m_fontFileName );
+    sob.SetAttribute( "size", std::to_string( m_fontSize ) );
+    sob.SetAttribute( "blur", std::to_string( m_blurSize ) );
+    sob.SetAttribute( "outline", std::to_string( m_outlineSize ) );
+    sob.SetAttribute( "mipmaps", m_generateMipmaps ? "true" : "false" );
 
-    sob.Pop();
+    sob.ExitChild();
 }
 
 // ***********************
 //
-template<class Deserializer>
-FontAssetDescConstPtr FontAssetDesc::DeserializeAsset( Deserializer& dob )
+ISerializableConstPtr FontAssetDesc::Create          ( ISerializer& dob )
 {
-    assert( dob.GetValue( "type" ) == "font" );
+    assert( dob.GetAttribute( "type" ) == "font" );
 
-    auto path = dob.GetValue( "path" );
-    auto size = stoul( dob.GetValue( "size" ) );
-    auto blurSize = stoul( dob.GetValue( "blur" ) );
-    auto outSize = stoul( dob.GetValue( "outline" ) );
-    auto mipmaps = dob.GetValue( "mipmaps" ) == "true" ? true : false;
+    auto path = dob.GetAttribute( "path" );
+    auto size = stoul( dob.GetAttribute( "size" ) );
+    auto blurSize = stoul( dob.GetAttribute( "blur" ) );
+    auto outSize = stoul( dob.GetAttribute( "outline" ) );
+    auto mipmaps = dob.GetAttribute( "mipmaps" ) == "true" ? true : false;
 
     return FontAssetDesc::Create( path, size, blurSize, outSize, mipmaps );
-}
-
-
-// ***********************
-//
-void                FontAssetDesc::Serialize       ( SerializeObject & sob ) const
-{
-	SerializeAsset( sob );
-}
-
-// ***********************
-//
-ISerializableConstPtr FontAssetDesc::Create          ( DeserializeObject & dob )
-{
-	return DeserializeAsset( dob );
-}
-
-// ***********************
-//
-void FontAssetDesc::Serialize( JsonSerializeObject & sob ) const
-{
-	SerializeAsset( sob );
-}
-
-// ***********************
-//
-ISerializableConstPtr FontAssetDesc::Create( JsonDeserializeObject & dob )
-{
-	return DeserializeAsset( dob );
 }
 
 

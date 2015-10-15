@@ -64,8 +64,8 @@ void JsonSerializeObject::Save( const std::string & filename )
 void JsonSerializeObject::Save( std::ostream & out )
 { pimpl_->Save( out ); }
 
-void JsonSerializeObject::SetName( const std::string & name )
-{ pimpl_->SetName( name ); }
+void JsonSerializeObject::EnterChild( const std::string & name )
+{ pimpl_->EnterChild( name ); }
 
 void JsonSerializeObject::SetValue( const std::string & name, const std::string & value )
 { pimpl_->SetValue( name, value ); }

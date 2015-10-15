@@ -18,8 +18,8 @@ public:
 
     KeyFrame( std::string t, std::string v ) : time( t ), value( v ) {}
 
-    virtual void                Serialize       ( SerializeObject &/*doc*/ ) const {}
-    static ISerializablePtr     Create          ( DeserializeObject &doc )
+    virtual void                Serialize       ( ISerializer&/*doc*/ ) const {}
+    static ISerializablePtr     Create          ( ISerializer&doc )
     {
         auto time = doc.GetValue( "time" );
         auto value = doc.GetValue( "val" );
@@ -40,12 +40,12 @@ public:
 //        float val = 
 //}
 
-ISerializablePtr AbstractModelParameter::Create( DeserializeObject& dob ) // FIXME: rethink if is might be done cleaner
+ISerializablePtr AbstractModelParameter::Create( ISerializer& dob ) // FIXME: rethink if is might be done cleaner
 {
-    auto name = dob.GetValue( "name" );
-    auto type = dob.GetValue( "type" );
+    auto name = dob.GetAttribute( "name" );
+    auto type = dob.GetAttribute( "type" );
     //ITimeEvaluatorPtr te = dob.m_tm->GetRootTimeline();
-    auto timeline = dob.GetValue( "timeline" );
+    auto timeline = dob.GetAttribute( "timeline" );
 
     auto tm = TimelineManager::GetInstance();
     ITimeEvaluatorPtr te = tm->GetTimeline( timeline );

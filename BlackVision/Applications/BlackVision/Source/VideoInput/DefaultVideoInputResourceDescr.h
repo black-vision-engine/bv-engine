@@ -9,8 +9,8 @@ namespace bv { namespace model {
 		IVideoInput *input;
 
 	public:
-        virtual void                Serialize       ( SerializeObject & /*sob*/ ) const { assert( !"implement me" ); return; }
-        static ISerializablePtr     Create          ( DeserializeObject & /*dob*/ ) { assert( !"implement me" ); return nullptr; }
+        virtual void                Serialize       ( ISerializer& /*sob*/ ) const { assert( !"implement me" ); return; }
+        static ISerializablePtr     Create          ( ISerializer& /*dob*/ ) { assert( !"implement me" ); return nullptr; }
 
 		DefaultVideoInputResourceDescr( DefaultTextureDescriptor* d, IVideoInput *i ) : descr( d ), input( i ) {}
 

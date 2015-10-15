@@ -11,7 +11,7 @@ class AssetLoader
 public:
 
 	virtual AssetConstPtr		LoadAsset        ( const AssetDescConstPtr & desc )  const = 0;
-	virtual AssetDescConstPtr	CreateDescriptor ( JsonDeserializeObject& deserializeObject ) const = 0;
+    virtual AssetDescConstPtr	CreateDescriptor ( ISerializer& deserializeObject ) const = 0;
 
 
             AssetLoader			();

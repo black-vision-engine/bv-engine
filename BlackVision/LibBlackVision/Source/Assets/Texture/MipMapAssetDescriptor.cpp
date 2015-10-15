@@ -12,14 +12,14 @@ const std::string MipMapAssetDesc::uid = "MIP_MAP_ASSET_DESC";
 
 // ***********************
 //
-void                MipMapAssetDesc::Serialize       ( SerializeObject & /*sob*/ ) const
+void                MipMapAssetDesc::Serialize       ( ISerializer& /*sob*/ ) const
 {
     assert( !"implement me" );
 }
 
 // ***********************
 //
-ISerializablePtr     MipMapAssetDesc::Create          ( DeserializeObject & /*dob*/ )
+ISerializablePtr     MipMapAssetDesc::Create          ( ISerializer& /*dob*/ )
 {
     assert( !"implement me" );
     return nullptr;

@@ -11,10 +11,10 @@ namespace bv {
 namespace SerializationHelper {
 
 template< typename T >
-void SerializeObjectImpl( const T& o, SerializeObject & sob );
+void SerializeObjectImpl( const T& o, ISerializer& sob );
 
 //template< typename T >
-//T* DeserializeObjectImpl( DeserializeObject & dob );
+//T* DeserializeObjectImpl( ISerializer& dob );
 //
 //template< typename T >
 //class SerializedObject : public ISerializable
@@ -24,9 +24,9 @@ void SerializeObjectImpl( const T& o, SerializeObject & sob );
 //public:
 //    SerializedObject( const T& o_ ) : o( o_ ) { }
 //
-//    virtual void                Serialize       ( SerializeObject & sob ) const { SerializeObjectImpl< T >( o, sob ); }
+//    virtual void                Serialize       ( ISerializer& sob ) const { SerializeObjectImpl< T >( o, sob ); }
 //
-//    static ISerializablePtr     Create          ( DeserializeObject & dob ) { return ISerializablePtr( DeserializeObjectImpl< T >( dob ); }
+//    static ISerializablePtr     Create          ( ISerializer& dob ) { return ISerializablePtr( DeserializeObjectImpl< T >( dob ); }
 //};
 
 // glm stuff

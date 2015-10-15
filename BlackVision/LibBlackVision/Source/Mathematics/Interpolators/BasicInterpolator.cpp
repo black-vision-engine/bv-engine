@@ -11,6 +11,7 @@
 #include "Mathematics/Defines.h"
 
 #include "Serialization/SerializationObjects.inl"
+#include "Serialization/ISerializer.h"
 
 // FIXME
 namespace std
@@ -180,7 +181,7 @@ Key<TimeValueT, ValueT>::Key(TimeValueT t, ValueT val)
 // *************************************
 //
 template<class TimeValueT, class ValueT >
-void                Key<TimeValueT, ValueT>::Serialize       ( SerializeObject & /*doc*/ ) const
+void                Key<TimeValueT, ValueT>::Serialize       ( ISerializer& /*doc*/ ) const
 {
     assert( !"Implement me please :)" );
 }
@@ -188,7 +189,7 @@ void                Key<TimeValueT, ValueT>::Serialize       ( SerializeObject &
 // *************************************
 //
 template<class TimeValueT, class ValueT >
-ISerializablePtr     Key<TimeValueT, ValueT>::Create          ( DeserializeObject & /*doc*/ )
+ISerializablePtr     Key<TimeValueT, ValueT>::Create          ( ISerializer& /*doc*/ )
 {
     assert( !"Don't run me please ;)" );
     return nullptr;
@@ -197,7 +198,7 @@ ISerializablePtr     Key<TimeValueT, ValueT>::Create          ( DeserializeObjec
 // *************************************
 //
 template<>
-ISerializablePtr     Key< bv::TimeType, float >::Create          ( DeserializeObject & doc )
+ISerializablePtr     Key< bv::TimeType, float >::Create          ( ISerializer& doc )
 {
     auto time = doc.GetValue( "time" );
     auto val = doc.GetValue( "val" );
@@ -224,10 +225,10 @@ std::vector<std::string> split_(const std::string &s, char delim) { // FIXME: th
 // *************************************
 //
 template<>
-ISerializablePtr     Key< bv::TimeType, glm::vec3 >::Create          ( DeserializeObject & doc ) // FIXME: this is not a good place to do that
+ISerializablePtr     Key< bv::TimeType, glm::vec3 >::Create          ( ISerializer& doc ) // FIXME: this is not a good place to do that
 {
-    auto time = doc.GetValue( "time" );
-    auto val_ = doc.GetValue( "val" );
+    auto time = doc.GetAttribute( "time" );
+    auto val_ = doc.GetAttribute( "val" );
 
     auto vals = split_( val_, ',' );
     assert( vals.size() == 3 );
@@ -257,25 +258,25 @@ BasicInterpolator<TimeValueT, ValueT, FloatT>::BasicInterpolator(TimeValueT tole
 // *************************************
 //
 template<class TimeValueT, class ValueT, class FloatT >
-void                BasicInterpolator<TimeValueT, ValueT, FloatT>::Serialize       ( SerializeObject & doc ) const
+void                BasicInterpolator<TimeValueT, ValueT, FloatT>::Serialize       ( ISerializer& doc ) const
 {
-    doc.SetName( "interpolator" );
+    doc.EnterChild( "interpolator" );
     
     for( auto key : keys )
     {
-        doc.SetName( "key" );
-        doc.SetValue( "time", std::to_string( key.t ) );
-        doc.SetValue( "val", std::to_string( key.val ) );
-        doc.Pop();
+        doc.EnterChild( "key" );
+        doc.GetAttribute( "time", std::to_string( key.t ) );
+        doc.GetAttribute( "val", std::to_string( key.val ) );
+        doc.ExitChild();
     }
 
-    doc.Pop();
+    doc.ExitChild();
 }
 
 // *************************************
 //
 template<class TimeValueT, class ValueT, class FloatT >
-ISerializablePtr     BasicInterpolator<TimeValueT, ValueT, FloatT>::Create          ( DeserializeObject & doc ) // FIXME: this works for floats only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ISerializablePtr     BasicInterpolator<TimeValueT, ValueT, FloatT>::Create          ( ISerializer& doc ) // FIXME: this works for floats only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 {
     auto keys = doc.LoadProperties< Key<TimeValueT, ValueT> >( "key" );
 

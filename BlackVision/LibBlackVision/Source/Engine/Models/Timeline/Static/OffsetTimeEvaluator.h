@@ -23,8 +23,8 @@ public:
             OffsetTimeEvaluator                     ( const std::string & name, TimeType offsetTime );
             ~OffsetTimeEvaluator                    ();
 
-    virtual void                Serialize           ( SerializeObject & sob ) const;
-    static ISerializablePtr     Create              ( DeserializeObject & dob );
+    virtual void                Serialize           ( ISerializer& sob ) const;
+    static ISerializablePtr     Create              ( ISerializer& dob );
 
     void    SetTimeOffset                           ( TimeType t );
 

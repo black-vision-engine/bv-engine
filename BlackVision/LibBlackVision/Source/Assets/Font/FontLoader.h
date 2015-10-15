@@ -16,7 +16,7 @@ private:
 
 public:
 	AssetConstPtr			LoadAsset			( const bv::AssetDescConstPtr & ) const override;
-	AssetDescConstPtr		CreateDescriptor	( JsonDeserializeObject& deserializeObject ) const override;
+	AssetDescConstPtr		CreateDescriptor	( JsonISerializer& deserializeObject ) const override;
 
     explicit                FontLoader( ){}
 

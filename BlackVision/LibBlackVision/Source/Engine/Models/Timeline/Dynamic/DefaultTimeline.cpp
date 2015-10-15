@@ -10,6 +10,8 @@
 #include "Engine/Models/Timeline/Dynamic/TimelineEventNull.h"
 #include "Engine/Models/Timeline/Dynamic/TimelineEventStop.h"
 
+#include "Serialization/ISerializer.h"
+
 
 namespace bv { namespace model {
 
@@ -49,40 +51,40 @@ DefaultTimeline::~DefaultTimeline    ()
 
 // *********************************
 //
-void                                DefaultTimeline::Serialize           ( SerializeObject & sob ) const
+void                                DefaultTimeline::Serialize           ( ISerializer& sob ) const
 {
-    sob.SetName( "timeline" );
-    sob.SetValue( "name", GetName() );
-    sob.SetValue( "type", "default" );
+    sob.EnterChild( "timeline" );
+    sob.SetAttribute( "name", GetName() );
+    sob.SetAttribute( "type", "default" );
 
-    sob.SetValue( "duration", std::to_string( m_timeEvalImpl.GetDuration() ) );
+    sob.SetAttribute( "duration", std::to_string( m_timeEvalImpl.GetDuration() ) );
     if( m_timeEvalImpl.GetWrapPre() == m_timeEvalImpl.GetWrapPost() && m_timeEvalImpl.GetWrapPost() == TimelineWrapMethod::TWM_REPEAT )
     {
-        sob.SetValue( "loop", "true" );
+        sob.SetAttribute( "loop", "true" );
     }
     else
     {
-        sob.SetValue( "loop", "false" ); // FIXME include more general cases
+        sob.SetAttribute( "loop", "false" ); // FIXME include more general cases
     }
 
-    sob.SetName( "children" );
+    sob.EnterChild( "children" );
     for( auto child : m_children )
         child->Serialize( sob );
-    sob.Pop(); // children
+    sob.ExitChild(); // children
 
-    sob.Pop();
+    sob.ExitChild();
 }
 
 // *********************************
 //
-ISerializablePtr                     DefaultTimeline::Create              ( DeserializeObject & dob )
+ISerializablePtr                     DefaultTimeline::Create              ( ISerializer& dob )
 {
-    auto name = dob.GetValue( "name" );
+    auto name = dob.GetAttribute( "name" );
 
-    auto duration_ = dob.GetValue( "duration" );
+    auto duration_ = dob.GetAttribute( "duration" );
     float duration = std::stof( duration_ );
 
-    auto loop = dob.GetValue( "loop" );
+    auto loop = dob.GetAttribute( "loop" );
     TimelineWrapMethod preWrap = ( loop == "true" ) ? TimelineWrapMethod::TWM_REPEAT : TimelineWrapMethod::TWM_CLAMP; // FIXME
     TimelineWrapMethod postWrap = preWrap; // FIXME
 

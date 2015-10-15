@@ -14,17 +14,17 @@ class AssetDescWithUID : public ISerializable
 public:
     AssetDescWithUID( AssetDescConstPtr desc, std::string uid ) : desc( desc ), uid( uid ) { }
 
-    virtual void                            Serialize       ( SerializeObject & sob ) const
+    virtual void                            Serialize       ( ISerializer& sob ) const
     {
-        sob.SetName( "uid" );
-        sob.SetValue( "uid", uid );
+        sob.EnterChild( "uid" );
+        sob.SetAttribute( "uid", uid );
         desc->Serialize( sob );
-        sob.Pop();
+        sob.ExitChild();
     }
 
-    static ISerializablePtr                 Create          ( DeserializeObject & dob )
+    static ISerializablePtr                 Create          ( ISerializer& dob )
     {
-        auto uid = dob.GetValue( "uid" );
+        auto uid = dob.GetAttribute( "uid" );
         auto desc = dob.Load< const SerializedAssetDesc >( "asset" );
         return std::make_shared< AssetDescWithUID >( desc, uid );
     }
@@ -45,16 +45,16 @@ public:
     static AssetDescsWithUIDs&                              GetInstance() { return instance; }
     static void                                             SetInstance( AssetDescsWithUIDs& i ) { instance = i; }
 
-    virtual void                                            Serialize       ( SerializeObject & sob ) const
+    virtual void                                            Serialize       ( ISerializer& sob ) const
     {
-        sob.SetName( "assets" );
+        sob.EnterChild( "assets" );
         for( auto asset : m_uid2asset )
         {
             AssetDescWithUID( asset.second, asset.first ).Serialize( sob );
         }
-        sob.Pop();
+        sob.ExitChild();
     }
-    static ISerializablePtr                                 Create          ( DeserializeObject & dob )
+    static ISerializablePtr                                 Create          ( ISerializer& dob )
     {
         auto assetsWithUIDs = dob.LoadProperties< AssetDescWithUID >( "uid" );
 

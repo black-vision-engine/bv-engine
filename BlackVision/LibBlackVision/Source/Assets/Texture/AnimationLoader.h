@@ -12,7 +12,7 @@ class AnimationLoader : public AssetLoader
 public:
 
 	AssetConstPtr		LoadAsset			( const AssetDescConstPtr & desc ) const override;
-	AssetDescConstPtr	CreateDescriptor	( JsonDeserializeObject& deserializeObject ) const override;
+	AssetDescConstPtr	CreateDescriptor	( JsonISerializer& deserializeObject ) const override;
 
     virtual ~AnimationLoader(){}
 

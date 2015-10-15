@@ -5,6 +5,7 @@
 #include "Static/OffsetTimeEvaluator.h"
 
 #include "Serialization/SerializationObjects.inl"
+#include "Serialization/ISerializer.h"
 
 namespace bv { 
     
@@ -15,9 +16,9 @@ namespace model {
 
 // *******************************
 //
-ISerializablePtr     TimeEvaluatorBase< ITimeEvaluator >::Create              ( DeserializeObject & dob )
+ISerializablePtr     TimeEvaluatorBase< ITimeEvaluator >::Create              ( ISerializer& dob )
 {
-    auto type = dob.GetValue( "type" );
+    auto type = dob.GetAttribute( "type" );
 
     if( type == "default" )
         return DefaultTimeline::Create( dob );

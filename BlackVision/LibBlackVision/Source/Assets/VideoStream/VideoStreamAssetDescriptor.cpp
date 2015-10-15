@@ -27,22 +27,22 @@ VideoStreamAssetDescConstPtr VideoStreamAssetDesc::DeserializeAsset( Deserialize
 
 // ***********************
 //
-void                VideoStreamAssetDesc::Serialize       ( SerializeObject & sob ) const
+void                VideoStreamAssetDesc::Serialize       ( ISerializer& sob ) const
 {
 	SerializeAsset( sob );
 }
-void VideoStreamAssetDesc::Serialize       ( JsonSerializeObject & sob ) const
+void VideoStreamAssetDesc::Serialize       ( JsonISerializer& sob ) const
 {
 	SerializeAsset( sob );
 }
 
 // ***********************
 //
-ISerializableConstPtr VideoStreamAssetDesc::Create          ( DeserializeObject & dob )
+ISerializableConstPtr VideoStreamAssetDesc::Create          ( ISerializer& dob )
 {
 	return DeserializeAsset( dob );
 }
-ISerializableConstPtr VideoStreamAssetDesc::Create          ( JsonDeserializeObject & dob )
+ISerializableConstPtr VideoStreamAssetDesc::Create          ( JsonISerializer& dob )
 {
 	/*dob.Push( "asset" );*/
 	return DeserializeAsset( dob );

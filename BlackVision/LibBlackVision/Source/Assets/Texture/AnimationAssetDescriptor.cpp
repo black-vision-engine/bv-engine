@@ -4,56 +4,24 @@ namespace bv {
 
 const std::string AnimationAssetDesc::uid = "ANIMATION_ASSET_DESC";
 
+
 // ***********************
 //
-template<class Serializer>
-void AnimationAssetDesc::SerializeAsset( Serializer& sob ) const
+void                AnimationAssetDesc::Serialize       ( ISerializer& sob ) const
 {
-sob.SetName( "asset" );
-    sob.SetValue( "type", "anim" );
-    sob.SetValue( "path", m_path );
-    sob.SetValue( "filter", m_filter );
-sob.Pop();
+sob.EnterChild( "asset" );
+    sob.SetAttribute( "type", "anim" );
+    sob.SetAttribute( "path", m_path );
+    sob.SetAttribute( "filter", m_filter );
+sob.ExitChild();
 }
 
 // ***********************
 //
-template<class Deserializer>
-AnimationAssetDescConstPtr AnimationAssetDesc::DeserializeAsset( Deserializer& dob )
+ISerializableConstPtr     AnimationAssetDesc::Create          ( ISerializer& dob )
 {
-    return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetValue( "path" ), dob.GetValue( "filter" ) ) );
+    return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetAttribute( "path" ), dob.GetAttribute( "filter" ) ) );
 }
-
-
-// ***********************
-//
-void                AnimationAssetDesc::Serialize       ( SerializeObject & sob ) const
-{
-	SerializeAsset( sob );
-}
-
-// ***********************
-//
-ISerializableConstPtr     AnimationAssetDesc::Create          ( DeserializeObject & dob )
-{
-	return DeserializeAsset( dob );
-}
-
-
-// ***********************
-//
-void AnimationAssetDesc::Serialize( JsonSerializeObject & sob ) const
-{
-	SerializeAsset( sob );
-}
-
-// ***********************
-//
-ISerializableConstPtr AnimationAssetDesc::Create( JsonDeserializeObject & dob )
-{
-	return DeserializeAsset( dob );
-}
-
 
 
 

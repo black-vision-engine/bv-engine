@@ -164,7 +164,7 @@ void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root )
 
 // *******************************
 //
-void            BVScene::Serialize           ( SerializeObject &doc) const
+void            BVScene::Serialize           ( ISerializer&doc) const
 {
     doc.SetName( "scene" );
 
@@ -180,12 +180,12 @@ void            BVScene::Serialize           ( SerializeObject &doc) const
     m_pTimelineManager->Serialize( doc );
     m_pModelSceneRoot->Serialize( doc );
 
-    doc.Pop();
+    doc.ExitChild();
 }
 
 // *******************************
 //
-ISerializablePtr        BVScene::Create          ( DeserializeObject &/*doc*/ )
+ISerializablePtr        BVScene::Create          ( ISerializer&/*doc*/ )
 {
     assert( !"Will not implement (probably) (see LoadSceneFromFile)" );
     return nullptr;

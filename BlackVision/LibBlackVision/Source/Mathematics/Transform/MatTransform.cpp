@@ -65,7 +65,7 @@ SimpleTransform<ParamT>::SimpleTransform( TransformKind kind )
 // *************************************
 //
 template<typename ParamT>
-void                SimpleTransform<ParamT>::Serialize       ( SerializeObject & sob ) const
+void                SimpleTransform<ParamT>::Serialize       ( ISerializer& sob ) const
 {
     assert( !"Tell me why I'm not implemented ;)" );
     sob;
@@ -74,7 +74,7 @@ void                SimpleTransform<ParamT>::Serialize       ( SerializeObject &
 // *************************************
 //
 template<typename ParamT>
-ISerializablePtr     SimpleTransform<ParamT>::Create          ( DeserializeObject & dob )
+ISerializablePtr     SimpleTransform<ParamT>::Create          ( ISerializer& dob )
 {
     if( dob.GetName() != "transform" )
     {
@@ -82,7 +82,7 @@ ISerializablePtr     SimpleTransform<ParamT>::Create          ( DeserializeObjec
         return nullptr; // FIXME so much: error handling
     }
 
-    auto kind = dob.GetValue( "kind" );
+    auto kind = dob.GetAttribute( "kind" );
 
     if( kind == "rotation" ) // very special case indeed :)
     {
@@ -323,7 +323,7 @@ CompositeTransform<ParamT>::CompositeTransform  ( const CompositeTransform & src
 // *************************************
 //
 template<typename ParamT>
-ISerializablePtr                     CompositeTransform<ParamT>::Create                  ( const DeserializeObject & dob )
+ISerializablePtr                     CompositeTransform<ParamT>::Create                  ( const ISerializer& dob )
 {
     auto transform = std::make_shared< CompositeTransform< ParamT > >();
 
@@ -359,29 +359,29 @@ std::string Kind2String( TransformKind kind )
 // *************************************
 //
 template<typename ParamT>
-void                                CompositeTransform<ParamT>::Serialize               ( SerializeObject & doc ) const
+void                                CompositeTransform<ParamT>::Serialize               ( ISerializer& doc ) const
 {
-    doc.SetName( "composite_transform" );
+    doc.EnterChild( "composite_transform" );
 
     for( auto trans : m_transformations )
     {
-        doc.SetName( "transform" );
-        doc.SetValue( "kind", Kind2String( trans->KindKurwaMac() ) );
+        doc.EnterChild( "transform" );
+        doc.SetAttribute( "kind", Kind2String( trans->KindKurwaMac() ) );
 
         if( trans->KindKurwaMac() == TransformKind::rotation ) // FIXME: this really should be virtualized
         {
             auto rotation = std::static_pointer_cast< Rotation< ParamT > >( trans );
             if( rotation->IsAxisVec3() )
             {
-                doc.SetValue( "isaxisvec3", "true" );
+                doc.SetAttribute( "isaxisvec3", "true" );
 
-                doc.SetName( "angle" );
+                doc.EnterChild( "angle" );
                     rotation->AccessAngle().Serialize( doc );
-                doc.Pop();
+                doc.ExitChild();
 
-                doc.SetName( "rotaxis" );
+                doc.EnterChild( "rotaxis" );
                     rotation->AccessRotAxis().Serialize( doc );
-                doc.Pop();
+                doc.ExitChild();
             }
             else
                 assert( false );
@@ -395,10 +395,10 @@ void                                CompositeTransform<ParamT>::Serialize       
 
         }
 
-        doc.Pop(); // transform
+        doc.ExitChild(); // transform
     }
 
-    doc.Pop(); // composite_transform
+    doc.ExitChild(); // composite_transform
 }
 
 // *************************************

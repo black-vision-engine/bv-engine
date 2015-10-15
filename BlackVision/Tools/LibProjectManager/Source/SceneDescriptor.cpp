@@ -74,7 +74,7 @@ void			            SceneDescriptor::SaveScene		( const model::BasicNodeConstPtr 
 {
 	auto sob = SerializeObject();
 
-    sob.SetName( "scene" );
+    sob.EnterChild( "scene" );
 
     AssetDescsWithUIDs assets;
     GetAssetsWithUIDs( assets, std::const_pointer_cast< model::BasicNode >( scene ) );
@@ -85,7 +85,7 @@ void			            SceneDescriptor::SaveScene		( const model::BasicNodeConstPtr 
     tm->Serialize( sob );
     scene->Serialize( sob );
 
-    sob.Pop();
+    sob.ExitChild();
     sob.Save( out );
 }
 
