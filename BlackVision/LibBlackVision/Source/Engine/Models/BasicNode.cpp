@@ -89,10 +89,10 @@ BasicNodePtr                    BasicNode::Create                   ( const std:
 //
 void                            BasicNode::Serialize               ( ISerializer& doc ) const
 {
-    doc.SetName( "node" );
+    doc.EnterChild( "node" );
     doc.SetAttribute( "name", GetName() );
 
-    doc.SetName( "plugins" );
+    doc.EnterChild( "plugins" );
         for( unsigned int  i = 0; i < m_pluginList->NumPlugins(); i++ )
         {
             auto plugin_ = m_pluginList->GetPlugin( i );
@@ -102,7 +102,7 @@ void                            BasicNode::Serialize               ( ISerializer
         }
     doc.ExitChild(); // plugins
 
-    doc.SetName( "nodes" );
+    doc.EnterChild( "nodes" );
         for( auto child : m_children )
             child->Serialize( doc );
     doc.ExitChild();

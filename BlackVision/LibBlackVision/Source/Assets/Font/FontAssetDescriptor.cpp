@@ -27,7 +27,7 @@ void                FontAssetDesc::Serialize       ( ISerializer& sob ) const
 
 // ***********************
 //
-void FontAssetDesc::Deserialize     ( ISerializer& sob )
+void FontAssetDesc::Deserialize     ( ISerializer& /*sob*/ )
 {
 
 }

@@ -1,6 +1,6 @@
 #include "AssetManager.h"
 #include "Assets.h"
-#include "Serialization/Json/JsonSerializationObjects.h"
+#include "Serialization/Json/JsonDeserializeObject.h"
 
 #include <memory>
 
@@ -13,8 +13,9 @@ namespace bv
 //
 AssetDescConstPtr AssetManager::CreateDesc( const std::string& jsonString )
 {
-	JsonDeserializeObject deserializeObject( jsonString );
-	bool success = deserializeObject.Push( "asset" );
+	JsonDeserializeObject deserializeObject;
+    deserializeObject.Load( jsonString );
+    bool success = deserializeObject.EnterChild( "asset" );
 	if( !success )
 		return nullptr;
 

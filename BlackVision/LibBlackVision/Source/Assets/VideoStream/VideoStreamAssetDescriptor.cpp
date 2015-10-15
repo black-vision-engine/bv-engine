@@ -9,43 +9,23 @@ const std::string		VideoStreamAssetDesc::uid = "VIDEO_STREAM_ASSET_DESC";
 
 // ***********************
 //
-template<class Serializer>
-void VideoStreamAssetDesc::SerializeAsset( Serializer& /*sob*/ ) const
+void                VideoStreamAssetDesc::Serialize       ( ISerializer& /*sob*/ ) const
 {
 	assert( !"Implement me" );
 }
 
 // ***********************
 //
-template<class Deserializer>
-VideoStreamAssetDescConstPtr VideoStreamAssetDesc::DeserializeAsset( Deserializer& /*dob*/ )
+void VideoStreamAssetDesc::Deserialize     ( ISerializer& /*sob*/ )
+{
+
+}
+
+// ***********************
+//
+ISerializableConstPtr VideoStreamAssetDesc::Create          ( ISerializer& /*dob*/ )
 {
 	assert( !"Implement me" );
-	return nullptr;
-}
-
-
-// ***********************
-//
-void                VideoStreamAssetDesc::Serialize       ( ISerializer& sob ) const
-{
-	SerializeAsset( sob );
-}
-void VideoStreamAssetDesc::Serialize       ( JsonISerializer& sob ) const
-{
-	SerializeAsset( sob );
-}
-
-// ***********************
-//
-ISerializableConstPtr VideoStreamAssetDesc::Create          ( ISerializer& dob )
-{
-	return DeserializeAsset( dob );
-}
-ISerializableConstPtr VideoStreamAssetDesc::Create          ( JsonISerializer& dob )
-{
-	/*dob.Push( "asset" );*/
-	return DeserializeAsset( dob );
 }
 
 

@@ -3,7 +3,7 @@
 #include "Assets/AssetLoader.h"
 #include "Assets/Font/Text.h"
 #include "Engine/Types/Enums.h"
-
+#include "Serialization/ISerializer.h"
 
 namespace bv {
 
@@ -16,7 +16,7 @@ private:
 
 public:
 	AssetConstPtr			LoadAsset			( const bv::AssetDescConstPtr & ) const override;
-	AssetDescConstPtr		CreateDescriptor	( JsonISerializer& deserializeObject ) const override;
+	AssetDescConstPtr		CreateDescriptor	( ISerializer& deserializeObject ) const override;
 
     explicit                FontLoader( ){}
 

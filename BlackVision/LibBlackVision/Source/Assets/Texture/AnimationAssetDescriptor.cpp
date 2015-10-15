@@ -25,7 +25,7 @@ ISerializableConstPtr     AnimationAssetDesc::Create          ( ISerializer& dob
 
 // ***********************
 //
-void AnimationAssetDesc::Deserialize     ( ISerializer& sob )
+void AnimationAssetDesc::Deserialize     ( ISerializer& /*sob*/ )
 {
 
 }

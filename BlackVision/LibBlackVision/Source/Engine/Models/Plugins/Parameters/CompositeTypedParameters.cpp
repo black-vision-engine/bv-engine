@@ -17,7 +17,7 @@ ParamTransform::ParamTransform  ( const std::string & name, const TransformF & t
 //
 void    ParamTransform::Serialize       ( ISerializer& doc ) const
 {
-    doc.SetName( "param" );
+    doc.EnterChild( "param" );
     doc.SetAttribute( "name", GetName() );
     doc.SetAttribute( "type", "transform" );
     doc.SetAttribute( "timeline", m_timeEvaluator->GetName() );
@@ -61,7 +61,7 @@ ParamTransformVec::ParamTransformVec                ( const std::string & name, 
 //
 void ParamTransformVec::Serialize       ( ISerializer& doc ) const
 {
-    doc.SetName( "param" );
+    doc.EnterChild( "param" );
     doc.SetAttribute( "name", GetName() );
     doc.SetAttribute( "type", "transform_vec" );
     doc.SetAttribute( "timeline", m_timeEvaluator->GetName() );

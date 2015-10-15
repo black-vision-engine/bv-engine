@@ -2,7 +2,7 @@
 
 #include "Assets/AssetDescriptor.h"
 #include "Engine/Types/Enums.h"
-#include "Serialization/Json/JsonSerializationObjects.h"
+#include "Serialization/ISerializer.h"
 
 #include "CoreDEF.h"
 
@@ -39,9 +39,8 @@ public:
 
 
     virtual void								Serialize					( ISerializer& sob ) const;
-    virtual void							    Serialize					( JsonISerializer& sob ) const;
+    virtual void                                Deserialize                 ( ISerializer& sob );
 	static ISerializableConstPtr			    Create						( ISerializer& dob );
-	static ISerializableConstPtr				Create						( JsonISerializer& dob );
 
 	virtual const std::string &					GetUID						() const override;
 	
@@ -57,11 +56,6 @@ public:
 	static VideoStreamAssetDescConstPtr			Create						( const std::string & streamPath );
 	static VideoStreamAssetDescConstPtr			Create						( const std::string & streamPath, UInt32 width, UInt32 height, UInt32 frameRate );
 
-
-private:
-	//For internal use only
-	template<class Serializer>		void									SerializeAsset			( Serializer& sob ) const;
-	template<class Deserializer>	static VideoStreamAssetDescConstPtr		DeserializeAsset		( Deserializer& dob );
 };
 
 } // bv

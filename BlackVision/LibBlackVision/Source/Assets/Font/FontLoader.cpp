@@ -77,7 +77,7 @@ TextConstPtr		FontLoader::TryLoadFont( const std::string & file, UInt32 size, UI
 }
 
 
-AssetDescConstPtr FontLoader::CreateDescriptor	( JsonISerializer& deserializeObject ) const
+AssetDescConstPtr FontLoader::CreateDescriptor	( ISerializer& deserializeObject ) const
 {
 	return std::static_pointer_cast<const AssetDesc>( FontAssetDesc::Create( deserializeObject ) );
 }
