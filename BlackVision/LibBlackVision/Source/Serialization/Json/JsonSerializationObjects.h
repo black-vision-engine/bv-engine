@@ -2,6 +2,7 @@
 
 #include <string>
 #include <iostream>
+#include "Serialization\ISerializer.h"
 
 namespace bv
 {
@@ -10,7 +11,7 @@ class JsonDeserializeObjectImpl;
 class JsonSerializeObjectImpl;
 
 
-class JsonSerializeObject
+class JsonSerializeObject : public ISerializer
 {
 private:
 	JsonSerializeObjectImpl*		pimpl_;
@@ -27,7 +28,7 @@ public:
 	void						Pop();
 };
 
-class JsonDeserializeObject
+class JsonDeserializeObject : public ISerializer
 {
 private:
 	JsonDeserializeObjectImpl*		pimpl_;

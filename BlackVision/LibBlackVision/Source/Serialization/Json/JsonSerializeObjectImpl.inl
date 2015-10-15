@@ -61,7 +61,8 @@ inline void JsonSerializeObjectImpl::Save( std::ostream& out )
 inline void JsonSerializeObjectImpl::SetName( const std::string& name )
 {
 	m_nodeStack.push( m_currentNode );
-	m_currentNode = &((*m_currentNode)[ name ]);
+	auto size = (*m_currentNode)[ name ].size();
+	m_currentNode = &((*m_currentNode)[ name ][ size ]);
 }
 
 inline void JsonSerializeObjectImpl::SetValue( const std::string& name, const std::string& value )

@@ -1,13 +1,14 @@
 #pragma once
 
 #include "CoreDEF.h"
+#include "Serialization\ISerializer.h"
 
 namespace bv
 {
 
 class SerializeObjectImpl;
 
-class SerializeObject
+class SerializeObject : public ISerializer
 {
     SerializeObjectImpl                                     *pimpl_;
 
@@ -35,7 +36,7 @@ std::vector< std::shared_ptr< T > >                         DeserializeObjectLoa
 template< typename T >
 std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( DeserializeObjectImpl*, std::string name );
 
-class DeserializeObject
+class DeserializeObject  : public ISerializer
 {
     friend class DeserializeObjectImpl;
     DeserializeObjectImpl                                   *pimpl_;

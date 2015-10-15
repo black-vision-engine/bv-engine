@@ -16,6 +16,7 @@
 
 #include "BVConfig.h"
 #include "ProjectManager.h"
+#include "Serialization/SerializationObjects.h"
 
 #include "MockScenes.h"
 #include "DefaultPlugins.h"
@@ -36,6 +37,7 @@
 #define XML
 #include "ConfigManager.h"
 #include "RemoteControlInterface.h"
+
 
 namespace bv
 {

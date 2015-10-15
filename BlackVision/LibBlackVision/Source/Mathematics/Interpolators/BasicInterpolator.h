@@ -28,8 +28,8 @@ public:
 
     explicit Key( TimeValueT t, ValueT val );
 
-    virtual void                Serialize       ( SerializeObject & doc ) const override;
-    static ISerializablePtr     Create          ( DeserializeObject & doc );
+    virtual void                Serialize       ( ISerializer& doc ) const override;
+    static ISerializablePtr     Create          ( ISerializer& doc );
 };
 
 template<class TimeValueT>

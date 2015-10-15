@@ -2084,10 +2084,10 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
 
 
-	//auto texDesc = TextureAssetDesc::Create( "sand.jpg", MipMapFilterType::BILINEAR, true );
-	//JsonSerializeObject serializeObject;
-	//texDesc->Serialize( serializeObject );
-	//serializeObject.Save( "textureSerialize.txt" );
+	auto texDesc = TextureAssetDesc::Create( "sand.jpg", MipMapFilterType::BILINEAR, true );
+	JsonSerializeObject serializeObject;
+	texDesc->Serialize( serializeObject );
+	serializeObject.Save( "textureSerialize.txt" );
 
 	//fstream file;
 	//file.open( "textureSerialize.txt", std::ios_base::in );
