@@ -8,7 +8,7 @@ namespace bv
 //
 JsonSerializeObject::JsonSerializeObject()
 {
-    m_currentNode = nullptr;
+    m_currentNode = &m_root;
 }
 JsonSerializeObject::~JsonSerializeObject()
 {}

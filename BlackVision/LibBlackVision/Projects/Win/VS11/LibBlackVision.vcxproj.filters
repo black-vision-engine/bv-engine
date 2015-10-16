@@ -957,6 +957,9 @@
     <ClCompile Include="..\..\..\Source\Serialization\Json\JsonSerializeObject.cpp">
       <Filter>Serialization\Json</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.cpp">
+      <Filter>Serialization\Json</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2000,9 +2003,6 @@
       <Filter>Serialization</Filter>
     </None>
     <None Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.h">
-      <Filter>Serialization\Json</Filter>
-    </None>
-    <None Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.cpp">
       <Filter>Serialization\Json</Filter>
     </None>
   </ItemGroup>
