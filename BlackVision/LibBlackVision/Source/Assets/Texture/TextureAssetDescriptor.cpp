@@ -28,13 +28,16 @@ std::string Filter2String( MipMapFilterType filter )
 void                TextureAssetDesc::Serialize       ( ISerializer& sob ) const
 {
 sob.EnterChild( "asset" );
-    sob.SetAttribute( "type", "tx" );
+    sob.SetAttribute( "uid", UID() );
     sob.SetAttribute( "path", m_originalTextureDesc->GetImagePath() );
 
     if( m_mipMapsDescs )
         sob.SetAttribute( "mipmap", Filter2String( m_mipMapsDescs->GetFilter() ) );
     else
         sob.SetAttribute( "mipmap", "none" );
+
+    sob.EnterChild( "mipmaps" );
+    sob.SetAttribute( "path", "bla bla" );
 sob.ExitChild();
 }
 

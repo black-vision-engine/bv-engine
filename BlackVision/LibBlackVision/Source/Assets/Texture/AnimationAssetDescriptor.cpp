@@ -10,7 +10,7 @@ const std::string AnimationAssetDesc::uid = "ANIMATION_ASSET_DESC";
 void                AnimationAssetDesc::Serialize       ( ISerializer& sob ) const
 {
 sob.EnterChild( "asset" );
-    sob.SetAttribute( "type", "anim" );
+    sob.SetAttribute( "uid", UID() );
     sob.SetAttribute( "path", m_path );
     sob.SetAttribute( "filter", m_filter );
 sob.ExitChild();

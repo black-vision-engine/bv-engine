@@ -15,7 +15,7 @@ void                FontAssetDesc::Serialize       ( ISerializer& sob ) const
 {
     sob.EnterChild( "asset" );
 
-    sob.SetAttribute( "type", "font" );
+    sob.SetAttribute( "uid", GetUID() );
     sob.SetAttribute( "path", m_fontFileName );
     sob.SetAttribute( "size", std::to_string( m_fontSize ) );
     sob.SetAttribute( "blur", std::to_string( m_blurSize ) );
@@ -36,7 +36,7 @@ void FontAssetDesc::Deserialize     ( ISerializer& /*sob*/ )
 //
 ISerializableConstPtr FontAssetDesc::Create          ( ISerializer& dob )
 {
-    assert( dob.GetAttribute( "type" ) == "font" );
+    assert( dob.GetAttribute( "uid" ) == UID() );
 
     auto path = dob.GetAttribute( "path" );
     auto size = stoul( dob.GetAttribute( "size" ) );

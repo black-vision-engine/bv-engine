@@ -30,7 +30,7 @@ void JsonSerializeObject::Save( std::ostream& out )
 
 // ***********************
 //
-bool JsonSerializeObject::EnterChild( const std::string& name )
+bool JsonSerializeObject::EnterChild( const std::string& name, unsigned int /*index*/ )
 {
 	m_nodeStack.push( m_currentNode );
 	auto size = (*m_currentNode)[ name ].size();

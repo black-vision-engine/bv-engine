@@ -17,9 +17,11 @@ public:
 	virtual std::string			GetAttribute        ( const std::string& name ) = 0;
 
     /**@brief Push.
+    @param[in] name Nazwa wêz³a dziecka.
+    @param[in] index Indeks w tablicy dzieci.
     @return If serializing - always true.
     If deserializing, returns false if child does not exist.*/
-    virtual bool                EnterChild          ( const std::string& name ) = 0;
+    virtual bool                EnterChild          ( const std::string& name, unsigned int index = 0 ) = 0;
     
     /**@brief Pop.*/
     virtual bool                ExitChild           () = 0;

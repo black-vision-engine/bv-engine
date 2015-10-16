@@ -34,6 +34,9 @@
 
 #include "BVConfig.h"
 
+#include "Serialization/Json/JsonDeserializeObject.h"
+#include "Serialization/Json/JsonSerializeObject.h"
+
 #include <fstream>
 
 namespace {
@@ -2084,22 +2087,26 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
 
 
-	auto texDesc = TextureAssetDesc::Create( "sand.jpg", MipMapFilterType::BILINEAR, true );
-	JsonSerializeObject serializeObject;
-	texDesc->Serialize( serializeObject );
-	serializeObject.Save( "textureSerialize.txt" );
+	//auto texDesc = TextureAssetDesc::Create( "sand.jpg", MipMapFilterType::BILINEAR, true );
+	//JsonSerializeObject serializeObject;
+	//texDesc->Serialize( serializeObject );
+	//serializeObject.Save( "textureSerialize.txt" );
 
-	//fstream file;
-	//file.open( "textureSerialize.txt", std::ios_base::in );
-	//JsonDeserializeObject deserializeObject( file );
-	//file.close();
-	//auto texDesc = TextureAssetDesc::Create( deserializeObject );
+	fstream file;
+	file.open( "textureSerialize.txt", std::ios_base::in );
+	JsonDeserializeObject deserializeObject;
+    deserializeObject.Load( file );
+	file.close();
 
- //   root->GetPlugin( "texture" )->LoadResource( std::static_pointer_cast<const AssetDesc>( texDesc ) );
+    deserializeObject.EnterChild( "asset" );
+	auto texDesc = TextureAssetDesc::Create( deserializeObject );
+
+    root->GetPlugin( "texture" )->LoadResource( std::static_pointer_cast<const AssetDesc>( texDesc ) );
 
 
-	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );	//, MipMapFilterType::BOX
-	//success = model::LoadTexture( root->GetPlugin( "texture" ), "Skybox.jpg", MipMapFilterType::BILINEAR );
+	//success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );	//, MipMapFilterType::BOX
+	
+    
 	assert( success );
 	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
 	model::SetParameter( texturePlugin->GetParameter("borderColor"), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );

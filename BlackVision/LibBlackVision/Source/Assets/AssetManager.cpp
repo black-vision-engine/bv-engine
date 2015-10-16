@@ -15,12 +15,13 @@ AssetDescConstPtr AssetManager::CreateDesc( const std::string& jsonString )
 {
 	JsonDeserializeObject deserializeObject;
     deserializeObject.Load( jsonString );
+
     bool success = deserializeObject.EnterChild( "asset" );
 	if( !success )
 		return nullptr;
 
-	assert( !"Implement!!!!!" );
-	std::string assetUID;		// = deserializeObject.GetValue( "uid" );
+    std::string assetUID  = deserializeObject.GetAttribute( "uid" );
+    //deserializeObject.ExitChild();
 
 	auto it = m_loaders.find( assetUID );
 

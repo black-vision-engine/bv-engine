@@ -25,7 +25,7 @@ public:
 
     virtual void				SetAttribute        ( const std::string& /*name*/, const std::string& /*value*/ ) {}
     virtual std::string			GetAttribute        ( const std::string& /*name*/ ) { return ""; }
-    virtual bool                EnterChild          ( const std::string& /*name*/ ) { return true; }
+    virtual bool                EnterChild          ( const std::string& /*name*/, unsigned int /*index = 0*/  ) { return true; }
     virtual bool                ExitChild           () { return true; }
 
 };
@@ -77,7 +77,7 @@ public:
 
     virtual void				SetAttribute        ( const std::string& /*name*/, const std::string& /*value*/ ) {}
     virtual std::string			GetAttribute        ( const std::string& /*name*/ ) { return ""; }
-    virtual bool                EnterChild          ( const std::string& /*name*/ ) { return true; }
+    virtual bool                EnterChild          ( const std::string& /*name*/, unsigned int /*index = 0*/ ) { return true; }
     virtual bool                ExitChild           () { return true; }
 };
 

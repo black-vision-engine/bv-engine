@@ -20,8 +20,8 @@ void JsonDeserializeObject::Load                ( const std::string& jsonString 
 {
 	Json::Reader reader;
 	reader.parse( jsonString, m_root );
-	m_currentNode =&m_root;
-	m_nodeStack.push(&m_root );
+	m_currentNode = &m_root;
+	m_nodeStack.push( &m_root );
 }
 
 // ***********************
@@ -50,10 +50,10 @@ std::string JsonDeserializeObject::GetAttribute        ( const std::string& name
 
 // ***********************
 //
-bool JsonDeserializeObject::EnterChild          ( const std::string& name )
+bool JsonDeserializeObject::EnterChild          ( const std::string& name, unsigned int index )
 {
 	m_nodeStack.push( m_currentNode );
-	m_currentNode = &((*m_currentNode)[ name ]);
+	m_currentNode = &((*m_currentNode)[ name ][ index ]);
 
 	if( m_currentNode->isNull() )
     {
