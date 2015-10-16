@@ -355,7 +355,7 @@ void                        DefaultTextureDescriptor::SetDefaults     ( DefaultT
 //
 DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const TextureAssetDescConstPtr & textureResDesc, const std::string & name )
 {
-	auto res = QueryTypedRes< TextureAssetConstPtr >( AssetManager::GetInstance().LoadAsset( textureResDesc ) );
+	auto res = LoadTypedAsset<TextureAsset>( textureResDesc );
 
     if ( res == nullptr )
     {

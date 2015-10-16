@@ -4,6 +4,8 @@
 namespace bv
 {
 
+const unsigned int INVALID_FRAME = 0xFFFFFFFF;
+
 // *********************************
 //
 inline void MovingAverageData::AddNextSample        ( const FrameStatsSample & sample, bool * minFlag, bool * maxFlag )
@@ -34,6 +36,19 @@ inline void MovingAverageData::AddNextSample        ( const FrameStatsSample & s
 
     samples.pop_front();
     samples.push_back( sample );
+}
+
+
+// *********************************
+// Assumes there's at least one valid sample.
+inline unsigned int MovingAverageData::CountUselessSamples() const
+{
+	// Skip all useless samples.
+	unsigned int validSample = 0;
+	while( samples[ validSample ].frame == INVALID_FRAME )
+		++validSample;
+
+	return validSample;
 }
 
 // *********************************

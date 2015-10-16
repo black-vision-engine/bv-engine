@@ -16,6 +16,7 @@ namespace bv {
 
 ///////////////////////////////
 //
+// @todo Raplace all references with LoadTypedAsset
 FontAssetConstPtr      TextHelper::LoadFont( const FontAssetDescConstPtr & fontAssetDesc )
 {
 	return std::static_pointer_cast< const FontAsset >( AssetManager::GetInstance().LoadAsset( fontAssetDesc ) );

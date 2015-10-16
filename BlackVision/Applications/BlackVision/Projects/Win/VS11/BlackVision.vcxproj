@@ -126,8 +126,12 @@
     <ClCompile Include="..\..\..\Source\NewModelTestNodes.cpp" />
     <ClCompile Include="..\..\..\Source\NewModelTestScenes.cpp" />
     <ClCompile Include="..\..\..\Source\PieChartNode.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\AlphaMaskRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\DefaultEffectRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeEffectRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeMaskRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\OffscreenRenderLogic.cpp" />
-    <ClCompile Include="..\..\..\Source\Rendering\RenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\StatsFormatters.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\AICommands.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestAI.cpp" />
@@ -160,8 +164,12 @@
     <ClInclude Include="..\..\..\Source\ModelInteractionLayer.h" />
     <ClInclude Include="..\..\..\Source\NewModelTestNodes.h" />
     <ClInclude Include="..\..\..\Source\PieChartNode.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\AlphaMaskRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\DefaultEffectRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeEffectRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeMaskRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\OffscreenRenderLogic.h" />
-    <ClInclude Include="..\..\..\Source\Rendering\RenderLogic.h" />
     <ClInclude Include="..\..\..\Source\StatsFormatters.h" />
     <ClInclude Include="..\..\..\Source\TestAI\AICommands.h" />
     <ClInclude Include="..\..\..\Source\TestAI\IAICommand.h" />

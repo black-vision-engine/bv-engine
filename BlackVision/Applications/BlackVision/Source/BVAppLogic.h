@@ -8,7 +8,7 @@
 
 #include "FrameStatsService.h"
 
-#define HIDE_PROFILE_STATS
+//#define HIDE_PROFILE_STATS
 
 
 namespace bv

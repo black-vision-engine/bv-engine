@@ -89,7 +89,7 @@ void						FFmpegVideoDecoder::Stop				()
 MemoryChunkConstPtr			FFmpegVideoDecoder::GetCurrentFrameData		( UInt64 & outFrameId ) const
 {
 	std::lock_guard< std::mutex > guard( m_dataMutex );
-	outFrameId = m_vstreamDecoder->GetCurrentFrameId();
+	outFrameId = m_currFrameIdx;
 	return m_frameData;
 }
 
@@ -97,7 +97,6 @@ MemoryChunkConstPtr			FFmpegVideoDecoder::GetCurrentFrameData		( UInt64 & outFra
 //
 bool						FFmpegVideoDecoder::NextFrameDataReady		()
 {
-	std::lock_guard< std::mutex > guard( m_dataMutex );
 	auto packet = m_demuxer->GetPacket( m_vstreamDecoder->GetStreamIdx() );
 	if( packet != nullptr )
 	{
@@ -105,9 +104,11 @@ bool						FFmpegVideoDecoder::NextFrameDataReady		()
 		{
 			m_vstreamDecoder->ConvertFrame( m_frame, m_outFrame );
 
+			std::lock_guard< std::mutex > guard( m_dataMutex );
 			char * data = new char[ m_frameSize ];
 			memcpy( data, ( char * )m_outFrame->data[ 0 ], m_frameSize );
 			m_frameData = MemoryChunk::Create( data, SizeType( m_frameSize ) );
+			m_currFrameIdx = m_vstreamDecoder->GetCurrentFrameId();
 
 			return true;
 		}
@@ -147,6 +148,7 @@ Float64						FFmpegVideoDecoder::GetFrameRate			() const
 //
 void						FFmpegVideoDecoder::Seek					( Float64 time ) 
 {
+	std::lock_guard< std::mutex > guard( m_dataMutex );
 	m_demuxer->Seek( m_vstreamDecoder->ConvertTime( time ), m_vstreamDecoder->GetStreamIdx() );
 	m_vstreamDecoder->Reset();
 	ClearFrameData();
@@ -156,6 +158,7 @@ void						FFmpegVideoDecoder::Seek					( Float64 time )
 //
 void						FFmpegVideoDecoder::Reset					() 
 {
+	std::lock_guard< std::mutex > guard( m_dataMutex );
 	m_demuxer->Reset();
 	m_vstreamDecoder->Reset();
 	ClearFrameData();

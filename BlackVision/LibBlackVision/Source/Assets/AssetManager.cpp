@@ -85,4 +85,6 @@ void AssetManager::RegisterBasicLoaders()
 	AssetManager::GetInstance().RegisterLoader( AnimationAssetDesc::UID(),	std::make_shared< AnimationLoader >() );
 }
 
+
+
 } // bv

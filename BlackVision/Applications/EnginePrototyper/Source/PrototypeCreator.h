@@ -1,16 +1,12 @@
 #pragma once
 
-#include "PrototypesForwardInc.h"
-
+#include "BasicWindowApp.h"
 
 namespace  bv {
 
-class Renderer;
+static bool		CreatePrototype				();
 
-IAppLogicPrototype * CreateDefaultPrototype             ( Renderer * renderer);
+static bool		ms_prototypeInitialized = CreatePrototype();
 
-unsigned int        DefaultPrototypeWidth               ();
-unsigned int        DefaultPrototypeHeight              ();
-bool                DefaultPrototypeFullscreenSetting   ();
 
 } // bv

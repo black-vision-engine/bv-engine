@@ -28,6 +28,7 @@ private:
 
 	MemoryChunkPtr					m_frameData;
 	SizeType						m_frameSize;
+	UInt32							m_currFrameIdx;
 
 	mutable std::mutex				m_dataMutex;
 

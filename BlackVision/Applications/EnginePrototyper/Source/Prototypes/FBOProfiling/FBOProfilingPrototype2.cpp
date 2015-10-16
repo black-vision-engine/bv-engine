@@ -279,5 +279,12 @@ void	FBOProfilingPrototype2::AddTextureForAttachment( SizeType i )
 	m_texIds[ i ] = pdrTx->GetTextureID();
 }
 
+// **************************
+//
+IBasicLogicUnqPtr    FBOProfilingPrototype2::Create  ( Renderer * renderer )
+{
+	return IBasicLogicUnqPtr( new FBOProfilingPrototype2( renderer ) );
+}
+
 
 } // bv
