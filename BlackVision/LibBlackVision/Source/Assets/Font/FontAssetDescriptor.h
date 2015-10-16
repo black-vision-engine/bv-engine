@@ -69,4 +69,14 @@ private:
 	std::wstring	m_atlasCharSetFile;
 };
 
+// ***********************
+/// Returns AssetDescriptor UID for Asset in template parameter.
+/// @note AssetDescriptor uid and Asset uid are different strings.
+template<> inline const std::string& GetAssetDescUID<FontAsset>()
+{
+    return FontAssetDesc::UID();
+}
+
+
+
 } // bv

@@ -18,6 +18,8 @@ class TextureAsset;
 class TextureAssetDesc;
 class FontAsset;
 class FontAssetDesc;
+class VideoStreamAsset;
+class VideoStreamAssetDesc;
 
 DEFINE_CONST_PTR_TYPE( FontAssetDesc )
 DEFINE_CONST_PTR_TYPE( FontAsset )

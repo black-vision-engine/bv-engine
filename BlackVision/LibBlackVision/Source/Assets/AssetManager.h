@@ -39,8 +39,13 @@ public:
 // ***********************
 //
 template<typename AssetType>
-std::shared_ptr<const AssetType> LoadTypedAsset		(  const AssetDescConstPtr & )
+std::shared_ptr<const AssetType> LoadTypedAsset		(  const AssetDescConstPtr & desc )
 {
+    if( desc->GetUID() == GetAssetDescUID<AssetType>() )
+	{
+		auto asset = AssetManager::GetInstance().LoadAsset( desc );
+		return std::static_pointer_cast<const AssetType>( asset );
+	}
 	return nullptr;
 }
 

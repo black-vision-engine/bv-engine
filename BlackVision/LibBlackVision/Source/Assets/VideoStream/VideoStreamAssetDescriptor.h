@@ -58,4 +58,13 @@ public:
 
 };
 
+// ***********************
+/// Returns AssetDescriptor UID for Asset in template parameter.
+/// @note AssetDescriptor uid and Asset uid are different strings.
+template<> inline const std::string& GetAssetDescUID<VideoStreamAsset>()
+{
+    return VideoStreamAssetDesc::UID();
+}
+
+
 } // bv
