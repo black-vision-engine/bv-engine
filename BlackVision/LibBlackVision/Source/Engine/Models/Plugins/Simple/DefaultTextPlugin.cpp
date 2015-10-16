@@ -60,6 +60,7 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 
     SimpleVec4EvaluatorPtr      rccBeginColorEvaluator  = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "rcc_beginColor", timeEvaluator );
     SimpleVec4EvaluatorPtr      rccEndColorEvaluator    = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "rcc_endColor", timeEvaluator );
+    SimpleIntEvaluatorPtr       colTextEffectIdEvaluator= ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "colTextEffectId", timeEvaluator );
 
     SimpleFloatEvaluatorPtr     timeSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "time", timeEvaluator );
 
@@ -79,6 +80,7 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     psModel->RegisterAll( rccEndColorEvaluator );
     psModel->RegisterAll( timeSizeEvaluator );
     psModel->RegisterAll( explosionCenterEvaluator );
+    psModel->RegisterAll( colTextEffectIdEvaluator );
 
     plModel->RegisterAll( textEvaluator );
     plModel->RegisterAll( blurSizeEvaluator );
@@ -103,8 +105,9 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
 	outlineColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
 
-    rccBeginColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 1.f, 0.f, 1.f ), TimeType( 0.f ) );
-    rccEndColorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 0.f, 1.f, 1.f ), TimeType( 0.f ) );
+    rccBeginColorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 1.f, 1.f, 1.f ), TimeType( 0.f ) );
+    rccEndColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 1.f ), TimeType( 0.f ) );
+    colTextEffectIdEvaluator->Parameter()->SetVal( 2, TimeType( 0.f ) );
 
     explosionCenterEvaluator->Parameter()->SetVal( glm::vec2( 0.0, -0.2 ), TimeType( 0.f ) );
 
