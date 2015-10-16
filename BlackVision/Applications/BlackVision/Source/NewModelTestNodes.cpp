@@ -2098,8 +2098,9 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
     deserializeObject.Load( file );
 	file.close();
 
-    deserializeObject.EnterChild( "asset" );
-	auto texDesc = TextureAssetDesc::Create( deserializeObject );
+ //   deserializeObject.EnterChild( "asset" );
+	//auto texDesc = TextureAssetDesc::Create( deserializeObject );
+    auto texDesc = AssetManager::GetInstance().CreateDesc( deserializeObject );
 
     root->GetPlugin( "texture" )->LoadResource( std::static_pointer_cast<const AssetDesc>( texDesc ) );
 

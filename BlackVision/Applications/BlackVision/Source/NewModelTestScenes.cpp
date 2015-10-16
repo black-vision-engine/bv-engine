@@ -1110,15 +1110,15 @@ model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::Plu
     pluginsManager;
 
     auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "sand.jpg" );
-    auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ) );
-    auto node2 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CIRCLE", glm::vec3( -2.0, 0.0, 3.0 ) );
-    auto node3 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_SPHERE", glm::vec3( -4.0, -3.0, 1.0 ) );
-    auto node4 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_ROUNDEDRECT", glm::vec3( -3.0, -2.0, -3.0 ) );
-    auto node5 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_TORUS", glm::vec3( 1.0, 0.0, -3.0 ) );
-    auto node6 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_SPRING", glm::vec3( 5.0, -5.0, 0.0 ) );
-    auto node7 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_TRIANGLE", glm::vec3( 1.0, -0.7, -3.0 ) );
-    auto node8 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CYLINDER", glm::vec3( -3.0, 2.0, -3.0 ) );
-    auto node9 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_ELLIPSE", glm::vec3( 0.0, -3.0, 4.0 ) );
+    auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "sand.jpg" );
+    auto node2 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CIRCLE", glm::vec3( -2.0, 0.0, 3.0 ), "water.jpg" );
+    auto node3 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_SPHERE", glm::vec3( -4.0, -3.0, 1.0 ), "sand.jpg" );
+    auto node4 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_ROUNDEDRECT", glm::vec3( -3.0, -2.0, -3.0 ), "sand.jpg" );
+    auto node5 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_TORUS", glm::vec3( 1.0, 0.0, -3.0 ), "sand.jpg" );
+    auto node6 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_SPRING", glm::vec3( 5.0, -5.0, 0.0 ), "water.jpg" );
+    auto node7 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_TRIANGLE", glm::vec3( 1.0, -0.7, -3.0 ), "sand.jpg" );
+    auto node8 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CYLINDER", glm::vec3( -3.0, 2.0, -3.0 ), "water.jpg" );
+    auto node9 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_ELLIPSE", glm::vec3( 0.0, -3.0, 4.0 ), "sand.jpg" );
     
     node0->AddChildToModelOnly( node1 );
     node0->AddChildToModelOnly( node2 );
