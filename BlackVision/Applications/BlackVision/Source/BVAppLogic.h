@@ -3,12 +3,23 @@
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/BVScene.h"
+#include "System/Path.h"
 
 #include "Engine/Events/Events.h"
 
 #include "FrameStatsService.h"
 
 //#define HIDE_PROFILE_STATS
+
+//pablito
+#include "Solution.h"
+#include "VideoCardManager.h"
+#include "structure/AssetManager.h"
+
+//hackvideoinput
+#include "VideoInput/DefaultVideoInputResourceDescr.h"
+#include "hack_videoinput/TestVideoInput.h"
+
 
 
 namespace bv
@@ -17,6 +28,7 @@ namespace bv
 class SimpleTimer;
 class RenderLogic;
 class Renderer;
+class RemoteControlInterface;
 
 enum class BVAppState : int
 {
@@ -32,11 +44,13 @@ class BVAppLogic
 {
 private:
 
+    //hackvideoinput
+    TestVideoInput*                  VideoInput;
+
     BVAppState                      m_state;
 
     FrameStatsCalculator            m_statsCalculator;
 
-    model::TimelineManager *        m_timelineManager;
     const model::PluginsManager *   m_pluginsManager;
     model::OffsetTimeEvaluatorPtr   m_globalTimeline;
 
@@ -47,7 +61,16 @@ private:
 
     unsigned long                   m_startTime;
 
-    void            LoadSceneFromFile       ( std::string filename );
+	//pablito
+	RemoteControlInterface*			m_RemoteControl;
+	Solution						m_solution;
+	bv::videocards::VideoCardManager* m_videoCardManager;
+	std::string                     m_grabFramePath;
+    
+    //void            LoadSceneFromFile       ( std::string filename );
+    
+    void            RefreshVideoInputScene  ();
+
 public:
 
                     BVAppLogic      ( Renderer * renderer );
@@ -60,6 +83,11 @@ public:
     void            InitCamera      ( unsigned int w, unsigned int h );
 
     void            SetStartTime    ( unsigned long millis );
+
+	//pablito:
+	void			SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager);
+	FrameStatsCalculator* GetStatsCalculator(){return &m_statsCalculator;};
+    static model::TimelineManager* GetTimeLineManager() { return GetTimelineManager(); }
 
     virtual void    OnUpdate        ( unsigned int millis, Renderer * renderer );
     virtual void    OnKey           ( unsigned char c );
@@ -77,6 +105,9 @@ public:
     void            ResetScene      ();
     void            ReloadScene     ();
 
+	void            GrabCurrentFrame(  const std::string & path );
+	void            SetKey			( bool active);
+
 private:
 
     void            OnUpdateParam   ( IEventPtr evt );
@@ -84,10 +115,12 @@ private:
 	void            OnNodeLeaving   ( IEventPtr evt );
 	void            OnNoMoreNodes   ( IEventPtr evt );
 
+    model::BasicNodePtr LoadScenes( const PathVec & pathVec );
+
 public:
 
     //Convenience API - generalized model accessors
-    model::TimelineManager *        GetTimelineManager  ();
+    static model::TimelineManager * GetTimelineManager  ();
 
     BVScenePtr                      GetBVScene          ();
 

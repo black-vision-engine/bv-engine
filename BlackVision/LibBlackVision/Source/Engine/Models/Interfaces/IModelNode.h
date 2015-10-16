@@ -63,6 +63,9 @@ public:
 
     virtual bool                            IsVisible           () const                                                            = 0;
 
+	//pablito
+	virtual void                            SetVisible           (bool visible)                                                             = 0;
+
     virtual                                 ~IModelNode         () {};
 
 };

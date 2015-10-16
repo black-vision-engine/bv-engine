@@ -143,11 +143,15 @@ private:
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
+public:
+
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
-    virtual void                                Update                      ( TimeType t ) override;
+private:
+
+	virtual void                                Update                      ( TimeType t ) override;
 
     void                                        Start                       ();
     void                                        Stop                        ();

@@ -51,6 +51,8 @@ typedef SimpleParamValEvaluator< ParamVec3Ptr, ValueVec3Ptr >         SimpleVec3
 typedef SimpleParamValEvaluator< ParamVec2Ptr, ValueVec2Ptr >         SimpleVec2Evaluator;
 typedef SimpleParamValEvaluator< ParamMat2Ptr, ValueMat2Ptr >         SimpleMat2Evaluator;
 typedef SimpleParamValEvaluator< ParamTransformPtr, ValueMat4Ptr >    SimpleTransformEvaluator;
+typedef SimpleParamValEvaluator< ParamStringPtr, ValueStringPtr >     SimpleStringEvaluator;
+typedef SimpleParamValEvaluator< ParamWStringPtr, ValueWStringPtr >   SimpleWStringEvaluator;
 
 DEFINE_PTR_TYPE(SimpleIntEvaluator)
 DEFINE_PTR_TYPE(SimpleFloatEvaluator)
@@ -59,6 +61,8 @@ DEFINE_PTR_TYPE(SimpleVec3Evaluator)
 DEFINE_PTR_TYPE(SimpleVec2Evaluator)
 DEFINE_PTR_TYPE(SimpleMat2Evaluator)
 DEFINE_PTR_TYPE(SimpleTransformEvaluator)
+DEFINE_PTR_TYPE(SimpleStringEvaluator)
+DEFINE_PTR_TYPE(SimpleWStringEvaluator)
 
 } //model
 } //bv

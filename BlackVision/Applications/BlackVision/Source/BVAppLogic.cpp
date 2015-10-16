@@ -1,4 +1,4 @@
-﻿#include "BVAppLogic.h"
+#include "BVAppLogic.h"
 
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
@@ -15,6 +15,7 @@
 #include "Widgets/Crawler/CrawlerEvents.h"
 
 #include "BVConfig.h"
+#include "ProjectManager.h"
 
 #include "MockScenes.h"
 #include "DefaultPlugins.h"
@@ -30,6 +31,11 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
+
+//pablito
+#define XML
+#include "ConfigManager.h"
+#include "RemoteControlInterface.h"
 
 namespace bv
 {
@@ -80,11 +86,9 @@ namespace
     }
 }
 
-// *********************************
 //
 BVAppLogic::BVAppLogic              ( Renderer * renderer )
     : m_startTime( 0 )
-    , m_timelineManager( new model::TimelineManager() )
     , m_bvScene( nullptr )
     , m_pluginsManager( nullptr )
     , m_renderer( nullptr )
@@ -92,6 +96,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
     , m_globalTimeline( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) )
+    , m_solution( GetTimelineManager() ) //pablito
 {
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
@@ -99,6 +104,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
 
     m_renderer = renderer;
     m_renderLogic = new RenderLogic();
+	m_RemoteControl = new RemoteControlInterface(this);
 }
 
 // *********************************
@@ -108,7 +114,7 @@ BVAppLogic::~BVAppLogic             ()
     GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
     GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
 
-    delete m_timelineManager;
+    //delete m_timelineManager;
 
     delete m_renderLogic;
 }
@@ -124,22 +130,69 @@ void BVAppLogic::Initialize         ()
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNoMoreNodes ), widgets::NoMoreNodesCrawlerEvent::Type() );
 
-    model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
+    GetTimelineManager()->RegisterRootTimeline( m_globalTimeline );
+
+	model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
     m_pluginsManager = &model::PluginsManager::DefaultInstance();
 
 	bv::effect::InitializeLibEffect( m_renderer );
 }
 
+// *********************************
+//
+model::BasicNodePtr BVAppLogic::LoadScenes( const PathVec & pathVec )
+{
+    auto root = model::BasicNode::Create( "root", m_globalTimeline );
+    root->AddPlugin( "DEFAULT_TRANSFORM", "transform", m_globalTimeline ); 
+
+    for( auto p : pathVec )
+    {
+        auto scene = SceneDescriptor::LoadScene( ProjectManager::GetInstance()->ToAbsPath( p ), GetTimeLineManager() );
+
+        root->AddChildToModelOnly( std::const_pointer_cast< model::BasicNode >( scene ) );
+    }
+
+    return root;
+}
 
 // *********************************
 //
 void BVAppLogic::LoadScene          ( void )
 {
-    m_timelineManager->RegisterRootTimeline( m_globalTimeline );
-    auto root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, m_timelineManager, m_globalTimeline );
+
+     //m_bvScene->GetTimelineManager()->RegisterRootTimeline( m_globalTimeline );
+
+     model::BasicNodePtr root;
+    
+    if( !ConfigManager::GetBool( "Debug/LoadSceneFromEnv" ) )
+    {
+        if( ConfigManager::GetBool( "Debug/LoadSolution" ) )
+        {
+            //m_solution.SetTimeline(m_timelineManager);
+            m_solution.LoadSolution( ConfigManager::GetString("solution") );
+            root = m_solution.GetRoot();
+            //if(ConfigManager::GetBool("hm"))
+            //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
+        }
+        else
+        {
+            auto pm = ProjectManager::GetInstance();
+
+            auto projectName = ConfigManager::GetString( "default_project_name" );
+            auto projectScenesNames = pm->ListScenesNames( projectName );
+
+            root = LoadScenes( projectScenesNames );
+        }
+
+    }
+    else
+    {
+        root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, GetTimelineManager(), m_globalTimeline );
+    }
+
 	assert( root );
 
-    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline, m_renderer );
+    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline, m_renderer, GetTimelineManager() );
     assert( m_bvScene );
 }
 
@@ -199,9 +252,14 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
             m_globalTimeline->SetGlobalTime( t );
             m_bvScene->Update( t );
         }
+
+		m_RemoteControl->UpdateHM();
+
         {
             FRAME_STATS_SECTION( "Render" );
-            HPROFILER_SECTION( "Render", PROFILER_THREAD1 );
+			HPROFILER_SECTION( "Render", PROFILER_THREAD1 );			
+            
+			RefreshVideoInputScene();
 
             m_renderLogic->RenderFrame  ( renderer, m_bvScene->GetEngineSceneRoot() );
             m_renderLogic->FrameRendered( renderer );
@@ -210,12 +268,28 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 
     GTimer.StartTimer();
 }
+// *********************************
+//
+void BVAppLogic::RefreshVideoInputScene()
+{
+    if(ConfigManager::GetBool("Debug/UseVideoInputFeeding") && m_videoCardManager->IsEnabled())
+    {
+        if(m_videoCardManager->CheckIfNewFrameArrived(0,"A"))
+        {
+			BB::AssetManager::VideoInput->RefreshData(m_videoCardManager->GetCaptureBufferForShaderProccessing(0,"A"));
+        }
+        else
+        {
+            m_videoCardManager->UnblockCaptureQueue(0,"A");
+        }
+    }
+}
 
 // *********************************
 //
 model::IModelNodePtr BVAppLogic::CreateTestModelNodeInSomeSpecificScope( const std::string & name )
 {
-    model::BasicNodePtr node = TestScenesFactory::CreateTestRandomNode( name, m_pluginsManager, m_timelineManager, m_globalTimeline );
+    model::BasicNodePtr node = TestScenesFactory::CreateTestRandomNode( name, m_pluginsManager, GetTimelineManager(), m_globalTimeline );
 
     return node;
 }
@@ -299,11 +373,16 @@ void BVAppLogic::OnKey           ( unsigned char c )
     else if( c == 's' )
     {
         auto sob = new SerializeObject();
+
         m_bvScene->Serialize( *sob );
-        sob->Save( "text.xml" );
+
+        sob->Save( "test.xml" );
         delete sob;
     }
-
+    else if( c == 'd' )
+    {
+        m_videoCardManager->DestroyVideoCardManager();
+    }   
 /*
     // FIXME: the code below is must be used with an animation plugin
     unsigned char d = c - '0';
@@ -367,6 +446,13 @@ void BVAppLogic::ShutDown           ()
     //TODO: any required deinitialization
 }
 
+//pablito:
+void	BVAppLogic::SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager)
+{
+		m_videoCardManager = videoCardManager;
+		m_renderLogic->SetVideoCardManager(videoCardManager,m_renderer);
+}
+
 // *********************************
 //
 void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int millis )
@@ -421,6 +507,21 @@ void                            BVAppLogic::ReloadScene     ()
     LoadScene();
 }
 
+//pablito
+// *********************************
+//
+void            BVAppLogic::GrabCurrentFrame(  const std::string & path )
+{
+    m_grabFramePath = path;
+}
+//pablito
+// *********************************
+//
+void            BVAppLogic::SetKey(  bool active)
+{
+    m_videoCardManager->SetKey(active);
+}
+
 // *********************************
 //
 void            BVAppLogic::OnUpdateParam   ( IEventPtr evt )
@@ -445,12 +546,12 @@ void            BVAppLogic::OnNoMoreNodes   ( IEventPtr evt )
 {
 }
 
-// *********************************
-//
-model::TimelineManager *    BVAppLogic::GetTimelineManager  ()
-{
-    return m_timelineManager;
-}
+//// *********************************
+////
+//model::TimelineManager *    BVAppLogic::GetTimelineManager  ()
+//{
+//    return m_timelineManager;
+//}
 
 // *********************************
 //FIXME: unsafe - consider returning const variant of this class (IParameters * without const should be accessible anyway)
@@ -465,6 +566,14 @@ const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
 {
     return m_pluginsManager;
 }
+
+// *********************************
+//
+model::TimelineManager* BVAppLogic::GetTimelineManager()
+{
+    return TimelineManager::GetInstance();
+}
+
 
 //// *********************************
 ////

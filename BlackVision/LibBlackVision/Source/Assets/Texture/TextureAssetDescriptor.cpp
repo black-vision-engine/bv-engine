@@ -2,12 +2,69 @@
 #include "LibImage.h"
 #include "Engine/Types/EnumsUtils.h"
 #include "Tools/Utils.h"
+#include "ProjectManager.h"
 #include <cassert>
 
 namespace bv
 {
 
 const std::string TextureAssetDesc::uid = "TEXTURE_ASSET_DESC";
+
+std::string Filter2String( MipMapFilterType filter )
+{
+    if( filter == MipMapFilterType::BILINEAR )
+        return "bilinear";
+    else
+    {
+        assert( false );
+        return std::to_string( (int) filter );
+    }
+}
+
+// ***********************
+//
+void                TextureAssetDesc::Serialize       ( SerializeObject & sob ) const
+{
+sob.SetName( "asset" );
+    sob.SetValue( "type", "tx" );
+    sob.SetValue( "path", m_originalTextureDesc->GetImagePath() );
+
+    if( m_mipMapsDescs )
+        sob.SetValue( "mipmap", Filter2String( m_mipMapsDescs->GetFilter() ) );
+    else
+        sob.SetValue( "mipmap", "none" );
+sob.Pop();
+}
+
+MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
+{
+//std::pair< MipMapFilterType, std::string > p[] =
+//    { std::make_pair( MipMapFilterType::BICUBIC, "bicubic" ),
+//    std::make_pair( MipMapFilterType::BILINEAR, "bilinear" ) };
+
+    if( string == "bilinear" )
+        return MipMapFilterType::BILINEAR;
+    //else if( string == "none" )
+    //    return MipMapFilterType::MMFT_TOTAL;
+    else
+    {
+        assert( false );
+        return (MipMapFilterType) std::stoi( string );
+    }
+}
+
+// ***********************
+//
+ISerializableConstPtr TextureAssetDesc::Create          ( DeserializeObject & dob )
+{
+    auto path = dob.GetValue( "path" );
+
+    auto filterS = dob.GetValue( "mipmap" );
+    if( filterS == "none" )
+        return Create( path, true );
+    else
+        return Create( path, String2Filter( filterS ), true );
+}
 
 // ***********************
 //
@@ -41,7 +98,7 @@ VoidConstPtr TextureAssetDesc::QueryThis() const
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFilePath, bool isCacheable )
 {
-	auto props = image::GetImageProps( imageFilePath );
+    auto props = image::GetImageProps( ProjectManager::GetInstance()->ToAbsPath( imageFilePath ).Str() );
 
 	if( !props.error.empty() )
 	{
@@ -55,7 +112,7 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFile
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFilePath, MipMapFilterType mmFilter, bool isCacheable )
 {
-	auto props = image::GetImageProps( imageFilePath );
+    auto props = image::GetImageProps( ProjectManager::GetInstance()->ToAbsPath( imageFilePath ).Str() );
 
 	if( !props.error.empty() )
 	{
@@ -69,7 +126,7 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFile
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFilePath, const StringVector & mipMapsPaths, bool isCacheable )
 {
-	auto props = image::GetImageProps( imageFilePath );
+	auto props = image::GetImageProps( ProjectManager::GetInstance()->ToAbsPath( imageFilePath ).Str() );
 
 	if( !props.error.empty() )
 	{
@@ -185,6 +242,13 @@ std::string				TextureAssetDesc::GetKey		() const
 	}
 }
 
+// ***********************
+//
+std::string             TextureAssetDesc::GetProposedShortKey () const
+{
+    auto basename = AssetDesc::GetProposedShortKey();
+    return basename.substr( 0, basename.find( '.' ) );
+}
 // ***********************
 //
 SingleTextureAssetDescConstPtr TextureAssetDesc::GetOrigTextureDesc() const

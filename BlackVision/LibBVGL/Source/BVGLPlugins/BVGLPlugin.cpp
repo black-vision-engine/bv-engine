@@ -675,6 +675,57 @@ void            BVGLPlugin::VertexAttribPointer			( GLuint index, GLint size, GL
     glVertexAttribPointer( index, size, type, normalized, stride, pointer );
 }
 
+
+
+//pablito
+// *****************************
+//
+void				BVGLPlugin::BindFramebufferEXT			(GLenum target, GLuint framebuffer)
+{
+	glBindFramebuffer(target,framebuffer);
+}
+// *****************************
+//
+void				BVGLPlugin::BindRenderbufferEXT			(GLenum target, GLuint renderbuffer)
+{
+	glBindRenderbuffer(target,renderbuffer);
+}
+// *****************************
+//
+void				BVGLPlugin::DeleteFramebufferEXT		(GLsizei n, const GLuint *framebuffers)
+{
+	glDeleteFramebuffers(n, framebuffers);
+}
+// *****************************
+//
+void				BVGLPlugin::DeleteRenderbufferEXT		(GLsizei n, const GLuint *renderbuffers)
+{
+	glDeleteRenderbuffers(n,renderbuffers);
+}
+
+// *****************************
+//
+void				BVGLPlugin::Finish		()
+{
+	glFinish();
+}
+
+
+// *****************************
+//
+void				BVGLPlugin::Flush		()
+{
+	glFlush();
+}
+
+
+// *****************************
+//
+/*GLuint				GetError					()
+{
+	return glGetError();
+}*/
+
 // *****************************
 //
 void			BVGLPlugin::VertexAttribDivisor			( GLuint index,  GLuint divisor )

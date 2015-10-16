@@ -193,4 +193,339 @@ public:
 
 DEFINE_PTR_TYPE(KeyPressedEvent)
 
+
+
+
+
+	// ciach
+
+	// ************************************* VideoCardEvent *************************************
+class VideoCardEvent : public BaseEvent
+{
+private:
+
+    glm::vec3   m_translation;
+    glm::vec3   m_scale;
+
+   
+
+public:
+
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+
+     std::wstring               command;      // move to private
+
+
+
+public:
+
+    explicit                        VideoCardEvent   ();
+
+    virtual EventType               GetEventType        () const;
+
+    virtual void                    Serialize           ( std::ostringstream & out ) const;
+    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual IEventPtr               Clone               () const;
+    static EventType                Type                ();
+
+    virtual const std::string &     GetName             () const;
+    void                            SetData(std::wstring cmd){command=cmd;};
+
+};
+
+DEFINE_PTR_TYPE(VideoCardEvent)
+
+
+// ************************************* Response Event *************************************
+class ResponseEvent : public BaseEvent
+{
+private:
+
+    glm::vec3   m_translation;
+    glm::vec3   m_scale;
+
+   
+
+public:
+
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+
+     std::wstring               command;      // move to private
+     std::wstring               response;
+
+public:
+
+    explicit                        ResponseEvent   ();
+
+    virtual EventType               GetEventType        () const;
+
+    virtual void                    Serialize           ( std::ostringstream & out ) const;
+    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual IEventPtr               Clone               () const;
+    static EventType                Type                ();
+
+    virtual const std::string &     GetName             () const;
+    void                            SetData(std::wstring cmd){command=cmd;};
+
+};
+
+
+DEFINE_PTR_TYPE(ResponseEvent)
+
+
+// ************************************* Information Event *************************************
+class InfoEvent : public BaseEvent
+{
+private:
+
+    glm::vec3   m_translation;
+    glm::vec3   m_scale;
+
+public:
+
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+
+     std::wstring               command;      // move to private
+     std::wstring               request;
+	 std::wstring				NodeName;
+     int                        sock_id;
+
+     std::wstring                m_additionalStrData;  // FIXME: temporary
+
+public:
+
+    explicit                        InfoEvent   ();
+
+    virtual EventType               GetEventType        () const;
+
+    virtual void                    Serialize           ( std::ostringstream & out ) const;
+    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual IEventPtr               Clone               () const;
+    static EventType                Type                ();
+
+    virtual bool                    ForceSync           () const;
+
+    virtual const std::string &     GetName             () const;
+    void                            SetData             ( std::wstring cmd ){ command=cmd; };
+
+    void                            SetAddStrData       ( const std::wstring & data ) { m_additionalStrData = data; }
+    const std::wstring &             GetAddStrData       () const;
+
+};
+
+DEFINE_PTR_TYPE(InfoEvent)
+
+	// ************************************* Information Event *************************************
+class SceneStructureEvent : public BaseEvent
+{
+private:
+
+    glm::vec3   m_translation;
+    glm::vec3   m_scale;
+
+public:
+
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+
+     std::wstring               command;      // move to private
+     std::wstring               request;
+	 std::wstring				NodeName;
+	 std::wstring				NodeName2;
+     int                        sock_id;
+
+     std::wstring                m_additionalStrData;  // FIXME: temporary
+
+public:
+
+    explicit                        SceneStructureEvent   ();
+
+    virtual EventType               GetEventType        () const;
+
+    virtual void                    Serialize           ( std::ostringstream & out ) const;
+    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual IEventPtr               Clone               () const;
+    static EventType                Type                ();
+
+    virtual bool                    ForceSync           () const;
+
+    virtual const std::string &     GetName             () const;
+    void                            SetData             ( std::wstring cmd ){ command=cmd; };
+
+    void                            SetAddStrData       ( const std::wstring & data ) { m_additionalStrData = data; }
+    const std::wstring &             GetAddStrData       () const;
+
+};
+
+DEFINE_PTR_TYPE(SceneStructureEvent)
+
+
+// ************************************* SetParamEvent *************************************
+class SetParamEvent : public BaseEvent
+{
+private:
+
+    glm::vec3   m_translation;
+    glm::vec3   m_scale;
+
+   
+
+public:
+
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+
+    std::wstring               command;      // move to private
+
+    std::wstring               NodeName;
+    std::wstring               PluginName;
+    std::wstring               ParamName;
+    std::wstring               Value;
+    float                       x;
+    float                       y;
+    float                       z;
+	float                      time;
+
+
+public:
+
+    explicit                        SetParamEvent   ();
+
+    virtual EventType               GetEventType        () const;
+
+    virtual void                    Serialize           ( std::ostringstream & out ) const;
+    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual IEventPtr               Clone               () const;
+    static EventType                Type                ();
+
+    virtual const std::string &     GetName             () const;
+    void                            SetData(std::wstring cmd){command=cmd;};
+
+};
+
+DEFINE_PTR_TYPE(SetParamEvent)
+
+// ************************************* TimelineCmd *************************************
+class TimeLineCmd : public BaseEvent
+{
+private:
+
+    glm::vec3   m_translation;
+    glm::vec3   m_scale;
+
+   
+
+public:
+
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+    float                       value;
+    std::wstring                cmd;      // move to private
+
+    std::wstring                TimelineName;
+   
+
+public:
+
+    explicit                        TimeLineCmd   ();
+
+    virtual EventType               GetEventType        () const;
+
+    virtual void                    Serialize           ( std::ostringstream & out ) const;
+    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual IEventPtr               Clone               () const;
+    static EventType                Type                ();
+
+    virtual const std::string &     GetName             () const;
+    //void                            SetData(std::wstring cmd){command=cmd;};
+
+};
+
+DEFINE_PTR_TYPE(TimeLineCmd)
+
+
+// ************************************* TimerCmd *************************************
+class TimerCmd : public BaseEvent
+{
+private:
+
+    glm::vec3   m_translation;
+    glm::vec3   m_scale;
+
+   
+
+public:
+
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+    float                       value;
+    std::wstring                cmd;      // move to private
+    std::wstring                NodeName;
+    float                       H;
+    float                       M;
+    float                       S;
+    float                       MS;
+   
+
+public:
+
+    explicit                        TimerCmd   ();
+
+    virtual EventType               GetEventType        () const;
+
+    virtual void                    Serialize           ( std::ostringstream & out ) const;
+    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual IEventPtr               Clone               () const;
+    static EventType                Type                ();
+
+    virtual const std::string &     GetName             () const;
+    //void                            SetData(std::wstring cmd){command=cmd;};
+
+};
+
+DEFINE_PTR_TYPE(TimerCmd)
+
+// ************************************* WidgetCmd *************************************
+class WidgetCmd : public BaseEvent
+{
+private:
+
+    glm::vec3   m_translation;
+    glm::vec3   m_scale;
+
+   
+
+public:
+
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+    std::wstring                Param;      // move to private
+    std::wstring                NodeName;
+	std::wstring                Action;
+	float						Time;
+	std::wstring                Value;
+	std::wstring                WidgetName;
+   
+
+public:
+
+    explicit                        WidgetCmd			();
+
+    virtual EventType               GetEventType        () const;
+
+    virtual void                    Serialize           ( std::ostringstream & out ) const;
+    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual IEventPtr               Clone               () const;
+    static EventType                Type                ();
+
+    virtual const std::string &     GetName             () const;
+    //void                            SetData(std::wstring cmd){command=cmd;};
+
+};
+
+DEFINE_PTR_TYPE(WidgetCmd)
+
 } //bv

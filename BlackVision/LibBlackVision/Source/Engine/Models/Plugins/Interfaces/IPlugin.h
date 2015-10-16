@@ -66,6 +66,7 @@ public:
 
     //FIXME: implement a more generic interface for resource loading
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) = 0;
+    virtual std::vector< AssetDescConstPtr >    GetAssets                   () const = 0;
 
 
 	virtual ParamTransformVecPtr				GetParamTransform			() const = 0; //FIXME: BArdzo brzydki hack zeby zadzialal crawler

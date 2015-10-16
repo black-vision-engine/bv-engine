@@ -10,6 +10,8 @@ namespace bv
 {
     typedef BasicInterpolator<TimeType, TimeType>   TimeInterpolator;
 
+    typedef BasicInterpolator<TimeType, std::string> StringInterpolator;
+    typedef BasicInterpolator<TimeType, std::wstring> WStringInterpolator;
     typedef BasicInterpolator<TimeType, bool>       BoolInterpolator;
     typedef BasicInterpolator<TimeType, int>        IntInterpolator;
     typedef BasicInterpolator<TimeType, float>      FloatInterpolator;

@@ -39,6 +39,20 @@ inline bool    BVConfig::FullScreenMode                         () const
 
 // *********************************
 //
+inline WindowMode    BVConfig::GetWindowMode                   () const
+{
+    return m_windowMode;
+}
+
+// *********************************
+//
+inline RendererInput    BVConfig::GetRendererInput                   () const
+{
+    return m_RendererInput;
+}
+
+// *********************************
+//
 inline bool    BVConfig::ReadbackFlag                           () const
 {
     return m_readbackOn;

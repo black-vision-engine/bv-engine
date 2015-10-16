@@ -13,7 +13,7 @@
 
 #include <algorithm>
 
-#include <Windows.h>
+#include "win_sock.h"
 
 namespace bv { namespace model {
 
@@ -577,7 +577,7 @@ void                                DefaultTimerPlugin::Refresh         ( bool i
     }
 
     shift = m_timePaternInfo.fosPHStart;
-    int fosPHSize = m_timePaternInfo.fracOfSecondsPlaceholderSize;
+    int fosPHSize = 1;//m_timePaternInfo.fracOfSecondsPlaceholderSize;
 
     int prec =  EvaluateAsInt< int >( m_precisionParam );
 
@@ -724,8 +724,11 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
         ret.append( L"MM" );
         ret.push_back( m_defaultSeparator );
         ret.append( L"SS" );
-        ret.push_back( m_secSeparator );
-        ret.append( L"ss" );
+		int prec =  EvaluateAsInt< int >( m_precisionParam );
+		if(prec>0){
+				ret.push_back( m_secSeparator );
+				ret.append( L"s" );
+			}
     }
     else
     {
@@ -739,8 +742,11 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
 
             ret.push_back( m_defaultSeparator );
             ret.append( L"SS" );
-            ret.push_back( m_secSeparator );
-            ret.append( L"ss" );
+			int prec =  EvaluateAsInt< int >( m_precisionParam );
+            if(prec>0){
+				ret.push_back( m_secSeparator );
+				ret.append( L"s" );
+			}
         }
         else
         {
@@ -751,8 +757,11 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
             else
                 ret.push_back( L'S' );
 
-            ret.push_back( m_secSeparator );
-            ret.append( L"ss" );
+			int prec =  EvaluateAsInt< int >( m_precisionParam );
+           if(prec>0){
+				ret.push_back( m_secSeparator );
+				ret.append( L"s" );
+			}
         }
     }
 
