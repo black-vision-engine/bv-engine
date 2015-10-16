@@ -35,9 +35,6 @@ sob.EnterChild( "asset" );
         sob.SetAttribute( "mipmap", Filter2String( m_mipMapsDescs->GetFilter() ) );
     else
         sob.SetAttribute( "mipmap", "none" );
-
-    sob.EnterChild( "mipmaps" );
-    sob.SetAttribute( "path", "bla bla" );
 sob.ExitChild();
 }
 
