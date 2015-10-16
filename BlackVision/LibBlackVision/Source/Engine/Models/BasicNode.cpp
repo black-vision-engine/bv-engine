@@ -41,6 +41,7 @@ BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator,
     , m_overrideState( nullptr )
     , m_visible( true )
 	, m_modelNodeEditor ( nullptr )
+    , m_modelNodeEffect( nullptr )
 {
     if( pluginsManager == nullptr )
     {
@@ -171,9 +172,16 @@ unsigned int                    BasicNode::GetNumChildren           () const
 
 // ********************************
 //
-IModelNodeEffect *              BasicNode::GetNodeEffect            () const
+IModelNodeEffectPtr             BasicNode::GetNodeEffect            () const
 {
-    return nullptr;
+    return m_modelNodeEffect;
+}
+
+// ********************************
+//
+void                            BasicNode::SetNodeEffect            ( IModelNodeEffectPtr nodeEffect )
+{
+    m_modelNodeEffect = nodeEffect;
 }
 
 // ********************************

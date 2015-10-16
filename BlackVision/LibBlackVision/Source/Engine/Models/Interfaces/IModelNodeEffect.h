@@ -16,5 +16,8 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(IModelNodeEffect)
+DEFINE_CONST_PTR_TYPE(IModelNodeEffect)
+
 } // model
 } // bv

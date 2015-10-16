@@ -40,7 +40,7 @@ public:
     virtual unsigned int                    GetNumChildren      () const                                                            = 0;
 
     // FIXME: TRANSITION - BEGIN
-    virtual IModelNodeEffect *              GetNodeEffect       () const                                                            = 0;
+    virtual IModelNodeEffectPtr              GetNodeEffect      () const                                                            = 0;
     // FIXME: TRANSITION - END
 
     // FIXME: remove when proper GlobalEfect is implemented

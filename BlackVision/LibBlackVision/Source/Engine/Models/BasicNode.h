@@ -45,7 +45,7 @@ private:
     DefaultPluginListFinalizedPtr   m_pluginList;
 
 	INodeLogicPtr					m_nodeLogic;
-    IModelNodeEffect *              m_modelNodeEffect;
+    IModelNodeEffectPtr             m_modelNodeEffect;
 
     ModelNodeEditor *				m_modelNodeEditor;
 
@@ -72,7 +72,8 @@ public:
     virtual unsigned int                    GetNumChildren          () const override;
 
     // FIXME: TRANSITION - BEGIN
-    virtual IModelNodeEffect *              GetNodeEffect           () const;
+    virtual IModelNodeEffectPtr             GetNodeEffect           () const;
+    void                                    SetNodeEffect           ( IModelNodeEffectPtr nodeEffect );
     // FIXME: TRANSITION - END
 
 
