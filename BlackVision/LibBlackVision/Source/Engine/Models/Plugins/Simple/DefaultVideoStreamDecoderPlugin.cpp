@@ -133,8 +133,6 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
 	, m_vaChannel( nullptr )
 	, m_paramValModel( model )
 	, m_decoder( nullptr )
-	, m_prevFrameId( UINT32_MAX )
-	, m_currFrameId( 0 )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr );
 	m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
@@ -260,11 +258,11 @@ void                                DefaultVideoStreamDecoderPlugin::Update     
     }
 
 	//update texture with video data
-	auto data = m_decoder->GetCurrentFrameData( m_currFrameId );
-	if( m_prevFrameId != m_currFrameId )
+	auto mediaData = m_decoder->GetVideoMediaData();
+	if( mediaData.frameData != nullptr )
 	{
-		static_cast< DefaultVideoStreamDescriptor * >( m_psc->GetTexturesDataImpl()->GetTexture( 0 ) )->SetBits( data );
-		m_prevFrameId = m_currFrameId;
+		static_cast< DefaultVideoStreamDescriptor * >
+			( m_psc->GetTexturesDataImpl()->GetTexture( 0 ) )->SetBits( mediaData.frameData );
 	}
 
     m_vsc->PostUpdate();

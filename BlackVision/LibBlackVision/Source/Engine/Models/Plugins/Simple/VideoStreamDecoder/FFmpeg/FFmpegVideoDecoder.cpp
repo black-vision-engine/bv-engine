@@ -5,6 +5,8 @@
 namespace bv
 {
 
+const UInt32			FFmpegVideoDecoder::MAX_QUEUE_SIZE = 2;
+
 // *********************************
 //
 FFmpegVideoDecoder::FFmpegVideoDecoder		( VideoStreamAssetDescConstPtr desc )
@@ -32,8 +34,6 @@ FFmpegVideoDecoder::FFmpegVideoDecoder		( VideoStreamAssetDescConstPtr desc )
 	m_outFrame->height = height;
 	m_outFrame->format = ( int )ffmpegFormat;
 	m_frameSize = avpicture_get_size( static_cast< AVPixelFormat >( m_outFrame->format ), m_outFrame->width, m_outFrame->height );
-
-	ClearFrameData();
 }
 
 // *********************************
@@ -53,10 +53,14 @@ FFmpegVideoDecoder::~FFmpegVideoDecoder		()
 //
 void						FFmpegVideoDecoder::Start				()
 {
-	if( m_decoderThread == nullptr || m_decoderThread->Stopped() )
+	if( m_decoderThread == nullptr )
+	{
+		m_decoderThread = std::unique_ptr< VideoDecoderThread >( new VideoDecoderThread( shared_from_this() ) );
+		m_decoderThread->Start();
+	} 
+	else if ( m_decoderThread->Stopped() )
 	{
 		Reset();
-		m_decoderThread = std::unique_ptr< VideoDecoderThread >( new VideoDecoderThread( shared_from_this() ) );
 		m_decoderThread->Start();
 	}
 }
@@ -78,38 +82,44 @@ void						FFmpegVideoDecoder::Stop				()
 	if( m_decoderThread != nullptr )
 	{
 		m_decoderThread->Stop();
-		m_decoderThread = nullptr;
-
 		Reset();
 	}
 }
 
 // *********************************
 //
-MemoryChunkConstPtr			FFmpegVideoDecoder::GetCurrentFrameData		( UInt64 & outFrameId ) const
+VideoMediaData			FFmpegVideoDecoder::GetVideoMediaData		()
 {
-	std::lock_guard< std::mutex > guard( m_dataMutex );
-	outFrameId = m_currFrameIdx;
-	return m_frameData;
+	VideoMediaData mediaData;
+	m_frameQueue.TryPop( mediaData );
+	return mediaData;
 }
 
 // *********************************
 //
-bool						FFmpegVideoDecoder::NextFrameDataReady		()
+void					FFmpegVideoDecoder::NextFrameDataReady		()
 {
+	std::lock_guard< std::mutex > lock( m_mutex );
+	char * data = new char[ m_frameSize ];
+	memcpy( data, ( char * )m_outFrame->data[ 0 ], m_frameSize );
+
+	VideoMediaData mediaData;
+	mediaData.frameIdx = m_vstreamDecoder->GetCurrentFrameId();
+	mediaData.frameData = MemoryChunk::Create( data, SizeType( m_frameSize ) );
+	m_frameQueue.Push( mediaData );
+}
+
+// *********************************
+//
+bool					FFmpegVideoDecoder::DecodeNextFrame			()
+{
+	std::lock_guard< std::mutex > lock( m_mutex );
 	auto packet = m_demuxer->GetPacket( m_vstreamDecoder->GetStreamIdx() );
-	if( packet != nullptr )
+	if( packet != nullptr && m_frameQueue.Size() < MAX_QUEUE_SIZE )
 	{
 		if( m_vstreamDecoder->DecodePacket( packet, m_frame ) )
 		{
 			m_vstreamDecoder->ConvertFrame( m_frame, m_outFrame );
-
-			std::lock_guard< std::mutex > guard( m_dataMutex );
-			char * data = new char[ m_frameSize ];
-			memcpy( data, ( char * )m_outFrame->data[ 0 ], m_frameSize );
-			m_frameData = MemoryChunk::Create( data, SizeType( m_frameSize ) );
-			m_currFrameIdx = m_vstreamDecoder->GetCurrentFrameId();
-
 			return true;
 		}
 	}
@@ -118,67 +128,58 @@ bool						FFmpegVideoDecoder::NextFrameDataReady		()
 
 // *********************************
 //
-SizeType					FFmpegVideoDecoder::GetFrameSize			() const
+SizeType				FFmpegVideoDecoder::GetFrameSize			() const
 {
 	return m_frameSize;
 }
 
 // *********************************
 //
-UInt32						FFmpegVideoDecoder::GetWidth				() const
+UInt32					FFmpegVideoDecoder::GetWidth				() const
 {
 	return m_vstreamDecoder->GetWidth();
 }
 
 // *********************************
 //
-UInt32						FFmpegVideoDecoder::GetHeight				() const
+UInt32					FFmpegVideoDecoder::GetHeight				() const
 {
 	return m_vstreamDecoder->GetHeight();
 }
 
 // *********************************
 //
-Float64						FFmpegVideoDecoder::GetFrameRate			() const
+Float64					FFmpegVideoDecoder::GetFrameRate			() const
 {
 	return m_vstreamDecoder->GetFrameRate();
 }
 
 // *********************************
 //
-void						FFmpegVideoDecoder::Seek					( Float64 time ) 
+void					FFmpegVideoDecoder::Seek					( Float64 time ) 
 {
-	std::lock_guard< std::mutex > guard( m_dataMutex );
+	std::lock_guard< std::mutex > lock( m_mutex );
 	m_demuxer->Seek( m_vstreamDecoder->ConvertTime( time ), m_vstreamDecoder->GetStreamIdx() );
 	m_vstreamDecoder->Reset();
-	ClearFrameData();
+	m_frameQueue.Clear();
 }
 
 // *********************************
 //
-void						FFmpegVideoDecoder::Reset					() 
+void					FFmpegVideoDecoder::Reset					() 
 {
-	std::lock_guard< std::mutex > guard( m_dataMutex );
+	std::lock_guard< std::mutex > lock( m_mutex );
 	m_demuxer->Reset();
 	m_vstreamDecoder->Reset();
-	ClearFrameData();
+	m_frameQueue.Clear();
 }
 
 // *********************************
 //
-bool						FFmpegVideoDecoder::IsEOF					() const
+bool					FFmpegVideoDecoder::IsEOF					() const
 {
-	std::lock_guard< std::mutex > guard( m_dataMutex );
+	std::lock_guard< std::mutex > lock( m_mutex );
 	return m_demuxer->IsEOF();
-}
-
-// *********************************
-//
-void						FFmpegVideoDecoder::ClearFrameData			() 
-{
-	char * rawData = new char[ m_frameSize ];
-	memset( rawData, 0, m_frameSize );
-	m_frameData = MemoryChunk::Create( rawData, m_frameSize );
 }
 
 } //bv

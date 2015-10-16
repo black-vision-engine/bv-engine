@@ -50,9 +50,6 @@ private:
 
 	IVideoDecoderPtr				m_decoder;
 
-	UInt64							m_prevFrameId;
-	UInt64							m_currFrameId;
-
 public:
 
     explicit							DefaultVideoStreamDecoderPlugin		( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );

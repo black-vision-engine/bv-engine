@@ -7,6 +7,8 @@
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IVideoDecoder.h"
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/VideoDecoderThread.h"
 
+#include "DataTypes/QueueConcurrent.h"
+
 #include "FFmpegDemuxer.h"
 #include "FFmpegVideoStreamDecoder.h"
 
@@ -24,13 +26,13 @@ private:
 	AVFrame *						m_frame;
 	AVFrame *						m_outFrame;
 
-	VideoDecoderThreadUPtr			m_decoderThread;
-
-	MemoryChunkPtr					m_frameData;
 	SizeType						m_frameSize;
-	UInt32							m_currFrameIdx;
 
-	mutable std::mutex				m_dataMutex;
+	VideoDecoderThreadUPtr			m_decoderThread;
+	mutable std::mutex				m_mutex;
+
+	QueueConcurrent< VideoMediaData >	m_frameQueue;
+	static const UInt32				MAX_QUEUE_SIZE;
 
 public:
 								FFmpegVideoDecoder		( VideoStreamAssetDescConstPtr desc );
@@ -40,9 +42,7 @@ public:
 	virtual void				Pause					() override;
 	virtual void				Stop					() override;
 
-	virtual MemoryChunkConstPtr	GetCurrentFrameData		( UInt64 & outFrameId ) const override;
-
-	virtual bool				NextFrameDataReady		() override;
+	virtual VideoMediaData		GetVideoMediaData		() override;
 
 	virtual SizeType			GetFrameSize			() const override;
 
@@ -57,8 +57,10 @@ public:
 
 	virtual bool				IsEOF					() const override;
 
-private:
-	void						ClearFrameData			();
+protected:
+	
+	virtual bool				DecodeNextFrame			() override;
+	virtual void				NextFrameDataReady		() override;
 
 };
 

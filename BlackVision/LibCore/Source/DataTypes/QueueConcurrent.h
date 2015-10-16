@@ -16,7 +16,7 @@ class QueueConcurrent
 {
 private:
 
-    CriticalSection     m_criticalSection;
+    mutable CriticalSection     m_criticalSection;
 
     std::queue< T >     m_queue;
     HANDLE              m_dataPushed;

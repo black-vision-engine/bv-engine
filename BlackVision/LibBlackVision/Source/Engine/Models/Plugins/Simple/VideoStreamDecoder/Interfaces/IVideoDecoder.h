@@ -6,6 +6,18 @@
 namespace bv
 {
 
+struct VideoMediaData
+{
+	UInt32			frameIdx;
+	MemoryChunkPtr	frameData;
+
+	VideoMediaData()
+		: frameIdx( 0 )
+		, frameData( nullptr )
+	{}
+};
+
+
 class IVideoDecoder
 {
 public:
@@ -13,9 +25,7 @@ public:
 	virtual void					Pause					() = 0;
 	virtual void					Stop					() = 0;
 
-	virtual MemoryChunkConstPtr		GetCurrentFrameData		( UInt64 & outFrameId ) const = 0;
-	
-	virtual bool					NextFrameDataReady		() = 0;
+	virtual VideoMediaData			GetVideoMediaData		() = 0;
 
 	virtual SizeType				GetFrameSize			() const = 0;
 
@@ -28,6 +38,13 @@ public:
 	virtual void					Reset					() = 0;
 
 	virtual bool					IsEOF					() const = 0;
+
+protected:
+
+	virtual bool					DecodeNextFrame			() = 0;
+	virtual void					NextFrameDataReady		() = 0;
+
+	friend class VideoDecoderThread;
 };
 
 DEFINE_PTR_TYPE( IVideoDecoder )
