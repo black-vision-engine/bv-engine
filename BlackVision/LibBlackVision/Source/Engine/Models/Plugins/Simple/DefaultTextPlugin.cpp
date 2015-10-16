@@ -61,8 +61,11 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     SimpleVec4EvaluatorPtr      rccBeginColorEvaluator  = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "rcc_beginColor", timeEvaluator );
     SimpleVec4EvaluatorPtr      rccEndColorEvaluator    = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "rcc_endColor", timeEvaluator );
     SimpleIntEvaluatorPtr       colTextEffectIdEvaluator= ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "colTextEffectId", timeEvaluator );
+    SimpleIntEvaluatorPtr       transformTextEffectIdEvaluator= ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "transformTextEffectId", timeEvaluator );
 
-    SimpleFloatEvaluatorPtr     timeSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "time", timeEvaluator );
+    SimpleFloatEvaluatorPtr     timeValEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "time", timeEvaluator );
+    SimpleFloatEvaluatorPtr     transformEffectVal1Evaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "transformEffectVal1", timeEvaluator );
+    SimpleFloatEvaluatorPtr     transformEffectVal2Evaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "transformEffectVal2", timeEvaluator );
 
     SimpleFloatEvaluatorPtr     spacingEvaluator        = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "spacing", timeEvaluator );
     SimpleFloatEvaluatorPtr     alignmentEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alignment", timeEvaluator );
@@ -72,15 +75,18 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
+    vsModel->RegisterAll( transformEffectVal1Evaluator );
+    vsModel->RegisterAll( transformEffectVal2Evaluator );
     psModel->RegisterAll( borderColorEvaluator );
 	psModel->RegisterAll( outlineColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
 
     psModel->RegisterAll( rccBeginColorEvaluator );
     psModel->RegisterAll( rccEndColorEvaluator );
-    psModel->RegisterAll( timeSizeEvaluator );
+    psModel->RegisterAll( timeValEvaluator );
     psModel->RegisterAll( explosionCenterEvaluator );
     psModel->RegisterAll( colTextEffectIdEvaluator );
+    psModel->RegisterAll( transformTextEffectIdEvaluator );
 
     plModel->RegisterAll( textEvaluator );
     plModel->RegisterAll( blurSizeEvaluator );
@@ -107,13 +113,26 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 
     rccBeginColorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 1.f, 1.f, 1.f ), TimeType( 0.f ) );
     rccEndColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 1.f ), TimeType( 0.f ) );
+
+    rccBeginColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 1.f, 0.f, 1.f ), TimeType( 10.f ) );
+    rccEndColorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 0.f, 0.f, 1.f ), TimeType( 10.f ) );
+
     colTextEffectIdEvaluator->Parameter()->SetVal( 2, TimeType( 0.f ) );
+    transformTextEffectIdEvaluator->Parameter()->SetVal( 3, TimeType( 0.f ) );
 
     explosionCenterEvaluator->Parameter()->SetVal( glm::vec2( 0.0, -0.2 ), TimeType( 0.f ) );
 
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
     fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
     maxTextLenghtEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.f ) );
+
+    transformEffectVal1Evaluator->Parameter()->SetVal( 1.f, TimeType( 0.f ) );
+
+    transformEffectVal1Evaluator->Parameter()->SetVal( 0.1f, TimeType( 10.f ) );
+
+    transformEffectVal2Evaluator->Parameter()->SetVal( 2.f, TimeType( 0.f ) );
+
+    transformEffectVal2Evaluator->Parameter()->SetVal( 5.f, TimeType( 10.f ) );
 
     return model;
 }

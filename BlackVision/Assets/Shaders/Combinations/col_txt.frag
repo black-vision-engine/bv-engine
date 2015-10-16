@@ -3,6 +3,7 @@
 layout (location = 0) out vec4 FragColor;
 
 in vec2             uvCoord;
+in vec2             ccCenterCoord;
 
 uniform sampler2D   AtlasTex0;
 
@@ -27,6 +28,11 @@ vec4 gradientColor( vec4 begin, vec4 end, int i, int total )  // color gradient
     return begin * ( 1.0 - t ) + end * t;
 }
 
+float rand( float co )
+{
+    return fract(sin(dot(vec2( co, co ) ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
 int pseudoRandonInt( int seed, int total )  // Linear congruential generator
 {   
     return ( 4 * seed + 1 ) % ( total + 1 );
@@ -39,27 +45,25 @@ float linearInterpolation( float begin, float end, float t )
 
 float pseudoRandonFloat( float begin, float end, int i, int total )  // Linear congruential generator
 {   
-    int x1 = pseudoRandonInt( i, total );
-    
-    float t = float( x1 ) / float( total );
+    float t = rand( float( i ) / float( total ) );
     
     return linearInterpolation( begin, end, t );
 }
 
 vec4 pseudoRandonColorCube( vec4 begin, vec4 end, int i, int total )  // Linear congruential generator
 {   
-    int seed = pseudoRandonInt( i, total );
+    float t = rand( float( i ) / float( total ) );
     
-    float x = linearInterpolation( begin.x, end.x, float( seed ) / float( total ) );
+    float x = linearInterpolation( begin.x, end.x, t );
 
-    seed = pseudoRandonInt( seed, total );
-    float y = linearInterpolation( begin.y, end.y, float( seed ) / float( total ) );
+    t = rand( float( i + 1 ) / float( total ) );
+    float y = linearInterpolation( begin.y, end.y, t );
 
-    seed = pseudoRandonInt( seed, total );
-    float z = linearInterpolation( begin.z, end.z, float( seed ) / float( total ) );
+    t = rand( float( i + 2 ) / float( total ) );
+    float z = linearInterpolation( begin.z, end.z, t );
 
-    seed = pseudoRandonInt( seed, total );
-    float w = linearInterpolation( begin.w, end.w, float( seed ) / float( total ) );
+    t = rand( float( i + 3 ) / float( total ) );
+    float w = linearInterpolation( begin.w, end.w, t );
     
     return vec4( x, y, z, w );
 }
