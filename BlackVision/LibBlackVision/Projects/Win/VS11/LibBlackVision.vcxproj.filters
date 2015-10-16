@@ -738,9 +738,6 @@
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureLoader.cpp">
       <Filter>Assets\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\Texture\TextureCache.cpp">
-      <Filter>Assets\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureAssetDescriptor.cpp">
       <Filter>Assets\Texture</Filter>
     </ClCompile>
@@ -1668,9 +1665,6 @@
       <Filter>Assets</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureLoader.h">
-      <Filter>Assets\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Assets\Texture\TextureCache.h">
       <Filter>Assets\Texture</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureAssetDescriptor.h">

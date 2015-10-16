@@ -14,13 +14,14 @@ class AssetManager
 {
 public:
 	AssetDescConstPtr				CreateDesc		( const std::string& jsonString );
-	AssetConstPtr					LoadAsset		( const AssetDescConstPtr & desc );
-	bool							RegisterLoader	( const std::string & assetDescUID, const AssetLoaderConstPtr & loader );
-	bool							UnregisterLoader( const std::string & assetDescUID );
+	AssetConstPtr					LoadAsset		( const AssetDescConstPtr& desc );
+	bool							RegisterLoader	( const std::string& assetDescUID, const AssetLoaderConstPtr& loader );
+	bool							UnregisterLoader( const std::string& assetDescUID );
 
+    void                            AddToCache      ( AssetDescConstPtr& desc, AssetConstPtr asset );
+    AssetConstPtr                   GetFromCache    ( AssetDescConstPtr& desc );
 
-
-	static AssetManager &			GetInstance		();
+	static AssetManager&			GetInstance		();
 
 private:
 

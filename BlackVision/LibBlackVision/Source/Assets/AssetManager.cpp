@@ -89,6 +89,20 @@ bool AssetManager::UnregisterLoader( const std::string & assetDescUID )
 
 // ***********************
 //
+void AssetManager::AddToCache               ( AssetDescConstPtr& desc, AssetConstPtr asset )
+{
+    m_assetCache.Add( desc, asset );
+}
+
+// ***********************
+//
+AssetConstPtr AssetManager::GetFromCache    ( AssetDescConstPtr& desc )
+{
+    return m_assetCache.Get( desc );
+}
+
+// ***********************
+//
 AssetManager & AssetManager::GetInstance()
 {
 	static auto instance = AssetManager();

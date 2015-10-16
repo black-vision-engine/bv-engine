@@ -129,7 +129,6 @@
     <ClCompile Include="..\..\..\Source\Assets\Texture\SingleTextureAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureAssetDescriptor.cpp" />
-    <ClCompile Include="..\..\..\Source\Assets\Texture\TextureCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamAsset.cpp" />
@@ -417,7 +416,6 @@
     <ClInclude Include="..\..\..\Source\Assets\Texture\SingleTextureAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureAssetDescriptor.h" />
-    <ClInclude Include="..\..\..\Source\Assets\Texture\TextureCache.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureLoader.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\BaseEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\EventManager.h" />
