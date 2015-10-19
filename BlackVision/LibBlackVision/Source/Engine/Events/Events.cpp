@@ -53,6 +53,8 @@ std::string WidgetCmd::m_sEventName           = "Event_Widget";
 const EventType SceneStructureEvent::m_sEventType       = 0x10000012;
 std::string SceneStructureEvent::m_sEventName           = "Event_SceneStructure";
 
+const EventType LoadAssetEvent::m_sEventType            = 0x10000013;
+std::string LoadAssetEvent::m_sEventName                = "Event_LoadAsset";
 
 
 // ************************************* PluginAddedEvent *************************************
@@ -857,6 +859,58 @@ const std::string &     WidgetCmd::GetName           () const
 {
     return m_sEventName;
 }
+
+
+
+
+//******************* LoadAssetEvent *************
+
+LoadAssetEvent::LoadAssetEvent         () 
+{
+  
+}
+
+
+// *************************************
+//
+EventType           LoadAssetEvent::GetEventType         () const
+{
+    return this->m_sEventType;
+}
+
+// *************************************
+//
+void                LoadAssetEvent::Serialize            ( std::ostringstream & out ) const
+{
+    assert( false );
+}
+
+// *************************************
+//
+void                LoadAssetEvent::Deserialize          ( std::istringstream & in )
+{
+    assert( false );
+}
+// *************************************
+//
+IEventPtr               LoadAssetEvent::Clone             () const
+{
+    return IEventPtr( new LoadAssetEvent( *this ) );
+}
+// *************************************
+//
+EventType               LoadAssetEvent::Type              ()
+{
+    return m_sEventType;
+}
+
+// *************************************
+//
+const std::string &     LoadAssetEvent::GetName           () const
+{
+    return m_sEventName;
+}
+
 
 #pragma warning( pop )
 

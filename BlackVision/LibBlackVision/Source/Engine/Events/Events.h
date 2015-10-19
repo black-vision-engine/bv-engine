@@ -528,4 +528,32 @@ public:
 
 DEFINE_PTR_TYPE(WidgetCmd)
 
+
+// ************************************* LoadAssetEvent *************************************
+class LoadAssetEvent : public BaseEvent
+{
+public:
+
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+    std::wstring                NodeName;
+    std::wstring                PluginName;
+    std::wstring                AssetData;
+
+public:
+    explicit                        LoadAssetEvent();
+
+    virtual EventType               GetEventType        () const;
+
+    virtual void                    Serialize           ( std::ostringstream & out ) const;
+    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual IEventPtr               Clone               () const;
+    static EventType                Type                ();
+
+    virtual const std::string &     GetName             () const;
+};
+
+
+DEFINE_PTR_TYPE(LoadAssetEvent)
+
 } //bv
