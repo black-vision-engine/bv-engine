@@ -420,6 +420,7 @@ namespace bv{
                             ev->AssetData  = std::move( cmd->m_assetData );
                             ev->PluginName = std::move( cmd->m_pluginName );
                             ev->NodeName   = std::move( cmd->m_nodeName );
+                            ev->SockID     = (int)*csock;
 
                             GetDefaultEventManager().ConcurrentQueueEvent( ev );
                         }

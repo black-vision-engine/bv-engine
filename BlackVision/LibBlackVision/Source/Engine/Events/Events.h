@@ -540,6 +540,7 @@ public:
     std::wstring                PluginName;
     std::wstring                AssetData;
 
+    int                         SockID;
 public:
     explicit                        LoadAssetEvent();
 

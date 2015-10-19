@@ -66,6 +66,7 @@ RemoteControlInterface::RemoteControlInterface(BVAppLogic *AppLogic)
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnNodeAppearing ), widgets::NodeAppearingCrawlerEvent::Type() );
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );
 
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnLoadAsset ), bv::LoadAssetEvent::Type() );
 }
 
 
@@ -1232,9 +1233,24 @@ void            RemoteControlInterface::OnLoadAsset     ( IEventPtr evt )
         JsonDeserializeObject deserializer;
         deserializer.Load( asssetData );
 
+        bool result = true;
         auto assetDesc = AssetManager::GetInstance().CreateDesc( deserializer );
 
-        plugin->LoadResource( assetDesc );
+        if( assetDesc != nullptr )
+            result = plugin->LoadResource( assetDesc );
+        else
+            result = false;
+
+        std::wstring response;
+        if( result )
+            response = L"Asset loaded succesfully. node: [" + eventLoadAsset->NodeName + L"] plugin [" + eventLoadAsset->PluginName + L"]";
+        else
+            response = L"Failed to load asset. node [" + eventLoadAsset->NodeName + L"] plugin [" + eventLoadAsset->PluginName + L"]";
+
+        ResponseMsg msg;
+        msg.msg     = response;
+        msg.sock_id = eventLoadAsset->SockID;
+        SocketWrapper::AddMsg( msg );
     }
 }
 
