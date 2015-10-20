@@ -13,6 +13,13 @@ namespace SerializationHelper {
 template< typename T >
 void SerializeObjectImpl( const T& o, ISerializer& sob );
 
+template< typename T >
+std::shared_ptr< T > Create( ISerializer& sob )
+{
+    auto obj = T::Create( sob );
+    return std::static_pointer_cast< T >( obj );
+}
+
 //template< typename T >
 //T* DeserializeObjectImpl( ISerializer& dob );
 //

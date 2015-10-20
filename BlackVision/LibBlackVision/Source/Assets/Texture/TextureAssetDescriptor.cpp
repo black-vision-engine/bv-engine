@@ -5,6 +5,8 @@
 #include "ProjectManager.h"
 #include <cassert>
 
+#include "Serialization/SerializationHelper.h"
+
 namespace bv
 {
 
@@ -38,6 +40,27 @@ sob.EnterChild( "asset" );
 sob.ExitChild();
 }
 
+// ***********************
+//
+void TextureAssetDesc::Deserialize     ( ISerializer& sob )
+{
+    auto obj = SerializationHelper::Create< const TextureAssetDesc >( sob );
+
+    *this = *obj;
+
+//sob.EnterChild( "asset" );
+//    if( UID() != sob.GetAttribute( "uid" ) )
+//        assert( false ); // FIXME: error handling
+//
+//    sob.SetAttribute( "path", m_originalTextureDesc->GetImagePath() );
+//
+//    if( m_mipMapsDescs )
+//        sob.SetAttribute( "mipmap", Filter2String( m_mipMapsDescs->GetFilter() ) );
+//    else
+//        sob.SetAttribute( "mipmap", "none" );
+//sob.ExitChild();
+}
+
 MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
 {
 //std::pair< MipMapFilterType, std::string > p[] =
@@ -55,13 +78,6 @@ MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
     }
 }
 
-
-// ***********************
-//
-void TextureAssetDesc::Deserialize     ( ISerializer& /*sob*/ )
-{
-
-}
 
 
 // ***********************
