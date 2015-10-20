@@ -354,6 +354,7 @@
     <ClCompile Include="..\..\..\Source\Serialization\DeserializeObject.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\DeserializeObjectImpl.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\Json\JsonSerializeObject.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\SerializationHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\SerializationObjects.cpp" />
   </ItemGroup>
   <ItemGroup>
