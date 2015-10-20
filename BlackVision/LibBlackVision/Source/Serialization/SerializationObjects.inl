@@ -6,8 +6,10 @@ namespace bv {
 // *************************************
 //
 template< typename T >
-std::shared_ptr< T >                                        DeserializeObjectLoadImpl( ISerializer& sob, std::string name )
+std::shared_ptr< T >                                        DeserializeObjectLoadImpl( const ISerializer& sob_, std::string name )
 {
+    auto& sob = const_cast< ISerializer& >( sob_ ); // FIXME OMFG
+
     auto sucess = sob.EnterChild( name );
     assert( sucess ); // FIXME error handling
     auto obj = T::Create( sob );
@@ -18,45 +20,51 @@ std::shared_ptr< T >                                        DeserializeObjectLoa
 // *************************************
 //
 template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( ISerializer& pimpl, std::string name )
+std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( const ISerializer& sob_, std::string name )
 {
-    assert( false ); pimpl; name; return std::vector< std::shared_ptr< T > >();
-    //auto& m_doc = pimpl->m_doc;
+    auto& sob = const_cast< ISerializer& >( sob_ ); // FIXME OMFG
 
-    //std::vector< std::shared_ptr< T > > ret;
+    std::vector< std::shared_ptr< T > > ret;
 
-    //auto children = m_doc->first_node( name.c_str() );
+    bool success = sob.EnterChild( name );
+    if( !success )
+        return ret;
 
-    //if( children )
-    //    for( auto child = children->first_node(); child; child = child->next_sibling() )
-    //    {
-    //        auto childNode = pimpl->Load< T >( child );
-    //        ret.push_back( childNode );
-    //    }
+// remove trailing 's'
+    assert( name[ name.size()-1 ] == 's' );
+    name = name.substr( 0, name.size()-1 );
 
-    //return ret;
+    int i = 0;
+    while( sob.EnterChild( name, i++ ) )
+    {
+        auto childNode = DeserializeObjectLoadImpl< T >( sob, name );
+        ret.push_back( childNode );
+    sob.ExitChild();
+    }
+
+   sob.ExitChild();
+
+    return ret;
 }
 
 // *************************************
 //
 template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( ISerializer& pimpl, std::string name )
+std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( const ISerializer& sob_, std::string name )
 {
-    assert( false ); pimpl; name; return std::vector< std::shared_ptr< T > >();
-    //auto& m_doc = pimpl->m_doc;
+    auto& sob = const_cast< ISerializer& >( sob_ ); // FIXME OMFG
 
-    //std::vector< std::shared_ptr< T > > ret;
+    std::vector< std::shared_ptr< T > > ret;
 
-    //for( auto child = m_doc->first_node(); child; child = child->next_sibling() )
-    //{
-    //    if( !strcmp( child->name(), name.c_str() ) )
-    //    {
-    //        auto childNode = pimpl->Load< T >( child );
-    //        ret.push_back( childNode );
-    //    }
-    //}
+    int i = 0;
+    while( sob.EnterChild( name, i++ ) )
+    {
+        auto child = DeserializeObjectLoadImpl< T >( sob, name );
+        ret.push_back( child );
+    sob.ExitChild();
+    }
 
-    //return ret;
+    return ret;
 }
 
 }

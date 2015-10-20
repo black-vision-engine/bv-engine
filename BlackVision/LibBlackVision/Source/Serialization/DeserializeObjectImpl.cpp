@@ -47,5 +47,31 @@ DeserializeObjectImpl::~DeserializeObjectImpl()
     delete m_rootDoc;
 }
 
+bool						DeserializeObjectImpl::EnterChild          ( const std::string& name, unsigned int index )
+{
+// FIXME this implementation sucks so much
+    auto child = m_doc->first_node( name.c_str() );
+    if( child == nullptr )
+        return false;
+    while( index-- )
+    {
+        child = child->next_sibling();
+        if( child == nullptr )
+            return false;
+    }
+    m_nodes.push( child );
+    return true;
+}
+
+bool						DeserializeObjectImpl::ExitChild           ()
+{
+    if( m_nodes.size() > 0 )
+    {
+        m_nodes.pop();
+        return true;
+    }
+    else
+        return false;
+}
 
 }

@@ -5,7 +5,7 @@
 namespace bv { 
     
 // serialization stuff
-template std::vector< std::shared_ptr< SimpleTransformF > >                         DeserializeObjectLoadPropertiesImpl( ISerializer& pimpl, std::string name );
+template std::vector< std::shared_ptr< SimpleTransformF > >                         DeserializeObjectLoadPropertiesImpl( const ISerializer& pimpl, std::string name );
 
 namespace model {
 
@@ -76,18 +76,18 @@ void                SimpleTransform<ParamT>::Serialize       ( ISerializer& sob 
 template<typename ParamT>
 ISerializablePtr     SimpleTransform<ParamT>::Create          ( ISerializer& dob )
 {
-    if( dob.GetName() != "transform" )
-    {
-        std::cerr << "SimpleTransform<ParamT>::Create failed" << std::endl;
-        return nullptr; // FIXME so much: error handling
-    }
+    //if( dob.GetName() != "transform" )
+    //{
+    //    std::cerr << "SimpleTransform<ParamT>::Create failed" << std::endl;
+    //    return nullptr; // FIXME so much: error handling
+    //}
 
     auto kind = dob.GetAttribute( "kind" );
 
     if( kind == "rotation" ) // very special case indeed :)
     {
-        auto angleArray = dob.LoadArray< ParamT >( "angle" );
-        auto rotAxisArray = dob.LoadArray< Vec3Interpolator >( "rotaxis" );
+        auto angleArray = DeserializeObjectLoadArrayImpl< ParamT >( dob, "angle" );
+        auto rotAxisArray = DeserializeObjectLoadArrayImpl< Vec3Interpolator >( dob, "rotaxis" );
 
         if( angleArray.size() != 1 )
         {

@@ -47,4 +47,26 @@ std::string                                             DeserializeObject::GetVa
     return node->value();
 }
 
+
+void				DeserializeObject::SetAttribute        ( const std::string& /*name*/, const std::string& /*value*/ ) 
+{
+    assert( false );
+}
+
+std::string			DeserializeObject::GetAttribute        ( const std::string& name ) 
+{ 
+    return GetValue( name );
+}
+
+bool                DeserializeObject::EnterChild          ( const std::string& name, unsigned int index ) 
+{ 
+    return pimpl_->EnterChild( name, index );
+}
+
+bool                DeserializeObject::ExitChild           () 
+{ 
+    return pimpl_->ExitChild();
+}
+
+
 } // bv

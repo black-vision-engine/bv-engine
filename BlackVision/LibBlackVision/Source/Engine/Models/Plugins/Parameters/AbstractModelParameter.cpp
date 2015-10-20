@@ -6,7 +6,7 @@
 namespace bv { 
 
 // serialization stuff
-template std::vector< std::shared_ptr< model::AbstractModelParameter > >                         DeserializeObjectLoadArrayImpl( ISerializer& pimpl, std::string name );
+template std::vector< std::shared_ptr< model::AbstractModelParameter > >                         DeserializeObjectLoadArrayImpl( const ISerializer& pimpl, std::string name );
 
     
 namespace model {

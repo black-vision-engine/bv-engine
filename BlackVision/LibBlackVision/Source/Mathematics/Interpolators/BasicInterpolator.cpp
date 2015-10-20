@@ -29,7 +29,7 @@ namespace std
 namespace bv {
 
 // serialization stuff
-template std::vector< std::shared_ptr< Key< float, float > > >                         DeserializeObjectLoadPropertiesImpl( ISerializer&, std::string name );
+template std::vector< std::shared_ptr< Key< float, float > > >                         DeserializeObjectLoadPropertiesImpl( const ISerializer&, std::string name );
 
 namespace {
 

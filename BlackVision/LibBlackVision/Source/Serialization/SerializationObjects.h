@@ -34,13 +34,13 @@ public:
 class DeserializeObjectImpl;
 
 template< typename T >
-std::shared_ptr< T >                                        DeserializeObjectLoadImpl( ISerializer&, std::string name );
+std::shared_ptr< T >                                        DeserializeObjectLoadImpl( const ISerializer&, std::string name );
 
 template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( ISerializer&, std::string name );
+std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( const ISerializer&, std::string name );
 
 template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( ISerializer&, std::string name );
+std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( const ISerializer&, std::string name );
 
 class DeserializeObject  : public ISerializer
 {
@@ -60,25 +60,25 @@ public:
     template< typename T >
     std::shared_ptr< T >                                    Load( std::string name ) const
     {
-        return DeserializeObjectLoadImpl< T >( pimpl_, name );
+        return DeserializeObjectLoadImpl< T >( *this, name );
     }
 
     template< typename T >
     std::vector< std::shared_ptr< T > >                     LoadArray( std::string name ) const
     {
-        return DeserializeObjectLoadArrayImpl< T >( pimpl_, name );
+        return DeserializeObjectLoadArrayImpl< T >( *this, name );
     }
 
     template< typename T >
     std::vector< std::shared_ptr< T > >                     LoadProperties( std::string name ) const
     {
-        return DeserializeObjectLoadPropertiesImpl< T >( pimpl_, name );
+        return DeserializeObjectLoadPropertiesImpl< T >( *this, name );
     }
 
-    virtual void				SetAttribute        ( const std::string& /*name*/, const std::string& /*value*/ ) {}
-    virtual std::string			GetAttribute        ( const std::string& /*name*/ ) { return ""; }
-    virtual bool                EnterChild          ( const std::string& /*name*/, unsigned int /*index = 0*/ ) { return true; }
-    virtual bool                ExitChild           () { return true; }
+    virtual void				SetAttribute        ( const std::string& /*name*/, const std::string& /*value*/ );
+    virtual std::string			GetAttribute        ( const std::string& /*name*/ );
+    virtual bool                EnterChild          ( const std::string& /*name*/, unsigned int /*index = 0*/ );
+    virtual bool                ExitChild           ();
 };
 
 }

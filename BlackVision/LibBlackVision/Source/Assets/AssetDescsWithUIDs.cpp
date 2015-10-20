@@ -6,7 +6,7 @@ namespace bv {
 
 AssetDescsWithUIDs AssetDescsWithUIDs::instance;
 
-template std::shared_ptr< AssetDescsWithUIDs >                                        DeserializeObjectLoadImpl( ISerializer&, std::string name );
+template std::shared_ptr< AssetDescsWithUIDs >                                        DeserializeObjectLoadImpl( const ISerializer&, std::string name );
 
 // ********************************
 //
