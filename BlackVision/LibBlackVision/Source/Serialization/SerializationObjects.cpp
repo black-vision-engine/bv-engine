@@ -62,17 +62,17 @@ void SerializeObject::Save( std::ostream & out )
 
 // *******************************
 //
-//void                                                    SerializeObject::SetName( const std::string & name )
-//{
-//    auto& m_doc = pimpl_->m_doc;
-//    auto& m_roots = pimpl_->m_roots;
-//
-//    char *node_name = m_doc.allocate_string( name.c_str() );
-//    rapidxml::xml_node<>* node = m_doc.allocate_node( rapidxml::node_element, node_name );
-//
-//    m_roots.top()->append_node( node );
-//    m_roots.push( node );
-//}
+void                                                    SerializeObject::SetName( const std::string & name )
+{
+    auto& m_doc = pimpl_->m_doc;
+    auto& m_roots = pimpl_->m_roots;
+
+    char *node_name = m_doc.allocate_string( name.c_str() );
+    rapidxml::xml_node<>* node = m_doc.allocate_node( rapidxml::node_element, node_name );
+
+    m_roots.top()->append_node( node );
+    m_roots.push( node );
+}
 
 // *******************************
 //
@@ -105,5 +105,28 @@ void                                                    SerializeObject::Pop()
 
     m_roots.pop();
 }
+
+void				SerializeObject::SetAttribute        ( const std::string& name, const std::string& value )
+{
+    SetValue( name, value );
+}
+
+std::string			SerializeObject::GetAttribute        ( const std::string& name )
+{
+    return GetAttribute( name );
+}
+
+bool                SerializeObject::EnterChild          ( const std::string& name, unsigned int /*index*/  )
+{
+    SetName( name );
+    return true;
+}
+
+bool                SerializeObject::ExitChild           ()
+{
+    Pop();
+    return true;
+}
+
 
 } // bv

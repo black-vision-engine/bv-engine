@@ -18,15 +18,15 @@ public:
     void										            Save( const std::string & filename );
 	void										            Save( std::ostream & out );
 
-    //bool                                                    EnterChild( const std::string & name );
+    void                                                    SetName( const std::string & name );
     void                                                    SetValue( const std::string & name, const std::string & value );
 	void                                                    SetContent( const std::string & value );
     void                                                    Pop();
 
-    virtual void				SetAttribute        ( const std::string& /*name*/, const std::string& /*value*/ ) {}
-    virtual std::string			GetAttribute        ( const std::string& /*name*/ ) { return ""; }
-    virtual bool                EnterChild          ( const std::string& /*name*/, unsigned int /*index = 0*/  ) { return true; }
-    virtual bool                ExitChild           () { return true; }
+    virtual void				SetAttribute        ( const std::string& /*name*/, const std::string& /*value*/ );
+    virtual std::string			GetAttribute        ( const std::string& /*name*/ );
+    virtual bool                EnterChild          ( const std::string& /*name*/, unsigned int /*index = 0*/  );
+    virtual bool                ExitChild           ();
 
 };
 
