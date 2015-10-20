@@ -189,6 +189,26 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode   ( const std::s
 
 // *****************************
 //
+model::BasicNodePtr  SimpleNodesFactory::CreateGlobalEffectTest      ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { timelineManager; } // FIXME: suppress unused warning
+    SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 0.f, 0.f, 0.75f ), 1.f, 1.f );
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_01.jpg", false, 3.4f, 0.7f );
+
+    auto root = bTex.CreateNode( "root", true );
+    auto v  = bTex.CreateNode( "vanilla", true );
+    auto am = bTex.CreateNode( "alpha_mask", true );
+    auto nm = bTex.CreateNode( "node_mask", true );
+
+    root->AddChildToModelOnly( v );
+    root->AddChildToModelOnly( am );
+    root->AddChildToModelOnly( nm );
+
+    return root;
+}
+
+// *****************************
+//
 model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { timelineManager; } // FIXME: suppress unused warning
