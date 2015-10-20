@@ -136,6 +136,7 @@
     <ClCompile Include="..\..\..\Source\TestAI\AICommands.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestAI.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestAIManager.cpp" />
+    <ClCompile Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.cpp" />
     <ClCompile Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.cpp" />
     <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Crawler\Crawler.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="..\..\..\Source\TestAI\IAICommand.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestAI.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestAIManager.h" />
+    <ClInclude Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\IVideoInput.h" />

@@ -244,7 +244,7 @@ void BVAppLogic::OnKey           ( unsigned char c )
     else if( c == '+' )
     {
         auto root = m_bvScene->GetModelSceneRoot();
-        
+
         if( root )
         {
             auto child = root->GetChild( "child0" );
