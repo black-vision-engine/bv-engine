@@ -17,6 +17,7 @@ private:
 	Json::Value				        	m_root;
 	mutable Json::Value*				m_currentNode;
 	mutable std::stack<Json::Value*>	m_nodeStack;
+    mutable std::stack<unsigned int>    m_indexStack;
 public:
 	JsonDeserializeObject();
     virtual ~JsonDeserializeObject();

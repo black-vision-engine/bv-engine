@@ -54,6 +54,7 @@ bool JsonDeserializeObject::EnterChild          ( const std::string& name ) cons
         // Always push both node's when making an array.
         // Array node can never be the current node.
         m_nodeStack.push( &node );
+        m_indexStack.push( 0 );         //After EnterChild we are always in first array element.
         m_currentNode = &( node[ 0 ] );
     }
     else
@@ -86,6 +87,7 @@ bool JsonDeserializeObject::ExitChild           () const
 
         m_currentNode = m_nodeStack.top();
         m_nodeStack.pop();
+        m_indexStack.pop();     // Restore last index, before we entered array.
     }
 
     return true;
@@ -95,6 +97,21 @@ bool JsonDeserializeObject::ExitChild           () const
 //
 bool JsonDeserializeObject::NextChild           () const
 {
+    if( m_nodeStack.empty() )
+        return false;
+
+    auto arrayNode = m_nodeStack.top();
+    if( arrayNode->isArray() )
+    {
+        auto nodeIndex = m_indexStack.top();
+        if( ++nodeIndex < arrayNode->size() )
+        {
+            m_indexStack.pop();
+            m_indexStack.push( nodeIndex );
+            m_currentNode = &(*arrayNode)[ nodeIndex ];
+            return true;
+        }
+    }
     return false;
 }
 

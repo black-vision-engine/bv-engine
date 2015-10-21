@@ -109,6 +109,16 @@ ISerializableConstPtr TextureAssetDesc::Create          ( IDeserializer& dob )
 {
     auto path = dob.GetAttribute( "path" );
 
+    bool succes = dob.EnterChild( "mipmaps" );
+    while( succes )
+    {
+        auto path = dob.GetAttribute( "path" );
+        { path; }
+
+        succes = dob.NextChild();
+    }
+    dob.ExitChild();
+
     auto filterS = dob.GetAttribute( "mipmap" );
     if( filterS == "none" )
         return Create( path, true );
