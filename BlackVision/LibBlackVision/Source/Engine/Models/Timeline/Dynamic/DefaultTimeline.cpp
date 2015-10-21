@@ -12,6 +12,7 @@
 
 #include "Serialization/ISerializer.h"
 #include "Serialization/SerializationObjects.h"
+#include "Serialization/SerializationObjects.inl"
 
 namespace bv { namespace model {
 

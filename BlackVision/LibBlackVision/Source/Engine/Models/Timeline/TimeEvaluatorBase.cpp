@@ -10,7 +10,7 @@
 namespace bv { 
     
 // serialization stuff
-template std::vector< std::shared_ptr< model::TimeEvaluatorBase< model::ITimeEvaluator > > >                         DeserializeObjectLoadArrayImpl( const ISerializer&, std::string name );
+template std::vector< std::shared_ptr< model::TimeEvaluatorBase< model::ITimeEvaluator > > >                         DeserializeObjectLoadArrayImpl( const ISerializer&, std::string, std::string );
 
 namespace model {
 

@@ -32,22 +32,22 @@ public:
     }
 };
 
-class SerializedAssetDesc : public AssetDesc {
-public:
-    static ISerializableConstPtr Create( ISerializer& dob )
-    {
-        if( dob.GetAttribute( "type" ) == "tx" )
-            return TextureAssetDesc::Create( dob );
-        else if( dob.GetAttribute( "type" ) == "anim" )
-            return AnimationAssetDesc::Create( dob );
-        else if( dob.GetAttribute( "type" ) == "font" )
-            return FontAssetDesc::Create( dob );
-        else
-        {
-            assert( false );
-            return nullptr;
-        }
-    }
-};
+//class SerializedAssetDesc : public AssetDesc {
+//public:
+//    static ISerializableConstPtr Create( ISerializer& dob )
+//    {
+//        if( dob.GetAttribute( "type" ) == "tx" )
+//            return TextureAssetDesc::Create( dob );
+//        else if( dob.GetAttribute( "type" ) == "anim" )
+//            return AnimationAssetDesc::Create( dob );
+//        else if( dob.GetAttribute( "type" ) == "font" )
+//            return FontAssetDesc::Create( dob );
+//        else
+//        {
+//            assert( false );
+//            return nullptr;
+//        }
+//    }
+//};
 
 }

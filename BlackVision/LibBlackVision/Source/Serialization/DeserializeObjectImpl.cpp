@@ -19,6 +19,8 @@ DeserializeObjectImpl::DeserializeObjectImpl( std::string filename  )
     static std::string content( buffer.str() ); // FIXME
     m_rootDoc->parse<0>( &content[0] );
     m_doc = m_rootDoc->first_node();
+
+    m_nodes.push( m_doc );
 }
 
 DeserializeObjectImpl::DeserializeObjectImpl( std::istream & in, SizeType numBytes )
@@ -34,6 +36,8 @@ DeserializeObjectImpl::DeserializeObjectImpl( std::istream & in, SizeType numByt
 
     m_rootDoc->parse<0>( buf );
     m_doc = m_rootDoc->first_node();
+
+    m_nodes.push( m_doc );
 }
 
 DeserializeObjectImpl::DeserializeObjectImpl( rapidxml::xml_node<> * node )
@@ -59,7 +63,10 @@ bool						DeserializeObjectImpl::EnterChild          ( const std::string& name, 
         if( child == nullptr )
             return false;
     }
+
     m_nodes.push( child );
+    m_doc = child;
+
     return true;
 }
 
@@ -68,6 +75,7 @@ bool						DeserializeObjectImpl::ExitChild           ()
     if( m_nodes.size() > 0 )
     {
         m_nodes.pop();
+        m_doc = m_nodes.top();
         return true;
     }
     else

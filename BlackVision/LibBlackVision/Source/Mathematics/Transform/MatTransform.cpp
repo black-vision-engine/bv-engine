@@ -86,8 +86,8 @@ ISerializablePtr     SimpleTransform<ParamT>::Create          ( ISerializer& dob
 
     if( kind == "rotation" ) // very special case indeed :)
     {
-        auto angleArray = DeserializeObjectLoadArrayImpl< ParamT >( dob, "angle" );
-        auto rotAxisArray = DeserializeObjectLoadArrayImpl< Vec3Interpolator >( dob, "rotaxis" );
+        auto angleArray = DeserializeObjectLoadArrayImpl< ParamT >( dob, "angle", "interpolator" );
+        auto rotAxisArray = DeserializeObjectLoadArrayImpl< Vec3Interpolator >( dob, "rotaxis", "interpolator" );
 
         if( angleArray.size() != 1 )
         {

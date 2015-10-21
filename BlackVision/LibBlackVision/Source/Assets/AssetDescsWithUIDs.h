@@ -3,8 +3,9 @@
 #include <map>
 
 #include "AssetDescriptor.h"
-#include "AssetSerialization.h"
+#include "AssetManager.h"
 #include "Serialization/SerializationObjects.h"
+#include "Serialization/SerializationObjects.inl"
 
 namespace bv {
 
@@ -26,7 +27,11 @@ public:
     static ISerializablePtr                 Create          ( ISerializer& dob )
     {
         auto uid = dob.GetAttribute( "uid" );
-        auto desc = DeserializeObjectLoadImpl< const SerializedAssetDesc >( dob, "asset" );
+        
+        //auto desc = DeserializeObjectLoadImpl< const SerializedAssetDesc >( dob, "asset" );
+        auto desc = AssetManager::GetInstance().CreateDesc( dob );
+        //dob.ExitChild(); // FIXME this so f***ing wrong
+        
         return std::make_shared< AssetDescWithUID >( desc, uid );
     }
 
