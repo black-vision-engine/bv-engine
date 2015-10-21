@@ -46,6 +46,12 @@ void TextureAssetDesc::Deserialize     ( ISerializer& sob )
 {
     auto obj = SerializationHelper::Create< const TextureAssetDesc >( sob );
 
+    if( obj == nullptr || obj->GetUID() != uid )
+    {
+        assert( !"Failed" ); //FIXME: Error handling.
+        return;
+    }
+
     *this = *obj;
 
 //sob.EnterChild( "asset" );
