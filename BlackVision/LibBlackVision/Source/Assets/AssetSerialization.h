@@ -34,7 +34,7 @@ public:
 
 //class SerializedAssetDesc : public AssetDesc {
 //public:
-    static ISerializableConstPtr Create( IDeserializer& dob )
+//    static ISerializableConstPtr Create( IDeserializer& dob )
 //    {
 //        if( dob.GetAttribute( "type" ) == "tx" )
 //            return TextureAssetDesc::Create( dob );

@@ -40,7 +40,7 @@ std::vector< std::shared_ptr< T > >                         DeserializeObjectLoa
     }
 
     //int i = 0;
-    sob.EnterChild( name );
+    sob.EnterChild( nameChild );
     while( sob.NextChild() )
     {
         auto obj = T::Create( sob );
