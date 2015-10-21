@@ -192,19 +192,56 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode   ( const std::s
 model::BasicNodePtr  SimpleNodesFactory::CreateGlobalEffectTest      ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { timelineManager; } // FIXME: suppress unused warning
-    SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 0.f, 0.f, 0.75f ), 1.f, 1.f );
+    SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 0.f, 1.f ), 3.4f, 1.9f );
     TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_01.jpg", false, 3.4f, 0.7f );
 
-    auto root = bTex.CreateNode( "root", true );
-    auto v  = bTex.CreateNode( "vanilla", true );
+    // ROOT
+    auto root = bSolid.CreateNode( "root", true );
+
+    // Vanilla parent
+    bSolid.SetW( 2.8f );
+    bSolid.SetH( 1.6f );
+    bSolid.SetColor( 1.f, 0.f, 0.f, 1.f );
+    auto v  = bSolid.CreateNode( "vanilla", true );
+
+    // Vanilla solid
+    bSolid.SetW( 1.1f );
+    bSolid.SetH( 1.0f );
+    bSolid.SetColor( 0.f, 0.f, 1.f, 1.f );
+    bSolid.SetPosition( 0.6f, 0.f, .1f );
+    auto vs = bSolid.CreateNode( "vanilla_solid", true );
+    
+    // Vanilla texture
+    bTex.SetW( 1.1f );
+    bTex.SetH( 1.0f );
+    bTex.SetPosition( -0.6f, 0.f, .1f );
+    bTex.SetTextureFile( "rsrcy/simless_00.jpg", 1.f );
+    auto vt = bTex.CreateNode( "vanilla_tex", true );
+
     auto am = bTex.CreateNode( "alpha_mask", true );
+
     auto nm = bTex.CreateNode( "node_mask", true );
+    auto nm_bg = bTex.CreateNode( "node_mask_bg", true );
+    auto nm_bg_c = bTex.CreateNode( "node_mask_bg_col", true );
+
+    auto nm_fg = bTex.CreateNode( "node_mask_fg", true );
 
     root->AddChildToModelOnly( v );
-    root->AddChildToModelOnly( am );
-    root->AddChildToModelOnly( nm );
+    v->AddChildToModelOnly( vs );
+    v->AddChildToModelOnly( vt );
 
     return root;
+
+    /*
+
+    root->AddChildToModelOnly( am );
+
+    root->AddChildToModelOnly( nm );
+    nm->AddChildToModelOnly( nm_bg );
+    nm_bg->AddChildToModelOnly( nm_bg_c );
+    nm->AddChildToModelOnly( nm_fg );
+
+    return root;*/
 }
 
 // *****************************

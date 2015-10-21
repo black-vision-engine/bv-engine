@@ -506,6 +506,10 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
 	{
 		node = TestScenesFactory::BasicShapesTest(  pluginsManager, timelineManager, timeEvaluator );
 	}
+    else if( scene == "GLOBAL_EFFECT_05" )
+    {
+        node = TestScenesFactory::GlobalEffect05( pluginsManager, timelineManager, timeEvaluator );
+    }
     else
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
@@ -558,7 +562,15 @@ model::BasicNodePtr     TestScenesFactory::CreateTestScene      ( const model::P
 
 // *****************************
 //
-model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr     TestScenesFactory::GlobalEffect05           ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { pluginsManager; }
+    return SimpleNodesFactory::CreateGlobalEffectTest( timelineManager, timeEvaluator );
+}
+
+// *****************************
+//
+model::BasicNodePtr     TestScenesFactory::NewModelTestScene        ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { pluginsManager; } // FIXME: suppress unused warning
     //return SimpleNodesFactory::CreateHeightMapNode( timelineManager, timeEvaluator );
@@ -566,9 +578,6 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene     ( const model::
 	auto node0 = SimpleNodesFactory::CreateBasicShapesTestNode( timelineManager, timeEvaluator );
     //auto node0 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
     //auto node1 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
-
-
-	
 
     return node0;
 
