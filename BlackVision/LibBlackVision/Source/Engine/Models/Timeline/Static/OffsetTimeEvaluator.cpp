@@ -1,6 +1,7 @@
 #include "OffsetTimeEvaluator.h"
 #include "Serialization/ISerializer.h"
 #include "Serialization/SerializationObjects.h"
+#include "Serialization/SerializationObjects.inl"
 
 namespace bv { namespace model {
 
@@ -43,7 +44,7 @@ ISerializablePtr     OffsetTimeEvaluator::Create              ( IDeserializer& d
 
     auto te = std::make_shared< OffsetTimeEvaluator >( name, 0.f ); // FIXME load offset
 
-    auto children = DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( dob, "children" );
+    auto children = DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( dob, "children", "timeline" );
 
     for( auto child : children )
         te->AddChild( child );

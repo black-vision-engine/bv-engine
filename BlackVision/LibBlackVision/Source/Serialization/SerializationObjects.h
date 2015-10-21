@@ -33,14 +33,14 @@ public:
 
 class DeserializeObjectImpl;
 
-template< typename T >
-std::shared_ptr< T >                                        DeserializeObjectLoadImpl( const IDeserializer&, std::string name );
-
-template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( const IDeserializer&, std::string name );
-
-template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( const IDeserializer&, std::string name );
+//template< typename T >
+//std::shared_ptr< T >                                        DeserializeObjectLoadImpl( const IDeserializer&, std::string name );
+//
+//template< typename T >
+//std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( const IDeserializer&, std::string nameParent, std::string nameChild="" );
+//
+//template< typename T >
+//std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( const IDeserializer&, std::string name );
 
 class DeserializeObject  : public IDeserializer
 {

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "DeserializeObjectImpl.h"
 #include "IDeserializer.h"
 
@@ -20,31 +22,34 @@ std::shared_ptr< T >                                        DeserializeObjectLoa
 // *************************************
 //
 template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( const IDeserializer& sob_, std::string name )
+std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( const IDeserializer& sob_, std::string nameParent, std::string nameChild="" )
 {
     auto& sob = const_cast< IDeserializer& >( sob_ ); // FIXME OMFG
 
     std::vector< std::shared_ptr< T > > ret;
 
-    bool success = sob.EnterChild( name );
+    bool success = sob.EnterChild( nameParent );
     if( !success )
         return ret;
 
-// remove trailing 's'
-    assert( name[ name.size()-1 ] == 's' );
-    name = name.substr( 0, name.size()-1 );
+// create nameChild if necessary
+    if( nameChild == "" )
+    {
+        assert( nameParent[ nameParent.size()-1 ] == 's' );
+        nameChild = nameParent.substr( 0, nameParent.size()-1 );
+    }
 
     //int i = 0;
     sob.EnterChild( name );
     while( sob.NextChild() )
     {
-        auto childNode = DeserializeObjectLoadImpl< T >( sob, name );
-        ret.push_back( childNode );
-    sob.ExitChild();
+        auto obj = T::Create( sob );
+        ret.push_back( std::static_pointer_cast< T >( obj ) );
+        //sob.ExitChild(); // return to parent
     }
+    sob.ExitChild(); // nameChild
 
-   sob.ExitChild();
-
+    sob.ExitChild(); // nameParent
     return ret;
 }
 
@@ -61,10 +66,12 @@ std::vector< std::shared_ptr< T > >                         DeserializeObjectLoa
     sob.EnterChild( name );
     while( sob.NextChild( ) )
     {
-        auto child = DeserializeObjectLoadImpl< T >( sob, name );
-        ret.push_back( child );
-    sob.ExitChild();
+        auto obj = T::Create( sob );
+
+        ret.push_back( std::static_pointer_cast< T >( obj ) );
+        //sob.ExitChild();
     }
+    sob.ExitChild();
 
     return ret;
 }

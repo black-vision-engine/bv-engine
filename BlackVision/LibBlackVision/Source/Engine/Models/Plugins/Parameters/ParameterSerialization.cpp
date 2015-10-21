@@ -4,9 +4,10 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include <sstream>
 
-#include "Serialization/SerializationObjects.inl"
+//#include "Serialization/SerializationObjects.inl"
 #include "Serialization/SerializationHelper.h"
 //#include "Serialization/SerializationObjects.h"
+#include "Serialization/SerializationObjects.inl"
 
 namespace bv { namespace model {
 
@@ -51,7 +52,7 @@ ISerializablePtr AbstractModelParameter::Create( IDeserializer& dob ) // FIXME: 
     ITimeEvaluatorPtr te = tm->GetTimeline( timeline );
     if( te == nullptr ) te = tm->GetRootTimeline();
 
-    auto values = DeserializeObjectLoadArrayImpl< KeyFrame >( dob, "interpolator" );
+    auto values = DeserializeObjectLoadArrayImpl< KeyFrame >( dob, "interpolator", "key" );
 
     if( type == "float" )
     {

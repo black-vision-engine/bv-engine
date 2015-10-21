@@ -35,14 +35,14 @@ DeserializeObject::~DeserializeObject()
 //
 std::string                                             DeserializeObject::GetName()
 {
-    return pimpl_->m_doc->name();
+    return pimpl_->GetDoc()->name();
 }
 
 // *******************************
 //
 std::string                                             DeserializeObject::GetValue( std::string name ) const
 {
-    auto node = pimpl_->m_doc->first_attribute( name.c_str() );
+    auto node = pimpl_->GetDoc()->first_attribute( name.c_str() );
     assert( node ); // FIXME: error handling
     return node->value();
 }

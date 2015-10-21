@@ -21,7 +21,7 @@ AssetDescConstPtr AssetManager::CreateDesc( IDeserializer& deserializer )
 
 	if( it != m_loaders.end() )
     {
-		auto desc = it->second->CreateDescriptor( deserializer );
+        auto desc = it->second->CreateDescriptor( deserializer );
         deserializer.ExitChild();
         return desc;
     }
