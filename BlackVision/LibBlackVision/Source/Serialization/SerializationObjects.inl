@@ -1,3 +1,5 @@
+#pragma once
+
 #include "DeserializeObjectImpl.h"
 #include "ISerializer.h"
 
@@ -20,29 +22,33 @@ std::shared_ptr< T >                                        DeserializeObjectLoa
 // *************************************
 //
 template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( const ISerializer& sob_, std::string name )
+std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( const ISerializer& sob_, std::string nameParent, std::string nameChild="" )
 {
     auto& sob = const_cast< ISerializer& >( sob_ ); // FIXME OMFG
 
     std::vector< std::shared_ptr< T > > ret;
 
-    bool success = sob.EnterChild( name );
+    bool success = sob.EnterChild( nameParent );
     if( !success )
         return ret;
 
-// remove trailing 's'
-    assert( name[ name.size()-1 ] == 's' );
-    name = name.substr( 0, name.size()-1 );
-
-    int i = 0;
-    while( sob.EnterChild( name, i++ ) )
+// create nameChild if necessary
+    if( nameChild == "" )
     {
-        auto childNode = DeserializeObjectLoadImpl< T >( sob, name );
-        ret.push_back( childNode );
-    sob.ExitChild();
+        assert( nameParent[ nameParent.size()-1 ] == 's' );
+        nameChild = nameParent.substr( 0, nameParent.size()-1 );
     }
 
-   sob.ExitChild();
+    int i = 0;
+    while( sob.EnterChild( nameChild, i++ ) )
+    {
+        auto obj = T::Create( sob );
+        sob.ExitChild(); // nameChild
+        ret.push_back( std::static_pointer_cast< T >( obj ) );
+        //sob.ExitChild(); // return to parent
+    }
+
+    sob.ExitChild(); // nameParent
 
     return ret;
 }
@@ -59,9 +65,10 @@ std::vector< std::shared_ptr< T > >                         DeserializeObjectLoa
     int i = 0;
     while( sob.EnterChild( name, i++ ) )
     {
-        auto child = DeserializeObjectLoadImpl< T >( sob, name );
-        ret.push_back( child );
-    sob.ExitChild();
+        auto obj = T::Create( sob );
+        sob.ExitChild();
+        ret.push_back( std::static_pointer_cast< T >( obj ) );
+        //sob.ExitChild();
     }
 
     return ret;

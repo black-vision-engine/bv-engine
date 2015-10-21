@@ -10,10 +10,10 @@ namespace bv {
 
 class DeserializeObjectImpl
 {
-public:
     rapidxml::xml_document<>*                               m_rootDoc;
     rapidxml::xml_node<>*                                   m_doc;
     std::stack< rapidxml::xml_node<>* >                     m_nodes;
+public:
 
     DeserializeObjectImpl( std::string filename );
     DeserializeObjectImpl( std::istream & in, SizeType numBytes );
@@ -22,6 +22,8 @@ public:
 
     bool						EnterChild          ( const std::string& name, unsigned int index = 0 );
 	bool						ExitChild           ();
+
+    rapidxml::xml_node<>*                           GetDoc() { return m_nodes.top(); }
 
     template< typename T >
     std::shared_ptr< T >                                    Load( rapidxml::xml_node<>* node ) const

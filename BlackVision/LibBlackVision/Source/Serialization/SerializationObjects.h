@@ -1,7 +1,8 @@
 #pragma once
 
 #include "CoreDEF.h"
-#include "Serialization\ISerializer.h"
+#include "Serialization/ISerializer.h"
+//#include "Serialization/SerializationObjects.inl"
 
 namespace bv
 {
@@ -33,14 +34,14 @@ public:
 
 class DeserializeObjectImpl;
 
-template< typename T >
-std::shared_ptr< T >                                        DeserializeObjectLoadImpl( const ISerializer&, std::string name );
-
-template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( const ISerializer&, std::string name );
-
-template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( const ISerializer&, std::string name );
+//template< typename T >
+//std::shared_ptr< T >                                        DeserializeObjectLoadImpl( const ISerializer&, std::string name );
+//
+//template< typename T >
+//std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( const ISerializer&, std::string nameParent, std::string nameChild="" );
+//
+//template< typename T >
+//std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( const ISerializer&, std::string name );
 
 class DeserializeObject  : public ISerializer
 {
