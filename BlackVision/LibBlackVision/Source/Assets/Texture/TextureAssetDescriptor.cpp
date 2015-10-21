@@ -12,6 +12,10 @@ namespace bv
 
 const std::string TextureAssetDesc::uid = "TEXTURE_ASSET_DESC";
 
+
+// Serialization strings
+//const std::string 
+
 // ***********************
 //
 std::string Filter2String( MipMapFilterType filter )
@@ -34,25 +38,26 @@ sob.EnterChild( "asset" );
     sob.SetAttribute( "path", m_originalTextureDesc->GetImagePath() );
 
     if( m_mipMapsDescs )
-        sob.SetAttribute( "mipmap", Filter2String( m_mipMapsDescs->GetFilter() ) );
+        sob.SetAttribute( "filter", Filter2String( m_mipMapsDescs->GetFilter() ) );
     else
-        sob.SetAttribute( "mipmap", "none" );
+        sob.SetAttribute( "filter", "none" );
 
-    sob.EnterChild( "mipmaps" );
-        sob.SetAttribute( "path", "sand.jpg" );
-    sob.ExitChild();
-    sob.EnterChild( "mipmaps" );
-        sob.SetAttribute( "path", "sand.jpg" );
-    sob.ExitChild();
-    sob.EnterChild( "mipmaps" );
-        sob.SetAttribute( "path", "sand.jpg" );
-    sob.ExitChild();
-    sob.EnterChild( "mipmaps" );
-        sob.SetAttribute( "path", "sand.jpg" );
-    sob.ExitChild();
-    sob.EnterChild( "mipmaps" );
-        sob.SetAttribute( "path", "sand.jpg" );
-    sob.ExitChild();
+    if( m_loadingType == TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE )
+        sob.SetAttribute( "loading type", "ONLY ORIGINAL" );
+    else if( m_loadingType == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS )
+        sob.SetAttribute( "loading type", "GENERATE MIP MAPS" );
+    else
+        sob.SetAttribute( "loading type", "LOAD WITH MIP MAPS" );
+
+    if( m_loadingType == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS )
+    {
+        for( auto desc : m_mipMapsDescs->m_mipMapDescs )
+        {
+            sob.EnterChild( "mipmaps" );
+            sob.SetAttribute( "path", desc->GetImagePath() );
+            sob.ExitChild();
+        }
+    }
 
 sob.ExitChild();
 }
@@ -110,16 +115,19 @@ ISerializableConstPtr TextureAssetDesc::Create          ( IDeserializer& dob )
     auto path = dob.GetAttribute( "path" );
 
     bool succes = dob.EnterChild( "mipmaps" );
-    while( succes )
+    if( succes )
     {
-        auto path = dob.GetAttribute( "path" );
-        { path; }
+        while( succes )
+        {
+            auto path = dob.GetAttribute( "path" );
+            { path; }
 
-        succes = dob.NextChild();
+            succes = dob.NextChild();
+        }
+        dob.ExitChild();
     }
-    dob.ExitChild();
 
-    auto filterS = dob.GetAttribute( "mipmap" );
+    auto filterS = dob.GetAttribute( "filter" );
     if( filterS == "none" )
         return Create( path, true );
     else

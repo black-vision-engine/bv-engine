@@ -1,5 +1,7 @@
 #include "MipMapAssetDescriptor.h"
 #include "MipMapBuilder.h"
+#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 
 #include <sstream>
 #include <cassert>
