@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Tools/IncludeJSON.h"
-#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 
 #include <fstream>
 #include <stack>
@@ -11,12 +11,12 @@ namespace bv
 
 
 
-class JsonDeserializeObject : public ISerializer
+class JsonDeserializeObject : public IDeserializer
 {
 private:
-	Json::Value					m_root;
-	Json::Value*				m_currentNode;
-	std::stack<Json::Value*>	m_nodeStack;
+	Json::Value				        	m_root;
+	mutable Json::Value*				m_currentNode;
+	mutable std::stack<Json::Value*>	m_nodeStack;
 public:
 	JsonDeserializeObject();
     virtual ~JsonDeserializeObject();
@@ -24,11 +24,12 @@ public:
 	void						Load                ( const std::string& jsonString );
 	void						Load                ( std::istream& stream );
 
-	void						SetAttribute        ( const std::string& name, const std::string& value ) override;
-    std::string                 GetAttribute        ( const std::string& name ) override;
+    std::string                 GetAttribute        ( const std::string& name ) const override;
 
-    bool						EnterChild          ( const std::string& name, unsigned int index = 0 ) override;
-	bool						ExitChild           () override;
+    bool						EnterChild          ( const std::string& name ) const override;
+	bool						ExitChild           () const override;
+
+    virtual bool                NextChild           () const override;
 };
 
 

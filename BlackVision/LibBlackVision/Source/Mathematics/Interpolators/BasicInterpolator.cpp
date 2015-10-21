@@ -12,6 +12,7 @@
 
 #include "Serialization/SerializationObjects.inl"
 #include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 
 // FIXME
 namespace std
@@ -29,7 +30,7 @@ namespace std
 namespace bv {
 
 // serialization stuff
-template std::vector< std::shared_ptr< Key< float, float > > >                         DeserializeObjectLoadPropertiesImpl( const ISerializer&, std::string name );
+template std::vector< std::shared_ptr< Key< float, float > > >                         DeserializeObjectLoadPropertiesImpl( const IDeserializer&, std::string name );
 
 namespace {
 
@@ -189,7 +190,7 @@ void                Key<TimeValueT, ValueT>::Serialize       ( ISerializer& /*do
 // *************************************
 //
 template<class TimeValueT, class ValueT >
-ISerializablePtr     Key<TimeValueT, ValueT>::Create          ( ISerializer& /*doc*/ )
+ISerializablePtr     Key<TimeValueT, ValueT>::Create          ( IDeserializer& /*doc*/ )
 {
     assert( !"Don't run me please ;)" );
     return nullptr;
@@ -198,7 +199,7 @@ ISerializablePtr     Key<TimeValueT, ValueT>::Create          ( ISerializer& /*d
 // *************************************
 //
 template<>
-ISerializablePtr     Key< bv::TimeType, float >::Create          ( ISerializer& doc )
+ISerializablePtr     Key< bv::TimeType, float >::Create          ( IDeserializer& doc )
 {
     auto time = doc.GetAttribute( "time" );
     auto val = doc.GetAttribute( "val" );
@@ -225,7 +226,7 @@ std::vector<std::string> split_(const std::string &s, char delim) { // FIXME: th
 // *************************************
 //
 template<>
-ISerializablePtr     Key< bv::TimeType, glm::vec3 >::Create          ( ISerializer& doc ) // FIXME: this is not a good place to do that
+ISerializablePtr     Key< bv::TimeType, glm::vec3 >::Create          ( IDeserializer& doc ) // FIXME: this is not a good place to do that
 {
     auto time = doc.GetAttribute( "time" );
     auto val_ = doc.GetAttribute( "val" );
@@ -276,7 +277,7 @@ void                BasicInterpolator<TimeValueT, ValueT, FloatT>::Serialize    
 // *************************************
 //
 template<class TimeValueT, class ValueT, class FloatT >
-ISerializablePtr     BasicInterpolator<TimeValueT, ValueT, FloatT>::Create          ( ISerializer& doc ) // FIXME: this works for floats only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ISerializablePtr     BasicInterpolator<TimeValueT, ValueT, FloatT>::Create          ( IDeserializer& doc ) // FIXME: this works for floats only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 {
     auto keys = DeserializeObjectLoadPropertiesImpl< Key<TimeValueT, ValueT> >( doc, "key" );
 

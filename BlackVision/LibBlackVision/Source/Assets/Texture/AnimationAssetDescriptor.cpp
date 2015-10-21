@@ -1,4 +1,6 @@
 #include "AnimationAssetDescriptor.h"
+#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 
 namespace bv {
 
@@ -18,14 +20,14 @@ sob.ExitChild();
 
 // ***********************
 //
-ISerializableConstPtr     AnimationAssetDesc::Create          ( ISerializer& dob )
+ISerializableConstPtr     AnimationAssetDesc::Create          ( IDeserializer& dob )
 {
     return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetAttribute( "path" ), dob.GetAttribute( "filter" ) ) );
 }
 
 // ***********************
 //
-void AnimationAssetDesc::Deserialize     ( ISerializer& /*sob*/ )
+void AnimationAssetDesc::Deserialize     ( IDeserializer& /*sob*/ )
 {
 
 }

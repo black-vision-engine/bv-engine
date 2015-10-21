@@ -2090,22 +2090,22 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	//auto texDesc_ = TextureAssetDesc::Create( "sand.jpg", MipMapFilterType::BILINEAR, true );
 	//JsonSerializeObject serializeObject;
 	//texDesc_->Serialize( serializeObject );
-	//serializeObject.Save( "textureSerialize.txt" );
+	//serializeObject.Save( "textureSerialize.json" );
 
 	fstream file;
-	file.open( "asset.json", std::ios_base::in );
+	file.open( "textureSerialize.json", std::ios_base::in );
 	JsonDeserializeObject deserializeObject;
     deserializeObject.Load( file );
 	file.close();
 
  //   deserializeObject.EnterChild( "asset" );
 	//auto texDesc = TextureAssetDesc::Create( deserializeObject );
-    auto texDesc = AssetManager::GetInstance().CreateDesc( deserializeObject );
+    //auto texDesc = AssetManager::GetInstance().CreateDesc( deserializeObject );
 
-    root->GetPlugin( "texture" )->LoadResource( std::static_pointer_cast<const AssetDesc>( texDesc ) );
+    //root->GetPlugin( "texture" )->LoadResource( std::static_pointer_cast<const AssetDesc>( texDesc ) );
 
 
-	//success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );	//, MipMapFilterType::BOX
+	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );	//, MipMapFilterType::BOX
 	
     
 	assert( success );

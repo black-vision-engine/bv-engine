@@ -38,8 +38,8 @@ protected:
 
 public:
     virtual void                        Serialize       ( ISerializer& sob ) const;
-    virtual void                        Deserialize     ( ISerializer& sob );
-	static ISerializableConstPtr        Create          ( ISerializer& dob );
+    virtual void                        Deserialize     ( IDeserializer& sob );
+	static ISerializableConstPtr        Create          ( IDeserializer& dob );
 
 	virtual bool						IsCacheable			() const override;
 

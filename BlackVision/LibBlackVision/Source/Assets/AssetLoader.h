@@ -3,6 +3,7 @@
 #include "AssetDescriptor.h"
 #include "Asset.h"
 #include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 
 namespace bv { 
 
@@ -11,7 +12,7 @@ class AssetLoader
 public:
 
 	virtual AssetConstPtr		LoadAsset        ( const AssetDescConstPtr & desc )  const = 0;
-    virtual AssetDescConstPtr	CreateDescriptor ( ISerializer& deserializeObject ) const = 0;
+    virtual AssetDescConstPtr	CreateDescriptor ( IDeserializer& deserializeObject ) const = 0;
 
 
             AssetLoader			();

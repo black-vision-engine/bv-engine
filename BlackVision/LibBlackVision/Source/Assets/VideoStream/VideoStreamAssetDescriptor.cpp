@@ -16,14 +16,14 @@ void                VideoStreamAssetDesc::Serialize       ( ISerializer& /*sob*/
 
 // ***********************
 //
-void VideoStreamAssetDesc::Deserialize     ( ISerializer& /*sob*/ )
+void VideoStreamAssetDesc::Deserialize     ( IDeserializer& /*sob*/ )
 {
 
 }
 
 // ***********************
 //
-ISerializableConstPtr VideoStreamAssetDesc::Create          ( ISerializer& /*dob*/ )
+ISerializableConstPtr VideoStreamAssetDesc::Create          ( IDeserializer& /*dob*/ )
 {
 	assert( !"Implement me" );
     return nullptr;

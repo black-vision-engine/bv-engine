@@ -1931,6 +1931,9 @@
     <ClInclude Include="..\..\..\Source\Serialization\Json\JsonSerializeObject.h">
       <Filter>Serialization\Json</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\IDeserializer.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

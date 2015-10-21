@@ -17,7 +17,7 @@
 namespace bv { 
     
 // serialization stuff
-template std::shared_ptr< model::BasicNode >                                        DeserializeObjectLoadImpl( const ISerializer& pimpl, std::string name );
+template std::shared_ptr< model::BasicNode >                                        DeserializeObjectLoadImpl( const IDeserializer& pimpl, std::string name );
     
 namespace model {
 
@@ -112,7 +112,7 @@ void                            BasicNode::Serialize               ( ISerializer
 
 // ********************************
 //
-ISerializablePtr BasicNode::Create( ISerializer& dob )
+ISerializablePtr BasicNode::Create( IDeserializer& dob )
 {
     //assert( dob.GetName() == "node" ); FIXME
 

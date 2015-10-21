@@ -28,7 +28,7 @@ public:
 	void						SetAttribute        ( const std::string& name, const std::string& value ) override;
     std::string                 GetAttribute        ( const std::string& name ) override;
 
-    bool						EnterChild          ( const std::string& name, unsigned int index = 0 ) override;
+    void						EnterChild          ( const std::string& name ) override;
 	bool						ExitChild           () override;
 };
 

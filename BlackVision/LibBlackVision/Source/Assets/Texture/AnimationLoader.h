@@ -5,6 +5,7 @@
 #include "Assets/Texture/AnimationAssetDescriptor.h"
 #include "Assets/Texture/TextureAssetDescriptor.h"
 #include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 
 namespace bv {
 
@@ -13,7 +14,7 @@ class AnimationLoader : public AssetLoader
 public:
 
 	AssetConstPtr		LoadAsset			( const AssetDescConstPtr & desc ) const override;
-    AssetDescConstPtr	CreateDescriptor	( ISerializer& deserializeObject ) const override;
+    AssetDescConstPtr	CreateDescriptor	( IDeserializer& deserializeObject ) const override;
 
     virtual ~AnimationLoader(){}
 

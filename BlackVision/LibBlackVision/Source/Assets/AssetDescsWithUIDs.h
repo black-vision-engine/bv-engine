@@ -23,7 +23,7 @@ public:
         sob.ExitChild();
     }
 
-    static ISerializablePtr                 Create          ( ISerializer& dob )
+    static ISerializablePtr                 Create          ( IDeserializer& dob )
     {
         auto uid = dob.GetAttribute( "uid" );
         auto desc = DeserializeObjectLoadImpl< const SerializedAssetDesc >( dob, "asset" );
@@ -55,7 +55,7 @@ public:
         }
         sob.ExitChild();
     }
-    static ISerializablePtr                                 Create          ( ISerializer& dob )
+    static ISerializablePtr                                 Create          ( IDeserializer& dob )
     {
         auto assetsWithUIDs = DeserializeObjectLoadPropertiesImpl< AssetDescWithUID >( dob, "uid" );
 

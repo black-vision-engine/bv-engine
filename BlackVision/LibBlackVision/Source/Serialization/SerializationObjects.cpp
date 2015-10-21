@@ -11,7 +11,7 @@
 
 namespace bv {
 
-    void ISerializable::Deserialize( ISerializer& ) {} //FIXME taki ch*j
+    void ISerializable::Deserialize( IDeserializer& ) {} //FIXME taki ch*j
 
 class SerializeObjectImpl
 {
@@ -116,10 +116,10 @@ std::string			SerializeObject::GetAttribute        ( const std::string& name )
     return GetAttribute( name );
 }
 
-bool                SerializeObject::EnterChild          ( const std::string& name, unsigned int /*index*/  )
+void                SerializeObject::EnterChild          ( const std::string& name )
 {
     SetName( name );
-    return true;
+    return ;
 }
 
 bool                SerializeObject::ExitChild           ()

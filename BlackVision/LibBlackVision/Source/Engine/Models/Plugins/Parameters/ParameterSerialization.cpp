@@ -19,7 +19,7 @@ public:
     KeyFrame( std::string t, std::string v ) : time( t ), value( v ) {}
 
     virtual void                Serialize       ( ISerializer&/*doc*/ ) const {}
-    static ISerializablePtr     Create          ( ISerializer&doc )
+    static ISerializablePtr     Create          ( IDeserializer&doc )
     {
         auto time = doc.GetAttribute( "time" );
         auto value = doc.GetAttribute( "val" );
@@ -40,7 +40,7 @@ public:
 //        float val = 
 //}
 
-ISerializablePtr AbstractModelParameter::Create( ISerializer& dob ) // FIXME: rethink if is might be done cleaner
+ISerializablePtr AbstractModelParameter::Create( IDeserializer& dob ) // FIXME: rethink if is might be done cleaner
 {
     auto name = dob.GetAttribute( "name" );
     auto type = dob.GetAttribute( "type" );

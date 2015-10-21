@@ -3,6 +3,7 @@
 #include "Assets/AssetDescriptor.h"
 #include "Engine/Types/Enums.h"
 #include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 
 #include "CoreDEF.h"
 
@@ -39,8 +40,8 @@ public:
 
 
     virtual void								Serialize					( ISerializer& sob ) const;
-    virtual void                                Deserialize                 ( ISerializer& sob );
-	static ISerializableConstPtr			    Create						( ISerializer& dob );
+    virtual void                                Deserialize                 ( IDeserializer& sob );
+	static ISerializableConstPtr			    Create						( IDeserializer& dob );
 
 	virtual const std::string &					GetUID						() const override;
 	

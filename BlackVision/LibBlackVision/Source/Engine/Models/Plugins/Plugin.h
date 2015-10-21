@@ -38,7 +38,7 @@ protected:
 
 public:
     virtual void                                Serialize                   ( ISerializer& doc ) const override;
-    static ISerializablePtr                     Create                      ( ISerializer& doc );
+    static ISerializablePtr                     Create                      ( IDeserializer& doc );
 
     virtual                                     ~BasePlugin                 ();
 

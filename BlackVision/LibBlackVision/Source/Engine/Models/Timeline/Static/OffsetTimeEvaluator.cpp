@@ -37,7 +37,7 @@ void                OffsetTimeEvaluator::Serialize           ( ISerializer& sob 
 
 // *******************************
 //
-ISerializablePtr     OffsetTimeEvaluator::Create              ( ISerializer& dob )
+ISerializablePtr     OffsetTimeEvaluator::Create              ( IDeserializer& dob )
 {
     auto name = dob.GetAttribute( "name" );
 

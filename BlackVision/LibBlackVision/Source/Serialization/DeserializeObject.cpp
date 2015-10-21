@@ -48,22 +48,22 @@ std::string                                             DeserializeObject::GetVa
 }
 
 
-void				DeserializeObject::SetAttribute        ( const std::string& /*name*/, const std::string& /*value*/ ) 
-{
-    assert( false );
-}
+//void				DeserializeObject::SetAttribute        ( const std::string& /*name*/, const std::string& /*value*/ ) 
+//{
+//    assert( false );
+//}
 
-std::string			DeserializeObject::GetAttribute        ( const std::string& name ) 
+std::string			DeserializeObject::GetAttribute        ( const std::string& name ) const
 { 
     return GetValue( name );
 }
 
-bool                DeserializeObject::EnterChild          ( const std::string& name, unsigned int index ) 
+bool                DeserializeObject::EnterChild          ( const std::string& name ) const
 { 
-    return pimpl_->EnterChild( name, index );
+    return pimpl_->EnterChild( name );
 }
 
-bool                DeserializeObject::ExitChild           () 
+bool                DeserializeObject::ExitChild           () const
 { 
     return pimpl_->ExitChild();
 }

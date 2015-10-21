@@ -10,7 +10,7 @@
 #include "Engine/Models/Timeline/Dynamic/TimelineEventNull.h"
 #include "Engine/Models/Timeline/Dynamic/TimelineEventStop.h"
 
-#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 #include "Serialization/SerializationObjects.h"
 
 namespace bv { namespace model {
@@ -77,7 +77,7 @@ void                                DefaultTimeline::Serialize           ( ISeri
 
 // *********************************
 //
-ISerializablePtr                     DefaultTimeline::Create              ( ISerializer& dob )
+ISerializablePtr                     DefaultTimeline::Create              ( IDeserializer& dob )
 {
     auto name = dob.GetAttribute( "name" );
 

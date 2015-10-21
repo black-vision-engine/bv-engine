@@ -34,30 +34,29 @@ void JsonDeserializeObject::Load                ( std::istream& stream )
 	m_nodeStack.push( &m_root );
 }
 
-// ***********************
-//
-void JsonDeserializeObject::SetAttribute        ( const std::string& name, const std::string& value )
-{
-	(*m_currentNode)[ name ] = value;
-}
 
 // ***********************
 //
-std::string JsonDeserializeObject::GetAttribute        ( const std::string& name )
+std::string JsonDeserializeObject::GetAttribute        ( const std::string& name ) const
 {
     return (*m_currentNode)[ name ].asString();
 }
 
 // ***********************
 //
-bool JsonDeserializeObject::EnterChild          ( const std::string& name, unsigned int index )
+bool JsonDeserializeObject::EnterChild          ( const std::string& name ) const
 {
 	m_nodeStack.push( m_currentNode );
-	m_currentNode = &((*m_currentNode)[ name ][ index ]);
+	
+    auto node = (*m_currentNode)[ name ];
+    if( node.isArray() )
+        m_currentNode = &(node[ 0 ]);
+    else
+        m_currentNode = &node;
 
 	if( m_currentNode->isNull() )
     {
-        ExitChild();        // Return to previous node.
+        ExitChild();        // Return to previous node. Always true.
 		return false;
     }
 	return true;
@@ -65,7 +64,7 @@ bool JsonDeserializeObject::EnterChild          ( const std::string& name, unsig
 
 // ***********************
 //
-bool JsonDeserializeObject::ExitChild           ()
+bool JsonDeserializeObject::ExitChild           () const
 {
     if( m_nodeStack.empty() )
         return false;
@@ -74,6 +73,13 @@ bool JsonDeserializeObject::ExitChild           ()
 	m_nodeStack.pop();
 
     return true;
+}
+
+// ***********************
+//
+bool JsonDeserializeObject::NextChild           () const
+{
+    return false;
 }
 
 

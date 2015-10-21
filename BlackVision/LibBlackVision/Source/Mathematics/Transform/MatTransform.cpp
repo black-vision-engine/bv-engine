@@ -1,11 +1,13 @@
 #include "Mathematics/Transform/MatTransform.h"
 
 #include "Serialization/SerializationObjects.inl"
+#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 
 namespace bv { 
     
 // serialization stuff
-template std::vector< std::shared_ptr< SimpleTransformF > >                         DeserializeObjectLoadPropertiesImpl( const ISerializer& pimpl, std::string name );
+template std::vector< std::shared_ptr< SimpleTransformF > >                         DeserializeObjectLoadPropertiesImpl( const IDeserializer& pimpl, std::string name );
 
 namespace model {
 
@@ -74,7 +76,7 @@ void                SimpleTransform<ParamT>::Serialize       ( ISerializer& sob 
 // *************************************
 //
 template<typename ParamT>
-ISerializablePtr     SimpleTransform<ParamT>::Create          ( ISerializer& dob )
+ISerializablePtr     SimpleTransform<ParamT>::Create          ( IDeserializer& dob )
 {
     //if( dob.GetName() != "transform" )
     //{
@@ -323,7 +325,7 @@ CompositeTransform<ParamT>::CompositeTransform  ( const CompositeTransform & src
 // *************************************
 //
 template<typename ParamT>
-ISerializablePtr                     CompositeTransform<ParamT>::Create                  ( ISerializer& dob )
+ISerializablePtr                     CompositeTransform<ParamT>::Create                  ( IDeserializer& dob )
 {
     auto transform = std::make_shared< CompositeTransform< ParamT > >();
 

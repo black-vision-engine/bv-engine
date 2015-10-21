@@ -25,7 +25,7 @@ protected:
 public:
 
     virtual void                Serialize       ( ISerializer& sob ) const;
-    static ISerializablePtr     Create          ( ISerializer& dob );
+    static ISerializablePtr     Create          ( IDeserializer& dob );
 
 	virtual const std::string &		GetUID		() const override;
 

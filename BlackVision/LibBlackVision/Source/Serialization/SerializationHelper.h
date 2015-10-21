@@ -13,7 +13,7 @@ template< typename T >
 void SerializeObjectImpl( const T& o, ISerializer& sob );
 
 template< typename T >
-std::shared_ptr< T > Create( ISerializer& sob )
+std::shared_ptr< T > Create( IDeserializer& sob )
 {
     auto obj = T::Create( sob );
     return std::static_pointer_cast< T >( obj );

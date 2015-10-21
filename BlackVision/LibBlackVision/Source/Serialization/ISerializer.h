@@ -21,7 +21,7 @@ public:
     @param[in] index Indeks w tablicy dzieci.
     @return If serializing - always true.
     If deserializing, returns false if child does not exist.*/
-    virtual bool                EnterChild          ( const std::string& name, unsigned int index = 0 ) = 0;
+    virtual void                EnterChild          ( const std::string& name ) = 0;
     
     /**@brief Pop.*/
     virtual bool                ExitChild           () = 0;

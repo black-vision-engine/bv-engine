@@ -5,18 +5,18 @@
 #include "Static/OffsetTimeEvaluator.h"
 
 #include "Serialization/SerializationObjects.inl"
-#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 
 namespace bv { 
     
 // serialization stuff
-template std::vector< std::shared_ptr< model::TimeEvaluatorBase< model::ITimeEvaluator > > >                         DeserializeObjectLoadArrayImpl( const ISerializer&, std::string name );
+template std::vector< std::shared_ptr< model::TimeEvaluatorBase< model::ITimeEvaluator > > >                         DeserializeObjectLoadArrayImpl( const IDeserializer&, std::string name );
 
 namespace model {
 
 // *******************************
 //
-ISerializablePtr     TimeEvaluatorBase< ITimeEvaluator >::Create              ( ISerializer& dob )
+ISerializablePtr     TimeEvaluatorBase< ITimeEvaluator >::Create              ( IDeserializer& dob )
 {
     auto type = dob.GetAttribute( "type" );
 

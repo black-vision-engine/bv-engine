@@ -26,7 +26,7 @@ public:
         sob.ExitChild(); // asset
     }
 
-    static ISerializablePtr             Create( ISerializer& dob )
+    static ISerializablePtr             Create( IDeserializer& dob )
     {
         return ISerializablePtr( new SerializedAssetUID( dob.GetAttribute( "uid" ) ) ); // make_shared does not work for some reason ;)
     }
@@ -34,7 +34,7 @@ public:
 
 class SerializedAssetDesc : public AssetDesc {
 public:
-    static ISerializableConstPtr Create( ISerializer& dob )
+    static ISerializableConstPtr Create( IDeserializer& dob )
     {
         if( dob.GetAttribute( "type" ) == "tx" )
             return TextureAssetDesc::Create( dob );

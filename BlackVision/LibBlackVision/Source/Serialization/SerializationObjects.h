@@ -1,7 +1,8 @@
 #pragma once
 
 #include "CoreDEF.h"
-#include "Serialization\ISerializer.h"
+#include "Serialization/IDeserializer.h"
+#include "Serialization/ISerializer.h"
 
 namespace bv
 {
@@ -23,26 +24,25 @@ public:
 	void                                                    SetContent( const std::string & value );
     void                                                    Pop();
 
-    virtual void				SetAttribute        ( const std::string& /*name*/, const std::string& /*value*/ );
-    virtual std::string			GetAttribute        ( const std::string& /*name*/ );
-    virtual bool                EnterChild          ( const std::string& /*name*/, unsigned int /*index = 0*/  );
-    virtual bool                ExitChild           ();
-
+    virtual void				SetAttribute        ( const std::string& /*name*/, const std::string& /*value*/ ) override;
+    virtual std::string			GetAttribute        ( const std::string& /*name*/ ) override;
+    virtual void                EnterChild          ( const std::string& /*name*/ ) override;
+    virtual bool                ExitChild           () override;
 };
 
 
 class DeserializeObjectImpl;
 
 template< typename T >
-std::shared_ptr< T >                                        DeserializeObjectLoadImpl( const ISerializer&, std::string name );
+std::shared_ptr< T >                                        DeserializeObjectLoadImpl( const IDeserializer&, std::string name );
 
 template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( const ISerializer&, std::string name );
+std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( const IDeserializer&, std::string name );
 
 template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( const ISerializer&, std::string name );
+std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( const IDeserializer&, std::string name );
 
-class DeserializeObject  : public ISerializer
+class DeserializeObject  : public IDeserializer
 {
     friend class DeserializeObjectImpl;
     DeserializeObjectImpl                                   *pimpl_;
@@ -75,10 +75,12 @@ public:
         return DeserializeObjectLoadPropertiesImpl< T >( *this, name );
     }
 
-    virtual void				SetAttribute        ( const std::string& /*name*/, const std::string& /*value*/ );
-    virtual std::string			GetAttribute        ( const std::string& /*name*/ );
-    virtual bool                EnterChild          ( const std::string& /*name*/, unsigned int /*index = 0*/ );
-    virtual bool                ExitChild           ();
+    //virtual void				SetAttribute        ( const std::string& /*name*/, const std::string& /*value*/ );
+    virtual std::string			GetAttribute        ( const std::string& /*name*/ ) const override;
+    virtual bool                EnterChild          ( const std::string& /*name*/ ) const override;
+    virtual bool                ExitChild           () const override;
+
+    virtual bool                NextChild           () const override { return false; };
 };
 
 }

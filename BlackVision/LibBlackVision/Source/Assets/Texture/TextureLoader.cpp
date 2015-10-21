@@ -43,7 +43,7 @@ AssetConstPtr TextureLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 
 // ******************************
 //
-AssetDescConstPtr TextureLoader::CreateDescriptor( ISerializer& deserializeObject ) const
+AssetDescConstPtr TextureLoader::CreateDescriptor( IDeserializer& deserializeObject ) const
 {
 	return std::static_pointer_cast<const AssetDesc>( TextureAssetDesc::Create( deserializeObject ) );
 }

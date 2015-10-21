@@ -123,7 +123,7 @@ doc.EnterChild( "plugin" );
 // *******************************
 //
 template <>
-ISerializablePtr BasePlugin< IPlugin >::Create( ISerializer& doc )
+ISerializablePtr BasePlugin< IPlugin >::Create( IDeserializer& doc )
 {
     std::string pluginType = doc.GetAttribute( "uid" );
     std::string pluginName = doc.GetAttribute( "name" );

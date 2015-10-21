@@ -72,7 +72,7 @@ AssetConstPtr AnimationLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 
 // ******************************
 //
-AssetDescConstPtr	AnimationLoader::CreateDescriptor	( ISerializer& deserializeObject ) const
+AssetDescConstPtr	AnimationLoader::CreateDescriptor	( IDeserializer& deserializeObject ) const
 {
 	return std::static_pointer_cast<const AssetDesc>( AnimationAssetDesc::Create( deserializeObject ) );
 }

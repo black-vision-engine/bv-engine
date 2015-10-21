@@ -19,7 +19,7 @@ void                MipMapAssetDesc::Serialize       ( ISerializer& /*sob*/ ) co
 
 // ***********************
 //
-ISerializablePtr     MipMapAssetDesc::Create          ( ISerializer& /*dob*/ )
+ISerializablePtr     MipMapAssetDesc::Create          ( IDeserializer& /*dob*/ )
 {
     assert( !"implement me" );
     return nullptr;

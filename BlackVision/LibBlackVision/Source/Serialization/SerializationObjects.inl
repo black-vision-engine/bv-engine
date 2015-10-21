@@ -1,14 +1,14 @@
 #include "DeserializeObjectImpl.h"
-#include "ISerializer.h"
+#include "IDeserializer.h"
 
 namespace bv {
 
 // *************************************
 //
 template< typename T >
-std::shared_ptr< T >                                        DeserializeObjectLoadImpl( const ISerializer& sob_, std::string name )
+std::shared_ptr< T >                                        DeserializeObjectLoadImpl( const IDeserializer& sob_, std::string name )
 {
-    auto& sob = const_cast< ISerializer& >( sob_ ); // FIXME OMFG
+    auto& sob = const_cast< IDeserializer& >( sob_ ); // FIXME OMFG
 
     auto sucess = sob.EnterChild( name );
     assert( sucess ); // FIXME error handling
@@ -20,9 +20,9 @@ std::shared_ptr< T >                                        DeserializeObjectLoa
 // *************************************
 //
 template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( const ISerializer& sob_, std::string name )
+std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( const IDeserializer& sob_, std::string name )
 {
-    auto& sob = const_cast< ISerializer& >( sob_ ); // FIXME OMFG
+    auto& sob = const_cast< IDeserializer& >( sob_ ); // FIXME OMFG
 
     std::vector< std::shared_ptr< T > > ret;
 
@@ -34,8 +34,9 @@ std::vector< std::shared_ptr< T > >                         DeserializeObjectLoa
     assert( name[ name.size()-1 ] == 's' );
     name = name.substr( 0, name.size()-1 );
 
-    int i = 0;
-    while( sob.EnterChild( name, i++ ) )
+    //int i = 0;
+    sob.EnterChild( name );
+    while( sob.NextChild() )
     {
         auto childNode = DeserializeObjectLoadImpl< T >( sob, name );
         ret.push_back( childNode );
@@ -50,14 +51,15 @@ std::vector< std::shared_ptr< T > >                         DeserializeObjectLoa
 // *************************************
 //
 template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( const ISerializer& sob_, std::string name )
+std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( const IDeserializer& sob_, std::string name )
 {
-    auto& sob = const_cast< ISerializer& >( sob_ ); // FIXME OMFG
+    auto& sob = const_cast< IDeserializer& >( sob_ ); // FIXME OMFG
 
     std::vector< std::shared_ptr< T > > ret;
 
-    int i = 0;
-    while( sob.EnterChild( name, i++ ) )
+    //int i = 0;
+    sob.EnterChild( name );
+    while( sob.NextChild( ) )
     {
         auto child = DeserializeObjectLoadImpl< T >( sob, name );
         ret.push_back( child );

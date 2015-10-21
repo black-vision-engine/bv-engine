@@ -31,7 +31,7 @@ protected:
 
 public:
     virtual void                Serialize       ( ISerializer& doc ) const override = 0;
-    static ISerializablePtr     Create          ( ISerializer& doc );
+    static ISerializablePtr     Create          ( IDeserializer& doc );
 
     virtual const std::string & GetName                 () const override;
     virtual ModelParamType      GetType                 () const override;

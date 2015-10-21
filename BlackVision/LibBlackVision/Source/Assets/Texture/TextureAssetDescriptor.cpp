@@ -37,12 +37,16 @@ sob.EnterChild( "asset" );
         sob.SetAttribute( "mipmap", Filter2String( m_mipMapsDescs->GetFilter() ) );
     else
         sob.SetAttribute( "mipmap", "none" );
+
+    sob.EnterChild( "mipmaps" );
+    sob.SetAttribute( "path", "sand.jpg" );
+
 sob.ExitChild();
 }
 
 // ***********************
 //
-void TextureAssetDesc::Deserialize     ( ISerializer& sob )
+void TextureAssetDesc::Deserialize     ( IDeserializer& sob )
 {
     auto obj = SerializationHelper::Create< const TextureAssetDesc >( sob );
 
@@ -88,7 +92,7 @@ MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
 
 // ***********************
 //
-ISerializableConstPtr TextureAssetDesc::Create          ( ISerializer& dob )
+ISerializableConstPtr TextureAssetDesc::Create          ( IDeserializer& dob )
 {
     auto path = dob.GetAttribute( "path" );
 

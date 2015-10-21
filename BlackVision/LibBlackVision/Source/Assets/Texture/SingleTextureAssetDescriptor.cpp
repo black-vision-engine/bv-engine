@@ -16,7 +16,7 @@ void                SingleTextureAssetDesc::Serialize       ( ISerializer& /*sob
 
 // ***********************
 //
-ISerializablePtr     SingleTextureAssetDesc::Create          ( ISerializer& /*dob*/ )
+ISerializablePtr     SingleTextureAssetDesc::Create          ( IDeserializer& /*dob*/ )
 {
     assert( !"implement me" );
     return nullptr;

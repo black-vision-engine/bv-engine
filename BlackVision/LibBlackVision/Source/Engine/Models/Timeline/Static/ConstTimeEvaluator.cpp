@@ -1,5 +1,6 @@
 #include "ConstTimeEvaluator.h"
 #include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 
 namespace bv { namespace model {
 
@@ -29,7 +30,7 @@ void                ConstTimeEvaluator::Serialize           ( ISerializer& sob )
 
 // *******************************
 //
-ISerializablePtr     ConstTimeEvaluator::Create              ( ISerializer& dob )
+ISerializablePtr     ConstTimeEvaluator::Create              ( IDeserializer& dob )
 {
     dob; return nullptr;
 }
