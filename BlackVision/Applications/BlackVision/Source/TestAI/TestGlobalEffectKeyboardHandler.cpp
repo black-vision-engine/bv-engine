@@ -2,6 +2,9 @@
 
 #include "BVAppLogic.h"
 
+#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
+
 
 namespace bv {
 
@@ -32,6 +35,43 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
             GetVanillaNode( logic )->SetVisible( false );
             GetAlphaMaskNode( logic )->SetVisible( false );
             GetNodeMaskNode( logic )->SetVisible( true );
+
+            break;
+        }
+        case 'q':
+        case 'Q':
+        {
+            break;
+        }
+        case 'w':
+        case 'W':
+        {
+            auto node = GetAlphaMaskNode( logic );
+            auto effect = node->GetNodeEffect();
+
+            if (!effect || effect->GetType() != NodeEffectType::NET_ALPHA_MASK )
+            {
+                auto newEffect = std::shared_ptr< model::ModelNodeEffectAlphaMask >( new model::ModelNodeEffectAlphaMask( logic->GetGlobalTimeline() ) );
+                node->SetNodeEffect( newEffect );
+            }
+
+            auto typedEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( node->GetNodeEffect() );
+            // TODO: some effect related changes
+            break;
+        }
+        case 'e':
+        case 'E':
+        {
+            auto node = GetAlphaMaskNode( logic );
+            auto effect = node->GetNodeEffect();
+
+            if (!effect || effect->GetType() != NodeEffectType::NET_NODE_MASK )
+            {
+                auto newEffect = std::shared_ptr< model::ModelNodeEffectNodeMask >( new model::ModelNodeEffectNodeMask( logic->GetGlobalTimeline() ) );
+                node->SetNodeEffect( newEffect );
+            }
+
+            auto typedEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( node->GetNodeEffect() );
 
             break;
         }
