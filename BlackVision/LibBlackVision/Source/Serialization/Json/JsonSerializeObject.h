@@ -17,7 +17,9 @@ class JsonSerializeObject : public ISerializer
 private:
 	Json::Value					m_root;
 	Json::Value*				m_currentNode;
-	std::stack<Json::Value*>	m_nodeStack;
+	
+    std::stack<Json::Value*>	m_nodeStack;
+
 public:
 	JsonSerializeObject();
 	~JsonSerializeObject();

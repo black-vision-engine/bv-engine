@@ -39,7 +39,20 @@ sob.EnterChild( "asset" );
         sob.SetAttribute( "mipmap", "none" );
 
     sob.EnterChild( "mipmaps" );
-    sob.SetAttribute( "path", "sand.jpg" );
+        sob.SetAttribute( "path", "sand.jpg" );
+    sob.ExitChild();
+    sob.EnterChild( "mipmaps" );
+        sob.SetAttribute( "path", "sand.jpg" );
+    sob.ExitChild();
+    sob.EnterChild( "mipmaps" );
+        sob.SetAttribute( "path", "sand.jpg" );
+    sob.ExitChild();
+    sob.EnterChild( "mipmaps" );
+        sob.SetAttribute( "path", "sand.jpg" );
+    sob.ExitChild();
+    sob.EnterChild( "mipmaps" );
+        sob.SetAttribute( "path", "sand.jpg" );
+    sob.ExitChild();
 
 sob.ExitChild();
 }

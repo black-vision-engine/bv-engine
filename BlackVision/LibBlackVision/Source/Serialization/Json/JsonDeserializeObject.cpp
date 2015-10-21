@@ -48,9 +48,14 @@ bool JsonDeserializeObject::EnterChild          ( const std::string& name ) cons
 {
 	m_nodeStack.push( m_currentNode );
 	
-    auto node = (*m_currentNode)[ name ];
+    auto& node = (*m_currentNode)[ name ];
     if( node.isArray() )
-        m_currentNode = &(node[ 0 ]);
+    {
+        // Always push both node's when making an array.
+        // Array node can never be the current node.
+        m_nodeStack.push( &node );
+        m_currentNode = &( node[ 0 ] );
+    }
     else
         m_currentNode = &node;
 
@@ -70,7 +75,18 @@ bool JsonDeserializeObject::ExitChild           () const
         return false;
 
 	m_currentNode = m_nodeStack.top();
-	m_nodeStack.pop();
+    m_nodeStack.pop();
+
+    // If we took array node from stack, we have to take next top node too.
+    // Array node can never be the current node.
+    if( (*m_currentNode).isArray() )
+    {
+        if( m_nodeStack.empty() )
+            return false;       // Stack corrupted. It's very very bad.
+
+        m_currentNode = m_nodeStack.top();
+        m_nodeStack.pop();
+    }
 
     return true;
 }

@@ -37,28 +37,22 @@ void JsonSerializeObject::EnterChild( const std::string& name )
     if( (*m_currentNode)[ name ].isArray() )
     {
         auto size = (*m_currentNode)[ name ].size();
-        m_currentNode = &((*m_currentNode)[ name ][ size ]);
+        
+        //(*m_currentNode)[ name ][ size ];
+        m_currentNode = &(*m_currentNode)[ name ][ size ];
+        
     }
-    else if( (*m_currentNode).isObject() )
+    else if( (*m_currentNode)[ name ].isObject() )
     {
-        auto tempNode = Json::Value( (*m_currentNode)[ name ] );       //Remember node.
+        auto tempNode = Json::Value( (*m_currentNode)[ name ] );       //Remember node. (deep copy)
+        
+        (*m_currentNode)[ name ] = Json::Value( Json::ValueType::arrayValue );
         (*m_currentNode)[ name ][ 0 ] = tempNode;
+
         m_currentNode = &(*m_currentNode)[ name ][ 1 ];
     }
     else
         m_currentNode = &(*m_currentNode)[ name ];
-
-
-	//auto size = (*m_currentNode)[ name ].size();
- //   if( size == 0 )
- //       m_currentNode = &((*m_currentNode)[ name ]);
- //   else if( size == 1 )
- //   {
- //       auto tempNode = (*m_currentNode)[ name ][ 0 ];  // Remember first element.
-
- //   }
- //   else
- //       m_currentNode = &((*m_currentNode)[ name ][ size ]);
 }
 
 // ***********************

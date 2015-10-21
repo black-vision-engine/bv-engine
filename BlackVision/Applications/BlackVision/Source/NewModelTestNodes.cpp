@@ -2087,10 +2087,10 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
 
 
-	//auto texDesc_ = TextureAssetDesc::Create( "sand.jpg", MipMapFilterType::BILINEAR, true );
-	//JsonSerializeObject serializeObject;
-	//texDesc_->Serialize( serializeObject );
-	//serializeObject.Save( "textureSerialize.json" );
+	auto texDesc_ = TextureAssetDesc::Create( "sand.jpg", MipMapFilterType::BILINEAR, true );
+	JsonSerializeObject serializeObject;
+	texDesc_->Serialize( serializeObject );
+	serializeObject.Save( "textureSerialize.json" );
 
 	fstream file;
 	file.open( "textureSerialize.json", std::ios_base::in );
@@ -2098,14 +2098,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
     deserializeObject.Load( file );
 	file.close();
 
- //   deserializeObject.EnterChild( "asset" );
-	//auto texDesc = TextureAssetDesc::Create( deserializeObject );
-    //auto texDesc = AssetManager::GetInstance().CreateDesc( deserializeObject );
-
-    //root->GetPlugin( "texture" )->LoadResource( std::static_pointer_cast<const AssetDesc>( texDesc ) );
+    auto texDesc = AssetManager::GetInstance().CreateDesc( deserializeObject );
+    root->GetPlugin( "texture" )->LoadResource( std::static_pointer_cast<const AssetDesc>( texDesc ) );
 
 
-	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );	//, MipMapFilterType::BOX
+	//success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );	//, MipMapFilterType::BOX
 	
     
 	assert( success );
