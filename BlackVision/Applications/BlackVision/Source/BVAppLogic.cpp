@@ -14,6 +14,7 @@
 
 #include "Widgets/Crawler/CrawlerEvents.h"
 
+#include "System/Env.h"
 #include "BVConfig.h"
 
 #include "MockScenes.h"
@@ -21,6 +22,7 @@
 #include "LibEffect.h"
 
 //FIXME: remove
+#include "TestAI/TestGlobalEffectKeyboardHandler.h"
 #include "testai/TestAIManager.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "BVGL.h"
@@ -111,6 +113,8 @@ BVAppLogic::~BVAppLogic             ()
     delete m_timelineManager;
 
     delete m_renderLogic;
+
+    delete m_kbdHandler;
 }
 
 // *********************************
@@ -128,6 +132,8 @@ void BVAppLogic::Initialize         ()
     m_pluginsManager = &model::PluginsManager::DefaultInstance();
 
 	bv::effect::InitializeLibEffect( m_renderer );
+
+    InitializeKbdHandler();
 }
 
 
@@ -213,139 +219,9 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 
 // *********************************
 //
-model::IModelNodePtr BVAppLogic::CreateTestModelNodeInSomeSpecificScope( const std::string & name )
-{
-    model::BasicNodePtr node = TestScenesFactory::CreateTestRandomNode( name, m_pluginsManager, m_timelineManager, m_globalTimeline );
-
-    return node;
-}
-
-// *********************************
-//
 void BVAppLogic::OnKey           ( unsigned char c )
 {
-    if( c == '-' )
-    {
-        BVGL::PrintCompleteSummary( "BEFORE REMOVING ROOT NODE" );
-        m_bvScene->GetSceneEditor()->DeleteRootNode();
-    }
-    else if( c == 8 )
-    {
-        BVGL::PrintCompleteSummary( "BEFORE REMOVING ROOT NODE" );
-
-        auto root = m_bvScene->GetModelSceneRoot();
-        m_bvScene->GetSceneEditor()->DeleteChildNode( root, "child0" );
-        //root->DeleteNode( "child0", m_renderer );
-        
-        //auto child = root->GetChild( "child0" );
-        //child->DeleteNode( "child01", m_renderer );
-        BVGL::PrintCompleteSummary( "AFTER REMOVING ROOT NODE" );
-    }
-    else if( c == '+' )
-    {
-        auto root = m_bvScene->GetModelSceneRoot();
-
-        if( root )
-        {
-            auto child = root->GetChild( "child0" );
-
-            if( child )
-            {
-                auto n = child->GetNumChildren();
-                auto nodeName = "child0" + std::to_string(n);
-
-                auto newNode = CreateTestModelNodeInSomeSpecificScope( nodeName );
-
-                m_bvScene->GetSceneEditor()->AddChildNode( child, newNode );            
-            }
-            else
-            {
-                auto newNode = CreateTestModelNodeInSomeSpecificScope( "child0" );
-                
-                m_bvScene->GetSceneEditor()->AddChildNode( root, newNode );            
-            }
-        }
-        else
-        {
-            auto newNode = CreateTestModelNodeInSomeSpecificScope( "root node" );
-        
-            m_bvScene->GetSceneEditor()->SetRootNode( newNode );
-        }
-
-        BVGL::PrintCompleteSummary( "AFTER ADD NODE" );
-    }
-    else if( c == '1' )
-    {
-        m_bvScene->GetSceneEditor()->DetachRootNode();
-        BVGL::PrintCompleteSummary( "AFTER DETACH ROOT NODE" );
-    }
-    else if( c == '2' )
-    {
-        m_bvScene->GetSceneEditor()->AttachRootNode();
-        BVGL::PrintCompleteSummary( "AFTER ATTACH ROOT NODE" );
-    }
-
-    else if( c == '3' )
-    {
-        auto root = m_bvScene->GetModelSceneRoot();
-        
-        if( root )
-        {
-            m_bvScene->GetSceneEditor()->AttachChildNode( root );
-
-            BVGL::PrintCompleteSummary( "AFTER ATTACH NODE TO ROOT" );
-        }
-    }
-    else if( c == 's' )
-    {
-        auto sob = new SerializeObject();
-        m_bvScene->Serialize( *sob );
-        sob->Save( "text.xml" );
-        delete sob;
-    }
-
-/*
-    // FIXME: the code below is must be used with an animation plugin
-    unsigned char d = c - '0';
-
-    if( d <= 10 )
-    {
-        auto root = m_modelScene->GetSceneRoot();
-
-        SetParameter( root->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 0.f ), float( d ) );
-    }
-
-    if( c == 'i' || c == 'I' )
-    {
-        m_renderLogic->PrintGLStats( c == 'I' );
-    }
-*/
-    //auto root = m_modelScene->GetSceneRoot();
-    //auto timerPlugin = root->GetPlugin("timer");
-    //if(c == 'q')
-    //{
-    //    model::StartTimerPlugin( timerPlugin );
-    //}
-
-    //if(c == 'w')
-    //{
-    //    model::StopTimerPlugin( timerPlugin );
-    //}
-    //   
-
-    //if(c == 'a')
-    //{
-    //    model::SetTimeTimerPlugin( timerPlugin, 3600.f * 5 + 60.f * 4 + 23.f + 0.12f );
-    //}
-
-    //if(c == 's')
-    //{
-    //    model::SetTimeTimerPlugin( timerPlugin, 43.f + 0.88f );
-    //}
-        
-    //FIXME: keypressed event was used here to set text in all currently loaded Text plugins
-    //KeyPressedSendEvent( c );
-    //TODO: implement whatever you want here
+    m_kbdHandler->HandleKey( c, this );
 }
 
 // *********************************
@@ -447,14 +323,21 @@ void            BVAppLogic::OnNoMoreNodes   ( IEventPtr evt )
 
 // *********************************
 //
-model::TimelineManager *    BVAppLogic::GetTimelineManager  ()
+model::TimelineManager *    BVAppLogic::GetTimelineManager      ()
 {
     return m_timelineManager;
 }
 
 // *********************************
+//
+model::OffsetTimeEvaluatorPtr   BVAppLogic::GetGlobalTimeline   ()
+{
+    return m_globalTimeline;
+}
+
+// *********************************
 //FIXME: unsafe - consider returning const variant of this class (IParameters * without const should be accessible anyway)
-BVScenePtr                  BVAppLogic::GetBVScene          ()
+BVScenePtr                  BVAppLogic::GetBVScene              ()
 {
     return m_bvScene;
 }
@@ -464,6 +347,22 @@ BVScenePtr                  BVAppLogic::GetBVScene          ()
 const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
 {
     return m_pluginsManager;
+}
+
+// *********************************
+//
+void                            BVAppLogic::InitializeKbdHandler()
+{
+    auto envScene = Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
+
+    if ( envScene == "GLOBAL_EFFECT_05" )
+    {
+        m_kbdHandler = new TestGlobalEfectKeyboardHandler();
+    }
+    else
+    {
+        m_kbdHandler = new TestKeyboardHandler();
+    }
 }
 
 //// *********************************
@@ -493,23 +392,3 @@ const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
         //    frame++;
 
 } //bv
-
-//namespace 
-//{
-//	const static std::wstring examples[] = 
-//	{
-//		L"Jasiu kup kiełbasę !!",
-//		L"wielojęzyczny projekt internetortej treści. Funkcjonuje wykorzystując",
-//		L"Wikipedia powstała 15 stycznia ertów i nieistniejącej już Nupedii. ",
-//		L"iostrzane. Wikipedia jest jedną], a wiele stron uruchomiło jej mirrory lub forki.",
-//		L"Współzałożyciel Wikipedii Jimmyia wielojęzycznej",
-//		L"wolnej encyklopedii o najwyższywłasnym języku”[8].",
-//		L"Kontrowersje budzi wiarygodnośćeści artykułów ",
-//		L"i brak weryfikacji kompetencji .",
-//		L"Z drugiej",
-//		L"strony możliwość swobodnej dyst źródłem informacji",
-//		L"Jasiu kup kiełbasę !!",
-//	};
-//
-//	auto exampleSize = sizeof( examples ) / sizeof( std::wstring );
-//}

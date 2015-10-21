@@ -1,4 +1,5 @@
 #include "TestGlobalEffectKeyboardHandler.h"
+
 #include "BVAppLogic.h"
 
 
@@ -8,24 +9,30 @@ namespace bv {
 //
 void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
 {
-    assert( false );
-
     switch( c )
     {
         case '1':
         {
-            auto amNode = GetAlphaMaskNode( logic )->GetNodeEffect();
-            auto nmNode = GetNodeMaskNode( logic )->GetNodeEffect();
+            GetVanillaNode( logic )->SetVisible( true );
+            GetAlphaMaskNode( logic )->SetVisible( false );
+            GetNodeMaskNode( logic )->SetVisible( false );
+
             break;
         }
         case '2':
         {
-            auto amNode = GetAlphaMaskNode( logic )->GetNodeEffect();
+            GetVanillaNode( logic )->SetVisible( false );
+            GetAlphaMaskNode( logic )->SetVisible( true );
+            GetNodeMaskNode( logic )->SetVisible( false );
+
             break;
         }
         case '3':
         {
-            auto nmNode = GetNodeMaskNode( logic )->GetNodeEffect();
+            GetVanillaNode( logic )->SetVisible( false );
+            GetAlphaMaskNode( logic )->SetVisible( false );
+            GetNodeMaskNode( logic )->SetVisible( true );
+
             break;
         }
         default:

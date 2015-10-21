@@ -1,21 +1,16 @@
 #pragma once
 
-
 #include "Engine/Models/BasicNode.h"
+#include "TestAI/TestKeyboardHandler.h"
 
 
 namespace bv {
 
-class BVAppLogic;
-
-
-class TestGlobalEfectKeyboardHandler
+class TestGlobalEfectKeyboardHandler : public TestKeyboardHandler
 {
-private:
-
 public:
 
-    void                    HandleKey       ( unsigned char c, BVAppLogic * logic );
+    virtual void            HandleKey       ( unsigned char c, BVAppLogic * logic ) override;
         
 private:
 
@@ -25,10 +20,7 @@ private:
     model::BasicNodePtr     GetVanillaNode  ( BVAppLogic * logic );
     model::BasicNodePtr     GetAlphaMaskNode( BVAppLogic * logic );
     model::BasicNodePtr     GetNodeMaskNode ( BVAppLogic * logic );
-        
-    
+
 };
 
 } //bv
-
-

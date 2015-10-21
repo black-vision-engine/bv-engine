@@ -215,20 +215,53 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGlobalEffectTest      ( model::Ti
     bTex.SetW( 1.1f );
     bTex.SetH( 1.0f );
     bTex.SetPosition( -0.6f, 0.f, .1f );
-    bTex.SetTextureFile( "rsrcy/simless_00.jpg", 1.f );
+    bTex.SetTextureFile( "rsrcy/simless_00.jpg", true );
     auto vt = bTex.CreateNode( "vanilla_tex", true );
 
+    // Alpha mask root
+    bTex.SetW( 2.6f );
+    bTex.SetH( 1.5f );
+    bTex.SetTextureFile( "rsrcy/simless_00.jpg", true );
     auto am = bTex.CreateNode( "alpha_mask", true );
 
-    auto nm = bTex.CreateNode( "node_mask", true );
-    auto nm_bg = bTex.CreateNode( "node_mask_bg", true );
-    auto nm_bg_c = bTex.CreateNode( "node_mask_bg_col", true );
+    // Node mask root
+    bSolid.SetW( 2.75f );
+    bSolid.SetH( 1.55f );
+    bSolid.SetColor( 1.f, 0.f, 1.f, 1.f );
+    auto nm = bSolid.CreateNode( "node_mask", true );
 
+    // Node mask background
+    bTex.SetW( 2.4f );
+    bTex.SetH( 1.0f );
+    bTex.SetPosition( 0.0f, 0.f, .1f );
+    bTex.SetTextureFile( "rsrcy/simless_00.jpg", true );
+    auto nm_bg = bTex.CreateNode( "node_mask_bg", true );
+
+    // Node mask background color child
+    bSolid.SetW( .8f );
+    bSolid.SetH( .7f );
+    bSolid.SetColor( 1.f, 1.f, 0.f, 1.f );
+    bSolid.SetPosition( 0.5f, 0.f, .0f );
+    auto nm_bg_c = bSolid.CreateNode( "node_mask_bg_col", true );
+
+    // Node mask foreground
+    bTex.SetW( 2.35f );
+    bTex.SetH( 0.95f );
+    bTex.SetPosition( 0.0f, 0.f, .1f );
+    bTex.SetTextureFile( "rsrcy/hm_background.png", true );
     auto nm_fg = bTex.CreateNode( "node_mask_fg", true );
 
+    // Build the scene
     root->AddChildToModelOnly( v );
     v->AddChildToModelOnly( vs );
     v->AddChildToModelOnly( vt );
+
+    root->AddChildToModelOnly( am );
+
+    root->AddChildToModelOnly( nm );
+    nm->AddChildToModelOnly( nm_bg );
+    nm_bg->AddChildToModelOnly( nm_bg_c );
+    nm->AddChildToModelOnly( nm_fg );
 
     return root;
 
@@ -237,7 +270,6 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGlobalEffectTest      ( model::Ti
     root->AddChildToModelOnly( am );
 
     root->AddChildToModelOnly( nm );
-    nm->AddChildToModelOnly( nm_bg );
     nm_bg->AddChildToModelOnly( nm_bg_c );
     nm->AddChildToModelOnly( nm_fg );
 
