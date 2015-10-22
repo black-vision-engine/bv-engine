@@ -44,6 +44,7 @@ RenderableEffectPtr GetBlurEffect( UInt32 blurLength, Float32 pixelWidth, Float3
 // Bluring image with GPU
 MemoryChunkConstPtr		GLBlurImage( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 blurLength )
 {
+
     { bpp; }
 
     assert( in->Size() == width * height * bpp / 8 );

@@ -1,5 +1,7 @@
 #pragma once
 
+//pablito:
+#include "VideoCardManager.h"
 #include <vector>
 
 
@@ -16,6 +18,8 @@ class RenderLogic
 {
 private:
 
+    OffscreenRenderLogic *  m_offscreenRenderLogic;
+	bv::videocards::VideoCardManager *      m_VideoCardManager;
     enum CustomLogicType
     {
         CLT_DEFAULT = 0,
@@ -24,10 +28,6 @@ private:
 
         CLT_TOTAL
     };
-
-private:
-
-    OffscreenRenderLogic *                  m_offscreenRenderLogic;
 
     std::vector< NodeEffectRenderLogic * >  m_customNodeRenderLogic;
 
@@ -40,6 +40,9 @@ public:
 
     void    RenderFrame     ( Renderer * renderer, SceneNode * node );
 
+	//pablito
+	void	SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager, Renderer * renderer);
+	void	InitVideoCards     ( Renderer * renderer );
 // Temporary transition code START
     void    RenderFrameTM   ( Renderer * renderer, SceneNode * node );
     void    PreFrameSetupTM ( Renderer * renderer );

@@ -40,6 +40,7 @@ public:
 
     virtual void                                        Update          () override;
 
+    void                                                SetParameter    ( IParameterPtr param );
     void                                                AddParameter    ( IParameterPtr param );
     void                                                AddValue        ( bv::IValuePtr val );
     void                                                AddValue        ( bv::IValueConstPtr val );

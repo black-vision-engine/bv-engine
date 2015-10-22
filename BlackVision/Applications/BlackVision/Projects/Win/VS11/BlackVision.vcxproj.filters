@@ -16,20 +16,20 @@
     <Filter Include="Widgets">
       <UniqueIdentifier>{a40b34a5-8104-4523-b976-a18c9886873d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Xml">
-      <UniqueIdentifier>{9972112a-a435-4bbe-878e-c42aa90be206}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Widgets\Crawler">
       <UniqueIdentifier>{a5c51410-4f01-4c1b-a9e6-c93795ac17ba}</UniqueIdentifier>
     </Filter>
     <Filter Include="VideoInput">
       <UniqueIdentifier>{f67ab42f-30e0-4d7a-90ee-0cfaed68a769}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Xml\Auxiliary">
-      <UniqueIdentifier>{c1c96312-47dd-4f87-8536-8babf39b47b5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="PieCharts">
       <UniqueIdentifier>{fd129272-37d9-42a7-b86d-f8a467b2b2d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hack_videoinput">
+      <UniqueIdentifier>{7f69fce6-91f9-48b4-b144-634e189e9d1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Widgets\Counter">
+      <UniqueIdentifier>{a43fa586-3aea-4556-b75d-89f716af2be6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Rendering\Logic">
       <UniqueIdentifier>{f1ca2f90-831f-4cb3-8ecc-247f7d455325}</UniqueIdentifier>
@@ -80,18 +80,6 @@
     <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.cpp">
       <Filter>Widgets\Crawler</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Xml\BlackTree.cpp">
-      <Filter>Xml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Xml\Scena.cpp">
-      <Filter>Xml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Xml\TreeBuilder.cpp">
-      <Filter>Xml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Xml\Auxiliary\Auxiliary.cpp">
-      <Filter>Xml\Auxiliary</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\PieChartNode.cpp">
       <Filter>PieCharts</Filter>
     </ClCompile>
@@ -102,8 +90,16 @@
       <Filter>VideoInput</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
+    <ClCompile Include="..\..\..\Source\RemoteControlInterface.cpp" />
+    <ClCompile Include="..\..\..\Source\PerformanceMonitor.cpp" />
     <ClCompile Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp">
       <Filter>VideoInput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp">
+      <Filter>hack_videoinput</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\Counter\Counter.cpp">
+      <Filter>Widgets\Counter</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogic.cpp">
       <Filter>Rendering\Logic</Filter>
@@ -177,18 +173,6 @@
     <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.h">
       <Filter>Widgets\Crawler</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Xml\BlackTree.h">
-      <Filter>Xml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Xml\Scena.h">
-      <Filter>Xml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Xml\TreeBuilder.h">
-      <Filter>Xml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Xml\Auxiliary\Auxiliary.hpp">
-      <Filter>Xml\Auxiliary</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\PieChartNode.h">
       <Filter>PieCharts</Filter>
     </ClInclude>
@@ -202,8 +186,16 @@
       <Filter>VideoInput</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
+    <ClInclude Include="..\..\..\Source\RemoteControlInterface.h" />
+    <ClInclude Include="..\..\..\Source\PerformanceMonitor.h" />
     <ClInclude Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h">
       <Filter>VideoInput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\hack_videoinput\TestVideoInput.h">
+      <Filter>hack_videoinput</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\Counter\Counter.h">
+      <Filter>Widgets\Counter</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogic.h">
       <Filter>Rendering\Logic</Filter>

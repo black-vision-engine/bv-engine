@@ -3,12 +3,14 @@
 #include "CoreDEF.h"
 #include "Assets/FwdDecls.h"
 
+#include "Serialization/ISerializable.h"
+
 #include <string>
 
 namespace bv
 {
 
-class AssetDesc
+class AssetDesc : public ISerializable
 {
 protected:
 	virtual VoidConstPtr            QueryThis	() const = 0;
@@ -19,6 +21,7 @@ public:
 	virtual bool					IsCacheable	() const = 0;
 
 	virtual std::string				GetKey		() const;
+    virtual std::string             GetProposedShortKey () const;
 
 
 	template< typename DescTypeConstPtr >

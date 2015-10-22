@@ -40,6 +40,7 @@
     <ClInclude Include="..\..\..\Source\Tools\SimpleTimer.h" />
     <ClInclude Include="..\..\..\Source\Tools\StringHeplers.h" />
     <ClInclude Include="..\..\..\Source\Tools\Utils.h" />
+    <ClInclude Include="..\..\..\Source\win_sock.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp" />

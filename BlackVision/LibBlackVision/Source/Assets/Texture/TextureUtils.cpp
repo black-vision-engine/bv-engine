@@ -3,6 +3,7 @@
 #include "Assets/Texture/TextureCache.h"
 #include "MipMapBuilder.h"
 #include "Assets/Cache/RawDataCache.h"
+#include "ProjectManager.h"
 
 #include <cassert>
 
@@ -154,7 +155,7 @@ SingleTextureAssetConstPtr	TextureUtils::LoadSingleTexture( const SingleTextureA
 		UInt32 bpp			= 0;
 		UInt32 channelNum	= 0;
 
-		auto imgPath		= singleTextureResDesc->GetImagePath();
+        auto imgPath		= ProjectManager::GetInstance()->ToAbsPath( singleTextureResDesc->GetImagePath() ).Str();
 
 		mmChunk = LoadImage( imgPath, &w, &h, &bpp, &channelNum );
 		

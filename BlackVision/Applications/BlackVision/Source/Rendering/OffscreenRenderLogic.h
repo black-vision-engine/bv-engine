@@ -104,6 +104,9 @@ public:
 
     Texture2DConstPtr   ReadDisplayTarget           ( Renderer * renderer, unsigned int bufNum );
 
+	//pablito
+	std::vector< int >  GetHackBuffersUids          ( Renderer * renderer ) const;
+
 private:
 
     RenderTarget *      GetRenderTargetAt               ( int i ) const;

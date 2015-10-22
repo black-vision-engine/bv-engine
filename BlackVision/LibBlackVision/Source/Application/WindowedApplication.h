@@ -3,12 +3,16 @@
 #include "ApplicationBase.h"
 #include <string>
 #include "Mathematics/glm_inc.h"
-#include <Windows.h>
+#include "win_sock.h"
+
+#include "Engine\Graphics\Renderers\WGLRenderer\WGLRendererInput.h"
 
 namespace bv
 {
 
 class Renderer;
+//pablito
+enum WindowMode {FULLSCREEN=0,WINDOWED=1,MULTIPLE_SCREENS=2};
 
 class WindowedApplication : public ApplicationBase
 {
@@ -23,23 +27,34 @@ protected:
     int				m_Width;
     int 			m_Height;
 
+	//pablito
+	RendererInput	m_RendererInput;
+
     bool			m_AllowResize;
+    bool			m_MultipleMonitors;
     bool			m_FullScreen;
 
     glm::vec4		m_ClearColor;
 
     Renderer *		m_Renderer;
 	
+	bool			m_EnableGLFinish;
+	bool			m_EnableGLFlush;
+	int				m_VSYNFrames;
+	
 
 protected:
 
-    WindowedApplication				( const char * title, int x, int y, int w, int h, bool fullScreen = false );
+    WindowedApplication				( const char * title, int x, int y, int w, int h,  WindowMode windowMode, RendererInput ri );
 
 public:
 
     virtual ~WindowedApplication	();
 
     virtual int MainFun				( int argc, char ** argv );
+
+	//pablito
+	RendererInput	GetRendererInput() const;
 
     std::string		Title			() const;
     int				XPos			() const;
@@ -48,6 +63,7 @@ public:
     int				Height			() const;
     
     bool			ResizeAllowed	() const;
+	bool			MultipleMonitors() const;
     bool			FullScreen		() const;
     void			UnsetFulscreen	();
 

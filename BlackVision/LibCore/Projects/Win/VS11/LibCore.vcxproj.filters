@@ -73,6 +73,7 @@
     <ClInclude Include="..\..\..\Source\Tools\Utils.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\win_sock.h" />
     <ClInclude Include="..\..\..\Source\Tools\Logger\Logger.h">
       <Filter>Tools\Logger</Filter>
     </ClInclude>

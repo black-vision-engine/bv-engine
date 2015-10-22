@@ -1,5 +1,6 @@
 #include "FileIO.h"
-
+#include "DirIO.h"
+#include "System/Path.h"
 #include <sys/stat.h>
 
 #include "boost/filesystem/path.hpp"
@@ -41,6 +42,7 @@ public:
 
     static bool         Exists      ( const std::string & fileName );
     static FileImpl *   Open        ( const std::string & fileName, File::OpenMode openMode );
+	static FileImpl *	OpenTmp     ( std::string * name );
     static SizeType     Read        ( std::ostream & out, const std::string & fileName );
     static SizeType     Read        ( char* out, const std::string & fileName );
     static SizeType     Write       ( std::istream & in, const std::string & fileName );
@@ -182,6 +184,13 @@ FileImpl *  FileImpl::Open        ( const std::string & fileName, File::OpenMode
 {
     FileImpl * impl = new FileImpl( fileName );
 
+    auto parent = boost::filesystem::path( fileName ).parent_path();
+
+    if( !parent.empty() && !boost::filesystem::exists( parent ) )
+    {
+        Dir::CreateDir( parent.string(), true );
+    }
+
     if( openMode == File::FOMReadOnly )
         impl->m_fileHandle = new std::fstream( fileName, std::ios::in | std::ios::binary );
     else if ( openMode == File::FOMReadWrite )
@@ -194,6 +203,20 @@ FileImpl *  FileImpl::Open        ( const std::string & fileName, File::OpenMode
         std::cerr << "Cannot open file: " << fileName << std::endl;
         return impl;
     }
+}
+
+// *******************************
+//
+FileImpl *	FileImpl::OpenTmp     ( std::string * name )
+{
+	auto p = boost::filesystem::unique_path();
+
+	if( name )
+	{
+		*name = p.string();
+	}
+
+	return Open( p.string(), File::OpenMode::FOMReadWrite );
 }
 
 // *******************************
@@ -353,6 +376,13 @@ File        File::Open        ( const std::string & fileName, OpenMode openMode 
 
 // *******************************
 //
+File         File::OpenTmp     ( std::string * name )
+{
+	return File( FileImpl::OpenTmp( name ) );
+}
+
+// *******************************
+//
 SizeType    File::Read        ( std::ostream & out, const std::string & fileName )
 {
     return FileImpl::Read( out, fileName );
@@ -401,6 +431,17 @@ std::string  File::GetFileName ( const std::string & path )
 {
 	boost::filesystem::path p( path );
 	return p.stem().string();
+}
+
+// *******************************
+//
+void         File::Touch       ( const std::string & fileName )
+{
+    if( !Path::Exists( fileName ) )
+    {
+        auto f = File::Open( fileName, OpenMode::FOMReadWrite );
+        f.Close();
+    }
 }
 
 } //bv

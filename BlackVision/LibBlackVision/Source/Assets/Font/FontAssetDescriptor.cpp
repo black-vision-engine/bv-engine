@@ -8,6 +8,40 @@ const std::string FontAssetDesc::uid = "FONT_ASSET_DESC";
 
 // ***********************
 //
+void                FontAssetDesc::Serialize       ( SerializeObject & sob ) const
+{
+    sob.SetName( "asset" );
+
+    sob.SetValue( "type", "font" );
+    sob.SetValue( "path", m_fontFileName );
+    sob.SetValue( "size", std::to_string( m_fontSize ) );
+    sob.SetValue( "blur", std::to_string( m_blurSize ) );
+    sob.SetValue( "outline", std::to_string( m_outlineSize ) );
+    sob.SetValue( "mipmaps", m_generateMipmaps ? "true" : "false" );
+    sob.SetValue( "char_set_file", std::string( m_atlasCharSetFile.begin(), m_atlasCharSetFile.end() ) );
+
+    sob.Pop();
+}
+
+// ***********************
+//
+ISerializableConstPtr FontAssetDesc::Create          ( DeserializeObject & dob )
+{
+    assert( dob.GetValue( "type" ) == "font" );
+
+    auto path = dob.GetValue( "path" );
+    auto size = stoul( dob.GetValue( "size" ) );
+    auto blurSize = stoul( dob.GetValue( "blur" ) );
+    auto outSize = stoul( dob.GetValue( "outline" ) );
+    auto mipmaps = dob.GetValue( "mipmaps" ) == "true" ? true : false;
+    auto charSetFile = dob.GetValue( "char_set_file" );
+    auto charSetFileW = std::wstring( charSetFile.begin(), charSetFile.end() );
+
+    return FontAssetDesc::Create( path, size, blurSize, outSize, mipmaps, charSetFileW );
+}
+
+// ***********************
+//
 const std::string &	FontAssetDesc::GetUID() const
 {
 	return FontAssetDesc::UID();
@@ -92,6 +126,25 @@ bool FontAssetDesc::GetGenerateMipmaps() const
 const std::wstring & FontAssetDesc::GetAtlasCharSetFile () const
 {
 	return m_atlasCharSetFile;
+}
+
+
+// ***********************
+//
+std::string           FontAssetDesc::GetKey		() const
+{
+    return  m_fontFileName + "_" +
+            std::to_string( m_fontSize ) + "_" +
+            std::to_string( m_blurSize ) + "_" +
+            std::to_string( m_outlineSize ) + "_" +
+            std::to_string( m_generateMipmaps );
+}
+
+// ***********************
+//
+std::string             FontAssetDesc::GetProposedShortKey () const
+{
+    return GetKey();
 }
 
 } // bv

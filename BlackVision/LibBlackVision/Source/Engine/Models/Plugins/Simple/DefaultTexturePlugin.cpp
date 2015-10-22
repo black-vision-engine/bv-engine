@@ -219,6 +219,8 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
         auto txData = m_psc->GetTexturesDataImpl();
         assert( txData->GetTextures().size() <= 2 ); //FIXME: Second one may be added by a mask
 
+        AddAsset( assetDescr );
+
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultTexturePluginDesc::TextureName() );
         txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
