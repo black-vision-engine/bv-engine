@@ -924,6 +924,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectNodeMask.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultText3DPlugin.cpp">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1864,6 +1867,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectNodeMask.h">
       <Filter>Engine\Models\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultText3DPlugin.h">
+      <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
