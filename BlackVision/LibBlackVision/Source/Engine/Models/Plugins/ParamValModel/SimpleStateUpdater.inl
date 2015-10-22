@@ -20,4 +20,3 @@ void    SimpleStateUpdater<StateTypePtr,ValueTypePtr>::DoUpdate    ()
 
 } // model
 } // bvc
-

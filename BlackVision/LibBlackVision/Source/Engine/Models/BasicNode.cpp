@@ -509,6 +509,11 @@ void BasicNode::Update( TimeType t )
 {
     if( IsVisible() )
     {
+        if ( m_modelNodeEffect )
+        {
+            m_modelNodeEffect->Update( t );
+        }
+
         m_overrideState->Update( t );
 
         m_pluginList->Update( t );

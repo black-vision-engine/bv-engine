@@ -65,7 +65,7 @@ void                    TestGlobalEfectKeyboardHandler::HandleIncrement ( BVAppL
 
         alpha->SetVal( min( 1.f, alpha->Evaluate() + .1f ), 0.f );
 
-        printf( "New alpha mask alpha value: %4f\n", alpha->Evaluate() );
+        // printf( "New alpha mask alpha value: %4f\n", alpha->Evaluate() );
     }
     else if ( m_curSelectedNode == NodeEffectType::NET_NODE_MASK )
     {
@@ -80,7 +80,7 @@ void                    TestGlobalEfectKeyboardHandler::HandleIncrement ( BVAppL
         paramBg->SetVal( fgIdx, 0.f );
         paramFg->SetVal( bgIdx, 0.f );
 
-        printf( "New node mask bg: %d fg: %d\n", effect->GetBackgroundChildIdx(), effect->GetForegroundChildIdx() );
+        // printf( "New node mask bg: %d fg: %d\n", effect->GetBackgroundChildIdx(), effect->GetForegroundChildIdx() );
     }
 }
 
@@ -95,7 +95,7 @@ void                    TestGlobalEfectKeyboardHandler::HandleDecrement ( BVAppL
 
         alpha->SetVal( max( 0.f, alpha->Evaluate() - .1f ), 0.f );
 
-        printf( "New alpha mask alpha value: %4f\n", alpha->Evaluate() );
+        // printf( "New alpha mask alpha value: %4f\n", alpha->Evaluate() );
     }
     else if ( m_curSelectedNode == NodeEffectType::NET_NODE_MASK )
     {
@@ -110,7 +110,7 @@ void                    TestGlobalEfectKeyboardHandler::HandleDecrement ( BVAppL
         paramBg->SetVal( fgIdx, 0.f );
         paramFg->SetVal( bgIdx, 0.f );
 
-        printf( "New node mask bg: %d fg: %d\n", effect->GetBackgroundChildIdx(), effect->GetForegroundChildIdx() );
+        // printf( "New node mask bg: %d fg: %d\n", effect->GetBackgroundChildIdx(), effect->GetForegroundChildIdx() );
     }
 }
 
@@ -164,7 +164,7 @@ model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetNodeMaskNode ( BVAppL
 //
 model::ModelNodeEffectAlphaMaskPtr TestGlobalEfectKeyboardHandler::GetAlphaMaskNodeEffect( BVAppLogic * logic )
 {
-    auto node = GetNodeMaskNode( logic );
+    auto node = GetAlphaMaskNode( logic );
     auto effect = node->GetNodeEffect();
 
     if (!effect || effect->GetType() != NodeEffectType::NET_ALPHA_MASK )

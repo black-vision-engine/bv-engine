@@ -83,6 +83,7 @@ void    RenderLogic::RenderFrameTM   ( Renderer * renderer, SceneNode * node )
 {
     PreFrameSetupTM( renderer );
 
+    // FIXME: verify that all rendering paths work as expected
 	if( node )
 		RenderNodeTM( renderer, node );
 
@@ -174,21 +175,47 @@ bool    RenderLogic::UseNodeMask     ( SceneNode * node ) const
 
 // *********************************
 //
+bool    RenderLogic::UseDefaultMaskTM( SceneNode * node ) const
+{
+    { node; }
+    return true;
+}
+
+// *********************************
+//
+bool    RenderLogic::UseAlphaMaskTM  ( SceneNode * node ) const
+{
+    { node; }
+    return false;
+}
+
+// *********************************
+//
+bool    RenderLogic::UseNodeMaskTM   ( SceneNode * node ) const
+{
+    { node; }
+    return false;
+}
+
+// *********************************
+//
 NodeEffectRenderLogic *     RenderLogic::GetNodeEffectRenderLogic    ( SceneNode * node ) const
 {
-    if( UseAlphaMask( node ) )
+    if( UseAlphaMaskTM( node ) )
     {
-        m_customNodeRenderLogic[ CLT_ALPHA_MASK ];
+        return m_customNodeRenderLogic[ CLT_ALPHA_MASK ];
     }
-    else if ( UseNodeMask( node ) )
+    else if ( UseNodeMaskTM( node ) )
     {
-        m_customNodeRenderLogic[ CLT_NODE_MASK ];
+        return m_customNodeRenderLogic[ CLT_NODE_MASK ];
+    }
+    else if ( UseDefaultMaskTM( node ) )
+    {
+        return m_customNodeRenderLogic[ CLT_DEFAULT ];
     }
     else
     {
-        assert( UseDefaultMask( node ) );
-
-        m_customNodeRenderLogic[ CLT_DEFAULT ];
+        assert( false );
     }
 
     return nullptr;

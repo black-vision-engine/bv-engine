@@ -56,6 +56,10 @@ public:
     bool    UseAlphaMask    ( SceneNode * node ) const;
     bool    UseNodeMask     ( SceneNode * node ) const;
 
+    bool    UseDefaultMaskTM( SceneNode * node ) const;
+    bool    UseAlphaMaskTM  ( SceneNode * node ) const;
+    bool    UseNodeMaskTM   ( SceneNode * node ) const;
+
     NodeEffectRenderLogic *     GetNodeEffectRenderLogic    ( SceneNode * node ) const;
 // Temporary transition code END
 
