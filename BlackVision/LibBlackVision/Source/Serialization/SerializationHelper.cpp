@@ -6,7 +6,7 @@
 
 namespace bv {
 
-void ISerializable::Deserialize( const IDeserializer& ) {} //FIXME taki ch*j
+void ISerializable::Deserialize( const IDeserializer& ) { assert( false ); } //FIXME taki ch*j
 
 namespace SerializationHelper {
 
