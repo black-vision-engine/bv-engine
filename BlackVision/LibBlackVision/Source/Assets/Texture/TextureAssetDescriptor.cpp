@@ -110,24 +110,21 @@ MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
 
 // ***********************
 //
-ISerializableConstPtr TextureAssetDesc::Create          ( IDeserializer& dob )
+ISerializableConstPtr TextureAssetDesc::Create          ( IDeserializer& deser )
 {
-    auto path = dob.GetAttribute( "path" );
+    auto path = deser.GetAttribute( "path" );
 
-    bool succes = dob.EnterChild( "mipmaps" );
-    if( succes )
+    if( deser.EnterChild( "mipmaps" ) )
     {
-        while( succes )
+        do
         {
-            auto path = dob.GetAttribute( "path" );
+            auto path = deser.GetAttribute( "path" );
             { path; }
-
-            succes = dob.NextChild();
-        }
-        dob.ExitChild();
+        } while( deser.NextChild() );
+        deser.ExitChild();
     }
 
-    auto filterS = dob.GetAttribute( "filter" );
+    auto filterS = deser.GetAttribute( "filter" );
     if( filterS == "none" )
         return Create( path, true );
     else
