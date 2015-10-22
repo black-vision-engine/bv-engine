@@ -31,38 +31,30 @@ std::string Filter2String( MipMapFilterType filter )
 
 // ***********************
 //
-void                TextureAssetDesc::Serialize       ( ISerializer& sob ) const
+void                TextureAssetDesc::Serialize       ( ISerializer& ser ) const
 {
-sob.EnterChild( "asset" );
-    sob.SetAttribute( "uid", UID() );
-    sob.SetAttribute( "path", m_originalTextureDesc->GetImagePath() );
+ser.EnterChild( "asset" );
+    ser.SetAttribute( "uid", UID() );
+    ser.SetAttribute( "path", m_originalTextureDesc->GetImagePath() );
 
     if( m_mipMapsDescs )
-        sob.SetAttribute( "filter", Filter2String( m_mipMapsDescs->GetFilter() ) );
+        ser.SetAttribute( "filter", Filter2String( m_mipMapsDescs->GetFilter() ) );
     else
-        sob.SetAttribute( "filter", "none" );
+        ser.SetAttribute( "filter", "none" );
 
     if( m_loadingType == TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE )
-        sob.SetAttribute( "loading type", "ONLY ORIGINAL" );
+        ser.SetAttribute( "loading type", "ONLY ORIGINAL" );
     else if( m_loadingType == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS )
-        sob.SetAttribute( "loading type", "GENERATE MIP MAPS" );
+        ser.SetAttribute( "loading type", "GENERATE MIP MAPS" );
     else
-        sob.SetAttribute( "loading type", "LOAD WITH MIP MAPS" );
+        ser.SetAttribute( "loading type", "LOAD WITH MIP MAPS" );
 
     //if( m_loadingType == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS )
     {
-        for( auto desc : m_mipMapsDescs->m_mipMapDescs )
-        {
-            sob.EnterChild( "mipmaps" );
-            //sob.SetAttribute( "path", desc->GetImagePath() );
-            
-            desc->Serialize( sob );
-
-            sob.ExitChild();
-        }
+        m_mipMapsDescs->Serialize( ser );
     }
 
-sob.ExitChild();
+ser.ExitChild();
 }
 
 // ***********************
