@@ -91,6 +91,7 @@ namespace
 //
 BVAppLogic::BVAppLogic              ( Renderer * renderer )
     : m_startTime( 0 )
+    , m_timelineManager( new model::TimelineManager() )
     , m_bvScene( nullptr )
     , m_pluginsManager( nullptr )
     , m_renderer( nullptr )
@@ -100,6 +101,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
     , m_globalTimeline( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) )
     , m_solution( GetTimelineManager() ) //pablito
 {
+    model::TimelineManager::SetInstance( GetTimelineManager() );
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
     GTimer.StartTimer();
