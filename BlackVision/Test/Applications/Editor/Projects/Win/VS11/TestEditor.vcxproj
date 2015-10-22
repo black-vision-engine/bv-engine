@@ -113,10 +113,12 @@
   <PropertyGroup />
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Scenes\TestScene.cpp" />
+    <ClCompile Include="..\..\..\Source\Scenes\TestSceneUtils.cpp" />
     <ClCompile Include="..\..\..\Source\TestLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Scenes\TestScene.h" />
+    <ClInclude Include="..\..\..\Source\Scenes\TestSceneUtils.h" />
     <ClInclude Include="..\..\..\Source\TestLogic.h" />
   </ItemGroup>
   <ItemGroup>

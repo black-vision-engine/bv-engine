@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine/Models/Timeline/TimelineManager.h"
+
 #include "Interfaces/IBasicLogic.h"
 #include "BasicWindowApp.h"
 
@@ -16,9 +18,14 @@ private:
 	static bool			ms_debugConsole;
 #endif
 
-	TestScenePtr		m_scene;
+	TestScenePtr					m_scene;
 
-	Renderer *			m_renderer;
+    model::TimelineManager *        m_timelineManager;
+    model::OffsetTimeEvaluatorPtr   m_globalTimeline;
+
+	Renderer *						m_renderer;
+
+	TimeType						m_time;
 
 public:
 	TestLogic			( Renderer * renderer );
@@ -37,6 +44,8 @@ public:
 private:
 
 	void				Draw				( SceneNode * node );
+
+	static std::vector< model::IPluginDescriptor * >  DefaultBVPluginDescriptors  ();
 };
 
 

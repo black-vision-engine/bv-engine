@@ -5,10 +5,16 @@
     <ClCompile Include="..\..\..\Source\Scenes\TestScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Scenes\TestSceneUtils.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\TestLogic.h" />
     <ClInclude Include="..\..\..\Source\Scenes\TestScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Scenes\TestSceneUtils.h">
       <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
