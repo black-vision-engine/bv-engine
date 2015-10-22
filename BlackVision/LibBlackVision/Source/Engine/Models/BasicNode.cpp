@@ -12,12 +12,13 @@
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 
-#include "Serialization/SerializationObjects.inl"
+#include "Serialization/SerializationHelper.h"
+//#include "Serialization/SerializationObjects.inl"
 
 namespace bv { 
     
 // serialization stuff
-template std::shared_ptr< model::BasicNode >                                        DeserializeObjectLoadImpl( const IDeserializer& pimpl, std::string name );
+//template std::shared_ptr< model::BasicNode >                                        DeserializeObjectLoadImpl( const IDeserializer& pimpl, std::string name );
     
 namespace model {
 

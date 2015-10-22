@@ -82,4 +82,10 @@ bool						DeserializeObjectImpl::ExitChild           ()
         return false;
 }
 
+bool                DeserializeObjectImpl::NextChild           () const
+{
+    assert( false );
+    return false;
+}
+
 }

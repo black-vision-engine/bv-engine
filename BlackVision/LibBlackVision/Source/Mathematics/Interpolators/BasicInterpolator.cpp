@@ -10,7 +10,8 @@
 #include "Mathematics/Core/mathfuncs.h"
 #include "Mathematics/Defines.h"
 
-#include "Serialization/SerializationObjects.inl"
+#include "Serialization/SerializationHelper.h"
+//#include "Serialization/SerializationObjects.inl"
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
 
@@ -30,7 +31,7 @@ namespace std
 namespace bv {
 
 // serialization stuff
-template std::vector< std::shared_ptr< Key< float, float > > >                         DeserializeObjectLoadPropertiesImpl( const IDeserializer&, std::string name );
+//template std::vector< std::shared_ptr< Key< float, float > > >                         DeserializeObjectLoadPropertiesImpl( const IDeserializer&, std::string name );
 
 namespace {
 

@@ -11,8 +11,9 @@
 #include "Engine/Models/Timeline/Dynamic/TimelineEventStop.h"
 
 #include "Serialization/IDeserializer.h"
-#include "Serialization/SerializationObjects.h"
-#include "Serialization/SerializationObjects.inl"
+//#include "Serialization/SerializationObjects.h"
+//#include "Serialization/SerializationObjects.inl"
+#include "Serialization/SerializationHelper.h"
 
 namespace bv { namespace model {
 

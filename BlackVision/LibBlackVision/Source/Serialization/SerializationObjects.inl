@@ -1,7 +1,8 @@
 #pragma once
 
-#include "DeserializeObjectImpl.h"
+//#include "DeserializeObjectImpl.h"
 #include "IDeserializer.h"
+#include <cassert>
 
 namespace bv {
 
@@ -40,14 +41,16 @@ std::vector< std::shared_ptr< T > >                         DeserializeObjectLoa
     }
 
     //int i = 0;
-    sob.EnterChild( nameChild );
-    while( sob.NextChild() )
+    if( sob.EnterChild( nameChild ) )
     {
-        auto obj = T::Create( sob );
-        ret.push_back( std::static_pointer_cast< T >( obj ) );
-        //sob.ExitChild(); // return to parent
+        do
+        {
+            auto obj = T::Create( sob );
+            ret.push_back( std::static_pointer_cast< T >( obj ) );
+            //sob.ExitChild(); // return to parent
+        }while( sob.NextChild() );
+        sob.ExitChild(); // nameChild
     }
-    sob.ExitChild(); // nameChild
 
     sob.ExitChild(); // nameParent
     return ret;
@@ -63,15 +66,17 @@ std::vector< std::shared_ptr< T > >                         DeserializeObjectLoa
     std::vector< std::shared_ptr< T > > ret;
 
     //int i = 0;
-    sob.EnterChild( name );
-    while( sob.NextChild( ) )
+    if( sob.EnterChild( name ) )
     {
-        auto obj = T::Create( sob );
+        do
+        {
+            auto obj = T::Create( sob );
 
-        ret.push_back( std::static_pointer_cast< T >( obj ) );
-        //sob.ExitChild();
+            ret.push_back( std::static_pointer_cast< T >( obj ) );
+            //sob.ExitChild();
+        }while( sob.NextChild( ) );
+        sob.ExitChild();
     }
-    sob.ExitChild();
 
     return ret;
 }

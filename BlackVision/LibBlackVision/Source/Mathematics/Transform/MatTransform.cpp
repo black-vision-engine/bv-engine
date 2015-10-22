@@ -1,13 +1,13 @@
 #include "Mathematics/Transform/MatTransform.h"
 
-#include "Serialization/SerializationObjects.inl"
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
+#include "Serialization/SerializationHelper.h"
 
 namespace bv { 
     
 // serialization stuff
-template std::vector< std::shared_ptr< SimpleTransformF > >                         DeserializeObjectLoadPropertiesImpl( const IDeserializer& pimpl, std::string name );
+//template std::vector< std::shared_ptr< SimpleTransformF > >                         DeserializeObjectLoadPropertiesImpl( const IDeserializer& pimpl, std::string name );
 
 namespace model {
 

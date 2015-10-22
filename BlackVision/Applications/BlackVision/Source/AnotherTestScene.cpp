@@ -34,9 +34,10 @@
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Assets/AssetDescsWithUIDs.h"
 
-#include "Serialization/ISerializable.h"
 #include "Engine/Models/BVScene.h"
 #include "System/Path.h"
+
+#include "Serialization/SerializationObjects.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>

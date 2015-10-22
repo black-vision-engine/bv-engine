@@ -1,7 +1,9 @@
 #pragma once
 
 #include "ISerializable.h"
-#include "SerializationObjects.h"
+#include "ISerializer.h"
+#include "IDeserializer.h"
+#include "SerializationObjects.inl"
 
 #include "Mathematics/glm_inc.h"
 

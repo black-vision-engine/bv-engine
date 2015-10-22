@@ -4,8 +4,7 @@
 
 #include "AssetDescriptor.h"
 #include "AssetManager.h"
-#include "Serialization/SerializationObjects.h"
-#include "Serialization/SerializationObjects.inl"
+#include "Serialization/SerializationHelper.h"
 
 namespace bv {
 

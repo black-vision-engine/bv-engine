@@ -22,6 +22,7 @@ public:
 
     bool						EnterChild          ( const std::string& name, unsigned int index = 0 );
 	bool						ExitChild           ();
+    bool                NextChild           () const;
 
     rapidxml::xml_node<>*                           GetDoc() { return m_nodes.top(); }
 

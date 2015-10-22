@@ -43,13 +43,13 @@ ser.EnterChild( "asset" );
         ser.SetAttribute( "filter", "none" );
 
     if( m_loadingType == TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE )
-        ser.SetAttribute( "loading type", "ONLY ORIGINAL" );
+        ser.SetAttribute( "loading_type", "ONLY ORIGINAL" );
     else if( m_loadingType == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS )
-        ser.SetAttribute( "loading type", "GENERATE MIP MAPS" );
+        ser.SetAttribute( "loading_type", "GENERATE MIP MAPS" );
     else
-        ser.SetAttribute( "loading type", "LOAD WITH MIP MAPS" );
+        ser.SetAttribute( "loading_type", "LOAD WITH MIP MAPS" );
 
-    //if( m_loadingType == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS )
+    if( m_loadingType == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS )
     {
         m_mipMapsDescs->Serialize( ser );
     }
@@ -111,12 +111,13 @@ ISerializableConstPtr TextureAssetDesc::Create          ( IDeserializer& deser )
 
     if( deser.EnterChild( "mipmaps" ) )
     {
+        deser.EnterChild( "asset" );
         do
         {
-            auto path = deser.GetAttribute( "path" );
-            { path; }
         } while( deser.NextChild() );
-        deser.ExitChild();
+        deser.ExitChild(); // asset
+
+        deser.ExitChild(); // mipmaps
     }
 
     auto filterS = deser.GetAttribute( "filter" );

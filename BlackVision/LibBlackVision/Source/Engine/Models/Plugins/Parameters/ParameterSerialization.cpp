@@ -7,7 +7,7 @@
 //#include "Serialization/SerializationObjects.inl"
 #include "Serialization/SerializationHelper.h"
 //#include "Serialization/SerializationObjects.h"
-#include "Serialization/SerializationObjects.inl"
+//#include "Serialization/SerializationObjects.inl"
 
 namespace bv { namespace model {
 
