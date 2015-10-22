@@ -2,9 +2,6 @@
 
 #include "BVAppLogic.h"
 
-#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
-#include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
-
 
 namespace bv {
 
@@ -16,6 +13,8 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
     {
         case '1':
         {
+            m_curSelectedNode = NodeEffectType::NET_DEFAULT;
+
             GetVanillaNode( logic )->SetVisible( true );
             GetAlphaMaskNode( logic )->SetVisible( false );
             GetNodeMaskNode( logic )->SetVisible( false );
@@ -24,6 +23,8 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
         }
         case '2':
         {
+            m_curSelectedNode = NodeEffectType::NET_ALPHA_MASK;
+
             GetVanillaNode( logic )->SetVisible( false );
             GetAlphaMaskNode( logic )->SetVisible( true );
             GetNodeMaskNode( logic )->SetVisible( false );
@@ -32,51 +33,84 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
         }
         case '3':
         {
+            m_curSelectedNode = NodeEffectType::NET_NODE_MASK;
+
             GetVanillaNode( logic )->SetVisible( false );
             GetAlphaMaskNode( logic )->SetVisible( false );
             GetNodeMaskNode( logic )->SetVisible( true );
 
             break;
         }
-        case 'q':
-        case 'Q':
-        {
-            break;
-        }
-        case 'w':
-        case 'W':
-        {
-            auto node = GetAlphaMaskNode( logic );
-            auto effect = node->GetNodeEffect();
-
-            if (!effect || effect->GetType() != NodeEffectType::NET_ALPHA_MASK )
-            {
-                auto newEffect = std::shared_ptr< model::ModelNodeEffectAlphaMask >( new model::ModelNodeEffectAlphaMask( logic->GetGlobalTimeline() ) );
-                node->SetNodeEffect( newEffect );
-            }
-
-            auto typedEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( node->GetNodeEffect() );
-            // TODO: some effect related changes
-            break;
-        }
-        case 'e':
-        case 'E':
-        {
-            auto node = GetAlphaMaskNode( logic );
-            auto effect = node->GetNodeEffect();
-
-            if (!effect || effect->GetType() != NodeEffectType::NET_NODE_MASK )
-            {
-                auto newEffect = std::shared_ptr< model::ModelNodeEffectNodeMask >( new model::ModelNodeEffectNodeMask( logic->GetGlobalTimeline() ) );
-                node->SetNodeEffect( newEffect );
-            }
-
-            auto typedEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( node->GetNodeEffect() );
+        case '[':
+            HandleDecrement( logic );
 
             break;
-        }
+        case ']':
+            HandleIncrement( logic );
+
+            break;
         default:
-            assert( false );
+            ;
+    }
+}
+
+// *********************************
+//
+void                    TestGlobalEfectKeyboardHandler::HandleIncrement ( BVAppLogic * logic )
+{
+    if ( m_curSelectedNode == NodeEffectType::NET_ALPHA_MASK )
+    {
+        auto effect = GetAlphaMaskNodeEffect( logic );
+        auto alpha = effect->GetParamAlpha();
+
+        alpha->SetVal( min( 1.f, alpha->Evaluate() + .1f ), 0.f );
+
+        printf( "New alpha mask alpha value: %4f\n", alpha->Evaluate() );
+    }
+    else if ( m_curSelectedNode == NodeEffectType::NET_NODE_MASK )
+    {
+        auto effect = GetNodeMaskNodeEffect( logic );
+
+        auto paramBg = effect->GetParamBgIdx();
+        auto paramFg = effect->GetParamFgIdx();
+
+        auto bgIdx = effect->GetBackgroundChildIdx();
+        auto fgIdx = effect->GetForegroundChildIdx();
+
+        paramBg->SetVal( fgIdx, 0.f );
+        paramFg->SetVal( bgIdx, 0.f );
+
+        printf( "New node mask bg: %d fg: %d\n", effect->GetBackgroundChildIdx(), effect->GetForegroundChildIdx() );
+    }
+}
+
+// *********************************
+//
+void                    TestGlobalEfectKeyboardHandler::HandleDecrement ( BVAppLogic * logic )
+{
+    if ( m_curSelectedNode == NodeEffectType::NET_ALPHA_MASK )
+    {
+        auto effect = GetAlphaMaskNodeEffect( logic );
+        auto alpha = effect->GetParamAlpha();
+
+        alpha->SetVal( max( 0.f, alpha->Evaluate() - .1f ), 0.f );
+
+        printf( "New alpha mask alpha value: %4f\n", alpha->Evaluate() );
+    }
+    else if ( m_curSelectedNode == NodeEffectType::NET_NODE_MASK )
+    {
+        auto effect = GetNodeMaskNodeEffect( logic );
+        
+        auto paramBg = effect->GetParamBgIdx();
+        auto paramFg = effect->GetParamFgIdx();
+    
+        auto bgIdx = effect->GetBackgroundChildIdx();
+        auto fgIdx = effect->GetForegroundChildIdx();
+    
+        paramBg->SetVal( fgIdx, 0.f );
+        paramFg->SetVal( bgIdx, 0.f );
+
+        printf( "New node mask bg: %d fg: %d\n", effect->GetBackgroundChildIdx(), effect->GetForegroundChildIdx() );
     }
 }
 
@@ -124,6 +158,38 @@ model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetNodeMaskNode ( BVAppL
     auto node = GetNodeByPath( logic, "root/node_mask" );
 
     return node;
+}
+
+// *********************************
+//
+model::ModelNodeEffectAlphaMaskPtr TestGlobalEfectKeyboardHandler::GetAlphaMaskNodeEffect( BVAppLogic * logic )
+{
+    auto node = GetNodeMaskNode( logic );
+    auto effect = node->GetNodeEffect();
+
+    if (!effect || effect->GetType() != NodeEffectType::NET_ALPHA_MASK )
+    {
+        auto newEffect = std::make_shared< model::ModelNodeEffectAlphaMask >( logic->GetGlobalTimeline() );
+        node->SetNodeEffect( newEffect );
+    }
+
+    return std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( node->GetNodeEffect() );
+}
+
+// *********************************
+//
+model::ModelNodeEffectNodeMaskPtr  TestGlobalEfectKeyboardHandler::GetNodeMaskNodeEffect( BVAppLogic * logic )
+{
+    auto node = GetNodeMaskNode( logic );
+    auto effect = node->GetNodeEffect();
+
+    if (!effect || effect->GetType() != NodeEffectType::NET_NODE_MASK )
+    {
+        auto newEffect = std::make_shared< model::ModelNodeEffectNodeMask >( logic->GetGlobalTimeline() );
+        node->SetNodeEffect( newEffect );
+    }
+
+    return std::static_pointer_cast< model::ModelNodeEffectNodeMask >( node->GetNodeEffect() );
 }
 
 } //bv

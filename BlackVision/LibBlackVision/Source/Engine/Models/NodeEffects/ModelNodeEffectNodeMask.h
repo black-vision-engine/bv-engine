@@ -32,5 +32,8 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(ModelNodeEffectNodeMask)
+DEFINE_CONST_PTR_TYPE(ModelNodeEffectNodeMask)
+
 } // model
 } // bv
