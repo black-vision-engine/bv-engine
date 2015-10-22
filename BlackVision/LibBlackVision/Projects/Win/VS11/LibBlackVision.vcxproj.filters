@@ -181,6 +181,9 @@
     <Filter Include="Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg">
       <UniqueIdentifier>{b85fcf6c-90be-4820-9c89-3f272705f078}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Serialization\XML">
+      <UniqueIdentifier>{719969e2-b26b-4293-85e3-d733a281968c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -894,9 +897,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.cpp">
       <Filter>Engine\Models\Timeline</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Assets\AssetSerialization.cpp">
-      <Filter>Assets</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.cpp">
       <Filter>Assets\Texture</Filter>
     </ClCompile>
@@ -908,9 +908,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamAsset.cpp">
       <Filter>Assets\VideoStream</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\DeserializeObject.cpp">
-      <Filter>Serialization</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamAssetDescriptor.cpp">
       <Filter>Assets\VideoStream</Filter>
@@ -924,14 +921,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeMaskNodeEffect.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\SerializationObjects.cpp">
-      <Filter>Serialization</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\DefaultVideoStreamDecoderPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\DeserializeObjectImpl.cpp">
-      <Filter>Serialization</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultVideoStreamDescriptor.cpp">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
@@ -959,6 +950,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Serialization\SerializationHelper.cpp">
       <Filter>Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\XML\XMLDeserializer.cpp">
+      <Filter>Serialization\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\XML\XMLSerializer.cpp">
+      <Filter>Serialization\XML</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1901,13 +1898,7 @@
     <ClInclude Include="..\..\..\Source\Assets\AssetDescsWithUIDs.h">
       <Filter>Assets</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\DeserializeObjectImpl.h">
-      <Filter>Serialization</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Serialization\ISerializable.h">
-      <Filter>Serialization</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\SerializationObjects.h">
       <Filter>Serialization</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h">
@@ -1933,6 +1924,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Serialization\IDeserializer.h">
       <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\XML\XMLSerializer.h">
+      <Filter>Serialization\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\XML\XMLDeserializer.h">
+      <Filter>Serialization\XML</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1995,12 +1992,6 @@
     </None>
     <None Include="..\..\..\Source\Engine\Models\Plugins\Descriptor\ModelHelper.h">
       <Filter>Engine\Models\Plugins\Descriptor</Filter>
-    </None>
-    <None Include="..\..\..\Source\Serialization\SerializationObjects.inl">
-      <Filter>Serialization</Filter>
-    </None>
-    <None Include="..\..\..\Source\Serialization\SerializationObjects.inl">
-      <Filter>Serialization</Filter>
     </None>
     <None Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.h">
       <Filter>Serialization\Json</Filter>

@@ -56,13 +56,13 @@ void            TimelineManager::Serialize                       ( ISerializer& 
     sob.ExitChild();
 }
 
-// *********************************
-//
-ISerializablePtr TimelineManager::Create                          ( ISerializer& dob )
-{
-    dob;
-    return nullptr;
-}
+//// *********************************
+////
+//ISerializablePtr TimelineManager::Create                          ( const ISerializer& dob )
+//{
+//    dob; assert( false );
+//    return nullptr;
+//}
 
 // *********************************
 //

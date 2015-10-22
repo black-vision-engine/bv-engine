@@ -20,7 +20,7 @@ class TextureLoader : public AssetLoader
 public:
 
 	AssetConstPtr						LoadAsset			( const AssetDescConstPtr & desc ) const override;
-	AssetDescConstPtr					CreateDescriptor	( IDeserializer& deserializeObject ) const override;
+	AssetDescConstPtr					CreateDescriptor	( const IDeserializer& deserializeObject ) const override;
 
     virtual								~TextureLoader		(){}
 };

@@ -16,7 +16,7 @@ namespace model {
 
 // *******************************
 //
-ISerializablePtr     TimeEvaluatorBase< ITimeEvaluator >::Create              ( IDeserializer& dob )
+ISerializablePtr     TimeEvaluatorBase< ITimeEvaluator >::Create              ( const IDeserializer& dob )
 {
     auto type = dob.GetAttribute( "type" );
 

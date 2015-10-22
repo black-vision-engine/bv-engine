@@ -39,13 +39,13 @@ void                OffsetTimeEvaluator::Serialize           ( ISerializer& sob 
 
 // *******************************
 //
-ISerializablePtr     OffsetTimeEvaluator::Create              ( IDeserializer& dob )
+ISerializablePtr     OffsetTimeEvaluator::Create              ( const IDeserializer& dob )
 {
     auto name = dob.GetAttribute( "name" );
 
     auto te = std::make_shared< OffsetTimeEvaluator >( name, 0.f ); // FIXME load offset
 
-    auto children = DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( dob, "children", "timeline" );
+    auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( dob, "children", "timeline" );
 
     for( auto child : children )
         te->AddChild( child );

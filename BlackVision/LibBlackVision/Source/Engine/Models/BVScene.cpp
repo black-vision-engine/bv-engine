@@ -183,36 +183,36 @@ void            BVScene::Serialize           ( ISerializer&doc) const
     doc.ExitChild();
 }
 
-// *******************************
+//// *******************************
+////
+//ISerializablePtr        BVScene::Create          ( ISerializer&/*doc*/ )
+//{
+//    assert( !"Will not implement (probably) (see LoadSceneFromFile)" );
+//    return nullptr;
+//    //auto& tm = *doc.m_tm; // FIXME(?)
+//    //auto nRoot = doc.m_doc->first_node();
 //
-ISerializablePtr        BVScene::Create          ( ISerializer&/*doc*/ )
-{
-    assert( !"Will not implement (probably) (see LoadSceneFromFile)" );
-    return nullptr;
-    //auto& tm = *doc.m_tm; // FIXME(?)
-    //auto nRoot = doc.m_doc->first_node();
-
-    //if( strcmp( nRoot->name(), "scene" ) )
-    //{
-    //    std::cerr << "[SceneLoader] ERROR: XML root node is not \"scene\"" << std::endl;
-    //    return nullptr;
-    //}
-
-    //auto nNodes = nRoot->first_node( "nodes" );
-    //if( !nNodes )
-    //{
-    //    std::cerr << "[SceneLoader] ERROR: scene has no node \"nodes\"" << std::endl;
-    //    return nullptr;
-    //}
-
-    //auto nNode = nNodes->first_node( "node" );
-    //auto aName = nNode->first_attribute( "name" ); assert( aName );
-    //model::BasicNodePtr root = model::BasicNode::Create( aName->value(), tm.GetRootTimeline() );
-
-    //root->AddPlugin( "DEFAULT_TRANSFORM", tm.GetRootTimeline() ); // FIXME
-
-    //return Create( root, nullptr, "", tm.GetRootTimeline(), nullptr ); // FIXME
-}
+//    //if( strcmp( nRoot->name(), "scene" ) )
+//    //{
+//    //    std::cerr << "[SceneLoader] ERROR: XML root node is not \"scene\"" << std::endl;
+//    //    return nullptr;
+//    //}
+//
+//    //auto nNodes = nRoot->first_node( "nodes" );
+//    //if( !nNodes )
+//    //{
+//    //    std::cerr << "[SceneLoader] ERROR: scene has no node \"nodes\"" << std::endl;
+//    //    return nullptr;
+//    //}
+//
+//    //auto nNode = nNodes->first_node( "node" );
+//    //auto aName = nNode->first_attribute( "name" ); assert( aName );
+//    //model::BasicNodePtr root = model::BasicNode::Create( aName->value(), tm.GetRootTimeline() );
+//
+//    //root->AddPlugin( "DEFAULT_TRANSFORM", tm.GetRootTimeline() ); // FIXME
+//
+//    //return Create( root, nullptr, "", tm.GetRootTimeline(), nullptr ); // FIXME
+//}
 
 
 } // bv

@@ -37,7 +37,8 @@
 #include "Engine/Models/BVScene.h"
 #include "System/Path.h"
 
-#include "Serialization/SerializationObjects.h"
+#include "Serialization/XML/XMLDeserializer.h"
+#include "Serialization/SerializationHelper.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -953,16 +954,16 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineMana
     model::TimelineManager::SetInstance( timelineManager );
 
 // assets
-    auto assets = dob.Load< AssetDescsWithUIDs >( "assets" );
+    auto assets = SerializationHelper::DeserializeObjectLoadImpl< AssetDescsWithUIDs >( dob, "assets" );
     AssetDescsWithUIDs::SetInstance( *assets );
 
 // timelines
-    auto timelines = dob.LoadArray< TimeEvaluatorBase< ITimeEvaluator > >( "timelines" );
+    auto timelines = SerializationHelper::DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( dob, "timelines" );
     for( auto timeline : timelines )
         for( auto child : timeline->GetChildren() )
             timelineManager->AddTimeline( child );
 
-    auto node = dob.Load< model::BasicNode >( "node" );
+    auto node = SerializationHelper::DeserializeObjectLoadImpl< model::BasicNode >( dob, "node" );
     assert( node );
     return node;
 }

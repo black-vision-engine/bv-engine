@@ -123,7 +123,7 @@ doc.EnterChild( "plugin" );
 // *******************************
 //
 template <>
-ISerializablePtr BasePlugin< IPlugin >::Create( IDeserializer& doc )
+ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& doc )
 {
     std::string pluginType = doc.GetAttribute( "uid" );
     std::string pluginName = doc.GetAttribute( "name" );
@@ -137,7 +137,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create( IDeserializer& doc )
     std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
 
 // params
-    auto params = DeserializeObjectLoadArrayImpl< AbstractModelParameter >( doc, "params" );
+    auto params = SerializationHelper::DeserializeObjectLoadArrayImpl< AbstractModelParameter >( doc, "params" );
     for( auto param : params )
     {
         if( plugin->GetParameter( param->GetName() ) == nullptr )
@@ -150,7 +150,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create( IDeserializer& doc )
         SetParameter( plugin->GetPluginParamValModel(), param );
     }
     
-    auto uids = DeserializeObjectLoadArrayImpl< SerializedAssetUID >( doc, "assets" );
+    auto uids = SerializationHelper::DeserializeObjectLoadArrayImpl< SerializedAssetUID >( doc, "assets" );
     for( auto uid : uids )
     {
         auto asset = AssetDescsWithUIDs::GetInstance().UID2Asset( uid->GetUID() );

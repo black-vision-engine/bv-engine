@@ -9,7 +9,7 @@ namespace bv
 
 // ***********************
 //
-AssetDescConstPtr AssetManager::CreateDesc( IDeserializer& deserializer )
+AssetDescConstPtr AssetManager::CreateDesc( const IDeserializer& deserializer )
 {
     bool success = deserializer.EnterChild( "asset" );
 	if( !success )

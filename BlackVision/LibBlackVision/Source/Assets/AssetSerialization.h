@@ -26,7 +26,7 @@ public:
         sob.ExitChild(); // asset
     }
 
-    static ISerializablePtr             Create( IDeserializer& dob )
+    static ISerializablePtr             Create( const IDeserializer& dob )
     {
         return ISerializablePtr( new SerializedAssetUID( dob.GetAttribute( "uid" ) ) ); // make_shared does not work for some reason ;)
     }

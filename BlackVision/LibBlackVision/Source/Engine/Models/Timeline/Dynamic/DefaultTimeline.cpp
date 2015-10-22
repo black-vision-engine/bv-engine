@@ -79,7 +79,7 @@ void                                DefaultTimeline::Serialize           ( ISeri
 
 // *********************************
 //
-ISerializablePtr                     DefaultTimeline::Create              ( IDeserializer& dob )
+ISerializablePtr                     DefaultTimeline::Create              ( const IDeserializer& dob )
 {
     auto name = dob.GetAttribute( "name" );
 
@@ -92,7 +92,7 @@ ISerializablePtr                     DefaultTimeline::Create              ( IDes
 
     auto te = std::make_shared< DefaultTimeline >( name, duration, preWrap, postWrap );
 
-    auto children = DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( dob, "children" );
+    auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( dob, "children" );
 
     for( auto child : children )
         te->AddChild( child );

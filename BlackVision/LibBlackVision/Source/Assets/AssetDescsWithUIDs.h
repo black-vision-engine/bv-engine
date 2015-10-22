@@ -23,7 +23,7 @@ public:
         sob.ExitChild();
     }
 
-    static ISerializablePtr                 Create          ( IDeserializer& dob )
+    static ISerializablePtr                 Create          ( const IDeserializer& dob )
     {
         auto uid = dob.GetAttribute( "uid" );
         
@@ -59,9 +59,9 @@ public:
         }
         sob.ExitChild();
     }
-    static ISerializablePtr                                 Create          ( IDeserializer& dob )
+    static ISerializablePtr                                 Create          ( const IDeserializer& dob )
     {
-        auto assetsWithUIDs = DeserializeObjectLoadPropertiesImpl< AssetDescWithUID >( dob, "uid" );
+        auto assetsWithUIDs = SerializationHelper::DeserializeObjectLoadPropertiesImpl< AssetDescWithUID >( dob, "uid" );
 
         auto assets = std::make_shared< AssetDescsWithUIDs >();
         for( auto asset : assetsWithUIDs )

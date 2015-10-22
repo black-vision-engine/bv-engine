@@ -59,7 +59,7 @@ ser.ExitChild();
 
 // ***********************
 //
-void TextureAssetDesc::Deserialize     ( IDeserializer& sob )
+void TextureAssetDesc::Deserialize     ( const IDeserializer& sob )
 {
     auto obj = SerializationHelper::Create< const TextureAssetDesc >( sob );
 
@@ -105,7 +105,7 @@ MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
 
 // ***********************
 //
-ISerializableConstPtr TextureAssetDesc::Create          ( IDeserializer& deser )
+ISerializableConstPtr TextureAssetDesc::Create          ( const IDeserializer& deser )
 {
     auto path = deser.GetAttribute( "path" );
 

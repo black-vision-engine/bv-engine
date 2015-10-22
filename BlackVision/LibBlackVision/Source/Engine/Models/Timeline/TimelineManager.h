@@ -40,7 +40,7 @@ public:
                             ~TimelineManager                ();
 
     virtual void            Serialize                       ( ISerializer& sob ) const;
-    static ISerializablePtr Create                          ( ISerializer& dob );
+    //static ISerializablePtr Create                          ( const IDeserializer& dob );
 
     ITimeEvaluatorPtr       CreateOffsetTimeEvaluator       ( const std::string & name, TimeType startTime );
     ITimeEvaluatorPtr       CreateConstTimeEvaluator        ( const std::string & name, TimeType timeVal );

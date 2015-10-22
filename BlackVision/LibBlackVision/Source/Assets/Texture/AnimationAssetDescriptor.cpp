@@ -2,6 +2,8 @@
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
 
+#include <cassert>
+
 namespace bv {
 
 const std::string AnimationAssetDesc::uid = "ANIMATION_ASSET_DESC";
@@ -20,16 +22,16 @@ sob.ExitChild();
 
 // ***********************
 //
-ISerializableConstPtr     AnimationAssetDesc::Create          ( IDeserializer& dob )
+ISerializableConstPtr     AnimationAssetDesc::Create          ( const IDeserializer& dob )
 {
     return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetAttribute( "path" ), dob.GetAttribute( "filter" ) ) );
 }
 
 // ***********************
 //
-void AnimationAssetDesc::Deserialize     ( IDeserializer& /*sob*/ )
+void AnimationAssetDesc::Deserialize     ( const IDeserializer& /*sob*/ )
 {
-
+    assert( false );
 }
 
 // *******************************

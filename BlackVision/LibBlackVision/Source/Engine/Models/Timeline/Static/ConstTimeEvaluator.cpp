@@ -30,8 +30,9 @@ void                ConstTimeEvaluator::Serialize           ( ISerializer& sob )
 
 // *******************************
 //
-ISerializablePtr     ConstTimeEvaluator::Create              ( IDeserializer& dob )
+ISerializablePtr     ConstTimeEvaluator::Create              ( const IDeserializer& dob )
 {
+    assert( false );
     dob; return nullptr;
 }
 

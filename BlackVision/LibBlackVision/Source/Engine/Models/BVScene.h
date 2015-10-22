@@ -58,7 +58,7 @@ public:
                             ~BVScene            ();
 
     static BVScenePtr       Create              ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager );
-    static ISerializablePtr Create              ( ISerializer& doc );
+    //static ISerializablePtr Create              ( const ISerializer& doc );
     virtual void            Serialize           ( ISerializer&doc) const override;
 
     virtual void            Update              ( TimeType t );

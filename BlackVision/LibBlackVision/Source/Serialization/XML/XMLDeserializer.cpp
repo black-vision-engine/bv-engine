@@ -1,9 +1,8 @@
-#include "SerializationObjects.h"
-#include "DeserializeObjectImpl.h"
+#include "XMLDeserializer.h"
 
 #include "System/Path.h"
 #include <fstream>
-
+#include <sstream>
 
 namespace bv {
 

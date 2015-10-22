@@ -6,6 +6,8 @@
 
 namespace bv {
 
+void ISerializable::Deserialize( const IDeserializer& ) {} //FIXME taki ch*j
+
 namespace SerializationHelper {
 
 inline std::vector<std::string> &_split(const std::string &s, char delim, std::vector<std::string> &elems) {

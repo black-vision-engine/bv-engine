@@ -29,7 +29,7 @@ public:
     explicit Key( TimeValueT t, ValueT val );
 
     virtual void                Serialize       ( ISerializer& doc ) const override;
-    static ISerializablePtr     Create          ( IDeserializer& doc );
+    static ISerializablePtr     Create          ( const IDeserializer& doc );
 };
 
 template<class TimeValueT>
@@ -85,7 +85,7 @@ public:
     virtual ~BasicInterpolator  () {};
 
     virtual void                Serialize       ( ISerializer& doc ) const override;
-    static ISerializablePtr     Create          ( IDeserializer& doc );
+    static ISerializablePtr     Create          ( const IDeserializer& doc );
 
     //void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method ) override;
 	//model::IParameter::InterpolationMethod     GetInterpolationMethod () const override;

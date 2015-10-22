@@ -76,7 +76,7 @@ void                SimpleTransform<ParamT>::Serialize       ( ISerializer& sob 
 // *************************************
 //
 template<typename ParamT>
-ISerializablePtr     SimpleTransform<ParamT>::Create          ( IDeserializer& dob )
+ISerializablePtr     SimpleTransform<ParamT>::Create          ( const IDeserializer& dob )
 {
     //if( dob.GetName() != "transform" )
     //{
@@ -88,8 +88,8 @@ ISerializablePtr     SimpleTransform<ParamT>::Create          ( IDeserializer& d
 
     if( kind == "rotation" ) // very special case indeed :)
     {
-        auto angleArray = DeserializeObjectLoadArrayImpl< ParamT >( dob, "angle", "interpolator" );
-        auto rotAxisArray = DeserializeObjectLoadArrayImpl< Vec3Interpolator >( dob, "rotaxis", "interpolator" );
+        auto angleArray = SerializationHelper::DeserializeObjectLoadArrayImpl< ParamT >( dob, "angle", "interpolator" );
+        auto rotAxisArray = SerializationHelper::DeserializeObjectLoadArrayImpl< Vec3Interpolator >( dob, "rotaxis", "interpolator" );
 
         if( angleArray.size() != 1 )
         {
@@ -108,7 +108,7 @@ ISerializablePtr     SimpleTransform<ParamT>::Create          ( IDeserializer& d
         return std::make_shared< Rotation< ParamT > >( *angle.get(), *rotAxis ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
-    auto params = DeserializeObjectLoadPropertiesImpl< ParamT >( dob, "interpolator" );
+    auto params = SerializationHelper::DeserializeObjectLoadPropertiesImpl< ParamT >( dob, "interpolator" );
     
     if( params.size() != 3 && ( kind != "rotation" || params.size() != 2 ) ) // de Morgan FTW!
     {
@@ -325,11 +325,11 @@ CompositeTransform<ParamT>::CompositeTransform  ( const CompositeTransform & src
 // *************************************
 //
 template<typename ParamT>
-ISerializablePtr                     CompositeTransform<ParamT>::Create                  ( IDeserializer& dob )
+ISerializablePtr                     CompositeTransform<ParamT>::Create                  ( const IDeserializer& dob )
 {
     auto transform = std::make_shared< CompositeTransform< ParamT > >();
 
-    auto transes = DeserializeObjectLoadPropertiesImpl< SimpleTransform< ParamT > >( dob, "transform" );
+    auto transes = SerializationHelper::DeserializeObjectLoadPropertiesImpl< SimpleTransform< ParamT > >( dob, "transform" );
 
     int i = 0;
     for( auto trans : transes )

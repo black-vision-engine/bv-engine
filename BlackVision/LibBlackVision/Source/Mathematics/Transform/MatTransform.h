@@ -64,7 +64,7 @@ public:
 
 public:
     virtual void                Serialize       ( ISerializer& sob ) const;
-    static ISerializablePtr     Create          ( IDeserializer& dob );
+    static ISerializablePtr     Create          ( const IDeserializer& dob );
 
     virtual glm::mat4x4         Evaluate            ( typename ParamT::TimeT t ) const;
     virtual SimpleTransform *   Clone               () const;
@@ -183,7 +183,7 @@ public:
     explicit        CompositeTransform  ();
                     CompositeTransform  ( const CompositeTransform & src );
 
-    static ISerializablePtr                     Create                  ( IDeserializer& dob );
+    static ISerializablePtr                     Create                  ( const IDeserializer& dob );
     virtual void                                Serialize               ( ISerializer& doc ) const;
 
     void            InitializeDefaultSRT();

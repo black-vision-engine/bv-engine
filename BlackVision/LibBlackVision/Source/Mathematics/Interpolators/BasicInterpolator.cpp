@@ -191,7 +191,7 @@ void                Key<TimeValueT, ValueT>::Serialize       ( ISerializer& /*do
 // *************************************
 //
 template<class TimeValueT, class ValueT >
-ISerializablePtr     Key<TimeValueT, ValueT>::Create          ( IDeserializer& /*doc*/ )
+ISerializablePtr     Key<TimeValueT, ValueT>::Create          ( const IDeserializer& /*doc*/ )
 {
     assert( !"Don't run me please ;)" );
     return nullptr;
@@ -200,7 +200,7 @@ ISerializablePtr     Key<TimeValueT, ValueT>::Create          ( IDeserializer& /
 // *************************************
 //
 template<>
-ISerializablePtr     Key< bv::TimeType, float >::Create          ( IDeserializer& doc )
+ISerializablePtr     Key< bv::TimeType, float >::Create          ( const IDeserializer& doc )
 {
     auto time = doc.GetAttribute( "time" );
     auto val = doc.GetAttribute( "val" );
@@ -227,7 +227,7 @@ std::vector<std::string> split_(const std::string &s, char delim) { // FIXME: th
 // *************************************
 //
 template<>
-ISerializablePtr     Key< bv::TimeType, glm::vec3 >::Create          ( IDeserializer& doc ) // FIXME: this is not a good place to do that
+ISerializablePtr     Key< bv::TimeType, glm::vec3 >::Create          ( const IDeserializer& doc ) // FIXME: this is not a good place to do that
 {
     auto time = doc.GetAttribute( "time" );
     auto val_ = doc.GetAttribute( "val" );
@@ -278,9 +278,9 @@ void                BasicInterpolator<TimeValueT, ValueT, FloatT>::Serialize    
 // *************************************
 //
 template<class TimeValueT, class ValueT, class FloatT >
-ISerializablePtr     BasicInterpolator<TimeValueT, ValueT, FloatT>::Create          ( IDeserializer& doc ) // FIXME: this works for floats only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ISerializablePtr     BasicInterpolator<TimeValueT, ValueT, FloatT>::Create          ( const IDeserializer& doc ) // FIXME: this works for floats only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 {
-    auto keys = DeserializeObjectLoadPropertiesImpl< Key<TimeValueT, ValueT> >( doc, "key" );
+    auto keys = SerializationHelper::DeserializeObjectLoadPropertiesImpl< Key<TimeValueT, ValueT> >( doc, "key" );
 
     auto interpolator = std::make_shared< BasicInterpolator<TimeValueT, ValueT, FloatT> >();
 

@@ -27,14 +27,14 @@ void                FontAssetDesc::Serialize       ( ISerializer& sob ) const
 
 // ***********************
 //
-void FontAssetDesc::Deserialize     ( IDeserializer& /*sob*/ )
+void FontAssetDesc::Deserialize     ( const IDeserializer& /*sob*/ )
 {
-
+    assert( false );
 }
 
 // ***********************
 //
-ISerializableConstPtr FontAssetDesc::Create          ( IDeserializer& dob )
+ISerializableConstPtr FontAssetDesc::Create          ( const IDeserializer& dob )
 {
     assert( dob.GetAttribute( "uid" ) == UID() );
 

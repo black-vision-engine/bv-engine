@@ -24,7 +24,7 @@ public:
             ~OffsetTimeEvaluator                    ();
 
     virtual void                Serialize           ( ISerializer& sob ) const;
-    static ISerializablePtr     Create              ( IDeserializer& dob );
+    static ISerializablePtr     Create              ( const IDeserializer& dob );
 
     void    SetTimeOffset                           ( TimeType t );
 

@@ -19,9 +19,9 @@ class ISerializable
 public:
 
     virtual void                Serialize       ( ISerializer& sob ) const = 0;
-    virtual void                Deserialize     ( IDeserializer& sob );
+    virtual void                Deserialize     ( const IDeserializer& sob );
 
-    static ISerializablePtr     Create          ( IDeserializer& dob ); // not really part of a class, but please remember to implement it ;)
+    static ISerializablePtr     Create          ( const IDeserializer& dob ); // not really part of a class, but please remember to implement it ;)
 };
 
 }
