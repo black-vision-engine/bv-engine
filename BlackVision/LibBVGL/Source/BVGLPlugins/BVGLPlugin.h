@@ -329,7 +329,7 @@ public:
 	virtual void                MultiDrawElementsIndirect						( GLenum mode, GLenum type, const void * indirect, GLsizei drawcount, GLsizei stride );
 	virtual void				MultiDrawArrays									( GLenum mode, const GLint* first, const GLsizei* count, GLsizei drawCount );
 	virtual void				MultiDrawElements								( GLenum mode, const GLsizei* count, GLenum type, const GLvoid** indicies, GLsizei drawCount );
-	virtual void				MultiDrawElementsBaseVertex						( GLenum mode, GLsizei* count, GLenum type, GLvoid** indicies, GLsizei drawCount, GLsizei* baseVartex );
+	virtual void				MultiDrawElementsBaseVertex						( GLenum mode, GLsizei* count, GLenum type, const GLvoid** indicies, GLsizei drawCount, GLsizei* baseVartex );
 
 // Stencil
 	virtual void				ClearStencil				( GLint s );

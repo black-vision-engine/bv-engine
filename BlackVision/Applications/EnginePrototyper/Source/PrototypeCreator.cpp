@@ -1,76 +1,44 @@
 #include "PrototypeCreator.h"
 
-#include "Engine/Graphics/Renderers/Renderer.h"
+#include <cassert>
+
+#include "Prototypes/VAO/SimpleVAOPrototype0.h"
+#include "Prototypes/FBOProfiling/FBOProfilingPrototype0.h"
+#include "Prototypes/FBOProfiling/FBOProfilingPrototype1.h"
+#include "Prototypes/FBOProfiling/FBOProfilingPrototype2.h"
+#include "Prototypes/FBOProfiling/FBOProfilingPrototype3.h"
+#include "Prototypes/Engine/MemManagement/MemManagementInspector.h"
+#include "Prototypes/Engine/MemManagement/PboUpdatesInspector.h"
+#include "Prototypes/DrawingCommands/DrawingPrototype.h"
+#include "Prototypes/Engine/Multipass/MultipassTest.h"
 
 
+namespace  bv {
 
-namespace bv {
-
-namespace  {
-
-    unsigned int    DefaultWidth                = 800;
-    unsigned int    DefaultHeight               = 600;
-    bool            DefaultFullscreenSetting    = false;
-
-} // anonymous
-
-
-// ****************************
-//
-IAppLogicPrototype * CreateDefaultPrototype             ( Renderer * renderer )
+bool			CreatePrototype			()
 {
-    { renderer; }
-    //return new SimpleVAOPrototype0();
-    // return new PboUpdatesInspector( renderer );
+	bool success = false;
+	
+	success = BasicWindowApp::RegisterInitializer( &SimpleVAOPrototype0::Create, "SimpleVAOPrototype0", 800, 600 );
 
-    //return new MemManagementInspector( renderer );
-	//return new FBOProfilingPrototype0( renderer );
-	//return new FBOProfilingPrototype1( renderer );
-	//return new FBOProfilingPrototype2( renderer );
-	//return new FBOProfilingPrototype3( renderer );
+	//success = BasicWindowApp::RegisterInitializer( &PboUpdatesInspector::Create, "PboUpdatesInspector", 800, 600 );
 
-    //return new DrawingPrototype( renderer );
-	return new MultipassTest( renderer );
-}
+	//success = BasicWindowApp::RegisterInitializer( &MemManagementInspector::Create, "MemManagementInspector", 800, 600 );
 
-// ****************************
-// FIXME: fatalna imitacja nedznej namiastki configa
-unsigned int        DefaultPrototypeWidth               ()
-{
-    return DefaultWidth;
-}
+	//success = BasicWindowApp::RegisterInitializer( &FBOProfilingPrototype0::Create, "FBOProfilingPrototype0", 800, 600 );
+	//success = BasicWindowApp::RegisterInitializer( &FBOProfilingPrototype1::Create, "FBOProfilingPrototype1", 800, 600 );
+	//success = BasicWindowApp::RegisterInitializer( &FBOProfilingPrototype2::Create, "FBOProfilingPrototype2", 800, 600 );
+	//success = BasicWindowApp::RegisterInitializer( &FBOProfilingPrototype3::Create, "FBOProfilingPrototype3", 800, 600 );
 
-// ****************************
-// FIXME: fatalna imitacja nedznej namiastki configa
-unsigned int        DefaultPrototypeHeight              ()
-{
-    return DefaultHeight;
-}
+	//success = BasicWindowApp::RegisterInitializer( &DrawingPrototype::Create, "DrawingPrototype", 800, 600 );
 
-// ****************************
-// FIXME: fatalna imitacja nedznej namiastki configa
-WindowMode       DefaultPrototypeWindowModeSetting             ()
-{
-	return WindowMode::WINDOWED;
-}
+	//success = BasicWindowApp::RegisterInitializer( &MultipassTest::Create, "MultipassTest", 800, 600 );
 
-// ****************************
-// FIXME: fatalna imitacja nedznej namiastki configa
-RendererInput       DefaultPrototypeRendererInput             ()
-{
-	RendererInput ri;
-	ri.m_WindowHandle			= nullptr;
-    ri.m_PixelFormat			= 0;
-    ri.m_RendererDC				= 0;
-    ri.m_DisableVerticalSync	= true;
-	return ri;
-}
+	BasicWindowApp::RegisterConsoleInitializer();
 
-// ****************************
-// FIXME: fatalna imitacja nedznej namiastki configa
-bool                DefaultPrototypeFullscreenSetting   ()
-{
-    return DefaultFullscreenSetting;
+	assert( success );
+	
+	return success;
 }
 
 } // bv

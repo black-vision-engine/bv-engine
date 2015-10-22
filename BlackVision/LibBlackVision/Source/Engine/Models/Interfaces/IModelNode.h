@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "Engine/Interfaces/IUpdatable.h"
+#include "Engine/Models/Interfaces/IModelNodeEffect.h"
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 #include "Engine/Models/Plugins/Interfaces/IFinalizePlugin.h"
 
@@ -37,6 +38,10 @@ public:
     virtual const IPluginListFinalized *    GetPluginList       () const                                                            = 0;
 
     virtual unsigned int                    GetNumChildren      () const                                                            = 0;
+
+    // FIXME: TRANSITION - BEGIN
+    virtual IModelNodeEffectPtr             GetNodeEffect       () const                                                            = 0;
+    // FIXME: TRANSITION - END
 
     // FIXME: remove when proper GlobalEfect is implemented
     virtual void                            EnableOverrideStateAM   ()                                                              = 0;

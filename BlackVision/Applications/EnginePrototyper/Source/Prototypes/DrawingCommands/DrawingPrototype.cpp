@@ -77,4 +77,11 @@ void    DrawingPrototype::Render              ()
 	m_mode->Render( m_scene->GetDrawingModeData() );
 }
 
+// **************************
+//
+IBasicLogicUnqPtr    DrawingPrototype::Create  ( Renderer * renderer )
+{
+	return IBasicLogicUnqPtr( new DrawingPrototype( renderer ) );
+}
+
 } // bv

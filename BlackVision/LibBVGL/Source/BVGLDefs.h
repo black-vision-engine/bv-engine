@@ -40,6 +40,7 @@ namespace bv {
 #define GL_MAX_TEXTURE_IMAGE_UNITS							0x8872
 
 #define GL_STENCIL_TEST										0x0B90
+#define GL_CURRENT_PROGRAM                                  0x8B8D
 
 #define GL_NO_ERROR 0
 #define GL_INVALID_ENUM										0x0500
@@ -229,7 +230,7 @@ namespace bv {
 #define GL_LINES_ADJACENCY				0x000A
 #define GL_TRIANGLES_ADJACENCY			0x000C
 #define GL_TRIANGLE_STRIP_ADJACENCY		0x000D
-#define GL_PATCHES						0xE
+#define GL_PATCHES						0x000E
 #define GL_TRIANGLE_FAN					0x0006
 
 // MipMap filtering

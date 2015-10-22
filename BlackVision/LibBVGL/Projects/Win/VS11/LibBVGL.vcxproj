@@ -28,6 +28,9 @@
     <ClCompile Include="..\..\..\Source\BVGLPlugins\ResourceTracking\TrackableResources.cpp" />
     <ClCompile Include="..\..\..\Source\BVGLTools\BVGLStringFormatters.cpp" />
     <ClCompile Include="..\..\..\Source\BVGLTools\BVGLTranslator.cpp" />
+    <ClCompile Include="..\..\..\Source\GLCore\src\glad.c">
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\BVGL.h" />
@@ -40,6 +43,8 @@
     <ClInclude Include="..\..\..\Source\BVGLPlugins\ResourceTracking\TrackableResources.h" />
     <ClInclude Include="..\..\..\Source\BVGLTools\BVGLStringFormatters.h" />
     <ClInclude Include="..\..\..\Source\BVGLTools\BVGLTranslator.h" />
+    <ClInclude Include="..\..\..\Source\GLCore\include\glad\glad.h" />
+    <ClInclude Include="..\..\..\Source\GLCore\include\KHR\khrplatform.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B0E6C314-5B08-40F7-87EF-17141A389BA5}</ProjectGuid>
@@ -114,13 +119,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ThirdPartyDir)/glew/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\Source\GLCore\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
-    <Lib>
-      <AdditionalDependencies>glew32s.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ThirdPartyDir)/glew/lib/$(PlatformName)</AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Interfaces/IAppLogicPrototype.h"
+#include "Interfaces/IBasicLogic.h"
 
 #include "Common/VBORect.h"
 #include "Common/GLSLProgram.h"
@@ -8,7 +8,7 @@
 
 namespace bv {
 
-class SimpleVAOPrototype0 : public IAppLogicPrototype
+class SimpleVAOPrototype0 : public IBasicLogic
 {
 private:
 
@@ -18,14 +18,16 @@ private:
 
 public:
 
-    SimpleVAOPrototype0                     ();
-    ~SimpleVAOPrototype0                    ();
+	SimpleVAOPrototype0		( Renderer * renderer );
+    ~SimpleVAOPrototype0	();
 
     virtual     void    Initialize          () override;
     virtual     void    Update              ( TimeType t ) override;
     virtual     void    Render              () override;
     virtual     void    Key                 ( unsigned char c ) override;
     virtual     void    Resize              ( UInt32 w, UInt32 h ) override;
+
+	static IBasicLogicUnqPtr	Create			( Renderer * renderer );
 
 private:
 

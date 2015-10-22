@@ -5,7 +5,7 @@
 
 namespace bv { namespace model {
 
-TimelineManager* TimelineManager::instance = new TimelineManager(); // FIXME: this may be moved to static initilizer
+TimelineManager* TimelineManager::instance = nullptr; // FIXME: this may be moved to static initilizer
 
 // *********************************
 //

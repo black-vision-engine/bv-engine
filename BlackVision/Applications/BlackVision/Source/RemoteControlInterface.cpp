@@ -290,7 +290,7 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
             
             Log::A("SENDING","Timelines info...:");
 
-			model::TimelineManager * TM = m_AppLogic->GetTimeLineManager();
+			model::TimelineManager * TM = m_AppLogic->GetTimelineManager();
 
 			auto timelines = TM->GetRootTimeline()->GetChildren();
 			string s_timelines;
@@ -602,8 +602,8 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
 			}
 
 
-			auto newNode = model::BasicNode::Create(NodeNameStr2,m_AppLogic->GetTimeLineManager()->GetRootTimeline());
-			newNode->AddPlugin( "DEFAULT_TRANSFORM", "transform",m_AppLogic->GetTimeLineManager()->GetRootTimeline() ); 
+			auto newNode = model::BasicNode::Create(NodeNameStr2,m_AppLogic->GetTimelineManager()->GetRootTimeline());
+			newNode->AddPlugin( "DEFAULT_TRANSFORM", "transform",m_AppLogic->GetTimelineManager()->GetRootTimeline() ); 
 
 			m_AppLogic->GetBVScene()->GetSceneEditor()->AddChildNode(node,newNode);
         }
@@ -728,7 +728,7 @@ void RemoteControlInterface::OnTimelineCmd ( bv::IEventPtr evt )
         //todo: patch string converting
         string timeline_name(evtTimeline->TimelineName.begin(),evtTimeline->TimelineName.end());
 
-        auto timeline = m_AppLogic->GetTimeLineManager()->GetTimeline(timeline_name);
+        auto timeline = m_AppLogic->GetTimelineManager()->GetTimeline(timeline_name);
         if(timeline==nullptr)
         {
             Log::A(L"ERROR",L"timeline ["+evtTimeline->TimelineName+L"] does not exist :(");
@@ -1313,7 +1313,7 @@ void            RemoteControlInterface::HMShow                  ()
     auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
     auto hmplugin = root->GetPlugin( "height map" );
 
-    auto timeline = m_AppLogic->GetTimeLineManager()->GetTimeline( "hm_timeline" );
+    auto timeline = m_AppLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
         Log::A( L"ERROR", L"timeline [ height map ] does not exist :(" );
@@ -1337,7 +1337,7 @@ void            RemoteControlInterface::HMShow                  ()
 void            RemoteControlInterface::HMReset                  ()
 {
    
-    auto timeline = m_AppLogic->GetTimeLineManager()->GetTimeline( "hm_timeline" );
+    auto timeline = m_AppLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
     timeline->SetTimeAndStop(0.0f);
 }
 
@@ -1351,7 +1351,7 @@ void            RemoteControlInterface::HMStart                 ( float km )
     auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
     auto hmplugin = root->GetPlugin( "height map" );
 
-    auto timeline = m_AppLogic->GetTimeLineManager()->GetTimeline( "hm_timeline" );
+    auto timeline = m_AppLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
         Log::A( L"ERROR", L"timeline [ height map ] does not exist :(" );
@@ -1377,7 +1377,7 @@ void        RemoteControlInterface::HMZoomIn                ( float km, float le
     auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
     auto hmplugin = root->GetPlugin( "height map" );
 
-    auto timeline = m_AppLogic->GetTimeLineManager()->GetTimeline( "hm_timeline" );
+    auto timeline = m_AppLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
         Log::A( L"ERROR", L"timeline [ height map ] does not exist :(" );
@@ -1430,7 +1430,7 @@ void            RemoteControlInterface::HMZoomOutFromCurrent    (float scale)
     auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
      auto hmplugin = root->GetPlugin( "height map" );
 
-    auto timeline = m_AppLogic->GetTimeLineManager()->GetTimeline( "hm_timeline" );
+    auto timeline = m_AppLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
         Log::A( L"ERROR", L"timeline [ height map ] does not exist :(" );
@@ -1462,7 +1462,7 @@ void        RemoteControlInterface::HMZoomInFake                ( float km, floa
     auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
     auto hmplugin = root->GetPlugin( "height map" );
 
-    auto timeline = m_AppLogic->GetTimeLineManager()->GetTimeline( "hm_timeline" );
+    auto timeline = m_AppLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
         Log::A( L"ERROR", L"timeline [ height map ] does not exist :(" );
@@ -1517,7 +1517,7 @@ void            RemoteControlInterface::HMConcentratedDistanceAnimStart( int num
 
 	{tp;}
 
-    auto timeline = m_AppLogic->GetTimeLineManager()->GetTimeline( "hm_timeline" );
+    auto timeline = m_AppLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
         Log::A( L"ERROR", L"timeline [ height map ] does not exist :(" );
@@ -1562,7 +1562,7 @@ void            RemoteControlInterface::HMConcentratedDistanceAnimStart2( int nu
 
     model::DefaultHeightMapPlugin *  tp = static_cast< model::DefaultHeightMapPlugin * > ( hmplugin.get() );
 	{tp;}
-    auto timeline = m_AppLogic->GetTimeLineManager()->GetTimeline( "hm_timeline" );
+    auto timeline = m_AppLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
         Log::A( L"ERROR", L"timeline [ height map ] does not exist :(" );

@@ -2,6 +2,8 @@
 
 //pablito:
 #include "VideoCardManager.h"
+#include <vector>
+
 
 namespace bv {
 
@@ -9,6 +11,8 @@ class Renderer;
 class OffscreenRenderLogic;
 class SceneNode;
 class Camera;
+class NodeEffectRenderLogic;
+
 
 class RenderLogic
 {
@@ -16,6 +20,16 @@ private:
 
     OffscreenRenderLogic *  m_offscreenRenderLogic;
 	bv::videocards::VideoCardManager *      m_VideoCardManager;
+    enum CustomLogicType
+    {
+        CLT_DEFAULT = 0,
+        CLT_ALPHA_MASK,
+        CLT_NODE_MASK,
+
+        CLT_TOTAL
+    };
+
+    std::vector< NodeEffectRenderLogic * >  m_customNodeRenderLogic;
 
 public:
 
@@ -29,11 +43,25 @@ public:
 	//pablito
 	void	SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager, Renderer * renderer);
 	void	InitVideoCards     ( Renderer * renderer );
+// Temporary transition code START
+    void    RenderFrameTM   ( Renderer * renderer, SceneNode * node );
+    void    PreFrameSetupTM ( Renderer * renderer );
+    void    PostFrameSetupTM( Renderer * renderer );
+// Temporary transition code END
 
-private:
+public:
 
     void    RenderNode      ( Renderer * renderer, SceneNode * node );
-    
+
+// Temporary transition code START
+    void    RenderNodeTM    ( Renderer * renderer, SceneNode * node );
+    bool    UseDefaultMask  ( SceneNode * node ) const;
+    bool    UseAlphaMask    ( SceneNode * node ) const;
+    bool    UseNodeMask     ( SceneNode * node ) const;
+
+    NodeEffectRenderLogic *     GetNodeEffectRenderLogic    ( SceneNode * node ) const;
+// Temporary transition code END
+
     void    RenderVanilla   ( Renderer * renderer, SceneNode * node );
     void    RenderAlphaMask ( Renderer * renderer, SceneNode * node );
     void    RenderNodeMask  ( Renderer * renderer, SceneNode * node );

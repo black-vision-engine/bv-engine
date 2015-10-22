@@ -1,14 +1,14 @@
 #pragma once
 
 
-#include "Interfaces/IAppLogicPrototype.h"
+#include "Interfaces/IBasicLogic.h"
 #include "Prototypes/Engine/Common/ScenePrototype.h"
 
 namespace bv {
 
 class Renderer;
 
-class MultipassTest : public IAppLogicPrototype
+class MultipassTest : public IBasicLogic
 {
 private:
 
@@ -25,6 +25,8 @@ public:
     virtual     void    Render              ()                      override;
     virtual     void    Key                 ( unsigned char c )     override;
     virtual     void    Resize              ( UInt32 w, UInt32 h )  override;
+
+	static IBasicLogicUnqPtr	Create			( Renderer * renderer );
 
 private:
 

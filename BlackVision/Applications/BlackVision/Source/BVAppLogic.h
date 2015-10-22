@@ -7,6 +7,8 @@
 
 #include "Engine/Events/Events.h"
 
+#include "TestAI/TestKeyboardHandler.h"
+
 #include "FrameStatsService.h"
 
 //#define HIDE_PROFILE_STATS
@@ -51,6 +53,7 @@ private:
 
     FrameStatsCalculator            m_statsCalculator;
 
+    model::TimelineManager *        m_timelineManager;
     const model::PluginsManager *   m_pluginsManager;
     model::OffsetTimeEvaluatorPtr   m_globalTimeline;
 
@@ -58,6 +61,7 @@ private:
 
     Renderer *                      m_renderer;
     RenderLogic *                   m_renderLogic;
+    TestKeyboardHandler *           m_kbdHandler;
 
     unsigned long                   m_startTime;
 
@@ -66,8 +70,6 @@ private:
 	Solution						m_solution;
 	bv::videocards::VideoCardManager* m_videoCardManager;
 	std::string                     m_grabFramePath;
-    
-    //void            LoadSceneFromFile       ( std::string filename );
     
     void            RefreshVideoInputScene  ();
 
@@ -87,13 +89,10 @@ public:
 	//pablito:
 	void			SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager);
 	FrameStatsCalculator* GetStatsCalculator(){return &m_statsCalculator;};
-    static model::TimelineManager* GetTimeLineManager() { return GetTimelineManager(); }
 
     virtual void    OnUpdate        ( unsigned int millis, Renderer * renderer );
     virtual void    OnKey           ( unsigned char c );
     
-    model::IModelNodePtr   CreateTestModelNodeInSomeSpecificScope( const std::string & name );
-
     virtual void    ChangeState     ( BVAppState state );
 
     virtual void    ShutDown        ();
@@ -120,11 +119,15 @@ private:
 public:
 
     //Convenience API - generalized model accessors
-    static model::TimelineManager * GetTimelineManager  ();
-
+    model::TimelineManager *        GetTimelineManager  ();
+    model::OffsetTimeEvaluatorPtr   GetGlobalTimeline   ();
     BVScenePtr                      GetBVScene          ();
-
     const model::PluginsManager *   GetPluginsManager   () const;
+
+private:
+
+    void                            InitializeKbdHandler();
+
 };
 
 } //bv

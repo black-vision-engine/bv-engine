@@ -32,6 +32,8 @@ public:
 
 	MemoryChunkConstPtr ReadColor			() override;
 
+	static IBasicLogicUnqPtr	Create			( Renderer * renderer );
+
 private:
 
     bool    PrepareShader                   ();

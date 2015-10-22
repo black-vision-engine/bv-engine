@@ -116,6 +116,18 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\DefaultEffectRenderLogic.cpp">
       <Filter>Rendering\Logic\NodeEffectRendering</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.cpp">
+      <Filter>TestAI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestAI\TestEditorsKeyboardHandler.cpp">
+      <Filter>TestAI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestAI\TestKeyboardHandler.cpp">
+      <Filter>TestAI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestAI\TestAnimationKeyboardHandler.cpp">
+      <Filter>TestAI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -199,6 +211,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\DefaultEffectRenderLogic.h">
       <Filter>Rendering\Logic\NodeEffectRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.h">
+      <Filter>TestAI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestAI\TestEditorsKeyboardHandler.h">
+      <Filter>TestAI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestAI\TestKeyboardHandler.h">
+      <Filter>TestAI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestAI\TestAnimationKeyboardHandler.h">
+      <Filter>TestAI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

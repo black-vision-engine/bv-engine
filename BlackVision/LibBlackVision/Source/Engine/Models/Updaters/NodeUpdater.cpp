@@ -14,6 +14,10 @@
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
 
+#include "Engine/Models/NodeEffects/ModelNodeEffectDefault.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
+
 
 namespace bv 
 {
@@ -112,6 +116,8 @@ void    NodeUpdater::DoUpdate        ()
     {
         m_sceneNode->SetVisible( true );
 
+        // Add, when all mechanisms are implemented
+        // UpdateNodeEffect();
         //FIXME: until global effect is implemented, only one state can be used
         assert( !(m_modelNode->IsStateOverridenAM() && m_modelNode->IsStateOverridenNM()) );
 
@@ -134,6 +140,61 @@ void    NodeUpdater::DoUpdate        ()
     else
     {
         m_sceneNode->SetVisible( false );
+    }
+}
+
+// *****************************
+// FIXME: change effects if required or assert that they cannot be changed in runtime
+void    NodeUpdater::UpdateNodeEffect       ()
+{
+    auto nodeEffect = m_modelNode->GetNodeEffect();
+
+    switch( nodeEffect->GetType() )
+    {
+        case NodeEffectType::NET_DEFAULT:
+        {
+            auto defaultEffect = std::static_pointer_cast< model::ModelNodeEffectDefault >( nodeEffect );
+            { defaultEffect; }
+            break;
+        }
+        case NodeEffectType::NET_ALPHA_MASK:
+        {
+            auto alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( nodeEffect );
+            auto paramAlpha = alphaMaskEffect->GetParamAlpha();
+
+            auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+
+            auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );
+
+            if ( alphaVal != nullptr )
+            {
+                alphaVal->SetValue( alphaMaskEffect->GetAlpha() );
+            }
+
+            break;
+        }
+        case NodeEffectType::NET_NODE_MASK:
+        {
+            auto nodeMaskEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( nodeEffect );
+
+            auto paramBgIdx = nodeMaskEffect->GetParamBgIdx();
+            auto paramFgIdx = nodeMaskEffect->GetParamFgIdx();
+
+            auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+
+            auto bgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramBgIdx->GetName() ) );
+            auto fgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramFgIdx->GetName() ) );
+
+            if ( bgIdxVal != nullptr && fgIdxVal != nullptr )
+            {
+                bgIdxVal->SetValue( nodeMaskEffect->GetBackgroundChildIdx() );
+                fgIdxVal->SetValue( nodeMaskEffect->GetForegroundChildIdx() );
+            }
+
+            break;
+        }
+        default:
+            assert( false );
     }
 }
 

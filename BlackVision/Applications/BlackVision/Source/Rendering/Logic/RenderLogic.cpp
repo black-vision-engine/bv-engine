@@ -17,6 +17,10 @@
 #include "Log.h"
 #include "ConfigManager.h"
 #include <boost/lexical_cast.hpp>
+#include "Rendering/Logic/NodeEffectRendering/NodeEffectRenderLogic.h"
+#include "Rendering/Logic/NodeEffectRendering/DefaultEffectRenderLogic.h"
+#include "Rendering/Logic/NodeEffectRendering/AlphaMaskRenderLogic.h"
+#include "Rendering/Logic/NodeEffectRendering/NodeMaskRenderLogic.h"
 
 #define USE_HACK_FRIEND_NODE_MASK_IMPL
 
@@ -29,6 +33,10 @@ extern HighResolutionTimer GTimer;
 RenderLogic::RenderLogic     ()
 {
     m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffersPerRT() );
+
+    m_customNodeRenderLogic.push_back( new DefaultEffectRenderLogic( this, m_offscreenRenderLogic ) );
+    m_customNodeRenderLogic.push_back( new AlphaMaskRenderLogic( this, m_offscreenRenderLogic ) );
+    m_customNodeRenderLogic.push_back( new NodeMaskRenderLogic( this, m_offscreenRenderLogic ) );
 }
 
 // *********************************
@@ -36,6 +44,9 @@ RenderLogic::RenderLogic     ()
 RenderLogic::~RenderLogic    ()
 {
 	m_VideoCardManager->m_IsEnding = true;
+    for ( auto rl : m_customNodeRenderLogic )
+        delete rl;
+
     delete m_offscreenRenderLogic;
 }
 
@@ -207,7 +218,6 @@ void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
 
 
     renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
-
     renderer->ClearBuffers();
     renderer->PreDraw();
 
@@ -228,6 +238,45 @@ void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
 
         m_offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
     
+
+    m_offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
+
+    renderer->PostDraw();
+    renderer->DisplayColorBuffer();
+}
+
+// *********************************
+//
+void    RenderLogic::RenderFrameTM   ( Renderer * renderer, SceneNode * node )
+{
+    PreFrameSetupTM( renderer );
+
+	if( node )
+		RenderNodeTM( renderer, node );
+
+    PostFrameSetupTM( renderer );
+}
+
+// *********************************
+//
+void    RenderLogic::PreFrameSetupTM ( Renderer * renderer )
+{
+    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+    renderer->ClearBuffers();
+    renderer->PreDraw();
+
+    m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
+    m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
+
+    renderer->ClearBuffers();
+}
+
+// *********************************
+//
+void    RenderLogic::PostFrameSetupTM( Renderer * renderer )
+{
+    m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
+    m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
 
     m_offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
 
@@ -258,6 +307,59 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 			RenderVanilla( renderer, node );
         }
     }
+}
+
+// *********************************
+//
+void    RenderLogic::RenderNodeTM       ( Renderer * renderer, SceneNode * node )
+{
+    if ( node->IsVisible() )
+    {
+        GetNodeEffectRenderLogic( node )->RenderNode( renderer, node );
+    }
+}
+
+// *********************************
+//
+bool    RenderLogic::UseDefaultMask  ( SceneNode * node ) const
+{
+    return !( UseAlphaMask( node ) || UseNodeMask( node ) );
+}
+
+// *********************************
+//
+bool    RenderLogic::UseAlphaMask    ( SceneNode * node ) const
+{
+    return node->IsOverridenAM();
+}
+
+// *********************************
+//
+bool    RenderLogic::UseNodeMask     ( SceneNode * node ) const
+{
+    return node->IsOverridenNM();
+}
+
+// *********************************
+//
+NodeEffectRenderLogic *     RenderLogic::GetNodeEffectRenderLogic    ( SceneNode * node ) const
+{
+    if( UseAlphaMask( node ) )
+    {
+        m_customNodeRenderLogic[ CLT_ALPHA_MASK ];
+    }
+    else if ( UseNodeMask( node ) )
+    {
+        m_customNodeRenderLogic[ CLT_NODE_MASK ];
+    }
+    else
+    {
+        assert( UseDefaultMask( node ) );
+
+        m_customNodeRenderLogic[ CLT_DEFAULT ];
+    }
+
+    return nullptr;
 }
 
 // *********************************

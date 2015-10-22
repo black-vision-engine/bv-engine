@@ -92,4 +92,11 @@ void    PboUpdatesInspector::DrawNode            ( Renderer * renderer, SceneNod
     }
 }
 
+// **************************
+//
+IBasicLogicUnqPtr    PboUpdatesInspector::Create  ( Renderer * renderer )
+{
+	return IBasicLogicUnqPtr( new PboUpdatesInspector( renderer ) );
+}
+
 } // bv

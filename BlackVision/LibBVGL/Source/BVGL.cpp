@@ -1385,7 +1385,7 @@ void BVGL::bvglMultiDrawElements					( GLenum mode, const GLsizei* count, GLenum
 	bvgl.MultiDrawElements( mode, count, type, indicies, drawCount );
 }
 
-void BVGL::bvglMultiDrawElementsBaseVertex			( GLenum mode, GLsizei* count, GLenum type, GLvoid** indicies, GLsizei drawcount, GLint* baseVertex )
+void BVGL::bvglMultiDrawElementsBaseVertex			( GLenum mode, GLsizei* count, GLenum type, const GLvoid** indicies, GLsizei drawcount, GLint* baseVertex )
 {
 	bvgl.MultiDrawElementsBaseVertex( mode, count, type, indicies, drawcount, baseVertex );
 }

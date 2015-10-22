@@ -45,8 +45,9 @@ private:
     DefaultPluginListFinalizedPtr   m_pluginList;
 
 	INodeLogicPtr					m_nodeLogic;
+    IModelNodeEffectPtr             m_modelNodeEffect;
 
-	ModelNodeEditor *				m_modelNodeEditor;
+    ModelNodeEditor *				m_modelNodeEditor;
 
 protected:
 
@@ -71,6 +72,12 @@ public:
     virtual const IPluginListFinalized *    GetPluginList           () const override;
 
     virtual unsigned int                    GetNumChildren          () const override;
+
+    // FIXME: TRANSITION - BEGIN
+    virtual IModelNodeEffectPtr             GetNodeEffect           () const;
+    void                                    SetNodeEffect           ( IModelNodeEffectPtr nodeEffect );
+    // FIXME: TRANSITION - END
+
 
     // FIXME: remove when proper GlobalEfect is implemented
     virtual void                            EnableOverrideStateAM   () override;

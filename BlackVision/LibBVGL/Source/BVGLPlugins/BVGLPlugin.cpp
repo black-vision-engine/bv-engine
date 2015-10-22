@@ -1,7 +1,6 @@
 #include "BVGLPlugin.h"
 
-#include <gl/glew.h>
-
+#include <glad/glad.h>
 
 namespace bv {
 
@@ -9,10 +8,8 @@ namespace bv {
 // FIXME: this initialization should check more caps and return an error code instead of a simple bool
 bool        BVGLPlugin::InitializeBVGL						()
 {
-    glewInit();
-
-    if ( !GLEW_ARB_vertex_program || !glewGetExtension( "GL_ARB_fragment_program" ) ) 
-    {		
+	if( !gladLoadGL() )
+	{
         return false;
     }
     
@@ -685,25 +682,25 @@ void            BVGLPlugin::VertexAttribPointer			( GLuint index, GLint size, GL
 //
 void				BVGLPlugin::BindFramebufferEXT			(GLenum target, GLuint framebuffer)
 {
-	glBindFramebufferEXT(target,framebuffer);
+	glBindFramebuffer(target,framebuffer);
 }
 // *****************************
 //
 void				BVGLPlugin::BindRenderbufferEXT			(GLenum target, GLuint renderbuffer)
 {
-	glBindRenderbufferEXT(target,renderbuffer);
+	glBindRenderbuffer(target,renderbuffer);
 }
 // *****************************
 //
 void				BVGLPlugin::DeleteFramebufferEXT		(GLsizei n, const GLuint *framebuffers)
 {
-	glDeleteFramebuffersEXT(n, framebuffers);
+	glDeleteFramebuffers(n, framebuffers);
 }
 // *****************************
 //
 void				BVGLPlugin::DeleteRenderbufferEXT		(GLsizei n, const GLuint *renderbuffers)
 {
-	glDeleteRenderbuffersEXT(n,renderbuffers);
+	glDeleteRenderbuffers(n,renderbuffers);
 }
 
 // *****************************
@@ -1374,7 +1371,7 @@ void BVGLPlugin::MultiDrawElements			( GLenum mode, const GLsizei* count, GLenum
 	glMultiDrawElements( mode, count, type, indicies, drawCount );
 }
 
-void BVGLPlugin::MultiDrawElementsBaseVertex	( GLenum mode, GLsizei* count, GLenum type, GLvoid** indicies, GLsizei drawcount, GLint* baseVertex )
+void BVGLPlugin::MultiDrawElementsBaseVertex	( GLenum mode, GLsizei* count, GLenum type, const GLvoid** indicies, GLsizei drawcount, GLint* baseVertex )
 {
 	glMultiDrawElementsBaseVertex( mode, count, type, indicies, drawcount, baseVertex );
 }
@@ -1416,6 +1413,5 @@ void BVGLPlugin::StencilOpSeparate			( GLenum face, GLenum sfail, GLenum dpfail,
 {
 	glStencilOpSeparate( face, sfail, dpfail, dppass );
 }
-
 
 } //bv

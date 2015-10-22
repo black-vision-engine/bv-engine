@@ -11,7 +11,7 @@ namespace bv
 {
 
 class Renderer;
-
+//pablito
 enum WindowMode {FULLSCREEN=0,WINDOWED=1,MULTIPLE_SCREENS=2};
 
 class WindowedApplication : public ApplicationBase
