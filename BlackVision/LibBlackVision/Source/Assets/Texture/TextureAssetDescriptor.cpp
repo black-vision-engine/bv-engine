@@ -49,12 +49,15 @@ sob.EnterChild( "asset" );
     else
         sob.SetAttribute( "loading type", "LOAD WITH MIP MAPS" );
 
-    if( m_loadingType == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS )
+    //if( m_loadingType == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS )
     {
         for( auto desc : m_mipMapsDescs->m_mipMapDescs )
         {
             sob.EnterChild( "mipmaps" );
-            sob.SetAttribute( "path", desc->GetImagePath() );
+            //sob.SetAttribute( "path", desc->GetImagePath() );
+            
+            desc->Serialize( sob );
+
             sob.ExitChild();
         }
     }
