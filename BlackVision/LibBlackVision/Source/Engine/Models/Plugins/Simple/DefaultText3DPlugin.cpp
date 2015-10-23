@@ -21,7 +21,7 @@ namespace bv { namespace model {
 // *******************************
 //
 DefaultText3DPluginDesc::DefaultText3DPluginDesc                            ()
-    : BasePluginDescriptor( UID(), "text", "txt" )
+    : BasePluginDescriptor( UID(), "text3d", "txt3d" )
 {
 }
 
