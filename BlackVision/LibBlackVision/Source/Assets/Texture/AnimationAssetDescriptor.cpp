@@ -27,12 +27,12 @@ ISerializableConstPtr     AnimationAssetDesc::Create          ( const IDeseriali
     return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetAttribute( "path" ), dob.GetAttribute( "filter" ) ) );
 }
 
-// ***********************
-//
-void AnimationAssetDesc::Deserialize     ( const IDeserializer& /*sob*/ )
-{
-    assert( false );
-}
+//// ***********************
+////
+//void AnimationAssetDesc::Deserialize     ( const IDeserializer& /*sob*/ )
+//{
+//    assert( false );
+//}
 
 // *******************************
 //
