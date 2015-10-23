@@ -12,6 +12,26 @@ ParamTransform::ParamTransform  ( const std::string & name, const TransformF & t
 {
 }
 
+
+// *******************************
+//
+void    ParamTransform::Serialize       ( SerializeObject & doc ) const
+{
+    doc.SetName( "param" );
+    doc.SetValue( "name", GetName() );
+    doc.SetValue( "type", "transform" );
+    doc.SetValue( "timeline", m_timeEvaluator->GetName() );
+
+    m_transformModel.Serialize( doc );
+    //for( unsigned int i = 0; i < m_transformModel.Size(); i++ )
+    //{
+    //    m_transformModel[ i ]->GetP0MotylaNoga().Serialize( doc );
+    //    m_transformModel[ i ]->GetP1MotylaNoga().Serialize( doc );
+    //    m_transformModel[ i ]->GetP2MotylaNoga().Serialize( doc );
+    //}
+
+    doc.Pop();
+}
 // *******************************
 //
 VoidPtr    ParamTransform::QueryParamTyped  ()
@@ -39,9 +59,47 @@ ParamTransformVec::ParamTransformVec                ( const std::string & name, 
 
 // *******************************
 //
+void ParamTransformVec::Serialize       ( SerializeObject & doc ) const
+{
+    doc.SetName( "param" );
+    doc.SetValue( "name", GetName() );
+    doc.SetValue( "type", "transform_vec" );
+    doc.SetValue( "timeline", m_timeEvaluator->GetName() );
+
+    for( auto t : m_transformModelVec )
+    {
+        t.Serialize( doc );
+        //for( int i = 0; i < t.Size(); i++ )
+        //{
+        //    t[ i ]->Ser
+        //    //doc.SetName( "transform" );
+        //    //doc.SetValue( "kind", Kind2String( t[ i ]->KindKurwaMac() ) );
+        //    //    t[ i ]->GetP0MotylaNoga().Serialize( doc );
+        //    //    t[ i ]->GetP1MotylaNoga().Serialize( doc );
+        //    //    t[ i ]->GetP2MotylaNoga().Serialize( doc );
+        //    //doc.Pop();
+        //}
+    }
+
+    doc.Pop(); // param
+}
+// *******************************
+//
 void    ParamTransformVec::AppendTransform          ( const TransformF & transform )
 {
     m_transformModelVec.push_back( transform );
+}
+
+// *******************************
+//
+void                ParamTransformVec::InsertTransform     ( unsigned int transformNum, const TransformF & transform )
+{
+    if( transformNum < m_transformModelVec.size() )
+        m_transformModelVec[ transformNum ] = transform;
+    else if( transformNum == m_transformModelVec.size() )
+        AppendTransform( transform );
+    else
+        assert( false );
 }
 
 // *******************************

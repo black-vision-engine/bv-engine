@@ -4,7 +4,7 @@
 #include "Engine/Models/BasicNode.h"
 #include "Mathematics/Interpolators/Interpolators.h"
 
-#include "xml/TreeBuilder.h"
+
 
 
 namespace bv
@@ -81,7 +81,7 @@ public:
     static  model::BasicNodePtr     NonGeometryParent               ();
                             
     static  model::BasicNodePtr     XMLTestScene                    ();
-    static  model::BasicNodePtr     CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager );
+    static  model::BasicNodePtr     CreateSerializedTestScene       ( model::TimelineManager * timelineManager );
                             
     static  model::BasicNodePtr     StackThemNow                    ( model::BasicNodePtr n0, model::BasicNodePtr n1 );
 

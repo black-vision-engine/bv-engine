@@ -10,6 +10,21 @@ namespace bv
 
 const std::string MipMapAssetDesc::uid = "MIP_MAP_ASSET_DESC";
 
+// ***********************
+//
+void                MipMapAssetDesc::Serialize       ( SerializeObject & /*sob*/ ) const
+{
+    assert( !"implement me" );
+}
+
+// ***********************
+//
+ISerializablePtr     MipMapAssetDesc::Create          ( DeserializeObject & /*dob*/ )
+{
+    assert( !"implement me" );
+    return nullptr;
+}
+
 // *******************************
 //
 SingleTextureAssetDescConstPtr MipMapAssetDesc::GetLevelDesc( SizeType level ) const

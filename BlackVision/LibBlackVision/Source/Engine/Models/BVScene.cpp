@@ -9,21 +9,25 @@
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
+#include "Engine/Models/Timeline/TimelineManager.h"
+#include "Assets/AssetDescsWithUIDs.h"
+#include "Serialization/SerializationObjects.inl"
+
 namespace bv {
 
 // *******************************
 //
-BVScenePtr    BVScene::Create( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer )
+BVScenePtr    BVScene::Create( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager )
 {
     struct make_shared_enabler_BVScene : public BVScene
     {
-        make_shared_enabler_BVScene( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer )
-            : BVScene( cam, name, timeEvaluator, renderer )
+        make_shared_enabler_BVScene( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager )
+            : BVScene( cam, name, timeEvaluator, renderer, pTimelineManager )
         {
         }
     };
 
-    auto bvScene    = std::make_shared< make_shared_enabler_BVScene >( cam, name, timeEvaluator, renderer );
+    auto bvScene    = std::make_shared< make_shared_enabler_BVScene >( cam, name, timeEvaluator, renderer, pTimelineManager );
 
     if( modelRootNode )
     {
@@ -34,16 +38,28 @@ BVScenePtr    BVScene::Create( model::BasicNodePtr modelRootNode, Camera * cam, 
     return bvScene;
 }
 
-void            BVScene::Serialize           ( SerializeObject &doc) const
+// *******************************
+//
+BVScenePtr    BVScene::CreateFakeSceneForTestingOnly( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    static std::string name = "scene";
-    doc.SetName( name );
+    return BVScenePtr( new BVScene( modelRootNode, cam, name, timeEvaluator ) );
 }
-
 
 // *******************************
 //
-BVScene::BVScene    ( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer )
+BVScene::BVScene    ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator )
+    : m_pCamera( cam )
+    , m_pModelSceneRoot( modelRootNode )
+    , m_pEngineSceneRoot( nullptr )
+    , m_cameraPosition( "camera_position", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 1.0f ) ), timeEvaluator )
+    , m_cameraDirection( "camera_direction", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 0.f ) ), timeEvaluator )
+    , m_cameraUp( "camera_up", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 1.f, 0.f ) ), timeEvaluator )
+    , m_name( name )
+{}
+
+// *******************************
+//
+BVScene::BVScene    ( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager )
     : m_pCamera( cam )
     , m_renderer( renderer )
     , m_pModelSceneRoot( nullptr )
@@ -52,6 +68,7 @@ BVScene::BVScene    ( Camera * cam, const std::string & name, model::ITimeEvalua
     , m_cameraDirection( "camera_direction", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 0.f ) ), timeEvaluator )
     , m_cameraUp( "camera_up", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 1.f, 0.f ) ), timeEvaluator )
     , m_name( name )
+    , m_pTimelineManager( pTimelineManager )
 {
     m_pSceneEditor = new BVSceneEditor( this );
 }
@@ -130,34 +147,67 @@ const std::string &     BVScene::GetName            () const
 
 // *******************************
 //
-ISerializablePtr        BVScene::Create          ( DeserializeObject &/*doc*/ )
+void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root )
 {
-    assert( !"Will not implement (probably)" );
-    return nullptr;
-    //auto& tm = *doc.m_tm; // FIXME(?)
-    //auto nRoot = doc.m_doc->first_node();
+    auto plugins = root->GetPlugins();
+    for( unsigned int i = 0; i < root->GetNumPlugins(); i++ )
+    {
+        auto assets = root->GetPlugins()->GetPlugin( i )->GetAssets();
+        for( auto asset : assets )
+        {
+            map.AddAssetDesc( asset );
+        }
+    }
 
-    //if( strcmp( nRoot->name(), "scene" ) )
-    //{
-    //    std::cerr << "[SceneLoader] ERROR: XML root node is not \"scene\"" << std::endl;
-    //    return nullptr;
-    //}
-
-    //auto nNodes = nRoot->first_node( "nodes" );
-    //if( !nNodes )
-    //{
-    //    std::cerr << "[SceneLoader] ERROR: scene has no node \"nodes\"" << std::endl;
-    //    return nullptr;
-    //}
-
-    //auto nNode = nNodes->first_node( "node" );
-    //auto aName = nNode->first_attribute( "name" ); assert( aName );
-    //model::BasicNodePtr root = model::BasicNode::Create( aName->value(), tm.GetRootTimeline() );
-
-    //root->AddPlugin( "DEFAULT_TRANSFORM", tm.GetRootTimeline() ); // FIXME
-
-    //return Create( root, nullptr, "", tm.GetRootTimeline(), nullptr ); // FIXME
+    for( unsigned int i = 0; i < root->GetNumChildren(); i++ )
+        GetAssetsWithUIDs( map, root->GetChild( i ) );
 }
+
+// *******************************
+//
+void            BVScene::Serialize           ( SerializeObject &doc) const
+{
+    doc.SetName( "scene" );
+
+    model::TimelineManager::SetInstance( m_pTimelineManager );
+
+    //auto& assets = AssetDescsWithUIDs::GetInstance();
+    AssetDescsWithUIDs assets;
+    GetAssetsWithUIDs( assets, m_pModelSceneRoot );
+    AssetDescsWithUIDs::SetInstance( assets );
+
+    assets.Serialize( doc );
+
+    m_pTimelineManager->Serialize( doc );
+    m_pModelSceneRoot->Serialize( doc );
+
+    doc.Pop();
+}
+
+// *******************************
+//
+ISerializablePtr        BVScene::Create          ( DeserializeObject &dob )
+{
+// assets
+    auto assets = dob.Load< AssetDescsWithUIDs >( "assets" );
+    AssetDescsWithUIDs::SetInstance( *assets );
+
+// timelines
+    auto tm = model::TimelineManager::GetInstance();
+
+    auto timelines = dob.LoadArray< model::TimeEvaluatorBase< model::ITimeEvaluator > >( "timelines" );
+    for( auto timeline : timelines )
+        for( auto child : timeline->GetChildren() )
+            tm->AddTimeline( child );
+
+// nodes
+    auto node = dob.Load< model::BasicNode >( "node" );
+    assert( node );
+
+    return Create( node, nullptr, "", tm->GetRootTimeline(), nullptr, tm );
+}
+
+template std::shared_ptr< BVScene >                                        DeserializeObjectLoadImpl( DeserializeObjectImpl*, std::string name );
 
 
 } // bv

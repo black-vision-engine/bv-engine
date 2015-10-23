@@ -49,6 +49,57 @@ DefaultTimeline::~DefaultTimeline    ()
 
 // *********************************
 //
+void                                DefaultTimeline::Serialize           ( SerializeObject & sob ) const
+{
+    sob.SetName( "timeline" );
+    sob.SetValue( "name", GetName() );
+    sob.SetValue( "type", "default" );
+
+    sob.SetValue( "duration", std::to_string( m_timeEvalImpl.GetDuration() ) );
+    if( m_timeEvalImpl.GetWrapPre() == m_timeEvalImpl.GetWrapPost() && m_timeEvalImpl.GetWrapPost() == TimelineWrapMethod::TWM_REPEAT )
+    {
+        sob.SetValue( "loop", "true" );
+    }
+    else
+    {
+        sob.SetValue( "loop", "false" ); // FIXME include more general cases
+    }
+
+    sob.SetName( "children" );
+    for( auto child : m_children )
+        child->Serialize( sob );
+    sob.Pop(); // children
+
+    sob.Pop();
+}
+
+// *********************************
+//
+ISerializablePtr                     DefaultTimeline::Create              ( DeserializeObject & dob )
+{
+    auto name = dob.GetValue( "name" );
+
+    auto duration_ = dob.GetValue( "duration" );
+    float duration = std::stof( duration_ );
+
+    auto loop = dob.GetValue( "loop" );
+    TimelineWrapMethod preWrap = ( loop == "true" ) ? TimelineWrapMethod::TWM_REPEAT : TimelineWrapMethod::TWM_CLAMP; // FIXME
+    TimelineWrapMethod postWrap = preWrap; // FIXME
+
+    auto te = std::make_shared< DefaultTimeline >( name, duration, preWrap, postWrap );
+
+    auto children = dob.LoadArray< TimeEvaluatorBase< ITimeEvaluator > >( "children" );
+
+    for( auto child : children )
+        te->AddChild( child );
+
+    te->Play(); // FIXME, this should be deserialized
+
+    return te;
+}
+
+// *********************************
+//
 TimeType                            DefaultTimeline::GetDuration        () const
 {
     return m_timeEvalImpl.GetDuration();

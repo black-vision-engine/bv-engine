@@ -31,10 +31,10 @@
 #include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
-
 #include "Engine/Models/Plugins/PluginsFactory.h"
+#include "Assets/AssetDescsWithUIDs.h"
 
-#include "Engine/Models/SerializationObjects.h"
+#include "Serialization/ISerializable.h"
 #include "Engine/Models/BVScene.h"
 #include "System/Path.h"
 
@@ -939,57 +939,28 @@ model::BasicNodePtr      TestScenesFactory::SequenceAnimationTestScene  ()
     return nullptr;
 }
 
-// ******************************
-//
-model::BasicNodePtr          TestScenesFactory::XMLTestScene()
+model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineManager * tm )
 {
-    /*auto root =  Text1();
-    root->AddChild( GreenRect() );
-    root->AddChild( TexturedRect() );
-    root->AddChild( ExtrudedTexturedRing() ); // To nie dziala na mojej karcie.
-    root->AddChild( TexturedRing() );
-    root->AddChild( ExtrudedRedRect() );
-    root->AddChild( Text2() );
-	*/
+    if( !Path::Exists( filename ) )
+	{
+		std::cout << "[ERROR] File " << filename << " does not exist" << std::endl;
+		return nullptr;
+	}
+// begin serialization
+    DeserializeObject dob( filename );
 
-	TreeBuilder *XMLTree = new TreeBuilder();
+    model::TimelineManager::SetInstance( tm );
+    auto scene = dob.Load< BVScene >( "scene" );
 
-	auto root = XMLTree->BuildTree("e:\\temp\\test2.xml");
-
-    return root;
+    return scene->GetModelSceneRoot();
 }
 
-model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager )
+model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( model::TimelineManager * timelineManager )
 {
-    assert( Path::Exists( filename ) );
+    //return LoadSceneFromFile( "Assets/07_Results.xml", timelineManager );
+    auto scene = LoadSceneFromFile( "test.xml", timelineManager );
 
-    xml_document<> doc;
-    std::ifstream file( filename );
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    file.close();
-    std::string content( buffer.str() );
-    doc.parse<0>( &content[0] );
-
-    //ISerializablePtr scene = BVScene::Create( deDoc );
-    //BVScene* realScene = reinterpret_cast<BVScene*>( scene.get() );
-    //BVScenePtr realScene = reinterpret_cast<BVScenePtr>( scene );
-    //auto root = realScene->GetModelSceneRoot();
-
-    auto docNode = doc.first_node()->first_node( "nodes" )->first_node( "node" );
-
-    auto deDoc = DeserializeObject( *docNode, *timelineManager, *pluginsManager );
-
-    ISerializablePtr node = model::BasicNode::Create( deDoc );
-
-    auto root = static_cast< model::BasicNode* >( node.get() );
-    assert( root );
-    return BasicNodePtr( root );
-}
-
-model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager )
-{
-    return LoadSceneFromFile( "Assets/07_Results.xml", pluginsManager, timelineManager );
+    return scene;
 }
 
 } // bv

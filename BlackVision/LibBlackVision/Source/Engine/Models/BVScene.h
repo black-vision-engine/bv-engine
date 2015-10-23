@@ -4,11 +4,12 @@
 #include "Mathematics/Interpolators/Interpolators.h"
 
 #include "Engine/Interfaces/IUpdatable.h"
-#include "Engine/Interfaces/ISerializable.h"
-#include "Engine/Models/SerializationObjects.h"
+#include "Serialization/ISerializable.h"
+#include "Serialization/ISerializable.h"
 
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
+#include "Engine/Models/Timeline/TimelineManager.h"
 
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
@@ -43,17 +44,20 @@ private:
     //SceneModelPtr       m_pModelSceneRoot;
     SceneNode *         m_pEngineSceneRoot;
 
+    model::TimelineManager * m_pTimelineManager;
+
     std::string         m_name;
 
 private:
 
-    explicit                BVScene             ( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
+    explicit                BVScene             ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator );
+    explicit                BVScene             ( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager );
 
 public:
 
                             ~BVScene            ();
 
-    static BVScenePtr       Create              ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
+    static BVScenePtr       Create              ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager );
     static ISerializablePtr Create              ( DeserializeObject& doc );
     virtual void            Serialize           ( SerializeObject &doc) const override;
 
@@ -70,6 +74,7 @@ public:
 
     const std::string &     GetName             ()  const;
 
+    static BVScenePtr       CreateFakeSceneForTestingOnly( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator );
 
 private:
 

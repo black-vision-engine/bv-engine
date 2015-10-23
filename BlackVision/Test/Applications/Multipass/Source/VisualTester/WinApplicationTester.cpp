@@ -45,7 +45,7 @@ bool WinApplicationTester::m_sWindowedApplicationInitialized = WinApplicationTes
 
 
 WinApplicationTester::WinApplicationTester()
-	:	WindowedApplication( "Rendering test", 0, 0, DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight(), DefaultConfig.FullScreenMode() )
+	:	WindowedApplication( "Rendering test", 0, 0, DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight(),bv::WindowMode::WINDOWED,*(new bv::RendererInput) )
 {
 	application = this;
 }

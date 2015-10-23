@@ -8,6 +8,7 @@
     <DepDir>$(SolutionRoot)\Dep</DepDir>
     <CoreLibsRootDir>$(SolutionRoot)</CoreLibsRootDir>
     <LibCoreDir>$(CoreLibsRootDir)\LibCore</LibCoreDir>
+	<LibVideoCardsDir>$(CoreLibsRootDir)\LibVideoCards</LibVideoCardsDir>
     <LibBVGLDir>$(CoreLibsRootDir)\LibBVGL</LibBVGLDir>
     <LibImageDir>$(CoreLibsRootDir)\LibImage</LibImageDir>
     <LibBlackVisionDir>$(CoreLibsRootDir)\LibBlackVision</LibBlackVisionDir>
@@ -83,6 +84,9 @@
     </BuildMacro>
     <BuildMacro Include="ThirdPartyDir">
       <Value>$(ThirdPartyDir)</Value>
+    </BuildMacro>
+	<BuildMacro Include="LibVideoCardsDir">
+      <Value>$(LibVideoCardsDir)</Value>
     </BuildMacro>
     <BuildMacro Include="AssetsDir">
       <Value>$(AssetsDir)</Value>

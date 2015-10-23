@@ -56,7 +56,7 @@ bool			BasicWindowApp::RegisterConsoleInitializer		()
 // *********************************
 //
 BasicWindowApp::BasicWindowApp	( CreateLogicFunc logicFunc, const char * title, int xOffset, int yOffset, int width, int height, bool fullScreen )
-    : WindowedApplication( title, xOffset, yOffset, width, height, fullScreen )
+    : WindowedApplication( title, xOffset, yOffset, width, height, fullScreen ? FULLSCREEN : WINDOWED, *(new bv::RendererInput) )  // FIXME: pablito
 	, CreateLogic( logicFunc )
 {
 }

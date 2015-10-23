@@ -5,6 +5,22 @@
 
 namespace bv { namespace model {
 
+TimelineManager* TimelineManager::instance = nullptr; // FIXME: this may be moved to static initilizer
+
+// *********************************
+//
+TimelineManager* TimelineManager::GetInstance                     ()
+{
+    return instance;
+}
+
+// *********************************
+//
+void             TimelineManager::SetInstance                     ( TimelineManager* i )
+{
+    instance = i;
+}
+    
 // *********************************
 //
 TimelineManager::TimelineManager         ()
@@ -20,6 +36,30 @@ TimelineManager::~TimelineManager        ()
     {
         delete it->second;
     }
+}
+
+// *********************************
+//
+void            TimelineManager::Serialize                       ( SerializeObject & sob ) const
+{
+    sob.SetName( "timelines" );
+
+    m_rootTimeline->Serialize( sob );
+
+    for( auto i : m_registeredParams )
+    {
+        i.first->Serialize( sob );
+    }
+
+    sob.Pop();
+}
+
+// *********************************
+//
+ISerializablePtr TimelineManager::Create                          ( DeserializeObject & dob )
+{
+    dob;
+    return nullptr;
 }
 
 // *********************************
