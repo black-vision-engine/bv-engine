@@ -1168,9 +1168,9 @@ model::BasicNodePtr     TestScenesFactory::AssetCacheTestScene         ( const m
     auto node3 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CUBE", glm::vec3( 5.0, -5.0, 0.0 ), "water.jpg" );
 
     auto node4 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( 0.0, -0.4, 0.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 1", "fonts/Astera.TTF" );
-    auto node5 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( -3.0, 2.0, -3.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 2", "fonts/Astera.TTF" );
+    auto node5 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( -3.0, 0.0, -3.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 2", "fonts/Astera.TTF" );
     auto node6 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( -4.0, -3.0, 1.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Courbi tekst 1", "fonts/courbi.ttf" );
-    auto node7 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( 0.0, 2.0, 4.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Courbi tekst 2", "fonts/courbi.ttf" );
+    auto node7 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( 0.0, 0.0, 4.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Courbi tekst 2", "fonts/courbi.ttf" );
     auto node8 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( 1.0, 0.0, -3.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Cour tekst 1", "fonts/cour.ttf" );
     auto node9 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( -4.0, -3.0, 1.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Cour tekst 2", "fonts/cour.ttf" );
 
