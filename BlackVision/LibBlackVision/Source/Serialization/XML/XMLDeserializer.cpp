@@ -19,7 +19,7 @@ DeserializeObject::DeserializeObject( std::string filename )
     file.close();
     static std::string content( buffer.str() ); // FIXME
     m_rootDoc->parse<0>( &content[0] );
-    m_doc = m_rootDoc->first_node();
+    m_doc = m_rootDoc;
 
     m_nodes.push( m_doc );
 }
@@ -38,23 +38,15 @@ DeserializeObject::DeserializeObject( std::istream & in, SizeType numBytes )
     in.read( buf, numBytes );
 
     m_rootDoc->parse<0>( buf );
-    m_doc = m_rootDoc->first_node();
+    m_doc = m_rootDoc;
 
     m_nodes.push( m_doc );
 }
-
-//// *******************************
-////
-//DeserializeObject::DeserializeObject( DeserializeObjectImpl *pimpl )
-//    //: pimpl_( pimpl )
-//{
-//}
 
 // *******************************
 //
 DeserializeObject::~DeserializeObject()
 {
-    //delete pimpl_;
 }
 
 
@@ -75,11 +67,6 @@ std::string                                             DeserializeObject::GetVa
 }
 
 
-//void				DeserializeObject::SetAttribute        ( const std::string& /*name*/, const std::string& /*value*/ ) 
-//{
-//    assert( false );
-//}
-
 std::string			DeserializeObject::GetAttribute        ( const std::string& name ) const
 { 
     return GetValue( name );
@@ -87,7 +74,6 @@ std::string			DeserializeObject::GetAttribute        ( const std::string& name )
 
 bool                DeserializeObject::EnterChild          ( const std::string& name ) const
 { 
-// FIXME this implementation sucks so much
     auto child = m_doc->first_node( name.c_str() );
     if( child == nullptr )
         return false;

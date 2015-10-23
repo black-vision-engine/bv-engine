@@ -31,7 +31,7 @@ BVSceneEditor::BVSceneEditor                ( BVScene * scene )
     assert( scene != nullptr );
     assert( scene->m_renderer != nullptr );
 
-    m_modelSceneEditor = new model::ModelSceneEditor( scene->m_pModelSceneRoot );
+    m_modelSceneEditor = new model::ModelSceneEditor( scene->GetModelSceneRoot() );
     m_engineSceneEditor = new SceneEditor( scene->m_renderer, scene->m_pEngineSceneRoot );
 }
 

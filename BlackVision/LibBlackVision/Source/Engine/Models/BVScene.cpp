@@ -9,11 +9,15 @@
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
-#include "Engine/Models/Timeline/TimelineManager.h"
-#include "Assets/AssetDescsWithUIDs.h"
-#include "Serialization/SerializationHelper.h"
-
 namespace bv {
+
+// *******************************
+//
+void                    BVScene::Serialize           ( ISerializer& ser ) const
+{
+    m_pSceneModel->Serialize( ser );
+}
+
 
 // *******************************
 //
@@ -49,12 +53,11 @@ BVScenePtr    BVScene::CreateFakeSceneForTestingOnly( model::BasicNodePtr modelR
 //
 BVScene::BVScene    ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator )
     : m_pCamera( cam )
-    , m_pModelSceneRoot( modelRootNode )
+    , m_pSceneModel( new SceneModel( name, nullptr, modelRootNode ) )
     , m_pEngineSceneRoot( nullptr )
     , m_cameraPosition( "camera_position", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 1.0f ) ), timeEvaluator )
     , m_cameraDirection( "camera_direction", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 0.f ) ), timeEvaluator )
     , m_cameraUp( "camera_up", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 1.f, 0.f ) ), timeEvaluator )
-    , m_name( name )
 {}
 
 // *******************************
@@ -62,13 +65,11 @@ BVScene::BVScene    ( model::BasicNodePtr modelRootNode, Camera * cam, const std
 BVScene::BVScene    ( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager )
     : m_pCamera( cam )
     , m_renderer( renderer )
-    , m_pModelSceneRoot( nullptr )
+    , m_pSceneModel( new SceneModel( name, pTimelineManager, nullptr ) )
     , m_pEngineSceneRoot( nullptr )
     , m_cameraPosition( "camera_position", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 1.0f ) ), timeEvaluator )
     , m_cameraDirection( "camera_direction", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 0.f ) ), timeEvaluator )
     , m_cameraUp( "camera_up", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 1.f, 0.f ) ), timeEvaluator )
-    , m_name( name )
-    , m_pTimelineManager( pTimelineManager )
 {
     m_pSceneEditor = new BVSceneEditor( this );
 }
@@ -87,9 +88,9 @@ void            BVScene::Update( TimeType t )
 {
     static std::vector< Transform > vec(1);
 
-    if( m_pModelSceneRoot )
+    if( GetModelSceneRoot() )
     {
-        m_pModelSceneRoot->Update( t );
+        GetModelSceneRoot()->Update( t );
 
         UpdatersManager::Get().UpdateStep();
 
@@ -119,9 +120,9 @@ Camera *        BVScene::GetCamera              ()  const
 
 // *******************************
 //
-model::BasicNodePtr BVScene::GetModelSceneRoot  ()  const
+model::BasicNodePtr & BVScene::GetModelSceneRoot  ()  const
 {
-    return m_pModelSceneRoot;
+    return m_pSceneModel->m_pModelSceneRoot;
 }
 
 // *******************************
@@ -142,69 +143,7 @@ BVSceneEditor *         BVScene::GetSceneEditor     ()
 //
 const std::string &     BVScene::GetName            () const
 {
-    return m_name;
-}
-
-// *******************************
-//
-void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root )
-{
-    auto plugins = root->GetPlugins();
-    for( unsigned int i = 0; i < root->GetNumPlugins(); i++ )
-    {
-        auto assets = root->GetPlugins()->GetPlugin( i )->GetAssets();
-        for( auto asset : assets )
-        {
-            map.AddAssetDesc( asset );
-        }
-    }
-
-    for( unsigned int i = 0; i < root->GetNumChildren(); i++ )
-        GetAssetsWithUIDs( map, root->GetChild( i ) );
-}
-
-// *******************************
-//
-void            BVScene::Serialize           ( ISerializer& ser) const
-{
-ser.EnterChild( "scene" );
-
-    model::TimelineManager::SetInstance( m_pTimelineManager );
-
-    //auto& assets = AssetDescsWithUIDs::GetInstance();
-    AssetDescsWithUIDs assets;
-    GetAssetsWithUIDs( assets, m_pModelSceneRoot );
-    AssetDescsWithUIDs::SetInstance( assets );
-
-    assets.Serialize( ser );
-
-    m_pTimelineManager->Serialize( ser );
-    m_pModelSceneRoot->Serialize( ser );
-
-ser.ExitChild();
-}
-
-// *******************************
-//
-ISerializablePtr        BVScene::Create          ( const IDeserializer& deser )
-{
-// assets
-    auto assets = SerializationHelper::DeserializeObjectLoadImpl< AssetDescsWithUIDs >( deser, "assets" );
-    AssetDescsWithUIDs::SetInstance( *assets );
-
-// timelines
-    auto tm = model::TimelineManager::GetInstance();
-
-    auto timelines = SerializationHelper::DeserializeObjectLoadArrayImpl< model::TimeEvaluatorBase< model::ITimeEvaluator > >( deser, "timelines" );
-    for( auto timeline : timelines )
-        for( auto child : timeline->GetChildren() )
-            tm->AddTimeline( child );
-
-// nodes
-    auto node = SerializationHelper::DeserializeObjectLoadImpl< model::BasicNode >( deser, "node" );
-    assert( node );
-
-    return Create( node, nullptr, "", tm->GetRootTimeline(), nullptr, tm );
+    return m_pSceneModel->m_name;
 }
 
 
