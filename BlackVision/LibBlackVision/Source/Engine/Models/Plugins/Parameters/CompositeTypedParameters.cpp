@@ -13,6 +13,13 @@ ParamTransform::ParamTransform  ( const std::string & name, const TransformF & t
 }
 
 // *******************************
+// FIXME: reimplement with SQT paramter model
+void                ParamTransform::SetCurveType    ( CurveType type ) 
+{ 
+    m_transformModel.SetCurveType( type ); 
+}
+
+// *******************************
 //
 VoidPtr    ParamTransform::QueryParamTyped  ()
 {
@@ -35,6 +42,14 @@ ParamTransformVec::ParamTransformVec                ( const std::string & name, 
 ParamTransformVec::ParamTransformVec                ( const std::string & name, ITimeEvaluatorPtr evaluator )
     : AbstractModelParameter( name, ModelParamType::MPT_TRANSFORM_VEC, evaluator )
 {
+}
+
+// *******************************
+//
+void ParamTransformVec::SetCurveType        ( CurveType type ) 
+{ 
+    for( auto& trans : m_transformModelVec ) 
+        trans.SetCurveType( type ); 
 }
 
 // *******************************
