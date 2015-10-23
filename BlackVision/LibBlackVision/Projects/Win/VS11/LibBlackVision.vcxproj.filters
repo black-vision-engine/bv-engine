@@ -969,6 +969,9 @@
     <ClCompile Include="..\..\..\Source\Serialization\XML\XMLSerializer.cpp">
       <Filter>Serialization\XML</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\SceneModel.cpp">
+      <Filter>Engine\Models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">

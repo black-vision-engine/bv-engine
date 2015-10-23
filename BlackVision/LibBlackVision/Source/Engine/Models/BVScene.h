@@ -27,7 +27,7 @@ DEFINE_PTR_TYPE(BVScene)
 DEFINE_CONST_PTR_TYPE(BVScene)
 
 
-class BVScene : public IUpdatable, public ISerializable
+class BVScene : public IUpdatable
 {
 private:
     
@@ -40,13 +40,9 @@ private:
     model::ParamVec3    m_cameraDirection;
     model::ParamVec3    m_cameraUp;
 
-    model::BasicNodePtr m_pModelSceneRoot;
-    //SceneModelPtr       m_pModelSceneRoot;
+    SceneModelPtr       m_pSceneModel;
+
     SceneNode *         m_pEngineSceneRoot;
-
-    model::TimelineManager * m_pTimelineManager;
-
-    std::string         m_name;
 
 private:
 
@@ -58,8 +54,7 @@ public:
                             ~BVScene            ();
 
     static BVScenePtr       Create              ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager );
-    static ISerializablePtr Create              ( const IDeserializer& deser );
-    virtual void            Serialize           ( ISerializer& doc) const override;
+    void                    Serialize           ( ISerializer& ser ) const;
 
     virtual void            Update              ( TimeType t );
 
@@ -67,7 +62,7 @@ public:
 
     Camera *                GetCamera           ()  const;
 
-    model::BasicNodePtr     GetModelSceneRoot   ()  const;
+    model::BasicNodePtr &   GetModelSceneRoot   ()  const;
     SceneNode *             GetEngineSceneRoot  ()  const;
 
     BVSceneEditor *         GetSceneEditor      ();
