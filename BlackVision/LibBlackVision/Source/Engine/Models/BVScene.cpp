@@ -11,7 +11,7 @@
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Assets/AssetDescsWithUIDs.h"
-#include "Serialization/SerializationObjects.inl"
+#include "Serialization/SerializationHelper.h"
 
 namespace bv {
 
@@ -165,9 +165,9 @@ void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root )
 
 // *******************************
 //
-void            BVScene::Serialize           ( SerializeObject &doc) const
+void            BVScene::Serialize           ( ISerializer& ser) const
 {
-    doc.SetName( "scene" );
+ser.EnterChild( "scene" );
 
     model::TimelineManager::SetInstance( m_pTimelineManager );
 
@@ -176,38 +176,36 @@ void            BVScene::Serialize           ( SerializeObject &doc) const
     GetAssetsWithUIDs( assets, m_pModelSceneRoot );
     AssetDescsWithUIDs::SetInstance( assets );
 
-    assets.Serialize( doc );
+    assets.Serialize( ser );
 
-    m_pTimelineManager->Serialize( doc );
-    m_pModelSceneRoot->Serialize( doc );
+    m_pTimelineManager->Serialize( ser );
+    m_pModelSceneRoot->Serialize( ser );
 
-    doc.Pop();
+ser.ExitChild();
 }
 
 // *******************************
 //
-ISerializablePtr        BVScene::Create          ( DeserializeObject &dob )
+ISerializablePtr        BVScene::Create          ( const IDeserializer& deser )
 {
 // assets
-    auto assets = dob.Load< AssetDescsWithUIDs >( "assets" );
+    auto assets = SerializationHelper::DeserializeObjectLoadImpl< AssetDescsWithUIDs >( deser, "assets" );
     AssetDescsWithUIDs::SetInstance( *assets );
 
 // timelines
     auto tm = model::TimelineManager::GetInstance();
 
-    auto timelines = dob.LoadArray< model::TimeEvaluatorBase< model::ITimeEvaluator > >( "timelines" );
+    auto timelines = SerializationHelper::DeserializeObjectLoadArrayImpl< model::TimeEvaluatorBase< model::ITimeEvaluator > >( deser, "timelines" );
     for( auto timeline : timelines )
         for( auto child : timeline->GetChildren() )
             tm->AddTimeline( child );
 
 // nodes
-    auto node = dob.Load< model::BasicNode >( "node" );
+    auto node = SerializationHelper::DeserializeObjectLoadImpl< model::BasicNode >( deser, "node" );
     assert( node );
 
     return Create( node, nullptr, "", tm->GetRootTimeline(), nullptr, tm );
 }
-
-template std::shared_ptr< BVScene >                                        DeserializeObjectLoadImpl( DeserializeObjectImpl*, std::string name );
 
 
 } // bv

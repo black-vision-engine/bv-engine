@@ -41,17 +41,4 @@ private:
 
 
 
-class FontAssetDesc;
-
-template<> inline std::shared_ptr<const FontAsset> LoadTypedAsset<FontAsset>(  const AssetDescConstPtr & desc )
-{
-	if( typeid( FontAssetDesc ) == typeid( *( desc.get() ) ) )
-	{
-		auto asset = AssetManager::GetInstance().LoadAsset( desc );
-		return std::static_pointer_cast<const FontAsset>( asset );
-	}
-	return nullptr;
-}
-
-
 } // bv

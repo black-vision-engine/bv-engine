@@ -5,6 +5,7 @@
 
 #include "Engine/Models/Plugins/Parameters/AbstractModelParameter.h"
 #include "Serialization/ISerializable.h"
+#include "Serialization/ISerializer.h"
 
 
 namespace bv { namespace model {
@@ -26,7 +27,7 @@ public:
     explicit                SimpleParameterImpl ( const std::string & name, const InterpolatorType & interpolator, ITimeEvaluatorPtr evaluator );
                             ~SimpleParameterImpl();
 
-    void                    Serialize       ( SerializeObject & doc ) const;
+    void                    Serialize       ( ISerializer& doc ) const;
 
 
     virtual void                SetInterpolationMethod ( InterpolationMethod method ) override;

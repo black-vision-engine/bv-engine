@@ -17,8 +17,9 @@ protected:
 
 public:
 
-    virtual void                    Serialize       ( SerializeObject & sob ) const;
-    static ISerializableConstPtr    Create          ( DeserializeObject & dob );
+    virtual void                    Serialize       ( ISerializer& sob ) const;
+    //virtual void                    Deserialize     ( const IDeserializer& sob );
+    static ISerializableConstPtr    Create          ( const IDeserializer& dob );
 
 	virtual const std::string &		GetUID		() const override;
 
@@ -37,6 +38,8 @@ public:
 
 	//const std::vector< TextureAssetDescConstPtr > &  GetFrames		() const;
 
+	//const std::vector< TextureAssetDescConstPtr > &  GetFrames		() const;
+
     static AnimationAssetDescConstPtr			Create ( const std::string & path, const std::string & filter );
     //static AnimationAssetDescConstPtr			Create ( const std::vector< TextureAssetDescConstPtr > & frames );
 
@@ -47,7 +50,15 @@ private:
     //std::vector< TextureAssetDescConstPtr > m_frames;
     std::string                             m_path;
     std::string                             m_filter;
-
 };
+
+// ***********************
+/// Returns AssetDescriptor UID for Asset in template parameter.
+/// @note AssetDescriptor uid and Asset uid are different strings.
+template<> inline const std::string& GetAssetDescUID<AnimationAsset>()
+{
+    return AnimationAssetDesc::UID();
+}
+
 
 } //bv

@@ -32,6 +32,8 @@
 #include "Engine\Models\BVSceneEditor.h"
 #include "Engine\Models\ModelNodeEditor.h"
 
+#include "Serialization/Json/JsonDeserializeObject.h"
+
 #include <iomanip>
 #include <string>
 #include <sstream>
@@ -64,6 +66,7 @@ RemoteControlInterface::RemoteControlInterface(BVAppLogic *AppLogic)
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnNodeAppearing ), widgets::NodeAppearingCrawlerEvent::Type() );
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );
 
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnLoadAsset ), bv::LoadAssetEvent::Type() );
 }
 
 
@@ -189,6 +192,15 @@ namespace
 	{
 		return t;
 	}
+
+    // *********************************
+    //
+    template<>
+    std::string toString< std::wstring >( const std::wstring& t )
+    {
+        std::string convertedString( t.begin(), t.end() );
+        return std::move( convertedString );
+    }
 
     // *********************************
     //
@@ -1204,6 +1216,46 @@ void            RemoteControlInterface::OnNodeLeaving   ( IEventPtr evt )
 
 // *********************************
 //
+void            RemoteControlInterface::OnLoadAsset     ( IEventPtr evt )
+{
+    if( evt->GetEventType() == bv::LoadAssetEvent::m_sEventType )
+    {
+        bv::LoadAssetEventPtr eventLoadAsset = std::static_pointer_cast<bv::LoadAssetEvent>( evt );
+        
+        std::string nodeName = toString( eventLoadAsset->NodeName );
+        std::string pluginName = toString( eventLoadAsset->PluginName );
+        std::string asssetData = toString( eventLoadAsset->AssetData );
+
+        auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot();
+        auto node = root->GetNode( nodeName );
+        auto plugin = node->GetPlugin( pluginName );
+
+        JsonDeserializeObject deserializer;
+        deserializer.Load( asssetData );
+
+        bool result = true;
+        auto assetDesc = AssetManager::GetInstance().CreateDesc( deserializer );
+
+        if( assetDesc != nullptr )
+            result = plugin->LoadResource( assetDesc );
+        else
+            result = false;
+
+        std::wstring response;
+        if( result )
+            response = L"Asset loaded succesfully. node: [" + eventLoadAsset->NodeName + L"] plugin [" + eventLoadAsset->PluginName + L"]";
+        else
+            response = L"Failed to load asset. node [" + eventLoadAsset->NodeName + L"] plugin [" + eventLoadAsset->PluginName + L"]";
+
+        ResponseMsg msg;
+        msg.msg     = response;
+        msg.sock_id = eventLoadAsset->SockID;
+        SocketWrapper::AddMsg( msg );
+    }
+}
+
+// *********************************
+//
 namespace 
 {
     const std::wstring* examples2 = new std::wstring[20];
@@ -1744,6 +1796,8 @@ void    RemoteControlInterface::UpdateHM        ()
 
     }
 }
+
+
 
 }
 

@@ -1,26 +1,38 @@
 #include "AnimationAssetDescriptor.h"
+#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
+
+#include <cassert>
 
 namespace bv {
 
 const std::string AnimationAssetDesc::uid = "ANIMATION_ASSET_DESC";
 
+
 // ***********************
 //
-void                AnimationAssetDesc::Serialize       ( SerializeObject & sob ) const
+void                AnimationAssetDesc::Serialize       ( ISerializer& sob ) const
 {
-sob.SetName( "asset" );
-    sob.SetValue( "type", "anim" );
-    sob.SetValue( "path", m_path );
-    sob.SetValue( "filter", m_filter );
-sob.Pop();
+sob.EnterChild( "asset" );
+    sob.SetAttribute( "uid", UID() );
+    sob.SetAttribute( "path", m_path );
+    sob.SetAttribute( "filter", m_filter );
+sob.ExitChild();
 }
 
 // ***********************
 //
-ISerializableConstPtr     AnimationAssetDesc::Create          ( DeserializeObject & dob )
+ISerializableConstPtr     AnimationAssetDesc::Create          ( const IDeserializer& dob )
 {
-    return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetValue( "path" ), dob.GetValue( "filter" ) ) );
+    return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetAttribute( "path" ), dob.GetAttribute( "filter" ) ) );
 }
+
+//// ***********************
+////
+//void AnimationAssetDesc::Deserialize     ( const IDeserializer& /*sob*/ )
+//{
+//    assert( false );
+//}
 
 // *******************************
 //
@@ -38,22 +50,19 @@ AnimationAssetDesc::AnimationAssetDesc							( const std::string & path, const s
 //}
 
 
+
+
 // *******************************
 //
 AnimationAssetDesc::~AnimationAssetDesc							()
 {
 }
 
-// *******************************
-//
-//const std::vector< TextureAssetDescConstPtr > & AnimationAssetDesc::GetFrames		() const
-//{
-//    return m_frames;
-//}
 
-//// *******************************
-////
-//AnimationAssetDescConstPtr			AnimationAssetDesc::Create ( const std::vector< TextureAssetDescConstPtr > & frames )
+
+
+
+//const std::vector< TextureAssetDescConstPtr > & AnimationAssetDesc::GetFrames		() const
 //{
 //    return AnimationAssetDescConstPtr( new AnimationAssetDesc ( frames ) );
 //}

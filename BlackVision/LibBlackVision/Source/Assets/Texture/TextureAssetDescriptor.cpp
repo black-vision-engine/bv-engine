@@ -5,11 +5,19 @@
 #include "ProjectManager.h"
 #include <cassert>
 
+#include "Serialization/SerializationHelper.h"
+
 namespace bv
 {
 
 const std::string TextureAssetDesc::uid = "TEXTURE_ASSET_DESC";
 
+
+// Serialization strings
+//const std::string 
+
+// ***********************
+//
 std::string Filter2String( MipMapFilterType filter )
 {
     if( filter == MipMapFilterType::BILINEAR )
@@ -23,17 +31,57 @@ std::string Filter2String( MipMapFilterType filter )
 
 // ***********************
 //
-void                TextureAssetDesc::Serialize       ( SerializeObject & sob ) const
+void                TextureAssetDesc::Serialize       ( ISerializer& ser ) const
 {
-sob.SetName( "asset" );
-    sob.SetValue( "type", "tx" );
-    sob.SetValue( "path", m_originalTextureDesc->GetImagePath() );
+ser.EnterChild( "asset" );
+    ser.SetAttribute( "uid", UID() );
+    ser.SetAttribute( "path", m_originalTextureDesc->GetImagePath() );
 
     if( m_mipMapsDescs )
-        sob.SetValue( "mipmap", Filter2String( m_mipMapsDescs->GetFilter() ) );
+        ser.SetAttribute( "filter", Filter2String( m_mipMapsDescs->GetFilter() ) );
     else
-        sob.SetValue( "mipmap", "none" );
-sob.Pop();
+        ser.SetAttribute( "filter", "none" );
+
+    if( m_loadingType == TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE )
+        ser.SetAttribute( "loading_type", "ONLY_ORIGINAL" );
+    else if( m_loadingType == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS )
+        ser.SetAttribute( "loading_type", "GENERATE_MIPMAPS" );
+    else
+        ser.SetAttribute( "loading_type", "LOAD_WITH_MIPMAPS" );
+
+    if( m_loadingType == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS )
+    {
+        m_mipMapsDescs->Serialize( ser );
+    }
+
+ser.ExitChild();
+}
+
+// ***********************
+//
+void TextureAssetDesc::Deserialize     ( const IDeserializer& sob )
+{
+    auto obj = SerializationHelper::Create< const TextureAssetDesc >( sob );
+
+    if( obj == nullptr || obj->GetUID() != uid )
+    {
+        assert( !"Failed" ); //FIXME: Error handling.
+        return;
+    }
+
+    *this = *obj;
+
+//sob.EnterChild( "asset" );
+//    if( UID() != sob.GetAttribute( "uid" ) )
+//        assert( false ); // FIXME: error handling
+//
+//    sob.SetAttribute( "path", m_originalTextureDesc->GetImagePath() );
+//
+//    if( m_mipMapsDescs )
+//        sob.SetAttribute( "mipmap", Filter2String( m_mipMapsDescs->GetFilter() ) );
+//    else
+//        sob.SetAttribute( "mipmap", "none" );
+//sob.ExitChild();
 }
 
 MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
@@ -53,18 +101,32 @@ MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
     }
 }
 
+
+
 // ***********************
 //
-ISerializableConstPtr TextureAssetDesc::Create          ( DeserializeObject & dob )
+ISerializableConstPtr TextureAssetDesc::Create          ( const IDeserializer& deser )
 {
-    auto path = dob.GetValue( "path" );
+    auto path = deser.GetAttribute( "path" );
 
-    auto filterS = dob.GetValue( "mipmap" );
+    if( deser.EnterChild( "mipmaps" ) )
+    {
+        deser.EnterChild( "asset" );
+        do
+        {
+        } while( deser.NextChild() );
+        deser.ExitChild(); // asset
+
+        deser.ExitChild(); // mipmaps
+    }
+
+    auto filterS = deser.GetAttribute( "filter" );
     if( filterS == "none" )
         return Create( path, true );
     else
         return Create( path, String2Filter( filterS ), true );
 }
+
 
 // ***********************
 //

@@ -72,49 +72,51 @@ void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root )
 //
 void			            SceneDescriptor::SaveScene		( const model::BasicNodeConstPtr & scene, model::TimelineManager * tm, std::ostream & out )
 {
-	auto sob = SerializeObject();
+    assert( false ); scene; tm; out;
+	//auto sob = SerializeObject();
 
-    sob.SetName( "scene" );
+ //   sob.EnterChild( "scene" );
 
-    AssetDescsWithUIDs assets;
-    GetAssetsWithUIDs( assets, std::const_pointer_cast< model::BasicNode >( scene ) );
-    AssetDescsWithUIDs::SetInstance( assets );
+ //   AssetDescsWithUIDs assets;
+ //   GetAssetsWithUIDs( assets, std::const_pointer_cast< model::BasicNode >( scene ) );
+ //   AssetDescsWithUIDs::SetInstance( assets );
 
-    assets.Serialize( sob );
+ //   assets.Serialize( sob );
 
-    tm->Serialize( sob );
-    scene->Serialize( sob );
+ //   tm->Serialize( sob );
+ //   scene->Serialize( sob );
 
-    sob.Pop();
-    sob.Save( out );
+ //   sob.ExitChild();
+ //   sob.Save( out );
 }
 
 // ********************************
 //
 model::BasicNodeConstPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeType numBytes, model::TimelineManager * tm )
 {
-    auto deDoc = DeserializeObject( in, numBytes );
+    assert( false ); in; numBytes; tm; return nullptr;
+    //auto deDoc = DeserializeObject( in, numBytes );
 
 
-    // assets
-    auto assets = deDoc.Load< AssetDescsWithUIDs >( "assets" );
-    AssetDescsWithUIDs::SetInstance( *assets );
+    //// assets
+    //auto assets = deDoc.Load< AssetDescsWithUIDs >( "assets" );
+    //AssetDescsWithUIDs::SetInstance( *assets );
 
-    auto timelines = deDoc.LoadArray< model::TimeEvaluatorBase< model::ITimeEvaluator > >( "timelines" );
-    for( auto timeline : timelines )
-        for( auto child : timeline->GetChildren() )
-            tm->AddTimeline( child );
+    //auto timelines = deDoc.LoadArray< model::TimeEvaluatorBase< model::ITimeEvaluator > >( "timelines" );
+    //for( auto timeline : timelines )
+    //    for( auto child : timeline->GetChildren() )
+    //        tm->AddTimeline( child );
 
 
-    auto node = deDoc.Load< model::BasicNode >( "node" );
-    assert( node );
-    return node;
-    //docNode = doc.first_node( "scene" )->first_node( "node" );
-    //deDoc = DeserializeObject( docNode, tm );
+    //auto node = deDoc.Load< model::BasicNode >( "node" );
+    //assert( node );
+    //return node;
+    ////docNode = doc.first_node( "scene" )->first_node( "node" );
+    ////deDoc = DeserializeObject( docNode, tm );
 
-    //ISerializablePtr node = model::BasicNode::Create( deDoc );
+    ////ISerializablePtr node = model::BasicNode::Create( deDoc );
 
-    //return std::static_pointer_cast< const model::BasicNode >( node );
+    ////return std::static_pointer_cast< const model::BasicNode >( node );
 }
 
 // ********************************
@@ -135,12 +137,13 @@ AssetDescVec SceneDescriptor::ListSceneAssets ( const Path & sceneFile )
 //
 AssetDescVec SceneDescriptor::ListSceneAssets ( std::istream & in, SizeType numBytes )
 {
-    auto deDoc = DeserializeObject( in, numBytes );
+    assert( false ); in; numBytes; return AssetDescVec();
+    //auto deDoc = DeserializeObject( in, numBytes );
 
-    // assets
-    auto assets = deDoc.Load< AssetDescsWithUIDs >( "assets" );
+    //// assets
+    //auto assets = deDoc.Load< AssetDescsWithUIDs >( "assets" );
 
-    return assets->GetAssetsDescs();
+    //return assets->GetAssetsDescs();
 }
 
 } // bv

@@ -3,7 +3,6 @@
 #include "Assets/Font/Glyph.h"
 #include "Assets/Font/Text.h"
 #include "Assets/Font/TextAtlas.h"
-#include "Assets/Texture/TextureCache.h"
 #include "ProjectManager.h"
 
 #include "LibImage.h"

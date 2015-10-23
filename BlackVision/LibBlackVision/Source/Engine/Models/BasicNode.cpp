@@ -12,12 +12,13 @@
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 
-#include "Serialization/SerializationObjects.inl"
+#include "Serialization/SerializationHelper.h"
+//#include "Serialization/SerializationObjects.inl"
 
 namespace bv { 
     
 // serialization stuff
-template std::shared_ptr< model::BasicNode >                                        DeserializeObjectLoadImpl( DeserializeObjectImpl* pimpl, std::string name );
+//template std::shared_ptr< model::BasicNode >                                        DeserializeObjectLoadImpl( const IDeserializer& pimpl, std::string name );
     
 namespace model {
 
@@ -88,12 +89,12 @@ BasicNodePtr                    BasicNode::Create                   ( const std:
 
 // ********************************
 //
-void                            BasicNode::Serialize               ( SerializeObject& doc ) const
+void                            BasicNode::Serialize               ( ISerializer& doc ) const
 {
-    doc.SetName( "node" );
-    doc.SetValue( "name", GetName() );
+    doc.EnterChild( "node" );
+    doc.SetAttribute( "name", GetName() );
 
-    doc.SetName( "plugins" );
+    doc.EnterChild( "plugins" );
         for( unsigned int  i = 0; i < m_pluginList->NumPlugins(); i++ )
         {
             auto plugin_ = m_pluginList->GetPlugin( i );
@@ -101,36 +102,36 @@ void                            BasicNode::Serialize               ( SerializeOb
             assert( plugin );
             plugin->Serialize( doc );
         }
-    doc.Pop(); // plugins
+    doc.ExitChild(); // plugins
 
-    doc.SetName( "nodes" );
+    doc.EnterChild( "nodes" );
         for( auto child : m_children )
             child->Serialize( doc );
-    doc.Pop();
+    doc.ExitChild();
 
-    doc.Pop();
+    doc.ExitChild();
 }
 
 // ********************************
 //
-ISerializablePtr BasicNode::Create( DeserializeObject& dob )
+ISerializablePtr BasicNode::Create( const IDeserializer& dob )
 {
-    assert( dob.GetName() == "node" );
+    //assert( dob.GetName() == "node" ); FIXME
 
-    auto name = dob.GetValue( "name" );
+    auto name = dob.GetAttribute( "name" );
 
     auto timeEvaluator = TimelineManager::GetInstance()->GetRootTimeline(); // FIXME: probably this should be serialized
     
     auto node = Create( name, timeEvaluator );
 
 // plugins
-    auto plugins = dob.LoadArray< BasePlugin< IPlugin > >( "plugins" );
+    auto plugins = SerializationHelper::DeserializeObjectLoadArrayImpl< BasePlugin< IPlugin > >( dob, "plugins" );
 
     for( auto plugin : plugins )
         node->AddPlugin( plugin );
 
 // children
-    auto children = dob.LoadArray< BasicNode >( "nodes" );
+    auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< BasicNode >( dob, "nodes" );
 
     for( auto child : children )
         node->AddChildToModelOnly( child );

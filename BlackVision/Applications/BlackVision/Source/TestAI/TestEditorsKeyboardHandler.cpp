@@ -1,11 +1,11 @@
 #include "TestEditorsKeyboardHandler.h"
 
 #include "Engine/Models/BVSceneEditor.h"
+#include "Serialization/XML/XMLSerializer.h"
 
 #include "MockScenes.h"
 #include "BVAppLogic.h"
 #include "BVGL.h"
-
 
 namespace bv {
 

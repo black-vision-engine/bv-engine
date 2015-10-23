@@ -331,7 +331,8 @@ namespace bv{
  
                              GetDefaultEventManager().ConcurrentQueueEvent( ev );
                              wcout<<"event  :"<<cmd->query<<" added!"<<endl;
-                        }else if(pm.cmdStack[i]->Type==CmdType::SET_PARAM)
+                        }
+                        else if(pm.cmdStack[i]->Type==CmdType::SET_PARAM)
                         {
                             CmdSetParam *cmd = (CmdSetParam*)(pm.cmdStack[i]);
                             SetParamEventPtr ev = SetParamEventPtr(new SetParamEvent() );
@@ -345,7 +346,8 @@ namespace bv{
                             ev->z = cmd->z;
 
                             GetDefaultEventManager().ConcurrentQueueEvent( ev );
-                        }else if(pm.cmdStack[i]->Type==CmdType::GET_INFO)
+                        }
+                        else if(pm.cmdStack[i]->Type==CmdType::GET_INFO)
                         {
                              CmdGetInfo *cmd = (CmdGetInfo*)(pm.cmdStack[i]);
                              InfoEventPtr  ev = InfoEventPtr( new InfoEvent() );
@@ -356,7 +358,8 @@ namespace bv{
                              ev->sock_id = (int)*csock;
  
                              GetDefaultEventManager().ConcurrentQueueEvent( ev );
-                        }else if(pm.cmdStack[i]->Type==CmdType::SCENE_STRUCTURE)
+                        }
+                        else if(pm.cmdStack[i]->Type==CmdType::SCENE_STRUCTURE)
                         {
                              CmdStruct *cmd = (CmdStruct*)(pm.cmdStack[i]);
                              SceneStructureEventPtr  ev = SceneStructureEventPtr( new SceneStructureEvent() );
@@ -369,7 +372,8 @@ namespace bv{
                              ev->sock_id = (int)*csock;
  
                              GetDefaultEventManager().ConcurrentQueueEvent( ev );
-                        }else if(pm.cmdStack[i]->Type==CmdType::TIMELINE)
+                        }
+                        else if(pm.cmdStack[i]->Type==CmdType::TIMELINE)
                         {
                             CmdTimeline *cmd = (CmdTimeline*)(pm.cmdStack[i]);
                             TimeLineCmdPtr ev = TimeLineCmdPtr(new TimeLineCmd() );
@@ -392,7 +396,8 @@ namespace bv{
                             ev->MS = cmd->MS;
                             
                             GetDefaultEventManager().ConcurrentQueueEvent( ev );
-                        }else if(pm.cmdStack[i]->Type==CmdType::WIDGET)
+                        }
+                        else if(pm.cmdStack[i]->Type==CmdType::WIDGET)
                         {
                             CmdWidget *cmd = (CmdWidget*)(pm.cmdStack[i]);
                             WidgetCmdPtr ev = WidgetCmdPtr(new WidgetCmd() );
@@ -404,6 +409,18 @@ namespace bv{
 							ev->Param = cmd->Param;
 							ev->Time = cmd->Time;
 							ev->Value = cmd->Value;
+
+                            GetDefaultEventManager().ConcurrentQueueEvent( ev );
+                        }
+                        else if( pm.cmdStack[i]->Type == CmdType::LOAD_ASSET )
+                        {
+                            CmdLoadAsset* cmd = (CmdLoadAsset*)(pm.cmdStack[i]);
+                            LoadAssetEventPtr ev = std::make_shared<LoadAssetEvent>();
+
+                            ev->AssetData  = std::move( cmd->m_assetData );
+                            ev->PluginName = std::move( cmd->m_pluginName );
+                            ev->NodeName   = std::move( cmd->m_nodeName );
+                            ev->SockID     = (int)*csock;
 
                             GetDefaultEventManager().ConcurrentQueueEvent( ev );
                         }

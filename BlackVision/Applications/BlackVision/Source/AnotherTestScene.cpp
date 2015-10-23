@@ -34,9 +34,12 @@
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Assets/AssetDescsWithUIDs.h"
 
-#include "Serialization/ISerializable.h"
 #include "Engine/Models/BVScene.h"
 #include "System/Path.h"
+
+#include "Serialization/XML/XMLDeserializer.h"
+#include "Serialization/Json/JsonDeserializeObject.h"
+#include "Serialization/SerializationHelper.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -947,10 +950,14 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineMana
 		return nullptr;
 	}
 // begin serialization
-    DeserializeObject dob( filename );
+    JsonDeserializeObject deser;
+    deser.Load( filename );
 
     model::TimelineManager::SetInstance( tm );
-    auto scene = dob.Load< BVScene >( "scene" );
+    
+    //deser.EnterChild( "scene" );
+    auto scene = SerializationHelper::DeserializeObjectLoadImpl< BVScene >( deser, "scene" );
+    //deser.ExitChild();
 
     return scene->GetModelSceneRoot();
 }
@@ -958,7 +965,8 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineMana
 model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( model::TimelineManager * timelineManager )
 {
     //return LoadSceneFromFile( "Assets/07_Results.xml", timelineManager );
-    auto scene = LoadSceneFromFile( "test.xml", timelineManager );
+    //auto scene = LoadSceneFromFile( "test.xml", timelineManager );
+    auto scene = LoadSceneFromFile( "test.json", timelineManager );
 
     return scene;
 }

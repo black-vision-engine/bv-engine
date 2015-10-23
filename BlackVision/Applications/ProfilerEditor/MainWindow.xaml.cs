@@ -152,14 +152,15 @@ namespace ProfilerEditor
 			if( !m_firstTime[ thread ] )
 			{
 				m_profilerTreeView[ thread ].Update( treeView );
-				var tree = GetThreadTreeView( thread );
-				tree.ExpandTree();
 			}
 			else
 			{
 				m_firstTime[ thread ] = false;
 				m_profilerTreeView[ thread ] = treeView;
 				SetTreeDataContext( thread, treeView );
+
+                var tree = GetThreadTreeView(thread);
+                tree.ExpandTree();
 			}
 		}
 

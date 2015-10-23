@@ -41,4 +41,16 @@ DescTypeConstPtr  QueryTypedDesc( AssetDescConstPtr desc )
     return std::static_pointer_cast< DescTypeConstPtr::element_type >( desc->QueryThis() );
 }
 
+
+// ***********************
+/// Returns AssetDescriptor UID for Asset in template parameter.
+/// @note AssetDescriptor uid and Asset uid are different strings.
+///
+/// Specialize this template for every asset.
+template<typename AssetType>
+inline const std::string& GetAssetDescUID()
+{
+    return "";
+}
+
 } // bv
