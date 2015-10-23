@@ -22,7 +22,7 @@ protected:
 
 public:
 
-            DefaultPixelShaderChannel                       ( const std::string & shaderSource, IValueSetConstPtr valueSet, RendererContextPtr ctx = nullptr );
+            DefaultPixelShaderChannel                       ( const std::string & shaderSource, IValueSetConstPtr valueSet, RendererContextPtr ctx );
     virtual ~DefaultPixelShaderChannel                      ();
 
     virtual RendererContextConstPtr         GetRendererContext  () const override;

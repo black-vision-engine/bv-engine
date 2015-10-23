@@ -79,7 +79,7 @@ DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create              ( co
     {
         assert( values );
         
-        return DefaultPixelShaderChannelPtr( new DefaultPixelShaderChannel( shaderSource, values, ctx ) );
+		return std::make_shared< DefaultPixelShaderChannel >( shaderSource, values, ctx );
     }
 
     return nullptr;
@@ -89,7 +89,7 @@ DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create              ( co
 //
 DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create              ( IValueSetConstPtr values, RendererContextPtr ctx )
 {
-    return DefaultPixelShaderChannelPtr( new DefaultPixelShaderChannel( "", values, ctx ) );
+    return std::make_shared< DefaultPixelShaderChannel >( "", values, ctx );
 }
 
 // ******************************
@@ -97,7 +97,7 @@ DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create              ( IV
 DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create ()
 {
     //FIXME: remove this DefaultParamValModel construction from here (implement decent ShaderChannel in case of nullptr input IValueSet - simply return empty vector there)
-    return std::make_shared< DefaultPixelShaderChannel >( "", std::make_shared< DefaultParamValModel >() );
+    return std::make_shared< DefaultPixelShaderChannel >( "", std::make_shared< DefaultParamValModel >(), nullptr );
 }
 
 } //model

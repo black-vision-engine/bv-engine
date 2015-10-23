@@ -123,6 +123,15 @@ std::string             DefaultGradientPluginDesc::TextureName               ()
 
 // *************************************
 // 
+void					DefaultGradientPlugin::SetPrevPlugin				( IPluginPtr prev )
+{
+    BasePlugin::SetPrevPlugin( prev );
+
+    InitAttributesChannel( prev );
+}
+
+// *************************************
+// 
 DefaultGradientPlugin::DefaultGradientPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_psc( nullptr )
@@ -130,10 +139,8 @@ DefaultGradientPlugin::DefaultGradientPlugin         ( const std::string & name,
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
 {
-    //m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( DefaultGradientPluginDesc::PixelShaderSource(), model->GetPixelShaderChannelModel(), nullptr ) );
-    //m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( DefaultGradientPluginDesc::VertexShaderSource(), model->GetVertexShaderChannelModel() ) );
-	m_psc = DefaultPixelShaderChannelPtr( new DefaultPixelShaderChannel( "", model->GetPixelShaderChannelModel() ) );
-	m_vsc = DefaultVertexShaderChannelPtr( new DefaultVertexShaderChannel( "", model->GetVertexShaderChannelModel() ) );
+	m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
+	m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
     InitAttributesChannel( prev );
 
@@ -180,15 +187,23 @@ void                                DefaultGradientPlugin::Update               
     { t; } // FIXME: suppress unused warning
     m_paramValModel->Update();
 
-    if( m_prevPlugin->GetVertexAttributesChannel() && m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() ) //FIXME: additionalna hackierka
-    {
-        if( m_vaChannel != nullptr )
-        {
-            m_vaChannel->ClearAll();
-        }
+	bool hasPrevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
+    
+	if( m_vaChannel )
+	{
+		m_vaChannel->SetNeedsAttributesUpdate( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() );
 
-		InitAttributesChannel( m_prevPlugin );	
-		m_vaChannel->SetNeedsTopologyUpdate( true );
+		if( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() ) //FIXME: additionalna hackierka
+		{
+			m_vaChannel->ClearAll();
+			InitAttributesChannel( m_prevPlugin );	
+			m_vaChannel->SetNeedsTopologyUpdate( true );
+			m_vaChannel->SetNeedsAttributesUpdate( false ); // FIXME: very ugly hack this is
+		}
+		else
+		{
+			m_vaChannel->SetNeedsTopologyUpdate( false );
+		}
 	}
 
         //m_vaChannel->SetNeedsAttributesUpdate( true );
@@ -201,16 +216,14 @@ void                                DefaultGradientPlugin::Update               
 //
 void DefaultGradientPlugin::InitAttributesChannel( IPluginPtr prev )
 {
+	if( !( prev && prev->GetVertexAttributesChannel() ) )
+	{
+		m_vaChannel = nullptr;
+		return;
+	}
+
 	auto prevGeomChannel = prev->GetVertexAttributesChannel();
     AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR ); // TOCHECK is that right?
-
-    if( prevGeomChannel == nullptr ) //FIXME: hackierka
-    {
-		assert( prev->GetTypeUid() == DefaultTextPluginDesc::UID() || prev->GetTypeUid() == DefaultTransformPluginDesc::UID() || prev->GetTypeUid() == DefaultTimerPluginDesc::UID() || prev->GetTypeUid() == DefaultPrismPluginDesc::UID() );
-
-        return;
-    }
-
 
     //FIXME: only one texture - convex hull calculations
     float minX = 100000.0f, minY = 100000.0f;
@@ -247,8 +260,8 @@ void DefaultGradientPlugin::InitAttributesChannel( IPluginPtr prev )
             connComp->AddAttributeChannel( prevCompCh );
         }
 
-        if( m_vaChannel == nullptr )
-        {
+        //if( m_vaChannel == nullptr )
+        //{
             for( auto prevCompCh : prevCompChannels )
             {
                 auto prevCompChDesc = prevCompCh->GetDescriptor();
@@ -258,9 +271,8 @@ void DefaultGradientPlugin::InitAttributesChannel( IPluginPtr prev )
             //Only one texture
             vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR ); // TOCHECK is it needed?
 
-            auto vaChannel = VertexAttributesChannelPtr( new VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() ) );
-            m_vaChannel = vaChannel;
-        }
+            m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+        //}
 
         auto verTexAttrChannel = new model::Float2AttributeChannel( desc, DefaultGradientPluginDesc::TextureName(), true );
 

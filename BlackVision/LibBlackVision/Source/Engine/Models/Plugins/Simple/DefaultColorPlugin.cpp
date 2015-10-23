@@ -52,7 +52,7 @@ DefaultColorPlugin::DefaultColorPlugin  ( const std::string & name, const std::s
     , m_pixelShaderChannel( nullptr )
     , m_paramValModel( model )
 { 
-    m_pixelShaderChannel = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
+    m_pixelShaderChannel = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
     m_pixelShaderChannel->GetRendererContext()->alphaCtx->blendEnabled = true;
 }
 

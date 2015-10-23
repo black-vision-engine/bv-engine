@@ -61,6 +61,8 @@ public:
 private:
 
     void                                        InitAttributesChannel       ( IPluginPtr prev );
+
+    virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 };
 
 } // model

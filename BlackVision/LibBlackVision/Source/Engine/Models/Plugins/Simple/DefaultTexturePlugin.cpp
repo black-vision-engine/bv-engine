@@ -151,10 +151,9 @@ std::string             DefaultTexturePluginDesc::TextureName               ()
 // 
 void DefaultTexturePlugin::SetPrevPlugin( IPluginPtr prev )
 {
-    __super::SetPrevPlugin( prev );
+    BasePlugin::SetPrevPlugin( prev );
 
-    if( prev )
-        InitAttributesChannel( prev );
+    InitAttributesChannel( prev );
 }
 
 // *************************************
@@ -166,8 +165,8 @@ DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, c
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
 {
-    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( /*DefaultTexturePluginDesc::PixelShaderSource(),*/ model->GetPixelShaderChannelModel(), nullptr ) );
-    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( /*DefaultTexturePluginDesc::VertexShaderSource(),*/ model->GetVertexShaderChannelModel() ) );
+    m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
+    m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
     SetPrevPlugin( prev );
 
@@ -273,11 +272,13 @@ void                                DefaultTexturePlugin::Update                
     { t; } // FIXME: suppress unused warning
     m_paramValModel->Update();
 
+	bool hasPrevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
+
     auto attachmentMode = GetAttachementMode();
 
     if( attachmentMode == TextureAttachmentMode::MM_FREE )
     {
-        if( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
+        if( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
         {
             for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
             {
@@ -306,25 +307,31 @@ void                                DefaultTexturePlugin::Update                
     auto wY = GetWrapModeY();
     auto fm = GetFilteringMode();
 
-    if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() || StateChanged( wX, wY, fm, attachmentMode ) )
-    {
-        UpdateState( wX, wY, fm, attachmentMode );
-        m_vaChannel->SetNeedsAttributesUpdate( true );
-    }
-    else
-    {
-        m_vaChannel->SetNeedsAttributesUpdate( false );
-    }
+	if( m_vaChannel )
+	{
+		if ( ( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
+			|| StateChanged( wX, wY, fm, attachmentMode ) )
+		{
+			UpdateState( wX, wY, fm, attachmentMode );
+			m_vaChannel->SetNeedsAttributesUpdate( true );
+		}
+		else
+		{
+			m_vaChannel->SetNeedsAttributesUpdate( false );
+		}
 
-    if( m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() )
-    {
-        m_vaChannel->ClearAll();
-        InitAttributesChannel( m_prevPlugin );
-        m_vaChannel->SetNeedsTopologyUpdate( true );
-		m_vaChannel->SetNeedsAttributesUpdate( false ); // FIXME: very ugly hack this is
-    }
-    else
-        m_vaChannel->SetNeedsTopologyUpdate( false );
+		if( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() )
+		{
+			m_vaChannel->ClearAll();
+			InitAttributesChannel( m_prevPlugin );
+			m_vaChannel->SetNeedsTopologyUpdate( true );
+			m_vaChannel->SetNeedsAttributesUpdate( false ); // FIXME: very ugly hack this is
+		}
+		else
+		{
+			m_vaChannel->SetNeedsTopologyUpdate( false );
+		}
+	}
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -335,6 +342,12 @@ void                                DefaultTexturePlugin::Update                
 //
 void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
 {
+	if( !( prev && prev->GetVertexAttributesChannel() ) )
+	{
+		m_vaChannel = nullptr;
+		return;
+	}
+
     auto prevGeomChannel = prev->GetVertexAttributesChannel();
     AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
@@ -358,8 +371,9 @@ void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
             assert( accept );
         }
 
-        if( m_vaChannel == nullptr )
-        {
+		//FIXME: m_vaChannel has to be recreated when previous plugin changes
+        //if( m_vaChannel == nullptr )
+        //{
             for( auto prevCompCh : prevCompChannels )
             {
                 auto prevCompChDesc = prevCompCh->GetDescriptor();
@@ -371,40 +385,19 @@ void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
 				vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
 			m_texCoordChannelIndex = vaChannelDesc.GetNumVertexChannels() - 1;
-
-            auto vaChannel = VertexAttributesChannelPtr( new VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() ) );
-            m_vaChannel = vaChannel;
-        }
+			
+			m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+        //}
 
 		if( UVsGenerationNeeded )
 		{
-			////FIXME: only one texture - convex hull calculations
-			//float minX = 100000.0f, minY = 100000.0f;
-			//float maxX = 0.0f, maxY = 0.0f;
-
-			////convex hull - make sure that prevCompChannels[ 0 ] is indeed a positional channel
-			//for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
-			//{
-			//	const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() );
-
-			//	minX = std::min( minX, pos[ j ].x );
-			//	minY = std::min( minY, pos[ j ].y );
-			//	maxX = std::max( maxX, pos[ j ].x );
-			//	maxY = std::max( maxY, pos[ j ].y );
-			//}
-			
-
+			//FIXME: only one texture - convex hull calculations
+			//convex hull - make sure that prevCompChannels[ 0 ] is indeed a positional channel
 			auto verTexAttrChannel = new model::Float2AttributeChannel( desc, DefaultTexturePluginDesc::TextureName(), true );
 			auto UVChannelPtr = Float2AttributeChannelPtr( verTexAttrChannel );
-
-
+			
 			Helper::UVGenerator::generateUV( reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() ), prevCompChannels[ 0 ]->GetNumEntries(),
 											UVChannelPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ), true );
-			//for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
-			//{
-			//	const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() );
-			//	verTexAttrChannel->AddAttribute( glm::vec2( ( pos[ j ].x - minX ) / ( maxX - minX ), ( pos[ j ].y - minY ) / ( maxY - minY ) ) );
-			//}
 
 			connComp->AddAttributeChannel( UVChannelPtr );
 		}

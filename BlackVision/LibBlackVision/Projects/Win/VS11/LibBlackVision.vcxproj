@@ -256,7 +256,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\TranformChannel.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Custom\DefaultHeightMapPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\DefaultFinalizePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\DefaultPluginListFinalized.cpp" />
@@ -323,9 +322,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Static\OffsetTimeEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimelineManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\GeometryUpdater.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\SequenceAnimationUpdater.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\UpdatersManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Processes\InitProcess.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Processes\Process.cpp" />
@@ -536,7 +533,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\TransformChannel.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Custom\DefaultHeightMapPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\DefaultFinalizePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\DefaultPluginListFinalized.h" />
@@ -624,9 +620,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimelineManager.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\GeometryUpdater.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\SequenceAnimationUpdater.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\UpdatersManager.h" />
     <ClInclude Include="..\..\..\Source\Engine\Processes\InitProcess.h" />
     <ClInclude Include="..\..\..\Source\Engine\Processes\Process.h" />

@@ -123,10 +123,7 @@ std::string             DefaultAnimationPluginDesc::TextureName               ()
 
 void								DefaultAnimationPlugin::SetPrevPlugin               ( IPluginPtr prev )
 {
-    __super::SetPrevPlugin( prev );
-
-    if( prev == nullptr )
-        return;
+	BasePlugin::SetPrevPlugin( prev );
 
     InitAttributesChannel( prev );
 }
@@ -240,11 +237,13 @@ void                                DefaultAnimationPlugin::Update              
     { t; } // FIXME: suppress unused variable
     m_paramValModel->Update();
 
+	bool prevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
+
     auto attachmentMode = GetAttachementMode();
 
     if( attachmentMode == TextureAttachmentMode::MM_FREE )
     {
-        if( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
+        if( prevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
         {
             for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
             {
@@ -276,15 +275,21 @@ void                                DefaultAnimationPlugin::Update              
     unsigned int frameNum = (unsigned int )m_paramFrameNum->Evaluate(); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
     m_texturesData->SetAnimationFrame( 0, frameNum ); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
 
-    if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() || StateChanged( wX, wY, fm, attachmentMode ) )
-    {
-        UpdateState( wX, wY, fm, attachmentMode );
-        m_vaChannel->SetNeedsAttributesUpdate( true );
-    }
-    else
-    {
-        m_vaChannel->SetNeedsAttributesUpdate( false );
-    }
+	if( m_vaChannel )
+	{
+		if ( ( prevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
+			|| StateChanged( wX, wY, fm, attachmentMode ) )
+		{
+			UpdateState( wX, wY, fm, attachmentMode );
+			m_vaChannel->SetNeedsAttributesUpdate( true );
+		}
+		else
+		{
+			m_vaChannel->SetNeedsAttributesUpdate( false );
+		}
+	}
+
+	//FIXME: what about NeedsTopologyUpdate?
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -294,6 +299,12 @@ void                                DefaultAnimationPlugin::Update              
 //
 void DefaultAnimationPlugin::InitAttributesChannel( IPluginPtr prev )
 {
+	if( !( prev && prev->GetVertexAttributesChannel() ) )
+	{
+		m_vaChannel = nullptr;
+		return;
+	}
+
     auto prevGeomChannel = prev->GetVertexAttributesChannel();
     AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
@@ -310,8 +321,8 @@ void DefaultAnimationPlugin::InitAttributesChannel( IPluginPtr prev )
             connComp->AddAttributeChannel( prevCompCh );
         }
 
-        if( m_vaChannel == nullptr )
-        {
+        //if( m_vaChannel == nullptr )
+        //{
             for( auto prevCompCh : prevCompChannels )
             {
                 auto prevCompChDesc = prevCompCh->GetDescriptor();
@@ -325,7 +336,7 @@ void DefaultAnimationPlugin::InitAttributesChannel( IPluginPtr prev )
 
             auto vaChannel = VertexAttributesChannelPtr( new VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() ) );
             m_vaChannel = vaChannel;
-        }
+        //}
 
         //FIXME: only one texture - convex hull calculations
         float minX = 100000.0f, minY = 100000.0f;

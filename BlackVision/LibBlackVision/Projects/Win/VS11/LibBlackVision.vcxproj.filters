@@ -106,9 +106,6 @@
     <Filter Include="Engine\Models\Plugins\Channels\Transform">
       <UniqueIdentifier>{010bc633-f174-4c49-aab8-2f54695eb0cf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Models\Plugins\Channels\VertexShader">
-      <UniqueIdentifier>{35597ded-e812-4814-8ade-2f4ce1473665}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Models\Plugins\Channels\Geometry\Simple">
       <UniqueIdentifier>{fd20b384-4353-4a1a-9e74-02bc938059b7}</UniqueIdentifier>
     </Filter>
@@ -531,9 +528,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\TranformChannel.cpp">
       <Filter>Engine\Models\Plugins\Channels\Transform</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.cpp">
-      <Filter>Engine\Models\Plugins\Channels\VertexShader</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Custom\DefaultHeightMapPlugin.cpp">
       <Filter>Engine\Models\Plugins\Custom</Filter>
     </ClCompile>
@@ -663,13 +657,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventStop.cpp">
       <Filter>Engine\Models\Timeline\Dynamic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\GeometryUpdater.cpp">
-      <Filter>Engine\Models\Updaters</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.cpp">
-      <Filter>Engine\Models\Updaters</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\SequenceAnimationUpdater.cpp">
       <Filter>Engine\Models\Updaters</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\UpdatersManager.cpp">
@@ -1322,9 +1310,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\TransformChannel.h">
       <Filter>Engine\Models\Plugins\Channels\Transform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.h">
-      <Filter>Engine\Models\Plugins\Channels\VertexShader</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Custom\DefaultHeightMapPlugin.h">
       <Filter>Engine\Models\Plugins\Custom</Filter>
     </ClInclude>
@@ -1535,13 +1520,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventStop.h">
       <Filter>Engine\Models\Timeline\Dynamic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\GeometryUpdater.h">
-      <Filter>Engine\Models\Updaters</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.h">
-      <Filter>Engine\Models\Updaters</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\SequenceAnimationUpdater.h">
       <Filter>Engine\Models\Updaters</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\UpdatersManager.h">

@@ -5,6 +5,7 @@
 
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Interfaces/IModelNode.h"
+#include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 
 namespace bv {
 
@@ -54,7 +55,7 @@ public:
     model::IModelNodePtr    GetRootNode         ();
 
 	
-	void                    AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, unsigned int idx );
+	bool                    AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, unsigned int idx );
     bool                    DeletePlugin		( model::BasicNodePtr node, unsigned int idx );
     bool                    DeletePlugin		( model::BasicNodePtr node, const std::string & name );
 
@@ -63,6 +64,8 @@ public:
     bool                    DetachPlugin		( model::BasicNodePtr node, unsigned int idx );
     bool                    DetachPlugin		( model::BasicNodePtr node, const std::string & name );
     
+	model::IPluginPtr		GetDetachedPlugin	( model::BasicNodePtr node );
+    void                    ResetDetachedPlugin	( model::BasicNodePtr node );
 
 private:
 
