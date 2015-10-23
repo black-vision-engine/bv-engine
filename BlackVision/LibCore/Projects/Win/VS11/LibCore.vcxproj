@@ -35,6 +35,7 @@
     <ClInclude Include="..\..\..\Source\Threading\Thread.h" />
     <ClInclude Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.h" />
     <ClInclude Include="..\..\..\Source\Tools\HRTimer.h" />
+    <ClInclude Include="..\..\..\Source\Tools\IncludeJSON.h" />
     <ClInclude Include="..\..\..\Source\Tools\Logger\Logger.h" />
     <ClInclude Include="..\..\..\Source\Tools\Logger\UseLogger.h" />
     <ClInclude Include="..\..\..\Source\Tools\SimpleTimer.h" />

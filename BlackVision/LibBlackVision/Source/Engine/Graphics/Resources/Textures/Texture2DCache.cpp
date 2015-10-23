@@ -50,7 +50,8 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
     }
 
     tx = CreateEmptyTexture( format, width, height, semantic );
-	tx->SetRawData( txParams->GetBits(), format, txParams->GetWidth(), txParams->GetHeight() );
+	auto data = txParams->GetBits();
+	tx->SetRawData( data, format, txParams->GetWidth(), txParams->GetHeight() );
 
     if( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC )
     {

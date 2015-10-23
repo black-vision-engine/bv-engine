@@ -10,7 +10,7 @@ class ParametersFactory
 {
 public:
 
-    static ISerializablePtr     Create                              ( DeserializeObject &doc );
+    static ISerializablePtr     Create                              ( ISerializer&doc );
 
     static ParamMat2            CreateParameterMat2                 ( const std::string & name, const Vec4Interpolator & interpolator, ITimeEvaluatorPtr timeline );
     static ParamVec2            CreateParameter                     ( const std::string & name, const Vec2Interpolator & interpolator, ITimeEvaluatorPtr timeline );

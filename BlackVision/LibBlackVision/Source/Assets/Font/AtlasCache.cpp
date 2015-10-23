@@ -13,7 +13,7 @@
 #include "LibImage.h"
 #include "Assets/Texture/TextureLoader.h"
 #include "Assets/Assets.h"
-#include "Assets/Texture/TextureCache.h"
+#include "Assets/Texture/TextureUtils.h"
 
 #pragma warning(push)
 #pragma warning(disable : 4512)
@@ -216,7 +216,7 @@ FontAtlasCacheEntry *    FontAtlasCache::GetEntry        ( const std::string & f
 																				ret->m_mmLevelsNum,
                                                                                 charSet );
 
-		auto asset = TextureCache::GetInstance().Get( atlasTextureDesc ); 
+		auto asset = std::static_pointer_cast<const TextureAsset>( AssetManager::GetInstance().LoadAsset( atlasTextureDesc ) );
 
 		if( asset != nullptr )
 		{
@@ -290,7 +290,9 @@ void                    FontAtlasCache::AddEntry        ( const FontAtlasCacheEn
 																			mmLevelsNum,
                                                                             data.m_charSetFileName );
 
-	TextureCache::GetInstance().Add( atlasTextureDesc, data.m_textAtlas->m_textureAsset );
+    auto descriptor = std::static_pointer_cast<const AssetDesc>( atlasTextureDesc );
+    AssetManager::GetInstance().AddToCache( descriptor, data.m_textAtlas->m_textureAsset ); //Add to AssetCache
+    TextureUtils::AddToRawDataCache( data.m_textAtlas->m_textureAsset );                    //Add to RawDataCache
 
     sqlite3_stmt * stmt = nullptr;
     const char * parsed = nullptr;

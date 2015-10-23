@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\JsonWrapper\commands\base\CmdBase.h" />
     <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdGetInfo.h" />
+    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdLoadAsset.h" />
     <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdSceneManager.h" />
     <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdSetParam.h" />
     <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdStruct.h" />

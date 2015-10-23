@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Assets/AssetDescriptor.h"
+#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 
 #include "CoreDEF.h"
 
@@ -24,8 +26,9 @@ protected:
 	virtual const std::string &			GetUID				() const override;
 
 public:
-    virtual void                Serialize       ( SerializeObject & sob ) const;
-    static ISerializableConstPtr Create          ( DeserializeObject & dob );
+    virtual void						Serialize       ( ISerializer& sob ) const;
+    //virtual void                        Deserialize     ( const IDeserializer& sob );
+    static ISerializableConstPtr		Create          ( const IDeserializer& dob );
 
 	virtual bool						IsCacheable			() const override;
 
@@ -65,7 +68,16 @@ private:
 	UInt32			m_outlineSize;
 	bool			m_generateMipmaps;
 	std::wstring	m_atlasCharSetFile;
-
 };
+
+// ***********************
+/// Returns AssetDescriptor UID for Asset in template parameter.
+/// @note AssetDescriptor uid and Asset uid are different strings.
+template<> inline const std::string& GetAssetDescUID<FontAsset>()
+{
+    return FontAssetDesc::UID();
+}
+
+
 
 } // bv

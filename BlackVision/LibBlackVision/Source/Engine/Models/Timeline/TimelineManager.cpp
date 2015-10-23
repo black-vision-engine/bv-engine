@@ -1,4 +1,6 @@
 #include "TimelineManager.h"
+#include "Serialization/ISerializer.h"
+#include "Serialization/ISerializer.h"
 
 #include <cassert>
 
@@ -40,9 +42,9 @@ TimelineManager::~TimelineManager        ()
 
 // *********************************
 //
-void            TimelineManager::Serialize                       ( SerializeObject & sob ) const
+void            TimelineManager::Serialize                       ( ISerializer& sob ) const
 {
-    sob.SetName( "timelines" );
+    sob.EnterChild( "timelines" );
 
     m_rootTimeline->Serialize( sob );
 
@@ -51,16 +53,16 @@ void            TimelineManager::Serialize                       ( SerializeObje
         i.first->Serialize( sob );
     }
 
-    sob.Pop();
+    sob.ExitChild();
 }
 
-// *********************************
-//
-ISerializablePtr TimelineManager::Create                          ( DeserializeObject & dob )
-{
-    dob;
-    return nullptr;
-}
+//// *********************************
+////
+//ISerializablePtr TimelineManager::Create                          ( const ISerializer& dob )
+//{
+//    dob; assert( false );
+//    return nullptr;
+//}
 
 // *********************************
 //

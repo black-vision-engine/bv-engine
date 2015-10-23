@@ -74,14 +74,14 @@ void                                BasePlugin< IPlugin >::AddAsset             
 
 // *******************************
 //
-void                                BasePlugin< IPlugin >::Serialize                   ( SerializeObject & doc ) const
+void                                BasePlugin< IPlugin >::Serialize                   ( ISerializer& doc ) const
 {
-    doc.SetName( "plugin" );
-    doc.SetValue( "uid", GetTypeUid() );
-    doc.SetValue( "name", GetName() );
-    doc.SetValue( "timeline", GetTimeline( this )->GetName() );
+doc.EnterChild( "plugin" );
+    doc.SetAttribute( "uid", GetTypeUid() );
+    doc.SetAttribute( "name", GetName() );
+    doc.SetAttribute( "timeline", GetTimeline( this )->GetName() );
 
-    doc.SetName( "params" );
+    doc.EnterChild( "params" );
     {
         IPluginParamValModelPtr pvm =    GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
     
@@ -101,21 +101,21 @@ void                                BasePlugin< IPlugin >::Serialize            
                 param->Serialize( doc );
             }
     }
-    doc.Pop(); // params
+    doc.ExitChild(); // params
 
     auto assets = GetAssets();
     if( assets.size() > 0 )
     {
-        doc.SetName( "assets" );
+        doc.EnterChild( "assets" );
         for( auto asset : GetAssets() )
         {
             auto uid = AssetDescsWithUIDs::GetInstance().Key2UID( asset->GetKey() );
             SerializedAssetUID( uid ).Serialize( doc );
         }
-        doc.Pop(); // assets
+        doc.ExitChild(); // assets
     }
 
-    doc.Pop(); // plugin
+    doc.ExitChild(); // plugin
 }
 
 
@@ -123,11 +123,11 @@ void                                BasePlugin< IPlugin >::Serialize            
 // *******************************
 //
 template <>
-ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
+ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& doc )
 {
-    std::string pluginType = doc.GetValue( "uid" );
-    std::string pluginName = doc.GetValue( "name" );
-    auto timeline = doc.GetValue( "timeline" );
+    std::string pluginType = doc.GetAttribute( "uid" );
+    std::string pluginName = doc.GetAttribute( "name" );
+    auto timeline = doc.GetAttribute( "timeline" );
 
     auto tm = TimelineManager::GetInstance();
     ITimeEvaluatorPtr te = tm->GetTimeline( timeline );
@@ -137,7 +137,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
     std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
 
 // params
-    auto params = doc.LoadArray< AbstractModelParameter >( "params" );
+    auto params = SerializationHelper::DeserializeObjectLoadArrayImpl< AbstractModelParameter >( doc, "params" );
     for( auto param : params )
     {
         if( plugin->GetParameter( param->GetName() ) == nullptr )
@@ -150,7 +150,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create( DeserializeObject& doc )
         SetParameter( plugin->GetPluginParamValModel(), param );
     }
     
-    auto uids = doc.LoadArray< SerializedAssetUID >( "assets" );
+    auto uids = SerializationHelper::DeserializeObjectLoadArrayImpl< SerializedAssetUID >( doc, "assets" );
     for( auto uid : uids )
     {
         auto asset = AssetDescsWithUIDs::GetInstance().UID2Asset( uid->GetUID() );

@@ -19,34 +19,16 @@ public:
 
     std::string                         GetUID() { return uid; }
 
-    virtual void                Serialize       ( SerializeObject & sob ) const
+    virtual void                Serialize       ( ISerializer& sob ) const
     {
-        sob.SetName( "asset" );
-        sob.SetValue( "uid", uid );
-        sob.Pop(); // asset
+        sob.EnterChild( "asset" );
+        sob.SetAttribute( "uid", uid );
+        sob.ExitChild(); // asset
     }
 
-    static ISerializablePtr             Create( DeserializeObject& dob )
+    static ISerializablePtr             Create( const IDeserializer& dob )
     {
-        return ISerializablePtr( new SerializedAssetUID( dob.GetValue( "uid" ) ) ); // make_shared does not work for some reason ;)
-    }
-};
-
-class SerializedAssetDesc : public AssetDesc {
-public:
-    static ISerializableConstPtr Create( DeserializeObject& dob )
-    {
-        if( dob.GetValue( "type" ) == "tx" )
-            return TextureAssetDesc::Create( dob );
-        else if( dob.GetValue( "type" ) == "anim" )
-            return AnimationAssetDesc::Create( dob );
-        else if( dob.GetValue( "type" ) == "font" )
-            return FontAssetDesc::Create( dob );
-        else
-        {
-            assert( false );
-            return nullptr;
-        }
+        return ISerializablePtr( new SerializedAssetUID( dob.GetAttribute( "uid" ) ) ); // make_shared does not work for some reason ;)
     }
 };
 

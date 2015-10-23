@@ -4,9 +4,10 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include <sstream>
 
-#include "Serialization/SerializationObjects.inl"
+//#include "Serialization/SerializationObjects.inl"
 #include "Serialization/SerializationHelper.h"
 //#include "Serialization/SerializationObjects.h"
+//#include "Serialization/SerializationObjects.inl"
 
 namespace bv { namespace model {
 
@@ -18,11 +19,11 @@ public:
 
     KeyFrame( std::string t, std::string v ) : time( t ), value( v ) {}
 
-    virtual void                Serialize       ( SerializeObject &/*doc*/ ) const {}
-    static ISerializablePtr     Create          ( DeserializeObject &doc )
+    virtual void                Serialize       ( ISerializer&/*doc*/ ) const {}
+    static ISerializablePtr     Create          ( const IDeserializer&doc )
     {
-        auto time = doc.GetValue( "time" );
-        auto value = doc.GetValue( "val" );
+        auto time = doc.GetAttribute( "time" );
+        auto value = doc.GetAttribute( "val" );
         return std::make_shared< KeyFrame >( time, value );
     }
 };
@@ -40,18 +41,18 @@ public:
 //        float val = 
 //}
 
-ISerializablePtr AbstractModelParameter::Create( DeserializeObject& dob ) // FIXME: rethink if is might be done cleaner
+ISerializablePtr AbstractModelParameter::Create( const IDeserializer& dob ) // FIXME: rethink if is might be done cleaner
 {
-    auto name = dob.GetValue( "name" );
-    auto type = dob.GetValue( "type" );
+    auto name = dob.GetAttribute( "name" );
+    auto type = dob.GetAttribute( "type" );
     //ITimeEvaluatorPtr te = dob.m_tm->GetRootTimeline();
-    auto timeline = dob.GetValue( "timeline" );
+    auto timeline = dob.GetAttribute( "timeline" );
 
     auto tm = TimelineManager::GetInstance();
     ITimeEvaluatorPtr te = tm->GetTimeline( timeline );
     if( te == nullptr ) te = tm->GetRootTimeline();
 
-    auto values = dob.LoadArray< KeyFrame >( "interpolator" );
+    auto values = SerializationHelper::DeserializeObjectLoadArrayImpl< KeyFrame >( dob, "interpolator", "key" );
 
     if( type == "float" )
     {
@@ -109,7 +110,7 @@ ISerializablePtr AbstractModelParameter::Create( DeserializeObject& dob ) // FIX
     {
         auto param = ParametersFactory::CreateParameterTransform( name, te );
 
-        auto transform = dob.Load< TransformF >( "composite_transform" );
+        auto transform = SerializationHelper::DeserializeObjectLoadImpl< TransformF >( dob, "composite_transform" );
 
         param->Transform() = *transform;
 
@@ -120,7 +121,7 @@ ISerializablePtr AbstractModelParameter::Create( DeserializeObject& dob ) // FIX
     {
         auto param = ParametersFactory::CreateParameterTransformVec( name, te );
 
-        auto transes = dob.LoadProperties< TransformF >( "composite_transform" );
+        auto transes = SerializationHelper::DeserializeObjectLoadPropertiesImpl< TransformF >( dob, "composite_transform" );
 
         int i = 0;
         for( auto trans : transes )

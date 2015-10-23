@@ -22,7 +22,7 @@ public:
 
     explicit            ParamTransform  ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator );
 
-    void                Serialize       ( SerializeObject & doc ) const;
+    void                Serialize       ( ISerializer& doc ) const;
 
 	void                SetInterpolationMethod ( InterpolationMethod method ) override;
 	InterpolationMethod GetInterpolationMethod () const override;
@@ -66,7 +66,7 @@ public:
     explicit            ParamTransformVec   ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator );
     explicit            ParamTransformVec   ( const std::string & name, const ITimeEvaluatorPtr evaluator );
 
-    void                Serialize       ( SerializeObject & doc ) const;
+    void                Serialize       ( ISerializer& doc ) const;
 
 	void                SetInterpolationMethod ( InterpolationMethod method ) override;
 	InterpolationMethod GetInterpolationMethod () const override;

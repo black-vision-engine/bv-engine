@@ -44,6 +44,7 @@ public:
     static model::BasicNodePtr  CreateTexturedRectNode      ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask );
     static model::BasicNodePtr  CreateTexturedTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask );
     static model::BasicNodePtr  CreateTextureAnimationRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask );
+    static model::BasicNodePtr  CreateVideoStreamDecoderRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask );
                            
     static model::BasicNodePtr  CreateTextNode              ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, bool useAlphaMask );
     static model::BasicNodePtr  CreateTextWithShadowNode    ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, const glm::vec3 shadowTranslation );
@@ -54,8 +55,9 @@ public:
 
 	static model::BasicNodePtr	CreateCrawlerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 
-	static model::BasicNodePtr	CreateBasicShapesTestNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
-	static model::BasicNodePtr	CreateBasicShapeShow( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string& uid, glm::vec3 translation, std::string = "Assets/Textures/sand.jpg" );
+	static model::BasicNodePtr	CreateBasicShapesTestNode   ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+	static model::BasicNodePtr	CreateBasicShapeShow        ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string& uid, glm::vec3 translation, std::string = "sand.jpg" );
+    static model::BasicNodePtr  CreateTextCacheTest         ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, glm::vec3 translation, glm::vec4 color, const std::wstring text, const std::string& fontName );
 
 	static void					TestTypedParamQueries	( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 
