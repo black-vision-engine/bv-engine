@@ -9,6 +9,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultAlphaMaskPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultGradientPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 
 namespace bv {
@@ -134,6 +135,7 @@ std::vector< model::IPluginDescriptor * >  TestLogic::DefaultBVPluginDescriptors
     descriptors.push_back( new model::DefaultTexturePluginDesc() );
     descriptors.push_back( new model::DefaultAnimationPluginDesc() );
     descriptors.push_back( new model::DefaultAlphaMaskPluginDesc() );
+    descriptors.push_back( new model::DefaultGradientPluginDesc() );
     descriptors.push_back( new model::DefaultTextPluginDesc() );
 
     return descriptors;

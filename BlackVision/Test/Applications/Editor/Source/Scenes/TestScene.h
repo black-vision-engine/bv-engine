@@ -34,6 +34,7 @@ private:
 	static const std::string	COL_NODE;
 	static const std::string	TEX_NODE;
 	static const std::string	ANIM_NODE;
+	static const std::string	GRAD_NODE;
 
 public:
 							TestScene				( Renderer * renderer, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
@@ -59,6 +60,10 @@ private:
 
 	void					InitBasicAnimationPluginTest();
 	void					InitOrderAnimationPluginTest();
+
+	void					InitBasicGradientPluginTest	();
+	void					InitOrderGradientPluginTest	();
+
 
 	void					InitOrderTest				( const OrderTestCase & test );
 	void					SwapLastPlugin				( const std::string & childName );

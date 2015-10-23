@@ -9,6 +9,7 @@ namespace bv {
 const std::string	TestScene::COL_NODE		= "col";
 const std::string	TestScene::TEX_NODE		= "tex";
 const std::string	TestScene::ANIM_NODE	= "anim";
+const std::string	TestScene::GRAD_NODE	= "grad";
 
 // ****************************
 //	
@@ -201,11 +202,14 @@ void					TestScene::InitTestModelNodeEditor	()
 	//InitBasicColorPluginTest();
 	//InitOrderColorPluginTest();
 
-	InitBasicTexturePluginTest();
-	InitOrderTexturePluginTest();
+	//InitBasicTexturePluginTest();
+	//InitOrderTexturePluginTest();
 
-	InitBasicAnimationPluginTest();
-	InitOrderAnimationPluginTest();
+	//InitBasicAnimationPluginTest();
+	//InitOrderAnimationPluginTest();
+
+	InitBasicGradientPluginTest();
+	InitOrderGradientPluginTest();
 }
 
 // ****************************
@@ -467,8 +471,8 @@ void					TestScene::InitOrderAnimationPluginTest	()
 	std::vector < OrderTestCase > tests;
 	tests.push_back( OrderTestCase( ANIM_NODE, "ARTAm", std::vector< std::string >( test0, test0 + 4 ) ) );
 	tests.push_back( OrderTestCase( ANIM_NODE, "TARAm", std::vector< std::string >( test1, test1 + 4 ) ) );
-	tests.push_back( OrderTestCase( ANIM_NODE, "TRAAm", std::vector< std::string >( test2, test2 + 4 ) ) );
-	tests.push_back( OrderTestCase( ANIM_NODE, "RTA", std::vector< std::string >( test3, test3 + 4 ) ) );
+	tests.push_back( OrderTestCase( ANIM_NODE, "RATAm", std::vector< std::string >( test2, test2 + 4 ) ) );
+	tests.push_back( OrderTestCase( ANIM_NODE, "RTAAm", std::vector< std::string >( test3, test3 + 4 ) ) );
 	tests.push_back( OrderTestCase( ANIM_NODE, "AAm", std::vector< std::string >( test4, test4 + 2 ) ) );
 	tests.push_back( OrderTestCase( ANIM_NODE, "AAm", std::vector< std::string >( test5, test5 + 2 ) ) );
 
@@ -487,6 +491,81 @@ void					TestScene::InitOrderAnimationPluginTest	()
 		editor->AddChildNode( anim, lChild );
 		editor->AddChildNode( anim, rChild );
 		assert( anim->GetNumChildren() == 2 );
+	};
+
+	for( auto & test : tests )
+	{
+		m_testSteps.push_back( recoverScene );
+		InitOrderTest( test );
+	}
+	m_testSteps.push_back( recoverScene );
+}
+
+// ****************************
+//
+void					TestScene::InitBasicGradientPluginTest	()
+{
+	auto add = [&] 
+	{
+		auto editor = m_scene->GetSceneEditor();
+
+		auto grad = TestSceneUtils::GradientRectangle( m_timelineManager, m_timeEvaluator, GRAD_NODE, 0.3f, 0.3f, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 1.f, 1.f, 0.f, 1.f ) ); //, TestSceneUtils::ALPHA_MASK_PATH
+		model::SetParameterTranslation( grad->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.5f, -0.5f, 0.f ) );
+
+		auto root = m_scene->GetModelSceneRoot();
+		editor->AddChildNode( root, grad );
+		
+		auto lChild = TestSceneUtils::AnimatedRectangle( m_timelineManager, m_timeEvaluator, "lChild", 0.1f, 0.1f, TestSceneUtils::ANIM_PATH, TestSceneUtils::ALPHA_MASK_PATH );
+		model::SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
+		auto rChild = TestSceneUtils::TexturedRectangle( m_timelineManager, m_timeEvaluator, "rChild", 0.1f, 0.1f, TestSceneUtils::TEXTURE_PATH );
+		model::SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
+		editor->AddChildNode( grad, lChild );
+		editor->AddChildNode( grad, rChild );
+
+		assert( grad->GetNumChildren() == 2 );
+	};
+
+	m_testSteps.push_back( add );
+	m_testSteps.push_back( [&]{ SwapLastPlugin( GRAD_NODE ); } );
+	m_testSteps.push_back( [&]{ SwapLastPlugin( GRAD_NODE ); } );
+
+	m_testSteps.push_back( [&]
+	{
+		auto child = std::static_pointer_cast< model::BasicNode >( m_scene->GetModelSceneRoot()->GetChild( GRAD_NODE ) );
+		SetParameter( child->GetPlugin( "linear_gradient" )->GetParameter( "color1" ), TimeType( 0.f ), glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
+	});
+}
+
+// ****************************
+//
+void					TestScene::InitOrderGradientPluginTest	()
+{
+	std::string test0[] = { "linear_gradient", "rectangle" , "transform" };
+	std::string test1[] = { "transform", "linear_gradient" , "rectangle" };
+	std::string test2[] = { "rectangle", "linear_gradient", "transform" };
+	std::string test3[] = { "rectangle", "transform" , "linear_gradient" };
+
+	std::vector < OrderTestCase > tests;
+	tests.push_back( OrderTestCase( GRAD_NODE, "LgRT", std::vector< std::string >( test0, test0 + 3 ) ) );
+	tests.push_back( OrderTestCase( GRAD_NODE, "TLgR", std::vector< std::string >( test1, test1 + 3 ) ) );
+	tests.push_back( OrderTestCase( GRAD_NODE, "TLgT", std::vector< std::string >( test2, test2 + 3 ) ) );
+	tests.push_back( OrderTestCase( GRAD_NODE, "RTLg", std::vector< std::string >( test3, test3 + 3 ) ) );
+
+	auto recoverScene = [&] 
+	{
+		auto editor = m_scene->GetSceneEditor();
+		auto grad = TestSceneUtils::GradientRectangle( m_timelineManager, m_timeEvaluator, GRAD_NODE, 0.3f, 0.3f, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 1.f, 1.f, 0.f, 1.f ) ); //, TestSceneUtils::ALPHA_MASK_PATH
+		model::SetParameterTranslation( grad->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.5f, -0.5f, 0.f ) );
+
+		auto root = m_scene->GetModelSceneRoot();
+		auto child = root->GetChild( GRAD_NODE );
+		auto lChild = child->GetChild( "lChild" );
+		auto rChild = child->GetChild( "rChild" );
+		assert( editor->DeleteChildNode( root, child->GetName() ) );
+		editor->AddChildNode( root, grad );
+		editor->AddChildNode( grad, lChild );
+		editor->AddChildNode( grad, rChild );
+		assert( grad->GetNumChildren() == 2 );
 	};
 
 	for( auto & test : tests )
@@ -572,7 +651,7 @@ void					TestScene::TestModelNodeEditor	( TimeType time )
 {
 	auto step = ( Int32 )std::floor( TestSceneUtils::SPEED * time );
 	
-	if( m_lastStep != step && step - m_stepOffset < m_testSteps.size() )
+	if( m_lastStep != step && step - m_stepOffset < ( Int32 )m_testSteps.size() )
 	{
 		m_testSteps[ step - m_stepOffset ]();
 	}

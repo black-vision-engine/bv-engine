@@ -125,6 +125,42 @@ model::BasicNodePtr		TestSceneUtils::AnimatedRectangle		( model::TimelineManager
     return node;
 }
 
+// ****************************
+//
+model::BasicNodePtr		TestSceneUtils::GradientRectangle		( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, Float32 width, Float32 height, glm::vec4 c1, glm::vec4 c2, const std::string & alphaMask )
+{
+	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+    timeEvaluator->AddChild( localTimeline );
+
+    auto node = model::BasicNode::Create( name, timeEvaluator );
+
+	std::vector< std::string > plugins;
+	plugins.push_back( "DEFAULT_TRANSFORM" );
+	plugins.push_back( "DEFAULT_RECTANGLE" );
+	plugins.push_back( "DEFAULT_LINEAR_GRADIENT" );
+	if( !alphaMask.empty() )
+	{
+		plugins.push_back( "DEFAULT_ALPHA_MASK" );
+	}
+
+    auto success = node->AddPlugins( plugins, localTimeline );
+
+    assert( success );
+
+	SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ),  width );
+	SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), height );
+	
+	SetParameter( node->GetPlugin( "linear_gradient" )->GetParameter( "color1" ), TimeType( 0.f ), c1 );
+	SetParameter( node->GetPlugin( "linear_gradient" )->GetParameter( "color2" ), TimeType( 0.f ), c2 );
+	
+	if( !alphaMask.empty() )
+	{
+		model::LoadTexture( node->GetPlugin( "alpha_mask" ), alphaMask );
+	}
+
+    return node;
+}
+
 // *************************
 //
 void					TestSceneUtils::GenerateCheckboardTex	( const std::string & name, UInt32 width, UInt32 height, glm::uvec3 color )
