@@ -13,23 +13,23 @@ namespace SerializationHelper {
 // *************************************
 //
 template< typename T >
-std::shared_ptr< T >                                        DeserializeObjectLoadImpl( const IDeserializer& sob, std::string name )
+std::shared_ptr< T >                                        DeserializeObjectLoadImpl( const IDeserializer& deser, std::string name )
 {
-    auto sucess = sob.EnterChild( name );
+    auto sucess = deser.EnterChild( name );
     assert( sucess ); // FIXME error handling
-    auto obj = T::Create( sob );
-    sob.ExitChild();
+    auto obj = T::Create( deser );
+    deser.ExitChild();
     return std::static_pointer_cast< T >( obj );
 }
 
 // *************************************
 //
 template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( const IDeserializer& sob, std::string nameParent, std::string nameChild="" )
+std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( const IDeserializer& deser, std::string nameParent, std::string nameChild="" )
 {
     std::vector< std::shared_ptr< T > > ret;
 
-    bool success = sob.EnterChild( nameParent );
+    bool success = deser.EnterChild( nameParent );
     if( !success )
         return ret;
 
@@ -40,48 +40,48 @@ std::vector< std::shared_ptr< T > >                         DeserializeObjectLoa
         nameChild = nameParent.substr( 0, nameParent.size()-1 );
     }
 
-    if( sob.EnterChild( nameChild ) )
+    if( deser.EnterChild( nameChild ) )
     {
         do
         {
-            auto obj = T::Create( sob );
+            auto obj = T::Create( deser );
             ret.push_back( std::static_pointer_cast< T >( obj ) );
-        }while( sob.NextChild() );
-        sob.ExitChild(); // nameChild
+        }while( deser.NextChild() );
+        deser.ExitChild(); // nameChild
     }
 
-    sob.ExitChild(); // nameParent
+    deser.ExitChild(); // nameParent
     return ret;
 }
 
 // *************************************
 //
 template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( const IDeserializer& sob, std::string name )
+std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( const IDeserializer& deser, std::string name )
 {
     std::vector< std::shared_ptr< T > > ret;
 
-    if( sob.EnterChild( name ) )
+    if( deser.EnterChild( name ) )
     {
         do
         {
-            auto obj = T::Create( sob );
+            auto obj = T::Create( deser );
 
             ret.push_back( std::static_pointer_cast< T >( obj ) );
-        }while( sob.NextChild( ) );
-        sob.ExitChild();
+        }while( deser.NextChild( ) );
+        deser.ExitChild();
     }
 
     return ret;
 }
 
 template< typename T >
-void SerializeObjectImpl( const T& o, ISerializer& sob );
+void SerializeObjectImpl( const T& o, ISerializer& ser );
 
 template< typename T >
-std::shared_ptr< T > Create( const IDeserializer& sob )
+std::shared_ptr< T > Create( const IDeserializer& deser )
 {
-    auto obj = T::Create( sob );
+    auto obj = T::Create( deser );
     return std::static_pointer_cast< T >( obj );
 }
 

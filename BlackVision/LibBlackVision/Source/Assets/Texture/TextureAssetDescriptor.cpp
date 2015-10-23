@@ -43,11 +43,11 @@ ser.EnterChild( "asset" );
         ser.SetAttribute( "filter", "none" );
 
     if( m_loadingType == TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE )
-        ser.SetAttribute( "loading_type", "ONLY ORIGINAL" );
+        ser.SetAttribute( "loading_type", "ONLY_ORIGINAL" );
     else if( m_loadingType == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS )
-        ser.SetAttribute( "loading_type", "GENERATE MIP MAPS" );
+        ser.SetAttribute( "loading_type", "GENERATE_MIPMAPS" );
     else
-        ser.SetAttribute( "loading_type", "LOAD WITH MIP MAPS" );
+        ser.SetAttribute( "loading_type", "LOAD_WITH_MIPMAPS" );
 
     if( m_loadingType == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS )
     {
