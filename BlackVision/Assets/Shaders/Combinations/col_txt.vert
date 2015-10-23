@@ -93,13 +93,13 @@ void main()
     switch( transformTextEffectId )
     {
     case 1:
-        transform = translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * linearRotationCC( transformEffectVal1, transformEffectVal2, cc_num, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
+        transform = transform * translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * linearRotationCC( transformEffectVal1, transformEffectVal2, cc_num, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
          break;
     case 2:
-        transform = translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * linearScaleCC( transformEffectVal1, transformEffectVal2, cc_num, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
+        transform = transform *translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * linearScaleCC( transformEffectVal1, transformEffectVal2, cc_num, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
          break;     
     case 3:
-        transform = translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * randomScaleCC( transformEffectVal1, transformEffectVal2, cc_num, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
+        transform = transform * translateMatrix( vec3( ccCenter.x, ccCenter.y, 0.0 ) ) * randomScaleCC( transformEffectVal1, transformEffectVal2, cc_num, cc_num_total ) * translateMatrix( vec3( -ccCenter.x, -ccCenter.y, 0.0 ) );
          break;
     default:
         break;
@@ -112,16 +112,3 @@ void main()
     ccCenterCoord = ccCenter;
 }
 
-
-    //mat4 rot = translateMatrix( vec3( ccc.x, ccc.y, 0.0 ) ) * rotationMatrix( vec3( 0.0 , 0.0 , 1.0 ), time * cc_num * 0.1 ) * translateMatrix( vec3( -ccc.x, -ccc.y, 0.0 ) );
-
-    
-    
-    
-    // vec2 expCenterDirection = ccc - explosionCenter;
-    
-    // float expCenterDist = length( expCenterDirection );
-    
-    // vec2 expCenterDirectionNorm = normalize( expCenterDirection );
-    
-    // mat4 explodeMatrix = translateMatrix( vec3( expCenterDirectionNorm.x * expCenterDist, expCenterDirectionNorm.y * expCenterDist, 0.0 ) ) ;
