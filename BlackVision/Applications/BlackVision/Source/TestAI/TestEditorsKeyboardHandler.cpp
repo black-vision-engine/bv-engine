@@ -2,6 +2,7 @@
 
 #include "Engine/Models/BVSceneEditor.h"
 #include "Serialization/XML/XMLSerializer.h"
+#include "Serialization/Json/JsonSerializeObject.h"
 
 #include "MockScenes.h"
 #include "BVAppLogic.h"
@@ -107,6 +108,7 @@ void    TestEditorsKeyboardHandler::HandleKey   ( unsigned char c, BVAppLogic * 
     else if( c == 's' )
     {
         auto sob = new SerializeObject();
+        //auto sob = new JsonSerializeObject();
         m_bvScene->Serialize( *sob );
         sob->Save( "text.xml" );
         delete sob;

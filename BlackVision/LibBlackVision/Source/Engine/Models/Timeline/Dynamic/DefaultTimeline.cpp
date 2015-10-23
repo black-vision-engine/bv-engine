@@ -92,7 +92,7 @@ ISerializablePtr                     DefaultTimeline::Create              ( cons
 
     auto te = std::make_shared< DefaultTimeline >( name, duration, preWrap, postWrap );
 
-    auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( dob, "children" );
+    auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( dob, "children", "timeline" );
 
     for( auto child : children )
         te->AddChild( child );

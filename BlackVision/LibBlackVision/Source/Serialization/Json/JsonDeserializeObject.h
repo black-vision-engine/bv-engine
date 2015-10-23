@@ -22,6 +22,7 @@ public:
 	JsonDeserializeObject();
     virtual ~JsonDeserializeObject();
 
+    bool                        LoadFromFile        ( const std::string& fileName );
 	void						Load                ( const std::string& jsonString );
 	void						Load                ( std::istream& stream );
 

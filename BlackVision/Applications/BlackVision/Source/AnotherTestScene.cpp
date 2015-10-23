@@ -950,8 +950,9 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineMana
 		return nullptr;
 	}
 // begin serialization
-    JsonDeserializeObject deser;
-    deser.Load( filename );
+    DeserializeObject deser( filename );
+    //JsonDeserializeObject deser;
+    //deser.LoadFromFile( filename );
 
     model::TimelineManager::SetInstance( tm );
     
@@ -965,8 +966,8 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineMana
 model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( model::TimelineManager * timelineManager )
 {
     //return LoadSceneFromFile( "Assets/07_Results.xml", timelineManager );
-    //auto scene = LoadSceneFromFile( "test.xml", timelineManager );
-    auto scene = LoadSceneFromFile( "test.json", timelineManager );
+    auto scene = LoadSceneFromFile( "test.xml", timelineManager );
+    //auto scene = LoadSceneFromFile( "test.json", timelineManager );
 
     return scene;
 }

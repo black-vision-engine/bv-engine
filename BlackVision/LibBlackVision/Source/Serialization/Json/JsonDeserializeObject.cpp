@@ -1,5 +1,7 @@
 #include "Serialization/Json/JsonDeserializeObject.h"
 
+#include <fstream>
+
 namespace bv
 {
 
@@ -13,6 +15,20 @@ JsonDeserializeObject::JsonDeserializeObject()
 }
 JsonDeserializeObject::~JsonDeserializeObject()
 {}
+
+// ***********************
+//
+bool JsonDeserializeObject::LoadFromFile        ( const std::string& fileName )
+{
+    std::ifstream file;
+    file.open( fileName, std::ios_base::out );
+    if( !file.fail() )
+    {
+        Load( file );
+        return true;
+    }
+    return false;
+}
 
 // ***********************
 //
