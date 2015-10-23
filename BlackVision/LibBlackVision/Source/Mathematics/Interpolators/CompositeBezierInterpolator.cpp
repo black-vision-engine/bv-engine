@@ -54,6 +54,19 @@ public:
     }
 };
 
+Key< bv::TimeType, bool > Key< bv::TimeType, bool >::operator+( const Key< bv::TimeType, bool > &/*that*/ ) const { assert( false ); return Key< bv::TimeType, bool >( 0, false ); }
+Key< bv::TimeType, bool > Key< bv::TimeType, bool >::operator-( const Key< bv::TimeType, bool > &/*that*/ ) const { assert( false ); return Key< bv::TimeType, bool >( 0, false ); }
+
+template<>
+Key< bv::TimeType, bool > operator*( const bv::TimeType & /*a*/, const Key< bv::TimeType, bool > &/*that*/ ) { assert( false ); return Key< bv::TimeType, bool >( 0, false ); }
+
+template<>
+bool LinearEvaluator< bv::TimeType, bool >::Evaluate( bv::TimeType t ) const
+{
+    bv::TimeType alpha = ( t - key1.t ) / ( key2.t - key1.t );
+    return int( alpha * key2.val + (1-alpha) * key1.val ) > 0;
+}
+
 // *******************************
 //
 template< class TimeValueT, class ValueT >
@@ -122,7 +135,10 @@ public:
 //
 template< class TimeValueT, class ValueT >
 CompositeBezierInterpolator< TimeValueT, ValueT >::CompositeBezierInterpolator( float tolerance )
-    : m_type( CurveType::LINEAR )
+    //: m_type( CurveType::LINEAR )
+    //: m_type( CurveType::COSINE_LIKE )
+    //: m_type( CurveType::POINT )
+    : m_type( CurveType::BEZIER )
     , m_tolerance( tolerance )
     , m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
 {
@@ -450,7 +466,7 @@ void                                                CompositeBezierInterpolator<
 }
 
 template class CompositeBezierInterpolator<TimeType, TimeType>;
-//template class CompositeBezierInterpolator<TimeType, bool>;
+template class CompositeBezierInterpolator<TimeType, bool>;
 template class CompositeBezierInterpolator<TimeType, int>;
 template class CompositeBezierInterpolator<TimeType, float>;
 

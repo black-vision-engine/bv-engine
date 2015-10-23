@@ -11,7 +11,7 @@ namespace bv
 {
     typedef CompositeBezierInterpolator<TimeType, TimeType>   TimeInterpolator;
 
-    //typedef CompositeBezierInterpolator<TimeType, bool>       BoolInterpolator;
+    typedef CompositeBezierInterpolator<TimeType, bool>       BoolInterpolator;
     typedef CompositeBezierInterpolator<TimeType, int>        IntInterpolator;
     
     typedef CompositeBezierInterpolator<TimeType, float>      FloatInterpolator;
@@ -23,7 +23,7 @@ namespace bv
 
     //typedef BasicInterpolator<TimeType, TimeType>   TimeInterpolator;
 
-    typedef BasicInterpolator<TimeType, bool>       BoolInterpolator;
+    //typedef BasicInterpolator<TimeType, bool>       BoolInterpolator;
     //typedef BasicInterpolator<TimeType, int>        IntInterpolator;
     //
     //typedef BasicInterpolator<TimeType, float>      FloatInterpolator;
