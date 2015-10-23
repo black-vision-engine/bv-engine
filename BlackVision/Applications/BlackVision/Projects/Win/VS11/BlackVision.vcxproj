@@ -270,7 +270,8 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\BVAppLogic.cpp" />
     <ClCompile Include="..\..\..\Source\BVConfig.cpp" />
     <ClCompile Include="..\..\..\Source\DefaultPlugins.cpp" />
-    <ClCompile Include="..\..\..\Source\EventHandlers\PluginEvents.cpp" />
+    <ClCompile Include="..\..\..\Source\EventHandlers\PluginEventsHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EventHandlers\SceneEventsHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
     <ClCompile Include="..\..\..\Source\FrameStatsService.cpp" />
     <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp" />
@@ -314,7 +315,9 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\BVConfig.h" />
     <ClInclude Include="..\..\..\Source\BVForwards.h" />
     <ClInclude Include="..\..\..\Source\DefaultPlugins.h" />
-    <ClInclude Include="..\..\..\Source\EventHandlers\PluginEvents.h" />
+    <ClInclude Include="..\..\..\Source\EventHandlers\EventHelpers.h" />
+    <ClInclude Include="..\..\..\Source\EventHandlers\PluginEventsHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EventHandlers\SceneEventsHandlers.h" />
     <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
     <ClInclude Include="..\..\..\Source\FrameStatsService.h" />
     <ClInclude Include="..\..\..\Source\hack_videoinput\TestVideoInput.h" />
