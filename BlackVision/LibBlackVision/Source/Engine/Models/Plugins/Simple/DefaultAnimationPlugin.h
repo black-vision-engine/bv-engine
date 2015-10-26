@@ -47,8 +47,6 @@ private:
 
     DefaultTexturesDataPtr          m_texturesData;
 
-    unsigned int                    m_texCoordChannelIndex;
-
     ParamFloatPtr                   m_paramFrameNum;
     ParamFloatPtr                   m_paramWrapModeX;
     ParamFloatPtr                   m_paramWrapModeY;

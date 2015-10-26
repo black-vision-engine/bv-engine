@@ -11,9 +11,10 @@ const std::string	TestSceneUtils::TEXTURE_PATH	= "Assets/checkboard.bmp";
 const std::string	TestSceneUtils::ALPHA_MASK_PATH	= "Assets/checkboard_am.bmp";
 const std::string	TestSceneUtils::ANIM_PATH		= "Assets/anim";
 
-const UInt32		TestSceneUtils::SPEED			= 3;
+const UInt32		TestSceneUtils::SPEED			= 2;
 const UInt32		TestSceneUtils::ANIM_NUM		= 10;
 const UInt32		TestSceneUtils::IMG_SIZE		= 256;
+const UInt32		TestSceneUtils::AM_SIZE			= 1024;
 
 // ****************************
 //
@@ -203,7 +204,7 @@ void					TestSceneUtils::GenerateCheckboardAlphaMaskTex		( const std::string & n
 		for ( unsigned int j = 0; j < height; ++j ) 
 		{
 			unsigned int idx = i * height + j;
-			unsigned char c = static_cast< unsigned char >( (( ( (i&64)==0 ) ^ ( (j&64)==0 ) ))*255 );
+			unsigned char c = static_cast< unsigned char >( (( ( (i&32)==0 ) ^ ( (j&32)==0 ) ))*255 );
 			data[ idx ] = (GLubyte)c;
 		}
 	}

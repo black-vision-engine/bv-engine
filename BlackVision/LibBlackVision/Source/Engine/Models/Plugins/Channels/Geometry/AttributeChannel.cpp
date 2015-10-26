@@ -55,33 +55,27 @@ std::string                                 AttributeChannel::GetName           
 
 // *************************************
 //
-IAttributeChannelPtr                         AttributeChannel::GetPositionChannel( const std::vector< IAttributeChannelPtr > & channels )
+IAttributeChannelPtr                         AttributeChannel::GetAttrChannel	( const std::vector< IAttributeChannelPtr > & channels, AttributeSemantic semantic, UInt32 occuranceIdx )
 {
+	IAttributeChannelPtr ret = nullptr;
     if( !channels.empty() )
     {
-        // try to guess
-        if( channels[ 0 ]->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_POSITION )
-            return channels[ 0 ];
-
         for( auto ch : channels )
-            if( ch->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_POSITION )
-                return ch;
+		{
+            if( ch->GetDescriptor()->GetSemantic() == semantic )
+			{
+				if( occuranceIdx == 0 )
+				{
+					return ch;
+				}
+				ret = ch;
+				occuranceIdx--;
+			}
+		}
     }
 
-    return nullptr;
+    return ret;
 }
-
-// *************************************
-//
-IAttributeChannelPtr                         AttributeChannel::GetUVChannel( const std::vector< IAttributeChannelPtr >& channels, SizeType index )
-{
-    assert( !channels.empty() );
-    assert( channels.size() > index );
-    assert( channels[index]->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_TEXCOORD );
-
-    return channels[index];
-}
-
 
 } // model
 } // bv

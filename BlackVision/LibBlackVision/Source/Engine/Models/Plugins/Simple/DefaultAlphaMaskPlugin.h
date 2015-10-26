@@ -11,7 +11,7 @@
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
-
+#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
 namespace bv { namespace model {
 
@@ -45,8 +45,6 @@ private:
     VertexAttributesChannelPtr      m_vaChannel;
 
     DefaultTexturesDataPtr          m_texturesData;
-
-    SizeType						m_texCoordChannelIndex;
 
     ParamFloatPtr                   m_paramWrapModeX;
     ParamFloatPtr                   m_paramWrapModeY;
@@ -82,7 +80,7 @@ public:
 private:
 
     void                                        InitAttributesChannel       ( IPluginConstPtr prev );
-    void                                        RecalculateAttrChannel      ();
+    void                                        RecalculateUVChannel		();
 
     TextureWrappingMode                         GetWrapModeX                () const;
     TextureWrappingMode                         GetWrapModeY                () const;
@@ -91,6 +89,8 @@ private:
 
     bool                                        StateChanged                ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am ) const;
     void                                        UpdateState                 ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am );
+
+	void										RegisterEvaluators			( IPluginPtr prev, const std::vector< std::string > & vsEvaluators, const std::vector< std::string > & psEvaluators ); 
 
 };
 

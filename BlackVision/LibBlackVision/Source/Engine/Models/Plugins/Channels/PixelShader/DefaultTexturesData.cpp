@@ -74,10 +74,15 @@ void                                            DefaultTexturesData::SetTextureP
 //
 void                                            DefaultTexturesData::SetTexture         ( unsigned int idx, DefaultTextureDescriptor * textureDesc )
 {
-    assert( idx < m_textureDescriptors.size() );
-
-    delete m_textureDescriptors[ idx ];
-    m_textureDescriptors[ idx ] = textureDesc;
+    if( idx < m_textureDescriptors.size() )
+	{
+		delete m_textureDescriptors[ idx ];
+		m_textureDescriptors[ idx ] = textureDesc;
+	}
+	else
+	{
+		m_textureDescriptors.push_back( textureDesc );
+	}
 }
 
 // ******************************

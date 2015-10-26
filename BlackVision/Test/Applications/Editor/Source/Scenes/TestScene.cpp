@@ -31,7 +31,7 @@ OrderTestCase::OrderTestCase	( const std::string & node, const std::string & tes
 {
 	auto size = TestSceneUtils::IMG_SIZE;
 	TestSceneUtils::GenerateCheckboardTex( TestSceneUtils::TEXTURE_PATH, size, size, glm::uvec3( 32 ) );
-	TestSceneUtils::GenerateCheckboardAlphaMaskTex( TestSceneUtils::ALPHA_MASK_PATH, size, size );
+	TestSceneUtils::GenerateCheckboardAlphaMaskTex( TestSceneUtils::ALPHA_MASK_PATH, TestSceneUtils::AM_SIZE, TestSceneUtils::AM_SIZE );
 	TestSceneUtils::GenerateCheckboardAnim( TestSceneUtils::ANIM_PATH, size, size, TestSceneUtils::ANIM_NUM );
 
 	m_scene = ColoredRectanglesScene();
@@ -509,7 +509,7 @@ void					TestScene::InitBasicGradientPluginTest	()
 	{
 		auto editor = m_scene->GetSceneEditor();
 
-		auto grad = TestSceneUtils::GradientRectangle( m_timelineManager, m_timeEvaluator, GRAD_NODE, 0.3f, 0.3f, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 1.f, 1.f, 0.f, 1.f ) ); //, TestSceneUtils::ALPHA_MASK_PATH
+		auto grad = TestSceneUtils::GradientRectangle( m_timelineManager, m_timeEvaluator, GRAD_NODE, 0.3f, 0.3f, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 1.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
 		model::SetParameterTranslation( grad->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.5f, -0.5f, 0.f ) );
 
 		auto root = m_scene->GetModelSceneRoot();
@@ -526,14 +526,14 @@ void					TestScene::InitBasicGradientPluginTest	()
 	};
 
 	m_testSteps.push_back( add );
-	m_testSteps.push_back( [&]{ SwapLastPlugin( GRAD_NODE ); } );
-	m_testSteps.push_back( [&]{ SwapLastPlugin( GRAD_NODE ); } );
-
 	m_testSteps.push_back( [&]
 	{
 		auto child = std::static_pointer_cast< model::BasicNode >( m_scene->GetModelSceneRoot()->GetChild( GRAD_NODE ) );
 		SetParameter( child->GetPlugin( "linear_gradient" )->GetParameter( "color1" ), TimeType( 0.f ), glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
 	});
+
+	m_testSteps.push_back( [&]{ SwapLastPlugin( GRAD_NODE ); } );
+	m_testSteps.push_back( [&]{ SwapLastPlugin( GRAD_NODE ); } );
 }
 
 // ****************************
@@ -544,17 +544,21 @@ void					TestScene::InitOrderGradientPluginTest	()
 	std::string test1[] = { "transform", "linear_gradient" , "rectangle" };
 	std::string test2[] = { "rectangle", "linear_gradient", "transform" };
 	std::string test3[] = { "rectangle", "transform" , "linear_gradient" };
+	std::string test4[] = { "alpha_mask", "linear_gradient" };
+	std::string test5[] = { "linear_gradient", "alpha_mask" };
 
 	std::vector < OrderTestCase > tests;
 	tests.push_back( OrderTestCase( GRAD_NODE, "LgRT", std::vector< std::string >( test0, test0 + 3 ) ) );
 	tests.push_back( OrderTestCase( GRAD_NODE, "TLgR", std::vector< std::string >( test1, test1 + 3 ) ) );
 	tests.push_back( OrderTestCase( GRAD_NODE, "TLgT", std::vector< std::string >( test2, test2 + 3 ) ) );
 	tests.push_back( OrderTestCase( GRAD_NODE, "RTLg", std::vector< std::string >( test3, test3 + 3 ) ) );
+	tests.push_back( OrderTestCase( GRAD_NODE, "AmLg", std::vector< std::string >( test4, test4 + 2 ) ) );
+	tests.push_back( OrderTestCase( GRAD_NODE, "LgAm", std::vector< std::string >( test5, test5 + 2 ) ) );
 
 	auto recoverScene = [&] 
 	{
 		auto editor = m_scene->GetSceneEditor();
-		auto grad = TestSceneUtils::GradientRectangle( m_timelineManager, m_timeEvaluator, GRAD_NODE, 0.3f, 0.3f, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 1.f, 1.f, 0.f, 1.f ) ); //, TestSceneUtils::ALPHA_MASK_PATH
+		auto grad = TestSceneUtils::GradientRectangle( m_timelineManager, m_timeEvaluator, GRAD_NODE, 0.3f, 0.3f, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 1.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
 		model::SetParameterTranslation( grad->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.5f, -0.5f, 0.f ) );
 
 		auto root = m_scene->GetModelSceneRoot();

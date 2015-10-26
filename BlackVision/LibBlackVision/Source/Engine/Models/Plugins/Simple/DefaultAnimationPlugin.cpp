@@ -6,6 +6,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+#include "Engine/Models/Plugins/HelperUVGenerator.h"
 
 #include "Assets/Texture/AnimationAssetDescriptor.h"
 
@@ -250,9 +251,9 @@ void                                DefaultAnimationPlugin::Update              
                 auto connComp = m_vaChannel->GetConnectedComponent( i );
                 auto compChannels = connComp->GetAttributeChannels();
 
-                if( auto posChannel = AttributeChannel::GetPositionChannel( compChannels ) )
+				if( auto posChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_POSITION ) )
                 {
-                    if( auto uvChannel = AttributeChannel::GetUVChannel( compChannels, m_texCoordChannelIndex ) )
+					if( auto uvChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_TEXCOORD ) )
                     {
                         auto & verts  = std::dynamic_pointer_cast< Float3AttributeChannel >( posChannel )->GetVertices();
                         auto & uvs    = std::dynamic_pointer_cast< Float2AttributeChannel >( uvChannel )->GetVertices();
@@ -306,14 +307,33 @@ void DefaultAnimationPlugin::InitAttributesChannel( IPluginPtr prev )
 	}
 
     auto prevGeomChannel = prev->GetVertexAttributesChannel();
-    AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+	auto prevCC = prevGeomChannel->GetComponents();
+    
+//recreate vachannel ->
+    VertexAttributesChannelDescriptor vaChannelDesc;
+    auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( prevCC[ 0 ] ); //FIXME: is it possible that CC is empty?
+    auto prevCompChannels = prevConnComp->GetAttributeChannelsPtr();
+    for( auto prevCompCh : prevCompChannels )
+    {
+        auto prevCompChDesc = prevCompCh->GetDescriptor();
+        vaChannelDesc.AddAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
+    }
 
-    for( unsigned int i = 0; i < prevGeomChannel->GetComponents().size(); ++i )
+    //Only one texture
+	if( !AttributeChannel::GetAttrChannel( prevConnComp->GetAttributeChannels(), AttributeSemantic::AS_TEXCOORD ) )
+	{
+		vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+	}
+
+	m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+//<- recreate vachannel
+
+	
+	auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    for( unsigned int i = 0; i < prevCC.size(); ++i )
     {
         auto connComp = ConnectedComponent::Create();
-        VertexAttributesChannelDescriptor vaChannelDesc;
-
-        auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( prevGeomChannel->GetComponents()[ i ] );
+        auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( prevCC[ i ] );
         auto prevCompChannels = prevConnComp->GetAttributeChannelsPtr();
 
         for( auto prevCompCh : prevCompChannels )
@@ -321,47 +341,18 @@ void DefaultAnimationPlugin::InitAttributesChannel( IPluginPtr prev )
             connComp->AddAttributeChannel( prevCompCh );
         }
 
-        //if( m_vaChannel == nullptr )
-        //{
-            for( auto prevCompCh : prevCompChannels )
-            {
-                auto prevCompChDesc = prevCompCh->GetDescriptor();
-                vaChannelDesc.AddAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
-            }
+		auto posChannel = AttributeChannel::GetAttrChannel( prevConnComp->GetAttributeChannels(), AttributeSemantic::AS_POSITION );
+		if( posChannel && !AttributeChannel::GetAttrChannel( prevConnComp->GetAttributeChannels(), AttributeSemantic::AS_TEXCOORD ) )
+		{
+			//FIXME: only one texture - convex hull calculations
+			auto uvs = new model::Float2AttributeChannel( desc, DefaultAnimationPluginDesc::TextureName(), true );
+			auto uvsPtr = Float2AttributeChannelPtr( uvs );
+			
+			Helper::UVGenerator::generateUV( reinterpret_cast< const glm::vec3 * >( posChannel->GetData() ), posChannel->GetNumEntries(),
+											uvsPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ), true );
 
-            m_texCoordChannelIndex = vaChannelDesc.GetNumVertexChannels();
-
-            //Only one texture
-            vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
-
-            auto vaChannel = VertexAttributesChannelPtr( new VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() ) );
-            m_vaChannel = vaChannel;
-        //}
-
-        //FIXME: only one texture - convex hull calculations
-        float minX = 100000.0f, minY = 100000.0f;
-        float maxX = 0.0f, maxY = 0.0f;
-
-        //convex hull - make sure that prevCompChannels[ 0 ] is indeed a positional channel
-        for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
-        {
-            const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() );
-
-            minX = std::min( minX, pos[ j ].x );
-            minY = std::min( minY, pos[ j ].y );
-            maxX = std::max( maxX, pos[ j ].x );
-            maxY = std::max( maxY, pos[ j ].y );
-        }
-
-        auto verTexAttrChannel = new model::Float2AttributeChannel( desc, DefaultAnimationPluginDesc::TextureName(), true );
-
-        for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
-        {
-            const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() );
-            verTexAttrChannel->AddAttribute( glm::vec2( ( pos[ j ].x - minX ) / ( maxX - minX ), ( pos[ j ].y - minY ) / ( maxY - minY ) ) );
-        }
-
-        connComp->AddAttributeChannel( AttributeChannelPtr( verTexAttrChannel ) );
+			connComp->AddAttributeChannel( uvsPtr );
+		}
 
         m_vaChannel->AddConnectedComponent( connComp );
     }

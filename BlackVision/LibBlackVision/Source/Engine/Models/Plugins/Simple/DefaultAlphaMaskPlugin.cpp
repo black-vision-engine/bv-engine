@@ -14,7 +14,6 @@
 #include "Engine/Models/Plugins/Simple/DefaultGradientPlugin.h"
 #include "DefaultTransformPlugin.h"
 
-
 namespace bv { namespace model {
 
 namespace {
@@ -131,7 +130,7 @@ std::string             DefaultAlphaMaskPluginDesc::TextureName             ()
 // 
 void								DefaultAlphaMaskPlugin::SetPrevPlugin               ( IPluginPtr prev )
 {
-    __super::SetPrevPlugin( prev );
+    BasePlugin::SetPrevPlugin( prev );
     
     if( prev == nullptr )
         return;
@@ -139,72 +138,33 @@ void								DefaultAlphaMaskPlugin::SetPrevPlugin               ( IPluginPtr pre
     //FIXME: The hackiest of it all - added registered parameters to pass on to the engine - ten kod jest przestraszny i wykurwiscie niefajny
     if( prev->GetTypeUid() == DefaultColorPluginDesc::UID() )
     {
-        assert( prev->GetParameter( "color" ) != nullptr );
-
-        auto evaluators = prev->GetPluginParamValModel()->GetPixelShaderChannelModel()->GetEvaluators();
-        for( unsigned int i = 0; i < evaluators.size(); ++i )
-        {
-            auto colorParam = evaluators[ i ]->GetParameter( "color" );
-            if( colorParam != nullptr )
-            {
-                //FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
-                std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( evaluators[ i ] );
-                break;
-            }
-        }
+		std::vector< std::string > psEval;
+		psEval.push_back( "color" );
+		RegisterEvaluators( prev, std::vector< std::string >(), psEval );
     }
     else if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() || prev->GetTypeUid() == DefaultAnimationPluginDesc::UID() )
     {
-        assert( prev->GetParameter( "alpha" ) != nullptr );
-        
-        auto evaluatorsp = prev->GetPluginParamValModel()->GetPixelShaderChannelModel()->GetEvaluators();
-        for( unsigned int i = 0; i < evaluatorsp.size(); ++i )
-        {
-            auto colorParam = evaluatorsp[ i ]->GetParameter( "alpha" );
-            if( colorParam != nullptr )
-            {
-                //FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
-                std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( evaluatorsp[ i ] );
-                break;
-            }
-        }
-
-        assert( prev->GetParameter( "txMat" ) != nullptr );
-        
-        auto evaluatorsv = prev->GetPluginParamValModel()->GetVertexShaderChannelModel()->GetEvaluators();
-        for( unsigned int i = 0; i < evaluatorsv.size(); ++i )
-        {
-            auto colorParam = evaluatorsv[ i ]->GetParameter( "txMat" );
-            if( colorParam != nullptr )
-            {
-                //FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
-                std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetVertexShaderChannelModel() )->RegisterAll( evaluatorsv[ i ] );
-                break;
-            }
-        }
+		std::vector< std::string > vsEval, psEval;
+		vsEval.push_back( "txMat" );
+		psEval.push_back( "alpha" );
+		RegisterEvaluators( prev, vsEval, psEval );
     }
     else if( prev->GetTypeUid() == DefaultTextPluginDesc::UID() )
     {
-        assert( prev->GetParameter( "alpha" ) != nullptr );
-        assert( prev->GetParameter( "color" ) != nullptr );
-        
-        auto evaluatorsp = prev->GetPluginParamValModel()->GetPixelShaderChannelModel()->GetEvaluators();
-        for( unsigned int i = 0; i < evaluatorsp.size(); ++i )
-        {
-            auto colorParam = evaluatorsp[ i ]->GetParameter( "alpha" );
-            if( colorParam != nullptr )
-            {
-                //FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
-                std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( evaluatorsp[ i ] );
-            }
-
-            auto colorParami = evaluatorsp[ i ]->GetParameter( "color" );
-            if( colorParami != nullptr )
-            {
-                //FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
-                std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( evaluatorsp[ i ] );
-            }
-        }
+        std::vector< std::string > psEval;
+		psEval.push_back( "alpha" );
+		psEval.push_back( "color" );
+		RegisterEvaluators( prev, std::vector< std::string >(), psEval );
+    }
+	else if( prev->GetTypeUid() == DefaultGradientPluginDesc::UID() )
+    {
+		std::vector< std::string > vsEval, psEval;
+		vsEval.push_back( "txMat" );
+		psEval.push_back( "color1" );
+		psEval.push_back( "color2" );
+		psEval.push_back( "point1" );
+		psEval.push_back( "point2" );
+		RegisterEvaluators( prev, vsEval, psEval );
     }
 
     InitAttributesChannel( prev );
@@ -229,10 +189,10 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
     , m_textureWidth( 0 )
     , m_textureHeight( 0 )
 {
-    SetPrevPlugin( prev );
-
-    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
-    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
+    m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
+    m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
+    
+	SetPrevPlugin( prev );
 
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
@@ -291,63 +251,18 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( AssetDescCon
 
         if( txDesc != nullptr )
         {
-            if( GetPrevPlugin()->GetTypeUid() == DefaultColorPluginDesc::UID() )
+			auto prevTypeUid = GetPrevPlugin()->GetTypeUid();
+            if( prevTypeUid == DefaultColorPluginDesc::UID()
+				|| prevTypeUid == DefaultAnimationPluginDesc::UID()
+				|| prevTypeUid == DefaultGradientPluginDesc::UID() )
             {
-                if( txData->GetTextures().size() == 0 )
-                {
-                    txData->AddTexture( txDesc );
-                }
-                else
-                {
-                    assert( txData->GetTextures().size() == 1 );
-
-                    txData->SetTexture( 0, txDesc );
-                }
+                txData->SetTexture( 0, txDesc );
             }
-            else if( GetPrevPlugin()->GetTypeUid() == DefaultTexturePluginDesc::UID() )
+            else if( prevTypeUid == DefaultTexturePluginDesc::UID() 
+				|| prevTypeUid == DefaultTextPluginDesc::UID() )
             {
                 assert( txData->GetTextures().size() >= 1 ); //FIXME: texture plugin is supposed to be added first
-
-                if( txData->GetTextures().size() == 1 )
-                {
-                    txData->AddTexture( txDesc );
-                }
-                else
-                {
-                    assert( txData->GetTextures().size() == 2 );
-
-                    txData->SetTexture( 1, txDesc );
-                }
-            }
-            else if( GetPrevPlugin()->GetTypeUid() == DefaultAnimationPluginDesc::UID() )
-            {
-                assert( txData->GetTextures().size() <= 1 ); //FIXME: texture plugin is supposed to be added first
-
-                if( txData->GetTextures().size() == 0 )
-                {
-                    txData->AddTexture( txDesc );
-                }
-                else
-                {
-                    assert( txData->GetTextures().size() == 1 );
-
-                    txData->SetTexture( 0, txDesc );
-                }
-            }
-            else if( GetPrevPlugin()->GetTypeUid() == DefaultTextPluginDesc::UID() )
-            {
-                assert( txData->GetTextures().size() >= 1 ); //FIXME: text plugin is supposed to be added first
-
-                if( txData->GetTextures().size() == 1 )
-                {
-                    txData->AddTexture( txDesc );
-                }
-                else
-                {
-                    assert( txData->GetTextures().size() == 2 );
-
-                    txData->SetTexture( 1, txDesc );
-                }
+				txData->SetTexture( 1, txDesc );
             }
             else
             {
@@ -357,9 +272,7 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( AssetDescCon
             m_textureWidth = txDesc->GetWidth();
             m_textureHeight = txDesc->GetHeight();
 
-            auto prev = GetPrevPlugin();
-
-            RecalculateAttrChannel();
+			RecalculateUVChannel();
 
             return true;
         }
@@ -397,155 +310,37 @@ void                                DefaultAlphaMaskPlugin::Update              
     m_paramValModel->Update();
 
     auto attachmentMode = GetAttachementMode();
-
-    auto prevVAC = m_prevPlugin->GetVertexAttributesChannel();
-    if( prevVAC && prevVAC->NeedsAttributesUpdate() ) // FUNKED for serialization
-    {
-        RecalculateAttrChannel();
-    }
-
-    if( prevVAC && prevVAC->NeedsTopologyUpdate() ) //FIXME: additionalna hackierka
-                                                     // FUNKED for serialization
-    {
-        if( m_vaChannel != nullptr )
-        {
-            m_vaChannel->ClearAll();
-        }
-        //m_vaChannel = nullptr;
-
-        assert( m_prevPlugin->GetTypeUid() == DefaultTextPluginDesc::UID() );
-
-        InitAttributesChannel( m_prevPlugin );
-
-        //FIXME: very fucking hack - treats text connected components as FREE uv mapping
-        //FIXME: only one texture - convex hull calculations
-        float minX = 100000.0f, minY = 100000.0f;
-        float maxX = 0.0f, maxY = 0.0f;
-            
-        float txWidth = 1920.f;
-        float txHeight = 1080.f;
-
-        if( m_textureWidth > 0 )
-        {
-            txWidth = (float) m_textureWidth;
-        }
-
-        if( m_textureHeight > 0 )
-        {
-            txHeight = (float) m_textureHeight;
-        }
-
-        //Calculate min max
-        for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
-        {
-            auto connComp = m_vaChannel->GetConnectedComponent( i );
-            auto compChannels = connComp->GetAttributeChannels();
-
-            if( auto posChannel = AttributeChannel::GetPositionChannel( compChannels ) )
-            {
-                if( auto uvChannel = AttributeChannel::GetUVChannel( compChannels, m_texCoordChannelIndex ) )
-                {
-                    auto & verts  = std::dynamic_pointer_cast< Float3AttributeChannel >( posChannel )->GetVertices();
-
-                    for( unsigned int j = 0; j < verts.size(); ++j )
-                    {
-                        minX = std::min( minX, verts[ j ].x );
-                        minY = std::min( minY, verts[ j ].y );
-                        maxX = std::max( maxX, verts[ j ].x );
-                        maxY = std::max( maxY, verts[ j ].y );
-                    }
-                }
-            }
-        }
-
-        //printf( "************** RECALCULATED MAPPING *****************\n" );
-        //Recalculate uv mapping
-        for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
-        {
-            auto connComp = m_vaChannel->GetConnectedComponent( i );
-            auto compChannels = connComp->GetAttributeChannels();
-
-            if( auto posChannel = AttributeChannel::GetPositionChannel( compChannels ) )
-            {
-                //printf( "CComp %d with texture (%d, %d) \n", i, m_textureWidth, m_textureHeight );
-                if( auto uvChannel = AttributeChannel::GetUVChannel( compChannels, m_texCoordChannelIndex ) )
-                {
-                    auto & verts  = std::dynamic_pointer_cast< Float3AttributeChannel >( posChannel )->GetVertices();
-                    auto & uvs    = std::dynamic_pointer_cast< Float2AttributeChannel >( uvChannel )->GetVertices();
-
-                    for( unsigned int j = 0; j < verts.size(); ++j )
-                    {
-                        float u0 = verts[ j ].x;
-                        float v0 = verts[ j ].y;
-						{u0;v0;}
-
-                        float u1 = pixelsPerUnitUVSpace * ( verts[ j ].x - minX ) / txWidth;
-                        float v1 = pixelsPerUnitUVSpace * ( verts[ j ].y - minY ) / txHeight;
-
-                        //float tmp[] = { u0, v0, u1, v1 };
-
-                        uvs[ j ].x = u1;
-
-                        uvs[ j ].y = v1;
-
-                        //printf( "   Vertex %d (%.3f, %.3f, %.3f) -> (%.3f, %3f), (%.3f, %3f)\n", j, verts[ j ].x, verts[ j ].y, verts[ j ].z, u0, v0, u1, v1 );
-                    }
-                }
-            }
-        }
-    }
-    //FIXME: olewamy MM_FREE w tym pluginie (i tak na razie nie jest nigdzie uzywane)
-#if 0
-    if( attachmentMode == TextureAttachmentMode::MM_FREE )
-    {
-        if( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
-        {
-            for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
-            {
-                auto connComp = m_vaChannel->GetConnectedComponent( i );
-                auto compChannels = connComp->GetAttributeChannels();
-
-                if( auto posChannel = AttributeChannel::GetPositionChannel( compChannels ) )
-                {
-                    if( auto uvChannel = AttributeChannel::GetUVChannel( compChannels, m_texCoordChannelIndex ) )
-                    {
-                        auto & verts  = std::dynamic_pointer_cast< Float3AttributeChannel >( posChannel )->GetVertices();
-                        auto & uvs    = std::dynamic_pointer_cast< Float2AttributeChannel >( uvChannel )->GetVertices();
-
-                        for( unsigned int i = 0; i < verts.size(); ++i )
-                        {
-                            uvs[ i ].x = verts[ i ].x;
-                            uvs[ i ].y = verts[ i ].y;
-                        }
-                    }
-                }
-            }
-        }
-    }
-#endif //if 0
-
     auto wX = GetWrapModeX();
     auto wY = GetWrapModeY();
     auto fm = GetFilteringMode();
 
-    if( prevVAC && prevVAC->NeedsTopologyUpdate() )  // FUNKED for serialization
-    {
-        m_vaChannel->SetNeedsTopologyUpdate( true );
-    }
-    else if( prevVAC ) // seriously FUNKED for serialization
-    {
-        if ( ( prevVAC && prevVAC->NeedsAttributesUpdate() ) || StateChanged( wX, wY, fm, attachmentMode ) ) // FUNKED for serialization
-        {
-            UpdateState( wX, wY, fm, attachmentMode );
-            m_vaChannel->SetNeedsAttributesUpdate( true );
-        }
-        else
-        {
-            m_vaChannel->SetNeedsAttributesUpdate( false );
-        }
+	if( m_vaChannel )
+	{
+		bool hasPrevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
+		if ( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() 
+			|| StateChanged( wX, wY, fm, attachmentMode ) )
+		{
+			RecalculateUVChannel();
+			UpdateState( wX, wY, fm, attachmentMode );
+			m_vaChannel->SetNeedsAttributesUpdate( true );
+		}
+		else
+		{
+			m_vaChannel->SetNeedsAttributesUpdate( false );
+		}
 
-        m_vaChannel->SetNeedsTopologyUpdate( false );
-    }
+		if( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() )
+		{
+			m_vaChannel->ClearAll();
+			InitAttributesChannel( m_prevPlugin );
+			m_vaChannel->SetNeedsTopologyUpdate( true );
+			m_vaChannel->SetNeedsAttributesUpdate( false ); // FIXME: very ugly hack this is
+		}
+		else
+		{
+			m_vaChannel->SetNeedsTopologyUpdate( false );
+		}
+	}
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -555,159 +350,156 @@ void                                DefaultAlphaMaskPlugin::Update              
 //
 void DefaultAlphaMaskPlugin::InitAttributesChannel( IPluginConstPtr prev )
 {
+	if( !( prev && prev->GetVertexAttributesChannel() ) )
+	{
+		m_vaChannel = nullptr;
+		return;
+	}
+
     auto prevGeomChannel = prev->GetVertexAttributesChannel();
+	auto prevCC = prevGeomChannel->GetComponents();
 
-    if( prevGeomChannel == nullptr ) //FIXME: hackierka
+//recreate vachannel ->
+	VertexAttributesChannelDescriptor vaChannelDesc;
+	auto prevCompChannels = prevCC[ 0 ]->GetAttributeChannels(); //FIXME: is it possible that CC is empty?
+    for( auto prevCompCh : prevCompChannels )
     {
-        assert( prev->GetTypeUid() == DefaultTextPluginDesc::UID() || prev->GetTypeUid() == DefaultTransformPluginDesc::UID() );
-
-        return;
+        auto prevCompChDesc = prevCompCh->GetDescriptor();
+        vaChannelDesc.AddAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
     }
 
-    AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    //add alpha mask texture desc
+	vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-    for( unsigned int i = 0; i < prevGeomChannel->GetComponents().size(); ++i )
+	m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+//<- recreate vachannel
+
+
+    auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    for( unsigned int i = 0; i < prevCC.size(); ++i )
     {
         auto connComp = ConnectedComponent::Create();
-        VertexAttributesChannelDescriptor vaChannelDesc;
-
-        auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( prevGeomChannel->GetComponents()[ i ] );
-        auto prevCompChannels = prevConnComp->GetAttributeChannelsPtr();
-
+        auto prevCompChannels = std::static_pointer_cast< const model::ConnectedComponent >( prevGeomChannel->GetComponents()[ i ] )->GetAttributeChannelsPtr();
+		
         for( auto prevCompCh : prevCompChannels )
         {
             connComp->AddAttributeChannel( prevCompCh );
         }
 
-        if( m_vaChannel == nullptr || m_vaChannel->NeedsInitialization() )
-        {
-            for( auto prevCompCh : prevCompChannels )
-            {
-                auto prevCompChDesc = prevCompCh->GetDescriptor();
-                vaChannelDesc.AddAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
-            }
-
-            m_texCoordChannelIndex = vaChannelDesc.GetNumVertexChannels();
-
-            //Only one texture
-            vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
-
-            if( m_vaChannel == nullptr )
-            {
-                m_vaChannel = VertexAttributesChannelPtr( new VertexAttributesChannel( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() ) );
-            }
-
-            m_vaChannel->Initialize( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
-        }
-
-        //FIXME: only one texture - convex hull calculations
-        float minX = 100000.0f, minY = 100000.0f;
-        float maxX = 0.0f, maxY = 0.0f;
-        float pixelsPerUnitUVSpace = 1080.f;
-            
-        float txWidth = 1920.f;
-        float txHeight = 1080.f;
-
-        if( m_textureWidth > 0 )
-        {
-            txWidth = (float) m_textureWidth;
-        }
-
-        if( m_textureHeight > 0 )
-        {
-            txHeight = (float) m_textureHeight;
-        }
-
-        //FIXME: hackish as hell positioning (assuming implicit FullHD)
-        //convex hull - make sure that prevCompChannels[ 0 ] is indeed a positional channel
-        for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
-        {
-            const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() );
-
-            minX = std::min( minX, pos[ j ].x );
-            minY = std::min( minY, pos[ j ].y );
-            maxX = std::max( maxX, pos[ j ].x );
-            maxY = std::max( maxY, pos[ j ].y );
-        }
-
-        auto verTexAttrChannel = new model::Float2AttributeChannel( desc, DefaultAlphaMaskPluginDesc::TextureName(), true );
-
-        for( unsigned int j = 0; j < prevCompChannels[ 0 ]->GetNumEntries(); ++j )
-        {
-            const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() );
-            //verTexAttrChannel->AddAttribute( glm::vec2( pixelsPerUnitUVSpace * ( pos[ j ].x - minX ) / ( maxX - minX ) / txWidth, pixelsPerUnitUVSpace * ( pos[ j ].y - minY ) / ( maxY - minY ) / txHeight ) );
-            verTexAttrChannel->AddAttribute( glm::vec2( pixelsPerUnitUVSpace * ( pos[ j ].x - minX ) / txWidth, pixelsPerUnitUVSpace * ( pos[ j ].y - minY ) / txHeight ) );
-        }
-
-        connComp->AddAttributeChannel( AttributeChannelPtr( verTexAttrChannel ) );
+		//add alpha mask uv channel
+		connComp->AddAttributeChannel( std::make_shared< Float2AttributeChannel >( desc, DefaultAlphaMaskPluginDesc::TextureName(), true ) );
 
         m_vaChannel->AddConnectedComponent( connComp );
     }
+
+	RecalculateUVChannel();
 }
 
 // *************************************
 //
-void     DefaultAlphaMaskPlugin::RecalculateAttrChannel         ()
+void     DefaultAlphaMaskPlugin::RecalculateUVChannel         ()
 {
-    auto prevGeomChannel = GetPrevPlugin()->GetVertexAttributesChannel();
+	//FIXME: only one texture - convex hull calculations
+    float minX = 100000.0f, minY = 100000.0f;
+    float maxX = 0.0f, maxY = 0.0f;
+    float pixelsPerUnitUVSpace = 1080.f;
 
-    if( prevGeomChannel == nullptr || m_vaChannel == nullptr ) //FIXME: hackierka
-    {
-        assert( GetPrevPlugin()->GetTypeUid() == DefaultTextPluginDesc::UID() );
+	float txWidth = m_textureWidth > 0 ? ( float )m_textureWidth : 1920.f;
+	float txHeight = m_textureHeight > 0 ? ( float )m_textureHeight : 1080.f;
 
-        return;
-    }
+	auto cc = m_vaChannel->GetComponents();
+	for( unsigned int i = 0; i < cc.size(); ++i )
+	{
+		auto compChannels = cc[ i ]->GetAttributeChannels();
+		auto posChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_POSITION );
+		if( posChannel )
+		{
+			auto pos = std::static_pointer_cast< Float3AttributeChannel >( posChannel )->GetVertices();
+			for( unsigned int j = 0; j < posChannel->GetNumEntries(); ++j )
+			{
+				minX = std::min( minX, pos[ j ].x );
+				minY = std::min( minY, pos[ j ].y );
+				maxX = std::max( maxX, pos[ j ].x );
+				maxY = std::max( maxY, pos[ j ].y );
+			}
+		}
+	}
 
-    assert( m_vaChannel != nullptr );
-    assert( m_textureWidth > 0 );
-    assert( m_textureHeight > 0 );
+	for( unsigned int i = 0; i < cc.size(); ++i )
+	{
+		auto compChannels = cc[ i ]->GetAttributeChannels();
+		auto posChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_POSITION );
+		auto uvChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_TEXCOORD, 1 );
+		
+		if( posChannel && uvChannel )
+		{
+			auto pos = std::static_pointer_cast< Float3AttributeChannel >( posChannel );
+			auto uvs = std::static_pointer_cast< Float2AttributeChannel >( uvChannel );
 
-    for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
-    {
-        auto cc = m_vaChannel->GetConnectedComponent( i );
-        auto ccAttrChannels = cc->GetAttributeChannelsPtr();
-        auto posChannel = ccAttrChannels.front(); //FIXME: implicit assumption that first channel contains positional data !!!
-        auto uvChannel = ccAttrChannels.back();
+			auto & uvVerts = uvs->GetVertices();
+			if( uvVerts.size() < posChannel->GetNumEntries() )
+			{
+				uvVerts.resize( posChannel->GetNumEntries() );
+				m_vaChannel->SetNeedsTopologyUpdate( true );
+			}
 
-        assert( uvChannel == ccAttrChannels[ m_texCoordChannelIndex ] );
+			auto & posVerts = pos->GetVertices();
+			for( unsigned int j = 0; j < posChannel->GetNumEntries(); ++j )
+			{
+				uvVerts[ j ] = glm::vec2( pixelsPerUnitUVSpace * ( posVerts[ j ].x - minX ) / txWidth, 
+					pixelsPerUnitUVSpace * ( posVerts[ j ].y - minY ) / txHeight );
+			}
+		}
+	}
 
-        //FIXME: only one texture - convex hull calculations
-        float minX = 100000.0f, minY = 100000.0f;
-        float maxX = 0.0f, maxY = 0.0f;
+	m_vaChannel->SetNeedsAttributesUpdate( true );
+}
 
-        float txWidth = (float) m_textureWidth;
-        float txHeight = (float) m_textureHeight;
+// *************************************
+//
+void					DefaultAlphaMaskPlugin::RegisterEvaluators			( IPluginPtr prev, const std::vector< std::string > & vsEvaluators, const std::vector< std::string > & psEvaluators )
+{
+	for( auto paramName : vsEvaluators )
+	{
+		assert( prev->GetParameter( paramName ) != nullptr );
+	}
+        
+	if( prev->GetPluginParamValModel()->GetVertexShaderChannelModel() )
+	{
+		auto evaluatorsv = prev->GetPluginParamValModel()->GetVertexShaderChannelModel()->GetEvaluators();
+		for( auto & eval : evaluatorsv )
+		{
+			for( auto & paramName : vsEvaluators )
+			{
+				if( eval->GetParameter( paramName ) )
+				{
+					//FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
+					std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetVertexShaderChannelModel() )->RegisterAll( eval );
+				}
+			}
+		}
+	}
 
-        //FIXME: hackish as hell positioning (assuming implicit FullHD)
-        //convex hull - make sure that prevCompChannels[ 0 ] is indeed a positional channel
-        for( unsigned int j = 0; j < posChannel->GetNumEntries(); ++j )
-        {
-            const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( posChannel->GetData() );
+	for( auto paramName : psEvaluators )
+	{
+		assert( prev->GetParameter( paramName ) != nullptr );
+	}
 
-            minX = std::min( minX, pos[ j ].x );
-            minY = std::min( minY, pos[ j ].y );
-            maxX = std::max( maxX, pos[ j ].x );
-            maxY = std::max( maxY, pos[ j ].y );
-        }
-
-        Float2AttributeChannelPtr uv = std::static_pointer_cast< Float2AttributeChannel >( uvChannel ); //FIXME: poor, poor, poor
-        auto & uvVec = uv->GetVertices();
-
-        for( unsigned int j = 0; j < uvVec.size(); ++j )
-        {
-            const glm::vec3 * pos = reinterpret_cast< const glm::vec3 * >( posChannel->GetData() );
-
-            //uvVec[ j ].x = pixelsPerUnitUVSpace * ( pos[ j ].x - minX ) / ( maxX - minX ) / txWidth;
-            //uvVec[ j ].y = pixelsPerUnitUVSpace * ( pos[ j ].y - minY ) / ( maxY - minY ) / txHeight;
-            uvVec[ j ].x = pixelsPerUnitUVSpace * ( pos[ j ].x - minX ) / txWidth;
-            uvVec[ j ].y = pixelsPerUnitUVSpace * ( pos[ j ].y - minY ) / txHeight;
-
-			
-            //printf( "   Vertex %d (%.3f, %.3f, %.3f) -> (%.3f, %3f)\n", j, pos[ j ].x, pos[ j ].y, pos[ j ].z,uvVec[ j ].x, uvVec[ j ].y );
-        }
-    }
-
-    m_vaChannel->SetNeedsAttributesUpdate( true );
+	if( prev->GetPluginParamValModel()->GetPixelShaderChannelModel() )
+	{
+		auto evaluatorsp = prev->GetPluginParamValModel()->GetPixelShaderChannelModel()->GetEvaluators();
+		for( auto & eval : evaluatorsp )
+		{
+			for( auto & paramName : psEvaluators )
+			{
+				if( eval->GetParameter( paramName ) )
+				{
+					//FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
+					std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( eval );
+				}
+			}
+		}
+	}
 }
 
 namespace {

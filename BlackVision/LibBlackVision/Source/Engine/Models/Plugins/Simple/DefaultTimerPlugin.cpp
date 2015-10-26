@@ -638,7 +638,7 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
             {
                 auto channels = comps[ connComp ]->GetAttributeChannels();
 
-                auto uvChannel = std::static_pointer_cast< Float2AttributeChannel >( AttributeChannel::GetUVChannel( channels, 1 ) );
+                auto uvChannel = std::static_pointer_cast< Float2AttributeChannel >( AttributeChannel::GetAttrChannel( channels, AttributeSemantic::AS_TEXCOORD ) );
 
                 auto& verts = uvChannel->GetVertices();
 

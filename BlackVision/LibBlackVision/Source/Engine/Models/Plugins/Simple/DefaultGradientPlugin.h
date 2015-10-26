@@ -61,6 +61,7 @@ public:
 private:
 
     void                                        InitAttributesChannel       ( IPluginPtr prev );
+    void                                        RecalculateUVChannel		();
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 };

@@ -47,8 +47,6 @@ protected:
 
 	DefaultTexturesDataPtr          m_texturesData;
 
-    SizeType						m_texCoordChannelIndex;
-
     ParamFloatPtr                   m_paramWrapModeX;
     ParamFloatPtr                   m_paramWrapModeY;
     ParamFloatPtr                   m_paramFilteringMode;

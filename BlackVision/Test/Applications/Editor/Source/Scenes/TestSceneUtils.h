@@ -24,6 +24,7 @@ public:
 	static const UInt32			SPEED;
 	static const UInt32			ANIM_NUM;
 	static const UInt32			IMG_SIZE;
+	static const UInt32			AM_SIZE;
 
 public:
 	static model::BasicNodePtr	ColoredRectangle					( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, Float32 width, Float32 height, glm::vec4 color, const std::string & alphaMask = "" );

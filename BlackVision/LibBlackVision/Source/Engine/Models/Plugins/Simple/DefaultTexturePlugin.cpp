@@ -14,28 +14,6 @@
 
 namespace bv { namespace model {
 
-// ============== helper functions ================ //
-
-/**@brief Function returns false if AttributeType and AttributeSemantic
-don't match any of known attribute types.
-
-@param[out] UVsGenerationNeeded Returns true if */
-bool acceptAttributeChannel( AttributeChannelPtr attributeChannel, bool& UVsGenerationNeeded )
-{
-	auto compDescriptor = attributeChannel->GetDescriptor();
-	auto attribType = compDescriptor->GetType();
-	auto attribSemantic = compDescriptor->GetSemantic();
-
-	if( attribType == AttributeType::AT_FLOAT2 && attribSemantic == AttributeSemantic::AS_TEXCOORD )
-	{
-		UVsGenerationNeeded = false;
-		return true;
-	}
-	else if( attribType == AttributeType::AT_FLOAT3 && attribSemantic == AttributeSemantic::AS_POSITION )
-		return true;
-	return false;
-}
-
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
 // *******************************
@@ -225,14 +203,7 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
 
         if( txDesc != nullptr )
         {
-            if( txData->GetTextures().size() == 0 )
-            {
-                txData->AddTexture( txDesc );
-            }
-            else
-            {
-                txData->SetTexture( 0, txDesc );
-            }
+            txData->SetTexture( 0, txDesc );
 
 			m_textureWidth = txAssetDescr->GetOrigTextureDesc()->GetWidth();
             m_textureHeight = txAssetDescr->GetOrigTextureDesc()->GetHeight();
@@ -272,10 +243,9 @@ void                                DefaultTexturePlugin::Update                
     { t; } // FIXME: suppress unused warning
     m_paramValModel->Update();
 
-	bool hasPrevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
-
     auto attachmentMode = GetAttachementMode();
 
+#if 0
     if( attachmentMode == TextureAttachmentMode::MM_FREE )
     {
         if( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
@@ -285,9 +255,9 @@ void                                DefaultTexturePlugin::Update                
                 auto connComp = m_vaChannel->GetConnectedComponent( i );
                 auto compChannels = connComp->GetAttributeChannels();
 
-                if( auto posChannel = AttributeChannel::GetPositionChannel( compChannels ) )
+				if( auto posChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_POSITION ) )
                 {
-                    if( auto uvChannel = AttributeChannel::GetUVChannel( compChannels, m_texCoordChannelIndex ) )
+					if( auto uvChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_TEXCOORD ) )
                     {
                         auto & verts  = std::dynamic_pointer_cast< Float3AttributeChannel >( posChannel )->GetVertices();
                         auto & uvs    = std::dynamic_pointer_cast< Float2AttributeChannel >( uvChannel )->GetVertices();
@@ -302,6 +272,7 @@ void                                DefaultTexturePlugin::Update                
             }
         }
     }
+#endif
 
     auto wX = GetWrapModeX();
     auto wY = GetWrapModeY();
@@ -309,6 +280,7 @@ void                                DefaultTexturePlugin::Update                
 
 	if( m_vaChannel )
 	{
+		bool hasPrevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
 		if ( ( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
 			|| StateChanged( wX, wY, fm, attachmentMode ) )
 		{
@@ -349,57 +321,52 @@ void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
 	}
 
     auto prevGeomChannel = prev->GetVertexAttributesChannel();
-    AttributeChannelDescriptor * desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+	auto prevCC = prevGeomChannel->GetComponents();
 
-    for( unsigned int i = 0; i < prevGeomChannel->GetComponents().size(); ++i )
+//recreate vachannel ->
+    VertexAttributesChannelDescriptor vaChannelDesc;
+    auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( prevCC[ 0 ] ); //FIXME: is it possible that CC is empty?
+    auto prevCompChannels = prevConnComp->GetAttributeChannelsPtr();
+    for( auto prevCompCh : prevCompChannels )
+    {
+        auto prevCompChDesc = prevCompCh->GetDescriptor();
+        vaChannelDesc.AddAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
+    }
+
+    //Only one texture
+	if( !AttributeChannel::GetAttrChannel( prevConnComp->GetAttributeChannels(), AttributeSemantic::AS_TEXCOORD ) )
+	{
+		vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+	}
+			
+	m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+//<- recreate vachannel
+
+
+	auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    for( unsigned int i = 0; i < prevCC.size(); ++i )
     {
         auto connComp = ConnectedComponent::Create();
-        VertexAttributesChannelDescriptor vaChannelDesc;
-		bool UVsGenerationNeeded = true;
 
-        auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( prevGeomChannel->GetComponents()[ i ] );
+        auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( prevCC[ i ] );
         auto prevCompChannels = prevConnComp->GetAttributeChannelsPtr();
 
         for( auto prevCompCh : prevCompChannels )
         {
             connComp->AddAttributeChannel( prevCompCh );
-
-			// !!!! Function accepts only position and UVs coordinates ( 2D textures ).
-			// It needs to be changed when normal vectors appear in engine.
-			bool accept = acceptAttributeChannel( prevCompCh, UVsGenerationNeeded );
-            { accept; }
-            assert( accept );
         }
 
-		//FIXME: m_vaChannel has to be recreated when previous plugin changes
-        //if( m_vaChannel == nullptr )
-        //{
-            for( auto prevCompCh : prevCompChannels )
-            {
-                auto prevCompChDesc = prevCompCh->GetDescriptor();
-                vaChannelDesc.AddAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
-            }
-
-            //Only one texture
-			if( UVsGenerationNeeded )
-				vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
-
-			m_texCoordChannelIndex = vaChannelDesc.GetNumVertexChannels() - 1;
-			
-			m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
-        //}
-
-		if( UVsGenerationNeeded )
+		auto posChannel = AttributeChannel::GetAttrChannel( prevConnComp->GetAttributeChannels(), AttributeSemantic::AS_POSITION );
+		if( posChannel && !AttributeChannel::GetAttrChannel( prevConnComp->GetAttributeChannels(), AttributeSemantic::AS_TEXCOORD ) )
 		{
 			//FIXME: only one texture - convex hull calculations
-			//convex hull - make sure that prevCompChannels[ 0 ] is indeed a positional channel
-			auto verTexAttrChannel = new model::Float2AttributeChannel( desc, DefaultTexturePluginDesc::TextureName(), true );
-			auto UVChannelPtr = Float2AttributeChannelPtr( verTexAttrChannel );
+			auto uvs = new model::Float2AttributeChannel( desc, DefaultTexturePluginDesc::TextureName(), true );
+			auto uvsPtr = Float2AttributeChannelPtr( uvs );
 			
-			Helper::UVGenerator::generateUV( reinterpret_cast< const glm::vec3 * >( prevCompChannels[ 0 ]->GetData() ), prevCompChannels[ 0 ]->GetNumEntries(),
-											UVChannelPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ), true );
+			Helper::UVGenerator::generateUV( reinterpret_cast< const glm::vec3 * >( posChannel->GetData() ), posChannel->GetNumEntries(),
+											uvsPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ), true );
 
-			connComp->AddAttributeChannel( UVChannelPtr );
+			connComp->AddAttributeChannel( uvsPtr );
 		}
 
         m_vaChannel->AddConnectedComponent( connComp );
