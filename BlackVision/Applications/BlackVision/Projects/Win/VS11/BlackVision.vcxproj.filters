@@ -137,6 +137,9 @@
     <ClCompile Include="..\..\..\Source\EventHandlers\PluginEventsHandlers.cpp">
       <Filter>EventHandlers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\EventHandlers\RemoteCommandsConverter.cpp">
+      <Filter>EventHandlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -242,6 +245,10 @@
     <ClInclude Include="..\..\..\Source\EventHandlers\PluginEventsHandlers.h">
       <Filter>EventHandlers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\EventHandlers\RemoteCommandsConverter.h">
+      <Filter>EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UseLogger.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\BVConfig.inl" />

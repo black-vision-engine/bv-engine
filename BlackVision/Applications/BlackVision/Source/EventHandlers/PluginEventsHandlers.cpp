@@ -3,13 +3,16 @@
 #include "EventHelpers.h"
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Assets/AssetManager.h"
+#include "../BVAppLogic.h"
+#include "../UseLogger.h"
 
 namespace bv
 {
 
 // *********************************
 // constructor destructor
-PluginEventsHandlers::PluginEventsHandlers()
+PluginEventsHandlers::PluginEventsHandlers(  BVAppLogic* logic )
+    : m_appLogic( logic )
 {}
 
 PluginEventsHandlers::~PluginEventsHandlers()
@@ -21,13 +24,48 @@ void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
 {
     if( eventPtr->GetEventType() == bv::SetParamEvent::m_sEventType)
     {
-        bv::SetParamEventPtr setParamEvent = std::static_pointer_cast<bv::SetParamEvent>( eventPtr );
+        bv::ParamKeyEventPtr setParamEvent = std::static_pointer_cast<bv::ParamKeyEvent>( eventPtr );
 
         std::string nodeName    = toString( setParamEvent->NodeName );
         std::string pluginName  = toString( setParamEvent->PluginName );
         std::string paramName   = toString( setParamEvent->ParamName );
-        std::string value       = toString( setParamEvent->Value );
+        std::wstring value      = setParamEvent->Value;
+
+        float keyTime                   = setParamEvent->Time;
+        ParamKeyEvent::Command command  = setParamEvent->KeyCommand;
+        { keyTime; }
+        { command; }
         
+        auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
+        auto node = root->GetNode( nodeName );
+        if( node == nullptr )
+        {
+            if( root->GetName() == nodeName )
+                node = root;
+            else
+            {
+                LOG_MESSAGE( SeverityLevel::error ) << "AddParamKey() node ["+ nodeName+"] not found";
+                return;
+            }
+        }
+
+     //   if( pluginName == "transform" )
+     //   {
+     //       auto param = node->GetPlugin("transform")->GetParameter("simple_transform");
+     //       assert( param );
+     //       if( paramName == "translation" )
+     //       {
+				 //Log::A("OK", "node ["+ NodeNameStr+"] translation: ("+to_string(evtSetParam->x)+", "+to_string(evtSetParam->y)+", "+to_string(evtSetParam->z)+") time: "+to_string(evtSetParam->time));
+
+     //            SetParameterTranslation ( param, 0, (bv::TimeType)evtSetParam->time, glm::vec3( evtSetParam->x,evtSetParam->y,evtSetParam->z));
+     //       }
+     //       else if( paramName == "scale" )
+     //       {
+				 //Log::A("OK", "node ["+ NodeNameStr+"] scale: ("+to_string(evtSetParam->x)+", "+to_string(evtSetParam->y)+", "+to_string(evtSetParam->z)+") time: "+to_string(evtSetParam->time));
+     //            
+     //            SetParameterScale ( param, 0, (bv::TimeType)evtSetParam->time, glm::vec3( evtSetParam->x,evtSetParam->y,evtSetParam->z));
+     //       }
+     //   }
     }
 }
 
@@ -38,14 +76,6 @@ void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
   //      
   //      auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot();
   //      
-
-  //      //todo: //fixme: wstring -> string
-  //      wstring NodeName = evtSetParam->NodeName;
-  //      string NodeNameStr( NodeName.begin(), NodeName.end() );
-  //      //todo: //fixme: wstring -> string
-  //      wstring TexturePath = evtSetParam->Value;
-  //      string TexturePathStr( TexturePath.begin(), TexturePath.end() );
-
   //      auto node = root->GetNode(NodeNameStr);
   //      if(node==nullptr &&root->GetName()==NodeNameStr)
   //      {
@@ -56,32 +86,6 @@ void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
   //      {
   //          Log::A("error", "Error OnSetParam() node ["+ NodeNameStr+"] not found");
   //          return;
-  //      }
-  //      if(evtSetParam->PluginName == L"texture")
-  //      {
-  //          auto plugin = node->GetPlugin( "texture" );
-
-  //          if(plugin == nullptr)
-  //          {
-  //               Log::A("error", "Error OnSetParam() node ["+ NodeNameStr+"] , plugin [texture] not found");
-  //               return;
-  //          }
-		//		ifstream f(BB::AssetManager::GetTexture(TexturePathStr ).c_str());
-  //              if (f.good()) {
-  //                  f.close();
-  //                   bool result = model::LoadTexture( plugin, BB::AssetManager::GetTexture(TexturePathStr ) );
-		//			 {result;}
-  //              } else {
-  //                  f.close();
-		//			 bool result = model::LoadTexture( plugin, BB::AssetManager::GetBlankTexture() );
-		//			 {result;}
-  //                  Log::A("error", "Error OnSetParam() texture ["+  BB::AssetManager::GetTexture(TexturePathStr )+"] not found");
-  //                  return;
-  //              }   
-
-  //         
-  //          Log::A("OK", "OK OnSetParam() node ["+ NodeNameStr+"] has new image, yo!");
-
   //      }else if(evtSetParam->PluginName == L"transform"){
   //          
   //          if(evtSetParam->ParamName == L"translation")
@@ -142,20 +146,6 @@ void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
   //                  Log::A("error", "Error OnSetParam() node ["+ NodeNameStr+"] , plugin [text] not found");
   //              }
   //          }
-
-  //      }else if(evtSetParam->PluginName == L"visibility"){
-  //          
-  //          if(evtSetParam->ParamName == L"visible")
-  //          {
-  //              if(evtSetParam->Value == L"true")
-  //              {
-  //                  node->SetVisible(true);
-  //              }else{
-  //                  node->SetVisible(false);
-  //              }
-  //          }
-
-  //      
   //      } else {
 		//	string plugin_name_cast= string(evtSetParam->PluginName.begin(), evtSetParam->PluginName.end());
 		//	string param_name_cast= string(evtSetParam->ParamName.begin(), evtSetParam->ParamName.end());
@@ -195,42 +185,42 @@ void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
 //
 void PluginEventsHandlers::UpdateParamKey      ( bv::IEventPtr /*eventPtr*/ )
 {
-
+    assert( !"Implement meeee" );
 }
 
 // *********************************
 //
 void PluginEventsHandlers::RemoveParamKey      ( bv::IEventPtr /*eventPtr*/ )
 {
-
+    assert( !"Implement meeee" );
 }
 
 // *********************************
 //
-void PluginEventsHandlers::LoadAsset( bv::IEventPtr /*eventPtr*/ )
+void PluginEventsHandlers::LoadAsset( bv::IEventPtr eventPtr )
 {
-    //if( eventPtr->GetEventType() == bv::LoadAssetEvent::m_sEventType )
-    //{
-    //    bv::LoadAssetEventPtr eventLoadAsset = std::static_pointer_cast<bv::LoadAssetEvent>( eventPtr );
-    //    
-    //    std::string nodeName = toString( eventLoadAsset->NodeName );
-    //    std::string pluginName = toString( eventLoadAsset->PluginName );
-    //    std::string asssetData = toString( eventLoadAsset->AssetData );
+    if( eventPtr->GetEventType() == bv::LoadAssetEvent::m_sEventType )
+    {
+        bv::LoadAssetEventPtr eventLoadAsset = std::static_pointer_cast<bv::LoadAssetEvent>( eventPtr );
+        
+        std::string nodeName = toString( eventLoadAsset->NodeName );
+        std::string pluginName = toString( eventLoadAsset->PluginName );
+        std::string asssetData = toString( eventLoadAsset->AssetData );
 
-    //    auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot();
-    //    auto node = root->GetNode( nodeName );
-    //    auto plugin = node->GetPlugin( pluginName );
+        auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
+        auto node = root->GetNode( nodeName );
+        auto plugin = node->GetPlugin( pluginName );
 
-    //    JsonDeserializeObject deserializer;
-    //    deserializer.Load( asssetData );
+        JsonDeserializeObject deserializer;
+        deserializer.Load( asssetData );
 
-    //    bool result = true;
-    //    auto assetDesc = AssetManager::GetInstance().CreateDesc( deserializer );
+        bool result = true;
+        auto assetDesc = AssetManager::GetInstance().CreateDesc( deserializer );
 
-    //    if( assetDesc != nullptr )
-    //        result = plugin->LoadResource( assetDesc );
-    //    else
-    //        result = false;
+        if( assetDesc != nullptr )
+            result = plugin->LoadResource( assetDesc );
+        else
+            result = false;
 
         //std::wstring response;
         //if( result )
@@ -243,7 +233,7 @@ void PluginEventsHandlers::LoadAsset( bv::IEventPtr /*eventPtr*/ )
         //msg.msg     = response;
         //msg.sock_id = eventLoadAsset->SockID;
         //SocketWrapper::AddMsg( msg );
-    //}
+    }
 }
 
 } //bv

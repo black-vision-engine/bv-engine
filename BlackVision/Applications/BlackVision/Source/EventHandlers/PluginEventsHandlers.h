@@ -4,18 +4,21 @@
 
 namespace bv
 {
+class BVAppLogic;
 
 class PluginEventsHandlers
 {
+private:
+    BVAppLogic*             m_appLogic;
 public:
-    PluginEventsHandlers();
+    PluginEventsHandlers( BVAppLogic* logic );
     ~PluginEventsHandlers();
 
-    static void AddParamKey         ( bv::IEventPtr eventPtr );
-    static void UpdateParamKey      ( bv::IEventPtr eventPtr );
-    static void RemoveParamKey      ( bv::IEventPtr eventPtr );
+    void AddParamKey         ( bv::IEventPtr eventPtr );
+    void UpdateParamKey      ( bv::IEventPtr eventPtr );
+    void RemoveParamKey      ( bv::IEventPtr eventPtr );
 
-    static void LoadAsset           ( bv::IEventPtr eventPtr );
+    void LoadAsset           ( bv::IEventPtr eventPtr );
 };
 
 
