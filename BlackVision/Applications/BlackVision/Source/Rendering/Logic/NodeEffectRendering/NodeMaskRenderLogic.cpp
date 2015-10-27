@@ -33,7 +33,7 @@ void    NodeMaskRenderLogic::RenderNode                  ( Renderer * renderer, 
     }
     else
     {
-        GetRenderLogic()->DrawNodeOnly( renderer, node );
+        GetRenderLogic()->DrawNodeOnlyTM( renderer, node );
 
         GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
         GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
@@ -55,7 +55,7 @@ void    NodeMaskRenderLogic::RenderNode                  ( Renderer * renderer, 
         assert( maskIdx != fgIdx );
 
         // MASK
-        GetRenderLogic()->RenderNode( renderer, node->GetChild( maskIdx ) ); 
+        GetRenderLogic()->RenderNodeTM( renderer, node->GetChild( maskIdx ) );
 
         GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
         GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
@@ -63,7 +63,7 @@ void    NodeMaskRenderLogic::RenderNode                  ( Renderer * renderer, 
         renderer->ClearBuffers();
 
         // FOREGROUND
-        GetRenderLogic()->RenderNode( renderer, node->GetChild( fgIdx ) ); 
+        GetRenderLogic()->RenderNodeTM( renderer, node->GetChild( fgIdx ) ); 
 
         GetOffscreenRenderLogic()->DrawAMTopTwoRenderTargets( renderer, alphaVal.get() );
     
@@ -72,7 +72,7 @@ void    NodeMaskRenderLogic::RenderNode                  ( Renderer * renderer, 
 
         GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
 
-        GetRenderLogic()->DrawChildren( renderer, node, 2 );
+        GetRenderLogic()->DrawChildrenTM( renderer, node, 2 );
     }
 }
 

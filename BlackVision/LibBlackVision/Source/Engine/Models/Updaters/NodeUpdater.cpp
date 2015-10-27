@@ -114,37 +114,42 @@ NodeUpdater::~NodeUpdater    ()
 //
 void    NodeUpdater::DoUpdate        ()
 {
+
+    DoUpdateTM();
+
+    return;
+
     //FIXME: czy jesli node nie jest widoczne to trzeba w ogole updatowac stan - zakladam, ze nie, ale trzeba sie upewnic
     //FIXME: it is just a single bool to set, so no there is no fancy machinery for testing whehter any update is necessary 
-    if( m_modelNode->IsVisible() )
-    {
-        m_sceneNode->SetVisible( true );
+    //if( m_modelNode->IsVisible() )
+    //{
+    //    m_sceneNode->SetVisible( true );
 
-        // Add, when all mechanisms are implemented
-        // UpdateNodeEffect();
-        //FIXME: until global effect is implemented, only one state can be used
-        assert( !(m_modelNode->IsStateOverridenAM() && m_modelNode->IsStateOverridenNM()) );
+    //    // Add, when all mechanisms are implemented
+    //    // UpdateNodeEffect();
+    //    //FIXME: until global effect is implemented, only one state can be used
+    //    assert( !(m_modelNode->IsStateOverridenAM() && m_modelNode->IsStateOverridenNM()) );
 
-        m_sceneNode->SetOverridenAM( m_modelNode->IsStateOverridenAM() );
-        m_sceneNode->SetOverridenNM( m_modelNode->IsStateOverridenNM() );
+    //    m_sceneNode->SetOverridenAM( m_modelNode->IsStateOverridenAM() );
+    //    m_sceneNode->SetOverridenNM( m_modelNode->IsStateOverridenNM() );
 
-        UpdateTransform();
+    //    UpdateTransform();
 
-        if( m_hasEffect )
-        {
-            if( !m_timeInvariantVertexData )
-            {
-                UpdateGeometry();
-            }
+    //    if( m_hasEffect )
+    //    {
+    //        if( !m_timeInvariantVertexData )
+    //        {
+    //            UpdateGeometry();
+    //        }
 
-            UpdateTexturesData();
-            UpdateRendererState();
-        }
-    }
-    else
-    {
-        m_sceneNode->SetVisible( false );
-    }
+    //        UpdateTexturesData();
+    //        UpdateRendererState();
+    //    }
+    //}
+    //else
+    //{
+    //    m_sceneNode->SetVisible( false );
+    //}
 }
 
 // *****************************
