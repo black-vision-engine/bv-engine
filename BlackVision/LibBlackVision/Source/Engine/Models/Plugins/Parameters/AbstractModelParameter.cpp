@@ -70,19 +70,19 @@ ModelParamType      AbstractModelParameter::GetType () const
     return m_type;
 }
 
-// *******************************
+//// *******************************
+////
+//void                AbstractModelParameter::SetInterpolationMethod ( IParameter::InterpolationMethod method )
+//{
+//    m_method = method;
+//}
 //
-void                AbstractModelParameter::SetInterpolationMethod ( IParameter::InterpolationMethod method )
-{
-    m_method = method;
-}
-
-// *******************************
-//
-IParameter::InterpolationMethod AbstractModelParameter::GetInterpolationMethod () const
-{
-    return m_method;
-}
+//// *******************************
+////
+//IParameter::InterpolationMethod AbstractModelParameter::GetInterpolationMethod () const
+//{
+//    return m_method;
+//}
 
 
 
