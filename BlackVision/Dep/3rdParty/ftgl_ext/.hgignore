@@ -1,0 +1,8 @@
+syntax: glob
+test/Makefile.am
+poly2tri/x64/Debug/sweep.obj
+src/Makefile.am
+poly2tri/x64/Debug/cdt.obj
+poly2tri/x64/Debug/cl.command.1.tlog
+*.tlog
+*.obj
