@@ -1,5 +1,5 @@
 #include "JsonSerializeObject.h"
-
+#include <cassert>
 
 namespace bv
 {
@@ -82,5 +82,19 @@ bool JsonSerializeObject::ExitChild()
     return true;
 }
 
+// ***********************
+//
+void                JsonSerializeObject::SetAttribute        ( const std::wstring& /*name*/, const std::wstring& /*value*/ )
+{    assert( !"This serializer doesn't supports wstrings" );    }
+
+// ***********************
+//
+std::wstring        JsonSerializeObject::GetAttribute        ( const std::wstring& /*name*/ )
+{    assert( !"This serializer doesn't supports wstrings" ); return L"";   }
+
+// ***********************
+//
+void                JsonSerializeObject::EnterChild          ( const std::wstring& /*name*/ )
+{    assert( !"This serializer doesn't supports wstrings" );    }
 
 } //bv

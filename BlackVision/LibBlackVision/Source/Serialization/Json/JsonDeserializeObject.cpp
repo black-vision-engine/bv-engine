@@ -1,6 +1,7 @@
 #include "Serialization/Json/JsonDeserializeObject.h"
 
 #include <fstream>
+#include <cassert>
 
 namespace bv
 {
@@ -131,6 +132,10 @@ bool JsonDeserializeObject::NextChild           () const
     return false;
 }
 
+std::wstring        JsonDeserializeObject::GetAttribute        ( const std::wstring& /*name*/ ) const
+{    assert( !"This serializer doesn't supports wstrings" ); return L"";    }
 
+bool                JsonDeserializeObject::EnterChild          ( const std::wstring& /*name*/ ) const
+{    assert( !"This serializer doesn't supports wstrings" ); return false;   }
 
 } //bv

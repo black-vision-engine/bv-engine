@@ -110,4 +110,11 @@ bool                DeserializeObject::NextChild           () const
 }
 
 
+std::wstring        DeserializeObject::GetAttribute        ( const std::wstring& /*name*/ ) const
+{    assert( !"This serializer doesn't supports wstrings" ); return L"";    }
+
+bool                DeserializeObject::EnterChild          ( const std::wstring& /*name*/ ) const
+{    assert( !"This serializer doesn't supports wstrings" ); return false;    }
+
+
 } // bv

@@ -11,8 +11,11 @@ public:
     SceneEventsHandlers();
     ~SceneEventsHandlers();
 
-    static void SceneStructure      ( bv::IEventPtr evt );
+    //void SceneStructure      ( bv::IEventPtr evt );
     // SetNodeVisible <- wczeœniej implementowane przez SetParamEvent
+
+    void        AddNode         ();
+    void        RemoveNode      ();
 };
 
 
