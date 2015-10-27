@@ -202,7 +202,7 @@ void    NodeUpdater::UpdateNodeEffect       ()
 
                 auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
-                if ( !sceneNodeEffect )
+                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_ALPHA_MASK )
                 {
                     sceneNodeEffect = std::make_shared< AlphaMaskNodeEffect >();
                     m_sceneNode->SetNodeEffect( sceneNodeEffect );
@@ -226,7 +226,7 @@ void    NodeUpdater::UpdateNodeEffect       ()
 
                 auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
-                if ( !sceneNodeEffect )
+                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_NODE_MASK )
                 {
                     sceneNodeEffect = std::make_shared< NodeMaskNodeEffect >();
                     m_sceneNode->SetNodeEffect( sceneNodeEffect );

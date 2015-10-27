@@ -65,7 +65,7 @@ void                    TestGlobalEfectKeyboardHandler::HandleIncrement ( BVAppL
 
         alpha->SetVal( min( 1.f, alpha->Evaluate() + .1f ), 0.f );
 
-        // printf( "New alpha mask alpha value: %4f\n", alpha->Evaluate() );
+        printf( "New alpha mask alpha value: %4f\n", alpha->Evaluate() );
     }
     else if ( m_curSelectedNode == NodeEffectType::NET_NODE_MASK )
     {
@@ -95,7 +95,7 @@ void                    TestGlobalEfectKeyboardHandler::HandleDecrement ( BVAppL
 
         alpha->SetVal( max( 0.f, alpha->Evaluate() - .1f ), 0.f );
 
-        // printf( "New alpha mask alpha value: %4f\n", alpha->Evaluate() );
+        printf( "New alpha mask alpha value: %4f\n", alpha->Evaluate() );
     }
     else if ( m_curSelectedNode == NodeEffectType::NET_NODE_MASK )
     {

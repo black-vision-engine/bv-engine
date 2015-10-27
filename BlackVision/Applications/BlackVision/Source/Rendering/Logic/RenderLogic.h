@@ -31,6 +31,8 @@ private:
 
     std::vector< NodeEffectRenderLogic * >  m_customNodeRenderLogic;
 
+    mutable CustomLogicType m_yp;
+
 public:
 
             RenderLogic     ();
@@ -72,6 +74,11 @@ public:
 
     void    DrawNodeOnly    ( Renderer * renderer, SceneNode * node );
     void    DrawChildren    ( Renderer * renderer, SceneNode * node, int firstChildIdx = 0 );
+
+    void    DrawNodeTM      ( Renderer * renderer, SceneNode * node );
+
+    void    DrawNodeOnlyTM  ( Renderer * renderer, SceneNode * node );
+    void    DrawChildrenTM  ( Renderer * renderer, SceneNode * node, int firstChildIdx = 0 );
 
 public:
 

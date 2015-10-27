@@ -27,6 +27,8 @@ extern HighResolutionTimer GTimer;
 //
 RenderLogic::RenderLogic     ()
 {
+    m_yp = CLT_TOTAL;
+
     m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffersPerRT() );
 
     m_customNodeRenderLogic.push_back( new DefaultEffectRenderLogic( this, m_offscreenRenderLogic ) );
@@ -148,7 +150,9 @@ void    RenderLogic::RenderNodeTM       ( Renderer * renderer, SceneNode * node 
 {
     if ( node->IsVisible() )
     {
-        GetNodeEffectRenderLogic( node )->RenderNode( renderer, node );
+        auto effectRenderLogic = GetNodeEffectRenderLogic( node );
+        
+        effectRenderLogic->RenderNode( renderer, node );
     }
 }
 
@@ -177,7 +181,7 @@ bool    RenderLogic::UseNodeMask     ( SceneNode * node ) const
 //
 bool    RenderLogic::UseDefaultMaskTM( SceneNode * node ) const
 {
-    return !( UseNodeMaskTM( node ) || UseAlphaMaskTM( node ) );
+    return node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT;
 }
 
 // *********************************
@@ -334,6 +338,34 @@ void    RenderLogic::DrawChildren   ( Renderer * renderer, SceneNode * node, int
     {
         HPROFILER_SECTION( "RenderNode::RenderNode", PROFILER_THREAD1 );
         RenderNode( renderer, node->GetChild( i ) ); 
+    }
+}
+
+// *********************************
+//
+void    RenderLogic::DrawNodeTM      ( Renderer * renderer, SceneNode * node )
+{
+	HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor", PROFILER_THREAD1 );
+    DrawNodeOnlyTM( renderer, node );
+
+    DrawChildrenTM( renderer, node );
+}
+
+// *********************************
+//
+void    RenderLogic::DrawNodeOnlyTM  ( Renderer * renderer, SceneNode * node )
+{
+    renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable() ) );
+}
+
+// *********************************
+//
+void    RenderLogic::DrawChildrenTM  ( Renderer * renderer, SceneNode * node, int firstChildIdx )
+{
+    for ( unsigned int i = firstChildIdx; i < (unsigned int) node->NumChildNodes(); i++ )
+    {
+        HPROFILER_SECTION( "RenderNode::RenderNode", PROFILER_THREAD1 );
+        RenderNodeTM( renderer, node->GetChild( i ) ); 
     }
 }
 

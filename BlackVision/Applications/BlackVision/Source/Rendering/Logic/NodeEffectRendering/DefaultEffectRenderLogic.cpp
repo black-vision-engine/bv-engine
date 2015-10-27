@@ -25,7 +25,7 @@ DefaultEffectRenderLogic::~DefaultEffectRenderLogic ()
 //
 void    DefaultEffectRenderLogic::RenderNode        ( Renderer * renderer, SceneNode * node )
 {
-    GetRenderLogic()->DrawNode( renderer, node );
+    GetRenderLogic()->DrawNodeTM( renderer, node );
 }
 
 } //bv

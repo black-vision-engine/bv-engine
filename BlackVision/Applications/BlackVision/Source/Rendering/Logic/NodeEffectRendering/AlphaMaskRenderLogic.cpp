@@ -33,9 +33,10 @@ void    AlphaMaskRenderLogic::RenderNode                  ( Renderer * renderer,
     renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
     renderer->ClearBuffers();
 
-    GetRenderLogic()->DrawNode( renderer, node );
+    GetRenderLogic()->DrawNodeTM( renderer, node );
 
-    GetOffscreenRenderLogic()->DrawTopAuxRenderTarget( renderer, node->GetOverrideAlphaVal() );
+    auto alphaVal = node->GetNodeEffect()->GetValue( "alpha" );
+    GetOffscreenRenderLogic()->DrawTopAuxRenderTarget( renderer, alphaVal.get() );
     GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
     GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
 }
