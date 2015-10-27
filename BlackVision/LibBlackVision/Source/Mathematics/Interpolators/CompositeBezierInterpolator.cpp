@@ -1,6 +1,8 @@
 #include "CompositeBezierInterpolator.h"
 #include "Mathematics/Core/mathfuncs.h"
 
+#include "Serialization/SerializationHelper.h"
+
 #include "Mathematics/glm_inc.h" // just for explicit instantiation
 
 namespace bv {
@@ -155,6 +157,21 @@ CompositeBezierInterpolator< TimeValueT, ValueT >::CompositeBezierInterpolator( 
     m_type = that.m_type; 
     m_preMethod = that.m_preMethod;
     m_postMethod = that.m_postMethod;
+}
+
+// *************************************
+//
+template< class TimeValueT, class ValueT >
+ISerializablePtr     CompositeBezierInterpolator< TimeValueT, ValueT >::Create          ( const IDeserializer& doc ) // FIXME: this works for floats only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!(?)
+{
+    auto keys = SerializationHelper::DeserializeObjectLoadPropertiesImpl< Key >( doc, "key" );
+
+    auto interpolator = std::make_shared< CompositeBezierInterpolator< TimeValueT, ValueT > >();
+
+    for( auto key : keys )
+        interpolator->AddKey( key->t, key->val );
+
+    return interpolator;
 }
 
 // *******************************

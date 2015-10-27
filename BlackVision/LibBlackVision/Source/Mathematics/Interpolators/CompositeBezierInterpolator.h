@@ -54,8 +54,8 @@ public:
     CompositeBezierInterpolator( float tolerance = 0.000001 );
     CompositeBezierInterpolator( const CompositeBezierInterpolator& that );
 
-    virtual void                                        Serialize       ( SerializeObject& ) const override { assert( false ); }
-    static ISerializablePtr                             Create          ( DeserializeObject& )              { assert( false ); return nullptr; } 
+    virtual void                                        Serialize       ( ISerializer& ) const override { assert( false ); }
+    static ISerializablePtr                             Create          ( const IDeserializer& );
 
     void                                                AddKey          ( TimeValueT t, const ValueT & v );
     ValueT                                              Evaluate        ( TimeValueT t ) const;

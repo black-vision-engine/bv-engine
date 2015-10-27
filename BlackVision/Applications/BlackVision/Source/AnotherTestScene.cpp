@@ -966,7 +966,7 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineMana
     return std::static_pointer_cast< SceneModel >( obj )->m_pModelSceneRoot;
 }
 
-model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( model::TimelineManager * timelineManager  )
+//model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( model::TimelineManager * timelineManager  )
 //model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( model::TimelineManager * timelineManager )
 //{
 //    //return LoadSceneFromFile( "Assets/07_Results.xml", timelineManager );

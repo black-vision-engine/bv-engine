@@ -130,6 +130,17 @@ ISerializablePtr     SimpleTransform<ParamT>::Create          ( const IDeseriali
 }
 
 
+// *************************************
+//
+template<typename ParamT>
+void SimpleTransform<ParamT>::SetCurveType    ( CurveType type ) 
+{ 
+    p0.SetCurveType( type ); 
+    p1.SetCurveType( type ); 
+    p2.SetCurveType( type ); 
+}
+
+
 template<typename ParamT>
 Rotation<ParamT>::Rotation    ( ParamT angle, const Vec3Interpolator & rotAxis )
     : SimpleTransform( TransformKind::rotation )
