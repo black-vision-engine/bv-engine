@@ -17,6 +17,7 @@
 #include "System/Env.h"
 #include "BVConfig.h"
 #include "ProjectManager.h"
+#include "Serialization/XML/XMLSerializer.h"
 
 #include "MockScenes.h"
 #include "DefaultPlugins.h"
@@ -38,6 +39,7 @@
 #define XML
 #include "ConfigManager.h"
 #include "RemoteControlInterface.h"
+
 
 namespace bv
 {
@@ -299,6 +301,8 @@ void BVAppLogic::RefreshVideoInputScene()
 void BVAppLogic::OnKey           ( unsigned char c )
 {
     m_kbdHandler->HandleKey( c, this );
+        //auto sob = new JsonSerializeObject();
+        //sob->Save( "test.json" );
 }
 
 // *********************************

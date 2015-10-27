@@ -86,6 +86,9 @@
     <ClInclude Include="..\..\..\Source\System\Path.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\IncludeJSON.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\IO\NamedPipe.h">
       <Filter>IO</Filter>
     </ClInclude>

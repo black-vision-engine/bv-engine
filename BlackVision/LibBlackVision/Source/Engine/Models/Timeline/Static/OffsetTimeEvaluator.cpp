@@ -1,4 +1,8 @@
 #include "OffsetTimeEvaluator.h"
+#include "Serialization/ISerializer.h"
+#include "Serialization/SerializationHelper.h"
+//#include "Serialization/SerializationObjects.h"
+//#include "Serialization/SerializationObjects.inl"
 
 namespace bv { namespace model {
 
@@ -19,29 +23,29 @@ OffsetTimeEvaluator::~OffsetTimeEvaluator                   ()
 
 // *******************************
 //
-void                OffsetTimeEvaluator::Serialize           ( SerializeObject & sob ) const
+void                OffsetTimeEvaluator::Serialize           ( ISerializer& sob ) const
 {
-    sob.SetName( "timeline" );
-    sob.SetValue( "name", GetName() );
-    sob.SetValue( "type", "offset" );
+    sob.EnterChild( "timeline" );
+    sob.SetAttribute( "name", GetName() );
+    sob.SetAttribute( "type", "offset" );
 
-    sob.SetName( "children" );
+    sob.EnterChild( "children" );
     for( auto child : m_children )
         child->Serialize( sob );
-    sob.Pop(); // children
+    sob.ExitChild(); // children
 
-    sob.Pop();
+    sob.ExitChild();
 }
 
 // *******************************
 //
-ISerializablePtr     OffsetTimeEvaluator::Create              ( DeserializeObject & dob )
+ISerializablePtr     OffsetTimeEvaluator::Create              ( const IDeserializer& dob )
 {
-    auto name = dob.GetValue( "name" );
+    auto name = dob.GetAttribute( "name" );
 
     auto te = std::make_shared< OffsetTimeEvaluator >( name, 0.f ); // FIXME load offset
 
-    auto children = dob.LoadArray< TimeEvaluatorBase< ITimeEvaluator > >( "children" );
+    auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( dob, "children", "timeline" );
 
     for( auto child : children )
         te->AddChild( child );

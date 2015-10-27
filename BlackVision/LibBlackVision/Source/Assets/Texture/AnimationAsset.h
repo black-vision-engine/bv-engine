@@ -42,14 +42,4 @@ private:
 };
 
 
-template<> inline std::shared_ptr<const AnimationAsset> LoadTypedAsset<AnimationAsset>(  const AssetDescConstPtr & desc )
-{
-	if( typeid( AnimationAssetDesc ) == typeid( *( desc.get() ) ) )
-	{
-		auto asset = AssetManager::GetInstance().LoadAsset( desc );
-		return std::static_pointer_cast<const AnimationAsset>( asset );
-	}
-	return nullptr;
-}
-
 } // bv

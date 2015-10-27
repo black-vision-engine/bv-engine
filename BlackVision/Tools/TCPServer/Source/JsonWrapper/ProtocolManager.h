@@ -11,6 +11,7 @@
 #include "commands\CmdTimer.h"
 #include "commands\CmdWidget.h"
 #include "commands\CmdStruct.h"
+#include "commands/CmdLoadAsset.h"
 
 using namespace json_spirit;
 
