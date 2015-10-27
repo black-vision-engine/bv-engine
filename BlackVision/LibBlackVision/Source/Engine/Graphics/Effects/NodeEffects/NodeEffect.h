@@ -14,7 +14,8 @@ public:
 
     enum class Type : unsigned int
     {
-        T_ALPHA_MASK = 0,
+        T_DEFAULT = 0,
+        T_ALPHA_MASK,
         T_NODE_MASK,
 
         T_TOTAL
