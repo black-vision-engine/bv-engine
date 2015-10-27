@@ -31,8 +31,8 @@ protected:
     virtual                     ~AbstractModelParameter ();
 
 public:
-    virtual void                Serialize       ( SerializeObject & doc ) const override = 0;
-    static ISerializablePtr     Create          ( DeserializeObject & doc );
+    virtual void                Serialize       ( ISerializer& doc ) const override = 0;
+    static ISerializablePtr     Create          ( const IDeserializer& doc );
 
     virtual const std::string & GetName                 () const override;
     virtual ModelParamType      GetType                 () const override;

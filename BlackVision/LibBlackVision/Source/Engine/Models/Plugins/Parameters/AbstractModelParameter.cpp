@@ -1,12 +1,12 @@
 #include "AbstractModelParameter.h"
 #include "ParametersFactory.h"
 
-#include "Serialization/SerializationObjects.inl"
+//#include "Serialization/SerializationObjects.inl"
 
 namespace bv { 
 
 // serialization stuff
-template std::vector< std::shared_ptr< model::AbstractModelParameter > >                         DeserializeObjectLoadArrayImpl( DeserializeObjectImpl* pimpl, std::string name );
+//template std::vector< std::shared_ptr< model::AbstractModelParameter > >                         DeserializeObjectLoadArrayImpl( const IDeserializer& pimpl, std::string name );
 
     
 namespace model {

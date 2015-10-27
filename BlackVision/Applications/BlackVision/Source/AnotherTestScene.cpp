@@ -34,9 +34,15 @@
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Assets/AssetDescsWithUIDs.h"
 
-#include "Serialization/ISerializable.h"
 #include "Engine/Models/BVScene.h"
 #include "System/Path.h"
+
+#include "Serialization/XML/XMLDeserializer.h"
+#include "Serialization/Json/JsonDeserializeObject.h"
+#include "Serialization/SerializationHelper.h"
+
+#include "Application/WindowedApplication.h"
+#include "Engine/Graphics/Renderers/Renderer.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -947,14 +953,20 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineMana
 		return nullptr;
 	}
 // begin serialization
-    DeserializeObject dob( filename );
+    //JsonDeserializeObject deser;
+    //deser.Load( filename );
+    DeserializeObject deser( filename );
 
     model::TimelineManager::SetInstance( tm );
-    auto scene = dob.Load< BVScene >( "scene" );
-
-    return scene->GetModelSceneRoot();
+    
+    auto sucess = deser.EnterChild( "scene" );
+    assert( sucess ); // FIXME error handling
+    auto obj = SceneModel::Create( deser );
+    deser.ExitChild();
+    return std::static_pointer_cast< SceneModel >( obj )->m_pModelSceneRoot;
 }
 
+model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( model::TimelineManager * timelineManager  )
 //model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( model::TimelineManager * timelineManager )
 //{
 //    //return LoadSceneFromFile( "Assets/07_Results.xml", timelineManager );

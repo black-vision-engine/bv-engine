@@ -45,6 +45,7 @@ public:
 	void            OnNodeAppearing ( IEventPtr evt );
 	void            OnNodeLeaving   ( IEventPtr evt );
 	void            OnNoMoreNodes   ( IEventPtr evt );
+    void            OnLoadAsset     ( IEventPtr evt );
 
 	// FIXME: hack
     void            UpdateHM        ();

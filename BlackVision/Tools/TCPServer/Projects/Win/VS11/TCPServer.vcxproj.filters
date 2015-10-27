@@ -77,6 +77,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Log.h" />
     <ClInclude Include="..\..\..\Source\SocketWrapper.h" />
+    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdLoadAsset.h">
+      <Filter>JsonWrapper\commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\JsonWrapper\ProtocolManager.cpp">

@@ -2,6 +2,8 @@
 
 #include <assert.h>
 
+#include "Serialization/ISerializer.h"
+
 namespace bv
 {
 
@@ -9,14 +11,19 @@ const std::string SingleTextureAssetDesc::uid = "SINGLE_TEXTURE_ASSET_DESC";
 
 // ***********************
 //
-void                SingleTextureAssetDesc::Serialize       ( SerializeObject & /*sob*/ ) const
+void                SingleTextureAssetDesc::Serialize       ( ISerializer& ser ) const
 {
-    assert( !"implement me" );
+ser.EnterChild( "asset" );
+    
+    ser.SetAttribute( "uid", UID() );
+    ser.SetAttribute( "path", GetImagePath() );
+
+ser.ExitChild();
 }
 
 // ***********************
 //
-ISerializablePtr     SingleTextureAssetDesc::Create          ( DeserializeObject & /*dob*/ )
+ISerializablePtr     SingleTextureAssetDesc::Create          ( IDeserializer& /*dob*/ )
 {
     assert( !"implement me" );
     return nullptr;

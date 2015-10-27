@@ -72,7 +72,7 @@ void                                            DefaultTexturesData::SetTextureP
 
 // ******************************
 //
-void                                            DefaultTexturesData::SetTexture         ( unsigned int idx, DefaultTextureDescriptor * textureDesc )
+void                                            DefaultTexturesData::SetTexture         ( unsigned int idx, ITextureDescriptor * textureDesc )
 {
     assert( idx < m_textureDescriptors.size() );
 

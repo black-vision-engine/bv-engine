@@ -1,11 +1,13 @@
 #include "Mathematics/Transform/MatTransform.h"
 
-#include "Serialization/SerializationObjects.inl"
+#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
+#include "Serialization/SerializationHelper.h"
 
 namespace bv { 
     
 // serialization stuff
-template std::vector< std::shared_ptr< SimpleTransformF > >                         DeserializeObjectLoadPropertiesImpl( DeserializeObjectImpl* pimpl, std::string name );
+//template std::vector< std::shared_ptr< SimpleTransformF > >                         DeserializeObjectLoadPropertiesImpl( const IDeserializer& pimpl, std::string name );
 
 namespace model {
 
@@ -65,38 +67,29 @@ SimpleTransform<ParamT>::SimpleTransform( TransformKind kind )
 // *************************************
 //
 template<typename ParamT>
-void SimpleTransform<ParamT>::SetCurveType    ( CurveType type ) 
+void                SimpleTransform<ParamT>::Serialize       ( ISerializer& sob ) const
 { 
-    p0.SetCurveType( type ); 
-    p1.SetCurveType( type ); 
-    p2.SetCurveType( type ); 
-}
-
-// *************************************
-//
-template< typename ParamT >
-void SimpleTransform<ParamT>::Serialize       ( SerializeObject & ) const
-{
-    assert( false );
+    assert( !"Tell me why I'm not implemented ;)" );
+    sob;
 }
 
 // *************************************
 //
 template<typename ParamT>
-ISerializablePtr     SimpleTransform<ParamT>::Create          ( DeserializeObject & dob )
+ISerializablePtr     SimpleTransform<ParamT>::Create          ( const IDeserializer& dob )
 {
-    if( dob.GetName() != "transform" )
-    {
-        std::cerr << "SimpleTransform<ParamT>::Create failed" << std::endl;
-        return nullptr; // FIXME so much: error handling
-    }
+    //if( dob.GetName() != "transform" )
+    //{
+    //    std::cerr << "SimpleTransform<ParamT>::Create failed" << std::endl;
+    //    return nullptr; // FIXME so much: error handling
+    //}
 
-    auto kind = dob.GetValue( "kind" );
+    auto kind = dob.GetAttribute( "kind" );
 
     if( kind == "rotation" ) // very special case indeed :)
     {
-        auto angleArray = dob.LoadArray< ParamT >( "angle" );
-        auto rotAxisArray = dob.LoadArray< Vec3Interpolator >( "rotaxis" );
+        auto angleArray = SerializationHelper::DeserializeObjectLoadArrayImpl< ParamT >( dob, "angle", "interpolator" );
+        auto rotAxisArray = SerializationHelper::DeserializeObjectLoadArrayImpl< Vec3Interpolator >( dob, "rotaxis", "interpolator" );
 
         if( angleArray.size() != 1 )
         {
@@ -115,7 +108,7 @@ ISerializablePtr     SimpleTransform<ParamT>::Create          ( DeserializeObjec
         return std::make_shared< Rotation< ParamT > >( *angle.get(), *rotAxis ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
-    auto params = dob.LoadProperties< ParamT >( "interpolator" );
+    auto params = SerializationHelper::DeserializeObjectLoadPropertiesImpl< ParamT >( dob, "interpolator" );
     
     if( params.size() != 3 && ( kind != "rotation" || params.size() != 2 ) ) // de Morgan FTW!
     {
@@ -319,11 +312,11 @@ CompositeTransform<ParamT>::CompositeTransform  ( const CompositeTransform & src
 // *************************************
 //
 template<typename ParamT>
-ISerializablePtr                     CompositeTransform<ParamT>::Create                  ( const DeserializeObject & dob )
+ISerializablePtr                     CompositeTransform<ParamT>::Create                  ( const IDeserializer& dob )
 {
     auto transform = std::make_shared< CompositeTransform< ParamT > >();
 
-    auto transes = dob.LoadProperties< SimpleTransform< ParamT > >( "transform" );
+    auto transes = SerializationHelper::DeserializeObjectLoadPropertiesImpl< SimpleTransform< ParamT > >( dob, "transform" );
 
     int i = 0;
     for( auto trans : transes )
@@ -355,29 +348,29 @@ std::string Kind2String( TransformKind kind )
 // *************************************
 //
 template<typename ParamT>
-void                                CompositeTransform<ParamT>::Serialize               ( SerializeObject & doc ) const
+void                                CompositeTransform<ParamT>::Serialize               ( ISerializer& doc ) const
 {
-    doc.SetName( "composite_transform" );
+    doc.EnterChild( "composite_transform" );
 
     for( auto trans : m_transformations )
     {
-        doc.SetName( "transform" );
-        doc.SetValue( "kind", Kind2String( trans->KindKurwaMac() ) );
+        doc.EnterChild( "transform" );
+        doc.SetAttribute( "kind", Kind2String( trans->KindKurwaMac() ) );
 
         if( trans->KindKurwaMac() == TransformKind::rotation ) // FIXME: this really should be virtualized
         {
             auto rotation = std::static_pointer_cast< Rotation< ParamT > >( trans );
             if( rotation->IsAxisVec3() )
             {
-                doc.SetValue( "isaxisvec3", "true" );
+                doc.SetAttribute( "isaxisvec3", "true" );
 
-                doc.SetName( "angle" );
+                doc.EnterChild( "angle" );
                     rotation->AccessAngle().Serialize( doc );
-                doc.Pop();
+                doc.ExitChild();
 
-                doc.SetName( "rotaxis" );
+                doc.EnterChild( "rotaxis" );
                     rotation->AccessRotAxis().Serialize( doc );
-                doc.Pop();
+                doc.ExitChild();
             }
             else
                 assert( false );
@@ -391,10 +384,10 @@ void                                CompositeTransform<ParamT>::Serialize       
 
         }
 
-        doc.Pop(); // transform
+        doc.ExitChild(); // transform
     }
 
-    doc.Pop(); // composite_transform
+    doc.ExitChild(); // composite_transform
 }
 
 // *************************************

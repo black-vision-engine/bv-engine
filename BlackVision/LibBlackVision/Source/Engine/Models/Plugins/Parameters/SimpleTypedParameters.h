@@ -5,6 +5,7 @@
 
 #include "Engine/Models/Plugins/Parameters/AbstractModelParameter.h"
 #include "Serialization/ISerializable.h"
+#include "Serialization/ISerializer.h"
 
 #include "Mathematics/Interpolators/Interpolators.h"
 
@@ -27,7 +28,7 @@ public:
     explicit                SimpleParameterImpl ( const std::string & name, const InterpolatorType & interpolator, ITimeEvaluatorPtr evaluator );
                             ~SimpleParameterImpl();
 
-    void                    Serialize       ( SerializeObject & doc ) const;
+    void                    Serialize       ( ISerializer& doc ) const;
 
     void                    SetCurveType        ( CurveType type );
 

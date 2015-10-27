@@ -63,8 +63,8 @@ public:
     explicit SimpleTransform( TransformKind kind );
 
 public:
-    virtual void                Serialize       ( SerializeObject & sob ) const;
-    static ISerializablePtr     Create          ( DeserializeObject & dob );
+    virtual void                Serialize       ( ISerializer& sob ) const;
+    static ISerializablePtr     Create          ( const IDeserializer& dob );
     virtual void                SetCurveType        ( CurveType type );
 
     virtual glm::mat4x4         Evaluate            ( typename ParamT::TimeT t ) const;
@@ -185,8 +185,8 @@ public:
     explicit        CompositeTransform  ();
                     CompositeTransform  ( const CompositeTransform & src );
 
-    static ISerializablePtr                     Create                  ( const DeserializeObject & dob );
-    virtual void                                Serialize               ( SerializeObject & doc ) const;
+    static ISerializablePtr                     Create                  ( const IDeserializer& dob );
+    virtual void                                Serialize               ( ISerializer& doc ) const;
 
     void            InitializeDefaultSRT();
 

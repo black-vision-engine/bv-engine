@@ -6,39 +6,47 @@ namespace bv
 
 const std::string FontAssetDesc::uid = "FONT_ASSET_DESC";
 
-// ***********************
-//
-void                FontAssetDesc::Serialize       ( SerializeObject & sob ) const
-{
-    sob.SetName( "asset" );
 
-    sob.SetValue( "type", "font" );
-    sob.SetValue( "path", m_fontFileName );
-    sob.SetValue( "size", std::to_string( m_fontSize ) );
-    sob.SetValue( "blur", std::to_string( m_blurSize ) );
-    sob.SetValue( "outline", std::to_string( m_outlineSize ) );
-    sob.SetValue( "mipmaps", m_generateMipmaps ? "true" : "false" );
-    sob.SetValue( "char_set_file", std::string( m_atlasCharSetFile.begin(), m_atlasCharSetFile.end() ) );
 
-    sob.Pop();
-}
 
 // ***********************
 //
-ISerializableConstPtr FontAssetDesc::Create          ( DeserializeObject & dob )
+void                FontAssetDesc::Serialize       ( ISerializer& sob ) const
 {
-    assert( dob.GetValue( "type" ) == "font" );
+    sob.EnterChild( "asset" );
 
-    auto path = dob.GetValue( "path" );
-    auto size = stoul( dob.GetValue( "size" ) );
-    auto blurSize = stoul( dob.GetValue( "blur" ) );
-    auto outSize = stoul( dob.GetValue( "outline" ) );
-    auto mipmaps = dob.GetValue( "mipmaps" ) == "true" ? true : false;
-    auto charSetFile = dob.GetValue( "char_set_file" );
-    auto charSetFileW = std::wstring( charSetFile.begin(), charSetFile.end() );
+    sob.SetAttribute( "uid", GetUID() );
+    sob.SetAttribute( "path", m_fontFileName );
+    sob.SetAttribute( "size", std::to_string( m_fontSize ) );
+    sob.SetAttribute( "blur", std::to_string( m_blurSize ) );
+    sob.SetAttribute( "outline", std::to_string( m_outlineSize ) );
+    sob.SetAttribute( "mipmaps", m_generateMipmaps ? "true" : "false" );
 
-    return FontAssetDesc::Create( path, size, blurSize, outSize, mipmaps, charSetFileW );
+    sob.ExitChild();
 }
+
+//// ***********************
+////
+//void FontAssetDesc::Deserialize     ( const IDeserializer& /*sob*/ )
+//{
+//    assert( false );
+//}
+
+// ***********************
+//
+ISerializableConstPtr FontAssetDesc::Create          ( const IDeserializer& dob )
+{
+    assert( dob.GetAttribute( "uid" ) == UID() );
+
+    auto path = dob.GetAttribute( "path" );
+    auto size = stoul( dob.GetAttribute( "size" ) );
+    auto blurSize = stoul( dob.GetAttribute( "blur" ) );
+    auto outSize = stoul( dob.GetAttribute( "outline" ) );
+    auto mipmaps = dob.GetAttribute( "mipmaps" ) == "true" ? true : false;
+
+    return FontAssetDesc::Create( path, size, blurSize, outSize, mipmaps );
+}
+
 
 // ***********************
 //

@@ -21,7 +21,7 @@ public:
                                                         TimeEvaluatorBase   ( const std::string & name );
     virtual                                             ~TimeEvaluatorBase  ();
 
-	static ISerializablePtr                             Create              ( DeserializeObject &  );
+	static ISerializablePtr                             Create              ( const IDeserializer&  );
 
     virtual void                                        AddChild            ( ITimeEvaluatorPtr child ) override;
 

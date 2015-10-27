@@ -45,14 +45,5 @@ private:
 };
 
 
-template<> inline std::shared_ptr<const TextureAsset> LoadTypedAsset<TextureAsset>( const AssetDescConstPtr & desc )
-{
-	if( typeid( TextureAssetDesc ) == typeid( *( desc.get() ) ) )
-	{
-		auto asset = AssetManager::GetInstance().LoadAsset( desc );
-		return std::static_pointer_cast<const TextureAsset>( asset );
-	}
-	return nullptr;
-}
 
 } // bv

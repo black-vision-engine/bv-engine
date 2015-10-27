@@ -22,12 +22,12 @@ void                ParamTransform::SetCurveType    ( CurveType type )
 
 // *******************************
 //
-void    ParamTransform::Serialize       ( SerializeObject & doc ) const
+void    ParamTransform::Serialize       ( ISerializer& doc ) const
 {
-    doc.SetName( "param" );
-    doc.SetValue( "name", GetName() );
-    doc.SetValue( "type", "transform" );
-    doc.SetValue( "timeline", m_timeEvaluator->GetName() );
+    doc.EnterChild( "param" );
+    doc.SetAttribute( "name", GetName() );
+    doc.SetAttribute( "type", "transform" );
+    doc.SetAttribute( "timeline", m_timeEvaluator->GetName() );
 
     m_transformModel.Serialize( doc );
     //for( unsigned int i = 0; i < m_transformModel.Size(); i++ )
@@ -37,7 +37,7 @@ void    ParamTransform::Serialize       ( SerializeObject & doc ) const
     //    m_transformModel[ i ]->GetP2MotylaNoga().Serialize( doc );
     //}
 
-    doc.Pop();
+    doc.ExitChild();
 }
 // *******************************
 //
@@ -66,12 +66,12 @@ ParamTransformVec::ParamTransformVec                ( const std::string & name, 
 
 // *******************************
 //
-void ParamTransformVec::Serialize       ( SerializeObject & doc ) const
+void ParamTransformVec::Serialize       ( ISerializer& doc ) const
 {
-    doc.SetName( "param" );
-    doc.SetValue( "name", GetName() );
-    doc.SetValue( "type", "transform_vec" );
-    doc.SetValue( "timeline", m_timeEvaluator->GetName() );
+    doc.EnterChild( "param" );
+    doc.SetAttribute( "name", GetName() );
+    doc.SetAttribute( "type", "transform_vec" );
+    doc.SetAttribute( "timeline", m_timeEvaluator->GetName() );
 
     for( auto t : m_transformModelVec )
     {
@@ -80,15 +80,15 @@ void ParamTransformVec::Serialize       ( SerializeObject & doc ) const
         //{
         //    t[ i ]->Ser
         //    //doc.SetName( "transform" );
-        //    //doc.SetValue( "kind", Kind2String( t[ i ]->KindKurwaMac() ) );
+        //    //doc.SetAttribute( "kind", Kind2String( t[ i ]->KindKurwaMac() ) );
         //    //    t[ i ]->GetP0MotylaNoga().Serialize( doc );
         //    //    t[ i ]->GetP1MotylaNoga().Serialize( doc );
         //    //    t[ i ]->GetP2MotylaNoga().Serialize( doc );
-        //    //doc.Pop();
+        //    //doc.ExitChild();
         //}
     }
 
-    doc.Pop(); // param
+    doc.ExitChild(); // param
 }
 
 // *******************************

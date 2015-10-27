@@ -70,4 +70,11 @@ AssetConstPtr AnimationLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 	return AnimationAsset::Create( framesAssets );
 }
 
+// ******************************
+//
+AssetDescConstPtr	AnimationLoader::CreateDescriptor	( const IDeserializer& deserializeObject ) const
+{
+	return std::static_pointer_cast<const AssetDesc>( AnimationAssetDesc::Create( deserializeObject ) );
+}
+
 } // bv

@@ -28,8 +28,8 @@ public:
 
     explicit Key( TimeValueT t, ValueT val );
 
-    virtual void                                        Serialize       ( SerializeObject& sob ) const override;
-    static ISerializablePtr                             Create          ( DeserializeObject& dob ); 
+    virtual void                Serialize       ( ISerializer& doc ) const override;
+    static ISerializablePtr     Create          ( const IDeserializer& doc );
 
     Key< TimeValueT, ValueT > operator+( const Key< TimeValueT, ValueT > &that ) const { return Key< TimeValueT, ValueT >( t + that.t, ValueT( val + that.val ) ); }
     Key< TimeValueT, ValueT > operator-( const Key< TimeValueT, ValueT > &that ) const { return Key< TimeValueT, ValueT >( t - that.t, ValueT( val - that.val ) ); }
@@ -75,8 +75,8 @@ public:
     explicit BasicInterpolator  ( TimeValueT tolerance = 0.0001 );
     virtual ~BasicInterpolator  () {};
 
-    virtual void                Serialize       ( SerializeObject & doc ) const override;
-    static ISerializablePtr     Create          ( DeserializeObject & doc );
+    virtual void                Serialize       ( ISerializer& doc ) const override;
+    static ISerializablePtr     Create          ( const IDeserializer& doc );
 
     void AddKey             ( TimeValueT t, const ValueT & v );
     void AddKey             ( const Key<TimeValueT, ValueT> & key );
