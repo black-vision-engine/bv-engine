@@ -888,6 +888,9 @@
     <ClCompile Include="..\..\..\Source\Assets\AssetSerialization.cpp">
       <Filter>Assets</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeBezierInterpolator.cpp">
+      <Filter>Mathematics\Interpolators</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.cpp">
       <Filter>Assets\Texture</Filter>
     </ClCompile>
@@ -1825,6 +1828,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\AssetSerialization.h">
       <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeBezierInterpolator.h">
+      <Filter>Mathematics\Interpolators</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h">
       <Filter>Assets\Texture</Filter>

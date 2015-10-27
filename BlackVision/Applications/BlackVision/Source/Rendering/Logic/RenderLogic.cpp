@@ -345,24 +345,21 @@ bool    RenderLogic::UseNodeMask     ( SceneNode * node ) const
 //
 bool    RenderLogic::UseDefaultMaskTM( SceneNode * node ) const
 {
-    { node; }
-    return true;
+    return !( UseNodeMaskTM( node ) || UseAlphaMaskTM( node ) );
 }
 
 // *********************************
 //
 bool    RenderLogic::UseAlphaMaskTM  ( SceneNode * node ) const
 {
-    { node; }
-    return false;
+    return node->GetNodeEffect()->GetType() == NodeEffect::Type::T_ALPHA_MASK;
 }
 
 // *********************************
 //
 bool    RenderLogic::UseNodeMaskTM   ( SceneNode * node ) const
 {
-    { node; }
-    return false;
+    return node->GetNodeEffect()->GetType() == NodeEffect::Type::T_NODE_MASK;
 }
 
 // *********************************

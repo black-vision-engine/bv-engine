@@ -1372,7 +1372,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
     assert( success );
 
     SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 0.f ), 0.f );
-    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 10.f ), 100.f );
+    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 10.f ), 16.f );
 
     node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( timeEvaluator );
 

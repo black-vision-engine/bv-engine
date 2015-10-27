@@ -31,7 +31,7 @@ WidgetCounter::WidgetCounter(bv::model::BasicNode * parent,bv::model:: ITimeEval
 	m_param = bv::model::ParametersFactory::CreateParameterFloat( "alpha", timeEvaluator );
 	m_value = ValuesFactory::CreateValueFloat("alpha" );
 	m_isFinalized = true;
-	m_param->SetInterpolationMethod(bv::model::IParameter::InterpolationMethod::COSINE);
+    m_param->SetCurveType( CurveType::COSINE_LIKE );
 }
 
 

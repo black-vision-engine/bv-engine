@@ -167,8 +167,12 @@ model::BasicNodePtr BVAppLogic::LoadScenes( const PathVec & pathVec )
 //
 void BVAppLogic::LoadScene          ( void )
 {
+    //auto te = m_timelineManager->CreateDefaultTimeline( "", 10.f, TimelineWrapMethod::TWM_MIRROR, TimelineWrapMethod::TWM_MIRROR );
+    //te->Play();
+    //m_globalTimeline->AddChild( te );
+    auto te = m_globalTimeline;
 
-     //m_bvScene->GetTimelineManager()->RegisterRootTimeline( m_globalTimeline );
+    m_timelineManager->RegisterRootTimeline( te );
 
      model::BasicNodePtr root;
     
@@ -198,9 +202,7 @@ void BVAppLogic::LoadScene          ( void )
         root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, GetTimelineManager(), m_globalTimeline );
     }
 
-	assert( root );
-
-    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline, m_renderer, GetTimelineManager() );
+    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", te, m_renderer, GetTimelineManager() );
     assert( m_bvScene );
 }
 

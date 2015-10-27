@@ -250,7 +250,7 @@ BasicInterpolator<TimeValueT, ValueT, FloatT>::BasicInterpolator(TimeValueT tole
     , wrapPre( WrapMethod::clamp )
 {
     assert( tolerance > static_cast<TimeValueT>(0.) );
-    SetInterpolationMethod( model::IParameter::InterpolationMethod::LINEAR );
+    //SetInterpolationMethod( model::IParameter::InterpolationMethod::LINEAR );
     //SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
 }
 
@@ -407,33 +407,33 @@ ValueT BasicInterpolator<TimeValueT, ValueT, FloatT>::Evaluate( TimeValueT t ) c
 
             if( t <= k1.t )
             {
-                switch( GetInterpolationMethod() )
-                {
-                case model::IParameter::InterpolationMethod::LINEAR:
+                //switch( GetInterpolationMethod() )
+                //{
+                //case model::IParameter::InterpolationMethod::LINEAR:
                     return EvaluateLinear<TimeValueT, ValueT, FloatT>( keys[ i0 ], keys[ i1 ], t );
-                    break;
-                case model::IParameter::InterpolationMethod::COSINE:
-                    return EvaluateCosine<TimeValueT, ValueT, FloatT>( keys[ i0 ], keys[ i1 ], t );
-                    break;
-                default:
-                    assert( false );
-                }
+                //    break;
+                //case model::IParameter::InterpolationMethod::COSINE:
+                //    return EvaluateCosine<TimeValueT, ValueT, FloatT>( keys[ i0 ], keys[ i1 ], t );
+                //    break;
+                //default:
+                //    assert( false );
+                //}
             }
         }
     }
 
-    switch( GetInterpolationMethod() )
-    {
-    case model::IParameter::InterpolationMethod::LINEAR:
+    //switch( GetInterpolationMethod() )
+    //{
+    //case model::IParameter::InterpolationMethod::LINEAR:
         return EvaluateLinear<TimeValueT, ValueT, FloatT>( keys[ maxKeyIdx ], keys[ maxKeyIdx ], t );
-        break;
-    case model::IParameter::InterpolationMethod::COSINE:
-        return EvaluateCosine<TimeValueT, ValueT, FloatT>( keys[ maxKeyIdx ], keys[ maxKeyIdx ], t );
-        break;
-    default: 
-        assert( false );
-        return EvaluatePoint( t );
-    }
+    //    break;
+    //case model::IParameter::InterpolationMethod::COSINE:
+    //    return EvaluateCosine<TimeValueT, ValueT, FloatT>( keys[ maxKeyIdx ], keys[ maxKeyIdx ], t );
+    //    break;
+    //default: 
+    //    assert( false );
+    //    return EvaluatePoint( t );
+    //}
 }
 
 // *************************************
