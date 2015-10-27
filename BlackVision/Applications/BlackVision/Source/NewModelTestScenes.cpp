@@ -870,9 +870,9 @@ model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr t
     assert( qParam );
     qParam->SetCurveType( type );
 
-    model::SetParameterTranslation( param, 0, 0.f, offset );
-    model::SetParameterTranslation( param, 0, 1.f, offset );
     model::SetParameterTranslation( param, 0, 10.f, offset + glm::vec3( 2, 0, 0 ) );
+    model::SetParameterTranslation( param, 0, 1.f, offset );
+    model::SetParameterTranslation( param, 0, 0.f, offset );
     model::SetParameterScale( param, 0, 0.f, glm::vec3( 0.25f, 0.25f, 1.f ) );
 
     //param = node->GetPlugin( "rectangle" )->GetParameter( "width" );
