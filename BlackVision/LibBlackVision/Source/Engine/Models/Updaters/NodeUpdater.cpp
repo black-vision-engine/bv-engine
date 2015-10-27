@@ -223,6 +223,7 @@ void    NodeUpdater::UpdateNodeEffect       ()
 
                 auto paramBgIdx = nodeMaskEffect->GetParamBgIdx();
                 auto paramFgIdx = nodeMaskEffect->GetParamFgIdx();
+                auto paramAlpha = nodeMaskEffect->GetParamAlpha();
 
                 auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
@@ -234,11 +235,13 @@ void    NodeUpdater::UpdateNodeEffect       ()
 
                 auto bgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramBgIdx->GetName() ) );
                 auto fgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramFgIdx->GetName() ) );
+                auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );
 
-                if ( bgIdxVal != nullptr && fgIdxVal != nullptr )
+                if ( bgIdxVal != nullptr && fgIdxVal != nullptr && alphaVal != nullptr )
                 {
                     bgIdxVal->SetValue( nodeMaskEffect->GetBackgroundChildIdx() );
                     fgIdxVal->SetValue( nodeMaskEffect->GetForegroundChildIdx() );
+                    alphaVal->SetValue( nodeMaskEffect->GetAlpha() );
                 }
 
                 break;

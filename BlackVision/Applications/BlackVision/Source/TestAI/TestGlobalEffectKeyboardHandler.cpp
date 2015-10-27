@@ -49,6 +49,8 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
             HandleIncrement( logic );
 
             break;
+        case ' ':
+            HandleSpace( logic );
         default:
             ;
     }
@@ -70,17 +72,11 @@ void                    TestGlobalEfectKeyboardHandler::HandleIncrement ( BVAppL
     else if ( m_curSelectedNode == NodeEffectType::NET_NODE_MASK )
     {
         auto effect = GetNodeMaskNodeEffect( logic );
+        auto alpha = effect->GetParamAlpha();
 
-        auto paramBg = effect->GetParamBgIdx();
-        auto paramFg = effect->GetParamFgIdx();
+        alpha->SetVal( min( 1.f, alpha->Evaluate() + .1f ), 0.f );
 
-        auto bgIdx = effect->GetBackgroundChildIdx();
-        auto fgIdx = effect->GetForegroundChildIdx();
-
-        paramBg->SetVal( fgIdx, 0.f );
-        paramFg->SetVal( bgIdx, 0.f );
-
-        // printf( "New node mask bg: %d fg: %d\n", effect->GetBackgroundChildIdx(), effect->GetForegroundChildIdx() );
+        printf( "New node mask alpha value: %4f\n", alpha->Evaluate() );
     }
 }
 
@@ -98,6 +94,21 @@ void                    TestGlobalEfectKeyboardHandler::HandleDecrement ( BVAppL
         printf( "New alpha mask alpha value: %4f\n", alpha->Evaluate() );
     }
     else if ( m_curSelectedNode == NodeEffectType::NET_NODE_MASK )
+    {
+        auto effect = GetNodeMaskNodeEffect( logic );
+        auto alpha = effect->GetParamAlpha();
+
+        alpha->SetVal( max( 0.f, alpha->Evaluate() - .1f ), 0.f );
+
+        printf( "New node mask alpha value: %4f\n", alpha->Evaluate() );
+    }
+}
+
+// *********************************
+//
+void                    TestGlobalEfectKeyboardHandler::HandleSpace     ( BVAppLogic * logic )
+{
+    if ( m_curSelectedNode == NodeEffectType::NET_NODE_MASK )
     {
         auto effect = GetNodeMaskNodeEffect( logic );
         

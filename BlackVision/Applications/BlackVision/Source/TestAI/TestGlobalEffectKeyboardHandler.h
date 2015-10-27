@@ -26,6 +26,7 @@ private:
 
     void                    HandleIncrement ( BVAppLogic * logic );
     void                    HandleDecrement ( BVAppLogic * logic );
+    void                    HandleSpace     ( BVAppLogic * logic );
 
     model::BasicNodePtr     GetRootNode     ( BVAppLogic * logic );
     model::BasicNodePtr     GetNodeByPath   ( BVAppLogic * logic, const std::string & path );
