@@ -15,7 +15,7 @@ SceneNode::SceneNode           ( TransformableEntity * transformable )
     , m_overridenStateAlphaMask( false )
     , m_overridenStateNodeMask( false )
     , m_overrideAlphaVal( nullptr )
-    , m_nodeEffect( nullptr )
+    , m_nodeEffect( std::make_shared< NodeEffect >( NodeEffect::Type::T_DEFAULT ) )
 {
 }
 
