@@ -110,10 +110,15 @@ void                                            DefaultTexturesData::SetAnimatio
 //
 void                                            DefaultTexturesData::SetAnimation       ( unsigned int idx, DefaultAnimationDescriptor * animationDesc )
 {
-    assert( idx < m_animationDescriptors.size() );
-
-    delete m_animationDescriptors[ idx ];
-    m_animationDescriptors[ idx ] = animationDesc;
+	if( idx < m_animationDescriptors.size() )
+	{
+		delete m_animationDescriptors[ idx ];
+		m_animationDescriptors[ idx ] = animationDesc;
+	}
+	else
+	{
+		m_animationDescriptors.push_back( animationDesc );
+	}
 }
 
 // ******************************

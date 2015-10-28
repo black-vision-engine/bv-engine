@@ -6,6 +6,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
@@ -127,7 +128,7 @@ void					DefaultGradientPlugin::SetPrevPlugin				( IPluginPtr prev )
 {
     BasePlugin::SetPrevPlugin( prev );
 
-    InitAttributesChannel( prev );
+    InitVertexAttributesChannel();
 }
 
 // *************************************
@@ -142,9 +143,9 @@ DefaultGradientPlugin::DefaultGradientPlugin         ( const std::string & name,
 	m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
 	m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
-    InitAttributesChannel( prev );
+    InitVertexAttributesChannel();
 
-    if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() || prev->GetTypeUid() == DefaultAnimationPluginDesc::UID() || prev->GetTypeUid() == DefaultTextPluginDesc::UID() || prev->GetTypeUid() == DefaultTimerPluginDesc::UID() )
+    if( prev->GetTypeUid() == DefaultTextPluginDesc::UID() || prev->GetTypeUid() == DefaultTimerPluginDesc::UID() )
     {
         //FIXME: set textures data from prev plugin to this plugin
         auto prev_psc = std::const_pointer_cast< ITexturesData >( prev->GetPixelShaderChannel()->GetTexturesData() );
@@ -187,32 +188,43 @@ void                                DefaultGradientPlugin::Update               
     { t; } // FIXME: suppress unused warning
     m_paramValModel->Update();
 	
-	bool hasPrevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
-    
-	if( m_vaChannel )
+	if( HelperVertexAttributesChannel::FetchAttributesUpdate( m_vaChannel, m_prevPlugin ) )
 	{
-		if( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
-		{
-			RecalculateUVChannel();
-			m_vaChannel->SetNeedsAttributesUpdate( true );
-		}
-		else
-		{
-			m_vaChannel->SetNeedsAttributesUpdate( false );
-		}
-
-		if( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() ) //FIXME: additionalna hackierka
-		{
-			m_vaChannel->ClearAll();
-			InitAttributesChannel( m_prevPlugin );	
-			m_vaChannel->SetNeedsTopologyUpdate( true );
-			m_vaChannel->SetNeedsAttributesUpdate( false ); // FIXME: very ugly hack this is
-		}
-		else
-		{
-			m_vaChannel->SetNeedsTopologyUpdate( false );
-		}
+		RecalculateUVChannel();
 	}
+
+	if( HelperVertexAttributesChannel::FetchTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+	{
+		InitVertexAttributesChannel();
+	}
+
+
+	//bool hasPrevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
+ //   
+	//if( m_vaChannel )
+	//{
+	//	if( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
+	//	{
+	//		RecalculateUVChannel();
+	//		m_vaChannel->SetNeedsAttributesUpdate( true );
+	//	}
+	//	else
+	//	{
+	//		m_vaChannel->SetNeedsAttributesUpdate( false );
+	//	}
+
+	//	if( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() ) //FIXME: additionalna hackierka
+	//	{
+	//		m_vaChannel->ClearAll();
+	//		InitVertexAttributesChannel();	
+	//		m_vaChannel->SetNeedsTopologyUpdate( true );
+	//		m_vaChannel->SetNeedsAttributesUpdate( false ); // FIXME: very ugly hack this is
+	//	}
+	//	else
+	//	{
+	//		m_vaChannel->SetNeedsTopologyUpdate( false );
+	//	}
+	//}
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -220,15 +232,15 @@ void                                DefaultGradientPlugin::Update               
 
 // *************************************
 //
-void								DefaultGradientPlugin::InitAttributesChannel		( IPluginPtr prev )
+void								DefaultGradientPlugin::InitVertexAttributesChannel	()
 {
-	if( !( prev && prev->GetVertexAttributesChannel() ) )
+	if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
 	{
 		m_vaChannel = nullptr;
 		return;
 	}
 
-	auto prevGeomChannel = prev->GetVertexAttributesChannel();
+	auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
 	auto prevCC = prevGeomChannel->GetComponents();
     
 //recreate vachannel ->
@@ -308,7 +320,8 @@ void									DefaultGradientPlugin::RecalculateUVChannel         ()
 			if( uvVerts.size() < posChannel->GetNumEntries() )
 			{
 				uvVerts.resize( posChannel->GetNumEntries() );
-				m_vaChannel->SetNeedsTopologyUpdate( true );
+
+				//HelperVertexAttributesChannel::TopologyUpdate( m_vaChannel, true );
 			}
 
 			auto & posVerts = pos->GetVertices();

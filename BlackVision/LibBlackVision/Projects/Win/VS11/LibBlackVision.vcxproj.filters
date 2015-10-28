@@ -879,6 +879,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeMaskNodeEffect.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\HelperVertexAttributesChannel.cpp">
+      <Filter>Engine\Models\Plugins\Channels\Geometry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1783,6 +1786,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeMaskNodeEffect.h">
       <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\HelperVertexAttributesChannel.h">
+      <Filter>Engine\Models\Plugins\Channels\Geometry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

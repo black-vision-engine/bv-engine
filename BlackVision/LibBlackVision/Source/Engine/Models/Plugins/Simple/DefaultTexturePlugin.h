@@ -81,8 +81,7 @@ public:
 	virtual void                                Update                      ( TimeType t ) override;
 
 private:
-
-	void                                        InitAttributesChannel       ( IPluginPtr prev );
+	void										InitVertexAttributesChannel ();
 
 	TextureWrappingMode                         GetWrapModeX                () const;
 	TextureWrappingMode                         GetWrapModeY                () const;
@@ -90,8 +89,7 @@ private:
 	TextureAttachmentMode                       GetAttachementMode          () const;
 	glm::vec4                                   GetBorderColor              () const;
 
-	bool                                        StateChanged                ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am/*, glm::vec4 bc*/ ) const;
-	void                                        UpdateState                 ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am/*, glm::vec4 bc*/ );
+	bool                                        UpdateState                 ();
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 };

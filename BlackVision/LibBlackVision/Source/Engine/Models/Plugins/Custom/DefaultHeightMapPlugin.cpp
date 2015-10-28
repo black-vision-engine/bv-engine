@@ -6,6 +6,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
@@ -329,7 +330,8 @@ void                                DefaultHeightMapPlugin::Update              
     { t; } // FIXME: suppress unused variable
     m_paramValModel->Update();
 
-    m_vaChannel->SetNeedsAttributesUpdate( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() );
+	HelperVertexAttributesChannel::FetchAttributesUpdate( m_vaChannel, m_prevPlugin );
+    //m_vaChannel->SetNeedsAttributesUpdate( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() );
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();

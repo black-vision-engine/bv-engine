@@ -77,9 +77,10 @@ public:
     virtual void                                Update                      ( TimeType t ) override;
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
+    
 private:
+	void										InitVertexAttributesChannel ();
 
-    void                                        InitAttributesChannel       ( IPluginConstPtr prev );
     void                                        RecalculateUVChannel		();
 
     TextureWrappingMode                         GetWrapModeX                () const;
@@ -87,10 +88,9 @@ private:
     TextureFilteringMode                        GetFilteringMode            () const;
     TextureAttachmentMode                       GetAttachementMode          () const;
 
-    bool                                        StateChanged                ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am ) const;
-    void                                        UpdateState                 ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am );
+    bool                                        UpdateState                 ();
 
-	void										RegisterEvaluators			( IPluginPtr prev, const std::vector< std::string > & vsEvaluators, const std::vector< std::string > & psEvaluators ); 
+	void										RegisterEvaluators			( IPluginPtr prev, const std::vector< std::string > & vsParamNames, const std::vector< std::string > & psParamNames ); 
 
 };
 

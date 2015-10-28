@@ -4,6 +4,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 #include "Assets/Font/FontLoader.h"
@@ -220,21 +221,17 @@ TimeValue::TimeValue( double time, int accuracy )
 }
 
 // *************************************
-//
-DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
-    , m_paramValModel( model )
-    , m_textAtlas()
-    , m_timePatern( )
-    , m_globalStartTime( 0 )
-    , m_localStartTime( 0 )
-    , m_currentTimeValue( 0.0 )
-    , m_defaultSeparator(L':')
-    , m_secSeparator(L'.')
-    , m_widestGlyph( L'0' ) 
-    , m_started(false)
+// 
+void		DefaultTimerPlugin::SetPrevPlugin		( IPluginPtr prev )
 {
-    auto colorParam = prev->GetParameter( "color" );
+    BasePlugin::SetPrevPlugin( prev );
+
+    if( prev == nullptr )
+	{
+        return;
+	}
+
+	auto colorParam = prev->GetParameter( "color" );
 
     if ( colorParam == nullptr )
     {
@@ -258,12 +255,29 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
         }
         
     }
+}
 
-
+// *************************************
+//
+DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
+    : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
+    , m_paramValModel( model )
+    , m_textAtlas()
+    , m_timePatern( )
+    , m_globalStartTime( 0 )
+    , m_localStartTime( 0 )
+    , m_currentTimeValue( 0.0 )
+    , m_defaultSeparator(L':')
+    , m_secSeparator(L'.')
+    , m_widestGlyph( L'0' ) 
+    , m_started(false)
+{
     m_spacingParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
 
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
     m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
+	
+	SetPrevPlugin( prev );
 
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
@@ -482,7 +496,8 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
 
     TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, false );
  
-    m_vaChannel->SetNeedsTopologyUpdate( true );
+	HelperVertexAttributesChannel::TopologyUpdate( m_vaChannel, true );
+    //m_vaChannel->SetNeedsTopologyUpdate( true );
 }
 
 ////////////////////////////
@@ -771,10 +786,10 @@ void                                DefaultTimerPlugin::SetTime        ( TimeTyp
         SetTimePatern( GenerateTimePatern( time ) );
         m_currentTimeValue = newTime;
         Refresh( !m_started );
-        if( ! m_vaChannel->NeedsTopologyUpdate() )
-        {
-            m_vaChannel->SetNeedsAttributesUpdate( true );
-        }
+        //if( ! m_vaChannel->NeedsTopologyUpdate() )
+        //{
+        //    m_vaChannel->SetNeedsAttributesUpdate( true );
+        //}
     }
 }
 

@@ -166,6 +166,8 @@ private:
 public:
 	explicit               DefaultTimerPlugin          ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
 							~DefaultTimerPlugin         ();
+
+    virtual void			SetPrevPlugin               ( IPluginPtr plugin ) override;
 };
 
 

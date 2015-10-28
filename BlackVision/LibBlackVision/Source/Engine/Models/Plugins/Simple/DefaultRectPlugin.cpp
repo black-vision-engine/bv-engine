@@ -5,6 +5,7 @@
 #include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
@@ -126,23 +127,26 @@ void                                DefaultRectPlugin::Update                   
     //FIXME: reimplement va channel (no time, no explicit update and so on)
     m_paramValModel->Update();
 
+	HelperVertexAttributesChannel::AttributesUpdate( m_vaChannel, UpdateState() );
+	HelperVertexAttributesChannel::FetchAttributesUpdate( m_vaChannel, m_prevPlugin );
+}
+
+// *************************************
+//
+bool								DefaultRectPlugin::UpdateState					()
+{
     //This code has to be executed in a plugin as only plugin knows how to translate its state to geometry representation
-    float w = m_widthParam->Evaluate();
-    float h = m_heightParam->Evaluate();
+	auto w = m_widthParam->Evaluate();
+	auto h = m_heightParam->Evaluate();
+	if( ( fabs( m_lastW - w ) + fabs( m_lastH - h ) ) > 0.001f )
+	{
+		m_lastW = w;
+		m_lastH = h;
+		m_rct->SetRectSize( w, h );
 
-    auto needssAttrsUpdate = false;
-
-    if( ( fabs( m_lastW - w ) + fabs( m_lastH - h ) ) > 0.001f )
-    {
-        m_rct->SetRectSize( w, h );
-
-        needssAttrsUpdate = true;
-
-        m_lastW = w;
-        m_lastH = h;
-    }
-
-    m_vaChannel->SetNeedsAttributesUpdate( needssAttrsUpdate );
+		return true;
+	}
+	return false;
 }
 
 } // model

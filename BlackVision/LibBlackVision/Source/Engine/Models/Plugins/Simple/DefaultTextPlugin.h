@@ -56,7 +56,6 @@ private:
 
     std::wstring                    m_text;
     TextAtlasConstPtr				m_atlas;
-    bool                            m_textSet;
 	Float32							m_textLength;
 
     UInt32		                    m_fontSize;
@@ -95,17 +94,18 @@ private:
 
     virtual void                                Update                      ( TimeType t ) override;
 
-    void                                        InitAttributesChannel       ( IPluginPtr prev );
 
 	void										ScaleToMaxTextLength		();
 
+    void                                        InitVertexAttributesChannel ();
 public:
+
 	explicit                                    DefaultTextPlugin           ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
 												~DefaultTextPlugin          ();
 
 	static bool									SetText						( IPluginPtr, const std::wstring& );
 
-    virtual void								SetPrevPlugin               ( IPluginPtr plugin );
+    virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 };
 
 } // model

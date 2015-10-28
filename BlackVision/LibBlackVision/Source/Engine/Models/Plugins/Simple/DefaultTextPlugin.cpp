@@ -6,6 +6,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 
 #include "Mathematics/Transform/MatTransform.h"
@@ -136,10 +137,13 @@ std::string             DefaultTextPluginDesc::FontFileName             ()
 // 
 void DefaultTextPlugin::SetPrevPlugin( IPluginPtr prev )
 {
-    __super::SetPrevPlugin( prev );
+    BasePlugin::SetPrevPlugin( prev );
 
     if( prev == nullptr )
+	{
+		m_transformChannel = nullptr;
         return;
+	}
 
     auto colorParam = prev->GetParameter( "color" );
 
@@ -163,8 +167,13 @@ void DefaultTextPlugin::SetPrevPlugin( IPluginPtr prev )
                 break;
             }
         }
-        
     }
+
+	m_scaleValue =  ValuesFactory::CreateValueMat4( "" );
+	m_scaleValue->SetValue( glm::mat4( 1.0 ) );
+    ValueMat4PtrVec values;
+	values.push_back( m_scaleValue );
+	m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( m_prevPlugin, values, false ) ); //<3
 }
 
 // *************************************
@@ -175,21 +184,15 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
-    , m_textSet( true )
+    //, m_textSet( true )
     , m_atlas( nullptr )
     , m_text( L"" )
 	, m_textLength( 0.f )
 {
+    m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
+    m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
+
     SetPrevPlugin( prev );
-
-    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
-    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
-
-	m_scaleValue =  ValuesFactory::CreateValueMat4( "" );
-	m_scaleValue->SetValue( glm::mat4( 1.0 ) );
-    ValueMat4PtrVec values;
-	values.push_back( m_scaleValue );
-	m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( m_prevPlugin, values, false ) ); //<3
 
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
@@ -237,14 +240,7 @@ void							DefaultTextPlugin::LoadTexture(	DefaultTexturesDataPtr txData,
 
 	if( txDesc != nullptr )
 	{
-		if( txData->GetTextures().size() == 0 )
-		{
-			txData->AddTexture( txDesc );
-		}
-		else
-		{
-			txData->SetTexture( 0, txDesc );
-		}
+		txData->SetTexture( 0, txDesc );
 	}
 
 	txDesc->SetBits( res );
@@ -295,7 +291,7 @@ bool                            DefaultTextPlugin::LoadResource  ( AssetDescCons
 		m_blurSize = txAssetDescr->GetBlurSize();
 		m_outlineSize = txAssetDescr->GetOutlineSize();
 		LoadAtlas( txAssetDescr );
-		InitAttributesChannel( m_prevPlugin );
+		InitVertexAttributesChannel();
 
 		return true;
     }    
@@ -324,6 +320,8 @@ IVertexShaderChannelConstPtr        DefaultTextPlugin::GetVertexShaderChannel   
     return m_vsc;
 }
 
+// *************************************
+// 
 ITransformChannelConstPtr           DefaultTextPlugin::GetTransformChannel         () const
 {
 	return m_transformChannel;
@@ -368,10 +366,16 @@ void                                DefaultTextPlugin::Update                   
 
 	m_scaleValue->SetValue( m_scaleMat );
 
-    if( m_vaChannel) // FUNKED for serialization
-        m_vaChannel->SetNeedsTopologyUpdate( m_textSet );
+	HelperVertexAttributesChannel::FetchAttributesUpdate( m_vaChannel, m_prevPlugin );
+	if( HelperVertexAttributesChannel::FetchTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+	{
+		InitVertexAttributesChannel();
+	}
 
-    m_textSet = false;
+    //if( m_vaChannel) // FUNKED for serialization
+    //    m_vaChannel->SetNeedsTopologyUpdate( m_textSet );
+
+    //m_textSet = false;
 
     //if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
     //{
@@ -383,8 +387,12 @@ void                                DefaultTextPlugin::Update                   
     //}
 
     m_vsc->PostUpdate();
-    m_psc->PostUpdate();    
-	m_transformChannel->PostUpdate();
+    m_psc->PostUpdate();
+
+	if( m_transformChannel )
+	{
+		m_transformChannel->PostUpdate();
+	}
 }
 
 namespace {
@@ -402,7 +410,7 @@ inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
 
 // *************************************
 //
-void DefaultTextPlugin::InitAttributesChannel( IPluginPtr prev )
+void DefaultTextPlugin::InitVertexAttributesChannel	()
 {
     m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
@@ -518,7 +526,6 @@ void DefaultTextPlugin::ScaleToMaxTextLength		()
 //
 void DefaultTextPlugin::SetText                     ( const std::wstring & newText )
 {
-    m_textSet = true;
     m_text = newText;
 
     m_vaChannel->ClearConnectedComponent();
@@ -529,7 +536,7 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 
 	ScaleToMaxTextLength();
 
-    m_vaChannel->SetNeedsTopologyUpdate( true );
+	HelperVertexAttributesChannel::TopologyUpdate( m_vaChannel, true );
 }
 
 // *************************************

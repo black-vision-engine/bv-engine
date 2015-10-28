@@ -6,6 +6,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/HelperUVGenerator.h"
 
 #include "Assets/Texture/AnimationAssetDescriptor.h"
@@ -126,7 +127,7 @@ void								DefaultAnimationPlugin::SetPrevPlugin               ( IPluginPtr pre
 {
 	BasePlugin::SetPrevPlugin( prev );
 
-    InitAttributesChannel( prev );
+    InitVertexAttributesChannel();
 }
 
 // *************************************
@@ -163,12 +164,7 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
     assert( m_paramFilteringMode );
     assert( m_paramAttachMode );
 
-    auto wX = GetWrapModeX();
-    auto wY = GetWrapModeY();
-    auto fm = GetFilteringMode();
-    auto am = GetAttachementMode();
-
-    UpdateState( wX, wY, fm, am );
+    UpdateState();
 }
 
 // *************************************
@@ -194,15 +190,7 @@ bool                            DefaultAnimationPlugin::LoadResource  ( AssetDes
 
         if( animDesc != nullptr )
         {
-            if( txData->GetAnimations().size() == 0 )
-            {
-                txData->AddAnimation( animDesc );
-            }
-            else
-            {
-                txData->SetAnimation( 0, animDesc );
-            }
-
+            txData->SetAnimation( 0, animDesc );
             return true;
         }
     }
@@ -238,59 +226,30 @@ void                                DefaultAnimationPlugin::Update              
     { t; } // FIXME: suppress unused variable
     m_paramValModel->Update();
 
-	bool prevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
-
-    auto attachmentMode = GetAttachementMode();
-
-    if( attachmentMode == TextureAttachmentMode::MM_FREE )
-    {
-        if( prevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
-        {
-            for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
-            {
-                auto connComp = m_vaChannel->GetConnectedComponent( i );
-                auto compChannels = connComp->GetAttributeChannels();
-
-				if( auto posChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_POSITION ) )
-                {
-					if( auto uvChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_TEXCOORD ) )
-                    {
-                        auto & verts  = std::dynamic_pointer_cast< Float3AttributeChannel >( posChannel )->GetVertices();
-                        auto & uvs    = std::dynamic_pointer_cast< Float2AttributeChannel >( uvChannel )->GetVertices();
-
-                        for( unsigned int i = 0; i < verts.size(); ++i )
-                        {
-                            uvs[ i ].x = verts[ i ].x;
-                            uvs[ i ].y = verts[ i ].y;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    auto wX = GetWrapModeX();
-    auto wY = GetWrapModeY();
-    auto fm = GetFilteringMode();
-
     unsigned int frameNum = (unsigned int )m_paramFrameNum->Evaluate(); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
     m_texturesData->SetAnimationFrame( 0, frameNum ); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
 
-	if( m_vaChannel )
+	HelperVertexAttributesChannel::AttributesUpdate( m_vaChannel, UpdateState() );
+	HelperVertexAttributesChannel::FetchAttributesUpdate( m_vaChannel, m_prevPlugin );
+	if( HelperVertexAttributesChannel::FetchTopologyUpdate( m_vaChannel, m_prevPlugin ) )
 	{
-		if ( ( prevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
-			|| StateChanged( wX, wY, fm, attachmentMode ) )
-		{
-			UpdateState( wX, wY, fm, attachmentMode );
-			m_vaChannel->SetNeedsAttributesUpdate( true );
-		}
-		else
-		{
-			m_vaChannel->SetNeedsAttributesUpdate( false );
-		}
+		InitVertexAttributesChannel();
 	}
 
-	//FIXME: what about NeedsTopologyUpdate?
+	//bool prevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
+	//if( m_vaChannel )
+	//{
+	//	if ( ( prevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
+	//		|| StateChanged() )
+	//	{
+	//		UpdateState();
+	//		m_vaChannel->SetNeedsAttributesUpdate( true );
+	//	}
+	//	else
+	//	{
+	//		m_vaChannel->SetNeedsAttributesUpdate( false );
+	//	}
+	//}
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -298,15 +257,15 @@ void                                DefaultAnimationPlugin::Update              
 
 // *************************************
 //
-void DefaultAnimationPlugin::InitAttributesChannel( IPluginPtr prev )
+void		DefaultAnimationPlugin::InitVertexAttributesChannel		()
 {
-	if( !( prev && prev->GetVertexAttributesChannel() ) )
+	if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
 	{
 		m_vaChannel = nullptr;
 		return;
 	}
 
-    auto prevGeomChannel = prev->GetVertexAttributesChannel();
+    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
 	auto prevCC = prevGeomChannel->GetComponents();
     
 //recreate vachannel ->
@@ -412,19 +371,24 @@ TextureAttachmentMode                       DefaultAnimationPlugin::GetAttacheme
 
 // *************************************
 // 
-bool                                        DefaultAnimationPlugin::StateChanged            ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am ) const
+bool                                        DefaultAnimationPlugin::UpdateState             ()
 {
-    return wmX != m_lastTextureWrapModeX || wmY != m_lastTextureWrapModeY || fm != m_lastTextureFilteringMode || am != m_lastTextureAttachMode;
-}
+	auto wmx = GetWrapModeX();
+	auto wmy = GetWrapModeY();
+	auto fm = GetFilteringMode();
+	auto am = GetAttachementMode();
 
-// *************************************
-// 
-void                                        DefaultAnimationPlugin::UpdateState             ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am )
-{
-    m_lastTextureWrapModeX      = wmX;
-    m_lastTextureWrapModeY      = wmY;
-    m_lastTextureFilteringMode  = fm;
-    m_lastTextureAttachMode     = am;
+	if( wmx != m_lastTextureWrapModeX || wmy != m_lastTextureWrapModeY || 
+		fm != m_lastTextureFilteringMode || am != m_lastTextureAttachMode )
+	{
+		m_lastTextureWrapModeX      = wmx;
+		m_lastTextureWrapModeY      = wmy;
+		m_lastTextureFilteringMode  = fm;
+		m_lastTextureAttachMode     = am;
+		
+		return true;
+	}
+	return false;
 }
 
 } // model

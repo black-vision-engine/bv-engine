@@ -74,15 +74,14 @@ public:
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 private:
 
-    void                                        InitAttributesChannel       ( IPluginPtr prev );
+    void                                        InitVertexAttributesChannel ();
 
     TextureWrappingMode                         GetWrapModeX                () const;
     TextureWrappingMode                         GetWrapModeY                () const;
     TextureFilteringMode                        GetFilteringMode            () const;
     TextureAttachmentMode                       GetAttachementMode          () const;
 
-    bool                                        StateChanged                ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am ) const;
-    void                                        UpdateState                 ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am );
+    bool                                        UpdateState                 ();
 
 };
 

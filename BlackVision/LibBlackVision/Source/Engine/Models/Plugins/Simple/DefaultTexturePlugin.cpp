@@ -7,6 +7,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/HelperUVGenerator.h"
 
 #include "Assets/Texture/TextureAssetDescriptor.h"
@@ -131,7 +132,7 @@ void DefaultTexturePlugin::SetPrevPlugin( IPluginPtr prev )
 {
     BasePlugin::SetPrevPlugin( prev );
 
-    InitAttributesChannel( prev );
+    InitVertexAttributesChannel();
 }
 
 // *************************************
@@ -170,12 +171,7 @@ DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, c
     assert( m_paramFilteringMode );
     assert( m_paramAttachMode );
 
-    auto wX = GetWrapModeX();
-    auto wY = GetWrapModeY();
-    auto fm = GetFilteringMode();
-    auto am = GetAttachementMode();
-
-    UpdateState( wX, wY, fm, am );
+    UpdateState();
 }
 
 // *************************************
@@ -243,105 +239,74 @@ void                                DefaultTexturePlugin::Update                
     { t; } // FIXME: suppress unused warning
     m_paramValModel->Update();
 
-    auto attachmentMode = GetAttachementMode();
-
-#if 0
-    if( attachmentMode == TextureAttachmentMode::MM_FREE )
-    {
-        if( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
-        {
-            for( unsigned int i = 0; i < m_vaChannel->GetComponents().size(); ++i )
-            {
-                auto connComp = m_vaChannel->GetConnectedComponent( i );
-                auto compChannels = connComp->GetAttributeChannels();
-
-				if( auto posChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_POSITION ) )
-                {
-					if( auto uvChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_TEXCOORD ) )
-                    {
-                        auto & verts  = std::dynamic_pointer_cast< Float3AttributeChannel >( posChannel )->GetVertices();
-                        auto & uvs    = std::dynamic_pointer_cast< Float2AttributeChannel >( uvChannel )->GetVertices();
-
-                        for( unsigned int i = 0; i < verts.size(); ++i )
-                        {
-                            uvs[ i ].x = verts[ i ].x;
-                            uvs[ i ].y = verts[ i ].y;
-                        }
-                    }
-                }
-            }
-        }
-    }
-#endif
-
-    auto wX = GetWrapModeX();
-    auto wY = GetWrapModeY();
-    auto fm = GetFilteringMode();
-
-	if( m_vaChannel )
+	HelperVertexAttributesChannel::AttributesUpdate( m_vaChannel, UpdateState() );
+	HelperVertexAttributesChannel::FetchAttributesUpdate( m_vaChannel, m_prevPlugin );
+	if( HelperVertexAttributesChannel::FetchTopologyUpdate( m_vaChannel, m_prevPlugin ) )
 	{
-		bool hasPrevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
-		if ( ( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
-			|| StateChanged( wX, wY, fm, attachmentMode ) )
-		{
-			UpdateState( wX, wY, fm, attachmentMode );
-			m_vaChannel->SetNeedsAttributesUpdate( true );
-		}
-		else
-		{
-			m_vaChannel->SetNeedsAttributesUpdate( false );
-		}
-
-		if( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() )
-		{
-			m_vaChannel->ClearAll();
-			InitAttributesChannel( m_prevPlugin );
-			m_vaChannel->SetNeedsTopologyUpdate( true );
-			m_vaChannel->SetNeedsAttributesUpdate( false ); // FIXME: very ugly hack this is
-		}
-		else
-		{
-			m_vaChannel->SetNeedsTopologyUpdate( false );
-		}
+		InitVertexAttributesChannel();
 	}
+
+	//if( m_vaChannel )
+	//{
+	//	bool hasPrevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
+	//	if ( ( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
+	//		|| StateChanged( wX, wY, fm, attachmentMode ) )
+	//	{
+	//		UpdateState( wX, wY, fm, attachmentMode );
+	//		m_vaChannel->SetNeedsAttributesUpdate( true );
+	//	}
+	//	else
+	//	{
+	//		m_vaChannel->SetNeedsAttributesUpdate( false );
+	//	}
+
+	//	if( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() )
+	//	{
+	//		m_vaChannel->ClearAll();
+	//		InitVertexAttributesChannel( m_prevPlugin );
+	//		m_vaChannel->SetNeedsTopologyUpdate( true );
+	//		m_vaChannel->SetNeedsAttributesUpdate( false ); // FIXME: very ugly hack this is
+	//	}
+	//	else
+	//	{
+	//		m_vaChannel->SetNeedsTopologyUpdate( false );
+	//	}
+	//}
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
 }
 
-
 // *************************************
 //
-void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
+void		DefaultTexturePlugin::InitVertexAttributesChannel		()
 {
-	if( !( prev && prev->GetVertexAttributesChannel() ) )
+	if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
 	{
 		m_vaChannel = nullptr;
 		return;
 	}
 
-    auto prevGeomChannel = prev->GetVertexAttributesChannel();
+    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
 	auto prevCC = prevGeomChannel->GetComponents();
 
-//recreate vachannel ->
-    VertexAttributesChannelDescriptor vaChannelDesc;
-    auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( prevCC[ 0 ] ); //FIXME: is it possible that CC is empty?
-    auto prevCompChannels = prevConnComp->GetAttributeChannelsPtr();
-    for( auto prevCompCh : prevCompChannels )
-    {
-        auto prevCompChDesc = prevCompCh->GetDescriptor();
-        vaChannelDesc.AddAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
-    }
-
     //Only one texture
-	if( !AttributeChannel::GetAttrChannel( prevConnComp->GetAttributeChannels(), AttributeSemantic::AS_TEXCOORD ) )
+	//FIXME: is it possible that CC is empty?
+	auto vaChannelDesc = HelperVertexAttributesChannel::CreateVertexAttributesChannelDescriptor( prevCC[ 0 ]->GetAttributeChannels() );
+	if( !AttributeChannel::GetAttrChannel( prevCC[ 0 ]->GetAttributeChannels(), AttributeSemantic::AS_TEXCOORD ) )
 	{
 		vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 	}
-			
-	m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
-//<- recreate vachannel
-
+	
+	if( !m_vaChannel )
+	{		
+		m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+	}
+	else
+	{
+		m_vaChannel->ClearAll();
+		m_vaChannel->SetDescriptor( vaChannelDesc );
+	}
 
 	auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
     for( unsigned int i = 0; i < prevCC.size(); ++i )
@@ -371,7 +336,7 @@ void DefaultTexturePlugin::InitAttributesChannel( IPluginPtr prev )
 
         m_vaChannel->AddConnectedComponent( connComp );
     }
-
+	
     assert( prevGeomChannel->GetComponents().size() > 0 );
 }
 
@@ -435,19 +400,24 @@ TextureAttachmentMode                       DefaultTexturePlugin::GetAttachement
 
 // *************************************
 // 
-bool                                        DefaultTexturePlugin::StateChanged                ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am ) const
+bool                                        DefaultTexturePlugin::UpdateState           ()
 {
-    return wmX != m_lastTextureWrapModeX || wmY != m_lastTextureWrapModeY || fm != m_lastTextureFilteringMode || am != m_lastTextureAttachMode;
-}
+	auto wmx = GetWrapModeX();
+	auto wmy = GetWrapModeY();
+	auto fm = GetFilteringMode();
+	auto am = GetAttachementMode();
 
-// *************************************
-// 
-void                                        DefaultTexturePlugin::UpdateState                 ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am )
-{
-    m_lastTextureWrapModeX      = wmX;
-    m_lastTextureWrapModeY      = wmY;
-    m_lastTextureFilteringMode  = fm;
-    m_lastTextureAttachMode     = am;
+	if( wmx != m_lastTextureWrapModeX || wmy != m_lastTextureWrapModeY || 
+		fm != m_lastTextureFilteringMode || am != m_lastTextureAttachMode )
+	{
+		m_lastTextureWrapModeX      = wmx;
+		m_lastTextureWrapModeY      = wmy;
+		m_lastTextureFilteringMode  = fm;
+		m_lastTextureAttachMode     = am;
+		
+		return true;
+	}
+	return false;
 }
 
 // *************************************

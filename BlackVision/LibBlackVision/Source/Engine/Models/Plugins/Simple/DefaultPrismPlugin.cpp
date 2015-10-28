@@ -3,6 +3,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
 
 #include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 #include <tuple>
 
@@ -157,7 +158,10 @@ void                                DefaultPrismPlugin::Update                  
     if( n != m_lastN || uvType != m_uvType )
     {
         InitGeometry( n, uvType );
-        m_vaChannel->SetNeedsTopologyUpdate( true );
+
+		HelperVertexAttributesChannel::TopologyUpdate( m_vaChannel, true );
+        //m_vaChannel->SetNeedsTopologyUpdate( true );
+
         m_lastN = n;
         m_uvType = uvType;
     }

@@ -229,6 +229,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\AttributeChannelDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\AttributeChannelTyped.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\HelperVertexAttributesChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\IndexChannelDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\DefaultGeometryVertexAttributeChannel.cpp" />
@@ -346,6 +347,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\AlphaMaskNodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeMaskNodeEffect.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\HelperVertexAttributesChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.h" />

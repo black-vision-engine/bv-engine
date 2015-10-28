@@ -52,6 +52,8 @@ public:
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual void                                Update                      ( TimeType t ) override;
 
+private:
+	bool                                UpdateState					();
 };
 
 DEFINE_PTR_TYPE(DefaultRectPlugin)

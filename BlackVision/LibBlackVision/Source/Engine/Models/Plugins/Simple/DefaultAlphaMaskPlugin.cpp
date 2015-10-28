@@ -6,6 +6,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultColorPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
@@ -167,7 +168,7 @@ void								DefaultAlphaMaskPlugin::SetPrevPlugin               ( IPluginPtr pre
 		RegisterEvaluators( prev, vsEval, psEval );
     }
 
-    InitAttributesChannel( prev );
+    InitVertexAttributesChannel();
 
     if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() || prev->GetTypeUid() == DefaultAnimationPluginDesc::UID() || prev->GetTypeUid() == DefaultTextPluginDesc::UID() )
     {
@@ -213,12 +214,7 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
     assert( m_paramFilteringMode );
     assert( m_paramAttachMode );
 
-    auto wX = GetWrapModeX();
-    auto wY = GetWrapModeY();
-    auto fm = GetFilteringMode();
-    auto am = GetAttachementMode();
-
-    UpdateState( wX, wY, fm, am );
+    UpdateState();
 }
 
 // *************************************
@@ -272,7 +268,14 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( AssetDescCon
             m_textureWidth = txDesc->GetWidth();
             m_textureHeight = txDesc->GetHeight();
 
-			RecalculateUVChannel();
+			if( HelperVertexAttributesChannel::FetchTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+			{
+				InitVertexAttributesChannel();
+			}
+			else
+			{
+				RecalculateUVChannel();
+			}
 
             return true;
         }
@@ -309,38 +312,44 @@ void                                DefaultAlphaMaskPlugin::Update              
     { t; } // FIXME: suppress unused variable
     m_paramValModel->Update();
 
-    auto attachmentMode = GetAttachementMode();
-    auto wX = GetWrapModeX();
-    auto wY = GetWrapModeY();
-    auto fm = GetFilteringMode();
-
-	if( m_vaChannel )
+	if( HelperVertexAttributesChannel::AttributesUpdate( m_vaChannel, UpdateState() ) 
+		|| HelperVertexAttributesChannel::FetchAttributesUpdate( m_vaChannel, m_prevPlugin ) )
 	{
-		bool hasPrevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
-		if ( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() 
-			|| StateChanged( wX, wY, fm, attachmentMode ) )
-		{
-			RecalculateUVChannel();
-			UpdateState( wX, wY, fm, attachmentMode );
-			m_vaChannel->SetNeedsAttributesUpdate( true );
-		}
-		else
-		{
-			m_vaChannel->SetNeedsAttributesUpdate( false );
-		}
-
-		if( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() )
-		{
-			m_vaChannel->ClearAll();
-			InitAttributesChannel( m_prevPlugin );
-			m_vaChannel->SetNeedsTopologyUpdate( true );
-			m_vaChannel->SetNeedsAttributesUpdate( false ); // FIXME: very ugly hack this is
-		}
-		else
-		{
-			m_vaChannel->SetNeedsTopologyUpdate( false );
-		}
+		RecalculateUVChannel();
 	}
+
+	if( HelperVertexAttributesChannel::FetchTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+	{
+		InitVertexAttributesChannel();
+	}
+
+	//if( m_vaChannel )
+	//{
+	//	bool hasPrevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
+	//	if ( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() 
+	//		|| StateChanged() )
+	//	{
+	//		RecalculateUVChannel();
+	//		UpdateState();
+	//		m_vaChannel->SetNeedsAttributesUpdate( true );
+	//	}
+	//	else
+	//	{
+	//		m_vaChannel->SetNeedsAttributesUpdate( false );
+	//	}
+
+	//	if( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() )
+	//	{
+	//		m_vaChannel->ClearAll();
+	//		InitAttributesChannel( m_prevPlugin );
+	//		m_vaChannel->SetNeedsTopologyUpdate( true );
+	//		m_vaChannel->SetNeedsAttributesUpdate( false ); // FIXME: very ugly hack this is
+	//	}
+	//	else
+	//	{
+	//		m_vaChannel->SetNeedsTopologyUpdate( false );
+	//	}
+	//}
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -348,38 +357,37 @@ void                                DefaultAlphaMaskPlugin::Update              
 
 // *************************************
 //
-void DefaultAlphaMaskPlugin::InitAttributesChannel( IPluginConstPtr prev )
+void		DefaultAlphaMaskPlugin::InitVertexAttributesChannel			()
 {
-	if( !( prev && prev->GetVertexAttributesChannel() ) )
+	if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
 	{
 		m_vaChannel = nullptr;
 		return;
 	}
 
-    auto prevGeomChannel = prev->GetVertexAttributesChannel();
+    auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
 	auto prevCC = prevGeomChannel->GetComponents();
 
-//recreate vachannel ->
-	VertexAttributesChannelDescriptor vaChannelDesc;
-	auto prevCompChannels = prevCC[ 0 ]->GetAttributeChannels(); //FIXME: is it possible that CC is empty?
-    for( auto prevCompCh : prevCompChannels )
-    {
-        auto prevCompChDesc = prevCompCh->GetDescriptor();
-        vaChannelDesc.AddAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
-    }
-
     //add alpha mask texture desc
+	//FIXME: is it possible that CC is empty?
+	auto vaChannelDesc = HelperVertexAttributesChannel::CreateVertexAttributesChannelDescriptor( prevCC[ 0 ]->GetAttributeChannels() );
 	vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-	m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
-//<- recreate vachannel
-
+	if( !m_vaChannel )
+	{
+		m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+	}
+	else
+	{
+		m_vaChannel->ClearAll();
+		m_vaChannel->SetDescriptor( vaChannelDesc );
+	}
 
     auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
     for( unsigned int i = 0; i < prevCC.size(); ++i )
     {
         auto connComp = ConnectedComponent::Create();
-        auto prevCompChannels = std::static_pointer_cast< const model::ConnectedComponent >( prevGeomChannel->GetComponents()[ i ] )->GetAttributeChannelsPtr();
+        auto prevCompChannels = std::static_pointer_cast< const model::ConnectedComponent >( prevCC[ i ] )->GetAttributeChannelsPtr();
 		
         for( auto prevCompCh : prevCompChannels )
         {
@@ -399,6 +407,9 @@ void DefaultAlphaMaskPlugin::InitAttributesChannel( IPluginConstPtr prev )
 //
 void     DefaultAlphaMaskPlugin::RecalculateUVChannel         ()
 {
+	if( !m_vaChannel )
+		return;
+
 	//FIXME: only one texture - convex hull calculations
     float minX = 100000.0f, minY = 100000.0f;
     float maxX = 0.0f, maxY = 0.0f;
@@ -440,7 +451,7 @@ void     DefaultAlphaMaskPlugin::RecalculateUVChannel         ()
 			if( uvVerts.size() < posChannel->GetNumEntries() )
 			{
 				uvVerts.resize( posChannel->GetNumEntries() );
-				m_vaChannel->SetNeedsTopologyUpdate( true );
+				//m_vaChannel->SetNeedsTopologyUpdate( true );
 			}
 
 			auto & posVerts = pos->GetVertices();
@@ -451,15 +462,13 @@ void     DefaultAlphaMaskPlugin::RecalculateUVChannel         ()
 			}
 		}
 	}
-
-	m_vaChannel->SetNeedsAttributesUpdate( true );
 }
 
 // *************************************
 //
-void					DefaultAlphaMaskPlugin::RegisterEvaluators			( IPluginPtr prev, const std::vector< std::string > & vsEvaluators, const std::vector< std::string > & psEvaluators )
+void					DefaultAlphaMaskPlugin::RegisterEvaluators			( IPluginPtr prev, const std::vector< std::string > & vsParamNames, const std::vector< std::string > & psParamNames )
 {
-	for( auto paramName : vsEvaluators )
+	for( auto paramName : vsParamNames )
 	{
 		assert( prev->GetParameter( paramName ) != nullptr );
 	}
@@ -469,7 +478,7 @@ void					DefaultAlphaMaskPlugin::RegisterEvaluators			( IPluginPtr prev, const s
 		auto evaluatorsv = prev->GetPluginParamValModel()->GetVertexShaderChannelModel()->GetEvaluators();
 		for( auto & eval : evaluatorsv )
 		{
-			for( auto & paramName : vsEvaluators )
+			for( auto & paramName : vsParamNames )
 			{
 				if( eval->GetParameter( paramName ) )
 				{
@@ -480,7 +489,7 @@ void					DefaultAlphaMaskPlugin::RegisterEvaluators			( IPluginPtr prev, const s
 		}
 	}
 
-	for( auto paramName : psEvaluators )
+	for( auto paramName : psParamNames )
 	{
 		assert( prev->GetParameter( paramName ) != nullptr );
 	}
@@ -490,7 +499,7 @@ void					DefaultAlphaMaskPlugin::RegisterEvaluators			( IPluginPtr prev, const s
 		auto evaluatorsp = prev->GetPluginParamValModel()->GetPixelShaderChannelModel()->GetEvaluators();
 		for( auto & eval : evaluatorsp )
 		{
-			for( auto & paramName : psEvaluators )
+			for( auto & paramName : psParamNames )
 			{
 				if( eval->GetParameter( paramName ) )
 				{
@@ -556,19 +565,24 @@ TextureAttachmentMode                       DefaultAlphaMaskPlugin::GetAttacheme
 
 // *************************************
 // 
-bool                                        DefaultAlphaMaskPlugin::StateChanged        ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am ) const
+bool                                        DefaultAlphaMaskPlugin::UpdateState         ()
 {
-    return wmX != m_lastTextureWrapModeX || wmY != m_lastTextureWrapModeY || fm != m_lastTextureFilteringMode || am != m_lastTextureAttachMode;
-}
+	auto wmx = GetWrapModeX();
+	auto wmy = GetWrapModeY();
+	auto fm = GetFilteringMode();
+	auto am = GetAttachementMode();
 
-// *************************************
-// 
-void                                        DefaultAlphaMaskPlugin::UpdateState         ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am )
-{
-    m_lastTextureWrapModeX      = wmX;
-    m_lastTextureWrapModeY      = wmY;
-    m_lastTextureFilteringMode  = fm;
-    m_lastTextureAttachMode     = am;
+	if( wmx != m_lastTextureWrapModeX || wmy != m_lastTextureWrapModeY || 
+		fm != m_lastTextureFilteringMode || am != m_lastTextureAttachMode )
+	{
+		m_lastTextureWrapModeX      = wmx;
+		m_lastTextureWrapModeY      = wmy;
+		m_lastTextureFilteringMode  = fm;
+		m_lastTextureAttachMode     = am;
+		
+		return true;
+	}
+	return false;
 }
 
 // *************************************

@@ -2,6 +2,7 @@
 
 //#include "Engine/Models/Plugins/Channels/Geometry/Simple/VertexAttributesChannelVariableTopology.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/DefaultGeometryVertexAttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 #include "Mathematics/defines.h"
 
@@ -272,7 +273,10 @@ void                                DefaultPieChartPlugin::Update               
     if( asVal != m_angleStart || aeVal != m_angleEnd )
     {
         InitGeometry( asVal, aeVal );
-        m_vaChannel->SetNeedsTopologyUpdate( true );
+
+		HelperVertexAttributesChannel::TopologyUpdate( m_vaChannel, true );
+        //m_vaChannel->SetNeedsTopologyUpdate( true );
+
         m_angleStart = asVal; m_angleEnd = aeVal;
     }
 }

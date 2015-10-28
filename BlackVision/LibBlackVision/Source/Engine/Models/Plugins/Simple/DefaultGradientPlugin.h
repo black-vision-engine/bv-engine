@@ -60,7 +60,7 @@ public:
 
 private:
 
-    void                                        InitAttributesChannel       ( IPluginPtr prev );
+    void                                        InitVertexAttributesChannel ();
     void                                        RecalculateUVChannel		();
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;

@@ -27,10 +27,13 @@ protected:
 
     bool                                            m_isReadOnly;
     bool                                            m_isTimeInvariant;
-    bool                                            m_needsAttributesUpdate;
-    bool                                            m_needsTopologyUpdate;
+    //bool                                            m_needsAttributesUpdate;
+    //bool                                            m_needsTopologyUpdate;
 
-    bool                                            m_needsInitialization;
+    //bool                                            m_needsInitialization;
+
+	UInt64											m_lastAttributeUpdateID;
+	UInt64											m_lastTopologyUpdateID;
 
 public:
                                                         VertexAttributesChannel         ( PrimitiveType type, bool isReadOnly = false, bool isTimeInvariant = false );
@@ -43,11 +46,20 @@ public:
 
     //IVertexAttributesChannel
     virtual bool                                        IsTimeInvariant         () const override;
-    virtual bool                                        NeedsAttributesUpdate   () const override;
-    virtual bool                                        NeedsTopologyUpdate     () const override;
+    //virtual bool                                        NeedsAttributesUpdate   () const override;
+    //virtual bool                                        NeedsTopologyUpdate     () const override;
 
-    void                                                SetNeedsAttributesUpdate( bool b );
-    void                                                SetNeedsTopologyUpdate  ( bool b );
+    //void                                                SetNeedsAttributesUpdate( bool b );
+    //void                                                SetNeedsTopologyUpdate  ( bool b );
+
+
+	virtual UInt64										GetLastAttributeUpdateID() const override;
+	virtual UInt64										GetLastTopologyUpdateID	() const override;
+
+	void												SetLastAttributeUpdateID( UInt64 updateID );
+	void												SetLastTopologyUpdateID	( UInt64 updateID );
+
+	
 
     virtual unsigned int                                TotalNumVertices        () const override;
 
@@ -68,7 +80,7 @@ public:
     ConnectedComponentPtr                               GetConnectedComponent   ( unsigned int idx );
 
     void                                                ClearAll                ();
-    bool                                                NeedsInitialization     () const;
+    //bool                                                NeedsInitialization     () const;
     void                                                Initialize              ( PrimitiveType type, const VertexAttributesChannelDescriptor& desc, bool isReadOnly, bool isTimeInvariant );
 
 protected:

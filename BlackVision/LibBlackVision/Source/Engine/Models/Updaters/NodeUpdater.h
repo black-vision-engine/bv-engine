@@ -84,6 +84,11 @@ private:
 
     std::vector< TexData2ShaderParams >         m_texDataMappingVec;
 
+
+	UInt64										m_lastAttributesUpdateID;
+	UInt64										m_lastTopologyUpdateID;
+
+
                             NodeUpdater         ( SceneNode * sceneNode, model::IModelNodeConstPtr modelNode ); 
 public:
                             ~NodeUpdater        ();

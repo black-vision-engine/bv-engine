@@ -60,7 +60,35 @@ inline  void    NodeUpdater::UpdateTransform     ()
 //
 inline  void    NodeUpdater::UpdateGeometry      ()
 {
-    if ( m_vertexAttributesChannel->NeedsAttributesUpdate() )
+	if( m_vertexAttributesChannel->GetLastTopologyUpdateID() > m_lastTopologyUpdateID )
+	{
+        UpdateTopology();
+		m_lastTopologyUpdateID = m_vertexAttributesChannel->GetLastTopologyUpdateID();
+	}
+	else if( m_vertexAttributesChannel->GetLastAttributeUpdateID() > m_lastAttributesUpdateID )
+	{
+        UpdatePositions();
+		m_lastAttributesUpdateID = m_vertexAttributesChannel->GetLastAttributeUpdateID();
+	}
+	/*else if ( m_vertexAttributesChannel->NeedsAttributesUpdate() )
+    {
+        assert( !m_vertexAttributesChannel->NeedsTopologyUpdate() );
+        UpdatePositions();
+    }
+    else if ( m_vertexAttributesChannel->NeedsTopologyUpdate() )
+    {
+        UpdateTopology();
+    }*/
+    else
+    {
+        RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_renderable->GetRenderableArrayData() );
+        VertexArraySingleVertexBuffer * vao = rad->VAO();
+
+        vao->SetNeedsUpdateMemUpload( false );
+        vao->SetNeedsUpdateRecreation( false );
+    }
+
+    /*if ( m_vertexAttributesChannel->NeedsAttributesUpdate() )
     {
         assert( !m_vertexAttributesChannel->NeedsTopologyUpdate() );
         UpdatePositions();
@@ -76,7 +104,7 @@ inline  void    NodeUpdater::UpdateGeometry      ()
 
         vao->SetNeedsUpdateMemUpload( false );
         vao->SetNeedsUpdateRecreation( false );
-    }
+    }*/
 }
 
 // *****************************
