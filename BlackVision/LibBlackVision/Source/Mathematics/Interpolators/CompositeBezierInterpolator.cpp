@@ -207,21 +207,6 @@ ser.EnterChild( "interpolator" );
 ser.ExitChild();
 }
 
-// *************************************
-//
-template< class TimeValueT, class ValueT >
-ISerializablePtr     CompositeBezierInterpolator< TimeValueT, ValueT >::Create          ( const IDeserializer& doc ) // FIXME: this works for floats only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!(?)
-{
-    auto keys = SerializationHelper::DeserializeObjectLoadPropertiesImpl< Key >( doc, "key" );
-
-    auto interpolator = std::make_shared< CompositeBezierInterpolator< TimeValueT, ValueT > >();
-
-    for( auto key : keys )
-        interpolator->AddKey( key->t, key->val );
-
-    return interpolator;
-}
-
 // *******************************
 //
 template< class TimeValueT, class ValueT >
@@ -240,6 +225,40 @@ IEvaluator<TimeValueT, ValueT >* CreateDummyInterpolator( CurveType type, Key< T
         assert( false );
         return nullptr;
     }
+}
+
+class Interpolation : ISerializable
+{
+public:
+    virtual void                Serialize       ( ISerializer& ) const { assert( false ); }
+    static ISerializablePtr     Create          ( const IDeserializer& deser )
+    {
+        auto type = deser.GetAttribute( "type" );
+        if( type == "point" )
+            return ISerializablePtr( CreateDummyInterpolator<float,float>( CurveType::POINT, Key<float,float>(0,0), Key<float,float>(0,0), 0 ) );
+        else if( type == "linear" )
+            return ISerializablePtr( CreateDummyInterpolator<float,float>( CurveType::LINEAR, Key<float,float>(0,0), Key<float,float>(0,0), 0 ) );
+        else if( type == "bezier" )
+            return ISerializablePtr( CreateDummyInterpolator<float,float>( CurveType::BEZIER, Key<float,float>(0,0), Key<float,float>(0,0), 0 ) );
+        return nullptr;
+    }
+};
+
+// *************************************
+//
+template< class TimeValueT, class ValueT >
+ISerializablePtr     CompositeBezierInterpolator< TimeValueT, ValueT >::Create          ( const IDeserializer& deser )
+{
+    auto interpolator = std::make_shared< CompositeBezierInterpolator< TimeValueT, ValueT > >();
+
+    interpolator->SetCurveType( SerializationHelper::String2T< CurveType >( ct2s, deser.GetAttribute( "curve_type" ) ) );
+
+    auto keys = SerializationHelper::DeserializeObjectLoadPropertiesImpl< Key >( deser, "key" );
+    auto interpolators = SerializationHelper::DeserializeObjectLoadPropertiesImpl< Interpolation >( deser, "interpolation" );
+    for( auto key : keys )
+        interpolator->AddKey( key->t, key->val );
+
+    return interpolator;
 }
 
 // *******************************

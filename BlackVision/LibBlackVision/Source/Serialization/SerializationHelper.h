@@ -115,6 +115,14 @@ std::string T2String( const std::pair< T, const char* > t2s[], const T& t )
             return t2s[i].second;
 }
 
+template< typename T >
+T String2T( const std::pair< T, const char* > t2s[], const std::string& s )
+{
+    for( int i = 0; ; i++ ) // FIXME so much
+        if( t2s[i].second == s )
+            return t2s[i].first;
+}
+
 }
 
 }
