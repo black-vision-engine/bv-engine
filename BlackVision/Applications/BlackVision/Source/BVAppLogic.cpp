@@ -25,6 +25,7 @@
 
 //FIXME: remove
 #include "TestAI/TestGlobalEffectKeyboardHandler.h"
+#include "TestAI/TestEditorsKeyboardHandler.h"
 #include "testai/TestAIManager.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "BVGL.h"
@@ -201,7 +202,7 @@ void BVAppLogic::LoadScene          ( void )
     }
     else
     {
-        root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, GetTimelineManager(), m_globalTimeline );
+        root = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_pluginsManager, GetTimelineManager(), m_globalTimeline );
     }
 
     m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", te, m_renderer, GetTimelineManager() );
@@ -303,8 +304,6 @@ void BVAppLogic::RefreshVideoInputScene()
 void BVAppLogic::OnKey           ( unsigned char c )
 {
     m_kbdHandler->HandleKey( c, this );
-        //auto sob = new JsonSerializeObject();
-        //sob->Save( "test.json" );
 }
 
 // *********************************
@@ -458,16 +457,31 @@ const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
 //
 void                            BVAppLogic::InitializeKbdHandler()
 {
-    auto envScene = Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
+    auto envScene = GetEnvScene();
 
     if ( envScene == "GLOBAL_EFFECT_05" )
     {
         m_kbdHandler = new TestGlobalEfectKeyboardHandler();
     }
+    if( envScene == "SERIALIZED_TEST" )
+    {
+        m_kbdHandler = new TestEditorsKeyboardHandler();
+    }
     else
     {
         m_kbdHandler = new TestKeyboardHandler();
     }
+}
+
+// *********************************
+//
+std::string                     BVAppLogic::GetEnvScene()
+{
+    auto s = ConfigManager::GetString( "Debug/SceneFromEnvName" );
+    if( s != "" )
+        return s;
+    else
+        return Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
 }
 
 //// *********************************

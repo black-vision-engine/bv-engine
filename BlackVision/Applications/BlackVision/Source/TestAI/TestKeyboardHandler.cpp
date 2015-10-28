@@ -1,5 +1,8 @@
 #include "TestKeyboardHandler.h"
 
+#include "BVAppLogic.h"
+#include "Serialization/XML/XMLSerializer.h"
+
 namespace bv {
 
 // *********************************
@@ -12,6 +15,14 @@ TestKeyboardHandler::~TestKeyboardHandler()
 //
 void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
 {
+    if( c == 's' )
+    {
+        auto sob = new SerializeObject();
+        logic->GetBVScene()->Serialize( *sob );
+        sob->Save( "test.xml" );
+        delete sob;
+    }
+
     { c; }
     { logic; }
 	// To be implemented in subclasses

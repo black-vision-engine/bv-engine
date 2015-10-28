@@ -128,6 +128,8 @@ private:
 
     void                            InitializeKbdHandler();
 
+    std::string                     GetEnvScene();
+
 };
 
 } //bv

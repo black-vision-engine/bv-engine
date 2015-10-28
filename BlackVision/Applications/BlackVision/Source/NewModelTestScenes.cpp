@@ -466,11 +466,8 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 
 // *****************************
 //
-model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const std::string& scene, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    //auto scene = Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
-    auto scene = ConfigManager::GetString( "Debug/SceneFromEnvName" );
-
     model::BasicNodePtr node = nullptr;
 
     if( scene == "TWO_TEXTURED_RECTANGLES" )
