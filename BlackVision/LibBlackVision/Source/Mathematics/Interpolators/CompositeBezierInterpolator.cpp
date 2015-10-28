@@ -3,7 +3,9 @@
 
 #include "Serialization/SerializationHelper.h"
 
-#include "Mathematics/glm_inc.h" // just for explicit instantiation
+#include <vector>
+#include <array>
+//#include <initializer_list>
 
 namespace bv {
 
@@ -24,6 +26,13 @@ public:
     }
 
     ValueT Evaluate( TimeValueT ) const override { return value; }
+
+    virtual void                                        Serialize       ( ISerializer& ser ) const override
+    {
+    ser.EnterChild( "interpolation" );
+        ser.SetAttribute( "type", "point" );
+    ser.ExitChild();
+    }
 };
 
 // *******************************
@@ -53,6 +62,13 @@ public:
     { 
         TimeValueT alpha = ( t - key1.t ) / ( key2.t - key1.t );
         return ValueT( alpha * key2.val + (1-alpha) * key1.val );
+    }
+
+    virtual void                                        Serialize       ( ISerializer& ser ) const override
+    {
+    ser.EnterChild( "interpolation" );
+        ser.SetAttribute( "type", "linear" );
+    ser.ExitChild();
     }
 };
 
@@ -131,6 +147,15 @@ public:
             }
         }
     }
+
+    virtual void                                        Serialize       ( ISerializer& ser ) const override
+    {
+    ser.EnterChild( "interpolation" );
+        ser.SetAttribute( "type", "bezier" );
+        ser.SetAttribute( "v1", std::to_string( v1.t ) + ", " + std::to_string( v1.val ) );
+        ser.SetAttribute( "v2", std::to_string( v2.t ) + ", " + std::to_string( v2.val ) );
+    ser.ExitChild();
+    }
 };
 
 // *******************************
@@ -157,6 +182,29 @@ CompositeBezierInterpolator< TimeValueT, ValueT >::CompositeBezierInterpolator( 
     m_type = that.m_type; 
     m_preMethod = that.m_preMethod;
     m_postMethod = that.m_postMethod;
+}
+
+std::pair< CurveType, const char* > ct2s[] = 
+{ std::make_pair( CurveType::BEZIER, "bezier" )
+    , std::make_pair( CurveType::COSINE_LIKE, "cosine" ) 
+    , std::make_pair( CurveType::LINEAR, "linear" ) 
+    , std::make_pair( CurveType::POINT, "point" ) 
+};
+
+// *************************************
+//
+template< class TimeValueT, class ValueT >
+void                                        CompositeBezierInterpolator< TimeValueT, ValueT >::Serialize       ( ISerializer& ser ) const
+{
+ser.EnterChild( "interpolator" );
+    ser.SetAttribute( "curve_type", SerializationHelper::T2String< CurveType >( ct2s, m_type ) );
+    for( size_t i = 0; i < interpolators.size(); i++ )
+    {
+        keys[ i ].Serialize( ser );
+        interpolators[ i ]->Serialize( ser );
+    }
+    ( keys.end()-1 )->Serialize( ser );
+ser.ExitChild();
 }
 
 // *************************************
@@ -490,6 +538,5 @@ template class CompositeBezierInterpolator<TimeType, float>;
 template class CompositeBezierInterpolator<TimeType, glm::vec2>;
 template class CompositeBezierInterpolator<TimeType, glm::vec3>;
 template class CompositeBezierInterpolator<TimeType, glm::vec4>;
-
 
 } // bv

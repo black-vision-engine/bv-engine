@@ -11,27 +11,13 @@
 #include "Mathematics/Defines.h"
 
 #include "Serialization/SerializationHelper.h"
-//#include "Serialization/SerializationObjects.inl"
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
 
-// FIXME
-namespace std
-{
-    string to_string( const glm::vec2 & v ) { return to_string( v[0] ) + ", " + to_string( v[1] ); }
-    string to_string( const glm::vec3 & v ) { return to_string( v[0] ) + ", " + to_string( v[1] ) + ", " + to_string( v[2] ); }
-    string to_string( const glm::vec4 & v ) { return to_string( v[0] ) + ", " + to_string( v[1] ) + ", " + to_string( v[2] ) + ", " + to_string( v[3] ); }
-    string to_string( const std::string & val ) { return val; }
-    string to_string( const std::wstring & val ) { return std::string( val.begin(), val.end() ); }
-}
-// FIXME
 #include <sstream>
 
 
 namespace bv {
-
-// serialization stuff
-//template std::vector< std::shared_ptr< Key< float, float > > >                         DeserializeObjectLoadPropertiesImpl( const IDeserializer&, std::string name );
 
 namespace {
 
@@ -183,9 +169,12 @@ Key<TimeValueT, ValueT>::Key(TimeValueT t, ValueT val)
 // *************************************
 //
 template<class TimeValueT, class ValueT >
-void                Key<TimeValueT, ValueT>::Serialize       ( ISerializer& /*doc*/ ) const
+void                Key<TimeValueT, ValueT>::Serialize       ( ISerializer& ser ) const
 {
-    assert( !"Implement me please :)" );
+    ser.EnterChild( "key" );
+    ser.SetAttribute( "time", std::to_string( t ) );
+    ser.SetAttribute( "val", std::to_string( val ) );
+    ser.ExitChild();
 }
 
 // *************************************

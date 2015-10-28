@@ -21,7 +21,7 @@ enum class EvaluatorType : int
 };
 
 template< class TimeValueT, class ValueT >
-class IEvaluator
+class IEvaluator : public ISerializable // FIXME perhaps not every evaluator has to be serializable
 {
 public:
     virtual ValueT                              Evaluate( TimeValueT t ) const                      = 0;
@@ -54,7 +54,7 @@ public:
     CompositeBezierInterpolator( float tolerance = 0.000001 );
     CompositeBezierInterpolator( const CompositeBezierInterpolator& that );
 
-    virtual void                                        Serialize       ( ISerializer& ) const override { assert( false ); }
+    virtual void                                        Serialize       ( ISerializer& ) const override;
     static ISerializablePtr                             Create          ( const IDeserializer& );
 
     void                                                AddKey          ( TimeValueT t, const ValueT & v );

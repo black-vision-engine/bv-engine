@@ -107,6 +107,23 @@ glm::vec4               String2Vec4( std::string s );
 glm::vec3               String2Vec3( std::string s );
 glm::vec2               String2Vec2( std::string s );
 
+template< typename T >
+std::string T2String( const std::pair< T, const char* > t2s[], const T& t )
+{
+    for( int i = 0; ; i++ ) // FIXME so much
+        if( t2s[i].first == t )
+            return t2s[i].second;
 }
 
+}
+
+}
+
+namespace std
+{
+    string to_string( const glm::vec2 & v );
+    string to_string( const glm::vec3 & v );
+    string to_string( const glm::vec4 & v );
+    string to_string( const std::string & val );
+    string to_string( const std::wstring & val );
 }
