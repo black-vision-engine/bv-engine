@@ -29,6 +29,7 @@
 #include "BVConfig.h"
 
 #include "Serialization/JsonSpirit/JsonSpiritSerializeObject.h"
+#include "Serialization/JsonSpirit/JsonSpiritDeserilizeObject.h"
 
 
 namespace bv {
@@ -1214,6 +1215,28 @@ model::BasicNodePtr TestScenesFactory::WSerializationTest          ( const model
     serializeObject.ExitChild();
 
     serializeObject.Save( "textureWSerialize.json", FormatStyle::FORMATSTYLE_READABLE );
+
+
+    JsonSpiritDeserilizeObject deserializeObject;
+    if( deserializeObject.LoadFile( "textureWSerialize.json" ) )
+    {
+        std::wstring result;
+        result;
+
+        deserializeObject.EnterChild( L"asset" );
+            result = deserializeObject.GetAttribute( L"path" );
+            result = deserializeObject.GetAttribute( L"type" );
+            if( deserializeObject.EnterChild( L"mipmap" ) )
+            {
+                do
+                {
+                    result = deserializeObject.GetAttribute( L"path" );
+                    result = deserializeObject.GetAttribute( L"type" );
+                } while( deserializeObject.NextChild() );
+                deserializeObject.ExitChild();      // mipmap
+            }
+        deserializeObject.ExitChild();          // asset
+    }
 
     return node0;
 }
