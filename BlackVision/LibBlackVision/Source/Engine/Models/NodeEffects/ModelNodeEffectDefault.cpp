@@ -17,5 +17,12 @@ NodeEffectType  ModelNodeEffectDefault::GetType () const
     return NodeEffectType::NET_DEFAULT;
 }
 
+// ********************************
+//
+void            ModelNodeEffectDefault::Update  ( TimeType t )
+{
+    { t; }
+}
+
 } // model
 } // bv

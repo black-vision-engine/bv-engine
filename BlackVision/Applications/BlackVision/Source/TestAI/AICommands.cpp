@@ -484,7 +484,7 @@ bool        AICommandDisableAlphaNM::TriggerImpl    ( TimeType t )
     { t; } // FIXME: suppress unuse warning
     if( m_node )
     {
-//        m_node->DisableOverrideStateNM();
+        assert( false );
 
         return true;
     }

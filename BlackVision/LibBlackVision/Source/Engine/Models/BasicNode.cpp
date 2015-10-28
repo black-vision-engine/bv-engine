@@ -9,6 +9,7 @@
 
 #include "Engine/Models/Plugins/Plugin.h"
 
+
 namespace bv { namespace model {
 
 // FIXME: hack
@@ -52,7 +53,6 @@ BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator,
 //
 BasicNode::~BasicNode()
 {
-//    delete m_overrideState;
 }
 
 // ********************************
@@ -180,83 +180,6 @@ void                            BasicNode::SetNodeEffect            ( IModelNode
 {
     m_modelNodeEffect = nodeEffect;
 }
-
-//// ********************************
-////
-//void                            BasicNode::EnableOverrideStateAM    ()
-//{
-//    m_overrideState->EnableAlphaAM();
-//}
-//
-//// ********************************
-////
-//void                            BasicNode::EnableOverrideStateNM    ()
-//{
-//    m_overrideState->EnableAlphaNM();
-//}
-//
-//// ********************************
-////
-//void                            BasicNode::DisableOverrideStateAM   ()
-//{
-//    m_overrideState->DisableAlphaAM();
-//}
-//
-//// ********************************
-////
-//void                            BasicNode::DisableOverrideStateNM   ()
-//{
-//    m_overrideState->DisableAlphaNM();
-//}
-//
-//// ********************************
-////
-//bool                            BasicNode::OverrideStateChangedAM   () const
-//{
-//    return m_overrideState->ChangedAM();
-//}
-//
-//// ********************************
-////
-//bool                            BasicNode::OverrideStateChangedNM   () const
-//{
-//    return m_overrideState->ChangedNM();
-//}
-//
-//// ********************************
-////
-//void                            BasicNode::SetOverrideStateChgAM    ( bool changed )
-//{
-//    return m_overrideState->SetChangedAM( changed );
-//}
-//
-//// ********************************
-////
-//void                            BasicNode::SetOverrideStateChgNM    ( bool changed )
-//{
-//    return m_overrideState->SetChangedNM( changed );
-//}
-//
-//// ********************************
-////
-//bool                            BasicNode::IsStateOverridenAM       () const
-//{
-//    return m_overrideState->IsAlphaEnabledAM();
-//}
-//
-//// ********************************
-////
-//bool                            BasicNode::IsStateOverridenNM       () const
-//{
-//    return m_overrideState->IsAlphaEnabledNM();
-//}
-//
-//// ********************************
-////
-//IOverrideState *                BasicNode::GetOverrideState         ()
-//{
-//    return m_overrideState;
-//}
 
 // ********************************
 //
@@ -560,5 +483,4 @@ std::string                         BasicNode::SplitPrefix              ( std::s
 }
 
 } // model
-
 } // bv

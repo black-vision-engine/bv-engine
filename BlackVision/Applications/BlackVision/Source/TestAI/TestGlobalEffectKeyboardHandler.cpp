@@ -2,13 +2,29 @@
 
 #include "BVAppLogic.h"
 
+#include "Engine/Models/NodeEffects/ModelNodeEffectDefault.h"
+
 
 namespace bv {
 
 // *********************************
 //
+TestGlobalEfectKeyboardHandler::TestGlobalEfectKeyboardHandler  ()
+{
+    m_defaultEffect = nullptr;
+    m_alphaMaskEffect = nullptr;
+    m_nodeMaskEffect = nullptr;
+}
+
+// *********************************
+//
 void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
 {
+    if( !m_defaultEffect )
+    {
+        m_defaultEffect = std::make_shared< model::ModelNodeEffectDefault >( logic->GetGlobalTimeline() );
+    }
+
     switch( c )
     {
         case '1':
@@ -51,6 +67,12 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
             break;
         case ' ':
             HandleSpace( logic );
+            
+            break;
+        case'\\':
+            HandleToggleEffect( logic );
+
+            break;
         default:
             ;
     }
@@ -58,76 +80,160 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
 
 // *********************************
 //
-void                    TestGlobalEfectKeyboardHandler::HandleIncrement ( BVAppLogic * logic )
+void                    TestGlobalEfectKeyboardHandler::HandleIncrement     ( BVAppLogic * logic )
 {
     if ( m_curSelectedNode == NodeEffectType::NET_ALPHA_MASK )
     {
         auto effect = GetAlphaMaskNodeEffect( logic );
-        auto alpha = effect->GetParamAlpha();
+        if( effect->GetType() == NodeEffectType::NET_ALPHA_MASK )
+        {
+            auto tEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( effect );
+        
+            auto alpha = tEffect->GetParamAlpha();
 
-        alpha->SetVal( min( 1.f, alpha->Evaluate() + .1f ), 0.f );
+            alpha->SetVal( min( 1.f, alpha->Evaluate() + .1f ), 0.f );
 
-        printf( "New alpha mask alpha value: %4f\n", alpha->Evaluate() );
+            printf( "New alpha mask alpha value: %4f\n", alpha->Evaluate() );
+        }
     }
     else if ( m_curSelectedNode == NodeEffectType::NET_NODE_MASK )
     {
         auto effect = GetNodeMaskNodeEffect( logic );
-        auto alpha = effect->GetParamAlpha();
 
-        alpha->SetVal( min( 1.f, alpha->Evaluate() + .1f ), 0.f );
+        if( effect->GetType() == NodeEffectType::NET_NODE_MASK )
+        {
+            auto tEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( effect );
 
-        printf( "New node mask alpha value: %4f\n", alpha->Evaluate() );
+            auto alpha = tEffect->GetParamAlpha();
+
+            alpha->SetVal( min( 1.f, alpha->Evaluate() + .1f ), 0.f );
+    
+            printf( "New node mask alpha value: %4f\n", alpha->Evaluate() );
+        }
     }
 }
 
 // *********************************
 //
-void                    TestGlobalEfectKeyboardHandler::HandleDecrement ( BVAppLogic * logic )
+void                    TestGlobalEfectKeyboardHandler::HandleDecrement     ( BVAppLogic * logic )
 {
     if ( m_curSelectedNode == NodeEffectType::NET_ALPHA_MASK )
     {
         auto effect = GetAlphaMaskNodeEffect( logic );
-        auto alpha = effect->GetParamAlpha();
 
-        alpha->SetVal( max( 0.f, alpha->Evaluate() - .1f ), 0.f );
+        if( effect->GetType() == NodeEffectType::NET_ALPHA_MASK )
+        {
+            auto tEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( effect );
 
-        printf( "New alpha mask alpha value: %4f\n", alpha->Evaluate() );
+            auto alpha = tEffect->GetParamAlpha();
+
+            alpha->SetVal( max( 0.f, alpha->Evaluate() - .1f ), 0.f );
+
+            printf( "New alpha mask alpha value: %4f\n", alpha->Evaluate() );
+        }
     }
     else if ( m_curSelectedNode == NodeEffectType::NET_NODE_MASK )
     {
         auto effect = GetNodeMaskNodeEffect( logic );
-        auto alpha = effect->GetParamAlpha();
 
-        alpha->SetVal( max( 0.f, alpha->Evaluate() - .1f ), 0.f );
+        if( effect->GetType() == NodeEffectType::NET_NODE_MASK )
+        {
+            auto tEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( effect );
 
-        printf( "New node mask alpha value: %4f\n", alpha->Evaluate() );
+            auto alpha = tEffect->GetParamAlpha();
+
+            alpha->SetVal( max( 0.f, alpha->Evaluate() - .1f ), 0.f );
+
+            printf( "New node mask alpha value: %4f\n", alpha->Evaluate() );
+        }
     }
 }
 
 // *********************************
 //
-void                    TestGlobalEfectKeyboardHandler::HandleSpace     ( BVAppLogic * logic )
+void                    TestGlobalEfectKeyboardHandler::HandleSpace         ( BVAppLogic * logic )
 {
     if ( m_curSelectedNode == NodeEffectType::NET_NODE_MASK )
     {
         auto effect = GetNodeMaskNodeEffect( logic );
         
-        auto paramBg = effect->GetParamBgIdx();
-        auto paramFg = effect->GetParamFgIdx();
-    
-        auto bgIdx = effect->GetBackgroundChildIdx();
-        auto fgIdx = effect->GetForegroundChildIdx();
-    
-        paramBg->SetVal( fgIdx, 0.f );
-        paramFg->SetVal( bgIdx, 0.f );
+        if( effect->GetType() == NodeEffectType::NET_NODE_MASK )
+        {
+            auto tEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( effect );
 
-        // printf( "New node mask bg: %d fg: %d\n", effect->GetBackgroundChildIdx(), effect->GetForegroundChildIdx() );
+            auto paramBg = tEffect->GetParamBgIdx();
+            auto paramFg = tEffect->GetParamFgIdx();
+    
+            auto bgIdx = tEffect->GetBackgroundChildIdx();
+            auto fgIdx = tEffect->GetForegroundChildIdx();
+    
+            paramBg->SetVal( fgIdx, 0.f );
+            paramFg->SetVal( bgIdx, 0.f );
+
+            // printf( "New node mask bg: %d fg: %d\n", effect->GetBackgroundChildIdx(), effect->GetForegroundChildIdx() );
+        }
     }
 }
 
 // *********************************
 //
-model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetRootNode     ( BVAppLogic * logic )
+void                    TestGlobalEfectKeyboardHandler::HandleToggleEffect  ( BVAppLogic * logic )
+{
+    if( m_curSelectedNode == NodeEffectType::NET_ALPHA_MASK )
+    {
+        auto node = GetAlphaMaskNode( logic );
+        auto effect = GetAlphaMaskNodeEffect( logic );
+
+        if ( effect )
+        {
+            if ( effect->GetType() == NodeEffectType::NET_ALPHA_MASK )
+            {
+                m_alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( effect );
+                node->SetNodeEffect( m_defaultEffect );
+            }
+            else if( effect->GetType() == NodeEffectType::NET_DEFAULT )
+            {
+                assert( m_alphaMaskEffect );
+                
+                node->SetNodeEffect( m_alphaMaskEffect );
+                m_alphaMaskEffect = nullptr;
+            }
+            else
+            {
+                assert( false );
+            }
+        }
+    }
+    else if ( m_curSelectedNode == NodeEffectType::NET_NODE_MASK )
+    {
+        auto node = GetNodeMaskNode( logic );
+        auto effect = GetNodeMaskNodeEffect( logic );
+
+        if ( effect )
+        {
+            if ( effect->GetType() == NodeEffectType::NET_NODE_MASK )
+            {
+                m_nodeMaskEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( effect );
+                node->SetNodeEffect( m_defaultEffect );
+            }
+            else if( effect->GetType() == NodeEffectType::NET_DEFAULT )
+            {
+                assert( m_nodeMaskEffect );
+                
+                node->SetNodeEffect( m_nodeMaskEffect );
+                m_nodeMaskEffect = nullptr;
+            }
+            else
+            {
+                assert( false );
+            }
+        }
+    }
+}
+
+// *********************************
+//
+model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetRootNode         ( BVAppLogic * logic )
 {
     auto scene = logic->GetBVScene();
     auto root = scene->GetModelSceneRoot();
@@ -137,7 +243,7 @@ model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetRootNode     ( BVAppL
 
 // *********************************
 //
-model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetNodeByPath   ( BVAppLogic * logic, const std::string & path )
+model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetNodeByPath       ( BVAppLogic * logic, const std::string & path )
 {
     auto root = GetRootNode( logic );
 
@@ -146,7 +252,7 @@ model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetNodeByPath   ( BVAppL
 
 // *********************************
 //
-model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetVanillaNode  ( BVAppLogic * logic )
+model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetVanillaNode      ( BVAppLogic * logic )
 {
     auto node = GetNodeByPath( logic, "root/vanilla" );
 
@@ -155,7 +261,7 @@ model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetVanillaNode  ( BVAppL
 
 // *********************************
 //
-model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetAlphaMaskNode( BVAppLogic * logic )
+model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetAlphaMaskNode    ( BVAppLogic * logic )
 {
     auto node = GetNodeByPath( logic, "root/alpha_mask" );
 
@@ -164,7 +270,7 @@ model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetAlphaMaskNode( BVAppL
 
 // *********************************
 //
-model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetNodeMaskNode ( BVAppLogic * logic )
+model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetNodeMaskNode     ( BVAppLogic * logic )
 {
     auto node = GetNodeByPath( logic, "root/node_mask" );
 
@@ -173,34 +279,34 @@ model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetNodeMaskNode ( BVAppL
 
 // *********************************
 //
-model::ModelNodeEffectAlphaMaskPtr TestGlobalEfectKeyboardHandler::GetAlphaMaskNodeEffect( BVAppLogic * logic )
+model::IModelNodeEffectPtr TestGlobalEfectKeyboardHandler::GetAlphaMaskNodeEffect( BVAppLogic * logic )
 {
     auto node = GetAlphaMaskNode( logic );
     auto effect = node->GetNodeEffect();
 
-    if (!effect || effect->GetType() != NodeEffectType::NET_ALPHA_MASK )
+    if (!effect) // || effect->GetType() != NodeEffectType::NET_ALPHA_MASK )
     {
         auto newEffect = std::make_shared< model::ModelNodeEffectAlphaMask >( logic->GetGlobalTimeline() );
         node->SetNodeEffect( newEffect );
     }
 
-    return std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( node->GetNodeEffect() );
+    return node->GetNodeEffect();
 }
 
 // *********************************
 //
-model::ModelNodeEffectNodeMaskPtr  TestGlobalEfectKeyboardHandler::GetNodeMaskNodeEffect( BVAppLogic * logic )
+model::IModelNodeEffectPtr  TestGlobalEfectKeyboardHandler::GetNodeMaskNodeEffect( BVAppLogic * logic )
 {
     auto node = GetNodeMaskNode( logic );
     auto effect = node->GetNodeEffect();
 
-    if (!effect || effect->GetType() != NodeEffectType::NET_NODE_MASK )
+    if (!effect) // || effect->GetType() != NodeEffectType::NET_NODE_MASK )
     {
         auto newEffect = std::make_shared< model::ModelNodeEffectNodeMask >( logic->GetGlobalTimeline() );
         node->SetNodeEffect( newEffect );
     }
 
-    return std::static_pointer_cast< model::ModelNodeEffectNodeMask >( node->GetNodeEffect() );
+    return node->GetNodeEffect();
 }
 
 } //bv

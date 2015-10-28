@@ -155,7 +155,14 @@ void    NodeUpdater::UpdateNodeEffect       ()
             case NodeEffectType::NET_DEFAULT:
             {
                 auto defaultEffect = std::static_pointer_cast< model::ModelNodeEffectDefault >( nodeEffect );
-                { defaultEffect; }
+
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+
+                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_DEFAULT )
+                {
+                    sceneNodeEffect = std::make_shared< NodeEffect >( NodeEffect::Type::T_DEFAULT );
+                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
+                }
                 break;
             }
             case NodeEffectType::NET_ALPHA_MASK:
