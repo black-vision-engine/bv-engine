@@ -4,7 +4,6 @@
 #include "Tools/StringHeplers.h"
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
-#include "Engine/Models/BasicOverrideState.h"
 
 #include "Engine/Models/ModelNodeEditor.h"
 
@@ -38,7 +37,6 @@ BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator,
     : m_name( name )
     , m_pluginList( nullptr )
     , m_pluginsManager( pluginsManager )
-//    , m_overrideState( nullptr )
     , m_visible( true )
 	, m_modelNodeEditor ( nullptr )
     , m_modelNodeEffect( nullptr )
@@ -48,8 +46,6 @@ BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator,
         m_pluginsManager = &PluginsManager::DefaultInstance();
     }
 
-    //REMOVE
-//    m_overrideState = new BasicOverrideState( timeEvaluator );
 }
 
 // ********************************
@@ -514,9 +510,6 @@ void BasicNode::Update( TimeType t )
         {
             m_modelNodeEffect->Update( t );
         }
-
-        // REMOVE
-        // m_overrideState->Update( t );
 
         m_pluginList->Update( t );
 

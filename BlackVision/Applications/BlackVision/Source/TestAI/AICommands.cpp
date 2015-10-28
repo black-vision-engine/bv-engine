@@ -5,7 +5,8 @@
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
-#include "Engine/Models/Interfaces/IOverrideState.h"
+
+#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
 
 #include "Engine/Models/Plugins/PluginUtils.h"
 
@@ -321,17 +322,18 @@ bool        AICommandEnableOverridenAlpha::TriggerImpl          ( TimeType t )
     { t; } 
     if ( m_node )
     {
-        //auto state = m_node->GetOverrideState();
-        //auto alpha = state->GetAlphaParam();
-        ///*
-        //SetParameter( alpha, 0.f, 1.f );
-        //*/
-        //SetParameter( alpha, t, 1.f );
-        //SetParameter( alpha, t + 2.5f, 0.f );
-        //SetParameter( alpha, t + 5.5f, 0.f );
-        //SetParameter( alpha, t + 8.f, 1.f );
+        auto effect = m_node->GetNodeEffect();
 
-        //m_node->EnableOverrideStateAM();
+        if( effect->GetType() == NodeEffectType::NET_ALPHA_MASK )
+        {
+            auto alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( effect );
+            auto alpha = alphaMaskEffect->GetParamAlpha();
+
+            SetParameter( alpha, t, 1.f );
+            SetParameter( alpha, t + 2.5f, 0.f );
+            SetParameter( alpha, t + 5.5f, 0.f );
+            SetParameter( alpha, t + 8.f, 1.f );
+        }
 
         return true;
     }
@@ -378,9 +380,8 @@ bool        AICommandDisableAlpha::TriggerImpl  ( TimeType t )
     { t; } // FIXME: suppress unuse warning
     if( m_node )
     {
-        // m_node->DisableOverrideStateAM();
-
-        return true;
+        assert( false );
+        return false;
     }
 
     return false;
@@ -425,18 +426,18 @@ bool        AICommandEnableOverridenAlphaNM::TriggerImpl            ( TimeType t
     { t; } // FIXME: suppress unuse warning
     if ( m_node )
     {
-        //auto state = m_node->GetOverrideState();
-        //auto alpha = state->GetAlphaParam();
+        auto effect = m_node->GetNodeEffect();
 
-        //SetParameter( alpha, 0.f, 1.f );
+        if( effect->GetType() == NodeEffectType::NET_ALPHA_MASK )
+        {
+            auto alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( effect );
+            auto alpha = alphaMaskEffect->GetParamAlpha();
 
-        ///*
-        //SetParameter( alpha, t, 1.f );
-        //SetParameter( alpha, t + 2.5f, 0.f );
-        //SetParameter( alpha, t + 5.5f, 0.f );
-        //SetParameter( alpha, t + 8.f, 1.f );
-        //*/
-        //m_node->EnableOverrideStateNM();
+            SetParameter( alpha, t, 1.f );
+            SetParameter( alpha, t + 2.5f, 0.f );
+            SetParameter( alpha, t + 5.5f, 0.f );
+            SetParameter( alpha, t + 8.f, 1.f );
+        }
 
         return true;
     }

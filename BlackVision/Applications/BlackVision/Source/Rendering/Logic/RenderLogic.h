@@ -40,26 +40,24 @@ public:
 
     void    SetCamera       ( Camera * cam );
 
-    void    RenderFrameTM   ( Renderer * renderer, SceneNode * node );
-    void    PreFrameSetupTM ( Renderer * renderer );
-    void    PostFrameSetupTM( Renderer * renderer );
+    void    RenderFrame     ( Renderer * renderer, SceneNode * node );
+    void    PreFrameSetup   ( Renderer * renderer );
+    void    PostFrameSetup  ( Renderer * renderer );
 
 public:
 
-    void    RenderNodeTM    ( Renderer * renderer, SceneNode * node );
+    void    RenderNode      ( Renderer * renderer, SceneNode * node );
 
-    bool    UseDefaultMaskTM( SceneNode * node ) const;
-    bool    UseAlphaMaskTM  ( SceneNode * node ) const;
-    bool    UseNodeMaskTM   ( SceneNode * node ) const;
+    bool    UseDefaultMask  ( SceneNode * node ) const;
+    bool    UseAlphaMask    ( SceneNode * node ) const;
+    bool    UseNodeMask     ( SceneNode * node ) const;
 
     NodeEffectRenderLogic *     GetNodeEffectRenderLogic    ( SceneNode * node ) const;
 
-    void    DrawNodeTM      ( Renderer * renderer, SceneNode * node );
+    void    DrawNode        ( Renderer * renderer, SceneNode * node );
 
-    void    DrawNodeOnlyTM  ( Renderer * renderer, SceneNode * node );
-    void    DrawChildrenTM  ( Renderer * renderer, SceneNode * node, int firstChildIdx = 0 );
-
-public:
+    void    DrawNodeOnly    ( Renderer * renderer, SceneNode * node );
+    void    DrawChildren    ( Renderer * renderer, SceneNode * node, int firstChildIdx = 0 );
 
     void    FrameRendered   ( Renderer * renderer );
     void    PrintGLStats    ( bool detailed );

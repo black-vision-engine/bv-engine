@@ -702,9 +702,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\BasicNode.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\BasicOverrideState.cpp">
-      <Filter>Engine\Models</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.cpp">
       <Filter>Engine\Models\Plugins\ParamValModel</Filter>
     </ClCompile>
@@ -1205,9 +1202,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\INodeLogic.h">
       <Filter>Engine\Models\Interfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IOverrideState.h">
-      <Filter>Engine\Models\Interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITextureDescriptor.h">
       <Filter>Engine\Models\Interfaces</Filter>
     </ClInclude>
@@ -1590,9 +1584,6 @@
       <Filter>Engine\Types\Values</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\BasicNode.h">
-      <Filter>Engine\Models</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\BasicOverrideState.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h">

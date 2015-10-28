@@ -29,11 +29,11 @@ void    NodeMaskRenderLogic::RenderNode                  ( Renderer * renderer, 
 {
     if( node->NumChildNodes() < 2 )
     {
-        GetRenderLogic()->DrawNodeTM( renderer, node );
+        GetRenderLogic()->DrawNode( renderer, node );
     }
     else
     {
-        GetRenderLogic()->DrawNodeOnlyTM( renderer, node );
+        GetRenderLogic()->DrawNodeOnly( renderer, node );
 
         GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
         GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
@@ -55,7 +55,7 @@ void    NodeMaskRenderLogic::RenderNode                  ( Renderer * renderer, 
         assert( maskIdx != fgIdx );
 
         // MASK
-        GetRenderLogic()->RenderNodeTM( renderer, node->GetChild( maskIdx ) );
+        GetRenderLogic()->RenderNode( renderer, node->GetChild( maskIdx ) );
 
         GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
         GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
@@ -63,7 +63,7 @@ void    NodeMaskRenderLogic::RenderNode                  ( Renderer * renderer, 
         renderer->ClearBuffers();
 
         // FOREGROUND
-        GetRenderLogic()->RenderNodeTM( renderer, node->GetChild( fgIdx ) ); 
+        GetRenderLogic()->RenderNode( renderer, node->GetChild( fgIdx ) ); 
 
         GetOffscreenRenderLogic()->DrawAMTopTwoRenderTargets( renderer, alphaVal.get() );
     
@@ -72,7 +72,7 @@ void    NodeMaskRenderLogic::RenderNode                  ( Renderer * renderer, 
 
         GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
 
-        GetRenderLogic()->DrawChildrenTM( renderer, node, 2 );
+        GetRenderLogic()->DrawChildren( renderer, node, 2 );
     }
 }
 

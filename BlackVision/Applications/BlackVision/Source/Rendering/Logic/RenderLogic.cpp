@@ -55,20 +55,20 @@ void    RenderLogic::SetCamera       ( Camera * cam )
 
 // *********************************
 //
-void    RenderLogic::RenderFrameTM   ( Renderer * renderer, SceneNode * node )
+void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * node )
 {
-    PreFrameSetupTM( renderer );
+    PreFrameSetup( renderer );
 
     // FIXME: verify that all rendering paths work as expected
 	if( node )
-		RenderNodeTM( renderer, node );
+		RenderNode( renderer, node );
 
-    PostFrameSetupTM( renderer );
+    PostFrameSetup( renderer );
 }
 
 // *********************************
 //
-void    RenderLogic::PreFrameSetupTM ( Renderer * renderer )
+void    RenderLogic::PreFrameSetup  ( Renderer * renderer )
 {
     renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
     renderer->ClearBuffers();
@@ -82,7 +82,7 @@ void    RenderLogic::PreFrameSetupTM ( Renderer * renderer )
 
 // *********************************
 //
-void    RenderLogic::PostFrameSetupTM( Renderer * renderer )
+void    RenderLogic::PostFrameSetup ( Renderer * renderer )
 {
     m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
     m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
@@ -95,7 +95,7 @@ void    RenderLogic::PostFrameSetupTM( Renderer * renderer )
 
 // *********************************
 //
-void    RenderLogic::RenderNodeTM       ( Renderer * renderer, SceneNode * node )
+void    RenderLogic::RenderNode     ( Renderer * renderer, SceneNode * node )
 {
     if ( node->IsVisible() )
     {
@@ -107,21 +107,21 @@ void    RenderLogic::RenderNodeTM       ( Renderer * renderer, SceneNode * node 
 
 // *********************************
 //
-bool    RenderLogic::UseDefaultMaskTM( SceneNode * node ) const
+bool    RenderLogic::UseDefaultMask ( SceneNode * node ) const
 {
     return node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT;
 }
 
 // *********************************
 //
-bool    RenderLogic::UseAlphaMaskTM  ( SceneNode * node ) const
+bool    RenderLogic::UseAlphaMask   ( SceneNode * node ) const
 {
     return node->GetNodeEffect()->GetType() == NodeEffect::Type::T_ALPHA_MASK;
 }
 
 // *********************************
 //
-bool    RenderLogic::UseNodeMaskTM   ( SceneNode * node ) const
+bool    RenderLogic::UseNodeMask    ( SceneNode * node ) const
 {
     return node->GetNodeEffect()->GetType() == NodeEffect::Type::T_NODE_MASK;
 }
@@ -130,15 +130,15 @@ bool    RenderLogic::UseNodeMaskTM   ( SceneNode * node ) const
 //
 NodeEffectRenderLogic *     RenderLogic::GetNodeEffectRenderLogic    ( SceneNode * node ) const
 {
-    if( UseAlphaMaskTM( node ) )
+    if( UseAlphaMask( node ) )
     {
         return m_customNodeRenderLogic[ CLT_ALPHA_MASK ];
     }
-    else if ( UseNodeMaskTM( node ) )
+    else if ( UseNodeMask( node ) )
     {
         return m_customNodeRenderLogic[ CLT_NODE_MASK ];
     }
-    else if ( UseDefaultMaskTM( node ) )
+    else if ( UseDefaultMask( node ) )
     {
         return m_customNodeRenderLogic[ CLT_DEFAULT ];
     }
@@ -152,29 +152,29 @@ NodeEffectRenderLogic *     RenderLogic::GetNodeEffectRenderLogic    ( SceneNode
 
 // *********************************
 //
-void    RenderLogic::DrawNodeTM      ( Renderer * renderer, SceneNode * node )
+void    RenderLogic::DrawNode       ( Renderer * renderer, SceneNode * node )
 {
 	HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor", PROFILER_THREAD1 );
-    DrawNodeOnlyTM( renderer, node );
+    DrawNodeOnly( renderer, node );
 
-    DrawChildrenTM( renderer, node );
+    DrawChildren( renderer, node );
 }
 
 // *********************************
 //
-void    RenderLogic::DrawNodeOnlyTM  ( Renderer * renderer, SceneNode * node )
+void    RenderLogic::DrawNodeOnly   ( Renderer * renderer, SceneNode * node )
 {
     renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable() ) );
 }
 
 // *********************************
 //
-void    RenderLogic::DrawChildrenTM  ( Renderer * renderer, SceneNode * node, int firstChildIdx )
+void    RenderLogic::DrawChildren   ( Renderer * renderer, SceneNode * node, int firstChildIdx )
 {
     for ( unsigned int i = firstChildIdx; i < (unsigned int) node->NumChildNodes(); i++ )
     {
         HPROFILER_SECTION( "RenderNode::RenderNode", PROFILER_THREAD1 );
-        RenderNodeTM( renderer, node->GetChild( i ) ); 
+        RenderNode  ( renderer, node->GetChild( i ) ); 
     }
 }
 
