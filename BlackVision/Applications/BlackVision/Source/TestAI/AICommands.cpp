@@ -318,19 +318,20 @@ void        AICommandEnableOverridenAlpha::SetTimeline          ( model::Default
 //
 bool        AICommandEnableOverridenAlpha::TriggerImpl          ( TimeType t )
 {
+    { t; } 
     if ( m_node )
     {
-        auto state = m_node->GetOverrideState();
-        auto alpha = state->GetAlphaParam();
-        /*
-        SetParameter( alpha, 0.f, 1.f );
-        */
-        SetParameter( alpha, t, 1.f );
-        SetParameter( alpha, t + 2.5f, 0.f );
-        SetParameter( alpha, t + 5.5f, 0.f );
-        SetParameter( alpha, t + 8.f, 1.f );
+        //auto state = m_node->GetOverrideState();
+        //auto alpha = state->GetAlphaParam();
+        ///*
+        //SetParameter( alpha, 0.f, 1.f );
+        //*/
+        //SetParameter( alpha, t, 1.f );
+        //SetParameter( alpha, t + 2.5f, 0.f );
+        //SetParameter( alpha, t + 5.5f, 0.f );
+        //SetParameter( alpha, t + 8.f, 1.f );
 
-        m_node->EnableOverrideStateAM();
+        //m_node->EnableOverrideStateAM();
 
         return true;
     }
@@ -377,7 +378,7 @@ bool        AICommandDisableAlpha::TriggerImpl  ( TimeType t )
     { t; } // FIXME: suppress unuse warning
     if( m_node )
     {
-        m_node->DisableOverrideStateAM();
+        // m_node->DisableOverrideStateAM();
 
         return true;
     }
@@ -424,18 +425,18 @@ bool        AICommandEnableOverridenAlphaNM::TriggerImpl            ( TimeType t
     { t; } // FIXME: suppress unuse warning
     if ( m_node )
     {
-        auto state = m_node->GetOverrideState();
-        auto alpha = state->GetAlphaParam();
+        //auto state = m_node->GetOverrideState();
+        //auto alpha = state->GetAlphaParam();
 
-        SetParameter( alpha, 0.f, 1.f );
+        //SetParameter( alpha, 0.f, 1.f );
 
-        /*
-        SetParameter( alpha, t, 1.f );
-        SetParameter( alpha, t + 2.5f, 0.f );
-        SetParameter( alpha, t + 5.5f, 0.f );
-        SetParameter( alpha, t + 8.f, 1.f );
-        */
-        m_node->EnableOverrideStateNM();
+        ///*
+        //SetParameter( alpha, t, 1.f );
+        //SetParameter( alpha, t + 2.5f, 0.f );
+        //SetParameter( alpha, t + 5.5f, 0.f );
+        //SetParameter( alpha, t + 8.f, 1.f );
+        //*/
+        //m_node->EnableOverrideStateNM();
 
         return true;
     }
@@ -482,7 +483,7 @@ bool        AICommandDisableAlphaNM::TriggerImpl    ( TimeType t )
     { t; } // FIXME: suppress unuse warning
     if( m_node )
     {
-        m_node->DisableOverrideStateNM();
+//        m_node->DisableOverrideStateNM();
 
         return true;
     }

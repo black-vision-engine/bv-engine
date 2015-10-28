@@ -54,7 +54,8 @@ SceneNode *         BVSceneTools::BuildEngineSceneNode                  ( model:
 
     nodesMapping[ modelNode.get() ] = engineNode;
 
-    engineNode->SetOverrideAlphaVal( modelNode->GetOverrideState()->GetAlphaValue().get() );
+    // FIXME: implement addition of model nodes here
+    // engineNode->SetOverrideAlphaVal( modelNode->GetOverrideState()->GetAlphaValue().get() );
 
     for( unsigned int i = 0; i < modelNode->GetNumChildren(); ++i )
     {

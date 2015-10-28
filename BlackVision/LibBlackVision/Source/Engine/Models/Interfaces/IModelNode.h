@@ -17,7 +17,6 @@ namespace model {
 
 class IFinalizePlugin;
 class IPluginListFinalized;
-class IOverrideState;
 
 class IModelNode;
 DEFINE_PTR_TYPE(IModelNode)
@@ -44,20 +43,20 @@ public:
     // FIXME: TRANSITION - END
 
     // FIXME: remove when proper GlobalEfect is implemented
-    virtual void                            EnableOverrideStateAM   ()                                                              = 0;
-    virtual void                            EnableOverrideStateNM   ()                                                              = 0;
-    virtual void                            DisableOverrideStateAM  ()                                                              = 0;
-    virtual void                            DisableOverrideStateNM  ()                                                              = 0;
+    //virtual void                            EnableOverrideStateAM   ()                                                              = 0;
+    //virtual void                            EnableOverrideStateNM   ()                                                              = 0;
+    //virtual void                            DisableOverrideStateAM  ()                                                              = 0;
+    //virtual void                            DisableOverrideStateNM  ()                                                              = 0;
 
-    virtual bool                            OverrideStateChangedAM  () const                                                        = 0;
-    virtual bool                            OverrideStateChangedNM  () const                                                        = 0;
-    virtual void                            SetOverrideStateChgAM   ( bool changed )                                                = 0;
-    virtual void                            SetOverrideStateChgNM   ( bool changed )                                                = 0;
+    //virtual bool                            OverrideStateChangedAM  () const                                                        = 0;
+    //virtual bool                            OverrideStateChangedNM  () const                                                        = 0;
+    //virtual void                            SetOverrideStateChgAM   ( bool changed )                                                = 0;
+    //virtual void                            SetOverrideStateChgNM   ( bool changed )                                                = 0;
 
-    virtual bool                            IsStateOverridenNM  () const                                                            = 0;
-    virtual bool                            IsStateOverridenAM  () const                                                            = 0;
+    //virtual bool                            IsStateOverridenNM  () const                                                            = 0;
+    //virtual bool                            IsStateOverridenAM  () const                                                            = 0;
 
-    virtual IOverrideState *                GetOverrideState    ()                                                                  = 0;
+    //virtual IOverrideState *                GetOverrideState    ()                                                                  = 0;
     // FIXME: end of remove
     // FIXME: remove when proper GlobalEfect is implemented
 

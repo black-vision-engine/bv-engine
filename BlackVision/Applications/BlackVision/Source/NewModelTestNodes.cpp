@@ -240,7 +240,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGlobalEffectTest      ( model::Ti
     // Node mask background color child
     bSolid.SetW( .8f );
     bSolid.SetH( .7f );
-    bSolid.SetColor( 1.f, 1.f, 0.f, 1.f );
+    bSolid.SetColor( 1.f, 1.f, 0.f, 0.5f );
     bSolid.SetPosition( 0.5f, 0.f, .0f );
     auto nm_bg_c = bSolid.CreateNode( "node_mask_bg_col", true );
 
