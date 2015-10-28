@@ -67,21 +67,21 @@ private:
 
     bool                    m_visible;
 
-    const IValue *          m_overrideAlphaVal;
+    //const IValue *          m_overrideAlphaVal;
 
-    bool                    m_overridenStateAlphaMask;
-    bool                    m_overridenStateNodeMask;
+    //bool                    m_overridenStateAlphaMask;
+    //bool                    m_overridenStateNodeMask;
 
 public:
 
-    void                    SetOverrideAlphaVal ( const IValue * val );
-    const IValue *          GetOverrideAlphaVal () const;
+    //void                    SetOverrideAlphaVal ( const IValue * val );
+    //const IValue *          GetOverrideAlphaVal () const;
 
-    bool                    IsOverridenAM       () const;
-    bool                    IsOverridenNM       () const;
+    //bool                    IsOverridenAM       () const;
+    //bool                    IsOverridenNM       () const;
 
-    void                    SetOverridenAM      ( bool overriden );
-    void                    SetOverridenNM      ( bool overriden );
+    //void                    SetOverridenAM      ( bool overriden );
+    //void                    SetOverridenNM      ( bool overriden );
 
 // ***********************************************************************************************
 //                          END OF HACKISH GLOBAL EFFECT INTERFACE

@@ -20,7 +20,7 @@ public:
     SimpleStateUpdater( StateTypePtr state, ValueTypePtr value );
 
     virtual void    DoUpdate    () override;
-    virtual void    DoUpdateTM  () override {};
+
 };
 
 typedef SimpleStateUpdater< FloatSimpleStatePtr, ValueFloatConstPtr > SimpleFloatStateUpdater;
