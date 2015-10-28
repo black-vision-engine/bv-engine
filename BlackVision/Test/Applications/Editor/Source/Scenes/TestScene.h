@@ -35,6 +35,9 @@ private:
 	static const std::string	TEX_NODE;
 	static const std::string	ANIM_NODE;
 	static const std::string	GRAD_NODE;
+	static const std::string	TXT_NODE;
+	static const std::string	TMR_NODE;
+	static const std::string	GEOM_NODE;
 
 public:
 							TestScene				( Renderer * renderer, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
@@ -64,9 +67,13 @@ private:
 	void					InitBasicGradientPluginTest	();
 	void					InitOrderGradientPluginTest	();
 
+	void					InitColoredTextTest			();
+	void					InitColoredTimerTest		();
+
+	void					InitColoredGeometryTest		();
 
 	void					InitOrderTest				( const OrderTestCase & test );
-	void					SwapLastPlugin				( const std::string & childName );
+	void					SwapPlugins					( const std::string & rootPlugin, UInt32 rootIdx, const std::string & childName, const std::string & childPlugin,  UInt32 childIdx );
 };
 
 DEFINE_PTR_TYPE( TestScene )

@@ -3,14 +3,7 @@
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
-#include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultColorPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultAlphaMaskPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultGradientPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+#include "Scenes/TestSceneUtils.h"
 
 namespace bv {
 
@@ -33,7 +26,7 @@ bool TestLogic::ms_debugConsole = BasicWindowApp::RegisterConsoleInitializer();
     , m_timelineManager( new model::TimelineManager() )
     , m_globalTimeline( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) )
 {
-    model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( TestLogic::DefaultBVPluginDescriptors() );
+    model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( TestSceneUtils::DefaultBVPluginDescriptors() );
 
     m_timelineManager->RegisterRootTimeline( m_globalTimeline );
 	m_scene = std::make_shared< TestScene >( renderer, m_timelineManager, m_globalTimeline );
@@ -121,24 +114,6 @@ void			TestLogic::Draw					( SceneNode * node )
 IBasicLogicUnqPtr    TestLogic::Create  ( Renderer * renderer )
 {
 	return IBasicLogicUnqPtr( new TestLogic( renderer ) );
-}
-
-// ****************************
-//
-std::vector< model::IPluginDescriptor * >  TestLogic::DefaultBVPluginDescriptors  ()
-{
-    std::vector< model::IPluginDescriptor * > descriptors;
-
-    descriptors.push_back( new model::DefaultTransformPluginDesc() );
-    descriptors.push_back( new model::DefaultRectPluginDesc() );
-    descriptors.push_back( new model::DefaultColorPluginDesc() );
-    descriptors.push_back( new model::DefaultTexturePluginDesc() );
-    descriptors.push_back( new model::DefaultAnimationPluginDesc() );
-    descriptors.push_back( new model::DefaultAlphaMaskPluginDesc() );
-    descriptors.push_back( new model::DefaultGradientPluginDesc() );
-    descriptors.push_back( new model::DefaultTextPluginDesc() );
-
-    return descriptors;
 }
 
 } // bv

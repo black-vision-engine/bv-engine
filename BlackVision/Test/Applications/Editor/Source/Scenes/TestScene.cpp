@@ -10,6 +10,9 @@ const std::string	TestScene::COL_NODE		= "col";
 const std::string	TestScene::TEX_NODE		= "tex";
 const std::string	TestScene::ANIM_NODE	= "anim";
 const std::string	TestScene::GRAD_NODE	= "grad";
+const std::string	TestScene::TXT_NODE		= "txt";
+const std::string	TestScene::TMR_NODE		= "tmr";
+const std::string	TestScene::GEOM_NODE	= "geom";
 
 // ****************************
 //	
@@ -74,7 +77,7 @@ void					TestScene::TestModelSceneEditor		()
 
 	auto child = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, "added0", 0.2f, 0.2f, glm::vec4( 0.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
 	auto childTransform = child->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-	model::SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )1.5f, -0.5f, 0.f ) );
+	SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )1.5f, -0.5f, 0.f ) );
 
 	editor->AddChildNode( root, child );
 	rootChildrenNum++;
@@ -158,7 +161,7 @@ void					TestScene::TestModelSceneEditor		()
 
 	auto newRoot = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, "newRoot", 0.5f, 0.5f, glm::vec4( 0.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
 	auto rootTransform = newRoot->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-    model::SetParameterTranslation( rootTransform, 0, 0.0f, glm::vec3( -1.f, 0.5f, -1.f ) );
+    SetParameterTranslation( rootTransform, 0, 0.0f, glm::vec3( -1.f, 0.5f, -1.f ) );
 	
 	editor->SetRootNode( newRoot );
 	assert( editor->GetRootNode() );
@@ -182,7 +185,7 @@ void					TestScene::TestModelSceneEditor		()
 
 	auto newChild = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, "newChild", 0.3f, 0.3f, glm::vec4( 1.f, 0.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
 	childTransform = newChild->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-	model::SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )0.5, -0.5f, 0.2f ) );
+	SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )0.5, -0.5f, 0.2f ) );
 
 	editor->AddChildNode( root, newChild );
 	rootChildrenNum++;
@@ -208,100 +211,44 @@ void					TestScene::InitTestModelNodeEditor	()
 	//InitBasicAnimationPluginTest();
 	//InitOrderAnimationPluginTest();
 
-	InitBasicGradientPluginTest();
-	InitOrderGradientPluginTest();
+	//InitBasicGradientPluginTest();
+	//InitOrderGradientPluginTest();
+
+	//InitColoredTextTest();
+	//InitColoredTimerTest();
+
+	InitColoredGeometryTest();
 }
 
 // ****************************
 //
 void					TestScene::InitBasicColorPluginTest	()
 {
-	m_testSteps.push_back( [&] 
+	auto add = [&] 
 	{ 
-		// DETACH COLOR PLUGIN FROM ROOT NODE ( WHITE ROOT & GREEN CHILD )
 		auto editor = m_scene->GetSceneEditor();
-		auto root = m_scene->GetModelSceneRoot();
-		assert( root->GetNumPlugins() == 3 );
+		auto col = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, COL_NODE, 0.3f, 0.3f, glm::vec4( 0.f, 0.f, 1.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
+		SetParameterTranslation( col->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.5f, 0.f ) );
 
-		assert( editor->DetachPlugin( root, "solid color" ) );
-		assert( !editor->DetachPlugin( root, "solid color" ) );
-		assert( root->GetNumPlugins() == 2 );
-		assert( editor->GetDetachedPlugin( root ) );
-		assert( editor->GetDetachedPlugin( root )->GetName() == "solid color" );
-	});
-
-	m_testSteps.push_back( [&] 
-	{ 
-		// DETACH COLOR PLUGIN FROM CHILD NODE ( WHITE ROOT & WHITE CHILD )
-		auto editor = m_scene->GetSceneEditor();
-		auto child = m_scene->GetModelSceneRoot()->GetChild( 0 );
-
-		assert( editor->DetachPlugin( child, "solid color" ) );
-		assert( !editor->DetachPlugin( child, "solid color" ) );
-		assert( child->GetNumPlugins() == 2 );
-		assert( editor->GetDetachedPlugin( child ) );
-		assert( editor->GetDetachedPlugin( child )->GetName() == "solid color" );
-	});
-
-	m_testSteps.push_back( [&] 
-	{ 
-		// ATTACH COLOR PLUGIN TO ROOT NODE ( GREEN ROOT & WHITE CHILD )
-		auto editor = m_scene->GetSceneEditor();
-		auto root = m_scene->GetModelSceneRoot();
-
-		assert( editor->AttachPlugin( root, 2 ) );
-		assert( !editor->AttachPlugin( root, 2 ) );
-		assert( root->GetNumPlugins() == 3 );
-		assert( !editor->GetDetachedPlugin( root ) );
-	});
-	
-	m_testSteps.push_back( [&] 
-	{ 
-		// ATTACH COLOR PLUGIN FROM ROOT NODE TO CHILD NODE ( WHITE ROOT & GREEN CHILD )
-		auto editor = m_scene->GetSceneEditor();
-		auto root = m_scene->GetModelSceneRoot();
-		auto child = root->GetChild( 0 );
-
-		assert( editor->DetachPlugin( root, "solid color" ) );
-		assert( editor->GetDetachedPlugin( root ) );
-		assert( root->GetNumPlugins() == 2 );
-		assert( editor->AttachPlugin( root, child, 2 ) );
-		assert( !editor->GetDetachedPlugin( root ) );
-		assert( editor->GetDetachedPlugin( child ) );
-		assert( child->GetNumPlugins() == 3 );
-	});
-	
-	m_testSteps.push_back( [&] 
-	{ 
-		// DELETE DETACHED COLOR PLUGIN FROM CHILD NODE ( WHITE ROOT & GREEN CHILD )
-		auto editor = m_scene->GetSceneEditor();
-		auto child = m_scene->GetModelSceneRoot()->GetChild( 0 );
-
-		editor->ResetDetachedPlugin( child );
-		assert( !editor->GetDetachedPlugin( child ) );
-		assert( !editor->AttachPlugin( child, 2 ) );
-	});
-
-	m_testSteps.push_back( [&] 
-	{ 
-		// ADD RED COLOR PLUGIN TO ROOT NODE
-		auto editor = m_scene->GetSceneEditor();
-		auto newChild = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, "newChild", 0.3f, 0.3f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
-		model::SetParameterTranslation( newChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, -0.5f, 0.0f ) );
+		bool success = true;
 
 		auto root = m_scene->GetModelSceneRoot();
+		editor->AddChildNode( root, col );
 
-		assert( editor->AddPlugin( root, newChild->GetPlugin( "solid color" ), 2 ) );
-		assert( root->GetNumPlugins() == 3 );
+		auto lChild = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, "lChild", 0.1f, 0.1f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
+		auto rChild = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, "rChild", 0.1f, 0.1f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
+		editor->AddChildNode( col, lChild );
+		editor->AddChildNode( col, rChild );
+		success &= ( col->GetNumChildren() == 2 );
 
-		auto lChild = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, "lChild", 0.2f, 0.2f, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
-		model::SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.5f, 0.0f ) );
-		auto rChild = TestSceneUtils::TexturedRectangle( m_timelineManager, m_timeEvaluator, "rChild", 0.2f, 0.2f, TestSceneUtils::TEXTURE_PATH );
-		model::SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.5f, 0.0f ) );
+		assert( success ); { success; }
+	};
 
-		editor->AddChildNode( root->GetChild( 0 ), lChild );
-		editor->AddChildNode( root->GetChild( 0 ), rChild );
-	});
+	m_testSteps.push_back( add );
+	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, COL_NODE, "solid color", 2 ); } );
+	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, COL_NODE, "solid color", 2 ); } );
 }
 
 // ****************************
@@ -328,24 +275,24 @@ void					TestScene::InitOrderColorPluginTest	()
 	auto recoverScene = [&] 
 	{ 
 		auto editor = m_scene->GetSceneEditor();
-		auto newChild = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, "newChild", 0.3f, 0.3f, glm::vec4( 0.f, 0.f, 1.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
-		auto childTransform = newChild->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-		model::SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )0.5, -0.5f, 0.f ) );
+		auto col = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, COL_NODE, 0.3f, 0.3f, glm::vec4( 0.f, 0.f, 1.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
+		SetParameterTranslation( col->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.5f, 0.f ) );
+
+		bool success = true;
 
 		auto root = m_scene->GetModelSceneRoot();
-		auto child = root->GetChild( 0 );
+		auto child = root->GetChild( COL_NODE );
 
 		auto lChild = child->GetChild( "lChild" );
 		auto rChild = child->GetChild( "rChild" );
 
-		assert( editor->DeleteChildNode( root, child->GetName() ) );
-		editor->AddChildNode( root, newChild );
-		assert( root->GetNumChildren() == 1 );
-		editor->AddChildNode( newChild, lChild );
-		editor->AddChildNode( newChild, rChild );
-		assert( newChild->GetNumChildren() == 2 );
-		child = root->GetChild( 0 );
-		//assert( child->GetNumPlugins() == 4 );
+		success &= editor->DeleteChildNode( root, child->GetName() );
+		editor->AddChildNode( root, col );
+		editor->AddChildNode( col, lChild );
+		editor->AddChildNode( col, rChild );
+		success &= ( col->GetNumChildren() == 2 );
+		
+		assert( success );
 	};
 
 	for( auto & test : tests )
@@ -364,24 +311,29 @@ void					TestScene::InitBasicTexturePluginTest	()
 		auto editor = m_scene->GetSceneEditor();
 		// ADD TEXTURED ROOT NODE
 		auto tex = TestSceneUtils::TexturedRectangle( m_timelineManager, m_timeEvaluator, TEX_NODE, 0.3f, 0.3f, TestSceneUtils::TEXTURE_PATH, TestSceneUtils::ALPHA_MASK_PATH );
-		model::SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
+		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
+
+		bool success = true;
 
 		auto root = m_scene->GetModelSceneRoot();
 		editor->AddChildNode( root, tex );
 		
 		auto lChild = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, "lChild", 0.1f, 0.1f, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
-		model::SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
+		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
 		auto rChild = TestSceneUtils::TexturedRectangle( m_timelineManager, m_timeEvaluator, "rChild", 0.1f, 0.1f, TestSceneUtils::TEXTURE_PATH );
-		model::SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
+		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
 		editor->AddChildNode( tex, lChild );
 		editor->AddChildNode( tex, rChild );
 
-		assert( tex->GetNumChildren() == 2 );
+		success &= ( tex->GetNumChildren() == 2 );
+		
+		assert( success );
 	};
 
 	m_testSteps.push_back( add );
-	m_testSteps.push_back( [&]{ SwapLastPlugin( TEX_NODE ); } );
-	m_testSteps.push_back( [&]{ SwapLastPlugin( TEX_NODE ); } );
+	
+	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TEX_NODE, "texture", 2 ); } );
+	m_testSteps.push_back( [&]{ SwapPlugins( "texture", 2, TEX_NODE, "solid color", 2 ); } );
 }
 
 // ****************************
@@ -407,17 +359,21 @@ void					TestScene::InitOrderTexturePluginTest	()
 	{
 		auto editor = m_scene->GetSceneEditor();
 		auto tex = TestSceneUtils::TexturedRectangle( m_timelineManager, m_timeEvaluator, TEX_NODE, 0.3f, 0.3f, TestSceneUtils::TEXTURE_PATH, TestSceneUtils::ALPHA_MASK_PATH );
-		model::SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
+		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
+
+		bool success = true;
 
 		auto root = m_scene->GetModelSceneRoot();
 		auto child = root->GetChild( TEX_NODE );
 		auto lChild = child->GetChild( "lChild" );
 		auto rChild = child->GetChild( "rChild" );
-		assert( editor->DeleteChildNode( root, child->GetName() ) );
+		success &= editor->DeleteChildNode( root, child->GetName() );
 		editor->AddChildNode( root, tex );
 		editor->AddChildNode( tex, lChild );
 		editor->AddChildNode( tex, rChild );
-		assert( tex->GetNumChildren() == 2 );
+		success &= ( tex->GetNumChildren() == 2 );
+
+		assert( success );
 	};
 
 	for( auto & test : tests )
@@ -437,24 +393,29 @@ void					TestScene::InitBasicAnimationPluginTest	()
 		auto editor = m_scene->GetSceneEditor();
 
 		auto anim = TestSceneUtils::AnimatedRectangle( m_timelineManager, m_timeEvaluator, ANIM_NODE, 0.3f, 0.3f, TestSceneUtils::ANIM_PATH, TestSceneUtils::ALPHA_MASK_PATH );
-		model::SetParameterTranslation( anim->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
+		SetParameterTranslation( anim->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
 		
+		bool success = true;
+
 		auto root = m_scene->GetModelSceneRoot();
 		editor->AddChildNode( root, anim );
 		
 		auto lChild = TestSceneUtils::TexturedRectangle( m_timelineManager, m_timeEvaluator, "lChild", 0.1f, 0.1f, TestSceneUtils::TEXTURE_PATH );
-		model::SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
+		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
 		auto rChild = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, "rChild", 0.1f, 0.1f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
-		model::SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
+		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
 		editor->AddChildNode( anim, lChild );
 		editor->AddChildNode( anim, rChild );
 
-		assert( anim->GetNumChildren() == 2 );
+		success &= ( anim->GetNumChildren() == 2 );
+		
+		assert( success );
 	};
 
 	m_testSteps.push_back( add );
-	m_testSteps.push_back( [&]{ SwapLastPlugin( ANIM_NODE ); } );
-	m_testSteps.push_back( [&]{ SwapLastPlugin( ANIM_NODE ); } );
+
+	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, ANIM_NODE, "animation", 2 ); } );
+	m_testSteps.push_back( [&]{ SwapPlugins( "animation", 2, ANIM_NODE, "solid color", 2 ); } );
 }
 
 // ****************************
@@ -480,17 +441,21 @@ void					TestScene::InitOrderAnimationPluginTest	()
 	{
 		auto editor = m_scene->GetSceneEditor();
 		auto anim = TestSceneUtils::AnimatedRectangle( m_timelineManager, m_timeEvaluator, ANIM_NODE, 0.3f, 0.3f, TestSceneUtils::ANIM_PATH, TestSceneUtils::ALPHA_MASK_PATH );
-		model::SetParameterTranslation( anim->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
+		SetParameterTranslation( anim->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
+		
+		bool success = true;
 
 		auto root = m_scene->GetModelSceneRoot();
 		auto child = root->GetChild( ANIM_NODE );
 		auto lChild = child->GetChild( "lChild" );
 		auto rChild = child->GetChild( "rChild" );
-		assert( editor->DeleteChildNode( root, child->GetName() ) );
+		success &= editor->DeleteChildNode( root, child->GetName() );
 		editor->AddChildNode( root, anim );
 		editor->AddChildNode( anim, lChild );
 		editor->AddChildNode( anim, rChild );
-		assert( anim->GetNumChildren() == 2 );
+		success &= ( anim->GetNumChildren() == 2 );
+
+		assert( success );
 	};
 
 	for( auto & test : tests )
@@ -510,19 +475,23 @@ void					TestScene::InitBasicGradientPluginTest	()
 		auto editor = m_scene->GetSceneEditor();
 
 		auto grad = TestSceneUtils::GradientRectangle( m_timelineManager, m_timeEvaluator, GRAD_NODE, 0.3f, 0.3f, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 1.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
-		model::SetParameterTranslation( grad->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.5f, -0.5f, 0.f ) );
+		SetParameterTranslation( grad->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.5f, -0.5f, 0.f ) );
+
+		bool success = true;
 
 		auto root = m_scene->GetModelSceneRoot();
 		editor->AddChildNode( root, grad );
 		
-		auto lChild = TestSceneUtils::AnimatedRectangle( m_timelineManager, m_timeEvaluator, "lChild", 0.1f, 0.1f, TestSceneUtils::ANIM_PATH, TestSceneUtils::ALPHA_MASK_PATH );
-		model::SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
+		auto lChild = TestSceneUtils::AnimatedRectangle( m_timelineManager, m_timeEvaluator, "lChild", 0.1f, 0.1f, TestSceneUtils::ANIM_PATH );
+		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
 		auto rChild = TestSceneUtils::TexturedRectangle( m_timelineManager, m_timeEvaluator, "rChild", 0.1f, 0.1f, TestSceneUtils::TEXTURE_PATH );
-		model::SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
+		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
 		editor->AddChildNode( grad, lChild );
 		editor->AddChildNode( grad, rChild );
 
-		assert( grad->GetNumChildren() == 2 );
+		success &= ( grad->GetNumChildren() == 2 );
+
+		assert( success );
 	};
 
 	m_testSteps.push_back( add );
@@ -532,8 +501,8 @@ void					TestScene::InitBasicGradientPluginTest	()
 		SetParameter( child->GetPlugin( "linear_gradient" )->GetParameter( "color1" ), TimeType( 0.f ), glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
 	});
 
-	m_testSteps.push_back( [&]{ SwapLastPlugin( GRAD_NODE ); } );
-	m_testSteps.push_back( [&]{ SwapLastPlugin( GRAD_NODE ); } );
+	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, GRAD_NODE, "linear_gradient", 2 ); } );
+	m_testSteps.push_back( [&]{ SwapPlugins( "linear_gradient", 2, GRAD_NODE, "solid color", 2 ); } );
 }
 
 // ****************************
@@ -559,17 +528,21 @@ void					TestScene::InitOrderGradientPluginTest	()
 	{
 		auto editor = m_scene->GetSceneEditor();
 		auto grad = TestSceneUtils::GradientRectangle( m_timelineManager, m_timeEvaluator, GRAD_NODE, 0.3f, 0.3f, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 1.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
-		model::SetParameterTranslation( grad->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.5f, -0.5f, 0.f ) );
+		SetParameterTranslation( grad->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.5f, -0.5f, 0.f ) );
+
+		bool success = true;
 
 		auto root = m_scene->GetModelSceneRoot();
 		auto child = root->GetChild( GRAD_NODE );
 		auto lChild = child->GetChild( "lChild" );
 		auto rChild = child->GetChild( "rChild" );
-		assert( editor->DeleteChildNode( root, child->GetName() ) );
+		success &= editor->DeleteChildNode( root, child->GetName() );
 		editor->AddChildNode( root, grad );
 		editor->AddChildNode( grad, lChild );
 		editor->AddChildNode( grad, rChild );
-		assert( grad->GetNumChildren() == 2 );
+		success &= ( grad->GetNumChildren() == 2 );
+
+		assert( success );
 	};
 
 	for( auto & test : tests )
@@ -578,6 +551,236 @@ void					TestScene::InitOrderGradientPluginTest	()
 		InitOrderTest( test );
 	}
 	m_testSteps.push_back( recoverScene );
+}
+
+// ****************************
+//
+void					TestScene::InitColoredTextTest			()
+{
+	auto add = [&] 
+	{
+		auto editor = m_scene->GetSceneEditor();
+
+		auto txt = TestSceneUtils::ColoredText( m_timelineManager, m_timeEvaluator, TXT_NODE, glm::vec4( 1.f, 1.f, 0.f, 1.f ), 60, TestSceneUtils::ALPHA_MASK_PATH );
+		SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
+
+		bool success = true;
+
+		auto root = m_scene->GetModelSceneRoot();
+		editor->AddChildNode( root, txt );
+		
+		auto lChild = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, "lChild", 0.1f, 0.1f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
+		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
+		auto rChild = TestSceneUtils::TexturedRectangle( m_timelineManager, m_timeEvaluator, "rChild", 0.1f, 0.1f, TestSceneUtils::TEXTURE_PATH );
+		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
+		editor->AddChildNode( txt, lChild );
+		editor->AddChildNode( txt, rChild );
+
+		success &= ( txt->GetNumChildren() == 2 );
+
+		assert( success );
+	};
+
+	std::string test0[] = { "text", "alpha_mask" };
+	std::string test1[] = { "alpha_mask", "text" };
+	std::string test2[] = { "alpha_mask", "transform", "solid color", "text" };
+	std::string test3[] = { "transform", "alpha_mask", "solid color", "text" };
+	std::string test4[] = { "transform", "solid color", "alpha_mask", "text" };
+	std::string test5[] = { "alpha_mask", "solid color", "transform", "text" };
+	std::string test6[] = { "solid color", "alpha_mask", "transform", "text" };
+	std::string test7[] = { "solid color", "transform", "alpha_mask", "text" };
+	std::string test8[] = { "transform", "text", "alpha_mask", "solid color" };
+	std::string test9[] = { "transform", "alpha_mask", "text", "solid color" };
+	std::string test10[] = { "solid color", "text", "alpha_mask", "transform" };
+	std::string test11[] = { "solid color", "alpha_mask", "text", "transform" };
+
+	std::vector < OrderTestCase > tests;
+	tests.push_back( OrderTestCase( TXT_NODE, "TxtAm", std::vector< std::string >( test0, test0 + 2 ) ) );
+	tests.push_back( OrderTestCase( TXT_NODE, "AmTxt", std::vector< std::string >( test1, test1 + 2 ) ) );
+	tests.push_back( OrderTestCase( TXT_NODE, "AmTCTxt", std::vector< std::string >( test2, test2 + 4 ) ) );
+	tests.push_back( OrderTestCase( TXT_NODE, "TAmCTxt", std::vector< std::string >( test3, test3 + 4 ) ) );
+	tests.push_back( OrderTestCase( TXT_NODE, "TCAmTxt", std::vector< std::string >( test4, test4 + 4 ) ) );
+	tests.push_back( OrderTestCase( TXT_NODE, "AmCTTxt", std::vector< std::string >( test5, test5 + 4 ) ) );
+	tests.push_back( OrderTestCase( TXT_NODE, "CAmTTxt", std::vector< std::string >( test6, test6 + 4 ) ) );
+	tests.push_back( OrderTestCase( TXT_NODE, "CTAmTxt", std::vector< std::string >( test7, test7 + 4 ) ) );
+	tests.push_back( OrderTestCase( TXT_NODE, "TTxtAmC", std::vector< std::string >( test8, test8 + 4 ) ) );
+	tests.push_back( OrderTestCase( TXT_NODE, "TAmTxtC", std::vector< std::string >( test9, test9 + 4 ) ) );
+	tests.push_back( OrderTestCase( TXT_NODE, "CTxtAmT", std::vector< std::string >( test10, test10 + 4 ) ) );
+	tests.push_back( OrderTestCase( TXT_NODE, "CAmTxtT", std::vector< std::string >( test11, test11 + 4 ) ) );
+
+	auto recoverScene = [&] 
+	{
+		auto editor = m_scene->GetSceneEditor();
+		auto txt = TestSceneUtils::ColoredText( m_timelineManager, m_timeEvaluator, TXT_NODE, glm::vec4( 1.f, 1.f, 0.f, 1.f ), 60, TestSceneUtils::ALPHA_MASK_PATH );
+		SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
+
+		bool success = true;
+
+		auto root = m_scene->GetModelSceneRoot();
+		auto child = root->GetChild( TXT_NODE );
+		auto lChild = child->GetChild( "lChild" );
+		auto rChild = child->GetChild( "rChild" );
+		success &= editor->DeleteChildNode( root, child->GetName() );
+		editor->AddChildNode( root, txt );
+		editor->AddChildNode( txt, lChild );
+		editor->AddChildNode( txt, rChild );
+		success &= ( txt->GetNumChildren() == 2 );
+
+		assert( success );
+	};
+
+
+//---------------
+
+
+	m_testSteps.push_back( add );
+	m_testSteps.push_back( []{} ); //empty step because creating new text plugin takes so long..
+	
+	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TXT_NODE, "solid color", 1 ); } );
+	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TXT_NODE, "solid color", 1 ); } );
+
+	for( auto & test : tests )
+	{
+		m_testSteps.push_back( recoverScene );
+		m_testSteps.push_back( []{} ); //empty step because creating new text plugin takes so long..
+		InitOrderTest( test );
+	}
+	m_testSteps.push_back( recoverScene );
+}
+
+
+// ****************************
+//
+void					TestScene::InitColoredTimerTest			()
+{
+	auto add = [&] 
+	{
+		auto editor = m_scene->GetSceneEditor();
+
+		auto tmr = TestSceneUtils::ColoredTimer( m_timelineManager, m_timeEvaluator, TMR_NODE, glm::vec4( 1.f, 1.f, 0.f, 1.f ), 60 );
+		SetParameterTranslation( tmr->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, 0.f, 0.f ) );
+
+		bool success = true;
+
+		auto root = m_scene->GetModelSceneRoot();
+		editor->AddChildNode( root, tmr );
+		
+		auto lChild = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, "lChild", 0.1f, 0.1f, glm::vec4( 0.f, 1.f, 1.f, 1.f ) );
+		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
+		auto rChild = TestSceneUtils::TexturedRectangle( m_timelineManager, m_timeEvaluator, "rChild", 0.1f, 0.1f, TestSceneUtils::TEXTURE_PATH );
+		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
+		editor->AddChildNode( tmr, lChild );
+		editor->AddChildNode( tmr, rChild );
+
+		success &= ( tmr->GetNumChildren() == 2 );
+
+		assert( success );
+	};
+
+	std::string test0[] = { "timer" };
+	std::string test1[] = { "solid color", "transform", "timer" };
+	std::string test2[] = { "transform", "solid color", "timer" };
+	std::string test3[] = { "transform", "timer" };
+	std::string test4[] = { "solid color", "timer" };
+
+	std::vector < OrderTestCase > tests;
+	tests.push_back( OrderTestCase( TMR_NODE, "Tm", std::vector< std::string >( test0, test0 + 1 ) ) );
+	tests.push_back( OrderTestCase( TMR_NODE, "CTTm", std::vector< std::string >( test1, test1 + 3 ) ) );
+	tests.push_back( OrderTestCase( TMR_NODE, "TCTm", std::vector< std::string >( test2, test2 + 3 ) ) );
+	tests.push_back( OrderTestCase( TMR_NODE, "TTm", std::vector< std::string >( test3, test3 + 2 ) ) );
+	tests.push_back( OrderTestCase( TMR_NODE, "CTm", std::vector< std::string >( test4, test4 + 2 ) ) );
+
+	auto recoverScene = [&] 
+	{
+		auto editor = m_scene->GetSceneEditor();
+		auto tmr = TestSceneUtils::ColoredTimer( m_timelineManager, m_timeEvaluator, TMR_NODE, glm::vec4( 1.f, 1.f, 0.f, 1.f ), 60 );
+		SetParameterTranslation( tmr->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, 0.f, 0.f ) );
+
+		bool success = true;
+
+		auto root = m_scene->GetModelSceneRoot();
+		auto child = root->GetChild( TMR_NODE );
+		auto lChild = child->GetChild( "lChild" );
+		auto rChild = child->GetChild( "rChild" );
+		success &= editor->DeleteChildNode( root, child->GetName() );
+		editor->AddChildNode( root, tmr );
+		editor->AddChildNode( tmr, lChild );
+		editor->AddChildNode( tmr, rChild );
+		success &= ( tmr->GetNumChildren() == 2 );
+
+		assert( success );
+	};
+
+
+//---------------
+
+
+	m_testSteps.push_back( add );
+	m_testSteps.push_back( []{} ); //empty step because creating new text plugin takes so long..
+	
+	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TMR_NODE, "solid color", 1 ); } );
+	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TMR_NODE, "solid color", 1 ); } );
+
+	for( auto & test : tests )
+	{
+		m_testSteps.push_back( recoverScene );
+		m_testSteps.push_back( []{} ); //empty step because creating new text plugin takes so long..
+		InitOrderTest( test );
+	}
+	m_testSteps.push_back( recoverScene );
+}
+
+// ****************************
+//
+void					TestScene::InitColoredGeometryTest		()
+{
+	unsigned int pluginsNum = 1;
+	std::string pluginsArr[] = { /*"DEFAULT_TRIANGLE", "DEFAULT_CIRCLE", "DEFAULT_ELLIPSE", "DEFAULT_ROUNDEDRECT",*/ "DEFAULT_CUBE" };
+	std::string pluginsNameArr[] = {/* "triangle", "circle", "ellipse", "rounded rect",*/ "cube" };
+	
+	for( unsigned int i = 0; i < pluginsNum; ++i )
+	{
+		auto plugin = pluginsArr[ i ];
+		m_testSteps.push_back( [ plugin, this ]
+		{
+			auto editor = m_scene->GetSceneEditor();
+
+			auto geom = TestSceneUtils::ColoredGeometry( m_timelineManager, m_timeEvaluator, GEOM_NODE, plugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
+			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.0f, -0.5f, -2.f ) );
+
+			auto root = m_scene->GetModelSceneRoot();
+			editor->DeleteChildNode( root, GEOM_NODE );
+			editor->AddChildNode( root, geom );
+		});
+		m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, GEOM_NODE, "solid color", 2 ); } );
+		m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, GEOM_NODE, "solid color", 2 ); } );
+
+		auto pluginName = pluginsNameArr[ i ];
+		std::string test0[] = { "alpha_mask", pluginName };
+		std::string test1[] = { "transform", "solid color", pluginName };
+		std::string test2[] = { "solid color", "transform", pluginName };
+
+		std::vector < OrderTestCase > tests;
+		tests.push_back( OrderTestCase( GEOM_NODE, "Geom", std::vector< std::string >( test0, test0 + 2 ) ) );
+		tests.push_back( OrderTestCase( GEOM_NODE, "TCGeom", std::vector< std::string >( test1, test1 + 3 ) ) );
+		tests.push_back( OrderTestCase( GEOM_NODE, "CTGeom", std::vector< std::string >( test2, test2 + 3 ) ) );
+
+		for( auto & test : tests )
+		{
+			m_testSteps.push_back( [ plugin, this ]
+			{
+				auto editor = m_scene->GetSceneEditor();
+
+				auto geom = TestSceneUtils::ColoredGeometry( m_timelineManager, m_timeEvaluator, GEOM_NODE, plugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
+				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.0f, -0.5f, -2.f ) );
+
+				auto root = m_scene->GetModelSceneRoot();
+				editor->DeleteChildNode( root, GEOM_NODE );
+				editor->AddChildNode( root, geom );
+			});
+			InitOrderTest( test );
+		}
+	}
 }
 
 // ****************************
@@ -594,59 +797,43 @@ void					TestScene::InitOrderTest			( const OrderTestCase & testCase )
 
 			auto editor = m_scene->GetSceneEditor();
 			auto child = std::static_pointer_cast< model::BasicNode >( m_scene->GetModelSceneRoot()->GetChild( node ) );
-			assert( editor->DeletePlugin( child, plugin ) );
-			assert( !editor->DeletePlugin( child, plugin ) );
-			assert( !child->GetPlugin( plugin ) );
+			
+			bool success = true;
+			
+			success &= editor->DeletePlugin( child, plugin );
+			success &= !editor->DeletePlugin( child, plugin );
+			success &= ( child->GetPlugin( plugin ) == nullptr );
 
+			assert( success );
 		});
 	}
 }
 
 // ****************************
 //
-void					TestScene::SwapLastPlugin		( const std::string & childName )
+void					TestScene::SwapPlugins			( const std::string & rootPlugin, UInt32 rootIdx, const std::string & childName, const std::string & childPlugin,  UInt32 childIdx )
 {
 	auto editor = m_scene->GetSceneEditor();
 
 	auto root = m_scene->GetModelSceneRoot();
 	auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( childName ) );
 
-	std::string rootLastPlugin, childLastPlugin;
-	UInt32 rootLastIdx, childLastIdx;
-	if( root->GetFinalizePlugin()->GetPrevPlugin()->GetName() == "alpha_mask" )
-	{
-		rootLastPlugin = root->GetFinalizePlugin()->GetPrevPlugin()->GetPrevPlugin()->GetName();
-		rootLastIdx = root->GetNumPlugins() - 2;
-	}
-	else
-	{
-		rootLastPlugin = root->GetFinalizePlugin()->GetPrevPlugin()->GetName();
-		rootLastIdx = root->GetNumPlugins() - 1;
-	}
+	bool success = true;
 
-	if( child->GetFinalizePlugin()->GetPrevPlugin()->GetName() == "alpha_mask" )
-	{
-		childLastPlugin = child->GetFinalizePlugin()->GetPrevPlugin()->GetPrevPlugin()->GetName();
-		childLastIdx = child->GetNumPlugins() - 2;
-	}
-	else
-	{
-		childLastPlugin = child->GetFinalizePlugin()->GetPrevPlugin()->GetName();
-		childLastIdx = child->GetNumPlugins() - 1;
-	}
+	success &= editor->DetachPlugin( root, rootPlugin );
+	success &= editor->DetachPlugin( child, childPlugin );
 
-	assert( editor->DetachPlugin( root, rootLastPlugin ) );
-	assert( editor->DetachPlugin( child, childLastPlugin ) );
+	success &= ( editor->GetDetachedPlugin( root ) != nullptr );
+	success &= ( editor->GetDetachedPlugin( root )->GetName() == rootPlugin );
 
-	assert( editor->GetDetachedPlugin( child ) );
-	assert( editor->GetDetachedPlugin( child )->GetName() == childLastPlugin );
+	success &= editor->AddPlugin( child, editor->GetDetachedPlugin( root ), childIdx );
 
-	assert( editor->AddPlugin( root, editor->GetDetachedPlugin( child ), rootLastIdx ) );
+	success &= ( editor->GetDetachedPlugin( child ) != nullptr );
+	success &= ( editor->GetDetachedPlugin( child )->GetName() == childPlugin );
 
-	assert( editor->GetDetachedPlugin( root ) );
-	assert( editor->GetDetachedPlugin( root )->GetName() == rootLastPlugin );
+	success &= editor->AddPlugin( root, editor->GetDetachedPlugin( child ), rootIdx );
 
-	assert( editor->AddPlugin( child, editor->GetDetachedPlugin( root ), childLastIdx ) );
+	assert( success );
 }
 
 // ****************************
@@ -669,13 +856,13 @@ BVScenePtr				TestScene::ColoredRectanglesScene	()
 {
 	auto root = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, "root", 0.5f, 0.5f, glm::vec4( 0.f, 0.f, 1.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
     auto rootTransform  = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-    model::SetParameterTranslation( rootTransform, 0, 0.0f, glm::vec3( -1.f, 0.5f, -1.f ) );
+    SetParameterTranslation( rootTransform, 0, 0.0f, glm::vec3( -1.f, 0.5f, -1.f ) );
 	
 	for( unsigned int i = 0; i < 3; ++i )
 	{
 		auto child = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, "child" + toString( i ), 0.3f, 0.3f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
 		auto childTransform = child->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-		model::SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )0.5*i, -0.5f, 0.f ) );
+		SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )0.5*i, -0.5f, 0.f ) );
 		root->AddChildToModelOnly( child );
 	}
 
@@ -683,7 +870,7 @@ BVScenePtr				TestScene::ColoredRectanglesScene	()
 	{
 		auto child = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, "child0" + toString( i ), 0.2f, 0.2f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
 		auto childTransform = child->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-		model::SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )i, -0.5f, 0.f ) );
+		SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )i, -0.5f, 0.f ) );
 		root->GetChild( 0 )->AddChildToModelOnly( child );
 	}
 

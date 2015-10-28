@@ -44,8 +44,6 @@ public:
 private:
 
 	void				Draw				( SceneNode * node );
-
-	static std::vector< model::IPluginDescriptor * >  DefaultBVPluginDescriptors  ();
 };
 
 
