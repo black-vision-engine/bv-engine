@@ -162,10 +162,10 @@ public:
 //
 template< class TimeValueT, class ValueT >
 CompositeBezierInterpolator< TimeValueT, ValueT >::CompositeBezierInterpolator( float tolerance )
-    //: m_type( CurveType::LINEAR )
+    : m_type( CurveType::LINEAR )
     //: m_type( CurveType::COSINE_LIKE )
     //: m_type( CurveType::POINT )
-    : m_type( CurveType::BEZIER )
+    //: m_type( CurveType::BEZIER )
     , m_tolerance( tolerance )
     , m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
 {
