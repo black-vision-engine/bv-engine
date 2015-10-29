@@ -18,6 +18,10 @@
 #include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
 
+#include "Engine/Graphics/Effects/NodeEffects/NodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/NodeMaskNodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
+
 
 namespace bv 
 {
@@ -144,57 +148,104 @@ void    NodeUpdater::DoUpdate        ()
 }
 
 // *****************************
+//
+void    NodeUpdater::DoUpdateTM             ()
+{
+    //FIXME: czy jesli node nie jest widoczne to trzeba w ogole updatowac stan - zakladam, ze nie, ale trzeba sie upewnic
+    //FIXME: it is just a single bool to set, so no there is no fancy machinery for testing whehter any update is necessary 
+    if( m_modelNode->IsVisible() )
+    {
+        m_sceneNode->SetVisible( true );
+
+        // Add, when all mechanisms are implemented
+        UpdateNodeEffect();
+        UpdateTransform();
+
+        if( m_hasEffect )
+        {
+            if( !m_timeInvariantVertexData )
+            {
+                UpdateGeometry();
+            }
+
+            UpdateTexturesData();
+            UpdateRendererState();
+        }
+    }
+    else
+    {
+        m_sceneNode->SetVisible( false );
+    }
+}
+
+// *****************************
 // FIXME: change effects if required or assert that they cannot be changed in runtime
 void    NodeUpdater::UpdateNodeEffect       ()
 {
+    auto name = m_modelNode->GetName();
     auto nodeEffect = m_modelNode->GetNodeEffect();
 
-    switch( nodeEffect->GetType() )
+    if( nodeEffect )
     {
-        case NodeEffectType::NET_DEFAULT:
+        switch( nodeEffect->GetType() )
         {
-            auto defaultEffect = std::static_pointer_cast< model::ModelNodeEffectDefault >( nodeEffect );
-            { defaultEffect; }
-            break;
-        }
-        case NodeEffectType::NET_ALPHA_MASK:
-        {
-            auto alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( nodeEffect );
-            auto paramAlpha = alphaMaskEffect->GetParamAlpha();
-
-            auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-
-            auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );
-
-            if ( alphaVal != nullptr )
+            case NodeEffectType::NET_DEFAULT:
             {
-                alphaVal->SetValue( alphaMaskEffect->GetAlpha() );
+                auto defaultEffect = std::static_pointer_cast< model::ModelNodeEffectDefault >( nodeEffect );
+                { defaultEffect; }
+                break;
             }
-
-            break;
-        }
-        case NodeEffectType::NET_NODE_MASK:
-        {
-            auto nodeMaskEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( nodeEffect );
-
-            auto paramBgIdx = nodeMaskEffect->GetParamBgIdx();
-            auto paramFgIdx = nodeMaskEffect->GetParamFgIdx();
-
-            auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-
-            auto bgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramBgIdx->GetName() ) );
-            auto fgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramFgIdx->GetName() ) );
-
-            if ( bgIdxVal != nullptr && fgIdxVal != nullptr )
+            case NodeEffectType::NET_ALPHA_MASK:
             {
-                bgIdxVal->SetValue( nodeMaskEffect->GetBackgroundChildIdx() );
-                fgIdxVal->SetValue( nodeMaskEffect->GetForegroundChildIdx() );
-            }
+                auto alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( nodeEffect );
+                auto paramAlpha = alphaMaskEffect->GetParamAlpha();
 
-            break;
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+
+                if ( !sceneNodeEffect )
+                {
+                    sceneNodeEffect = std::make_shared< AlphaMaskNodeEffect >();
+                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
+                }
+
+                auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );
+
+                if ( alphaVal != nullptr )
+                {
+                    alphaVal->SetValue( alphaMaskEffect->GetAlpha() );
+                }
+
+                break;
+            }
+            case NodeEffectType::NET_NODE_MASK:
+            {
+                auto nodeMaskEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( nodeEffect );
+
+                auto paramBgIdx = nodeMaskEffect->GetParamBgIdx();
+                auto paramFgIdx = nodeMaskEffect->GetParamFgIdx();
+
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+
+                if ( !sceneNodeEffect )
+                {
+                    sceneNodeEffect = std::make_shared< NodeMaskNodeEffect >();
+                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
+                }
+
+                auto bgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramBgIdx->GetName() ) );
+                auto fgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramFgIdx->GetName() ) );
+
+                if ( bgIdxVal != nullptr && fgIdxVal != nullptr )
+                {
+                    bgIdxVal->SetValue( nodeMaskEffect->GetBackgroundChildIdx() );
+                    fgIdxVal->SetValue( nodeMaskEffect->GetForegroundChildIdx() );
+                }
+
+                break;
+            }
+            default:
+                assert( false );
         }
-        default:
-            assert( false );
     }
 }
 

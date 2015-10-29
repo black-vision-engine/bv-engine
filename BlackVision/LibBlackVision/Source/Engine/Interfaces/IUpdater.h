@@ -13,6 +13,7 @@ public:
     virtual         ~IUpdater   () {}
 
     virtual void    DoUpdate    () = 0;
+    virtual void    DoUpdateTM  () = 0;
 
 };
 

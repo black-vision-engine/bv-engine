@@ -321,6 +321,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTrianglePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\DefaultVideoStreamDecoderPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Text3DUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoDecoder.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoStreamDecoder.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDemuxer.cpp" />
@@ -353,6 +354,7 @@
     <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Core\MathFuncs.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp" />
+    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeBezierInterpolator.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritDeserializeObject.cpp" />
@@ -649,6 +651,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTrianglePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\DefaultVideoStreamDecoderPlugin.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Text3DUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDef.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoDecoder.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoStreamDecoder.h" />
@@ -690,6 +693,7 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Defines.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeBezierInterpolator.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Rect.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Transform\MatTransform.h" />

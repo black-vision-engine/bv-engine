@@ -23,6 +23,9 @@
 #include "Engine/Models/Plugins/Simple/DefaultConePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
 
+//#include "Mathematics/Interpolators/CompositeBezierInterpolator.h"
+//#include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
+
 #include "Engine/Models/Plugins/PluginUtils.h"
 
 #include "System/Env.h"
@@ -466,11 +469,8 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 
 // *****************************
 //
-model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const std::string& scene, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    //auto scene = Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
-    auto scene = ConfigManager::GetString( "Debug/SceneFromEnvName" );
-
     model::BasicNodePtr node = nullptr;
 
     if( scene == "TWO_TEXTURED_RECTANGLES" )
@@ -503,7 +503,7 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
     }
     else if( scene == "SERIALIZED_TEST" )
     {
-        node = TestScenesFactory::CreateSerializedTestScene( timelineManager );
+        node = TestScenesFactory::CreateSerializedTestScene( pluginsManager, timelineManager );
     }
 	else if( scene == "ALL_BASIC_SHAPES_SHOW" )
 	{
@@ -513,6 +513,10 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
 	{
 		node = TestScenesFactory::BasicShapesTest(  pluginsManager, timelineManager, timeEvaluator );
 	}
+    else if( scene == "INTERPOLATION_TEST_SCENE" )
+    {
+        node = TestScenesFactory::CreedCosineDemoScene( pluginsManager, timelineManager, timeEvaluator );
+    }
     else if( scene == "GLOBAL_EFFECT_05" )
     {
         node = TestScenesFactory::GlobalEffect05( pluginsManager, timelineManager, timeEvaluator );
@@ -755,7 +759,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     {success;}
 
     SetParameter( prism->GetPlugin( "prism" )->GetParameter( "n" ), 10.f, 10 );
-    prism->GetPlugin( "prism" )->GetParameter( "n" )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
+    //prism->GetPlugin( "prism" )->GetParameter( "n" )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
 
     SetParameterScale( prism->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  5.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
     SetParameterScale( prism->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 10.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
@@ -771,7 +775,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 
     auto param = prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-    param->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
+    //param->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
 
 //SetParameterRotation( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 50.f, glm::vec3( 1, 0, 0 ), -10000.f );
 
@@ -866,7 +870,7 @@ void BoolParamTest()
     model::SetParameter( param, 0.f, true );
 }
 
-model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr timeEvaluator, CurveType type )
 {
     model::BasicNodePtr node = model::BasicNode::Create( "rect", timeEvaluator );
     node->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -876,25 +880,41 @@ model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr t
     model::SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
 
     auto param = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-    model::SetParameterTranslation( param, 0, 0.f, offset );
-    model::SetParameterTranslation( param, 0, 1.f, offset );
+
+    auto qParam = model::QueryTypedParam< model::ParamTransformVecPtr >( param );
+    assert( qParam );
+    qParam->SetCurveType( type );
+
     model::SetParameterTranslation( param, 0, 10.f, offset + glm::vec3( 2, 0, 0 ) );
-    model::SetParameterScale( param, 0, 0.f, glm::vec3( 0.5f, 0.5f, 1.f ) );
+    model::SetParameterTranslation( param, 0, 1.f, offset );
+    model::SetParameterTranslation( param, 0, 0.f, offset );
+    model::SetParameterScale( param, 0, 0.f, glm::vec3( 0.25f, 0.25f, 1.f ) );
+
+    //param = node->GetPlugin( "rectangle" )->GetParameter( "width" );
+    //auto qParam2 = model::QueryTypedParam< model::ParamFloatPtr >( param );
+    //qParam2->SetCurveType( CurveType::BEZIER );
+    //model::SetParameter( param, 1, 1.f );
+    //auto i = qParam2->AccessInterpolator();
+    //i.GetInterpolators()[ 0 ]->GetType();
+    //i.SetKey1( 0, Key< float, float >( 0, 0 ) );
 
     return node;
 }
 
-model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model::PluginsManager * , model::TimelineManager * , model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model::PluginsManager * , model::TimelineManager * /*tm*/, model::ITimeEvaluatorPtr timeEvaluator )
 {
     model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
-    auto node1 = CosineDemoRect( glm::vec3( -1, 0.5, 0 ) , timeEvaluator );
-    auto node2 = CosineDemoRect( glm::vec3( -1, -0.5, 0 ) , timeEvaluator );
-    node2->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
+    auto node1 = CosineDemoRect( glm::vec3( -1, 0.6, 0 ) , timeEvaluator, CurveType::POINT );
+    auto node2 = CosineDemoRect( glm::vec3( -1, 0.2, 0 ) , timeEvaluator, CurveType::LINEAR );
+    auto node3 = CosineDemoRect( glm::vec3( -1, -0.2, 0 ) , timeEvaluator, CurveType::COSINE_LIKE );
+    auto node4 = CosineDemoRect( glm::vec3( -1, -0.6, 0 ) , timeEvaluator, CurveType::BEZIER );
 
     root->AddChildToModelOnly( node1 );
     root->AddChildToModelOnly( node2 );
+    root->AddChildToModelOnly( node3 );
+    root->AddChildToModelOnly( node4 );
 
     return root;
 }

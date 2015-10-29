@@ -2,10 +2,7 @@
 
 #include "CoreDEF.h" //FIXME: store in PCH
 
-
-
 namespace bv {
-
 
 class ISerializer;
 class IDeserializer;
@@ -18,10 +15,10 @@ class ISerializable
 {
 public:
 
-    virtual void                Serialize       ( ISerializer& sob ) const = 0;
-    //virtual void                Deserialize     ( const IDeserializer& sob );
+    virtual void                Serialize       ( ISerializer& ser ) const = 0;
+    //virtual void                Deserialize     ( const IDeserializer& ser );
 
-    static ISerializablePtr     Create          ( const IDeserializer& dob ); // not really part of a class, but please remember to implement it ;)
+    static ISerializablePtr     Create          ( const IDeserializer& deser ); // not really part of a class, but please remember to implement it ;)
 };
 
 }

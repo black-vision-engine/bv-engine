@@ -9,6 +9,7 @@ namespace bv { namespace model {
 // ********************************
 //
 ModelNodeEffectAlphaMask::ModelNodeEffectAlphaMask( ITimeEvaluatorPtr timeEvaluator )
+    : m_alpha( 1.f )
 {
     m_paramAlpha = ParametersFactory::CreateParameterFloat( "alpha", timeEvaluator );
 

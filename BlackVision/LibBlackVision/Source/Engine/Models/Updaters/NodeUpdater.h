@@ -90,6 +90,7 @@ public:
 
     static NodeUpdaterPtr   Create              ( SceneNode * sceneNode, model::IModelNodeConstPtr modelNode );
     virtual void            DoUpdate            () override;
+    virtual void            DoUpdateTM          () override;
 
 private:
 

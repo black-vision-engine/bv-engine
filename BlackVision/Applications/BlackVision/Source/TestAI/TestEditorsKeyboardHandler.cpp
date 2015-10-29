@@ -110,7 +110,7 @@ void    TestEditorsKeyboardHandler::HandleKey   ( unsigned char c, BVAppLogic * 
         auto sob = new SerializeObject();
         //auto sob = new JsonSerializeObject();
         m_bvScene->Serialize( *sob );
-        sob->Save( "text.xml" );
+        sob->Save( "test.xml" );
         delete sob;
     }
 }

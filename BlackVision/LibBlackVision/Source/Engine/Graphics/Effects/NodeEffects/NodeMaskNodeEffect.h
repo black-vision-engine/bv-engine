@@ -7,14 +7,9 @@ namespace bv {
 
 class NodeMaskNodeEffect : public NodeEffect
 {
-private:
-
-    unsigned int m_bgNodeIdx;
-    unsigned int m_fgNodeIdx;
-
 public:
 
-                    NodeMaskNodeEffect  ( unsigned int backgroundNodeIdx, unsigned int foregroundNodeIdx );
+                    NodeMaskNodeEffect  ();
                     ~NodeMaskNodeEffect ();
 
     unsigned int    GetForegroundIdx    () const;

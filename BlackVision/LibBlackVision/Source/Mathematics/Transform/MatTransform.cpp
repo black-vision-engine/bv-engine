@@ -51,7 +51,7 @@ namespace model {
 // *************************************
 //
 template<typename ParamT>
-SimpleTransform<ParamT>::SimpleTransform( TransformKind kind, ParamT p0, ParamT p1, ParamT p2 )
+SimpleTransform<ParamT>::SimpleTransform( const TransformKind kind, const ParamT p0, const ParamT p1, const ParamT p2 )
     : kind( kind ), p0( p0 ), p1( p1 ), p2 (p2 )
 {
 }
@@ -68,7 +68,7 @@ SimpleTransform<ParamT>::SimpleTransform( TransformKind kind )
 //
 template<typename ParamT>
 void                SimpleTransform<ParamT>::Serialize       ( ISerializer& sob ) const
-{
+{ 
     assert( !"Tell me why I'm not implemented ;)" );
     sob;
 }
@@ -130,6 +130,17 @@ ISerializablePtr     SimpleTransform<ParamT>::Create          ( const IDeseriali
 }
 
 
+// *************************************
+//
+template<typename ParamT>
+void SimpleTransform<ParamT>::SetCurveType    ( CurveType type ) 
+{ 
+    p0.SetCurveType( type ); 
+    p1.SetCurveType( type ); 
+    p2.SetCurveType( type ); 
+}
+
+
 template<typename ParamT>
 Rotation<ParamT>::Rotation    ( ParamT angle, const Vec3Interpolator & rotAxis )
     : SimpleTransform( TransformKind::rotation )
@@ -147,6 +158,15 @@ Rotation<ParamT>::Rotation( ParamT angle, ParamT p0, ParamT p1, ParamT p2 )
     , m_angle( angle )
     , m_hasRotAxisInterpolator( false )
 {
+}
+
+// *************************************
+//
+template<typename ParamT>
+void Rotation<ParamT>::SetCurveType( CurveType type )
+{
+    m_angle.SetCurveType( type );
+    m_rotationAxis.SetCurveType( type );
 }
 
 // *************************************
@@ -190,32 +210,10 @@ CompositeTransform<ParamT>::~CompositeTransform()
 // *************************************
 //
 template<typename ParamT>
-void                    CompositeTransform<ParamT>::SetInterpolationMethod ( model::IParameter::InterpolationMethod method )
-{
-    __super::SetInterpolationMethod( method );
-    for( auto& transformation : m_transformations )
-    {
-        transformation->GetP0MotylaNoga().SetInterpolationMethod( method );
-        transformation->GetP1MotylaNoga().SetInterpolationMethod( method );
-        transformation->GetP2MotylaNoga().SetInterpolationMethod( method );
-    }
-}
-
-// *************************************
-//
-template<typename ParamT>
-model::IParameter::InterpolationMethod     CompositeTransform<ParamT>::GetInterpolationMethod () const
-{
-    auto ret = __super::GetInterpolationMethod();
-    for( auto& transformation : m_transformations )
-    {
-        assert( ret == transformation->GetP0MotylaNoga().GetInterpolationMethod() );
-        assert( ret == transformation->GetP1MotylaNoga().GetInterpolationMethod() );
-        assert( ret == transformation->GetP2MotylaNoga().GetInterpolationMethod() );
-    
-        { transformation; }
-    }
-    return ret;
+void CompositeTransform<ParamT>::SetCurveType        ( CurveType type )  
+{ 
+    for( auto& trans : m_transformations ) 
+        trans->SetCurveType( type ); 
 }
 
 // *************************************
@@ -467,7 +465,8 @@ glm::mat4x4 SimpleTransform<ParamT>::Evaluate( typename ParamT::TimeT t ) const
 template<typename ParamT>
 SimpleTransform<ParamT> * SimpleTransform<ParamT>::Clone() const
 {
-    return new SimpleTransform( *this );
+    //return new SimpleTransform( *this );
+    return new SimpleTransform( kind, p0, p1, p2 );
 }
 
 } //bv

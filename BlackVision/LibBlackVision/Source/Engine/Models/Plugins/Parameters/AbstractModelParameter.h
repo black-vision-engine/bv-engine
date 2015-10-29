@@ -22,7 +22,8 @@ protected:
 
     std::string             m_name;
     ModelParamType          m_type;
-    InterpolationMethod     m_method;
+    //InterpolationMethod     m_method;
+    //CurveType               m_curveType;
 
 protected:
 
@@ -36,8 +37,9 @@ public:
     virtual const std::string & GetName                 () const override;
     virtual ModelParamType      GetType                 () const override;
 
-	virtual void                SetInterpolationMethod ( InterpolationMethod method ) override;
-	virtual InterpolationMethod GetInterpolationMethod () const override;
+    //virtual void                SetCurveType    ( CurveType type ) { m_curveType = type; }
+	//virtual void                SetInterpolationMethod ( InterpolationMethod method ) override;
+	//virtual InterpolationMethod GetInterpolationMethod () const override;
 
     virtual ITimeEvaluatorPtr   GetTimeEvaluator        () override;
     virtual void                SetTimeEvaluator        ( ITimeEvaluatorPtr timeEvaluator ) override;

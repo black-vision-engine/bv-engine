@@ -28,5 +28,9 @@ public:
     float                   GetAlpha                () const;
 
 };
+
+DEFINE_PTR_TYPE(ModelNodeEffectAlphaMask)
+DEFINE_CONST_PTR_TYPE(ModelNodeEffectAlphaMask)
+
 } // model
 } // bv

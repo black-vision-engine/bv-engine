@@ -53,3 +53,12 @@ glm::vec2               String2Vec2( std::string s )
 }
 
 } }
+
+namespace std
+{
+    string to_string( const glm::vec2 & v ) { return to_string( v[0] ) + ", " + to_string( v[1] ); }
+    string to_string( const glm::vec3 & v ) { return to_string( v[0] ) + ", " + to_string( v[1] ) + ", " + to_string( v[2] ); }
+    string to_string( const glm::vec4 & v ) { return to_string( v[0] ) + ", " + to_string( v[1] ) + ", " + to_string( v[2] ) + ", " + to_string( v[3] ); }
+    string to_string( const std::string & val ) { return val; }
+    string to_string( const std::wstring & val ) { return std::string( val.begin(), val.end() ); }
+}

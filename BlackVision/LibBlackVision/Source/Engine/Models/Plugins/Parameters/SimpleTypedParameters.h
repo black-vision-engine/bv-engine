@@ -7,6 +7,7 @@
 #include "Serialization/ISerializable.h"
 #include "Serialization/ISerializer.h"
 
+#include "Mathematics/Interpolators/Interpolators.h"
 
 namespace bv { namespace model {
 
@@ -20,7 +21,7 @@ public:
 
 protected:
 
-    InterpolatorType m_interpolator;
+    InterpolatorType        m_interpolator;
 
 public:
 
@@ -29,9 +30,7 @@ public:
 
     void                    Serialize       ( ISerializer& doc ) const;
 
-
-    virtual void                SetInterpolationMethod ( InterpolationMethod method ) override;
-    virtual InterpolationMethod GetInterpolationMethod () const override;
+    void                    SetCurveType        ( CurveType type );
 
     inline  ValueType       Evaluate            () const;
     inline  void            SetVal              ( const ValueType & val, TimeType t );
@@ -106,6 +105,7 @@ DEFINE_PTR_TYPE( ParamVec2 )
 DEFINE_PTR_TYPE( ParamMat2 )
 DEFINE_PTR_TYPE( ParamWString )
 DEFINE_PTR_TYPE( ParamString )
+
 
 } //model
 } //bv

@@ -14,6 +14,13 @@ ParamTransform::ParamTransform  ( const std::string & name, const TransformF & t
 
 
 // *******************************
+// FIXME: reimplement with SQT paramter model
+void                ParamTransform::SetCurveType    ( CurveType type ) 
+{ 
+    m_transformModel.SetCurveType( type ); 
+}
+
+// *******************************
 //
 void    ParamTransform::Serialize       ( ISerializer& doc ) const
 {
@@ -83,6 +90,15 @@ void ParamTransformVec::Serialize       ( ISerializer& doc ) const
 
     doc.ExitChild(); // param
 }
+
+// *******************************
+//
+void ParamTransformVec::SetCurveType        ( CurveType type ) 
+{ 
+    for( auto& trans : m_transformModelVec ) 
+        trans.SetCurveType( type ); 
+}
+
 // *******************************
 //
 void    ParamTransformVec::AppendTransform          ( const TransformF & transform )

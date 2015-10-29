@@ -49,7 +49,7 @@ public:
 
 public:
 
-    static  model::BasicNodePtr     CreateSceneFromEnv              ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     CreateSceneFromEnv              ( const std::string& scene, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreateTestRandomNode            ( const std::string & name,  const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreateTestScene                 ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, TestSceneSelector tss );
 
@@ -81,7 +81,7 @@ public:
     static  model::BasicNodePtr     NonGeometryParent               ();
                             
     static  model::BasicNodePtr     XMLTestScene                    ();
-    static  model::BasicNodePtr     CreateSerializedTestScene       ( model::TimelineManager * timelineManager );
+    static  model::BasicNodePtr     CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager );
                             
     static  model::BasicNodePtr     StackThemNow                    ( model::BasicNodePtr n0, model::BasicNodePtr n1 );
 

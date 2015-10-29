@@ -11,8 +11,7 @@ namespace bv { namespace model {
 ModelNodeEffectNodeMask::ModelNodeEffectNodeMask( ITimeEvaluatorPtr timeEvaluator )
     : m_bgVal( 0 )
     , m_fgVal( 1 )
-{
-    
+{ 
     m_paramBgIdx = ParametersFactory::CreateParameterInt( "bgIdx", timeEvaluator );
     m_paramFgIdx = ParametersFactory::CreateParameterInt( "fgIdx", timeEvaluator );
 
