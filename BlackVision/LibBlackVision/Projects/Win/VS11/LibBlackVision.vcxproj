@@ -143,6 +143,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectShaders.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectWithMask.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\WireframeShaders.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRenderer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRendererData.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLUtils.cpp" />
@@ -355,6 +357,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeMaskNodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\WireframeNodeEffect.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeShaders.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelNodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectAlphaMask.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectDefault.h" />
