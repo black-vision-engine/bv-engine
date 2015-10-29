@@ -16,6 +16,7 @@
 #include "Rendering/Logic/NodeEffectRendering/DefaultEffectRenderLogic.h"
 #include "Rendering/Logic/NodeEffectRendering/AlphaMaskRenderLogic.h"
 #include "Rendering/Logic/NodeEffectRendering/NodeMaskRenderLogic.h"
+#include "Rendering/Logic/NodeEffectRendering/WireframeRenderLogic.h"
 
 #define USE_HACK_FRIEND_NODE_MASK_IMPL
 
@@ -34,6 +35,7 @@ RenderLogic::RenderLogic     ()
     m_customNodeRenderLogic.push_back( new DefaultEffectRenderLogic( this, m_offscreenRenderLogic ) );
     m_customNodeRenderLogic.push_back( new AlphaMaskRenderLogic( this, m_offscreenRenderLogic ) );
     m_customNodeRenderLogic.push_back( new NodeMaskRenderLogic( this, m_offscreenRenderLogic ) );
+    m_customNodeRenderLogic.push_back( new WireframeRenderLogic( this, m_offscreenRenderLogic ) );
 }
 
 // *********************************
@@ -130,24 +132,9 @@ bool    RenderLogic::UseNodeMask    ( SceneNode * node ) const
 //
 NodeEffectRenderLogic *     RenderLogic::GetNodeEffectRenderLogic    ( SceneNode * node ) const
 {
-    if( UseAlphaMask( node ) )
-    {
-        return m_customNodeRenderLogic[ CLT_ALPHA_MASK ];
-    }
-    else if ( UseNodeMask( node ) )
-    {
-        return m_customNodeRenderLogic[ CLT_NODE_MASK ];
-    }
-    else if ( UseDefaultMask( node ) )
-    {
-        return m_customNodeRenderLogic[ CLT_DEFAULT ];
-    }
-    else
-    {
-        assert( false );
-    }
+    assert( (unsigned int) node->GetNodeEffect()->GetType() < (unsigned int) NodeEffect::Type::T_TOTAL );
 
-    return nullptr;
+    return m_customNodeRenderLogic[ (unsigned int) node->GetNodeEffect()->GetType() ];
 }
 
 // *********************************

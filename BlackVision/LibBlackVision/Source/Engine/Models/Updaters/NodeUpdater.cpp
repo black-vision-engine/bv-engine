@@ -17,10 +17,12 @@
 #include "Engine/Models/NodeEffects/ModelNodeEffectDefault.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectWireframe.h"
 
 #include "Engine/Graphics/Effects/NodeEffects/NodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/NodeMaskNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/WireframeNodeEffect.h"
 
 
 namespace bv 
@@ -214,6 +216,18 @@ void    NodeUpdater::UpdateNodeEffect       ()
                     alphaVal->SetValue( nodeMaskEffect->GetAlpha() );
                 }
 
+                break;
+            }
+            case NodeEffectType::NET_WIREFRAME:
+            {
+                auto nodeMaskEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( nodeEffect );
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+
+                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_WIREFRAME )
+                {
+                    sceneNodeEffect = std::make_shared< WireframeNodeEffect >();
+                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
+                }
                 break;
             }
             default:

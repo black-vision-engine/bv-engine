@@ -132,6 +132,9 @@
     <ClCompile Include="..\..\..\Source\TestAI\TestAnimationKeyboardHandler.cpp">
       <Filter>TestAI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.cpp">
+      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -231,6 +234,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\TestAI\TestAnimationKeyboardHandler.h">
       <Filter>TestAI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.h">
+      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

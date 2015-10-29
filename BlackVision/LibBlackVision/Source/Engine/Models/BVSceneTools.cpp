@@ -16,6 +16,7 @@
 #include "Engine/Graphics/Effects/NodeEffects/NodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/NodeMaskNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/WireframeNodeEffect.h"
 
 
 namespace bv {
@@ -89,6 +90,11 @@ void                BVSceneTools::UpdateSceneNodeEffect                 ( SceneN
     {
         auto sceneNodeNMEffect = std::make_shared< NodeMaskNodeEffect >();
         node->SetNodeEffect( sceneNodeNMEffect );
+    }
+    else if( modelNodeEffect->GetType() ==  NodeEffectType::NET_WIREFRAME )
+    {
+        auto sceneNodeWireframeEffect = std::make_shared< WireframeNodeEffect >();
+        node->SetNodeEffect( sceneNodeWireframeEffect );
     }
     else
     {
