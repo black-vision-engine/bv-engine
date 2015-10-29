@@ -2041,5 +2041,8 @@
     <None Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.h">
       <Filter>Serialization\Json</Filter>
     </None>
+    <None Include="..\..\..\Source\Serialization\SerializationHelper.inl">
+      <Filter>Serialization</Filter>
+    </None>
   </ItemGroup>
 </Project>

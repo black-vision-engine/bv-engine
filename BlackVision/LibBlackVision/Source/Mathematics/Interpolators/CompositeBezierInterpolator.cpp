@@ -2,6 +2,7 @@
 #include "Mathematics/Core/mathfuncs.h"
 
 #include "Serialization/SerializationHelper.h"
+#include "Serialization/SerializationHelper.inl"
 
 #include <vector>
 #include <array>
@@ -33,6 +34,13 @@ public:
         ser.SetAttribute( "type", "point" );
     ser.ExitChild();
     }
+
+    virtual void                                Deserialize( const IDeserializer& deser )
+    {
+        if( deser.GetAttribute( "type" ) != "point" )
+            assert( false );
+    }
+
 };
 
 // *******************************
@@ -69,6 +77,12 @@ public:
     ser.EnterChild( "interpolation" );
         ser.SetAttribute( "type", "linear" );
     ser.ExitChild();
+    }
+
+    virtual void                                Deserialize( const IDeserializer& deser )
+    {
+        if( deser.GetAttribute( "type" ) != "linear" )
+            assert( false );
     }
 };
 
@@ -156,6 +170,15 @@ public:
         ser.SetAttribute( "v2", std::to_string( v2.t ) + ", " + std::to_string( v2.val ) );
     ser.ExitChild();
     }
+
+    virtual void                                Deserialize( const IDeserializer& deser )
+    {
+        if( deser.GetAttribute( "type" ) != "bezier" )
+            assert( false );
+
+        v1 = SerializationHelper::String2Pair< TimeValueT, ValueT >( deser.GetAttribute( "v1" ) );
+        v2 = SerializationHelper::String2Pair< TimeValueT, ValueT >( deser.GetAttribute( "v2" ) );
+    }
 };
 
 // *******************************
@@ -222,6 +245,7 @@ ISerializablePtr     CompositeBezierInterpolator< TimeValueT, ValueT >::Create  
         for( auto key : keys ) // no interpolation types
             interpolator->AddKey( key->t, key->val );
     else
+    {
         for( auto key : keys )
         {
             interpolator->AddKey( key->t, key->val );
@@ -238,6 +262,16 @@ ISerializablePtr     CompositeBezierInterpolator< TimeValueT, ValueT >::Create  
                     }
             }
         }
+
+        deser.EnterChild( "interpolation" );
+        size_t i = 0;
+        do
+        {
+            auto interpolators = interpolator->GetInterpolators();
+            interpolators[ i ]->Deserialize( deser );
+        } while( deser.NextChild() );
+        deser.ExitChild();
+    }
 
     return interpolator;
 }

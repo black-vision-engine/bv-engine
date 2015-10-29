@@ -718,6 +718,7 @@
     <None Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.inl" />
     <ClCompile Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.cpp" />
     <None Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.h" />
+    <None Include="..\..\..\Source\Serialization\SerializationHelper.inl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\LibBVGL\Projects\Win\VS11\LibBVGL.vcxproj">
