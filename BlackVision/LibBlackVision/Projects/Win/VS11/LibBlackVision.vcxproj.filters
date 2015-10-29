@@ -2033,6 +2033,9 @@
     <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer_template.h">
       <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Events\EventHelpers.h">
+      <Filter>Engine\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

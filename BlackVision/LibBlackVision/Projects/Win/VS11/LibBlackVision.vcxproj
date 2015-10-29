@@ -381,6 +381,7 @@
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h" />
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamAssetDescriptor.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Events\EventHelpers.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\DefaultMultipassEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultVideoStreamDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\AlphaMaskNodeEffect.h" />

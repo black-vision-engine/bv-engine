@@ -36,8 +36,8 @@ public:
 
     virtual EventType               GetEventType    () const;
 
-    virtual void                    Serialize       ( std::ostringstream & out ) const;
-    virtual void                    Deserialize     ( std::istringstream & in );
+    virtual void                    Serialize       ( ISerializer& ser ) const;
+    static IEventPtr                Create          ( IDeserializer& deser );
 
     virtual IEventPtr               Clone           () const;
 
@@ -74,8 +74,8 @@ public:
 
     virtual EventType               GetEventType    () const;
 
-    virtual void                    Serialize       ( std::ostringstream & out ) const;
-    virtual void                    Deserialize     ( std::istringstream & in );
+    virtual void                    Serialize       ( ISerializer& ser ) const;
+    static IEventPtr                Create          ( IDeserializer& deser );
 
     virtual IEventPtr               Clone           () const;
 
@@ -109,8 +109,8 @@ public:
 
     virtual EventType               GetEventType        () const;
 
-    virtual void                    Serialize           ( std::ostringstream & out ) const;
-    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
 
     virtual IEventPtr               Clone               () const;
 
@@ -148,8 +148,8 @@ public:
 
     virtual EventType               GetEventType        () const;
 
-    virtual void                    Serialize           ( std::ostringstream & out ) const;
-    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
 
     virtual IEventPtr               Clone               () const;
 
@@ -224,8 +224,8 @@ public:
 
     virtual EventType               GetEventType        () const;
 
-    virtual void                    Serialize           ( std::ostringstream & out ) const;
-    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
     virtual IEventPtr               Clone               () const;
     static EventType                Type                ();
 
@@ -261,8 +261,8 @@ public:
 
     virtual EventType               GetEventType        () const;
 
-    virtual void                    Serialize           ( std::ostringstream & out ) const;
-    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
     virtual IEventPtr               Clone               () const;
     static EventType                Type                ();
 
@@ -301,8 +301,8 @@ public:
 
     virtual EventType               GetEventType        () const;
 
-    virtual void                    Serialize           ( std::ostringstream & out ) const;
-    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
     virtual IEventPtr               Clone               () const;
     static EventType                Type                ();
 
@@ -345,8 +345,8 @@ public:
 
     virtual EventType               GetEventType        () const;
 
-    virtual void                    Serialize           ( std::ostringstream & out ) const;
-    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
     virtual IEventPtr               Clone               () const;
     static EventType                Type                ();
 
@@ -396,8 +396,8 @@ public:
 
     virtual EventType               GetEventType        () const;
 
-    virtual void                    Serialize           ( std::ostringstream & out ) const;
-    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
     virtual IEventPtr               Clone               () const;
     static EventType                Type                ();
 
@@ -434,8 +434,8 @@ public:
 
     virtual EventType               GetEventType        () const;
 
-    virtual void                    Serialize           ( std::ostringstream & out ) const;
-    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
     virtual IEventPtr               Clone               () const;
     static EventType                Type                ();
 
@@ -476,8 +476,8 @@ public:
 
     virtual EventType               GetEventType        () const;
 
-    virtual void                    Serialize           ( std::ostringstream & out ) const;
-    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
     virtual IEventPtr               Clone               () const;
     static EventType                Type                ();
 
@@ -516,8 +516,8 @@ public:
 
     virtual EventType               GetEventType        () const;
 
-    virtual void                    Serialize           ( std::ostringstream & out ) const;
-    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
     virtual IEventPtr               Clone               () const;
     static EventType                Type                ();
 
@@ -536,9 +536,9 @@ public:
 
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
-    std::wstring                NodeName;
-    std::wstring                PluginName;
-    std::wstring                AssetData;
+    std::string                 NodeName;
+    std::string                 PluginName;
+    std::string                 AssetData;
 
     int                         SockID;
 public:
@@ -546,8 +546,8 @@ public:
 
     virtual EventType               GetEventType        () const;
 
-    virtual void                    Serialize           ( std::ostringstream & out ) const;
-    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
     virtual IEventPtr               Clone               () const;
     static EventType                Type                ();
 
@@ -588,8 +588,8 @@ public:
     virtual EventType               GetEventType        () const;
     virtual const std::string &     GetName             () const;
 
-    virtual void                    Serialize           ( std::ostringstream & out ) const;
-    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
     virtual IEventPtr               Clone               () const;
 };
 DEFINE_PTR_TYPE( ParamKeyEvent )
@@ -628,7 +628,7 @@ DEFINE_PTR_TYPE( ParamKeyEvent )
 //
 //    virtual EventType               GetEventType        () const;
 //
-//    virtual void                    Serialize           ( std::ostringstream & out ) const;
+//    virtual void                    Serialize           ( ISerializer& ser ) const;
 //    virtual void                    Deserialize         ( std::istringstream & in );
 //    virtual IEventPtr               Clone               () const;
 //    static EventType                Type                ();

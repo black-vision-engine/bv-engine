@@ -1,6 +1,6 @@
 #include "PluginEventsHandlers.h"
 
-#include "EventHelpers.h"
+#include "Engine/Events/EventHelpers.h"
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Assets/AssetManager.h"
 #include "../BVAppLogic.h"
@@ -203,9 +203,9 @@ void PluginEventsHandlers::LoadAsset( bv::IEventPtr eventPtr )
     {
         bv::LoadAssetEventPtr eventLoadAsset = std::static_pointer_cast<bv::LoadAssetEvent>( eventPtr );
         
-        std::string nodeName = toString( eventLoadAsset->NodeName );
-        std::string pluginName = toString( eventLoadAsset->PluginName );
-        std::string asssetData = toString( eventLoadAsset->AssetData );
+        std::string nodeName = eventLoadAsset->NodeName;
+        std::string pluginName = eventLoadAsset->PluginName;
+        std::string asssetData = eventLoadAsset->AssetData;
 
         auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
         auto node = root->GetNode( nodeName );

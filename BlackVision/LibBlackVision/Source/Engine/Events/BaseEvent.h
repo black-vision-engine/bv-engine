@@ -3,8 +3,10 @@
 #include "Engine/Events/Interfaces/IEvent.h"
 
 
+
 namespace bv
 {
+
 
 class BaseEvent : public IEvent
 {
@@ -18,8 +20,8 @@ public:
 
     TimeType        GetTimeStamp    () const;
 
-    virtual void    Serialize       ( std::ostringstream & out ) const;
-    virtual void    Deserialize     ( std::istringstream & in );
+    virtual void    Serialize       ( ISerializer& ser ) const;
+    //static void     Create          ( IDeserializer& deser );
 
 };
 

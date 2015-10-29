@@ -6,7 +6,6 @@
 
 namespace 
 {
-	// FIXME: Should be moved to some core module.
 	template< typename T > 
 	std::string toString( const T & t )
 	{
@@ -54,6 +53,22 @@ namespace
 		return toString( v[ 0 ] ) + ", " + toString( v[ 1 ] );
 	}
 
+
+    // *********************************
+    //
+    template< typename T > 
+	std::wstring toWString( const T & t )
+	{
+		return std::to_wstring( t );
+	}
+
+    // *********************************
+    //
+	template<> 
+	std::wstring toWString< std::string >( const std::string& t )
+	{
+		return std::wstring( t.begin(), t.end() );
+	}
 } // anonymous
 
 

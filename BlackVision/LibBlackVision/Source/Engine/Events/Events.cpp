@@ -5,6 +5,10 @@
 #pragma warning( push )
 #pragma warning(disable:4100)
 
+#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
+#include "EventHelpers.h"
+
 namespace bv 
 {
 
@@ -62,6 +66,21 @@ const EventType ParamKeyEvent::m_sEventType       = 0x30000006;
 std::string ParamKeyEvent::m_sEventName           = "Event_ParamKeyEvent";
 
 
+
+// ************************************* Events Serialization *****************************************
+
+namespace Serial
+{
+
+const std::wstring COMMAND_WSTRING = L"cmd";
+const std::wstring NODE_NAME_WSTRING = L"NodeName";
+const std::wstring PLUGIN_NAME_WSTRING = L"PluginName";
+
+// LoadAssetEvent
+const std::wstring ASSET_DATA_WSTRING = L"AssetData";
+
+}
+
 // ************************************* PluginAddedEvent *************************************
 
 // *************************************
@@ -87,20 +106,19 @@ EventType               PluginAddedEvent::GetEventType      () const
 
 // *************************************
 //
-void                    PluginAddedEvent::Serialize         ( std::ostringstream & out ) const
+void                    PluginAddedEvent::Serialize         ( ISerializer& /*ser*/ ) const
 {
-    { out; } // FIXME: suppress unused warning
     std::string err = GetName() + " should not be serialized";
     assert( !err.c_str()  );
 }
 
 // *************************************
 //
-void                    PluginAddedEvent::Deserialize       ( std::istringstream & in )
+IEventPtr                    PluginAddedEvent::Create          ( IDeserializer& /*deser*/ )
 {
-    { in; } // FIXME: suppress unused warning
-    std::string err = GetName() + " should not be deserialized";
+    std::string err = m_sEventName + " should not be deserialized";
     assert( !err.c_str()  );
+    return nullptr;
 }
 
 // *************************************
@@ -157,20 +175,20 @@ EventType               NodeAddedEvent::GetEventType        () const
 
 // *************************************
 //
-void                    NodeAddedEvent::Serialize           ( std::ostringstream & out ) const
+void                    NodeAddedEvent::Serialize           ( ISerializer& ser ) const
 {
-    { out; } // FIXME: suppress unused warning
+    { ser; } // FIXME: suppress unused warning
     std::string err = GetName() + " should not be serialized";
     assert( !err.c_str()  );
 }
 
 // *************************************
 //
-void                    NodeAddedEvent::Deserialize         ( std::istringstream & in )
+IEventPtr               NodeAddedEvent::Create          ( IDeserializer& /*deser*/ )
 {
-    { in; } // FIXME: suppress unused warning
-    std::string err = GetName() + " should not be deserialized";
+    std::string err = m_sEventName + " should not be deserialized";
     assert( !err.c_str()  );
+    return nullptr;
 }
 
 // *************************************
@@ -220,20 +238,21 @@ EventType               FrameRenderedEvent::GetEventType        () const
 
 // *************************************
 //
-void                    FrameRenderedEvent::Serialize           ( std::ostringstream & out ) const
+void                    FrameRenderedEvent::Serialize           ( ISerializer& ser ) const
 {
-    { out; } // FIXME: suppress unused warning
+    { ser; } // FIXME: suppress unused warning
     std::string err = GetName() + " should not be serialized";
     assert( !err.c_str()  );
 }
 
 // *************************************
 //
-void                    FrameRenderedEvent::Deserialize         ( std::istringstream & in )
+IEventPtr                    FrameRenderedEvent::Create          ( IDeserializer& deser )
 {
-    { in; } // FIXME: suppress unused warning
-    std::string err = GetName() + " should not be deserialized";
+    { deser; } // FIXME: suppress unused warning
+    std::string err = m_sEventName + " should not be deserialized";
     assert( !err.c_str()  );
+    return nullptr;
 }
 
 // *************************************
@@ -306,18 +325,19 @@ EventType           TransformSetEvent::GetEventType         () const
 
 // *************************************
 //
-void                TransformSetEvent::Serialize            ( std::ostringstream & out ) const
+void                TransformSetEvent::Serialize            ( ISerializer& ser ) const
 {
-    { out; } // FIXME: suppress unused warning
+    { ser; } // FIXME: suppress unused warning
     assert( false );
 }
 
 // *************************************
 //
-void                TransformSetEvent::Deserialize          ( std::istringstream & in )
+IEventPtr                TransformSetEvent::Create          ( IDeserializer& deser )
 {
-    { in; } // FIXME: suppress unused warning
+    { deser; } // FIXME: suppress unused warning
     assert( false );
+    return nullptr;
 }
 
 // *************************************
@@ -434,16 +454,17 @@ EventType           VideoCardEvent::GetEventType         () const
 
 // *************************************
 //
-void                VideoCardEvent::Serialize            ( std::ostringstream & out ) const
+void                VideoCardEvent::Serialize            ( ISerializer& ser ) const
 {
     assert( false );
 }
 
 // *************************************
 //
-void                VideoCardEvent::Deserialize          ( std::istringstream & in )
+IEventPtr                VideoCardEvent::Create          ( IDeserializer& deser )
 {
     assert( false );
+    return nullptr;
 }
 // *************************************
 //
@@ -484,16 +505,17 @@ EventType           InfoEvent::GetEventType         () const
 
 // *************************************
 //
-void                InfoEvent::Serialize            ( std::ostringstream & out ) const
+void                InfoEvent::Serialize            ( ISerializer& ser ) const
 {
     assert( false );
 }
 
 // *************************************
 //
-void                InfoEvent::Deserialize          ( std::istringstream & in )
+IEventPtr                InfoEvent::Create          ( IDeserializer& deser )
 {
     assert( false );
+    return nullptr;
 }
 // *************************************
 //
@@ -548,16 +570,17 @@ EventType           SceneStructureEvent::GetEventType         () const
 
 // *************************************
 //
-void                SceneStructureEvent::Serialize            ( std::ostringstream & out ) const
+void                SceneStructureEvent::Serialize            ( ISerializer& ser ) const
 {
     assert( false );
 }
 
 // *************************************
 //
-void                SceneStructureEvent::Deserialize          ( std::istringstream & in )
+IEventPtr                SceneStructureEvent::Create          ( IDeserializer& deser )
 {
     assert( false );
+    return nullptr;
 }
 // *************************************
 //
@@ -613,16 +636,17 @@ EventType           ResponseEvent::GetEventType         () const
 
 // *************************************
 //
-void                ResponseEvent::Serialize            ( std::ostringstream & out ) const
+void                ResponseEvent::Serialize            ( ISerializer& ser ) const
 {
     assert( false );
 }
 
 // *************************************
 //
-void                ResponseEvent::Deserialize          ( std::istringstream & in )
+IEventPtr                ResponseEvent::Create          ( IDeserializer& deser )
 {
     assert( false );
+    return nullptr;
 }
 // *************************************
 //
@@ -668,16 +692,17 @@ EventType           SetParamEvent::GetEventType         () const
 
 // *************************************
 //
-void                SetParamEvent::Serialize            ( std::ostringstream & out ) const
+void                SetParamEvent::Serialize            ( ISerializer& ser ) const
 {
     assert( false );
 }
 
 // *************************************
 //
-void                SetParamEvent::Deserialize          ( std::istringstream & in )
+IEventPtr                SetParamEvent::Create          ( IDeserializer& deser )
 {
     assert( false );
+    return nullptr;
 }
 // *************************************
 //
@@ -721,16 +746,17 @@ EventType           TimeLineCmd::GetEventType         () const
 
 // *************************************
 //
-void                TimeLineCmd::Serialize            ( std::ostringstream & out ) const
+void                TimeLineCmd::Serialize            ( ISerializer& ser ) const
 {
     assert( false );
 }
 
 // *************************************
 //
-void                TimeLineCmd::Deserialize          ( std::istringstream & in )
+IEventPtr                TimeLineCmd::Create          ( IDeserializer& deser )
 {
     assert( false );
+    return nullptr;
 }
 // *************************************
 //
@@ -778,16 +804,17 @@ EventType           TimerCmd::GetEventType         () const
 
 // *************************************
 //
-void                TimerCmd::Serialize            ( std::ostringstream & out ) const
+void                TimerCmd::Serialize            ( ISerializer& ser ) const
 {
     assert( false );
 }
 
 // *************************************
 //
-void                TimerCmd::Deserialize          ( std::istringstream & in )
+IEventPtr                TimerCmd::Create          ( IDeserializer& deser )
 {
     assert( false );
+    return nullptr;
 }
 // *************************************
 //
@@ -834,16 +861,17 @@ EventType           WidgetCmd::GetEventType         () const
 
 // *************************************
 //
-void                WidgetCmd::Serialize            ( std::ostringstream & out ) const
+void                WidgetCmd::Serialize            ( ISerializer& ser ) const
 {
     assert( false );
 }
 
 // *************************************
 //
-void                WidgetCmd::Deserialize          ( std::istringstream & in )
+IEventPtr                WidgetCmd::Create          ( IDeserializer& deser )
 {
     assert( false );
+    return nullptr;
 }
 // *************************************
 //
@@ -885,16 +913,27 @@ EventType           LoadAssetEvent::GetEventType         () const
 
 // *************************************
 //
-void                LoadAssetEvent::Serialize            ( std::ostringstream & out ) const
+void                LoadAssetEvent::Serialize            ( ISerializer& ser ) const
 {
-    assert( false );
+    ser.SetAttribute( Serial::COMMAND_WSTRING, toWString( m_sEventName ) );
+    ser.SetAttribute( Serial::NODE_NAME_WSTRING, toWString( NodeName ) );
+    ser.SetAttribute( Serial::PLUGIN_NAME_WSTRING, toWString( PluginName ) );
+    ser.SetAttribute( Serial::ASSET_DATA_WSTRING, toWString( AssetData ) );
 }
 
 // *************************************
 //
-void                LoadAssetEvent::Deserialize          ( std::istringstream & in )
+IEventPtr                LoadAssetEvent::Create          ( IDeserializer& deser )
 {
-    assert( false );
+    if( deser.GetAttribute( Serial::COMMAND_WSTRING ) == toWString( m_sEventName ) )
+    {
+        LoadAssetEventPtr newEvent  = std::make_shared<LoadAssetEvent>();
+        newEvent->PluginName        = toString( deser.GetAttribute( Serial::PLUGIN_NAME_WSTRING ) );
+        newEvent->NodeName          = toString( deser.GetAttribute( Serial::NODE_NAME_WSTRING ) );
+        newEvent->AssetData         = toString( deser.GetAttribute( Serial::ASSET_DATA_WSTRING ) );
+        return newEvent;
+    }
+    return nullptr;
 }
 // *************************************
 //
@@ -931,13 +970,13 @@ EventType           ParamKeyEvent::GetEventType         () const
 
 // *************************************
 //
-void                ParamKeyEvent::Serialize            ( std::ostringstream & out ) const
+void                ParamKeyEvent::Serialize            ( ISerializer& ser ) const
 { assert( false ); }
 
 // *************************************
 //
-void                ParamKeyEvent::Deserialize          ( std::istringstream & in )
-{ assert( false ); }
+IEventPtr           ParamKeyEvent::Create          ( IDeserializer& deser )
+{ assert( false ); return nullptr; }
 
 // *************************************
 //

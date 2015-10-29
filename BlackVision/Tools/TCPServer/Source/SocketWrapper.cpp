@@ -417,9 +417,9 @@ namespace bv{
                             CmdLoadAsset* cmd = (CmdLoadAsset*)(pm.cmdStack[i]);
                             LoadAssetEventPtr ev = std::make_shared<LoadAssetEvent>();
 
-                            ev->AssetData  = std::move( cmd->m_assetData );
-                            ev->PluginName = std::move( cmd->m_pluginName );
-                            ev->NodeName   = std::move( cmd->m_nodeName );
+                            ev->AssetData  = std::string( cmd->m_assetData.begin(), cmd->m_assetData.end() );
+                            ev->PluginName = std::string( cmd->m_pluginName.begin(), cmd->m_pluginName.end() );
+                            ev->NodeName   = std::string( cmd->m_nodeName.begin(), cmd->m_nodeName.end() );
                             ev->SockID     = (int)*csock;
 
                             GetDefaultEventManager().ConcurrentQueueEvent( ev );

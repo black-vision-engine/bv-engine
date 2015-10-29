@@ -226,6 +226,22 @@ namespace
 		return toString( v[ 0 ] ) + ", " + toString( v[ 1 ] );
 	}
 
+   // *********************************
+    //
+    template< typename T > 
+	std::wstring toWString( const T & t )
+	{
+		return std::to_wstring( t );
+	}
+
+    // *********************************
+    //
+	template<> 
+	std::wstring toWString< std::string >( const std::string& t )
+	{
+		return std::wstring( t.begin(), t.end() );
+	}
+
 } // anonymous
 
 // *********************************
@@ -1222,9 +1238,9 @@ void            RemoteControlInterface::OnLoadAsset     ( IEventPtr evt )
     {
         bv::LoadAssetEventPtr eventLoadAsset = std::static_pointer_cast<bv::LoadAssetEvent>( evt );
         
-        std::string nodeName = toString( eventLoadAsset->NodeName );
-        std::string pluginName = toString( eventLoadAsset->PluginName );
-        std::string asssetData = toString( eventLoadAsset->AssetData );
+        std::string nodeName = eventLoadAsset->NodeName;
+        std::string pluginName = eventLoadAsset->PluginName;
+        std::string asssetData = eventLoadAsset->AssetData;
 
         auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot();
         auto node = root->GetNode( nodeName );
@@ -1243,9 +1259,9 @@ void            RemoteControlInterface::OnLoadAsset     ( IEventPtr evt )
 
         std::wstring response;
         if( result )
-            response = L"Asset loaded succesfully. node: [" + eventLoadAsset->NodeName + L"] plugin [" + eventLoadAsset->PluginName + L"]";
+            response = L"Asset loaded succesfully. node: [" + toWString( eventLoadAsset->NodeName ) + L"] plugin [" + toWString( eventLoadAsset->PluginName ) + L"]";
         else
-            response = L"Failed to load asset. node [" + eventLoadAsset->NodeName + L"] plugin [" + eventLoadAsset->PluginName + L"]";
+            response = L"Failed to load asset. node [" + toWString( eventLoadAsset->NodeName ) + L"] plugin [" + toWString( eventLoadAsset->PluginName ) + L"]";
 
         ResponseMsg msg;
         msg.msg     = response;
