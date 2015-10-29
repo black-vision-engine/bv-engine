@@ -15,6 +15,18 @@ public:
 
     virtual void    RenderNode                  ( Renderer * renderer, SceneNode * node ) override;
 
+private:
+
+    void            RenderWireframeOverlay      ( Renderer * renderer, SceneNode * node );
+
+    void            EnableWireframeEffect       ( Renderer * renderer );
+
+    void            DrawWirefreameNodeOnly      ( Renderer * renderer, SceneNode * node );
+    void            DrawWireframeChildren       ( Renderer * renderer, SceneNode * node );
+
+    void            DisableWireframeEffect      ( Renderer * renderer );
+
 };
+
 
 } //bv

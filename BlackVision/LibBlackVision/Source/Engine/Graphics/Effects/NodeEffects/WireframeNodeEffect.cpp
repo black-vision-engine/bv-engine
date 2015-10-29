@@ -13,8 +13,9 @@ WireframeNodeEffect::WireframeNodeEffect     ()
     auto & values = AccessValues();
 
     { values; }
-    // FIXME: string "alpha" used explicitely - suxx
-    //auto value = ValuesFactory::CreateValueFloat( "alpha" );
+    //auto value = ValuesFactory::CreateValueFloat( "lineWidth" );
+    //auto value = ValuesFactory::CreateValueVec4( "lineColor" );
+    //auto value = ValuesFactory::CreateValueVec4( "mainColor" );
     //value->SetValue( 1.f );
     //values.push_back( value );
 }
