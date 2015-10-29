@@ -187,6 +187,12 @@
     <Filter Include="Serialization\XML">
       <UniqueIdentifier>{719969e2-b26b-4293-85e3-d733a281968c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Serialization\JsonSpirit">
+      <UniqueIdentifier>{b7b800d7-36bd-4291-a6fb-e61ad91d484b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Serialization\JsonSpirit\JsonSpiritSource">
+      <UniqueIdentifier>{3f32f7df-24cd-4102-8f39-1c982a3001c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -980,6 +986,21 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\SceneModel.cpp">
       <Filter>Engine\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritDeserializeObject.cpp">
+      <Filter>Serialization\JsonSpirit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSerializeObject.cpp">
+      <Filter>Serialization\JsonSpirit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_reader.cpp">
+      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_value.cpp">
+      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer.cpp">
+      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1976,6 +1997,42 @@
     <ClInclude Include="..\..\..\Source\Serialization\XML\XMLDeserializer.h">
       <Filter>Serialization\XML</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritDeserilizeObject.h">
+      <Filter>Serialization\JsonSpirit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSerializeObject.h">
+      <Filter>Serialization\JsonSpirit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit.h">
+      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_error_position.h">
+      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_reader.h">
+      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_reader_template.h">
+      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_stream_reader.h">
+      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_utils.h">
+      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_value.h">
+      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer.h">
+      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer_options.h">
+      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer_template.h">
+      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
@@ -2040,6 +2097,9 @@
     </None>
     <None Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.h">
       <Filter>Serialization\Json</Filter>
+    </None>
+    <None Include="..\..\..\Source\Serialization\SerializationHelper.inl">
+      <Filter>Serialization</Filter>
     </None>
   </ItemGroup>
 </Project>

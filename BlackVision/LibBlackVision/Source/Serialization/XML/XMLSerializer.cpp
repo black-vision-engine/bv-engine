@@ -97,5 +97,20 @@ bool                SerializeObject::ExitChild           ()
     return true;
 }
 
+// ***********************
+//
+void                SerializeObject::SetAttribute        ( const std::wstring& /*name*/, const std::wstring& /*value*/ )
+{    assert( !"This serializer doesn't supports wstrings" );    }
+
+// ***********************
+//
+std::wstring        SerializeObject::GetAttribute        ( const std::wstring& /*name*/ )
+{    assert( !"This serializer doesn't supports wstrings" ); return L"";    }
+
+// ***********************
+//
+void                SerializeObject::EnterChild          ( const std::wstring& /*name*/ )
+{    assert( !"This serializer doesn't supports wstrings" );    }
+
 
 } // bv

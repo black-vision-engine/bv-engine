@@ -557,4 +557,89 @@ public:
 
 DEFINE_PTR_TYPE(LoadAssetEvent)
 
+
+// ******************************************************************************************
+// ************************************* new Events *****************************************
+// ******************************************************************************************
+
+
+// ************************************* ParamKeyEvent *************************************
+class ParamKeyEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        AddKey,
+        UpdateKey,
+        RemoveKey
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    std::string                 NodeName;
+    std::string                 PluginName;
+    std::string                 ParamName;
+    std::wstring                Value;
+
+    float                       Time;
+    ParamKeyEvent::Command      KeyCommand;
+
+    virtual EventType               GetEventType        () const;
+    virtual const std::string &     GetName             () const;
+
+    virtual void                    Serialize           ( std::ostringstream & out ) const;
+    virtual void                    Deserialize         ( std::istringstream & in );
+    virtual IEventPtr               Clone               () const;
+};
+DEFINE_PTR_TYPE( ParamKeyEvent )
+
+
+// ************************************* SetParamEvent *************************************
+//class SetParamEvent : public BaseEvent
+//{
+//private:
+//
+//    glm::vec3   m_translation;
+//    glm::vec3   m_scale;
+//
+//   
+//
+//public:
+//
+//    static const EventType      m_sEventType;
+//    static std::string          m_sEventName;
+//
+//    std::wstring               command;      // move to private
+//
+//    std::wstring               NodeName;
+//    std::wstring               PluginName;
+//    std::wstring               ParamName;
+//    std::wstring               Value;
+//    float                       x;
+//    float                       y;
+//    float                       z;
+//	float                      time;
+//
+//
+//public:
+//
+//    explicit                        SetParamEvent   ();
+//
+//    virtual EventType               GetEventType        () const;
+//
+//    virtual void                    Serialize           ( std::ostringstream & out ) const;
+//    virtual void                    Deserialize         ( std::istringstream & in );
+//    virtual IEventPtr               Clone               () const;
+//    static EventType                Type                ();
+//
+//    virtual const std::string &     GetName             () const;
+//    void                            SetData(std::wstring cmd){command=cmd;};
+//
+//};
+//
+//DEFINE_PTR_TYPE(SetParamEvent)
+
+
+
 } //bv

@@ -57,6 +57,11 @@ const EventType LoadAssetEvent::m_sEventType            = 0x10000013;
 std::string LoadAssetEvent::m_sEventName                = "Event_LoadAsset";
 
 
+// ************************************* new Events *****************************************
+const EventType ParamKeyEvent::m_sEventType       = 0x30000006;
+std::string ParamKeyEvent::m_sEventName           = "Event_ParamKeyEvent";
+
+
 // ************************************* PluginAddedEvent *************************************
 
 // *************************************
@@ -910,6 +915,43 @@ const std::string &     LoadAssetEvent::GetName           () const
 {
     return m_sEventName;
 }
+
+
+// ******************************************************************************************
+// ************************************* new Events *****************************************
+// ******************************************************************************************
+
+
+//******************* ParamKeyEvent *************
+
+// *************************************
+//
+EventType           ParamKeyEvent::GetEventType         () const
+{ return this->m_sEventType; }
+
+// *************************************
+//
+void                ParamKeyEvent::Serialize            ( std::ostringstream & out ) const
+{ assert( false ); }
+
+// *************************************
+//
+void                ParamKeyEvent::Deserialize          ( std::istringstream & in )
+{ assert( false ); }
+
+// *************************************
+//
+IEventPtr               ParamKeyEvent::Clone             () const
+{ return IEventPtr( new ParamKeyEvent( *this ) ); }
+
+// *************************************
+//
+const std::string &     ParamKeyEvent::GetName           () const
+{ return m_sEventName; }
+
+
+
+
 
 
 #pragma warning( pop )

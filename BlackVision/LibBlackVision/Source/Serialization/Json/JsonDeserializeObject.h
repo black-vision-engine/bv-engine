@@ -31,7 +31,10 @@ public:
     bool						EnterChild          ( const std::string& name ) const override;
 	bool						ExitChild           () const override;
 
-    virtual bool                NextChild           () const override;
+    bool                        NextChild           () const override;
+
+    std::wstring	        	GetAttribute        ( const std::wstring& name ) const override;
+    bool                        EnterChild          ( const std::wstring& name ) const override;
 };
 
 

@@ -98,7 +98,10 @@ bool                DeserializeObject::ExitChild           () const
 
 bool                DeserializeObject::NextChild           () const
 {
-    m_doc = m_doc->next_sibling();
+    auto name = m_doc->name();
+    do {
+        m_doc = m_doc->next_sibling();
+    }while( m_doc && strcmp( name, m_doc->name() ) );
 
     m_nodes.pop();
     m_nodes.push( m_doc );
@@ -108,6 +111,13 @@ bool                DeserializeObject::NextChild           () const
     else
         return false;
 }
+
+
+std::wstring        DeserializeObject::GetAttribute        ( const std::wstring& /*name*/ ) const
+{    assert( !"This serializer doesn't supports wstrings" ); return L"";    }
+
+bool                DeserializeObject::EnterChild          ( const std::wstring& /*name*/ ) const
+{    assert( !"This serializer doesn't supports wstrings" ); return false;    }
 
 
 } // bv

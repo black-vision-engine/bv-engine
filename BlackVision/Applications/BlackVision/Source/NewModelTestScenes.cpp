@@ -31,6 +31,9 @@
 #include "System/Env.h"
 #include "BVConfig.h"
 
+#include "Serialization/JsonSpirit/JsonSpiritSerializeObject.h"
+#include "Serialization/JsonSpirit/JsonSpiritDeserilizeObject.h"
+
 
 namespace bv {
 
@@ -466,11 +469,8 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 
 // *****************************
 //
-model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const std::string& scene, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    //auto scene = Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
-    auto scene = ConfigManager::GetString( "Debug/SceneFromEnvName" );
-
     model::BasicNodePtr node = nullptr;
 
     if( scene == "TWO_TEXTURED_RECTANGLES" )
@@ -528,6 +528,10 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
     else if( scene == "TEXT_CACHE_TEST" )
     {
         node = TestScenesFactory::AssetCacheTestScene( pluginsManager, timelineManager, timeEvaluator );
+    }
+    else if( scene == "W_SERIALIZATION_TEST" )
+    {
+        node = TestScenesFactory::WSerializationTest( pluginsManager, timelineManager, timeEvaluator );
     }
     else
     {
@@ -1145,7 +1149,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedBasicGeometryTestScene     ( 
     static  model::BasicNodePtr     CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager );
 
 /**All basic shapes in one scene*/
-model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::PluginsManager* pluginsManager, model::TimelineManager* timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     pluginsManager;
 
@@ -1173,7 +1177,7 @@ model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::Plu
     return node0;
 }
 
-model::BasicNodePtr		TestScenesFactory::BasicShapesTest		( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr		TestScenesFactory::BasicShapesTest		( const model::PluginsManager* pluginsManager, model::TimelineManager* timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     pluginsManager;
 
@@ -1181,7 +1185,7 @@ model::BasicNodePtr		TestScenesFactory::BasicShapesTest		( const model::PluginsM
     return node0;
 }
 
-model::BasicNodePtr     TestScenesFactory::AssetCacheTestScene         ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr     TestScenesFactory::AssetCacheTestScene         ( const model::PluginsManager* pluginsManager, model::TimelineManager* timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     pluginsManager;
 
@@ -1207,6 +1211,52 @@ model::BasicNodePtr     TestScenesFactory::AssetCacheTestScene         ( const m
     node0->AddChildToModelOnly( node7 );
     node0->AddChildToModelOnly( node8 );
     node0->AddChildToModelOnly( node9 );
+
+    return node0;
+}
+
+model::BasicNodePtr TestScenesFactory::WSerializationTest          ( const model::PluginsManager* pluginsManager, model::TimelineManager* timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    pluginsManager;
+    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "sand.jpg" );
+
+    JsonSpiritSerializeObject serializeObject;
+    serializeObject.EnterChild( L"asset" );
+        serializeObject.SetAttribute( L"path", L"sand.jpg" );
+        serializeObject.SetAttribute( L"type", L"texture" );
+        serializeObject.EnterChild( L"mipmap" );
+            serializeObject.SetAttribute( L"path", L"water.jpg" );
+            serializeObject.SetAttribute( L"type", L"texture" );
+        serializeObject.ExitChild();
+        serializeObject.EnterChild( L"mipmap" );
+            serializeObject.SetAttribute( L"path", L"water.jpg" );
+            serializeObject.SetAttribute( L"type", L"texture" );
+        serializeObject.ExitChild();
+    serializeObject.ExitChild();
+
+    serializeObject.Save( "textureWSerialize.json", FormatStyle::FORMATSTYLE_READABLE );
+
+
+    JsonSpiritDeserilizeObject deserializeObject;
+    if( deserializeObject.LoadFile( "textureWSerialize.json" ) )
+    {
+        std::wstring result;
+        result;
+
+        deserializeObject.EnterChild( L"asset" );
+            result = deserializeObject.GetAttribute( L"path" );
+            result = deserializeObject.GetAttribute( L"type" );
+            if( deserializeObject.EnterChild( L"mipmap" ) )
+            {
+                do
+                {
+                    result = deserializeObject.GetAttribute( L"path" );
+                    result = deserializeObject.GetAttribute( L"type" );
+                } while( deserializeObject.NextChild() );
+                deserializeObject.ExitChild();      // mipmap
+            }
+        deserializeObject.ExitChild();          // asset
+    }
 
     return node0;
 }

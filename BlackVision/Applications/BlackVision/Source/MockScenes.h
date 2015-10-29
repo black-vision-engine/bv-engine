@@ -49,7 +49,7 @@ public:
 
 public:
 
-    static  model::BasicNodePtr     CreateSceneFromEnv              ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     CreateSceneFromEnv              ( const std::string& scene, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreateTestRandomNode            ( const std::string & name,  const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreateTestScene                 ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, TestSceneSelector tss );
 
@@ -89,6 +89,7 @@ public:
 	static	model::BasicNodePtr		BasicShapesTest				( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 
     static  model::BasicNodePtr     AssetCacheTestScene         ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     WSerializationTest          ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 };
 
 // ********************************
