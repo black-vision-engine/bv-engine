@@ -24,9 +24,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/AnimatedStripComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/Simple/VertexAttributesChannelAnimatedVertices.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/VariableTopologyStripComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/Simple/VertexAttributesChannelVariableTopology.h"
 #include "Engine/Models/Plugins/GeometryMultiRectPlugin.h"
 #include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
 
@@ -61,79 +59,6 @@ struct AnimationSequenceDesc
 
 using namespace model;
 
-//// ******************************
-////
-//model::BasicNode *          AnimatedSolid ( float w, float h, float z, unsigned int numSegments, float speedX, float speedY, float cyclesX, float cyclesY, float sizeY, float sizeZ )
-//{
-//    model::BasicNode * root = new model::BasicNode( "AnimatedSolidRoot" );
-//
-//    ///////////////////////////// Channels //////////////////////////
-//    model::VertexAttributesChannel *        vaChannel     = model::VertexAttributesChannelAnimatedVertices::Create( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
-//
-//    ///////////////////////////// Geometry plugin //////////////////////////
-//    model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin( vaChannel );
-//
-//    root->AddPlugin( geomPlugin );
-//
-//    TransformF trans;
-//
-//    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( geomPlugin, model::ParametersFactory::CreateParameter( "transformation", trans, nullptr, 0 ) );
-//
-//    root->AddPlugin( transformPlugin );
-//
-//    ///////////////////////////// Solid plugin //////////////////////////// 
-//
-//    //auto solidPlugin = PluginsFactory::CreateSolidColorPlugin( transformPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
-//    //root->AddPlugin( solidPlugin );
-//    //return root;
-//
-//    ///////////////////////////// Texture plugin //////////////////////////// 
-//
-//    TransformF txTrans;
-//    txTrans.AddScale( InterpolatorsHelper::CreateConstValue( float( w ) / float( h ) ), InterpolatorsHelper::CreateConstValue( 1.f ), InterpolatorsHelper::CreateConstValue( 1.f ) );
-//
-//    std::vector< const model::TextureDescriptor > textures;
-//        
-//    textures.push_back( model::TextureDescriptor( "simless_00.jpg", ParametersFactory::CreateParameter( "texTransform", txTrans ) ) );
-//
-//    auto texturePlugin = PluginsFactory::CreateSimpleTexturePlugin( transformPlugin, textures, TextureAttachmentMode::MM_ATTACHED );
-//
-//    root->AddPlugin( texturePlugin );
-//
-//    return root;
-//    
-//}
-//
-//// ******************************
-////
-//model::BasicNode * VariableTopologySolids( float size, float speed, float oscilationSpeed, int numSegments, int numComponents )
-//{
-//    model::BasicNode * root = new model::BasicNode( "VarTopologySolidsRoot" );
-//    
-//    ///////////////////////////// Channels //////////////////////////
-//    model::VertexAttributesChannel *        vaChannel     = model::VertexAttributesChannelVariableTopology::Create( size, speed, oscilationSpeed, numSegments, numComponents );
-//
-//    ///////////////////////////// Geometry plugin //////////////////////////
-//    model::GeometryPlugin *     geomPlugin  = new model::GeometryPlugin( vaChannel );
-//
-//    root->AddPlugin( geomPlugin );
-//
-//    TransformF trans;
-//
-//    auto transformPlugin = PluginsFactory::CreateSimpleTransformPlugin( geomPlugin, model::ParametersFactory::CreateParameter( "transformation", trans, nullptr, 0 ) );
-//
-//    root->AddPlugin( transformPlugin );
-//
-//
-//    ///////////////////////////// Solid plugin //////////////////////////// 
-//
-//    PluginsFactory::CreateSolidColorPlugin( root, transformPlugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
-//    //// Add plugins to node
-//    
-//
-//    return root;
-//}
-//
 //// ******************************
 ////
 //model::BasicNode * AnimatedSequenceRect( const std::vector< AnimationSequenceDesc > & animations )
@@ -837,30 +762,6 @@ model::BasicNodePtr          TestScenesFactory::AnotherTestScene()
     return root;
 }
 
-
-// ******************************
-//
-model::BasicNodePtr      TestScenesFactory::AnimatedTestScene ()
-{
-    /*
-    float w = 5.f;
-    float h = 1.f;
-    float z = 0.f;
-    
-    unsigned int numSegments = 100;
-
-    float speedX    = 5.f;
-    float speedY    = 1.f;
-    float cyclesX   = 1.5f; //5
-    float cyclesY   = 0.7f; //3
-    float sizeY     = 1.5f;
-    float sizeZ     = 2.f; //0.7
-    */
-    //float 
-    //return AnimatedSolid( w, h, z, numSegments, speedX, speedY, cyclesX, cyclesY, sizeY, sizeZ );
-    return nullptr;
-}
-
 // ******************************
 //
 model::BasicNodePtr      TestScenesFactory::GreenRectTestScene          ()
@@ -882,21 +783,6 @@ model::BasicNodePtr      TestScenesFactory::TexturedRectTestScene       ()
 model::BasicNodePtr      TestScenesFactory::NaiveTimerTestScene         ()
 {
     //return NaiveTimer();
-    return nullptr;
-}
-
-// ******************************
-//
-model::BasicNodePtr      TestScenesFactory::TestSceneVariableTopology   ()
-{
-    /*
-    float size              = 1.0f;
-    float speed             = 1.5f;
-    float oscilationSpeed   = 1.f;
-    int numSegments         = 10;
-    int numComponents       = 4;
-    */
-    //return VariableTopologySolids( size, speed, oscilationSpeed, numSegments, numComponents );
     return nullptr;
 }
 

@@ -1,6 +1,5 @@
 #include "DefaultGeometryPluginBase.h"
 
-//#include "Engine/Models/Plugins/Channels/Geometry/Simple/VertexAttributesChannelVariableTopology.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/DefaultGeometryVertexAttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
@@ -64,7 +63,11 @@ void DefaultGeometryPluginBase::InitGeometry()
     {
 		m_vaChannel = std::make_shared< DefaultGeometryAndUVsVertexAttributeChannel >( PrimitiveType::PT_TRIANGLE_STRIP );
     }
-    m_vaChannel->ClearAll();
+	else
+	{
+		m_vaChannel->ClearAll();
+	}
+	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel, true );
 
     auto gens = GetGenerators();
 
@@ -78,14 +81,11 @@ void                                DefaultGeometryPluginBase::Update           
 {
     m_pluginParamValModel->Update();
 
+	//FIXME: some geometries shouldn't recreate vertex attributes channel and just update it
     if( NeedsTopologyUpdate() )
     {
         InitGeometry();
-		HelperVertexAttributesChannel::TopologyUpdate( m_vaChannel, true );
-        //m_vaChannel->SetNeedsTopologyUpdate( true );
     }
-    //else
-    //	m_vaChannel->SetNeedsTopologyUpdate( false );
 }
 
 } }

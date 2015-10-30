@@ -69,12 +69,10 @@ public:
                             
     static  model::BasicNodePtr     AnotherTestScene                ();
                             
-    static  model::BasicNodePtr     AnimatedTestScene               ();
     static  model::BasicNodePtr     GreenRectTestScene              ();
     static  model::BasicNodePtr     TexturedRectTestScene           ();
     static  model::BasicNodePtr     NaiveTimerTestScene             ();
                             
-    static  model::BasicNodePtr     TestSceneVariableTopology       ();
     static  model::BasicNodePtr     SequenceAnimationTestScene      ();
     static  model::BasicNodePtr     NonGeometryParent               ();
                             
