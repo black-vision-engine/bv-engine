@@ -6,6 +6,8 @@
 
 #include "Rendering/Logic/RenderLogic.h"
 
+#include "Engine/Graphics/Effects/WireframeEffect.h"
+
 
 namespace bv {
 
@@ -13,6 +15,7 @@ namespace bv {
 //
 WireframeRenderLogic::WireframeRenderLogic  ( RenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic )
     : NodeEffectRenderLogic( renderLogic, offscreenRenderLogic )
+    , m_effect( new WireframeEffect() )
 {
 }
 
@@ -35,20 +38,17 @@ void    WireframeRenderLogic::RenderNode                ( Renderer * renderer, S
 //
 void    WireframeRenderLogic::RenderWireframeOverlay    ( Renderer * renderer, SceneNode * node )
 {
-    EnableWireframeEffect( renderer );
+    EnableWireframeEffect( renderer, node );
 
     DrawWirefreameNodeOnly( renderer, node );
     DrawWireframeChildren( renderer, node );
-
-    DisableWireframeEffect( renderer );
 }
 
 // *********************************
 //
-void    WireframeRenderLogic::EnableWireframeEffect       ( Renderer * renderer )
+void    WireframeRenderLogic::EnableWireframeEffect       ( Renderer * renderer, SceneNode * node )
 {
-    { renderer; }
-    // FIXME: implement
+    renderer->Enable( m_effect->GetPass( 0 ), static_cast<bv::RenderableEntity *>( node->GetTransformable() ) );
 }
 
 // *********************************
@@ -69,14 +69,6 @@ void    WireframeRenderLogic::DrawWireframeChildren       ( Renderer * renderer,
         DrawWirefreameNodeOnly( renderer, node->GetChild( i ) ); 
         DrawWireframeChildren( renderer, node->GetChild( i ) );
     }
-}
-
-// *********************************
-//
-void    WireframeRenderLogic::DisableWireframeEffect      ( Renderer * renderer )
-{
-    { renderer; }
-    // FIXME: implement
 }
 
 } //bv
