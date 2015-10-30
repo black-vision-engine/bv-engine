@@ -4,11 +4,11 @@
 #include "Tools/StringHeplers.h"
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
-#include "Engine/Models/BasicOverrideState.h"
 
 #include "Engine/Models/ModelNodeEditor.h"
 
 #include "Engine/Models/Plugins/Plugin.h"
+
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 
@@ -48,7 +48,6 @@ BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator,
     : m_name( name )
     , m_pluginList( nullptr )
     , m_pluginsManager( pluginsManager )
-    , m_overrideState( nullptr )
     , m_visible( true )
 	, m_modelNodeEditor ( nullptr )
     , m_modelNodeEffect( nullptr )
@@ -58,14 +57,12 @@ BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator,
         m_pluginsManager = &PluginsManager::DefaultInstance();
     }
 
-    m_overrideState = new BasicOverrideState( timeEvaluator );
 }
 
 // ********************************
 //
 BasicNode::~BasicNode()
 {
-    delete m_overrideState;
 }
 
 // ********************************
@@ -218,83 +215,6 @@ IModelNodeEffectPtr             BasicNode::GetNodeEffect            () const
 void                            BasicNode::SetNodeEffect            ( IModelNodeEffectPtr nodeEffect )
 {
     m_modelNodeEffect = nodeEffect;
-}
-
-// ********************************
-//
-void                            BasicNode::EnableOverrideStateAM    ()
-{
-    m_overrideState->EnableAlphaAM();
-}
-
-// ********************************
-//
-void                            BasicNode::EnableOverrideStateNM    ()
-{
-    m_overrideState->EnableAlphaNM();
-}
-
-// ********************************
-//
-void                            BasicNode::DisableOverrideStateAM   ()
-{
-    m_overrideState->DisableAlphaAM();
-}
-
-// ********************************
-//
-void                            BasicNode::DisableOverrideStateNM   ()
-{
-    m_overrideState->DisableAlphaNM();
-}
-
-// ********************************
-//
-bool                            BasicNode::OverrideStateChangedAM   () const
-{
-    return m_overrideState->ChangedAM();
-}
-
-// ********************************
-//
-bool                            BasicNode::OverrideStateChangedNM   () const
-{
-    return m_overrideState->ChangedNM();
-}
-
-// ********************************
-//
-void                            BasicNode::SetOverrideStateChgAM    ( bool changed )
-{
-    return m_overrideState->SetChangedAM( changed );
-}
-
-// ********************************
-//
-void                            BasicNode::SetOverrideStateChgNM    ( bool changed )
-{
-    return m_overrideState->SetChangedNM( changed );
-}
-
-// ********************************
-//
-bool                            BasicNode::IsStateOverridenAM       () const
-{
-    return m_overrideState->IsAlphaEnabledAM();
-}
-
-// ********************************
-//
-bool                            BasicNode::IsStateOverridenNM       () const
-{
-    return m_overrideState->IsAlphaEnabledNM();
-}
-
-// ********************************
-//
-IOverrideState *                BasicNode::GetOverrideState         ()
-{
-    return m_overrideState;
 }
 
 // ********************************
@@ -550,8 +470,6 @@ void BasicNode::Update( TimeType t )
             m_modelNodeEffect->Update( t );
         }
 
-        m_overrideState->Update( t );
-
         m_pluginList->Update( t );
 
         if( m_nodeLogic )
@@ -608,5 +526,4 @@ INodeLogicPtr                       BasicNode::GetLogic				    ()
 }
 
 } // model
-
 } // bv

@@ -12,9 +12,11 @@ private:
 
     ParamIntPtr     m_paramBgIdx;
     ParamIntPtr     m_paramFgIdx;
+    ParamFloatPtr   m_paramAlpha;
 
     unsigned int    m_bgVal;
     unsigned int    m_fgVal;
+    float           m_alphaVal;
 
 public:
 
@@ -24,11 +26,13 @@ public:
 
     ParamIntPtr             GetParamBgIdx           ();
     ParamIntPtr             GetParamFgIdx           ();
+    ParamFloatPtr           GetParamAlpha           ();
 
     virtual void            Update                  ( TimeType t ) override;
 
     unsigned int            GetBackgroundChildIdx   () const;
     unsigned int            GetForegroundChildIdx   () const;
+    float                   GetAlpha                () const;
 
 };
 

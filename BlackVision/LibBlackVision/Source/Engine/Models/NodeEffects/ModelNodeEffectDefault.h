@@ -13,6 +13,7 @@ public:
             ModelNodeEffectDefault  ( ITimeEvaluatorPtr timeEvaluator );
 
     virtual NodeEffectType  GetType () const override;
+    virtual void            Update  ( TimeType t ) override;
 
 };
 } // model

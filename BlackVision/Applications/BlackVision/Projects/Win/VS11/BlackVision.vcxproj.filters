@@ -142,6 +142,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\EventHandlers\PluginEventsHandlers.cpp">
       <Filter>EventHandlers</Filter>
+	</ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.cpp">
+      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsConverter\JsonCommandsConverter.cpp">
       <Filter>EndUserAPI\JsonCommandsConverter</Filter>
@@ -257,6 +260,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsConverter\JsonCommandsConverter.h">
       <Filter>EndUserAPI\JsonCommandsConverter</Filter>
+	</ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.h">
+      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

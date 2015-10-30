@@ -14,12 +14,15 @@ NodeMaskNodeEffect::NodeMaskNodeEffect     ()
 
     auto valueBgIdx = ValuesFactory::CreateValueInt( "bgIdx" );
     auto valueFgIdx = ValuesFactory::CreateValueInt( "fgIdx" );
+    auto valueAlpha = ValuesFactory::CreateValueFloat( "alpha" );
 
     valueBgIdx->SetValue( 0 );
     valueFgIdx->SetValue( 1 );
+    valueAlpha->SetValue( 1.f );
 
     values.push_back( valueBgIdx );
     values.push_back( valueFgIdx );
+    values.push_back( valueAlpha );
 }
 
 // *********************************

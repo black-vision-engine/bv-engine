@@ -1,4 +1,4 @@
-#include "OffscreenRenderLogic.h"
+#include "OffscreenRenderLogicTst.h"
 
 #include "Engine/Graphics/Resources/RenderTarget.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
@@ -90,7 +90,7 @@ void    OffscreenRenderData::UseTexture2DEffect ( const IValue * val, Texture2DP
 
 // **************************
 //
-OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int height, unsigned int numReadBuffers, Camera * camera, TextureFormat fmt )
+OffscreenRenderLogicTst::OffscreenRenderLogicTst   ( unsigned int width, unsigned int height, unsigned int numReadBuffers, Camera * camera, TextureFormat fmt )
     : m_textureData( width, height, fmt )
     , m_usedStackedRenderTargets( 0 )
     , m_topRenderTargetEnabled( false )
@@ -114,7 +114,7 @@ OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int 
 
 // **************************
 //
-OffscreenRenderLogic::~OffscreenRenderLogic  ()
+OffscreenRenderLogicTst::~OffscreenRenderLogicTst  ()
 {
     for( auto rtd : m_auxRenderTargets )
     {
@@ -132,14 +132,14 @@ OffscreenRenderLogic::~OffscreenRenderLogic  ()
 
 // **************************
 //
-void                OffscreenRenderLogic::SetRendererCamera         ( Camera * camera )
+void                OffscreenRenderLogicTst::SetRendererCamera         ( Camera * camera )
 {
     m_rendererCamera = camera;
 }
 
 // **************************
 //
-void                OffscreenRenderLogic::AllocateNewRenderTarget     ( Renderer * renderer )
+void                OffscreenRenderLogicTst::AllocateNewRenderTarget     ( Renderer * renderer )
 {
     if( m_topRenderTargetEnabled )
     {
@@ -160,7 +160,7 @@ void                OffscreenRenderLogic::AllocateNewRenderTarget     ( Renderer
 
 // **************************
 //
-void                OffscreenRenderLogic::EnableTopRenderTarget       ( Renderer * renderer )
+void                OffscreenRenderLogicTst::EnableTopRenderTarget       ( Renderer * renderer )
 {
     assert( m_usedStackedRenderTargets > 0 );
 
@@ -174,7 +174,7 @@ void                OffscreenRenderLogic::EnableTopRenderTarget       ( Renderer
 
 // **************************
 //
-void                OffscreenRenderLogic::DiscardCurrentRenderTarget  ( Renderer * renderer )
+void                OffscreenRenderLogicTst::DiscardCurrentRenderTarget  ( Renderer * renderer )
 {
     assert( m_usedStackedRenderTargets > 0 );
 
@@ -188,7 +188,7 @@ void                OffscreenRenderLogic::DiscardCurrentRenderTarget  ( Renderer
 
 // **************************
 //
-void                OffscreenRenderLogic::DisableTopRenderTarget    ( Renderer * renderer )
+void                OffscreenRenderLogicTst::DisableTopRenderTarget    ( Renderer * renderer )
 {
     if( m_topRenderTargetEnabled )
     {
@@ -200,7 +200,7 @@ void                OffscreenRenderLogic::DisableTopRenderTarget    ( Renderer *
 
 // **************************
 //
-void                OffscreenRenderLogic::DrawTopAuxRenderTarget    ( Renderer * renderer, const IValue * alphaVal )
+void                OffscreenRenderLogicTst::DrawTopAuxRenderTarget    ( Renderer * renderer, const IValue * alphaVal )
 {
     DisableTopRenderTarget( renderer );
 
@@ -218,7 +218,7 @@ void                OffscreenRenderLogic::DrawTopAuxRenderTarget    ( Renderer *
 
 // **************************
 //
-void                OffscreenRenderLogic::DrawAMTopTwoRenderTargets ( Renderer * renderer, const IValue * alphaVal )
+void                OffscreenRenderLogicTst::DrawAMTopTwoRenderTargets ( Renderer * renderer, const IValue * alphaVal )
 {
     DisableTopRenderTarget( renderer );
 
@@ -237,7 +237,7 @@ void                OffscreenRenderLogic::DrawAMTopTwoRenderTargets ( Renderer *
 
 // **************************
 //
-void                OffscreenRenderLogic::DrawDisplayRenderTarget   ( Renderer * renderer )
+void                OffscreenRenderLogicTst::DrawDisplayRenderTarget   ( Renderer * renderer )
 {
     assert( m_displayRTEnabled == false );
 
@@ -248,28 +248,28 @@ void                OffscreenRenderLogic::DrawDisplayRenderTarget   ( Renderer *
 
 // **************************
 //
-void                OffscreenRenderLogic::SwapDisplayRenderTargets  ()
+void                OffscreenRenderLogicTst::SwapDisplayRenderTargets  ()
 {
     m_curDisplayTarget = ( m_curDisplayTarget + 1 ) % GNumRenderTargets;
 }
 
 // **************************
 //
-unsigned int    OffscreenRenderLogic::TotalNumReadBuffers           () const
+unsigned int    OffscreenRenderLogicTst::TotalNumReadBuffers           () const
 {
     return (unsigned int) m_readbackTextures.size();
 }
 
 // **************************
 //
-unsigned int    OffscreenRenderLogic::NumReadBuffersPerRT           () const
+unsigned int    OffscreenRenderLogicTst::NumReadBuffersPerRT           () const
 {
     return TotalNumReadBuffers() / GNumRenderTargets;
 }
 
 // **************************
 //
-Texture2DConstPtr   OffscreenRenderLogic::ReadDisplayTarget         ( Renderer * renderer, unsigned int bufNum )
+Texture2DConstPtr   OffscreenRenderLogicTst::ReadDisplayTarget         ( Renderer * renderer, unsigned int bufNum )
 {
     unsigned int bufferIdx = GNumRenderTargets * bufNum + CurDisplayRenderTargetNum();
 
@@ -282,7 +282,7 @@ Texture2DConstPtr   OffscreenRenderLogic::ReadDisplayTarget         ( Renderer *
 
 // **************************
 // Python-like logic, where negative numbers are used to index the array backwards
-RenderTarget *      OffscreenRenderLogic::GetRenderTargetAt         ( int i ) const
+RenderTarget *      OffscreenRenderLogicTst::GetRenderTargetAt         ( int i ) const
 {
     int numUsedRT = (int) m_usedStackedRenderTargets;
 
@@ -310,7 +310,7 @@ RenderTarget *      OffscreenRenderLogic::GetRenderTargetAt         ( int i ) co
 
 // **************************
 //
-RenderTargetData    OffscreenRenderLogic::CreateDisplayRenderTargetData () const
+RenderTargetData    OffscreenRenderLogicTst::CreateDisplayRenderTargetData () const
 {
     RenderTargetData ret;
 
@@ -330,14 +330,14 @@ RenderTargetData    OffscreenRenderLogic::CreateDisplayRenderTargetData () const
 
 // **************************
 //
-unsigned int      OffscreenRenderLogic::CurDisplayRenderTargetNum   () const
+unsigned int      OffscreenRenderLogicTst::CurDisplayRenderTargetNum   () const
 {
     return m_curDisplayTarget;
 }
 
 // **************************
 //
-RenderTargetData  OffscreenRenderLogic::CurDisplayRenderTargetData  () const
+RenderTargetData  OffscreenRenderLogicTst::CurDisplayRenderTargetData  () const
 {
     return m_displayRenderTargetData[ m_curDisplayTarget ];
 }

@@ -40,7 +40,7 @@ protected:
 
 };
 
-const std::string                            ReadShaderContentsFromFile             ( const std::string & fileName );
+std::string                            ReadShaderContentsFromFile             ( const std::string & fileName );
 
 } // model
 } // bv

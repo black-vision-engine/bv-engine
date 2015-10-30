@@ -14,9 +14,11 @@ ModelNodeEffectNodeMask::ModelNodeEffectNodeMask( ITimeEvaluatorPtr timeEvaluato
 { 
     m_paramBgIdx = ParametersFactory::CreateParameterInt( "bgIdx", timeEvaluator );
     m_paramFgIdx = ParametersFactory::CreateParameterInt( "fgIdx", timeEvaluator );
+    m_paramAlpha = ParametersFactory::CreateParameterFloat( "alpha", timeEvaluator );
 
     m_paramBgIdx->SetVal( 0, 0.f );
     m_paramFgIdx->SetVal( 1, 0.f );
+    m_paramAlpha->SetVal( 1.f, 0.f );
 }
 
 // ********************************
@@ -42,12 +44,20 @@ ParamIntPtr     ModelNodeEffectNodeMask::GetParamFgIdx           ()
 
 // ********************************
 //
+ParamFloatPtr   ModelNodeEffectNodeMask::GetParamAlpha           ()
+{
+    return m_paramAlpha;
+}
+
+// ********************************
+//
 void            ModelNodeEffectNodeMask::Update  ( TimeType t )
 {
     { t; }
 
     m_bgVal = m_paramBgIdx->Evaluate();
     m_fgVal = m_paramFgIdx->Evaluate();
+    m_alphaVal = m_paramAlpha->Evaluate();
 
     assert( m_bgVal != m_fgVal );
 }
@@ -64,6 +74,13 @@ unsigned int    ModelNodeEffectNodeMask::GetBackgroundChildIdx   () const
 unsigned int    ModelNodeEffectNodeMask::GetForegroundChildIdx   () const
 {
     return m_fgVal;
+}
+
+// ********************************
+//
+float           ModelNodeEffectNodeMask::GetAlpha                () const
+{
+    return m_alphaVal;
 }
 
 } // model

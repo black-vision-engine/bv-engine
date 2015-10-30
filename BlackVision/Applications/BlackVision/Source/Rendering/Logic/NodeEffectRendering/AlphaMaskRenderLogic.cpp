@@ -35,7 +35,8 @@ void    AlphaMaskRenderLogic::RenderNode                  ( Renderer * renderer,
 
     GetRenderLogic()->DrawNode( renderer, node );
 
-    GetOffscreenRenderLogic()->DrawTopAuxRenderTarget( renderer, node->GetOverrideAlphaVal() );
+    auto alphaVal = node->GetNodeEffect()->GetValue( "alpha" );
+    GetOffscreenRenderLogic()->DrawTopAuxRenderTarget( renderer, alphaVal.get() );
     GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
     GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
 }
