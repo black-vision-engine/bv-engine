@@ -514,54 +514,54 @@ public:
 
     explicit                        WidgetCmd			();
 
-    virtual EventType               GetEventType        () const;
 
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );
     virtual IEventPtr               Clone               () const;
+
     static EventType                Type                ();
-
+    static std::string&             Name                ();
     virtual const std::string &     GetName             () const;
-    //void                            SetData(std::wstring cmd){command=cmd;};
-
+    virtual EventType               GetEventType        () const;
 };
 
 DEFINE_PTR_TYPE(WidgetCmd)
 
 
-// ************************************* LoadAssetEvent *************************************
-class LoadAssetEvent : public BaseEvent
-{
-public:
-
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-    std::string                 NodeName;
-    std::string                 PluginName;
-    std::string                 AssetData;
-
-    int                         SockID;
-public:
-    explicit                        LoadAssetEvent();
-
-    virtual EventType               GetEventType        () const;
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-    static EventType                Type                ();
-
-    virtual const std::string &     GetName             () const;
-};
-
-
-DEFINE_PTR_TYPE(LoadAssetEvent)
 
 
 // ******************************************************************************************
 // ************************************* new Events *****************************************
 // ******************************************************************************************
 
+
+// ************************************* LoadAssetEvent *************************************
+class LoadAssetEvent : public BaseEvent
+{
+private:
+    static const EventType          m_sEventType;
+    static std::string              m_sEventName;
+public:
+    std::string                     NodeName;
+    std::string                     PluginName;
+    std::string                     AssetData;
+
+    int                             SockID;
+public:
+    explicit                        LoadAssetEvent();
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+};
+
+
+DEFINE_PTR_TYPE( LoadAssetEvent )
 
 // ************************************* ParamKeyEvent *************************************
 class ParamKeyEvent : public BaseEvent
@@ -571,19 +571,20 @@ public:
     {
         AddKey,
         UpdateKey,
-        RemoveKey
+        RemoveKey,
+        Fail            // Wrong command
     } Command;
 private:
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
 public:
-    std::string                 NodeName;
-    std::string                 PluginName;
-    std::string                 ParamName;
-    std::wstring                Value;
+    std::string                     NodeName;
+    std::string                     PluginName;
+    std::string                     ParamName;
+    std::wstring                    Value;
 
-    float                       Time;
-    ParamKeyEvent::Command      KeyCommand;
+    float                           Time;
+    ParamKeyEvent::Command          KeyCommand;
 
     virtual EventType               GetEventType        () const;
     virtual const std::string &     GetName             () const;
@@ -591,54 +592,14 @@ public:
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );
     virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+private:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
 };
 DEFINE_PTR_TYPE( ParamKeyEvent )
-
-
-// ************************************* SetParamEvent *************************************
-//class SetParamEvent : public BaseEvent
-//{
-//private:
-//
-//    glm::vec3   m_translation;
-//    glm::vec3   m_scale;
-//
-//   
-//
-//public:
-//
-//    static const EventType      m_sEventType;
-//    static std::string          m_sEventName;
-//
-//    std::wstring               command;      // move to private
-//
-//    std::wstring               NodeName;
-//    std::wstring               PluginName;
-//    std::wstring               ParamName;
-//    std::wstring               Value;
-//    float                       x;
-//    float                       y;
-//    float                       z;
-//	float                      time;
-//
-//
-//public:
-//
-//    explicit                        SetParamEvent   ();
-//
-//    virtual EventType               GetEventType        () const;
-//
-//    virtual void                    Serialize           ( ISerializer& ser ) const;
-//    virtual void                    Deserialize         ( std::istringstream & in );
-//    virtual IEventPtr               Clone               () const;
-//    static EventType                Type                ();
-//
-//    virtual const std::string &     GetName             () const;
-//    void                            SetData(std::wstring cmd){command=cmd;};
-//
-//};
-//
-//DEFINE_PTR_TYPE(SetParamEvent)
 
 
 

@@ -71,13 +71,23 @@ std::string ParamKeyEvent::m_sEventName           = "Event_ParamKeyEvent";
 
 namespace Serial
 {
+const std::wstring EMPTY_WSTRING            = L"";
 
-const std::wstring COMMAND_WSTRING = L"cmd";
-const std::wstring NODE_NAME_WSTRING = L"NodeName";
-const std::wstring PLUGIN_NAME_WSTRING = L"PluginName";
+const std::wstring EVENT_TYPE_WSTRING          = L"cmd";
+const std::wstring NODE_NAME_WSTRING        = L"NodeName";
+const std::wstring PLUGIN_NAME_WSTRING      = L"PluginName";
 
 // LoadAssetEvent
-const std::wstring ASSET_DATA_WSTRING = L"AssetData";
+const std::wstring ASSET_DATA_WSTRING       = L"AssetData";
+
+// ParamKeyEvent
+const std::wstring PARAM_NAME_WSTRING       = L"ParamName";
+const std::wstring PARAM_VALUE_WSTRING      = L"ParamValue";
+const std::wstring KEY_TIME_WSTRING         = L"Time";
+const std::wstring KEY_OPERATION_WSTRING    = L"Command";
+const std::wstring ADD_KEY_COMMAND_WSTRING  = L"AddKey";
+const std::wstring REMOVE_KEY_COMMAND_WSTRING   = L"RemoveKey";
+const std::wstring UPDATE_KEY_COMMAND_WSTRING   = L"UpdateKey";
 
 }
 
@@ -899,23 +909,13 @@ const std::string &     WidgetCmd::GetName           () const
 //******************* LoadAssetEvent *************
 
 LoadAssetEvent::LoadAssetEvent         () 
-{
-  
-}
-
-
-// *************************************
-//
-EventType           LoadAssetEvent::GetEventType         () const
-{
-    return this->m_sEventType;
-}
+{}
 
 // *************************************
 //
 void                LoadAssetEvent::Serialize            ( ISerializer& ser ) const
 {
-    ser.SetAttribute( Serial::COMMAND_WSTRING, toWString( m_sEventName ) );
+    ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
     ser.SetAttribute( Serial::NODE_NAME_WSTRING, toWString( NodeName ) );
     ser.SetAttribute( Serial::PLUGIN_NAME_WSTRING, toWString( PluginName ) );
     ser.SetAttribute( Serial::ASSET_DATA_WSTRING, toWString( AssetData ) );
@@ -925,7 +925,7 @@ void                LoadAssetEvent::Serialize            ( ISerializer& ser ) co
 //
 IEventPtr                LoadAssetEvent::Create          ( IDeserializer& deser )
 {
-    if( deser.GetAttribute( Serial::COMMAND_WSTRING ) == toWString( m_sEventName ) )
+    if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         LoadAssetEventPtr newEvent  = std::make_shared<LoadAssetEvent>();
         newEvent->PluginName        = toString( deser.GetAttribute( Serial::PLUGIN_NAME_WSTRING ) );
@@ -938,23 +938,24 @@ IEventPtr                LoadAssetEvent::Create          ( IDeserializer& deser 
 // *************************************
 //
 IEventPtr               LoadAssetEvent::Clone             () const
-{
-    return IEventPtr( new LoadAssetEvent( *this ) );
-}
+{    return IEventPtr( new LoadAssetEvent( *this ) );   }
+
 // *************************************
 //
 EventType               LoadAssetEvent::Type              ()
-{
-    return m_sEventType;
-}
-
+{    return m_sEventType;   }
+// *************************************
+//
+std::string& LoadAssetEvent::Name                ()
+{    return m_sEventName;   }
 // *************************************
 //
 const std::string &     LoadAssetEvent::GetName           () const
-{
-    return m_sEventName;
-}
-
+{    return Name();   }
+// *************************************
+//
+EventType           LoadAssetEvent::GetEventType         () const
+{    return this->m_sEventType; }
 
 // ******************************************************************************************
 // ************************************* new Events *****************************************
@@ -965,18 +966,35 @@ const std::string &     LoadAssetEvent::GetName           () const
 
 // *************************************
 //
-EventType           ParamKeyEvent::GetEventType         () const
-{ return this->m_sEventType; }
-
-// *************************************
-//
 void                ParamKeyEvent::Serialize            ( ISerializer& ser ) const
-{ assert( false ); }
+{
+    ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
+    ser.SetAttribute( Serial::NODE_NAME_WSTRING, toWString( NodeName ) );
+    ser.SetAttribute( Serial::PLUGIN_NAME_WSTRING, toWString( PluginName ) );
+    ser.SetAttribute( Serial::PARAM_NAME_WSTRING, toWString( ParamName ) );
+    ser.SetAttribute( Serial::PARAM_VALUE_WSTRING, Value );
+    ser.SetAttribute( Serial::KEY_TIME_WSTRING, std::to_wstring( Time ) );
+    ser.SetAttribute( Serial::KEY_OPERATION_WSTRING, CommandToWString( KeyCommand ) );
+}
 
 // *************************************
 //
 IEventPtr           ParamKeyEvent::Create          ( IDeserializer& deser )
-{ assert( false ); return nullptr; }
+{
+    if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
+    {
+        ParamKeyEventPtr newEvent   = std::make_shared<ParamKeyEvent>();
+        newEvent->PluginName        = toString( deser.GetAttribute( Serial::PLUGIN_NAME_WSTRING ) );
+        newEvent->NodeName          = toString( deser.GetAttribute( Serial::NODE_NAME_WSTRING ) );
+        newEvent->ParamName         = toString( deser.GetAttribute( Serial::PARAM_NAME_WSTRING ) );
+        newEvent->Value             = deser.GetAttribute( Serial::PARAM_VALUE_WSTRING );
+        newEvent->Time              = stof( deser.GetAttribute( Serial::KEY_TIME_WSTRING ) );
+        newEvent->KeyCommand        = WStringToCommand( deser.GetAttribute( Serial::KEY_OPERATION_WSTRING ) );
+        
+        return newEvent;
+    }
+    return nullptr;    
+}
 
 // *************************************
 //
@@ -985,13 +1003,47 @@ IEventPtr               ParamKeyEvent::Clone             () const
 
 // *************************************
 //
+std::wstring ParamKeyEvent::CommandToWString    ( Command cmd )
+{
+    if( cmd == Command::AddKey )
+        return Serial::ADD_KEY_COMMAND_WSTRING;
+    else if( cmd == Command::RemoveKey )
+        return Serial::REMOVE_KEY_COMMAND_WSTRING;
+    else if( cmd == Command::UpdateKey )
+        return Serial::UPDATE_KEY_COMMAND_WSTRING;
+    else
+        return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
+}
+// *************************************
+//
+ParamKeyEvent::Command ParamKeyEvent::WStringToCommand    ( const std::wstring& string )
+{
+    if( string == Serial::ADD_KEY_COMMAND_WSTRING )
+        return Command::AddKey;
+    else if( string == Serial::REMOVE_KEY_COMMAND_WSTRING )
+        return Command::RemoveKey;
+    else if( string == Serial::UPDATE_KEY_COMMAND_WSTRING )
+        return Command::UpdateKey;
+    else
+        return Command::Fail;
+}
+
+// *************************************
+//
+EventType               ParamKeyEvent::Type              ()
+{    return m_sEventType;   }
+// *************************************
+//
+std::string& ParamKeyEvent::Name                ()
+{    return m_sEventName;   }
+// *************************************
+//
 const std::string &     ParamKeyEvent::GetName           () const
-{ return m_sEventName; }
-
-
-
-
-
+{    return Name();   }
+// *************************************
+//
+EventType           ParamKeyEvent::GetEventType         () const
+{ return this->m_sEventType; }
 
 #pragma warning( pop )
 

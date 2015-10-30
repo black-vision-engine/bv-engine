@@ -1234,7 +1234,7 @@ void            RemoteControlInterface::OnNodeLeaving   ( IEventPtr evt )
 //
 void            RemoteControlInterface::OnLoadAsset     ( IEventPtr evt )
 {
-    if( evt->GetEventType() == bv::LoadAssetEvent::m_sEventType )
+    if( evt->GetEventType() == bv::LoadAssetEvent::Type() )
     {
         bv::LoadAssetEventPtr eventLoadAsset = std::static_pointer_cast<bv::LoadAssetEvent>( evt );
         

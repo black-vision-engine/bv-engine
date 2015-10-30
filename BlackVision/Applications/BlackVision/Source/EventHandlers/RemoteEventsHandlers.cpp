@@ -30,6 +30,7 @@ void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic* appLogic )
     m_sceneEvents = new SceneEventsHandlers( appLogic );
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_pluginEvents, &PluginEventsHandlers::LoadAsset ), LoadAssetEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_pluginEvents, &PluginEventsHandlers::AddParamKey ), ParamKeyEvent::Type() );
 }
 
 } //bv

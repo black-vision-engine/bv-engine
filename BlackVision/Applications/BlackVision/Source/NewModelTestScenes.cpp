@@ -1269,6 +1269,7 @@ model::BasicNodePtr TestScenesFactory::RemoteEventsTestScene( const model::Plugi
 {
     pluginsManager;
     auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "sand.jpg" );
+    //auto node0 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( 0.0, -0.4, 0.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 1", "fonts/Astera.TTF" );
 
     return node0;
 }

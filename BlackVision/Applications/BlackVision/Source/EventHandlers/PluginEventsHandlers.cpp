@@ -1,10 +1,13 @@
 #include "PluginEventsHandlers.h"
 
-#include "Engine/Events/EventHelpers.h"
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Assets/AssetManager.h"
 #include "../BVAppLogic.h"
 #include "../UseLogger.h"
+
+#include "Engine/Events/EventHelpers.h"             // wstring to string conversions and vice versa
+#include "Serialization/SerializationHelper.h"      // Conversions from string to glm types
+
 
 namespace bv
 {
@@ -22,19 +25,20 @@ PluginEventsHandlers::~PluginEventsHandlers()
 //
 void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
 {
-    if( eventPtr->GetEventType() == bv::SetParamEvent::m_sEventType)
+    if( eventPtr->GetEventType() == bv::ParamKeyEvent::Type() )
     {
         bv::ParamKeyEventPtr setParamEvent = std::static_pointer_cast<bv::ParamKeyEvent>( eventPtr );
+        
+        ParamKeyEvent::Command command  = setParamEvent->KeyCommand;
+        if( command != ParamKeyEvent::Command::AddKey )
+            return;
 
         std::string nodeName    = toString( setParamEvent->NodeName );
         std::string pluginName  = toString( setParamEvent->PluginName );
         std::string paramName   = toString( setParamEvent->ParamName );
         std::wstring value      = setParamEvent->Value;
 
-        float keyTime                   = setParamEvent->Time;
-        ParamKeyEvent::Command command  = setParamEvent->KeyCommand;
-        { keyTime; }
-        { command; }
+        float keyTime           = setParamEvent->Time;
         
         auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
         auto node = root->GetNode( nodeName );
@@ -49,23 +53,29 @@ void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
             }
         }
 
-     //   if( pluginName == "transform" )
-     //   {
-     //       auto param = node->GetPlugin("transform")->GetParameter("simple_transform");
-     //       assert( param );
-     //       if( paramName == "translation" )
-     //       {
-				 //Log::A("OK", "node ["+ NodeNameStr+"] translation: ("+to_string(evtSetParam->x)+", "+to_string(evtSetParam->y)+", "+to_string(evtSetParam->z)+") time: "+to_string(evtSetParam->time));
-
-     //            SetParameterTranslation ( param, 0, (bv::TimeType)evtSetParam->time, glm::vec3( evtSetParam->x,evtSetParam->y,evtSetParam->z));
-     //       }
-     //       else if( paramName == "scale" )
-     //       {
-				 //Log::A("OK", "node ["+ NodeNameStr+"] scale: ("+to_string(evtSetParam->x)+", "+to_string(evtSetParam->y)+", "+to_string(evtSetParam->z)+") time: "+to_string(evtSetParam->time));
-     //            
-     //            SetParameterScale ( param, 0, (bv::TimeType)evtSetParam->time, glm::vec3( evtSetParam->x,evtSetParam->y,evtSetParam->z));
-     //       }
-     //   }
+        if( pluginName == "transform" )
+        {
+            auto param = node->GetPlugin( pluginName )->GetParameter("simple_transform");
+            if( param == nullptr )
+            {
+                LOG_MESSAGE( SeverityLevel::error ) << "AddParamKey() node ["+ nodeName+"], plugin [" + pluginName + "], param [simple_transform] not found";
+                return;
+            }
+            
+            std::string stringValue = toString( value );
+            if( paramName == "translation" )
+            {
+                 SetParameterTranslation( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
+                 LOG_MESSAGE( SeverityLevel::info ) << "Node [" + nodeName + "] translation: " + stringValue + " key time: " + std::to_string( keyTime );
+                 // @todo Realy do we want to send messages all the time, when this param changes??
+            }
+            else if( paramName == "scale" )
+            {
+                 SetParameterScale ( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
+                 LOG_MESSAGE( SeverityLevel::info ) << "Node [" + nodeName + "] scale: " + stringValue + " key time: " + std::to_string( keyTime );
+                 // @todo Realy do we want to send messages all the time, when this param changes??
+            }
+        }
     }
 }
 
@@ -199,7 +209,7 @@ void PluginEventsHandlers::RemoveParamKey      ( bv::IEventPtr /*eventPtr*/ )
 //
 void PluginEventsHandlers::LoadAsset( bv::IEventPtr eventPtr )
 {
-    if( eventPtr->GetEventType() == bv::LoadAssetEvent::m_sEventType )
+    if( eventPtr->GetEventType() == bv::LoadAssetEvent::Type() )
     {
         bv::LoadAssetEventPtr eventLoadAsset = std::static_pointer_cast<bv::LoadAssetEvent>( eventPtr );
         

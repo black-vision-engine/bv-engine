@@ -11,7 +11,8 @@ namespace bv
 //
 RemoteCommandsConverter::RemoteCommandsConverter()
 {
-    RegisterEvent( LoadAssetEvent::m_sEventName, LoadAssetEvent::Create );
+    RegisterEvent( LoadAssetEvent::Name(), LoadAssetEvent::Create );
+    RegisterEvent( ParamKeyEvent::Name(), ParamKeyEvent::Create );
 }
 
 // ***********************
