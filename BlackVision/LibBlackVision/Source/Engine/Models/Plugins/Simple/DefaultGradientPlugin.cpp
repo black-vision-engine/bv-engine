@@ -9,13 +9,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultPrismPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultPieChartPlugin.h"
 
 namespace bv { namespace model {
 
@@ -96,13 +90,13 @@ bool                   DefaultGradientPluginDesc::CanBeAttachedTo     ( IPluginC
     //    return false;
     //}
 
-    auto uid = plugin->GetTypeUid();
+ //   auto uid = plugin->GetTypeUid();
 
-	if ( uid != DefaultRectPluginDesc::UID() && uid != DefaultTextPluginDesc::UID() && uid != DefaultTransformPluginDesc::UID() && uid != DefaultTimerPluginDesc::UID() && uid != DefaultPrismPluginDesc::UID() && uid != DefaultPieChartPluginDesc::UID() )
-	{
-		assert( false && "not one of my favourite plugins you are" );
-        return false;
-    }
+	//if ( uid != DefaultRectPluginDesc::UID() && uid != DefaultTextPluginDesc::UID() && uid != DefaultTransformPluginDesc::UID() && uid != DefaultTimerPluginDesc::UID() && uid != DefaultPrismPluginDesc::UID() && uid != DefaultPieChartPluginDesc::UID() )
+	//{
+	//	assert( false && "not one of my favourite plugins you are" );
+ //       return false;
+ //   }
 
     return true;
 }
@@ -128,30 +122,32 @@ void					DefaultGradientPlugin::SetPrevPlugin				( IPluginPtr prev )
 {
     BasePlugin::SetPrevPlugin( prev );
 
+	////FIXME
+	//if( prev && ( prev->GetTypeUid() == DefaultTextPluginDesc::UID() 
+	//	|| prev->GetTypeUid() == DefaultTimerPluginDesc::UID() ) )
+	//{
+	//	m_texLocation = 1; //FIXME: ugly fixed location
+	//}
+
     InitVertexAttributesChannel();
 }
 
 // *************************************
-// 
+//
 DefaultGradientPlugin::DefaultGradientPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
     : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
     , m_psc( nullptr )
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
+	, m_texLocation( 0 )
 {
 	m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
 	m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
-    InitVertexAttributesChannel();
+	SetPrevPlugin( prev );
 
-    if( prev->GetTypeUid() == DefaultTextPluginDesc::UID() || prev->GetTypeUid() == DefaultTimerPluginDesc::UID() )
-    {
-        //FIXME: set textures data from prev plugin to this plugin
-        auto prev_psc = std::const_pointer_cast< ITexturesData >( prev->GetPixelShaderChannel()->GetTexturesData() );
-        //FIXME: this line causes changes to Texture Plugin data via current pointer - quite shitty
-        m_psc->OverrideTexturesData( std::static_pointer_cast< DefaultTexturesData >( prev_psc ) );
-    }
+    InitVertexAttributesChannel();
 }
 
 // *************************************
@@ -188,12 +184,12 @@ void                                DefaultGradientPlugin::Update               
     { t; } // FIXME: suppress unused warning
     m_paramValModel->Update();
 	
-	if( HelperVertexAttributesChannel::FetchAttributesUpdate( m_vaChannel, m_prevPlugin ) )
+	if( HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin ) )
 	{
 		RecalculateUVChannel();
 	}
 
-	if( HelperVertexAttributesChannel::FetchTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+	if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
 	{
 		InitVertexAttributesChannel();
 	}
@@ -243,21 +239,22 @@ void								DefaultGradientPlugin::InitVertexAttributesChannel	()
 	auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
 	auto prevCC = prevGeomChannel->GetComponents();
     
-//recreate vachannel ->
-    VertexAttributesChannelDescriptor vaChannelDesc;
-	auto prevCompChannels = prevCC[ 0 ]->GetAttributeChannels(); //FIXME: is it possible that CC is empty?
-    for( auto prevCompCh : prevCompChannels )
-    {
-        auto prevCompChDesc = prevCompCh->GetDescriptor();
-        vaChannelDesc.AddAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
-    }
-
     //add gradient texture desc
+	//FIXME: is it possible that CC is empty?
+	auto vaChannelDesc = HelperVertexAttributesChannel::CreateVertexAttributesChannelDescriptor( prevCC[ 0 ]->GetAttributeChannels() );
 	vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-	m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
-//<- recreate vachannel
-	
+	if( !m_vaChannel )
+	{
+		m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+	}
+	else
+	{
+		m_vaChannel->ClearAll();
+		m_vaChannel->SetDescriptor( vaChannelDesc );
+	}
+	m_vaChannel->SetLastTopologyUpdateID( prevGeomChannel->GetLastTopologyUpdateID() );
+
 	auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR ); // TOCHECK is that right?
     for( unsigned int i = 0; i < prevCC.size(); ++i )
     {
@@ -309,19 +306,17 @@ void									DefaultGradientPlugin::RecalculateUVChannel         ()
     {
 		auto compChannels = cc[ i ]->GetAttributeChannels();
 		auto posChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_POSITION );
-		auto uvChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_TEXCOORD );
+		auto uvChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_TEXCOORD, m_texLocation );
 
 		if( posChannel && uvChannel )
 		{
 			auto pos = std::static_pointer_cast< Float3AttributeChannel >( posChannel );
 			auto uvs = std::static_pointer_cast< Float2AttributeChannel >( uvChannel );
-
+			
 			auto & uvVerts = uvs->GetVertices();
 			if( uvVerts.size() < posChannel->GetNumEntries() )
 			{
 				uvVerts.resize( posChannel->GetNumEntries() );
-
-				//HelperVertexAttributesChannel::TopologyUpdate( m_vaChannel, true );
 			}
 
 			auto & posVerts = pos->GetVertices();

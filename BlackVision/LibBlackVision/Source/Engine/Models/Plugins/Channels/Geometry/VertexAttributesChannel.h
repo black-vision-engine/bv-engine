@@ -69,7 +69,7 @@ public:
     virtual PrimitiveType                               GetPrimitiveType        () const override;
 
     void                                                AddConnectedComponent   ( ConnectedComponentPtr cc );
-    void                                                ClearConnectedComponent ( );
+    //void                                                ClearConnectedComponent ( ); //duplicate of ClearAll
 
     virtual int                                         GetNumPrimitives        ( IConnectedComponentPtr cc ) const override;
     virtual std::vector< IConnectedComponentPtr >       GetComponents           () const override;

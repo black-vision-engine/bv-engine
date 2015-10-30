@@ -45,22 +45,8 @@ protected:
 
 	VertexAttributesChannelPtr      m_vaChannel;
 
-	DefaultTexturesDataPtr          m_texturesData;
-
-    ParamFloatPtr                   m_paramWrapModeX;
-    ParamFloatPtr                   m_paramWrapModeY;
-    ParamFloatPtr                   m_paramFilteringMode;
-    ParamFloatPtr                   m_paramAttachMode;
-    
     SizeType	                    m_textureWidth;
     SizeType	                    m_textureHeight;
-
-	TextureWrappingMode             m_lastTextureWrapModeX;
-	TextureWrappingMode             m_lastTextureWrapModeY;
-	TextureFilteringMode            m_lastTextureFilteringMode;
-	TextureAttachmentMode           m_lastTextureAttachMode;
-	glm::vec4                       m_lastBorderColor;
-	
 
 public:
 
@@ -82,14 +68,6 @@ public:
 
 private:
 	void										InitVertexAttributesChannel ();
-
-	TextureWrappingMode                         GetWrapModeX                () const;
-	TextureWrappingMode                         GetWrapModeY                () const;
-	TextureFilteringMode                        GetFilteringMode            () const;
-	TextureAttachmentMode                       GetAttachementMode          () const;
-	glm::vec4                                   GetBorderColor              () const;
-
-	bool                                        UpdateState                 ();
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 };

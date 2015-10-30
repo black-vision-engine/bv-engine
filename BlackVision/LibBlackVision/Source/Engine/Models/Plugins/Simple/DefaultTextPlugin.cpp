@@ -126,13 +126,6 @@ std::string             DefaultTextPluginDesc::TextureName              ()
     return "AtlasTex0";
 }
 
-// *******************************
-//
-std::string             DefaultTextPluginDesc::FontFileName             ()
-{
-    return "../dep/Media/fonts/ARIALUNI.TTF";
-}
-
 // *************************************
 // 
 void DefaultTextPlugin::SetPrevPlugin( IPluginPtr prev )
@@ -184,7 +177,6 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
-    //, m_textSet( true )
     , m_atlas( nullptr )
     , m_text( L"" )
 	, m_textLength( 0.f )
@@ -200,8 +192,6 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     ctx->alphaCtx->blendEnabled = true;
     ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
     ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
-
-    m_texturesData = m_psc->GetTexturesDataImpl();
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &DefaultTextPlugin::OnSetText ), KeyPressedEvent::Type() );
 
@@ -240,7 +230,10 @@ void							DefaultTextPlugin::LoadTexture(	DefaultTexturesDataPtr txData,
 
 	if( txDesc != nullptr )
 	{
-		txData->SetTexture( 0, txDesc );
+		if( !txData->SetTexture( 0, txDesc ) )
+		{
+			txData->AddTexture( txDesc );
+		}
 	}
 
 	txDesc->SetBits( res );
@@ -366,25 +359,11 @@ void                                DefaultTextPlugin::Update                   
 
 	m_scaleValue->SetValue( m_scaleMat );
 
-	HelperVertexAttributesChannel::FetchAttributesUpdate( m_vaChannel, m_prevPlugin );
-	if( HelperVertexAttributesChannel::FetchTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
+	if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
 	{
 		InitVertexAttributesChannel();
 	}
-
-    //if( m_vaChannel) // FUNKED for serialization
-    //    m_vaChannel->SetNeedsTopologyUpdate( m_textSet );
-
-    //m_textSet = false;
-
-    //if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
-    //{
-    //    m_vaChannel->SetNeedsAttributesUpdate( true );
-    //}
-    //else
-    //{
-    //    m_vaChannel->SetNeedsAttributesUpdate( false );
-    //}
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();
@@ -412,7 +391,7 @@ inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
 //
 void DefaultTextPlugin::InitVertexAttributesChannel	()
 {
-    m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
+	m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
     auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
@@ -528,7 +507,7 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 {
     m_text = newText;
 
-    m_vaChannel->ClearConnectedComponent();
+    m_vaChannel->ClearAll();
 
     auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
@@ -536,7 +515,7 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 
 	ScaleToMaxTextLength();
 
-	HelperVertexAttributesChannel::TopologyUpdate( m_vaChannel, true );
+	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel, true );
 }
 
 // *************************************

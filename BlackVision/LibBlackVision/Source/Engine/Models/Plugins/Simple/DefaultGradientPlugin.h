@@ -45,7 +45,7 @@ private:
 
     VertexAttributesChannelPtr      m_vaChannel;
 
-    DefaultTexturesDataPtr          m_texturesData;
+	UInt32							m_texLocation;
 
 public:
 

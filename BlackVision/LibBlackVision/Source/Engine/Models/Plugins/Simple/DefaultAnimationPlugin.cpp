@@ -190,7 +190,10 @@ bool                            DefaultAnimationPlugin::LoadResource  ( AssetDes
 
         if( animDesc != nullptr )
         {
-            txData->SetAnimation( 0, animDesc );
+			if( !txData->SetAnimation( 0, animDesc ) )
+			{
+				txData->AddAnimation( animDesc );
+			}
             return true;
         }
     }
@@ -229,9 +232,9 @@ void                                DefaultAnimationPlugin::Update              
     unsigned int frameNum = (unsigned int )m_paramFrameNum->Evaluate(); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
     m_texturesData->SetAnimationFrame( 0, frameNum ); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
 
-	HelperVertexAttributesChannel::AttributesUpdate( m_vaChannel, UpdateState() );
-	HelperVertexAttributesChannel::FetchAttributesUpdate( m_vaChannel, m_prevPlugin );
-	if( HelperVertexAttributesChannel::FetchTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+	HelperVertexAttributesChannel::SetAttributesUpdate( m_vaChannel, UpdateState() );
+	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
+	if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
 	{
 		InitVertexAttributesChannel();
 	}
@@ -268,25 +271,24 @@ void		DefaultAnimationPlugin::InitVertexAttributesChannel		()
     auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
 	auto prevCC = prevGeomChannel->GetComponents();
     
-//recreate vachannel ->
-    VertexAttributesChannelDescriptor vaChannelDesc;
-    auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( prevCC[ 0 ] ); //FIXME: is it possible that CC is empty?
-    auto prevCompChannels = prevConnComp->GetAttributeChannelsPtr();
-    for( auto prevCompCh : prevCompChannels )
-    {
-        auto prevCompChDesc = prevCompCh->GetDescriptor();
-        vaChannelDesc.AddAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
-    }
-
     //Only one texture
-	if( !AttributeChannel::GetAttrChannel( prevConnComp->GetAttributeChannels(), AttributeSemantic::AS_TEXCOORD ) )
+	//FIXME: is it possible that CC is empty?
+	auto vaChannelDesc = HelperVertexAttributesChannel::CreateVertexAttributesChannelDescriptor( prevCC[ 0 ]->GetAttributeChannels() );
+	if( !AttributeChannel::GetAttrChannel( prevCC[ 0 ]->GetAttributeChannels(), AttributeSemantic::AS_TEXCOORD ) )
 	{
 		vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 	}
 
-	m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
-//<- recreate vachannel
-
+	if( !m_vaChannel )
+	{
+		m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+	}
+	else
+	{
+		m_vaChannel->ClearAll();
+		m_vaChannel->SetDescriptor( vaChannelDesc );
+	}
+	m_vaChannel->SetLastTopologyUpdateID( prevGeomChannel->GetLastTopologyUpdateID() );
 	
 	auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
     for( unsigned int i = 0; i < prevCC.size(); ++i )

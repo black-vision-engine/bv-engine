@@ -64,6 +64,7 @@ inline  void    NodeUpdater::UpdateGeometry      ()
 	{
         UpdateTopology();
 		m_lastTopologyUpdateID = m_vertexAttributesChannel->GetLastTopologyUpdateID();
+		m_lastAttributesUpdateID = m_vertexAttributesChannel->GetLastAttributeUpdateID();
 	}
 	else if( m_vertexAttributesChannel->GetLastAttributeUpdateID() > m_lastAttributesUpdateID )
 	{

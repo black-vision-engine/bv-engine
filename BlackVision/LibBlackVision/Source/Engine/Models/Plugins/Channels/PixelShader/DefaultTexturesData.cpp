@@ -72,17 +72,15 @@ void                                            DefaultTexturesData::SetTextureP
 
 // ******************************
 //
-void                                            DefaultTexturesData::SetTexture         ( unsigned int idx, DefaultTextureDescriptor * textureDesc )
+bool                                            DefaultTexturesData::SetTexture         ( unsigned int idx, ITextureDescriptor * textureDesc )
 {
     if( idx < m_textureDescriptors.size() )
 	{
 		delete m_textureDescriptors[ idx ];
 		m_textureDescriptors[ idx ] = textureDesc;
+		return true;
 	}
-	else
-	{
-		m_textureDescriptors.push_back( textureDesc );
-	}
+	return false;
 }
 
 // ******************************
@@ -108,36 +106,36 @@ void                                            DefaultTexturesData::SetAnimatio
 
 // ******************************
 //
-void                                            DefaultTexturesData::SetAnimation       ( unsigned int idx, DefaultAnimationDescriptor * animationDesc )
+bool                                            DefaultTexturesData::SetAnimation       ( unsigned int idx, IAnimationDescriptor * animationDesc )
 {
 	if( idx < m_animationDescriptors.size() )
 	{
 		delete m_animationDescriptors[ idx ];
 		m_animationDescriptors[ idx ] = animationDesc;
+		return true;
 	}
-	else
-	{
-		m_animationDescriptors.push_back( animationDesc );
-	}
+	return false;
 }
 
 // ******************************
 //
-void                                            DefaultTexturesData::AddAnimation       ( DefaultAnimationDescriptor * animationDesc )
+void                                            DefaultTexturesData::AddAnimation       ( IAnimationDescriptor * animationDesc )
 {
     m_animationDescriptors.push_back( animationDesc );
 }
 
 // ******************************
 //
-void                                            DefaultTexturesData::SetAnimationFrame   ( unsigned int idx, unsigned int frameNum )
+bool                                            DefaultTexturesData::SetAnimationFrame   ( unsigned int idx, unsigned int frameNum )
 {
     //assert( idx < m_animationDescriptors.size() ); // FUNKED for serialization
-    if( idx >= m_animationDescriptors.size() )
-        return;
-
-    auto desc = static_cast< DefaultAnimationDescriptor * >( m_animationDescriptors[ idx ] );
-    desc->SetCurrentFrame( frameNum );
+    if( idx < m_animationDescriptors.size() )
+	{
+		auto desc = static_cast< DefaultAnimationDescriptor * >( m_animationDescriptors[ idx ] );
+		desc->SetCurrentFrame( frameNum );
+		return true;
+	}
+    return false;
 }
 
 } //model

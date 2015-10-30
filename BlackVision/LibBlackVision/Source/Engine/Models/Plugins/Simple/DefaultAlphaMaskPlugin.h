@@ -44,21 +44,8 @@ private:
 
     VertexAttributesChannelPtr      m_vaChannel;
 
-    DefaultTexturesDataPtr          m_texturesData;
-
-    ParamFloatPtr                   m_paramWrapModeX;
-    ParamFloatPtr                   m_paramWrapModeY;
-    ParamFloatPtr                   m_paramFilteringMode;
-    ParamFloatPtr                   m_paramAttachMode;
-
     SizeType                        m_textureWidth;
     SizeType                        m_textureHeight;
-
-    TextureWrappingMode             m_lastTextureWrapModeX;
-    TextureWrappingMode             m_lastTextureWrapModeY;
-    TextureFilteringMode            m_lastTextureFilteringMode;
-    TextureAttachmentMode           m_lastTextureAttachMode;
-    
 
 public:
 
@@ -80,15 +67,7 @@ public:
     
 private:
 	void										InitVertexAttributesChannel ();
-
     void                                        RecalculateUVChannel		();
-
-    TextureWrappingMode                         GetWrapModeX                () const;
-    TextureWrappingMode                         GetWrapModeY                () const;
-    TextureFilteringMode                        GetFilteringMode            () const;
-    TextureAttachmentMode                       GetAttachementMode          () const;
-
-    bool                                        UpdateState                 ();
 
 	void										RegisterEvaluators			( IPluginPtr prev, const std::vector< std::string > & vsParamNames, const std::vector< std::string > & psParamNames ); 
 

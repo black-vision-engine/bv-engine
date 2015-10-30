@@ -20,8 +20,8 @@ VertexAttributesChannel::VertexAttributesChannel     ( PrimitiveType type, bool 
     //, m_needsAttributesUpdate( false )
     //, m_needsTopologyUpdate( false )
     //, m_needsInitialization( true )
-	, m_lastAttributeUpdateID( 1 )
-	, m_lastTopologyUpdateID( 1 )
+	, m_lastAttributeUpdateID( 0 )
+	, m_lastTopologyUpdateID( 0 )
 {
 }
 
@@ -35,8 +35,8 @@ VertexAttributesChannel::VertexAttributesChannel     ( PrimitiveType type, const
     //, m_needsAttributesUpdate( false )
     //, m_needsTopologyUpdate( false )
     //, m_needsInitialization( true )
-	, m_lastAttributeUpdateID( 1 )
-	, m_lastTopologyUpdateID( 1 )
+	, m_lastAttributeUpdateID( 0 )
+	, m_lastTopologyUpdateID( 0 )
 {
 }
 
@@ -185,12 +185,12 @@ void                                    VertexAttributesChannel::AddConnectedCom
     m_connectedComponents.push_back( cc );
 }
 
-// *********************************
-//
-void                                    VertexAttributesChannel::ClearConnectedComponent()
-{
-    m_connectedComponents.clear();
-}
+//// *********************************
+////
+//void                                    VertexAttributesChannel::ClearConnectedComponent()
+//{
+//    m_connectedComponents.clear();
+//}
 
 // *********************************
 //
@@ -264,8 +264,6 @@ ConnectedComponentPtr                   VertexAttributesChannel::GetConnectedCom
 void                                    VertexAttributesChannel::ClearAll                ()
 {
     m_connectedComponents.clear();
-	m_lastAttributeUpdateID = 0;
-	//m_lastTopologyUpdateID = 0;
     //m_needsInitialization = true;
 }
 

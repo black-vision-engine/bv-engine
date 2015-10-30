@@ -98,13 +98,6 @@ bool                   DefaultAlphaMaskPluginDesc::CanBeAttachedTo     ( IPlugin
 //        return false;
 //    }
 
-    auto uid = plugin->GetTypeUid();
-
-	//if ( uid != DefaultColorPluginDesc::UID() && uid != DefaultTexturePluginDesc::UID() && uid != DefaultTextPluginDesc::UID() && uid != DefaultAnimationPluginDesc::UID() && uid != DefaultGradientPluginDesc::UID() ) // FUNKED for serialization
- //   {
- //       return false;
- //   }
-
     return true;
 }
 
@@ -134,7 +127,9 @@ void								DefaultAlphaMaskPlugin::SetPrevPlugin               ( IPluginPtr pre
     BasePlugin::SetPrevPlugin( prev );
     
     if( prev == nullptr )
+	{
         return;
+	}
 
     //FIXME: The hackiest of it all - added registered parameters to pass on to the engine - ten kod jest przestraszny i wykurwiscie niefajny
     if( prev->GetTypeUid() == DefaultColorPluginDesc::UID() )
@@ -170,13 +165,13 @@ void								DefaultAlphaMaskPlugin::SetPrevPlugin               ( IPluginPtr pre
 
     InitVertexAttributesChannel();
 
-    if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() || prev->GetTypeUid() == DefaultAnimationPluginDesc::UID() || prev->GetTypeUid() == DefaultTextPluginDesc::UID() )
-    {
-        //FIXME: set textures data from prev plugin to this plugin
-        auto prev_psc = std::const_pointer_cast< ITexturesData >( prev->GetPixelShaderChannel()->GetTexturesData() );
-        //FIXME: this line causes changes to Texture Plugin data via current pointer - quite shitty
-        m_psc->OverrideTexturesData( std::static_pointer_cast< DefaultTexturesData >( prev_psc ) );
-    }
+    //if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() || prev->GetTypeUid() == DefaultAnimationPluginDesc::UID() || prev->GetTypeUid() == DefaultTextPluginDesc::UID() )
+    //{
+    //    //FIXME: set textures data from prev plugin to this plugin
+    //    auto prev_psc = std::const_pointer_cast< ITexturesData >( prev->GetPixelShaderChannel()->GetTexturesData() );
+    //    //FIXME: this line causes changes to Texture Plugin data via current pointer - quite shitty
+    //    m_psc->OverrideTexturesData( std::static_pointer_cast< DefaultTexturesData >( prev_psc ) );
+    //}
 }
 
 // *************************************
@@ -198,23 +193,6 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
     ctx->alphaCtx->blendEnabled = true;
-
-    m_texturesData = m_psc->GetTexturesDataImpl();
-
-    //Direct param state access (to bypass model querying)
-    auto psModel = PixelShaderChannelModel();
-    
-    m_paramWrapModeX        = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "wrapModeX" ) );
-    m_paramWrapModeY        = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "wrapModeY" ) );
-    m_paramFilteringMode    = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "filteringMode" ) );
-    m_paramAttachMode       = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "attachmentMode" ) );
-
-    assert( m_paramWrapModeX );
-    assert( m_paramWrapModeY );
-    assert( m_paramFilteringMode );
-    assert( m_paramAttachMode );
-
-    UpdateState();
 }
 
 // *************************************
@@ -233,7 +211,6 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( AssetDescCon
     if ( txAssetDescr != nullptr )
     {
         auto txData = m_psc->GetTexturesDataImpl();
-        assert( txData->GetTextures().size() <= 2 );
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultAlphaMaskPluginDesc::TextureName() );
@@ -247,35 +224,15 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( AssetDescCon
 
         if( txDesc != nullptr )
         {
-			auto prevTypeUid = GetPrevPlugin()->GetTypeUid();
-            if( prevTypeUid == DefaultColorPluginDesc::UID()
-				|| prevTypeUid == DefaultAnimationPluginDesc::UID()
-				|| prevTypeUid == DefaultGradientPluginDesc::UID() )
-            {
-                txData->SetTexture( 0, txDesc );
-            }
-            else if( prevTypeUid == DefaultTexturePluginDesc::UID() 
-				|| prevTypeUid == DefaultTextPluginDesc::UID() )
-            {
-                assert( txData->GetTextures().size() >= 1 ); //FIXME: texture plugin is supposed to be added first
-				txData->SetTexture( 1, txDesc );
-            }
-            else
-            {
-                assert( false );
-            }
+			if( !txData->SetTexture( 0, txDesc ) )
+			{
+				txData->AddTexture( txDesc );
+			}
 
             m_textureWidth = txDesc->GetWidth();
             m_textureHeight = txDesc->GetHeight();
 
-			if( HelperVertexAttributesChannel::FetchTopologyUpdate( m_vaChannel, m_prevPlugin ) )
-			{
-				InitVertexAttributesChannel();
-			}
-			else
-			{
-				RecalculateUVChannel();
-			}
+			RecalculateUVChannel();
 
             return true;
         }
@@ -312,44 +269,15 @@ void                                DefaultAlphaMaskPlugin::Update              
     { t; } // FIXME: suppress unused variable
     m_paramValModel->Update();
 
-	if( HelperVertexAttributesChannel::AttributesUpdate( m_vaChannel, UpdateState() ) 
-		|| HelperVertexAttributesChannel::FetchAttributesUpdate( m_vaChannel, m_prevPlugin ) )
+	if( HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin ) )
 	{
 		RecalculateUVChannel();
 	}
 
-	if( HelperVertexAttributesChannel::FetchTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+	if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
 	{
 		InitVertexAttributesChannel();
 	}
-
-	//if( m_vaChannel )
-	//{
-	//	bool hasPrevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
-	//	if ( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() 
-	//		|| StateChanged() )
-	//	{
-	//		RecalculateUVChannel();
-	//		UpdateState();
-	//		m_vaChannel->SetNeedsAttributesUpdate( true );
-	//	}
-	//	else
-	//	{
-	//		m_vaChannel->SetNeedsAttributesUpdate( false );
-	//	}
-
-	//	if( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() )
-	//	{
-	//		m_vaChannel->ClearAll();
-	//		InitAttributesChannel( m_prevPlugin );
-	//		m_vaChannel->SetNeedsTopologyUpdate( true );
-	//		m_vaChannel->SetNeedsAttributesUpdate( false ); // FIXME: very ugly hack this is
-	//	}
-	//	else
-	//	{
-	//		m_vaChannel->SetNeedsTopologyUpdate( false );
-	//	}
-	//}
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -382,6 +310,7 @@ void		DefaultAlphaMaskPlugin::InitVertexAttributesChannel			()
 		m_vaChannel->ClearAll();
 		m_vaChannel->SetDescriptor( vaChannelDesc );
 	}
+	m_vaChannel->SetLastTopologyUpdateID( prevGeomChannel->GetLastTopologyUpdateID() );
 
     auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
     for( unsigned int i = 0; i < prevCC.size(); ++i )
@@ -509,80 +438,6 @@ void					DefaultAlphaMaskPlugin::RegisterEvaluators			( IPluginPtr prev, const s
 			}
 		}
 	}
-}
-
-namespace {
-
-// *************************************
-// FIXME: implement int parameters and bool parameters
-template< typename EnumClassType >
-inline EnumClassType EvaluateAsInt( ParamFloat * param )
-{
-    int val = int( param->Evaluate() );
-
-    return EnumClassType( val );
-}
-
-// *************************************
-// FIXME: implement int parameters and bool parameters
-template< typename EnumClassType >
-inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
-{
-    int val = int( param->Evaluate() );
-
-    return EnumClassType( val );
-}
-
-} //anonymous
-
-// *************************************
-// 
-TextureWrappingMode                         DefaultAlphaMaskPlugin::GetWrapModeX        () const
-{
-    return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeX );
-}
-
-// *************************************
-// 
-TextureWrappingMode                         DefaultAlphaMaskPlugin::GetWrapModeY        () const
-{
-    return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeY );
-}
-
-// *************************************
-// 
-TextureFilteringMode                        DefaultAlphaMaskPlugin::GetFilteringMode    () const
-{
-    return EvaluateAsInt< TextureFilteringMode >( m_paramFilteringMode );
-}
-
-// *************************************
-// 
-TextureAttachmentMode                       DefaultAlphaMaskPlugin::GetAttachementMode  () const
-{
-    return EvaluateAsInt< TextureAttachmentMode >( m_paramAttachMode );
-}
-
-// *************************************
-// 
-bool                                        DefaultAlphaMaskPlugin::UpdateState         ()
-{
-	auto wmx = GetWrapModeX();
-	auto wmy = GetWrapModeY();
-	auto fm = GetFilteringMode();
-	auto am = GetAttachementMode();
-
-	if( wmx != m_lastTextureWrapModeX || wmy != m_lastTextureWrapModeY || 
-		fm != m_lastTextureFilteringMode || am != m_lastTextureAttachMode )
-	{
-		m_lastTextureWrapModeX      = wmx;
-		m_lastTextureWrapModeY      = wmy;
-		m_lastTextureFilteringMode  = fm;
-		m_lastTextureAttachMode     = am;
-		
-		return true;
-	}
-	return false;
 }
 
 // *************************************

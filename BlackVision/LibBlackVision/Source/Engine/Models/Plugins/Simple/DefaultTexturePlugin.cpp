@@ -155,23 +155,6 @@ DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, c
     ctx->alphaCtx->blendEnabled = true;
     ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
     ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
-
-    m_texturesData = m_psc->GetTexturesDataImpl();
-
-    //Direct param state access (to bypass model querying)
-    auto psModel = PixelShaderChannelModel();
-    
-    //m_paramWrapModeX        = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "wrapModeX" ) );
-    //m_paramWrapModeY        = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "wrapModeY" ) );
-    m_paramFilteringMode    = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "filteringMode" ) );
-    m_paramAttachMode       = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "attachmentMode" ) );
-
-    //assert( m_paramWrapModeX );
-    //assert( m_paramWrapModeY );
-    assert( m_paramFilteringMode );
-    assert( m_paramAttachMode );
-
-    UpdateState();
 }
 
 // *************************************
@@ -190,16 +173,18 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
     if ( txAssetDescr != nullptr )
     {
         auto txData = m_psc->GetTexturesDataImpl();
-        assert( txData->GetTextures().size() <= 2 ); //FIXME: Second one may be added by a mask
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultTexturePluginDesc::TextureName() );
         txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
-        txDesc->SetBorderColor( GetBorderColor() );
+        txDesc->SetBorderColor( QueryTypedParam< ParamVec4Ptr >( GetParameter( "borderColor" ) )->Evaluate() );
 
         if( txDesc != nullptr )
         {
-            txData->SetTexture( 0, txDesc );
+            if( !txData->SetTexture( 0, txDesc ) )
+			{
+				txData->AddTexture( txDesc );
+			}
 
 			m_textureWidth = txAssetDescr->GetOrigTextureDesc()->GetWidth();
             m_textureHeight = txAssetDescr->GetOrigTextureDesc()->GetHeight();
@@ -239,39 +224,11 @@ void                                DefaultTexturePlugin::Update                
     { t; } // FIXME: suppress unused warning
     m_paramValModel->Update();
 
-	HelperVertexAttributesChannel::AttributesUpdate( m_vaChannel, UpdateState() );
-	HelperVertexAttributesChannel::FetchAttributesUpdate( m_vaChannel, m_prevPlugin );
-	if( HelperVertexAttributesChannel::FetchTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
+	if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
 	{
 		InitVertexAttributesChannel();
 	}
-
-	//if( m_vaChannel )
-	//{
-	//	bool hasPrevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
-	//	if ( ( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
-	//		|| StateChanged( wX, wY, fm, attachmentMode ) )
-	//	{
-	//		UpdateState( wX, wY, fm, attachmentMode );
-	//		m_vaChannel->SetNeedsAttributesUpdate( true );
-	//	}
-	//	else
-	//	{
-	//		m_vaChannel->SetNeedsAttributesUpdate( false );
-	//	}
-
-	//	if( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() )
-	//	{
-	//		m_vaChannel->ClearAll();
-	//		InitVertexAttributesChannel( m_prevPlugin );
-	//		m_vaChannel->SetNeedsTopologyUpdate( true );
-	//		m_vaChannel->SetNeedsAttributesUpdate( false ); // FIXME: very ugly hack this is
-	//	}
-	//	else
-	//	{
-	//		m_vaChannel->SetNeedsTopologyUpdate( false );
-	//	}
-	//}
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -307,6 +264,7 @@ void		DefaultTexturePlugin::InitVertexAttributesChannel		()
 		m_vaChannel->ClearAll();
 		m_vaChannel->SetDescriptor( vaChannelDesc );
 	}
+	m_vaChannel->SetLastTopologyUpdateID( prevGeomChannel->GetLastTopologyUpdateID() );
 
 	auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
     for( unsigned int i = 0; i < prevCC.size(); ++i )
@@ -338,86 +296,6 @@ void		DefaultTexturePlugin::InitVertexAttributesChannel		()
     }
 	
     assert( prevGeomChannel->GetComponents().size() > 0 );
-}
-
-namespace {
-
-// *************************************
-// FIXME: implement int parameters and bool parameters
-template< typename EnumClassType >
-inline EnumClassType EvaluateAsInt( ParamFloat * param )
-{
-    int val = int( param->Evaluate() );
-
-    return EnumClassType( val );
-}
-
-// *************************************
-// FIXME: implement int parameters and bool parameters
-template< typename EnumClassType >
-inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
-{
-    int val = int( param->Evaluate() );
-
-    return EnumClassType( val );
-}
-
-} //anonymous
-
-// *************************************
-// 
-TextureWrappingMode                         DefaultTexturePlugin::GetWrapModeX          () const
-{
-    //return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeX );
-	auto param = this->GetParameter( "wrapModeX" );
-	assert( param );
-	return static_cast<TextureWrappingMode>( static_cast<int>( QueryTypedParam< ParamFloatPtr >( param )->Evaluate() ) );
-}
-
-// *************************************
-// 
-TextureWrappingMode                         DefaultTexturePlugin::GetWrapModeY          () const
-{
-    //return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeY );
-	auto param = this->GetParameter( "wrapModeY" );
-	assert( param );
-	return static_cast<TextureWrappingMode>( static_cast<int>( QueryTypedParam< ParamFloatPtr >( param )->Evaluate() ) );
-}
-
-// *************************************
-// 
-TextureFilteringMode                        DefaultTexturePlugin::GetFilteringMode      () const
-{
-    return EvaluateAsInt< TextureFilteringMode >( m_paramFilteringMode );
-}
-
-// *************************************
-// 
-TextureAttachmentMode                       DefaultTexturePlugin::GetAttachementMode    () const
-{
-    return EvaluateAsInt< TextureAttachmentMode >( m_paramAttachMode );
-}
-
-// *************************************
-// 
-bool                                        DefaultTexturePlugin::UpdateState           ()
-{
-	auto wmx = GetWrapModeX();
-	auto wmy = GetWrapModeY();
-	auto fm = GetFilteringMode();
-	auto am = GetAttachementMode();
-
-	if( wmx != m_lastTextureWrapModeX || wmy != m_lastTextureWrapModeY || 
-		fm != m_lastTextureFilteringMode || am != m_lastTextureAttachMode )
-	{
-		m_lastTextureWrapModeX      = wmx;
-		m_lastTextureWrapModeY      = wmy;
-		m_lastTextureFilteringMode  = fm;
-		m_lastTextureAttachMode     = am;
-		
-		return true;
-	}
-	return false;
 }
 
 // *************************************
@@ -458,16 +336,6 @@ mathematics::RectConstPtr					DefaultTexturePlugin::GetAABB						( const glm::ma
 	//	
 	//return nullptr;
 }
-
-// *************************************
-// 
-glm::vec4                                   DefaultTexturePlugin::GetBorderColor        () const
-{
-	auto param = this->GetParameter( "borderColor" );
-	assert( param );
-	return QueryTypedParam< ParamVec4Ptr >( param )->Evaluate();
-}
-
 
 } // model
 } // bv

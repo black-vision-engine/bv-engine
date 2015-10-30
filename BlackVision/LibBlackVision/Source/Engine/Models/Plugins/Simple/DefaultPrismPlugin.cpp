@@ -135,6 +135,7 @@ void DefaultPrismPlugin::InitGeometry( int n, PrismComponent::PrismUVType t )
         m_vaChannel->ClearAll();
         m_vaChannel->AddConnectedComponent( prism1 );
     }
+	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel, true );
 
     m_vaChannel->AddConnectedComponent( prism2 );
     m_vaChannel->AddConnectedComponent( prism3 );
@@ -159,7 +160,7 @@ void                                DefaultPrismPlugin::Update                  
     {
         InitGeometry( n, uvType );
 
-		HelperVertexAttributesChannel::TopologyUpdate( m_vaChannel, true );
+		//HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel, true );
         //m_vaChannel->SetNeedsTopologyUpdate( true );
 
         m_lastN = n;

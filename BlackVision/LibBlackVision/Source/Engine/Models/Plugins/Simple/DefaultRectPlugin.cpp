@@ -127,8 +127,8 @@ void                                DefaultRectPlugin::Update                   
     //FIXME: reimplement va channel (no time, no explicit update and so on)
     m_paramValModel->Update();
 
-	HelperVertexAttributesChannel::AttributesUpdate( m_vaChannel, UpdateState() );
-	HelperVertexAttributesChannel::FetchAttributesUpdate( m_vaChannel, m_prevPlugin );
+	HelperVertexAttributesChannel::SetAttributesUpdate( m_vaChannel, UpdateState() );
+	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
 }
 
 // *************************************

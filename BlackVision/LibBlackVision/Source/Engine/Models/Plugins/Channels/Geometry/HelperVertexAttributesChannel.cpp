@@ -13,9 +13,9 @@ namespace bv { namespace model
 
 // *************************************
 //
-bool		HelperVertexAttributesChannel::AttributesUpdate		( VertexAttributesChannelPtr vaChannel, bool stateChanged )
+bool		HelperVertexAttributesChannel::SetAttributesUpdate		( VertexAttributesChannelPtr vaChannel, bool stateChanged )
 {
-	if( vaChannel && stateChanged )
+	if( stateChanged && vaChannel )
 	{
 		vaChannel->SetLastAttributeUpdateID( vaChannel->GetLastAttributeUpdateID() + 1 );
 		return true;
@@ -25,7 +25,7 @@ bool		HelperVertexAttributesChannel::AttributesUpdate		( VertexAttributesChannel
 
 // *************************************
 //
-bool		HelperVertexAttributesChannel::FetchAttributesUpdate		( VertexAttributesChannelPtr vaChannel, IPluginPtr prevPlugin )
+bool		HelperVertexAttributesChannel::PropagateAttributesUpdate		( VertexAttributesChannelPtr vaChannel, IPluginPtr prevPlugin )
 {
 	if( vaChannel )
 	{
@@ -44,9 +44,9 @@ bool		HelperVertexAttributesChannel::FetchAttributesUpdate		( VertexAttributesCh
 
 // *************************************
 //
-bool		HelperVertexAttributesChannel::TopologyUpdate		( VertexAttributesChannelPtr vaChannel, bool stateChanged )
+bool		HelperVertexAttributesChannel::SetTopologyUpdate		( VertexAttributesChannelPtr vaChannel, bool stateChanged )
 {
-	if( vaChannel && stateChanged )
+	if( stateChanged && vaChannel )
 	{
 		vaChannel->SetLastTopologyUpdateID( vaChannel->GetLastTopologyUpdateID() + 1 );
 		return true;
@@ -56,7 +56,7 @@ bool		HelperVertexAttributesChannel::TopologyUpdate		( VertexAttributesChannelPt
 
 // *************************************
 //
-bool		HelperVertexAttributesChannel::FetchTopologyUpdate		( VertexAttributesChannelPtr vaChannel, IPluginPtr prevPlugin )
+bool		HelperVertexAttributesChannel::PropagateTopologyUpdate		( VertexAttributesChannelPtr vaChannel, IPluginPtr prevPlugin )
 {
 	if( vaChannel )
 	{

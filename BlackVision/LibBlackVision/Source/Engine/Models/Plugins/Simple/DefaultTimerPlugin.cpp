@@ -352,14 +352,10 @@ bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr
 
         if( txDesc != nullptr )
         {
-            if( txData->GetTextures().size() == 0 )
-            {
-                txData->AddTexture( txDesc );
-            }
-            else
-            {
-                txData->SetTexture( 0, txDesc );
-            }
+			if( !txData->SetTexture( 0, txDesc ) )
+			{
+				txData->AddTexture( txDesc );
+			}
 
             m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
@@ -490,13 +486,13 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
 
     auto timerInit = toTimerInit( m_timePatern, m_widestGlyph );
 
-    m_vaChannel->ClearConnectedComponent();
+    m_vaChannel->ClearAll();
 
     auto alignType =  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
     TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, false );
  
-	HelperVertexAttributesChannel::TopologyUpdate( m_vaChannel, true );
+	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel, true );
     //m_vaChannel->SetNeedsTopologyUpdate( true );
 }
 

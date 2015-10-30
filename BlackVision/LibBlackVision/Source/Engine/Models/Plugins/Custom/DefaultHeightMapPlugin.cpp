@@ -330,7 +330,7 @@ void                                DefaultHeightMapPlugin::Update              
     { t; } // FIXME: suppress unused variable
     m_paramValModel->Update();
 
-	HelperVertexAttributesChannel::FetchAttributesUpdate( m_vaChannel, m_prevPlugin );
+	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
     //m_vaChannel->SetNeedsAttributesUpdate( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() );
 
     m_vsc->PostUpdate();

@@ -34,7 +34,6 @@ public:
     static  std::string                     UID                 ();
 
     static  std::string                     TextureName         ();
-    static  std::string                     FontFileName        ();
 };
 
 // ***************************** PLUGIN ********************************** 
@@ -49,8 +48,6 @@ private:
     VertexAttributesChannelPtr      m_vaChannel;
 	DefaultTransformChannelPtr		m_transformChannel;
 	glm::mat4						m_scaleMat;
-
-    DefaultTexturesDataPtr          m_texturesData;
 
     unsigned int                    m_texCoordChannelIndex;
 
