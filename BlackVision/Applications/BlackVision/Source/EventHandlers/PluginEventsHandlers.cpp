@@ -2,6 +2,9 @@
 
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Assets/AssetManager.h"
+#include "Engine/Models/Interfaces/IOverrideState.h"    // ??
+
+
 #include "../BVAppLogic.h"
 #include "../UseLogger.h"
 
@@ -65,17 +68,39 @@ void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
             std::string stringValue = toString( value );
             if( paramName == "translation" )
             {
-                 SetParameterTranslation( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
-                 LOG_MESSAGE( SeverityLevel::info ) << "Node [" + nodeName + "] translation: " + stringValue + " key time: " + std::to_string( keyTime );
-                 // @todo Realy do we want to send messages all the time, when this param changes??
+                SetParameterTranslation( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
+                LOG_MESSAGE( SeverityLevel::info ) << "Node [" + nodeName + "] translation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+                // @todo Realy do we want to send messages all the time, when this param changes??
             }
             else if( paramName == "scale" )
             {
-                 SetParameterScale ( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
-                 LOG_MESSAGE( SeverityLevel::info ) << "Node [" + nodeName + "] scale: " + stringValue + " key time: " + std::to_string( keyTime );
-                 // @todo Realy do we want to send messages all the time, when this param changes??
+                SetParameterScale( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
+                LOG_MESSAGE( SeverityLevel::info ) << "Node [" + nodeName + "] scale: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+                // @todo Realy do we want to send messages all the time, when this param changes??
+            }
+            else if( paramName == "rotation" )
+            {
+                glm::vec4 rotAxisAngle = SerializationHelper::String2Vec4( stringValue );
+                glm::vec3 rotAxis = glm::vec3( rotAxisAngle );
+
+                SetParameterRotation( param, 0, (bv::TimeType)keyTime, rotAxis, rotAxisAngle.w );
+                LOG_MESSAGE( SeverityLevel::info ) << "Node [" + nodeName + "] rotation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+                // @todo Realy do we want to send messages all the time, when this param changes??
             }
         }
+        else if( setParamEvent->PluginName == "alpha" )
+        {    
+            if( setParamEvent->ParamName == "alpha" )
+            {
+				 auto state = node->GetOverrideState();
+				 auto alphaParam = state->GetAlphaParam();
+				 
+				 float floatValue = stof( value );
+
+                 SetParameter( alphaParam, (bv::TimeType)keyTime, floatValue );
+            }
+        }
+
     }
 }
 
