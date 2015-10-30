@@ -24,6 +24,9 @@
 
 namespace bv { namespace model {
 
+class TimelineManager;
+DEFINE_PTR_TYPE( TimelineManager );
+
 class TimelineManager : public ISerializable
 {
 private:
@@ -40,7 +43,7 @@ public:
                             ~TimelineManager                ();
 
     virtual void            Serialize                       ( ISerializer& sob ) const;
-    //static ISerializablePtr Create                          ( const IDeserializer& dob );
+    static ISerializablePtr Create                          ( const IDeserializer& dob );
 
     ITimeEvaluatorPtr       CreateOffsetTimeEvaluator       ( const std::string & name, TimeType startTime );
     ITimeEvaluatorPtr       CreateConstTimeEvaluator        ( const std::string & name, TimeType timeVal );

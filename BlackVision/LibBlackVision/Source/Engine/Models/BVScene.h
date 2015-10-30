@@ -31,18 +31,18 @@ class BVScene : public IUpdatable
 {
 private:
     
-    BVSceneEditor *     m_pSceneEditor;
-    Renderer *          m_renderer;
+    BVSceneEditor *         m_pSceneEditor;
+    Renderer *              m_renderer;
 
-	Camera *            m_pCamera;
+	Camera *                m_pCamera;
 
-    model::ParamVec3    m_cameraPosition;
-    model::ParamVec3    m_cameraDirection;
-    model::ParamVec3    m_cameraUp;
+    model::ParamVec3        m_cameraPosition;
+    model::ParamVec3        m_cameraDirection;
+    model::ParamVec3        m_cameraUp;
 
-    SceneModelPtr       m_pSceneModel;
+    model::SceneModelPtr    m_pSceneModel;
 
-    SceneNode *         m_pEngineSceneRoot;
+    SceneNode *             m_pEngineSceneRoot;
 
 private:
 

@@ -62,7 +62,8 @@ std::string                                             DeserializeObject::GetNa
 std::string                                             DeserializeObject::GetValue( std::string name ) const
 {
     auto node = GetDoc()->first_attribute( name.c_str() );
-    assert( node ); // FIXME: error handling
+    if( node == nullptr )
+        return "";
     return node->value();
 }
 

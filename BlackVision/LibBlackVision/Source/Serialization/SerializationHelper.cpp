@@ -54,8 +54,8 @@ glm::vec2               String2Vec2( std::string s )
         std::stof( vals[1] ) );
 }
 
-template<> float String2T( std::string s ) { return std::stof( s ); }
-template<> bool String2T( std::string s ) { if( s == "true" ) return true; else if( s == "false" ) return false; assert( false ); return false; }
+template<> float String2T( std::string s ) { if( s == "" ) return 0.f; else return std::stof( s ); }
+template<> bool String2T( std::string s ) { if( s == "true" ) return true; else if( s == "false" ) return false; assert( false ); return false; } // FIXME error handling
 template<> int String2T( std::string s ) { return std::stoi( s ); }
 template<> glm::vec2 String2T( std::string s ) { return String2Vec2( s ); }
 template<> glm::vec3 String2T( std::string s ) { return String2Vec3( s ); }

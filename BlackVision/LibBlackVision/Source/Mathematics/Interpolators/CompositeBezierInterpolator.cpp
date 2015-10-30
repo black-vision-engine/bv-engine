@@ -237,8 +237,6 @@ ISerializablePtr     CompositeBezierInterpolator< TimeValueT, ValueT >::Create  
 {
     auto interpolator = std::make_shared< CompositeBezierInterpolator< TimeValueT, ValueT > >();
 
-    interpolator->SetCurveType( SerializationHelper::String2T< CurveType >( ct2s, deser.GetAttribute( "curve_type" ) ) );
-
     auto keys = SerializationHelper::DeserializeObjectLoadPropertiesImpl< Key >( deser, "key" );
 
     if( deser.EnterChild( "interpolation" ) == false )
@@ -272,6 +270,8 @@ ISerializablePtr     CompositeBezierInterpolator< TimeValueT, ValueT >::Create  
         } while( deser.NextChild() );
         deser.ExitChild();
     }
+
+    interpolator->SetCurveType( SerializationHelper::String2T< CurveType >( ct2s, deser.GetAttribute( "curve_type" ) ) );
 
     return interpolator;
 }

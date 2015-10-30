@@ -130,8 +130,12 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& doc )
     auto timeline = doc.GetAttribute( "timeline" );
 
     auto tm = TimelineManager::GetInstance();
-    ITimeEvaluatorPtr te = tm->GetTimeline( timeline );
-    if( te == nullptr ) te = tm->GetRootTimeline();
+    ITimeEvaluatorPtr te = tm->GetTimeEvaluator( timeline );
+    if( te == nullptr ) 
+    {
+        assert( false );
+        te = tm->GetRootTimeline();
+    }
 
     IPluginPtr plugin_ = PluginsManager::DefaultInstanceRef().CreatePlugin( pluginType, pluginName, te );
     std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
