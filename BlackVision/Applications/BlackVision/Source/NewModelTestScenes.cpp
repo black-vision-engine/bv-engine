@@ -533,6 +533,10 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const std:
     {
         node = TestScenesFactory::WSerializationTest( pluginsManager, timelineManager, timeEvaluator );
     }
+    else if( scene == "REMOTE_EVENTS_TEST_SCENE" )
+    {
+        node = TestScenesFactory::RemoteEventsTestScene( pluginsManager, timelineManager, timeEvaluator );
+    }
     else
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
@@ -1260,5 +1264,14 @@ model::BasicNodePtr TestScenesFactory::WSerializationTest          ( const model
 
     return node0;
 }
+
+model::BasicNodePtr TestScenesFactory::RemoteEventsTestScene( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    pluginsManager;
+    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "sand.jpg" );
+
+    return node0;
+}
+
 
 } //bv

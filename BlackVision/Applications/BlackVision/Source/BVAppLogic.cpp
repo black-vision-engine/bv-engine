@@ -26,6 +26,7 @@
 //FIXME: remove
 #include "TestAI/TestGlobalEffectKeyboardHandler.h"
 #include "TestAI/TestEditorsKeyboardHandler.h"
+#include "TestAI/TestRemoteEventsKeyboardHandler.h"
 #include "testai/TestAIManager.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "BVGL.h"
@@ -35,6 +36,8 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
+
+#include "EventHandlers/RemoteEventsHandlers.h"
 
 //pablito
 #define XML
@@ -111,6 +114,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
 
     m_renderer = renderer;
     m_renderLogic = new RenderLogic();
+    m_remoteHandlers = new RemoteEventsHandlers;
 	m_RemoteControl = new RemoteControlInterface(this);
 }
 
@@ -147,6 +151,7 @@ void BVAppLogic::Initialize         ()
 	bv::effect::InitializeLibEffect( m_renderer );
 
     InitializeKbdHandler();
+    m_remoteHandlers->InitializeHandlers( this );
 }
 
 // *********************************
@@ -463,9 +468,13 @@ void                            BVAppLogic::InitializeKbdHandler()
     {
         m_kbdHandler = new TestGlobalEfectKeyboardHandler();
     }
-    if( envScene == "SERIALIZED_TEST" )
+    else if( envScene == "SERIALIZED_TEST" )
     {
         m_kbdHandler = new TestEditorsKeyboardHandler();
+    }
+    else if( envScene == "REMOTE_EVENTS_TEST_SCENE" )
+    {
+        m_kbdHandler = new TestRemoteEventsKeyboardHandler();
     }
     else
     {

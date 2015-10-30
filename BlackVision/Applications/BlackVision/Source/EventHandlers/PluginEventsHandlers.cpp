@@ -210,6 +210,8 @@ void PluginEventsHandlers::LoadAsset( bv::IEventPtr eventPtr )
         auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
         auto node = root->GetNode( nodeName );
         auto plugin = node->GetPlugin( pluginName );
+        if( node == nullptr || plugin == nullptr )
+            return;
 
         JsonDeserializeObject deserializer;
         deserializer.Load( asssetData );

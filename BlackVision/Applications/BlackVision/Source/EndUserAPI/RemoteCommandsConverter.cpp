@@ -2,6 +2,7 @@
 
 #include "Serialization/IDeserializer.h"
 #include "Engine/Events/Events.h"
+#include "JsonCommandsConverter/JsonCommandsConverter.h"
 
 namespace bv
 {
@@ -11,6 +12,14 @@ namespace bv
 RemoteCommandsConverter::RemoteCommandsConverter()
 {
     RegisterEvent( LoadAssetEvent::m_sEventName, LoadAssetEvent::Create );
+}
+
+// ***********************
+// @todo Move creation of commands converter to better place. Maybe BVAppLogic ??
+RemoteCommandsConverter& RemoteCommandsConverter::GetRemoteCommandsConverter()
+{
+    static JsonCommandsConverter converter;
+    return static_cast<RemoteCommandsConverter&>( converter );
 }
 
 

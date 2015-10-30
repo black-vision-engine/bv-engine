@@ -5,13 +5,15 @@
 namespace bv
 {
 
-SceneEventsHandlers::SceneEventsHandlers()
-{
-}
-
+// ***********************
+//
+SceneEventsHandlers::SceneEventsHandlers( BVAppLogic* /*appLogic*/ )
+{}
 
 SceneEventsHandlers::~SceneEventsHandlers()
-{
-}
+{}
+
+// ***********************
+//
 
 } //bv

@@ -4,11 +4,12 @@
 
 namespace bv
 {
+class BVAppLogic;
 
 class SceneEventsHandlers
 {
 public:
-    SceneEventsHandlers();
+    SceneEventsHandlers( BVAppLogic* appLogic );
     ~SceneEventsHandlers();
 
     //void SceneStructure      ( bv::IEventPtr evt );

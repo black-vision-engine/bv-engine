@@ -66,7 +66,7 @@ RemoteControlInterface::RemoteControlInterface(BVAppLogic *AppLogic)
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnNodeAppearing ), widgets::NodeAppearingCrawlerEvent::Type() );
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );
 
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnLoadAsset ), bv::LoadAssetEvent::Type() );
+    //GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnLoadAsset ), bv::LoadAssetEvent::Type() );
 }
 
 

@@ -149,6 +149,12 @@
     <ClCompile Include="..\..\..\Source\EndUserAPI\RemoteCommandsConverter.cpp">
       <Filter>EndUserAPI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\EventHandlers\RemoteEventsHandlers.cpp">
+      <Filter>EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestAI\TestRemoteEventsKeyboardHandler.cpp">
+      <Filter>TestAI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -257,6 +263,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsConverter\JsonCommandsConverter.h">
       <Filter>EndUserAPI\JsonCommandsConverter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EventHandlers\RemoteEventsHandlers.h">
+      <Filter>EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestAI\TestRemoteEventsKeyboardHandler.h">
+      <Filter>TestAI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

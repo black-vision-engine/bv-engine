@@ -19,6 +19,8 @@ public:
 
     virtual void                        QueueEvent          ( const std::wstring& eventString ) = 0;
     virtual std::wstring                PollEvent           () = 0;
+
+    static RemoteCommandsConverter&     GetRemoteCommandsConverter();
 protected:
     IEventPtr                           CreateEvent         ( IDeserializer& deser );
     void                                RegisterEvent       ( const std::string& eventName, EventCreatorDelegate eventCreator );
