@@ -53,7 +53,7 @@ public:
     typedef ValueT                      ValT;
 
 public:
-    CompositeBezierInterpolator( float tolerance = 0.000001 );
+    CompositeBezierInterpolator( float tolerance = 0.0001f );
     CompositeBezierInterpolator( const CompositeBezierInterpolator& that );
 
     virtual void                                        Serialize       ( ISerializer& ) const override;
