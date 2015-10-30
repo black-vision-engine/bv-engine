@@ -13,7 +13,10 @@
 #include "Engine/Models/Updaters/NodeUpdater.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
 
-#include "Engine/Models/Interfaces/IOverrideState.h"
+#include "Engine/Graphics/Effects/NodeEffects/NodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/NodeMaskNodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/WireframeNodeEffect.h"
 
 
 namespace bv {
@@ -54,7 +57,7 @@ SceneNode *         BVSceneTools::BuildEngineSceneNode                  ( model:
 
     nodesMapping[ modelNode.get() ] = engineNode;
 
-    engineNode->SetOverrideAlphaVal( modelNode->GetOverrideState()->GetAlphaValue().get() );
+    UpdateSceneNodeEffect( engineNode, modelNode );
 
     for( unsigned int i = 0; i < modelNode->GetNumChildren(); ++i )
     {
@@ -65,6 +68,39 @@ SceneNode *         BVSceneTools::BuildEngineSceneNode                  ( model:
     }
 
     return engineNode;
+}
+
+// *******************************
+//
+void                BVSceneTools::UpdateSceneNodeEffect                 ( SceneNode * node, model::BasicNodePtr modelNode )
+{
+    auto modelNodeEffect = modelNode->GetNodeEffect();
+
+    if ( !modelNodeEffect || modelNodeEffect->GetType() == NodeEffectType::NET_DEFAULT )
+    {
+        auto sceneNodeDefaultEffect = std::make_shared< NodeEffect >( NodeEffect::Type::T_DEFAULT );
+        node->SetNodeEffect( sceneNodeDefaultEffect );
+    }
+    else if( modelNodeEffect->GetType() == NodeEffectType::NET_ALPHA_MASK )
+    {
+        auto sceneNodeAMEffect = std::make_shared< AlphaMaskNodeEffect >();
+        node->SetNodeEffect( sceneNodeAMEffect );
+    }
+    else if( modelNodeEffect->GetType() == NodeEffectType::NET_NODE_MASK )
+    {
+        auto sceneNodeNMEffect = std::make_shared< NodeMaskNodeEffect >();
+        node->SetNodeEffect( sceneNodeNMEffect );
+    }
+    else if( modelNodeEffect->GetType() ==  NodeEffectType::NET_WIREFRAME )
+    {
+        auto sceneNodeWireframeEffect = std::make_shared< WireframeNodeEffect >();
+        node->SetNodeEffect( sceneNodeWireframeEffect );
+    }
+    else
+    {
+        //Did you forget to implement an additional effect
+        assert( false );
+    }
 }
 
 // *******************************

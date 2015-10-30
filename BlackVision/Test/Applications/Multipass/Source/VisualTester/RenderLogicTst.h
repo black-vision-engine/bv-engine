@@ -9,20 +9,20 @@ Class member m_offscreenRenderLogic changed to protected.*/
 namespace bv {
 
 class Renderer;
-class OffscreenRenderLogic;
+class OffscreenRenderLogicTst;
 class SceneNode;
 class Camera;
 
-class RenderLogic
+class RenderLogicTst
 {
 protected:
 
-    OffscreenRenderLogic *  m_offscreenRenderLogic;
+    OffscreenRenderLogicTst *  m_offscreenRenderLogicTst;
 
 public:
 
-            RenderLogic     ();
-            ~RenderLogic    ();
+            RenderLogicTst  ();
+            ~RenderLogicTst ();
 
     void    SetCamera       ( Camera * cam );
 

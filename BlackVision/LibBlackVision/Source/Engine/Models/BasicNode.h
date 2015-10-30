@@ -10,10 +10,10 @@
 
 #include "Serialization/ISerializable.h"
 
+
 namespace bv { namespace model {
 
 class PluginsManager;
-class BasicOverrideState;
 
 class BasicNode;
 DEFINE_PTR_TYPE(BasicNode)
@@ -37,8 +37,6 @@ private:
     
     const PluginsManager *          m_pluginsManager;
     bool                            m_visible;
-
-    BasicOverrideState *            m_overrideState;
 
     TNodeVec                        m_children;
 
@@ -73,30 +71,8 @@ public:
 
     virtual unsigned int                    GetNumChildren          () const override;
 
-    // FIXME: TRANSITION - BEGIN
     virtual IModelNodeEffectPtr             GetNodeEffect           () const;
     void                                    SetNodeEffect           ( IModelNodeEffectPtr nodeEffect );
-    // FIXME: TRANSITION - END
-
-
-    // FIXME: remove when proper GlobalEfect is implemented
-    virtual void                            EnableOverrideStateAM   () override;
-    virtual void                            EnableOverrideStateNM   () override;
-    virtual void                            DisableOverrideStateAM  () override;
-    virtual void                            DisableOverrideStateNM  () override;
-
-    virtual bool                            OverrideStateChangedAM  () const override;
-    virtual bool                            OverrideStateChangedNM  () const override;
-
-    virtual void                            SetOverrideStateChgAM   ( bool changed ) override;
-    virtual void                            SetOverrideStateChgNM   ( bool changed ) override;
-
-    virtual bool                            IsStateOverridenAM      () const override;
-    virtual bool                            IsStateOverridenNM      () const override;
-
-    virtual IOverrideState *                GetOverrideState        () override;
-    // FIXME: end of remove
-    // FIXME: remove when proper GlobalEfect is implemented
 
     virtual const std::string &             GetName                 () const override;
     void                                    SetName                 ( const std::string & name );

@@ -23,7 +23,7 @@ void UpdatersManager::UpdateStep        ()
 {
     for( auto updater : m_updaters )
     {
-        updater->DoUpdateTM();
+        updater->DoUpdate();
     }
 }
 

@@ -1,7 +1,6 @@
 #include "Engine/Models/BasicNode.h"
 
 #include "RemoteControlInterface.h"
-#include "Engine/Models/Interfaces/IOverrideState.h"
 #include "Engine/Models/BasicNode.h"
 //#include "Engine/Models/ModelScene.h"
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
@@ -10,6 +9,7 @@
 //#include "Engine/Models/Resources/TextureHelpers.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
 #include "Engine/Models/Plugins/Custom/DefaultHeightMapPlugin.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
 
 #include "structure/AssetManager.h"
 
@@ -1000,8 +1000,21 @@ void RemoteControlInterface::OnSetParam ( bv::IEventPtr evt )
             
             if(evtSetParam->ParamName == L"alpha")
             {
-				 auto state = node->GetOverrideState();
-				 auto alpha_param = state->GetAlphaParam();
+                 auto sceneNodeEffect = node->GetNodeEffect();
+
+                 ParamFloatPtr alpha_param;
+
+                 if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_ALPHA_MASK )
+                 {
+                    auto typeEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( sceneNodeEffect );
+                    typeEffect->GetParamAlpha();
+                 }
+
+                 if( !alpha_param )
+                 {
+                     assert( false );
+                     return;
+                 }
 
 				 wstring value = evtSetParam->Value;
 				 

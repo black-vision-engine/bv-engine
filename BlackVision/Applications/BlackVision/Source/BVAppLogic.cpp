@@ -274,8 +274,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
             
 			RefreshVideoInputScene();
 
-            m_renderLogic->RenderFrameTM( renderer, m_bvScene->GetEngineSceneRoot() );
-            // m_renderLogic->RenderFrame  ( renderer, m_bvScene->GetEngineSceneRoot() );
+            m_renderLogic->RenderFrame( renderer, m_bvScene->GetEngineSceneRoot() );
             m_renderLogic->FrameRendered( renderer );
         }
     }
