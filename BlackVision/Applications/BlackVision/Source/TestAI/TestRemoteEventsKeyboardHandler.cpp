@@ -4,9 +4,14 @@
 #include "Serialization/JsonSpirit/JsonSpiritSerializeObject.h"
 #include "Engine/Events/Events.h"
 #include "../EndUserAPI/RemoteCommandsConverter.h"
+//#include 
+
 
 namespace bv
 {
+
+std::wstring LoadUtf8FileToString( const std::wstring & _filename );
+
 
 // *********************************
 //
@@ -39,9 +44,7 @@ void TestRemoteEventsKeyboardHandler::HandleKey           ( unsigned char c, BVA
     }
     else if( c == 'r' )
     {// Test remote commands magic
-        std::wifstream file( "serialization/remoteEvent.json" );
-        std::wstring pretendRemoteString( (std::istreambuf_iterator<wchar_t>( file )), std::istreambuf_iterator<wchar_t>() );
-        file.close();
+        std::wstring pretendRemoteString = LoadUtf8FileToString( L"serialization/remoteEvent.json" );
 
         RemoteCommandsConverter::GetRemoteCommandsConverter().QueueEvent( pretendRemoteString );
     }

@@ -14,11 +14,11 @@ public:
     PluginEventsHandlers( BVAppLogic* logic );
     ~PluginEventsHandlers();
 
-    void AddParamKey         ( bv::IEventPtr eventPtr );
-    void UpdateParamKey      ( bv::IEventPtr eventPtr );
-    void RemoveParamKey      ( bv::IEventPtr eventPtr );
+    void                    AddParamKey         ( bv::IEventPtr eventPtr );
+    void                    UpdateParamKey      ( bv::IEventPtr eventPtr );
+    void                    RemoveParamKey      ( bv::IEventPtr eventPtr );
 
-    void LoadAsset           ( bv::IEventPtr eventPtr );
+    void                    LoadAsset           ( bv::IEventPtr eventPtr );
 };
 
 
