@@ -34,6 +34,7 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
             GetVanillaNode( logic )->SetVisible( true );
             GetAlphaMaskNode( logic )->SetVisible( false );
             GetNodeMaskNode( logic )->SetVisible( false );
+            GetWireframeNode( logic )->SetVisible( false );
 
             break;
         }
@@ -44,6 +45,7 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
             GetVanillaNode( logic )->SetVisible( false );
             GetAlphaMaskNode( logic )->SetVisible( true );
             GetNodeMaskNode( logic )->SetVisible( false );
+            GetWireframeNode( logic )->SetVisible( false );
 
             break;
         }
@@ -54,6 +56,18 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
             GetVanillaNode( logic )->SetVisible( false );
             GetAlphaMaskNode( logic )->SetVisible( false );
             GetNodeMaskNode( logic )->SetVisible( true );
+            GetWireframeNode( logic )->SetVisible( false );
+
+            break;
+        }
+        case '4':
+        {
+            m_curSelectedNode = NodeEffectType::NET_WIREFRAME;
+
+            GetVanillaNode( logic )->SetVisible( false );
+            GetAlphaMaskNode( logic )->SetVisible( false );
+            GetNodeMaskNode( logic )->SetVisible( false );
+            GetWireframeNode( logic )->SetVisible( true );
 
             break;
         }
@@ -273,6 +287,15 @@ model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetAlphaMaskNode    ( BV
 model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetNodeMaskNode     ( BVAppLogic * logic )
 {
     auto node = GetNodeByPath( logic, "root/node_mask" );
+
+    return node;
+}
+
+// *********************************
+//
+model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetWireframeNode    ( BVAppLogic * logic )
+{
+    auto node = GetNodeByPath( logic, "root/overlay_alpha" );
 
     return node;
 }

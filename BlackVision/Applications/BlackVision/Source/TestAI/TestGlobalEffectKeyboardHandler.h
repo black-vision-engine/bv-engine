@@ -50,6 +50,7 @@ private:
     model::BasicNodePtr     GetVanillaNode      ( BVAppLogic * logic );
     model::BasicNodePtr     GetAlphaMaskNode    ( BVAppLogic * logic );
     model::BasicNodePtr     GetNodeMaskNode     ( BVAppLogic * logic );
+    model::BasicNodePtr     GetWireframeNode    ( BVAppLogic * logic );
 
     model::IModelNodeEffectPtr  GetAlphaMaskNodeEffect   ( BVAppLogic * logic );
     model::IModelNodeEffectPtr  GetNodeMaskNodeEffect    ( BVAppLogic * logic );
