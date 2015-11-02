@@ -106,13 +106,9 @@ void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
             DefaultTextPlugin* textPlugin = dynamic_cast< DefaultTextPlugin* >( node->GetPlugin("text").get() );
 
             if( textPlugin != nullptr )
-            {
                 model::DefaultTextPlugin::SetText( plugin, value );
-            }
             else
-            {
                 LOG_MESSAGE( SeverityLevel::error ) << "AddParamKey() nNode ["+ nodeName+"], plugin [text] not found";
-            }
         }
     }
     else if( setParamEvent->PluginName == "alpha" )

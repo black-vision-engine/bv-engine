@@ -1,6 +1,7 @@
 #include "JsonCommandsConverter.h"
 
-#include "Serialization/JsonSpirit/JsonSpiritDeserilizeObject.h"
+#include "Serialization/JsonSpirit/JsonSpiritDeserializeObject.h"
+#include "Serialization/JsonSpirit/JsonSpiritSerializeObject.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Engine/Events/EventHelpers.h"
 
@@ -21,7 +22,7 @@ JsonCommandsConverter::~JsonCommandsConverter()
 //
 void                JsonCommandsConverter::QueueEvent          ( const std::wstring& eventString )
 {
-    JsonSpiritDeserilizeObject deserializer;
+    JsonSpiritDeserializeObject deserializer;
 
     if( !deserializer.LoadWString( eventString ) )
     {
@@ -35,10 +36,17 @@ void                JsonCommandsConverter::QueueEvent          ( const std::wstr
 }
 
 // ***********************
-//
+// Always check, if string isn't empty. That means, no more events are queued.
 std::wstring        JsonCommandsConverter::PollEvent           ()
 {
-    return L"";
+    auto evt = GetDefaultEventManager().GetNextResponse();
+    if( evt == nullptr )
+        return L"";
+
+    JsonSpiritSerializeObject ser;
+    evt->Serialize( ser );
+
+    return ser.Save( FormatStyle::FORMATSTYLE_SPARING );
 }
 
 

@@ -1997,9 +1997,6 @@
     <ClInclude Include="..\..\..\Source\Serialization\XML\XMLDeserializer.h">
       <Filter>Serialization\XML</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritDeserilizeObject.h">
-      <Filter>Serialization\JsonSpirit</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSerializeObject.h">
       <Filter>Serialization\JsonSpirit</Filter>
     </ClInclude>
@@ -2035,6 +2032,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\EventHelpers.h">
       <Filter>Engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritDeserializeObject.h">
+      <Filter>Serialization\JsonSpirit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

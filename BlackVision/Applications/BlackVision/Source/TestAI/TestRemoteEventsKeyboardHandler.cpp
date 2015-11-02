@@ -4,13 +4,12 @@
 #include "Serialization/JsonSpirit/JsonSpiritSerializeObject.h"
 #include "Engine/Events/Events.h"
 #include "../EndUserAPI/RemoteCommandsConverter.h"
-//#include 
 
 
 namespace bv
 {
 
-std::wstring LoadUtf8FileToString( const std::wstring & _filename );
+std::wstring LoadUtf8FileToString( const std::wstring & _filename );        // There's no header. Implementation in file FreeTypeEngine.cpp LibBlackVision.
 
 
 // *********************************
@@ -49,7 +48,7 @@ void TestRemoteEventsKeyboardHandler::HandleKey           ( unsigned char c, BVA
         RemoteCommandsConverter::GetRemoteCommandsConverter().QueueEvent( pretendRemoteString );
     }
     else if( c == 'e' )
-    {// Save descriptor. This helps to create remote event. You can copy this desc to serialization/remoteEvent.json file.
+    {// Save descriptor. This helps to create remote event. You can copy this desc to serialization/remoteEvent.json.
         ParamKeyEventPtr newEvent = std::make_shared<ParamKeyEvent>();
         newEvent->PluginName = "texture";
         newEvent->NodeName = "DEFAULT_CONE";

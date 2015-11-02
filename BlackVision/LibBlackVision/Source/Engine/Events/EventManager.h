@@ -28,6 +28,7 @@ private:
 
     EventQueue              m_queues[ NUM_QUEUES ];
     EventQueueConcurrent    m_concurrentQueues[ NUM_CONCURRENT_QUEUES ];
+    EventQueueConcurrent    m_responseConcurrentQueue;
 
     int m_activeQueue;
     int m_activeconcurrentQueue;
@@ -48,6 +49,8 @@ public:
 
     virtual bool    Update                  ( unsigned long maxEvaluationMillis = millisINFINITE );
 
+    virtual void        QueueResponse       ( const IEventPtr evt ) override;
+    virtual IEventPtr   GetNextResponse     () override;
 };
 
 } //bv
