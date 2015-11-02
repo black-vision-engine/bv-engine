@@ -1071,6 +1071,7 @@ void                SceneStructureEvent::Serialize            ( ISerializer& ser
     ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
     ser.SetAttribute( Serial::NODE_NAME_WSTRING, toWString( NodeName ) );
     ser.SetAttribute( Serial::NEW_NODE_NAME_WSTRING, toWString( NewNodeName ) );
+    ser.SetAttribute( Serial::PLUGIN_NAME_WSTRING, toWString( PluginName ) );
     ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( SceneCommand ) );
 }
 
@@ -1083,6 +1084,7 @@ IEventPtr                SceneStructureEvent::Create          ( IDeserializer& d
         SceneStructureEventPtr newEvent   = std::make_shared<SceneStructureEvent>();
         newEvent->NodeName          = toString( deser.GetAttribute( Serial::NODE_NAME_WSTRING ) );
         newEvent->NewNodeName       = toString( deser.GetAttribute( Serial::NEW_NODE_NAME_WSTRING ) );
+        newEvent->PluginName        = toString( deser.GetAttribute( Serial::PLUGIN_NAME_WSTRING ) );
         newEvent->SceneCommand      = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
         
         return newEvent;

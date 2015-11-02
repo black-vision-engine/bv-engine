@@ -625,6 +625,7 @@ private:
 public:
     SceneStructureEvent::Command    SceneCommand;
     std::string                     NodeName;
+    std::string                     PluginName;
     std::string                     NewNodeName;
 public:
     explicit                        SceneStructureEvent   () {}

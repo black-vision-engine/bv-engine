@@ -8,15 +8,13 @@ class BVAppLogic;
 
 class SceneEventsHandlers
 {
+private:
+    BVAppLogic*         m_appLogic;
 public:
     SceneEventsHandlers( BVAppLogic* appLogic );
     ~SceneEventsHandlers();
 
     void        SceneStructure      ( bv::IEventPtr evt );
-    // SetNodeVisible <- wczeœniej implementowane przez SetParamEvent
-
-    void        AddNode         ();
-    void        RemoveNode      ();
 };
 
 

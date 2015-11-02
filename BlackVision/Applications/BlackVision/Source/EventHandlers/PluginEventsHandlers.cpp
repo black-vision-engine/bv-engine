@@ -43,7 +43,7 @@ void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
     std::string nodeName    = toString( setParamEvent->NodeName );
     std::string pluginName  = toString( setParamEvent->PluginName );
     std::string paramName   = toString( setParamEvent->ParamName );
-    std::wstring value      = setParamEvent->Value;
+    std::wstring& value     = setParamEvent->Value;
 
     float keyTime           = setParamEvent->Time;
         
