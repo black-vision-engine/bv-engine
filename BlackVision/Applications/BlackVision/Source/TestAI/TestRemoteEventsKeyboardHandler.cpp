@@ -49,13 +49,10 @@ void TestRemoteEventsKeyboardHandler::HandleKey           ( unsigned char c, BVA
     }
     else if( c == 'e' )
     {// Save descriptor. This helps to create remote event. You can copy this desc to serialization/remoteEvent.json.
-        ParamKeyEventPtr newEvent = std::make_shared<ParamKeyEvent>();
-        newEvent->PluginName = "texture";
-        newEvent->NodeName = "DEFAULT_CONE";
-        newEvent->KeyCommand = ParamKeyEvent::Command::AddKey;
-        newEvent->ParamName = "translate";
-        newEvent->Value = L"3.14";
-        newEvent->Time = 3.0f;
+        SceneStructureEventPtr newEvent = std::make_shared<SceneStructureEvent>();
+        newEvent->NodeName = "root";
+        newEvent->SceneCommand = SceneStructureEvent::Command::RemoveNode;
+        newEvent->NewNodeName = "";
 
         JsonSpiritSerializeObject ser;
         newEvent->Serialize( ser );

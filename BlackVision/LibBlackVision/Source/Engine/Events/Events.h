@@ -318,8 +318,8 @@ public:
 
 DEFINE_PTR_TYPE(InfoEvent)
 
-	// ************************************* Information Event *************************************
-class SceneStructureEvent : public BaseEvent
+// ************************************* SceneStructureEvent Event *************************************
+class SceneStructureEventDeprecated : public BaseEvent
 {
 private:
 
@@ -341,7 +341,7 @@ public:
 
 public:
 
-    explicit                        SceneStructureEvent   ();
+    explicit                        SceneStructureEventDeprecated   ();
 
     virtual EventType               GetEventType        () const;
 
@@ -360,7 +360,7 @@ public:
 
 };
 
-DEFINE_PTR_TYPE(SceneStructureEvent)
+DEFINE_PTR_TYPE( SceneStructureEventDeprecated )
 
 
 // ************************************* SetParamEvent *************************************
@@ -563,6 +563,7 @@ public:
 
 DEFINE_PTR_TYPE( LoadAssetEvent )
 
+
 // ************************************* ParamKeyEvent *************************************
 class ParamKeyEvent : public BaseEvent
 {
@@ -572,7 +573,7 @@ public:
         AddKey,
         UpdateKey,
         RemoveKey,
-        Fail            // Wrong command
+        Fail            ///< Wrong command
     } Command;
 private:
     static const EventType      m_sEventType;
@@ -586,12 +587,14 @@ public:
     float                           Time;
     ParamKeyEvent::Command          KeyCommand;
 
-    virtual EventType               GetEventType        () const;
-    virtual const std::string &     GetName             () const;
-
+public:
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );
     virtual IEventPtr               Clone               () const;
+
+
+    virtual EventType               GetEventType        () const;
+    virtual const std::string &     GetName             () const;
 
     static EventType                Type                ();
     static std::string&             Name                ();
@@ -602,5 +605,44 @@ private:
 DEFINE_PTR_TYPE( ParamKeyEvent )
 
 
+// ************************************* SceneStructureEvent Event *************************************
+class SceneStructureEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        AddNode,
+        RemoveNode,
+        DetachPlugin,
+        AttachPlugin,
+        SetNodeVisible,
+        SetNodeInvisible,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    SceneStructureEvent::Command    SceneCommand;
+    std::string                     NodeName;
+    std::string                     NewNodeName;
+public:
+    explicit                        SceneStructureEvent   () {}
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+
+private:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
+};
+
+DEFINE_PTR_TYPE(SceneStructureEvent)
 
 } //bv

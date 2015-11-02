@@ -362,7 +362,7 @@ namespace bv{
                         else if(pm.cmdStack[i]->Type==CmdType::SCENE_STRUCTURE)
                         {
                              CmdStruct *cmd = (CmdStruct*)(pm.cmdStack[i]);
-                             SceneStructureEventPtr  ev = SceneStructureEventPtr( new SceneStructureEvent() );
+                             SceneStructureEventDeprecatedPtr  ev = SceneStructureEventDeprecatedPtr( new SceneStructureEventDeprecated() );
 
                              ev->command = cmd->Command;
 							 ev->NodeName = cmd->NodeParam1;

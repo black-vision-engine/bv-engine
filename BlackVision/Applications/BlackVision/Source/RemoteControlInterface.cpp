@@ -51,7 +51,7 @@ RemoteControlInterface::RemoteControlInterface(BVAppLogic *AppLogic)
 	// SetParamEvent
     bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnSetParam ), bv::SetParamEvent::Type() );
     bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnInformation ), bv::InfoEvent::Type() );
-	bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnSceneStructure ), bv::SceneStructureEvent::Type() );
+	//bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnSceneStructure ), bv::SceneStructureEvent::Type() );
 
     // timeline events
     bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnTimelineCmd ), bv::TimeLineCmd::Type() );
@@ -547,14 +547,14 @@ Json::Value Str2Json( const std::string & data )
 
 // *********************************
 //
-Json::Value GetRequestParamValue( const bv::SceneStructureEventPtr & evtStructure )
+Json::Value GetRequestParamValue( const bv::SceneStructureEventDeprecatedPtr & evtStructure )
 {
     return Str2Json( std::string( evtStructure->request.begin(), evtStructure->request.end() ) );
 }
 
 // *********************************
 //
-void SendOnSceneStructureResponse( const bv::SceneStructureEventPtr & evtStructure, const std::string & cmd, const std::string & msgKey, const Json::Value & msgVal )
+void SendOnSceneStructureResponse( const bv::SceneStructureEventDeprecatedPtr & evtStructure, const std::string & cmd, const std::string & msgKey, const Json::Value & msgVal )
 {
     Log::A( "OK", cmd );
 
@@ -579,9 +579,9 @@ void SendOnSceneStructureResponse( const bv::SceneStructureEventPtr & evtStructu
 //
 void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
 {
-    if( evt->GetEventType() == bv::SceneStructureEvent::m_sEventType)
+    if( evt->GetEventType() == bv::SceneStructureEventDeprecated::Type() )
     {
-		bv::SceneStructureEventPtr evtStructure = std::static_pointer_cast<bv::SceneStructureEvent>( evt );
+		bv::SceneStructureEventDeprecatedPtr evtStructure = std::static_pointer_cast<bv::SceneStructureEventDeprecated>( evt );
 
         auto pm = ProjectManager::GetInstance();
 

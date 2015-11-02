@@ -54,18 +54,22 @@ std::string TimerCmd::m_sEventName           = "Event_Timer";
 const EventType WidgetCmd::m_sEventType       = 0x10000011;
 std::string WidgetCmd::m_sEventName           = "Event_Widget";
 
-const EventType SceneStructureEvent::m_sEventType       = 0x10000012;
-std::string SceneStructureEvent::m_sEventName           = "Event_SceneStructure";
+const EventType SceneStructureEventDeprecated::m_sEventType       = 0x10000012;
+std::string SceneStructureEventDeprecated::m_sEventName           = "Event_SceneStructure";
 
-const EventType LoadAssetEvent::m_sEventType            = 0x10000013;
-std::string LoadAssetEvent::m_sEventName                = "Event_LoadAsset";
+
+
 
 
 // ************************************* new Events *****************************************
-const EventType ParamKeyEvent::m_sEventType       = 0x30000006;
-std::string ParamKeyEvent::m_sEventName           = "Event_ParamKeyEvent";
+const EventType LoadAssetEvent::m_sEventType        = 0x10000013;
+std::string LoadAssetEvent::m_sEventName            = "Event_LoadAsset";
 
+const EventType ParamKeyEvent::m_sEventType         = 0x30000006;
+std::string ParamKeyEvent::m_sEventName             = "Event_ParamKeyEvent";
 
+const EventType SceneStructureEvent::m_sEventType   = 0x30000012;
+std::string SceneStructureEvent::m_sEventName       = "Event_SceneStructure";
 
 // ************************************* Events Serialization *****************************************
 
@@ -73,9 +77,10 @@ namespace Serial
 {
 const std::wstring EMPTY_WSTRING            = L"";
 
-const std::wstring EVENT_TYPE_WSTRING          = L"cmd";
+const std::wstring EVENT_TYPE_WSTRING       = L"cmd";
 const std::wstring NODE_NAME_WSTRING        = L"NodeName";
 const std::wstring PLUGIN_NAME_WSTRING      = L"PluginName";
+const std::wstring COMMAND_WSTRING    = L"Command";
 
 // LoadAssetEvent
 const std::wstring ASSET_DATA_WSTRING       = L"AssetData";
@@ -84,10 +89,19 @@ const std::wstring ASSET_DATA_WSTRING       = L"AssetData";
 const std::wstring PARAM_NAME_WSTRING       = L"ParamName";
 const std::wstring PARAM_VALUE_WSTRING      = L"ParamValue";
 const std::wstring KEY_TIME_WSTRING         = L"Time";
-const std::wstring KEY_OPERATION_WSTRING    = L"Command";
-const std::wstring ADD_KEY_COMMAND_WSTRING  = L"AddKey";
-const std::wstring REMOVE_KEY_COMMAND_WSTRING   = L"RemoveKey";
-const std::wstring UPDATE_KEY_COMMAND_WSTRING   = L"UpdateKey";
+const std::wstring COMMAND_ADD_KEY_WSTRING  = L"AddKey";
+const std::wstring COMMAND_REMOVE_KEY_WSTRING   = L"RemoveKey";
+const std::wstring COMMAND_UPDATE_KEY_WSTRING   = L"UpdateKey";
+
+// ScenStructureEvent
+const std::wstring NEW_NODE_NAME_WSTRING        = L"NewNodeName";
+
+const std::wstring COMMAND_ADD_NODE_WSTRING         = L"AddNode";
+const std::wstring COMMAND_REMOVE_NODE_WSTRING      = L"RemoveNode";
+const std::wstring COMMAND_ATTACH_PLUGIN_WSTRING    = L"AttachPlugin";
+const std::wstring COMMAND_DETACH_PLUGIN_WSTRING    = L"DetachPlugin";
+const std::wstring COMMAND_SET_NODE_VISIBLE_WSTRING     = L"SetNodeVisible";
+const std::wstring COMMAND_SET_NODE_INVISIBLE_WSTRING   = L"SetNodeInvisible";
 
 }
 
@@ -562,10 +576,7 @@ const std::wstring &         InfoEvent::GetAddStrData    () const
 }
 
 
-
-
-
-SceneStructureEvent::SceneStructureEvent         () 
+SceneStructureEventDeprecated::SceneStructureEventDeprecated         () 
 {
   
 }
@@ -573,58 +584,60 @@ SceneStructureEvent::SceneStructureEvent         ()
 
 // *************************************
 //
-EventType           SceneStructureEvent::GetEventType         () const
+EventType           SceneStructureEventDeprecated::GetEventType         () const
 {
     return this->m_sEventType;
 }
 
 // *************************************
 //
-void                SceneStructureEvent::Serialize            ( ISerializer& ser ) const
+void                SceneStructureEventDeprecated::Serialize            ( ISerializer& ser ) const
 {
     assert( false );
 }
 
 // *************************************
 //
-IEventPtr                SceneStructureEvent::Create          ( IDeserializer& deser )
+IEventPtr                SceneStructureEventDeprecated::Create          ( IDeserializer& deser )
 {
     assert( false );
     return nullptr;
 }
 // *************************************
 //
-IEventPtr               SceneStructureEvent::Clone             () const
+IEventPtr               SceneStructureEventDeprecated::Clone             () const
 {
-    return IEventPtr( new SceneStructureEvent( *this ) );
+    return IEventPtr( new SceneStructureEventDeprecated( *this ) );
 }
 // *************************************
 //
-EventType               SceneStructureEvent::Type              ()
+EventType               SceneStructureEventDeprecated::Type              ()
 {
     return m_sEventType;
 }
 
 // *************************************
 //
-bool                    SceneStructureEvent::ForceSync        () const
+bool                    SceneStructureEventDeprecated::ForceSync        () const
 {
     return request == L"grab_that_frame";
 }
 
 // *************************************
 //
-const std::string &     SceneStructureEvent::GetName           () const
+const std::string &     SceneStructureEventDeprecated::GetName           () const
 {
     return m_sEventName;
 }
 
 // *************************************
 //
-const std::wstring &         SceneStructureEvent::GetAddStrData    () const
+const std::wstring &         SceneStructureEventDeprecated::GetAddStrData    () const
 {
     return m_additionalStrData;
 }
+
+
 
 
 
@@ -974,7 +987,7 @@ void                ParamKeyEvent::Serialize            ( ISerializer& ser ) con
     ser.SetAttribute( Serial::PARAM_NAME_WSTRING, toWString( ParamName ) );
     ser.SetAttribute( Serial::PARAM_VALUE_WSTRING, Value );
     ser.SetAttribute( Serial::KEY_TIME_WSTRING, std::to_wstring( Time ) );
-    ser.SetAttribute( Serial::KEY_OPERATION_WSTRING, CommandToWString( KeyCommand ) );
+    ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( KeyCommand ) );
 }
 
 // *************************************
@@ -989,7 +1002,7 @@ IEventPtr           ParamKeyEvent::Create          ( IDeserializer& deser )
         newEvent->ParamName         = toString( deser.GetAttribute( Serial::PARAM_NAME_WSTRING ) );
         newEvent->Value             = deser.GetAttribute( Serial::PARAM_VALUE_WSTRING );
         newEvent->Time              = stof( deser.GetAttribute( Serial::KEY_TIME_WSTRING ) );
-        newEvent->KeyCommand        = WStringToCommand( deser.GetAttribute( Serial::KEY_OPERATION_WSTRING ) );
+        newEvent->KeyCommand        = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
         
         return newEvent;
     }
@@ -1006,11 +1019,11 @@ IEventPtr               ParamKeyEvent::Clone             () const
 std::wstring ParamKeyEvent::CommandToWString    ( Command cmd )
 {
     if( cmd == Command::AddKey )
-        return Serial::ADD_KEY_COMMAND_WSTRING;
+        return Serial::COMMAND_ADD_KEY_WSTRING;
     else if( cmd == Command::RemoveKey )
-        return Serial::REMOVE_KEY_COMMAND_WSTRING;
+        return Serial::COMMAND_REMOVE_KEY_WSTRING;
     else if( cmd == Command::UpdateKey )
-        return Serial::UPDATE_KEY_COMMAND_WSTRING;
+        return Serial::COMMAND_UPDATE_KEY_WSTRING;
     else
         return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
 }
@@ -1018,11 +1031,11 @@ std::wstring ParamKeyEvent::CommandToWString    ( Command cmd )
 //
 ParamKeyEvent::Command ParamKeyEvent::WStringToCommand    ( const std::wstring& string )
 {
-    if( string == Serial::ADD_KEY_COMMAND_WSTRING )
+    if( string == Serial::COMMAND_ADD_KEY_WSTRING )
         return Command::AddKey;
-    else if( string == Serial::REMOVE_KEY_COMMAND_WSTRING )
+    else if( string == Serial::COMMAND_REMOVE_KEY_WSTRING )
         return Command::RemoveKey;
-    else if( string == Serial::UPDATE_KEY_COMMAND_WSTRING )
+    else if( string == Serial::COMMAND_UPDATE_KEY_WSTRING )
         return Command::UpdateKey;
     else
         return Command::Fail;
@@ -1044,6 +1057,98 @@ const std::string &     ParamKeyEvent::GetName           () const
 //
 EventType           ParamKeyEvent::GetEventType         () const
 { return this->m_sEventType; }
+
+
+
+
+
+//******************* SceneStructureEvent *************
+
+// *************************************
+//
+void                SceneStructureEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
+    ser.SetAttribute( Serial::NODE_NAME_WSTRING, toWString( NodeName ) );
+    ser.SetAttribute( Serial::NEW_NODE_NAME_WSTRING, toWString( NewNodeName ) );
+    ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( SceneCommand ) );
+}
+
+// *************************************
+//
+IEventPtr                SceneStructureEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
+    {
+        SceneStructureEventPtr newEvent   = std::make_shared<SceneStructureEvent>();
+        newEvent->NodeName          = toString( deser.GetAttribute( Serial::NODE_NAME_WSTRING ) );
+        newEvent->NewNodeName       = toString( deser.GetAttribute( Serial::NEW_NODE_NAME_WSTRING ) );
+        newEvent->SceneCommand      = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
+        
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               SceneStructureEvent::Clone             () const
+{   return IEventPtr( new SceneStructureEvent( *this ) );  }
+
+// *************************************
+//
+EventType           SceneStructureEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        SceneStructureEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  SceneStructureEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           SceneStructureEvent::GetEventType() const
+{   return this->m_sEventType; }
+
+// *************************************
+//
+std::wstring SceneStructureEvent::CommandToWString    ( Command cmd )
+{
+    if( cmd == Command::AddNode )
+        return Serial::COMMAND_ADD_NODE_WSTRING;
+    else if( cmd == Command::RemoveNode )
+        return Serial::COMMAND_REMOVE_NODE_WSTRING;
+    else if( cmd == Command::AttachPlugin )
+        return Serial::COMMAND_ATTACH_PLUGIN_WSTRING;
+    else if( cmd == Command::DetachPlugin )
+        return Serial::COMMAND_DETACH_PLUGIN_WSTRING;
+    else if( cmd == Command::SetNodeVisible )
+        return Serial::COMMAND_SET_NODE_VISIBLE_WSTRING;
+    else if( cmd == Command::SetNodeInvisible )
+        return Serial::COMMAND_SET_NODE_INVISIBLE_WSTRING;
+    else
+        return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
+}
+// *************************************
+//
+SceneStructureEvent::Command SceneStructureEvent::WStringToCommand    ( const std::wstring& string )
+{
+    if( string == Serial::COMMAND_ADD_NODE_WSTRING )
+        return Command::AddNode;
+    else if( string == Serial::COMMAND_REMOVE_NODE_WSTRING )
+        return Command::RemoveNode;
+    else if( string == Serial::COMMAND_ATTACH_PLUGIN_WSTRING)
+        return Command::AttachPlugin;
+    else if( string == Serial::COMMAND_DETACH_PLUGIN_WSTRING )
+        return Command::DetachPlugin;
+    else if( string == Serial::COMMAND_SET_NODE_VISIBLE_WSTRING )
+        return Command::SetNodeVisible;
+    else if( string == Serial::COMMAND_SET_NODE_INVISIBLE_WSTRING )
+        return Command::SetNodeInvisible;
+    else
+        return Command::Fail;
+}
 
 #pragma warning( pop )
 
