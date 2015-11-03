@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ftgl_static", "ftgl_static.vcxproj", "{1D758EEA-59C3-46E4-BEF5-16DCCA8C0B21}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FTGLDemo", "FTGLDemo.vcxproj", "{90173472-70E2-4B0B-AEBE-BCE4F68BE2C5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "poly2tri", "..\..\poly2tri\poly2tri.vcxproj", "{4EA58C69-9B3E-4792-8C14-5A3354A01608}"
@@ -10,6 +8,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleDemo", "SimpleDemo.vcxproj", "{F2E2D79C-F982-46C3-B33A-0982613DE6B0}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "trackball", "trackball.vcxproj", "{6CEFDFC5-05FF-4C34-A53F-C49593E1936C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ftgl", "ftgl.vcxproj", "{F7946C68-319D-441A-A732-BC2A200A9112}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +19,6 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1D758EEA-59C3-46E4-BEF5-16DCCA8C0B21}.Debug|Win32.ActiveCfg = Debug|Win32
-		{1D758EEA-59C3-46E4-BEF5-16DCCA8C0B21}.Debug|Win32.Build.0 = Debug|Win32
-		{1D758EEA-59C3-46E4-BEF5-16DCCA8C0B21}.Debug|x64.ActiveCfg = Debug|x64
-		{1D758EEA-59C3-46E4-BEF5-16DCCA8C0B21}.Debug|x64.Build.0 = Debug|x64
-		{1D758EEA-59C3-46E4-BEF5-16DCCA8C0B21}.Release|Win32.ActiveCfg = Release|Win32
-		{1D758EEA-59C3-46E4-BEF5-16DCCA8C0B21}.Release|Win32.Build.0 = Release|Win32
-		{1D758EEA-59C3-46E4-BEF5-16DCCA8C0B21}.Release|x64.ActiveCfg = Release|x64
-		{1D758EEA-59C3-46E4-BEF5-16DCCA8C0B21}.Release|x64.Build.0 = Release|x64
 		{90173472-70E2-4B0B-AEBE-BCE4F68BE2C5}.Debug|Win32.ActiveCfg = Debug|Win32
 		{90173472-70E2-4B0B-AEBE-BCE4F68BE2C5}.Debug|Win32.Build.0 = Debug|Win32
 		{90173472-70E2-4B0B-AEBE-BCE4F68BE2C5}.Debug|x64.ActiveCfg = Debug|x64
@@ -59,11 +51,16 @@ Global
 		{6CEFDFC5-05FF-4C34-A53F-C49593E1936C}.Release|Win32.Build.0 = Release|Win32
 		{6CEFDFC5-05FF-4C34-A53F-C49593E1936C}.Release|x64.ActiveCfg = Release|x64
 		{6CEFDFC5-05FF-4C34-A53F-C49593E1936C}.Release|x64.Build.0 = Release|x64
+		{F7946C68-319D-441A-A732-BC2A200A9112}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F7946C68-319D-441A-A732-BC2A200A9112}.Debug|Win32.Build.0 = Debug|Win32
+		{F7946C68-319D-441A-A732-BC2A200A9112}.Debug|x64.ActiveCfg = Debug|x64
+		{F7946C68-319D-441A-A732-BC2A200A9112}.Debug|x64.Build.0 = Debug|x64
+		{F7946C68-319D-441A-A732-BC2A200A9112}.Release|Win32.ActiveCfg = Release|Win32
+		{F7946C68-319D-441A-A732-BC2A200A9112}.Release|Win32.Build.0 = Release|Win32
+		{F7946C68-319D-441A-A732-BC2A200A9112}.Release|x64.ActiveCfg = Release|x64
+		{F7946C68-319D-441A-A732-BC2A200A9112}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

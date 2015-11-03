@@ -163,10 +163,6 @@
     <ProjectReference Include="..\..\poly2tri\poly2tri.vcxproj">
       <Project>{4ea58c69-9b3e-4792-8c14-5a3354a01608}</Project>
     </ProjectReference>
-    <ProjectReference Include="ftgl_static.vcxproj">
-      <Project>{1d758eea-59c3-46e4-bef5-16dcca8c0b21}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
