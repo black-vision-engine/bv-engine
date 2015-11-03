@@ -67,23 +67,23 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(ProjectDir)\..\..\bin\$(Platform)\$(Configuration)</OutDir>
-    <IntDir>$(ProjectDir)\$(Platform)\$(Configuration)</IntDir>
+    <IntDir>$(ProjectDir)\$(ProjectName)\$(Platform)\$(Configuration)</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(ProjectDir)\..\..\bin\$(Platform)\$(Configuration)</OutDir>
-    <IntDir>$(ProjectDir)\$(Platform)\$(Configuration)</IntDir>
+    <IntDir>$(ProjectDir)\$(ProjectName)\$(Platform)\$(Configuration)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(ProjectDir)\..\..\bin\$(Platform)\$(Configuration)</OutDir>
-    <IntDir>$(ProjectDir)\$(Platform)\$(Configuration)</IntDir>
+    <IntDir>$(ProjectDir)\$(ProjectName)\$(Platform)\$(Configuration)</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(ProjectDir)\..\..\bin\$(Platform)\$(Configuration)</OutDir>
-    <IntDir>$(ProjectDir)\$(Platform)\$(Configuration)</IntDir>
+    <IntDir>$(ProjectDir)\$(ProjectName)\$(Platform)\$(Configuration)</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -121,7 +121,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>freetype250_D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freeglut.lib;freetype250_D.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>./../../../FreeType/objs/$(PlatformName)/$(Configuration);./../../glut/lib/$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -140,7 +140,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>freetype250.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freeglut.lib;freetype250.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -163,7 +163,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>freetype234.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freeglut.lib;freetype250.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>

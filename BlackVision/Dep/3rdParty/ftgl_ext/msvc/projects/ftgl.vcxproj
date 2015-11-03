@@ -73,21 +73,21 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>./../../bin/$(Platform)/$(Configuration)/</OutDir>
-    <IntDir>$(ProjectDir)/$(Platform)/$(Configuration)/</IntDir>
+    <IntDir>$(ProjectDir)\$(ProjectName)\$(Platform)\$(Configuration)</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>./../../bin/$(Platform)/$(Configuration)/</OutDir>
-    <IntDir>$(ProjectDir)/$(Platform)/$(Configuration)/</IntDir>
+    <IntDir>$(ProjectDir)\$(ProjectName)\$(Platform)\$(Configuration)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>./../../bin/$(Platform)/$(Configuration)/</OutDir>
-    <IntDir>$(ProjectDir)/$(Platform)/$(Configuration)/</IntDir>
+    <IntDir>$(ProjectDir)\$(ProjectName)\$(Platform)\$(Configuration)</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IntDir>$(ProjectDir)/$(Platform)/$(Configuration)/</IntDir>
+    <IntDir>$(ProjectDir)\$(ProjectName)\$(Platform)\$(Configuration)</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <OutDir>./../../bin/$(Platform)/$(Configuration)/</OutDir>
   </PropertyGroup>
