@@ -60,8 +60,7 @@ ISerializablePtr        SceneModel::Create          ( const IDeserializer& deser
 
     auto timelines = SerializationHelper::DeserializeObjectLoadArrayImpl< model::TimeEvaluatorBase< model::ITimeEvaluator > >( deser, "timelines" );
     for( auto timeline : timelines )
-        for( auto child : timeline->GetChildren() )
-            tm->AddTimeline( child );
+        tm->AddTimeline( timeline );
 
 // nodes
     auto node = SerializationHelper::DeserializeObjectLoadImpl< model::BasicNode >( deser, "node" );

@@ -164,6 +164,7 @@ model::BasicNodePtr BVAppLogic::LoadScenes( const PathVec & pathVec )
     }
 
     m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline, m_renderer, GetTimelineManager() );
+    InitCamera( 500, 500 );
     assert( m_bvScene );
 
     return root;

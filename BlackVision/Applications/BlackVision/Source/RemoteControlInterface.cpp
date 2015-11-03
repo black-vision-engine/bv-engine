@@ -34,6 +34,8 @@
 
 #include "Serialization/Json/JsonDeserializeObject.h"
 
+#include "Engine/Models/Updaters/UpdatersManager.h"
+
 #include <iomanip>
 #include <string>
 #include <sstream>
@@ -407,7 +409,14 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 				IPluginPtr plugin = pluginlist->GetPlugin( i );
 				string plugin_name = plugin->GetName();
 
-				auto & params = plugin->GetPluginParamValModel()->GetPluginModel()->GetParameters();
+                auto pluginParamModel = plugin->GetPluginParamValModel()->GetPluginModel();
+
+                if( !pluginParamModel )
+                {
+                    continue;
+                }
+
+				auto & params = pluginParamModel->GetParameters();
 
 				for( auto p : params )
 				{
@@ -734,6 +743,8 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
 
             if( !projectScenesNames.empty() )
             {
+                UpdatersManager::Get().RemoveAllUpdaters();
+                
                 auto node = m_AppLogic->LoadScenes( projectScenesNames );
                 if( node )
                 {
@@ -749,6 +760,29 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
             {
                 SendOnSceneStructureResponse( evtStructure, "LOAD_PROJECT", "status", "ERROR" );
             }
+        } 
+        else if( evtStructure->command == L"SAVE_SCENE" )
+        {
+            wstring NodeName = evtStructure->NodeName;
+            string nodeNameStr( NodeName.begin(), NodeName.end() );
+
+            auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot();
+            auto node = root->GetNode( nodeNameStr );
+
+			if( node == nullptr && root->GetName() == nodeNameStr )
+			{
+				Log::A( "OK", "root node is node you're looking for [" + nodeNameStr + "] Applying jedi fix now." );
+				node = root;
+			}
+
+            auto basicNode = std::static_pointer_cast< model::BasicNode >( node );
+
+            auto projName = std::string( evtStructure->request.begin(), evtStructure->request.end() );
+
+            pm->AddScene( basicNode, "proj01", "dupa.scn" );
+
+
+            SendOnSceneStructureResponse( evtStructure, "SAVE_SCENE", "status", "OK" );
         }
     }
 }

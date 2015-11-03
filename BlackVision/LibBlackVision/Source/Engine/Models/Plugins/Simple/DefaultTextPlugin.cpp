@@ -118,7 +118,7 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     rccEndColorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 0.f, 0.f, 1.f ), TimeType( 10.f ) );
 
     colTextEffectIdEvaluator->Parameter()->SetVal( 2, TimeType( 0.f ) );
-    transformTextEffectIdEvaluator->Parameter()->SetVal( 3, TimeType( 0.f ) );
+    transformTextEffectIdEvaluator->Parameter()->SetVal( 2, TimeType( 0.f ) );
 
     explosionCenterEvaluator->Parameter()->SetVal( glm::vec2( 0.0, -0.2 ), TimeType( 0.f ) );
 
