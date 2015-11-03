@@ -90,6 +90,9 @@ private:
 
     PdrPBOMemTransfer *                 m_PdrPBOMemTransferRT;
 
+	bool								m_EnableGLFinish;
+	bool								m_EnableGLFlush;
+
 public:
 
     void	Initialize			( int w, int h, TextureFormat colorFormat );
@@ -206,6 +209,8 @@ private:
 
     template< typename MapType >
     void                        DeleteSinglePDR                 ( MapType & resMap, typename MapType::key_type & key );
+
+    void                        PassCCNumUniform                ( int i, SizeType num );
 
 };
 

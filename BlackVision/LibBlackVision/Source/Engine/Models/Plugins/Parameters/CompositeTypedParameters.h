@@ -22,6 +22,8 @@ public:
 
     explicit            ParamTransform  ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator );
 
+    void                Serialize       ( ISerializer& doc ) const;
+
     void                SetCurveType    ( CurveType type );
 
     inline  void        SetRotation     ( const glm::vec3 & rotAxis, float angle, TimeType t );
@@ -63,9 +65,12 @@ public:
     explicit            ParamTransformVec   ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator );
     explicit            ParamTransformVec   ( const std::string & name, const ITimeEvaluatorPtr evaluator );
 
+    void                Serialize       ( ISerializer& doc ) const;
     void                SetCurveType        ( CurveType type );
 
+
     void                AppendTransform     ( const TransformF & transform );
+    void                InsertTransform     ( unsigned int transformNum, const TransformF & transform );
 
     inline unsigned int NumTransforms       () const;
 

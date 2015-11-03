@@ -1,7 +1,15 @@
 #include "Mathematics/Transform/MatTransform.h"
 
+#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
+#include "Serialization/SerializationHelper.h"
 
-namespace bv { namespace model {
+namespace bv { 
+    
+// serialization stuff
+//template std::vector< std::shared_ptr< SimpleTransformF > >                         DeserializeObjectLoadPropertiesImpl( const IDeserializer& pimpl, std::string name );
+
+namespace model {
 
     // *************************************
     //
@@ -59,6 +67,72 @@ SimpleTransform<ParamT>::SimpleTransform( TransformKind kind )
 // *************************************
 //
 template<typename ParamT>
+void                SimpleTransform<ParamT>::Serialize       ( ISerializer& sob ) const
+{ 
+    assert( !"Tell me why I'm not implemented ;)" );
+    sob;
+}
+
+// *************************************
+//
+template<typename ParamT>
+ISerializablePtr     SimpleTransform<ParamT>::Create          ( const IDeserializer& dob )
+{
+    //if( dob.GetName() != "transform" )
+    //{
+    //    std::cerr << "SimpleTransform<ParamT>::Create failed" << std::endl;
+    //    return nullptr; // FIXME so much: error handling
+    //}
+
+    auto kind = dob.GetAttribute( "kind" );
+
+    if( kind == "rotation" ) // very special case indeed :)
+    {
+        auto angleArray = SerializationHelper::DeserializeObjectLoadArrayImpl< ParamT >( dob, "angle", "interpolator" );
+        auto rotAxisArray = SerializationHelper::DeserializeObjectLoadArrayImpl< Vec3Interpolator >( dob, "rotaxis", "interpolator" );
+
+        if( angleArray.size() != 1 )
+        {
+            std::cerr << "SimpleTransform<ParamT>::Create failed" << std::endl;
+            return nullptr;
+        }
+        if( rotAxisArray.size() != 1 )
+        {
+            std::cerr << "SimpleTransform<ParamT>::Create failed" << std::endl;
+            return nullptr;
+        }
+
+        auto angle = angleArray[0];
+        auto rotAxis = rotAxisArray[0];
+
+        return std::make_shared< Rotation< ParamT > >( *angle.get(), *rotAxis ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    }
+
+    auto params = SerializationHelper::DeserializeObjectLoadPropertiesImpl< ParamT >( dob, "interpolator" );
+    
+    if( params.size() != 3 && ( kind != "rotation" || params.size() != 2 ) ) // de Morgan FTW!
+    {
+        std::cerr << "[ERROR] CompositeTransform<ParamT>::Create failed" << std::endl;
+        return nullptr;
+    }
+
+    if( kind == "fwd_center" )
+        return std::make_shared< SimpleTransform< ParamT > >( TransformKind::fwd_center, *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    else if( kind == "translation" )
+        return std::make_shared< SimpleTransform< ParamT > >( TransformKind::translation, *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    else if( kind == "scale" )
+        return std::make_shared< SimpleTransform< ParamT > >( TransformKind::scale, *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    else if( kind == "inv_center" )
+        return std::make_shared< SimpleTransform< ParamT > >( TransformKind::inv_center, *params[0].get(), *params[1].get(), *params[2].get() ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    assert( false );
+    return nullptr;
+}
+
+
+// *************************************
+//
+template<typename ParamT>
 void SimpleTransform<ParamT>::SetCurveType    ( CurveType type ) 
 { 
     p0.SetCurveType( type ); 
@@ -66,8 +140,7 @@ void SimpleTransform<ParamT>::SetCurveType    ( CurveType type )
     p2.SetCurveType( type ); 
 }
 
-// *************************************
-//
+
 template<typename ParamT>
 Rotation<ParamT>::Rotation    ( ParamT angle, const Vec3Interpolator & rotAxis )
     : SimpleTransform( TransformKind::rotation )
@@ -103,11 +176,6 @@ void            CompositeTransform<ParamT>::InitializeDefaultSRT()
 {
     auto t =  TimeType( 0.0 );
 
-    for( auto tr : m_transformations )
-    {
-        delete tr;
-    }
-
     ParamT ctx, cty, ctz;
     ParamT ictx, icty, ictz;
     ParamT sx, sy, sz;
@@ -137,10 +205,6 @@ void            CompositeTransform<ParamT>::InitializeDefaultSRT()
 template<typename ParamT>
 CompositeTransform<ParamT>::~CompositeTransform()
 {
-    for( auto t : m_transformations )
-    {
-        delete t;
-    }
 }
 
 // *************************************
@@ -185,7 +249,7 @@ void CompositeTransform<ParamT>::AddScale( ParamT s0, ParamT s1, ParamT s2 )
 template<typename ParamT>
 void CompositeTransform<ParamT>::AddRotation( ParamT angle, ParamT r0, ParamT r1, ParamT r2 )
 {
-    m_transformations.push_back( new Rotation<ParamT>( angle, r0, r1, r2 ) );
+    m_transformations.push_back( std::make_shared< Rotation<ParamT> >( angle, r0, r1, r2 ) );
 }
 
 // *************************************
@@ -193,7 +257,7 @@ void CompositeTransform<ParamT>::AddRotation( ParamT angle, ParamT r0, ParamT r1
 template<typename ParamT>
 void            CompositeTransform<ParamT>::AddRotation         ( ParamT angle, const Vec3Interpolator & rotAxis )
 {
-    m_transformations.push_back( new Rotation<ParamT>( angle, rotAxis ) );    
+    m_transformations.push_back( std::make_shared< Rotation< ParamT > >( angle, rotAxis ) );    
 }
 
 // *************************************
@@ -215,7 +279,7 @@ void            CompositeTransform<ParamT>::AddTranslationCInv  ( ParamT x0, Par
 // *************************************
 //
 template<typename ParamT>
-void CompositeTransform<ParamT>::AddTransform( SimpleTransform<ParamT> * trans )
+void CompositeTransform<ParamT>::AddTransform( std::shared_ptr< SimpleTransform<ParamT> > trans )
 {
     m_transformations.push_back( trans );
 }
@@ -223,13 +287,17 @@ void CompositeTransform<ParamT>::AddTransform( SimpleTransform<ParamT> * trans )
 // *************************************
 //
 template<typename ParamT>
-void CompositeTransform<ParamT>::InsertTransform     ( int i, SimpleTransform<ParamT> * trans )
+void CompositeTransform<ParamT>::InsertTransform     ( int i, std::shared_ptr< SimpleTransform<ParamT> > trans )
 {
     if( i < (int)m_transformations.size() )
     {
         auto it = m_transformations.begin();
         m_transformations.insert( it + i - 1, trans );
     }
+    else if( i == (int)m_transformations.size() )
+        AddTransform( trans );
+    else
+        assert( false );
 }
 
 // *************************************
@@ -244,17 +312,93 @@ CompositeTransform<ParamT>::CompositeTransform()
 template<typename ParamT>
 CompositeTransform<ParamT>::CompositeTransform  ( const CompositeTransform & src )
 {
-    for ( auto t : m_transformations )
-    {
-        delete t;
-    }
-
     m_transformations.clear();
 
     for ( auto st : src.m_transformations )
     {
-        m_transformations.push_back( st->Clone() );
+        m_transformations.push_back( st );
     }
+}
+
+// *************************************
+//
+template<typename ParamT>
+ISerializablePtr                     CompositeTransform<ParamT>::Create                  ( const IDeserializer& dob )
+{
+    auto transform = std::make_shared< CompositeTransform< ParamT > >();
+
+    auto transes = SerializationHelper::DeserializeObjectLoadPropertiesImpl< SimpleTransform< ParamT > >( dob, "transform" );
+
+    int i = 0;
+    for( auto trans : transes )
+    {
+        transform->InsertTransform( i, trans );
+        i++;
+    }
+
+    return transform;
+}
+
+std::string Kind2String( TransformKind kind )
+{
+    if( kind == TransformKind::fwd_center )
+        return "fwd_center";
+    else if( kind == TransformKind::inv_center )
+        return "inv_center";
+    else if( kind == TransformKind::rotation )
+        return "rotation";
+    else if( kind == TransformKind::scale )
+        return "scale";
+    else if( kind == TransformKind::translation )
+        return "translation";
+
+    assert( false );
+    return "";
+}
+
+// *************************************
+//
+template<typename ParamT>
+void                                CompositeTransform<ParamT>::Serialize               ( ISerializer& doc ) const
+{
+    doc.EnterChild( "composite_transform" );
+
+    for( auto trans : m_transformations )
+    {
+        doc.EnterChild( "transform" );
+        doc.SetAttribute( "kind", Kind2String( trans->KindKurwaMac() ) );
+
+        if( trans->KindKurwaMac() == TransformKind::rotation ) // FIXME: this really should be virtualized
+        {
+            auto rotation = std::static_pointer_cast< Rotation< ParamT > >( trans );
+            if( rotation->IsAxisVec3() )
+            {
+                doc.SetAttribute( "isaxisvec3", "true" );
+
+                doc.EnterChild( "angle" );
+                    rotation->AccessAngle().Serialize( doc );
+                doc.ExitChild();
+
+                doc.EnterChild( "rotaxis" );
+                    rotation->AccessRotAxis().Serialize( doc );
+                doc.ExitChild();
+            }
+            else
+                assert( false );
+        }
+        else
+        {
+        
+            trans->GetP0MotylaNoga().Serialize( doc );
+            trans->GetP1MotylaNoga().Serialize( doc );
+            trans->GetP2MotylaNoga().Serialize( doc );
+
+        }
+
+        doc.ExitChild(); // transform
+    }
+
+    doc.ExitChild(); // composite_transform
 }
 
 // *************************************
@@ -270,13 +414,13 @@ SizeType    CompositeTransform<ParamT>::Size() const
 template<typename ParamT>
 SimpleTransform<ParamT> * CompositeTransform<ParamT>::operator[]( unsigned int i )
 {
-    return m_transformations[ i ];
+    return m_transformations[ i ].get();
 }
 
 template<typename ParamT>
 const SimpleTransform<ParamT> * CompositeTransform<ParamT>::operator[]( unsigned int i ) const
 {
-    return m_transformations[ i ];
+    return m_transformations[ i ].get();
 }
 
 // *************************************

@@ -4,11 +4,12 @@
 #include "Mathematics/Interpolators/Interpolators.h"
 
 #include "Engine/Interfaces/IUpdatable.h"
-#include "Engine/Interfaces/ISerializable.h"
-#include "Engine/Models/SerializationObjects.h"
+#include "Serialization/ISerializable.h"
+#include "Serialization/ISerializable.h"
 
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
+#include "Engine/Models/Timeline/TimelineManager.h"
 
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
@@ -26,7 +27,7 @@ DEFINE_PTR_TYPE(BVScene)
 DEFINE_CONST_PTR_TYPE(BVScene)
 
 
-class BVScene : public IUpdatable, public ISerializable
+class BVScene : public IUpdatable
 {
 private:
     
@@ -39,23 +40,21 @@ private:
     model::ParamVec3    m_cameraDirection;
     model::ParamVec3    m_cameraUp;
 
-    model::BasicNodePtr m_pModelSceneRoot;
-    //SceneModelPtr       m_pModelSceneRoot;
-    SceneNode *         m_pEngineSceneRoot;
+    SceneModelPtr       m_pSceneModel;
 
-    std::string         m_name;
+    SceneNode *         m_pEngineSceneRoot;
 
 private:
 
-    explicit                BVScene             ( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
+    explicit                BVScene             ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator );
+    explicit                BVScene             ( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager );
 
 public:
 
                             ~BVScene            ();
 
-    static BVScenePtr       Create              ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
-    static ISerializablePtr Create              ( DeserializeObject& doc );
-    virtual void            Serialize           ( SerializeObject &doc) const override;
+    static BVScenePtr       Create              ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager );
+    void                    Serialize           ( ISerializer& ser ) const;
 
     virtual void            Update              ( TimeType t );
 
@@ -63,13 +62,14 @@ public:
 
     Camera *                GetCamera           ()  const;
 
-    model::BasicNodePtr     GetModelSceneRoot   ()  const;
+    model::BasicNodePtr &   GetModelSceneRoot   ()  const;
     SceneNode *             GetEngineSceneRoot  ()  const;
 
     BVSceneEditor *         GetSceneEditor      ();
 
     const std::string &     GetName             ()  const;
 
+    static BVScenePtr       CreateFakeSceneForTestingOnly( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator );
 
 private:
 

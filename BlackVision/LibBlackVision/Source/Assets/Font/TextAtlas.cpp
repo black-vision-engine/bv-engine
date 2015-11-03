@@ -213,9 +213,9 @@ TextureAssetConstPtr	TextAtlas::GetAsset() const
 
 // *********************************
 //
-TextureAssetDescConstPtr TextAtlas::GenerateTextAtlasAssetDescriptor( const std::string & fontFileName, UInt32 width, UInt32 height, SizeType fontSize, SizeType blurSize, SizeType outlineSize, SizeType mmLevels )
+TextureAssetDescConstPtr TextAtlas::GenerateTextAtlasAssetDescriptor( const std::string & fontFileName, UInt32 width, UInt32 height, SizeType fontSize, SizeType blurSize, SizeType outlineSize, SizeType mmLevels, const std::wstring & charSet )
 {
-	auto namePrefix = fontFileName + "W" + std::to_string( width ) + "H" + std::to_string( height ) + "FS" + std::to_string( fontSize ) + "BS" + std::to_string( blurSize ) + "OS" + std::to_string( outlineSize );
+    auto namePrefix = fontFileName + "W" + std::to_string( width ) + "H" + std::to_string( height ) + "FS" + std::to_string( fontSize ) + "BS" + std::to_string( blurSize ) + "OS" + std::to_string( outlineSize ) + "CS" + std::string( charSet.begin(), charSet.end() );
 
 	auto zeroLevelDesc = GeneratedSingleTextureAssetDesc::Create( namePrefix, width, height, TextureFormat::F_A8R8G8B8, true );
 

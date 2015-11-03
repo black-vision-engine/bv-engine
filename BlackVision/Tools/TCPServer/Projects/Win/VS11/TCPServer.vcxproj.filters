@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="JsonWrapper">
+      <UniqueIdentifier>{53f3e4fb-f412-4b5e-a841-39d30643ffd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JsonWrapper\commands">
+      <UniqueIdentifier>{25cb0a04-d77d-4c99-bc5d-116db951c16d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JsonWrapper\json_spirit">
+      <UniqueIdentifier>{239aba9c-058a-4e2c-ba78-96cb942172bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JsonWrapper\commands\base">
+      <UniqueIdentifier>{91a39ea9-d033-461a-8c86-bc602590a30f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\ProtocolManager.h">
+      <Filter>JsonWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdWidget.h">
+      <Filter>JsonWrapper\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdVideoCardInfo.h">
+      <Filter>JsonWrapper\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdTimer.h">
+      <Filter>JsonWrapper\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdTimeline.h">
+      <Filter>JsonWrapper\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdStruct.h">
+      <Filter>JsonWrapper\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdSetParam.h">
+      <Filter>JsonWrapper\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdSceneManager.h">
+      <Filter>JsonWrapper\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdGetInfo.h">
+      <Filter>JsonWrapper\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\base\CmdBase.h">
+      <Filter>JsonWrapper\commands\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_writer_template.h">
+      <Filter>JsonWrapper\json_spirit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_writer_options.h">
+      <Filter>JsonWrapper\json_spirit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_writer.h">
+      <Filter>JsonWrapper\json_spirit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_value.h">
+      <Filter>JsonWrapper\json_spirit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_utils.h">
+      <Filter>JsonWrapper\json_spirit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_stream_reader.h">
+      <Filter>JsonWrapper\json_spirit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_reader_template.h">
+      <Filter>JsonWrapper\json_spirit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_reader.h">
+      <Filter>JsonWrapper\json_spirit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_error_position.h">
+      <Filter>JsonWrapper\json_spirit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit.h">
+      <Filter>JsonWrapper\json_spirit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Log.h" />
+    <ClInclude Include="..\..\..\Source\SocketWrapper.h" />
+    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdLoadAsset.h">
+      <Filter>JsonWrapper\commands</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\JsonWrapper\ProtocolManager.cpp">
+      <Filter>JsonWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\JsonWrapper\commands\CmdWidget.cpp">
+      <Filter>JsonWrapper\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\JsonWrapper\commands\CmdVideoCardInfo.cpp">
+      <Filter>JsonWrapper\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\JsonWrapper\commands\CmdTimer.cpp">
+      <Filter>JsonWrapper\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\JsonWrapper\commands\CmdTimeline.cpp">
+      <Filter>JsonWrapper\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\JsonWrapper\commands\CmdStruct.cpp">
+      <Filter>JsonWrapper\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\JsonWrapper\commands\CmdSetParam.cpp">
+      <Filter>JsonWrapper\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\JsonWrapper\commands\CmdSceneManager.cpp">
+      <Filter>JsonWrapper\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\JsonWrapper\commands\CmdGetInfo.cpp">
+      <Filter>JsonWrapper\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\JsonWrapper\commands\base\CmdBase.cpp">
+      <Filter>JsonWrapper\commands\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_writer.cpp">
+      <Filter>JsonWrapper\json_spirit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_value.cpp">
+      <Filter>JsonWrapper\json_spirit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_reader.cpp">
+      <Filter>JsonWrapper\json_spirit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Log.cpp" />
+    <ClCompile Include="..\..\..\Source\SocketWrapper.cpp" />
+  </ItemGroup>
+</Project>

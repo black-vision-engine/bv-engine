@@ -16,6 +16,23 @@ SimpleParameterImpl< InterpolatorType, ValueType, type >::~SimpleParameterImpl  
 {
 }
 
+// ********************************************************************************************************************
+
+std::string Type2String( ModelParamType type ); // FIXME
+
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+void                SimpleParameterImpl< InterpolatorType, ValueType, type >::Serialize       ( ISerializer& doc ) const
+{
+    doc.EnterChild( "param" );
+    doc.SetAttribute( "name", GetName() );
+    doc.SetAttribute( "type", Type2String( GetType() ) );
+    doc.SetAttribute( "timeline", m_timeEvaluator->GetName() );
+
+    m_interpolator.Serialize( doc );
+
+    doc.ExitChild();
+}
+
 // *******************************
 //
 template< typename InterpolatorType, typename ValueType, ModelParamType type >

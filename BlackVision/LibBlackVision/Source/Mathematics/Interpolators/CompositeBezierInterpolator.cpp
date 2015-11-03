@@ -1,7 +1,12 @@
 #include "CompositeBezierInterpolator.h"
 #include "Mathematics/Core/mathfuncs.h"
 
-#include "Mathematics/glm_inc.h" // just for explicit instantiation
+#include "Serialization/SerializationHelper.h"
+#include "Serialization/SerializationHelper.inl"
+
+#include <vector>
+#include <array>
+//#include <initializer_list>
 
 namespace bv {
 
@@ -22,6 +27,20 @@ public:
     }
 
     ValueT Evaluate( TimeValueT ) const override { return value; }
+
+    virtual void                                        Serialize       ( ISerializer& ser ) const override
+    {
+    ser.EnterChild( "interpolation" );
+        ser.SetAttribute( "type", "point" );
+    ser.ExitChild();
+    }
+
+    virtual void                                Deserialize( const IDeserializer& deser )
+    {
+        if( deser.GetAttribute( "type" ) != "point" )
+            assert( false );
+    }
+
 };
 
 // *******************************
@@ -51,6 +70,19 @@ public:
     { 
         TimeValueT alpha = ( t - key1.t ) / ( key2.t - key1.t );
         return ValueT( alpha * key2.val + (1-alpha) * key1.val );
+    }
+
+    virtual void                                        Serialize       ( ISerializer& ser ) const override
+    {
+    ser.EnterChild( "interpolation" );
+        ser.SetAttribute( "type", "linear" );
+    ser.ExitChild();
+    }
+
+    virtual void                                Deserialize( const IDeserializer& deser )
+    {
+        if( deser.GetAttribute( "type" ) != "linear" )
+            assert( false );
     }
 };
 
@@ -129,16 +161,34 @@ public:
             }
         }
     }
+
+    virtual void                                        Serialize       ( ISerializer& ser ) const override
+    {
+    ser.EnterChild( "interpolation" );
+        ser.SetAttribute( "type", "bezier" );
+        ser.SetAttribute( "v1", std::to_string( v1.t ) + ", " + std::to_string( v1.val ) );
+        ser.SetAttribute( "v2", std::to_string( v2.t ) + ", " + std::to_string( v2.val ) );
+    ser.ExitChild();
+    }
+
+    virtual void                                Deserialize( const IDeserializer& deser )
+    {
+        if( deser.GetAttribute( "type" ) != "bezier" )
+            assert( false );
+
+        v1 = SerializationHelper::String2Pair< TimeValueT, ValueT >( deser.GetAttribute( "v1" ) );
+        v2 = SerializationHelper::String2Pair< TimeValueT, ValueT >( deser.GetAttribute( "v2" ) );
+    }
 };
 
 // *******************************
 //
 template< class TimeValueT, class ValueT >
 CompositeBezierInterpolator< TimeValueT, ValueT >::CompositeBezierInterpolator( float tolerance )
-    //: m_type( CurveType::LINEAR )
+    : m_type( CurveType::LINEAR )
     //: m_type( CurveType::COSINE_LIKE )
     //: m_type( CurveType::POINT )
-    : m_type( CurveType::BEZIER )
+    //: m_type( CurveType::BEZIER )
     , m_tolerance( tolerance )
     , m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
 {
@@ -157,24 +207,73 @@ CompositeBezierInterpolator< TimeValueT, ValueT >::CompositeBezierInterpolator( 
     m_postMethod = that.m_postMethod;
 }
 
-// *******************************
+std::pair< CurveType, const char* > ct2s[] = 
+{ std::make_pair( CurveType::BEZIER, "bezier" )
+    , std::make_pair( CurveType::COSINE_LIKE, "cosine" ) 
+    , std::make_pair( CurveType::LINEAR, "linear" ) 
+    , std::make_pair( CurveType::POINT, "point" ) 
+};
+
+// *************************************
 //
 template< class TimeValueT, class ValueT >
-IEvaluator<TimeValueT, ValueT >* CreateDummyInterpolator( CurveType type, Key< TimeValueT, ValueT > k1, Key< TimeValueT, ValueT > k2, TimeValueT tolerance ) // FIXME maybe
+void                                        CompositeBezierInterpolator< TimeValueT, ValueT >::Serialize       ( ISerializer& ser ) const
 {
-    if( type == CurveType::POINT )
-        return new ConstEvaluator< TimeValueT, ValueT >( k1.val );
-    else if( type == CurveType::LINEAR )
-        return new LinearEvaluator< TimeValueT, ValueT >( k1, k2 );
-    else if( type == CurveType::BEZIER )
-        return new BezierEvaluator< TimeValueT, ValueT >( k1, k2, Key< TimeValueT, ValueT >( 0, ValueT() ), Key< TimeValueT, ValueT >( 0, ValueT() ), tolerance );
-    else if( type == CurveType::COSINE_LIKE )
-        return new BezierEvaluator< TimeValueT, ValueT >( k1, k2, Key< TimeValueT, ValueT >( 0, ValueT() ), Key< TimeValueT, ValueT >( 0, ValueT() ), tolerance );
+ser.EnterChild( "interpolator" );
+    ser.SetAttribute( "curve_type", SerializationHelper::T2String< CurveType >( ct2s, m_type ) );
+    for( size_t i = 0; i < interpolators.size(); i++ )
+    {
+        keys[ i ].Serialize( ser );
+        interpolators[ i ]->Serialize( ser );
+    }
+    ( keys.end()-1 )->Serialize( ser );
+ser.ExitChild();
+}
+
+// *************************************
+//
+template< class TimeValueT, class ValueT >
+ISerializablePtr     CompositeBezierInterpolator< TimeValueT, ValueT >::Create          ( const IDeserializer& deser )
+{
+    auto interpolator = std::make_shared< CompositeBezierInterpolator< TimeValueT, ValueT > >();
+
+    interpolator->SetCurveType( SerializationHelper::String2T< CurveType >( ct2s, deser.GetAttribute( "curve_type" ) ) );
+
+    auto keys = SerializationHelper::DeserializeObjectLoadPropertiesImpl< Key >( deser, "key" );
+
+    if( deser.EnterChild( "interpolation" ) == false )
+        for( auto key : keys ) // no interpolation types
+            interpolator->AddKey( key->t, key->val );
     else
     {
-        assert( false );
-        return nullptr;
+        for( auto key : keys )
+        {
+            interpolator->AddKey( key->t, key->val );
+            if( key != keys.back() )
+            {
+                interpolator->SetCurveType( SerializationHelper::String2T< CurveType >( ct2s, deser.GetAttribute( "type" ) ) );
+                if( deser.NextChild() == false )
+                    if( key == keys.end()[-2] ) // everything is OK, this is the end, we need to go out
+                        deser.ExitChild();
+                    else // we've got malformed XML
+                    {
+                        assert( false ); // FIXME: error handling
+                        return nullptr;
+                    }
+            }
+        }
+
+        deser.EnterChild( "interpolation" );
+        size_t i = 0;
+        do
+        {
+            auto interpolators = interpolator->GetInterpolators();
+            interpolators[ i ]->Deserialize( deser );
+        } while( deser.NextChild() );
+        deser.ExitChild();
     }
+
+    return interpolator;
 }
 
 // *******************************
@@ -213,6 +312,26 @@ void UpdateInterpolator( std::vector< IEvaluator<TimeValueT, ValueT >* >& interp
     }
     else
         assert( false );
+}
+
+// *******************************
+//
+template< class TimeValueT, class ValueT >
+IEvaluator<TimeValueT, ValueT >* CreateDummyInterpolator( CurveType type, Key< TimeValueT, ValueT > k1, Key< TimeValueT, ValueT > k2, TimeValueT tolerance ) // FIXME maybe
+{
+    if( type == CurveType::POINT )
+        return new ConstEvaluator< TimeValueT, ValueT >( k1.val );
+    else if( type == CurveType::LINEAR )
+        return new LinearEvaluator< TimeValueT, ValueT >( k1, k2 );
+    else if( type == CurveType::BEZIER )
+        return new BezierEvaluator< TimeValueT, ValueT >( k1, k2, Key< TimeValueT, ValueT >( 0, ValueT() ), Key< TimeValueT, ValueT >( 0, ValueT() ), tolerance );
+    else if( type == CurveType::COSINE_LIKE )
+        return new BezierEvaluator< TimeValueT, ValueT >( k1, k2, Key< TimeValueT, ValueT >( 0, ValueT() ), Key< TimeValueT, ValueT >( 0, ValueT() ), tolerance );
+    else
+    {
+        assert( false );
+        return nullptr;
+    }
 }
 
 // *******************************
@@ -473,6 +592,5 @@ template class CompositeBezierInterpolator<TimeType, float>;
 template class CompositeBezierInterpolator<TimeType, glm::vec2>;
 template class CompositeBezierInterpolator<TimeType, glm::vec3>;
 template class CompositeBezierInterpolator<TimeType, glm::vec4>;
-
 
 } // bv

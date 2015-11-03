@@ -20,6 +20,9 @@ namespace bv
     typedef CompositeBezierInterpolator<TimeType, glm::vec3>  Vec3Interpolator;
     typedef CompositeBezierInterpolator<TimeType, glm::vec4>  Vec4Interpolator;
 
+    typedef BasicInterpolator<TimeType, std::string> StringInterpolator;
+    typedef BasicInterpolator<TimeType, std::wstring> WStringInterpolator;
+
 
     //typedef BasicInterpolator<TimeType, TimeType>   TimeInterpolator;
 

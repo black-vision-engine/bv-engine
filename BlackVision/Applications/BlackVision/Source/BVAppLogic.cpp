@@ -1,4 +1,4 @@
-﻿#include "BVAppLogic.h"
+#include "BVAppLogic.h"
 
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
@@ -16,6 +16,8 @@
 
 #include "System/Env.h"
 #include "BVConfig.h"
+#include "ProjectManager.h"
+#include "Serialization/XML/XMLSerializer.h"
 
 #include "MockScenes.h"
 #include "DefaultPlugins.h"
@@ -23,6 +25,7 @@
 
 //FIXME: remove
 #include "TestAI/TestGlobalEffectKeyboardHandler.h"
+#include "TestAI/TestEditorsKeyboardHandler.h"
 #include "testai/TestAIManager.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "BVGL.h"
@@ -32,6 +35,12 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
+
+//pablito
+#define XML
+#include "ConfigManager.h"
+#include "RemoteControlInterface.h"
+
 
 namespace bv
 {
@@ -82,7 +91,6 @@ namespace
     }
 }
 
-// *********************************
 //
 BVAppLogic::BVAppLogic              ( Renderer * renderer )
     : m_startTime( 0 )
@@ -94,13 +102,16 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
     , m_globalTimeline( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) )
+    , m_solution( GetTimelineManager() ) //pablito
 {
+    model::TimelineManager::SetInstance( GetTimelineManager() );
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
     GTimer.StartTimer();
 
     m_renderer = renderer;
     m_renderLogic = new RenderLogic();
+	m_RemoteControl = new RemoteControlInterface(this);
 }
 
 // *********************************
@@ -110,7 +121,7 @@ BVAppLogic::~BVAppLogic             ()
     GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
     GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
 
-    delete m_timelineManager;
+    //delete m_timelineManager;
 
     delete m_renderLogic;
 
@@ -128,7 +139,9 @@ void BVAppLogic::Initialize         ()
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNoMoreNodes ), widgets::NoMoreNodesCrawlerEvent::Type() );
 
-    model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
+    GetTimelineManager()->RegisterRootTimeline( m_globalTimeline );
+
+	model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
     m_pluginsManager = &model::PluginsManager::DefaultInstance();
 
 	bv::effect::InitializeLibEffect( m_renderer );
@@ -136,6 +149,22 @@ void BVAppLogic::Initialize         ()
     InitializeKbdHandler();
 }
 
+// *********************************
+//
+model::BasicNodePtr BVAppLogic::LoadScenes( const PathVec & pathVec )
+{
+    auto root = model::BasicNode::Create( "root", m_globalTimeline );
+    root->AddPlugin( "DEFAULT_TRANSFORM", "transform", m_globalTimeline ); 
+
+    for( auto p : pathVec )
+    {
+        auto scene = SceneDescriptor::LoadScene( ProjectManager::GetInstance()->ToAbsPath( p ), GetTimelineManager() );
+
+        root->AddChildToModelOnly( std::const_pointer_cast< model::BasicNode >( scene ) );
+    }
+
+    return root;
+}
 
 // *********************************
 //
@@ -147,10 +176,36 @@ void BVAppLogic::LoadScene          ( void )
     auto te = m_globalTimeline;
 
     m_timelineManager->RegisterRootTimeline( te );
-    auto root = TestScenesFactory::CreateSceneFromEnv( m_pluginsManager, m_timelineManager, te );
-	assert( root );
 
-    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", te, m_renderer );
+     model::BasicNodePtr root;
+    
+    if( !ConfigManager::GetBool( "Debug/LoadSceneFromEnv" ) )
+    {
+        if( ConfigManager::GetBool( "Debug/LoadSolution" ) )
+        {
+            //m_solution.SetTimeline(m_timelineManager);
+            m_solution.LoadSolution( ConfigManager::GetString("solution") );
+            root = m_solution.GetRoot();
+            //if(ConfigManager::GetBool("hm"))
+            //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
+        }
+        else
+        {
+            auto pm = ProjectManager::GetInstance();
+
+            auto projectName = ConfigManager::GetString( "default_project_name" );
+            auto projectScenesNames = pm->ListScenesNames( projectName );
+
+            root = LoadScenes( projectScenesNames );
+        }
+
+    }
+    else
+    {
+        root = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_pluginsManager, GetTimelineManager(), m_globalTimeline );
+    }
+
+    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", te, m_renderer, GetTimelineManager() );
     assert( m_bvScene );
 }
 
@@ -210,9 +265,14 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
             m_globalTimeline->SetGlobalTime( t );
             m_bvScene->Update( t );
         }
+
+		m_RemoteControl->UpdateHM();
+
         {
             FRAME_STATS_SECTION( "Render" );
-            HPROFILER_SECTION( "Render", PROFILER_THREAD1 );
+			HPROFILER_SECTION( "Render", PROFILER_THREAD1 );			
+            
+			RefreshVideoInputScene();
 
             m_renderLogic->RenderFrame( renderer, m_bvScene->GetEngineSceneRoot() );
             m_renderLogic->FrameRendered( renderer );
@@ -220,6 +280,22 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
     }
 
     GTimer.StartTimer();
+}
+// *********************************
+//
+void BVAppLogic::RefreshVideoInputScene()
+{
+    if(ConfigManager::GetBool("Debug/UseVideoInputFeeding") && m_videoCardManager->IsEnabled())
+    {
+        if(m_videoCardManager->CheckIfNewFrameArrived(0,"A"))
+        {
+			BB::AssetManager::VideoInput->RefreshData(m_videoCardManager->GetCaptureBufferForShaderProccessing(0,"A"));
+        }
+        else
+        {
+            m_videoCardManager->UnblockCaptureQueue(0,"A");
+        }
+    }
 }
 
 // *********************************
@@ -246,6 +322,13 @@ void BVAppLogic::ChangeState     ( BVAppState state )
 void BVAppLogic::ShutDown           ()
 {
     //TODO: any required deinitialization
+}
+
+//pablito:
+void	BVAppLogic::SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager)
+{
+		m_videoCardManager = videoCardManager;
+		m_renderLogic->SetVideoCardManager(videoCardManager,m_renderer);
 }
 
 // *********************************
@@ -300,6 +383,21 @@ void                            BVAppLogic::ReloadScene     ()
 {
     ResetScene();
     LoadScene();
+}
+
+//pablito
+// *********************************
+//
+void            BVAppLogic::GrabCurrentFrame(  const std::string & path )
+{
+    m_grabFramePath = path;
+}
+//pablito
+// *********************************
+//
+void            BVAppLogic::SetKey(  bool active)
+{
+    m_videoCardManager->SetKey(active);
 }
 
 // *********************************
@@ -358,16 +456,31 @@ const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
 //
 void                            BVAppLogic::InitializeKbdHandler()
 {
-    auto envScene = Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
+    auto envScene = GetEnvScene();
 
     if ( envScene == "GLOBAL_EFFECT_05" )
     {
         m_kbdHandler = new TestGlobalEfectKeyboardHandler();
     }
+    if( envScene == "SERIALIZED_TEST" )
+    {
+        m_kbdHandler = new TestEditorsKeyboardHandler();
+    }
     else
     {
         m_kbdHandler = new TestKeyboardHandler();
     }
+}
+
+// *********************************
+//
+std::string                     BVAppLogic::GetEnvScene()
+{
+    auto s = ConfigManager::GetString( "Debug/SceneFromEnvName" );
+    if( s != "" )
+        return s;
+    else
+        return Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
 }
 
 //// *********************************

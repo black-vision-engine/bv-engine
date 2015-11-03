@@ -1,9 +1,33 @@
 #include "SingleTextureAssetDescriptor.h"
 
+#include <assert.h>
+
+#include "Serialization/ISerializer.h"
+
 namespace bv
 {
 
 const std::string SingleTextureAssetDesc::uid = "SINGLE_TEXTURE_ASSET_DESC";
+
+// ***********************
+//
+void                SingleTextureAssetDesc::Serialize       ( ISerializer& ser ) const
+{
+ser.EnterChild( "asset" );
+    
+    ser.SetAttribute( "uid", UID() );
+    ser.SetAttribute( "path", GetImagePath() );
+
+ser.ExitChild();
+}
+
+// ***********************
+//
+ISerializablePtr     SingleTextureAssetDesc::Create          ( IDeserializer& /*dob*/ )
+{
+    assert( !"implement me" );
+    return nullptr;
+}
 
 // ***********************
 //

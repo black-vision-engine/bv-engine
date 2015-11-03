@@ -23,6 +23,9 @@ public:
             OffsetTimeEvaluator                     ( const std::string & name, TimeType offsetTime );
             ~OffsetTimeEvaluator                    ();
 
+    virtual void                Serialize           ( ISerializer& sob ) const;
+    static ISerializablePtr     Create              ( const IDeserializer& dob );
+
     void    SetTimeOffset                           ( TimeType t );
 
     virtual void                SetGlobalTimeImpl   ( TimeType t ) override;

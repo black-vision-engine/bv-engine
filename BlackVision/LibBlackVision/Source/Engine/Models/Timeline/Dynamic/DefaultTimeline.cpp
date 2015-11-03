@@ -10,6 +10,10 @@
 #include "Engine/Models/Timeline/Dynamic/TimelineEventNull.h"
 #include "Engine/Models/Timeline/Dynamic/TimelineEventStop.h"
 
+#include "Serialization/IDeserializer.h"
+//#include "Serialization/SerializationObjects.h"
+//#include "Serialization/SerializationObjects.inl"
+#include "Serialization/SerializationHelper.h"
 
 namespace bv { namespace model {
 
@@ -45,6 +49,57 @@ DefaultTimeline::~DefaultTimeline    ()
     {
         delete evt;
     }
+}
+
+// *********************************
+//
+void                                DefaultTimeline::Serialize           ( ISerializer& sob ) const
+{
+    sob.EnterChild( "timeline" );
+    sob.SetAttribute( "name", GetName() );
+    sob.SetAttribute( "type", "default" );
+
+    sob.SetAttribute( "duration", std::to_string( m_timeEvalImpl.GetDuration() ) );
+    if( m_timeEvalImpl.GetWrapPre() == m_timeEvalImpl.GetWrapPost() && m_timeEvalImpl.GetWrapPost() == TimelineWrapMethod::TWM_REPEAT )
+    {
+        sob.SetAttribute( "loop", "true" );
+    }
+    else
+    {
+        sob.SetAttribute( "loop", "false" ); // FIXME include more general cases
+    }
+
+    sob.EnterChild( "children" );
+    for( auto child : m_children )
+        child->Serialize( sob );
+    sob.ExitChild(); // children
+
+    sob.ExitChild();
+}
+
+// *********************************
+//
+ISerializablePtr                     DefaultTimeline::Create              ( const IDeserializer& dob )
+{
+    auto name = dob.GetAttribute( "name" );
+
+    auto duration_ = dob.GetAttribute( "duration" );
+    float duration = std::stof( duration_ );
+
+    auto loop = dob.GetAttribute( "loop" );
+    TimelineWrapMethod preWrap = ( loop == "true" ) ? TimelineWrapMethod::TWM_REPEAT : TimelineWrapMethod::TWM_CLAMP; // FIXME
+    TimelineWrapMethod postWrap = preWrap; // FIXME
+
+    auto te = std::make_shared< DefaultTimeline >( name, duration, preWrap, postWrap );
+
+    auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( dob, "children", "timeline" );
+
+    for( auto child : children )
+        te->AddChild( child );
+
+    te->Play(); // FIXME, this should be deserialized
+
+    return te;
 }
 
 // *********************************

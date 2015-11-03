@@ -4,6 +4,8 @@
 
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
 
+#include "Serialization/ISerializable.h"
+
 namespace bv
 {
 
@@ -15,7 +17,7 @@ enum class WrapMethod : int
 };
 
 template<class TimeValueT/* = bv::TimeType*/, class ValueT>
-class Key
+class Key : public ISerializable
 {
 public:
 
@@ -26,8 +28,12 @@ public:
 
     explicit Key( TimeValueT t, ValueT val );
 
+    virtual void                Serialize       ( ISerializer& doc ) const override;
+    static ISerializablePtr     Create          ( const IDeserializer& doc );
+
     Key< TimeValueT, ValueT > operator+( const Key< TimeValueT, ValueT > &that ) const { return Key< TimeValueT, ValueT >( t + that.t, ValueT( val + that.val ) ); }
     Key< TimeValueT, ValueT > operator-( const Key< TimeValueT, ValueT > &that ) const { return Key< TimeValueT, ValueT >( t - that.t, ValueT( val - that.val ) ); }
+    void operator=( const std::pair< TimeValueT, ValueT >& p ) { t = p.first; val = p.second; }
 };
 
 template<class TimeValueT, class ValueT>
@@ -41,7 +47,7 @@ public:
 };
 
 template<class TimeValueT, class ValueT, class FloatT = float >
-class BasicInterpolator : public Interpolator<TimeValueT> // FIXME: this class will be removed
+class BasicInterpolator : public Interpolator<TimeValueT>, public ISerializable
 {
 public:
 
@@ -69,6 +75,9 @@ public:
 
     explicit BasicInterpolator  ( TimeValueT tolerance = 0.0001 );
     virtual ~BasicInterpolator  () {};
+
+    virtual void                Serialize       ( ISerializer& doc ) const override;
+    static ISerializablePtr     Create          ( const IDeserializer& doc );
 
     void AddKey             ( TimeValueT t, const ValueT & v );
     void AddKey             ( const Key<TimeValueT, ValueT> & key );
