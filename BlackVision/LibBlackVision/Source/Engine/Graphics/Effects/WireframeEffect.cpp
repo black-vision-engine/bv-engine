@@ -46,6 +46,7 @@ WireframeEffect::~WireframeEffect()
 //
 PixelShader *       WireframeEffect::CreatePS        ()
 {
+    //FIXM: register parameters here
     auto shader = new PixelShader( GetWireframePixelShaderCode(), new ShaderParameters() );
 
     return shader;
@@ -55,6 +56,7 @@ PixelShader *       WireframeEffect::CreatePS        ()
 //
 VertexShader *      WireframeEffect::CreateVS        ()
 {
+    //FIXM: register parameters here
     auto shader = new VertexShader( GetWireframeVertexShaderCode(), new ShaderParameters() );
 
     return shader;
@@ -64,6 +66,7 @@ VertexShader *      WireframeEffect::CreateVS        ()
 //
 GeometryShader *    WireframeEffect::CreateGS        ()
 {
+    //FIXM: register parameters here
     auto shader = new GeometryShader( GetWireframeGeometryShaderCode(), new ShaderParameters() );
 
     return shader;

@@ -6,8 +6,14 @@
 
 namespace bv {
 
+class WireframeEffect;
+
 class WireframeRenderLogic : public NodeEffectRenderLogic
 {
+private:
+
+    WireframeEffect     *   m_effect;
+
 public:
 
                     WireframeRenderLogic        ( RenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic );
@@ -19,12 +25,10 @@ private:
 
     void            RenderWireframeOverlay      ( Renderer * renderer, SceneNode * node );
 
-    void            EnableWireframeEffect       ( Renderer * renderer );
+    void            EnableWireframeEffect       ( Renderer * renderer, SceneNode * node );
 
     void            DrawWirefreameNodeOnly      ( Renderer * renderer, SceneNode * node );
     void            DrawWireframeChildren       ( Renderer * renderer, SceneNode * node );
-
-    void            DisableWireframeEffect      ( Renderer * renderer );
 
 };
 

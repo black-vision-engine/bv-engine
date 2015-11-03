@@ -236,6 +236,13 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGlobalEffectTest      ( model::Ti
     bSolid.SetColor( 1.f, 0.f, 1.f, 1.f );
     auto nm = bSolid.CreateNode( "node_mask", true );
 
+    // Overlay alpha node root
+    bTex.SetW( 2.6f );
+    bTex.SetH( 1.35f );
+    bTex.SetPosition( 0.0f, 0.f, .1f );
+    bTex.SetTextureFile( "rsrcy/simless_01.jpg", true );
+    auto ov = bTex.CreateNode( "overlay_alpha", true );
+
     // Node mask background
     bTex.SetW( 2.4f );
     bTex.SetH( 1.0f );
@@ -268,6 +275,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGlobalEffectTest      ( model::Ti
     nm->AddChildToModelOnly( nm_bg );
     nm_bg->AddChildToModelOnly( nm_bg_c );
     nm->AddChildToModelOnly( nm_fg );
+
+    root->AddChildToModelOnly( ov );
 
     return root;
 
