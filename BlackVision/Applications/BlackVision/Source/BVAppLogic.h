@@ -114,8 +114,6 @@ private:
 	void            OnNodeLeaving   ( IEventPtr evt );
 	void            OnNoMoreNodes   ( IEventPtr evt );
 
-    model::BasicNodePtr LoadScenes( const PathVec & pathVec );
-
 public:
 
     //Convenience API - generalized model accessors
@@ -123,6 +121,9 @@ public:
     model::OffsetTimeEvaluatorPtr   GetGlobalTimeline   ();
     BVScenePtr                      GetBVScene          ();
     const model::PluginsManager *   GetPluginsManager   () const;
+
+
+    model::BasicNodePtr LoadScenes( const PathVec & pathVec );
 
 private:
 

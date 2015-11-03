@@ -724,6 +724,32 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
             // [czesio]
             // [{"name":"czesio", "scenes_count":123},{...},...]
         }
+        else if( evtStructure->command == L"LOAD_PROJECT" )
+        {
+            auto projName = std::string( evtStructure->request.begin(), evtStructure->request.end() );
+
+            auto projectScenesNames = pm->ListScenesNames( projName );
+
+            bool status = false;
+
+            if( !projectScenesNames.empty() )
+            {
+                auto node = m_AppLogic->LoadScenes( projectScenesNames );
+                if( node )
+                {
+                    status = true;
+                }
+            }
+
+            if( status )
+            {
+                SendOnSceneStructureResponse( evtStructure, "LOAD_PROJECT", "status", "OK" );
+            }
+            else
+            {
+                SendOnSceneStructureResponse( evtStructure, "LOAD_PROJECT", "status", "ERROR" );
+            }
+        }
     }
 }
 
