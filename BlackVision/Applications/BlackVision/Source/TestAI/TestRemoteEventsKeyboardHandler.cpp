@@ -53,6 +53,7 @@ void TestRemoteEventsKeyboardHandler::HandleKey           ( unsigned char c, BVA
         newEvent->NodeName = "root";
         newEvent->SceneCommand = SceneStructureEvent::Command::RemoveNode;
         newEvent->NewNodeName = "";
+        newEvent->PluginName = "";
 
         JsonSpiritSerializeObject ser;
         newEvent->Serialize( ser );

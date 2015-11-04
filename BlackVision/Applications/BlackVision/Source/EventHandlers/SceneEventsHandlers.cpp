@@ -5,6 +5,8 @@
 #include "../BVAppLogic.h"
 #include "../UseLogger.h"
 
+#include <limits>
+#undef max
 
 namespace bv
 {
@@ -54,14 +56,17 @@ void SceneEventsHandlers::SceneStructure      ( bv::IEventPtr evt )
     else if( command == SceneStructureEvent::Command::RemoveNode )
     {
         auto parentNodeName = nodeName.substr( 0, nodeName.find_last_of("/") );
-        auto childNode= nodeName.substr( nodeName.find_last_of("/") + 1 );
+        auto childNode = nodeName.substr( nodeName.find_last_of("/") + 1 );
         auto parentNode = root->GetNode( parentNodeName );
 			
         m_appLogic->GetBVScene()->GetSceneEditor()->DeleteChildNode( parentNode, childNode );
     }
     else if( command == SceneStructureEvent::Command::AttachPlugin )
     {
-        assert( !"Implement mee" );
+        bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
+        
+        unsigned int endIndex = std::numeric_limits<unsigned int>::max();
+        basicNode->GetModelNodeEditor()->AttachPlugin( endIndex );
     }
     else if( command == SceneStructureEvent::Command::DetachPlugin )
     {
