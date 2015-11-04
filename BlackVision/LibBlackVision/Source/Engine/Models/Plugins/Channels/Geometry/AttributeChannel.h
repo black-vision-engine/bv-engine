@@ -29,8 +29,8 @@ public:
     virtual const IAttributeChannelDescriptor *     GetDescriptor       ()  const;
     virtual std::string                             GetName             ()  const;
 
-
-	static IAttributeChannelPtr                     GetAttrChannel		( const std::vector< IAttributeChannelPtr > & channels, AttributeSemantic semantic, UInt32 occuranceIdx = 0 );
+	//@param[ occuranceIdx ] for occuranceIdx < 0 function will return the last attrChannel
+	static IAttributeChannelPtr                     GetAttrChannel		( const std::vector< IAttributeChannelPtr > & channels, AttributeSemantic semantic, Int32 occuranceIdx = 0 );
 };
 
 DEFINE_PTR_TYPE(AttributeChannel)

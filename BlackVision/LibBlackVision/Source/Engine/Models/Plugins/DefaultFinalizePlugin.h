@@ -79,7 +79,7 @@ private:
 	void										UpdateShaderChannelModel	( DefaultParamValModelPtr psModel, IParamValModelPtr model ) const;
 	void										UpdateTexturesData			( DefaultTexturesDataPtr txData, IPluginPtr plugin ) const;
 	
-	void										UpdateTexturesData			();
+	void										UpdateTexturesData			( DefaultPixelShaderChannelPtr psc );
 
     std::vector< std::string >                  GetUIDS                    () const;
 

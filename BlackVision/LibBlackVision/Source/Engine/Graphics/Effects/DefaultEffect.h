@@ -41,10 +41,12 @@ private:
 
     ShaderParameters *      CreateDefaultParamsImpl ( const IShaderDataSource * ds ) const;
 
-    TextureSampler *        CreateSampler           ( const ITextureParams * txParams, unsigned int samplerNum ) const;
+    TextureSampler *        CreateSampler           ( const ITextureParamsPtr & txParams, unsigned int samplerNum ) const;
 
-    Texture2DPtr            GetTexture              ( const ITextureDescriptor * txParams ) const;
-    Texture2DPtr            GetSequence             ( const IAnimationDescriptor * animParams ) const;
+    Texture2DPtr            GetTexture              ( const ITextureDescriptorPtr & txParams ) const;
+    Texture2DPtr            GetSequence             ( const IAnimationDescriptorPtr & animParams ) const;
+
+	SamplerShaderParametersPtr	CreateSamplerParameters ( const ITextureParamsPtr & txParams ) const;
 
 };
 

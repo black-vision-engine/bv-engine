@@ -55,7 +55,7 @@ std::string                                 AttributeChannel::GetName           
 
 // *************************************
 //
-IAttributeChannelPtr                         AttributeChannel::GetAttrChannel	( const std::vector< IAttributeChannelPtr > & channels, AttributeSemantic semantic, UInt32 occuranceIdx )
+IAttributeChannelPtr                         AttributeChannel::GetAttrChannel	( const std::vector< IAttributeChannelPtr > & channels, AttributeSemantic semantic, Int32 occuranceIdx )
 {
 	IAttributeChannelPtr ret = nullptr;
     if( !channels.empty() )

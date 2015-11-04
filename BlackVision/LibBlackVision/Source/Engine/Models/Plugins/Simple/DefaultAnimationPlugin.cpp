@@ -1,19 +1,10 @@
 #include "DefaultAnimationPlugin.h"
 
-#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
-#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
-#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
-
+#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 
 #include "Engine/Models/Plugins/HelperUVGenerator.h"
-
-#include "Assets/Texture/AnimationAssetDescriptor.h"
-
 
 namespace bv { namespace model {
 
@@ -39,30 +30,21 @@ IPluginPtr              DefaultAnimationPluginDesc::CreatePlugin              ( 
 DefaultPluginParamValModelPtr   DefaultAnimationPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     //Create all models
-    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >();
+    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
     DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
     //Create all parameters and evaluators
-    SimpleVec4EvaluatorPtr      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
+    //SimpleVec4EvaluatorPtr      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
     SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
 
     ParamFloatPtr  paramFrameNum      = ParametersFactory::CreateParameterFloat( "frameNum", timeEvaluator );
-    ParamFloatPtr  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX", timeEvaluator );
-    ParamFloatPtr  paramWrapModeY     = ParametersFactory::CreateParameterFloat( "wrapModeY", timeEvaluator );
-    ParamFloatPtr  paramFilteringMode = ParametersFactory::CreateParameterFloat( "filteringMode", timeEvaluator );
-    ParamFloatPtr  paramAttachMode    = ParametersFactory::CreateParameterFloat( "attachmentMode", timeEvaluator );
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
-    psModel->RegisterAll( borderColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
     psModel->AddParameter( paramFrameNum );
-    psModel->AddParameter( paramWrapModeX );
-    psModel->AddParameter( paramWrapModeY );
-    psModel->AddParameter( paramFilteringMode );
-    psModel->AddParameter( paramAttachMode );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
@@ -70,15 +52,10 @@ DefaultPluginParamValModelPtr   DefaultAnimationPluginDesc::CreateDefaultModel( 
 
     //Set default values of all parameters
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
-    borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
 
     //FIXME: integer parmeters should be used here
     paramFrameNum->SetVal( 0.f, TimeType( 0.f ) );
-    paramWrapModeX->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
-    paramWrapModeY->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
-    paramFilteringMode->SetVal( (float) TextureFilteringMode::TFM_LINEAR, TimeType( 0.f ) );
-    paramAttachMode->SetVal( (float) TextureAttachmentMode::MM_ATTACHED, TimeType( 0.f ) );
 
     return model;
 }
@@ -137,11 +114,10 @@ void								DefaultAnimationPlugin::SetPrevPlugin               ( IPluginPtr pre
 // *************************************
 // 
 DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
+    : BasePlugin< IPlugin >( name, uid, prev, model )
     , m_psc( nullptr )
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
-    , m_paramValModel( model )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
@@ -175,20 +151,19 @@ bool                            DefaultAnimationPlugin::LoadResource  ( AssetDes
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( animAssetDescr != nullptr )
     {
-        auto txData = m_psc->GetTexturesDataImpl();
-        assert( txData->GetAnimations().size() <= 1 );
-
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto animDesc = DefaultAnimationDescriptor::LoadAnimation( animAssetDescr, DefaultAnimationPluginDesc::TextureName() );
 
         if( animDesc != nullptr )
         {
-			if( !txData->SetAnimation( 0, animDesc ) )
-			{
-				txData->AddAnimation( animDesc );
-			}
+			animDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
+			
+			auto txData = m_psc->GetTexturesDataImpl();
+			txData->SetAnimation( 0, animDesc );
+
 			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
-            return true;
+            
+			return true;
         }
     }
 
@@ -220,8 +195,7 @@ IVertexShaderChannelConstPtr        DefaultAnimationPlugin::GetVertexShaderChann
 // 
 void                                DefaultAnimationPlugin::Update                      ( TimeType t )
 {
-    { t; } // FIXME: suppress unused variable
-    m_paramValModel->Update();
+	BasePlugin::Update( t );
 
     unsigned int frameNum = (unsigned int )m_paramFrameNum->Evaluate(); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
     m_texturesData->SetAnimationFrame( 0, frameNum ); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
@@ -233,21 +207,6 @@ void                                DefaultAnimationPlugin::Update              
 	}
 
 	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
-
-	//bool prevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
-	//if( m_vaChannel )
-	//{
-	//	if ( ( prevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
-	//		|| StateChanged() )
-	//	{
-	//		UpdateState();
-	//		m_vaChannel->SetNeedsAttributesUpdate( true );
-	//	}
-	//	else
-	//	{
-	//		m_vaChannel->SetNeedsAttributesUpdate( false );
-	//	}
-	//}
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    

@@ -36,7 +36,7 @@ IPluginPtr              DefaultGradientPluginDesc::CreatePlugin              ( c
 DefaultPluginParamValModelPtr   DefaultGradientPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     //Create all models
-    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >();
+    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
     DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
@@ -123,31 +123,22 @@ void					DefaultGradientPlugin::SetPrevPlugin				( IPluginPtr prev )
 {
     BasePlugin::SetPrevPlugin( prev );
 
-	////FIXME
-	//if( prev && ( prev->GetTypeUid() == DefaultTextPluginDesc::UID() 
-	//	|| prev->GetTypeUid() == DefaultTimerPluginDesc::UID() ) )
-	//{
-	//	m_texLocation = 1; //FIXME: ugly fixed location
-	//}
-
     InitVertexAttributesChannel();
 }
 
 // *************************************
 //
 DefaultGradientPlugin::DefaultGradientPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
+    : BasePlugin< IPlugin >( name, uid, prev, model )
     , m_psc( nullptr )
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
-    , m_paramValModel( model )
-	, m_texLocation( 0 )
 {
 	m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
 	m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
 	SetPrevPlugin( prev );
-
+	
     InitVertexAttributesChannel();
 }
 
@@ -182,8 +173,7 @@ IVertexShaderChannelConstPtr        DefaultGradientPlugin::GetVertexShaderChanne
 // 
 void                                DefaultGradientPlugin::Update                      ( TimeType t )
 {
-    { t; } // FIXME: suppress unused warning
-    m_paramValModel->Update();
+	BasePlugin::Update( t );
 	
 	if( HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin ) )
 	{
@@ -308,7 +298,7 @@ void									DefaultGradientPlugin::RecalculateUVChannel         ()
     {
 		auto compChannels = cc[ i ]->GetAttributeChannels();
 		auto posChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_POSITION );
-		auto uvChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_TEXCOORD, m_texLocation );
+		auto uvChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_TEXCOORD, -1 );
 
 		if( posChannel && uvChannel )
 		{

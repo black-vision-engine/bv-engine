@@ -184,6 +184,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\TriangleStrip.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\GeometryShader.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\GenericShaderParam.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\SamplerShaderParameters.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParameters.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamFloat.cpp" />
@@ -241,10 +242,13 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannelDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannelUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\HelperPixelShaderChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultTexturesData.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\ResourceStateModel.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\SamplerStateModel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\RendererContext\AlphaContext.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\RendererContext\CullContext.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\RendererContext\DepthContext.cpp" />
@@ -345,7 +349,11 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\AlphaMaskNodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeMaskNodeEffect.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\SamplerShaderParameters.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\HelperVertexAttributesChannel.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\HelperPixelShaderChannel.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\ResourceStateModel.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\SamplerStateModel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.h" />

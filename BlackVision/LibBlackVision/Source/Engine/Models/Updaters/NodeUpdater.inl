@@ -242,9 +242,12 @@ inline void    NodeUpdater::UpdateTexturesData  ()
                  //Stored in cache which means that proper 2D texture has to be created for current texDesc (possibly alread stored in the cache)
                 if( GTexture2DCache.IsStored( tex2D ) && tex2D != GTexture2DCache.GetTexture( texDesc.get() ) )
                 {
-                    auto newTex2D = GTexture2DCache.GetTexture( texDesc );
-
-                    shaderParams->SetTexture( j, newTex2D );
+                    auto newTex2D = GTexture2DCache.GetTexture( texDesc.get() );
+					
+					auto samplerState = texDesc->GetSamplerState();
+					auto samplerParams = std::make_shared< SamplerShaderParameters >( samplerState->GetWrappingModeX(), samplerState->GetWrappingModeY(), 
+						samplerState->GetWrappingModeZ(), samplerState->GetFilteringMode(), samplerState->GetBorderColor() );
+					shaderParams->SetTexture( j, newTex2D, samplerParams );
                 }
                 else //Some other texture type which just requires contents to be swapped
                 {

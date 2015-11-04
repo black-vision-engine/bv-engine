@@ -47,6 +47,7 @@ public:
     virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const override;
     virtual IStatedValuePtr                     GetState                    ( const std::string & name ) const;
 
+	virtual IParamValModelPtr					GetResourceStateModel		( const std::string & name ) const override;
 
     virtual void                                Update                      ( TimeType t );
 
@@ -98,7 +99,10 @@ template< class Iface >
 void BasePlugin< Iface >::Update  ( TimeType t )
 {
     { t; } // FIXME: suppress unused warning
-    assert( !"Implement in derived class" );
+    
+	m_pluginParamValModel->Update();
+
+    //assert( !"Implement in derived class" );
 }
 
 // *******************************
@@ -181,6 +185,15 @@ IStatedValuePtr             BasePlugin< Iface >::GetState               ( const 
         }
     }
 
+    return nullptr;
+}
+
+// *******************************
+//
+template< class Iface >
+IParamValModelPtr				BasePlugin< Iface >::GetResourceStateModel		 ( const std::string & name ) const
+{
+	{ name; }
     return nullptr;
 }
 

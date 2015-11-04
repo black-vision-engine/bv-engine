@@ -1,13 +1,9 @@
 #pragma once
 
-#include "Mathematics/Transform/MatTransform.h"
-
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/ResourceStateModel.h"
 
-#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
-
-#include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
@@ -52,6 +48,7 @@ public:
 												~DefaultTexturePlugin       ();
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
+	virtual IParamValModelPtr					GetResourceStateModel		( const std::string & name ) const override;
 
 	virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
 	virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;

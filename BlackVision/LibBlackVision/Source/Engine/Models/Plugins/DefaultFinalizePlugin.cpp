@@ -71,7 +71,7 @@ ICachedParameterPtr                 DefaultFinalizePlugin::GetCachedParameter   
     
 // *******************************
 //
-IParamValModelPtr					DefaultFinalizePlugin::GetResourceStateModel        ( const std::string & ) const
+IParamValModelPtr					DefaultFinalizePlugin::GetResourceStateModel		( const std::string & ) const
 {
     return nullptr;
 }
@@ -227,7 +227,12 @@ void                                DefaultFinalizePlugin::Update               
 	auto psc = std::static_pointer_cast< DefaultPixelShaderChannel >( m_finalizePSC->GetChannel() );
 	if( HelperPixelShaderChannel::PropagateTexturesDataUpdate( psc, m_prevPlugin ) )
 	{
-		UpdateTexturesData();
+		UpdateTexturesData( psc );
+	}
+
+	if( HelperPixelShaderChannel::PropagateRendererContextUpdate( psc, m_prevPlugin ) && m_prevPlugin )
+	{
+		psc->SetRendererContext( std::const_pointer_cast< RendererContext >( m_prevPlugin->GetRendererContext() ) );
 	}
 
 	//FIXME: update renderer context
@@ -244,6 +249,8 @@ void                                DefaultFinalizePlugin::SetPrevPlugin        
     m_finalizeGSC = nullptr;
 
     m_prevPlugin = plugin;
+
+	GetPixelShaderChannel(); //recreate pixel shader channel
 }
 
 // *******************************
@@ -316,10 +323,16 @@ DefaultPixelShaderChannelPtr		DefaultFinalizePlugin::UpdateShaderChannelModel		(
 {
 	auto psModel = std::make_shared< DefaultParamValModel >();
 	auto txData = std::make_shared< DefaultTexturesData >();
+	auto renderCtx = std::make_shared< RendererContext >();
 
 	UpdateShaderChannelModel( psModel, txData, m_prevPlugin );
 
-	return DefaultPixelShaderChannel::Create( psModel, txData );
+	if( m_prevPlugin )
+	{
+		renderCtx = std::const_pointer_cast< RendererContext >( m_prevPlugin->GetRendererContext() );
+	}
+
+	return DefaultPixelShaderChannel::Create( psModel, txData, renderCtx );
 }
 
 // *******************************
@@ -337,8 +350,6 @@ void								DefaultFinalizePlugin::UpdateShaderChannelModel			( DefaultParamValM
 	UpdateShaderChannelModel( psModel, plugin->GetPluginParamValModel()->GetPixelShaderChannelModel() );
 
 	UpdateTexturesData( txData, plugin );
-
-	//FIXME: update renderer context
 }
 
 // *******************************
@@ -373,21 +384,20 @@ void								DefaultFinalizePlugin::UpdateShaderChannelModel	( DefaultParamValMod
 
 // *******************************
 //
-void								DefaultFinalizePlugin::UpdateTexturesData				()
+void								DefaultFinalizePlugin::UpdateTexturesData				( DefaultPixelShaderChannelPtr psc )
 {
-	std::function< void( DefaultTexturesDataPtr txData, IPluginPtr plugin )> recursiveUpdate;
-	recursiveUpdate = [ & ]( DefaultTexturesDataPtr txData, IPluginPtr plugin ){
-		if( plugin == nullptr )
-		{
-			return;
-		}
-		recursiveUpdate( txData, plugin->GetPrevPlugin() );
-		UpdateTexturesData( txData, plugin );
-	};
-
-	auto psc = std::static_pointer_cast< DefaultPixelShaderChannel >( m_finalizePSC->GetChannel() );
 	if( psc )
 	{
+		std::function< void( DefaultTexturesDataPtr txData, IPluginPtr plugin )> recursiveUpdate;
+		recursiveUpdate = [ & ]( DefaultTexturesDataPtr txData, IPluginPtr plugin ){
+			if( plugin == nullptr )
+			{
+				return;
+			}
+			recursiveUpdate( txData, plugin->GetPrevPlugin() );
+			UpdateTexturesData( txData, plugin );
+		};
+
 		auto txData = psc->GetTexturesDataImpl();
 		txData->ClearAll();
 		recursiveUpdate( txData, m_prevPlugin );

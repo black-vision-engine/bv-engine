@@ -51,14 +51,16 @@ public:
 	virtual UInt32	                GetDepth            ( UInt32 level = 0 ) const override;
     
     virtual TextureFormat           GetFormat           () const override;
+	
+	virtual SamplerStateModelPtr	GetSamplerState		() const override;
 
-    virtual TextureWrappingMode     GetWrappingModeX    () const override;
-    virtual TextureWrappingMode     GetWrappingModeY    () const override;
-	virtual TextureWrappingMode     GetWrappingModeZ	() const override;
+ //   virtual TextureWrappingMode     GetWrappingModeX    () const override;
+ //   virtual TextureWrappingMode     GetWrappingModeY    () const override;
+	//virtual TextureWrappingMode     GetWrappingModeZ	() const override;
 
-    virtual TextureFilteringMode    GetFilteringMode    () const override;
-    
-    virtual glm::vec4               BorderColor         () const override;
+ //   virtual TextureFilteringMode    GetFilteringMode    () const override;
+ //   
+ //   virtual glm::vec4               BorderColor         () const override;
 
     void                            SetBits             ( UInt32 idx, TextureAssetConstPtr handle );
     void                            AddBits             ( TextureAssetConstPtr handle );
@@ -73,12 +75,14 @@ public:
 
     void                            SetFormat           ( TextureFormat fmt );
 
-    void                            SetWrappingModeX    ( TextureWrappingMode wm );
-    void                            SetWrappingModeY    ( TextureWrappingMode wm );
+	void							SetSamplerState		( SamplerStateModelPtr samplerState );
 
-    void                            SetFilteringMode    ( TextureFilteringMode fm );
+    //void                            SetWrappingModeX    ( TextureWrappingMode wm );
+    //void                            SetWrappingModeY    ( TextureWrappingMode wm );
 
-    void                            SetBorderColor      ( const glm::vec4 & bc );
+    //void                            SetFilteringMode    ( TextureFilteringMode fm );
+
+    //void                            SetBorderColor      ( const glm::vec4 & bc );
 
     static DefaultAnimationDescriptorPtr LoadAnimation   ( const AnimationAssetDescConstPtr & frames, const std::string & name );
 

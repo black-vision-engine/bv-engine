@@ -45,7 +45,7 @@ IPluginPtr                      DefaultPieChartPluginDesc::CreatePlugin         
 //
 DefaultPluginParamValModelPtr   DefaultPieChartPluginDesc::CreateDefaultModel   ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
+    DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
     DefaultParamValModelPtr         vacModel    = std::make_shared< DefaultParamValModel >();
 
     //ParamFloatPtr paramN             = ParametersFactory::CreateParameterFloat( "n", timeEvaluator );

@@ -56,7 +56,7 @@ IPluginPtr              DefaultHeightMapPluginDesc::CreatePlugin              ( 
 DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     //Create all models
-    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >();
+    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
     DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
@@ -198,11 +198,10 @@ std::string             DefaultHeightMapPluginDesc::BackgroundTextureName   ()
 // *************************************
 // 
 DefaultHeightMapPlugin::DefaultHeightMapPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
+    : BasePlugin< IPlugin >( name, uid, prev, model )
     , m_psc( nullptr )
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
-    , m_paramValModel( model )
     , m_hmRawData( nullptr )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
@@ -213,8 +212,6 @@ DefaultHeightMapPlugin::DefaultHeightMapPlugin         ( const std::string & nam
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
     ctx->alphaCtx->blendEnabled = true;
-
-    m_texturesData = m_psc->GetTexturesDataImpl();
 
     //Direct param state access (to bypass model querying)
     auto psModel = PixelShaderChannelModel();
@@ -293,9 +290,17 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( AssetDes
         }
 */
 
-        SetTextureParams( ( TextureSlot ) curNumTextures, txDesc.get() );
+		if( ( TextureSlot ) curNumTextures == TextureSlot::TS_HEIGHT_MAP )
+		{
+			assert( txDesc->GetHeight() == 1 );
+		}
 
+		auto timeEval = m_pluginParamValModel->GetTimeEvaluator();
+		txDesc->SetSamplerState( SamplerStateModel::Create( timeEval, TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, 
+			TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_POINT, glm::vec4( 0.f ) ) );
+		txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
         txData->AddTexture( txDesc );
+
 		HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
         return true;
@@ -329,8 +334,7 @@ IVertexShaderChannelConstPtr        DefaultHeightMapPlugin::GetVertexShaderChann
 // 
 void                                DefaultHeightMapPlugin::Update                      ( TimeType t )
 {
-    { t; } // FIXME: suppress unused variable
-    m_paramValModel->Update();
+	BasePlugin::Update( t );
 
 	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
 	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
@@ -434,21 +438,6 @@ void    DefaultHeightMapPlugin::InitAttributesChannel( IPluginPtr prev )
 
         m_vaChannel->AddConnectedComponent( connComp );
     }
-}
-
-// *************************************
-//
-void               DefaultHeightMapPlugin::SetTextureParams            ( TextureSlot slot, DefaultTextureDescriptor * txDesc ) const
-{
-    if( slot == TextureSlot::TS_HEIGHT_MAP )
-    {
-        assert( txDesc->GetHeight() == 1 );
-    }
-
-    txDesc->SetFilteringMode( TextureFilteringMode::TFM_POINT );
-    txDesc->SetWrappingModeX( TextureWrappingMode::TWM_MIRROR );
-    txDesc->SetWrappingModeY( TextureWrappingMode::TWM_MIRROR );
-    txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
 }
 
 // *****************************

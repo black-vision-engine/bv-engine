@@ -38,14 +38,10 @@ class DefaultGradientPlugin : public BasePlugin< IPlugin >
 {
 private:
 
-    DefaultPluginParamValModelPtr   m_paramValModel;
-
     DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;
 
     VertexAttributesChannelPtr      m_vaChannel;
-
-	UInt32							m_texLocation;
 
 public:
 

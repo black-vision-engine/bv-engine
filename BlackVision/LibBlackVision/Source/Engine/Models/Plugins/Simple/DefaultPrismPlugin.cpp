@@ -47,7 +47,7 @@ IPluginPtr                      DefaultPrismPluginDesc::CreatePlugin         ( c
 //
 DefaultPluginParamValModelPtr   DefaultPrismPluginDesc::CreateDefaultModel   ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
+    DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
     DefaultParamValModelPtr         vacModel    = std::make_shared< DefaultParamValModel >();
 
     ParamIntPtr paramN             = ParametersFactory::CreateParameterInt( "n", timeEvaluator );

@@ -30,15 +30,18 @@ public:
 	ITextureDescriptorPtr                                   GetTexture          ( const std::string & name );
 
     void                                                    SetTextureParams    ( unsigned int idx, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, TextureFilteringMode filteringMode, const glm::vec4 & borderColor );
-	bool                                                    SetTexture          ( unsigned int idx, ITextureDescriptorPtr textureDesc );
+	void                                                    SetTexture          ( unsigned int idx, ITextureDescriptorPtr textureDesc );
     void                                                    AddTexture          ( ITextureDescriptorPtr textureDesc );
 
     void                                                    SetAnimationParams  ( unsigned int idx, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, TextureFilteringMode filteringMode, const glm::vec4 & borderColor );
-    bool                                                    SetAnimation        ( unsigned int idx, IAnimationDescriptorPtr animationDesc );
+    void                                                    SetAnimation        ( unsigned int idx, IAnimationDescriptorPtr animationDesc );
     void                                                    AddAnimation        ( IAnimationDescriptorPtr animationDesc );
 
     bool                                                    SetAnimationFrame   ( unsigned int idx, unsigned int frameNum );
 
+	void													UpdateResourceModels();
+
+	void													ClearAll			();
 };
 
 DEFINE_PTR_TYPE(DefaultTexturesData)

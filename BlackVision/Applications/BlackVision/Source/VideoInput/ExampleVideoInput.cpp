@@ -15,7 +15,7 @@ ExampleVideoInput::ExampleVideoInput( int x, int y, float fps, int maskAnd, int 
 
 	desc = std::make_shared< model::DefaultTextureDescriptor >( asset,
 		//"Tex0", TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_LINEAR, glm::vec4( 1, 1, 1, 1), DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
-        "Tex0", TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_POINT, glm::vec4( 1, 1, 1, 1), DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
+        "Tex0", DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
 }
 
 

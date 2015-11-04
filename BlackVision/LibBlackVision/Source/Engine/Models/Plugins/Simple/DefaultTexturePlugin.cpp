@@ -1,13 +1,11 @@
 #include "DefaultTexturePlugin.h"
 
-#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
-#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
-#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
+
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
+#include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
+
 #include "Engine/Models/Plugins/HelperUVGenerator.h"
 
 #include "Assets/Texture/TextureAssetDescriptor.h"
@@ -36,32 +34,17 @@ IPluginPtr              DefaultTexturePluginDesc::CreatePlugin              ( co
 DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     //Create all models
-    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >();
+    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
     DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
     //Create all parameters and evaluators
-    SimpleVec4EvaluatorPtr      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
     SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
-	SimpleFloatEvaluatorPtr		wrapModeXEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "wrapModeX", timeEvaluator );
-	SimpleFloatEvaluatorPtr		wrapModeYEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "wrapModeY", timeEvaluator );
-
-    //ParamFloatPtr  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX", timeEvaluator );
-    //ParamFloatPtr  paramWrapModeY     = ParametersFactory::CreateParameterFloat( "wrapModeY", timeEvaluator );
-    ParamFloatPtr  paramFilteringMode = ParametersFactory::CreateParameterFloat( "filteringMode", timeEvaluator );
-    ParamFloatPtr  paramAttachMode    = ParametersFactory::CreateParameterFloat( "attachmentMode", timeEvaluator );
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
-    psModel->RegisterAll( borderColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
-	psModel->RegisterAll( wrapModeXEvaluator );
-	psModel->RegisterAll( wrapModeYEvaluator );
-    //psModel->AddParameter( paramWrapModeX );
-    //psModel->AddParameter( paramWrapModeY );
-    psModel->AddParameter( paramFilteringMode );
-    psModel->AddParameter( paramAttachMode );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
@@ -69,16 +52,7 @@ DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( IT
 
     //Set default values of all parameters
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
-    borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
-	wrapModeXEvaluator->Parameter()->SetVal( static_cast<int>( TextureWrappingMode::TWM_CLAMP_BORDER ), TimeType( 0.0 ) ); 
-	wrapModeYEvaluator->Parameter()->SetVal( static_cast<int>( TextureWrappingMode::TWM_CLAMP_BORDER ), TimeType( 0.0 ) ); 
-
-    //FIXME: integer parmeters should be used here
-    //paramWrapModeX->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
-    //paramWrapModeY->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
-    paramFilteringMode->SetVal( (float) TextureFilteringMode::TFM_LINEAR, TimeType( 0.f ) );
-    paramAttachMode->SetVal( (float) TextureAttachmentMode::MM_ATTACHED, TimeType( 0.f ) );
 
     return model;
 }
@@ -171,19 +145,16 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( txAssetDescr != nullptr )
     {
-        auto txData = m_psc->GetTexturesDataImpl();
-
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultTexturePluginDesc::TextureName() );
-        txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
-        txDesc->SetBorderColor( QueryTypedParam< ParamVec4Ptr >( GetParameter( "borderColor" ) )->Evaluate() );
-
         if( txDesc != nullptr )
         {
-            if( !txData->SetTexture( 0, txDesc ) )
-			{
-				txData->AddTexture( txDesc );
-			}
+			txDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
+			txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+			
+			auto txData = m_psc->GetTexturesDataImpl();
+            txData->SetTexture( 0, txDesc );
+
 			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
 			m_textureWidth = txAssetDescr->GetOrigTextureDesc()->GetWidth();
@@ -192,8 +163,19 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
             return true;
         }
     }
-
     return false;
+}
+
+// *************************************
+// 
+IParamValModelPtr					DefaultTexturePlugin::GetResourceStateModel			( const std::string & name ) const
+{
+	auto tx = m_psc->GetTexturesDataImpl()->GetTexture( name );
+	if( tx )
+	{
+		return tx->GetSamplerState();
+	}
+	return nullptr;
 }
 
 // *************************************
@@ -221,8 +203,7 @@ IVertexShaderChannelConstPtr        DefaultTexturePlugin::GetVertexShaderChannel
 // 
 void                                DefaultTexturePlugin::Update                      ( TimeType t )
 {
-    { t; } // FIXME: suppress unused warning
-    m_paramValModel->Update();
+	BasePlugin::Update( t );
 
 	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
 	if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )

@@ -1,20 +1,9 @@
 #include "DefaultAlphaMaskPlugin.h"
 
-#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
-#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
-#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
+#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
-
-#include "Engine/Models/Plugins/Simple/DefaultColorPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultGradientPlugin.h"
-#include "DefaultTransformPlugin.h"
 
 namespace bv { namespace model {
 
@@ -43,24 +32,15 @@ IPluginPtr              DefaultAlphaMaskPluginDesc::CreatePlugin            ( co
 DefaultPluginParamValModelPtr   DefaultAlphaMaskPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     //Create all models
-    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >();
+    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
     DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
     //Create all parameters and evaluators
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txAlphaMat", timeEvaluator );
 
-    ParamFloatPtr  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX", timeEvaluator );
-    ParamFloatPtr  paramWrapModeY     = ParametersFactory::CreateParameterFloat( "wrapModeY", timeEvaluator );
-    ParamFloatPtr  paramFilteringMode = ParametersFactory::CreateParameterFloat( "filteringMode", timeEvaluator );
-    ParamFloatPtr  paramAttachMode    = ParametersFactory::CreateParameterFloat( "attachmentMode", timeEvaluator );
-
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
-    psModel->AddParameter( paramWrapModeX );
-    psModel->AddParameter( paramWrapModeY );
-    psModel->AddParameter( paramFilteringMode );
-    psModel->AddParameter( paramAttachMode );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
@@ -68,12 +48,6 @@ DefaultPluginParamValModelPtr   DefaultAlphaMaskPluginDesc::CreateDefaultModel( 
 
     //Set default values of all parameters
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
-
-    //FIXME: integer parmeters should be used here
-    paramWrapModeX->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
-    paramWrapModeY->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
-    paramFilteringMode->SetVal( (float) TextureFilteringMode::TFM_LINEAR, TimeType( 0.f ) );
-    paramAttachMode->SetVal( (float) TextureAttachmentMode::MM_ATTACHED, TimeType( 0.f ) );
 
     return model;
 }
@@ -127,62 +101,16 @@ void								DefaultAlphaMaskPlugin::SetPrevPlugin               ( IPluginPtr pre
 {
     BasePlugin::SetPrevPlugin( prev );
     
-    if( prev == nullptr )
-	{
-        return;
-	}
-
-    //FIXME: The hackiest of it all - added registered parameters to pass on to the engine - ten kod jest przestraszny i wykurwiscie niefajny
- //   if( prev->GetTypeUid() == DefaultColorPluginDesc::UID() )
- //   {
-	//	std::vector< std::string > psEval;
-	//	psEval.push_back( "color" );
-	//	RegisterEvaluators( prev, std::vector< std::string >(), psEval );
- //   }
- //   else if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() || prev->GetTypeUid() == DefaultAnimationPluginDesc::UID() )
- //   {
-	//	std::vector< std::string > vsEval, psEval;
-	//	vsEval.push_back( "txMat" );
-	//	psEval.push_back( "alpha" );
-	//	RegisterEvaluators( prev, vsEval, psEval );
- //   }
- //   else if( prev->GetTypeUid() == DefaultTextPluginDesc::UID() )
- //   {
- //       std::vector< std::string > psEval;
-	//	psEval.push_back( "alpha" );
-	//	psEval.push_back( "color" );
-	//	RegisterEvaluators( prev, std::vector< std::string >(), psEval );
- //   }
-	//else if( prev->GetTypeUid() == DefaultGradientPluginDesc::UID() )
- //   {
-	//	std::vector< std::string > vsEval, psEval;
-	//	vsEval.push_back( "txMat" );
-	//	psEval.push_back( "color1" );
-	//	psEval.push_back( "color2" );
-	//	psEval.push_back( "point1" );
-	//	psEval.push_back( "point2" );
-	//	RegisterEvaluators( prev, vsEval, psEval );
- //   }
-
     InitVertexAttributesChannel();
-
-    //if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() || prev->GetTypeUid() == DefaultAnimationPluginDesc::UID() || prev->GetTypeUid() == DefaultTextPluginDesc::UID() )
-    //{
-    //    //FIXME: set textures data from prev plugin to this plugin
-    //    auto prev_psc = std::const_pointer_cast< ITexturesData >( prev->GetPixelShaderChannel()->GetTexturesData() );
-    //    //FIXME: this line causes changes to Texture Plugin data via current pointer - quite shitty
-    //    m_psc->OverrideTexturesData( std::static_pointer_cast< DefaultTexturesData >( prev_psc ) );
-    //}
 }
 
 // *************************************
 // 
 DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
+    : BasePlugin< IPlugin >( name, uid, prev, model )
     , m_psc( nullptr )
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
-    , m_paramValModel( model )
     , m_textureWidth( 0 )
     , m_textureHeight( 0 )
 {
@@ -212,24 +140,17 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( AssetDescCon
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( txAssetDescr != nullptr )
     {
-        auto txData = m_psc->GetTexturesDataImpl();
-
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultAlphaMaskPluginDesc::TextureName() );
 		
-        //Alpha texture defaults
-        txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
-        txDesc->SetBorderColor( glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
-        txDesc->SetWrappingModeX( TextureWrappingMode::TWM_CLAMP_BORDER );
-        txDesc->SetWrappingModeY( TextureWrappingMode::TWM_CLAMP_BORDER );
-        txDesc->SetFilteringMode( TextureFilteringMode::TFM_LINEAR );
-
         if( txDesc != nullptr )
         {
-			if( !txData->SetTexture( 0, txDesc ) )
-			{
-				txData->AddTexture( txDesc );
-			}
+			txDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
+			txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+			
+			auto txData = m_psc->GetTexturesDataImpl();
+			txData->SetTexture( 0, txDesc );
+
 			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
             m_textureWidth = txDesc->GetWidth();
@@ -269,8 +190,7 @@ IVertexShaderChannelConstPtr        DefaultAlphaMaskPlugin::GetVertexShaderChann
 // 
 void                                DefaultAlphaMaskPlugin::Update                      ( TimeType t )
 {
-    { t; } // FIXME: suppress unused variable
-    m_paramValModel->Update();
+	BasePlugin::Update( t );
 
 	if( HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin ) )
 	{
@@ -374,7 +294,7 @@ void     DefaultAlphaMaskPlugin::RecalculateUVChannel         ()
 	{
 		auto compChannels = cc[ i ]->GetAttributeChannels();
 		auto posChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_POSITION );
-		auto uvChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_TEXCOORD, 1 );
+		auto uvChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_TEXCOORD, -1 );
 		
 		if( posChannel && uvChannel )
 		{
@@ -397,53 +317,6 @@ void     DefaultAlphaMaskPlugin::RecalculateUVChannel         ()
 		}
 	}
 }
-
-//// *************************************
-////
-//void					DefaultAlphaMaskPlugin::RegisterEvaluators			( IPluginPtr prev, const std::vector< std::string > & vsParamNames, const std::vector< std::string > & psParamNames )
-//{
-//	for( auto paramName : vsParamNames )
-//	{
-//		assert( prev->GetParameter( paramName ) != nullptr );
-//	}
-//        
-//	if( prev->GetPluginParamValModel()->GetVertexShaderChannelModel() )
-//	{
-//		auto evaluatorsv = prev->GetPluginParamValModel()->GetVertexShaderChannelModel()->GetEvaluators();
-//		for( auto & eval : evaluatorsv )
-//		{
-//			for( auto & paramName : vsParamNames )
-//			{
-//				if( eval->GetParameter( paramName ) )
-//				{
-//					//FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
-//					std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetVertexShaderChannelModel() )->RegisterAll( eval );
-//				}
-//			}
-//		}
-//	}
-//
-//	for( auto paramName : psParamNames )
-//	{
-//		assert( prev->GetParameter( paramName ) != nullptr );
-//	}
-//
-//	if( prev->GetPluginParamValModel()->GetPixelShaderChannelModel() )
-//	{
-//		auto evaluatorsp = prev->GetPluginParamValModel()->GetPixelShaderChannelModel()->GetEvaluators();
-//		for( auto & eval : evaluatorsp )
-//		{
-//			for( auto & paramName : psParamNames )
-//			{
-//				if( eval->GetParameter( paramName ) )
-//				{
-//					//FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
-//					std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( eval );
-//				}
-//			}
-//		}
-//	}
-//}
 
 // *************************************
 // 

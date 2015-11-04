@@ -12,6 +12,7 @@ class IParamValModel;
 class DefaultPluginParamValModel : public IPluginParamValModel
 {
 private:
+	ITimeEvaluatorPtr		m_timeEvaluator;
 
     DefaultParamValModelPtr m_pluginModel;
 
@@ -23,7 +24,7 @@ private:
 
 public:
 
-                                    DefaultPluginParamValModel      ();
+                                    DefaultPluginParamValModel      ( ITimeEvaluatorPtr timeEvaluator );
                                     ~DefaultPluginParamValModel     ();
     
     virtual void                    Update                          () override;
@@ -36,6 +37,7 @@ public:
     virtual     IParamValModelPtr   GetVertexShaderChannelModel     () override;
     virtual     IParamValModelPtr   GetGeometryShaderChannelModel   () override;
 
+	virtual		ITimeEvaluatorPtr	GetTimeEvaluator				() const override;
 
     DefaultParamValModelPtr        PluginModelImpl                 ();
 

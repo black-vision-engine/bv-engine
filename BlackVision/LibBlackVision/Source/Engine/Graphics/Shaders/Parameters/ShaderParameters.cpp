@@ -40,18 +40,18 @@ void    ShaderParameters::AddParameter                      ( GenericShaderParam
 
 // ***************************
 //
-void               ShaderParameters::AddTexture             ( Texture2DPtr texture )
+void               ShaderParameters::AddTexture             ( Texture2DPtr texture, SamplerShaderParametersPtr samplerParams )
 {
-    m_textures.push_back( texture );
+	m_textures.push_back( std::make_pair( texture, samplerParams ) );
 }
 
 // ***************************
 //
-void              ShaderParameters::SetTexture              ( unsigned int idx, Texture2DPtr tex )
+void              ShaderParameters::SetTexture              ( unsigned int idx, Texture2DPtr texture, SamplerShaderParametersPtr samplerParams )
 {
     assert( idx < m_textures.size() );
 
-    m_textures[ idx ] = tex;
+    m_textures[ idx ] = std::make_pair( texture, samplerParams );
 }
 
 } //bv

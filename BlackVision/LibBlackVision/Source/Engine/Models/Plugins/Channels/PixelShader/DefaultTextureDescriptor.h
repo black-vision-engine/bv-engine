@@ -26,7 +26,7 @@ private:
 public:
 
     DefaultTextureDescriptor        ();
-    DefaultTextureDescriptor        ( TextureAssetConstPtr texResource, const std::string & name, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc, DataBuffer::Semantic semantic );
+    DefaultTextureDescriptor        ( TextureAssetConstPtr texResource, const std::string & name, DataBuffer::Semantic semantic );
     ~DefaultTextureDescriptor       ();
 
     virtual uintptr_t               GetUID          () const override;
@@ -47,13 +47,15 @@ public:
     
     virtual TextureFormat           GetFormat       () const override;
 
-    virtual TextureWrappingMode     GetWrappingModeX() const override;
-    virtual TextureWrappingMode     GetWrappingModeY() const override;
-	virtual TextureWrappingMode     GetWrappingModeZ() const override;
-    
-    virtual TextureFilteringMode    GetFilteringMode() const override;
-    
-    virtual glm::vec4               BorderColor     () const override;
+	virtual SamplerStateModelPtr	GetSamplerState () const override;
+
+ //   virtual TextureWrappingMode     GetWrappingModeX() const override;
+ //   virtual TextureWrappingMode     GetWrappingModeY() const override;
+	//virtual TextureWrappingMode     GetWrappingModeZ() const override;
+ //   
+ //   virtual TextureFilteringMode    GetFilteringMode() const override;
+ //   
+ //   virtual glm::vec4               BorderColor     () const override;
     
     virtual DataBuffer::Semantic    GetSemantic     () const override;
 
@@ -69,15 +71,17 @@ public:
     
     void                            SetFormat       ( TextureFormat fmt );
     
-    void                            SetWrappingModeX( TextureWrappingMode wm );
+ /*   void                            SetWrappingModeX( TextureWrappingMode wm );
     void                            SetWrappingModeY( TextureWrappingMode wm );
 	void                            SetWrappingModeZ( TextureWrappingMode wm );
     
     void                            SetFilteringMode( TextureFilteringMode fm );
     
     void                            SetBorderColor  ( const glm::vec4 & bc );
-    
+    */
     void                            SetSemantic     ( DataBuffer::Semantic semantic );
+	
+	void							SetSamplerState ( SamplerStateModelPtr samplerState );
 
     static void                     SetDefaults     ( DefaultTextureDescriptorPtr desc );
 

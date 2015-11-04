@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Assets/Asset.h"
@@ -122,7 +121,6 @@ private:
 
     std::wstring                    m_timePatern;
     TimeInfo                        m_timePaternInfo;
-    DefaultPluginParamValModelPtr   m_paramValModel;
 
     bool                            CheckTimeConsistency ( const std::wstring & time ) const;
 

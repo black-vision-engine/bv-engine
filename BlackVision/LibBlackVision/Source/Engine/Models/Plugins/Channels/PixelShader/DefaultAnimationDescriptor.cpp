@@ -21,10 +21,11 @@ DefaultAnimationDescriptor::DefaultAnimationDescriptor        ( const std::strin
     SetWidth( w );
     SetHeight( h );
     SetFormat( fmt );
-    SetWrappingModeX( wmx );
-    SetWrappingModeY( wmy );
-    SetFilteringMode( fm );
-    SetBorderColor( bc );
+	{ wmx; wmy; fm; bc; }
+    //SetWrappingModeX( wmx );
+    //SetWrappingModeY( wmy );
+    //SetFilteringMode( fm );
+    //SetBorderColor( bc );
     SetCurrentFrame( 0 ); //current
     SetCurrentFrame( 0 ); //previous
 }
@@ -131,39 +132,46 @@ TextureFormat           DefaultAnimationDescriptor::GetFormat           () const
     return m_params.GetFormat();
 }
 
-// *******************************
+//// *******************************
+////
+//TextureWrappingMode     DefaultAnimationDescriptor::GetWrappingModeX    () const
+//{
+//    return m_params.GetWrappingModeX();
+//}
 //
-TextureWrappingMode     DefaultAnimationDescriptor::GetWrappingModeX    () const
-{
-    return m_params.GetWrappingModeX();
-}
+//// *******************************
+////
+//TextureWrappingMode     DefaultAnimationDescriptor::GetWrappingModeZ	() const
+//{
+//	return m_params.GetWrappingModeZ();
+//}
+//
+//// *******************************
+////
+//TextureWrappingMode     DefaultAnimationDescriptor::GetWrappingModeY    () const
+//{
+//    return m_params.GetWrappingModeY();
+//}
+//
+//// *******************************
+////
+//TextureFilteringMode    DefaultAnimationDescriptor::GetFilteringMode    () const
+//{
+//    return m_params.GetFilteringMode();
+//}
+//
+//// *******************************
+////
+//glm::vec4               DefaultAnimationDescriptor::BorderColor         () const
+//{
+//    return m_params.BorderColor();
+//}
 
-// *******************************
+// **************************
 //
-TextureWrappingMode     DefaultAnimationDescriptor::GetWrappingModeZ	() const
+SamplerStateModelPtr    DefaultAnimationDescriptor::GetSamplerState     () const
 {
-	return m_params.GetWrappingModeZ();
-}
-
-// *******************************
-//
-TextureWrappingMode     DefaultAnimationDescriptor::GetWrappingModeY    () const
-{
-    return m_params.GetWrappingModeY();
-}
-
-// *******************************
-//
-TextureFilteringMode    DefaultAnimationDescriptor::GetFilteringMode    () const
-{
-    return m_params.GetFilteringMode();
-}
-
-// *******************************
-//
-glm::vec4               DefaultAnimationDescriptor::BorderColor         () const
-{
-    return m_params.BorderColor();
+	return m_params.GetSamplerState();
 }
 
 // *******************************
@@ -257,33 +265,40 @@ void                    DefaultAnimationDescriptor::SetFormat           ( Textur
     m_params.SetFormat( fmt );
 }
 
-// *******************************
+// **************************
 //
-void                    DefaultAnimationDescriptor::SetWrappingModeX    ( TextureWrappingMode wm )
+void                     DefaultAnimationDescriptor::SetSamplerState	( SamplerStateModelPtr samplerState )
 {
-    m_params.SetWrappingModeX( wm );
+	m_params.SetSamplerState( samplerState );
 }
 
-// *******************************
+////*******************************
+////
+//void                    DefaultAnimationDescriptor::SetWrappingModeX    ( TextureWrappingMode wm )
+//{
+//    m_params.SetWrappingModeX( wm );
+//}
 //
-void                    DefaultAnimationDescriptor::SetWrappingModeY    ( TextureWrappingMode wm )
-{
-    m_params.SetWrappingModeY( wm );
-}
-
-// *******************************
+//// *******************************
+////
+//void                    DefaultAnimationDescriptor::SetWrappingModeY    ( TextureWrappingMode wm )
+//{
+//    m_params.SetWrappingModeY( wm );
+//}
 //
-void                    DefaultAnimationDescriptor::SetFilteringMode    ( TextureFilteringMode fm )
-{
-    m_params.SetFilteringMode( fm );
-}
-
-// *******************************
+//// *******************************
+////
+//void                    DefaultAnimationDescriptor::SetFilteringMode    ( TextureFilteringMode fm )
+//{
+//    m_params.SetFilteringMode( fm );
+//}
 //
-void                    DefaultAnimationDescriptor::SetBorderColor      ( const glm::vec4 & bc )
-{
-    m_params.SetBorderColor( bc );
-}
+//// *******************************
+////
+//void                    DefaultAnimationDescriptor::SetBorderColor      ( const glm::vec4 & bc )
+//{
+//    m_params.SetBorderColor( bc );
+//}
 
 // *******************************
 //

@@ -29,31 +29,20 @@ namespace bv { namespace model {
     DefaultPluginParamValModelPtr   DefaultVideoInputPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
     {
         //Create all models
-        DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >();
+        DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
         DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
         DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
         //Create all parameters and evaluators
-        SimpleVec4EvaluatorPtr      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
         SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
         SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
-
-        ParamFloatPtr  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX", timeEvaluator );
-        ParamFloatPtr  paramWrapModeY     = ParametersFactory::CreateParameterFloat( "wrapModeY", timeEvaluator );
-        ParamFloatPtr  paramFilteringMode = ParametersFactory::CreateParameterFloat( "filteringMode", timeEvaluator );
-        ParamFloatPtr  paramAttachMode    = ParametersFactory::CreateParameterFloat( "attachmentMode", timeEvaluator );
 
         ParamFloatPtr  paramVideoInputSource = ParametersFactory::CreateParameterFloat( "source", timeEvaluator );
 
         //Register all parameters and evaloators in models
         vsModel->RegisterAll( trTxEvaluator );
-        psModel->RegisterAll( borderColorEvaluator );
         psModel->RegisterAll( alphaEvaluator );
-        psModel->AddParameter( paramWrapModeX );
-        psModel->AddParameter( paramWrapModeY );
-        psModel->AddParameter( paramFilteringMode );
-        psModel->AddParameter( paramAttachMode );
-
+       
         psModel->AddParameter( paramVideoInputSource );
 
         //Set models structure
@@ -62,14 +51,9 @@ namespace bv { namespace model {
 
         //Set default values of all parameters
         alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
-        borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
         trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
 
         //FIXME: integer parmeters should be used here
-        paramWrapModeX->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
-        paramWrapModeY->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
-        paramFilteringMode->SetVal( (float) TextureFilteringMode::TFM_LINEAR, TimeType( 0.f ) );
-        paramAttachMode->SetVal( (float) TextureAttachmentMode::MM_ATTACHED, TimeType( 0.f ) );
         paramVideoInputSource->SetVal( (float) 0.f, TimeType( 0.f ) );
 
         return model;
@@ -157,9 +141,9 @@ namespace bv { namespace model {
     }
 
 
-    void                                DefaultVideoInputPlugin::Update                      ( TimeType )
+    void                                DefaultVideoInputPlugin::Update                      ( TimeType t )
     {
-        m_paramValModel->Update();
+		BasePlugin::Update( t );
 
         //desc.Update();
 
@@ -179,19 +163,15 @@ bool                                DefaultVideoInputPlugin::LoadResource       
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( txAssetDescr != nullptr )
     {
-        auto txData = m_psc->GetTexturesDataImpl();
-        assert( txData->GetTextures().size() <= 2 ); //FIXME: Second one may be added by a mask
-
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultTexturePluginDesc::TextureName() );
-        txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
-
         if( txDesc != nullptr )
         {
-            if( !txData->SetTexture( 0, txDesc ) )
-            {
-                txData->AddTexture( txDesc );
-            }
+			txDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
+			txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+
+			auto txData = m_psc->GetTexturesDataImpl();
+            txData->SetTexture( 0, txDesc );
 
             m_textureWidth = txDesc->GetWidth();
             m_textureHeight = txDesc->GetHeight();

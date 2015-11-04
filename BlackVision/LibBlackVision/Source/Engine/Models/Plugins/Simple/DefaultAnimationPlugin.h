@@ -5,13 +5,8 @@
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
 
-#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
-
-#include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
-
-
 
 namespace bv { namespace model {
 
@@ -37,8 +32,6 @@ public:
 class DefaultAnimationPlugin : public BasePlugin< IPlugin >
 {
 private:
-
-    DefaultPluginParamValModelPtr   m_paramValModel;
 
     DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;

@@ -1,10 +1,6 @@
 #include "DefaultRectPlugin.h"
 
-#include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
-#include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
-#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
-#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
@@ -123,9 +119,8 @@ IVertexAttributesChannelConstPtr    DefaultRectPlugin::GetVertexAttributesChanne
 //
 void                                DefaultRectPlugin::Update                      ( TimeType t )
 {
-    { t; } // FIXME: suppress unused warning
+	BasePlugin::Update( t );
     //FIXME: reimplement va channel (no time, no explicit update and so on)
-    m_paramValModel->Update();
 
 	if( UpdateState() )
 	{

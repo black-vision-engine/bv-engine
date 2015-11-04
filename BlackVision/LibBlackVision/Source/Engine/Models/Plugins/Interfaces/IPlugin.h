@@ -49,6 +49,8 @@ public:
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const = 0;
     virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const = 0;
 
+	virtual IParamValModelPtr					GetResourceStateModel		( const std::string & name ) const = 0;
+
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const = 0;
     virtual ITransformChannelConstPtr           GetTransformChannel         () const = 0;
     virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const = 0;

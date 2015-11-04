@@ -1,16 +1,12 @@
 #include "DefaultTextPlugin.h"
 
-#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
-#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
-#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
+#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 
-#include "Mathematics/Transform/MatTransform.h"
+#include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 
 #include "Assets/Font/FontAssetDescriptor.h"
 #include "Assets/Font/FontLoader.h"
@@ -43,14 +39,13 @@ IPluginPtr              DefaultTextPluginDesc::CreatePlugin             ( const 
 DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     //Create all models
-    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >();
+    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
     DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
     DefaultParamValModelPtr plModel      = std::make_shared< DefaultParamValModel >();
 
 
     //Create all parameters and evaluators
-    SimpleVec4EvaluatorPtr      borderColorEvaluator    = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
     SimpleFloatEvaluatorPtr     alphaEvaluator          = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator           = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
     SimpleFloatEvaluatorPtr     fontSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
@@ -65,7 +60,6 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
-    psModel->RegisterAll( borderColorEvaluator );
 	psModel->RegisterAll( outlineColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
     plModel->RegisterAll( blurSizeEvaluator );
@@ -86,7 +80,6 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 	outlineSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     spacingEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     alignmentEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-    borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
 	outlineColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
     fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
@@ -139,29 +132,14 @@ void DefaultTextPlugin::SetPrevPlugin( IPluginPtr prev )
         return;
 	}
 
-    auto colorParam = prev->GetParameter( "color" );
-
-    if ( colorParam == nullptr )
-    {
-        auto bcParam = this->GetParameter( "borderColor" );
-        SimpleVec4EvaluatorPtr      colorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", bcParam->GetTimeEvaluator() );
-        std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( colorEvaluator );
-        colorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 1.f, 1.f, 1.f ), TimeType( 0.f ) );
-    }
-    else
-    {
-        auto evaluators = prev->GetPluginParamValModel()->GetPixelShaderChannelModel()->GetEvaluators();
-        for( unsigned int i = 0; i < evaluators.size(); ++i )
-        {
-            auto colorParam = evaluators[ i ]->GetParameter( "color" );
-            if( colorParam != nullptr )
-            {
-                //FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak)
-                std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( evaluators[ i ] );
-                break;
-            }
-        }
-    }
+  //  auto colorParam = prev->GetParameter( "color" );
+  //  if ( colorParam == nullptr )
+  //  {
+  //      auto bcParam = this->GetParameter( "borderColor" );
+  //      SimpleVec4EvaluatorPtr      colorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", bcParam->GetTimeEvaluator() );
+		//std::static_pointer_cast< DefaultParamValModel >( m_pluginParamValModel->GetPixelShaderChannelModel() )->RegisterAll( colorEvaluator );
+  //      colorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 1.f, 1.f, 1.f ), TimeType( 0.f ) );
+  //  }
 
 	m_scaleValue =  ValuesFactory::CreateValueMat4( "" );
 	m_scaleValue->SetValue( glm::mat4( 1.0 ) );
@@ -173,11 +151,10 @@ void DefaultTextPlugin::SetPrevPlugin( IPluginPtr prev )
 // *************************************
 // 
 DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
+    : BasePlugin< IPlugin >( name, uid, prev, model )
     , m_psc( nullptr )
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
-    , m_paramValModel( model )
     , m_atlas( nullptr )
     , m_text( L"" )
 	, m_textLength( 0.f )
@@ -193,6 +170,7 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     ctx->alphaCtx->blendEnabled = true;
     ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
     ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+	HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &DefaultTextPlugin::OnSetText ), KeyPressedEvent::Type() );
 
@@ -220,27 +198,19 @@ void							DefaultTextPlugin::LoadTexture(	DefaultTexturesDataPtr txData,
 {
 	
       //FIXME: use some better API to handle resources in general and textures in this specific case
-	auto txDesc = std::make_shared< DefaultTextureDescriptor >(	res
-												,   name
-												,   hWrappingMode
-												,   vWrappingMode
-												,   txFilteringMode
-												,   bColor
-												,   semantic );
-
+	auto txDesc = std::make_shared< DefaultTextureDescriptor >(	res, name, semantic );
 
 	if( txDesc != nullptr )
 	{
-		if( !txData->SetTexture( 0, txDesc ) )
-		{
-			txData->AddTexture( txDesc );
-		}
+		auto timeEval = m_pluginParamValModel->GetTimeEvaluator();
+		txDesc->SetSamplerState( SamplerStateModel::Create( timeEval, hWrappingMode, vWrappingMode, vWrappingMode, txFilteringMode, bColor ) );
+		txDesc->SetBits( res );
+		txDesc->SetName( name );
+
+		txData->SetTexture( 0, txDesc );
+
 		HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 	}
-
-	txDesc->SetBits( res );
-	txDesc->SetName( name );
-
 }
 
 // *************************************
@@ -352,8 +322,7 @@ mathematics::RectConstPtr			DefaultTextPlugin::GetAABB						( const glm::mat4 & 
 // 
 void                                DefaultTextPlugin::Update                      ( TimeType t )
 {
-    { t; } // FIXME: suppress unused warning
-    m_paramValModel->Update();
+	BasePlugin::Update( t );
 
 	m_scaleMat = glm::mat4( 1.0 );
 
