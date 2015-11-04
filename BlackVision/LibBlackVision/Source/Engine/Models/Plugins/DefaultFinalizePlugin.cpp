@@ -1,19 +1,10 @@
 #include "DefaultFinalizePlugin.h"
 
-#include <cassert>
-
-#include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Plugin.h"
+#include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 
 #include "CoreDEF.h"
 
-/* hacked by creed */
-#include "Engine/Models/Plugins/Simple/DefaultGradientPlugin.h"
-#include "Engine/Models/Plugins/Plugin.h"
-
-#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
-#include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
-
-#include "Engine/Models/Plugins/Channels/Transform/DefaultTransformChannel.h"
 
 namespace bv { namespace model {
 
@@ -31,7 +22,7 @@ DefaultFinalizePlugin::DefaultFinalizePlugin       ()
 
 {
     m_defaultVSChannel = DefaultVertexShaderChannel::Create();
-    m_defaultPSChannel = DefaultPixelShaderChannel::Create();
+    //m_defaultPSChannel = DefaultPixelShaderChannel::Create();
 
 	m_defaultTransformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create() );
 }
@@ -77,6 +68,13 @@ ICachedParameterPtr                 DefaultFinalizePlugin::GetCachedParameter   
 {
     return nullptr;
 }
+    
+// *******************************
+//
+IParamValModelPtr					DefaultFinalizePlugin::GetResourceStateModel        ( const std::string & ) const
+{
+    return nullptr;
+}
 
 // *******************************
 //
@@ -90,8 +88,6 @@ bv::IValueConstPtr                  DefaultFinalizePlugin::GetValue             
 //
 IVertexAttributesChannelConstPtr    DefaultFinalizePlugin::GetVertexAttributesChannel   () const
 {
-    //assert( m_prevPlugin );
-
 	if( m_prevPlugin )
 		return m_prevPlugin->GetVertexAttributesChannel();
 	return nullptr;
@@ -101,8 +97,6 @@ IVertexAttributesChannelConstPtr    DefaultFinalizePlugin::GetVertexAttributesCh
 //
 ITransformChannelConstPtr           DefaultFinalizePlugin::GetTransformChannel          () const
 {
-    //assert( m_prevPlugin );
-
 	if( m_prevPlugin )
 	{
 		auto transformChannel = m_prevPlugin->GetTransformChannel();
@@ -117,20 +111,10 @@ ITransformChannelConstPtr           DefaultFinalizePlugin::GetTransformChannel  
 //
 IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel        () const
 {
-    //assert( m_prevPlugin );
-    
-	//assert( m_prevPlugin->GetPixelShaderChannel() );
-	IPixelShaderChannelConstPtr psc = nullptr;
-
-	if( m_prevPlugin )
-		psc = m_prevPlugin->GetPixelShaderChannel();
-
-    if( !psc )
-        psc = m_defaultPSChannel;
-
     if( m_finalizePSC == nullptr )
     {
-        m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( std::const_pointer_cast< IPixelShaderChannel >( psc ), m_shadersDir );
+		auto psChannel = UpdateShaderChannelModel();
+        m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( psChannel, m_shadersDir );
         m_finalizePSC->RegenerateShaderSource( GetUIDS() );
     }
 
@@ -141,8 +125,6 @@ IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel
 //
 IVertexShaderChannelConstPtr        DefaultFinalizePlugin::GetVertexShaderChannel       () const
 {
-    //assert( m_prevPlugin );
-
 	IVertexShaderChannelConstPtr vsc = nullptr;
 	if( m_prevPlugin )
 		vsc = m_prevPlugin->GetVertexShaderChannel();
@@ -163,8 +145,6 @@ IVertexShaderChannelConstPtr        DefaultFinalizePlugin::GetVertexShaderChanne
 //
 IGeometryShaderChannelConstPtr           DefaultFinalizePlugin::GetGeometryShaderChannel    () const
 {
-    //assert( m_prevPlugin );
-
     if( m_finalizeGSC == nullptr )
     {
         auto prevChannel = m_prevPlugin->GetGeometryShaderChannel();
@@ -175,6 +155,8 @@ IGeometryShaderChannelConstPtr           DefaultFinalizePlugin::GetGeometryShade
             m_finalizeGSC->RegenerateShaderSource( GetUIDS() );
         }
     }
+
+	
 
     return m_finalizeGSC;
 }
@@ -241,6 +223,14 @@ void                                DefaultFinalizePlugin::Update               
 {
     { t; } // FIXME: suppress unuse warning
     //TODO: implement if there is logic that should be run
+	
+	auto psc = std::static_pointer_cast< DefaultPixelShaderChannel >( m_finalizePSC->GetChannel() );
+	if( HelperPixelShaderChannel::PropagateTexturesDataUpdate( psc, m_prevPlugin ) )
+	{
+		UpdateTexturesData();
+	}
+
+	//FIXME: update renderer context
 }
 
 // *******************************
@@ -319,6 +309,108 @@ bool								DefaultFinalizePlugin::IsValid						()
 	return true;
 }
 
+
+// *******************************
+//
+DefaultPixelShaderChannelPtr		DefaultFinalizePlugin::UpdateShaderChannelModel		() const
+{
+	auto psModel = std::make_shared< DefaultParamValModel >();
+	auto txData = std::make_shared< DefaultTexturesData >();
+
+	UpdateShaderChannelModel( psModel, txData, m_prevPlugin );
+
+	return DefaultPixelShaderChannel::Create( psModel, txData );
+}
+
+// *******************************
+//
+void								DefaultFinalizePlugin::UpdateShaderChannelModel			( DefaultParamValModelPtr psModel, DefaultTexturesDataPtr txData, IPluginPtr plugin ) const
+{
+	if( plugin == nullptr )
+	{
+		return;
+	}
+
+	UpdateShaderChannelModel( psModel, txData, plugin->GetPrevPlugin() );
+
+	UpdateShaderChannelModel( psModel, plugin->GetPluginParamValModel()->GetVertexShaderChannelModel() );
+	UpdateShaderChannelModel( psModel, plugin->GetPluginParamValModel()->GetPixelShaderChannelModel() );
+
+	UpdateTexturesData( txData, plugin );
+
+	//FIXME: update renderer context
+}
+
+// *******************************
+//
+void								DefaultFinalizePlugin::UpdateShaderChannelModel	( DefaultParamValModelPtr psModel, IParamValModelPtr model ) const
+{
+	if( model )
+	{
+		for( auto eval : model->GetEvaluators() )
+		{
+			psModel->RegisterAll( eval );
+		}
+
+		//FIXME: what about parameters and values?
+		for( auto val : model->GetValues() )
+		{
+			if( !psModel->GetValue( val->GetName() ) )
+			{
+				psModel->AddValue( val );
+			}
+		}
+
+		for( auto param : model->GetParameters() )
+		{
+			if( !psModel->GetParameter( param->GetName() ) )
+			{
+				psModel->AddParameter( param );
+			}
+		}
+	}
+}
+
+// *******************************
+//
+void								DefaultFinalizePlugin::UpdateTexturesData				()
+{
+	std::function< void( DefaultTexturesDataPtr txData, IPluginPtr plugin )> recursiveUpdate;
+	recursiveUpdate = [ & ]( DefaultTexturesDataPtr txData, IPluginPtr plugin ){
+		if( plugin == nullptr )
+		{
+			return;
+		}
+		recursiveUpdate( txData, plugin->GetPrevPlugin() );
+		UpdateTexturesData( txData, plugin );
+	};
+
+	auto psc = std::static_pointer_cast< DefaultPixelShaderChannel >( m_finalizePSC->GetChannel() );
+	if( psc )
+	{
+		auto txData = psc->GetTexturesDataImpl();
+		txData->ClearAll();
+		recursiveUpdate( txData, m_prevPlugin );
+	}
+}
+
+// *******************************
+//
+void								DefaultFinalizePlugin::UpdateTexturesData				( DefaultTexturesDataPtr txData, IPluginPtr plugin ) const
+{
+	auto psc = std::static_pointer_cast< model::DefaultPixelShaderChannel >( std::const_pointer_cast< model::IPixelShaderChannel >( plugin->GetPixelShaderChannel() ) ); //fantastic cast
+	if( psc )
+	{
+		for( auto tx : psc->GetTexturesDataImpl()->GetTextures() )
+		{
+			txData->AddTexture( tx );
+		}
+		for( auto anim : psc->GetTexturesDataImpl()->GetAnimations() )
+		{
+			txData->AddAnimation( anim );
+		}
+	}
+}
 
 } //model
 }  //bv

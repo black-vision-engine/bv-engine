@@ -7,6 +7,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
+#include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
@@ -194,6 +195,7 @@ void                                DefaultGradientPlugin::Update               
 		InitVertexAttributesChannel();
 	}
 
+	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
 	//bool hasPrevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
  //   

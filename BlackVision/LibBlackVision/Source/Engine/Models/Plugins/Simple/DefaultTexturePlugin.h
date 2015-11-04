@@ -38,8 +38,6 @@ class DefaultTexturePlugin : public BasePlugin< IPlugin >
 {
 protected:
 
-	DefaultPluginParamValModelPtr   m_paramValModel;
-
 	DefaultPixelShaderChannelPtr    m_psc;
 	DefaultVertexShaderChannelPtr   m_vsc;
 

@@ -13,14 +13,12 @@ namespace bv { namespace model
 
 // *************************************
 //
-bool		HelperVertexAttributesChannel::SetAttributesUpdate		( VertexAttributesChannelPtr vaChannel, bool stateChanged )
+void		HelperVertexAttributesChannel::SetAttributesUpdate		( VertexAttributesChannelPtr vaChannel )
 {
-	if( stateChanged && vaChannel )
+	if( vaChannel )
 	{
 		vaChannel->SetLastAttributeUpdateID( vaChannel->GetLastAttributeUpdateID() + 1 );
-		return true;
 	}
-	return false;
 }
 
 // *************************************
@@ -44,14 +42,12 @@ bool		HelperVertexAttributesChannel::PropagateAttributesUpdate		( VertexAttribut
 
 // *************************************
 //
-bool		HelperVertexAttributesChannel::SetTopologyUpdate		( VertexAttributesChannelPtr vaChannel, bool stateChanged )
+void		HelperVertexAttributesChannel::SetTopologyUpdate		( VertexAttributesChannelPtr vaChannel )
 {
-	if( stateChanged && vaChannel )
+	if( vaChannel )
 	{
 		vaChannel->SetLastTopologyUpdateID( vaChannel->GetLastTopologyUpdateID() + 1 );
-		return true;
 	}
-	return false;
 }
 
 // *************************************

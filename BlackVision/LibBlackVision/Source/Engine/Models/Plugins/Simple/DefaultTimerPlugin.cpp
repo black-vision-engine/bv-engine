@@ -5,6 +5,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
+#include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 #include "Assets/Font/FontLoader.h"
@@ -356,6 +357,7 @@ bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr
 			{
 				txData->AddTexture( txDesc );
 			}
+			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
             m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
@@ -405,6 +407,8 @@ void                                DefaultTimerPlugin::Update                  
 
     m_paramValModel->Update();
 
+	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+	
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
 }
@@ -492,7 +496,7 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
 
     TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, false );
  
-	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel, true );
+	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
     //m_vaChannel->SetNeedsTopologyUpdate( true );
 }
 

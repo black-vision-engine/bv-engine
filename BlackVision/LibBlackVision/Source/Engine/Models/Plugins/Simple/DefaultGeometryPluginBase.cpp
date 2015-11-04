@@ -67,7 +67,7 @@ void DefaultGeometryPluginBase::InitGeometry()
 	{
 		m_vaChannel->ClearAll();
 	}
-	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel, true );
+	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
 
     auto gens = GetGenerators();
 

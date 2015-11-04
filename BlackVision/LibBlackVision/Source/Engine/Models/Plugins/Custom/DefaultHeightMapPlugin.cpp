@@ -7,6 +7,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
+#include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
@@ -204,8 +205,8 @@ DefaultHeightMapPlugin::DefaultHeightMapPlugin         ( const std::string & nam
     , m_paramValModel( model )
     , m_hmRawData( nullptr )
 {
-    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
-    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
+    m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
+    m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
     InitAttributesChannel( prev );
 
@@ -295,6 +296,7 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( AssetDes
         SetTextureParams( ( TextureSlot ) curNumTextures, txDesc.get() );
 
         txData->AddTexture( txDesc );
+		HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
         return true;
     }
@@ -331,6 +333,8 @@ void                                DefaultHeightMapPlugin::Update              
     m_paramValModel->Update();
 
 	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
+	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+
     //m_vaChannel->SetNeedsAttributesUpdate( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() );
 
     m_vsc->PostUpdate();

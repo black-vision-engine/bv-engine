@@ -7,6 +7,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
+#include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 
 #include "Mathematics/Transform/MatTransform.h"
@@ -234,6 +235,7 @@ void							DefaultTextPlugin::LoadTexture(	DefaultTexturesDataPtr txData,
 		{
 			txData->AddTexture( txDesc );
 		}
+		HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 	}
 
 	txDesc->SetBits( res );
@@ -364,6 +366,8 @@ void                                DefaultTextPlugin::Update                   
 	{
 		InitVertexAttributesChannel();
 	}
+
+	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();
@@ -515,7 +519,7 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 
 	ScaleToMaxTextLength();
 
-	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel, true );
+	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
 }
 
 // *************************************

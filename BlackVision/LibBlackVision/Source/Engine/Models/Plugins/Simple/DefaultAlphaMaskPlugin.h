@@ -69,7 +69,7 @@ private:
 	void										InitVertexAttributesChannel ();
     void                                        RecalculateUVChannel		();
 
-	void										RegisterEvaluators			( IPluginPtr prev, const std::vector< std::string > & vsParamNames, const std::vector< std::string > & psParamNames ); 
+	//void										RegisterEvaluators			( IPluginPtr prev, const std::vector< std::string > & vsParamNames, const std::vector< std::string > & psParamNames ); 
 
 };
 

@@ -7,6 +7,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
+#include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultColorPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
@@ -132,36 +133,36 @@ void								DefaultAlphaMaskPlugin::SetPrevPlugin               ( IPluginPtr pre
 	}
 
     //FIXME: The hackiest of it all - added registered parameters to pass on to the engine - ten kod jest przestraszny i wykurwiscie niefajny
-    if( prev->GetTypeUid() == DefaultColorPluginDesc::UID() )
-    {
-		std::vector< std::string > psEval;
-		psEval.push_back( "color" );
-		RegisterEvaluators( prev, std::vector< std::string >(), psEval );
-    }
-    else if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() || prev->GetTypeUid() == DefaultAnimationPluginDesc::UID() )
-    {
-		std::vector< std::string > vsEval, psEval;
-		vsEval.push_back( "txMat" );
-		psEval.push_back( "alpha" );
-		RegisterEvaluators( prev, vsEval, psEval );
-    }
-    else if( prev->GetTypeUid() == DefaultTextPluginDesc::UID() )
-    {
-        std::vector< std::string > psEval;
-		psEval.push_back( "alpha" );
-		psEval.push_back( "color" );
-		RegisterEvaluators( prev, std::vector< std::string >(), psEval );
-    }
-	else if( prev->GetTypeUid() == DefaultGradientPluginDesc::UID() )
-    {
-		std::vector< std::string > vsEval, psEval;
-		vsEval.push_back( "txMat" );
-		psEval.push_back( "color1" );
-		psEval.push_back( "color2" );
-		psEval.push_back( "point1" );
-		psEval.push_back( "point2" );
-		RegisterEvaluators( prev, vsEval, psEval );
-    }
+ //   if( prev->GetTypeUid() == DefaultColorPluginDesc::UID() )
+ //   {
+	//	std::vector< std::string > psEval;
+	//	psEval.push_back( "color" );
+	//	RegisterEvaluators( prev, std::vector< std::string >(), psEval );
+ //   }
+ //   else if( prev->GetTypeUid() == DefaultTexturePluginDesc::UID() || prev->GetTypeUid() == DefaultAnimationPluginDesc::UID() )
+ //   {
+	//	std::vector< std::string > vsEval, psEval;
+	//	vsEval.push_back( "txMat" );
+	//	psEval.push_back( "alpha" );
+	//	RegisterEvaluators( prev, vsEval, psEval );
+ //   }
+ //   else if( prev->GetTypeUid() == DefaultTextPluginDesc::UID() )
+ //   {
+ //       std::vector< std::string > psEval;
+	//	psEval.push_back( "alpha" );
+	//	psEval.push_back( "color" );
+	//	RegisterEvaluators( prev, std::vector< std::string >(), psEval );
+ //   }
+	//else if( prev->GetTypeUid() == DefaultGradientPluginDesc::UID() )
+ //   {
+	//	std::vector< std::string > vsEval, psEval;
+	//	vsEval.push_back( "txMat" );
+	//	psEval.push_back( "color1" );
+	//	psEval.push_back( "color2" );
+	//	psEval.push_back( "point1" );
+	//	psEval.push_back( "point2" );
+	//	RegisterEvaluators( prev, vsEval, psEval );
+ //   }
 
     InitVertexAttributesChannel();
 
@@ -193,6 +194,7 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
     ctx->alphaCtx->blendEnabled = true;
+	HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 }
 
 // *************************************
@@ -214,7 +216,7 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( AssetDescCon
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultAlphaMaskPluginDesc::TextureName() );
-
+		
         //Alpha texture defaults
         txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
         txDesc->SetBorderColor( glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
@@ -228,6 +230,7 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( AssetDescCon
 			{
 				txData->AddTexture( txDesc );
 			}
+			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
             m_textureWidth = txDesc->GetWidth();
             m_textureHeight = txDesc->GetHeight();
@@ -278,6 +281,8 @@ void                                DefaultAlphaMaskPlugin::Update              
 	{
 		InitVertexAttributesChannel();
 	}
+
+	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -393,52 +398,52 @@ void     DefaultAlphaMaskPlugin::RecalculateUVChannel         ()
 	}
 }
 
-// *************************************
+//// *************************************
+////
+//void					DefaultAlphaMaskPlugin::RegisterEvaluators			( IPluginPtr prev, const std::vector< std::string > & vsParamNames, const std::vector< std::string > & psParamNames )
+//{
+//	for( auto paramName : vsParamNames )
+//	{
+//		assert( prev->GetParameter( paramName ) != nullptr );
+//	}
+//        
+//	if( prev->GetPluginParamValModel()->GetVertexShaderChannelModel() )
+//	{
+//		auto evaluatorsv = prev->GetPluginParamValModel()->GetVertexShaderChannelModel()->GetEvaluators();
+//		for( auto & eval : evaluatorsv )
+//		{
+//			for( auto & paramName : vsParamNames )
+//			{
+//				if( eval->GetParameter( paramName ) )
+//				{
+//					//FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
+//					std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetVertexShaderChannelModel() )->RegisterAll( eval );
+//				}
+//			}
+//		}
+//	}
 //
-void					DefaultAlphaMaskPlugin::RegisterEvaluators			( IPluginPtr prev, const std::vector< std::string > & vsParamNames, const std::vector< std::string > & psParamNames )
-{
-	for( auto paramName : vsParamNames )
-	{
-		assert( prev->GetParameter( paramName ) != nullptr );
-	}
-        
-	if( prev->GetPluginParamValModel()->GetVertexShaderChannelModel() )
-	{
-		auto evaluatorsv = prev->GetPluginParamValModel()->GetVertexShaderChannelModel()->GetEvaluators();
-		for( auto & eval : evaluatorsv )
-		{
-			for( auto & paramName : vsParamNames )
-			{
-				if( eval->GetParameter( paramName ) )
-				{
-					//FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
-					std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetVertexShaderChannelModel() )->RegisterAll( eval );
-				}
-			}
-		}
-	}
-
-	for( auto paramName : psParamNames )
-	{
-		assert( prev->GetParameter( paramName ) != nullptr );
-	}
-
-	if( prev->GetPluginParamValModel()->GetPixelShaderChannelModel() )
-	{
-		auto evaluatorsp = prev->GetPluginParamValModel()->GetPixelShaderChannelModel()->GetEvaluators();
-		for( auto & eval : evaluatorsp )
-		{
-			for( auto & paramName : psParamNames )
-			{
-				if( eval->GetParameter( paramName ) )
-				{
-					//FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
-					std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( eval );
-				}
-			}
-		}
-	}
-}
+//	for( auto paramName : psParamNames )
+//	{
+//		assert( prev->GetParameter( paramName ) != nullptr );
+//	}
+//
+//	if( prev->GetPluginParamValModel()->GetPixelShaderChannelModel() )
+//	{
+//		auto evaluatorsp = prev->GetPluginParamValModel()->GetPixelShaderChannelModel()->GetEvaluators();
+//		for( auto & eval : evaluatorsp )
+//		{
+//			for( auto & paramName : psParamNames )
+//			{
+//				if( eval->GetParameter( paramName ) )
+//				{
+//					//FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak), robione podwojnie updaty, tego typu duperele
+//					std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( eval );
+//				}
+//			}
+//		}
+//	}
+//}
 
 // *************************************
 // 

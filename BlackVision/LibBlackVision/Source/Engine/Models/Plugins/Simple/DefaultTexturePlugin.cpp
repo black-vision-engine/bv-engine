@@ -138,11 +138,10 @@ void DefaultTexturePlugin::SetPrevPlugin( IPluginPtr prev )
 // *************************************
 // 
 DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
+    : BasePlugin< IPlugin >( name, uid, prev, model )
     , m_psc( nullptr )
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
-    , m_paramValModel( model )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
@@ -185,6 +184,7 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
 			{
 				txData->AddTexture( txDesc );
 			}
+			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
 			m_textureWidth = txAssetDescr->GetOrigTextureDesc()->GetWidth();
             m_textureHeight = txAssetDescr->GetOrigTextureDesc()->GetHeight();
@@ -229,6 +229,8 @@ void                                DefaultTexturePlugin::Update                
 	{
 		InitVertexAttributesChannel();
 	}
+	
+	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    

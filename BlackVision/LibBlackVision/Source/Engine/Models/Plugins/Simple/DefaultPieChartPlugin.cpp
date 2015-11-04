@@ -232,7 +232,7 @@ void DefaultPieChartPlugin::InitGeometry( float angleStart_, float angleEnd_ )
 	{
 		m_vaChannel->ClearAll();
 	}
-	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel, true );
+	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
 
     z1 = 0; z2 = 1; // FIXME: variable?
 
@@ -273,7 +273,7 @@ void                                DefaultPieChartPlugin::Update               
     {
         InitGeometry( asVal, aeVal );
 
-		//HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel, true );
+		//HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
         //m_vaChannel->SetNeedsTopologyUpdate( true );
 
         m_angleStart = asVal; m_angleEnd = aeVal;

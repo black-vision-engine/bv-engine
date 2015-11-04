@@ -48,15 +48,6 @@ private:
     DefaultTexturesDataPtr          m_texturesData;
 
     ParamFloatPtr                   m_paramFrameNum;
-    ParamFloatPtr                   m_paramWrapModeX;
-    ParamFloatPtr                   m_paramWrapModeY;
-    ParamFloatPtr                   m_paramFilteringMode;
-    ParamFloatPtr                   m_paramAttachMode;
-
-    TextureWrappingMode             m_lastTextureWrapModeX;
-    TextureWrappingMode             m_lastTextureWrapModeY;
-    TextureFilteringMode            m_lastTextureFilteringMode;
-    TextureAttachmentMode           m_lastTextureAttachMode;
 
 public:
 
@@ -75,14 +66,6 @@ public:
 private:
 
     void                                        InitVertexAttributesChannel ();
-
-    TextureWrappingMode                         GetWrapModeX                () const;
-    TextureWrappingMode                         GetWrapModeY                () const;
-    TextureFilteringMode                        GetFilteringMode            () const;
-    TextureAttachmentMode                       GetAttachementMode          () const;
-
-    bool                                        UpdateState                 ();
-
 };
 
 } // model

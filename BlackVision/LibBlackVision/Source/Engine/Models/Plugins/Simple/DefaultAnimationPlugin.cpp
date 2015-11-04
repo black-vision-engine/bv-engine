@@ -6,7 +6,10 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
+#include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
+
 #include "Engine/Models/Plugins/HelperUVGenerator.h"
 
 #include "Assets/Texture/AnimationAssetDescriptor.h"
@@ -128,6 +131,7 @@ void								DefaultAnimationPlugin::SetPrevPlugin               ( IPluginPtr pre
 	BasePlugin::SetPrevPlugin( prev );
 
     InitVertexAttributesChannel();
+	
 }
 
 // *************************************
@@ -139,8 +143,8 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
     , m_vaChannel( nullptr )
     , m_paramValModel( model )
 {
-    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
-    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
+    m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
+    m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
     SetPrevPlugin( prev );
 
@@ -153,18 +157,7 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
     auto psModel = PixelShaderChannelModel();
     
     m_paramFrameNum         = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "frameNum" ) );
-    m_paramWrapModeX        = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "wrapModeX" ) );
-    m_paramWrapModeY        = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "wrapModeY" ) );
-    m_paramFilteringMode    = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "filteringMode" ) );
-    m_paramAttachMode       = QueryTypedParam< ParamFloatPtr >( psModel->GetParameter( "attachmentMode" ) );
-
     assert( m_paramFrameNum );
-    assert( m_paramWrapModeX );
-    assert( m_paramWrapModeY );
-    assert( m_paramFilteringMode );
-    assert( m_paramAttachMode );
-
-    UpdateState();
 }
 
 // *************************************
@@ -194,6 +187,7 @@ bool                            DefaultAnimationPlugin::LoadResource  ( AssetDes
 			{
 				txData->AddAnimation( animDesc );
 			}
+			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
             return true;
         }
     }
@@ -232,12 +226,13 @@ void                                DefaultAnimationPlugin::Update              
     unsigned int frameNum = (unsigned int )m_paramFrameNum->Evaluate(); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
     m_texturesData->SetAnimationFrame( 0, frameNum ); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
 
-	HelperVertexAttributesChannel::SetAttributesUpdate( m_vaChannel, UpdateState() );
 	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
 	if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
 	{
 		InitVertexAttributesChannel();
 	}
+
+	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
 	//bool prevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
 	//if( m_vaChannel )
@@ -317,80 +312,6 @@ void		DefaultAnimationPlugin::InitVertexAttributesChannel		()
 
         m_vaChannel->AddConnectedComponent( connComp );
     }
-}
-
-namespace {
-
-// *************************************
-// FIXME: implement int parameters and bool parameters
-template< typename EnumClassType >
-inline EnumClassType EvaluateAsInt( ParamFloat * param )
-{
-    int val = int( param->Evaluate() );
-
-    return EnumClassType( val );
-}
-
-// *************************************
-// FIXME: implement int parameters and bool parameters
-template< typename EnumClassType >
-inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
-{
-    int val = int( param->Evaluate() );
-
-    return EnumClassType( val );
-}
-
-} //anonymous
-
-// *************************************
-// 
-TextureWrappingMode                         DefaultAnimationPlugin::GetWrapModeX            () const
-{
-    return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeX );
-}
-
-// *************************************
-// 
-TextureWrappingMode                         DefaultAnimationPlugin::GetWrapModeY            () const
-{
-    return EvaluateAsInt< TextureWrappingMode >( m_paramWrapModeY );
-}
-
-// *************************************
-// 
-TextureFilteringMode                        DefaultAnimationPlugin::GetFilteringMode        () const
-{
-    return EvaluateAsInt< TextureFilteringMode >( m_paramFilteringMode );
-}
-
-// *************************************
-// 
-TextureAttachmentMode                       DefaultAnimationPlugin::GetAttachementMode      () const
-{
-    return EvaluateAsInt< TextureAttachmentMode >( m_paramAttachMode );
-}
-
-// *************************************
-// 
-bool                                        DefaultAnimationPlugin::UpdateState             ()
-{
-	auto wmx = GetWrapModeX();
-	auto wmy = GetWrapModeY();
-	auto fm = GetFilteringMode();
-	auto am = GetAttachementMode();
-
-	if( wmx != m_lastTextureWrapModeX || wmy != m_lastTextureWrapModeY || 
-		fm != m_lastTextureFilteringMode || am != m_lastTextureAttachMode )
-	{
-		m_lastTextureWrapModeX      = wmx;
-		m_lastTextureWrapModeY      = wmy;
-		m_lastTextureFilteringMode  = fm;
-		m_lastTextureAttachMode     = am;
-		
-		return true;
-	}
-	return false;
 }
 
 } // model

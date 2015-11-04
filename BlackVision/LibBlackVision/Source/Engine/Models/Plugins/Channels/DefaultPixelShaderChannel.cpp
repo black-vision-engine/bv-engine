@@ -7,16 +7,22 @@ namespace bv { namespace model {
 
 // ******************************
 //
-DefaultPixelShaderChannel::DefaultPixelShaderChannel  ( const std::string & shaderSource, IValueSetConstPtr values, RendererContextPtr ctx )
+DefaultPixelShaderChannel::DefaultPixelShaderChannel  ( const std::string & shaderSource, IValueSetConstPtr values, DefaultTexturesDataPtr txData, RendererContextPtr ctx )
     : ShaderChannel( shaderSource, values )
-    , m_rendererContext( ctx ) 
+    , m_rendererContext( ctx )
+	, m_texturesData( txData )
+	, m_texturesDataUpdateID( 0 )
+	, m_rendererContexUpdateID( 0 )
 {
     if ( ctx == nullptr )
     {
         m_rendererContext = RendererContext::CreateDefault();
     }
 
-    m_texturesData = std::make_shared< DefaultTexturesData >();
+	if( txData == nullptr )
+	{
+		m_texturesData = std::make_shared< DefaultTexturesData >();
+	}
 }
 
 // ******************************
@@ -64,7 +70,35 @@ DefaultTexturesDataPtr       DefaultPixelShaderChannel::GetTexturesDataImpl ()
 
 // ******************************
 //
-DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create              ( const std::string & shaderFile, IValueSetConstPtr values, RendererContextPtr ctx )
+UInt64						DefaultPixelShaderChannel::GetTexturesDataUpdateID		() const
+{
+	return m_texturesDataUpdateID;
+}
+
+// ******************************
+//
+void						DefaultPixelShaderChannel::SetTexturesDataUpdateID		( UInt64 updateID )
+{
+	m_texturesDataUpdateID = updateID;
+}
+
+// ******************************
+//
+UInt64						DefaultPixelShaderChannel::GetRendererContextUpdateID	() const
+{
+	return m_rendererContexUpdateID;
+}
+
+// ******************************
+//
+void						DefaultPixelShaderChannel::SetRendererContextUpdateID	( UInt64 updateID )
+{
+	m_rendererContexUpdateID = updateID;
+}
+
+// ******************************
+//
+DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create              ( const std::string & shaderFile, IValueSetConstPtr values, DefaultTexturesDataPtr txData, RendererContextPtr ctx )
 {
     auto shaderSource = ReadShaderFromFile( shaderFile );
 
@@ -72,7 +106,7 @@ DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create              ( co
     {
         assert( values );
         
-		return std::make_shared< DefaultPixelShaderChannel >( shaderSource, values, ctx );
+		return std::make_shared< DefaultPixelShaderChannel >( shaderSource, values, txData, ctx );
     }
 
     return nullptr;
@@ -80,9 +114,9 @@ DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create              ( co
 
 // ******************************
 //
-DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create              ( IValueSetConstPtr values, RendererContextPtr ctx )
+DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create              ( IValueSetConstPtr values, DefaultTexturesDataPtr txData, RendererContextPtr ctx )
 {
-    return std::make_shared< DefaultPixelShaderChannel >( "", values, ctx );
+    return std::make_shared< DefaultPixelShaderChannel >( "", values, txData, ctx );
 }
 
 // ******************************
@@ -90,7 +124,7 @@ DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create              ( IV
 DefaultPixelShaderChannelPtr DefaultPixelShaderChannel::Create ()
 {
     //FIXME: remove this DefaultParamValModel construction from here (implement decent ShaderChannel in case of nullptr input IValueSet - simply return empty vector there)
-    return std::make_shared< DefaultPixelShaderChannel >( "", std::make_shared< DefaultParamValModel >(), nullptr );
+    return std::make_shared< DefaultPixelShaderChannel >( "", std::make_shared< DefaultParamValModel >(), nullptr, nullptr );
 }
 
 } //model
