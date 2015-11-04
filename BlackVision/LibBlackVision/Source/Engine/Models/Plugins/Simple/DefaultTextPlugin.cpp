@@ -145,13 +145,17 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 
     transformEffectVal2Evaluator->Parameter()->SetVal( 5.f, TimeType( 10.f ) );
 
-    animScaleOffsetEvaluator->Parameter()->SetVal( -1.f, TimeType( 0.f ) );
-    animScaleOffsetEvaluator->Parameter()->SetVal( 1.f, TimeType( 6.f ) );
+    animScaleOffsetEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.f ) );
+    animScaleOffsetEvaluator->Parameter()->SetVal( 1.f, TimeType( 5.f ) );
+
+    animScaleOffsetEvaluator->Parameter()->AccessInterpolator().SetWrapPostMethod( WrapMethod::pingPong );
+
     animScaleEvaluator->Parameter()->SetVal( 1.5f, TimeType( 0.f ) );
 
-    animAlphaOffsetEvaluator->Parameter()->SetVal( -1.f, TimeType( 0.f ) );
-    animAlphaOffsetEvaluator->Parameter()->SetVal( 1.f, TimeType( 6.f ) );
-    animAlphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.f ) );
+    animAlphaOffsetEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.f ) );
+    animAlphaOffsetEvaluator->Parameter()->SetVal( 1.f, TimeType( 5.f ) );
+    animAlphaOffsetEvaluator->Parameter()->AccessInterpolator().SetWrapPostMethod( WrapMethod::pingPong );
+    animAlphaEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.f ) );
 
 
 

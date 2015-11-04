@@ -92,7 +92,7 @@ mat4 translateMatrix( vec3 transVec )
 mat4 animLetterTransform()
 {
     float lf  = animScaleOffset * float( cc_num_total + 1 );
-    int l = int( round( lf ) );
+    int l = int( floor( lf ) );
     
     if( l < 0 )
     {
@@ -107,7 +107,7 @@ mat4 animLetterTransform()
     if( cc_num == l )
     {
         float so = lf - float( l );
-        float realScale = animScale * so;
+        float realScale = so + animScale * ( 1.0 - so );
         
         return scaleMatrix( vec3( realScale, realScale, 1.0 ) );
     }

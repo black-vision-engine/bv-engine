@@ -83,7 +83,7 @@ vec4 pseudoRandonColorAffine( vec4 begin, vec4 end, int i, int total )  // Linea
 float animateAlpha()
 {
     float lf  = animAlphaOffset * float( cc_num_total + 1 );
-    int l = int( round( lf ) );
+    int l = int( floor( lf ) );
     
     if( l < 0 )
     {
@@ -98,9 +98,9 @@ float animateAlpha()
     if( cc_num == l )
     {
         float so = lf - float( l );
-        float realAlpha = animAlpha * so;
+        float realAlpha = alpha * so + animAlpha * ( 1.0 - so );
         
-        return 0.0;
+        return realAlpha;
     }
     else if( cc_num > l ) 
     {
@@ -108,7 +108,7 @@ float animateAlpha()
     }
     else if( cc_num < l )
     {
-        return 0.0;
+        return alpha;
     }
 }
 
@@ -133,8 +133,7 @@ void main()
         c = gradientColor( rcc_beginColor, rcc_endColor, cc_num, cc_num_total );
         break;
     case 4:
-        //a = animateAlpha();
-        a = 0.0;
+        a = animateAlpha();
         break;
     default:
         break;
