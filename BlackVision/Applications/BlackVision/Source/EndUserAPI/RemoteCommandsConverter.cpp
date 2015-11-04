@@ -15,6 +15,7 @@ RemoteCommandsConverter::RemoteCommandsConverter()
     RegisterEvent( ParamKeyEvent::Name(), ParamKeyEvent::Create );
     RegisterEvent( SceneStructureEvent::Name(), SceneStructureEvent::Create );
     RegisterEvent( ProjectStructureEvent::Name(), ProjectStructureEvent::Create );
+    RegisterEvent( NewInfoEvent::Name(), NewInfoEvent::Create );
 }
 
 // ***********************

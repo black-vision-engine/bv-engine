@@ -128,7 +128,7 @@ Json::Value GetRequestParamValue( std::string& request )
 //
 void SendOnSceneStructureResponse( const std::string & cmd, const std::string & msgKey, const Json::Value & msgVal )
 {
-    //Log::A( "OK", cmd );
+    LOG_MESSAGE( SeverityLevel::info ) << cmd << " OK";
 
     Json::Value scenes;
 
@@ -139,10 +139,9 @@ void SendOnSceneStructureResponse( const std::string & cmd, const std::string & 
 
     wstring WS = wstring( S.begin(), S.end() );
 
-    //ResponseMsg msg;
-    //msg.msg     = WS;
-    //msg.sock_id = evtStructure->sock_id;
-    //SocketWrapper::AddMsg( msg );
+    ResponseEventPtr responseEvent = std::make_shared<ResponseEvent>();
+    responseEvent->Response = WS;
+    GetDefaultEventManager().QueueResponse( responseEvent );
 }
 
 // ***********************

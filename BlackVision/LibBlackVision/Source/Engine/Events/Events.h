@@ -236,8 +236,6 @@ public:
 
 DEFINE_PTR_TYPE(VideoCardEvent)
 
-
-
 // ************************************* Information Event *************************************
 class InfoEvent : public BaseEvent
 {
@@ -280,6 +278,7 @@ public:
 };
 
 DEFINE_PTR_TYPE(InfoEvent)
+
 
 // ************************************* SceneStructureEvent Event *************************************
 class SceneStructureEventDeprecated : public BaseEvent
@@ -670,9 +669,49 @@ public:
     static std::string&             Name                ();
     virtual const std::string &     GetName             () const;
     virtual EventType               GetEventType        () const;
-
 };
 
-DEFINE_PTR_TYPE(ResponseEvent)
+DEFINE_PTR_TYPE( ResponseEvent )
+
+    
+// ************************************* Information Event *************************************
+// Rename me later
+class NewInfoEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        TreeStructure,
+        Performance,
+        Timelines,
+        NodeInfo,
+        Videocards,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    NewInfoEvent::Command       InfoRequest;
+    std::string                 NodeName;
+
+public:
+    explicit                        NewInfoEvent   () {}
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+
+private:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
+};
+
+DEFINE_PTR_TYPE( NewInfoEvent )
 
 } //bv

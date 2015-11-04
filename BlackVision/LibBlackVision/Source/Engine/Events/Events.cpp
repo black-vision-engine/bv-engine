@@ -39,9 +39,6 @@ std::string VideoCardEvent::m_sEventName           = "Event_VideoCard";
 const EventType SetParamEvent::m_sEventType       = 0x10000006;
 std::string SetParamEvent::m_sEventName           = "Event_SetParam";
 
-const EventType InfoEvent::m_sEventType       = 0x10000007;
-std::string InfoEvent::m_sEventName           = "Event_Info";
-
 const EventType TimeLineCmd::m_sEventType       = 0x10000009;
 std::string TimeLineCmd::m_sEventName           = "Event_Timeline";
 
@@ -54,7 +51,8 @@ std::string WidgetCmd::m_sEventName           = "Event_Widget";
 const EventType SceneStructureEventDeprecated::m_sEventType       = 0x10000012;
 std::string SceneStructureEventDeprecated::m_sEventName           = "Event_SceneStructure";
 
-
+const EventType InfoEvent::m_sEventType             = 0x10000007;
+std::string InfoEvent::m_sEventName                 = "Event_Info";
 
 
 
@@ -74,16 +72,22 @@ std::string ProjectStructureEvent::m_sEventName     = "Event_ProjectStructure";
 const EventType ResponseEvent::m_sEventType         = 0x30000008;
 std::string ResponseEvent::m_sEventName             = "Event_Response";
 
+const EventType NewInfoEvent::m_sEventType          = 0x30000007;
+std::string NewInfoEvent::m_sEventName              = "Event_Info";
+
+
 // ************************************* Events Serialization *****************************************
 
 namespace Serial
 {
+// Key names used to serialization.
+
 const std::wstring EMPTY_WSTRING            = L"";
 
 const std::wstring EVENT_TYPE_WSTRING       = L"cmd";
 const std::wstring NODE_NAME_WSTRING        = L"NodeName";
 const std::wstring PLUGIN_NAME_WSTRING      = L"PluginName";
-const std::wstring COMMAND_WSTRING    = L"Command";
+const std::wstring COMMAND_WSTRING          = L"Command";
 
 // LoadAssetEvent
 const std::wstring ASSET_DATA_WSTRING       = L"AssetData";
@@ -107,7 +111,7 @@ const std::wstring COMMAND_SET_NODE_VISIBLE_WSTRING     = L"SetNodeVisible";
 const std::wstring COMMAND_SET_NODE_INVISIBLE_WSTRING   = L"SetNodeInvisible";
 
 // ProjectStructureEvent
-const std::wstring REQUEST_WSTRING              = L"request";
+const std::wstring REQUEST_WSTRING                          = L"request";
 
 const std::wstring COMMAND_NEW_PROJECT_WSTRING              = L"NEW_PROJECT";
 const std::wstring COMMAND_SET_CURRENT_PROJECT_WSTRING      = L"SET_CURRENT_PROJECT";
@@ -118,7 +122,15 @@ const std::wstring COMMAND_LIST_CATEGORIES_NAMES_WSTRING    = L"LIST_CATEGORIES_
 const std::wstring COMMAND_LIST_PROJECTS_WSTRING            = L"LIST_PROJECTS";
 
 // ResponseEvent
-const std::wstring RESPONSE_WSTRING             = L"response";
+const std::wstring RESPONSE_WSTRING                     = L"response";
+
+// InfoEvent
+const std::wstring COMMAND_TREE_STRUCTURE_WSTRING       = L"tree_structure";
+const std::wstring COMMAND_PERFORMANCE_WSTRING          = L"performance";
+const std::wstring COMMAND_TIMELINES_WSTRING            = L"timelines";
+const std::wstring COMMAND_NODE_INFO_WSTRING            = L"node_info";
+const std::wstring COMMAND_VIDEO_CARDS_WSTRING          = L"videocards";
+
 
 }
 
@@ -530,7 +542,6 @@ const std::string &     VideoCardEvent::GetName           () const
 
 
 
-
 InfoEvent::InfoEvent         () 
 {
   
@@ -593,11 +604,11 @@ const std::wstring &         InfoEvent::GetAddStrData    () const
 }
 
 
-SceneStructureEventDeprecated::SceneStructureEventDeprecated         () 
-{
-  
-}
 
+
+
+SceneStructureEventDeprecated::SceneStructureEventDeprecated         () 
+{}
 
 // *************************************
 //
@@ -1248,6 +1259,91 @@ const std::string&  ResponseEvent::GetName() const
 //
 EventType           ResponseEvent::GetEventType() const
 {   return this->m_sEventType; }
+
+
+
+//******************* InfoEvent *************
+
+// *************************************
+//
+void                NewInfoEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
+    ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( InfoRequest ) );
+    ser.SetAttribute( Serial::NODE_NAME_WSTRING, toWString( NodeName ) );
+}
+
+// *************************************
+//
+IEventPtr                NewInfoEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
+    {
+        NewInfoEventPtr newEvent    = std::make_shared<NewInfoEvent>();
+        newEvent->NodeName          = toString( deser.GetAttribute( Serial::NODE_NAME_WSTRING ) );
+        newEvent->InfoRequest       = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
+        
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               NewInfoEvent::Clone             () const
+{   return IEventPtr( new NewInfoEvent( *this ) );  }
+
+// *************************************
+//
+EventType           NewInfoEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        NewInfoEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  NewInfoEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           NewInfoEvent::GetEventType() const
+{   return this->m_sEventType; }
+
+// *************************************
+//
+std::wstring NewInfoEvent::CommandToWString    ( Command cmd )
+{
+    if( cmd == Command::NodeInfo )
+        return Serial::COMMAND_NODE_INFO_WSTRING;
+    else if( cmd == Command::Performance )
+        return Serial::COMMAND_PERFORMANCE_WSTRING;
+    else if( cmd == Command::Timelines )
+        return Serial::COMMAND_TIMELINES_WSTRING;
+    else if( cmd == Command::TreeStructure )
+        return Serial::COMMAND_TREE_STRUCTURE_WSTRING;
+    else if( cmd == Command::Videocards )
+        return Serial::COMMAND_VIDEO_CARDS_WSTRING;
+    else
+        return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
+}
+
+// *************************************
+//
+NewInfoEvent::Command NewInfoEvent::WStringToCommand    ( const std::wstring& string )
+{
+    if( string == Serial::COMMAND_NODE_INFO_WSTRING )
+        return Command::NodeInfo;
+    else if( string == Serial::COMMAND_PERFORMANCE_WSTRING )
+        return Command::Performance;
+    else if( string == Serial::COMMAND_TIMELINES_WSTRING)
+        return Command::Timelines;
+    else if( string == Serial::COMMAND_TREE_STRUCTURE_WSTRING )
+        return Command::TreeStructure;
+    else if( string == Serial::COMMAND_VIDEO_CARDS_WSTRING )
+        return Command::Videocards;
+    else
+        return Command::Fail;
+}
 
 
 

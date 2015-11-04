@@ -31,8 +31,8 @@ void                JsonCommandsConverter::QueueEvent          ( const std::wstr
     }
 
     IEventPtr newEvent = CreateEvent( deserializer );
-
-    GetDefaultEventManager().ConcurrentQueueEvent( newEvent );
+    if( newEvent != nullptr )
+        GetDefaultEventManager().ConcurrentQueueEvent( newEvent );
 }
 
 // ***********************
