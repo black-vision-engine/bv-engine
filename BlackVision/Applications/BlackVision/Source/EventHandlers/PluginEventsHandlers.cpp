@@ -2,7 +2,7 @@
 
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Assets/AssetManager.h"
-#include "Engine/Models/Interfaces/IOverrideState.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 
 
@@ -114,9 +114,22 @@ void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
     {
         if( setParamEvent->ParamName == "alpha" )
         {
-			auto state = node->GetOverrideState();
-			auto alphaParam = state->GetAlphaParam();
-				 
+            auto sceneNodeEffect = node->GetNodeEffect();
+
+            ParamFloatPtr alphaParam;
+
+            if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_ALPHA_MASK )
+            {
+                auto typeEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( sceneNodeEffect );
+                typeEffect->GetParamAlpha();
+            }
+
+            if( !alphaParam )
+            {
+                assert( false );
+                return;
+            }
+
 			float floatValue = stof( value );
 
             SetParameter( alphaParam, (bv::TimeType)keyTime, floatValue );

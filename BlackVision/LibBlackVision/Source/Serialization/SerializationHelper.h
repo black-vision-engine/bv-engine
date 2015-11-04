@@ -123,9 +123,14 @@ T String2T( const std::pair< T, const char* > t2s[], const std::string& s )
             return t2s[i].first;
 }
 
-}
+template< typename T >
+T String2T( std::string s );
 
-}
+template< typename T, typename U >
+std::pair< T, U > String2Pair( std::string s );
+
+} // SerializationHelper
+} // bv
 
 namespace std
 {

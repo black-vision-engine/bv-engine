@@ -40,9 +40,22 @@ void    NodeMaskRenderLogic::RenderNode                  ( Renderer * renderer, 
 
         renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
         renderer->ClearBuffers();
-        
+
+        auto effect = node->GetNodeEffect();
+
+        auto maskIdxVal = std::static_pointer_cast< ValueInt >( effect->GetValue( "bgIdx" ) );
+        auto fgIdxVal = std::static_pointer_cast< ValueInt >( effect->GetValue( "fgIdx" ) );
+        auto alphaVal = effect->GetValue( "alpha" );
+
+        auto maskIdx= maskIdxVal->GetValue();
+        auto fgIdx = fgIdxVal->GetValue();
+
+        assert( maskIdx == 0 || maskIdx == 1 );
+        assert( fgIdx == 0 || fgIdx == 1 );
+        assert( maskIdx != fgIdx );
+
         // MASK
-        GetRenderLogic()->RenderNode( renderer, node->GetChild( 1 ) ); 
+        GetRenderLogic()->RenderNode( renderer, node->GetChild( maskIdx ) );
 
         GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
         GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
@@ -50,9 +63,9 @@ void    NodeMaskRenderLogic::RenderNode                  ( Renderer * renderer, 
         renderer->ClearBuffers();
 
         // FOREGROUND
-        GetRenderLogic()->RenderNode( renderer, node->GetChild( 0 ) ); 
+        GetRenderLogic()->RenderNode( renderer, node->GetChild( fgIdx ) ); 
 
-        GetOffscreenRenderLogic()->DrawAMTopTwoRenderTargets( renderer, node->GetOverrideAlphaVal() );
+        GetOffscreenRenderLogic()->DrawAMTopTwoRenderTargets( renderer, alphaVal.get() );
     
         GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
         GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );

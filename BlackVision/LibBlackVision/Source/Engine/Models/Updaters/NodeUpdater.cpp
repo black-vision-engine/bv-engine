@@ -17,10 +17,12 @@
 #include "Engine/Models/NodeEffects/ModelNodeEffectDefault.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectWireframe.h"
 
 #include "Engine/Graphics/Effects/NodeEffects/NodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/NodeMaskNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/WireframeNodeEffect.h"
 
 
 namespace bv 
@@ -112,44 +114,7 @@ NodeUpdater::~NodeUpdater    ()
 
 // *****************************
 //
-void    NodeUpdater::DoUpdate        ()
-{
-    //FIXME: czy jesli node nie jest widoczne to trzeba w ogole updatowac stan - zakladam, ze nie, ale trzeba sie upewnic
-    //FIXME: it is just a single bool to set, so no there is no fancy machinery for testing whehter any update is necessary 
-    if( m_modelNode->IsVisible() )
-    {
-        m_sceneNode->SetVisible( true );
-
-        // Add, when all mechanisms are implemented
-        // UpdateNodeEffect();
-        //FIXME: until global effect is implemented, only one state can be used
-        assert( !(m_modelNode->IsStateOverridenAM() && m_modelNode->IsStateOverridenNM()) );
-
-        m_sceneNode->SetOverridenAM( m_modelNode->IsStateOverridenAM() );
-        m_sceneNode->SetOverridenNM( m_modelNode->IsStateOverridenNM() );
-
-        UpdateTransform();
-
-        if( m_hasEffect )
-        {
-            if( !m_timeInvariantVertexData )
-            {
-                UpdateGeometry();
-            }
-
-            UpdateTexturesData();
-            UpdateRendererState();
-        }
-    }
-    else
-    {
-        m_sceneNode->SetVisible( false );
-    }
-}
-
-// *****************************
-//
-void    NodeUpdater::DoUpdateTM             ()
+void    NodeUpdater::DoUpdate               ()
 {
     //FIXME: czy jesli node nie jest widoczne to trzeba w ogole updatowac stan - zakladam, ze nie, ale trzeba sie upewnic
     //FIXME: it is just a single bool to set, so no there is no fancy machinery for testing whehter any update is necessary 
@@ -192,7 +157,14 @@ void    NodeUpdater::UpdateNodeEffect       ()
             case NodeEffectType::NET_DEFAULT:
             {
                 auto defaultEffect = std::static_pointer_cast< model::ModelNodeEffectDefault >( nodeEffect );
-                { defaultEffect; }
+
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+
+                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_DEFAULT )
+                {
+                    sceneNodeEffect = std::make_shared< NodeEffect >( NodeEffect::Type::T_DEFAULT );
+                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
+                }
                 break;
             }
             case NodeEffectType::NET_ALPHA_MASK:
@@ -202,7 +174,7 @@ void    NodeUpdater::UpdateNodeEffect       ()
 
                 auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
-                if ( !sceneNodeEffect )
+                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_ALPHA_MASK )
                 {
                     sceneNodeEffect = std::make_shared< AlphaMaskNodeEffect >();
                     m_sceneNode->SetNodeEffect( sceneNodeEffect );
@@ -223,10 +195,11 @@ void    NodeUpdater::UpdateNodeEffect       ()
 
                 auto paramBgIdx = nodeMaskEffect->GetParamBgIdx();
                 auto paramFgIdx = nodeMaskEffect->GetParamFgIdx();
+                auto paramAlpha = nodeMaskEffect->GetParamAlpha();
 
                 auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
-                if ( !sceneNodeEffect )
+                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_NODE_MASK )
                 {
                     sceneNodeEffect = std::make_shared< NodeMaskNodeEffect >();
                     m_sceneNode->SetNodeEffect( sceneNodeEffect );
@@ -234,13 +207,27 @@ void    NodeUpdater::UpdateNodeEffect       ()
 
                 auto bgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramBgIdx->GetName() ) );
                 auto fgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramFgIdx->GetName() ) );
+                auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );
 
-                if ( bgIdxVal != nullptr && fgIdxVal != nullptr )
+                if ( bgIdxVal != nullptr && fgIdxVal != nullptr && alphaVal != nullptr )
                 {
                     bgIdxVal->SetValue( nodeMaskEffect->GetBackgroundChildIdx() );
                     fgIdxVal->SetValue( nodeMaskEffect->GetForegroundChildIdx() );
+                    alphaVal->SetValue( nodeMaskEffect->GetAlpha() );
                 }
 
+                break;
+            }
+            case NodeEffectType::NET_WIREFRAME:
+            {
+                auto nodeMaskEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( nodeEffect );
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+
+                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_WIREFRAME )
+                {
+                    sceneNodeEffect = std::make_shared< WireframeNodeEffect >();
+                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
+                }
                 break;
             }
             default:

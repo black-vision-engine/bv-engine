@@ -168,6 +168,10 @@ model::BasicNodePtr BVAppLogic::LoadScenes( const PathVec & pathVec )
         root->AddChildToModelOnly( std::const_pointer_cast< model::BasicNode >( scene ) );
     }
 
+    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline, m_renderer, GetTimelineManager() );
+    InitCamera( 500, 500 );
+    assert( m_bvScene );
+
     return root;
 }
 
@@ -199,18 +203,33 @@ void BVAppLogic::LoadScene          ( void )
             auto pm = ProjectManager::GetInstance();
 
             auto projectName = ConfigManager::GetString( "default_project_name" );
-            auto projectScenesNames = pm->ListScenesNames( projectName );
+            
+            if( !projectName.empty() )
+            {
+                auto projectScenesNames = pm->ListScenesNames( projectName );
 
-            root = LoadScenes( projectScenesNames );
+                if( !projectScenesNames.empty() )
+                {
+                    root = LoadScenes( projectScenesNames );
+                }
+            }
+            else
+            {
+                root = model::BasicNode::Create ("root", m_globalTimeline);
+                root->AddPlugin( "DEFAULT_TRANSFORM", "transform", m_globalTimeline ); 
+            }
         }
-
     }
     else
     {
         root = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_pluginsManager, GetTimelineManager(), m_globalTimeline );
     }
 
-    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", te, m_renderer, GetTimelineManager() );
+    if( !m_bvScene )  // FIXME: 
+    {
+        m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", te, m_renderer, GetTimelineManager() );
+    }
+
     assert( m_bvScene );
 }
 
@@ -279,8 +298,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
             
 			RefreshVideoInputScene();
 
-            m_renderLogic->RenderFrameTM( renderer, m_bvScene->GetEngineSceneRoot() );
-            // m_renderLogic->RenderFrame  ( renderer, m_bvScene->GetEngineSceneRoot() );
+            m_renderLogic->RenderFrame( renderer, m_bvScene->GetEngineSceneRoot() );
             m_renderLogic->FrameRendered( renderer );
         }
     }

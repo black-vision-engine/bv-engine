@@ -1,7 +1,6 @@
 #include "Engine/Models/BasicNode.h"
 
 #include "RemoteControlInterface.h"
-#include "Engine/Models/Interfaces/IOverrideState.h"
 #include "Engine/Models/BasicNode.h"
 //#include "Engine/Models/ModelScene.h"
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
@@ -10,6 +9,7 @@
 //#include "Engine/Models/Resources/TextureHelpers.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
 #include "Engine/Models/Plugins/Custom/DefaultHeightMapPlugin.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
 
 #include "structure/AssetManager.h"
 
@@ -33,6 +33,8 @@
 #include "Engine\Models\ModelNodeEditor.h"
 
 #include "Serialization/Json/JsonDeserializeObject.h"
+
+#include "Engine/Models/Updaters/UpdatersManager.h"
 
 #include <iomanip>
 #include <string>
@@ -659,6 +661,57 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
             // [czesio]
             // [{"name":"czesio", "scenes_count":123},{...},...]
         }
+        else if( evtStructure->command == L"LOAD_PROJECT" )
+        {
+            auto projName = std::string( evtStructure->request.begin(), evtStructure->request.end() );
+
+            auto projectScenesNames = pm->ListScenesNames( projName );
+
+            bool status = false;
+
+            if( !projectScenesNames.empty() )
+            {
+                UpdatersManager::Get().RemoveAllUpdaters();
+                
+                auto node = m_AppLogic->LoadScenes( projectScenesNames );
+                if( node )
+                {
+                    status = true;
+                }
+            }
+
+            if( status )
+            {
+                SendOnSceneStructureResponse( evtStructure, "LOAD_PROJECT", "status", "OK" );
+            }
+            else
+            {
+                SendOnSceneStructureResponse( evtStructure, "LOAD_PROJECT", "status", "ERROR" );
+            }
+        } 
+        else if( evtStructure->command == L"SAVE_SCENE" )
+        {
+            wstring NodeName = evtStructure->NodeName;
+            string nodeNameStr( NodeName.begin(), NodeName.end() );
+
+            auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot();
+            auto node = root->GetNode( nodeNameStr );
+
+			if( node == nullptr && root->GetName() == nodeNameStr )
+			{
+				Log::A( "OK", "root node is node you're looking for [" + nodeNameStr + "] Applying jedi fix now." );
+				node = root;
+			}
+
+            auto basicNode = std::static_pointer_cast< model::BasicNode >( node );
+
+            auto projName = std::string( evtStructure->request.begin(), evtStructure->request.end() );
+
+            pm->AddScene( basicNode, "proj01", "dupa.scn" );
+
+
+            SendOnSceneStructureResponse( evtStructure, "SAVE_SCENE", "status", "OK" );
+        }
     }
 }
 
@@ -935,8 +988,21 @@ void RemoteControlInterface::OnSetParam ( bv::IEventPtr evt )
             
             if(evtSetParam->ParamName == L"alpha")
             {
-				 auto state = node->GetOverrideState();
-				 auto alpha_param = state->GetAlphaParam();
+                 auto sceneNodeEffect = node->GetNodeEffect();
+
+                 ParamFloatPtr alpha_param;
+
+                 if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_ALPHA_MASK )
+                 {
+                    auto typeEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( sceneNodeEffect );
+                    typeEffect->GetParamAlpha();
+                 }
+
+                 if( !alpha_param )
+                 {
+                     assert( false );
+                     return;
+                 }
 
 				 wstring value = evtSetParam->Value;
 				 

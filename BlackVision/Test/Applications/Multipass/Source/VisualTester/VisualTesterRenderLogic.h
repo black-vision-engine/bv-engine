@@ -1,8 +1,8 @@
 #pragma once
 
 
-#include "RenderLogic.h"
-#include "OffscreenRenderLogic.h"
+#include "RenderLogicTst.h"
+#include "OffscreenRenderLogicTst.h"
 #include <string>
 
 namespace bv
@@ -17,7 +17,7 @@ typedef double (*SampleCompareFunction)( const char* refImage, const char* rende
 typedef void (*SampleDiffWriteFunction)( double stepError, char* diffImage );
 
 class VisualTesterRenderLogic :
-	public RenderLogic
+	public RenderLogicTst
 {
 private:
 	SampleCompareFunction		currentCompareFunction;
@@ -38,6 +38,4 @@ public:
 	bool makeDiffImage;
 };
 
-
-
-}
+} //bv

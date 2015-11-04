@@ -33,6 +33,7 @@ public:
 
     Key< TimeValueT, ValueT > operator+( const Key< TimeValueT, ValueT > &that ) const { return Key< TimeValueT, ValueT >( t + that.t, ValueT( val + that.val ) ); }
     Key< TimeValueT, ValueT > operator-( const Key< TimeValueT, ValueT > &that ) const { return Key< TimeValueT, ValueT >( t - that.t, ValueT( val - that.val ) ); }
+    void operator=( const std::pair< TimeValueT, ValueT >& p ) { t = p.first; val = p.second; }
 };
 
 template<class TimeValueT, class ValueT>

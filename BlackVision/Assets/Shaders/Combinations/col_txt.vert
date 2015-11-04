@@ -66,7 +66,7 @@ mat4 linearRotationCC( float begin, float end, int i, int total )
 
 mat4 linearScaleCC( float begin, float end, int i, int total )
 {
-    float scale = rand( float( i ) / float( total ) );
+    float scale = linearInterpolation( begin, end, float( i ) / float( total ) );
     
     return scaleMatrix( vec3( 1.f, scale, 1.0 ) );
 }

@@ -24,6 +24,8 @@ template< class TimeValueT, class ValueT >
 class IEvaluator : public ISerializable // FIXME perhaps not every evaluator has to be serializable
 {
 public:
+    virtual void                                Deserialize( const IDeserializer& deser ) = 0;
+    
     virtual ValueT                              Evaluate( TimeValueT t ) const                      = 0;
     virtual void                                SetValue( TimeValueT t, ValueT v )                  = 0;
     virtual EvaluatorType                       GetType()                                           = 0;

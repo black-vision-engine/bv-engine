@@ -1,5 +1,4 @@
 #pragma warning(disable :4996)
-#include "Engine/Models/Interfaces/IOverrideState.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/BasicNode.h"
 //#include "Engine/Models/Resources/TextHelpers.h"
@@ -11,6 +10,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultColorPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
 
 #include "Engine/Models/Plugins/PluginUtils.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
@@ -184,11 +184,13 @@ namespace bv{
     //
     bool TreeBuilder::AttachAlphaPlugin(model::BasicNodePtr node,XMLPlugin* plugin)
 	{
-        auto state = node->GetOverrideState();
-        auto alpha = state->GetAlphaParam();
+        auto newEffect = std::make_shared< bv::model::ModelNodeEffectAlphaMask >( GetTimeline(plugin->timeline) );
+        node->SetNodeEffect( newEffect );
+
+        auto alpha = newEffect->GetParamAlpha();
 
         alpha->SetTimeEvaluator(GetTimeline(plugin->timeline));
-
+        
         for(unsigned int i=0;i<plugin->properties.size();i++)
 		{
             vector<TimeProperty> *timevals  = plugin->properties[i].timeproperty;				
@@ -207,8 +209,6 @@ namespace bv{
             }
              
         }
-        //todo: byc mo¿e przesun¹æ w miejsce odpalania timelinu
-        node->EnableOverrideStateAM();
 
         return true;
 	}
