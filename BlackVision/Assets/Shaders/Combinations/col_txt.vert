@@ -144,7 +144,7 @@ void main()
         break;
     }
     
-       
+    transform = MVP * transform;
     
     gl_Position = transform * vec4( vertexPosition, 1.0 );
     uvCoord = ( vec4( vertexTexCoord, 0.0, 1.0 ) ).xy;
