@@ -128,8 +128,8 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     rccBeginColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 1.f, 0.f, 1.f ), TimeType( 10.f ) );
     rccEndColorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 0.f, 0.f, 1.f ), TimeType( 10.f ) );
 
-    colTextEffectIdEvaluator->Parameter()->SetVal( 4, TimeType( 0.f ) );
-    transformTextEffectIdEvaluator->Parameter()->SetVal( 4, TimeType( 0.f ) );
+    colTextEffectIdEvaluator->Parameter()->SetVal( 0, TimeType( 0.f ) );
+    transformTextEffectIdEvaluator->Parameter()->SetVal( 0, TimeType( 0.f ) );
 
     explosionCenterEvaluator->Parameter()->SetVal( glm::vec2( 0.0, -0.2 ), TimeType( 0.f ) );
 
@@ -150,7 +150,7 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 
     animScaleOffsetEvaluator->Parameter()->AccessInterpolator().SetWrapPostMethod( WrapMethod::pingPong );
 
-    animScaleEvaluator->Parameter()->SetVal( 1.5f, TimeType( 0.f ) );
+    animScaleEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.f ) );
 
     animAlphaOffsetEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.f ) );
     animAlphaOffsetEvaluator->Parameter()->SetVal( 1.f, TimeType( 5.f ) );
@@ -415,35 +415,25 @@ IVertexShaderChannelConstPtr        DefaultTextPlugin::GetVertexShaderChannel   
 // 
 mathematics::RectConstPtr			DefaultTextPlugin::GetAABB						( const glm::mat4 & trans ) const
 {
-	//auto trParam = GetCurrentParamTransform( this );
+    auto rect = mathematics::Rect::Create();
+    if( AABB( m_vaChannel.get(), trans, rect.get() ) )
+	    return rect;
+    else
+	    return nullptr;
 
-	//if( !trParam )
-	//	return nullptr;
-
-	//assert( trParam->NumTransforms() <= 1 );
-
-	//if( trParam->NumTransforms() == 1 )
-	//{
-	//	auto trValue = trParam->Evaluate( 0 );
-
-		auto rect = mathematics::Rect::Create();
-		if( AABB( m_vaChannel.get(), trans, rect.get() ) )
-			return rect;
-		else
-			return nullptr;
-	//}
-	//	
-	//return nullptr;
 }
 
 // *************************************
 // 
 void                                DefaultTextPlugin::Update                      ( TimeType t )
 {
-    { t; } // FIXME: suppress unused warning
-    
     m_timeParam->SetVal( t, TimeType( 0.0 ) );
     m_paramValModel->Update();
+
+    if( m_currentText != m_textParam->Evaluate() )
+    {
+        SetText( m_textParam->Evaluate() );
+    }
 
 	m_scaleMat = glm::mat4( 1.0 );
 
@@ -456,18 +446,8 @@ void                                DefaultTextPlugin::Update                   
 
     m_textSet = false;
 
-    //if ( m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
-    //{
-    //    m_vaChannel->SetNeedsAttributesUpdate( true );
-    //}
-    //else
-    //{
-    //    m_vaChannel->SetNeedsAttributesUpdate( false );
-    //}
-
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
-	//m_transformChannel->PostUpdate();
 }
 
 namespace {
@@ -600,16 +580,18 @@ void DefaultTextPlugin::ScaleToMaxTextLength		()
 
 // *************************************
 //
-void DefaultTextPlugin::SetText                     ( const std::wstring & newText )
+void DefaultTextPlugin::SetText                     ( const std::wstring & newText, TimeType t )
 {
     m_textSet = true;
-    m_textParam->SetVal( newText, TimeType( 0.f ) );
+    m_textParam->SetVal( newText, t );
+
+    m_currentText = m_textParam->Evaluate();
 
     m_vaChannel->ClearConnectedComponent();
 
     auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
-    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_textParam->Evaluate(), m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, false );
+    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_currentText, m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, false );
 
 	ScaleToMaxTextLength();
 
