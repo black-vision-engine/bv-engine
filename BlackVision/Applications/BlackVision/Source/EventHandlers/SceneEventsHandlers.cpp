@@ -4,6 +4,8 @@
 #include "Engine/Models/ModelNodeEditor.h"
 #include "../BVAppLogic.h"
 #include "../UseLogger.h"
+#include "ProjectManager.h"
+#include "Tools/IncludeJSON.h"
 
 #include <limits>
 #undef max
@@ -80,6 +82,154 @@ void SceneEventsHandlers::SceneStructure      ( bv::IEventPtr evt )
 
 }
 
+
+// *********************************
+//
+Json::Value ToJSONArray( const PathVec & v )
+{
+    Json::Value root;
+
+    for( auto pn : v )
+    {
+        root.append( pn.Str() );
+    }
+
+    return root;
+}
+
+// *********************************
+//
+Json::Value ToJSONArray( const StringVector & v )
+{
+    Json::Value root;
+
+    for( auto s : v )
+    {
+        root.append( s );
+    }
+
+    return root;
+}
+// *********************************
+//
+Json::Value Str2Json( const std::string & data )
+{
+    return Json::Value( data );
+}
+
+// *********************************
+//
+Json::Value GetRequestParamValue( std::string& request )
+{
+    return Str2Json( std::string( request.begin(), request.end() ) );
+}
+
+// *********************************
+//
+void SendOnSceneStructureResponse( const std::string & cmd, const std::string & msgKey, const Json::Value & msgVal )
+{
+    //Log::A( "OK", cmd );
+
+    Json::Value scenes;
+
+    scenes[ "cmd" ] = cmd;
+    scenes[ msgKey ] = msgVal;
+
+    std::string S = scenes.toStyledString();
+
+    wstring WS = wstring( S.begin(), S.end() );
+
+    //ResponseMsg msg;
+    //msg.msg     = WS;
+    //msg.sock_id = evtStructure->sock_id;
+    //SocketWrapper::AddMsg( msg );
+}
+
+// ***********************
+//
+void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
+{
+    if( evt->GetEventType() != bv::ProjectStructureEvent::Type() )
+        return;
+    bv::ProjectStructureEventPtr projectEvent = std::static_pointer_cast<bv::ProjectStructureEvent>( evt );
+
+    auto pm = ProjectManager::GetInstance();
+
+    std::string& request = projectEvent->Request;
+    auto command = projectEvent->ProjectCommand;
+
+        if( command == ProjectStructureEvent::Command::ListProjectNames )
+        {
+            auto pns = pm->ListProjectsNames();
+
+            auto pList = ToJSONArray( pns );
+
+            SendOnSceneStructureResponse( "LIST_PROJECTS_NAMES", "list", pList );
+        }
+        else if( command == ProjectStructureEvent::Command::NewProject )
+        {
+            auto name = GetRequestParamValue( request )[ "projectName" ].asString();
+
+            pm->AddNewProject( name );
+
+            SendOnSceneStructureResponse( "NEW_PROJECT", "status", "OK" );
+        }
+        else if( command == ProjectStructureEvent::Command::ListScenes )
+        {
+            auto name = GetRequestParamValue( request )[ "projectName" ].asString();
+            auto sns = pm->ListScenesNames( name );
+
+            auto pList = ToJSONArray( sns );
+
+            SendOnSceneStructureResponse( "LIST_SCENES", "list", pList );
+        }
+        else if( command == ProjectStructureEvent::Command::ListAssetsPaths )
+        {
+            auto projName = GetRequestParamValue( request )[ "projectName" ].asString();
+            auto catName = GetRequestParamValue( request )[ "categoryName" ].asString();
+
+            auto sns = pm->ListAssetsPaths( projName, catName );
+
+            auto pList = ToJSONArray( sns );
+
+            SendOnSceneStructureResponse( "LIST_ASSETS_PATHS", "list", pList );
+        }
+        else if( command == ProjectStructureEvent::Command::ListCategoriesNames )
+        {
+            auto sns = pm->ListCategoriesNames();
+
+            auto pList = ToJSONArray( sns );
+
+            SendOnSceneStructureResponse( "LIST_CATEGORIES_NAMES", "list", pList );
+        }
+        else if( command == ProjectStructureEvent::Command::SetCurrentProject )
+        {
+            auto projName = GetRequestParamValue( request )[ "projectName" ].asString();
+
+            pm->SetCurrentProject( projName );
+
+            SendOnSceneStructureResponse( "SET_CURRENT_PROJECT", "status", "OK" );
+        }
+        else if( command == ProjectStructureEvent::Command::ListProjects )
+        {
+            auto pns = pm->ListProjectsNames();
+
+            Json::Value list;
+
+            for( auto p : pns )
+            {
+                auto scenesCount = pm->ListScenesNames( p ).size();
+
+                Json::Value entry;
+                entry[ "name" ] = p.Str();
+                entry[ "scenes_count" ] = scenesCount;
+
+                list.append( entry );
+            }
+
+            SendOnSceneStructureResponse( "LIST_PROJECTS", "list", list );
+        }
+}
 
 
 } //bv

@@ -11,8 +11,7 @@
 
 #include "Engine/Events/EventHelpers.h"             // wstring to string conversions and vice versa
 #include "Serialization/SerializationHelper.h"      // Conversions from string to glm types
-
-
+#include "Engine/Events/EventManager.h"
 
 
 namespace bv
@@ -212,17 +211,10 @@ void PluginEventsHandlers::LoadAsset( bv::IEventPtr eventPtr )
         else
             result = false;
 
-        //std::wstring response;
-        //if( result )
-        //    response = L"Asset loaded succesfully. node: [" + eventLoadAsset->NodeName + L"] plugin [" + eventLoadAsset->PluginName + L"]";
-        //else
-        //    response = L"Failed to load asset. node [" + eventLoadAsset->NodeName + L"] plugin [" + eventLoadAsset->PluginName + L"]";
-
-        //
-        //ResponseMsg msg;
-        //msg.msg     = response;
-        //msg.sock_id = eventLoadAsset->SockID;
-        //SocketWrapper::AddMsg( msg );
+        if( result )
+            LOG_MESSAGE( SeverityLevel::info ) << "Asset loaded succesfully. Node: [" + eventLoadAsset->NodeName + "] plugin [" + eventLoadAsset->PluginName + "]";
+        else
+            LOG_MESSAGE( SeverityLevel::error ) << "Failed to load asset. Node [" + eventLoadAsset->NodeName + "] plugin [" + eventLoadAsset->PluginName + "]\n" << asssetData;
     }
 }
 

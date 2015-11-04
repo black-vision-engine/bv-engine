@@ -251,7 +251,7 @@ IEventPtr EventManager::GetNextResponse     ()
 {
     IEventPtr evt;
     if( m_responseConcurrentQueue.TryPop( evt ) )
-        return evt;
+        return evt;     // This event shouldn't be used anymore. It's memory will be moved. Remember while modyfying this function.
     else
         return nullptr;
 }

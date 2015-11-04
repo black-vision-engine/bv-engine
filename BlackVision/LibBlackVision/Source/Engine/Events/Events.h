@@ -237,43 +237,6 @@ public:
 DEFINE_PTR_TYPE(VideoCardEvent)
 
 
-// ************************************* Response Event *************************************
-class ResponseEvent : public BaseEvent
-{
-private:
-
-    glm::vec3   m_translation;
-    glm::vec3   m_scale;
-
-   
-
-public:
-
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-
-     std::wstring               command;      // move to private
-     std::wstring               response;
-
-public:
-
-    explicit                        ResponseEvent   ();
-
-    virtual EventType               GetEventType        () const;
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-    static EventType                Type                ();
-
-    virtual const std::string &     GetName             () const;
-    void                            SetData(std::wstring cmd){command=cmd;};
-
-};
-
-
-DEFINE_PTR_TYPE(ResponseEvent)
-
 
 // ************************************* Information Event *************************************
 class InfoEvent : public BaseEvent
@@ -645,5 +608,71 @@ private:
 };
 
 DEFINE_PTR_TYPE(SceneStructureEvent)
+
+// ************************************* ProjectStructureEvent Event *************************************
+class ProjectStructureEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        NewProject,
+        SetCurrentProject,
+        ListProjectNames,
+        ListScenes,
+        ListAssetsPaths,
+        ListCategoriesNames,
+        ListProjects,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    ProjectStructureEvent::Command  ProjectCommand;
+    std::string                     Request;
+public:
+    explicit                        ProjectStructureEvent   () {}
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+
+private:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
+};
+
+DEFINE_PTR_TYPE( ProjectStructureEvent )
+
+
+// ************************************* Response Event *************************************
+class ResponseEvent : public BaseEvent
+{
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+     std::wstring               Response;
+
+public:
+    explicit                        ResponseEvent() {}
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+
+};
+
+DEFINE_PTR_TYPE(ResponseEvent)
 
 } //bv

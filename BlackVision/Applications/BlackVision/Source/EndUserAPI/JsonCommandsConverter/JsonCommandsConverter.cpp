@@ -43,10 +43,15 @@ std::wstring        JsonCommandsConverter::PollEvent           ()
     if( evt == nullptr )
         return L"";
 
-    JsonSpiritSerializeObject ser;
-    evt->Serialize( ser );
+    // Maybe later, but for now it must be compatibile with previous solution.
+    //JsonSpiritSerializeObject ser;
+    //evt->Serialize( ser );
 
-    return ser.Save( FormatStyle::FORMATSTYLE_SPARING );
+    if( evt->GetEventType() != ResponseEvent::Type() )
+        return L"";
+
+    ResponseEventPtr response = std::static_pointer_cast<ResponseEvent>( evt );
+    return std::move( response->Response );
 }
 
 

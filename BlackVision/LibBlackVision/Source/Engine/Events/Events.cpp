@@ -42,9 +42,6 @@ std::string SetParamEvent::m_sEventName           = "Event_SetParam";
 const EventType InfoEvent::m_sEventType       = 0x10000007;
 std::string InfoEvent::m_sEventName           = "Event_Info";
 
-const EventType ResponseEvent::m_sEventType       = 0x10000008;
-std::string ResponseEvent::m_sEventName           = "Event_Response";
-
 const EventType TimeLineCmd::m_sEventType       = 0x10000009;
 std::string TimeLineCmd::m_sEventName           = "Event_Timeline";
 
@@ -70,6 +67,12 @@ std::string ParamKeyEvent::m_sEventName             = "Event_ParamKeyEvent";
 
 const EventType SceneStructureEvent::m_sEventType   = 0x30000012;
 std::string SceneStructureEvent::m_sEventName       = "Event_SceneStructure";
+
+const EventType ProjectStructureEvent::m_sEventType = 0x30000013;
+std::string ProjectStructureEvent::m_sEventName     = "Event_ProjectStructure";
+
+const EventType ResponseEvent::m_sEventType         = 0x30000008;
+std::string ResponseEvent::m_sEventName             = "Event_Response";
 
 // ************************************* Events Serialization *****************************************
 
@@ -102,6 +105,20 @@ const std::wstring COMMAND_ATTACH_PLUGIN_WSTRING    = L"AttachPlugin";
 const std::wstring COMMAND_DETACH_PLUGIN_WSTRING    = L"DetachPlugin";
 const std::wstring COMMAND_SET_NODE_VISIBLE_WSTRING     = L"SetNodeVisible";
 const std::wstring COMMAND_SET_NODE_INVISIBLE_WSTRING   = L"SetNodeInvisible";
+
+// ProjectStructureEvent
+const std::wstring REQUEST_WSTRING              = L"request";
+
+const std::wstring COMMAND_NEW_PROJECT_WSTRING              = L"NEW_PROJECT";
+const std::wstring COMMAND_SET_CURRENT_PROJECT_WSTRING      = L"SET_CURRENT_PROJECT";
+const std::wstring COMMAND_LIST_PROJECTS_NAMES_WSTRING      = L"LIST_PROJECTS_NAMES";
+const std::wstring COMMAND_LIST_SCENES_WSTRING              = L"LIST_SCENES";
+const std::wstring COMMAND_LIST_ASSETS_PATHS_WSTRING        = L"LIST_ASSETS_PATHS";
+const std::wstring COMMAND_LIST_CATEGORIES_NAMES_WSTRING    = L"LIST_CATEGORIES_NAMES";
+const std::wstring COMMAND_LIST_PROJECTS_WSTRING            = L"LIST_PROJECTS";
+
+// ResponseEvent
+const std::wstring RESPONSE_WSTRING             = L"response";
 
 }
 
@@ -638,64 +655,6 @@ const std::wstring &         SceneStructureEventDeprecated::GetAddStrData    () 
 }
 
 
-
-
-
-
-
-
-ResponseEvent::ResponseEvent         () 
-{
-  
-}
-
-
-// *************************************
-//
-EventType           ResponseEvent::GetEventType         () const
-{
-    return this->m_sEventType;
-}
-
-// *************************************
-//
-void                ResponseEvent::Serialize            ( ISerializer& ser ) const
-{
-    assert( false );
-}
-
-// *************************************
-//
-IEventPtr                ResponseEvent::Create          ( IDeserializer& deser )
-{
-    assert( false );
-    return nullptr;
-}
-// *************************************
-//
-IEventPtr               ResponseEvent::Clone             () const
-{
-    return IEventPtr( new ResponseEvent( *this ) );
-}
-// *************************************
-//
-EventType               ResponseEvent::Type              ()
-{
-    return m_sEventType;
-}
-
-// *************************************
-//
-const std::string &     ResponseEvent::GetName           () const
-{
-    return m_sEventName;
-}
-
-
-
-
-
-
 //******************* SET PARAM *************
 
 
@@ -1151,6 +1110,146 @@ SceneStructureEvent::Command SceneStructureEvent::WStringToCommand    ( const st
     else
         return Command::Fail;
 }
+
+
+//******************* ProjectStructureEvent *************
+
+// *************************************
+//
+void                ProjectStructureEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
+    ser.SetAttribute( Serial::REQUEST_WSTRING, toWString( Request ) );
+    ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( ProjectCommand ) );
+}
+
+// *************************************
+//
+IEventPtr                ProjectStructureEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
+    {
+        ProjectStructureEventPtr newEvent   = std::make_shared<ProjectStructureEvent>();
+        newEvent->Request                   = toString( deser.GetAttribute( Serial::REQUEST_WSTRING ) );
+        newEvent->ProjectCommand            = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
+        
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               ProjectStructureEvent::Clone             () const
+{   return IEventPtr( new ProjectStructureEvent( *this ) );  }
+
+// *************************************
+//
+EventType           ProjectStructureEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        ProjectStructureEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  ProjectStructureEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           ProjectStructureEvent::GetEventType() const
+{   return this->m_sEventType; }
+
+// *************************************
+//
+std::wstring ProjectStructureEvent::CommandToWString    ( Command cmd )
+{
+    if( cmd == Command::NewProject )
+        return Serial::COMMAND_NEW_PROJECT_WSTRING;
+    else if( cmd == Command::SetCurrentProject )
+        return Serial::COMMAND_SET_CURRENT_PROJECT_WSTRING;
+    else if( cmd == Command::ListAssetsPaths )
+        return Serial::COMMAND_LIST_ASSETS_PATHS_WSTRING;
+    else if( cmd == Command::ListCategoriesNames )
+        return Serial::COMMAND_LIST_CATEGORIES_NAMES_WSTRING;
+    else if( cmd == Command::ListProjectNames )
+        return Serial::COMMAND_LIST_PROJECTS_NAMES_WSTRING;
+    else if( cmd == Command::ListProjects )
+        return Serial::COMMAND_LIST_PROJECTS_WSTRING;
+    else if( cmd == Command::ListScenes )
+        return Serial::COMMAND_LIST_SCENES_WSTRING;
+    else
+        return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
+}
+// *************************************
+//
+ProjectStructureEvent::Command ProjectStructureEvent::WStringToCommand    ( const std::wstring& string )
+{
+    if( string == Serial::COMMAND_NEW_PROJECT_WSTRING )
+        return Command::NewProject;
+    else if( string == Serial::COMMAND_SET_CURRENT_PROJECT_WSTRING )
+        return Command::SetCurrentProject;
+    else if( string == Serial::COMMAND_LIST_ASSETS_PATHS_WSTRING)
+        return Command::ListAssetsPaths;
+    else if( string == Serial::COMMAND_LIST_CATEGORIES_NAMES_WSTRING )
+        return Command::ListCategoriesNames;
+    else if( string == Serial::COMMAND_LIST_PROJECTS_NAMES_WSTRING )
+        return Command::ListProjectNames;
+    else if( string == Serial::COMMAND_LIST_PROJECTS_WSTRING )
+        return Command::ListProjects;
+    else if( string == Serial::COMMAND_LIST_SCENES_WSTRING )
+        return Command::ListScenes;
+    else
+        return Command::Fail;
+}
+
+
+
+//******************* ResponseEvent *************
+
+// *************************************
+//
+void                ResponseEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
+    ser.SetAttribute( Serial::RESPONSE_WSTRING, Response );
+}
+
+// *************************************
+//
+IEventPtr                ResponseEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
+    {
+        ResponseEventPtr newEvent   = std::make_shared<ResponseEvent>();
+        newEvent->Response          = deser.GetAttribute( Serial::RESPONSE_WSTRING );
+        
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               ResponseEvent::Clone             () const
+{   return IEventPtr( new ResponseEvent( *this ) );  }
+
+// *************************************
+//
+EventType           ResponseEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        ResponseEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  ResponseEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           ResponseEvent::GetEventType() const
+{   return this->m_sEventType; }
+
+
 
 #pragma warning( pop )
 

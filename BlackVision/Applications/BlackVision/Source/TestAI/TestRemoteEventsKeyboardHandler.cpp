@@ -60,6 +60,19 @@ void TestRemoteEventsKeyboardHandler::HandleKey           ( unsigned char c, BVA
 
         ser.Save( "serialization/eventSerialize.json", FORMATSTYLE_READABLE );
     }
+    else if( c == 'i' )
+    {// Append info response to file.
+        std::wofstream file( L"serialization/responseEvents.json", std::ios_base::app );
+        
+        auto infoResponse = RemoteCommandsConverter::GetRemoteCommandsConverter().PollEvent();
+        while( infoResponse != L"" )
+        {            
+            file << infoResponse << std::endl;
+            infoResponse = RemoteCommandsConverter::GetRemoteCommandsConverter().PollEvent();
+        }
+
+        file.close();
+    }
 }
 
 
