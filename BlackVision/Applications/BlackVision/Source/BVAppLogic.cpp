@@ -163,8 +163,18 @@ model::BasicNodePtr BVAppLogic::LoadScenes( const PathVec & pathVec )
         root->AddChildToModelOnly( std::const_pointer_cast< model::BasicNode >( scene ) );
     }
 
-    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline, m_renderer, GetTimelineManager() );
-    InitCamera( 500, 500 );
+    Camera * cam = nullptr;
+
+    if( m_bvScene )
+    {
+        cam = m_bvScene->GetCamera();
+    }
+    else
+    {
+        cam = new Camera( DefaultConfig.IsCameraPerspactive() );
+    }
+
+    m_bvScene    = BVScene::Create( root,  cam, "BasicScene", m_globalTimeline, m_renderer, GetTimelineManager() );
     assert( m_bvScene );
 
     return root;

@@ -17,6 +17,9 @@ uniform float       time;
 
 uniform int         colTextEffectId;
 
+uniform float       animAlphaOffset;
+uniform float       animAlpha;
+
 // linearly colorize characters
 uniform vec4        rcc_beginColor;
 uniform vec4        rcc_endColor;
@@ -77,6 +80,38 @@ vec4 pseudoRandonColorAffine( vec4 begin, vec4 end, int i, int total )  // Linea
     return begin * ( 1.0 - t ) + end * t;
 }
 
+float animateAlpha()
+{
+    float lf  = animAlphaOffset * float( cc_num_total + 1 );
+    int l = int( round( lf ) );
+    
+    if( l < 0 )
+    {
+        l = -l;
+    }
+    
+    if( lf < 0.0 )
+    {
+        lf = -lf;
+    }
+    
+    if( cc_num == l )
+    {
+        float so = lf - float( l );
+        float realAlpha = animAlpha * so;
+        
+        return 0.0;
+    }
+    else if( cc_num > l ) 
+    {
+        return animAlpha;
+    }
+    else if( cc_num < l )
+    {
+        return 0.0;
+    }
+}
+
 void main()
 {
     float col1 = texture( AtlasTex0, uvCoord ).b;
@@ -84,6 +119,7 @@ void main()
     
     vec4 c = color;
     vec4 oc = outlineColor;
+    float a = alpha;
 
     switch( colTextEffectId )
     {
@@ -96,11 +132,15 @@ void main()
     case 3:
         c = gradientColor( rcc_beginColor, rcc_endColor, cc_num, cc_num_total );
         break;
+    case 4:
+        //a = animateAlpha();
+        a = 0.0;
+        break;
     default:
         break;
     }
     
-	FragColor = alpha * ( c * col1 + oc * ( col2 * ( 1.0 - col1 ) ) );
+	FragColor = a * ( c * col1 + oc * ( col2 * ( 1.0 - col1 ) ) );
 }
 
 

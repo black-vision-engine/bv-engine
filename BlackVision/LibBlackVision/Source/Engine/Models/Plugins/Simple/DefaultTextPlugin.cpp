@@ -73,13 +73,24 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 
     SimpleVec2EvaluatorPtr      explosionCenterEvaluator = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "explosionCenter", timeEvaluator );
 
+
+    SimpleFloatEvaluatorPtr      animScaleOffsetEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "animScaleOffset", timeEvaluator );
+    SimpleFloatEvaluatorPtr      animScaleEvaluator     = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "animScale", timeEvaluator );
+
+    SimpleFloatEvaluatorPtr      animAlphaOffsetEvaluator = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "animAlphaOffset", timeEvaluator );
+    SimpleFloatEvaluatorPtr      animAlphaEvaluator     = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "animAlpha", timeEvaluator );
+
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
     vsModel->RegisterAll( transformEffectVal1Evaluator );
     vsModel->RegisterAll( transformEffectVal2Evaluator );
+    vsModel->RegisterAll( animScaleOffsetEvaluator );
+    vsModel->RegisterAll( animScaleEvaluator );
     psModel->RegisterAll( borderColorEvaluator );
 	psModel->RegisterAll( outlineColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
+    vsModel->RegisterAll( animAlphaOffsetEvaluator );
+    vsModel->RegisterAll( animAlphaEvaluator );
 
     psModel->RegisterAll( rccBeginColorEvaluator );
     psModel->RegisterAll( rccEndColorEvaluator );
@@ -117,8 +128,8 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     rccBeginColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 1.f, 0.f, 1.f ), TimeType( 10.f ) );
     rccEndColorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 0.f, 0.f, 1.f ), TimeType( 10.f ) );
 
-    colTextEffectIdEvaluator->Parameter()->SetVal( 2, TimeType( 0.f ) );
-    transformTextEffectIdEvaluator->Parameter()->SetVal( 2, TimeType( 0.f ) );
+    colTextEffectIdEvaluator->Parameter()->SetVal( 4, TimeType( 0.f ) );
+    transformTextEffectIdEvaluator->Parameter()->SetVal( 4, TimeType( 0.f ) );
 
     explosionCenterEvaluator->Parameter()->SetVal( glm::vec2( 0.0, -0.2 ), TimeType( 0.f ) );
 
@@ -133,6 +144,16 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     transformEffectVal2Evaluator->Parameter()->SetVal( 2.f, TimeType( 0.f ) );
 
     transformEffectVal2Evaluator->Parameter()->SetVal( 5.f, TimeType( 10.f ) );
+
+    animScaleOffsetEvaluator->Parameter()->SetVal( -1.f, TimeType( 0.f ) );
+    animScaleOffsetEvaluator->Parameter()->SetVal( 1.f, TimeType( 6.f ) );
+    animScaleEvaluator->Parameter()->SetVal( 1.5f, TimeType( 0.f ) );
+
+    animAlphaOffsetEvaluator->Parameter()->SetVal( -1.f, TimeType( 0.f ) );
+    animAlphaOffsetEvaluator->Parameter()->SetVal( 1.f, TimeType( 6.f ) );
+    animAlphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.f ) );
+
+
 
     return model;
 }
