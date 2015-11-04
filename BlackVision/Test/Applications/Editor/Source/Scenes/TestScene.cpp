@@ -35,6 +35,7 @@ OrderTestCase::OrderTestCase	( const std::string & node, const std::string & tes
 	auto size = TestSceneUtils::IMG_SIZE;
 	TestSceneUtils::GenerateCheckboardTex( TestSceneUtils::TEXTURE_PATH, size, size, glm::uvec3( 32 ) );
 	TestSceneUtils::GenerateCheckboardAlphaMaskTex( TestSceneUtils::ALPHA_MASK_PATH, TestSceneUtils::AM_SIZE, TestSceneUtils::AM_SIZE );
+	TestSceneUtils::GenerateCheckboardAlphaMaskTex( TestSceneUtils::ALPHA_MASK0_PATH, TestSceneUtils::AM_SIZE, TestSceneUtils::AM_SIZE, 128 );
 	TestSceneUtils::GenerateCheckboardAnim( TestSceneUtils::ANIM_PATH, size, size, TestSceneUtils::ANIM_NUM );
 
 	m_scene = ColoredRectanglesScene();
@@ -159,7 +160,7 @@ void					TestScene::TestModelSceneEditor		()
 	assert( !editor->DeleteRootNode() );
 	assert( !editor->DetachRootNode() );
 
-	auto newRoot = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, "newRoot", 0.5f, 0.5f, glm::vec4( 0.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
+	auto newRoot = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, "newRoot", 0.5f, 0.5f, glm::vec4( 0.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK0_PATH );
 	auto rootTransform = newRoot->GetPlugin( "transform" )->GetParameter( "simple_transform" );
     SetParameterTranslation( rootTransform, 0, 0.0f, glm::vec3( -1.f, 0.5f, -1.f ) );
 	
@@ -215,9 +216,12 @@ void					TestScene::InitTestModelNodeEditor	()
 	//InitOrderGradientPluginTest();
 
 	//InitColoredTextTest();
+	InitGradientTextTest();
+	
 	//InitColoredTimerTest();
+	//InitGradientTimerTest();
 
-	InitColoredGeometryTest();
+	//InitColoredGeometryTest();
 }
 
 // ****************************
@@ -334,6 +338,18 @@ void					TestScene::InitBasicTexturePluginTest	()
 	
 	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TEX_NODE, "texture", 2 ); } );
 	m_testSteps.push_back( [&]{ SwapPlugins( "texture", 2, TEX_NODE, "solid color", 2 ); } );
+
+	m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, TEX_NODE, "alpha_mask", 3 ); } );
+	m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, TEX_NODE, "alpha_mask", 3 ); } );
+
+	m_testSteps.push_back( [&]{
+		auto root = m_scene->GetModelSceneRoot();
+		auto child = root->GetChild( TEX_NODE );
+		LoadTexture( child->GetPlugin( "texture" ), TestSceneUtils::ANIM_PATH + "/f0.bmp" );
+	});
+	m_testSteps.push_back( []{} );
+
+	m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, TEX_NODE, "alpha_mask", 3 ); } );
 }
 
 // ****************************
@@ -646,6 +662,101 @@ void					TestScene::InitColoredTextTest			()
 		InitOrderTest( test );
 	}
 	m_testSteps.push_back( recoverScene );
+}
+
+// ****************************
+//
+void					TestScene::InitGradientTextTest			()
+{
+	auto add = [&] 
+	{
+		auto editor = m_scene->GetSceneEditor();
+
+		auto txt = TestSceneUtils::GradientText( m_timelineManager, m_timeEvaluator, TXT_NODE, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 0.f, 1.f, 0.f, 1.f ), 60 ); //, TestSceneUtils::ALPHA_MASK_PATH
+		SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
+
+		bool success = true;
+
+		auto root = m_scene->GetModelSceneRoot();
+		editor->DeleteChildNode( root, TXT_NODE );
+		editor->AddChildNode( root, txt );
+		
+		auto lChild = TestSceneUtils::ColoredRectangle( m_timelineManager, m_timeEvaluator, "lChild", 0.1f, 0.1f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
+		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
+		auto rChild = TestSceneUtils::TexturedRectangle( m_timelineManager, m_timeEvaluator, "rChild", 0.1f, 0.1f, TestSceneUtils::TEXTURE_PATH );
+		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
+		editor->AddChildNode( txt, lChild );
+		editor->AddChildNode( txt, rChild );
+
+		success &= ( txt->GetNumChildren() == 2 );
+
+		assert( success );
+	};
+
+	//std::string test0[] = { "text", "alpha_mask" };
+	//std::string test1[] = { "alpha_mask", "text" };
+	//std::string test2[] = { "alpha_mask", "transform", "linear_gradient", "text" };
+	//std::string test3[] = { "transform", "alpha_mask", "linear_gradient", "text" };
+	//std::string test4[] = { "transform", "linear_gradient", "alpha_mask", "text" };
+	//std::string test5[] = { "alpha_mask", "linear_gradient", "transform", "text" };
+	//std::string test6[] = { "linear_gradient", "alpha_mask", "transform", "text" };
+	//std::string test7[] = { "linear_gradient", "transform", "alpha_mask", "text" };
+	//std::string test8[] = { "transform", "text", "alpha_mask", "solid color" };
+	//std::string test9[] = { "transform", "alpha_mask", "text", "solid color" };
+	//std::string test10[] = { "linear_gradient", "text", "alpha_mask", "transform" };
+	//std::string test11[] = { "linear_gradient", "alpha_mask", "text", "transform" };
+
+	//std::vector < OrderTestCase > tests;
+	//tests.push_back( OrderTestCase( TXT_NODE, "TxtAm", std::vector< std::string >( test0, test0 + 2 ) ) );
+	//tests.push_back( OrderTestCase( TXT_NODE, "AmTxt", std::vector< std::string >( test1, test1 + 2 ) ) );
+	//tests.push_back( OrderTestCase( TXT_NODE, "AmTCTxt", std::vector< std::string >( test2, test2 + 4 ) ) );
+	//tests.push_back( OrderTestCase( TXT_NODE, "TAmCTxt", std::vector< std::string >( test3, test3 + 4 ) ) );
+	//tests.push_back( OrderTestCase( TXT_NODE, "TCAmTxt", std::vector< std::string >( test4, test4 + 4 ) ) );
+	//tests.push_back( OrderTestCase( TXT_NODE, "AmCTTxt", std::vector< std::string >( test5, test5 + 4 ) ) );
+	//tests.push_back( OrderTestCase( TXT_NODE, "CAmTTxt", std::vector< std::string >( test6, test6 + 4 ) ) );
+	//tests.push_back( OrderTestCase( TXT_NODE, "CTAmTxt", std::vector< std::string >( test7, test7 + 4 ) ) );
+	//tests.push_back( OrderTestCase( TXT_NODE, "TTxtAmC", std::vector< std::string >( test8, test8 + 4 ) ) );
+	//tests.push_back( OrderTestCase( TXT_NODE, "TAmTxtC", std::vector< std::string >( test9, test9 + 4 ) ) );
+	//tests.push_back( OrderTestCase( TXT_NODE, "CTxtAmT", std::vector< std::string >( test10, test10 + 4 ) ) );
+	//tests.push_back( OrderTestCase( TXT_NODE, "CAmTxtT", std::vector< std::string >( test11, test11 + 4 ) ) );
+
+	//auto recoverScene = [&] 
+	//{
+	//	auto editor = m_scene->GetSceneEditor();
+	//	auto txt = TestSceneUtils::GradientText( m_timelineManager, m_timeEvaluator, TXT_NODE, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 0.f, 1.f, 0.f, 1.f ), 60 );
+	//	SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
+
+	//	bool success = true;
+
+	//	auto root = m_scene->GetModelSceneRoot();
+	//	auto lChild = root->GetChild( TXT_NODE )->GetChild( "lChild" );
+	//	auto rChild = root->GetChild( TXT_NODE )->GetChild( "rChild" );
+	//	success &= editor->DeleteChildNode( root, TXT_NODE );
+	//	editor->AddChildNode( root, txt );
+	//	editor->AddChildNode( txt, lChild );
+	//	editor->AddChildNode( txt, rChild );
+	//	success &= ( txt->GetNumChildren() == 2 );
+	//	
+	//	assert( success );
+	//};
+
+
+//---------------
+
+
+	m_testSteps.push_back( add );
+	m_testSteps.push_back( []{} ); //empty step because creating new text plugin takes so long..
+	
+	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TXT_NODE, "linear_gradient", 1 ); } );
+	m_testSteps.push_back( [&]{ SwapPlugins( "linear_gradient", 2, TXT_NODE, "solid color", 2 ); } );
+
+	//for( auto & test : tests )
+	//{
+	//	m_testSteps.push_back( recoverScene );
+	//	m_testSteps.push_back( []{} ); //empty step because creating new text plugin takes so long..
+	//	InitOrderTest( test );
+	//}
+	//m_testSteps.push_back( recoverScene );
 }
 
 

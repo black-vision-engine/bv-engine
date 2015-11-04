@@ -10,6 +10,7 @@
 namespace bv {
 
 const std::string	TestSceneUtils::TEXTURE_PATH	= "Assets/checkboard.bmp";
+const std::string	TestSceneUtils::ALPHA_MASK0_PATH	= "Assets/checkboard_am0.bmp";
 const std::string	TestSceneUtils::ALPHA_MASK_PATH	= "Assets/checkboard_am.bmp";
 const std::string	TestSceneUtils::ANIM_PATH		= "Assets/anim";
 
@@ -277,6 +278,45 @@ model::BasicNodePtr		TestSceneUtils::ColoredText				( model::TimelineManager * t
 
 // ****************************
 //
+model::BasicNodePtr		TestSceneUtils::GradientText			( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask )
+{
+	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+    timeEvaluator->AddChild( localTimeline );
+
+    auto node = model::BasicNode::Create( name, timeEvaluator );
+
+	std::vector< std::string > plugins;
+	plugins.push_back( "DEFAULT_TRANSFORM" );
+	plugins.push_back( "DEFAULT_TEXT" );
+	plugins.push_back( "DEFAULT_LINEAR_GRADIENT" );
+	if( !alphaMask.empty() )
+	{
+		plugins.push_back( "DEFAULT_ALPHA_MASK" );
+	}
+
+    auto success = node->AddPlugins( plugins, localTimeline );
+
+	assert( success ); { success; }
+
+	SetParameter( node->GetPlugin( "linear_gradient" )->GetParameter( "color1" ), TimeType( 0.f ), c1 );
+	SetParameter( node->GetPlugin( "linear_gradient" )->GetParameter( "color2" ), TimeType( 0.f ), c2 );
+
+    SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
+	SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
+    
+	LoadFont( node->GetPlugin( "text" ), "Assets/Fonts/arial.TTF", fontSize, 0, 0, true );
+	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"tekst\n1234" );
+	
+	if( !alphaMask.empty() )
+	{
+		LoadTexture( node->GetPlugin( "alpha_mask" ), alphaMask );
+	}
+
+    return node;
+}
+
+// ****************************
+//
 model::BasicNodePtr		TestSceneUtils::ColoredTimer				( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 color, UInt32 fontSize )
 {
 	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
@@ -303,6 +343,38 @@ model::BasicNodePtr		TestSceneUtils::ColoredTimer				( model::TimelineManager * 
 	model::SetTimeTimerPlugin( node->GetPlugin( "timer" ), 12333.0f );
     model::StartTimerPlugin( node->GetPlugin( "timer" ) );
 
+    return node;
+}
+
+// ****************************
+//
+model::BasicNodePtr		TestSceneUtils::GradientTimer			( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize )
+{
+	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+    timeEvaluator->AddChild( localTimeline );
+
+    auto node = model::BasicNode::Create( name, timeEvaluator );
+
+	std::vector< std::string > plugins;
+	plugins.push_back( "DEFAULT_TRANSFORM" );
+	plugins.push_back( "DEFAULT_GRADIENT" );
+	plugins.push_back( "DEFAULT_TIMER" );
+
+    auto success = node->AddPlugins( plugins, localTimeline );
+
+	assert( success ); { success; }
+
+	SetParameter( node->GetPlugin( "linear_gradient" )->GetParameter( "color1" ), TimeType( 0.f ), c1 );
+	SetParameter( node->GetPlugin( "linear_gradient" )->GetParameter( "color2" ), TimeType( 0.f ), c2 );
+
+    SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
+	SetParameter( node->GetPlugin( "timer" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
+    
+	LoadFont( node->GetPlugin( "timer" ), "Assets/Fonts/arial.TTF", fontSize, 0, 0, true );
+    
+	model::SetTimeTimerPlugin( node->GetPlugin( "timer" ), 12333.0f );
+    model::StartTimerPlugin( node->GetPlugin( "timer" ) );
+	
     return node;
 }
 
@@ -339,20 +411,19 @@ void					TestSceneUtils::GenerateCheckboardTex	( const std::string & name, UInt3
 
 // *************************
 //
-void					TestSceneUtils::GenerateCheckboardAlphaMaskTex		( const std::string & name, UInt32 width, UInt32 height )
+void					TestSceneUtils::GenerateCheckboardAlphaMaskTex		( const std::string & name, UInt32 width, UInt32 height, UInt32 size )
 {
-	SizeType size = width * height;
-	char * data = new char[ size ];
+	char * data = new char[ width * height ];
 	for ( unsigned int i = 0; i < width; ++i ) 
 	{
 		for ( unsigned int j = 0; j < height; ++j ) 
 		{
 			unsigned int idx = i * height + j;
-			unsigned char c = static_cast< unsigned char >( (( ( (i&32)==0 ) ^ ( (j&32)==0 ) ))*255 );
+			unsigned char c = static_cast< unsigned char >( (( ( (i&size)==0 ) ^ ( (j&size)==0 ) ))*255 );
 			data[ idx ] = (GLubyte)c;
 		}
 	}
-	image::SaveBMPImage( name, MemoryChunk::Create( data, size ), width, height, 8 );
+	image::SaveBMPImage( name, MemoryChunk::Create( data, width * height ), width, height, 8 );
 }
 
 // *************************

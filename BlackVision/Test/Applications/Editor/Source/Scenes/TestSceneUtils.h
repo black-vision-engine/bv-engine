@@ -35,6 +35,7 @@ class TestSceneUtils
 public:
 	static const std::string	TEXTURE_PATH;
 	static const std::string	ALPHA_MASK_PATH;
+	static const std::string	ALPHA_MASK0_PATH;
 	static const std::string	ANIM_PATH;
 
 	static const Float32		SPEED;
@@ -48,15 +49,19 @@ public:
 	
 	static model::BasicNodePtr	TexturedRectangle					( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, Float32 width, Float32 height, const std::string & path, const std::string & alphaMask = "" );
 	static model::BasicNodePtr	TexturedTriangle					( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, const std::string & path, const std::string & alphaMask = "" );
-
+	
 	static model::BasicNodePtr	AnimatedRectangle					( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, Float32 width, Float32 height, const std::string & path, const std::string & alphaMask = "" );
 	static model::BasicNodePtr	GradientRectangle					( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, Float32 width, Float32 height, glm::vec4 c1, glm::vec4 c2, const std::string & alphaMask = "" );
+	
 	static model::BasicNodePtr	ColoredText							( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 color, UInt32 fontSize, const std::string & alphaMask = "" );
+	static model::BasicNodePtr	GradientText						( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask = "" );
+	
 	static model::BasicNodePtr	ColoredTimer						( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 color, UInt32 fontSize );
+	static model::BasicNodePtr	GradientTimer						( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize );
 
 
 	static void					GenerateCheckboardTex				( const std::string & name, UInt32 width, UInt32 height, glm::uvec3 color );
-	static void					GenerateCheckboardAlphaMaskTex		( const std::string & name, UInt32 width, UInt32 height );
+	static void					GenerateCheckboardAlphaMaskTex		( const std::string & name, UInt32 width, UInt32 height, UInt32 size = 32 );
 	static void					GenerateCheckboardAnim				( const std::string & path, UInt32 width, UInt32 height, UInt32 animNum );
 
 	static std::vector< model::IPluginDescriptor * >  DefaultBVPluginDescriptors  ();

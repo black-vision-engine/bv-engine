@@ -68,7 +68,10 @@ private:
 	void					InitOrderGradientPluginTest	();
 
 	void					InitColoredTextTest			();
+	void					InitGradientTextTest		();
+
 	void					InitColoredTimerTest		();
+	void					InitGradientTimerTest		();
 
 	void					InitColoredGeometryTest		();
 
