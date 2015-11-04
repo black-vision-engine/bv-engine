@@ -3,23 +3,13 @@
 #include "Engine/Models/BasicNode.h"
 #include "TestAI/TestKeyboardHandler.h"
 
+#include "Engine/Models/NodeEffects/ModelNodeEffectDefault.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
-
-#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
-#include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectWireframe.h"
 
 
 namespace bv {
-
-namespace model {
-
-class ModelNodeEffectDefault;
-class ModelNodeEffectAlphaMask;
-class ModelNodeEffectNodeMask;
-
-} // model
-
 
 class TestGlobalEfectKeyboardHandler : public TestKeyboardHandler
 {
@@ -30,6 +20,7 @@ private:
     std::shared_ptr< model::ModelNodeEffectDefault >    m_defaultEffect;
     std::shared_ptr< model::ModelNodeEffectAlphaMask >  m_alphaMaskEffect;
     std::shared_ptr< model::ModelNodeEffectNodeMask >   m_nodeMaskEffect;
+    std::shared_ptr< model::ModelNodeEffectWireframe >  m_wireframeEffect;
 
 public:
 
@@ -54,6 +45,7 @@ private:
 
     model::IModelNodeEffectPtr  GetAlphaMaskNodeEffect   ( BVAppLogic * logic );
     model::IModelNodeEffectPtr  GetNodeMaskNodeEffect    ( BVAppLogic * logic );
+    model::IModelNodeEffectPtr  GetNodeWireframeEffect   ( BVAppLogic * logic );
 
 };
 
