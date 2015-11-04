@@ -49,6 +49,8 @@ void    WireframeRenderLogic::RenderWireframeOverlay    ( Renderer * renderer, S
 void    WireframeRenderLogic::EnableWireframeEffect       ( Renderer * renderer, SceneNode * node )
 {
     // FIXME: add IValues to the effect
+    //auto pass = m_effect->GetPass( 0 );
+
     renderer->Enable( m_effect->GetPass( 0 ), static_cast<bv::RenderableEntity *>( node->GetTransformable() ) );
 }
 

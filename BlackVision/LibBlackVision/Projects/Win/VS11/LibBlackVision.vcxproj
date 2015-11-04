@@ -200,6 +200,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamVec2.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamVec3.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamVec4.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\PixelShader.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\RenderableEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\RenderablePass.cpp" />
@@ -359,6 +360,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\WireframeNodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeShaders.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelNodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectAlphaMask.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectDefault.h" />

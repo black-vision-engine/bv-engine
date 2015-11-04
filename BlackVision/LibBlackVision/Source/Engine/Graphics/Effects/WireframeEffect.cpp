@@ -2,6 +2,8 @@
 
 #include "Engine/Models/Builder/RendererStatesBuilder.h"
 
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"
+
 #include "Engine/Graphics/Effects/WireframeShaders.h"
 
 
@@ -56,8 +58,12 @@ PixelShader *       WireframeEffect::CreatePS        ()
 //
 VertexShader *      WireframeEffect::CreateVS        ()
 {
-    //FIXM: register parameters here
-    auto shader = new VertexShader( GetWireframeVertexShaderCode(), new ShaderParameters() );
+    auto params = new ShaderParameters();
+
+    params->AddParameter( ShaderParamFactory::CreateViewportMatrixParameter() );
+    params->AddParameter( ShaderParamFactory::CreateMVPParameter() );
+
+    auto shader = new VertexShader( GetWireframeVertexShaderCode(), params );
 
     return shader;
 }
