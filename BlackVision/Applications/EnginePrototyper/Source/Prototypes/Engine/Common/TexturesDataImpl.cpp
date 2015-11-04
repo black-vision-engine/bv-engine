@@ -12,27 +12,18 @@ namespace bv {
 //
 TexturesDataImpl::~TexturesDataImpl   ()
 {
-    for( auto desc : m_textures )
-    {
-        delete desc;
-    }
-
-    for( auto anim : m_animations )
-    {
-        delete anim;
-    }
 }
 
 // **************************
 //
-const std::vector< ITextureDescriptor * > &     TexturesDataImpl::GetTextures       () const
+const std::vector< ITextureDescriptorPtr > &     TexturesDataImpl::GetTextures       () const
 {
     return m_textures;
 }
 
 // **************************
 //
-const std::vector< IAnimationDescriptor * > &   TexturesDataImpl::GetAnimations     () const
+const std::vector< IAnimationDescriptorPtr > &   TexturesDataImpl::GetAnimations     () const
 {
     return m_animations;
 }

@@ -12,27 +12,30 @@ class DefaultTexturesData : public ITexturesData
 {
 private:
 
-    std::vector< ITextureDescriptor * >     m_textureDescriptors;
-    std::vector< IAnimationDescriptor * >   m_animationDescriptors;
+    std::vector< ITextureDescriptorPtr >     m_textureDescriptors;
+    std::vector< IAnimationDescriptorPtr >   m_animationDescriptors;
 
 public:
 
             DefaultTexturesData ();
             ~DefaultTexturesData();
 
-    virtual const std::vector< ITextureDescriptor * > &     GetTextures     () const override;
-    virtual const std::vector< IAnimationDescriptor * > &   GetAnimations   () const override;
+    virtual const std::vector< ITextureDescriptorPtr > &     GetTextures     () const override;
+    virtual const std::vector< IAnimationDescriptorPtr > &   GetAnimations   () const override;
 
-    ITextureDescriptor *                                    GetTexture          ( unsigned int idx );
-    IAnimationDescriptor *                                  GetAnimation        ( unsigned int idx );
+	//NOTE: not used anywhere
+    ITextureDescriptorPtr                                   GetTexture          ( unsigned int idx );
+	IAnimationDescriptorPtr                                 GetAnimation        ( unsigned int idx );
+    
+	ITextureDescriptorPtr                                   GetTexture          ( const std::string & name );
 
     void                                                    SetTextureParams    ( unsigned int idx, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, TextureFilteringMode filteringMode, const glm::vec4 & borderColor );
-    bool                                                    SetTexture          ( unsigned int idx, ITextureDescriptor * textureDesc );
-    void                                                    AddTexture          ( ITextureDescriptor * textureDesc );
+	bool                                                    SetTexture          ( unsigned int idx, ITextureDescriptorPtr textureDesc );
+    void                                                    AddTexture          ( ITextureDescriptorPtr textureDesc );
 
     void                                                    SetAnimationParams  ( unsigned int idx, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, TextureFilteringMode filteringMode, const glm::vec4 & borderColor );
-    bool                                                    SetAnimation        ( unsigned int idx, IAnimationDescriptor * animationDesc );
-    void                                                    AddAnimation        ( IAnimationDescriptor * animationDesc );
+    bool                                                    SetAnimation        ( unsigned int idx, IAnimationDescriptorPtr animationDesc );
+    void                                                    AddAnimation        ( IAnimationDescriptorPtr animationDesc );
 
     bool                                                    SetAnimationFrame   ( unsigned int idx, unsigned int frameNum );
 

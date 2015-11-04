@@ -12,6 +12,10 @@
 
 namespace bv { namespace model {
 
+class DefaultAnimationDescriptor;
+DEFINE_PTR_TYPE(DefaultAnimationDescriptor)
+DEFINE_CONST_PTR_TYPE(DefaultAnimationDescriptor)
+
 class DefaultAnimationDescriptor : public IAnimationDescriptor
 {
 private:
@@ -76,7 +80,7 @@ public:
 
     void                            SetBorderColor      ( const glm::vec4 & bc );
 
-    static DefaultAnimationDescriptor * LoadAnimation   ( const AnimationAssetDescConstPtr & frames, const std::string & name );
+    static DefaultAnimationDescriptorPtr LoadAnimation   ( const AnimationAssetDescConstPtr & frames, const std::string & name );
 
 };
 

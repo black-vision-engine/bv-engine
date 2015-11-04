@@ -287,7 +287,7 @@ void                    DefaultAnimationDescriptor::SetBorderColor      ( const 
 
 // *******************************
 //
-DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const AnimationAssetDescConstPtr & animResDesc, const std::string & name )
+DefaultAnimationDescriptorPtr DefaultAnimationDescriptor::LoadAnimation  ( const AnimationAssetDescConstPtr & animResDesc, const std::string & name )
 {
 	auto animRes = LoadTypedAsset<AnimationAsset>( animResDesc );
 
@@ -312,7 +312,7 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
     auto w		= texResource->GetOriginal()->GetWidth();
     auto h		= texResource->GetOriginal()->GetHeight();
 
-    DefaultAnimationDescriptor * retDesc = new DefaultAnimationDescriptor( name, w, h, fmt, TextureWrappingMode::TWM_CLAMP_BORDER, TextureWrappingMode::TWM_CLAMP_BORDER, TextureFilteringMode::TFM_LINEAR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
+	auto retDesc = std::make_shared< DefaultAnimationDescriptor >( name, w, h, fmt, TextureWrappingMode::TWM_CLAMP_BORDER, TextureWrappingMode::TWM_CLAMP_BORDER, TextureFilteringMode::TFM_LINEAR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 
     retDesc->AddBits( texResource );
 
@@ -333,10 +333,7 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
 
         if( lfmt != fmt || lw != w || lh != h )
         {
-            delete retDesc;
-            
             retDesc = nullptr;
-            
             break;
         }
         else

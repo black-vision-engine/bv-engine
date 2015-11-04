@@ -9,6 +9,10 @@
 
 namespace bv { namespace model {
 
+class DefaultTextureDescriptor;
+DEFINE_PTR_TYPE(DefaultTextureDescriptor)
+DEFINE_CONST_PTR_TYPE(DefaultTextureDescriptor)
+
 class DefaultTextureDescriptor : public ITextureDescriptor
 {
 private:
@@ -41,7 +45,7 @@ public:
     virtual UInt32				    GetHeight       ( UInt32 level = 0 ) const override;
 	virtual UInt32				    GetDepth		( UInt32 level = 0 ) const override;
     
-    virtual TextureFormat           GetFormat       () const override;\
+    virtual TextureFormat           GetFormat       () const override;
 
     virtual TextureWrappingMode     GetWrappingModeX() const override;
     virtual TextureWrappingMode     GetWrappingModeY() const override;
@@ -75,9 +79,9 @@ public:
     
     void                            SetSemantic     ( DataBuffer::Semantic semantic );
 
-    static void                     SetDefaults     ( DefaultTextureDescriptor * desc );
+    static void                     SetDefaults     ( DefaultTextureDescriptorPtr desc );
 
-	static DefaultTextureDescriptor * LoadTexture   ( const TextureAssetDescConstPtr & textureResDesc, const std::string & name );
+	static DefaultTextureDescriptorPtr LoadTexture   ( const TextureAssetDescConstPtr & textureResDesc, const std::string & name );
 
 };
 

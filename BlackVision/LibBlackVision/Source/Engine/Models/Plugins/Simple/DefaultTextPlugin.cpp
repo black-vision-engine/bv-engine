@@ -219,7 +219,7 @@ void							DefaultTextPlugin::LoadTexture(	DefaultTexturesDataPtr txData,
 {
 	
       //FIXME: use some better API to handle resources in general and textures in this specific case
-	auto txDesc = new DefaultTextureDescriptor(		res
+	auto txDesc = std::make_shared< DefaultTextureDescriptor >(	res
 												,   name
 												,   hWrappingMode
 												,   vWrappingMode

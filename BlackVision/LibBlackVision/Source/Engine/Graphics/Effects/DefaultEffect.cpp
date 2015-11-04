@@ -152,8 +152,8 @@ void               DefaultEffect::AddTextures       ( Shader * shader, ITextures
 
         for( auto tx : textures )
         {
-            auto sampler = CreateSampler( tx, samplerNum );
-            auto texture = GetTexture( tx );
+            auto sampler = CreateSampler( tx.get(), samplerNum );
+            auto texture = GetTexture( tx.get() );
 
             shader->AddTextureSampler( sampler );
             params->AddTexture( texture );
@@ -165,8 +165,8 @@ void               DefaultEffect::AddTextures       ( Shader * shader, ITextures
         {
             if( anim->NumTextures() > 0 )
             {
-                auto sampler    = CreateSampler( anim, samplerNum );
-                auto sequence   = GetSequence( anim );
+                auto sampler    = CreateSampler( anim.get(), samplerNum );
+                auto sequence   = GetSequence( anim.get() );
 
                 shader->AddTextureSampler( sampler );
                 params->AddTexture( sequence );

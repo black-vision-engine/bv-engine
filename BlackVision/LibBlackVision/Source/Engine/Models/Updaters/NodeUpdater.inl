@@ -240,7 +240,7 @@ inline void    NodeUpdater::UpdateTexturesData  ()
                 auto tex2D  = std::static_pointer_cast< Texture2DImpl >( shaderParams->GetTexture( j ) );
 
                  //Stored in cache which means that proper 2D texture has to be created for current texDesc (possibly alread stored in the cache)
-                if( GTexture2DCache.IsStored( tex2D ) && tex2D != GTexture2DCache.GetTexture( texDesc ) )
+                if( GTexture2DCache.IsStored( tex2D ) && tex2D != GTexture2DCache.GetTexture( texDesc.get() ) )
                 {
                     auto newTex2D = GTexture2DCache.GetTexture( texDesc );
 

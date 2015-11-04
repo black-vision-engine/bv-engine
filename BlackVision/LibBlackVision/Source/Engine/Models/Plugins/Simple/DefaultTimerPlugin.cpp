@@ -274,8 +274,8 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
 {
     m_spacingParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
 
-    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
-    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
+    m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
+    m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 	
 	SetPrevPlugin( prev );
 
@@ -342,7 +342,7 @@ bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr
 		auto textureResource = m_textAtlas->GetAsset();
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
-        auto txDesc = new DefaultTextureDescriptor(     textureResource
+		auto txDesc = std::make_shared< DefaultTextureDescriptor >(     textureResource
                                                     ,   DefaultTimerPluginDesc::TextureName()
                                                     ,   TextureWrappingMode::TWM_CLAMP_BORDER
                                                     ,   TextureWrappingMode::TWM_CLAMP_BORDER

@@ -336,7 +336,7 @@ void                        DefaultTextureDescriptor::SetSemantic     ( DataBuff
 
 // **************************
 //
-void                        DefaultTextureDescriptor::SetDefaults     ( DefaultTextureDescriptor * desc )
+void                        DefaultTextureDescriptor::SetDefaults     ( DefaultTextureDescriptorPtr desc )
 {
     desc->SetBits( nullptr );
     desc->SetName( "" );
@@ -353,7 +353,7 @@ void                        DefaultTextureDescriptor::SetDefaults     ( DefaultT
 
 // **************************
 //
-DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const TextureAssetDescConstPtr & textureResDesc, const std::string & name )
+DefaultTextureDescriptorPtr  DefaultTextureDescriptor::LoadTexture    ( const TextureAssetDescConstPtr & textureResDesc, const std::string & name )
 {
 	auto res = LoadTypedAsset<TextureAsset>( textureResDesc );
 
@@ -362,7 +362,7 @@ DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const Tex
         return nullptr;
     }
 
-    DefaultTextureDescriptor * desc = new DefaultTextureDescriptor();
+	auto desc = std::make_shared< DefaultTextureDescriptor >();
     SetDefaults( desc );
 
 	if( res->HasMipMaps() )

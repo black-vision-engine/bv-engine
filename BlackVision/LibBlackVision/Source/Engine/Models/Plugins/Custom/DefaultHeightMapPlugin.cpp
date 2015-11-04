@@ -292,7 +292,7 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( AssetDes
         }
 */
 
-        SetTextureParams( ( TextureSlot ) curNumTextures, txDesc );
+        SetTextureParams( ( TextureSlot ) curNumTextures, txDesc.get() );
 
         txData->AddTexture( txDesc );
 

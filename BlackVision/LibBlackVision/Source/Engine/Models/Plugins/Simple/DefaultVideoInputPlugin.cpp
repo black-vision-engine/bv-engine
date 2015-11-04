@@ -188,13 +188,9 @@ bool                                DefaultVideoInputPlugin::LoadResource       
 
         if( txDesc != nullptr )
         {
-            if( txData->GetTextures().size() == 0 )
+            if( !txData->SetTexture( 0, txDesc ) )
             {
                 txData->AddTexture( txDesc );
-            }
-            else
-            {
-                txData->SetTexture( 0, txDesc );
             }
 
             m_textureWidth = txDesc->GetWidth();

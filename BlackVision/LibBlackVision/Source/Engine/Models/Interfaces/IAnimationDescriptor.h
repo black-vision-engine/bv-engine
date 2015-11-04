@@ -23,4 +23,7 @@ public:
 
 };
 
+DEFINE_PTR_TYPE(IAnimationDescriptor)
+DEFINE_CONST_PTR_TYPE(IAnimationDescriptor)
+
 } //bv
