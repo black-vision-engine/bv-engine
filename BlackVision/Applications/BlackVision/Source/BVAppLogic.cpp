@@ -168,18 +168,8 @@ model::BasicNodePtr BVAppLogic::LoadScenes( const PathVec & pathVec )
         root->AddChildToModelOnly( std::const_pointer_cast< model::BasicNode >( scene ) );
     }
 
-    Camera * cam = nullptr;
-
-    if( m_bvScene )
-    {
-        cam = m_bvScene->GetCamera();
-    }
-    else
-    {
-        cam = new Camera( DefaultConfig.IsCameraPerspactive() );
-    }
-
-    m_bvScene    = BVScene::Create( root,  cam, "BasicScene", m_globalTimeline, m_renderer, GetTimelineManager() );
+    m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", m_globalTimeline, m_renderer, GetTimelineManager() );
+    InitCamera( 500, 500 );
     assert( m_bvScene );
 
     return root;
@@ -303,13 +293,22 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 		m_RemoteControl->UpdateHM();
 
         {
-            FRAME_STATS_SECTION( "Render" );
 			HPROFILER_SECTION( "Render", PROFILER_THREAD1 );			
             
-			RefreshVideoInputScene();
+            {
+                FRAME_STATS_SECTION( "Video input" );
+			    RefreshVideoInputScene();
+            }
 
-            m_renderLogic->RenderFrame( renderer, m_bvScene->GetEngineSceneRoot() );
-            m_renderLogic->FrameRendered( renderer );
+            {
+                FRAME_STATS_SECTION( "Render" );
+                m_renderLogic->RenderFrame( renderer, m_bvScene->GetEngineSceneRoot() );
+            }
+            
+            {
+                FRAME_STATS_SECTION( "VideoCard copy buffer" );
+                m_renderLogic->FrameRendered( renderer );
+            }
         }
     }
 

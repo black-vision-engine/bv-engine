@@ -151,16 +151,34 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
         else if( command == NewInfoEvent::Command::Performance )
         {
             //Log::A("SENDING","Performance:");
-            
-            PerformanceMonitor::Calculate( m_appLogic->GetStatsCalculator() );
-            string S = "{\"cmd\":\"performance\",\"fps\":\""+PerformanceMonitor::Stats.fps+"\",\"fps_avg\":\""+PerformanceMonitor::Stats.fps_avg+"\",\"ram\":\""+PerformanceMonitor::Stats.ram+"\",\"vram\":\""+PerformanceMonitor::Stats.vram+"\",\"cpu\":\""+PerformanceMonitor::Stats.cpu+"\" }";
-           
-            //Log::A("OK",S);
-            wstring responseMessage = wstring(S.begin(),S.end());
+                        
+            auto& frameStats = m_appLogic->FrameStats();
+            auto& sections = frameStats.RegisteredSections();
 
-            ResponseEventPtr msg = std::make_shared<ResponseEvent>();
-            msg->Response = responseMessage;
-            GetDefaultEventManager().QueueResponse( msg );
+            PerformanceMonitor::Calculate( m_appLogic->GetStatsCalculator() );
+
+            Json::Value root;
+            root["cmd"] = "performance";
+            root["fps"] = PerformanceMonitor::Stats.fps;
+            root["fps_avg"] = PerformanceMonitor::Stats.fps_avg;
+            root["ram"] = PerformanceMonitor::Stats.ram;
+            root["vram"] = PerformanceMonitor::Stats.vram;
+            root["cpu"] = PerformanceMonitor::Stats.cpu;
+
+            for( auto name : sections )
+            {
+                root[ name ]["average"] = frameStats.ExpectedValue( name );
+                root[ name ]["minVal"] = frameStats.MinVal( name );
+                root[ name ]["maxVal"] = frameStats.MaxVal( name );
+                root[ name ]["variance"] = frameStats.Variance( name );
+            }
+            
+            //Log::A("OK",S);
+            wstring responseMessage = toWString( root.toStyledString() );
+
+            ResponseEventPtr responseEvent = std::make_shared<ResponseEvent>();
+            responseEvent->Response = responseMessage;
+            GetDefaultEventManager().QueueResponse( responseEvent );
 
         }
         else if( command == NewInfoEvent::Command::Timelines )
@@ -254,59 +272,13 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
 				return;
 			}
 
-			bool visible    = node->IsVisible();
-			auto pluginlist = node->GetPluginList();
+            JsonSerializeObject ser;
+            std::static_pointer_cast< model::BasicNode >( node )->Serialize( ser );
 
             Json::Value res;
-            res[ "cmd" ]        = "node_info";
-            res[ "visible" ]    = visible;
-
-            Json::Value jsonParams;
-
-			for( unsigned int i = 0; i < pluginlist->NumPlugins(); ++i )
-			{
-				IPluginPtr plugin = pluginlist->GetPlugin( i );
-				string plugin_name = plugin->GetName();
-
-                auto pluginParamModel = plugin->GetPluginParamValModel()->GetPluginModel();
-
-                if( !pluginParamModel )
-                {
-                    continue;
-                }
-
-				auto & params = pluginParamModel->GetParameters();
-
-				for( auto p : params )
-				{
-                    switch( p->GetType() )
-                    {
-                        case ModelParamType::MPT_FLOAT:
-                            jsonParams.append( GetParamDescription< ParamFloatPtr >( p ) );
-                        case ModelParamType::MPT_MAT2:
-                            assert( !"Not imeplemented" );  // TODO: Implement this case.
-                            //jsonParams.append( GetParamDescription< ParamMat2Ptr >( p ) );
-                        case ModelParamType::MPT_VEC2:
-                            jsonParams.append( GetParamDescription< ParamVec2Ptr >( p ) );
-                        case ModelParamType::MPT_VEC3:
-                            jsonParams.append( GetParamDescription< ParamVec3Ptr >( p ) );
-                        case ModelParamType::MPT_VEC4:
-                            jsonParams.append( GetParamDescription< ParamVec4Ptr >( p ) );
-                        case ModelParamType::MPT_TRANSFORM:
-                            assert( !"Not imeplemented" );  // TODO: Implement this case. AccessInterpolator' : is not a member of 'bv::model::ParamTransform'
-                        case ModelParamType::MPT_TRANSFORM_VEC:
-                            assert( !"Not imeplemented" );  // TODO: Implement this case. AccessInterpolator' : is not a member of 'bv::model::ParamTransformVec'
-                        case ModelParamType::MPT_INT:
-                            jsonParams.append( GetParamDescription< ParamIntPtr >( p ) );
-                        case ModelParamType::MPT_BOOL:
-                            jsonParams.append( GetParamDescription< ParamBoolPtr >( p ) );
-                        case ModelParamType::MPT_ENUM:
-                            assert( !"Not imeplemented" );  // TODO: Implement this case. No idea how TypeEnum is a tamplate class.
-                    }
-                }
-            }
-           
-            res[ "params" ]     = jsonParams;
+            res[ "cmd" ] = "node_info";
+            res[ "node" ] = ser.GetJson();
+            res[ "node" ]["node"].removeMember( "nodes" );
 
             auto resStr = res.toStyledString();
 

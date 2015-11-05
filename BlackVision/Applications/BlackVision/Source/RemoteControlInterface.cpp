@@ -221,7 +221,7 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
         }else if( infoEvent->request==L"performance")
         {
             Log::A("SENDING","Performance:");
-            
+
             PerformanceMonitor::Calculate(m_AppLogic->GetStatsCalculator());
             string S = "{\"cmd\":\"performance\",\"fps\":\""+PerformanceMonitor::Stats.fps+"\",\"fps_avg\":\""+PerformanceMonitor::Stats.fps_avg+"\",\"ram\":\""+PerformanceMonitor::Stats.ram+"\",\"vram\":\""+PerformanceMonitor::Stats.vram+"\",\"cpu\":\""+PerformanceMonitor::Stats.cpu+"\" }";
            
