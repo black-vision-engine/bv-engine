@@ -14,7 +14,9 @@ public:
 
                             ModelNodeEffectWireframe( ITimeEvaluatorPtr timeEvaluator );
 
-    virtual NodeEffectType  GetType                 () const override;
+        virtual void            Update              ( TimeType t ) override;
+
+        virtual NodeEffectType  GetType             () const override;
 
 };
 

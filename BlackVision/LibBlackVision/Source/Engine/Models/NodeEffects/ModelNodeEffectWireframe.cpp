@@ -8,14 +8,21 @@ namespace bv { namespace model {
 
 // ********************************
 //
-ModelNodeEffectWireframe::ModelNodeEffectWireframe( ITimeEvaluatorPtr timeEvaluator )
+ModelNodeEffectWireframe::ModelNodeEffectWireframe  ( ITimeEvaluatorPtr timeEvaluator )
 { 
     { timeEvaluator; }
 }
 
 // ********************************
 //
-NodeEffectType  ModelNodeEffectWireframe::GetType() const
+void            ModelNodeEffectWireframe::Update    ( TimeType t )
+{
+    { t; }
+}
+
+// ********************************
+//
+NodeEffectType  ModelNodeEffectWireframe::GetType   () const
 {
     return NodeEffectType::NET_WIREFRAME;
 }
