@@ -4,18 +4,19 @@
 
 namespace bv
 {
+class BVAppLogic;
 
 class SceneEventsHandlers
 {
+private:
+    BVAppLogic*         m_appLogic;
 public:
-    SceneEventsHandlers();
+    SceneEventsHandlers( BVAppLogic* appLogic );
     ~SceneEventsHandlers();
 
-    //void SceneStructure      ( bv::IEventPtr evt );
-    // SetNodeVisible <- wczeœniej implementowane przez SetParamEvent
-
-    void        AddNode         ();
-    void        RemoveNode      ();
+    void        SceneStructure      ( bv::IEventPtr evt );
+    void        ProjectStructure    ( bv::IEventPtr evt );
+    void        TimelineHandler     ( bv::IEventPtr evt );
 };
 
 

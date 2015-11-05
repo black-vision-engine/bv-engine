@@ -238,6 +238,25 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
     return pendingEvents;
 }
 
+// *******************************
+//
+void EventManager::QueueResponse       ( const IEventPtr evt )
+{
+    m_responseConcurrentQueue.Push( evt );
+}
+
+// *******************************
+//
+IEventPtr EventManager::GetNextResponse     ()
+{
+    IEventPtr evt;
+    if( m_responseConcurrentQueue.TryPop( evt ) )
+        return evt;     // This event shouldn't be used anymore. It's memory will be moved. Remember while modyfying this function.
+    else
+        return nullptr;
+}
+
+
 //FIXME: hack - should be created by means of Engine object or some global object responsible for application state and services
 IEventManager &     GetDefaultEventManager  ()
 {

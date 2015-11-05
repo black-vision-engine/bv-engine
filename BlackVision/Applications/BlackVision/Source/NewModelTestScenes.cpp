@@ -32,7 +32,7 @@
 #include "BVConfig.h"
 
 #include "Serialization/JsonSpirit/JsonSpiritSerializeObject.h"
-#include "Serialization/JsonSpirit/JsonSpiritDeserilizeObject.h"
+#include "Serialization/JsonSpirit/JsonSpiritDeserializeObject.h"
 
 
 namespace bv {
@@ -532,6 +532,10 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const std:
     else if( scene == "W_SERIALIZATION_TEST" )
     {
         node = TestScenesFactory::WSerializationTest( pluginsManager, timelineManager, timeEvaluator );
+    }
+    else if( scene == "REMOTE_EVENTS_TEST_SCENE" )
+    {
+        node = TestScenesFactory::RemoteEventsTestScene( pluginsManager, timelineManager, timeEvaluator );
     }
     else
     {
@@ -1237,7 +1241,7 @@ model::BasicNodePtr TestScenesFactory::WSerializationTest          ( const model
     serializeObject.Save( "textureWSerialize.json", FormatStyle::FORMATSTYLE_READABLE );
 
 
-    JsonSpiritDeserilizeObject deserializeObject;
+    JsonSpiritDeserializeObject deserializeObject;
     if( deserializeObject.LoadFile( "textureWSerialize.json" ) )
     {
         std::wstring result;
@@ -1260,5 +1264,18 @@ model::BasicNodePtr TestScenesFactory::WSerializationTest          ( const model
 
     return node0;
 }
+
+model::BasicNodePtr TestScenesFactory::RemoteEventsTestScene( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    pluginsManager;
+    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "water.jpg" );
+    auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "sand.jpg" );
+    //auto node0 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( 0.0, -0.4, 0.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 1", "fonts/courbi.TTF" );
+
+    node0->AddChildToModelOnly( node1 );
+
+    return node0;
+}
+
 
 } //bv

@@ -27,6 +27,7 @@ public:
 
 
     void						Save                ( const std::string& filename, FormatStyle style = FormatStyle::FORMATSTYLE_SPARING );
+    std::wstring				Save                ( FormatStyle style = FormatStyle::FORMATSTYLE_SPARING );
 
     // Serializer on string
 	virtual void				SetAttribute        ( const std::string& name, const std::string& value ) override;

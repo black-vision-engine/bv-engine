@@ -51,9 +51,9 @@ RemoteControlInterface::RemoteControlInterface(BVAppLogic *AppLogic)
 	m_AppLogic = AppLogic;
 
 	// SetParamEvent
-    bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnSetParam ), bv::SetParamEvent::Type() );
-    bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnInformation ), bv::InfoEvent::Type() );
-	bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnSceneStructure ), bv::SceneStructureEvent::Type() );
+    //bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnSetParam ), bv::SetParamEvent::Type() );
+    //bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnInformation ), bv::InfoEvent::Type() );
+	//bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnSceneStructure ), bv::SceneStructureEvent::Type() );
 
     // timeline events
     bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnTimelineCmd ), bv::TimeLineCmd::Type() );
@@ -68,7 +68,7 @@ RemoteControlInterface::RemoteControlInterface(BVAppLogic *AppLogic)
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnNodeAppearing ), widgets::NodeAppearingCrawlerEvent::Type() );
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );
 
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnLoadAsset ), bv::LoadAssetEvent::Type() );
+    //GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnLoadAsset ), bv::LoadAssetEvent::Type() );
 }
 
 
@@ -79,6 +79,8 @@ RemoteControlInterface::~RemoteControlInterface(void)
 
 }
 
+namespace 
+{
 
 std::string SerializeNode( model::BasicNodePtr node )
 {
@@ -142,93 +144,15 @@ void ReqPrint( model::BasicNodePtr node, int level )
 
 }
 
+} //anonymous
+
 // *********************************
 //
 namespace 
 {
-// *********************************
-//
-std::string ParamTypeToString( ModelParamType pType )
-{
-    switch( pType )
-    {
-    case ModelParamType::MPT_FLOAT:
-        return "float";
-    case ModelParamType::MPT_MAT2:
-        return "mat2";
-    case ModelParamType::MPT_VEC2:
-        return "vec2";
-    case ModelParamType::MPT_VEC3:
-        return "vec3";
-    case ModelParamType::MPT_VEC4:
-        return "vec4";
-    case ModelParamType::MPT_TRANSFORM:
-        return "transform";
-    case ModelParamType::MPT_TRANSFORM_VEC:
-        return "transform_vec";
-    case ModelParamType::MPT_INT:
-        return "int";
-    case ModelParamType::MPT_BOOL:
-        return "bool";
-    case ModelParamType::MPT_ENUM:
-        return "enum";
-    default:
-        assert( !"Should never be here" );
-        return "";
-    }
-}
 
-namespace 
-{
-	// FIXME: Should be moved to some core module.
-	template< typename T > 
-	std::string toString( const T & t )
-	{
-		return std::to_string( t );
-	}
 
-    // *********************************
-    //
-	template<> 
-	std::string toString< std::string >( const std::string & t )
-	{
-		return t;
-	}
-
-    // *********************************
-    //
-    template<>
-    std::string toString< std::wstring >( const std::wstring& t )
-    {
-        std::string convertedString( t.begin(), t.end() );
-        return std::move( convertedString );
-    }
-
-    // *********************************
-    //
-    template<> 
-	std::string toString< glm::vec4 >( const glm::vec4 & v )
-	{
-		return toString( v[ 0 ] ) + ", " + toString( v[ 1 ] ) + ", "  + toString( v[ 2 ] ) + ", "  + toString( v[ 3 ] );
-	}
-
-    // *********************************
-    //
-    template<> 
-	std::string toString< glm::vec3 >( const glm::vec3 & v )
-	{
-		return toString( v[ 0 ] ) + ", " + toString( v[ 1 ] ) + ", "  + toString( v[ 2 ] );
-	}
-    
-    // *********************************
-    //
-    template<> 
-	std::string toString< glm::vec2 >( const glm::vec2 & v )
-	{
-		return toString( v[ 0 ] ) + ", " + toString( v[ 1 ] );
-	}
-
-} // anonymous
+#include "Engine/Events/EventHelpers.h"
 
 // *********************************
 //
@@ -272,10 +196,13 @@ Json::Value GetParamDescription( IParameterPtr p )
 //
 void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 {
-    if( evt->GetEventType() == bv::InfoEvent::m_sEventType)
+    if( evt->GetEventType() == bv::InfoEvent::Type() )
     {
-        bv::InfoEventPtr evtInfo = std::static_pointer_cast<bv::InfoEvent>( evt );
-        if(evtInfo->request==L"tree_structure")
+        bv::InfoEventPtr infoEvent = std::static_pointer_cast<bv::InfoEvent>( evt );
+
+
+
+        if( infoEvent->request==L"tree_structure")
         {
             Log::A("OK","Tree structure:");
 			
@@ -288,10 +215,10 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 
             ResponseMsg msg;
             msg.msg     = WS;
-            msg.sock_id = evtInfo->sock_id;
+            msg.sock_id = infoEvent->sock_id;
             SocketWrapper::AddMsg(msg);
 
-        }else if(evtInfo->request==L"performance")
+        }else if( infoEvent->request==L"performance")
         {
             Log::A("SENDING","Performance:");
             
@@ -303,10 +230,10 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 
             ResponseMsg msg;
             msg.msg     = WS;
-            msg.sock_id = evtInfo->sock_id;
+            msg.sock_id =  infoEvent->sock_id;
             SocketWrapper::AddMsg(msg);
 
-        }else if(evtInfo->request==L"timelines")
+        }else if( infoEvent->request==L"timelines")
         {
             
             Log::A("SENDING","Timelines info...:");
@@ -378,13 +305,13 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 
             ResponseMsg msg;
             msg.msg     = WS;
-            msg.sock_id = evtInfo->sock_id;
+            msg.sock_id = infoEvent->sock_id;
             SocketWrapper::AddMsg(msg);
 
         }
-        else if( evtInfo->request == L"node_info" )
+        else if( infoEvent->request == L"node_info" )
         {
-            wstring nodeName = evtInfo->NodeName;
+            wstring nodeName = infoEvent->NodeName;
 			string nodeNameStr( nodeName.begin(), nodeName.end() );
 			//todo: //fixme: wstring -> string
 		    auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot();
@@ -424,6 +351,7 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 			//{
 			//	IPluginPtr plugin = pluginlist->GetPlugin( i );
 			//	string plugin_name = plugin->GetName();
+
 
 
    //             std::vector< IParameterPtr > params;
@@ -496,10 +424,10 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 
             ResponseMsg msg;
             msg.msg     = WS;
-            msg.sock_id = evtInfo->sock_id;
+            msg.sock_id = infoEvent->sock_id;
             SocketWrapper::AddMsg(msg);
         }
-        else if(evtInfo->request==L"videocards")
+        else if( infoEvent->request==L"videocards")
         {
             Json::Value val;
             val[ "cmd" ]        = "videocards";
@@ -512,23 +440,23 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 
             ResponseMsg msg;
             msg.msg     = WS;
-            msg.sock_id = evtInfo->sock_id;
+            msg.sock_id = infoEvent->sock_id;
             SocketWrapper::AddMsg(msg);
 
         }
-        else if( evtInfo->request == L"grab_that_frame" )
+        else if( infoEvent->request == L"grab_that_frame" )
 		{
-            const std::wstring & path = evtInfo->GetAddStrData();
+            const std::wstring & path = infoEvent->GetAddStrData();
 			string s_path( path.begin(),path.end() );
 
             m_AppLogic->GrabCurrentFrame( s_path );
 		}
-		else if( evtInfo->request == L"key_on" )
+		else if( infoEvent->request == L"key_on" )
 		{
 			Log::A("KEY", "ON");
             m_AppLogic->SetKey( true );
 		}
-		else if( evtInfo->request == L"key_off" )
+		else if( infoEvent->request == L"key_off" )
 		{
 			Log::A("KEY", "OFF");
 			
@@ -580,14 +508,14 @@ Json::Value Str2Json( const std::string & data )
 
 // *********************************
 //
-Json::Value GetRequestParamValue( const bv::SceneStructureEventPtr & evtStructure )
+Json::Value GetRequestParamValue( const bv::SceneStructureEventDeprecatedPtr & evtStructure )
 {
     return Str2Json( std::string( evtStructure->request.begin(), evtStructure->request.end() ) );
 }
 
 // *********************************
 //
-void SendOnSceneStructureResponse( const bv::SceneStructureEventPtr & evtStructure, const std::string & cmd, const std::string & msgKey, const Json::Value & msgVal )
+void SendOnSceneStructureResponse( const bv::SceneStructureEventDeprecatedPtr & evtStructure, const std::string & cmd, const std::string & msgKey, const Json::Value & msgVal )
 {
     Log::A( "OK", cmd );
 
@@ -612,9 +540,9 @@ void SendOnSceneStructureResponse( const bv::SceneStructureEventPtr & evtStructu
 //
 void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
 {
-    if( evt->GetEventType() == bv::SceneStructureEvent::m_sEventType)
+    if( evt->GetEventType() == bv::SceneStructureEventDeprecated::Type() )
     {
-		bv::SceneStructureEventPtr evtStructure = std::static_pointer_cast<bv::SceneStructureEvent>( evt );
+		bv::SceneStructureEventDeprecatedPtr evtStructure = std::static_pointer_cast<bv::SceneStructureEventDeprecated>( evt );
 
         auto pm = ProjectManager::GetInstance();
 
@@ -1331,13 +1259,13 @@ void            RemoteControlInterface::OnNodeLeaving   ( IEventPtr evt )
 //
 void            RemoteControlInterface::OnLoadAsset     ( IEventPtr evt )
 {
-    if( evt->GetEventType() == bv::LoadAssetEvent::m_sEventType )
+    if( evt->GetEventType() == bv::LoadAssetEvent::Type() )
     {
         bv::LoadAssetEventPtr eventLoadAsset = std::static_pointer_cast<bv::LoadAssetEvent>( evt );
         
-        std::string nodeName = toString( eventLoadAsset->NodeName );
-        std::string pluginName = toString( eventLoadAsset->PluginName );
-        std::string asssetData = toString( eventLoadAsset->AssetData );
+        std::string nodeName = eventLoadAsset->NodeName;
+        std::string pluginName = eventLoadAsset->PluginName;
+        std::string asssetData = eventLoadAsset->AssetData;
 
         auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot();
         auto node = root->GetNode( nodeName );
@@ -1356,9 +1284,9 @@ void            RemoteControlInterface::OnLoadAsset     ( IEventPtr evt )
 
         std::wstring response;
         if( result )
-            response = L"Asset loaded succesfully. node: [" + eventLoadAsset->NodeName + L"] plugin [" + eventLoadAsset->PluginName + L"]";
+            response = L"Asset loaded succesfully. node: [" + toWString( eventLoadAsset->NodeName ) + L"] plugin [" + toWString( eventLoadAsset->PluginName ) + L"]";
         else
-            response = L"Failed to load asset. node [" + eventLoadAsset->NodeName + L"] plugin [" + eventLoadAsset->PluginName + L"]";
+            response = L"Failed to load asset. node [" + toWString( eventLoadAsset->NodeName ) + L"] plugin [" + toWString( eventLoadAsset->PluginName ) + L"]";
 
         ResponseMsg msg;
         msg.msg     = response;

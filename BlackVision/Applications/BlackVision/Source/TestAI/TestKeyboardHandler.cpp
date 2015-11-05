@@ -3,6 +3,7 @@
 #include "BVAppLogic.h"
 #include "Serialization/XML/XMLSerializer.h"
 
+
 namespace bv {
 
 // *********************************
@@ -23,7 +24,7 @@ void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
         delete sob;
     }
 
-    { c; }
+
     { logic; }
 	// To be implemented in subclasses
 

@@ -8,7 +8,7 @@
 
 namespace bv {
 
-class JsonSpiritDeserilizeObject : public IDeserializer
+class JsonSpiritDeserializeObject : public IDeserializer
 {
 private:
     json_spirit::wValue                         m_root;
@@ -16,8 +16,8 @@ private:
 	mutable std::stack<json_spirit::wValue*>	m_nodeStack;
     mutable std::stack<unsigned int>            m_indexStack;
 public:
-    JsonSpiritDeserilizeObject();
-    ~JsonSpiritDeserilizeObject();
+    JsonSpiritDeserializeObject();
+    ~JsonSpiritDeserializeObject();
 
     bool                LoadFile            ( const std::string& fileName );
     bool                LoadWString         ( const std::wstring& jsonString );

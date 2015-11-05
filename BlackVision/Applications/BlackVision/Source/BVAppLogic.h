@@ -31,6 +31,8 @@ class SimpleTimer;
 class RenderLogic;
 class Renderer;
 class RemoteControlInterface;
+class RemoteEventsHandlers;
+
 
 enum class BVAppState : int
 {
@@ -62,6 +64,7 @@ private:
     Renderer *                      m_renderer;
     RenderLogic *                   m_renderLogic;
     TestKeyboardHandler *           m_kbdHandler;
+    RemoteEventsHandlers*           m_remoteHandlers;
 
     unsigned long                   m_startTime;
 
