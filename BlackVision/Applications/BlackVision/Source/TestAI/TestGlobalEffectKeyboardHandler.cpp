@@ -212,13 +212,6 @@ void                    TestGlobalEfectKeyboardHandler::HandleToggleEffect  ( BV
                 node->SetNodeEffect( m_alphaMaskEffect );
                 m_alphaMaskEffect = nullptr;
             }
-            else if ( effect->GetType() == NodeEffectType::NET_WIREFRAME )
-            {
-                assert( m_alphaMaskEffect );
-                
-                node->SetNodeEffect( m_alphaMaskEffect );
-                m_alphaMaskEffect = nullptr;
-            }
             else
             {
                 assert( false );
@@ -243,6 +236,31 @@ void                    TestGlobalEfectKeyboardHandler::HandleToggleEffect  ( BV
                 
                 node->SetNodeEffect( m_nodeMaskEffect );
                 m_nodeMaskEffect = nullptr;
+            }
+            else
+            {
+                assert( false );
+            }
+        }
+    }
+    else if( m_curSelectedNode == NodeEffectType::NET_WIREFRAME )
+    {
+        auto node = GetWireframeNode( logic );
+        auto effect = GetNodeWireframeEffect( logic );
+
+        if ( effect )
+        {
+            if ( effect->GetType() == NodeEffectType::NET_WIREFRAME )
+            {
+                m_wireframeEffect = std::static_pointer_cast< model::ModelNodeEffectWireframe >( effect );
+                node->SetNodeEffect( m_defaultEffect );
+            }
+            else if( effect->GetType() == NodeEffectType::NET_DEFAULT )
+            {
+                assert( m_wireframeEffect );
+                
+                node->SetNodeEffect( m_wireframeEffect );
+                m_wireframeEffect = nullptr;
             }
             else
             {

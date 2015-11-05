@@ -50,7 +50,7 @@ PixelShader *       WireframeEffect::CreatePS        ()
 {
     //FIXM: register parameters here
     auto shader = new PixelShader( GetWireframePixelShaderCode(), new ShaderParameters() );
-
+    
     return shader;
 }
 
@@ -60,8 +60,8 @@ VertexShader *      WireframeEffect::CreateVS        ()
 {
     auto params = new ShaderParameters();
 
-    params->AddParameter( ShaderParamFactory::CreateViewportMatrixParameter() );
     params->AddParameter( ShaderParamFactory::CreateMVPParameter() );
+    params->AddParameter( ShaderParamFactory::CreateMVParameter() );
 
     auto shader = new VertexShader( GetWireframeVertexShaderCode(), params );
 
@@ -72,8 +72,11 @@ VertexShader *      WireframeEffect::CreateVS        ()
 //
 GeometryShader *    WireframeEffect::CreateGS        ()
 {
-    //FIXM: register parameters here
-    auto shader = new GeometryShader( GetWireframeGeometryShaderCode(), new ShaderParameters() );
+    auto params = new ShaderParameters();
+
+    params->AddParameter( ShaderParamFactory::CreateViewportMatrixParameter() );
+
+    auto shader = new GeometryShader( GetWireframeGeometryShaderCode(), params );
 
     return shader;
 }

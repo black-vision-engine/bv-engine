@@ -33,8 +33,12 @@ vec3 find_altitudes( vec3 p0, vec3 p1, vec3 p2 )
 
 void process_next_vertex( vec3 edgeDistances, int idx )
 {
-	GEdgeDistance = edgeDistances[ idx ];
+	vec3 ged = vec3(0.0, 0.0, 0.0);
+	ged[ idx ] = edgeDistances[ idx ];
+
+	GEdgeDistance = ged;
 	GPosition = VPosition[ idx ];
+
 	gl_Position = gl_in[ idx ].gl_Position;
 
 	EmitVertex();
