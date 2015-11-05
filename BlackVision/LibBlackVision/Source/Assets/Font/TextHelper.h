@@ -8,6 +8,12 @@
 
 namespace bv { 
 
+namespace model
+{
+class TextArranger;
+
+} // model
+
 class TextAtlas;
 
 enum class TextAlignmentType
@@ -37,7 +43,7 @@ public:
 
     /////////////////////////////////////
     // This function builds VertexAttributeChannel for text and fontAsset.
-    static float                        BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, bool useKerning = true );
+    static float                        BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, model::TextArranger * arranger = nullptr, bool useKerning = true );
 };
 
 
