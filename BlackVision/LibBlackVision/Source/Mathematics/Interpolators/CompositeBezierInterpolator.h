@@ -51,7 +51,7 @@ public:
     typedef ValueT                      ValT;
 
 public:
-    CompositeBezierInterpolator( float tolerance = 0.000001 );
+    CompositeBezierInterpolator( float tolerance = 0.0001 );
     CompositeBezierInterpolator( const CompositeBezierInterpolator& that );
 
     void                                                AddKey             ( TimeValueT t, const ValueT & v );

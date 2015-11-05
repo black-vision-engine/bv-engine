@@ -35,7 +35,6 @@ DefaultPluginParamValModelPtr   DefaultAnimationPluginDesc::CreateDefaultModel( 
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
     //Create all parameters and evaluators
-    //SimpleVec4EvaluatorPtr      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
     SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
 
@@ -126,6 +125,7 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
 
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
+	HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 
     m_texturesData = m_psc->GetTexturesDataImpl();
 

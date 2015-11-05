@@ -24,7 +24,6 @@ private:
     std::string                     m_name;
     static std::string              m_uid;
 
-    //DefaultPixelShaderChannelPtr	m_defaultPSChannel;
     DefaultVertexShaderChannelPtr   m_defaultVSChannel;
 	ITransformChannelConstPtr		m_defaultTransformChannel;
 
@@ -72,14 +71,15 @@ public:
 
     virtual bool								IsValid						() override;
 
-	DefaultPixelShaderChannelPtr				UpdateShaderChannelModel	() const;
-
 private:
 	void										UpdateShaderChannelModel	( DefaultParamValModelPtr psModel, DefaultTexturesDataPtr txData, IPluginPtr plugin ) const;
 	void										UpdateShaderChannelModel	( DefaultParamValModelPtr psModel, IParamValModelPtr model ) const;
 	void										UpdateTexturesData			( DefaultTexturesDataPtr txData, IPluginPtr plugin ) const;
 	
-	void										UpdateTexturesData			( DefaultPixelShaderChannelPtr psc );
+	void										UpdateTexturesData			( DefaultPixelShaderChannelPtr psc ) const;
+
+	void										UpdatePixelShaderChannel	() const;
+
 
     std::vector< std::string >                  GetUIDS                    () const;
 

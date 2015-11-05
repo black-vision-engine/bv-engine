@@ -128,6 +128,7 @@ DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, c
     ctx->alphaCtx->blendEnabled = true;
     ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
     ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+	HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 }
 
 // *************************************
