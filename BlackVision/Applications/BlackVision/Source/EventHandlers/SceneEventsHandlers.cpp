@@ -283,7 +283,60 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 //
 void SceneEventsHandlers::TimelineHandler     ( bv::IEventPtr evt )
 {
+    //printf("timeline evt\n");
+    if( evt->GetEventType() == bv::TimeLineEvent::Type() )
+    {
+        bv::TimeLineEventPtr timelineEvent = std::static_pointer_cast<bv::TimeLineEvent>( evt );
 
+        std::string& timeLineName = timelineEvent->TimelineName;
+        float time = timelineEvent->Time;
+        TimeLineEvent::Command command = timelineEvent->TimelineCommand;
+
+        auto timeline = m_appLogic->GetTimelineManager()->GetTimeline( timeLineName );
+        if( timeline == nullptr )
+        {
+            LOG_MESSAGE( SeverityLevel::error ) << "Timeline ["+ timeLineName + "] does not exist.";
+            return;
+        }
+        bv::model::ITimeline* timelineTyped = static_cast<bv::model::ITimeline*>(timeline.get());
+
+
+        if( command == TimeLineEvent::Command::Play )
+        {
+            timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
+            timelineTyped->Play();
+            
+            
+            //printf("play\n");
+        }
+        else if( command == TimeLineEvent::Command::Stop )
+        {
+            timelineTyped->Stop();
+            //printf("stop\n");
+        }
+        else if( command == TimeLineEvent::Command::PlayReverse )
+        {
+            timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_BACKWARD );
+            timelineTyped->Play();
+            
+            //printf("play reverse\n");
+        }
+        else if( command == TimeLineEvent::Command::Goto )
+        {
+            timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
+            timelineTyped->SetTimeAndStop( (bv::TimeType)time );
+            
+            //printf("goto\n");
+        }
+        else if( command == TimeLineEvent::Command::GotoAndPlay )
+        {
+            timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
+            timelineTyped->SetTimeAndPlay( (bv::TimeType)time );
+            //timeline_cast->
+            //printf("gotoandplay\n");
+        }
+       
+    }
 }
 
 } //bv
