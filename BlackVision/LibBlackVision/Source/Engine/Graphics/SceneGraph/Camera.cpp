@@ -9,7 +9,9 @@ namespace bv
 // *********************************
 //
 Camera::Camera( bool isPerspective )
-    : m_position( 0.f, 0.f, 0.f )
+    : m_viewportWidth( 0 )
+    , m_viewportHeight( 0 )
+    , m_position( 0.f, 0.f, 0.f )
     , m_direction( 0.f, 0.f, -1.f )
     , m_up( 0.f, 1.f, 0.f )
     , m_FOV( 90.f )
@@ -70,6 +72,9 @@ void Camera::SetViewportSize                        ( unsigned int w, unsigned i
 {
     assert( w > 0 );
     assert( h > 0 );
+
+    m_viewportWidth = w;
+    m_viewportHeight = h;
 
     float aspect = float( w ) / float( h );
 
@@ -142,6 +147,20 @@ void Camera::SetProjectionMatrix                    ( const glm::mat4 & projecti
     m_projection = projectionMatrix;
 
     UpdatePVMatrix();
+}
+
+// *********************************
+//
+unsigned int        Camera::GetViewportWidth        () const
+{
+    return m_viewportWidth;
+}
+
+// *********************************
+//
+unsigned int        Camera::GetViewportHeight       () const
+{
+    return m_viewportHeight;
 }
 
 // *********************************

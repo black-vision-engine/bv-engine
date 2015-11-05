@@ -37,6 +37,8 @@ public:
 
 private:
 
+    static void                 UpdateSceneNodeEffect               ( SceneNode * node, model::BasicNodePtr modelNode );
+
     static  SceneNode *         BuildSingleEngineNode               ( model::BasicNodePtr modelNode );
 
     static  RenderableEntity *  CreateRenderableEntity              ( model::BasicNodePtr modelNode, const model::IPluginConstPtr & finalizer );

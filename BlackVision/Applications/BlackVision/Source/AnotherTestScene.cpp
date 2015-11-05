@@ -875,7 +875,8 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, const model::Plugin
 
 model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager )
 {
-    return LoadSceneFromFile( "Assets/07_Results.xml", pluginsManager, timelineManager );
+    //return LoadSceneFromFile( "Assets/07_Results.xml", pluginsManager, timelineManager );
+    return LoadSceneFromFile( "test.xml", pluginsManager, timelineManager );
 }
 
 } // bv

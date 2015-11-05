@@ -58,7 +58,7 @@ typedef std::vector< RenderTarget * >  RenderTargetVec;
 
 }
 
-class OffscreenRenderLogic
+class OffscreenRenderLogicTst
 {
 private:
 
@@ -83,8 +83,8 @@ private:
 
 public:
 
-                        OffscreenRenderLogic        ( unsigned int width, unsigned int height, unsigned int numReadBuffers, Camera * camera = nullptr, TextureFormat fmt = TextureFormat::F_A8R8G8B8 );
-                        ~OffscreenRenderLogic       ();
+                        OffscreenRenderLogicTst     ( unsigned int width, unsigned int height, unsigned int numReadBuffers, Camera * camera = nullptr, TextureFormat fmt = TextureFormat::F_A8R8G8B8 );
+                        ~OffscreenRenderLogicTst    ();
 
     void                SetRendererCamera           ( Camera * camera );
 

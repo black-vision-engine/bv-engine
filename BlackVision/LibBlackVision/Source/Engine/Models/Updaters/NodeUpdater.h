@@ -90,13 +90,17 @@ private:
 
 
                             NodeUpdater         ( SceneNode * sceneNode, model::IModelNodeConstPtr modelNode ); 
+
 public:
-                            ~NodeUpdater        ();
+
+    virtual                 ~NodeUpdater        ();
 
     static NodeUpdaterPtr   Create              ( SceneNode * sceneNode, model::IModelNodeConstPtr modelNode );
     virtual void            DoUpdate            () override;
 
 private:
+
+    void            UpdateNodeEffect    ();
 
     void            RegisterTexturesData( IShaderDataSourceConstPtr psTxData, IShaderDataSourceConstPtr vsTxData, IShaderDataSourceConstPtr gsTxData, RenderablePass * pass );
     bool            MustBeRegistered    ( IShaderDataSourceConstPtr shaderDataSrc, ShaderParameters * shaderParams );

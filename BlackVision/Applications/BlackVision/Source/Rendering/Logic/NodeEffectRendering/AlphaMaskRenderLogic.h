@@ -9,7 +9,10 @@ class AlphaMaskRenderLogic : public NodeEffectRenderLogic
 {
 public:
 
-    virtual void    RenderNode                  ( Renderer * renderer, SceneNode * node, OffscreenRenderLogic * offscreenRenderLogic ) override;
+                    AlphaMaskRenderLogic        ( RenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic );
+    virtual         ~AlphaMaskRenderLogic       ();
+
+    virtual void    RenderNode                  ( Renderer * renderer, SceneNode * node ) override;
 
 };
 

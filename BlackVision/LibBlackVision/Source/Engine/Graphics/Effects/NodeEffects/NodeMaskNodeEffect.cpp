@@ -1,35 +1,34 @@
 #include "NodeMaskNodeEffect.h"
 
+#include "Engine/Types/Values/ValuesFactory.h"
+
 
 namespace bv {
 
 // *********************************
 //
-NodeMaskNodeEffect::NodeMaskNodeEffect     ( unsigned int backgroundNodeIdx, unsigned int foregroundNodeIdx )
+NodeMaskNodeEffect::NodeMaskNodeEffect     ()
     : NodeEffect( NodeEffect::Type::T_NODE_MASK )
-    , m_bgNodeIdx( backgroundNodeIdx  )
-    , m_fgNodeIdx( foregroundNodeIdx )
 {
+    auto & values = AccessValues();
+
+    auto valueBgIdx = ValuesFactory::CreateValueInt( "bgIdx" );
+    auto valueFgIdx = ValuesFactory::CreateValueInt( "fgIdx" );
+    auto valueAlpha = ValuesFactory::CreateValueFloat( "alpha" );
+
+    valueBgIdx->SetValue( 0 );
+    valueFgIdx->SetValue( 1 );
+    valueAlpha->SetValue( 1.f );
+
+    values.push_back( valueBgIdx );
+    values.push_back( valueFgIdx );
+    values.push_back( valueAlpha );
 }
 
 // *********************************
 //
 NodeMaskNodeEffect::~NodeMaskNodeEffect    ()
 {
-}
-
-// *********************************
-//
-unsigned int    NodeMaskNodeEffect::GetForegroundIdx    () const
-{
-    return m_fgNodeIdx;
-}
-
-// *********************************
-//
-unsigned int    NodeMaskNodeEffect::GetBackgroundIdx    () const
-{
-    return m_bgNodeIdx;
 }
 
 } // bv

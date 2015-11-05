@@ -63,7 +63,7 @@ Texture2DConstPtr VisualTesterRenderLogic::renderImage( Renderer* renderer, Scen
 {
 	RenderFrame( renderer, node );
 
-	return m_offscreenRenderLogic->ReadDisplayTarget( renderer, 0 );
+	return m_offscreenRenderLogicTst->ReadDisplayTarget( renderer, 0 );
 }
 
 void VisualTesterRenderLogic::renderReferenceImage( Renderer* renderer, SceneNode* node, const std::string fileName )

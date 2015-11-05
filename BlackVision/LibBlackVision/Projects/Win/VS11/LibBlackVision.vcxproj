@@ -139,9 +139,12 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\AlphaMaskNodeEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeMaskNodeEffect.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\WireframeNodeEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectShaders.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectWithMask.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\WireframeShaders.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRenderer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRendererData.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLUtils.cpp" />
@@ -198,6 +201,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamVec2.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamVec3.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamVec4.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\PixelShader.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\RenderableEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\RenderablePass.cpp" />
@@ -213,13 +217,16 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\State\StencilState.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Types\Transform.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BasicNode.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\BasicOverrideState.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Builder\RendererStatesBuilder.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BVScene.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BVSceneEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BVSceneTools.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelNodeEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelSceneEditor.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectAlphaMask.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectDefault.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectNodeMask.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectWireframe.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\ChannelsFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizeGeometryShaderChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizePixelShaderChannel.cpp" />
@@ -338,6 +345,7 @@
     <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Core\MathFuncs.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp" />
+    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeBezierInterpolator.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
   </ItemGroup>
@@ -354,6 +362,15 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\HelperPixelShaderChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\ResourceStateModel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\SamplerStateModel.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\WireframeNodeEffect.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeShaders.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelNodeEffect.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectAlphaMask.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectDefault.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectNodeMask.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectWireframe.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.h" />
@@ -488,14 +505,12 @@
     <ClInclude Include="..\..\..\Source\Engine\Interfaces\IValue.h" />
     <ClInclude Include="..\..\..\Source\Engine\Interfaces\IValueSet.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\BasicNode.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\BasicOverrideState.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Builder\RendererStatesBuilder.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\BVSceneEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\BVSceneTools.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IAnimationDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelNode.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\INodeLogic.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IOverrideState.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITextureDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITextureParams.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITexturesData.h" />
@@ -643,6 +658,7 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Defines.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeBezierInterpolator.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Rect.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Transform\MatTransform.h" />
