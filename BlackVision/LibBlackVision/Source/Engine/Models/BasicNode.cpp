@@ -91,6 +91,8 @@ void                            BasicNode::Serialize               ( ISerializer
     doc.EnterChild( "node" );
     doc.SetAttribute( "name", GetName() );
 
+    doc.SetAttribute( "visible", m_visible ? "true" : "false" );
+
     doc.EnterChild( "plugins" );
         for( unsigned int  i = 0; i < m_pluginList->NumPlugins(); i++ )
         {
@@ -121,6 +123,8 @@ ISerializablePtr BasicNode::Create( const IDeserializer& dob )
     
     auto node = Create( name, timeEvaluator );
 
+    node->m_visible = dob.GetAttribute( "visible" ) == "true" ? true : false;
+
 // plugins
     auto plugins = SerializationHelper::DeserializeObjectLoadArrayImpl< BasePlugin< IPlugin > >( dob, "plugins" );
 
@@ -134,6 +138,9 @@ ISerializablePtr BasicNode::Create( const IDeserializer& dob )
         node->AddChildToModelOnly( child );
 
     return node;
+
+
+    //SetParamVal("nodePath" ,"plugin", { name: "translataion", type:"vec3" , val:"0 ,0 ,0" } );
 }
 
 // ********************************

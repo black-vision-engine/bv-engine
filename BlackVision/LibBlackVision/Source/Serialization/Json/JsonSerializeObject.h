@@ -26,6 +26,7 @@ public:
 
 	void						Save                ( const std::string& filename );
 	void						Save                ( std::ostream& out );
+    Json::Value                 GetJson             ();
 
 	void						SetAttribute        ( const std::string& name, const std::string& value ) override;
     std::string                 GetAttribute        ( const std::string& name ) override;

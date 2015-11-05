@@ -1,4 +1,5 @@
 #include "JsonSerializeObject.h"
+
 #include <cassert>
 
 namespace bv
@@ -23,9 +24,18 @@ void JsonSerializeObject::Save( const std::string& filename )
 	file.close();
 }
 
+// ***********************
+//
 void JsonSerializeObject::Save( std::ostream& out )
 {
 	out << m_root;
+}
+
+// ***********************
+//
+Json::Value JsonSerializeObject::GetJson()
+{
+    return m_root;
 }
 
 // ***********************

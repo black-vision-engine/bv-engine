@@ -147,7 +147,7 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     transformEffectVal2Evaluator->Parameter()->SetVal( 5.f, TimeType( 10.f ) );
 
     animScaleOffsetEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.f ) );
-    animScaleOffsetEvaluator->Parameter()->SetVal( 1.f, TimeType( 5.f ) );
+    animScaleOffsetEvaluator->Parameter()->SetVal( 1.f, TimeType( 15.f ) );
 
     animScaleOffsetEvaluator->Parameter()->AccessInterpolator().SetWrapPostMethod( WrapMethod::pingPong );
 

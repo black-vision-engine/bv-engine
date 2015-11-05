@@ -246,17 +246,24 @@ Json::Value GetParamDescription( IParameterPtr p )
     Json::Value jsonKeys;
 
     auto typedParam = QueryTypedParam< ParamTypePtr >( p );
-    auto accessIntepolator = typedParam->AccessInterpolator();
-    auto keys = accessIntepolator.AccessKeys();
-    for( auto & k : keys )
-    {
-        jsonKeys.append( toString( k.t ) );
-        jsonKeys.append( toString( k.val ) );
-    }
 
-    entry[ "keys" ] = jsonKeys;
+    JsonSerializeObject ser;
 
-    return entry;
+    typedParam->Serialize( ser );
+
+    return ser.GetJson();
+
+    //auto accessIntepolator = typedParam->AccessInterpolator();
+    //auto keys = accessIntepolator.GetKeys();
+    //for( auto & k : keys )
+    //{
+    //    jsonKeys.append( toString( k.t ) );
+    //    jsonKeys.append( toString( k.val ) );
+    //}
+
+    //entry[ "keys" ] = jsonKeys;
+
+    //return entry;
 }
 
 } // anonymous
@@ -381,7 +388,7 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 			string nodeNameStr( nodeName.begin(), nodeName.end() );
 			//todo: //fixme: wstring -> string
 		    auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot();
-			auto node = root->GetNode( nodeNameStr );
+            auto node = root->GetNode( nodeNameStr );
 
 			if( node == nullptr && root->GetName() == nodeNameStr )
 			{
@@ -395,61 +402,94 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 				return;
 			}
 
-			bool visible    = node->IsVisible();
-			auto pluginlist = node->GetPluginList();
+            JsonSerializeObject ser;
+            std::static_pointer_cast< model::BasicNode >( node )->Serialize( ser );
 
             Json::Value res;
-            res[ "cmd" ]        = "node_info";
-            res[ "visible" ]    = visible;
-
-            Json::Value jsonParams;
-
-			for( unsigned int i = 0; i < pluginlist->NumPlugins(); ++i )
-			{
-				IPluginPtr plugin = pluginlist->GetPlugin( i );
-				string plugin_name = plugin->GetName();
-
-                auto pluginParamModel = plugin->GetPluginParamValModel()->GetPluginModel();
-
-                if( !pluginParamModel )
-                {
-                    continue;
-                }
-
-				auto & params = pluginParamModel->GetParameters();
-
-				for( auto p : params )
-				{
-                    switch( p->GetType() )
-                    {
-                        case ModelParamType::MPT_FLOAT:
-                            jsonParams.append( GetParamDescription< ParamFloatPtr >( p ) );
-                        case ModelParamType::MPT_MAT2:
-                            assert( !"Not imeplemented" );  // TODO: Implement this case.
-                            //jsonParams.append( GetParamDescription< ParamMat2Ptr >( p ) );
-                        case ModelParamType::MPT_VEC2:
-                            jsonParams.append( GetParamDescription< ParamVec2Ptr >( p ) );
-                        case ModelParamType::MPT_VEC3:
-                            jsonParams.append( GetParamDescription< ParamVec3Ptr >( p ) );
-                        case ModelParamType::MPT_VEC4:
-                            jsonParams.append( GetParamDescription< ParamVec4Ptr >( p ) );
-                        case ModelParamType::MPT_TRANSFORM:
-                            assert( !"Not imeplemented" );  // TODO: Implement this case. AccessInterpolator' : is not a member of 'bv::model::ParamTransform'
-                        case ModelParamType::MPT_TRANSFORM_VEC:
-                            assert( !"Not imeplemented" );  // TODO: Implement this case. AccessInterpolator' : is not a member of 'bv::model::ParamTransformVec'
-                        case ModelParamType::MPT_INT:
-                            jsonParams.append( GetParamDescription< ParamIntPtr >( p ) );
-                        case ModelParamType::MPT_BOOL:
-                            jsonParams.append( GetParamDescription< ParamBoolPtr >( p ) );
-                        case ModelParamType::MPT_ENUM:
-                            assert( !"Not imeplemented" );  // TODO: Implement this case. No idea how TypeEnum is a tamplate class.
-                    }
-                }
-            }
-           
-            res[ "params" ]     = jsonParams;
+            res[ "cmd" ] = "node_info";
+            res[ "node" ] = ser.GetJson();
+            res[ "node" ]["node"].removeMember( "nodes" );
 
             auto resStr = res.toStyledString();
+
+			//bool visible    = node->IsVisible();
+			//auto pluginlist = node->GetPluginList();
+
+   //         Json::Value res;
+   //         res[ "cmd" ]        = "node_info";
+   //         res[ "visible" ]    = visible;
+
+
+			//for( unsigned int i = 0; i < pluginlist->NumPlugins(); ++i )
+			//{
+			//	IPluginPtr plugin = pluginlist->GetPlugin( i );
+			//	string plugin_name = plugin->GetName();
+
+
+   //             std::vector< IParameterPtr > params;
+
+   //             IPluginParamValModelPtr pvm =    plugin->GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
+   // 
+   //             IParamValModelPtr models[] = {    pvm->GetPluginModel()
+   //                                             , pvm->GetTransformChannelModel()
+   //                                             , pvm->GetVertexAttributesChannelModel()
+   //                                             , pvm->GetPixelShaderChannelModel()
+   //                                             , pvm->GetVertexShaderChannelModel()
+   //                                             , pvm->GetGeometryShaderChannelModel() 
+   //                                         };
+   // 
+   //             for( auto model : models )
+   //                 if( model ) for( auto param : model->GetParameters() )
+   //                     params.push_back( param );
+
+   //             Json::Value jsonParamsForPlugin;
+
+			//	for( auto p : params )
+			//	{
+   //                 switch( p->GetType() )
+   //                 {
+   //                     case ModelParamType::MPT_FLOAT:
+   //                         jsonParamsForPlugin.append( GetParamDescription< ParamFloatPtr >( p ) );
+   //                         break;
+   //                     case ModelParamType::MPT_MAT2:
+   //                         //assert( !"Not imeplemented" );  // TODO: Implement this case.
+   //                         break;
+   //                         //jsonParams.append( GetParamDescription< ParamMat2Ptr >( p ) );
+   //                     case ModelParamType::MPT_VEC2:
+   //                         jsonParamsForPlugin.append( GetParamDescription< ParamVec2Ptr >( p ) );
+   //                         break;
+   //                     case ModelParamType::MPT_VEC3:
+   //                         jsonParamsForPlugin.append( GetParamDescription< ParamVec3Ptr >( p ) );
+   //                         break;
+   //                     case ModelParamType::MPT_VEC4:
+   //                         jsonParamsForPlugin.append( GetParamDescription< ParamVec4Ptr >( p ) );
+   //                         break;
+   //                     case ModelParamType::MPT_TRANSFORM:
+   //                         //assert( !"Not imeplemented" );  // TODO: Implement this case. AccessInterpolator' : is not a member of 'bv::model::ParamTransform'
+   //                         break;
+   //                     case ModelParamType::MPT_TRANSFORM_VEC:
+   //                         jsonParamsForPlugin.append( GetParamDescription< ParamTransformVecPtr >( p ) );
+   //                         break;
+   //                     case ModelParamType::MPT_INT:
+   //                         jsonParamsForPlugin.append( GetParamDescription< ParamIntPtr >( p ) );
+   //                         break;
+   //                     case ModelParamType::MPT_BOOL:
+   //                         jsonParamsForPlugin.append( GetParamDescription< ParamBoolPtr >( p ) );
+   //                         break;
+   //                     case ModelParamType::MPT_ENUM:
+   //                         //assert( !"Not imeplemented" );  // TODO: Implement this case. No idea how TypeEnum is a tamplate class.
+   //                         break;
+   //                 }
+   //             }
+
+   //             Json::Value pluginEntry;
+   //             pluginEntry[ "pluginName" ] = plugin_name;
+   //             pluginEntry[ "pluginParams" ] = jsonParamsForPlugin;
+
+   //             res["plugins"].append( pluginEntry );
+   //         }
+
+   //         auto resStr = res.toStyledString();
 
             Log::A( "SENDING", resStr );
             wstring WS = wstring( resStr.begin(), resStr.end() );
