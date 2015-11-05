@@ -9,9 +9,9 @@ void main()
 {
     // Some default values
     // TODO: move them to uniform variables
-    float lineWidth = 2.5f;
+    float lineWidth = 1.5f;
     vec4 lineColor = vec4( 0.0, 0.0, 0.0, 1.0 ); // black line
-    vec4 mainColor = vec4( 1.0, 1.0, 1.0, 1.0 ); // white background
+    vec4 mainColor = vec4( 1.0, 0.0, 0.0, 0.25 ); // white background
 
     // Find the smallest distance
     float d = min( min( GEdgeDistance.x, GEdgeDistance.y ), GEdgeDistance.z );

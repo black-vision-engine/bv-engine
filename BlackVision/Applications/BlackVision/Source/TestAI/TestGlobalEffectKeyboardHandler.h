@@ -16,6 +16,9 @@ class TestGlobalEfectKeyboardHandler : public TestKeyboardHandler
 private:
 
     NodeEffectType          m_curSelectedNode;
+    
+    unsigned int            m_curWireframeNodeIdx;
+    bool                    m_wireframeDisabled;
 
     std::shared_ptr< model::ModelNodeEffectDefault >    m_defaultEffect;
     std::shared_ptr< model::ModelNodeEffectAlphaMask >  m_alphaMaskEffect;
@@ -43,9 +46,11 @@ private:
     model::BasicNodePtr     GetNodeMaskNode     ( BVAppLogic * logic );
     model::BasicNodePtr     GetWireframeNode    ( BVAppLogic * logic );
 
-    model::IModelNodeEffectPtr  GetAlphaMaskNodeEffect   ( BVAppLogic * logic );
-    model::IModelNodeEffectPtr  GetNodeMaskNodeEffect    ( BVAppLogic * logic );
-    model::IModelNodeEffectPtr  GetNodeWireframeEffect   ( BVAppLogic * logic );
+    model::IModelNodeEffectPtr  GetAlphaMaskNodeEffect  ( BVAppLogic * logic );
+    model::IModelNodeEffectPtr  GetNodeMaskNodeEffect   ( BVAppLogic * logic );
+    model::IModelNodeEffectPtr  GetNodeWireframeEffect  ( BVAppLogic * logic, unsigned int idx );
+
+    model::BasicNodePtr         GetWireframeNode        ( BVAppLogic * logic, unsigned int idx );
 
 };
 

@@ -19,7 +19,7 @@ WireframeEffect::WireframeEffect ()
 
     RenderablePass * pass = new RenderablePass( ps, vs, gs );
     auto sinst = pass->GetStateInstance();
-
+    
     RendererStatesBuilder::Create( sinst );
 
     auto as = RenderStateAccessor::AccessAlphaState( sinst );
