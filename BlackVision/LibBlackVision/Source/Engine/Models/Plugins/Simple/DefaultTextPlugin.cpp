@@ -259,7 +259,7 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
 {
     SetPrevPlugin( prev );
 
-    m_arranger = &CircleArranger;
+    //m_arranger = &CircleArranger;
 
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
     m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
