@@ -49,6 +49,14 @@ glm::mat4                           TextArranger::EvaluteRotation( float x, floa
 
 // *********************************
 //
+glm::vec3                           TextArranger::EvaluteNormal( float x, float xmin, float xmax )
+{
+    float t = (x - xmin) / std::abs( xmax - xmin );
+    return m_norm( t );
+}
+
+// *********************************
+//
 model::VertexAttributesChannel *    TextArranger::Arange( model::VertexAttributesChannel * vac )
 {
     mathematics::Rect rect;
@@ -83,6 +91,7 @@ model::VertexAttributesChannel *    TextArranger::Arange( model::VertexAttribute
 
                                 auto trans = glm::mat4( 1.f );
                                 auto rot = glm::mat4( 1.f );
+                                auto norm = glm::vec3( 1.f );
 
 					            for( unsigned int i = 0; i < numVerts; ++i )
 					            {
@@ -97,6 +106,7 @@ model::VertexAttributesChannel *    TextArranger::Arange( model::VertexAttribute
                                         trans = glm::translate( glm::mat4( 1.f ), translate );
 
                                         rot = EvaluteRotation( pos[ i ].x, x0, x1 );
+                                        norm = EvaluteNormal( pos[ i ].x, x0, x1 );
                                     }
 
                                     auto translateToBegin = glm::translate( glm::mat4( 1.f ), firstCCCenter - glm::vec3( posc[ i ].x, posc[ i ].y, 0.f ) );
@@ -104,9 +114,15 @@ model::VertexAttributesChannel *    TextArranger::Arange( model::VertexAttribute
                                     auto transC = glm::translate( glm::mat4( 1.f ), glm::vec3( posc[ i ].x, posc[ i ].y, 0.f ) );
                                     auto transCInv = glm::translate( glm::mat4( 1.f ), -glm::vec3( posc[ i ].x, posc[ i ].y, 0.f ) );
 
-                                    pos[ i ] = glm::vec3( trans * translateToBegin * transC * rot * transCInv * glm::vec4( pos[ i ].x, pos[ i ].y, pos[ i ].z, 1.f ) );
+                                    auto shift = glm::vec3( posc[ i ].x, posc[ i ].y, 0.f ) - firstCCCenter;
+
+                                    auto nShift = EvaluteNormal( pos[ i ].x, x0, x1 ) * shift.y;
+
+                                    auto nTranslate = glm::translate( glm::mat4( 1.f ), nShift );
+
+                                    pos[ i ] = glm::vec3( nTranslate * trans * translateToBegin * transC * rot * transCInv * glm::vec4( pos[ i ].x, pos[ i ].y, pos[ i ].z, 1.f ) );
                                     
-						            posc[ i ] = glm::vec2( trans * translateToBegin * transC * rot * transCInv * glm::vec4( posc[ i ].x, posc[ i ].y, 0.f, 1.f ) );
+						            posc[ i ] = glm::vec2( nTranslate * trans * translateToBegin * transC * rot * transCInv * glm::vec4( posc[ i ].x, posc[ i ].y, 0.f, 1.f ) );
 					            }
                             }
                         }

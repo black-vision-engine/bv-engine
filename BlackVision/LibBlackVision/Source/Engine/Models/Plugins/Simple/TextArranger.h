@@ -15,8 +15,9 @@ private:
     FuncFloat2Vec3Type m_tangent;
     FuncFloat2Vec3Type m_norm;
 
-    glm::vec3                           EvalutePosition( float x, float xmin, float xmax );
-    glm::mat4                           EvaluteRotation( float x, float xmin, float xmax );
+    glm::vec3                           EvalutePosition ( float x, float xmin, float xmax );
+    glm::mat4                           EvaluteRotation ( float x, float xmin, float xmax );
+    glm::vec3                           EvaluteNormal   ( float x, float xmin, float xmax );
 
 public:
 
