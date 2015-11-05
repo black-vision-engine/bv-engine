@@ -16,6 +16,7 @@ public:
 
     void        SceneStructure      ( bv::IEventPtr evt );
     void        ProjectStructure    ( bv::IEventPtr evt );
+    void        TimelineHandler     ( bv::IEventPtr evt );
 };
 
 

@@ -608,14 +608,16 @@ private:
 
 DEFINE_PTR_TYPE(SceneStructureEvent)
 
-// ************************************* ProjectStructureEvent Event *************************************
-class ProjectStructureEvent : public BaseEvent
+// ************************************* ProjectEvent Event *************************************
+class ProjectEvent : public BaseEvent
 {
 public:
     typedef enum
     {
         NewProject,
         SetCurrentProject,
+        SaveScene,
+        LoadProject,
         ListProjectNames,
         ListScenes,
         ListAssetsPaths,
@@ -627,10 +629,10 @@ private:
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
 public:
-    ProjectStructureEvent::Command  ProjectCommand;
+    ProjectEvent::Command           ProjectCommand;
     std::string                     Request;
 public:
-    explicit                        ProjectStructureEvent   () {}
+    explicit                        ProjectEvent   () {}
 
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );
@@ -646,7 +648,7 @@ private:
     static Command                  WStringToCommand    ( const std::wstring& string );
 };
 
-DEFINE_PTR_TYPE( ProjectStructureEvent )
+DEFINE_PTR_TYPE( ProjectEvent )
 
 
 // ************************************* Response Event *************************************
@@ -713,5 +715,47 @@ private:
 };
 
 DEFINE_PTR_TYPE( NewInfoEvent )
+
+
+// ************************************* TimelineCmd *************************************
+class TimeLineEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        Play,
+        Stop,
+        PlayReverse,
+        Goto,
+        GotoAndPlay,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    TimeLineEvent::Command      TimelineCommand;
+    std::string                 TimelineName;
+    float                       Time;
+
+public:
+    explicit                        TimeLineEvent   () {}
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+private:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
+};
+
+DEFINE_PTR_TYPE( TimeLineEvent )
+
+
 
 } //bv

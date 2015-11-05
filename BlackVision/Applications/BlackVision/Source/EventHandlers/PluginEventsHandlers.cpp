@@ -200,9 +200,9 @@ void PluginEventsHandlers::LoadAsset( bv::IEventPtr eventPtr )
     {
         bv::LoadAssetEventPtr eventLoadAsset = std::static_pointer_cast<bv::LoadAssetEvent>( eventPtr );
         
-        std::string nodeName = eventLoadAsset->NodeName;
-        std::string pluginName = eventLoadAsset->PluginName;
-        std::string asssetData = eventLoadAsset->AssetData;
+        std::string& nodeName = eventLoadAsset->NodeName;
+        std::string& pluginName = eventLoadAsset->PluginName;
+        std::string& asssetData = eventLoadAsset->AssetData;
 
         auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
         auto node = root->GetNode( nodeName );

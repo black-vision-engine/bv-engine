@@ -66,8 +66,8 @@ std::string ParamKeyEvent::m_sEventName             = "Event_ParamKeyEvent";
 const EventType SceneStructureEvent::m_sEventType   = 0x30000012;
 std::string SceneStructureEvent::m_sEventName       = "Event_SceneStructure";
 
-const EventType ProjectStructureEvent::m_sEventType = 0x30000013;
-std::string ProjectStructureEvent::m_sEventName     = "Event_ProjectStructure";
+const EventType ProjectEvent::m_sEventType          = 0x30000013;
+std::string ProjectEvent::m_sEventName              = "Event_ProjectStructure";
 
 const EventType ResponseEvent::m_sEventType         = 0x30000008;
 std::string ResponseEvent::m_sEventName             = "Event_Response";
@@ -75,6 +75,8 @@ std::string ResponseEvent::m_sEventName             = "Event_Response";
 const EventType NewInfoEvent::m_sEventType          = 0x30000007;
 std::string NewInfoEvent::m_sEventName              = "Event_Info";
 
+const EventType TimeLineEvent::m_sEventType         = 0x30000009;
+std::string TimeLineEvent::m_sEventName             = "Event_Timeline";
 
 // ************************************* Events Serialization *****************************************
 
@@ -110,9 +112,11 @@ const std::wstring COMMAND_DETACH_PLUGIN_WSTRING    = L"DetachPlugin";
 const std::wstring COMMAND_SET_NODE_VISIBLE_WSTRING     = L"SetNodeVisible";
 const std::wstring COMMAND_SET_NODE_INVISIBLE_WSTRING   = L"SetNodeInvisible";
 
-// ProjectStructureEvent
+// ProjectEvent
 const std::wstring REQUEST_WSTRING                          = L"request";
 
+const std::wstring COMMAND_SAVE_SCENE_WSTRING               = L"SAVE_SCENE";
+const std::wstring COMMAND_LOAD_PROJECT_WSTRING             = L"LOAD_PROJECT";
 const std::wstring COMMAND_NEW_PROJECT_WSTRING              = L"NEW_PROJECT";
 const std::wstring COMMAND_SET_CURRENT_PROJECT_WSTRING      = L"SET_CURRENT_PROJECT";
 const std::wstring COMMAND_LIST_PROJECTS_NAMES_WSTRING      = L"LIST_PROJECTS_NAMES";
@@ -131,7 +135,15 @@ const std::wstring COMMAND_TIMELINES_WSTRING            = L"timelines";
 const std::wstring COMMAND_NODE_INFO_WSTRING            = L"node_info";
 const std::wstring COMMAND_VIDEO_CARDS_WSTRING          = L"videocards";
 
+// TimelineEvent
+const std::wstring COMMAND_PLAY_WSTRING                 = L"play";
+const std::wstring COMMAND_STOP_WSTRING                 = L"stop";
+const std::wstring COMMAND_PLAY_REVERSE_WSTRING         = L"play_reverse";
+const std::wstring COMMAND_GOTO_WSTRING                 = L"goto";
+const std::wstring COMMAND_GOTO_AND_PLAY_WSTRING        = L"gotoandplay";
 
+const std::wstring TIMELINE_TIME_VALUE_WSTRING          = L"time";
+const std::wstring TIMELINE_NAME_WSTRING                = L"time";
 }
 
 // ************************************* PluginAddedEvent *************************************
@@ -1123,11 +1135,11 @@ SceneStructureEvent::Command SceneStructureEvent::WStringToCommand    ( const st
 }
 
 
-//******************* ProjectStructureEvent *************
+//******************* ProjectEvent *************
 
 // *************************************
 //
-void                ProjectStructureEvent::Serialize            ( ISerializer& ser ) const
+void                ProjectEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
     ser.SetAttribute( Serial::REQUEST_WSTRING, toWString( Request ) );
@@ -1136,11 +1148,11 @@ void                ProjectStructureEvent::Serialize            ( ISerializer& s
 
 // *************************************
 //
-IEventPtr                ProjectStructureEvent::Create          ( IDeserializer& deser )
+IEventPtr                ProjectEvent::Create          ( IDeserializer& deser )
 {
     if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
-        ProjectStructureEventPtr newEvent   = std::make_shared<ProjectStructureEvent>();
+        ProjectEventPtr newEvent            = std::make_shared<ProjectEvent>();
         newEvent->Request                   = toString( deser.GetAttribute( Serial::REQUEST_WSTRING ) );
         newEvent->ProjectCommand            = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
         
@@ -1150,29 +1162,29 @@ IEventPtr                ProjectStructureEvent::Create          ( IDeserializer&
 }
 // *************************************
 //
-IEventPtr               ProjectStructureEvent::Clone             () const
-{   return IEventPtr( new ProjectStructureEvent( *this ) );  }
+IEventPtr               ProjectEvent::Clone             () const
+{   return IEventPtr( new ProjectEvent( *this ) );  }
 
 // *************************************
 //
-EventType           ProjectStructureEvent::Type()
+EventType           ProjectEvent::Type()
 {   return m_sEventType;   }
 // *************************************
 //
-std::string&        ProjectStructureEvent::Name()
+std::string&        ProjectEvent::Name()
 {   return m_sEventName;   }
 // *************************************
 //
-const std::string&  ProjectStructureEvent::GetName() const
+const std::string&  ProjectEvent::GetName() const
 {   return Name();   }
 // *************************************
 //
-EventType           ProjectStructureEvent::GetEventType() const
+EventType           ProjectEvent::GetEventType() const
 {   return this->m_sEventType; }
 
 // *************************************
 //
-std::wstring ProjectStructureEvent::CommandToWString    ( Command cmd )
+std::wstring ProjectEvent::CommandToWString    ( Command cmd )
 {
     if( cmd == Command::NewProject )
         return Serial::COMMAND_NEW_PROJECT_WSTRING;
@@ -1188,12 +1200,16 @@ std::wstring ProjectStructureEvent::CommandToWString    ( Command cmd )
         return Serial::COMMAND_LIST_PROJECTS_WSTRING;
     else if( cmd == Command::ListScenes )
         return Serial::COMMAND_LIST_SCENES_WSTRING;
+    else if( cmd == Command::SaveScene )
+        return Serial::COMMAND_SAVE_SCENE_WSTRING;
+    else if( cmd == Command::LoadProject )
+        return Serial::COMMAND_LOAD_PROJECT_WSTRING;
     else
         return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
 }
 // *************************************
 //
-ProjectStructureEvent::Command ProjectStructureEvent::WStringToCommand    ( const std::wstring& string )
+ProjectEvent::Command ProjectEvent::WStringToCommand    ( const std::wstring& string )
 {
     if( string == Serial::COMMAND_NEW_PROJECT_WSTRING )
         return Command::NewProject;
@@ -1209,6 +1225,10 @@ ProjectStructureEvent::Command ProjectStructureEvent::WStringToCommand    ( cons
         return Command::ListProjects;
     else if( string == Serial::COMMAND_LIST_SCENES_WSTRING )
         return Command::ListScenes;
+    else if( string == Serial::COMMAND_SAVE_SCENE_WSTRING )
+        return Command::SaveScene;
+    else if( string == Serial::COMMAND_LOAD_PROJECT_WSTRING )
+        return Command::LoadProject;
     else
         return Command::Fail;
 }
@@ -1345,7 +1365,90 @@ NewInfoEvent::Command NewInfoEvent::WStringToCommand    ( const std::wstring& st
         return Command::Fail;
 }
 
+//******************* TimeLineEvent *************
 
+// *************************************
+//
+void                TimeLineEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
+    ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( TimelineCommand ) );
+    ser.SetAttribute( Serial::TIMELINE_NAME_WSTRING, toWString( TimelineName ) );
+    ser.SetAttribute( Serial::TIMELINE_TIME_VALUE_WSTRING, toWString( Time ) );
+}
+
+// *************************************
+//
+IEventPtr                TimeLineEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
+    {
+        TimeLineEventPtr newEvent   = std::make_shared<TimeLineEvent>();
+        newEvent->Time              = stof( deser.GetAttribute( Serial::TIMELINE_TIME_VALUE_WSTRING ) );
+        newEvent->TimelineCommand   = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
+        newEvent->TimelineName      = toString( deser.GetAttribute( Serial::TIMELINE_NAME_WSTRING ) );
+
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               TimeLineEvent::Clone             () const
+{   return IEventPtr( new TimeLineEvent( *this ) );  }
+
+// *************************************
+//
+EventType           TimeLineEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        TimeLineEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  TimeLineEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           TimeLineEvent::GetEventType() const
+{   return this->m_sEventType; }
+
+// *************************************
+//
+std::wstring TimeLineEvent::CommandToWString    ( Command cmd )
+{
+    if( cmd == Command::Goto )
+        return Serial::COMMAND_GOTO_WSTRING;
+    else if( cmd == Command::GotoAndPlay )
+        return Serial::COMMAND_GOTO_AND_PLAY_WSTRING;
+    else if( cmd == Command::Play )
+        return Serial::COMMAND_PLAY_WSTRING;
+    else if( cmd == Command::PlayReverse )
+        return Serial::COMMAND_PLAY_REVERSE_WSTRING;
+    else if( cmd == Command::Stop )
+        return Serial::COMMAND_STOP_WSTRING;
+    else
+        return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
+}
+
+// *************************************
+//
+TimeLineEvent::Command TimeLineEvent::WStringToCommand    ( const std::wstring& string )
+{
+    if( string == Serial::COMMAND_GOTO_WSTRING )
+        return Command::Goto;
+    else if( string == Serial::COMMAND_GOTO_AND_PLAY_WSTRING )
+        return Command::GotoAndPlay;
+    else if( string == Serial::COMMAND_PLAY_WSTRING)
+        return Command::Play;
+    else if( string == Serial::COMMAND_PLAY_REVERSE_WSTRING )
+        return Command::PlayReverse;
+    else if( string == Serial::COMMAND_STOP_WSTRING )
+        return Command::Stop;
+    else
+        return Command::Fail;
+}
 
 #pragma warning( pop )
 

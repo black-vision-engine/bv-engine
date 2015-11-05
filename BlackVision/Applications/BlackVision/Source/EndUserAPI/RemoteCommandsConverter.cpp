@@ -14,8 +14,9 @@ RemoteCommandsConverter::RemoteCommandsConverter()
     RegisterEvent( LoadAssetEvent::Name(), LoadAssetEvent::Create );
     RegisterEvent( ParamKeyEvent::Name(), ParamKeyEvent::Create );
     RegisterEvent( SceneStructureEvent::Name(), SceneStructureEvent::Create );
-    RegisterEvent( ProjectStructureEvent::Name(), ProjectStructureEvent::Create );
+    RegisterEvent( ProjectEvent::Name(), ProjectEvent::Create );
     RegisterEvent( NewInfoEvent::Name(), NewInfoEvent::Create );
+    RegisterEvent( TimeLineEvent::Name(), TimeLineEvent::Create );
 }
 
 // ***********************

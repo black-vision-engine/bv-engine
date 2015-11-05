@@ -5,6 +5,7 @@
 #include "../BVAppLogic.h"
 #include "../UseLogger.h"
 #include "ProjectManager.h"
+#include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Tools/IncludeJSON.h"
 
 #include <limits>
@@ -148,16 +149,16 @@ void SendOnSceneStructureResponse( const std::string & cmd, const std::string & 
 //
 void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 {
-    if( evt->GetEventType() != bv::ProjectStructureEvent::Type() )
+    if( evt->GetEventType() != bv::ProjectEvent::Type() )
         return;
-    bv::ProjectStructureEventPtr projectEvent = std::static_pointer_cast<bv::ProjectStructureEvent>( evt );
+    bv::ProjectEventPtr projectEvent = std::static_pointer_cast<bv::ProjectEvent>( evt );
 
     auto pm = ProjectManager::GetInstance();
 
     std::string& request = projectEvent->Request;
     auto command = projectEvent->ProjectCommand;
 
-        if( command == ProjectStructureEvent::Command::ListProjectNames )
+        if( command == ProjectEvent::Command::ListProjectNames )
         {
             auto pns = pm->ListProjectsNames();
 
@@ -165,7 +166,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
             SendOnSceneStructureResponse( "LIST_PROJECTS_NAMES", "list", pList );
         }
-        else if( command == ProjectStructureEvent::Command::NewProject )
+        else if( command == ProjectEvent::Command::NewProject )
         {
             auto name = GetRequestParamValue( request )[ "projectName" ].asString();
 
@@ -173,7 +174,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
             SendOnSceneStructureResponse( "NEW_PROJECT", "status", "OK" );
         }
-        else if( command == ProjectStructureEvent::Command::ListScenes )
+        else if( command == ProjectEvent::Command::ListScenes )
         {
             auto name = GetRequestParamValue( request )[ "projectName" ].asString();
             auto sns = pm->ListScenesNames( name );
@@ -182,7 +183,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
             SendOnSceneStructureResponse( "LIST_SCENES", "list", pList );
         }
-        else if( command == ProjectStructureEvent::Command::ListAssetsPaths )
+        else if( command == ProjectEvent::Command::ListAssetsPaths )
         {
             auto projName = GetRequestParamValue( request )[ "projectName" ].asString();
             auto catName = GetRequestParamValue( request )[ "categoryName" ].asString();
@@ -193,7 +194,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
             SendOnSceneStructureResponse( "LIST_ASSETS_PATHS", "list", pList );
         }
-        else if( command == ProjectStructureEvent::Command::ListCategoriesNames )
+        else if( command == ProjectEvent::Command::ListCategoriesNames )
         {
             auto sns = pm->ListCategoriesNames();
 
@@ -201,7 +202,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
             SendOnSceneStructureResponse( "LIST_CATEGORIES_NAMES", "list", pList );
         }
-        else if( command == ProjectStructureEvent::Command::SetCurrentProject )
+        else if( command == ProjectEvent::Command::SetCurrentProject )
         {
             auto projName = GetRequestParamValue( request )[ "projectName" ].asString();
 
@@ -209,7 +210,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
             SendOnSceneStructureResponse( "SET_CURRENT_PROJECT", "status", "OK" );
         }
-        else if( command == ProjectStructureEvent::Command::ListProjects )
+        else if( command == ProjectEvent::Command::ListProjects )
         {
             auto pns = pm->ListProjectsNames();
 
@@ -228,7 +229,61 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
             SendOnSceneStructureResponse( "LIST_PROJECTS", "list", list );
         }
+        else if( command == ProjectEvent::Command::LoadProject )
+        {
+            auto projName = std::string( request.begin(), request.end() );
+
+            auto projectScenesNames = pm->ListScenesNames( projName );
+
+            bool status = false;
+
+            if( !projectScenesNames.empty() )
+            {
+                UpdatersManager::Get().RemoveAllUpdaters();
+                
+                auto node = m_appLogic->LoadScenes( projectScenesNames );
+                if( node )
+                {
+                    status = true;
+                }
+            }
+
+            if( status )
+            {
+                SendOnSceneStructureResponse( "LOAD_PROJECT", "status", "OK" );
+            }
+            else
+            {
+                SendOnSceneStructureResponse( "LOAD_PROJECT", "status", "ERROR" );
+            }
+        } 
+   //     else if( command == ProjectEvent::Command::SaveScene )
+   //     {
+   //         auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
+   //         auto node = root->GetNode( nodeName );
+
+			//if( node == nullptr && root->GetName() == nodeName )
+			//{
+			//	//Log::A( "OK", "root node is node you're looking for [" + nodeName + "] Applying jedi fix now." );
+			//	node = root;
+			//}
+
+   //         auto basicNode = std::static_pointer_cast< model::BasicNode >( node );
+
+   //         auto projName = std::string( request.begin(), request.end() );
+
+   //         pm->AddScene( basicNode, "proj01", "dupa.scn" );
+
+
+   //         SendOnSceneStructureResponse( "SAVE_SCENE", "status", "OK" );
+   //     }
 }
 
+// ***********************
+//
+void SceneEventsHandlers::TimelineHandler     ( bv::IEventPtr evt )
+{
+
+}
 
 } //bv
