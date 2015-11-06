@@ -142,7 +142,7 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\EventHandlers\PluginEventsHandlers.cpp">
       <Filter>EventHandlers</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.cpp">
       <Filter>Rendering\Logic\NodeEffectRendering</Filter>
     </ClCompile>
@@ -159,6 +159,9 @@
       <Filter>TestAI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\EventHandlers\QueryHandlers.cpp">
+      <Filter>EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\EventHandlers\HightmapHandlers.cpp">
       <Filter>EventHandlers</Filter>
     </ClCompile>
   </ItemGroup>
@@ -269,7 +272,7 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsConverter\JsonCommandsConverter.h">
       <Filter>EndUserAPI\JsonCommandsConverter</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.h">
       <Filter>Rendering\Logic\NodeEffectRendering</Filter>
     </ClInclude>
@@ -280,6 +283,9 @@
       <Filter>TestAI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\EventHandlers\QueryHandlers.h">
+      <Filter>EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EventHandlers\HightmapHandlers.h">
       <Filter>EventHandlers</Filter>
     </ClInclude>
   </ItemGroup>

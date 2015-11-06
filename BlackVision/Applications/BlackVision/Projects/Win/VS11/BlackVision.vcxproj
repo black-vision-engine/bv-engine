@@ -272,6 +272,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\DefaultPlugins.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsConverter\JsonCommandsConverter.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\RemoteCommandsConverter.cpp" />
+    <ClCompile Include="..\..\..\Source\EventHandlers\HightmapHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EventHandlers\PluginEventsHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EventHandlers\QueryHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EventHandlers\RemoteEventsHandlers.cpp" />
@@ -323,6 +324,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\DefaultPlugins.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsConverter\JsonCommandsConverter.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteCommandsConverter.h" />
+    <ClInclude Include="..\..\..\Source\EventHandlers\HightmapHandlers.h" />
     <ClInclude Include="..\..\..\Source\EventHandlers\PluginEventsHandlers.h" />
     <ClInclude Include="..\..\..\Source\EventHandlers\QueryHandlers.h" />
     <ClInclude Include="..\..\..\Source\EventHandlers\RemoteEventsHandlers.h" />
