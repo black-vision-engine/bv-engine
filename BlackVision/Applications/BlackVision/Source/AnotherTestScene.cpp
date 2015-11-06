@@ -957,44 +957,12 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineMana
     //deser.Load( filename );
     DeserializeObject deser( filename );
 
-    //model::TimelineManager::SetInstance( tm );
-
     auto model = SerializationHelper::DeserializeObjectLoadImpl< SceneModel >( deser, "scene" );
 
     tm->AddTimeline( model->m_pTimelineManager->GetRootTimeline() );
 
     return model->m_pModelSceneRoot;
 }
-
-//model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( model::TimelineManager * timelineManager  )
-//model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( model::TimelineManager * timelineManager )
-//{
-//    //return LoadSceneFromFile( "Assets/07_Results.xml", timelineManager );
-//    auto scene = LoadSceneFromFile( "test.xml", timelineManager );
-//
-//    xml_document<> doc;
-//    std::ifstream file( filename );
-//    std::stringstream buffer;
-//    buffer << file.rdbuf();
-//    file.close();
-//    std::string content( buffer.str() );
-//    doc.parse<0>( &content[0] );
-//
-//    //ISerializablePtr scene = BVScene::Create( deDoc );
-//    //BVScene* realScene = reinterpret_cast<BVScene*>( scene.get() );
-//    //BVScenePtr realScene = reinterpret_cast<BVScenePtr>( scene );
-//    //auto root = realScene->GetModelSceneRoot();
-//
-//    auto docNode = doc.first_node()->first_node( "nodes" )->first_node( "node" );
-//
-//    auto deDoc = DeserializeObject( *docNode, *timelineManager, *pluginsManager );
-//
-//    ISerializablePtr node = model::BasicNode::Create( deDoc );
-//
-//    auto root = static_cast< model::BasicNode* >( node.get() );
-//    assert( root );
-//    return BasicNodePtr( root );
-//}
 
 model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( const model::PluginsManager *, model::TimelineManager * timelineManager  )
 {

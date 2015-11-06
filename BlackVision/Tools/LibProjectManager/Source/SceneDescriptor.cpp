@@ -98,7 +98,7 @@ model::BasicNodeConstPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeTy
 {
     auto deser = DeserializeObject( in, numBytes );
 
-    auto scene = SerializationHelper::DeserializeObjectLoadImpl< SceneModel >( deser, "scene" );
+    auto scene = SerializationHelper::DeserializeObjectLoadImpl< model::SceneModel >( deser, "scene" );
 
     return scene->m_pModelSceneRoot;
 }
