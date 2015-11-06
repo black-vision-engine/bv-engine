@@ -162,6 +162,36 @@ BVSceneEditor *         BVScene::GetSceneEditor     ( )
 
 // *******************************
 //
+void                    BVScene::AddScene           ( model::SceneModelPtr sceneModel )
+{
+    m_pSceneModelVec.push_back( sceneModel );
+    m_pSceneEditor->AddChildNode( m_rootNode, sceneModel->m_pModelSceneRoot );
+}
+
+// *******************************
+//
+void                    BVScene::RemoveScene         ( const std::string & name )
+{
+    model::BasicNodePtr toRemove = nullptr;
+
+    for( auto it = m_pSceneModelVec.begin(); it != m_pSceneModelVec.end(); ++it )
+    {
+        if( (*it)->m_name == name )
+        {
+            auto rit = it;
+            ++it;
+            m_pSceneModelVec.erase( it );
+        }
+    }
+
+    if( toRemove )
+    {
+        m_pSceneEditor->DeleteChildNode( m_rootNode, toRemove->GetName() );
+    }
+}
+
+// *******************************
+//
 //const std::string &     BVScene::GetName            () const
 //{
 //    return m_pSceneModel->m_name;

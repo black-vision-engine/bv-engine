@@ -59,7 +59,8 @@ public:
     static BVScenePtr       Create              ( model::SceneModelPtr sceneModel   , Camera * cam, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
     static BVScenePtr       Create              ( model::SceneModelVec sceneModelVec, Camera * cam, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
 
-    void                    AddSceneModel       ( model::SceneModelPtr sceneModel );
+    void                    AddScene            ( model::SceneModelPtr sceneModel );
+    void                    RemoveScene         ( const std::string & name );
 
     void                    Serialize           ( ISerializer& ser ) const;
 
