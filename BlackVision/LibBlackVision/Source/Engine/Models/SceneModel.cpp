@@ -77,7 +77,7 @@ ISerializablePtr        SceneModel::Create          ( const IDeserializer& deser
     auto node = SerializationHelper::DeserializeObjectLoadImpl< model::BasicNode >( deser, "node" );
     assert( node );
 
-    auto obj = new SceneModel( deser.GetAttribute( "name" ), tm, node );
+    auto obj = std::make_shared< SceneModel >( deser.GetAttribute( "name" ), tm, node );
     return ISerializablePtr( obj );
 }
 

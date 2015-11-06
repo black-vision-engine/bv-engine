@@ -126,6 +126,9 @@ T String2T( const std::pair< T, const char* > t2s[], const std::string& s )
 template< typename T >
 T String2T( std::string s );
 
+template< typename T >
+T String2T( std::string s, const T& default );
+
 template< typename T, typename U >
 std::pair< T, U > String2Pair( std::string s );
 

@@ -63,7 +63,11 @@ ISerializablePtr TimelineManager::Create                          ( const IDeser
 
     auto timelines = SerializationHelper::DeserializeObjectLoadPropertiesImpl< model::TimeEvaluatorBase< model::ITimeEvaluator > >( deser, "timeline" );
     for( auto timeline : timelines )
+    {
         tm->AddTimeline( timeline );
+    }
+
+    tm->RegisterRootTimeline( timelines[ 0 ] );
 
     return tm;
 }
