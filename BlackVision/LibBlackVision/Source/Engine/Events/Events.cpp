@@ -33,9 +33,6 @@ std::string KeyPressedEvent::m_sEventName           = "Event_KeyPressedEvent";
 
 // Pawełek event pevent
 
-const EventType VideoCardEvent::m_sEventType       = 0x10000005;
-std::string VideoCardEvent::m_sEventName           = "Event_VideoCard";
-
 const EventType SetParamEvent::m_sEventType       = 0x10000006;
 std::string SetParamEvent::m_sEventName           = "Event_SetParam";
 
@@ -63,8 +60,8 @@ std::string LoadAssetEvent::m_sEventName            = "Event_LoadAsset";
 const EventType ParamKeyEvent::m_sEventType         = 0x30000006;
 std::string ParamKeyEvent::m_sEventName             = "Event_ParamKeyEvent";
 
-const EventType NodeStructureEvent::m_sEventType   = 0x30000012;
-std::string NodeStructureEvent::m_sEventName       = "Event_NodeStructure";
+const EventType NodeStructureEvent::m_sEventType    = 0x30000012;
+std::string NodeStructureEvent::m_sEventName        = "Event_NodeStructure";
 
 const EventType ProjectEvent::m_sEventType          = 0x30000013;
 std::string ProjectEvent::m_sEventName              = "Event_ProjectStructure";
@@ -84,6 +81,8 @@ std::string TimerEvent::m_sEventName                = "Event_Timer";
 const EventType WidgetEvent::m_sEventType           = 0x30000011;
 std::string WidgetEvent::m_sEventName               = "Event_Widget";
 
+const EventType VideoCardEvent::m_sEventType       = 0x30000005;
+std::string VideoCardEvent::m_sEventName           = "Event_VideoCard";
 
 // ************************************* Events Serialization *****************************************
 
@@ -150,7 +149,21 @@ const std::wstring COMMAND_GOTO_WSTRING                 = L"goto";
 const std::wstring COMMAND_GOTO_AND_PLAY_WSTRING        = L"gotoandplay";
 
 const std::wstring TIMELINE_TIME_VALUE_WSTRING          = L"time";
-const std::wstring TIMELINE_NAME_WSTRING                = L"time";
+const std::wstring TIMELINE_NAME_WSTRING                = L"TimeLineName";
+
+// WidgetEvent
+const std::wstring COMMAND_CRAWL_WSTRING                = L"crawl";
+const std::wstring COMMAND_COUNTER_WSTRING              = L"counter";
+
+const std::wstring WIDGET_ACTION_WSTRING                = L"Action";
+const std::wstring WIDGET_TIME_VALUE_WSTRING            = L"Time";
+
+// VideoCardEvent
+const std::wstring VIDEO_CARD_ACTION_WSTRING            = L"Action";
+
+const std::wstring COMMAND_VIDEO_CARD_OFF_WSTRING       = L"Off";
+const std::wstring COMMAND_VIDEO_CARD_ON_WSTRING        = L"On";
+
 }
 
 // ************************************* PluginAddedEvent *************************************
@@ -507,57 +520,6 @@ EventType               KeyPressedEvent::Type                ()
 {
     return m_sEventType;
 }
-
-
-// ------------ Pawe�ek event 
-
-VideoCardEvent::VideoCardEvent         () 
-{
-  
-}
-
-
-// *************************************
-//
-EventType           VideoCardEvent::GetEventType         () const
-{
-    return this->m_sEventType;
-}
-
-// *************************************
-//
-void                VideoCardEvent::Serialize            ( ISerializer& ser ) const
-{
-    assert( false );
-}
-
-// *************************************
-//
-IEventPtr                VideoCardEvent::Create          ( IDeserializer& deser )
-{
-    assert( false );
-    return nullptr;
-}
-// *************************************
-//
-IEventPtr               VideoCardEvent::Clone             () const
-{
-    return IEventPtr( new VideoCardEvent( *this ) );
-}
-// *************************************
-//
-EventType               VideoCardEvent::Type              ()
-{
-    return m_sEventType;
-}
-
-// *************************************
-//
-const std::string &     VideoCardEvent::GetName           () const
-{
-    return m_sEventName;
-}
-
 
 
 
@@ -1529,24 +1491,26 @@ TimerEvent::Command TimerEvent::WStringToCommand    ( const std::wstring& string
 void                WidgetEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
-    //ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( TimelineCommand ) );
-    //ser.SetAttribute( Serial::TIMELINE_NAME_WSTRING, toWString( TimelineName ) );
-    //ser.SetAttribute( Serial::TIMELINE_TIME_VALUE_WSTRING, toWString( Time ) );
+    ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( WidgetCommand ) );
+    ser.SetAttribute( Serial::TIMELINE_TIME_VALUE_WSTRING, toWString( Time ) );
+    ser.SetAttribute( Serial::NODE_NAME_WSTRING, toWString( NodeName ) );
+    ser.SetAttribute( Serial::WIDGET_ACTION_WSTRING, toWString( Action ) );
 }
 
 // *************************************
 //
 IEventPtr                WidgetEvent::Create          ( IDeserializer& deser )
 {
-    //if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
-    //{
-    //    TimeLineEventPtr newEvent   = std::make_shared<TimeLineEvent>();
-    //    newEvent->Time              = stof( deser.GetAttribute( Serial::TIMELINE_TIME_VALUE_WSTRING ) );
-    //    newEvent->TimelineCommand   = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
-    //    newEvent->TimelineName      = toString( deser.GetAttribute( Serial::TIMELINE_NAME_WSTRING ) );
+    if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
+    {
+        WidgetEventPtr newEvent     = std::make_shared<WidgetEvent>();
+        newEvent->Time              = stof( deser.GetAttribute( Serial::WIDGET_TIME_VALUE_WSTRING ) );
+        newEvent->WidgetCommand     = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
+        newEvent->NodeName          = toString( deser.GetAttribute( Serial::TIMELINE_NAME_WSTRING ) );
+        newEvent->Action            = toString( deser.GetAttribute( Serial::WIDGET_ACTION_WSTRING ) );
 
-    //    return newEvent;
-    //}
+        return newEvent;
+    }
     return nullptr;    
 }
 // *************************************
@@ -1571,6 +1535,100 @@ const std::string&  WidgetEvent::GetName() const
 EventType           WidgetEvent::GetEventType() const
 {   return this->m_sEventType; }
 
+// *************************************
+//
+std::wstring WidgetEvent::CommandToWString    ( Command cmd )
+{
+    if( cmd == Command::Crawl )
+        return Serial::COMMAND_CRAWL_WSTRING;
+    else if( cmd == Command::Counter )
+        return Serial::COMMAND_COUNTER_WSTRING;
+    else
+        return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
+}
+
+// *************************************
+//
+WidgetEvent::Command WidgetEvent::WStringToCommand    ( const std::wstring& string )
+{
+    if( string == Serial::COMMAND_CRAWL_WSTRING )
+        return Command::Crawl;
+    else if( string == Serial::COMMAND_CRAWL_WSTRING )
+        return Command::Counter;
+    else
+        return Command::Fail;
+}
+
+//******************* VideoCardEvent *************
+
+// *************************************
+//
+void                VideoCardEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
+    ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( VideoCommand ) );
+    ser.SetAttribute( Serial::WIDGET_ACTION_WSTRING, toWString( Action ) );
+}
+
+// *************************************
+//
+IEventPtr                VideoCardEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
+    {
+        VideoCardEventPtr newEvent      = std::make_shared<VideoCardEvent>();
+        newEvent->VideoCommand          = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
+        newEvent->Action                = toString( deser.GetAttribute( Serial::VIDEO_CARD_ACTION_WSTRING ) );
+
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               VideoCardEvent::Clone             () const
+{   return IEventPtr( new VideoCardEvent( *this ) );  }
+
+// *************************************
+//
+EventType           VideoCardEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        VideoCardEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  VideoCardEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           VideoCardEvent::GetEventType() const
+{   return this->m_sEventType; }
+
+// *************************************
+//
+std::wstring VideoCardEvent::CommandToWString    ( Command cmd )
+{
+    if( cmd == Command::VideoCardOff )
+        return Serial::COMMAND_VIDEO_CARD_OFF_WSTRING;
+    else if( cmd == Command::VideoCardOn )
+        return Serial::COMMAND_VIDEO_CARD_ON_WSTRING;
+    else
+        return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
+}
+
+// *************************************
+//
+VideoCardEvent::Command VideoCardEvent::WStringToCommand    ( const std::wstring& string )
+{
+    if( string == Serial::COMMAND_VIDEO_CARD_OFF_WSTRING )
+        return Command::VideoCardOff;
+    else if( string == Serial::COMMAND_VIDEO_CARD_ON_WSTRING )
+        return Command::VideoCardOn;
+    else
+        return Command::Fail;
+}
 
 #pragma warning( pop )
 

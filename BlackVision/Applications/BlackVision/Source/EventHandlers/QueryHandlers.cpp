@@ -280,10 +280,10 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             val[ "cmd" ]        = "videocards";
             val[ "visible" ]    = " no diggy diggy ";
 
-            string S = val.toStyledString();
+            string response = val.toStyledString();
            
             //Log::A( "SENDING", S );
-            responseMessage = wstring( S.begin(),S.end() );
+            responseMessage = wstring( response.begin(),response.end() );
         }
         
         ResponseEventPtr msg = std::make_shared<ResponseEvent>();

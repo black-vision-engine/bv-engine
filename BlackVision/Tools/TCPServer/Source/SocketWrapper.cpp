@@ -326,8 +326,9 @@ namespace bv{
                              CmdVideoCardInfo *cmd = (CmdVideoCardInfo*)(pm.cmdStack[i]);
                              VideoCardEventPtr  ev = VideoCardEventPtr( new VideoCardEvent() );
 
-                             ev->SetData(cmd->query);
-							 
+                             //ev->SetData(cmd->query);
+                             // Just for now. Soon all these functions will disapear.
+                             ev->VideoCommand = VideoCardEvent::WStringToCommand( cmd->query );
  
                              GetDefaultEventManager().ConcurrentQueueEvent( ev );
                              wcout<<"event  :"<<cmd->query<<" added!"<<endl;

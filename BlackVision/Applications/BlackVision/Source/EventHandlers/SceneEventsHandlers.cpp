@@ -7,6 +7,9 @@
 #include "ProjectManager.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Tools/IncludeJSON.h"
+#include "Widgets/Crawler/CrawlerEvents.h"
+#include "Widgets/Counter/Counter.h"
+#include "Engine/Events/EventHelpers.h"
 
 #include <limits>
 #undef max
@@ -335,115 +338,97 @@ void SceneEventsHandlers::TimelineHandler     ( bv::IEventPtr evt )
 //
 void SceneEventsHandlers::WidgetHandler       ( bv::IEventPtr evt )
 {
-	//if( evt->GetEventType() == bv::WidgetEvent::Type() )
- //       return;
+	if( evt->GetEventType() == bv::WidgetEvent::Type() )
+        return;
 
-	//bv::WidgetEventPtr widgetEvent = std::static_pointer_cast<bv::WidgetEvent>( evt );        
- //   auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
- //       
-
- //   //todo: //fixme: wstring -> string
- //   wstring NodeName =  widgetEvent->NodeName;
- //   string NodeNameStr( NodeName.begin(), NodeName.end() );
- //   //todo: //fixme: wstring -> string
- //   wstring param = widgetEvent->Param;
- //   //string TexturePathStr( TexturePath.begin(), TexturePath.end() );
-	//	
-
- //   auto node = root->GetNode(NodeNameStr);
- //   if(node==nullptr &&root->GetName()==NodeNameStr)
- //   {
- //       Log::A("OK", "root node is node you're looking for ["+ NodeNameStr+"] Applying jedi fix now.");
- //       node = root;
- //   }
- //   if(node==nullptr)
- //   {
- //       Log::A("error", "Error OnSetParam() node ["+ NodeNameStr+"] not found");
- //       return;
- //   }
-	//	
-	//BasicNodePtr nod      = std::static_pointer_cast< bv::model::BasicNode >(node);
-	//		
-	//	
- //   if(nod == nullptr)
- //   {
- //           Log::A("error", "Error OnWidgetCmd () node ["+ NodeNameStr+"] not found");
- //           return;
- //   }
-
-	//INodeLogicPtr logic = nod->GetLogic();
-	//if(logic==nullptr)
-	//{
-	//		Log::A("error", "Error OnWidgetCmd () node ["+ NodeNameStr+"] , logic [] not found");
- //           return;
-
-	//}
-	//	
-	//INodeLogic* logic__ptr = logic.get();
+	bv::WidgetEventPtr widgetEvent = std::static_pointer_cast<bv::WidgetEvent>( evt );        
+    auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
+        
+    std::string nodeName = widgetEvent->NodeName;
+    std::string action = widgetEvent->Action;
+    WidgetEvent::Command command = widgetEvent->WidgetCommand;
+    float time = widgetEvent->Time;
 
 
- //   if(widgetEvent->WidgetName == L"crawl")
- //   {
-	//	bv::widgets::Crawler* crawler =  (bv::widgets::Crawler*)logic__ptr;
-	//	if(widgetEvent->Action==L"stop")
-	//	{
-	//		Log::A("OK","crawl stop...");
-	//		crawler->Stop();
-	//	}
-	//	else if(widgetEvent->Action==L"start")
-	//	{
-	//		Log::A("OK","crawl start...");
-	//		crawler->Start();
-	//	}else if(widgetEvent->Action==L"add_text")
-	//	{
-	//		Log::A(L"OK",L"crawl add text..."+ widgetEvent->Param);
-	//		crawler->AddMessage(widgetEvent->Param);
-	//	}else if(widgetEvent->Action==L"reset")
-	//	{
-	//		Log::A(L"OK",L"crawl reset...");
-	//		crawler->Reset();
-	//	}
-	//	else if(widgetEvent->Action==L"clear")
-	//	{
-	//		Log::A(L"OK",L"crawl clear...");
-	//		crawler->Clear();
-	//	}else if(widgetEvent->Action==L"set_speed")
-	//	{
-	//		Log::A(L"OK",L"crawl set speed.."+ widgetEvent->Param);
-	//		float speed = 0.5;
-	//		string s_speed( widgetEvent->Param.begin(), widgetEvent->Param.end() );
-	//		speed = (float)atof(s_speed.c_str());
-	//		crawler->SetSpeed(speed);
+    BasicNodePtr node = std::static_pointer_cast< bv::model::BasicNode >( root->GetNode( nodeName ) );
+    if( node == nullptr && root->GetName() == nodeName )
+    {
+        //Log::A("OK", "root node is node you're looking for ["+ nodeName+"] Applying jedi fix now.");
+        node = root;
+    }
+    if( node == nullptr )
+    {
+        //Log::A("error", "Error OnSetParam() node ["+ nodeName+"] not found");
+        return;
+    }
+		
+    INodeLogic* logic = node->GetLogic().get();
+	if( logic == nullptr )
+	{
+        //Log::A("error", "Error OnWidgetCmd () node ["+ nodeName+"] , logic [] not found");
+        return;
+	}
+		
 
-	//	}
+    if( command == WidgetEvent::Command::Crawl )
+    {
+		bv::widgets::Crawler* crawler =  (bv::widgets::Crawler*)logic;
+        Json::Value parseAction( action );
 
-	//}else if(widgetEvent->WidgetName == L"counter")
- //   {
-	//	bv::widgets::WidgetCounter * counter =  (bv::widgets::WidgetCounter*)logic__ptr;
+        std::string crawlAction = parseAction.get( "Action", "" ).asString();
+        std::string param = parseAction.get( "Param", "" ).asString();
 
-	//	string param_name_cast= string(widgetEvent->Param.begin(), widgetEvent->Param.end());
+		if( crawlAction == "stop" )
+		{
+			//Log::A("OK","crawl stop...");
+			crawler->Stop();
+		}
+		else if( crawlAction == "start" )
+		{
+			//Log::A("OK","crawl start...");
+			crawler->Start();
+		}
+        else if( crawlAction == "add_text" )
+		{
+			//Log::A(L"OK",L"crawl add text..."+ widgetEvent->Param);
+			crawler->AddMessage( toWString( param ) );
+		}
+        else if( crawlAction == "reset" )
+		{
+			//Log::A(L"OK",L"crawl reset...");
+			crawler->Reset();
+		}
+		else if( crawlAction == "clear" )
+		{
+			//Log::A(L"OK",L"crawl clear...");
+			crawler->Clear();
+		}
+        else if( crawlAction == "set_speed" )
+		{
+			//Log::A(L"OK",L"crawl set speed.."+ widgetEvent->Param);
+			float speed = 0.5;
+			speed = (float)atof( param.c_str() );
+			crawler->SetSpeed( speed );
+		}
+	}
+    else if( command == WidgetEvent::Command::Counter )
+    {
+		bv::widgets::WidgetCounter* counter = (bv::widgets::WidgetCounter*)logic;
+        
+        Json::Value parseAction( action );
+        std::string param = parseAction.get( "Param", "" ).asString();
+        float value = parseAction.get( "Value", 1.0f ).asFloat();
 
-	//	auto param = counter->GetValueParam();
-	//	if(param==nullptr)
-	//	{
-	//		Log::A("error", "Error OnSetParam() plugin [counter] param ["+param_name_cast+"] not found");
 
-	//	}else{
+		auto paramPtr = counter->GetValueParam();
+		if( paramPtr == nullptr )
+		{
+			//Log::A("error", "Error OnSetParam() plugin [counter] param ["+ param +"] not found");
+            return;
+		}
 
-	//			wstring value = widgetEvent->Value;
-	//			 
-	//			float float_value = 1.0f;
-
-	//			try{
-	//			float_value =  boost::lexical_cast<float>(value);
-	//			}catch(boost::bad_lexical_cast&)
-	//			{
-	//			float_value = 0.0f;
-	//			}
-
-	//			SetParameter( param, (bv::TimeType)widgetEvent->Time, float_value);
-	//	}
-	//}
+        SetParameter( paramPtr, (bv::TimeType)time, value );
+	}
 }
 
 } //bv

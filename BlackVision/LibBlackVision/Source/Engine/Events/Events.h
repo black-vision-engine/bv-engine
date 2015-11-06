@@ -195,47 +195,6 @@ DEFINE_PTR_TYPE(KeyPressedEvent)
 
 
 
-
-
-	// ciach
-
-	// ************************************* VideoCardEvent *************************************
-class VideoCardEvent : public BaseEvent
-{
-private:
-
-    glm::vec3   m_translation;
-    glm::vec3   m_scale;
-
-   
-
-public:
-
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-
-     std::wstring               command;      // move to private
-
-
-
-public:
-
-    explicit                        VideoCardEvent   ();
-
-    virtual EventType               GetEventType        () const;
-
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
-    virtual IEventPtr               Clone               () const;
-    static EventType                Type                ();
-
-    virtual const std::string &     GetName             () const;
-    void                            SetData(std::wstring cmd){command=cmd;};
-
-};
-
-DEFINE_PTR_TYPE(VideoCardEvent)
-
 // ************************************* Information Event *************************************
 class InfoEvent : public BaseEvent
 {
@@ -799,20 +758,21 @@ DEFINE_PTR_TYPE( TimerEvent )
 // ************************************* WidgetEvent *************************************
 class WidgetEvent : public BaseEvent
 {
+public:
+    typedef enum
+    {
+        Crawl,
+        Counter,
+        Fail            ///< Wrong command
+    } Command;
 private:
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
 public:
-    std::wstring                NodeName;
+    Command                     WidgetCommand;
+    std::string                 NodeName;
+	std::string                 Action;
     float						Time;
-	std::string                 Value;
-
-
-    std::wstring                Param;      // move to private
-	std::wstring                Action;
-	std::wstring                WidgetName;
-   
-
 public:
     explicit                        WidgetEvent			(){};
 
@@ -824,9 +784,50 @@ public:
     static std::string&             Name                ();
     virtual const std::string &     GetName             () const;
     virtual EventType               GetEventType        () const;
+private:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
 };
 
 DEFINE_PTR_TYPE( WidgetEvent )
 
+
+// ciach
+
+// ************************************* VideoCardEvent *************************************
+class VideoCardEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        VideoCardOn,
+        VideoCardOff,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    Command                     VideoCommand;
+    std::string                 Action;         // For future use.
+public:
+
+    explicit                        VideoCardEvent   () {};
+
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+public:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
+};
+
+DEFINE_PTR_TYPE( VideoCardEvent )
 
 } //bv
