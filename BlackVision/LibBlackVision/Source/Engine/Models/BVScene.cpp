@@ -53,7 +53,7 @@ BVScenePtr    BVScene::CreateFakeSceneForTestingOnly( model::BasicNodePtr modelR
 //
 BVScene::BVScene    ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator )
     : m_pCamera( cam )
-    , m_pSceneModel( new SceneModel( name, nullptr, modelRootNode ) )
+    , m_pSceneModel( new model::SceneModel( name, nullptr, modelRootNode ) )
     , m_pEngineSceneRoot( nullptr )
     , m_cameraPosition( "camera_position", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 1.0f ) ), timeEvaluator )
     , m_cameraDirection( "camera_direction", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 0.f ) ), timeEvaluator )
@@ -65,7 +65,7 @@ BVScene::BVScene    ( model::BasicNodePtr modelRootNode, Camera * cam, const std
 BVScene::BVScene    ( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager )
     : m_pCamera( cam )
     , m_renderer( renderer )
-    , m_pSceneModel( new SceneModel( name, pTimelineManager, nullptr ) )
+    , m_pSceneModel( new model::SceneModel( name, pTimelineManager, nullptr ) )
     , m_pEngineSceneRoot( nullptr )
     , m_cameraPosition( "camera_position", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 1.0f ) ), timeEvaluator )
     , m_cameraDirection( "camera_direction", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 0.f ) ), timeEvaluator )

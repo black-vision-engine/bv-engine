@@ -19,6 +19,7 @@
 
 namespace bv { namespace model {
 
+extern TextArranger CircleArranger;
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
@@ -254,8 +255,11 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     , m_textSet( true )
     , m_atlas( nullptr )
 	, m_textLength( 0.f )
+    , m_arranger( nullptr )
 {
     SetPrevPlugin( prev );
+
+    //m_arranger = &CircleArranger;
 
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
     m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
@@ -464,7 +468,7 @@ void DefaultTextPlugin::InitAttributesChannel( IPluginPtr prev )
 
     auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
-    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_textParam->Evaluate(), m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, false );
+    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_textParam->Evaluate(), m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, m_arranger, false );
 }
 
 // *************************************
@@ -519,7 +523,7 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 
     auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
-    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_currentText, m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, false );
+    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_currentText, m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, m_arranger, false );
 
 	ScaleToMaxTextLength();
 

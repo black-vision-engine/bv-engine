@@ -45,12 +45,15 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& dob ) // F
 {
     auto name = dob.GetAttribute( "name" );
     auto type = dob.GetAttribute( "type" );
-    //ITimeEvaluatorPtr te = dob.m_tm->GetRootTimeline();
     auto timeline = dob.GetAttribute( "timeline" );
 
     auto tm = TimelineManager::GetInstance();
-    ITimeEvaluatorPtr te = tm->GetTimeline( timeline );
-    if( te == nullptr ) te = tm->GetRootTimeline();
+    ITimeEvaluatorPtr te = tm->GetTimeEvaluator( timeline );
+    if( te == nullptr ) 
+    {
+        assert( false );
+        te = tm->GetRootTimeline();
+    }
 
     auto values = SerializationHelper::DeserializeObjectLoadArrayImpl< KeyFrame >( dob, "interpolator", "key" );
 

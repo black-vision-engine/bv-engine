@@ -107,27 +107,20 @@ glm::vec4               String2Vec4( std::string s );
 glm::vec3               String2Vec3( std::string s );
 glm::vec2               String2Vec2( std::string s );
 
-template< typename T >
-std::string T2String( const std::pair< T, const char* > t2s[], const T& t )
-{
-    for( int i = 0; ; i++ ) // FIXME so much
-        if( t2s[i].first == t )
-            return t2s[i].second;
-}
+//template< typename T >
+//std::string T2String( const std::pair< T, const char* > t2s[], const T& t ); // include SerializationHelper.inl for the definition
+
+//template< typename T >
+//T String2T( const std::pair< T, const char* > t2s[], const std::string& s ); // include SerializationHelper.inl for the definition
+
+//template< typename T >
+//T String2T( std::string s ); // obsolete
 
 template< typename T >
-T String2T( const std::pair< T, const char* > t2s[], const std::string& s )
-{
-    for( int i = 0; ; i++ ) // FIXME so much
-        if( t2s[i].second == s )
-            return t2s[i].first;
-}
+T String2T( std::string s, const T& default );
 
-template< typename T >
-T String2T( std::string s );
-
-template< typename T, typename U >
-std::pair< T, U > String2Pair( std::string s );
+//template< typename T, typename U >
+//std::pair< T, U > String2Pair( std::string s ); // include SerializationHelper.inl for the definition
 
 } // SerializationHelper
 } // bv

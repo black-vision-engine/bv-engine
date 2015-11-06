@@ -8,7 +8,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
-
+#include "Engine/Models/Plugins/Simple/TextArranger.h"
 
 #include <assert.h>
 
@@ -110,7 +110,7 @@ TextAtlasConstPtr				TextHelper::GetAtlas            ( const AssetConstPtr & ass
 
 // *********************************
 //
-float                    TextHelper::BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring & text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, bool useKerning )
+float                    TextHelper::BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring & text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, model::TextArranger * arranger, bool useKerning )
 {
     assert( vertexAttributeChannel );
     assert( textAtlas );
@@ -302,6 +302,11 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
     if( vertexAttributeChannel->GetComponents().empty() ) // FIXME: We add one empty CC because of bug #72174842
     {
         vertexAttributeChannel->AddConnectedComponent( CreateEmptyCC() );
+    }
+
+    if( arranger )
+    {
+        vertexAttributeChannel = arranger->Arange( vertexAttributeChannel );
     }
 
     return translate.x; // FIXME: This does not work for multiline text

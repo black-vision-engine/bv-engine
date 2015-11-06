@@ -1,10 +1,24 @@
 #include "SceneModel.h"
 
-#include "Engine/Models/Timeline/TimelineManager.h"
+//#include "Engine/Models/Timeline/TimelineManager.h"
 #include "Assets/AssetDescsWithUIDs.h"
-#include "Serialization/SerializationHelper.h"
+//#include "Serialization/SerializationHelper.h"
 
-namespace bv {
+namespace bv { namespace model {
+
+SceneModel::SceneModel( std::string name, model::TimelineManager * pTimelineManager, model::BasicNodePtr pModelSceneRoot )
+    : m_name( name )
+    , m_pTimelineManager( pTimelineManager )
+    , m_pModelSceneRoot( pModelSceneRoot )
+{
+}
+
+SceneModel::SceneModel( std::string name, model::TimelineManagerPtr pTimelineManager, model::BasicNodePtr pModelSceneRoot )
+    : m_name( name )
+    , m_pTimelineManager( pTimelineManager )
+    , m_pModelSceneRoot( pModelSceneRoot )
+{
+}
 
 // *******************************
 //
@@ -32,7 +46,7 @@ ser.EnterChild( "scene" );
 
     ser.SetAttribute( "name", m_name );
 
-    model::TimelineManager::SetInstance( m_pTimelineManager );
+    model::TimelineManager::SetInstance( m_pTimelineManager.get() );
 
     //auto& assets = AssetDescsWithUIDs::GetInstance();
     AssetDescsWithUIDs assets;
@@ -56,18 +70,15 @@ ISerializablePtr        SceneModel::Create          ( const IDeserializer& deser
     AssetDescsWithUIDs::SetInstance( *assets );
 
 // timelines
-    auto tm = model::TimelineManager::GetInstance();
-
-    auto timelines = SerializationHelper::DeserializeObjectLoadArrayImpl< model::TimeEvaluatorBase< model::ITimeEvaluator > >( deser, "timelines" );
-    for( auto timeline : timelines )
-        tm->AddTimeline( timeline );
+    auto tm = SerializationHelper::DeserializeObjectLoadImpl< model::TimelineManager >( deser, "timelines" );
+    TimelineManager::SetInstance( tm.get() );
 
 // nodes
     auto node = SerializationHelper::DeserializeObjectLoadImpl< model::BasicNode >( deser, "node" );
     assert( node );
 
-    auto obj = new SceneModel( deser.GetAttribute( "name" ), tm, node );
+    auto obj = std::make_shared< SceneModel >( deser.GetAttribute( "name" ), tm, node );
     return ISerializablePtr( obj );
 }
 
-} // bv
+} }

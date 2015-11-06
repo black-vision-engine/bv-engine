@@ -948,53 +948,21 @@ model::BasicNodePtr      TestScenesFactory::SequenceAnimationTestScene  ()
 model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineManager * tm )
 {
     if( !Path::Exists( filename ) )
-	{
-		std::cout << "[ERROR] File " << filename << " does not exist" << std::endl;
-		return nullptr;
-	}
-// begin serialization
+    {
+        std::cout << "[ERROR] File " << filename << " does not exist" << std::endl;
+        return nullptr;
+    }
+
     //JsonDeserializeObject deser;
     //deser.Load( filename );
     DeserializeObject deser( filename );
 
-    model::TimelineManager::SetInstance( tm );
-    
-    auto sucess = deser.EnterChild( "scene" );
-    assert( sucess ); // FIXME error handling
-    auto obj = SceneModel::Create( deser );
-    deser.ExitChild();
-    return std::static_pointer_cast< SceneModel >( obj )->m_pModelSceneRoot;
-}
+    auto model = SerializationHelper::DeserializeObjectLoadImpl< SceneModel >( deser, "scene" );
 
-//model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( model::TimelineManager * timelineManager  )
-//model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( model::TimelineManager * timelineManager )
-//{
-//    //return LoadSceneFromFile( "Assets/07_Results.xml", timelineManager );
-//    auto scene = LoadSceneFromFile( "test.xml", timelineManager );
-//
-//    xml_document<> doc;
-//    std::ifstream file( filename );
-//    std::stringstream buffer;
-//    buffer << file.rdbuf();
-//    file.close();
-//    std::string content( buffer.str() );
-//    doc.parse<0>( &content[0] );
-//
-//    //ISerializablePtr scene = BVScene::Create( deDoc );
-//    //BVScene* realScene = reinterpret_cast<BVScene*>( scene.get() );
-//    //BVScenePtr realScene = reinterpret_cast<BVScenePtr>( scene );
-//    //auto root = realScene->GetModelSceneRoot();
-//
-//    auto docNode = doc.first_node()->first_node( "nodes" )->first_node( "node" );
-//
-//    auto deDoc = DeserializeObject( *docNode, *timelineManager, *pluginsManager );
-//
-//    ISerializablePtr node = model::BasicNode::Create( deDoc );
-//
-//    auto root = static_cast< model::BasicNode* >( node.get() );
-//    assert( root );
-//    return BasicNodePtr( root );
-//}
+    tm->AddTimeline( model->m_pTimelineManager->GetRootTimeline() );
+
+    return model->m_pModelSceneRoot;
+}
 
 model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( const model::PluginsManager *, model::TimelineManager * timelineManager  )
 {

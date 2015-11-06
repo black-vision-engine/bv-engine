@@ -1,6 +1,5 @@
 #include "TimelineManager.h"
-#include "Serialization/ISerializer.h"
-#include "Serialization/ISerializer.h"
+#include "Serialization/SerializationHelper.h"
 
 #include <cassert>
 
@@ -56,13 +55,22 @@ void            TimelineManager::Serialize                       ( ISerializer& 
     sob.ExitChild();
 }
 
-//// *********************************
-////
-//ISerializablePtr TimelineManager::Create                          ( const ISerializer& dob )
-//{
-//    dob; assert( false );
-//    return nullptr;
-//}
+// *********************************
+//
+ISerializablePtr TimelineManager::Create                          ( const IDeserializer& deser )
+{
+    auto tm = std::make_shared< model::TimelineManager >();    
+
+    auto timelines = SerializationHelper::DeserializeObjectLoadPropertiesImpl< model::TimeEvaluatorBase< model::ITimeEvaluator > >( deser, "timeline" );
+    for( auto timeline : timelines )
+    {
+        tm->AddTimeline( timeline );
+    }
+
+    tm->RegisterRootTimeline( timelines[ 0 ] );
+
+    return tm;
+}
 
 // *********************************
 //
@@ -232,8 +240,11 @@ bool                    TimelineManager::AddTimeline                     ( ITime
     {
         return AddTimelineToTimeline( timeline, m_rootTimeline );
     }
-
-    return false;
+    else
+    {
+        RegisterRootTimeline( timeline );
+        return true;
+    }
 }
 
 // *********************************

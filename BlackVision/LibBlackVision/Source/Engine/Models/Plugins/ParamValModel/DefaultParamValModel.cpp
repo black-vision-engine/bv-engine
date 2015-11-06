@@ -94,12 +94,11 @@ void                                        DefaultParamValModel::Update        
     }
 }
 
-void CopyParameter( IParameterPtr out, IParameterPtr in ) // FIXME: don't forget about copying timelines!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+void CopyParameter( IParameterPtr out, IParameterPtr in )
 {
-    assert( out->GetType() == in->GetType() ); // FIXME: uncomment when parameter deserialization is finished
-    
-    //if( out->GetType() != in->GetType() )
-    //    return;
+    assert( out->GetType() == in->GetType() );
+
+    out->SetTimeEvaluator( in->GetTimeEvaluator() );
 
     if( out->GetType() == ModelParamType::MPT_VEC4 )
     {

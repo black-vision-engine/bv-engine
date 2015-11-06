@@ -14,6 +14,7 @@
 
 #include "Engine/Events/BaseEvent.h"
 #include "Assets/Font/TextHelper.h"
+#include "TextArranger.h"
 
 namespace bv { namespace model {
 
@@ -70,6 +71,8 @@ private:
     ParamFloatPtr                   m_timeParam;
 	ValueMat4Ptr					m_scaleValue;
 
+    TextArranger *                  m_arranger;
+
     //delegates
     void                                        OnSetText                   ( IEventPtr evt );
 
@@ -95,7 +98,6 @@ public:
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
 private:
-	//virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
 
 	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & trans ) const override;
 
