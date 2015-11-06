@@ -266,7 +266,7 @@ ISerializablePtr     CompositeBezierInterpolator< TimeValueT, ValueT >::Create  
         do
         {
             auto interpolators = interpolator->GetInterpolators();
-            interpolators[ i ]->Deserialize( deser );
+            interpolators[ i++ ]->Deserialize( deser );
         } while( deser.NextChild() );
         deser.ExitChild();
     }

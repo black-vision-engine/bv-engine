@@ -111,7 +111,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
 
     m_renderer = renderer;
     m_renderLogic = new RenderLogic();
-	m_RemoteControl = new RemoteControlInterface(this);
+    m_RemoteControl = new RemoteControlInterface(this);
 }
 
 // *********************************
@@ -141,10 +141,10 @@ void BVAppLogic::Initialize         ()
 
     GetTimelineManager()->RegisterRootTimeline( m_globalTimeline );
 
-	model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
+    model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
     m_pluginsManager = &model::PluginsManager::DefaultInstance();
 
-	bv::effect::InitializeLibEffect( m_renderer );
+    bv::effect::InitializeLibEffect( m_renderer );
 
     InitializeKbdHandler();
 }
@@ -295,13 +295,13 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
             m_bvScene->Update( t );
         }
 
-		m_RemoteControl->UpdateHM();
+        m_RemoteControl->UpdateHM();
 
         {
             FRAME_STATS_SECTION( "Render" );
-			HPROFILER_SECTION( "Render", PROFILER_THREAD1 );			
+            HPROFILER_SECTION( "Render", PROFILER_THREAD1 );			
             
-			RefreshVideoInputScene();
+            RefreshVideoInputScene();
 
             m_renderLogic->RenderFrame( renderer, m_bvScene->GetEngineSceneRoot() );
             m_renderLogic->FrameRendered( renderer );
@@ -318,7 +318,7 @@ void BVAppLogic::RefreshVideoInputScene()
     {
         if(m_videoCardManager->CheckIfNewFrameArrived(0,"A"))
         {
-			BB::AssetManager::VideoInput->RefreshData(m_videoCardManager->GetCaptureBufferForShaderProccessing(0,"A"));
+            BB::AssetManager::VideoInput->RefreshData(m_videoCardManager->GetCaptureBufferForShaderProccessing(0,"A"));
         }
         else
         {
@@ -356,8 +356,8 @@ void BVAppLogic::ShutDown           ()
 //pablito:
 void	BVAppLogic::SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager)
 {
-		m_videoCardManager = videoCardManager;
-		m_renderLogic->SetVideoCardManager(videoCardManager,m_renderer);
+        m_videoCardManager = videoCardManager;
+        m_renderLogic->SetVideoCardManager(videoCardManager,m_renderer);
 }
 
 // *********************************

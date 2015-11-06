@@ -948,10 +948,10 @@ model::BasicNodePtr      TestScenesFactory::SequenceAnimationTestScene  ()
 model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineManager * tm )
 {
     if( !Path::Exists( filename ) )
-	{
-		std::cout << "[ERROR] File " << filename << " does not exist" << std::endl;
-		return nullptr;
-	}
+    {
+        std::cout << "[ERROR] File " << filename << " does not exist" << std::endl;
+        return nullptr;
+    }
 
     //JsonDeserializeObject deser;
     //deser.Load( filename );
