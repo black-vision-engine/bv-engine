@@ -185,10 +185,10 @@ public:
 //
 template< class TimeValueT, class ValueT >
 CompositeBezierInterpolator< TimeValueT, ValueT >::CompositeBezierInterpolator( float tolerance )
-    : m_type( CurveType::LINEAR )
+    //: m_type( CurveType::LINEAR )
     //: m_type( CurveType::COSINE_LIKE )
     //: m_type( CurveType::POINT )
-    //: m_type( CurveType::BEZIER )
+    : m_type( CurveType::BEZIER )
     , m_tolerance( tolerance )
     , m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
 {
@@ -237,8 +237,6 @@ ISerializablePtr     CompositeBezierInterpolator< TimeValueT, ValueT >::Create  
 {
     auto interpolator = std::make_shared< CompositeBezierInterpolator< TimeValueT, ValueT > >();
 
-    interpolator->SetCurveType( SerializationHelper::String2T< CurveType >( ct2s, deser.GetAttribute( "curve_type" ) ) );
-
     auto keys = SerializationHelper::DeserializeObjectLoadPropertiesImpl< Key >( deser, "key" );
 
     if( deser.EnterChild( "interpolation" ) == false )
@@ -272,6 +270,8 @@ ISerializablePtr     CompositeBezierInterpolator< TimeValueT, ValueT >::Create  
         } while( deser.NextChild() );
         deser.ExitChild();
     }
+
+    interpolator->SetCurveType( SerializationHelper::String2T< CurveType >( ct2s, deser.GetAttribute( "curve_type" ) ) );
 
     return interpolator;
 }

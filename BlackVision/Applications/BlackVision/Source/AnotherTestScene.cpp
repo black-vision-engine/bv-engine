@@ -952,18 +952,18 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineMana
 		std::cout << "[ERROR] File " << filename << " does not exist" << std::endl;
 		return nullptr;
 	}
-// begin serialization
+
     //JsonDeserializeObject deser;
     //deser.Load( filename );
     DeserializeObject deser( filename );
 
-    model::TimelineManager::SetInstance( tm );
-    
-    auto sucess = deser.EnterChild( "scene" );
-    assert( sucess ); // FIXME error handling
-    auto obj = SceneModel::Create( deser );
-    deser.ExitChild();
-    return std::static_pointer_cast< SceneModel >( obj )->m_pModelSceneRoot;
+    //model::TimelineManager::SetInstance( tm );
+
+    auto model = SerializationHelper::DeserializeObjectLoadImpl< SceneModel >( deser, "scene" );
+
+    tm->AddTimeline( model->m_pTimelineManager->GetRootTimeline() );
+
+    return model->m_pModelSceneRoot;
 }
 
 //model::BasicNodePtr     TestScenesFactory::CreateSerializedTestScene       ( model::TimelineManager * timelineManager  )

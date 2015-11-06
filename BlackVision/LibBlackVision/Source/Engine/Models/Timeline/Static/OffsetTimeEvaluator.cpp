@@ -8,10 +8,11 @@ namespace bv { namespace model {
 
 // *******************************
 //
-OffsetTimeEvaluator::OffsetTimeEvaluator                    ( const std::string & name, TimeType offsetTime )
+OffsetTimeEvaluator::OffsetTimeEvaluator                    ( const std::string & name, TimeType offsetTime, TimeType scale )
     : Parent( name )
     , m_globalTime( 0.f )
     , m_timeOffset( offsetTime )
+    , m_timeScale( scale )
 {
 }
 
@@ -43,7 +44,10 @@ ISerializablePtr     OffsetTimeEvaluator::Create              ( const IDeseriali
 {
     auto name = dob.GetAttribute( "name" );
 
-    auto te = std::make_shared< OffsetTimeEvaluator >( name, 0.f ); // FIXME load offset
+    auto offset = SerializationHelper::String2T< float >( dob.GetAttribute( "offset" ) );
+    auto scale = SerializationHelper::String2T< float >( dob.GetAttribute( "scale" ), 1.f );
+
+    auto te = std::make_shared< OffsetTimeEvaluator >( name, offset, scale );
 
     auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( dob, "children", "timeline" );
 
@@ -71,7 +75,7 @@ void                OffsetTimeEvaluator::SetGlobalTimeImpl  ( TimeType t )
 //
 TimeType            OffsetTimeEvaluator::GetLocalTime       () const
 {
-    return m_globalTime + m_timeOffset;
+    return ( m_globalTime + m_timeOffset ) * m_timeScale;
 }
 
 } //model
