@@ -39,13 +39,13 @@ void TestRemoteEventsKeyboardHandler::HandleKey           ( unsigned char c, BVA
 
         std::wstring pretendRemoteString = ser.Save( FORMATSTYLE_SPARING );
 
-        RemoteCommandsConverter::GetRemoteCommandsConverter().QueueEvent( pretendRemoteString );
+        RemoteCommandsConverter::GetRemoteCommandsConverter().QueueEvent( pretendRemoteString, 0 );
     }
     else if( c == 'r' )
     {// Test remote commands magic
         std::wstring pretendRemoteString = LoadUtf8FileToString( L"serialization/remoteEvent.json" );
 
-        RemoteCommandsConverter::GetRemoteCommandsConverter().QueueEvent( pretendRemoteString );
+        RemoteCommandsConverter::GetRemoteCommandsConverter().QueueEvent( pretendRemoteString, 0 );
     }
     else if( c == 'e' )
     {// Save descriptor. This helps to create remote event. You can copy this desc to serialization/remoteEvent.json.
@@ -63,9 +63,10 @@ void TestRemoteEventsKeyboardHandler::HandleKey           ( unsigned char c, BVA
         std::wofstream file( L"serialization/responseEvents.json", std::ios_base::app );
         
         auto infoResponse = RemoteCommandsConverter::GetRemoteCommandsConverter().PollEvent();
-        while( infoResponse != L"" )
+        while( infoResponse != nullptr )
         {            
-            file << infoResponse << std::endl;
+            BaseEventPtr responseEvent = std::static_pointer_cast<ResponseEvent>( infoResponse );
+            file << infoResponse->Response << std::endl;
             infoResponse = RemoteCommandsConverter::GetRemoteCommandsConverter().PollEvent();
         }
 

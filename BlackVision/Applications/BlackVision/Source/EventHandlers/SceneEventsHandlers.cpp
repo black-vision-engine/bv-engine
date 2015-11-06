@@ -25,11 +25,11 @@ SceneEventsHandlers::~SceneEventsHandlers()
 
 // ***********************
 //
-void SceneEventsHandlers::SceneStructure      ( bv::IEventPtr evt )
+void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 {
-    if( evt->GetEventType() != bv::SceneStructureEvent::Type() )
+    if( evt->GetEventType() != bv::NodeStructureEvent::Type() )
         return;
-    bv::SceneStructureEventPtr structureEvent = std::static_pointer_cast<bv::SceneStructureEvent>( evt );
+    bv::NodeStructureEventPtr structureEvent = std::static_pointer_cast<bv::NodeStructureEvent>( evt );
 
     std::string& nodeName = structureEvent->NodeName;
     std::string& newNodeName = structureEvent->NewNodeName;
@@ -49,14 +49,14 @@ void SceneEventsHandlers::SceneStructure      ( bv::IEventPtr evt )
         }
     }
 
-    if( command == SceneStructureEvent::Command::AddNode )
+    if( command == NodeStructureEvent::Command::AddNode )
     {
         auto newNode = model::BasicNode::Create( newNodeName, m_appLogic->GetTimelineManager()->GetRootTimeline() );
 		newNode->AddPlugin( "DEFAULT_TRANSFORM", "transform", m_appLogic->GetTimelineManager()->GetRootTimeline() ); 
 
 		m_appLogic->GetBVScene()->GetSceneEditor()->AddChildNode( node, newNode );
     }
-    else if( command == SceneStructureEvent::Command::RemoveNode )
+    else if( command == NodeStructureEvent::Command::RemoveNode )
     {
         auto parentNodeName = nodeName.substr( 0, nodeName.find_last_of("/") );
         auto childNode = nodeName.substr( nodeName.find_last_of("/") + 1 );
@@ -64,21 +64,21 @@ void SceneEventsHandlers::SceneStructure      ( bv::IEventPtr evt )
 			
         m_appLogic->GetBVScene()->GetSceneEditor()->DeleteChildNode( parentNode, childNode );
     }
-    else if( command == SceneStructureEvent::Command::AttachPlugin )
+    else if( command == NodeStructureEvent::Command::AttachPlugin )
     {
         bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
         
         unsigned int endIndex = std::numeric_limits<unsigned int>::max();
         basicNode->GetModelNodeEditor()->AttachPlugin( endIndex );
     }
-    else if( command == SceneStructureEvent::Command::DetachPlugin )
+    else if( command == NodeStructureEvent::Command::DetachPlugin )
     {
         bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
         basicNode->GetModelNodeEditor()->DetachPlugin( pluginName );
     }
-    else if( command == SceneStructureEvent::Command::SetNodeVisible )
+    else if( command == NodeStructureEvent::Command::SetNodeVisible )
         node->SetVisible( true );
-    else if( command == SceneStructureEvent::Command::SetNodeInvisible )
+    else if( command == NodeStructureEvent::Command::SetNodeInvisible )
         node->SetVisible( false );
 
 }
@@ -127,7 +127,7 @@ Json::Value GetRequestParamValue( std::string& request )
 
 // *********************************
 //
-void SendOnSceneStructureResponse( const std::string & cmd, const std::string & msgKey, const Json::Value & msgVal )
+void SendOnSceneStructureResponse( int socketID, const std::string & cmd, const std::string & msgKey, const Json::Value & msgVal )
 {
     LOG_MESSAGE( SeverityLevel::info ) << cmd << " OK";
 
@@ -142,6 +142,7 @@ void SendOnSceneStructureResponse( const std::string & cmd, const std::string & 
 
     ResponseEventPtr responseEvent = std::make_shared<ResponseEvent>();
     responseEvent->Response = WS;
+    responseEvent->SocketID = socketID;
     GetDefaultEventManager().QueueResponse( responseEvent );
 }
 
@@ -157,126 +158,127 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
     std::string& request = projectEvent->Request;
     auto command = projectEvent->ProjectCommand;
+    int senderID = projectEvent->SocketID;
 
-        if( command == ProjectEvent::Command::ListProjectNames )
+    if( command == ProjectEvent::Command::ListProjectNames )
+    {
+        auto pns = pm->ListProjectsNames();
+
+        auto pList = ToJSONArray( pns );
+
+        SendOnSceneStructureResponse( senderID, "LIST_PROJECTS_NAMES", "list", pList );
+    }
+    else if( command == ProjectEvent::Command::NewProject )
+    {
+        auto name = GetRequestParamValue( request )[ "projectName" ].asString();
+
+        pm->AddNewProject( name );
+
+        SendOnSceneStructureResponse( senderID, "NEW_PROJECT", "status", "OK" );
+    }
+    else if( command == ProjectEvent::Command::ListScenes )
+    {
+        auto name = GetRequestParamValue( request )[ "projectName" ].asString();
+        auto sns = pm->ListScenesNames( name );
+
+        auto pList = ToJSONArray( sns );
+
+        SendOnSceneStructureResponse( senderID, "LIST_SCENES", "list", pList );
+    }
+    else if( command == ProjectEvent::Command::ListAssetsPaths )
+    {
+        auto projName = GetRequestParamValue( request )[ "projectName" ].asString();
+        auto catName = GetRequestParamValue( request )[ "categoryName" ].asString();
+
+        auto sns = pm->ListAssetsPaths( projName, catName );
+
+        auto pList = ToJSONArray( sns );
+
+        SendOnSceneStructureResponse( senderID, "LIST_ASSETS_PATHS", "list", pList );
+    }
+    else if( command == ProjectEvent::Command::ListCategoriesNames )
+    {
+        auto sns = pm->ListCategoriesNames();
+
+        auto pList = ToJSONArray( sns );
+
+        SendOnSceneStructureResponse( senderID, "LIST_CATEGORIES_NAMES", "list", pList );
+    }
+    else if( command == ProjectEvent::Command::SetCurrentProject )
+    {
+        auto projName = GetRequestParamValue( request )[ "projectName" ].asString();
+
+        pm->SetCurrentProject( projName );
+
+        SendOnSceneStructureResponse( senderID, "SET_CURRENT_PROJECT", "status", "OK" );
+    }
+    else if( command == ProjectEvent::Command::ListProjects )
+    {
+        auto pns = pm->ListProjectsNames();
+
+        Json::Value list;
+
+        for( auto p : pns )
         {
-            auto pns = pm->ListProjectsNames();
+            auto scenesCount = pm->ListScenesNames( p ).size();
 
-            auto pList = ToJSONArray( pns );
+            Json::Value entry;
+            entry[ "name" ] = p.Str();
+            entry[ "scenes_count" ] = scenesCount;
 
-            SendOnSceneStructureResponse( "LIST_PROJECTS_NAMES", "list", pList );
+            list.append( entry );
         }
-        else if( command == ProjectEvent::Command::NewProject )
+
+        SendOnSceneStructureResponse( senderID, "LIST_PROJECTS", "list", list );
+    }
+    else if( command == ProjectEvent::Command::LoadProject )
+    {
+        auto projName = std::string( request.begin(), request.end() );
+
+        auto projectScenesNames = pm->ListScenesNames( projName );
+
+        bool status = false;
+
+        if( !projectScenesNames.empty() )
         {
-            auto name = GetRequestParamValue( request )[ "projectName" ].asString();
-
-            pm->AddNewProject( name );
-
-            SendOnSceneStructureResponse( "NEW_PROJECT", "status", "OK" );
-        }
-        else if( command == ProjectEvent::Command::ListScenes )
-        {
-            auto name = GetRequestParamValue( request )[ "projectName" ].asString();
-            auto sns = pm->ListScenesNames( name );
-
-            auto pList = ToJSONArray( sns );
-
-            SendOnSceneStructureResponse( "LIST_SCENES", "list", pList );
-        }
-        else if( command == ProjectEvent::Command::ListAssetsPaths )
-        {
-            auto projName = GetRequestParamValue( request )[ "projectName" ].asString();
-            auto catName = GetRequestParamValue( request )[ "categoryName" ].asString();
-
-            auto sns = pm->ListAssetsPaths( projName, catName );
-
-            auto pList = ToJSONArray( sns );
-
-            SendOnSceneStructureResponse( "LIST_ASSETS_PATHS", "list", pList );
-        }
-        else if( command == ProjectEvent::Command::ListCategoriesNames )
-        {
-            auto sns = pm->ListCategoriesNames();
-
-            auto pList = ToJSONArray( sns );
-
-            SendOnSceneStructureResponse( "LIST_CATEGORIES_NAMES", "list", pList );
-        }
-        else if( command == ProjectEvent::Command::SetCurrentProject )
-        {
-            auto projName = GetRequestParamValue( request )[ "projectName" ].asString();
-
-            pm->SetCurrentProject( projName );
-
-            SendOnSceneStructureResponse( "SET_CURRENT_PROJECT", "status", "OK" );
-        }
-        else if( command == ProjectEvent::Command::ListProjects )
-        {
-            auto pns = pm->ListProjectsNames();
-
-            Json::Value list;
-
-            for( auto p : pns )
-            {
-                auto scenesCount = pm->ListScenesNames( p ).size();
-
-                Json::Value entry;
-                entry[ "name" ] = p.Str();
-                entry[ "scenes_count" ] = scenesCount;
-
-                list.append( entry );
-            }
-
-            SendOnSceneStructureResponse( "LIST_PROJECTS", "list", list );
-        }
-        else if( command == ProjectEvent::Command::LoadProject )
-        {
-            auto projName = std::string( request.begin(), request.end() );
-
-            auto projectScenesNames = pm->ListScenesNames( projName );
-
-            bool status = false;
-
-            if( !projectScenesNames.empty() )
-            {
-                UpdatersManager::Get().RemoveAllUpdaters();
+            UpdatersManager::Get().RemoveAllUpdaters();
                 
-                auto node = m_appLogic->LoadScenes( projectScenesNames );
-                if( node )
-                {
-                    status = true;
-                }
-            }
-
-            if( status )
+            auto node = m_appLogic->LoadScenes( projectScenesNames );
+            if( node )
             {
-                SendOnSceneStructureResponse( "LOAD_PROJECT", "status", "OK" );
+                status = true;
             }
-            else
-            {
-                SendOnSceneStructureResponse( "LOAD_PROJECT", "status", "ERROR" );
-            }
-        } 
-   //     else if( command == ProjectEvent::Command::SaveScene )
-   //     {
-   //         auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
-   //         auto node = root->GetNode( nodeName );
+        }
 
-			//if( node == nullptr && root->GetName() == nodeName )
-			//{
-			//	//Log::A( "OK", "root node is node you're looking for [" + nodeName + "] Applying jedi fix now." );
-			//	node = root;
-			//}
+        if( status )
+        {
+            SendOnSceneStructureResponse( senderID, "LOAD_PROJECT", "status", "OK" );
+        }
+        else
+        {
+            SendOnSceneStructureResponse( senderID, "LOAD_PROJECT", "status", "ERROR" );
+        }
+    } 
+//     else if( command == ProjectEvent::Command::SaveScene )
+//     {
+//         auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
+//         auto node = root->GetNode( nodeName );
 
-   //         auto basicNode = std::static_pointer_cast< model::BasicNode >( node );
+		//if( node == nullptr && root->GetName() == nodeName )
+		//{
+		//	//Log::A( "OK", "root node is node you're looking for [" + nodeName + "] Applying jedi fix now." );
+		//	node = root;
+		//}
 
-   //         auto projName = std::string( request.begin(), request.end() );
+//         auto basicNode = std::static_pointer_cast< model::BasicNode >( node );
 
-   //         pm->AddScene( basicNode, "proj01", "dupa.scn" );
+//         auto projName = std::string( request.begin(), request.end() );
+
+//         pm->AddScene( basicNode, "proj01", "dupa.scn" );
 
 
-   //         SendOnSceneStructureResponse( "SAVE_SCENE", "status", "OK" );
-   //     }
+//         SendOnSceneStructureResponse( "SAVE_SCENE", "status", "OK" );
+//     }
 }
 
 // ***********************
@@ -305,38 +307,143 @@ void SceneEventsHandlers::TimelineHandler     ( bv::IEventPtr evt )
         {
             timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
             timelineTyped->Play();
-            
-            
-            //printf("play\n");
         }
         else if( command == TimeLineEvent::Command::Stop )
         {
             timelineTyped->Stop();
-            //printf("stop\n");
         }
         else if( command == TimeLineEvent::Command::PlayReverse )
         {
             timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_BACKWARD );
             timelineTyped->Play();
-            
-            //printf("play reverse\n");
         }
         else if( command == TimeLineEvent::Command::Goto )
         {
             timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
             timelineTyped->SetTimeAndStop( (bv::TimeType)time );
-            
-            //printf("goto\n");
         }
         else if( command == TimeLineEvent::Command::GotoAndPlay )
         {
             timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
             timelineTyped->SetTimeAndPlay( (bv::TimeType)time );
-            //timeline_cast->
-            //printf("gotoandplay\n");
         }
        
     }
+}
+
+// ***********************
+//
+void SceneEventsHandlers::WidgetHandler       ( bv::IEventPtr evt )
+{
+	//if( evt->GetEventType() == bv::WidgetEvent::Type() )
+ //       return;
+
+	//bv::WidgetEventPtr widgetEvent = std::static_pointer_cast<bv::WidgetEvent>( evt );        
+ //   auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
+ //       
+
+ //   //todo: //fixme: wstring -> string
+ //   wstring NodeName =  widgetEvent->NodeName;
+ //   string NodeNameStr( NodeName.begin(), NodeName.end() );
+ //   //todo: //fixme: wstring -> string
+ //   wstring param = widgetEvent->Param;
+ //   //string TexturePathStr( TexturePath.begin(), TexturePath.end() );
+	//	
+
+ //   auto node = root->GetNode(NodeNameStr);
+ //   if(node==nullptr &&root->GetName()==NodeNameStr)
+ //   {
+ //       Log::A("OK", "root node is node you're looking for ["+ NodeNameStr+"] Applying jedi fix now.");
+ //       node = root;
+ //   }
+ //   if(node==nullptr)
+ //   {
+ //       Log::A("error", "Error OnSetParam() node ["+ NodeNameStr+"] not found");
+ //       return;
+ //   }
+	//	
+	//BasicNodePtr nod      = std::static_pointer_cast< bv::model::BasicNode >(node);
+	//		
+	//	
+ //   if(nod == nullptr)
+ //   {
+ //           Log::A("error", "Error OnWidgetCmd () node ["+ NodeNameStr+"] not found");
+ //           return;
+ //   }
+
+	//INodeLogicPtr logic = nod->GetLogic();
+	//if(logic==nullptr)
+	//{
+	//		Log::A("error", "Error OnWidgetCmd () node ["+ NodeNameStr+"] , logic [] not found");
+ //           return;
+
+	//}
+	//	
+	//INodeLogic* logic__ptr = logic.get();
+
+
+ //   if(widgetEvent->WidgetName == L"crawl")
+ //   {
+	//	bv::widgets::Crawler* crawler =  (bv::widgets::Crawler*)logic__ptr;
+	//	if(widgetEvent->Action==L"stop")
+	//	{
+	//		Log::A("OK","crawl stop...");
+	//		crawler->Stop();
+	//	}
+	//	else if(widgetEvent->Action==L"start")
+	//	{
+	//		Log::A("OK","crawl start...");
+	//		crawler->Start();
+	//	}else if(widgetEvent->Action==L"add_text")
+	//	{
+	//		Log::A(L"OK",L"crawl add text..."+ widgetEvent->Param);
+	//		crawler->AddMessage(widgetEvent->Param);
+	//	}else if(widgetEvent->Action==L"reset")
+	//	{
+	//		Log::A(L"OK",L"crawl reset...");
+	//		crawler->Reset();
+	//	}
+	//	else if(widgetEvent->Action==L"clear")
+	//	{
+	//		Log::A(L"OK",L"crawl clear...");
+	//		crawler->Clear();
+	//	}else if(widgetEvent->Action==L"set_speed")
+	//	{
+	//		Log::A(L"OK",L"crawl set speed.."+ widgetEvent->Param);
+	//		float speed = 0.5;
+	//		string s_speed( widgetEvent->Param.begin(), widgetEvent->Param.end() );
+	//		speed = (float)atof(s_speed.c_str());
+	//		crawler->SetSpeed(speed);
+
+	//	}
+
+	//}else if(widgetEvent->WidgetName == L"counter")
+ //   {
+	//	bv::widgets::WidgetCounter * counter =  (bv::widgets::WidgetCounter*)logic__ptr;
+
+	//	string param_name_cast= string(widgetEvent->Param.begin(), widgetEvent->Param.end());
+
+	//	auto param = counter->GetValueParam();
+	//	if(param==nullptr)
+	//	{
+	//		Log::A("error", "Error OnSetParam() plugin [counter] param ["+param_name_cast+"] not found");
+
+	//	}else{
+
+	//			wstring value = widgetEvent->Value;
+	//			 
+	//			float float_value = 1.0f;
+
+	//			try{
+	//			float_value =  boost::lexical_cast<float>(value);
+	//			}catch(boost::bad_lexical_cast&)
+	//			{
+	//			float_value = 0.0f;
+	//			}
+
+	//			SetParameter( param, (bv::TimeType)widgetEvent->Time, float_value);
+	//	}
+	//}
 }
 
 } //bv

@@ -48,8 +48,8 @@ std::string TimerCmd::m_sEventName           = "Event_Timer";
 const EventType WidgetCmd::m_sEventType       = 0x10000011;
 std::string WidgetCmd::m_sEventName           = "Event_Widget";
 
-const EventType SceneStructureEventDeprecated::m_sEventType       = 0x10000012;
-std::string SceneStructureEventDeprecated::m_sEventName           = "Event_SceneStructure";
+const EventType SceneStructureEvent::m_sEventType       = 0x10000012;
+std::string SceneStructureEvent::m_sEventName           = "Event_SceneStructure";
 
 const EventType InfoEvent::m_sEventType             = 0x10000007;
 std::string InfoEvent::m_sEventName                 = "Event_Info";
@@ -63,8 +63,8 @@ std::string LoadAssetEvent::m_sEventName            = "Event_LoadAsset";
 const EventType ParamKeyEvent::m_sEventType         = 0x30000006;
 std::string ParamKeyEvent::m_sEventName             = "Event_ParamKeyEvent";
 
-const EventType SceneStructureEvent::m_sEventType   = 0x30000012;
-std::string SceneStructureEvent::m_sEventName       = "Event_SceneStructure";
+const EventType NodeStructureEvent::m_sEventType   = 0x30000012;
+std::string NodeStructureEvent::m_sEventName       = "Event_NodeStructure";
 
 const EventType ProjectEvent::m_sEventType          = 0x30000013;
 std::string ProjectEvent::m_sEventName              = "Event_ProjectStructure";
@@ -78,6 +78,13 @@ std::string NewInfoEvent::m_sEventName              = "Event_Info";
 const EventType TimeLineEvent::m_sEventType         = 0x30000009;
 std::string TimeLineEvent::m_sEventName             = "Event_Timeline";
 
+const EventType TimerEvent::m_sEventType            = 0x30000010;
+std::string TimerEvent::m_sEventName                = "Event_Timer";
+
+const EventType WidgetEvent::m_sEventType           = 0x30000011;
+std::string WidgetEvent::m_sEventName               = "Event_Widget";
+
+
 // ************************************* Events Serialization *****************************************
 
 namespace Serial
@@ -86,7 +93,7 @@ namespace Serial
 
 const std::wstring EMPTY_WSTRING            = L"";
 
-const std::wstring EVENT_TYPE_WSTRING       = L"cmd";
+const std::wstring EVENT_TYPE_WSTRING       = L"Event";
 const std::wstring NODE_NAME_WSTRING        = L"NodeName";
 const std::wstring PLUGIN_NAME_WSTRING      = L"PluginName";
 const std::wstring COMMAND_WSTRING          = L"Command";
@@ -102,7 +109,7 @@ const std::wstring COMMAND_ADD_KEY_WSTRING  = L"AddKey";
 const std::wstring COMMAND_REMOVE_KEY_WSTRING   = L"RemoveKey";
 const std::wstring COMMAND_UPDATE_KEY_WSTRING   = L"UpdateKey";
 
-// ScenStructureEvent
+// NodeStructureEvent
 const std::wstring NEW_NODE_NAME_WSTRING        = L"NewNodeName";
 
 const std::wstring COMMAND_ADD_NODE_WSTRING         = L"AddNode";
@@ -619,60 +626,60 @@ const std::wstring &         InfoEvent::GetAddStrData    () const
 
 
 
-SceneStructureEventDeprecated::SceneStructureEventDeprecated         () 
+SceneStructureEvent::SceneStructureEvent         () 
 {}
 
 // *************************************
 //
-EventType           SceneStructureEventDeprecated::GetEventType         () const
+EventType           SceneStructureEvent::GetEventType         () const
 {
     return this->m_sEventType;
 }
 
 // *************************************
 //
-void                SceneStructureEventDeprecated::Serialize            ( ISerializer& ser ) const
+void                SceneStructureEvent::Serialize            ( ISerializer& ser ) const
 {
     assert( false );
 }
 
 // *************************************
 //
-IEventPtr                SceneStructureEventDeprecated::Create          ( IDeserializer& deser )
+IEventPtr                SceneStructureEvent::Create          ( IDeserializer& deser )
 {
     assert( false );
     return nullptr;
 }
 // *************************************
 //
-IEventPtr               SceneStructureEventDeprecated::Clone             () const
+IEventPtr               SceneStructureEvent::Clone             () const
 {
-    return IEventPtr( new SceneStructureEventDeprecated( *this ) );
+    return IEventPtr( new SceneStructureEvent( *this ) );
 }
 // *************************************
 //
-EventType               SceneStructureEventDeprecated::Type              ()
+EventType               SceneStructureEvent::Type              ()
 {
     return m_sEventType;
 }
 
 // *************************************
 //
-bool                    SceneStructureEventDeprecated::ForceSync        () const
+bool                    SceneStructureEvent::ForceSync        () const
 {
     return request == L"grab_that_frame";
 }
 
 // *************************************
 //
-const std::string &     SceneStructureEventDeprecated::GetName           () const
+const std::string &     SceneStructureEvent::GetName           () const
 {
     return m_sEventName;
 }
 
 // *************************************
 //
-const std::wstring &         SceneStructureEventDeprecated::GetAddStrData    () const
+const std::wstring &         SceneStructureEvent::GetAddStrData    () const
 {
     return m_additionalStrData;
 }
@@ -1044,11 +1051,11 @@ EventType           ParamKeyEvent::GetEventType         () const
 
 
 
-//******************* SceneStructureEvent *************
+//******************* NodeStructureEvent *************
 
 // *************************************
 //
-void                SceneStructureEvent::Serialize            ( ISerializer& ser ) const
+void                NodeStructureEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
     ser.SetAttribute( Serial::NODE_NAME_WSTRING, toWString( NodeName ) );
@@ -1059,11 +1066,11 @@ void                SceneStructureEvent::Serialize            ( ISerializer& ser
 
 // *************************************
 //
-IEventPtr                SceneStructureEvent::Create          ( IDeserializer& deser )
+IEventPtr                NodeStructureEvent::Create          ( IDeserializer& deser )
 {
     if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
-        SceneStructureEventPtr newEvent   = std::make_shared<SceneStructureEvent>();
+        NodeStructureEventPtr newEvent   = std::make_shared<NodeStructureEvent>();
         newEvent->NodeName          = toString( deser.GetAttribute( Serial::NODE_NAME_WSTRING ) );
         newEvent->NewNodeName       = toString( deser.GetAttribute( Serial::NEW_NODE_NAME_WSTRING ) );
         newEvent->PluginName        = toString( deser.GetAttribute( Serial::PLUGIN_NAME_WSTRING ) );
@@ -1075,29 +1082,29 @@ IEventPtr                SceneStructureEvent::Create          ( IDeserializer& d
 }
 // *************************************
 //
-IEventPtr               SceneStructureEvent::Clone             () const
-{   return IEventPtr( new SceneStructureEvent( *this ) );  }
+IEventPtr               NodeStructureEvent::Clone             () const
+{   return IEventPtr( new NodeStructureEvent( *this ) );  }
 
 // *************************************
 //
-EventType           SceneStructureEvent::Type()
+EventType           NodeStructureEvent::Type()
 {   return m_sEventType;   }
 // *************************************
 //
-std::string&        SceneStructureEvent::Name()
+std::string&        NodeStructureEvent::Name()
 {   return m_sEventName;   }
 // *************************************
 //
-const std::string&  SceneStructureEvent::GetName() const
+const std::string&  NodeStructureEvent::GetName() const
 {   return Name();   }
 // *************************************
 //
-EventType           SceneStructureEvent::GetEventType() const
+EventType           NodeStructureEvent::GetEventType() const
 {   return this->m_sEventType; }
 
 // *************************************
 //
-std::wstring SceneStructureEvent::CommandToWString    ( Command cmd )
+std::wstring NodeStructureEvent::CommandToWString    ( Command cmd )
 {
     if( cmd == Command::AddNode )
         return Serial::COMMAND_ADD_NODE_WSTRING;
@@ -1116,7 +1123,7 @@ std::wstring SceneStructureEvent::CommandToWString    ( Command cmd )
 }
 // *************************************
 //
-SceneStructureEvent::Command SceneStructureEvent::WStringToCommand    ( const std::wstring& string )
+NodeStructureEvent::Command NodeStructureEvent::WStringToCommand    ( const std::wstring& string )
 {
     if( string == Serial::COMMAND_ADD_NODE_WSTRING )
         return Command::AddNode;
@@ -1449,6 +1456,121 @@ TimeLineEvent::Command TimeLineEvent::WStringToCommand    ( const std::wstring& 
     else
         return Command::Fail;
 }
+
+//******************* TimerEvent *************
+
+// *************************************
+//
+void                TimerEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
+    //ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( TimelineCommand ) );
+    //ser.SetAttribute( Serial::TIMELINE_NAME_WSTRING, toWString( TimelineName ) );
+    //ser.SetAttribute( Serial::TIMELINE_TIME_VALUE_WSTRING, toWString( Time ) );
+}
+
+// *************************************
+//
+IEventPtr                TimerEvent::Create          ( IDeserializer& deser )
+{
+    //if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
+    //{
+    //    TimeLineEventPtr newEvent   = std::make_shared<TimeLineEvent>();
+    //    newEvent->Time              = stof( deser.GetAttribute( Serial::TIMELINE_TIME_VALUE_WSTRING ) );
+    //    newEvent->TimelineCommand   = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
+    //    newEvent->TimelineName      = toString( deser.GetAttribute( Serial::TIMELINE_NAME_WSTRING ) );
+
+    //    return newEvent;
+    //}
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               TimerEvent::Clone             () const
+{   return IEventPtr( new TimerEvent( *this ) );  }
+
+// *************************************
+//
+EventType           TimerEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        TimerEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  TimerEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           TimerEvent::GetEventType() const
+{   return this->m_sEventType; }
+
+// *************************************
+//
+std::wstring TimerEvent::CommandToWString    ( Command cmd )
+{
+    return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
+}
+
+// *************************************
+//
+TimerEvent::Command TimerEvent::WStringToCommand    ( const std::wstring& string )
+{
+    return Command::Fail;
+}
+
+
+
+//******************* WidgetEvent *************
+
+// *************************************
+//
+void                WidgetEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
+    //ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( TimelineCommand ) );
+    //ser.SetAttribute( Serial::TIMELINE_NAME_WSTRING, toWString( TimelineName ) );
+    //ser.SetAttribute( Serial::TIMELINE_TIME_VALUE_WSTRING, toWString( Time ) );
+}
+
+// *************************************
+//
+IEventPtr                WidgetEvent::Create          ( IDeserializer& deser )
+{
+    //if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
+    //{
+    //    TimeLineEventPtr newEvent   = std::make_shared<TimeLineEvent>();
+    //    newEvent->Time              = stof( deser.GetAttribute( Serial::TIMELINE_TIME_VALUE_WSTRING ) );
+    //    newEvent->TimelineCommand   = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
+    //    newEvent->TimelineName      = toString( deser.GetAttribute( Serial::TIMELINE_NAME_WSTRING ) );
+
+    //    return newEvent;
+    //}
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               WidgetEvent::Clone             () const
+{   return IEventPtr( new WidgetEvent( *this ) );  }
+
+// *************************************
+//
+EventType           WidgetEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        WidgetEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  WidgetEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           WidgetEvent::GetEventType() const
+{   return this->m_sEventType; }
+
 
 #pragma warning( pop )
 

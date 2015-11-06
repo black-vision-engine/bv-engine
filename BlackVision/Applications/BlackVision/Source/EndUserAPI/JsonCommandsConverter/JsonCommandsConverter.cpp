@@ -20,7 +20,9 @@ JsonCommandsConverter::~JsonCommandsConverter()
 
 // ***********************
 //
-void                JsonCommandsConverter::QueueEvent          ( const std::wstring& eventString )
+/// @param[in] eventString String to parse.
+/// @param[in] socketID Event sender identifier.
+void                JsonCommandsConverter::QueueEvent          ( const std::wstring& eventString, int socketID )
 {
     JsonSpiritDeserializeObject deserializer;
 
@@ -30,28 +32,25 @@ void                JsonCommandsConverter::QueueEvent          ( const std::wstr
         return;
     }
 
-    IEventPtr newEvent = CreateEvent( deserializer );
+    BaseEventPtr newEvent = std::static_pointer_cast<BaseEvent>( CreateEvent( deserializer ) );
+    newEvent->SocketID = socketID;
+
     if( newEvent != nullptr )
         GetDefaultEventManager().ConcurrentQueueEvent( newEvent );
 }
 
 // ***********************
 // Always check, if string isn't empty. That means, no more events are queued.
-std::wstring        JsonCommandsConverter::PollEvent           ()
+ResponseEventPtr        JsonCommandsConverter::PollEvent           ()
 {
     auto evt = GetDefaultEventManager().GetNextResponse();
     if( evt == nullptr )
-        return L"";
-
-    // Maybe later, but for now it must be compatibile with previous solution.
-    //JsonSpiritSerializeObject ser;
-    //evt->Serialize( ser );
+        return nullptr;
 
     if( evt->GetEventType() != ResponseEvent::Type() )
-        return L"";
+        return nullptr;
 
-    ResponseEventPtr response = std::static_pointer_cast<ResponseEvent>( evt );
-    return std::move( response->Response );
+    return std::static_pointer_cast< ResponseEvent >( evt );
 }
 
 

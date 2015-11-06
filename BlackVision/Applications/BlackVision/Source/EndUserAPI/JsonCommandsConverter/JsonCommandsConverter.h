@@ -14,8 +14,8 @@ public:
     JsonCommandsConverter();
     ~JsonCommandsConverter();
 
-    void                QueueEvent          ( const std::wstring& eventString ) override;
-    std::wstring        PollEvent           () override;
+    void                QueueEvent          ( const std::wstring& eventString, int socketID ) override;
+    ResponseEventPtr    PollEvent           () override;
 };
 
 } //bv

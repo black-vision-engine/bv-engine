@@ -508,14 +508,14 @@ Json::Value Str2Json( const std::string & data )
 
 // *********************************
 //
-Json::Value GetRequestParamValue( const bv::SceneStructureEventDeprecatedPtr & evtStructure )
+Json::Value GetRequestParamValue( const bv::SceneStructureEventPtr & evtStructure )
 {
     return Str2Json( std::string( evtStructure->request.begin(), evtStructure->request.end() ) );
 }
 
 // *********************************
 //
-void SendOnSceneStructureResponse( const bv::SceneStructureEventDeprecatedPtr & evtStructure, const std::string & cmd, const std::string & msgKey, const Json::Value & msgVal )
+void SendOnSceneStructureResponse( const bv::SceneStructureEventPtr & evtStructure, const std::string & cmd, const std::string & msgKey, const Json::Value & msgVal )
 {
     Log::A( "OK", cmd );
 
@@ -540,9 +540,9 @@ void SendOnSceneStructureResponse( const bv::SceneStructureEventDeprecatedPtr & 
 //
 void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
 {
-    if( evt->GetEventType() == bv::SceneStructureEventDeprecated::Type() )
+    if( evt->GetEventType() == bv::SceneStructureEvent::Type() )
     {
-		bv::SceneStructureEventDeprecatedPtr evtStructure = std::static_pointer_cast<bv::SceneStructureEventDeprecated>( evt );
+		bv::SceneStructureEventPtr evtStructure = std::static_pointer_cast<bv::SceneStructureEvent>( evt );
 
         auto pm = ProjectManager::GetInstance();
 

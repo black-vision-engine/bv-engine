@@ -98,13 +98,13 @@ void ReqPrint( model::BasicNodePtr node, int level )
     //Log::A("OK",temp+node->GetName());
     
     int NumChildren = (node)->GetNumChildren();
-    for(int i=0;i<NumChildren;i++)
+    for( int i = 0; i < NumChildren; i++ )
     {
 
 		model::IModelNodePtr ptr   = node->GetChild(i);
         model::IModelNodePtr ptr2 = ptr;
         model::BasicNodePtr nod = std::static_pointer_cast< model::BasicNode >( ptr2 );
-        ReqPrint(nod,level+1);
+        ReqPrint( nod, level + 1 );
     }
 
 }
@@ -132,21 +132,19 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
         NewInfoEvent::Command command = infoEvent->InfoRequest;
         std::string& nodeName = infoEvent->NodeName;
 
+        wstring responseMessage;
+
         if( command == NewInfoEvent::Command::TreeStructure )
         {
             //Log::A("OK","Tree structure:");
-			
-			
             ReqPrint( m_appLogic->GetBVScene()->GetModelSceneRoot(), 1 );
-            std::string S;
-			S="{\"cmd\":\"scene_tree\",\"tree\": "+SerializeNode(m_appLogic->GetBVScene()->GetModelSceneRoot())+"}";
+
+            Json::Value root;
+            root[ "command" ] = "scene_tree";
+            root[ "tree" ] = SerializeNode( m_appLogic->GetBVScene()->GetModelSceneRoot() );
+
             //Log::A("OK",S);
-            wstring responseMessage = wstring(S.begin(),S.end());
-
-            ResponseEventPtr msg = std::make_shared<ResponseEvent>();
-            msg->Response = responseMessage;
-            GetDefaultEventManager().QueueResponse( msg );
-
+            responseMessage = toWString( root.toStyledString() );
         }
         else if( command == NewInfoEvent::Command::Performance )
         {
@@ -158,7 +156,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             PerformanceMonitor::Calculate( m_appLogic->GetStatsCalculator() );
 
             Json::Value root;
-            root["cmd"] = "performance";
+            root["command"] = "performance";
             root["fps"] = PerformanceMonitor::Stats.fps;
             root["fps_avg"] = PerformanceMonitor::Stats.fps_avg;
             root["ram"] = PerformanceMonitor::Stats.ram;
@@ -174,12 +172,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             }
             
             //Log::A("OK",S);
-            wstring responseMessage = toWString( root.toStyledString() );
-
-            ResponseEventPtr responseEvent = std::make_shared<ResponseEvent>();
-            responseEvent->Response = responseMessage;
-            GetDefaultEventManager().QueueResponse( responseEvent );
-
+            responseMessage = toWString( root.toStyledString() );
         }
         else if( command == NewInfoEvent::Command::Timelines )
         {
@@ -245,15 +238,11 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
 			}
 			s_timelines = "["+s_timelines+"]";
    
-            PerformanceMonitor::Calculate( m_appLogic->GetStatsCalculator() );
+            PerformanceMonitor::Calculate(m_appLogic->GetStatsCalculator());
             string S = "{\"cmd\":\"timelines\", \"timelines\":"+s_timelines+" }";
            
             //Log::A("SENDING",S);
-            wstring responseMessage = wstring(S.begin(),S.end());
-
-            ResponseEventPtr msg = std::make_shared<ResponseEvent>();
-            msg->Response = responseMessage;
-            GetDefaultEventManager().QueueResponse( msg );
+            responseMessage = wstring(S.begin(),S.end());
         }
         else if( command == NewInfoEvent::Command::NodeInfo )
         {
@@ -283,11 +272,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             auto resStr = res.toStyledString();
 
             //Log::A( "SENDING", resStr );
-            wstring responseMessage = wstring( resStr.begin(), resStr.end() );
-
-            ResponseEventPtr msg = std::make_shared<ResponseEvent>();
-            msg->Response = responseMessage;
-            GetDefaultEventManager().QueueResponse( msg );
+            responseMessage = wstring( resStr.begin(), resStr.end() );
         }
         else if( command == NewInfoEvent::Command::Videocards )
         {
@@ -298,12 +283,13 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             string S = val.toStyledString();
            
             //Log::A( "SENDING", S );
-            wstring responseMessage = wstring( S.begin(),S.end() );
-
-            ResponseEventPtr msg = std::make_shared<ResponseEvent>();
-            msg->Response = responseMessage;
-            GetDefaultEventManager().QueueResponse( msg );
+            responseMessage = wstring( S.begin(),S.end() );
         }
+        
+        ResponseEventPtr msg = std::make_shared<ResponseEvent>();
+        msg->Response = responseMessage;
+        msg->SocketID = infoEvent->SocketID;
+        GetDefaultEventManager().QueueResponse( msg );
     }
 }
 

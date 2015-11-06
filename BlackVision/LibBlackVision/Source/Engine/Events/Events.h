@@ -281,7 +281,7 @@ DEFINE_PTR_TYPE(InfoEvent)
 
 
 // ************************************* SceneStructureEvent Event *************************************
-class SceneStructureEventDeprecated : public BaseEvent
+class SceneStructureEvent : public BaseEvent
 {
 private:
 
@@ -303,7 +303,7 @@ public:
 
 public:
 
-    explicit                        SceneStructureEventDeprecated   ();
+    explicit                        SceneStructureEvent   ();
 
     virtual EventType               GetEventType        () const;
 
@@ -322,7 +322,7 @@ public:
 
 };
 
-DEFINE_PTR_TYPE( SceneStructureEventDeprecated )
+DEFINE_PTR_TYPE( SceneStructureEvent )
 
 
 // ************************************* SetParamEvent *************************************
@@ -568,7 +568,7 @@ DEFINE_PTR_TYPE( ParamKeyEvent )
 
 
 // ************************************* SceneStructureEvent Event *************************************
-class SceneStructureEvent : public BaseEvent
+class NodeStructureEvent : public BaseEvent
 {
 public:
     typedef enum
@@ -585,12 +585,12 @@ private:
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
 public:
-    SceneStructureEvent::Command    SceneCommand;
+    NodeStructureEvent::Command     SceneCommand;
     std::string                     NodeName;
     std::string                     PluginName;
     std::string                     NewNodeName;
 public:
-    explicit                        SceneStructureEvent   () {}
+    explicit                        NodeStructureEvent   () {}
 
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );
@@ -606,7 +606,7 @@ private:
     static Command                  WStringToCommand    ( const std::wstring& string );
 };
 
-DEFINE_PTR_TYPE(SceneStructureEvent)
+DEFINE_PTR_TYPE( NodeStructureEvent )
 
 // ************************************* ProjectEvent Event *************************************
 class ProjectEvent : public BaseEvent
@@ -659,7 +659,6 @@ private:
     static std::string          m_sEventName;
 public:
      std::wstring               Response;
-
 public:
     explicit                        ResponseEvent() {}
 
@@ -756,6 +755,78 @@ private:
 
 DEFINE_PTR_TYPE( TimeLineEvent )
 
+
+// ************************************* TimerEvent *************************************
+class TimerEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    float                       value;
+    std::wstring                NodeName;
+    float                       H;
+    float                       M;
+    float                       S;
+    float                       MS;
+   
+
+public:
+
+    explicit                        TimerEvent   (){};
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+private:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
+};
+
+DEFINE_PTR_TYPE( TimerEvent )
+
+
+// ************************************* WidgetEvent *************************************
+class WidgetEvent : public BaseEvent
+{
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    std::wstring                NodeName;
+    float						Time;
+	std::string                 Value;
+
+
+    std::wstring                Param;      // move to private
+	std::wstring                Action;
+	std::wstring                WidgetName;
+   
+
+public:
+    explicit                        WidgetEvent			(){};
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+};
+
+DEFINE_PTR_TYPE( WidgetEvent )
 
 
 } //bv

@@ -17,8 +17,8 @@ public:
     RemoteCommandsConverter();
     virtual ~RemoteCommandsConverter() {};
 
-    virtual void                        QueueEvent          ( const std::wstring& eventString ) = 0;
-    virtual std::wstring                PollEvent           () = 0;
+    virtual void                        QueueEvent          ( const std::wstring& eventString, int socketID ) = 0;
+    virtual ResponseEventPtr            PollEvent           () = 0;
 
     static RemoteCommandsConverter&     GetRemoteCommandsConverter();
 protected:

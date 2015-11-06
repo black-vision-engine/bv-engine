@@ -13,7 +13,7 @@ RemoteCommandsConverter::RemoteCommandsConverter()
 {
     RegisterEvent( LoadAssetEvent::Name(), LoadAssetEvent::Create );
     RegisterEvent( ParamKeyEvent::Name(), ParamKeyEvent::Create );
-    RegisterEvent( SceneStructureEvent::Name(), SceneStructureEvent::Create );
+    RegisterEvent( NodeStructureEvent::Name(), NodeStructureEvent::Create );
     RegisterEvent( ProjectEvent::Name(), ProjectEvent::Create );
     RegisterEvent( NewInfoEvent::Name(), NewInfoEvent::Create );
     RegisterEvent( TimeLineEvent::Name(), TimeLineEvent::Create );
@@ -32,7 +32,7 @@ RemoteCommandsConverter& RemoteCommandsConverter::GetRemoteCommandsConverter()
 //
 IEventPtr RemoteCommandsConverter::CreateEvent         ( IDeserializer& deser )
 {
-    std::wstring command = deser.GetAttribute( L"cmd" );
+    std::wstring command = deser.GetAttribute( L"Event" );
     auto iter = m_eventsConverter.find( command );
     if( iter != m_eventsConverter.end() )
     {
