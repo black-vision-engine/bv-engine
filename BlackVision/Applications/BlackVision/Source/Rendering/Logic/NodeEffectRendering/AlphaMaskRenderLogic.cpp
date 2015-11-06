@@ -27,18 +27,28 @@ AlphaMaskRenderLogic::~AlphaMaskRenderLogic       ()
 //
 void    AlphaMaskRenderLogic::RenderNode                  ( Renderer * renderer, SceneNode * node )
 {
-    GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
-    GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
-
-    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
-    renderer->ClearBuffers();
-
-    GetRenderLogic()->DrawNode( renderer, node );
-
     auto alphaVal = node->GetNodeEffect()->GetValue( "alpha" );
-    GetOffscreenRenderLogic()->DrawTopAuxRenderTarget( renderer, alphaVal.get() );
-    GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
-    GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
+    auto alphaValue = QueryTypedValue< ValueFloatPtr >( alphaVal )->GetValue();
+
+    if( alphaValue < 0.99f )
+    {
+        GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
+        GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
+
+        renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+        renderer->ClearBuffers();
+
+        GetRenderLogic()->DrawNode( renderer, node );
+
+        auto alphaVal = node->GetNodeEffect()->GetValue( "alpha" );
+        GetOffscreenRenderLogic()->DrawTopAuxRenderTarget( renderer, alphaVal.get() );
+        GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
+        GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
+    }
+    else
+    {
+        GetRenderLogic()->DrawNode( renderer, node );
+    }
 }
 
 } //bv
