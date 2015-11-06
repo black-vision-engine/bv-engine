@@ -1,4 +1,5 @@
 #include "SerializationHelper.h"
+#include "SerializationHelper.inl"
 
 
 #include <vector>
@@ -55,13 +56,14 @@ glm::vec2               String2Vec2( std::string s )
 }
 
 template<> float String2T( std::string s, const float& default ) { if( s == "" ) return default; else return std::stof( s ); }
+template<> bool String2T( std::string s, const bool& default ) { if( s == "true" ) return true; else if( s == "false" ) return false; else return default; } // FIXME error handling
 
-template<> float String2T( std::string s ) { return String2T( s, 0.f ); }
-template<> bool String2T( std::string s ) { if( s == "true" ) return true; else if( s == "false" ) return false; assert( false ); return false; } // FIXME error handling
-template<> int String2T( std::string s ) { return std::stoi( s ); }
-template<> glm::vec2 String2T( std::string s ) { return String2Vec2( s ); }
-template<> glm::vec3 String2T( std::string s ) { return String2Vec3( s ); }
-template<> glm::vec4 String2T( std::string s ) { return String2Vec4( s ); }
+template<> float _String2T( std::string s ) { return std::stof( s ); }
+template<> bool _String2T( std::string s ) { if( s == "true" ) return true; else if( s == "false" ) return false; assert( false ); return false; } // FIXME error handling
+template<> int _String2T( std::string s ) { return std::stoi( s ); }
+template<> glm::vec2 _String2T( std::string s ) { return String2Vec2( s ); }
+template<> glm::vec3 _String2T( std::string s ) { return String2Vec3( s ); }
+template<> glm::vec4 _String2T( std::string s ) { return String2Vec4( s ); }
 
 } }
 

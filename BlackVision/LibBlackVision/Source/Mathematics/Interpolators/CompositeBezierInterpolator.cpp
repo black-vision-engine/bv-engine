@@ -212,6 +212,7 @@ std::pair< CurveType, const char* > ct2s[] =
     , std::make_pair( CurveType::COSINE_LIKE, "cosine" ) 
     , std::make_pair( CurveType::LINEAR, "linear" ) 
     , std::make_pair( CurveType::POINT, "point" ) 
+    , std::make_pair( CurveType::LINEAR, "" ) 
 };
 
 // *************************************

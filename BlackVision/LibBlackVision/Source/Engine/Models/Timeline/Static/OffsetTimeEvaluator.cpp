@@ -44,7 +44,7 @@ ISerializablePtr     OffsetTimeEvaluator::Create              ( const IDeseriali
 {
     auto name = dob.GetAttribute( "name" );
 
-    auto offset = SerializationHelper::String2T< float >( dob.GetAttribute( "offset" ) );
+    auto offset = SerializationHelper::String2T< float >( dob.GetAttribute( "offset" ), 0.f );
     auto scale = SerializationHelper::String2T< float >( dob.GetAttribute( "scale" ), 1.f );
 
     auto te = std::make_shared< OffsetTimeEvaluator >( name, offset, scale );

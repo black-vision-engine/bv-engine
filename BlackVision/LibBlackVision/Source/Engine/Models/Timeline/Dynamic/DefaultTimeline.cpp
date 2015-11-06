@@ -11,9 +11,8 @@
 #include "Engine/Models/Timeline/Dynamic/TimelineEventStop.h"
 
 #include "Serialization/IDeserializer.h"
-//#include "Serialization/SerializationObjects.h"
-//#include "Serialization/SerializationObjects.inl"
 #include "Serialization/SerializationHelper.h"
+#include "Serialization/SerializationHelper.inl"
 
 namespace bv { namespace model {
 
@@ -77,27 +76,34 @@ void                                DefaultTimeline::Serialize           ( ISeri
     sob.ExitChild();
 }
 
+
+std::pair< TimelineWrapMethod, const char* > TWM2S[] = {
+    std::make_pair( TimelineWrapMethod::TWM_CLAMP, "clamp" ),
+    std::make_pair( TimelineWrapMethod::TWM_MIRROR, "mirror" ),
+    std::make_pair( TimelineWrapMethod::TWM_REPEAT, "repeat" ),
+    std::make_pair( TimelineWrapMethod::TWM_CLAMP, "" ) };
+
 // *********************************
 //
-ISerializablePtr                     DefaultTimeline::Create              ( const IDeserializer& dob )
+ISerializablePtr                     DefaultTimeline::Create              ( const IDeserializer& deser )
 {
-    auto name = dob.GetAttribute( "name" );
+    auto name = deser.GetAttribute( "name" );
 
-    auto duration_ = dob.GetAttribute( "duration" );
+    auto duration_ = deser.GetAttribute( "duration" );
     float duration = std::stof( duration_ );
 
-    auto loop = dob.GetAttribute( "loop" );
-    TimelineWrapMethod preWrap = ( loop == "true" ) ? TimelineWrapMethod::TWM_REPEAT : TimelineWrapMethod::TWM_CLAMP; // FIXME
+    TimelineWrapMethod preWrap = SerializationHelper::String2T< TimelineWrapMethod >( TWM2S, deser.GetAttribute( "loop" ) );
     TimelineWrapMethod postWrap = preWrap; // FIXME
 
     auto te = std::make_shared< DefaultTimeline >( name, duration, preWrap, postWrap );
 
-    auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( dob, "children", "timeline" );
+    auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( deser, "children", "timeline" );
 
     for( auto child : children )
         te->AddChild( child );
 
-    te->Play(); // FIXME, this should be deserialized
+    if( SerializationHelper::String2T< bool >( deser.GetAttribute( "play" ), true ) )
+        te->Play();
 
     return te;
 }
