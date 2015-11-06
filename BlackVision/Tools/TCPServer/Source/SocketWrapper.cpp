@@ -11,6 +11,8 @@
 
 #include "Log.h"
 
+// Hack. Make better API for sockets
+//#include "../../Applications/BlackVision/Source/EndUserAPI/RemoteCommandsConverter.h"
 
 #include <iostream>
 #pragma comment(lib, "Ws2_32.lib")
@@ -20,8 +22,11 @@ namespace bv{
 
 	//DWORD WINAPI SocketHandler(void*);
     vector<ResponseMsg> SocketWrapper::Responses;
-	SocketWrapper::SocketWrapper(void)
+    //RemoteCommandsConverter* BVcommandsConverter = nullptr;
+
+	SocketWrapper::SocketWrapper(/* RemoteCommandsConverter* commandsConverter */)
 	{
+        //BVcommandsConverter = commandsConverter;
 	    Socket = this;
 	}
 

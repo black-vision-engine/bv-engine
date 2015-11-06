@@ -297,7 +297,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
             
             {
                 FRAME_STATS_SECTION( "Video input" );
-		RefreshVideoInputScene();
+		        RefreshVideoInputScene();
             }
 
             {

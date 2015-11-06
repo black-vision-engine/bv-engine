@@ -13,7 +13,9 @@
 
 
 namespace bv{
-    
+  
+//class RemoteCommandsConverter;
+
 class ResponseMsg{
 public: 
     wstring msg;
@@ -26,6 +28,8 @@ public:
     class SocketWrapper
 	{
 	private:
+        //static RemoteCommandsConverter* BVcommandsConverter;
+
 		int m_nLinkMode;
         static ProtocolManager protocolManager;
         static vector<ResponseMsg> Responses;
@@ -33,7 +37,7 @@ public:
         bool thread_clients();
 	public:
         
-		SocketWrapper(void);
+		SocketWrapper(/* RemoteCommandsConverter* commandsConverter */);
 		~SocketWrapper(void);
 		bool InitServer();
         static void ParseCmd(std::wstring cmd);

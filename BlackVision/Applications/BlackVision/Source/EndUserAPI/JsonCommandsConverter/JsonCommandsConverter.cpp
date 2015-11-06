@@ -24,19 +24,27 @@ JsonCommandsConverter::~JsonCommandsConverter()
 /// @param[in] socketID Event sender identifier.
 void                JsonCommandsConverter::QueueEvent          ( const std::wstring& eventString, int socketID )
 {
-    JsonSpiritDeserializeObject deserializer;
+    JsonSpiritDeserializeObject deser;
 
-    if( !deserializer.LoadWString( eventString ) )
+    if( !deser.LoadWString( eventString ) )
     {
         LOG_MESSAGE( SeverityLevel::error ) << "Commands converter can't parse command: \n" + toString( eventString );
         return;
     }
 
-    BaseEventPtr newEvent = std::static_pointer_cast<BaseEvent>( CreateEvent( deserializer ) );
-    newEvent->SocketID = socketID;
+    if( deser.EnterChild( L"Events" ) )
+    {
+        do
+        {
+            BaseEventPtr newEvent = std::static_pointer_cast<BaseEvent>( CreateEvent( deser ) );
+            newEvent->SocketID = socketID;
 
-    if( newEvent != nullptr )
-        GetDefaultEventManager().ConcurrentQueueEvent( newEvent );
+            if( newEvent != nullptr )
+                GetDefaultEventManager().ConcurrentQueueEvent( newEvent );
+        }
+        while( deser.NextChild() );
+        deser.ExitChild();
+    }
 }
 
 // ***********************
