@@ -61,6 +61,7 @@ public:
 
     void                    AddScene            ( model::SceneModelPtr sceneModel );
     void                    RemoveScene         ( const std::string & name );
+    StringVector            ListScenesNames     () const;
 
     void                    Serialize           ( ISerializer& ser ) const;
 

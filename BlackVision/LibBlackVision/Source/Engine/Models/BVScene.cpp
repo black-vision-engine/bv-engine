@@ -192,6 +192,19 @@ void                    BVScene::RemoveScene         ( const std::string & name 
 
 // *******************************
 //
+StringVector            BVScene::ListScenesNames     () const
+{
+    StringVector ret;
+    for( auto sm : m_pSceneModelVec )
+    {
+        ret.push_back( sm->m_name );
+    }
+
+    return ret;
+}
+
+// *******************************
+//
 //const std::string &     BVScene::GetName            () const
 //{
 //    return m_pSceneModel->m_name;
