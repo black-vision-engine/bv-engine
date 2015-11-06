@@ -151,16 +151,14 @@ void BVAppLogic::Initialize         ()
 
 // *********************************
 //
-model::BasicNodePtr BVAppLogic::LoadScenes( const PathVec & pathVec )
+void BVAppLogic::LoadScenes( const PathVec & pathVec )
 {
-    auto root = model::BasicNode::Create( "root", m_globalTimeline );
-    root->AddPlugin( "DEFAULT_TRANSFORM", "transform", m_globalTimeline ); 
+    model::SceneModelVec sceneModelVec;
 
     for( auto p : pathVec )
     {
         auto scene = SceneDescriptor::LoadScene( ProjectManager::GetInstance()->ToAbsPath( p ), GetTimelineManager() );
-
-        root->AddChildToModelOnly( std::const_pointer_cast< model::BasicNode >( scene ) );
+        sceneModelVec.push_back( SceneModel::Create( p.Str(), GetTimelineManager(), std::const_pointer_cast< model::BasicNode >( scene ) ) );
     }
 
     Camera * cam = nullptr;
@@ -174,10 +172,8 @@ model::BasicNodePtr BVAppLogic::LoadScenes( const PathVec & pathVec )
         cam = new Camera( DefaultConfig.IsCameraPerspactive() );
     }
 
-    m_bvScene    = BVScene::Create( root,  cam, "BasicScene", m_globalTimeline, m_renderer, GetTimelineManager() );
+    m_bvScene    = BVScene::Create( sceneModelVec,  cam, m_globalTimeline, m_renderer );
     assert( m_bvScene );
-
-    return root;
 }
 
 // *********************************
@@ -190,8 +186,6 @@ void BVAppLogic::LoadScene          ( void )
     auto te = m_globalTimeline;
 
     m_timelineManager->RegisterRootTimeline( te );
-
-     model::BasicNodePtr root;
     
     if( !ConfigManager::GetBool( "Debug/LoadSceneFromEnv" ) )
     {
@@ -199,7 +193,8 @@ void BVAppLogic::LoadScene          ( void )
         {
             //m_solution.SetTimeline(m_timelineManager);
             m_solution.LoadSolution( ConfigManager::GetString("solution") );
-            root = m_solution.GetRoot();
+            auto root = m_solution.GetRoot();
+            m_bvScene    = BVScene::Create( SceneModel::Create( "root", GetTimelineManager(), root ), new Camera( DefaultConfig.IsCameraPerspactive() ), te, m_renderer );
             //if(ConfigManager::GetBool("hm"))
             //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
         }
@@ -215,24 +210,15 @@ void BVAppLogic::LoadScene          ( void )
 
                 if( !projectScenesNames.empty() )
                 {
-                    root = LoadScenes( projectScenesNames );
+                    LoadScenes( projectScenesNames );
                 }
-            }
-            else
-            {
-                root = model::BasicNode::Create ("root", m_globalTimeline);
-                root->AddPlugin( "DEFAULT_TRANSFORM", "transform", m_globalTimeline ); 
             }
         }
     }
     else
     {
-        root = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_pluginsManager, GetTimelineManager(), m_globalTimeline );
-    }
-
-    if( !m_bvScene )  // FIXME: 
-    {
-        m_bvScene    = BVScene::Create( root, new Camera( DefaultConfig.IsCameraPerspactive() ), "BasicScene", te, m_renderer, GetTimelineManager() );
+        auto root = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_pluginsManager, GetTimelineManager(), m_globalTimeline );
+        m_bvScene = BVScene::Create( SceneModel::Create( "root", GetTimelineManager(), root ), new Camera( DefaultConfig.IsCameraPerspactive() ), te, m_renderer );
     }
 
     assert( m_bvScene );

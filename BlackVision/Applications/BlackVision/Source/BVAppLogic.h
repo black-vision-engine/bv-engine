@@ -123,7 +123,7 @@ public:
     const model::PluginsManager *   GetPluginsManager   () const;
 
 
-    model::BasicNodePtr LoadScenes( const PathVec & pathVec );
+    void            LoadScenes      ( const PathVec & pathVec );
 
 private:
 

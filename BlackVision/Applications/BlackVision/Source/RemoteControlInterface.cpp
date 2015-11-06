@@ -785,11 +785,8 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
             {
                 UpdatersManager::Get().RemoveAllUpdaters();
                 
-                auto node = m_AppLogic->LoadScenes( projectScenesNames );
-                if( node )
-                {
-                    status = true;
-                }
+                m_AppLogic->LoadScenes( projectScenesNames );
+                status = true;
             }
 
             if( status )
