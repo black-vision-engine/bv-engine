@@ -17,6 +17,7 @@ using System.Threading;
 using ProfilerEditor.PresentationLayer;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Sockets;
 
 
 namespace ProfilerEditor
@@ -39,6 +40,10 @@ namespace ProfilerEditor
 
 		public int											m_timeFormatUnits;
 		public string										m_timeFormatString;
+
+        // TCP client
+        private NetworkStream                               m_networkStream;
+        private TcpClient                                   m_tcpClient;
 
 #region Properties
 		public ProfilerModel.NameMapping ColorMapping
@@ -324,5 +329,36 @@ namespace ProfilerEditor
 			m_BlackVisionProcess.StartInfo.Arguments = m_commandLineArg;
 			m_BlackVisionProcess.Start();
 		}
+
+        private void ConnectButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Int32 port = 11101;
+                string addressIP = "127.0.0.1";
+                m_tcpClient = new TcpClient(addressIP, port);
+
+                m_networkStream = m_tcpClient.GetStream();
+            }
+            catch ( SocketException except )
+            {
+                NetStatusLabel.Content = "Socket exception " + except.ToString();
+            }
+
+            NetStatusLabel.Content = "Connected";
+        }
+
+        private void DisconnetcButton_Click(object sender, RoutedEventArgs e)
+        {
+            m_networkStream.Close();
+            m_tcpClient.Close();
+            NetStatusLabel.Content = "Disconnected";
+        }
+
+        private void SendButton_Click(object sender, RoutedEventArgs e)
+        {
+            string command = CommandTextBox.Text;
+            m_networkStream.Write( Encoding.ASCII.GetBytes( command ), 0, command.Length );
+        }
     }
 }

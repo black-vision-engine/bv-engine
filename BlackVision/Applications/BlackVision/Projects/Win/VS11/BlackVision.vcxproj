@@ -322,6 +322,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\BVConfig.h" />
     <ClInclude Include="..\..\..\Source\BVForwards.h" />
     <ClInclude Include="..\..\..\Source\DefaultPlugins.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\IEventServer.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsConverter\JsonCommandsConverter.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteCommandsConverter.h" />
     <ClInclude Include="..\..\..\Source\EventHandlers\HightmapHandlers.h" />

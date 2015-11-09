@@ -288,6 +288,9 @@
     <ClInclude Include="..\..\..\Source\EventHandlers\HightmapHandlers.h">
       <Filter>EventHandlers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\EndUserAPI\IEventServer.h">
+      <Filter>EndUserAPI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\BVConfig.inl" />
