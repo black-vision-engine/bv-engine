@@ -44,6 +44,7 @@ namespace ProfilerEditor
         // TCP client
         private NetworkStream                               m_networkStream;
         private TcpClient                                   m_tcpClient;
+        bool                                                m_connected;
 
 #region Properties
 		public ProfilerModel.NameMapping ColorMapping
@@ -91,6 +92,11 @@ namespace ProfilerEditor
 				m_dataProcessor[ i ] = new DataAnalysis.AverageSamples();
 
 			m_profilerTreeView = new ProfilerModel.ProfilerTreeViewModel[ m_numThreads ];
+
+            // TCP
+            m_connected = false;
+            m_tcpClient = null;
+            m_networkStream = null;
         }
 
 		private void startButton_Click( object sender, RoutedEventArgs e )
@@ -330,7 +336,7 @@ namespace ProfilerEditor
 			m_BlackVisionProcess.Start();
 		}
 
-        private void ConnectButton_Click(object sender, RoutedEventArgs e)
+        private void ConnectButton_Click( object sender, RoutedEventArgs e )
         {
             try
             {
@@ -343,22 +349,35 @@ namespace ProfilerEditor
             catch ( SocketException except )
             {
                 NetStatusLabel.Content = "Socket exception " + except.ToString();
+                m_connected = false;
             }
 
             NetStatusLabel.Content = "Connected";
+            m_connected = true;
         }
 
-        private void DisconnetcButton_Click(object sender, RoutedEventArgs e)
+        private void DisconnetcButton_Click( object sender, RoutedEventArgs e )
         {
             m_networkStream.Close();
             m_tcpClient.Close();
             NetStatusLabel.Content = "Disconnected";
+            m_connected = false;
         }
 
-        private void SendButton_Click(object sender, RoutedEventArgs e)
+        private void SendButton_Click( object sender, RoutedEventArgs e )
         {
-            string command = CommandTextBox.Text;
-            m_networkStream.Write( Encoding.ASCII.GetBytes( command ), 0, command.Length );
+            if( m_connected )
+            {
+                byte[] command = Encoding.UTF8.GetBytes(  CommandTextBox.Text );
+
+                byte[] message = new byte[command.Length + 2];
+
+                message[0] = 0x002;                         // Start transmission sign
+                System.Buffer.BlockCopy( command, 0, message, 1, command.Length );
+                message[command.Length + 1] = 0x003;        // End transmission sign
+
+                m_networkStream.Write( message, 0, command.Length + 2 );
+            }
         }
     }
 }

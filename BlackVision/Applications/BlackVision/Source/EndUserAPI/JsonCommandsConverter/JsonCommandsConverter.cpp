@@ -13,6 +13,7 @@ namespace bv
 // ***********************
 //
 JsonCommandsConverter::JsonCommandsConverter()
+    : m_eventServer( nullptr )
 {}
 
 JsonCommandsConverter::~JsonCommandsConverter()
@@ -61,5 +62,11 @@ ResponseEventPtr        JsonCommandsConverter::PollEvent           ()
     return std::static_pointer_cast< ResponseEvent >( evt );
 }
 
+
+bool JsonCommandsConverter::InitializeServer    ()
+{
+    m_eventServer = IEventServer::CreateServerObject();
+    return m_eventServer->InitializeServer( this );
+}
 
 } //bv

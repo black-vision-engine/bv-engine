@@ -19,6 +19,7 @@ public:
 
     virtual void                        QueueEvent          ( const std::wstring& eventString, int socketID ) = 0;
     virtual ResponseEventPtr            PollEvent           () = 0;
+    virtual bool                        InitializeServer    () = 0;
 
     static RemoteCommandsConverter&     GetRemoteCommandsConverter();
 protected:

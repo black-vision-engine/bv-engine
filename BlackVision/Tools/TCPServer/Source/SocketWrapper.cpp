@@ -11,34 +11,39 @@
 
 #include "Log.h"
 
-// Hack. Make better API for sockets
-//#include "../../Applications/BlackVision/Source/EndUserAPI/RemoteCommandsConverter.h"
-
 #include <iostream>
 #pragma comment(lib, "Ws2_32.lib")
 
 namespace bv{
 	
 
+    IEventServer* IEventServer::CreateServerObject  ()
+    {
+        return new SocketWrapper();
+    }
+
 	//DWORD WINAPI SocketHandler(void*);
     vector<ResponseMsg> SocketWrapper::Responses;
-    //RemoteCommandsConverter* BVcommandsConverter = nullptr;
+    RemoteCommandsConverter* SocketWrapper::BVCommandsConverter = nullptr;
 
-	SocketWrapper::SocketWrapper(/* RemoteCommandsConverter* commandsConverter */)
+	SocketWrapper::SocketWrapper()
 	{
-        //BVcommandsConverter = commandsConverter;
 	    Socket = this;
 	}
 
 
-	SocketWrapper::~SocketWrapper(void)
-	{
-	}
+	SocketWrapper::~SocketWrapper()
+    {}
 
+
+    bool SocketWrapper::InitializeServer( RemoteCommandsConverter* commandsConverter )
+    {
+        BVCommandsConverter = commandsConverter;
+        return InitServer();
+    }
 
 	bool SocketWrapper::InitServer()
 	{
-
 		CreateThread(0,0,(LPTHREAD_START_ROUTINE)SocketInitHandler, this , 0,0);	
 		return true;
 	}
@@ -215,7 +220,7 @@ namespace bv{
 
 		char buffer[1024];
         //wchar_t w_buffer[1024];
-		int buffer_len = 10;
+		int buffer_len = 512;
 		int bytecount;
 
 		//char ParseBuffer[2048];
@@ -320,121 +325,122 @@ namespace bv{
                     std::wstring_convert <std::codecvt_utf8<wchar_t>,wchar_t> convert;
                     wstring str = convert.from_bytes((const char*)temp_s.c_str());
 
+                    BVCommandsConverter->QueueEvent( str, (int)*csock );
 
-                    pm.ParseCmd(str);
+                    //pm.ParseCmd(str);
                    
-                    for(unsigned int i=0;i<pm.cmdStack.size();i++)
-                    {
-                        wcout<<"command :"<<pm.cmdStack[i]->CmdName<<"parsed!"<<endl;
-                        if(pm.cmdStack[i]->Type==CmdType::VIDEOCARD_INFO)
-                        {
-                             CmdVideoCardInfo *cmd = (CmdVideoCardInfo*)(pm.cmdStack[i]);
-                             VideoCardEventPtr  ev = VideoCardEventPtr( new VideoCardEvent() );
+       //             for(unsigned int i=0;i<pm.cmdStack.size();i++)
+       //             {
+       //                 wcout<<"command :"<<pm.cmdStack[i]->CmdName<<"parsed!"<<endl;
+       //                 if(pm.cmdStack[i]->Type==CmdType::VIDEOCARD_INFO)
+       //                 {
+       //                      CmdVideoCardInfo *cmd = (CmdVideoCardInfo*)(pm.cmdStack[i]);
+       //                      VideoCardEventPtr  ev = VideoCardEventPtr( new VideoCardEvent() );
 
-                             //ev->SetData(cmd->query);
-                             // Just for now. Soon all these functions will disapear.
-                             ev->VideoCommand = VideoCardEvent::WStringToCommand( cmd->query );
+       //                      //ev->SetData(cmd->query);
+       //                      // Just for now. Soon all these functions will disapear.
+       //                      ev->VideoCommand = VideoCardEvent::WStringToCommand( cmd->query );
  
-                             GetDefaultEventManager().ConcurrentQueueEvent( ev );
-                             wcout<<"event  :"<<cmd->query<<" added!"<<endl;
-                        }
-                        else if(pm.cmdStack[i]->Type==CmdType::SET_PARAM)
-                        {
-                            CmdSetParam *cmd = (CmdSetParam*)(pm.cmdStack[i]);
-                            SetParamEventPtr ev = SetParamEventPtr(new SetParamEvent() );
-                            ev->NodeName = cmd->path;
-                            ev->PluginName = cmd->plugin;
-                            ev->ParamName = cmd->param;
-                            ev->Value = cmd->value;
-                            ev->time = cmd->time;
-							ev->x = cmd->x;
-                            ev->y = cmd->y;
-                            ev->z = cmd->z;
+       //                      GetDefaultEventManager().ConcurrentQueueEvent( ev );
+       //                      wcout<<"event  :"<<cmd->query<<" added!"<<endl;
+       //                 }
+       //                 else if(pm.cmdStack[i]->Type==CmdType::SET_PARAM)
+       //                 {
+       //                     CmdSetParam *cmd = (CmdSetParam*)(pm.cmdStack[i]);
+       //                     SetParamEventPtr ev = SetParamEventPtr(new SetParamEvent() );
+       //                     ev->NodeName = cmd->path;
+       //                     ev->PluginName = cmd->plugin;
+       //                     ev->ParamName = cmd->param;
+       //                     ev->Value = cmd->value;
+       //                     ev->time = cmd->time;
+							//ev->x = cmd->x;
+       //                     ev->y = cmd->y;
+       //                     ev->z = cmd->z;
 
-                            GetDefaultEventManager().ConcurrentQueueEvent( ev );
-                        }
-                        else if(pm.cmdStack[i]->Type==CmdType::GET_INFO)
-                        {
-                             CmdGetInfo *cmd = (CmdGetInfo*)(pm.cmdStack[i]);
-                             InfoEventPtr  ev = InfoEventPtr( new InfoEvent() );
+       //                     GetDefaultEventManager().ConcurrentQueueEvent( ev );
+       //                 }
+       //                 else if(pm.cmdStack[i]->Type==CmdType::GET_INFO)
+       //                 {
+       //                      CmdGetInfo *cmd = (CmdGetInfo*)(pm.cmdStack[i]);
+       //                      InfoEventPtr  ev = InfoEventPtr( new InfoEvent() );
 
-                             ev->request = cmd->request;
-							 ev->NodeName = cmd->path;
-							 ev->SetAddStrData(cmd->param);
-                             ev->sock_id = (int)*csock;
+       //                      ev->request = cmd->request;
+							// ev->NodeName = cmd->path;
+							// ev->SetAddStrData(cmd->param);
+       //                      ev->sock_id = (int)*csock;
  
-                             GetDefaultEventManager().ConcurrentQueueEvent( ev );
-                        }
-                        else if(pm.cmdStack[i]->Type==CmdType::SCENE_STRUCTURE)
-                        {
-                             CmdStruct *cmd = (CmdStruct*)(pm.cmdStack[i]);
-                             SceneStructureEventPtr  ev = SceneStructureEventPtr( new SceneStructureEvent() );
+       //                      GetDefaultEventManager().ConcurrentQueueEvent( ev );
+       //                 }
+       //                 else if(pm.cmdStack[i]->Type==CmdType::SCENE_STRUCTURE)
+       //                 {
+       //                      CmdStruct *cmd = (CmdStruct*)(pm.cmdStack[i]);
+       //                      SceneStructureEventPtr  ev = SceneStructureEventPtr( new SceneStructureEvent() );
 
-                             ev->command = cmd->Command;
-							 ev->NodeName = cmd->NodeParam1;
-							 ev->NodeName2 = cmd->NodeParam2;
-                             ev->request = cmd->Request;
-							 
-                             ev->sock_id = (int)*csock;
+       //                      ev->command = cmd->Command;
+							// ev->NodeName = cmd->NodeParam1;
+							// ev->NodeName2 = cmd->NodeParam2;
+       //                      ev->request = cmd->Request;
+							// 
+       //                      ev->sock_id = (int)*csock;
  
-                             GetDefaultEventManager().ConcurrentQueueEvent( ev );
-                        }
-                        else if(pm.cmdStack[i]->Type==CmdType::TIMELINE)
-                        {
-                            CmdTimeline *cmd = (CmdTimeline*)(pm.cmdStack[i]);
-                            TimeLineCmdPtr ev = TimeLineCmdPtr(new TimeLineCmd() );
-                            ev->cmd = cmd->command;
-                            ev->value = cmd->value;
-                            ev->TimelineName = cmd->timeline_name;
-                            
-                            GetDefaultEventManager().ConcurrentQueueEvent( ev );
-                        }
-                        else if(pm.cmdStack[i]->Type==CmdType::TIMER)
-                        {
-                            CmdTimer *cmd = (CmdTimer*)(pm.cmdStack[i]);
-                            TimerCmdPtr ev = TimerCmdPtr(new TimerCmd() );
-                            ev->cmd = cmd->command;
-                            
-                            ev->NodeName = cmd->NodeName;
-                            ev->H = cmd->H;
-                            ev->M = cmd->M;
-                            ev->S = cmd->S;
-                            ev->MS = cmd->MS;
-                            
-                            GetDefaultEventManager().ConcurrentQueueEvent( ev );
-                        }
-                        else if(pm.cmdStack[i]->Type==CmdType::WIDGET)
-                        {
-                            CmdWidget *cmd = (CmdWidget*)(pm.cmdStack[i]);
-                            WidgetCmdPtr ev = WidgetCmdPtr(new WidgetCmd() );
-							
-                            
-                            ev->NodeName = cmd->NodePath;
-							ev->WidgetName = cmd->WidgetName;
-							ev->Action = cmd->Action;
-							ev->Param = cmd->Param;
-							ev->Time = cmd->Time;
-							ev->Value = cmd->Value;
+       //                      GetDefaultEventManager().ConcurrentQueueEvent( ev );
+       //                 }
+       //                 else if(pm.cmdStack[i]->Type==CmdType::TIMELINE)
+       //                 {
+       //                     CmdTimeline *cmd = (CmdTimeline*)(pm.cmdStack[i]);
+       //                     TimeLineCmdPtr ev = TimeLineCmdPtr(new TimeLineCmd() );
+       //                     ev->cmd = cmd->command;
+       //                     ev->value = cmd->value;
+       //                     ev->TimelineName = cmd->timeline_name;
+       //                     
+       //                     GetDefaultEventManager().ConcurrentQueueEvent( ev );
+       //                 }
+       //                 else if(pm.cmdStack[i]->Type==CmdType::TIMER)
+       //                 {
+       //                     CmdTimer *cmd = (CmdTimer*)(pm.cmdStack[i]);
+       //                     TimerCmdPtr ev = TimerCmdPtr(new TimerCmd() );
+       //                     ev->cmd = cmd->command;
+       //                     
+       //                     ev->NodeName = cmd->NodeName;
+       //                     ev->H = cmd->H;
+       //                     ev->M = cmd->M;
+       //                     ev->S = cmd->S;
+       //                     ev->MS = cmd->MS;
+       //                     
+       //                     GetDefaultEventManager().ConcurrentQueueEvent( ev );
+       //                 }
+       //                 else if(pm.cmdStack[i]->Type==CmdType::WIDGET)
+       //                 {
+       //                     CmdWidget *cmd = (CmdWidget*)(pm.cmdStack[i]);
+       //                     WidgetCmdPtr ev = WidgetCmdPtr(new WidgetCmd() );
+							//
+       //                     
+       //                     ev->NodeName = cmd->NodePath;
+							//ev->WidgetName = cmd->WidgetName;
+							//ev->Action = cmd->Action;
+							//ev->Param = cmd->Param;
+							//ev->Time = cmd->Time;
+							//ev->Value = cmd->Value;
 
-                            GetDefaultEventManager().ConcurrentQueueEvent( ev );
-                        }
-                        else if( pm.cmdStack[i]->Type == CmdType::LOAD_ASSET )
-                        {
-                            CmdLoadAsset* cmd = (CmdLoadAsset*)(pm.cmdStack[i]);
-                            LoadAssetEventPtr ev = std::make_shared<LoadAssetEvent>();
+       //                     GetDefaultEventManager().ConcurrentQueueEvent( ev );
+       //                 }
+       //                 else if( pm.cmdStack[i]->Type == CmdType::LOAD_ASSET )
+       //                 {
+       //                     CmdLoadAsset* cmd = (CmdLoadAsset*)(pm.cmdStack[i]);
+       //                     LoadAssetEventPtr ev = std::make_shared<LoadAssetEvent>();
 
-                            ev->AssetData  = std::string( cmd->m_assetData.begin(), cmd->m_assetData.end() );
-                            ev->PluginName = std::string( cmd->m_pluginName.begin(), cmd->m_pluginName.end() );
-                            ev->NodeName   = std::string( cmd->m_nodeName.begin(), cmd->m_nodeName.end() );
-                            ev->SockID     = (int)*csock;
+       //                     ev->AssetData  = std::string( cmd->m_assetData.begin(), cmd->m_assetData.end() );
+       //                     ev->PluginName = std::string( cmd->m_pluginName.begin(), cmd->m_pluginName.end() );
+       //                     ev->NodeName   = std::string( cmd->m_nodeName.begin(), cmd->m_nodeName.end() );
+       //                     ev->SockID     = (int)*csock;
 
-                            GetDefaultEventManager().ConcurrentQueueEvent( ev );
-                        }
+       //                     GetDefaultEventManager().ConcurrentQueueEvent( ev );
+       //                 }
 
-                    }
+       //             }
 
 
-                    pm.cmdStack.clear();
+       //             pm.cmdStack.clear();
 
 
             
