@@ -47,13 +47,14 @@ public:
 
 	BVScenePtr				GetScene				();
 	
-	void					TestModelSceneEditor	();
-	void					TestModelNodeEditor		( TimeType time );
+	void					TestEditor				( TimeType time );
 
 	BVScenePtr				ColoredRectanglesScene	();
 	
 private:
-	void					InitTestModelNodeEditor		();
+	void					InitTestEditor				();
+
+	void					InitTestModelSceneEditor	();
 
 	void					InitBasicColorPluginTest	();
 	void					InitOrderColorPluginTest	();
@@ -74,7 +75,10 @@ private:
 	void					InitGradientTimerTest		();
 
 	void					InitColoredGeometryTest		();
-
+	void					InitTexturedGeometryTest	();
+	void					InitAnimatedGeometryTest	();
+	void					InitGradientGeometryTest	();
+	
 	void					InitOrderTest				( const OrderTestCase & test );
 	void					SwapPlugins					( const std::string & rootPlugin, UInt32 rootIdx, const std::string & childName, const std::string & childPlugin,  UInt32 childIdx );
 };

@@ -156,41 +156,6 @@ TextureFormat           DefaultTextureDescriptor::GetFormat         () const
     return m_params.GetFormat();
 }
 
-//// **************************
-////
-//TextureWrappingMode     DefaultTextureDescriptor::GetWrappingModeX  () const
-//{
-//    return m_params.GetWrappingModeX();
-//}
-//
-//// **************************
-////
-//TextureWrappingMode     DefaultTextureDescriptor::GetWrappingModeY  () const
-//{
-//    return m_params.GetWrappingModeY();
-//}
-//
-//// **************************
-////
-//TextureWrappingMode     DefaultTextureDescriptor::GetWrappingModeZ  () const
-//{
-//    return m_params.GetWrappingModeZ();
-//}
-//
-//// **************************
-////
-//TextureFilteringMode    DefaultTextureDescriptor::GetFilteringMode  () const
-//{
-//    return m_params.GetFilteringMode();
-//}
-//
-//// **************************
-////
-//glm::vec4               DefaultTextureDescriptor::BorderColor       () const
-//{
-//    return m_params.BorderColor();
-//}
-
 // **************************
 //
 DataBuffer::Semantic    DefaultTextureDescriptor::GetSemantic     () const
@@ -293,41 +258,6 @@ void                    DefaultTextureDescriptor::SetFormat         ( TextureFor
 {
     m_params.SetFormat( fmt );
 }
-
-//// **************************
-////
-//void                    DefaultTextureDescriptor::SetWrappingModeX  ( TextureWrappingMode wm )
-//{
-//	m_params.GetSamplerState()->SetWrappingModeX( wm );
-//}
-//
-//// **************************
-////
-//void                    DefaultTextureDescriptor::SetWrappingModeY  ( TextureWrappingMode wm )
-//{
-//    m_params.GetSamplerState()->SetWrappingModeY( wm );
-//}
-//
-//// **************************
-////
-//void                    DefaultTextureDescriptor::SetWrappingModeZ  ( TextureWrappingMode wm )
-//{
-//    m_params.GetSamplerState()->SetWrappingModeZ( wm );
-//}
-//
-//// **************************
-////
-//void                    DefaultTextureDescriptor::SetFilteringMode  ( TextureFilteringMode fm )
-//{
-//    m_params.GetSamplerState()->SetFilteringMode( fm );
-//}
-//
-//// **************************
-////
-//void                    DefaultTextureDescriptor::SetBorderColor    ( const glm::vec4 & bc )
-//{
-//    m_params.GetSamplerState()->SetBorderColor( bc );
-//}
 
 // **************************
 //

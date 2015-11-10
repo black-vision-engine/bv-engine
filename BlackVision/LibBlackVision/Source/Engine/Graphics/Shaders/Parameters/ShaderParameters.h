@@ -47,7 +47,8 @@ public:
     inline GenericShaderParam *             AccessParam                     ( const std::string & name );
 
     void                                    AddTexture                      ( Texture2DPtr texture, SamplerShaderParametersPtr samplerParams = nullptr );
-    void                                    SetTexture                      ( unsigned int idx, Texture2DPtr tex, SamplerShaderParametersPtr samplerParams = nullptr );
+    void                                    SetTexture                      ( unsigned int idx, Texture2DPtr tex );
+    void                                    SetSamplerParameters            ( unsigned int idx, SamplerShaderParametersPtr samplerParams );
 
     inline unsigned int                     NumTextures                     () const;
 

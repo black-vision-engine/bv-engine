@@ -110,17 +110,6 @@ ITransformChannelConstPtr           DefaultFinalizePlugin::GetTransformChannel  
 //
 IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel        () const
 {
-    /*if( m_finalizePSC == nullptr )
-    {
-		auto psChannel = UpdatePixelShaderChannelModel();
-        m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( psChannel, m_shadersDir );
-        m_finalizePSC->RegenerateShaderSource( GetUIDS() );
-    }
-	else
-	{
-		
-	}*/
-
 	UpdatePixelShaderChannel();
 
     return m_finalizePSC;
@@ -230,8 +219,6 @@ void                                DefaultFinalizePlugin::Update               
     //TODO: implement if there is logic that should be run
 	
 	UpdatePixelShaderChannel();
-
-	//FIXME: update renderer context
 }
 
 // *******************************
@@ -323,15 +310,15 @@ void								DefaultFinalizePlugin::UpdateShaderChannelModel			( DefaultParamValM
 
 	UpdateShaderChannelModel( psModel, txData, plugin->GetPrevPlugin() );
 
-	UpdateShaderChannelModel( psModel, plugin->GetPluginParamValModel()->GetVertexShaderChannelModel() );
-	UpdateShaderChannelModel( psModel, plugin->GetPluginParamValModel()->GetPixelShaderChannelModel() );
+	AddModel( psModel, plugin->GetPluginParamValModel()->GetVertexShaderChannelModel() );
+	AddModel( psModel, plugin->GetPluginParamValModel()->GetPixelShaderChannelModel() );
 
-	UpdateTexturesData( txData, plugin );
+	AddTextures( txData, plugin );
 }
 
 // *******************************
 //
-void								DefaultFinalizePlugin::UpdateShaderChannelModel	( DefaultParamValModelPtr psModel, IParamValModelPtr model ) const
+void								DefaultFinalizePlugin::AddModel	( DefaultParamValModelPtr psModel, IParamValModelPtr model ) const
 {
 	if( model )
 	{
@@ -372,7 +359,7 @@ void								DefaultFinalizePlugin::UpdateTexturesData				( DefaultPixelShaderCha
 				return;
 			}
 			recursiveUpdate( txData, plugin->GetPrevPlugin() );
-			UpdateTexturesData( txData, plugin );
+			AddTextures( txData, plugin );
 		};
 
 		auto txData = psc->GetTexturesDataImpl();
@@ -383,7 +370,7 @@ void								DefaultFinalizePlugin::UpdateTexturesData				( DefaultPixelShaderCha
 
 // *******************************
 //
-void								DefaultFinalizePlugin::UpdateTexturesData				( DefaultTexturesDataPtr txData, IPluginPtr plugin ) const
+void								DefaultFinalizePlugin::AddTextures						( DefaultTexturesDataPtr txData, IPluginPtr plugin ) const
 {
 	auto psc = std::static_pointer_cast< model::DefaultPixelShaderChannel >( std::const_pointer_cast< model::IPixelShaderChannel >( plugin->GetPixelShaderChannel() ) ); //fantastic cast
 	if( psc )
@@ -407,19 +394,19 @@ void								DefaultFinalizePlugin::UpdatePixelShaderChannel			() const
     {
 		auto psModel = std::make_shared< DefaultParamValModel >();
 		auto txData = std::make_shared< DefaultTexturesData >();
-		auto renderCtx = std::make_shared< RendererContext >();
+		auto renderCtx = RendererContext::CreateDefault();
 
 		UpdateShaderChannelModel( psModel, txData, m_prevPlugin );
 
-		if( m_prevPlugin )
+		if( m_prevPlugin && m_prevPlugin->GetRendererContext() )
 		{
-			renderCtx = std::const_pointer_cast< RendererContext >( m_prevPlugin->GetRendererContext() );
+			renderCtx = m_prevPlugin->GetRendererContext()->Clone();
 		}
 
 		auto psChannel = DefaultPixelShaderChannel::Create( psModel, txData, renderCtx );
-
         m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( psChannel, m_shadersDir );
         m_finalizePSC->RegenerateShaderSource( GetUIDS() );
+
     }
 	else
 	{
@@ -431,7 +418,7 @@ void								DefaultFinalizePlugin::UpdatePixelShaderChannel			() const
 
 		if( HelperPixelShaderChannel::PropagateRendererContextUpdate( psc, m_prevPlugin ) && m_prevPlugin )
 		{
-			psc->SetRendererContext( std::const_pointer_cast< RendererContext >( m_prevPlugin->GetRendererContext() ) );
+			psc->SetRendererContext( m_prevPlugin->GetRendererContext()->Clone() );
 		}
 	}
 }

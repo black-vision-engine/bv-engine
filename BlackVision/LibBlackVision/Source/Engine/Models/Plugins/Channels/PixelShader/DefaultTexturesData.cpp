@@ -65,19 +65,6 @@ ITextureDescriptorPtr                            DefaultTexturesData::GetTexture
 
 // ******************************
 //
-void                                            DefaultTexturesData::SetTextureParams   ( unsigned int idx, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, TextureFilteringMode filteringMode, const glm::vec4 & borderColor )
-{
-    assert( idx < m_textureDescriptors.size() );
-
-	auto samplerState = m_textureDescriptors[ idx ]->GetSamplerState();
-    samplerState->SetWrappingModeX( wrapModeX );
-    samplerState->SetWrappingModeY( wrapModeY );
-    samplerState->SetFilteringMode( filteringMode );
-    samplerState->SetBorderColor( borderColor );
-}
-
-// ******************************
-//
 void                                            DefaultTexturesData::SetTexture         ( unsigned int idx, ITextureDescriptorPtr textureDesc )
 {
     if( idx >= m_textureDescriptors.size() )
@@ -92,19 +79,6 @@ void                                            DefaultTexturesData::SetTexture 
 void                                            DefaultTexturesData::AddTexture         ( ITextureDescriptorPtr textureDesc )
 {
     m_textureDescriptors.push_back( textureDesc );
-}
-
-// ******************************
-//
-void                                            DefaultTexturesData::SetAnimationParams ( unsigned int idx, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, TextureFilteringMode filteringMode, const glm::vec4 & borderColor )
-{
-    assert( idx < m_animationDescriptors.size() );
-
-	auto samplerState = m_animationDescriptors[ idx ]->GetSamplerState();
-    samplerState->SetWrappingModeX( wrapModeX );
-    samplerState->SetWrappingModeY( wrapModeY );
-    samplerState->SetFilteringMode( filteringMode );
-    samplerState->SetBorderColor( borderColor );
 }
 
 // ******************************

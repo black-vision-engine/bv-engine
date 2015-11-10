@@ -33,11 +33,8 @@ public:
 
     virtual bool                                        IsTimeInvariant             ()                              const   = 0;
 
-    //virtual bool                                        NeedsAttributesUpdate       ()                              const   = 0;
-    //virtual bool                                        NeedsTopologyUpdate         ()                              const   = 0;
-
-	virtual UInt64										GetLastAttributeUpdateID	()								const	= 0;
-	virtual UInt64										GetLastTopologyUpdateID		()								const	= 0;
+	virtual UInt64										GetAttributesUpdateID		()								const	= 0;
+	virtual UInt64										GetTopologyUpdateID			()								const	= 0;
 
 
     virtual unsigned int                                TotalNumVertices            ()                              const   = 0;

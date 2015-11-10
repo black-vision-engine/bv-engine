@@ -99,6 +99,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp" />
+    <ClCompile Include="..\..\..\Source\Application\ApplicationContext.cpp" />
     <ClCompile Include="..\..\..\Source\Application\ConsoleApplication.cpp" />
     <ClCompile Include="..\..\..\Source\Application\Win32\WinApplication.cpp" />
     <ClCompile Include="..\..\..\Source\Application\WindowedApplication.cpp" />
@@ -350,6 +351,7 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Application\ApplicationContext.h" />
     <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h" />

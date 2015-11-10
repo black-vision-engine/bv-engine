@@ -1,19 +1,21 @@
 #include "HelperPixelShaderChannel.h"
 
+#include "Application/ApplicationContext.h"
+
 namespace bv { namespace model {
 
 // ******************************
 //
 void			HelperPixelShaderChannel::SetTexturesDataUpdate			( DefaultPixelShaderChannelPtr psChannel )
 {
-	psChannel->SetTexturesDataUpdateID( psChannel->GetTexturesDataUpdateID() + 1 );
+	psChannel->SetTexturesDataUpdateID( ApplicationContext::Instance().GetTimestamp() + 1 );
 }
 
 // ******************************
 //
 void			HelperPixelShaderChannel::SetRendererContextUpdate		( DefaultPixelShaderChannelPtr psChannel )
 {
-	psChannel->SetRendererContextUpdateID( psChannel->GetRendererContextUpdateID() + 1 );
+	psChannel->SetRendererContextUpdateID( ApplicationContext::Instance().GetTimestamp() + 1 );
 }
 
 // ******************************
@@ -66,6 +68,17 @@ void			HelperPixelShaderChannel::PropagateUpdate			( DefaultPixelShaderChannelPt
 		{
 			psChannel->SetRendererContextUpdateID( rendererCtxUpdateId );
 		}
+	}
+}
+
+
+// ******************************
+//
+void			HelperPixelShaderChannel::CloneRenderContext		( DefaultPixelShaderChannelPtr psChannel, IPluginPtr prevPlugin )
+{
+	if( prevPlugin && prevPlugin->GetRendererContext() )
+	{
+		psChannel->SetRendererContext( prevPlugin->GetRendererContext()->Clone() );
 	}
 }
 

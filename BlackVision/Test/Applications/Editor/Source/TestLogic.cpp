@@ -46,9 +46,7 @@ bool TestLogic::ms_debugConsole = BasicWindowApp::RegisterConsoleInitializer();
 //
 void			TestLogic::Initialize			()
 {
-	m_scene->TestModelSceneEditor();
-
-    m_globalTimeline->SetTimeOffset( TimeType( -2.f ) );
+    //m_globalTimeline->SetTimeOffset( TimeType( -2.f ) );
 }
 
 // ****************************
@@ -66,7 +64,7 @@ void			TestLogic::Render				()
 //
 void			TestLogic::Update				( TimeType t )
 {
-	m_scene->TestModelNodeEditor( t );
+	m_scene->TestEditor( t );
 
     m_globalTimeline->SetGlobalTime( t );
 	m_scene->GetScene()->Update( t );
@@ -99,7 +97,7 @@ void			TestLogic::Resize				( UInt32 w, UInt32 h )
 //
 void			TestLogic::Draw					( SceneNode * node )
 {
-	if ( node->IsVisible() )
+	if ( node && node->IsVisible() )
     {
 		m_renderer->Draw( static_cast< bv::RenderableEntity * >( node->GetTransformable() ) );
 		for ( unsigned int i = 0; i < (unsigned int) node->NumChildNodes(); i++ )

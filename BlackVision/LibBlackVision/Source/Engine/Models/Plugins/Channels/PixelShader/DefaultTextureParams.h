@@ -21,7 +21,7 @@ private:
 public:
 
             DefaultTextureParams ();
-            DefaultTextureParams ( const std::string & name, UInt32 w, UInt32 h, UInt32 d, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureWrappingMode wmz, TextureFilteringMode fm, const glm::vec4 & bc );
+            DefaultTextureParams ( const std::string & name, UInt32 w, UInt32 h, UInt32 d, TextureFormat fmt );
             ~DefaultTextureParams();
 
     virtual const std::string       GetName         () const override;
@@ -34,14 +34,6 @@ public:
 
 	virtual model::SamplerStateModelPtr	GetSamplerState () const override;
 
- //   virtual TextureWrappingMode     GetWrappingModeX() const override;
- //   virtual TextureWrappingMode     GetWrappingModeY() const override;
-	//virtual TextureWrappingMode     GetWrappingModeZ() const override;
-
- //   virtual TextureFilteringMode    GetFilteringMode() const override;
-
- //   virtual glm::vec4               BorderColor     () const override;
-
     void                            SetName         ( const std::string & name );
     void                            SetWidth        ( UInt32 w );
     void                            SetHeight       ( UInt32 h );
@@ -49,15 +41,6 @@ public:
     void                            SetFormat       ( TextureFormat fmt );
 
 	void							SetSamplerState ( SamplerStateModelPtr samplerState );
-
- //   void                            SetWrappingModeX( TextureWrappingMode wm );
- //   void                            SetWrappingModeY( TextureWrappingMode wm );
-	//void                            SetWrappingModeZ( TextureWrappingMode wm );
-
- //   void                            SetFilteringMode( TextureFilteringMode fm );
-
- //   void                            SetBorderColor  ( const glm::vec4 & bc );
-
 };
 
 } //model

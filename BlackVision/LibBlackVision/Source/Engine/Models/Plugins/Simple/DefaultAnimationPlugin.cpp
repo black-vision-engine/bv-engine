@@ -74,11 +74,11 @@ bool                   DefaultAnimationPluginDesc::CanBeAttachedTo     ( IPlugin
         return false;
     }
 
-    auto numChannels = vac->GetDescriptor()->GetNumVertexChannels();
-    if ( numChannels != 1 ) //only vertex attribute data allowed here
-    {
-        return false;
-    }
+    //auto numChannels = vac->GetDescriptor()->GetNumVertexChannels();
+    //if ( numChannels != 1 ) //only vertex attribute data allowed here
+    //{
+    //    return false;
+    //}
 
     return true;
 }
@@ -107,7 +107,11 @@ void								DefaultAnimationPlugin::SetPrevPlugin               ( IPluginPtr pre
 	BasePlugin::SetPrevPlugin( prev );
 
     InitVertexAttributesChannel();
-	
+	    
+	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+	auto ctx = m_psc->GetRendererContext();
+    ctx->cullCtx->enabled = false;
+	//HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 }
 
 // *************************************
@@ -122,10 +126,6 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
     SetPrevPlugin( prev );
-
-    auto ctx = m_psc->GetRendererContext();
-    ctx->cullCtx->enabled = false;
-	HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 
     m_texturesData = m_psc->GetTexturesDataImpl();
 
@@ -226,9 +226,8 @@ void		DefaultAnimationPlugin::InitVertexAttributesChannel		()
 	auto prevCC = prevGeomChannel->GetComponents();
     
     //Only one texture
-	//FIXME: is it possible that CC is empty?
-	auto vaChannelDesc = HelperVertexAttributesChannel::CreateVertexAttributesChannelDescriptor( prevCC[ 0 ]->GetAttributeChannels() );
-	if( !AttributeChannel::GetAttrChannel( prevCC[ 0 ]->GetAttributeChannels(), AttributeSemantic::AS_TEXCOORD ) )
+	VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
+	if( !vaChannelDesc.GetAttrChannelDescriptor( AttributeSemantic::AS_TEXCOORD ) )
 	{
 		vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 	}
@@ -242,7 +241,6 @@ void		DefaultAnimationPlugin::InitVertexAttributesChannel		()
 		m_vaChannel->ClearAll();
 		m_vaChannel->SetDescriptor( vaChannelDesc );
 	}
-	m_vaChannel->SetLastTopologyUpdateID( prevGeomChannel->GetLastTopologyUpdateID() );
 	
 	auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
     for( unsigned int i = 0; i < prevCC.size(); ++i )
@@ -256,8 +254,8 @@ void		DefaultAnimationPlugin::InitVertexAttributesChannel		()
             connComp->AddAttributeChannel( prevCompCh );
         }
 
-		auto posChannel = AttributeChannel::GetAttrChannel( prevConnComp->GetAttributeChannels(), AttributeSemantic::AS_POSITION );
-		if( posChannel && !AttributeChannel::GetAttrChannel( prevConnComp->GetAttributeChannels(), AttributeSemantic::AS_TEXCOORD ) )
+		auto posChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
+		if( posChannel && !prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) )
 		{
 			//FIXME: only one texture - convex hull calculations
 			auto uvs = new model::Float2AttributeChannel( desc, DefaultAnimationPluginDesc::TextureName(), true );

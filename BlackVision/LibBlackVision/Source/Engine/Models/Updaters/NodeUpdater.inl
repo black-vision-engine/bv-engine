@@ -60,26 +60,17 @@ inline  void    NodeUpdater::UpdateTransform     ()
 //
 inline  void    NodeUpdater::UpdateGeometry      ()
 {
-	if( m_vertexAttributesChannel->GetLastTopologyUpdateID() > m_lastTopologyUpdateID )
+	if( m_vertexAttributesChannel->GetTopologyUpdateID() > m_topologyUpdateID )
 	{
         UpdateTopology();
-		m_lastTopologyUpdateID = m_vertexAttributesChannel->GetLastTopologyUpdateID();
-		m_lastAttributesUpdateID = m_vertexAttributesChannel->GetLastAttributeUpdateID();
+		m_topologyUpdateID = m_vertexAttributesChannel->GetTopologyUpdateID();
+		m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
 	}
-	else if( m_vertexAttributesChannel->GetLastAttributeUpdateID() > m_lastAttributesUpdateID )
+	else if( m_vertexAttributesChannel->GetAttributesUpdateID() > m_attributesUpdateID )
 	{
         UpdatePositions();
-		m_lastAttributesUpdateID = m_vertexAttributesChannel->GetLastAttributeUpdateID();
+		m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
 	}
-	/*else if ( m_vertexAttributesChannel->NeedsAttributesUpdate() )
-    {
-        assert( !m_vertexAttributesChannel->NeedsTopologyUpdate() );
-        UpdatePositions();
-    }
-    else if ( m_vertexAttributesChannel->NeedsTopologyUpdate() )
-    {
-        UpdateTopology();
-    }*/
     else
     {
         RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_renderable->GetRenderableArrayData() );
@@ -88,24 +79,6 @@ inline  void    NodeUpdater::UpdateGeometry      ()
         vao->SetNeedsUpdateMemUpload( false );
         vao->SetNeedsUpdateRecreation( false );
     }
-
-    /*if ( m_vertexAttributesChannel->NeedsAttributesUpdate() )
-    {
-        assert( !m_vertexAttributesChannel->NeedsTopologyUpdate() );
-        UpdatePositions();
-    }
-    else if ( m_vertexAttributesChannel->NeedsTopologyUpdate() )
-    {
-        UpdateTopology();
-    }
-    else
-    {
-        RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_renderable->GetRenderableArrayData() );
-        VertexArraySingleVertexBuffer * vao = rad->VAO();
-
-        vao->SetNeedsUpdateMemUpload( false );
-        vao->SetNeedsUpdateRecreation( false );
-    }*/
 }
 
 // *****************************
@@ -182,7 +155,7 @@ inline  void    NodeUpdater::UpdateTopology      ()
 
     if( components.empty() )
     {
-        assert( false ); //FIXME: at this point empty geometry is not allowed
+        //assert( false ); //FIXME: at this point empty geometry is not allowed
         return;
     }
 
@@ -243,11 +216,7 @@ inline void    NodeUpdater::UpdateTexturesData  ()
                 if( GTexture2DCache.IsStored( tex2D ) && tex2D != GTexture2DCache.GetTexture( texDesc.get() ) )
                 {
                     auto newTex2D = GTexture2DCache.GetTexture( texDesc.get() );
-					
-					auto samplerState = texDesc->GetSamplerState();
-					auto samplerParams = std::make_shared< SamplerShaderParameters >( samplerState->GetWrappingModeX(), samplerState->GetWrappingModeY(), 
-						samplerState->GetWrappingModeZ(), samplerState->GetFilteringMode(), samplerState->GetBorderColor() );
-					shaderParams->SetTexture( j, newTex2D, samplerParams );
+					shaderParams->SetTexture( j, newTex2D );
                 }
                 else //Some other texture type which just requires contents to be swapped
                 {
@@ -256,14 +225,43 @@ inline void    NodeUpdater::UpdateTexturesData  ()
 					tex2D->SetRawData( texDesc->GetBits(), format, texDesc->GetWidth(), texDesc->GetHeight() );
                 }
 
+				auto samplerState = texDesc->GetSamplerState();
+				auto samplerParams = std::make_shared< SamplerShaderParameters >( samplerState->GetWrappingModeX(), samplerState->GetWrappingModeY(), 
+						samplerState->GetWrappingModeZ(), samplerState->GetFilteringMode(), samplerState->GetBorderColor() );
+				shaderParams->SetSamplerParameters( j, samplerParams );
+
                 texDesc->ResetBitsChanged();
             }
         }
 
         for( unsigned int i = 0; i < animations.size(); ++i, ++j )
         {
-            auto tex2DSeq   = std::static_pointer_cast< Texture2DSequenceImpl >( shaderParams->GetTexture( j ) );
             auto animDesc   = animations[ i ];
+
+			auto tex2DSeq   = std::static_pointer_cast< Texture2DSequenceImpl >( shaderParams->GetTexture( j ) );
+			if( animDesc->BitsChanged() )
+			{
+				if( GTexture2DCache.IsStored( tex2DSeq ) && tex2DSeq != GTexture2DCache.GetSequence( animDesc.get() ) )
+                {
+                    auto newTexSeq2D = GTexture2DCache.GetSequence( animDesc.get() );
+					shaderParams->SetTexture( j, newTexSeq2D );
+                }
+				else
+				{
+					tex2DSeq->Clear();
+					for( unsigned int k = 0; k < animDesc->NumTextures(); ++k )
+					{
+						tex2DSeq->AddTextureSettingRawData( animDesc->GetBits( k ), animDesc->GetFormat(), animDesc->GetWidth(), animDesc->GetHeight() );
+					}
+				}
+				
+				auto samplerState = animDesc->GetSamplerState();
+				auto samplerParams = std::make_shared< SamplerShaderParameters >( samplerState->GetWrappingModeX(), samplerState->GetWrappingModeY(), 
+						samplerState->GetWrappingModeZ(), samplerState->GetFilteringMode(), samplerState->GetBorderColor() );
+				shaderParams->SetSamplerParameters( j, samplerParams );
+
+                animDesc->ResetBitsChanged();
+			}
 
             if ( animDesc->CurrentFrame() != animDesc->PreviousFrame() )
             {

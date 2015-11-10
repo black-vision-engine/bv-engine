@@ -16,6 +16,7 @@ public:
 
 	static void			PropagateUpdate					( DefaultPixelShaderChannelPtr psChannel, IPluginPtr prevPlugin );
 
+	static void			CloneRenderContext				( DefaultPixelShaderChannelPtr psChannel, IPluginPtr prevPlugin );
 };
 
 } //model

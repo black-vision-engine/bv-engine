@@ -1,6 +1,8 @@
 #include "DefaultTexturePlugin.h"
 
-#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
+#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
+#include "Engine\Interfaces\IValue.h"
+
 #include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
@@ -107,6 +109,15 @@ void DefaultTexturePlugin::SetPrevPlugin( IPluginPtr prev )
     BasePlugin::SetPrevPlugin( prev );
 
     InitVertexAttributesChannel();
+
+	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+	auto ctx = m_psc->GetRendererContext();
+    ctx->cullCtx->enabled = false;
+    
+    ctx->alphaCtx->blendEnabled = true;
+    ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
+    ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+	//HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 }
 
 // *************************************
@@ -121,14 +132,6 @@ DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, c
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
     SetPrevPlugin( prev );
-
-    auto ctx = m_psc->GetRendererContext();
-    ctx->cullCtx->enabled = false;
-    
-    ctx->alphaCtx->blendEnabled = true;
-    ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
-    ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
-	HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 }
 
 // *************************************
@@ -169,18 +172,6 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
 
 // *************************************
 // 
-IParamValModelPtr					DefaultTexturePlugin::GetResourceStateModel			( const std::string & name ) const
-{
-	auto tx = m_psc->GetTexturesDataImpl()->GetTexture( name );
-	if( tx )
-	{
-		return tx->GetSamplerState();
-	}
-	return nullptr;
-}
-
-// *************************************
-// 
 IVertexAttributesChannelConstPtr    DefaultTexturePlugin::GetVertexAttributesChannel  () const
 {
     return m_vaChannel;
@@ -205,6 +196,11 @@ IVertexShaderChannelConstPtr        DefaultTexturePlugin::GetVertexShaderChannel
 void                                DefaultTexturePlugin::Update                      ( TimeType t )
 {
 	BasePlugin::Update( t );
+	
+	for( auto tx : m_psc->GetTexturesDataImpl()->GetTextures() )
+	{
+		tx->GetSamplerState()->Update();
+	}
 
 	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
 	if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
@@ -232,9 +228,8 @@ void		DefaultTexturePlugin::InitVertexAttributesChannel		()
 	auto prevCC = prevGeomChannel->GetComponents();
 
     //Only one texture
-	//FIXME: is it possible that CC is empty?
-	auto vaChannelDesc = HelperVertexAttributesChannel::CreateVertexAttributesChannelDescriptor( prevCC[ 0 ]->GetAttributeChannels() );
-	if( !AttributeChannel::GetAttrChannel( prevCC[ 0 ]->GetAttributeChannels(), AttributeSemantic::AS_TEXCOORD ) )
+	VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
+	if( !vaChannelDesc.GetAttrChannelDescriptor( AttributeSemantic::AS_TEXCOORD ) )
 	{
 		vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 	}
@@ -248,7 +243,6 @@ void		DefaultTexturePlugin::InitVertexAttributesChannel		()
 		m_vaChannel->ClearAll();
 		m_vaChannel->SetDescriptor( vaChannelDesc );
 	}
-	m_vaChannel->SetLastTopologyUpdateID( prevGeomChannel->GetLastTopologyUpdateID() );
 
 	auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
     for( unsigned int i = 0; i < prevCC.size(); ++i )
@@ -263,8 +257,8 @@ void		DefaultTexturePlugin::InitVertexAttributesChannel		()
             connComp->AddAttributeChannel( prevCompCh );
         }
 
-		auto posChannel = AttributeChannel::GetAttrChannel( prevConnComp->GetAttributeChannels(), AttributeSemantic::AS_POSITION );
-		if( posChannel && !AttributeChannel::GetAttrChannel( prevConnComp->GetAttributeChannels(), AttributeSemantic::AS_TEXCOORD ) )
+		auto posChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
+		if( posChannel && !prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) )
 		{
 			//FIXME: only one texture - convex hull calculations
 			auto uvs = new model::Float2AttributeChannel( desc, DefaultTexturePluginDesc::TextureName(), true );

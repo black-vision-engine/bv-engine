@@ -29,11 +29,9 @@ public:
     
 	ITextureDescriptorPtr                                   GetTexture          ( const std::string & name );
 
-    void                                                    SetTextureParams    ( unsigned int idx, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, TextureFilteringMode filteringMode, const glm::vec4 & borderColor );
 	void                                                    SetTexture          ( unsigned int idx, ITextureDescriptorPtr textureDesc );
     void                                                    AddTexture          ( ITextureDescriptorPtr textureDesc );
 
-    void                                                    SetAnimationParams  ( unsigned int idx, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, TextureFilteringMode filteringMode, const glm::vec4 & borderColor );
     void                                                    SetAnimation        ( unsigned int idx, IAnimationDescriptorPtr animationDesc );
     void                                                    AddAnimation        ( IAnimationDescriptorPtr animationDesc );
 

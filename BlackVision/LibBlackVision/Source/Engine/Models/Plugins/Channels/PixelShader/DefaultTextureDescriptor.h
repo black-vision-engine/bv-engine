@@ -44,23 +44,11 @@ public:
     virtual UInt32				    GetWidth        ( UInt32 level = 0 ) const override;
     virtual UInt32				    GetHeight       ( UInt32 level = 0 ) const override;
 	virtual UInt32				    GetDepth		( UInt32 level = 0 ) const override;
-    
     virtual TextureFormat           GetFormat       () const override;
-
 	virtual SamplerStateModelPtr	GetSamplerState () const override;
-
- //   virtual TextureWrappingMode     GetWrappingModeX() const override;
- //   virtual TextureWrappingMode     GetWrappingModeY() const override;
-	//virtual TextureWrappingMode     GetWrappingModeZ() const override;
- //   
- //   virtual TextureFilteringMode    GetFilteringMode() const override;
- //   
- //   virtual glm::vec4               BorderColor     () const override;
-    
     virtual DataBuffer::Semantic    GetSemantic     () const override;
 
     void                            SetBits         ( TextureAssetConstPtr texResource );
-
     void                            SetBitsChanged  ( bool bitsChanged ) const;
 
     void                            SetName         ( const std::string & name );
@@ -68,19 +56,8 @@ public:
     void                            SetWidth        ( UInt32 w );
     void                            SetHeight       ( UInt32 h );
 	void                            SetDepth        ( UInt32 z );
-    
     void                            SetFormat       ( TextureFormat fmt );
-    
- /*   void                            SetWrappingModeX( TextureWrappingMode wm );
-    void                            SetWrappingModeY( TextureWrappingMode wm );
-	void                            SetWrappingModeZ( TextureWrappingMode wm );
-    
-    void                            SetFilteringMode( TextureFilteringMode fm );
-    
-    void                            SetBorderColor  ( const glm::vec4 & bc );
-    */
     void                            SetSemantic     ( DataBuffer::Semantic semantic );
-	
 	void							SetSamplerState ( SamplerStateModelPtr samplerState );
 
     static void                     SetDefaults     ( DefaultTextureDescriptorPtr desc );

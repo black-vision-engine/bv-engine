@@ -806,7 +806,7 @@ model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const mod
     root->AddPlugin( "DEFAULT_VIDEOINPUT", timeEvaluator );
     auto plugin = root->GetPlugin( "video input" );
     auto vi = new ExampleVideoInput( 10, 10, 1.f );
-    auto success = plugin->LoadResource( AssetDescConstPtr( new model::DefaultVideoInputResourceDescr( vi->GetTexture(), vi ) ) );
+	auto success = plugin->LoadResource( AssetDescConstPtr( std::make_shared< model::DefaultVideoInputResourceDescr >( vi->GetTexture(), vi ) ) );
     assert(success);
 	{ success; }
     //auto vi2 = new ExampleVideoInput( 20, 20, 1.f );
@@ -835,7 +835,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismBugTestScene     ( const mod
 
     model::SetParameter( prism2->GetPlugin( "prism" )->GetParameter( "n" ), 10.f, 10.f );
 
-    model::SetParameter( prism2->GetPlugin( "texture" )->GetParameter( "borderColor") , 0.f, glm::vec4( 1, 0, 0, 1 ) );
+    model::SetParameter( prism2->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "borderColor") , 0.f, glm::vec4( 1, 0, 0, 1 ) );
 
     //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  3.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
     //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  7.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
@@ -1056,8 +1056,9 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
 
     root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
     root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
-    model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 0, 0, 1 ) );
+
     model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
+    model::SetParameter( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 0, 0, 1 ) );
 
     //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
     //model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
@@ -1088,8 +1089,9 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedTorusBasicGeometryTestScene  
 
     root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
     root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
-    model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 0, 0, 1 ) );
+
     model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
+    model::SetParameter( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 0, 0, 1 ) );
 
     //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
     //model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );
@@ -1120,8 +1122,9 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedBasicGeometryTestScene     ( 
 
     root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
     root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
-    model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 0, 0, 1 ) );
+
     model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
+    model::SetParameter( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 0, 0, 1 ) );
 
     //root->AddPlugin( "DEFAULT_COLOR", timeEvaluator );
     //model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1, 1, 1, 1 ) );

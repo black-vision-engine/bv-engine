@@ -48,7 +48,6 @@ public:
 												~DefaultTexturePlugin       ();
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
-	virtual IParamValModelPtr					GetResourceStateModel		( const std::string & name ) const override;
 
 	virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
 	virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;

@@ -88,7 +88,6 @@ private:
 
 	void										ScaleToMaxTextLength		();
 
-    void                                        InitVertexAttributesChannel ();
 public:
 
 	explicit                                    DefaultTextPlugin           ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );

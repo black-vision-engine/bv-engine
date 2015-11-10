@@ -2,6 +2,7 @@
 
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
+#include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
@@ -45,6 +46,19 @@ std::string             DefaultColorPluginDesc::UID                         ()
 
 // ************************************************************************* PLUGIN ************************************************************************* 
 
+
+// *************************************
+// 
+void DefaultColorPlugin::SetPrevPlugin( IPluginPtr prev )
+{
+    BasePlugin::SetPrevPlugin( prev );
+
+	HelperPixelShaderChannel::CloneRenderContext( m_pixelShaderChannel, prev );
+    m_pixelShaderChannel->GetRendererContext()->alphaCtx->blendEnabled = true;
+	//HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
+}
+
+
 // *******************************
 //
 DefaultColorPlugin::DefaultColorPlugin  ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
@@ -53,7 +67,8 @@ DefaultColorPlugin::DefaultColorPlugin  ( const std::string & name, const std::s
     , m_paramValModel( model )
 { 
     m_pixelShaderChannel = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
-    m_pixelShaderChannel->GetRendererContext()->alphaCtx->blendEnabled = true;
+
+	SetPrevPlugin( prev );
 }
 
 // *************************************

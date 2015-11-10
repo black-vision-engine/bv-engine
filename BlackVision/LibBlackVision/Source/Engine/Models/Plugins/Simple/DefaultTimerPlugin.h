@@ -153,9 +153,6 @@ private:
 
 private:
 
-    void                                        InitAttributesChannel       ( IPluginPtr prev );
-
-
 	friend bool            SetTimeTimerPlugin( IPluginPtr timerPlugin, TimeType time );
 	friend bool            StartTimerPlugin( IPluginPtr timerPlugin );
 	friend bool            StopTimerPlugin( IPluginPtr timerPlugin );

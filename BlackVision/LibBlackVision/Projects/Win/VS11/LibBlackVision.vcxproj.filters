@@ -915,6 +915,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.cpp">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Application\ApplicationContext.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1852,6 +1855,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Application\ApplicationContext.h">
+      <Filter>Application</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

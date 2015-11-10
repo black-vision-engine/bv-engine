@@ -126,26 +126,18 @@ void DefaultTextPlugin::SetPrevPlugin( IPluginPtr prev )
 {
     BasePlugin::SetPrevPlugin( prev );
 
-    if( prev == nullptr )
-	{
-		m_transformChannel = nullptr;
-        return;
-	}
-
-  //  auto colorParam = prev->GetParameter( "color" );
-  //  if ( colorParam == nullptr )
-  //  {
-  //      auto bcParam = this->GetParameter( "borderColor" );
-  //      SimpleVec4EvaluatorPtr      colorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", bcParam->GetTimeEvaluator() );
-		//std::static_pointer_cast< DefaultParamValModel >( m_pluginParamValModel->GetPixelShaderChannelModel() )->RegisterAll( colorEvaluator );
-  //      colorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 1.f, 1.f, 1.f ), TimeType( 0.f ) );
-  //  }
-
 	m_scaleValue =  ValuesFactory::CreateValueMat4( "" );
 	m_scaleValue->SetValue( glm::mat4( 1.0 ) );
     ValueMat4PtrVec values;
 	values.push_back( m_scaleValue );
 	m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( m_prevPlugin, values, false ) ); //<3
+
+	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+	auto ctx = m_psc->GetRendererContext();
+	ctx->cullCtx->enabled = false;
+	ctx->alphaCtx->blendEnabled = true;
+	ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
+	ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
 }
 
 // *************************************
@@ -161,16 +153,9 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
+	m_vaChannel = TextHelper::CreateEmptyVACForText();
 
     SetPrevPlugin( prev );
-
-    auto ctx = m_psc->GetRendererContext();
-    ctx->cullCtx->enabled = false;
-
-    ctx->alphaCtx->blendEnabled = true;
-    ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
-    ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
-	HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &DefaultTextPlugin::OnSetText ), KeyPressedEvent::Type() );
 
@@ -256,7 +241,7 @@ bool                            DefaultTextPlugin::LoadResource  ( AssetDescCons
 		m_blurSize = txAssetDescr->GetBlurSize();
 		m_outlineSize = txAssetDescr->GetOutlineSize();
 		LoadAtlas( txAssetDescr );
-		InitVertexAttributesChannel();
+		SetText( m_text );
 
 		return true;
     }    
@@ -330,12 +315,8 @@ void                                DefaultTextPlugin::Update                   
 
 	m_scaleValue->SetValue( m_scaleMat );
 
+	//assumption that text plugin provides vertices, so no need for backward topology propagation
 	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
-	if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
-	{
-		InitVertexAttributesChannel();
-	}
-
 	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
     m_vsc->PostUpdate();
@@ -359,17 +340,6 @@ inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
 }
 
 } //anonymous
-
-// *************************************
-//
-void DefaultTextPlugin::InitVertexAttributesChannel	()
-{
-	m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
-
-    auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
-
-    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_text, m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, false );
-}
 
 // *************************************
 //

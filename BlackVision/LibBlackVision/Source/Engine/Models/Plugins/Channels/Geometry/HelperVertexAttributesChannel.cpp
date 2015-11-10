@@ -7,6 +7,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
 
+#include "Application/ApplicationContext.h"
 
 namespace bv { namespace model
 {
@@ -17,7 +18,7 @@ void		HelperVertexAttributesChannel::SetAttributesUpdate		( VertexAttributesChan
 {
 	if( vaChannel )
 	{
-		vaChannel->SetLastAttributeUpdateID( vaChannel->GetLastAttributeUpdateID() + 1 );
+		vaChannel->SetAttributesUpdateID( ApplicationContext::Instance().GetTimestamp() + 1 );
 	}
 }
 
@@ -29,10 +30,11 @@ bool		HelperVertexAttributesChannel::PropagateAttributesUpdate		( VertexAttribut
 	{
 		if( prevPlugin && prevPlugin->GetVertexAttributesChannel() )
 		{
-			auto prevUpdateId = prevPlugin->GetVertexAttributesChannel()->GetLastAttributeUpdateID();
-			if( vaChannel->GetLastAttributeUpdateID() < prevUpdateId )
+			auto prevUpdateId = prevPlugin->GetVertexAttributesChannel()->GetAttributesUpdateID();
+			if( vaChannel->GetAttributesUpdateID() < prevUpdateId )
 			{
-				vaChannel->SetLastAttributeUpdateID( prevUpdateId );
+				
+				vaChannel->SetAttributesUpdateID( prevUpdateId );
 				return true;
 			}
 		}
@@ -46,7 +48,7 @@ void		HelperVertexAttributesChannel::SetTopologyUpdate		( VertexAttributesChanne
 {
 	if( vaChannel )
 	{
-		vaChannel->SetLastTopologyUpdateID( vaChannel->GetLastTopologyUpdateID() + 1 );
+		vaChannel->SetTopologyUpdateID( ApplicationContext::Instance().GetTimestamp() + 1 );
 	}
 }
 
@@ -58,29 +60,16 @@ bool		HelperVertexAttributesChannel::PropagateTopologyUpdate		( VertexAttributes
 	{
 		if( prevPlugin && prevPlugin->GetVertexAttributesChannel() )
 		{
-			auto prevUpdateId = prevPlugin->GetVertexAttributesChannel()->GetLastTopologyUpdateID();
-			if( vaChannel->GetLastTopologyUpdateID() < prevUpdateId )
+			auto prevUpdateId = prevPlugin->GetVertexAttributesChannel()->GetTopologyUpdateID();
+			if( vaChannel->GetTopologyUpdateID() < prevUpdateId )
 			{
-				vaChannel->SetLastTopologyUpdateID( prevUpdateId );
+				vaChannel->SetTopologyUpdateID( prevUpdateId );
 				return true;
 			}
 		}
 		return false;
 	}
 	return ( prevPlugin && prevPlugin->GetVertexAttributesChannel() );
-}
-
-// *************************************
-//
-VertexAttributesChannelDescriptor		HelperVertexAttributesChannel::CreateVertexAttributesChannelDescriptor		( const std::vector< IAttributeChannelPtr > & attrChannels )
-{
-	VertexAttributesChannelDescriptor desc;
-    for( auto attrChannel : attrChannels )
-    {
-        auto prevCompChDesc = attrChannel->GetDescriptor();
-        desc.AddAttrChannelDesc( prevCompChDesc->GetType(), prevCompChDesc->GetSemantic(), prevCompChDesc->GetChannelRole()  );
-    }
-	return desc;
 }
 
 } // model

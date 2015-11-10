@@ -14,7 +14,7 @@ DefaultTextureParams::DefaultTextureParams ()
 
 // **************************
 //
-DefaultTextureParams::DefaultTextureParams ( const std::string & name, UInt32 w, UInt32 h, UInt32 z, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureWrappingMode wmz, TextureFilteringMode fm, const glm::vec4 & bc )
+DefaultTextureParams::DefaultTextureParams ( const std::string & name, UInt32 w, UInt32 h, UInt32 z, TextureFormat fmt )
 	: m_samplerState( nullptr )
 {
     SetName( name );
@@ -22,12 +22,6 @@ DefaultTextureParams::DefaultTextureParams ( const std::string & name, UInt32 w,
     SetHeight( h );
 	SetDepth( z );
     SetFormat( fmt );
-	{ wmx; wmy; wmz; fm; bc; }
- //   SetWrappingModeX( wmx );
- //   SetWrappingModeY( wmy );
-	//SetWrappingModeZ( wmz );
- //   SetFilteringMode( fm );
- //   SetBorderColor( bc );
 }
 
 // **************************
@@ -77,41 +71,6 @@ SamplerStateModelPtr	DefaultTextureParams::GetSamplerState () const
 {
 	return m_samplerState;
 }
-//
-//// **************************
-////
-//TextureWrappingMode     DefaultTextureParams::GetWrappingModeX  () const
-//{
-//	return m_samplerState->GetWrappingModeX();
-//}
-//
-//// **************************
-////
-//TextureWrappingMode     DefaultTextureParams::GetWrappingModeY  () const
-//{
-//	return m_samplerState->GetWrappingModeY();
-//}
-//
-//// **************************
-////
-//TextureWrappingMode     DefaultTextureParams::GetWrappingModeZ  () const
-//{
-//	return m_samplerState->GetWrappingModeZ();
-//}
-//
-//// **************************
-////
-//TextureFilteringMode    DefaultTextureParams::GetFilteringMode  () const
-//{
-//	return m_samplerState->GetFilteringMode();
-//}
-//
-//// **************************
-////
-//glm::vec4               DefaultTextureParams::BorderColor       () const
-//{
-//	return m_samplerState->BorderColor();
-//}
 
 // **************************
 //
@@ -153,47 +112,6 @@ void                    DefaultTextureParams::SetSamplerState   ( SamplerStateMo
 {
 	m_samplerState = samplerState;
 }
-
-//
-//// **************************
-////
-//void                    DefaultTextureParams::SetWrappingModeX  ( TextureWrappingMode wm )
-//{
-//	{ wm; }
-//    //m_wrappingModeX = wm;
-//}
-//
-//// **************************
-////
-//void                    DefaultTextureParams::SetWrappingModeY  ( TextureWrappingMode wm )
-//{
-//	{ wm; }
-//   // m_wrappingModeY = wm;
-//}
-//
-//// **************************
-////
-//void                    DefaultTextureParams::SetWrappingModeZ  ( TextureWrappingMode wm )
-//{
-//	{ wm; }
-//    //m_wrappingModeZ = wm;
-//}
-//
-//// **************************
-////
-//void                    DefaultTextureParams::SetFilteringMode  ( TextureFilteringMode fm )
-//{
-//	{ fm; }
-//    //m_filteringMode = fm;
-//}
-//
-//// **************************
-////
-//void                    DefaultTextureParams::SetBorderColor    ( const glm::vec4 & bc )
-//{
-//	{ bc; }
-//    //m_borderColor = bc;
-//}
 
 } //model
 } //bv

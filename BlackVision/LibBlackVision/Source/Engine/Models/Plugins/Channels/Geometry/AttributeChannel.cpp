@@ -53,29 +53,5 @@ std::string                                 AttributeChannel::GetName           
     return m_name;
 }
 
-// *************************************
-//
-IAttributeChannelPtr                         AttributeChannel::GetAttrChannel	( const std::vector< IAttributeChannelPtr > & channels, AttributeSemantic semantic, Int32 occuranceIdx )
-{
-	IAttributeChannelPtr ret = nullptr;
-    if( !channels.empty() )
-    {
-        for( auto ch : channels )
-		{
-            if( ch->GetDescriptor()->GetSemantic() == semantic )
-			{
-				if( occuranceIdx == 0 )
-				{
-					return ch;
-				}
-				ret = ch;
-				occuranceIdx--;
-			}
-		}
-    }
-
-    return ret;
-}
-
 } // model
 } // bv

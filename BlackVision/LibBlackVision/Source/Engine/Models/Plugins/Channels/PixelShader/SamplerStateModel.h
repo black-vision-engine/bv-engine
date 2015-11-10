@@ -49,7 +49,7 @@ public:
     void                        SetBorderColor		( const glm::vec4 & bc );
 
 private:
-	void						AddEvaluators		( ITimeEvaluatorPtr timeEvaluator );
+	void						Initialize			( ITimeEvaluatorPtr timeEvaluator, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureWrappingMode wmz, TextureFilteringMode fm, const glm::vec4 & bc );
 
 };
 

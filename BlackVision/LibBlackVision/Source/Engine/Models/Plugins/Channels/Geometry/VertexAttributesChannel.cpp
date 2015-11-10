@@ -17,11 +17,8 @@ VertexAttributesChannel::VertexAttributesChannel     ( PrimitiveType type, bool 
     : m_primitiveType( type )
     , m_isReadOnly( isReadOnly )
     , m_isTimeInvariant( isTimeInvariant )
-    //, m_needsAttributesUpdate( false )
-    //, m_needsTopologyUpdate( false )
-    //, m_needsInitialization( true )
-	, m_lastAttributeUpdateID( 0 )
-	, m_lastTopologyUpdateID( 0 )
+	, m_attributesUpdateID( 0 )
+	, m_topologyUpdateID( 0 )
 {
 }
 
@@ -32,11 +29,8 @@ VertexAttributesChannel::VertexAttributesChannel     ( PrimitiveType type, const
     , m_desc( desc )
     , m_isReadOnly( isReadOnly )
     , m_isTimeInvariant( isTimeInvariant )
-    //, m_needsAttributesUpdate( false )
-    //, m_needsTopologyUpdate( false )
-    //, m_needsInitialization( true )
-	, m_lastAttributeUpdateID( 0 )
-	, m_lastTopologyUpdateID( 0 )
+	, m_attributesUpdateID( 0 )
+	, m_topologyUpdateID( 0 )
 {
 }
 
@@ -73,61 +67,33 @@ bool                                    VertexAttributesChannel::IsTimeInvariant
 {
     return m_isTimeInvariant;
 }
-//
-//// *********************************
-////
-//bool                                    VertexAttributesChannel::NeedsAttributesUpdate  () const
-//{
-//    return m_needsAttributesUpdate;
-//}
-//
-//// *********************************
-////
-//bool                                    VertexAttributesChannel::NeedsTopologyUpdate    () const
-//{
-//    return m_needsTopologyUpdate;
-//}
-//
-//// *********************************
-////
-//void                                    VertexAttributesChannel::SetNeedsAttributesUpdate( bool b )
-//{
-//    m_needsAttributesUpdate = b;
-//}
-//
-//// *********************************
-////
-//void                                    VertexAttributesChannel::SetNeedsTopologyUpdate ( bool b )
-//{
-//    m_needsTopologyUpdate = b;
-//}
 
 // *********************************
 //
-UInt64                                VertexAttributesChannel::GetLastAttributeUpdateID	() const
+UInt64                                VertexAttributesChannel::GetAttributesUpdateID	() const
 {
-	return m_lastAttributeUpdateID;
+	return m_attributesUpdateID;
 }
 
 // *********************************
 //
-UInt64                                VertexAttributesChannel::GetLastTopologyUpdateID	() const
+UInt64                                VertexAttributesChannel::GetTopologyUpdateID		() const
 {
-	return m_lastTopologyUpdateID;
+	return m_topologyUpdateID;
 }
 
 // *********************************
 //
-void                                VertexAttributesChannel::SetLastAttributeUpdateID	( UInt64 updateID )
+void                                VertexAttributesChannel::SetAttributesUpdateID	( UInt64 updateID )
 {
-	m_lastAttributeUpdateID = updateID;
+	m_attributesUpdateID = updateID;
 }
 
 // *********************************
 //
-void                                VertexAttributesChannel::SetLastTopologyUpdateID	( UInt64 updateID )
+void                                VertexAttributesChannel::SetTopologyUpdateID	( UInt64 updateID )
 {
-	m_lastTopologyUpdateID = updateID;
+	m_topologyUpdateID = updateID;
 }
 
 // *********************************
@@ -184,13 +150,6 @@ void                                    VertexAttributesChannel::AddConnectedCom
 
     m_connectedComponents.push_back( cc );
 }
-
-//// *********************************
-////
-//void                                    VertexAttributesChannel::ClearConnectedComponent()
-//{
-//    m_connectedComponents.clear();
-//}
 
 // *********************************
 //
@@ -264,15 +223,7 @@ ConnectedComponentPtr                   VertexAttributesChannel::GetConnectedCom
 void                                    VertexAttributesChannel::ClearAll                ()
 {
     m_connectedComponents.clear();
-    //m_needsInitialization = true;
 }
-
-//// *********************************
-////
-//bool                                    VertexAttributesChannel::NeedsInitialization     () const
-//{
-//    return m_needsInitialization;
-//}
 
 // *********************************
 //
@@ -282,10 +233,6 @@ void                                    VertexAttributesChannel::Initialize     
     m_desc = desc;
     m_isReadOnly = isReadOnly;
     m_isTimeInvariant = isTimeInvariant;
-    //m_needsAttributesUpdate = false;
-    //m_needsTopologyUpdate = false;
-
-    //m_needsInitialization = false;
 }
 
 } // model

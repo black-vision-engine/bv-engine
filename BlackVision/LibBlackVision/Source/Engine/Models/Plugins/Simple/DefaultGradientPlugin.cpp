@@ -124,6 +124,8 @@ void					DefaultGradientPlugin::SetPrevPlugin				( IPluginPtr prev )
     BasePlugin::SetPrevPlugin( prev );
 
     InitVertexAttributesChannel();
+
+	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
 }
 
 // *************************************
@@ -138,8 +140,6 @@ DefaultGradientPlugin::DefaultGradientPlugin         ( const std::string & name,
 	m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
 
 	SetPrevPlugin( prev );
-	
-    InitVertexAttributesChannel();
 }
 
 // *************************************
@@ -187,35 +187,8 @@ void                                DefaultGradientPlugin::Update               
 
 	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
-	//bool hasPrevVAC = m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel();
- //   
-	//if( m_vaChannel )
-	//{
-	//	if( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsAttributesUpdate() )
-	//	{
-	//		RecalculateUVChannel();
-	//		m_vaChannel->SetNeedsAttributesUpdate( true );
-	//	}
-	//	else
-	//	{
-	//		m_vaChannel->SetNeedsAttributesUpdate( false );
-	//	}
-
-	//	if( hasPrevVAC && m_prevPlugin->GetVertexAttributesChannel()->NeedsTopologyUpdate() ) //FIXME: additionalna hackierka
-	//	{
-	//		m_vaChannel->ClearAll();
-	//		InitVertexAttributesChannel();	
-	//		m_vaChannel->SetNeedsTopologyUpdate( true );
-	//		m_vaChannel->SetNeedsAttributesUpdate( false ); // FIXME: very ugly hack this is
-	//	}
-	//	else
-	//	{
-	//		m_vaChannel->SetNeedsTopologyUpdate( false );
-	//	}
-	//}
-
     m_vsc->PostUpdate();
-    m_psc->PostUpdate();    
+    m_psc->PostUpdate();
 }
 
 // *************************************
@@ -229,13 +202,11 @@ void								DefaultGradientPlugin::InitVertexAttributesChannel	()
 	}
 
 	auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
-	auto prevCC = prevGeomChannel->GetComponents();
-    
+	
     //add gradient texture desc
-	//FIXME: is it possible that CC is empty?
-	auto vaChannelDesc = HelperVertexAttributesChannel::CreateVertexAttributesChannelDescriptor( prevCC[ 0 ]->GetAttributeChannels() );
+	VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
 	vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
-
+	
 	if( !m_vaChannel )
 	{
 		m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
@@ -245,9 +216,9 @@ void								DefaultGradientPlugin::InitVertexAttributesChannel	()
 		m_vaChannel->ClearAll();
 		m_vaChannel->SetDescriptor( vaChannelDesc );
 	}
-	m_vaChannel->SetLastTopologyUpdateID( prevGeomChannel->GetLastTopologyUpdateID() );
 
 	auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR ); // TOCHECK is that right?
+	auto prevCC = prevGeomChannel->GetComponents();
     for( unsigned int i = 0; i < prevCC.size(); ++i )
     {
         auto connComp = ConnectedComponent::Create();
@@ -280,7 +251,7 @@ void									DefaultGradientPlugin::RecalculateUVChannel         ()
     for( unsigned int i = 0; i < cc.size(); ++i )
     {
         auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( cc[ i ] );
-		auto posChannel = AttributeChannel::GetAttrChannel( prevConnComp->GetAttributeChannels(), AttributeSemantic::AS_POSITION );
+		auto posChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
 		if( posChannel )
 		{
 			for( unsigned int j = 0; j < posChannel->GetNumEntries(); ++j )
@@ -296,9 +267,9 @@ void									DefaultGradientPlugin::RecalculateUVChannel         ()
 
 	for( unsigned int i = 0; i < cc.size(); ++i )
     {
-		auto compChannels = cc[ i ]->GetAttributeChannels();
-		auto posChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_POSITION );
-		auto uvChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_TEXCOORD, -1 );
+        auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( cc[ i ] );
+		auto posChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
+		auto uvChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD, -1 );
 
 		if( posChannel && uvChannel )
 		{

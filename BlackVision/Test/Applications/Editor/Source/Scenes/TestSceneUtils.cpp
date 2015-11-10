@@ -21,6 +21,12 @@ const UInt32		TestSceneUtils::AM_SIZE			= 2048;
 
 // ****************************
 //
+const UInt32		TestSceneUtils::GEOM_PLUGINS_NUM = 15;
+const std::string	TestSceneUtils::PluginsArr[] = { "DEFAULT_TRIANGLE", "DEFAULT_CIRCLE", "DEFAULT_ELLIPSE", "DEFAULT_ROUNDEDRECT", "DEFAULT_CUBE", "DEFAULT_SIMPLE_CUBE", "DEFAULT_SPHERE", "DEFAULT_GEOSPHERE", "DEFAULT_CYLINDER", "DEFAULT_CONE", "DEFAULT_TORUS", "DEFAULT_SPRING", "DEFAULT_COGWHEEL", "DEFAULT_PIECHART", "DEFAULT_PRISM" };
+const std::string	TestSceneUtils::PluginsNameArr[] = { "triangle", "circle", "ellipse", "rounded rect", "cube", "simple cube", "sphere", "sphere", "cylinder", "cone", "torus", "spring", "cog wheel", "piechart", "prism" };
+
+// ****************************
+//
 model::BasicNodePtr		TestSceneUtils::ColoredRectangle			( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, Float32 width, Float32 height, glm::vec4 color, const std::string & alphaMask )
 {
 	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
@@ -123,7 +129,7 @@ model::BasicNodePtr		TestSceneUtils::TexturedRectangle		( model::TimelineManager
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::TexturedTriangle		( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, const std::string & path, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::TexturedGeometry		( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, const std::string & plugin, const std::string & path, const std::string & alphaMask )
 {
 	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
     timeEvaluator->AddChild( localTimeline );
@@ -132,7 +138,7 @@ model::BasicNodePtr		TestSceneUtils::TexturedTriangle		( model::TimelineManager 
 
 	std::vector< std::string > plugins;
 	plugins.push_back( "DEFAULT_TRANSFORM" );
-	plugins.push_back( "DEFAULT_TRIANGLE" );
+	plugins.push_back( plugin );
 	plugins.push_back( "DEFAULT_TEXTURE" );
 	if( !alphaMask.empty() )
 	{
@@ -142,15 +148,6 @@ model::BasicNodePtr		TestSceneUtils::TexturedTriangle		( model::TimelineManager 
     auto success = node->AddPlugins( plugins, localTimeline );
 
 	assert( success ); { success; }
-
-	auto time = timeEvaluator->GetLocalTime();
-    SetParameter( node->GetPlugin( "triangle" )->GetParameter( model::DefaultTrianglePlugin::PN_POINTA ), TimeType( 0.f ), glm::vec3( 0.3f, 0, 0 ) );
-    SetParameter( node->GetPlugin( "triangle" )->GetParameter( model::DefaultTrianglePlugin::PN_POINTB ), TimeType( 0.f ), glm::vec3( 0, 0.7f, 0 ) );
-    SetParameter( node->GetPlugin( "triangle" )->GetParameter( model::DefaultTrianglePlugin::PN_POINTC ), TimeType( 0.f ), glm::vec3( 0, 0, 0 ) );
-	
-    SetParameter( node->GetPlugin( "triangle" )->GetParameter( model::DefaultTrianglePlugin::PN_POINTA ), time + TimeType( 1.5f ), glm::vec3( 0.7f, 0, 0 ) );
-    SetParameter( node->GetPlugin( "triangle" )->GetParameter( model::DefaultTrianglePlugin::PN_POINTB ), time + TimeType( 1.5f ), glm::vec3( 0, 0.3f, 0 ) );
-    SetParameter( node->GetPlugin( "triangle" )->GetParameter( model::DefaultTrianglePlugin::PN_POINTC ), time + TimeType( 1.5f ), glm::vec3( 0, 0, 0 ) );
 
 	LoadTexture( node->GetPlugin( "texture" ), path );
 
@@ -204,6 +201,43 @@ model::BasicNodePtr		TestSceneUtils::AnimatedRectangle		( model::TimelineManager
 
 // ****************************
 //
+model::BasicNodePtr		TestSceneUtils::AnimatedGeometry		( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, const std::string & plugin, const std::string & path, const std::string & alphaMask )
+{
+	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+    timeEvaluator->AddChild( localTimeline );
+
+    auto node = model::BasicNode::Create( name, timeEvaluator );
+
+	std::vector< std::string > plugins;
+	plugins.push_back( "DEFAULT_TRANSFORM" );
+	plugins.push_back( plugin );
+	plugins.push_back( "DEFAULT_ANIMATION" );
+	if( !alphaMask.empty() )
+	{
+		plugins.push_back( "DEFAULT_ALPHA_MASK" );
+	}
+
+    auto success = node->AddPlugins( plugins, localTimeline );
+
+	assert( success ); { success; }
+
+	model::LoadAnimation( node->GetPlugin( "animation" ), path, "*.bmp" );
+	
+	auto time = timeEvaluator->GetLocalTime();
+    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), time, 0.f );
+    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), time + TimeType( 0.25f * ( Float32 )ANIM_NUM / SPEED ), ( Float32 )( ANIM_NUM - 1 ) );
+    node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( timeEvaluator );
+
+	if( !alphaMask.empty() )
+	{
+		LoadTexture( node->GetPlugin( "alpha_mask" ), alphaMask );
+	}
+
+    return node;
+}
+
+// ****************************
+//
 model::BasicNodePtr		TestSceneUtils::GradientRectangle		( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, Float32 width, Float32 height, glm::vec4 c1, glm::vec4 c2, const std::string & alphaMask )
 {
 	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
@@ -227,6 +261,39 @@ model::BasicNodePtr		TestSceneUtils::GradientRectangle		( model::TimelineManager
 	SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ),  width );
 	SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), height );
 	
+	SetParameter( node->GetPlugin( "linear_gradient" )->GetParameter( "color1" ), TimeType( 0.f ), c1 );
+	SetParameter( node->GetPlugin( "linear_gradient" )->GetParameter( "color2" ), TimeType( 0.f ), c2 );
+	
+	if( !alphaMask.empty() )
+	{
+		LoadTexture( node->GetPlugin( "alpha_mask" ), alphaMask );
+	}
+
+    return node;
+}
+
+// ****************************
+//
+model::BasicNodePtr		TestSceneUtils::GradientGeometry		( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, const std::string & plugin, glm::vec4 c1, glm::vec4 c2, const std::string & alphaMask )
+{
+	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+    timeEvaluator->AddChild( localTimeline );
+
+    auto node = model::BasicNode::Create( name, timeEvaluator );
+
+	std::vector< std::string > plugins;
+	plugins.push_back( "DEFAULT_TRANSFORM" );
+	plugins.push_back( plugin );
+	plugins.push_back( "DEFAULT_LINEAR_GRADIENT" );
+	if( !alphaMask.empty() )
+	{
+		plugins.push_back( "DEFAULT_ALPHA_MASK" );
+	}
+
+    auto success = node->AddPlugins( plugins, localTimeline );
+
+	assert( success ); { success; }
+
 	SetParameter( node->GetPlugin( "linear_gradient" )->GetParameter( "color1" ), TimeType( 0.f ), c1 );
 	SetParameter( node->GetPlugin( "linear_gradient" )->GetParameter( "color2" ), TimeType( 0.f ), c2 );
 	
@@ -317,7 +384,7 @@ model::BasicNodePtr		TestSceneUtils::GradientText			( model::TimelineManager * t
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::ColoredTimer				( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 color, UInt32 fontSize )
+model::BasicNodePtr		TestSceneUtils::ColoredTimer				( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 color, UInt32 fontSize, const std::string & alphaMask )
 {
 	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
     timeEvaluator->AddChild( localTimeline );
@@ -328,6 +395,10 @@ model::BasicNodePtr		TestSceneUtils::ColoredTimer				( model::TimelineManager * 
 	plugins.push_back( "DEFAULT_TRANSFORM" );
 	plugins.push_back( "DEFAULT_COLOR" );
 	plugins.push_back( "DEFAULT_TIMER" );
+	if( !alphaMask.empty() )
+	{
+		plugins.push_back( "DEFAULT_ALPHA_MASK" );
+	}
 
     auto success = node->AddPlugins( plugins, localTimeline );
 
@@ -340,6 +411,11 @@ model::BasicNodePtr		TestSceneUtils::ColoredTimer				( model::TimelineManager * 
     
 	LoadFont( node->GetPlugin( "timer" ), "Assets/Fonts/arial.TTF", fontSize, 0, 0, true );
     
+	if( !alphaMask.empty() )
+	{
+		LoadTexture( node->GetPlugin( "alpha_mask" ), alphaMask );
+	}
+
 	model::SetTimeTimerPlugin( node->GetPlugin( "timer" ), 12333.0f );
     model::StartTimerPlugin( node->GetPlugin( "timer" ) );
 
@@ -348,7 +424,7 @@ model::BasicNodePtr		TestSceneUtils::ColoredTimer				( model::TimelineManager * 
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::GradientTimer			( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize )
+model::BasicNodePtr		TestSceneUtils::GradientTimer			( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask )
 {
 	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
     timeEvaluator->AddChild( localTimeline );
@@ -357,8 +433,12 @@ model::BasicNodePtr		TestSceneUtils::GradientTimer			( model::TimelineManager * 
 
 	std::vector< std::string > plugins;
 	plugins.push_back( "DEFAULT_TRANSFORM" );
-	plugins.push_back( "DEFAULT_GRADIENT" );
 	plugins.push_back( "DEFAULT_TIMER" );
+	plugins.push_back( "DEFAULT_LINEAR_GRADIENT" );
+	if( !alphaMask.empty() )
+	{
+		plugins.push_back( "DEFAULT_ALPHA_MASK" );
+	}
 
     auto success = node->AddPlugins( plugins, localTimeline );
 
@@ -372,6 +452,11 @@ model::BasicNodePtr		TestSceneUtils::GradientTimer			( model::TimelineManager * 
     
 	LoadFont( node->GetPlugin( "timer" ), "Assets/Fonts/arial.TTF", fontSize, 0, 0, true );
     
+	if( !alphaMask.empty() )
+	{
+		LoadTexture( node->GetPlugin( "alpha_mask" ), alphaMask );
+	}
+
 	model::SetTimeTimerPlugin( node->GetPlugin( "timer" ), 12333.0f );
     model::StartTimerPlugin( node->GetPlugin( "timer" ) );
 	
@@ -461,6 +546,16 @@ std::vector< model::IPluginDescriptor * >  TestSceneUtils::DefaultBVPluginDescri
 	descriptors.push_back( new model::DefaultEllipsePluginDesc() );
 	descriptors.push_back( new model::DefaultRoundedRectPluginDesc() );
 	descriptors.push_back( new model::DefaultCube::PluginDesc() );
+	descriptors.push_back( new model::DefaultSimpleCube::PluginDesc() );
+	descriptors.push_back( new model::DefaultSphere::PluginDesc() );
+	descriptors.push_back( new model::DefaultGeosphere::PluginDesc() );
+	descriptors.push_back( new model::DefaultCylinder::DefaultCylinderPluginDesc() );
+	descriptors.push_back( new model::DefaultCone::DefaultConePluginDesc() );
+	descriptors.push_back( new model::DefaultTorus::PluginDesc() );
+	descriptors.push_back( new model::DefaultSpring::PluginDesc() );
+	descriptors.push_back( new model::DefaultCogWheel::PluginDesc() );
+	descriptors.push_back( new model::DefaultPieChartPluginDesc() );
+	descriptors.push_back( new model::DefaultPrismPluginDesc() );
 
     return descriptors;
 }

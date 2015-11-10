@@ -222,19 +222,12 @@ void		DefaultTimerPlugin::SetPrevPlugin		( IPluginPtr prev )
 {
     BasePlugin::SetPrevPlugin( prev );
 
- //   if( prev == nullptr )
-	//{
- //       return;
-	//}
-
-	//auto colorParam = prev->GetParameter( "color" );
- //   if ( colorParam == nullptr )
- //   {
- //       auto bcParam = this->GetParameter( "borderColor" );
- //       SimpleVec4EvaluatorPtr      colorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", bcParam->GetTimeEvaluator() );
-	//	std::static_pointer_cast< DefaultParamValModel >( m_pluginParamValModel->GetPixelShaderChannelModel() )->RegisterAll( colorEvaluator );
- //       colorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 1.f, 1.f, 1.f ), TimeType( 0.f ) );
- //   }
+	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+	auto ctx = m_psc->GetRendererContext();
+    ctx->cullCtx->enabled = false;
+    ctx->alphaCtx->blendEnabled = true;
+    ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
+    ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
 }
 
 // *************************************
@@ -255,16 +248,9 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
 
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
+	m_vaChannel = TextHelper::CreateEmptyVACForText();
 	
 	SetPrevPlugin( prev );
-
-    auto ctx = m_psc->GetRendererContext();
-    ctx->cullCtx->enabled = false;
-    ctx->alphaCtx->blendEnabled = true;
-
-    ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
-    ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
-	HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 
     m_fontSizeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
     m_blurSizeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
@@ -294,13 +280,6 @@ inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
 
 } //anonymous
 
-
-// *************************************
-//
-void DefaultTimerPlugin::InitAttributesChannel( IPluginPtr prev )
-{
-}
-
 // *************************************
 // 
 bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
@@ -328,8 +307,6 @@ bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr
 			txData->SetTexture( 0, txDesc );
 
 			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
-
-            m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
 
             SetTimePatern( GenerateTimePatern( 0.f ) );
 
@@ -377,6 +354,8 @@ void                                DefaultTimerPlugin::Update                  
 
 	BasePlugin::Update( t );
 
+	//assumption that text plugin provides vertices, so no need for backward topology propagation
+	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
 	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 	
     m_vsc->PostUpdate();
@@ -465,8 +444,6 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
     auto alignType =  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
     TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, false );
- 
-	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
 }
 
 ////////////////////////////
@@ -620,9 +597,8 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
         {
             if( comps[ connComp ]->GetNumVertices() == 4 )
             {
-                auto channels = comps[ connComp ]->GetAttributeChannels();
-
-                auto uvChannel = std::static_pointer_cast< Float2AttributeChannel >( AttributeChannel::GetAttrChannel( channels, AttributeSemantic::AS_TEXCOORD ) );
+				auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( comps[ connComp ] );
+                auto uvChannel = std::static_pointer_cast< Float2AttributeChannel >( prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) );
 
                 auto& verts = uvChannel->GetVertices();
 
@@ -755,6 +731,7 @@ void                                DefaultTimerPlugin::SetTime        ( TimeTyp
         SetTimePatern( GenerateTimePatern( time ) );
         m_currentTimeValue = newTime;
         Refresh( !m_started );
+		HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
     }
 }
 

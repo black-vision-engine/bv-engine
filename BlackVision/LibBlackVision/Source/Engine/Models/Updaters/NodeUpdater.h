@@ -33,7 +33,7 @@
 
 #include "Engine/Graphics/Resources/VertexArray.h"
 
-
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 namespace bv {
 
@@ -47,11 +47,14 @@ class IAnimationDescriptor;
 class Texture2DImpl;
 class Texture2DSequenceImpl;
 
+
 namespace model
 {
     class IModelNode;
     class ITransformChannel;
     class IVertexAttributesChannel;
+
+	class HelperVertexAttributesChannel;
 }
 
 typedef std::pair< ITexturesDataConstPtr, ShaderParameters * > TexData2ShaderParams;
@@ -85,8 +88,8 @@ private:
     std::vector< TexData2ShaderParams >         m_texDataMappingVec;
 
 
-	UInt64										m_lastAttributesUpdateID;
-	UInt64										m_lastTopologyUpdateID;
+	UInt64										m_attributesUpdateID;
+	UInt64										m_topologyUpdateID;
 
 
                             NodeUpdater         ( SceneNode * sceneNode, model::IModelNodeConstPtr modelNode ); 

@@ -22,6 +22,7 @@ private:
 
 	std::vector< TextureAssetConstPtr >	m_frames;
     mutable std::vector< bool >				m_frameBiteChanged;
+    mutable bool				m_bitsChanged;
 
     DefaultTextureParams        m_params;
 
@@ -31,7 +32,7 @@ private:
 public:
 
     DefaultAnimationDescriptor      ();
-    DefaultAnimationDescriptor      ( const std::string & name, UInt32 w, UInt32 h, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc );
+    DefaultAnimationDescriptor      ( const std::string & name, UInt32 w, UInt32 h, TextureFormat fmt );
     ~DefaultAnimationDescriptor     ();
 
     virtual unsigned int            NumTextures         () const override;
@@ -39,6 +40,7 @@ public:
 
     virtual bool                    BitsChanged         () const override;
     virtual bool                    BitsChanged         ( UInt32 frameNum ) const override;
+    virtual void                    ResetBitsChanged    () const override;
     virtual void                    ResetBitsChanged    ( UInt32 frameNum ) const override;
 
     virtual UInt32					CurrentFrame        () const override;
@@ -54,17 +56,10 @@ public:
 	
 	virtual SamplerStateModelPtr	GetSamplerState		() const override;
 
- //   virtual TextureWrappingMode     GetWrappingModeX    () const override;
- //   virtual TextureWrappingMode     GetWrappingModeY    () const override;
-	//virtual TextureWrappingMode     GetWrappingModeZ	() const override;
-
- //   virtual TextureFilteringMode    GetFilteringMode    () const override;
- //   
- //   virtual glm::vec4               BorderColor         () const override;
-
     void                            SetBits             ( UInt32 idx, TextureAssetConstPtr handle );
     void                            AddBits             ( TextureAssetConstPtr handle );
 
+    void                            SetBitsChanged      ( bool bitsChanged ) const;
     void                            SetBitsChanged      ( UInt32 frameNum, bool bitsChanged ) const;
     void                            SetCurrentFrame     ( UInt32 frameNum );
 
@@ -76,13 +71,6 @@ public:
     void                            SetFormat           ( TextureFormat fmt );
 
 	void							SetSamplerState		( SamplerStateModelPtr samplerState );
-
-    //void                            SetWrappingModeX    ( TextureWrappingMode wm );
-    //void                            SetWrappingModeY    ( TextureWrappingMode wm );
-
-    //void                            SetFilteringMode    ( TextureFilteringMode fm );
-
-    //void                            SetBorderColor      ( const glm::vec4 & bc );
 
     static DefaultAnimationDescriptorPtr LoadAnimation   ( const AnimationAssetDescConstPtr & frames, const std::string & name );
 

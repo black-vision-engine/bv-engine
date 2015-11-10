@@ -102,6 +102,11 @@ void								DefaultAlphaMaskPlugin::SetPrevPlugin               ( IPluginPtr pre
     BasePlugin::SetPrevPlugin( prev );
     
     InitVertexAttributesChannel();
+
+	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+    auto ctx = m_psc->GetRendererContext();
+    ctx->cullCtx->enabled = false;
+    ctx->alphaCtx->blendEnabled = true;
 }
 
 // *************************************
@@ -118,11 +123,6 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
     
 	SetPrevPlugin( prev );
-
-    auto ctx = m_psc->GetRendererContext();
-    ctx->cullCtx->enabled = false;
-    ctx->alphaCtx->blendEnabled = true;
-	HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 }
 
 // *************************************
@@ -223,7 +223,7 @@ void		DefaultAlphaMaskPlugin::InitVertexAttributesChannel			()
 
     //add alpha mask texture desc
 	//FIXME: is it possible that CC is empty?
-	auto vaChannelDesc = HelperVertexAttributesChannel::CreateVertexAttributesChannelDescriptor( prevCC[ 0 ]->GetAttributeChannels() );
+	VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
 	vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
 	if( !m_vaChannel )
@@ -235,7 +235,6 @@ void		DefaultAlphaMaskPlugin::InitVertexAttributesChannel			()
 		m_vaChannel->ClearAll();
 		m_vaChannel->SetDescriptor( vaChannelDesc );
 	}
-	m_vaChannel->SetLastTopologyUpdateID( prevGeomChannel->GetLastTopologyUpdateID() );
 
     auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
     for( unsigned int i = 0; i < prevCC.size(); ++i )
@@ -275,8 +274,8 @@ void     DefaultAlphaMaskPlugin::RecalculateUVChannel         ()
 	auto cc = m_vaChannel->GetComponents();
 	for( unsigned int i = 0; i < cc.size(); ++i )
 	{
-		auto compChannels = cc[ i ]->GetAttributeChannels();
-		auto posChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_POSITION );
+        auto prevComp = std::static_pointer_cast< const model::ConnectedComponent >( cc[ i ] );
+		auto posChannel = prevComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
 		if( posChannel )
 		{
 			auto pos = std::static_pointer_cast< Float3AttributeChannel >( posChannel )->GetVertices();
@@ -292,9 +291,9 @@ void     DefaultAlphaMaskPlugin::RecalculateUVChannel         ()
 
 	for( unsigned int i = 0; i < cc.size(); ++i )
 	{
-		auto compChannels = cc[ i ]->GetAttributeChannels();
-		auto posChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_POSITION );
-		auto uvChannel = AttributeChannel::GetAttrChannel( compChannels, AttributeSemantic::AS_TEXCOORD, -1 );
+        auto prevComp = std::static_pointer_cast< const model::ConnectedComponent >( cc[ i ] );
+		auto posChannel = prevComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
+		auto uvChannel = prevComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD, -1 );
 		
 		if( posChannel && uvChannel )
 		{
@@ -305,7 +304,6 @@ void     DefaultAlphaMaskPlugin::RecalculateUVChannel         ()
 			if( uvVerts.size() < posChannel->GetNumEntries() )
 			{
 				uvVerts.resize( posChannel->GetNumEntries() );
-				//m_vaChannel->SetNeedsTopologyUpdate( true );
 			}
 
 			auto & posVerts = pos->GetVertices();
