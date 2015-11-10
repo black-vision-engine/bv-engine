@@ -20,7 +20,7 @@ namespace bv {
 	class IVideoInput : public IVideoInputCore
 	{
 	public:
-		virtual model::DefaultTextureDescriptor* GetTexture		() const = 0; // FIXME(???): temporary(?) or not really?
+		virtual model::DefaultTextureDescriptorPtr GetTexture		() const = 0; // FIXME(???): temporary(?) or not really?
 																			// removing it would require changes in the engine or using animation instead of texture interface
 																		// one could also switch from DefaultTextureDescriptor to ITextureDescriptor
 	};

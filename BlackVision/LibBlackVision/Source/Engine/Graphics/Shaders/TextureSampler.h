@@ -66,7 +66,9 @@ private:
 public:
 
                             //FIXME: instead of passing whole array of wraping modes, it should be accessible via accessors (getters and setters)
-                            TextureSampler  ( int id, const std::string & name, SamplerSamplingMode ssm, SamplerFilteringMode sfm, 
+							
+							TextureSampler  ( int id, const std::string & name, SamplerSamplingMode ssm );
+							TextureSampler  ( int id, const std::string & name, SamplerSamplingMode ssm, SamplerFilteringMode sfm, 
                                               SamplerWrappingMode swm[ (int) SamplerWrapDirection::SWD_TOTAL ], const glm::vec4 & borderColor );
                             ~TextureSampler ();
 
@@ -76,10 +78,11 @@ public:
     SamplerSamplingMode     SamplingMode    () const;
     SamplerFilteringMode    FilteringMode   () const;
     SamplerWrappingMode     WrappingMode    ( SamplerWrapDirection direction ) const;
-
     const glm::vec4 &       GetBorderColor  () const;
-    void                    SetBorderColor  ( const glm::vec4 & bc ) const; // FIXME: HACK
-	void					SetWrappingMode ( SamplerWrappingMode mode, SamplerWrapDirection wrap_direction ) const; // @FIXME: HACK
+
+    void                    SetBorderColor  ( const glm::vec4 & );
+	void					SetWrappingMode ( SamplerWrappingMode mode, SamplerWrapDirection wrap_direction );
+	void					SetFilteringMode( SamplerFilteringMode mode );
 
     //FIXME: anisotropy
     //FIXME: LOD bias when LOD mipmapping is implemented

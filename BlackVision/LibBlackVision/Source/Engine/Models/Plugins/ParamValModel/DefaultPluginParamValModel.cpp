@@ -10,7 +10,8 @@ namespace bv { namespace model {
 
 // *******************************
 //
-DefaultPluginParamValModel::DefaultPluginParamValModel      ()
+DefaultPluginParamValModel::DefaultPluginParamValModel      ( ITimeEvaluatorPtr timeEvaluator )
+	: m_timeEvaluator( timeEvaluator )
 {
     m_pluginModel                   = nullptr;
     m_transformChannelModel         = nullptr;
@@ -89,6 +90,13 @@ IParamValModelPtr   DefaultPluginParamValModel::GetVertexShaderChannelModel     
 IParamValModelPtr   DefaultPluginParamValModel::GetGeometryShaderChannelModel   ()
 {
     return GeometryShaderChannelModelImpl();
+}
+
+// *******************************
+//
+ITimeEvaluatorPtr   DefaultPluginParamValModel::GetTimeEvaluator				() const
+{
+	return m_timeEvaluator;
 }
 
 // *******************************

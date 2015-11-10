@@ -36,7 +36,7 @@
 
 namespace {
 
-    std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR", "DEFAULT_GRADIENT" };
+    std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR" };
     std::string GSimplePlugins1[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_TEXTURE" };
     std::string GSimplePlugins2[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_ANIMATION" };
     std::string GSimplePlugins3[] = { "DEFAULT_TRANSFORM", "DEFAULT_COLOR", "DEFAULT_TEXT" };
@@ -823,8 +823,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::Ti
 // TEXTURE plugin
 	if( root->GetPlugin( "texture" ) )
 	{
-        SetParameter( root->GetPlugin( "texture" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 1, 0, 1 ) );
 		success = model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
+        SetParameter( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 1, 0, 1 ) );
 		root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
 		assert( success );
 	}
@@ -2153,15 +2153,13 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 #endif
 	
 #ifdef VERSION_TEXTURE
-
-	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
-	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
-
 	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg" );	//, MipMapFilterType::BOX
 	//success = model::LoadTexture( root->GetPlugin( "texture" ), "Skybox.jpg", MipMapFilterType::BILINEAR );
 	assert( success );
-	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
-	model::SetParameter( texturePlugin->GetParameter("borderColor"), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
+	auto texturePlugin =  root->GetPlugin( "texture" );
+	model::SetParameter( texturePlugin->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+	model::SetParameter( texturePlugin->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+	model::SetParameter( texturePlugin->GetResourceStateModel( "Tex0" )->GetParameter("borderColor"), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
 	//root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
 #endif
 
@@ -2241,13 +2239,12 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineMan
 	
 #ifdef VERSION_TEXTURE
 
-	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
-	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
-
 	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
 	assert( success );
-	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
-	model::SetParameter( texturePlugin->GetParameter("borderColor"), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
+	auto texturePlugin =  root->GetPlugin( "texture" );
+	model::SetParameter( texturePlugin->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+	model::SetParameter( texturePlugin->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+	model::SetParameter( texturePlugin->GetResourceStateModel( "Tex0" )->GetParameter("borderColor"), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
 	//root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
 #endif
 

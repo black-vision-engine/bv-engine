@@ -7,15 +7,15 @@ namespace bv {
 class TexturesDataImpl : public ITexturesData {
 private:
 
-    std::vector< ITextureDescriptor * >     m_textures;
-    std::vector< IAnimationDescriptor * >   m_animations;
+    std::vector< ITextureDescriptorPtr >     m_textures;
+    std::vector< IAnimationDescriptorPtr >   m_animations;
 
 public:
 
     ~TexturesDataImpl   ();
 
-    virtual const std::vector< ITextureDescriptor * > &     GetTextures         () const override;
-    virtual const std::vector< IAnimationDescriptor * > &   GetAnimations       () const override;
+    virtual const std::vector< ITextureDescriptorPtr > &     GetTextures         () const override;
+    virtual const std::vector< IAnimationDescriptorPtr > &   GetAnimations       () const override;
 
     bool                                                    AddTextureFromFile  ( const std::string & textureFile, const std::string & textureName );
 

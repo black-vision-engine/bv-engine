@@ -92,4 +92,12 @@ MemoryChunkConstPtr Texture2DSequenceImpl::GetData          ( UInt32 level ) con
     return m_data[ m_activeTexture ];
 }
 
+// *********************************
+//  
+void				Texture2DSequenceImpl::Clear          ()
+{
+	m_data.clear();
+	m_activeTexture = 0;
+}
+
 } //bv

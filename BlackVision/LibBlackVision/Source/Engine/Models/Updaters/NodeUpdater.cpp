@@ -50,6 +50,8 @@ NodeUpdater::NodeUpdater     ( SceneNode * sceneNode, model::IModelNodeConstPtr 
     , m_modelNode( modelNode )
     , m_renderable( nullptr )
     , m_rendererContext( nullptr )
+	, m_attributesUpdateID( 0 )
+	, m_topologyUpdateID( 0 )
 {
     assert( sceneNode != nullptr );
     assert( modelNode != nullptr );

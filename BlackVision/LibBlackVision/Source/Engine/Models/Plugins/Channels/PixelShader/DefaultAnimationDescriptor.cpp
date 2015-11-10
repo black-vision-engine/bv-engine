@@ -15,16 +15,12 @@ DefaultAnimationDescriptor::DefaultAnimationDescriptor        ()
 
 // *******************************
 //
-DefaultAnimationDescriptor::DefaultAnimationDescriptor        ( const std::string & name, UInt32 w, UInt32 h, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc )
+DefaultAnimationDescriptor::DefaultAnimationDescriptor        ( const std::string & name, UInt32 w, UInt32 h, TextureFormat fmt )
 {
     SetName( name );
     SetWidth( w );
     SetHeight( h );
     SetFormat( fmt );
-    SetWrappingModeX( wmx );
-    SetWrappingModeY( wmy );
-    SetFilteringMode( fm );
-    SetBorderColor( bc );
     SetCurrentFrame( 0 ); //current
     SetCurrentFrame( 0 ); //previous
 }
@@ -55,9 +51,7 @@ MemoryChunkConstPtr      DefaultAnimationDescriptor::GetBits            ( unsign
 //
 bool                    DefaultAnimationDescriptor::BitsChanged         () const
 {
-    //FIXME: implement
-    assert( false );
-    return false;
+	return m_bitsChanged;
 }
 
 // *******************************
@@ -67,6 +61,13 @@ bool                    DefaultAnimationDescriptor::BitsChanged         ( unsign
     //FIXME: implement
     assert( false && "Implement" );
     return m_frameBiteChanged[ frameNum ];
+}
+
+// *******************************
+//
+void                    DefaultAnimationDescriptor::ResetBitsChanged    () const
+{
+    SetBitsChanged( false );
 }
 
 // *******************************
@@ -131,39 +132,11 @@ TextureFormat           DefaultAnimationDescriptor::GetFormat           () const
     return m_params.GetFormat();
 }
 
-// *******************************
+// **************************
 //
-TextureWrappingMode     DefaultAnimationDescriptor::GetWrappingModeX    () const
+SamplerStateModelPtr    DefaultAnimationDescriptor::GetSamplerState     () const
 {
-    return m_params.GetWrappingModeX();
-}
-
-// *******************************
-//
-TextureWrappingMode     DefaultAnimationDescriptor::GetWrappingModeZ	() const
-{
-	return m_params.GetWrappingModeZ();
-}
-
-// *******************************
-//
-TextureWrappingMode     DefaultAnimationDescriptor::GetWrappingModeY    () const
-{
-    return m_params.GetWrappingModeY();
-}
-
-// *******************************
-//
-TextureFilteringMode    DefaultAnimationDescriptor::GetFilteringMode    () const
-{
-    return m_params.GetFilteringMode();
-}
-
-// *******************************
-//
-glm::vec4               DefaultAnimationDescriptor::BorderColor         () const
-{
-    return m_params.BorderColor();
+	return m_params.GetSamplerState();
 }
 
 // *******************************
@@ -214,6 +187,13 @@ void                     DefaultAnimationDescriptor::AddBits            ( Textur
 
 // *******************************
 //
+void                     DefaultAnimationDescriptor::SetBitsChanged      ( bool bitsChanged ) const
+{
+	m_bitsChanged = bitsChanged;
+}
+
+// *******************************
+//
 void                     DefaultAnimationDescriptor::SetBitsChanged      ( unsigned int frameNum, bool bitsChanged ) const
 {
     //FIXME: implement
@@ -257,37 +237,16 @@ void                    DefaultAnimationDescriptor::SetFormat           ( Textur
     m_params.SetFormat( fmt );
 }
 
-// *******************************
+// **************************
 //
-void                    DefaultAnimationDescriptor::SetWrappingModeX    ( TextureWrappingMode wm )
+void                     DefaultAnimationDescriptor::SetSamplerState	( SamplerStateModelPtr samplerState )
 {
-    m_params.SetWrappingModeX( wm );
+	m_params.SetSamplerState( samplerState );
 }
 
 // *******************************
 //
-void                    DefaultAnimationDescriptor::SetWrappingModeY    ( TextureWrappingMode wm )
-{
-    m_params.SetWrappingModeY( wm );
-}
-
-// *******************************
-//
-void                    DefaultAnimationDescriptor::SetFilteringMode    ( TextureFilteringMode fm )
-{
-    m_params.SetFilteringMode( fm );
-}
-
-// *******************************
-//
-void                    DefaultAnimationDescriptor::SetBorderColor      ( const glm::vec4 & bc )
-{
-    m_params.SetBorderColor( bc );
-}
-
-// *******************************
-//
-DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const AnimationAssetDescConstPtr & animResDesc, const std::string & name )
+DefaultAnimationDescriptorPtr DefaultAnimationDescriptor::LoadAnimation  ( const AnimationAssetDescConstPtr & animResDesc, const std::string & name )
 {
 	auto animRes = LoadTypedAsset<AnimationAsset>( animResDesc );
 
@@ -311,8 +270,8 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
 	auto fmt	= texResource->GetOriginal()->GetFormat();
     auto w		= texResource->GetOriginal()->GetWidth();
     auto h		= texResource->GetOriginal()->GetHeight();
-
-    DefaultAnimationDescriptor * retDesc = new DefaultAnimationDescriptor( name, w, h, fmt, TextureWrappingMode::TWM_CLAMP_BORDER, TextureWrappingMode::TWM_CLAMP_BORDER, TextureFilteringMode::TFM_LINEAR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
+	
+	auto retDesc = std::make_shared< DefaultAnimationDescriptor >( name, w, h, fmt );
 
     retDesc->AddBits( texResource );
 
@@ -333,10 +292,7 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
 
         if( lfmt != fmt || lw != w || lh != h )
         {
-            delete retDesc;
-            
             retDesc = nullptr;
-            
             break;
         }
         else
@@ -344,6 +300,7 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
             retDesc->AddBits( texResource );
         }
     }
+    retDesc->SetBitsChanged( true );
 
     return retDesc;
 }

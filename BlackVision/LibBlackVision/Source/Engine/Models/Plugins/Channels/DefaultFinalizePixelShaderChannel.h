@@ -25,7 +25,12 @@ public:
         DefaultFinalizePixelShaderChannel       ( IPixelShaderChannelPtr channel, const std::string & shadersDir );
         ~DefaultFinalizePixelShaderChannel      ();
 
-        virtual RendererContextConstPtr  GetRendererContext  () const override;
+        IPixelShaderChannelPtr				GetChannel					() const;
+
+        virtual RendererContextConstPtr		GetRendererContext			() const override;
+
+		virtual UInt64						GetTexturesDataUpdateID		() const override;
+		virtual UInt64						GetRendererContextUpdateID	() const override;
 
 protected:
 

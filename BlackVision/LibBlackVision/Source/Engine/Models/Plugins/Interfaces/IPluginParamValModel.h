@@ -24,6 +24,8 @@ public:
     virtual     IParamValModelPtr   GetVertexShaderChannelModel     () = 0;
     virtual     IParamValModelPtr   GetGeometryShaderChannelModel   () = 0;
 
+	virtual		ITimeEvaluatorPtr	GetTimeEvaluator				() const = 0;
+
     virtual     ~IPluginParamValModel   () {} 
 
 };

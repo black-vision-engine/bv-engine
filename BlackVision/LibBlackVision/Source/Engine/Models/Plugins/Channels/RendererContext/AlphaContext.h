@@ -57,8 +57,9 @@ public:
 
 public:
 
-    AlphaContext();
+							AlphaContext	();
 
+    AlphaContext *			Clone			() const;
 };
 
 } //model

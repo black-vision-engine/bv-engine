@@ -32,7 +32,7 @@ public:
 
     /////////////////////////////////////
     // This function creates empty VertexAttributeChannel for text with proper attribute descriptor. ( position, texture cord )
-    static model::VertexAttributesChannel * CreateEmptyVACForText   ();
+    static model::VertexAttributesChannelPtr CreateEmptyVACForText   ();
 
     /////////////////////////////////////
     // This function builds VertexAttributeChannel for text and fontAsset.

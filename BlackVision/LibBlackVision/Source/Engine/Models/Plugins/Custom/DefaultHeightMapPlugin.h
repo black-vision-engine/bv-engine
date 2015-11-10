@@ -53,14 +53,10 @@ private:
 
 private:
 
-    DefaultPluginParamValModelPtr   m_paramValModel;
-
     DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;
 
     VertexAttributesChannelPtr      m_vaChannel;
-
-    DefaultTexturesDataPtr          m_texturesData;
 
     ParamFloatPtr                   m_hmHeightScale;
     ParamFloatPtr                   m_GroundLevelHeight;
@@ -92,7 +88,6 @@ public:
 private:
 
     void                                        InitAttributesChannel       ( IPluginPtr prev );
-    void                                        SetTextureParams            ( TextureSlot slot, DefaultTextureDescriptor * txDesc ) const;
 
     float                                       DecodeFixedPoint            ( const unsigned char * data ) const;
     float                                       DecodeHeight                ( const unsigned char * data, float sclHeight, float groundLevel, float maxHeight ) const;

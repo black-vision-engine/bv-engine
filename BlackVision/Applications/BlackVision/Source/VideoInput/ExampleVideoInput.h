@@ -7,7 +7,7 @@ namespace bv {
     {
         float m_fps;
         MemoryChunkPtr bits;
-        model::DefaultTextureDescriptor* desc;
+        model::DefaultTextureDescriptorPtr desc;
 
         int m_maskAnd;
         int m_maskOr;
@@ -25,10 +25,10 @@ namespace bv {
         virtual unsigned int            GetHeight			() const;
         virtual TextureFormat           GetFormat			() const;
 
-        virtual model::DefaultTextureDescriptor* GetTexture		() const;
+        virtual model::DefaultTextureDescriptorPtr GetTexture		() const;
         virtual void					Update				() override;
 
-        virtual model::DefaultTextureDescriptor* GetTextureDesc	() const; // THIS IS SO UGLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        virtual model::DefaultTextureDescriptorPtr GetTextureDesc	() const; // THIS IS SO UGLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     };
 
 }

@@ -15,6 +15,7 @@ public:
 
     DepthContext();
 
+    DepthContext *			Clone			() const;
 };
 
 } //model

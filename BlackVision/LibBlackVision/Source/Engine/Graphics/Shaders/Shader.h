@@ -22,7 +22,7 @@ protected:
     ShaderParameters *        m_parameters;
     std::string               m_programSurce;
     
-    std::vector< const TextureSampler * >   m_textureSamplers;
+    std::vector< TextureSampler * >   m_textureSamplers;
 
 protected:
 
@@ -33,13 +33,13 @@ public:
 
     ShaderParameters *  GetParameters       ();
 
-    void                AddTextureSampler   ( const TextureSampler * sampler );
+    void                AddTextureSampler   ( TextureSampler * sampler );
 
     const std::string & ProgramSource       () const;
 
     void                Update              ( RenderableEntity * renderable, Camera * camera );
 
-    const std::vector< const TextureSampler * > &  Samplers  () const;
+    const std::vector< TextureSampler * > &  Samplers  () const;
 
 };
 

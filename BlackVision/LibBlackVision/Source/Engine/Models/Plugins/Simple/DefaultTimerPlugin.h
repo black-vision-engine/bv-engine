@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Assets/Asset.h"
@@ -122,7 +121,6 @@ private:
 
     std::wstring                    m_timePatern;
     TimeInfo                        m_timePaternInfo;
-    DefaultPluginParamValModelPtr   m_paramValModel;
 
     bool                            CheckTimeConsistency ( const std::wstring & time ) const;
 
@@ -155,9 +153,6 @@ private:
 
 private:
 
-    void                                        InitAttributesChannel       ( IPluginPtr prev );
-
-
 	friend bool            SetTimeTimerPlugin( IPluginPtr timerPlugin, TimeType time );
 	friend bool            StartTimerPlugin( IPluginPtr timerPlugin );
 	friend bool            StopTimerPlugin( IPluginPtr timerPlugin );
@@ -166,6 +161,8 @@ private:
 public:
 	explicit               DefaultTimerPlugin          ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
 							~DefaultTimerPlugin         ();
+
+    virtual void			SetPrevPlugin               ( IPluginPtr plugin ) override;
 };
 
 

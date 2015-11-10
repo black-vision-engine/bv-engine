@@ -47,6 +47,7 @@ public:
     virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const override;
     virtual IStatedValuePtr                     GetState                    ( const std::string & name ) const;
 
+	virtual IParamValModelPtr					GetResourceStateModel		( const std::string & name ) const override;
 
     virtual void                                Update                      ( TimeType t );
 
@@ -98,7 +99,24 @@ template< class Iface >
 void BasePlugin< Iface >::Update  ( TimeType t )
 {
     { t; } // FIXME: suppress unused warning
-    assert( !"Implement in derived class" );
+    
+	m_pluginParamValModel->Update();
+	
+	if( GetPixelShaderChannel() )
+	{
+		auto txData = GetPixelShaderChannel()->GetTexturesData();
+		for( auto tx : txData->GetTextures() )
+		{
+			tx->GetSamplerState()->Update();
+		}
+
+		for( auto tx : txData->GetAnimations() )
+		{
+			tx->GetSamplerState()->Update();
+		}
+	}
+
+    //assert( !"Implement in derived class" );
 }
 
 // *******************************
@@ -182,6 +200,34 @@ IStatedValuePtr             BasePlugin< Iface >::GetState               ( const 
     }
 
     return nullptr;
+}
+
+// *******************************
+//
+template< class Iface >
+IParamValModelPtr				BasePlugin< Iface >::GetResourceStateModel		 ( const std::string & name ) const
+{
+	//FIXME: maybe this should be implemented directly in plugin
+	if( GetPixelShaderChannel() )
+	{
+		auto txData = GetPixelShaderChannel()->GetTexturesData();
+		for( auto tx : txData->GetTextures() )
+		{
+			if( tx->GetName() == name )
+			{
+				return tx->GetSamplerState();
+			}
+		}
+
+		for( auto anim : txData->GetAnimations() )
+		{
+			if( anim->GetName() == name )
+			{
+				return anim->GetSamplerState();
+			}
+		}
+	}
+	return nullptr;
 }
 
 // *******************************

@@ -33,6 +33,8 @@ public:
 
     virtual MemoryChunkConstPtr GetData                 ( UInt32 level = 0 ) const override;
 
+	void						Clear					();
+
 };
 
 DEFINE_PTR_TYPE(Texture2DSequenceImpl)
