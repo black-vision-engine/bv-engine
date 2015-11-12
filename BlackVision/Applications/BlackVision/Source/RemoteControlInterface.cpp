@@ -1047,13 +1047,7 @@ void RemoteControlInterface::OnSetParam ( bv::IEventPtr evt )
 				 wstring value = evtSetParam->Value;
 				 
 				 float float_value = 1.0f;
-
-				 try{
-					float_value =  boost::lexical_cast<float>(value);
-				 }catch(boost::bad_lexical_cast&)
-				 {
-					float_value = 0.0f;
-				 }
+                 float_value =  stof(value);
 
 				 SetParameter( alpha_param, (bv::TimeType)evtSetParam->time, float_value);
             }
@@ -1105,14 +1099,8 @@ void RemoteControlInterface::OnSetParam ( bv::IEventPtr evt )
 
 					 wstring value = evtSetParam->Value;
 				 
-					 float float_value = 1.0f;
-
-					 try{
-						float_value =  boost::lexical_cast<float>(value);
-					 }catch(boost::bad_lexical_cast&)
-					 {
-						float_value = 0.0f;
-					 }
+					 float float_value = 0.0f;
+				     float_value =  stof(value);
 
 					 SetParameter( param, (bv::TimeType)evtSetParam->time, float_value);
 				}
@@ -1225,14 +1213,8 @@ void RemoteControlInterface::OnWidgetCmd ( bv::IEventPtr evt )
 
 					wstring value = evtWidget->Value;
 				 
-					float float_value = 1.0f;
-
-					try{
-					float_value =  boost::lexical_cast<float>(value);
-					}catch(boost::bad_lexical_cast&)
-					{
-					float_value = 0.0f;
-					}
+					float float_value = 0.0f;
+					float_value =  stof(value);
 
 					SetParameter( param, (bv::TimeType)evtWidget->Time, float_value);
 			}

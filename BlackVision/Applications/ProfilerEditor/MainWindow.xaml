@@ -73,7 +73,7 @@
 
 
     <Grid Name="mainWindowGrid">
-        <Menu IsMainMenu="True" VerticalAlignment="Top" HorizontalAlignment="Left" Height="20" Width="500">
+        <Menu IsMainMenu="True" VerticalAlignment="Top" HorizontalAlignment="Left" Height="20" Width="1092" Panel.ZIndex="99">
             <MenuItem Header="Options">
                 <MenuItem Header="Profiling Tool" Name="ProfilingTool" Click="ProfilingTool_Click"></MenuItem>
             </MenuItem>
@@ -81,12 +81,16 @@
         
         <ScrollViewer VerticalScrollBarVisibility="Auto">        
             <Grid Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="29*"/>
+                    <ColumnDefinition Width="1063*"/>
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <Expander Header="Profiler" Height="Auto" Width="1069" IsExpanded="True" Grid.Row="0">
+                <Expander Header="Profiler" Height="Auto" Width="1069" IsExpanded="True" Grid.Row="0" Grid.ColumnSpan="2" Margin="12,0">
                     <Grid Height="480">
                         <Button x:Name="startButton" Content="Start BlackVision" HorizontalAlignment="Left" Margin="930,0,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="0.701,-0.712" Click="startButton_Click"/>
                         <Button x:Name="endServer" Content="End BlackVision" HorizontalAlignment="Left" Margin="930,27,0,0" VerticalAlignment="Top" Width="100" Click="endServer_Click"/>
@@ -162,7 +166,7 @@
                         <Button Content="Expand Tree" HorizontalAlignment="Left" Margin="930,197,0,0" VerticalAlignment="Top" Width="106" Click="ExpandButton_Click"/>
                     </Grid>
                 </Expander>
-                <Expander Header="Black Vision Client" Width="1069" Grid.Row="1" Margin="0,0,0,0">
+                <Expander Header="Black Vision Client" Width="1069" Grid.Row="1" Margin="12,0" Grid.ColumnSpan="2">
                     <Grid Height="546">
                         <TextBox Name="CommandTextBox" AcceptsReturn="True" HorizontalAlignment="Left" VerticalAlignment="Top" Height="493" TextWrapping="Wrap" Text="Event to send" Width="396" Margin="24,10,0,-190"/>
                         <TextBox Name="ResponseTextBox" AcceptsReturn="True" HorizontalAlignment="Left" VerticalAlignment="Top" Height="493" TextWrapping="Wrap" Text="" Width="396" Margin="647,10,0,-190"/>

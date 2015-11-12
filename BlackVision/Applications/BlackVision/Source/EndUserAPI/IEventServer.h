@@ -14,7 +14,8 @@ struct ResponseMsg
     int socketID;
     bool sent;
 
-    ResponseMsg(){sent=false;}
+    ResponseMsg()
+    { sent = false; }
 };
 
 
