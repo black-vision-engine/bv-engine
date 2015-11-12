@@ -4,6 +4,7 @@
 
 #include "Engine/Models/NodeEffects/ModelNodeEffectDefault.h"
 
+#include "Serialization/XML/XMLSerializer.h"
 
 namespace bv {
 
@@ -29,6 +30,15 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
 
     switch( c )
     {
+        case 's': 
+        {
+            auto sob = new SerializeObject();
+            logic->GetBVScene()->Serialize( *sob );
+            sob->Save( "test.xml" );
+            delete sob; 
+
+            break;
+        }
         case '1':
         {
             m_curSelectedNode = NodeEffectType::NET_DEFAULT;
@@ -337,7 +347,7 @@ model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetNodeByPath       ( BV
 //
 model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetVanillaNode      ( BVAppLogic * logic )
 {
-    auto node = GetNodeByPath( logic, "root/vanilla" );
+    auto node = GetNodeByPath( logic, "main root/root/vanilla" );
 
     return node;
 }
@@ -346,7 +356,7 @@ model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetVanillaNode      ( BV
 //
 model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetAlphaMaskNode    ( BVAppLogic * logic )
 {
-    auto node = GetNodeByPath( logic, "root/alpha_mask" );
+    auto node = GetNodeByPath( logic, "main root/root/alpha_mask" );
 
     return node;
 }
@@ -355,7 +365,7 @@ model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetAlphaMaskNode    ( BV
 //
 model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetNodeMaskNode     ( BVAppLogic * logic )
 {
-    auto node = GetNodeByPath( logic, "root/node_mask" );
+    auto node = GetNodeByPath( logic, "main root/root/node_mask" );
 
     return node;
 }
@@ -364,7 +374,7 @@ model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetNodeMaskNode     ( BV
 //
 model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetWireframeNode    ( BVAppLogic * logic )
 {
-    auto node = GetNodeByPath( logic, "root/overlay_alpha" );
+    auto node = GetNodeByPath( logic, "main root/root/overlay_alpha" );
 
     return node;
 }
@@ -421,7 +431,7 @@ model::IModelNodeEffectPtr  TestGlobalEfectKeyboardHandler::GetNodeWireframeEffe
 //
 model::BasicNodePtr  TestGlobalEfectKeyboardHandler::GetWireframeNode               ( BVAppLogic * logic, unsigned int idx )
 {
-    std::string nodes[] = {"root/overlay_alpha", "root/overlay_alpha/overlay_alpha_solid", "root/overlay_alpha/overlay_alpha_tex"};
+    std::string nodes[] = {"main root/root/overlay_alpha", "main root/root/overlay_alpha/overlay_alpha_solid", "main root/root/overlay_alpha/overlay_alpha_tex"};
 
     auto node = GetNodeByPath( logic, nodes[ idx % 3 ] );
 

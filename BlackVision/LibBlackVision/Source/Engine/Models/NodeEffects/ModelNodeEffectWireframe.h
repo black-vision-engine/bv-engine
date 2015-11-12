@@ -14,6 +14,9 @@ public:
 
                             ModelNodeEffectWireframe( ITimeEvaluatorPtr timeEvaluator );
 
+        virtual void            Serialize       ( ISerializer& ser ) const;
+        static ISerializablePtr Create          ( const IDeserializer& deser );
+
         virtual void            Update              ( TimeType t ) override;
 
         virtual NodeEffectType  GetType             () const override;

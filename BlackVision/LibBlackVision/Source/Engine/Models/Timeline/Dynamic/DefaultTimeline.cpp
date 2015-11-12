@@ -102,7 +102,7 @@ ISerializablePtr                     DefaultTimeline::Create              ( cons
     for( auto child : children )
         te->AddChild( child );
 
-    if( SerializationHelper::String2T< bool >( deser.GetAttribute( "play" ), true ) )
+    if( SerializationHelper::String2T< bool >( deser.GetAttribute( "play" ), false ) )
         te->Play();
 
     return te;

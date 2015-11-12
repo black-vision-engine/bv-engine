@@ -2,9 +2,20 @@
 
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 
+#include "Serialization/SerializationHelper.h"
 
 namespace bv { namespace model {
 
+
+// ********************************
+//
+void            ModelNodeEffectAlphaMask::Serialize       ( ISerializer& ser ) const
+{
+ser.EnterChild( "effect" );
+    ser.SetAttribute( "type", SerializationHelper::T2String< NodeEffectType >( GetType() ) );
+    m_paramAlpha->Serialize( ser );
+ser.ExitChild();
+}
 
 // ********************************
 //
