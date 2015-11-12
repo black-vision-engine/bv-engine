@@ -40,7 +40,7 @@ bool    LoadTexture     ( model::IPluginPtr plugin, const Path & projectName, co
     return plugin->LoadResource( TextureAssetDesc::Create( texDesc ) );
 }
 
-bv::model::BasicNodeConstPtr CreateTestScene0()
+bv::model::SceneModelPtr CreateTestScene0()
 {
     std::vector< model::IPluginDescriptor * > descriptors;
 
@@ -72,7 +72,7 @@ bv::model::BasicNodeConstPtr CreateTestScene0()
     success = LoadTexture( root->GetPlugin( "texture" ), "proj00", "flagi/pol.jpg" );
     assert( success );    
 
-    return root;
+    return bv::model::SceneModel::Create( "textured_rect", model::TimelineManager::GetInstance(), root );
 }
 
 TEST( CleanAll, ProjectManager )

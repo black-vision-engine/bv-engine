@@ -205,6 +205,18 @@ StringVector            BVScene::ListScenesNames     () const
 
 // *******************************
 //
+model::SceneModelPtr    BVScene::GetScene            ( const std::string & name ) const
+{
+    for( auto it = m_pSceneModelVec.begin(); it != m_pSceneModelVec.end(); ++it )
+    {
+        if( (*it)->m_name == name )
+        {
+            return (*it);
+        }
+    }
+
+    return nullptr;
+}
 //const std::string &     BVScene::GetName            () const
 //{
 //    return m_pSceneModel->m_name;

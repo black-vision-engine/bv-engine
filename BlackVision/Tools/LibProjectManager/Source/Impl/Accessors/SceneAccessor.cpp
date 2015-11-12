@@ -48,7 +48,7 @@ SceneDescriptor	SceneAccessor::GetSceneDesc( const Path & path ) const
 
 // ********************************
 //
-model::BasicNodeConstPtr	SceneAccessor::GetScene( const Path & path ) const
+model::SceneModelPtr	SceneAccessor::GetScene( const Path & path ) const
 {
     return SceneDescriptor::LoadScene( path, model::TimelineManager::GetInstance() );
 }
@@ -62,9 +62,9 @@ void			SceneAccessor::AddSceneFromFile( const Path & srcPath, const Path & path 
 
 // ********************************
 //
-void			SceneAccessor::AddScene( const model::BasicNodeConstPtr & scene, const Path & path ) const
+void			SceneAccessor::AddScene( const model::SceneModelPtr & scene, const Path & path ) const
 {
-	SceneDescriptor::SaveScene( scene, model::TimelineManager::GetInstance(), m_rootDir / path );
+    SceneDescriptor::SaveScene( scene, scene->m_pTimelineManager.get(), m_rootDir / path );
 }
 
 // ********************************
@@ -108,7 +108,7 @@ void			SceneAccessor::ImportScene( std::istream & in, const Path & importToProje
             model::TimelineManager::SetInstance( &newTMInstance );
             auto scene = SceneDescriptor::LoadScene( in, size, &newTMInstance );
         
-            auto sceneAssertDescs = ListSceneAssetsDescs( scene );
+            auto sceneAssertDescs = ListSceneAssetsDescs( scene->m_pModelSceneRoot );
         
             std::set< AssetDescConstPtr > assetsDescsSet;
             assetsDescsSet.insert( sceneAssertDescs.begin(), sceneAssertDescs.end() );

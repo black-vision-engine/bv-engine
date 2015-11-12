@@ -61,6 +61,7 @@ public:
 
     void                    AddScene            ( model::SceneModelPtr sceneModel );
     void                    RemoveScene         ( const std::string & name );
+    model::SceneModelPtr    GetScene            ( const std::string & name ) const;
     StringVector            ListScenesNames     () const;
 
     void                    Serialize           ( ISerializer& ser ) const;
@@ -75,8 +76,6 @@ public:
     SceneNode *             GetEngineSceneRoot  ()  const;
 
     BVSceneEditor *         GetSceneEditor      ();
-
-    //const std::string &     GetName             ()  const;
 
     static BVScenePtr       CreateFakeSceneForTestingOnly( model::SceneModelPtr sceneModel, Camera * cam, model::ITimeEvaluatorPtr timeEvaluator );
 

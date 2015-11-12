@@ -161,9 +161,9 @@ void						ProjectManager::RemoveUnusedAssets	()
 
 // ********************************
 //
-void						ProjectManager::AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath )
+void						ProjectManager::AddScene			( const model::SceneModelPtr & scene, const Path & projectName, const Path & outPath )
 {
-	m_impl->AddScene( sceneRootNode, projectName, outPath );
+	m_impl->AddScene( scene, projectName, outPath );
 }
 
 // ********************************
@@ -259,14 +259,14 @@ SceneDescriptor			    ProjectManager::GetSceneDesc		( const Path & path ) const
 
 // ********************************
 //
-model::BasicNodeConstPtr     ProjectManager::LoadPreset          ( const Path & projectName, const Path & path ) const
+model::SceneModelPtr        ProjectManager::LoadPreset          ( const Path & projectName, const Path & path ) const
 {
     return m_impl->LoadPreset( projectName, path );
 }
 
 // ********************************
 //
-void                        ProjectManager::SavePreset          ( const model::BasicNodeConstPtr & node, const Path & projectName, const Path & path ) const
+void                        ProjectManager::SavePreset          ( const model::SceneModelPtr & node, const Path & projectName, const Path & path ) const
 {
     m_impl->SavePreset( node, projectName, path );
 }

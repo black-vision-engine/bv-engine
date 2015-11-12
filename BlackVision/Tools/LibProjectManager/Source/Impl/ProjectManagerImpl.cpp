@@ -308,7 +308,7 @@ void						ProjectManagerImpl::RemoveUnusedAssets	() const
 
 // ********************************
 //
-void						ProjectManagerImpl::AddScene			( const model::BasicNodeConstPtr & scene, const Path & projectName, const Path & outPath )
+void						ProjectManagerImpl::AddScene			( const model::SceneModelPtr & scene, const Path & projectName, const Path & outPath )
 {
 	auto pathInScenes = TranslateToPathCategory( projectName, outPath );
 
@@ -827,7 +827,7 @@ Path						ProjectManagerImpl::Location2Path( const Location & loc ) const
 
 // ********************************
 //
-model::BasicNodeConstPtr    ProjectManagerImpl::LoadPreset          ( const Path & projectName, const Path & path ) const
+model::SceneModelPtr        ProjectManagerImpl::LoadPreset          ( const Path & projectName, const Path & path ) const
 {
     auto pathInCategory = TranslateToPathCategory( projectName, path );
     return m_presetAccessor->LoadPreset( pathInCategory );
@@ -835,7 +835,7 @@ model::BasicNodeConstPtr    ProjectManagerImpl::LoadPreset          ( const Path
 
 // ********************************
 //
-void                        ProjectManagerImpl::SavePreset          ( const model::BasicNodeConstPtr & node, const Path & projectName, const Path & path ) const
+void                        ProjectManagerImpl::SavePreset          ( const model::SceneModelPtr & node, const Path & projectName, const Path & path ) const
 {
     auto pathInCategory = TranslateToPathCategory( projectName, path );
     return m_presetAccessor->SavePreset( node, pathInCategory );

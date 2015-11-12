@@ -158,7 +158,7 @@ void BVAppLogic::LoadScenes( const PathVec & pathVec )
     for( auto p : pathVec )
     {
         auto scene = SceneDescriptor::LoadScene( ProjectManager::GetInstance()->ToAbsPath( p ), GetTimelineManager() );
-        sceneModelVec.push_back( SceneModel::Create( p.Str(), GetTimelineManager(), std::const_pointer_cast< model::BasicNode >( scene ) ) );
+        sceneModelVec.push_back( scene );
     }
 
     Camera * cam = nullptr;

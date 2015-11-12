@@ -123,7 +123,7 @@ ISerializablePtr BasicNode::Create( const IDeserializer& dob )
     
     auto node = Create( name, timeEvaluator );
 
-    node->m_visible = dob.GetAttribute( "visible" ) == "true" ? true : false;
+    node->m_visible = dob.GetAttribute( "visible" ) == "false" ? false : true;
 
 // plugins
     auto plugins = SerializationHelper::DeserializeObjectLoadArrayImpl< BasePlugin< IPlugin > >( dob, "plugins" );
