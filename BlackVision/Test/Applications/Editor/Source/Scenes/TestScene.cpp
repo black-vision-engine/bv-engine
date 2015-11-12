@@ -396,10 +396,10 @@ void					TestScene::InitTestEditor			()
 	//InitOrderGradientPluginTest();
 
 	//InitColoredTextTest();
-	//InitGradientTextTest();
+	InitGradientTextTest();
 	
 	//InitColoredTimerTest();
-	InitGradientTimerTest();
+	//InitGradientTimerTest();
 
 	//InitColoredGeometryTest();
 	//InitTexturedGeometryTest();
@@ -889,7 +889,6 @@ void					TestScene::InitGradientTextTest			()
 
 		auto txt = TestSceneUtils::GradientText( m_timelineManager, m_timeEvaluator, TXT_NODE, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 0.f, 1.f, 0.f, 1.f ), 60/*, TestSceneUtils::ALPHA_MASK_PATH*/ );
 		SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
-		txt->Update( 0 );
 
 		bool success = true;
 
@@ -1092,7 +1091,7 @@ void					TestScene::InitGradientTimerTest			()
 	{
 		auto editor = m_scene->GetSceneEditor();
 
-		auto tmr = TestSceneUtils::GradientTimer( m_timelineManager, m_timeEvaluator, TMR_NODE, glm::vec4( 1.f, 1.f, 0.f, 1.f ), glm::vec4( 1.f, 0.f, 1.f, 1.f ), 60/*, TestSceneUtils::ALPHA_MASK_PATH*/ );
+		auto tmr = TestSceneUtils::GradientTimer( m_timelineManager, m_timeEvaluator, TMR_NODE, glm::vec4( 1.f, 1.f, 0.f, 1.f ), glm::vec4( 1.f, 0.f, 1.f, 1.f ), 60, TestSceneUtils::ALPHA_MASK_PATH );
 		SetParameterTranslation( tmr->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, 0.f, 0.f ) );
 
 		bool success = true;
@@ -1167,33 +1166,33 @@ void					TestScene::InitGradientTimerTest			()
 	m_testSteps.push_back( add );
 	m_testSteps.push_back( []{} ); //empty step
 	
-	//m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TMR_NODE, "linear_gradient", 1 ); } );
-	//m_testSteps.push_back( [&]{ SwapPlugins( "linear_gradient", 2, TMR_NODE, "solid color", 2 ); } );
+	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TMR_NODE, "linear_gradient", 1 ); } );
+	m_testSteps.push_back( [&]{ SwapPlugins( "linear_gradient", 2, TMR_NODE, "solid color", 2 ); } );
 
-	//m_testSteps.push_back( [&]
-	//{ 
-	//	auto root = m_scene->GetModelSceneRoot();
-	//	auto child = root->GetChild( TMR_NODE );
-	//	model::SetTimeTimerPlugin( child->GetPlugin( "timer" ), 15.0f );
-	//	model::StartTimerPlugin( child->GetPlugin( "timer" ) );
-	//});
-	//m_testSteps.push_back( []{} ); //empty step
+	m_testSteps.push_back( [&]
+	{ 
+		auto root = m_scene->GetModelSceneRoot();
+		auto child = root->GetChild( TMR_NODE );
+		model::SetTimeTimerPlugin( child->GetPlugin( "timer" ), 15.0f );
+		model::StartTimerPlugin( child->GetPlugin( "timer" ) );
+	});
+	m_testSteps.push_back( []{} ); //empty step
 
-	//m_testSteps.push_back( [&]
-	//{ 
-	//	auto root = m_scene->GetModelSceneRoot();
-	//	auto child = root->GetChild( TMR_NODE );
-	//	LoadFont( child->GetPlugin( "timer" ), "Assets/Fonts/couri.TTF", 40, 0, 0, true );
-	//});
-	//m_testSteps.push_back( []{} ); //empty step
+	m_testSteps.push_back( [&]
+	{ 
+		auto root = m_scene->GetModelSceneRoot();
+		auto child = root->GetChild( TMR_NODE );
+		LoadFont( child->GetPlugin( "timer" ), "Assets/Fonts/couri.TTF", 40, 0, 0, true );
+	});
+	m_testSteps.push_back( []{} ); //empty step
 
-	//for( auto & test : tests )
-	//{
-	//	m_testSteps.push_back( recoverScene );
-	//	m_testSteps.push_back( []{} ); //empty step
-	//	InitOrderTest( test );
-	//}
-	//m_testSteps.push_back( recoverScene );
+	for( auto & test : tests )
+	{
+		m_testSteps.push_back( recoverScene );
+		m_testSteps.push_back( []{} ); //empty step
+		InitOrderTest( test );
+	}
+	m_testSteps.push_back( recoverScene );
 }
 
 // ****************************
