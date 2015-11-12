@@ -94,13 +94,11 @@ void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & sc
 
 // ********************************
 //
-model::SceneModelPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeType numBytes, model::TimelineManager * tm )
+model::SceneModelPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeType numBytes, model::TimelineManager * )
 {
     auto deser = DeserializeObject( in, numBytes );
 
     auto scene = SerializationHelper::DeserializeObjectLoadImpl< model::SceneModel >( deser, "scene" );
-
-    tm->AddTimeline( scene->m_pTimelineManager->GetRootTimeline() );
 
     return scene;
 }

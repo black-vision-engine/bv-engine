@@ -174,6 +174,9 @@ void BVAppLogic::LoadScenes( const PathVec & pathVec )
 
     m_bvScene    = BVScene::Create( sceneModelVec,  cam, m_globalTimeline, m_renderer );
     assert( m_bvScene );
+    InitializeScenesTimelines();
+
+    InitCamera( DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight() );
 }
 
 // *********************************
@@ -195,6 +198,7 @@ void BVAppLogic::LoadScene          ( void )
             m_solution.LoadSolution( ConfigManager::GetString("solution") );
             auto root = m_solution.GetRoot();
             m_bvScene    = BVScene::Create( SceneModel::Create( "root", GetTimelineManager(), root ), new Camera( DefaultConfig.IsCameraPerspactive() ), te, m_renderer );
+            InitializeScenesTimelines();
             //if(ConfigManager::GetBool("hm"))
             //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
         }
@@ -219,9 +223,14 @@ void BVAppLogic::LoadScene          ( void )
     {
         auto root = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_pluginsManager, GetTimelineManager(), m_globalTimeline );
         m_bvScene = BVScene::Create( SceneModel::Create( "root", GetTimelineManager(), root ), new Camera( DefaultConfig.IsCameraPerspactive() ), te, m_renderer );
+        InitializeScenesTimelines();
     }
 
-    assert( m_bvScene );
+    if( !m_bvScene )
+    {
+        m_bvScene = BVScene::Create( model::SceneModelVec(), new Camera( DefaultConfig.IsCameraPerspactive() ), te, m_renderer );
+        InitializeScenesTimelines();
+    }
 }
 
 // *********************************
@@ -485,6 +494,14 @@ void                            BVAppLogic::InitializeKbdHandler()
     {
         m_kbdHandler = new TestKeyboardHandler();
     }
+}
+
+// *********************************
+//
+void                            BVAppLogic::InitializeScenesTimelines()
+{
+    for( auto scene : m_bvScene->GetScenes() )
+        m_timelineManager->AddTimeline( scene->m_pTimelineManager->GetRootTimeline() );
 }
 
 // *********************************

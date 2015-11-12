@@ -129,6 +129,7 @@ private:
 
     void                            InitializeKbdHandler();
 
+    void                            InitializeScenesTimelines();
     std::string                     GetEnvScene();
 
 };

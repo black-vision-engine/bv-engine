@@ -217,6 +217,14 @@ model::SceneModelPtr    BVScene::GetScene            ( const std::string & name 
 
     return nullptr;
 }
+
+// *******************************
+//
+const model::SceneModelVec &  BVScene::GetScenes() const
+{
+    return m_pSceneModelVec;
+}
+
 //const std::string &     BVScene::GetName            () const
 //{
 //    return m_pSceneModel->m_name;

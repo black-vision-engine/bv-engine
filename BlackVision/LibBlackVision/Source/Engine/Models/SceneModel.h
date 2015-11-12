@@ -12,6 +12,7 @@ namespace model {
 
 struct SceneModel;
 DEFINE_PTR_TYPE( SceneModel );
+DEFINE_CONST_PTR_TYPE( SceneModel );
 
 struct SceneModel : public ISerializable
 {
@@ -28,6 +29,7 @@ struct SceneModel : public ISerializable
 };
 
 typedef std::vector< SceneModelPtr > SceneModelVec;
+typedef std::vector< SceneModelConstPtr > SceneModelConstVec;
 
 } // model
 }

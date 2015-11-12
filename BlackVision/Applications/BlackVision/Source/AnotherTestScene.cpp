@@ -945,7 +945,7 @@ model::BasicNodePtr      TestScenesFactory::SequenceAnimationTestScene  ()
     return nullptr;
 }
 
-model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineManager * tm )
+model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineManager * )
 {
     if( !Path::Exists( filename ) )
     {
@@ -958,8 +958,6 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineMana
     DeserializeObject deser( filename );
 
     auto model = SerializationHelper::DeserializeObjectLoadImpl< SceneModel >( deser, "scene" );
-
-    tm->AddTimeline( model->m_pTimelineManager->GetRootTimeline() );
 
     return model->m_pModelSceneRoot;
 }
