@@ -60,7 +60,7 @@ void        JsonCommandsConverter::SendResponse           ( const IEventPtr evt 
 
     ResponseMsg responseMessage;
     responseMessage.socketID = response->SocketID;
-    responseMessage.message = std::move( response->Response );
+    responseMessage.message = response->Response;   //std::move( response->Response );      // Maybe we could move this string... But we should guarantee only one listener lsitens to this event.
 
     m_eventServer->SendResponse( responseMessage );
 }

@@ -3,6 +3,7 @@
 #include "PluginEventsHandlers.h"
 #include "SceneEventsHandlers.h"
 #include "QueryHandlers.h"
+#include "HightmapHandlers.h"
 #include "Engine/Events/EventManager.h"
 
 namespace bv
@@ -24,21 +25,25 @@ RemoteEventsHandlers::~RemoteEventsHandlers()
         delete m_sceneEvents;
     if( m_queryEvents )
         delete m_queryEvents;
+    if( m_heightmapEvents )
+        delete m_heightmapEvents;
 }
 
 // ***********************
 //
 void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic* appLogic )
 {
-    m_pluginEvents = new PluginEventsHandlers( appLogic );
-    m_sceneEvents = new SceneEventsHandlers( appLogic );
-    m_queryEvents = new QueryHandlers( appLogic );
+    m_pluginEvents      = new PluginEventsHandlers( appLogic );
+    m_sceneEvents       = new SceneEventsHandlers( appLogic );
+    m_queryEvents       = new QueryHandlers( appLogic );
+    m_heightmapEvents   = new HightmapHandlers( appLogic );     // Unused for now.
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_pluginEvents, &PluginEventsHandlers::LoadAsset ), LoadAssetEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_pluginEvents, &PluginEventsHandlers::AddParamKey ), ParamKeyEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::NodeStructure ), NodeStructureEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::ProjectStructure ), ProjectEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::TimelineHandler ), TimeLineEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::WidgetHandler ), WidgetEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_queryEvents, &QueryHandlers::Info ), NewInfoEvent::Type() );
 }
 

@@ -56,13 +56,13 @@ RemoteControlInterface::RemoteControlInterface(BVAppLogic *AppLogic)
 	//bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnSceneStructure ), bv::SceneStructureEvent::Type() );
 
     // timeline events
-    bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnTimelineCmd ), bv::TimeLineCmd::Type() );
+    //bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnTimelineCmd ), bv::TimeLineCmd::Type() );
 
     // timer events
-    bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnTimerCmd ), bv::TimerCmd::Type() );
+    //bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnTimerCmd ), bv::TimerCmd::Type() );
 
 	// widget events
-    bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnWidgetCmd ), bv::WidgetCmd::Type() );
+    //bv::GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnWidgetCmd ), bv::WidgetCmd::Type() );
 
 
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &RemoteControlInterface::OnNodeAppearing ), widgets::NodeAppearingCrawlerEvent::Type() );

@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:layer="clr-namespace:ProfilerEditor.PresentationLayer"
-        Title="Profiler Editor" Height="651.94" Width="1077" Closing="Window_Closing" Name="mainWindow">
+        Title="Profiler Editor" Height="650" Width="1100" Closing="Window_Closing" Name="mainWindow" MaxWidth="1100" MinWidth="1100" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="False">
     <Window.Resources>
 
         <layer:NameColorConverter x:Key="NameColorConverter"></layer:NameColorConverter>
@@ -79,101 +79,103 @@
             </MenuItem>
         </Menu>
         
-        <Grid Margin="0,20,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">        
+            <Grid Margin="0,20,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-            <Expander Header="Profiler" Height="Auto" Width="1069" IsExpanded="True" Grid.Row="0">
-                <Grid Height="480">
-                    <Button x:Name="startButton" Content="Start BlackVision" HorizontalAlignment="Left" Margin="930,0,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="0.701,-0.712" Click="startButton_Click"/>
-                    <Button x:Name="endServer" Content="End BlackVision" HorizontalAlignment="Left" Margin="930,27,0,0" VerticalAlignment="Top" Width="100" Click="endServer_Click"/>
-                    <TabControl Name="ThreadsTabControl" HorizontalAlignment="Left" Height="461" Margin="28,14,0,0" VerticalAlignment="Top" Width="867">
-                        <TabItem Header="Thread 1">
-                            <Grid Background="#FFE5E5E5">
-                                <layer:TreeListView x:Name="ProfilerTree1" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
-                                    <layer:TreeListView.ItemTemplate>
-                                        <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
-                                    </layer:TreeListView.ItemTemplate>
-                                </layer:TreeListView>
-                            </Grid>
-                        </TabItem>
-                        <TabItem Header="Thread 2">
-                            <Grid Background="#FFE5E5E5">
-                                <layer:TreeListView x:Name="ProfilerTree2" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
-                                    <layer:TreeListView.ItemTemplate>
-                                        <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
-                                    </layer:TreeListView.ItemTemplate>
-                                </layer:TreeListView>
-                            </Grid>
-                        </TabItem>
-                        <TabItem Header="Thread 3">
-                            <Grid Background="#FFE5E5E5">
-                                <layer:TreeListView x:Name="ProfilerTree3" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
-                                    <layer:TreeListView.ItemTemplate>
-                                        <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
-                                    </layer:TreeListView.ItemTemplate>
-                                </layer:TreeListView>
-                            </Grid>
-                        </TabItem>
-                        <TabItem Header="Thread 4">
-                            <Grid Background="#FFE5E5E5">
-                                <layer:TreeListView x:Name="ProfilerTree4" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
-                                    <layer:TreeListView.ItemTemplate>
-                                        <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
-                                    </layer:TreeListView.ItemTemplate>
-                                </layer:TreeListView>
-                            </Grid>
-                        </TabItem>
-                        <TabItem Header="Thread 5">
-                            <Grid Background="#FFE5E5E5">
-                                <layer:TreeListView x:Name="ProfilerTree5" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
-                                    <layer:TreeListView.ItemTemplate>
-                                        <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
-                                    </layer:TreeListView.ItemTemplate>
-                                </layer:TreeListView>
-                            </Grid>
-                        </TabItem>
-                        <TabItem Header="Thread 6">
-                            <Grid Background="#FFE5E5E5">
-                                <layer:TreeListView x:Name="ProfilerTree6" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
-                                    <layer:TreeListView.ItemTemplate>
-                                        <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
-                                    </layer:TreeListView.ItemTemplate>
-                                </layer:TreeListView>
-                            </Grid>
-                        </TabItem>
-                    </TabControl>
-                    <Button Name="ClearMaxTimeButton" Content="Clear Max Time" HorizontalAlignment="Left" Margin="930,87,0,0" VerticalAlignment="Top" Width="106" Click="ClearMaxTimeButton_Click"/>
-                    <Button Name="ClearMinTimeButton" Content="Clear Min Time" HorizontalAlignment="Left" Margin="930,114,0,0" VerticalAlignment="Top" Width="106" Click="ClearMinTimeButton_Click"/>
-                    <Button Name="ClearTotalTimeButton" Content="Clear Total Time" HorizontalAlignment="Left" Margin="930,141,0,0" VerticalAlignment="Top" Width="106" Click="ClearTotalTimeButton_Click"/>
-                    <Button Name="ClearTreeButton" Content="Clear Tree" HorizontalAlignment="Left" Margin="930,168,0,0" VerticalAlignment="Top" Width="106" Click="ClearTreeButton_Click"/>
-                    <CheckBox Name="AffectAllCheckBox" Content="Affect all threads" HorizontalAlignment="Left" Margin="930,224,0,0" VerticalAlignment="Top" Width="120"/>
-                    <ComboBox Name="TimeUnitsComboBox" HorizontalAlignment="Left" Margin="930,330,0,0" VerticalAlignment="Top" Width="120">
-                        <ComboBoxItem IsSelected="True">Seconds</ComboBoxItem>
-                        <ComboBoxItem>Milliseconds</ComboBoxItem>
-                    </ComboBox>
-                    <TextBox Name="TimeDigitsTextBox" HorizontalAlignment="Left" Height="24" Margin="1026,357,0,0" TextWrapping="Wrap" Text="6" VerticalAlignment="Top" Width="24"/>
-                    <Label Content="Decimal digits" HorizontalAlignment="Left" Height="29" Margin="930,352,0,0" VerticalAlignment="Top" Width="91"/>
-                    <Button Name="UpdateTimeFormatButton" Content="Update format" HorizontalAlignment="Left" Margin="961,386,0,0" VerticalAlignment="Top" Width="89" Click="UpdateTimeFormatButton_Click"/>
-                    <Label Content="Time format:" HorizontalAlignment="Left" Margin="930,299,0,0" VerticalAlignment="Top" Width="120"/>
-                    <Button Content="Expand Tree" HorizontalAlignment="Left" Margin="930,197,0,0" VerticalAlignment="Top" Width="106" Click="ExpandButton_Click"/>
-                </Grid>
-            </Expander>
-            <Expander Header="Black Vision Client" Width="1069" Grid.Row="1" Margin="0,0,0,0">
-                <Grid Height="546">
-                    <TextBox Name="CommandTextBox" AcceptsReturn="True" HorizontalAlignment="Left" VerticalAlignment="Top" Height="493" TextWrapping="Wrap" Text="Event to send" Width="396" Margin="24,10,0,-190"/>
-                    <TextBox Name="ResponseTextBox" AcceptsReturn="True" HorizontalAlignment="Left" VerticalAlignment="Top" Height="493" TextWrapping="Wrap" Text="" Width="396" Margin="647,10,0,-190"/>
-                    <Button Name="ConnectButton" Content="Connect" HorizontalAlignment="Left" Margin="487,22,0,0" VerticalAlignment="Top" Width="91" Click="ConnectButton_Click"/>
-                    <Button Name="DisconnetcButton" Content="Disconnect" HorizontalAlignment="Left" Margin="487,47,0,0" VerticalAlignment="Top" Width="91" Click="DisconnetcButton_Click"/>
-                    <Button Name="SendButton" Content="Send" HorizontalAlignment="Left" Margin="487,72,0,0" VerticalAlignment="Top" Width="91" Click="SendButton_Click"/>
-                    <Button Name="ReceiveButton" Content="Receive" HorizontalAlignment="Left" Margin="487,97,0,0" VerticalAlignment="Top" Width="91" Click="ReceiveButton_Click"/>
-                    <Label Name="NetStatusLabel" Content="Disconnected" HorizontalAlignment="Left" Margin="487,153,0,0" VerticalAlignment="Top" Width="91"/>
-                    <Button Name="ClearResponsesButton" Content="Clear" HorizontalAlignment="Left" Margin="547,122,0,0" VerticalAlignment="Top" Width="75" Click="ClearResponsesButton_Click"/>
-                    <Button x:Name="ClearEventsButton" Content="Clear" HorizontalAlignment="Left" Margin="437,122,0,0" VerticalAlignment="Top" Width="75" Click="ClearEventsButton_Click"/>
-                </Grid>                
-            </Expander>
-        </Grid>
+                <Expander Header="Profiler" Height="Auto" Width="1069" IsExpanded="True" Grid.Row="0">
+                    <Grid Height="480">
+                        <Button x:Name="startButton" Content="Start BlackVision" HorizontalAlignment="Left" Margin="930,0,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="0.701,-0.712" Click="startButton_Click"/>
+                        <Button x:Name="endServer" Content="End BlackVision" HorizontalAlignment="Left" Margin="930,27,0,0" VerticalAlignment="Top" Width="100" Click="endServer_Click"/>
+                        <TabControl Name="ThreadsTabControl" HorizontalAlignment="Left" Height="461" Margin="28,14,0,0" VerticalAlignment="Top" Width="867">
+                            <TabItem Header="Thread 1">
+                                <Grid Background="#FFE5E5E5">
+                                    <layer:TreeListView x:Name="ProfilerTree1" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
+                                        <layer:TreeListView.ItemTemplate>
+                                            <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
+                                        </layer:TreeListView.ItemTemplate>
+                                    </layer:TreeListView>
+                                </Grid>
+                            </TabItem>
+                            <TabItem Header="Thread 2">
+                                <Grid Background="#FFE5E5E5">
+                                    <layer:TreeListView x:Name="ProfilerTree2" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
+                                        <layer:TreeListView.ItemTemplate>
+                                            <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
+                                        </layer:TreeListView.ItemTemplate>
+                                    </layer:TreeListView>
+                                </Grid>
+                            </TabItem>
+                            <TabItem Header="Thread 3">
+                                <Grid Background="#FFE5E5E5">
+                                    <layer:TreeListView x:Name="ProfilerTree3" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
+                                        <layer:TreeListView.ItemTemplate>
+                                            <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
+                                        </layer:TreeListView.ItemTemplate>
+                                    </layer:TreeListView>
+                                </Grid>
+                            </TabItem>
+                            <TabItem Header="Thread 4">
+                                <Grid Background="#FFE5E5E5">
+                                    <layer:TreeListView x:Name="ProfilerTree4" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
+                                        <layer:TreeListView.ItemTemplate>
+                                            <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
+                                        </layer:TreeListView.ItemTemplate>
+                                    </layer:TreeListView>
+                                </Grid>
+                            </TabItem>
+                            <TabItem Header="Thread 5">
+                                <Grid Background="#FFE5E5E5">
+                                    <layer:TreeListView x:Name="ProfilerTree5" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
+                                        <layer:TreeListView.ItemTemplate>
+                                            <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
+                                        </layer:TreeListView.ItemTemplate>
+                                    </layer:TreeListView>
+                                </Grid>
+                            </TabItem>
+                            <TabItem Header="Thread 6">
+                                <Grid Background="#FFE5E5E5">
+                                    <layer:TreeListView x:Name="ProfilerTree6" Columns="{StaticResource SamplesColumnsCollection}"  ItemsSource="{Binding TopLevelSamples}" HorizontalAlignment="Left" Height="429" VerticalAlignment="Top" Width="857" AllowsColumnReorder="True">
+                                        <layer:TreeListView.ItemTemplate>
+                                            <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
+                                        </layer:TreeListView.ItemTemplate>
+                                    </layer:TreeListView>
+                                </Grid>
+                            </TabItem>
+                        </TabControl>
+                        <Button Name="ClearMaxTimeButton" Content="Clear Max Time" HorizontalAlignment="Left" Margin="930,87,0,0" VerticalAlignment="Top" Width="106" Click="ClearMaxTimeButton_Click"/>
+                        <Button Name="ClearMinTimeButton" Content="Clear Min Time" HorizontalAlignment="Left" Margin="930,114,0,0" VerticalAlignment="Top" Width="106" Click="ClearMinTimeButton_Click"/>
+                        <Button Name="ClearTotalTimeButton" Content="Clear Total Time" HorizontalAlignment="Left" Margin="930,141,0,0" VerticalAlignment="Top" Width="106" Click="ClearTotalTimeButton_Click"/>
+                        <Button Name="ClearTreeButton" Content="Clear Tree" HorizontalAlignment="Left" Margin="930,168,0,0" VerticalAlignment="Top" Width="106" Click="ClearTreeButton_Click"/>
+                        <CheckBox Name="AffectAllCheckBox" Content="Affect all threads" HorizontalAlignment="Left" Margin="930,224,0,0" VerticalAlignment="Top" Width="120"/>
+                        <ComboBox Name="TimeUnitsComboBox" HorizontalAlignment="Left" Margin="930,330,0,0" VerticalAlignment="Top" Width="120">
+                            <ComboBoxItem IsSelected="True">Seconds</ComboBoxItem>
+                            <ComboBoxItem>Milliseconds</ComboBoxItem>
+                        </ComboBox>
+                        <TextBox Name="TimeDigitsTextBox" HorizontalAlignment="Left" Height="24" Margin="1026,357,0,0" TextWrapping="Wrap" Text="6" VerticalAlignment="Top" Width="24"/>
+                        <Label Content="Decimal digits" HorizontalAlignment="Left" Height="29" Margin="930,352,0,0" VerticalAlignment="Top" Width="91"/>
+                        <Button Name="UpdateTimeFormatButton" Content="Update format" HorizontalAlignment="Left" Margin="961,386,0,0" VerticalAlignment="Top" Width="89" Click="UpdateTimeFormatButton_Click"/>
+                        <Label Content="Time format:" HorizontalAlignment="Left" Margin="930,299,0,0" VerticalAlignment="Top" Width="120"/>
+                        <Button Content="Expand Tree" HorizontalAlignment="Left" Margin="930,197,0,0" VerticalAlignment="Top" Width="106" Click="ExpandButton_Click"/>
+                    </Grid>
+                </Expander>
+                <Expander Header="Black Vision Client" Width="1069" Grid.Row="1" Margin="0,0,0,0">
+                    <Grid Height="546">
+                        <TextBox Name="CommandTextBox" AcceptsReturn="True" HorizontalAlignment="Left" VerticalAlignment="Top" Height="493" TextWrapping="Wrap" Text="Event to send" Width="396" Margin="24,10,0,-190"/>
+                        <TextBox Name="ResponseTextBox" AcceptsReturn="True" HorizontalAlignment="Left" VerticalAlignment="Top" Height="493" TextWrapping="Wrap" Text="" Width="396" Margin="647,10,0,-190"/>
+                        <Button Name="ConnectButton" Content="Connect" HorizontalAlignment="Left" Margin="487,22,0,0" VerticalAlignment="Top" Width="91" Click="ConnectButton_Click"/>
+                        <Button Name="DisconnetcButton" Content="Disconnect" HorizontalAlignment="Left" Margin="487,47,0,0" VerticalAlignment="Top" Width="91" Click="DisconnetcButton_Click"/>
+                        <Button Name="SendButton" Content="Send" HorizontalAlignment="Left" Margin="487,72,0,0" VerticalAlignment="Top" Width="91" Click="SendButton_Click"/>
+                        <Button Name="ReceiveButton" Content="Receive" HorizontalAlignment="Left" Margin="487,97,0,0" VerticalAlignment="Top" Width="91" Click="ReceiveButton_Click"/>
+                        <Label Name="NetStatusLabel" Content="Disconnected" HorizontalAlignment="Left" Margin="487,153,0,0" VerticalAlignment="Top" Width="91"/>
+                        <Button Name="ClearResponsesButton" Content="Clear" HorizontalAlignment="Left" Margin="547,122,0,0" VerticalAlignment="Top" Width="75" Click="ClearResponsesButton_Click"/>
+                        <Button x:Name="ClearEventsButton" Content="Clear" HorizontalAlignment="Left" Margin="437,122,0,0" VerticalAlignment="Top" Width="75" Click="ClearEventsButton_Click"/>
+                    </Grid>                
+                </Expander>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Window>
