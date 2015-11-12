@@ -45,6 +45,7 @@ namespace ProfilerEditor
         private NetworkStream                               m_networkStream;
         private TcpClient                                   m_tcpClient;
         bool                                                m_connected;
+        const int                                           tcpReadBufferSize = 1000;
 
 #region Properties
 		public ProfilerModel.NameMapping ColorMapping
@@ -368,7 +369,7 @@ namespace ProfilerEditor
         {
             if( m_connected )
             {
-                byte[] command = Encoding.UTF8.GetBytes(  CommandTextBox.Text );
+                byte[] command = Encoding.UTF8.GetBytes( CommandTextBox.Text );
 
                 byte[] message = new byte[command.Length + 2];
 
@@ -378,6 +379,35 @@ namespace ProfilerEditor
 
                 m_networkStream.Write( message, 0, command.Length + 2 );
             }
+        }
+
+        private void ReceiveButton_Click( object sender, RoutedEventArgs e )
+        {
+            if( m_connected && m_networkStream.DataAvailable )
+            {
+                byte[] message = new byte[ tcpReadBufferSize ];
+                int numBytesRead = 0;
+
+                do
+                {
+                    numBytesRead = m_networkStream.Read( message, 0, tcpReadBufferSize );
+                    string stringMessage = System.Text.Encoding.UTF8.GetString( message, 0, numBytesRead );
+
+                    ResponseTextBox.Text += stringMessage;
+                } while( m_networkStream.DataAvailable );
+                
+
+            }
+        }
+
+        private void ClearResponsesButton_Click( object sender, RoutedEventArgs e )
+        {
+            ResponseTextBox.Text = "";
+        }
+
+        private void ClearEventsButton_Click( object sender, RoutedEventArgs e )
+        {
+            CommandTextBox.Text = "";
         }
     }
 }

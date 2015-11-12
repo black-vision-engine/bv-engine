@@ -162,13 +162,16 @@
                 </Grid>
             </Expander>
             <Expander Header="Black Vision Client" Width="1069" Grid.Row="1" Margin="0,0,0,0">
-                <Grid Height="313">
-                    <TextBox Name="CommandTextBox" AcceptsReturn="True" HorizontalAlignment="Left" VerticalAlignment="Top" Height="293" TextWrapping="Wrap" Text="Event to send" Width="396" Margin="24,10,0,0"/>
-                    <TextBox Name="ResponseTextBox" AcceptsReturn="True" HorizontalAlignment="Left" VerticalAlignment="Top" Height="293" TextWrapping="Wrap" Text="Responses" Width="396" Margin="647,10,0,0"/>
+                <Grid Height="546">
+                    <TextBox Name="CommandTextBox" AcceptsReturn="True" HorizontalAlignment="Left" VerticalAlignment="Top" Height="493" TextWrapping="Wrap" Text="Event to send" Width="396" Margin="24,10,0,-190"/>
+                    <TextBox Name="ResponseTextBox" AcceptsReturn="True" HorizontalAlignment="Left" VerticalAlignment="Top" Height="493" TextWrapping="Wrap" Text="" Width="396" Margin="647,10,0,-190"/>
                     <Button Name="ConnectButton" Content="Connect" HorizontalAlignment="Left" Margin="487,22,0,0" VerticalAlignment="Top" Width="91" Click="ConnectButton_Click"/>
                     <Button Name="DisconnetcButton" Content="Disconnect" HorizontalAlignment="Left" Margin="487,47,0,0" VerticalAlignment="Top" Width="91" Click="DisconnetcButton_Click"/>
                     <Button Name="SendButton" Content="Send" HorizontalAlignment="Left" Margin="487,72,0,0" VerticalAlignment="Top" Width="91" Click="SendButton_Click"/>
-                    <Label Name="NetStatusLabel" Content="Disconnected" HorizontalAlignment="Left" Margin="450,97,0,0" VerticalAlignment="Top" Width="177"/>
+                    <Button Name="ReceiveButton" Content="Receive" HorizontalAlignment="Left" Margin="487,97,0,0" VerticalAlignment="Top" Width="91" Click="ReceiveButton_Click"/>
+                    <Label Name="NetStatusLabel" Content="Disconnected" HorizontalAlignment="Left" Margin="487,153,0,0" VerticalAlignment="Top" Width="91"/>
+                    <Button Name="ClearResponsesButton" Content="Clear" HorizontalAlignment="Left" Margin="547,122,0,0" VerticalAlignment="Top" Width="75" Click="ClearResponsesButton_Click"/>
+                    <Button x:Name="ClearEventsButton" Content="Clear" HorizontalAlignment="Left" Margin="437,122,0,0" VerticalAlignment="Top" Width="75" Click="ClearEventsButton_Click"/>
                 </Grid>                
             </Expander>
         </Grid>
