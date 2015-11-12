@@ -42,6 +42,11 @@ namespace bv{
         return InitServer();
     }
 
+    void SocketWrapper::SendResponse        ( ResponseMsg& message )
+    {
+        Responses.push_back( std::move( message ) );
+    }
+
 	bool SocketWrapper::InitServer()
 	{
 		CreateThread(0,0,(LPTHREAD_START_ROUTINE)SocketInitHandler, this , 0,0);	
@@ -249,14 +254,14 @@ namespace bv{
                 for(unsigned int i=0;i<Responses.size();i++)
                 {
 
-                    if( Responses[i].sock_id == (int) *csock && Responses[i].sent == false )
+                    if( Responses[i].socketID == (int) *csock && Responses[i].sent == false )
                     {
                         printf("Sock id %d zgadza siê!\n",*csock);
                         
                         printf("Sock id %d zgadza siê!\n",*csock);
 						wchar_t CHAR_BEGIN = 0x02;
 						wchar_t CHAR_END = 0x03;
-                        wstring to_send = CHAR_BEGIN+Responses[i].msg+CHAR_END;
+                        wstring to_send = CHAR_BEGIN+Responses[i].message+CHAR_END;
                         const wchar_t* tmpBuffer = to_send.c_str();
 
                         size_t buffer_size;

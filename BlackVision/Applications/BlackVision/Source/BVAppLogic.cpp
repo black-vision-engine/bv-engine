@@ -501,6 +501,7 @@ void                            BVAppLogic::InitializeKbdHandler()
     }
     else if( envScene == "REMOTE_EVENTS_TEST_SCENE" )
     {
+        //m_kbdHandler = new TestEditorsKeyboardHandler();
         m_kbdHandler = new TestRemoteEventsKeyboardHandler();
     }
     else

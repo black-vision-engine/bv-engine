@@ -14,7 +14,9 @@ namespace bv
 //
 JsonCommandsConverter::JsonCommandsConverter()
     : m_eventServer( nullptr )
-{}
+{
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &JsonCommandsConverter::SendResponse ), ResponseEvent::Type() );
+}
 
 JsonCommandsConverter::~JsonCommandsConverter()
 {}
@@ -49,17 +51,18 @@ void                JsonCommandsConverter::QueueEvent          ( const std::wstr
 }
 
 // ***********************
-// Always check, if string isn't empty. That means, no more events are queued.
-ResponseEventPtr        JsonCommandsConverter::PollEvent           ()
+//
+void        JsonCommandsConverter::SendResponse           ( const IEventPtr evt )
 {
-    auto evt = GetDefaultEventManager().GetNextResponse();
-    if( evt == nullptr )
-        return nullptr;
+    if( evt->GetEventType() != bv::ResponseEvent::Type() )
+        return;
+    ResponseEventPtr response = std::static_pointer_cast<ResponseEvent>( evt );
 
-    if( evt->GetEventType() != ResponseEvent::Type() )
-        return nullptr;
+    ResponseMsg responseMessage;
+    responseMessage.socketID = response->SocketID;
+    responseMessage.message = std::move( response->Response );
 
-    return std::static_pointer_cast< ResponseEvent >( evt );
+    m_eventServer->SendResponse( responseMessage );
 }
 
 

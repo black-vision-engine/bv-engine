@@ -55,34 +55,34 @@ std::string InfoEvent::m_sEventName                 = "Event_Info";
 
 // ************************************* new Events *****************************************
 const EventType LoadAssetEvent::m_sEventType        = 0x10000013;
-std::string LoadAssetEvent::m_sEventName            = "Event_LoadAsset";
+std::string LoadAssetEvent::m_sEventName            = "LoadAssetEvent";
 
 const EventType ParamKeyEvent::m_sEventType         = 0x30000006;
-std::string ParamKeyEvent::m_sEventName             = "Event_ParamKeyEvent";
+std::string ParamKeyEvent::m_sEventName             = "ParamKeyEvent";
 
 const EventType NodeStructureEvent::m_sEventType    = 0x30000012;
-std::string NodeStructureEvent::m_sEventName        = "Event_NodeStructure";
+std::string NodeStructureEvent::m_sEventName        = "NodeStructureEvent";
 
 const EventType ProjectEvent::m_sEventType          = 0x30000013;
-std::string ProjectEvent::m_sEventName              = "Event_ProjectStructure";
+std::string ProjectEvent::m_sEventName              = "ProjectStructureEvent";
 
 const EventType ResponseEvent::m_sEventType         = 0x30000008;
-std::string ResponseEvent::m_sEventName             = "Event_Response";
+std::string ResponseEvent::m_sEventName             = "ResponseEvent";
 
 const EventType NewInfoEvent::m_sEventType          = 0x30000007;
-std::string NewInfoEvent::m_sEventName              = "Event_Info";
+std::string NewInfoEvent::m_sEventName              = "InfoEvent";
 
 const EventType TimeLineEvent::m_sEventType         = 0x30000009;
-std::string TimeLineEvent::m_sEventName             = "Event_Timeline";
+std::string TimeLineEvent::m_sEventName             = "TimeLineEvent";
 
 const EventType TimerEvent::m_sEventType            = 0x30000010;
-std::string TimerEvent::m_sEventName                = "Event_Timer";
+std::string TimerEvent::m_sEventName                = "TimerEvent";
 
 const EventType WidgetEvent::m_sEventType           = 0x30000011;
-std::string WidgetEvent::m_sEventName               = "Event_Widget";
+std::string WidgetEvent::m_sEventName               = "WidgetEvent";
 
 const EventType VideoCardEvent::m_sEventType       = 0x30000005;
-std::string VideoCardEvent::m_sEventName           = "Event_VideoCard";
+std::string VideoCardEvent::m_sEventName           = "VideoCardEvent";
 
 // ************************************* Events Serialization *****************************************
 
@@ -104,6 +104,7 @@ const std::wstring ASSET_DATA_WSTRING       = L"AssetData";
 const std::wstring PARAM_NAME_WSTRING       = L"ParamName";
 const std::wstring PARAM_VALUE_WSTRING      = L"ParamValue";
 const std::wstring KEY_TIME_WSTRING         = L"Time";
+
 const std::wstring COMMAND_ADD_KEY_WSTRING  = L"AddKey";
 const std::wstring COMMAND_REMOVE_KEY_WSTRING   = L"RemoveKey";
 const std::wstring COMMAND_UPDATE_KEY_WSTRING   = L"UpdateKey";
@@ -119,41 +120,41 @@ const std::wstring COMMAND_SET_NODE_VISIBLE_WSTRING     = L"SetNodeVisible";
 const std::wstring COMMAND_SET_NODE_INVISIBLE_WSTRING   = L"SetNodeInvisible";
 
 // ProjectEvent
-const std::wstring REQUEST_WSTRING                          = L"request";
+const std::wstring REQUEST_WSTRING                          = L"Request";
 
-const std::wstring COMMAND_SAVE_SCENE_WSTRING               = L"SAVE_SCENE";
-const std::wstring COMMAND_LOAD_PROJECT_WSTRING             = L"LOAD_PROJECT";
-const std::wstring COMMAND_NEW_PROJECT_WSTRING              = L"NEW_PROJECT";
-const std::wstring COMMAND_SET_CURRENT_PROJECT_WSTRING      = L"SET_CURRENT_PROJECT";
-const std::wstring COMMAND_LIST_PROJECTS_NAMES_WSTRING      = L"LIST_PROJECTS_NAMES";
-const std::wstring COMMAND_LIST_SCENES_WSTRING              = L"LIST_SCENES";
-const std::wstring COMMAND_LIST_ASSETS_PATHS_WSTRING        = L"LIST_ASSETS_PATHS";
-const std::wstring COMMAND_LIST_CATEGORIES_NAMES_WSTRING    = L"LIST_CATEGORIES_NAMES";
-const std::wstring COMMAND_LIST_PROJECTS_WSTRING            = L"LIST_PROJECTS";
+const std::wstring COMMAND_SAVE_SCENE_WSTRING               = L"SaveScene";
+const std::wstring COMMAND_LOAD_PROJECT_WSTRING             = L"LoadProject";
+const std::wstring COMMAND_NEW_PROJECT_WSTRING              = L"NewProject";
+const std::wstring COMMAND_SET_CURRENT_PROJECT_WSTRING      = L"SetCurrentProject";
+const std::wstring COMMAND_LIST_PROJECTS_NAMES_WSTRING      = L"ListProjectNames";
+const std::wstring COMMAND_LIST_SCENES_WSTRING              = L"ListScenes";
+const std::wstring COMMAND_LIST_ASSETS_PATHS_WSTRING        = L"ListAssetsPaths";
+const std::wstring COMMAND_LIST_CATEGORIES_NAMES_WSTRING    = L"ListCategoriesNames";
+const std::wstring COMMAND_LIST_PROJECTS_WSTRING            = L"ListProjects";
 
 // ResponseEvent
-const std::wstring RESPONSE_WSTRING                     = L"response";
+const std::wstring RESPONSE_WSTRING                     = L"Response";
 
 // InfoEvent
-const std::wstring COMMAND_TREE_STRUCTURE_WSTRING       = L"tree_structure";
-const std::wstring COMMAND_PERFORMANCE_WSTRING          = L"performance";
-const std::wstring COMMAND_TIMELINES_WSTRING            = L"timelines";
-const std::wstring COMMAND_NODE_INFO_WSTRING            = L"node_info";
-const std::wstring COMMAND_VIDEO_CARDS_WSTRING          = L"videocards";
+const std::wstring COMMAND_TREE_STRUCTURE_WSTRING       = L"TreeStructure";
+const std::wstring COMMAND_PERFORMANCE_WSTRING          = L"Performance";
+const std::wstring COMMAND_TIMELINES_WSTRING            = L"TimeLines";
+const std::wstring COMMAND_NODE_INFO_WSTRING            = L"NodeInfo";
+const std::wstring COMMAND_VIDEO_CARDS_WSTRING          = L"VideoCards";
 
-// TimelineEvent
-const std::wstring COMMAND_PLAY_WSTRING                 = L"play";
-const std::wstring COMMAND_STOP_WSTRING                 = L"stop";
-const std::wstring COMMAND_PLAY_REVERSE_WSTRING         = L"play_reverse";
-const std::wstring COMMAND_GOTO_WSTRING                 = L"goto";
-const std::wstring COMMAND_GOTO_AND_PLAY_WSTRING        = L"gotoandplay";
+// TimeLineEvent
+const std::wstring COMMAND_PLAY_WSTRING                 = L"Play";
+const std::wstring COMMAND_STOP_WSTRING                 = L"Stop";
+const std::wstring COMMAND_PLAY_REVERSE_WSTRING         = L"PlayReverse";
+const std::wstring COMMAND_GOTO_WSTRING                 = L"Goto";
+const std::wstring COMMAND_GOTO_AND_PLAY_WSTRING        = L"GotoAndPlay";
 
-const std::wstring TIMELINE_TIME_VALUE_WSTRING          = L"time";
+const std::wstring TIMELINE_TIME_VALUE_WSTRING          = L"Time";
 const std::wstring TIMELINE_NAME_WSTRING                = L"TimeLineName";
 
 // WidgetEvent
-const std::wstring COMMAND_CRAWL_WSTRING                = L"crawl";
-const std::wstring COMMAND_COUNTER_WSTRING              = L"counter";
+const std::wstring COMMAND_CRAWL_WSTRING                = L"Crawl";
+const std::wstring COMMAND_COUNTER_WSTRING              = L"Counter";
 
 const std::wstring WIDGET_ACTION_WSTRING                = L"Action";
 const std::wstring WIDGET_TIME_VALUE_WSTRING            = L"Time";

@@ -18,14 +18,6 @@ namespace bv{
   
 //class RemoteCommandsConverter;
 
-class ResponseMsg{
-public: 
-    wstring msg;
-    int sock_id;
-    bool sent;
-    ResponseMsg(){sent=false;}
-
-};
 
 class SocketWrapper : public IEventServer
 {
@@ -45,9 +37,10 @@ public:
     static void ParseCmd(std::wstring cmd);
 	static DWORD WINAPI SocketHandler(void*);
 	static DWORD WINAPI SocketInitHandler(void*);
-    static void AddMsg(ResponseMsg msg){Responses.push_back(msg);}
+    static void AddMsg(ResponseMsg msg){Responses.push_back( msg );}
 
-    bool        InitializeServer( RemoteCommandsConverter* commandsConverter ) override;
+    bool        InitializeServer    ( RemoteCommandsConverter* commandsConverter ) override;
+    void        SendResponse        ( ResponseMsg& message ) override;
 };
 
 }

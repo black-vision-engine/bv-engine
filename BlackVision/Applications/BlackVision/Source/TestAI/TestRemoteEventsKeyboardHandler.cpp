@@ -49,29 +49,27 @@ void TestRemoteEventsKeyboardHandler::HandleKey           ( unsigned char c, BVA
     }
     else if( c == 'e' )
     {// Save descriptor. This helps to create remote event. You can copy this desc to serialization/remoteEvent.json.
-        VideoCardEventPtr newEvent = std::make_shared<VideoCardEvent>();
-        newEvent->Action = "";
-        newEvent->VideoCommand = VideoCardEvent::Command::VideoCardOff;
+        LoadAssetEventPtr newEvent = std::make_shared<LoadAssetEvent>();
 
         JsonSpiritSerializeObject ser;
         newEvent->Serialize( ser );
 
         ser.Save( "serialization/eventSerialize.json", FORMATSTYLE_READABLE );
     }
-    else if( c == 'i' )
-    {// Append info response to file.
-        std::wofstream file( L"serialization/responseEvents.json", std::ios_base::app );
-        
-        auto infoResponse = RemoteCommandsConverter::GetRemoteCommandsConverter().PollEvent();
-        while( infoResponse != nullptr )
-        {            
-            BaseEventPtr responseEvent = std::static_pointer_cast<ResponseEvent>( infoResponse );
-            file << infoResponse->Response << std::endl;
-            infoResponse = RemoteCommandsConverter::GetRemoteCommandsConverter().PollEvent();
-        }
+    //else if( c == 'i' )
+    //{// Append info response to file.
+    //    std::wofstream file( L"serialization/responseEvents.json", std::ios_base::app );
+    //    
+    //    auto infoResponse = RemoteCommandsConverter::GetRemoteCommandsConverter().PollEvent();
+    //    while( infoResponse != nullptr )
+    //    {            
+    //        BaseEventPtr responseEvent = std::static_pointer_cast<ResponseEvent>( infoResponse );
+    //        file << infoResponse->Response << std::endl;
+    //        infoResponse = RemoteCommandsConverter::GetRemoteCommandsConverter().PollEvent();
+    //    }
 
-        file.close();
-    }
+    //    file.close();
+    //}
 }
 
 

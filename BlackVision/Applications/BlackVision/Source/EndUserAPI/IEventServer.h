@@ -1,10 +1,22 @@
 #pragma once
 
+#include <string>
 
 
 namespace bv
 {
 class RemoteCommandsConverter;
+
+
+struct ResponseMsg
+{
+    std::wstring message;
+    int socketID;
+    bool sent;
+
+    ResponseMsg(){sent=false;}
+};
+
 
 class IEventServer
 {
@@ -14,7 +26,7 @@ public:
     ~IEventServer() {}
 
     virtual bool            InitializeServer    ( RemoteCommandsConverter* converter ) = 0;
-
+    virtual void            SendResponse        ( ResponseMsg& meesage ) = 0;
     /// For now I assume, there's only one one implementation and this function is enough.
     /// Maybe in future we should create a factory or something.
     static IEventServer*    CreateServerObject  ();

@@ -242,19 +242,9 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
 //
 void EventManager::QueueResponse       ( const IEventPtr evt )
 {
-    m_responseConcurrentQueue.Push( evt );
+    ConcurrentQueueEvent( evt );
 }
 
-// *******************************
-//
-IEventPtr EventManager::GetNextResponse     ()
-{
-    IEventPtr evt;
-    if( m_responseConcurrentQueue.TryPop( evt ) )
-        return evt;
-    else
-        return nullptr;
-}
 
 
 //FIXME: hack - should be created by means of Engine object or some global object responsible for application state and services

@@ -214,8 +214,8 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
             wstring WS = wstring(S.begin(),S.end());
 
             ResponseMsg msg;
-            msg.msg     = WS;
-            msg.sock_id = infoEvent->sock_id;
+            msg.message    = WS;
+            msg.socketID    = infoEvent->sock_id;
             SocketWrapper::AddMsg(msg);
 
         }else if( infoEvent->request==L"performance")
@@ -229,8 +229,8 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
             wstring WS = wstring(S.begin(),S.end());
 
             ResponseMsg msg;
-            msg.msg     = WS;
-            msg.sock_id =  infoEvent->sock_id;
+            msg.message     = WS;
+            msg.socketID    =  infoEvent->sock_id;
             SocketWrapper::AddMsg(msg);
 
         }else if( infoEvent->request==L"timelines")
@@ -304,8 +304,8 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
             wstring WS = wstring(S.begin(),S.end());
 
             ResponseMsg msg;
-            msg.msg     = WS;
-            msg.sock_id = infoEvent->sock_id;
+            msg.message     = WS;
+            msg.socketID    = infoEvent->sock_id;
             SocketWrapper::AddMsg(msg);
 
         }
@@ -423,8 +423,8 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
             wstring WS = wstring( resStr.begin(), resStr.end() );
 
             ResponseMsg msg;
-            msg.msg     = WS;
-            msg.sock_id = infoEvent->sock_id;
+            msg.message     = WS;
+            msg.socketID    = infoEvent->sock_id;
             SocketWrapper::AddMsg(msg);
         }
         else if( infoEvent->request==L"videocards")
@@ -439,8 +439,8 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
             wstring WS = wstring( S.begin(),S.end() );
 
             ResponseMsg msg;
-            msg.msg     = WS;
-            msg.sock_id = infoEvent->sock_id;
+            msg.message     = WS;
+            msg.socketID    = infoEvent->sock_id;
             SocketWrapper::AddMsg(msg);
 
         }
@@ -529,8 +529,8 @@ void SendOnSceneStructureResponse( const bv::SceneStructureEventPtr & evtStructu
     wstring WS = wstring( S.begin(), S.end() );
 
     ResponseMsg msg;
-    msg.msg     = WS;
-    msg.sock_id = evtStructure->sock_id;
+    msg.message     = WS;
+    msg.socketID = evtStructure->sock_id;
     SocketWrapper::AddMsg( msg );
 }
 
@@ -1289,8 +1289,8 @@ void            RemoteControlInterface::OnLoadAsset     ( IEventPtr evt )
             response = L"Failed to load asset. node [" + toWString( eventLoadAsset->NodeName ) + L"] plugin [" + toWString( eventLoadAsset->PluginName ) + L"]";
 
         ResponseMsg msg;
-        msg.msg     = response;
-        msg.sock_id = eventLoadAsset->SockID;
+        msg.message     = response;
+        msg.socketID = eventLoadAsset->SockID;
         SocketWrapper::AddMsg( msg );
     }
 }
