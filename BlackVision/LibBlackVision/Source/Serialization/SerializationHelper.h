@@ -107,6 +107,9 @@ glm::vec4               String2Vec4( std::string s );
 glm::vec3               String2Vec3( std::string s );
 glm::vec2               String2Vec2( std::string s );
 
+template< typename T >
+std::string T2String( const T& t );
+
 //template< typename T >
 //std::string T2String( const std::pair< T, const char* > t2s[], const T& t ); // include SerializationHelper.inl for the definition
 

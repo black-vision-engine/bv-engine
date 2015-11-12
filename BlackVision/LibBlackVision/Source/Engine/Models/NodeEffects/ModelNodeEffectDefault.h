@@ -12,6 +12,9 @@ public:
 
             ModelNodeEffectDefault  ( ITimeEvaluatorPtr timeEvaluator );
 
+    virtual void            Serialize       ( ISerializer& ser ) const;
+    static ISerializablePtr Create          ( const IDeserializer& deser );
+
     virtual NodeEffectType  GetType () const override;
     virtual void            Update  ( TimeType t ) override;
 

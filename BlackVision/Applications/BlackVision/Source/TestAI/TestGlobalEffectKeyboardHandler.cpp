@@ -4,6 +4,7 @@
 
 #include "Engine/Models/NodeEffects/ModelNodeEffectDefault.h"
 
+#include "Serialization/XML/XMLSerializer.h"
 
 namespace bv {
 
@@ -29,6 +30,15 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
 
     switch( c )
     {
+        case 's': 
+        {
+            auto sob = new SerializeObject();
+            logic->GetBVScene()->Serialize( *sob );
+            sob->Save( "test.xml" );
+            delete sob; 
+
+            break;
+        }
         case '1':
         {
             m_curSelectedNode = NodeEffectType::NET_DEFAULT;

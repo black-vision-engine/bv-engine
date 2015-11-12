@@ -3,7 +3,7 @@
 namespace bv { namespace SerializationHelper {
 
 template< typename T >
-std::string T2String( const std::pair< T, const char* > t2s[], const T& t )
+std::string Enum2String( const std::pair< T, const char* > t2s[], const T& t )
 {
     for( int i = 0; ; i++ ) // FIXME so much
         if( t2s[i].first == t )
