@@ -477,7 +477,7 @@ void                            BVAppLogic::InitializeKbdHandler()
     {
         m_kbdHandler = new TestGlobalEfectKeyboardHandler();
     }
-    if( envScene == "SERIALIZED_TEST" )
+    else if( envScene == "SERIALIZED_TEST" )
     {
         m_kbdHandler = new TestEditorsKeyboardHandler();
     }
