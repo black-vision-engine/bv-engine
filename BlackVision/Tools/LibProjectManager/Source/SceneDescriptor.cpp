@@ -96,7 +96,7 @@ void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & sc
 //
 model::SceneModelPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeType numBytes, model::TimelineManager * )
 {
-    auto deser = DeserializeObject( in, numBytes );
+    auto deser = XMLDeserializer( in, numBytes );
 
     auto scene = SerializationHelper::DeserializeObjectLoadImpl< model::SceneModel >( deser, "scene" );
 
@@ -121,7 +121,7 @@ AssetDescVec SceneDescriptor::ListSceneAssets ( const Path & sceneFile )
 //
 AssetDescVec SceneDescriptor::ListSceneAssets ( std::istream & in, SizeType numBytes )
 {
-    auto deser = DeserializeObject( in, numBytes );
+    auto deser = XMLDeserializer( in, numBytes );
 
     // assets
     auto assets = SerializationHelper::DeserializeObjectLoadImpl< AssetDescsWithUIDs >( deser, "assets" );

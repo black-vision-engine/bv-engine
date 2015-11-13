@@ -9,16 +9,16 @@
 namespace bv
 {
 
-class DeserializeObject  : public IDeserializer
+class XMLDeserializer  : public IDeserializer
 {
     rapidxml::xml_document<>*                               m_rootDoc;
     mutable rapidxml::xml_node<>*                           m_doc;
     mutable std::stack< rapidxml::xml_node<>* >             m_nodes;
 
 public:
-    DeserializeObject( std::string filename );
-    DeserializeObject( std::istream & in, SizeType numBytes );
-    ~DeserializeObject();
+    XMLDeserializer( std::string filename );
+    XMLDeserializer( std::istream & in, SizeType numBytes );
+    ~XMLDeserializer();
 
     rapidxml::xml_node<>*                           GetDoc() const { return m_nodes.top(); }
 

@@ -8,7 +8,7 @@ namespace bv {
 
 // *******************************
 //
-DeserializeObject::DeserializeObject( std::string filename )
+XMLDeserializer::XMLDeserializer( std::string filename )
     : m_rootDoc( new rapidxml::xml_document<> )
 { 
     assert( Path::Exists( filename ) );
@@ -26,7 +26,7 @@ DeserializeObject::DeserializeObject( std::string filename )
 
 // *******************************
 //
-DeserializeObject::DeserializeObject( std::istream & in, SizeType numBytes )
+XMLDeserializer::XMLDeserializer( std::istream & in, SizeType numBytes )
     : m_rootDoc( new rapidxml::xml_document<> )
 {
     std::stringstream buffer;
@@ -45,21 +45,21 @@ DeserializeObject::DeserializeObject( std::istream & in, SizeType numBytes )
 
 // *******************************
 //
-DeserializeObject::~DeserializeObject()
+XMLDeserializer::~XMLDeserializer()
 {
 }
 
 
 // *******************************
 //
-std::string                                             DeserializeObject::GetName()
+std::string                                             XMLDeserializer::GetName()
 {
     return GetDoc()->name();
 }
 
 // *******************************
 //
-std::string                                             DeserializeObject::GetValue( std::string name ) const
+std::string                                             XMLDeserializer::GetValue( std::string name ) const
 {
     auto node = GetDoc()->first_attribute( name.c_str() );
     if( node == nullptr )
@@ -68,12 +68,12 @@ std::string                                             DeserializeObject::GetVa
 }
 
 
-std::string			DeserializeObject::GetAttribute        ( const std::string& name ) const
+std::string			XMLDeserializer::GetAttribute        ( const std::string& name ) const
 { 
     return GetValue( name );
 }
 
-bool                DeserializeObject::EnterChild          ( const std::string& name ) const
+bool                XMLDeserializer::EnterChild          ( const std::string& name ) const
 { 
     auto child = m_doc->first_node( name.c_str() );
     if( child == nullptr )
@@ -85,7 +85,7 @@ bool                DeserializeObject::EnterChild          ( const std::string& 
     return true;
 }
 
-bool                DeserializeObject::ExitChild           () const
+bool                XMLDeserializer::ExitChild           () const
 { 
     if( m_nodes.size() > 0 )
     {
@@ -97,7 +97,7 @@ bool                DeserializeObject::ExitChild           () const
         return false;
 }
 
-bool                DeserializeObject::NextChild           () const
+bool                XMLDeserializer::NextChild           () const
 {
     auto name = m_doc->name();
     do {
@@ -114,10 +114,10 @@ bool                DeserializeObject::NextChild           () const
 }
 
 
-std::wstring        DeserializeObject::GetAttribute        ( const std::wstring& /*name*/ ) const
+std::wstring        XMLDeserializer::GetAttribute        ( const std::wstring& /*name*/ ) const
 {    assert( !"This serializer doesn't supports wstrings" ); return L"";    }
 
-bool                DeserializeObject::EnterChild          ( const std::wstring& /*name*/ ) const
+bool                XMLDeserializer::EnterChild          ( const std::wstring& /*name*/ ) const
 {    assert( !"This serializer doesn't supports wstrings" ); return false;    }
 
 

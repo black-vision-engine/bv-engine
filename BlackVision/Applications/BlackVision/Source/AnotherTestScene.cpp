@@ -955,7 +955,7 @@ model::BasicNodePtr LoadSceneFromFile( std::string filename, model::TimelineMana
 
     //JsonDeserializeObject deser;
     //deser.Load( filename );
-    DeserializeObject deser( filename );
+    XMLDeserializer deser( filename );
 
     auto model = SerializationHelper::DeserializeObjectLoadImpl< SceneModel >( deser, "scene" );
 
