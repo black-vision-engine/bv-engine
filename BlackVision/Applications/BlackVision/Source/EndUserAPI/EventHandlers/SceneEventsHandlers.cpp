@@ -2,8 +2,8 @@
 
 #include "Engine/Models/BVSceneEditor.h"
 #include "Engine/Models/ModelNodeEditor.h"
-#include "../BVAppLogic.h"
-#include "../UseLogger.h"
+#include "../../BVAppLogic.h"
+#include "../../UseLogger.h"
 #include "ProjectManager.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Tools/IncludeJSON.h"

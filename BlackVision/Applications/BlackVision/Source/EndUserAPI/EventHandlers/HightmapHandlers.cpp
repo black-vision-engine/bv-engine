@@ -1,6 +1,6 @@
 #include "HightmapHandlers.h"
 
-#include "../BVAppLogic.h"
+#include "../../BVAppLogic.h"
 #include "Engine/Models/Plugins/Custom/DefaultHeightMapPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Log.h"

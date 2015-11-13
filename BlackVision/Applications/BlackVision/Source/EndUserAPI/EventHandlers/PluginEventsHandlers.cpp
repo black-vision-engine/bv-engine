@@ -6,8 +6,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 
 
-#include "../BVAppLogic.h"
-#include "../UseLogger.h"
+#include "../../BVAppLogic.h"
+#include "../../UseLogger.h"
 
 #include "Engine/Events/EventHelpers.h"             // wstring to string conversions and vice versa
 #include "Serialization/SerializationHelper.h"      // Conversions from string to glm types

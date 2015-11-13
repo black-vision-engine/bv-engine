@@ -1,7 +1,7 @@
 #include "QueryHandlers.h"
 
-#include "../BVAppLogic.h"
-#include "../UseLogger.h"
+#include "../../BVAppLogic.h"
+#include "../../UseLogger.h"
 #include "Tools/IncludeJSON.h"
 #include "PerformanceMonitor.h"
 #include "Engine/Models/BasicNode.h"
