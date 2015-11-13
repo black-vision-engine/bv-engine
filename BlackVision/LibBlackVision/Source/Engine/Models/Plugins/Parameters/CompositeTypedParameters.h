@@ -25,6 +25,15 @@ public:
     void                Serialize       ( ISerializer& doc ) const;
 
     void                SetCurveType    ( CurveType type );
+    CurveType           GetCurveType    ();
+
+    virtual void        SetWrapPostMethod ( WrapMethod method );
+    virtual void        SetWrapPreMethod ( WrapMethod method );
+    virtual WrapMethod  GetWrapPostMethod ();
+    virtual WrapMethod  GetWrapPreMethod ();
+
+    virtual int         GetNumKeys      ();
+
 
     inline  void        SetRotation     ( const glm::vec3 & rotAxis, float angle, TimeType t );
     inline  void        SetScale        ( const glm::vec3 & scale, TimeType t );
@@ -65,8 +74,16 @@ public:
     explicit            ParamTransformVec   ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator );
     explicit            ParamTransformVec   ( const std::string & name, const ITimeEvaluatorPtr evaluator );
 
-    void                Serialize       ( ISerializer& doc ) const;
+    void                Serialize           ( ISerializer& doc ) const;
     void                SetCurveType        ( CurveType type );
+    CurveType           GetCurveType        ();
+
+    virtual void        SetWrapPostMethod   ( WrapMethod method );
+    virtual void        SetWrapPreMethod    ( WrapMethod method );
+    virtual WrapMethod  GetWrapPostMethod   ();
+    virtual WrapMethod  GetWrapPreMethod    ();
+
+    virtual int         GetNumKeys          ();
 
 
     void                AppendTransform     ( const TransformF & transform );

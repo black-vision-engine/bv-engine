@@ -66,6 +66,8 @@ public:
     virtual void                Serialize       ( ISerializer& sob ) const;
     static ISerializablePtr     Create          ( const IDeserializer& dob );
     virtual void                SetCurveType        ( CurveType type );
+    virtual void                SetWrapPostMethod   ( WrapMethod method );
+    virtual void                SetWrapPreMethod    ( WrapMethod method );
 
     virtual glm::mat4x4         Evaluate            ( typename ParamT::TimeT t ) const;
     virtual SimpleTransform *   Clone               () const;
@@ -139,7 +141,9 @@ private:
     Vec3Interpolator    m_rotationAxis;
 
 public:
-    virtual void                SetCurveType        ( CurveType type );
+    virtual void                SetCurveType        ( CurveType type ) override;
+    virtual void                SetWrapPostMethod   ( WrapMethod method ) override;
+    virtual void                SetWrapPreMethod    ( WrapMethod method ) override;
 
     explicit                    Rotation    ( ParamT angle, const Vec3Interpolator & rotAxis );
     explicit                    Rotation    ( ParamT angle, ParamT p0, ParamT p1, ParamT p2 );
@@ -193,6 +197,8 @@ public:
     virtual         ~CompositeTransform ();
 
     void            SetCurveType        ( CurveType type );
+    void            SetWrapPostMethod   ( WrapMethod method );
+    void            SetWrapPreMethod    ( WrapMethod method );
 
     void            AddTranslation      ( ParamT x0, ParamT x1, ParamT x2 );
     void            AddScale            ( ParamT s0, ParamT s1, ParamT s2 );

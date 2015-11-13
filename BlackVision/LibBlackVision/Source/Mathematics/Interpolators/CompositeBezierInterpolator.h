@@ -1,24 +1,10 @@
 #pragma once
 
 #include "BasicInterpolator.h"
+#include "InterpolatorBasicTypes.h"
 
 namespace bv
 {
-
-enum CurveType 
-{ 
-    POINT, 
-    LINEAR, 
-    BEZIER,
-    COSINE_LIKE
-};
-
-enum class EvaluatorType : int
-{ 
-    CONSTANT, 
-    LINEAR, 
-    BEZIER 
-};
 
 template< class TimeValueT, class ValueT >
 class IEvaluator : public ISerializable // FIXME perhaps not every evaluator has to be serializable
@@ -62,20 +48,25 @@ public:
     void                                                AddKey          ( TimeValueT t, const ValueT & v );
     ValueT                                              Evaluate        ( TimeValueT t ) const;
 
-    const std::vector< Key > &                          GetKeys();
+    int                                                 GetNumKeys      ();
+    const std::vector< Key > &                          GetKeys         ();
     const std::vector< IEvaluator* > &                  GetInterpolators();
 
-    void                                                SetCurveType( CurveType type );
+    void                                                SetCurveType    ( CurveType type );
+    CurveType                                           GetCurveType    ();
+
     void                                                SetWrapPostMethod  ( WrapMethod method );
     void                                                SetWrapPreMethod   ( WrapMethod method );
+    WrapMethod                                          GetWrapPostMethod  ();
+    WrapMethod                                          GetWrapPreMethod   ();
 
-    void                                                SetKey1( int i, Key key );
-    void                                                SetKey2( int i, Key key );
-    void                                                SetV1( int i, Key v );
-    void                                                SetV2( int i, Key v );
+    void                                                SetKey1             ( int i, Key key );
+    void                                                SetKey2             ( int i, Key key );
+    void                                                SetV1               ( int i, Key v );
+    void                                                SetV2               ( int i, Key v );
 
 // FIXME: below is to remove
-    const std::vector<Key> & AccessKeys() const { static std::vector<Key> ret; return ret; };
+    //const std::vector<Key> & AccessKeys() const { static std::vector<Key> ret; return ret; };
 
 private:
     ValueT                                              PreEvaluate( TimeValueT t ) const;

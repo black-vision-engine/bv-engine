@@ -704,6 +704,7 @@
     <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeBezierInterpolator.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\InterpolatorBasicTypes.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Rect.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Transform\MatTransform.h" />

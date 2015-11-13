@@ -140,6 +140,26 @@ void SimpleTransform<ParamT>::SetCurveType    ( CurveType type )
     p2.SetCurveType( type ); 
 }
 
+// *************************************
+//
+template<typename ParamT>
+void                SimpleTransform<ParamT>::SetWrapPostMethod   ( WrapMethod method )
+{
+    p0.SetWrapPostMethod( method );
+    p1.SetWrapPostMethod( method );
+    p1.SetWrapPostMethod( method );
+}
+
+// *************************************
+//
+template<typename ParamT>
+void                SimpleTransform<ParamT>::SetWrapPreMethod    ( WrapMethod method )
+{
+    p0.SetWrapPreMethod( method );
+    p1.SetWrapPreMethod( method );
+    p1.SetWrapPreMethod( method );
+}
+
 
 template<typename ParamT>
 Rotation<ParamT>::Rotation    ( ParamT angle, const Vec3Interpolator & rotAxis )
@@ -167,6 +187,24 @@ void Rotation<ParamT>::SetCurveType( CurveType type )
 {
     m_angle.SetCurveType( type );
     m_rotationAxis.SetCurveType( type );
+}
+
+// *************************************
+//
+template<typename ParamT>
+void                Rotation<ParamT>::SetWrapPostMethod   ( WrapMethod method )
+{
+    m_angle.SetWrapPostMethod( method );
+    m_rotationAxis.SetWrapPostMethod( method );
+}
+
+// *************************************
+//
+template<typename ParamT>
+void                Rotation<ParamT>::SetWrapPreMethod    ( WrapMethod method )
+{
+    m_angle.SetWrapPreMethod( method );
+    m_rotationAxis.SetWrapPreMethod( method );
 }
 
 // *************************************
@@ -215,6 +253,25 @@ void CompositeTransform<ParamT>::SetCurveType        ( CurveType type )
     for( auto& trans : m_transformations ) 
         trans->SetCurveType( type ); 
 }
+
+// *************************************
+//
+template<typename ParamT>
+void            CompositeTransform<ParamT>::SetWrapPostMethod   ( WrapMethod method )
+{
+    for( auto& trans : m_transformations ) 
+        trans->SetWrapPostMethod( method );
+}
+
+// *************************************
+//
+template<typename ParamT>
+void            CompositeTransform<ParamT>::SetWrapPreMethod    ( WrapMethod method )
+{
+    for( auto& trans : m_transformations ) 
+        trans->SetWrapPreMethod( method );
+}
+
 
 // *************************************
 //

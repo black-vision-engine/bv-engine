@@ -41,6 +41,54 @@ void SimpleParameterImpl< InterpolatorType, ValueType, type >::SetCurveType    (
     m_interpolator.SetCurveType( type ); 
 }
 
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+CurveType       SimpleParameterImpl< InterpolatorType, ValueType, type >::GetCurveType        ()
+{
+    return m_interpolator.GetCurveType();
+}
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+void                SimpleParameterImpl< InterpolatorType, ValueType, type >::SetWrapPostMethod       ( WrapMethod method )
+{
+    m_interpolator.SetWrapPostMethod( method );
+}
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+void                SimpleParameterImpl< InterpolatorType, ValueType, type >::SetWrapPreMethod        ( WrapMethod method )
+{
+    m_interpolator.SetWrapPreMethod( method );
+}
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+WrapMethod          SimpleParameterImpl< InterpolatorType, ValueType, type >::GetWrapPostMethod       ()
+{
+    return m_interpolator.GetWrapPostMethod();
+}
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+WrapMethod          SimpleParameterImpl< InterpolatorType, ValueType, type >::GetWrapPreMethod        ()
+{
+    return m_interpolator.GetWrapPreMethod();
+}
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+int                 SimpleParameterImpl< InterpolatorType, ValueType, type >::GetNumKeys              ()
+{
+    return m_interpolator.GetNumKeys();
+}
+
 
 // *******************************
 //
@@ -83,25 +131,6 @@ inline ModelParamType  SimpleParameterImpl< InterpolatorType, ValueType, type >:
 {
     return type;
 }
-
-//// *******************************
-////
-//template< typename InterpolatorType, typename ValueType, ModelParamType type >
-//void                SimpleParameterImpl< InterpolatorType, ValueType, type >::SetInterpolationMethod ( IParameter::InterpolationMethod method )
-//{
-//    __super::SetInterpolationMethod( method );
-//    m_interpolator.SetInterpolationMethod( method );
-//}
-//
-//// *******************************
-////
-//template< typename InterpolatorType, typename ValueType, ModelParamType type >
-//IParameter::InterpolationMethod SimpleParameterImpl< InterpolatorType, ValueType, type >::GetInterpolationMethod () const
-//{
-//    assert( __super::GetInterpolationMethod() == m_interpolator.GetInterpolationMethod() ); // just to make sure we're consistent
-//    return __super::GetInterpolationMethod();
-//}
-
 
 // *******************************
 //

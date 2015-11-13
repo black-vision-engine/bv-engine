@@ -21,6 +21,52 @@ void                ParamTransform::SetCurveType    ( CurveType type )
 }
 
 // *******************************
+// FIXME: reimplement with SQT paramter model
+CurveType           ParamTransform::GetCurveType    ()
+{
+    assert( false );
+    return CurveType::CT_TOTAL;
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+void        ParamTransform::SetWrapPostMethod ( WrapMethod method )
+{
+    m_transformModel.SetWrapPostMethod( method );
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+void        ParamTransform::SetWrapPreMethod ( WrapMethod method )
+{
+    m_transformModel.SetWrapPreMethod( method );
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+WrapMethod  ParamTransform::GetWrapPostMethod ()
+{
+    assert( false );
+    return WrapMethod( -1 );
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+WrapMethod  ParamTransform::GetWrapPreMethod ()
+{
+    assert( false );
+    return WrapMethod( -1 );
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+int         ParamTransform::GetNumKeys      ()
+{
+    assert( false );
+    return -1;
+}
+
+// *******************************
 //
 void    ParamTransform::Serialize       ( ISerializer& doc ) const
 {
@@ -97,6 +143,55 @@ void ParamTransformVec::SetCurveType        ( CurveType type )
 { 
     for( auto& trans : m_transformModelVec ) 
         trans.SetCurveType( type ); 
+}
+
+// *******************************
+//
+void ParamTransformVec::SetWrapPostMethod        ( WrapMethod method ) 
+{ 
+    for( auto& trans : m_transformModelVec ) 
+        trans.SetWrapPostMethod( method ); 
+}
+
+// *******************************
+//
+void ParamTransformVec::SetWrapPreMethod        ( WrapMethod method ) 
+{ 
+    for( auto& trans : m_transformModelVec ) 
+        trans.SetWrapPreMethod( method ); 
+}
+
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+CurveType           ParamTransformVec::GetCurveType    ()
+{
+    assert( false );
+    return CurveType::CT_TOTAL;
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+WrapMethod  ParamTransformVec::GetWrapPostMethod ()
+{
+    assert( false );
+    return WrapMethod( -1 );
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+WrapMethod  ParamTransformVec::GetWrapPreMethod ()
+{
+    assert( false );
+    return WrapMethod( -1 );
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+int         ParamTransformVec::GetNumKeys      ()
+{
+    assert( false );
+    return -1;
 }
 
 // *******************************
