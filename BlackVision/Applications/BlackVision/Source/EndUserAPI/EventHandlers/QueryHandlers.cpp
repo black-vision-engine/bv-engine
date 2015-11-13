@@ -125,16 +125,16 @@ QueryHandlers::~QueryHandlers()
 //
 void QueryHandlers::Info        ( bv::IEventPtr evt )
 {
-    if( evt->GetEventType() == bv::NewInfoEvent::Type() )
+    if( evt->GetEventType() == bv::InfoEvent::Type() )
     {
-        bv::NewInfoEventPtr infoEvent = std::static_pointer_cast<bv::NewInfoEvent>( evt );
+        bv::InfoEventPtr infoEvent = std::static_pointer_cast<bv::InfoEvent>( evt );
 
-        NewInfoEvent::Command command = infoEvent->InfoRequest;
+        InfoEvent::Command command = infoEvent->InfoRequest;
         std::string& nodeName = infoEvent->NodeName;
 
         wstring responseMessage;
 
-        if( command == NewInfoEvent::Command::TreeStructure )
+        if( command == InfoEvent::Command::TreeStructure )
         {
             //Log::A("OK","Tree structure:");
             ReqPrint( m_appLogic->GetBVScene()->GetModelSceneRoot(), 1 );
@@ -146,7 +146,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             //Log::A("OK",S);
             responseMessage = toWString( root.toStyledString() );
         }
-        else if( command == NewInfoEvent::Command::Performance )
+        else if( command == InfoEvent::Command::Performance )
         {
             //Log::A("SENDING","Performance:");
                         
@@ -174,7 +174,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             //Log::A("OK",S);
             responseMessage = toWString( root.toStyledString() );
         }
-        else if( command == NewInfoEvent::Command::Timelines )
+        else if( command == InfoEvent::Command::Timelines )
         {
             
             //Log::A("SENDING","Timelines info...:");
@@ -244,7 +244,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             //Log::A("SENDING",S);
             responseMessage = wstring(S.begin(),S.end());
         }
-        else if( command == NewInfoEvent::Command::NodeInfo )
+        else if( command == InfoEvent::Command::NodeInfo )
         {
 		    auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
 			auto node = root->GetNode( nodeName );
@@ -274,7 +274,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             //Log::A( "SENDING", resStr );
             responseMessage = wstring( resStr.begin(), resStr.end() );
         }
-        else if( command == NewInfoEvent::Command::Videocards )
+        else if( command == InfoEvent::Command::Videocards )
         {
             Json::Value val;
             val[ "cmd" ]        = "videocards";

@@ -31,30 +31,10 @@ std::string KeyPressedEvent::m_sEventName           = "Event_KeyPressedEvent";
 
 // FIXME: MORE EVENTS IN CrawlerEvents.cpp. VERY VERY BAD IDEA. WE NEED EVENTS REGISTER SYSTEM ASAP.
 
-// Pawełek event pevent
-
-const EventType SetParamEvent::m_sEventType       = 0x10000006;
-std::string SetParamEvent::m_sEventName           = "Event_SetParam";
-
-const EventType TimeLineCmd::m_sEventType       = 0x10000009;
-std::string TimeLineCmd::m_sEventName           = "Event_Timeline";
-
-const EventType TimerCmd::m_sEventType       = 0x10000010;
-std::string TimerCmd::m_sEventName           = "Event_Timer";
-
-const EventType WidgetCmd::m_sEventType       = 0x10000011;
-std::string WidgetCmd::m_sEventName           = "Event_Widget";
-
-const EventType SceneStructureEvent::m_sEventType       = 0x10000012;
-std::string SceneStructureEvent::m_sEventName           = "Event_SceneStructure";
-
-const EventType InfoEvent::m_sEventType             = 0x10000007;
-std::string InfoEvent::m_sEventName                 = "Event_Info";
-
 
 
 // ************************************* new Events *****************************************
-const EventType LoadAssetEvent::m_sEventType        = 0x10000013;
+const EventType LoadAssetEvent::m_sEventType        = 0x30000013;
 std::string LoadAssetEvent::m_sEventName            = "LoadAssetEvent";
 
 const EventType ParamKeyEvent::m_sEventType         = 0x30000006;
@@ -69,8 +49,8 @@ std::string ProjectEvent::m_sEventName              = "ProjectStructureEvent";
 const EventType ResponseEvent::m_sEventType         = 0x30000008;
 std::string ResponseEvent::m_sEventName             = "ResponseEvent";
 
-const EventType NewInfoEvent::m_sEventType          = 0x30000007;
-std::string NewInfoEvent::m_sEventName              = "InfoEvent";
+const EventType InfoEvent::m_sEventType          = 0x30000007;
+std::string InfoEvent::m_sEventName              = "InfoEvent";
 
 const EventType TimeLineEvent::m_sEventType         = 0x30000009;
 std::string TimeLineEvent::m_sEventName             = "TimeLineEvent";
@@ -202,68 +182,52 @@ const std::wstring COMMAND_HM_SET3_WSTRING      = L"Set3";
 //
 PluginAddedEvent::PluginAddedEvent                          ()
     : m_addedPlugin( nullptr )
-{
-}
+{}
 
 // *************************************
 //
 PluginAddedEvent::PluginAddedEvent                          ( model::IPluginConstPtr plugin )
     : m_addedPlugin( plugin )
-{
-}
+{}
 
 // *************************************
 //
-EventType               PluginAddedEvent::GetEventType      () const
-{
-    return m_sEventType;
-}
+void                PluginAddedEvent::Serialize            ( ISerializer& ser ) const
+{    assert( !"Should not be serialized" );  }
 
 // *************************************
 //
-void                    PluginAddedEvent::Serialize         ( ISerializer& /*ser*/ ) const
+IEventPtr                PluginAddedEvent::Create          ( IDeserializer& deser )
 {
-    std::string err = GetName() + " should not be serialized";
-    assert( !err.c_str()  );
+    assert( !"Should not be deserialized" );
+    return nullptr;    
 }
-
-// *************************************
-//
-IEventPtr                    PluginAddedEvent::Create          ( IDeserializer& /*deser*/ )
-{
-    std::string err = m_sEventName + " should not be deserialized";
-    assert( !err.c_str()  );
-    return nullptr;
-}
-
 // *************************************
 //
 IEventPtr               PluginAddedEvent::Clone             () const
-{
-    return IEventPtr( new PluginAddedEvent( *this ) );
-}
+{   return IEventPtr( new PluginAddedEvent( *this ) );  }
 
 // *************************************
 //
-const std::string &     PluginAddedEvent::GetName           () const
-{
-    return m_sEventName;
-}
+EventType           PluginAddedEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        PluginAddedEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  PluginAddedEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           PluginAddedEvent::GetEventType() const
+{   return this->m_sEventType; }
 
 // *************************************
 //
 model::IPluginConstPtr  PluginAddedEvent::GetPlugin         () const
-{
-    return m_addedPlugin;
-}
-
-// *************************************
-//
-EventType               PluginAddedEvent::Type              ()
-{
-    return m_sEventType;
-}
-
+{    return m_addedPlugin;  }
 
 // ************************************* NodeAddedEvent *************************************
 
@@ -271,67 +235,52 @@ EventType               PluginAddedEvent::Type              ()
 //
 NodeAddedEvent::NodeAddedEvent                              ()
     : m_addedNode( nullptr )
-{
-}
-
+{}
 // *************************************
 //
 NodeAddedEvent::NodeAddedEvent                              ( model::IModelNodeConstPtr node )
     : m_addedNode( node )
-{
-}
+{}
 
 // *************************************
 //
-EventType               NodeAddedEvent::GetEventType        () const
-{
-    return m_sEventType;
-}
+void                NodeAddedEvent::Serialize            ( ISerializer& ser ) const
+{    assert( !"Should not be serialized" );  }
 
 // *************************************
 //
-void                    NodeAddedEvent::Serialize           ( ISerializer& ser ) const
+IEventPtr                NodeAddedEvent::Create          ( IDeserializer& deser )
 {
-    { ser; } // FIXME: suppress unused warning
-    std::string err = GetName() + " should not be serialized";
-    assert( !err.c_str()  );
+    assert( !"Should not be deserialized" );
+    return nullptr;    
 }
+// *************************************
+//
+IEventPtr               NodeAddedEvent::Clone             () const
+{   return IEventPtr( new NodeAddedEvent( *this ) );  }
 
 // *************************************
 //
-IEventPtr               NodeAddedEvent::Create          ( IDeserializer& /*deser*/ )
-{
-    std::string err = m_sEventName + " should not be deserialized";
-    assert( !err.c_str()  );
-    return nullptr;
-}
-
+EventType           NodeAddedEvent::Type()
+{   return m_sEventType;   }
 // *************************************
 //
-IEventPtr               NodeAddedEvent::Clone               () const
-{
-    return IEventPtr( new NodeAddedEvent( *this ) );
-}
-
+std::string&        NodeAddedEvent::Name()
+{   return m_sEventName;   }
 // *************************************
 //
-const std::string &     NodeAddedEvent::GetName             () const
-{
-    return m_sEventName;
-}
+const std::string&  NodeAddedEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           NodeAddedEvent::GetEventType() const
+{   return this->m_sEventType; }
 
 // *************************************
 //
 model::IModelNodeConstPtr  NodeAddedEvent::GetNode         () const
 {
     return m_addedNode;
-}
-
-// *************************************
-//
-EventType                   NodeAddedEvent::Type            ()
-{
-    return m_sEventType;
 }
 
 
@@ -341,55 +290,45 @@ EventType                   NodeAddedEvent::Type            ()
 //
 FrameRenderedEvent::FrameRenderedEvent                          ( bv::Renderer * renderer )
     : m_renderer( renderer )
-{
-}
+{}
+// *************************************
+//
+void                FrameRenderedEvent::Serialize            ( ISerializer& ser ) const
+{    assert( !"Should not be serialized" );  }
 
 // *************************************
 //
-EventType               FrameRenderedEvent::GetEventType        () const
+IEventPtr                FrameRenderedEvent::Create          ( IDeserializer& deser )
 {
-    return m_sEventType;
+    assert( !"Should not be deserialized" );
+    return nullptr;    
 }
+// *************************************
+//
+IEventPtr               FrameRenderedEvent::Clone             () const
+{   return IEventPtr( new FrameRenderedEvent( *this ) );  }
 
 // *************************************
 //
-void                    FrameRenderedEvent::Serialize           ( ISerializer& ser ) const
-{
-    { ser; } // FIXME: suppress unused warning
-    std::string err = GetName() + " should not be serialized";
-    assert( !err.c_str()  );
-}
-
+EventType           FrameRenderedEvent::Type()
+{   return m_sEventType;   }
 // *************************************
 //
-IEventPtr                    FrameRenderedEvent::Create          ( IDeserializer& deser )
-{
-    { deser; } // FIXME: suppress unused warning
-    std::string err = m_sEventName + " should not be deserialized";
-    assert( !err.c_str()  );
-    return nullptr;
-}
-
+std::string&        FrameRenderedEvent::Name()
+{   return m_sEventName;   }
 // *************************************
 //
-IEventPtr               FrameRenderedEvent::Clone               () const
-{
-    return IEventPtr( new FrameRenderedEvent( *this ) );
-}
-
+const std::string&  FrameRenderedEvent::GetName() const
+{   return Name();   }
 // *************************************
 //
-const std::string &     FrameRenderedEvent::GetName             () const
-{
-    return m_sEventName;
-}
+EventType           FrameRenderedEvent::GetEventType() const
+{   return this->m_sEventType; }
 
 // *************************************
 //
 Renderer *              FrameRenderedEvent::Renderer            ()
-{
-    return m_renderer;
-}
+{    return m_renderer; }
 
 // *************************************
 //
@@ -402,107 +341,81 @@ void                    FrameRenderedEvent::SetResolution       ( int w, int h )
 // *************************************
 //
 int                     FrameRenderedEvent::Width               () const
-{
-    return m_width;
-}
+{    return m_width;    }
 
 // *************************************
 //
 int                     FrameRenderedEvent::Height              () const
-{
-    return m_height;
-}
-
-// *************************************
-//
-EventType               FrameRenderedEvent::Type                ()
-{
-    return m_sEventType;
-}
+{    return m_height;   }
 
 
-// ************************************* FrameRenderedEvent *************************************
+
+// ************************************* TransformSetEvent *************************************
 
 // *************************************
 //
 TransformSetEvent::TransformSetEvent                        ()
     : m_translation( 0.f, 0.f, 0.f )
     , m_scale( 1.f, 1.f, 1.f )
-{
-}
-
-// *************************************
-//
-EventType           TransformSetEvent::GetEventType         () const
-{
-    return m_sEventType;
-}
+{}
 
 // *************************************
 //
 void                TransformSetEvent::Serialize            ( ISerializer& ser ) const
-{
-    { ser; } // FIXME: suppress unused warning
-    assert( false );
-}
+{    assert( !"Should not be serialized" );  }
 
 // *************************************
 //
 IEventPtr                TransformSetEvent::Create          ( IDeserializer& deser )
 {
-    { deser; } // FIXME: suppress unused warning
-    assert( false );
-    return nullptr;
+    assert( !"Should not be deserialized" );
+    return nullptr;    
 }
+// *************************************
+//
+IEventPtr               TransformSetEvent::Clone             () const
+{   return IEventPtr( new TransformSetEvent( *this ) );  }
 
 // *************************************
 //
-IEventPtr           TransformSetEvent::Clone                () const
-{
-    return IEventPtr( new TransformSetEvent( *this ) );
-}
-
+EventType           TransformSetEvent::Type()
+{   return m_sEventType;   }
 // *************************************
 //
-const std::string & TransformSetEvent::GetName              () const
-{
-    return m_sEventName;
-}
+std::string&        TransformSetEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  TransformSetEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           TransformSetEvent::GetEventType() const
+{   return this->m_sEventType; }
 
 // *************************************
 //
 void                TransformSetEvent::SetTranslation       ( const glm::vec3 & translation )
-{
-    m_translation = translation;
-}
+{    m_translation = translation;   }
 
 // *************************************
 //
 void                TransformSetEvent::SetScale             ( const glm::vec3 & scale )
-{
-    m_scale = scale;
-}
+{    m_scale = scale;   }
 
 // *************************************
 //
 const glm::vec3 &   TransformSetEvent::Translation          () const
-{
-    return m_translation;
-}
+{    return m_translation;  }
 
 // *************************************
 //
 const glm::vec3 &   TransformSetEvent::Scale                () const
-{
-    return m_scale;
-}
+{    return m_scale;    }
 
-// *************************************
-//
-EventType           TransformSetEvent::Type                 ()
-{
-    return m_sEventType;
-}
+
+// ************************************* KeyPressedEvent *************************************
+
 
 // *************************************
 //
@@ -511,393 +424,47 @@ KeyPressedEvent::KeyPressedEvent        ()
 
 // *************************************
 //
-EventType               KeyPressedEvent::GetEventType      () const
-{
-    return m_sEventType;
-}
+void                KeyPressedEvent::Serialize            ( ISerializer& ser ) const
+{    assert( !"Should not be serialized" );  }
 
+// *************************************
+//
+IEventPtr                KeyPressedEvent::Create          ( IDeserializer& deser )
+{
+    assert( !"Should not be deserialized" );
+    return nullptr;    
+}
 // *************************************
 //
 IEventPtr               KeyPressedEvent::Clone             () const
-{
-    return IEventPtr( new KeyPressedEvent( *this ) );
-}
+{   return IEventPtr( new KeyPressedEvent( *this ) );  }
 
 // *************************************
 //
-const std::string &     KeyPressedEvent::GetName           () const
-{
-    return m_sEventName;
-}
+EventType           KeyPressedEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        KeyPressedEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  KeyPressedEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           KeyPressedEvent::GetEventType() const
+{   return this->m_sEventType; }
 
 // *************************************
 //
 void                    KeyPressedEvent::SetChar             ( unsigned char  c )
-{
-    m_char = c;
-}
+{    m_char = c;    }
 
 // *************************************
 //
 unsigned char           KeyPressedEvent::GetChar             () const
-{
-    return m_char;
-}
-
-// *************************************
-//
-EventType               KeyPressedEvent::Type                ()
-{
-    return m_sEventType;
-}
-
-
-
-InfoEvent::InfoEvent         () 
-{
-  
-}
-
-
-// *************************************
-//
-EventType           InfoEvent::GetEventType         () const
-{
-    return this->m_sEventType;
-}
-
-// *************************************
-//
-void                InfoEvent::Serialize            ( ISerializer& ser ) const
-{
-    assert( false );
-}
-
-// *************************************
-//
-IEventPtr                InfoEvent::Create          ( IDeserializer& deser )
-{
-    assert( false );
-    return nullptr;
-}
-// *************************************
-//
-IEventPtr               InfoEvent::Clone             () const
-{
-    return IEventPtr( new InfoEvent( *this ) );
-}
-// *************************************
-//
-EventType               InfoEvent::Type              ()
-{
-    return m_sEventType;
-}
-
-// *************************************
-//
-bool                    InfoEvent::ForceSync        () const
-{
-    return request == L"grab_that_frame";
-}
-
-// *************************************
-//
-const std::string &     InfoEvent::GetName           () const
-{
-    return m_sEventName;
-}
-
-// *************************************
-//
-const std::wstring &         InfoEvent::GetAddStrData    () const
-{
-    return m_additionalStrData;
-}
-
-
-
-
-
-SceneStructureEvent::SceneStructureEvent         () 
-{}
-
-// *************************************
-//
-EventType           SceneStructureEvent::GetEventType         () const
-{
-    return this->m_sEventType;
-}
-
-// *************************************
-//
-void                SceneStructureEvent::Serialize            ( ISerializer& ser ) const
-{
-    assert( false );
-}
-
-// *************************************
-//
-IEventPtr                SceneStructureEvent::Create          ( IDeserializer& deser )
-{
-    assert( false );
-    return nullptr;
-}
-// *************************************
-//
-IEventPtr               SceneStructureEvent::Clone             () const
-{
-    return IEventPtr( new SceneStructureEvent( *this ) );
-}
-// *************************************
-//
-EventType               SceneStructureEvent::Type              ()
-{
-    return m_sEventType;
-}
-
-// *************************************
-//
-bool                    SceneStructureEvent::ForceSync        () const
-{
-    return request == L"grab_that_frame";
-}
-
-// *************************************
-//
-const std::string &     SceneStructureEvent::GetName           () const
-{
-    return m_sEventName;
-}
-
-// *************************************
-//
-const std::wstring &         SceneStructureEvent::GetAddStrData    () const
-{
-    return m_additionalStrData;
-}
-
-
-//******************* SET PARAM *************
-
-
-
-SetParamEvent::SetParamEvent         () 
-{
-  
-}
-
-
-// *************************************
-//
-EventType           SetParamEvent::GetEventType         () const
-{
-    return this->m_sEventType;
-}
-
-// *************************************
-//
-void                SetParamEvent::Serialize            ( ISerializer& ser ) const
-{
-    assert( false );
-}
-
-// *************************************
-//
-IEventPtr                SetParamEvent::Create          ( IDeserializer& deser )
-{
-    assert( false );
-    return nullptr;
-}
-// *************************************
-//
-IEventPtr               SetParamEvent::Clone             () const
-{
-    return IEventPtr( new SetParamEvent( *this ) );
-}
-// *************************************
-//
-EventType               SetParamEvent::Type              ()
-{
-    return m_sEventType;
-}
-
-// *************************************
-//
-const std::string &     SetParamEvent::GetName           () const
-{
-    return m_sEventName;
-}
-
-
-
-
-//******************* Timeline CMD *************
-
-
-
-TimeLineCmd::TimeLineCmd         () 
-{
-  
-}
-
-
-// *************************************
-//
-EventType           TimeLineCmd::GetEventType         () const
-{
-    return this->m_sEventType;
-}
-
-// *************************************
-//
-void                TimeLineCmd::Serialize            ( ISerializer& ser ) const
-{
-    assert( false );
-}
-
-// *************************************
-//
-IEventPtr                TimeLineCmd::Create          ( IDeserializer& deser )
-{
-    assert( false );
-    return nullptr;
-}
-// *************************************
-//
-IEventPtr               TimeLineCmd::Clone             () const
-{
-    return IEventPtr( new TimeLineCmd( *this ) );
-}
-// *************************************
-//
-EventType               TimeLineCmd::Type              ()
-{
-    return m_sEventType;
-}
-
-// *************************************
-//
-const std::string &     TimeLineCmd::GetName           () const
-{
-    return m_sEventName;
-}
-
-
-
-
-
-
-
-
-//******************* Timer CMD *************
-
-
-
-TimerCmd::TimerCmd         () 
-{
-  
-}
-
-
-// *************************************
-//
-EventType           TimerCmd::GetEventType         () const
-{
-    return this->m_sEventType;
-}
-
-// *************************************
-//
-void                TimerCmd::Serialize            ( ISerializer& ser ) const
-{
-    assert( false );
-}
-
-// *************************************
-//
-IEventPtr                TimerCmd::Create          ( IDeserializer& deser )
-{
-    assert( false );
-    return nullptr;
-}
-// *************************************
-//
-IEventPtr               TimerCmd::Clone             () const
-{
-    return IEventPtr( new TimerCmd( *this ) );
-}
-// *************************************
-//
-EventType               TimerCmd::Type              ()
-{
-    return m_sEventType;
-}
-
-// *************************************
-//
-const std::string &     TimerCmd::GetName           () const
-{
-    return m_sEventName;
-}
-
-
-
-
-
-
-
-//******************* Widget CMD *************
-
-
-
-WidgetCmd::WidgetCmd         () 
-{
-  
-}
-
-
-// *************************************
-//
-EventType           WidgetCmd::GetEventType         () const
-{
-    return this->m_sEventType;
-}
-
-// *************************************
-//
-void                WidgetCmd::Serialize            ( ISerializer& ser ) const
-{
-    assert( false );
-}
-
-// *************************************
-//
-IEventPtr                WidgetCmd::Create          ( IDeserializer& deser )
-{
-    assert( false );
-    return nullptr;
-}
-// *************************************
-//
-IEventPtr               WidgetCmd::Clone             () const
-{
-    return IEventPtr( new WidgetCmd( *this ) );
-}
-// *************************************
-//
-EventType               WidgetCmd::Type              ()
-{
-    return m_sEventType;
-}
-
-// *************************************
-//
-const std::string &     WidgetCmd::GetName           () const
-{
-    return m_sEventName;
-}
-
-
+{    return m_char; }
 
 
 //******************* LoadAssetEvent *************
@@ -1285,7 +852,7 @@ EventType           ResponseEvent::GetEventType() const
 
 // *************************************
 //
-void                NewInfoEvent::Serialize            ( ISerializer& ser ) const
+void                InfoEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
     ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( InfoRequest ) );
@@ -1294,11 +861,11 @@ void                NewInfoEvent::Serialize            ( ISerializer& ser ) cons
 
 // *************************************
 //
-IEventPtr                NewInfoEvent::Create          ( IDeserializer& deser )
+IEventPtr                InfoEvent::Create          ( IDeserializer& deser )
 {
     if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
-        NewInfoEventPtr newEvent    = std::make_shared<NewInfoEvent>();
+        InfoEventPtr newEvent    = std::make_shared<InfoEvent>();
         newEvent->NodeName          = toString( deser.GetAttribute( Serial::NODE_NAME_WSTRING ) );
         newEvent->InfoRequest       = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
         
@@ -1308,29 +875,29 @@ IEventPtr                NewInfoEvent::Create          ( IDeserializer& deser )
 }
 // *************************************
 //
-IEventPtr               NewInfoEvent::Clone             () const
-{   return IEventPtr( new NewInfoEvent( *this ) );  }
+IEventPtr               InfoEvent::Clone             () const
+{   return IEventPtr( new InfoEvent( *this ) );  }
 
 // *************************************
 //
-EventType           NewInfoEvent::Type()
+EventType           InfoEvent::Type()
 {   return m_sEventType;   }
 // *************************************
 //
-std::string&        NewInfoEvent::Name()
+std::string&        InfoEvent::Name()
 {   return m_sEventName;   }
 // *************************************
 //
-const std::string&  NewInfoEvent::GetName() const
+const std::string&  InfoEvent::GetName() const
 {   return Name();   }
 // *************************************
 //
-EventType           NewInfoEvent::GetEventType() const
+EventType           InfoEvent::GetEventType() const
 {   return this->m_sEventType; }
 
 // *************************************
 //
-std::wstring NewInfoEvent::CommandToWString    ( Command cmd )
+std::wstring InfoEvent::CommandToWString    ( Command cmd )
 {
     if( cmd == Command::NodeInfo )
         return Serial::COMMAND_NODE_INFO_WSTRING;
@@ -1348,7 +915,7 @@ std::wstring NewInfoEvent::CommandToWString    ( Command cmd )
 
 // *************************************
 //
-NewInfoEvent::Command NewInfoEvent::WStringToCommand    ( const std::wstring& string )
+InfoEvent::Command InfoEvent::WStringToCommand    ( const std::wstring& string )
 {
     if( string == Serial::COMMAND_NODE_INFO_WSTRING )
         return Command::NodeInfo;
