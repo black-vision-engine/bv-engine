@@ -9,14 +9,14 @@
 namespace bv
 {
 
-class SerializeObject : public ISerializer
+class XMLSerializer : public ISerializer
 {
     rapidxml::xml_document<>                                m_doc;
     std::stack< rapidxml::xml_node<>* >                     m_roots;
 
 public:
-    SerializeObject();
-    ~SerializeObject();
+    XMLSerializer();
+    ~XMLSerializer();
     void										            Save( const std::string & filename );
 	void										            Save( std::ostream & out );
 

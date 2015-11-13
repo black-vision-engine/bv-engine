@@ -17,7 +17,7 @@ void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
 {
     if( c == 's' )
     {
-        auto sob = new SerializeObject();
+        auto sob = new XMLSerializer();
         logic->GetBVScene()->Serialize( *sob );
         sob->Save( "test.xml" );
         delete sob;

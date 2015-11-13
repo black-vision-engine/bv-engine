@@ -32,7 +32,7 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
     {
         case 's': 
         {
-            auto sob = new SerializeObject();
+            auto sob = new XMLSerializer();
             logic->GetBVScene()->Serialize( *sob );
             sob->Save( "test.xml" );
             delete sob; 

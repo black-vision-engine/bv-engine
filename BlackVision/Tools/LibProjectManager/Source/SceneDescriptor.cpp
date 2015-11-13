@@ -75,7 +75,7 @@ void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root )
 //
 void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & scene, model::TimelineManager * tm, std::ostream & out )
 {
-	auto sob = SerializeObject();
+	auto sob = XMLSerializer();
 
     sob.EnterChild( "scene" );
 
