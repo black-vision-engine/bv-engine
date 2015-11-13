@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:layer="clr-namespace:ProfilerEditor.PresentationLayer"
-        Title="Profiler Editor" Height="650" Width="1100" Closing="Window_Closing" Name="mainWindow" MaxWidth="1100" MinWidth="1100" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="False">
+        Title="Profiler Editor" Height="650" Width="1100" Closing="Window_Closing" Name="mainWindow" MaxWidth="1100" MinWidth="1120" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="False">
     <Window.Resources>
 
         <layer:NameColorConverter x:Key="NameColorConverter"></layer:NameColorConverter>
@@ -73,7 +73,7 @@
 
 
     <Grid Name="mainWindowGrid">
-        <Menu IsMainMenu="True" VerticalAlignment="Top" HorizontalAlignment="Left" Height="20" Width="1092" Panel.ZIndex="99">
+        <Menu IsMainMenu="True" VerticalAlignment="Top" HorizontalAlignment="Left" Height="20" Width="1112" Panel.ZIndex="99">
             <MenuItem Header="Options">
                 <MenuItem Header="Profiling Tool" Name="ProfilingTool" Click="ProfilingTool_Click"></MenuItem>
             </MenuItem>
@@ -168,8 +168,8 @@
                 </Expander>
                 <Expander Header="Black Vision Client" Width="1069" Grid.Row="1" Margin="12,0" Grid.ColumnSpan="2">
                     <Grid Height="546">
-                        <TextBox Name="CommandTextBox" AcceptsReturn="True" HorizontalAlignment="Left" VerticalAlignment="Top" Height="493" TextWrapping="Wrap" Text="Event to send" Width="396" Margin="24,10,0,-190"/>
-                        <TextBox Name="ResponseTextBox" AcceptsReturn="True" HorizontalAlignment="Left" VerticalAlignment="Top" Height="493" TextWrapping="Wrap" Text="" Width="396" Margin="647,10,0,-190"/>
+                        <TextBox Name="CommandTextBox" AcceptsReturn="True" HorizontalAlignment="Left" VerticalAlignment="Top" Height="493" TextWrapping="Wrap" Text="Event to send" Width="396" Margin="24,10,0,-190" AcceptsTab="True" TextOptions.TextFormattingMode="Display"/>
+                        <TextBox Name="ResponseTextBox" AcceptsReturn="True" HorizontalAlignment="Left" VerticalAlignment="Top" Height="493" TextWrapping="Wrap" Text="" Width="396" Margin="647,10,0,-190" AcceptsTab="True" IsReadOnly="True"/>
                         <Button Name="ConnectButton" Content="Connect" HorizontalAlignment="Left" Margin="487,22,0,0" VerticalAlignment="Top" Width="91" Click="ConnectButton_Click"/>
                         <Button Name="DisconnetcButton" Content="Disconnect" HorizontalAlignment="Left" Margin="487,47,0,0" VerticalAlignment="Top" Width="91" Click="DisconnetcButton_Click"/>
                         <Button Name="SendButton" Content="Send" HorizontalAlignment="Left" Margin="487,72,0,0" VerticalAlignment="Top" Width="91" Click="SendButton_Click"/>

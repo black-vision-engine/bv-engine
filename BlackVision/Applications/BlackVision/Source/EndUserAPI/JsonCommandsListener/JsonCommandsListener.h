@@ -1,19 +1,19 @@
 #pragma once
 
-#include "../RemoteCommandsConverter.h"
+#include "../RemoteCommandsListener.h"
 #include "../IEventServer.h"
 
 namespace bv
 {
 class IDeserializer;
 
-class JsonCommandsConverter : public RemoteCommandsConverter
+class JsonCommandsListener : public RemoteCommandsListener
 {
 private:
     IEventServer*       m_eventServer;
 public:
-    JsonCommandsConverter();
-    ~JsonCommandsConverter();
+    JsonCommandsListener();
+    ~JsonCommandsListener();
 
     void                QueueEvent          ( const std::wstring& eventString, int socketID ) override;
     bool                InitializeServer    ( int port ) override;

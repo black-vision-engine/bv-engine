@@ -1,4 +1,4 @@
-#include "JsonCommandsConverter.h"
+#include "JsonCommandsListener.h"
 
 #include "Serialization/JsonSpirit/JsonSpiritDeserializeObject.h"
 #include "Serialization/JsonSpirit/JsonSpiritSerializeObject.h"
@@ -12,20 +12,20 @@ namespace bv
 
 // ***********************
 //
-JsonCommandsConverter::JsonCommandsConverter()
+JsonCommandsListener::JsonCommandsListener()
     : m_eventServer( nullptr )
 {
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &JsonCommandsConverter::SendResponse ), ResponseEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &JsonCommandsListener::SendResponse ), ResponseEvent::Type() );
 }
 
-JsonCommandsConverter::~JsonCommandsConverter()
+JsonCommandsListener::~JsonCommandsListener()
 {}
 
 // ***********************
 //
 /// @param[in] eventString String to parse.
 /// @param[in] socketID Event sender identifier.
-void                JsonCommandsConverter::QueueEvent          ( const std::wstring& eventString, int socketID )
+void                JsonCommandsListener::QueueEvent          ( const std::wstring& eventString, int socketID )
 {
     JsonSpiritDeserializeObject deser;
 
@@ -52,7 +52,7 @@ void                JsonCommandsConverter::QueueEvent          ( const std::wstr
 
 // ***********************
 //
-void        JsonCommandsConverter::SendResponse           ( const IEventPtr evt )
+void        JsonCommandsListener::SendResponse           ( const IEventPtr evt )
 {
     if( evt->GetEventType() != bv::ResponseEvent::Type() )
         return;
@@ -66,7 +66,7 @@ void        JsonCommandsConverter::SendResponse           ( const IEventPtr evt 
 }
 
 
-bool JsonCommandsConverter::InitializeServer    ( int port )
+bool JsonCommandsListener::InitializeServer    ( int port )
 {
     m_eventServer = IEventServer::CreateServerObject();
     return m_eventServer->InitializeServer( this, port );

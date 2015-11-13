@@ -3,7 +3,7 @@
 
 #include "Serialization/JsonSpirit/JsonSpiritSerializeObject.h"
 #include "Engine/Events/Events.h"
-#include "../EndUserAPI/RemoteCommandsConverter.h"
+#include "../EndUserAPI/RemoteCommandsListener.h"
 
 
 namespace bv
@@ -39,13 +39,13 @@ void TestRemoteEventsKeyboardHandler::HandleKey           ( unsigned char c, BVA
 
         std::wstring pretendRemoteString = ser.Save( FORMATSTYLE_SPARING );
 
-        RemoteCommandsConverter::GetRemoteCommandsConverter().QueueEvent( pretendRemoteString, 0 );
+        RemoteCommandsListener::Get().QueueEvent( pretendRemoteString, 0 );
     }
     else if( c == 'r' )
     {// Test remote commands magic
         std::wstring pretendRemoteString = LoadUtf8FileToString( L"serialization/remoteEvent.json" );
 
-        RemoteCommandsConverter::GetRemoteCommandsConverter().QueueEvent( pretendRemoteString, 0 );
+        RemoteCommandsListener::Get().QueueEvent( pretendRemoteString, 0 );
     }
     else if( c == 'e' )
     {// Save descriptor. This helps to create remote event. You can copy this desc to serialization/remoteEvent.json.
@@ -60,12 +60,12 @@ void TestRemoteEventsKeyboardHandler::HandleKey           ( unsigned char c, BVA
     //{// Append info response to file.
     //    std::wofstream file( L"serialization/responseEvents.json", std::ios_base::app );
     //    
-    //    auto infoResponse = RemoteCommandsConverter::GetRemoteCommandsConverter().PollEvent();
+    //    auto infoResponse = RemoteCommandsListener::Get().PollEvent();
     //    while( infoResponse != nullptr )
     //    {            
     //        BaseEventPtr responseEvent = std::static_pointer_cast<ResponseEvent>( infoResponse );
     //        file << infoResponse->Response << std::endl;
-    //        infoResponse = RemoteCommandsConverter::GetRemoteCommandsConverter().PollEvent();
+    //        infoResponse = RemoteCommandsListener::Get().PollEvent();
     //    }
 
     //    file.close();

@@ -1,15 +1,15 @@
-#include "RemoteCommandsConverter.h"
+#include "RemoteCommandsListener.h"
 
 #include "Serialization/IDeserializer.h"
 #include "Engine/Events/Events.h"
-#include "JsonCommandsConverter/JsonCommandsConverter.h"
+#include "JsonCommandsListener/JsonCommandsListener.h"
 
 namespace bv
 {
 
 // ***********************
 //
-RemoteCommandsConverter::RemoteCommandsConverter()
+RemoteCommandsListener::RemoteCommandsListener()
 {
     RegisterEvent( LoadAssetEvent::Name(), LoadAssetEvent::Create );
     RegisterEvent( ParamKeyEvent::Name(), ParamKeyEvent::Create );
@@ -22,16 +22,16 @@ RemoteCommandsConverter::RemoteCommandsConverter()
 
 // ***********************
 // @todo Move creation of commands converter to better place. Maybe BVAppLogic ??
-RemoteCommandsConverter& RemoteCommandsConverter::GetRemoteCommandsConverter()
+RemoteCommandsListener& RemoteCommandsListener::Get()
 {
-    static JsonCommandsConverter converter;
-    return static_cast<RemoteCommandsConverter&>( converter );
+    static JsonCommandsListener converter;
+    return static_cast<RemoteCommandsListener&>( converter );
 }
 
 
 // ***********************
 //
-IEventPtr RemoteCommandsConverter::CreateEvent         ( IDeserializer& deser )
+IEventPtr RemoteCommandsListener::CreateEvent         ( IDeserializer& deser )
 {
     std::wstring command = deser.GetAttribute( L"Event" );
     auto iter = m_eventsConverter.find( command );
@@ -46,7 +46,7 @@ IEventPtr RemoteCommandsConverter::CreateEvent         ( IDeserializer& deser )
 
 // ***********************
 // Command name and event name are to separate things. Command names
-void RemoteCommandsConverter::RegisterEvent       ( const std::string& eventName, EventCreatorDelegate eventCreator )
+void RemoteCommandsListener::RegisterEvent       ( const std::string& eventName, EventCreatorDelegate eventCreator )
 {
     std::wstring commandName = std::wstring( eventName.begin(), eventName.end() );
     m_eventsConverter[ commandName ] = eventCreator;

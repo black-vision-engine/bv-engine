@@ -2,7 +2,7 @@
 #include "bvApp.h"
 
 #include "System/InitSubsystem.h"
-#include "EndUserAPI/RemoteCommandsConverter.h"
+#include "EndUserAPI/RemoteCommandsListener.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
@@ -191,7 +191,7 @@ bool    BlackVisionApp::InitializeLicenses   ()
 //
 void    BlackVisionApp::InitializeSocketServer  ()
 {
-    RemoteCommandsConverter::GetRemoteCommandsConverter().InitializeServer( 11101 );
+    RemoteCommandsListener::Get().InitializeServer( 11101 );
 }
 
 // *********************************

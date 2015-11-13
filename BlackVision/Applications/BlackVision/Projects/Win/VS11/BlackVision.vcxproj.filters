@@ -40,11 +40,11 @@
     <Filter Include="EndUserAPI">
       <UniqueIdentifier>{4d25f62a-5bd7-414f-b683-53e8c1ded179}</UniqueIdentifier>
     </Filter>
-    <Filter Include="EndUserAPI\JsonCommandsConverter">
-      <UniqueIdentifier>{eceea615-6f9e-49bd-bfa0-e18ef67e559a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="EndUserAPI\EventHandlers">
       <UniqueIdentifier>{fb178992-4589-46d8-b948-24ce9f5b39a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EndUserAPI\JsonCommandsListener">
+      <UniqueIdentifier>{eceea615-6f9e-49bd-bfa0-e18ef67e559a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -139,12 +139,6 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.cpp">
       <Filter>Rendering\Logic\NodeEffectRendering</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsConverter\JsonCommandsConverter.cpp">
-      <Filter>EndUserAPI\JsonCommandsConverter</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\EndUserAPI\RemoteCommandsConverter.cpp">
-      <Filter>EndUserAPI</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\TestAI\TestRemoteEventsKeyboardHandler.cpp">
       <Filter>TestAI</Filter>
     </ClCompile>
@@ -162,6 +156,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\EndUserAPI\RemoteCommandsListener.cpp">
+      <Filter>EndUserAPI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.cpp">
+      <Filter>EndUserAPI\JsonCommandsListener</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -259,12 +259,6 @@
       <Filter>TestAI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UseLogger.h" />
-    <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteCommandsConverter.h">
-      <Filter>EndUserAPI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsConverter\JsonCommandsConverter.h">
-      <Filter>EndUserAPI\JsonCommandsConverter</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.h">
       <Filter>Rendering\Logic\NodeEffectRendering</Filter>
     </ClInclude>
@@ -288,6 +282,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.h">
       <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteCommandsListener.h">
+      <Filter>EndUserAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.h">
+      <Filter>EndUserAPI\JsonCommandsListener</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

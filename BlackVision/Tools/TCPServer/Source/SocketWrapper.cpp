@@ -4,7 +4,7 @@
 #include "SocketWrapper.h"
 #include <math.h>
 
-#include "../../Applications/BlackVision/Source/EndUserAPI/RemoteCommandsConverter.h"
+#include "../../Applications/BlackVision/Source/EndUserAPI/RemoteCommandsListener.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Engine/Events/Events.h"
 
@@ -23,7 +23,7 @@ namespace bv{
 
 	//DWORD WINAPI SocketHandler(void*);
     vector<ResponseMsg> SocketWrapper::Responses;
-    RemoteCommandsConverter* SocketWrapper::BVCommandsConverter = nullptr;
+    RemoteCommandsListener* SocketWrapper::BVCommandsConverter = nullptr;
 
 	SocketWrapper::SocketWrapper()
 	{}
@@ -33,7 +33,7 @@ namespace bv{
     {}
 
 
-    bool SocketWrapper::InitializeServer( RemoteCommandsConverter* commandsConverter, int port )
+    bool SocketWrapper::InitializeServer( RemoteCommandsListener* commandsConverter, int port )
     {
         m_port = port;
         BVCommandsConverter = commandsConverter;
