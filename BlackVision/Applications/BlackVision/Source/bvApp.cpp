@@ -191,7 +191,7 @@ bool    BlackVisionApp::InitializeLicenses   ()
 //
 void    BlackVisionApp::InitializeSocketServer  ()
 {
-    RemoteCommandsConverter::GetRemoteCommandsConverter().InitializeServer();
+    RemoteCommandsConverter::GetRemoteCommandsConverter().InitializeServer( 11101 );
 }
 
 // *********************************

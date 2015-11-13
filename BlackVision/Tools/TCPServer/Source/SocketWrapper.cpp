@@ -1,7 +1,6 @@
 #pragma warning(disable :4996)
 #include <codecvt>
 #include<locale>
-#include<boost/lexical_cast.hpp>
 #include "SocketWrapper.h"
 #include <math.h>
 
@@ -27,17 +26,16 @@ namespace bv{
     RemoteCommandsConverter* SocketWrapper::BVCommandsConverter = nullptr;
 
 	SocketWrapper::SocketWrapper()
-	{
-	    Socket = this;
-	}
+	{}
 
 
 	SocketWrapper::~SocketWrapper()
     {}
 
 
-    bool SocketWrapper::InitializeServer( RemoteCommandsConverter* commandsConverter )
+    bool SocketWrapper::InitializeServer( RemoteCommandsConverter* commandsConverter, int port )
     {
+        m_port = port;
         BVCommandsConverter = commandsConverter;
         return InitServer();
     }
@@ -57,7 +55,7 @@ namespace bv{
     bool SocketWrapper::thread_clients(void)
 	{
 //The port you want the server to listen on
-		int host_port= 11101;
+		int host_port = m_port;
 
 		
 		unsigned short wVersionRequested;

@@ -169,7 +169,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         auto pList = ToJSONArray( pns );
 
-        SendOnSceneStructureResponse( senderID, "LIST_PROJECTS_NAMES", "list", pList );
+        SendOnSceneStructureResponse( senderID, "ListProjectNames", "list", pList );
     }
     else if( command == ProjectEvent::Command::NewProject )
     {
@@ -177,7 +177,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         pm->AddNewProject( name );
 
-        SendOnSceneStructureResponse( senderID, "NEW_PROJECT", "status", "OK" );
+        SendOnSceneStructureResponse( senderID, "NewProject", "status", "OK" );
     }
     else if( command == ProjectEvent::Command::ListScenes )
     {
@@ -186,7 +186,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         auto pList = ToJSONArray( sns );
 
-        SendOnSceneStructureResponse( senderID, "LIST_SCENES", "list", pList );
+        SendOnSceneStructureResponse( senderID, "ListScenes", "list", pList );
     }
     else if( command == ProjectEvent::Command::ListAssetsPaths )
     {
@@ -197,7 +197,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         auto pList = ToJSONArray( sns );
 
-        SendOnSceneStructureResponse( senderID, "LIST_ASSETS_PATHS", "list", pList );
+        SendOnSceneStructureResponse( senderID, "ListAssetPaths", "list", pList );
     }
     else if( command == ProjectEvent::Command::ListCategoriesNames )
     {
@@ -205,7 +205,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         auto pList = ToJSONArray( sns );
 
-        SendOnSceneStructureResponse( senderID, "LIST_CATEGORIES_NAMES", "list", pList );
+        SendOnSceneStructureResponse( senderID, "ListCategoriesNames", "list", pList );
     }
     else if( command == ProjectEvent::Command::SetCurrentProject )
     {
@@ -213,7 +213,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         pm->SetCurrentProject( projName );
 
-        SendOnSceneStructureResponse( senderID, "SET_CURRENT_PROJECT", "status", "OK" );
+        SendOnSceneStructureResponse( senderID, "SetCurrentProject", "status", "OK" );
     }
     else if( command == ProjectEvent::Command::ListProjects )
     {
@@ -232,7 +232,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
             list.append( entry );
         }
 
-        SendOnSceneStructureResponse( senderID, "LIST_PROJECTS", "list", list );
+        SendOnSceneStructureResponse( senderID, "ListProjects", "list", list );
     }
     else if( command == ProjectEvent::Command::LoadProject )
     {
@@ -247,19 +247,16 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
             UpdatersManager::Get().RemoveAllUpdaters();
                 
             auto node = m_appLogic->LoadScenes( projectScenesNames );
-            if( node )
-            {
-                status = true;
-            }
+            status = true;
         }
 
         if( status )
         {
-            SendOnSceneStructureResponse( senderID, "LOAD_PROJECT", "status", "OK" );
+            SendOnSceneStructureResponse( senderID, "LoadProject", "status", "OK" );
         }
         else
         {
-            SendOnSceneStructureResponse( senderID, "LOAD_PROJECT", "status", "ERROR" );
+            SendOnSceneStructureResponse( senderID, "LoadProject", "status", "ERROR" );
         }
     } 
 //     else if( command == ProjectEvent::Command::SaveScene )

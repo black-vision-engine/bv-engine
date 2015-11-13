@@ -28,7 +28,7 @@ private:
     static std::vector<ResponseMsg> Responses;
 
 	int m_nLinkMode;
-    SocketWrapper *Socket;
+    int m_port;
 
 private:
     bool thread_clients();
@@ -44,7 +44,7 @@ public:
 
     static void             AddMsg              ( ResponseMsg msg){Responses.push_back( msg );}     ///@deprecated @todo Wywaliæ jak ju¿ zniknie RemoteControlInterface
 
-    bool        InitializeServer    ( RemoteCommandsConverter* commandsConverter ) override;
+    bool        InitializeServer    ( RemoteCommandsConverter* commandsConverter, int port ) override;
     void        SendResponse        ( ResponseMsg& message ) override;
 };
 

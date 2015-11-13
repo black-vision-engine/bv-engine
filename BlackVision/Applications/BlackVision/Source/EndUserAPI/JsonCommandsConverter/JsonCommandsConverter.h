@@ -16,7 +16,7 @@ public:
     ~JsonCommandsConverter();
 
     void                QueueEvent          ( const std::wstring& eventString, int socketID ) override;
-    bool                InitializeServer    () override;
+    bool                InitializeServer    ( int port ) override;
     void                SendResponse        ( const IEventPtr response ) override;
 };
 

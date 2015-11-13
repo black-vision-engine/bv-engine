@@ -66,10 +66,10 @@ void        JsonCommandsConverter::SendResponse           ( const IEventPtr evt 
 }
 
 
-bool JsonCommandsConverter::InitializeServer    ()
+bool JsonCommandsConverter::InitializeServer    ( int port )
 {
     m_eventServer = IEventServer::CreateServerObject();
-    return m_eventServer->InitializeServer( this );
+    return m_eventServer->InitializeServer( this, port );
 }
 
 } //bv
