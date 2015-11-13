@@ -52,6 +52,47 @@ CurveType       SimpleParameterImpl< InterpolatorType, ValueType, type >::GetCur
 // *******************************
 //
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
+void                SimpleParameterImpl< InterpolatorType, ValueType, type >::SetWrapPostMethod       ( WrapMethod method )
+{
+    m_interpolator.SetWrapPostMethod( method );
+}
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+void                SimpleParameterImpl< InterpolatorType, ValueType, type >::SetWrapPreMethod        ( WrapMethod method )
+{
+    m_interpolator.SetWrapPreMethod( method );
+}
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+WrapMethod          SimpleParameterImpl< InterpolatorType, ValueType, type >::GetWrapPostMethod       ()
+{
+    return m_interpolator.GetWrapPostMethod();
+}
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+WrapMethod          SimpleParameterImpl< InterpolatorType, ValueType, type >::GetWrapPreMethod        ()
+{
+    return m_interpolator.GetWrapPreMethod();
+}
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+int                 SimpleParameterImpl< InterpolatorType, ValueType, type >::GetNumKeys              ()
+{
+    return m_interpolator.GetNumKeys();
+}
+
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
 inline ValueType SimpleParameterImpl< InterpolatorType, ValueType, type >::Evaluate () const
 {
     auto t = GetLocalEvaluationTime();

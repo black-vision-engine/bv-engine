@@ -619,6 +619,15 @@ const typename BasicInterpolator<TimeValueT, ValueT, FloatT>::KeyType &     Basi
     return keys.back();
 }
 
+// *************************************
+//
+template<class TimeValueT, class ValueT, class FloatT>
+int                                                 BasicInterpolator<TimeValueT, ValueT, FloatT>::GetNumKeys      ()
+{
+    return int( keys.size() );
+}
+
+
 } // bv
 
 #define INSTANTIATE(TYPE) \

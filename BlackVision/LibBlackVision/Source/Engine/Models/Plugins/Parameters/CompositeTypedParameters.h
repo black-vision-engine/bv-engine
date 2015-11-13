@@ -27,6 +27,14 @@ public:
     void                SetCurveType    ( CurveType type );
     CurveType           GetCurveType    ();
 
+    virtual void        SetWrapPostMethod ( WrapMethod method );
+    virtual void        SetWrapPreMethod ( WrapMethod method );
+    virtual WrapMethod  GetWrapPostMethod ();
+    virtual WrapMethod  GetWrapPreMethod ();
+
+    virtual int         GetNumKeys      ();
+
+
     inline  void        SetRotation     ( const glm::vec3 & rotAxis, float angle, TimeType t );
     inline  void        SetScale        ( const glm::vec3 & scale, TimeType t );
     inline  void        SetTranslation  ( const glm::vec3 & translation, TimeType t );
@@ -69,6 +77,13 @@ public:
     void                Serialize           ( ISerializer& doc ) const;
     void                SetCurveType        ( CurveType type );
     CurveType           GetCurveType        ();
+
+    virtual void        SetWrapPostMethod   ( WrapMethod method );
+    virtual void        SetWrapPreMethod    ( WrapMethod method );
+    virtual WrapMethod  GetWrapPostMethod   ();
+    virtual WrapMethod  GetWrapPreMethod    ();
+
+    virtual int         GetNumKeys          ();
 
 
     void                AppendTransform     ( const TransformF & transform );

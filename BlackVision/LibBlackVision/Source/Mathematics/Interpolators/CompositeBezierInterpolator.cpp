@@ -512,6 +512,14 @@ ValueT CompositeBezierInterpolator< TimeValueT, ValueT >::Evaluate         ( Tim
 // *******************************
 //
 template< class TimeValueT, class ValueT >
+int                          CompositeBezierInterpolator< TimeValueT, ValueT >::GetNumKeys()
+{
+    return (int) keys.size();
+}
+
+// *******************************
+//
+template< class TimeValueT, class ValueT >
 const std::vector< Key< TimeValueT, ValueT > > &                          CompositeBezierInterpolator< TimeValueT, ValueT >::GetKeys()
 {
     return keys;

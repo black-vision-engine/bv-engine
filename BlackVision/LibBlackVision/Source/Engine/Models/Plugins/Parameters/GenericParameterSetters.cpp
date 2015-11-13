@@ -205,23 +205,69 @@ CurveType                                           BezierGetCurveType( IParamet
 
 // *******************************
 //
-void                                                BezierSetWrapPostMethod  ( IParameterPtr parameter, WrapMethod method );
+bool                                                BezierSetWrapPostMethod  ( IParameterPtr parameter, WrapMethod method )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+    {
+        abstract_parameter->SetWrapPostMethod( method );
+        return true;
+    }
+    else
+        return false;
+}
 
 // *******************************
 //
-void                                                BezierSetWrapPreMethod   ( IParameterPtr parameter, WrapMethod method );
+bool                                                BezierSetWrapPreMethod   ( IParameterPtr parameter, WrapMethod method )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+    {
+        abstract_parameter->SetWrapPreMethod( method );
+        return true;
+    }
+    else
+        return false;
+}
 
 // *******************************
 //
-WrapMethod                                          BezierGetWrapPostMethod  ( IParameterPtr parameter );
+WrapMethod                                          BezierGetWrapPostMethod  ( IParameterPtr parameter )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+        return abstract_parameter->GetWrapPostMethod();
+    else
+        return WrapMethod( -1 );
+}
 
 // *******************************
 //
-WrapMethod                                          BezierGetWrapPreMethod   ( IParameterPtr parameter );
+WrapMethod                                          BezierGetWrapPreMethod   ( IParameterPtr parameter )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+        return abstract_parameter->GetWrapPreMethod();
+    else
+        return WrapMethod( -1 );
+}
 
 // *******************************
 //
-int                                                 BezierParameterGetNumKeys( IParameterPtr parameter );
+int                                                 BezierParameterGetNumKeys( IParameterPtr parameter )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+        return abstract_parameter->GetNumKeys();
+    else
+        return -1;
+}
 
 
 } //model

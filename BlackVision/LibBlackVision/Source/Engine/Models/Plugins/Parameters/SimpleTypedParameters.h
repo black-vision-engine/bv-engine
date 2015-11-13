@@ -33,6 +33,13 @@ public:
     virtual void            SetCurveType        ( CurveType type ) override;
     virtual CurveType       GetCurveType        () override;
 
+    virtual void                SetWrapPostMethod       ( WrapMethod method );
+    virtual void                SetWrapPreMethod        ( WrapMethod method );
+    virtual WrapMethod          GetWrapPostMethod       ();
+    virtual WrapMethod          GetWrapPreMethod        ();
+
+    virtual int                 GetNumKeys              ();
+
     inline  ValueType       Evaluate            () const;
     inline  void            SetVal              ( const ValueType & val, TimeType t );
 

@@ -32,10 +32,10 @@ bool    SetParameterCenterMass  ( IParameterPtr parameter, unsigned int idx, Tim
 bool                                                BezierSetCurveType( IParameterPtr parameter, CurveType type );
 CurveType                                           BezierGetCurveType( IParameterPtr parameter );
 
-void                                                BezierSetWrapPostMethod  ( IParameterPtr parameter, WrapMethod method );
-void                                                BezierSetWrapPreMethod   ( IParameterPtr parameter, WrapMethod method );
-WrapMethod                                          BezierGetWrapPostMethod  ( IParameterPtr parameter );
-WrapMethod                                          BezierGetWrapPreMethod   ( IParameterPtr parameter );
+bool                                                SetWrapPostMethod  ( IParameterPtr parameter, WrapMethod method );
+bool                                                SetWrapPreMethod   ( IParameterPtr parameter, WrapMethod method );
+WrapMethod                                          GetWrapPostMethod  ( IParameterPtr parameter );
+WrapMethod                                          GetWrapPreMethod   ( IParameterPtr parameter );
 
 int                                                 BezierParameterGetNumKeys( IParameterPtr parameter );
 

@@ -75,6 +75,8 @@ public:
     const KeyType &     FirstKey    () const;
     const KeyType &     LastKey     () const;
 
+    int                                                 GetNumKeys      ();
+
     void                                                SetCurveType    ( CurveType /*type*/ ) { assert( false ); }
     CurveType                                           GetCurveType    () { assert( false ); return CurveType::CT_TOTAL; }
 };

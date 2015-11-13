@@ -39,6 +39,13 @@ public:
     virtual void                SetCurveType            ( CurveType type ) = 0;
     virtual CurveType           GetCurveType            () = 0;
 
+    virtual void                SetWrapPostMethod       ( WrapMethod method ) = 0;
+    virtual void                SetWrapPreMethod        ( WrapMethod method ) = 0;
+    virtual WrapMethod          GetWrapPostMethod       () = 0;
+    virtual WrapMethod          GetWrapPreMethod        () = 0;
+
+    virtual int                 GetNumKeys              () = 0;
+
     virtual ITimeEvaluatorPtr   GetTimeEvaluator        () override;
     virtual void                SetTimeEvaluator        ( ITimeEvaluatorPtr timeEvaluator ) override;
 

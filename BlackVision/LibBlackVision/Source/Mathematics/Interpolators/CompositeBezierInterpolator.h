@@ -48,6 +48,7 @@ public:
     void                                                AddKey          ( TimeValueT t, const ValueT & v );
     ValueT                                              Evaluate        ( TimeValueT t ) const;
 
+    int                                                 GetNumKeys      ();
     const std::vector< Key > &                          GetKeys         ();
     const std::vector< IEvaluator* > &                  GetInterpolators();
 
