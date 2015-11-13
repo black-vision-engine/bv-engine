@@ -18,6 +18,10 @@ public:
     void        ProjectStructure    ( bv::IEventPtr evt );
     void        TimelineHandler     ( bv::IEventPtr evt );
     void        WidgetHandler       ( bv::IEventPtr evt );
+
+	void        OnNodeAppearing     ( IEventPtr evt );
+	void        OnNodeLeaving       ( IEventPtr evt );
+	void        OnNoMoreNodes       ( IEventPtr evt );
 };
 
 

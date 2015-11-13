@@ -122,9 +122,6 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
 //
 BVAppLogic::~BVAppLogic             ()
 {
-    GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
-    GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
-
     //delete m_timelineManager;
 
     delete m_renderLogic;
@@ -136,13 +133,6 @@ BVAppLogic::~BVAppLogic             ()
 //
 void BVAppLogic::Initialize         ()
 {
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
-
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNodeAppearing ), widgets::NodeAppearingCrawlerEvent::Type() );
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNoMoreNodes ), widgets::NoMoreNodesCrawlerEvent::Type() );
-
     GetTimelineManager()->RegisterRootTimeline( m_globalTimeline );
 
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
@@ -424,37 +414,6 @@ void                            BVAppLogic::ReloadScene     ()
 void            BVAppLogic::GrabCurrentFrame(  const std::string & path )
 {
     m_grabFramePath = path;
-}
-//pablito
-// *********************************
-//
-void            BVAppLogic::SetKey(  bool active)
-{
-    m_videoCardManager->SetKey(active);
-}
-
-// *********************************
-//
-void            BVAppLogic::OnUpdateParam   ( IEventPtr evt )
-{ 
-}
-
-// *********************************
-//
-void            BVAppLogic::OnNodeAppearing   ( IEventPtr evt )
-{ 
-}
-
-// *********************************
-//
-void            BVAppLogic::OnNodeLeaving   ( IEventPtr evt )
-{
-}
-
-// *********************************
-//
-void            BVAppLogic::OnNoMoreNodes   ( IEventPtr evt )
-{
 }
 
 // *********************************

@@ -454,13 +454,13 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
 		else if( infoEvent->request == L"key_on" )
 		{
 			Log::A("KEY", "ON");
-            m_AppLogic->SetKey( true );
+            //m_AppLogic->SetKey( true );
 		}
 		else if( infoEvent->request == L"key_off" )
 		{
 			Log::A("KEY", "OFF");
 			
-            m_AppLogic->SetKey( false );
+           // m_AppLogic->SetKey( false );
 		}
     }
 }

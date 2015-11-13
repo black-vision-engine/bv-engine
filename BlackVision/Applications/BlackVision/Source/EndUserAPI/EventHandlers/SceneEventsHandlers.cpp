@@ -4,12 +4,14 @@
 #include "Engine/Models/ModelNodeEditor.h"
 #include "../../BVAppLogic.h"
 #include "../../UseLogger.h"
+#include "Tools/IncludeJSON.h"
+
 #include "ProjectManager.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
-#include "Tools/IncludeJSON.h"
 #include "Widgets/Crawler/CrawlerEvents.h"
 #include "Widgets/Counter/Counter.h"
 #include "Engine/Events/EventHelpers.h"
+#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 
 #include <limits>
 #undef max
@@ -425,6 +427,82 @@ void SceneEventsHandlers::WidgetHandler       ( bv::IEventPtr evt )
 		}
 
         SetParameter( paramPtr, (bv::TimeType)time, value );
+	}
+}
+
+// ***********************
+//
+void SceneEventsHandlers::OnNodeAppearing     ( IEventPtr evt )
+{
+
+}
+
+// ***********************
+//
+void SceneEventsHandlers::OnNodeLeaving       ( IEventPtr evt )
+{
+
+}
+
+
+// *********************************
+//
+namespace 
+{
+    const std::wstring* examples2 = new std::wstring[20];
+   
+
+    int examplesIndex=0;
+
+
+	const static std::wstring examples[] = 
+	{
+		L"Jasiu kup kie³basê !!",
+		L"wielojêzyczny projekt internetortej treœci. Funkcjonuje wykorzystuj¹c",
+		L"Wikipedia powsta³a 15 stycznia ertów i nieistniej¹cej ju¿ Nupedii. ",
+		L"iostrzane. Wikipedia jest jedn¹], a wiele stron uruchomi³o jej mirrory lub forki.",
+		L"Wspó³za³o¿yciel Wikipedii Jimmyia wielojêzycznej",
+		L"wolnej encyklopedii o najwy¿szyw³asnym jêzyku”[8].",
+		L"Kontrowersje budzi wiarygodnoœæeœci artyku³ów ",
+		L"i brak weryfikacji kompetencji .",
+		L"Z drugiej",
+		L"strony mo¿liwoœæ swobodnej dyst Ÿród³em informacji",
+		L"Jasiu kup kie³basê !!",
+	};
+
+   
+
+   
+
+	auto exampleSize = sizeof( examples ) / sizeof( std::wstring );
+}
+
+
+// ***********************
+//
+void SceneEventsHandlers::OnNoMoreNodes       ( IEventPtr evt )
+{
+	auto typedEvent = std::static_pointer_cast< widgets::NoMoreNodesCrawlerEvent >( evt );
+	// Remove code below. Only for testing.
+	auto n = typedEvent->GetCrawler()->GetNonActiveNode();
+	if( n )
+	{
+
+		auto textNode = n->GetChild( "Text" );
+		if( textNode )
+		{
+			auto pl = textNode->GetPlugin( "text" );
+
+			if( pl )
+			{
+				//model::DefaultTextPlugin::SetText( pl, examples[ i ] );
+
+                model::DefaultTextPlugin::SetText( pl, L"nowa wiadomoœæ "+to_wstring(examplesIndex) );
+                examplesIndex=(examplesIndex+1)%20;
+
+				typedEvent->GetCrawler()->EnqueueNode( n );
+			}
+		}
 	}
 }
 
