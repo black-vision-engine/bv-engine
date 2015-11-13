@@ -713,11 +713,8 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
             {
                 UpdatersManager::Get().RemoveAllUpdaters();
                 
-                auto node = m_AppLogic->LoadScenes( projectScenesNames );
-                if( node )
-                {
-                    status = true;
-                }
+                m_AppLogic->LoadScenes( projectScenesNames );
+                status = true;
             }
 
             if( status )
@@ -734,20 +731,21 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
             wstring NodeName = evtStructure->NodeName;
             string nodeNameStr( NodeName.begin(), NodeName.end() );
 
-            auto root = m_AppLogic->GetBVScene()->GetModelSceneRoot();
-            auto node = root->GetNode( nodeNameStr );
+            auto root = m_AppLogic->GetBVScene()->GetScene( nodeNameStr );
+            {root;}
+            assert( false ); // TODO: Implement with SceneNodel
 
-			if( node == nullptr && root->GetName() == nodeNameStr )
-			{
-				Log::A( "OK", "root node is node you're looking for [" + nodeNameStr + "] Applying jedi fix now." );
-				node = root;
-			}
+			//if( node == nullptr && root->GetName() == nodeNameStr )
+			//{
+			//	Log::A( "OK", "root node is node you're looking for [" + nodeNameStr + "] Applying jedi fix now." );
+			//	node = root;
+			//}
 
-            auto basicNode = std::static_pointer_cast< model::BasicNode >( node );
+   //         auto basicNode = std::static_pointer_cast< model::BasicNode >( node );
 
-            auto projName = std::string( evtStructure->request.begin(), evtStructure->request.end() );
+   //         auto projName = std::string( evtStructure->request.begin(), evtStructure->request.end() );
 
-            pm->AddScene( basicNode, "proj01", "dupa.scn" );
+   //         pm->AddScene( basicNode, "proj01", "dupa.scn" );
 
 
             SendOnSceneStructureResponse( evtStructure, "SAVE_SCENE", "status", "OK" );

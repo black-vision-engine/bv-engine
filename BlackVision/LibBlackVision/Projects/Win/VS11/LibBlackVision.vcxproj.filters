@@ -1017,6 +1017,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextArranger.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\NodeEffectSerialization.cpp">
+      <Filter>Engine\Models\NodeEffects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">

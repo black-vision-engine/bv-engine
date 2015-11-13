@@ -40,20 +40,31 @@ private:
     model::ParamVec3        m_cameraDirection;
     model::ParamVec3        m_cameraUp;
 
-    model::SceneModelPtr    m_pSceneModel;
+    model::BasicNodePtr     m_rootNode;
+
+    model::SceneModelVec    m_pSceneModelVec;
 
     SceneNode *             m_pEngineSceneRoot;
 
 private:
 
-    explicit                BVScene             ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator );
-    explicit                BVScene             ( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager );
+    explicit                BVScene             ( model::SceneModelVec sceneModelVec, Camera * cam, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
+    explicit                BVScene             ( Camera * cam, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
 
 public:
 
                             ~BVScene            ();
 
-    static BVScenePtr       Create              ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager );
+    static BVScenePtr       Create              ( Camera * cam, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
+    static BVScenePtr       Create              ( model::SceneModelPtr sceneModel   , Camera * cam, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
+    static BVScenePtr       Create              ( model::SceneModelVec sceneModelVec, Camera * cam, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
+
+    void                    AddScene            ( model::SceneModelPtr sceneModel );
+    void                    RemoveScene         ( const std::string & name );
+    model::SceneModelPtr    GetScene            ( const std::string & name ) const;
+    const model::SceneModelVec &  GetScenes() const;
+    StringVector            ListScenesNames     () const;
+
     void                    Serialize           ( ISerializer& ser ) const;
 
     virtual void            Update              ( TimeType t );
@@ -62,14 +73,12 @@ public:
 
     Camera *                GetCamera           ()  const;
 
-    model::BasicNodePtr &   GetModelSceneRoot   ()  const;
+    model::BasicNodePtr &   GetModelSceneRoot   ();
     SceneNode *             GetEngineSceneRoot  ()  const;
 
     BVSceneEditor *         GetSceneEditor      ();
 
-    const std::string &     GetName             ()  const;
-
-    static BVScenePtr       CreateFakeSceneForTestingOnly( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator );
+    static BVScenePtr       CreateFakeSceneForTestingOnly( model::SceneModelPtr sceneModel, Camera * cam, model::ITimeEvaluatorPtr timeEvaluator );
 
 private:
 

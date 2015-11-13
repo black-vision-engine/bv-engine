@@ -28,7 +28,7 @@ Path SceneDescriptor::GetPath() const
 
 // ********************************
 //
-void			            SceneDescriptor::SaveScene		( const model::BasicNodeConstPtr & scene, model::TimelineManager * tm, const Path & outputFilePath )
+void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & scene, model::TimelineManager * tm, const Path & outputFilePath )
 {
     File::Touch( outputFilePath.Str() );
 
@@ -40,7 +40,7 @@ void			            SceneDescriptor::SaveScene		( const model::BasicNodeConstPtr 
 
 // ********************************
 //
-model::BasicNodeConstPtr	SceneDescriptor::LoadScene		( const Path & inputFilePath, model::TimelineManager * tm )
+model::SceneModelPtr	    SceneDescriptor::LoadScene		( const Path & inputFilePath, model::TimelineManager * tm )
 {
     auto f = File::Open( inputFilePath.Str() );
 
@@ -73,14 +73,14 @@ void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root )
 } // anonymous
 // ********************************
 //
-void			            SceneDescriptor::SaveScene		( const model::BasicNodeConstPtr & scene, model::TimelineManager * tm, std::ostream & out )
+void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & scene, model::TimelineManager * tm, std::ostream & out )
 {
 	auto sob = SerializeObject();
 
     sob.EnterChild( "scene" );
 
     AssetDescsWithUIDs assets;
-    GetAssetsWithUIDs( assets, std::const_pointer_cast< model::BasicNode >( scene ) );
+    GetAssetsWithUIDs( assets, scene->m_pModelSceneRoot );
     AssetDescsWithUIDs::SetInstance( assets );
 
     assets.Serialize( sob );
@@ -94,15 +94,13 @@ void			            SceneDescriptor::SaveScene		( const model::BasicNodeConstPtr 
 
 // ********************************
 //
-model::BasicNodeConstPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeType numBytes, model::TimelineManager * tm )
+model::SceneModelPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeType numBytes, model::TimelineManager * )
 {
     auto deser = DeserializeObject( in, numBytes );
 
     auto scene = SerializationHelper::DeserializeObjectLoadImpl< model::SceneModel >( deser, "scene" );
 
-    tm->AddTimeline( scene->m_pTimelineManager->GetRootTimeline() );
-
-    return scene->m_pModelSceneRoot;
+    return scene;
 }
 
 // ********************************

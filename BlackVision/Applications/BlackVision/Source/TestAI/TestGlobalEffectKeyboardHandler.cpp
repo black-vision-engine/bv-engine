@@ -4,6 +4,7 @@
 
 #include "Engine/Models/NodeEffects/ModelNodeEffectDefault.h"
 
+#include "Serialization/XML/XMLSerializer.h"
 
 namespace bv {
 
@@ -14,6 +15,8 @@ TestGlobalEfectKeyboardHandler::TestGlobalEfectKeyboardHandler  ()
     m_defaultEffect = nullptr;
     m_alphaMaskEffect = nullptr;
     m_nodeMaskEffect = nullptr;
+    m_curWireframeNodeIdx = 0;
+    m_wireframeDisabled = true;
 }
 
 // *********************************
@@ -27,6 +30,15 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
 
     switch( c )
     {
+        case 's': 
+        {
+            auto sob = new SerializeObject();
+            logic->GetBVScene()->Serialize( *sob );
+            sob->Save( "test.xml" );
+            delete sob; 
+
+            break;
+        }
         case '1':
         {
             m_curSelectedNode = NodeEffectType::NET_DEFAULT;
@@ -125,6 +137,22 @@ void                    TestGlobalEfectKeyboardHandler::HandleIncrement     ( BV
             printf( "New node mask alpha value: %4f\n", alpha->Evaluate() );
         }
     }
+    else if( m_curSelectedNode == NodeEffectType::NET_WIREFRAME )
+    {
+        if( !m_wireframeDisabled )
+        {
+            auto curIdx = m_curWireframeNodeIdx;
+
+            m_curWireframeNodeIdx = ( curIdx + 1 ) % 3;
+
+            auto curNode = GetWireframeNode( logic, curIdx );
+            auto nextNode = GetWireframeNode( logic, m_curWireframeNodeIdx );
+
+            curNode->SetNodeEffect( m_defaultEffect );
+            auto newEffect = std::make_shared< model::ModelNodeEffectWireframe >( logic->GetGlobalTimeline() );
+            nextNode->SetNodeEffect( newEffect );
+        }        
+    }
 }
 
 // *********************************
@@ -159,6 +187,29 @@ void                    TestGlobalEfectKeyboardHandler::HandleDecrement     ( BV
             alpha->SetVal( max( 0.f, alpha->Evaluate() - .1f ), 0.f );
 
             printf( "New node mask alpha value: %4f\n", alpha->Evaluate() );
+        }
+    }
+    else if( m_curSelectedNode == NodeEffectType::NET_WIREFRAME )
+    {
+        if( !m_wireframeDisabled )
+        {
+            auto curIdx = m_curWireframeNodeIdx;
+
+            if ( curIdx == 0 )
+            {
+                m_curWireframeNodeIdx = 2;
+            }
+            else
+            {
+                m_curWireframeNodeIdx -= 1;
+            }
+
+            auto curNode = GetWireframeNode( logic, curIdx );
+            auto nextNode = GetWireframeNode( logic, m_curWireframeNodeIdx );
+
+            curNode->SetNodeEffect( m_defaultEffect );
+            auto newEffect = std::make_shared< model::ModelNodeEffectWireframe >( logic->GetGlobalTimeline() );
+            nextNode->SetNodeEffect( newEffect );
         }
     }
 }
@@ -212,13 +263,6 @@ void                    TestGlobalEfectKeyboardHandler::HandleToggleEffect  ( BV
                 node->SetNodeEffect( m_alphaMaskEffect );
                 m_alphaMaskEffect = nullptr;
             }
-            else if ( effect->GetType() == NodeEffectType::NET_WIREFRAME )
-            {
-                assert( m_alphaMaskEffect );
-                
-                node->SetNodeEffect( m_alphaMaskEffect );
-                m_alphaMaskEffect = nullptr;
-            }
             else
             {
                 assert( false );
@@ -243,6 +287,34 @@ void                    TestGlobalEfectKeyboardHandler::HandleToggleEffect  ( BV
                 
                 node->SetNodeEffect( m_nodeMaskEffect );
                 m_nodeMaskEffect = nullptr;
+            }
+            else
+            {
+                assert( false );
+            }
+        }
+    }
+    else if( m_curSelectedNode == NodeEffectType::NET_WIREFRAME )
+    {
+        auto node = GetWireframeNode( logic, m_curWireframeNodeIdx );
+        auto effect = GetNodeWireframeEffect( logic, m_curWireframeNodeIdx );
+
+        if ( effect )
+        {
+            if ( effect->GetType() == NodeEffectType::NET_WIREFRAME )
+            {
+                m_wireframeEffect = std::static_pointer_cast< model::ModelNodeEffectWireframe >( effect );
+                node->SetNodeEffect( m_defaultEffect );
+                m_wireframeDisabled = true;
+            }
+            else if( effect->GetType() == NodeEffectType::NET_DEFAULT )
+            {
+                assert( m_wireframeEffect );
+                
+                node->SetNodeEffect( m_wireframeEffect );
+                m_wireframeEffect = nullptr;
+
+                m_wireframeDisabled = false;
             }
             else
             {
@@ -275,7 +347,7 @@ model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetNodeByPath       ( BV
 //
 model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetVanillaNode      ( BVAppLogic * logic )
 {
-    auto node = GetNodeByPath( logic, "root/vanilla" );
+    auto node = GetNodeByPath( logic, "main root/root/vanilla" );
 
     return node;
 }
@@ -284,7 +356,7 @@ model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetVanillaNode      ( BV
 //
 model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetAlphaMaskNode    ( BVAppLogic * logic )
 {
-    auto node = GetNodeByPath( logic, "root/alpha_mask" );
+    auto node = GetNodeByPath( logic, "main root/root/alpha_mask" );
 
     return node;
 }
@@ -293,7 +365,7 @@ model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetAlphaMaskNode    ( BV
 //
 model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetNodeMaskNode     ( BVAppLogic * logic )
 {
-    auto node = GetNodeByPath( logic, "root/node_mask" );
+    auto node = GetNodeByPath( logic, "main root/root/node_mask" );
 
     return node;
 }
@@ -302,7 +374,7 @@ model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetNodeMaskNode     ( BV
 //
 model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetWireframeNode    ( BVAppLogic * logic )
 {
-    auto node = GetNodeByPath( logic, "root/overlay_alpha" );
+    auto node = GetNodeByPath( logic, "main root/root/overlay_alpha" );
 
     return node;
 }
@@ -341,9 +413,9 @@ model::IModelNodeEffectPtr  TestGlobalEfectKeyboardHandler::GetNodeMaskNodeEffec
 
 // *********************************
 //
-model::IModelNodeEffectPtr  TestGlobalEfectKeyboardHandler::GetNodeWireframeEffect   ( BVAppLogic * logic )
+model::IModelNodeEffectPtr  TestGlobalEfectKeyboardHandler::GetNodeWireframeEffect   ( BVAppLogic * logic, unsigned int idx )
 {
-    auto node = GetWireframeNode ( logic );
+    auto node = GetWireframeNode ( logic, idx );
     auto effect = node->GetNodeEffect();
 
     if (!effect) // || effect->GetType() != NodeEffectType::NET_WIREFRAME )
@@ -353,6 +425,17 @@ model::IModelNodeEffectPtr  TestGlobalEfectKeyboardHandler::GetNodeWireframeEffe
     }
 
     return node->GetNodeEffect();
+}
+
+// *********************************
+//
+model::BasicNodePtr  TestGlobalEfectKeyboardHandler::GetWireframeNode               ( BVAppLogic * logic, unsigned int idx )
+{
+    std::string nodes[] = {"main root/root/overlay_alpha", "main root/root/overlay_alpha/overlay_alpha_solid", "main root/root/overlay_alpha/overlay_alpha_tex"};
+
+    auto node = GetNodeByPath( logic, nodes[ idx % 3 ] );
+
+    return node;
 }
 
 } //bv

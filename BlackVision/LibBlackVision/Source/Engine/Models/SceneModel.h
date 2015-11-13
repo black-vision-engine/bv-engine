@@ -10,6 +10,10 @@ namespace bv {
 
 namespace model {
 
+struct SceneModel;
+DEFINE_PTR_TYPE( SceneModel );
+DEFINE_CONST_PTR_TYPE( SceneModel );
+
 struct SceneModel : public ISerializable
 {
     std::string                                     m_name;
@@ -19,12 +23,13 @@ struct SceneModel : public ISerializable
     SceneModel( std::string name, model::TimelineManagerPtr pTimelineManager, model::BasicNodePtr pModelSceneRoot ); // FIXME remove me!!!
     SceneModel( std::string name, model::TimelineManager * pTimelineManager, model::BasicNodePtr pModelSceneRoot );
 
+    static SceneModelPtr    Create              ( std::string name, model::TimelineManager * pTimelineManager, model::BasicNodePtr pModelSceneRoot );
     static ISerializablePtr Create              ( const IDeserializer& deser );
     virtual void            Serialize           ( ISerializer& doc) const override;
 };
 
-
-DEFINE_PTR_TYPE( SceneModel );
+typedef std::vector< SceneModelPtr > SceneModelVec;
+typedef std::vector< SceneModelConstPtr > SceneModelConstVec;
 
 } // model
 }

@@ -221,7 +221,7 @@ template< class TimeValueT, class ValueT >
 void                                        CompositeBezierInterpolator< TimeValueT, ValueT >::Serialize       ( ISerializer& ser ) const
 {
 ser.EnterChild( "interpolator" );
-    ser.SetAttribute( "curve_type", SerializationHelper::T2String< CurveType >( ct2s, m_type ) );
+    ser.SetAttribute( "curve_type", SerializationHelper::Enum2String< CurveType >( ct2s, m_type ) );
     for( size_t i = 0; i < interpolators.size(); i++ )
     {
         keys[ i ].Serialize( ser );

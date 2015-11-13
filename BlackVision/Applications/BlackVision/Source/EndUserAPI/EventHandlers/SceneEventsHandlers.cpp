@@ -248,7 +248,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         {
             UpdatersManager::Get().RemoveAllUpdaters();
                 
-            auto node = m_appLogic->LoadScenes( projectScenesNames );
+            m_appLogic->LoadScenes( projectScenesNames );
             status = true;
         }
 

@@ -21,7 +21,7 @@ PresetAccessor::PresetAccessor	( const Path & path )
 
 // ********************************
 //
-void                        PresetAccessor::SavePreset ( const model::BasicNodeConstPtr node, const Path & path ) const
+void                        PresetAccessor::SavePreset ( const model::SceneModelPtr node, const Path & path ) const
 {
     File::Touch( ( m_path / path ).Str() );
     SceneDescriptor::SaveScene( node, model::TimelineManager::GetInstance(), ( m_path / path ).Str() );
@@ -29,7 +29,7 @@ void                        PresetAccessor::SavePreset ( const model::BasicNodeC
     
 // ********************************
 //
-model::BasicNodeConstPtr    PresetAccessor::LoadPreset( const Path & path ) const
+model::SceneModelPtr    PresetAccessor::LoadPreset( const Path & path ) const
 {
     return SceneDescriptor::LoadScene( ( m_path / path ).Str(), model::TimelineManager::GetInstance() );
 }

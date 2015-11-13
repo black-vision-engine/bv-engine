@@ -86,29 +86,32 @@ BasicNodePtr                    BasicNode::Create                   ( const std:
 
 // ********************************
 //
-void                            BasicNode::Serialize               ( ISerializer& doc ) const
+void                            BasicNode::Serialize               ( ISerializer& ser ) const
 {
-    doc.EnterChild( "node" );
-    doc.SetAttribute( "name", GetName() );
+    ser.EnterChild( "node" );
+    ser.SetAttribute( "name", GetName() );
 
-    doc.SetAttribute( "visible", m_visible ? "true" : "false" );
+    ser.SetAttribute( "visible", m_visible ? "true" : "false" );
 
-    doc.EnterChild( "plugins" );
+    ser.EnterChild( "plugins" );
         for( unsigned int  i = 0; i < m_pluginList->NumPlugins(); i++ )
         {
             auto plugin_ = m_pluginList->GetPlugin( i );
             auto plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
             assert( plugin );
-            plugin->Serialize( doc );
+            plugin->Serialize( ser );
         }
-    doc.ExitChild(); // plugins
+    ser.ExitChild(); // plugins
 
-    doc.EnterChild( "nodes" );
+    if( m_modelNodeEffect )
+        m_modelNodeEffect->Serialize( ser );
+
+    ser.EnterChild( "nodes" );
         for( auto child : m_children )
-            child->Serialize( doc );
-    doc.ExitChild();
+            child->Serialize( ser );
+    ser.ExitChild();
 
-    doc.ExitChild();
+    ser.ExitChild();
 }
 
 // ********************************
@@ -123,13 +126,17 @@ ISerializablePtr BasicNode::Create( const IDeserializer& dob )
     
     auto node = Create( name, timeEvaluator );
 
-    node->m_visible = dob.GetAttribute( "visible" ) == "true" ? true : false;
+    node->m_visible = dob.GetAttribute( "visible" ) == "false" ? false : true;
 
 // plugins
     auto plugins = SerializationHelper::DeserializeObjectLoadArrayImpl< BasePlugin< IPlugin > >( dob, "plugins" );
 
     for( auto plugin : plugins )
         node->AddPlugin( plugin );
+
+//// node effect
+//    if( m_modelNodeEffect )
+//        m_modelNodeEffect->Serialize( dob );
 
 // children
     auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< BasicNode >( dob, "nodes" );

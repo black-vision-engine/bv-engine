@@ -1,11 +1,18 @@
 #include "SceneModel.h"
 
-//#include "Engine/Models/Timeline/TimelineManager.h"
 #include "Assets/AssetDescsWithUIDs.h"
-//#include "Serialization/SerializationHelper.h"
 
 namespace bv { namespace model {
 
+// *******************************
+//
+SceneModelPtr    SceneModel::Create( std::string name, model::TimelineManager * pTimelineManager, model::BasicNodePtr pModelSceneRoot )
+{
+    return SceneModelPtr( new SceneModel( name, pTimelineManager, pModelSceneRoot ) );
+}
+
+// *******************************
+//
 SceneModel::SceneModel( std::string name, model::TimelineManager * pTimelineManager, model::BasicNodePtr pModelSceneRoot )
     : m_name( name )
     , m_pTimelineManager( pTimelineManager )
@@ -13,6 +20,8 @@ SceneModel::SceneModel( std::string name, model::TimelineManager * pTimelineMana
 {
 }
 
+// *******************************
+//
 SceneModel::SceneModel( std::string name, model::TimelineManagerPtr pTimelineManager, model::BasicNodePtr pModelSceneRoot )
     : m_name( name )
     , m_pTimelineManager( pTimelineManager )
@@ -81,4 +90,5 @@ ISerializablePtr        SceneModel::Create          ( const IDeserializer& deser
     return ISerializablePtr( obj );
 }
 
-} }
+} // model
+} // bv

@@ -15,57 +15,78 @@ namespace bv {
 //
 void                    BVScene::Serialize           ( ISerializer& ser ) const
 {
-    m_pSceneModel->Serialize( ser );
-}
+    ser.EnterChild( "scenes" );
 
-
-// *******************************
-//
-BVScenePtr    BVScene::Create( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager )
-{
-    struct make_shared_enabler_BVScene : public BVScene
+    for( auto sm : m_pSceneModelVec )
     {
-        make_shared_enabler_BVScene( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager )
-            : BVScene( cam, name, timeEvaluator, renderer, pTimelineManager )
-        {
-        }
-    };
-
-    auto bvScene    = std::make_shared< make_shared_enabler_BVScene >( cam, name, timeEvaluator, renderer, pTimelineManager );
-
-    if( modelRootNode )
-    {
-        auto bvEditor   = bvScene->GetSceneEditor();
-        bvEditor->SetRootNode( modelRootNode );
+        sm->Serialize( ser );
     }
 
-    return bvScene;
+    ser.ExitChild();
 }
 
 // *******************************
 //
-BVScenePtr    BVScene::CreateFakeSceneForTestingOnly( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator )
+BVScenePtr  BVScene::Create              ( Camera * cam, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer )
 {
-    return BVScenePtr( new BVScene( modelRootNode, cam, name, timeEvaluator ) );
+    return BVScenePtr( new BVScene( cam, timeEvaluator, renderer ) );
 }
 
 // *******************************
 //
-BVScene::BVScene    ( model::BasicNodePtr modelRootNode, Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator )
+BVScenePtr  BVScene::Create              ( model::SceneModelPtr sceneModel, Camera * cam, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer )
+{
+    model::SceneModelVec vec;
+    vec.push_back( sceneModel );
+    return Create( vec, cam, timeEvaluator, renderer );
+}
+
+// *******************************
+//
+BVScenePtr  BVScene::Create              ( model::SceneModelVec sceneModelVec, Camera * cam, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer )
+{
+    return BVScenePtr( new BVScene( sceneModelVec, cam, timeEvaluator, renderer ) );
+}
+
+// *******************************
+//
+BVScenePtr    BVScene::CreateFakeSceneForTestingOnly( model::SceneModelPtr sceneModel, Camera * cam, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    model::SceneModelVec vec;
+    vec.push_back( sceneModel );
+    return BVScenePtr( new BVScene( vec, cam, timeEvaluator, nullptr ) );
+}
+
+// *******************************
+//
+BVScene::BVScene    ( model::SceneModelVec sceneModelVec, Camera * cam, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer )
     : m_pCamera( cam )
-    , m_pSceneModel( new model::SceneModel( name, nullptr, modelRootNode ) )
+    , m_pSceneModelVec( sceneModelVec )
+    , m_renderer( renderer )
     , m_pEngineSceneRoot( nullptr )
     , m_cameraPosition( "camera_position", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 1.0f ) ), timeEvaluator )
     , m_cameraDirection( "camera_direction", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 0.f ) ), timeEvaluator )
     , m_cameraUp( "camera_up", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 1.f, 0.f ) ), timeEvaluator )
-{}
+{
+    m_pSceneEditor = new BVSceneEditor( this );
+
+    auto rootNode = model::BasicNode::Create( "main root", timeEvaluator );
+    rootNode->AddPlugin( "DEFAULT_TRANSFORM", "transform", timeEvaluator );
+
+    for( auto sm : sceneModelVec )
+    {
+        rootNode->AddChildToModelOnly( sm->m_pModelSceneRoot );
+    }
+
+    m_pSceneEditor->SetRootNode( rootNode );
+    m_rootNode = rootNode;
+}
 
 // *******************************
 //
-BVScene::BVScene    ( Camera * cam, const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer, model::TimelineManager * pTimelineManager )
+BVScene::BVScene    ( Camera * cam, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer )
     : m_pCamera( cam )
     , m_renderer( renderer )
-    , m_pSceneModel( new model::SceneModel( name, pTimelineManager, nullptr ) )
     , m_pEngineSceneRoot( nullptr )
     , m_cameraPosition( "camera_position", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 1.0f ) ), timeEvaluator )
     , m_cameraDirection( "camera_direction", InterpolatorsHelper::CreateConstValue( glm::vec3( 0.f, 0.f, 0.f ) ), timeEvaluator )
@@ -88,9 +109,9 @@ void            BVScene::Update( TimeType t )
 {
     static std::vector< Transform > vec(1);
 
-    if( GetModelSceneRoot() )
+    if( m_rootNode )
     {
-        GetModelSceneRoot()->Update( t );
+        m_rootNode->Update( t );
 
         UpdatersManager::Get().UpdateStep();
 
@@ -120,9 +141,9 @@ Camera *        BVScene::GetCamera              ()  const
 
 // *******************************
 //
-model::BasicNodePtr & BVScene::GetModelSceneRoot  ()  const
+model::BasicNodePtr & BVScene::GetModelSceneRoot  ()
 {
-    return m_pSceneModel->m_pModelSceneRoot;
+    return m_rootNode;
 }
 
 // *******************************
@@ -134,17 +155,80 @@ SceneNode *             BVScene::GetEngineSceneRoot ()  const
 
 // *******************************
 //
-BVSceneEditor *         BVScene::GetSceneEditor     ()
+BVSceneEditor *         BVScene::GetSceneEditor     ( )
 {
     return m_pSceneEditor;
 }
 
 // *******************************
 //
-const std::string &     BVScene::GetName            () const
+void                    BVScene::AddScene           ( model::SceneModelPtr sceneModel )
 {
-    return m_pSceneModel->m_name;
+    m_pSceneModelVec.push_back( sceneModel );
+    m_pSceneEditor->AddChildNode( m_rootNode, sceneModel->m_pModelSceneRoot );
 }
+
+// *******************************
+//
+void                    BVScene::RemoveScene         ( const std::string & name )
+{
+    model::BasicNodePtr toRemove = nullptr;
+
+    for( auto it = m_pSceneModelVec.begin(); it != m_pSceneModelVec.end(); ++it )
+    {
+        if( (*it)->m_name == name )
+        {
+            auto rit = it;
+            ++it;
+            m_pSceneModelVec.erase( it );
+        }
+    }
+
+    if( toRemove )
+    {
+        m_pSceneEditor->DeleteChildNode( m_rootNode, toRemove->GetName() );
+    }
+}
+
+// *******************************
+//
+StringVector            BVScene::ListScenesNames     () const
+{
+    StringVector ret;
+    for( auto sm : m_pSceneModelVec )
+    {
+        ret.push_back( sm->m_name );
+    }
+
+    return ret;
+}
+
+// *******************************
+//
+model::SceneModelPtr    BVScene::GetScene            ( const std::string & name ) const
+{
+    for( auto it = m_pSceneModelVec.begin(); it != m_pSceneModelVec.end(); ++it )
+    {
+        if( (*it)->m_name == name )
+        {
+            return (*it);
+        }
+    }
+
+    return nullptr;
+}
+
+// *******************************
+//
+const model::SceneModelVec &  BVScene::GetScenes() const
+{
+    return m_pSceneModelVec;
+}
+
+//const std::string &     BVScene::GetName            () const
+//{
+//    return m_pSceneModel->m_name;
+//}
 
 
 } // bv

@@ -56,7 +56,7 @@ public:
     void					RemoveUnusedAssets	( const Path & projectName );
 	void					RemoveUnusedAssets	();
 
-	void					AddScene			( const model::BasicNodeConstPtr & sceneRootNode, const Path & projectName, const Path & outPath );
+	void					AddScene			( const model::SceneModelPtr & scene, const Path & projectName, const Path & outPath );
 	void					CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 	void					RemoveScene			( const Path & projectName, const Path & path );
 	void					MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
@@ -92,8 +92,8 @@ public:
 
 	// *********************************
 	// loading, saving presets
-    model::BasicNodeConstPtr LoadPreset          ( const Path & projectName, const Path & path ) const;
-    void                    SavePreset          ( const model::BasicNodeConstPtr & node, const Path & projectName, const Path & path ) const;
+    model::SceneModelPtr    LoadPreset          ( const Path & projectName, const Path & path ) const;
+    void                    SavePreset          ( const model::SceneModelPtr & node, const Path & projectName, const Path & path ) const;
     PathVec                 ListPresets         ( const Path & projectName, const Path & path ) const;
     PathVec                 ListPresets         ( const Path & projectName ) const;
     PathVec                 ListPresets         () const;
