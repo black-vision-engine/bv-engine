@@ -19,7 +19,7 @@ JsonDeserializeObject::~JsonDeserializeObject()
 
 // ***********************
 //
-bool JsonDeserializeObject::LoadFromFile        ( const std::string& fileName )
+bool JsonDeserializeObject::LoadFile        ( const std::string& fileName )
 {
     std::ifstream file;
     file.open( fileName, std::ios_base::out );

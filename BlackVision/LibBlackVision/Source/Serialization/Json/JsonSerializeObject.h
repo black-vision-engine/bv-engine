@@ -24,7 +24,7 @@ public:
 	JsonSerializeObject();
 	~JsonSerializeObject();
 
-	void						Save                ( const std::string& filename );
+	void						Save                ( const std::string& filename, FormatStyle style = FormatStyle::FORMATSTYLE_SPARING );
 	void						Save                ( std::ostream& out );
     Json::Value                 GetJson             ();
 
@@ -36,6 +36,9 @@ public:
 
     void						EnterChild          ( const std::string& name ) override;
     void                        EnterChild          ( const std::wstring& /*name*/ ) override;
+    void                        EnterArray          ( const std::string& name ) override;
+    void                        EnterArray          ( const std::wstring& /*name*/ ) override;
+
 	bool						ExitChild           () override;
 };
 

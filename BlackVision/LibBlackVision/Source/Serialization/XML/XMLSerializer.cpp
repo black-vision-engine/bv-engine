@@ -112,5 +112,16 @@ std::wstring        SerializeObject::GetAttribute        ( const std::wstring& /
 void                SerializeObject::EnterChild          ( const std::wstring& /*name*/ )
 {    assert( !"This serializer doesn't supports wstrings" );    }
 
+// ***********************
+//
+void                SerializeObject::EnterArray          ( const std::wstring& /*name*/ )
+{    assert( !"This serializer doesn't supports wstrings" );    }
+
+// ***********************
+//
+void                SerializeObject::EnterArray          ( const std::string& /*name*/ )
+{
+    assert( !"Please implement me" );
+}
 
 } // bv

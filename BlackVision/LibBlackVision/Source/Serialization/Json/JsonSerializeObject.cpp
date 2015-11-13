@@ -16,7 +16,7 @@ JsonSerializeObject::~JsonSerializeObject()
 
 // ***********************
 //
-void JsonSerializeObject::Save( const std::string& filename )
+void JsonSerializeObject::Save( const std::string& filename, FormatStyle /*style*/ )
 {
 	std::ofstream file;
 	file.open( filename, std::ios_base::out );
@@ -43,32 +43,16 @@ Json::Value JsonSerializeObject::GetJson()
 void JsonSerializeObject::EnterChild( const std::string& name )
 {
 	m_nodeStack.push( m_currentNode );
-
-    if( (*m_currentNode)[ name ].isArray() )
-    {
-        auto size = (*m_currentNode)[ name ].size();
-        
-        //(*m_currentNode)[ name ][ size ];
-        m_currentNode = &(*m_currentNode)[ name ][ size ];
-        
-    }
-    else if( (*m_currentNode)[ name ].isObject() )
-    {
-        auto tempNode = Json::Value( (*m_currentNode)[ name ] );       //Remember node. (deep copy)
-        
-        (*m_currentNode)[ name ] = Json::Value( Json::ValueType::arrayValue );
-        (*m_currentNode)[ name ][ 0 ] = tempNode;
-
-        m_currentNode = &(*m_currentNode)[ name ][ 1 ];
-    }
-    else
-        m_currentNode = &(*m_currentNode)[ name ];
+    (*m_currentNode)[ name ] = Json::ValueType::objectValue;
+    m_currentNode = &(*m_currentNode)[ name ];
 }
 
 // ***********************
 //
 void JsonSerializeObject::SetAttribute( const std::string& name, const std::string& value )
 {
+    //assert( !((*m_currentNode).isObject()) );
+
 	(*m_currentNode)[ name ] = value;
 }
 
@@ -76,6 +60,8 @@ void JsonSerializeObject::SetAttribute( const std::string& name, const std::stri
 //
 std::string JsonSerializeObject::GetAttribute( const std::string& name )
 {
+    //assert( !(*m_currentNode).isObject() );
+
     return (*m_currentNode)[ name ].asString();
 }
 
@@ -91,6 +77,25 @@ bool JsonSerializeObject::ExitChild()
 
     return true;
 }
+// ***********************
+//
+void                JsonSerializeObject::EnterArray          ( const std::string& name )
+{
+	m_nodeStack.push( m_currentNode );
+
+    if( (*m_currentNode)[ name ].isArray() )
+    {
+        auto size = (*m_currentNode)[ name ].size();
+        m_currentNode = &(*m_currentNode)[ name ][ size ];        
+    }
+    else
+        m_currentNode = &(*m_currentNode)[ name ][ 0 ];
+}
+
+// ***********************
+//
+void                JsonSerializeObject::EnterArray          ( const std::wstring& /*name*/ )
+{    assert( !"This serializer doesn't supports wstrings" );    }
 
 // ***********************
 //

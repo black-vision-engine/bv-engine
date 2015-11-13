@@ -33,7 +33,8 @@
 
 #include "Serialization/JsonSpirit/JsonSpiritSerializeObject.h"
 #include "Serialization/JsonSpirit/JsonSpiritDeserilizeObject.h"
-
+#include "Serialization/Json/JsonSerializeObject.h"
+#include "Serialization/Json/JsonDeserializeObject.h"
 
 namespace bv {
 
@@ -1217,41 +1218,59 @@ model::BasicNodePtr     TestScenesFactory::AssetCacheTestScene         ( const m
 
 model::BasicNodePtr TestScenesFactory::WSerializationTest          ( const model::PluginsManager* pluginsManager, model::TimelineManager* timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
+
+#define __W_STRING_SERIALIZATION_TEST
+#ifdef __W_STRING_SERIALIZATION_TEST
+    #define MAKE_STR( s ) L##s
+    #define STRING std::wstring
+    #define Serializer JsonSpiritSerializeObject
+    #define Deserializer JsonSpiritDeserilizeObject
+#else
+    #define MAKE_STR( s ) s
+    #define STRING std::string
+    #define Serializer JsonSerializeObject
+    #define Deserializer JsonDeserializeObject
+#endif
+
     pluginsManager;
     auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "sand.jpg" );
 
-    JsonSpiritSerializeObject serializeObject;
-    serializeObject.EnterChild( L"asset" );
-        serializeObject.SetAttribute( L"path", L"sand.jpg" );
-        serializeObject.SetAttribute( L"type", L"texture" );
-        serializeObject.EnterChild( L"mipmap" );
-            serializeObject.SetAttribute( L"path", L"water.jpg" );
-            serializeObject.SetAttribute( L"type", L"texture" );
+    Serializer serializeObject;
+    serializeObject.EnterChild( MAKE_STR("asset") );
+        serializeObject.SetAttribute( MAKE_STR("path"), MAKE_STR("sand.jpg") );
+        serializeObject.SetAttribute( MAKE_STR("type"), MAKE_STR("texture") );
+        serializeObject.EnterArray( MAKE_STR("mipmap") );
+            serializeObject.SetAttribute( MAKE_STR("path"), MAKE_STR("fire.jpg") );
+            serializeObject.SetAttribute( MAKE_STR("type"), MAKE_STR("texture") );
         serializeObject.ExitChild();
-        serializeObject.EnterChild( L"mipmap" );
-            serializeObject.SetAttribute( L"path", L"water.jpg" );
-            serializeObject.SetAttribute( L"type", L"texture" );
+        serializeObject.EnterArray( MAKE_STR("mipmap") );
+            serializeObject.SetAttribute( MAKE_STR("path"), MAKE_STR("water.jpg") );
+            serializeObject.SetAttribute( MAKE_STR("type"), MAKE_STR("texture") );
         serializeObject.ExitChild();
+        // This should assert or report error
+        //serializeObject.EnterChild( MAKE_STR("mipmap") );
+        //    serializeObject.SetAttribute( MAKE_STR("path"), MAKE_STR("poison.jpg") );
+        //serializeObject.ExitChild();
     serializeObject.ExitChild();
 
-    serializeObject.Save( "textureWSerialize.json", FormatStyle::FORMATSTYLE_READABLE );
+    serializeObject.Save( "serialization/textureWSerialize.json", FormatStyle::FORMATSTYLE_READABLE );
 
 
-    JsonSpiritDeserilizeObject deserializeObject;
-    if( deserializeObject.LoadFile( "textureWSerialize.json" ) )
+    Deserializer deserializeObject;
+    if( deserializeObject.LoadFile( "serialization/textureWSerialize.json" ) )
     {
-        std::wstring result;
+        STRING result;
         result;
 
-        deserializeObject.EnterChild( L"asset" );
-            result = deserializeObject.GetAttribute( L"path" );
-            result = deserializeObject.GetAttribute( L"type" );
-            if( deserializeObject.EnterChild( L"mipmap" ) )
+        deserializeObject.EnterChild( MAKE_STR("asset") );
+            result = deserializeObject.GetAttribute( MAKE_STR("path") );
+            result = deserializeObject.GetAttribute( MAKE_STR("type") );
+            if( deserializeObject.EnterChild( MAKE_STR("mipmap") ) )
             {
                 do
                 {
-                    result = deserializeObject.GetAttribute( L"path" );
-                    result = deserializeObject.GetAttribute( L"type" );
+                    result = deserializeObject.GetAttribute( MAKE_STR("path") );
+                    result = deserializeObject.GetAttribute( MAKE_STR("type") );
                 } while( deserializeObject.NextChild() );
                 deserializeObject.ExitChild();      // mipmap
             }
@@ -1260,5 +1279,11 @@ model::BasicNodePtr TestScenesFactory::WSerializationTest          ( const model
 
     return node0;
 }
+
+#undef MAKE_STR
+#undef Serializer
+#undef Deserializer
+#undef STRING
+
 
 } //bv

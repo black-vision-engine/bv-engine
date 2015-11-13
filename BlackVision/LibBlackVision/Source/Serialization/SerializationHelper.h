@@ -16,7 +16,7 @@ template< typename T >
 std::shared_ptr< T >                                        DeserializeObjectLoadImpl( const IDeserializer& deser, std::string name )
 {
     auto sucess = deser.EnterChild( name );
-    assert( sucess ); // FIXME error handling
+    assert( sucess ); { sucess; } // FIXME error handling
     auto obj = T::Create( deser );
     deser.ExitChild();
     return std::static_pointer_cast< T >( obj );

@@ -29,10 +29,12 @@ public:
     virtual std::string			GetAttribute        ( const std::string& name ) override;
     virtual void                EnterChild          ( const std::string& name ) override;
     virtual bool                ExitChild           () override;
+    void                        EnterArray          ( const std::string& name ) override;
 
 	virtual void				SetAttribute        ( const std::wstring& name, const std::wstring& value ) override;
 	virtual std::wstring		GetAttribute        ( const std::wstring& name ) override;
     virtual void                EnterChild          ( const std::wstring& name ) override;
+    void                        EnterArray          ( const std::wstring& /*name*/ ) override;
 };
 
 }

@@ -6,6 +6,12 @@
 namespace bv {
 
 
+enum FormatStyle
+{
+    FORMATSTYLE_SPARING,
+    FORMATSTYLE_READABLE
+};
+
 class ISerializer
 {
 private:
@@ -27,6 +33,9 @@ public:
     If deserializing, returns false if child does not exist.*/
     virtual void                EnterChild          ( const std::string& name ) = 0;
     virtual void                EnterChild          ( const std::wstring& name ) = 0;
+
+    virtual void                EnterArray          ( const std::string& name ) = 0;
+    virtual void                EnterArray          ( const std::wstring& name ) = 0;
     
     /**@brief Pop.*/
     virtual bool                ExitChild           () = 0;

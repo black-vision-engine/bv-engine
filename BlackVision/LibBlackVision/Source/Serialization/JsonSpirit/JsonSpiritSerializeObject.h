@@ -9,11 +9,6 @@
 
 namespace bv {
 
-enum FormatStyle
-{
-    FORMATSTYLE_SPARING,
-    FORMATSTYLE_READABLE
-};
 
 class JsonSpiritSerializeObject : public ISerializer
 {
@@ -43,6 +38,8 @@ public:
     virtual void                EnterChild          ( const std::string& name ) override;
     virtual void                EnterChild          ( const std::wstring& name ) override;
     
+    void                        EnterArray          ( const std::string& /*name*/ ) override;
+    void                        EnterArray          ( const std::wstring& name ) override;
     /**@brief Pop.*/
     virtual bool                ExitChild           () override;
 

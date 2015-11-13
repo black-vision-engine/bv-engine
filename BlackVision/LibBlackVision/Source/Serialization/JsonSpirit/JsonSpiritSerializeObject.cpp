@@ -42,6 +42,8 @@ std::string			JsonSpiritSerializeObject::GetAttribute        ( const std::string
 //
 void				JsonSpiritSerializeObject::SetAttribute        ( const std::wstring& name, const std::wstring& value )
 {
+    //assert( (*m_currentNode).type() != json_spirit::Value_type::obj_type );
+
     auto& JsonObject = (*m_currentNode).get_obj();
     JsonObject.push_back( json_spirit::wPair( name, value ) );
 }
@@ -50,6 +52,8 @@ void				JsonSpiritSerializeObject::SetAttribute        ( const std::wstring& nam
 //
 std::wstring		JsonSpiritSerializeObject::GetAttribute        ( const std::wstring& name )
 {
+    //assert( (*m_currentNode).type() != json_spirit::Value_type::obj_type );
+
     auto& JsonObject = (*m_currentNode).get_obj();
     auto value = FindValue( JsonObject, name );
     if( value == nullptr )
@@ -80,40 +84,7 @@ void                JsonSpiritSerializeObject::EnterChild          ( const std::
         m_currentNode = &( object.back().value_ );
     }
     else
-    {
-        auto nodeType = node->type();
-        if( nodeType == json_spirit::Value_type::array_type )
-        {// Add element to array
-            auto& array = const_cast<json_spirit::wArray&>( node->get_array() );
-
-            json_spirit::wObject newObject;
-            array.push_back( newObject );
-
-            m_currentNode = &( array.back() );
-        }
-        else
-        {// Save object, insert array, create new object and add created and saved to the array.
-            auto& prevObject = const_cast<json_spirit::wObject&>( node->get_obj() );
-            
-            json_spirit::wObject newObject;
-            json_spirit::wArray newArray;
-            newArray.push_back( prevObject );
-            newArray.push_back( newObject );
-
-            // delete prevObject from vector
-            for( int i = 0; i < object.size(); ++i )
-                if( object[i].name_ == name )
-                {
-                    object.erase( object.begin() + i );
-                    break;
-                }
-                 
-           object.push_back( json_spirit::wPair( name, newArray ) );
-
-           m_currentNode = &( object.back().value_.get_array().back() );
-        }
-    }
-
+        m_currentNode = node;
 }
 
 // ***********************
@@ -127,6 +98,41 @@ bool                JsonSpiritSerializeObject::ExitChild           ()
 	m_nodeStack.pop();
 
     return true;
+}
+
+// ***********************
+//
+void JsonSpiritSerializeObject::EnterArray          ( const std::string& /*name*/ )
+{    assert( !"This serializer supports only wstrings" );   }
+
+// ***********************
+//
+void JsonSpiritSerializeObject::EnterArray          ( const std::wstring& name )
+{
+    m_nodeStack.push( m_currentNode );
+
+    auto& object = (*m_currentNode).get_obj();
+    auto node = FindValue( object, name );
+
+    if( node == nullptr )
+    {// Add node
+        json_spirit::wArray newArray;
+        json_spirit::wObject newObject;
+        newArray.push_back( newObject );
+
+        object.push_back( json_spirit::wPair( name, newArray ) );
+
+        m_currentNode = &( object.back().value_.get_array().back() );
+    }
+    else
+    {
+        auto& array = const_cast<json_spirit::wArray&>( node->get_array() );
+
+        json_spirit::wObject newObject;
+        array.push_back( newObject );
+
+        m_currentNode = &( array.back() );
+    }
 }
 
 // ***********************
