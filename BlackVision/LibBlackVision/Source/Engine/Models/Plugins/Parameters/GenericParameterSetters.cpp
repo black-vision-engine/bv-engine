@@ -176,5 +176,53 @@ bool    SetParameterCenterMass  ( IParameterPtr parameter, unsigned int idx, Tim
     return SetCenterMass( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, center );
 }
 
+// *******************************
+//
+bool                                                BezierSetCurveType( IParameterPtr parameter, CurveType type )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+    {
+        abstract_parameter->SetCurveType( type );
+        return true;
+    }
+    else
+        return false;
+}
+
+// *******************************
+//
+CurveType                                           BezierGetCurveType( IParameterPtr parameter )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+        return abstract_parameter->GetCurveType();
+    else
+        return CurveType::CT_TOTAL;
+}
+
+// *******************************
+//
+void                                                BezierSetWrapPostMethod  ( IParameterPtr parameter, WrapMethod method );
+
+// *******************************
+//
+void                                                BezierSetWrapPreMethod   ( IParameterPtr parameter, WrapMethod method );
+
+// *******************************
+//
+WrapMethod                                          BezierGetWrapPostMethod  ( IParameterPtr parameter );
+
+// *******************************
+//
+WrapMethod                                          BezierGetWrapPreMethod   ( IParameterPtr parameter );
+
+// *******************************
+//
+int                                                 BezierParameterGetNumKeys( IParameterPtr parameter );
+
+
 } //model
 } //bv

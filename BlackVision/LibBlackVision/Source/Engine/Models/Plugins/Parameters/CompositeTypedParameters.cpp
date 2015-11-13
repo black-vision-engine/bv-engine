@@ -21,6 +21,14 @@ void                ParamTransform::SetCurveType    ( CurveType type )
 }
 
 // *******************************
+// FIXME: reimplement with SQT paramter model
+CurveType           ParamTransform::GetCurveType    ()
+{
+    assert( false );
+    return CurveType::CT_TOTAL;
+}
+
+// *******************************
 //
 void    ParamTransform::Serialize       ( ISerializer& doc ) const
 {
@@ -97,6 +105,14 @@ void ParamTransformVec::SetCurveType        ( CurveType type )
 { 
     for( auto& trans : m_transformModelVec ) 
         trans.SetCurveType( type ); 
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+CurveType           ParamTransformVec::GetCurveType    ()
+{
+    assert( false );
+    return CurveType::CT_TOTAL;
 }
 
 // *******************************

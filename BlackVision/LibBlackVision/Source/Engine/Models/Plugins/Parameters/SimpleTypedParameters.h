@@ -30,7 +30,8 @@ public:
 
     void                    Serialize       ( ISerializer& doc ) const;
 
-    void                    SetCurveType        ( CurveType type );
+    virtual void            SetCurveType        ( CurveType type ) override;
+    virtual CurveType       GetCurveType        () override;
 
     inline  ValueType       Evaluate            () const;
     inline  void            SetVal              ( const ValueType & val, TimeType t );
