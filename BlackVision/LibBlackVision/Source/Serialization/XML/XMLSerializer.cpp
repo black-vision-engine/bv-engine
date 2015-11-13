@@ -119,9 +119,9 @@ void                XMLSerializer::EnterArray          ( const std::wstring& /*n
 
 // ***********************
 //
-void                XMLSerializer::EnterArray          ( const std::string& /*name*/ )
+void                XMLSerializer::EnterArray          ( const std::string& name )
 {
-    assert( !"Please implement me" );
+    SetName( name );
 }
 
 } // bv
