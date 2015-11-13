@@ -69,7 +69,6 @@ private:
     unsigned long                   m_startTime;
 
 	//pablito
-	RemoteControlInterface*			m_RemoteControl;
 	Solution						m_solution;
 	bv::videocards::VideoCardManager* m_videoCardManager;
 	std::string                     m_grabFramePath;

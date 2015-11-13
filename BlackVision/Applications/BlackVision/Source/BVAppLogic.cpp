@@ -42,7 +42,6 @@
 //pablito
 #define XML
 #include "ConfigManager.h"
-#include "RemoteControlInterface.h"
 
 
 namespace bv
@@ -115,7 +114,6 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
     m_renderer = renderer;
     m_renderLogic = new RenderLogic();
     m_remoteHandlers = new RemoteEventsHandlers;
-    m_RemoteControl = new RemoteControlInterface(this);
 }
 
 // *********************************
@@ -285,7 +283,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
             m_bvScene->Update( t );
         }
 
-        m_RemoteControl->UpdateHM();
+        m_remoteHandlers->UpdateHM();
 
         {
             HPROFILER_SECTION( "Render", PROFILER_THREAD1 );			

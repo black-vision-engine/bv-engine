@@ -99,7 +99,6 @@
       <Filter>VideoInput</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
-    <ClCompile Include="..\..\..\Source\RemoteControlInterface.cpp" />
     <ClCompile Include="..\..\..\Source\PerformanceMonitor.cpp" />
     <ClCompile Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp">
       <Filter>VideoInput</Filter>
@@ -222,7 +221,6 @@
       <Filter>VideoInput</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
-    <ClInclude Include="..\..\..\Source\RemoteControlInterface.h" />
     <ClInclude Include="..\..\..\Source\PerformanceMonitor.h" />
     <ClInclude Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h">
       <Filter>VideoInput</Filter>

@@ -22,6 +22,9 @@ public:
     ~RemoteEventsHandlers();
 
     void            InitializeHandlers      ( BVAppLogic* appLogic );
+
+    // Still little hackisch
+    void            UpdateHM                ();
 };
 
 } //bv

@@ -52,4 +52,10 @@ void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic* appLogic )
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );
 }
 
+// ***********************
+//
+void RemoteEventsHandlers::UpdateHM                ()
+{
+    m_heightmapEvents->UpdateHM();
+}
 } //bv
