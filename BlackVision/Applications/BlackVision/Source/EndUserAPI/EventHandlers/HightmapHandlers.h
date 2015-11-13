@@ -31,6 +31,7 @@ public:
 
 	// FIXME: hack
     void            UpdateHM        ();
+    void            HightmapHandler         ( bv::IEventPtr eventPtr );
 };
 
 } //bv

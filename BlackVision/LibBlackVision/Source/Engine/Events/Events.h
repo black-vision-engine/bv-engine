@@ -839,35 +839,46 @@ DEFINE_PTR_TYPE( VideoCardEvent )
 // ************************************* HightmapEvent *************************************
 class HightmapEvent : public BaseEvent
 {
+public:
+    typedef enum
+    {
+        Enable,
+        Start,
+        Reset,
+        Show,
+        Zoom,
+        ZoomOut,
+        Set,
+        Anim,
+        Anim2,
+        Set3,
+        Fail            ///< Wrong command
+    } Command;
 private:
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
 public:
-    float                       value;
-    std::wstring                cmd;      // move to private
-    std::wstring                NodeName;
-    float                       H;
-    float                       M;
-    float                       S;
-    float                       MS;
-   
-
+    Command                     HightmapCommand;
+    float                       Hours;
+    float                       Minutes;
+    float                       Seconds;
+    float                       Milliseconds;
 public:
-
-    explicit                        HightmapEvent   ();
-
-    virtual EventType               GetEventType        () const;
+    explicit                        HightmapEvent   () {};
 
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );
     virtual IEventPtr               Clone               () const;
+
     static EventType                Type                ();
-
+    static std::string&             Name                ();
     virtual const std::string &     GetName             () const;
-    //void                            SetData(std::wstring cmd){command=cmd;};
-
+    virtual EventType               GetEventType        () const;
+public:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
 };
 
-DEFINE_PTR_TYPE(TimerCmd)
+DEFINE_PTR_TYPE( HightmapEvent )
 
 } //bv

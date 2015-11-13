@@ -183,7 +183,17 @@ const std::wstring COMMAND_SET_TIME_WSTRING             = L"SetTime";
 const std::wstring COMMAND_SET_TIME_START_WSTRING       = L"SetTimeStart";
 const std::wstring COMMAND_SET_TIME_STOP_WSTRING        = L"SetTimeStop";
 
-
+// HightmapEvent
+const std::wstring COMMAND_HM_ENABLE_WSTRING    = L"Enable";
+const std::wstring COMMAND_HM_START_WSTRING     = L"Start";
+const std::wstring COMMAND_HM_RESET_WSTRING     = L"Reset";
+const std::wstring COMMAND_HM_SHOW_WSTRING      = L"Show";
+const std::wstring COMMAND_HM_ZOOM_WSTRING      = L"Zoom";
+const std::wstring COMMAND_HM_ZOOM_OUT_WSTRING  = L"ZoomOut";
+const std::wstring COMMAND_HM_SET_WSTRING       = L"Set";
+const std::wstring COMMAND_HM_ANIM_WSTRING      = L"Anim";
+const std::wstring COMMAND_HM_ANIM2_WSTRING     = L"Anim2";
+const std::wstring COMMAND_HM_SET3_WSTRING      = L"Set3";
 }
 
 // ************************************* PluginAddedEvent *************************************
@@ -1682,6 +1692,116 @@ VideoCardEvent::Command VideoCardEvent::WStringToCommand    ( const std::wstring
         return Command::KeyOn;
     else if( string == Serial::COMMAND_VIDEO_CARD_KEY_OFF_WSTRING )
         return Command::KeyOff;
+    else
+        return Command::Fail;
+}
+
+
+//******************* HightmapEvent *************
+
+// *************************************
+//
+void                HightmapEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
+    ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( HightmapCommand ) );
+    ser.SetAttribute( Serial::TIMER_HOURS_WSTRING, toWString( Hours ) );
+    ser.SetAttribute( Serial::TIMER_MINUTES_WSTRING, toWString( Minutes ) );
+    ser.SetAttribute( Serial::TIMER_SECONDS_WSTRING, toWString( Seconds ) );
+    ser.SetAttribute( Serial::TIMER_MILLISECONDS_WSTRING, toWString( Milliseconds ) );
+}
+
+// *************************************
+//
+IEventPtr                HightmapEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
+    {
+        HightmapEventPtr newEvent   = std::make_shared<HightmapEvent>();
+        newEvent->HightmapCommand   = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
+        newEvent->Hours             = stof( deser.GetAttribute( Serial::TIMER_HOURS_WSTRING ) );
+        newEvent->Minutes           = stof( deser.GetAttribute( Serial::TIMER_MINUTES_WSTRING ) );
+        newEvent->Seconds           = stof( deser.GetAttribute( Serial::TIMER_SECONDS_WSTRING ) );
+        newEvent->Milliseconds      = stof( deser.GetAttribute( Serial::TIMER_MILLISECONDS_WSTRING ) );
+
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               HightmapEvent::Clone             () const
+{   return IEventPtr( new HightmapEvent( *this ) );  }
+
+// *************************************
+//
+EventType           HightmapEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        HightmapEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  HightmapEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           HightmapEvent::GetEventType() const
+{   return this->m_sEventType; }
+
+// *************************************
+//
+std::wstring HightmapEvent::CommandToWString    ( Command cmd )
+{
+    if( cmd == Command::Anim )
+        return Serial::COMMAND_HM_ANIM_WSTRING;
+    else if( cmd == Command::Anim2 )
+        return Serial::COMMAND_HM_ANIM2_WSTRING;
+    else if( cmd == Command::Enable )
+        return Serial::COMMAND_HM_ENABLE_WSTRING;
+    else if( cmd == Command::Reset )
+        return Serial::COMMAND_HM_RESET_WSTRING;
+    else if( cmd == Command::Set )
+        return Serial::COMMAND_HM_SET_WSTRING;
+    else if( cmd == Command::Set3 )
+        return Serial::COMMAND_HM_SET3_WSTRING;
+    else if( cmd == Command::Show )
+        return Serial::COMMAND_HM_SHOW_WSTRING;
+    else if( cmd == Command::Start )
+        return Serial::COMMAND_HM_START_WSTRING;
+    else if( cmd == Command::Zoom )
+        return Serial::COMMAND_HM_ZOOM_WSTRING;
+    else if( cmd == Command::ZoomOut )
+        return Serial::COMMAND_HM_ZOOM_OUT_WSTRING;
+    else
+        return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
+}
+
+// *************************************
+//
+HightmapEvent::Command HightmapEvent::WStringToCommand    ( const std::wstring& string )
+{
+    if( string == Serial::COMMAND_HM_ANIM_WSTRING )
+        return Command::Anim;
+    else if( string == Serial::COMMAND_HM_ANIM2_WSTRING )
+        return Command::Anim2;
+    else if( string == Serial::COMMAND_HM_ENABLE_WSTRING )
+        return Command::Enable;
+    else if( string == Serial::COMMAND_HM_RESET_WSTRING )
+        return Command::Reset;
+    else if( string == Serial::COMMAND_HM_SET_WSTRING )
+        return Command::Set;
+    else if( string == Serial::COMMAND_HM_SET3_WSTRING )
+        return Command::Set3;
+    else if( string == Serial::COMMAND_HM_SHOW_WSTRING )
+        return Command::Show;
+    else if( string == Serial::COMMAND_HM_START_WSTRING )
+        return Command::Start;
+    else if( string == Serial::COMMAND_HM_ZOOM_WSTRING )
+        return Command::Zoom;
+    else if( string == Serial::COMMAND_HM_ZOOM_OUT_WSTRING )
+        return Command::ZoomOut;
     else
         return Command::Fail;
 }

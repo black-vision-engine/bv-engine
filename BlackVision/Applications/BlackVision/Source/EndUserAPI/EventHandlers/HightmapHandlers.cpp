@@ -16,6 +16,82 @@ HightmapHandlers::HightmapHandlers( BVAppLogic* appLogic )
 HightmapHandlers::~HightmapHandlers()
 {}
 
+// *********************************
+//
+void            HightmapHandlers::HightmapHandler         ( bv::IEventPtr eventPtr )
+{
+    if( eventPtr->GetEventType() != bv::HightmapEvent::Type() )
+        return;
+
+    HightmapEventPtr evtHightmap = std::static_pointer_cast<bv::HightmapEvent>( eventPtr );
+    BVScenePtr modelScene = m_appLogic->GetBVScene();
+    auto root = modelScene->GetModelSceneRoot();
+
+    //float hours = evtHightmap->Hours;
+    //float minutes = evtHightmap->Minutes;
+    //float seconds = evtHightmap->Seconds;
+    //float millis = evtHightmap->Milliseconds;
+    HightmapEvent::Command command = evtHightmap->HightmapCommand;
+
+    if( command == HightmapEvent::Command::Enable )
+    {
+        printf("hm enable\n");
+            modelScene->GetModelSceneRoot()->GetChild(".")->SetVisible(true);
+				 
+        //hm_enable = true;
+            
+    }
+    else if( command == HightmapEvent::Command::Start )
+    {
+        printf("hm start\n");
+        //this->HMStart(evtTimer->H);
+    }
+    else if( command == HightmapEvent::Command::Reset )
+    {
+        modelScene->GetModelSceneRoot()->GetChild(".")->SetVisible(false);
+        // hm_enable = false;
+        //this->HMReset();
+    }
+    else if( command == HightmapEvent::Command::Show )
+    {
+        printf("hm show\n");
+        //this->HMShow();
+    }
+    else if( command == HightmapEvent::Command::Zoom )
+    {
+        printf("hm zoom\n");
+        //FIXME: USE NEW API
+        // this->HMZoomIn( evtTimer->H,evtTimer->M,evtTimer->S,2.0f );
+    }
+    else if( command == HightmapEvent::Command::ZoomOut )
+    {
+        printf("hm zoom out\n");
+        //FIXME: USE NEW API
+        //this->HMZoomOutFromCurrent( evtTimer->H );
+    }
+    else if( command == HightmapEvent::Command::Set )
+    {
+        printf("hm set\n");
+        //HMSetCyclistPosition( 1, evtTimer->H );
+        //HMSetCyclistPosition( 2, evtTimer->M );
+        // HMSetCyclistPosition( 3, evtTimer->S );
+    }
+    else if( command == HightmapEvent::Command::Anim )
+    {
+        printf("hm anim\n");
+            //this->HMConcentratedDistanceAnimStart(9);
+    }
+    else if( command == HightmapEvent::Command::Anim2 )
+    {
+        printf("hm anim2\n");
+        // this->HMConcentratedDistanceAnimStart2(9);
+    }
+    else if( command == HightmapEvent::Command::Set3 )
+    {
+        // this->HMStart( 150 );
+    }
+}
+
 
 // *********************************
 //

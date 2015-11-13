@@ -49,7 +49,7 @@ void TestRemoteEventsKeyboardHandler::HandleKey           ( unsigned char c, BVA
     }
     else if( c == 'e' )
     {// Save descriptor. This helps to create remote event. You can copy this desc to serialization/remoteEvent.json.
-        LoadAssetEventPtr newEvent = std::make_shared<LoadAssetEvent>();
+        TimerEventPtr newEvent = std::make_shared<TimerEvent>();
 
         JsonSpiritSerializeObject ser;
         newEvent->Serialize( ser );
