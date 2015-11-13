@@ -721,20 +721,24 @@ class TimerEvent : public BaseEvent
 public:
     typedef enum
     {
+        Start,
+        Stop,
+        Reset,
+        SetTime,
+        SetTimeStart,
+        SetTimeStop,
         Fail            ///< Wrong command
     } Command;
 private:
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
 public:
-    float                       value;
-    std::wstring                NodeName;
-    float                       H;
-    float                       M;
-    float                       S;
-    float                       MS;
-   
-
+    std::string                 NodeName;
+    Command                     TimerCommand;
+    float                       Hours;
+    float                       Minutes;
+    float                       Seconds;
+    float                       Milliseconds;
 public:
 
     explicit                        TimerEvent   (){};
@@ -745,7 +749,7 @@ public:
 
     static EventType                Type                ();
     static std::string&             Name                ();
-    virtual const std::string &     GetName             () const;
+    virtual const std::string&      GetName             () const;
     virtual EventType               GetEventType        () const;
 private:
     static std::wstring             CommandToWString    ( Command cmd );
@@ -802,6 +806,8 @@ public:
     {
         VideoCardOn,
         VideoCardOff,
+        KeyOn,
+        KeyOff,
         Fail            ///< Wrong command
     } Command;
 private:
@@ -829,5 +835,39 @@ public:
 };
 
 DEFINE_PTR_TYPE( VideoCardEvent )
+
+// ************************************* HightmapEvent *************************************
+class HightmapEvent : public BaseEvent
+{
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    float                       value;
+    std::wstring                cmd;      // move to private
+    std::wstring                NodeName;
+    float                       H;
+    float                       M;
+    float                       S;
+    float                       MS;
+   
+
+public:
+
+    explicit                        HightmapEvent   ();
+
+    virtual EventType               GetEventType        () const;
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+    static EventType                Type                ();
+
+    virtual const std::string &     GetName             () const;
+    //void                            SetData(std::wstring cmd){command=cmd;};
+
+};
+
+DEFINE_PTR_TYPE(TimerCmd)
 
 } //bv

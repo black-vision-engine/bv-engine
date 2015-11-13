@@ -4,6 +4,7 @@
 #include "Assets/AssetManager.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 
 
 #include "../../BVAppLogic.h"
@@ -228,6 +229,62 @@ void PluginEventsHandlers::LoadAsset( bv::IEventPtr eventPtr )
             LOG_MESSAGE( SeverityLevel::info ) << "Asset loaded succesfully. Node: [" + eventLoadAsset->NodeName + "] plugin [" + eventLoadAsset->PluginName + "]";
         else
             LOG_MESSAGE( SeverityLevel::error ) << "Failed to load asset. Node [" + eventLoadAsset->NodeName + "] plugin [" + eventLoadAsset->PluginName + "]\n" << asssetData;
+    }
+}
+
+void PluginEventsHandlers::TimerHandler        ( bv::IEventPtr eventPtr )
+{
+    if( eventPtr->GetEventType() != bv::TimerEvent::Type() )
+        return;
+
+    bv::TimerEventPtr evtTimer = std::static_pointer_cast<bv::TimerEvent>( eventPtr );
+	BVScenePtr modelScene = m_appLogic->GetBVScene();
+    auto root = modelScene->GetModelSceneRoot();
+        
+    std::string& nodeName = evtTimer->NodeName;
+    TimerEvent::Command command = evtTimer->TimerCommand;
+    float hours = evtTimer->Hours;
+    float minutes = evtTimer->Minutes;
+    float seconds = evtTimer->Seconds;
+    float millis = evtTimer->Milliseconds;
+
+    TimeType time = ( hours * 3600.0f + minutes * 60.0f + seconds ) + millis * 0.001f;
+
+    auto node = root->GetNode( nodeName );
+
+    if( node == nullptr && root->GetName() == nodeName )
+    {
+        //Log::A("OK", "root node is node you're looking for ["+ nodeName+"] Applying jedi fix now.");
+        node = root;
+    }
+    if( node == nullptr )
+    {
+        //Log::A("error", "Error OnTimer() node ["+ nodeName+"] not found");
+        return;
+    }
+       
+    auto timerplugin = node->GetPlugin("timer");
+
+    if( command == TimerEvent::Command::Start )
+        StartTimerPlugin( timerplugin );
+    else if( command == TimerEvent::Command::Stop )
+        StopTimerPlugin( timerplugin );
+    else if( command == TimerEvent::Command::Reset )
+    {
+        //FIXME: PAMIETAC o ResetTimerPlugin :P
+        //timer->Reset(0.0f);
+    }
+    else if( command == TimerEvent::Command::SetTime )
+        SetTimeTimerPlugin( timerplugin, time );
+    else if( command == TimerEvent::Command::SetTimeStart )
+    {
+        SetTimeTimerPlugin( timerplugin, time );
+        StartTimerPlugin( timerplugin );
+    }
+    else if( command == TimerEvent::Command::SetTimeStop )
+    {
+        SetTimeTimerPlugin( timerplugin, time );
+        StopTimerPlugin( timerplugin );
     }
 }
 

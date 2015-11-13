@@ -81,8 +81,11 @@ std::string TimerEvent::m_sEventName                = "TimerEvent";
 const EventType WidgetEvent::m_sEventType           = 0x30000011;
 std::string WidgetEvent::m_sEventName               = "WidgetEvent";
 
-const EventType VideoCardEvent::m_sEventType       = 0x30000005;
-std::string VideoCardEvent::m_sEventName           = "VideoCardEvent";
+const EventType VideoCardEvent::m_sEventType        = 0x30000005;
+std::string VideoCardEvent::m_sEventName            = "VideoCardEvent";
+
+const EventType HightmapEvent::m_sEventType         = 0x30000014;
+std::string HightmapEvent::m_sEventName             = "HightmapEvent";
 
 // ************************************* Events Serialization *****************************************
 
@@ -164,6 +167,22 @@ const std::wstring VIDEO_CARD_ACTION_WSTRING            = L"Action";
 
 const std::wstring COMMAND_VIDEO_CARD_OFF_WSTRING       = L"Off";
 const std::wstring COMMAND_VIDEO_CARD_ON_WSTRING        = L"On";
+const std::wstring COMMAND_VIDEO_CARD_KEY_OFF_WSTRING   = L"KeyOff";
+const std::wstring COMMAND_VIDEO_CARD_KEY_ON_WSTRING    = L"KeyOn";
+
+// TimerEvent
+const std::wstring TIMER_HOURS_WSTRING                  = L"Hours";
+const std::wstring TIMER_MINUTES_WSTRING                = L"Minutes";
+const std::wstring TIMER_SECONDS_WSTRING                = L"Seconds";
+const std::wstring TIMER_MILLISECONDS_WSTRING           = L"Milliseconds";
+
+const std::wstring COMMAND_START_TIMER_WSTRING          = L"Start";
+const std::wstring COMMAND_STOP_TIMER_WSTRING           = L"Stop";
+const std::wstring COMMAND_RESET_TIMER_WSTRING          = L"Reset";
+const std::wstring COMMAND_SET_TIME_WSTRING             = L"SetTime";
+const std::wstring COMMAND_SET_TIME_START_WSTRING       = L"SetTimeStart";
+const std::wstring COMMAND_SET_TIME_STOP_WSTRING        = L"SetTimeStop";
+
 
 }
 
@@ -1427,24 +1446,30 @@ TimeLineEvent::Command TimeLineEvent::WStringToCommand    ( const std::wstring& 
 void                TimerEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
-    //ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( TimelineCommand ) );
-    //ser.SetAttribute( Serial::TIMELINE_NAME_WSTRING, toWString( TimelineName ) );
-    //ser.SetAttribute( Serial::TIMELINE_TIME_VALUE_WSTRING, toWString( Time ) );
+    ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( TimerCommand ) );
+    ser.SetAttribute( Serial::NODE_NAME_WSTRING, toWString( NodeName ) );
+    ser.SetAttribute( Serial::TIMER_HOURS_WSTRING, toWString( Hours ) );
+    ser.SetAttribute( Serial::TIMER_MINUTES_WSTRING, toWString( Minutes ) );
+    ser.SetAttribute( Serial::TIMER_SECONDS_WSTRING, toWString( Seconds ) );
+    ser.SetAttribute( Serial::TIMER_MILLISECONDS_WSTRING, toWString( Milliseconds ) );
 }
 
 // *************************************
 //
 IEventPtr                TimerEvent::Create          ( IDeserializer& deser )
 {
-    //if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
-    //{
-    //    TimeLineEventPtr newEvent   = std::make_shared<TimeLineEvent>();
-    //    newEvent->Time              = stof( deser.GetAttribute( Serial::TIMELINE_TIME_VALUE_WSTRING ) );
-    //    newEvent->TimelineCommand   = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
-    //    newEvent->TimelineName      = toString( deser.GetAttribute( Serial::TIMELINE_NAME_WSTRING ) );
+    if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
+    {
+        TimerEventPtr newEvent      = std::make_shared<TimerEvent>();
+        newEvent->TimerCommand      = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
+        newEvent->NodeName          = toString( deser.GetAttribute( Serial::NODE_NAME_WSTRING ) );
+        newEvent->Hours             = stof( deser.GetAttribute( Serial::TIMER_HOURS_WSTRING ) );
+        newEvent->Minutes           = stof( deser.GetAttribute( Serial::TIMER_MINUTES_WSTRING ) );
+        newEvent->Seconds           = stof( deser.GetAttribute( Serial::TIMER_SECONDS_WSTRING ) );
+        newEvent->Milliseconds      = stof( deser.GetAttribute( Serial::TIMER_MILLISECONDS_WSTRING ) );
 
-    //    return newEvent;
-    //}
+        return newEvent;
+    }
     return nullptr;    
 }
 // *************************************
@@ -1473,6 +1498,18 @@ EventType           TimerEvent::GetEventType() const
 //
 std::wstring TimerEvent::CommandToWString    ( Command cmd )
 {
+    if( cmd == Command::Start )
+        return Serial::COMMAND_START_TIMER_WSTRING;
+    if( cmd == Command::Stop )
+        return Serial::COMMAND_STOP_TIMER_WSTRING;
+    if( cmd == Command::Reset )
+        return Serial::COMMAND_RESET_TIMER_WSTRING;
+    if( cmd == Command::SetTime )
+        return Serial::COMMAND_SET_TIME_WSTRING;
+    if( cmd == Command::SetTimeStart )
+        return Serial::COMMAND_SET_TIME_START_WSTRING;
+    if( cmd == Command::SetTimeStop )
+        return Serial::COMMAND_SET_TIME_STOP_WSTRING;
     return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
 }
 
@@ -1480,10 +1517,20 @@ std::wstring TimerEvent::CommandToWString    ( Command cmd )
 //
 TimerEvent::Command TimerEvent::WStringToCommand    ( const std::wstring& string )
 {
+    if( string == Serial::COMMAND_START_TIMER_WSTRING )
+        return Command::Start;
+    else if( string == Serial::COMMAND_STOP_TIMER_WSTRING )
+        return Command::Stop;
+    else if( string == Serial::COMMAND_RESET_TIMER_WSTRING )
+        return Command::Reset;
+    else if( string == Serial::COMMAND_SET_TIME_WSTRING )
+        return Command::SetTime;
+    else if( string == Serial::COMMAND_SET_TIME_START_WSTRING )
+        return Command::SetTimeStart;
+    else if( string == Serial::COMMAND_SET_TIME_STOP_WSTRING )
+        return Command::SetTimeStop;
     return Command::Fail;
 }
-
-
 
 //******************* WidgetEvent *************
 
@@ -1615,6 +1662,10 @@ std::wstring VideoCardEvent::CommandToWString    ( Command cmd )
         return Serial::COMMAND_VIDEO_CARD_OFF_WSTRING;
     else if( cmd == Command::VideoCardOn )
         return Serial::COMMAND_VIDEO_CARD_ON_WSTRING;
+    else if( cmd == Command::KeyOn )
+        return Serial::COMMAND_VIDEO_CARD_KEY_ON_WSTRING;
+    else if( cmd == Command::KeyOff )
+        return Serial::COMMAND_VIDEO_CARD_KEY_OFF_WSTRING;
     else
         return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
 }
@@ -1627,6 +1678,10 @@ VideoCardEvent::Command VideoCardEvent::WStringToCommand    ( const std::wstring
         return Command::VideoCardOff;
     else if( string == Serial::COMMAND_VIDEO_CARD_ON_WSTRING )
         return Command::VideoCardOn;
+    else if( string == Serial::COMMAND_VIDEO_CARD_KEY_ON_WSTRING )
+        return Command::KeyOn;
+    else if( string == Serial::COMMAND_VIDEO_CARD_KEY_OFF_WSTRING )
+        return Command::KeyOff;
     else
         return Command::Fail;
 }

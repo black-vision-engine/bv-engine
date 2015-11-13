@@ -603,6 +603,11 @@ void bv::videocards::VideoCardManager::OnEventReceived                   ( bv::I
                 m_VideoCards[i]->Disable();
             }
         }
+        else if( command == VideoCardEvent::Command::KeyOn )
+            SetKey( true );
+        else if( command == VideoCardEvent::Command::KeyOff )
+            SetKey( false );
+
     }
 
 }

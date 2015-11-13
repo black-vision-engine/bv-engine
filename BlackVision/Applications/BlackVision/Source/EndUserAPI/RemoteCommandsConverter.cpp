@@ -17,6 +17,7 @@ RemoteCommandsConverter::RemoteCommandsConverter()
     RegisterEvent( ProjectEvent::Name(), ProjectEvent::Create );
     RegisterEvent( NewInfoEvent::Name(), NewInfoEvent::Create );
     RegisterEvent( TimeLineEvent::Name(), TimeLineEvent::Create );
+    RegisterEvent( TimerEvent::Name(), TimerEvent::Create );
 }
 
 // ***********************
