@@ -6,6 +6,7 @@
 
 #include "Tools/Profiler/HerarchicalProfiler.h"
 #include "Tools/HRTimer.h"
+#include "FrameStatsService.h"
 
 #include "Rendering/OffscreenRenderLogic.h"
 #include "BVConfig.h"
@@ -355,6 +356,7 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
     auto frame = m_offscreenRenderLogic->ReadDisplayTarget( renderer, nReadbackFrame );
     nReadbackFrame = ( nReadbackFrame + 1 ) % m_offscreenRenderLogic->NumReadBuffersPerRT();
 	auto FrameNo = m_offscreenRenderLogic->ReadDisplayTarget( renderer, 0 );
+
 
     //GPUDirect;
 	if(m_VideoCardManager->IsEnabled())

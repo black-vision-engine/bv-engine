@@ -31,6 +31,8 @@ class SimpleTimer;
 class RenderLogic;
 class Renderer;
 class RemoteControlInterface;
+class RemoteEventsHandlers;
+
 
 enum class BVAppState : int
 {
@@ -62,11 +64,11 @@ private:
     Renderer *                      m_renderer;
     RenderLogic *                   m_renderLogic;
     TestKeyboardHandler *           m_kbdHandler;
+    RemoteEventsHandlers*           m_remoteHandlers;
 
     unsigned long                   m_startTime;
 
 	//pablito
-	RemoteControlInterface*			m_RemoteControl;
 	Solution						m_solution;
 	bv::videocards::VideoCardManager* m_videoCardManager;
 	std::string                     m_grabFramePath;
@@ -105,14 +107,6 @@ public:
     void            ReloadScene     ();
 
 	void            GrabCurrentFrame(  const std::string & path );
-	void            SetKey			( bool active);
-
-private:
-
-    void            OnUpdateParam   ( IEventPtr evt );
-	void            OnNodeAppearing ( IEventPtr evt );
-	void            OnNodeLeaving   ( IEventPtr evt );
-	void            OnNoMoreNodes   ( IEventPtr evt );
 
 public:
 

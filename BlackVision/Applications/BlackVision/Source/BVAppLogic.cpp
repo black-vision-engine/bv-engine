@@ -26,6 +26,7 @@
 //FIXME: remove
 #include "TestAI/TestGlobalEffectKeyboardHandler.h"
 #include "TestAI/TestEditorsKeyboardHandler.h"
+#include "TestAI/TestRemoteEventsKeyboardHandler.h"
 #include "testai/TestAIManager.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "BVGL.h"
@@ -36,10 +37,11 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+#include "EndUserAPI/EventHandlers/RemoteEventsHandlers.h"
+
 //pablito
 #define XML
 #include "ConfigManager.h"
-#include "RemoteControlInterface.h"
 
 
 namespace bv
@@ -111,16 +113,13 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
 
     m_renderer = renderer;
     m_renderLogic = new RenderLogic();
-    m_RemoteControl = new RemoteControlInterface(this);
+    m_remoteHandlers = new RemoteEventsHandlers;
 }
 
 // *********************************
 //
 BVAppLogic::~BVAppLogic             ()
 {
-    GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
-    GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
-
     //delete m_timelineManager;
 
     delete m_renderLogic;
@@ -132,13 +131,6 @@ BVAppLogic::~BVAppLogic             ()
 //
 void BVAppLogic::Initialize         ()
 {
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
-
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNodeAppearing ), widgets::NodeAppearingCrawlerEvent::Type() );
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNoMoreNodes ), widgets::NoMoreNodesCrawlerEvent::Type() );
-
     GetTimelineManager()->RegisterRootTimeline( m_globalTimeline );
 
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
@@ -147,6 +139,7 @@ void BVAppLogic::Initialize         ()
     bv::effect::InitializeLibEffect( m_renderer );
 
     InitializeKbdHandler();
+    m_remoteHandlers->InitializeHandlers( this );
 }
 
 // *********************************
@@ -172,7 +165,7 @@ void BVAppLogic::LoadScenes( const PathVec & pathVec )
         cam = new Camera( DefaultConfig.IsCameraPerspactive() );
     }
 
-    m_bvScene    = BVScene::Create( sceneModelVec,  cam, m_globalTimeline, m_renderer );
+    m_bvScene    = BVScene::Create( sceneModelVec, cam, m_globalTimeline, m_renderer );
     assert( m_bvScene );
     InitializeScenesTimelines();
 
@@ -290,16 +283,25 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
             m_bvScene->Update( t );
         }
 
-        m_RemoteControl->UpdateHM();
+        m_remoteHandlers->UpdateHM();
 
         {
-            FRAME_STATS_SECTION( "Render" );
             HPROFILER_SECTION( "Render", PROFILER_THREAD1 );			
             
-            RefreshVideoInputScene();
+            {
+                FRAME_STATS_SECTION( "Video input" );
+		        RefreshVideoInputScene();
+            }
 
-            m_renderLogic->RenderFrame( renderer, m_bvScene->GetEngineSceneRoot() );
-            m_renderLogic->FrameRendered( renderer );
+            {
+                FRAME_STATS_SECTION( "Render" );
+                m_renderLogic->RenderFrame( renderer, m_bvScene->GetEngineSceneRoot() );
+            }
+            
+            {
+                FRAME_STATS_SECTION( "VideoCard copy buffer" );
+                m_renderLogic->FrameRendered( renderer );
+            }
         }
     }
 
@@ -416,37 +418,6 @@ void            BVAppLogic::GrabCurrentFrame(  const std::string & path )
 {
     m_grabFramePath = path;
 }
-//pablito
-// *********************************
-//
-void            BVAppLogic::SetKey(  bool active)
-{
-    m_videoCardManager->SetKey(active);
-}
-
-// *********************************
-//
-void            BVAppLogic::OnUpdateParam   ( IEventPtr evt )
-{ 
-}
-
-// *********************************
-//
-void            BVAppLogic::OnNodeAppearing   ( IEventPtr evt )
-{ 
-}
-
-// *********************************
-//
-void            BVAppLogic::OnNodeLeaving   ( IEventPtr evt )
-{
-}
-
-// *********************************
-//
-void            BVAppLogic::OnNoMoreNodes   ( IEventPtr evt )
-{
-}
 
 // *********************************
 //
@@ -489,6 +460,11 @@ void                            BVAppLogic::InitializeKbdHandler()
     else if( envScene == "SERIALIZED_TEST" )
     {
         m_kbdHandler = new TestEditorsKeyboardHandler();
+    }
+    else if( envScene == "REMOTE_EVENTS_TEST_SCENE" )
+    {
+        //m_kbdHandler = new TestEditorsKeyboardHandler();
+        m_kbdHandler = new TestRemoteEventsKeyboardHandler();
     }
     else
     {
