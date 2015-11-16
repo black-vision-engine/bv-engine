@@ -1020,6 +1020,18 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\NodeEffectSerialization.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceEffect.cpp">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShadeders.cpp">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\MaskChannelsShaders.cpp">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\MaskChannelsEffect.cpp">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2065,6 +2077,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\InterpolatorBasicTypes.h">
       <Filter>Mathematics\Interpolators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceEffect.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShadeders.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MaskChannelsShaders.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MaskChannelsEffect.h">
+      <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
