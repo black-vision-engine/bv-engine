@@ -2,6 +2,7 @@
 
 #include "BVAppLogic.h"
 #include "Serialization/XML/XMLSerializer.h"
+#include "Serialization/Json/JsonSerializeObject.h"
 
 namespace bv {
 
@@ -20,6 +21,13 @@ void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
         auto sob = new XMLSerializer();
         logic->GetBVScene()->Serialize( *sob );
         sob->Save( "test.xml" );
+        delete sob;
+    }
+    else if( c == 'j' )
+    {
+        auto sob = new JsonSerializeObject();
+        logic->GetBVScene()->Serialize( *sob );
+        sob->Save( "test.json" );
         delete sob;
     }
 

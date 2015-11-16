@@ -42,7 +42,7 @@ std::string			JsonSpiritSerializeObject::GetAttribute        ( const std::string
 //
 void				JsonSpiritSerializeObject::SetAttribute        ( const std::wstring& name, const std::wstring& value )
 {
-    //assert( (*m_currentNode).type() != json_spirit::Value_type::obj_type );
+    assert( (*m_currentNode).type() == json_spirit::Value_type::obj_type );
 
     auto& JsonObject = (*m_currentNode).get_obj();
     JsonObject.push_back( json_spirit::wPair( name, value ) );
@@ -52,7 +52,7 @@ void				JsonSpiritSerializeObject::SetAttribute        ( const std::wstring& nam
 //
 std::wstring		JsonSpiritSerializeObject::GetAttribute        ( const std::wstring& name )
 {
-    //assert( (*m_currentNode).type() != json_spirit::Value_type::obj_type );
+    assert( (*m_currentNode).type() == json_spirit::Value_type::obj_type );
 
     auto& JsonObject = (*m_currentNode).get_obj();
     auto value = FindValue( JsonObject, name );
@@ -84,7 +84,10 @@ void                JsonSpiritSerializeObject::EnterChild          ( const std::
         m_currentNode = &( object.back().value_ );
     }
     else
+    {
+        assert( node->type() == json_spirit::Value_type::obj_type );
         m_currentNode = node;
+    }
 }
 
 // ***********************
@@ -126,6 +129,7 @@ void JsonSpiritSerializeObject::EnterArray          ( const std::wstring& name )
     }
     else
     {
+        assert( node->type() == json_spirit::Value_type::array_type );
         auto& array = const_cast<json_spirit::wArray&>( node->get_array() );
 
         json_spirit::wObject newObject;

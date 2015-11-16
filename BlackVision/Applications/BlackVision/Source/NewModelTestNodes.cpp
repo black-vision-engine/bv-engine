@@ -2020,7 +2020,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
     auto root = model::BasicNode::Create( "Root", timeEvaluator );
 
     auto success = root->AddPlugins( uids, localTimeline );
-    assert( success );
+    assert( success );  { success;  }
 
 // ============================================ //
 // Tranformations
