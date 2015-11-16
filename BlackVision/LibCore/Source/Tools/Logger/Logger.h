@@ -1,7 +1,8 @@
 #pragma once
 
 #include <string>
-
+#include "DataTypes/QueueConcurrent.h"
+#include "LogMsgStruct.h"
 
 #pragma warning( disable : 4512 )
 // warning: could not generate contructor for...
@@ -17,6 +18,8 @@
 
 
 namespace bv{
+
+
 
 class Logger;
 
@@ -100,6 +103,7 @@ private:
 public:
 	void						AddLogFile			( const std::string& fileName, SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
 	void						AddConsole			( SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
+    void                        AddLogQueue         ( QueueConcurrent<LogMsg>& queue, SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
 
 
 	/// Affects all files, that will be added after this call.
