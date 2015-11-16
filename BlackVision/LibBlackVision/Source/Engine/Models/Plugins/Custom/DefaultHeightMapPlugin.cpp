@@ -203,6 +203,7 @@ DefaultHeightMapPlugin::DefaultHeightMapPlugin         ( const std::string & nam
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
     , m_hmRawData( nullptr )
+	, m_currTextureIdx( 0 )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
@@ -213,10 +214,14 @@ DefaultHeightMapPlugin::DefaultHeightMapPlugin         ( const std::string & nam
     ctx->cullCtx->enabled = false;
     ctx->alphaCtx->blendEnabled = true;
 
-    //Direct param state access (to bypass model querying)
-    auto psModel = PixelShaderChannelModel();
-
-    m_hmHeightScale     = QueryTypedParam< ParamFloatPtr >( GetParameter( "hmHeightScale" ) );
+	//FIXME: 'reserve' required texture
+	auto timeEval = m_pluginParamValModel->GetTimeEvaluator();
+	m_psc->GetTexturesDataImpl()->SetTexture( 0, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultHeightMapPluginDesc::HeightMapTextureName(), timeEval ) );
+	m_psc->GetTexturesDataImpl()->SetTexture( 1, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultHeightMapPluginDesc::HillTextureName(), timeEval ) );
+	m_psc->GetTexturesDataImpl()->SetTexture( 2, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultHeightMapPluginDesc::CoveredDistTextureName(), timeEval ) );
+	m_psc->GetTexturesDataImpl()->SetTexture( 3, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultHeightMapPluginDesc::BackgroundTextureName(), timeEval ) );
+    
+	m_hmHeightScale     = QueryTypedParam< ParamFloatPtr >( GetParameter( "hmHeightScale" ) );
     m_GroundLevelHeight = QueryTypedParam< ParamFloatPtr >( GetParameter( "hmGroundLevelHeight" ) );
     m_MaxHeightValue    = QueryTypedParam< ParamFloatPtr >( GetParameter( "hmMaxHeightValue" ) );
     m_totalDistInMeters = QueryTypedParam< ParamFloatPtr >( GetParameter( "totalDistanceInMeters" ) );
@@ -299,7 +304,8 @@ bool                            DefaultHeightMapPlugin::LoadResource  ( AssetDes
 		txDesc->SetSamplerState( SamplerStateModel::Create( timeEval, TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, 
 			TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_POINT, glm::vec4( 0.f ) ) );
 		txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
-        txData->AddTexture( txDesc );
+		txData->SetTexture( m_currTextureIdx, txDesc );
+		m_currTextureIdx++;
 
 		HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 

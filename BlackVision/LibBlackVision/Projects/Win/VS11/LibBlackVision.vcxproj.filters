@@ -621,9 +621,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\PluginUtils.cpp">
       <Filter>Engine\Models\Plugins</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.cpp">
-      <Filter>Engine\Models\Plugins</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\GlobalTimeline.cpp">
       <Filter>Engine\Models\Timeline</Filter>
     </ClCompile>
@@ -1509,9 +1506,6 @@
       <Filter>Engine\Models\Plugins</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\PluginUtils.h">
-      <Filter>Engine\Models\Plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.h">
       <Filter>Engine\Models\Plugins</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\GlobalTimeline.h">

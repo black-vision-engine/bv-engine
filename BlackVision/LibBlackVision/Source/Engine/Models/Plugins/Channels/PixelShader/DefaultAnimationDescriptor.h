@@ -73,7 +73,8 @@ public:
 	void							SetSamplerState		( SamplerStateModelPtr samplerState );
 
     static DefaultAnimationDescriptorPtr LoadAnimation   ( const AnimationAssetDescConstPtr & frames, const std::string & name );
-
+    
+	static DefaultAnimationDescriptorPtr CreateEmptyDesc ( const std::string & name, ITimeEvaluatorPtr timeEvaluator );
 };
 
 } //model

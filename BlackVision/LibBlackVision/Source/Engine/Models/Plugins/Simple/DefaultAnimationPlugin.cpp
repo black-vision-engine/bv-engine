@@ -128,6 +128,9 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
     SetPrevPlugin( prev );
 
     m_texturesData = m_psc->GetTexturesDataImpl();
+	
+	//FIXME: 'reserve' required texture
+	m_texturesData->SetAnimation( 0, DefaultAnimationDescriptor::CreateEmptyDesc( DefaultAnimationPluginDesc::TextureName(), m_pluginParamValModel->GetTimeEvaluator() ) );
 
     //Direct param state access (to bypass model querying)
     auto psModel = PixelShaderChannelModel();

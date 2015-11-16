@@ -58,29 +58,37 @@ uintptr_t               DefaultTextureDescriptor::GetUID            () const
 //
 UInt32				    DefaultTextureDescriptor::GetNumLevels		() const
 {
-	if( m_texResource->GetMipMaps() != nullptr )
+	if( m_texResource )
 	{
-		return ( UInt32 )m_texResource->GetMipMaps()->GetLevelsNum() + 1;
+		if( m_texResource->GetMipMaps() != nullptr )
+		{
+			return ( UInt32 )m_texResource->GetMipMaps()->GetLevelsNum() + 1;
+		}
+		else
+		{
+			return 1;
+		}
 	}
-	else
-	{
-		return 1;
-	}
+	return 0;
 }
 
 // **************************
 //
 MemoryChunkConstPtr     DefaultTextureDescriptor::GetBits           ( UInt32 level ) const
 {
-	if( level == 0 )
+	if( m_texResource )
 	{
-		return m_texResource->GetOriginal()->GetData();
+		if( level == 0 )
+		{
+			return m_texResource->GetOriginal()->GetData();
+		}
+		else
+		{
+			assert( level < m_texResource->GetMipMaps()->GetLevelsNum() );
+			return m_texResource->GetMipMaps()->GetLevel( level )->GetData();
+		}
 	}
-	else
-	{
-		assert( level < m_texResource->GetMipMaps()->GetLevelsNum() );
-		return m_texResource->GetMipMaps()->GetLevel( level )->GetData();
-	}
+	return nullptr;
 }
 
 // **************************
@@ -89,22 +97,24 @@ MemoryChunkVector		DefaultTextureDescriptor::GetBits			() const
 {
 	MemoryChunkVector res;
 
-	if( !m_texResource->HasMipMaps() )
+	if( m_texResource )
 	{
-		res.push_back( m_texResource->GetOriginal()->GetData() );
-		return res;
-	}
-	else
-	{
-		SizeType numLevel = m_texResource->GetMipMaps()->GetLevelsNum();
-
-		for( UInt32 i = 0; i < numLevel; ++i )
+		if( !m_texResource->HasMipMaps() )
 		{
-			res.push_back( m_texResource->GetMipMaps()->GetLevel( i )->GetData() );
+			res.push_back( m_texResource->GetOriginal()->GetData() );
 		}
+		else
+		{
+			SizeType numLevel = m_texResource->GetMipMaps()->GetLevelsNum();
 
-		return res;
+			for( UInt32 i = 0; i < numLevel; ++i )
+			{
+				res.push_back( m_texResource->GetMipMaps()->GetLevel( i )->GetData() );
+			}
+		}
 	}
+
+	return res;
 }
 
 // **************************
@@ -303,6 +313,23 @@ DefaultTextureDescriptorPtr  DefaultTextureDescriptor::LoadTexture    ( const Te
     desc->SetName( name );
 	desc->SetFormat( res->GetOriginal()->GetFormat() );
 
+    return desc;
+}
+
+// **************************
+//
+DefaultTextureDescriptorPtr  DefaultTextureDescriptor::CreateEmptyTexture2DDesc    ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+{
+	auto desc = std::make_shared< DefaultTextureDescriptor >();
+    desc->SetBits( nullptr );
+    desc->SetName( name );
+    desc->SetWidth( 1 );
+    desc->SetHeight( 2 );
+	desc->SetDepth( 1 );
+    desc->SetFormat( TextureFormat::F_A8R8G8B8 );
+	desc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+	desc->SetBitsChanged( false );
+	desc->SetSamplerState( SamplerStateModel::Create( timeEvaluator ) );
     return desc;
 }
 

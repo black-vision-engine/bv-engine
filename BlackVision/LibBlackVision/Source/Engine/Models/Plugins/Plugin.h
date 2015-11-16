@@ -11,7 +11,6 @@
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
-#include "TextureInfo.h"
 
 #include "Engine/Interfaces/ISerializable.h"
 //#include "Engine/Models/Plugins/PluginsFactory.h"

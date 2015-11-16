@@ -305,5 +305,15 @@ DefaultAnimationDescriptorPtr DefaultAnimationDescriptor::LoadAnimation  ( const
     return retDesc;
 }
 
+// *******************************
+//
+DefaultAnimationDescriptorPtr DefaultAnimationDescriptor::CreateEmptyDesc  ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+{
+	auto desc = std::make_shared< DefaultAnimationDescriptor >( name, 0, 0, TextureFormat::F_A8 );
+    desc->SetBitsChanged( false );
+	desc->SetSamplerState( SamplerStateModel::Create( timeEvaluator ) );
+    return desc;
+}
+
 } //model
 } //bv

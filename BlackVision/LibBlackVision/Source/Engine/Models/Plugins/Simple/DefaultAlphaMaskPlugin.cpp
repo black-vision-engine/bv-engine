@@ -123,6 +123,9 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
     m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
     
 	SetPrevPlugin( prev );
+
+	//FIXME: 'reserve' required texture
+	m_psc->GetTexturesDataImpl()->SetTexture( 0, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultAlphaMaskPluginDesc::TextureName(), m_pluginParamValModel->GetTimeEvaluator() ) );
 }
 
 // *************************************

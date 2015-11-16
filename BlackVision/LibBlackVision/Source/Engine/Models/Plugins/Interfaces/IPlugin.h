@@ -33,9 +33,6 @@ class IPlugin;
 DEFINE_PTR_TYPE(IPlugin)
 DEFINE_CONST_PTR_TYPE(IPlugin)
 
-struct TextureInfo;
-typedef std::vector< TextureInfo * > TextureInfoVec;
-
 class IPlugin : public IUpdatable
 {
 public:

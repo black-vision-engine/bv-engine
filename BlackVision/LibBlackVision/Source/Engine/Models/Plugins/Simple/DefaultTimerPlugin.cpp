@@ -252,6 +252,9 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
 	
 	SetPrevPlugin( prev );
 
+	//FIXME: 'reserve' required texture
+	m_psc->GetTexturesDataImpl()->SetTexture( 0, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultTimerPluginDesc::TextureName(), m_pluginParamValModel->GetTimeEvaluator() ) );
+
     m_fontSizeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
     m_blurSizeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
 	m_outlineSizeParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "outlineSize" ) );

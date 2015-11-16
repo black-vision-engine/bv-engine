@@ -67,6 +67,7 @@ private:
     ParamFloatPtr                   m_hmOffsetYInPixels;
 
     unsigned int                    m_texCoordChannelIndex;
+    unsigned int                    m_currTextureIdx;
 
     const unsigned char *           m_hmRawData;
 

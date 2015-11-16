@@ -2,6 +2,7 @@
 
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
+#include "Engine/Types/Values/ValuesFactory.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
@@ -156,6 +157,9 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
 	m_vaChannel = TextHelper::CreateEmptyVACForText();
 
     SetPrevPlugin( prev );
+
+	//FIXME: 'reserve' required texture
+	m_psc->GetTexturesDataImpl()->SetTexture( 0, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultTextPluginDesc::TextureName(), m_pluginParamValModel->GetTimeEvaluator() ) );
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &DefaultTextPlugin::OnSetText ), KeyPressedEvent::Type() );
 

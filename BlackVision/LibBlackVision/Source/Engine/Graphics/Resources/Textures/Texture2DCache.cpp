@@ -36,7 +36,8 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
     
     Texture2DImplPtr tx = nullptr;
 
-    if( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC )
+	if( txParams->GetBits( 0 ) &&
+		( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC ) )
     {
         auto it = m_tex2DCache.find( txParams->GetUID() );
 
@@ -52,7 +53,8 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
     tx = CreateEmptyTexture( format, width, height, semantic );
 	tx->SetRawData( txParams->GetBits(), format, txParams->GetWidth(), txParams->GetHeight() );
 
-    if( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC )
+	if( txParams->GetBits( 0 ) &&
+		( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC ) )
     {
         assert( m_tex2DSet.find( tx.get() ) == m_tex2DSet.end() );
 

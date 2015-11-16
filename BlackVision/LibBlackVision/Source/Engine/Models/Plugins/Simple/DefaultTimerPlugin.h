@@ -115,8 +115,6 @@ private:
 
     VertexAttributesChannelPtr      m_vaChannel;
 
-    TextureInfoVec                  m_textures;
-
     TextAtlasConstPtr               m_textAtlas;
 
     std::wstring                    m_timePatern;
