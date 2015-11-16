@@ -3,9 +3,9 @@
 #include <hash_map>
 #include <string>
 
+#include "Engine/Models/Interfaces/IModelNode.h"
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Interfaces/IModelNode.h"
-#include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 
 namespace bv {
 
@@ -54,7 +54,7 @@ public:
 
     model::IModelNodePtr    GetRootNode         ();
 
-	
+
 	bool                    AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, unsigned int idx );
     bool                    DeletePlugin		( model::BasicNodePtr node, unsigned int idx );
     bool                    DeletePlugin		( model::BasicNodePtr node, const std::string & name );
@@ -66,6 +66,10 @@ public:
     
 	model::IPluginPtr		GetDetachedPlugin	( model::BasicNodePtr node );
     void                    ResetDetachedPlugin	( model::BasicNodePtr node );
+
+
+	model::IModelNodeEffectPtr	GetNodeEffect   ( model::IModelNodePtr node );
+    void						SetNodeEffect   ( model::IModelNodePtr node, model::IModelNodeEffectPtr nodeEffect );
 
 private:
 

@@ -301,6 +301,22 @@ void					BVSceneEditor::ResetDetachedPlugin  ( model::BasicNodePtr node )
 
 // *******************************
 //
+model::IModelNodeEffectPtr	BVSceneEditor::GetNodeEffect		( model::IModelNodePtr node )
+{
+	return QueryTyped( node )->GetNodeEffect();
+}
+
+// *******************************
+//
+void						BVSceneEditor::SetNodeEffect		( model::IModelNodePtr node, model::IModelNodeEffectPtr nodeEffect )
+{
+    auto modelNode = QueryTyped( node );
+	modelNode->SetNodeEffect( nodeEffect );
+	BVSceneTools::UpdateSceneNodeEffect( GetEngineNode( node ), modelNode );
+}
+
+// *******************************
+//
 void                    BVSceneEditor::MappingsCleanup      ( model::IModelNodePtr node )
 {
     if( node )
