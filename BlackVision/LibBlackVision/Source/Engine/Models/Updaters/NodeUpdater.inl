@@ -60,15 +60,17 @@ inline  void    NodeUpdater::UpdateTransform     ()
 //
 inline  void    NodeUpdater::UpdateGeometry      ()
 {
-    if ( m_vertexAttributesChannel->NeedsAttributesUpdate() )
-    {
-        assert( !m_vertexAttributesChannel->NeedsTopologyUpdate() );
-        UpdatePositions();
-    }
-    else if ( m_vertexAttributesChannel->NeedsTopologyUpdate() )
-    {
+	if( m_vertexAttributesChannel->GetTopologyUpdateID() > m_topologyUpdateID )
+	{
         UpdateTopology();
-    }
+		m_topologyUpdateID = m_vertexAttributesChannel->GetTopologyUpdateID();
+		m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
+	}
+	else if( m_vertexAttributesChannel->GetAttributesUpdateID() > m_attributesUpdateID )
+	{
+        UpdatePositions();
+		m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
+	}
     else
     {
         RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_renderable->GetRenderableArrayData() );
@@ -153,7 +155,7 @@ inline  void    NodeUpdater::UpdateTopology      ()
 
     if( components.empty() )
     {
-        assert( false ); //FIXME: at this point empty geometry is not allowed
+        //assert( false ); //FIXME: at this point empty geometry is not allowed
         return;
     }
 
@@ -206,24 +208,18 @@ inline void    NodeUpdater::UpdateTexturesData  ()
         for( unsigned int i = 0; i < textures.size(); ++i, ++j )
         {
             auto texDesc    = textures[ i ];
-
-			if ( m_texDataUpdateID[ txIdx ] < texDesc->GetUpdateID() )
+			if( m_texDataUpdateID[ txIdx ][ j ] < texDesc->GetUpdateID() )
             {
-                auto tex2D  = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
+				//FIXME: 
+                auto tex2D = GTexture2DCache.GetTexture( texDesc.get() );
+				shaderParams->SetTexture( j, tex2D );
+                
+				auto samplerState = texDesc->GetSamplerState();
+				auto samplerParams = std::make_shared< SamplerShaderParameters >( samplerState->GetWrappingModeX(), samplerState->GetWrappingModeY(), 
+						samplerState->GetWrappingModeZ(), samplerState->GetFilteringMode(), samplerState->GetBorderColor() );
+				shaderParams->SetSamplerParameters( j, samplerParams );
 
-                 //Stored in cache which means that proper 2D texture has to be created for current texDesc (possibly alread stored in the cache)
-                if( GTexture2DCache.IsStored( tex2D ) && tex2D != GTexture2DCache.GetTexture( texDesc ) )
-                {
-                    auto newTex2D = GTexture2DCache.GetTexture( texDesc );
-
-                    shaderParams->SetTexture( j, newTex2D );
-                }
-                else //Some other texture type which just requires contents to be swapped
-                {
-					tex2D->SetData( texDesc->GetBits() );
-                }
-
-                m_texDataUpdateID[ txIdx ] = texDesc->GetUpdateID();
+                m_texDataUpdateID[ txIdx ][ j ] = texDesc->GetUpdateID();
             }
         }
 
@@ -235,22 +231,28 @@ inline void    NodeUpdater::UpdateTexturesData  ()
 
 			auto currFrame = animDesc->CurrentFrame();
 			auto numTextures = animDesc->NumTextures();
-
 			assert( currFrame <= numTextures );
 
-            if ( currFrame != animDesc->PreviousFrame() )
-            {
+			if( m_texDataUpdateID[ txIdx ][ j ] < animDesc->GetUpdateID() )
+			{
 				if( currFrame < numTextures )
 				{
 					tex2D->SetData( animDesc->GetBits( currFrame ) );
+
+					//FIXME: shouldn't be set every new frame
+					auto samplerState = animDesc->GetSamplerState();
+					auto samplerParams = std::make_shared< SamplerShaderParameters >( samplerState->GetWrappingModeX(), samplerState->GetWrappingModeY(), 
+						samplerState->GetWrappingModeZ(), samplerState->GetFilteringMode(), samplerState->GetBorderColor() );
+					shaderParams->SetSamplerParameters( j, samplerParams );
 				}
 				else if ( currFrame == numTextures )
 				{
 					tex2D->ForceUpdate();
 				}
-            }
+				
+                m_texDataUpdateID[ txIdx ][ j ] = animDesc->GetUpdateID();
+			}
         }
-
     }
 }
 

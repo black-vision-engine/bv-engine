@@ -5,30 +5,25 @@
 #include "Assets/AssetManager.h"
 #include "Engine/Graphics/Resources/Textures/Texture.h"
 
+#include "Application/ApplicationContext.h"
+
 namespace bv { namespace model {
 
 // *******************************
 //
 DefaultAnimationDescriptor::DefaultAnimationDescriptor        ()
-    : m_updateID( 0 )
 {
 }
 
 // *******************************
 //
-DefaultAnimationDescriptor::DefaultAnimationDescriptor        ( const std::string & name, UInt32 w, UInt32 h, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc )
-    : m_updateID( 0 )
+DefaultAnimationDescriptor::DefaultAnimationDescriptor        ( const std::string & name, UInt32 w, UInt32 h, TextureFormat fmt )
 {
     SetName( name );
     SetWidth( w );
     SetHeight( h );
     SetFormat( fmt );
-    SetWrappingModeX( wmx );
-    SetWrappingModeY( wmy );
-    SetFilteringMode( fm );
-    SetBorderColor( bc );
-    SetCurrentFrame( 0 ); //current
-    SetCurrentFrame( 0 ); //previous
+    SetCurrentFrame( 0 );
 }
 
 // *******************************
@@ -53,18 +48,11 @@ MemoryChunkConstPtr      DefaultAnimationDescriptor::GetBits            ( unsign
 	return m_frames[ idx ]->GetOriginal()->GetData();
 }
 
-// **************************
+// *******************************
 //
-void					DefaultAnimationDescriptor::SetUpdateID			( UInt32 updateID )
+UInt64					DefaultAnimationDescriptor::GetUpdateID         () const
 {
-    m_updateID = updateID;
-}
-
-// **************************
-//
-UInt32                  DefaultAnimationDescriptor::GetUpdateID			() const
-{
-    return m_updateID;
+	return m_updateID;
 }
 
 // *******************************
@@ -72,13 +60,6 @@ UInt32                  DefaultAnimationDescriptor::GetUpdateID			() const
 unsigned int            DefaultAnimationDescriptor::CurrentFrame        () const
 {
     return m_curFrame;
-}
-
-// *******************************
-//
-unsigned int            DefaultAnimationDescriptor::PreviousFrame       () const
-{
-    return m_lastFrame;
 }
 
 // *******************************
@@ -122,67 +103,39 @@ TextureFormat           DefaultAnimationDescriptor::GetFormat           () const
     return m_params.GetFormat();
 }
 
-// *******************************
+// **************************
 //
-TextureWrappingMode     DefaultAnimationDescriptor::GetWrappingModeX    () const
+SamplerStateModelPtr    DefaultAnimationDescriptor::GetSamplerState     () const
 {
-    return m_params.GetWrappingModeX();
+	return m_params.GetSamplerState();
 }
 
-// *******************************
+//// *******************************
+////
+//void                    DefaultAnimationDescriptor::SetBits             ( unsigned int idx, TextureAssetConstPtr texResource )
+//{
+//    //auto extraKind = handle->GetExtra()->GetResourceExtraKind();
+//    //{ extraKind; } // FIXME: suppress unused warning
+//    //assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
 //
-TextureWrappingMode     DefaultAnimationDescriptor::GetWrappingModeZ	() const
-{
-	return m_params.GetWrappingModeZ();
-}
-
-// *******************************
+//    //auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
+//    //{ texExtra; } // FIXME: suppress unused warning
+//    //assert( texExtra->GetType() == TextureType::T_2D );
 //
-TextureWrappingMode     DefaultAnimationDescriptor::GetWrappingModeY    () const
-{
-    return m_params.GetWrappingModeY();
-}
-
-// *******************************
+//	assert( texResource->GetOriginal()->GetWidth() == GetWidth() );
+//    assert( texResource->GetOriginal()->GetHeight() == GetHeight() );
+//    assert( texResource->GetOriginal()->GetFormat() == GetFormat() );
+//    assert( idx < NumTextures() );
 //
-TextureFilteringMode    DefaultAnimationDescriptor::GetFilteringMode    () const
-{
-    return m_params.GetFilteringMode();
-}
-
-// *******************************
+////    delete[] m_frames[ idx ];
+//    
+//  //  unsigned int dataSize = GetWidth() * GetHeight() * Texture::GetPixelSize( GetFormat() );
 //
-glm::vec4               DefaultAnimationDescriptor::BorderColor         () const
-{
-    return m_params.BorderColor();
-}
-
-// *******************************
+//	m_frames[ idx ] = texResource;
+////    m_frames[ idx ] = new char[ dataSize ];
 //
-void                    DefaultAnimationDescriptor::SetBits             ( unsigned int idx, TextureAssetConstPtr texResource )
-{
-    //auto extraKind = handle->GetExtra()->GetResourceExtraKind();
-    //{ extraKind; } // FIXME: suppress unused warning
-    //assert( extraKind == model::ResourceExtraKind::RE_TEXTURE );
-
-    //auto texExtra = static_cast< const model::TextureExtraData * >( handle->GetExtra() );
-    //{ texExtra; } // FIXME: suppress unused warning
-    //assert( texExtra->GetType() == TextureType::T_2D );
-
-	assert( texResource->GetOriginal()->GetWidth() == GetWidth() );
-    assert( texResource->GetOriginal()->GetHeight() == GetHeight() );
-    assert( texResource->GetOriginal()->GetFormat() == GetFormat() );
-    assert( idx < NumTextures() );
-
-//    delete[] m_frames[ idx ];
-    
-  //  unsigned int dataSize = GetWidth() * GetHeight() * Texture::GetPixelSize( GetFormat() );
-
-	m_frames[ idx ] = texResource;
-//    m_frames[ idx ] = new char[ dataSize ];
-
-//    memcpy( m_frames[ idx ], data, dataSize );
-}
+////    memcpy( m_frames[ idx ], data, dataSize );
+//}
 
 // *******************************
 //
@@ -201,13 +154,18 @@ void                     DefaultAnimationDescriptor::AddBits            ( Textur
     assert( texResource->GetOriginal()->GetFormat() == GetFormat() );
 
     m_frames.push_back( texResource );
+
+	m_updateID = ApplicationContext::Instance().GetTimestamp() + 1;
 }
 
 // *******************************
 //
 void                     DefaultAnimationDescriptor::SetCurrentFrame     ( unsigned int frameNum )
 {
-    m_lastFrame = m_curFrame;
+	if( m_curFrame != frameNum )
+	{
+		m_updateID = ApplicationContext::Instance().GetTimestamp() + 1;
+	}
     m_curFrame = frameNum;
 }
 
@@ -239,37 +197,16 @@ void                    DefaultAnimationDescriptor::SetFormat           ( Textur
     m_params.SetFormat( fmt );
 }
 
-// *******************************
+// **************************
 //
-void                    DefaultAnimationDescriptor::SetWrappingModeX    ( TextureWrappingMode wm )
+void                     DefaultAnimationDescriptor::SetSamplerState	( SamplerStateModelPtr samplerState )
 {
-    m_params.SetWrappingModeX( wm );
+	m_params.SetSamplerState( samplerState );
 }
 
 // *******************************
 //
-void                    DefaultAnimationDescriptor::SetWrappingModeY    ( TextureWrappingMode wm )
-{
-    m_params.SetWrappingModeY( wm );
-}
-
-// *******************************
-//
-void                    DefaultAnimationDescriptor::SetFilteringMode    ( TextureFilteringMode fm )
-{
-    m_params.SetFilteringMode( fm );
-}
-
-// *******************************
-//
-void                    DefaultAnimationDescriptor::SetBorderColor      ( const glm::vec4 & bc )
-{
-    m_params.SetBorderColor( bc );
-}
-
-// *******************************
-//
-DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const AnimationAssetDescConstPtr & animResDesc, const std::string & name )
+DefaultAnimationDescriptorPtr DefaultAnimationDescriptor::LoadAnimation  ( const AnimationAssetDescConstPtr & animResDesc, const std::string & name )
 {
 	auto animRes = LoadTypedAsset<AnimationAsset>( animResDesc );
 
@@ -293,8 +230,8 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
 	auto fmt	= texResource->GetOriginal()->GetFormat();
     auto w		= texResource->GetOriginal()->GetWidth();
     auto h		= texResource->GetOriginal()->GetHeight();
-
-    DefaultAnimationDescriptor * retDesc = new DefaultAnimationDescriptor( name, w, h, fmt, TextureWrappingMode::TWM_CLAMP_BORDER, TextureWrappingMode::TWM_CLAMP_BORDER, TextureFilteringMode::TFM_LINEAR, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
+	
+	auto retDesc = std::make_shared< DefaultAnimationDescriptor >( name, w, h, fmt );
 
     retDesc->AddBits( texResource );
 
@@ -315,10 +252,7 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
 
         if( lfmt != fmt || lw != w || lh != h )
         {
-            delete retDesc;
-            
             retDesc = nullptr;
-            
             break;
         }
         else
@@ -327,9 +261,16 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
         }
     }
 
-	retDesc->SetUpdateID( retDesc->GetUpdateID() + 1 );
-
     return retDesc;
+}
+
+// *******************************
+//
+DefaultAnimationDescriptorPtr DefaultAnimationDescriptor::CreateEmptyDesc  ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+{
+	auto desc = std::make_shared< DefaultAnimationDescriptor >( name, 0, 0, TextureFormat::F_A8 );
+	desc->SetSamplerState( SamplerStateModel::Create( timeEvaluator ) );
+    return desc;
 }
 
 } //model

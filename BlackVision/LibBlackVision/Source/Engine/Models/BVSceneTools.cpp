@@ -162,7 +162,6 @@ RenderableEntity *  BVSceneTools::CreateRenderableEntity                ( model:
     }
 
     auto worldTransformVec = CreateTransformVec( finalizer );
-
     renderable->SetWorldTransforms( worldTransformVec );
 
     return renderable;
@@ -224,10 +223,10 @@ BVSceneTools::RADASVB * BVSceneTools::CreateRenderableArrayDataTriStrip ( model:
     auto components = vaChannel->GetComponents();
     auto geomDesc = vaChannel->GetDescriptor();
 
-    if( components.empty() )
-    {
-        return nullptr;
-    }
+    //if( components.empty() )
+    //{
+    //    return nullptr;
+    //}
     
     return CreateRenderableArrayDataArrays( components, geomDesc, vaChannel->IsTimeInvariant() );
 }

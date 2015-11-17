@@ -386,16 +386,11 @@ void    Renderer::Enable              ( const Texture2D * texture, int textureUn
 		m_TextureUpdateIDMap[ texture ] = 0;
 	}
 
-	if( texture->GetUpdateID() != m_TextureUpdateIDMap[ texture ] )
+	if( texture->GetUpdateID() > m_TextureUpdateIDMap[ texture ] )
     {
         pdrTex2D->Update( texture );
 		m_TextureUpdateIDMap[ texture ] = texture->GetUpdateID();
-        //pdrTex2D->SetUpdated( true );
     }
-    //else
-    //{
-        //pdrTex2D->SetUpdated( false );        
-    //}
 
     pdrTex2D->Enable( this, textureUnit );
 }

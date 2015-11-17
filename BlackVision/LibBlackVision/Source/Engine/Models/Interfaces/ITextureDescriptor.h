@@ -21,7 +21,7 @@ public:
 	virtual MemoryChunkVector		GetBits             () const = 0;
     virtual DataBuffer::Semantic    GetSemantic         () const = 0;
 	
-	virtual UInt32                  GetUpdateID         () const = 0;
+	virtual UInt64                  GetUpdateID         () const = 0;
 
     virtual ~ITextureDescriptor() {}
 

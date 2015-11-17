@@ -17,9 +17,8 @@ VertexAttributesChannel::VertexAttributesChannel     ( PrimitiveType type, bool 
     : m_primitiveType( type )
     , m_isReadOnly( isReadOnly )
     , m_isTimeInvariant( isTimeInvariant )
-    , m_needsAttributesUpdate( false )
-    , m_needsTopologyUpdate( false )
-    , m_needsInitialization( true )
+	, m_attributesUpdateID( 0 )
+	, m_topologyUpdateID( 0 )
 {
 }
 
@@ -30,9 +29,8 @@ VertexAttributesChannel::VertexAttributesChannel     ( PrimitiveType type, const
     , m_desc( desc )
     , m_isReadOnly( isReadOnly )
     , m_isTimeInvariant( isTimeInvariant )
-    , m_needsAttributesUpdate( false )
-    , m_needsTopologyUpdate( false )
-    , m_needsInitialization( true )
+	, m_attributesUpdateID( 0 )
+	, m_topologyUpdateID( 0 )
 {
 }
 
@@ -72,30 +70,30 @@ bool                                    VertexAttributesChannel::IsTimeInvariant
 
 // *********************************
 //
-bool                                    VertexAttributesChannel::NeedsAttributesUpdate  () const
+UInt64                                VertexAttributesChannel::GetAttributesUpdateID	() const
 {
-    return m_needsAttributesUpdate;
+	return m_attributesUpdateID;
 }
 
 // *********************************
 //
-bool                                    VertexAttributesChannel::NeedsTopologyUpdate    () const
+UInt64                                VertexAttributesChannel::GetTopologyUpdateID		() const
 {
-    return m_needsTopologyUpdate;
+	return m_topologyUpdateID;
 }
 
 // *********************************
 //
-void                                    VertexAttributesChannel::SetNeedsAttributesUpdate( bool b )
+void                                VertexAttributesChannel::SetAttributesUpdateID	( UInt64 updateID )
 {
-    m_needsAttributesUpdate = b;
+	m_attributesUpdateID = updateID;
 }
 
 // *********************************
 //
-void                                    VertexAttributesChannel::SetNeedsTopologyUpdate ( bool b )
+void                                VertexAttributesChannel::SetTopologyUpdateID	( UInt64 updateID )
 {
-    m_needsTopologyUpdate = b;
+	m_topologyUpdateID = updateID;
 }
 
 // *********************************
@@ -151,13 +149,6 @@ void                                    VertexAttributesChannel::AddConnectedCom
     }
 
     m_connectedComponents.push_back( cc );
-}
-
-// *********************************
-//
-void                                    VertexAttributesChannel::ClearConnectedComponent()
-{
-    m_connectedComponents.clear();
 }
 
 // *********************************
@@ -232,14 +223,6 @@ ConnectedComponentPtr                   VertexAttributesChannel::GetConnectedCom
 void                                    VertexAttributesChannel::ClearAll                ()
 {
     m_connectedComponents.clear();
-    m_needsInitialization = true;
-}
-
-// *********************************
-//
-bool                                    VertexAttributesChannel::NeedsInitialization     () const
-{
-    return m_needsInitialization;
 }
 
 // *********************************
@@ -250,10 +233,6 @@ void                                    VertexAttributesChannel::Initialize     
     m_desc = desc;
     m_isReadOnly = isReadOnly;
     m_isTimeInvariant = isTimeInvariant;
-    m_needsAttributesUpdate = false;
-    m_needsTopologyUpdate = false;
-
-    m_needsInitialization = false;
 }
 
 } // model

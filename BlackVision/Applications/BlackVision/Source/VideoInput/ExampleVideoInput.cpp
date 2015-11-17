@@ -13,9 +13,9 @@ ExampleVideoInput::ExampleVideoInput( int x, int y, float fps, int maskAnd, int 
 
 	auto asset = TextureAsset::Create( SingleTextureAsset::Create( bits, "key", x, y, TextureFormat::F_A8R8G8B8, false ), nullptr );
 
-    desc = new model::DefaultTextureDescriptor( asset,
+	desc = std::make_shared< model::DefaultTextureDescriptor >( asset,
 		//"Tex0", TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_LINEAR, glm::vec4( 1, 1, 1, 1), DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
-        "Tex0", TextureWrappingMode::TWM_MIRROR, TextureWrappingMode::TWM_MIRROR, TextureFilteringMode::TFM_POINT, glm::vec4( 1, 1, 1, 1), DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
+        "Tex0", DataBuffer::Semantic::S_TEXTURE_DYNAMIC );
 }
 
 
@@ -57,7 +57,7 @@ MemoryChunkConstPtr     ExampleVideoInput::GetBits             () const
 	return bits;
 }
 
-UInt32                  ExampleVideoInput::GetUpdateID         () const
+UInt64                  ExampleVideoInput::GetUpdateID         () const
 {
 	return m_updateID;
 }
@@ -101,16 +101,16 @@ public:
         return *v;
 	}
 
-	virtual UInt32                  GetUpdateID         () const override
+	virtual UInt64                  GetUpdateID         () const override
 	{
 		return input->GetUpdateID();
 	}
 
 };
 
-model::DefaultTextureDescriptor* ExampleVideoInput::GetTexture		() const
+model::DefaultTextureDescriptorPtr ExampleVideoInput::GetTexture		() const
 {
-	return new ExampleVideoInputWrapper( this );
+	return std::make_shared< ExampleVideoInputWrapper >( this );
 }
 
 void					ExampleVideoInput::Update				()
@@ -118,7 +118,7 @@ void					ExampleVideoInput::Update				()
 	GenerateBits( GetWidth(), GetHeight() ); //hahaha ;)
 }
 
-model::DefaultTextureDescriptor* ExampleVideoInput::GetTextureDesc	() const
+model::DefaultTextureDescriptorPtr ExampleVideoInput::GetTextureDesc	() const
 {
 	return desc;
 }

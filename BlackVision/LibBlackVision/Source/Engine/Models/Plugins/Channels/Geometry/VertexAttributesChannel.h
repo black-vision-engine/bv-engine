@@ -27,10 +27,9 @@ protected:
 
     bool                                            m_isReadOnly;
     bool                                            m_isTimeInvariant;
-    bool                                            m_needsAttributesUpdate;
-    bool                                            m_needsTopologyUpdate;
 
-    bool                                            m_needsInitialization;
+	UInt64											m_attributesUpdateID;
+	UInt64											m_topologyUpdateID;
 
 public:
                                                         VertexAttributesChannel         ( PrimitiveType type, bool isReadOnly = false, bool isTimeInvariant = false );
@@ -43,11 +42,13 @@ public:
 
     //IVertexAttributesChannel
     virtual bool                                        IsTimeInvariant         () const override;
-    virtual bool                                        NeedsAttributesUpdate   () const override;
-    virtual bool                                        NeedsTopologyUpdate     () const override;
 
-    void                                                SetNeedsAttributesUpdate( bool b );
-    void                                                SetNeedsTopologyUpdate  ( bool b );
+	virtual UInt64										GetAttributesUpdateID	() const override;
+	virtual UInt64										GetTopologyUpdateID		() const override;
+
+	void												SetAttributesUpdateID	( UInt64 updateID );
+	void												SetTopologyUpdateID		( UInt64 updateID );
+
 
     virtual unsigned int                                TotalNumVertices        () const override;
 
@@ -57,7 +58,6 @@ public:
     virtual PrimitiveType                               GetPrimitiveType        () const override;
 
     void                                                AddConnectedComponent   ( ConnectedComponentPtr cc );
-    void                                                ClearConnectedComponent ( );
 
     virtual int                                         GetNumPrimitives        ( IConnectedComponentPtr cc ) const override;
     virtual std::vector< IConnectedComponentPtr >       GetComponents           () const override;
@@ -68,8 +68,8 @@ public:
     ConnectedComponentPtr                               GetConnectedComponent   ( unsigned int idx );
 
     void                                                ClearAll                ();
-    bool                                                NeedsInitialization     () const;
-    void                                                Initialize              ( PrimitiveType type, const VertexAttributesChannelDescriptor& desc, bool isReadOnly, bool isTimeInvariant );
+    
+	void                                                Initialize              ( PrimitiveType type, const VertexAttributesChannelDescriptor& desc, bool isReadOnly, bool isTimeInvariant );
 
 protected:
 
