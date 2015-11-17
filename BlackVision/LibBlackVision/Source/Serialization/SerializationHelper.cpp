@@ -65,6 +65,23 @@ template<> glm::vec2 _String2T( std::string s ) { return String2Vec2( s ); }
 template<> glm::vec3 _String2T( std::string s ) { return String2Vec3( s ); }
 template<> glm::vec4 _String2T( std::string s ) { return String2Vec4( s ); }
 
+template< typename T >
+std::string T2String( const T& t )
+{
+    return std::to_string( t );
+}
+
+template<>
+std::string T2String( const bool& b )
+{
+    if( b )
+        return "true";
+    else
+        return "false";
+}
+
+template std::string T2String( const glm::vec4& v );
+
 } }
 
 namespace std
