@@ -565,6 +565,14 @@ void BVGLResourceTrackingPlugin::NamedFramebufferTexture		( GLuint framebuffer, 
 	resource.AttachTexture2D( attachment, m_framebuffers.BoundTo( framebuffer ), texture, level );
 }
 
+void BVGLResourceTrackingPlugin::NamedFramebufferTextureLayer	( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level, GLint layer )
+{
+	Parent::NamedFramebufferTextureLayer( framebuffer, attachment, texture, level, layer );
+
+	auto& resource = m_framebuffers.GetResource( framebuffer );
+	resource.AttachTexture2D( attachment, m_framebuffers.BoundTo( framebuffer ), texture, level );
+}
+
 void BVGLResourceTrackingPlugin::NamedFramebufferRenderbuffer( GLuint framebuffer, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer )
 {
 	Parent::NamedFramebufferRenderbuffer( framebuffer, attachment, renderbuffertarget, renderbuffer );

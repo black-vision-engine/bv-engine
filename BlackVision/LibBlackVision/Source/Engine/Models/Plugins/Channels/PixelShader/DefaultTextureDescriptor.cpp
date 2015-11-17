@@ -64,7 +64,8 @@ UInt32				    DefaultTextureDescriptor::GetNumLevels		() const
 {
 	if( m_texResource->GetMipMaps() != nullptr )
 	{
-		return ( UInt32 )m_texResource->GetMipMaps()->GetLevelsNum() + 1;
+		//FIXME: make sure that number of levels is correct, maybe it should be increamented by 1... but it breaks text plugin though
+		return ( UInt32 )m_texResource->GetMipMaps()->GetLevelsNum();
 	}
 	else
 	{
