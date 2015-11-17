@@ -96,4 +96,3 @@ TextureSampler *    InterlaceEffect::CreateSampler  ( int samplerId, const std::
 }
 
 } // bv
-
