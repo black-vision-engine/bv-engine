@@ -226,7 +226,7 @@ IVertexAttributesChannelConstPtr    DefaultAnimationPlugin::GetVertexAttributesC
 
 // *************************************
 // 
-IPixelShaderChannelConstPtr         DefaultAnimationPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr         DefaultAnimationPlugin::GetPixelShaderChannel       () const
 {
     return m_psc;
 }
