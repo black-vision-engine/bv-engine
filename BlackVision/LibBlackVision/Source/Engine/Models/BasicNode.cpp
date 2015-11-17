@@ -93,8 +93,6 @@ void                            BasicNode::Serialize               ( ISerializer
 
     ser.SetAttribute( "visible", m_visible ? "true" : "false" );
 
-    m_pluginList->GetFinalizePlugin()->GetRendererContext()->Serialize( ser );
-
     ser.EnterChild( "plugins" );
         for( unsigned int  i = 0; i < m_pluginList->NumPlugins(); i++ )
         {

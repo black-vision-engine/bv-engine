@@ -40,6 +40,7 @@ public:
     static RendererContextPtr   CreateDefault       ();
 
     virtual void                Serialize       ( ISerializer& ser ) const;
+    //void                        Deserialize     ( IDeserializer& deser );
     static RendererContextPtr   Create          ( const IDeserializer& deser );
 };
 

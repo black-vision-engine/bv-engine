@@ -1,7 +1,7 @@
 #include "Plugin.h"
 
 #include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
-
+#include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
 
 #include "Assets/AssetSerialization.h"
@@ -74,14 +74,18 @@ void                                BasePlugin< IPlugin >::AddAsset             
 
 // *******************************
 //
-void                                BasePlugin< IPlugin >::Serialize                   ( ISerializer& doc ) const
+void                                BasePlugin< IPlugin >::Serialize                   ( ISerializer& ser ) const
 {
-doc.EnterChild( "plugin" );
-    doc.SetAttribute( "uid", GetTypeUid() );
-    doc.SetAttribute( "name", GetName() );
-    doc.SetAttribute( "timeline", GetTimeline( this )->GetName() );
+ser.EnterChild( "plugin" );
+    ser.SetAttribute( "uid", GetTypeUid() );
+    ser.SetAttribute( "name", GetName() );
+    ser.SetAttribute( "timeline", GetTimeline( this )->GetName() );
 
-    doc.EnterChild( "params" );
+    auto context = GetRendererContext();
+    if( context )
+        context->Serialize( ser );
+
+    ser.EnterChild( "params" );
     {
         IPluginParamValModelPtr pvm =    GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
     
@@ -98,24 +102,24 @@ doc.EnterChild( "plugin" );
             {
                 auto param = std::static_pointer_cast< AbstractModelParameter >( param_ );
                 assert( param );
-                param->Serialize( doc );
+                param->Serialize( ser );
             }
     }
-    doc.ExitChild(); // params
+    ser.ExitChild(); // params
 
     auto assets = GetAssets();
     if( assets.size() > 0 )
     {
-        doc.EnterChild( "assets" );
+        ser.EnterChild( "assets" );
         for( auto asset : GetAssets() )
         {
             auto uid = AssetDescsWithUIDs::GetInstance().Key2UID( asset->GetKey() );
-            SerializedAssetUID( uid ).Serialize( doc );
+            SerializedAssetUID( uid ).Serialize( ser );
         }
-        doc.ExitChild(); // assets
+        ser.ExitChild(); // assets
     }
 
-    doc.ExitChild(); // plugin
+    ser.ExitChild(); // plugin
 }
 
 
@@ -123,11 +127,11 @@ doc.EnterChild( "plugin" );
 // *******************************
 //
 template <>
-ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& doc )
+ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
 {
-    std::string pluginType = doc.GetAttribute( "uid" );
-    std::string pluginName = doc.GetAttribute( "name" );
-    auto timeline = doc.GetAttribute( "timeline" );
+    std::string pluginType = deser.GetAttribute( "uid" );
+    std::string pluginName = deser.GetAttribute( "name" );
+    auto timeline = deser.GetAttribute( "timeline" );
 
     auto tm = TimelineManager::GetInstance();
     ITimeEvaluatorPtr te = tm->GetTimeEvaluator( timeline );
@@ -141,7 +145,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& doc )
     std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
 
 // params
-    auto params = SerializationHelper::DeserializeObjectLoadArrayImpl< AbstractModelParameter >( doc, "params" );
+    auto params = SerializationHelper::DeserializeObjectLoadArrayImpl< AbstractModelParameter >( deser, "params" );
     for( auto param : params )
     {
         if( plugin->GetParameter( param->GetName() ) == nullptr )
@@ -154,15 +158,33 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& doc )
         SetParameter( plugin->GetPluginParamValModel(), param );
     }
     
-    auto uids = SerializationHelper::DeserializeObjectLoadArrayImpl< SerializedAssetUID >( doc, "assets" );
+    auto uids = SerializationHelper::DeserializeObjectLoadArrayImpl< SerializedAssetUID >( deser, "assets" );
     for( auto uid : uids )
     {
         auto asset = AssetDescsWithUIDs::GetInstance().UID2Asset( uid->GetUID() );
         plugin->LoadResource( asset );
     }
 
+    if( deser.EnterChild( "renderer_context" ) )
+    {
+        auto context = RendererContext::Create( deser );
+        deser.ExitChild();
+        plugin->SetRendererContext( context );    
+    }
+
     ISerializablePtr serializablePlugin = std::static_pointer_cast< ISerializable >( plugin );
     return serializablePlugin;
+}
+
+
+// *******************************
+//
+template <>
+void                                BasePlugin< IPlugin >::SetRendererContext          ( RendererContextPtr context )
+{
+    auto psc = GetPixelShaderChannel();
+    auto pscDefault = std::dynamic_pointer_cast< DefaultPixelShaderChannel >( psc );
+    pscDefault->SetRendererContext( context );
 }
 
 } }

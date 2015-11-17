@@ -396,7 +396,7 @@ IVertexAttributesChannelConstPtr    DefaultTextPlugin::GetVertexAttributesChanne
 
 // *************************************
 // 
-IPixelShaderChannelConstPtr         DefaultTextPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr              DefaultTextPlugin::GetPixelShaderChannel       () const
 {
     return m_psc;
 }

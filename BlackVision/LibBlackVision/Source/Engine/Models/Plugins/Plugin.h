@@ -65,11 +65,12 @@ public:
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
-    virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
+    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
     virtual IGeometryShaderChannelConstPtr      GetGeometryShaderChannel    () const override;
 
     virtual RendererContextConstPtr             GetRendererContext          () const override;
+    virtual void                                SetRendererContext          ( RendererContextPtr context ) override;
 
     virtual IPluginConstPtr                     GetPrevPlugin               () const override;
     virtual IPluginPtr							GetPrevPlugin               () override;
@@ -267,7 +268,7 @@ ITransformChannelConstPtr           BasePlugin< Iface >::GetTransformChannel    
 // *******************************
 //
 template< class Iface >
-IPixelShaderChannelConstPtr         BasePlugin< Iface >::GetPixelShaderChannel          () const
+IPixelShaderChannelPtr         BasePlugin< Iface >::GetPixelShaderChannel          () const
 {
     if( m_prevPlugin )
     {

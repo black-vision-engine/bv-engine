@@ -146,13 +146,24 @@ ser.EnterChild( "renderer_context" );
 ser.ExitChild();
 }
 
+
+//void                        Deserialize     ( IDeserializer& /*deser*/ )
+//{
+//}
+
 // *****************************
 //
 RendererContextPtr   RendererContext::Create          ( const IDeserializer& deser )
 {
-    auto context = Create();
+    auto context = CreateDefault();
 
+    deser.EnterChild( "alpha_context" );
     context->alphaCtx->blendEnabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "blendEnabled" ), false );
+    deser.ExitChild(); // alpha_context
+
+    deser.EnterChild( "fill_context" );
+    context->fillCtx->fillMode = SerializationHelper::String2T< FillContext::Mode >( SerializationHelper::fcm2s, deser.GetAttribute( "fillMode" ) );
+    deser.ExitChild(); // fill_context
 
     return context;
 }
