@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\PrototyperApp.cpp" />
     <ClCompile Include="..\..\..\Source\Common\VBORect.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -11,7 +10,6 @@
     <ClCompile Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.cpp">
       <Filter>Prototypes\VAO</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\PrototypeCreator.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\Engine\MemManagement\MemManagementInspector.cpp">
       <Filter>Prototypes\Engine\MemManagement</Filter>
     </ClCompile>
@@ -122,7 +120,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
     <ClInclude Include="..\..\..\Source\Interfaces\IAppLogicPrototype.h">
       <Filter>Interfaces</Filter>
     </ClInclude>
@@ -138,11 +135,9 @@
     <ClInclude Include="..\..\..\Source\Common\GLSLprogram.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\PrototypesForwardInc.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\VAO\SimpleVAOPrototype0.h">
       <Filter>Prototypes\VAO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\PrototypeCreator.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\Engine\MemManagement\MemManagementInspector.h">
       <Filter>Prototypes\Engine\MemManagement</Filter>
     </ClInclude>

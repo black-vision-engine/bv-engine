@@ -81,4 +81,11 @@ void    TextureTest::Render              ()
 	}
 }
 
+// **************************
+//
+IBasicLogicUnqPtr    TextureTest::Create  ( Renderer * renderer )
+{
+	return IBasicLogicUnqPtr( new TextureTest( renderer ) );
+}
+
 } // bv

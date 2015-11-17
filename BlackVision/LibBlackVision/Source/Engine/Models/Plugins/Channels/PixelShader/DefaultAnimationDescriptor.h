@@ -17,12 +17,13 @@ class DefaultAnimationDescriptor : public IAnimationDescriptor
 private:
 
 	std::vector< TextureAssetConstPtr >	m_frames;
-    mutable std::vector< bool >				m_frameBiteChanged;
 
     DefaultTextureParams        m_params;
 
     UInt32						m_curFrame;
     UInt32						m_lastFrame;
+
+	mutable UInt32				m_updateID;
 
 public:
 
@@ -33,9 +34,8 @@ public:
     virtual unsigned int            NumTextures         () const override;
     virtual MemoryChunkConstPtr     GetBits             ( unsigned int idx ) const override;
 
-    virtual bool                    BitsChanged         () const override;
-    virtual bool                    BitsChanged         ( UInt32 frameNum ) const override;
-    virtual void                    ResetBitsChanged    ( UInt32 frameNum ) const override;
+	virtual void					SetUpdateID			( UInt32 updateID );
+	virtual UInt32                  GetUpdateID			() const override;
 
     virtual UInt32					CurrentFrame        () const override;
     virtual UInt32					PreviousFrame       () const override;
@@ -59,7 +59,6 @@ public:
     void                            SetBits             ( UInt32 idx, TextureAssetConstPtr handle );
     void                            AddBits             ( TextureAssetConstPtr handle );
 
-    void                            SetBitsChanged      ( UInt32 frameNum, bool bitsChanged ) const;
     void                            SetCurrentFrame     ( UInt32 frameNum );
 
     void                            SetName             ( const std::string & name );

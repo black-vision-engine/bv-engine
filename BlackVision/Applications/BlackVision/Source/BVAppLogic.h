@@ -6,9 +6,11 @@
 
 #include "Engine/Events/Events.h"
 
+#include "TestAI/TestKeyboardHandler.h"
+
 #include "FrameStatsService.h"
 
-#define HIDE_PROFILE_STATS
+//#define HIDE_PROFILE_STATS
 
 
 namespace bv
@@ -44,10 +46,10 @@ private:
 
     Renderer *                      m_renderer;
     RenderLogic *                   m_renderLogic;
+    TestKeyboardHandler *           m_kbdHandler;
 
     unsigned long                   m_startTime;
 
-    void            LoadSceneFromFile       ( std::string filename );
 public:
 
                     BVAppLogic      ( Renderer * renderer );
@@ -64,8 +66,6 @@ public:
     virtual void    OnUpdate        ( unsigned int millis, Renderer * renderer );
     virtual void    OnKey           ( unsigned char c );
     
-    model::IModelNodePtr   CreateTestModelNodeInSomeSpecificScope( const std::string & name );
-
     virtual void    ChangeState     ( BVAppState state );
 
     virtual void    ShutDown        ();
@@ -88,10 +88,14 @@ public:
 
     //Convenience API - generalized model accessors
     model::TimelineManager *        GetTimelineManager  ();
-
+    model::OffsetTimeEvaluatorPtr   GetGlobalTimeline   ();
     BVScenePtr                      GetBVScene          ();
-
     const model::PluginsManager *   GetPluginsManager   () const;
+
+private:
+
+    void                            InitializeKbdHandler();
+
 };
 
 } //bv

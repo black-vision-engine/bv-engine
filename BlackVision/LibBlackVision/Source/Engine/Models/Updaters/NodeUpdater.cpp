@@ -14,6 +14,16 @@
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
 
+#include "Engine/Models/NodeEffects/ModelNodeEffectDefault.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectWireframe.h"
+
+#include "Engine/Graphics/Effects/NodeEffects/NodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/NodeMaskNodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/WireframeNodeEffect.h"
+
 
 namespace bv 
 {
@@ -104,7 +114,7 @@ NodeUpdater::~NodeUpdater    ()
 
 // *****************************
 //
-void    NodeUpdater::DoUpdate        ()
+void    NodeUpdater::DoUpdate               ()
 {
     //FIXME: czy jesli node nie jest widoczne to trzeba w ogole updatowac stan - zakladam, ze nie, ale trzeba sie upewnic
     //FIXME: it is just a single bool to set, so no there is no fancy machinery for testing whehter any update is necessary 
@@ -112,12 +122,8 @@ void    NodeUpdater::DoUpdate        ()
     {
         m_sceneNode->SetVisible( true );
 
-        //FIXME: untill global effect is implemented, only one state can be used
-        assert( !(m_modelNode->IsStateOverridenAM() && m_modelNode->IsStateOverridenNM()) );
-
-        m_sceneNode->SetOverridenAM( m_modelNode->IsStateOverridenAM() );
-        m_sceneNode->SetOverridenNM( m_modelNode->IsStateOverridenNM() );
-
+        // Add, when all mechanisms are implemented
+        UpdateNodeEffect();
         UpdateTransform();
 
         if( m_hasEffect )
@@ -134,6 +140,99 @@ void    NodeUpdater::DoUpdate        ()
     else
     {
         m_sceneNode->SetVisible( false );
+    }
+}
+
+// *****************************
+// FIXME: change effects if required or assert that they cannot be changed in runtime
+void    NodeUpdater::UpdateNodeEffect       ()
+{
+    auto name = m_modelNode->GetName();
+    auto nodeEffect = m_modelNode->GetNodeEffect();
+
+    if( nodeEffect )
+    {
+        switch( nodeEffect->GetType() )
+        {
+            case NodeEffectType::NET_DEFAULT:
+            {
+                auto defaultEffect = std::static_pointer_cast< model::ModelNodeEffectDefault >( nodeEffect );
+
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+
+                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_DEFAULT )
+                {
+                    sceneNodeEffect = std::make_shared< NodeEffect >( NodeEffect::Type::T_DEFAULT );
+                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
+                }
+                break;
+            }
+            case NodeEffectType::NET_ALPHA_MASK:
+            {
+                auto alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( nodeEffect );
+                auto paramAlpha = alphaMaskEffect->GetParamAlpha();
+
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+
+                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_ALPHA_MASK )
+                {
+                    sceneNodeEffect = std::make_shared< AlphaMaskNodeEffect >();
+                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
+                }
+
+                auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );
+
+                if ( alphaVal != nullptr )
+                {
+                    alphaVal->SetValue( alphaMaskEffect->GetAlpha() );
+                }
+
+                break;
+            }
+            case NodeEffectType::NET_NODE_MASK:
+            {
+                auto nodeMaskEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( nodeEffect );
+
+                auto paramBgIdx = nodeMaskEffect->GetParamBgIdx();
+                auto paramFgIdx = nodeMaskEffect->GetParamFgIdx();
+                auto paramAlpha = nodeMaskEffect->GetParamAlpha();
+
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+
+                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_NODE_MASK )
+                {
+                    sceneNodeEffect = std::make_shared< NodeMaskNodeEffect >();
+                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
+                }
+
+                auto bgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramBgIdx->GetName() ) );
+                auto fgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramFgIdx->GetName() ) );
+                auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );
+
+                if ( bgIdxVal != nullptr && fgIdxVal != nullptr && alphaVal != nullptr )
+                {
+                    bgIdxVal->SetValue( nodeMaskEffect->GetBackgroundChildIdx() );
+                    fgIdxVal->SetValue( nodeMaskEffect->GetForegroundChildIdx() );
+                    alphaVal->SetValue( nodeMaskEffect->GetAlpha() );
+                }
+
+                break;
+            }
+            case NodeEffectType::NET_WIREFRAME:
+            {
+                auto nodeMaskEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( nodeEffect );
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+
+                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_WIREFRAME )
+                {
+                    sceneNodeEffect = std::make_shared< WireframeNodeEffect >();
+                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
+                }
+                break;
+            }
+            default:
+                assert( false );
+        }
     }
 }
 
@@ -185,6 +284,7 @@ void            NodeUpdater::RegisterTex2Params  ( ITexturesDataConstPtr texture
     if( textures.size() != 0 || animations.size() != 0 )
     {
         m_texDataMappingVec.push_back( std::make_pair( texturesData, shaderParams ) );
+		m_texDataUpdateID.push_back( 0 );
     }
 /*
     auto textures = texturesData->GetTextures();

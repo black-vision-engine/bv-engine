@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Interfaces/IAppLogicPrototype.h"
+#include "Interfaces/IBasicLogic.h"
 
 #include "Common/GLSLProgram.h"
 #include "Common/VBORect.h"
@@ -11,7 +11,7 @@ namespace bv {
 
 class Renderer;
 
-class FBOProfilingPrototypeBase : public IAppLogicPrototype
+class FBOProfilingPrototypeBase : public IBasicLogic
 {
 protected:
 	SizeType		m_currFrame;

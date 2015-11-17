@@ -192,8 +192,9 @@ inline  void    NodeUpdater::UpdateTopology      ()
 //
 inline void    NodeUpdater::UpdateTexturesData  ()
 {
-    for( auto txDataPair : m_texDataMappingVec )
+    for( unsigned int txIdx = 0; txIdx < ( unsigned int )m_texDataMappingVec.size(); ++txIdx )
     {
+		auto txDataPair		= m_texDataMappingVec [ txIdx ];
         auto texData        = txDataPair.first;
         auto shaderParams   = txDataPair.second;
     
@@ -206,7 +207,7 @@ inline void    NodeUpdater::UpdateTexturesData  ()
         {
             auto texDesc    = textures[ i ];
 
-            if ( texDesc->BitsChanged() )
+			if ( m_texDataUpdateID[ txIdx ] < texDesc->GetUpdateID() )
             {
                 auto tex2D  = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
 
@@ -222,7 +223,7 @@ inline void    NodeUpdater::UpdateTexturesData  ()
 					tex2D->SetData( texDesc->GetBits() );
                 }
 
-                texDesc->ResetBitsChanged();
+                m_texDataUpdateID[ txIdx ] = texDesc->GetUpdateID();
             }
         }
 

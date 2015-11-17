@@ -43,6 +43,16 @@ enum class ParamType : int
     PT_TOTAL
 };
 
+enum class NodeEffectType : int
+{
+	NET_DEFAULT = 0,
+	NET_ALPHA_MASK,
+	NET_NODE_MASK,
+    NET_WIREFRAME,
+	
+	NET_TOTAL
+};
+
 enum class ModelParamType : int
 {
     MPT_FLOAT = 0,
@@ -105,8 +115,6 @@ enum class ChannelRole : int
     CR_PASSTHROUGH,
 
     CR_TOTAL,
-
-    CR_7 //Krisztjano Rezinaldo
 };
 
 enum class IndexType : int

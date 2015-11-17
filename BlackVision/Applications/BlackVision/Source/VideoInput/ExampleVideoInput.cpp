@@ -47,6 +47,8 @@ void		ExampleVideoInput::GenerateBits( int x, int y )
 
 	MemoryChunkPtr chunk = std::make_shared < MemoryChunk >( mem, size );
 	bits = chunk;
+
+	m_updateID++;
 }
 
 MemoryChunkConstPtr     ExampleVideoInput::GetBits             () const
@@ -55,14 +57,9 @@ MemoryChunkConstPtr     ExampleVideoInput::GetBits             () const
 	return bits;
 }
 
-bool                    ExampleVideoInput::BitsChanged         () const
+UInt32                  ExampleVideoInput::GetUpdateID         () const
 {
-	return true; // ;)
-}
-
-void                    ExampleVideoInput::ResetBitsChanged    () const
-{
-	return; // :P
+	return m_updateID;
 }
 
 unsigned int            ExampleVideoInput::GetWidth			() const
@@ -104,15 +101,11 @@ public:
         return *v;
 	}
 
-	virtual bool                    BitsChanged         () const override
+	virtual UInt32                  GetUpdateID         () const override
 	{
-		return input->BitsChanged();
+		return input->GetUpdateID();
 	}
 
-	virtual void                    ResetBitsChanged    () const override
-	{
-		return input->ResetBitsChanged();
-	}
 };
 
 model::DefaultTextureDescriptor* ExampleVideoInput::GetTexture		() const

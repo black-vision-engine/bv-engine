@@ -9,14 +9,14 @@ namespace bv { namespace model {
 // **************************
 //
 DefaultTextureDescriptor::DefaultTextureDescriptor        ()
-    : m_bitsChanged( false )
+    : m_updateID( 0 )
 {
 }
 
 // **************************
 //
 DefaultTextureDescriptor::DefaultTextureDescriptor        ( TextureAssetConstPtr texResource, const std::string & name, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc, DataBuffer::Semantic semantic )
-    : m_bitsChanged( true )
+    : m_updateID( 0 )
 {
     //auto extraKind = handle->GetExtra()->GetResourceExtraKind();
     //{ extraKind; } // FIXME: suppress unused warning
@@ -113,16 +113,9 @@ MemoryChunkVector		DefaultTextureDescriptor::GetBits			() const
 
 // **************************
 //
-bool                    DefaultTextureDescriptor::BitsChanged       () const
+UInt32                  DefaultTextureDescriptor::GetUpdateID       () const
 {
-    return m_bitsChanged;
-}
-
-// **************************
-//
-void                    DefaultTextureDescriptor::ResetBitsChanged  () const
-{
-    SetBitsChanged( false );
+    return m_updateID;
 }
 
 // **************************
@@ -246,14 +239,7 @@ void                    DefaultTextureDescriptor::SetBits           ( TextureAss
 
     m_texResource = texResource;
 
-    SetBitsChanged( true );
-}
-
-// **************************
-//
-void                    DefaultTextureDescriptor::SetBitsChanged    ( bool bitsChanged ) const
-{
-    m_bitsChanged = bitsChanged;
+    m_updateID++;
 }
 
 // **************************
@@ -354,7 +340,7 @@ void                        DefaultTextureDescriptor::SetDefaults     ( DefaultT
 //
 DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const TextureAssetDescConstPtr & textureResDesc, const std::string & name )
 {
-	auto res = QueryTypedRes< TextureAssetConstPtr >( AssetManager::GetInstance().LoadAsset( textureResDesc ) );
+	auto res = LoadTypedAsset<TextureAsset>( textureResDesc );
 
     if ( res == nullptr )
     {
@@ -369,8 +355,6 @@ DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const Tex
 		desc->SetFilteringMode( TextureFilteringMode::TFM_LINEAR_MIPMAP_LINEAR );
 	}
 
-    //desc->SetWrappingModeY( TextureWrappingMode::TWM_REPEAT ); 
-    //desc->SetFilteringMode( TextureFilteringMode::TFM_POINT ); 
 	desc->SetBits( res );
     desc->SetName( name );
 	desc->SetFormat( res->GetOriginal()->GetFormat() );

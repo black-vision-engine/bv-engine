@@ -189,6 +189,120 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode   ( const std::s
 
 // *****************************
 //
+model::BasicNodePtr  SimpleNodesFactory::CreateGlobalEffectTest      ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { timelineManager; } // FIXME: suppress unused warning
+    SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 0.f, 1.f ), 3.4f, 1.9f );
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_01.jpg", false, 3.4f, 0.7f );
+
+    // ROOT
+    auto root = bSolid.CreateNode( "root", true );
+
+    // Vanilla parent
+    bSolid.SetW( 2.8f );
+    bSolid.SetH( 1.6f );
+    bSolid.SetColor( 1.f, 0.f, 0.f, 1.f );
+    auto v  = bSolid.CreateNode( "vanilla", true );
+
+    // Vanilla solid
+    bSolid.SetW( 1.1f );
+    bSolid.SetH( 1.0f );
+    bSolid.SetColor( 0.f, 0.f, 1.f, 1.f );
+    bSolid.SetPosition( 0.6f, 0.f, .1f );
+    auto vs = bSolid.CreateNode( "vanilla_solid", true );
+    
+    // Vanilla texture
+    bTex.SetW( 1.1f );
+    bTex.SetH( 1.0f );
+    bTex.SetPosition( -0.6f, 0.f, .1f );
+    bTex.SetTextureFile( "rsrcy/simless_00.jpg", true );
+    auto vt = bTex.CreateNode( "vanilla_tex", true );
+
+    // Alpha mask root
+    bTex.SetW( 2.6f );
+    bTex.SetH( 1.5f );
+    bTex.SetTextureFile( "rsrcy/simless_00.jpg", true );
+    auto am = bTex.CreateNode( "alpha_mask", true );
+
+    // Node mask root
+    bSolid.SetW( 2.75f );
+    bSolid.SetH( 1.55f );
+    bSolid.SetColor( 1.f, 0.f, 1.f, 1.f );
+    auto nm = bSolid.CreateNode( "node_mask", true );
+
+    // Overlay alpha node root
+    bTex.SetW( 2.6f );
+    bTex.SetH( 1.35f );
+    bTex.SetPosition( 0.0f, 0.f, .1f );
+    bTex.SetTextureFile( "rsrcy/simless_01.jpg", true );
+    auto ov = bTex.CreateNode( "overlay_alpha", true );
+
+    // Overlay alpha solid
+    bSolid.SetW( 1.1f );
+    bSolid.SetH( 1.0f );
+    bSolid.SetColor( 0.f, 0.f, 1.f, 1.f );
+    bSolid.SetPosition( 0.6f, 0.f, .1f );
+    auto ov_s = bSolid.CreateNode( "overlay_alpha_solid", true );
+    
+    // Overlay alpha texture
+    bTex.SetW( 1.1f );
+    bTex.SetH( 1.0f );
+    bTex.SetPosition( -0.6f, 0.f, .1f );
+    bTex.SetTextureFile( "rsrcy/simless_00.jpg", true );
+    auto ov_t = bTex.CreateNode( "overlay_alpha_tex", true );
+
+    // Node mask background
+    bTex.SetW( 2.4f );
+    bTex.SetH( 1.0f );
+    bTex.SetPosition( 0.0f, 0.f, .1f );
+    bTex.SetTextureFile( "rsrcy/simless_00.jpg", true );
+    auto nm_bg = bTex.CreateNode( "node_mask_bg", true );
+
+    // Node mask background color child
+    bSolid.SetW( .8f );
+    bSolid.SetH( .7f );
+    bSolid.SetColor( 1.f, 1.f, 0.f, 0.5f );
+    bSolid.SetPosition( 0.5f, 0.f, .0f );
+    auto nm_bg_c = bSolid.CreateNode( "node_mask_bg_col", true );
+
+    // Node mask foreground
+    bTex.SetW( 2.35f );
+    bTex.SetH( 0.95f );
+    bTex.SetPosition( 0.0f, 0.f, .1f );
+    bTex.SetTextureFile( "rsrcy/hm_background.png", true );
+    auto nm_fg = bTex.CreateNode( "node_mask_fg", true );
+
+    // Build the scene
+    root->AddChildToModelOnly( v );
+    v->AddChildToModelOnly( vs );
+    v->AddChildToModelOnly( vt );
+
+    root->AddChildToModelOnly( am );
+
+    root->AddChildToModelOnly( nm );
+    nm->AddChildToModelOnly( nm_bg );
+    nm_bg->AddChildToModelOnly( nm_bg_c );
+    nm->AddChildToModelOnly( nm_fg );
+
+    root->AddChildToModelOnly( ov );
+    ov->AddChildToModelOnly( ov_s );
+    ov->AddChildToModelOnly( ov_t );
+
+    return root;
+
+    /*
+
+    root->AddChildToModelOnly( am );
+
+    root->AddChildToModelOnly( nm );
+    nm_bg->AddChildToModelOnly( nm_bg_c );
+    nm->AddChildToModelOnly( nm_fg );
+
+    return root;*/
+}
+
+// *****************************
+//
 model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { timelineManager; } // FIXME: suppress unused warning
@@ -1283,7 +1397,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
     assert( success );
 
     SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 0.f ), 0.f );
-    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 10.f ), 100.f );
+    SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), TimeType( 10.f ), 16.f );
 
     node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( timeEvaluator );
 
@@ -1292,7 +1406,8 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 1.f );
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
 
-	success = model::LoadAnimation( node->GetPlugin( "animation" ), "rsrcy/test_anim", "*.jpg" );
+	success = model::LoadAnimation( node->GetPlugin( "animation" ), "rsrcy/test_anim", "*.png" );
+	//success = model::LoadAnimation( node->GetPlugin( "animation" ), "rsrcy/test_anim", "*.jpg" );
     //success = model::LoadAnimation( node->GetPlugin( "animation" ), "d:/src/media/sequences/FullHD/alfai/", "*.tga" );
     assert( success );
 

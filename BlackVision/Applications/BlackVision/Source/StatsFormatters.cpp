@@ -3,44 +3,189 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Tools/HerarchicalProfiler.h"
+#include "Tools/Profiler/HerarchicalProfiler.h"
 #include "FrameStatsService.h"
 
 #include "BVConfig.h"
 
 
+
+
 namespace bv
 {
 
+//====================================================================//
+//							HerarchicalProfiler						  //
+//====================================================================//
+
+
 // *********************************
 //
-void    ProfilerDataFormatter::PrintToConsole  ( const char * msg )
+ProfilerNamedPipeSender ProfilerDataFormatter::s_namedPipeSender[ MAX_PROFILER_THREADS ] = 
 {
-    unsigned int frame = HPROFILER_GET_ACTIVE_FRAME();
-    const ProfilerSample * samples = HPROFILER_GET_ONE_FRAME_SAMPLES( frame );
-    unsigned int numSamples = HPROFILER_GET_NUM_SAMPLES();
+	ProfilerNamedPipeSender( 0 ),
+	//ProfilerNamedPipeSender( 1 ),
+	//ProfilerNamedPipeSender( 2 ),
+	//ProfilerNamedPipeSender( 3 ),
+	//ProfilerNamedPipeSender( 4 ),
+	//ProfilerNamedPipeSender( 5 ),
+};
 
-    printf( "%s\n", msg );
+// Default profiler named pipe name
+std::wstring ProfilerNamedPipeSender::s_pipeName = L"BlackVisionProfiler";
 
-    for( unsigned int i = 0; i < numSamples; ++i )
-    {
-        const ProfilerSample & sample = samples[ i ];
-        const char * section = sample.type == AutoProfileType::APT_FUNCTION ? "F" : "S";
+UInt16 ProfilerNamedPipeSender::GetNameID		( const char* name )
+{
+	auto iterator = m_names.find( name );
+	if( iterator != m_names.end() )
+		return iterator->second;
 
-        for( unsigned int k = 0; k < sample.depth * 2; ++k )
-            printf( " " );
+	++m_nameCounter;
+	// ID should be unique even for different threads. 
+	UInt16 newID = m_nameCounter | ( m_thread << 12 );
 
-        printf( "%s %s    %2.4f ms\n", section, sample.name, sample.durationSecs * 1000.0 );
-        //printf( "%*s %s duration: %2.4f ms\n", sample.depth * 6, section, sample.name, sample.durationSecs * 1000.0 );
-    }
+	m_names.insert( std::make_pair( name, newID ) );
+	m_namesToSend.push_back( name );
+	return newID;
+}
+
+
+// *********************************
+//
+NamedPipe& ProfilerNamedPipeSender::GetNamedPipe()
+{
+	if( m_firstPipeUse )
+	{
+		// waits 2 miliseconds for connection
+		m_pipe.ConnectToNamedPipe( s_pipeName, NamedPipeAccess::PipeWrite, 2 );
+		m_firstPipeUse = false;
+	}
+	return m_pipe;
 }
 
 // *********************************
 //
-void    ProfilerDataFormatter::PrintToDevNull   ( const char * msg )
+void ProfilerNamedPipeSender::SendNewNames		()
 {
-    { msg; } // FIXME: suppress unused warning
+	unsigned int numNames = (unsigned int)m_namesToSend.size();
+	if( numNames > 0 )
+	{
+		char buffer[ sizeof( ProtocolHeader ) + MAX_NAMES_SENDER_BUFFER ];
+
+		ProtocolHeader* header = (ProtocolHeader*)buffer;
+		header->threadID = (UInt16)m_thread;
+		header->numSamples = 0;
+
+		//Writing string lengths to buffer.
+		UInt16 stringsLegths = 0;
+		UInt16* curStringLength = (UInt16*)( buffer + sizeof( ProtocolHeader ) );
+		unsigned int stringNum = 0;
+		for( ; stringNum < numNames; stringNum++ )
+		{
+			UInt16 nextStringLength = (UInt16)strlen( m_namesToSend[ stringNum ] );
+			if( stringsLegths + nextStringLength < static_cast<UInt16>(MAX_NAMES_SENDER_BUFFER - sizeof( ProtocolHeader ) - sizeof( UInt32 ) * ( stringNum + 1 )) )
+			{
+				curStringLength[ stringNum ] = nextStringLength;
+				stringsLegths += nextStringLength;
+			}
+			else
+				break;
+		}
+		curStringLength += stringNum;
+		header->numNameStrings = (UInt16)stringNum;
+
+		// Writing string IDs to buffer.
+		UInt16* curStringID = curStringLength;
+		for( unsigned int i = 0; i < stringNum; ++i )
+			curStringID[ i ] = GetNameID( m_namesToSend[ i ] );
+		curStringID += stringNum;
+
+		// Writing string to buffer
+		char* stringPtr = (char*)curStringID;
+		for( unsigned int i = 0; i < stringNum; ++i )
+		{
+			int length = (UInt16)strlen( m_namesToSend[ i ] );
+			memmove( stringPtr, m_namesToSend[ i ], length );
+			stringPtr += length;
+		}
+
+		m_namesToSend.erase( m_namesToSend.begin(), m_namesToSend.begin() + stringNum );
+
+		NamedPipe& pipe = GetNamedPipe();
+		pipe.WriteToPipe( (const char*)buffer, sizeof( ProtocolHeader ) + stringsLegths + sizeof( UInt32 ) * stringNum );
+	}
 }
+
+// *********************************
+//
+void ProfilerNamedPipeSender::SendSamples		()
+{
+	CPUThreadSamples* CPUsamples =  AutoProfile::GetCPUThreadSamples( m_thread );
+	char buffer[ sizeof( ProtocolHeader ) + MAX_PROFILER_SAMPLES * sizeof( ProtocolSample ) ];
+
+	LARGE_INTEGER freq = AutoProfile::QueryCounterFrequency();
+	double freqd = (double) freq.QuadPart;
+
+	unsigned int activeFrame = CPUsamples->m_activeFrame;
+	unsigned int framesToSend = CPUsamples->m_framesToSend;
+	if( framesToSend >= MAX_PROFILER_FRAMES )
+		framesToSend = MAX_PROFILER_FRAMES - 1;
+
+	//Sends all frames from first, that wasn't send yet, to active frame.
+	for( ; framesToSend > 0; framesToSend-- )
+	{
+		int frame = activeFrame - framesToSend + 1;
+		if( frame < 0 )
+			frame += MAX_PROFILER_FRAMES - 1;
+
+		ProtocolHeader* header = (ProtocolHeader*)buffer;
+		header->threadID = (UInt16)m_thread;
+		header->numSamples = (UInt16)CPUsamples->m_numFrameSamples[ frame ];
+		header->numNameStrings = 0;
+		header->unused = 0;
+
+		unsigned int numLiveSamples = CPUsamples->m_numFrameSamples[ frame ];
+		assert( numLiveSamples <= MAX_PROFILER_SAMPLES );
+
+		ProfilerLiveSample* liveSamples = &CPUsamples->m_liveSamples[ frame * MAX_PROFILER_SAMPLES ];
+		ProtocolSample* samples = (ProtocolSample*)( buffer + sizeof( header ) );
+
+		for( unsigned int i = 0, k = 0; i < numLiveSamples; ++i )
+		{
+			ProfilerLiveSample & liveSample = liveSamples[ i ];
+			ProtocolSample & sample = samples[ k ];
+
+			sample.depth = (UInt16)liveSample.depth;
+			sample.name = GetNameID( liveSample.name );
+
+			double duration = double( liveSample.timeEnd.QuadPart - liveSample.timeStart.QuadPart );
+			sample.durationSecs = float( duration / freqd );
+
+			++k;
+		}
+		
+		NamedPipe& pipe = GetNamedPipe();
+		pipe.WriteToPipe( (const char*)buffer, sizeof( ProtocolHeader ) + sizeof( ProtocolSample ) * header->numSamples );
+	}
+}
+
+// *********************************
+//
+/**Just for now only for first thread.*/
+void	ProfilerDataFormatter::SendToExternApp	( const char*, unsigned int thread )
+{
+	s_namedPipeSender[ thread ].SendSamples();
+	s_namedPipeSender[ thread ].SendNewNames();
+}
+
+// *********************************
+//
+void    ProfilerDataFormatter::PrintToDevNull   ( const char*, unsigned int )
+{}
+
+//====================================================================//
+//							FrameStatsFormatter						  //
+//====================================================================//
 
 // *********************************
 //

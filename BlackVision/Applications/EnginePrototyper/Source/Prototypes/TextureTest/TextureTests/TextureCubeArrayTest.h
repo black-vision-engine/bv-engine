@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Interfaces/IAppLogicPrototype.h"
 #include "../BaseTextureTest.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrTextureCubeArray.h"
 #include "Engine\Graphics\Renderers\OGLRenderer\PdrSampler.h"

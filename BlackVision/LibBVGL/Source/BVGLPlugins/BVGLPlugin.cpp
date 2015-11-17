@@ -1,7 +1,6 @@
 #include "BVGLPlugin.h"
 
-#include <gl/glew.h>
-
+#include <glad/glad.h>
 
 namespace bv {
 
@@ -9,10 +8,8 @@ namespace bv {
 // FIXME: this initialization should check more caps and return an error code instead of a simple bool
 bool        BVGLPlugin::InitializeBVGL						()
 {
-    glewInit();
-
-    if ( !GLEW_ARB_vertex_program || !glewGetExtension( "GL_ARB_fragment_program" ) ) 
-    {		
+	if( !gladLoadGL() )
+	{
         return false;
     }
     
@@ -1337,7 +1334,7 @@ void BVGLPlugin::MultiDrawElements			( GLenum mode, const GLsizei* count, GLenum
 	glMultiDrawElements( mode, count, type, indicies, drawCount );
 }
 
-void BVGLPlugin::MultiDrawElementsBaseVertex	( GLenum mode, GLsizei* count, GLenum type, GLvoid** indicies, GLsizei drawcount, GLint* baseVertex )
+void BVGLPlugin::MultiDrawElementsBaseVertex	( GLenum mode, GLsizei* count, GLenum type, const GLvoid** indicies, GLsizei drawcount, GLint* baseVertex )
 {
 	glMultiDrawElementsBaseVertex( mode, count, type, indicies, drawcount, baseVertex );
 }

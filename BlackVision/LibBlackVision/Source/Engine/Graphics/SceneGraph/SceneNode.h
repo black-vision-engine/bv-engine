@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Engine/Graphics/SceneGraph/TransformableEntity.h"
+#include "Engine/Graphics/Effects/NodeEffects/NodeEffect.h"
 
 #include "CoreDEF.h"
 
@@ -16,13 +17,17 @@ class Renderer;
 
 class SceneNode
 {
+private:
+
     typedef std::vector<SceneNode *>            SceneNodeVec;
 
 private:
 
     SceneNodeVec            m_sceneNodes;
-
+    NodeEffectPtr           m_nodeEffect;
     TransformableEntity *   m_transformable;
+
+    bool                    m_visible;
 
 public:
 
@@ -40,6 +45,9 @@ public:
 
     TransformableEntity *   GetTransformable    ();
    
+    NodeEffectPtr           GetNodeEffect       ();
+    void                    SetNodeEffect       ( NodeEffectPtr nodeEffect );
+
 private:
 
     void                    SetTransformable    ( TransformableEntity * transformable );
@@ -51,35 +59,6 @@ public:
 
     bool                    IsVisible           () const;
     void                    SetVisible          ( bool visible );
-
-// ***********************************************************************************************
-//                              HACKISH GLOBAL EFFECT INTERFACE
-// ***********************************************************************************************
-//FIXME: add some kind of global effect here
-//FIXME: instead of IsOverriden, SetOverriden and so on simplu use Get/Set GlobalEffect which is applied to the result
-private:
-
-    bool                    m_visible;
-
-    const IValue *          m_overrideAlphaVal;
-
-    bool                    m_overridenStateAlphaMask;
-    bool                    m_overridenStateNodeMask;
-
-public:
-
-    void                    SetOverrideAlphaVal ( const IValue * val );
-    const IValue *          GetOverrideAlphaVal () const;
-
-    bool                    IsOverridenAM       () const;
-    bool                    IsOverridenNM       () const;
-
-    void                    SetOverridenAM      ( bool overriden );
-    void                    SetOverridenNM      ( bool overriden );
-
-// ***********************************************************************************************
-//                          END OF HACKISH GLOBAL EFFECT INTERFACE
-// ***********************************************************************************************
 
     // FIXME: think of some better approach to dynamic node state manipulation
     friend class BVSceneTools;

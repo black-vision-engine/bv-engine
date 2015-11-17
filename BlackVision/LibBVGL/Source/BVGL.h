@@ -322,7 +322,7 @@ public:
 	static void					bvglMultiDrawElementsIndirect						( GLenum mode, GLenum type, const void * indirect, GLsizei drawcount, GLsizei stride );
 	static void					bvglMultiDrawArrays									( GLenum mode, const GLint* first, const GLsizei* count, GLsizei drawCount );
 	static void					bvglMultiDrawElements								( GLenum mode, const GLsizei* count, GLenum type, const GLvoid** indicies, GLsizei drawCount );
-	static void					bvglMultiDrawElementsBaseVertex						( GLenum mode, GLsizei* count, GLenum type, GLvoid** indicies, GLsizei drawCount, GLsizei* baseVartex );
+	static void					bvglMultiDrawElementsBaseVertex						( GLenum mode, GLsizei* count, GLenum type, const GLvoid** indicies, GLsizei drawCount, GLsizei* baseVartex );
 
 // Stencil
 	static void					bvglClearStencil				( GLint s );

@@ -10,12 +10,14 @@ namespace bv { namespace model {
 // *******************************
 //
 DefaultAnimationDescriptor::DefaultAnimationDescriptor        ()
+    : m_updateID( 0 )
 {
 }
 
 // *******************************
 //
 DefaultAnimationDescriptor::DefaultAnimationDescriptor        ( const std::string & name, UInt32 w, UInt32 h, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc )
+    : m_updateID( 0 )
 {
     SetName( name );
     SetWidth( w );
@@ -51,29 +53,18 @@ MemoryChunkConstPtr      DefaultAnimationDescriptor::GetBits            ( unsign
 	return m_frames[ idx ]->GetOriginal()->GetData();
 }
 
-// *******************************
+// **************************
 //
-bool                    DefaultAnimationDescriptor::BitsChanged         () const
+void					DefaultAnimationDescriptor::SetUpdateID			( UInt32 updateID )
 {
-    //FIXME: implement
-    assert( false );
-    return false;
+    m_updateID = updateID;
 }
 
-// *******************************
+// **************************
 //
-bool                    DefaultAnimationDescriptor::BitsChanged         ( unsigned int frameNum ) const
+UInt32                  DefaultAnimationDescriptor::GetUpdateID			() const
 {
-    //FIXME: implement
-    assert( false && "Implement" );
-    return m_frameBiteChanged[ frameNum ];
-}
-
-// *******************************
-//
-void                    DefaultAnimationDescriptor::ResetBitsChanged    ( unsigned int frameNum ) const
-{
-    SetBitsChanged( frameNum, false );
+    return m_updateID;
 }
 
 // *******************************
@@ -187,7 +178,7 @@ void                    DefaultAnimationDescriptor::SetBits             ( unsign
     
   //  unsigned int dataSize = GetWidth() * GetHeight() * Texture::GetPixelSize( GetFormat() );
 
-    m_frames[ idx ] = texResource;
+	m_frames[ idx ] = texResource;
 //    m_frames[ idx ] = new char[ dataSize ];
 
 //    memcpy( m_frames[ idx ], data, dataSize );
@@ -210,15 +201,6 @@ void                     DefaultAnimationDescriptor::AddBits            ( Textur
     assert( texResource->GetOriginal()->GetFormat() == GetFormat() );
 
     m_frames.push_back( texResource );
-}
-
-// *******************************
-//
-void                     DefaultAnimationDescriptor::SetBitsChanged      ( unsigned int frameNum, bool bitsChanged ) const
-{
-    //FIXME: implement
-    assert( false && "Implement" );
-    m_frameBiteChanged[ frameNum ] = bitsChanged;
 }
 
 // *******************************
@@ -289,15 +271,7 @@ void                    DefaultAnimationDescriptor::SetBorderColor      ( const 
 //
 DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const AnimationAssetDescConstPtr & animResDesc, const std::string & name )
 {
-	auto res = AssetManager::GetInstance().LoadAsset( animResDesc );
-
-	if ( res == nullptr )
-    {
-        return nullptr;
-    }
-
-
-	auto animRes = QueryTypedRes< AnimationAssetConstPtr >( res );
+	auto animRes = LoadTypedAsset<AnimationAsset>( animResDesc );
 
     if ( animRes == nullptr )
     {
@@ -352,6 +326,8 @@ DefaultAnimationDescriptor * DefaultAnimationDescriptor::LoadAnimation  ( const 
             retDesc->AddBits( texResource );
         }
     }
+
+	retDesc->SetUpdateID( retDesc->GetUpdateID() + 1 );
 
     return retDesc;
 }

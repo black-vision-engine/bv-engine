@@ -12,10 +12,9 @@ namespace bv {
 //
 SceneNode::SceneNode           ( TransformableEntity * transformable )
     : m_transformable( transformable )
-    , m_overridenStateAlphaMask( false )
-    , m_overridenStateNodeMask( false )
-    , m_overrideAlphaVal( nullptr )
+    , m_nodeEffect( nullptr )
 {
+    m_nodeEffect = std::make_shared< NodeEffect >( NodeEffect::Type::T_DEFAULT );
 }
 
 // ********************************
@@ -109,6 +108,20 @@ TransformableEntity *   SceneNode::GetTransformable     ()
 
 // ********************************
 //
+NodeEffectPtr           SceneNode::GetNodeEffect       ()
+{
+    return m_nodeEffect;
+}
+
+// ********************************
+//
+void                    SceneNode::SetNodeEffect       ( NodeEffectPtr nodeEffect )
+{
+    m_nodeEffect = nodeEffect;
+}
+
+// ********************************
+//
 void            SceneNode::SetTransformable     ( TransformableEntity * transformable )
 {
     DeleteTransformable();
@@ -151,50 +164,6 @@ bool                    SceneNode::IsVisible    () const
 void                    SceneNode::SetVisible   ( bool visible )
 {
     m_visible = visible;
-}
-
-// ********************************
-//
-void            SceneNode::SetOverrideAlphaVal  ( const IValue * val )
-{
-    assert( val != nullptr );
-
-    m_overrideAlphaVal = val;
-}
-
-// ********************************
-//
-const IValue * SceneNode::GetOverrideAlphaVal   () const
-{
-    return m_overrideAlphaVal;
-}
-
-// ********************************
-//
-bool                    SceneNode::IsOverridenAM() const
-{
-    return m_overridenStateAlphaMask;
-}
-
-// ********************************
-//
-bool                    SceneNode::IsOverridenNM() const
-{
-    return m_overridenStateNodeMask;
-}
-
-// ********************************
-//
-void                    SceneNode::SetOverridenAM( bool overriden )
-{
-    m_overridenStateAlphaMask = overriden;
-}
-
-// ********************************
-//
-void                    SceneNode::SetOverridenNM( bool overriden )
-{
-    m_overridenStateNodeMask = overriden;
 }
 
 } //bv

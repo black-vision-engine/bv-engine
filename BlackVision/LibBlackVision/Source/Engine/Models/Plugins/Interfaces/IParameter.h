@@ -20,18 +20,8 @@ namespace bv { namespace model {
 	class IParameter
 	{
 	public:
-
-		enum class InterpolationMethod : int
-		{
-			LINEAR = 0,
-			COSINE
-		};
-
 		virtual const std::string &     GetName         () const								= 0;
 		virtual ModelParamType          GetType         () const								= 0;
-
-		virtual void                    SetInterpolationMethod ( InterpolationMethod method )	= 0;
-		virtual InterpolationMethod     GetInterpolationMethod () const							= 0;
 
 		virtual ITimeEvaluatorPtr       GetTimeEvaluator()										= 0;
 		virtual void                    SetTimeEvaluator( ITimeEvaluatorPtr timeEvaluator )		= 0;

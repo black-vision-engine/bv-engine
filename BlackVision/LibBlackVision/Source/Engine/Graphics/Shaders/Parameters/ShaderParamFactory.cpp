@@ -17,13 +17,14 @@
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamMVP.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamMV.h"
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamP.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamViewport.h"
 
 
 namespace bv {
 
 // ********************************
 //
-GenericShaderParam *    ShaderParamFactory::CreateGenericParameter  ( const IValue * value )
+GenericShaderParam *    ShaderParamFactory::CreateGenericParameter              ( const IValue * value )
 {
     assert( value != nullptr );
 
@@ -58,7 +59,7 @@ GenericShaderParam *    ShaderParamFactory::CreateGenericParameter  ( const IVal
 
 // ********************************
 //
-GenericShaderParam *    ShaderParamFactory::CreateGenericParameter  ( const std::string & name, ParamType paramType )
+GenericShaderParam *    ShaderParamFactory::CreateGenericParameter              ( const std::string & name, ParamType paramType )
 {
     switch( paramType )
     {
@@ -86,23 +87,30 @@ GenericShaderParam *    ShaderParamFactory::CreateGenericParameter  ( const std:
 
 // ********************************
 //
-GenericShaderParam *     ShaderParamFactory::CreateMVPParameter      ()
+GenericShaderParam *     ShaderParamFactory::CreateMVPParameter                 ()
 {
     return new ShaderParamMVP( "MVP" );
 }
 
 // ********************************
 //
-GenericShaderParam *     ShaderParamFactory::CreateMVParameter       ()
+GenericShaderParam *     ShaderParamFactory::CreateMVParameter                  ()
 {
     return new ShaderParamMV( "MV" );
 }
 
 // ********************************
 //
-GenericShaderParam *     ShaderParamFactory::CreatePParameter        ()
+GenericShaderParam *     ShaderParamFactory::CreatePParameter                   ()
 {
     return new ShaderParamP( "P" );
+}
+
+// ********************************
+//
+GenericShaderParam *     ShaderParamFactory::CreateViewportMatrixParameter      ()
+{
+    return new ShaderParamViewport( "ViewportMatrix" );
 }
 
 } //bv

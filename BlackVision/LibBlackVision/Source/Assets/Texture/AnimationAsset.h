@@ -3,6 +3,9 @@
 #include "TextureAsset.h"
 #include "Assets/Asset.h"
 
+#include "Assets/AssetManager.h"			// Only for LoadTypedAsset template specialization
+
+
 namespace bv
 {
 
@@ -37,5 +40,16 @@ private:
 
 	std::vector< TextureAssetConstPtr >	m_frames;
 };
+
+
+template<> inline std::shared_ptr<const AnimationAsset> LoadTypedAsset<AnimationAsset>(  const AssetDescConstPtr & desc )
+{
+	if( typeid( AnimationAssetDesc ) == typeid( *( desc.get() ) ) )
+	{
+		auto asset = AssetManager::GetInstance().LoadAsset( desc );
+		return std::static_pointer_cast<const AnimationAsset>( asset );
+	}
+	return nullptr;
+}
 
 } // bv

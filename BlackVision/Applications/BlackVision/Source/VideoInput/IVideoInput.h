@@ -7,8 +7,7 @@ namespace bv {
 	{
 	public:
 		virtual MemoryChunkConstPtr     GetBits             () const = 0;
-		virtual bool                    BitsChanged         () const = 0;
-		virtual void                    ResetBitsChanged    () const = 0;
+		virtual UInt32                  GetUpdateID			() const = 0;
 
 		virtual unsigned int            GetWidth			() const = 0;
 		virtual unsigned int            GetHeight			() const = 0;

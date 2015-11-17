@@ -16,8 +16,9 @@ private:
     TextureAssetConstPtr	m_texResource;
 
     DefaultTextureParams    m_params;
-    mutable bool            m_bitsChanged;
     DataBuffer::Semantic    m_semantic;
+
+	mutable UInt32			m_updateID;
 
 public:
 
@@ -32,8 +33,7 @@ public:
     virtual MemoryChunkConstPtr     GetBits         (  UInt32 level ) const override;
 	virtual MemoryChunkVector		GetBits         () const override;
 
-    virtual bool                    BitsChanged     () const override;
-    virtual void                    ResetBitsChanged() const override;
+	virtual UInt32                  GetUpdateID     () const override;
 
     virtual const std::string       GetName         () const override;
 
@@ -54,8 +54,6 @@ public:
     virtual DataBuffer::Semantic    GetSemantic     () const override;
 
     void                            SetBits         ( TextureAssetConstPtr texResource );
-
-    void                            SetBitsChanged  ( bool bitsChanged ) const;
 
     void                            SetName         ( const std::string & name );
 

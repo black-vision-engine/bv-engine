@@ -7,6 +7,8 @@
 
 namespace bv { namespace model {
 
+// *****************************
+//
 std::string         StaticShaderGenerator::GenerateShaderSource( const std::vector< std::string > & uids ) const
 {
     std::string filename = GenerateFilename( uids );
@@ -32,6 +34,8 @@ std::string         StaticShaderGenerator::GenerateShaderSource( const std::vect
     }
 }
 
+// *****************************
+//
 std::string         StaticShaderGenerator::GenerateFilename( const std::vector< std::string > & uids ) const
 {
     std::string filename = "";
@@ -57,7 +61,9 @@ std::string         StaticShaderGenerator::GenerateFilename( const std::vector< 
     return filename;
 }
 
-std::string         StaticShaderGenerator::UID2Abbrv( const std::string uid ) const
+// *****************************
+//
+std::string         StaticShaderGenerator::UID2Abbrv                    ( const std::string & uid ) const
 {
     const IPluginDescriptor * pluginDesc = PluginsManager::DefaultInstance().GetDescriptor( uid );
     return pluginDesc->GetPluginTypeAbbrv();
@@ -65,7 +71,7 @@ std::string         StaticShaderGenerator::UID2Abbrv( const std::string uid ) co
 
 // *********************************
 //
-const std::string                            ReadShaderContentsFromFile             ( const std::string & fileName )
+std::string         ReadShaderContentsFromFile   ( const std::string & fileName )
 {
     std::stringstream shaderSource;
 
@@ -73,7 +79,6 @@ const std::string                            ReadShaderContentsFromFile         
 
     return shaderSource.str();
 }
-
 
 } //model
 } //bv

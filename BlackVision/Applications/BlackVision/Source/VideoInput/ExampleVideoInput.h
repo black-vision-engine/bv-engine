@@ -11,6 +11,8 @@ namespace bv {
 
         int m_maskAnd;
         int m_maskOr;
+
+        UInt32 m_updateID;
     
         void		GenerateBits( int x, int y );
     public:
@@ -18,8 +20,7 @@ namespace bv {
         ~ExampleVideoInput(void);
 
         virtual MemoryChunkConstPtr     GetBits             () const;
-        virtual bool                    BitsChanged         () const;
-        virtual void                    ResetBitsChanged    () const;
+        virtual UInt32                  GetUpdateID         () const;
 
         virtual unsigned int            GetWidth			() const;
         virtual unsigned int            GetHeight			() const;

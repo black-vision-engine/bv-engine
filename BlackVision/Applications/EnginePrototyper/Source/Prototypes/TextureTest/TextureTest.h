@@ -2,7 +2,7 @@
 
 #include <map>
 
-#include "Interfaces/IAppLogicPrototype.h"
+#include "Interfaces/IBasicLogic.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
@@ -11,7 +11,7 @@
 
 namespace bv {
 
-class TextureTest : public IAppLogicPrototype
+class TextureTest : public IBasicLogic
 {
 private:
 	Camera *				m_camera;
@@ -36,6 +36,7 @@ public:
     virtual     void    Key                 ( unsigned char c )     override;
     virtual     void    Resize              ( UInt32 w, UInt32 h )  override;
 
+	static IBasicLogicUnqPtr	Create		( Renderer * renderer );
 };
 
 } //bv

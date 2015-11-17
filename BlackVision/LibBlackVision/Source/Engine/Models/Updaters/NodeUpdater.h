@@ -53,8 +53,8 @@ namespace model
 }
 
 typedef std::pair< ITexturesDataConstPtr, ShaderParameters * > TexData2ShaderParams;
-typedef std::pair< const ITextureDescriptor *, Texture2D * > Tex2Tex2DPair;
-typedef std::pair< const IAnimationDescriptor *, Texture2D * > Anim2Tex2DPair;
+//typedef std::pair< const ITextureDescriptor *, Texture2D * > Tex2Tex2DPair;
+//typedef std::pair< const IAnimationDescriptor *, Texture2D * > Anim2Tex2DPair;
 
 class NodeUpdater;
 DEFINE_CONST_PTR_TYPE(NodeUpdater)
@@ -77,19 +77,26 @@ private:
     std::vector< RendererStateInstance * >      m_redererStateInstanceVec;
     model::RendererContextConstPtr              m_rendererContext;
 
-    std::vector< Tex2Tex2DPair >                m_texMappingVec;
-    std::vector< Anim2Tex2DPair >               m_animMappingVec;
+    //std::vector< Tex2Tex2DPair >                m_texMappingVec;
+    //std::vector< Anim2Tex2DPair >               m_animMappingVec;
 
     std::vector< TexData2ShaderParams >         m_texDataMappingVec;
+    std::vector< UInt32 >						m_texDataUpdateID;
+
+private:
 
                             NodeUpdater         ( SceneNode * sceneNode, model::IModelNodeConstPtr modelNode ); 
+
 public:
-                            ~NodeUpdater        ();
+
+    virtual                 ~NodeUpdater        ();
 
     static NodeUpdaterPtr   Create              ( SceneNode * sceneNode, model::IModelNodeConstPtr modelNode );
     virtual void            DoUpdate            () override;
 
 private:
+
+    void            UpdateNodeEffect    ();
 
     void            RegisterTexturesData( IShaderDataSourceConstPtr psTxData, IShaderDataSourceConstPtr vsTxData, IShaderDataSourceConstPtr gsTxData, RenderablePass * pass );
     bool            MustBeRegistered    ( IShaderDataSourceConstPtr shaderDataSrc, ShaderParameters * shaderParams );

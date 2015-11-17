@@ -124,8 +124,8 @@ void    TextureCubeTest::Render              ()
 void    TextureCubeTest::Update              ( TimeType t )
 {
 	{ t; }
-	m_angleX += 0.05f;
-	m_angleY += 0.2f;
+	m_angleX += 0.005f;
+	m_angleY += 0.02f;
 }
 
 } // bv

@@ -58,6 +58,7 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_DevTools.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
@@ -68,6 +69,7 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_DevTools.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
@@ -78,6 +80,7 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_DevTools.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
@@ -88,6 +91,7 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_DevTools.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Lib_3rdParty.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Pbe_CopyFiles.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\App_EntryPoint.props" />
@@ -95,6 +99,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\DevTools\LibWindowApp\Projects\Win\VS11\LibWindowApp.vcxproj">
+      <Project>{bfd61862-778e-4636-9143-97d8262b7f6e}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\LibBlackVision\Projects\Win\VS11\LibBlackVision.vcxproj">
       <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
     </ProjectReference>
@@ -103,7 +110,6 @@
     <ClCompile Include="..\..\..\Source\Common\GLSLProgram.cpp" />
     <ClCompile Include="..\..\..\Source\Common\VBORect.cpp" />
     <ClCompile Include="..\..\..\Source\PrototypeCreator.cpp" />
-    <ClCompile Include="..\..\..\Source\PrototyperApp.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingMode.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingTestScene.cpp" />
     <ClCompile Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Scenes\DrawingTestScene0.cpp" />
@@ -149,8 +155,6 @@
     <ClInclude Include="..\..\..\Source\Interfaces\IAppLogicPrototype.h" />
     <ClInclude Include="..\..\..\Source\Interfaces\IRenderable.h" />
     <ClInclude Include="..\..\..\Source\PrototypeCreator.h" />
-    <ClInclude Include="..\..\..\Source\PrototyperApp.h" />
-    <ClInclude Include="..\..\..\Source\PrototypesForwardInc.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingMode.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\DrawingTestScene.h" />
     <ClInclude Include="..\..\..\Source\Prototypes\DrawingCommands\Common\Modes\DrawingModes.h" />
