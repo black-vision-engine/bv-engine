@@ -12,6 +12,8 @@ class InterlaceEffect : public RenderableEffect
 {
 private:
 
+    ShaderParamInt *  m_firstTextureIdxParam;
+
 public:
 
                         InterlaceEffect ( Texture2DPtr tex0, Texture2DPtr tex1 );
@@ -19,8 +21,10 @@ public:
 
 private:
 
-    PixelShader *       CreatePS        ();
+    PixelShader *       CreatePS        ( Texture2DPtr tex0, Texture2DPtr tex1 );
     VertexShader *      CreateVS        ();
+
+    TextureSampler *    CreateSampler   ( int samplerId, const std::string & samplerName ) const;
 
 };
 
