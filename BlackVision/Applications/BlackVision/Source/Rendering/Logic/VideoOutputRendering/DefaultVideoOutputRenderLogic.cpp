@@ -52,6 +52,40 @@ void    DefaultVideoOutputRenderLogic::FrameRendered            ( Renderer * ren
 
 // *********************************
 //
+void    DefaultVideoOutputRenderLogic::FrameRenderedNewImpl            ( Renderer * renderer, OffscreenRenderLogic * offscreenRenderLogic )
+{
+    { renderer; }
+    { offscreenRenderLogic; }
+
+    if ( !m_useVideoCard )
+    {
+        return;
+    }
+
+// FIXME: add effects list along with proper bookkeeping of rendered frames for the interlacer
+
+    //GPURenderPreVideo(); //With all effects
+
+/*
+    if not DisplayAsVideoOutput:
+        BlitToWindow()
+    else:
+        GPURenderPreVideo()
+        BlitToWindow()
+
+        if PushToVideoCard:
+            Readback()
+            Push()
+
+
+    if not PushToVideoCard:
+        else:
+            BlitToWindow()
+*/
+}
+
+// *********************************
+//
 void    DefaultVideoOutputRenderLogic::PushToVideoCard  ( Texture2DConstPtr & frame )
 {
     // FIXME: implement

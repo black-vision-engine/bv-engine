@@ -27,6 +27,7 @@ public:
             ~DefaultVideoOutputRenderLogic  ();
 
     void    FrameRendered                   ( Renderer * renderer, OffscreenRenderLogic * offscreenRenderLogic );
+    void    FrameRenderedNewImpl            ( Renderer * renderer, OffscreenRenderLogic * offscreenRenderLogic );
 
 private:
 
