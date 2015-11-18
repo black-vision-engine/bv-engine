@@ -72,7 +72,7 @@ public:
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
 	virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
-	virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
+	virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
 	virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
 	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const override;

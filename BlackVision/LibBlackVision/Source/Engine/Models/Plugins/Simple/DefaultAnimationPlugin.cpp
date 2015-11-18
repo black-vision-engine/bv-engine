@@ -148,6 +148,10 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
 
+    ctx->alphaCtx->blendEnabled = true;
+    ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
+    ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+
     m_texturesData = m_psc->GetTexturesDataImpl();
 
     //Direct param state access (to bypass model querying)
@@ -222,7 +226,7 @@ IVertexAttributesChannelConstPtr    DefaultAnimationPlugin::GetVertexAttributesC
 
 // *************************************
 // 
-IPixelShaderChannelConstPtr         DefaultAnimationPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr         DefaultAnimationPlugin::GetPixelShaderChannel       () const
 {
     return m_psc;
 }

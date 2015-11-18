@@ -310,7 +310,7 @@ IVertexAttributesChannelConstPtr    DefaultHeightMapPlugin::GetVertexAttributesC
 
 // *************************************
 // 
-IPixelShaderChannelConstPtr         DefaultHeightMapPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr              DefaultHeightMapPlugin::GetPixelShaderChannel       () const
 {
     return m_psc;
 }

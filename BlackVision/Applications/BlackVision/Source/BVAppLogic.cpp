@@ -221,9 +221,9 @@ void BVAppLogic::LoadScene          ( void )
     }
     else
     {
-        auto root = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_pluginsManager, GetTimelineManager(), m_globalTimeline );
-        m_bvScene = BVScene::Create( SceneModel::Create( "root", GetTimelineManager(), root ), new Camera( DefaultConfig.IsCameraPerspactive() ), te, m_renderer );
-        //InitializeScenesTimelines();
+        auto scene = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_pluginsManager, GetTimelineManager(), m_globalTimeline );
+        m_bvScene = BVScene::Create( scene, new Camera( DefaultConfig.IsCameraPerspactive() ), te, m_renderer );
+        InitializeScenesTimelines();
     }
 
     if( !m_bvScene )

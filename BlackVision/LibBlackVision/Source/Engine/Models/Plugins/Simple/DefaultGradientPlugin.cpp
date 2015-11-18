@@ -161,7 +161,7 @@ IVertexAttributesChannelConstPtr    DefaultGradientPlugin::GetVertexAttributesCh
 
 // *************************************
 // 
-IPixelShaderChannelConstPtr         DefaultGradientPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr              DefaultGradientPlugin::GetPixelShaderChannel       () const
 {
     return m_psc;
 }

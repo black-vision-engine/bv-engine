@@ -470,7 +470,7 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 
 // *****************************
 //
-model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const std::string& scene, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::SceneModelPtr    TestScenesFactory::CreateSceneFromEnv       ( const std::string& scene, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     model::BasicNodePtr node = nullptr;
 
@@ -504,7 +504,7 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const std:
     }
     else if( scene == "SERIALIZED_TEST" )
     {
-        node = TestScenesFactory::CreateSerializedTestScene( pluginsManager, timelineManager );
+        return TestScenesFactory::CreateSerializedTestScene( pluginsManager, timelineManager );
     }
 	else if( scene == "ALL_BASIC_SHAPES_SHOW" )
 	{
@@ -555,7 +555,7 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const std:
         node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
 
-    return node;
+    return std::make_shared< model::SceneModel >( "sceneFromEnv", timelineManager,  node );
 }
 
 // *****************************
