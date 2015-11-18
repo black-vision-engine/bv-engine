@@ -37,6 +37,9 @@
     <Filter Include="Rendering\Logic\NodeEffectRendering">
       <UniqueIdentifier>{779e4a57-6fa2-46f1-bba2-31541f4a8920}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering\Logic\VideoOutputRendering">
+      <UniqueIdentifier>{b3d9d3ab-1a17-4f23-988d-1ed9c94ee73c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -134,6 +137,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.cpp">
       <Filter>Rendering\Logic\NodeEffectRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.cpp">
+      <Filter>Rendering\Logic\VideoOutputRendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -237,6 +243,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.h">
       <Filter>Rendering\Logic\NodeEffectRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.h">
+      <Filter>Rendering\Logic\VideoOutputRendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
