@@ -7,6 +7,9 @@ namespace bv {
     
 namespace SerializationHelper{ 
 
+template< typename T >
+T String2Enum( std::string s );
+
 std::pair< model::AlphaContext::SrcBlendMode, const char* > sbm2s[] =
 {
     std::make_pair( model::AlphaContext::SrcBlendMode::SBM_ZERO, "SBM_ZERO" )
@@ -26,6 +29,7 @@ std::pair< model::AlphaContext::SrcBlendMode, const char* > sbm2s[] =
 };
 
 template<> std::string T2String( const model::AlphaContext::SrcBlendMode& sbm ) { return Enum2String( sbm2s, sbm ); }
+template<> model::AlphaContext::SrcBlendMode String2Enum( std::string s ) { return String2T( sbm2s, s ); }
 
 
 std::pair< model::AlphaContext::DstBlendMode, const char* > dbm2s[] =
@@ -46,6 +50,7 @@ std::pair< model::AlphaContext::DstBlendMode, const char* > dbm2s[] =
 };
 
 template<> std::string T2String( const model::AlphaContext::DstBlendMode& dbm ) { return Enum2String( dbm2s, dbm ); }
+template<> model::AlphaContext::DstBlendMode String2Enum( std::string s ) { return String2T( dbm2s, s ); }
 
 
 std::pair< model::FillContext::Mode, const char* > fcm2s[] =
@@ -56,6 +61,7 @@ std::pair< model::FillContext::Mode, const char* > fcm2s[] =
     , std::make_pair( model::FillContext::Mode::M_TOTAL, "" )
 };
 template<> std::string T2String( const model::FillContext::Mode& fcm ) { return Enum2String( fcm2s, fcm ); }
+template<> model::FillContext::Mode String2Enum( std::string s ) { return String2T( fcm2s, s ); }
 
 }
    
@@ -147,9 +153,32 @@ ser.ExitChild();
 }
 
 
-//void                        Deserialize     ( IDeserializer& /*deser*/ )
-//{
-//}
+// *****************************
+//
+void                        RendererContext::Deserialize     ( const IDeserializer& deser )
+{
+    deser.EnterChild( "alpha_context" );
+    alphaCtx->blendEnabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "blendEnabled" ), false );
+    alphaCtx->dstBlendMode = SerializationHelper::String2Enum< AlphaContext::DstBlendMode >( deser.GetAttribute( "dstBlendMode" ) );
+    alphaCtx->srcBlendMode = SerializationHelper::String2Enum< AlphaContext::SrcBlendMode >( deser.GetAttribute( "srcBlendMode" ) );
+    alphaCtx->blendColor = SerializationHelper::String2T< glm::vec4 >( deser.GetAttribute( "blendColor" ), glm::vec4( 0, 0, 0, 0 ) );
+    deser.ExitChild(); // alpha_context
+
+    deser.EnterChild( "cull_context" );
+    cullCtx->enabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "enabled" ), true );
+    cullCtx->isCCWOrdered = SerializationHelper::String2T< bool >( deser.GetAttribute( "enabled" ), true );
+    deser.ExitChild(); // cull_context
+
+    deser.EnterChild( "depth_context" );
+    depthCtx->enabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "enabled" ), true );
+    depthCtx->writable = SerializationHelper::String2T< bool >( deser.GetAttribute( "writable" ), true );
+    deser.ExitChild(); // depth_context
+
+    deser.EnterChild( "fill_context" );
+    fillCtx->fillMode = SerializationHelper::String2Enum< FillContext::Mode >( deser.GetAttribute( "fillMode" ) );
+    deser.ExitChild(); // fill_context
+
+}
 
 // *****************************
 //
@@ -157,13 +186,7 @@ RendererContextPtr   RendererContext::Create          ( const IDeserializer& des
 {
     auto context = CreateDefault();
 
-    deser.EnterChild( "alpha_context" );
-    context->alphaCtx->blendEnabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "blendEnabled" ), false );
-    deser.ExitChild(); // alpha_context
-
-    deser.EnterChild( "fill_context" );
-    context->fillCtx->fillMode = SerializationHelper::String2T< FillContext::Mode >( SerializationHelper::fcm2s, deser.GetAttribute( "fillMode" ) );
-    deser.ExitChild(); // fill_context
+    context->Deserialize( deser );
 
     return context;
 }
