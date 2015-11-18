@@ -7,6 +7,7 @@
 #include "Engine/Models/Plugins/PluginsFactory.h"
 
 #include "Engine/Models/BasicNode.h"
+#include "Engine/Models/Timeline/TimelineManager.h"
 
 #include "ExampleTestScenes.h"
 #include "NewModelTestNodes.h"
@@ -22,9 +23,6 @@
 #include "Engine/Models/Plugins/Simple/DefaultRoundedRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultConePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
-
-//#include "Mathematics/Interpolators/CompositeBezierInterpolator.h"
-//#include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 
 #include "Engine/Models/Plugins/PluginUtils.h"
 
@@ -551,7 +549,7 @@ model::SceneModelPtr    TestScenesFactory::CreateSceneFromEnv       ( const std:
         node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
 
-    return std::make_shared< model::SceneModel >( "sceneFromEnv", timelineManager,  node );
+    return std::make_shared< model::SceneModel >( "sceneFromEnv", model::TimelineManagerPtr( timelineManager ),  node );
 }
 
 // *****************************
