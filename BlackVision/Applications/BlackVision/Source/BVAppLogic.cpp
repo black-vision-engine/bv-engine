@@ -38,6 +38,7 @@
 #include <math.h>
 
 #include "EndUserAPI/EventHandlers/RemoteEventsHandlers.h"
+#include "EndUserAPI/JsonCommandsListener/JsonCommandsListener.h"
 
 //pablito
 #define XML
@@ -114,6 +115,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
     m_renderer = renderer;
     m_renderLogic = new RenderLogic();
     m_remoteHandlers = new RemoteEventsHandlers;
+    m_remoteController = new JsonCommandsListener;
 }
 
 // *********************************
@@ -123,8 +125,11 @@ BVAppLogic::~BVAppLogic             ()
     //delete m_timelineManager;
 
     delete m_renderLogic;
-
+    
+    delete m_remoteHandlers;
     delete m_kbdHandler;
+
+    delete m_remoteController;
 }
 
 // *********************************
@@ -140,6 +145,8 @@ void BVAppLogic::Initialize         ()
 
     InitializeKbdHandler();
     m_remoteHandlers->InitializeHandlers( this );
+    m_remoteController->InitializeRemoteLog( "10.0.0.101", 28777, SeverityLevel::info );
+    m_remoteController->InitializeServer( 11101 );
 }
 
 // *********************************

@@ -11,6 +11,8 @@
 
 #include "FrameStatsService.h"
 
+#include "EndUserAPI/RemoteController.h"
+
 //#define HIDE_PROFILE_STATS
 
 //pablito
@@ -30,7 +32,6 @@ namespace bv
 class SimpleTimer;
 class RenderLogic;
 class Renderer;
-class RemoteControlInterface;
 class RemoteEventsHandlers;
 
 
@@ -64,7 +65,9 @@ private:
     Renderer *                      m_renderer;
     RenderLogic *                   m_renderLogic;
     TestKeyboardHandler *           m_kbdHandler;
+
     RemoteEventsHandlers*           m_remoteHandlers;
+    RemoteController*               m_remoteController;
 
     unsigned long                   m_startTime;
 

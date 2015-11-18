@@ -5,6 +5,9 @@
 #include <iostream>
 #include <boost/lexical_cast.hpp>
 //#include <..\dep\vld\include\vld.h>
+
+#include "UseLogger.h"
+
 namespace bv
 {
 
@@ -112,13 +115,13 @@ bool VideoCardManager::InitVideoCardManager(const std::vector<int> & hackBuffers
 	{        
 		InitVideoCards( hackBuffersUids );
     
-		Log::A("VideoCards","INFO","Detected " + to_string(GetVideoCardsSize()) + " videocard(s)");
+        LOG_MESSAGE( SeverityLevel::info ) << "Detected " + to_string( GetVideoCardsSize() ) + " videocard(s)";
 		
 		return true;
 	}
 	else
 	{
-		Log::A("VideoCards","ERROR","NO VIDEO CARDS DETECTED");
+		LOG_MESSAGE( SeverityLevel::error ) << "NO VIDEO CARDS DETECTED";
 		return false;
 	}
 }

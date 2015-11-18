@@ -14,10 +14,11 @@ typedef boost::log::sinks::combine_requirements<boost::log::sinks::concurrent_fe
 class QueueSink :   public boost::log::sinks::basic_sink_backend<frontend_requirements>
 {
 private:
-    QueueConcurrent<LogMsg>&        m_queue;
+    QueueConcurrent<LogMsg>         m_queue;
 public:
-    QueueSink( QueueConcurrent<LogMsg>& queue )
-        :   m_queue( queue )    {}
+    QueueSink() {}
+
+    QueueConcurrent<LogMsg>&        GetQueueReference()     { return m_queue; }
 
     void consume( boost::log::record_view const& rec );
 };

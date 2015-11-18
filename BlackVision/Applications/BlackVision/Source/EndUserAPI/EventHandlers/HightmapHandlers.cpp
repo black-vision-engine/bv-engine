@@ -3,7 +3,7 @@
 #include "../../BVAppLogic.h"
 #include "Engine/Models/Plugins/Custom/DefaultHeightMapPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
-#include "Log.h"
+#include "UseLogger.h"
 
 namespace bv
 {
@@ -148,7 +148,7 @@ void            HightmapHandlers::HMShow                  ()
     auto timeline = m_appLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
-        Log::A( L"ERROR", L"timeline [ height map ] does not exist :(" );
+        LOG_MESSAGE( SeverityLevel::error ) << "timeline [ height map ] does not exist :(";
         return;
     }
 
@@ -186,7 +186,7 @@ void            HightmapHandlers::HMStart                 ( float km )
     auto timeline = m_appLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
-        Log::A( L"ERROR", L"timeline [ height map ] does not exist :(" );
+        LOG_MESSAGE( SeverityLevel::error ) << "timeline [ height map ] does not exist :(";
         return;
     }
 
@@ -212,7 +212,7 @@ void        HightmapHandlers::HMZoomIn                ( float km, float leftKM, 
     auto timeline = m_appLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
-        Log::A( L"ERROR", L"timeline [ height map ] does not exist :(" );
+        LOG_MESSAGE( SeverityLevel::error ) << "timeline [ height map ] does not exist :(";
         return;
     }
 
@@ -265,7 +265,7 @@ void            HightmapHandlers::HMZoomOutFromCurrent    (float scale)
     auto timeline = m_appLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
-        Log::A( L"ERROR", L"timeline [ height map ] does not exist :(" );
+        LOG_MESSAGE( SeverityLevel::error ) << "timeline [ height map ] does not exist :(";
         return;
     }
 
@@ -297,7 +297,7 @@ void        HightmapHandlers::HMZoomInFake                ( float km, float left
     auto timeline = m_appLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
-        Log::A( L"ERROR", L"timeline [ height map ] does not exist :(" );
+        LOG_MESSAGE( SeverityLevel::error ) << "timeline [ height map ] does not exist :(";
         return;
     }
 
@@ -352,7 +352,7 @@ void            HightmapHandlers::HMConcentratedDistanceAnimStart( int num )
     auto timeline = m_appLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
-        Log::A( L"ERROR", L"timeline [ height map ] does not exist :(" );
+        LOG_MESSAGE( SeverityLevel::error ) << "timeline [ height map ] does not exist :(";
         return;
     }
        
@@ -397,7 +397,7 @@ void            HightmapHandlers::HMConcentratedDistanceAnimStart2( int num )
     auto timeline = m_appLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
-        Log::A( L"ERROR", L"timeline [ height map ] does not exist :(" );
+        LOG_MESSAGE( SeverityLevel::error ) << "timeline [ height map ] does not exist :(";
         return;
     }
        

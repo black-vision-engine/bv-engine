@@ -4,11 +4,9 @@
 #include "SocketWrapper.h"
 #include <math.h>
 
-#include "../../Applications/BlackVision/Source/EndUserAPI/RemoteCommandsListener.h"
-#include "Engine/Events/Interfaces/IEventManager.h"
-#include "Engine/Events/Events.h"
+#include "../../Applications/BlackVision/Source/EndUserAPI/RemoteController.h"
 
-#include "Log.h"
+#include "UseLogger.h"
 
 #include <iostream>
 #pragma comment(lib, "Ws2_32.lib")
@@ -22,8 +20,8 @@ namespace bv{
     }
 
 	//DWORD WINAPI SocketHandler(void*);
-    vector<ResponseMsg> SocketWrapper::Responses;
-    RemoteCommandsListener* SocketWrapper::BVCommandsConverter = nullptr;
+    std::vector<ResponseMsg> SocketWrapper::Responses;
+    RemoteController* SocketWrapper::BVCommandsConverter = nullptr;
 
 	SocketWrapper::SocketWrapper()
 	{}
@@ -33,7 +31,7 @@ namespace bv{
     {}
 
 
-    bool SocketWrapper::InitializeServer( RemoteCommandsListener* commandsConverter, int port )
+    bool SocketWrapper::InitializeServer( RemoteController* commandsConverter, int port )
     {
         m_port = port;
         BVCommandsConverter = commandsConverter;
@@ -108,26 +106,26 @@ namespace bv{
 	
 		
 
-		//int* csock;
-		SOCKET* csock;
-		sockaddr_in sadr;
-		int	addr_size = sizeof(SOCKADDR);
-	
-		for(;;)
-		{
-			printf("waiting for clients...\n");
-			csock = (SOCKET*)malloc(sizeof(int));
-		
-			if((*csock = accept( hsock, (SOCKADDR*)&sadr, &addr_size))!= INVALID_SOCKET ){
-				printf("Received connection from %s\n",inet_ntoa(sadr.sin_addr));
-                Log::A("Connection","Client connected: "+string(inet_ntoa(sadr.sin_addr)));
-				CreateThread(0,0,SocketHandler, (void*)csock , 0,0);
-			}
-			else{
-				fprintf(stderr, "Error accepting %d\n",WSAGetLastError());
-			}
-		}
-	}
+        //int* csock;
+        SOCKET* csock;
+        sockaddr_in sadr;
+        int	addr_size = sizeof(SOCKADDR);
+
+        for(;;)
+        {
+            printf("waiting for clients...\n");
+            csock = (SOCKET*)malloc(sizeof(int));
+
+            if((*csock = accept( hsock, (SOCKADDR*)&sadr, &addr_size))!= INVALID_SOCKET ){
+                printf("Received connection from %s\n",inet_ntoa(sadr.sin_addr));
+                LOG_MESSAGE( SeverityLevel::info ) << "Connection","Client connected: " + std::string( inet_ntoa( sadr.sin_addr ) );
+                CreateThread(0,0,SocketHandler, (void*)csock , 0,0);
+            }
+            else{
+                fprintf(stderr, "Error accepting %d\n",WSAGetLastError());
+            }
+        }
+    }
 	DWORD SocketWrapper::SocketInitHandler(void *lp)
 	{
         SocketWrapper *myObj = (SocketWrapper*)lp;
@@ -192,7 +190,7 @@ namespace bv{
                         printf("Sock id %d zgadza siê!\n",*csock);
 						wchar_t CHAR_BEGIN = 0x02;
 						wchar_t CHAR_END = 0x03;
-                        wstring to_send = CHAR_BEGIN+Responses[i].message+CHAR_END;
+                        std::wstring to_send = CHAR_BEGIN+Responses[i].message+CHAR_END;
                         const wchar_t* tmpBuffer = to_send.c_str();
 
                         size_t buffer_size;
@@ -257,7 +255,7 @@ namespace bv{
                 else if(buffer[i]==END_TRANSMISSION)
 				{
                     std::wstring_convert <std::codecvt_utf8<wchar_t>,wchar_t> convert;
-                    wstring str = convert.from_bytes((const char*)temp_s.c_str());
+                    std::wstring str = convert.from_bytes((const char*)temp_s.c_str());
 
                     BVCommandsConverter->QueueEvent( str, (int)*csock );
 				}

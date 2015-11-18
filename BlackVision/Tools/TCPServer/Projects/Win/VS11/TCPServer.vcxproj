@@ -19,11 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Source\Log.h" />
+    <ClInclude Include="..\..\..\Source\LogTCP.h" />
     <ClInclude Include="..\..\..\Source\SocketWrapper.h" />
+    <ClInclude Include="..\..\..\Source\UseLogger.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\Log.cpp" />
+    <ClCompile Include="..\..\..\Source\LogTCP.cpp" />
     <ClCompile Include="..\..\..\Source\SocketWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>

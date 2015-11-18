@@ -70,6 +70,9 @@ void InitializeModuleMapping()
 	moduleString[bv::ModuleEnum::ME_Prototyper]			= "Prototyper";
 	moduleString[bv::ModuleEnum::ME_BlackVisionApp]		= "BlackVisionApp";
 	moduleString[bv::ModuleEnum::ME_LibProjectManager]	= "LibProjectManager";
+    moduleString[bv::ModuleEnum::ME_TCPServer]          = "LibTCPServer";
+    moduleString[bv::ModuleEnum::ME_LibVideoCards]      = "LibVideoCards";
+    moduleString[bv::ModuleEnum::ME_XMLScenParser]      = "LibXMLSceneParser";
 
 	modulesStringAlignment = 17;
 }
@@ -189,9 +192,9 @@ void SetFilter( boost::shared_ptr<Type> sink, SeverityLevel minLevel, int module
 			|| (module == (modules & ( modules & (0x1 << 3) )))
 			|| (module == (modules & ( modules & (0x1 << 4) )))
 			|| (module == (modules & ( modules & (0x1 << 5) )))
-			//|| (module == (modules & ( modules & (0x1 << 6) )))
-			//|| (module == (modules & ( modules & (0x1 << 7) )))
-			//|| (module == (modules & ( modules & (0x1 << 8) )))
+			|| (module == (modules & ( modules & (0x1 << 6) )))
+			|| (module == (modules & ( modules & (0x1 << 7) )))
+			|| (module == (modules & ( modules & (0x1 << 8) )))
 			//|| (module == (modules & ( modules & (0x1 << 9) )))
 			//|| (module == (modules & ( modules & (0x1 << 10) )))
 			//|| (module == (modules & ( modules & (0x1 << 11) )))
@@ -249,15 +252,17 @@ void Logger::AddConsole			( SeverityLevel minLevel, int modules )
 	boost::log::core::get()->add_sink( newSink );
 }
 
-void Logger::AddLogQueue         ( QueueConcurrent<LogMsg>& queue, SeverityLevel minLevel, int modules )
+QueueConcurrent<LogMsg>& Logger::AddLogQueue         ( SeverityLevel minLevel, int modules )
 {
-    boost::shared_ptr< QueueSink > backend = boost::make_shared< QueueSink >( queue );
+    boost::shared_ptr< QueueSink > backend = boost::make_shared< QueueSink >();
     boost::shared_ptr< ASyncQueueSink > newSink( new ASyncQueueSink( backend ) );
 
     //newSink->set_formatter( m_formatter );
 	SetFilter( newSink, minLevel, modules );
 
     boost::log::core::get()->add_sink( newSink );
+
+    return backend->GetQueueReference();
 }
 
 void QueueSink::consume( boost::log::record_view const& rec )

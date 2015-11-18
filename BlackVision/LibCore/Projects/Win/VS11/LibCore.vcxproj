@@ -33,6 +33,7 @@
     <ClInclude Include="..\..\..\Source\Threading\CriticalSection.h" />
     <ClInclude Include="..\..\..\Source\Threading\ScopedCriticalSection.h" />
     <ClInclude Include="..\..\..\Source\Threading\Thread.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Logger\LoggerEnums.h" />
     <ClInclude Include="..\..\..\Source\Tools\Logger\LogMsgStruct.h" />
     <ClInclude Include="..\..\..\Source\Tools\Logger\QueueSink.h" />
     <ClInclude Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.h" />

@@ -13,7 +13,6 @@
 #include "structure/AssetManager.h"
 #include "LicenseManager.h"
 #include "VideoCardManager.h"
-#include "Log.h"
 
 
 namespace bv {
@@ -75,8 +74,6 @@ private:
 	// pablito
 	bool			InitializeLicenses      ();
     void			InitializeConfig        ();
-    void			InitializeSocketServer  ();
-    void			InitializeLogger        ();
 
     void            PostFrame					( unsigned int millis );
 };

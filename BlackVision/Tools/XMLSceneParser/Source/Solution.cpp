@@ -1,6 +1,6 @@
 #include "Solution.h"
 #include "structure/AssetManager.h"
-#include "Log.h"
+#include "UseLogger.h"
 #include <iostream>
 
 using namespace std;
@@ -19,7 +19,7 @@ namespace bv
 		}
 		else {
 			f.close();
-			Log::A("error", "Error LoadSolution() solution [" + BB::AssetManager::GetSolution(solution) + "] not found");
+			LOG_MESSAGE( SeverityLevel::error ) << "Error LoadSolution() solution [" + BB::AssetManager::GetSolution(solution) + "] not found";
 			return false;
 		}
 

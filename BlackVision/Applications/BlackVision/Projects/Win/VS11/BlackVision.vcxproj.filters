@@ -157,11 +157,11 @@
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\EndUserAPI\RemoteCommandsListener.cpp">
-      <Filter>EndUserAPI</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.cpp">
       <Filter>EndUserAPI\JsonCommandsListener</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\EndUserAPI\RemoteController.cpp">
+      <Filter>EndUserAPI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -283,11 +283,11 @@
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.h">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteCommandsListener.h">
-      <Filter>EndUserAPI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.h">
       <Filter>EndUserAPI\JsonCommandsListener</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteController.h">
+      <Filter>EndUserAPI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

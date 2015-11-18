@@ -13,9 +13,10 @@
 
 #include "BVGL.h"
 
+#include "UseLogger.h"
+
 //pablito
 #define USE_VIDEOCARD	
-#include "Log.h"
 #include "ConfigManager.h"
 #include <boost/lexical_cast.hpp>
 #include "Rendering/Logic/NodeEffectRendering/NodeEffectRenderLogic.h"
@@ -81,7 +82,7 @@ void RenderLogic::InitVideoCards     ( Renderer * renderer )
 {
 	if(!DefaultConfig.ReadbackFlag() )
     {
-		Log::A("VIDEOCARDS", "INFO", "Config file prevents from initializing VideoCards...");
+		LOG_MESSAGE( SeverityLevel::info ) << "Config file prevents from initializing VideoCards...";
 		return;
 	}
     m_VideoCardManager->m_VideoCardConfig.ReadbackFlag = bv::DefaultConfig.ReadbackFlag();
@@ -96,7 +97,7 @@ void RenderLogic::InitVideoCards     ( Renderer * renderer )
     
 	if(m_VideoCardManager->GetVideoCardsSize()==0)
 	{
-		Log::A("VIDEOCARDS", "ERROR", "No videocards present in system, aborting videocard initialization...");
+		LOG_MESSAGE( SeverityLevel::error ) << "No videocards present in system, aborting videocard initialization...";
 	}else{
 		unsigned int bln = 0;
 		for(unsigned int i = 0   ;   i < m_VideoCardManager->GetVideoCardsSize() ; i++)

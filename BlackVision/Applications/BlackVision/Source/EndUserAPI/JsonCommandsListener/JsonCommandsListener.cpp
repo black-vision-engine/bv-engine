@@ -7,19 +7,25 @@
 
 #include "UseLogger.h"
 
+#undef CreateEvent
+
 namespace bv
 {
 
 // ***********************
 //
 JsonCommandsListener::JsonCommandsListener()
-    : m_eventServer( nullptr )
+    :   m_eventServer( nullptr ),
+        m_remoteLog( nullptr )
 {
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &JsonCommandsListener::SendResponse ), ResponseEvent::Type() );
 }
 
 JsonCommandsListener::~JsonCommandsListener()
-{}
+{
+    delete m_remoteLog;
+    delete m_eventServer;
+}
 
 // ***********************
 //
@@ -39,7 +45,7 @@ void                JsonCommandsListener::QueueEvent          ( const std::wstri
     {
         do
         {
-            BaseEventPtr newEvent = std::static_pointer_cast<BaseEvent>( CreateEvent( deser ) );
+            BaseEventPtr newEvent = std::static_pointer_cast<BaseEvent>( DeserializeEvent( deser ) );
             newEvent->SocketID = socketID;
 
             if( newEvent != nullptr )
@@ -65,11 +71,23 @@ void        JsonCommandsListener::SendResponse           ( const IEventPtr evt )
     m_eventServer->SendResponse( responseMessage );
 }
 
-
+// ***********************
+//
 bool JsonCommandsListener::InitializeServer    ( int port )
 {
     m_eventServer = IEventServer::CreateServerObject();
     return m_eventServer->InitializeServer( this, port );
+}
+
+// ***********************
+//
+bool JsonCommandsListener::InitializeRemoteLog ( const std::string& address, unsigned short port, SeverityLevel minLevel, int modules )
+{
+    QueueConcurrent<LogMsg>& queue = Logger::GetLogger().AddLogQueue( minLevel, modules );
+    m_remoteLog = new LogTCP( queue );
+    m_remoteLog->Initialize( address, port );
+
+    return true;
 }
 
 } //bv
