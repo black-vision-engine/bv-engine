@@ -10,6 +10,18 @@
 
 namespace bv {
 
+namespace SerializationHelper {
+
+std::pair< WrapMethod, const char* > wm2s[] =
+{ std::make_pair( WrapMethod::clamp, "clamp" )
+, std::make_pair( WrapMethod::pingPong, "pingPong" )
+, std::make_pair( WrapMethod::repeat, "repeat" )
+, std::make_pair( WrapMethod::clamp, "" ) };
+
+template<> std::string T2String< WrapMethod >( const WrapMethod& wm ) { return Enum2String( wm2s, wm ); }
+
+}
+
 // *******************************
 //
 template< class TimeValueT, class ValueT >
@@ -221,13 +233,18 @@ template< class TimeValueT, class ValueT >
 void                                        CompositeBezierInterpolator< TimeValueT, ValueT >::Serialize       ( ISerializer& ser ) const
 {
 ser.EnterChild( "interpolator" );
+
     ser.SetAttribute( "curve_type", SerializationHelper::Enum2String< CurveType >( ct2s, m_type ) );
+    SerializationHelper::SerializeAttribute( ser, m_preMethod, "preMethod" );
+    SerializationHelper::SerializeAttribute( ser, m_postMethod, "postMethod" );
+
     for( size_t i = 0; i < interpolators.size(); i++ )
     {
         keys[ i ].Serialize( ser );
         interpolators[ i ]->Serialize( ser );
     }
     ( keys.end()-1 )->Serialize( ser );
+
 ser.ExitChild();
 }
 
@@ -273,6 +290,8 @@ ISerializablePtr     CompositeBezierInterpolator< TimeValueT, ValueT >::Create  
     }
 
     interpolator->SetCurveType( SerializationHelper::String2T< CurveType >( ct2s, deser.GetAttribute( "curve_type" ) ) );
+    interpolator->SetWrapPreMethod( SerializationHelper::String2T< WrapMethod >( SerializationHelper::wm2s, deser.GetAttribute( "preMethod" ) ) );
+    interpolator->SetWrapPostMethod( SerializationHelper::String2T< WrapMethod >( SerializationHelper::wm2s, deser.GetAttribute( "postMethod" ) ) );
 
     return interpolator;
 }
