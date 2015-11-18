@@ -1,7 +1,7 @@
 #include "DefaultPieChartPlugin.h"
 
-//#include "Engine/Models/Plugins/Channels/Geometry/Simple/VertexAttributesChannelVariableTopology.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/DefaultGeometryVertexAttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 #include "Mathematics/defines.h"
 
@@ -45,7 +45,7 @@ IPluginPtr                      DefaultPieChartPluginDesc::CreatePlugin         
 //
 DefaultPluginParamValModelPtr   DefaultPieChartPluginDesc::CreateDefaultModel   ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >();
+    DefaultPluginParamValModelPtr   model       = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
     DefaultParamValModelPtr         vacModel    = std::make_shared< DefaultParamValModel >();
 
     //ParamFloatPtr paramN             = ParametersFactory::CreateParameterFloat( "n", timeEvaluator );
@@ -224,16 +224,15 @@ public:
 
 void DefaultPieChartPlugin::InitGeometry( float angleStart_, float angleEnd_ )
 {
-    DefaultGeometryAndUVsVertexAttributeChannel* channel;
-    if( m_vaChannel==NULL ) // FIXME: this should be smarter and maybe moved to DefaultGeometryAndUVsVertexAttributeChannel
+    if( !m_vaChannel ) // FIXME: this should be smarter and maybe moved to DefaultGeometryAndUVsVertexAttributeChannel
     {
-        channel = new DefaultGeometryAndUVsVertexAttributeChannel( PrimitiveType::PT_TRIANGLE_STRIP );
-        m_vaChannel = VertexAttributesChannelPtr( (VertexAttributesChannel*) channel );
-    } else
-    {
-        channel = (DefaultGeometryAndUVsVertexAttributeChannel*) m_vaChannel.get();
-        channel->ClearAll();
+		m_vaChannel = std::make_shared< DefaultGeometryAndUVsVertexAttributeChannel >( PrimitiveType::PT_TRIANGLE_STRIP );
     }
+	else
+	{
+		m_vaChannel->ClearAll();
+	}
+	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
 
     z1 = 0; z2 = 1; // FIXME: variable?
 
@@ -247,6 +246,7 @@ void DefaultPieChartPlugin::InitGeometry( float angleStart_, float angleEnd_ )
     auto gen3 = GenerateSideUV( z1, z2, angleEnd );
     auto gen4 = GenerateRoundSideUV( angleStart, angleEnd, z1, z2 );
 
+	auto channel = std::static_pointer_cast< DefaultGeometryAndUVsVertexAttributeChannel >( m_vaChannel );
     channel->GenerateAndAddConnectedComponent( gen0 );
     channel->GenerateAndAddConnectedComponent( gen1 );
     channel->GenerateAndAddConnectedComponent( gen2 );
@@ -272,7 +272,10 @@ void                                DefaultPieChartPlugin::Update               
     if( asVal != m_angleStart || aeVal != m_angleEnd )
     {
         InitGeometry( asVal, aeVal );
-        m_vaChannel->SetNeedsTopologyUpdate( true );
+
+		//HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
+        //m_vaChannel->SetNeedsTopologyUpdate( true );
+
         m_angleStart = asVal; m_angleEnd = aeVal;
     }
 }

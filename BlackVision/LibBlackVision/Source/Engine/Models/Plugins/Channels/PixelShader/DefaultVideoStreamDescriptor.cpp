@@ -1,7 +1,8 @@
 #include "DefaultVideoStreamDescriptor.h"
 
 #include "Assets/AssetManager.h"
-#include "Engine/Graphics/Resources/Texture.h"
+#include "Engine/Graphics/Resources/Textures/Texture.h"
+#include "Application/ApplicationContext.h"
 
 
 namespace bv { namespace model {
@@ -9,9 +10,8 @@ namespace bv { namespace model {
 // **************************
 //
 DefaultVideoStreamDescriptor::DefaultVideoStreamDescriptor        ( const std::string & name, MemoryChunkConstPtr data, UInt32 width, UInt32 height, TextureFormat format, DataBuffer::Semantic semantic )
-    : m_bitsChanged( true )
+    : m_updateID( 0 )
 {
-
     SetWidth( width );
     SetHeight( height );
     SetFormat( format );
@@ -20,13 +20,7 @@ DefaultVideoStreamDescriptor::DefaultVideoStreamDescriptor        ( const std::s
 	SetBits( data );
     SetName( name );
 
-	//default values.. not needed?
 	m_params.SetDepth( 1 );
-	m_params.SetWrappingModeX( TextureWrappingMode::TWM_CLAMP_BORDER );
-	m_params.SetWrappingModeY( TextureWrappingMode::TWM_CLAMP_BORDER );
-	m_params.SetWrappingModeZ( TextureWrappingMode::TWM_CLAMP_BORDER );
-	m_params.SetFilteringMode( TextureFilteringMode::TFM_LINEAR );
-    m_params.SetBorderColor( glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 }
 
 // **************************
@@ -72,16 +66,9 @@ MemoryChunkVector		DefaultVideoStreamDescriptor::GetBits			() const
 
 // **************************
 //
-bool                    DefaultVideoStreamDescriptor::BitsChanged       () const
+UInt64                  DefaultVideoStreamDescriptor::GetUpdateID       () const
 {
-    return m_bitsChanged;
-}
-
-// **************************
-//
-void                    DefaultVideoStreamDescriptor::ResetBitsChanged  () const
-{
-    m_bitsChanged = false;
+    return m_updateID;
 }
 
 // **************************
@@ -127,44 +114,16 @@ TextureFormat           DefaultVideoStreamDescriptor::GetFormat         () const
 
 // **************************
 //
-TextureWrappingMode     DefaultVideoStreamDescriptor::GetWrappingModeX  () const
-{
-    return m_params.GetWrappingModeX();
-}
-
-// **************************
-//
-TextureWrappingMode     DefaultVideoStreamDescriptor::GetWrappingModeY  () const
-{
-    return m_params.GetWrappingModeY();
-}
-
-// **************************
-//
-TextureWrappingMode     DefaultVideoStreamDescriptor::GetWrappingModeZ  () const
-{
-    return m_params.GetWrappingModeZ();
-}
-
-// **************************
-//
-TextureFilteringMode    DefaultVideoStreamDescriptor::GetFilteringMode  () const
-{
-    return m_params.GetFilteringMode();
-}
-
-// **************************
-//
-glm::vec4               DefaultVideoStreamDescriptor::BorderColor       () const
-{
-    return m_params.BorderColor();
-}
-
-// **************************
-//
 DataBuffer::Semantic    DefaultVideoStreamDescriptor::GetSemantic     () const
 {
     return m_semantic;
+}
+
+// **************************
+//
+SamplerStateModelPtr    DefaultVideoStreamDescriptor::GetSamplerState     () const
+{
+	return m_params.GetSamplerState();
 }
 
 // **************************
@@ -173,7 +132,7 @@ void                    DefaultVideoStreamDescriptor::SetBits           ( Memory
 {
 	assert( data != nullptr );
 	m_data = data;
-	m_bitsChanged = true;
+	m_updateID = ApplicationContext::Instance().GetTimestamp() + 1;
 }
 
 // **************************
@@ -210,6 +169,14 @@ void                        DefaultVideoStreamDescriptor::SetSemantic     ( Data
 {
     m_semantic = semantic;
 }
+
+// **************************
+//
+void                        DefaultVideoStreamDescriptor::SetSamplerState   ( SamplerStateModelPtr samplerState )
+{
+	m_params.SetSamplerState( samplerState );
+}
+
 
 } //model
 } //bv

@@ -60,6 +60,10 @@ void            TrackableResources< ResourceDesc >::DeleteResources     ( GLsize
 template< typename ResourceDesc >
 GLuint          TrackableResources< ResourceDesc >::GetBoundResourceID  ( GLenum target ) const
 {
+	//FIXME: how to handle cube maps?
+	if( target >= GL_TEXTURE_CUBE_MAP_POSITIVE_X && target <= GL_TEXTURE_CUBE_MAP_NEGATIVE_Z )
+		return m_boundResources.find( GL_TEXTURE_CUBE_MAP )->second;
+
     assert( m_boundResources.find( target ) != m_boundResources.end() );
     
     return m_boundResources.find( target )->second;

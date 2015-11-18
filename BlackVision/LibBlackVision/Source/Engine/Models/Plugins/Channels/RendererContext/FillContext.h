@@ -24,6 +24,7 @@ public:
 
     FillContext();
 
+    FillContext *			Clone			() const;
 };
 
 } //model

@@ -5,18 +5,17 @@ namespace bv { namespace model {
 
 	class DefaultVideoInputResourceDescr : public AssetDesc, public std::enable_shared_from_this< DefaultVideoInputResourceDescr >
 	{
-		DefaultTextureDescriptor* descr;
+		DefaultTextureDescriptorPtr descr;
 		IVideoInput *input;
 
 	public:
+		DefaultVideoInputResourceDescr( DefaultTextureDescriptorPtr d, IVideoInput *i ) : descr( d ), input( i ) {}
         virtual void                Serialize       ( ISerializer& /*sob*/ ) const { assert( !"implement me" ); return; }
         static ISerializablePtr     Create          ( ISerializer& /*dob*/ ) { assert( !"implement me" ); return nullptr; }
 
-		DefaultVideoInputResourceDescr( DefaultTextureDescriptor* d, IVideoInput *i ) : descr( d ), input( i ) {}
-
 		virtual PluginResourceType      GetResourceType () const { return PluginResourceType::PRT_VIDEOINPUT; }
 
-		virtual  DefaultTextureDescriptor*     GetITextureDescriptor  () const /*override*/ { return descr; }
+		virtual  DefaultTextureDescriptorPtr     GetITextureDescriptor  () const /*override*/ { return descr; }
 
 		//virtual void Update() const override { input->Update(); }
 

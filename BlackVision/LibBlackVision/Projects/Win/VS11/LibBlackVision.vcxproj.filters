@@ -106,9 +106,6 @@
     <Filter Include="Engine\Models\Plugins\Channels\Transform">
       <UniqueIdentifier>{010bc633-f174-4c49-aab8-2f54695eb0cf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Models\Plugins\Channels\VertexShader">
-      <UniqueIdentifier>{35597ded-e812-4814-8ade-2f4ce1473665}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Models\Plugins\Channels\Geometry\Simple">
       <UniqueIdentifier>{fd20b384-4353-4a1a-9e74-02bc938059b7}</UniqueIdentifier>
     </Filter>
@@ -318,21 +315,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\RenderTarget.cpp">
       <Filter>Engine\Graphics\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Texture.cpp">
-      <Filter>Engine\Graphics\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Texture2D.cpp">
-      <Filter>Engine\Graphics\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Texture2DImpl.cpp">
-      <Filter>Engine\Graphics\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Texture2DSequenceImpl.cpp">
-      <Filter>Engine\Graphics\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\TextureBase.cpp">
-      <Filter>Engine\Graphics\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexArray.cpp">
       <Filter>Engine\Graphics\Resources</Filter>
     </ClCompile>
@@ -519,12 +501,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.cpp">
       <Filter>Engine\Models\Plugins\Channels\Geometry\Simple</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelAnimatedVertices.cpp">
-      <Filter>Engine\Models\Plugins\Channels\Geometry\Simple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelVariableTopology.cpp">
-      <Filter>Engine\Models\Plugins\Channels\Geometry\Simple</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.cpp">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
     </ClCompile>
@@ -560,9 +536,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\TranformChannel.cpp">
       <Filter>Engine\Models\Plugins\Channels\Transform</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.cpp">
-      <Filter>Engine\Models\Plugins\Channels\VertexShader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Custom\DefaultHeightMapPlugin.cpp">
       <Filter>Engine\Models\Plugins\Custom</Filter>
@@ -660,9 +633,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\PluginUtils.cpp">
       <Filter>Engine\Models\Plugins</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.cpp">
-      <Filter>Engine\Models\Plugins</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\GlobalTimeline.cpp">
       <Filter>Engine\Models\Timeline</Filter>
     </ClCompile>
@@ -693,13 +663,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventStop.cpp">
       <Filter>Engine\Models\Timeline\Dynamic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\GeometryUpdater.cpp">
-      <Filter>Engine\Models\Updaters</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.cpp">
-      <Filter>Engine\Models\Updaters</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\SequenceAnimationUpdater.cpp">
       <Filter>Engine\Models\Updaters</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\UpdatersManager.cpp">
@@ -912,6 +876,54 @@
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureUtils.cpp">
       <Filter>Assets\Texture</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture1D.cpp">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture3D.cpp">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrSampler.cpp">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture.cpp">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1D.cpp">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture3D.cpp">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2DArray.cpp">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture2DArray.cpp">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1DArray.cpp">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture1DArray.cpp">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCube.cpp">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCube.cpp">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCubeArray.cpp">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCubeArray.cpp">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture.cpp">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2D.cpp">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\AssetDescsWithUIDs.cpp">
       <Filter>Assets</Filter>
     </ClCompile>
@@ -936,17 +948,29 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectAlphaMask.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\HelperVertexAttributesChannel.cpp">
+      <Filter>Engine\Models\Plugins\Channels\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\HelperPixelShaderChannel.cpp">
+      <Filter>Engine\Models\Plugins\Channels</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultVideoStreamDescriptor.cpp">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectDefault.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\ResourceStateModel.cpp">
+      <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDemuxer.cpp">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectNodeMask.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\SamplerStateModel.cpp">
+      <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoStreamDecoder.cpp">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>
@@ -1002,6 +1026,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectWireframe.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\SamplerShaderParameters.cpp">
+      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\WireframeNodeEffect.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
     </ClCompile>
@@ -1013,6 +1040,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.cpp">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Application\ApplicationContext.cpp">
+      <Filter>Application</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextArranger.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
@@ -1121,9 +1151,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrShader.h">
       <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture2D.h">
-      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObject.h">
       <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
     </ClInclude>
@@ -1164,21 +1191,6 @@
       <Filter>Engine\Graphics\Resources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\RenderTarget.h">
-      <Filter>Engine\Graphics\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Texture.h">
-      <Filter>Engine\Graphics\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Texture2D.h">
-      <Filter>Engine\Graphics\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Texture2DImpl.h">
-      <Filter>Engine\Graphics\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Texture2DSequenceImpl.h">
-      <Filter>Engine\Graphics\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\TextureBase.h">
       <Filter>Engine\Graphics\Resources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\VertexArray.h">
@@ -1418,12 +1430,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.h">
       <Filter>Engine\Models\Plugins\Channels\Geometry\Simple</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelAnimatedVertices.h">
-      <Filter>Engine\Models\Plugins\Channels\Geometry\Simple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelVariableTopology.h">
-      <Filter>Engine\Models\Plugins\Channels\Geometry\Simple</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.h">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
     </ClInclude>
@@ -1459,9 +1465,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\TransformChannel.h">
       <Filter>Engine\Models\Plugins\Channels\Transform</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.h">
-      <Filter>Engine\Models\Plugins\Channels\VertexShader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Custom\DefaultHeightMapPlugin.h">
       <Filter>Engine\Models\Plugins\Custom</Filter>
@@ -1634,9 +1637,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\PluginUtils.h">
       <Filter>Engine\Models\Plugins</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.h">
-      <Filter>Engine\Models\Plugins</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\GlobalTimeline.h">
       <Filter>Engine\Models\Timeline</Filter>
     </ClInclude>
@@ -1673,13 +1673,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventStop.h">
       <Filter>Engine\Models\Timeline\Dynamic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\GeometryUpdater.h">
-      <Filter>Engine\Models\Updaters</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.h">
-      <Filter>Engine\Models\Updaters</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\SequenceAnimationUpdater.h">
       <Filter>Engine\Models\Updaters</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\UpdatersManager.h">
@@ -1928,6 +1922,51 @@
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h">
       <Filter>Assets\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture1D.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture3D.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrSampler.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture2D.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1D.h">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture3D.h">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2DArray.h">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture2DArray.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1DArray.h">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture1DArray.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCube.h">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCube.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCubeArray.h">
+      <Filter>Engine\Graphics\Renderers\OGLRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCubeArray.h">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h">
       <Filter>Assets</Filter>
     </ClInclude>
@@ -1978,6 +2017,78 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\AssetCache.h">
       <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\AlphaMaskNodeEffect.h">
+      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeEffect.h">
+      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeMaskNodeEffect.h">
+      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\HelperVertexAttributesChannel.h">
+      <Filter>Engine\Models\Plugins\Channels\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelNodeEffect.h">
+      <Filter>Engine\Models\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\HelperPixelShaderChannel.h">
+      <Filter>Engine\Models\Plugins\Channels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectAlphaMask.h">
+      <Filter>Engine\Models\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\ResourceStateModel.h">
+      <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectDefault.h">
+      <Filter>Engine\Models\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\SamplerStateModel.h">
+      <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectNodeMask.h">
+      <Filter>Engine\Models\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\SamplerShaderParameters.h">
+      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectWireframe.h">
+      <Filter>Engine\Models\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\WireframeNodeEffect.h">
+      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeShaders.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.h">
+      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Application\ApplicationContext.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceEffect.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShadeders.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MaskChannelsShaders.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MaskChannelsEffect.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture.h">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2D.h">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\AlphaMaskNodeEffect.h">
       <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
@@ -2077,6 +2188,72 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\InterpolatorBasicTypes.h">
       <Filter>Mathematics\Interpolators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceEffect.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShadeders.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MaskChannelsShaders.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MaskChannelsEffect.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture.h">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2D.h">
+      <Filter>Engine\Graphics\Resources\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\AlphaMaskNodeEffect.h">
+      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeEffect.h">
+      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeMaskNodeEffect.h">
+      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelNodeEffect.h">
+      <Filter>Engine\Models\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectAlphaMask.h">
+      <Filter>Engine\Models\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectDefault.h">
+      <Filter>Engine\Models\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectNodeMask.h">
+      <Filter>Engine\Models\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectWireframe.h">
+      <Filter>Engine\Models\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\WireframeNodeEffect.h">
+      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeShaders.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.h">
+      <Filter>Engine\Graphics\Shaders\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceEffect.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShadeders.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MaskChannelsShaders.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MaskChannelsEffect.h">
+      <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceEffect.h">
       <Filter>Engine\Graphics\Effects</Filter>

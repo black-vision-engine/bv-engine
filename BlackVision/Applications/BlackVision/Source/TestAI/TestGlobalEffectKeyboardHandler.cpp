@@ -17,12 +17,18 @@ TestGlobalEfectKeyboardHandler::TestGlobalEfectKeyboardHandler  ()
     m_nodeMaskEffect = nullptr;
     m_curWireframeNodeIdx = 0;
     m_wireframeDisabled = true;
+	m_editor = nullptr;
 }
 
 // *********************************
 //
 void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
 {
+	if( !m_editor ) 
+	{
+		m_editor = logic->GetBVScene()->GetSceneEditor();
+	}
+
     if( !m_defaultEffect )
     {
         m_defaultEffect = std::make_shared< model::ModelNodeEffectDefault >( logic->GetGlobalTimeline() );
@@ -148,9 +154,9 @@ void                    TestGlobalEfectKeyboardHandler::HandleIncrement     ( BV
             auto curNode = GetWireframeNode( logic, curIdx );
             auto nextNode = GetWireframeNode( logic, m_curWireframeNodeIdx );
 
-            curNode->SetNodeEffect( m_defaultEffect );
+			m_editor->SetNodeEffect( curNode, m_defaultEffect );
             auto newEffect = std::make_shared< model::ModelNodeEffectWireframe >( logic->GetGlobalTimeline() );
-            nextNode->SetNodeEffect( newEffect );
+			m_editor->SetNodeEffect( nextNode, newEffect );
         }        
     }
 }
@@ -207,9 +213,9 @@ void                    TestGlobalEfectKeyboardHandler::HandleDecrement     ( BV
             auto curNode = GetWireframeNode( logic, curIdx );
             auto nextNode = GetWireframeNode( logic, m_curWireframeNodeIdx );
 
-            curNode->SetNodeEffect( m_defaultEffect );
+			m_editor->SetNodeEffect( curNode, m_defaultEffect );
             auto newEffect = std::make_shared< model::ModelNodeEffectWireframe >( logic->GetGlobalTimeline() );
-            nextNode->SetNodeEffect( newEffect );
+			m_editor->SetNodeEffect( nextNode, newEffect );
         }
     }
 }
@@ -254,13 +260,13 @@ void                    TestGlobalEfectKeyboardHandler::HandleToggleEffect  ( BV
             if ( effect->GetType() == NodeEffectType::NET_ALPHA_MASK )
             {
                 m_alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( effect );
-                node->SetNodeEffect( m_defaultEffect );
+				m_editor->SetNodeEffect( node, m_defaultEffect );
             }
             else if( effect->GetType() == NodeEffectType::NET_DEFAULT )
             {
                 assert( m_alphaMaskEffect );
                 
-                node->SetNodeEffect( m_alphaMaskEffect );
+				m_editor->SetNodeEffect( node, m_alphaMaskEffect );
                 m_alphaMaskEffect = nullptr;
             }
             else
@@ -279,13 +285,13 @@ void                    TestGlobalEfectKeyboardHandler::HandleToggleEffect  ( BV
             if ( effect->GetType() == NodeEffectType::NET_NODE_MASK )
             {
                 m_nodeMaskEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( effect );
-                node->SetNodeEffect( m_defaultEffect );
+				m_editor->SetNodeEffect( node, m_defaultEffect );
             }
             else if( effect->GetType() == NodeEffectType::NET_DEFAULT )
             {
                 assert( m_nodeMaskEffect );
                 
-                node->SetNodeEffect( m_nodeMaskEffect );
+				m_editor->SetNodeEffect( node, m_nodeMaskEffect );
                 m_nodeMaskEffect = nullptr;
             }
             else
@@ -304,14 +310,14 @@ void                    TestGlobalEfectKeyboardHandler::HandleToggleEffect  ( BV
             if ( effect->GetType() == NodeEffectType::NET_WIREFRAME )
             {
                 m_wireframeEffect = std::static_pointer_cast< model::ModelNodeEffectWireframe >( effect );
-                node->SetNodeEffect( m_defaultEffect );
+				m_editor->SetNodeEffect( node, m_defaultEffect );
                 m_wireframeDisabled = true;
             }
             else if( effect->GetType() == NodeEffectType::NET_DEFAULT )
             {
                 assert( m_wireframeEffect );
                 
-                node->SetNodeEffect( m_wireframeEffect );
+				m_editor->SetNodeEffect( node, m_wireframeEffect );
                 m_wireframeEffect = nullptr;
 
                 m_wireframeDisabled = false;
@@ -389,7 +395,7 @@ model::IModelNodeEffectPtr TestGlobalEfectKeyboardHandler::GetAlphaMaskNodeEffec
     if (!effect) // || effect->GetType() != NodeEffectType::NET_ALPHA_MASK )
     {
         auto newEffect = std::make_shared< model::ModelNodeEffectAlphaMask >( logic->GetGlobalTimeline() );
-        node->SetNodeEffect( newEffect );
+		m_editor->SetNodeEffect( node, newEffect );
     }
 
     return node->GetNodeEffect();
@@ -405,7 +411,7 @@ model::IModelNodeEffectPtr  TestGlobalEfectKeyboardHandler::GetNodeMaskNodeEffec
     if (!effect) // || effect->GetType() != NodeEffectType::NET_NODE_MASK )
     {
         auto newEffect = std::make_shared< model::ModelNodeEffectNodeMask >( logic->GetGlobalTimeline() );
-        node->SetNodeEffect( newEffect );
+		m_editor->SetNodeEffect( node, newEffect );
     }
 
     return node->GetNodeEffect();
@@ -421,7 +427,7 @@ model::IModelNodeEffectPtr  TestGlobalEfectKeyboardHandler::GetNodeWireframeEffe
     if (!effect) // || effect->GetType() != NodeEffectType::NET_WIREFRAME )
     {
         auto newEffect = std::make_shared< model::ModelNodeEffectWireframe >( logic->GetGlobalTimeline() );
-        node->SetNodeEffect( newEffect );
+		m_editor->SetNodeEffect( node, newEffect );
     }
 
     return node->GetNodeEffect();

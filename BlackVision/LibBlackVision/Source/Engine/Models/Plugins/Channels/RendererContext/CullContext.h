@@ -12,8 +12,9 @@ public:
 
 public:
 
-    CullContext();
+							CullContext		();
 
+    CullContext *			Clone			() const;
 };
 
 } //model

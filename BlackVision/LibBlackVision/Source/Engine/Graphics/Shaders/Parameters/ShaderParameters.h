@@ -3,7 +3,8 @@
 #include <vector>
 
 #include "Engine/Graphics/Shaders/Parameters/GenericShaderParam.h"
-#include "Engine/Graphics/Resources/Texture2D.h" //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
+#include "Engine/Graphics/Shaders/Parameters/SamplerShaderParameters.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h" //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
 
 
 namespace bv {
@@ -16,10 +17,12 @@ class Texture2D;
 //FIXME: Buffer usage dla texture unitu to jest DYNAMIC_DRAW, to samo trzeba robic dla dynamicznych geometrii, ktore co klatka wymagaja wrzucenia calego kanalu atrybutow !!!!
 class ShaderParameters
 {
+
 private:
 
-    typedef std::vector< GenericShaderParam * > TShaderParamVec;
-    typedef std::vector< Texture2DPtr >         TTexture2DVec; //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
+    typedef std::vector< GenericShaderParam * >										TShaderParamVec;
+    typedef std::vector< std::pair< Texture2DPtr, SamplerShaderParametersPtr > >   TTexture2DVec; //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
+//	typedef std::vector< Texture2DsTATa >      
 
 private:
 
@@ -43,12 +46,14 @@ public:
     inline GenericShaderParam *             AccessParam                     ( unsigned int idx );
     inline GenericShaderParam *             AccessParam                     ( const std::string & name );
 
-    void                                    AddTexture                      ( Texture2DPtr texture );
+    void                                    AddTexture                      ( Texture2DPtr texture, SamplerShaderParametersPtr samplerParams = nullptr );
     void                                    SetTexture                      ( unsigned int idx, Texture2DPtr tex );
+    void                                    SetSamplerParameters            ( unsigned int idx, SamplerShaderParametersPtr samplerParams );
 
     inline unsigned int                     NumTextures                     () const;
 
     inline Texture2DPtr                     GetTexture                      ( unsigned int idx ); //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
+    inline SamplerShaderParametersConstPtr  GetSamplerParameters            ( unsigned int idx );
 
 };
 

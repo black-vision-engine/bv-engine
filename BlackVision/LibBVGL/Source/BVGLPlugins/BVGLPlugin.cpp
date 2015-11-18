@@ -1017,6 +1017,20 @@ void BVGLPlugin::CopyImageSubData			( GLuint srcName, GLenum srcTarget, GLint sr
 	glCopyImageSubData( srcName, srcTarget, srcLevel, srcX, srcY, srcZ, dstName, dstTarget, dstLevel, dstX, dstY, dstZ, srcWidth, srcHeight, srcDepth );
 }
 
+// *****************************
+//
+void			BVGLPlugin::GetTexImage		( GLenum target, GLint level, GLenum format, GLenum type, GLvoid * data )
+{
+	glGetTexImage( target, level, format, type, data );
+}
+
+// *****************************
+//
+void			BVGLPlugin::GenerateMipmap		( GLenum target )
+{
+	glGenerateMipmap( target );
+}
+
 // Sampler
 
 #ifdef BV_GL_VERSION_4_5
