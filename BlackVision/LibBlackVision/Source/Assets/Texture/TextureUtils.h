@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Assets/Assets.h"
 
 namespace bv {

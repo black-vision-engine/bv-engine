@@ -5,11 +5,74 @@ namespace bv {
 
 // ****************************
 //
-PdrPBOMemTransfer::PdrPBOMemTransfer    ( DataBuffer::Semantic semantic, SizeType dataSize )
+					PdrUploadPBO::PdrUploadPBO			( DataBuffer::Semantic semantic, SizeType dataSize )
+			: PdrPBOMemTransfer( semantic, dataSize )
+{
+	assert( m_pboTarget == GL_PIXEL_UNPACK_BUFFER );
+}
+
+// ****************************
+//
+void				PdrUploadPBO::LockUpload			( const char * source, SizeType dataSize )
+{
+	BVGL::bvglBindBuffer( m_pboTarget, m_pboID[ m_index ] );
+
+	auto data = BVGL::bvglMapBuffer( m_pboTarget, GL_WRITE_ONLY );
+	memcpy( data, source, dataSize );
+	BVGL::bvglUnmapBuffer( m_pboTarget );
+
+	if( m_numPBOs > 1 )
+	{
+		m_index = ( m_index + 1 ) % m_numPBOs;
+		BVGL::bvglBindBuffer( m_pboTarget, m_pboID[ m_index ] );
+	}
+}
+
+// ****************************
+//
+void				PdrUploadPBO::UnlockUpload			()
+{
+	BVGL::bvglBindBuffer( m_pboTarget, 0 );
+}
+
+// ****************************
+//
+					PdrDownloadPBO::PdrDownloadPBO		( DataBuffer::Semantic semantic, SizeType dataSize )
+			: PdrPBOMemTransfer( semantic, dataSize )
+{
+	assert( m_pboTarget == GL_PIXEL_PACK_BUFFER );
+}
+
+// ****************************
+//
+void				PdrDownloadPBO::LockDownload		()
+{
+    BVGL::bvglBindBuffer( m_pboTarget, m_pboID[ m_index ] );
+}
+
+// ****************************
+//
+void				PdrDownloadPBO::UnlockDownload		( char * dest, SizeType dataSize )
+{
+	if( m_numPBOs > 1 )
+	{
+		m_index = ( m_index + 1 ) % m_numPBOs;
+		BVGL::bvglBindBuffer( m_pboTarget, m_pboID[ m_index ] );
+	}
+
+	auto data = BVGL::bvglMapBuffer( m_pboTarget, GL_READ_ONLY );
+	memcpy( dest, data, dataSize );
+	BVGL::bvglUnmapBuffer( m_pboTarget );
+		
+	BVGL::bvglBindBuffer( m_pboTarget, 0 );
+}
+
+
+// ****************************
+//
+				PdrPBOMemTransfer::PdrPBOMemTransfer    ( DataBuffer::Semantic semantic, SizeType dataSize )
     : m_index( 0 ) 
     , m_dataSize( ( GLenum )dataSize )
-    , m_writeLock( false )
-    , m_lockedMemoryPtr( nullptr )
 {
     assert( (int) DataBuffer::Semantic::S_TOTAL == 7 );
     assert( PBORequired( semantic ) );
@@ -18,286 +81,24 @@ PdrPBOMemTransfer::PdrPBOMemTransfer    ( DataBuffer::Semantic semantic, SizeTyp
     m_pboUsage  = PBOUsage( semantic );
     m_numPBOs   = NumPBOs( semantic );
 
-    // FIXME: for the time being
-    m_numPBOs = 1;
-
     assert( m_numPBOs > 0 );
 
-    BVGL::bvglGenBuffers( m_numPBOs, m_pboID );
+	m_pboID.resize( m_numPBOs );
+    BVGL::bvglGenBuffers( m_numPBOs, &m_pboID[ 0 ] );
 
     for( unsigned int i = 0; i < m_numPBOs; ++i )
     {
         BVGL::bvglBindBuffer( m_pboTarget, m_pboID[ i ] );
         BVGL::bvglBufferData( m_pboTarget, dataSize, 0, m_pboUsage );
-        BVGL::bvglBindBuffer( m_pboTarget, 0 );
     }
+    BVGL::bvglBindBuffer( m_pboTarget, 0 );
 }
 
 // ****************************
 //
 PdrPBOMemTransfer::~PdrPBOMemTransfer   ()
 {
-    BVGL::bvglDeleteBuffers( m_numPBOs, m_pboID );
-}
-
-// ****************************
-//
-void *  PdrPBOMemTransfer::LockTexture         ( MemoryLockingType mlt, GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type )
-{
-    if( m_numPBOs == 1 )
-    {
-        return SyncLockTexture( mlt );
-    }
-
-    return AsyncLockTexture( mlt, textureID, width, height, format, type );
-}
-
-// ****************************
-//
-void    PdrPBOMemTransfer::UnlockTexture       ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type )
-{
-    if( m_numPBOs == 1 )
-    {
-        SyncUnlockTexture( textureID, width, height, format, type );
-    }
-    else
-    {
-        AsyncUnlockTexture();
-    }
-}
-
-// ****************************
-//
-void *  PdrPBOMemTransfer::LockRenderTarget    ( GLenum readBufferID, GLuint width, GLuint height, GLuint format, GLuint type )
-{
-    if( m_numPBOs == 1 )
-    {
-        return SyncLockRenderTarget( readBufferID, width, height, format, type );
-    }
-
-    return AsyncLockRenderTarget( readBufferID, width, height, format, type );
-}
-
-// ****************************
-//
-void    PdrPBOMemTransfer::UnlockRenderTarget  ()
-{
-    if( m_numPBOs == 1 )
-    {
-        SyncUnlockRenderTarget();
-    }
-    else
-    {
-        AsyncUnlockRenderTarget();
-    }
-}
-
-// ****************************
-// FIXME: tutaj tylko zapis bedzie szybi, odczyt w przypadku GL_PIXEL_UNPACK_BUFFER bedzie koszmarnie wolny
-void * PdrPBOMemTransfer::SyncLockTexture   ( MemoryLockingType mlt )
-{
-    assert( m_numPBOs == 1 );
-
-    if( !m_lockedMemoryPtr )
-    {
-        BVGL::bvglBindBuffer( m_pboTarget, m_pboID[ m_index ] );
-        m_lockedMemoryPtr = BVGL::bvglMapBuffer( m_pboTarget, PBOAccess( mlt ) );
-        BVGL::bvglBindBuffer( m_pboTarget, 0 );
-
-        m_writeLock = mlt != MemoryLockingType::MLT_READ_ONLY;
-    }
-
-    return m_lockedMemoryPtr;
-}
-
-// ****************************
-// FIXME: only 2D textures so far
-void   PdrPBOMemTransfer::SyncUnlockTexture ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type )
-{
-    assert( m_numPBOs == 1 );
-
-    if( m_lockedMemoryPtr )
-    {
-        BVGL::bvglBindBuffer( m_pboTarget, m_pboID[ m_index ] );
-        BVGL::bvglUnmapBuffer( m_pboTarget );
-
-        if( m_writeLock )
-        {
-            GLint prevTex = BindTexture( textureID );
-
-            //READ FROM PBO
-            BVGL::bvglTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, width, height, format, type, 0 );
-
-            BVGL::bvglBindTexture( GL_TEXTURE_2D, prevTex );
-
-            m_writeLock = false;
-        }
-
-        BVGL::bvglBindBuffer( m_pboTarget, 0 );
-
-        m_lockedMemoryPtr = nullptr;
-    }
-}
-
-// ****************************
-// FIXME: only for writing now
-void *  PdrPBOMemTransfer::AsyncLockTexture     ( MemoryLockingType mlt, GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type )
-{
-    assert( m_numPBOs == 2 );
-    assert( mlt == MemoryLockingType::MLT_READ_WRITE || mlt == MemoryLockingType::MLT_WRITE_ONLY );
-    assert( m_pboTarget == GL_PIXEL_UNPACK_BUFFER );
-    assert( m_pboUsage == GL_STREAM_DRAW );
-
-    if( !m_lockedMemoryPtr )
-    {
-        m_writeLock = mlt != MemoryLockingType::MLT_READ_ONLY;
-
-        m_index = ( m_index + 1 ) % 2;
-        
-        if( m_writeLock )
-        {
-            BVGL::bvglBindBuffer( m_pboTarget, m_pboID[ m_index ] );
-
-            GLint prevTex = BindTexture( textureID );
-
-            //READ FROM PBO and write to texture - async, via DMA
-            BVGL::bvglTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, width, height, format, type, 0 );
-            BVGL::bvglBindTexture( GL_TEXTURE_2D, prevTex );
-
-            BVGL::bvglBindBuffer( m_pboTarget, m_pboID[ ( m_index + 1 ) % 2 ] );
-
-            // Note that glMapBufferARB() causes sync issue.
-            // If GPU is working with this buffer, glMapBufferARB() will wait(stall)
-            // until GPU to finish its job. To avoid waiting (idle), you can call
-            // first glBufferDataARB() with NULL pointer before glMapBufferARB().
-            // If you do that, the previous data in PBO will be discarded and
-            // glMapBufferARB() returns a new allocated pointer immediately
-            // even if GPU is still working with the previous data.
-            BVGL::bvglBufferData( m_pboTarget, m_dataSize, 0, m_pboUsage );
-
-            m_lockedMemoryPtr = BVGL::bvglMapBuffer( m_pboTarget, PBOAccess( mlt ) );
-
-            BVGL::bvglBindBuffer( m_pboTarget, 0 );
-        }
-    }
-
-    return m_lockedMemoryPtr;
-}
-
-// ****************************
-//
-void    PdrPBOMemTransfer::AsyncUnlockTexture   ()
-{
-    assert( m_numPBOs == 2 );
-
-    if( m_lockedMemoryPtr )
-    {
-        BVGL::bvglBindBuffer( m_pboTarget, m_pboID[ ( m_index + 1 ) % 2 ] );
-        BVGL::bvglUnmapBuffer( m_pboTarget );
-        BVGL::bvglBindBuffer( m_pboTarget, 0 );
-
-        m_writeLock = false;
-        m_lockedMemoryPtr = nullptr;
-    }
-}
-
-// ****************************
-//
-void *  PdrPBOMemTransfer::SyncLockRenderTarget    ( GLenum readBufferID, GLuint width, GLuint height, GLuint format, GLuint type )
-{
-    assert( m_numPBOs == 1 );
-    assert( m_pboTarget == GL_PIXEL_PACK_BUFFER );
-
-    if( !m_lockedMemoryPtr )
-    {
-        BVGL::bvglReadBuffer( readBufferID );
-
-        BVGL::bvglBindBuffer( m_pboTarget, m_pboID[ m_index ] );
-        BVGL::bvglReadPixels( 0, 0, width, height, format, type, 0 );
-        m_lockedMemoryPtr = BVGL::bvglMapBuffer( m_pboTarget, GL_READ_ONLY );
-
-        BVGL::bvglBindBuffer( m_pboTarget, 0 );
-    }
-
-    return m_lockedMemoryPtr;
-}
-
-// ****************************
-//
-void    PdrPBOMemTransfer::SyncUnlockRenderTarget  ()
-{
-    assert( m_numPBOs == 1 );
-    assert( m_pboTarget == GL_PIXEL_PACK_BUFFER );
-
-    BVGL::bvglBindBuffer( m_pboTarget, m_pboID[ m_index ] );
-    BVGL::bvglUnmapBuffer( m_pboTarget );
-    BVGL::bvglBindBuffer( m_pboTarget, 0 );
-
-    m_lockedMemoryPtr = nullptr;
-}
-
-// ****************************
-//
-void *  PdrPBOMemTransfer::AsyncLockRenderTarget   ( GLenum readBufferID, GLuint width, GLuint height, GLuint format, GLuint type )
-{
-    assert( m_numPBOs == 2 );
-    assert( m_pboTarget == GL_PIXEL_PACK_BUFFER );
-    assert( m_pboUsage == GL_STREAM_READ );
-
-    if( !m_lockedMemoryPtr )
-    {
-        m_index = ( m_index + 1 ) % 2;
-
-        BVGL::bvglReadBuffer( readBufferID );
-
-        BVGL::bvglBindBuffer( m_pboTarget, m_pboID[ m_index ] );
-        BVGL::bvglReadPixels( 0, 0, width, height, format, type, 0 ); //Async DMA read
-
-        BVGL::bvglBindBuffer( m_pboTarget, m_pboID[ ( m_index + 1 ) % 2 ] );
-        m_lockedMemoryPtr = BVGL::bvglMapBuffer( m_pboTarget, GL_READ_ONLY );
-
-        BVGL::bvglBindBuffer( m_pboTarget, 0 );
-    }
-
-    return m_lockedMemoryPtr;
-}
-
-// ****************************
-//
-void    PdrPBOMemTransfer::AsyncUnlockRenderTarget ()
-{
-    assert( m_numPBOs == 2 );
-    assert( m_pboTarget == GL_PIXEL_PACK_BUFFER );
-
-    BVGL::bvglBindBuffer( m_pboTarget, m_pboID[ ( m_index + 1 ) % 2 ] );
-    BVGL::bvglUnmapBuffer( m_pboTarget );
-    BVGL::bvglBindBuffer( m_pboTarget, 0 );
-
-    m_lockedMemoryPtr = nullptr;
-}
-
-// ****************************
-//
-void    PdrPBOMemTransfer::Flush        ( GLuint textureUnit )
-{
-    { textureUnit; }
-    //if ( NumPBOs() == 2 )
-    //{
-    //}
-}
-
-// ****************************
-//
-GLuint  PdrPBOMemTransfer::NumPBOs      () const
-{
-    return m_numPBOs;
-}
-
-// ****************************
-//
-GLuint  PdrPBOMemTransfer::DataSize     () const
-{
-    return m_dataSize;
+    BVGL::bvglDeleteBuffers( m_numPBOs, &m_pboID[ 0 ] );
 }
 
 // ****************************
@@ -305,18 +106,6 @@ GLuint  PdrPBOMemTransfer::DataSize     () const
 bool PdrPBOMemTransfer::PBORequired     ( DataBuffer::Semantic semantic )
 {
     return semantic != DataBuffer::Semantic::S_STATIC && semantic != DataBuffer::Semantic::S_TEXTURE_STATIC;
-}
-
-// ****************************
-//
-GLint   PdrPBOMemTransfer::BindTexture  ( GLuint textureID )
-{
-    GLint prevTex = 0;
-
-    BVGL::bvglGetIntegerv( GL_TEXTURE_BINDING_2D, &prevTex );
-    BVGL::bvglBindTexture( GL_TEXTURE_2D, textureID );
-
-    return prevTex;
 }
 
 // ****************************
@@ -369,13 +158,6 @@ GLenum  PdrPBOMemTransfer::PBOUsage     ( DataBuffer::Semantic semantic ) const
     }
 
     return 0;
-}
-
-// ****************************
-//
-GLenum  PdrPBOMemTransfer::PBOAccess    ( MemoryLockingType mlt ) const
-{
-    return ConstantsMapper::GLConstant( mlt );
 }
 
 } //bv

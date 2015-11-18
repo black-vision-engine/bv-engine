@@ -12,6 +12,8 @@
 
 #include "Tools/HRTimer.h"
 
+#include "Application/ApplicationContext.h"
+
 namespace bv {
 
 extern HighResolutionTimer GTimer;
@@ -86,8 +88,11 @@ void BasicWindowApp::OnPreidle  ()
 void BasicWindowApp::OnIdle		()
 {
     static DWORD curMillis = timeGetTime();
+	auto timeDiff = timeGetTime() - curMillis;
 
-    m_appLogic->Update( float( timeGetTime() - curMillis ) * 0.001f );
+	ApplicationContext::Instance().SetTimestamp( timeDiff );
+
+    m_appLogic->Update( float( timeDiff ) * 0.001f );
 
 	m_appLogic->Render();
 

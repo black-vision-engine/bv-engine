@@ -18,6 +18,8 @@
 #include "BVAppLogic.h"
 #include "BVConfig.h"
 
+#include "Application/ApplicationContext.h"
+
 // Log initializer
 #include "bvAppLogInitializer.inl"
 
@@ -92,6 +94,8 @@ void BlackVisionApp::OnIdle		()
     unsigned long millis = m_timer.ElapsedMillis();
 
     UpdateSubsystems( millis );
+
+	ApplicationContext::Instance().SetTimestamp( millis );
 
     m_app->OnUpdate( millis, m_Renderer );
 

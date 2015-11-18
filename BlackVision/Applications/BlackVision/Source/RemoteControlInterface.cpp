@@ -311,7 +311,7 @@ void RemoteControlInterface::OnInformation ( bv::IEventPtr evt )
             
             Log::A("SENDING","Timelines info...:");
 
-			model::TimelineManager * TM = m_AppLogic->GetTimelineManager();
+			model::TimelineManagerPtr TM = m_AppLogic->GetTimelineManager();
 
 			auto timelines = TM->GetRootTimeline()->GetChildren();
 			string s_timelines;

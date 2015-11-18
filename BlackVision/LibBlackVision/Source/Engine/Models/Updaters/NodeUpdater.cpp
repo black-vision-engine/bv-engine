@@ -50,6 +50,8 @@ NodeUpdater::NodeUpdater     ( SceneNode * sceneNode, model::IModelNodeConstPtr 
     , m_modelNode( modelNode )
     , m_renderable( nullptr )
     , m_rendererContext( nullptr )
+	, m_attributesUpdateID( 0 )
+	, m_topologyUpdateID( 0 )
 {
     assert( sceneNode != nullptr );
     assert( modelNode != nullptr );
@@ -154,32 +156,12 @@ void    NodeUpdater::UpdateNodeEffect       ()
     {
         switch( nodeEffect->GetType() )
         {
-            case NodeEffectType::NET_DEFAULT:
-            {
-                auto defaultEffect = std::static_pointer_cast< model::ModelNodeEffectDefault >( nodeEffect );
-
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-
-                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_DEFAULT )
-                {
-                    sceneNodeEffect = std::make_shared< NodeEffect >( NodeEffect::Type::T_DEFAULT );
-                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
-                }
-                break;
-            }
             case NodeEffectType::NET_ALPHA_MASK:
             {
                 auto alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( nodeEffect );
-                auto paramAlpha = alphaMaskEffect->GetParamAlpha();
-
                 auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
-                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_ALPHA_MASK )
-                {
-                    sceneNodeEffect = std::make_shared< AlphaMaskNodeEffect >();
-                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
-                }
-
+                auto paramAlpha = alphaMaskEffect->GetParamAlpha();
                 auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );
 
                 if ( alphaVal != nullptr )
@@ -199,13 +181,7 @@ void    NodeUpdater::UpdateNodeEffect       ()
 
                 auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
-                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_NODE_MASK )
-                {
-                    sceneNodeEffect = std::make_shared< NodeMaskNodeEffect >();
-                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
-                }
-
-                auto bgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramBgIdx->GetName() ) );
+				auto bgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramBgIdx->GetName() ) );
                 auto fgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramFgIdx->GetName() ) );
                 auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );
 
@@ -218,20 +194,6 @@ void    NodeUpdater::UpdateNodeEffect       ()
 
                 break;
             }
-            case NodeEffectType::NET_WIREFRAME:
-            {
-                auto nodeMaskEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( nodeEffect );
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-
-                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_WIREFRAME )
-                {
-                    sceneNodeEffect = std::make_shared< WireframeNodeEffect >();
-                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
-                }
-                break;
-            }
-            default:
-                assert( false );
         }
     }
 }
@@ -284,6 +246,9 @@ void            NodeUpdater::RegisterTex2Params  ( ITexturesDataConstPtr texture
     if( textures.size() != 0 || animations.size() != 0 )
     {
         m_texDataMappingVec.push_back( std::make_pair( texturesData, shaderParams ) );
+
+		std::vector< UInt64 > updateIDs( textures.size() + animations.size(), 0 );
+		m_texDataUpdateID.push_back( updateIDs );
     }
 /*
     auto textures = texturesData->GetTextures();

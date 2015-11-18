@@ -40,18 +40,10 @@ public:
 class DefaultVideoStreamDecoderPlugin : public BasePlugin< IPlugin >
 {
 private:
-	DefaultPluginParamValModelPtr   m_paramValModel;
-
     DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;
 
     VertexAttributesChannelPtr      m_vaChannel;
-
-    DefaultTexturesDataPtr          m_texturesData;
-
-    unsigned int                    m_texCoordChannelIndex;
-
-    ParamFloatPtr                   m_paramAttachMode;
 
 	IVideoDecoderPtr				m_decoder;
 
@@ -76,9 +68,7 @@ public:
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 private:
 
-    void                                        InitAttributesChannel       ( IPluginPtr prev );
-
-    TextureAttachmentMode                       GetAttachementMode          () const;
+    void                                        InitVertexAttributesChannel ();
 };
 
 } }

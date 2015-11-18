@@ -41,6 +41,7 @@ public:
 
     virtual void                            Update                      ( TimeType t ) override;
 
+    virtual void							SetPrevPlugin               ( IPluginPtr plugin ) override;
 };
 
 } // model

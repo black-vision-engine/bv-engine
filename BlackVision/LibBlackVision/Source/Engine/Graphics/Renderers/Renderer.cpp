@@ -4,7 +4,7 @@
 
 #include "BVGL.h"
 
-#include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Graphics/Resources/RenderTarget.h"
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
@@ -384,15 +384,15 @@ void    Renderer::Enable              ( const Texture2D * texture, int textureUn
 {
     PdrTexture2D * pdrTex2D = GetPdrTexture2D( texture );
 
-    if( texture->Changed() )
+	if( m_TextureUpdateIDMap.count( texture ) == 0 )
+	{
+		m_TextureUpdateIDMap[ texture ] = 0;
+	}
+
+	if( texture->GetUpdateID() > m_TextureUpdateIDMap[ texture ] )
     {
         pdrTex2D->Update( texture );
-        texture->SetChanged( false );
-        pdrTex2D->SetUpdated( true );
-    }
-    else
-    {
-        pdrTex2D->SetUpdated( false );        
+		m_TextureUpdateIDMap[ texture ] = texture->GetUpdateID();
     }
 
     pdrTex2D->Enable( this, textureUnit );
@@ -430,10 +430,10 @@ void    Renderer::ReadColorTexture    ( unsigned int i, const RenderTarget * rt,
 
     if( !m_PdrPBOMemTransferRT )
     {
-        m_PdrPBOMemTransferRT = new PdrPBOMemTransfer( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( i )->RawFrameSize() );
+		m_PdrPBOMemTransferRT = new PdrDownloadPBO( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( i )->RawFrameSize() );
     }
 
-    assert( m_PdrPBOMemTransferRT->DataSize() == rt->ColorTexture( i )->RawFrameSize() );
+    //assert( m_PdrPBOMemTransferRT->DataSize() == rt->ColorTexture( i )->RawFrameSize() );
 
     pdrRt->ReadColorTexture( i, this, m_PdrPBOMemTransferRT, outputTex );
 }

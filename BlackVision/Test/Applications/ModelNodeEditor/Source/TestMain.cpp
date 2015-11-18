@@ -201,9 +201,9 @@ TEST(ModelNodeEditor, BVSceneEditor)
 	model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
     auto pluginsManager = &model::PluginsManager::DefaultInstance();
 	auto globalTimeline = model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) );
-	auto timelineManager = new model::TimelineManager();
+	auto timelineManager = std::make_shared< model::TimelineManager >();
 
-	auto root = TwoTexturedRectangles( pluginsManager, timelineManager, globalTimeline );
+	auto root = TwoTexturedRectangles( pluginsManager, timelineManager.get(), globalTimeline );
 	auto child = root->GetChild(0);
 
 	auto rootEditor = root->GetModelNodeEditor();

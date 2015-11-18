@@ -384,6 +384,20 @@ void            BVGL::bvglTexParameterfv        ( GLenum target, GLenum pname, c
 
 // *****************************
 //
+void			BVGL::bvglGetTexImage			( GLenum target, GLint level, GLenum format, GLenum type, GLvoid * data )
+{
+	bvgl.GetTexImage( target, level, format, type, data );
+}
+
+// *****************************
+//
+void			BVGL::bvglGenerateMipmap			( GLenum target )
+{
+	bvgl.GenerateMipmap( target );
+}
+
+// *****************************
+//
 void         BVGL::bvglReadBuffer               ( GLenum mode )
 {
 	bvgl.ReadBuffer( mode );
@@ -1427,6 +1441,5 @@ void BVGL::bvglStencilOpSeparate			( GLenum face, GLenum sfail, GLenum dpfail, G
 {
 	bvgl.StencilOpSeparate( face, sfail, dpfail, dppass );
 }
-
 
 } // bv

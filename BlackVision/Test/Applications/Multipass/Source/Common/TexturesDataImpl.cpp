@@ -12,27 +12,18 @@ namespace bv {
 //
 TexturesDataImpl::~TexturesDataImpl   ()
 {
-    for( auto desc : m_textures )
-    {
-        delete desc;
-    }
-
-    for( auto anim : m_animations )
-    {
-        delete anim;
-    }
 }
 
 // **************************
 //
-const std::vector< ITextureDescriptor * > &     TexturesDataImpl::GetTextures       () const
+const std::vector< ITextureDescriptorPtr > &     TexturesDataImpl::GetTextures       () const
 {
     return m_textures;
 }
 
 // **************************
 //
-const std::vector< IAnimationDescriptor * > &   TexturesDataImpl::GetAnimations     () const
+const std::vector< IAnimationDescriptorPtr > &   TexturesDataImpl::GetAnimations     () const
 {
     return m_animations;
 }
@@ -48,9 +39,9 @@ bool                                            TexturesDataImpl::AddTextureFrom
     {
         m_textures.push_back( desc );
 
-        desc->SetFilteringMode( TextureFilteringMode::TFM_LINEAR );
-        desc->SetWrappingModeX( TextureWrappingMode::TWM_MIRROR );
-        desc->SetWrappingModeY( TextureWrappingMode::TWM_MIRROR );
+        //desc->SetFilteringMode( TextureFilteringMode::TFM_LINEAR );
+        //desc->SetWrappingModeX( TextureWrappingMode::TWM_MIRROR );
+        //desc->SetWrappingModeY( TextureWrappingMode::TWM_MIRROR );
         desc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
 
         return true;

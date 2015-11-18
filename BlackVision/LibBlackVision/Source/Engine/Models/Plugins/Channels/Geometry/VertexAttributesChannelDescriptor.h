@@ -24,6 +24,7 @@ private:
 public:
 
                                                         VertexAttributesChannelDescriptor   ();
+														VertexAttributesChannelDescriptor	( const VertexAttributesChannelDescriptor & other );
     virtual										        ~VertexAttributesChannelDescriptor	();
 
     virtual unsigned int								GetNumVertexChannels		()						const;
@@ -41,6 +42,8 @@ public:
     const IndexChannelDescriptor *                      SetIndexChannelDesc     ( IndexType type );
     void                                                SetIndexChannelDesc     ( IndexChannelDescriptor * desc );
 
+	//@param[ occuranceIdx ] for occuranceIdx < 0 function will return the last attrChannel
+	const AttributeChannelDescriptor *					GetAttrChannelDescriptor	( AttributeSemantic semantic, Int32 occuranceIdx = 0 ) const;
 };
 
 } //model

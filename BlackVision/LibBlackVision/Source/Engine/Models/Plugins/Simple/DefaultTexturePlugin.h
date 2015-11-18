@@ -1,13 +1,9 @@
 #pragma once
 
-#include "Mathematics/Transform/MatTransform.h"
-
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/ResourceStateModel.h"
 
-#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
-
-#include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
@@ -38,31 +34,13 @@ class DefaultTexturePlugin : public BasePlugin< IPlugin >
 {
 protected:
 
-	DefaultPluginParamValModelPtr   m_paramValModel;
-
 	DefaultPixelShaderChannelPtr    m_psc;
 	DefaultVertexShaderChannelPtr   m_vsc;
 
 	VertexAttributesChannelPtr      m_vaChannel;
 
-	DefaultTexturesDataPtr          m_texturesData;
-
-    SizeType						m_texCoordChannelIndex;
-
-    ParamFloatPtr                   m_paramWrapModeX;
-    ParamFloatPtr                   m_paramWrapModeY;
-    ParamFloatPtr                   m_paramFilteringMode;
-    ParamFloatPtr                   m_paramAttachMode;
-    
     SizeType	                    m_textureWidth;
     SizeType	                    m_textureHeight;
-
-	TextureWrappingMode             m_lastTextureWrapModeX;
-	TextureWrappingMode             m_lastTextureWrapModeY;
-	TextureFilteringMode            m_lastTextureFilteringMode;
-	TextureAttachmentMode           m_lastTextureAttachMode;
-	glm::vec4                       m_lastBorderColor;
-	
 
 public:
 
@@ -83,17 +61,7 @@ public:
 	virtual void                                Update                      ( TimeType t ) override;
 
 private:
-
-	void                                        InitAttributesChannel       ( IPluginPtr prev );
-
-	TextureWrappingMode                         GetWrapModeX                () const;
-	TextureWrappingMode                         GetWrapModeY                () const;
-	TextureFilteringMode                        GetFilteringMode            () const;
-	TextureAttachmentMode                       GetAttachementMode          () const;
-	glm::vec4                                   GetBorderColor              () const;
-
-	bool                                        StateChanged                ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am/*, glm::vec4 bc*/ ) const;
-	void                                        UpdateState                 ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am/*, glm::vec4 bc*/ );
+	void										InitVertexAttributesChannel ();
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 };

@@ -72,7 +72,10 @@ bv::model::SceneModelPtr CreateTestScene0()
     success = LoadTexture( root->GetPlugin( "texture" ), "proj00", "flagi/pol.jpg" );
     assert( success );    
 
-    return bv::model::SceneModel::Create( "textured_rect", model::TimelineManager::GetInstance(), root );
+	assert( false );
+	//model::TimelineManager::GetInstance()
+	auto timelineManager = std::make_shared< model::TimelineManager >();
+    return bv::model::SceneModel::Create( "textured_rect", timelineManager, root );
 }
 
 TEST( CleanAll, ProjectManager )

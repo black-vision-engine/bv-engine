@@ -32,22 +32,17 @@ public:
     static  std::string                     UID                 ();
 
     static  std::string                     TextureName         ();
-    static  std::string                     FontFileName        ();
 };
 
 // ***************************** PLUGIN ********************************** 
 class DefaultText3DPlugin : public BasePlugin< IPlugin >
 {
 private:
-    DefaultPluginParamValModelPtr   m_paramValModel;
-
     DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;
 
     VertexAttributesChannelPtr      m_vaChannel;
 	DefaultTransformChannelPtr		m_transformChannel;
-
-    DefaultTexturesDataPtr          m_texturesData;
 
     ParamWStringPtr                 m_textParam;
 

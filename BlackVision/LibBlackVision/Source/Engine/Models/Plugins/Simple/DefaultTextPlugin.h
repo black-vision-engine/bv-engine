@@ -1,14 +1,9 @@
 #pragma once
 
-#include "Mathematics/Transform/MatTransform.h"
-
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/Transform/DefaultTransformChannel.h"
 
-#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
-
-#include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
@@ -35,30 +30,22 @@ public:
     static  std::string                     UID                 ();
 
     static  std::string                     TextureName         ();
-    static  std::string                     FontFileName        ();
 };
 
 // ***************************** PLUGIN ********************************** 
 class DefaultTextPlugin : public BasePlugin< IPlugin >
 {
 private:
-    DefaultPluginParamValModelPtr   m_paramValModel;
 
     DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;
 
     VertexAttributesChannelPtr      m_vaChannel;
-	DefaultTransformChannelPtr		m_transformChannel;
 	glm::mat4						m_scaleMat;
-
-    DefaultTexturesDataPtr          m_texturesData;
-
-    unsigned int                    m_texCoordChannelIndex;
 
     ParamWStringPtr                 m_textParam;
     std::wstring                    m_currentText;
     TextAtlasConstPtr				m_atlas;
-    bool                            m_textSet;
 	Float32							m_textLength;
 
     UInt32		                    m_fontSize;
@@ -103,20 +90,18 @@ private:
 
     virtual void                                Update                      ( TimeType t ) override;
 
-    void                                        InitAttributesChannel       ( IPluginPtr prev );
 
 	void										ScaleToMaxTextLength		();
 
 public:
+
 	explicit                                    DefaultTextPlugin           ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
 												~DefaultTextPlugin          ();
 
-    virtual void								SetPrevPlugin               ( IPluginPtr plugin );
+    virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 
 	std::wstring                                GetText                     () const;
-
     static bool									SetText						( IPluginPtr, const std::wstring& );
-
 };
 
 } // model

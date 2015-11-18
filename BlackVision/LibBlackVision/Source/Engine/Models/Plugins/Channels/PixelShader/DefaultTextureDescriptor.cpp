@@ -2,22 +2,23 @@
 
 #include "Assets/AssetManager.h"
 #include "Assets/Texture/TextureLoader.h"
-#include "Engine/Graphics/Resources/Texture.h"
+#include "Engine/Graphics/Resources/Textures/Texture.h"
 
+#include "Application/ApplicationContext.h"
 
 namespace bv { namespace model {
 
 // **************************
 //
 DefaultTextureDescriptor::DefaultTextureDescriptor        ()
-    : m_bitsChanged( false )
+    : m_updateID( 0 )
 {
 }
 
 // **************************
 //
-DefaultTextureDescriptor::DefaultTextureDescriptor        ( TextureAssetConstPtr texResource, const std::string & name, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureFilteringMode fm, const glm::vec4 & bc, DataBuffer::Semantic semantic )
-    : m_bitsChanged( true )
+DefaultTextureDescriptor::DefaultTextureDescriptor        ( TextureAssetConstPtr texResource, const std::string & name, DataBuffer::Semantic semantic )
+    : m_updateID( 0 )
 {
     //auto extraKind = handle->GetExtra()->GetResourceExtraKind();
     //{ extraKind; } // FIXME: suppress unused warning
@@ -35,11 +36,6 @@ DefaultTextureDescriptor::DefaultTextureDescriptor        ( TextureAssetConstPtr
     SetHeight( height );
 	SetDepth( 1 );
     SetFormat( format );
-    SetWrappingModeX( wmx );
-    SetWrappingModeY( wmy );
-	SetWrappingModeZ( TextureWrappingMode::TWM_CLAMP_BORDER );
-    SetFilteringMode( fm );
-    SetBorderColor( bc );
     SetSemantic( semantic );
 
 	SetBits( texResource );
@@ -63,29 +59,38 @@ uintptr_t               DefaultTextureDescriptor::GetUID            () const
 //
 UInt32				    DefaultTextureDescriptor::GetNumLevels		() const
 {
-	if( m_texResource->GetMipMaps() != nullptr )
+	if( m_texResource )
 	{
-		return ( UInt32 )m_texResource->GetMipMaps()->GetLevelsNum() + 1;
+		if( m_texResource->GetMipMaps() != nullptr )
+		{
+		   //FIXME: make sure that number of levels is correct, maybe it should be increamented by 1... but it breaks text plugin though
+		   return ( UInt32 )m_texResource->GetMipMaps()->GetLevelsNum();
+		}
+		else
+		{
+			return 1;
+		}
 	}
-	else
-	{
-		return 1;
-	}
+	return 0;
 }
 
 // **************************
 //
 MemoryChunkConstPtr     DefaultTextureDescriptor::GetBits           ( UInt32 level ) const
 {
-	if( level == 0 )
+	if( m_texResource )
 	{
-		return m_texResource->GetOriginal()->GetData();
+		if( level == 0 )
+		{
+			return m_texResource->GetOriginal()->GetData();
+		}
+		else
+		{
+			assert( level < m_texResource->GetMipMaps()->GetLevelsNum() );
+			return m_texResource->GetMipMaps()->GetLevel( level )->GetData();
+		}
 	}
-	else
-	{
-		assert( level < m_texResource->GetMipMaps()->GetLevelsNum() );
-		return m_texResource->GetMipMaps()->GetLevel( level )->GetData();
-	}
+	return nullptr;
 }
 
 // **************************
@@ -94,36 +99,31 @@ MemoryChunkVector		DefaultTextureDescriptor::GetBits			() const
 {
 	MemoryChunkVector res;
 
-	if( !m_texResource->HasMipMaps() )
+	if( m_texResource )
 	{
-		res.push_back( m_texResource->GetOriginal()->GetData() );
-		return res;
-	}
-	else
-	{
-		SizeType numLevel = m_texResource->GetMipMaps()->GetLevelsNum();
-
-		for( UInt32 i = 0; i < numLevel; ++i )
+		if( !m_texResource->HasMipMaps() )
 		{
-			res.push_back( m_texResource->GetMipMaps()->GetLevel( i )->GetData() );
+			res.push_back( m_texResource->GetOriginal()->GetData() );
 		}
+		else
+		{
+			SizeType numLevel = m_texResource->GetMipMaps()->GetLevelsNum();
 
-		return res;
+			for( UInt32 i = 0; i < numLevel; ++i )
+			{
+				res.push_back( m_texResource->GetMipMaps()->GetLevel( i )->GetData() );
+			}
+		}
 	}
+
+	return res;
 }
 
 // **************************
 //
-bool                    DefaultTextureDescriptor::BitsChanged       () const
+UInt64                  DefaultTextureDescriptor::GetUpdateID       () const
 {
-    return m_bitsChanged;
-}
-
-// **************************
-//
-void                    DefaultTextureDescriptor::ResetBitsChanged  () const
-{
-    SetBitsChanged( false );
+    return m_updateID;
 }
 
 // **************************
@@ -163,44 +163,16 @@ TextureFormat           DefaultTextureDescriptor::GetFormat         () const
 
 // **************************
 //
-TextureWrappingMode     DefaultTextureDescriptor::GetWrappingModeX  () const
-{
-    return m_params.GetWrappingModeX();
-}
-
-// **************************
-//
-TextureWrappingMode     DefaultTextureDescriptor::GetWrappingModeY  () const
-{
-    return m_params.GetWrappingModeY();
-}
-
-// **************************
-//
-TextureWrappingMode     DefaultTextureDescriptor::GetWrappingModeZ  () const
-{
-    return m_params.GetWrappingModeZ();
-}
-
-// **************************
-//
-TextureFilteringMode    DefaultTextureDescriptor::GetFilteringMode  () const
-{
-    return m_params.GetFilteringMode();
-}
-
-// **************************
-//
-glm::vec4               DefaultTextureDescriptor::BorderColor       () const
-{
-    return m_params.BorderColor();
-}
-
-// **************************
-//
 DataBuffer::Semantic    DefaultTextureDescriptor::GetSemantic     () const
 {
     return m_semantic;
+}
+
+// **************************
+//
+SamplerStateModelPtr    DefaultTextureDescriptor::GetSamplerState     () const
+{
+	return m_params.GetSamplerState();
 }
 
 // **************************
@@ -247,14 +219,7 @@ void                    DefaultTextureDescriptor::SetBits           ( TextureAss
 
     m_texResource = texResource;
 
-    SetBitsChanged( true );
-}
-
-// **************************
-//
-void                    DefaultTextureDescriptor::SetBitsChanged    ( bool bitsChanged ) const
-{
-    m_bitsChanged = bitsChanged;
+	m_updateID = ApplicationContext::Instance().GetTimestamp() + 1;
 }
 
 // **************************
@@ -294,41 +259,6 @@ void                    DefaultTextureDescriptor::SetFormat         ( TextureFor
 
 // **************************
 //
-void                    DefaultTextureDescriptor::SetWrappingModeX  ( TextureWrappingMode wm )
-{
-    m_params.SetWrappingModeX( wm );
-}
-
-// **************************
-//
-void                    DefaultTextureDescriptor::SetWrappingModeY  ( TextureWrappingMode wm )
-{
-    m_params.SetWrappingModeY( wm );
-}
-
-// **************************
-//
-void                    DefaultTextureDescriptor::SetWrappingModeZ  ( TextureWrappingMode wm )
-{
-    m_params.SetWrappingModeZ( wm );
-}
-
-// **************************
-//
-void                    DefaultTextureDescriptor::SetFilteringMode  ( TextureFilteringMode fm )
-{
-    m_params.SetFilteringMode( fm );
-}
-
-// **************************
-//
-void                    DefaultTextureDescriptor::SetBorderColor    ( const glm::vec4 & bc )
-{
-    m_params.SetBorderColor( bc );
-}
-
-// **************************
-//
 void                        DefaultTextureDescriptor::SetSemantic     ( DataBuffer::Semantic semantic )
 {
     m_semantic = semantic;
@@ -336,24 +266,25 @@ void                        DefaultTextureDescriptor::SetSemantic     ( DataBuff
 
 // **************************
 //
-void                        DefaultTextureDescriptor::SetDefaults     ( DefaultTextureDescriptor * desc )
+void                        DefaultTextureDescriptor::SetSamplerState   ( SamplerStateModelPtr samplerState )
 {
-    desc->SetBits( nullptr );
+	m_params.SetSamplerState( samplerState );
+}
+
+// **************************
+//
+void                        DefaultTextureDescriptor::SetDefaults     ( DefaultTextureDescriptorPtr desc )
+{
     desc->SetName( "" );
     desc->SetWidth( 0 );
     desc->SetHeight( 0 );
 	desc->SetDepth( 0 );
     desc->SetFormat( TextureFormat::F_A8R8G8B8 );
-    desc->SetWrappingModeX( TextureWrappingMode::TWM_CLAMP_BORDER );
-    desc->SetWrappingModeY( TextureWrappingMode::TWM_CLAMP_BORDER );
-	desc->SetWrappingModeZ( TextureWrappingMode::TWM_CLAMP_BORDER );
-    desc->SetFilteringMode( TextureFilteringMode::TFM_LINEAR );
-    desc->SetBorderColor( glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 }
 
 // **************************
 //
-DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const TextureAssetDescConstPtr & textureResDesc, const std::string & name )
+DefaultTextureDescriptorPtr  DefaultTextureDescriptor::LoadTexture    ( const TextureAssetDescConstPtr & textureResDesc, const std::string & name )
 {
 	auto res = LoadTypedAsset<TextureAsset>( textureResDesc );
 
@@ -362,20 +293,34 @@ DefaultTextureDescriptor *  DefaultTextureDescriptor::LoadTexture    ( const Tex
         return nullptr;
     }
 
-    DefaultTextureDescriptor * desc = new DefaultTextureDescriptor();
+	auto desc = std::make_shared< DefaultTextureDescriptor >();
     SetDefaults( desc );
 
-	if( res->HasMipMaps() )
-	{
-		desc->SetFilteringMode( TextureFilteringMode::TFM_LINEAR_MIPMAP_LINEAR );
-	}
+	//if( res->HasMipMaps() )
+	//{
+	//	desc->SetFilteringMode( TextureFilteringMode::TFM_LINEAR_MIPMAP_LINEAR );
+	//}
 
-    //desc->SetWrappingModeY( TextureWrappingMode::TWM_REPEAT ); 
-    //desc->SetFilteringMode( TextureFilteringMode::TFM_POINT ); 
 	desc->SetBits( res );
     desc->SetName( name );
 	desc->SetFormat( res->GetOriginal()->GetFormat() );
 
+    return desc;
+}
+
+// **************************
+//
+DefaultTextureDescriptorPtr  DefaultTextureDescriptor::CreateEmptyTexture2DDesc    ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+{
+	auto desc = std::make_shared< DefaultTextureDescriptor >();
+    desc->SetBits( nullptr );
+    desc->SetName( name );
+    desc->SetWidth( 1 );
+    desc->SetHeight( 2 );
+	desc->SetDepth( 1 );
+    desc->SetFormat( TextureFormat::F_A8R8G8B8 );
+	desc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+	desc->SetSamplerState( SamplerStateModel::Create( timeEvaluator ) );
     return desc;
 }
 

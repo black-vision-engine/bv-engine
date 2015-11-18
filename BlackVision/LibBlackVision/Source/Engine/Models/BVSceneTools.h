@@ -35,9 +35,9 @@ public:
 
     static  SceneNode *         BuildEngineSceneNode                ( model::BasicNodePtr modelNode, std::hash_map< model::IModelNode *, SceneNode * > & nodesMapping );
 
-private:
-
     static void                 UpdateSceneNodeEffect               ( SceneNode * node, model::BasicNodePtr modelNode );
+
+private:
 
     static  SceneNode *         BuildSingleEngineNode               ( model::BasicNodePtr modelNode );
 

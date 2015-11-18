@@ -24,7 +24,7 @@ FontAssetConstPtr      TextHelper::LoadFont( const FontAssetDescConstPtr & fontA
 
 // *********************************
 //
-model::VertexAttributesChannel *   TextHelper::CreateEmptyVACForText()
+model::VertexAttributesChannelPtr   TextHelper::CreateEmptyVACForText()
 {
     model::VertexAttributesChannelDescriptor vacDesc;
 
@@ -32,7 +32,7 @@ model::VertexAttributesChannel *   TextHelper::CreateEmptyVACForText()
     vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
     vacDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
 
-    return new model::VertexAttributesChannel( PrimitiveType::PT_TRIANGLE_STRIP, vacDesc);
+	return std::make_shared< model::VertexAttributesChannel>( PrimitiveType::PT_TRIANGLE_STRIP, vacDesc );
 }
 
 namespace

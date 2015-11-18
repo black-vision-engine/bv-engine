@@ -53,7 +53,7 @@ private:
 
     FrameStatsCalculator            m_statsCalculator;
 
-    model::TimelineManager *        m_timelineManager;
+    model::TimelineManagerPtr       m_timelineManager;
     const model::PluginsManager *   m_pluginsManager;
     model::OffsetTimeEvaluatorPtr   m_globalTimeline;
 
@@ -117,7 +117,7 @@ private:
 public:
 
     //Convenience API - generalized model accessors
-    model::TimelineManager *        GetTimelineManager  ();
+    model::TimelineManagerPtr       GetTimelineManager  ();
     model::OffsetTimeEvaluatorPtr   GetGlobalTimeline   ();
     BVScenePtr                      GetBVScene          ();
     const model::PluginsManager *   GetPluginsManager   () const;

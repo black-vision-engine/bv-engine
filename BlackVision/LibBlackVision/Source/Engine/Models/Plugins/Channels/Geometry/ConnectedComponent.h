@@ -37,6 +37,9 @@ public:
     void                                        AddAttributeChannel         ( const AttributeChannelPtr& attr );
 
     static ConnectedComponentPtr                Create                      ();
+
+	//@param[ occuranceIdx ] for occuranceIdx < 0 function will return the last attrChannel
+	AttributeChannelPtr							GetAttrChannel				( AttributeSemantic semantic, Int32 occuranceIdx = 0 ) const;
 };
 
 } // model

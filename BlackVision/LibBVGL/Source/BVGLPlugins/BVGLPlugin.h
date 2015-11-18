@@ -219,7 +219,10 @@ public:
 	virtual void				CopyTexImage2D				( GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border );
 	virtual void				CopyTexImage1D				( GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLint border );
 	virtual void				CopyImageSubData			( GLuint srcName, GLenum srcTarget, GLint srcLevel, GLint srcX, GLint srcY, GLint srcZ, GLuint dstName, GLenum dstTarget, GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ, GLsizei srcWidth, GLsizei srcHeight, GLsizei srcDepth );
-
+	
+	virtual void				GetTexImage					( GLenum target, GLint level, GLenum format, GLenum type, GLvoid * data );
+	virtual void				GenerateMipmap				( GLenum target );
+	
 // Sampler
 #ifdef BV_GL_VERSION_4_5
 	virtual void				CreateSamplers				( GLsizei n, GLuint* samplers );

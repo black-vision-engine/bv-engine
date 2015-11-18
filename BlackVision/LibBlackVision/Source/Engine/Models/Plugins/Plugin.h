@@ -11,7 +11,6 @@
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
-#include "TextureInfo.h"
 
 #include "Serialization/ISerializable.h"
 //#include "Engine/Models/Plugins/PluginsFactory.h"
@@ -47,6 +46,8 @@ public:
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const override;
     virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const override;
     virtual IStatedValuePtr                     GetState                    ( const std::string & name ) const;
+    
+	virtual IParamValModelPtr					GetResourceStateModel		( const std::string & name ) const override;
     
     virtual std::vector< IParameterPtr >        GetParameters               () const; // FIXME: ugly hack for serialization
     virtual std::vector< AssetDescConstPtr >    GetAssets                   () const; // FIXME: ugly hack for serialization
@@ -103,7 +104,24 @@ template< class Iface >
 void BasePlugin< Iface >::Update  ( TimeType t )
 {
     { t; } // FIXME: suppress unused warning
-    assert( !"Implement in derived class" );
+    
+	m_pluginParamValModel->Update();
+	
+	if( GetPixelShaderChannel() )
+	{
+		auto txData = GetPixelShaderChannel()->GetTexturesData();
+		for( auto tx : txData->GetTextures() )
+		{
+			tx->GetSamplerState()->Update();
+		}
+
+		for( auto tx : txData->GetAnimations() )
+		{
+			tx->GetSamplerState()->Update();
+		}
+	}
+
+    //assert( !"Implement in derived class" );
 }
 
 // *******************************
@@ -187,6 +205,34 @@ IStatedValuePtr             BasePlugin< Iface >::GetState               ( const 
     }
 
     return nullptr;
+}
+
+// *******************************
+//
+template< class Iface >
+IParamValModelPtr				BasePlugin< Iface >::GetResourceStateModel		 ( const std::string & name ) const
+{
+	//FIXME: maybe this should be implemented directly in plugin
+	if( GetPixelShaderChannel() )
+	{
+		auto txData = GetPixelShaderChannel()->GetTexturesData();
+		for( auto tx : txData->GetTextures() )
+		{
+			if( tx->GetName() == name )
+			{
+				return tx->GetSamplerState();
+			}
+		}
+
+		for( auto anim : txData->GetAnimations() )
+		{
+			if( anim->GetName() == name )
+			{
+				return anim->GetSamplerState();
+			}
+		}
+	}
+	return nullptr;
 }
 
 // *******************************

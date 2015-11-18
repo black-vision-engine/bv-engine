@@ -94,7 +94,7 @@ namespace
 //
 BVAppLogic::BVAppLogic              ( Renderer * renderer )
     : m_startTime( 0 )
-    , m_timelineManager( new model::TimelineManager() )
+    , m_timelineManager( std::make_shared < model::TimelineManager >() )
     , m_bvScene( nullptr )
     , m_pluginsManager( nullptr )
     , m_renderer( nullptr )
@@ -102,9 +102,9 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
     , m_globalTimeline( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) )
-    , m_solution( GetTimelineManager() ) //pablito
+    , m_solution( GetTimelineManager().get() ) //pablito
 {
-    model::TimelineManager::SetInstance( GetTimelineManager() );
+    model::TimelineManager::SetInstance( GetTimelineManager().get() );
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
     GTimer.StartTimer();
@@ -120,8 +120,6 @@ BVAppLogic::~BVAppLogic             ()
 {
     GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
     GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
-
-    //delete m_timelineManager;
 
     delete m_renderLogic;
 
@@ -157,7 +155,7 @@ void BVAppLogic::LoadScenes( const PathVec & pathVec )
 
     for( auto p : pathVec )
     {
-        auto scene = SceneDescriptor::LoadScene( ProjectManager::GetInstance()->ToAbsPath( p ), GetTimelineManager() );
+        auto scene = SceneDescriptor::LoadScene( ProjectManager::GetInstance()->ToAbsPath( p ), GetTimelineManager().get() );
         sceneModelVec.push_back( scene );
     }
 
@@ -221,7 +219,7 @@ void BVAppLogic::LoadScene          ( void )
     }
     else
     {
-        auto scene = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_pluginsManager, GetTimelineManager(), m_globalTimeline );
+        auto scene = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_pluginsManager, GetTimelineManager().get(), m_globalTimeline );
         m_bvScene = BVScene::Create( scene, new Camera( DefaultConfig.IsCameraPerspactive() ), te, m_renderer );
         InitializeScenesTimelines();
     }
@@ -450,7 +448,7 @@ void            BVAppLogic::OnNoMoreNodes   ( IEventPtr evt )
 
 // *********************************
 //
-model::TimelineManager *    BVAppLogic::GetTimelineManager      ()
+model::TimelineManagerPtr	BVAppLogic::GetTimelineManager      ()
 {
     return m_timelineManager;
 }

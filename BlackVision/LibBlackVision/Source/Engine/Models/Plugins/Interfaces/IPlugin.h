@@ -33,9 +33,6 @@ class IPlugin;
 DEFINE_PTR_TYPE(IPlugin)
 DEFINE_CONST_PTR_TYPE(IPlugin)
 
-struct TextureInfo;
-typedef std::vector< TextureInfo * > TextureInfoVec;
-
 class IPlugin : public IUpdatable
 {
 public:
@@ -48,6 +45,8 @@ public:
     virtual IParameterPtr                       GetParameter                ( const std::string & name ) const = 0;
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const = 0;
     virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const = 0;
+
+	virtual IParamValModelPtr					GetResourceStateModel		( const std::string & name ) const = 0;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const = 0;
     virtual ITransformChannelConstPtr           GetTransformChannel         () const = 0;

@@ -7,11 +7,7 @@
 #include "Engine/Models/Interfaces/ITextureDescriptor.h"
 #include "Engine/Models/Interfaces/IAnimationDescriptor.h"
 
-#include "Engine/Graphics/Resources/Texture2D.h"
-
-#include "Engine/Graphics/Resources/Texture2DImpl.h"
-#include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
-
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 namespace bv
 {
@@ -43,10 +39,8 @@ public:
 
     void                            ClearCache          ();
 
-    static Texture2DImplPtr         CreateEmptyTexture  ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic );
-    static Texture2DImplPtr         CreateTexture       ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, MemoryChunkConstPtr data );
-
-    static Texture2DSequenceImplPtr CreateEmptySequence ( TextureFormat format, UInt32 width, UInt32 height  );
+    static Texture2DPtr				CreateEmptyTexture  ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, UInt32 levels );
+    static Texture2DPtr				CreateTexture       ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, MemoryChunkConstPtr data );
 
 };
 

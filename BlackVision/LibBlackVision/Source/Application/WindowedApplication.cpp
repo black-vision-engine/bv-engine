@@ -1,7 +1,7 @@
 #include "WindowedApplication.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
-
+#include "Application/ApplicationContext.h"
 
 namespace bv {
 
@@ -18,6 +18,8 @@ WindowedApplication::WindowedApplication			( const char * title, int x, int y, i
     , m_ClearColor( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ) )
     , m_Renderer( nullptr )
 {
+    ApplicationContext::Instance().SetResolution( w, h );
+
 	 if(windowMode==WindowMode::WINDOWED)
         m_AllowResize = true;
     else

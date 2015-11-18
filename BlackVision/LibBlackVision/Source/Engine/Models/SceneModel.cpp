@@ -6,18 +6,9 @@ namespace bv { namespace model {
 
 // *******************************
 //
-SceneModelPtr    SceneModel::Create( std::string name, model::TimelineManager * pTimelineManager, model::BasicNodePtr pModelSceneRoot )
+SceneModelPtr    SceneModel::Create( std::string name, model::TimelineManagerPtr pTimelineManager, model::BasicNodePtr pModelSceneRoot )
 {
     return SceneModelPtr( new SceneModel( name, pTimelineManager, pModelSceneRoot ) );
-}
-
-// *******************************
-//
-SceneModel::SceneModel( std::string name, model::TimelineManager * pTimelineManager, model::BasicNodePtr pModelSceneRoot )
-    : m_name( name )
-    , m_pTimelineManager( pTimelineManager )
-    , m_pModelSceneRoot( pModelSceneRoot )
-{
 }
 
 // *******************************

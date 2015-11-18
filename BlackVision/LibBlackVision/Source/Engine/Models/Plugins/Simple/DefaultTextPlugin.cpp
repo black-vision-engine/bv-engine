@@ -1,14 +1,13 @@
 #include "DefaultTextPlugin.h"
 
-#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
-#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
-#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
+#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
+#include "Engine/Types/Values/ValuesFactory.h"
 
-#include "Mathematics/Transform/MatTransform.h"
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
+#include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
+
+#include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 
 #include "Assets/Font/FontAssetDescriptor.h"
 #include "Assets/Font/FontLoader.h"
@@ -42,7 +41,7 @@ IPluginPtr              DefaultTextPluginDesc::CreatePlugin             ( const 
 DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     //Create all models
-    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >();
+    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
     DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
     DefaultParamValModelPtr plModel      = std::make_shared< DefaultParamValModel >();
@@ -50,7 +49,6 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 
     //Create all parameters and evaluators
     SimpleWStringEvaluatorPtr   textEvaluator           = ParamValEvaluatorFactory::CreateSimpleWStringEvaluator( "text", timeEvaluator );
-    SimpleVec4EvaluatorPtr      borderColorEvaluator    = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
     SimpleFloatEvaluatorPtr     alphaEvaluator          = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator           = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
     SimpleFloatEvaluatorPtr     fontSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
@@ -83,12 +81,13 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
+
     vsModel->RegisterAll( transformEffectVal1Evaluator );
     vsModel->RegisterAll( transformEffectVal2Evaluator );
     vsModel->RegisterAll( animScaleOffsetEvaluator );
     vsModel->RegisterAll( animScaleEvaluator );
-    psModel->RegisterAll( borderColorEvaluator );
-	psModel->RegisterAll( outlineColorEvaluator );
+
+    psModel->RegisterAll( outlineColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
     vsModel->RegisterAll( animAlphaOffsetEvaluator );
     vsModel->RegisterAll( animAlphaEvaluator );
@@ -121,7 +120,6 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 	outlineSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     spacingEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     alignmentEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-    borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
 	outlineColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
 
     rccBeginColorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 1.f, 1.f, 1.f ), TimeType( 0.f ) );
@@ -187,13 +185,11 @@ std::string             DefaultTextPluginDesc::UID                      ()
     return "DEFAULT_TEXT";
 }
 
-// *************************************
 //
 std::wstring            DefaultTextPlugin::GetText                      () const
 {
     return m_textParam->Evaluate();
 }
-
 
 // *******************************
 //
@@ -202,82 +198,43 @@ std::string             DefaultTextPluginDesc::TextureName              ()
     return "AtlasTex0";
 }
 
-// *******************************
-//
-std::string             DefaultTextPluginDesc::FontFileName             ()
-{
-    return "../dep/Media/fonts/ARIALUNI.TTF";
-}
-
 // *************************************
 // 
 void DefaultTextPlugin::SetPrevPlugin( IPluginPtr prev )
 {
-    __super::SetPrevPlugin( prev );
+    BasePlugin::SetPrevPlugin( prev );
 
-    if( prev == nullptr )
-        return;
+	m_scaleValue =  ValuesFactory::CreateValueMat4( "" );
+	m_scaleValue->SetValue( glm::mat4( 1.0 ) );
 
-    auto colorParam = prev->GetParameter( "color" );
-
-    if ( colorParam == nullptr )
-    {
-        auto bcParam = this->GetParameter( "borderColor" );
-        SimpleVec4EvaluatorPtr      colorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", bcParam->GetTimeEvaluator() );
-        std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( colorEvaluator );
-        colorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 1.f, 1.f, 1.f ), TimeType( 0.f ) );
-    }
-    else
-    {
-        auto evaluators = prev->GetPluginParamValModel()->GetPixelShaderChannelModel()->GetEvaluators();
-        for( unsigned int i = 0; i < evaluators.size(); ++i )
-        {
-            auto colorParam = evaluators[ i ]->GetParameter( "color" );
-            if( colorParam != nullptr )
-            {
-                //FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak)
-                std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( evaluators[ i ] );
-                break;
-            }
-        }
-        
-    }
+	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+	auto ctx = m_psc->GetRendererContext();
+	ctx->cullCtx->enabled = false;
+	ctx->alphaCtx->blendEnabled = true;
+	ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
+	ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
 }
 
 // *************************************
 // 
 DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
+    : BasePlugin< IPlugin >( name, uid, prev, model )
     , m_psc( nullptr )
     , m_vsc( nullptr )
     , m_vaChannel( nullptr )
-    , m_paramValModel( model )
-    , m_textSet( true )
     , m_atlas( nullptr )
 	, m_textLength( 0.f )
     , m_arranger( nullptr )
 {
-    SetPrevPlugin( prev );
-
     //m_arranger = &CircleArranger;
-
     m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
     m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
+	m_vaChannel = TextHelper::CreateEmptyVACForText();
 
-	m_scaleValue =  ValuesFactory::CreateValueMat4( "" );
-	m_scaleValue->SetValue( glm::mat4( 1.0 ) );
-    ValueMat4PtrVec values;
-	values.push_back( m_scaleValue );
-	//m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( m_prevPlugin, values, false ) ); //<3
+    SetPrevPlugin( prev );
 
-    auto ctx = m_psc->GetRendererContext();
-    ctx->cullCtx->enabled = false;
-
-    ctx->alphaCtx->blendEnabled = true;
-    ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
-    ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
-
-    m_texturesData = m_psc->GetTexturesDataImpl();
+	//FIXME: 'reserve' required texture
+	m_psc->GetTexturesDataImpl()->SetTexture( 0, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultTextPluginDesc::TextureName(), m_pluginParamValModel->GetTimeEvaluator() ) );
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &DefaultTextPlugin::OnSetText ), KeyPressedEvent::Type() );
 
@@ -308,30 +265,19 @@ void							DefaultTextPlugin::LoadTexture(	DefaultTexturesDataPtr txData,
 {
 	
       //FIXME: use some better API to handle resources in general and textures in this specific case
-	auto txDesc = new DefaultTextureDescriptor(		res
-												,   name
-												,   hWrappingMode
-												,   vWrappingMode
-												,   txFilteringMode
-												,   bColor
-												,   semantic );
-
+	auto txDesc = std::make_shared< DefaultTextureDescriptor >(	res, name, semantic );
 
 	if( txDesc != nullptr )
 	{
-		if( txData->GetTextures().size() == 0 )
-		{
-			txData->AddTexture( txDesc );
-		}
-		else
-		{
-			txData->SetTexture( 0, txDesc );
-		}
+		auto timeEval = m_pluginParamValModel->GetTimeEvaluator();
+		txDesc->SetSamplerState( SamplerStateModel::Create( timeEval, hWrappingMode, vWrappingMode, vWrappingMode, txFilteringMode, bColor ) );
+		txDesc->SetBits( res );
+		txDesc->SetName( name );
+
+		txData->SetTexture( 0, txDesc );
+
+		HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 	}
-
-	txDesc->SetBits( res );
-	txDesc->SetName( name );
-
 }
 
 // *************************************
@@ -379,7 +325,7 @@ bool                            DefaultTextPlugin::LoadResource  ( AssetDescCons
 		m_blurSize = txAssetDescr->GetBlurSize();
 		m_outlineSize = txAssetDescr->GetOutlineSize();
 		LoadAtlas( txAssetDescr );
-		InitAttributesChannel( m_prevPlugin );
+		SetText( m_textParam->Evaluate() );
 
 		return true;
     }    
@@ -425,7 +371,7 @@ mathematics::RectConstPtr			DefaultTextPlugin::GetAABB						( const glm::mat4 & 
 void                                DefaultTextPlugin::Update                      ( TimeType t )
 {
     m_timeParam->SetVal( t, TimeType( 0.0 ) );
-    m_paramValModel->Update();
+	BasePlugin::Update( t );
 
     if( m_currentText != m_textParam->Evaluate() )
     {
@@ -438,13 +384,12 @@ void                                DefaultTextPlugin::Update                   
 
 	m_scaleValue->SetValue( m_scaleMat );
 
-    if( m_vaChannel) // FUNKED for serialization
-        m_vaChannel->SetNeedsTopologyUpdate( m_textSet );
-
-    m_textSet = false;
+	//assumption that text plugin provides vertices, so no need for backward topology propagation
+	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
+	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
     m_vsc->PostUpdate();
-    m_psc->PostUpdate();    
+    m_psc->PostUpdate();
 }
 
 namespace {
@@ -459,17 +404,6 @@ inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
 }
 
 } //anonymous
-
-// *************************************
-//
-void DefaultTextPlugin::InitAttributesChannel( IPluginPtr prev )
-{
-    m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
-
-    auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
-
-    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_textParam->Evaluate(), m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, m_arranger, false );
-}
 
 // *************************************
 //
@@ -514,12 +448,11 @@ void DefaultTextPlugin::ScaleToMaxTextLength		()
 //
 void DefaultTextPlugin::SetText                     ( const std::wstring & newText, TimeType t )
 {
-    m_textSet = true;
     m_textParam->SetVal( newText, t );
 
     m_currentText = m_textParam->Evaluate();
 
-    m_vaChannel->ClearConnectedComponent();
+    m_vaChannel->ClearAll();
 
     auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
@@ -527,7 +460,7 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 
 	ScaleToMaxTextLength();
 
-    m_vaChannel->SetNeedsTopologyUpdate( true );
+	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
 }
 
 // *************************************

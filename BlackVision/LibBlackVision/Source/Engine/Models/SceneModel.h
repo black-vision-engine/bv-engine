@@ -21,9 +21,8 @@ struct SceneModel : public ISerializable
     BasicNodePtr                                    m_pModelSceneRoot;
 
     SceneModel( std::string name, model::TimelineManagerPtr pTimelineManager, model::BasicNodePtr pModelSceneRoot ); // FIXME remove me!!!
-    SceneModel( std::string name, model::TimelineManager * pTimelineManager, model::BasicNodePtr pModelSceneRoot );
 
-    static SceneModelPtr    Create              ( std::string name, model::TimelineManager * pTimelineManager, model::BasicNodePtr pModelSceneRoot );
+    static SceneModelPtr    Create              ( std::string name, model::TimelineManagerPtr pTimelineManager, model::BasicNodePtr pModelSceneRoot );
     static ISerializablePtr Create              ( const IDeserializer& deser );
     virtual void            Serialize           ( ISerializer& doc) const override;
 };
