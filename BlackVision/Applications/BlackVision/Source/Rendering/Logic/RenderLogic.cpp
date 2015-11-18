@@ -238,3 +238,33 @@ void    RenderLogic::PrintGLStats    (  bool detailed  )
 }
 
 } //bv
+
+/*
+
+def RenderFrame():
+    # simple rendering of a single frame
+
+def GPURenderPreVideo():
+    ApplyAllPixelEffects
+    DoInterlace
+    
+
+def mainLoop():
+    RenderFrame()
+
+    if not DisplayAsVideoOutput:
+        BlitToWindow()
+    else:
+        GPURenderPreVideo()
+        BlitToWindow()
+
+        if PushToVideoCard:
+            Readback()
+            Push()
+
+
+    if not PushToVideoCard:
+        else:
+            BlitToWindow()
+
+*/
