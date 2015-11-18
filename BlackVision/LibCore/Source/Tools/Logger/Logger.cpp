@@ -26,12 +26,13 @@
 #include <boost\log\sinks\text_ostream_backend.hpp>
 #include <boost\log\sinks\text_file_backend.hpp>
 #include <boost/core/null_deleter.hpp>
+#include <boost/log/sinks/sync_frontend.hpp>
 
 #include "DataTypes/QueueConcurrent.h"
 
 typedef boost::log::sinks::asynchronous_sink< boost::log::sinks::text_file_backend > ASyncFileSink;
 typedef boost::log::sinks::asynchronous_sink< boost::log::sinks::text_ostream_backend > ASyncStreamSink;
-typedef boost::log::sinks::asynchronous_sink< bv::QueueSink > ASyncQueueSink;
+typedef boost::log::sinks::synchronous_sink< bv::QueueSink > SyncQueueSink;
 typedef bv::LoggerType::char_type char_type;
 typedef std::unordered_map< bv::ModuleEnum, std::string > ModuleMapping;
 
@@ -255,7 +256,7 @@ void Logger::AddConsole			( SeverityLevel minLevel, int modules )
 QueueConcurrent<LogMsg>& Logger::AddLogQueue         ( SeverityLevel minLevel, int modules )
 {
     boost::shared_ptr< QueueSink > backend = boost::make_shared< QueueSink >();
-    boost::shared_ptr< ASyncQueueSink > newSink( new ASyncQueueSink( backend ) );
+    boost::shared_ptr< SyncQueueSink > newSink( new SyncQueueSink( backend ) );
 
     //newSink->set_formatter( m_formatter );
 	SetFilter( newSink, minLevel, modules );

@@ -78,6 +78,8 @@ private:
 public:
 	void						AddLogFile			( const std::string& fileName, SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
 	void						AddConsole			( SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
+
+    /// You must ensure someone gets messages from queue.
     QueueConcurrent<LogMsg>&    AddLogQueue         ( SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
 
 

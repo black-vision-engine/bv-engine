@@ -254,12 +254,12 @@ void PluginEventsHandlers::TimerHandler        ( bv::IEventPtr eventPtr )
 
     if( node == nullptr && root->GetName() == nodeName )
     {
-        //Log::A("OK", "root node is node you're looking for ["+ nodeName+"] Applying jedi fix now.");
+        LOG_MESSAGE( SeverityLevel::info ) << "root node is node you're looking for [" + nodeName + "] Applying jedi fix now.";
         node = root;
     }
     if( node == nullptr )
     {
-        //Log::A("error", "Error OnTimer() node ["+ nodeName+"] not found");
+        LOG_MESSAGE( SeverityLevel::error ) << "Error OnSetParam() node [" + nodeName + "] not found";
         return;
     }
        

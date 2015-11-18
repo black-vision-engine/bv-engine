@@ -287,7 +287,6 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 //
 void SceneEventsHandlers::TimelineHandler     ( bv::IEventPtr evt )
 {
-    //printf("timeline evt\n");
     if( evt->GetEventType() == bv::TimeLineEvent::Type() )
     {
         bv::TimeLineEventPtr timelineEvent = std::static_pointer_cast<bv::TimeLineEvent>( evt );
@@ -352,19 +351,19 @@ void SceneEventsHandlers::WidgetHandler       ( bv::IEventPtr evt )
     BasicNodePtr node = std::static_pointer_cast< bv::model::BasicNode >( root->GetNode( nodeName ) );
     if( node == nullptr && root->GetName() == nodeName )
     {
-        //Log::A("OK", "root node is node you're looking for ["+ nodeName+"] Applying jedi fix now.");
+        LOG_MESSAGE( SeverityLevel::info ) << "root node is node you're looking for [" + nodeName + "] Applying jedi fix now.";
         node = root;
     }
     if( node == nullptr )
     {
-        //Log::A("error", "Error OnSetParam() node ["+ nodeName+"] not found");
+        LOG_MESSAGE( SeverityLevel::error ) << "Error OnSetParam() node [" + nodeName + "] not found";
         return;
     }
 		
     INodeLogic* logic = node->GetLogic().get();
 	if( logic == nullptr )
 	{
-        //Log::A("error", "Error OnWidgetCmd () node ["+ nodeName+"] , logic [] not found");
+        LOG_MESSAGE( SeverityLevel::error ) << "Error OnWidgetCmd () node [" + nodeName + "] , logic [] not found";
         return;
 	}
 		
@@ -422,7 +421,7 @@ void SceneEventsHandlers::WidgetHandler       ( bv::IEventPtr evt )
 		auto paramPtr = counter->GetValueParam();
 		if( paramPtr == nullptr )
 		{
-			//Log::A("error", "Error OnSetParam() plugin [counter] param ["+ param +"] not found");
+			LOG_MESSAGE( SeverityLevel::error ) << "Error OnSetParam() plugin [counter] param [" + param + "] not found";
             return;
 		}
 

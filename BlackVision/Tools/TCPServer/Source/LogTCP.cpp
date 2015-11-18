@@ -30,7 +30,9 @@ void LogTCP::Initialize      ( const std::string& address, unsigned short port )
     m_address = address;
     m_port = port;
 
-    m_mainThread = std::thread( &LogTCP::MainThread, this );
+    std::thread connectThread( &LogTCP::ConnectThread, this );
+    connectThread.detach();
+    m_mainThread = std::thread( &LogTCP::MainThread, this );        // This thread must work even if app is unable to connect. We have to eat masseges from queue.
 }
 
 SOCKET LogTCP::ConnectToPort()
@@ -58,7 +60,7 @@ SOCKET LogTCP::ConnectToPort()
         // WSAEWOULDBLOCK whichis actually not one 
         if( SOCKET_ERRNO != WSAEWOULDBLOCK ) 
         { 
-            printf( "connect() error (%d)\n", SOCKET_ERRNO ); 
+            printf( "TCPLogger - connection error (%d)\n", SOCKET_ERRNO ); 
             return (SOCKET)-1 ;
         } 
     } 
@@ -66,11 +68,9 @@ SOCKET LogTCP::ConnectToPort()
     return hSocket; 
 } 
 
-void LogTCP::MainThread()
+void LogTCP::ConnectThread   ()
 {
-
-    WSADATA stack_info; 
-    SOCKET ahSocket[1]; 
+    WSADATA stack_info;  
     WSAEVENT ahEvents[1]; 
     DWORD dwEvent; 
     WSANETWORKEVENTS NetworkEvents; 
@@ -100,11 +100,10 @@ void LogTCP::MainThread()
     { 
         printf( "WSAEventSelect() error %d\n", SOCKET_ERRNO ); 
         return;
-    } 
+    }
 
     while( !m_end ) 
     { 
-        //Sleep(100);  
         // look for events 
         dwEvent = WSAWaitForMultipleEvents( 1, ahEvents, FALSE, 500, FALSE); 
         printf ("sock : %d\n",dwEvent);
@@ -158,58 +157,62 @@ void LogTCP::MainThread()
                 } 
 
                 if (FD_WRITE & NetworkEvents.lNetworkEvents) 
-                { 
-
-                    int cbBuffer; 
-
+                {
                     printf( "FD_WRITE ok (dwEvent=%d)\n", dwEvent ); 
 
-                    // create string and return the size 
-                    while( !m_end )
-                    {
-                        Sleep(50);
-
-                        LogMsg logMsg;
-                        if( !m_queue.TryPop( logMsg ) )
-                        {
-                            int msg_size=20+(int)logMsg.message.size()+(int)logMsg.module.size()+(int)logMsg.severity.size();
-                            wchar_t *tmpBuffer = new wchar_t[msg_size];
-                            cbBuffer = swprintf(tmpBuffer,msg_size,L"\r\n+log|%ls|%ls|info|%ls\r\n\0",logMsg.module.c_str(),logMsg.severity.c_str(),logMsg.message.c_str() ); 
-
-
-                            // send the string with 0 at the end 
-                            //rc = send( ahSocket[dwEvent], tmpBuffer, cbBuffer + 1, 0 ); 
-
-                            size_t buffer_size;
-                            wcstombs_s(&buffer_size, NULL, 0, tmpBuffer, _TRUNCATE);
-
-                            // do the actual conversion
-                            char *buffer = (char*) malloc(buffer_size);
-                            wcstombs_s(&buffer_size, buffer, (int)buffer_size, tmpBuffer, _TRUNCATE);
-
-                            // send the data
-                            int buffer_sent = 0;
-                            while (buffer_sent < (int) buffer_size)
-                            {
-                                int sent_size = send(ahSocket[dwEvent], buffer+buffer_sent, (int)buffer_size-buffer_sent, 0);
-                                buffer_sent += sent_size;
-                            }
-
-                            if (SOCKET_ERROR ==  rc) 
-                            { 
-                                printf("WSAEnumNetworkEvent: %d lNetworkEvent %X\n",  WSAGetLastError(), NetworkEvents.lNetworkEvents); 
-                            }
-                        } 
-                    }
-
+                    m_validConnection = true;
                     // not sure if I have to use it 
                     //WSAResetEvent(ahEvents[0]); 
-
                 } 
 
             } 
-        } 
+        }
+        Sleep(300);
     } 
+}
+
+void LogTCP::MainThread()
+{
+    int cbBuffer; 
+
+    while( !m_end )
+    {
+        Sleep(50);
+
+        LogMsg logMsg;
+        if( !m_queue.TryPop( logMsg ) )
+        {
+            if( !m_validConnection ) continue;      // We've got here only to empty queue.
+
+            int msg_size=20+(int)logMsg.message.size()+(int)logMsg.module.size()+(int)logMsg.severity.size();
+            wchar_t *tmpBuffer = new wchar_t[msg_size];
+            cbBuffer = swprintf(tmpBuffer,msg_size,L"\r\n+log|%ls|%ls|info|%ls\r\n\0",logMsg.module.c_str(),logMsg.severity.c_str(),logMsg.message.c_str() ); 
+
+
+            // send the string with 0 at the end 
+            //rc = send( ahSocket[dwEvent], tmpBuffer, cbBuffer + 1, 0 ); 
+
+            size_t buffer_size;
+            wcstombs_s(&buffer_size, NULL, 0, tmpBuffer, _TRUNCATE);
+
+            // do the actual conversion
+            char *buffer = (char*) malloc(buffer_size);
+            wcstombs_s(&buffer_size, buffer, (int)buffer_size, tmpBuffer, _TRUNCATE);
+
+            // send the data
+            int buffer_sent = 0;
+            while (buffer_sent < (int) buffer_size)
+            {
+                int sent_size = send(ahSocket[0], buffer+buffer_sent, (int)buffer_size-buffer_sent, 0);
+                buffer_sent += sent_size;
+            }
+
+            //if (SOCKET_ERROR ==  rc) 
+            //{ 
+            //    printf("WSAEnumNetworkEvent: %d lNetworkEvent %X\n",  WSAGetLastError(), NetworkEvents.lNetworkEvents); 
+            //}
+        } 
+    }
 }
 
 

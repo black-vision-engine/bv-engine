@@ -118,11 +118,12 @@ namespace bv{
 
             if((*csock = accept( hsock, (SOCKADDR*)&sadr, &addr_size))!= INVALID_SOCKET ){
                 printf("Received connection from %s\n",inet_ntoa(sadr.sin_addr));
-                LOG_MESSAGE( SeverityLevel::info ) << "Connection","Client connected: " + std::string( inet_ntoa( sadr.sin_addr ) );
+                LOG_MESSAGE( SeverityLevel::info ) << "Client connected: " + std::string( inet_ntoa( sadr.sin_addr ) );
                 CreateThread(0,0,SocketHandler, (void*)csock , 0,0);
             }
-            else{
-                fprintf(stderr, "Error accepting %d\n",WSAGetLastError());
+            else
+            {
+                LOG_MESSAGE( SeverityLevel::error ) <<"Error accepting client " << WSAGetLastError();
             }
         }
     }
