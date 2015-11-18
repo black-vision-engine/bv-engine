@@ -18,7 +18,8 @@
 #include "Rendering/Logic/NodeEffectRendering/NodeMaskRenderLogic.h"
 #include "Rendering/Logic/NodeEffectRendering/WireframeRenderLogic.h"
 
-#define USE_HACK_FRIEND_NODE_MASK_IMPL
+#include "Rendering/Logic/VideoOutputRendering/DefaultVideoOutputRenderLogic.h"
+
 
 namespace bv {
 
@@ -31,6 +32,7 @@ RenderLogic::RenderLogic     ()
     m_yp = CLT_TOTAL;
 
     m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffersPerRT() );
+    m_videoOutputRenderLogic = new DefaultVideoOutputRenderLogic( DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
 
     m_customNodeRenderLogic.push_back( new DefaultEffectRenderLogic( this, m_offscreenRenderLogic ) );
     m_customNodeRenderLogic.push_back( new AlphaMaskRenderLogic( this, m_offscreenRenderLogic ) );
@@ -46,6 +48,7 @@ RenderLogic::~RenderLogic    ()
         delete rl;
 
     delete m_offscreenRenderLogic;
+    delete m_videoOutputRenderLogic;
 }
 
 // *********************************
@@ -169,6 +172,7 @@ void    RenderLogic::DrawChildren   ( Renderer * renderer, SceneNode * node, int
 //
 void    RenderLogic::FrameRendered   ( Renderer * renderer )
 {
+    m_videoOutputRenderLogic->FrameRendered( renderer, m_offscreenRenderLogic );
     static int w = 0;
     static int h = 0;
 

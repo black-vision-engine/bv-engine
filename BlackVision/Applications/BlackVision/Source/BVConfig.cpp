@@ -2,6 +2,7 @@
 
 //#define USE_READBACK_API
 //#define FULLSCREEN_MODE
+//#define DISPLAY_VIDEO_CARD_OUTPUT
 #define PERSPECTIVE_CAMERA
 
 namespace bv
@@ -31,6 +32,12 @@ BVConfig::BVConfig                      ()
     m_readbackOn        = true;
 #else
     m_readbackOn        = false;
+#endif
+
+#ifdef DISPLAY_VIDEO_CARD_OUTPUT
+    m_displayVideoCardOutput = true;
+#else
+    m_displayVideoCardOutput = false;
 #endif
 
 #ifdef PERSPECTIVE_CAMERA

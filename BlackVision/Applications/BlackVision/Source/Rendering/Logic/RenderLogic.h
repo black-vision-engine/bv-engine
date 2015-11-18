@@ -10,7 +10,7 @@ class OffscreenRenderLogic;
 class SceneNode;
 class Camera;
 class NodeEffectRenderLogic;
-
+class DefaultVideoOutputRenderLogic;
 
 class RenderLogic
 {
@@ -28,6 +28,7 @@ private:
 private:
 
     OffscreenRenderLogic *                  m_offscreenRenderLogic;
+    DefaultVideoOutputRenderLogic *         m_videoOutputRenderLogic;
 
     std::vector< NodeEffectRenderLogic * >  m_customNodeRenderLogic;
 
@@ -44,6 +45,7 @@ public:
     void    PreFrameSetup   ( Renderer * renderer );
     void    PostFrameSetup  ( Renderer * renderer );
 
+// FIXME: this interface should be private or moved to another service class used by RenderLogic and Effects
 public:
 
     void    RenderNode      ( Renderer * renderer, SceneNode * node );
