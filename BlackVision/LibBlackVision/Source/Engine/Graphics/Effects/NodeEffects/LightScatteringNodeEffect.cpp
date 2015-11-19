@@ -13,7 +13,7 @@ LightScatteringNodeEffect::LightScatteringNodeEffect     ()
     auto & values = AccessValues();
 
     values.push_back( ValuesFactory::CreateValueFloat( "exposure" ) );
-    values.push_back( ValuesFactory::CreateValueFloat( "exposure" ) );
+    values.push_back( ValuesFactory::CreateValueFloat( "weight" ) );
     values.push_back( ValuesFactory::CreateValueFloat( "decay" ) );
     values.push_back( ValuesFactory::CreateValueFloat( "density" ) );
     values.push_back( ValuesFactory::CreateValueVec2( "lightPositionOnScreen" ) );

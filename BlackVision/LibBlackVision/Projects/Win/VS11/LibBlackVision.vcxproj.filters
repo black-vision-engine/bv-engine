@@ -1068,6 +1068,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\LightScatteringNodeEffect.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectLightScattering.cpp">
+      <Filter>Engine\Models\NodeEffects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2278,6 +2281,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\LightScatteringNodeEffect.h">
       <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectLightScattering.h">
+      <Filter>Engine\Models\NodeEffects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
