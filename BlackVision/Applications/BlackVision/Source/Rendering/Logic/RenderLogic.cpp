@@ -64,8 +64,6 @@ void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * node )
 		RenderNode( renderer, node );
 
     PostFrameSetup( renderer );
-
-    m_videoOutputRenderLogic->FrameRendered( renderer, m_offscreenRenderLogic );
 }
 
 // *********************************
@@ -89,7 +87,8 @@ void    RenderLogic::PostFrameSetup ( Renderer * renderer )
     m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
     m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
 
-    m_offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
+    // FIXME: at this point everything was rendered to the texture and can be preprocessed/displayed correctly
+    m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic );
 
     renderer->PostDraw();
     renderer->DisplayColorBuffer();

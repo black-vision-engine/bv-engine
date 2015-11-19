@@ -27,6 +27,9 @@ DefaultVideoOutputRenderLogic::~DefaultVideoOutputRenderLogic  ()
 //
 void    DefaultVideoOutputRenderLogic::FrameRendered            ( Renderer * renderer, OffscreenRenderLogic * offscreenRenderLogic )
 {
+    // FIXME: default behavior - show rendered preview (render to current display)
+    offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
+
     if( !m_useVideoCard )
     {
         //Not needed as it does not make sense without readback delay
@@ -56,6 +59,9 @@ void    DefaultVideoOutputRenderLogic::FrameRenderedNewImpl            ( Rendere
 {
     { renderer; }
     { offscreenRenderLogic; }
+
+    // FIXME: default behavior - show rendered preview (render to current display)
+    offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
 
     if ( !m_useVideoCard )
     {
