@@ -468,8 +468,9 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 
 // *****************************
 //
-model::SceneModelPtr    TestScenesFactory::CreateSceneFromEnv       ( const std::string& scene, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::SceneModelPtr    TestScenesFactory::CreateSceneFromEnv       ( const std::string& scene, const model::PluginsManager * pluginsManager, model::TimelineManagerPtr timelineManagerPtr, model::ITimeEvaluatorPtr timeEvaluator )
 {
+    auto timelineManager = timelineManagerPtr.get();
     model::BasicNodePtr node = nullptr;
 
     if( scene == "TWO_TEXTURED_RECTANGLES" )
@@ -549,7 +550,7 @@ model::SceneModelPtr    TestScenesFactory::CreateSceneFromEnv       ( const std:
         node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
 
-    return std::make_shared< model::SceneModel >( "sceneFromEnv: " + scene, model::TimelineManagerPtr( timelineManager ),  node );
+    return std::make_shared< model::SceneModel >( "sceneFromEnv: " + scene, timelineManagerPtr,  node );
 }
 
 // *****************************
