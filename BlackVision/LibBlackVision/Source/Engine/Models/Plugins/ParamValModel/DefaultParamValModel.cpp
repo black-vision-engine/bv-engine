@@ -23,6 +23,16 @@ DefaultParamValModel::~DefaultParamValModel                                     
 
 // *******************************
 //
+void                                        DefaultParamValModel::Serialize       ( ISerializer& ser ) const
+{
+ser.EnterArray( "params" );
+    for( auto param : m_parameters )
+        param->Serialize( ser );
+ser.ExitChild();
+}
+
+// *******************************
+//
 std::vector< IParameterPtr > &              DefaultParamValModel::GetParameters     ()
 {
     return m_parameters;

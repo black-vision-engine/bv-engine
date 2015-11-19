@@ -67,9 +67,17 @@ std::vector< AssetDescConstPtr >    BasePlugin< IPlugin >::GetAssets            
 
 // *******************************
 //
-void                                BasePlugin< IPlugin >::AddAsset                    ( AssetDescConstPtr asset )
+void                                BasePlugin< IPlugin >::AddAsset                    ( AssetDescConstPtr asset, ResourceStateModelPtr rsm )
 {
     m_assets.push_back( asset );
+    m_key2rsm[ asset->GetKey() ] = rsm;
+}
+
+// *******************************
+//
+ResourceStateModelPtr              BasePlugin< IPlugin >::GetRSM                    ( std::string key ) const
+{
+    return m_key2rsm.at( key );
 }
 
 // *******************************
@@ -98,11 +106,11 @@ ser.EnterChild( "plugin" );
                                     };
     
         for( auto model : models )
-            if( model ) for( auto param_ : model->GetParameters() )
+            if( model ) 
+                //model->Serialize( ser );
             {
-                auto param = std::static_pointer_cast< AbstractModelParameter >( param_ );
-                assert( param );
-                param->Serialize( ser );
+                for( auto param : model->GetParameters() )
+                    param->Serialize( ser );
             }
     }
     ser.ExitChild(); // params
@@ -114,7 +122,11 @@ ser.EnterChild( "plugin" );
         for( auto asset : GetAssets() )
         {
             auto uid = AssetDescsWithUIDs::GetInstance().Key2UID( asset->GetKey() );
-            SerializedAssetUID( uid ).Serialize( ser );
+            ser.EnterChild( "asset" );
+                ser.SetAttribute( "uid", uid );
+
+                GetRSM( asset->GetKey() )->Serialize( ser );
+            ser.ExitChild();
         }
         ser.ExitChild(); // assets
     }
