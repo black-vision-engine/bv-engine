@@ -319,7 +319,7 @@ bool                            DefaultTextPlugin::LoadResource  ( AssetDescCons
 
     if ( txAssetDescr != nullptr )
     {
-        AddAsset( assetDescr );
+        AddAsset( assetDescr, nullptr );
 
 		m_fontSize = txAssetDescr->GetFontSize();
 		m_blurSize = txAssetDescr->GetBlurSize();

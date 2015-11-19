@@ -29,7 +29,9 @@ protected:
     std::string                                 m_uid;
 
     IPluginParamValModelPtr                     m_pluginParamValModel;
-    std::vector< AssetDescConstPtr >            m_assets;
+    
+    std::vector< AssetDescConstPtr >            m_assets; // FIXME: ugly hack for serialization
+    std::map< std::string, ResourceStateModelPtr > m_key2rsm; // FIXME: ugly hack for serialization
 
 protected:
 
@@ -51,7 +53,8 @@ public:
     
     virtual std::vector< IParameterPtr >        GetParameters               () const; // FIXME: ugly hack for serialization
     virtual std::vector< AssetDescConstPtr >    GetAssets                   () const; // FIXME: ugly hack for serialization
-    virtual void                                AddAsset                    ( AssetDescConstPtr asset ); // FIXME: ugly hack for serialization
+    virtual void                                AddAsset                    ( AssetDescConstPtr asset, ResourceStateModelPtr rsm ); // FIXME: ugly hack for serialization
+    virtual ResourceStateModelPtr               GetRSM                      ( std::string key ) const; // FIXME: ugly hack for serialization
 
     virtual void                                Update                      ( TimeType t );
 

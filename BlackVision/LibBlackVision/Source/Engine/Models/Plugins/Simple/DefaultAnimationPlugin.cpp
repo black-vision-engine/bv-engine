@@ -157,8 +157,6 @@ bool                            DefaultAnimationPlugin::LoadResource  ( AssetDes
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( animAssetDescr != nullptr )
     {
-        AddAsset( animAssetDescr );
-
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto animDesc = DefaultAnimationDescriptor::LoadAnimation( animAssetDescr, DefaultAnimationPluginDesc::TextureName() );
 
@@ -171,6 +169,8 @@ bool                            DefaultAnimationPlugin::LoadResource  ( AssetDes
 
 			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
             
+            AddAsset( animAssetDescr, animDesc->GetSamplerState() );
+    
 			return true;
         }
     }
