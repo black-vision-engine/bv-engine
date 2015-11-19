@@ -74,6 +74,11 @@ if(ConfigManager::GetBool("USE_READBACK_API"))
 else
     m_readbackOn        = false;
 
+#ifdef DISPLAY_VIDEO_CARD_OUTPUT
+    m_displayVideoCardOutput = true;
+#else
+    m_displayVideoCardOutput = false;
+#endif
 
 if(ConfigManager::GetBool("PERSPECTIVE_CAMERA"))
     m_isCameraPerspective = true;

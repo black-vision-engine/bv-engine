@@ -39,6 +39,9 @@
     </Filter>
     <Filter Include="EndUserAPI">
       <UniqueIdentifier>{4d25f62a-5bd7-414f-b683-53e8c1ded179}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="Rendering\Logic\VideoOutputRendering">
+      <UniqueIdentifier>{b3d9d3ab-1a17-4f23-988d-1ed9c94ee73c}</UniqueIdentifier>
     </Filter>
     <Filter Include="EndUserAPI\EventHandlers">
       <UniqueIdentifier>{fb178992-4589-46d8-b948-24ce9f5b39a0}</UniqueIdentifier>
@@ -150,6 +153,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\RemoteEventsHandlers.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
+	</ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.cpp">
+      <Filter>Rendering\Logic\VideoOutputRendering</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
@@ -282,6 +288,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteController.h">
       <Filter>EndUserAPI</Filter>
+	</ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.h">
+      <Filter>Rendering\Logic\VideoOutputRendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

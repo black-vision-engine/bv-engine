@@ -12,13 +12,12 @@ class OffscreenRenderLogic;
 class SceneNode;
 class Camera;
 class NodeEffectRenderLogic;
-
+class DefaultVideoOutputRenderLogic;
 
 class RenderLogic
 {
 private:
 
-    OffscreenRenderLogic *  m_offscreenRenderLogic;
 	bv::videocards::VideoCardManager *      m_VideoCardManager;
     enum CustomLogicType
     {
@@ -28,6 +27,11 @@ private:
 
         CLT_TOTAL
     };
+
+private:
+
+    OffscreenRenderLogic *                  m_offscreenRenderLogic;
+    DefaultVideoOutputRenderLogic *         m_videoOutputRenderLogic;
 
     std::vector< NodeEffectRenderLogic * >  m_customNodeRenderLogic;
 
@@ -47,6 +51,7 @@ public:
 	void	SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager, Renderer * renderer);
 	void	InitVideoCards     ( Renderer * renderer );
 
+// FIXME: this interface should be private or moved to another service class used by RenderLogic and Effects
 public:
 
     void    RenderNode      ( Renderer * renderer, SceneNode * node );

@@ -30,6 +30,7 @@ private:
 
     bool            m_fullscreeMode;
     bool            m_readbackOn;
+    bool            m_displayVideoCardOutput;
     bool            m_isCameraPerspective;
 
     float           m_defaultFOV;
@@ -70,6 +71,7 @@ public:
 	inline RendererInput        GetRendererInput	        () const;
 	inline bool                 FullScreenMode          () const;
     inline bool                 ReadbackFlag            () const;
+    inline bool                 DisplayVideoCardOutput  () const;
     inline bool                 IsCameraPerspactive     () const;
 
     inline unsigned int         EventLoopUpdateMillis   () const;
