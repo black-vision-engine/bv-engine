@@ -35,18 +35,10 @@ public:
 class DefaultVideoStreamDecoderPlugin : public BasePlugin< IPlugin >
 {
 private:
-	DefaultPluginParamValModelPtr   m_paramValModel;
-
     DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;
 
     VertexAttributesChannelPtr      m_vaChannel;
-
-    DefaultTexturesDataPtr          m_texturesData;
-
-    UInt32		                    m_texCoordChannelIndex;
-
-    ParamFloatPtr                   m_paramAttachMode;
 
 	IVideoDecoderPtr				m_decoder;
 
@@ -73,10 +65,13 @@ public:
 	/** @param[time] in seconds from the beginning of video */
 	void										Seek						( Float64 time );
 
-private:
-    void                                        InitAttributesChannel       ( IPluginPtr prev );
+    static bool									Start						( IPluginPtr plugin );
+    static bool									Pause						( IPluginPtr plugin );
+    static bool									Stop						( IPluginPtr plugin );
+    static bool									Seek						( IPluginPtr plugin, Float64 time );
 
-    TextureAttachmentMode                       GetAttachementMode          () const;
+private:
+    void                                        InitVertexAttributesChannel ();
 };
 
 } }

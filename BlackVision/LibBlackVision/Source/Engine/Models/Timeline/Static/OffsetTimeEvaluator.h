@@ -16,12 +16,16 @@ private:
 private:
 
     TimeType        m_timeOffset;
+    TimeType        m_timeScale;
     TimeType        m_globalTime;
 
 public:
 
-            OffsetTimeEvaluator                     ( const std::string & name, TimeType offsetTime );
+            OffsetTimeEvaluator                     ( const std::string & name, TimeType offsetTime, TimeType scale = 1 );
             ~OffsetTimeEvaluator                    ();
+
+    virtual void                Serialize           ( ISerializer& sob ) const;
+    static ISerializablePtr     Create              ( const IDeserializer& dob );
 
     void    SetTimeOffset                           ( TimeType t );
 

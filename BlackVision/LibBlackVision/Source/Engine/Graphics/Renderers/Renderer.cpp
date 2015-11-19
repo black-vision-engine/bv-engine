@@ -4,7 +4,7 @@
 
 #include "BVGL.h"
 
-#include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Graphics/Resources/RenderTarget.h"
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
@@ -192,8 +192,11 @@ bool     Renderer::DrawTriangleStrips      ( TriangleStrip * strip )
     Enable  ( vao );
 
     unsigned int firstVertex = 0;
-    for( unsigned int i = 0; i < vao->GetNumConnectedComponents(); ++i )
+    auto ccNum = vao->GetNumConnectedComponents();
+    for( unsigned int i = 0; i < ccNum; ++i )
     {
+        PassCCNumUniform( i, ccNum );
+
         unsigned int numVertices = vao->GetNumVertices( i );
         BVGL::bvglDrawArrays( mode, firstVertex, numVertices );
         firstVertex += numVertices;
@@ -381,15 +384,15 @@ void    Renderer::Enable              ( const Texture2D * texture, int textureUn
 {
     PdrTexture2D * pdrTex2D = GetPdrTexture2D( texture );
 
-    if( texture->Changed() )
+	if( m_TextureUpdateIDMap.count( texture ) == 0 )
+	{
+		m_TextureUpdateIDMap[ texture ] = 0;
+	}
+
+	if( texture->GetUpdateID() > m_TextureUpdateIDMap[ texture ] )
     {
         pdrTex2D->Update( texture );
-        texture->SetChanged( false );
-        pdrTex2D->SetUpdated( true );
-    }
-    else
-    {
-        pdrTex2D->SetUpdated( false );        
+		m_TextureUpdateIDMap[ texture ] = texture->GetUpdateID();
     }
 
     pdrTex2D->Enable( this, textureUnit );
@@ -427,10 +430,10 @@ void    Renderer::ReadColorTexture    ( unsigned int i, const RenderTarget * rt,
 
     if( !m_PdrPBOMemTransferRT )
     {
-        m_PdrPBOMemTransferRT = new PdrPBOMemTransfer( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( i )->RawFrameSize() );
+		m_PdrPBOMemTransferRT = new PdrDownloadPBO( DataBuffer::Semantic::S_TEXTURE_STREAMING_READ, rt->ColorTexture( i )->RawFrameSize() );
     }
 
-    assert( m_PdrPBOMemTransferRT->DataSize() == rt->ColorTexture( i )->RawFrameSize() );
+    //assert( m_PdrPBOMemTransferRT->DataSize() == rt->ColorTexture( i )->RawFrameSize() );
 
     pdrRt->ReadColorTexture( i, this, m_PdrPBOMemTransferRT, outputTex );
 }
@@ -814,6 +817,29 @@ void    Renderer::DeleteSinglePDR   ( MapType & resMap, typename MapType::key_ty
 
         resMap.erase( it );
     }
+}
+
+// *********************************
+//
+void    Renderer::PassCCNumUniform  ( int i, SizeType num )
+{
+    GLint id;
+    BVGL::bvglGetIntegerv( GL_CURRENT_PROGRAM, &id );
+
+    auto loc = BVGL::bvglGetUniformLocation( id, "cc_num" );
+
+    if( loc >= 0 )
+    {
+        BVGL::bvglUniform1i( loc, i );
+    }
+
+    loc = BVGL::bvglGetUniformLocation( id, "cc_num_total" );
+    
+    if( loc >= 0 )
+    {
+        BVGL::bvglUniform1i( loc, ( bv::GLint )num );
+    }
+
 }
 
 } //bv

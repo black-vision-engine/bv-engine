@@ -38,6 +38,7 @@ public:
     static RendererContextPtr   Create              ();
     static RendererContextPtr   CreateDefault       ();
 
+    RendererContextPtr			Clone				() const;
 };
 
 } //model

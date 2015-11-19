@@ -16,6 +16,8 @@ TimeSegmentEvalImpl::TimeSegmentEvalImpl ( TimeType duration, TimelinePlayDirect
     , m_playDirection( direction )
     , m_globalTime( TimeType( 0.0 ) )
     , m_startTime( TimeType( 0.0 ) )
+    , m_wrapPreBehavior( preMethod ) // FIXME just for serialization actually
+    , m_wrapPostBehavior( postMethod ) // FIXME just for serialization actually
 {
     assert( duration > TimeType( 0.0 ) );
 

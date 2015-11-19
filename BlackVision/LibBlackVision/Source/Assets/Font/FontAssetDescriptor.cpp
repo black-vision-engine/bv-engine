@@ -6,6 +6,48 @@ namespace bv
 
 const std::string FontAssetDesc::uid = "FONT_ASSET_DESC";
 
+
+
+
+// ***********************
+//
+void                FontAssetDesc::Serialize       ( ISerializer& sob ) const
+{
+    sob.EnterChild( "asset" );
+
+    sob.SetAttribute( "uid", GetUID() );
+    sob.SetAttribute( "path", m_fontFileName );
+    sob.SetAttribute( "size", std::to_string( m_fontSize ) );
+    sob.SetAttribute( "blur", std::to_string( m_blurSize ) );
+    sob.SetAttribute( "outline", std::to_string( m_outlineSize ) );
+    sob.SetAttribute( "mipmaps", m_generateMipmaps ? "true" : "false" );
+
+    sob.ExitChild();
+}
+
+//// ***********************
+////
+//void FontAssetDesc::Deserialize     ( const IDeserializer& /*sob*/ )
+//{
+//    assert( false );
+//}
+
+// ***********************
+//
+ISerializableConstPtr FontAssetDesc::Create          ( const IDeserializer& dob )
+{
+    assert( dob.GetAttribute( "uid" ) == UID() );
+
+    auto path = dob.GetAttribute( "path" );
+    auto size = stoul( dob.GetAttribute( "size" ) );
+    auto blurSize = stoul( dob.GetAttribute( "blur" ) );
+    auto outSize = stoul( dob.GetAttribute( "outline" ) );
+    auto mipmaps = dob.GetAttribute( "mipmaps" ) == "true" ? true : false;
+
+    return FontAssetDesc::Create( path, size, blurSize, outSize, mipmaps );
+}
+
+
 // ***********************
 //
 const std::string &	FontAssetDesc::GetUID() const
@@ -92,6 +134,25 @@ bool FontAssetDesc::GetGenerateMipmaps() const
 const std::wstring & FontAssetDesc::GetAtlasCharSetFile () const
 {
 	return m_atlasCharSetFile;
+}
+
+
+// ***********************
+//
+std::string           FontAssetDesc::GetKey		() const
+{
+    return  m_fontFileName + "_" +
+            std::to_string( m_fontSize ) + "_" +
+            std::to_string( m_blurSize ) + "_" +
+            std::to_string( m_outlineSize ) + "_" +
+            std::to_string( m_generateMipmaps );
+}
+
+// ***********************
+//
+std::string             FontAssetDesc::GetProposedShortKey () const
+{
+    return GetKey();
 }
 
 } // bv

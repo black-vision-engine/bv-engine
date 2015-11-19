@@ -40,6 +40,7 @@ namespace bv {
 #define GL_MAX_TEXTURE_IMAGE_UNITS							0x8872
 
 #define GL_STENCIL_TEST										0x0B90
+#define GL_CURRENT_PROGRAM                                  0x8B8D
 
 #define GL_NO_ERROR 0
 #define GL_INVALID_ENUM										0x0500
@@ -188,6 +189,15 @@ namespace bv {
 #define GL_TEXTURE_BINDING_1D					0x8068
 #define GL_TEXTURE_BINDING_2D					0x8069
 #define GL_TEXTURE_BINDING_3D					0x806A
+#define GL_TEXTURE_BINDING_1D_ARRAY				0x8C1C
+#define GL_TEXTURE_BINDING_2D_ARRAY				0x8C1D
+#define GL_TEXTURE_BINDING_CUBE_MAP				0x8514
+#define GL_TEXTURE_BINDING_CUBE_MAP_ARRAY		0x900A
+
+#define GL_SAMPLER_BINDING						0x8919
+
+#define	GL_TEXTURE_CUBE_MAP_SEAMLESS			0x884F
+
 #define GL_TEXTURE_BORDER_COLOR					0x1004
 #define GL_READ_WRITE					0x88BA
 #define GL_STREAM_DRAW					0x88E0
@@ -255,6 +265,7 @@ namespace bv {
 // // todo
 //#define GL_MIRROR_CLAMP_TO_EDGE
 
+#define GL_TEXTURE_BASE_LEVEL			0x813C
 #define GL_TEXTURE_MAX_LEVEL			0x813D
 
 #define GL_TEXTURE0						0x84C0
@@ -312,10 +323,15 @@ namespace bv {
 #define GL_GEQUAL						0x0206
 #define GL_ALWAYS						0x0207
 
+//pablito
+#define GL_RGB10 0x8052
 #define GL_POINT						0x1B00
 #define GL_LINE							0x1B01
 #define GL_FILL							0x1B02
 
+#define GL_RGB16 0x8054
+#define GL_RGBA16 0x805B
+//#define GL_ALPHA16
 #define GL_BGR							0x80E0
 #define GL_BGRA							0x80E1
 #define GL_RGBA							0x1908
@@ -354,6 +370,11 @@ namespace bv {
 #define GL_CULL_FACE					0x0B44
 #define GL_CULL_FACE_MODE				0x0B45
 
+//pablito
+#define GL_FRAMEBUFFER_EXT 0x8D40
+#define GL_RENDERBUFFER_EXT 0x8D41
+#define GL_FRAMEBUFFER_EXT 0x8D40
+#define GL_FRAMEBUFFER_EXT 0x8D40
 #define GL_VIEWPORT						0x0BA2
 #define GL_COLOR_BUFFER_BIT				0x00004000
 #define GL_DEPTH_BUFFER_BIT				0x00000100

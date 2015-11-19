@@ -47,7 +47,7 @@ RendererContextPtr   RendererContext::Create             ()
 
 // *****************************
 //
-RendererContextPtr   RendererContext::CreateDefault     ()
+RendererContextPtr   RendererContext::CreateDefault		()
 {
     auto ctx        = Create();
     ctx->alphaCtx   = new model::AlphaContext();
@@ -55,6 +55,18 @@ RendererContextPtr   RendererContext::CreateDefault     ()
     ctx->depthCtx   = new model::DepthContext();
     ctx->fillCtx    = new model::FillContext();
 
+    return ctx;
+}
+
+// *****************************
+//
+RendererContextPtr   RendererContext::Clone				() const
+{
+    auto ctx        = Create();
+    ctx->alphaCtx   = alphaCtx->Clone();
+    ctx->cullCtx    = cullCtx->Clone();
+    ctx->depthCtx   = depthCtx->Clone();
+    ctx->fillCtx    = fillCtx->Clone();
     return ctx;
 }
 

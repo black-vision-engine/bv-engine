@@ -4,6 +4,8 @@
 #include "Engine/Interfaces/IValue.h"
 #include "Engine/Models/Plugins/Interfaces/IParamValEvaluator.h"
 
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
+#include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 
 namespace bv { namespace model {
 
@@ -90,6 +92,107 @@ void                                        DefaultParamValModel::Update        
     {
         updater->DoUpdate();
     }
+}
+
+void CopyParameter( IParameterPtr out, IParameterPtr in )
+{
+    assert( out->GetType() == in->GetType() );
+
+    out->SetTimeEvaluator( in->GetTimeEvaluator() );
+
+    if( out->GetType() == ModelParamType::MPT_VEC4 )
+    {
+        auto inT = QueryTypedParam< ParamVec4Ptr >( in );
+        auto outT = QueryTypedParam< ParamVec4Ptr >( out );
+
+        outT->AccessInterpolator() = inT->AccessInterpolator();
+    }
+    else if( out->GetType() == ModelParamType::MPT_VEC3 )
+    {
+        auto inT = QueryTypedParam< ParamVec3Ptr >( in );
+        auto outT = QueryTypedParam< ParamVec3Ptr >( out );
+
+        outT->AccessInterpolator() = inT->AccessInterpolator();
+    } 
+    else if( out->GetType() == ModelParamType::MPT_VEC2 )
+    {
+        auto inT = QueryTypedParam< ParamVec2Ptr >( in );
+        auto outT = QueryTypedParam< ParamVec2Ptr >( out );
+
+        outT->AccessInterpolator() = inT->AccessInterpolator();
+    } 
+    else if( out->GetType() == ModelParamType::MPT_FLOAT )
+    {
+        auto inT = QueryTypedParam< ParamFloatPtr >( in );
+        auto outT = QueryTypedParam< ParamFloatPtr >( out );
+
+        outT->AccessInterpolator() = inT->AccessInterpolator();
+    } 
+    else if( out->GetType() == ModelParamType::MPT_INT )
+    {
+        auto inT = QueryTypedParam< ParamIntPtr >( in );
+        auto outT = QueryTypedParam< ParamIntPtr >( out );
+
+        outT->AccessInterpolator() = inT->AccessInterpolator();
+    } 
+    else if( out->GetType() == ModelParamType::MPT_BOOL )
+    {
+        auto inT = QueryTypedParam< ParamBoolPtr >( in );
+        auto outT = QueryTypedParam< ParamBoolPtr >( out );
+
+        outT->AccessInterpolator() = inT->AccessInterpolator();
+    } 
+    else if( out->GetType() == ModelParamType::MPT_TRANSFORM_VEC )
+    {
+        auto inT = QueryTypedParam< ParamTransformVecPtr >( in );
+        auto outT = QueryTypedParam< ParamTransformVecPtr >( out );
+
+        for( unsigned int i = 0; i < inT->NumTransforms(); i++ )
+        {
+            auto trans = inT->Transform( i );
+            outT->InsertTransform( i, trans );
+        }
+    } 
+    else if( out->GetType() == ModelParamType::MPT_TRANSFORM )
+    {
+        auto inT = QueryTypedParam< ParamTransformPtr >( in );
+        auto outT = QueryTypedParam< ParamTransformPtr >( out );
+
+        outT->Transform() = inT->Transform();
+    }
+    else if( out->GetType() == ModelParamType::MPT_ENUM )
+    {
+        // FIXME so much :)
+    }
+    else if( out->GetType() == ModelParamType::MPT_STRING )
+    {
+        auto inT = QueryTypedParam< ParamStringPtr >( in );
+        auto outT = QueryTypedParam< ParamStringPtr >( out );
+
+        outT->AccessInterpolator() = inT->AccessInterpolator();
+    }
+    else if( out->GetType() == ModelParamType::MPT_WSTRING )
+    {
+        auto inT = QueryTypedParam< ParamWStringPtr >( in );
+        auto outT = QueryTypedParam< ParamWStringPtr >( out );
+
+        outT->AccessInterpolator() = inT->AccessInterpolator();
+    }
+    else
+    {
+        assert( false );
+        return;
+    }
+}
+
+// *******************************
+//
+void                                        DefaultParamValModel::SetParameter      ( IParameterPtr param )
+{
+    std::string name = param->GetName(); // FIXME: make this an argument
+
+    auto prevParam = GetParameter( name );
+    CopyParameter( prevParam, param );
 }
 
 // *******************************

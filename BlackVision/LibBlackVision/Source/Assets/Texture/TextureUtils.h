@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Assets/Assets.h"
 
 namespace bv {
@@ -18,6 +20,9 @@ struct TextureUtils
 	static TextureAssetConstPtr			LoadTextureAndMipMaps			( const TextureAssetDescConstPtr & desc );
 	static TextureAssetConstPtr			LoadTextureAndGenerateMipMaps	( const TextureAssetDescConstPtr & desc );
 
+    static TextureAssetConstPtr         GetFromRawDataCache             ( const TextureAssetDescConstPtr & desc );
+    static SingleTextureAssetConstPtr	GetFromRawDataCache             ( const SingleTextureAssetDescConstPtr & desc );
+    static void                         AddToRawDataCache               ( const TextureAssetConstPtr & textureRes );
 };
 
 }  // bv

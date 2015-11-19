@@ -129,6 +129,9 @@
     <ProjectReference Include="..\..\..\..\..\..\LibBlackVision\Projects\Win\VS11\LibBlackVision.vcxproj">
       <Project>{78c1f0d1-bd43-4162-8f54-fea184b03c36}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\Tools\LibProjectManager\Projects\Win\VS11\LibProjectManager.vcxproj">
+      <Project>{9fa5a3b8-fa25-4aa0-a3ac-dfca1283d6d2}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Common\ExperimentalNodeDeleter.cpp" />
@@ -150,8 +153,8 @@
     <ClCompile Include="..\..\..\Source\MultipassTest.cpp" />
     <ClCompile Include="..\..\..\Source\TestMain.cpp" />
     <ClCompile Include="..\..\..\Source\VisualTester\BVConfig.cpp" />
-    <ClCompile Include="..\..\..\Source\VisualTester\OffscreenRenderLogic.cpp" />
-    <ClCompile Include="..\..\..\Source\VisualTester\RenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\VisualTester\OffscreenRenderLogicTst.cpp" />
+    <ClCompile Include="..\..\..\Source\VisualTester\RenderLogicTst.cpp" />
     <ClCompile Include="..\..\..\Source\VisualTester\VisualTesterRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\VisualTester\WinApplicationTester.cpp" />
   </ItemGroup>
@@ -177,8 +180,8 @@
     <ClInclude Include="..\..\..\Source\Common\VBORect.h" />
     <ClInclude Include="..\..\..\Source\MultipassTest.h" />
     <ClInclude Include="..\..\..\Source\VisualTester\BVConfig.h" />
-    <ClInclude Include="..\..\..\Source\VisualTester\OffscreenRenderLogic.h" />
-    <ClInclude Include="..\..\..\Source\VisualTester\RenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\VisualTester\OffscreenRenderLogicTst.h" />
+    <ClInclude Include="..\..\..\Source\VisualTester\RenderLogicTst.h" />
     <ClInclude Include="..\..\..\Source\VisualTester\VisualTesterRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\VisualTester\WinApplicationTester.h" />
   </ItemGroup>

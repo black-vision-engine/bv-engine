@@ -1,55 +1,15 @@
 #include "AbstractModelParameter.h"
 #include "ParametersFactory.h"
 
+//#include "Serialization/SerializationObjects.inl"
 
-namespace bv { namespace model {
+namespace bv { 
 
-class KeyFrame : public ISerializable
-{
-public:
-    std::string time, value; // FIXME
+// serialization stuff
+//template std::vector< std::shared_ptr< model::AbstractModelParameter > >                         DeserializeObjectLoadArrayImpl( const IDeserializer& pimpl, std::string name );
 
-    KeyFrame( std::string t, std::string v ) : time( t ), value( v ) {}
-
-    virtual void                Serialize       ( SerializeObject &/*doc*/ ) const {}
-    static ISerializablePtr     Create          ( DeserializeObject &doc )
-    {
-        auto time = doc.GetValue( "time" );
-        auto value = doc.GetValue( "value" );
-        return std::make_shared< KeyFrame >( time, value );
-    }
-};
-
-// ********************************************************************************************************************
-
-ISerializablePtr AbstractModelParameter::Create( DeserializeObject& dob )
-{
-    ITimeEvaluatorPtr te = dob.m_tm->GetRootTimeline();
-
-    std::string name = dob.GetValue( "name" );
-
-    auto values = dob.LoadProperties< KeyFrame >( "timeval" );
-
-    if( values.size() == 0 )
-        values.push_back( std::make_shared< KeyFrame >( "0", dob.GetValue( "value" ) ) );
-
-    auto param = ParametersFactory::CreateParameterFloat( name, te ); // FIXME
-
-    try
-    {
-        for( auto value : values )
-        {
-            float val = std::stof( value->value );
-            float t = std::stof( value->time );
-            param->SetVal( val , t );
-        }
-    }catch( std::invalid_argument & )
-    {
-        return ParametersFactory::CreateParameterBool( name, te ); // FIXME
-    }
-
-    return param;
-}
+    
+namespace model {
 
 namespace
 {
@@ -110,19 +70,19 @@ ModelParamType      AbstractModelParameter::GetType () const
     return m_type;
 }
 
-// *******************************
+//// *******************************
+////
+//void                AbstractModelParameter::SetInterpolationMethod ( IParameter::InterpolationMethod method )
+//{
+//    m_method = method;
+//}
 //
-void                AbstractModelParameter::SetInterpolationMethod ( IParameter::InterpolationMethod method )
-{
-    m_method = method;
-}
-
-// *******************************
-//
-IParameter::InterpolationMethod AbstractModelParameter::GetInterpolationMethod () const
-{
-    return m_method;
-}
+//// *******************************
+////
+//IParameter::InterpolationMethod AbstractModelParameter::GetInterpolationMethod () const
+//{
+//    return m_method;
+//}
 
 
 

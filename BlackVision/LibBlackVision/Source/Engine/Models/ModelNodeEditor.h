@@ -11,11 +11,11 @@ namespace bv { namespace model {
 class ModelNodeEditor
 {
 private:
-	BasicNodePtr		m_model;
+	BasicNodePtr		m_node;
     IPluginPtr			m_detachedPlugin;
 
 public:
-                            ModelNodeEditor		( BasicNodePtr model ); 
+                            ModelNodeEditor		( BasicNodePtr node ); 
 
     bool                    AddPlugin			( IPluginPtr plugin, unsigned int idx );
     bool                    DeletePlugin		( unsigned int idx );
@@ -28,6 +28,10 @@ public:
 
 	IPluginPtr				GetDetachedPlugin	();
     void                    ResetDetachedPlugin	();
+
+	IModelNodeEffectPtr		GetNodeEffect		();
+    void					SetNodeEffect		( IModelNodeEffectPtr nodeEffect );
+
 
 	void					RefreshNode			( SceneNode * sceneNode, Renderer * renderer );
 

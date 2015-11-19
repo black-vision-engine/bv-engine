@@ -12,6 +12,8 @@ namespace bv { namespace model {
 template< typename StateTypePtr, typename ValueTypePtr >
 class SimpleStateUpdater : public IUpdater
 {
+private:
+
     StateTypePtr                            m_state;
     ValueTypePtr                            m_value;
 
@@ -19,7 +21,8 @@ public:
 
     SimpleStateUpdater( StateTypePtr state, ValueTypePtr value );
 
-    virtual void    DoUpdate    ();
+    virtual void    DoUpdate    () override;
+
 };
 
 typedef SimpleStateUpdater< FloatSimpleStatePtr, ValueFloatConstPtr > SimpleFloatStateUpdater;

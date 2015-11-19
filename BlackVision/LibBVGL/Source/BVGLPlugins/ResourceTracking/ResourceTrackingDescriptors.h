@@ -44,7 +44,7 @@ struct TextureDesc
     GLsizei         width;
     GLsizei         height;
 	GLsizei			depth;
-    GLenum          format;
+    GLenum          internalFormat;
 	GLenum			type;
 	GLint			mipmapLevels;
     const GLvoid *  pixels;
@@ -53,12 +53,11 @@ struct TextureDesc
 
 	void	SetTypeIfFirstBind		( GLenum target );
     void    SetID					( GLuint ID );
-    void    Set						( GLsizei width, GLsizei height, GLsizei depth, GLenum format, const GLvoid * pixels );
+    void    Set						( GLsizei width, GLsizei height, GLsizei depth, GLenum internalFormat, const GLvoid * pixels );
 	void	NewMipmapLevel			( GLint level );
 	GLint	GetMipmapLevel			() { return mipmapLevels; }
 
     GLuint  DataSize    () const;
-    GLuint  PixelSize   ( GLenum format ) const;
 
     void    Visit       ( VisitorAggregate & visitor ) const;
 

@@ -30,6 +30,9 @@ public:
                                                 DefaultTimeline     ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
                                                 ~DefaultTimeline    ();
 
+    virtual void                                Serialize           ( ISerializer& sob ) const;
+    static ISerializablePtr                     Create              ( const IDeserializer& dob );
+
     //ITimeline
     virtual TimeType                            GetDuration         () const override;
 

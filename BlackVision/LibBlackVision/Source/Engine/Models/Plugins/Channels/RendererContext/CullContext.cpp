@@ -11,5 +11,15 @@ CullContext::CullContext()
     isCCWOrdered = true;
 }
 
+// ******************************
+//
+CullContext *		CullContext::Clone			() const
+{
+	auto ctx = new CullContext();
+    ctx->enabled = enabled;
+    ctx->isCCWOrdered = isCCWOrdered;
+	return ctx;
+}
+
 } //model
 } //bv

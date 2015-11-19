@@ -1,7 +1,7 @@
 #include "DefaultGeometryPluginBase.h"
 
-//#include "Engine/Models/Plugins/Channels/Geometry/Simple/VertexAttributesChannelVariableTopology.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/DefaultGeometryVertexAttributeChannel.h"
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 #include "Mathematics/defines.h"
 
@@ -59,21 +59,20 @@ IVertexAttributesChannelConstPtr    DefaultGeometryPluginBase::GetVertexAttribut
 
 void DefaultGeometryPluginBase::InitGeometry()
 {
-    DefaultGeometryAndUVsVertexAttributeChannel* channel;
-    if( m_vaChannel==NULL ) // FIXME: this should be smarter and maybe moved to DefaultGeometryAndUVsVertexAttributeChannel
+    if( !m_vaChannel ) // FIXME: this should be smarter and maybe moved to DefaultGeometryAndUVsVertexAttributeChannel
     {
-        channel = new DefaultGeometryAndUVsVertexAttributeChannel( PrimitiveType::PT_TRIANGLE_STRIP );
-        m_vaChannel = VertexAttributesChannelPtr( (VertexAttributesChannel*) channel );
-    } else
-    {
-        channel = (DefaultGeometryAndUVsVertexAttributeChannel*) m_vaChannel.get();
-        channel->ClearAll();
+		m_vaChannel = std::make_shared< DefaultGeometryAndUVsVertexAttributeChannel >( PrimitiveType::PT_TRIANGLE_STRIP );
     }
+	else
+	{
+		m_vaChannel->ClearAll();
+	}
+	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
 
     auto gens = GetGenerators();
 
     for( auto gen : gens )
-        channel->GenerateAndAddConnectedComponent( *gen );
+		std::static_pointer_cast< DefaultGeometryAndUVsVertexAttributeChannel >( m_vaChannel )->GenerateAndAddConnectedComponent( *gen );
 }
 
 // *************************************
@@ -82,13 +81,11 @@ void                                DefaultGeometryPluginBase::Update           
 {
     m_pluginParamValModel->Update();
 
+	//FIXME: some geometries shouldn't recreate vertex attributes channel and just update it
     if( NeedsTopologyUpdate() )
     {
         InitGeometry();
-        m_vaChannel->SetNeedsTopologyUpdate( true );
     }
-    else
-        m_vaChannel->SetNeedsTopologyUpdate( false );
 }
 
 } }

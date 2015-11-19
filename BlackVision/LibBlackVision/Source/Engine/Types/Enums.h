@@ -20,6 +20,8 @@ enum class TextureFormat : int
 enum class TextureType : int
 {
     T_2D = 0        ,
+    T_3D = 0        ,
+    T_1D = 0        ,
     T_CUBE          ,
 
     T_TOTAL
@@ -38,7 +40,19 @@ enum class ParamType : int
     PT_INT,
     PT_BOOL,
     PT_ENUM,
+    PT_STRING,
+    PT_WSTRING,
     PT_TOTAL
+};
+
+enum class NodeEffectType : int
+{
+	NET_DEFAULT = 0,
+	NET_ALPHA_MASK,
+	NET_NODE_MASK,
+    NET_WIREFRAME,
+	
+	NET_TOTAL
 };
 
 enum class ModelParamType : int
@@ -53,6 +67,8 @@ enum class ModelParamType : int
     MPT_INT,
     MPT_BOOL,
     MPT_ENUM,
+    MPT_STRING,
+    MPT_WSTRING,
     MPT_TOTAL
 };
 
@@ -103,8 +119,6 @@ enum class ChannelRole : int
     CR_PASSTHROUGH,
 
     CR_TOTAL,
-
-    CR_7 //Krisztjano Rezinaldo
 };
 
 enum class IndexType : int
@@ -198,7 +212,9 @@ enum class MipMapFilterType : int
 	B_SPLINE,
 	BICUBIC,
 	CATMULL_ROM,
-	LANCZOS
+	LANCZOS,
+
+    MMFT_TOTAL
 };
 
 enum class VideoPixelFormat : int 

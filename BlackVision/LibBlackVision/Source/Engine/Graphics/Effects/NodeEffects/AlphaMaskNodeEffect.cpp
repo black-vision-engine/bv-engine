@@ -10,7 +10,7 @@ namespace bv {
 AlphaMaskNodeEffect::AlphaMaskNodeEffect     ()
     : NodeEffect( NodeEffect::Type::T_ALPHA_MASK )
 {
-    auto values = AccessValues();
+    auto & values = AccessValues();
 
     // FIXME: string "alpha" used explicitely - suxx
     auto value = ValuesFactory::CreateValueFloat( "alpha" );

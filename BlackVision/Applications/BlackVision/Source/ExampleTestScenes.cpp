@@ -157,7 +157,7 @@ model::BasicNodePtr TwoTexturedRectangles       ( const model::PluginsManager * 
 
     assert( success );
 
-    std::string txFileName = "rsrcy/simless_00.jpg";
+    std::string txFileName = "0level.bmp";
 
     success &= model::LoadTexture( rootNode->GetPlugin( "texture" ), txFileName );
     success &= model::LoadTexture( childNode->GetPlugin( "texture" ), txFileName );

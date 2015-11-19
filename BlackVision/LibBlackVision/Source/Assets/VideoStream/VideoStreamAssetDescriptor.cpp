@@ -1,9 +1,34 @@
 #include "VideoStreamAssetDescriptor.h"
+#include <cassert>			//@todo delete after implementing all functions
 
 namespace bv
 {
 
 const std::string		VideoStreamAssetDesc::uid = "VIDEO_STREAM_ASSET_DESC";
+
+
+// ***********************
+//
+void                VideoStreamAssetDesc::Serialize       ( ISerializer& /*sob*/ ) const
+{
+	assert( !"Implement me" );
+}
+
+// ***********************
+//
+void VideoStreamAssetDesc::Deserialize     ( IDeserializer& /*sob*/ )
+{
+
+}
+
+// ***********************
+//
+ISerializableConstPtr VideoStreamAssetDesc::Create          ( IDeserializer& /*dob*/ )
+{
+	assert( !"Implement me" );
+    return nullptr;
+}
+
 
 // ***********************
 //

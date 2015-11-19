@@ -13,5 +13,17 @@ AlphaContext::AlphaContext()
     dstBlendMode    = DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
 }
 
+// ******************************
+//
+AlphaContext *		AlphaContext::Clone		() const
+{
+	auto ctx = new AlphaContext();
+    ctx->blendEnabled = blendEnabled;
+    ctx->blendColor = blendColor;
+    ctx->srcBlendMode = srcBlendMode;
+    ctx->dstBlendMode = dstBlendMode;
+	return ctx;
+}
+
 } //model
 } //bv

@@ -2,6 +2,8 @@
 
 #include "Assets/AssetDescriptor.h"
 #include "Engine/Types/Enums.h"
+#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 
 #include "CoreDEF.h"
 
@@ -39,6 +41,11 @@ public:
 	explicit									VideoStreamAssetDesc		( const std::string & streamPath, TextureFormat textureFormat );
 	explicit									VideoStreamAssetDesc		( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat );
 
+
+    virtual void								Serialize					( ISerializer& sob ) const;
+    virtual void                                Deserialize                 ( IDeserializer& sob );
+	static ISerializableConstPtr			    Create						( IDeserializer& dob );
+
 	virtual const std::string &					GetUID						() const override;
 	
 	virtual bool								IsCacheable					() const override;
@@ -57,5 +64,14 @@ public:
 	static VideoStreamAssetDescConstPtr			Create						( const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat  );
 
 };
+
+// ***********************
+/// Returns AssetDescriptor UID for Asset in template parameter.
+/// @note AssetDescriptor uid and Asset uid are different strings.
+template<> inline const std::string& GetAssetDescUID<VideoStreamAsset>()
+{
+    return VideoStreamAssetDesc::UID();
+}
+
 
 } // bv

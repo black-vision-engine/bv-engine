@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "Engine/Interfaces/IUpdatable.h"
+#include "Engine/Models/Interfaces/IModelNodeEffect.h"
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 #include "Engine/Models/Plugins/Interfaces/IFinalizePlugin.h"
 
@@ -16,7 +17,6 @@ namespace model {
 
 class IFinalizePlugin;
 class IPluginListFinalized;
-class IOverrideState;
 
 class IModelNode;
 DEFINE_PTR_TYPE(IModelNode)
@@ -38,25 +38,32 @@ public:
 
     virtual unsigned int                    GetNumChildren      () const                                                            = 0;
 
+    // FIXME: TRANSITION - BEGIN
+    virtual IModelNodeEffectPtr             GetNodeEffect       () const                                                            = 0;
+    // FIXME: TRANSITION - END
+
     // FIXME: remove when proper GlobalEfect is implemented
-    virtual void                            EnableOverrideStateAM   ()                                                              = 0;
-    virtual void                            EnableOverrideStateNM   ()                                                              = 0;
-    virtual void                            DisableOverrideStateAM  ()                                                              = 0;
-    virtual void                            DisableOverrideStateNM  ()                                                              = 0;
+    //virtual void                            EnableOverrideStateAM   ()                                                              = 0;
+    //virtual void                            EnableOverrideStateNM   ()                                                              = 0;
+    //virtual void                            DisableOverrideStateAM  ()                                                              = 0;
+    //virtual void                            DisableOverrideStateNM  ()                                                              = 0;
 
-    virtual bool                            OverrideStateChangedAM  () const                                                        = 0;
-    virtual bool                            OverrideStateChangedNM  () const                                                        = 0;
-    virtual void                            SetOverrideStateChgAM   ( bool changed )                                                = 0;
-    virtual void                            SetOverrideStateChgNM   ( bool changed )                                                = 0;
+    //virtual bool                            OverrideStateChangedAM  () const                                                        = 0;
+    //virtual bool                            OverrideStateChangedNM  () const                                                        = 0;
+    //virtual void                            SetOverrideStateChgAM   ( bool changed )                                                = 0;
+    //virtual void                            SetOverrideStateChgNM   ( bool changed )                                                = 0;
 
-    virtual bool                            IsStateOverridenNM  () const                                                            = 0;
-    virtual bool                            IsStateOverridenAM  () const                                                            = 0;
+    //virtual bool                            IsStateOverridenNM  () const                                                            = 0;
+    //virtual bool                            IsStateOverridenAM  () const                                                            = 0;
 
-    virtual IOverrideState *                GetOverrideState    ()                                                                  = 0;
+    //virtual IOverrideState *                GetOverrideState    ()                                                                  = 0;
     // FIXME: end of remove
     // FIXME: remove when proper GlobalEfect is implemented
 
     virtual bool                            IsVisible           () const                                                            = 0;
+
+	//pablito
+	virtual void                            SetVisible           (bool visible)                                                             = 0;
 
     virtual                                 ~IModelNode         () {};
 

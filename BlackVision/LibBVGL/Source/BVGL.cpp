@@ -384,6 +384,20 @@ void            BVGL::bvglTexParameterfv        ( GLenum target, GLenum pname, c
 
 // *****************************
 //
+void			BVGL::bvglGetTexImage			( GLenum target, GLint level, GLenum format, GLenum type, GLvoid * data )
+{
+	bvgl.GetTexImage( target, level, format, type, data );
+}
+
+// *****************************
+//
+void			BVGL::bvglGenerateMipmap			( GLenum target )
+{
+	bvgl.GenerateMipmap( target );
+}
+
+// *****************************
+//
 void         BVGL::bvglReadBuffer               ( GLenum mode )
 {
 	bvgl.ReadBuffer( mode );
@@ -689,6 +703,60 @@ void            BVGL::bvglVertexAttribPointer       ( GLuint index, GLint size, 
 {
 	bvgl.VertexAttribPointer( index, size, type, normalized, stride, pointer );
 }
+
+
+//pablito::
+
+// ******************************
+//
+void			BVGL::bvglBindFramebufferEXT		(GLenum target, GLuint framebuffer)
+{
+	bvgl.BindFramebufferEXT(target,framebuffer);
+}
+
+// ******************************
+//
+void			BVGL::bvglBindRenderbufferEXT		(GLenum target, GLuint renderbuffer)
+{
+	bvgl.BindRenderbufferEXT(target,renderbuffer);
+}
+
+// ******************************
+//
+void			BVGL::bvglDeleteFramebuffersEXT	(GLsizei n, const GLuint *framebuffers)
+{
+	bvgl.DeleteFramebufferEXT(n,framebuffers);
+}
+
+// ******************************
+//
+void			BVGL::bvglDeleteRenderbuffersEXT	(GLsizei n, const GLuint *renderbuffers)
+{
+	bvgl.DeleteRenderbufferEXT(n,renderbuffers);
+}
+
+// ******************************
+//
+void			BVGL::bvglFlush	()
+{
+	bvgl.Flush();
+}
+
+// ******************************
+//
+void			BVGL::bvglFinish	()
+{
+	bvgl.Finish();
+}
+
+// ******************************
+//
+/*GLuint			BVGL::bvglGetError	()
+{
+	return bvgl.GetError();
+}*/
+
+
 
 // *****************************
 //
@@ -1373,6 +1441,5 @@ void BVGL::bvglStencilOpSeparate			( GLenum face, GLenum sfail, GLenum dpfail, G
 {
 	bvgl.StencilOpSeparate( face, sfail, dpfail, dppass );
 }
-
 
 } // bv

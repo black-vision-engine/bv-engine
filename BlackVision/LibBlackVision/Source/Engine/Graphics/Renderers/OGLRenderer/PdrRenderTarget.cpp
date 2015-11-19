@@ -109,7 +109,7 @@ void            PdrRenderTarget::Disable            ( Renderer * renderer )
 
 // ****************************
 // FIXME: dodac streaming flag do bufora (dla multi PBO)
-void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer * renderer, PdrPBOMemTransfer * pboMem, Texture2DPtr & outputTex )
+void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer * renderer, PdrDownloadPBO * pboMem, Texture2DPtr & outputTex )
 {
     assert( i < m_numTargets );
 
@@ -155,12 +155,9 @@ void            PdrRenderTarget::ReadColorTexture   ( unsigned int i, Renderer *
     //double readStart = GTimer.CurElapsed();
     Enable( renderer );
 
-    auto fmt    = ConstantsMapper::GLConstantTextureFormat( format );
-    auto type   = ConstantsMapper::GLConstantTextureType( format );
-
-    void * data = pboMem->LockRenderTarget( m_drawBuffers[ i ], ( GLuint )m_width, ( GLuint )m_height, fmt, type );
-    memcpy( buffer->GetWritable(), data, outputTex->RawFrameSize() );
-    pboMem->UnlockRenderTarget();
+	pboMem->LockDownload();
+	PBODownloadData( i );
+    pboMem->UnlockDownload( buffer->GetWritable(), outputTex->RawFrameSize() );
 
     Disable( renderer );
     //double readTime = GTimer.CurElapsed() - readStart;
@@ -228,6 +225,18 @@ bool            PdrRenderTarget::FramebuferStatusOK () const
     }
 
     return true;
+}
+
+// ****************************
+//
+void          PdrRenderTarget::PBODownloadData     ( unsigned int i )
+{
+    auto format = m_textureFormats[ i ];
+    auto fmt    = ConstantsMapper::GLConstantTextureFormat( format );
+    auto type   = ConstantsMapper::GLConstantTextureType( format );
+	
+	BVGL::bvglReadBuffer( m_drawBuffers[ i ] );
+	BVGL::bvglReadPixels( 0, 0, ( GLuint )m_width, ( GLuint )m_height, fmt, type, 0 );
 }
 
 } //bv

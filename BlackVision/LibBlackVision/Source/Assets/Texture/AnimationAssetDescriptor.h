@@ -17,9 +17,15 @@ protected:
 
 public:
 
+    virtual void                    Serialize       ( ISerializer& sob ) const;
+    //virtual void                    Deserialize     ( const IDeserializer& sob );
+    static ISerializableConstPtr    Create          ( const IDeserializer& dob );
+
 	virtual const std::string &		GetUID		() const override;
 
 	virtual bool					IsCacheable	() const override;
+
+    virtual std::string             GetKey      () const override;
 
 	static const std::string &		UID			();
 
@@ -27,15 +33,32 @@ public:
                                                 
                                                 ~AnimationAssetDesc	();
 
-	const std::vector< TextureAssetDescConstPtr > &  GetFrames		() const;
+    std::string                     GetPath		() const;
+    std::string                     GetFilter   () const;
 
-    static AnimationAssetDescConstPtr			CreateFromDirFrames ( const std::string & path, const std::string & filter );
+	//const std::vector< TextureAssetDescConstPtr > &  GetFrames		() const;
+
+	//const std::vector< TextureAssetDescConstPtr > &  GetFrames		() const;
+
+    static AnimationAssetDescConstPtr			Create ( const std::string & path, const std::string & filter );
+    //static AnimationAssetDescConstPtr			Create ( const std::vector< TextureAssetDescConstPtr > & frames );
 
 private:
-	explicit						AnimationAssetDesc	( const std::vector< std::string > & frames );
+	explicit						AnimationAssetDesc	( const std::string & frames, const std::string & filter );
+	//explicit						AnimationAssetDesc	( const std::vector< TextureAssetDescConstPtr > & frames );
 
-    std::vector< TextureAssetDescConstPtr >  m_frames;
-
+    //std::vector< TextureAssetDescConstPtr > m_frames;
+    std::string                             m_path;
+    std::string                             m_filter;
 };
+
+// ***********************
+/// Returns AssetDescriptor UID for Asset in template parameter.
+/// @note AssetDescriptor uid and Asset uid are different strings.
+template<> inline const std::string& GetAssetDescUID<AnimationAsset>()
+{
+    return AnimationAssetDesc::UID();
+}
+
 
 } //bv

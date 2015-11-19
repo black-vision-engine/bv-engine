@@ -35,11 +35,13 @@
     <ClInclude Include="..\..\..\Source\Threading\Thread.h" />
     <ClInclude Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.h" />
     <ClInclude Include="..\..\..\Source\Tools\HRTimer.h" />
+    <ClInclude Include="..\..\..\Source\Tools\IncludeJSON.h" />
     <ClInclude Include="..\..\..\Source\Tools\Logger\Logger.h" />
     <ClInclude Include="..\..\..\Source\Tools\Logger\UseLogger.h" />
     <ClInclude Include="..\..\..\Source\Tools\SimpleTimer.h" />
     <ClInclude Include="..\..\..\Source\Tools\StringHeplers.h" />
     <ClInclude Include="..\..\..\Source\Tools\Utils.h" />
+    <ClInclude Include="..\..\..\Source\win_sock.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp" />

@@ -4,51 +4,22 @@
 
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
 
+#include "InterpolatorBasicTypes.h"
+
+#include "Serialization/ISerializable.h"
+
 namespace bv
 {
-
-enum class WrapMethod : int
-{
-    clamp = 0,
-    repeat = 1,
-    pingPong = 2,
-};
-
-template<class TimeValueT, class ValueT>
-class Key
-{
-public:
-
-    TimeValueT  t;
-    ValueT      val;
-
-public:
-
-    explicit Key( TimeValueT t, ValueT val );
-};
 
 template<class TimeValueT>
 class Interpolator
 {
-private:
-
-	model::IParameter::InterpolationMethod m_method;
-
 public:
-
-    typedef TimeValueT TimeType;
-
-public:
-
-    virtual void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method ) { m_method = method; }
-    virtual model::IParameter::InterpolationMethod     GetInterpolationMethod () const { return m_method; }
-
     virtual int EvalToCBuffer( TimeValueT time, char * buf ) const = 0;
-
 };
 
 template<class TimeValueT, class ValueT, class FloatT = float >
-class BasicInterpolator : public Interpolator<TimeValueT>
+class BasicInterpolator : public Interpolator<TimeValueT>, public ISerializable
 {
 public:
 
@@ -56,8 +27,6 @@ public:
     typedef ValueT      ValueType;
 
 private:
-	//model::IParameter::InterpolationMethod			method;
-
     std::vector<Key<TimeValueT, ValueT>>    keys;
     TimeValueT                              tolerance;
 
@@ -79,8 +48,8 @@ public:
     explicit BasicInterpolator  ( TimeValueT tolerance = 0.0001 );
     virtual ~BasicInterpolator  () {};
 
-	//void                    SetInterpolationMethod ( model::IParameter::InterpolationMethod method ) override;
-	//model::IParameter::InterpolationMethod     GetInterpolationMethod () const override;
+    virtual void                Serialize       ( ISerializer& doc ) const override;
+    static ISerializablePtr     Create          ( const IDeserializer& doc );
 
     void AddKey             ( TimeValueT t, const ValueT & v );
     void AddKey             ( const Key<TimeValueT, ValueT> & key );
@@ -106,6 +75,10 @@ public:
     const KeyType &     FirstKey    () const;
     const KeyType &     LastKey     () const;
 
+    int                                                 GetNumKeys      ();
+
+    void                                                SetCurveType    ( CurveType /*type*/ ) { assert( false ); }
+    CurveType                                           GetCurveType    () { assert( false ); return CurveType::CT_TOTAL; }
 };
 
 } //bv
