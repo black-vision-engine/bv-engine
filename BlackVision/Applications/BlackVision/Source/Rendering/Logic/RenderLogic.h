@@ -16,23 +16,10 @@ class RenderLogic
 {
 private:
 
-    enum CustomLogicType
-    {
-        CLT_DEFAULT = 0,
-        CLT_ALPHA_MASK,
-        CLT_NODE_MASK,
-
-        CLT_TOTAL
-    };
-
-private:
-
     OffscreenRenderLogic *                  m_offscreenRenderLogic;
     DefaultVideoOutputRenderLogic *         m_videoOutputRenderLogic;
 
     std::vector< NodeEffectRenderLogic * >  m_customNodeRenderLogic;
-
-    mutable CustomLogicType m_yp;
 
 public:
 
