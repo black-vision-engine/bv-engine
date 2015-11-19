@@ -1,4 +1,4 @@
-#include "JsonSpiritDeserilizeObject.h"
+#include "JsonSpiritDeserializeObject.h"
 
 #include <cassert>
 #include <fstream>
@@ -9,16 +9,16 @@ const std::wstring EMPTY_STRING = L"";
 
 // ***********************
 //
-JsonSpiritDeserilizeObject::JsonSpiritDeserilizeObject()
+JsonSpiritDeserializeObject::JsonSpiritDeserializeObject()
 {
     m_currentNode = nullptr;
 }
-JsonSpiritDeserilizeObject::~JsonSpiritDeserilizeObject()
+JsonSpiritDeserializeObject::~JsonSpiritDeserializeObject()
 {}
 
 // ***********************
 //
-bool JsonSpiritDeserilizeObject::LoadFile           ( const std::string& fileName )
+bool JsonSpiritDeserializeObject::LoadFile           ( const std::string& fileName )
 {
     std::wifstream file( fileName );
     bool result = json_spirit::read( file, m_root );
@@ -29,7 +29,7 @@ bool JsonSpiritDeserilizeObject::LoadFile           ( const std::string& fileNam
 
 // ***********************
 //
-bool JsonSpiritDeserilizeObject::LoadWString         ( const std::wstring& jsonString )
+bool JsonSpiritDeserializeObject::LoadWString         ( const std::wstring& jsonString )
 {
     bool result = json_spirit::read( jsonString, m_root );
     if( result )
@@ -40,12 +40,12 @@ bool JsonSpiritDeserilizeObject::LoadWString         ( const std::wstring& jsonS
 
 // ***********************
 //
-std::string			JsonSpiritDeserilizeObject::GetAttribute        ( const std::string& /*name*/ ) const
+std::string			JsonSpiritDeserializeObject::GetAttribute        ( const std::string& /*name*/ ) const
 {    assert( !"This serializer supports only wstrings" ); return "";   }
 
 // ***********************
 //
-std::wstring		JsonSpiritDeserilizeObject::GetAttribute        ( const std::wstring& name ) const
+std::wstring		JsonSpiritDeserializeObject::GetAttribute        ( const std::wstring& name ) const
 {
     auto& JsonObject = m_currentNode->get_obj();
     auto value = FindValue( JsonObject, name );
@@ -57,12 +57,12 @@ std::wstring		JsonSpiritDeserilizeObject::GetAttribute        ( const std::wstri
 
 // ***********************
 //
-bool                JsonSpiritDeserilizeObject::EnterChild          ( const std::string& /*name*/ ) const
+bool                JsonSpiritDeserializeObject::EnterChild          ( const std::string& /*name*/ ) const
 {    assert( !"This serializer supports only wstrings" ); return "";   }
 
 // ***********************
 //
-bool                JsonSpiritDeserilizeObject::EnterChild          ( const std::wstring& name ) const
+bool                JsonSpiritDeserializeObject::EnterChild          ( const std::wstring& name ) const
 {
 	m_nodeStack.push( m_currentNode );
 	
@@ -90,7 +90,7 @@ bool                JsonSpiritDeserilizeObject::EnterChild          ( const std:
 
 // ***********************
 //
-bool                JsonSpiritDeserilizeObject::NextChild           () const
+bool                JsonSpiritDeserializeObject::NextChild           () const
 {
     if( m_nodeStack.empty() )
         return false;
@@ -113,7 +113,7 @@ bool                JsonSpiritDeserilizeObject::NextChild           () const
 
 // ***********************
 //
-bool                JsonSpiritDeserilizeObject::ExitChild           () const
+bool                JsonSpiritDeserializeObject::ExitChild           () const
 {
     if( m_nodeStack.empty() )
         return false;
@@ -138,7 +138,7 @@ bool                JsonSpiritDeserilizeObject::ExitChild           () const
 
 // ***********************
 //
-json_spirit::wObject::value_type::Value_type* JsonSpiritDeserilizeObject::FindValue ( const json_spirit::wObject& obj, const std::wstring& name ) const
+json_spirit::wObject::value_type::Value_type* JsonSpiritDeserializeObject::FindValue ( const json_spirit::wObject& obj, const std::wstring& name ) const
 {
     for( size_t i = 0; i < obj.size(); ++i )
         if( obj[ i ].name_ == name )

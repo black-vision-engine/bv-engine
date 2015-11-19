@@ -19,47 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\base\CmdBase.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdGetInfo.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdLoadAsset.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdSceneManager.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdSetParam.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdStruct.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdTimeline.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdTimer.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdVideoCardInfo.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\commands\CmdWidget.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_error_position.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_reader.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_reader_template.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_stream_reader.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_utils.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_value.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_writer.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_writer_options.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_writer_template.h" />
-    <ClInclude Include="..\..\..\Source\JsonWrapper\ProtocolManager.h" />
-    <ClInclude Include="..\..\..\Source\Log.h" />
+    <ClInclude Include="..\..\..\Source\LogTCP.h" />
     <ClInclude Include="..\..\..\Source\SocketWrapper.h" />
+    <ClInclude Include="..\..\..\Source\UseLogger.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\JsonWrapper\commands\base\CmdBase.cpp" />
-    <ClCompile Include="..\..\..\Source\JsonWrapper\commands\CmdGetInfo.cpp" />
-    <ClCompile Include="..\..\..\Source\JsonWrapper\commands\CmdSceneManager.cpp" />
-    <ClCompile Include="..\..\..\Source\JsonWrapper\commands\CmdSetParam.cpp" />
-    <ClCompile Include="..\..\..\Source\JsonWrapper\commands\CmdStruct.cpp" />
-    <ClCompile Include="..\..\..\Source\JsonWrapper\commands\CmdTimeline.cpp" />
-    <ClCompile Include="..\..\..\Source\JsonWrapper\commands\CmdTimer.cpp" />
-    <ClCompile Include="..\..\..\Source\JsonWrapper\commands\CmdVideoCardInfo.cpp" />
-    <ClCompile Include="..\..\..\Source\JsonWrapper\commands\CmdWidget.cpp" />
-    <ClCompile Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_reader.cpp">
-      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/bigobj %(AdditionalOptions)</AdditionalOptions>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_value.cpp" />
-    <ClCompile Include="..\..\..\Source\JsonWrapper\json_spirit\json_spirit_writer.cpp" />
-    <ClCompile Include="..\..\..\Source\JsonWrapper\ProtocolManager.cpp" />
-    <ClCompile Include="..\..\..\Source\Log.cpp" />
+    <ClCompile Include="..\..\..\Source\LogTCP.cpp" />
     <ClCompile Include="..\..\..\Source\SocketWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>

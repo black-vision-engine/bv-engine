@@ -45,6 +45,7 @@
     <ClInclude Include="..\..\..\Source\VideoCardManager.h" />
     <ClInclude Include="..\..\..\Source\VideoCardBase.h" />
     <ClInclude Include="..\..\..\Source\ThreadSafeQueue.h" />
+    <ClInclude Include="..\..\..\Source\UseLogger.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Models\BlueFish\Utils.cpp">
