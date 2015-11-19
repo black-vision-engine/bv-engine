@@ -1,7 +1,6 @@
 #pragma once
 #include "../../VideoCardBase.h"
 
-#include "Log.h"
 #include "DeckLinkAPI_h.h"
 namespace bv
 {

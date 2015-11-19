@@ -6,41 +6,44 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <stdio.h>
-#include "JsonWrapper\ProtocolManager.h"
+#include <vector>
+
+#include "../../Applications/BlackVision/Source/EndUserAPI/IEventServer.h"
+
 
 //#include "SocketHandle.h"
 //#include "tcp/SocketServer.h"
 
 
-namespace bv{
-    
-class ResponseMsg{
-public: 
-    wstring msg;
-    int sock_id;
-    bool sent;
-    ResponseMsg(){sent=false;}
+namespace bv
+{
 
-};
+class SocketWrapper : public IEventServer
+{
+private:
+    static QueueEventCallback           SendCommandCallback;
+    static std::vector<ResponseMsg>     Responses;
 
-    class SocketWrapper
-	{
-	private:
-		int m_nLinkMode;
-        static ProtocolManager protocolManager;
-        static vector<ResponseMsg> Responses;
-        SocketWrapper *Socket;
-        bool thread_clients();
-	public:
+	int m_nLinkMode;
+    int m_port;
+
+private:
+    bool thread_clients();
+public:
         
-		SocketWrapper(void);
-		~SocketWrapper(void);
-		bool InitServer();
-        static void ParseCmd(std::wstring cmd);
-		static DWORD WINAPI SocketHandler(void*);
-		static DWORD WINAPI SocketInitHandler(void*);
-        static void AddMsg(ResponseMsg msg){Responses.push_back(msg);}
-	};
+	SocketWrapper();
+	~SocketWrapper(void);
+
+
+	bool                    InitServer          ();
+	static DWORD WINAPI     SocketHandler       (void*);
+	static DWORD WINAPI     SocketInitHandler   (void*);
+
+    static void             AddMsg              ( ResponseMsg msg){Responses.push_back( msg );}     ///@deprecated @todo Wywaliæ jak ju¿ zniknie RemoteControlInterface
+
+    bool        InitializeServer        ( const QueueEventCallback& callback, int port ) override;
+    void        SendResponse            ( ResponseMsg& message ) override;
+};
 
 }
 
