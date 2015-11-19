@@ -221,7 +221,7 @@ void BVAppLogic::LoadScene          ( void )
     {
         auto scene = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_pluginsManager, GetTimelineManager().get(), m_globalTimeline );
         m_bvScene = BVScene::Create( scene, new Camera( DefaultConfig.IsCameraPerspactive() ), te, m_renderer );
-        if( GetEnvScene() == "SERIALIZED_TEST " )
+        if( GetEnvScene() == "SERIALIZED_TEST" ) // FIXME: nasty hack
             InitializeScenesTimelines();
     }
 
