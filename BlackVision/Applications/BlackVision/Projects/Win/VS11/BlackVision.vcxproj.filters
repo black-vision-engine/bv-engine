@@ -139,9 +139,6 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.cpp">
       <Filter>Rendering\Logic\NodeEffectRendering</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\TestAI\TestRemoteEventsKeyboardHandler.cpp">
-      <Filter>TestAI</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\HightmapHandlers.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClCompile>
@@ -261,9 +258,6 @@
     <ClInclude Include="..\..\..\Source\UseLogger.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.h">
       <Filter>Rendering\Logic\NodeEffectRendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\TestAI\TestRemoteEventsKeyboardHandler.h">
-      <Filter>TestAI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\EndUserAPI\IEventServer.h">
       <Filter>EndUserAPI</Filter>

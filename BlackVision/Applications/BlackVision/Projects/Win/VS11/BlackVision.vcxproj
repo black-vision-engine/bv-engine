@@ -306,7 +306,6 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\TestAI\TestEditorsKeyboardHandler.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestKeyboardHandler.cpp" />
-    <ClCompile Include="..\..\..\Source\TestAI\TestRemoteEventsKeyboardHandler.cpp" />
     <ClCompile Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.cpp" />
     <ClCompile Include="..\..\..\Source\VideoInput\ExampleVideoInput.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Counter\Counter.cpp" />
@@ -358,7 +357,6 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\TestAI\TestEditorsKeyboardHandler.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestKeyboardHandler.h" />
-    <ClInclude Include="..\..\..\Source\TestAI\TestRemoteEventsKeyboardHandler.h" />
     <ClInclude Include="..\..\..\Source\UseLogger.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h" />

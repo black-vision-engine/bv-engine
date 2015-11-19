@@ -26,7 +26,6 @@
 //FIXME: remove
 #include "TestAI/TestGlobalEffectKeyboardHandler.h"
 #include "TestAI/TestEditorsKeyboardHandler.h"
-#include "TestAI/TestRemoteEventsKeyboardHandler.h"
 #include "testai/TestAIManager.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "BVGL.h"
@@ -464,11 +463,6 @@ void                            BVAppLogic::InitializeKbdHandler()
     else if( envScene == "SERIALIZED_TEST" )
     {
         m_kbdHandler = new TestEditorsKeyboardHandler();
-    }
-    else if( envScene == "REMOTE_EVENTS_TEST_SCENE" )
-    {
-        //m_kbdHandler = new TestEditorsKeyboardHandler();
-        m_kbdHandler = new TestRemoteEventsKeyboardHandler();
     }
     else
     {
