@@ -23,6 +23,7 @@
 #include "Rendering/Logic/NodeEffectRendering/AlphaMaskRenderLogic.h"
 #include "Rendering/Logic/NodeEffectRendering/NodeMaskRenderLogic.h"
 #include "Rendering/Logic/NodeEffectRendering/WireframeRenderLogic.h"
+#include "Rendering/Logic/NodeEffectRendering/LightScatteringRenderLogic.h"
 
 #include "Rendering/Logic/VideoOutputRendering/DefaultVideoOutputRenderLogic.h"
 
@@ -33,8 +34,6 @@ namespace bv {
 //
 RenderLogic::RenderLogic     ()
 {
-    m_yp = CLT_TOTAL;
-
     m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffersPerRT() );
     m_videoOutputRenderLogic = new DefaultVideoOutputRenderLogic( DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
 
@@ -42,6 +41,7 @@ RenderLogic::RenderLogic     ()
     m_customNodeRenderLogic.push_back( new AlphaMaskRenderLogic( this, m_offscreenRenderLogic ) );
     m_customNodeRenderLogic.push_back( new NodeMaskRenderLogic( this, m_offscreenRenderLogic ) );
     m_customNodeRenderLogic.push_back( new WireframeRenderLogic( this, m_offscreenRenderLogic ) );
+    m_customNodeRenderLogic.push_back( new LightScatteringRenderLogic( this, m_offscreenRenderLogic ) );
 }
 
 // *********************************

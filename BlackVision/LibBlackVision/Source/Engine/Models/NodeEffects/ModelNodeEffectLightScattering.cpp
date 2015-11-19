@@ -63,5 +63,89 @@ NodeEffectType  ModelNodeEffectLightScattering::GetType   () const
     return NodeEffectType::NET_LIGHT_SCATTERING;
 }
 
+// ********************************
+//
+ParamFloatPtr           ModelNodeEffectLightScattering::GetParamExposure                ()
+{
+    return m_paramExposure;
+}
+
+// ********************************
+//
+ParamFloatPtr           ModelNodeEffectLightScattering::GetParamWeight                  ()
+{
+    return m_paramWeight;
+}
+
+// ********************************
+//
+ParamFloatPtr           ModelNodeEffectLightScattering::GetParamDecay                   ()
+{
+    return m_paramDecay;
+}
+
+// ********************************
+//
+ParamFloatPtr           ModelNodeEffectLightScattering::GetParamDensity                 ()
+{
+    return m_paramDensity;
+}
+
+// ********************************
+//
+ParamVec2Ptr            ModelNodeEffectLightScattering::GetParamLightPositionOnScreen   ()
+{
+    return m_paramLightPositionOnScreen;
+}
+
+// ********************************
+//
+ParamIntPtr             ModelNodeEffectLightScattering::GetParamNumSamples              ()
+{
+    return m_paramNumSamples;
+}
+
+// ********************************
+//
+float                   ModelNodeEffectLightScattering::GetExposure                     ()
+{
+    return m_exposureVal;
+}
+
+// ********************************
+//
+float                   ModelNodeEffectLightScattering::GetWeight                       ()
+{
+    return m_weightVal;
+}
+
+// ********************************
+//
+float                   ModelNodeEffectLightScattering::GetDecay                        ()
+{
+    return m_decayVal;
+}
+
+// ********************************
+//
+float                   ModelNodeEffectLightScattering::GetDensity                      ()
+{
+    return m_densityVal;
+}
+
+// ********************************
+//
+glm::vec2               ModelNodeEffectLightScattering::GetLightPositionOnScreen        ()
+{
+    return m_lightPositionOnScreenVal;
+}
+
+// ********************************
+//
+int                     ModelNodeEffectLightScattering::GetNumSamples                   ()
+{
+    return m_numSamplesVal;
+}
+
 } // model
 } // bv

@@ -25,14 +25,29 @@ private:
 
 public:
 
-                                ModelNodeEffectLightScattering( ITimeEvaluatorPtr timeEvaluator );
+                            ModelNodeEffectLightScattering( ITimeEvaluatorPtr timeEvaluator );
 
-        virtual void            Serialize       ( ISerializer& ser ) const;
-        static ISerializablePtr Create          ( const IDeserializer& deser );
+        
+    ParamFloatPtr           GetParamExposure                ();
+    ParamFloatPtr           GetParamWeight                  ();
+    ParamFloatPtr           GetParamDecay                   ();
+    ParamFloatPtr           GetParamDensity                 ();
+    ParamVec2Ptr            GetParamLightPositionOnScreen   ();
+    ParamIntPtr             GetParamNumSamples              ();         
 
-        virtual void            Update              ( TimeType t ) override;
+    float                   GetExposure                     ();
+    float                   GetWeight                       ();
+    float                   GetDecay                        ();
+    float                   GetDensity                      ();
+    glm::vec2               GetLightPositionOnScreen        ();
+    int                     GetNumSamples                   ();   
 
-        virtual NodeEffectType  GetType             () const override;
+    virtual void            Serialize       ( ISerializer& ser ) const;
+    static ISerializablePtr Create          ( const IDeserializer& deser );
+
+    virtual void            Update              ( TimeType t ) override;
+
+    virtual NodeEffectType  GetType             () const override;
 
 };
 

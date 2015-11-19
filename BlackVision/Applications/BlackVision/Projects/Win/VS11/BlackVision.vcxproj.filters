@@ -39,7 +39,7 @@
     </Filter>
     <Filter Include="EndUserAPI">
       <UniqueIdentifier>{4d25f62a-5bd7-414f-b683-53e8c1ded179}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="Rendering\Logic\VideoOutputRendering">
       <UniqueIdentifier>{b3d9d3ab-1a17-4f23-988d-1ed9c94ee73c}</UniqueIdentifier>
     </Filter>
@@ -153,7 +153,7 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\RemoteEventsHandlers.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.cpp">
       <Filter>Rendering\Logic\VideoOutputRendering</Filter>
     </ClCompile>
@@ -165,6 +165,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\EndUserAPI\RemoteController.cpp">
       <Filter>EndUserAPI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\LightScatteringRenderLogic.cpp">
+      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -288,9 +291,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteController.h">
       <Filter>EndUserAPI</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.h">
       <Filter>Rendering\Logic\VideoOutputRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\LightScatteringRenderLogic.h">
+      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
