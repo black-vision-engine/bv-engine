@@ -37,13 +37,13 @@
     <Filter Include="Rendering\Logic\NodeEffectRendering">
       <UniqueIdentifier>{779e4a57-6fa2-46f1-bba2-31541f4a8920}</UniqueIdentifier>
     </Filter>
-    <Filter Include="EventHandlers">
-      <UniqueIdentifier>{8535c773-e776-4501-9a4c-6c03c589eab7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="EndUserAPI">
       <UniqueIdentifier>{4d25f62a-5bd7-414f-b683-53e8c1ded179}</UniqueIdentifier>
     </Filter>
-    <Filter Include="EndUserAPI\JsonCommandsConverter">
+    <Filter Include="EndUserAPI\EventHandlers">
+      <UniqueIdentifier>{fb178992-4589-46d8-b948-24ce9f5b39a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EndUserAPI\JsonCommandsListener">
       <UniqueIdentifier>{eceea615-6f9e-49bd-bfa0-e18ef67e559a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -99,7 +99,6 @@
       <Filter>VideoInput</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
-    <ClCompile Include="..\..\..\Source\RemoteControlInterface.cpp" />
     <ClCompile Include="..\..\..\Source\PerformanceMonitor.cpp" />
     <ClCompile Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp">
       <Filter>VideoInput</Filter>
@@ -137,17 +136,32 @@
     <ClCompile Include="..\..\..\Source\TestAI\TestAnimationKeyboardHandler.cpp">
       <Filter>TestAI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\EventHandlers\SceneEventsHandlers.cpp">
-      <Filter>EventHandlers</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\EventHandlers\PluginEventsHandlers.cpp">
-      <Filter>EventHandlers</Filter>
-	</ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.cpp">
       <Filter>Rendering\Logic\NodeEffectRendering</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsConverter\JsonCommandsConverter.cpp">
-      <Filter>EndUserAPI\JsonCommandsConverter</Filter>
+    <ClCompile Include="..\..\..\Source\TestAI\TestRemoteEventsKeyboardHandler.cpp">
+      <Filter>TestAI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\HightmapHandlers.cpp">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\PluginEventsHandlers.cpp">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\QueryHandlers.cpp">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\RemoteEventsHandlers.cpp">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.cpp">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.cpp">
+      <Filter>EndUserAPI\JsonCommandsListener</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\EndUserAPI\RemoteController.cpp">
+      <Filter>EndUserAPI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -207,7 +221,6 @@
       <Filter>VideoInput</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
-    <ClInclude Include="..\..\..\Source\RemoteControlInterface.h" />
     <ClInclude Include="..\..\..\Source\PerformanceMonitor.h" />
     <ClInclude Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h">
       <Filter>VideoInput</Filter>
@@ -245,24 +258,36 @@
     <ClInclude Include="..\..\..\Source\TestAI\TestAnimationKeyboardHandler.h">
       <Filter>TestAI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\EventHandlers\EventHelpers.h">
-      <Filter>EventHandlers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\EventHandlers\SceneEventsHandlers.h">
-      <Filter>EventHandlers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\EventHandlers\PluginEventsHandlers.h">
-      <Filter>EventHandlers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\UseLogger.h" />
-    <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteCommandsConverter.h">
-      <Filter>EndUserAPI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsConverter\JsonCommandsConverter.h">
-      <Filter>EndUserAPI\JsonCommandsConverter</Filter>
-	</ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.h">
       <Filter>Rendering\Logic\NodeEffectRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestAI\TestRemoteEventsKeyboardHandler.h">
+      <Filter>TestAI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EndUserAPI\IEventServer.h">
+      <Filter>EndUserAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\HightmapHandlers.h">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\PluginEventsHandlers.h">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\QueryHandlers.h">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\RemoteEventsHandlers.h">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.h">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.h">
+      <Filter>EndUserAPI\JsonCommandsListener</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteController.h">
+      <Filter>EndUserAPI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
