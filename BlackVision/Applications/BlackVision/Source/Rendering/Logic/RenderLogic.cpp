@@ -26,8 +26,6 @@ namespace bv {
 //
 RenderLogic::RenderLogic     ()
 {
-    m_yp = CLT_TOTAL;
-
     m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffersPerRT() );
     m_videoOutputRenderLogic = new DefaultVideoOutputRenderLogic( DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
 
