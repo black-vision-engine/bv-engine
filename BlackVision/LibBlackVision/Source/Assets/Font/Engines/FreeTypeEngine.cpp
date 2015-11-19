@@ -313,7 +313,7 @@ size_t GetSizeOfFile( const std::wstring& path )
 	_wstat(path.c_str(), &fileinfo);
 	return fileinfo.st_size;
 }
-
+} // anonymous
 // *******************************
 //
 std::wstring LoadUtf8FileToString(const std::wstring & _filename)
@@ -348,7 +348,7 @@ std::wstring LoadUtf8FileToString(const std::wstring & _filename)
 
 	return buffer;
 }
-} // anonymous
+
 
 // *********************************
 //

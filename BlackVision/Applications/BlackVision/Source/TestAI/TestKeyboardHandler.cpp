@@ -4,6 +4,7 @@
 #include "Serialization/XML/XMLSerializer.h"
 #include "Serialization/Json/JsonSerializeObject.h"
 
+
 namespace bv {
 
 // *********************************
@@ -31,7 +32,7 @@ void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
         delete sob;
     }
 
-    { c; }
+
     { logic; }
 	// To be implemented in subclasses
 

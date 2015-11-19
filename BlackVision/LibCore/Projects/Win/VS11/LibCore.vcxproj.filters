@@ -92,6 +92,15 @@
     <ClInclude Include="..\..\..\Source\IO\NamedPipe.h">
       <Filter>IO</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Logger\QueueSink.h">
+      <Filter>Tools\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Logger\LogMsgStruct.h">
+      <Filter>Tools\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Logger\LoggerEnums.h">
+      <Filter>Tools\Logger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">

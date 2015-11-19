@@ -18,7 +18,7 @@ JsonSpiritSerializeObject::~JsonSpiritSerializeObject()
 
 // ***********************
 //
-void JsonSpiritSerializeObject::Save                ( const std::string& filename, FormatStyle style  )
+void JsonSpiritSerializeObject::Save                ( const std::string& filename, FormatStyle style )
 {
     std::wofstream file( filename );
     if( style == FormatStyle::FORMATSTYLE_SPARING )
@@ -26,6 +26,17 @@ void JsonSpiritSerializeObject::Save                ( const std::string& filenam
     else if( style == FormatStyle::FORMATSTYLE_READABLE )
         json_spirit::write( m_root, file, json_spirit::pretty_print );
     file.close();
+}
+
+// ***********************
+//
+std::wstring JsonSpiritSerializeObject::Save                ( FormatStyle style )
+{
+    if( style == FormatStyle::FORMATSTYLE_SPARING )
+        return json_spirit::write( m_root, json_spirit::none );
+    else if( style == FormatStyle::FORMATSTYLE_READABLE )
+        return json_spirit::write( m_root, json_spirit::pretty_print );
+    return L"";
 }
 
 // ***********************

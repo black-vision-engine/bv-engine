@@ -2,6 +2,7 @@
 #include "bvApp.h"
 
 #include "System/InitSubsystem.h"
+#include "EndUserAPI/RemoteController.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
@@ -116,9 +117,7 @@ bool BlackVisionApp::OnInitialize       ()
 {
     m_processManager = new ProcessManager();
 		//pablito
-    InitializeLogger        ();
     InitializeLicenses      ();
-    InitializeSocketServer  ();
     InitializeConfig        ();
 
 
@@ -162,15 +161,6 @@ void    BlackVisionApp::InitializeConsole   ()
     }
 }
 
-//pablito
-// *********************************
-//`
-void BlackVisionApp::InitializeLogger        ()
-{
-    //Log::Connect();
-    Log::EnableConsoleOutput();
-    Log::A(L"Connection Initialized");
-}
 
 // *********************************
 //
@@ -179,24 +169,17 @@ bool    BlackVisionApp::InitializeLicenses   ()
     LicenseManager::LoadLicenses();
     bool license = LicenseManager::VerifyLicense();
 
-    Log::A(L"license");
-	if(license)
+	if( license )
 	{
-        Log::A(L"tools",L"license",L"License is valid. Proceeding...");
-	}else{
-        Log::A(L"tools",L"license",L"License is not valid. Please contact your administrator or sales representative");
-
+        LOG_MESSAGE( SeverityLevel::info ) << "License is valid. Proceeding...";
+	}
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::critical ) << "License is not valid. Please contact your administrator or sales representative";
 	}
     return license;
 }
 
-// *********************************
-//
-void    BlackVisionApp::InitializeSocketServer  ()
-{
-    SocketWrapper Server;
-	Server.InitServer();
-}
 
 // *********************************
 //

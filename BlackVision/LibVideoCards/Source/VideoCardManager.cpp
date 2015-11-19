@@ -5,6 +5,9 @@
 #include <iostream>
 #include <boost/lexical_cast.hpp>
 //#include <..\dep\vld\include\vld.h>
+
+#include "UseLogger.h"
+
 namespace bv
 {
 
@@ -112,13 +115,13 @@ bool VideoCardManager::InitVideoCardManager(const std::vector<int> & hackBuffers
 	{        
 		InitVideoCards( hackBuffersUids );
     
-		Log::A("VideoCards","INFO","Detected " + to_string(GetVideoCardsSize()) + " videocard(s)");
+        LOG_MESSAGE( SeverityLevel::info ) << "Detected " + to_string( GetVideoCardsSize() ) + " videocard(s)";
 		
 		return true;
 	}
 	else
 	{
-		Log::A("VideoCards","ERROR","NO VIDEO CARDS DETECTED");
+		LOG_MESSAGE( SeverityLevel::error ) << "NO VIDEO CARDS DETECTED";
 		return false;
 	}
 }
@@ -580,19 +583,22 @@ bool VideoCardManager::UpdateReferenceOffset( unsigned int VideoCardID, std::str
 
 void bv::videocards::VideoCardManager::OnEventReceived                   ( bv::IEventPtr evt )
 {
-    if( evt->GetEventType() == bv::VideoCardEvent::m_sEventType)
+    if( evt->GetEventType() == bv::VideoCardEvent::Type() )
     {
-		
-		bv::VideoCardEventPtr evtVideo = std::static_pointer_cast<bv::VideoCardEvent>( evt );
-        wcout<<"video : "<<evtVideo->command<<endl;
-        if(evtVideo->command==L"ON")
+		bv::VideoCardEventPtr videoEvent = std::static_pointer_cast<bv::VideoCardEvent>( evt );
+        VideoCardEvent::Command command = videoEvent->VideoCommand;
+
+        wcout << "video : " << VideoCardEvent::CommandToWString( command ) << endl;
+
+
+        if( command == VideoCardEvent::Command::VideoCardOn )
         {
             for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
             {
                 m_VideoCards[i]->Enable();
             }
         }
-        else  if(evtVideo->command==L"OFF")
+        else  if( command == VideoCardEvent::Command::VideoCardOff )
         {
             for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
             {
@@ -600,6 +606,11 @@ void bv::videocards::VideoCardManager::OnEventReceived                   ( bv::I
                 m_VideoCards[i]->Disable();
             }
         }
+        else if( command == VideoCardEvent::Command::KeyOn )
+            SetKey( true );
+        else if( command == VideoCardEvent::Command::KeyOff )
+            SetKey( false );
+
     }
 
 }
