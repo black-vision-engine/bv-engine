@@ -31,6 +31,8 @@ namespace bv{
     bool SocketWrapper::InitializeServer( const QueueEventCallback& callback, int port )
     {
         m_port = port;
+        if( callback.empty() )
+            return false;
 
         SendCommandCallback = callback;
         return InitServer();
