@@ -464,6 +464,10 @@ void                            BVAppLogic::InitializeKbdHandler()
     {
         m_kbdHandler = new TestEditorsKeyboardHandler();
     }
+    else if( envScene == "LIGHT_SCATTERING_EFFECT" )
+    {
+        m_kbdHandler = new TestEditorsKeyboardHandler();
+    }
     else
     {
         m_kbdHandler = new TestKeyboardHandler();

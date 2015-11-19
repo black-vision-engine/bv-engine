@@ -537,6 +537,10 @@ model::SceneModelPtr    TestScenesFactory::CreateSceneFromEnv       ( const std:
     {
         node = TestScenesFactory::RemoteEventsTestScene( pluginsManager, timelineManager, timeEvaluator );
     }
+    else if( scene == "LIGHT_SCATTERING_EFFECT" )
+    {
+        node = TestScenesFactory::LightScatteringTestScene( pluginsManager, timelineManager, timeEvaluator );
+    }
     else
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
@@ -595,6 +599,14 @@ model::BasicNodePtr     TestScenesFactory::GlobalEffect05           ( const mode
 {
     { pluginsManager; }
     return SimpleNodesFactory::CreateGlobalEffectTest( timelineManager, timeEvaluator );
+}
+
+// *****************************
+//
+model::BasicNodePtr     TestScenesFactory::LightScatteringTestScene  ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { pluginsManager; }
+    return SimpleNodesFactory::CreateLightScatteringTest( timelineManager, timeEvaluator );
 }
 
 // *****************************
