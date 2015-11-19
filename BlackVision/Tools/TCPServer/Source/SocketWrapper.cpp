@@ -4,8 +4,6 @@
 #include "SocketWrapper.h"
 #include <math.h>
 
-#include "../../Applications/BlackVision/Source/EndUserAPI/RemoteController.h"
-
 #include "UseLogger.h"
 
 #include <iostream>
@@ -21,20 +19,20 @@ namespace bv{
 
 	//DWORD WINAPI SocketHandler(void*);
     std::vector<ResponseMsg> SocketWrapper::Responses;
-    RemoteController* SocketWrapper::BVCommandsConverter = nullptr;
+    QueueEventCallback SocketWrapper::SendCommandCallback = nullptr;
 
 	SocketWrapper::SocketWrapper()
 	{}
-
 
 	SocketWrapper::~SocketWrapper()
     {}
 
 
-    bool SocketWrapper::InitializeServer( RemoteController* commandsConverter, int port )
+    bool SocketWrapper::InitializeServer( const QueueEventCallback& callback, int port )
     {
         m_port = port;
-        BVCommandsConverter = commandsConverter;
+
+        SendCommandCallback = callback;
         return InitServer();
     }
 
@@ -258,7 +256,7 @@ namespace bv{
                     std::wstring_convert <std::codecvt_utf8<wchar_t>,wchar_t> convert;
                     std::wstring str = convert.from_bytes((const char*)temp_s.c_str());
 
-                    BVCommandsConverter->QueueEvent( str, (int)*csock );
+                    SendCommandCallback( str, (int)*csock );
 				}
                 else
                 {

@@ -76,7 +76,9 @@ void        JsonCommandsListener::SendResponse           ( const IEventPtr evt )
 bool JsonCommandsListener::InitializeServer    ( int port )
 {
     m_eventServer = IEventServer::CreateServerObject();
-    return m_eventServer->InitializeServer( this, port );
+
+    bool result = m_eventServer->InitializeServer( fastdelegate::MakeDelegate( this, &JsonCommandsListener::QueueEvent ), port );
+    return result;
 }
 
 // ***********************
@@ -89,5 +91,6 @@ bool JsonCommandsListener::InitializeRemoteLog ( const std::string& address, uns
 
     return true;
 }
+
 
 } //bv

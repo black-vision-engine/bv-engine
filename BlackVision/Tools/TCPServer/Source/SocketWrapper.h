@@ -17,15 +17,12 @@
 
 namespace bv
 {
-  
-class RemoteController;
-
 
 class SocketWrapper : public IEventServer
 {
 private:
-    static RemoteController* BVCommandsConverter;
-    static std::vector<ResponseMsg> Responses;
+    static QueueEventCallback           SendCommandCallback;
+    static std::vector<ResponseMsg>     Responses;
 
 	int m_nLinkMode;
     int m_port;
@@ -44,8 +41,8 @@ public:
 
     static void             AddMsg              ( ResponseMsg msg){Responses.push_back( msg );}     ///@deprecated @todo Wywaliæ jak ju¿ zniknie RemoteControlInterface
 
-    bool        InitializeServer    ( RemoteController* commandsConverter, int port ) override;
-    void        SendResponse        ( ResponseMsg& message ) override;
+    bool        InitializeServer        ( const QueueEventCallback& callback, int port ) override;
+    void        SendResponse            ( ResponseMsg& message ) override;
 };
 
 }

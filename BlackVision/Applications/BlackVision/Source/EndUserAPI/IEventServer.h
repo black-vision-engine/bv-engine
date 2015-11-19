@@ -2,6 +2,12 @@
 
 #include <string>
 
+#pragma warning( push )
+#pragma warning( disable : 4100 )
+
+#include "FastDelegate.h"
+
+#pragma warning( pop )
 
 namespace bv
 {
@@ -19,6 +25,8 @@ struct ResponseMsg
 };
 
 
+typedef fastdelegate::FastDelegate2<const std::wstring&, int> QueueEventCallback;
+
 class IEventServer
 {
 private:
@@ -26,11 +34,11 @@ protected:
 public:
     ~IEventServer() {}
 
-    virtual bool            InitializeServer    ( RemoteController* converter, int port ) = 0;
-    virtual void            SendResponse        ( ResponseMsg& meesage ) = 0;
+    virtual bool            InitializeServer        ( const QueueEventCallback& callback, int port ) = 0;
+    virtual void            SendResponse            ( ResponseMsg& meesage ) = 0;
     /// For now I assume, there's only one one implementation and this function is enough.
     /// Maybe in future we should create a factory or something.
-    static IEventServer*    CreateServerObject  ();
+    static IEventServer*    CreateServerObject      ();
 };
 
 

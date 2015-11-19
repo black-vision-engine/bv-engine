@@ -22,8 +22,6 @@ public:
     virtual bool                        InitializeServer    ( int port ) = 0;
     virtual bool                        InitializeRemoteLog ( const std::string& address, unsigned short port, SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF ) = 0;
     virtual void                        SendResponse        ( const IEventPtr response ) = 0;
-
-    static RemoteController&            Get();
 protected:
     IEventPtr                           DeserializeEvent    ( IDeserializer& deser );
     void                                RegisterEvent       ( const std::string& eventName, EventCreatorDelegate eventCreator );
