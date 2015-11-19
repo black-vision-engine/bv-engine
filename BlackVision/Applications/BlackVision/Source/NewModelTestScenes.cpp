@@ -549,7 +549,7 @@ model::SceneModelPtr    TestScenesFactory::CreateSceneFromEnv       ( const std:
         node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
 
-    return std::make_shared< model::SceneModel >( "sceneFromEnv", model::TimelineManagerPtr( timelineManager ),  node );
+    return std::make_shared< model::SceneModel >( "sceneFromEnv: " + scene, model::TimelineManagerPtr( timelineManager ),  node );
 }
 
 // *****************************

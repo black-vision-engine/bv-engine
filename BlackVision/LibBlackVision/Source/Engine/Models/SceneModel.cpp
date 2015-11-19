@@ -22,24 +22,6 @@ SceneModel::SceneModel( std::string name, model::TimelineManagerPtr pTimelineMan
 
 // *******************************
 //
-void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root )
-{
-    auto plugins = root->GetPlugins();
-    for( unsigned int i = 0; i < root->GetNumPlugins(); i++ )
-    {
-        auto assets = root->GetPlugins()->GetPlugin( i )->GetAssets();
-        for( auto asset : assets )
-        {
-            map.AddAssetDesc( asset );
-        }
-    }
-
-    for( unsigned int i = 0; i < root->GetNumChildren(); i++ )
-        GetAssetsWithUIDs( map, root->GetChild( i ) );
-}
-
-// *******************************
-//
 void            SceneModel::Serialize           ( ISerializer& ser) const
 {
 ser.EnterChild( "scene" );

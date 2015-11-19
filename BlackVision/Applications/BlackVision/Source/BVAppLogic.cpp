@@ -221,7 +221,8 @@ void BVAppLogic::LoadScene          ( void )
     {
         auto scene = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_pluginsManager, GetTimelineManager().get(), m_globalTimeline );
         m_bvScene = BVScene::Create( scene, new Camera( DefaultConfig.IsCameraPerspactive() ), te, m_renderer );
-        InitializeScenesTimelines();
+        if( GetEnvScene() == "SERIALIZED_TEST " )
+            InitializeScenesTimelines();
     }
 
     if( !m_bvScene )
