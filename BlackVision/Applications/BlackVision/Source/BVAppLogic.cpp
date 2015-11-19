@@ -215,7 +215,6 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
             HPROFILER_SECTION( "Render", PROFILER_THREAD1 );
 
             m_renderLogic->RenderFrame( renderer, m_bvScene->GetEngineSceneRoot() );
-            m_renderLogic->FrameRendered( renderer );
         }
     }
 

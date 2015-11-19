@@ -37,18 +37,19 @@ public:
 
     void    RenderNode      ( Renderer * renderer, SceneNode * node );
 
-    bool    UseDefaultMask  ( SceneNode * node ) const;
-    bool    UseAlphaMask    ( SceneNode * node ) const;
-    bool    UseNodeMask     ( SceneNode * node ) const;
+private:
 
     NodeEffectRenderLogic *     GetNodeEffectRenderLogic    ( SceneNode * node ) const;
+
+public:
 
     void    DrawNode        ( Renderer * renderer, SceneNode * node );
 
     void    DrawNodeOnly    ( Renderer * renderer, SceneNode * node );
     void    DrawChildren    ( Renderer * renderer, SceneNode * node, int firstChildIdx = 0 );
 
-    void    FrameRendered   ( Renderer * renderer );
+private:
+
     void    PrintGLStats    ( bool detailed );
 
 };

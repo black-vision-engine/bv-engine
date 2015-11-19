@@ -64,6 +64,8 @@ void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * node )
 		RenderNode( renderer, node );
 
     PostFrameSetup( renderer );
+
+    m_videoOutputRenderLogic->FrameRendered( renderer, m_offscreenRenderLogic );
 }
 
 // *********************************
@@ -107,27 +109,6 @@ void    RenderLogic::RenderNode     ( Renderer * renderer, SceneNode * node )
 
 // *********************************
 //
-bool    RenderLogic::UseDefaultMask ( SceneNode * node ) const
-{
-    return node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT;
-}
-
-// *********************************
-//
-bool    RenderLogic::UseAlphaMask   ( SceneNode * node ) const
-{
-    return node->GetNodeEffect()->GetType() == NodeEffect::Type::T_ALPHA_MASK;
-}
-
-// *********************************
-//
-bool    RenderLogic::UseNodeMask    ( SceneNode * node ) const
-{
-    return node->GetNodeEffect()->GetType() == NodeEffect::Type::T_NODE_MASK;
-}
-
-// *********************************
-//
 NodeEffectRenderLogic *     RenderLogic::GetNodeEffectRenderLogic    ( SceneNode * node ) const
 {
     assert( (unsigned int) node->GetNodeEffect()->GetType() < (unsigned int) NodeEffect::Type::T_TOTAL );
@@ -165,13 +146,6 @@ void    RenderLogic::DrawChildren   ( Renderer * renderer, SceneNode * node, int
 
 // *********************************
 //
-void    RenderLogic::FrameRendered   ( Renderer * renderer )
-{
-    m_videoOutputRenderLogic->FrameRendered( renderer, m_offscreenRenderLogic );
-}
-
-// *********************************
-//
 void    RenderLogic::PrintGLStats    (  bool detailed  )
 {
     if ( detailed )
@@ -185,33 +159,3 @@ void    RenderLogic::PrintGLStats    (  bool detailed  )
 }
 
 } //bv
-
-/*
-
-def RenderFrame():
-    # simple rendering of a single frame
-
-def GPURenderPreVideo():
-    ApplyAllPixelEffects
-    DoInterlace
-    
-
-def mainLoop():
-    RenderFrame()
-
-    if not DisplayAsVideoOutput:
-        BlitToWindow()
-    else:
-        GPURenderPreVideo()
-        BlitToWindow()
-
-        if PushToVideoCard:
-            Readback()
-            Push()
-
-
-    if not PushToVideoCard:
-        else:
-            BlitToWindow()
-
-*/
