@@ -23,7 +23,8 @@
 #include "Engine/Graphics/Effects/NodeEffects/NodeMaskNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/WireframeNodeEffect.h"
-
+#include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/LightScatteringNodeEffect.h"
 
 namespace bv 
 {

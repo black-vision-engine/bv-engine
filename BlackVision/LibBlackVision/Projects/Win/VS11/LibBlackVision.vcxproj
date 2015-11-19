@@ -145,6 +145,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\MaskChannelsEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\MaskChannelsShaders.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\AlphaMaskNodeEffect.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\LightScatteringNodeEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeMaskNodeEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\WireframeNodeEffect.cpp" />
@@ -405,6 +406,7 @@
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\EventHelpers.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\DefaultMultipassEffect.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\LightScatteringNodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultVideoStreamDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShadeders.h" />
