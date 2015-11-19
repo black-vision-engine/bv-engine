@@ -117,7 +117,11 @@ std::string T2String( const bool& b )
         return "false";
 }
 
+template std::string T2String( const glm::vec2& v );
+template std::string T2String( const glm::vec3& v );
 template std::string T2String( const glm::vec4& v );
+template std::string T2String( const float& v );
+template std::string T2String( const int& v );
 
 } }
 
