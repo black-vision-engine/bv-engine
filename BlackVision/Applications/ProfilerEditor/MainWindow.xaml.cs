@@ -346,23 +346,26 @@ namespace ProfilerEditor
                 m_tcpClient = new TcpClient(addressIP, port);
 
                 m_networkStream = m_tcpClient.GetStream();
+
+                NetStatusLabel.Content = "Connected";
+                m_connected = true;
             }
             catch ( SocketException except )
             {
                 NetStatusLabel.Content = "Socket exception " + except.ToString();
                 m_connected = false;
             }
-
-            NetStatusLabel.Content = "Connected";
-            m_connected = true;
         }
 
         private void DisconnetcButton_Click( object sender, RoutedEventArgs e )
         {
-            m_networkStream.Close();
-            m_tcpClient.Close();
-            NetStatusLabel.Content = "Disconnected";
-            m_connected = false;
+            if( m_connected )
+            {
+                m_networkStream.Close();
+                m_tcpClient.Close();
+                NetStatusLabel.Content = "Disconnected";
+                m_connected = false;
+            }
         }
 
         private void SendButton_Click( object sender, RoutedEventArgs e )

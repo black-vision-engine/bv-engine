@@ -142,9 +142,7 @@ void BVAppLogic::Initialize         ()
     bv::effect::InitializeLibEffect( m_renderer );
 
     InitializeKbdHandler();
-    m_remoteHandlers->InitializeHandlers( this );
-    m_remoteController->InitializeRemoteLog( "10.0.0.101", 28777, SeverityLevel::info );
-    m_remoteController->InitializeServer( 11101 );
+    InitializeRemoteCommunication();
 }
 
 // *********************************
@@ -476,6 +474,26 @@ void                            BVAppLogic::InitializeKbdHandler()
     {
         m_kbdHandler = new TestKeyboardHandler();
     }
+}
+
+// *********************************
+//
+void                            BVAppLogic::InitializeRemoteCommunication()
+{
+    m_remoteHandlers->InitializeHandlers( this );
+
+    unsigned int editorPort = ConfigManager::GetInt( "Network/SocketServer/Port" );
+    bool useRemoteLog = ConfigManager::GetBool( "Network/RemoteLog/Use" );
+
+    if( useRemoteLog )
+    {
+        unsigned int remoteLogPort = ConfigManager::GetInt( "Network/RemoteLog/Port" );
+        std::string remoteLogIP = ConfigManager::GetString( "Network/RemoteLog/IP" );
+
+        m_remoteController->InitializeRemoteLog( remoteLogIP, static_cast<unsigned short>( remoteLogPort ), SeverityLevel::info );
+    }
+    
+    m_remoteController->InitializeServer( editorPort );
 }
 
 // *********************************

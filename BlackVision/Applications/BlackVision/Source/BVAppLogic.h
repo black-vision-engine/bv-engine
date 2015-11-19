@@ -125,6 +125,7 @@ public:
 private:
 
     void                            InitializeKbdHandler();
+    void                            InitializeRemoteCommunication();
 
     void                            InitializeScenesTimelines();
     std::string                     GetEnvScene();
