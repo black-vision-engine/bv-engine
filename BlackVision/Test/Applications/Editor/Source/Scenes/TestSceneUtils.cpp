@@ -29,11 +29,11 @@ const std::string	TestSceneUtils::PluginsNameArr[] = { "triangle", "circle", "el
 //
 model::BasicNodePtr		TestSceneUtils::ColoredRectangle			( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, Float32 width, Float32 height, glm::vec4 color, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
     timeEvaluator->AddChild( localTimeline );
 
     auto node = model::BasicNode::Create( name, timeEvaluator );
-
+	
 	std::vector< std::string > plugins;
 	plugins.push_back( "DEFAULT_TRANSFORM" );
 	plugins.push_back( "DEFAULT_RECTANGLE" );
@@ -64,7 +64,7 @@ model::BasicNodePtr		TestSceneUtils::ColoredRectangle			( model::TimelineManager
 //
 model::BasicNodePtr		TestSceneUtils::ColoredGeometry				( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, const std::string & plugin, glm::vec4 color, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
     timeEvaluator->AddChild( localTimeline );
 
     auto node = model::BasicNode::Create( name, timeEvaluator );
@@ -96,7 +96,7 @@ model::BasicNodePtr		TestSceneUtils::ColoredGeometry				( model::TimelineManager
 //
 model::BasicNodePtr		TestSceneUtils::TexturedRectangle		( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, Float32 width, Float32 height, const std::string & path, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
     timeEvaluator->AddChild( localTimeline );
 
     auto node = model::BasicNode::Create( name, timeEvaluator );
@@ -131,7 +131,7 @@ model::BasicNodePtr		TestSceneUtils::TexturedRectangle		( model::TimelineManager
 //
 model::BasicNodePtr		TestSceneUtils::TexturedGeometry		( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, const std::string & plugin, const std::string & path, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
     timeEvaluator->AddChild( localTimeline );
 
     auto node = model::BasicNode::Create( name, timeEvaluator );
@@ -163,7 +163,7 @@ model::BasicNodePtr		TestSceneUtils::TexturedGeometry		( model::TimelineManager 
 //
 model::BasicNodePtr		TestSceneUtils::AnimatedRectangle		( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, Float32 width, Float32 height, const std::string & path, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
     timeEvaluator->AddChild( localTimeline );
 
     auto node = model::BasicNode::Create( name, timeEvaluator );
@@ -203,7 +203,7 @@ model::BasicNodePtr		TestSceneUtils::AnimatedRectangle		( model::TimelineManager
 //
 model::BasicNodePtr		TestSceneUtils::AnimatedGeometry		( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, const std::string & plugin, const std::string & path, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
     timeEvaluator->AddChild( localTimeline );
 
     auto node = model::BasicNode::Create( name, timeEvaluator );
@@ -240,7 +240,7 @@ model::BasicNodePtr		TestSceneUtils::AnimatedGeometry		( model::TimelineManager 
 //
 model::BasicNodePtr		TestSceneUtils::GradientRectangle		( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, Float32 width, Float32 height, glm::vec4 c1, glm::vec4 c2, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
     timeEvaluator->AddChild( localTimeline );
 
     auto node = model::BasicNode::Create( name, timeEvaluator );
@@ -276,7 +276,7 @@ model::BasicNodePtr		TestSceneUtils::GradientRectangle		( model::TimelineManager
 //
 model::BasicNodePtr		TestSceneUtils::GradientGeometry		( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, const std::string & plugin, glm::vec4 c1, glm::vec4 c2, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
     timeEvaluator->AddChild( localTimeline );
 
     auto node = model::BasicNode::Create( name, timeEvaluator );
@@ -309,7 +309,7 @@ model::BasicNodePtr		TestSceneUtils::GradientGeometry		( model::TimelineManager 
 //
 model::BasicNodePtr		TestSceneUtils::ColoredText				( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 color, UInt32 fontSize, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
     timeEvaluator->AddChild( localTimeline );
 
     auto node = model::BasicNode::Create( name, timeEvaluator );
@@ -330,9 +330,9 @@ model::BasicNodePtr		TestSceneUtils::ColoredText				( model::TimelineManager * t
 	SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, color );
 
     SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
-	SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Left ) );
+	SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
     
-	LoadFont( node->GetPlugin( "text" ), "Assets/Fonts/arial.TTF", fontSize, 0, 0, true );
+	LoadFont( node->GetPlugin( "text" ), "fonts/arial.TTF", fontSize, 0, 0, true );
 	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"tekst\n1234" );
 	
 	if( !alphaMask.empty() )
@@ -347,7 +347,7 @@ model::BasicNodePtr		TestSceneUtils::ColoredText				( model::TimelineManager * t
 //
 model::BasicNodePtr		TestSceneUtils::GradientText			( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
     timeEvaluator->AddChild( localTimeline );
 
     auto node = model::BasicNode::Create( name, timeEvaluator );
@@ -371,7 +371,7 @@ model::BasicNodePtr		TestSceneUtils::GradientText			( model::TimelineManager * t
     SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
 	SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
     
-	LoadFont( node->GetPlugin( "text" ), "Assets/Fonts/arial.TTF", fontSize, 0, 0, true );
+	LoadFont( node->GetPlugin( "text" ), "fonts/arial.TTF", fontSize, 0, 0, true );
 	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"tekst\n1234" );
 	
 	if( !alphaMask.empty() )
@@ -386,7 +386,7 @@ model::BasicNodePtr		TestSceneUtils::GradientText			( model::TimelineManager * t
 //
 model::BasicNodePtr		TestSceneUtils::ColoredTimer				( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 color, UInt32 fontSize, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
     timeEvaluator->AddChild( localTimeline );
 
     auto node = model::BasicNode::Create( name, timeEvaluator );
@@ -409,7 +409,7 @@ model::BasicNodePtr		TestSceneUtils::ColoredTimer				( model::TimelineManager * 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
 	SetParameter( node->GetPlugin( "timer" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
     
-	LoadFont( node->GetPlugin( "timer" ), "Assets/Fonts/arial.TTF", fontSize, 0, 0, true );
+	LoadFont( node->GetPlugin( "timer" ), "fonts/arial.TTF", fontSize, 0, 0, true );
     
 	if( !alphaMask.empty() )
 	{
@@ -426,7 +426,7 @@ model::BasicNodePtr		TestSceneUtils::ColoredTimer				( model::TimelineManager * 
 //
 model::BasicNodePtr		TestSceneUtils::GradientTimer			( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
     timeEvaluator->AddChild( localTimeline );
 
     auto node = model::BasicNode::Create( name, timeEvaluator );
@@ -450,7 +450,7 @@ model::BasicNodePtr		TestSceneUtils::GradientTimer			( model::TimelineManager * 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
 	SetParameter( node->GetPlugin( "timer" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
     
-	LoadFont( node->GetPlugin( "timer" ), "Assets/Fonts/arial.TTF", fontSize, 0, 0, true );
+	LoadFont( node->GetPlugin( "timer" ), "fonts/arial.TTF", fontSize, 0, 0, true );
     
 	if( !alphaMask.empty() )
 	{

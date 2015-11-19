@@ -123,7 +123,7 @@ mat4 animLetterTransform()
 
 void main()
 {
-    mat4 transform = MVP;
+    mat4 transform = mat4( 1.0 );
     
     switch( transformTextEffectId )
     {
