@@ -298,16 +298,9 @@ ParamTransformVecPtr				DefaultFinalizePlugin::GetParamTransform			() const
 
 // *******************************
 //
-bool								DefaultFinalizePlugin::IsValid						()
+bool								DefaultFinalizePlugin::IsValid						() const
 {
-	auto plugin = m_prevPlugin;
-	while ( plugin )
-	{
-		if ( !PluginsManager::DefaultInstance().CanBeAttachedTo( plugin->GetTypeUid(), plugin->GetPrevPlugin() ) )
-			return false;
-		plugin = plugin->GetPrevPlugin();
-	}
-	return true;
+	return m_prevPlugin->IsValid();
 }
 
 // *******************************

@@ -145,18 +145,6 @@ DefaultPluginParamValModelPtr   DefaultHeightMapPluginDesc::CreateDefaultModel( 
 
 // *******************************
 //
-bool                   DefaultHeightMapPluginDesc::CanBeAttachedTo     ( IPluginConstPtr plugin ) const
-{
-    if ( plugin == nullptr || plugin->GetTypeUid() != DefaultRectPluginDesc::UID() )
-    {
-        return false;
-    }
-
-    return true;
-}
-
-// *******************************
-//
 std::string             DefaultHeightMapPluginDesc::UID                     ()
 {
     return "DEFAULT_HEIGHT_MAP";

@@ -40,6 +40,8 @@ public:
     virtual const std::string &                 GetName                     () const = 0;
     virtual const std::string &                 GetTypeUid                  () const = 0;
 
+    virtual bool								IsValid						() const = 0;
+
     //TODO: rething the whole query API - and const correctness as well for that matter
     virtual IPluginParamValModelPtr             GetPluginParamValModel      () const = 0; //FIXME: czy tu nie powinno byc tez od razu const przy zwracanym wskazniku?
     virtual IParameterPtr                       GetParameter                ( const std::string & name ) const = 0;

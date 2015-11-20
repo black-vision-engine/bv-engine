@@ -27,8 +27,6 @@ public:
     virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
    
-    virtual bool                            CanBeAttachedTo     ( IPluginConstPtr plugin )  const override;
-
     static  std::string                     UID                 ();
 
     static  std::string                     TextureName         ();

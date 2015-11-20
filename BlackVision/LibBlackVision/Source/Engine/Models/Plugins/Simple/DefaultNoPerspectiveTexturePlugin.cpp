@@ -49,30 +49,6 @@ DefaultPluginParamValModelPtr   DefaultNoPerspectiveTexturePluginDesc::CreateDef
 
 // *******************************
 //
-bool                   DefaultNoPerspectiveTexturePluginDesc::CanBeAttachedTo     ( IPluginConstPtr plugin ) const
-{
-    if ( plugin == nullptr )
-    {
-        return false;
-    }
-
-    auto  vac = plugin->GetVertexAttributesChannel();
-    if ( vac == nullptr )
-    {
-        return false;
-    }
-
-    //auto numChannels = vac->GetDescriptor()->GetNumVertexChannels();
-    //if ( numChannels != 1 ) //only vertex attribute data allowed here
-    //{
-    //    return false;
-    //}
-
-    return true;
-}
-
-// *******************************
-//
 std::string             DefaultNoPerspectiveTexturePluginDesc::UID                       ()
 {
     return "DEFAULT_NO_PERSPECTIVE_TEXTURE";

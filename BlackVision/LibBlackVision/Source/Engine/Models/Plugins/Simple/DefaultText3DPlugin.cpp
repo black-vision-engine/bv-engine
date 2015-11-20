@@ -133,24 +133,6 @@ DefaultPluginParamValModelPtr   DefaultText3DPluginDesc::CreateDefaultModel( ITi
 
 // *******************************
 //
-bool                   DefaultText3DPluginDesc::CanBeAttachedTo   ( IPluginConstPtr plugin ) const
-{
-    if ( plugin == nullptr )
-    {
-        return true;
-    }
-
-    auto  vac = plugin->GetVertexAttributesChannel();
-    if ( vac != nullptr )
-    {
-        return false;
-    }
-
-    return true;
-}
-
-// *******************************
-//
 std::string             DefaultText3DPluginDesc::UID                      ()
 {
     return "DEFAULT_TEXT";

@@ -72,38 +72,6 @@ DefaultPluginParamValModelPtr   DefaultGradientPluginDesc::CreateDefaultModel( I
 
 // *******************************
 //
-bool                   DefaultGradientPluginDesc::CanBeAttachedTo     ( IPluginConstPtr plugin ) const
-{
-    if ( plugin == nullptr )
-    {
-        return false;
-    }
-
-    //auto  vac = plugin->GetVertexAttributesChannel();
-    //if ( vac == nullptr )
-    //{
-    //    return false;
-    //}
-
-    //auto numChannels = vac->GetDescriptor()->GetNumVertexChannels();
-    //if ( numChannels != 1 ) //only vertex attribute data allowed here
-    //{
-    //    return false;
-    //}
-
- //   auto uid = plugin->GetTypeUid();
-
-	//if ( uid != DefaultRectPluginDesc::UID() && uid != DefaultTextPluginDesc::UID() && uid != DefaultTransformPluginDesc::UID() && uid != DefaultTimerPluginDesc::UID() && uid != DefaultPrismPluginDesc::UID() && uid != DefaultPieChartPluginDesc::UID() )
-	//{
-	//	assert( false && "not one of my favourite plugins you are" );
- //       return false;
- //   }
-
-    return true;
-}
-
-// *******************************
-//
 std::string             DefaultGradientPluginDesc::UID                       ()
 {
     return "DEFAULT_LINEAR_GRADIENT";

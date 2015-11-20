@@ -70,7 +70,7 @@ public:
 
 	virtual ParamTransformVecPtr				GetParamTransform			() const override;
 
-    virtual bool								IsValid						() override;
+    virtual bool								IsValid						() const override;
 
 private:
 	void										UpdateShaderChannelModel	( DefaultParamValModelPtr psModel, DefaultTexturesDataPtr txData, IPluginPtr plugin ) const;

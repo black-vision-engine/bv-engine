@@ -18,24 +18,6 @@ DefaultGeometryPluginDescBase::DefaultGeometryPluginDescBase                    
 
 // *******************************
 //
-bool                            DefaultGeometryPluginDescBase::CanBeAttachedTo      ( IPluginConstPtr plugin )  const
-{
-    if( !BasePluginDescriptor::CanBeAttachedTo( plugin ) )
-    {
-        return false;
-    }
-
-    //Geometry generator cannot be attached to a plugin which generates geometry itself
-    if( plugin && plugin->GetVertexAttributesChannel() )
-    {
-        return false;
-    }
-
-    return true;
-}
-
-// *******************************
-//
 std::string                     DefaultGeometryPluginDescBase::UID                  ()
 {
     assert( false );

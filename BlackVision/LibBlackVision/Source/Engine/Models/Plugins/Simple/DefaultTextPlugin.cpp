@@ -162,24 +162,6 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
 
 // *******************************
 //
-bool                   DefaultTextPluginDesc::CanBeAttachedTo   ( IPluginConstPtr plugin ) const
-{
-    if ( plugin == nullptr )
-    {
-        return true;
-    }
-
-    auto  vac = plugin->GetVertexAttributesChannel();
-    if ( vac != nullptr )
-    {
-        return false;
-    }
-
-    return true;
-}
-
-// *******************************
-//
 std::string             DefaultTextPluginDesc::UID                      ()
 {
     return "DEFAULT_TEXT";

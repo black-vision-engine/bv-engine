@@ -61,30 +61,6 @@ DefaultPluginParamValModelPtr   DefaultAnimationPluginDesc::CreateDefaultModel( 
 
 // *******************************
 //
-bool                   DefaultAnimationPluginDesc::CanBeAttachedTo     ( IPluginConstPtr plugin ) const
-{
-    if ( plugin == nullptr )
-    {
-        return false;
-    }
-
-    auto  vac = plugin->GetVertexAttributesChannel();
-    if ( vac == nullptr )
-    {
-        return false;
-    }
-
-    //auto numChannels = vac->GetDescriptor()->GetNumVertexChannels();
-    //if ( numChannels != 1 ) //only vertex attribute data allowed here
-    //{
-    //    return false;
-    //}
-
-    return true;
-}
-
-// *******************************
-//
 std::string             DefaultAnimationPluginDesc::UID                       ()
 {
     return "DEFAULT_ANIMATION";
@@ -146,6 +122,13 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
 // 
 DefaultAnimationPlugin::~DefaultAnimationPlugin         ()
 {
+}
+
+// *************************************
+// 
+bool							DefaultAnimationPlugin::IsValid     () const
+{
+	return ( m_vaChannel && m_prevPlugin->IsValid() );
 }
 
 // *************************************

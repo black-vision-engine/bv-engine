@@ -54,30 +54,6 @@ DefaultPluginParamValModelPtr   DefaultAlphaMaskPluginDesc::CreateDefaultModel( 
 
 // *******************************
 //
-bool                   DefaultAlphaMaskPluginDesc::CanBeAttachedTo     ( IPluginConstPtr plugin ) const
-{
-    if ( plugin == nullptr )
-    {
-        return false;
-    }
-/*
-    auto  vac = plugin->GetVertexAttributesChannel();
-    if ( vac == nullptr )
-    {
-        return false;
-    }
-    */
-//    auto numChannels = vac->GetDescriptor()->GetNumVertexChannels();
-//    if ( numChannels != 1 && numChannels != 2 ) //vertex attribute + optional texture
-//    {
-//        return false;
-//    }
-
-    return true;
-}
-
-// *******************************
-//
 std::string             DefaultAlphaMaskPluginDesc::UID                     ()
 {
     return "DEFAULT_ALPHA_MASK";
@@ -132,6 +108,13 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
 // 
 DefaultAlphaMaskPlugin::~DefaultAlphaMaskPlugin         ()
 {
+}
+
+// *************************************
+// 
+bool						DefaultAlphaMaskPlugin::IsValid     () const
+{
+	return ( m_vaChannel && m_prevPlugin->IsValid() );
 }
 
 // *************************************

@@ -60,30 +60,6 @@ DefaultPluginParamValModelPtr   DefaultVideoStreamDecoderPluginDesc::CreateDefau
 
 // *******************************
 //
-bool                   DefaultVideoStreamDecoderPluginDesc::CanBeAttachedTo     ( IPluginConstPtr plugin ) const
-{
-    if ( plugin == nullptr )
-    {
-        return false;
-    }
-
-    auto  vac = plugin->GetVertexAttributesChannel();
-    if ( vac == nullptr )
-    {
-        return false;
-    }
-
-    auto numChannels = vac->GetDescriptor()->GetNumVertexChannels();
-    if ( numChannels != 1 ) //only vertex attribute data allowed here
-    {
-        return false;
-    }
-
-    return true;
-}
-
-// *******************************
-//
 std::string             DefaultVideoStreamDecoderPluginDesc::UID                       ()
 {
     return "DEFAULT_VIDEO_STREAM_DECODER";
@@ -135,6 +111,13 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
 // 
 DefaultVideoStreamDecoderPlugin::~DefaultVideoStreamDecoderPlugin					()
 {
+}
+
+// *************************************
+// 
+bool							DefaultVideoStreamDecoderPlugin::IsValid     () const
+{
+	return ( m_vaChannel && m_prevPlugin->IsValid() );
 }
 
 // *************************************

@@ -58,6 +58,8 @@ public:
     const std::string &                         GetName                     () const override   { return m_name; } 
     const std::string &                         GetTypeUid                  () const override   { return m_uid; } 
 
+    virtual bool								IsValid						() const override;
+
     virtual void                                SetGeometryChannel          ( VertexAttributesChannelPtr vaChannel ) { assert(!"Implement in derived class"); }
     virtual void                                SetTransformChannel         ( TransformChannelPtr transformChannel ) { assert(!"Implement in derived class"); }
     virtual void                                SetPixelShaderChannel       ( IPixelShaderChannelPtr pShCh )         { assert(!"Implement in derived class"); }
@@ -139,6 +141,18 @@ BasePlugin< Iface >::BasePlugin   ( const std::string & name, const std::string 
 template< class Iface >
 BasePlugin< Iface >::~BasePlugin()
 {
+}
+
+// *******************************
+//
+template< class Iface >
+bool						BasePlugin< Iface >::IsValid				() const
+{
+	if( m_prevPlugin )
+    {
+        return m_prevPlugin->IsValid();
+    }
+    return true;
 }
 
 // *******************************

@@ -369,15 +369,6 @@ bool            BasicNode::AddPlugin                        ( IPluginPtr plugin 
 {
     NonNullPluginsListGuard();
 
-    IPluginPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
-
-    assert( m_pluginsManager->CanBeAttachedTo( plugin->GetTypeUid(), prev ) );
-
-    if( !m_pluginsManager->CanBeAttachedTo( plugin->GetTypeUid(), prev ) )
-    {
-        return false;
-    }
-
     m_pluginList->AttachPlugin( plugin );
 
     return true;
@@ -390,13 +381,6 @@ bool            BasicNode::AddPlugin                        ( const std::string 
     NonNullPluginsListGuard ();
 
     IPluginPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
-
-    if( !m_pluginsManager->CanBeAttachedTo( uid, prev ) )
-    {
-        std::cout << uid << " cannot be attached to " << prev->GetTypeUid() << std::endl;
-        assert( false ); // FIXME(?)
-    }
-
     m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, prev, timeEvaluator ) );
 
     return true;
@@ -409,11 +393,6 @@ bool            BasicNode::AddPlugin                    ( const std::string & ui
     NonNullPluginsListGuard ();
 
     IPluginPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
-
-    if( !m_pluginsManager->CanBeAttachedTo( uid, prev ) )
-    {
-        return false;
-    }
 
     m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, name, prev, timeEvaluator ) );
 

@@ -20,24 +20,6 @@ DefaultPrismPluginDesc::DefaultPrismPluginDesc                                ()
 
 // *******************************
 //
-bool                            DefaultPrismPluginDesc::CanBeAttachedTo      ( IPluginConstPtr plugin )  const
-{
-    if( !BasePluginDescriptor::CanBeAttachedTo( plugin ) )
-    {
-        return false;
-    }
-
-    //Geometry generator cannot be attached to a plugin which generates geometry itself
-    if( plugin && plugin->GetVertexAttributesChannel() )
-    {
-        return false;
-    }
-
-    return true;
-}
-
-// *******************************
-//
 IPluginPtr                      DefaultPrismPluginDesc::CreatePlugin         ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     return CreatePluginTyped< DefaultPrismPlugin >( name, prev, timeEvaluator );

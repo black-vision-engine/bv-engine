@@ -84,17 +84,7 @@ model::BasicNodePtr  DefaultTestWithValidation   ( const model::PluginsManager *
     //NEW API
     IPluginPtr firstPlugin  = IPluginPtr( pluginsManager->CreatePlugin( "DEFAULT_TRANSFORM", "transform0", nullptr, timeEvaluator ) );
 
-    if( !pluginsManager->CanBeAttachedTo( "DEFAULT_RECTANGLE", firstPlugin ) )
-    {
-        return nullptr;
-    }
-
     IPluginPtr secondPlugin = IPluginPtr( pluginsManager->CreatePlugin( "DEFAULT_RECTANGLE", "rect0", firstPlugin, timeEvaluator ) );
-
-    if( !pluginsManager->CanBeAttachedTo( "DEFAULT_COLOR", secondPlugin ) )
-    {
-        return nullptr;
-    }
 
     IPluginPtr thirdPlugin  = IPluginPtr( pluginsManager->CreatePlugin( "DEFAULT_COLOR", "col0", secondPlugin, timeEvaluator ) );
 

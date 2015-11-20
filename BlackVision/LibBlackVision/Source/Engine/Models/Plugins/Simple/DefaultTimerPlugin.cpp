@@ -84,24 +84,6 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
 
 // *******************************
 //
-bool                   DefaultTimerPluginDesc::CanBeAttachedTo   ( IPluginConstPtr plugin ) const
-{
-    if ( plugin == nullptr )
-    {
-        return true;
-    }
-
-    auto  vac = plugin->GetVertexAttributesChannel();
-    if ( vac != nullptr )
-    {
-        return false;
-    }
-
-    return true;
-}
-
-// *******************************
-//
 std::string             DefaultTimerPluginDesc::UID                      ()
 {
     return "DEFAULT_TIMER";

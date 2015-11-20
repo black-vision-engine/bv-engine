@@ -19,24 +19,6 @@ DefaultRectPluginDesc::DefaultRectPluginDesc                                ()
 
 // *******************************
 //
-bool                            DefaultRectPluginDesc::CanBeAttachedTo      ( IPluginConstPtr plugin )  const
-{
-    if( !BasePluginDescriptor::CanBeAttachedTo( plugin ) )
-    {
-        return false;
-    }
-
-    //Geometry generator cannot be attached to a plugin which generates geometry itself
-    if( plugin && plugin->GetVertexAttributesChannel() )
-    {
-        return false;
-    }
-
-    return true;
-}
-
-// *******************************
-//
 IPluginPtr                      DefaultRectPluginDesc::CreatePlugin         ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
     return CreatePluginTyped< DefaultRectPlugin >( name, prev, timeEvaluator );
