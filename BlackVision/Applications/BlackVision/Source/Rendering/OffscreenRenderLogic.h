@@ -96,6 +96,7 @@ public:
     void                DrawTopAuxRenderTarget      ( Renderer * renderer, const IValue * alphaVal );
     void                DrawAMTopTwoRenderTargets   ( Renderer * renderer, const IValue * alphaVal );
 
+    void                DrawWithAllVideoEffects     ( Renderer * renderer );
     void                DrawDisplayRenderTarget     ( Renderer * renderer );
     void                SwapDisplayRenderTargets    ();
 

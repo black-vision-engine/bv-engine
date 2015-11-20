@@ -87,7 +87,6 @@ void    RenderLogic::PostFrameSetup ( Renderer * renderer )
     m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
     m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
 
-    // FIXME: at this point everything was rendered to the texture and can be preprocessed/displayed correctly
     m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic );
 
     renderer->PostDraw();

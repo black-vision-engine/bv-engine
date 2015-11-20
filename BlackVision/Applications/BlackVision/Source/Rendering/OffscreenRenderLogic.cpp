@@ -237,6 +237,13 @@ void                OffscreenRenderLogic::DrawAMTopTwoRenderTargets ( Renderer *
 
 // **************************
 //
+void                OffscreenRenderLogic::DrawWithAllVideoEffects   ( Renderer * renderer )
+{
+    { renderer; }
+}
+
+// **************************
+//
 void                OffscreenRenderLogic::DrawDisplayRenderTarget   ( Renderer * renderer )
 {
     assert( m_displayRTEnabled == false );
