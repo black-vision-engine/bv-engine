@@ -35,7 +35,21 @@ bool    LoadTexture     ( IPluginPtr plugin, const std::string & textureFile, co
 //
 bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, const std::string & filter )
 {
-	auto desc = AnimationAssetDesc::CreateFromDirFrames( animationPath, filter );
+	auto desc = AnimationAssetDesc::Create( animationPath, filter );
+
+    if( desc == nullptr )
+    {
+        return false;
+    }
+
+    return plugin->LoadResource( desc );
+}
+
+// *******************************
+//
+bool    LoadVideoStream ( IPluginPtr plugin, const std::string & streamPath )
+{
+	auto desc = VideoStreamAssetDesc::Create( streamPath );
 
     if( desc == nullptr )
     {
@@ -49,7 +63,7 @@ bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, 
 //
 bool    LoadFont        ( IPluginPtr plugin, const std::string & fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps )
 {
-	auto desc = FontAssetDesc::Create( fontFile, fontSize, blurSize, outlineSize, generateMipmaps );
+	auto desc = FontAssetDesc::Create( fontFile, fontSize, blurSize, outlineSize, generateMipmaps, SUPPROTED_CHARS_FILE );
 
     return plugin->LoadResource( desc );
 }

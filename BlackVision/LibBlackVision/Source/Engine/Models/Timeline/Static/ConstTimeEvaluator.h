@@ -20,6 +20,9 @@ public:
             ConstTimeEvaluator                      ( const std::string & name, TimeType val );
             ~ConstTimeEvaluator                     ();
 
+    virtual void                Serialize           ( ISerializer& sob ) const;
+    static ISerializablePtr     Create              ( const IDeserializer& dob );
+
     void    SetConstTimeValue                       ( TimeType t );
 
     virtual void                SetGlobalTimeImpl   ( TimeType t ) override;

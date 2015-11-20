@@ -3,12 +3,6 @@
 
 namespace bv { namespace model {
 
-    template<>
-    static IParameterPtr        ParametersFactory::CreateTypedParameter<int>                 ( const std::string & name, ITimeEvaluatorPtr timeline )
-    {
-        return CreateParameterInt( name, timeline );
-    }
-
 // *******************************
 //
 ParamMat2                          ParametersFactory::CreateParameterMat2                 ( const std::string & name, const Vec4Interpolator & interpolator, ITimeEvaluatorPtr timeline )
@@ -127,6 +121,52 @@ ParamTransformVecPtr                 ParametersFactory::CreateParameterTransform
     }
 
     return ptv;
+}
+
+// *******************************
+//
+ParamStringPtr                      ParametersFactory::CreateParameterString               ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return std::make_shared< ParamString >( name, StringInterpolator(), timeline );
+}
+
+ParamWStringPtr                     ParametersFactory::CreateParameterWString              ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return std::make_shared< ParamWString >( name, WStringInterpolator(), timeline );
+}
+
+
+// *******************************
+//
+
+template<>
+static ParamIntPtr          ParametersFactory::CreateTypedSimpleParameter< ParamInt > (const std::string& name, ITimeEvaluatorPtr te )
+{
+    return CreateParameterInt( name, te );
+}
+
+template<>
+static ParamFloatPtr          ParametersFactory::CreateTypedSimpleParameter< ParamFloat > (const std::string& name, ITimeEvaluatorPtr te )
+{
+    return CreateParameterFloat( name, te );
+}
+
+template<>
+static ParamBoolPtr          ParametersFactory::CreateTypedSimpleParameter< ParamBool > (const std::string& name, ITimeEvaluatorPtr te )
+{
+    return CreateParameterBool( name, te );
+}
+
+template<>
+static ParamStringPtr        ParametersFactory::CreateTypedSimpleParameter< ParamString > (const std::string& name, ITimeEvaluatorPtr te )
+{
+    return CreateParameterString( name, te );
+}
+
+template<>
+static ParamWStringPtr       ParametersFactory::CreateTypedSimpleParameter< ParamWString > (const std::string& name, ITimeEvaluatorPtr te )
+{
+    return CreateParameterWString( name, te );
 }
 
 } // model

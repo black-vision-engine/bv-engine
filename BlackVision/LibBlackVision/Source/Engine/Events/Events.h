@@ -21,32 +21,25 @@ class Renderer;
 class PluginAddedEvent : public BaseEvent
 {
 private:
-
-    model::IPluginConstPtr      m_addedPlugin;
-
-public:
-
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
 
+    model::IPluginConstPtr      m_addedPlugin;
 public:
 
     explicit                        PluginAddedEvent();
     explicit                        PluginAddedEvent( model::IPluginConstPtr plugin );
 
-    virtual EventType               GetEventType    () const;
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
 
-    virtual void                    Serialize       ( std::ostringstream & out ) const;
-    virtual void                    Deserialize     ( std::istringstream & in );
-
-    virtual IEventPtr               Clone           () const;
-
-    virtual const std::string &     GetName         () const;
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
 
     model::IPluginConstPtr          GetPlugin       () const;
-
-    static EventType                Type            ();
-
 };
 
 DEFINE_PTR_TYPE(PluginAddedEvent)
@@ -59,32 +52,24 @@ DEFINE_CONST_PTR_TYPE(NodeAddedEvent)
 class NodeAddedEvent : public BaseEvent
 {
 private:
-
-    model::IModelNodeConstPtr   m_addedNode;
-
-public:
-
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
 
+    model::IModelNodeConstPtr   m_addedNode;
 public:
+    explicit                        NodeAddedEvent      ();
+    explicit                        NodeAddedEvent      ( model::IModelNodeConstPtr node );
 
-    explicit                        NodeAddedEvent  ();
-    explicit                        NodeAddedEvent  ( model::IModelNodeConstPtr node );
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
 
-    virtual EventType               GetEventType    () const;
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
 
-    virtual void                    Serialize       ( std::ostringstream & out ) const;
-    virtual void                    Deserialize     ( std::istringstream & in );
-
-    virtual IEventPtr               Clone           () const;
-
-    virtual const std::string &     GetName         () const;
-
-    model::IModelNodeConstPtr       GetNode         () const;
-
-    static EventType                Type            ();
-
+    model::IModelNodeConstPtr       GetNode             () const;
 };
 
 
@@ -92,29 +77,24 @@ public:
 class FrameRenderedEvent : public BaseEvent
 {
 private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
 
     Renderer *          m_renderer;
 
     int                 m_width;
     int                 m_height;
-
 public:
-
-    static const EventType      m_sEventType;
-    static std::string          m_sEventName;
-
-public:
-
     explicit                        FrameRenderedEvent  ( Renderer * renderer );
 
-    virtual EventType               GetEventType        () const;
-
-    virtual void                    Serialize           ( std::ostringstream & out ) const;
-    virtual void                    Deserialize         ( std::istringstream & in );
-
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
     virtual IEventPtr               Clone               () const;
 
+    static EventType                Type                ();
+    static std::string&             Name                ();
     virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
 
     Renderer *                      Renderer            ();
 
@@ -122,9 +102,6 @@ public:
 
     int                             Width               () const;
     int                             Height              () const;
-
-    static EventType                Type                ();
-
 };
 
 DEFINE_PTR_TYPE(FrameRenderedEvent)
@@ -133,36 +110,29 @@ DEFINE_PTR_TYPE(FrameRenderedEvent)
 class TransformSetEvent : public BaseEvent
 {
 private:
-
-    glm::vec3   m_translation;
-    glm::vec3   m_scale;
-
-public:
-
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
 
+    glm::vec3           m_translation;
+    glm::vec3           m_scale;
 public:
 
     explicit                        TransformSetEvent   ();
 
-    virtual EventType               GetEventType        () const;
-
-    virtual void                    Serialize           ( std::ostringstream & out ) const;
-    virtual void                    Deserialize         ( std::istringstream & in );
-
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
     virtual IEventPtr               Clone               () const;
 
+    static EventType                Type                ();
+    static std::string&             Name                ();
     virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
 
     void                            SetTranslation      ( const glm::vec3 & translation );
     void                            SetScale            ( const glm::vec3 & scale );
 
     const glm::vec3 &               Translation         () const;
     const glm::vec3 &               Scale               () const;
-
-    static EventType                Type                ();
-
 };
 
 DEFINE_PTR_TYPE(TransformSetEvent)
@@ -170,27 +140,461 @@ DEFINE_PTR_TYPE(TransformSetEvent)
 // ***************************** SET TEXT EVENT *************************
 class KeyPressedEvent : public BaseEvent
 {
+private:
+    static const EventType          m_sEventType;
+    static std::string              m_sEventName;
+    
     char        m_char;
-
 public:
 
     explicit                        KeyPressedEvent     ();
 
-    virtual EventType               GetEventType        () const;
-
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
     virtual IEventPtr               Clone               () const;
 
+    static EventType                Type                ();
+    static std::string&             Name                ();
     virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
 
     void                            SetChar             ( unsigned char c );
     unsigned char                   GetChar             () const;
-
-    static EventType                Type                ();
-
-    static const EventType          m_sEventType;
-    static std::string              m_sEventName;
 };
 
-DEFINE_PTR_TYPE(KeyPressedEvent)
+DEFINE_PTR_TYPE( KeyPressedEvent )
+
+
+
+
+// ******************************************************************************************
+// ************************************* new Events *****************************************
+// ******************************************************************************************
+
+
+// ************************************* LoadAssetEvent *************************************
+class LoadAssetEvent : public BaseEvent
+{
+private:
+    static const EventType          m_sEventType;
+    static std::string              m_sEventName;
+public:
+    std::string                     NodeName;
+    std::string                     PluginName;
+    std::string                     AssetData;
+
+    int                             SockID;
+public:
+    explicit                        LoadAssetEvent();
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+};
+
+
+DEFINE_PTR_TYPE( LoadAssetEvent )
+
+
+// ************************************* ParamKeyEvent *************************************
+class ParamKeyEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        AddKey,
+        UpdateKey,
+        RemoveKey,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    std::string                     NodeName;
+    std::string                     PluginName;
+    std::string                     ParamName;
+    std::wstring                    Value;
+
+    float                           Time;
+    ParamKeyEvent::Command          KeyCommand;
+
+public:
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+
+    virtual EventType               GetEventType        () const;
+    virtual const std::string &     GetName             () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+private:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
+};
+DEFINE_PTR_TYPE( ParamKeyEvent )
+
+
+// ************************************* SceneStructureEvent Event *************************************
+class NodeStructureEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        AddNode,
+        RemoveNode,
+        DetachPlugin,
+        AttachPlugin,
+        SetNodeVisible,
+        SetNodeInvisible,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    NodeStructureEvent::Command     SceneCommand;
+    std::string                     NodeName;
+    std::string                     PluginName;
+    std::string                     NewNodeName;
+public:
+    explicit                        NodeStructureEvent   () {}
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+
+private:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
+};
+
+DEFINE_PTR_TYPE( NodeStructureEvent )
+
+// ************************************* ProjectEvent Event *************************************
+class ProjectEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        NewProject,
+        SetCurrentProject,
+        SaveScene,
+        LoadProject,
+        ListProjectNames,
+        ListScenes,
+        ListAssetsPaths,
+        ListCategoriesNames,
+        ListProjects,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    ProjectEvent::Command           ProjectCommand;
+    std::string                     Request;
+public:
+    explicit                        ProjectEvent   () {}
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+
+private:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
+};
+
+DEFINE_PTR_TYPE( ProjectEvent )
+
+
+// ************************************* Response Event *************************************
+class ResponseEvent : public BaseEvent
+{
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+     std::wstring               Response;
+public:
+    explicit                        ResponseEvent() {}
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+};
+
+DEFINE_PTR_TYPE( ResponseEvent )
+
+    
+// ************************************* Information Event *************************************
+// Rename me later
+class InfoEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        TreeStructure,
+        Performance,
+        Timelines,
+        NodeInfo,
+        Videocards,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    InfoEvent::Command          InfoRequest;
+    std::string                 NodeName;
+
+public:
+    explicit                        InfoEvent   () {}
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+
+private:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
+};
+
+DEFINE_PTR_TYPE( InfoEvent )
+
+
+// ************************************* TimelineCmd *************************************
+class TimeLineEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        Play,
+        Stop,
+        PlayReverse,
+        Goto,
+        GotoAndPlay,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    TimeLineEvent::Command      TimelineCommand;
+    std::string                 TimelineName;
+    float                       Time;
+
+public:
+    explicit                        TimeLineEvent   () {}
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+private:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
+};
+
+DEFINE_PTR_TYPE( TimeLineEvent )
+
+
+// ************************************* TimerEvent *************************************
+class TimerEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        Start,
+        Stop,
+        Reset,
+        SetTime,
+        SetTimeStart,
+        SetTimeStop,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    std::string                 NodeName;
+    Command                     TimerCommand;
+    float                       Hours;
+    float                       Minutes;
+    float                       Seconds;
+    float                       Milliseconds;
+public:
+
+    explicit                        TimerEvent   (){};
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string&      GetName             () const;
+    virtual EventType               GetEventType        () const;
+private:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
+};
+
+DEFINE_PTR_TYPE( TimerEvent )
+
+
+// ************************************* WidgetEvent *************************************
+class WidgetEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        Crawl,
+        Counter,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    Command                     WidgetCommand;
+    std::string                 NodeName;
+	std::string                 Action;
+    float						Time;
+public:
+    explicit                        WidgetEvent			(){};
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+private:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
+};
+
+DEFINE_PTR_TYPE( WidgetEvent )
+
+
+// ciach
+
+// ************************************* VideoCardEvent *************************************
+class VideoCardEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        VideoCardOn,
+        VideoCardOff,
+        KeyOn,
+        KeyOff,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    Command                     VideoCommand;
+    std::string                 Action;         // For future use.
+public:
+
+    explicit                        VideoCardEvent   () {};
+
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+public:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
+};
+
+DEFINE_PTR_TYPE( VideoCardEvent )
+
+// ************************************* HightmapEvent *************************************
+class HightmapEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        Enable,
+        Start,
+        Reset,
+        Show,
+        Zoom,
+        ZoomOut,
+        Set,
+        Anim,
+        Anim2,
+        Set3,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    Command                     HightmapCommand;
+    float                       Hours;
+    float                       Minutes;
+    float                       Seconds;
+    float                       Milliseconds;
+public:
+    explicit                        HightmapEvent   () {};
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+public:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
+};
+
+DEFINE_PTR_TYPE( HightmapEvent )
 
 } //bv

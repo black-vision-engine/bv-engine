@@ -675,6 +675,57 @@ void            BVGLPlugin::VertexAttribPointer			( GLuint index, GLint size, GL
     glVertexAttribPointer( index, size, type, normalized, stride, pointer );
 }
 
+
+
+//pablito
+// *****************************
+//
+void				BVGLPlugin::BindFramebufferEXT			(GLenum target, GLuint framebuffer)
+{
+	glBindFramebuffer(target,framebuffer);
+}
+// *****************************
+//
+void				BVGLPlugin::BindRenderbufferEXT			(GLenum target, GLuint renderbuffer)
+{
+	glBindRenderbuffer(target,renderbuffer);
+}
+// *****************************
+//
+void				BVGLPlugin::DeleteFramebufferEXT		(GLsizei n, const GLuint *framebuffers)
+{
+	glDeleteFramebuffers(n, framebuffers);
+}
+// *****************************
+//
+void				BVGLPlugin::DeleteRenderbufferEXT		(GLsizei n, const GLuint *renderbuffers)
+{
+	glDeleteRenderbuffers(n,renderbuffers);
+}
+
+// *****************************
+//
+void				BVGLPlugin::Finish		()
+{
+	glFinish();
+}
+
+
+// *****************************
+//
+void				BVGLPlugin::Flush		()
+{
+	glFlush();
+}
+
+
+// *****************************
+//
+/*GLuint				GetError					()
+{
+	return glGetError();
+}*/
+
 // *****************************
 //
 void			BVGLPlugin::VertexAttribDivisor			( GLuint index,  GLuint divisor )
@@ -964,6 +1015,20 @@ void BVGLPlugin::CopyTexImage1D				( GLenum target, GLint level, GLenum internal
 void BVGLPlugin::CopyImageSubData			( GLuint srcName, GLenum srcTarget, GLint srcLevel, GLint srcX, GLint srcY, GLint srcZ, GLuint dstName, GLenum dstTarget, GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ, GLsizei srcWidth, GLsizei srcHeight, GLsizei srcDepth )
 {
 	glCopyImageSubData( srcName, srcTarget, srcLevel, srcX, srcY, srcZ, dstName, dstTarget, dstLevel, dstX, dstY, dstZ, srcWidth, srcHeight, srcDepth );
+}
+
+// *****************************
+//
+void			BVGLPlugin::GetTexImage		( GLenum target, GLint level, GLenum format, GLenum type, GLvoid * data )
+{
+	glGetTexImage( target, level, format, type, data );
+}
+
+// *****************************
+//
+void			BVGLPlugin::GenerateMipmap		( GLenum target )
+{
+	glGenerateMipmap( target );
 }
 
 // Sampler

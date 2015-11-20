@@ -1,5 +1,10 @@
 #include "TestKeyboardHandler.h"
 
+#include "BVAppLogic.h"
+#include "Serialization/XML/XMLSerializer.h"
+#include "Serialization/Json/JsonSerializeObject.h"
+
+
 namespace bv {
 
 // *********************************
@@ -12,7 +17,22 @@ TestKeyboardHandler::~TestKeyboardHandler()
 //
 void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
 {
-    { c; }
+    if( c == 's' )
+    {
+        auto sob = new XMLSerializer();
+        logic->GetBVScene()->GetScenes()[ 0 ]->Serialize( *sob );
+        sob->Save( "test.xml" );
+        delete sob;
+    }
+    else if( c == 'j' )
+    {
+        auto sob = new JsonSerializeObject();
+        logic->GetBVScene()->Serialize( *sob );
+        sob->Save( "test.json" );
+        delete sob;
+    }
+
+
     { logic; }
 	// To be implemented in subclasses
 

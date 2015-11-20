@@ -4,7 +4,7 @@
 
 #include "Mathematics/glm_inc.h"
 
-#include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 #include "Engine/Graphics/Renderers/WGLRenderer/WGLRendererInput.h"
 #include "Engine/Graphics/Renderers/OGLRenderer/GLRendererData.h"
@@ -44,7 +44,7 @@ class PdrVertexArrayObjectSingleVB;
 class PdrVertexDescriptor;
 class PdrVertexArrayObject;
 class PdrRenderTarget;
-class PdrPBOMemTransfer;
+class PdrDownloadPBO;
 
 class TransformableEntity;
 
@@ -79,6 +79,8 @@ private:
     typedef std::hash_map<const Texture2D *, PdrTexture2D * >                                   PdrTexture2DMap;
     typedef std::hash_map<const RenderTarget *, PdrRenderTarget * >                             PdrRenderTargetMap;
 
+    typedef std::hash_map<const Texture *, UInt32 >												TextureUpdateIDMapType;
+
     PdrShaderMapType                    m_PdrShaderMap;
     PdrVertexBufferMapType              m_PdrVertexBufferMap;
     PdrIndexBufferMapType               m_PdrIndexBufferMap;
@@ -88,7 +90,12 @@ private:
     PdrVertexArrayObjectSingleVBMapType m_PdrVertexArrayObjectSingleVBMap;
     PdrRenderTargetMap                  m_PdrRenderTargetMap;
 
-    PdrPBOMemTransfer *                 m_PdrPBOMemTransferRT;
+    TextureUpdateIDMapType              m_TextureUpdateIDMap;
+
+    PdrDownloadPBO *					m_PdrPBOMemTransferRT;
+
+	bool								m_EnableGLFinish;
+	bool								m_EnableGLFlush;
 
 public:
 
@@ -206,6 +213,8 @@ private:
 
     template< typename MapType >
     void                        DeleteSinglePDR                 ( MapType & resMap, typename MapType::key_type & key );
+
+    void                        PassCCNumUniform                ( int i, SizeType num );
 
 };
 

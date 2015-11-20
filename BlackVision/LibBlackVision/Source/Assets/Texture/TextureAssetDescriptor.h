@@ -2,6 +2,7 @@
 
 #include "Assets/AssetDescriptor.h"
 #include "MipMapAssetDescriptor.h"
+#include "Serialization/Json/JsonSerializeObject.h"
 
 #include "CoreDEF.h"
 
@@ -36,11 +37,16 @@ protected:
 	virtual const std::string &			GetUID				() const override;
 
 public:
+    virtual void                        Serialize       ( ISerializer& sob ) const;
+    virtual void                        Deserialize     ( const IDeserializer& sob );
+	static ISerializableConstPtr        Create          ( const IDeserializer& dob );
+
 	virtual bool						IsCacheable			() const override;
 
 	virtual VoidConstPtr				QueryThis			() const override;
 
 	virtual std::string					GetKey				() const override;
+    virtual std::string                 GetProposedShortKey () const override;
 
 	TextureAssetLoadingType				GetLoadingType		() const;
 	SingleTextureAssetDescConstPtr		GetOrigTextureDesc	() const;
@@ -55,6 +61,19 @@ public:
 	static TextureAssetDescConstPtr		Create				( const SingleTextureAssetDescConstPtr & origDesc );
 
 	static const std::string &			UID					();
+
 };
+
+class TextureAsset;
+
+// ***********************
+/// Returns AssetDescriptor UID for Asset in template parameter.
+/// @note AssetDescriptor uid and Asset uid are different strings.
+template<> inline const std::string& GetAssetDescUID<TextureAsset>()
+{
+    return TextureAssetDesc::UID();
+}
+
+
 
 } // bv

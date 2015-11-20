@@ -19,9 +19,9 @@ public:
 	virtual UInt32				    GetNumLevels        () const = 0;
     virtual MemoryChunkConstPtr     GetBits             ( UInt32 level ) const = 0;
 	virtual MemoryChunkVector		GetBits             () const = 0;
-    virtual bool                    BitsChanged         () const = 0;
-    virtual void                    ResetBitsChanged    () const = 0;
     virtual DataBuffer::Semantic    GetSemantic         () const = 0;
+	
+	virtual UInt64                  GetUpdateID         () const = 0;
 
     virtual ~ITextureDescriptor() {}
 

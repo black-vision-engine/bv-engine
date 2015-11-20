@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Engine/Types/Enums.h"
-#include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 #include "Engine/Graphics/Effects/Texture2DEffect.h"
 #include "Engine/Graphics/Effects/Texture2DEffectWithMask.h"
@@ -103,6 +103,9 @@ public:
     unsigned int        NumReadBuffersPerRT         () const;
 
     Texture2DConstPtr   ReadDisplayTarget           ( Renderer * renderer, unsigned int bufNum );
+
+	//pablito
+	std::vector< int >  GetHackBuffersUids          ( Renderer * renderer ) const;
 
 private:
 

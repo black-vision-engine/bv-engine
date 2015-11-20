@@ -7,6 +7,13 @@
 #include "Application/WindowedApplication.h"
 #include "Tools/SimpleTimer.h"
 
+//pablito
+//#include "SocketWrapper.h"
+#include "ConfigManager.h"
+#include "structure/AssetManager.h"
+#include "LicenseManager.h"
+#include "VideoCardManager.h"
+
 
 namespace bv {
 
@@ -33,6 +40,8 @@ private:
 
     SimpleTimer                 m_timer;
 
+	//pablito
+	bv::videocards::VideoCardManager m_videoCardManager;
 public:
 
     static bool			m_sWindowedApplicationInitialized;
@@ -62,6 +71,9 @@ private:
     void            InitializeConsole			();
     void            InitializeAppLogic			();
     void            InitializeSelfState			();
+	// pablito
+	bool			InitializeLicenses      ();
+    void			InitializeConfig        ();
 
     void            PostFrame					( unsigned int millis );
 };

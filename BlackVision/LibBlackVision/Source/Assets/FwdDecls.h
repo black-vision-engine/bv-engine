@@ -16,11 +16,17 @@ class SingleTextureAsset;
 class SingleTextureAssetDesc;
 class TextureAsset;
 class TextureAssetDesc;
+class FontAsset;
+class FontAssetDesc;
+class VideoStreamAsset;
+class VideoStreamAssetDesc;
 
+DEFINE_CONST_PTR_TYPE( FontAssetDesc )
+DEFINE_CONST_PTR_TYPE( FontAsset )
 DEFINE_CONST_PTR_TYPE( TextureAssetDesc )
 DEFINE_CONST_PTR_TYPE( TextureAsset )
 DEFINE_CONST_PTR_TYPE( SingleTextureAssetDesc )
-DEFINE_CONST_PTR_TYPE(SingleTextureAsset)
+DEFINE_CONST_PTR_TYPE( SingleTextureAsset )
 DEFINE_CONST_PTR_TYPE( MipMapAssetDesc )
 DEFINE_CONST_PTR_TYPE( MipMapAsset )
 DEFINE_CONST_PTR_TYPE( GeneratedSingleTextureAssetDesc )
@@ -31,5 +37,9 @@ DEFINE_CONST_PTR_TYPE( Asset )
 
 DEFINE_PTR_TYPE( AnimationAssetDesc )
 
+typedef std::vector< AssetDescConstPtr >   AssetDescVec;
+typedef std::vector< AssetConstPtr >       AssetVec;
+
+typedef std::vector< TextureAssetDescConstPtr > TextureAssetDescVec;
 
 } // bv

@@ -18,7 +18,8 @@ public:
 	static ProjectConstPtr	Create	( const Path & name, const Path & rootDir );
 
 private:
-	explicit				Project( const Path & name, const Path & rootDir );
+	explicit				Project	( const Path & name, const Path & rootDir );
+	void					Init	() const;
 
 
 	Path				m_name;

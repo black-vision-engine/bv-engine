@@ -38,14 +38,10 @@ class DefaultGradientPlugin : public BasePlugin< IPlugin >
 {
 private:
 
-    DefaultPluginParamValModelPtr   m_paramValModel;
-
     DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;
 
     VertexAttributesChannelPtr      m_vaChannel;
-
-    DefaultTexturesDataPtr          m_texturesData;
 
 public:
 
@@ -53,14 +49,17 @@ public:
                                                 ~DefaultGradientPlugin       ();
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
-    virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
+    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
     virtual void                                Update                      ( TimeType t ) override;
 
 private:
 
-    void                                        InitAttributesChannel       ( IPluginPtr prev );
+    void                                        InitVertexAttributesChannel ();
+    void                                        RecalculateUVChannel		();
+
+    virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 };
 
 } // model

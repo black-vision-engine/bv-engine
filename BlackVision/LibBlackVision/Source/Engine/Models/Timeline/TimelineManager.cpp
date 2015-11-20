@@ -1,10 +1,27 @@
 #include "TimelineManager.h"
+#include "Serialization/SerializationHelper.h"
 
 #include <cassert>
 
 
 namespace bv { namespace model {
 
+TimelineManager* TimelineManager::instance = nullptr; // FIXME: this may be moved to static initilizer
+
+// *********************************
+//
+TimelineManager* TimelineManager::GetInstance                     ()
+{
+    return instance;
+}
+
+// *********************************
+//
+void             TimelineManager::SetInstance                     ( TimelineManager* i )
+{
+    instance = i;
+}
+    
 // *********************************
 //
 TimelineManager::TimelineManager         ()
@@ -20,6 +37,39 @@ TimelineManager::~TimelineManager        ()
     {
         delete it->second;
     }
+}
+
+// *********************************
+//
+void            TimelineManager::Serialize                       ( ISerializer& sob ) const
+{
+    sob.EnterChild( "timelines" );
+
+    m_rootTimeline->Serialize( sob );
+
+    for( auto i : m_registeredParams )
+    {
+        i.first->Serialize( sob );
+    }
+
+    sob.ExitChild();
+}
+
+// *********************************
+//
+ISerializablePtr TimelineManager::Create                          ( const IDeserializer& deser )
+{
+    auto tm = std::make_shared< model::TimelineManager >();    
+
+    auto timelines = SerializationHelper::DeserializeObjectLoadPropertiesImpl< model::TimeEvaluatorBase< model::ITimeEvaluator > >( deser, "timeline" );
+    for( auto timeline : timelines )
+    {
+        tm->AddTimeline( timeline );
+    }
+
+    tm->RegisterRootTimeline( timelines[ 0 ] );
+
+    return tm;
 }
 
 // *********************************
@@ -190,8 +240,11 @@ bool                    TimelineManager::AddTimeline                     ( ITime
     {
         return AddTimelineToTimeline( timeline, m_rootTimeline );
     }
-
-    return false;
+    else
+    {
+        RegisterRootTimeline( timeline );
+        return true;
+    }
 }
 
 // *********************************

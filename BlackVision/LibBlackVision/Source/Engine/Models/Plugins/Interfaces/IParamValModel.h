@@ -11,9 +11,10 @@ namespace bv { namespace model {
 class IParamValModel;
 DEFINE_PTR_TYPE(IParamValModel)
 
-class IParamValModel : public IParamSet, public IValueSet, public IStateSet
+class IParamValModel : public IParamSet, public IValueSet, public IStateSet, public ISerializable
 {
 public:
+    virtual void                                    Serialize           ( ISerializer& ser ) const = 0;
 
     virtual std::vector< IParamValEvaluatorPtr > &  GetEvaluators       () = 0;
     virtual void                                    Update              () = 0;

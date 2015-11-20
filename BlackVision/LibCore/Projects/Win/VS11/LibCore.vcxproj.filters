@@ -73,6 +73,7 @@
     <ClInclude Include="..\..\..\Source\Tools\Utils.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\win_sock.h" />
     <ClInclude Include="..\..\..\Source\Tools\Logger\Logger.h">
       <Filter>Tools\Logger</Filter>
     </ClInclude>
@@ -85,8 +86,20 @@
     <ClInclude Include="..\..\..\Source\System\Path.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\IncludeJSON.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\IO\NamedPipe.h">
       <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Logger\QueueSink.h">
+      <Filter>Tools\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Logger\LogMsgStruct.h">
+      <Filter>Tools\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Logger\LoggerEnums.h">
+      <Filter>Tools\Logger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

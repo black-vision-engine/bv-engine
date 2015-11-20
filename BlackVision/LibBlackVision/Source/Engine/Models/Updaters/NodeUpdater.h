@@ -17,8 +17,7 @@
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 
-#include "Engine/Graphics/Resources/Texture2DImpl.h"
-#include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 
 //FIXME: this part suxx as hell
@@ -33,7 +32,7 @@
 
 #include "Engine/Graphics/Resources/VertexArray.h"
 
-
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 namespace bv {
 
@@ -44,19 +43,21 @@ class ShaderParameters;
 class IShaderDataSource;
 class ITextureDescriptor;
 class IAnimationDescriptor;
-class Texture2DImpl;
-class Texture2DSequenceImpl;
+class Texture2D;
+
 
 namespace model
 {
     class IModelNode;
     class ITransformChannel;
     class IVertexAttributesChannel;
+
+	class HelperVertexAttributesChannel;
 }
 
 typedef std::pair< ITexturesDataConstPtr, ShaderParameters * > TexData2ShaderParams;
-typedef std::pair< const ITextureDescriptor *, Texture2DImpl * > Tex2Tex2DPair;
-typedef std::pair< const IAnimationDescriptor *, Texture2DSequenceImpl * > Anim2Tex2DPair;
+//typedef std::pair< const ITextureDescriptor *, Texture2D * > Tex2Tex2DPair;
+//typedef std::pair< const IAnimationDescriptor *, Texture2D * > Anim2Tex2DPair;
 
 class NodeUpdater;
 DEFINE_CONST_PTR_TYPE(NodeUpdater)
@@ -79,12 +80,16 @@ private:
     std::vector< RendererStateInstance * >      m_redererStateInstanceVec;
     model::RendererContextConstPtr              m_rendererContext;
 
-    std::vector< Tex2Tex2DPair >                m_texMappingVec;
-    std::vector< Anim2Tex2DPair >               m_animMappingVec;
+    //std::vector< Tex2Tex2DPair >                m_texMappingVec;
+    //std::vector< Anim2Tex2DPair >               m_animMappingVec;
 
     std::vector< TexData2ShaderParams >         m_texDataMappingVec;
+    std::vector< std::vector< UInt64 > >		m_texDataUpdateID;
 
-private:
+
+	UInt64										m_attributesUpdateID;
+	UInt64										m_topologyUpdateID;
+
 
                             NodeUpdater         ( SceneNode * sceneNode, model::IModelNodeConstPtr modelNode ); 
 

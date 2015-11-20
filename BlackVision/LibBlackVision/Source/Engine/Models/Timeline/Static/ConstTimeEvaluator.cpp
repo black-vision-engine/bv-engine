@@ -1,4 +1,6 @@
 #include "ConstTimeEvaluator.h"
+#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 
 namespace bv { namespace model {
 
@@ -14,6 +16,24 @@ ConstTimeEvaluator::ConstTimeEvaluator                      ( const std::string 
 //
 ConstTimeEvaluator::~ConstTimeEvaluator                     ()
 {
+}
+
+// *******************************
+//
+void                ConstTimeEvaluator::Serialize           ( ISerializer& sob ) const
+{
+    sob.EnterChild( "timeline" );
+    sob.SetAttribute( "name", GetName() );
+    sob.SetAttribute( "type", "const" );
+    sob.ExitChild();
+}
+
+// *******************************
+//
+ISerializablePtr     ConstTimeEvaluator::Create              ( const IDeserializer& dob )
+{
+    assert( false );
+    dob; return nullptr;
 }
 
 // *******************************

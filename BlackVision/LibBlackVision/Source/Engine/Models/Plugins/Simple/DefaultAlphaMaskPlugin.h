@@ -1,16 +1,10 @@
 #pragma once
 
-#include "Mathematics/Transform/MatTransform.h"
-
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
 
-#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
-
-#include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
-
 
 
 namespace bv { namespace model {
@@ -37,30 +31,13 @@ class DefaultAlphaMaskPlugin : public BasePlugin< IPlugin >
 {
 private:
 
-    DefaultPluginParamValModelPtr   m_paramValModel;
-
     DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;
 
     VertexAttributesChannelPtr      m_vaChannel;
 
-    DefaultTexturesDataPtr          m_texturesData;
-
-    SizeType						m_texCoordChannelIndex;
-
-    ParamFloatPtr                   m_paramWrapModeX;
-    ParamFloatPtr                   m_paramWrapModeY;
-    ParamFloatPtr                   m_paramFilteringMode;
-    ParamFloatPtr                   m_paramAttachMode;
-
     SizeType                        m_textureWidth;
     SizeType                        m_textureHeight;
-
-    TextureWrappingMode             m_lastTextureWrapModeX;
-    TextureWrappingMode             m_lastTextureWrapModeY;
-    TextureFilteringMode            m_lastTextureFilteringMode;
-    TextureAttachmentMode           m_lastTextureAttachMode;
-    
 
 public:
 
@@ -70,7 +47,7 @@ public:
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
-    virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
+    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
     SizeType                                    GetAlphaTextureWidth        () const;
@@ -79,18 +56,10 @@ public:
     virtual void                                Update                      ( TimeType t ) override;
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
+    
 private:
-
-    void                                        InitAttributesChannel       ( IPluginConstPtr prev );
-    void                                        RecalculateAttrChannel      ();
-
-    TextureWrappingMode                         GetWrapModeX                () const;
-    TextureWrappingMode                         GetWrapModeY                () const;
-    TextureFilteringMode                        GetFilteringMode            () const;
-    TextureAttachmentMode                       GetAttachementMode          () const;
-
-    bool                                        StateChanged                ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am ) const;
-    void                                        UpdateState                 ( TextureWrappingMode wmX, TextureWrappingMode wmY, TextureFilteringMode fm, TextureAttachmentMode am );
+	void										InitVertexAttributesChannel ();
+    void                                        RecalculateUVChannel		();
 
 };
 

@@ -1,8 +1,11 @@
 #include "ProjectManager.h"
 #include "Impl/ProjectManagerImpl.h"
+#include "ConfigManager.h"
 
 namespace bv
 {
+std::shared_ptr< ProjectManager > ProjectManager::_instance = nullptr;
+
 // ********************************
 //
 ProjectManager::ProjectManager	( const Path & rootPath )
@@ -25,21 +28,31 @@ namespace
 
 // ********************************
 //
-ProjectManager *			ProjectManager::GetInstance		( const Path & rootPath )
+ProjectManager *	        ProjectManager::GetInstance		()
 {
-	auto it = g_pms.find( rootPath.Str() );
+    auto pmRootFolder = ConfigManager::GetString( "PMFolder" );
 
-	if( it != g_pms.end() )
-	{
-		return it->second;
-	}
-	else
-	{
-		auto npm = new ProjectManager( rootPath );
-		g_pms[ rootPath.Str() ] = npm;
-		return npm;
-	}
+    if( pmRootFolder.empty() )
+    {
+        pmRootFolder = "DefaultPMDir";
+    }
+
+    if( !_instance )
+    {
+        _instance = std::shared_ptr< ProjectManager >( new ProjectManager( pmRootFolder ) );
+    }
+
+    return _instance.get();
 }
+
+
+// ********************************
+// DO NOT USE, IF NOT TESTING MORE THAN ONE PM
+void                        ProjectManager::SetPMInstanceOnlyForTests( ProjectManager * inst )
+{
+    ProjectManager::_instance = std::shared_ptr< ProjectManager >( inst );
+}
+
 
 // ********************************
 //
@@ -57,7 +70,7 @@ PathVec			ProjectManager::ListScenesNames		( const Path & projectName ) const
 
 // ********************************
 //
-PathVec			ProjectManager::ListCategoriesNames	() const
+StringVector	ProjectManager::ListCategoriesNames	() const
 {
 	return m_impl->ListCategoriesNames();
 }
@@ -141,9 +154,16 @@ void						ProjectManager::RemoveUnusedAssets	( const Path & projectName )
 
 // ********************************
 //
-void						ProjectManager::AddScene			( const model::BasicNode & sceneRootNode, const Path & projectName, const Path & outPath )
+void						ProjectManager::RemoveUnusedAssets	()
 {
-	m_impl->AddScene( sceneRootNode, projectName, outPath );
+	m_impl->RemoveUnusedAssets();
+}
+
+// ********************************
+//
+void						ProjectManager::AddScene			( const model::SceneModelPtr & scene, const Path & projectName, const Path & outPath )
+{
+	m_impl->AddScene( scene, projectName, outPath );
 }
 
 // ********************************
@@ -211,9 +231,9 @@ void						ProjectManager::ExportProjectToFile	( const Path & projectName, const 
 
 // ********************************
 //
-void						ProjectManager::ImportProjectFromFile( const Path & expFilePath, const Path & importToPath )
+void						ProjectManager::ImportProjectFromFile( const Path & expFilePath, const Path & projectName )
 {
-	m_impl->ImportProjectFromFile( expFilePath, importToPath );
+	m_impl->ImportProjectFromFile( expFilePath, projectName );
 }
 
 // ********************************
@@ -225,10 +245,60 @@ AssetDescConstPtr			ProjectManager::GetAssetDesc		( const Path & projectName, co
 
 // ********************************
 //
-SceneDesc *					ProjectManager::GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const
+SceneDescriptor				ProjectManager::GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const
 {
 	return m_impl->GetSceneDesc( projectName, pathInProject );
 }
+
+// ********************************
+//
+SceneDescriptor			    ProjectManager::GetSceneDesc		( const Path & path ) const
+{
+    return m_impl->GetSceneDesc( path );
+}
+
+// ********************************
+//
+model::SceneModelPtr        ProjectManager::LoadPreset          ( const Path & projectName, const Path & path ) const
+{
+    return m_impl->LoadPreset( projectName, path );
+}
+
+// ********************************
+//
+void                        ProjectManager::SavePreset          ( const model::SceneModelPtr & node, const Path & projectName, const Path & path ) const
+{
+    m_impl->SavePreset( node, projectName, path );
+}
+
+// ********************************
+//
+PathVec                     ProjectManager::ListPresets         ( const Path & projectName, const Path & path ) const
+{
+    return m_impl->ListPresets( projectName, path );
+}
+
+// ********************************
+//
+PathVec                     ProjectManager::ListPresets         ( const Path & projectName ) const
+{
+    return m_impl->ListPresets( projectName );
+}
+
+// ********************************
+//
+PathVec                     ProjectManager::ListPresets         () const
+{
+    return m_impl->ListPresets();
+}
+
+// ********************************
+//
+Path                        ProjectManager::ToAbsPath           ( const Path & path ) const
+{
+    return m_impl->ToAbsPath( path );
+}
+
 
 } // bv
 

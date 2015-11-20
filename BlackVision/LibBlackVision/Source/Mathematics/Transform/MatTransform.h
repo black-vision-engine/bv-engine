@@ -46,7 +46,7 @@ enum class TransformKind : int
 };
 
 template<typename ParamT>
-class SimpleTransform
+class SimpleTransform : public ISerializable
 {
 protected:
 
@@ -56,25 +56,30 @@ protected:
     ParamT p1;
     ParamT p2;
 
-protected:
+//protected:
+public:
 
     explicit SimpleTransform( const TransformKind kind, const ParamT p0, const ParamT p1, const ParamT p2 );
     explicit SimpleTransform( TransformKind kind );
 
 public:
+    virtual void                Serialize       ( ISerializer& sob ) const;
+    static ISerializablePtr     Create          ( const IDeserializer& dob );
     virtual void                SetCurveType        ( CurveType type );
+    virtual void                SetWrapPostMethod   ( WrapMethod method );
+    virtual void                SetWrapPreMethod    ( WrapMethod method );
 
     virtual glm::mat4x4         Evaluate            ( typename ParamT::TimeT t ) const;
     virtual SimpleTransform *   Clone               () const;
 
-    static SimpleTransform *    CreateScale         ( ParamT p0, ParamT p1, ParamT p2 )
+    static std::shared_ptr< SimpleTransform >    CreateScale         ( ParamT p0, ParamT p1, ParamT p2 )
     {
-        return new SimpleTransform( TransformKind::scale, p0, p1, p2 );
+        return std::make_shared< SimpleTransform >( TransformKind::scale, p0, p1, p2 );
     }
 
-    static SimpleTransform *    CreateTranslation   ( ParamT p0, ParamT p1, ParamT p2, TransformKind tk = TransformKind::translation )
+    static std::shared_ptr< SimpleTransform >    CreateTranslation   ( ParamT p0, ParamT p1, ParamT p2, TransformKind tk = TransformKind::translation )
     {
-        return new SimpleTransform( tk, p0, p1, p2 );
+        return std::make_shared< SimpleTransform >( tk, p0, p1, p2 );
     }
 
     void  SetValues ( TimeType t, float v0, float v1, float v2 )
@@ -136,7 +141,9 @@ private:
     Vec3Interpolator    m_rotationAxis;
 
 public:
-    virtual void                SetCurveType        ( CurveType type );
+    virtual void                SetCurveType        ( CurveType type ) override;
+    virtual void                SetWrapPostMethod   ( WrapMethod method ) override;
+    virtual void                SetWrapPreMethod    ( WrapMethod method ) override;
 
     explicit                    Rotation    ( ParamT angle, const Vec3Interpolator & rotAxis );
     explicit                    Rotation    ( ParamT angle, ParamT p0, ParamT p1, ParamT p2 );
@@ -167,11 +174,11 @@ public:
 };
 
 template<typename ParamT>
-class CompositeTransform : public Interpolator<typename ParamT::TimeT>
+class CompositeTransform : public Interpolator<typename ParamT::TimeT>, public ISerializable
 {
 private:
 
-    std::vector< SimpleTransform<ParamT> * > m_transformations;
+    std::vector< std::shared_ptr< SimpleTransform<ParamT> > > m_transformations;
 
 public:
 
@@ -182,11 +189,16 @@ public:
     explicit        CompositeTransform  ();
                     CompositeTransform  ( const CompositeTransform & src );
 
+    static ISerializablePtr                     Create                  ( const IDeserializer& dob );
+    virtual void                                Serialize               ( ISerializer& doc ) const;
+
     void            InitializeDefaultSRT();
 
     virtual         ~CompositeTransform ();
 
     void            SetCurveType        ( CurveType type );
+    void            SetWrapPostMethod   ( WrapMethod method );
+    void            SetWrapPreMethod    ( WrapMethod method );
 
     void            AddTranslation      ( ParamT x0, ParamT x1, ParamT x2 );
     void            AddScale            ( ParamT s0, ParamT s1, ParamT s2 );
@@ -194,8 +206,8 @@ public:
     void            AddRotation         ( ParamT angle, const Vec3Interpolator & rotAxis );
     void            AddTranslationCFwd  ( ParamT x0, ParamT x1, ParamT x2 );
     void            AddTranslationCInv  ( ParamT x0, ParamT x1, ParamT x2 );
-    void            AddTransform        ( SimpleTransform<ParamT> * trans );
-    void            InsertTransform     ( int i, SimpleTransform<ParamT> * trans );
+    void            AddTransform        ( std::shared_ptr< SimpleTransform<ParamT> > trans );
+    void            InsertTransform     ( int i, std::shared_ptr< SimpleTransform<ParamT> > trans );
 
     SizeType        Size                () const;
 

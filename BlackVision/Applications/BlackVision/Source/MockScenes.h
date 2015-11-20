@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
-#include "Engine/Models/BasicNode.h"
+#include "Engine/Models/SceneModel.h"
 #include "Mathematics/Interpolators/Interpolators.h"
 
-#include "xml/TreeBuilder.h"
+
 
 
 namespace bv
@@ -49,11 +49,12 @@ public:
 
 public:
 
-    static  model::BasicNodePtr     CreateSceneFromEnv              ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::SceneModelPtr    CreateSceneFromEnv              ( const std::string& scene, const model::PluginsManager * pluginsManager, model::TimelineManagerPtr timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreateTestRandomNode            ( const std::string & name,  const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreateTestScene                 ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, TestSceneSelector tss );
 
     static  model::BasicNodePtr     GlobalEffect05                  ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     LightScatteringTestScene        ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     NewModelTestScene               ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     OlafTestScene                   ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreedDeprecatedTestScene        ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
@@ -71,22 +72,24 @@ public:
                             
     static  model::BasicNodePtr     AnotherTestScene                ();
                             
-    static  model::BasicNodePtr     AnimatedTestScene               ();
     static  model::BasicNodePtr     GreenRectTestScene              ();
     static  model::BasicNodePtr     TexturedRectTestScene           ();
     static  model::BasicNodePtr     NaiveTimerTestScene             ();
                             
-    static  model::BasicNodePtr     TestSceneVariableTopology       ();
     static  model::BasicNodePtr     SequenceAnimationTestScene      ();
     static  model::BasicNodePtr     NonGeometryParent               ();
                             
     static  model::BasicNodePtr     XMLTestScene                    ();
-    static  model::BasicNodePtr     CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager );
+    static  model::SceneModelPtr    CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager );
                             
     static  model::BasicNodePtr     StackThemNow                    ( model::BasicNodePtr n0, model::BasicNodePtr n1 );
 
 	static	model::BasicNodePtr		BasicShapesShowScene		( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 	static	model::BasicNodePtr		BasicShapesTest				( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+
+    static  model::BasicNodePtr     AssetCacheTestScene         ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     WSerializationTest          ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     RemoteEventsTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 };
 
 // ********************************

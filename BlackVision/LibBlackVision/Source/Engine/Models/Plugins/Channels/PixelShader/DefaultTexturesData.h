@@ -2,40 +2,44 @@
 
 #include "Engine/Models/Interfaces/ITexturesData.h"
 
-#include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureDescriptor.h"
-#include "Engine/Models/Plugins/Channels/PixelShader/DefaultAnimationDescriptor.h"
-
-
 namespace bv { namespace model {
 
 class DefaultTexturesData : public ITexturesData
 {
 private:
 
-    std::vector< ITextureDescriptor * >     m_textureDescriptors;
-    std::vector< IAnimationDescriptor * >   m_animationDescriptors;
+    std::vector< ITextureDescriptorPtr >                    m_textureDescriptors;
+    std::vector< IAnimationDescriptorPtr >                  m_animationDescriptors;
+    std::vector< IFontDescriptorPtr >                       m_fontDescriptors;
 
 public:
 
             DefaultTexturesData ();
             ~DefaultTexturesData();
 
-    virtual const std::vector< ITextureDescriptor * > &     GetTextures     () const override;
-    virtual const std::vector< IAnimationDescriptor * > &   GetAnimations   () const override;
+    virtual const std::vector< ITextureDescriptorPtr > &    GetTextures     () const override;
+    virtual const std::vector< IAnimationDescriptorPtr > &  GetAnimations   () const override;
+    virtual const std::vector< IFontDescriptorPtr > &       GetFonts        () const override;
 
-    ITextureDescriptor *                                    GetTexture          ( unsigned int idx );
-    IAnimationDescriptor *                                  GetAnimation        ( unsigned int idx );
+	//NOTE: not used anywhere
+    ITextureDescriptorPtr                                   GetTexture          ( unsigned int idx );
+	IAnimationDescriptorPtr                                 GetAnimation        ( unsigned int idx );
+    
+	ITextureDescriptorPtr                                   GetTexture          ( const std::string & name );
 
-    void                                                    SetTextureParams    ( unsigned int idx, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, TextureFilteringMode filteringMode, const glm::vec4 & borderColor );
-    void                                                    SetTexture          ( unsigned int idx, DefaultTextureDescriptor * textureDesc );
-    void                                                    AddTexture          ( ITextureDescriptor * textureDesc );
+	void                                                    SetTexture          ( unsigned int idx, ITextureDescriptorPtr textureDesc );
+    void                                                    AddTexture          ( ITextureDescriptorPtr textureDesc );
 
-    void                                                    SetAnimationParams  ( unsigned int idx, TextureWrappingMode wrapModeX, TextureWrappingMode wrapModeY, TextureFilteringMode filteringMode, const glm::vec4 & borderColor );
-    void                                                    SetAnimation        ( unsigned int idx, DefaultAnimationDescriptor * animationDesc );
-    void                                                    AddAnimation        ( DefaultAnimationDescriptor * animationDesc );
+    void                                                    SetAnimation        ( unsigned int idx, IAnimationDescriptorPtr animationDesc );
+    void                                                    AddAnimation        ( IAnimationDescriptorPtr animationDesc );
 
-    void                                                    SetAnimationFrame   ( unsigned int idx, unsigned int frameNum );
+    bool                                                    SetAnimationFrame   ( unsigned int idx, unsigned int frameNum );
 
+    void                                                    AddFont             ( IFontDescriptorPtr fontDesc );
+
+	void													UpdateResourceModels();
+
+	void													ClearAll			();
 };
 
 DEFINE_PTR_TYPE(DefaultTexturesData)

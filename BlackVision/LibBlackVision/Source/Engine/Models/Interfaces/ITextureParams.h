@@ -1,8 +1,6 @@
 #pragma once
 
-#include <string>
-#include "Mathematics/glm_inc.h"
-
+#include "Engine/Models/Plugins/Channels/PixelShader/SamplerStateModel.h"
 #include "Engine/Types/Enums.h"
 #include "CoreDEF.h"
 
@@ -19,15 +17,9 @@ public:
     virtual UInt32				    GetHeight       ( UInt32 level = 0  ) const = 0;
 	virtual UInt32				    GetDepth		( UInt32 level = 0  ) const = 0;
 
+	virtual model::SamplerStateModelPtr	GetSamplerState () const = 0;
+
     virtual TextureFormat           GetFormat       () const = 0;
-
-    virtual TextureWrappingMode     GetWrappingModeX() const = 0;
-    virtual TextureWrappingMode     GetWrappingModeY() const = 0;
-	virtual TextureWrappingMode     GetWrappingModeZ() const = 0;
-
-    virtual TextureFilteringMode    GetFilteringMode() const = 0;
-
-    virtual glm::vec4               BorderColor     () const = 0;
 
     virtual ~ITextureParams () {}
 
@@ -35,11 +27,5 @@ public:
 
 DEFINE_PTR_TYPE(ITextureParams)
 DEFINE_CONST_PTR_TYPE(ITextureParams)
-
-//    std::string             fileName;
-//    ParamTransform          transform;
-
-//    ParamFloat              alpha;
-//    ParamVec4               borderColor;
 
 } //bv

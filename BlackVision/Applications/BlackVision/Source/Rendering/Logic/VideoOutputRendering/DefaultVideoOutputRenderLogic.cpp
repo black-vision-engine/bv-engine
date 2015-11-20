@@ -25,37 +25,7 @@ DefaultVideoOutputRenderLogic::~DefaultVideoOutputRenderLogic  ()
 
 // *********************************
 //
-void    DefaultVideoOutputRenderLogic::FrameRendered            ( Renderer * renderer, OffscreenRenderLogic * offscreenRenderLogic )
-{
-    // FIXME: default behavior - show rendered preview (render to current display)
-    offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
-
-    if( !m_useVideoCard )
-    {
-        //Not needed as it does not make sense without readback delay
-        //m_offscreenRenderLogic->SwapDisplayRenderTargets();
-        return;
-    }
-
-    if( m_width != (unsigned int) renderer->GetWidth() || m_height != (unsigned int) renderer->GetHeight() )
-    {
-        m_width = renderer->GetWidth();
-        m_height = renderer->GetHeight();
-
-        printf( "Framebuffer resolution changed to %dx%d\n", m_width, m_height );
-    }
-
-    auto frame = offscreenRenderLogic->ReadDisplayTarget( renderer, m_curReadbackFrame );
-    m_curReadbackFrame = ( m_curReadbackFrame + 1 ) % offscreenRenderLogic->NumReadBuffersPerRT();
-
-    PushToVideoCard( frame );
-
-    offscreenRenderLogic->SwapDisplayRenderTargets();
-}
-
-// *********************************
-//
-void    DefaultVideoOutputRenderLogic::FrameRenderedNewImpl            ( Renderer * renderer, OffscreenRenderLogic * offscreenRenderLogic )
+void    DefaultVideoOutputRenderLogic::FrameRenderedNewImpl            ( Renderer * renderer, OffscreenRenderLogic * offscreenRenderLogic, videocards::VideoCardManager * videoCardManager )
 {
     { renderer; }
     { offscreenRenderLogic; }
@@ -88,14 +58,43 @@ void    DefaultVideoOutputRenderLogic::FrameRenderedNewImpl            ( Rendere
         else:
             BlitToWindow()
 */
+
+    if( m_width != (unsigned int) renderer->GetWidth() || m_height != (unsigned int) renderer->GetHeight() )
+    {
+        m_width = renderer->GetWidth();
+        m_height = renderer->GetHeight();
+
+        printf( "Framebuffer resolution changed to %dx%d\n", m_width, m_height );
+    }
+
+    auto frame = offscreenRenderLogic->ReadDisplayTarget( renderer, m_curReadbackFrame );
+    m_curReadbackFrame = ( m_curReadbackFrame + 1 ) % offscreenRenderLogic->NumReadBuffersPerRT();
+
+    PushToVideoCard( frame, videoCardManager );
+
+    offscreenRenderLogic->SwapDisplayRenderTargets();
+
+
 }
 
 // *********************************
 //
-void    DefaultVideoOutputRenderLogic::PushToVideoCard  ( Texture2DConstPtr & frame )
+void    DefaultVideoOutputRenderLogic::PushToVideoCard  ( Texture2DConstPtr & frame, videocards::VideoCardManager * videoCardManager )
 {
-    // FIXME: implement
-    { frame; }
+    //GPUDirect;
+	if(videoCardManager->IsEnabled())
+	{
+		if( videoCardManager->m_CurrentTransferMode == bv::videocards::VideoCard_RAM_GPU::GPU )
+		{          
+			//m_offscreenRenderLogic->TransferFromGPUToSDI( renderer, m_VideoCardManager );
+			//m_offscreenRenderLogic->SwapDisplayRenderTargets();
+			//todo: fix gpu direct
+		}
+		else if( videoCardManager->m_CurrentTransferMode==bv::videocards::VideoCard_RAM_GPU::RAM )
+		{
+			videoCardManager->GetBufferFromRenderer( frame );
+		}
+	}
 }
 
 } //bv

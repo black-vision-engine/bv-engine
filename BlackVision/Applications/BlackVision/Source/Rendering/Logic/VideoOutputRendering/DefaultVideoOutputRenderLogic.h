@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Engine/Graphics/Resources/Texture2D.h"
-
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
+#include "VideoCardManager.h"
 
 namespace bv {
 
@@ -26,12 +26,11 @@ public:
             DefaultVideoOutputRenderLogic   ( bool useVideoCard, bool displayVideoOutputOnPreview );
             ~DefaultVideoOutputRenderLogic  ();
 
-    void    FrameRendered                   ( Renderer * renderer, OffscreenRenderLogic * offscreenRenderLogic );
-    void    FrameRenderedNewImpl            ( Renderer * renderer, OffscreenRenderLogic * offscreenRenderLogic );
+    void    FrameRenderedNewImpl            ( Renderer * renderer, OffscreenRenderLogic * offscreenRenderLogic, videocards::VideoCardManager * videoCardManager );
 
 private:
 
-    void    PushToVideoCard                 ( Texture2DConstPtr & frame );
+    void    PushToVideoCard                 ( Texture2DConstPtr & frame, videocards::VideoCardManager * videoCardManager );
 
 };
 

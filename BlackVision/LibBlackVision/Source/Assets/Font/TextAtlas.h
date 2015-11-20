@@ -70,7 +70,8 @@ public:
 												SizeType fontSize, 
 												SizeType blurSize,
 												SizeType outlineSize,
-												SizeType mmLevels );
+												SizeType mmLevels,
+                                                const std::wstring & charSet );
 
     friend class Text;
 

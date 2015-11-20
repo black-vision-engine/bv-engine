@@ -1,19 +1,15 @@
 #pragma once
 
-#include "Mathematics/Transform/MatTransform.h"
-
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/DefaultVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/Transform/DefaultTransformChannel.h"
 
-#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
-
-#include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
 #include "Engine/Events/BaseEvent.h"
 #include "Assets/Font/TextHelper.h"
+#include "TextArranger.h"
 
 namespace bv { namespace model {
 
@@ -34,29 +30,22 @@ public:
     static  std::string                     UID                 ();
 
     static  std::string                     TextureName         ();
-    static  std::string                     FontFileName        ();
 };
 
 // ***************************** PLUGIN ********************************** 
 class DefaultTextPlugin : public BasePlugin< IPlugin >
 {
 private:
-    DefaultPluginParamValModelPtr   m_paramValModel;
 
     DefaultPixelShaderChannelPtr    m_psc;
     DefaultVertexShaderChannelPtr   m_vsc;
 
     VertexAttributesChannelPtr      m_vaChannel;
-	DefaultTransformChannelPtr		m_transformChannel;
 	glm::mat4						m_scaleMat;
 
-    DefaultTexturesDataPtr          m_texturesData;
-
-    unsigned int                    m_texCoordChannelIndex;
-
-    std::wstring                    m_text;
+    ParamWStringPtr                 m_textParam;
+    std::wstring                    m_currentText;
     TextAtlasConstPtr				m_atlas;
-    bool                            m_textSet;
 	Float32							m_textLength;
 
     UInt32		                    m_fontSize;
@@ -66,12 +55,15 @@ private:
     ParamFloatPtr                   m_spacingParam;
     ParamFloatPtr                   m_alignmentParam;
     ParamFloatPtr                   m_maxTextLengthParam;
+    ParamFloatPtr                   m_timeParam;
 	ValueMat4Ptr					m_scaleValue;
+
+    TextArranger *                  m_arranger;
 
     //delegates
     void                                        OnSetText                   ( IEventPtr evt );
 
-    void                                        SetText                     ( const std::wstring & newText );
+    void                                        SetText                     ( const std::wstring & newText, TimeType t = TimeType( 0.f ) );
 
 	void										LoadTexture					(	DefaultTexturesDataPtr,
 																				TextureAssetConstPtr,
@@ -86,26 +78,30 @@ private:
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
+public:
+
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
-    virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
+    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
-	virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
+
+private:
 
 	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & trans ) const override;
 
     virtual void                                Update                      ( TimeType t ) override;
 
-    void                                        InitAttributesChannel       ( IPluginPtr prev );
 
 	void										ScaleToMaxTextLength		();
 
 public:
+
 	explicit                                    DefaultTextPlugin           ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
 												~DefaultTextPlugin          ();
 
-	static bool									SetText						( IPluginPtr, const std::wstring& );
+    virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 
-    virtual void								SetPrevPlugin               ( IPluginPtr plugin );
+	std::wstring                                GetText                     () const;
+    static bool									SetText						( IPluginPtr, const std::wstring& );
 };
 
 } // model

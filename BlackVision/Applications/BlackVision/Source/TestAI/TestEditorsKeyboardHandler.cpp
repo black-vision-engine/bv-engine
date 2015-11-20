@@ -1,11 +1,12 @@
 #include "TestEditorsKeyboardHandler.h"
 
 #include "Engine/Models/BVSceneEditor.h"
+#include "Serialization/XML/XMLSerializer.h"
+#include "Serialization/Json/JsonSerializeObject.h"
 
 #include "MockScenes.h"
 #include "BVAppLogic.h"
 #include "BVGL.h"
-
 
 namespace bv {
 
@@ -19,7 +20,7 @@ model::IModelNodePtr CreateTestModelNodeInSomeSpecificScope( BVAppLogic * logic,
     auto timelineManager = logic->GetTimelineManager();
     auto globalTimeline = logic->GetGlobalTimeline();
 
-    model::BasicNodePtr node = TestScenesFactory::CreateTestRandomNode( name, pluginsManager, timelineManager, globalTimeline );
+    model::BasicNodePtr node = TestScenesFactory::CreateTestRandomNode( name, pluginsManager, timelineManager.get(), globalTimeline );
 
     return node;
 }
@@ -106,9 +107,10 @@ void    TestEditorsKeyboardHandler::HandleKey   ( unsigned char c, BVAppLogic * 
     }
     else if( c == 's' )
     {
-        auto sob = new SerializeObject();
-        m_bvScene->Serialize( *sob );
-        sob->Save( "text.xml" );
+        auto sob = new XMLSerializer();
+        //auto sob = new JsonSerializeObject();
+        logic->GetBVScene()->GetScenes()[ 0 ]->Serialize( *sob );
+        sob->Save( "test.xml" );
         delete sob;
     }
 }

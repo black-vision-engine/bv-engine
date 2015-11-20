@@ -10,6 +10,13 @@
 #include "Mathematics/Core/mathfuncs.h"
 #include "Mathematics/Defines.h"
 
+#include "Serialization/SerializationHelper.h"
+#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
+
+#include <sstream>
+
+
 namespace bv {
 
 namespace {
@@ -62,6 +69,24 @@ bool EvaluateLinear< bv::TimeType, bool, float > ( const Key<bv::TimeType, bool>
 
 // *************************************
 //
+//template<class TimeValueT, class ValueT, class FloatT >
+template<>
+std::string EvaluateLinear< bv::TimeType, std::string, float > ( const Key< bv::TimeType, std::string > & k0, const Key< bv::TimeType, std::string > & , bv::TimeType  )
+{
+    return k0.val;
+}
+
+// *************************************
+//
+//template<class TimeValueT, class ValueT, class FloatT >
+template<>
+std::wstring EvaluateLinear< bv::TimeType, std::wstring, float > ( const Key< bv::TimeType, std::wstring > & k0, const Key< bv::TimeType, std::wstring > & , bv::TimeType  )
+{
+    return k0.val;
+}
+
+// *************************************
+//
 template<class TimeValueT, class ValueT, class FloatT>
 ValueT EvaluateCosine( const Key<TimeValueT, ValueT> & k0, const Key<TimeValueT, ValueT> & k1, TimeValueT t )
 {
@@ -97,6 +122,24 @@ bool EvaluateCosine< bv::TimeType, bool, float > ( const Key<bv::TimeType, bool>
 
 // *************************************
 //
+//template<class TimeValueT, class ValueT, class FloatT >
+template<>
+std::string EvaluateCosine< bv::TimeType, std::string, float > ( const Key<bv::TimeType, std::string> & k0, const Key<bv::TimeType, std::string> &, bv::TimeType )
+{
+    return k0.val;
+}
+
+// *************************************
+//
+//template<class TimeValueT, class ValueT, class FloatT >
+template<>
+std::wstring EvaluateCosine< bv::TimeType, std::wstring, float > ( const Key<bv::TimeType, std::wstring> & k0, const Key<bv::TimeType, std::wstring> &, bv::TimeType )
+{
+    return k0.val;
+}
+
+// *************************************
+//
 template<class TimeValueT, class ValueT>
 ValueT EvaluatePoint( const Key<TimeValueT, ValueT> & k0, const Key<TimeValueT, ValueT> & k1, TimeValueT t )
 {
@@ -125,6 +168,73 @@ Key<TimeValueT, ValueT>::Key(TimeValueT t, ValueT val)
 
 // *************************************
 //
+template<class TimeValueT, class ValueT >
+void                Key<TimeValueT, ValueT>::Serialize       ( ISerializer& ser ) const
+{
+    ser.EnterChild( "key" );
+    ser.SetAttribute( "time", std::to_string( t ) );
+    ser.SetAttribute( "val", std::to_string( val ) );
+    ser.ExitChild();
+}
+
+// *************************************
+//
+template<class TimeValueT, class ValueT >
+ISerializablePtr     Key<TimeValueT, ValueT>::Create          ( const IDeserializer& /*doc*/ )
+{
+    assert( !"Don't run me please ;)" );
+    return nullptr;
+}
+
+// *************************************
+//
+template<>
+ISerializablePtr     Key< bv::TimeType, float >::Create          ( const IDeserializer& doc )
+{
+    auto time = doc.GetAttribute( "time" );
+    auto val = doc.GetAttribute( "val" );
+    auto key = std::make_shared< Key< bv::TimeType, float > >( std::stof( time ), std::stof( val ) );
+    return key;
+}
+
+std::vector<std::string> &split_(const std::string &s, char delim, std::vector<std::string> &elems) { // FIXME: this "_" is so weak
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+    return elems;
+}
+
+
+std::vector<std::string> split_(const std::string &s, char delim) { // FIXME: this "_" is so weak
+    std::vector<std::string> elems;
+    split_(s, delim, elems);
+    return elems;
+}
+
+// *************************************
+//
+template<>
+ISerializablePtr     Key< bv::TimeType, glm::vec3 >::Create          ( const IDeserializer& doc ) // FIXME: this is not a good place to do that
+{
+    auto time = doc.GetAttribute( "time" );
+    auto val_ = doc.GetAttribute( "val" );
+
+    auto vals = split_( val_, ',' );
+    assert( vals.size() == 3 );
+    glm::vec3 val( std::stof( vals[0] ), 
+        std::stof( vals[1] ), 
+        std::stof( vals[2] ) );
+
+
+    auto key = std::make_shared< Key< bv::TimeType, glm::vec3 > >( std::stof( time ), glm::vec3( val ) );
+    return key;
+}
+
+
+// *************************************
+//
 template<class TimeValueT, class ValueT, class FloatT >
 BasicInterpolator<TimeValueT, ValueT, FloatT>::BasicInterpolator(TimeValueT tolerance)
     : tolerance( tolerance )
@@ -134,6 +244,39 @@ BasicInterpolator<TimeValueT, ValueT, FloatT>::BasicInterpolator(TimeValueT tole
     assert( tolerance > static_cast<TimeValueT>(0.) );
     //SetInterpolationMethod( model::IParameter::InterpolationMethod::LINEAR );
     //SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
+}
+
+// *************************************
+//
+template<class TimeValueT, class ValueT, class FloatT >
+void                BasicInterpolator<TimeValueT, ValueT, FloatT>::Serialize       ( ISerializer& doc ) const
+{
+    doc.EnterChild( "interpolator" );
+    
+    for( auto key : keys )
+    {
+        doc.EnterChild( "key" );
+        doc.SetAttribute( "time", std::to_string( key.t ) );
+        doc.SetAttribute( "val", std::to_string( key.val ) );
+        doc.ExitChild();
+    }
+
+    doc.ExitChild();
+}
+
+// *************************************
+//
+template<class TimeValueT, class ValueT, class FloatT >
+ISerializablePtr     BasicInterpolator<TimeValueT, ValueT, FloatT>::Create          ( const IDeserializer& doc ) // FIXME: this works for floats only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+{
+    auto keys = SerializationHelper::DeserializeObjectLoadPropertiesImpl< Key<TimeValueT, ValueT> >( doc, "key" );
+
+    auto interpolator = std::make_shared< BasicInterpolator<TimeValueT, ValueT, FloatT> >();
+
+    for( auto key : keys )
+        interpolator->AddKey( key->t, key->val );
+
+    return interpolator;
 }
 
 // *************************************
@@ -476,6 +619,15 @@ const typename BasicInterpolator<TimeValueT, ValueT, FloatT>::KeyType &     Basi
     return keys.back();
 }
 
+// *************************************
+//
+template<class TimeValueT, class ValueT, class FloatT>
+int                                                 BasicInterpolator<TimeValueT, ValueT, FloatT>::GetNumKeys      ()
+{
+    return int( keys.size() );
+}
+
+
 } // bv
 
 #define INSTANTIATE(TYPE) \
@@ -492,5 +644,7 @@ template bv::BasicInterpolator<bv::TimeType, double>;
 template bv::BasicInterpolator<bv::TimeType, glm::vec2>;
 template bv::BasicInterpolator<bv::TimeType, glm::vec3>;
 template bv::BasicInterpolator<bv::TimeType, glm::vec4>;
+template bv::BasicInterpolator<bv::TimeType, std::string>;
+template bv::BasicInterpolator<bv::TimeType, std::wstring>;
 
 #undef INSTANTIATE

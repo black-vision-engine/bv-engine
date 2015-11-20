@@ -17,6 +17,7 @@
 #include "Engine/Graphics/Effects/NodeEffects/NodeMaskNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/WireframeNodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/LightScatteringNodeEffect.h"
 
 
 namespace bv {
@@ -96,6 +97,11 @@ void                BVSceneTools::UpdateSceneNodeEffect                 ( SceneN
         auto sceneNodeWireframeEffect = std::make_shared< WireframeNodeEffect >();
         node->SetNodeEffect( sceneNodeWireframeEffect );
     }
+    else if( modelNodeEffect->GetType() ==  NodeEffectType::NET_LIGHT_SCATTERING )
+    {
+        auto sceneNodeLightScatteringEffect = std::make_shared< LightScatteringNodeEffect >();
+        node->SetNodeEffect( sceneNodeLightScatteringEffect );
+    }
     else
     {
         //Did you forget to implement an additional effect
@@ -162,7 +168,6 @@ RenderableEntity *  BVSceneTools::CreateRenderableEntity                ( model:
     }
 
     auto worldTransformVec = CreateTransformVec( finalizer );
-
     renderable->SetWorldTransforms( worldTransformVec );
 
     return renderable;
@@ -224,10 +229,10 @@ BVSceneTools::RADASVB * BVSceneTools::CreateRenderableArrayDataTriStrip ( model:
     auto components = vaChannel->GetComponents();
     auto geomDesc = vaChannel->GetDescriptor();
 
-    if( components.empty() )
-    {
-        return nullptr;
-    }
+    //if( components.empty() )
+    //{
+    //    return nullptr;
+    //}
     
     return CreateRenderableArrayDataArrays( components, geomDesc, vaChannel->IsTimeInvariant() );
 }

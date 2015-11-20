@@ -18,12 +18,14 @@
 #include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectWireframe.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectLightScattering.h"
 
 #include "Engine/Graphics/Effects/NodeEffects/NodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/NodeMaskNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/WireframeNodeEffect.h"
-
+#include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/LightScatteringNodeEffect.h"
 
 namespace bv 
 {
@@ -50,6 +52,8 @@ NodeUpdater::NodeUpdater     ( SceneNode * sceneNode, model::IModelNodeConstPtr 
     , m_modelNode( modelNode )
     , m_renderable( nullptr )
     , m_rendererContext( nullptr )
+	, m_attributesUpdateID( 0 )
+	, m_topologyUpdateID( 0 )
 {
     assert( sceneNode != nullptr );
     assert( modelNode != nullptr );
@@ -154,32 +158,12 @@ void    NodeUpdater::UpdateNodeEffect       ()
     {
         switch( nodeEffect->GetType() )
         {
-            case NodeEffectType::NET_DEFAULT:
-            {
-                auto defaultEffect = std::static_pointer_cast< model::ModelNodeEffectDefault >( nodeEffect );
-
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-
-                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_DEFAULT )
-                {
-                    sceneNodeEffect = std::make_shared< NodeEffect >( NodeEffect::Type::T_DEFAULT );
-                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
-                }
-                break;
-            }
             case NodeEffectType::NET_ALPHA_MASK:
             {
                 auto alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( nodeEffect );
-                auto paramAlpha = alphaMaskEffect->GetParamAlpha();
-
                 auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
-                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_ALPHA_MASK )
-                {
-                    sceneNodeEffect = std::make_shared< AlphaMaskNodeEffect >();
-                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
-                }
-
+                auto paramAlpha = alphaMaskEffect->GetParamAlpha();
                 auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );
 
                 if ( alphaVal != nullptr )
@@ -199,13 +183,7 @@ void    NodeUpdater::UpdateNodeEffect       ()
 
                 auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
-                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_NODE_MASK )
-                {
-                    sceneNodeEffect = std::make_shared< NodeMaskNodeEffect >();
-                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
-                }
-
-                auto bgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramBgIdx->GetName() ) );
+				auto bgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramBgIdx->GetName() ) );
                 auto fgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramFgIdx->GetName() ) );
                 auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );
 
@@ -218,20 +196,40 @@ void    NodeUpdater::UpdateNodeEffect       ()
 
                 break;
             }
-            case NodeEffectType::NET_WIREFRAME:
+            case NodeEffectType::NET_LIGHT_SCATTERING:
             {
-                auto nodeMaskEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( nodeEffect );
+                auto lightScatteringEffect = std::static_pointer_cast< model::ModelNodeEffectLightScattering >( nodeEffect );
+
+                auto paramExposure = lightScatteringEffect->GetParamExposure();
+                auto paramWeight = lightScatteringEffect->GetParamWeight();
+                auto paramDecay = lightScatteringEffect->GetParamDecay();
+                auto paramDensity = lightScatteringEffect->GetParamDensity();
+                auto paramLightPositionOnScreen = lightScatteringEffect->GetParamLightPositionOnScreen();
+                auto paramNumSamples = lightScatteringEffect->GetParamNumSamples();
+
                 auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
-                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_WIREFRAME )
+				auto exposureVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramExposure->GetName() ) );
+                auto weightVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramWeight->GetName() ) );
+                auto decayVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramDecay->GetName() ) );
+                auto densityVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramDensity->GetName() ) );
+                auto lightPositionOnScreenVal = std::static_pointer_cast< ValueVec2 >( sceneNodeEffect->GetValue( paramLightPositionOnScreen->GetName() ) );
+                auto numSamplesVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramNumSamples->GetName() ) );
+
+
+                if ( exposureVal != nullptr && weightVal != nullptr && decayVal != nullptr && 
+                     densityVal != nullptr && lightPositionOnScreenVal != nullptr && numSamplesVal != nullptr )
                 {
-                    sceneNodeEffect = std::make_shared< WireframeNodeEffect >();
-                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
+                    exposureVal->SetValue( lightScatteringEffect->GetExposure() );
+                    weightVal->SetValue( lightScatteringEffect->GetWeight() );
+                    decayVal->SetValue( lightScatteringEffect->GetDecay() );
+                    densityVal->SetValue( lightScatteringEffect->GetDensity() );
+                    lightPositionOnScreenVal->SetValue( lightScatteringEffect->GetLightPositionOnScreen() );
+                    numSamplesVal->SetValue( lightScatteringEffect->GetNumSamples() );
                 }
+
                 break;
             }
-            default:
-                assert( false );
         }
     }
 }
@@ -284,6 +282,9 @@ void            NodeUpdater::RegisterTex2Params  ( ITexturesDataConstPtr texture
     if( textures.size() != 0 || animations.size() != 0 )
     {
         m_texDataMappingVec.push_back( std::make_pair( texturesData, shaderParams ) );
+
+		std::vector< UInt64 > updateIDs( textures.size() + animations.size(), 0 );
+		m_texDataUpdateID.push_back( updateIDs );
     }
 /*
     auto textures = texturesData->GetTextures();

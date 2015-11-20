@@ -19,10 +19,15 @@
 #include "Engine/Models/Timeline/Dynamic/TimelineEventNull.h"
 #include "Engine/Models/Timeline/Dynamic/TimelineEventStop.h"
 
+#include "Serialization/ISerializable.h"
+
 
 namespace bv { namespace model {
 
-class TimelineManager
+class TimelineManager;
+DEFINE_PTR_TYPE( TimelineManager );
+
+class TimelineManager : public ISerializable
 {
 private:
 
@@ -31,9 +36,14 @@ private:
     ITimeEvaluatorPtr                                       m_rootTimeline;
 
 public:
+    static TimelineManager* GetInstance                     ();
+    static void             SetInstance                     ( TimelineManager* );
 
                             TimelineManager                 ();
                             ~TimelineManager                ();
+
+    virtual void            Serialize                       ( ISerializer& sob ) const;
+    static ISerializablePtr Create                          ( const IDeserializer& dob );
 
     ITimeEvaluatorPtr       CreateOffsetTimeEvaluator       ( const std::string & name, TimeType startTime );
     ITimeEvaluatorPtr       CreateConstTimeEvaluator        ( const std::string & name, TimeType timeVal );
@@ -87,6 +97,7 @@ private:
     SimpleIParamSet *       GetParamSet                     ( ITimeEvaluatorPtr timeline );
     bool                    DeregisterParam                 ( IParameterPtr param, ITimeEvaluatorPtr timeline );
 
+    static TimelineManager* instance;
 };
 
 } //model

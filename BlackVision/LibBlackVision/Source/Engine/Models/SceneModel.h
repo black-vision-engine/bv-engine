@@ -1,13 +1,34 @@
 #pragma once
 
+#include "Engine/Models/BasicNode.h"
+#include "Engine/Models/Timeline/TimelineManager.h"
+#include "Serialization/ISerializable.h"
+
 #include "CoreDEF.h"
 
 namespace bv {
 
-class SceneModel
+namespace model {
+
+struct SceneModel;
+DEFINE_PTR_TYPE( SceneModel );
+DEFINE_CONST_PTR_TYPE( SceneModel );
+
+struct SceneModel : public ISerializable
 {
+    std::string                                     m_name;
+    TimelineManagerPtr                              m_pTimelineManager; // FIXME(?) using TimelineManager as timeline container seems a little bit like a design flaw
+    BasicNodePtr                                    m_pModelSceneRoot;
+
+    SceneModel( std::string name, model::TimelineManagerPtr pTimelineManager, model::BasicNodePtr pModelSceneRoot ); // FIXME remove me!!!
+
+    static SceneModelPtr    Create              ( std::string name, model::TimelineManagerPtr pTimelineManager, model::BasicNodePtr pModelSceneRoot );
+    static ISerializablePtr Create              ( const IDeserializer& deser );
+    virtual void            Serialize           ( ISerializer& doc) const override;
 };
 
-DEFINE_PTR_TYPE( SceneModel );
+typedef std::vector< SceneModelPtr > SceneModelVec;
+typedef std::vector< SceneModelConstPtr > SceneModelConstVec;
 
+} // model
 }

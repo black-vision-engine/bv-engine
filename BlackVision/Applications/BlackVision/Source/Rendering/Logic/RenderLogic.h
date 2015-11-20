@@ -1,5 +1,7 @@
 #pragma once
 
+//pablito:
+#include "VideoCardManager.h"
 #include <vector>
 
 
@@ -16,6 +18,8 @@ class RenderLogic
 {
 private:
 
+	bv::videocards::VideoCardManager *      m_VideoCardManager;
+
     OffscreenRenderLogic *                  m_offscreenRenderLogic;
     DefaultVideoOutputRenderLogic *         m_videoOutputRenderLogic;
 
@@ -31,6 +35,9 @@ public:
     void    RenderFrame     ( Renderer * renderer, SceneNode * node );
     void    PreFrameSetup   ( Renderer * renderer );
     void    PostFrameSetup  ( Renderer * renderer );
+	//pablito
+	void	SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager, Renderer * renderer);
+	void	InitVideoCards     ( Renderer * renderer );
 
 // FIXME: this interface should be private or moved to another service class used by RenderLogic and Effects
 public:

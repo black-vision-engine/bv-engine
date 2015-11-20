@@ -20,6 +20,8 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
 
+#include "Engine/Models/NodeEffects/ModelNodeEffectLightScattering.h"
+
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
 
@@ -34,15 +36,21 @@
 
 #include "BVConfig.h"
 
+#include "Serialization/Json/JsonDeserializeObject.h"
+#include "Serialization/Json/JsonSerializeObject.h"
+
+#include <fstream>
+
 namespace {
 
-    std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR", "DEFAULT_GRADIENT" };
+    std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR" };
     std::string GSimplePlugins1[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_TEXTURE" };
     std::string GSimplePlugins2[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_ANIMATION" };
     std::string GSimplePlugins3[] = { "DEFAULT_TRANSFORM", "DEFAULT_COLOR", "DEFAULT_TEXT" };
     std::string GSimplePlugins4[] = { "DEFAULT_TRANSFORM", "DEFAULT_TEXT" };
     std::string GSimplePlugins5[] = { "DEFAULT_TRANSFORM", "DEFAULT_COLOR", "DEFAULT_TIMER" };
     std::string GSimplePlugins6[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_HEIGHT_MAP" };
+    std::string GSimplePlugins7[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_VIDEO_STREAM_DECODER" };
 
 
     // *****************************
@@ -299,6 +307,21 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGlobalEffectTest      ( model::Ti
     nm->AddChildToModelOnly( nm_fg );
 
     return root;*/
+}
+
+// *****************************
+//
+model::BasicNodePtr  SimpleNodesFactory::CreateLightScatteringTest      ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { timelineManager; }
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_01.jpg", false, 3.4f, 0.7f );
+
+     // ROOT
+    auto root = bTex.CreateNode( "root", true );
+
+    root->SetNodeEffect( std::make_shared< model::ModelNodeEffectLightScattering >( timeEvaluator ) );
+
+    return root;
 }
 
 // *****************************
@@ -823,8 +846,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::Ti
 // TEXTURE plugin
 	if( root->GetPlugin( "texture" ) )
 	{
-        SetParameter( root->GetPlugin( "texture" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 1, 0, 1 ) );
 		success = model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
+        SetParameter( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 1, 0, 1 ) );
 		root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
 		assert( success );
 	}
@@ -1216,7 +1239,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "4float.exr" );
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "4float.exr", MipMapFilterType::BILINEAR );
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
-	success = model::LoadTexture( node->GetPlugin( "texture" ), "64bit.png", MipMapFilterType::BILINEAR );
+	success = model::LoadTexture( node->GetPlugin( "texture" ), "Desert.jpg", MipMapFilterType::BILINEAR );
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "64bit.png" );
 
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "sand.jpg" );
@@ -1406,8 +1429,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 1.f );
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
 
-	success = model::LoadAnimation( node->GetPlugin( "animation" ), "rsrcy/test_anim", "*.png" );
-	//success = model::LoadAnimation( node->GetPlugin( "animation" ), "rsrcy/test_anim", "*.jpg" );
+	success = model::LoadAnimation( node->GetPlugin( "animation" ), "FullHD/alfai", "*.tga" );
     //success = model::LoadAnimation( node->GetPlugin( "animation" ), "d:/src/media/sequences/FullHD/alfai/", "*.tga" );
     assert( success );
 
@@ -1423,6 +1445,44 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
 
     auto ai = TestAIManager::Instance().GetAIPreset( 2 );
     ai->SetTimeline( someTimelineWithEvents );
+
+    return node;    
+}
+
+
+// *****************************
+//
+model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
+{
+	{ useAlphaMask; }
+    //Timeline stuff
+    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+
+    someTimelineWithEvents->AddChild( localTimeline );
+    timeEvaluator->AddChild( someTimelineWithEvents );
+
+    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins7, GSimplePlugins7 + 3 );
+
+    auto node = model::BasicNode::Create( "Root", timeEvaluator );
+
+    auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
+    assert( success );
+
+    model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 1.f );
+    model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
+
+	//http://samples.ffmpeg.org/game-formats/bink/ActivisionLogo.bik
+	//success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/ActivisionLogo.bik" );
+
+	//http://www.cinemartin.com/cinec/_Sample_Videos/Samsung_Galaxy_Note_3/20140117_142047_CINEC_ProRes4444.mov
+	//success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/20140117_142047_CINEC_ProRes4444.mov" );
+
+	//http://download.openbricks.org/sample/H264/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4
+	success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4" );
+	
+    assert( success );
 
     return node;    
 }
@@ -1486,14 +1546,14 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
 
 	SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
 	node->GetPlugin( "text" )->GetParameter( "maxTextLenght" )->SetTimeEvaluator( timeEvaluator );
-    SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 0.0 ), 0.2f );
+    //SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 0.0 ), 0.2f );
 	//SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 5.0 ), 0.1f );
 	//SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 10.0 ), 0.5f );
 
 
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/courbi.ttf" );
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/cour.ttf" );
-    success = model::LoadFont( node->GetPlugin( "text" ), "Assets/Fonts/arial.TTF", 60, blurSize, 0, true );
+    success = model::LoadFont( node->GetPlugin( "text" ), "fonts/Astera.TTF", 30, blurSize, 0, true );
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/ARIALUNI.TTF" );
     assert( success );
 
@@ -1502,7 +1562,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AV::11A-AAAA\nBBBBCCCC\nDDD333DD88\nAAAAAAAA\nB3BBCCCC\nDDDD888DDD" );
 //    model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAABBBBCCCCDDDD" );
 	//model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"AV::11A-AAAABBBBCCCCDDD333DD88AAAAAAAAB3BBCCCCDDDD888DDD" );
-	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"za¿ó³æ111 \n gêœl¹ jaŸñ11" );
+	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"123456789" );
 
     if( useAlphaMask )
     {
@@ -1977,7 +2037,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
     auto root = model::BasicNode::Create( "Root", timeEvaluator );
 
     auto success = root->AddPlugins( uids, localTimeline );
-    assert( success );
+    assert( success );  { success;  }
 
 // ============================================ //
 // Tranformations
@@ -2153,16 +2213,24 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 #endif
 	
 #ifdef VERSION_TEXTURE
+	auto texDesc_ = TextureAssetDesc::Create( "sand.jpg", MipMapFilterType::BILINEAR, true );
+	JsonSerializeObject serializeObject;
+	texDesc_->Serialize( serializeObject );
+	serializeObject.Save( "serialization/textureSerialize.json" );
 
-	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
-	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+	fstream file;
+	file.open( "serialization/textureSerialize.json", std::ios_base::in );
+	JsonDeserializeObject deserializeObject;
+    deserializeObject.Load( file );
+	file.close();
 
-	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg" );	//, MipMapFilterType::BOX
-	//success = model::LoadTexture( root->GetPlugin( "texture" ), "Skybox.jpg", MipMapFilterType::BILINEAR );
-	assert( success );
-	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
-	model::SetParameter( texturePlugin->GetParameter("borderColor"), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
-	//root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
+    auto texDesc = AssetManager::GetInstance().CreateDesc( deserializeObject );
+    root->GetPlugin( "texture" )->LoadResource( std::static_pointer_cast<const AssetDesc>( texDesc ) );
+
+	model::SetParameter( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+	model::SetParameter( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+
+	//success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );	//, MipMapFilterType::BOX
 #endif
 
 
@@ -2175,7 +2243,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 
 // *****************************
 //
-model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string& uid, glm::vec3 translation )
+model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string& uid, glm::vec3 translation, std::string texturePath )
 {
 
 #define VERSION_TEXTURE
@@ -2214,7 +2282,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineMan
 	#endif
 #endif
 
-    auto root = model::BasicNode::Create( "Root", timeEvaluator );
+    auto root = model::BasicNode::Create( uid, timeEvaluator );
 
     auto success = root->AddPlugins( uids, localTimeline );
     assert( success );
@@ -2240,14 +2308,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineMan
 #endif
 	
 #ifdef VERSION_TEXTURE
-
-	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
-	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
-
-	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
+	success = model::LoadTexture( root->GetPlugin( "texture" ), texturePath, MipMapFilterType::BILINEAR );
 	assert( success );
-	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
-	model::SetParameter( texturePlugin->GetParameter("borderColor"), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
+	auto texturePlugin =  root->GetPlugin( "texture" );
+	model::SetParameter( texturePlugin->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+	model::SetParameter( texturePlugin->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
 	//root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
 #endif
 
@@ -2259,93 +2324,137 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineMan
 #undef VERSION_COLOR
 }
 
+model::BasicNodePtr SimpleNodesFactory::CreateTextCacheTest         ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, glm::vec3 translation, glm::vec4 color, const std::wstring text, const std::string& fontName )
+{
+    //Timeline stuff
+    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
+    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    
+    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+
+    someTimelineWithEvents->AddChild( localTimeline );
+    timeEvaluator->AddChild( someTimelineWithEvents );
+
+    //Plugin stuff
+    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins3, GSimplePlugins3 + 3 );
+
+
+    auto node = model::BasicNode::Create( "Text", timeEvaluator );
+    auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
+    assert( success );
+
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, translation );
+	SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.f, 2.f, 1.f ) );
+    
+
+	//node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( timeEvaluator );
+	//node->GetPlugin( "text" )->GetParameter( "outlineColor" )->SetTimeEvaluator( timeEvaluator );
+
+    SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), color );
+	SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 0.0f, 1.0f ) );
+    SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
+	SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
+
+    success = model::LoadFont( node->GetPlugin( "text" ), fontName, 30, 0, 0, true );
+    assert( success );
+
+	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), text );
+
+    auto ai = TestAIManager::Instance().GetAIPreset( 2 );
+    ai->SetTimeline( someTimelineWithEvents );
+
+    return node;    
+}
+
 // *****************************
 //
 void					SimpleNodesFactory::TestTypedParamQueries	( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-	auto node = CreateSolidRectNode( "rect_node", 1.0f, 1.0f, glm::vec3( 0.f, 0.f, 0.f ), glm::vec4( 1.f, 1.f, 1.f, 1.f ), timelineManager, timeEvaluator );
+    assert( false ); timelineManager; timeEvaluator;
+	//auto node = CreateSolidRectNode( "rect_node", 1.0f, 1.0f, glm::vec3( 0.f, 0.f, 0.f ), glm::vec4( 1.f, 1.f, 1.f, 1.f ), timelineManager, timeEvaluator );
 
-	///////////////////////////////////////////////////
-	// Acessing simple interpolator and time evaluator for float parmameter
-    auto paramWidth					= node->GetPlugin( "rectangle" )->GetParameter( "width" );
-	auto paramWidth_Float			= model::QueryTypedParam< model::ParamFloatPtr >( paramWidth );
-	auto & paramWidth_Interpolator	= paramWidth_Float->AccessInterpolator(); // auto & is necessary as AccessInterpolator returns reference to the interpolator
-	auto paramWidt_timeline			= paramWidth_Float->GetTimeEvaluator();
-	
-	paramWidth_Interpolator.AddKey( 0.f, 3.f );
-	auto & keys = paramWidth_Interpolator.AccessKeys(); // returns const reference to keys, to change keys use: paramWidth_Interpolator.AddKey(...)
+	/////////////////////////////////////////////////////
+	//// Acessing simple interpolator and time evaluator for float parmameter
+ //   auto paramWidth					= node->GetPlugin( "rectangle" )->GetParameter( "width" );
+	//auto paramWidth_Float			= model::QueryTypedParam< model::ParamFloatPtr >( paramWidth );
+	//auto & paramWidth_Interpolator	= paramWidth_Float->AccessInterpolator(); // auto & is necessary as AccessInterpolator returns reference to the interpolator
+	//auto paramWidt_timeline			= paramWidth_Float->GetTimeEvaluator();
+	//
+	//paramWidth_Interpolator.AddKey( 0.f, 3.f );
+	//auto & keys = paramWidth_Interpolator.AccessKeys(); // returns const reference to keys, to change keys use: paramWidth_Interpolator.AddKey(...)
 
-	auto & key_val	= keys.at( 0 ); // equal to: keys[ 0 ]
-	TimeType time	= key_val.t;
-	float value		= key_val.val;
+	//auto & key_val	= keys.at( 0 ); // equal to: keys[ 0 ]
+	//TimeType time	= key_val.t;
+	//float value		= key_val.val;
 
-	///////////////////////////////////////////////////
-	// Acessing simple interpolator for vec4 parmameter
-    auto paramColor					= node->GetPlugin( "solid color" )->GetParameter( "color" );
-	auto paramColor_Float			= model::QueryTypedParam< model::ParamVec4Ptr >( paramColor );
-	auto & paramColor_Interpolator	= paramColor_Float->AccessInterpolator();
+	/////////////////////////////////////////////////////
+	//// Acessing simple interpolator for vec4 parmameter
+ //   auto paramColor					= node->GetPlugin( "solid color" )->GetParameter( "color" );
+	//auto paramColor_Float			= model::QueryTypedParam< model::ParamVec4Ptr >( paramColor );
+	//auto & paramColor_Interpolator	= paramColor_Float->AccessInterpolator();
 
-	auto & paramColor_keys			= paramColor_Interpolator.AccessKeys();
-	
-	// inspect the first key (TimeType, glm::vec4)
-	TimeType paramColor_keys_0_t	= paramColor_keys[ 0 ].t;
-	glm::vec4 paramColor_keys_0_val = paramColor_keys[ 0 ].val;
+	//auto & paramColor_keys			= paramColor_Interpolator.AccessKeys();
+	//
+	//// inspect the first key (TimeType, glm::vec4)
+	//TimeType paramColor_keys_0_t	= paramColor_keys[ 0 ].t;
+	//glm::vec4 paramColor_keys_0_val = paramColor_keys[ 0 ].val;
 
 
-	///////////////////////////////////////////////////
-	// Acessing simple interpolator for transform parameter
-	auto paramTrans					= node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-	auto paramTrans_TV				= model::QueryTypedParam< model::ParamTransformVecPtr >( paramTrans );
-	
-	auto & transform				= paramTrans_TV->Transform( 0 );
-	auto translation				= transform[ 1 ];								// translation
-	auto rotation					= static_cast<RotationF *>( transform[ 2 ] );	// rotation transform[ 2 ] == SimpleTransformF * but can be cast to RotationF, as it is a rotation by default
+	/////////////////////////////////////////////////////
+	//// Acessing simple interpolator for transform parameter
+	//auto paramTrans					= node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+	//auto paramTrans_TV				= model::QueryTypedParam< model::ParamTransformVecPtr >( paramTrans );
+	//
+	//auto & transform				= paramTrans_TV->Transform( 0 );
+	//auto translation				= transform[ 1 ];								// translation
+	//auto rotation					= static_cast<RotationF *>( transform[ 2 ] );	// rotation transform[ 2 ] == SimpleTransformF * but can be cast to RotationF, as it is a rotation by default
 
-	auto & transform_x_interpolator = translation->GetP0MotylaNoga();
-	auto & transform_y_interpolator = translation->GetP1MotylaNoga();
-	auto & transform_z_interpolator = translation->GetP2MotylaNoga();
+	//auto & transform_x_interpolator = translation->GetP0MotylaNoga();
+	//auto & transform_y_interpolator = translation->GetP1MotylaNoga();
+	//auto & transform_z_interpolator = translation->GetP2MotylaNoga();
 
-	auto & t_x_keys					= transform_x_interpolator.AccessKeys();
+	//auto & t_x_keys					= transform_x_interpolator.AccessKeys();
 
-	// inspect the first key (TimeType, float)
-	TimeType t_x_0_key_time			= t_x_keys[ 0 ].t;
-	float	 t_x_0_key_val			= t_x_keys[ 0 ].val;
+	//// inspect the first key (TimeType, float)
+	//TimeType t_x_0_key_time			= t_x_keys[ 0 ].t;
+	//float	 t_x_0_key_val			= t_x_keys[ 0 ].val;
 
-	// Make sure that vec4 interpolator is used for rotation axis interpolation
-	assert( rotation->IsAxisVec3() );
+	//// Make sure that vec4 interpolator is used for rotation axis interpolation
+	//assert( rotation->IsAxisVec3() );
 
-	auto & rot_angle_interpolator	= rotation->AccessAngle();
-	auto & rot_angle_keys			= rot_angle_interpolator.AccessKeys();
+	//auto & rot_angle_interpolator	= rotation->AccessAngle();
+	//auto & rot_angle_keys			= rot_angle_interpolator.AccessKeys();
 
-	// inspect the first key (TimeType, float)
-	TimeType rot_angle_key_0_time	= rot_angle_keys[ 0 ].t; 
-	float rot_angle_key_0_value		= rot_angle_keys[ 0 ].val; 
-	
-	auto & rot_axis_interpolator	= rotation->AccessRotAxis();
-	auto & rot_axis_keys			= rot_axis_interpolator.AccessKeys();
+	//// inspect the first key (TimeType, float)
+	//TimeType rot_angle_key_0_time	= rot_angle_keys[ 0 ].t; 
+	//float rot_angle_key_0_value		= rot_angle_keys[ 0 ].val; 
+	//
+	//auto & rot_axis_interpolator	= rotation->AccessRotAxis();
+	//auto & rot_axis_keys			= rot_axis_interpolator.AccessKeys();
 
-	// inspect the first key (TimeType, glm::vec3)
-	TimeType rot_axis_key_0_time	= rot_axis_keys[ 0 ].t; 
-	glm::vec3 rot_axis_key_0_value	= rot_axis_keys[ 0 ].val; 
-	
-	// suppress warnings
-	{ transform_y_interpolator; }
-	{ transform_z_interpolator; }
+	//// inspect the first key (TimeType, glm::vec3)
+	//TimeType rot_axis_key_0_time	= rot_axis_keys[ 0 ].t; 
+	//glm::vec3 rot_axis_key_0_value	= rot_axis_keys[ 0 ].val; 
+	//
+	//// suppress warnings
+	//{ transform_y_interpolator; }
+	//{ transform_z_interpolator; }
 
-	{ time; }
-	{ value; }
+	//{ time; }
+	//{ value; }
 
-	{ t_x_0_key_time; }
-	{ t_x_0_key_val; }
+	//{ t_x_0_key_time; }
+	//{ t_x_0_key_val; }
 
-	{ paramColor_keys_0_t; }
-	{ paramColor_keys_0_val; }
+	//{ paramColor_keys_0_t; }
+	//{ paramColor_keys_0_val; }
 
-	{ rot_angle_key_0_time; }
-	{ rot_angle_key_0_value; }
+	//{ rot_angle_key_0_time; }
+	//{ rot_angle_key_0_value; }
 
-	{ rot_axis_key_0_time; }
-	{ rot_axis_key_0_value; }
+	//{ rot_axis_key_0_time; }
+	//{ rot_axis_key_0_value; }
 }
 
 } //bv

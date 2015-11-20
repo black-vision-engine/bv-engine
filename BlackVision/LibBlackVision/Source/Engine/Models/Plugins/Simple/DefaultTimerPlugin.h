@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Assets/Asset.h"
@@ -116,13 +115,10 @@ private:
 
     VertexAttributesChannelPtr      m_vaChannel;
 
-    TextureInfoVec                  m_textures;
-
     TextAtlasConstPtr               m_textAtlas;
 
     std::wstring                    m_timePatern;
     TimeInfo                        m_timePaternInfo;
-    DefaultPluginParamValModelPtr   m_paramValModel;
 
     bool                            CheckTimeConsistency ( const std::wstring & time ) const;
 
@@ -143,20 +139,21 @@ private:
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
+public:
+
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
-    virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
+    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
-    virtual void                                Update                      ( TimeType t ) override;
+private:
+
+	virtual void                                Update                      ( TimeType t ) override;
 
     void                                        Start                       ();
     void                                        Stop                        ();
     void                                        Reset                       ( float localTime );
 
 private:
-
-    void                                        InitAttributesChannel       ( IPluginPtr prev );
-
 
 	friend bool            SetTimeTimerPlugin( IPluginPtr timerPlugin, TimeType time );
 	friend bool            StartTimerPlugin( IPluginPtr timerPlugin );
@@ -166,6 +163,8 @@ private:
 public:
 	explicit               DefaultTimerPlugin          ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
 							~DefaultTimerPlugin         ();
+
+    virtual void			SetPrevPlugin               ( IPluginPtr plugin ) override;
 };
 
 
