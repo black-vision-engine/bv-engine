@@ -1225,12 +1225,12 @@ model::BasicNodePtr     TestScenesFactory::AssetCacheTestScene         ( const m
 model::BasicNodePtr TestScenesFactory::WSerializationTest          ( const model::PluginsManager* pluginsManager, model::TimelineManager* timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
 
-//#define __W_STRING_SERIALIZATION_TEST
+#define __W_STRING_SERIALIZATION_TEST
 #ifdef __W_STRING_SERIALIZATION_TEST
     #define MAKE_STR( s ) L##s
     #define STRING std::wstring
     #define Serializer JsonSpiritSerializeObject
-    #define Deserializer JsonSpiritDeserilizeObject
+    #define Deserializer JsonSpiritDeserializeObject
 #else
     #define MAKE_STR( s ) s
     #define STRING std::string

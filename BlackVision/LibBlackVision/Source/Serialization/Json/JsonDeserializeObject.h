@@ -35,6 +35,9 @@ public:
 
     std::wstring	        	GetAttribute        ( const std::wstring& name ) const override;
     bool                        EnterChild          ( const std::wstring& name ) const override;
+
+private:
+    void                        OnRootInit          ();
 };
 
 

@@ -23,7 +23,7 @@ bool JsonSpiritDeserializeObject::LoadFile           ( const std::string& fileNa
     std::wifstream file( fileName );
     bool result = json_spirit::read( file, m_root );
     if( result )
-        m_currentNode = &m_root;
+        OnRootInit();
     return result;
 }
 
@@ -33,10 +33,24 @@ bool JsonSpiritDeserializeObject::LoadWString         ( const std::wstring& json
 {
     bool result = json_spirit::read( jsonString, m_root );
     if( result )
-        m_currentNode = &m_root;
+        OnRootInit();
     return result;
 }
 
+// ***********************
+//
+void JsonSpiritDeserializeObject::OnRootInit          ()
+{
+    m_nodeStack.push( &m_root );
+    if( m_root.type() == json_spirit::Value_type::obj_type )
+        m_currentNode = &m_root;
+    else if( m_root.type() == json_spirit::Value_type::array_type )
+    {
+        auto& nodeArray = m_root.get_array();
+        m_currentNode = &nodeArray[ 0 ];
+        m_indexStack.push( 0 );
+    }
+}
 
 // ***********************
 //
