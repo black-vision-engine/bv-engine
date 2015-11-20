@@ -2,6 +2,8 @@
 
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureDescriptor.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultAnimationDescriptor.h"
 
 namespace bv { namespace model {
 

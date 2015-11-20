@@ -125,7 +125,9 @@ ser.EnterChild( "plugin" );
             ser.EnterChild( "asset" );
                 ser.SetAttribute( "uid", uid );
 
-                GetRSM( asset->GetKey() )->Serialize( ser );
+                auto rsm = GetRSM( asset->GetKey() );
+                assert( rsm );
+                rsm->Serialize( ser );
             ser.ExitChild();
         }
         ser.ExitChild(); // assets

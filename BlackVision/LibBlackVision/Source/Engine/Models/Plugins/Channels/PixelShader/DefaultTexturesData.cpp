@@ -1,5 +1,7 @@
 #include "DefaultTexturesData.h"
 
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureDescriptor.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultAnimationDescriptor.h"
 
 namespace bv { namespace model {
 
@@ -27,6 +29,13 @@ const std::vector< ITextureDescriptorPtr > &     DefaultTexturesData::GetTexture
 const std::vector< IAnimationDescriptorPtr > &   DefaultTexturesData::GetAnimations      () const
 {
     return m_animationDescriptors;
+}
+
+// ******************************
+//
+const std::vector< IFontDescriptorPtr > &       DefaultTexturesData::GetFonts        () const
+{
+    return m_fontDescriptors;
 }
 
 // ******************************
@@ -115,6 +124,13 @@ bool                                            DefaultTexturesData::SetAnimatio
 
 // ******************************
 //
+void                                                    DefaultTexturesData::AddFont             ( IFontDescriptorPtr fontDesc )
+{
+    m_fontDescriptors.push_back( fontDesc );
+}
+
+// ******************************
+//
 void                                            DefaultTexturesData::UpdateResourceModels	()
 {
 	for( auto tx : m_textureDescriptors )
@@ -126,6 +142,10 @@ void                                            DefaultTexturesData::UpdateResou
 	{
 		anim->GetSamplerState()->Update();
 	}
+    for( auto font : m_fontDescriptors )
+    {
+        font->GetStateModel()->Update();
+    }
 }
 
 // ******************************
@@ -134,6 +154,7 @@ void                                            DefaultTexturesData::ClearAll			
 {
 	m_textureDescriptors.clear();
 	m_animationDescriptors.clear();
+    m_fontDescriptors.clear();
 }
 
 } //model

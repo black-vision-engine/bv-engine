@@ -30,6 +30,13 @@ const std::vector< IAnimationDescriptorPtr > &   TexturesDataImpl::GetAnimations
 
 // **************************
 //
+const std::vector< IFontDescriptorPtr > &        TexturesDataImpl::GetFonts            () const
+{
+    return m_fonts;
+}
+
+// **************************
+//
 bool                                            TexturesDataImpl::AddTextureFromFile( const std::string & textureFile, const std::string & textureName )
 {
 	auto textureResDesc = TextureAssetDesc::Create( textureFile, true );

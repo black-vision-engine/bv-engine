@@ -6,6 +6,7 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultFontDescriptor.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 
@@ -309,6 +310,10 @@ void							DefaultTextPlugin::LoadAtlas	( const FontAssetDescConstPtr & fontAsse
 				,   tfm
                 ,   glm::vec4( 0.f, 0.f, 0.f, 0.f )
                 ,   DataBuffer::Semantic::S_TEXTURE_STATIC );
+
+    auto texDesc = txData->GetTexture( DefaultTextPluginDesc::TextureName() );
+    auto fontDesc = std::make_shared< DefaultFontDescriptor >( texDesc );
+    txData->AddFont( fontDesc );
 }
 
 // *************************************
@@ -319,13 +324,15 @@ bool                            DefaultTextPlugin::LoadResource  ( AssetDescCons
 
     if ( txAssetDescr != nullptr )
     {
-        AddAsset( assetDescr, nullptr );
-
 		m_fontSize = txAssetDescr->GetFontSize();
 		m_blurSize = txAssetDescr->GetBlurSize();
 		m_outlineSize = txAssetDescr->GetOutlineSize();
 		LoadAtlas( txAssetDescr );
 		SetText( m_textParam->Evaluate() );
+
+        auto fonts = m_psc->GetTexturesDataImpl()->GetFonts();
+        assert( fonts.size() == 1 );
+        AddAsset( assetDescr, fonts[ 0 ]->GetStateModel() );
 
 		return true;
     }    

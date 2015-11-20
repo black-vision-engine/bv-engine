@@ -5,6 +5,8 @@
 #include "Assets/Texture/SingleTextureAssetDescriptor.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureDescriptor.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultAnimationDescriptor.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"

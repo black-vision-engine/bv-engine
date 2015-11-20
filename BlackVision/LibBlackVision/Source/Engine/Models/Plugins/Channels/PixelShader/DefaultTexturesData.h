@@ -2,26 +2,24 @@
 
 #include "Engine/Models/Interfaces/ITexturesData.h"
 
-#include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureDescriptor.h"
-#include "Engine/Models/Plugins/Channels/PixelShader/DefaultAnimationDescriptor.h"
-
-
 namespace bv { namespace model {
 
 class DefaultTexturesData : public ITexturesData
 {
 private:
 
-    std::vector< ITextureDescriptorPtr >     m_textureDescriptors;
-    std::vector< IAnimationDescriptorPtr >   m_animationDescriptors;
+    std::vector< ITextureDescriptorPtr >                    m_textureDescriptors;
+    std::vector< IAnimationDescriptorPtr >                  m_animationDescriptors;
+    std::vector< IFontDescriptorPtr >                       m_fontDescriptors;
 
 public:
 
             DefaultTexturesData ();
             ~DefaultTexturesData();
 
-    virtual const std::vector< ITextureDescriptorPtr > &     GetTextures     () const override;
-    virtual const std::vector< IAnimationDescriptorPtr > &   GetAnimations   () const override;
+    virtual const std::vector< ITextureDescriptorPtr > &    GetTextures     () const override;
+    virtual const std::vector< IAnimationDescriptorPtr > &  GetAnimations   () const override;
+    virtual const std::vector< IFontDescriptorPtr > &       GetFonts        () const override;
 
 	//NOTE: not used anywhere
     ITextureDescriptorPtr                                   GetTexture          ( unsigned int idx );
@@ -36,6 +34,8 @@ public:
     void                                                    AddAnimation        ( IAnimationDescriptorPtr animationDesc );
 
     bool                                                    SetAnimationFrame   ( unsigned int idx, unsigned int frameNum );
+
+    void                                                    AddFont             ( IFontDescriptorPtr fontDesc );
 
 	void													UpdateResourceModels();
 

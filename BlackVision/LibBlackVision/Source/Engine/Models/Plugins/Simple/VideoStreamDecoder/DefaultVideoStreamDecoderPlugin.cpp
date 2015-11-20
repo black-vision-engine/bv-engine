@@ -4,6 +4,8 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultVideoStreamDescriptor.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureDescriptor.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultAnimationDescriptor.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
