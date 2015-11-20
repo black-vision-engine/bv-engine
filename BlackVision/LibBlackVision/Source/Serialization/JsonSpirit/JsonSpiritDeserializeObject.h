@@ -33,7 +33,7 @@ public:
 
 private:
     json_spirit::wObject::value_type::Value_type*   FindValue           ( const json_spirit::wObject& obj, const std::wstring& name ) const;
-    void                                            OnRootInit          ();
+    bool                                            OnRootInit          ();
 };
 
 } //bv

@@ -37,7 +37,7 @@ void                JsonCommandsListener::QueueEvent          ( const std::wstri
 
     if( !deser.LoadWString( eventString ) )
     {
-        LOG_MESSAGE( SeverityLevel::error ) << "Commands converter can't parse command: \n" + toString( eventString );
+        LOG_MESSAGE( SeverityLevel::error ) << "Remote controller can't parse command: \n" + toString( eventString );
         return;
     }
 

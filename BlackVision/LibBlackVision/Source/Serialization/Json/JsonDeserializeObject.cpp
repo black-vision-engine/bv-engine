@@ -83,6 +83,8 @@ bool JsonDeserializeObject::EnterChild          ( const std::string& name ) cons
     auto& node = (*m_currentNode)[ name ];
     if( node.isArray() )
     {
+        if( node.size() == 0 )
+            return false;
         // Always push both node's when making an array.
         // Array node can never be the current node.
         m_nodeStack.push( &node );
