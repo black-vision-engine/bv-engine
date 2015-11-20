@@ -35,6 +35,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultPiechartPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultPrismPlugin.h"
 
+#include "Engine/Models/Plugins/Simple/DefaultVideoStreamDecoderPlugin.h"
+
 #include "Tools/Utils.h"
 
 #include "BVGL.h"
@@ -48,6 +50,9 @@ public:
 	static const std::string	ALPHA_MASK_PATH;
 	static const std::string	ALPHA_MASK0_PATH;
 	static const std::string	ANIM_PATH;
+
+	static const std::string	VIDEO_PATH0;
+	static const std::string	VIDEO_PATH1;
 
 	static const Float32		SPEED;
 	static const UInt32			ANIM_NUM;
@@ -78,6 +83,7 @@ public:
 	static model::BasicNodePtr	ColoredTimer						( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 color, UInt32 fontSize, const std::string & alphaMask = "" );
 	static model::BasicNodePtr	GradientTimer						( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask = "" );
 
+	static model::BasicNodePtr	VideoStreamDecoder					( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, const std::string & plugin, const std::string & videoPath, const std::string & alphaMask = "" );
 
 	static void					GenerateCheckboardTex				( const std::string & name, UInt32 width, UInt32 height, glm::uvec3 color );
 	static void					GenerateCheckboardAlphaMaskTex		( const std::string & name, UInt32 width, UInt32 height, UInt32 size = 32 );

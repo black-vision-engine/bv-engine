@@ -14,6 +14,9 @@ const std::string	TestSceneUtils::ALPHA_MASK0_PATH	= "Assets/checkboard_am0.bmp"
 const std::string	TestSceneUtils::ALPHA_MASK_PATH	= "Assets/checkboard_am.bmp";
 const std::string	TestSceneUtils::ANIM_PATH		= "Assets/anim";
 
+const std::string	TestSceneUtils::VIDEO_PATH0		= "Assets/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4";
+const std::string	TestSceneUtils::VIDEO_PATH1		= "Assets/20140117_142047_CINEC_ProRes4444.mov";
+
 const Float32		TestSceneUtils::SPEED			= 1.f;
 const UInt32		TestSceneUtils::ANIM_NUM		= 10;
 const UInt32		TestSceneUtils::IMG_SIZE		= 128;
@@ -21,9 +24,9 @@ const UInt32		TestSceneUtils::AM_SIZE			= 2048;
 
 // ****************************
 //
-const UInt32		TestSceneUtils::GEOM_PLUGINS_NUM = 15;
-const std::string	TestSceneUtils::PluginsArr[] = { "DEFAULT_TRIANGLE", "DEFAULT_CIRCLE", "DEFAULT_ELLIPSE", "DEFAULT_ROUNDEDRECT", "DEFAULT_CUBE", "DEFAULT_SIMPLE_CUBE", "DEFAULT_SPHERE", "DEFAULT_GEOSPHERE", "DEFAULT_CYLINDER", "DEFAULT_CONE", "DEFAULT_TORUS", "DEFAULT_SPRING", "DEFAULT_COGWHEEL", "DEFAULT_PIECHART", "DEFAULT_PRISM" };
-const std::string	TestSceneUtils::PluginsNameArr[] = { "triangle", "circle", "ellipse", "rounded rect", "cube", "simple cube", "sphere", "sphere", "cylinder", "cone", "torus", "spring", "cog wheel", "piechart", "prism" };
+const UInt32		TestSceneUtils::GEOM_PLUGINS_NUM = 16;
+const std::string	TestSceneUtils::PluginsArr[] = { "DEFAULT_TRIANGLE", "DEFAULT_CIRCLE", "DEFAULT_ELLIPSE", "DEFAULT_ROUNDEDRECT", "DEFAULT_CUBE", "DEFAULT_SIMPLE_CUBE", "DEFAULT_SPHERE", "DEFAULT_GEOSPHERE", "DEFAULT_CYLINDER", "DEFAULT_CONE", "DEFAULT_TORUS", "DEFAULT_SPRING", "DEFAULT_COGWHEEL", "DEFAULT_PIECHART", "DEFAULT_PRISM", "DEFAULT_RECTANGLE" };
+const std::string	TestSceneUtils::PluginsNameArr[] = { "triangle", "circle", "ellipse", "rounded rect", "cube", "simple cube", "sphere", "sphere", "cylinder", "cone", "torus", "spring", "cog wheel", "piechart", "prism", "rectangle" };
 
 // ****************************
 //
@@ -463,6 +466,40 @@ model::BasicNodePtr		TestSceneUtils::GradientTimer			( model::TimelineManager * 
     return node;
 }
 
+// ****************************
+//
+model::BasicNodePtr		TestSceneUtils::VideoStreamDecoder			( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, const std::string & plugin, const std::string & videoPath, const std::string & alphaMask )
+{
+	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    timeEvaluator->AddChild( localTimeline );
+
+    auto node = model::BasicNode::Create( name, timeEvaluator );
+
+	std::vector< std::string > plugins;
+	plugins.push_back( "DEFAULT_TRANSFORM" );
+	plugins.push_back( plugin );
+	plugins.push_back( "DEFAULT_VIDEO_STREAM_DECODER" );
+	if( !alphaMask.empty() )
+	{
+		plugins.push_back( "DEFAULT_ALPHA_MASK" );
+	}
+
+    auto success = node->AddPlugins( plugins, localTimeline );
+
+	assert( success );
+
+	success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), videoPath, TextureFormat::F_A8R8G8B8 );
+    
+	if( !alphaMask.empty() )
+	{
+		LoadTexture( node->GetPlugin( "alpha_mask" ), alphaMask );
+	}
+
+	assert( success );
+
+    return node;
+}
+
 // *************************
 //
 void					TestSceneUtils::GenerateCheckboardTex	( const std::string & name, UInt32 width, UInt32 height, glm::uvec3 color )
@@ -556,6 +593,8 @@ std::vector< model::IPluginDescriptor * >  TestSceneUtils::DefaultBVPluginDescri
 	descriptors.push_back( new model::DefaultCogWheel::PluginDesc() );
 	descriptors.push_back( new model::DefaultPieChartPluginDesc() );
 	descriptors.push_back( new model::DefaultPrismPluginDesc() );
+
+	descriptors.push_back( new model::DefaultVideoStreamDecoderPluginDesc() );
 
     return descriptors;
 }

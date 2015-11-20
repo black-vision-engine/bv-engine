@@ -38,7 +38,8 @@ private:
 	static const std::string	TXT_NODE;
 	static const std::string	TMR_NODE;
 	static const std::string	GEOM_NODE;
-
+	static const std::string	VSD_NODE;
+	
 public:
 							TestScene				( Renderer * renderer, model::TimelineManagerPtr timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
 							~TestScene				();
@@ -78,6 +79,8 @@ private:
 	void					InitTexturedGeometryTest	();
 	void					InitAnimatedGeometryTest	();
 	void					InitGradientGeometryTest	();
+
+	void					InitVideoStreamDecoderTest	();
 	
 	void					InitOrderTest				( const OrderTestCase & test );
 	void					SwapPlugins					( const std::string & rootPlugin, UInt32 rootIdx, const std::string & childName, const std::string & childPlugin,  UInt32 childIdx );

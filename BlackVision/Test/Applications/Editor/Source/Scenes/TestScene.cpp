@@ -11,6 +11,8 @@
 #include "IO/FileIO.h"
 #include "IO/DirIO.h"
 
+#include "Engine/Models/Plugins/Simple/DefaultVideoStreamDecoderPlugin.h"
+
 namespace bv {
 
 const std::string	TestScene::COL_NODE		= "col";
@@ -20,6 +22,7 @@ const std::string	TestScene::GRAD_NODE	= "grad";
 const std::string	TestScene::TXT_NODE		= "txt";
 const std::string	TestScene::TMR_NODE		= "tmr";
 const std::string	TestScene::GEOM_NODE	= "geom";
+const std::string	TestScene::VSD_NODE		= "vsd";
 
 // ****************************
 //	
@@ -398,7 +401,7 @@ void					TestScene::InitTestEditor			()
 	//InitOrderGradientPluginTest();
 
 	//InitColoredTextTest();
-	InitGradientTextTest();
+	//InitGradientTextTest();
 	
 	//InitColoredTimerTest();
 	//InitGradientTimerTest();
@@ -407,6 +410,8 @@ void					TestScene::InitTestEditor			()
 	//InitTexturedGeometryTest();
 	//InitAnimatedGeometryTest();
 	//InitGradientGeometryTest();
+
+	InitVideoStreamDecoderTest();
 }
 
 // ****************************
@@ -1283,7 +1288,7 @@ void					TestScene::InitGradientTimerTest			()
 //
 void					TestScene::InitColoredGeometryTest		()
 {
-	for( unsigned int i = 0; i < TestSceneUtils::GEOM_PLUGINS_NUM; ++i )
+	for( unsigned int i = 0; i < TestSceneUtils::GEOM_PLUGINS_NUM - 1; ++i )
 	{
 		auto plugin = TestSceneUtils::PluginsArr[ i ];
 		m_testSteps.push_back( [ plugin, this ]
@@ -1361,7 +1366,7 @@ void					TestScene::InitColoredGeometryTest		()
 //
 void					TestScene::InitTexturedGeometryTest		()
 {
-	for( unsigned int i = 0; i < TestSceneUtils::GEOM_PLUGINS_NUM; ++i )
+	for( unsigned int i = 0; i < TestSceneUtils::GEOM_PLUGINS_NUM - 1; ++i )
 	{
 		auto plugin = TestSceneUtils::PluginsArr[ i ];
 
@@ -1447,7 +1452,7 @@ void					TestScene::InitTexturedGeometryTest		()
 //
 void					TestScene::InitAnimatedGeometryTest		()
 {
-	for( unsigned int i = 0; i < TestSceneUtils::GEOM_PLUGINS_NUM; ++i )
+	for( unsigned int i = 0; i < TestSceneUtils::GEOM_PLUGINS_NUM - 1; ++i )
 	{
 		auto plugin = TestSceneUtils::PluginsArr[ i ];
 
@@ -1526,7 +1531,7 @@ void					TestScene::InitAnimatedGeometryTest		()
 //
 void					TestScene::InitGradientGeometryTest		()
 {
-	for( unsigned int i = 0; i < TestSceneUtils::GEOM_PLUGINS_NUM; ++i )
+	for( unsigned int i = 0; i < TestSceneUtils::GEOM_PLUGINS_NUM - 1; ++i )
 	{
 		auto plugin = TestSceneUtils::PluginsArr[ i ];
 
@@ -1599,6 +1604,119 @@ void					TestScene::InitGradientGeometryTest		()
 			});
 			InitOrderTest( test );
 		}
+	}
+}
+
+// ****************************
+//
+void					TestScene::InitVideoStreamDecoderTest	()
+{
+	for( unsigned int i = 0; i < TestSceneUtils::GEOM_PLUGINS_NUM; ++i )
+	{
+		auto plugin = TestSceneUtils::PluginsArr[ i ];
+
+		auto add0 = [ plugin, this ]
+		{
+			auto editor = m_scene->GetSceneEditor();
+			auto vsd = TestSceneUtils::VideoStreamDecoder( m_timelineManager.get(), m_timeEvaluator, VSD_NODE, plugin, TestSceneUtils::VIDEO_PATH0 );
+			SetParameterTranslation( vsd->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+
+			auto root = std::static_pointer_cast< model::BasicNode >( m_scene->GetModelSceneRoot()->GetChild( "root" ) );
+			editor->DeleteChildNode( root, VSD_NODE );
+			editor->AddChildNode( root, vsd );
+
+			model::DefaultVideoStreamDecoderPlugin::Start( vsd->GetPlugin( "video_stream_decoder" ) );
+		};
+
+		auto add1 = [ plugin, this ]
+		{
+			auto editor = m_scene->GetSceneEditor();
+			auto vsd = TestSceneUtils::VideoStreamDecoder( m_timelineManager.get(), m_timeEvaluator, VSD_NODE, plugin, TestSceneUtils::VIDEO_PATH0, TestSceneUtils::ALPHA_MASK_PATH );
+			SetParameterTranslation( vsd->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+
+			auto root = std::static_pointer_cast< model::BasicNode >( m_scene->GetModelSceneRoot()->GetChild( "root" ) );
+			editor->DeleteChildNode( root, VSD_NODE );
+			editor->AddChildNode( root, vsd );
+
+			model::DefaultVideoStreamDecoderPlugin::Start( vsd->GetPlugin( "video_stream_decoder" ) );
+		};
+
+		m_testSteps.push_back( add0 );
+		m_testSteps.push_back( []{} );
+		m_testSteps.push_back( add1 );
+	
+		m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, VSD_NODE, "video_stream_decoder", 2 ); } );
+		m_testSteps.push_back( [&]{ SwapPlugins( "video_stream_decoder", 2, VSD_NODE, "solid color", 2 ); } );
+
+		m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, VSD_NODE, "alpha_mask", 3 ); } );
+		m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, VSD_NODE, "alpha_mask", 3 ); } );
+	
+		m_testSteps.push_back( [&]{
+			auto root = std::static_pointer_cast< model::BasicNode >( m_scene->GetModelSceneRoot()->GetChild( "root" ) );
+			auto child = root->GetChild( VSD_NODE );
+
+			model::LoadVideoStream( child->GetPlugin( "video_stream_decoder" ), TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
+
+			model::DefaultVideoStreamDecoderPlugin::Start( child->GetPlugin( "video_stream_decoder" ) );
+		});
+
+		auto pluginName = TestSceneUtils::PluginsNameArr[ i ];
+		std::string test0[] = { "alpha_mask", pluginName };
+		std::string test1[] = { "video_stream_decoder", pluginName };
+
+		std::vector < OrderTestCase > tests;
+		tests.push_back( OrderTestCase( VSD_NODE, "AmGeom", std::vector< std::string >( test0, test0 + 2 ) ) );
+		tests.push_back( OrderTestCase( VSD_NODE, "VsGeom", std::vector< std::string >( test1, test1 + 2 ) ) );
+
+		for( auto & test : tests )
+		{
+			m_testSteps.push_back( [ plugin, this ]
+			{
+				auto editor = m_scene->GetSceneEditor();
+				auto vsd = TestSceneUtils::VideoStreamDecoder( m_timelineManager.get(), m_timeEvaluator, VSD_NODE, plugin, TestSceneUtils::VIDEO_PATH0, TestSceneUtils::ALPHA_MASK_PATH );
+				SetParameterTranslation( vsd->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+
+				auto root = std::static_pointer_cast< model::BasicNode >( m_scene->GetModelSceneRoot()->GetChild( "root" ) );
+				editor->DeleteChildNode( root, VSD_NODE );
+				editor->AddChildNode( root, vsd );
+
+				model::DefaultVideoStreamDecoderPlugin::Start( vsd->GetPlugin( "video_stream_decoder" ) );
+			});
+			InitOrderTest( test );
+		}
+
+		m_testSteps.push_back( [ plugin, this ]
+		{
+			auto editor = m_scene->GetSceneEditor();
+			auto vsd = TestSceneUtils::VideoStreamDecoder( m_timelineManager.get(), m_timeEvaluator, VSD_NODE, plugin, TestSceneUtils::VIDEO_PATH0, TestSceneUtils::ALPHA_MASK_PATH );
+			SetParameterTranslation( vsd->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+
+			auto root = std::static_pointer_cast< model::BasicNode >( m_scene->GetModelSceneRoot()->GetChild( "root" ) );
+			editor->DeleteChildNode( root, VSD_NODE );
+			editor->AddChildNode( root, vsd );
+
+			model::DefaultVideoStreamDecoderPlugin::Start( vsd->GetPlugin( "video_stream_decoder" ) );
+		});
+
+		m_testSteps.push_back( [&]{
+			auto root = std::static_pointer_cast< model::BasicNode >( m_scene->GetModelSceneRoot()->GetChild( "root" ) );
+			auto child = root->GetChild( VSD_NODE );
+
+			model::LoadVideoStream( child->GetPlugin( "video_stream_decoder" ), TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
+
+			model::DefaultVideoStreamDecoderPlugin::Start( child->GetPlugin( "video_stream_decoder" ) );
+		});
+
+		m_testSteps.push_back( []{} );
+		m_testSteps.push_back( []{} );
+		m_testSteps.push_back( []{} );
+		
+		m_testSteps.push_back( [&]
+		{
+			auto root = std::static_pointer_cast< model::BasicNode >( m_scene->GetModelSceneRoot()->GetChild( "root" ) );
+			auto editor = m_scene->GetSceneEditor();
+			editor->DeleteChildNode( root, VSD_NODE );
+		} );
 	}
 }
 
