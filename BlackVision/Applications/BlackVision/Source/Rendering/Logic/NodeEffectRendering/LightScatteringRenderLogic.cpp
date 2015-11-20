@@ -2,8 +2,11 @@
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
+#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
+#include "Engine/Graphics/Resources/RenderTarget.h"
 #include "Rendering/OffscreenRenderLogic.h"
+#include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 
 #include "Rendering/Logic/RenderLogic.h"
 
@@ -30,8 +33,8 @@ LightScatteringRenderLogic::~LightScatteringRenderLogic        ()
 //
 void    LightScatteringRenderLogic::RenderNode                  ( Renderer * renderer, SceneNode * node )
 {
-    { renderer; node; }
-    GetRenderLogic()->DrawNode( renderer, node );
+    //GetRenderLogic()->DrawNode( renderer, node );
+
     //if( node->NumChildNodes() < 2 )
     //{
     //    GetRenderLogic()->DrawNode( renderer, node );
@@ -40,13 +43,40 @@ void    LightScatteringRenderLogic::RenderNode                  ( Renderer * ren
     //{
     //    GetRenderLogic()->DrawNodeOnly( renderer, node );
 
-    //    GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
-    //    GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
+        GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
+        GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
 
-    //    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
-    //    renderer->ClearBuffers();
+        renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+        renderer->ClearBuffers();
 
-    //    auto effect = node->GetNodeEffect();
+        GetRenderLogic()->DrawNode( renderer, node );
+
+        GetOffscreenRenderLogic()->DisableTopRenderTarget( renderer );
+
+        auto effect = node->GetNodeEffect();
+        m_effect->SetExposureVal( effect->GetValue( "exposure" ).get() );
+        m_effect->SetWeightVal( effect->GetValue( "weight" ).get() );
+        m_effect->SetDecayVal( effect->GetValue( "decay" ).get() );
+        m_effect->SetDensityVal( effect->GetValue( "density" ).get() );
+        m_effect->SetLightPositionOnScreenVal( effect->GetValue( "lightPositionOnScreen" ).get() );
+        m_effect->SetNumSamplesVal( effect->GetValue( "numSamples" ).get() );
+
+        auto texture = GetOffscreenRenderLogic()->GetColorTextureAt( -1 );
+
+        m_effect->AddTexture( std::const_pointer_cast< Texture2D >( texture ) );
+
+        renderer->Enable( m_effect->GetPass( 0 ), static_cast< bv::RenderableEntity * >( node->GetTransformable() ) );
+
+        GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
+        GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
+
+        renderer->Draw( GetOffscreenRenderLogic()->CurDisplayRenderTargetData().quad );
+        GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
+        GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
+
+        GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
+
+        //GetRenderLogic()->RenderFrame( renderer, nullptr );
 
     //    auto maskIdxVal = std::static_pointer_cast< ValueInt >( effect->GetValue( "bgIdx" ) );
     //    auto fgIdxVal = std::static_pointer_cast< ValueInt >( effect->GetValue( "fgIdx" ) );

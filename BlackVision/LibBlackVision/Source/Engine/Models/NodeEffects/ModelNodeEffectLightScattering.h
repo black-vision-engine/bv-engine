@@ -14,14 +14,14 @@ private:
      ParamFloatPtr  m_paramDecay;
      ParamFloatPtr  m_paramDensity;
      ParamVec2Ptr   m_paramLightPositionOnScreen;
-     ParamIntPtr    m_paramNumSamples;
+     ParamFloatPtr  m_paramNumSamples;
 
      float          m_exposureVal;
      float          m_weightVal;
      float          m_decayVal;
      float          m_densityVal;
      glm::vec2      m_lightPositionOnScreenVal;
-     int            m_numSamplesVal;
+     float          m_numSamplesVal;
 
 public:
 
@@ -33,14 +33,14 @@ public:
     ParamFloatPtr           GetParamDecay                   ();
     ParamFloatPtr           GetParamDensity                 ();
     ParamVec2Ptr            GetParamLightPositionOnScreen   ();
-    ParamIntPtr             GetParamNumSamples              ();         
+    ParamFloatPtr           GetParamNumSamples              ();         
 
     float                   GetExposure                     ();
     float                   GetWeight                       ();
     float                   GetDecay                        ();
     float                   GetDensity                      ();
     glm::vec2               GetLightPositionOnScreen        ();
-    int                     GetNumSamples                   ();   
+    float                   GetNumSamples                   ();   
 
     virtual void            Serialize       ( ISerializer& ser ) const;
     static ISerializablePtr Create          ( const IDeserializer& deser );

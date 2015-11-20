@@ -206,7 +206,7 @@ void    NodeUpdater::UpdateNodeEffect       ()
                 auto paramDensity = lightScatteringEffect->GetParamDensity();
                 auto paramLightPositionOnScreen = lightScatteringEffect->GetParamLightPositionOnScreen();
                 auto paramNumSamples = lightScatteringEffect->GetParamNumSamples();
-
+                
                 auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
 				auto exposureVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramExposure->GetName() ) );
@@ -214,7 +214,7 @@ void    NodeUpdater::UpdateNodeEffect       ()
                 auto decayVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramDecay->GetName() ) );
                 auto densityVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramDensity->GetName() ) );
                 auto lightPositionOnScreenVal = std::static_pointer_cast< ValueVec2 >( sceneNodeEffect->GetValue( paramLightPositionOnScreen->GetName() ) );
-                auto numSamplesVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramNumSamples->GetName() ) );
+                auto numSamplesVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramNumSamples->GetName() ) );
 
 
                 if ( exposureVal != nullptr && weightVal != nullptr && decayVal != nullptr && 

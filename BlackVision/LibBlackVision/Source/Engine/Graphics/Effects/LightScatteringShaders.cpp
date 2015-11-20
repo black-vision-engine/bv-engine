@@ -46,9 +46,9 @@ std::string GetLightScatteringVertexShaderCode    ()
 
 // ****************************
 //
-std::string GetLightScatteringGeometryShaderCode  ()
-{
-    return ReadShaderContentsFromFile( EffectShadersDir() + "light_scattering.geom" );
-}
+//std::string GetLightScatteringGeometryShaderCode  ()
+//{
+//    return ReadShaderContentsFromFile( EffectShadersDir() + "light_scattering.geom" );
+//}
 
 } //bv

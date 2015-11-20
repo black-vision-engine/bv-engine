@@ -281,6 +281,21 @@ Texture2DConstPtr   OffscreenRenderLogic::ReadDisplayTarget         ( Renderer *
 }
 
 // **************************
+//
+Texture2DConstPtr   OffscreenRenderLogic::GetColorTextureAt           ( int i ) const
+{
+    auto rt = GetRenderTargetAt( i );
+    if( rt != nullptr )
+    {
+        return rt->ColorTexture( 0 );
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+// **************************
 // Python-like logic, where negative numbers are used to index the array backwards
 RenderTarget *      OffscreenRenderLogic::GetRenderTargetAt         ( int i ) const
 {

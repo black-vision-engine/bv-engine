@@ -7,7 +7,7 @@ namespace bv {
 
 std::string GetLightScatteringPixelShaderCode     ();
 std::string GetLightScatteringVertexShaderCode    ();
-std::string GetLightScatteringGeometryShaderCode  ();
+//std::string GetLightScatteringGeometryShaderCode  ();
 
 } //bv
 

@@ -17,7 +17,7 @@ ModelNodeEffectLightScattering::ModelNodeEffectLightScattering  ( ITimeEvaluator
     m_paramDecay = ParametersFactory::CreateParameterFloat( "decay", timeEvaluator );
     m_paramDensity = ParametersFactory::CreateParameterFloat( "density", timeEvaluator );
     m_paramLightPositionOnScreen = ParametersFactory::CreateParameterVec2( "lightPositionOnScreen", timeEvaluator );
-    m_paramNumSamples = ParametersFactory::CreateParameterInt( "num_samples", timeEvaluator );
+    m_paramNumSamples = ParametersFactory::CreateParameterFloat( "numSamples", timeEvaluator );
 
 
     m_paramExposure->SetVal( 1.f, 0.f );
@@ -25,7 +25,7 @@ ModelNodeEffectLightScattering::ModelNodeEffectLightScattering  ( ITimeEvaluator
     m_paramDecay->SetVal( 1.f, 0.f );
     m_paramDensity->SetVal( 1.f, 0.f );
     m_paramLightPositionOnScreen->SetVal( glm::vec2( 0.f, 0.f ), 0.f );
-    m_paramNumSamples->SetVal( 100, 0.f );
+    m_paramNumSamples->SetVal( 100.f, 0.f );
 }
 
 // ********************************
@@ -100,7 +100,7 @@ ParamVec2Ptr            ModelNodeEffectLightScattering::GetParamLightPositionOnS
 
 // ********************************
 //
-ParamIntPtr             ModelNodeEffectLightScattering::GetParamNumSamples              ()
+ParamFloatPtr           ModelNodeEffectLightScattering::GetParamNumSamples              ()
 {
     return m_paramNumSamples;
 }
@@ -142,7 +142,7 @@ glm::vec2               ModelNodeEffectLightScattering::GetLightPositionOnScreen
 
 // ********************************
 //
-int                     ModelNodeEffectLightScattering::GetNumSamples                   ()
+float                   ModelNodeEffectLightScattering::GetNumSamples                   ()
 {
     return m_numSamplesVal;
 }
