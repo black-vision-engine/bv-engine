@@ -70,6 +70,7 @@ private:
 
     RenderTargetVec     m_auxRenderTargets;
     RenderTargetData    m_displayRenderTargetData[ 2 ];
+    RenderTargetData    m_videoOutputRenderTarget;
 
     unsigned int        m_curDisplayTarget;
     unsigned int        m_buffersPerTarget;
@@ -109,10 +110,11 @@ private:
 
     RenderTarget *      GetRenderTargetAt               ( int i ) const;
 
-    RenderTargetData    CreateDisplayRenderTargetData   () const;
+    RenderTargetData    CreateDisplayRenderTargetData       () const;
+    RenderTargetData    CreateVideoOutputRenderTargetData   () const;
 
-    unsigned int        CurDisplayRenderTargetNum       () const;
-    RenderTargetData    CurDisplayRenderTargetData      () const;
+    unsigned int        CurDisplayRenderTargetNum           () const;
+    RenderTargetData    CurDisplayRenderTargetData          () const;
 
 };
 

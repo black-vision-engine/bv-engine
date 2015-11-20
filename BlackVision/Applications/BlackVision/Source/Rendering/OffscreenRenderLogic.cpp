@@ -106,6 +106,8 @@ OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int 
     m_displayRenderTargetData[ 0 ] = CreateDisplayRenderTargetData();
     m_displayRenderTargetData[ 1 ] = CreateDisplayRenderTargetData();
 
+    m_videoOutputRenderTarget = CreateVideoOutputRenderTargetData();
+
     for( unsigned int i = 0; i < m_readbackTextures.size(); ++i )
     {
         m_readbackTextures[ i ] = nullptr;
@@ -239,6 +241,7 @@ void                OffscreenRenderLogic::DrawAMTopTwoRenderTargets ( Renderer *
 //
 void                OffscreenRenderLogic::DrawWithAllVideoEffects   ( Renderer * renderer )
 {
+    // m_renderData.UseChannelMaskEffect( 
     { renderer; }
 }
 
@@ -317,7 +320,7 @@ RenderTarget *      OffscreenRenderLogic::GetRenderTargetAt         ( int i ) co
 
 // **************************
 //
-RenderTargetData    OffscreenRenderLogic::CreateDisplayRenderTargetData () const
+RenderTargetData    OffscreenRenderLogic::CreateDisplayRenderTargetData     () const
 {
     RenderTargetData ret;
 
@@ -337,14 +340,35 @@ RenderTargetData    OffscreenRenderLogic::CreateDisplayRenderTargetData () const
 
 // **************************
 //
-unsigned int      OffscreenRenderLogic::CurDisplayRenderTargetNum   () const
+RenderTargetData    OffscreenRenderLogic::CreateVideoOutputRenderTargetData () const
+{
+    //FIXME: implement additional logic for VideoOutput render target
+    RenderTargetData ret;
+
+    std::vector< bv::Transform > vec;
+    vec.push_back( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
+
+    auto rt   = MainDisplayTarget::CreateDisplayRenderTarget( m_textureData.m_width, m_textureData.m_height, m_textureData.m_fmt );
+    auto quad = MainDisplayTarget::CreateDisplayRect( rt->ColorTexture( 0 ) );
+    
+    quad->SetWorldTransforms( vec );
+
+    ret.renderTarget            = rt;
+    ret.quad                    = quad;
+
+    return ret;
+}
+
+// **************************
+//
+unsigned int      OffscreenRenderLogic::CurDisplayRenderTargetNum           () const
 {
     return m_curDisplayTarget;
 }
 
 // **************************
 //
-RenderTargetData  OffscreenRenderLogic::CurDisplayRenderTargetData  () const
+RenderTargetData  OffscreenRenderLogic::CurDisplayRenderTargetData          () const
 {
     return m_displayRenderTargetData[ m_curDisplayTarget ];
 }
