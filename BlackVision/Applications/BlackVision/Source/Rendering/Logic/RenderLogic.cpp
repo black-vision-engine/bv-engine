@@ -157,3 +157,25 @@ void    RenderLogic::PrintGLStats    (  bool detailed  )
 }
 
 } //bv
+
+
+/* 
+
+Perfect world:
+
+Rendering -> Frame rendered to texture -> POST RENDER DISPLAY LOGIC
+
+POST RENDER DISPLAY LOGIC: (option a: display to the preview) -> stack current frame -> apply per pixel effect -> interlace with previous frame -> (option b: display to the preview) | display to video card
+
+
+Not so ideal world:
+
+Rendering -> render logic (with swapping render targets) -> some code dependent on render logic and render targets -> bookkeeping of rendered frames -> not so well isolated POST RENDER DISPLAY LOGIC
+
+POST RENDER DISPLAY LOGIC: (option a: display to the preview) -> somehow use render logic and offscreen render logic to interlace last two frames -> apply pixel shaders afterwards -> (option b: display to the preview) | display to video card
+
+What makes it even more cumbersome is that RenderLogic is used by global effect render logic inplementation whereas a separated class created solely for this purpose should be used
+RenderLogic should only serve as a dispatcher of rendering tasks to appropriate render logic implementations
+OffscreenRenderLogic should also be split in two - blending logic and other logic AND a separate class used only to manipulate render targets
+
+*/
