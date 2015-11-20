@@ -5,6 +5,8 @@
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Engine/Events/EventHelpers.h"
 
+#include "Threading/ScopedCriticalSection.h"
+
 #include "UseLogger.h"
 
 #undef CreateEvent
@@ -41,6 +43,46 @@ void                JsonCommandsListener::QueueEvent          ( const std::wstri
         return;
     }
 
+    TryParseRegularEvent( deser, socketID );
+    TryParseEventsGroup( deser, socketID );
+}
+
+// ***********************
+//
+void                JsonCommandsListener::TryParseEventsGroup ( IDeserializer& deser, int socketID )
+{
+    if( deser.EnterChild( L"EventsGroups" ) )
+    {
+        unsigned int frameTrigger = std::stoul( deser.GetAttribute( L"FrameTrigger" ) );
+
+        if( deser.EnterChild( L"Events" ) )
+        {
+            do
+            {
+                BaseEventPtr newEvent = std::static_pointer_cast<BaseEvent>( DeserializeEvent( deser ) );
+                newEvent->SocketID = socketID;
+
+                if( newEvent != nullptr )
+                    AddTriggeredEvent( frameTrigger, newEvent );
+            }
+            while( deser.NextChild() );
+            deser.ExitChild();
+        }
+    }
+}
+
+// ***********************
+//
+void                JsonCommandsListener::AddTriggeredEvent   ( unsigned int requestedFrame, BaseEventPtr& eventPtr )
+{
+    ScopedCriticalSection lock( m_eventsMapLock );
+    m_triggeredEvents.insert( std::make_pair( requestedFrame, eventPtr ) );
+}
+
+// ***********************
+//
+void                JsonCommandsListener::TryParseRegularEvent( IDeserializer& deser, int socketID )
+{
     if( deser.EnterChild( L"Events" ) )
     {
         do

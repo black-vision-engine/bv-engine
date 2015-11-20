@@ -165,13 +165,6 @@ public:
 DEFINE_PTR_TYPE( KeyPressedEvent )
 
 
-
-
-// ******************************************************************************************
-// ************************************* new Events *****************************************
-// ******************************************************************************************
-
-
 // ************************************* LoadAssetEvent *************************************
 class LoadAssetEvent : public BaseEvent
 {
@@ -250,8 +243,6 @@ public:
     {
         AddNode,
         RemoveNode,
-        DetachPlugin,
-        AttachPlugin,
         SetNodeVisible,
         SetNodeInvisible,
         Fail            ///< Wrong command
@@ -262,7 +253,6 @@ private:
 public:
     NodeStructureEvent::Command     SceneCommand;
     std::string                     NodeName;
-    std::string                     PluginName;
     std::string                     NewNodeName;
 public:
     explicit                        NodeStructureEvent   () {}
@@ -282,6 +272,46 @@ private:
 };
 
 DEFINE_PTR_TYPE( NodeStructureEvent )
+
+
+// ************************************* PluginStructureEvent Event *************************************
+class PluginStructureEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        AddPlugin,
+        RemovePlugin,
+        AttachPlugin,
+        DetachPlugin,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    PluginStructureEvent::Command   PluginCommand;
+    std::string                     NodeName;
+    std::string                     PluginName;
+    unsigned int                    AttachIndex;
+public:
+    explicit                        PluginStructureEvent    () {}
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+
+private:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
+};
+
+DEFINE_PTR_TYPE( PluginStructureEvent )
 
 // ************************************* ProjectEvent Event *************************************
 class ProjectEvent : public BaseEvent

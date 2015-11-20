@@ -28,6 +28,24 @@ SceneEventsHandlers::SceneEventsHandlers( BVAppLogic* logic )
 SceneEventsHandlers::~SceneEventsHandlers()
 {}
 
+
+bv::model::IModelNodePtr SceneEventsHandlers::GetNode( const std::string& nodeName )
+{
+    auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
+    auto node = root->GetNode( nodeName );
+    if( node == nullptr )
+    {
+        if( root->GetName() == nodeName )
+            node = root;
+        else
+        {
+            LOG_MESSAGE( SeverityLevel::error ) << "SceneStructureEvent() node ["+ nodeName +"] not found";
+            return nullptr;
+        }
+    }
+    return node;
+}
+
 // ***********************
 //
 void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
@@ -38,21 +56,11 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 
     std::string& nodeName = structureEvent->NodeName;
     std::string& newNodeName = structureEvent->NewNodeName;
-    std::string& pluginName = structureEvent->PluginName;
     auto command = structureEvent->SceneCommand;
 
     auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
-    auto node = root->GetNode( nodeName );
-    if( node == nullptr )
-    {
-        if( root->GetName() == nodeName )
-            node = root;
-        else
-        {
-            LOG_MESSAGE( SeverityLevel::error ) << "SceneStructureEvent() node ["+ nodeName +"] not found";
-            return;
-        }
-    }
+    auto node = GetNode( nodeName );
+    if( !node ) return;
 
     if( command == NodeStructureEvent::Command::AddNode )
     {
@@ -69,18 +77,6 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 			
         m_appLogic->GetBVScene()->GetSceneEditor()->DeleteChildNode( parentNode, childNode );
     }
-    else if( command == NodeStructureEvent::Command::AttachPlugin )
-    {
-        bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
-        
-        unsigned int endIndex = std::numeric_limits<unsigned int>::max();
-        basicNode->GetModelNodeEditor()->AttachPlugin( endIndex );
-    }
-    else if( command == NodeStructureEvent::Command::DetachPlugin )
-    {
-        bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
-        basicNode->GetModelNodeEditor()->DetachPlugin( pluginName );
-    }
     else if( command == NodeStructureEvent::Command::SetNodeVisible )
         node->SetVisible( true );
     else if( command == NodeStructureEvent::Command::SetNodeInvisible )
@@ -88,6 +84,41 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 
 }
 
+// ***********************
+//
+void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
+{
+    if( evt->GetEventType() != bv::PluginStructureEvent::Type() )
+        return;
+    bv::PluginStructureEventPtr structureEvent = std::static_pointer_cast<bv::PluginStructureEvent>( evt );
+
+    std::string& nodeName = structureEvent->NodeName;
+    std::string& pluginName = structureEvent->PluginName;
+    unsigned int attachIndex = structureEvent->AttachIndex;
+    auto command = structureEvent->PluginCommand;
+
+    auto node = GetNode( nodeName );
+    if( !node ) return;
+
+    if( command == PluginStructureEvent::Command::AddPlugin )
+    {
+
+    }
+    else if( command == PluginStructureEvent::Command::RemovePlugin )
+    {
+
+    }
+    else if( command == PluginStructureEvent::Command::AttachPlugin )
+    {
+        bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
+        m_appLogic->GetBVScene()->GetSceneEditor()->AttachPlugin( basicNode, attachIndex );
+    }
+    else if( command == PluginStructureEvent::Command::DetachPlugin )
+    {
+        bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
+        m_appLogic->GetBVScene()->GetSceneEditor()->DetachPlugin( basicNode, pluginName );
+    }
+}
 
 // *********************************
 //

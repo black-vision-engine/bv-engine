@@ -17,6 +17,7 @@ RemoteController::RemoteController()
     RegisterEvent( InfoEvent::Name(), InfoEvent::Create );
     RegisterEvent( TimeLineEvent::Name(), TimeLineEvent::Create );
     RegisterEvent( TimerEvent::Name(), TimerEvent::Create );
+    RegisterEvent( PluginStructureEvent::Name(), PluginStructureEvent::Create );
 }
 
 
