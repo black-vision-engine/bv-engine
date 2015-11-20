@@ -293,6 +293,7 @@ public:
     PluginStructureEvent::Command   PluginCommand;
     std::string                     NodeName;
     std::string                     PluginName;
+    std::string                     PluginUID;
     unsigned int                    AttachIndex;
 public:
     explicit                        PluginStructureEvent    () {}

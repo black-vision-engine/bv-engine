@@ -94,10 +94,10 @@ bool                                                PluginsManager::CanBeAttache
 //
 IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    if( !CanBeAttachedTo( uid, prev ) )
-    {
-        return nullptr;
-    }
+    //if( !CanBeAttachedTo( uid, prev ) )
+    //{
+    //    return nullptr;
+    //}
 
     return GetDescriptor( uid )->CreatePlugin( name, prev, timeEvaluator );
 }
@@ -106,10 +106,10 @@ IPluginPtr                                          PluginsManager::CreatePlugin
 //
 IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    if( !CanBeAttachedTo( uid, prev ) )
-    {
-        return nullptr;
-    }
+    //if( !CanBeAttachedTo( uid, prev ) )
+    //{
+    //    return nullptr;
+    //}
 
     return CreatePlugin( uid, GetDescriptor( uid )->DefaultPluginName(), prev, timeEvaluator );
 }

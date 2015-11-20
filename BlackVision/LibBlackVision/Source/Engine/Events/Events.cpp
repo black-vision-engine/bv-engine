@@ -103,6 +103,7 @@ const std::wstring COMMAND_SET_NODE_INVISIBLE_WSTRING   = L"SetNodeInvisible";
 
 // PluginStructureEvent
 const std::wstring PLUGIN_ATTACH_INDEX_WSTRING      = L"AttachIndex";
+const std::wstring PLUGIN_UID_WSTRING               = L"PluginUID";
 
 const std::wstring COMMAND_ATTACH_PLUGIN_WSTRING    = L"AttachPlugin";
 const std::wstring COMMAND_DETACH_PLUGIN_WSTRING    = L"DetachPlugin";
@@ -704,6 +705,7 @@ void                PluginStructureEvent::Serialize            ( ISerializer& se
     ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( PluginCommand ) );
     ser.SetAttribute( Serial::PLUGIN_NAME_WSTRING, toWString( PluginName ) );
     ser.SetAttribute( Serial::PLUGIN_ATTACH_INDEX_WSTRING, toWString( AttachIndex ) );
+    ser.SetAttribute( Serial::PLUGIN_UID_WSTRING, toWString( PluginUID ) );
 }
 
 // *************************************
@@ -717,7 +719,8 @@ IEventPtr                PluginStructureEvent::Create          ( IDeserializer& 
         newEvent->PluginName        = toString( deser.GetAttribute( Serial::PLUGIN_NAME_WSTRING ) );
         newEvent->PluginCommand     = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
         newEvent->AttachIndex       = std::stoul( deser.GetAttribute( Serial::PLUGIN_ATTACH_INDEX_WSTRING ) );
-        
+        newEvent->PluginUID         = toString( deser.GetAttribute( Serial::PLUGIN_UID_WSTRING ) );
+
         return newEvent;
     }
     return nullptr;    

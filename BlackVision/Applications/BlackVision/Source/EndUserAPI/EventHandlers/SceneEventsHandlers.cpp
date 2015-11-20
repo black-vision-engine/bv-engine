@@ -94,31 +94,27 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
 
     std::string& nodeName = structureEvent->NodeName;
     std::string& pluginName = structureEvent->PluginName;
+    std::string& pluginUID = structureEvent->PluginUID;
     unsigned int attachIndex = structureEvent->AttachIndex;
     auto command = structureEvent->PluginCommand;
 
     auto node = GetNode( nodeName );
     if( !node ) return;
 
+    bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
+
     if( command == PluginStructureEvent::Command::AddPlugin )
     {
-
+        auto plugin = PluginsManager::DefaultInstance().CreatePlugin( pluginUID, pluginName, nullptr, m_appLogic->GetTimelineManager()->GetRootTimeline() );
+        m_appLogic->GetBVScene()->GetSceneEditor()->AddPlugin( basicNode, plugin, attachIndex );
+        //basicNode->AddPlugin( pluginUID, pluginName, m_appLogic->GetTimelineManager()->GetRootTimeline() );
     }
     else if( command == PluginStructureEvent::Command::RemovePlugin )
-    {
-        bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
         m_appLogic->GetBVScene()->GetSceneEditor()->DeletePlugin( basicNode, pluginName );
-    }
     else if( command == PluginStructureEvent::Command::AttachPlugin )
-    {
-        bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
         m_appLogic->GetBVScene()->GetSceneEditor()->AttachPlugin( basicNode, attachIndex );
-    }
     else if( command == PluginStructureEvent::Command::DetachPlugin )
-    {
-        bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
         m_appLogic->GetBVScene()->GetSceneEditor()->DetachPlugin( basicNode, pluginName );
-    }
 }
 
 // *********************************
