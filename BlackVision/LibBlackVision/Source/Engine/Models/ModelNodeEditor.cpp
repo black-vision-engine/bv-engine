@@ -16,14 +16,16 @@ namespace bv { namespace model {
 //
 bool			ModelNodeEditor::AddPlugin				( IPluginPtr plugin, unsigned int idx )
 {
-	return m_node->GetPlugins()->AttachPlugin( plugin, idx );
+	auto node = m_node.lock();
+	return node->GetPlugins()->AttachPlugin( plugin, idx );
 }
 
 // ********************************
 //
 bool			ModelNodeEditor::DeletePlugin				( const std::string & name )
 {
-	auto plugin = m_node->GetPlugins()->DetachPlugin( name );
+	auto node = m_node.lock();
+	auto plugin = node->GetPlugins()->DetachPlugin( name );
 	if( plugin )
 	{
 		plugin = nullptr;
@@ -36,7 +38,8 @@ bool			ModelNodeEditor::DeletePlugin				( const std::string & name )
 //
 bool			ModelNodeEditor::DeletePlugin				( unsigned int idx )
 {
-	auto plugin = m_node->GetPlugins()->DetachPlugin( idx );
+	auto node = m_node.lock();
+	auto plugin = node->GetPlugins()->DetachPlugin( idx );
 	if( plugin )
 	{
 		plugin = nullptr;
@@ -49,7 +52,8 @@ bool			ModelNodeEditor::DeletePlugin				( unsigned int idx )
 //
 bool				ModelNodeEditor::AttachPlugin			( unsigned int idx )
 {
-	if( m_node->GetPlugins()->AttachPlugin( m_detachedPlugin, idx ) )
+	auto node = m_node.lock();
+	if( node->GetPlugins()->AttachPlugin( m_detachedPlugin, idx ) )
 	{
 		m_detachedPlugin = nullptr;
 		return true;
@@ -77,7 +81,8 @@ bool				ModelNodeEditor::AttachPlugin			( BasicNodePtr sourceNode, unsigned int 
 //
 bool				ModelNodeEditor::DetachPlugin			( const std::string & name )
 {
-	auto plugin = m_node->GetPlugins()->DetachPlugin( name );
+	auto node = m_node.lock();
+	auto plugin = node->GetPlugins()->DetachPlugin( name );
 
 	if ( plugin )
 	{
@@ -92,7 +97,8 @@ bool				ModelNodeEditor::DetachPlugin			( const std::string & name )
 //
 bool				ModelNodeEditor::DetachPlugin			( unsigned int idx )
 {
-	auto plugin = m_node->GetPlugins()->DetachPlugin( idx );
+	auto node = m_node.lock();
+	auto plugin = node->GetPlugins()->DetachPlugin( idx );
 
 	if ( plugin )
 	{
@@ -121,22 +127,25 @@ void				ModelNodeEditor::ResetDetachedPlugin	()
 //
 IModelNodeEffectPtr	ModelNodeEditor::GetNodeEffect		()
 {
-	return m_node->GetNodeEffect();
+	auto node = m_node.lock();
+	return node->GetNodeEffect();
 }
 
 // *******************************
 //
 void				ModelNodeEditor::SetNodeEffect		( IModelNodeEffectPtr nodeEffect )
 {
-	m_node->SetNodeEffect( nodeEffect );
+	auto node = m_node.lock();
+	node->SetNodeEffect( nodeEffect );
 }
 
 // ********************************
 //
 void				ModelNodeEditor::RefreshNode ( SceneNode * sceneNode, Renderer * renderer )
 {
-		BVSceneTools::ClearSingleNode( sceneNode, renderer );
-		BVSceneTools::SyncSingleNode( m_node, sceneNode );
+	auto node = m_node.lock();
+	BVSceneTools::ClearSingleNode( sceneNode, renderer );
+	BVSceneTools::SyncSingleNode( node, sceneNode );
 }
 
 

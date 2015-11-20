@@ -10,7 +10,7 @@ namespace bv
 
 // *******************************
 //
-VideoDecoderThread::VideoDecoderThread				( IVideoDecoderPtr decoder )
+VideoDecoderThread::VideoDecoderThread				( IVideoDecoder * decoder )
 	: m_decoder( decoder )
 	, m_paused( false )
 	, m_stopped( false )
@@ -21,7 +21,6 @@ VideoDecoderThread::VideoDecoderThread				( IVideoDecoderPtr decoder )
 //
 VideoDecoderThread::~VideoDecoderThread				()
 {
-	Stop();
 }
 
 // *******************************
@@ -71,9 +70,13 @@ void				VideoDecoderThread::Run			()
 	auto frameDuration = 1000.0 / m_decoder->GetFrameRate();
 	while( !m_stopped )
 	{
+		std::unique_lock< std::mutex > lock( m_mutex );
+
 		if( m_decoder->IsEOF() )
 		{
-			Stop();
+			m_paused = false;
+			m_stopped = true;
+			m_cond.wait( lock );
 			break;
 		}
 
@@ -91,7 +94,6 @@ void				VideoDecoderThread::Run			()
 
 		if ( m_paused )
 		{
-			std::unique_lock< std::mutex > lock( m_mutex );
 			while( m_paused )
 			{
 				m_cond.wait( lock );

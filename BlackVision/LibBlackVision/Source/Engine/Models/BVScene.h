@@ -61,6 +61,10 @@ public:
 
     void                    AddScene            ( model::SceneModelPtr sceneModel );
     void                    RemoveScene         ( const std::string & name );
+
+	//FIXME: remove scene by root node - needed in BVSceneEditor::DeleteChildNode
+    void                    RemoveScene			( model::BasicNode * node );
+
     model::SceneModelPtr    GetScene            ( const std::string & name ) const;
     const model::SceneModelVec &  GetScenes() const;
     StringVector            ListScenesNames     () const;

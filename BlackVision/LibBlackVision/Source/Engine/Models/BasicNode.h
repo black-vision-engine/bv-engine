@@ -18,6 +18,7 @@ class PluginsManager;
 class BasicNode;
 DEFINE_PTR_TYPE(BasicNode)
 DEFINE_CONST_PTR_TYPE(BasicNode)
+typedef std::weak_ptr< BasicNode >  BasicNodeWeakPtr;
 
 typedef std::vector< BasicNodePtr > TNodeVec;
 
@@ -87,7 +88,6 @@ public:
     void                                    DetachChildNodeOnly     ( BasicNodePtr n );
 
 	ModelNodeEditor *						GetModelNodeEditor		();
-	void									SetModelNodeEditor		( ModelNodeEditor * editor );
 
 	DefaultPluginListFinalizedPtr			GetPlugins				();
 

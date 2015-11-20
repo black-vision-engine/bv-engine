@@ -147,8 +147,6 @@ bool                            DefaultVideoStreamDecoderPlugin::LoadResource		(
     {
 		m_decoder = std::make_shared< FFmpegVideoDecoder >( vstreamAssetDescr );
 
-		//auto data = m_decoder->GetFrameData( m_frameId );
-
 		auto vsDesc = std::make_shared< DefaultVideoStreamDescriptor >( DefaultVideoStreamDecoderPluginDesc::TextureName(), MemoryChunk::Create( m_decoder->GetFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), vstreamAssetDescr->GetTextureFormat(), DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE );
         if( vsDesc != nullptr )
 		{
@@ -158,9 +156,9 @@ bool                            DefaultVideoStreamDecoderPlugin::LoadResource		(
 			txData->SetTexture( 0, vsDesc );
 
 			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
-		}
 
-        return true;
+			return true;
+		}
     }
 
     return false;
@@ -261,10 +259,9 @@ void									DefaultVideoStreamDecoderPlugin::InitVertexAttributesChannel		()
 			auto uvs = new model::Float2AttributeChannel( desc, DefaultVideoStreamDecoderPluginDesc::TextureName(), true );
 			auto uvsPtr = Float2AttributeChannelPtr( uvs );
 			
-			//FIXME: add helper to generate flipped uvs at once
+			//FIXME: add helper to generate flipped uvs
 			Helper::UVGenerator::generateUV( reinterpret_cast< const glm::vec3 * >( posChannel->GetData() ), posChannel->GetNumEntries(),
 											uvsPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ), true );
-			std::reverse( uvsPtr->GetVertices().begin(),  uvsPtr->GetVertices().end() );
 
 			connComp->AddAttributeChannel( uvsPtr );
 		}

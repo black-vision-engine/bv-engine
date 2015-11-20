@@ -17,7 +17,7 @@ class VideoDecoderThread : public Thread
 {
 
 private:
-	IVideoDecoderPtr			m_decoder;
+	IVideoDecoder *				m_decoder;
 
 	mutable std::mutex			m_mutex;
 	std::condition_variable		m_cond;
@@ -28,7 +28,7 @@ private:
     SimpleTimer					m_timer;
 
 public:
-								VideoDecoderThread	( IVideoDecoderPtr decoder );
+								VideoDecoderThread	( IVideoDecoder * decoder );
 	virtual						~VideoDecoderThread	();
 
 	void						Pause				();

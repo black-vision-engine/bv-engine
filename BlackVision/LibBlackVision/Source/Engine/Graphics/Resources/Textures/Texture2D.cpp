@@ -48,16 +48,22 @@ void				    Texture2D::SetData      ( MemoryChunkConstPtr data, UInt32 level )
 
 // *********************************
 //
-void				    Texture2D::SetData		( const std::vector< MemoryChunkConstPtr > & data )
+void				    Texture2D::SetData		( const std::vector< MemoryChunkConstPtr > & data, TextureFormat format, UInt32 width, UInt32 height, UInt32 levels )
 {
-	assert( ( UInt32 )data.size() == m_levels );
+	m_format = format;
+	m_width = width;
+	m_height = height;
+	m_levels = levels;
 
-	m_data.clear();
+	m_data.resize( levels );
+
 	for( unsigned int lvl = 0; lvl < m_levels; ++lvl )
 	{
 		assert( data[ lvl ]->Size() == RawFrameSize( lvl ) );
-		m_data.push_back( data[ lvl ] );
+		m_data[ lvl ] = data[ lvl ];
 	}
+
+	m_updateID++;
 }
 
 // *********************************

@@ -56,13 +56,13 @@ BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator,
     {
         m_pluginsManager = &PluginsManager::DefaultInstance();
     }
-
 }
 
 // ********************************
 //
 BasicNode::~BasicNode()
 {
+    delete m_modelNodeEditor;
 }
 
 // ********************************
@@ -76,11 +76,8 @@ BasicNodePtr                    BasicNode::Create                   ( const std:
         {
         }
     };
-
-    auto node = std::make_shared<make_shared_enabler_BasicNode>( name, timeEvaluator, pluginsManager );
-
-    node->SetModelNodeEditor( new ModelNodeEditor( node ) );
-
+	auto node = std::make_shared<make_shared_enabler_BasicNode>( name, timeEvaluator, pluginsManager );
+	node->m_modelNodeEditor = new ModelNodeEditor( node );
     return node;
 }
 
@@ -338,14 +335,6 @@ ModelNodeEditor *					BasicNode::GetModelNodeEditor		()
         m_modelNodeEditor = new ModelNodeEditor( shared_from_this() );
     }
     return m_modelNodeEditor;
-}
-
-// ********************************
-//
-void								BasicNode::SetModelNodeEditor		( ModelNodeEditor * editor )
-{
-    delete m_modelNodeEditor; //?
-    m_modelNodeEditor = editor;
 }
 
 // ********************************

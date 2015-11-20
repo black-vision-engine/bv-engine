@@ -11,7 +11,7 @@ namespace bv { namespace model {
 class ModelNodeEditor
 {
 private:
-	BasicNodePtr		m_node;
+	BasicNodeWeakPtr	m_node;
     IPluginPtr			m_detachedPlugin;
 
 public:

@@ -376,6 +376,7 @@ void    Renderer::RegisterTexture2D   ( const Texture2D * texture, PdrTexture2D 
     assert( !IsRegistered( texture ) );
 
     m_PdrTextures2DMap[ texture ] = pdrTexture;
+	m_TextureUpdateIDMap[ texture ] = 0;
 }
 
 // *********************************
@@ -383,11 +384,6 @@ void    Renderer::RegisterTexture2D   ( const Texture2D * texture, PdrTexture2D 
 void    Renderer::Enable              ( const Texture2D * texture, int textureUnit )
 {
     PdrTexture2D * pdrTex2D = GetPdrTexture2D( texture );
-
-	if( m_TextureUpdateIDMap.count( texture ) == 0 )
-	{
-		m_TextureUpdateIDMap[ texture ] = 0;
-	}
 
 	if( texture->GetUpdateID() > m_TextureUpdateIDMap[ texture ] )
     {
@@ -555,6 +551,7 @@ PdrTexture2D *                  Renderer::GetPdrTexture2D       ( const Texture2
     {
         pdrTex = PdrTexture2D::Create( texture );
         m_PdrTextures2DMap[ texture ] = pdrTex;
+		m_TextureUpdateIDMap[ texture ] = 0;
     }
     else
     {
@@ -700,6 +697,7 @@ void    Renderer::DeletePDR                                 ( const VertexArrayS
 void    Renderer::DeletePDR                                 ( const Texture2D * texture )
 {
     DeleteSinglePDR( m_PdrTextures2DMap, texture );
+	m_TextureUpdateIDMap.erase( texture );
 }
 
 // *********************************

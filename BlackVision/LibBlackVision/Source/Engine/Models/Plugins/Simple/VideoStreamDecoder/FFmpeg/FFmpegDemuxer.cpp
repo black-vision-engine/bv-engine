@@ -30,7 +30,6 @@ FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath )
 FFmpegDemuxer::~FFmpegDemuxer    ()
 {
 	avformat_close_input( &m_formatCtx );
-
 	ClearPacketQueue();
 }
 
@@ -81,6 +80,7 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 				else
 				{
                     av_free_packet( packet );
+					delete packet;
                 }
             }
 			else

@@ -29,7 +29,7 @@ FFmpegVideoDecoder::FFmpegVideoDecoder		( VideoStreamAssetDescConstPtr desc )
 	auto numBytes = avpicture_get_size( ffmpegFormat, width, height );
 	auto buffer = ( uint8_t * )av_malloc( numBytes * sizeof( uint8_t ) );
 	avpicture_fill( ( AVPicture * )m_outFrame, buffer, ffmpegFormat, width, height );
-	
+
 	m_outFrame->width = width;
 	m_outFrame->height = height;
 	m_outFrame->format = ( int )ffmpegFormat;
@@ -43,10 +43,19 @@ FFmpegVideoDecoder::~FFmpegVideoDecoder		()
 	if( m_decoderThread )
 	{
 		m_decoderThread->Stop();
+		m_decoderThread->Join();
 		m_decoderThread = nullptr;
 	}
 
-	av_free( m_frame );
+	//force 
+	m_vstreamDecoder = nullptr;
+	m_demuxer = nullptr;
+
+	av_frame_free( &m_frame );
+
+	std::lock_guard< std::mutex > lock( m_mutex );
+	m_frameQueue.Clear();
+	av_frame_free( &m_outFrame );
 }
 
 // *********************************
@@ -55,7 +64,7 @@ void						FFmpegVideoDecoder::Start				()
 {
 	if( m_decoderThread == nullptr )
 	{
-		m_decoderThread = std::unique_ptr< VideoDecoderThread >( new VideoDecoderThread( shared_from_this() ) );
+		m_decoderThread = std::unique_ptr< VideoDecoderThread >( new VideoDecoderThread( this ) );
 		m_decoderThread->Start();
 	} 
 	else if ( m_decoderThread->Stopped() )
@@ -115,13 +124,17 @@ bool					FFmpegVideoDecoder::DecodeNextFrame			()
 {
 	std::lock_guard< std::mutex > lock( m_mutex );
 	auto packet = m_demuxer->GetPacket( m_vstreamDecoder->GetStreamIdx() );
-	if( packet != nullptr && m_frameQueue.Size() < MAX_QUEUE_SIZE )
+	if( packet != nullptr )
 	{
-		if( m_vstreamDecoder->DecodePacket( packet, m_frame ) )
+		if( m_frameQueue.Size() < MAX_QUEUE_SIZE && 
+			m_vstreamDecoder->DecodePacket( packet, m_frame ) )
 		{
 			m_vstreamDecoder->ConvertFrame( m_frame, m_outFrame );
 			return true;
 		}
+		
+		av_free_packet( packet );
+		delete packet;
 	}
 	return false;
 }

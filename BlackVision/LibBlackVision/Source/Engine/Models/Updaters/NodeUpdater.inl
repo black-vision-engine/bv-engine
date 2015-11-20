@@ -210,10 +210,18 @@ inline void    NodeUpdater::UpdateTexturesData  ()
             auto texDesc    = textures[ i ];
 			if( m_texDataUpdateID[ txIdx ][ j ] < texDesc->GetUpdateID() )
             {
-				//FIXME: 
-                auto tex2D = GTexture2DCache.GetTexture( texDesc.get() );
-				shaderParams->SetTexture( j, tex2D );
-                
+				auto tex2D  = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
+                if( GTexture2DCache.IsStored( tex2D ) && tex2D != GTexture2DCache.GetTexture( texDesc.get() ) )
+                {
+                    auto newTex2D = GTexture2DCache.GetTexture( texDesc.get() );
+                    shaderParams->SetTexture( j, newTex2D );
+                }
+                else //Some other texture type which just requires contents to be swapped
+                {
+					tex2D->SetData( texDesc->GetBits(), texDesc->GetFormat(), texDesc->GetWidth(), texDesc->GetHeight(), texDesc->GetNumLevels() );
+                }
+
+				//FIXME: video stream - shouldn't be set every new frame
 				auto samplerState = texDesc->GetSamplerState();
 				auto samplerParams = std::make_shared< SamplerShaderParameters >( samplerState->GetWrappingModeX(), samplerState->GetWrappingModeY(), 
 						samplerState->GetWrappingModeZ(), samplerState->GetFilteringMode(), samplerState->GetBorderColor() );

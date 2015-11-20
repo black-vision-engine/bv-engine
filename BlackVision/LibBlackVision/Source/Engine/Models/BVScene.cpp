@@ -170,7 +170,7 @@ void                    BVScene::AddScene           ( model::SceneModelPtr scene
 
 // *******************************
 //
-void                    BVScene::RemoveScene         ( const std::string & name )
+void                    BVScene::RemoveScene        ( const std::string & name )
 {
     model::BasicNodePtr toRemove = nullptr;
 
@@ -188,6 +188,20 @@ void                    BVScene::RemoveScene         ( const std::string & name 
     {
         m_pSceneEditor->DeleteChildNode( m_rootNode, toRemove->GetName() );
     }
+}
+
+// *******************************
+//FIXME: remove scene by root node - needed in BVSceneEditor::DeleteChildNode
+void						BVScene::RemoveScene	( model::BasicNode * node )
+{
+    for( unsigned int i = 0; i < m_pSceneModelVec.size(); ++i )
+	{
+		if( m_pSceneModelVec[ i ]->m_pModelSceneRoot.get() == node )
+		{
+            m_pSceneModelVec.erase( m_pSceneModelVec.begin() + i );
+            return;
+		}
+	}
 }
 
 // *******************************

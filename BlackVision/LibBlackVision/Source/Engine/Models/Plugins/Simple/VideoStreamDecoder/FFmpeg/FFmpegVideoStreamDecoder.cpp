@@ -53,8 +53,8 @@ FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder     ( VideoStreamAssetDescCon
 FFmpegVideoStreamDecoder::~FFmpegVideoStreamDecoder    ()
 {
 	sws_freeContext( m_swsCtx );
-
 	avcodec_close( m_codecCtx );
+	av_freep( m_codecCtx );
 }
 
 // *******************************
@@ -66,7 +66,6 @@ bool				FFmpegVideoStreamDecoder::DecodePacket		( AVPacket * packet, AVFrame * f
 	int frameReady = 0;
 	avcodec_decode_video2( m_codecCtx, frame, &frameReady, packet );
 
-    av_free_packet( packet );
     return ( frameReady != 0 );
 }
 

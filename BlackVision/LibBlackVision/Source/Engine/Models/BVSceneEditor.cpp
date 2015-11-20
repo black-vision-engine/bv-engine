@@ -96,8 +96,10 @@ bool    BVSceneEditor::DeleteChildNode      ( model::IModelNodePtr parentNode, c
         {
             m_modelSceneEditor->DeleteChildNode( modelParentNode, childNodeName );
             m_engineSceneEditor->DeleteChildNode( GetEngineNode( parentNode ), GetEngineNode( modelChildNode ) );
-
-            MappingsCleanup( modelChildNode );
+			
+			m_scene->RemoveScene( modelChildNode.get() );
+            
+			MappingsCleanup( modelChildNode );
 
             return true;
         }
@@ -177,7 +179,10 @@ bool                    BVSceneEditor::DetachChildNode     ( model::IModelNodePt
 //
 void            BVSceneEditor::DeleteDetachedNodes          ()
 {
-    MappingsCleanup( m_modelSceneEditor->GetDetachedNode() );
+	auto detachedNode = m_modelSceneEditor->GetDetachedNode();
+    MappingsCleanup( detachedNode );
+
+	m_scene->RemoveScene( detachedNode.get() );
 
     m_modelSceneEditor->DeleteDetachedNode();
     m_engineSceneEditor->DeleteDetachedNode();

@@ -15,7 +15,7 @@
 namespace bv
 {
 
-class FFmpegVideoDecoder : public IVideoDecoder, public std::enable_shared_from_this< IVideoDecoder >
+class FFmpegVideoDecoder : public IVideoDecoder
 {
 private:
 	FFmpegDemuxerUPtr				m_demuxer;
@@ -36,7 +36,7 @@ private:
 
 public:
 								FFmpegVideoDecoder		( VideoStreamAssetDescConstPtr desc );
-								~FFmpegVideoDecoder		();
+	virtual						~FFmpegVideoDecoder		();
 
 	virtual void				Start					() override;
 	virtual void				Pause					() override;
