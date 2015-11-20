@@ -106,7 +106,8 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
     }
     else if( command == PluginStructureEvent::Command::RemovePlugin )
     {
-
+        bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
+        m_appLogic->GetBVScene()->GetSceneEditor()->DeletePlugin( basicNode, pluginName );
     }
     else if( command == PluginStructureEvent::Command::AttachPlugin )
     {

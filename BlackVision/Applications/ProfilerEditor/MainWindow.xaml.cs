@@ -370,9 +370,12 @@ namespace ProfilerEditor
 
         private void SendButton_Click( object sender, RoutedEventArgs e )
         {
+            string prefix = "{\n\"Events\" : \n[";
+            string postfix = "]\n}";
+
             if( m_connected )
             {
-                byte[] command = Encoding.UTF8.GetBytes( CommandTextBox.Text );
+                byte[] command = Encoding.UTF8.GetBytes( prefix + CommandTextBox.Text + postfix );
 
                 byte[] message = new byte[command.Length + 2];
 
