@@ -71,7 +71,6 @@ BVScene::BVScene    ( model::SceneModelVec sceneModelVec, Camera * cam, model::I
     m_pSceneEditor = new BVSceneEditor( this );
 
     auto rootNode = model::BasicNode::Create( "main root", timeEvaluator );
-    rootNode->AddPlugin( "DEFAULT_TRANSFORM", "transform", timeEvaluator );
 
     for( auto sm : sceneModelVec )
     {

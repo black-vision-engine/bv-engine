@@ -98,8 +98,6 @@ private:
 
 private:
 
-    void                                    NonNullPluginsListGuard ();
-
 	mathematics::Rect 						GetAABB					( const glm::mat4 & currentTransformation ) const;
 
 public:
@@ -109,7 +107,6 @@ public:
     bool                                    AddPlugin               ( const std::string & uid, ITimeEvaluatorPtr timeEvaluator );
     bool                                    AddPlugin               ( const std::string & uid, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
     bool                                    AddPlugins              ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator );
-    bool                                    AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator );
 
 	void									SetLogic				( INodeLogicPtr logic );
 

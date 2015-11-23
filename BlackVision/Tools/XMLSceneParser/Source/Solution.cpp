@@ -77,8 +77,6 @@ namespace bv
         // root node
 
         root = BasicNode::Create( "root",timeline_default_alpha );
-        root->AddPlugin( "DEFAULT_TRANSFORM", "transform", TimeLineDefault ); 
-
 
         for(unsigned int i=0;i<ScenesToLoad.size();i++)
         {

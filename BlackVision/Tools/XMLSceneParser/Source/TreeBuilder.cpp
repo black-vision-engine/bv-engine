@@ -942,9 +942,6 @@ namespace bv{
 		    Tree.LoadFromFile(path);
         }else{
             model::BasicNodePtr newNode = BasicNode::Create("root",timeline_default_alpha);
-            bool result = newNode->AddPlugin( "DEFAULT_TRANSFORM", "transform", timeline_default ); 
-            assert( result );
-			{ result; }
 			Log::A("Load","error","scene file "+path+" does not exist.");
             return newNode;
         }

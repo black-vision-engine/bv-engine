@@ -664,7 +664,6 @@ void RemoteControlInterface::OnSceneStructure ( bv::IEventPtr evt )
 
 
 			auto newNode = model::BasicNode::Create(NodeNameStr2,m_AppLogic->GetTimelineManager()->GetRootTimeline());
-			newNode->AddPlugin( "DEFAULT_TRANSFORM", "transform",m_AppLogic->GetTimelineManager()->GetRootTimeline() ); 
 
 			m_AppLogic->GetBVScene()->GetSceneEditor()->AddChildNode(node,newNode);
         }

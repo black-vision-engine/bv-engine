@@ -46,7 +46,7 @@ IModelNodePtr  FindNode( const TNodeVec & vec, const std::string & name )
 //
 BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager )
     : m_name( name )
-    , m_pluginList( nullptr )
+    , m_pluginList( std::make_shared< DefaultPluginListFinalized >() )
     , m_pluginsManager( pluginsManager )
     , m_visible( true )
 	, m_modelNodeEditor ( nullptr )
@@ -341,8 +341,6 @@ ModelNodeEditor *					BasicNode::GetModelNodeEditor		()
 //
 DefaultPluginListFinalizedPtr		BasicNode::GetPlugins		()
 {
-    NonNullPluginsListGuard();
-
     return m_pluginList;
 }
 
@@ -355,20 +353,8 @@ void            BasicNode::SetPlugins                       ( DefaultPluginListF
 
 // ********************************
 //
-void             BasicNode::NonNullPluginsListGuard ()
-{
-    if( !m_pluginList )
-    {
-        m_pluginList = std::make_shared< DefaultPluginListFinalized >();
-    }
-}
-
-// ********************************
-//
 bool            BasicNode::AddPlugin                        ( IPluginPtr plugin )
 {
-    NonNullPluginsListGuard();
-
     m_pluginList->AttachPlugin( plugin );
 
     return true;
@@ -378,8 +364,6 @@ bool            BasicNode::AddPlugin                        ( IPluginPtr plugin 
 //
 bool            BasicNode::AddPlugin                        ( const std::string & uid, ITimeEvaluatorPtr timeEvaluator )
 {
-    NonNullPluginsListGuard ();
-
     IPluginPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
     m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, prev, timeEvaluator ) );
 
@@ -390,8 +374,6 @@ bool            BasicNode::AddPlugin                        ( const std::string 
 //
 bool            BasicNode::AddPlugin                    ( const std::string & uid, const std::string & name, ITimeEvaluatorPtr timeEvaluator )
 {
-    NonNullPluginsListGuard ();
-
     IPluginPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
 
     m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, name, prev, timeEvaluator ) );
@@ -406,26 +388,6 @@ bool           BasicNode::AddPlugins              ( const std::vector< std::stri
     for( auto uid : uids )
     {
         if( !AddPlugin( uid, timeEvaluator ) )
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-// ********************************
-//
-bool           BasicNode::AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator )
-{
-    if( uids.size() != names.size() )
-    {
-        return false;
-    }
-
-    for( unsigned int i = 0; i < names.size(); ++i )
-    {
-        if( !AddPlugin( uids[ i ], names[ i ], timeEvaluator ) )
         {
             return false;
         }
