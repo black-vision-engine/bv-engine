@@ -27,16 +27,34 @@ DefaultVideoOutputRenderLogic::~DefaultVideoOutputRenderLogic  ()
 //
 void    DefaultVideoOutputRenderLogic::FrameRenderedNewImpl            ( Renderer * renderer, OffscreenRenderLogic * offscreenRenderLogic, videocards::VideoCardManager * videoCardManager )
 {
-    { renderer; }
-    { offscreenRenderLogic; }
-
-    // FIXME: default behavior - show rendered preview (render to current display)
-    offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
-
-    if ( !m_useVideoCard )
+    // Just a lousy log
+    if( m_width != (unsigned int) renderer->GetWidth() || m_height != (unsigned int) renderer->GetHeight() )
     {
-        return;
+        m_width = renderer->GetWidth();
+        m_height = renderer->GetHeight();
+
+        printf( "Framebuffer resolution changed to %dx%d\n", m_width, m_height );
     }
+
+    if( !m_displayVideoOutputOnPreview )
+    {
+        offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
+    }
+    else
+    {
+        offscreenRenderLogic->DrawWithAllVideoEffects( renderer );
+        offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
+        
+        if ( m_useVideoCard )
+        {
+            auto frame = offscreenRenderLogic->ReadDisplayTarget( renderer, m_curReadbackFrame );
+            m_curReadbackFrame = ( m_curReadbackFrame + 1 ) % offscreenRenderLogic->NumReadBuffersPerRT();
+            
+            PushToVideoCard( frame, videoCardManager );
+        }
+    }
+
+    offscreenRenderLogic->SwapDisplayRenderTargets();
 
 // FIXME: add effects list along with proper bookkeeping of rendered frames for the interlacer
 

@@ -70,7 +70,7 @@ void    LightScatteringRenderLogic::RenderNode                  ( Renderer * ren
         GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
         GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
 
-        renderer->Draw( GetOffscreenRenderLogic()->CurDisplayRenderTargetData().quad );
+        //renderer->Draw( GetOffscreenRenderLogic()->CurDisplayRenderTargetData().quad );
         GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
         GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
 
