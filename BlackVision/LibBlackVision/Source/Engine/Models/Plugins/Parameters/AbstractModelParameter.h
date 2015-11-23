@@ -15,7 +15,7 @@ namespace bv { namespace model {
 class AbstractModelParameter;
 DEFINE_PTR_TYPE(AbstractModelParameter)
 
-class AbstractModelParameter : public IParameter, public std::enable_shared_from_this< AbstractModelParameter >, public ISerializable
+class AbstractModelParameter : public IParameter, public std::enable_shared_from_this< AbstractModelParameter >
 {
 protected:
 

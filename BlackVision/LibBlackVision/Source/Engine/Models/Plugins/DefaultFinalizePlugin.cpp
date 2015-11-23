@@ -110,7 +110,7 @@ ITransformChannelConstPtr           DefaultFinalizePlugin::GetTransformChannel  
 
 // *******************************
 //
-IPixelShaderChannelConstPtr         DefaultFinalizePlugin::GetPixelShaderChannel        () const
+IPixelShaderChannelPtr              DefaultFinalizePlugin::GetPixelShaderChannel        () const
 {
 	UpdatePixelShaderChannel();
 
@@ -169,6 +169,14 @@ RendererContextConstPtr             DefaultFinalizePlugin::GetRendererContext   
     }
 
     return nullptr;
+}
+
+
+// *******************************
+//
+void                                DefaultFinalizePlugin::SetRendererContext          ( RendererContextPtr context )
+{
+    assert( false );
 }
 
 // *******************************

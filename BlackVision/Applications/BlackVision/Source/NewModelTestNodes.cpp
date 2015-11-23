@@ -20,6 +20,8 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
 
+#include "Engine/Models/NodeEffects/ModelNodeEffectLightScattering.h"
+
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
 
@@ -305,6 +307,21 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGlobalEffectTest      ( model::Ti
     nm->AddChildToModelOnly( nm_fg );
 
     return root;*/
+}
+
+// *****************************
+//
+model::BasicNodePtr  SimpleNodesFactory::CreateLightScatteringTest      ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { timelineManager; }
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_01.jpg", false, 3.4f, 0.7f );
+
+     // ROOT
+    auto root = bTex.CreateNode( "root", true );
+
+    root->SetNodeEffect( std::make_shared< model::ModelNodeEffectLightScattering >( timeEvaluator ) );
+
+    return root;
 }
 
 // *****************************
@@ -2202,10 +2219,10 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 	auto texDesc_ = TextureAssetDesc::Create( "sand.jpg", MipMapFilterType::BILINEAR, true );
 	JsonSerializeObject serializeObject;
 	texDesc_->Serialize( serializeObject );
-	serializeObject.Save( "textureSerialize.json" );
+	serializeObject.Save( "serialization/textureSerialize.json" );
 
 	fstream file;
-	file.open( "textureSerialize.json", std::ios_base::in );
+	file.open( "serialization/textureSerialize.json", std::ios_base::in );
 	JsonDeserializeObject deserializeObject;
     deserializeObject.Load( file );
 	file.close();

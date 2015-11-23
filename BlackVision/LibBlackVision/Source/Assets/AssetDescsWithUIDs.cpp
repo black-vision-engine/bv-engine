@@ -1,8 +1,25 @@
 #include "AssetDescsWithUIDs.h"
 
-//#include "Serialization/SerializationObjects.inl"
-
 namespace bv {
+
+// *******************************
+//
+void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root, bool recursive )
+{
+    auto plugins = root->GetPlugins();
+    for( unsigned int i = 0; i < root->GetNumPlugins(); i++ )
+    {
+        auto assets = root->GetPlugins()->GetPlugin( i )->GetAssets();
+        for( auto asset : assets )
+        {
+            map.AddAssetDesc( asset );
+        }
+    }
+
+    if( recursive )
+        for( unsigned int i = 0; i < root->GetNumChildren(); i++ )
+            GetAssetsWithUIDs( map, root->GetChild( i ), true );
+}
 
 AssetDescsWithUIDs AssetDescsWithUIDs::instance;
 

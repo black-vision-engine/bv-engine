@@ -223,7 +223,7 @@ IVertexAttributesChannelConstPtr    DefaultText3DPlugin::GetVertexAttributesChan
 
 // *************************************
 // 
-IPixelShaderChannelConstPtr         DefaultText3DPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr              DefaultText3DPlugin::GetPixelShaderChannel       () const
 {
     return m_psc;
 }
@@ -272,7 +272,7 @@ inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
 //
 void DefaultText3DPlugin::OnSetText                   ( IEventPtr evt )
 {
-    if( evt->GetEventType() == KeyPressedEvent::m_sEventType)
+    if( evt->GetEventType() == KeyPressedEvent::Type() )
     {
         KeyPressedEventPtr evtTyped = std::static_pointer_cast<KeyPressedEvent>( evt );
         wchar_t c[2] = {evtTyped->GetChar() , '\0'};

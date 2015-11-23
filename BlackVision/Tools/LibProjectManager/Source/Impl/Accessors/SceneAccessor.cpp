@@ -1,6 +1,8 @@
 #include "SceneAccessor.h"
 
 #include "Engine/Models/Plugins/Plugin.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureDescriptor.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultAnimationDescriptor.h"
 
 #include "Assets/FwdDecls.h"
 

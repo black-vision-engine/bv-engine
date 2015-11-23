@@ -10,6 +10,18 @@
 
 namespace bv {
 
+namespace SerializationHelper {
+
+std::pair< WrapMethod, const char* > wm2s[] =
+{ std::make_pair( WrapMethod::clamp, "clamp" )
+, std::make_pair( WrapMethod::pingPong, "pingPong" )
+, std::make_pair( WrapMethod::repeat, "repeat" )
+, std::make_pair( WrapMethod::clamp, "" ) };
+
+template<> std::string T2String< WrapMethod >( const WrapMethod& wm ) { return Enum2String( wm2s, wm ); }
+
+}
+
 // *******************************
 //
 template< class TimeValueT, class ValueT >
@@ -166,8 +178,17 @@ public:
     {
     ser.EnterChild( "interpolation" );
         ser.SetAttribute( "type", "bezier" );
-        ser.SetAttribute( "v1", std::to_string( v1.t ) + ", " + std::to_string( v1.val ) );
-        ser.SetAttribute( "v2", std::to_string( v2.t ) + ", " + std::to_string( v2.val ) );
+        
+        ser.EnterChild( "v1" );
+            SerializationHelper::SerializeAttribute( ser, v1.t, "dt" );
+            SerializationHelper::SerializeAttribute( ser, v1.val, "dval" );
+        ser.ExitChild();
+        
+        ser.EnterChild( "v2" );
+            SerializationHelper::SerializeAttribute( ser, v2.t, "dt" );
+            SerializationHelper::SerializeAttribute( ser, v2.val, "dval" );
+        ser.ExitChild();
+        
     ser.ExitChild();
     }
 
@@ -176,8 +197,15 @@ public:
         if( deser.GetAttribute( "type" ) != "bezier" )
             assert( false );
 
-        v1 = SerializationHelper::String2Pair< TimeValueT, ValueT >( deser.GetAttribute( "v1" ) );
-        v2 = SerializationHelper::String2Pair< TimeValueT, ValueT >( deser.GetAttribute( "v2" ) );
+        deser.EnterChild( "v1" );
+            v1.t = SerializationHelper::_String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
+            v1.val = SerializationHelper::_String2T< ValueT >( deser.GetAttribute( "dval" ) );
+        deser.ExitChild();
+
+        deser.EnterChild( "v2" );
+            v2.t = SerializationHelper::_String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
+            v2.val = SerializationHelper::_String2T< ValueT >( deser.GetAttribute( "dval" ) );
+        deser.ExitChild();
     }
 };
 
@@ -221,13 +249,18 @@ template< class TimeValueT, class ValueT >
 void                                        CompositeBezierInterpolator< TimeValueT, ValueT >::Serialize       ( ISerializer& ser ) const
 {
 ser.EnterChild( "interpolator" );
+
     ser.SetAttribute( "curve_type", SerializationHelper::Enum2String< CurveType >( ct2s, m_type ) );
+    SerializationHelper::SerializeAttribute( ser, m_preMethod, "preMethod" );
+    SerializationHelper::SerializeAttribute( ser, m_postMethod, "postMethod" );
+
     for( size_t i = 0; i < interpolators.size(); i++ )
     {
         keys[ i ].Serialize( ser );
         interpolators[ i ]->Serialize( ser );
     }
     ( keys.end()-1 )->Serialize( ser );
+
 ser.ExitChild();
 }
 
@@ -273,6 +306,8 @@ ISerializablePtr     CompositeBezierInterpolator< TimeValueT, ValueT >::Create  
     }
 
     interpolator->SetCurveType( SerializationHelper::String2T< CurveType >( ct2s, deser.GetAttribute( "curve_type" ) ) );
+    interpolator->SetWrapPreMethod( SerializationHelper::String2T< WrapMethod >( SerializationHelper::wm2s, deser.GetAttribute( "preMethod" ) ) );
+    interpolator->SetWrapPostMethod( SerializationHelper::String2T< WrapMethod >( SerializationHelper::wm2s, deser.GetAttribute( "postMethod" ) ) );
 
     return interpolator;
 }

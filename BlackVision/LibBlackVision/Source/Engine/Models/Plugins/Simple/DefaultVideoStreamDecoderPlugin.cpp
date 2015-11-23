@@ -156,7 +156,7 @@ IVertexAttributesChannelConstPtr    DefaultVideoStreamDecoderPlugin::GetVertexAt
 
 // *************************************
 // 
-IPixelShaderChannelConstPtr         DefaultVideoStreamDecoderPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr		         DefaultVideoStreamDecoderPlugin::GetPixelShaderChannel       () const
 {
     return m_psc;
 }

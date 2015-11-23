@@ -135,10 +135,9 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( txAssetDescr != nullptr )
     {
-        AddAsset( assetDescr );
-
         //FIXME: use some better API to handle resources in general and textures in this specific case
         auto txDesc = DefaultTextureDescriptor::LoadTexture( txAssetDescr, DefaultTexturePluginDesc::TextureName() );
+
         if( txDesc != nullptr )
         {
 			txDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
@@ -152,8 +151,11 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
 			m_textureWidth = txAssetDescr->GetOrigTextureDesc()->GetWidth();
             m_textureHeight = txAssetDescr->GetOrigTextureDesc()->GetHeight();
 
+            AddAsset( assetDescr, txDesc->GetSamplerState() );
+
             return true;
         }
+
     }
     return false;
 }
@@ -167,7 +169,7 @@ IVertexAttributesChannelConstPtr    DefaultTexturePlugin::GetVertexAttributesCha
 
 // *************************************
 // 
-IPixelShaderChannelConstPtr         DefaultTexturePlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr              DefaultTexturePlugin::GetPixelShaderChannel       () const
 {
     return m_psc;
 }

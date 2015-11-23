@@ -6,6 +6,8 @@
 #include "AssetManager.h"
 #include "Serialization/SerializationHelper.h"
 
+#include "Engine/Models/BasicNode.h" // FIXME this is only important for GetAssetsWithUIDs
+
 namespace bv {
 
 class AssetDescWithUID : public ISerializable
@@ -76,5 +78,8 @@ public:
     std::string                                             Key2UID( std::string key ) { return m_key2uid[ key ]; }
     AssetDescConstPtr                                       UID2Asset( std::string uid ) { return m_uid2asset[ uid ]; }
 };
+
+void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root, bool recursive = true );
+
 
 } // bv

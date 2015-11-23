@@ -29,7 +29,9 @@ protected:
     std::string                                 m_uid;
 
     IPluginParamValModelPtr                     m_pluginParamValModel;
-    std::vector< AssetDescConstPtr >            m_assets;
+    
+    std::vector< AssetDescConstPtr >            m_assets; // FIXME: ugly hack for serialization
+    std::map< std::string, ResourceStateModelPtr > m_key2rsm; // FIXME: ugly hack for serialization
 
 protected:
 
@@ -51,7 +53,8 @@ public:
     
     virtual std::vector< IParameterPtr >        GetParameters               () const; // FIXME: ugly hack for serialization
     virtual std::vector< AssetDescConstPtr >    GetAssets                   () const; // FIXME: ugly hack for serialization
-    virtual void                                AddAsset                    ( AssetDescConstPtr asset ); // FIXME: ugly hack for serialization
+    virtual void                                AddAsset                    ( AssetDescConstPtr asset, ResourceStateModelPtr rsm ); // FIXME: ugly hack for serialization
+    virtual ResourceStateModelPtr               GetRSM                      ( std::string key ) const; // FIXME: ugly hack for serialization
 
     virtual void                                Update                      ( TimeType t );
 
@@ -68,11 +71,12 @@ public:
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
-    virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
+    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
     virtual IGeometryShaderChannelConstPtr      GetGeometryShaderChannel    () const override;
 
     virtual RendererContextConstPtr             GetRendererContext          () const override;
+    virtual void                                SetRendererContext          ( RendererContextPtr context ) override;
 
     virtual IPluginConstPtr                     GetPrevPlugin               () const override;
     virtual IPluginPtr							GetPrevPlugin               () override;
@@ -327,7 +331,7 @@ ITransformChannelConstPtr           BasePlugin< Iface >::GetTransformChannel    
 // *******************************
 //
 template< class Iface >
-IPixelShaderChannelConstPtr         BasePlugin< Iface >::GetPixelShaderChannel          () const
+IPixelShaderChannelPtr         BasePlugin< Iface >::GetPixelShaderChannel          () const
 {
     if( m_prevPlugin )
     {

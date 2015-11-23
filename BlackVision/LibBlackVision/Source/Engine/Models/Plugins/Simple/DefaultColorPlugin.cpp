@@ -79,7 +79,7 @@ DefaultColorPlugin::~DefaultColorPlugin ()
 
 // *************************************
 //
-IPixelShaderChannelConstPtr         DefaultColorPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr              DefaultColorPlugin::GetPixelShaderChannel       () const
 {
     return m_pixelShaderChannel;    
 }

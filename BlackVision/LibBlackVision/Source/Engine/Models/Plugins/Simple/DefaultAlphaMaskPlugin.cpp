@@ -160,7 +160,7 @@ IVertexAttributesChannelConstPtr    DefaultAlphaMaskPlugin::GetVertexAttributesC
 
 // *************************************
 // 
-IPixelShaderChannelConstPtr         DefaultAlphaMaskPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr         DefaultAlphaMaskPlugin::GetPixelShaderChannel       () const
 {
     return m_psc;
 }

@@ -38,10 +38,12 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+#include "EndUserAPI/EventHandlers/RemoteEventsHandlers.h"
+#include "EndUserAPI/JsonCommandsListener/JsonCommandsListener.h"
+
 //pablito
 #define XML
 #include "ConfigManager.h"
-#include "RemoteControlInterface.h"
 
 
 namespace bv
@@ -113,32 +115,26 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
 
     m_renderer = renderer;
     m_renderLogic = new RenderLogic();
-    m_RemoteControl = new RemoteControlInterface(this);
+    m_remoteHandlers = new RemoteEventsHandlers;
+    m_remoteController = new JsonCommandsListener;
 }
 
 // *********************************
 //
 BVAppLogic::~BVAppLogic             ()
 {
-    GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
-    GetDefaultEventManager().RemoveListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
-
     delete m_renderLogic;
-
+    
+    delete m_remoteHandlers;
     delete m_kbdHandler;
+
+    delete m_remoteController;
 }
 
 // *********************************
 //
 void BVAppLogic::Initialize         ()
 {
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetTransformParamsEvent::Type() );
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnUpdateParam ), SetColorParamEvent::Type() );
-
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNodeAppearing ), widgets::NodeAppearingCrawlerEvent::Type() );
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &BVAppLogic::OnNoMoreNodes ), widgets::NoMoreNodesCrawlerEvent::Type() );
-
     GetTimelineManager()->RegisterRootTimeline( m_globalTimeline );
 
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
@@ -147,6 +143,7 @@ void BVAppLogic::Initialize         ()
     bv::effect::InitializeLibEffect( m_renderer );
 
     InitializeKbdHandler();
+    InitializeRemoteCommunication();
 }
 
 // *********************************
@@ -172,7 +169,7 @@ void BVAppLogic::LoadScenes( const PathVec & pathVec )
         cam = new Camera( DefaultConfig.IsCameraPerspactive() );
     }
 
-    m_bvScene    = BVScene::Create( sceneModelVec,  cam, m_globalTimeline, m_renderer );
+    m_bvScene    = BVScene::Create( sceneModelVec, cam, m_globalTimeline, m_renderer );
     assert( m_bvScene );
     InitializeScenesTimelines();
 
@@ -221,9 +218,10 @@ void BVAppLogic::LoadScene          ( void )
     }
     else
     {
-        auto root = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_pluginsManager, GetTimelineManager().get(), m_globalTimeline );
-        m_bvScene = BVScene::Create( SceneModel::Create( "root", GetTimelineManager(), root ), new Camera( DefaultConfig.IsCameraPerspactive() ), te, m_renderer );
-        //InitializeScenesTimelines();
+        auto scene = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_pluginsManager, GetTimelineManager(), m_globalTimeline );
+        m_bvScene = BVScene::Create( scene, new Camera( DefaultConfig.IsCameraPerspactive() ), te, m_renderer );
+        if( GetEnvScene() == "SERIALIZED_TEST" ) // FIXME
+            InitializeScenesTimelines();
     }
 
     if( !m_bvScene )
@@ -290,16 +288,20 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
             m_bvScene->Update( t );
         }
 
-        m_RemoteControl->UpdateHM();
+        m_remoteHandlers->UpdateHM();
 
         {
-            FRAME_STATS_SECTION( "Render" );
             HPROFILER_SECTION( "Render", PROFILER_THREAD1 );			
             
-            RefreshVideoInputScene();
+            {
+                FRAME_STATS_SECTION( "Video input" );
+		        RefreshVideoInputScene();
+            }
 
-            m_renderLogic->RenderFrame( renderer, m_bvScene->GetEngineSceneRoot() );
-            m_renderLogic->FrameRendered( renderer );
+            {
+                FRAME_STATS_SECTION( "Render" );
+                m_renderLogic->RenderFrame( renderer, m_bvScene->GetEngineSceneRoot() );
+            }
         }
     }
 
@@ -416,37 +418,6 @@ void            BVAppLogic::GrabCurrentFrame(  const std::string & path )
 {
     m_grabFramePath = path;
 }
-//pablito
-// *********************************
-//
-void            BVAppLogic::SetKey(  bool active)
-{
-    m_videoCardManager->SetKey(active);
-}
-
-// *********************************
-//
-void            BVAppLogic::OnUpdateParam   ( IEventPtr evt )
-{ 
-}
-
-// *********************************
-//
-void            BVAppLogic::OnNodeAppearing   ( IEventPtr evt )
-{ 
-}
-
-// *********************************
-//
-void            BVAppLogic::OnNodeLeaving   ( IEventPtr evt )
-{
-}
-
-// *********************************
-//
-void            BVAppLogic::OnNoMoreNodes   ( IEventPtr evt )
-{
-}
 
 // *********************************
 //
@@ -490,14 +461,38 @@ void                            BVAppLogic::InitializeKbdHandler()
     {
         m_kbdHandler = new TestEditorsKeyboardHandler();
     }
-	else if( envScene == "VIDEO_STREAM_TEST_SCENE" )
+    else if( envScene == "VIDEO_STREAM_TEST_SCENE" )
     {
         m_kbdHandler = new TestVideoStreamDecoderKeyboardHandler();
+    }
+    else if( envScene == "LIGHT_SCATTERING_EFFECT" )
+    {
+        m_kbdHandler = new TestEditorsKeyboardHandler();
     }
     else
     {
         m_kbdHandler = new TestKeyboardHandler();
     }
+}
+
+// *********************************
+//
+void                            BVAppLogic::InitializeRemoteCommunication()
+{
+    m_remoteHandlers->InitializeHandlers( this );
+
+    unsigned int editorPort = ConfigManager::GetInt( "Network/SocketServer/Port" );
+    bool useRemoteLog = ConfigManager::GetBool( "Network/RemoteLog/Use" );
+
+    if( useRemoteLog )
+    {
+        unsigned int remoteLogPort = ConfigManager::GetInt( "Network/RemoteLog/Port" );
+        std::string remoteLogIP = ConfigManager::GetString( "Network/RemoteLog/IP" );
+
+        m_remoteController->InitializeRemoteLog( remoteLogIP, static_cast<unsigned short>( remoteLogPort ), SeverityLevel::info );
+    }
+    
+    m_remoteController->InitializeServer( editorPort );
 }
 
 // *********************************

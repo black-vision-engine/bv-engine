@@ -52,11 +52,12 @@ public:
 
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const = 0;
     virtual ITransformChannelConstPtr           GetTransformChannel         () const = 0;
-    virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const = 0;
+    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const = 0;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const = 0;
     virtual IGeometryShaderChannelConstPtr      GetGeometryShaderChannel    () const = 0;
 
     virtual RendererContextConstPtr             GetRendererContext          () const = 0;
+    virtual void                                SetRendererContext          ( RendererContextPtr context ) = 0;
 
     virtual IPluginConstPtr                     GetPrevPlugin               () const = 0;
     virtual IPluginPtr							GetPrevPlugin				() = 0;

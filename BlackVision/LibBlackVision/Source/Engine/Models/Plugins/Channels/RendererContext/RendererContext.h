@@ -6,6 +6,7 @@
 #include "Engine/Models/Plugins/Channels/RendererContext/DepthContext.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/FillContext.h"
 
+#include "Serialization/ISerializable.h"
 
 namespace bv { namespace model {
 
@@ -13,7 +14,7 @@ class RendererContext;
 DEFINE_CONST_PTR_TYPE(RendererContext)
 DEFINE_PTR_TYPE(RendererContext)
 
-class RendererContext
+class RendererContext : public ISerializable
 {
 private:
 
@@ -38,7 +39,11 @@ public:
     static RendererContextPtr   Create              ();
     static RendererContextPtr   CreateDefault       ();
 
-    RendererContextPtr			Clone				() const;
+    RendererContextPtr		Clone				() const;
+    
+    virtual void                Serialize       ( ISerializer& ser ) const;
+    void                        Deserialize     ( const IDeserializer& deser );
+    static RendererContextPtr   Create          ( const IDeserializer& deser );
 };
 
 } //model

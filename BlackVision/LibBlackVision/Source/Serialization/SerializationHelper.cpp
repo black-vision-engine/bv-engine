@@ -55,15 +55,73 @@ glm::vec2               String2Vec2( std::string s )
         std::stof( vals[1] ) );
 }
 
-template<> float String2T( std::string s, const float& default ) { if( s == "" ) return default; else return std::stof( s ); }
-template<> bool String2T( std::string s, const bool& default ) { if( s == "true" ) return true; else if( s == "false" ) return false; else return default; } // FIXME error handling
-
 template<> float _String2T( std::string s ) { return std::stof( s ); }
 template<> bool _String2T( std::string s ) { if( s == "true" ) return true; else if( s == "false" ) return false; assert( false ); return false; } // FIXME error handling
 template<> int _String2T( std::string s ) { return std::stoi( s ); }
 template<> glm::vec2 _String2T( std::string s ) { return String2Vec2( s ); }
 template<> glm::vec3 _String2T( std::string s ) { return String2Vec3( s ); }
 template<> glm::vec4 _String2T( std::string s ) { return String2Vec4( s ); }
+
+template<> float String2T( std::string s, const float& default ) 
+{ 
+    if( s == "" ) 
+        return default; 
+    else 
+        return _String2T< float >( s ); 
+}
+
+template<> bool String2T( std::string s, const bool& default ) 
+{ 
+    if( s == "" ) 
+        return default; 
+    else
+        return _String2T< bool >( s );
+}
+
+template<> glm::vec2 String2T( std::string s, const glm::vec2& default )
+{
+    if( s == "" )
+        return default;
+    else
+        return String2Vec2( s );
+}
+
+template<> glm::vec3 String2T( std::string s, const glm::vec3& default )
+{
+    if( s == "" )
+        return default;
+    else
+        return String2Vec3( s );
+}
+
+template<> glm::vec4 String2T( std::string s, const glm::vec4& default )
+{
+    if( s == "" )
+        return default;
+    else
+        return String2Vec4( s );
+}
+
+template< typename T >
+std::string T2String( const T& t )
+{
+    return std::to_string( t );
+}
+
+template<>
+std::string T2String( const bool& b )
+{
+    if( b )
+        return "true";
+    else
+        return "false";
+}
+
+template std::string T2String( const glm::vec2& v );
+template std::string T2String( const glm::vec3& v );
+template std::string T2String( const glm::vec4& v );
+template std::string T2String( const float& v );
+template std::string T2String( const int& v );
 
 } }
 

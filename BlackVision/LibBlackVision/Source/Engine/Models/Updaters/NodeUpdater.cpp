@@ -18,12 +18,14 @@
 #include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectWireframe.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectLightScattering.h"
 
 #include "Engine/Graphics/Effects/NodeEffects/NodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/NodeMaskNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/WireframeNodeEffect.h"
-
+#include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/LightScatteringNodeEffect.h"
 
 namespace bv 
 {
@@ -190,6 +192,40 @@ void    NodeUpdater::UpdateNodeEffect       ()
                     bgIdxVal->SetValue( nodeMaskEffect->GetBackgroundChildIdx() );
                     fgIdxVal->SetValue( nodeMaskEffect->GetForegroundChildIdx() );
                     alphaVal->SetValue( nodeMaskEffect->GetAlpha() );
+                }
+
+                break;
+            }
+            case NodeEffectType::NET_LIGHT_SCATTERING:
+            {
+                auto lightScatteringEffect = std::static_pointer_cast< model::ModelNodeEffectLightScattering >( nodeEffect );
+
+                auto paramExposure = lightScatteringEffect->GetParamExposure();
+                auto paramWeight = lightScatteringEffect->GetParamWeight();
+                auto paramDecay = lightScatteringEffect->GetParamDecay();
+                auto paramDensity = lightScatteringEffect->GetParamDensity();
+                auto paramLightPositionOnScreen = lightScatteringEffect->GetParamLightPositionOnScreen();
+                auto paramNumSamples = lightScatteringEffect->GetParamNumSamples();
+
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+
+				auto exposureVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramExposure->GetName() ) );
+                auto weightVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramWeight->GetName() ) );
+                auto decayVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramDecay->GetName() ) );
+                auto densityVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramDensity->GetName() ) );
+                auto lightPositionOnScreenVal = std::static_pointer_cast< ValueVec2 >( sceneNodeEffect->GetValue( paramLightPositionOnScreen->GetName() ) );
+                auto numSamplesVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramNumSamples->GetName() ) );
+
+
+                if ( exposureVal != nullptr && weightVal != nullptr && decayVal != nullptr && 
+                     densityVal != nullptr && lightPositionOnScreenVal != nullptr && numSamplesVal != nullptr )
+                {
+                    exposureVal->SetValue( lightScatteringEffect->GetExposure() );
+                    weightVal->SetValue( lightScatteringEffect->GetWeight() );
+                    decayVal->SetValue( lightScatteringEffect->GetDecay() );
+                    densityVal->SetValue( lightScatteringEffect->GetDensity() );
+                    lightPositionOnScreenVal->SetValue( lightScatteringEffect->GetLightPositionOnScreen() );
+                    numSamplesVal->SetValue( lightScatteringEffect->GetNumSamples() );
                 }
 
                 break;

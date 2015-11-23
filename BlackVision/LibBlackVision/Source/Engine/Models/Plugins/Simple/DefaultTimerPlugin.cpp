@@ -313,7 +313,7 @@ IVertexAttributesChannelConstPtr    DefaultTimerPlugin::GetVertexAttributesChann
 
 // *************************************
 // 
-IPixelShaderChannelConstPtr         DefaultTimerPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr              DefaultTimerPlugin::GetPixelShaderChannel       () const
 {
     return m_psc;
 }

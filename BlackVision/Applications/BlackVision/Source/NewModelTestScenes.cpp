@@ -7,6 +7,7 @@
 #include "Engine/Models/Plugins/PluginsFactory.h"
 
 #include "Engine/Models/BasicNode.h"
+#include "Engine/Models/Timeline/TimelineManager.h"
 
 #include "ExampleTestScenes.h"
 #include "NewModelTestNodes.h"
@@ -23,16 +24,13 @@
 #include "Engine/Models/Plugins/Simple/DefaultConePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
 
-//#include "Mathematics/Interpolators/CompositeBezierInterpolator.h"
-//#include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
-
 #include "Engine/Models/Plugins/PluginUtils.h"
 
 #include "System/Env.h"
 #include "BVConfig.h"
 
 #include "Serialization/JsonSpirit/JsonSpiritSerializeObject.h"
-#include "Serialization/JsonSpirit/JsonSpiritDeserilizeObject.h"
+#include "Serialization/JsonSpirit/JsonSpiritDeserializeObject.h"
 #include "Serialization/Json/JsonSerializeObject.h"
 #include "Serialization/Json/JsonDeserializeObject.h"
 
@@ -460,8 +458,9 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 
 // *****************************
 //
-model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const std::string& scene, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::SceneModelPtr    TestScenesFactory::CreateSceneFromEnv       ( const std::string& scene, const model::PluginsManager * pluginsManager, model::TimelineManagerPtr timelineManagerPtr, model::ITimeEvaluatorPtr timeEvaluator )
 {
+    auto timelineManager = timelineManagerPtr.get();
     model::BasicNodePtr node = nullptr;
 
     if( scene == "TWO_TEXTURED_RECTANGLES" )
@@ -494,7 +493,7 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const std:
     }
     else if( scene == "SERIALIZED_TEST" )
     {
-        node = TestScenesFactory::CreateSerializedTestScene( pluginsManager, timelineManager );
+        return TestScenesFactory::CreateSerializedTestScene( pluginsManager, timelineManager );
     }
 	else if( scene == "ALL_BASIC_SHAPES_SHOW" )
 	{
@@ -524,10 +523,18 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const std:
     {
         node = TestScenesFactory::WSerializationTest( pluginsManager, timelineManager, timeEvaluator );
     }
-	else if( scene == "VIDEO_STREAM_TEST_SCENE" )
-	{
-		node = SimpleNodesFactory::CreateVideoStreamDecoderRectNode( timelineManager, timeEvaluator, false );
-	}
+    else if( scene == "VIDEO_STREAM_TEST_SCENE" )
+   {
+ 	node = SimpleNodesFactory::CreateVideoStreamDecoderRectNode( timelineManager, timeEvaluator, false );
+    }
+    else if( scene == "REMOTE_EVENTS_TEST_SCENE" )
+    {
+        node = TestScenesFactory::RemoteEventsTestScene( pluginsManager, timelineManager, timeEvaluator );
+    }
+    else if( scene == "LIGHT_SCATTERING_EFFECT" )
+    {
+        node = TestScenesFactory::LightScatteringTestScene( pluginsManager, timelineManager, timeEvaluator );
+    }
     else
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
@@ -545,7 +552,7 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const std:
         node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
 
-    return node;
+    return std::make_shared< model::SceneModel >( "sceneFromEnv: " + scene, timelineManagerPtr,  node );
 }
 
 // *****************************
@@ -586,6 +593,14 @@ model::BasicNodePtr     TestScenesFactory::GlobalEffect05           ( const mode
 {
     { pluginsManager; }
     return SimpleNodesFactory::CreateGlobalEffectTest( timelineManager, timeEvaluator );
+}
+
+// *****************************
+//
+model::BasicNodePtr     TestScenesFactory::LightScatteringTestScene  ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { pluginsManager; }
+    return SimpleNodesFactory::CreateLightScatteringTest( timelineManager, timeEvaluator );
 }
 
 // *****************************
@@ -1283,6 +1298,18 @@ model::BasicNodePtr TestScenesFactory::WSerializationTest          ( const model
 #undef STRING
 }
 
+model::BasicNodePtr TestScenesFactory::RemoteEventsTestScene( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    pluginsManager;
+    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "water.jpg" );
+    auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "sand.jpg" );
+    auto node2 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( 0.0, -0.4, 0.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 1", "fonts/courbi.TTF" );
+
+    node0->AddChildToModelOnly( node1 );
+    node0->AddChildToModelOnly( node2 );
+
+    return node0;
+}
 
 
 } //bv

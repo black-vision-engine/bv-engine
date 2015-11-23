@@ -27,13 +27,13 @@ ModelNodeEffectNodeMask::ModelNodeEffectNodeMask( ITimeEvaluatorPtr timeEvaluato
 //
 void            ModelNodeEffectNodeMask::Serialize       ( ISerializer& ser ) const
 {
-ser.EnterChild( "effect" );
+    ser.EnterChild( "effect" );
     ser.SetAttribute( "type", SerializationHelper::T2String< NodeEffectType >( GetType() ) );
 
     m_paramAlpha->Serialize( ser );
     m_paramBgIdx->Serialize( ser );
     m_paramFgIdx->Serialize( ser );
-ser.ExitChild();
+    ser.ExitChild();
 }
 
 // ********************************

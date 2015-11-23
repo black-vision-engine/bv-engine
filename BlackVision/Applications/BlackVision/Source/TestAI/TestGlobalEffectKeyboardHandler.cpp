@@ -5,6 +5,7 @@
 #include "Engine/Models/NodeEffects/ModelNodeEffectDefault.h"
 
 #include "Serialization/XML/XMLSerializer.h"
+#include "Assets/AssetDescsWithUIDs.h"
 
 namespace bv {
 
@@ -39,10 +40,28 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
         case 's': 
         {
             auto sob = new XMLSerializer();
-            logic->GetBVScene()->Serialize( *sob );
+            logic->GetBVScene()->GetScenes()[ 0 ]->Serialize( *sob );
             sob->Save( "test.xml" );
             delete sob; 
 
+            break;
+        }
+        case 'p':
+        {
+            auto ser = new XMLSerializer();
+            
+            auto node = GetVanillaNode( logic )->GetChild( "vanilla_tex" );
+            auto& assets = AssetDescsWithUIDs::GetInstance(); // & is crucial!
+            GetAssetsWithUIDs( assets, std::dynamic_pointer_cast< model::BasicNode >( node ) );
+            
+            assets.Serialize( *ser );
+
+            auto plugin_ = node->GetPlugin( "texture" );
+            auto plugin = std::dynamic_pointer_cast< model::BasePlugin< model::IPlugin > >( plugin_ );
+            plugin->Serialize( *ser );
+
+            ser->Save( "plugin.xml" );
+            delete ser;
             break;
         }
         case '1':

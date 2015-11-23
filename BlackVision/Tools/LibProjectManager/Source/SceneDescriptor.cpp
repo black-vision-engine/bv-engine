@@ -54,21 +54,21 @@ model::SceneModelPtr	    SceneDescriptor::LoadScene		( const Path & inputFilePat
 
 namespace 
 {
-// *******************************
+//// *******************************
+////
+//void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root )
+//{
+//    auto plugins = root->GetPlugins();
+//    for( unsigned int i = 0; i < root->GetNumPlugins(); i++ )
+//    {
+//        auto assets = root->GetPlugins()->GetPlugin( i )->GetAssets();
+//        for( auto asset : assets )
+//            map.AddAssetDesc( asset );
+//    }
 //
-void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root )
-{
-    auto plugins = root->GetPlugins();
-    for( unsigned int i = 0; i < root->GetNumPlugins(); i++ )
-    {
-        auto assets = root->GetPlugins()->GetPlugin( i )->GetAssets();
-        for( auto asset : assets )
-            map.AddAssetDesc( asset );
-    }
-
-    for( unsigned int i = 0; i < root->GetNumChildren(); i++ )
-        GetAssetsWithUIDs( map, root->GetChild( i ) );
-}
+//    for( unsigned int i = 0; i < root->GetNumChildren(); i++ )
+//        GetAssetsWithUIDs( map, root->GetChild( i ) );
+//}
 
 } // anonymous
 // ********************************

@@ -29,7 +29,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
 
 // Log
-#include "Log.h"
+#include "UseLogger.h"
 //#include "../BVConfig.h"
 
 // ---------
@@ -938,11 +938,11 @@ namespace bv{
 
         if(FileExists(path))
         {
-            Log::A("Load","info","Loading scene file "+path);
+            LOG_MESSAGE( SeverityLevel::info ) << "Loading scene file " + path;
 		    Tree.LoadFromFile(path);
         }else{
             model::BasicNodePtr newNode = BasicNode::Create("root",timeline_default_alpha);
-			Log::A("Load","error","scene file "+path+" does not exist.");
+            LOG_MESSAGE( SeverityLevel::error ) << "scene file "+path+" does not exist.";
             return newNode;
         }
         
@@ -953,7 +953,7 @@ namespace bv{
         }
 
 		BasicNodePtr root = SendTree(Tree.Scene.MainNode);
-		Log::A("Load","info","XML scene has been parsed and loaded into engine");
+		LOG_MESSAGE( SeverityLevel::info ) << "info","XML scene has been parsed and loaded into engine";
         printf("Scene loaded\n");
         printf("Total nodes : %d\n",TotalNodesCount);
 		return root;

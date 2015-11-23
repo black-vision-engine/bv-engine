@@ -6,6 +6,7 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultFontDescriptor.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"
 
@@ -291,6 +292,10 @@ void							DefaultTextPlugin::LoadAtlas	( const FontAssetDescConstPtr & fontAsse
 				,   tfm
                 ,   glm::vec4( 0.f, 0.f, 0.f, 0.f )
                 ,   DataBuffer::Semantic::S_TEXTURE_STATIC );
+
+    auto texDesc = txData->GetTexture( DefaultTextPluginDesc::TextureName() );
+    auto fontDesc = std::make_shared< DefaultFontDescriptor >( texDesc );
+    txData->AddFont( fontDesc );
 }
 
 // *************************************
@@ -301,13 +306,15 @@ bool                            DefaultTextPlugin::LoadResource  ( AssetDescCons
 
     if ( txAssetDescr != nullptr )
     {
-        AddAsset( assetDescr );
-
 		m_fontSize = txAssetDescr->GetFontSize();
 		m_blurSize = txAssetDescr->GetBlurSize();
 		m_outlineSize = txAssetDescr->GetOutlineSize();
 		LoadAtlas( txAssetDescr );
 		SetText( m_textParam->Evaluate() );
+
+        auto fonts = m_psc->GetTexturesDataImpl()->GetFonts();
+        assert( fonts.size() == 1 );
+        AddAsset( assetDescr, fonts[ 0 ]->GetStateModel() );
 
 		return true;
     }    
@@ -324,7 +331,7 @@ IVertexAttributesChannelConstPtr    DefaultTextPlugin::GetVertexAttributesChanne
 
 // *************************************
 // 
-IPixelShaderChannelConstPtr         DefaultTextPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr              DefaultTextPlugin::GetPixelShaderChannel       () const
 {
     return m_psc;
 }
@@ -391,7 +398,7 @@ inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
 //
 void DefaultTextPlugin::OnSetText                   ( IEventPtr evt )
 {
-    if( evt->GetEventType() == KeyPressedEvent::m_sEventType)
+    if( evt->GetEventType() == KeyPressedEvent::Type())
     {
         KeyPressedEventPtr evtTyped = std::static_pointer_cast<KeyPressedEvent>( evt );
         wchar_t c[2] = {evtTyped->GetChar() , '\0'};
