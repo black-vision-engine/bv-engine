@@ -2,6 +2,7 @@
 
 #include "Rendering/Logic/NodeEffectRendering/NodeEffectRenderLogic.h"
 
+#include <memory>
 
 namespace bv {
 
@@ -9,7 +10,7 @@ class LightScatteringEffect;
 
 class LightScatteringRenderLogic : public NodeEffectRenderLogic
 {
-    LightScatteringEffect     *   m_effect;
+    std::shared_ptr< LightScatteringEffect >     m_effect;
 
 public:
 
