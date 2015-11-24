@@ -14,24 +14,26 @@ in vec2 uvCoord;
 
 void main()
 {	
-    vec2 deltaTextCoord     = vec2( uvCoord - lightPositionOnScreen.xy );
-    vec2 textCoo            = uvCoord;
-    deltaTextCoord         *= 1.0 /  numSamples * density;
-    float illuminationDecay = 1.0;
+
+    FragColor = texture2D( firstPassTexture, uvCoord );
+    // vec2 deltaTextCoord     = vec2( uvCoord - lightPositionOnScreen.xy );
+    // vec2 textCoo            = uvCoord;
+    // deltaTextCoord         *= 1.0 /  numSamples * density;
+    // float illuminationDecay = 1.0;
 
 
-    for( int i = 0; i < int(numSamples); i++ )
-    {
-             textCoo -= deltaTextCoord;
-             vec4 s = texture2D( firstPassTexture, textCoo );
+    // for( int i = 0; i < int(numSamples); i++ )
+    // {
+             // textCoo -= deltaTextCoord;
+             // vec4 s = texture2D( firstPassTexture, textCoo );
         
-             s *= illuminationDecay * weight;
+             // s *= illuminationDecay * weight;
 
-             FragColor += s;
+             // FragColor += s;
 
-             illuminationDecay *= decay;
-     }
+             // illuminationDecay *= decay;
+     // }
      
-     FragColor *= exposure;
-     FragColor = vec4(1,0,0,1);
+     // FragColor *= exposure;
+     // FragColor = vec4(1,0,0,1);
 }

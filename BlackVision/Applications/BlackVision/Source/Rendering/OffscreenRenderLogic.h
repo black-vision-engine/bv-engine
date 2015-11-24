@@ -118,6 +118,7 @@ private:
     RenderTargetData    CreateVideoOutputRenderTargetData   () const;
 
     unsigned int        CurDisplayRenderTargetNum           () const;
+
     RenderTargetData    CurDisplayRenderTargetData          () const;
 
 };
