@@ -253,6 +253,7 @@ public:
         RemoveNode,
         DetachPlugin,
         AttachPlugin,
+        AddPlugin,
         SetNodeVisible,
         SetNodeInvisible,
         Fail            ///< Wrong command
@@ -262,6 +263,7 @@ private:
     static std::string          m_sEventName;
 public:
     NodeStructureEvent::Command     SceneCommand;
+    std::string                     SceneName;
     std::string                     NodeName;
     std::string                     PluginName;
     std::string                     NewNodeName;

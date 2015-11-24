@@ -29,7 +29,7 @@ IPluginPtr              DefaultColorPluginDesc::CreatePlugin                ( co
 DefaultPluginParamValModelPtr   DefaultColorPluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
     START_MODEL( timeEvaluator )
-        ADD_PS_EVAL_PARAM( "color", glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ) )
+        ADD_PS_EVAL_PARAM( "color", glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ) )
         //START_COMPOSITE_PS_EVAL_PARAM( "color" )
         //    ADD_PS_PARAM( "r", 0.f )
         //END_COMPOSITE_PS_PARAM()
