@@ -295,40 +295,46 @@ void SceneEventsHandlers::TimelineHandler     ( bv::IEventPtr evt )
         float time = timelineEvent->Time;
         TimeLineEvent::Command command = timelineEvent->TimelineCommand;
 
-        auto timeline = m_appLogic->GetTimelineManager()->GetTimeline( timeLineName );
-        if( timeline == nullptr )
+        auto scene = m_appLogic->GetBVScene()->GetScene( timelineEvent->SceneName );
+
+        if( scene )
         {
-            LOG_MESSAGE( SeverityLevel::error ) << "Timeline ["+ timeLineName + "] does not exist.";
-            return;
-        }
-        bv::model::ITimeline* timelineTyped = static_cast<bv::model::ITimeline*>(timeline.get());
+            auto timeline = scene->m_pTimelineManager->GetTimeline( timeLineName );
+
+            if( timeline == nullptr )
+            {
+                LOG_MESSAGE( SeverityLevel::error ) << "Timeline ["+ timeLineName + "] does not exist.";
+                return;
+            }
+            bv::model::ITimeline* timelineTyped = static_cast<bv::model::ITimeline*>(timeline.get());
 
 
-        if( command == TimeLineEvent::Command::Play )
-        {
-            timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
-            timelineTyped->Play();
-        }
-        else if( command == TimeLineEvent::Command::Stop )
-        {
-            timelineTyped->Stop();
-        }
-        else if( command == TimeLineEvent::Command::PlayReverse )
-        {
-            timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_BACKWARD );
-            timelineTyped->Play();
-        }
-        else if( command == TimeLineEvent::Command::Goto )
-        {
-            timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
-            timelineTyped->SetTimeAndStop( (bv::TimeType)time );
-        }
-        else if( command == TimeLineEvent::Command::GotoAndPlay )
-        {
-            timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
-            timelineTyped->SetTimeAndPlay( (bv::TimeType)time );
-        }
+            if( command == TimeLineEvent::Command::Play )
+            {
+                timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
+                timelineTyped->Play();
+            }
+            else if( command == TimeLineEvent::Command::Stop )
+            {
+                timelineTyped->Stop();
+            }
+            else if( command == TimeLineEvent::Command::PlayReverse )
+            {
+                timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_BACKWARD );
+                timelineTyped->Play();
+            }
+            else if( command == TimeLineEvent::Command::Goto )
+            {
+                timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
+                timelineTyped->SetTimeAndStop( (bv::TimeType)time );
+            }
+            else if( command == TimeLineEvent::Command::GotoAndPlay )
+            {
+                timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
+                timelineTyped->SetTimeAndPlay( (bv::TimeType)time );
+            }
        
+        }
     }
 }
 

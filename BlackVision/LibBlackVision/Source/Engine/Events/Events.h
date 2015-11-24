@@ -219,6 +219,7 @@ public:
     std::string                     NodeName;
     std::string                     PluginName;
     std::string                     ParamName;
+    std::string                     SceneName;
     std::wstring                    Value;
 
     float                           Time;
@@ -410,6 +411,7 @@ private:
 public:
     TimeLineEvent::Command      TimelineCommand;
     std::string                 TimelineName;
+    std::string                 SceneName;
     float                       Time;
 
 public:

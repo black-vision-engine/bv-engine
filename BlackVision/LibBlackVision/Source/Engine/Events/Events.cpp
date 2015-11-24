@@ -134,6 +134,7 @@ const std::wstring COMMAND_GOTO_AND_PLAY_WSTRING        = L"GotoAndPlay";
 
 const std::wstring TIMELINE_TIME_VALUE_WSTRING          = L"Time";
 const std::wstring TIMELINE_NAME_WSTRING                = L"TimeLineName";
+const std::wstring SCENE_NAME_WSTRING                   = L"SceneName";
 
 // WidgetEvent
 const std::wstring COMMAND_CRAWL_WSTRING                = L"Crawl";
@@ -530,6 +531,7 @@ EventType           LoadAssetEvent::GetEventType         () const
 void                ParamKeyEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
+    ser.SetAttribute( Serial::SCENE_NAME_WSTRING, toWString( SceneName ) );
     ser.SetAttribute( Serial::NODE_NAME_WSTRING, toWString( NodeName ) );
     ser.SetAttribute( Serial::PLUGIN_NAME_WSTRING, toWString( PluginName ) );
     ser.SetAttribute( Serial::PARAM_NAME_WSTRING, toWString( ParamName ) );
@@ -545,6 +547,7 @@ IEventPtr           ParamKeyEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         ParamKeyEventPtr newEvent   = std::make_shared<ParamKeyEvent>();
+        newEvent->SceneName         = toString( deser.GetAttribute( Serial::SCENE_NAME_WSTRING) );
         newEvent->PluginName        = toString( deser.GetAttribute( Serial::PLUGIN_NAME_WSTRING ) );
         newEvent->NodeName          = toString( deser.GetAttribute( Serial::NODE_NAME_WSTRING ) );
         newEvent->ParamName         = toString( deser.GetAttribute( Serial::PARAM_NAME_WSTRING ) );
@@ -940,6 +943,7 @@ void                TimeLineEvent::Serialize            ( ISerializer& ser ) con
     ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
     ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( TimelineCommand ) );
     ser.SetAttribute( Serial::TIMELINE_NAME_WSTRING, toWString( TimelineName ) );
+    ser.SetAttribute( Serial::SCENE_NAME_WSTRING, toWString( SceneName ) );
     ser.SetAttribute( Serial::TIMELINE_TIME_VALUE_WSTRING, toWString( Time ) );
 }
 
@@ -953,6 +957,7 @@ IEventPtr                TimeLineEvent::Create          ( IDeserializer& deser )
         newEvent->Time              = stof( deser.GetAttribute( Serial::TIMELINE_TIME_VALUE_WSTRING ) );
         newEvent->TimelineCommand   = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
         newEvent->TimelineName      = toString( deser.GetAttribute( Serial::TIMELINE_NAME_WSTRING ) );
+        newEvent->SceneName         = toString( deser.GetAttribute( Serial::SCENE_NAME_WSTRING ) );
 
         return newEvent;
     }
