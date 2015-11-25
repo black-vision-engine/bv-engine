@@ -45,49 +45,12 @@ Json::Value GetParamDescription( IParameterPtr p )
 
 // ***********************
 //
-Json::Value SerializeNode( model::BasicNodePtr node )
+Json::Value SerializeSceneModel( model::SceneModelPtr sceneModel )
 {
     JsonSerializeObject ser;
-    std::static_pointer_cast< model::BasicNode >( node )->Serialize( ser );
+    sceneModel->Serialize( ser );
 
     return ser.GetJson();
-
- //   string S="";
- //   string tmp="";
- //   string children="";
- //   string plugins="";
-	//int NumChildren = (node)->GetNumChildren();
- //   S="{";
- //   S+="\"node_name\":\""+node->GetName()+"\",";
- //   
-
- //   auto pluginlist = node->GetPluginList();
-
- //   for( unsigned int i = 0; i < pluginlist->NumPlugins(); ++i )
- //   {
- //       string plugin = pluginlist->GetPlugin( i )->GetName();
- //       if(plugins!="")plugins+=",";
- //       plugins            +=  "{\"plugin_name\":\""+plugin+"\"}";
- //       
- //   }
-
- //   S+="\"node_plugins\":["+plugins+"],";
-
-
- //   for(int i=0;i<NumChildren;i++)
- //   {
-
-	//	model::IModelNodePtr ptr   = node->GetChild(i);
- //       model::IModelNodePtr ptr2    = ptr;
- //       model::BasicNodePtr nod      = std::static_pointer_cast< model::BasicNode >( ptr2 );
- //       if(children!="") children+=",";
- //       children            +=  SerializeNode(nod);
- //   }
-
- //   S+="\"node_children\":["+children+"]";
- //   S+="}";
-
- //   return S;
 }
 
 // ***********************
@@ -152,9 +115,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             for( auto s : m_appLogic->GetBVScene()->GetScenes() )
             {
                 Json::Value val;
-                val["name"] = s->m_name;
-                val["scene"] = SerializeNode( s->m_pModelSceneRoot );
-                root[ "scenes" ].append( val );
+                root[ "scenes" ].append( SerializeSceneModel( s ) );
             }
 
 
