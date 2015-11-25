@@ -56,7 +56,7 @@ struct OffscreenRenderData
 
 typedef std::vector< RenderTarget * >  RenderTargetVec;
 
-}
+} // anonymous
 
 class OffscreenRenderLogic
 {

@@ -5,7 +5,7 @@ namespace bv {
 
 // *********************************
 //
-NodeEffectRenderLogic::NodeEffectRenderLogic   ( RenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic )
+NodeEffectRenderLogic::NodeEffectRenderLogic   ( FrameRenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic )
     : m_renderLogic( renderLogic )
     , m_offscreenRenderLogic( offscreenRenderLogic )
 {
@@ -19,7 +19,7 @@ NodeEffectRenderLogic::~NodeEffectRenderLogic  ()
 
 // *********************************
 //
-RenderLogic *           NodeEffectRenderLogic::GetRenderLogic          ()
+FrameRenderLogic *      NodeEffectRenderLogic::GetRenderLogic          ()
 {
     return m_renderLogic;
 }

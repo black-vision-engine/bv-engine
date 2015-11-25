@@ -3,14 +3,14 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
-#include "Rendering/Logic/RenderLogic.h"
+#include "Rendering/Logic/FrameRendering/FrameRenderLogic.h"
 
 
 namespace bv {
 
 // *********************************
 //
-DefaultEffectRenderLogic::DefaultEffectRenderLogic  ( RenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic )
+DefaultEffectRenderLogic::DefaultEffectRenderLogic  ( FrameRenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic )
     : NodeEffectRenderLogic( renderLogic, offscreenRenderLogic )
 {
 }

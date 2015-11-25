@@ -10,7 +10,7 @@ class NodeMaskRenderLogic : public NodeEffectRenderLogic
 {
 public:
 
-                    NodeMaskRenderLogic         ( RenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic );
+                    NodeMaskRenderLogic         ( FrameRenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic );
     virtual         ~NodeMaskRenderLogic        ();
 
     virtual void    RenderNode                  ( Renderer * renderer, SceneNode * node ) override;

@@ -5,14 +5,14 @@
 
 #include "Rendering/Utils/OffscreenRenderLogic.h"
 
-#include "Rendering/Logic/RenderLogic.h"
+#include "Rendering/Logic/FrameRendering/FrameRenderLogic.h"
 
 
 namespace bv {
 
 // *********************************
 //
-NodeMaskRenderLogic::NodeMaskRenderLogic         ( RenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic )
+NodeMaskRenderLogic::NodeMaskRenderLogic         ( FrameRenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic )
     : NodeEffectRenderLogic( renderLogic, offscreenRenderLogic )
 {
 }

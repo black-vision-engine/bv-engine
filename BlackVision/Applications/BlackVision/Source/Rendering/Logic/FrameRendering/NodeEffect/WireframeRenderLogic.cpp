@@ -4,7 +4,7 @@
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
-#include "Rendering/Logic/RenderLogic.h"
+#include "Rendering/Logic/FrameRendering/FrameRenderLogic.h"
 
 #include "Engine/Graphics/Effects/WireframeEffect.h"
 
@@ -13,7 +13,7 @@ namespace bv {
 
 // *********************************
 //
-WireframeRenderLogic::WireframeRenderLogic  ( RenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic )
+WireframeRenderLogic::WireframeRenderLogic  ( FrameRenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic )
     : NodeEffectRenderLogic( renderLogic, offscreenRenderLogic )
     , m_effect( new WireframeEffect() )
 {

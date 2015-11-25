@@ -16,7 +16,7 @@ private:
 
 public:
 
-                    WireframeRenderLogic        ( RenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic );
+                    WireframeRenderLogic        ( FrameRenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic );
     virtual         ~WireframeRenderLogic       ();
 
     virtual void    RenderNode                  ( Renderer * renderer, SceneNode * node ) override;

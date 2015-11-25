@@ -5,25 +5,25 @@ namespace bv {
 class Renderer;
 class OffscreenRenderLogic;
 class SceneNode;
-class RenderLogic;
+class FrameRenderLogic;
 
 class NodeEffectRenderLogic
 {
 private:
 
-    RenderLogic *           m_renderLogic;
+    FrameRenderLogic *      m_renderLogic;
     OffscreenRenderLogic *  m_offscreenRenderLogic;
 
 public:
 
-                    NodeEffectRenderLogic   ( RenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic );
+                    NodeEffectRenderLogic   ( FrameRenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic );
     virtual         ~NodeEffectRenderLogic  ();
 
     virtual void    RenderNode              ( Renderer * renderer, SceneNode * node ) = 0;
 
 protected:
 
-    RenderLogic *           GetRenderLogic          ();
+    FrameRenderLogic *      GetRenderLogic          ();
     OffscreenRenderLogic *  GetOffscreenRenderLogic ();
 
 };

@@ -10,7 +10,7 @@ class DefaultEffectRenderLogic : public NodeEffectRenderLogic
 {
 public:
 
-                    DefaultEffectRenderLogic    ( RenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic );
+                    DefaultEffectRenderLogic    ( FrameRenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic );
     virtual         ~DefaultEffectRenderLogic   ();
 
     virtual void    RenderNode                  ( Renderer * renderer, SceneNode * node ) override;
