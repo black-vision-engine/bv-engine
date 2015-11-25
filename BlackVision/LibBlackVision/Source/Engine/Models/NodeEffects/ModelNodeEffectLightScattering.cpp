@@ -20,11 +20,23 @@ ModelNodeEffectLightScattering::ModelNodeEffectLightScattering  ( ITimeEvaluator
     m_paramNumSamples = ParametersFactory::CreateParameterFloat( "numSamples", timeEvaluator );
 
 
-    m_paramExposure->SetVal( 1.f, 0.f );
-    m_paramWeight->SetVal( 1.f, 0.f );
-    m_paramDecay->SetVal( 1.f, 0.f );
-    m_paramDensity->SetVal( 1.f, 0.f );
-    m_paramLightPositionOnScreen->SetVal( glm::vec2( 0.f, 0.f ), 0.f );
+    m_paramExposure->SetVal( 0.005f, 0.f );
+   // m_paramExposure->SetVal( 1.f, 0.f );
+    m_paramWeight->SetVal( 2.65f, 0.f );
+    //m_paramWeight->SetVal( 1.f, 5.f );
+    m_paramDecay->SetVal( 1.0f, 0.f );
+    //m_paramDecay->SetVal( 0.8f, 5.f );
+    m_paramDensity->SetVal( 0.2f, 0.f );
+
+    m_paramNumSamples->SetVal( 100000.f, 0.f );
+
+    m_paramLightPositionOnScreen->SetVal( glm::vec2( 0.1f, 0.4f ), 0.f );
+    m_paramLightPositionOnScreen->SetVal( glm::vec2( 0.4f, 0.6f ), 5.f );
+    m_paramLightPositionOnScreen->SetVal( glm::vec2( 0.5f, 0.4f ), 10.f );
+    m_paramLightPositionOnScreen->SetVal( glm::vec2( 0.4f, 0.1f ), 15.f );
+
+    m_paramLightPositionOnScreen->AccessInterpolator().SetWrapPostMethod( WrapMethod::pingPong );
+
     m_paramNumSamples->SetVal( 100.f, 0.f );
 }
 

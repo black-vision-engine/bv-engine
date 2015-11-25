@@ -314,7 +314,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGlobalEffectTest      ( model::Ti
 model::BasicNodePtr  SimpleNodesFactory::CreateLightScatteringTest      ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { timelineManager; }
-    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_01.jpg", false, 7.f, 5.f );
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/5.png", false, 3.f, 3.f );
 
      // ROOT
     auto root = bTex.CreateNode( "root", true );
