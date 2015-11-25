@@ -11,11 +11,11 @@
 
 #include "BVGL.h"
 
-#include "Rendering/Logic/NodeEffectRendering/NodeEffectRenderLogic.h"
-#include "Rendering/Logic/NodeEffectRendering/DefaultEffectRenderLogic.h"
-#include "Rendering/Logic/NodeEffectRendering/AlphaMaskRenderLogic.h"
-#include "Rendering/Logic/NodeEffectRendering/NodeMaskRenderLogic.h"
-#include "Rendering/Logic/NodeEffectRendering/WireframeRenderLogic.h"
+#include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
+#include "Rendering/Logic/FrameRendering/NodeEffect/DefaultEffectRenderLogic.h"
+#include "Rendering/Logic/FrameRendering/NodeEffect/AlphaMaskRenderLogic.h"
+#include "Rendering/Logic/FrameRendering/NodeEffect/NodeMaskRenderLogic.h"
+#include "Rendering/Logic/FrameRendering/NodeEffect/WireframeRenderLogic.h"
 
 #include "Rendering/Logic/VideoOutputRendering/DefaultVideoOutputRenderLogic.h"
 

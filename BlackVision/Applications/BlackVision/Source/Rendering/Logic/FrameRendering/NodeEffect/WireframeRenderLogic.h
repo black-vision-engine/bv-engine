@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "Rendering/Logic/NodeEffectRendering/NodeEffectRenderLogic.h"
+#include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
 
 
 namespace bv {

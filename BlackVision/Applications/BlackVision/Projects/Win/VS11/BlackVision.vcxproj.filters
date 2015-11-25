@@ -34,14 +34,14 @@
     <Filter Include="Rendering\Logic">
       <UniqueIdentifier>{f1ca2f90-831f-4cb3-8ecc-247f7d455325}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Rendering\Logic\NodeEffectRendering">
-      <UniqueIdentifier>{779e4a57-6fa2-46f1-bba2-31541f4a8920}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Rendering\Logic\VideoOutputRendering">
       <UniqueIdentifier>{b3d9d3ab-1a17-4f23-988d-1ed9c94ee73c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Rendering\Logic\FrameRendering">
       <UniqueIdentifier>{f2027b4b-e7e2-4beb-8fa7-7e9747d8d705}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Logic\FrameRendering\NodeEffect">
+      <UniqueIdentifier>{77a0dacd-e2f0-415a-bbf3-02b686401e90}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -114,18 +114,6 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogic.cpp">
       <Filter>Rendering\Logic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\AlphaMaskRenderLogic.cpp">
-      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeMaskRenderLogic.cpp">
-      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeEffectRenderLogic.cpp">
-      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\DefaultEffectRenderLogic.cpp">
-      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.cpp">
       <Filter>TestAI</Filter>
     </ClCompile>
@@ -138,9 +126,6 @@
     <ClCompile Include="..\..\..\Source\TestAI\TestAnimationKeyboardHandler.cpp">
       <Filter>TestAI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.cpp">
-      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.cpp">
       <Filter>Rendering\Logic\VideoOutputRendering</Filter>
     </ClCompile>
@@ -149,6 +134,21 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\PostFrameRenderLogic.cpp">
       <Filter>Rendering\Logic\FrameRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\AlphaMaskRenderLogic.cpp">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\DefaultEffectRenderLogic.cpp">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\NodeEffectRenderLogic.cpp">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\NodeMaskRenderLogic.cpp">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\WireframeRenderLogic.cpp">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -226,18 +226,6 @@
     <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogic.h">
       <Filter>Rendering\Logic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\AlphaMaskRenderLogic.h">
-      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeMaskRenderLogic.h">
-      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeEffectRenderLogic.h">
-      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\DefaultEffectRenderLogic.h">
-      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.h">
       <Filter>TestAI</Filter>
     </ClInclude>
@@ -250,9 +238,6 @@
     <ClInclude Include="..\..\..\Source\TestAI\TestAnimationKeyboardHandler.h">
       <Filter>TestAI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.h">
-      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.h">
       <Filter>Rendering\Logic\VideoOutputRendering</Filter>
     </ClInclude>
@@ -261,6 +246,21 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\PostFrameRenderLogic.h">
       <Filter>Rendering\Logic\FrameRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\AlphaMaskRenderLogic.h">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\DefaultEffectRenderLogic.h">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\NodeEffectRenderLogic.h">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\NodeMaskRenderLogic.h">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\WireframeRenderLogic.h">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
