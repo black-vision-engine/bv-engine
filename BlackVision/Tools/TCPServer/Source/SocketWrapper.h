@@ -8,6 +8,9 @@
 #include <stdio.h>
 #include <vector>
 
+
+#include "DataTypes/QueueConcurrent.h"
+
 #include "../../Applications/BlackVision/Source/EndUserAPI/IEventServer.h"
 
 
@@ -18,13 +21,20 @@
 namespace bv
 {
 
+struct InitData
+{
+    unsigned int    SeverityLevel;
+    unsigned int    LogModules;
+};
+
 class SocketWrapper : public IEventServer
 {
 private:
     static QueueEventCallback           SendCommandCallback;
     static std::vector<ResponseMsg>     Responses;
 
-	int m_nLinkMode;
+    std::vector<QueueConcurrent<ResponseMsg> >        m_responseQueues;
+
     int m_port;
 
 private:
@@ -39,7 +49,8 @@ public:
 	static DWORD WINAPI     SocketHandler       (void*);
 	static DWORD WINAPI     SocketInitHandler   (void*);
 
-    static void             AddMsg              ( ResponseMsg msg){Responses.push_back( msg );}     ///@deprecated @todo Wywaliæ jak ju¿ zniknie RemoteControlInterface
+    static InitData         InitCommunication   ( SOCKET socketID );
+    static bool             Authorization       ( SOCKET socketID );
 
     bool        InitializeServer        ( const QueueEventCallback& callback, int port ) override;
     void        SendResponse            ( ResponseMsg& message ) override;

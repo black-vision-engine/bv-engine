@@ -337,6 +337,35 @@ namespace ProfilerEditor
 			m_BlackVisionProcess.Start();
 		}
 
+
+        private uint GetSeverityLevel()
+        {
+            return (uint)SeverityLevelsCombobox.SelectedIndex;
+        }
+
+        private uint GetModuleFilter()
+        {
+            return 0xFFFFFFFF;
+        }
+
+        private void OnConnect()
+        {
+            SeverityLevelsCombobox.IsEnabled = false;
+            ModulesListView.IsEnabled = false;
+
+            NetStatusLabel.Content = "Connected";
+            m_connected = true;
+        }
+
+        private void OnDisconnect()
+        {
+            SeverityLevelsCombobox.IsEnabled = true;
+            ModulesListView.IsEnabled = true;
+
+            NetStatusLabel.Content = "Disconnected";
+            m_connected = false;
+        }
+
         private void ConnectButton_Click( object sender, RoutedEventArgs e )
         {
             try
@@ -347,13 +376,32 @@ namespace ProfilerEditor
 
                 m_networkStream = m_tcpClient.GetStream();
 
-                NetStatusLabel.Content = "Connected";
-                m_connected = true;
+                byte[] initMessage = new byte[ 8 ];
+
+                uint severityLevel = GetSeverityLevel();
+                uint modulesFilter = GetModuleFilter();
+                byte[] severity = BitConverter.GetBytes( severityLevel );
+                byte[] modules = BitConverter.GetBytes( modulesFilter );
+
+                if( BitConverter.IsLittleEndian )
+                {
+                    Array.Reverse( severity );
+                    Array.Reverse( modules );
+                }
+
+                severity.CopyTo( initMessage, 0 );
+                modules.CopyTo( initMessage, 4 );
+
+
+                m_networkStream.Write( initMessage, 0, initMessage.Length );
+                m_networkStream.Flush();
+
+                OnConnect();
             }
             catch ( SocketException except )
             {
                 NetStatusLabel.Content = "Socket exception " + except.ToString();
-                m_connected = false;
+                OnDisconnect();
             }
         }
 
@@ -363,8 +411,8 @@ namespace ProfilerEditor
             {
                 m_networkStream.Close();
                 m_tcpClient.Close();
-                NetStatusLabel.Content = "Disconnected";
-                m_connected = false;
+
+                OnDisconnect();
             }
         }
 

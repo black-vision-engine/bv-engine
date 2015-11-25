@@ -4,9 +4,13 @@
     <ClInclude Include="..\..\..\Source\SocketWrapper.h" />
     <ClInclude Include="..\..\..\Source\LogTCP.h" />
     <ClInclude Include="..\..\..\Source\UseLogger.h" />
+    <ClInclude Include="..\..\..\Source\SocketServer.h" />
+    <ClInclude Include="..\..\..\Source\SocketClient.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\SocketWrapper.cpp" />
     <ClCompile Include="..\..\..\Source\LogTCP.cpp" />
+    <ClCompile Include="..\..\..\Source\SocketServer.cpp" />
+    <ClCompile Include="..\..\..\Source\SocketClient.cpp" />
   </ItemGroup>
 </Project>

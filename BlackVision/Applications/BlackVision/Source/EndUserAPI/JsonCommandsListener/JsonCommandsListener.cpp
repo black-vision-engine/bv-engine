@@ -125,11 +125,11 @@ bool JsonCommandsListener::InitializeServer    ( int port )
 
 // ***********************
 //
-bool JsonCommandsListener::InitializeRemoteLog ( const std::string& address, unsigned short port, SeverityLevel minLevel, int modules )
+bool JsonCommandsListener::InitializeRemoteLog ( const std::string& /*address*/, unsigned short /*port*/, SeverityLevel /*minLevel*/, int /*modules*/ )
 {
-    QueueConcurrent<LogMsg>& queue = Logger::GetLogger().AddLogQueue( minLevel, modules );
-    m_remoteLog = new LogTCP( queue );
-    m_remoteLog->Initialize( address, port );
+    //QueueConcurrent<LogMsg>& queue = Logger::GetLogger().AddLogQueue( minLevel, modules );
+    //m_remoteLog = new LogTCP( queue );
+    //m_remoteLog->Initialize( address, port );
 
     return true;
 }

@@ -180,7 +180,7 @@ void LogTCP::MainThread()
         Sleep(50);
 
         LogMsg logMsg;
-        if( !m_queue.TryPop( logMsg ) )
+        if( m_queue.TryPop( logMsg ) )
         {
             if( !m_validConnection ) continue;      // We've got here only to empty queue.
 

@@ -1,10 +1,13 @@
 #pragma warning(disable :4996)
 #include <codecvt>
-#include<locale>
+#include <locale>
 #include "SocketWrapper.h"
 #include <math.h>
+#include <thread>
 
 #include "UseLogger.h"
+
+#include "Engine/Events/EventHelpers.h"
 
 #include <iostream>
 #pragma comment(lib, "Ws2_32.lib")
@@ -12,10 +15,10 @@
 namespace bv{
 	
 
-    IEventServer* IEventServer::CreateServerObject  ()
-    {
-        return new SocketWrapper();
-    }
+    //IEventServer* IEventServer::CreateServerObject  ()
+    //{
+    //    return new SocketWrapper();
+    //}
 
 	//DWORD WINAPI SocketHandler(void*);
     std::vector<ResponseMsg> SocketWrapper::Responses;
@@ -119,7 +122,9 @@ namespace bv{
             if((*csock = accept( hsock, (SOCKADDR*)&sadr, &addr_size))!= INVALID_SOCKET ){
                 printf("Received connection from %s\n",inet_ntoa(sadr.sin_addr));
                 LOG_MESSAGE( SeverityLevel::info ) << "Client connected: " + std::string( inet_ntoa( sadr.sin_addr ) );
-                CreateThread(0,0,SocketHandler, (void*)csock , 0,0);
+                //CreateThread(0,0,SocketHandler, (void*)csock , 0,0);
+                std::thread client = std::thread( SocketHandler, (void*)csock );
+                client.detach();
             }
             else
             {
@@ -127,6 +132,8 @@ namespace bv{
             }
         }
     }
+
+
 	DWORD SocketWrapper::SocketInitHandler(void *lp)
 	{
         SocketWrapper *myObj = (SocketWrapper*)lp;
@@ -145,6 +152,42 @@ namespace bv{
 		return elems;
 	}
 
+
+    InitData SocketWrapper::InitCommunication   ( SOCKET socketID )
+    {
+        InitData data;
+		data.LogModules = 0;        // Don't use logger
+        data.SeverityLevel = 0;     // Doesn't matter
+
+        int bytesCount = 0;
+
+
+        while( bytesCount < 8 )
+        {
+		    if( ( bytesCount = recv( socketID, (char*)&data, sizeof( InitData ), 0 ) ) == SOCKET_ERROR )
+            {
+                int error = WSAGetLastError();
+                if (error == WSAEWOULDBLOCK)
+                {  // currently no data available
+                    Sleep(50);  // wait and try again
+                    continue;
+                }
+
+                return data;
+		    }
+        }
+        
+        data.LogModules = ntohl( data.LogModules );
+        data.SeverityLevel = ntohl( data.SeverityLevel );
+
+        return data;
+    }
+
+    bool SocketWrapper::Authorization       ( SOCKET /*socketID*/ )
+    {
+        // Make real authorization here in future.
+        return true;
+    }
 
     /**
  * Convert a Windows wide string to a UTF-8 (multi-byte) string.
@@ -171,12 +214,50 @@ namespace bv{
 		const char END_TRANSMISSION = 0x03;
        
         // non blocking sockets, bitch!
-        u_long iMode=1;
-        ioctlsocket(*csock,FIONBIO,&iMode);
+        u_long iMode = 1;
+        ioctlsocket( *csock, FIONBIO, &iMode );
+
+        InitData initData = InitCommunication( *csock );
+
+        if( !Authorization( *csock ) )
+            return 0;
+
+        QueueConcurrent<bv::LogMsg>* logQueue = nullptr;
+        int logID = 0;
+        if( initData.LogModules )
+            logQueue = &bv::Logger::GetLogger().AddLogQueue( logID, (SeverityLevel)initData.SeverityLevel, initData.LogModules );
 
 		for(;;)
 		{
 			//sending
+            
+            
+            if( initData.LogModules )
+            {
+                LogMsg logMsg;
+                while( logQueue->TryPop( logMsg ) )
+                {
+                    ResponseMsg response;
+                    response.message = toWString( "[" + logMsg.severity + "][" + logMsg.module + "]" + logMsg.message + "\n" );
+                    response.socketID = (int)*csock;
+
+                    Responses.push_back( std::move( response ) );
+
+					//char CHAR_BEGIN = 0x02;
+					//char CHAR_END = 0x03;
+     //               std::string toSend = CHAR_BEGIN + "[" + logMsg.severity + "][" + logMsg.module.c_str() + "]" + logMsg.message + "\n" + CHAR_END;
+
+     //               // send the data
+     //               int bufferSent = 0;
+     //               size_t bufferSize = toSend.size();
+     //               while (bufferSent < (int) bufferSize )
+					//{
+     //                   int sent_size = send(*csock, toSend.c_str() + bufferSent, (int)bufferSize - bufferSent, 0);
+     //                   bufferSent += sent_size;
+     //               }
+                }
+            }
+
 
             if(Responses.size()>0)
             {
@@ -187,8 +268,7 @@ namespace bv{
                     if( Responses[i].socketID == (int) *csock && Responses[i].sent == false )
                     {
                         printf("Sock id %d zgadza siê!\n",*csock);
-                        
-                        printf("Sock id %d zgadza siê!\n",*csock);
+
 						wchar_t CHAR_BEGIN = 0x02;
 						wchar_t CHAR_END = 0x03;
                         std::wstring to_send = CHAR_BEGIN+Responses[i].message+CHAR_END;
@@ -220,9 +300,11 @@ namespace bv{
             //printf("malpka1\n");
 
 
-			if((bytecount = recv(*csock, (char*) buffer, buffer_len, 0))==SOCKET_ERROR){
+			if((bytecount = recv(*csock, (char*) buffer, buffer_len, 0))==SOCKET_ERROR)
+            {
                 int ierr= WSAGetLastError();
-                 if (ierr==WSAEWOULDBLOCK) {  // currently no data available
+                 if (ierr==WSAEWOULDBLOCK)
+                 {  // currently no data available
                     Sleep(50);  // wait and try again
                     continue; 
                  }
@@ -238,7 +320,8 @@ namespace bv{
 
 			if(bytecount>0)
 				;//printf("[Received] \"%s\"\n", buffer);
-			else if(bytecount==0){
+			else if(bytecount==0)
+            {
 				printf("[client disconnected]\n");
 				closesocket(*csock);
 				return 0;
