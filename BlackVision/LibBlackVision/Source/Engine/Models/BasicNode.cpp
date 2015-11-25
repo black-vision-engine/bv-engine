@@ -90,7 +90,7 @@ void                            BasicNode::Serialize               ( ISerializer
 
     ser.SetAttribute( "visible", m_visible ? "true" : "false" );
 
-    ser.EnterChild( "plugins" );
+    ser.EnterArray( "plugins" );
         for( unsigned int  i = 0; i < m_pluginList->NumPlugins(); i++ )
         {
             auto plugin_ = m_pluginList->GetPlugin( i );
