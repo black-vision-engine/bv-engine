@@ -3,7 +3,7 @@
 #include "SocketClient.h"
 #include "Threading/CriticalSection.h"
 
-#include <unordered_map>
+#include <map>
 #include <memory>
 
 
@@ -20,8 +20,8 @@ private:
     QueueEventCallback      m_sendCommandCallback;
     int                     m_port;
     
-    static std::unordered_map<SOCKET, SocketClientPtr>     clientsMap;
-    static CriticalSection                                 clientsCriticalSection;
+    static std::map<SOCKET, SocketClientPtr>    clientsMap;
+    static CriticalSection                      clientsCriticalSection;
 
 public:
     SocketServer();
@@ -31,6 +31,9 @@ public:
     void        SendResponse            ( ResponseMsg& message ) override;
 
     void        WaitForConnection       ();
+
+private:
+    void        RemoveUnusedClients     ();
 };
 
 

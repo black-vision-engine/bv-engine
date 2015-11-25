@@ -17,6 +17,7 @@ SocketClient::SocketClient( SOCKET socketID, QueueEventCallback callback )
 {
     m_logQueue = nullptr;
     m_logID = 0;
+    m_state = SocketClientState::SCS_Uninitialized;
 }
 
 // ***********************
@@ -25,11 +26,13 @@ SocketClient::~SocketClient()
 {}
 
 // ***********************
-//
+// Always return after this function.
 void SocketClient::OnEndMainThread()
 {
     bv::Logger::GetLogger().RemoveLog( m_logID );
     m_logQueue = nullptr;
+
+    m_state = SocketClientState::SCS_Ended;
 }
 
 // ***********************
@@ -60,6 +63,8 @@ void SocketClient::MainThread()
 
     if( initData.LogModules )
         m_logQueue = &bv::Logger::GetLogger().AddLogQueue( m_logID, (SeverityLevel)initData.SeverityLevel, initData.LogModules );
+
+    m_state = SocketClientState::SCS_Running;
 
 	for(;;)
 	{
@@ -115,12 +120,12 @@ void SocketClient::MainThread()
             }
 
             LOG_MESSAGE( SeverityLevel::error ) << "Error receiving data: " << ierr <<". Closing socket...";
-            
-            OnEndMainThread();
 
             Sleep(50);
-            //free(csock);
+            closesocket( m_socketID );
             Sleep(50);
+
+            OnEndMainThread();
             return;
 		}
 
@@ -158,8 +163,6 @@ void SocketClient::MainThread()
 			
 		memset(buffer, 0, buffer_len);
 	}
-
-    //OnEndMainThread();
 }
 
 // ***********************

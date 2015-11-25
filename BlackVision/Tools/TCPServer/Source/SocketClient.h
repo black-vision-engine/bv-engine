@@ -16,6 +16,14 @@ struct InitData
     unsigned int    LogModules;
 };
 
+
+enum SocketClientState
+{
+    SCS_Uninitialized,
+    SCS_Running,
+    SCS_Ended
+};
+
 class SocketClient
 {
 private:
@@ -26,6 +34,8 @@ private:
 
     QueueConcurrent<LogMsg>*        m_logQueue;
     int                             m_logID;
+
+    SocketClientState               m_state;
 public:
     SocketClient( SOCKET socketID, QueueEventCallback callback );
     ~SocketClient();
@@ -33,6 +43,7 @@ public:
     void            QueueResponse       ( ResponseMsg&& message );
     void            MainThread          ();
 
+    SocketClientState   GetState        ()      { return m_state; }
 private:
     InitData        InitCommunication   ( SOCKET socketID );
     bool            Authorization       ( SOCKET socketID );

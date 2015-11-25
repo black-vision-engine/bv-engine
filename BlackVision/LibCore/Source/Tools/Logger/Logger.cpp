@@ -245,12 +245,12 @@ int AddNewSink( boost::shared_ptr< boost::log::sinks::sink > newSink )
     int newSinkId;
     {
         ScopedCriticalSection lock( sinksLock );
-        globalSinksMap.insert( std::make_pair( sinkID++, newSink ) );
         newSinkId = sinkID;
+        globalSinksMap.insert( std::make_pair( sinkID++, newSink ) );
     }
 
 	boost::log::core::get()->add_sink( newSink );
-    return sinkID;
+    return newSinkId;
 }
 
 // ***********************

@@ -13,7 +13,7 @@
 namespace bv
 {
 
-std::unordered_map<SOCKET, SocketClientPtr>     SocketServer::clientsMap;
+std::map<SOCKET, SocketClientPtr>               SocketServer::clientsMap;
 CriticalSection                                 SocketServer::clientsCriticalSection;
 
 
@@ -129,6 +129,24 @@ void SocketServer::WaitForConnection       ()
         {
             LOG_MESSAGE( SeverityLevel::error ) <<"Error accepting client " << WSAGetLastError();
         }
+
+        RemoveUnusedClients();
+    }
+}
+
+// ***********************
+//
+void SocketServer::RemoveUnusedClients     ()
+{
+    ScopedCriticalSection lock( clientsCriticalSection );
+
+    auto iterator = clientsMap.begin();
+    while( iterator != clientsMap.end() )
+    {
+        if( iterator->second->GetState() == SocketClientState::SCS_Ended )
+            iterator = clientsMap.erase( iterator );
+        else
+            ++iterator;
     }
 }
 
