@@ -40,6 +40,9 @@
     <Filter Include="Rendering\Logic\VideoOutputRendering">
       <UniqueIdentifier>{b3d9d3ab-1a17-4f23-988d-1ed9c94ee73c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering\Logic\FrameRendering">
+      <UniqueIdentifier>{f2027b4b-e7e2-4beb-8fa7-7e9747d8d705}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -140,6 +143,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.cpp">
       <Filter>Rendering\Logic\VideoOutputRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\FrameRenderLogic.cpp">
+      <Filter>Rendering\Logic\FrameRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\PostFrameRenderLogic.cpp">
+      <Filter>Rendering\Logic\FrameRendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -246,6 +255,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.h">
       <Filter>Rendering\Logic\VideoOutputRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\FrameRenderLogic.h">
+      <Filter>Rendering\Logic\FrameRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\PostFrameRenderLogic.h">
+      <Filter>Rendering\Logic\FrameRendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
