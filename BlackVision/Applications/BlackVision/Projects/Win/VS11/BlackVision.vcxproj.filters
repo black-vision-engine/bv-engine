@@ -43,6 +43,9 @@
     <Filter Include="Rendering\Logic\FrameRendering\NodeEffect">
       <UniqueIdentifier>{77a0dacd-e2f0-415a-bbf3-02b686401e90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering\Utils">
+      <UniqueIdentifier>{4d2c2449-8f44-49bc-b3eb-1c514447afc6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -64,9 +67,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\MockFonts\FTTester.cpp">
       <Filter>MockFonts</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\OffscreenRenderLogic.cpp">
-      <Filter>Rendering</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\TestAI\AICommands.cpp">
       <Filter>TestAI</Filter>
@@ -150,6 +150,9 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\WireframeRenderLogic.cpp">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogic.cpp">
+      <Filter>Rendering\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -170,9 +173,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\MockFonts\FTTester.h">
       <Filter>MockFonts</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\OffscreenRenderLogic.h">
-      <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\TestAI\AICommands.h">
       <Filter>TestAI</Filter>
@@ -261,6 +261,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\WireframeRenderLogic.h">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogic.h">
+      <Filter>Rendering\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

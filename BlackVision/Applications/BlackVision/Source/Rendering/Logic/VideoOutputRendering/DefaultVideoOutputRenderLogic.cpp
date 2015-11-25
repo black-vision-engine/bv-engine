@@ -1,7 +1,7 @@
 #include "DefaultVideoOutputRenderLogic.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
-#include "Rendering/OffscreenRenderLogic.h"
+#include "Rendering/Utils/OffscreenRenderLogic.h"
 
 
 namespace bv {

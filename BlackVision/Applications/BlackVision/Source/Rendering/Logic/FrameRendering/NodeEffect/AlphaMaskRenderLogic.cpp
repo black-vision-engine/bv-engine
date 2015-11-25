@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
-#include "Rendering/OffscreenRenderLogic.h"
+#include "Rendering/Utils/OffscreenRenderLogic.h"
 
 #include "Rendering/Logic/RenderLogic.h"
 

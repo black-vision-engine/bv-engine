@@ -6,7 +6,7 @@
 
 #include "Tools/Profiler/HerarchicalProfiler.h"
 
-#include "Rendering/OffscreenRenderLogic.h"
+#include "Rendering/Utils/OffscreenRenderLogic.h"
 #include "BVConfig.h"
 
 #include "BVGL.h"

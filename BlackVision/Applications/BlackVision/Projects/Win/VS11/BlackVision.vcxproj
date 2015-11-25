@@ -135,7 +135,7 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\PostFrameRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.cpp" />
-    <ClCompile Include="..\..\..\Source\Rendering\OffscreenRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\StatsFormatters.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\AICommands.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestAI.cpp" />
@@ -181,7 +181,7 @@
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\PostFrameRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.h" />
-    <ClInclude Include="..\..\..\Source\Rendering\OffscreenRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\StatsFormatters.h" />
     <ClInclude Include="..\..\..\Source\TestAI\AICommands.h" />
     <ClInclude Include="..\..\..\Source\TestAI\IAICommand.h" />
