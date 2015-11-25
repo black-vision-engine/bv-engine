@@ -27,6 +27,7 @@ public:
 	void						Load                ( std::istream& stream );
 
     std::string                 GetAttribute        ( const std::string& name ) const override;
+    std::string                 GetParentAttribute  ( const std::string& parentName, const std::string& attName ) const override;
 
     bool						EnterChild          ( const std::string& name ) const override;
 	bool						ExitChild           () const override;
@@ -34,6 +35,7 @@ public:
     bool                        NextChild           () const override;
 
     std::wstring	        	GetAttribute        ( const std::wstring& name ) const override;
+    std::wstring	        	GetParentAttribute  ( const std::wstring& parentName, const std::wstring& attName ) const override;
     bool                        EnterChild          ( const std::wstring& name ) const override;
 };
 

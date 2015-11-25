@@ -61,6 +61,14 @@ std::string JsonDeserializeObject::GetAttribute        ( const std::string& name
 
 // ***********************
 //
+std::string JsonDeserializeObject::GetParentAttribute        ( const std::string& /*parentName*/, const std::string& /*attName*/ ) const
+{
+    assert( !"FIXME" ); return "";
+}
+
+
+// ***********************
+//
 bool JsonDeserializeObject::EnterChild          ( const std::string& name ) const
 {
 	m_nodeStack.push( m_currentNode );
@@ -133,6 +141,9 @@ bool JsonDeserializeObject::NextChild           () const
 }
 
 std::wstring        JsonDeserializeObject::GetAttribute        ( const std::wstring& /*name*/ ) const
+{    assert( !"This serializer doesn't supports wstrings" ); return L"";    }
+
+std::wstring        JsonDeserializeObject::GetParentAttribute	( const std::wstring& /*parentName*/, const std::wstring& /*attName*/ ) const
 {    assert( !"This serializer doesn't supports wstrings" ); return L"";    }
 
 bool                JsonDeserializeObject::EnterChild          ( const std::wstring& /*name*/ ) const
