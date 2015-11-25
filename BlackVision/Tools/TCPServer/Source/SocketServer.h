@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SocketClient.h"
+#include "SocketConnection.h"
 #include "Threading/CriticalSection.h"
 
 #include <map>
@@ -20,8 +20,8 @@ private:
     QueueEventCallback      m_sendCommandCallback;
     int                     m_port;
     
-    static std::map<SOCKET, SocketClientPtr>    clientsMap;
-    static CriticalSection                      clientsCriticalSection;
+    static std::map<SOCKET, SocketConnectionPtr>    clientsMap;
+    static CriticalSection                          clientsCriticalSection;
 
 public:
     SocketServer();

@@ -13,7 +13,7 @@
 namespace bv
 {
 
-std::map<SOCKET, SocketClientPtr>               SocketServer::clientsMap;
+std::map<SOCKET, SocketConnectionPtr>               SocketServer::clientsMap;
 CriticalSection                                 SocketServer::clientsCriticalSection;
 
 
@@ -113,14 +113,14 @@ void SocketServer::WaitForConnection       ()
     {
         if( ( socketID = accept( hsock, (SOCKADDR*)&sadr, &addr_size) )!= INVALID_SOCKET )
         {
-            SocketClientPtr newClient = std::make_shared<SocketClient>( socketID, m_sendCommandCallback );
+            SocketConnectionPtr newClient = std::make_shared<SocketConnection>( socketID, m_sendCommandCallback );
 
             {
                 ScopedCriticalSection lock( clientsCriticalSection );
                 clientsMap.insert( std::make_pair( socketID, newClient ) );
             }
 
-            std::thread clientThread = std::thread( &SocketClient::MainThread, newClient.get() );
+            std::thread clientThread = std::thread( &SocketConnection::MainThread, newClient.get() );
             clientThread.detach();
 
             LOG_MESSAGE( SeverityLevel::info ) << "Client connected: " + std::string( inet_ntoa( sadr.sin_addr ) );
@@ -143,7 +143,7 @@ void SocketServer::RemoveUnusedClients     ()
     auto iterator = clientsMap.begin();
     while( iterator != clientsMap.end() )
     {
-        if( iterator->second->GetState() == SocketClientState::SCS_Ended )
+        if( iterator->second->GetState() == SocketConnectionState::SCS_Ended )
             iterator = clientsMap.erase( iterator );
         else
             ++iterator;

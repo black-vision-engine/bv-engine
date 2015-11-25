@@ -25,7 +25,6 @@ public:
 
     void                QueueEvent          ( const std::wstring& eventString, int socketID ) override;
     bool                InitializeServer    ( int port ) override;
-    bool                InitializeRemoteLog ( const std::string& address, unsigned short port, SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF ) override;
     void                SendResponse        ( const IEventPtr response ) override;
 
 private:

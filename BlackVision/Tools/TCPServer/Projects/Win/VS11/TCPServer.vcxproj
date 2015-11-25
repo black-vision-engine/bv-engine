@@ -20,14 +20,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\LogTCP.h" />
-    <ClInclude Include="..\..\..\Source\SocketClient.h" />
+    <ClInclude Include="..\..\..\Source\SocketConnection.h" />
     <ClInclude Include="..\..\..\Source\SocketServer.h" />
     <ClInclude Include="..\..\..\Source\SocketWrapper.h" />
     <ClInclude Include="..\..\..\Source\UseLogger.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\LogTCP.cpp" />
-    <ClCompile Include="..\..\..\Source\SocketClient.cpp" />
+    <ClCompile Include="..\..\..\Source\SocketConnection.cpp" />
     <ClCompile Include="..\..\..\Source\SocketServer.cpp" />
     <ClCompile Include="..\..\..\Source\SocketWrapper.cpp" />
   </ItemGroup>

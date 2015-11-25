@@ -1,4 +1,4 @@
-#include "SocketClient.h"
+#include "SocketConnection.h"
 
 #include "UseLogger.h"
 #include "Engine/Events/EventHelpers.h"
@@ -11,33 +11,33 @@ namespace bv
 {
 // ***********************
 //
-SocketClient::SocketClient( SOCKET socketID, QueueEventCallback callback )
+SocketConnection::SocketConnection( SOCKET socketID, QueueEventCallback callback )
     :   m_socketID( socketID ),
         m_sendCommandCallback( callback )
 {
     m_logQueue = nullptr;
     m_logID = 0;
-    m_state = SocketClientState::SCS_Uninitialized;
+    m_state = SocketConnectionState::SCS_Uninitialized;
 }
 
 // ***********************
 //
-SocketClient::~SocketClient()
+SocketConnection::~SocketConnection()
 {}
 
 // ***********************
 // Always return after this function.
-void SocketClient::OnEndMainThread()
+void SocketConnection::OnEndMainThread()
 {
     bv::Logger::GetLogger().RemoveLog( m_logID );
     m_logQueue = nullptr;
 
-    m_state = SocketClientState::SCS_Ended;
+    m_state = SocketConnectionState::SCS_Ended;
 }
 
 // ***********************
 //
-void SocketClient::MainThread()
+void SocketConnection::MainThread()
 {
 	char buffer[1024];
 	int buffer_len = 512;
@@ -64,7 +64,7 @@ void SocketClient::MainThread()
     if( initData.LogModules )
         m_logQueue = &bv::Logger::GetLogger().AddLogQueue( m_logID, (SeverityLevel)initData.SeverityLevel, initData.LogModules );
 
-    m_state = SocketClientState::SCS_Running;
+    m_state = SocketConnectionState::SCS_Running;
 
 	for(;;)
 	{
@@ -135,8 +135,8 @@ void SocketClient::MainThread()
         {
 			LOG_MESSAGE( SeverityLevel::info ) << "Client disconnected";
 			closesocket( m_socketID );
-            OnEndMainThread();
 
+            OnEndMainThread();
 			return;
 		}
 
@@ -167,7 +167,7 @@ void SocketClient::MainThread()
 
 // ***********************
 //
-InitData SocketClient::InitCommunication   ( SOCKET socketID )
+InitData SocketConnection::InitCommunication   ( SOCKET socketID )
 {
     InitData data;
 	data.LogModules = 0;        // Don't use logger
@@ -199,13 +199,13 @@ InitData SocketClient::InitCommunication   ( SOCKET socketID )
 
 // ***********************
 //
-bool SocketClient::Authorization       ( SOCKET /*socketID*/ )
+bool SocketConnection::Authorization       ( SOCKET /*socketID*/ )
 {
     // Make real authorization here in future.
     return true;
 }
 
-void SocketClient::QueueResponse       ( ResponseMsg&& message )
+void SocketConnection::QueueResponse       ( ResponseMsg&& message )
 {
     m_responseQueue.Push( message );
 }

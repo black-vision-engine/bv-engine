@@ -477,16 +477,6 @@ void                            BVAppLogic::InitializeRemoteCommunication()
     m_remoteHandlers->InitializeHandlers( this );
 
     unsigned int editorPort = ConfigManager::GetInt( "Network/SocketServer/Port" );
-    bool useRemoteLog = ConfigManager::GetBool( "Network/RemoteLog/Use" );
-
-    if( useRemoteLog )
-    {
-        unsigned int remoteLogPort = ConfigManager::GetInt( "Network/RemoteLog/Port" );
-        std::string remoteLogIP = ConfigManager::GetString( "Network/RemoteLog/IP" );
-
-        m_remoteController->InitializeRemoteLog( remoteLogIP, static_cast<unsigned short>( remoteLogPort ), SeverityLevel::info );
-    }
-    
     m_remoteController->InitializeServer( editorPort );
 }
 

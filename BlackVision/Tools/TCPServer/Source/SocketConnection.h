@@ -17,14 +17,14 @@ struct InitData
 };
 
 
-enum SocketClientState
+enum SocketConnectionState
 {
     SCS_Uninitialized,
     SCS_Running,
     SCS_Ended
 };
 
-class SocketClient
+class SocketConnection
 {
 private:
     QueueConcurrent<ResponseMsg>    m_responseQueue;
@@ -35,15 +35,15 @@ private:
     QueueConcurrent<LogMsg>*        m_logQueue;
     int                             m_logID;
 
-    SocketClientState               m_state;
+    SocketConnectionState           m_state;
 public:
-    SocketClient( SOCKET socketID, QueueEventCallback callback );
-    ~SocketClient();
+    SocketConnection( SOCKET socketID, QueueEventCallback callback );
+    ~SocketConnection();
 
     void            QueueResponse       ( ResponseMsg&& message );
     void            MainThread          ();
 
-    SocketClientState   GetState        ()      { return m_state; }
+    SocketConnectionState   GetState    ()      { return m_state; }
 private:
     InitData        InitCommunication   ( SOCKET socketID );
     bool            Authorization       ( SOCKET socketID );
@@ -51,7 +51,7 @@ private:
     void            OnEndMainThread     ();
 };
 
-DEFINE_PTR_TYPE( SocketClient );
+DEFINE_PTR_TYPE( SocketConnection );
 
 
 } //bv
