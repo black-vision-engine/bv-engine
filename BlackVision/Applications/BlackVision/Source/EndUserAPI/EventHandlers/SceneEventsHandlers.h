@@ -15,6 +15,7 @@ public:
     ~SceneEventsHandlers();
 
     void        NodeStructure       ( bv::IEventPtr evt );
+    void        PluginStructure     ( bv::IEventPtr evt );
     void        ProjectStructure    ( bv::IEventPtr evt );
     void        TimelineHandler     ( bv::IEventPtr evt );
     void        WidgetHandler       ( bv::IEventPtr evt );
@@ -22,6 +23,10 @@ public:
 	void        OnNodeAppearing     ( IEventPtr evt );
 	void        OnNodeLeaving       ( IEventPtr evt );
 	void        OnNoMoreNodes       ( IEventPtr evt );
+
+private:
+    bv::model::IModelNodePtr    GetNode     ( const std::string& sceneName, const std::string& nodeName );
+    bv::model::IModelNodePtr    GetRootNode ( const std::string& sceneName );
 };
 
 
