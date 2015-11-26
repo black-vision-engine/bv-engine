@@ -17,7 +17,7 @@ namespace bv
 {
 
 class SimpleTimer;
-class FrameRenderLogic;
+class RenderLogic;
 class Renderer;
 
 enum class BVAppState : int
@@ -45,8 +45,8 @@ private:
     BVScenePtr                      m_bvScene;
 
     Renderer *                      m_renderer;
-    //RenderLogic *                   m_renderLogic;
-    FrameRenderLogic *              m_renderLogic;
+    RenderLogic *                   m_renderLogic;
+    //FrameRenderLogic *              m_renderLogic;
     TestKeyboardHandler *           m_kbdHandler;
 
     unsigned long                   m_startTime;
