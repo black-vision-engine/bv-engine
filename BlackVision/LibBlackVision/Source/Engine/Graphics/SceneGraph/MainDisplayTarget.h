@@ -3,12 +3,13 @@
 #include "Engine/Types/Enums.h"
 
 #include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/RenderTarget.h"
+
 #include "Engine/Graphics/Effects/Texture2DEffect.h"
 
 
 namespace bv {
 
-class RenderTarget;
 class TriangleStrip;
 class Camera;
 class RenderableArrayDataArraysSingleVertexBuffer;
@@ -23,6 +24,7 @@ private:
 
 public:
 
+    static  RenderTarget *  CreateRenderTarget          ( RenderTarget::RTSemantic semantic, unsigned int width, unsigned int height, TextureFormat fmt = TextureFormat::F_A8R8G8B8 );
     static  RenderTarget *  CreateDisplayRenderTarget   ( unsigned int width, unsigned int height, TextureFormat fmt = TextureFormat::F_A8R8G8B8 );
     static  RenderTarget *  CreateAuxRenderTarget       ( unsigned int width, unsigned int height, TextureFormat fmt = TextureFormat::F_A8R8G8B8 );
 

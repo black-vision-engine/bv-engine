@@ -153,6 +153,15 @@
     <ClCompile Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogic.cpp">
       <Filter>Rendering\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Utils\RenderTargetStack.cpp">
+      <Filter>Rendering\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Utils\RenderTargetEntryDesc.cpp">
+      <Filter>Rendering\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Utils\RenderTargetFactory.cpp">
+      <Filter>Rendering\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -263,6 +272,15 @@
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogic.h">
+      <Filter>Rendering\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Utils\RenderTargetStack.h">
+      <Filter>Rendering\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Utils\RenderTargetEntryDesc.h">
+      <Filter>Rendering\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Utils\RenderTargetFactory.h">
       <Filter>Rendering\Utils</Filter>
     </ClInclude>
   </ItemGroup>
