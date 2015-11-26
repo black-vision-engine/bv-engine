@@ -30,12 +30,24 @@ const std::string	TestSceneUtils::PluginsNameArr[] = { "triangle", "circle", "el
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::ColoredRectangle			( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, Float32 width, Float32 height, glm::vec4 color, const std::string & alphaMask )
+model::SceneModelPtr	TestSceneUtils::ColoredRectangleScene		( const std::string & name, glm::vec4 color, glm::vec3 transform )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    timeEvaluator->AddChild( localTimeline );
+	auto timeline = model::TimelineManager::CreateOffsetTimeEvaluator( name, TimeType( 0.0 ) );
+	auto root = TestSceneUtils::ColoredRectangle( "root", 0.5f, 0.5f, color, ALPHA_MASK0_PATH );
+    auto rootTransform  = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+    SetParameterTranslation( rootTransform, 0, 0.0f, transform );
 
-    auto node = model::BasicNode::Create( name, timeEvaluator );
+	return model::SceneModel::Create( name, root, new Camera() );
+}
+
+// ****************************
+//
+model::BasicNodePtr		TestSceneUtils::ColoredRectangle			( const std::string & name, Float32 width, Float32 height, glm::vec4 color, const std::string & alphaMask )
+{
+	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+	model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
+
+    auto node = model::BasicNode::Create( name, nullptr );
 	
 	std::vector< std::string > plugins;
 	plugins.push_back( "DEFAULT_TRANSFORM" );
@@ -65,12 +77,12 @@ model::BasicNodePtr		TestSceneUtils::ColoredRectangle			( model::TimelineManager
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::ColoredGeometry				( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, const std::string & plugin, glm::vec4 color, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::ColoredGeometry				( const std::string & name, const std::string & plugin, glm::vec4 color, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    timeEvaluator->AddChild( localTimeline );
+	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
 
-    auto node = model::BasicNode::Create( name, timeEvaluator );
+    auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
 	plugins.push_back( "DEFAULT_TRANSFORM" );
@@ -97,12 +109,12 @@ model::BasicNodePtr		TestSceneUtils::ColoredGeometry				( model::TimelineManager
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::TexturedRectangle		( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, Float32 width, Float32 height, const std::string & path, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::TexturedRectangle		( const std::string & name, Float32 width, Float32 height, const std::string & path, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    timeEvaluator->AddChild( localTimeline );
+	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
 
-    auto node = model::BasicNode::Create( name, timeEvaluator );
+    auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
 	plugins.push_back( "DEFAULT_TRANSFORM" );
@@ -132,12 +144,12 @@ model::BasicNodePtr		TestSceneUtils::TexturedRectangle		( model::TimelineManager
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::TexturedGeometry		( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, const std::string & plugin, const std::string & path, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::TexturedGeometry		( const std::string & name, const std::string & plugin, const std::string & path, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    timeEvaluator->AddChild( localTimeline );
+	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
 
-    auto node = model::BasicNode::Create( name, timeEvaluator );
+    auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
 	plugins.push_back( "DEFAULT_TRANSFORM" );
@@ -164,12 +176,12 @@ model::BasicNodePtr		TestSceneUtils::TexturedGeometry		( model::TimelineManager 
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::AnimatedRectangle		( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, Float32 width, Float32 height, const std::string & path, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::AnimatedRectangle		( const std::string & name, Float32 width, Float32 height, const std::string & path, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    timeEvaluator->AddChild( localTimeline );
+	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+	model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
 
-    auto node = model::BasicNode::Create( name, timeEvaluator );
+    auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
 	plugins.push_back( "DEFAULT_TRANSFORM" );
@@ -189,10 +201,10 @@ model::BasicNodePtr		TestSceneUtils::AnimatedRectangle		( model::TimelineManager
 	
 	model::LoadAnimation( node->GetPlugin( "animation" ), path, "*.bmp" );
 	
-	auto time = timeEvaluator->GetLocalTime();
+	auto time = model::TimelineManager::GetInstance()->GetRootTimeline()->GetLocalTime();
     SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), time, 0.f );
     SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), time + TimeType( 0.25f * ( Float32 )ANIM_NUM / SPEED ), ( Float32 )ANIM_NUM );
-    node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( timeEvaluator );
+    node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( localTimeline );
 
 	if( !alphaMask.empty() )
 	{
@@ -204,12 +216,12 @@ model::BasicNodePtr		TestSceneUtils::AnimatedRectangle		( model::TimelineManager
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::AnimatedGeometry		( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, const std::string & plugin, const std::string & path, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::AnimatedGeometry		( const std::string & name, const std::string & plugin, const std::string & path, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    timeEvaluator->AddChild( localTimeline );
+	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
 
-    auto node = model::BasicNode::Create( name, timeEvaluator );
+    auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
 	plugins.push_back( "DEFAULT_TRANSFORM" );
@@ -226,10 +238,10 @@ model::BasicNodePtr		TestSceneUtils::AnimatedGeometry		( model::TimelineManager 
 
 	model::LoadAnimation( node->GetPlugin( "animation" ), path, "*.bmp" );
 	
-	auto time = timeEvaluator->GetLocalTime();
+	auto time = model::TimelineManager::GetInstance()->GetRootTimeline()->GetLocalTime();
     SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), time, 0.f );
     SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), time + TimeType( 0.25f * ( Float32 )ANIM_NUM / SPEED ), ( Float32 )ANIM_NUM );
-    node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( timeEvaluator );
+    node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( localTimeline );
 
 	if( !alphaMask.empty() )
 	{
@@ -241,12 +253,12 @@ model::BasicNodePtr		TestSceneUtils::AnimatedGeometry		( model::TimelineManager 
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::GradientRectangle		( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, Float32 width, Float32 height, glm::vec4 c1, glm::vec4 c2, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::GradientRectangle		( const std::string & name, Float32 width, Float32 height, glm::vec4 c1, glm::vec4 c2, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    timeEvaluator->AddChild( localTimeline );
+	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
 
-    auto node = model::BasicNode::Create( name, timeEvaluator );
+    auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
 	plugins.push_back( "DEFAULT_TRANSFORM" );
@@ -277,12 +289,12 @@ model::BasicNodePtr		TestSceneUtils::GradientRectangle		( model::TimelineManager
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::GradientGeometry		( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, const std::string & plugin, glm::vec4 c1, glm::vec4 c2, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::GradientGeometry		( const std::string & name, const std::string & plugin, glm::vec4 c1, glm::vec4 c2, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    timeEvaluator->AddChild( localTimeline );
+	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
 
-    auto node = model::BasicNode::Create( name, timeEvaluator );
+    auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
 	plugins.push_back( "DEFAULT_TRANSFORM" );
@@ -310,12 +322,12 @@ model::BasicNodePtr		TestSceneUtils::GradientGeometry		( model::TimelineManager 
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::ColoredText				( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 color, UInt32 fontSize, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::ColoredText				( const std::string & name, glm::vec4 color, UInt32 fontSize, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    timeEvaluator->AddChild( localTimeline );
+	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
 
-    auto node = model::BasicNode::Create( name, timeEvaluator );
+    auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
 	plugins.push_back( "DEFAULT_TRANSFORM" );
@@ -348,12 +360,12 @@ model::BasicNodePtr		TestSceneUtils::ColoredText				( model::TimelineManager * t
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::GradientText			( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::GradientText			( const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    timeEvaluator->AddChild( localTimeline );
+	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
 
-    auto node = model::BasicNode::Create( name, timeEvaluator );
+    auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
 	plugins.push_back( "DEFAULT_TRANSFORM" );
@@ -387,12 +399,12 @@ model::BasicNodePtr		TestSceneUtils::GradientText			( model::TimelineManager * t
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::ColoredTimer				( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 color, UInt32 fontSize, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::ColoredTimer				( const std::string & name, glm::vec4 color, UInt32 fontSize, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    timeEvaluator->AddChild( localTimeline );
+	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
 
-    auto node = model::BasicNode::Create( name, timeEvaluator );
+    auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
 	plugins.push_back( "DEFAULT_TRANSFORM" );
@@ -427,12 +439,12 @@ model::BasicNodePtr		TestSceneUtils::ColoredTimer				( model::TimelineManager * 
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::GradientTimer			( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::GradientTimer			( const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    timeEvaluator->AddChild( localTimeline );
+	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
 
-    auto node = model::BasicNode::Create( name, timeEvaluator );
+    auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
 	plugins.push_back( "DEFAULT_TRANSFORM" );
@@ -468,12 +480,12 @@ model::BasicNodePtr		TestSceneUtils::GradientTimer			( model::TimelineManager * 
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::VideoStreamDecoder			( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & name, const std::string & plugin, const std::string & videoPath, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::VideoStreamDecoder			( const std::string & name, const std::string & plugin, const std::string & videoPath, const std::string & alphaMask )
 {
-	auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    timeEvaluator->AddChild( localTimeline );
+	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
 
-    auto node = model::BasicNode::Create( name, timeEvaluator );
+    auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
 	plugins.push_back( "DEFAULT_TRANSFORM" );

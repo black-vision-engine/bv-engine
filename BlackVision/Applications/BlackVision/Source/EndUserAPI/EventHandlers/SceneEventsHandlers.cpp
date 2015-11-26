@@ -56,10 +56,11 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 
     if( command == NodeStructureEvent::Command::AddNode )
     {
-        auto newNode = model::BasicNode::Create( newNodeName, m_appLogic->GetTimelineManager()->GetRootTimeline() );
-		newNode->AddPlugin( "DEFAULT_TRANSFORM", "transform", m_appLogic->GetTimelineManager()->GetRootTimeline() ); 
-
-		m_appLogic->GetBVScene()->GetSceneEditor()->AddChildNode( node, newNode );
+        auto newNode = model::BasicNode::Create( newNodeName, nullptr );
+		assert( false );
+		{ newNode; }
+		//FIXME: scene name needs to be passed along with nodes data
+		//m_appLogic->GetBVScene()->GetSceneEditor()->AddChildNode( <scene_name>, node, newNode );
     }
     else if( command == NodeStructureEvent::Command::RemoveNode )
     {
@@ -67,7 +68,10 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
         auto childNode = nodeName.substr( nodeName.find_last_of("/") + 1 );
         auto parentNode = root->GetNode( parentNodeName );
 			
-        m_appLogic->GetBVScene()->GetSceneEditor()->DeleteChildNode( parentNode, childNode );
+		assert( false );
+		{ parentNodeName; childNode; parentNode; }
+		//FIXME: scene name needs to be passed along with nodes data
+        //m_appLogic->GetBVScene()->GetSceneEditor()->DeleteChildNode( parentNode, childNode );
     }
     else if( command == NodeStructureEvent::Command::AttachPlugin )
     {
@@ -295,7 +299,8 @@ void SceneEventsHandlers::TimelineHandler     ( bv::IEventPtr evt )
         float time = timelineEvent->Time;
         TimeLineEvent::Command command = timelineEvent->TimelineCommand;
 
-        auto timeline = m_appLogic->GetTimelineManager()->GetTimeline( timeLineName );
+		//FIXME: GetTimeline finds the first timeline with given name; names might not be unique
+		auto timeline = model::TimelineManager::GetInstance()->GetTimeline( timeLineName );
         if( timeline == nullptr )
         {
             LOG_MESSAGE( SeverityLevel::error ) << "Timeline ["+ timeLineName + "] does not exist.";

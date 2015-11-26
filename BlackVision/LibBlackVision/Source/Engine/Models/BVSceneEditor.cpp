@@ -27,66 +27,128 @@ model::BasicNodePtr QueryTyped( model::IModelNodePtr node )
 //
 BVSceneEditor::BVSceneEditor                ( BVScene * scene )
 	: m_scene( scene )
+	, m_rootNode( scene->GetModelSceneRoot() )
 {
     assert( scene != nullptr );
     assert( scene->m_renderer != nullptr );
 
-    m_modelSceneEditor = new model::ModelSceneEditor( scene->GetModelSceneRoot() );
-    m_engineSceneEditor = new SceneEditor( scene->m_renderer, scene->m_pEngineSceneRoot );
+	scene->m_engineSceneRoot = BVSceneTools::BuildEngineSceneNode( QueryTyped( m_rootNode ), m_nodesMapping );
+    m_engineSceneEditor = new SceneEditor( scene->m_renderer, scene->m_engineSceneRoot );
 }
 
 // *******************************
 //
-void    BVSceneEditor::SetRootNode          ( model::IModelNodePtr rootNode )
+void    BVSceneEditor::AddScene       ( model::SceneModelPtr scene )
 {
-    auto root = QueryTyped( rootNode );
-
-    if( m_modelSceneEditor->GetRootNode() != root )
-    {
-        MappingsCleanup( m_modelSceneEditor->GetRootNode() );
-
-        m_modelSceneEditor->SetRootNode( root );
-        m_engineSceneEditor->SetRootNode( BVSceneTools::BuildEngineSceneNode( root, m_nodesMapping ) );
-    }
+	if( !m_scene->GetScene( scene->GetName() ) )
+	{
+		m_scene->AddScene( scene );
+		auto sceneNode = BVSceneTools::BuildEngineSceneNode( scene->GetRootNode(), m_nodesMapping );
+		m_engineSceneEditor->AddChildNode( m_engineSceneEditor->GetRootNode(), sceneNode );
+	}
 }
 
 // *******************************
 //
-bool    BVSceneEditor::DeleteRootNode       ()
+bool    BVSceneEditor::RemoveScene       ( const std::string & sceneName )
 {
-    auto root = m_modelSceneEditor->GetRootNode();
-
-    if( root )
-    {
-        MappingsCleanup( root );
-
-        m_modelSceneEditor->DeleteRootNode();
-        m_engineSceneEditor->DeleteRootNode();
-    
-        return true;
-    }
-
+	auto scene = m_scene->GetScene( sceneName );
+	if( scene )
+	{
+		m_scene->RemoveScene( sceneName );
+		m_engineSceneEditor->DeleteChildNode( m_engineSceneEditor->GetRootNode(), GetEngineNode( scene->GetRootNode() ) );
+		MappingsCleanup( scene->GetRootNode() );
+		return true;
+	}
     return false;
 }
 
 // *******************************
 //
-void    BVSceneEditor::AddChildNode         ( model::IModelNodePtr parentNode, model::IModelNodePtr childNode )
+void    BVSceneEditor::RemoveAllScenes		()
 {
+	while( !m_scene->m_sceneModelVec.empty() )
+	{
+		RemoveScene( m_scene->m_sceneModelVec[ 0 ]->GetName() );
+	}
+}
+
+// *******************************
+//
+model::SceneModelPtr    BVSceneEditor::GetScene ( const std::string & sceneName )
+{
+	return m_scene->GetScene( sceneName );
+}
+
+// *******************************
+//
+void    BVSceneEditor::SetSceneVisible       ( const std::string & sceneName, bool visible )
+{
+	auto scene = m_scene->GetScene( sceneName );
+	if( scene )
+	{
+		GetEngineNode( scene->GetRootNode() )->SetVisible( visible );
+	}
+}
+
+// *******************************
+//
+void    BVSceneEditor::SetSceneRootNode     ( const std::string & sceneName, model::IModelNodePtr rootNode )
+{
+	auto scene = m_scene->GetScene( sceneName );
+	if( scene )
+	{
+		auto oldRoot = scene->GetRootNode();
+		m_engineSceneEditor->DeleteChildNode( m_engineSceneEditor->GetRootNode(), GetEngineNode( oldRoot ) );
+		MappingsCleanup( oldRoot );
+
+		scene->GetModelSceneEditor()->SetRootNode( m_rootNode, QueryTyped( rootNode ) );
+		m_engineSceneEditor->AddChildNode( m_engineSceneEditor->GetRootNode(), BVSceneTools::BuildEngineSceneNode( scene->GetRootNode(), m_nodesMapping ) );
+	}
+}
+
+// *******************************
+//
+bool    BVSceneEditor::DeleteSceneRootNode	( const std::string & sceneName )
+{
+	auto scene = m_scene->GetScene( sceneName );
+	if( scene )
+	{
+		auto root = scene->GetRootNode();
+		m_engineSceneEditor->DeleteChildNode( m_engineSceneEditor->GetRootNode(), GetEngineNode( root ) );
+		MappingsCleanup( root );
+
+		scene->GetModelSceneEditor()->SetRootNode( m_rootNode, nullptr );
+	}
+	return false;
+}
+
+// *******************************
+//
+void    BVSceneEditor::AddChildNode         ( const std::string & sceneName, model::IModelNodePtr parentNode, model::IModelNodePtr childNode )
+{
+	auto scene = m_scene->GetScene( sceneName );
+	assert( scene != nullptr );
+
     if( parentNode &&  childNode )
     {
         auto engineParent = GetEngineNode( parentNode );
         auto engineChild = BVSceneTools::BuildEngineSceneNode( QueryTyped( childNode ), m_nodesMapping );
 
-        m_modelSceneEditor->AddChildNode( QueryTyped( parentNode ), QueryTyped( childNode ) );
+		auto sceneEditor = scene->GetModelSceneEditor();
+		sceneEditor->AddChildNode( QueryTyped( parentNode ), QueryTyped( childNode ) );
+
         m_engineSceneEditor->AddChildNode( engineParent, engineChild );
     }
 }
 
 // *******************************
 //
-bool    BVSceneEditor::DeleteChildNode      ( model::IModelNodePtr parentNode, const std::string & childNodeName )
+bool    BVSceneEditor::DeleteChildNode      ( const std::string & sceneName, model::IModelNodePtr parentNode, const std::string & childNodeName )
 {    
+	auto scene = m_scene->GetScene( sceneName );
+	assert( scene != nullptr );
+
     if( parentNode )
     {
         auto modelParentNode = QueryTyped( parentNode );
@@ -94,10 +156,10 @@ bool    BVSceneEditor::DeleteChildNode      ( model::IModelNodePtr parentNode, c
 
         if( modelChildNode )
         {
-            m_modelSceneEditor->DeleteChildNode( modelParentNode, childNodeName );
+			auto sceneEditor = scene->GetModelSceneEditor();
+			sceneEditor->DeleteChildNode( modelParentNode, childNodeName );
+
             m_engineSceneEditor->DeleteChildNode( GetEngineNode( parentNode ), GetEngineNode( modelChildNode ) );
-			
-			m_scene->RemoveScene( modelChildNode.get() );
             
 			MappingsCleanup( modelChildNode );
 
@@ -110,41 +172,15 @@ bool    BVSceneEditor::DeleteChildNode      ( model::IModelNodePtr parentNode, c
 
 // *******************************
 //
-void    BVSceneEditor::AttachRootNode      ()
+bool                    BVSceneEditor::AttachChildNode     ( const std::string & sceneName, model::IModelNodePtr parent )
 {
-	if( m_modelSceneEditor->GetDetachedNode() )
-	{
-		MappingsCleanup( m_modelSceneEditor->GetRootNode() );
+	auto scene = m_scene->GetScene( sceneName );
+	assert( scene != nullptr );
 
-		m_modelSceneEditor->AttachRootNode();
-		m_engineSceneEditor->AttachRootNode();
-	}
-}
-
-// *******************************
-//
-bool    BVSceneEditor::DetachRootNode      ()
-{
-	if( m_modelSceneEditor->GetRootNode() )
-	{
-		MappingsCleanup( m_modelSceneEditor->GetDetachedNode() );
-
-		auto detachModel    = m_modelSceneEditor->DetachRootNode();
-		auto detachEngine   = m_engineSceneEditor->DetachRootNode();
-
-		return detachModel && detachEngine;
-	}
-
-	return false;
-}
-
-// *******************************
-//
-bool                    BVSceneEditor::AttachChildNode     ( model::IModelNodePtr parent )
-{
+	auto sceneEditor = scene->GetModelSceneEditor();
     if( parent )
     {
-        auto attachModel    = m_modelSceneEditor->AttachChildNode( QueryTyped( parent ) );
+        auto attachModel    = sceneEditor->AttachChildNode( QueryTyped( parent ) );
         auto attachEngine   = m_engineSceneEditor->AttachChildNode( GetEngineNode( parent ) );
 
         return attachModel && attachEngine;
@@ -155,17 +191,21 @@ bool                    BVSceneEditor::AttachChildNode     ( model::IModelNodePt
 
 // *******************************
 //
-bool                    BVSceneEditor::DetachChildNode     ( model::IModelNodePtr parent, const std::string & nodeToDetach )
+bool                    BVSceneEditor::DetachChildNode     ( const std::string & sceneName, model::IModelNodePtr parent, const std::string & nodeToDetach )
 {
+	auto scene = m_scene->GetScene( sceneName );
+	assert( scene != nullptr );
+
     if( parent )
     {
         auto childNode = parent->GetChild( nodeToDetach );
 
         if( childNode )
         {
-			MappingsCleanup( m_modelSceneEditor->GetDetachedNode() );
+			auto sceneEditor = scene->GetModelSceneEditor();
+			MappingsCleanup( sceneEditor->GetDetachedNode() );
 
-            auto detachModel    = m_modelSceneEditor->DetachChildNode( QueryTyped( parent ), nodeToDetach );
+            auto detachModel    = sceneEditor->DetachChildNode( QueryTyped( parent ), nodeToDetach );
             auto detachEngine   = m_engineSceneEditor->DetachChildNode( GetEngineNode( parent ), GetEngineNode( childNode ) );
         
             return detachModel && detachEngine;
@@ -177,24 +217,19 @@ bool                    BVSceneEditor::DetachChildNode     ( model::IModelNodePt
 
 // *******************************
 //
-void            BVSceneEditor::DeleteDetachedNodes          ()
+void            BVSceneEditor::DeleteDetachedNodes          ( const std::string & sceneName )
 {
-	auto detachedNode = m_modelSceneEditor->GetDetachedNode();
+	auto scene = m_scene->GetScene( sceneName );
+	assert( scene != nullptr );
+
+	auto sceneEditor = scene->GetModelSceneEditor();
+
+	auto detachedNode = sceneEditor->GetDetachedNode();
     MappingsCleanup( detachedNode );
 
-	m_scene->RemoveScene( detachedNode.get() );
-
-    m_modelSceneEditor->DeleteDetachedNode();
+    sceneEditor->DeleteDetachedNode();
     m_engineSceneEditor->DeleteDetachedNode();
 }
-
-// *******************************
-//
-model::IModelNodePtr    BVSceneEditor::GetRootNode          ()
-{
-    return m_modelSceneEditor->GetRootNode();
-}
-
 
 // *******************************
 //
@@ -306,14 +341,14 @@ void					BVSceneEditor::ResetDetachedPlugin  ( model::BasicNodePtr node )
 
 // *******************************
 //
-model::IModelNodeEffectPtr	BVSceneEditor::GetNodeEffect		( model::IModelNodePtr node )
+model::IModelNodeEffectPtr	BVSceneEditor::GetNodeEffect	( model::IModelNodePtr node )
 {
 	return QueryTyped( node )->GetNodeEffect();
 }
 
 // *******************************
 //
-void						BVSceneEditor::SetNodeEffect		( model::IModelNodePtr node, model::IModelNodeEffectPtr nodeEffect )
+void						BVSceneEditor::SetNodeEffect	( model::IModelNodePtr node, model::IModelNodeEffectPtr nodeEffect )
 {
     auto modelNode = QueryTyped( node );
 	modelNode->SetNodeEffect( nodeEffect );

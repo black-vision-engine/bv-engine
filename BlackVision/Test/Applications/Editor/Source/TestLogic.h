@@ -18,11 +18,9 @@ private:
 
 	TestScenePtr					m_scene;
 
-    model::TimelineManagerPtr        m_timelineManager;
-    model::OffsetTimeEvaluatorPtr   m_globalTimeline;
-
+    BVScenePtr						m_bvScene;
 	Renderer *						m_renderer;
-
+	
 	TimeType						m_time;
 
 public:

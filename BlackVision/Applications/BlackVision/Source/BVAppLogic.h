@@ -56,9 +56,7 @@ private:
 
     FrameStatsCalculator            m_statsCalculator;
 
-    model::TimelineManagerPtr       m_timelineManager;
     const model::PluginsManager *   m_pluginsManager;
-    model::OffsetTimeEvaluatorPtr   m_globalTimeline;
 
     BVScenePtr                      m_bvScene;
 
@@ -114,8 +112,6 @@ public:
 public:
 
     //Convenience API - generalized model accessors
-    model::TimelineManagerPtr       GetTimelineManager  ();
-    model::OffsetTimeEvaluatorPtr   GetGlobalTimeline   ();
     BVScenePtr                      GetBVScene          ();
     const model::PluginsManager *   GetPluginsManager   () const;
 
@@ -127,7 +123,6 @@ private:
     void                            InitializeKbdHandler();
     void                            InitializeRemoteCommunication();
 
-    void                            InitializeScenesTimelines();
     std::string                     GetEnvScene();
 
 };

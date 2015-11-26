@@ -145,7 +145,8 @@ void            HightmapHandlers::HMShow                  ()
     auto root = m_appLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
     auto hmplugin = root->GetPlugin( "height map" );
 
-    auto timeline = m_appLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
+	//FIXME: GetTimeline finds the first timeline with given name; names might not be unique
+	auto timeline = model::TimelineManager::GetInstance()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
         LOG_MESSAGE( SeverityLevel::error ) << "timeline [ height map ] does not exist :(";
@@ -168,8 +169,8 @@ void            HightmapHandlers::HMShow                  ()
 //
 void            HightmapHandlers::HMReset                  ()
 {
-   
-    auto timeline = m_appLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
+	//FIXME: GetTimeline finds the first timeline with given name; names might not be unique
+    auto timeline = model::TimelineManager::GetInstance()->GetTimeline( "hm_timeline" );
     timeline->SetTimeAndStop(0.0f);
 }
 
@@ -183,7 +184,8 @@ void            HightmapHandlers::HMStart                 ( float km )
     auto root = m_appLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
     auto hmplugin = root->GetPlugin( "height map" );
 
-    auto timeline = m_appLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
+	//FIXME: GetTimeline finds the first timeline with given name; names might not be unique
+    auto timeline = model::TimelineManager::GetInstance()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
         LOG_MESSAGE( SeverityLevel::error ) << "timeline [ height map ] does not exist :(";
@@ -209,7 +211,8 @@ void        HightmapHandlers::HMZoomIn                ( float km, float leftKM, 
     auto root = m_appLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
     auto hmplugin = root->GetPlugin( "height map" );
 
-    auto timeline = m_appLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
+	//FIXME: GetTimeline finds the first timeline with given name; names might not be unique
+    auto timeline = model::TimelineManager::GetInstance()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
         LOG_MESSAGE( SeverityLevel::error ) << "timeline [ height map ] does not exist :(";
@@ -262,7 +265,8 @@ void            HightmapHandlers::HMZoomOutFromCurrent    (float scale)
     auto root = m_appLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
      auto hmplugin = root->GetPlugin( "height map" );
 
-    auto timeline = m_appLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
+	//FIXME: GetTimeline finds the first timeline with given name; names might not be unique
+    auto timeline = model::TimelineManager::GetInstance()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
         LOG_MESSAGE( SeverityLevel::error ) << "timeline [ height map ] does not exist :(";
@@ -294,7 +298,8 @@ void        HightmapHandlers::HMZoomInFake                ( float km, float left
     auto root = m_appLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
     auto hmplugin = root->GetPlugin( "height map" );
 
-    auto timeline = m_appLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
+	//FIXME: GetTimeline finds the first timeline with given name; names might not be unique
+    auto timeline = model::TimelineManager::GetInstance()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
         LOG_MESSAGE( SeverityLevel::error ) << "timeline [ height map ] does not exist :(";
@@ -349,7 +354,8 @@ void            HightmapHandlers::HMConcentratedDistanceAnimStart( int num )
 
 	{tp;}
 
-    auto timeline = m_appLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
+	//FIXME: GetTimeline finds the first timeline with given name; names might not be unique
+    auto timeline = model::TimelineManager::GetInstance()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
         LOG_MESSAGE( SeverityLevel::error ) << "timeline [ height map ] does not exist :(";
@@ -394,7 +400,9 @@ void            HightmapHandlers::HMConcentratedDistanceAnimStart2( int num )
 
     model::DefaultHeightMapPlugin *  tp = static_cast< model::DefaultHeightMapPlugin * > ( hmplugin.get() );
 	{tp;}
-    auto timeline = m_appLogic->GetTimelineManager()->GetTimeline( "hm_timeline" );
+
+	//FIXME: GetTimeline finds the first timeline with given name; names might not be unique
+    auto timeline = model::TimelineManager::GetInstance()->GetTimeline( "hm_timeline" );
     if( timeline == nullptr )
     {
         LOG_MESSAGE( SeverityLevel::error ) << "timeline [ height map ] does not exist :(";

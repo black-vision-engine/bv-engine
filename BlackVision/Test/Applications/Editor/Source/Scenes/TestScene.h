@@ -23,10 +23,11 @@ class TestScene
 private:
 	std::vector< std::function< void() > > m_testSteps;
 
-    BVScenePtr					m_scene;
+    BVScene *					m_scene;
 	Renderer *					m_renderer;
-	model::TimelineManagerPtr	m_timelineManager;
+
 	model::ITimeEvaluatorPtr	m_timeEvaluator;
+	model::TimelineManager *	m_timelineManager;
 	
 	Int32						m_stepOffset;
 	Int32						m_lastStep;
@@ -39,19 +40,17 @@ private:
 	static const std::string	TMR_NODE;
 	static const std::string	GEOM_NODE;
 	static const std::string	VSD_NODE;
+
+	static const std::string	SCENE_NAME;
+	static const std::string	SCENE_NAME1;
+
 	
 public:
-							TestScene				( Renderer * renderer, model::TimelineManagerPtr timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+							TestScene				( BVScene * scene, Renderer * renderer );
 							~TestScene				();
 
-	void					Restart					();
-
-	BVScenePtr				GetScene				();
-	
 	void					TestEditor				( TimeType time );
 
-	BVScenePtr				ColoredRectanglesScene	();
-	
 private:
 	void					InitTestEditor				();
 

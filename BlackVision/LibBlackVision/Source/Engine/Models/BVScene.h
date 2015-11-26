@@ -11,7 +11,6 @@
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
 
-#include "Engine/Graphics/SceneGraph/Camera.h"
 
 #include "SceneModel.h"
 
@@ -26,68 +25,63 @@ class BVScene;
 DEFINE_PTR_TYPE(BVScene)
 DEFINE_CONST_PTR_TYPE(BVScene)
 
-
 class BVScene : public IUpdatable
 {
 private:
+	static const std::string	MAIN_ROOT_NAME;
+	static const std::string	GLOBAL_TIMELINE_NAME;
     
-    BVSceneEditor *         m_pSceneEditor;
-    Renderer *              m_renderer;
+private:
+    BVSceneEditor *         m_sceneEditor;
+	Renderer *              m_renderer;
 
-	Camera *                m_pCamera;
+    model::TimelineManagerPtr		m_timelineManager;
+	model::OffsetTimeEvaluatorPtr   m_globalTimeline;
 
-    model::ParamVec3        m_cameraPosition;
-    model::ParamVec3        m_cameraDirection;
-    model::ParamVec3        m_cameraUp;
+    model::SceneModelVec	m_sceneModelVec;
+    
+	model::BasicNodePtr     m_rootNode;
+    SceneNode *             m_engineSceneRoot;
 
-    model::BasicNodePtr     m_rootNode;
-
-    model::SceneModelVec    m_pSceneModelVec;
-
-    SceneNode *             m_pEngineSceneRoot;
 
 private:
 
-    explicit                BVScene             ( model::SceneModelVec sceneModelVec, Camera * cam, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
-    explicit                BVScene             ( Camera * cam, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
+    explicit                BVScene             ( Renderer * renderer );
+
+	void                    AddScene            ( model::SceneModelPtr sceneModel );
+    bool                    RemoveScene         ( const std::string & name );
 
 public:
 
                             ~BVScene            ();
 
-    static BVScenePtr       Create              ( Camera * cam, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
-    static BVScenePtr       Create              ( model::SceneModelPtr sceneModel   , Camera * cam, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
-    static BVScenePtr       Create              ( model::SceneModelVec sceneModelVec, Camera * cam, model::ITimeEvaluatorPtr timeEvaluator, Renderer * renderer );
-
-    void                    AddScene            ( model::SceneModelPtr sceneModel );
-    void                    RemoveScene         ( const std::string & name );
-
-	//FIXME: remove scene by root node - needed in BVSceneEditor::DeleteChildNode
-    void                    RemoveScene			( model::BasicNode * node );
+    static BVScenePtr       Create              ( Renderer * renderer );
 
     model::SceneModelPtr    GetScene            ( const std::string & name ) const;
+
+	//FIXME: for tests only
     const model::SceneModelVec &  GetScenes() const;
+
     StringVector            ListScenesNames     () const;
 
     void                    Serialize           ( ISerializer& ser ) const;
 
     virtual void            Update              ( TimeType t );
 
-    void                    SetCamereParameters ( const model::ParamVec3 & pos, const model::ParamVec3 & dir, const model::ParamVec3 & up );
-
-    Camera *                GetCamera           ()  const;
-
-    model::BasicNodePtr &   GetModelSceneRoot   ();
-    SceneNode *             GetEngineSceneRoot  ()  const;
+    model::BasicNodePtr		GetModelSceneRoot   () const;
+    SceneNode *             GetEngineSceneRoot  () const;
 
     BVSceneEditor *         GetSceneEditor      ();
 
-    static BVScenePtr       CreateFakeSceneForTestingOnly( model::SceneModelPtr sceneModel, Camera * cam, model::ITimeEvaluatorPtr timeEvaluator );
+	void					SetStartTime		( unsigned long millis );
+
+    static BVScenePtr       CreateFakeSceneForTestingOnly( model::SceneModelPtr sceneModel );
 
 private:
 
     friend class BVSceneEditor;
 
 };
+
 
 } // bv

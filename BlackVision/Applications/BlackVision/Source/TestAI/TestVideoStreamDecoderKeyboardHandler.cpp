@@ -16,7 +16,7 @@ void TestVideoStreamDecoderKeyboardHandler::HandleKey( unsigned char c, BVAppLog
 {
 	static int seekOffset = 0;
    	auto editor = logic->GetBVScene()->GetSceneEditor();
-	auto node = editor->GetRootNode()->GetChild( "video_node" );
+	auto node = editor->GetScene( "sceneFromEnv: VIDEO_STREAM_TEST_SCENE" )->GetRootNode();
 	if( c == 'q' )
     {
 		DefaultVideoStreamDecoderPlugin::Start( node->GetPlugin( "video_stream_decoder" ) );
@@ -48,7 +48,7 @@ void TestVideoStreamDecoderKeyboardHandler::HandleKey( unsigned char c, BVAppLog
     }
 	else if( c == 'z' )
     {
-		editor->DeleteChildNode( editor->GetRootNode(), "video_node" );
+		editor->RemoveScene( "sceneFromEnv: VIDEO_STREAM_TEST_SCENE" );
     }
 }
 

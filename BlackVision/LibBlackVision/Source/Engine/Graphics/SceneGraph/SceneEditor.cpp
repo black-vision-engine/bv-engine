@@ -17,36 +17,36 @@ SceneEditor::SceneEditor					( Renderer * renderer, SceneNode * & rootNode )
 {
 }
 
-// *******************************
+//// *******************************
+////
+//void		SceneEditor::SetRootNode		( SceneNode * rootNode )
+//{
+//	if( m_rootNode != rootNode )
+//	{
+//		if( m_rootNode != nullptr )
+//		{
+//			DeleteRootNode();
+//		}
+//	}
 //
-void		SceneEditor::SetRootNode		( SceneNode * rootNode )
-{
-	if( m_rootNode != rootNode )
-	{
-		if( m_rootNode != nullptr )
-		{
-			DeleteRootNode();
-		}
-	}
+//	m_rootNode = rootNode;
+//}
 
-	m_rootNode = rootNode;
-}
-
-// *******************************
+//// *******************************
+////
+//bool		SceneEditor::DeleteRootNode     ()
+//{
+//	if( m_rootNode != nullptr )
+//	{
+//		DeleteNode( m_rootNode, m_renderer );
+//	
+//		m_rootNode = nullptr;
 //
-bool		SceneEditor::DeleteRootNode     ()
-{
-	if( m_rootNode != nullptr )
-	{
-		DeleteNode( m_rootNode, m_renderer );
-	
-		m_rootNode = nullptr;
-
-		return true;
-	}
-
-	return false;
-}
+//		return true;
+//	}
+//
+//	return false;
+//}
 
 // *******************************
 //
@@ -80,37 +80,37 @@ bool		SceneEditor::DeleteChildNode    ( SceneNode * parentNode, SceneNode * chil
     return false;
 }
 
-// *******************************
+//// *******************************
+////
+//void		SceneEditor::AttachRootNode     ()
+//{
+//    if( m_rootNode != nullptr )
+//    {
+//        DeleteNode( m_rootNode, m_renderer );
+//    }
 //
-void		SceneEditor::AttachRootNode     ()
-{
-    if( m_rootNode != nullptr )
-    {
-        DeleteNode( m_rootNode, m_renderer );
-    }
-
-    m_rootNode = m_detachedNode;
-
-    m_detachedNode = nullptr;
-}
-
-// *******************************
+//    m_rootNode = m_detachedNode;
 //
-bool		SceneEditor::DetachRootNode     ()
-{
-    DeleteDetachedNode();
-    
-    if( m_rootNode != nullptr )
-    {
-        m_detachedNode = m_rootNode;
-
-        m_rootNode = nullptr;
-
-        return true;
-    }
-
-    return false;
-}
+//    m_detachedNode = nullptr;
+//}
+//
+//// *******************************
+////
+//bool		SceneEditor::DetachRootNode     ()
+//{
+//    DeleteDetachedNode();
+//    
+//    if( m_rootNode != nullptr )
+//    {
+//        m_detachedNode = m_rootNode;
+//
+//        m_rootNode = nullptr;
+//
+//        return true;
+//    }
+//
+//    return false;
+//}
 
 // *******************************
 //

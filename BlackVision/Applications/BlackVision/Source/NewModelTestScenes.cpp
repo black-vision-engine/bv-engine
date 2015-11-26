@@ -26,6 +26,9 @@
 
 #include "Engine/Models/Plugins/PluginUtils.h"
 
+#include "Engine/Models/ModelSceneEditor.h"
+#include "Engine/Models/BVScene.h"
+
 #include "System/Env.h"
 #include "BVConfig.h"
 
@@ -458,38 +461,43 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 
 // *****************************
 //
-model::SceneModelPtr    TestScenesFactory::CreateSceneFromEnv       ( const std::string& scene, const model::PluginsManager * pluginsManager, model::TimelineManagerPtr timelineManagerPtr, model::ITimeEvaluatorPtr timeEvaluator )
+model::SceneModelPtr		TestScenesFactory::CreateSceneFromEnv       ( const std::string& scene, Camera * camera, const model::PluginsManager * pluginsManager )
 {
-    auto timelineManager = timelineManagerPtr.get();
+	auto timelineManager = model::TimelineManager::GetInstance();
     model::BasicNodePtr node = nullptr;
+
+	auto sceneName = "sceneFromEnv: " + scene;
+
+	auto timeline = model::TimelineManager::CreateOffsetTimeEvaluator( sceneName, TimeType( 0.0 ) );
+	timelineManager->AddTimeline( timeline );
 
     if( scene == "TWO_TEXTURED_RECTANGLES" )
     {
-        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
     }
     else if( scene == "ONE_TEXTURED_RECTANGLE" )
     {
-        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE );
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeline, TestScenesFactory::TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE );
     }
     else if( scene == "OLAF_TEST_SCENE" )
     {
-        node = TestScenesFactory::OlafTestScene( pluginsManager, timelineManager, timeEvaluator );
+        node = TestScenesFactory::OlafTestScene( pluginsManager, timelineManager, timeline );
     }
     else if( scene == "CREED_TEST_SCENE" )
     {
-        node = TestScenesFactory::CreedPieChartTestScene( pluginsManager, timelineManager, timeEvaluator );
+        node = TestScenesFactory::CreedPieChartTestScene( pluginsManager, timelineManager, timeline );
     }
     else if( scene == "VIDEO_INPUT_TEST_SCENE" )
     {
-        node = TestScenesFactory::CreedVideoInputTestScene( pluginsManager, timelineManager, timeEvaluator );
+        node = TestScenesFactory::CreedVideoInputTestScene( pluginsManager, timelineManager, timeline );
     }
     else if( scene == "DEFAULT_TEXT" )
     {
-        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TEXT );
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
     else if( scene == "TSS_ANIMATION_RECTANGLE" )
     {
-        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_ANIMATION_RECTANGLE );
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeline, TestScenesFactory::TestSceneSelector::TSS_ANIMATION_RECTANGLE );
     }
     else if( scene == "SERIALIZED_TEST" )
     {
@@ -497,43 +505,43 @@ model::SceneModelPtr    TestScenesFactory::CreateSceneFromEnv       ( const std:
     }
 	else if( scene == "ALL_BASIC_SHAPES_SHOW" )
 	{
-		node = TestScenesFactory::BasicShapesShowScene( pluginsManager, timelineManager, timeEvaluator );
+		node = TestScenesFactory::BasicShapesShowScene( pluginsManager, timelineManager, timeline );
 	}
 	else if( scene == "BASIC_SHAPES_TEST_SCENE" )
 	{
-		node = TestScenesFactory::BasicShapesTest(  pluginsManager, timelineManager, timeEvaluator );
+		node = TestScenesFactory::BasicShapesTest(  pluginsManager, timelineManager, timeline );
 	}
     else if( scene == "INTERPOLATION_TEST_SCENE" )
     {
-        node = TestScenesFactory::CreedCosineDemoScene( pluginsManager, timelineManager, timeEvaluator );
+        node = TestScenesFactory::CreedCosineDemoScene( pluginsManager, timelineManager, timeline );
     }
     else if( scene == "GLOBAL_EFFECT_05" )
     {
-        node = TestScenesFactory::GlobalEffect05( pluginsManager, timelineManager, timeEvaluator );
+        node = TestScenesFactory::GlobalEffect05( pluginsManager, timelineManager, timeline );
     }
     else if( scene == "BASIC_SHAPES_TEST_SCENE" )
     {
-        node = TestScenesFactory::BasicShapesTest( pluginsManager, timelineManager, timeEvaluator );
+        node = TestScenesFactory::BasicShapesTest( pluginsManager, timelineManager, timeline );
     }
     else if( scene == "TEXT_CACHE_TEST" )
     {
-        node = TestScenesFactory::AssetCacheTestScene( pluginsManager, timelineManager, timeEvaluator );
+        node = TestScenesFactory::AssetCacheTestScene( pluginsManager, timelineManager, timeline );
     }
     else if( scene == "W_SERIALIZATION_TEST" )
     {
-        node = TestScenesFactory::WSerializationTest( pluginsManager, timelineManager, timeEvaluator );
+        node = TestScenesFactory::WSerializationTest( pluginsManager, timelineManager, timeline );
     }
     else if( scene == "VIDEO_STREAM_TEST_SCENE" )
    {
- 	node = SimpleNodesFactory::CreateVideoStreamDecoderRectNode( timelineManager, timeEvaluator, false );
+ 	node = SimpleNodesFactory::CreateVideoStreamDecoderRectNode( timelineManager, timeline, false );
     }
     else if( scene == "REMOTE_EVENTS_TEST_SCENE" )
     {
-        node = TestScenesFactory::RemoteEventsTestScene( pluginsManager, timelineManager, timeEvaluator );
+        node = TestScenesFactory::RemoteEventsTestScene( pluginsManager, timelineManager, timeline );
     }
     else if( scene == "LIGHT_SCATTERING_EFFECT" )
     {
-        node = TestScenesFactory::LightScatteringTestScene( pluginsManager, timelineManager, timeEvaluator );
+        node = TestScenesFactory::LightScatteringTestScene( pluginsManager, timelineManager, timeline );
     }
     else
     {
@@ -549,10 +557,10 @@ model::SceneModelPtr    TestScenesFactory::CreateSceneFromEnv       ( const std:
 
         //node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_ANIMATION_RECTANGLE );
 
-        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TEXT );
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
 
-    return std::make_shared< model::SceneModel >( "sceneFromEnv: " + scene, timelineManagerPtr,  node );
+	return model::SceneModel::Create( sceneName, node, camera );
 }
 
 // *****************************

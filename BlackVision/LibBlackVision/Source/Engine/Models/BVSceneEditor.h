@@ -6,6 +6,7 @@
 #include "Engine/Models/Interfaces/IModelNode.h"
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Interfaces/IModelNode.h"
+#include "Engine/Models/SceneModel.h"
 
 namespace bv {
 
@@ -23,14 +24,14 @@ class BVSceneEditor
 private:
 
     typedef std::hash_map< model::IModelNode *, SceneNode * >	TNodesMapping;
-    typedef std::pair< model::IModelNodePtr, SceneNode * >      TNodesPair;
 
 private:
 	BVScene *					m_scene;
-    TNodesMapping	            m_nodesMapping;
+    model::BasicNodePtr			m_rootNode;
 
-    model::ModelSceneEditor *   m_modelSceneEditor;
     SceneEditor *               m_engineSceneEditor;
+    
+	TNodesMapping	            m_nodesMapping;
 
 private:
 
@@ -38,21 +39,24 @@ private:
 
 public:
 
-    void                    SetRootNode         ( model::IModelNodePtr rootNode );
-    bool                    DeleteRootNode      ();
+    void                    AddScene			( model::SceneModelPtr scene );
+    bool                    RemoveScene			( const std::string & sceneName );
+    void                    RemoveAllScenes		();
 
-    void                    AddChildNode        ( model::IModelNodePtr parentNode, model::IModelNodePtr childNode );
-    bool                    DeleteChildNode     ( model::IModelNodePtr parentNode, const std::string & childNodeName );
+	model::SceneModelPtr    GetScene			( const std::string & sceneName );
+    void					SetSceneVisible		( const std::string & sceneName, bool visible );
 
-    void                    AttachRootNode      ();
-    bool                    DetachRootNode      ();
+    void                    SetSceneRootNode	( const std::string & sceneName, model::IModelNodePtr rootNode );
+    bool                    DeleteSceneRootNode	( const std::string & sceneName );
 
-    bool                    AttachChildNode     ( model::IModelNodePtr parent );
-    bool                    DetachChildNode     ( model::IModelNodePtr parent, const std::string & nodeToDetach );
 
-    void                    DeleteDetachedNodes ();
+    void                    AddChildNode        ( const std::string & sceneName, model::IModelNodePtr parentNode, model::IModelNodePtr childNode );
+    bool                    DeleteChildNode     ( const std::string & sceneName, model::IModelNodePtr parentNode, const std::string & childNodeName );
 
-    model::IModelNodePtr    GetRootNode         ();
+    bool                    AttachChildNode     ( const std::string & sceneName, model::IModelNodePtr parent );
+    bool                    DetachChildNode     ( const std::string & sceneName, model::IModelNodePtr parent, const std::string & nodeToDetach );
+
+    void                    DeleteDetachedNodes ( const std::string & sceneName );
 
 
 	bool                    AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, unsigned int idx );

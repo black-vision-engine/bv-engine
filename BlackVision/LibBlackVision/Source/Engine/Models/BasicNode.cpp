@@ -44,7 +44,7 @@ IModelNodePtr  FindNode( const TNodeVec & vec, const std::string & name )
 
 // ********************************
 //
-BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager )
+BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr, const PluginsManager * pluginsManager )
     : m_name( name )
     , m_pluginList( std::make_shared< DefaultPluginListFinalized >() )
     , m_pluginsManager( pluginsManager )
@@ -119,15 +119,14 @@ ISerializablePtr BasicNode::Create( const IDeserializer& dob )
 
     auto name = dob.GetAttribute( "name" );
 
-    auto timeEvaluator = TimelineManager::GetInstance()->GetRootTimeline(); // FIXME: probably this should be serialized
-    
-    auto node = Create( name, timeEvaluator );
+	//FIXME: nullptr because timeEvaluator is not used in BasicNode
+    auto node = Create( name, nullptr );
 
     node->m_visible = dob.GetAttribute( "visible" ) == "false" ? false : true;
 
 // plugins
     auto plugins = SerializationHelper::DeserializeObjectLoadArrayImpl< BasePlugin< IPlugin > >( dob, "plugins" );
-
+	
     for( auto plugin : plugins )
         node->AddPlugin( plugin );
 

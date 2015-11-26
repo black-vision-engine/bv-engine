@@ -1,23 +1,32 @@
 #include "SceneModel.h"
 
 #include "Assets/AssetDescsWithUIDs.h"
+#include "Engine/Models/ModelSceneEditor.h"
 
 namespace bv { namespace model {
 
 // *******************************
 //
-SceneModelPtr    SceneModel::Create( std::string name, model::TimelineManagerPtr pTimelineManager, model::BasicNodePtr pModelSceneRoot )
+SceneModelPtr    SceneModel::Create		( std::string name, BasicNodePtr rootNode, Camera * camera )
 {
-    return SceneModelPtr( new SceneModel( name, pTimelineManager, pModelSceneRoot ) );
+    return std::make_shared< SceneModel >( name, rootNode, camera );
 }
 
 // *******************************
 //
-SceneModel::SceneModel( std::string name, model::TimelineManagerPtr pTimelineManager, model::BasicNodePtr pModelSceneRoot )
+				SceneModel::SceneModel	( std::string name, BasicNodePtr rootNode, Camera * camera )
     : m_name( name )
-    , m_pTimelineManager( pTimelineManager )
-    , m_pModelSceneRoot( pModelSceneRoot )
+    , m_sceneRootNode( rootNode )
+	, m_camera( camera )
 {
+	m_modelSceneEditor = new ModelSceneEditor( m_sceneRootNode );
+}
+
+// *******************************
+//
+				SceneModel::~SceneModel	()
+{
+	delete m_modelSceneEditor;
 }
 
 // *******************************
@@ -28,17 +37,16 @@ ser.EnterChild( "scene" );
 
     ser.SetAttribute( "name", m_name );
 
-    model::TimelineManager::SetInstance( m_pTimelineManager.get() );
+    //model::TimelineManager::SetInstance( m_timelineManager.get() );
 
     //auto& assets = AssetDescsWithUIDs::GetInstance();
     AssetDescsWithUIDs assets;
-    GetAssetsWithUIDs( assets, m_pModelSceneRoot );
+    GetAssetsWithUIDs( assets, m_sceneRootNode );
     AssetDescsWithUIDs::SetInstance( assets );
 
     assets.Serialize( ser );
 
-    m_pTimelineManager->Serialize( ser );
-    m_pModelSceneRoot->Serialize( ser );
+    m_sceneRootNode->Serialize( ser );                                    
 
 ser.ExitChild();
 }
@@ -52,15 +60,45 @@ ISerializablePtr        SceneModel::Create          ( const IDeserializer& deser
     AssetDescsWithUIDs::SetInstance( *assets );
 
 // timelines
-    auto tm = SerializationHelper::DeserializeObjectLoadImpl< model::TimelineManager >( deser, "timelines" );
-    TimelineManager::SetInstance( tm.get() );
+	auto timeline = SerializationHelper::DeserializeObjectLoadImpl< model::OffsetTimeEvaluator >( deser, "timeline" );
+	TimelineManager::GetInstance()->AddTimeline( timeline );
 
 // nodes
     auto node = SerializationHelper::DeserializeObjectLoadImpl< model::BasicNode >( deser, "node" );
     assert( node );
 
-    auto obj = std::make_shared< SceneModel >( deser.GetAttribute( "name" ), tm, node );
+	//FIXME: pass nullptr as camera because we don't have camera model yet
+    auto obj = std::make_shared< SceneModel >( deser.GetAttribute( "name" ), node, nullptr );
+
     return ISerializablePtr( obj );
+}
+
+// *******************************
+//
+BasicNodePtr				SceneModel::GetRootNode	() const
+{
+	return m_sceneRootNode;
+}
+
+// *******************************
+//
+const std::string &			SceneModel::GetName		() const
+{
+	return m_name;
+}
+
+// *******************************
+//
+Camera *					SceneModel::GetCamera              ()  const
+{
+    return m_camera;
+}
+
+// *******************************
+//
+ModelSceneEditor *			SceneModel::GetModelSceneEditor		() const
+{
+	return m_modelSceneEditor;
 }
 
 } // model

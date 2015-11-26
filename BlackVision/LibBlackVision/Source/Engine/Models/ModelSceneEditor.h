@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Engine/Models/SceneModel.h"
 #include "Engine/Models/BasicNode.h"
 
 
@@ -9,7 +10,7 @@ class ModelSceneEditor
 {
 private:
 
-    BasicNodePtr &          m_rootNode;
+    BasicNodePtr &			m_rootNode;
     BasicNodePtr            m_detachedNode;
 
 private:
@@ -21,8 +22,8 @@ public:
 
                             ModelSceneEditor    ( BasicNodePtr & rootNode );
 
-                            void                    SetRootNode         ( BasicNodePtr rootNode );
-    bool                    DeleteRootNode      ();
+    void                    SetRootNode         ( BasicNodePtr mainRootNode, BasicNodePtr sceneRootNode );
+    bool                    DeleteRootNode      ( BasicNodePtr mainRootNode );
 
     void                    AddChildNode        ( BasicNodePtr parentNode, BasicNodePtr childNode );
     bool                    DeleteChildNode     ( BasicNodePtr parentNode, const std::string & childNodeName );

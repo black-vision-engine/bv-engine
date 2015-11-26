@@ -179,7 +179,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             
             //Log::A("SENDING","Timelines info...:");
 
-			model::TimelineManager* TM = m_appLogic->GetTimelineManager().get();
+			model::TimelineManager* TM = model::TimelineManager::GetInstance();
 
 			auto timelines = TM->GetRootTimeline()->GetChildren();
 			string s_timelines;

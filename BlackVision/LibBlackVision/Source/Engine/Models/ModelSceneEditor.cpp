@@ -13,25 +13,28 @@ ModelSceneEditor::ModelSceneEditor                          ( BasicNodePtr & roo
 
 // ********************************
 //
-void                    ModelSceneEditor::SetRootNode       ( BasicNodePtr rootNode )
+void                    ModelSceneEditor::SetRootNode       ( BasicNodePtr mainRootNode, BasicNodePtr rootNode )
 {
-	if( m_rootNode != rootNode )
+	if( m_rootNode && m_rootNode != rootNode )
 	{
-		if( m_rootNode != nullptr )
-		{
-			m_rootNode = nullptr;
-		}
+		mainRootNode->DetachChildNodeOnly( m_rootNode );
 	}
 
 	m_rootNode = rootNode;
+
+	if( rootNode != nullptr )
+	{
+		mainRootNode->AddChildToModelOnly( rootNode );
+	}
 }
 
 // ********************************
 //
-bool                    ModelSceneEditor::DeleteRootNode     ()
+bool                    ModelSceneEditor::DeleteRootNode     ( BasicNodePtr mainRootNode )
 {
     if( m_rootNode )
     {
+		mainRootNode->DetachChildNodeOnly( m_rootNode );
         m_rootNode = nullptr;
 
         return true;
