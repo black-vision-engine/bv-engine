@@ -9,6 +9,7 @@
 
 #include "Engine/Graphics/Effects/Texture2DEffect.h"
 
+
 namespace bv {
 
 namespace {
@@ -97,9 +98,7 @@ OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int 
     , m_readbackTextures( numReadBuffers * GNumRenderTargets ) //two display targets that can be potentially used
     , m_displayCamera( nullptr )
     , m_rendererCamera( camera )
-    , m_curDisplayTarget( 0 )
     , m_buffersPerTarget( numReadBuffers )
-    , m_displayRTEnabled( false )
     , m_rtStack( width, height, fmt )
 {
     m_displayCamera         = MainDisplayTarget::CreateDisplayCamera();
@@ -144,23 +143,6 @@ void                OffscreenRenderLogic::SetRendererCamera         ( Camera * c
 //
 void                OffscreenRenderLogic::AllocateNewRenderTarget     ( Renderer * renderer )
 {
-/*
-    if( m_topRenderTargetEnabled )
-    {
-        DisableTopRenderTarget( renderer );
-    }
-    
-    m_usedStackedRenderTargets++;
-
-    auto auxRenderTargets = m_usedStackedRenderTargets - 1;
-
-    if( auxRenderTargets > m_auxRenderTargets.size() )
-    {
-        m_auxRenderTargets.push_back( MainDisplayTarget::CreateAuxRenderTarget( m_textureData.m_width, m_textureData.m_height, m_textureData.m_fmt ) );
-    }
-
-    assert( auxRenderTargets <= m_auxRenderTargets.size() );
-*/
     if( m_rtStack.TotalActiveRenderTargets() == 0 )
     {
         m_rtStack.AllocateNewRenderTarget( renderer, RenderTarget::RTSemantic::S_DRAW_READ );
@@ -175,16 +157,6 @@ void                OffscreenRenderLogic::AllocateNewRenderTarget     ( Renderer
 //
 void                OffscreenRenderLogic::EnableTopRenderTarget       ( Renderer * renderer )
 {
-/*
-    assert( m_usedStackedRenderTargets > 0 );
-
-    if( !m_topRenderTargetEnabled )
-    {
-        renderer->Enable( GetRenderTargetAt( -1 ) );
-
-        m_topRenderTargetEnabled = true;
-    }
-*/
     m_rtStack.EnableTopRenderTarget( renderer );
 }
 
@@ -192,17 +164,6 @@ void                OffscreenRenderLogic::EnableTopRenderTarget       ( Renderer
 //
 void                OffscreenRenderLogic::DiscardCurrentRenderTarget  ( Renderer * renderer )
 {
-/*
-    assert( m_usedStackedRenderTargets > 0 );
-
-    if( m_topRenderTargetEnabled )
-    {
-        DisableTopRenderTarget( renderer );
-    }
-
-    m_usedStackedRenderTargets--;
-*/
-
     m_rtStack.DiscardCurrentRenderTarget( renderer );
 }
 
@@ -210,14 +171,6 @@ void                OffscreenRenderLogic::DiscardCurrentRenderTarget  ( Renderer
 //
 void                OffscreenRenderLogic::DisableTopRenderTarget    ( Renderer * renderer )
 {
-/*
-    if( m_topRenderTargetEnabled )
-    {
-        renderer->Disable( GetRenderTargetAt( -1 ) );
-
-        m_topRenderTargetEnabled = false;
-    }
-*/
     m_rtStack.DisableTopRenderTarget( renderer );
 }
 
@@ -262,7 +215,6 @@ void                OffscreenRenderLogic::DrawAMTopTwoRenderTargets ( Renderer *
 //
 void                OffscreenRenderLogic::DrawWithAllVideoEffects   ( Renderer * renderer )
 {
-    // m_renderData.UseChannelMaskEffect( 
     { renderer; }
 }
 
@@ -270,14 +222,6 @@ void                OffscreenRenderLogic::DrawWithAllVideoEffects   ( Renderer *
 //
 void                OffscreenRenderLogic::DrawDisplayRenderTarget   ( Renderer * renderer )
 {
-    /*
-    assert( m_displayRTEnabled == false );
-
-    renderer->SetCamera( m_displayCamera );
-    renderer->Draw( CurDisplayRenderTargetData().quad );
-    renderer->SetCamera( m_rendererCamera );
-    */
-
     // FIXME: make sure that render logic does not discard this target before it is used (right now it is not a problem as discarding RT does not free any data and simply changes and index)
     assert( m_rtStack.TotalAllocatedRenderTargets() >= 1 );
     assert( m_rtStack.TotalActiveRenderTargets() == 0 );
@@ -287,6 +231,7 @@ void                OffscreenRenderLogic::DrawDisplayRenderTarget   ( Renderer *
     auto rt = m_rtStack.GetRenderTargetAt( 0 ); // DISPLAY
 
     // FIXME: create fake, shitty effect
+    // FIXME: this shit requires an immediate fix
     if( m_tmpOutput.quad == nullptr )
     {
         std::vector< bv::Transform > vec;
@@ -312,7 +257,8 @@ void                OffscreenRenderLogic::DrawDisplayRenderTarget   ( Renderer *
 //
 void                OffscreenRenderLogic::SwapDisplayRenderTargets  ()
 {
-    m_curDisplayTarget = ( m_curDisplayTarget + 1 ) % GNumRenderTargets;
+    // FIXME: what here
+    // m_curDisplayTarget = ( m_curDisplayTarget + 1 ) % GNumRenderTargets;
 }
 
 // **************************
@@ -415,20 +361,19 @@ RenderTargetData    OffscreenRenderLogic::CreateVideoOutputRenderTargetData () c
 //
 unsigned int      OffscreenRenderLogic::CurDisplayRenderTargetNum           () const
 {
-    return m_curDisplayTarget;
+    //FIXME: what here
+    // return m_curDisplayTarget;
+
+    return 0;
 }
 
 // **************************
 //
 RenderTargetData &  OffscreenRenderLogic::CurDisplayRenderTargetData        ()
 {
-    // FIXME: this shit requires an immediate fix
     assert( m_tmpOutput.quad != nullptr );
 
     return m_tmpOutput;
-    /*
-    return m_displayRenderTargetData[ m_curDisplayTarget ];
-    */
 }
 
 } //bv

@@ -77,7 +77,6 @@ private:
 
     RenderTargetData    m_tmpOutput;
 
-    unsigned int        m_curDisplayTarget;
     unsigned int        m_buffersPerTarget;
 
     std::vector< Texture2DPtr > m_readbackTextures;
@@ -85,7 +84,7 @@ private:
     Camera *            m_displayCamera;
     Camera *            m_rendererCamera;
 
-    bool                m_displayRTEnabled;
+    // bool                m_displayRTEnabled;
 
     RenderTargetStack   m_rtStack;
 
