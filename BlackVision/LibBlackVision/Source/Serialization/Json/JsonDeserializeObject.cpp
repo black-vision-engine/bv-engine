@@ -37,8 +37,7 @@ void JsonDeserializeObject::Load                ( const std::string& jsonString 
 {
 	Json::Reader reader;
 	reader.parse( jsonString, m_root );
-	m_currentNode = &m_root;
-	m_nodeStack.push( &m_root );
+    OnRootInit();
 }
 
 // ***********************
@@ -47,10 +46,26 @@ void JsonDeserializeObject::Load                ( std::istream& stream )
 {
 	Json::Reader reader;
 	reader.parse( stream, m_root );
-	m_currentNode = &m_root;
-	m_nodeStack.push( &m_root );
+    OnRootInit();
 }
 
+// ***********************
+//
+void JsonDeserializeObject::OnRootInit          ()
+{
+    m_nodeStack.push( &m_root );
+
+    if( m_root.isObject() )
+	    m_currentNode = &m_root;
+    else if( m_root.isArray() && m_root.size() )
+    {
+        m_currentNode = &m_root[ 0 ];
+        m_indexStack.push( 0 );
+    }
+    else
+        m_root = Json::ValueType::nullValue;
+
+}
 
 // ***********************
 //
@@ -76,6 +91,8 @@ bool JsonDeserializeObject::EnterChild          ( const std::string& name ) cons
     auto& node = (*m_currentNode)[ name ];
     if( node.isArray() )
     {
+        if( node.size() == 0 )
+            return false;
         // Always push both node's when making an array.
         // Array node can never be the current node.
         m_nodeStack.push( &node );

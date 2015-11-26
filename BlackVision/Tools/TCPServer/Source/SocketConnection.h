@@ -1,0 +1,57 @@
+#pragma once
+
+#include "CoreDEF.h"
+#include "DataTypes/QueueConcurrent.h"
+#include "Tools/Logger/LogMsgStruct.h"
+
+#include "../../Applications/BlackVision/Source/EndUserAPI/IEventServer.h"
+
+
+namespace bv
+{
+
+struct InitData
+{
+    unsigned int    SeverityLevel;
+    unsigned int    LogModules;
+};
+
+
+enum SocketConnectionState
+{
+    SCS_Uninitialized,
+    SCS_Running,
+    SCS_Ended
+};
+
+class SocketConnection
+{
+private:
+    QueueConcurrent<ResponseMsg>    m_responseQueue;
+    QueueEventCallback              m_sendCommandCallback;
+
+    SOCKET                          m_socketID;
+
+    QueueConcurrent<LogMsg>*        m_logQueue;
+    int                             m_logID;
+
+    SocketConnectionState           m_state;
+public:
+    SocketConnection( SOCKET socketID, QueueEventCallback callback );
+    ~SocketConnection();
+
+    void            QueueResponse       ( ResponseMsg&& message );
+    void            MainThread          ();
+
+    SocketConnectionState   GetState    ()      { return m_state; }
+private:
+    InitData        InitCommunication   ( SOCKET socketID );
+    bool            Authorization       ( SOCKET socketID );
+
+    void            OnEndMainThread     ();
+};
+
+DEFINE_PTR_TYPE( SocketConnection );
+
+
+} //bv

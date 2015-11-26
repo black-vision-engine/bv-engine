@@ -23,7 +23,7 @@ bool JsonSpiritDeserializeObject::LoadFile           ( const std::string& fileNa
     std::wifstream file( fileName );
     bool result = json_spirit::read( file, m_root );
     if( result )
-        m_currentNode = &m_root;
+        return OnRootInit();
     return result;
 }
 
@@ -33,10 +33,28 @@ bool JsonSpiritDeserializeObject::LoadWString         ( const std::wstring& json
 {
     bool result = json_spirit::read( jsonString, m_root );
     if( result )
-        m_currentNode = &m_root;
+        return OnRootInit();
     return result;
 }
 
+// ***********************
+//
+bool JsonSpiritDeserializeObject::OnRootInit          ()
+{
+    m_nodeStack.push( &m_root );
+    if( m_root.type() == json_spirit::Value_type::obj_type )
+        m_currentNode = &m_root;
+    else if( m_root.type() == json_spirit::Value_type::array_type )
+    {
+        auto& nodeArray = m_root.get_array();
+        if( nodeArray.empty() )
+            return false;
+
+        m_currentNode = &nodeArray[ 0 ];
+        m_indexStack.push( 0 );
+    }
+    return true;
+}
 
 // ***********************
 //
@@ -49,8 +67,7 @@ std::wstring		JsonSpiritDeserializeObject::GetAttribute        ( const std::wstr
 {
     auto& JsonObject = m_currentNode->get_obj();
     auto value = FindValue( JsonObject, name );
-
-    if( value == nullptr )
+    if( value->type() != json_spirit::Value_type::str_type )
         return EMPTY_STRING;
 
     return value->get_str();
@@ -87,6 +104,8 @@ bool                JsonSpiritDeserializeObject::EnterChild          ( const std
         if( node->type() == json_spirit::Value_type::array_type )
         {
             auto& arrayNode = node->get_array();
+            if( arrayNode.empty() )
+                return false;
             // Always push both node's when making an array.
             // Array node can never be the current node.
             m_nodeStack.push( node );

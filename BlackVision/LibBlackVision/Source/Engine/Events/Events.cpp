@@ -32,8 +32,6 @@ std::string KeyPressedEvent::m_sEventName           = "Event_KeyPressedEvent";
 // FIXME: MORE EVENTS IN CrawlerEvents.cpp. VERY VERY BAD IDEA. WE NEED EVENTS REGISTER SYSTEM ASAP.
 
 
-
-// ************************************* new Events *****************************************
 const EventType LoadAssetEvent::m_sEventType        = 0x30000013;
 std::string LoadAssetEvent::m_sEventName            = "LoadAssetEvent";
 
@@ -42,6 +40,9 @@ std::string ParamKeyEvent::m_sEventName             = "ParamKeyEvent";
 
 const EventType NodeStructureEvent::m_sEventType    = 0x30000012;
 std::string NodeStructureEvent::m_sEventName        = "NodeStructureEvent";
+
+const EventType PluginStructureEvent::m_sEventType    = 0x30000015;
+std::string PluginStructureEvent::m_sEventName        = "PluginStructureEvent";
 
 const EventType ProjectEvent::m_sEventType          = 0x30000013;
 std::string ProjectEvent::m_sEventName              = "ProjectStructureEvent";
@@ -97,11 +98,17 @@ const std::wstring NEW_NODE_NAME_WSTRING        = L"NewNodeName";
 
 const std::wstring COMMAND_ADD_NODE_WSTRING         = L"AddNode";
 const std::wstring COMMAND_REMOVE_NODE_WSTRING      = L"RemoveNode";
+const std::wstring COMMAND_SET_NODE_VISIBLE_WSTRING     = L"SetNodeVisible";
+const std::wstring COMMAND_SET_NODE_INVISIBLE_WSTRING   = L"SetNodeInvisible";
+
+// PluginStructureEvent
+const std::wstring PLUGIN_ATTACH_INDEX_WSTRING      = L"AttachIndex";
+const std::wstring PLUGIN_UID_WSTRING               = L"PluginUID";
+
 const std::wstring COMMAND_ATTACH_PLUGIN_WSTRING    = L"AttachPlugin";
 const std::wstring COMMAND_DETACH_PLUGIN_WSTRING    = L"DetachPlugin";
 const std::wstring COMMAND_ADD_PLUGIN_WSTRING       = L"AddPlugin";
-const std::wstring COMMAND_SET_NODE_VISIBLE_WSTRING     = L"SetNodeVisible";
-const std::wstring COMMAND_SET_NODE_INVISIBLE_WSTRING   = L"SetNodeInvisible";
+const std::wstring COMMAND_REMOVE_PLUGIN_WSTRING    = L"RemovePlugin";
 
 // ProjectEvent
 const std::wstring REQUEST_WSTRING                          = L"Request";
@@ -520,10 +527,6 @@ const std::string &     LoadAssetEvent::GetName           () const
 EventType           LoadAssetEvent::GetEventType         () const
 {    return this->m_sEventType; }
 
-// ******************************************************************************************
-// ************************************* new Events *****************************************
-// ******************************************************************************************
-
 
 //******************* ParamKeyEvent *************
 
@@ -624,7 +627,6 @@ void                NodeStructureEvent::Serialize            ( ISerializer& ser 
     ser.SetAttribute( Serial::SCENE_NAME_WSTRING, toWString( SceneName ) );
     ser.SetAttribute( Serial::NODE_NAME_WSTRING, toWString( NodeName ) );
     ser.SetAttribute( Serial::NEW_NODE_NAME_WSTRING, toWString( NewNodeName ) );
-    ser.SetAttribute( Serial::PLUGIN_NAME_WSTRING, toWString( PluginName ) );
     ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( SceneCommand ) );
 }
 
@@ -638,7 +640,6 @@ IEventPtr                NodeStructureEvent::Create          ( IDeserializer& de
         newEvent->SceneName         = toString( deser.GetAttribute( Serial::SCENE_NAME_WSTRING ) );
         newEvent->NodeName          = toString( deser.GetAttribute( Serial::NODE_NAME_WSTRING ) );
         newEvent->NewNodeName       = toString( deser.GetAttribute( Serial::NEW_NODE_NAME_WSTRING ) );
-        newEvent->PluginName        = toString( deser.GetAttribute( Serial::PLUGIN_NAME_WSTRING ) );
         newEvent->SceneCommand      = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
         
         return newEvent;
@@ -675,12 +676,6 @@ std::wstring NodeStructureEvent::CommandToWString    ( Command cmd )
         return Serial::COMMAND_ADD_NODE_WSTRING;
     else if( cmd == Command::RemoveNode )
         return Serial::COMMAND_REMOVE_NODE_WSTRING;
-    else if( cmd == Command::AttachPlugin )
-        return Serial::COMMAND_ATTACH_PLUGIN_WSTRING;
-    else if( cmd == Command::DetachPlugin )
-        return Serial::COMMAND_DETACH_PLUGIN_WSTRING;
-    else if( cmd == Command::AddPlugin )
-        return Serial::COMMAND_ADD_PLUGIN_WSTRING;
     else if( cmd == Command::SetNodeVisible )
         return Serial::COMMAND_SET_NODE_VISIBLE_WSTRING;
     else if( cmd == Command::SetNodeInvisible )
@@ -696,16 +691,96 @@ NodeStructureEvent::Command NodeStructureEvent::WStringToCommand    ( const std:
         return Command::AddNode;
     else if( string == Serial::COMMAND_REMOVE_NODE_WSTRING )
         return Command::RemoveNode;
-    else if( string == Serial::COMMAND_ATTACH_PLUGIN_WSTRING)
-        return Command::AttachPlugin;
-    else if( string == Serial::COMMAND_DETACH_PLUGIN_WSTRING )
-        return Command::DetachPlugin;
-    else if( string == Serial::COMMAND_ADD_PLUGIN_WSTRING)
-        return Command::AddPlugin;
     else if( string == Serial::COMMAND_SET_NODE_VISIBLE_WSTRING )
         return Command::SetNodeVisible;
     else if( string == Serial::COMMAND_SET_NODE_INVISIBLE_WSTRING )
         return Command::SetNodeInvisible;
+    else
+        return Command::Fail;
+}
+
+//******************* PluginStructureEvent *************
+
+// *************************************
+//
+void                PluginStructureEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
+    ser.SetAttribute( Serial::NODE_NAME_WSTRING, toWString( NodeName ) );
+    ser.SetAttribute( Serial::SCENE_NAME_WSTRING, toWString( SceneName ) );
+    ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( PluginCommand ) );
+    ser.SetAttribute( Serial::PLUGIN_NAME_WSTRING, toWString( PluginName ) );
+    ser.SetAttribute( Serial::PLUGIN_ATTACH_INDEX_WSTRING, toWString( AttachIndex ) );
+    ser.SetAttribute( Serial::PLUGIN_UID_WSTRING, toWString( PluginUID ) );
+}
+
+// *************************************
+//
+IEventPtr                PluginStructureEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
+    {
+        PluginStructureEventPtr newEvent   = std::make_shared<PluginStructureEvent>();
+        newEvent->NodeName          = toString( deser.GetAttribute( Serial::NODE_NAME_WSTRING ) );
+        newEvent->SceneName         = toString( deser.GetAttribute( Serial::SCENE_NAME_WSTRING ) );
+        newEvent->PluginName        = toString( deser.GetAttribute( Serial::PLUGIN_NAME_WSTRING ) );
+        newEvent->PluginCommand     = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
+        newEvent->AttachIndex       = std::stoul( deser.GetAttribute( Serial::PLUGIN_ATTACH_INDEX_WSTRING ) );
+        newEvent->PluginUID         = toString( deser.GetAttribute( Serial::PLUGIN_UID_WSTRING ) );
+
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               PluginStructureEvent::Clone             () const
+{   return IEventPtr( new PluginStructureEvent( *this ) );  }
+
+// *************************************
+//
+EventType           PluginStructureEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        PluginStructureEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  PluginStructureEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           PluginStructureEvent::GetEventType() const
+{   return this->m_sEventType; }
+
+// *************************************
+//
+std::wstring PluginStructureEvent::CommandToWString    ( Command cmd )
+{
+    if( cmd == Command::AttachPlugin )
+        return Serial::COMMAND_ATTACH_PLUGIN_WSTRING;
+    else if( cmd == Command::DetachPlugin )
+        return Serial::COMMAND_DETACH_PLUGIN_WSTRING;
+    else if( cmd == Command::AddPlugin )
+        return Serial::COMMAND_ADD_PLUGIN_WSTRING;
+    else if( cmd == Command::RemovePlugin )
+        return Serial::COMMAND_REMOVE_PLUGIN_WSTRING;
+    else
+        return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
+}
+// *************************************
+//
+PluginStructureEvent::Command PluginStructureEvent::WStringToCommand    ( const std::wstring& string )
+{
+    if( string == Serial::COMMAND_ATTACH_PLUGIN_WSTRING)
+        return Command::AttachPlugin;
+    else if( string == Serial::COMMAND_DETACH_PLUGIN_WSTRING )
+        return Command::DetachPlugin;
+    else if( string == Serial::COMMAND_ADD_PLUGIN_WSTRING )
+        return Command::AddPlugin;
+    else if( string == Serial::COMMAND_REMOVE_PLUGIN_WSTRING )
+        return Command::RemovePlugin;
     else
         return Command::Fail;
 }
