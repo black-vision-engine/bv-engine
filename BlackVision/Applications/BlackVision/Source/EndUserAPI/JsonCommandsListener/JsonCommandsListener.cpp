@@ -17,15 +17,13 @@ namespace bv
 // ***********************
 //
 JsonCommandsListener::JsonCommandsListener()
-    :   m_eventServer( nullptr ),
-        m_remoteLog( nullptr )
+    :   m_eventServer( nullptr )
 {
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &JsonCommandsListener::SendResponse ), ResponseEvent::Type() );
 }
 
 JsonCommandsListener::~JsonCommandsListener()
 {
-    delete m_remoteLog;
     delete m_eventServer;
 }
 

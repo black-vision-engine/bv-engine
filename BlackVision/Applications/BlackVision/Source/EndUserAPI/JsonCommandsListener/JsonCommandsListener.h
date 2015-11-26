@@ -2,7 +2,6 @@
 
 #include "../RemoteController.h"
 #include "../IEventServer.h"
-#include "LogTCP.h"
 #include "Threading/CriticalSection.h"
 
 #include <map>
@@ -15,7 +14,6 @@ class JsonCommandsListener : public RemoteController
 {
 private:
     IEventServer*       m_eventServer;
-    LogTCP*             m_remoteLog;
 
     std::map<unsigned int, IEventPtr>   m_triggeredEvents;          ///< Events from this map are sent to EventsManager in requested frame.
     CriticalSection                     m_eventsMapLock;

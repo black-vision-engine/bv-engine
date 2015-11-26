@@ -184,15 +184,16 @@
                             <ComboBoxItem>SeverityLevel::error</ComboBoxItem>
                             <ComboBoxItem>SeverityLevel::critical</ComboBoxItem>
                         </ComboBox>
-                        <ListView Name="ModulesListView" SelectionMode="Multiple" HorizontalAlignment="Left" Height="164" Margin="448,249,0,0" VerticalAlignment="Top" Width="130">
-                            <ListViewItem IsSelected="True">LibBlackVision</ListViewItem>
-                            <ListViewItem IsSelected="True">LibCore</ListViewItem>
-                            <ListViewItem IsSelected="True">LibImage</ListViewItem>
-                            <ListViewItem IsSelected="True">BlackVisionApp</ListViewItem>
-                            <ListViewItem IsSelected="True">LibProjectManager</ListViewItem>
-                            <ListViewItem IsSelected="True">TCPServer</ListViewItem>
-                            <ListViewItem IsSelected="True">LibVideCards</ListViewItem>
-                            <ListViewItem IsSelected="True">XMLSceneParser</ListViewItem>
+                        <ListView Name="ModulesListView" SelectionMode="Multiple" HorizontalAlignment="Left" Height="186" Margin="448,249,0,0" VerticalAlignment="Top" Width="130">
+                            <ListViewItem Tag="1" IsSelected="True">LibBlackVision</ListViewItem>
+                            <ListViewItem Tag="2" IsSelected="True">LibCore</ListViewItem>
+                            <ListViewItem Tag="4" IsSelected="True">LibImage</ListViewItem>
+                            <ListViewItem Tag="8" IsSelected="True">Prototyper</ListViewItem>
+                            <ListViewItem Tag="16" IsSelected="True">BlackVisionApp</ListViewItem>
+                            <ListViewItem Tag="32" IsSelected="True">LibProjectManager</ListViewItem>
+                            <ListViewItem Tag="64" IsSelected="True">TCPServer</ListViewItem>
+                            <ListViewItem Tag="128" IsSelected="True">LibVideCards</ListViewItem>
+                            <ListViewItem Tag="256" IsSelected="True">XMLSceneParser</ListViewItem>
                         </ListView>
                     </Grid>                
                 </Expander>

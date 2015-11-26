@@ -345,7 +345,15 @@ namespace ProfilerEditor
 
         private uint GetModuleFilter()
         {
-            return 0xFFFFFFFF;
+            uint filter = 0;
+            foreach( var item in ModulesListView.SelectedItems )
+            {
+                var listView = item as ListViewItem;
+                var tag = Convert.ToUInt32( listView.Tag.ToString() );
+                filter = filter | tag;
+            }
+
+            return filter;
         }
 
         private void OnConnect()
