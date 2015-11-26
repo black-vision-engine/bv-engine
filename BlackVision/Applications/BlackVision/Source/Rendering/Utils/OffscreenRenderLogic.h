@@ -8,6 +8,9 @@
 #include "Engine/Graphics/Effects/Texture2DEffect.h"
 #include "Engine/Graphics/Effects/Texture2DEffectWithMask.h"
 
+#include "Rendering/Utils/RenderTargetStack.h"
+
+
 namespace bv {
 
 class RenderTarget;
@@ -72,6 +75,8 @@ private:
     RenderTargetData    m_displayRenderTargetData[ 2 ];
     RenderTargetData    m_videoOutputRenderTarget;
 
+    RenderTargetData    m_tmpOutput;
+
     unsigned int        m_curDisplayTarget;
     unsigned int        m_buffersPerTarget;
 
@@ -81,6 +86,8 @@ private:
     Camera *            m_rendererCamera;
 
     bool                m_displayRTEnabled;
+
+    RenderTargetStack   m_rtStack;
 
 public:
 
@@ -108,13 +115,13 @@ public:
 
 private:
 
-    RenderTarget *      GetRenderTargetAt               ( int i ) const;
+    RenderTarget *      GetRenderTargetAt               ( int i );
 
     RenderTargetData    CreateDisplayRenderTargetData       () const;
     RenderTargetData    CreateVideoOutputRenderTargetData   () const;
 
     unsigned int        CurDisplayRenderTargetNum           () const;
-    RenderTargetData    CurDisplayRenderTargetData          () const;
+    RenderTargetData &  CurDisplayRenderTargetData          ();
 
 };
 

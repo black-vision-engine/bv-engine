@@ -112,4 +112,18 @@ RenderTarget *  RenderTargetStack::GetRenderTargetAt            ( int i ) const
     return m_allocatedRenderTargets[ i ];
 }
 
+// *********************************
+//
+unsigned int    RenderTargetStack::TotalActiveRenderTargets    () const
+{
+    return m_topActiveRenderTargetIdx + 1;
+}
+
+// *********************************
+//
+unsigned int    RenderTargetStack::TotalAllocatedRenderTargets () const
+{
+    return (unsigned int) m_allocatedRenderTargets.size();
+}
+
 } //bv

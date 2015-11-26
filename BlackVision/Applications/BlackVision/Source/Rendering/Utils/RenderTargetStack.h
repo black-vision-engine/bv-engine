@@ -15,7 +15,7 @@ namespace bv {
 
 class Renderer;
 
-typedef std::vector< RenderTarget * >  RenderTargetVec;
+typedef std::vector< RenderTarget * >  TRenderTargetVec;
 
 } //bv 
 
@@ -29,14 +29,11 @@ private:
 
     RenderTargetDataEntryDesc   m_renderTargetDescriptor;
 
-    RenderTargetVec             m_allocatedRenderTargets;
+    TRenderTargetVec            m_allocatedRenderTargets;
 
     bool                        m_isTopRTEnabled;
 
     int                         m_topActiveRenderTargetIdx;
-
-    unsigned int                m_curDisplayTarget;
-    unsigned int                m_buffersPerTarget;
 
 public:
 
@@ -49,6 +46,9 @@ public:
     void                DisableTopRenderTarget      ( Renderer * renderer );
 
     RenderTarget *      GetRenderTargetAt           ( int i ) const;
+
+    unsigned int        TotalActiveRenderTargets    () const;
+    unsigned int        TotalAllocatedRenderTargets () const;
 
 }; 
 
