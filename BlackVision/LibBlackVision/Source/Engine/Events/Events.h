@@ -219,6 +219,7 @@ public:
     std::string                     NodeName;
     std::string                     PluginName;
     std::string                     ParamName;
+    std::string                     SceneName;
     std::wstring                    Value;
 
     float                           Time;
@@ -252,6 +253,7 @@ public:
         RemoveNode,
         DetachPlugin,
         AttachPlugin,
+        AddPlugin,
         SetNodeVisible,
         SetNodeInvisible,
         Fail            ///< Wrong command
@@ -261,6 +263,7 @@ private:
     static std::string          m_sEventName;
 public:
     NodeStructureEvent::Command     SceneCommand;
+    std::string                     SceneName;
     std::string                     NodeName;
     std::string                     PluginName;
     std::string                     NewNodeName;
@@ -410,6 +413,7 @@ private:
 public:
     TimeLineEvent::Command      TimelineCommand;
     std::string                 TimelineName;
+    std::string                 SceneName;
     float                       Time;
 
 public:

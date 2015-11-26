@@ -2,15 +2,21 @@
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
+#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
+#include "Engine/Graphics/Resources/RenderTarget.h"
 #include "Rendering/OffscreenRenderLogic.h"
+#include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 
 #include "Rendering/Logic/RenderLogic.h"
 
 #include "Engine/Graphics/Effects/LightScatteringEffect.h"
 
+#include "Engine/Graphics/SceneGraph/MainDisplayTarget.h"
+
 
 namespace bv {
+
 
 // *********************************
 //
@@ -30,55 +36,44 @@ LightScatteringRenderLogic::~LightScatteringRenderLogic        ()
 //
 void    LightScatteringRenderLogic::RenderNode                  ( Renderer * renderer, SceneNode * node )
 {
-    { renderer; node; }
-    GetRenderLogic()->DrawNode( renderer, node );
-    //if( node->NumChildNodes() < 2 )
-    //{
-    //    GetRenderLogic()->DrawNode( renderer, node );
-    //}
-    //else
-    //{
-    //    GetRenderLogic()->DrawNodeOnly( renderer, node );
+    //GetRenderLogic()->DrawNode( renderer, node );
 
-    //    GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
-    //    GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
 
-    //    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
-    //    renderer->ClearBuffers();
+        GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
+        GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
 
-    //    auto effect = node->GetNodeEffect();
+        renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+        renderer->ClearBuffers();
 
-    //    auto maskIdxVal = std::static_pointer_cast< ValueInt >( effect->GetValue( "bgIdx" ) );
-    //    auto fgIdxVal = std::static_pointer_cast< ValueInt >( effect->GetValue( "fgIdx" ) );
-    //    auto alphaVal = effect->GetValue( "alpha" );
+        GetRenderLogic()->DrawNode( renderer, node );
 
-    //    auto maskIdx= maskIdxVal->GetValue();
-    //    auto fgIdx = fgIdxVal->GetValue();
+        auto texture = GetOffscreenRenderLogic()->GetColorTextureAt( -1 );
 
-    //    assert( maskIdx == 0 || maskIdx == 1 );
-    //    assert( fgIdx == 0 || fgIdx == 1 );
-    //    assert( maskIdx != fgIdx );
+        GetOffscreenRenderLogic()->DisableTopRenderTarget( renderer );
 
-    //    // MASK
-    //    GetRenderLogic()->RenderNode( renderer, node->GetChild( maskIdx ) );
+        auto effect = node->GetNodeEffect();
+        m_effect->SetExposureVal( effect->GetValue( "exposure" ).get() );
+        m_effect->SetWeightVal( effect->GetValue( "weight" ).get() );
+        m_effect->SetDecayVal( effect->GetValue( "decay" ).get() );
+        m_effect->SetDensityVal( effect->GetValue( "density" ).get() );
+        m_effect->SetLightPositionOnScreenVal( effect->GetValue( "lightPositionOnScreen" ).get() );
+        m_effect->SetNumSamplesVal( effect->GetValue( "numSamples" ).get() );
 
-    //    GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
-    //    GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
-    //    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
-    //    renderer->ClearBuffers();
+        GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
 
-    //    // FOREGROUND
-    //    GetRenderLogic()->RenderNode( renderer, node->GetChild( fgIdx ) ); 
+        m_effect->AddTexture( std::const_pointer_cast< Texture2D >( texture ) );
 
-    //    GetOffscreenRenderLogic()->DrawAMTopTwoRenderTargets( renderer, alphaVal.get() );
-    //
-    //    GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
-    //    GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
+        auto re = static_cast< bv::RenderableEntity * >( node->GetTransformable() );
+        
+        auto prevRE = re->GetRenderableEffect();
 
-    //    GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
+        re->SetRenderableEffect( RenderableEffectPtr( m_effect ) );
 
-    //    GetRenderLogic()->DrawChildren( renderer, node, 2 );
-    //}
+        GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
+
+        renderer->Draw( static_cast< bv::RenderableEntity * >( node->GetTransformable() ) );
+
+        re->SetRenderableEffect( prevRE );
 }
 
 } //bv

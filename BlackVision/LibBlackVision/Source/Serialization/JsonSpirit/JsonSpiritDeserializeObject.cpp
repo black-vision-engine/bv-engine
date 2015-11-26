@@ -49,10 +49,23 @@ std::wstring		JsonSpiritDeserializeObject::GetAttribute        ( const std::wstr
 {
     auto& JsonObject = m_currentNode->get_obj();
     auto value = FindValue( JsonObject, name );
+
     if( value == nullptr )
         return EMPTY_STRING;
 
     return value->get_str();
+}
+
+// ***********************
+//
+std::string			JsonSpiritDeserializeObject::GetParentAttribute		( const std::string& /*parentName*/, const std::string& /*attName*/ ) const
+{    assert( !"This serializer supports only wstrings" ); return "";   }
+
+// ***********************
+//
+std::wstring		JsonSpiritDeserializeObject::GetParentAttribute		( const std::wstring& /*parentName*/, const std::wstring& /*attName*/ ) const
+{
+        assert( !"FIXME" ); return L"";
 }
 
 // ***********************

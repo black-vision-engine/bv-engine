@@ -45,44 +45,12 @@ Json::Value GetParamDescription( IParameterPtr p )
 
 // ***********************
 //
-std::string SerializeNode( model::BasicNodePtr node )
+Json::Value SerializeSceneModel( model::SceneModelPtr sceneModel )
 {
-    string S="";
-    string tmp="";
-    string children="";
-    string plugins="";
-	int NumChildren = (node)->GetNumChildren();
-    S="{";
-    S+="\"node_name\":\""+node->GetName()+"\",";
-    
+    JsonSerializeObject ser;
+    sceneModel->Serialize( ser );
 
-    auto pluginlist = node->GetPluginList();
-
-    for( unsigned int i = 0; i < pluginlist->NumPlugins(); ++i )
-    {
-        string plugin = pluginlist->GetPlugin( i )->GetName();
-        if(plugins!="")plugins+=",";
-        plugins            +=  "{\"plugin_name\":\""+plugin+"\"}";
-        
-    }
-
-    S+="\"node_plugins\":["+plugins+"],";
-
-
-    for(int i=0;i<NumChildren;i++)
-    {
-
-		model::IModelNodePtr ptr   = node->GetChild(i);
-        model::IModelNodePtr ptr2    = ptr;
-        model::BasicNodePtr nod      = std::static_pointer_cast< model::BasicNode >( ptr2 );
-        if(children!="") children+=",";
-        children            +=  SerializeNode(nod);
-    }
-
-    S+="\"node_children\":["+children+"]";
-    S+="}";
-
-    return S;
+    return ser.GetJson();
 }
 
 // ***********************
@@ -141,9 +109,17 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
 
             Json::Value root;
             root[ "command" ] = "scene_tree";
-            root[ "tree" ] = SerializeNode( m_appLogic->GetBVScene()->GetModelSceneRoot() );
 
-            //Log::A("OK",S);
+            root[ "scenes" ] = Json::arrayValue;
+
+            for( auto s : m_appLogic->GetBVScene()->GetScenes() )
+            {
+                Json::Value val;
+                root[ "scenes" ].append( SerializeSceneModel( s ) );
+            }
+
+
+            auto ret = root.toStyledString();
             responseMessage = toWString( root.toStyledString() );
         }
         else if( command == InfoEvent::Command::Performance )
@@ -179,70 +155,88 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             
             //Log::A("SENDING","Timelines info...:");
 
-			model::TimelineManager* TM = model::TimelineManager::GetInstance();
+            Json::Value ret;
+            ret["command"] = "timelines";
+            ret[ "scenes" ] = Json::arrayValue;
 
-			auto timelines = TM->GetRootTimeline()->GetChildren();
-			string s_timelines;
-			bool first = true;
-			for( auto timeline : timelines)
-			{
-				if(!first)
-					s_timelines +=",";
-
-				string s_name = timeline->GetName();
-				string s_time = to_string(timeline->GetLocalTime());
-
-				bv::model::ITimeline* timeline_cast = static_cast<bv::model::ITimeline*>(timeline.get());
-				
-				string s_timeline = "{\"name\":\""+s_name+"\",\"time\":\""+s_time+"\",\"keyframes\":[";
-				string s_keyframes="";
-				for(unsigned int i=0;i<timeline_cast->NumKeyFrames();i++)
-				{
-					if(i>0)
-						s_keyframes += ",";
-					
-					const model::ITimelineEvent* keyframe = timeline_cast->GetKeyFrameEvent(i);
-					string s_keyframe_name = keyframe->GetName();
-					TimelineEventType keyframe_type = keyframe->GetType();
-					string s_keyframe_type = "NONE";
-					switch(keyframe_type)
-					{
-						case TimelineEventType::TET_LOOP:
-							s_keyframe_type = "loop";
-							break;
-						case TimelineEventType::TET_STOP:
-							s_keyframe_type = "stop";
-							break;
-						case TimelineEventType::TET_NULL:
-							s_keyframe_type = "null";
-							break;
-						case TimelineEventType::TET_TOTAL:
-							s_keyframe_type = "total";
-							break;
-						default:
-							break;
-					}
-					bv::TimeType f_time = keyframe->GetEventTime();
-					string s_info = "-";
+            for( auto s : m_appLogic->GetBVScene()->GetScenes() )
+            {
+                Json::Value val;
+				val[ "name" ] = s->GetName();
+                JsonSerializeObject ser;
+				//FIXME: only timelines used in scene should be serialized
+				TimelineManager::GetInstance()->Serialize(ser);
+                val[ "timelines" ] = ser.GetJson();
+                ret[ "scenes" ].append( val );
+            }
 
 
-					string s_keyframe_code="{\"name\":\""+s_keyframe_name+"\",\"type\":\""+s_keyframe_type+"\",\"time\":\""+to_string(f_time)+"\",\"info\":\""+s_info+"\"}";
+            responseMessage = toWString( ret.toStyledString() );
 
-					s_keyframes+=s_keyframe_code;
+			//model::TimelineManager* TM = m_appLogic->GetTimelineManager().get();
 
-				}
-				s_timeline+=s_keyframes+"]}";
-				
-				s_timelines += s_timeline;;
-				first = false;
-			}
-			s_timelines = "["+s_timelines+"]";
-   
-            PerformanceMonitor::Calculate(m_appLogic->GetStatsCalculator());
-            string S = "{\"cmd\":\"timelines\", \"timelines\":"+s_timelines+" }";
-           
-            //Log::A("SENDING",S);
-            responseMessage = wstring(S.begin(),S.end());
+			//auto timelines = TM->GetRootTimeline()->GetChildren();
+			//string s_timelines;
+			//bool first = true;
+			//for( auto timeline : timelines)
+			//{
+			//	if(!first)
+			//		s_timelines +=",";
+
+			//	string s_name = timeline->GetName();
+			//	string s_time = to_string(timeline->GetLocalTime());
+
+			//	bv::model::ITimeline* timeline_cast = static_cast<bv::model::ITimeline*>(timeline.get());
+			//	
+			//	string s_timeline = "{\"name\":\""+s_name+"\",\"time\":\""+s_time+"\",\"keyframes\":[";
+			//	string s_keyframes="";
+			//	for(unsigned int i=0;i<timeline_cast->NumKeyFrames();i++)
+			//	{
+			//		if(i>0)
+			//			s_keyframes += ",";
+			//		
+			//		const model::ITimelineEvent* keyframe = timeline_cast->GetKeyFrameEvent(i);
+			//		string s_keyframe_name = keyframe->GetName();
+			//		TimelineEventType keyframe_type = keyframe->GetType();
+			//		string s_keyframe_type = "NONE";
+			//		switch(keyframe_type)
+			//		{
+			//			case TimelineEventType::TET_LOOP:
+			//				s_keyframe_type = "loop";
+			//				break;
+			//			case TimelineEventType::TET_STOP:
+			//				s_keyframe_type = "stop";
+			//				break;
+			//			case TimelineEventType::TET_NULL:
+			//				s_keyframe_type = "null";
+			//				break;
+			//			case TimelineEventType::TET_TOTAL:
+			//				s_keyframe_type = "total";
+			//				break;
+			//			default:
+			//				break;
+			//		}
+			//		bv::TimeType f_time = keyframe->GetEventTime();
+			//		string s_info = "-";
+
+
+			//		string s_keyframe_code="{\"name\":\""+s_keyframe_name+"\",\"type\":\""+s_keyframe_type+"\",\"time\":\""+to_string(f_time)+"\",\"info\":\""+s_info+"\"}";
+
+			//		s_keyframes+=s_keyframe_code;
+
+			//	}
+			//	s_timeline+=s_keyframes+"]}";
+			//	
+			//	s_timelines += s_timeline;;
+			//	first = false;
+			//}
+			//s_timelines = "["+s_timelines+"]";
+   //
+   //         PerformanceMonitor::Calculate(m_appLogic->GetStatsCalculator());
+   //         string S = "{\"cmd\":\"timelines\", \"timelines\":"+s_timelines+" }";
+   //        
+   //         //Log::A("SENDING",S);
+   //         responseMessage = wstring(S.begin(),S.end());
         }
         else if( command == InfoEvent::Command::NodeInfo )
         {

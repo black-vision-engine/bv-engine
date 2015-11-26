@@ -6,6 +6,7 @@
 
 #include "Engine/Graphics/Effects/LightScatteringShaders.h"
 
+#include "Engine/Models/Plugins/EngineConstantsMapper.h"
 
 namespace bv {
 
@@ -15,9 +16,9 @@ LightScatteringEffect::LightScatteringEffect ()
 {
     auto ps = CreatePS();
     auto vs = CreateVS();
-    auto gs = CreateGS();
+    //auto gs = CreateGS();
 
-    RenderablePass * pass = new RenderablePass( ps, vs, gs );
+    RenderablePass * pass = new RenderablePass( ps, vs, nullptr );
     auto sinst = pass->GetStateInstance();
     
     RendererStatesBuilder::Create( sinst );
@@ -48,9 +49,28 @@ LightScatteringEffect::~LightScatteringEffect()
 //
 PixelShader *       LightScatteringEffect::CreatePS        ()
 {
-    //FIXM: register parameters here
-    auto shader = new PixelShader( GetLightScatteringPixelShaderCode(), new ShaderParameters() );
+    auto params = new ShaderParameters();
+
+    m_paramExposure = static_cast< ShaderParamFloat * >( ShaderParamFactory::CreateGenericParameter( "exposure", ParamType::PT_FLOAT1 ) );
+    m_paramWeight = static_cast< ShaderParamFloat * >( ShaderParamFactory::CreateGenericParameter( "weight", ParamType::PT_FLOAT1 ) );
+    m_paramDecay = static_cast< ShaderParamFloat * >( ShaderParamFactory::CreateGenericParameter( "decay", ParamType::PT_FLOAT1 ) );
+    m_paramDensity = static_cast< ShaderParamFloat * >( ShaderParamFactory::CreateGenericParameter( "density", ParamType::PT_FLOAT1 ) );
+    m_paramLightPositionOnScreen = static_cast< ShaderParamVec2 * >( ShaderParamFactory::CreateGenericParameter( "lightPositionOnScreen", ParamType::PT_FLOAT2 ) );
+    m_paramNumSamples = static_cast< ShaderParamFloat * >( ShaderParamFactory::CreateGenericParameter( "numSamples", ParamType::PT_FLOAT1 ) );
+
+    params->AddParameter( m_paramExposure );
+    params->AddParameter( m_paramWeight );
+    params->AddParameter( m_paramDecay );
+    params->AddParameter( m_paramDensity );
+    params->AddParameter( m_paramLightPositionOnScreen );
+    params->AddParameter( m_paramNumSamples );
+
+    auto shader = new PixelShader( GetLightScatteringPixelShaderCode(), params );
     
+    auto sampler = CreateSampler();
+
+    shader->AddTextureSampler( sampler );
+
     return shader;
 }
 
@@ -68,17 +88,156 @@ VertexShader *      LightScatteringEffect::CreateVS        ()
     return shader;
 }
 
+//// ****************************
+////
+//GeometryShader *    LightScatteringEffect::CreateGS        ()
+//{
+//    auto params = new ShaderParameters();
+//
+//    params->AddParameter( ShaderParamFactory::CreateViewportMatrixParameter() );
+//
+//    auto shader = new GeometryShader( GetLightScatteringGeometryShaderCode(), params );
+//
+//    return shader;
+//}
+
 // ****************************
 //
-GeometryShader *    LightScatteringEffect::CreateGS        ()
+void                LightScatteringEffect::SetExposureVal( const IValue * exposureVal )
 {
-    auto params = new ShaderParameters();
+    if( !m_paramExposure )
+    {
+        
+    }
 
-    params->AddParameter( ShaderParamFactory::CreateViewportMatrixParameter() );
+    if( m_paramExposure )
+    {
+        auto value = QueryTypedValue< ValueFloat >( exposureVal );
+        assert( value != nullptr );
 
-    auto shader = new GeometryShader( GetLightScatteringGeometryShaderCode(), params );
+        m_paramExposure->SetModelValue( value );
+    }
+}
 
-    return shader;
+// ****************************
+//
+void                LightScatteringEffect::SetWeightVal( const IValue * weightVal )
+{
+    if( !m_paramWeight )
+    {
+        
+    }
+
+    if( m_paramWeight )
+    {
+        auto value = QueryTypedValue< ValueFloat >( weightVal );
+        assert( value != nullptr );
+
+        m_paramWeight->SetModelValue( value );
+    }
+}
+
+// ****************************
+//
+void                LightScatteringEffect::SetDecayVal( const IValue * decayVal )
+{
+    if( !m_paramDecay )
+    {
+        
+    }
+
+    if( m_paramDecay )
+    {
+        auto value = QueryTypedValue< ValueFloat >( decayVal );
+        assert( value != nullptr );
+
+        m_paramDecay->SetModelValue( value );
+    }
+}
+
+// ****************************
+//
+void                LightScatteringEffect::SetDensityVal( const IValue * densityVal )
+{
+    if( !m_paramDensity )
+    {
+        
+    }
+
+    if( m_paramDensity )
+    {
+        auto value = QueryTypedValue< ValueFloat >( densityVal );
+        assert( value != nullptr );
+
+        m_paramDensity->SetModelValue( value );
+    }
+}
+
+// ****************************
+//
+void                LightScatteringEffect::SetLightPositionOnScreenVal( const IValue * lightPositionOnScreenVal )
+{
+    if( !m_paramLightPositionOnScreen )
+    {
+        m_paramLightPositionOnScreen = static_cast< ShaderParamVec2 * >( ShaderParamFactory::CreateGenericParameter( lightPositionOnScreenVal->GetName(), ParamType::PT_FLOAT2 ) );
+    }
+
+    if( m_paramLightPositionOnScreen )
+    {
+        auto value = QueryTypedValue< ValueVec2 >( lightPositionOnScreenVal );
+        assert( value != nullptr );
+
+        m_paramLightPositionOnScreen->SetModelValue( value );
+    }
+}
+
+// ****************************
+//
+void                LightScatteringEffect::SetNumSamplesVal( const IValue * numSamplesVal )
+{
+    if( !m_paramNumSamples )
+    {
+        m_paramNumSamples = static_cast< ShaderParamFloat * >( ShaderParamFactory::CreateGenericParameter( numSamplesVal->GetName(), ParamType::PT_FLOAT1 ) );
+    }
+
+    if( m_paramNumSamples )
+    {
+        auto value = QueryTypedValue< ValueFloat >( numSamplesVal );
+        assert( value != nullptr );
+
+        m_paramNumSamples->SetModelValue( value );
+    }
+}
+
+// ****************************
+//
+void                LightScatteringEffect::AddTexture                  ( Texture2DPtr texture )
+{
+    auto params = GetPass( 0 )->GetPixelShader()->GetParameters();
+    if( params->NumTextures() > 0 )
+    {
+        GetPass( 0 )->GetPixelShader()->GetParameters()->SetTexture( 0, texture );
+    }
+    else
+    {
+        params->AddTexture( texture );
+    }
+}
+
+// ****************************
+//
+TextureSampler *    LightScatteringEffect::CreateSampler   ()
+{
+    auto wrapX          = EngineConstantsMapper::EngineConstant( TextureWrappingMode::TWM_CLAMP_BORDER );
+    auto wrapY          = EngineConstantsMapper::EngineConstant( TextureWrappingMode::TWM_CLAMP_BORDER );            
+    auto samplingMode   = SamplerSamplingMode::SSM_MODE_2D;
+    auto sfm            = EngineConstantsMapper::EngineConstant( TextureFilteringMode::TFM_LINEAR_MIPMAP_LINEAR );
+
+    SamplerWrappingMode wrappingMode[] = { wrapX, wrapY, SamplerWrappingMode::SWM_REPEAT };
+
+    auto sampler = new TextureSampler( 0, "firstPassTexture", samplingMode, sfm, wrappingMode, glm::vec4( 0.f, 0.f, 0.f, 0.f ) ); 
+
+    return sampler;
 }
 
 } //bv

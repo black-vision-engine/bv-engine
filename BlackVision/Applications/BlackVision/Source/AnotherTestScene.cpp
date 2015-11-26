@@ -38,6 +38,7 @@
 #include "Serialization/XML/XMLDeserializer.h"
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Serialization/SerializationHelper.h"
+#include "Serialization/CloneViaSerialization.h"
 
 #include "Application/WindowedApplication.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
@@ -844,6 +845,8 @@ model::SceneModelPtr LoadSceneFromFile( std::string filename, model::TimelineMan
     XMLDeserializer deser( filename );
 
     auto model = SerializationHelper::DeserializeObjectLoadImpl< SceneModel >( deser, "scene" );
+
+	auto teClone = CloneViaSerialization::Clone( model::TimelineManager::GetInstance(), "timelines" );
 
     return model;
 }

@@ -17,7 +17,7 @@ LightScatteringNodeEffect::LightScatteringNodeEffect     ()
     values.push_back( ValuesFactory::CreateValueFloat( "decay" ) );
     values.push_back( ValuesFactory::CreateValueFloat( "density" ) );
     values.push_back( ValuesFactory::CreateValueVec2( "lightPositionOnScreen" ) );
-    values.push_back( ValuesFactory::CreateValueInt( "num_samples" ) );
+    values.push_back( ValuesFactory::CreateValueFloat( "numSamples" ) );
 }
 
 // *********************************

@@ -39,57 +39,77 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
     std::string& nodeName = structureEvent->NodeName;
     std::string& newNodeName = structureEvent->NewNodeName;
     std::string& pluginName = structureEvent->PluginName;
+	std::string& sceneName = structureEvent->SceneName;
     auto command = structureEvent->SceneCommand;
 
-    auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
-    auto node = root->GetNode( nodeName );
-    if( node == nullptr )
-    {
-        if( root->GetName() == nodeName )
-            node = root;
-        else
-        {
-            LOG_MESSAGE( SeverityLevel::error ) << "SceneStructureEvent() node ["+ nodeName +"] not found";
-            return;
-        }
-    }
+    auto scene = m_appLogic->GetBVScene()->GetScene( structureEvent->SceneName );
 
-    if( command == NodeStructureEvent::Command::AddNode )
+    if( scene )
     {
-        auto newNode = model::BasicNode::Create( newNodeName, nullptr );
-		assert( false );
-		{ newNode; }
-		//FIXME: scene name needs to be passed along with nodes data
-		//m_appLogic->GetBVScene()->GetSceneEditor()->AddChildNode( <scene_name>, node, newNode );
-    }
-    else if( command == NodeStructureEvent::Command::RemoveNode )
-    {
-        auto parentNodeName = nodeName.substr( 0, nodeName.find_last_of("/") );
-        auto childNode = nodeName.substr( nodeName.find_last_of("/") + 1 );
-        auto parentNode = root->GetNode( parentNodeName );
-			
-		assert( false );
-		{ parentNodeName; childNode; parentNode; }
-		//FIXME: scene name needs to be passed along with nodes data
-        //m_appLogic->GetBVScene()->GetSceneEditor()->DeleteChildNode( parentNode, childNode );
-    }
-    else if( command == NodeStructureEvent::Command::AttachPlugin )
-    {
-        bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
+		auto root = scene->GetRootNode();
         
-        unsigned int endIndex = std::numeric_limits<unsigned int>::max();
-        basicNode->GetModelNodeEditor()->AttachPlugin( endIndex );
-    }
-    else if( command == NodeStructureEvent::Command::DetachPlugin )
-    {
-        bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
-        basicNode->GetModelNodeEditor()->DetachPlugin( pluginName );
-    }
-    else if( command == NodeStructureEvent::Command::SetNodeVisible )
-        node->SetVisible( true );
-    else if( command == NodeStructureEvent::Command::SetNodeInvisible )
-        node->SetVisible( false );
+        auto node = root->GetNode( nodeName );
 
+        if( node == nullptr )
+        {
+            if( root->GetName() == nodeName )
+                node = root;
+            else
+            {
+                LOG_MESSAGE( SeverityLevel::error ) << "SceneStructureEvent() node ["+ nodeName +"] not found";
+                return;
+            }
+        }
+
+        if( command == NodeStructureEvent::Command::AddNode )
+        {
+            auto newNode = model::BasicNode::Create( newNodeName, nullptr );
+		    m_appLogic->GetBVScene()->GetSceneEditor()->AddChildNode( sceneName, node, newNode );
+        }
+        else if( command == NodeStructureEvent::Command::RemoveNode )
+        {
+            auto parentNodeName = nodeName.substr( 0, nodeName.find_last_of("/") );
+            auto childNode = nodeName.substr( nodeName.find_last_of("/") + 1 );
+            auto parentNode = root->GetNode( parentNodeName );
+		
+            if( root == node )
+            {
+                parentNode = m_appLogic->GetBVScene()->GetModelSceneRoot();
+            }
+
+            m_appLogic->GetBVScene()->GetSceneEditor()->DeleteChildNode( sceneName, parentNode, childNode );
+        }
+        else if( command == NodeStructureEvent::Command::AttachPlugin )
+        {
+            bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
+        
+            unsigned int endIndex = std::numeric_limits<unsigned int>::max();
+            basicNode->GetModelNodeEditor()->AttachPlugin( endIndex );
+        }
+        else if( command == NodeStructureEvent::Command::DetachPlugin )
+        {
+            bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
+            basicNode->GetModelNodeEditor()->DetachPlugin( pluginName );
+        }
+        else if( command == NodeStructureEvent::Command::AddPlugin )
+        {
+			//FIXME: why do we assume we want to add plugins to global timeline?
+			auto plugin = model::PluginsManager::DefaultInstanceRef().CreatePlugin( pluginName, node->GetPluginList()->GetLastPlugin(), model::TimelineManager::GetInstance()->GetRootTimeline() );
+	
+            bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
+
+            m_appLogic->GetBVScene()->GetSceneEditor()->AddPlugin( basicNode, plugin, node->GetPluginList()->NumPlugins() );
+        }
+        else if( command == NodeStructureEvent::Command::SetNodeVisible )
+            node->SetVisible( true );
+        else if( command == NodeStructureEvent::Command::SetNodeInvisible )
+            node->SetVisible( false );
+    }
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "SceneStructureEvent() scene ["+ structureEvent->SceneName +"] not found";
+        return;
+    }
 }
 
 
@@ -299,41 +319,47 @@ void SceneEventsHandlers::TimelineHandler     ( bv::IEventPtr evt )
         float time = timelineEvent->Time;
         TimeLineEvent::Command command = timelineEvent->TimelineCommand;
 
-		//FIXME: GetTimeline finds the first timeline with given name; names might not be unique
-		auto timeline = model::TimelineManager::GetInstance()->GetTimeline( timeLineName );
-        if( timeline == nullptr )
+        auto scene = m_appLogic->GetBVScene()->GetScene( timelineEvent->SceneName );
+
+        if( scene )
         {
-            LOG_MESSAGE( SeverityLevel::error ) << "Timeline ["+ timeLineName + "] does not exist.";
-            return;
-        }
-        bv::model::ITimeline* timelineTyped = static_cast<bv::model::ITimeline*>(timeline.get());
+			//FIXME: GetTimeline returns first timeline with given name; names are not guaranteed to be unique
+			auto timeline = TimelineManager::GetInstance()->GetTimeline( timeLineName );
+
+            if( timeline == nullptr )
+            {
+                LOG_MESSAGE( SeverityLevel::error ) << "Timeline ["+ timeLineName + "] does not exist.";
+                return;
+            }
+            bv::model::ITimeline* timelineTyped = static_cast<bv::model::ITimeline*>(timeline.get());
 
 
-        if( command == TimeLineEvent::Command::Play )
-        {
-            timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
-            timelineTyped->Play();
-        }
-        else if( command == TimeLineEvent::Command::Stop )
-        {
-            timelineTyped->Stop();
-        }
-        else if( command == TimeLineEvent::Command::PlayReverse )
-        {
-            timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_BACKWARD );
-            timelineTyped->Play();
-        }
-        else if( command == TimeLineEvent::Command::Goto )
-        {
-            timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
-            timelineTyped->SetTimeAndStop( (bv::TimeType)time );
-        }
-        else if( command == TimeLineEvent::Command::GotoAndPlay )
-        {
-            timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
-            timelineTyped->SetTimeAndPlay( (bv::TimeType)time );
-        }
+            if( command == TimeLineEvent::Command::Play )
+            {
+                timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
+                timelineTyped->Play();
+            }
+            else if( command == TimeLineEvent::Command::Stop )
+            {
+                timelineTyped->Stop();
+            }
+            else if( command == TimeLineEvent::Command::PlayReverse )
+            {
+                timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_BACKWARD );
+                timelineTyped->Play();
+            }
+            else if( command == TimeLineEvent::Command::Goto )
+            {
+                timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
+                timelineTyped->SetTimeAndStop( (bv::TimeType)time );
+            }
+            else if( command == TimeLineEvent::Command::GotoAndPlay )
+            {
+                timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
+                timelineTyped->SetTimeAndPlay( (bv::TimeType)time );
+            }
        
+        }
     }
 }
 

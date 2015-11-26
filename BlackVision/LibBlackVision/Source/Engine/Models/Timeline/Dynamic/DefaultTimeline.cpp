@@ -89,8 +89,7 @@ ISerializablePtr                     DefaultTimeline::Create              ( cons
 {
     auto name = deser.GetAttribute( "name" );
 
-    auto duration_ = deser.GetAttribute( "duration" );
-    float duration = std::stof( duration_ );
+    auto duration = SerializationHelper::String2T< float >( deser.GetAttribute( "duration" ), 777.f );
 
     TimelineWrapMethod preWrap = SerializationHelper::String2T< TimelineWrapMethod >( TWM2S, deser.GetAttribute( "loop" ) );
     TimelineWrapMethod postWrap = preWrap; // FIXME

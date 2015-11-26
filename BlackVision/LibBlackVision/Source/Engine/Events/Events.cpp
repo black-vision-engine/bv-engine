@@ -99,6 +99,7 @@ const std::wstring COMMAND_ADD_NODE_WSTRING         = L"AddNode";
 const std::wstring COMMAND_REMOVE_NODE_WSTRING      = L"RemoveNode";
 const std::wstring COMMAND_ATTACH_PLUGIN_WSTRING    = L"AttachPlugin";
 const std::wstring COMMAND_DETACH_PLUGIN_WSTRING    = L"DetachPlugin";
+const std::wstring COMMAND_ADD_PLUGIN_WSTRING       = L"AddPlugin";
 const std::wstring COMMAND_SET_NODE_VISIBLE_WSTRING     = L"SetNodeVisible";
 const std::wstring COMMAND_SET_NODE_INVISIBLE_WSTRING   = L"SetNodeInvisible";
 
@@ -134,6 +135,7 @@ const std::wstring COMMAND_GOTO_AND_PLAY_WSTRING        = L"GotoAndPlay";
 
 const std::wstring TIMELINE_TIME_VALUE_WSTRING          = L"Time";
 const std::wstring TIMELINE_NAME_WSTRING                = L"TimeLineName";
+const std::wstring SCENE_NAME_WSTRING                   = L"SceneName";
 
 // WidgetEvent
 const std::wstring COMMAND_CRAWL_WSTRING                = L"Crawl";
@@ -530,6 +532,7 @@ EventType           LoadAssetEvent::GetEventType         () const
 void                ParamKeyEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
+    ser.SetAttribute( Serial::SCENE_NAME_WSTRING, toWString( SceneName ) );
     ser.SetAttribute( Serial::NODE_NAME_WSTRING, toWString( NodeName ) );
     ser.SetAttribute( Serial::PLUGIN_NAME_WSTRING, toWString( PluginName ) );
     ser.SetAttribute( Serial::PARAM_NAME_WSTRING, toWString( ParamName ) );
@@ -545,6 +548,7 @@ IEventPtr           ParamKeyEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         ParamKeyEventPtr newEvent   = std::make_shared<ParamKeyEvent>();
+        newEvent->SceneName         = toString( deser.GetAttribute( Serial::SCENE_NAME_WSTRING) );
         newEvent->PluginName        = toString( deser.GetAttribute( Serial::PLUGIN_NAME_WSTRING ) );
         newEvent->NodeName          = toString( deser.GetAttribute( Serial::NODE_NAME_WSTRING ) );
         newEvent->ParamName         = toString( deser.GetAttribute( Serial::PARAM_NAME_WSTRING ) );
@@ -617,6 +621,7 @@ EventType           ParamKeyEvent::GetEventType         () const
 void                NodeStructureEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
+    ser.SetAttribute( Serial::SCENE_NAME_WSTRING, toWString( SceneName ) );
     ser.SetAttribute( Serial::NODE_NAME_WSTRING, toWString( NodeName ) );
     ser.SetAttribute( Serial::NEW_NODE_NAME_WSTRING, toWString( NewNodeName ) );
     ser.SetAttribute( Serial::PLUGIN_NAME_WSTRING, toWString( PluginName ) );
@@ -630,6 +635,7 @@ IEventPtr                NodeStructureEvent::Create          ( IDeserializer& de
     if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         NodeStructureEventPtr newEvent   = std::make_shared<NodeStructureEvent>();
+        newEvent->SceneName         = toString( deser.GetAttribute( Serial::SCENE_NAME_WSTRING ) );
         newEvent->NodeName          = toString( deser.GetAttribute( Serial::NODE_NAME_WSTRING ) );
         newEvent->NewNodeName       = toString( deser.GetAttribute( Serial::NEW_NODE_NAME_WSTRING ) );
         newEvent->PluginName        = toString( deser.GetAttribute( Serial::PLUGIN_NAME_WSTRING ) );
@@ -673,6 +679,8 @@ std::wstring NodeStructureEvent::CommandToWString    ( Command cmd )
         return Serial::COMMAND_ATTACH_PLUGIN_WSTRING;
     else if( cmd == Command::DetachPlugin )
         return Serial::COMMAND_DETACH_PLUGIN_WSTRING;
+    else if( cmd == Command::AddPlugin )
+        return Serial::COMMAND_ADD_PLUGIN_WSTRING;
     else if( cmd == Command::SetNodeVisible )
         return Serial::COMMAND_SET_NODE_VISIBLE_WSTRING;
     else if( cmd == Command::SetNodeInvisible )
@@ -692,6 +700,8 @@ NodeStructureEvent::Command NodeStructureEvent::WStringToCommand    ( const std:
         return Command::AttachPlugin;
     else if( string == Serial::COMMAND_DETACH_PLUGIN_WSTRING )
         return Command::DetachPlugin;
+    else if( string == Serial::COMMAND_ADD_PLUGIN_WSTRING)
+        return Command::AddPlugin;
     else if( string == Serial::COMMAND_SET_NODE_VISIBLE_WSTRING )
         return Command::SetNodeVisible;
     else if( string == Serial::COMMAND_SET_NODE_INVISIBLE_WSTRING )
@@ -940,6 +950,7 @@ void                TimeLineEvent::Serialize            ( ISerializer& ser ) con
     ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
     ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( TimelineCommand ) );
     ser.SetAttribute( Serial::TIMELINE_NAME_WSTRING, toWString( TimelineName ) );
+    ser.SetAttribute( Serial::SCENE_NAME_WSTRING, toWString( SceneName ) );
     ser.SetAttribute( Serial::TIMELINE_TIME_VALUE_WSTRING, toWString( Time ) );
 }
 
@@ -953,6 +964,7 @@ IEventPtr                TimeLineEvent::Create          ( IDeserializer& deser )
         newEvent->Time              = stof( deser.GetAttribute( Serial::TIMELINE_TIME_VALUE_WSTRING ) );
         newEvent->TimelineCommand   = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
         newEvent->TimelineName      = toString( deser.GetAttribute( Serial::TIMELINE_NAME_WSTRING ) );
+        newEvent->SceneName         = toString( deser.GetAttribute( Serial::SCENE_NAME_WSTRING ) );
 
         return newEvent;
     }

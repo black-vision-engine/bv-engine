@@ -70,6 +70,7 @@ private:
 
     RenderTargetVec     m_auxRenderTargets;
     RenderTargetData    m_displayRenderTargetData[ 2 ];
+    RenderTargetData    m_videoOutputRenderTarget;
 
     unsigned int        m_curDisplayTarget;
     unsigned int        m_buffersPerTarget;
@@ -96,6 +97,7 @@ public:
     void                DrawTopAuxRenderTarget      ( Renderer * renderer, const IValue * alphaVal );
     void                DrawAMTopTwoRenderTargets   ( Renderer * renderer, const IValue * alphaVal );
 
+    void                DrawWithAllVideoEffects     ( Renderer * renderer );
     void                DrawDisplayRenderTarget     ( Renderer * renderer );
     void                SwapDisplayRenderTargets    ();
 
@@ -103,6 +105,7 @@ public:
     unsigned int        NumReadBuffersPerRT         () const;
 
     Texture2DConstPtr   ReadDisplayTarget           ( Renderer * renderer, unsigned int bufNum );
+    Texture2DConstPtr   GetColorTextureAt           ( int i ) const;
 
 	//pablito
 	std::vector< int >  GetHackBuffersUids          ( Renderer * renderer ) const;
@@ -111,10 +114,12 @@ private:
 
     RenderTarget *      GetRenderTargetAt               ( int i ) const;
 
-    RenderTargetData    CreateDisplayRenderTargetData   () const;
+    RenderTargetData    CreateDisplayRenderTargetData       () const;
+    RenderTargetData    CreateVideoOutputRenderTargetData   () const;
 
-    unsigned int        CurDisplayRenderTargetNum       () const;
-    RenderTargetData    CurDisplayRenderTargetData      () const;
+    unsigned int        CurDisplayRenderTargetNum           () const;
+
+    RenderTargetData    CurDisplayRenderTargetData          () const;
 
 };
 
