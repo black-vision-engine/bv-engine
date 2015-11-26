@@ -20,14 +20,14 @@ void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
     if( c == 's' )
     {
         auto sob = new XMLSerializer();
-        logic->GetBVScene()->GetScenes()[ 0 ]->Serialize( *sob );
+        logic->GetBVProject()->GetScenes()[ 0 ]->Serialize( *sob );
         sob->Save( "test.xml" );
         delete sob;
     }
     else if( c == 'j' )
     {
         auto sob = new JsonSerializeObject();
-        logic->GetBVScene()->Serialize( *sob );
+        logic->GetBVProject()->Serialize( *sob );
         sob->Save( "test.json" );
         delete sob;
     }

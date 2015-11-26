@@ -18,7 +18,7 @@ private:
 
 	TestScenePtr					m_scene;
 
-    BVScenePtr						m_bvScene;
+    BVProjectPtr					m_project;
 	Renderer *						m_renderer;
 	
 	TimeType						m_time;

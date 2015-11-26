@@ -1,6 +1,6 @@
 #include "ModelNodeEditor.h"
 
-#include "Engine/Models/BVSceneTools.h"
+#include "Engine/Models/BVProjectTools.h"
 
 namespace bv { namespace model {
 
@@ -144,8 +144,8 @@ void				ModelNodeEditor::SetNodeEffect		( IModelNodeEffectPtr nodeEffect )
 void				ModelNodeEditor::RefreshNode ( SceneNode * sceneNode, Renderer * renderer )
 {
 	auto node = m_node.lock();
-	BVSceneTools::ClearSingleNode( sceneNode, renderer );
-	BVSceneTools::SyncSingleNode( node, sceneNode );
+	BVProjectTools::ClearSingleNode( sceneNode, renderer );
+	BVProjectTools::SyncSingleNode( node, sceneNode );
 }
 
 

@@ -8,14 +8,14 @@
 #include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectWireframe.h"
 
-#include "Engine/Models/BVSceneEditor.h"
+#include "Engine/Models/BVProjectEditor.h"
 
 namespace bv {
 
 class TestGlobalEfectKeyboardHandler : public TestKeyboardHandler
 {
 private:
-	BVSceneEditor *			m_editor;
+	BVProjectEditor *			m_editor;
 
     NodeEffectType          m_curSelectedNode;
     

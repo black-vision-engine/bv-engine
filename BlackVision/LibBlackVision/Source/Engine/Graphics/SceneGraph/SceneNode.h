@@ -61,7 +61,7 @@ public:
     void                    SetVisible          ( bool visible );
 
     // FIXME: think of some better approach to dynamic node state manipulation
-    friend class BVSceneTools;
+    friend class BVProjectTools;
 };
 
 } // bv

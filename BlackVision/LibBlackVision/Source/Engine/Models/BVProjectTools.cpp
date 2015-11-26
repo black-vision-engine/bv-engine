@@ -1,4 +1,4 @@
-#include "BVSceneTools.h"
+#include "BVProjectTools.h"
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
@@ -24,7 +24,7 @@ namespace bv {
 
 // *******************************
 // 
-void                BVSceneTools::ClearSingleNode                       ( SceneNode * node, Renderer * renderer )
+void                BVProjectTools::ClearSingleNode                       ( SceneNode * node, Renderer * renderer )
 {
     renderer->FreeAllPDResources( static_cast< RenderableEntity * >( node->GetTransformable() ) );
     node->DeleteTransformable();
@@ -32,7 +32,7 @@ void                BVSceneTools::ClearSingleNode                       ( SceneN
 
 // *******************************
 //
-void                BVSceneTools::SyncSingleNode                        ( model::BasicNodePtr modelNode, SceneNode * node )
+void                BVProjectTools::SyncSingleNode                        ( model::BasicNodePtr modelNode, SceneNode * node )
 {
     model::IPluginConstPtr finalizer = modelNode->GetFinalizePlugin();
     RenderableEntity * renderable = CreateRenderableEntity( modelNode, finalizer );
@@ -50,7 +50,7 @@ void                BVSceneTools::SyncSingleNode                        ( model:
 
 // *******************************
 //
-SceneNode *         BVSceneTools::BuildEngineSceneNode                  ( model::BasicNodePtr modelNode, std::hash_map< model::IModelNode *, SceneNode * > & nodesMapping )
+SceneNode *         BVProjectTools::BuildEngineSceneNode                  ( model::BasicNodePtr modelNode, std::hash_map< model::IModelNode *, SceneNode * > & nodesMapping )
 {
     assert( nodesMapping.find( modelNode.get() ) == nodesMapping.end() );
 
@@ -73,7 +73,7 @@ SceneNode *         BVSceneTools::BuildEngineSceneNode                  ( model:
 
 // *******************************
 //
-void                BVSceneTools::UpdateSceneNodeEffect                 ( SceneNode * node, model::BasicNodePtr modelNode )
+void                BVProjectTools::UpdateSceneNodeEffect                 ( SceneNode * node, model::BasicNodePtr modelNode )
 {
     auto modelNodeEffect = modelNode->GetNodeEffect();
 
@@ -111,7 +111,7 @@ void                BVSceneTools::UpdateSceneNodeEffect                 ( SceneN
 
 // *******************************
 //
-SceneNode *         BVSceneTools::BuildSingleEngineNode                 ( model::BasicNodePtr modelNode )
+SceneNode *         BVProjectTools::BuildSingleEngineNode                 ( model::BasicNodePtr modelNode )
 {
     model::IPluginConstPtr finalizer = modelNode->GetFinalizePlugin();
 
@@ -126,7 +126,7 @@ SceneNode *         BVSceneTools::BuildSingleEngineNode                 ( model:
 
 // *******************************
 //
-RenderableEntity *  BVSceneTools::CreateRenderableEntity                ( model::BasicNodePtr modelNode, const model::IPluginConstPtr & finalizer )
+RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( model::BasicNodePtr modelNode, const model::IPluginConstPtr & finalizer )
 {
     RenderableEntity * renderable = nullptr;
 
@@ -175,7 +175,7 @@ RenderableEntity *  BVSceneTools::CreateRenderableEntity                ( model:
 
 // ********************************
 //
-RenderableEffectPtr     BVSceneTools::CreateDefaultEffect               ( const model::IPluginConstPtr & finalizer )
+RenderableEffectPtr     BVProjectTools::CreateDefaultEffect               ( const model::IPluginConstPtr & finalizer )
 {
     auto psChannel      = finalizer->GetPixelShaderChannel();
     auto vsChannel      = finalizer->GetVertexShaderChannel();
@@ -189,7 +189,7 @@ RenderableEffectPtr     BVSceneTools::CreateDefaultEffect               ( const 
 
 // *******************************
 //
-TransformVec            BVSceneTools::CreateTransformVec                ( const model::IPluginConstPtr & finalizer )
+TransformVec            BVProjectTools::CreateTransformVec                ( const model::IPluginConstPtr & finalizer )
 {
     auto tc = finalizer->GetTransformChannel();
     assert( tc );
@@ -210,7 +210,7 @@ TransformVec            BVSceneTools::CreateTransformVec                ( const 
 
 // *******************************
 //
-BVSceneTools::RADASVB * BVSceneTools::CreateRenderableArrayDataTriStrip ( model::BasicNodePtr modelNode, const model::IPluginConstPtr & finalizer )
+BVProjectTools::RADASVB * BVProjectTools::CreateRenderableArrayDataTriStrip ( model::BasicNodePtr modelNode, const model::IPluginConstPtr & finalizer )
 {
     assert( modelNode->GetNumPlugins() > 0 );
 
@@ -239,7 +239,7 @@ BVSceneTools::RADASVB * BVSceneTools::CreateRenderableArrayDataTriStrip ( model:
 
 // ********************************
 //
-BVSceneTools::RADASVB * BVSceneTools::CreateRenderableArrayDataArrays   ( const std::vector< model::IConnectedComponentPtr > & ccVec, const model::IVertexAttributesChannelDescriptor * desc, bool isTimeInvariant )
+BVProjectTools::RADASVB * BVProjectTools::CreateRenderableArrayDataArrays   ( const std::vector< model::IConnectedComponentPtr > & ccVec, const model::IVertexAttributesChannelDescriptor * desc, bool isTimeInvariant )
 {
     //FIXME: a bit of hackery because memory layout may be different than what this constructor suggests (this time it is not)
     //FIXME: this code should be moved to some utility classes from this poor BasicNode (not so basic right now)
@@ -278,7 +278,7 @@ BVSceneTools::RADASVB * BVSceneTools::CreateRenderableArrayDataArrays   ( const 
 
 // ********************************
 //
-unsigned int            BVSceneTools::TotalNumVertices                  ( const std::vector< model::IConnectedComponentPtr > & ccVec )
+unsigned int            BVProjectTools::TotalNumVertices                  ( const std::vector< model::IConnectedComponentPtr > & ccVec )
 {
     unsigned int totalNumVertices = 0;
 
@@ -292,7 +292,7 @@ unsigned int            BVSceneTools::TotalNumVertices                  ( const 
 
 // ********************************
 //
-VertexDescriptor *      BVSceneTools::CreateVertexDescriptor            ( const model::IVertexAttributesChannelDescriptor * desc )
+VertexDescriptor *      BVProjectTools::CreateVertexDescriptor            ( const model::IVertexAttributesChannelDescriptor * desc )
 {
     VertexDescriptor * vertexDescriptor = new VertexDescriptor( desc->GetNumVertexChannels() );
 
@@ -314,7 +314,7 @@ VertexDescriptor *      BVSceneTools::CreateVertexDescriptor            ( const 
 
 // ********************************
 //
-void                    BVSceneTools::AddVertexDataToVBO                    ( char * data, model::IConnectedComponentPtr cc )
+void                    BVProjectTools::AddVertexDataToVBO                    ( char * data, model::IConnectedComponentPtr cc )
 {
     unsigned int numVertices = cc->GetNumVertices();
     unsigned int offset = 0;

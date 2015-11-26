@@ -24,7 +24,7 @@ void            HightmapHandlers::HightmapHandler         ( bv::IEventPtr eventP
         return;
 
     HightmapEventPtr evtHightmap = std::static_pointer_cast<bv::HightmapEvent>( eventPtr );
-    BVScenePtr modelScene = m_appLogic->GetBVScene();
+    BVProjectPtr modelScene = m_appLogic->GetBVProject();
     auto root = modelScene->GetModelSceneRoot();
 
     //float hours = evtHightmap->Hours;
@@ -102,7 +102,7 @@ void            HightmapHandlers::HMSetCyclistPosition    ( int cyclistPos, floa
 
     if(cyclistPos==1)
     {
-		auto root = m_appLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
+		auto root = m_appLogic->GetBVProject()->GetModelSceneRoot()->GetChild(".");
         model::SetParameter( root->GetPlugin( "height map" )->GetParameter( "curDistanceInMeters" ), TimeType( 0.f ), km * 1000.0f );
     }
 
@@ -114,7 +114,7 @@ void            HightmapHandlers::HMSetCyclistPosition    ( int cyclistPos, floa
 void            HightmapHandlers::UpdateCyclistPosition    ( int cyclistPos, float km )
 {
     assert( cyclistPos > 0 );
-    auto root = m_appLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
+    auto root = m_appLogic->GetBVProject()->GetModelSceneRoot()->GetChild(".");
     auto hmplugin = root->GetPlugin( "height map" );
 
     model::DefaultHeightMapPlugin *  tp = static_cast< model::DefaultHeightMapPlugin * > ( hmplugin.get() );
@@ -142,7 +142,7 @@ void            HightmapHandlers::UpdateCyclistPosition    ( int cyclistPos, flo
 //
 void            HightmapHandlers::HMShow                  ()
 {
-    auto root = m_appLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
+    auto root = m_appLogic->GetBVProject()->GetModelSceneRoot()->GetChild(".");
     auto hmplugin = root->GetPlugin( "height map" );
 
 	//FIXME: GetTimeline finds the first timeline with given name; names might not be unique
@@ -181,7 +181,7 @@ void            HightmapHandlers::HMReset                  ()
 //
 void            HightmapHandlers::HMStart                 ( float km )
 {
-    auto root = m_appLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
+    auto root = m_appLogic->GetBVProject()->GetModelSceneRoot()->GetChild(".");
     auto hmplugin = root->GetPlugin( "height map" );
 
 	//FIXME: GetTimeline finds the first timeline with given name; names might not be unique
@@ -208,7 +208,7 @@ void            HightmapHandlers::HMStart                 ( float km )
 //FIXME: uses hardcoded totalDistance
 void        HightmapHandlers::HMZoomIn                ( float km, float leftKM, float rightKM, float yScale )
 {
-    auto root = m_appLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
+    auto root = m_appLogic->GetBVProject()->GetModelSceneRoot()->GetChild(".");
     auto hmplugin = root->GetPlugin( "height map" );
 
 	//FIXME: GetTimeline finds the first timeline with given name; names might not be unique
@@ -262,7 +262,7 @@ void        HightmapHandlers::HMZoomIn                ( float km, float leftKM, 
 //FIXME: uses hardcoded totalDistance
 void            HightmapHandlers::HMZoomOutFromCurrent    (float scale)
 {
-    auto root = m_appLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
+    auto root = m_appLogic->GetBVProject()->GetModelSceneRoot()->GetChild(".");
      auto hmplugin = root->GetPlugin( "height map" );
 
 	//FIXME: GetTimeline finds the first timeline with given name; names might not be unique
@@ -295,7 +295,7 @@ void            HightmapHandlers::HMZoomOutFromCurrent    (float scale)
 //FIXME: uses hardcoded totalDistance
 void        HightmapHandlers::HMZoomInFake                ( float km, float leftKM, float rightKM, float yScale )
 {
-    auto root = m_appLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
+    auto root = m_appLogic->GetBVProject()->GetModelSceneRoot()->GetChild(".");
     auto hmplugin = root->GetPlugin( "height map" );
 
 	//FIXME: GetTimeline finds the first timeline with given name; names might not be unique
@@ -347,7 +347,7 @@ void        HightmapHandlers::HMZoomInFake                ( float km, float left
 void            HightmapHandlers::HMConcentratedDistanceAnimStart( int num )
 {
 	{num;}
-    auto root = m_appLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
+    auto root = m_appLogic->GetBVProject()->GetModelSceneRoot()->GetChild(".");
     auto hmplugin = root->GetPlugin( "height map" );
 
     model::DefaultHeightMapPlugin *  tp = static_cast< model::DefaultHeightMapPlugin * > ( hmplugin.get() );
@@ -395,7 +395,7 @@ void            HightmapHandlers::HMConcentratedDistanceAnimStart2( int num )
 {
 	{num;}
 
-    auto root = m_appLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
+    auto root = m_appLogic->GetBVProject()->GetModelSceneRoot()->GetChild(".");
     auto hmplugin = root->GetPlugin( "height map" );
 
     model::DefaultHeightMapPlugin *  tp = static_cast< model::DefaultHeightMapPlugin * > ( hmplugin.get() );
@@ -446,7 +446,7 @@ void    HightmapHandlers::UpdateHM        ()
 	bool hm_enable=false;
     if(hm_enable){
                 
-        auto root = m_appLogic->GetBVScene()->GetModelSceneRoot()->GetChild(".");
+        auto root = m_appLogic->GetBVProject()->GetModelSceneRoot()->GetChild(".");
         auto hmplugin = root->GetPlugin( "height map" );
         //auto rctn = root->GetChild( "rct" );
         //auto rect = rctn->GetPlugin( "transform" );
