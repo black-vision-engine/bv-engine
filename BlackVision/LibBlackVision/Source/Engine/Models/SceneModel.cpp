@@ -46,6 +46,8 @@ ser.EnterChild( "scene" );
 
     assets.Serialize( ser );
 
+	//FIXME: shouldn't serialize timeline manager (all timelines), only one used in the scene
+	model::TimelineManager::GetInstance()->Serialize( ser );
     m_sceneRootNode->Serialize( ser );                                    
 
 ser.ExitChild();
@@ -60,8 +62,10 @@ ISerializablePtr        SceneModel::Create          ( const IDeserializer& deser
     AssetDescsWithUIDs::SetInstance( *assets );
 
 // timelines
-	auto timeline = SerializationHelper::DeserializeObjectLoadImpl< model::OffsetTimeEvaluator >( deser, "timeline" );
-	TimelineManager::GetInstance()->AddTimeline( timeline );
+    auto tm = SerializationHelper::DeserializeObjectLoadImpl< model::TimelineManager >( deser, "timelines" );
+	//FIXME: add deserialized timelines as child to global timeline?
+    //TimelineManager::SetInstance( tm.get() );
+	TimelineManager::GetInstance()->AddTimeline( tm->GetRootTimeline() );
 
 // nodes
     auto node = SerializationHelper::DeserializeObjectLoadImpl< model::BasicNode >( deser, "node" );
