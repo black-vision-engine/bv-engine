@@ -58,6 +58,18 @@ std::wstring		JsonSpiritDeserializeObject::GetAttribute        ( const std::wstr
 
 // ***********************
 //
+std::string			JsonSpiritDeserializeObject::GetParentAttribute		( const std::string& /*parentName*/, const std::string& /*attName*/ ) const
+{    assert( !"This serializer supports only wstrings" ); return "";   }
+
+// ***********************
+//
+std::wstring		JsonSpiritDeserializeObject::GetParentAttribute		( const std::wstring& /*parentName*/, const std::wstring& /*attName*/ ) const
+{
+        assert( !"FIXME" ); return L"";
+}
+
+// ***********************
+//
 bool                JsonSpiritDeserializeObject::EnterChild          ( const std::string& /*name*/ ) const
 {    assert( !"This serializer supports only wstrings" ); return "";   }
 

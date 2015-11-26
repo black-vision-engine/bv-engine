@@ -73,6 +73,11 @@ std::string			XMLDeserializer::GetAttribute        ( const std::string& name ) c
     return GetValue( name );
 }
 
+std::string			XMLDeserializer::GetParentAttribute	  ( const std::string& /*parentName*/, const std::string& /*attName*/ ) const
+{ 
+    assert( !"FIXME" ); return "";
+}
+
 bool                XMLDeserializer::EnterChild          ( const std::string& name ) const
 { 
     auto child = m_doc->first_node( name.c_str() );
@@ -115,6 +120,9 @@ bool                XMLDeserializer::NextChild           () const
 
 
 std::wstring        XMLDeserializer::GetAttribute        ( const std::wstring& /*name*/ ) const
+{    assert( !"This serializer doesn't supports wstrings" ); return L"";    }
+
+std::wstring        XMLDeserializer::GetParentAttribute	( const std::wstring& /*parentName*/, const std::wstring& /*attName*/ ) const
 {    assert( !"This serializer doesn't supports wstrings" ); return L"";    }
 
 bool                XMLDeserializer::EnterChild          ( const std::wstring& /*name*/ ) const
