@@ -275,6 +275,39 @@ bool					BVSceneEditor::DetachPlugin          ( model::BasicNodePtr node, unsign
 
 // *******************************
 //
+<<<<<<< local
+=======
+model::IPluginPtr		BVSceneEditor::GetDetachedPlugin    ( model::BasicNodePtr node )
+{
+	return node->GetModelNodeEditor()->GetDetachedPlugin();
+}
+
+// *******************************
+//
+void					BVSceneEditor::ResetDetachedPlugin  ( model::BasicNodePtr node )
+{
+	return node->GetModelNodeEditor()->ResetDetachedPlugin();
+}
+
+// *******************************
+//
+model::IModelNodeEffectPtr	BVSceneEditor::GetNodeEffect		( model::IModelNodePtr node )
+{
+	return QueryTyped( node )->GetNodeEffect();
+}
+
+// *******************************
+//
+void						BVSceneEditor::SetNodeEffect		( model::IModelNodePtr node, model::IModelNodeEffectPtr nodeEffect )
+{
+    auto modelNode = QueryTyped( node );
+	modelNode->SetNodeEffect( nodeEffect );
+	BVSceneTools::UpdateSceneNodeEffect( GetEngineNode( node ), modelNode );
+}
+
+// *******************************
+//
+>>>>>>> graft
 void                    BVSceneEditor::MappingsCleanup      ( model::IModelNodePtr node )
 {
     if( node )
