@@ -6,6 +6,7 @@
 #include "System/Path.h"
 
 #include "Engine/Events/Events.h"
+#include "EngineMode.h"
 
 #include "TestAI/TestKeyboardHandler.h"
 
@@ -67,7 +68,7 @@ private:
     RemoteEventsHandlers*           m_remoteHandlers;
     RemoteController*               m_remoteController;
 
-    unsigned long                   m_startTime;
+    EngineMode                      m_engineMode;
 
 	//pablito
 	Solution						m_solution;
@@ -101,6 +102,7 @@ public:
     virtual void    ShutDown        ();
 
     void            PostFrameLogic  ( const SimpleTimer & timer, unsigned int millis );
+    void            UpdateFrame     ( TimeType time, Renderer * renderer );
 
     const FrameStatsCalculator &     FrameStats () const;
 

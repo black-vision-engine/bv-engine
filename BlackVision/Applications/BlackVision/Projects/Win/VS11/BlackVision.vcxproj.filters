@@ -172,6 +172,7 @@
     <ClCompile Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.cpp">
       <Filter>TestAI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\EngineMode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -304,6 +305,7 @@
     <ClInclude Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.h">
       <Filter>TestAI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\EngineMode.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\BVConfig.inl" />

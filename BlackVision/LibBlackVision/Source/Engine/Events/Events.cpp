@@ -41,8 +41,8 @@ std::string ParamKeyEvent::m_sEventName             = "ParamKeyEvent";
 const EventType NodeStructureEvent::m_sEventType    = 0x30000012;
 std::string NodeStructureEvent::m_sEventName        = "NodeStructureEvent";
 
-const EventType PluginStructureEvent::m_sEventType    = 0x30000015;
-std::string PluginStructureEvent::m_sEventName        = "PluginStructureEvent";
+const EventType PluginStructureEvent::m_sEventType  = 0x30000015;
+std::string PluginStructureEvent::m_sEventName      = "PluginStructureEvent";
 
 const EventType ProjectEvent::m_sEventType          = 0x30000013;
 std::string ProjectEvent::m_sEventName              = "ProjectStructureEvent";
@@ -50,8 +50,8 @@ std::string ProjectEvent::m_sEventName              = "ProjectStructureEvent";
 const EventType ResponseEvent::m_sEventType         = 0x30000008;
 std::string ResponseEvent::m_sEventName             = "ResponseEvent";
 
-const EventType InfoEvent::m_sEventType          = 0x30000007;
-std::string InfoEvent::m_sEventName              = "InfoEvent";
+const EventType InfoEvent::m_sEventType             = 0x30000007;
+std::string InfoEvent::m_sEventName                 = "InfoEvent";
 
 const EventType TimeLineEvent::m_sEventType         = 0x30000009;
 std::string TimeLineEvent::m_sEventName             = "TimeLineEvent";
@@ -67,6 +67,11 @@ std::string VideoCardEvent::m_sEventName            = "VideoCardEvent";
 
 const EventType HightmapEvent::m_sEventType         = 0x30000014;
 std::string HightmapEvent::m_sEventName             = "HightmapEvent";
+
+const EventType EngineModeEvent::m_sEventType       = 0x30000016;
+std::string EngineModeEvent::m_sEventName           = "EngineModeEvent";
+
+
 
 // ************************************* Events Serialization *****************************************
 
@@ -171,6 +176,11 @@ const std::wstring COMMAND_RESET_TIMER_WSTRING          = L"Reset";
 const std::wstring COMMAND_SET_TIME_WSTRING             = L"SetTime";
 const std::wstring COMMAND_SET_TIME_START_WSTRING       = L"SetTimeStart";
 const std::wstring COMMAND_SET_TIME_STOP_WSTRING        = L"SetTimeStop";
+
+// EngineModeEvent
+const std::wstring REQUESTED_FPS_WSTRING                = L"FPS";
+const std::wstring NUM_FRAMES_WSTRING                   = L"NumberFrames";
+const std::wstring RENDERING_FILE_PATH                  = L"FilePath";
 
 // HightmapEvent
 const std::wstring COMMAND_HM_ENABLE_WSTRING    = L"Enable";
@@ -1351,6 +1361,56 @@ VideoCardEvent::Command VideoCardEvent::WStringToCommand    ( const std::wstring
 }
 
 
+//******************* EngineModeEvent *************
+
+// *************************************
+//
+void                EngineModeEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
+    ser.SetAttribute( Serial::REQUESTED_FPS_WSTRING, toWString( FPS ) );
+    ser.SetAttribute( Serial::RENDERING_FILE_PATH, toWString( FilePath ) );
+    ser.SetAttribute( Serial::NUM_FRAMES_WSTRING, toWString( NumFrames ) );
+}
+
+// *************************************
+//
+IEventPtr                EngineModeEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
+    {
+        EngineModeEventPtr newEvent     = std::make_shared<EngineModeEvent>();
+        newEvent->FilePath              = toString( deser.GetAttribute( Serial::RENDERING_FILE_PATH ) );
+        newEvent->FPS                   = std::stof( toString( deser.GetAttribute( Serial::REQUESTED_FPS_WSTRING ) ) );
+        newEvent->NumFrames             = std::stoi( toString( deser.GetAttribute( Serial::NUM_FRAMES_WSTRING ) ) );
+
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               EngineModeEvent::Clone             () const
+{   return IEventPtr( new EngineModeEvent( *this ) );  }
+
+// *************************************
+//
+EventType           EngineModeEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        EngineModeEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  EngineModeEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           EngineModeEvent::GetEventType() const
+{   return this->m_sEventType; }
+
+
 //******************* HightmapEvent *************
 
 // *************************************
@@ -1459,6 +1519,7 @@ HightmapEvent::Command HightmapEvent::WStringToCommand    ( const std::wstring& 
     else
         return Command::Fail;
 }
+
 
 #pragma warning( pop )
 

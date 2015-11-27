@@ -97,8 +97,7 @@ namespace
 
 //
 BVAppLogic::BVAppLogic              ( Renderer * renderer )
-    : m_startTime( 0 )
-    , m_bvScene( BVScene::Create( renderer ) )
+    : m_bvScene( BVScene::Create( renderer ) )
     , m_pluginsManager( nullptr )
     , m_renderer( nullptr )
     , m_renderLogic( nullptr )
@@ -235,7 +234,7 @@ void BVAppLogic::InitCamera         ( unsigned int w, unsigned int h )
 //
 void BVAppLogic::SetStartTime       ( unsigned long millis )
 {
-    m_startTime = millis;
+    m_engineMode.SetStartTime( millis );
 	m_bvScene->SetStartTime( millis );
 }
 
@@ -245,23 +244,27 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 {
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
 
+    TimeType time = m_engineMode.StartFrame( millis );
+    UpdateFrame( time, renderer );
+}
+
+// ***********************
+//
+void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer )
+{
     assert( m_state != BVAppState::BVS_INVALID );
     if( m_state == BVAppState::BVS_RUNNING )
     {
         FRAME_STATS_FRAME();
         FRAME_STATS_SECTION( DefaultConfig.FrameStatsSection() );
 
-        //FIXME: debug timer - don't get fooled
-        //float t = float(frame) * 0.1f; ///10 fps
-
-        TimeType t = TimeType( millis ) * TimeType( 0.001 );
-        GownoWFormieKebaba( t, this );
+        GownoWFormieKebaba( time, this );
 
         {
             FRAME_STATS_SECTION( "Update" );
             HPROFILER_SECTION( "update total", PROFILER_THREAD1 );
 
-            m_bvScene->Update( t );
+            m_bvScene->Update( time );
         }
 
         m_remoteHandlers->UpdateHM();
@@ -283,6 +286,8 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 
     GTimer.StartTimer();
 }
+
+
 // *********************************
 //
 void BVAppLogic::RefreshVideoInputScene()
