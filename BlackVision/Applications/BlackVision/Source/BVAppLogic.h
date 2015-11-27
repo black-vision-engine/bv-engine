@@ -6,7 +6,7 @@
 #include "System/Path.h"
 
 #include "Engine/Events/Events.h"
-#include "EngineMode.h"
+#include "RenderMode.h"
 
 #include "TestAI/TestKeyboardHandler.h"
 
@@ -68,7 +68,7 @@ private:
     RemoteEventsHandlers*           m_remoteHandlers;
     RemoteController*               m_remoteController;
 
-    EngineMode                      m_engineMode;
+    RenderMode                      m_renderMode;
 
 	//pablito
 	Solution						m_solution;

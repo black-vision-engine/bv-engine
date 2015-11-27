@@ -1,4 +1,4 @@
-#include "EngineMode.h"
+#include "RenderMode.h"
 
 
 namespace bv
@@ -6,7 +6,7 @@ namespace bv
     
 // ***********************
 //
-EngineMode::EngineMode()
+RenderMode::RenderMode()
     :   m_startTime( 0 ),
         m_frameNumber( 0 ),
         m_currentTime( 0 ),
@@ -15,12 +15,12 @@ EngineMode::EngineMode()
 
 // ***********************
 //
-EngineMode::~EngineMode()
+RenderMode::~RenderMode()
 {}
 
 // ***********************
 //
-void EngineMode::SetStartTime( unsigned long time )
+void RenderMode::SetStartTime( unsigned long time )
 {
     m_startTime = time;
     m_currentTime = m_startTime;
@@ -29,7 +29,7 @@ void EngineMode::SetStartTime( unsigned long time )
 
 // ***********************
 //
-void EngineMode::SetRenderToFileMode( float requestedFPS, unsigned int numFrames )
+void RenderMode::SetRenderToFileMode( float requestedFPS, unsigned int numFrames )
 {
     m_nextFrameOffset = 1000 / requestedFPS;        // Time in millis
     m_framesToRender = numFrames;
@@ -37,12 +37,12 @@ void EngineMode::SetRenderToFileMode( float requestedFPS, unsigned int numFrames
 
 // ***********************
 //
-TimeType EngineMode::StartFrame( unsigned long millis )
+TimeType RenderMode::StartFrame( unsigned long millis )
 {
     m_frameNumber++;
     if( m_renderMode == RenderingMode::RenderRealTime )
         return TimeType( millis ) * TimeType( 0.001 );
-    else if( m_renderMode == RenderingMode::RenderToFile )
+    else if( m_renderMode == RenderingMode::RenderOffscreen )
     {
         if( m_framesToRender < 0 )
         {// Rendering to file ended. Restore previous state.
@@ -59,12 +59,12 @@ TimeType EngineMode::StartFrame( unsigned long millis )
 
 // ***********************
 //
-TimeType EngineMode::GetFrameTime()
+TimeType RenderMode::GetFrameTime()
 {    return TimeType( m_currentTime ) * TimeType( 0.001 );  }
 
 // ***********************
 //
-unsigned int EngineMode::GetFrameNumber()
+unsigned int RenderMode::GetFrameNumber()
 {    return m_frameNumber;  }
 
 

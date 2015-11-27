@@ -68,8 +68,8 @@ std::string VideoCardEvent::m_sEventName            = "VideoCardEvent";
 const EventType HightmapEvent::m_sEventType         = 0x30000014;
 std::string HightmapEvent::m_sEventName             = "HightmapEvent";
 
-const EventType EngineModeEvent::m_sEventType       = 0x30000016;
-std::string EngineModeEvent::m_sEventName           = "EngineModeEvent";
+const EventType RenderingModeEvent::m_sEventType       = 0x30000016;
+std::string RenderingModeEvent::m_sEventName           = "RenderingModeEvent";
 
 
 
@@ -177,10 +177,13 @@ const std::wstring COMMAND_SET_TIME_WSTRING             = L"SetTime";
 const std::wstring COMMAND_SET_TIME_START_WSTRING       = L"SetTimeStart";
 const std::wstring COMMAND_SET_TIME_STOP_WSTRING        = L"SetTimeStop";
 
-// EngineModeEvent
+// RenderingModeEvent
 const std::wstring REQUESTED_FPS_WSTRING                = L"FPS";
 const std::wstring NUM_FRAMES_WSTRING                   = L"NumberFrames";
 const std::wstring RENDERING_FILE_PATH                  = L"FilePath";
+
+const std::wstring COMMAND_SCREENSHOT_WSTRING           = L"ScreenShot";
+const std::wstring COMMAND_RENDER_OFFSCREEN_WSTRING     = L"RenderOffscreen";
 
 // HightmapEvent
 const std::wstring COMMAND_HM_ENABLE_WSTRING    = L"Enable";
@@ -1361,28 +1364,30 @@ VideoCardEvent::Command VideoCardEvent::WStringToCommand    ( const std::wstring
 }
 
 
-//******************* EngineModeEvent *************
+//******************* RenderingModeEvent *************
 
 // *************************************
 //
-void                EngineModeEvent::Serialize            ( ISerializer& ser ) const
+void                RenderingModeEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
     ser.SetAttribute( Serial::REQUESTED_FPS_WSTRING, toWString( FPS ) );
     ser.SetAttribute( Serial::RENDERING_FILE_PATH, toWString( FilePath ) );
     ser.SetAttribute( Serial::NUM_FRAMES_WSTRING, toWString( NumFrames ) );
+    ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( RenderingCommand ) );
 }
 
 // *************************************
 //
-IEventPtr                EngineModeEvent::Create          ( IDeserializer& deser )
+IEventPtr                RenderingModeEvent::Create          ( IDeserializer& deser )
 {
     if( deser.GetAttribute( Serial::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
-        EngineModeEventPtr newEvent     = std::make_shared<EngineModeEvent>();
+        RenderingModeEventPtr newEvent     = std::make_shared<RenderingModeEvent>();
         newEvent->FilePath              = toString( deser.GetAttribute( Serial::RENDERING_FILE_PATH ) );
         newEvent->FPS                   = std::stof( toString( deser.GetAttribute( Serial::REQUESTED_FPS_WSTRING ) ) );
         newEvent->NumFrames             = std::stoi( toString( deser.GetAttribute( Serial::NUM_FRAMES_WSTRING ) ) );
+        newEvent->RenderingCommand      = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
 
         return newEvent;
     }
@@ -1390,26 +1395,50 @@ IEventPtr                EngineModeEvent::Create          ( IDeserializer& deser
 }
 // *************************************
 //
-IEventPtr               EngineModeEvent::Clone             () const
-{   return IEventPtr( new EngineModeEvent( *this ) );  }
+IEventPtr               RenderingModeEvent::Clone             () const
+{   return IEventPtr( new RenderingModeEvent( *this ) );  }
 
 // *************************************
 //
-EventType           EngineModeEvent::Type()
+EventType           RenderingModeEvent::Type()
 {   return m_sEventType;   }
 // *************************************
 //
-std::string&        EngineModeEvent::Name()
+std::string&        RenderingModeEvent::Name()
 {   return m_sEventName;   }
 // *************************************
 //
-const std::string&  EngineModeEvent::GetName() const
+const std::string&  RenderingModeEvent::GetName() const
 {   return Name();   }
 // *************************************
 //
-EventType           EngineModeEvent::GetEventType() const
+EventType           RenderingModeEvent::GetEventType() const
 {   return this->m_sEventType; }
 
+
+// *************************************
+//
+std::wstring RenderingModeEvent::CommandToWString    ( Command cmd )
+{
+    if( cmd == Command::RenderOffscreen )
+        return Serial::COMMAND_RENDER_OFFSCREEN_WSTRING;
+    else if( cmd == Command::ScreenShot )
+        return Serial::COMMAND_SCREENSHOT_WSTRING;
+    else
+        return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
+}
+
+// *************************************
+//
+RenderingModeEvent::Command RenderingModeEvent::WStringToCommand    ( const std::wstring& string )
+{
+    if( string == Serial::COMMAND_RENDER_OFFSCREEN_WSTRING )
+        return Command::RenderOffscreen;
+    else if( string == Serial::COMMAND_SCREENSHOT_WSTRING )
+        return Command::ScreenShot;
+    else
+        return Command::Fail;
+}
 
 //******************* HightmapEvent *************
 

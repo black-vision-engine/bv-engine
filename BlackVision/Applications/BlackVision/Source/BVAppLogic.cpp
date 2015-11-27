@@ -234,7 +234,7 @@ void BVAppLogic::InitCamera         ( unsigned int w, unsigned int h )
 //
 void BVAppLogic::SetStartTime       ( unsigned long millis )
 {
-    m_engineMode.SetStartTime( millis );
+    m_renderMode.SetStartTime( millis );
 	m_bvScene->SetStartTime( millis );
 }
 
@@ -244,7 +244,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 {
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
 
-    TimeType time = m_engineMode.StartFrame( millis );
+    TimeType time = m_renderMode.StartFrame( millis );
     UpdateFrame( time, renderer );
 }
 

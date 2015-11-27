@@ -277,7 +277,6 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\RemoteController.cpp" />
-    <ClCompile Include="..\..\..\Source\EngineMode.cpp" />
     <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
     <ClCompile Include="..\..\..\Source\FrameStatsService.cpp" />
     <ClCompile Include="..\..\..\Source\hack_videoinput\TestVideoInput.cpp" />
@@ -301,6 +300,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\OffscreenRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\RenderMode.cpp" />
     <ClCompile Include="..\..\..\Source\StatsFormatters.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\AICommands.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestAI.cpp" />
@@ -332,7 +332,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\EndUserAPI\IEventServer.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteController.h" />
-    <ClInclude Include="..\..\..\Source\EngineMode.h" />
+    <ClInclude Include="..\..\..\Source\RenderMode.h" />
     <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
     <ClInclude Include="..\..\..\Source\FrameStatsService.h" />
     <ClInclude Include="..\..\..\Source\hack_videoinput\TestVideoInput.h" />
