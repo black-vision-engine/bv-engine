@@ -14,19 +14,19 @@ namespace model {
     class ModelSceneEditor;
 } // model
 
-class BVScene;
+class BVProject;
 class SceneNode;
 class SceneEditor;
 
 
-class BVSceneEditor
+class BVProjectEditor
 {
 private:
 
     typedef std::hash_map< model::IModelNode *, SceneNode * >	TNodesMapping;
 
 private:
-	BVScene *					m_scene;
+	BVProject *					m_scene;
     model::BasicNodePtr			m_rootNode;
 
     SceneEditor *               m_engineSceneEditor;
@@ -35,7 +35,7 @@ private:
 
 private:
 
-                            BVSceneEditor       ( BVScene * scene );
+                            BVProjectEditor       ( BVProject * scene );
 
 public:
 
@@ -84,7 +84,7 @@ private:
 
     SceneNode *             GetEngineNode       ( model::IModelNodePtr node );
 
-    friend class BVScene;
+    friend class BVProject;
 };
 
 } //bv

@@ -27,7 +27,7 @@
 #include "Engine/Models/Plugins/PluginUtils.h"
 
 #include "Engine/Models/ModelSceneEditor.h"
-#include "Engine/Models/BVScene.h"
+#include "Engine/Models/BVProject.h"
 
 #include "System/Env.h"
 #include "BVConfig.h"

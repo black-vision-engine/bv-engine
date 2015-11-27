@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"
-#include "Engine/Models/BVScene.h"
+#include "Engine/Models/BVProject.h"
 
 #include "BVGL.h"
 
@@ -23,7 +23,7 @@ class TestScene
 private:
 	std::vector< std::function< void() > > m_testSteps;
 
-    BVScene *					m_scene;
+    BVProject *					m_project;
 	Renderer *					m_renderer;
 
 	model::ITimeEvaluatorPtr	m_timeEvaluator;
@@ -46,7 +46,7 @@ private:
 
 	
 public:
-							TestScene				( BVScene * scene, Renderer * renderer );
+							TestScene				( BVProject * scene, Renderer * renderer );
 							~TestScene				();
 
 	void					TestEditor				( TimeType time );
