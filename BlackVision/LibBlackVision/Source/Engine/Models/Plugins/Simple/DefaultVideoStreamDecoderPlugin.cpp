@@ -140,6 +140,8 @@ bool                            DefaultVideoStreamDecoderPlugin::LoadResource		(
 
 			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
+			AddAsset( assetDescr, vsDesc->GetSamplerState() );
+
 			return true;
 		}
     }

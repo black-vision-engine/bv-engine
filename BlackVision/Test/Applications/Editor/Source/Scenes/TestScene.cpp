@@ -494,7 +494,7 @@ void					TestScene::InitTestEditor			()
 	//InitColoredTextTest();
 	//InitGradientTextTest();
 	
-	InitColoredTimerTest();
+	//InitColoredTimerTest();
 	//InitGradientTimerTest();
 
 	//InitColoredGeometryTest();
@@ -502,7 +502,7 @@ void					TestScene::InitTestEditor			()
 	//InitAnimatedGeometryTest();
 	//InitGradientGeometryTest();
 
-	//InitVideoStreamDecoderTest();
+	InitVideoStreamDecoderTest();
 }
 
 // ****************************
@@ -645,16 +645,6 @@ void					TestScene::InitBasicTexturePluginTest	()
 	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TEX_NODE, "texture", 2 ); } );
 	m_testSteps.push_back( [&]{ SwapPlugins( "texture", 2, TEX_NODE, "solid color", 2 ); } );
 
-	m_testSteps.push_back( [&]{ CopyPlugin( 2, "solid color", TEX_NODE, "texture" ); } );
-	m_testSteps.push_back( [&]
-	{
-		auto editor = m_project->GetProjectEditor();
-		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
-		
-		LoadTexture( root->GetPlugin( "texture" ), TestSceneUtils::ANIM_PATH + "/f0.bmp" );
-	});
-	m_testSteps.push_back( [&]{ RestoreRoot( 2, "texture" ); } );
-
 	m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, TEX_NODE, "alpha_mask", 3 ); } );
 	m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, TEX_NODE, "alpha_mask", 3 ); } );
 
@@ -664,12 +654,37 @@ void					TestScene::InitBasicTexturePluginTest	()
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TEX_NODE );
 		
-		auto time = m_timeEvaluator->GetLocalTime();
-		model::SetParameter( child->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "filteringMode" ), time, static_cast< Int32 >( TextureFilteringMode::TFM_POINT ) );
-		model::SetParameter( child->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "filteringMode" ), time + TimeType( 1.0f ), static_cast< Int32 >( TextureFilteringMode::TFM_LINEAR ) );
+		//auto time = m_timeEvaluator->GetLocalTime();
+		model::SetParameter( child->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "filteringMode" ), 0.f, static_cast< Int32 >( TextureFilteringMode::TFM_POINT ) );
+		//model::SetParameter( child->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "filteringMode" ), time + TimeType( 1.0f ), static_cast< Int32 >( TextureFilteringMode::TFM_LINEAR ) );
 	});
+
+	m_testSteps.push_back( [&]{ CopyPlugin( 2, "solid color", TEX_NODE, "texture" ); } );
+	m_testSteps.push_back( [&]
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+		auto child = root->GetChild( TEX_NODE );
+
+		bool success = true;
+
+		auto fm0 = QueryTypedValue< ValueIntPtr >( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetValue( "filteringMode" ) )->GetValue();
+		auto fm1 = QueryTypedValue< ValueIntPtr >( child->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetValue( "filteringMode" ) )->GetValue();
+
+		success &= ( fm0 == ( int )TextureFilteringMode::TFM_POINT );
+		success &= ( fm0 == fm1 );
+
+		assert( success );
+	} );
 	m_testSteps.push_back( [&]{} );
-	m_testSteps.push_back( [&]{} );
+	m_testSteps.push_back( [&]
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+		
+		LoadTexture( root->GetPlugin( "texture" ), TestSceneUtils::ANIM_PATH + "/f0.bmp" );
+	});
+	m_testSteps.push_back( [&]{ RestoreRoot( 2, "texture" ); } );
 
 	m_testSteps.push_back( [&]{
 		auto editor = m_project->GetProjectEditor();
@@ -1056,14 +1071,13 @@ void					TestScene::InitColoredTextTest			()
 	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TXT_NODE, "solid color", 1 ); } );
 
 	m_testSteps.push_back( [&]{ CopyPlugin( 2, "rectangle", TXT_NODE, "text" ); } );
-	//FIXME: AddAsset should take care of reloading assets on runtime
-	//m_testSteps.push_back( [&]
-	//{
-	//	auto editor = m_project->GetProjectEditor();
-	//	auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
-	//	
-	//	LoadFont( root->GetPlugin( "text" ), "fonts/couri.TTF", 30, 0, 0, true );
-	//});
+	m_testSteps.push_back( [&]
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+		
+		LoadFont( root->GetPlugin( "text" ), "fonts/couri.TTF", 30, 0, 0, true );
+	});
 	m_testSteps.push_back( [&]{ RestoreRoot( 1, "text" ); } );
 
 	m_testSteps.push_back( [&]
@@ -1831,6 +1845,23 @@ void					TestScene::InitVideoStreamDecoderTest	()
 		m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, VSD_NODE, "alpha_mask", 3 ); } );
 		m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, VSD_NODE, "alpha_mask", 3 ); } );
 	
+		m_testSteps.push_back( [&]{ 
+			CopyPlugin( 2, "solid color", VSD_NODE, "video_stream_decoder" );
+
+			auto editor = m_project->GetProjectEditor();
+			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+			model::DefaultVideoStreamDecoderPlugin::Start( root->GetPlugin( "video_stream_decoder" ) );
+		} );
+		m_testSteps.push_back( []{} );
+		m_testSteps.push_back( [&]
+		{
+			auto editor = m_project->GetProjectEditor();
+			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+			model::LoadVideoStream( root->GetPlugin( "video_stream_decoder" ), TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
+			model::DefaultVideoStreamDecoderPlugin::Start( root->GetPlugin( "video_stream_decoder" ) );
+		});
+		m_testSteps.push_back( [&]{ RestoreRoot( 2, "video_stream_decoder" ); } );
+
 		m_testSteps.push_back( [&]{
 			auto editor = m_project->GetProjectEditor();
 			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
