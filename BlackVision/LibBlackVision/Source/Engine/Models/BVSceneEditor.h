@@ -54,7 +54,7 @@ public:
 
     model::IModelNodePtr    GetRootNode         ();
 
-	bool                    AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, unsigned int idx );
+	void                    AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, unsigned int idx );
 
     bool                    DeletePlugin		( model::BasicNodePtr node, unsigned int idx );
     bool                    DeletePlugin		( model::BasicNodePtr node, const std::string & name );

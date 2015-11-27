@@ -275,8 +275,6 @@ bool					BVSceneEditor::DetachPlugin          ( model::BasicNodePtr node, unsign
 
 // *******************************
 //
-<<<<<<< local
-=======
 model::IPluginPtr		BVSceneEditor::GetDetachedPlugin    ( model::BasicNodePtr node )
 {
 	return node->GetModelNodeEditor()->GetDetachedPlugin();
@@ -307,7 +305,6 @@ void						BVSceneEditor::SetNodeEffect		( model::IModelNodePtr node, model::IMod
 
 // *******************************
 //
->>>>>>> graft
 void                    BVSceneEditor::MappingsCleanup      ( model::IModelNodePtr node )
 {
     if( node )

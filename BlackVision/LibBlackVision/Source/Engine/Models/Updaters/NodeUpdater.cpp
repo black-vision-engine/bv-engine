@@ -147,52 +147,14 @@ void    NodeUpdater::DoUpdate               ()
 // FIXME: change effects if required or assert that they cannot be changed in runtime
 void    NodeUpdater::UpdateNodeEffect       ()
 {
-    auto name = m_modelNode->GetName();
     auto nodeEffect = m_modelNode->GetNodeEffect();
-
     if( nodeEffect )
     {
-        switch( nodeEffect->GetType() )
-        {
-            case NodeEffectType::NET_ALPHA_MASK:
-            {
-                auto alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( nodeEffect );
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-
-                auto paramAlpha = alphaMaskEffect->GetParamAlpha();
-                auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );
-
-                if ( alphaVal != nullptr )
-                {
-                    alphaVal->SetValue( alphaMaskEffect->GetAlpha() );
-                }
-
-                break;
-            }
-            case NodeEffectType::NET_NODE_MASK:
-            {
-                auto nodeMaskEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( nodeEffect );
-
-                auto paramBgIdx = nodeMaskEffect->GetParamBgIdx();
-                auto paramFgIdx = nodeMaskEffect->GetParamFgIdx();
-                auto paramAlpha = nodeMaskEffect->GetParamAlpha();
-
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-
-				auto bgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramBgIdx->GetName() ) );
-                auto fgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramFgIdx->GetName() ) );
-                auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );
-
-                if ( bgIdxVal != nullptr && fgIdxVal != nullptr && alphaVal != nullptr )
-                {
-                    bgIdxVal->SetValue( nodeMaskEffect->GetBackgroundChildIdx() );
-                    fgIdxVal->SetValue( nodeMaskEffect->GetForegroundChildIdx() );
-                    alphaVal->SetValue( nodeMaskEffect->GetAlpha() );
-                }
-
-                break;
-            }
-        }
+		auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+		for( auto & val : nodeEffect->GetValues() )
+		{
+			UpdateValue( val, sceneNodeEffect->GetValue( val->GetName() ) );
+		}
     }
 }
 
@@ -263,6 +225,44 @@ void            NodeUpdater::RegisterTex2Params  ( ITexturesDataConstPtr texture
         m_animMappingVec.push_back( std::make_pair( animations[ i ], tex2DSeq ) );
     }
 */
+}
+
+// *****************************
+//
+void	NodeUpdater::UpdateValue			( IValueConstPtr source, IValuePtr dest )
+{
+	if( source->GetType() == dest->GetType() )
+	{
+		switch( source->GetType() )
+		{
+			case ParamType::PT_INT:
+				UpdateTypedValue< ValueIntPtr >( source, dest );
+				break;
+			case ParamType::PT_FLOAT1:
+				UpdateTypedValue< ValueFloatPtr >( source, dest );
+				break;
+			case ParamType::PT_FLOAT2:
+				UpdateTypedValue< ValueVec2Ptr >( source, dest );
+				break;
+			case ParamType::PT_FLOAT3:
+				UpdateTypedValue< ValueVec3Ptr >( source, dest );
+				break;
+			case ParamType::PT_FLOAT4:
+				UpdateTypedValue< ValueVec4Ptr >( source, dest );
+				break;
+			case ParamType::PT_MAT2:
+				UpdateTypedValue< ValueMat2Ptr >( source, dest );
+				break;
+			case ParamType::PT_MAT3:
+				UpdateTypedValue< ValueMat3Ptr >( source, dest );
+				break;
+			case ParamType::PT_MAT4:
+				UpdateTypedValue< ValueMat4Ptr >( source, dest );
+				break;
+			default:
+				assert( false );
+		}
+	}
 }
 
 } //bv

@@ -122,6 +122,13 @@ private:
 
     inline  void    UpdateTexturesData  ();
 
+private:
+	
+	void			UpdateValue			( IValueConstPtr source, IValuePtr dest );
+
+	template< typename ValType >
+    void			UpdateTypedValue    ( IValueConstPtr source, IValuePtr dest );
+
 };
 
 } //bv

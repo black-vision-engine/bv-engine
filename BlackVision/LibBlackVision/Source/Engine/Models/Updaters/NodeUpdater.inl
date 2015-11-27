@@ -242,4 +242,12 @@ inline void    NodeUpdater::UpdateTexturesData  ()
     }
 }
 
+// *******************************
+//
+template< typename ValType >
+void	NodeUpdater::UpdateTypedValue   ( IValueConstPtr source, IValuePtr dest )
+{
+	QueryTypedValue< ValType >( dest )->SetValue( QueryTypedValue< ValType >( source )->GetValue() );
+}
+
 } //bv
