@@ -4,6 +4,7 @@
 
 #include "CoreDEF.h" //FIXME: store in PCH
 #include "Engine/Types/Enums.h"
+#include "Serialization/ISerializable.h"
 
 
 namespace bv { namespace model {
@@ -11,7 +12,7 @@ namespace bv { namespace model {
 class ITimeline;
 
 // **********************************
-class ITimelineEvent
+class ITimelineEvent : public ISerializable
 {
 public:
 

@@ -52,28 +52,33 @@ DefaultTimeline::~DefaultTimeline    ()
 
 // *********************************
 //
-void                                DefaultTimeline::Serialize           ( ISerializer& sob ) const
+void                                DefaultTimeline::Serialize           ( ISerializer& ser ) const
 {
-    sob.EnterChild( "timeline" );
-    sob.SetAttribute( "name", GetName() );
-    sob.SetAttribute( "type", "default" );
+    ser.EnterChild( "timeline" );
+    ser.SetAttribute( "name", GetName() );
+    ser.SetAttribute( "type", "default" );
 
-    sob.SetAttribute( "duration", std::to_string( m_timeEvalImpl.GetDuration() ) );
+    ser.SetAttribute( "duration", std::to_string( m_timeEvalImpl.GetDuration() ) );
     if( m_timeEvalImpl.GetWrapPre() == m_timeEvalImpl.GetWrapPost() && m_timeEvalImpl.GetWrapPost() == TimelineWrapMethod::TWM_REPEAT )
     {
-        sob.SetAttribute( "loop", "true" );
+        ser.SetAttribute( "loop", "true" );
     }
     else
     {
-        sob.SetAttribute( "loop", "false" ); // FIXME include more general cases
+        ser.SetAttribute( "loop", "false" ); // FIXME include more general cases
     }
 
-    sob.EnterArray( "children" );
-    for( auto child : m_children )
-        child->Serialize( sob );
-    sob.ExitChild(); // children
+    ser.EnterArray( "events" );
+    for( auto event : m_keyFrameEvents )
+        event->Serialize( ser );
+    ser.ExitChild();
 
-    sob.ExitChild();
+    ser.EnterArray( "children" );
+    for( auto child : m_children )
+        child->Serialize( ser );
+    ser.ExitChild(); // children
+
+    ser.ExitChild();
 }
 
 
@@ -95,6 +100,22 @@ ISerializablePtr                     DefaultTimeline::Create              ( cons
     TimelineWrapMethod postWrap = preWrap; // FIXME
 
     auto te = std::make_shared< DefaultTimeline >( name, duration, preWrap, postWrap );
+
+    deser.EnterChild( "events" );
+    do {
+        deser.EnterChild( "event" );
+        auto type = deser.GetAttribute( "type" );
+        if( type == "loop" )
+            te->AddKeyFrame( TimelineEventLoop::Create( deser, te.get() ) );
+        else if( type == "null" )
+            te->AddKeyFrame( TimelineEventNull::Create( deser, te.get() ) );
+        else if( type == "stop" )
+            te->AddKeyFrame( TimelineEventStop::Create( deser, te.get() ) );
+        else
+            assert( false );
+        deser.ExitChild(); // event
+    }while( deser.NextChild() ); // events
+    deser.ExitChild();
 
     auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( deser, "children", "timeline" );
 

@@ -24,6 +24,9 @@ public:
                             TimelineEventLoop   ( const std::string & name, TimeType eventTime, LoopEventAction action, unsigned int totalLoopCount, TimeType targetTime = 0.0f, const ITimeline * owner =  nullptr );
                             ~TimelineEventLoop  ( );
 
+    virtual void            Serialize           ( ISerializer& ser ) const;
+    static TimelineEventLoop* Create            ( const IDeserializer& deser, ITimeline* timeline );
+
     virtual unsigned int    GetLoopCount        () const override;
     virtual unsigned int    GetTotalLoopCount   () const override;
 

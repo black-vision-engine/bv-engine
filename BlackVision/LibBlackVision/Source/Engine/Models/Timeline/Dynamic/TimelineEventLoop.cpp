@@ -1,7 +1,21 @@
 #include "TimelineEventLoop.h"
+#include "Serialization/SerializationHelper.inl"
 
+namespace bv { 
+    
+namespace SerializationHelper {
 
-namespace bv { namespace model {
+std::pair< LoopEventAction, const char* > lea2s[] =
+{ std::make_pair( LoopEventAction::LEA_GOTO, "goto" )
+, std::make_pair( LoopEventAction::LEA_RESTART, "restart" )
+, std::make_pair( LoopEventAction::LEA_REVERSE, "reverse" )
+, std::make_pair( LoopEventAction::LEA_TOTAL, "" ) };
+
+template<> std::string T2String( const LoopEventAction& lea ) { return Enum2String( lea2s, lea ); }
+
+}
+    
+namespace model {
 
 // *********************************
 //
@@ -18,6 +32,32 @@ TimelineEventLoop::TimelineEventLoop   ( const std::string & name, TimeType even
 //
 TimelineEventLoop::~TimelineEventLoop  ()
 {
+}
+
+// *********************************
+//
+void                TimelineEventLoop::Serialize       ( ISerializer& ser ) const
+{
+ser.EnterChild( "event" );
+    ser.SetAttribute( "type", "loop" );
+    ser.SetAttribute( "name", GetName() );
+    SerializationHelper::SerializeAttribute( ser, GetEventTime(), "time" );
+    SerializationHelper::SerializeAttribute( ser, GetActionType(), "action" );
+    SerializationHelper::SerializeAttribute( ser, m_totalLoopCount, "loopCount" );
+    SerializationHelper::SerializeAttribute( ser, m_targetTime, "targetTime" );
+ser.ExitChild();
+}
+
+// *********************************
+//
+TimelineEventLoop* TimelineEventLoop::Create            ( const IDeserializer& deser, ITimeline* timeline )
+{
+    return new TimelineEventLoop( deser.GetAttribute( "name" ),
+        SerializationHelper::String2T< TimeType >( "time", 0.f ),
+        SerializationHelper::String2T< LoopEventAction >( nullptr, "action" ),
+        SerializationHelper::String2T< unsigned int >( "loopCount", 0 ),
+        SerializationHelper::String2T< TimeType >( "targetTime", 0.f ),
+        timeline );
 }
 
 // *********************************
