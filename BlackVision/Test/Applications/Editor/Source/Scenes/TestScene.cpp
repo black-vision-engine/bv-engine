@@ -98,6 +98,43 @@ void					TestScene::InitTestModelSceneEditor	()
 	});
 
 	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		bool success = true;
+
+		auto copied = editor->CopyNode( editor->GetScene( SCENE_NAME )->GetRootNode() );
+		SetParameterTranslation( copied->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
+
+		editor->AddScene( model::SceneModel::Create( SCENE_NAME1, copied, new Camera() ) );
+
+		success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
+		success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
+
+		assert( success );
+	});
+
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		bool success = true;
+
+		auto scene = editor->GetScene( SCENE_NAME1 );
+		auto root = scene->GetRootNode();
+		SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.3f, 0.5f, -1.f ) );
+
+		for( UInt32 i = 0; i < root->GetNumChildren(); ++i )
+		{
+			model::SetParameter( root->GetChild( i )->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
+		}
+
+		success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
+		success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
+
+		assert( success );
+	});
+
+
+	m_testSteps.push_back([&] 
 	{ 
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
@@ -354,6 +391,20 @@ void					TestScene::InitTestModelSceneEditor	()
 
 	m_testSteps.push_back([&] 
 	{
+		auto editor = m_project->GetProjectEditor();
+		bool success = true;
+
+		success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
+
+		editor->RemoveScene( SCENE_NAME1 );
+
+		success &= ( !editor->GetScene( SCENE_NAME1 ) );
+
+		assert( success );
+	});
+
+	m_testSteps.push_back([&] 
+	{
 		auto newScene = TestSceneUtils::ColoredRectangleScene( SCENE_NAME1, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec3( -0.7f, 0.5f, -1.f ) );
 		auto editor = m_project->GetProjectEditor();
 		bool success = true;
@@ -443,10 +494,10 @@ void					TestScene::InitTestEditor			()
 	//InitColoredTextTest();
 	//InitGradientTextTest();
 	
-	//InitColoredTimerTest();
+	InitColoredTimerTest();
 	//InitGradientTimerTest();
 
-	InitColoredGeometryTest();
+	//InitColoredGeometryTest();
 	//InitTexturedGeometryTest();
 	//InitAnimatedGeometryTest();
 	//InitGradientGeometryTest();
@@ -1231,9 +1282,17 @@ void					TestScene::InitColoredTimerTest			()
 	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TMR_NODE, "solid color", 1 ); } );
 	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TMR_NODE, "solid color", 1 ); } );
 
-	//FIXME: timer plugin assets working
-	/*
-	m_testSteps.push_back( [&]{ CopyPlugin( 2, "rectangle", TMR_NODE, "timer" ); } );
+	m_testSteps.push_back( [&]
+	{ 
+		CopyPlugin( 2, "rectangle", TMR_NODE, "timer" ); 
+
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+		model::SetTimeTimerPlugin( root->GetPlugin( "timer" ), 12333.0f );
+		model::StartTimerPlugin( root->GetPlugin( "timer" ) );
+	} );
+	m_testSteps.push_back( []{} ); //empty step
+	m_testSteps.push_back( []{} ); //empty step
 	m_testSteps.push_back( [&]
 	{
 		auto editor = m_project->GetProjectEditor();
@@ -1241,8 +1300,10 @@ void					TestScene::InitColoredTimerTest			()
 		
 		LoadFont( root->GetPlugin( "timer" ), "Assets/Fonts/couri.TTF", 40, 0, 0, true );
 	});
+	m_testSteps.push_back( []{} ); //empty step
+	m_testSteps.push_back( []{} ); //empty step
 	m_testSteps.push_back( [&]{ RestoreRoot( 1, "timer" ); } );
-	*/
+
 
 	m_testSteps.push_back( [&]
 	{ 
@@ -1903,10 +1964,9 @@ void						TestScene::CopyPlugin			( UInt32 rootIdx, const std::string & rootPlug
 
 	auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 	auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( childName ) );
-	editor->CopyPlugin( child, childPlugin );
 
-	auto copied = editor->GetCopiedPlugin();
-	editor->CopyPlugin( root, rootPlugin );
+	auto copied = editor->CopyPlugin( child, childPlugin );
+	m_copiedPlugin = editor->CopyPlugin( root, rootPlugin );
 	editor->DeletePlugin( root, rootPlugin );
 
 	editor->AddPlugin( root, copied, rootIdx );
@@ -1917,12 +1977,10 @@ void						TestScene::CopyPlugin			( UInt32 rootIdx, const std::string & rootPlug
 void						TestScene::RestoreRoot			( UInt32 rootIdx, const std::string & childPlugin )
 {
 	auto editor = m_project->GetProjectEditor();
-
 	auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
-	auto copied = editor->GetCopiedPlugin();
-	editor->DeletePlugin( root, childPlugin );
 
-	editor->AddPlugin( root, copied, rootIdx );
+	editor->DeletePlugin( root, childPlugin );
+	editor->AddPlugin( root, m_copiedPlugin, rootIdx );
 }
 
 // ****************************

@@ -19,6 +19,25 @@ namespace bv { namespace model {
 
 // ********************************
 //
+BasicNodePtr			ModelNodeEditor::CopyNode				()
+{
+    auto node = m_node.lock();
+	//FIXME
+	auto oldAssets = AssetDescsWithUIDs::GetInstance();
+
+	AssetDescsWithUIDs assets;
+	GetAssetsWithUIDs( assets, node );
+	AssetDescsWithUIDs::SetInstance( assets );
+
+	auto clone = bv::CloneViaSerialization::Clone( node.get(), "node" );
+
+	AssetDescsWithUIDs::SetInstance( oldAssets ); //necessary?
+
+	return clone;
+}
+
+// ********************************
+//
 bool			ModelNodeEditor::AddPlugin				( IPluginPtr plugin, unsigned int idx )
 {
 	auto node = m_node.lock();

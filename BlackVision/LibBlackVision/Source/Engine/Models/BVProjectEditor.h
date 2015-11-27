@@ -33,8 +33,6 @@ private:
     
 	TNodesMapping	            m_nodesMapping;
 
-	model::IPluginPtr			m_copiedPlugin;
-
 private:
 
                             BVProjectEditor       ( BVProject * scene );
@@ -60,6 +58,9 @@ public:
 
     void                    DeleteDetachedNodes ( const std::string & sceneName );
 
+	model::BasicNodePtr		CopyNode			( model::BasicNodePtr node );
+
+
 	bool                    AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, unsigned int idx );
     bool                    DeletePlugin		( model::BasicNodePtr node, unsigned int idx );
     bool                    DeletePlugin		( model::BasicNodePtr node, const std::string & name );
@@ -73,8 +74,7 @@ public:
     void                    ResetDetachedPlugin	( model::BasicNodePtr node );
 
 
-	void					CopyPlugin			( model::BasicNodePtr node, const std::string & name );
-	model::IPluginPtr		GetCopiedPlugin		();
+	model::IPluginPtr		CopyPlugin			( model::BasicNodePtr node, const std::string & name );
 
 
 

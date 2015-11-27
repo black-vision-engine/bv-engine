@@ -26,6 +26,8 @@ private:
     BVProject *					m_project;
 	Renderer *					m_renderer;
 
+	model::IPluginPtr			m_copiedPlugin;
+
 	model::ITimeEvaluatorPtr	m_timeEvaluator;
 	model::TimelineManager *	m_timelineManager;
 	

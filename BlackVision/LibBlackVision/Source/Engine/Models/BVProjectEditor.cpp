@@ -233,6 +233,13 @@ void            BVProjectEditor::DeleteDetachedNodes          ( const std::strin
 
 // *******************************
 //
+model::BasicNodePtr    BVProjectEditor::CopyNode          ( model::BasicNodePtr node )
+{
+	return node->GetModelNodeEditor()->CopyNode();
+}
+
+// *******************************
+//
 bool					BVProjectEditor::AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, unsigned int idx )
 {
 	auto editor = node->GetModelNodeEditor();
@@ -341,16 +348,9 @@ void					BVProjectEditor::ResetDetachedPlugin  ( model::BasicNodePtr node )
 
 // *******************************
 //
-void					BVProjectEditor::CopyPlugin				( model::BasicNodePtr node, const std::string & name )
+model::IPluginPtr		BVProjectEditor::CopyPlugin				( model::BasicNodePtr node, const std::string & name )
 {
-	m_copiedPlugin = node->GetModelNodeEditor()->CopyPlugin( name );
-}
-
-// *******************************
-//
-model::IPluginPtr		BVProjectEditor::GetCopiedPlugin		()
-{
-	return m_copiedPlugin;
+	return node->GetModelNodeEditor()->CopyPlugin( name );
 }
 
 // *******************************

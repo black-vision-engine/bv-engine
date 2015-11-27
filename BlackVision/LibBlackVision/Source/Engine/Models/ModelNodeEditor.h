@@ -17,6 +17,8 @@ private:
 public:
                             ModelNodeEditor		( BasicNodePtr node ); 
 
+    BasicNodePtr			CopyNode			();
+
     bool                    AddPlugin			( IPluginPtr plugin, unsigned int idx );
     bool                    DeletePlugin		( unsigned int idx );
     bool                    DeletePlugin		( const std::string & name );
