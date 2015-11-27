@@ -103,7 +103,7 @@ void                            BasicNode::Serialize               ( ISerializer
     if( m_modelNodeEffect )
         m_modelNodeEffect->Serialize( ser );
 
-    ser.EnterChild( "nodes" );
+    ser.EnterArray( "nodes" );
         for( auto child : m_children )
             child->Serialize( ser );
     ser.ExitChild();

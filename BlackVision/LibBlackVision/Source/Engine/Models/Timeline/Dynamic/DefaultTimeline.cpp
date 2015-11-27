@@ -68,7 +68,7 @@ void                                DefaultTimeline::Serialize           ( ISeri
         sob.SetAttribute( "loop", "false" ); // FIXME include more general cases
     }
 
-    sob.EnterChild( "children" );
+    sob.EnterArray( "children" );
     for( auto child : m_children )
         child->Serialize( sob );
     sob.ExitChild(); // children

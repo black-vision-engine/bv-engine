@@ -43,7 +43,7 @@ TimelineManager::~TimelineManager        ()
 //
 void            TimelineManager::Serialize                       ( ISerializer& sob ) const
 {
-    sob.EnterChild( "timelines" );
+    sob.EnterArray( "timelines" );
 
     m_rootTimeline->Serialize( sob );
 

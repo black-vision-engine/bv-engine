@@ -93,7 +93,7 @@ ser.EnterChild( "plugin" );
     if( context )
         context->Serialize( ser );
 
-    ser.EnterChild( "params" );
+    ser.EnterArray( "params" );
     {
         IPluginParamValModelPtr pvm =    GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
     
@@ -118,7 +118,7 @@ ser.EnterChild( "plugin" );
     auto assets = GetAssets();
     if( assets.size() > 0 )
     {
-        ser.EnterChild( "assets" );
+        ser.EnterArray( "assets" );
         for( auto asset : GetAssets() )
         {
             auto uid = AssetDescsWithUIDs::GetInstance().Key2UID( asset->GetKey() );

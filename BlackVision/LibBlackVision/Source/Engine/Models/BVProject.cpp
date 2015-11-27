@@ -20,7 +20,7 @@ const std::string	BVProject::GLOBAL_TIMELINE_NAME	= "global timeline";
 //
 void                    BVProject::Serialize           ( ISerializer& ser ) const
 {
-    ser.EnterChild( "scenes" );
+    ser.EnterArray( "scenes" );
 
     for( auto & sm : m_sceneModelVec )
     {
