@@ -9,15 +9,8 @@ namespace bv { namespace model {
 // ********************************
 //
 ModelNodeEffectWireframe::ModelNodeEffectWireframe  ( ITimeEvaluatorPtr timeEvaluator )
+	: ModelNodeEffectBase( timeEvaluator )
 { 
-    { timeEvaluator; }
-}
-
-// ********************************
-//
-void            ModelNodeEffectWireframe::Update    ( TimeType t )
-{
-    { t; }
 }
 
 // ********************************

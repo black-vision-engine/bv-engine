@@ -930,6 +930,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\MaskChannelsEffect.cpp">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectBase.cpp">
+      <Filter>Engine\Models\NodeEffects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -1879,6 +1882,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MaskChannelsEffect.h">
       <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectBase.h">
+      <Filter>Engine\Models\NodeEffects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

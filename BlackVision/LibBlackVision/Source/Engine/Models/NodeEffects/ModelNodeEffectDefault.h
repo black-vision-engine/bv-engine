@@ -1,19 +1,16 @@
 #pragma once
 
-#include "Engine/Models/Interfaces/IModelNodeEffect.h"
-#include "Engine/Models/Interfaces/ITimeEvaluator.h"
-
+#include "Engine/Models/NodeEffects/ModelNodeEffectBase.h"
 
 namespace bv { namespace model {
 
-class ModelNodeEffectDefault : public IModelNodeEffect
+class ModelNodeEffectDefault : public ModelNodeEffectBase
 {
 public:
 
             ModelNodeEffectDefault  ( ITimeEvaluatorPtr timeEvaluator );
 
     virtual NodeEffectType  GetType () const override;
-    virtual void            Update  ( TimeType t ) override;
 
 };
 } // model

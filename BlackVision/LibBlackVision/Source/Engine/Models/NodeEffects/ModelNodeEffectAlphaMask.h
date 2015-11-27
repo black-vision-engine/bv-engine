@@ -1,19 +1,18 @@
 #pragma once
 
-#include "Engine/Models/Interfaces/IModelNodeEffect.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectBase.h"
 
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 
-
 namespace bv { namespace model {
 
-class ModelNodeEffectAlphaMask : public IModelNodeEffect
+class ModelNodeEffectAlphaMask : public ModelNodeEffectBase
 {
 private:
 
-    ParamFloatPtr       m_paramAlpha;
-    
-    float               m_alpha;
+    ParamFloatPtr   m_paramAlpha;
+
+    float           m_alphaVal;
 
 public:
 
@@ -21,9 +20,9 @@ public:
 
     virtual NodeEffectType  GetType                 () const override;
 
-    ParamFloatPtr           GetParamAlpha           ();
+	virtual void			Update					( TimeType t ) override;
 
-    virtual void            Update                  ( TimeType t ) override;
+	ParamFloatPtr           GetParamAlpha           () const;
 
     float                   GetAlpha                () const;
 
