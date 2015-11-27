@@ -341,6 +341,20 @@ void					BVProjectEditor::ResetDetachedPlugin  ( model::BasicNodePtr node )
 
 // *******************************
 //
+void					BVProjectEditor::CopyPlugin				( model::BasicNodePtr node, const std::string & name )
+{
+	m_copiedPlugin = node->GetModelNodeEditor()->CopyPlugin( name );
+}
+
+// *******************************
+//
+model::IPluginPtr		BVProjectEditor::GetCopiedPlugin		()
+{
+	return m_copiedPlugin;
+}
+
+// *******************************
+//
 model::IModelNodeEffectPtr	BVProjectEditor::GetNodeEffect	( model::IModelNodePtr node )
 {
 	return QueryTyped( node )->GetNodeEffect();

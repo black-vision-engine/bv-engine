@@ -26,6 +26,8 @@ public:
     bool                    DetachPlugin		( unsigned int idx );
     bool                    DetachPlugin		( const std::string & name );
 
+    IPluginPtr              CopyPlugin			( const std::string & name );
+
 	IPluginPtr				GetDetachedPlugin	();
     void                    ResetDetachedPlugin	();
 

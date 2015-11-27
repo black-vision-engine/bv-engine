@@ -83,6 +83,9 @@ private:
 	
 	void					InitOrderTest				( const OrderTestCase & test );
 	void					SwapPlugins					( const std::string & rootPlugin, UInt32 rootIdx, const std::string & childName, const std::string & childPlugin,  UInt32 childIdx );
+	void					CopyPlugin					( UInt32 rootIdx, const std::string & rootPlugin, const std::string & childName, const std::string & childPlugin );
+	void					RestoreRoot					( UInt32 rootIdx, const std::string & childPlugin );
+
 };
 
 DEFINE_PTR_TYPE( TestScene )
