@@ -162,6 +162,9 @@
     <ClCompile Include="..\..\..\Source\Rendering\Utils\RenderTargetFactory.cpp">
       <Filter>Rendering\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogicTr.cpp">
+      <Filter>Rendering\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -281,6 +284,9 @@
       <Filter>Rendering\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Utils\RenderTargetFactory.h">
+      <Filter>Rendering\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogicTr.h">
       <Filter>Rendering\Utils</Filter>
     </ClInclude>
   </ItemGroup>
