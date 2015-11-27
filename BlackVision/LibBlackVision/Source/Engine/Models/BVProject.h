@@ -19,20 +19,20 @@ namespace bv {
 class Renderer;
 class Camera;
 class BasicNode;
-class BVSceneEditor;
-class BVScene;
+class BVProjectEditor;
+class BVProject;
 
-DEFINE_PTR_TYPE(BVScene)
-DEFINE_CONST_PTR_TYPE(BVScene)
+DEFINE_PTR_TYPE(BVProject)
+DEFINE_CONST_PTR_TYPE(BVProject)
 
-class BVScene : public IUpdatable
+class BVProject : public IUpdatable
 {
 private:
 	static const std::string	MAIN_ROOT_NAME;
 	static const std::string	GLOBAL_TIMELINE_NAME;
     
 private:
-    BVSceneEditor *         m_sceneEditor;
+    BVProjectEditor *       m_projectEditor;
 	Renderer *              m_renderer;
 
     model::TimelineManagerPtr		m_timelineManager;
@@ -46,16 +46,16 @@ private:
 
 private:
 
-    explicit                BVScene             ( Renderer * renderer );
+    explicit                BVProject             ( Renderer * renderer );
 
 	void                    AddScene            ( model::SceneModelPtr sceneModel );
     bool                    RemoveScene         ( const std::string & name );
 
 public:
 
-                            ~BVScene            ();
+                            ~BVProject            ();
 
-    static BVScenePtr       Create              ( Renderer * renderer );
+    static BVProjectPtr     Create              ( Renderer * renderer );
 
     model::SceneModelPtr    GetScene            ( const std::string & name ) const;
 
@@ -71,15 +71,13 @@ public:
     model::BasicNodePtr		GetModelSceneRoot   () const;
     SceneNode *             GetEngineSceneRoot  () const;
 
-    BVSceneEditor *         GetSceneEditor      ();
+    BVProjectEditor *       GetProjectEditor      ();
 
 	void					SetStartTime		( unsigned long millis );
 
-    static BVScenePtr       CreateFakeSceneForTestingOnly( model::SceneModelPtr sceneModel );
-
 private:
 
-    friend class BVSceneEditor;
+    friend class BVProjectEditor;
 
 };
 

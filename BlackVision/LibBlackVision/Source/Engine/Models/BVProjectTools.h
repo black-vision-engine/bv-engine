@@ -22,7 +22,7 @@ class VertexDescriptor;
 
 typedef std::vector< Transform >    TransformVec;
 
-class BVSceneTools
+class BVProjectTools
 {
 private:
 

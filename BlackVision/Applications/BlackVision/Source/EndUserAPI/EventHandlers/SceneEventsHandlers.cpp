@@ -1,6 +1,6 @@
 #include "SceneEventsHandlers.h"
 
-#include "Engine/Models/BVSceneEditor.h"
+#include "Engine/Models/BVProjectEditor.h"
 #include "Engine/Models/ModelNodeEditor.h"
 #include "../../BVAppLogic.h"
 #include "../../UseLogger.h"
@@ -32,7 +32,7 @@ SceneEventsHandlers::~SceneEventsHandlers()
 //
 bv::model::IModelNodePtr SceneEventsHandlers::GetRootNode( const std::string& sceneName )
 {
-    auto scene = m_appLogic->GetBVScene()->GetScene( sceneName );
+    auto scene = m_appLogic->GetBVProject()->GetScene( sceneName );
     if( scene == nullptr )
     {
         LOG_MESSAGE( SeverityLevel::error ) << "SceneStructureEvent() scene [" + sceneName +" ] not found";
@@ -83,7 +83,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
     if( command == NodeStructureEvent::Command::AddNode )
     {
         auto newNode = model::BasicNode::Create( newNodeName, nullptr );
-		m_appLogic->GetBVScene()->GetSceneEditor()->AddChildNode( sceneName, node, newNode );
+		m_appLogic->GetBVProject()->GetProjectEditor()->AddChildNode( sceneName, node, newNode );
     }
     else if( command == NodeStructureEvent::Command::RemoveNode )
     {
@@ -94,10 +94,10 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 		
         if( root == node )
         {
-            parentNode = m_appLogic->GetBVScene()->GetModelSceneRoot();
+            parentNode = m_appLogic->GetBVProject()->GetModelSceneRoot();
         }
 
-        m_appLogic->GetBVScene()->GetSceneEditor()->DeleteChildNode( sceneName, parentNode, childNode );
+        m_appLogic->GetBVProject()->GetProjectEditor()->DeleteChildNode( sceneName, parentNode, childNode );
     }
     else if( command == NodeStructureEvent::Command::SetNodeVisible )
         node->SetVisible( true );
@@ -128,15 +128,15 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
     if( command == PluginStructureEvent::Command::AddPlugin )
     {
         auto plugin = PluginsManager::DefaultInstance().CreatePlugin( pluginUID, pluginName, nullptr, model::TimelineManager::GetInstance()->GetRootTimeline() );
-        m_appLogic->GetBVScene()->GetSceneEditor()->AddPlugin( basicNode, plugin, attachIndex );
+        m_appLogic->GetBVProject()->GetProjectEditor()->AddPlugin( basicNode, plugin, attachIndex );
         //basicNode->AddPlugin( pluginUID, pluginName, m_appLogic->GetTimelineManager()->GetRootTimeline() );
     }
     else if( command == PluginStructureEvent::Command::RemovePlugin )
-        m_appLogic->GetBVScene()->GetSceneEditor()->DeletePlugin( basicNode, pluginName );
+        m_appLogic->GetBVProject()->GetProjectEditor()->DeletePlugin( basicNode, pluginName );
     else if( command == PluginStructureEvent::Command::AttachPlugin )
-        m_appLogic->GetBVScene()->GetSceneEditor()->AttachPlugin( basicNode, attachIndex );
+        m_appLogic->GetBVProject()->GetProjectEditor()->AttachPlugin( basicNode, attachIndex );
     else if( command == PluginStructureEvent::Command::DetachPlugin )
-        m_appLogic->GetBVScene()->GetSceneEditor()->DetachPlugin( basicNode, pluginName );
+        m_appLogic->GetBVProject()->GetProjectEditor()->DetachPlugin( basicNode, pluginName );
 }
 
 // *********************************
@@ -313,7 +313,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     } 
 //     else if( command == ProjectEvent::Command::SaveScene )
 //     {
-//         auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
+//         auto root = m_appLogic->GetBVProject()->GetModelSceneRoot();
 //         auto node = root->GetNode( nodeName );
 
 		//if( node == nullptr && root->GetName() == nodeName )
@@ -345,7 +345,7 @@ void SceneEventsHandlers::TimelineHandler     ( bv::IEventPtr evt )
         float time = timelineEvent->Time;
         TimeLineEvent::Command command = timelineEvent->TimelineCommand;
 
-        auto scene = m_appLogic->GetBVScene()->GetScene( timelineEvent->SceneName );
+        auto scene = m_appLogic->GetBVProject()->GetScene( timelineEvent->SceneName );
 
         if( scene )
         {
@@ -397,7 +397,7 @@ void SceneEventsHandlers::WidgetHandler       ( bv::IEventPtr evt )
         return;
 
 	bv::WidgetEventPtr widgetEvent = std::static_pointer_cast<bv::WidgetEvent>( evt );        
-    auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
+    auto root = m_appLogic->GetBVProject()->GetModelSceneRoot();
         
     std::string nodeName = widgetEvent->NodeName;
     std::string action = widgetEvent->Action;

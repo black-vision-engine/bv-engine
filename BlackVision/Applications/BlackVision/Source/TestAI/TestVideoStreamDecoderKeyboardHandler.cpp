@@ -1,6 +1,6 @@
 #include "TestVideoStreamDecoderKeyboardHandler.h"
 
-#include "Engine/Models/BVSceneEditor.h"
+#include "Engine/Models/BVProjectEditor.h"
 
 #include "MockScenes.h"
 #include "BVAppLogic.h"
@@ -15,7 +15,7 @@ namespace bv {
 void TestVideoStreamDecoderKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
 {
 	static int seekOffset = 0;
-   	auto editor = logic->GetBVScene()->GetSceneEditor();
+   	auto editor = logic->GetBVProject()->GetProjectEditor();
 	auto node = editor->GetScene( "sceneFromEnv: VIDEO_STREAM_TEST_SCENE" )->GetRootNode();
 	if( c == 'q' )
     {

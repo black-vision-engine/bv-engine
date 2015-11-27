@@ -32,7 +32,7 @@
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Assets/AssetDescsWithUIDs.h"
 
-#include "Engine/Models/BVScene.h"
+#include "Engine/Models/BVProject.h"
 #include "System/Path.h"
 
 #include "Serialization/XML/XMLDeserializer.h"
