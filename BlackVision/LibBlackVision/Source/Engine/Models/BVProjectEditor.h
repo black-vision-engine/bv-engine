@@ -58,6 +58,8 @@ public:
 
     void                    DeleteDetachedNodes ( const std::string & sceneName );
 
+	model::BasicNodePtr		CopyNode			( model::BasicNodePtr node );
+
 
 	bool                    AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, unsigned int idx );
     bool                    DeletePlugin		( model::BasicNodePtr node, unsigned int idx );
@@ -70,6 +72,10 @@ public:
     
 	model::IPluginPtr		GetDetachedPlugin	( model::BasicNodePtr node );
     void                    ResetDetachedPlugin	( model::BasicNodePtr node );
+
+
+	model::IPluginPtr		CopyPlugin			( model::BasicNodePtr node, const std::string & name );
+
 
 
 	model::IModelNodeEffectPtr	GetNodeEffect   ( model::IModelNodePtr node );

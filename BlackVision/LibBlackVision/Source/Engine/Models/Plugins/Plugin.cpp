@@ -171,18 +171,24 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
 
         SetParameter( plugin->GetPluginParamValModel(), param );
     }
-    
-    auto uids = SerializationHelper::DeserializeObjectLoadArrayImpl< SerializedAssetUID >( deser, "assets" );
-    for( auto uid : uids )
-    {
-        auto asset = AssetDescsWithUIDs::GetInstance().UID2Asset( uid->GetUID() );
-        plugin->LoadResource( asset );
+
+	if( deser.EnterChild( "assets" ) )
+	{
+		do
+		{
+			deser.EnterChild( "asset" );
+
+			auto asset = AssetDescsWithUIDs::GetInstance().UID2Asset( deser.GetAttribute( "uid" ) );
+			plugin->LoadResource( asset );
         
-        auto params = SerializationHelper::DeserializeObjectLoadArrayImpl< AbstractModelParameter >( deser, "params" );
-        auto rsm = plugin->GetRSM( asset->GetKey() );
-        for( auto param : params )
-            rsm->SetParameter( param );
-    }
+			auto params = SerializationHelper::DeserializeObjectLoadArrayImpl< AbstractModelParameter >( deser, "params" );
+			auto rsm = plugin->GetRSM( asset->GetKey() );
+			for( auto param : params )
+				rsm->SetParameter( param );
+			deser.ExitChild(); // asset
+		}while( deser.NextChild() );
+		deser.ExitChild(); // assets
+	}
 
     if( deser.EnterChild( "renderer_context" ) )
     {

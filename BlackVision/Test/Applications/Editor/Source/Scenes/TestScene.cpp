@@ -98,6 +98,43 @@ void					TestScene::InitTestModelSceneEditor	()
 	});
 
 	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		bool success = true;
+
+		auto copied = editor->CopyNode( editor->GetScene( SCENE_NAME )->GetRootNode() );
+		SetParameterTranslation( copied->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
+
+		editor->AddScene( model::SceneModel::Create( SCENE_NAME1, copied, new Camera() ) );
+
+		success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
+		success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
+
+		assert( success );
+	});
+
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		bool success = true;
+
+		auto scene = editor->GetScene( SCENE_NAME1 );
+		auto root = scene->GetRootNode();
+		SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.3f, 0.5f, -1.f ) );
+
+		for( UInt32 i = 0; i < root->GetNumChildren(); ++i )
+		{
+			model::SetParameter( root->GetChild( i )->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
+		}
+
+		success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
+		success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
+
+		assert( success );
+	});
+
+
+	m_testSteps.push_back([&] 
 	{ 
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
@@ -354,6 +391,20 @@ void					TestScene::InitTestModelSceneEditor	()
 
 	m_testSteps.push_back([&] 
 	{
+		auto editor = m_project->GetProjectEditor();
+		bool success = true;
+
+		success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
+
+		editor->RemoveScene( SCENE_NAME1 );
+
+		success &= ( !editor->GetScene( SCENE_NAME1 ) );
+
+		assert( success );
+	});
+
+	m_testSteps.push_back([&] 
+	{
 		auto newScene = TestSceneUtils::ColoredRectangleScene( SCENE_NAME1, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec3( -0.7f, 0.5f, -1.f ) );
 		auto editor = m_project->GetProjectEditor();
 		bool success = true;
@@ -426,7 +477,7 @@ void					TestScene::InitTestModelSceneEditor	()
 //
 void					TestScene::InitTestEditor			()
 {
-	InitTestModelSceneEditor();
+	//InitTestModelSceneEditor();
 
 	//InitBasicColorPluginTest();
 	//InitOrderColorPluginTest();
@@ -443,7 +494,7 @@ void					TestScene::InitTestEditor			()
 	//InitColoredTextTest();
 	//InitGradientTextTest();
 	
-	//InitColoredTimerTest();
+	InitColoredTimerTest();
 	//InitGradientTimerTest();
 
 	//InitColoredGeometryTest();
@@ -466,7 +517,7 @@ void					TestScene::InitBasicColorPluginTest	()
 
 		bool success = true;
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		editor->AddChildNode( SCENE_NAME, root, col );
 
 		auto lChild = TestSceneUtils::ColoredRectangle( "lChild", 0.1f, 0.1f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
@@ -483,6 +534,16 @@ void					TestScene::InitBasicColorPluginTest	()
 	m_testSteps.push_back( add );
 	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, COL_NODE, "solid color", 2 ); } );
 	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, COL_NODE, "solid color", 2 ); } );
+
+	m_testSteps.push_back( [&]{ CopyPlugin( 2, "solid color", COL_NODE, "solid color" ); } );
+	m_testSteps.push_back( [&]
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+		
+		model::SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+	});
+	m_testSteps.push_back( [&]{ RestoreRoot( 2, "solid color" ); } );
 
 	m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, COL_NODE, "alpha_mask", 3 ); } );
 	m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, COL_NODE, "alpha_mask", 3 ); } );
@@ -517,7 +578,7 @@ void					TestScene::InitOrderColorPluginTest	()
 
 		bool success = true;
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( COL_NODE );
 
 		auto lChild = child->GetChild( "lChild" );
@@ -549,7 +610,7 @@ void					TestScene::InitBasicTexturePluginTest	()
 		auto tex = TestSceneUtils::TexturedRectangle( TEX_NODE, 0.3f, 0.3f, TestSceneUtils::TEXTURE_PATH );
 		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		editor->DeleteChildNode( SCENE_NAME, root, TEX_NODE );
 		editor->AddChildNode( SCENE_NAME, root, tex );
 	};
@@ -562,7 +623,7 @@ void					TestScene::InitBasicTexturePluginTest	()
 
 		bool success = true;
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		editor->DeleteChildNode( SCENE_NAME, root, TEX_NODE );
 		editor->AddChildNode( SCENE_NAME, root, tex );
 		
@@ -584,12 +645,23 @@ void					TestScene::InitBasicTexturePluginTest	()
 	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TEX_NODE, "texture", 2 ); } );
 	m_testSteps.push_back( [&]{ SwapPlugins( "texture", 2, TEX_NODE, "solid color", 2 ); } );
 
+	m_testSteps.push_back( [&]{ CopyPlugin( 2, "solid color", TEX_NODE, "texture" ); } );
+	m_testSteps.push_back( [&]
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+		
+		LoadTexture( root->GetPlugin( "texture" ), TestSceneUtils::ANIM_PATH + "/f0.bmp" );
+	});
+	m_testSteps.push_back( [&]{ RestoreRoot( 2, "texture" ); } );
+
 	m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, TEX_NODE, "alpha_mask", 3 ); } );
 	m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, TEX_NODE, "alpha_mask", 3 ); } );
 
 	m_testSteps.push_back( [&]
 	{
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TEX_NODE );
 		
 		auto time = m_timeEvaluator->GetLocalTime();
@@ -600,7 +672,8 @@ void					TestScene::InitBasicTexturePluginTest	()
 	m_testSteps.push_back( [&]{} );
 
 	m_testSteps.push_back( [&]{
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TEX_NODE );
 		LoadTexture( child->GetPlugin( "texture" ), TestSceneUtils::ANIM_PATH + "/f0.bmp" );
 	});
@@ -633,7 +706,7 @@ void					TestScene::InitOrderTexturePluginTest	()
 
 		bool success = true;
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TEX_NODE );
 		auto lChild = child->GetChild( "lChild" );
 		auto rChild = child->GetChild( "rChild" );
@@ -665,7 +738,7 @@ void					TestScene::InitBasicAnimationPluginTest	()
 		auto anim = TestSceneUtils::AnimatedRectangle( ANIM_NODE, 0.3f, 0.3f, TestSceneUtils::ANIM_PATH );
 		SetParameterTranslation( anim->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
 		
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		editor->DeleteChildNode( SCENE_NAME, root, ANIM_NODE );
 		editor->AddChildNode( SCENE_NAME, root, anim );
 	};
@@ -679,7 +752,7 @@ void					TestScene::InitBasicAnimationPluginTest	()
 		
 		bool success = true;
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		editor->DeleteChildNode( SCENE_NAME, root, ANIM_NODE );
 		editor->AddChildNode( SCENE_NAME, root, anim );
 		
@@ -701,9 +774,20 @@ void					TestScene::InitBasicAnimationPluginTest	()
 	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, ANIM_NODE, "animation", 2 ); } );
 	m_testSteps.push_back( [&]{ SwapPlugins( "animation", 2, ANIM_NODE, "solid color", 2 ); } );
 
+	m_testSteps.push_back( [&]{ CopyPlugin( 2, "solid color", ANIM_NODE, "animation" ); } );
 	m_testSteps.push_back( [&]
 	{
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+		
+		LoadAnimation( root->GetPlugin( "animation" ), TestSceneUtils::ANIM_PATH, "*.bmp" );
+	});
+	m_testSteps.push_back( [&]{ RestoreRoot( 2, "animation" ); } );
+
+	m_testSteps.push_back( [&]
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( ANIM_NODE );
 		model::SetParameter( child->GetPlugin( "animation" )->GetResourceStateModel( "Tex0" )->GetParameter( "filteringMode" ), 0.0, static_cast< Int32 >( TextureFilteringMode::TFM_POINT ) );
 	});
@@ -711,7 +795,8 @@ void					TestScene::InitBasicAnimationPluginTest	()
 	m_testSteps.push_back( [&]{} );
 
 	m_testSteps.push_back( [&]{
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( ANIM_NODE );
 		LoadAnimation( child->GetPlugin( "animation" ), TestSceneUtils::ANIM_PATH, "*.bmp" );
 
@@ -751,7 +836,7 @@ void					TestScene::InitOrderAnimationPluginTest	()
 		
 		bool success = true;
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( ANIM_NODE );
 		auto lChild = child->GetChild( "lChild" );
 		auto rChild = child->GetChild( "rChild" );
@@ -787,7 +872,7 @@ void					TestScene::InitBasicGradientPluginTest	()
 
 		bool success = true;
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		editor->AddChildNode( SCENE_NAME, root, grad );
 		
 		auto lChild = TestSceneUtils::AnimatedRectangle( "lChild", 0.1f, 0.1f, TestSceneUtils::ANIM_PATH );
@@ -811,6 +896,16 @@ void					TestScene::InitBasicGradientPluginTest	()
 
 	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, GRAD_NODE, "linear_gradient", 2 ); } );
 	m_testSteps.push_back( [&]{ SwapPlugins( "linear_gradient", 2, GRAD_NODE, "solid color", 2 ); } );
+
+	m_testSteps.push_back( [&]{ CopyPlugin( 2, "solid color", GRAD_NODE, "linear_gradient" ); } );
+	m_testSteps.push_back( [&]
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+		
+		SetParameter( root->GetPlugin( "linear_gradient" )->GetParameter( "color1" ), TimeType( 0.f ), glm::vec4( 0.f, 1.f, 1.f, 1.f ) );
+	});
+	m_testSteps.push_back( [&]{ RestoreRoot( 2, "linear_gradient" ); } );
 }
 
 // ****************************
@@ -840,7 +935,7 @@ void					TestScene::InitOrderGradientPluginTest	()
 
 		bool success = true;
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( GRAD_NODE );
 		auto lChild = child->GetChild( "lChild" );
 		auto rChild = child->GetChild( "rChild" );
@@ -872,7 +967,7 @@ void					TestScene::InitColoredTextTest			()
 		auto txt = TestSceneUtils::ColoredText( TXT_NODE, glm::vec4( 1.f, 1.f, 0.f, 1.f ), 60 );
 		SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
 		
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		editor->DeleteChildNode( SCENE_NAME, root, TXT_NODE );
 		editor->AddChildNode( SCENE_NAME, root, txt );
 	};
@@ -886,7 +981,7 @@ void					TestScene::InitColoredTextTest			()
 
 		bool success = true;
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		editor->DeleteChildNode( SCENE_NAME, root, TXT_NODE );
 		editor->AddChildNode( SCENE_NAME, root, txt );
 		
@@ -937,7 +1032,7 @@ void					TestScene::InitColoredTextTest			()
 
 		bool success = true;
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TXT_NODE );
 		auto lChild = child->GetChild( "lChild" );
 		auto rChild = child->GetChild( "rChild" );
@@ -960,16 +1055,29 @@ void					TestScene::InitColoredTextTest			()
 	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TXT_NODE, "solid color", 1 ); } );
 	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TXT_NODE, "solid color", 1 ); } );
 
+	m_testSteps.push_back( [&]{ CopyPlugin( 2, "rectangle", TXT_NODE, "text" ); } );
+	//FIXME: AddAsset should take care of reloading assets on runtime
+	//m_testSteps.push_back( [&]
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+	//	
+	//	LoadFont( root->GetPlugin( "text" ), "fonts/couri.TTF", 30, 0, 0, true );
+	//});
+	m_testSteps.push_back( [&]{ RestoreRoot( 1, "text" ); } );
+
 	m_testSteps.push_back( [&]
 	{ 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TXT_NODE );
 		model::DefaultTextPlugin::SetText( child->GetPlugin( "text" ), L"test0\n4321" );
 	});
 
 	m_testSteps.push_back( [&]
 	{ 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TXT_NODE );
 		LoadFont( child->GetPlugin( "text" ), "fonts/couri.TTF", 30, 0, 0, true );
 	});
@@ -993,7 +1101,7 @@ void					TestScene::InitGradientTextTest			()
 		auto txt = TestSceneUtils::GradientText( TXT_NODE, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 0.f, 1.f, 0.f, 1.f ), 60 );
 		SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		editor->DeleteChildNode( SCENE_NAME, root, TXT_NODE );
 		editor->AddChildNode( SCENE_NAME, root, txt );
 	};
@@ -1007,7 +1115,7 @@ void					TestScene::InitGradientTextTest			()
 
 		bool success = true;
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		editor->DeleteChildNode( SCENE_NAME, root, TXT_NODE );
 		editor->AddChildNode( SCENE_NAME, root, txt );
 		
@@ -1058,7 +1166,7 @@ void					TestScene::InitGradientTextTest			()
 
 		bool success = true;
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto lChild = root->GetChild( TXT_NODE )->GetChild( "lChild" );
 		auto rChild = root->GetChild( TXT_NODE )->GetChild( "rChild" );
 		success &= editor->DeleteChildNode( SCENE_NAME, root, TXT_NODE );
@@ -1101,7 +1209,7 @@ void					TestScene::InitColoredTimerTest			()
 
 		bool success = true;
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		editor->DeleteChildNode( SCENE_NAME, root, TMR_NODE );
 		editor->AddChildNode( SCENE_NAME, root, tmr );
 		
@@ -1152,7 +1260,7 @@ void					TestScene::InitColoredTimerTest			()
 
 		bool success = true;
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TMR_NODE );
 		auto lChild = child->GetChild( "lChild" );
 		auto rChild = child->GetChild( "rChild" );
@@ -1176,7 +1284,31 @@ void					TestScene::InitColoredTimerTest			()
 
 	m_testSteps.push_back( [&]
 	{ 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		CopyPlugin( 2, "rectangle", TMR_NODE, "timer" ); 
+
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+		model::SetTimeTimerPlugin( root->GetPlugin( "timer" ), 12333.0f );
+		model::StartTimerPlugin( root->GetPlugin( "timer" ) );
+	} );
+	m_testSteps.push_back( []{} ); //empty step
+	m_testSteps.push_back( []{} ); //empty step
+	m_testSteps.push_back( [&]
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+		
+		LoadFont( root->GetPlugin( "timer" ), "Assets/Fonts/couri.TTF", 40, 0, 0, true );
+	});
+	m_testSteps.push_back( []{} ); //empty step
+	m_testSteps.push_back( []{} ); //empty step
+	m_testSteps.push_back( [&]{ RestoreRoot( 1, "timer" ); } );
+
+
+	m_testSteps.push_back( [&]
+	{ 
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TMR_NODE );
 		model::SetTimeTimerPlugin( child->GetPlugin( "timer" ), 15.0f );
 		model::StartTimerPlugin( child->GetPlugin( "timer" ) );
@@ -1185,7 +1317,8 @@ void					TestScene::InitColoredTimerTest			()
 
 	m_testSteps.push_back( [&]
 	{ 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TMR_NODE );
 		LoadFont( child->GetPlugin( "timer" ), "Assets/Fonts/couri.TTF", 40, 0, 0, true );
 	});
@@ -1210,7 +1343,7 @@ void					TestScene::InitGradientTimerTest			()
 		auto tmr = TestSceneUtils::GradientTimer( TMR_NODE, glm::vec4( 1.f, 1.f, 0.f, 1.f ), glm::vec4( 1.f, 0.f, 1.f, 1.f ), 60 );
 		SetParameterTranslation( tmr->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, 0.f, 0.f ) );
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		editor->DeleteChildNode( SCENE_NAME, root, TMR_NODE );
 		editor->AddChildNode( SCENE_NAME, root, tmr );
 	};
@@ -1224,7 +1357,7 @@ void					TestScene::InitGradientTimerTest			()
 
 		bool success = true;
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		editor->DeleteChildNode( SCENE_NAME, root, TMR_NODE );
 		editor->AddChildNode( SCENE_NAME, root, tmr );
 		
@@ -1275,7 +1408,7 @@ void					TestScene::InitGradientTimerTest			()
 
 		bool success = true;
 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TMR_NODE );
 		auto lChild = child->GetChild( "lChild" );
 		auto rChild = child->GetChild( "rChild" );
@@ -1300,7 +1433,8 @@ void					TestScene::InitGradientTimerTest			()
 
 	m_testSteps.push_back( [&]
 	{ 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TMR_NODE );
 		model::SetTimeTimerPlugin( child->GetPlugin( "timer" ), 15.0f );
 		model::StartTimerPlugin( child->GetPlugin( "timer" ) );
@@ -1309,7 +1443,8 @@ void					TestScene::InitGradientTimerTest			()
 
 	m_testSteps.push_back( [&]
 	{ 
-		auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TMR_NODE );
 		LoadFont( child->GetPlugin( "timer" ), "Assets/Fonts/couri.TTF", 40, 0, 0, true );
 	});
@@ -1343,7 +1478,7 @@ void					TestScene::InitColoredGeometryTest		()
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 1.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 1.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
-			auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			editor->DeleteChildNode( SCENE_NAME, root, GEOM_NODE );
 			editor->AddChildNode( SCENE_NAME, root, geom );
 		});
@@ -1361,17 +1496,22 @@ void					TestScene::InitColoredGeometryTest		()
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 5.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 5.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
-			auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			editor->DeleteChildNode( SCENE_NAME, root, GEOM_NODE );
 			editor->AddChildNode( SCENE_NAME, root, geom );
 		});
 		m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, GEOM_NODE, "solid color", 2 ); } );
 		m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, GEOM_NODE, "solid color", 2 ); } );
 				
+	
+		auto pluginName = TestSceneUtils::PluginsNameArr[ i ];
+		m_testSteps.push_back( [ pluginName, this ]{ CopyPlugin( 1, "rectangle", GEOM_NODE, pluginName ); } );
+		m_testSteps.push_back( [ pluginName, this ]{ RestoreRoot( 1, pluginName ); } );
+	
+
 		m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, GEOM_NODE, "alpha_mask", 3 ); } );
 		m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, GEOM_NODE, "alpha_mask", 3 ); } );
 
-		auto pluginName = TestSceneUtils::PluginsNameArr[ i ];
 		std::string test0[] = { "alpha_mask", pluginName };
 		std::string test1[] = { "solid color", pluginName };
 
@@ -1393,7 +1533,7 @@ void					TestScene::InitColoredGeometryTest		()
 				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 3.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 3.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
-				auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+				auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 				editor->DeleteChildNode( SCENE_NAME, root, GEOM_NODE );
 				editor->AddChildNode( SCENE_NAME, root, geom );
 			});
@@ -1422,7 +1562,7 @@ void					TestScene::InitTexturedGeometryTest		()
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 1.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 1.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
-			auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			editor->DeleteChildNode( SCENE_NAME, root, GEOM_NODE );
 			editor->AddChildNode( SCENE_NAME, root, geom );
 		});
@@ -1440,7 +1580,7 @@ void					TestScene::InitTexturedGeometryTest		()
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 5.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 5.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
-			auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			editor->DeleteChildNode( SCENE_NAME, root, GEOM_NODE );
 			editor->AddChildNode( SCENE_NAME, root, geom );
 		});
@@ -1479,7 +1619,7 @@ void					TestScene::InitTexturedGeometryTest		()
 				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 3.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 3.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
-				auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+				auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 				editor->DeleteChildNode( SCENE_NAME, root, GEOM_NODE );
 				editor->AddChildNode( SCENE_NAME, root, geom );
 			});
@@ -1508,7 +1648,7 @@ void					TestScene::InitAnimatedGeometryTest		()
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 1.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 1.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
-			auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			editor->DeleteChildNode( SCENE_NAME, root, GEOM_NODE );
 			editor->AddChildNode( SCENE_NAME, root, geom );
 		});
@@ -1526,7 +1666,7 @@ void					TestScene::InitAnimatedGeometryTest		()
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 5.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 5.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
-			auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			editor->DeleteChildNode( SCENE_NAME, root, GEOM_NODE );
 			editor->AddChildNode( SCENE_NAME, root, geom );
 		});
@@ -1558,7 +1698,7 @@ void					TestScene::InitAnimatedGeometryTest		()
 				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 3.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 3.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
-				auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+				auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 				editor->DeleteChildNode( SCENE_NAME, root, GEOM_NODE );
 				editor->AddChildNode( SCENE_NAME, root, geom );
 			});
@@ -1587,7 +1727,7 @@ void					TestScene::InitGradientGeometryTest		()
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 1.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 1.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
-			auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			editor->DeleteChildNode( SCENE_NAME, root, GEOM_NODE );
 			editor->AddChildNode( SCENE_NAME, root, geom );
 		});
@@ -1605,7 +1745,7 @@ void					TestScene::InitGradientGeometryTest		()
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 5.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 5.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
-			auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			editor->DeleteChildNode( SCENE_NAME, root, GEOM_NODE );
 			editor->AddChildNode( SCENE_NAME, root, geom );
 		});
@@ -1638,7 +1778,7 @@ void					TestScene::InitGradientGeometryTest		()
 				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 3.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 3.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
-				auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+				auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 				editor->DeleteChildNode( SCENE_NAME, root, GEOM_NODE );
 				editor->AddChildNode( SCENE_NAME, root, geom );
 			});
@@ -1661,7 +1801,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			auto vsd = TestSceneUtils::VideoStreamDecoder( VSD_NODE, plugin, TestSceneUtils::VIDEO_PATH0 );
 			SetParameterTranslation( vsd->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 
-			auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			editor->DeleteChildNode( SCENE_NAME, root, VSD_NODE );
 			editor->AddChildNode( SCENE_NAME, root, vsd );
 
@@ -1674,7 +1814,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			auto vsd = TestSceneUtils::VideoStreamDecoder( VSD_NODE, plugin, TestSceneUtils::VIDEO_PATH0, TestSceneUtils::ALPHA_MASK_PATH );
 			SetParameterTranslation( vsd->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 
-			auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			editor->DeleteChildNode( SCENE_NAME, root, VSD_NODE );
 			editor->AddChildNode( SCENE_NAME, root, vsd );
 
@@ -1692,7 +1832,8 @@ void					TestScene::InitVideoStreamDecoderTest	()
 		m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, VSD_NODE, "alpha_mask", 3 ); } );
 	
 		m_testSteps.push_back( [&]{
-			auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+			auto editor = m_project->GetProjectEditor();
+			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			auto child = root->GetChild( VSD_NODE );
 
 			model::LoadVideoStream( child->GetPlugin( "video_stream_decoder" ), TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
@@ -1716,7 +1857,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 				auto vsd = TestSceneUtils::VideoStreamDecoder( VSD_NODE, plugin, TestSceneUtils::VIDEO_PATH0, TestSceneUtils::ALPHA_MASK_PATH );
 				SetParameterTranslation( vsd->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 
-				auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+				auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 				editor->DeleteChildNode( SCENE_NAME, root, VSD_NODE );
 				editor->AddChildNode( SCENE_NAME, root, vsd );
 
@@ -1731,7 +1872,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			auto vsd = TestSceneUtils::VideoStreamDecoder( VSD_NODE, plugin, TestSceneUtils::VIDEO_PATH0, TestSceneUtils::ALPHA_MASK_PATH );
 			SetParameterTranslation( vsd->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 
-			auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			editor->DeleteChildNode( SCENE_NAME, root, VSD_NODE );
 			editor->AddChildNode( SCENE_NAME, root, vsd );
 
@@ -1739,7 +1880,8 @@ void					TestScene::InitVideoStreamDecoderTest	()
 		});
 
 		m_testSteps.push_back( [&]{
-			auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+			auto editor = m_project->GetProjectEditor();
+			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			auto child = root->GetChild( VSD_NODE );
 
 			model::LoadVideoStream( child->GetPlugin( "video_stream_decoder" ), TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
@@ -1753,8 +1895,8 @@ void					TestScene::InitVideoStreamDecoderTest	()
 		
 		m_testSteps.push_back( [&]
 		{
-			auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
 			auto editor = m_project->GetProjectEditor();
+			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			editor->DeleteChildNode( SCENE_NAME, root, VSD_NODE );
 		} );
 	}
@@ -1773,7 +1915,8 @@ void					TestScene::InitOrderTest			( const OrderTestCase & testCase )
 			printf( "\n TEST: %s %s \n removing %s plugin \n\n", node.c_str(), name.c_str(), plugin.c_str() );
 
 			auto editor = m_project->GetProjectEditor();
-			auto child = std::static_pointer_cast< model::BasicNode >( std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) )->GetChild( node ) );
+			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+			auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( node ) );
 			
 			bool success = true;
 			
@@ -1792,7 +1935,7 @@ void					TestScene::SwapPlugins			( const std::string & rootPlugin, UInt32 rootI
 {
 	auto editor = m_project->GetProjectEditor();
 
-	auto root = std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) );
+	auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 	auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( childName ) );
 
 	bool success = true;
@@ -1811,6 +1954,33 @@ void					TestScene::SwapPlugins			( const std::string & rootPlugin, UInt32 rootI
 	success &= editor->AddPlugin( root, editor->GetDetachedPlugin( child ), rootIdx );
 
 	assert( success );
+}
+
+// ****************************
+//
+void						TestScene::CopyPlugin			( UInt32 rootIdx, const std::string & rootPlugin, const std::string & childName, const std::string & childPlugin )
+{
+	auto editor = m_project->GetProjectEditor();
+
+	auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+	auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( childName ) );
+
+	auto copied = editor->CopyPlugin( child, childPlugin );
+	m_copiedPlugin = editor->CopyPlugin( root, rootPlugin );
+	editor->DeletePlugin( root, rootPlugin );
+
+	editor->AddPlugin( root, copied, rootIdx );
+}
+
+// ****************************
+//
+void						TestScene::RestoreRoot			( UInt32 rootIdx, const std::string & childPlugin )
+{
+	auto editor = m_project->GetProjectEditor();
+	auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+
+	editor->DeletePlugin( root, childPlugin );
+	editor->AddPlugin( root, m_copiedPlugin, rootIdx );
 }
 
 // ****************************
