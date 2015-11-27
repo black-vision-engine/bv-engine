@@ -54,7 +54,7 @@ TimelineEventLoop* TimelineEventLoop::Create            ( const IDeserializer& d
 {
     return new TimelineEventLoop( deser.GetAttribute( "name" ),
         SerializationHelper::String2T< TimeType >( "time", 0.f ),
-        SerializationHelper::String2T< LoopEventAction >( nullptr, "action" ),
+        SerializationHelper::String2T< LoopEventAction >( SerializationHelper::lea2s, "action" ),
         SerializationHelper::String2T< unsigned int >( "loopCount", 0 ),
         SerializationHelper::String2T< TimeType >( "targetTime", 0.f ),
         timeline );
