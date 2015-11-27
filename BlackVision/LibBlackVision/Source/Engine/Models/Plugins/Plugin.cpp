@@ -177,6 +177,11 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
     {
         auto asset = AssetDescsWithUIDs::GetInstance().UID2Asset( uid->GetUID() );
         plugin->LoadResource( asset );
+        
+        auto params = SerializationHelper::DeserializeObjectLoadArrayImpl< AbstractModelParameter >( deser, "params" );
+        auto rsm = plugin->GetRSM( asset->GetKey() );
+        for( auto param : params )
+            rsm->SetParameter( param );
     }
 
     if( deser.EnterChild( "renderer_context" ) )
