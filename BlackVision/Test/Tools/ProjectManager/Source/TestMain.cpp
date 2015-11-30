@@ -44,6 +44,9 @@ bool    LoadTexture     ( model::IPluginPtr plugin, const Path & projectName, co
 
 bv::model::SceneModelPtr CreateTestScene0()
 {
+	auto sceneName = "textured_rect";
+	auto timeline = model::TimelineManager::CreateOffsetTimeEvaluator( sceneName, TimeType( 0.0 ) );
+
     std::vector< model::IPluginDescriptor * > descriptors;
 
     descriptors.push_back( new model::DefaultTransformPluginDesc() );
@@ -52,15 +55,14 @@ bv::model::SceneModelPtr CreateTestScene0()
 
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( descriptors );
 
-    auto globalTimeline = model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) );
-    auto root = model::BasicNode::Create( "textured_rect", globalTimeline );
+	auto root = model::BasicNode::Create( "textured_rect", timeline );
 
     StringVector plugins;
     plugins.push_back( "DEFAULT_TRANSFORM" );
     plugins.push_back( "DEFAULT_RECTANGLE" );
     plugins.push_back( "DEFAULT_TEXTURE" );
 
-    auto success = root->AddPlugins( plugins, globalTimeline );
+    auto success = root->AddPlugins( plugins, timeline );
     assert( success );
 
     auto wp = root->GetPlugin( "rectangle" )->GetParameter( "width" );
@@ -75,9 +77,8 @@ bv::model::SceneModelPtr CreateTestScene0()
     assert( success );    
 
 	assert( false );
-	//model::TimelineManager::GetInstance()
-	auto timelineManager = std::make_shared< model::TimelineManager >();
-    return bv::model::SceneModel::Create( "textured_rect", timelineManager, root );
+
+    return bv::model::SceneModel::Create( sceneName, root, nullptr );
 }
 
 TEST( CleanAll, ProjectManager )

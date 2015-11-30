@@ -49,8 +49,8 @@ public:
 
 public:
 
-    static  model::SceneModelPtr    CreateSceneFromEnv              ( const std::string& scene, const model::PluginsManager * pluginsManager, model::TimelineManagerPtr timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
-    static  model::BasicNodePtr     CreateTestRandomNode            ( const std::string & name,  const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::SceneModelPtr	CreateSceneFromEnv				( const std::string& scene, Camera * camera, const model::PluginsManager * pluginsManager );
+    static  model::BasicNodePtr     CreateTestRandomNode            ( const std::string & name, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreateTestScene                 ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, TestSceneSelector tss );
 
     static  model::BasicNodePtr     GlobalEffect05                  ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );

@@ -28,25 +28,25 @@ Path SceneDescriptor::GetPath() const
 
 // ********************************
 //
-void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & scene, model::TimelineManager * tm, const Path & outputFilePath )
+void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & scene, const Path & outputFilePath )
 {
     File::Touch( outputFilePath.Str() );
 
     auto f = File::Open( outputFilePath.Str(), File::OpenMode::FOMReadWrite );
 
-    SaveScene( scene, tm, *f.StreamBuf() );
+    SaveScene( scene, *f.StreamBuf() );
     f.Close();
 }
 
 // ********************************
 //
-model::SceneModelPtr	    SceneDescriptor::LoadScene		( const Path & inputFilePath, model::TimelineManager * tm )
+model::SceneModelPtr	    SceneDescriptor::LoadScene		( const Path & inputFilePath )
 {
     auto f = File::Open( inputFilePath.Str() );
 
     auto size = File::Size( inputFilePath.Str() );
 
-    auto ret = LoadScene( *f.StreamBuf(), size, tm );
+    auto ret = LoadScene( *f.StreamBuf(), size );
     f.Close();
 
     return ret;
@@ -73,19 +73,18 @@ namespace
 } // anonymous
 // ********************************
 //
-void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & scene, model::TimelineManager * tm, std::ostream & out )
+void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & scene, std::ostream & out )
 {
 	auto sob = XMLSerializer();
 
     sob.EnterChild( "scene" );
 
     AssetDescsWithUIDs assets;
-    GetAssetsWithUIDs( assets, scene->m_pModelSceneRoot );
+	GetAssetsWithUIDs( assets, scene->GetRootNode() );
     AssetDescsWithUIDs::SetInstance( assets );
 
     assets.Serialize( sob );
 
-    tm->Serialize( sob );
     scene->Serialize( sob );
 
     sob.ExitChild();
@@ -94,7 +93,7 @@ void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & sc
 
 // ********************************
 //
-model::SceneModelPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeType numBytes, model::TimelineManager * )
+model::SceneModelPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeType numBytes )
 {
     auto deser = XMLDeserializer( in, numBytes );
 

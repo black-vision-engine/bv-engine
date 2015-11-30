@@ -2,7 +2,7 @@
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
-#include "Engine/Models/BVScene.h"
+#include "Engine/Models/BVProject.h"
 #include "System/Path.h"
 
 #include "Engine/Events/Events.h"
@@ -56,11 +56,9 @@ private:
 
     FrameStatsCalculator            m_statsCalculator;
 
-    model::TimelineManagerPtr       m_timelineManager;
     const model::PluginsManager *   m_pluginsManager;
-    model::OffsetTimeEvaluatorPtr   m_globalTimeline;
 
-    BVScenePtr                      m_bvScene;
+    BVProjectPtr                    m_bvProject;
 
     Renderer *                      m_renderer;
     RenderLogic *                   m_renderLogic;
@@ -114,9 +112,7 @@ public:
 public:
 
     //Convenience API - generalized model accessors
-    model::TimelineManagerPtr       GetTimelineManager  ();
-    model::OffsetTimeEvaluatorPtr   GetGlobalTimeline   ();
-    BVScenePtr                      GetBVScene          ();
+    BVProjectPtr                    GetBVProject          ();
     const model::PluginsManager *   GetPluginsManager   () const;
 
 
@@ -127,7 +123,6 @@ private:
     void                            InitializeKbdHandler();
     void                            InitializeRemoteCommunication();
 
-    void                            InitializeScenesTimelines();
     std::string                     GetEnvScene();
 
 };

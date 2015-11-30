@@ -105,14 +105,14 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
         if( command == InfoEvent::Command::TreeStructure )
         {
             //Log::A("OK","Tree structure:");
-            ReqPrint( m_appLogic->GetBVScene()->GetModelSceneRoot(), 1 );
+            ReqPrint( m_appLogic->GetBVProject()->GetModelSceneRoot(), 1 );
 
             Json::Value root;
             root[ "command" ] = "scene_tree";
 
             root[ "scenes" ] = Json::arrayValue;
 
-            for( auto s : m_appLogic->GetBVScene()->GetScenes() )
+            for( auto s : m_appLogic->GetBVProject()->GetScenes() )
             {
                 Json::Value val;
                 root[ "scenes" ].append( SerializeSceneModel( s ) );
@@ -159,12 +159,13 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             ret["command"] = "timelines";
             ret[ "scenes" ] = Json::arrayValue;
 
-            for( auto s : m_appLogic->GetBVScene()->GetScenes() )
+            for( auto s : m_appLogic->GetBVProject()->GetScenes() )
             {
                 Json::Value val;
-                val[ "name" ] = s->m_name;
+				val[ "name" ] = s->GetName();
                 JsonSerializeObject ser;
-                s->m_pTimelineManager->Serialize(ser);
+				//FIXME: only timelines used in scene should be serialized
+				TimelineManager::GetInstance()->Serialize(ser);
                 val[ "timelines" ] = ser.GetJson();
                 ret[ "scenes" ].append( val );
             }
@@ -239,7 +240,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
         }
         else if( command == InfoEvent::Command::NodeInfo )
         {
-		    auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
+		    auto root = m_appLogic->GetBVProject()->GetModelSceneRoot();
 			auto node = root->GetNode( nodeName );
 
 			if( node == nullptr && root->GetName() == nodeName )

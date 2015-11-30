@@ -16,7 +16,7 @@ const std::string MipMapAssetDesc::uid = "MIP_MAP_ASSET_DESC";
 //
 void                MipMapAssetDesc::Serialize       ( ISerializer& ser ) const
 {
-ser.EnterChild( "mipmaps" );
+ser.EnterArray( "mipmaps" );
     for( auto desc : m_mipMapDescs )
         desc->Serialize( ser );
 ser.ExitChild();

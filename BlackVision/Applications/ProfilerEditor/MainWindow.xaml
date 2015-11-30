@@ -90,7 +90,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <Expander Header="Profiler" Height="Auto" Width="1069" IsExpanded="True" Grid.Row="0" Grid.ColumnSpan="2" Margin="12,0">
+                <Expander Header="Profiler" Height="Auto" Width="1069" Grid.Row="0" Grid.ColumnSpan="2" Margin="12,0">
                     <Grid Height="480">
                         <Button x:Name="startButton" Content="Start BlackVision" HorizontalAlignment="Left" Margin="930,0,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="0.701,-0.712" Click="startButton_Click"/>
                         <Button x:Name="endServer" Content="End BlackVision" HorizontalAlignment="Left" Margin="930,27,0,0" VerticalAlignment="Top" Width="100" Click="endServer_Click"/>
@@ -177,6 +177,24 @@
                         <Label Name="NetStatusLabel" Content="Disconnected" HorizontalAlignment="Left" Margin="487,153,0,0" VerticalAlignment="Top" Width="91"/>
                         <Button Name="ClearResponsesButton" Content="Clear" HorizontalAlignment="Left" Margin="547,122,0,0" VerticalAlignment="Top" Width="75" Click="ClearResponsesButton_Click"/>
                         <Button x:Name="ClearEventsButton" Content="Clear" HorizontalAlignment="Left" Margin="437,122,0,0" VerticalAlignment="Top" Width="75" Click="ClearEventsButton_Click"/>
+                        <ComboBox Name="SeverityLevelsCombobox" IsEnabled="True" Width="130" Height="20" Margin="448,208,489,318">
+                            <ComboBoxItem>SeverityLevel::debug</ComboBoxItem>
+                            <ComboBoxItem IsSelected="True">SeverityLevel::info</ComboBoxItem>
+                            <ComboBoxItem>SeverityLevel::warning</ComboBoxItem>
+                            <ComboBoxItem>SeverityLevel::error</ComboBoxItem>
+                            <ComboBoxItem>SeverityLevel::critical</ComboBoxItem>
+                        </ComboBox>
+                        <ListView Name="ModulesListView" SelectionMode="Multiple" HorizontalAlignment="Left" Height="186" Margin="448,249,0,0" VerticalAlignment="Top" Width="130">
+                            <ListViewItem Tag="1" IsSelected="True">LibBlackVision</ListViewItem>
+                            <ListViewItem Tag="2" IsSelected="True">LibCore</ListViewItem>
+                            <ListViewItem Tag="4" IsSelected="True">LibImage</ListViewItem>
+                            <ListViewItem Tag="8" IsSelected="True">Prototyper</ListViewItem>
+                            <ListViewItem Tag="16" IsSelected="True">BlackVisionApp</ListViewItem>
+                            <ListViewItem Tag="32" IsSelected="True">LibProjectManager</ListViewItem>
+                            <ListViewItem Tag="64" IsSelected="True">TCPServer</ListViewItem>
+                            <ListViewItem Tag="128" IsSelected="True">LibVideCards</ListViewItem>
+                            <ListViewItem Tag="256" IsSelected="True">XMLSceneParser</ListViewItem>
+                        </ListView>
                     </Grid>                
                 </Expander>
             </Grid>

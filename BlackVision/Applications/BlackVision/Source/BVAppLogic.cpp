@@ -4,7 +4,7 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
-#include "Engine/Models/BVSceneEditor.h"
+#include "Engine/Models/BVProjectEditor.h"
 
 #include "Tools/SimpleTimer.h"
 #include "Tools/Profiler/HerarchicalProfiler.h"
@@ -98,17 +98,14 @@ namespace
 //
 BVAppLogic::BVAppLogic              ( Renderer * renderer )
     : m_startTime( 0 )
-    , m_timelineManager( std::make_shared < model::TimelineManager >() )
-    , m_bvScene( nullptr )
+    , m_bvProject( BVProject::Create( renderer ) )
     , m_pluginsManager( nullptr )
     , m_renderer( nullptr )
     , m_renderLogic( nullptr )
     , m_state( BVAppState::BVS_INVALID )
     , m_statsCalculator( DefaultConfig.StatsMAWindowSize() )
-    , m_globalTimeline( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) )
-    , m_solution( GetTimelineManager().get() ) //pablito
+	, m_solution( model::TimelineManager::GetInstance() )
 {
-    model::TimelineManager::SetInstance( GetTimelineManager().get() );
     GTransformSetEvent = TransformSetEventPtr( new TransformSetEvent() );
     GKeyPressedEvent = KeyPressedEventPtr( new KeyPressedEvent() );
     GTimer.StartTimer();
@@ -135,8 +132,6 @@ BVAppLogic::~BVAppLogic             ()
 //
 void BVAppLogic::Initialize         ()
 {
-    GetTimelineManager()->RegisterRootTimeline( m_globalTimeline );
-
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
     m_pluginsManager = &model::PluginsManager::DefaultInstance();
 
@@ -150,28 +145,13 @@ void BVAppLogic::Initialize         ()
 //
 void BVAppLogic::LoadScenes( const PathVec & pathVec )
 {
-    model::SceneModelVec sceneModelVec;
+	m_bvProject->GetProjectEditor()->RemoveAllScenes();
 
     for( auto p : pathVec )
     {
-        auto scene = SceneDescriptor::LoadScene( ProjectManager::GetInstance()->ToAbsPath( p ), GetTimelineManager().get() );
-        sceneModelVec.push_back( scene );
+		auto scene = SceneDescriptor::LoadScene( ProjectManager::GetInstance()->ToAbsPath( p ) );
+		m_bvProject->GetProjectEditor()->AddScene( scene );
     }
-
-    Camera * cam = nullptr;
-
-    if( m_bvScene )
-    {
-        cam = m_bvScene->GetCamera();
-    }
-    else
-    {
-        cam = new Camera( DefaultConfig.IsCameraPerspactive() );
-    }
-
-    m_bvScene    = BVScene::Create( sceneModelVec, cam, m_globalTimeline, m_renderer );
-    assert( m_bvScene );
-    InitializeScenesTimelines();
 
     InitCamera( DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight() );
 }
@@ -183,19 +163,19 @@ void BVAppLogic::LoadScene          ( void )
     //auto te = m_timelineManager->CreateDefaultTimeline( "", 10.f, TimelineWrapMethod::TWM_MIRROR, TimelineWrapMethod::TWM_MIRROR );
     //te->Play();
     //m_globalTimeline->AddChild( te );
-    auto te = m_globalTimeline;
 
-    m_timelineManager->RegisterRootTimeline( te );
-    
     if( !ConfigManager::GetBool( "Debug/LoadSceneFromEnv" ) )
     {
         if( ConfigManager::GetBool( "Debug/LoadSolution" ) )
         {
             //m_solution.SetTimeline(m_timelineManager);
             m_solution.LoadSolution( ConfigManager::GetString("solution") );
+
             auto root = m_solution.GetRoot();
-            m_bvScene    = BVScene::Create( SceneModel::Create( "root", GetTimelineManager(), root ), new Camera( DefaultConfig.IsCameraPerspactive() ), te, m_renderer );
-            InitializeScenesTimelines();
+			auto scene = SceneModel::Create( "root", root, m_renderer->GetCamera() );
+
+			m_bvProject->GetProjectEditor()->AddScene( scene );
+
             //if(ConfigManager::GetBool("hm"))
             //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
         }
@@ -218,16 +198,7 @@ void BVAppLogic::LoadScene          ( void )
     }
     else
     {
-        auto scene = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_pluginsManager, GetTimelineManager(), m_globalTimeline );
-        m_bvScene = BVScene::Create( scene, new Camera( DefaultConfig.IsCameraPerspactive() ), te, m_renderer );
-        if( GetEnvScene() == "SERIALIZED_TEST" ) // FIXME
-            InitializeScenesTimelines();
-    }
-
-    if( !m_bvScene )
-    {
-        m_bvScene = BVScene::Create( model::SceneModelVec(), new Camera( DefaultConfig.IsCameraPerspactive() ), te, m_renderer );
-        InitializeScenesTimelines();
+		m_bvProject->GetProjectEditor()->AddScene( TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_renderer->GetCamera(), m_pluginsManager ) );
     }
 }
 
@@ -235,7 +206,7 @@ void BVAppLogic::LoadScene          ( void )
 //
 void BVAppLogic::InitCamera         ( unsigned int w, unsigned int h )
 {
-    Camera * cam = m_bvScene->GetCamera();
+	auto cam = new Camera( DefaultConfig.IsCameraPerspactive() );
 
     cam->SetFrame( DefaultConfig.CameraPosition(), DefaultConfig.CameraDirection(), DefaultConfig.CameraUp() );
     
@@ -248,6 +219,12 @@ void BVAppLogic::InitCamera         ( unsigned int w, unsigned int h )
         cam->SetViewportSize( w, h );
     }
 
+	//FIXME: nobody owns camera right now.. so it will be deleted here instead of scene model
+	if( m_renderer->GetCamera() )
+	{
+		delete m_renderer->GetCamera();
+	}
+
     m_renderer->SetCamera( cam );
     m_renderLogic->SetCamera( cam );
 
@@ -259,7 +236,7 @@ void BVAppLogic::InitCamera         ( unsigned int w, unsigned int h )
 void BVAppLogic::SetStartTime       ( unsigned long millis )
 {
     m_startTime = millis;
-    m_globalTimeline->SetTimeOffset( -TimeType( millis ) * TimeType( 0.001 ) );
+	m_bvProject->SetStartTime( millis );
 }
 
 // *********************************
@@ -284,8 +261,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
             FRAME_STATS_SECTION( "Update" );
             HPROFILER_SECTION( "update total", PROFILER_THREAD1 );
 
-            m_globalTimeline->SetGlobalTime( t );
-            m_bvScene->Update( t );
+            m_bvProject->Update( t );
         }
 
         m_remoteHandlers->UpdateHM();
@@ -300,7 +276,7 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 
             {
                 FRAME_STATS_SECTION( "Render" );
-                m_renderLogic->RenderFrame( renderer, m_bvScene->GetEngineSceneRoot() );
+                m_renderLogic->RenderFrame( renderer, m_bvProject->GetEngineSceneRoot() );
             }
         }
     }
@@ -399,8 +375,7 @@ const FrameStatsCalculator &     BVAppLogic::FrameStats () const
 void                            BVAppLogic::ResetScene      ()
 {
     UpdatersManager::Get().RemoveAllUpdaters();
-    m_globalTimeline = model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) );
-    m_bvScene = nullptr;
+    m_bvProject = nullptr;
 }
 
 // *********************************
@@ -420,24 +395,10 @@ void            BVAppLogic::GrabCurrentFrame(  const std::string & path )
 }
 
 // *********************************
-//
-model::TimelineManagerPtr	BVAppLogic::GetTimelineManager      ()
-{
-    return m_timelineManager;
-}
-
-// *********************************
-//
-model::OffsetTimeEvaluatorPtr   BVAppLogic::GetGlobalTimeline   ()
-{
-    return m_globalTimeline;
-}
-
-// *********************************
 //FIXME: unsafe - consider returning const variant of this class (IParameters * without const should be accessible anyway)
-BVScenePtr                  BVAppLogic::GetBVScene              ()
+BVProjectPtr                  BVAppLogic::GetBVProject              ()
 {
-    return m_bvScene;
+    return m_bvProject;
 }
 
 // *********************************
@@ -482,25 +443,7 @@ void                            BVAppLogic::InitializeRemoteCommunication()
     m_remoteHandlers->InitializeHandlers( this );
 
     unsigned int editorPort = ConfigManager::GetInt( "Network/SocketServer/Port" );
-    bool useRemoteLog = ConfigManager::GetBool( "Network/RemoteLog/Use" );
-
-    if( useRemoteLog )
-    {
-        unsigned int remoteLogPort = ConfigManager::GetInt( "Network/RemoteLog/Port" );
-        std::string remoteLogIP = ConfigManager::GetString( "Network/RemoteLog/IP" );
-
-        m_remoteController->InitializeRemoteLog( remoteLogIP, static_cast<unsigned short>( remoteLogPort ), SeverityLevel::info );
-    }
-    
     m_remoteController->InitializeServer( editorPort );
-}
-
-// *********************************
-//
-void                            BVAppLogic::InitializeScenesTimelines()
-{
-    for( auto scene : m_bvScene->GetScenes() )
-        m_timelineManager->AddTimeline( scene->m_pTimelineManager->GetRootTimeline() );
 }
 
 // *********************************

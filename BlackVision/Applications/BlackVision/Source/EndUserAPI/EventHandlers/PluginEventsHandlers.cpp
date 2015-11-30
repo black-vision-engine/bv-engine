@@ -48,13 +48,13 @@ void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
 
     float keyTime           = setParamEvent->Time;
         
-    auto scene = m_appLogic->GetBVScene()->GetScene( setParamEvent->SceneName );
+    auto scene = m_appLogic->GetBVProject()->GetScene( setParamEvent->SceneName );
 
     if( scene )
     {
 
 
-        auto root = scene->m_pModelSceneRoot;
+		auto root = scene->GetRootNode();
         auto node = root->GetNode( nodeName );
         if( node == nullptr )
         {
@@ -214,7 +214,7 @@ void PluginEventsHandlers::LoadAsset( bv::IEventPtr eventPtr )
         std::string& pluginName = eventLoadAsset->PluginName;
         std::string& asssetData = eventLoadAsset->AssetData;
 
-        auto root = m_appLogic->GetBVScene()->GetModelSceneRoot();
+        auto root = m_appLogic->GetBVProject()->GetModelSceneRoot();
         auto node = root->GetNode( nodeName );
         if( node == nullptr )
             return;
@@ -247,7 +247,7 @@ void PluginEventsHandlers::TimerHandler        ( bv::IEventPtr eventPtr )
         return;
 
     bv::TimerEventPtr evtTimer = std::static_pointer_cast<bv::TimerEvent>( eventPtr );
-	BVScenePtr modelScene = m_appLogic->GetBVScene();
+	BVProjectPtr modelScene = m_appLogic->GetBVProject();
     auto root = modelScene->GetModelSceneRoot();
         
     std::string& nodeName = evtTimer->NodeName;

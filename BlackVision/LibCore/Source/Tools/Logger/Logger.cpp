@@ -104,15 +104,19 @@ boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream& str
     return strm;
 }
 
+std::string toString( bv::ModuleEnum moduleEnum )
+{
+	auto module = moduleString.find( moduleEnum );
+	if( module != moduleString.end() )
+		return module->second;
+	else
+		return"Unknown Module";
+}
+
 boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream& strm, boost::log::to_log_manip< bv::ModuleEnum, module_tag > const& manip )
 {
     bv::ModuleEnum level = manip.get();
-
-	auto module = moduleString.find( level );
-	if( module != moduleString.end() )
-		strm << module->second;
-	else
-		strm << "Unknown Module";
+    strm << toString( level );
 
     return strm;
 }
@@ -224,7 +228,34 @@ void SetFilter( boost::shared_ptr<Type> sink, SeverityLevel minLevel, int module
 	sink->set_filter( filter );
 }
 
-void Logger::AddLogFile( const std::string& fileName, SeverityLevel minLevel, int modules )
+
+// ========================================================================= //
+// Functions adding sinks
+// ========================================================================= //
+
+
+std::unordered_map< int, boost::shared_ptr< boost::log::sinks::sink > >  globalSinksMap;
+CriticalSection sinksLock;
+int sinkID = 1;
+
+// ***********************
+//
+int AddNewSink( boost::shared_ptr< boost::log::sinks::sink > newSink )
+{
+    int newSinkId;
+    {
+        ScopedCriticalSection lock( sinksLock );
+        newSinkId = sinkID;
+        globalSinksMap.insert( std::make_pair( sinkID++, newSink ) );
+    }
+
+	boost::log::core::get()->add_sink( newSink );
+    return newSinkId;
+}
+
+// ***********************
+//
+int Logger::AddLogFile( const std::string& fileName, SeverityLevel minLevel, int modules )
 {
     boost::shared_ptr< boost::log::sinks::text_file_backend > backend =
         boost::make_shared< boost::log::sinks::text_file_backend >(
@@ -238,11 +269,13 @@ void Logger::AddLogFile( const std::string& fileName, SeverityLevel minLevel, in
 
     newSink->set_formatter( m_formatter );
 	SetFilter( newSink, minLevel, modules );
-
-	boost::log::core::get()->add_sink( newSink );
+    
+    return AddNewSink( newSink );
 }
 
-void Logger::AddConsole			( SeverityLevel minLevel, int modules )
+// ***********************
+//
+int Logger::AddConsole			( SeverityLevel minLevel, int modules )
 {
 	boost::shared_ptr< ASyncStreamSink > newSink = boost::make_shared< ASyncStreamSink >();
 	boost::shared_ptr< std::ostream > stream(&std::clog, boost::null_deleter());
@@ -250,30 +283,47 @@ void Logger::AddConsole			( SeverityLevel minLevel, int modules )
 
     newSink->set_formatter( m_formatter );
     SetFilter( newSink, minLevel, modules );
-	boost::log::core::get()->add_sink( newSink );
+
+    return AddNewSink( newSink );
 }
 
-QueueConcurrent<LogMsg>& Logger::AddLogQueue         ( SeverityLevel minLevel, int modules )
+// ***********************
+//
+QueueConcurrent<LogMsg>& Logger::AddLogQueue         ( int& logID, SeverityLevel minLevel, int modules )
 {
     boost::shared_ptr< QueueSink > backend = boost::make_shared< QueueSink >();
     boost::shared_ptr< SyncQueueSink > newSink( new SyncQueueSink( backend ) );
 
-    //newSink->set_formatter( m_formatter );
 	SetFilter( newSink, minLevel, modules );
-
-    boost::log::core::get()->add_sink( newSink );
+    logID = AddNewSink( newSink );
 
     return backend->GetQueueReference();
 }
 
+// ***********************
+//
+void Logger::RemoveLog           ( int logID )
+{
+    ScopedCriticalSection lock( sinksLock );
+
+    auto findResult = globalSinksMap.find( logID );
+    if( findResult != globalSinksMap.end() )
+    {
+        boost::log::core::get()->remove_sink( findResult->second );
+        globalSinksMap.erase( findResult );
+    }
+}
+
+// ***********************
+//
 void QueueSink::consume( boost::log::record_view const& rec )
 {
     namespace expr = boost::log::expressions;
 
     LogMsg message;
-    message.message << expr::message;
-    message.severity << expr::attr< bv::SeverityLevel, severity_tag >("Severity");
-    message.module << expr::attr< bv::ModuleEnum, module_tag >("Channel");
+    message.message = *rec[ expr::smessage ];
+    message.severity = SEVERITY_STRINGS[ rec[ ::bv::severity ].get() ];
+    message.module = toString( rec[ ::bv::module ].get() );
 
     m_queue.Push( message );
 }

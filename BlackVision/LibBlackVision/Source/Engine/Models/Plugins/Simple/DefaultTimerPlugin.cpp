@@ -5,6 +5,7 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultFontDescriptor.h"
 
 #include "Assets/Font/FontLoader.h"
 #include "Assets/Font/Text.h"
@@ -291,11 +292,18 @@ bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr
 			auto txData = m_psc->GetTexturesDataImpl();
 			txData->SetTexture( 0, txDesc );
 
+			//FIXME: on runtime reload it will add another descriptor instead of replacing the old one
+			txData->AddFont( std::make_shared< DefaultFontDescriptor >( txDesc ) );
+
 			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
             SetTimePatern( GenerateTimePatern( 0.f ) );
 
             SetTime(0.);
+
+			auto fonts = m_psc->GetTexturesDataImpl()->GetFonts();
+			//assert( fonts.size() == 1 );
+			AddAsset( assetDescr, fonts[ 0 ]->GetStateModel() );
 
             return true;
         }

@@ -5,6 +5,8 @@
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Engine/Events/EventHelpers.h"
 
+#include "Threading/ScopedCriticalSection.h"
+
 #include "UseLogger.h"
 
 #undef CreateEvent
@@ -15,15 +17,13 @@ namespace bv
 // ***********************
 //
 JsonCommandsListener::JsonCommandsListener()
-    :   m_eventServer( nullptr ),
-        m_remoteLog( nullptr )
+    :   m_eventServer( nullptr )
 {
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &JsonCommandsListener::SendResponse ), ResponseEvent::Type() );
 }
 
 JsonCommandsListener::~JsonCommandsListener()
 {
-    delete m_remoteLog;
     delete m_eventServer;
 }
 
@@ -37,10 +37,50 @@ void                JsonCommandsListener::QueueEvent          ( const std::wstri
 
     if( !deser.LoadWString( eventString ) )
     {
-        LOG_MESSAGE( SeverityLevel::error ) << "Commands converter can't parse command: \n" + toString( eventString );
+        LOG_MESSAGE( SeverityLevel::error ) << "Remote controller can't parse command: \n" + toString( eventString );
         return;
     }
 
+    TryParseRegularEvent( deser, socketID );
+    TryParseEventsGroup( deser, socketID );
+}
+
+// ***********************
+//
+void                JsonCommandsListener::TryParseEventsGroup ( IDeserializer& deser, int socketID )
+{
+    if( deser.EnterChild( L"EventsGroups" ) )
+    {
+        unsigned int frameTrigger = std::stoul( deser.GetAttribute( L"FrameTrigger" ) );
+
+        if( deser.EnterChild( L"Events" ) )
+        {
+            do
+            {
+                BaseEventPtr newEvent = std::static_pointer_cast<BaseEvent>( DeserializeEvent( deser ) );
+                newEvent->SocketID = socketID;
+
+                if( newEvent != nullptr )
+                    AddTriggeredEvent( frameTrigger, newEvent );
+            }
+            while( deser.NextChild() );
+            deser.ExitChild();
+        }
+    }
+}
+
+// ***********************
+//
+void                JsonCommandsListener::AddTriggeredEvent   ( unsigned int requestedFrame, BaseEventPtr& eventPtr )
+{
+    ScopedCriticalSection lock( m_eventsMapLock );
+    m_triggeredEvents.insert( std::make_pair( requestedFrame, eventPtr ) );
+}
+
+// ***********************
+//
+void                JsonCommandsListener::TryParseRegularEvent( IDeserializer& deser, int socketID )
+{
     if( deser.EnterChild( L"Events" ) )
     {
         do
@@ -79,17 +119,6 @@ bool JsonCommandsListener::InitializeServer    ( int port )
 
     bool result = m_eventServer->InitializeServer( fastdelegate::MakeDelegate( this, &JsonCommandsListener::QueueEvent ), port );
     return result;
-}
-
-// ***********************
-//
-bool JsonCommandsListener::InitializeRemoteLog ( const std::string& address, unsigned short port, SeverityLevel minLevel, int modules )
-{
-    QueueConcurrent<LogMsg>& queue = Logger::GetLogger().AddLogQueue( minLevel, modules );
-    m_remoteLog = new LogTCP( queue );
-    m_remoteLog->Initialize( address, port );
-
-    return true;
 }
 
 

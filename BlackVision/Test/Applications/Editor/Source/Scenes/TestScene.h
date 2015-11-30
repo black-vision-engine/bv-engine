@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"
-#include "Engine/Models/BVScene.h"
+#include "Engine/Models/BVProject.h"
 
 #include "BVGL.h"
 
@@ -23,10 +23,13 @@ class TestScene
 private:
 	std::vector< std::function< void() > > m_testSteps;
 
-    BVScenePtr					m_scene;
+    BVProject *					m_project;
 	Renderer *					m_renderer;
-	model::TimelineManagerPtr	m_timelineManager;
+
+	model::IPluginPtr			m_copiedPlugin;
+
 	model::ITimeEvaluatorPtr	m_timeEvaluator;
+	model::TimelineManager *	m_timelineManager;
 	
 	Int32						m_stepOffset;
 	Int32						m_lastStep;
@@ -39,19 +42,17 @@ private:
 	static const std::string	TMR_NODE;
 	static const std::string	GEOM_NODE;
 	static const std::string	VSD_NODE;
+
+	static const std::string	SCENE_NAME;
+	static const std::string	SCENE_NAME1;
+
 	
 public:
-							TestScene				( Renderer * renderer, model::TimelineManagerPtr timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+							TestScene				( BVProject * scene, Renderer * renderer );
 							~TestScene				();
 
-	void					Restart					();
-
-	BVScenePtr				GetScene				();
-	
 	void					TestEditor				( TimeType time );
 
-	BVScenePtr				ColoredRectanglesScene	();
-	
 private:
 	void					InitTestEditor				();
 
@@ -84,6 +85,9 @@ private:
 	
 	void					InitOrderTest				( const OrderTestCase & test );
 	void					SwapPlugins					( const std::string & rootPlugin, UInt32 rootIdx, const std::string & childName, const std::string & childPlugin,  UInt32 childIdx );
+	void					CopyPlugin					( UInt32 rootIdx, const std::string & rootPlugin, const std::string & childName, const std::string & childPlugin );
+	void					RestoreRoot					( UInt32 rootIdx, const std::string & childPlugin );
+
 };
 
 DEFINE_PTR_TYPE( TestScene )

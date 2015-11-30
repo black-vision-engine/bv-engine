@@ -21,6 +21,31 @@ void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root, bool 
             GetAssetsWithUIDs( map, root->GetChild( i ), true );
 }
 
+// *******************************
+//
+ISerializablePtr                                 AssetDescsWithUIDs::Create          ( const IDeserializer& deser )
+{
+    auto assetsWithUIDs = SerializationHelper::DeserializeObjectLoadPropertiesImpl< AssetDescWithUID >( deser, "uid" );
+
+    auto assets = std::make_shared< AssetDescsWithUIDs >();
+    for( auto asset : assetsWithUIDs )
+        assets->AddAssetDescWithUID( *asset );
+    return assets;
+}
+
+// *******************************
+//
+void                                            AssetDescsWithUIDs::Serialize       ( ISerializer& ser ) const
+{
+    ser.EnterArray( "assets" );
+    for( auto asset : m_uid2asset )
+    {
+        AssetDescWithUID( asset.second, asset.first ).Serialize( ser );
+    }
+    ser.ExitChild();
+}
+
+
 AssetDescsWithUIDs AssetDescsWithUIDs::instance;
 
 //template std::shared_ptr< AssetDescsWithUIDs >                                        DeserializeObjectLoadImpl( const IDeserializer&, std::string name );

@@ -27,12 +27,12 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
 {
 	if( !m_editor ) 
 	{
-		m_editor = logic->GetBVScene()->GetSceneEditor();
+		m_editor = logic->GetBVProject()->GetProjectEditor();
 	}
 
     if( !m_defaultEffect )
     {
-        m_defaultEffect = std::make_shared< model::ModelNodeEffectDefault >( logic->GetGlobalTimeline() );
+        m_defaultEffect = std::make_shared< model::ModelNodeEffectDefault >( model::TimelineManager::GetInstance()->GetRootTimeline() );
     }
 
     switch( c )
@@ -40,7 +40,7 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
         case 's': 
         {
             auto sob = new XMLSerializer();
-            logic->GetBVScene()->GetScenes()[ 0 ]->Serialize( *sob );
+            logic->GetBVProject()->GetScenes()[ 0 ]->Serialize( *sob );
             sob->Save( "test.xml" );
             delete sob; 
 
@@ -174,7 +174,7 @@ void                    TestGlobalEfectKeyboardHandler::HandleIncrement     ( BV
             auto nextNode = GetWireframeNode( logic, m_curWireframeNodeIdx );
 
 			m_editor->SetNodeEffect( curNode, m_defaultEffect );
-            auto newEffect = std::make_shared< model::ModelNodeEffectWireframe >( logic->GetGlobalTimeline() );
+            auto newEffect = std::make_shared< model::ModelNodeEffectWireframe >( model::TimelineManager::GetInstance()->GetRootTimeline() );
 			m_editor->SetNodeEffect( nextNode, newEffect );
         }        
     }
@@ -233,7 +233,7 @@ void                    TestGlobalEfectKeyboardHandler::HandleDecrement     ( BV
             auto nextNode = GetWireframeNode( logic, m_curWireframeNodeIdx );
 
 			m_editor->SetNodeEffect( curNode, m_defaultEffect );
-            auto newEffect = std::make_shared< model::ModelNodeEffectWireframe >( logic->GetGlobalTimeline() );
+            auto newEffect = std::make_shared< model::ModelNodeEffectWireframe >( model::TimelineManager::GetInstance()->GetRootTimeline() );
 			m_editor->SetNodeEffect( nextNode, newEffect );
         }
     }
@@ -353,7 +353,7 @@ void                    TestGlobalEfectKeyboardHandler::HandleToggleEffect  ( BV
 //
 model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetRootNode         ( BVAppLogic * logic )
 {
-    auto scene = logic->GetBVScene();
+    auto scene = logic->GetBVProject();
     auto root = scene->GetModelSceneRoot();
 
     return root;
@@ -413,7 +413,7 @@ model::IModelNodeEffectPtr TestGlobalEfectKeyboardHandler::GetAlphaMaskNodeEffec
 
     if (!effect) // || effect->GetType() != NodeEffectType::NET_ALPHA_MASK )
     {
-        auto newEffect = std::make_shared< model::ModelNodeEffectAlphaMask >( logic->GetGlobalTimeline() );
+        auto newEffect = std::make_shared< model::ModelNodeEffectAlphaMask >( model::TimelineManager::GetInstance()->GetRootTimeline() );
 		m_editor->SetNodeEffect( node, newEffect );
     }
 
@@ -429,7 +429,7 @@ model::IModelNodeEffectPtr  TestGlobalEfectKeyboardHandler::GetNodeMaskNodeEffec
 
     if (!effect) // || effect->GetType() != NodeEffectType::NET_NODE_MASK )
     {
-        auto newEffect = std::make_shared< model::ModelNodeEffectNodeMask >( logic->GetGlobalTimeline() );
+        auto newEffect = std::make_shared< model::ModelNodeEffectNodeMask >( model::TimelineManager::GetInstance()->GetRootTimeline() );
 		m_editor->SetNodeEffect( node, newEffect );
     }
 
@@ -445,7 +445,7 @@ model::IModelNodeEffectPtr  TestGlobalEfectKeyboardHandler::GetNodeWireframeEffe
 
     if (!effect) // || effect->GetType() != NodeEffectType::NET_WIREFRAME )
     {
-        auto newEffect = std::make_shared< model::ModelNodeEffectWireframe >( logic->GetGlobalTimeline() );
+        auto newEffect = std::make_shared< model::ModelNodeEffectWireframe >( model::TimelineManager::GetInstance()->GetRootTimeline() );
 		m_editor->SetNodeEffect( node, newEffect );
     }
 

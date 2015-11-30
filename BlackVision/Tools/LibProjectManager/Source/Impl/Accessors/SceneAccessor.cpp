@@ -52,7 +52,7 @@ SceneDescriptor	SceneAccessor::GetSceneDesc( const Path & path ) const
 //
 model::SceneModelPtr	SceneAccessor::GetScene( const Path & path ) const
 {
-    return SceneDescriptor::LoadScene( path, model::TimelineManager::GetInstance() );
+    return SceneDescriptor::LoadScene( path );
 }
 
 // ********************************
@@ -66,7 +66,7 @@ void			SceneAccessor::AddSceneFromFile( const Path & srcPath, const Path & path 
 //
 void			SceneAccessor::AddScene( const model::SceneModelPtr & scene, const Path & path ) const
 {
-    SceneDescriptor::SaveScene( scene, scene->m_pTimelineManager.get(), m_rootDir / path );
+    SceneDescriptor::SaveScene( scene, m_rootDir / path );
 }
 
 // ********************************
@@ -104,13 +104,9 @@ void			SceneAccessor::ImportScene( std::istream & in, const Path & importToProje
         in.ignore();
 
         {
-            auto oldTMInstance = model::TimelineManager::GetInstance();
-            auto newTMInstance = model::TimelineManager();
-            newTMInstance.RegisterRootTimeline( model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) ) );
-            model::TimelineManager::SetInstance( &newTMInstance );
-            auto scene = SceneDescriptor::LoadScene( in, size, &newTMInstance );
+            auto scene = SceneDescriptor::LoadScene( in, size );
         
-            auto sceneAssertDescs = ListSceneAssetsDescs( scene->m_pModelSceneRoot );
+			auto sceneAssertDescs = ListSceneAssetsDescs( scene->GetRootNode() );
         
             std::set< AssetDescConstPtr > assetsDescsSet;
             assetsDescsSet.insert( sceneAssertDescs.begin(), sceneAssertDescs.end() );
@@ -123,9 +119,7 @@ void			SceneAccessor::ImportScene( std::istream & in, const Path & importToProje
 
             auto outFilePath = ( m_rootDir / importToProject / importToPath ).Str();
 
-            SceneDescriptor::SaveScene( scene, &newTMInstance, outFilePath );
-
-            model::TimelineManager::SetInstance( oldTMInstance );
+            SceneDescriptor::SaveScene( scene, outFilePath );
         }
         buf.str( "" );
         in.ignore();

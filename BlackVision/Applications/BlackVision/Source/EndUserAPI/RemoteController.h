@@ -20,7 +20,6 @@ public:
 
     virtual void                        QueueEvent          ( const std::wstring& eventString, int socketID ) = 0;
     virtual bool                        InitializeServer    ( int port ) = 0;
-    virtual bool                        InitializeRemoteLog ( const std::string& address, unsigned short port, SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF ) = 0;
     virtual void                        SendResponse        ( const IEventPtr response ) = 0;
 protected:
     IEventPtr                           DeserializeEvent    ( IDeserializer& deser );

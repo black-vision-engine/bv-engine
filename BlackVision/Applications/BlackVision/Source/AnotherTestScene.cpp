@@ -32,7 +32,7 @@
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Assets/AssetDescsWithUIDs.h"
 
-#include "Engine/Models/BVScene.h"
+#include "Engine/Models/BVProject.h"
 #include "System/Path.h"
 
 #include "Serialization/XML/XMLDeserializer.h"
@@ -846,7 +846,7 @@ model::SceneModelPtr LoadSceneFromFile( std::string filename, model::TimelineMan
 
     auto model = SerializationHelper::DeserializeObjectLoadImpl< SceneModel >( deser, "scene" );
 
-    auto teClone = CloneViaSerialization::Clone( model->m_pTimelineManager.get(), "timelines" );
+	auto teClone = CloneViaSerialization::Clone( model::TimelineManager::GetInstance(), "timelines" );
 
     return model;
 }

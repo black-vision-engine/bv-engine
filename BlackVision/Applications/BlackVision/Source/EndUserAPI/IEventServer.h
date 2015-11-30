@@ -32,7 +32,7 @@ class IEventServer
 private:
 protected:
 public:
-    ~IEventServer() {}
+    virtual ~IEventServer() {}
 
     virtual bool            InitializeServer        ( const QueueEventCallback& callback, int port ) = 0;
     virtual void            SendResponse            ( ResponseMsg& meesage ) = 0;

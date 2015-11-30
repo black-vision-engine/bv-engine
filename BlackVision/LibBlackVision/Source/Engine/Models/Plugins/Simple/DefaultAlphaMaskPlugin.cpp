@@ -144,6 +144,8 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( AssetDescCon
 
 			RecalculateUVChannel();
 
+            AddAsset( assetDescr, txDesc->GetSamplerState() );
+
             return true;
         }
     }

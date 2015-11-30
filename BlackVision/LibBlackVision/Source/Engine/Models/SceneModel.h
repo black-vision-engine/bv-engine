@@ -3,6 +3,7 @@
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Serialization/ISerializable.h"
+#include "Engine/Graphics/SceneGraph/Camera.h"
 
 #include "CoreDEF.h"
 
@@ -10,25 +11,41 @@ namespace bv {
 
 namespace model {
 
-struct SceneModel;
+class ModelSceneEditor;
+
+class SceneModel;
 DEFINE_PTR_TYPE( SceneModel );
 DEFINE_CONST_PTR_TYPE( SceneModel );
 
-struct SceneModel : public ISerializable
+class SceneModel : public ISerializable
 {
-    std::string                                     m_name;
-    TimelineManagerPtr                              m_pTimelineManager; // FIXME(?) using TimelineManager as timeline container seems a little bit like a design flaw
-    BasicNodePtr                                    m_pModelSceneRoot;
+private:
+    std::string             m_name;
 
-    SceneModel( std::string name, model::TimelineManagerPtr pTimelineManager, model::BasicNodePtr pModelSceneRoot ); // FIXME remove me!!!
+    BasicNodePtr            m_sceneRootNode;
 
-    static SceneModelPtr    Create              ( std::string name, model::TimelineManagerPtr pTimelineManager, model::BasicNodePtr pModelSceneRoot );
+	Camera *                m_camera; //FIXME: camera model
+
+    ModelSceneEditor *		m_modelSceneEditor;
+
+public:
+							SceneModel			( std::string name, BasicNodePtr rootNode, Camera * camera );
+    virtual					~SceneModel			();
+
+    static SceneModelPtr    Create              ( std::string name, BasicNodePtr rootNode, Camera * camera );
     static ISerializablePtr Create              ( const IDeserializer& deser );
     virtual void            Serialize           ( ISerializer& doc) const override;
+
+	BasicNodePtr			GetRootNode			() const;
+
+	const std::string &		GetName				() const;
+
+	Camera *                GetCamera           () const;
+
+	ModelSceneEditor *		GetModelSceneEditor	() const;
 };
 
-typedef std::vector< SceneModelPtr > SceneModelVec;
-typedef std::vector< SceneModelConstPtr > SceneModelConstVec;
+typedef std::vector< model::SceneModelPtr > SceneModelVec;
 
 } // model
 }
