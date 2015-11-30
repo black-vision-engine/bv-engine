@@ -46,6 +46,9 @@
     <Filter Include="Rendering\Utils">
       <UniqueIdentifier>{4d2c2449-8f44-49bc-b3eb-1c514447afc6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering\RenderLogicImpl">
+      <UniqueIdentifier>{97c8f422-2dec-4b4d-b902-7e7e8dbbf23a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -164,6 +167,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogicTr.cpp">
       <Filter>Rendering\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicImpl.cpp">
+      <Filter>Rendering\RenderLogicImpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicRawPreview.cpp">
+      <Filter>Rendering\RenderLogicImpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicVideoPreview.cpp">
+      <Filter>Rendering\RenderLogicImpl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -288,6 +300,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogicTr.h">
       <Filter>Rendering\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicImpl.h">
+      <Filter>Rendering\RenderLogicImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicRawPreview.h">
+      <Filter>Rendering\RenderLogicImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicVideoPreview.h">
+      <Filter>Rendering\RenderLogicImpl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

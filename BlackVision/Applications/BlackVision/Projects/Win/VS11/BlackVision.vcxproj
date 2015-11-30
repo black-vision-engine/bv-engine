@@ -134,6 +134,9 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\WireframeRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\PostFrameRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicImpl.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicRawPreview.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicVideoPreview.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogicTr.cpp" />
@@ -184,6 +187,9 @@
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\WireframeRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\PostFrameRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicImpl.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicRawPreview.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicVideoPreview.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogicTr.h" />
