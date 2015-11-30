@@ -270,6 +270,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\BVAppLogic.cpp" />
     <ClCompile Include="..\..\..\Source\BVConfig.cpp" />
     <ClCompile Include="..\..\..\Source\DefaultPlugins.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\HightmapHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\PluginEventsHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\QueryHandlers.cpp" />
@@ -297,6 +298,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeEffectRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeMaskRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\OfflineRendering\ScreenShotLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\OffscreenRenderLogic.cpp" />
@@ -324,6 +326,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\BVConfig.h" />
     <ClInclude Include="..\..\..\Source\BVForwards.h" />
     <ClInclude Include="..\..\..\Source\DefaultPlugins.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\HightmapHandlers.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\PluginEventsHandlers.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\QueryHandlers.h" />
@@ -332,6 +335,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\EndUserAPI\IEventServer.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteController.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\OfflineRendering\ScreenShotLogic.h" />
     <ClInclude Include="..\..\..\Source\RenderMode.h" />
     <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
     <ClInclude Include="..\..\..\Source\FrameStatsService.h" />

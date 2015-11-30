@@ -5,6 +5,8 @@
 namespace bv
 {
 
+class RenderLogic;
+
 enum RenderingMode
 {
     RenderRealTime,
@@ -15,6 +17,8 @@ enum RenderingMode
 class RenderMode
 {
 private:
+    RenderLogic*        m_renderLogic;
+
     unsigned int        m_frameNumber;
     unsigned long       m_startTime;        ///< Milliseconds
     unsigned long       m_currentTime;      ///< Milliseconds
@@ -26,8 +30,11 @@ public:
     RenderMode();
     ~RenderMode();
 
+    void        SetRenderLogic              ( RenderLogic* logic )      { m_renderLogic = logic; }
     void        SetStartTime                ( unsigned long time );
-    void        SetRenderToFileMode         ( float requestedFPS, unsigned int numFrames );
+    
+    void        SetRenderToFileMode         ( const std::string& filePath, float requestedFPS, unsigned int numFrames );
+    void        MakeScreenShot              ( const std::string& filePath );
     TimeType    StartFrame                  ( unsigned long millis );
 
     unsigned long   GetStartTime()          { return m_startTime; }

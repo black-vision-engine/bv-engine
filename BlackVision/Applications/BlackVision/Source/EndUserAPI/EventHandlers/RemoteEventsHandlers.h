@@ -9,6 +9,7 @@ class PluginEventsHandlers;
 class SceneEventsHandlers;
 class QueryHandlers;
 class HightmapHandlers;
+class EngineStateHandlers;
 
 class RemoteEventsHandlers
 {
@@ -17,6 +18,7 @@ public:
     SceneEventsHandlers*            m_sceneEvents;
     QueryHandlers*                  m_queryEvents;
     HightmapHandlers*               m_heightmapEvents;
+    EngineStateHandlers*            m_engineStateEvents;
 public:
     RemoteEventsHandlers();
     ~RemoteEventsHandlers();

@@ -117,6 +117,7 @@ public:
     BVScenePtr                      GetBVScene          ();
     const model::PluginsManager *   GetPluginsManager   () const;
 
+    RenderMode&                     GetRenderMode       ()  { return m_renderMode; }
 
     void            LoadScenes      ( const PathVec & pathVec );
 

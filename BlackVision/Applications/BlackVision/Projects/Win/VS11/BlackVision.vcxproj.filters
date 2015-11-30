@@ -49,6 +49,9 @@
     <Filter Include="EndUserAPI\JsonCommandsListener">
       <UniqueIdentifier>{eceea615-6f9e-49bd-bfa0-e18ef67e559a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering\Logic\OfflineRendering">
+      <UniqueIdentifier>{5e5941f3-c717-4b2e-9ff8-ee9b9e9aec91}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -173,6 +176,12 @@
       <Filter>TestAI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\RenderMode.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\OfflineRendering\ScreenShotLogic.cpp">
+      <Filter>Rendering\Logic\OfflineRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.cpp">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -306,6 +315,12 @@
       <Filter>TestAI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\RenderMode.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\OfflineRendering\ScreenShotLogic.h">
+      <Filter>Rendering\Logic\OfflineRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.h">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\BVConfig.inl" />

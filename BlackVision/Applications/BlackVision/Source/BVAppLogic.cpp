@@ -113,6 +113,8 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
     m_renderLogic = new RenderLogic();
     m_remoteHandlers = new RemoteEventsHandlers;
     m_remoteController = new JsonCommandsListener;
+
+    m_renderMode.SetRenderLogic( m_renderLogic );
 }
 
 // *********************************

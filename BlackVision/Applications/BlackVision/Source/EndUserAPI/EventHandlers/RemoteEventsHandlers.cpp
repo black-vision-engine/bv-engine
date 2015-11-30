@@ -4,8 +4,11 @@
 #include "SceneEventsHandlers.h"
 #include "QueryHandlers.h"
 #include "HightmapHandlers.h"
+#include "EngineStateHandlers.h"
+
 #include "Engine/Events/EventManager.h"
 #include "Widgets/Crawler/CrawlerEvents.h"
+
 
 namespace bv
 {
@@ -15,7 +18,9 @@ namespace bv
 RemoteEventsHandlers::RemoteEventsHandlers()
     :   m_pluginEvents( nullptr ),
         m_sceneEvents( nullptr ),
-        m_queryEvents( nullptr )
+        m_queryEvents( nullptr ),
+        m_engineStateEvents( nullptr ),
+        m_heightmapEvents( nullptr )
 {}
 
 RemoteEventsHandlers::~RemoteEventsHandlers()
@@ -26,6 +31,8 @@ RemoteEventsHandlers::~RemoteEventsHandlers()
         delete m_sceneEvents;
     if( m_queryEvents )
         delete m_queryEvents;
+    if( m_engineStateEvents )
+        delete m_engineStateEvents;
     if( m_heightmapEvents )
         delete m_heightmapEvents;
 }
@@ -37,6 +44,7 @@ void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic* appLogic )
     m_pluginEvents      = new PluginEventsHandlers( appLogic );
     m_sceneEvents       = new SceneEventsHandlers( appLogic );
     m_queryEvents       = new QueryHandlers( appLogic );
+    m_engineStateEvents = new EngineStateHandlers( appLogic );
     m_heightmapEvents   = new HightmapHandlers( appLogic );     // Unused for now.
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_pluginEvents, &PluginEventsHandlers::LoadAsset ), LoadAssetEvent::Type() );
@@ -48,6 +56,7 @@ void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic* appLogic )
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::TimelineHandler ), TimeLineEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::WidgetHandler ), WidgetEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_queryEvents, &QueryHandlers::Info ), InfoEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_engineStateEvents, &EngineStateHandlers::RenderingModeEvent ), RenderingModeEvent::Type() );
 
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::OnNodeAppearing ), widgets::NodeAppearingCrawlerEvent::Type() );
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );

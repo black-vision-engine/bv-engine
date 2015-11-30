@@ -1,5 +1,6 @@
 #include "RenderMode.h"
 
+#include "Rendering/Logic/RenderLogic.h"
 
 namespace bv
 {
@@ -29,10 +30,18 @@ void RenderMode::SetStartTime( unsigned long time )
 
 // ***********************
 //
-void RenderMode::SetRenderToFileMode( float requestedFPS, unsigned int numFrames )
+void RenderMode::SetRenderToFileMode( const std::string& /*filePath*/, float requestedFPS, unsigned int numFrames )
 {
     m_nextFrameOffset = 1000 / requestedFPS;        // Time in millis
     m_framesToRender = numFrames;
+}
+
+// ***********************
+//
+void RenderMode::MakeScreenShot( const std::string& filePath )
+{
+    if( m_renderLogic )
+        m_renderLogic->MakeScreenShot( filePath );
 }
 
 // ***********************
