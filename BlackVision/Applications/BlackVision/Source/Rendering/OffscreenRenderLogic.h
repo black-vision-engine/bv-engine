@@ -110,9 +110,11 @@ public:
 	//pablito
 	std::vector< int >  GetHackBuffersUids          ( Renderer * renderer ) const;
 
-private:
+
 
     RenderTarget *      GetRenderTargetAt               ( int i ) const;
+
+private:
 
     RenderTargetData    CreateDisplayRenderTargetData       () const;
     RenderTargetData    CreateVideoOutputRenderTargetData   () const;
