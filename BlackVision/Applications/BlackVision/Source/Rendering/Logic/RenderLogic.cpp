@@ -1,5 +1,8 @@
 #include "RenderLogic.h"
 
+#include "Rendering/Logic/RenderLogicImpl/RenderLogicRawPreview.h"
+#include "Rendering/Logic/RenderLogicImpl/RenderLogicVideoPreview.h"
+
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
@@ -15,6 +18,7 @@
 #include "BVGL.h"
 
 #include "Rendering/Logic/VideoOutputRendering/DefaultVideoOutputRenderLogic.h"
+#include "BVConfig.h"
 
 
 namespace bv {
@@ -22,7 +26,20 @@ namespace bv {
 // *********************************
 //
 RenderLogic::RenderLogic     ()
+    :  m_impl( nullptr )
 {
+    auto videoCardEnabled   = DefaultConfig.ReadbackFlag();
+    auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput();
+   
+    if( previewAsVideoCard )
+    {
+        m_impl = new RenderLogicVideoPreview( videoCardEnabled );
+    }
+    else
+    {
+        m_impl = new RenderLogicRawPreview( videoCardEnabled );
+    }
+
     m_frameRenderLogic = new FrameRenderLogic();
     m_postFrameRenderLogic = new PostFrameRenderLogic();
 }
@@ -31,6 +48,7 @@ RenderLogic::RenderLogic     ()
 //
 RenderLogic::~RenderLogic    ()
 {
+    delete m_impl;
     delete m_frameRenderLogic;
     delete m_postFrameRenderLogic;
 }

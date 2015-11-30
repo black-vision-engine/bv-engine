@@ -9,6 +9,7 @@ class Camera;
 class Renderer;
 class SceneNode;
 
+class RenderLogicImpl;
 class FrameRenderLogic;
 class PostFrameRenderLogic;
 
@@ -16,6 +17,7 @@ class RenderLogic
 {
 private:
 
+    RenderLogicImpl *       m_impl;
     FrameRenderLogic *                      m_frameRenderLogic;
     PostFrameRenderLogic *                  m_postFrameRenderLogic;
 
