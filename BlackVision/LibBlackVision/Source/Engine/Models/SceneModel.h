@@ -36,6 +36,9 @@ public:
     static ISerializablePtr Create              ( const IDeserializer& deser );
     virtual void            Serialize           ( ISerializer& doc) const override;
 
+	model::SceneModelPtr	Clone				() const;
+
+
 	BasicNodePtr			GetRootNode			() const;
 
 	const std::string &		GetName				() const;
@@ -43,6 +46,7 @@ public:
 	Camera *                GetCamera           () const;
 
 	ModelSceneEditor *		GetModelSceneEditor	() const;
+
 };
 
 typedef std::vector< model::SceneModelPtr > SceneModelVec;

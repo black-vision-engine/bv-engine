@@ -11,8 +11,6 @@
 #include "Engine/Graphics/SceneGraph/SceneEditor.h"
 #include "Engine/Models/ModelNodeEditor.h"
 
-#include "Serialization/CloneViaSerialization.h"
-
 namespace bv {
     
 namespace {
@@ -100,7 +98,7 @@ model::SceneModelPtr    BVProjectEditor::CopyScene  ( const std::string & sceneN
 	auto scene = m_scene->GetScene( sceneName );
 	if( scene )
 	{
-		return bv::CloneViaSerialization::Clone( scene.get(), "scene" );
+		return scene->Clone();
 	}
 	return nullptr;
 }

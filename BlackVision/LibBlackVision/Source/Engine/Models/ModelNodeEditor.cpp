@@ -4,8 +4,6 @@
 
 #include "Engine/Models/Plugins/Plugin.h"
 
-#include "Serialization/CloneViaSerialization.h"
-#include "Assets/AssetDescsWithUIDs.h"
 
 namespace bv { namespace model {
 
@@ -22,12 +20,7 @@ namespace bv { namespace model {
 BasicNodePtr			ModelNodeEditor::CopyNode				()
 {
     auto node = m_node.lock();
-	
-	AssetDescsWithUIDs assets;
-	GetAssetsWithUIDs( assets, node );
-	AssetDescsWithUIDs::SetInstance( assets );
-
-	return bv::CloneViaSerialization::Clone( node.get(), "node" );
+	return std::static_pointer_cast< BasicNode >( node->Clone() );
 }
 
 // ********************************
@@ -150,11 +143,7 @@ IPluginPtr			ModelNodeEditor::CopyPlugin				( const std::string & name )
 
 	if( plugin )
 	{
-		AssetDescsWithUIDs assets;
-		GetAssetsWithUIDs( assets, node );
-		AssetDescsWithUIDs::SetInstance( assets );
-
-		return bv::CloneViaSerialization::Clone( std::static_pointer_cast< BasePlugin< IPlugin > >( plugin ).get(), "plugin" );
+		return plugin->Clone();
 	}
     return nullptr;
 }
