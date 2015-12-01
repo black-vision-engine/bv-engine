@@ -178,6 +178,9 @@
     <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.cpp">
       <Filter>Widgets\NodeReplicator</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.cpp">
+      <Filter>Widgets\NodeReplicator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -311,6 +314,12 @@
       <Filter>TestAI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.h">
+      <Filter>Widgets\NodeReplicator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\IReplicationModifier.h">
+      <Filter>Widgets\NodeReplicator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.h">
       <Filter>Widgets\NodeReplicator</Filter>
     </ClInclude>
   </ItemGroup>
