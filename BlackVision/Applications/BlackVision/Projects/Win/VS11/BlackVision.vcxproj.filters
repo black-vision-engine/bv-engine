@@ -49,6 +49,9 @@
     <Filter Include="EndUserAPI\JsonCommandsListener">
       <UniqueIdentifier>{eceea615-6f9e-49bd-bfa0-e18ef67e559a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Widgets\NodeReplicator">
+      <UniqueIdentifier>{92c97574-2f51-4596-bcfa-ef1caae4425d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -171,6 +174,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.cpp">
       <Filter>TestAI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.cpp">
+      <Filter>Widgets\NodeReplicator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -303,6 +309,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.h">
       <Filter>TestAI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.h">
+      <Filter>Widgets\NodeReplicator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
