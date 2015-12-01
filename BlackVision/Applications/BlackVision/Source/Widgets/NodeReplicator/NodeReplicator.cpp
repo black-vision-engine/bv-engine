@@ -10,52 +10,60 @@ NodeReplicator::NodeReplicator( const BasicNodePtr & node, SizeType repNum, cons
     : m_node( node )
     , m_repModifier( modifier )
     , m_repNum( repNum )
-{}
+    , m_initialized( false )
+{
+}
 
 // *******************************
 //
-NodeReplicatorConstPtr      NodeReplicator::Create( const BasicNodePtr & node, SizeType repNum, const IReplicationModifierConstPtr & modifier )
+NodeReplicatorPtr           NodeReplicator::Create( const BasicNodePtr & node, SizeType repNum, const IReplicationModifierConstPtr & modifier )
 {
-    return NodeReplicatorConstPtr( new NodeReplicator( node, repNum, modifier ) );
+    return NodeReplicatorPtr( new NodeReplicator( node, repNum, modifier ) );
 }
 
 // *******************************
 //
 void					    NodeReplicator::Initialize()
 {
+    if( m_initialized )
+    {
+        return;
+    }
+
+    m_initialized = true;
+
     auto numChildren = m_node->GetNumChildren();
 
     if( numChildren > 0 )
     {
         auto toReplicate = m_node->GetChild( numChildren - 1 );
+
+        auto basicName = toReplicate->GetName();
         
         for( SizeType i = 0; i < m_repNum; ++i )
         {
             auto copiedNode = toReplicate->GetModelNodeEditor()->CopyNode();
+
+            copiedNode->SetName( basicName + "_rep" + std::to_string( i ) );
 
             m_repModifier->Apply( toReplicate, copiedNode );
 
             m_node->AddChildToModelOnly( copiedNode );
 
             toReplicate = copiedNode;
-        }
-        
+        }   
     }
-
-    
 }
 
 // *******************************
 //
 void					    NodeReplicator::Update( TimeType )
-{
-}
+{}
 
 // *******************************
 //
 void					    NodeReplicator::Deinitialize()
-{
-}
+{}
 
 } // model
 } // bv

@@ -22,9 +22,18 @@ void                            ShiftReplicationModifier::Apply( const BasicNode
         auto typedTransformParam = QueryTypedParam< ParamTransformVecPtr >( transformParam );
 
         TransformF trans;
-        trans.AddTranslation( m_delta.x, m_delta.y, m_delta.z );
+        FloatInterpolator fx;
+        fx.AddKey( 0.f, m_delta.x );
+        
+        FloatInterpolator fy;
+        fy.AddKey( 0.f, m_delta.y );
 
-        typedTransformParam->AppendTransform( trans );
+        FloatInterpolator fz;
+        fz.AddKey( 0.f, m_delta.z );
+
+        trans.AddTranslation( fx, fy, fz );
+
+        typedTransformParam->Transform( 0 ).AddTranslation( fx, fy, fz );
     }
 }
 

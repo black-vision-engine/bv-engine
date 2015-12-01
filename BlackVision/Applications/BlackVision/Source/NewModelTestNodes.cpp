@@ -17,6 +17,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultCylinderPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCogWheelPlugin.h"
+#include "Widgets/NodeReplicator/NodeReplicator.h"
+#include "Widgets/NodeReplicator/ShiftReplicationModifier.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
 
@@ -314,10 +316,33 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGlobalEffectTest      ( model::Ti
 model::BasicNodePtr  SimpleNodesFactory::CreateLightScatteringTest      ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { timelineManager; }
-    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/5.png", false, 3.f, 3.f );
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/test_frame_00018.bmp", false, 3.f, 3.f );
 
      // ROOT
     auto root = bTex.CreateNode( "root", true );
+
+    root->SetNodeEffect( std::make_shared< model::ModelNodeEffectLightScattering >( timeEvaluator ) );
+
+    return root;
+}
+
+// *****************************
+//
+model::BasicNodePtr  SimpleNodesFactory::CreateNodeReplicatorTest       ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { timelineManager; }
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/rus.jpg", false, 0.6f, 0.6f );
+
+    // ROOT
+    auto root = bTex.CreateNode( "root", true );
+
+    auto repLogic = model::NodeReplicator::Create( root, 5, model::ShiftReplicationModifier::Create( glm::vec3( 0.1, 0.1, 0.0 ) ) );
+
+    auto image = bTex.CreateNode( "piateczka", true );
+
+    root->AddChildToModelOnly( image );
+
+    root->SetLogic( repLogic );
 
     root->SetNodeEffect( std::make_shared< model::ModelNodeEffectLightScattering >( timeEvaluator ) );
 

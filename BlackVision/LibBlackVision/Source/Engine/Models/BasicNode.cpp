@@ -400,6 +400,7 @@ bool           BasicNode::AddPlugins              ( const std::vector< std::stri
 void			BasicNode::SetLogic					( INodeLogicPtr logic )
 {
     m_nodeLogic = logic;
+    m_nodeLogic->Initialize();
 }
 
 // ********************************

@@ -1,3 +1,4 @@
+#pragma once
 #include "Engine/Models/BasicNode.h"
 
 namespace bv { namespace model
