@@ -30,7 +30,11 @@ void    AlphaMaskRenderLogic::RenderNode                  ( Renderer * renderer,
     auto alphaVal = node->GetNodeEffect()->GetValue( "alpha" );
     auto alphaValue = QueryTypedValue< ValueFloatPtr >( alphaVal )->GetValue();
 
-    if( alphaValue < 0.99f )
+    if( alphaValue > 0.99f )
+    {
+        GetRenderLogic()->DrawNode( renderer, node );
+    }
+    else if ( alphaValue > 0.01f )
     {
         GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
         GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
@@ -45,10 +49,8 @@ void    AlphaMaskRenderLogic::RenderNode                  ( Renderer * renderer,
         GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
         GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
     }
-    else
-    {
-        GetRenderLogic()->DrawNode( renderer, node );
-    }
+
+    // Do not render this node if alpha is more or less equal to zero
 }
 
 } //bv
