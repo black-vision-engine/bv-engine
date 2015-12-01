@@ -37,6 +37,8 @@
 
 #include "Engine/Models/Plugins/Simple/DefaultVideoStreamDecoderPlugin.h"
 
+#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
+
 #include "Tools/Utils.h"
 
 #include "BVGL.h"

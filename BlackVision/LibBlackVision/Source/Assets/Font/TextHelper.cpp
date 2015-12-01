@@ -105,12 +105,9 @@ TextAtlasConstPtr				TextHelper::GetAtlas            ( const AssetConstPtr & ass
     }
 }
 
-#define viewWidth   (1080 / 2)
-#define viewHeight  (1080 / 2)
-
 // *********************************
 //
-float                    TextHelper::BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring & text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, model::TextArranger * arranger, bool useKerning )
+float                    TextHelper::BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring & text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, UInt32 viewWidth, UInt32 viewHeight, model::TextArranger * arranger, bool useKerning )
 {
     assert( vertexAttributeChannel );
     assert( textAtlas );
@@ -124,8 +121,6 @@ float                    TextHelper::BuildVACForText     ( model::VertexAttribut
 
 	if( outlineSize != 0 )
 		outline = true;
-
-	
 
     float blurTexSize = float( blurSize );
     float blurLenghtX = float( blurSize ) / viewWidth;

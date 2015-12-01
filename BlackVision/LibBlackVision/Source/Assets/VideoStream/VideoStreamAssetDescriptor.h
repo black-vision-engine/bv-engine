@@ -43,13 +43,14 @@ public:
 
 
     virtual void								Serialize					( ISerializer& sob ) const;
-    virtual void                                Deserialize                 ( IDeserializer& sob );
-	static ISerializableConstPtr			    Create						( IDeserializer& dob );
+	static ISerializableConstPtr			    Create						( const IDeserializer& dob );
 
 	virtual const std::string &					GetUID						() const override;
 	
 	virtual bool								IsCacheable					() const override;
 	
+    virtual std::string							GetKey						() const override;
+
 	static const std::string &					UID							();
 
 	const std::string &							GetStreamPath				() const;

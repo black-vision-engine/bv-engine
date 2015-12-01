@@ -46,6 +46,8 @@ public:
 	model::SceneModelPtr    GetScene			( const std::string & sceneName );
     void					SetSceneVisible		( const std::string & sceneName, bool visible );
 
+	model::SceneModelPtr	CopyScene			( const std::string & sceneName );
+
     void                    SetSceneRootNode	( const std::string & sceneName, model::IModelNodePtr rootNode );
     bool                    DeleteSceneRootNode	( const std::string & sceneName );
 

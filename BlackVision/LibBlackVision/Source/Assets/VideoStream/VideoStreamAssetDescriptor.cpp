@@ -9,26 +9,33 @@ const std::string		VideoStreamAssetDesc::uid = "VIDEO_STREAM_ASSET_DESC";
 
 // ***********************
 //
-void                VideoStreamAssetDesc::Serialize       ( ISerializer& /*sob*/ ) const
+void                VideoStreamAssetDesc::Serialize       ( ISerializer& ser ) const
 {
-	assert( !"Implement me" );
+ser.EnterChild( "asset" );
+    ser.SetAttribute( "uid", UID() );
+	ser.SetAttribute( "path", m_streamPath );
+	ser.SetAttribute( "format", std::to_string( static_cast< int >( m_textureFormat ) ) );
+
+	//if( m_width != 0 && m_height != 0 )
+	//{
+	//	ser.SetAttribute( "width", std::to_string( m_width ) );
+	//	ser.SetAttribute( "height", std::to_string( m_height ) );
+	//	ser.SetAttribute( "frameRate", std::to_string( m_frameRate ) );
+	//	ser.SetAttribute( "videoFormat", std::to_string( static_cast< int >( m_videoFormat ) ) );
+	//}
+
+ser.ExitChild();
 }
 
 // ***********************
 //
-void VideoStreamAssetDesc::Deserialize     ( IDeserializer& /*sob*/ )
+ISerializableConstPtr VideoStreamAssetDesc::Create          ( const IDeserializer& deser )
 {
+	auto path = deser.GetAttribute( "path" );
+	auto format = static_cast< TextureFormat >( stoul( deser.GetAttribute( "format" ) ) );
 
+	return Create( path, format );
 }
-
-// ***********************
-//
-ISerializableConstPtr VideoStreamAssetDesc::Create          ( IDeserializer& /*dob*/ )
-{
-	assert( !"Implement me" );
-    return nullptr;
-}
-
 
 // ***********************
 //
@@ -55,6 +62,13 @@ VoidConstPtr			VideoStreamAssetDesc::QueryThis		() const
 bool					VideoStreamAssetDesc::IsCacheable	() const
 {
 	return false;
+}
+
+// *******************************
+//
+std::string				VideoStreamAssetDesc::GetKey      () const
+{
+    return m_streamPath;
 }
 
 // ***********************
