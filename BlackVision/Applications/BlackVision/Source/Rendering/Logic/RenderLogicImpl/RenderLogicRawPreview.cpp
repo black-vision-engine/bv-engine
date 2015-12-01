@@ -5,16 +5,17 @@ namespace bv {
 
 // ***************************
 //
-RenderLogicRawPreview::RenderLogicRawPreview   ( bool videoCardEnabled )
-    : RenderLogicImpl( videoCardEnabled )
+RenderLogicRawPreview::RenderLogicRawPreview   ( bool videoCardEnabled, RenderTargetStack * renderTargetStack )
+    : RenderLogicImpl( videoCardEnabled, renderTargetStack )
 {
 }
 
 
 // ***************************
 //
-void    RenderLogicRawPreview::RenderFrame      ()
+void    RenderLogicRawPreview::RenderFrame      ( Renderer * renderer, SceneNode * sceneRoot )
 {
+    { renderer; sceneRoot; }
 }
 
 } // bv

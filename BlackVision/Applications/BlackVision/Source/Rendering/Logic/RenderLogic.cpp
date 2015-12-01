@@ -27,17 +27,18 @@ namespace bv {
 //
 RenderLogic::RenderLogic     ()
     :  m_impl( nullptr )
+    , m_rtStack( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), TextureFormat::F_A8R8G8B8 )
 {
     auto videoCardEnabled   = DefaultConfig.ReadbackFlag();
     auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput();
    
     if( previewAsVideoCard )
     {
-        m_impl = new RenderLogicVideoPreview( videoCardEnabled );
+        m_impl = new RenderLogicVideoPreview( videoCardEnabled, &m_rtStack );
     }
     else
     {
-        m_impl = new RenderLogicRawPreview( videoCardEnabled );
+        m_impl = new RenderLogicRawPreview( videoCardEnabled, &m_rtStack );
     }
 
     m_frameRenderLogic = new FrameRenderLogic();
@@ -62,9 +63,10 @@ void    RenderLogic::SetCamera       ( Camera * cam )
 
 // *********************************
 //
-void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * node )
+void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot )
 {
-    m_frameRenderLogic->RenderFrame( renderer, node );
+    m_frameRenderLogic->RenderFrame( renderer, sceneRoot );
+//    m_impl->RenderFrame( renderer, sceneRoot );
 }
 
 } //bv

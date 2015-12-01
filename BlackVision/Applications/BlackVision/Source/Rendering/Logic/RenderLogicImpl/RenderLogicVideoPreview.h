@@ -9,9 +9,9 @@ class RenderLogicVideoPreview : public RenderLogicImpl
 {
 public:
 
-                    RenderLogicVideoPreview ( bool videoCardEnabled );
+                    RenderLogicVideoPreview ( bool videoCardEnabled, RenderTargetStack * renderTargetStack );
 
-    virtual void    RenderFrame             () override;
+    virtual void    RenderFrame             ( Renderer * renderer, SceneNode * sceneRoot ) override;
 
 };
 

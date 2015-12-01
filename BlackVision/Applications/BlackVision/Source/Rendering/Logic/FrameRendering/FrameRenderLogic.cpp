@@ -55,13 +55,13 @@ void    FrameRenderLogic::SetCamera       ( Camera * cam )
 
 // *********************************
 //
-void    FrameRenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * node )
+void    FrameRenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot )
 {
     PreFrameSetup( renderer );
 
     // FIXME: verify that all rendering paths work as expected
-	if( node )
-		RenderNode( renderer, node );
+	if( sceneRoot )
+		RenderNode( renderer, sceneRoot );
 
     PostFrameSetup( renderer );
 }

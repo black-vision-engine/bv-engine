@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "Rendering/Utils/RenderTargetStack.h"
+
 
 namespace bv {
 
@@ -16,6 +18,8 @@ class PostFrameRenderLogic;
 class RenderLogic
 {
 private:
+
+    RenderTargetStack       m_rtStack;
 
     RenderLogicImpl *       m_impl;
     FrameRenderLogic *                      m_frameRenderLogic;

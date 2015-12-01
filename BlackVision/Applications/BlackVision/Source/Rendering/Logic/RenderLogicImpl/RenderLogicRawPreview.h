@@ -9,9 +9,9 @@ class RenderLogicRawPreview : public RenderLogicImpl
 {
 public:
 
-                    RenderLogicRawPreview   ( bool videoCardEnabled );
+                    RenderLogicRawPreview   ( bool videoCardEnabled, RenderTargetStack * renderTargetStack );
 
-    virtual void    RenderFrame             () override;
+    virtual void    RenderFrame             ( Renderer * renderer, SceneNode * sceneRoot ) override;
 
 };
 
