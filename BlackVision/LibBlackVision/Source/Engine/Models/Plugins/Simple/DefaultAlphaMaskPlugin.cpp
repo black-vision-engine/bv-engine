@@ -4,6 +4,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
+#include "Application/ApplicationContext.h"
 
 namespace bv { namespace model {
 
@@ -254,10 +255,8 @@ void     DefaultAlphaMaskPlugin::RecalculateUVChannel         ()
 	//FIXME: only one texture - convex hull calculations
     float minX = 100000.0f, minY = 100000.0f;
     float maxX = 0.0f, maxY = 0.0f;
-    float pixelsPerUnitUVSpace = 1080.f;
 
-	float txWidth = m_textureWidth > 0 ? ( float )m_textureWidth : 1920.f;
-	float txHeight = m_textureHeight > 0 ? ( float )m_textureHeight : 1080.f;
+	float pixelsPerUnitUVSpace = ( float )( std::min( ApplicationContext::Instance().GetWidth(), ApplicationContext::Instance().GetHeight() ) / 2 );
 
 	auto cc = m_vaChannel->GetComponents();
 	for( unsigned int i = 0; i < cc.size(); ++i )
@@ -297,8 +296,8 @@ void     DefaultAlphaMaskPlugin::RecalculateUVChannel         ()
 			auto & posVerts = pos->GetVertices();
 			for( unsigned int j = 0; j < posChannel->GetNumEntries(); ++j )
 			{
-				uvVerts[ j ] = glm::vec2( pixelsPerUnitUVSpace * ( posVerts[ j ].x - minX ) / txWidth, 
-					pixelsPerUnitUVSpace * ( posVerts[ j ].y - minY ) / txHeight );
+				uvVerts[ j ] = glm::vec2( pixelsPerUnitUVSpace * ( posVerts[ j ].x - minX ) / m_textureWidth, 
+					pixelsPerUnitUVSpace * ( posVerts[ j ].y - minY ) / m_textureHeight );
 			}
 		}
 	}

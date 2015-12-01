@@ -55,6 +55,7 @@ BlackVisionApp::BlackVisionApp	()
     , m_processManager( nullptr )
     , m_app( nullptr )
 {
+	ApplicationContext::Instance().SetResolution( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight() );
 }
 
 // *********************************

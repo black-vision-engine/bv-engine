@@ -2,11 +2,14 @@
 
 namespace bv {
 
+const UInt32	ApplicationContext::HD_WIDTH = 1920;
+const UInt32	ApplicationContext::HD_HEIGHT = 1080;
+
 // ***********************
 //
 ApplicationContext::ApplicationContext						()
-    : m_width( 0 )
-    , m_height( 0 )
+    : m_width( HD_WIDTH )
+    , m_height( HD_HEIGHT )
     , m_timestamp( 0 )
 {
 }
