@@ -4,6 +4,9 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "LibImage.h"
 
+#include "System/Path.h"
+#include "IO/DirIO.h"
+
 namespace bv
 {
 
@@ -24,6 +27,18 @@ ScreenShotLogic::~ScreenShotLogic()
 void ScreenShotLogic::MakeScreenShot( const std::string& filePath, unsigned int numFrames )
 {
     m_filePath = filePath;
+
+    Path file( filePath );
+    auto directories = file.Split();
+
+    // Create directory for screenshots
+    std::string directory = "";
+    for( int i = 0; i < directories.size() - 1; ++i )
+        directory += directories[ i ];
+
+    if( directory != "" && !Dir::Exists( directory ) )
+        Dir::CreateDir( directory, true );
+
     m_remainingFrames = numFrames;
     m_allFrames = numFrames;
 }

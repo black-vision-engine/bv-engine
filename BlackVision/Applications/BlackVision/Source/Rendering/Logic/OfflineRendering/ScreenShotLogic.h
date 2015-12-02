@@ -11,6 +11,7 @@ class ScreenShotLogic
 {
 private:
     std::string         m_filePath;
+
     unsigned int        m_remainingFrames;
     unsigned int        m_allFrames;
 public:
