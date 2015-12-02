@@ -222,13 +222,22 @@ void RenderLogic::InitVideoCards     ( Renderer * renderer )
 //
 void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
 {
-    PreFrameSetup( renderer );
+    {
+        HPROFILER_SECTION( "PreFrame Setup", PROFILER_THREAD1 );
+        PreFrameSetup( renderer );
+    }
 
-    // FIXME: verify that all rendering paths work as expected
-	if( node )
-		RenderNode( renderer, node );
+    {
+        HPROFILER_SECTION( "RenderNode", PROFILER_THREAD1 );
+        // FIXME: verify that all rendering paths work as expected
+	    if( node )
+		    RenderNode( renderer, node );
+    }
 
-    PostFrameSetup( renderer );
+    {
+        HPROFILER_SECTION( "PostFrame Setup", PROFILER_THREAD1 );
+        PostFrameSetup( renderer );
+    }
 }
 
 // *********************************
@@ -249,14 +258,20 @@ void    RenderLogic::PreFrameSetup  ( Renderer * renderer )
 //
 void    RenderLogic::PostFrameSetup ( Renderer * renderer )
 {
-    m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
-    m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
+    {
+        HPROFILER_SECTION( "Video Output Logic", PROFILER_THREAD1 );
+        m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
+        m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
 
-    m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic, m_VideoCardManager );
-    //m_screenShotLogic->FrameRendered( renderer, m_offscreenRenderLogic );
+        m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic, m_VideoCardManager );
+        //m_screenShotLogic->FrameRendered( renderer, m_offscreenRenderLogic );
+    }
 
-    renderer->PostDraw();
-    renderer->DisplayColorBuffer();
+    {
+        HPROFILER_SECTION( "Display Color Buffer", PROFILER_THREAD1 );
+        renderer->PostDraw();
+        renderer->DisplayColorBuffer();
+    }
 }
 
 // *********************************

@@ -272,14 +272,16 @@ void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer )
         m_remoteHandlers->UpdateHM();
 
         {
-            HPROFILER_SECTION( "Render", PROFILER_THREAD1 );			
+            HPROFILER_SECTION( "Render", PROFILER_THREAD1 );
             
             {
+                HPROFILER_SECTION( "Refresh Video Input", PROFILER_THREAD1 );
                 FRAME_STATS_SECTION( "Video input" );
 		        RefreshVideoInputScene();
             }
 
             {
+                HPROFILER_SECTION( "Render Frame", PROFILER_THREAD1 );
                 FRAME_STATS_SECTION( "Render" );
                 m_renderLogic->RenderFrame( renderer, m_bvScene->GetEngineSceneRoot() );
             }
