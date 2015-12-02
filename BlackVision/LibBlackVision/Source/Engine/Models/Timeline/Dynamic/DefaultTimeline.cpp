@@ -101,21 +101,26 @@ ISerializablePtr                     DefaultTimeline::Create              ( cons
 
     auto te = std::make_shared< DefaultTimeline >( name, duration, preWrap, postWrap );
 
-    //deser.EnterChild( "events" );
-    //do {
-    //    deser.EnterChild( "event" );
-    //    auto type = deser.GetAttribute( "type" );
-    //    if( type == "loop" )
-    //        te->AddKeyFrame( TimelineEventLoop::Create( deser, te.get() ) );
-    //    else if( type == "null" )
-    //        te->AddKeyFrame( TimelineEventNull::Create( deser, te.get() ) );
-    //    else if( type == "stop" )
-    //        te->AddKeyFrame( TimelineEventStop::Create( deser, te.get() ) );
-    //    else
-    //        assert( false );
-    //    deser.ExitChild(); // event
-    //}while( deser.NextChild() ); // events
-    //deser.ExitChild();
+    if( deser.EnterChild( "events" ) )
+    {
+        do
+        {
+            deser.EnterChild( "event" );
+            auto type = deser.GetAttribute( "type" );
+            if( type == "loop" )
+                te->AddKeyFrame( TimelineEventLoop::Create( deser, te.get() ) );
+            else if( type == "null" )
+                te->AddKeyFrame( TimelineEventNull::Create( deser, te.get() ) );
+            else if( type == "stop" )
+                te->AddKeyFrame( TimelineEventStop::Create( deser, te.get() ) );
+            else
+                assert( false );
+            deser.ExitChild(); // event
+        }
+        while( deser.NextChild() ); // events
+        
+        deser.ExitChild();
+    }
 
     auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( deser, "children", "timeline" );
 
