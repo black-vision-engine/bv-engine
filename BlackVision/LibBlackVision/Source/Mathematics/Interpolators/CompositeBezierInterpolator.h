@@ -49,7 +49,8 @@ public:
     ValueT                                              Evaluate        ( TimeValueT t ) const;
 
     int                                                 GetNumKeys      ();
-    const std::vector< Key > &                          GetKeys         ();
+    const std::vector< Key > &                          GetKeys         () const;
+    std::vector< Key > &                                GetKeys         ();
     const std::vector< IEvaluator* > &                  GetInterpolators();
 
     void                                                SetCurveType    ( CurveType type );

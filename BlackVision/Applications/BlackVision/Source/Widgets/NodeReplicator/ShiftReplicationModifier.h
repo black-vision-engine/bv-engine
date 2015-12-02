@@ -14,19 +14,24 @@ struct ParamValDelta
 
 class ShiftReplicationModifier;
 
+DEFINE_PTR_TYPE( ShiftReplicationModifier )
 DEFINE_CONST_PTR_TYPE( ShiftReplicationModifier )
 
 class ShiftReplicationModifier : public IReplicationModifier
 {
 public:
 
-    virtual void                            Apply   ( const BasicNodeConstPtr & prev, const BasicNodePtr & next ) const override;
+    virtual void                            Apply               ( const BasicNodeConstPtr & prev, const BasicNodePtr & next ) const override;
 
-    void                                    AddParamShift( const std::string & pluginName, const std::string & paramName, ParamValDelta & shift );
+    void                                    AddParamShift       ( const std::string & pluginName, const std::string & paramName, const ParamValDelta & shift );
 
-    static ShiftReplicationModifierConstPtr Create  ();
+    static ShiftReplicationModifierPtr      Create  ();
 
 private:
+
+    void                                    ApplyTranslationDelta ( const ParamValDelta & delta, const BasicNodePtr & node ) const;
+    void                                    ApplyScaleDelta       ( const ParamValDelta & delta, const BasicNodePtr & node ) const;
+    void                                    ApplyRotationDelta    ( const ParamValDelta & delta, const BasicNodePtr & node ) const;
 
     explicit                ShiftReplicationModifier ();
 

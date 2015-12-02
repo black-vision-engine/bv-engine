@@ -631,9 +631,17 @@ int                                                 BasicInterpolator<TimeValueT
 // *************************************
 //
 template<class TimeValueT, class ValueT, class FloatT>
-const std::vector< Key< TimeValueT, ValueT > > &    BasicInterpolator<TimeValueT, ValueT, FloatT>::GetKeys()
+const std::vector< Key< TimeValueT, ValueT > > &    BasicInterpolator<TimeValueT, ValueT, FloatT>::GetKeys() const
 {
     return AccessKeys();
+}
+
+// *************************************
+//
+template<class TimeValueT, class ValueT, class FloatT>
+std::vector< Key< TimeValueT, ValueT > > &    BasicInterpolator<TimeValueT, ValueT, FloatT>::GetKeys()
+{
+    return keys;
 }
 
 } // bv

@@ -555,7 +555,15 @@ int                          CompositeBezierInterpolator< TimeValueT, ValueT >::
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-const std::vector< Key< TimeValueT, ValueT > > &                          CompositeBezierInterpolator< TimeValueT, ValueT >::GetKeys()
+const std::vector< Key< TimeValueT, ValueT > > &                          CompositeBezierInterpolator< TimeValueT, ValueT >::GetKeys() const
+{
+    return keys;
+}
+
+// *******************************
+//
+template< class TimeValueT, class ValueT >
+std::vector< Key< TimeValueT, ValueT > > &                                CompositeBezierInterpolator< TimeValueT, ValueT >::GetKeys()
 {
     return keys;
 }
