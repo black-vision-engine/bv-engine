@@ -338,6 +338,16 @@ model::BasicNodePtr  SimpleNodesFactory::CreateNodeReplicatorTest       ( model:
 
     auto shiftRepMod = model::ShiftReplicationModifier::Create();
 
+    model::ParamValDelta delta;
+
+    delta.deltaTime = 0.f;
+    delta.startTime = 0.f;
+    auto v = std::make_shared< ValueVec3 >( "" );
+    delta.delta = v;
+    v->SetValue( glm::vec3( 0.1f, 0.1f, 0.0 ) );
+
+    shiftRepMod->AddParamShift( "transform", "translation", delta );
+
     auto repLogic = model::NodeReplicator::Create( root, 5, shiftRepMod );
 
     auto image = bTex.CreateNode( "piateczka", true );

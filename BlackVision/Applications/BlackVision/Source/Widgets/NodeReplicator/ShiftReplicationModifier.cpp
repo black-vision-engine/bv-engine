@@ -12,7 +12,7 @@ ShiftReplicationModifier::ShiftReplicationModifier()
 
 // *******************************
 //
-void                            ShiftReplicationModifier::AddParamShift( const std::string & pluginName, const std::string & paramName, ParamValDelta & shift )
+void                            ShiftReplicationModifier::AddParamShift( const std::string & pluginName, const std::string & paramName, const ParamValDelta & shift )
 {
     auto p = std::make_pair( pluginName, paramName );
     m_paramsShifts[ p ] = shift;
@@ -31,12 +31,9 @@ void ApplyParamDelta( IParameterPtr param, ParamValDelta delta )
 
     if( auto p = QueryTypedParam< ParamTypePtr >( param ) )
     {
-
-        auto keys = p->AccessInterpolator().GetKeys();
-
         bool valueSet = false;
 
-        for( auto & k : keys )
+        for( auto & k : p->AccessInterpolator().GetKeys() )
         {
             if( k.t == delta.startTime )
             {
@@ -65,6 +62,24 @@ void                            ShiftReplicationModifier::Apply( const BasicNode
     {
         if( auto p = next->GetPlugin( it.first.first ) )
         {
+            if( it.first.first == "transform" )
+            {
+                if( it.first.second == "translation" )
+                {
+                    ApplyTranslationDelta( it.second, next );
+                }
+
+                if( it.first.second == "scale" )
+                {
+                    ApplyScaleDelta( it.second, next );
+                }
+
+                if( it.first.second == "rotation" )
+                {
+                    ApplyRotationDelta( it.second, next );
+                }
+            }
+
             if( auto param = p->GetParameter( it.first.second ) )
             {
                 switch( it.second.delta->GetType() )
@@ -116,9 +131,289 @@ void                            ShiftReplicationModifier::Apply( const BasicNode
 
 // *******************************
 //
-ShiftReplicationModifierConstPtr        ShiftReplicationModifier::Create()
+ShiftReplicationModifierPtr             ShiftReplicationModifier::Create()
 {
-    return ShiftReplicationModifierConstPtr( new ShiftReplicationModifier() );
+    return ShiftReplicationModifierPtr( new ShiftReplicationModifier() );
+}
+
+// *******************************
+//
+void                                    ShiftReplicationModifier::ApplyTranslationDelta ( const ParamValDelta & delta, const BasicNodePtr & node ) const
+{
+    auto transformParam = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+
+    if( transformParam->GetType() == ModelParamType::MPT_TRANSFORM_VEC )
+    {
+        auto transformParamTyped = QueryTypedParam< ParamTransformVecPtr >( transformParam );
+
+        // X
+        bool valueSet = false;
+
+        for( auto & k : transformParamTyped->Transform( 0 )[ 1 ]->GetP0MotylaNoga().GetKeys() )
+        {
+            if( k.t == delta.startTime )
+            {
+                k.t += delta.deltaTime;
+
+                auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+
+                k.val += dv.x;
+                valueSet = true;
+            }
+        }
+       
+        if( !valueSet )
+        {
+            auto interpolator = transformParamTyped->Transform( 0 )[ 1 ]->GetP0MotylaNoga();
+
+            auto val = interpolator.Evaluate( delta.startTime );
+
+            auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+
+            interpolator.AddKey( delta.startTime + delta.deltaTime,  val + dv.x );
+        }
+
+        // Y
+        valueSet = false;
+
+        for( auto & k : transformParamTyped->Transform( 0 )[ 1 ]->GetP1MotylaNoga().GetKeys() )
+        {
+            if( k.t == delta.startTime )
+            {
+                k.t += delta.deltaTime;
+
+                auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+
+                k.val += dv.y;
+                valueSet = true;
+            }
+        }
+       
+        if( !valueSet )
+        {
+            auto interpolator = transformParamTyped->Transform( 0 )[ 1 ]->GetP1MotylaNoga();
+
+            auto val = interpolator.Evaluate( delta.startTime );
+
+            auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+
+            interpolator.AddKey( delta.startTime + delta.deltaTime,  val + dv.y );
+        }
+
+        // Z
+        valueSet = false;
+
+        for( auto & k : transformParamTyped->Transform( 0 )[ 1 ]->GetP2MotylaNoga().GetKeys() )
+        {
+            if( k.t == delta.startTime )
+            {
+                k.t += delta.deltaTime;
+
+                auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+
+                k.val += dv.z;
+                valueSet = true;
+            }
+        }
+       
+        if( !valueSet )
+        {
+            auto interpolator = transformParamTyped->Transform( 0 )[ 1 ]->GetP2MotylaNoga();
+
+            auto val = interpolator.Evaluate( delta.startTime );
+
+            auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+
+            interpolator.AddKey( delta.startTime + delta.deltaTime,  val + dv.z );
+        }
+    }
+}
+
+// *******************************
+//
+void                                    ShiftReplicationModifier::ApplyScaleDelta       ( const ParamValDelta & delta, const BasicNodePtr & node ) const
+{
+    auto transformParam = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+
+    if( transformParam->GetType() == ModelParamType::MPT_TRANSFORM_VEC )
+    {
+        auto transformParamTyped = QueryTypedParam< ParamTransformVecPtr >( transformParam );
+
+        // X
+        bool valueSet = false;
+
+        for( auto & k : transformParamTyped->Transform( 0 )[ 3 ]->GetP0MotylaNoga().GetKeys() )
+        {
+            if( k.t == delta.startTime )
+            {
+                k.t += delta.deltaTime;
+
+                auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+
+                k.val += dv.x;
+                valueSet = true;
+            }
+        }
+       
+        if( !valueSet )
+        {
+            auto interpolator = transformParamTyped->Transform( 0 )[ 3 ]->GetP0MotylaNoga();
+
+            auto val = interpolator.Evaluate( delta.startTime );
+
+            auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+
+            interpolator.AddKey( delta.startTime + delta.deltaTime,  val + dv.x );
+        }
+
+        // Y
+        valueSet = false;
+
+        for( auto & k : transformParamTyped->Transform( 0 )[ 3 ]->GetP1MotylaNoga().GetKeys() )
+        {
+            if( k.t == delta.startTime )
+            {
+                k.t += delta.deltaTime;
+
+                auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+
+                k.val += dv.y;
+                valueSet = true;
+            }
+        }
+       
+        if( !valueSet )
+        {
+            auto interpolator = transformParamTyped->Transform( 0 )[ 3 ]->GetP1MotylaNoga();
+
+            auto val = interpolator.Evaluate( delta.startTime );
+
+            auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+
+            interpolator.AddKey( delta.startTime + delta.deltaTime,  val + dv.y );
+        }
+
+        // Z
+        valueSet = false;
+
+        for( auto & k : transformParamTyped->Transform( 0 )[ 3 ]->GetP2MotylaNoga().GetKeys() )
+        {
+            if( k.t == delta.startTime )
+            {
+                k.t += delta.deltaTime;
+
+                auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+
+                k.val += dv.z;
+                valueSet = true;
+            }
+        }
+       
+        if( !valueSet )
+        {
+            auto interpolator = transformParamTyped->Transform( 0 )[ 3 ]->GetP2MotylaNoga();
+
+            auto val = interpolator.Evaluate( delta.startTime );
+
+            auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+
+            interpolator.AddKey( delta.startTime + delta.deltaTime,  val + dv.z );
+        }
+    }
+
+}
+
+// *******************************
+//
+void                                    ShiftReplicationModifier::ApplyRotationDelta    ( const ParamValDelta & delta, const BasicNodePtr & node ) const
+{
+    auto transformParam = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+
+    if( transformParam->GetType() == ModelParamType::MPT_TRANSFORM_VEC )
+    {
+        auto transformParamTyped = QueryTypedParam< ParamTransformVecPtr >( transformParam );
+
+        // X
+        bool valueSet = false;
+
+        for( auto & k : transformParamTyped->Transform( 0 )[ 2 ]->GetP0MotylaNoga().GetKeys() )
+        {
+            if( k.t == delta.startTime )
+            {
+                k.t += delta.deltaTime;
+
+                auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+
+                k.val += dv.x;
+                valueSet = true;
+            }
+        }
+       
+        if( !valueSet )
+        {
+            auto interpolator = transformParamTyped->Transform( 0 )[ 2 ]->GetP0MotylaNoga();
+
+            auto val = interpolator.Evaluate( delta.startTime );
+
+            auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+
+            interpolator.AddKey( delta.startTime + delta.deltaTime,  val + dv.x );
+        }
+
+        // Y
+        valueSet = false;
+
+        for( auto & k : transformParamTyped->Transform( 0 )[ 2 ]->GetP1MotylaNoga().GetKeys() )
+        {
+            if( k.t == delta.startTime )
+            {
+                k.t += delta.deltaTime;
+
+                auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+
+                k.val += dv.y;
+                valueSet = true;
+            }
+        }
+       
+        if( !valueSet )
+        {
+            auto interpolator = transformParamTyped->Transform( 0 )[ 2 ]->GetP1MotylaNoga();
+
+            auto val = interpolator.Evaluate( delta.startTime );
+
+            auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+
+            interpolator.AddKey( delta.startTime + delta.deltaTime,  val + dv.y );
+        }
+
+        // Z
+        valueSet = false;
+
+        for( auto & k : transformParamTyped->Transform( 0 )[ 2 ]->GetP2MotylaNoga().GetKeys() )
+        {
+            if( k.t == delta.startTime )
+            {
+                k.t += delta.deltaTime;
+
+                auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+
+                k.val += dv.z;
+                valueSet = true;
+            }
+        }
+       
+        if( !valueSet )
+        {
+            auto interpolator = transformParamTyped->Transform( 0 )[ 2 ]->GetP2MotylaNoga();
+
+            auto val = interpolator.Evaluate( delta.startTime );
+
+            auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+
+            interpolator.AddKey( delta.startTime + delta.deltaTime,  val + dv.z );
+        }
+    }
 }
 
 } // model
