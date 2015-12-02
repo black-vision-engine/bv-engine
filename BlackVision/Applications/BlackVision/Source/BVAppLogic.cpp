@@ -4,7 +4,7 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
-#include "Engine/Models/BVSceneEditor.h"
+#include "Engine/Models/BVProjectEditor.h"
 
 #include "Tools/SimpleTimer.h"
 #include "Tools/Profiler/HerarchicalProfiler.h"
@@ -97,7 +97,7 @@ namespace
 
 //
 BVAppLogic::BVAppLogic              ( Renderer * renderer )
-    : m_bvScene( BVScene::Create( renderer ) )
+    : m_bvProject( BVProject::Create( renderer ) )
     , m_pluginsManager( nullptr )
     , m_renderer( nullptr )
     , m_renderLogic( nullptr )
@@ -146,12 +146,12 @@ void BVAppLogic::Initialize         ()
 //
 void BVAppLogic::LoadScenes( const PathVec & pathVec )
 {
-	m_bvScene->GetSceneEditor()->RemoveAllScenes();
+	m_bvProject->GetProjectEditor()->RemoveAllScenes();
 
     for( auto p : pathVec )
     {
 		auto scene = SceneDescriptor::LoadScene( ProjectManager::GetInstance()->ToAbsPath( p ) );
-		m_bvScene->GetSceneEditor()->AddScene( scene );
+		m_bvProject->GetProjectEditor()->AddScene( scene );
     }
 
     InitCamera( DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight() );
@@ -175,7 +175,7 @@ void BVAppLogic::LoadScene          ( void )
             auto root = m_solution.GetRoot();
 			auto scene = SceneModel::Create( "root", root, m_renderer->GetCamera() );
 
-			m_bvScene->GetSceneEditor()->AddScene( scene );
+			m_bvProject->GetProjectEditor()->AddScene( scene );
 
             //if(ConfigManager::GetBool("hm"))
             //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
@@ -199,7 +199,7 @@ void BVAppLogic::LoadScene          ( void )
     }
     else
     {
-		m_bvScene->GetSceneEditor()->AddScene( TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_renderer->GetCamera(), m_pluginsManager ) );
+		m_bvProject->GetProjectEditor()->AddScene( TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_renderer->GetCamera(), m_pluginsManager ) );
     }
 }
 
@@ -237,7 +237,7 @@ void BVAppLogic::InitCamera         ( unsigned int w, unsigned int h )
 void BVAppLogic::SetStartTime       ( unsigned long millis )
 {
     m_renderMode.SetStartTime( millis );
-	m_bvScene->SetStartTime( millis );
+	m_bvProject->SetStartTime( millis );
 }
 
 // *********************************
@@ -266,7 +266,7 @@ void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer )
             FRAME_STATS_SECTION( "Update" );
             HPROFILER_SECTION( "update total", PROFILER_THREAD1 );
 
-            m_bvScene->Update( time );
+            m_bvProject->Update( time );
         }
 
         m_remoteHandlers->UpdateHM();
@@ -283,7 +283,7 @@ void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer )
             {
                 HPROFILER_SECTION( "Render Frame", PROFILER_THREAD1 );
                 FRAME_STATS_SECTION( "Render" );
-                m_renderLogic->RenderFrame( renderer, m_bvScene->GetEngineSceneRoot() );
+                m_renderLogic->RenderFrame( renderer, m_bvProject->GetEngineSceneRoot() );
             }
         }
     }
@@ -385,7 +385,7 @@ const FrameStatsCalculator &     BVAppLogic::FrameStats () const
 void                            BVAppLogic::ResetScene      ()
 {
     UpdatersManager::Get().RemoveAllUpdaters();
-    m_bvScene = nullptr;
+    m_bvProject = nullptr;
 }
 
 // *********************************
@@ -406,9 +406,9 @@ void            BVAppLogic::GrabCurrentFrame(  const std::string & path )
 
 // *********************************
 //FIXME: unsafe - consider returning const variant of this class (IParameters * without const should be accessible anyway)
-BVScenePtr                  BVAppLogic::GetBVScene              ()
+BVProjectPtr                  BVAppLogic::GetBVProject              ()
 {
-    return m_bvScene;
+    return m_bvProject;
 }
 
 // *********************************

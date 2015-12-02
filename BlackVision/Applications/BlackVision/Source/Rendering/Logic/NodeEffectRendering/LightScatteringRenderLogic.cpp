@@ -49,8 +49,6 @@ void    LightScatteringRenderLogic::RenderNode                  ( Renderer * ren
 
         auto texture = GetOffscreenRenderLogic()->GetColorTextureAt( -1 );
 
-        GetOffscreenRenderLogic()->DisableTopRenderTarget( renderer );
-
         auto effect = node->GetNodeEffect();
         m_effect->SetExposureVal( effect->GetValue( "exposure" ).get() );
         m_effect->SetWeightVal( effect->GetValue( "weight" ).get() );
@@ -58,8 +56,6 @@ void    LightScatteringRenderLogic::RenderNode                  ( Renderer * ren
         m_effect->SetDensityVal( effect->GetValue( "density" ).get() );
         m_effect->SetLightPositionOnScreenVal( effect->GetValue( "lightPositionOnScreen" ).get() );
         m_effect->SetNumSamplesVal( effect->GetValue( "numSamples" ).get() );
-
-        GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
 
         m_effect->AddTexture( std::const_pointer_cast< Texture2D >( texture ) );
 
@@ -69,9 +65,12 @@ void    LightScatteringRenderLogic::RenderNode                  ( Renderer * ren
 
         re->SetRenderableEffect( RenderableEffectPtr( m_effect ) );
 
+        GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
+
         GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
 
-        renderer->Draw( static_cast< bv::RenderableEntity * >( node->GetTransformable() ) );
+        renderer->Draw(re);
+
 
         re->SetRenderableEffect( prevRE );
 }

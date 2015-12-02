@@ -41,6 +41,9 @@ public:
     virtual void                                Serialize                   ( ISerializer& doc ) const override;
     static ISerializablePtr                     Create                      ( const IDeserializer& doc );
 
+	virtual IPluginPtr							Clone						() const override;
+
+
     virtual                                     ~BasePlugin                 ();
 
     virtual IPluginParamValModelPtr             GetPluginParamValModel      () const override;

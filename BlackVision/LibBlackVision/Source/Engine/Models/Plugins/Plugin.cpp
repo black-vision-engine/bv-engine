@@ -5,6 +5,7 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 
 #include "Assets/AssetSerialization.h"
+#include "Serialization/CloneViaSerialization.h"
 #include "Assets/AssetDescsWithUIDs.h"
 
 namespace bv { namespace model {
@@ -93,7 +94,7 @@ ser.EnterChild( "plugin" );
     if( context )
         context->Serialize( ser );
 
-    ser.EnterChild( "params" );
+    ser.EnterArray( "params" );
     {
         IPluginParamValModelPtr pvm =    GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
     
@@ -118,7 +119,7 @@ ser.EnterChild( "plugin" );
     auto assets = GetAssets();
     if( assets.size() > 0 )
     {
-        ser.EnterChild( "assets" );
+        ser.EnterArray( "assets" );
         for( auto asset : GetAssets() )
         {
             auto uid = AssetDescsWithUIDs::GetInstance().Key2UID( asset->GetKey() );
@@ -171,13 +172,24 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
 
         SetParameter( plugin->GetPluginParamValModel(), param );
     }
-    
-    auto uids = SerializationHelper::DeserializeObjectLoadArrayImpl< SerializedAssetUID >( deser, "assets" );
-    for( auto uid : uids )
-    {
-        auto asset = AssetDescsWithUIDs::GetInstance().UID2Asset( uid->GetUID() );
-        plugin->LoadResource( asset );
-    }
+
+	if( deser.EnterChild( "assets" ) )
+	{
+		do
+		{
+			deser.EnterChild( "asset" );
+
+			auto asset = AssetDescsWithUIDs::GetInstance().UID2Asset( deser.GetAttribute( "uid" ) );
+			plugin->LoadResource( asset );
+        
+			auto params = SerializationHelper::DeserializeObjectLoadArrayImpl< AbstractModelParameter >( deser, "params" );
+			auto rsm = plugin->GetRSM( asset->GetKey() );
+			for( auto param : params )
+				rsm->SetParameter( param );
+			deser.ExitChild(); // asset
+		}while( deser.NextChild() );
+		deser.ExitChild(); // assets
+	}
 
     if( deser.EnterChild( "renderer_context" ) )
     {
@@ -190,6 +202,17 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
     return serializablePlugin;
 }
 
+// *******************************
+//
+template <>
+IPluginPtr							BasePlugin< IPlugin >::Clone					() const
+{
+	AssetDescsWithUIDs assets;
+	GetAssetsWithUIDs( assets, this );
+	AssetDescsWithUIDs::SetInstance( assets );
+
+	return bv::CloneViaSerialization::Clone( this, "plugin" );
+}
 
 // *******************************
 //

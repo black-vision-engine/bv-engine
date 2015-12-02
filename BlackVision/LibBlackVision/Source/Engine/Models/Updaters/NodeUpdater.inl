@@ -246,18 +246,18 @@ inline void    NodeUpdater::UpdateTexturesData  ()
 				if( currFrame < numTextures )
 				{
 					tex2D->SetData( animDesc->GetBits( currFrame ) );
-
-					//FIXME: shouldn't be set every new frame
-					auto samplerState = animDesc->GetSamplerState();
-					auto samplerParams = std::make_shared< SamplerShaderParameters >( samplerState->GetWrappingModeX(), samplerState->GetWrappingModeY(), 
-						samplerState->GetWrappingModeZ(), samplerState->GetFilteringMode(), samplerState->GetBorderColor() );
-					shaderParams->SetSamplerParameters( j, samplerParams );
 				}
 				else if ( currFrame == numTextures )
 				{
 					tex2D->ForceUpdate();
 				}
 				
+				//FIXME: shouldn't be set every new frame
+				auto samplerState = animDesc->GetSamplerState();
+				auto samplerParams = std::make_shared< SamplerShaderParameters >( samplerState->GetWrappingModeX(), samplerState->GetWrappingModeY(), 
+					samplerState->GetWrappingModeZ(), samplerState->GetFilteringMode(), samplerState->GetBorderColor() );
+				shaderParams->SetSamplerParameters( j, samplerParams );
+
                 m_texDataUpdateID[ txIdx ][ j ] = animDesc->GetUpdateID();
 			}
         }

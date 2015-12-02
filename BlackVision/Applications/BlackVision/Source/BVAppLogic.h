@@ -2,7 +2,7 @@
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
-#include "Engine/Models/BVScene.h"
+#include "Engine/Models/BVProject.h"
 #include "System/Path.h"
 
 #include "Engine/Events/Events.h"
@@ -59,7 +59,7 @@ private:
 
     const model::PluginsManager *   m_pluginsManager;
 
-    BVScenePtr                      m_bvScene;
+    BVProjectPtr                    m_bvProject;
 
     Renderer *                      m_renderer;
     RenderLogic *                   m_renderLogic;
@@ -114,7 +114,7 @@ public:
 public:
 
     //Convenience API - generalized model accessors
-    BVScenePtr                      GetBVScene          ();
+    BVProjectPtr                    GetBVProject          ();
     const model::PluginsManager *   GetPluginsManager   () const;
 
     RenderMode&                     GetRenderMode       ()  { return m_renderMode; }

@@ -14,19 +14,19 @@ namespace model {
     class ModelSceneEditor;
 } // model
 
-class BVScene;
+class BVProject;
 class SceneNode;
 class SceneEditor;
 
 
-class BVSceneEditor
+class BVProjectEditor
 {
 private:
 
     typedef std::hash_map< model::IModelNode *, SceneNode * >	TNodesMapping;
 
 private:
-	BVScene *					m_scene;
+	BVProject *					m_scene;
     model::BasicNodePtr			m_rootNode;
 
     SceneEditor *               m_engineSceneEditor;
@@ -35,7 +35,7 @@ private:
 
 private:
 
-                            BVSceneEditor       ( BVScene * scene );
+                            BVProjectEditor       ( BVProject * scene );
 
 public:
 
@@ -45,6 +45,8 @@ public:
 
 	model::SceneModelPtr    GetScene			( const std::string & sceneName );
     void					SetSceneVisible		( const std::string & sceneName, bool visible );
+
+	model::SceneModelPtr	CopyScene			( const std::string & sceneName );
 
     void                    SetSceneRootNode	( const std::string & sceneName, model::IModelNodePtr rootNode );
     bool                    DeleteSceneRootNode	( const std::string & sceneName );
@@ -57,6 +59,8 @@ public:
     bool                    DetachChildNode     ( const std::string & sceneName, model::IModelNodePtr parent, const std::string & nodeToDetach );
 
     void                    DeleteDetachedNodes ( const std::string & sceneName );
+
+	model::BasicNodePtr		CopyNode			( model::BasicNodePtr node );
 
 
 	bool                    AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, unsigned int idx );
@@ -72,6 +76,10 @@ public:
     void                    ResetDetachedPlugin	( model::BasicNodePtr node );
 
 
+	model::IPluginPtr		CopyPlugin			( model::BasicNodePtr node, const std::string & name );
+
+
+
 	model::IModelNodeEffectPtr	GetNodeEffect   ( model::IModelNodePtr node );
     void						SetNodeEffect   ( model::IModelNodePtr node, model::IModelNodeEffectPtr nodeEffect );
 
@@ -84,7 +92,7 @@ private:
 
     SceneNode *             GetEngineNode       ( model::IModelNodePtr node );
 
-    friend class BVScene;
+    friend class BVProject;
 };
 
 } //bv

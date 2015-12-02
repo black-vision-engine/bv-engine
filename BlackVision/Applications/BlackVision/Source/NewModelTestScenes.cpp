@@ -27,7 +27,7 @@
 #include "Engine/Models/Plugins/PluginUtils.h"
 
 #include "Engine/Models/ModelSceneEditor.h"
-#include "Engine/Models/BVScene.h"
+#include "Engine/Models/BVProject.h"
 
 #include "System/Env.h"
 #include "BVConfig.h"
@@ -543,6 +543,10 @@ model::SceneModelPtr		TestScenesFactory::CreateSceneFromEnv       ( const std::s
     {
         node = TestScenesFactory::LightScatteringTestScene( pluginsManager, timelineManager, timeline );
     }
+    else if( scene == "REPLICATOR_TEST_SCENE" )
+    {
+        node = TestScenesFactory::NodeReplicatorTestScene( pluginsManager, timelineManager, timeline );
+    }
     else
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );
@@ -609,6 +613,14 @@ model::BasicNodePtr     TestScenesFactory::LightScatteringTestScene  ( const mod
 {
     { pluginsManager; }
     return SimpleNodesFactory::CreateLightScatteringTest( timelineManager, timeEvaluator );
+}
+
+// *****************************
+//
+model::BasicNodePtr     TestScenesFactory::NodeReplicatorTestScene  ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { pluginsManager; }
+    return SimpleNodesFactory::CreateNodeReplicatorTest( timelineManager, timeEvaluator );
 }
 
 // *****************************

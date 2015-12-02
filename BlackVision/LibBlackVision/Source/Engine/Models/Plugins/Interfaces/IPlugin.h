@@ -36,8 +36,9 @@ DEFINE_CONST_PTR_TYPE(IPlugin)
 class IPlugin : public IUpdatable
 {
 public:
-
-    virtual const std::string &                 GetName                     () const = 0;
+	virtual IPluginPtr							Clone						() const = 0;
+    
+	virtual const std::string &                 GetName                     () const = 0;
     virtual const std::string &                 GetTypeUid                  () const = 0;
 
     virtual bool								IsValid						() const = 0;

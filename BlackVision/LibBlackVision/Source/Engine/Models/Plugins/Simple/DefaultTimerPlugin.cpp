@@ -5,11 +5,14 @@
 
 #include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultFontDescriptor.h"
 
 #include "Assets/Font/FontLoader.h"
 #include "Assets/Font/Text.h"
 #include "Assets/Font/Glyph.h"
 #include "Assets/Font/FontAssetDescriptor.h"
+
+#include "Application/ApplicationContext.h"
 
 #include <algorithm>
 
@@ -291,11 +294,18 @@ bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr
 			auto txData = m_psc->GetTexturesDataImpl();
 			txData->SetTexture( 0, txDesc );
 
+			//FIXME: on runtime reload it will add another descriptor instead of replacing the old one
+			txData->AddFont( std::make_shared< DefaultFontDescriptor >( txDesc ) );
+
 			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
             SetTimePatern( GenerateTimePatern( 0.f ) );
 
             SetTime(0.);
+
+			auto fonts = m_psc->GetTexturesDataImpl()->GetFonts();
+			//assert( fonts.size() == 1 );
+			AddAsset( assetDescr, fonts[ 0 ]->GetStateModel() );
 
             return true;
         }
@@ -428,7 +438,8 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
 
     auto alignType =  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
-    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, false );
+	auto viewSize = min( ApplicationContext::Instance().GetWidth(), ApplicationContext::Instance().GetHeight() ) / 2;
+    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, false, viewSize, viewSize );
 }
 
 ////////////////////////////

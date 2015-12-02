@@ -52,24 +52,8 @@ public:
     static AssetDescsWithUIDs&                              GetInstance() { return instance; }
     static void                                             SetInstance( AssetDescsWithUIDs& i ) { instance = i; }
 
-    virtual void                                            Serialize       ( ISerializer& sob ) const
-    {
-        sob.EnterChild( "assets" );
-        for( auto asset : m_uid2asset )
-        {
-            AssetDescWithUID( asset.second, asset.first ).Serialize( sob );
-        }
-        sob.ExitChild();
-    }
-    static ISerializablePtr                                 Create          ( const IDeserializer& dob )
-    {
-        auto assetsWithUIDs = SerializationHelper::DeserializeObjectLoadPropertiesImpl< AssetDescWithUID >( dob, "uid" );
-
-        auto assets = std::make_shared< AssetDescsWithUIDs >();
-        for( auto asset : assetsWithUIDs )
-            assets->AddAssetDescWithUID( *asset );
-        return assets;
-    }
+    virtual void                                            Serialize       ( ISerializer& ser ) const;
+    static ISerializablePtr                                 Create          ( const IDeserializer& deser );
 
     void                                                    AddAssetDesc( AssetDescConstPtr asset );
 
@@ -80,6 +64,7 @@ public:
 };
 
 void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root, bool recursive = true );
+void GetAssetsWithUIDs( AssetDescsWithUIDs& map, const model::IPlugin * plugin );
 
 
 } // bv

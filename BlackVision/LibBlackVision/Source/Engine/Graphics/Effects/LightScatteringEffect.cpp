@@ -228,14 +228,14 @@ void                LightScatteringEffect::AddTexture                  ( Texture
 //
 TextureSampler *    LightScatteringEffect::CreateSampler   ()
 {
-    auto wrapX          = EngineConstantsMapper::EngineConstant( TextureWrappingMode::TWM_CLAMP_BORDER );
-    auto wrapY          = EngineConstantsMapper::EngineConstant( TextureWrappingMode::TWM_CLAMP_BORDER );            
+    auto wrapX          = EngineConstantsMapper::EngineConstant( TextureWrappingMode::TWM_CLAMP_EDGE );
+    auto wrapY          = EngineConstantsMapper::EngineConstant( TextureWrappingMode::TWM_CLAMP_EDGE );            
     auto samplingMode   = SamplerSamplingMode::SSM_MODE_2D;
-    auto sfm            = EngineConstantsMapper::EngineConstant( TextureFilteringMode::TFM_LINEAR_MIPMAP_LINEAR );
+    auto sfm            = EngineConstantsMapper::EngineConstant( TextureFilteringMode::TFM_LINEAR );
 
     SamplerWrappingMode wrappingMode[] = { wrapX, wrapY, SamplerWrappingMode::SWM_REPEAT };
 
-    auto sampler = new TextureSampler( 0, "firstPassTexture", samplingMode, sfm, wrappingMode, glm::vec4( 0.f, 0.f, 0.f, 0.f ) ); 
+    auto sampler = new TextureSampler( 0, "Tex0", samplingMode, sfm, wrappingMode, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 
     return sampler;
 }

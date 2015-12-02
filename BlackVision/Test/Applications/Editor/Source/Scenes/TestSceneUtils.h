@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Engine/Models/BVSceneEditor.h"
+#include "Engine/Models/BVProjectEditor.h"
 #include "Engine/Models/ModelNodeEditor.h"
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
@@ -36,6 +36,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultPrismPlugin.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultVideoStreamDecoderPlugin.h"
+
+#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
 
 #include "Tools/Utils.h"
 

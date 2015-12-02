@@ -339,9 +339,9 @@ void    RenderLogic::PrintGLStats    (  bool detailed  )
 
 // ***********************
 //
-void    RenderLogic::MakeScreenShot  ( const std::string& path )
+void    RenderLogic::MakeScreenShot  ( const std::string& path, unsigned int numFrames )
 {
-    m_screenShotLogic->MakeScreenShot( path );
+    m_screenShotLogic->MakeScreenShot( path, numFrames );
 }
 
 

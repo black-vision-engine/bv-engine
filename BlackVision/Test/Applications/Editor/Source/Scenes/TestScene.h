@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"
-#include "Engine/Models/BVScene.h"
+#include "Engine/Models/BVProject.h"
 
 #include "BVGL.h"
 
@@ -23,8 +23,10 @@ class TestScene
 private:
 	std::vector< std::function< void() > > m_testSteps;
 
-    BVScene *					m_scene;
+    BVProject *					m_project;
 	Renderer *					m_renderer;
+
+	model::IPluginPtr			m_copiedPlugin;
 
 	model::ITimeEvaluatorPtr	m_timeEvaluator;
 	model::TimelineManager *	m_timelineManager;
@@ -46,7 +48,7 @@ private:
 
 	
 public:
-							TestScene				( BVScene * scene, Renderer * renderer );
+							TestScene				( BVProject * scene, Renderer * renderer );
 							~TestScene				();
 
 	void					TestEditor				( TimeType time );
@@ -83,6 +85,9 @@ private:
 	
 	void					InitOrderTest				( const OrderTestCase & test );
 	void					SwapPlugins					( const std::string & rootPlugin, UInt32 rootIdx, const std::string & childName, const std::string & childPlugin,  UInt32 childIdx );
+	void					CopyPlugin					( UInt32 rootIdx, const std::string & rootPlugin, const std::string & childName, const std::string & childPlugin );
+	void					RestoreRoot					( UInt32 rootIdx, const std::string & childPlugin );
+
 };
 
 DEFINE_PTR_TYPE( TestScene )

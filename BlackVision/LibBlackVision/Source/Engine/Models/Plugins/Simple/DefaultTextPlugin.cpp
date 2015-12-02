@@ -14,6 +14,8 @@
 #include "Assets/Font/FontLoader.h"
 #include "Assets/Font/Text.h"
 
+#include "Application/ApplicationContext.h"
+
 #include "Engine/Events/Events.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
 
@@ -313,7 +315,7 @@ bool                            DefaultTextPlugin::LoadResource  ( AssetDescCons
 		SetText( m_textParam->Evaluate() );
 
         auto fonts = m_psc->GetTexturesDataImpl()->GetFonts();
-        assert( fonts.size() == 1 );
+        //assert( fonts.size() == 1 );
         AddAsset( assetDescr, fonts[ 0 ]->GetStateModel() );
 
 		return true;
@@ -445,7 +447,8 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 
     auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
-    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_currentText, m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, m_arranger, false );
+	auto viewSize = std::min( ApplicationContext::Instance().GetWidth(), ApplicationContext::Instance().GetHeight() ) / 2;
+    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_currentText, m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, viewSize, viewSize, m_arranger, false );
 
 	ScaleToMaxTextLength();
 

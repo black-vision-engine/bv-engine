@@ -1,7 +1,7 @@
 #pragma once
 #include "System/Path.h"
 
-#include "Engine/Models/BVScene.h"
+#include "Engine/Models/BVProject.h"
 #include "Assets/FwdDecls.h"
 
 namespace bv

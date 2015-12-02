@@ -52,6 +52,9 @@
     <Filter Include="Rendering\Logic\OfflineRendering">
       <UniqueIdentifier>{5e5941f3-c717-4b2e-9ff8-ee9b9e9aec91}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Widgets\NodeReplicator">
+      <UniqueIdentifier>{92c97574-2f51-4596-bcfa-ef1caae4425d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -181,6 +184,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.cpp">
+      <Filter>Widgets\NodeReplicator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.cpp">
+      <Filter>Widgets\NodeReplicator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -320,6 +329,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\EngineStateHandlers.h">
       <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.h">
+      <Filter>Widgets\NodeReplicator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\IReplicationModifier.h">
+      <Filter>Widgets\NodeReplicator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.h">
+      <Filter>Widgets\NodeReplicator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -628,6 +628,14 @@ int                                                 BasicInterpolator<TimeValueT
 }
 
 
+// *************************************
+//
+template<class TimeValueT, class ValueT, class FloatT>
+const std::vector< Key< TimeValueT, ValueT > > &    BasicInterpolator<TimeValueT, ValueT, FloatT>::GetKeys()
+{
+    return AccessKeys();
+}
+
 } // bv
 
 #define INSTANTIATE(TYPE) \

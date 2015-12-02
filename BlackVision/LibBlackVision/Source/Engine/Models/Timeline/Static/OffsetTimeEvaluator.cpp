@@ -30,7 +30,7 @@ void                OffsetTimeEvaluator::Serialize           ( ISerializer& sob 
     sob.SetAttribute( "name", GetName() );
     sob.SetAttribute( "type", "offset" );
 
-    sob.EnterChild( "children" );
+    sob.EnterArray( "children" );
     for( auto child : m_children )
         child->Serialize( sob );
     sob.ExitChild(); // children

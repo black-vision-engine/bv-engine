@@ -1,11 +1,11 @@
-#include "BVScene.h"
+#include "BVProject.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/BasicNode.h"
-#include "Engine/Models/BVSceneEditor.h"
+#include "Engine/Models/BVProjectEditor.h"
 
 #include "Mathematics/Transform/MatTransform.h"
 
@@ -13,14 +13,14 @@
 
 namespace bv {
 
-const std::string	BVScene::MAIN_ROOT_NAME			= "main root";
-const std::string	BVScene::GLOBAL_TIMELINE_NAME	= "global timeline";
+const std::string	BVProject::MAIN_ROOT_NAME			= "main root";
+const std::string	BVProject::GLOBAL_TIMELINE_NAME	= "global timeline";
 
 // *******************************
 //
-void                    BVScene::Serialize           ( ISerializer& ser ) const
+void                    BVProject::Serialize           ( ISerializer& ser ) const
 {
-    ser.EnterChild( "scenes" );
+    ser.EnterArray( "scenes" );
 
     for( auto & sm : m_sceneModelVec )
     {
@@ -32,24 +32,15 @@ void                    BVScene::Serialize           ( ISerializer& ser ) const
 
 // *******************************
 //
-BVScenePtr  BVScene::Create              ( Renderer * renderer )
+BVProjectPtr  BVProject::Create              ( Renderer * renderer )
 {
-	struct make_shared_enabler_BVScene : public BVScene { make_shared_enabler_BVScene( Renderer * renderer ): BVScene( renderer ){} };
-    return std::make_shared< make_shared_enabler_BVScene >( renderer );
+	struct make_shared_enabler_BVProject : public BVProject { make_shared_enabler_BVProject( Renderer * renderer ): BVProject( renderer ){} };
+    return std::make_shared< make_shared_enabler_BVProject >( renderer );
 }
 
 // *******************************
 //
-BVScenePtr    BVScene::CreateFakeSceneForTestingOnly( model::SceneModelPtr sceneModel )
-{
-	auto bvScene = BVScene::Create( nullptr );
-	bvScene->GetSceneEditor()->AddScene( sceneModel );
-    return bvScene;
-}
-
-// *******************************
-//
-BVScene::BVScene    ( Renderer * renderer )
+BVProject::BVProject    ( Renderer * renderer )
     : m_renderer( renderer )
     , m_engineSceneRoot( nullptr )
 	, m_timelineManager( std::make_shared < model::TimelineManager >() )
@@ -60,20 +51,20 @@ BVScene::BVScene    ( Renderer * renderer )
 
     m_rootNode = model::BasicNode::Create( MAIN_ROOT_NAME, m_timelineManager->GetRootTimeline() );
 
-	m_sceneEditor = new BVSceneEditor( this );
+	m_projectEditor = new BVProjectEditor( this );
 }
 
 // *******************************
 //
-BVScene::~BVScene         ()
+BVProject::~BVProject         ()
 {
     delete m_engineSceneRoot;
-    delete m_sceneEditor;
+    delete m_projectEditor;
 }
 
 // *******************************
 //
-void            BVScene::Update( TimeType t )
+void            BVProject::Update( TimeType t )
 {
 	m_globalTimeline->SetGlobalTime( t );
 
@@ -95,28 +86,28 @@ void            BVScene::Update( TimeType t )
 
 // *******************************
 //
-model::BasicNodePtr		BVScene::GetModelSceneRoot  () const
+model::BasicNodePtr		BVProject::GetModelSceneRoot  () const
 {
     return m_rootNode;
 }
 
 // *******************************
 //
-SceneNode *             BVScene::GetEngineSceneRoot ()  const
+SceneNode *             BVProject::GetEngineSceneRoot ()  const
 {
     return m_engineSceneRoot;
 }
 
 // *******************************
 //
-BVSceneEditor *         BVScene::GetSceneEditor     ( )
+BVProjectEditor *         BVProject::GetProjectEditor     ( )
 {
-    return m_sceneEditor;
+    return m_projectEditor;
 }
 
 // *******************************
 //
-void                    BVScene::AddScene           ( model::SceneModelPtr sceneModel )
+void                    BVProject::AddScene           ( model::SceneModelPtr sceneModel )
 {
 	RemoveScene( sceneModel->GetName() ); 
 
@@ -126,7 +117,7 @@ void                    BVScene::AddScene           ( model::SceneModelPtr scene
 
 // *******************************
 //
-bool                    BVScene::RemoveScene        ( const std::string & name )
+bool                    BVProject::RemoveScene        ( const std::string & name )
 {
 	for( unsigned int i = 0; i < m_sceneModelVec.size(); ++i )
 	{
@@ -142,7 +133,7 @@ bool                    BVScene::RemoveScene        ( const std::string & name )
 
 // *******************************
 //
-StringVector            BVScene::ListScenesNames     () const
+StringVector            BVProject::ListScenesNames     () const
 {
     StringVector ret;
 	for( auto & sm : m_sceneModelVec )
@@ -155,7 +146,7 @@ StringVector            BVScene::ListScenesNames     () const
 
 // *******************************
 //
-model::SceneModelPtr    BVScene::GetScene            ( const std::string & name ) const
+model::SceneModelPtr    BVProject::GetScene            ( const std::string & name ) const
 {
 	for( unsigned int i = 0; i < m_sceneModelVec.size(); ++i )
 	{
@@ -169,14 +160,14 @@ model::SceneModelPtr    BVScene::GetScene            ( const std::string & name 
 
 // *******************************
 //
-const model::SceneModelVec &	BVScene::GetScenes			() const
+const model::SceneModelVec &	BVProject::GetScenes			() const
 {
     return m_sceneModelVec;
 }
 
 // *******************************
 //
-void							BVScene::SetStartTime		( unsigned long millis )
+void							BVProject::SetStartTime		( unsigned long millis )
 {
 	m_globalTimeline->SetTimeOffset( -TimeType( millis ) * TimeType( 0.001 ) );
 }

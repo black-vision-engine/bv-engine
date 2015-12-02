@@ -27,7 +27,7 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
 {
 	if( !m_editor ) 
 	{
-		m_editor = logic->GetBVScene()->GetSceneEditor();
+		m_editor = logic->GetBVProject()->GetProjectEditor();
 	}
 
     if( !m_defaultEffect )
@@ -40,7 +40,7 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
         case 's': 
         {
             auto sob = new XMLSerializer();
-            logic->GetBVScene()->GetScenes()[ 0 ]->Serialize( *sob );
+            logic->GetBVProject()->GetScenes()[ 0 ]->Serialize( *sob );
             sob->Save( "test.xml" );
             delete sob; 
 
@@ -353,7 +353,7 @@ void                    TestGlobalEfectKeyboardHandler::HandleToggleEffect  ( BV
 //
 model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetRootNode         ( BVAppLogic * logic )
 {
-    auto scene = logic->GetBVScene();
+    auto scene = logic->GetBVProject();
     auto root = scene->GetModelSceneRoot();
 
     return root;

@@ -1,6 +1,9 @@
 #include "ModelNodeEditor.h"
 
-#include "Engine/Models/BVSceneTools.h"
+#include "Engine/Models/BVProjectTools.h"
+
+#include "Engine/Models/Plugins/Plugin.h"
+
 
 namespace bv { namespace model {
 
@@ -10,6 +13,14 @@ namespace bv { namespace model {
     : m_node( node )
 	, m_detachedPlugin( nullptr )
 {
+}
+
+// ********************************
+//
+BasicNodePtr			ModelNodeEditor::CopyNode				()
+{
+    auto node = m_node.lock();
+	return std::static_pointer_cast< BasicNode >( node->Clone() );
 }
 
 // ********************************
@@ -123,6 +134,20 @@ void				ModelNodeEditor::ResetDetachedPlugin	()
     m_detachedPlugin = nullptr;
 }
 
+// ********************************
+//
+IPluginPtr			ModelNodeEditor::CopyPlugin				( const std::string & name )
+{
+    auto node = m_node.lock();
+	auto plugin = node->GetPlugin( name );
+
+	if( plugin )
+	{
+		return plugin->Clone();
+	}
+    return nullptr;
+}
+
 // *******************************
 //
 IModelNodeEffectPtr	ModelNodeEditor::GetNodeEffect		()
@@ -144,8 +169,8 @@ void				ModelNodeEditor::SetNodeEffect		( IModelNodeEffectPtr nodeEffect )
 void				ModelNodeEditor::RefreshNode ( SceneNode * sceneNode, Renderer * renderer )
 {
 	auto node = m_node.lock();
-	BVSceneTools::ClearSingleNode( sceneNode, renderer );
-	BVSceneTools::SyncSingleNode( node, sceneNode );
+	BVProjectTools::ClearSingleNode( sceneNode, renderer );
+	BVProjectTools::SyncSingleNode( node, sceneNode );
 }
 
 

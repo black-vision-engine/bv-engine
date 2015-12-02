@@ -16,6 +16,8 @@ public:
     TimelineEventNull   ( const std::string & name, TimeType eventTime, const ITimeline * owner =  nullptr );
     ~TimelineEventNull  ();
 
+    static TimelineEventNull*   Create          ( const IDeserializer& deser, ITimeline* timeline );
+    virtual void                Serialize       ( ISerializer& ser ) const;
 };
 
 } //model

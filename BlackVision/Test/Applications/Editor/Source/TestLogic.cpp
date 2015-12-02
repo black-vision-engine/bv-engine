@@ -26,9 +26,9 @@ bool TestLogic::ms_debugConsole = BasicWindowApp::RegisterConsoleInitializer();
 {
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( TestSceneUtils::DefaultBVPluginDescriptors() );
 
-	m_bvScene = BVScene::Create( m_renderer );
+	m_project = BVProject::Create( m_renderer );
 
-	m_scene = std::make_shared< TestScene >( m_bvScene.get(), renderer );
+	m_scene = std::make_shared< TestScene >( m_project.get(), renderer );
 	
 	auto cam = m_renderer->GetCamera();
 	cam->SetPerspective( 90.0f, 800, 600, 0.1f, 1000.0f );
@@ -53,7 +53,7 @@ void			TestLogic::Render				()
     m_renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
     m_renderer->ClearBuffers();
 
-	Draw( m_bvScene->GetEngineSceneRoot() );
+	Draw( m_project->GetEngineSceneRoot() );
 	
 }
 
@@ -63,7 +63,7 @@ void			TestLogic::Update				( TimeType t )
 {
 	m_scene->TestEditor( t );
 
-	m_bvScene->Update( t );
+	m_project->Update( t );
 
 	m_time = t;
 }
