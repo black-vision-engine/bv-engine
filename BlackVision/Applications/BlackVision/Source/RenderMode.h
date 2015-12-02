@@ -17,16 +17,20 @@ enum RenderingMode
 class RenderMode
 {
 private:
+
     RenderLogic*        m_renderLogic;
 
     unsigned int        m_frameNumber;
     unsigned long       m_startTime;        ///< Milliseconds
-    unsigned long       m_currentTime;      ///< Milliseconds
+    TimeType            m_currentTime;      ///< Milliseconds
+    TimeType            m_realTime;
 
     RenderingMode       m_renderMode;
     unsigned int        m_framesToRender;   ///< Only RenderToFile mode
     float               m_nextFrameOffset;  ///< Only RenderToFile mode
+
 public:
+
     RenderMode();
     ~RenderMode();
 
@@ -41,6 +45,7 @@ public:
     RenderingMode   GetRenderingMode()      { return m_renderMode; }
     TimeType        GetFrameTime();
     unsigned int    GetFrameNumber();
+    TimeType        GetRealTime()           { return m_realTime; }
 
 };
 

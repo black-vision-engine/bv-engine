@@ -11,14 +11,13 @@ class ScreenShotLogic
 {
 private:
     std::string         m_filePath;
-    bool                m_makeScreenShot;
-
-    unsigned int        m_curReadbackFrame;
+    unsigned int        m_remainingFrames;
+    unsigned int        m_allFrames;
 public:
     ScreenShotLogic();
     ~ScreenShotLogic();
 
-    void        MakeScreenShot  ( const std::string& filePath );
+    void        MakeScreenShot  ( const std::string& filePath, unsigned int numFrames = 1 );
 
     void        FrameRendered   ( Renderer* renderer, OffscreenRenderLogic* offscreenRenderLogic );
     bool        ReadbackNeeded  ();

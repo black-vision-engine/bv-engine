@@ -62,7 +62,7 @@ private:
     void    PrintGLStats    ( bool detailed );
 
 public:
-    void    MakeScreenShot  ( const std::string& path );
+    void    MakeScreenShot  ( const std::string& path, unsigned int numFrames );
 };
 
 } // bv

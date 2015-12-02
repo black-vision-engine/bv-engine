@@ -10,8 +10,8 @@ namespace bv
 // ***********************
 //
 ScreenShotLogic::ScreenShotLogic()
-    :   m_makeScreenShot( false ),
-        m_curReadbackFrame( 0 )
+    :   m_remainingFrames( 0 ),
+        m_allFrames( 0 )
 {}
 
 // ***********************
@@ -21,10 +21,11 @@ ScreenShotLogic::~ScreenShotLogic()
 
 // ***********************
 // Next frame will be written to file.
-void ScreenShotLogic::MakeScreenShot( const std::string& filePath )
+void ScreenShotLogic::MakeScreenShot( const std::string& filePath, unsigned int numFrames )
 {
     m_filePath = filePath;
-    m_makeScreenShot = true;
+    m_remainingFrames = numFrames;
+    m_allFrames = numFrames;
 }
 
 // ***********************
@@ -37,13 +38,14 @@ void ScreenShotLogic::FrameRendered   (  Renderer* renderer, OffscreenRenderLogi
 
     if( ReadbackNeeded() )
     {
-        auto frame = offscreenRenderLogic->ReadDisplayTarget( renderer, m_curReadbackFrame );
-        //m_curReadbackFrame = ( m_curReadbackFrame + 1 ) % offscreenRenderLogic->NumReadBuffersPerRT();
+        std::string newFilePath = m_filePath + std::to_string( m_allFrames - m_remainingFrames ) + ".bmp";
+
+        auto frame = offscreenRenderLogic->ReadDisplayTarget( renderer, 0 );
 
         auto chunk = frame->GetData();
-        image::SaveBMPImage( m_filePath, chunk, frame->GetWidth(), frame->GetHeight(), 32 );
+        image::SaveBMPImage( newFilePath, chunk, frame->GetWidth(), frame->GetHeight(), 32 );
 
-        m_makeScreenShot = false;
+        --m_remainingFrames;
     }
     offscreenRenderLogic->SwapDisplayRenderTargets();
     //offscreenRenderLogic->SwapDisplayRenderTargets();
@@ -52,6 +54,6 @@ void ScreenShotLogic::FrameRendered   (  Renderer* renderer, OffscreenRenderLogi
 // ***********************
 //
 bool ScreenShotLogic::ReadbackNeeded  ()
-{    return m_makeScreenShot;   }
+{    return m_remainingFrames > 0 ? true : false;   }
 
 } //bv
