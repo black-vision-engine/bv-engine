@@ -3,6 +3,15 @@
 namespace bv { namespace model
 {
 
+struct ParamValDelta
+{
+    IValueConstPtr  delta;
+
+    TimeType        deltaTime;
+
+    TimeType        startTime;
+};
+
 class ShiftReplicationModifier;
 
 DEFINE_CONST_PTR_TYPE( ShiftReplicationModifier )
@@ -13,14 +22,16 @@ public:
 
     virtual void                            Apply   ( const BasicNodeConstPtr & prev, const BasicNodePtr & next ) const override;
 
-    static ShiftReplicationModifierConstPtr Create  ( const glm::vec3 & delta );
+    void                                    AddParamShift( const std::string & pluginName, const std::string & paramName, ParamValDelta & shift );
+
+    static ShiftReplicationModifierConstPtr Create  ();
 
 private:
 
-    explicit                ShiftReplicationModifier ( const glm::vec3 & delta );
+    explicit                ShiftReplicationModifier ();
 
-    glm::vec3               m_delta;
-
+    typedef std::map< std::pair< std::string, std::string >, ParamValDelta > ParamsShiftsMapType;
+    ParamsShiftsMapType     m_paramsShifts;
 };
 
 } // model

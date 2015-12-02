@@ -336,7 +336,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateNodeReplicatorTest       ( model:
     // ROOT
     auto root = bTex.CreateNode( "root", true );
 
-    auto repLogic = model::NodeReplicator::Create( root, 5, model::ShiftReplicationModifier::Create( glm::vec3( 0.1, 0.1, 0.0 ) ) );
+    auto shiftRepMod = model::ShiftReplicationModifier::Create();
+
+    auto repLogic = model::NodeReplicator::Create( root, 5, shiftRepMod );
 
     auto image = bTex.CreateNode( "piateczka", true );
 
