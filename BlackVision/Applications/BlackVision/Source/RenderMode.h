@@ -27,7 +27,7 @@ private:
 
     RenderingMode       m_renderMode;
     unsigned int        m_framesToRender;   ///< Only RenderToFile mode
-    float               m_nextFrameOffset;  ///< Only RenderToFile mode
+    TimeType            m_nextFrameOffset;  ///< Only RenderToFile mode
 
 public:
 

@@ -29,7 +29,7 @@ void EngineStateHandlers::RenderingModeEvent( IEventPtr evt )
     float requestedFPS = modeEvent->FPS;
     auto command = modeEvent->RenderingCommand;
 
-    auto renderMode = m_appLogic->GetRenderMode();
+    auto& renderMode = m_appLogic->GetRenderMode();
     if( command == RenderingModeEvent::Command::ScreenShot )
         renderMode.MakeScreenShot( filePath );
     else if( command == RenderingModeEvent::Command::RenderOffscreen )

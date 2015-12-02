@@ -32,7 +32,7 @@ void RenderMode::SetStartTime( unsigned long time )
 //
 void RenderMode::SetRenderToFileMode( const std::string& filePath, float requestedFPS, unsigned int numFrames )
 {
-    m_nextFrameOffset = 1000 / requestedFPS;        // Time in millis
+    m_nextFrameOffset = TimeType( 1 / requestedFPS );
     m_framesToRender = numFrames;
 
     if( m_renderLogic )
@@ -63,7 +63,7 @@ TimeType RenderMode::StartFrame( unsigned long millis )
     }
     else if( m_renderMode == RenderingMode::RenderOffscreen )
     {
-        if( m_framesToRender < 0 )
+        if( m_framesToRender == 0 )
         {// Rendering to file ended. Restore previous state.
             m_renderMode = RenderingMode::RenderRealTime;
             // @todo Make something with timestamp to keep continuity.
@@ -72,7 +72,7 @@ TimeType RenderMode::StartFrame( unsigned long millis )
         }
         
         --m_framesToRender;
-        m_currentTime = ( TimeType( millis ) + TimeType( m_nextFrameOffset ) ) * TimeType( 0.001 );
+        m_currentTime = m_currentTime + m_nextFrameOffset;
         return m_currentTime;
     }
     return 0.0f;
@@ -81,7 +81,7 @@ TimeType RenderMode::StartFrame( unsigned long millis )
 // ***********************
 //
 TimeType RenderMode::GetFrameTime()
-{    return TimeType( m_currentTime ) * TimeType( 0.001 );  }
+{    return m_currentTime;   }
 
 // ***********************
 //
