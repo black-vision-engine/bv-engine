@@ -48,20 +48,22 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
         }
         case 'p':
         {
-            auto ser = new XMLSerializer();
+            XMLSerializer ser;
             
             auto node = GetVanillaNode( logic )->GetChild( "vanilla_tex" );
-            auto& assets = AssetDescsWithUIDs::GetInstance(); // & is crucial!
-            GetAssetsWithUIDs( assets, std::dynamic_pointer_cast< model::BasicNode >( node ) );
-            
-            assets.Serialize( *ser );
+
+            TimelineManager::GetInstance()->Serialize( ser );
+
+            ////auto& assets = AssetDescsWithUIDs::GetInstance(); // & is crucial!
+            ////GetAssetsWithUIDs( assets, std::dynamic_pointer_cast< model::BasicNode >( node ) );
+            //
+            //assets.Serialize( *ser );
 
             auto plugin_ = node->GetPlugin( "texture" );
             auto plugin = std::dynamic_pointer_cast< model::BasePlugin< model::IPlugin > >( plugin_ );
-            plugin->Serialize( *ser );
+            plugin->Serialize( ser );
 
-            ser->Save( "plugin.xml" );
-            delete ser;
+            ser.Save( "plugin.xml" );
             break;
         }
         case '1':

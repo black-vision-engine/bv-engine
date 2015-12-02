@@ -846,7 +846,8 @@ model::SceneModelPtr LoadSceneFromFile( std::string filename, model::TimelineMan
 
     auto model = SerializationHelper::DeserializeObjectLoadImpl< SceneModel >( deser, "scene" );
 
-	auto teClone = CloneViaSerialization::Clone( model::TimelineManager::GetInstance(), "timelines" );
+	//auto teClone = CloneViaSerialization::Clone( model::TimelineManager::GetInstance(), "timelines" );
+    auto plClone = model->GetRootNode()->GetPlugins()->GetPlugin( 2 )->Clone();
 
     return model;
 }

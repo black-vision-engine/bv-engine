@@ -34,7 +34,7 @@ std::string Filter2String( MipMapFilterType filter )
 void                TextureAssetDesc::Serialize       ( ISerializer& ser ) const
 {
 ser.EnterChild( "asset" );
-    ser.SetAttribute( "uid", UID() );
+    ser.SetAttribute( "type", UID() );
     ser.SetAttribute( "path", m_originalTextureDesc->GetImagePath() );
 
     if( m_mipMapsDescs )
@@ -69,7 +69,7 @@ void TextureAssetDesc::Deserialize     ( const IDeserializer& sob )
         return;
     }
 
-    *this = *obj;
+    *this = *obj; // if you think this is ugly, see why it cannot be done:
 
 //sob.EnterChild( "asset" );
 //    if( UID() != sob.GetAttribute( "uid" ) )

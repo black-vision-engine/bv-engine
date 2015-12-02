@@ -15,7 +15,7 @@ AssetDescConstPtr AssetManager::CreateDesc( const IDeserializer& deserializer )
 	if( !success )
 		return nullptr;
 
-    std::string assetUID  = deserializer.GetAttribute( "uid" );
+    std::string assetUID  = deserializer.GetAttribute( "type" );
 
 	auto it = m_loaders.find( assetUID );
 
