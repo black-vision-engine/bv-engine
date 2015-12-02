@@ -23,6 +23,17 @@ void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root, bool 
 
 // *******************************
 //
+void GetAssetsWithUIDs( AssetDescsWithUIDs& map, const model::IPlugin * plugin )
+{
+    auto assets = plugin->GetAssets();
+    for( auto asset : assets )
+    {
+        map.AddAssetDesc( asset );
+    }
+}
+
+// *******************************
+//
 ISerializablePtr                                 AssetDescsWithUIDs::Create          ( const IDeserializer& deser )
 {
     auto assetsWithUIDs = SerializationHelper::DeserializeObjectLoadPropertiesImpl< AssetDescWithUID >( deser, "uid" );

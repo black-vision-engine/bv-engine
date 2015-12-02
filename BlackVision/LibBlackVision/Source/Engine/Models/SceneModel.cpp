@@ -3,6 +3,8 @@
 #include "Assets/AssetDescsWithUIDs.h"
 #include "Engine/Models/ModelSceneEditor.h"
 
+#include "Serialization/CloneViaSerialization.h"
+
 namespace bv { namespace model {
 
 // *******************************
@@ -75,6 +77,13 @@ ISerializablePtr        SceneModel::Create          ( const IDeserializer& deser
     auto obj = std::make_shared< SceneModel >( deser.GetAttribute( "name" ), node, nullptr );
 
     return ISerializablePtr( obj );
+}
+
+// *******************************
+//
+model::SceneModelPtr		SceneModel::Clone		() const
+{
+	return CloneViaSerialization::Clone( this, "scene" );
 }
 
 // *******************************

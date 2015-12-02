@@ -36,6 +36,8 @@ public:
                                                 DefaultFinalizePlugin       ();
                                                 ~DefaultFinalizePlugin      ();
 
+	virtual IPluginPtr							Clone						() const override;
+
     virtual const std::string &                 GetName                     () const override;
     virtual const std::string &                 GetTypeUid                  () const override;
                                                                                      

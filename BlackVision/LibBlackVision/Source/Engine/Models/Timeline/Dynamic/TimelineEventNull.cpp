@@ -22,6 +22,7 @@ void                TimelineEventNull::Serialize       ( ISerializer& ser ) cons
 {
 ser.EnterChild( "event" );
     ser.SetAttribute( "type", "null" );
+    ser.SetAttribute( "name", GetName() );
     SerializationHelper::SerializeAttribute( ser, GetEventTime(), "time" );
 ser.ExitChild();
 }

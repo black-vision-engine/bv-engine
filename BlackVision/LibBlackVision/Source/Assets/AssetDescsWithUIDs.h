@@ -64,6 +64,7 @@ public:
 };
 
 void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root, bool recursive = true );
+void GetAssetsWithUIDs( AssetDescsWithUIDs& map, const model::IPlugin * plugin );
 
 
 } // bv

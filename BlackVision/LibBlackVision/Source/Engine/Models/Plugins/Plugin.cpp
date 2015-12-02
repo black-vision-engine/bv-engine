@@ -5,6 +5,7 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 
 #include "Assets/AssetSerialization.h"
+#include "Serialization/CloneViaSerialization.h"
 #include "Assets/AssetDescsWithUIDs.h"
 
 namespace bv { namespace model {
@@ -201,6 +202,17 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
     return serializablePlugin;
 }
 
+// *******************************
+//
+template <>
+IPluginPtr							BasePlugin< IPlugin >::Clone					() const
+{
+	AssetDescsWithUIDs assets;
+	GetAssetsWithUIDs( assets, this );
+	AssetDescsWithUIDs::SetInstance( assets );
+
+	return bv::CloneViaSerialization::Clone( this, "plugin" );
+}
 
 // *******************************
 //

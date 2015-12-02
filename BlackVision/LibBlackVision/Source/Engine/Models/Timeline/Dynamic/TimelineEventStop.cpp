@@ -22,6 +22,7 @@ void                TimelineEventStop::Serialize       ( ISerializer& ser ) cons
 {
 ser.EnterChild( "event" );
     ser.SetAttribute( "type", "stop" );
+    ser.SetAttribute( "name", GetName() );
     SerializationHelper::SerializeAttribute( ser, GetEventTime(), "time" );
 ser.ExitChild();
 }
