@@ -14,6 +14,8 @@
 
 #include "Serialization/SerializationHelper.h"
 //#include "Serialization/SerializationObjects.inl"
+#include "Serialization/CloneViaSerialization.h"
+#include "Assets/AssetDescsWithUIDs.h"
 
 namespace bv { 
     
@@ -144,6 +146,18 @@ ISerializablePtr BasicNode::Create( const IDeserializer& dob )
 
 
     //SetParamVal("nodePath" ,"plugin", { name: "translataion", type:"vec3" , val:"0 ,0 ,0" } );
+}
+
+// *******************************
+//
+IModelNodePtr					BasicNode::Clone			() const
+{
+	AssetDescsWithUIDs assets;
+	//FIXME: const hack
+	GetAssetsWithUIDs( assets, std::const_pointer_cast< BasicNode >( shared_from_this() ) );
+	AssetDescsWithUIDs::SetInstance( assets );
+
+	return CloneViaSerialization::Clone( this, "node" );
 }
 
 // ********************************

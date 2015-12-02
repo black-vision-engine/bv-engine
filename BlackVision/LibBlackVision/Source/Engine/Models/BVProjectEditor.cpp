@@ -93,6 +93,18 @@ void    BVProjectEditor::SetSceneVisible       ( const std::string & sceneName, 
 
 // *******************************
 //
+model::SceneModelPtr    BVProjectEditor::CopyScene  ( const std::string & sceneName )
+{
+	auto scene = m_scene->GetScene( sceneName );
+	if( scene )
+	{
+		return scene->Clone();
+	}
+	return nullptr;
+}
+
+// *******************************
+//
 void    BVProjectEditor::SetSceneRootNode     ( const std::string & sceneName, model::IModelNodePtr rootNode )
 {
 	auto scene = m_scene->GetScene( sceneName );

@@ -36,6 +36,14 @@ DefaultFinalizePlugin::~DefaultFinalizePlugin      ()
                                     
 // *******************************
 //
+IPluginPtr							DefaultFinalizePlugin::Clone						() const
+{
+	assert( false );
+    return nullptr;
+}
+
+// *******************************
+//
 const std::string &                 DefaultFinalizePlugin::GetName                      () const
 {
     return m_name;

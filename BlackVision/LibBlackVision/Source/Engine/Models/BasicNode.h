@@ -60,6 +60,9 @@ public:
     static ISerializablePtr                 Create                  ( const IDeserializer& doc );
     virtual void                            Serialize               ( ISerializer& doc ) const;
 
+	virtual IModelNodePtr					Clone					() const override;
+
+
     virtual IPluginPtr                      GetPlugin               ( const std::string & name ) const override;
     virtual IFinalizePluginConstPtr         GetFinalizePlugin       () const override;
 

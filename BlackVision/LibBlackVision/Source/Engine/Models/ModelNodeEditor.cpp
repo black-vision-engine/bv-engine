@@ -4,8 +4,6 @@
 
 #include "Engine/Models/Plugins/Plugin.h"
 
-#include "Serialization/CloneViaSerialization.h"
-#include "Assets/AssetDescsWithUIDs.h"
 
 namespace bv { namespace model {
 
@@ -22,18 +20,7 @@ namespace bv { namespace model {
 BasicNodePtr			ModelNodeEditor::CopyNode				()
 {
     auto node = m_node.lock();
-	//FIXME
-	auto oldAssets = AssetDescsWithUIDs::GetInstance();
-
-	AssetDescsWithUIDs assets;
-	GetAssetsWithUIDs( assets, node );
-	AssetDescsWithUIDs::SetInstance( assets );
-
-	auto clone = bv::CloneViaSerialization::Clone( node.get(), "node" );
-
-	AssetDescsWithUIDs::SetInstance( oldAssets ); //necessary?
-
-	return clone;
+	return std::static_pointer_cast< BasicNode >( node->Clone() );
 }
 
 // ********************************
@@ -156,18 +143,7 @@ IPluginPtr			ModelNodeEditor::CopyPlugin				( const std::string & name )
 
 	if( plugin )
 	{
-		//FIXME
-		auto oldAssets = AssetDescsWithUIDs::GetInstance();
-
-		AssetDescsWithUIDs assets;
-		GetAssetsWithUIDs( assets, node );
-		AssetDescsWithUIDs::SetInstance( assets );
-
-		auto clone = bv::CloneViaSerialization::Clone( std::static_pointer_cast< BasePlugin< IPlugin > >( plugin ).get(), "plugin" );
-
-		AssetDescsWithUIDs::SetInstance( oldAssets ); //necessary?
-
-		return clone;
+		return plugin->Clone();
 	}
     return nullptr;
 }

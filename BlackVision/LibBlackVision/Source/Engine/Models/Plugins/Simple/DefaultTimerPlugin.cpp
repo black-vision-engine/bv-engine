@@ -12,6 +12,8 @@
 #include "Assets/Font/Glyph.h"
 #include "Assets/Font/FontAssetDescriptor.h"
 
+#include "Application/ApplicationContext.h"
+
 #include <algorithm>
 
 #include "win_sock.h"
@@ -436,7 +438,8 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
 
     auto alignType =  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
-    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, false );
+	auto viewSize = min( ApplicationContext::Instance().GetWidth(), ApplicationContext::Instance().GetHeight() ) / 2;
+    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, false, viewSize, viewSize );
 }
 
 ////////////////////////////

@@ -8,7 +8,7 @@ namespace bv {
 namespace CloneViaSerialization {
 
 template< typename T >
-std::shared_ptr< T >            Clone( T* obj, std::string name )
+std::shared_ptr< T >            Clone( const T* obj, std::string name )
 {
     XMLSerializer ser;
     
