@@ -41,7 +41,7 @@ void ScreenShotLogic::FrameRendered   (  Renderer* renderer, OffscreenRenderLogi
         //m_curReadbackFrame = ( m_curReadbackFrame + 1 ) % offscreenRenderLogic->NumReadBuffersPerRT();
 
         auto chunk = frame->GetData();
-        image::SaveBMPImage( m_filePath, chunk, renderer->GetWidth(), renderer->GetHeight(), 24 );
+        image::SaveBMPImage( m_filePath, chunk, frame->GetWidth(), frame->GetHeight(), 32 );
 
         m_makeScreenShot = false;
     }

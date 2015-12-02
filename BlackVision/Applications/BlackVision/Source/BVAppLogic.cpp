@@ -331,6 +331,7 @@ void BVAppLogic::ChangeState     ( BVAppState state )
 void BVAppLogic::ShutDown           ()
 {
     //TODO: any required deinitialization
+    m_remoteController->DeinitializeServer();
 }
 
 //pablito:

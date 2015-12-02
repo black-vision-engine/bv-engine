@@ -121,5 +121,10 @@ bool JsonCommandsListener::InitializeServer    ( int port )
     return result;
 }
 
+// ***********************
+//
+void JsonCommandsListener::DeinitializeServer  ()
+{    m_eventServer->DeinitializeServer();   }
+
 
 } //bv
