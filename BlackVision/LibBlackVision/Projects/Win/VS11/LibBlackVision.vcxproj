@@ -243,6 +243,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\BVProject.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BVProjectEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BVProjectTools.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\IDGenerator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelNodeEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelSceneEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectAlphaMask.cpp" />
@@ -414,6 +415,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\LightScatteringEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\LightScatteringShaders.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\LightScatteringNodeEffect.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\IDGenerator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IFontDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectLightScattering.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultFontDescriptor.h" />

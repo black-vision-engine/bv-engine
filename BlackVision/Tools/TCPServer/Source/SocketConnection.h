@@ -6,6 +6,7 @@
 
 #include "../../Applications/BlackVision/Source/EndUserAPI/IEventServer.h"
 
+#include <thread>
 
 namespace bv
 {
@@ -31,20 +32,25 @@ private:
     QueueEventCallback              m_sendCommandCallback;
 
     SOCKET                          m_socketID;
+    std::thread                     m_clientThread;
 
     QueueConcurrent<LogMsg>*        m_logQueue;
     int                             m_logID;
 
     SocketConnectionState           m_state;
+
+    volatile bool                   m_end;
 public:
     SocketConnection( SOCKET socketID, QueueEventCallback callback );
     ~SocketConnection();
 
     void            QueueResponse       ( ResponseMsg&& message );
-    void            MainThread          ();
+    void            KillClient          ();
+    void            InitThread          ();
 
     SocketConnectionState   GetState    ()      { return m_state; }
 private:
+    void            MainThread          ();
     InitData        InitCommunication   ( SOCKET socketID );
     bool            Authorization       ( SOCKET socketID );
 

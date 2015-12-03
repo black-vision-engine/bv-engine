@@ -301,7 +301,7 @@ Path			Path::RelativePath		( const Path & path, const Path & start )
 StringVector    Path::Split				() const
 {
     StringVector results;
-    boost::split(results, m_path, boost::is_any_of("//"));
+    boost::split(results, m_path, boost::is_any_of("\\"));
 
 	return results;
 }
