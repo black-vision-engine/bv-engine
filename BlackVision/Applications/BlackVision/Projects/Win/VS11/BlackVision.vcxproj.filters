@@ -183,6 +183,9 @@
     <ClCompile Include="..\..\..\Source\Rendering\Utils\RenderTargetStackAllocator.cpp">
       <Filter>Rendering\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Utils\OffscreenDisplay.cpp">
+      <Filter>Rendering\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -320,6 +323,9 @@
       <Filter>Rendering\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Utils\RenderTargetStackAllocator.h">
+      <Filter>Rendering\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Utils\OffscreenDisplay.h">
       <Filter>Rendering\Utils</Filter>
     </ClInclude>
   </ItemGroup>

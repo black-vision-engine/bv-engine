@@ -138,6 +138,7 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicRawPreview.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicVideoPreview.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Utils\OffscreenDisplay.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogicTr.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Utils\RenderLogicContext.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicRawPreview.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicVideoPreview.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Utils\OffscreenDisplay.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogicTr.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Utils\RenderLogicContext.h" />

@@ -27,19 +27,10 @@ namespace bv {
 //
 RenderLogic::RenderLogic     ()
     :  m_impl( nullptr )
-    , m_rtStack( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), TextureFormat::F_A8R8G8B8 )
+    , m_rtStackAllocator( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), TextureFormat::F_A8R8G8B8 )
 {
-    auto videoCardEnabled   = DefaultConfig.ReadbackFlag();
-    auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput();
-   
-    if( previewAsVideoCard )
-    {
-        m_impl = new RenderLogicVideoPreview( videoCardEnabled, &m_rtStack );
-    }
-    else
-    {
-        m_impl = new RenderLogicRawPreview( videoCardEnabled, &m_rtStack );
-    }
+    // auto videoCardEnabled   = DefaultConfig.ReadbackFlag();
+    // auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput();
 
     m_frameRenderLogic = new FrameRenderLogic();
     m_postFrameRenderLogic = new PostFrameRenderLogic();

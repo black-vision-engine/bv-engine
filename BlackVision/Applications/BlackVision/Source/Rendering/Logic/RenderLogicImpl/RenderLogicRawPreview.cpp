@@ -8,8 +8,8 @@ namespace bv {
 // ***************************
 //
 RenderLogicRawPreview::RenderLogicRawPreview   ( bool videoCardEnabled, RenderTargetStack * renderTargetStack )
-    : RenderLogicImpl( videoCardEnabled, renderTargetStack )
 {
+    { videoCardEnabled; renderTargetStack; }
 }
 
 
@@ -17,7 +17,7 @@ RenderLogicRawPreview::RenderLogicRawPreview   ( bool videoCardEnabled, RenderTa
 //
 void    RenderLogicRawPreview::RenderFrame      ( Renderer * renderer, SceneNode * sceneRoot )
 {
-    PreRenderFrame( renderer );
+//    PreRenderFrame( renderer );
 
 //    EnableNextRenderTarget();
 

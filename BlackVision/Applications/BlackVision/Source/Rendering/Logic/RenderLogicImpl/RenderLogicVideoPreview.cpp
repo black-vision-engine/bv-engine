@@ -6,8 +6,8 @@ namespace bv {
 // ***************************
 //
 RenderLogicVideoPreview::RenderLogicVideoPreview( bool videoCardEnabled, RenderTargetStack * renderTargetStack )
-    : RenderLogicImpl( videoCardEnabled, renderTargetStack )
 {
+    { videoCardEnabled; renderTargetStack; }
 }
 
 // ***************************

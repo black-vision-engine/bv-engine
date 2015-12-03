@@ -2,7 +2,8 @@
 
 #include <vector>
 
-#include "Rendering/Utils/RenderTargetStack.h"
+#include "Rendering/Utils/RenderTargetStackAllocator.h"
+
 
 
 namespace bv {
@@ -19,11 +20,11 @@ class RenderLogic
 {
 private:
 
-    RenderTargetStack       m_rtStack;
+    RenderTargetStackAllocator  m_rtStackAllocator;
 
-    RenderLogicImpl *       m_impl;
-    FrameRenderLogic *                      m_frameRenderLogic;
-    PostFrameRenderLogic *                  m_postFrameRenderLogic;
+    RenderLogicImpl *           m_impl;
+    FrameRenderLogic *          m_frameRenderLogic;
+    PostFrameRenderLogic *      m_postFrameRenderLogic;
 
 public:
 

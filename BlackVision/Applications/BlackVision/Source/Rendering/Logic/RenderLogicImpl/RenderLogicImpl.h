@@ -2,9 +2,10 @@
 
 namespace bv {
 
-class RenderTargetStack;
+class RenderTargetStackAllocator;
 class Renderer;
 class SceneNode;
+class OffscreenDisplay;
 
 
 class RenderLogicImpl
@@ -15,15 +16,16 @@ private:
 
 protected:
 
-    RenderTargetStack *     m_rtStack;
+    RenderTargetStackAllocator *    m_rtStackAllocator;
+    OffscreenDisplay *              m_offscreenDisplay;
 
 public:
 
-                        RenderLogicImpl     ( bool videoCardEnabled, RenderTargetStack * renderTargetStack );
+                        RenderLogicImpl     ( RenderTargetStackAllocator * renderTargetStackAllocator, bool useTwoDisplayRenderTargets );
     virtual             ~RenderLogicImpl    ();
 
 
-    virtual     void    RenderFrame         ( Renderer * renderer, SceneNode * sceneRoot ) = 0;
+    virtual     void    RenderFrame         ( Renderer * renderer, SceneNode * sceneRoot );
 
 protected:
 

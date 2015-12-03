@@ -5,13 +5,15 @@
 
 namespace bv {
 
-class RenderLogicRawPreview : public RenderLogicImpl
+class RenderTargetStack;
+
+class RenderLogicRawPreview
 {
 public:
 
                     RenderLogicRawPreview   ( bool videoCardEnabled, RenderTargetStack * renderTargetStack );
 
-    virtual void    RenderFrame             ( Renderer * renderer, SceneNode * sceneRoot ) override;
+    virtual void    RenderFrame             ( Renderer * renderer, SceneNode * sceneRoot );
 
 };
 
