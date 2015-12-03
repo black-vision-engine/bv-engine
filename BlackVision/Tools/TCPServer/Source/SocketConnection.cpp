@@ -18,6 +18,7 @@ SocketConnection::SocketConnection( SOCKET socketID, QueueEventCallback callback
     m_logQueue = nullptr;
     m_logID = 0;
     m_state = SocketConnectionState::SCS_Uninitialized;
+    m_end = false;
 }
 
 // ***********************
@@ -29,10 +30,17 @@ SocketConnection::~SocketConnection()
 // Always return after this function.
 void SocketConnection::OnEndMainThread()
 {
+    closesocket( m_socketID );
+
     bv::Logger::GetLogger().RemoveLog( m_logID );
     m_logQueue = nullptr;
 
     m_state = SocketConnectionState::SCS_Ended;
+}
+
+void SocketConnection::InitThread          ()
+{
+    m_clientThread = std::thread( &SocketConnection::MainThread, this );
 }
 
 // ***********************
@@ -66,7 +74,7 @@ void SocketConnection::MainThread()
 
     m_state = SocketConnectionState::SCS_Running;
 
-	for(;;)
+	while( !m_end )
 	{
 
         if( initData.LogModules )
@@ -104,6 +112,12 @@ void SocketConnection::MainThread()
                 while ( bufferSent < (int)bufferSize )
 				{
                     int sentSize = send( m_socketID, buffer + bufferSent, (int)bufferSize - bufferSent, 0);
+                    if( sentSize < 0 )
+                    {
+                        LOG_MESSAGE( SeverityLevel::info ) << "Client disconnected";
+                        OnEndMainThread();
+                    }
+
                     bufferSent += sentSize;
                 }
             }
@@ -121,10 +135,6 @@ void SocketConnection::MainThread()
 
             LOG_MESSAGE( SeverityLevel::error ) << "Error receiving data: " << ierr <<". Closing socket...";
 
-            Sleep(50);
-            closesocket( m_socketID );
-            Sleep(50);
-
             OnEndMainThread();
             return;
 		}
@@ -134,7 +144,6 @@ void SocketConnection::MainThread()
 		else if(bytecount==0)
         {
 			LOG_MESSAGE( SeverityLevel::info ) << "Client disconnected";
-			closesocket( m_socketID );
 
             OnEndMainThread();
 			return;
@@ -163,6 +172,7 @@ void SocketConnection::MainThread()
 			
 		memset(buffer, 0, buffer_len);
 	}
+    OnEndMainThread();
 }
 
 // ***********************
@@ -208,6 +218,15 @@ bool SocketConnection::Authorization       ( SOCKET /*socketID*/ )
 void SocketConnection::QueueResponse       ( ResponseMsg&& message )
 {
     m_responseQueue.Push( message );
+}
+
+// ***********************
+//
+void SocketConnection::KillClient          ()
+{
+    m_end = true;
+    if( m_clientThread.joinable() )
+        m_clientThread.join();      // Wait until MainThread function ends.
 }
 
 } //bv

@@ -97,8 +97,7 @@ namespace
 
 //
 BVAppLogic::BVAppLogic              ( Renderer * renderer )
-    : m_startTime( 0 )
-    , m_bvProject( BVProject::Create( renderer ) )
+    : m_bvProject( BVProject::Create( renderer ) )
     , m_pluginsManager( nullptr )
     , m_renderer( nullptr )
     , m_renderLogic( nullptr )
@@ -114,6 +113,8 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
     m_renderLogic = new RenderLogic();
     m_remoteHandlers = new RemoteEventsHandlers;
     m_remoteController = new JsonCommandsListener;
+
+    m_renderMode.SetRenderLogic( m_renderLogic );
 }
 
 // *********************************
@@ -235,7 +236,7 @@ void BVAppLogic::InitCamera         ( unsigned int w, unsigned int h )
 //
 void BVAppLogic::SetStartTime       ( unsigned long millis )
 {
-    m_startTime = millis;
+    m_renderMode.SetStartTime( millis );
 	m_bvProject->SetStartTime( millis );
 }
 
@@ -245,36 +246,42 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 {
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
 
+    TimeType time = m_renderMode.StartFrame( millis );
+    UpdateFrame( time, renderer );
+}
+
+// ***********************
+//
+void BVAppLogic::UpdateFrame     ( TimeType time, Renderer * renderer )
+{
     assert( m_state != BVAppState::BVS_INVALID );
     if( m_state == BVAppState::BVS_RUNNING )
     {
         FRAME_STATS_FRAME();
         FRAME_STATS_SECTION( DefaultConfig.FrameStatsSection() );
 
-        //FIXME: debug timer - don't get fooled
-        //float t = float(frame) * 0.1f; ///10 fps
-
-        TimeType t = TimeType( millis ) * TimeType( 0.001 );
-        GownoWFormieKebaba( t, this );
+        GownoWFormieKebaba( time, this );
 
         {
             FRAME_STATS_SECTION( "Update" );
             HPROFILER_SECTION( "update total", PROFILER_THREAD1 );
 
-            m_bvProject->Update( t );
+            m_bvProject->Update( time );
         }
 
         m_remoteHandlers->UpdateHM();
 
         {
-            HPROFILER_SECTION( "Render", PROFILER_THREAD1 );			
+            HPROFILER_SECTION( "Render", PROFILER_THREAD1 );
             
             {
+                HPROFILER_SECTION( "Refresh Video Input", PROFILER_THREAD1 );
                 FRAME_STATS_SECTION( "Video input" );
 		        RefreshVideoInputScene();
             }
 
             {
+                HPROFILER_SECTION( "Render Frame", PROFILER_THREAD1 );
                 FRAME_STATS_SECTION( "Render" );
                 m_renderLogic->RenderFrame( renderer, m_bvProject->GetEngineSceneRoot() );
             }
@@ -283,6 +290,8 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 
     GTimer.StartTimer();
 }
+
+
 // *********************************
 //
 void BVAppLogic::RefreshVideoInputScene()
@@ -324,6 +333,7 @@ void BVAppLogic::ChangeState     ( BVAppState state )
 void BVAppLogic::ShutDown           ()
 {
     //TODO: any required deinitialization
+    m_remoteController->DeinitializeServer();
 }
 
 //pablito:

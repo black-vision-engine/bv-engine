@@ -23,6 +23,7 @@ public:
 
     void                QueueEvent          ( const std::wstring& eventString, int socketID ) override;
     bool                InitializeServer    ( int port ) override;
+    void                DeinitializeServer  () override;
     void                SendResponse        ( const IEventPtr response ) override;
 
 private:

@@ -35,6 +35,7 @@ public:
     virtual ~IEventServer() {}
 
     virtual bool            InitializeServer        ( const QueueEventCallback& callback, int port ) = 0;
+    virtual void            DeinitializeServer      () = 0;
     virtual void            SendResponse            ( ResponseMsg& meesage ) = 0;
     /// For now I assume, there's only one one implementation and this function is enough.
     /// Maybe in future we should create a factory or something.

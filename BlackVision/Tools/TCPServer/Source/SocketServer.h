@@ -28,6 +28,7 @@ public:
     ~SocketServer();
 
     bool        InitializeServer        ( const QueueEventCallback& callback, int port ) override;
+    void        DeinitializeServer      () override;
     void        SendResponse            ( ResponseMsg& message ) override;
 
     void        WaitForConnection       ();

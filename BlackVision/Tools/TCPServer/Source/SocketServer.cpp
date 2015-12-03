@@ -113,15 +113,17 @@ void SocketServer::WaitForConnection       ()
     {
         if( ( socketID = accept( hsock, (SOCKADDR*)&sadr, &addr_size) )!= INVALID_SOCKET )
         {
-            SocketConnectionPtr newClient = std::make_shared<SocketConnection>( socketID, m_sendCommandCallback );
+            // All unused clients have to be removed before inserting new client. In other case
+            // new connection can't be inserted into clientsMap and will be illigally destroyed what causes exception.
+            RemoveUnusedClients();
 
             {
                 ScopedCriticalSection lock( clientsCriticalSection );
+
+                SocketConnectionPtr newClient = std::make_shared<SocketConnection>( socketID, m_sendCommandCallback );
+                newClient->InitThread();
                 clientsMap.insert( std::make_pair( socketID, newClient ) );
             }
-
-            std::thread clientThread = std::thread( &SocketConnection::MainThread, newClient.get() );
-            clientThread.detach();
 
             LOG_MESSAGE( SeverityLevel::info ) << "Client connected: " + std::string( inet_ntoa( sadr.sin_addr ) );
         }
@@ -129,8 +131,6 @@ void SocketServer::WaitForConnection       ()
         {
             LOG_MESSAGE( SeverityLevel::error ) <<"Error accepting client " << WSAGetLastError();
         }
-
-        RemoveUnusedClients();
     }
 }
 
@@ -144,7 +144,10 @@ void SocketServer::RemoveUnusedClients     ()
     while( iterator != clientsMap.end() )
     {
         if( iterator->second->GetState() == SocketConnectionState::SCS_Ended )
+        {
+            iterator->second->KillClient();
             iterator = clientsMap.erase( iterator );
+        }
         else
             ++iterator;
     }
@@ -158,6 +161,20 @@ void SocketServer::SendResponse( ResponseMsg& message )
     auto client = clientsMap.find( message.socketID );
     if( client != clientsMap.end() )
         client->second->QueueResponse( std::move( message ) );
+}
+
+// ***********************
+//
+void SocketServer::DeinitializeServer      ()
+{
+    ScopedCriticalSection lock( clientsCriticalSection );
+
+    auto iterator = clientsMap.begin();
+    while( iterator != clientsMap.end() )
+    {
+        iterator->second->KillClient();
+        ++iterator;
+    }
 }
 
 } //bv

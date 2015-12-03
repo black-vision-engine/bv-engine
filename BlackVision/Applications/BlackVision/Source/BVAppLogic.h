@@ -6,6 +6,7 @@
 #include "System/Path.h"
 
 #include "Engine/Events/Events.h"
+#include "RenderMode.h"
 
 #include "TestAI/TestKeyboardHandler.h"
 
@@ -67,7 +68,7 @@ private:
     RemoteEventsHandlers*           m_remoteHandlers;
     RemoteController*               m_remoteController;
 
-    unsigned long                   m_startTime;
+    RenderMode                      m_renderMode;
 
 	//pablito
 	Solution						m_solution;
@@ -101,6 +102,7 @@ public:
     virtual void    ShutDown        ();
 
     void            PostFrameLogic  ( const SimpleTimer & timer, unsigned int millis );
+    void            UpdateFrame     ( TimeType time, Renderer * renderer );
 
     const FrameStatsCalculator &     FrameStats () const;
 
@@ -115,6 +117,7 @@ public:
     BVProjectPtr                    GetBVProject          ();
     const model::PluginsManager *   GetPluginsManager   () const;
 
+    RenderMode&                     GetRenderMode       ()  { return m_renderMode; }
 
     void            LoadScenes      ( const PathVec & pathVec );
 
