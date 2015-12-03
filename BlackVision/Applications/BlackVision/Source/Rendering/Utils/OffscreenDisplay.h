@@ -7,7 +7,6 @@ namespace bv {
 
 class RenderTargetStackAllocator;
 class RenderTarget;
-class Renderer;
 
 
 class OffscreenDisplay
@@ -23,8 +22,8 @@ public:
                     OffscreenDisplay            ( RenderTargetStackAllocator * rtAllocator, bool useTwoRenderTargets );
                     ~OffscreenDisplay           ();
 
-    void            EnableActiveRenderTarget    ( Renderer * renderer );
-    void            DisableActiveRenderTarget   ( Renderer * renderer );
+    //void            EnableActiveRenderTarget    ( Renderer * renderer );
+    //void            DisableActiveRenderTarget   ( Renderer * renderer );
 
     void            UpdateActiveRenderTargetIdx ();
 

@@ -1,6 +1,6 @@
 #include "OffscreenDisplay.h"
 
-#include "Engine/Graphics/Renderers/Renderer.h"
+// #include "Engine/Graphics/Renderers/Renderer.h"
 
 #include "Rendering/Utils/RenderTargetStackAllocator.h"
 
@@ -21,19 +21,19 @@ OffscreenDisplay::OffscreenDisplay    ( RenderTargetStackAllocator * rtAllocator
     m_activeRtIdx = 0;
 }
 
-// **************************
+//// **************************
+////
+//void            OffscreenDisplay::EnableActiveRenderTarget      ( Renderer * renderer )
+//{
+//    renderer->Enable( GetActiveRenderTarget() );
+//}
 //
-void            OffscreenDisplay::EnableActiveRenderTarget      ( Renderer * renderer )
-{
-    renderer->Enable( GetActiveRenderTarget() );
-}
-
-// **************************
-//
-void            OffscreenDisplay::DisableActiveRenderTarget     ( Renderer * renderer )
-{
-    renderer->Disable( GetActiveRenderTarget() );
-}
+//// **************************
+////
+//void            OffscreenDisplay::DisableActiveRenderTarget     ( Renderer * renderer )
+//{
+//    renderer->Disable( GetActiveRenderTarget() );
+//}
 
 // **************************
 //

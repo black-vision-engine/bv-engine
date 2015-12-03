@@ -186,6 +186,9 @@
     <ClCompile Include="..\..\..\Source\Rendering\Utils\OffscreenDisplay.cpp">
       <Filter>Rendering\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffectRenderLogicSelector.cpp">
+      <Filter>Rendering\Logic\FrameRendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -327,6 +330,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Utils\OffscreenDisplay.h">
       <Filter>Rendering\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffectRenderLogicSelector.h">
+      <Filter>Rendering\Logic\FrameRendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,9 @@
 #include "RenderLogicImpl.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
+#include "Engine/Graphics/SceneGraph/SceneNode.h"
+
+#include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
 
 #include "Rendering/Utils/OffscreenDisplay.h"
 
@@ -30,22 +33,42 @@ void    RenderLogicImpl::PreRenderFrame      ( Renderer * renderer )
     renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
     renderer->ClearBuffers();
     renderer->PreDraw();
-
-    m_offscreenDisplay->EnableActiveRenderTarget( renderer );
+    
+    renderer->Enable( m_offscreenDisplay->GetActiveRenderTarget() );
+    //m_offscreenDisplay->EnableActiveRenderTarget( renderer );
 }
 
 // ***************************
 //
 void    RenderLogicImpl::RenderFrame        ( Renderer * renderer, SceneNode * sceneRoot )
 {
-    { renderer; sceneRoot; }
+    PreRenderFrame( renderer );
+
+	if( sceneRoot )
+		RenderNode( renderer, sceneRoot );
+
+    PostRenderFrame( renderer );
+}
+
+// ***************************
+//
+void    RenderLogicImpl::RenderNode          ( Renderer * renderer, SceneNode * node )
+{
+    if ( node->IsVisible() )
+    {
+        auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogic( node );
+        
+        effectRenderLogic->RenderNode( renderer, node );
+    }
 }
 
 // ***************************
 //
 void    RenderLogicImpl::PostRenderFrame    ( Renderer * renderer )
 {
-    m_offscreenDisplay->DisableActiveRenderTarget( renderer );
+    renderer->Disable( m_offscreenDisplay->GetActiveRenderTarget() );
+
+//    m_offscreenDisplay->DisableActiveRenderTarget( renderer );
     m_offscreenDisplay->UpdateActiveRenderTargetIdx();
 
     //m_offscreenRenderLogic->DisableTopRenderTarget( renderer );

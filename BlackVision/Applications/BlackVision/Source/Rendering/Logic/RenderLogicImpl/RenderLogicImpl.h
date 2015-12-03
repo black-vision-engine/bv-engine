@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Rendering/Logic/FrameRendering/NodeEffectRenderLogicSelector.h"
+
+
 namespace bv {
 
 class RenderTargetStackAllocator;
@@ -16,6 +19,8 @@ private:
 
 protected:
 
+    NodeEffectRenderLogicSelector   m_nodeEffectRenderLogicSelector;
+
     RenderTargetStackAllocator *    m_rtStackAllocator;
     OffscreenDisplay *              m_offscreenDisplay;
 
@@ -26,6 +31,7 @@ public:
 
 
     virtual     void    RenderFrame         ( Renderer * renderer, SceneNode * sceneRoot );
+                void    RenderNode          ( Renderer * renderer, SceneNode * node );
 
 protected:
 

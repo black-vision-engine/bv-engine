@@ -127,6 +127,7 @@
     <ClCompile Include="..\..\..\Source\NewModelTestScenes.cpp" />
     <ClCompile Include="..\..\..\Source\PieChartNode.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\FrameRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffectRenderLogicSelector.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\AlphaMaskRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\DefaultEffectRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\NodeEffectRenderLogic.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="..\..\..\Source\NewModelTestNodes.h" />
     <ClInclude Include="..\..\..\Source\PieChartNode.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\FrameRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffectRenderLogicSelector.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\AlphaMaskRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\DefaultEffectRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\NodeEffectRenderLogic.h" />

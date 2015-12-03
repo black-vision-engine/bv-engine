@@ -29,9 +29,10 @@ RenderLogic::RenderLogic     ()
     :  m_impl( nullptr )
     , m_rtStackAllocator( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), TextureFormat::F_A8R8G8B8 )
 {
-    // auto videoCardEnabled   = DefaultConfig.ReadbackFlag();
-    // auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput();
+    auto videoCardEnabled   = DefaultConfig.ReadbackFlag();
+    auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput();
 
+    m_impl = new RenderLogicImpl( &m_rtStackAllocator, videoCardEnabled || previewAsVideoCard );
     m_frameRenderLogic = new FrameRenderLogic();
     m_postFrameRenderLogic = new PostFrameRenderLogic();
 }
