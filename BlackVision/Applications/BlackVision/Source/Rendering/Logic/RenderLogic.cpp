@@ -263,8 +263,8 @@ void    RenderLogic::PostFrameSetup ( Renderer * renderer )
         m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
         m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
 
-        m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic, m_VideoCardManager );
-        //m_screenShotLogic->FrameRendered( renderer, m_offscreenRenderLogic );
+        //m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic, m_VideoCardManager );
+        m_screenShotLogic->FrameRendered( renderer, m_offscreenRenderLogic );
     }
 
     {

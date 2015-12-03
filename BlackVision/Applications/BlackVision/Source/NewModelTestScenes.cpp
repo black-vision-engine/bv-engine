@@ -1186,17 +1186,19 @@ model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::Plu
 {
     pluginsManager;
 
-    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "sand.jpg" );
-    auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "sand.jpg" );
-    auto node2 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CIRCLE", glm::vec3( -2.0, 0.0, 3.0 ), "water.jpg" );
-    auto node3 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_SPHERE", glm::vec3( -4.0, -3.0, 1.0 ), "sand.jpg" );
-    auto node4 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_ROUNDEDRECT", glm::vec3( -3.0, -2.0, -3.0 ), "sand.jpg" );
-    auto node5 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_TORUS", glm::vec3( 1.0, 0.0, -3.0 ), "sand.jpg" );
-    auto node6 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_SPRING", glm::vec3( 5.0, -5.0, 0.0 ), "water.jpg" );
-    auto node7 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_TRIANGLE", glm::vec3( 1.0, -0.7, -3.0 ), "sand.jpg" );
-    auto node8 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CYLINDER", glm::vec3( -3.0, 2.0, -3.0 ), "water.jpg" );
-    auto node9 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_ELLIPSE", glm::vec3( 0.0, -3.0, 4.0 ), "sand.jpg" );
+    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "textures/sand.jpg" );
+    auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "textures/sand.jpg" );
+    auto node2 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CIRCLE", glm::vec3( -2.0, 0.0, 3.0 ), "textures/water.jpg" );
+    auto node3 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_SPHERE", glm::vec3( -4.0, -3.0, 1.0 ), "textures/sand.jpg" );
+    auto node4 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_ROUNDEDRECT", glm::vec3( -3.0, -2.0, -3.0 ), "textures/sand.jpg" );
+    auto node5 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_TORUS", glm::vec3( 1.0, 0.0, -3.0 ), "textures/sand.jpg" );
+    auto node6 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_SPRING", glm::vec3( 5.0, -5.0, 0.0 ), "textures/water.jpg" );
+    auto node7 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_TRIANGLE", glm::vec3( 1.0, -0.7, -3.0 ), "textures/sand.jpg" );
+    auto node8 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CYLINDER", glm::vec3( -3.0, 2.0, -3.0 ), "textures/water.jpg" );
+    auto node9 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_ELLIPSE", glm::vec3( 0.0, -3.0, 4.0 ), "textures/sand.jpg" );
     
+    auto node10 = SimpleNodesFactory::CreateCreedTimerNode( timelineManager, timeEvaluator, 0, false );
+
     node0->AddChildToModelOnly( node1 );
     node0->AddChildToModelOnly( node2 );
     node0->AddChildToModelOnly( node3 );
@@ -1206,6 +1208,8 @@ model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::Plu
     node0->AddChildToModelOnly( node7 );
     node0->AddChildToModelOnly( node8 );
     node0->AddChildToModelOnly( node9 );
+
+    node0->AddChildToModelOnly( node10 );
 
     return node0;
 }
@@ -1222,10 +1226,10 @@ model::BasicNodePtr     TestScenesFactory::AssetCacheTestScene         ( const m
 {
     pluginsManager;
 
-    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "sand.jpg" );
-    auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "sand.jpg" );
-    auto node2 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CYLINDER", glm::vec3( -3.0, 2.0, -3.0 ), "water.jpg" );
-    auto node3 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CUBE", glm::vec3( 5.0, -5.0, 0.0 ), "water.jpg" );
+    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "textures/sand.jpg" );
+    auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "textures/sand.jpg" );
+    auto node2 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CYLINDER", glm::vec3( -3.0, 2.0, -3.0 ), "textures/water.jpg" );
+    auto node3 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CUBE", glm::vec3( 5.0, -5.0, 0.0 ), "textures/water.jpg" );
 
     auto node4 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( 0.0, -0.4, 0.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 1", "fonts/Astera.TTF" );
     auto node5 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( -3.0, 0.0, -3.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 2", "fonts/Astera.TTF" );
@@ -1265,7 +1269,7 @@ model::BasicNodePtr TestScenesFactory::WSerializationTest          ( const model
 #endif
 
     pluginsManager;
-    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "sand.jpg" );
+    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "textures/sand.jpg" );
 
     Serializer serializeObject;
     serializeObject.EnterChild( MAKE_STR("asset") );
@@ -1321,8 +1325,8 @@ model::BasicNodePtr TestScenesFactory::WSerializationTest          ( const model
 model::BasicNodePtr TestScenesFactory::RemoteEventsTestScene( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     pluginsManager;
-    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "water.jpg" );
-    auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "sand.jpg" );
+    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "textures/water.jpg" );
+    auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "textures/sand.jpg" );
     auto node2 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( 0.0, -0.4, 0.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 1", "fonts/courbi.TTF" );
 
     node0->AddChildToModelOnly( node1 );

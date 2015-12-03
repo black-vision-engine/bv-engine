@@ -39,6 +39,7 @@ void RenderMode::SetRenderToFileMode( const std::string& filePath, float request
         m_renderLogic->MakeScreenShot( filePath, numFrames );
 
     m_renderMode = RenderingMode::RenderOffscreen;
+    m_currentTime = 0.0f;
 }
 
 // ***********************
