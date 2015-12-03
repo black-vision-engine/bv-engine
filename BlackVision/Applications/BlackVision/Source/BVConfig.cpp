@@ -2,7 +2,7 @@
 
 //#define USE_READBACK_API
 //#define FULLSCREEN_MODE
-#define DISPLAY_VIDEO_CARD_OUTPUT
+//#define DISPLAY_VIDEO_CARD_OUTPUT
 #define PERSPECTIVE_CAMERA
 
 namespace bv

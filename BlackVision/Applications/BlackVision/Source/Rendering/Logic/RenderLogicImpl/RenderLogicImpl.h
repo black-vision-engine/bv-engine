@@ -25,6 +25,11 @@ public:
 
     virtual     void    RenderFrame         ( Renderer * renderer, SceneNode * sceneRoot ) = 0;
 
+protected:
+
+                void    PreRenderFrame      ( Renderer * renderer );
+                void    PostRenderFrame     ( Renderer * renderer );
+
 };
 
 } // bv

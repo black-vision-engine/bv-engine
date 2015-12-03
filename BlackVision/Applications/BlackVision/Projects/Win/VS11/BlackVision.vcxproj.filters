@@ -177,6 +177,12 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicVideoPreview.cpp">
       <Filter>Rendering\RenderLogicImpl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Utils\RenderLogicContext.cpp">
+      <Filter>Rendering\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Utils\RenderTargetStackAllocator.cpp">
+      <Filter>Rendering\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -309,6 +315,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicVideoPreview.h">
       <Filter>Rendering\RenderLogicImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Utils\RenderLogicContext.h">
+      <Filter>Rendering\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Utils\RenderTargetStackAllocator.h">
+      <Filter>Rendering\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

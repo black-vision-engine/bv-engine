@@ -66,7 +66,8 @@ void    RenderLogic::SetCamera       ( Camera * cam )
 void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot )
 {
     m_frameRenderLogic->RenderFrame( renderer, sceneRoot );
-//    m_impl->RenderFrame( renderer, sceneRoot );
+
+    // m_impl->RenderFrame( renderer, sceneRoot );
 }
 
 } //bv
