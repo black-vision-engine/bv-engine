@@ -124,7 +124,10 @@ ser.EnterChild( "plugin" );
         {
             auto uid = AssetDescsWithUIDs::GetInstance().Key2UID( asset->GetKey() );
             ser.EnterChild( "asset" );
-                ser.SetAttribute( "uid", uid );
+                if( uid != "" )
+                    ser.SetAttribute( "uid", uid );
+                else
+                    asset->Serialize( ser );
 
                 auto rsm = GetRSM( asset->GetKey() );
                 assert( rsm );
@@ -179,7 +182,12 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
 		{
 			deser.EnterChild( "asset" );
 
-			auto asset = AssetDescsWithUIDs::GetInstance().UID2Asset( deser.GetAttribute( "uid" ) );
+            auto uid = deser.GetAttribute( "uid" );
+            AssetDescConstPtr asset;
+            if( uid != "" )
+			    asset = AssetDescsWithUIDs::GetInstance().UID2Asset( uid );
+            else
+                asset = AssetManager::GetInstance().CreateDesc( deser );
 			plugin->LoadResource( asset );
         
 			auto params = SerializationHelper::DeserializeObjectLoadArrayImpl< AbstractModelParameter >( deser, "params" );

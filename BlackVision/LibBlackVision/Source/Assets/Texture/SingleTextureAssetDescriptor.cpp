@@ -15,7 +15,7 @@ void                SingleTextureAssetDesc::Serialize       ( ISerializer& ser )
 {
 ser.EnterChild( "asset" );
     
-    ser.SetAttribute( "uid", UID() );
+    ser.SetAttribute( "type", UID() );
     ser.SetAttribute( "path", GetImagePath() );
 
 ser.ExitChild();

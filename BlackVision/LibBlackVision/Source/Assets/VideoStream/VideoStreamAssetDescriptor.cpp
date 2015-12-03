@@ -12,7 +12,7 @@ const std::string		VideoStreamAssetDesc::uid = "VIDEO_STREAM_ASSET_DESC";
 void                VideoStreamAssetDesc::Serialize       ( ISerializer& ser ) const
 {
 ser.EnterChild( "asset" );
-    ser.SetAttribute( "uid", UID() );
+    ser.SetAttribute( "type", UID() );
 	ser.SetAttribute( "path", m_streamPath );
 	ser.SetAttribute( "format", std::to_string( static_cast< int >( m_textureFormat ) ) );
 

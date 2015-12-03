@@ -2,6 +2,35 @@
 
 namespace bv {
 
+class AssetDescWithUID : public ISerializable
+{
+    AssetDescConstPtr desc;
+    std::string uid;
+public:
+    AssetDescWithUID( AssetDescConstPtr desc, std::string uid ) : desc( desc ), uid( uid ) { }
+
+    virtual void                            Serialize       ( ISerializer& sob ) const
+    {
+        sob.EnterChild( "uid" );
+        sob.SetAttribute( "uid", uid );
+        desc->Serialize( sob );
+        sob.ExitChild();
+    }
+
+    static ISerializablePtr                 Create          ( const IDeserializer& deser )
+    {
+        auto uid = deser.GetAttribute( "uid" );
+
+        auto desc = AssetManager::GetInstance().CreateDesc( deser );
+        assert( desc );
+        
+        return std::make_shared< AssetDescWithUID >( desc, uid );
+    }
+
+    AssetDescConstPtr                       GetDesc() const { return desc; }
+    std::string                             GetUID() const { return uid; }
+};
+
 // *******************************
 //
 void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root, bool recursive )
@@ -40,7 +69,7 @@ ISerializablePtr                                 AssetDescsWithUIDs::Create     
 
     auto assets = std::make_shared< AssetDescsWithUIDs >();
     for( auto asset : assetsWithUIDs )
-        assets->AddAssetDescWithUID( *asset );
+        assets->AddAssetDescWithUID( asset->GetDesc(), asset->GetUID() );
     return assets;
 }
 
@@ -71,23 +100,20 @@ void                                                    AssetDescsWithUIDs::AddA
     auto baseUID = asset->GetProposedShortKey();
     std::string uid = baseUID;
     if( m_uid2asset.find( uid ) == m_uid2asset.end() )
-        AddAssetDescWithUID( AssetDescWithUID( asset, uid ) );
+        AddAssetDescWithUID( asset, uid );
     else
         {
             int nTry = 1;
             while( uid = baseUID + std::to_string( nTry ), m_uid2asset.find( uid ) != m_uid2asset.end() )
                 nTry++;
-            AddAssetDescWithUID( AssetDescWithUID( asset, uid ) );            
+            AddAssetDescWithUID( asset, uid );            
         }
 }
 
 // ********************************
 //
-void                                                    AssetDescsWithUIDs::AddAssetDescWithUID( const AssetDescWithUID& assetWithUID )
+void                                                    AssetDescsWithUIDs::AddAssetDescWithUID( AssetDescConstPtr asset, std::string uid )
 {
-    auto asset = assetWithUID.GetDesc();
-    auto uid = assetWithUID.GetUID();
-
     assert( m_key2uid.find( asset->GetKey() ) == m_key2uid.end() );
     assert( m_uid2asset.find( uid ) == m_uid2asset.end() );
 

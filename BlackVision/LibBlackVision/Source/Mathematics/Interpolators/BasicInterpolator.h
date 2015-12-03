@@ -74,7 +74,8 @@ public:
 
     const KeyType &     FirstKey    () const;
     const KeyType &     LastKey     () const;
-    const std::vector< KeyType > &      GetKeys();
+    const std::vector< KeyType > &      GetKeys() const;
+    std::vector< KeyType > &        GetKeys();
 
     int                                                 GetNumKeys      ();
 
