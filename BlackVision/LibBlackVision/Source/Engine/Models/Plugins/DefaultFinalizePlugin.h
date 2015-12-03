@@ -20,7 +20,7 @@ private:
     IPluginPtr                      m_prevPlugin;
 
     std::string                     m_shadersDir;
-
+   
     std::string                     m_name;
     static std::string              m_uid;
 
@@ -38,6 +38,7 @@ public:
 
 	virtual IPluginPtr							Clone						() const override;
 
+    virtual UInt32				                GetID		                () const override;
     virtual const std::string &                 GetName                     () const override;
     virtual const std::string &                 GetTypeUid                  () const override;
                                                                                      

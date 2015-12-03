@@ -1101,6 +1101,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\BVProjectTools.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\IDGenerator.cpp">
+      <Filter>Engine\Models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2337,6 +2340,9 @@
       <Filter>Engine\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\BVProjectTools.h">
+      <Filter>Engine\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\IDGenerator.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
   </ItemGroup>
