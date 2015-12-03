@@ -1,9 +1,14 @@
 #include "CompositeBezierInterpolator.h"
-#include "Mathematics/Core/mathfuncs.h"
+
+#include "Functions/ConstFunction.h"
+#include "Functions/LinearFunction.h"
+#include "Functions/BezierFunction.h"
+#include "Functions/PolynomialFunction.h"
 
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/SerializationHelper.inl"
 
+#include "Mathematics/Core/mathfuncs.h"
 #include <vector>
 #include <array>
 //#include <initializer_list>
@@ -21,193 +26,6 @@ std::pair< WrapMethod, const char* > wm2s[] =
 template<> std::string T2String< WrapMethod >( const WrapMethod& wm ) { return Enum2String( wm2s, wm ); }
 
 }
-
-// *******************************
-//
-template< class TimeValueT, class ValueT >
-class ConstEvaluator : public IEvaluator< TimeValueT, ValueT >
-{
-    ValueT value;
-public:
-    ConstEvaluator( ValueT v ) : value( v ) {}
-
-    virtual EvaluatorType GetType() override { return EvaluatorType::ET_CONSTANT; }
-
-    virtual void SetValue( TimeValueT /*t*/, ValueT v ) override
-    {
-        value = v;
-    }
-
-    ValueT Evaluate( TimeValueT ) const override { return value; }
-
-    virtual void                                        Serialize       ( ISerializer& ser ) const override
-    {
-    ser.EnterChild( "interpolation" );
-        ser.SetAttribute( "type", "point" );
-    ser.ExitChild();
-    }
-
-    virtual void                                Deserialize( const IDeserializer& deser )
-    {
-        if( deser.GetAttribute( "type" ) != "point" )
-            assert( false );
-    }
-
-};
-
-// *******************************
-//
-template< class TimeValueT, class ValueT >
-class LinearEvaluator : public IEvaluator< TimeValueT, ValueT >
-{
-    typedef Key< TimeValueT, ValueT > Key;
-
-    Key key1, key2;
-public:
-    LinearEvaluator( Key k1, Key k2 ) : key1( k1 ), key2( k2 ) {}
-
-    virtual EvaluatorType GetType() override { return EvaluatorType::ET_LINEAR; }
-
-    virtual void SetValue( TimeValueT t, ValueT v ) override
-    {
-        if( key1.t == t )
-            key1.val = v;
-        else if( key2.t == t )
-            key2.val = v;
-        else
-            assert( false );
-    }
-
-    ValueT Evaluate( TimeValueT t ) const override 
-    { 
-        TimeValueT alpha = ( t - key1.t ) / ( key2.t - key1.t );
-        return ValueT( alpha * key2.val + (1-alpha) * key1.val );
-    }
-
-    virtual void                                        Serialize       ( ISerializer& ser ) const override
-    {
-    ser.EnterChild( "interpolation" );
-        ser.SetAttribute( "type", "linear" );
-    ser.ExitChild();
-    }
-
-    virtual void                                Deserialize( const IDeserializer& deser )
-    {
-        if( deser.GetAttribute( "type" ) != "linear" )
-            assert( false );
-    }
-};
-
-Key< bv::TimeType, bool > Key< bv::TimeType, bool >::operator+( const Key< bv::TimeType, bool > &/*that*/ ) const { assert( false ); return Key< bv::TimeType, bool >( 0, false ); }
-Key< bv::TimeType, bool > Key< bv::TimeType, bool >::operator-( const Key< bv::TimeType, bool > &/*that*/ ) const { assert( false ); return Key< bv::TimeType, bool >( 0, false ); }
-
-template<>
-Key< bv::TimeType, bool > operator*( const bv::TimeType & /*a*/, const Key< bv::TimeType, bool > &/*that*/ ) { assert( false ); return Key< bv::TimeType, bool >( 0, false ); }
-
-template<>
-bool LinearEvaluator< bv::TimeType, bool >::Evaluate( bv::TimeType t ) const
-{
-    bv::TimeType alpha = ( t - key1.t ) / ( key2.t - key1.t );
-    return int( alpha * key2.val + (1-alpha) * key1.val ) > 0;
-}
-
-// *******************************
-//
-template< class TimeValueT, class ValueT >
-class BezierEvaluator : public IEvaluator< TimeValueT, ValueT >
-{
-    typedef Key< TimeValueT, ValueT > Key;
-
-public: // FIXME
-    Key key1, key2;
-    Key v1, v2;
-    TimeValueT m_tolerance;
-public:
-    virtual EvaluatorType GetType() override { return EvaluatorType::ET_BEZIER; }
-
-    BezierEvaluator( Key k1, Key k2, Key v1_, Key v2_, TimeValueT tolerance ) : key1( k1 ), key2( k2 ), v1( v1_ ), v2( v2_ ), m_tolerance( tolerance ) {}
-    
-    void SetV2( Key v2 ) { this->v2 = v2; }
-    
-    virtual void SetValue( TimeValueT t, ValueT v ) override
-    {
-        if( key1.t == t )
-            key1.val = v;
-        else if( key2.t == t )
-            key2.val = v;
-        else
-            assert( false );
-    }
-
-    ValueT Evaluate( TimeValueT t ) const override 
-    {
-        assert( key1.t <= t && t <= key2.t );
-
-        Key A = key1,
-            B = key1 + v1,
-            C = key2 + v2,
-            D = key2;
-
-        for( ; ; ) 
-        {
-            Key middle = 1.f/8 * A + 3.f/8 * B + 3.f/8 * C + 1.f/8 * D;
-            
-            if( fabs( middle.t - t ) < m_tolerance )
-                return middle.val;
-            else
-            {
-                if( t < middle.t )
-                {
-                    A = A;
-                    B = 1.f/2 * A + 1.f/2 * B;
-                    C = 1.f/4 * A + 1.f/2 * B + 1.f/4 * C;
-                    D = middle;
-                }
-                else
-                {
-                    A = middle;
-                    B = 1.f/4 * B + 1.f/2 * C + 1.f/4 * D;
-                    C = 1.f/2 * C + 1.f/2 * D;
-                    D = D;               
-                }
-            }
-        }
-    }
-
-    virtual void                                        Serialize       ( ISerializer& ser ) const override
-    {
-    ser.EnterChild( "interpolation" );
-        ser.SetAttribute( "type", "bezier" );
-        
-        ser.EnterChild( "v1" );
-            SerializationHelper::SerializeAttribute( ser, v1.t, "dt" );
-            SerializationHelper::SerializeAttribute( ser, v1.val, "dval" );
-        ser.ExitChild();
-        
-        ser.EnterChild( "v2" );
-            SerializationHelper::SerializeAttribute( ser, v2.t, "dt" );
-            SerializationHelper::SerializeAttribute( ser, v2.val, "dval" );
-        ser.ExitChild();
-        
-    ser.ExitChild();
-    }
-
-    virtual void                                Deserialize( const IDeserializer& deser )
-    {
-        if( deser.GetAttribute( "type" ) != "bezier" )
-            assert( false );
-
-        deser.EnterChild( "v1" );
-            v1.t = SerializationHelper::_String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
-            v1.val = SerializationHelper::_String2T< ValueT >( deser.GetAttribute( "dval" ) );
-        deser.ExitChild();
-
-        deser.EnterChild( "v2" );
-            v2.t = SerializationHelper::_String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
-            v2.val = SerializationHelper::_String2T< ValueT >( deser.GetAttribute( "dval" ) );
-        deser.ExitChild();
-    }
-};
 
 // *******************************
 //
@@ -323,7 +141,7 @@ void UpdateInterpolator( std::vector< IEvaluator<TimeValueT, ValueT >* >& interp
 
     auto iType = interpolators[ i ]->GetType();
 
-    if( iType == EvaluatorType::ET_CONSTANT || iType == EvaluatorType::ET_LINEAR )
+    if( iType == EvaluatorType::ET_CONSTANT || iType == EvaluatorType::ET_LINEAR || iType == EvaluatorType::ET_POLYNOMIAL )
         return;
 
     assert( iType == EvaluatorType::ET_BEZIER );
@@ -363,6 +181,26 @@ IEvaluator<TimeValueT, ValueT >* CreateDummyInterpolator( CurveType type, Key< T
         return new BezierEvaluator< TimeValueT, ValueT >( k1, k2, Key< TimeValueT, ValueT >( 0, ValueT() ), Key< TimeValueT, ValueT >( 0, ValueT() ), tolerance );
     else if( type == CurveType::CT_COSINE_LIKE )
         return new BezierEvaluator< TimeValueT, ValueT >( k1, k2, Key< TimeValueT, ValueT >( 0, ValueT() ), Key< TimeValueT, ValueT >( 0, ValueT() ), tolerance );
+    else if( type == CurveType::CT_CUBIC_IN )
+        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 0, 0, 1, 0, 0 );
+    else if( type == CurveType::CT_CUBIC_OUT )
+        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 0, 0, 1, -3, 3 );
+    else if( type == CurveType::CT_ELASTIC_IN )
+        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 33, -59, 32, -5, 0 );
+    else if( type == CurveType::CT_ELASTIC_OUT )
+        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 33, -106, 126, -67, 15 );
+    //else if( type == CT_CUBIC_IN_BOUNCE )
+    //    return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 0, 0, 1, 0, 0, true );
+    //else if( type == CT_CUBIC_OUT_BOUNCE )
+    //    return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 0, 0, 1, -3, 3, true );
+    else if( type == CT_ELASTIC_IN_BOUNCE )
+        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 33, -59, 32, -5, 0, true );
+    else if( type == CT_ELASTIC_OUT_BOUNCE )
+        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 33, -106, 126, -67, 15, true );
+    else if( type == CT_QUARTIC_INOUT )
+        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 6, -15, 10, 0, 0 );
+    else if( type == CT_CUBIC_INTOUT )
+        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 0, 0, -2, 3, 0 );
     else
     {
         assert( false );

@@ -746,6 +746,10 @@
     <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeBezierInterpolator.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\BezierFunction.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\ConstFunction.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\LinearFunction.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\PolynomialFunction.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\InterpolatorBasicTypes.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Rect.h" />

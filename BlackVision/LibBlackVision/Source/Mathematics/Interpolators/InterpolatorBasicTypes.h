@@ -40,6 +40,19 @@ enum CurveType
     CT_BEZIER,
     CT_COSINE_LIKE,
 
+    CT_CUBIC_IN,
+    CT_CUBIC_OUT,
+    CT_ELASTIC_IN,
+    CT_ELASTIC_OUT,
+
+    //CT_CUBIC_IN_BOUNCE,
+    //CT_CUBIC_OUT_BOUNCE,
+    CT_ELASTIC_IN_BOUNCE,
+    CT_ELASTIC_OUT_BOUNCE,
+
+    CT_QUARTIC_INOUT,
+    CT_CUBIC_INTOUT,
+
     CT_TOTAL
 };
 
@@ -47,7 +60,8 @@ enum class EvaluatorType : int
 { 
     ET_CONSTANT, 
     ET_LINEAR, 
-    ET_BEZIER 
+    ET_BEZIER,
+    ET_POLYNOMIAL
 };
 
 

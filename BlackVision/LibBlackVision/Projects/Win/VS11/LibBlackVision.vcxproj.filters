@@ -196,6 +196,9 @@
     <Filter Include="Engine\Models\Plugins\Channels\Transform\VertexShader">
       <UniqueIdentifier>{35597ded-e812-4814-8ade-2f4ce1473665}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Mathematics\Interpolators\Functions">
+      <UniqueIdentifier>{27519ebb-c46f-4471-9667-85c65d77b043}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -2338,6 +2341,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\BVProjectTools.h">
       <Filter>Engine\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\ConstFunction.h">
+      <Filter>Mathematics\Interpolators\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\LinearFunction.h">
+      <Filter>Mathematics\Interpolators\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\BezierFunction.h">
+      <Filter>Mathematics\Interpolators\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\PolynomialFunction.h">
+      <Filter>Mathematics\Interpolators\Functions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
