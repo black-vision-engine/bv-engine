@@ -447,8 +447,9 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 
     auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
-	auto viewSize = std::min( ApplicationContext::Instance().GetWidth(), ApplicationContext::Instance().GetHeight() ) / 2;
-    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_currentText, m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, viewSize, viewSize, m_arranger, false );
+	auto viewWidth  = ApplicationContext::Instance().GetWidth();
+    auto viewHeight = ApplicationContext::Instance().GetHeight();
+    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_currentText, m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, viewWidth, viewHeight, m_arranger, false );
 
 	ScaleToMaxTextLength();
 
