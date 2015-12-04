@@ -548,8 +548,6 @@ private:
 DEFINE_PTR_TYPE( WidgetEvent )
 
 
-// ciach
-
 // ************************************* VideoCardEvent *************************************
 class VideoCardEvent : public BaseEvent
 {
@@ -587,6 +585,43 @@ public:
 };
 
 DEFINE_PTR_TYPE( VideoCardEvent )
+
+// ************************************* RenderingModeEvent *************************************
+class RenderingModeEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        RenderOffscreen,
+        ScreenShot,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    float                       FPS;
+    unsigned int                NumFrames;
+    std::string                 FilePath;
+    Command                     RenderingCommand;
+public:
+
+    explicit                        RenderingModeEvent   () {};
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+public:
+    static std::wstring             CommandToWString    ( Command cmd );
+    static Command                  WStringToCommand    ( const std::wstring& string );
+};
+
+DEFINE_PTR_TYPE( RenderingModeEvent )
 
 // ************************************* HightmapEvent *************************************
 class HightmapEvent : public BaseEvent

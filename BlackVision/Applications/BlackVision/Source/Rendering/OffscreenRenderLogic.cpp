@@ -9,6 +9,7 @@
 
 #include "Engine/Graphics/Effects/Texture2DEffect.h"
 
+
 namespace bv {
 
 namespace {
@@ -293,6 +294,8 @@ unsigned int    OffscreenRenderLogic::NumReadBuffersPerRT           () const
 {
     return TotalNumReadBuffers() / GNumRenderTargets;
 }
+
+
 
 // **************************
 //

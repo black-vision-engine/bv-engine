@@ -13,6 +13,7 @@ class SceneNode;
 class Camera;
 class NodeEffectRenderLogic;
 class DefaultVideoOutputRenderLogic;
+class ScreenShotLogic;
 
 class RenderLogic
 {
@@ -22,6 +23,7 @@ private:
 
     OffscreenRenderLogic *                  m_offscreenRenderLogic;
     DefaultVideoOutputRenderLogic *         m_videoOutputRenderLogic;
+    ScreenShotLogic*                        m_screenShotLogic;
 
     std::vector< NodeEffectRenderLogic * >  m_customNodeRenderLogic;
 
@@ -59,6 +61,8 @@ private:
 
     void    PrintGLStats    ( bool detailed );
 
+public:
+    void    MakeScreenShot  ( const std::string& path, unsigned int numFrames );
 };
 
 } // bv

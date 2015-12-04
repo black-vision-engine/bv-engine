@@ -12,6 +12,8 @@
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
 
+#include "Engine/Models/IDGenerator.h"
+
 #include "Serialization/ISerializable.h"
 //#include "Engine/Models/Plugins/PluginsFactory.h"
 
@@ -24,6 +26,8 @@ protected:
 
     ///////////////// Previous plugin ///////////
     IPluginPtr                                  m_prevPlugin;
+
+	UInt32										m_id;
 
     std::string                                 m_name;
     std::string                                 m_uid;
@@ -60,6 +64,8 @@ public:
     virtual ResourceStateModelPtr               GetRSM                      ( std::string key ) const; // FIXME: ugly hack for serialization
 
     virtual void                                Update                      ( TimeType t );
+
+    UInt32										GetID		                () const override   { return m_id; }
 
     const std::string &                         GetName                     () const override   { return m_name; } 
     const std::string &                         GetTypeUid                  () const override   { return m_uid; } 
@@ -140,6 +146,7 @@ BasePlugin< Iface >::BasePlugin   ( const std::string & name, const std::string 
     , m_name( name )
     , m_uid( uid )
     , m_pluginParamValModel( model )
+	, m_id( IDGenerator::Instance().GetID() )
 {
 }
 

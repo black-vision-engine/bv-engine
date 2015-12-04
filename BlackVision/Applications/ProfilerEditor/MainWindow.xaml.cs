@@ -261,25 +261,35 @@ namespace ProfilerEditor
 			}
 		}
 
+
+        private void ClearTree( bool affectAll )
+        {
+            if( affectAll )
+            {
+                for( int i = 0; i < m_profilerTreeView.Length; ++i )
+                {
+                    m_dataProcessor[i] = new DataAnalysis.AverageSamples();
+                    m_profilerTreeView[i] = null;
+                    m_firstTime[i] = true;
+                    SetTreeDataContext( (uint)i, null );
+                }
+            }
+            else
+            {
+                int thread = ThreadsTabControl.SelectedIndex;
+                m_profilerTreeView[thread] = null;
+                m_dataProcessor[thread] = new DataAnalysis.AverageSamples();
+                m_firstTime[thread] = true;
+                SetTreeDataContext( (uint)thread, null );
+            }
+        }
+
 		private void ClearTreeButton_Click( object sender, RoutedEventArgs e )
 		{
-			if( AffectAllCheckBox.IsChecked == true )
-			{
-				for( int i = 0; i < m_profilerTreeView.Length; ++i )
-				{
-					m_profilerTreeView[ i ] = null;
-					m_firstTime[ i ] = true;
-					SetTreeDataContext( (uint)i, null );
-				}
-			}
-			else
-			{
-				int thread = ThreadsTabControl.SelectedIndex;
-				m_profilerTreeView[ thread ] = null;
-				m_firstTime[ thread ] = true;
-				SetTreeDataContext( (uint)thread, null );
-			}
+            bool affectAll = AffectAllCheckBox.IsChecked.Value;
+            ClearTree( affectAll );
 		}
+
 
 		private void UpdateTimeFormatButton_Click( object sender, RoutedEventArgs e )
 		{
@@ -335,6 +345,8 @@ namespace ProfilerEditor
 			m_BlackVisionProcess.StartInfo.WorkingDirectory = System.IO.Path.GetDirectoryName( m_BlackVisionPathName );
 			m_BlackVisionProcess.StartInfo.Arguments = m_commandLineArg;
 			m_BlackVisionProcess.Start();
+
+            ClearTree( true );
 		}
 
 

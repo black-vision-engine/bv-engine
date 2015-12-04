@@ -21,7 +21,6 @@ DefaultFinalizePlugin::DefaultFinalizePlugin       ()
     , m_finalizePSC( nullptr )
     , m_finalizeVSC( nullptr )
     , m_finalizeGSC( nullptr )
-
 {
     m_defaultVSChannel = DefaultVertexShaderChannel::Create();
 
@@ -40,6 +39,14 @@ IPluginPtr							DefaultFinalizePlugin::Clone						() const
 {
 	assert( false );
     return nullptr;
+}
+
+// *******************************
+//
+UInt32								DefaultFinalizePlugin::GetID						() const
+{
+	assert( false );
+    return 0; //FIXME: id not needed?
 }
 
 // *******************************

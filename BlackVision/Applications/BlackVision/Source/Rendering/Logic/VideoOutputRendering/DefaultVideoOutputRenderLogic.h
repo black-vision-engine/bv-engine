@@ -28,6 +28,7 @@ public:
 
     void    FrameRenderedNewImpl            ( Renderer * renderer, OffscreenRenderLogic * offscreenRenderLogic, videocards::VideoCardManager * videoCardManager );
 
+    bool    ReadbackNeeded                  ()  { return m_useVideoCard; }
 private:
 
     void    PushToVideoCard                 ( Texture2DConstPtr & frame, videocards::VideoCardManager * videoCardManager );

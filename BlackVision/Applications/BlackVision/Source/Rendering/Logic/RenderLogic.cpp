@@ -7,6 +7,7 @@
 #include "Tools/Profiler/HerarchicalProfiler.h"
 #include "FrameStatsService.h"
 
+#include "Rendering/Logic/OfflineRendering/ScreenShotLogic.h"
 #include "Rendering/OffscreenRenderLogic.h"
 #include "BVConfig.h"
 
@@ -37,6 +38,7 @@ RenderLogic::RenderLogic     ()
 {
     m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffersPerRT() );
     m_videoOutputRenderLogic = new DefaultVideoOutputRenderLogic( DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
+    m_screenShotLogic = new ScreenShotLogic();
 
     m_customNodeRenderLogic.push_back( new DefaultEffectRenderLogic( this, m_offscreenRenderLogic ) );
     m_customNodeRenderLogic.push_back( new AlphaMaskRenderLogic( this, m_offscreenRenderLogic ) );
@@ -222,13 +224,22 @@ void RenderLogic::InitVideoCards     ( Renderer * renderer )
 //
 void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
 {
-    PreFrameSetup( renderer );
+    {
+        HPROFILER_SECTION( "PreFrame Setup", PROFILER_THREAD1 );
+        PreFrameSetup( renderer );
+    }
 
-    // FIXME: verify that all rendering paths work as expected
-	if( node )
-		RenderNode( renderer, node );
+    {
+        HPROFILER_SECTION( "RenderNode", PROFILER_THREAD1 );
+        // FIXME: verify that all rendering paths work as expected
+	    if( node )
+		    RenderNode( renderer, node );
+    }
 
-    PostFrameSetup( renderer );
+    {
+        HPROFILER_SECTION( "PostFrame Setup", PROFILER_THREAD1 );
+        PostFrameSetup( renderer );
+    }
 }
 
 // *********************************
@@ -249,13 +260,20 @@ void    RenderLogic::PreFrameSetup  ( Renderer * renderer )
 //
 void    RenderLogic::PostFrameSetup ( Renderer * renderer )
 {
-    m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
-    m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
+    {
+        HPROFILER_SECTION( "Video Output Logic", PROFILER_THREAD1 );
+        m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
+        m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
 
-    m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic, m_VideoCardManager );
+        m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic, m_VideoCardManager );
+        //m_screenShotLogic->FrameRendered( renderer, m_offscreenRenderLogic );
+    }
 
-    renderer->PostDraw();
-    renderer->DisplayColorBuffer();
+    {
+        HPROFILER_SECTION( "Display Color Buffer", PROFILER_THREAD1 );
+        renderer->PostDraw();
+        renderer->DisplayColorBuffer();
+    }
 }
 
 // *********************************
@@ -320,6 +338,14 @@ void    RenderLogic::PrintGLStats    (  bool detailed  )
         BVGL::PrintShortSummary( " ************************* SHORT GL STATS ********************************** " );
     }
 }
+
+// ***********************
+//
+void    RenderLogic::MakeScreenShot  ( const std::string& path, unsigned int numFrames )
+{
+    m_screenShotLogic->MakeScreenShot( path, numFrames );
+}
+
 
 } //bv
 
