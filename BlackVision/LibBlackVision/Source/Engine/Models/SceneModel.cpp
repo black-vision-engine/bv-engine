@@ -114,5 +114,13 @@ ModelSceneEditor *			SceneModel::GetModelSceneEditor		() const
 	return m_modelSceneEditor;
 }
 
+// *******************************
+//
+SceneModelPtr				SceneModel::CreateEmptyScene		( const std::string & name )
+{
+	//FIXME: timeevaluator and camera can be nullptr because they're not used yet
+	return SceneModel::Create( name, BasicNode::Create( std::string(), nullptr ), nullptr );
+}
+
 } // model
 } // bv

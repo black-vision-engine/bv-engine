@@ -26,7 +26,7 @@ private:
     typedef std::hash_map< model::IModelNode *, SceneNode * >	TNodesMapping;
 
 private:
-	BVProject *					m_scene;
+	BVProject *					m_project;
     model::BasicNodePtr			m_rootNode;
 
     SceneEditor *               m_engineSceneEditor;
@@ -35,11 +35,13 @@ private:
 
 private:
 
-                            BVProjectEditor       ( BVProject * scene );
+                            BVProjectEditor       ( BVProject * project );
 
 public:
 
     void                    AddScene			( model::SceneModelPtr scene );
+    void                    AddEmptyScene		( const std::string & sceneName );
+
     bool                    RemoveScene			( const std::string & sceneName );
     void                    RemoveAllScenes		();
 
