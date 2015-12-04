@@ -68,6 +68,8 @@ public:
 
     ITimelinePtr            GetTimeline                     ( const std::string & name );
     ITimelinePtr            GetTimeline                     ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
+    std::string             GetTimelinePath                 ( ITimeEvaluatorPtr timeline );
+    std::string             GetTimelinePath                 ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline );
 
     bool                    AddTimeline                     ( ITimeEvaluatorPtr timeline );
     bool                    AddTimelineToTimeline           ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline );
