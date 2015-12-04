@@ -35,6 +35,11 @@ public:
 
     void    RenderFrame     ( Renderer * renderer, SceneNode * node );
 
+    void    RenderNode      ( Renderer * renderer, SceneNode * node );
+    void    DrawNode        ( Renderer * renderer, SceneNode * node );
+    void    DrawNodeOnly    ( Renderer * renderer, SceneNode * node );
+    void    RenderChildren  ( Renderer * renderer, SceneNode * node, int firstChildIdx = 0 );
+
 };
 
 } // bv

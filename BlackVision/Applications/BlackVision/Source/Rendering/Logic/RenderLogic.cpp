@@ -62,8 +62,42 @@ void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot
     // m_impl->RenderFrame( renderer, sceneRoot );
 }
 
-} //bv
+// *********************************
+//
+void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
+{
+    { renderer; node; }
+    //m_impl->RenderNode( renderer, node );
+    //if ( node->IsVisible() )
+    //{
+    //    auto effectRenderLogic = GetNodeEffectRenderLogic( node );
+    //    
+    //    effectRenderLogic->RenderNode( renderer, node );
+    //}
+}
 
+// *********************************
+//
+void    RenderLogic::DrawNode        ( Renderer * renderer, SceneNode * node )
+{
+    { renderer; node; }
+}
+
+// *********************************
+//
+void    RenderLogic::DrawNodeOnly    ( Renderer * renderer, SceneNode * node )
+{
+    { renderer; node; }
+}
+
+// *********************************
+//
+void    RenderLogic::RenderChildren  ( Renderer * renderer, SceneNode * node, int firstChildIdx )
+{
+    { renderer; node; firstChildIdx; }
+}
+
+} //bv
 
 /* 
 

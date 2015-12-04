@@ -189,6 +189,24 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffectRenderLogicSelector.cpp">
       <Filter>Rendering\Logic\FrameRendering</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\AlphaMaskRenderLogicTr.cpp">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\DefaultEffectRenderLogicTr.cpp">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\NodeEffectRenderLogicTr.cpp">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\NodeMaskRenderLogicTr.cpp">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\WireframeRenderLogicTr.cpp">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Utils\DrawLogic.cpp">
+      <Filter>Rendering\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -333,6 +351,24 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffectRenderLogicSelector.h">
       <Filter>Rendering\Logic\FrameRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\AlphaMaskRenderLogicTr.h">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\DefaultEffectRenderLogicTr.h">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\NodeEffectRenderLogicTr.h">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\NodeMaskRenderLogicTr.h">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\WireframeRenderLogicTr.h">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Utils\DrawLogic.h">
+      <Filter>Rendering\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

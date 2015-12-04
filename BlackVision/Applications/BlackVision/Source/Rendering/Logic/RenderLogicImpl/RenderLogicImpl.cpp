@@ -35,7 +35,6 @@ void    RenderLogicImpl::PreRenderFrame      ( Renderer * renderer )
     renderer->PreDraw();
     
     renderer->Enable( m_offscreenDisplay->GetActiveRenderTarget() );
-    //m_offscreenDisplay->EnableActiveRenderTarget( renderer );
 }
 
 // ***************************
@@ -67,8 +66,6 @@ void    RenderLogicImpl::RenderNode          ( Renderer * renderer, SceneNode * 
 void    RenderLogicImpl::PostRenderFrame    ( Renderer * renderer )
 {
     renderer->Disable( m_offscreenDisplay->GetActiveRenderTarget() );
-
-//    m_offscreenDisplay->DisableActiveRenderTarget( renderer );
     m_offscreenDisplay->UpdateActiveRenderTargetIdx();
 
     //m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
