@@ -125,6 +125,9 @@ public:
     void    SetCamera           ( Camera * cam );
 	Camera * GetCamera           ();
 
+    void    SetVSync            ( bool enable, int verticalBufferFrameCount );
+    void    SetFlushFinish      ( bool flush, bool finish );
+
 public:
 
     void    SetStateInstance    ( const RendererStateInstance & stateInstance );

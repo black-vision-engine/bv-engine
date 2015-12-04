@@ -37,7 +37,7 @@ RenderLogic::RenderLogic     ()
 {
     m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffersPerRT() );
     m_videoOutputRenderLogic = new DefaultVideoOutputRenderLogic( DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
-    m_screenShotLogic = new ScreenShotLogic();
+    m_screenShotLogic = new ScreenShotLogic( m_offscreenRenderLogic->NumReadBuffersPerRT() );
 
     m_customNodeRenderLogic.push_back( new DefaultEffectRenderLogic( this, m_offscreenRenderLogic ) );
     m_customNodeRenderLogic.push_back( new AlphaMaskRenderLogic( this, m_offscreenRenderLogic ) );

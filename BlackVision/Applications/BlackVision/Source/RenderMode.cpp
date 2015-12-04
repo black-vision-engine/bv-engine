@@ -1,6 +1,8 @@
 #include "RenderMode.h"
 
 #include "Rendering/Logic/RenderLogic.h"
+#include "Engine/Graphics/Renderers/Renderer.h"
+#include "BVConfig.h"
 
 namespace bv
 {
@@ -38,6 +40,12 @@ void RenderMode::SetRenderToFileMode( const std::string& filePath, float request
     if( m_renderLogic )
         m_renderLogic->MakeScreenShot( filePath, numFrames );
 
+    if( m_renderer )
+    {
+        m_renderer->SetVSync( false, 0 );
+        m_renderer->SetFlushFinish( false, false );
+    }
+
     m_renderMode = RenderingMode::RenderOffscreen;
     m_currentTime = 0.0f;
 }
@@ -67,6 +75,10 @@ TimeType RenderMode::StartFrame( unsigned long millis )
         if( m_framesToRender == 0 )
         {// Rendering to file ended. Restore previous state.
             m_renderMode = RenderingMode::RenderRealTime;
+
+            m_renderer->SetVSync( !BVConfig::Instance().GetRendererInput().m_DisableVerticalSync, BVConfig::Instance().GetRendererInput().m_VerticalBufferFrameCount );
+            m_renderer->SetFlushFinish( BVConfig::Instance().GetRendererInput().m_EnableGLFlush, BVConfig::Instance().GetRendererInput().m_EnableGLFinish );
+
             // @todo Make something with timestamp to keep continuity.
             m_currentTime = m_realTime;
             return m_currentTime;
@@ -78,16 +90,6 @@ TimeType RenderMode::StartFrame( unsigned long millis )
     }
     return 0.0f;
 }
-
-// ***********************
-//
-TimeType RenderMode::GetFrameTime()
-{    return m_currentTime;   }
-
-// ***********************
-//
-unsigned int RenderMode::GetFrameNumber()
-{    return m_frameNumber;  }
 
 
 } //bv
