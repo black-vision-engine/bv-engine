@@ -64,9 +64,9 @@ void ScreenShotLogic::FrameRendered   (  Renderer* renderer, OffscreenRenderLogi
         {
             HPROFILER_SECTION( "Frame Readback", PROFILER_THREAD1 );
             if( m_asyncWrites[ m_curReadbackFrame ].valid() )
-                m_asyncWrites[ m_curReadbackFrame ].get();
+                m_asyncWrites[ m_curReadbackFrame ].get();      // Wait until frame will be written.
 
-            frame = offscreenRenderLogic->ReadDisplayTarget( renderer, 0 );
+            frame = offscreenRenderLogic->ReadDisplayTarget( renderer, m_curReadbackFrame );
             m_curReadbackFrame = ( m_curReadbackFrame + 1 ) % offscreenRenderLogic->NumReadBuffersPerRT();
         }
 
@@ -80,7 +80,6 @@ void ScreenShotLogic::FrameRendered   (  Renderer* renderer, OffscreenRenderLogi
         }
     }
     offscreenRenderLogic->SwapDisplayRenderTargets();
-    //offscreenRenderLogic->SwapDisplayRenderTargets();
 }
 
 // ***********************

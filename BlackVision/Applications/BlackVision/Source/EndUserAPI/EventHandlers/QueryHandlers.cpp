@@ -147,16 +147,12 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
                 root[ name ]["variance"] = frameStats.Variance( name );
             }
             
-            //Log::A("OK",S);
             responseMessage = toWString( root.toStyledString() );
         }
         else if( command == InfoEvent::Command::Timelines )
         {
-            
-            //Log::A("SENDING","Timelines info...:");
-
             Json::Value ret;
-            ret["command"] = "timelines";
+            ret[ "command" ] = "timelines";
             ret[ "scenes" ] = Json::arrayValue;
 
             for( auto s : m_appLogic->GetBVProject()->GetScenes() )
@@ -170,73 +166,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
                 ret[ "scenes" ].append( val );
             }
 
-
             responseMessage = toWString( ret.toStyledString() );
-
-			//model::TimelineManager* TM = m_appLogic->GetTimelineManager().get();
-
-			//auto timelines = TM->GetRootTimeline()->GetChildren();
-			//string s_timelines;
-			//bool first = true;
-			//for( auto timeline : timelines)
-			//{
-			//	if(!first)
-			//		s_timelines +=",";
-
-			//	string s_name = timeline->GetName();
-			//	string s_time = to_string(timeline->GetLocalTime());
-
-			//	bv::model::ITimeline* timeline_cast = static_cast<bv::model::ITimeline*>(timeline.get());
-			//	
-			//	string s_timeline = "{\"name\":\""+s_name+"\",\"time\":\""+s_time+"\",\"keyframes\":[";
-			//	string s_keyframes="";
-			//	for(unsigned int i=0;i<timeline_cast->NumKeyFrames();i++)
-			//	{
-			//		if(i>0)
-			//			s_keyframes += ",";
-			//		
-			//		const model::ITimelineEvent* keyframe = timeline_cast->GetKeyFrameEvent(i);
-			//		string s_keyframe_name = keyframe->GetName();
-			//		TimelineEventType keyframe_type = keyframe->GetType();
-			//		string s_keyframe_type = "NONE";
-			//		switch(keyframe_type)
-			//		{
-			//			case TimelineEventType::TET_LOOP:
-			//				s_keyframe_type = "loop";
-			//				break;
-			//			case TimelineEventType::TET_STOP:
-			//				s_keyframe_type = "stop";
-			//				break;
-			//			case TimelineEventType::TET_NULL:
-			//				s_keyframe_type = "null";
-			//				break;
-			//			case TimelineEventType::TET_TOTAL:
-			//				s_keyframe_type = "total";
-			//				break;
-			//			default:
-			//				break;
-			//		}
-			//		bv::TimeType f_time = keyframe->GetEventTime();
-			//		string s_info = "-";
-
-
-			//		string s_keyframe_code="{\"name\":\""+s_keyframe_name+"\",\"type\":\""+s_keyframe_type+"\",\"time\":\""+to_string(f_time)+"\",\"info\":\""+s_info+"\"}";
-
-			//		s_keyframes+=s_keyframe_code;
-
-			//	}
-			//	s_timeline+=s_keyframes+"]}";
-			//	
-			//	s_timelines += s_timeline;;
-			//	first = false;
-			//}
-			//s_timelines = "["+s_timelines+"]";
-   //
-   //         PerformanceMonitor::Calculate(m_appLogic->GetStatsCalculator());
-   //         string S = "{\"cmd\":\"timelines\", \"timelines\":"+s_timelines+" }";
-   //        
-   //         //Log::A("SENDING",S);
-   //         responseMessage = wstring(S.begin(),S.end());
         }
         else if( command == InfoEvent::Command::NodeInfo )
         {

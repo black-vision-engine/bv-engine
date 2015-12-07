@@ -396,13 +396,6 @@ void                            BVAppLogic::ReloadScene     ()
     LoadScene();
 }
 
-//pablito
-// *********************************
-//
-void            BVAppLogic::GrabCurrentFrame(  const std::string & path )
-{
-    m_grabFramePath = path;
-}
 
 // *********************************
 //FIXME: unsafe - consider returning const variant of this class (IParameters * without const should be accessible anyway)
