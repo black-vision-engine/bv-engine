@@ -8,6 +8,9 @@
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
 #include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
+#include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogicTr.h"
+
+#include "Rendering/Utils/RenderLogicContext.h"
 
 #include "Rendering/Utils/OffscreenDisplay.h"
 
@@ -98,11 +101,16 @@ void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot
 //
 void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 {
+    //FIXME: assumes only one renderer instance per application
+    static RenderLogicContext ctx( renderer, &m_rtStackAllocator, this );
+
+    assert( renderer == ctx.GetRenderer() );
+
     if ( node->IsVisible() )
     {
-        auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogic( node );
-        
-        effectRenderLogic->RenderNode( renderer, node );
+        auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogicTr( node );
+                
+        effectRenderLogic->RenderNode( node, &ctx );
     }
 }
 
