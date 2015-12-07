@@ -12,7 +12,7 @@ public:
                     AlphaMaskRenderLogicTr      ();
     virtual         ~AlphaMaskRenderLogicTr     ();
 
-    virtual void    RenderNode                  ( SceneNode * ndoe, RenderLogicContext * ctx ) override;
+    virtual void    RenderNode                  ( SceneNode * node, RenderLogicContext * ctx ) override;
 
 };
 

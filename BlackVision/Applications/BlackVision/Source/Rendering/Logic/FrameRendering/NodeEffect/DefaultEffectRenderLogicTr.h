@@ -1,20 +1,20 @@
 #pragma once
-//
-//
-//#include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
-//
-//
-//namespace bv {
-//
-//class DefaultEffectRenderLogic : public NodeEffectRenderLogic
-//{
-//public:
-//
-//                    DefaultEffectRenderLogic    ( FrameRenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic );
-//    virtual         ~DefaultEffectRenderLogic   ();
-//
-//    virtual void    RenderNode                  ( Renderer * renderer, SceneNode * node ) override;
-//
-//};
-//
-//} //bv
+
+
+#include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogicTr.h"
+
+
+namespace bv {
+
+class DefaultEffectRenderLogicTr : public NodeEffectRenderLogicTr
+{
+public:
+
+                    DefaultEffectRenderLogicTr  ();
+    virtual         ~DefaultEffectRenderLogicTr ();
+
+    virtual void    RenderNode                  ( SceneNode * node, RenderLogicContext * ctx ) override;
+
+};
+
+} //bv

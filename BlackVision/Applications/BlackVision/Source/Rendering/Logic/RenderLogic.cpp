@@ -58,6 +58,8 @@ RenderLogic::~RenderLogic    ()
 void    RenderLogic::SetCamera       ( Camera * cam )
 {
     m_frameRenderLogic->SetCamera( cam );
+    
+    // m_offscreenRenderLogic->SetRendererCamera( cam );
 }
 
 // *********************************

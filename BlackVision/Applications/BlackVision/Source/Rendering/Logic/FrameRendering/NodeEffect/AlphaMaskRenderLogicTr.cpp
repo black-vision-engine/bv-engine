@@ -48,8 +48,10 @@ void    AlphaMaskRenderLogicTr::RenderNode                  ( SceneNode * node, 
 
         auto alphaVal = node->GetNodeEffect()->GetValue( "alpha" );
         //GetOffscreenRenderLogic()->DrawTopAuxRenderTarget( renderer, alphaVal.get() );
+
         renderer->Disable( rt );
-        
+        rtAllocator->Free();
+
         renderer->Enable( rtAllocator->Top() );
 
         //GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
