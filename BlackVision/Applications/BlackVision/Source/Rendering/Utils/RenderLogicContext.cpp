@@ -5,11 +5,10 @@ namespace bv {
 
 // ***************************
 //
-RenderLogicContext::RenderLogicContext  ( Renderer * renderer, RenderTargetStackAllocator * rtStackAllocator, RenderLogic * renderLogic, DrawLogic * drawLogic )
+RenderLogicContext::RenderLogicContext  ( Renderer * renderer, RenderTargetStackAllocator * rtStackAllocator, RenderLogic * renderLogic )
     : m_renderer( renderer )
     , m_rtAllocator( rtStackAllocator )
     , m_renderLogic( renderLogic )
-    , m_drawLogic( drawLogic )
 {
 }
 
@@ -38,13 +37,6 @@ RenderTargetStackAllocator *    RenderLogicContext::GetRenderTargetAllocator() c
 RenderLogic *                   RenderLogicContext::GetRenderLogic          () const
 {
     return m_renderLogic;
-}
-
-// ***************************
-//
-DrawLogic *                     RenderLogicContext::GetDrawLogic            () const
-{
-    return m_drawLogic;
 }
 
 } // bv

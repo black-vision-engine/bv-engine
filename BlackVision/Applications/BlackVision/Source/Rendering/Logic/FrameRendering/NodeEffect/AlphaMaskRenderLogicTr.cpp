@@ -31,7 +31,7 @@ void    AlphaMaskRenderLogicTr::RenderNode                  ( SceneNode * node, 
 
     if( alphaValue > 0.99f )
     {
-        ctx->GetDrawLogic()->DrawNode( ctx->GetRenderer(), node );
+        ctx->GetRenderLogic()->DrawNode( ctx->GetRenderer(), node );
     }
     else if ( alphaValue > 0.01f )
     {
@@ -44,7 +44,7 @@ void    AlphaMaskRenderLogicTr::RenderNode                  ( SceneNode * node, 
         renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
         renderer->ClearBuffers();
 
-        ctx->GetDrawLogic()->DrawNode( renderer, node );
+        ctx->GetRenderLogic()->DrawNode( renderer, node );
 
         auto alphaVal = node->GetNodeEffect()->GetValue( "alpha" );
         //GetOffscreenRenderLogic()->DrawTopAuxRenderTarget( renderer, alphaVal.get() );

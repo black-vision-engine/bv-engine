@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Rendering/Utils/RenderTargetStackAllocator.h"
+#include "Rendering/Logic/FrameRendering/NodeEffectRenderLogicSelector.h"
 
 
 
@@ -15,12 +16,15 @@ class SceneNode;
 class RenderLogicImpl;
 class FrameRenderLogic;
 class PostFrameRenderLogic;
+class OffscreenDisplay;
 
 class RenderLogic
 {
 private:
 
-    RenderTargetStackAllocator  m_rtStackAllocator;
+    RenderTargetStackAllocator      m_rtStackAllocator;
+    NodeEffectRenderLogicSelector   m_nodeEffectRenderLogicSelector;
+    OffscreenDisplay *              m_offscreenDisplay;
 
     RenderLogicImpl *           m_impl;
     FrameRenderLogic *          m_frameRenderLogic;

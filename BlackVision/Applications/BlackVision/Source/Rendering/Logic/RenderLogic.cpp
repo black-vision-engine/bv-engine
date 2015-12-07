@@ -7,6 +7,10 @@
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
+#include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
+
+#include "Rendering/Utils/OffscreenDisplay.h"
+
 #include "Rendering/Logic/FrameRendering/FrameRenderLogic.h"
 #include "Rendering/Logic/FrameRendering/PostFrameRenderLogic.h"
 
@@ -26,11 +30,13 @@ namespace bv {
 // *********************************
 //
 RenderLogic::RenderLogic     ()
-    :  m_impl( nullptr )
+    : m_impl( nullptr )
     , m_rtStackAllocator( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), TextureFormat::F_A8R8G8B8 )
 {
     auto videoCardEnabled   = DefaultConfig.ReadbackFlag();
     auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput();
+
+    m_offscreenDisplay = new OffscreenDisplay( &m_rtStackAllocator, videoCardEnabled || previewAsVideoCard );
 
     m_impl = new RenderLogicImpl( &m_rtStackAllocator, videoCardEnabled || previewAsVideoCard );
     m_frameRenderLogic = new FrameRenderLogic();
@@ -41,6 +47,7 @@ RenderLogic::RenderLogic     ()
 //
 RenderLogic::~RenderLogic    ()
 {
+    delete m_offscreenDisplay;
     delete m_impl;
     delete m_frameRenderLogic;
     delete m_postFrameRenderLogic;
@@ -59,42 +66,70 @@ void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot
 {
     m_frameRenderLogic->RenderFrame( renderer, sceneRoot );
 
-    // m_impl->RenderFrame( renderer, sceneRoot );
+#if 0
+    // Pre frame setup
+    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+    renderer->ClearBuffers();
+    renderer->PreDraw();
+    
+    renderer->Enable( m_offscreenDisplay->GetActiveRenderTarget() );
+
+    // FIXME: verify that all rendering paths work as expected
+	if( sceneRoot )
+		RenderNode( renderer, sceneRoot );
+
+    // Post frame logic
+    renderer->Disable( m_offscreenDisplay->GetActiveRenderTarget() );
+    m_offscreenDisplay->UpdateActiveRenderTargetIdx();
+
+    //m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
+    //m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
+
+    //m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic );
+
+    renderer->PostDraw();
+    renderer->DisplayColorBuffer();
+#endif
 }
 
 // *********************************
 //
 void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 {
-    { renderer; node; }
-    //m_impl->RenderNode( renderer, node );
-    //if ( node->IsVisible() )
-    //{
-    //    auto effectRenderLogic = GetNodeEffectRenderLogic( node );
-    //    
-    //    effectRenderLogic->RenderNode( renderer, node );
-    //}
+    if ( node->IsVisible() )
+    {
+        auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogic( node );
+        
+        effectRenderLogic->RenderNode( renderer, node );
+    }
 }
 
 // *********************************
 //
 void    RenderLogic::DrawNode        ( Renderer * renderer, SceneNode * node )
 {
-    { renderer; node; }
+	HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor", PROFILER_THREAD1 );
+    DrawNodeOnly( renderer, node );
+
+    RenderChildren( renderer, node );
 }
 
 // *********************************
 //
 void    RenderLogic::DrawNodeOnly    ( Renderer * renderer, SceneNode * node )
 {
-    { renderer; node; }
+    renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable() ) );
 }
 
 // *********************************
 //
 void    RenderLogic::RenderChildren  ( Renderer * renderer, SceneNode * node, int firstChildIdx )
 {
-    { renderer; node; firstChildIdx; }
+    for ( unsigned int i = firstChildIdx; i < (unsigned int) node->NumChildNodes(); i++ )
+    {
+        HPROFILER_SECTION( "RenderNode::RenderNode", PROFILER_THREAD1 );
+        RenderNode  ( renderer, node->GetChild( i ) ); 
+    }
 }
 
 } //bv

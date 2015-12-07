@@ -204,9 +204,6 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\WireframeRenderLogicTr.cpp">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Utils\DrawLogic.cpp">
-      <Filter>Rendering\Utils</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -366,9 +363,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\WireframeRenderLogicTr.h">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Utils\DrawLogic.h">
-      <Filter>Rendering\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
