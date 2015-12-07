@@ -91,8 +91,8 @@ void DefaultTexturePlugin::SetPrevPlugin( IPluginPtr prev )
     ctx->cullCtx->enabled = false;
     
     ctx->alphaCtx->blendEnabled = true;
-    ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
-    ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+    ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
+    ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
 	//HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 }
 

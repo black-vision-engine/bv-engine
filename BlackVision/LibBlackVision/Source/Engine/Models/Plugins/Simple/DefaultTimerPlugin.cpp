@@ -211,8 +211,8 @@ void		DefaultTimerPlugin::SetPrevPlugin		( IPluginPtr prev )
 	auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
     ctx->alphaCtx->blendEnabled = true;
-    ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
-    ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+    ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
+    ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
 }
 
 // *************************************
@@ -439,8 +439,9 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
 
     auto alignType =  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
-	auto viewSize = min( ApplicationContext::Instance().GetWidth(), ApplicationContext::Instance().GetHeight() ) / 2;
-    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, false, viewSize, viewSize );
+	auto viewWidth  = ApplicationContext::Instance().GetWidth();
+    auto viewHeight = ApplicationContext::Instance().GetHeight();
+    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, false, viewWidth, viewHeight );
 }
 
 ////////////////////////////

@@ -1,6 +1,7 @@
 #include "TimelineManager.h"
 #include "Serialization/SerializationHelper.h"
 
+#include "Tools/StringHeplers.h"
 #include <cassert>
 
 
@@ -46,11 +47,6 @@ void            TimelineManager::Serialize                       ( ISerializer& 
     sob.EnterArray( "timelines" );
 
     m_rootTimeline->Serialize( sob );
-
-    for( auto i : m_registeredParams )
-    {
-        i.first->Serialize( sob );
-    }
 
     sob.ExitChild();
 }
@@ -180,27 +176,27 @@ ITimeEvaluatorPtr       TimelineManager::GetRootTimeline            ()
 //
 ITimeEvaluatorPtr       TimelineManager::GetTimeEvaluator           ( const std::string & name )
 {
-    return FindTimelineByName( name, m_rootTimeline );
+    return GetTimeEvaluator( name, m_rootTimeline );
 }
 
 // *********************************
 //
 ITimeEvaluatorPtr       TimelineManager::GetTimeEvaluator           ( const std::string & name, ITimeEvaluatorPtr parentTimeline )
 {
-    if( parentTimeline != nullptr )
+    auto path = Split( name, "/" );
+    if( path.size() == 1 )
+        return FindTimelineByName( name, parentTimeline );
+    else
     {
-        for( auto child : parentTimeline->GetChildren() )
+        auto nextParent = FindTimelineByName( path[ 0 ], parentTimeline );
+        if( nextParent )
         {
-            auto retVal = FindTimelineByName( name, child );
-            
-            if( retVal != nullptr )
-            {
-                return retVal;
-            }
+            path.erase( path.begin() );
+            return GetTimeEvaluator( Join( path, "/"), nextParent );
         }
+        else
+            return nullptr;
     }
-
-    return nullptr;
 }
 
 // *********************************
@@ -228,6 +224,30 @@ ITimelinePtr            TimelineManager::GetTimeline                     ( const
     }
 
     return nullptr;
+}
+
+// *********************************
+//
+std::string             TimelineManager::GetTimelinePath                 ( ITimeEvaluatorPtr timeline )
+{
+    return GetTimelinePath( timeline, m_rootTimeline );
+}
+
+
+// *********************************
+//
+std::string             TimelineManager::GetTimelinePath                 ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline )
+{
+    for( auto child : parentTimeline->GetChildren() )
+        if( child == timeline )
+            return timeline->GetName();
+        else
+        {
+            auto path = GetTimelinePath( timeline, child );
+            if( path != "" )
+                return child->GetName() + "/" + path;
+        }
+    return "";
 }
 
 // *********************************

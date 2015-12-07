@@ -202,6 +202,23 @@ void                OffscreenRenderLogic::DisableTopRenderTarget    ( Renderer *
 }
 
 // **************************
+//FIXME
+void                OffscreenRenderLogic::DrawTopAuxRenderTarget    ( Renderer * renderer, RenderableEffectPtr effect )
+{
+    DisableTopRenderTarget( renderer );
+
+    auto mainRT = GetRenderTargetAt( -2 );
+
+	m_renderData.auxQuad->SetRenderableEffect( effect );
+
+    renderer->Enable( mainRT );
+    renderer->SetCamera( m_displayCamera );
+    renderer->Draw( m_renderData.auxQuad );
+    renderer->SetCamera( m_rendererCamera );
+    renderer->Disable( mainRT );
+}
+
+// **************************
 //
 void                OffscreenRenderLogic::DrawTopAuxRenderTarget    ( Renderer * renderer, const IValue * alphaVal )
 {

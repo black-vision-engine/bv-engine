@@ -85,8 +85,8 @@ void					DefaultVideoStreamDecoderPlugin::SetPrevPlugin               ( IPluginP
     auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
     ctx->alphaCtx->blendEnabled = true;
-    ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
-    ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+    ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
+    ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
 }
 
 // *************************************

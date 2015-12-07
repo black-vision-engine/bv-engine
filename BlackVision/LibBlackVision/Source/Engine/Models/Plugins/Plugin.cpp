@@ -88,7 +88,9 @@ void                                BasePlugin< IPlugin >::Serialize            
 ser.EnterChild( "plugin" );
     ser.SetAttribute( "uid", GetTypeUid() );
     ser.SetAttribute( "name", GetName() );
-    ser.SetAttribute( "timeline", GetTimeline( this )->GetName() );
+
+    auto timeline = TimelineManager::GetInstance()->GetTimelinePath( GetTimeline( this ) );
+    ser.SetAttribute( "timeline", timeline );
 
     auto context = GetRendererContext();
     if( context )

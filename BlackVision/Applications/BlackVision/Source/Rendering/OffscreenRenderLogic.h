@@ -94,6 +94,8 @@ public:
     void                DiscardCurrentRenderTarget  ( Renderer * renderer );
     void                DisableTopRenderTarget      ( Renderer * renderer );
 
+    void                DrawTopAuxRenderTarget      ( Renderer * renderer, RenderableEffectPtr effect );
+
     void                DrawTopAuxRenderTarget      ( Renderer * renderer, const IValue * alphaVal );
     void                DrawAMTopTwoRenderTargets   ( Renderer * renderer, const IValue * alphaVal );
 

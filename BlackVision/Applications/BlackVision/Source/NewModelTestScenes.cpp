@@ -915,7 +915,7 @@ model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr t
     assert( qParam );
     qParam->SetCurveType( type );
 
-    model::SetParameterTranslation( param, 0, 10.f, offset + glm::vec3( 2, 0, 0 ) );
+    model::SetParameterTranslation( param, 0, 10.f, offset + glm::vec3( 0, -2, 0 ) );
     model::SetParameterTranslation( param, 0, 1.f, offset );
     model::SetParameterTranslation( param, 0, 0.f, offset );
     model::SetParameterScale( param, 0, 0.f, glm::vec3( 0.25f, 0.25f, 1.f ) );
@@ -936,15 +936,10 @@ model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model
     model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
-    auto node1 = CosineDemoRect( glm::vec3( -1, 0.6, 0 ) , timeEvaluator, CurveType::CT_POINT );
-    auto node2 = CosineDemoRect( glm::vec3( -1, 0.2, 0 ) , timeEvaluator, CurveType::CT_LINEAR );
-    auto node3 = CosineDemoRect( glm::vec3( -1, -0.2, 0 ) , timeEvaluator, CurveType::CT_COSINE_LIKE );
-    auto node4 = CosineDemoRect( glm::vec3( -1, -0.6, 0 ) , timeEvaluator, CurveType::CT_BEZIER );
+    const int total = bv::CurveType::CT_TOTAL;
 
-    root->AddChildToModelOnly( node1 );
-    root->AddChildToModelOnly( node2 );
-    root->AddChildToModelOnly( node3 );
-    root->AddChildToModelOnly( node4 );
+    for( int i = 0; i < total; i++ )
+        root->AddChildToModelOnly( CosineDemoRect( glm::vec3( -2.f + i * 4.0 / total, 1, 0 ) , timeEvaluator, bv::CurveType( i ) ) );
 
     return root;
 }

@@ -14,6 +14,8 @@ std::string Enum2String( const std::pair< T, const char* > t2s[], const T& t )
     for( int i = 0; ; i++ ) // FIXME so much
         if( t2s[i].first == t )
             return t2s[i].second;
+        else if( strcmp( t2s[i].second, "" ) == 0 )
+            return "";
 }
 
 template< typename T >

@@ -133,6 +133,18 @@ void					TestScene::InitTestModelSceneEditor	()
 		auto editor = m_project->GetProjectEditor();
 		bool success = true;
 
+		editor->AddEmptyScene( "empty_scene" );
+
+		success &= ( editor->GetScene( "empty_scene" ) != nullptr );
+
+		assert( success );
+	});
+
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		bool success = true;
+
 		auto copied = editor->CopyNode( editor->GetScene( SCENE_NAME )->GetRootNode() );
 		SetParameterTranslation( copied->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
 
@@ -508,7 +520,7 @@ void					TestScene::InitTestModelSceneEditor	()
 //
 void					TestScene::InitTestEditor			()
 {
-	//InitTestModelSceneEditor();
+	InitTestModelSceneEditor();
 
 	//InitBasicColorPluginTest();
 	//InitOrderColorPluginTest();
@@ -528,7 +540,7 @@ void					TestScene::InitTestEditor			()
 	//InitColoredTimerTest();
 	//InitGradientTimerTest();
 
-	InitColoredGeometryTest();
+	//InitColoredGeometryTest();
 	//InitTexturedGeometryTest();
 	//InitAnimatedGeometryTest();
 	//InitGradientGeometryTest();

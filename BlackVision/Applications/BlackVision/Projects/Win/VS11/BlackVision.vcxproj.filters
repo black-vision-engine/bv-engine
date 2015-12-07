@@ -191,6 +191,9 @@
     <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.cpp">
       <Filter>Widgets\NodeReplicator</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\AlphaChannelRenderLogic.cpp">
+      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -338,6 +341,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.h">
       <Filter>Widgets\NodeReplicator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\AlphaChannelRenderLogic.h">
+      <Filter>Rendering\Logic\NodeEffectRendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

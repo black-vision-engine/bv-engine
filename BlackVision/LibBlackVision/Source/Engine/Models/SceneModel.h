@@ -47,6 +47,7 @@ public:
 
 	ModelSceneEditor *		GetModelSceneEditor	() const;
 
+	static SceneModelPtr	CreateEmptyScene	( const std::string & name );
 };
 
 typedef std::vector< model::SceneModelPtr > SceneModelVec;

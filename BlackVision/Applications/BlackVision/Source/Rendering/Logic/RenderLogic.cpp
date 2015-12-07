@@ -25,6 +25,7 @@
 #include "Rendering/Logic/NodeEffectRendering/NodeMaskRenderLogic.h"
 #include "Rendering/Logic/NodeEffectRendering/WireframeRenderLogic.h"
 #include "Rendering/Logic/NodeEffectRendering/LightScatteringRenderLogic.h"
+#include "Rendering/Logic/NodeEffectRendering/AlphaChannelRenderLogic.h"
 
 #include "Rendering/Logic/VideoOutputRendering/DefaultVideoOutputRenderLogic.h"
 
@@ -44,6 +45,7 @@ RenderLogic::RenderLogic     ()
     m_customNodeRenderLogic.push_back( new NodeMaskRenderLogic( this, m_offscreenRenderLogic ) );
     m_customNodeRenderLogic.push_back( new WireframeRenderLogic( this, m_offscreenRenderLogic ) );
     m_customNodeRenderLogic.push_back( new LightScatteringRenderLogic( this, m_offscreenRenderLogic ) );
+    m_customNodeRenderLogic.push_back( new AlphaChannelRenderLogic( this, m_offscreenRenderLogic ) );
 }
 
 // *********************************
