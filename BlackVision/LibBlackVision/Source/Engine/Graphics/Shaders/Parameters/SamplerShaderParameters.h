@@ -16,7 +16,7 @@ private:
 	ShaderParamVec4	*	m_borderColor;
 
 public:
-							SamplerShaderParameters		( ValueIntPtr wmX, ValueIntPtr wmY, ValueIntPtr wmZ, ValueIntPtr fm, ValueVec4Ptr bc );
+							SamplerShaderParameters		( SamplerWrappingMode wmX, SamplerWrappingMode wmY, SamplerWrappingMode wmZ, SamplerFilteringMode fm, const glm::vec4 & bc );
 							~SamplerShaderParameters	();
 
     SamplerFilteringMode    GetFilteringMode			() const;
@@ -24,6 +24,12 @@ public:
     SamplerWrappingMode		GetWrappingModeY			() const;
     SamplerWrappingMode		GetWrappingModeZ			() const;
     const glm::vec4 &		GetBorderColor				() const;
+
+	void					SetFilteringMode			( SamplerFilteringMode );
+    void					SetWrappingModeX			( SamplerWrappingMode );
+    void					SetWrappingModeY			( SamplerWrappingMode );
+    void					SetWrappingModeZ			( SamplerWrappingMode );
+    void					SetBorderColor				( const glm::vec4 & );
 };
 
 DEFINE_PTR_TYPE(SamplerShaderParameters)

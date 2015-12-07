@@ -115,7 +115,7 @@ void                LightScatteringEffect::SetExposureVal( const IValue * exposu
         auto value = QueryTypedValue< ValueFloat >( exposureVal );
         assert( value != nullptr );
 
-        m_paramExposure->SetModelValue( value );
+        m_paramExposure->SetValue( value->GetValue() );
     }
 }
 
@@ -133,7 +133,7 @@ void                LightScatteringEffect::SetWeightVal( const IValue * weightVa
         auto value = QueryTypedValue< ValueFloat >( weightVal );
         assert( value != nullptr );
 
-        m_paramWeight->SetModelValue( value );
+        m_paramWeight->SetValue( value->GetValue() );
     }
 }
 
@@ -151,7 +151,7 @@ void                LightScatteringEffect::SetDecayVal( const IValue * decayVal 
         auto value = QueryTypedValue< ValueFloat >( decayVal );
         assert( value != nullptr );
 
-        m_paramDecay->SetModelValue( value );
+        m_paramDecay->SetValue( value->GetValue() );
     }
 }
 
@@ -169,7 +169,7 @@ void                LightScatteringEffect::SetDensityVal( const IValue * density
         auto value = QueryTypedValue< ValueFloat >( densityVal );
         assert( value != nullptr );
 
-        m_paramDensity->SetModelValue( value );
+        m_paramDensity->SetValue( value->GetValue() );
     }
 }
 
@@ -187,7 +187,7 @@ void                LightScatteringEffect::SetLightPositionOnScreenVal( const IV
         auto value = QueryTypedValue< ValueVec2 >( lightPositionOnScreenVal );
         assert( value != nullptr );
 
-        m_paramLightPositionOnScreen->SetModelValue( value );
+		m_paramLightPositionOnScreen->SetValue( value->GetValue() );
     }
 }
 
@@ -205,7 +205,7 @@ void                LightScatteringEffect::SetNumSamplesVal( const IValue * numS
         auto value = QueryTypedValue< ValueFloat >( numSamplesVal );
         assert( value != nullptr );
 
-        m_paramNumSamples->SetModelValue( value );
+        m_paramNumSamples->SetValue( value->GetValue() );
     }
 }
 

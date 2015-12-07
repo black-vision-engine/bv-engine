@@ -53,7 +53,7 @@ public:
     inline unsigned int                     NumTextures                     () const;
 
     inline Texture2DPtr                     GetTexture                      ( unsigned int idx ); //FIXME: tymczasowo obslugujemy tylko tekstury 2D, wiec nie trzeba trzymac wektora tekstur, ale docelowo warto miec wektor tekstur tutaj
-    inline SamplerShaderParametersConstPtr  GetSamplerParameters            ( unsigned int idx );
+    inline SamplerShaderParametersPtr		GetSamplerParameters            ( unsigned int idx ) const;
 
 };
 

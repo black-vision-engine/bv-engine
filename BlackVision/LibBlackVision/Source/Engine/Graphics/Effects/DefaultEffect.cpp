@@ -258,8 +258,8 @@ Texture2DPtr            DefaultEffect::GetSequence          ( const IAnimationDe
 SamplerShaderParametersPtr	DefaultEffect::CreateSamplerParameters  ( const ITextureParamsPtr & txParams ) const
 {
 	auto samplerState = txParams->GetSamplerState();
-	return std::make_shared< SamplerShaderParameters >( samplerState->GetWrappingModeX(), samplerState->GetWrappingModeY(), samplerState->GetWrappingModeZ(),
-		samplerState->GetFilteringMode(), samplerState->GetBorderColor() );
+	return std::make_shared< SamplerShaderParameters >( ( SamplerWrappingMode )samplerState->GetWrappingModeX(), ( SamplerWrappingMode )samplerState->GetWrappingModeY(), 
+						( SamplerWrappingMode )samplerState->GetWrappingModeZ(), ( SamplerFilteringMode )samplerState->GetFilteringMode(), samplerState->GetBorderColor() );
 }
 
 } //bv

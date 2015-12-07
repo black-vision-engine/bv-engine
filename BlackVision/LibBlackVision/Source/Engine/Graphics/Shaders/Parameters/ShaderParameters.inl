@@ -73,7 +73,7 @@ inline Texture2DPtr                 ShaderParameters::GetTexture        ( unsign
 
 // ***************************
 //
-inline SamplerShaderParametersConstPtr	ShaderParameters::GetSamplerParameters        ( unsigned int idx )
+inline SamplerShaderParametersPtr	ShaderParameters::GetSamplerParameters        ( unsigned int idx ) const
 {
     assert( idx < NumTextures() );
 

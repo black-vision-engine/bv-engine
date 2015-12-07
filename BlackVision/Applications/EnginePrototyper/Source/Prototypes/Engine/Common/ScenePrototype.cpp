@@ -63,17 +63,17 @@ void    ScenePrototype::SetWorldTransform   ( SceneNode * node, const Transform 
 
 // **************************
 //
-void    ScenePrototype::SetPixelShaderParam ( SceneNode * node, const std::string & name, const glm::vec4 & param )
+void    ScenePrototype::SetPixelShaderParam ( SceneNode *, const std::string &, const glm::vec4 & )
 {
-    auto renderable = static_cast< RenderableEntity * >( node->GetTransformable() );
+    //auto renderable = static_cast< RenderableEntity * >( node->GetTransformable() );
 
-    auto psParam = renderable->GetRenderableEffect()->GetPass( 0 )->GetPixelShader()->GetParameters()->AccessParam( name );
+    //auto psParam = renderable->GetRenderableEffect()->GetPass( 0 )->GetPixelShader()->GetParameters()->AccessParam( name );
 
-    if( psParam )
-    {
-        auto val = static_cast< ValueVec4 * >( psParam->AccessValuePtr() );
-        val->SetValue( param );
-    }
+    //if( psParam )
+    //{
+    //    //auto val = static_cast< ValueVec4 * >( psParam->AccessValuePtr() );
+    //    //val->SetValue( param );
+    //}
 }
 
 // **************************

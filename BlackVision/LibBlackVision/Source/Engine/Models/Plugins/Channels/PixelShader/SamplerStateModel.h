@@ -36,11 +36,11 @@ public:
 	static SamplerStateModelPtr	Create				( ITimeEvaluatorPtr timeEvaluator );
 	static SamplerStateModelPtr	Create				( ITimeEvaluatorPtr timeEvaluator, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureWrappingMode wmz, TextureFilteringMode fm, const glm::vec4 & bc );
 
-    ValueIntPtr					GetWrappingModeX	() const;
-    ValueIntPtr					GetWrappingModeY	() const;
-	ValueIntPtr					GetWrappingModeZ	() const;
-    ValueIntPtr					GetFilteringMode	() const;
-    ValueVec4Ptr				GetBorderColor		() const;
+    TextureWrappingMode			GetWrappingModeX	() const;
+    TextureWrappingMode			GetWrappingModeY	() const;
+	TextureWrappingMode			GetWrappingModeZ	() const;
+    TextureFilteringMode		GetFilteringMode	() const;
+    const glm::vec4 &			GetBorderColor		() const;
 
     void                        SetWrappingModeX	( TextureWrappingMode wm );
     void                        SetWrappingModeY	( TextureWrappingMode wm );

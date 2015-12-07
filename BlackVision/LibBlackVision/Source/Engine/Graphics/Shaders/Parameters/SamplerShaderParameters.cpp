@@ -5,13 +5,13 @@ namespace bv {
 
 // *******************************
 //
-			SamplerShaderParameters::SamplerShaderParameters			( ValueIntPtr wmX, ValueIntPtr wmY, ValueIntPtr wmZ, ValueIntPtr fm, ValueVec4Ptr bc )
+			SamplerShaderParameters::SamplerShaderParameters			( SamplerWrappingMode wmX, SamplerWrappingMode wmY, SamplerWrappingMode wmZ, SamplerFilteringMode fm, const glm::vec4 & bc )
 {
-	m_wrappingModeX = new ShaderParamInt( wmX->GetName(), wmX.get() );
-	m_wrappingModeY = new ShaderParamInt( wmY->GetName(), wmY.get() );
-	m_wrappingModeZ = new ShaderParamInt( wmZ->GetName(), wmZ.get() );
-	m_filteringMode = new ShaderParamInt( fm->GetName(), fm.get() );
-	m_borderColor	= new ShaderParamVec4( bc->GetName(), bc.get() );
+	m_wrappingModeX = new ShaderParamInt( "wrapModeX", ( int )wmX );
+	m_wrappingModeY = new ShaderParamInt( "wrapModeY", ( int )wmY );
+	m_wrappingModeZ = new ShaderParamInt( "wrapModeZ", ( int )wmZ );
+	m_filteringMode = new ShaderParamInt( "filterMode", ( int )fm );
+	m_borderColor	= new ShaderParamVec4( "borderColor", bc );
 }
 
 // *******************************
@@ -58,6 +58,41 @@ SamplerWrappingMode		SamplerShaderParameters::GetWrappingModeZ		() const
 const glm::vec4 &		SamplerShaderParameters::GetBorderColor			() const
 {
 	return m_borderColor->GenericGetValue< glm::vec4 >();
+}
+
+// *******************************
+//
+void					SamplerShaderParameters::SetFilteringMode		( SamplerFilteringMode val )
+{
+	m_filteringMode->SetValue( ( int )val );
+}
+
+// *******************************
+//
+void					SamplerShaderParameters::SetWrappingModeX		( SamplerWrappingMode val )
+{
+	m_wrappingModeX->SetValue( ( int )val );
+}
+
+// *******************************
+//
+void					SamplerShaderParameters::SetWrappingModeY		( SamplerWrappingMode val )
+{
+	m_wrappingModeY->SetValue( ( int )val );
+}
+
+// *******************************
+//
+void					SamplerShaderParameters::SetWrappingModeZ		( SamplerWrappingMode val )
+{
+	m_wrappingModeZ->SetValue( ( int )val );
+}
+
+// *******************************
+//
+void					SamplerShaderParameters::SetBorderColor			( const glm::vec4 & val )
+{
+	m_borderColor->SetValue( val );
 }
 
 } //bv

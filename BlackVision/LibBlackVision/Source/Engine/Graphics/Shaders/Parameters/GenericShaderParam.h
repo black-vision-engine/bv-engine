@@ -19,7 +19,7 @@ private:
     
     mutable bool        m_updatable;
     
-    ParamType           m_paramType;
+    ParamType			m_paramType;
     std::string         m_paramName;
 
 protected:
@@ -41,15 +41,10 @@ public:
 
     template< typename ValType >
     inline const ValType &      GenericGetValue     () const;
-
+	
 protected:
 
-    virtual const void *        GetValuePtr         () const = 0;
-
-public:
-
-    virtual void *              AccessValuePtr      (); //FIXME: temporary, REMOVE
-
+	virtual const void *        GetValuePtr         () const = 0;
 
 };
 

@@ -192,7 +192,17 @@ inline  void    NodeUpdater::UpdateTopology      ()
 
 // *****************************
 //
-inline void    NodeUpdater::UpdateTexturesData  ()
+inline void     NodeUpdater::UpdateShaderParams				()
+{
+	for( auto & pair : m_paramsMappingVec )
+	{
+		UpdateShaderParam( pair.first, pair.second );
+	}
+}
+
+// *****************************
+//
+inline void		NodeUpdater::UpdateTexturesData				()
 {
     for( unsigned int txIdx = 0; txIdx < ( unsigned int )m_texDataMappingVec.size(); ++txIdx )
     {
@@ -208,6 +218,9 @@ inline void    NodeUpdater::UpdateTexturesData  ()
         for( unsigned int i = 0; i < textures.size(); ++i, ++j )
         {
             auto texDesc    = textures[ i ];
+			auto samplerState = texDesc->GetSamplerState();
+			auto shaderSamplerParams = shaderParams->GetSamplerParameters( j );
+
 			if( m_texDataUpdateID[ txIdx ][ j ] < texDesc->GetUpdateID() )
             {
 				auto tex2D  = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
@@ -221,14 +234,15 @@ inline void    NodeUpdater::UpdateTexturesData  ()
 					tex2D->SetData( texDesc->GetBits(), texDesc->GetFormat(), texDesc->GetWidth(), texDesc->GetHeight(), texDesc->GetNumLevels() );
                 }
 
-				//FIXME: video stream - shouldn't be set every new frame
-				auto samplerState = texDesc->GetSamplerState();
-				auto samplerParams = std::make_shared< SamplerShaderParameters >( samplerState->GetWrappingModeX(), samplerState->GetWrappingModeY(), 
-						samplerState->GetWrappingModeZ(), samplerState->GetFilteringMode(), samplerState->GetBorderColor() );
-				shaderParams->SetSamplerParameters( j, samplerParams );
-
                 m_texDataUpdateID[ txIdx ][ j ] = texDesc->GetUpdateID();
             }
+
+			//update sampler values
+			shaderSamplerParams->SetWrappingModeX( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+			shaderSamplerParams->SetWrappingModeY( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+			shaderSamplerParams->SetWrappingModeZ( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+			shaderSamplerParams->SetFilteringMode( ( SamplerFilteringMode )samplerState->GetFilteringMode() );
+			shaderSamplerParams->SetBorderColor( samplerState->GetBorderColor() );
         }
 
 
@@ -236,6 +250,8 @@ inline void    NodeUpdater::UpdateTexturesData  ()
         {
             auto tex2D   = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
             auto animDesc   = animations[ i ];
+			auto samplerState = animDesc->GetSamplerState();
+			auto shaderSamplerParams = shaderParams->GetSamplerParameters( j );
 
 			auto currFrame = animDesc->CurrentFrame();
 			auto numTextures = animDesc->NumTextures();
@@ -251,17 +267,26 @@ inline void    NodeUpdater::UpdateTexturesData  ()
 				{
 					tex2D->ForceUpdate();
 				}
-				
-				//FIXME: shouldn't be set every new frame
-				auto samplerState = animDesc->GetSamplerState();
-				auto samplerParams = std::make_shared< SamplerShaderParameters >( samplerState->GetWrappingModeX(), samplerState->GetWrappingModeY(), 
-					samplerState->GetWrappingModeZ(), samplerState->GetFilteringMode(), samplerState->GetBorderColor() );
-				shaderParams->SetSamplerParameters( j, samplerParams );
 
                 m_texDataUpdateID[ txIdx ][ j ] = animDesc->GetUpdateID();
 			}
+
+			//update sampler values
+			shaderSamplerParams->SetWrappingModeX( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+			shaderSamplerParams->SetWrappingModeY( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+			shaderSamplerParams->SetWrappingModeZ( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+			shaderSamplerParams->SetFilteringMode( ( SamplerFilteringMode )samplerState->GetFilteringMode() );
+			shaderSamplerParams->SetBorderColor( samplerState->GetBorderColor() );
         }
     }
+}
+
+// *******************************
+//
+template< typename ValType, typename ShaderParamType >
+void	NodeUpdater::UpdateTypedShaderParam   ( IValueConstPtr source, GenericShaderParam * dest )
+{
+	static_cast< ShaderParamType * >( dest )->SetValue( QueryTypedValue< ValType >( source )->GetValue() );
 }
 
 } //bv

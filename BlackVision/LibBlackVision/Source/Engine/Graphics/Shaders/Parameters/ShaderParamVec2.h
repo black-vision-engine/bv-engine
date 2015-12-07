@@ -9,20 +9,17 @@ class ShaderParamVec2 : public GenericShaderParam
 {
 private:
 
-    const ValueVec2 *   m_valModel;
+    glm::vec2				m_val;
     
 public:
 
-                            ShaderParamVec2     ( const std::string & name, const ValueVec2 * value );
-                            ~ShaderParamVec2    ();
+                            ShaderParamVec2     ( const std::string & name, const glm::vec2 & value = glm::vec2( 0.f ) );
 
-    void                    SetModelValue       ( const ValueVec2 * value );
+    void                    SetValue			( const glm::vec2 & value );
+
+private:
 
     virtual const void *    GetValuePtr         () const override;
-    virtual void *          AccessValuePtr      () override //FIXME: temporary, REMOVE
-    {
-        return const_cast<ValueVec2*>(m_valModel);
-    }
 
 };
 

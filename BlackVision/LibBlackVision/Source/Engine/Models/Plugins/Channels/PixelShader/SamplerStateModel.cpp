@@ -44,37 +44,37 @@ SamplerStateModelPtr			SamplerStateModel::Create				( ITimeEvaluatorPtr timeEval
 
 // **************************
 //
-ValueIntPtr				SamplerStateModel::GetWrappingModeX		() const
+TextureWrappingMode				SamplerStateModel::GetWrappingModeX		() const
 {
-	return m_wrappingModeY;
+	return static_cast< TextureWrappingMode >( m_wrappingModeX->GetValue() );
 }
 
 // **************************
 //
-ValueIntPtr				SamplerStateModel::GetWrappingModeY		() const
+TextureWrappingMode				SamplerStateModel::GetWrappingModeY		() const
 {
-	return m_wrappingModeY;
+	return static_cast< TextureWrappingMode >( m_wrappingModeY->GetValue() );
 }
 
 // **************************
 //
-ValueIntPtr				SamplerStateModel::GetWrappingModeZ		() const
+TextureWrappingMode				SamplerStateModel::GetWrappingModeZ		() const
 {
-	return m_wrappingModeZ;
+	return static_cast< TextureWrappingMode >( m_wrappingModeZ->GetValue() );
 }
 
 // **************************
 //
-ValueIntPtr				SamplerStateModel::GetFilteringMode		() const
+TextureFilteringMode			SamplerStateModel::GetFilteringMode		() const
 {
-	return m_filteringMode;
+	return static_cast< TextureFilteringMode >( m_filteringMode->GetValue() );
 }
 
 // **************************
 //
-ValueVec4Ptr			SamplerStateModel::GetBorderColor		() const
+const glm::vec4 &				SamplerStateModel::GetBorderColor		() const
 {
-	return m_borderColor;
+	return m_borderColor->GetValue();
 }
 
 // **************************

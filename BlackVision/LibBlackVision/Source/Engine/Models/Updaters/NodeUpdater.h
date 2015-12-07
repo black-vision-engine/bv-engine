@@ -56,6 +56,8 @@ namespace model
 }
 
 typedef std::pair< ITexturesDataConstPtr, ShaderParameters * > TexData2ShaderParams;
+typedef std::pair< IValueConstPtr, GenericShaderParam * > Value2ShaderParam;
+
 //typedef std::pair< const ITextureDescriptor *, Texture2D * > Tex2Tex2DPair;
 //typedef std::pair< const IAnimationDescriptor *, Texture2D * > Anim2Tex2DPair;
 
@@ -86,6 +88,7 @@ private:
     std::vector< TexData2ShaderParams >         m_texDataMappingVec;
     std::vector< std::vector< UInt64 > >		m_texDataUpdateID;
 
+    std::vector< Value2ShaderParam >			m_paramsMappingVec;
 
 	UInt64										m_attributesUpdateID;
 	UInt64										m_topologyUpdateID;
@@ -125,7 +128,18 @@ private:
     inline  void    UpdatePositions     ();
     inline  void    UpdateTopology      ();
 
-    inline  void    UpdateTexturesData  ();
+    inline	void	UpdateShaderParams  ();
+    inline  void    UpdateTexturesData	();
+
+private:
+
+    void            RegisterShaderParams	( IValueSetConstPtr values, Shader * shader );
+	
+	
+	void			UpdateShaderParam		( IValueConstPtr source, GenericShaderParam * dest );
+
+	template< typename ValType, typename ShaderParamType >
+    void			UpdateTypedShaderParam   ( IValueConstPtr source, GenericShaderParam * dest );
 
 };
 
