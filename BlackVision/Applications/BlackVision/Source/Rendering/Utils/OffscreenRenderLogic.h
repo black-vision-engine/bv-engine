@@ -14,10 +14,9 @@
 namespace bv {
 
 class RenderTarget;
-class Renderer;
 class Camera;
 class TriangleStrip;
-class Rednerer;
+class Renderer;
 class Texture2DEffect;
 class Texture2DEffectWithMask;
 class IValue;
