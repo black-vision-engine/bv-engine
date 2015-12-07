@@ -139,6 +139,8 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\WireframeRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\WireframeRenderLogicTr.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\PostFrameRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffect.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicImpl.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicRawPreview.cpp" />
@@ -201,6 +203,8 @@
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\WireframeRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\WireframeRenderLogicTr.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\PostFrameRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffect.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicImpl.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogicImpl\RenderLogicRawPreview.h" />
