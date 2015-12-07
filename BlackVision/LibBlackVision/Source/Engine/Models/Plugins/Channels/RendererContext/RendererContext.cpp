@@ -173,8 +173,10 @@ void                        RendererContext::Deserialize     ( const IDeserializ
 {
     deser.EnterChild( "alpha_context" );
     alphaCtx->blendEnabled = SerializationHelper::String2T< bool >( deser.GetAttribute( "blendEnabled" ), false );
-    alphaCtx->dstRGBBlendMode = SerializationHelper::String2Enum< AlphaContext::DstBlendMode >( deser.GetAttribute( "dstBlendMode" ) );
-    alphaCtx->srcRGBBlendMode = SerializationHelper::String2Enum< AlphaContext::SrcBlendMode >( deser.GetAttribute( "srcBlendMode" ) );
+    alphaCtx->srcRGBBlendMode = SerializationHelper::String2Enum< AlphaContext::SrcBlendMode >( deser.GetAttribute( "srcRGBBlendMode" ) );
+    alphaCtx->dstRGBBlendMode = SerializationHelper::String2Enum< AlphaContext::DstBlendMode >( deser.GetAttribute( "dstRGBBlendMode" ) );
+    alphaCtx->srcAlphaBlendMode = SerializationHelper::String2Enum< AlphaContext::SrcBlendMode >( deser.GetAttribute( "srcAlphaBlendMode" ) );
+    alphaCtx->dstAlphaBlendMode = SerializationHelper::String2Enum< AlphaContext::DstBlendMode >( deser.GetAttribute( "dstAlphaBlendMode" ) );
     alphaCtx->blendColor = SerializationHelper::String2T< glm::vec4 >( deser.GetAttribute( "blendColor" ), glm::vec4( 0, 0, 0, 0 ) );
     deser.ExitChild(); // alpha_context
 
