@@ -1,8 +1,8 @@
 #include "OffsetTimeEvaluator.h"
 #include "Serialization/ISerializer.h"
+
 #include "Serialization/SerializationHelper.h"
-//#include "Serialization/SerializationObjects.h"
-//#include "Serialization/SerializationObjects.inl"
+#include "Serialization/SerializationHelper.inl"
 
 namespace bv { namespace model {
 
@@ -24,18 +24,19 @@ OffsetTimeEvaluator::~OffsetTimeEvaluator                   ()
 
 // *******************************
 //
-void                OffsetTimeEvaluator::Serialize           ( ISerializer& sob ) const
+void                OffsetTimeEvaluator::Serialize           ( ISerializer& ser ) const
 {
-    sob.EnterChild( "timeline" );
-    sob.SetAttribute( "name", GetName() );
-    sob.SetAttribute( "type", "offset" );
+    ser.EnterChild( "timeline" );
+    ser.SetAttribute( "name", GetName() );
+    ser.SetAttribute( "type", "offset" );
+    SerializationHelper::SerializeAttribute( ser, m_timeOffset, "offset" );
 
-    sob.EnterArray( "children" );
+    ser.EnterArray( "children" );
     for( auto child : m_children )
-        child->Serialize( sob );
-    sob.ExitChild(); // children
+        child->Serialize( ser );
+    ser.ExitChild(); // children
 
-    sob.ExitChild();
+    ser.ExitChild();
 }
 
 // *******************************

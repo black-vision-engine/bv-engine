@@ -46,7 +46,8 @@ void            TimelineManager::Serialize                       ( ISerializer& 
 {
     sob.EnterArray( "timelines" );
 
-    m_rootTimeline->Serialize( sob );
+    for( auto child : m_rootTimeline->GetChildren() )
+        child->Serialize( sob );
 
     sob.ExitChild();
 }

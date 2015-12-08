@@ -1,3 +1,5 @@
+#include "Engine/Models/Timeline/TimelineManager.h"
+
 namespace bv { namespace model {
 
 // *******************************
@@ -21,16 +23,18 @@ SimpleParameterImpl< InterpolatorType, ValueType, type >::~SimpleParameterImpl  
 std::string Type2String( ModelParamType type ); // FIXME
 
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
-void                SimpleParameterImpl< InterpolatorType, ValueType, type >::Serialize       ( ISerializer& doc ) const
+void                SimpleParameterImpl< InterpolatorType, ValueType, type >::Serialize       ( ISerializer& ser ) const
 {
-    doc.EnterChild( "param" );
-    doc.SetAttribute( "name", GetName() );
-    doc.SetAttribute( "type", Type2String( GetType() ) );
-    doc.SetAttribute( "timeline", m_timeEvaluator->GetName() );
+    ser.EnterChild( "param" );
+    ser.SetAttribute( "name", GetName() );
+    ser.SetAttribute( "type", Type2String( GetType() ) );
+    
+    auto timeline = TimelineManager::GetInstance()->GetTimelinePath( m_timeEvaluator );
+    ser.SetAttribute( "timeline", timeline );
 
-    m_interpolator.Serialize( doc );
+    m_interpolator.Serialize( ser );
 
-    doc.ExitChild();
+    ser.ExitChild();
 }
 
 // *******************************

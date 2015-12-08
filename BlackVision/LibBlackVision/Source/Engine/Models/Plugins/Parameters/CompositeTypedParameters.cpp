@@ -68,23 +68,20 @@ int         ParamTransform::GetNumKeys      ()
 
 // *******************************
 //
-void    ParamTransform::Serialize       ( ISerializer& doc ) const
+void    ParamTransform::Serialize       ( ISerializer& ser ) const
 {
-    doc.EnterChild( "param" );
-    doc.SetAttribute( "name", GetName() );
-    doc.SetAttribute( "type", "transform" );
-    doc.SetAttribute( "timeline", m_timeEvaluator->GetName() );
+    ser.EnterChild( "param" );
+    ser.SetAttribute( "name", GetName() );
+    ser.SetAttribute( "type", "transform" );
 
-    m_transformModel.Serialize( doc );
-    //for( unsigned int i = 0; i < m_transformModel.Size(); i++ )
-    //{
-    //    m_transformModel[ i ]->GetP0MotylaNoga().Serialize( doc );
-    //    m_transformModel[ i ]->GetP1MotylaNoga().Serialize( doc );
-    //    m_transformModel[ i ]->GetP2MotylaNoga().Serialize( doc );
-    //}
+    auto timeline = TimelineManager::GetInstance()->GetTimelinePath( m_timeEvaluator );
+    ser.SetAttribute( "timeline", timeline );
 
-    doc.ExitChild();
+    m_transformModel.Serialize( ser );
+
+    ser.ExitChild();
 }
+
 // *******************************
 //
 VoidPtr    ParamTransform::QueryParamTyped  ()
@@ -112,29 +109,19 @@ ParamTransformVec::ParamTransformVec                ( const std::string & name, 
 
 // *******************************
 //
-void ParamTransformVec::Serialize       ( ISerializer& doc ) const
+void ParamTransformVec::Serialize       ( ISerializer& ser ) const
 {
-    doc.EnterChild( "param" );
-    doc.SetAttribute( "name", GetName() );
-    doc.SetAttribute( "type", "transform_vec" );
-    doc.SetAttribute( "timeline", m_timeEvaluator->GetName() );
+    ser.EnterChild( "param" );
+    ser.SetAttribute( "name", GetName() );
+    ser.SetAttribute( "type", "transform_vec" );
+
+    auto timeline = TimelineManager::GetInstance()->GetTimelinePath( m_timeEvaluator );
+    ser.SetAttribute( "timeline", timeline );
 
     for( auto t : m_transformModelVec )
-    {
-        t.Serialize( doc );
-        //for( int i = 0; i < t.Size(); i++ )
-        //{
-        //    t[ i ]->Ser
-        //    //doc.SetName( "transform" );
-        //    //doc.SetAttribute( "kind", Kind2String( t[ i ]->KindKurwaMac() ) );
-        //    //    t[ i ]->GetP0MotylaNoga().Serialize( doc );
-        //    //    t[ i ]->GetP1MotylaNoga().Serialize( doc );
-        //    //    t[ i ]->GetP2MotylaNoga().Serialize( doc );
-        //    //doc.ExitChild();
-        //}
-    }
+        t.Serialize( ser );
 
-    doc.ExitChild(); // param
+    ser.ExitChild(); // param
 }
 
 // *******************************
