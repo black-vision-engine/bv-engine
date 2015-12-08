@@ -4,12 +4,11 @@
 #include "ModelNodeEffectWireframe.h"
 
 //#include "Serialization/SerializationHelper.h"
-#include "Serialization/SerializationHelper.inl"
+//#include "Serialization/SerializationHelper.inl"
 
 namespace bv { 
     
-namespace SerializationHelper
-{
+namespace SerializationHelper {
 
 std::pair< bv::NodeEffectType, const char* > ne2s[] = {
     std::make_pair( bv::NodeEffectType::NET_ALPHA_MASK, "alpha mask" )

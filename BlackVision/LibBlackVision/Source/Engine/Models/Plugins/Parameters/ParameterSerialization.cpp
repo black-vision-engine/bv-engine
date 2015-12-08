@@ -9,7 +9,36 @@
 //#include "Serialization/SerializationObjects.h"
 //#include "Serialization/SerializationObjects.inl"
 
-namespace bv { namespace model {
+namespace bv { 
+    
+namespace SerializationHelper {
+
+std::pair< bv::ModelParamType, const char* > mpt2s[] = {
+    std::make_pair( bv::ModelParamType::MPT_BOOL, "bool" ),
+    std::make_pair( bv::ModelParamType::MPT_ENUM, "enum" ),
+    std::make_pair( bv::ModelParamType::MPT_FLOAT, "float" ),
+    std::make_pair( bv::ModelParamType::MPT_INT, "int" ),
+    std::make_pair( bv::ModelParamType::MPT_MAT2, "mat2" ),
+    std::make_pair( bv::ModelParamType::MPT_STRING, "string" ),
+    std::make_pair( bv::ModelParamType::MPT_TRANSFORM, "transform" ),
+    std::make_pair( bv::ModelParamType::MPT_TRANSFORM_VEC, "transform_vec" ),
+    std::make_pair( bv::ModelParamType::MPT_VEC2, "vec2" ),
+    std::make_pair( bv::ModelParamType::MPT_VEC3, "vec3" ),
+    std::make_pair( bv::ModelParamType::MPT_VEC4, "vec4" ),
+    std::make_pair( bv::ModelParamType::MPT_WSTRING, "wstring" )
+};
+
+template<>
+std::string T2String< bv::ModelParamType>( const bv::ModelParamType& t )
+{
+    return SerializationHelper::Enum2String< bv::ModelParamType >( mpt2s, t );
+}
+
+
+}
+
+    
+namespace model {
 
 
 class KeyFrame : public ISerializable // FIXME: to remove!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

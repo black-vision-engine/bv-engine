@@ -1,4 +1,5 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
+#include "Serialization/SerializationHelper.inl"
 
 namespace bv { namespace model {
 
@@ -27,7 +28,7 @@ void                SimpleParameterImpl< InterpolatorType, ValueType, type >::Se
 {
     ser.EnterChild( "param" );
     ser.SetAttribute( "name", GetName() );
-    ser.SetAttribute( "type", Type2String( GetType() ) );
+    ser.SetAttribute( "type", SerializationHelper::T2String< ModelParamType >( GetType() ) );
     
     auto timeline = TimelineManager::GetInstance()->GetTimelinePath( m_timeEvaluator );
     ser.SetAttribute( "timeline", timeline );
