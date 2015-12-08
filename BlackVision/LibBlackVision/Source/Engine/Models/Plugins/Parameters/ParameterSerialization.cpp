@@ -185,10 +185,16 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& dob ) // F
         }
         return param;
     } 
-    else if( type == "9" ) // FIXME
+    else if( type == "9" || type == "enum" )
     {
-        return ParametersFactory::CreateParameterEnum< bool >( name, te );
-        //return nullptr;
+        auto param = ParametersFactory::CreateParameterEnum< int >( name, te );
+        for( auto value : values )
+        {
+            auto val = std::stoi( value->value );
+            auto time = std::stof( value->time );
+            param->SetVal( val, time );
+        }
+
     }
     else if( type == "wstring" ) 
     {
