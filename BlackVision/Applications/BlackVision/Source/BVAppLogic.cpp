@@ -172,8 +172,8 @@ void BVAppLogic::LoadScene          ( void )
             //m_solution.SetTimeline(m_timelineManager);
             m_solution.LoadSolution( ConfigManager::GetString("solution") );
 
-            auto root = m_solution.GetRoot();
-			auto scene = SceneModel::Create( "root", root, m_renderer->GetCamera() );
+			auto scene = SceneModel::Create( "root", m_renderer->GetCamera() );
+			scene->SetRootNode( m_solution.GetRoot() );
 
 			m_bvProject->GetProjectEditor()->AddScene( scene );
 

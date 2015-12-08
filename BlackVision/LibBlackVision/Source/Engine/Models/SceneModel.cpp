@@ -9,19 +9,21 @@ namespace bv { namespace model {
 
 // *******************************
 //
-SceneModelPtr    SceneModel::Create		( std::string name, BasicNodePtr rootNode, Camera * camera )
+SceneModelPtr    SceneModel::Create		( std::string name, Camera * camera )
 {
-    return std::make_shared< SceneModel >( name, rootNode, camera );
+    return std::make_shared< SceneModel >( name, camera );
 }
 
 // *******************************
 //
-				SceneModel::SceneModel	( std::string name, BasicNodePtr rootNode, Camera * camera )
+				SceneModel::SceneModel	( std::string name, Camera * camera )
     : m_name( name )
-    , m_sceneRootNode( rootNode )
+    , m_sceneRootNode( nullptr )
+    , m_timeline( new model::OffsetTimeEvaluator( name, TimeType( 0.0 ) ) )
 	, m_camera( camera )
+	, m_modelSceneEditor( nullptr )
 {
-	m_modelSceneEditor = new ModelSceneEditor( m_sceneRootNode );
+	//m_modelSceneEditor = new ModelSceneEditor( m_sceneRootNode );
 }
 
 // *******************************
@@ -39,8 +41,6 @@ ser.EnterChild( "scene" );
 
     ser.SetAttribute( "name", m_name );
 
-    //model::TimelineManager::SetInstance( m_timelineManager.get() );
-
     //auto& assets = AssetDescsWithUIDs::GetInstance();
     AssetDescsWithUIDs assets;
     GetAssetsWithUIDs( assets, m_sceneRootNode );
@@ -48,8 +48,8 @@ ser.EnterChild( "scene" );
 
     assets.Serialize( ser );
 
-	//FIXME: shouldn't serialize timeline manager (all timelines), only one used in the scene
-	model::TimelineManager::GetInstance()->Serialize( ser );
+	m_timeline->Serialize( ser );
+
     m_sceneRootNode->Serialize( ser );                                    
 
 ser.ExitChild();
@@ -63,20 +63,23 @@ ISerializablePtr        SceneModel::Create          ( const IDeserializer& deser
     auto assets = SerializationHelper::DeserializeObjectLoadImpl< AssetDescsWithUIDs >( deser, "assets" );
     AssetDescsWithUIDs::SetInstance( *assets );
 
-// timelines
-    auto tm = SerializationHelper::DeserializeObjectLoadImpl< model::TimelineManager >( deser, "timelines" );
-	//FIXME: add deserialized timelines as child to global timeline?
-    //TimelineManager::SetInstance( tm.get() );
-	TimelineManager::GetInstance()->AddTimeline( tm->GetRootTimeline() );
-
 // nodes
     auto node = SerializationHelper::DeserializeObjectLoadImpl< model::BasicNode >( deser, "node" );
     assert( node );
 
 	//FIXME: pass nullptr as camera because we don't have camera model yet
-    auto obj = std::make_shared< SceneModel >( deser.GetAttribute( "name" ), node, nullptr );
+    auto obj = std::make_shared< SceneModel >( deser.GetAttribute( "name" ), nullptr );
+	obj->SetRootNode( node );
 
-    return ISerializablePtr( obj );
+// timelines
+	auto sceneTimeline = obj->GetTimeline();
+	auto timelines = SerializationHelper::DeserializeObjectLoadImpl< OffsetTimeEvaluator >( deser, "timeline" );
+	for( auto timeline : timelines->GetChildren() )
+    {
+		sceneTimeline->AddChild( timeline );
+    }
+
+	return ISerializablePtr( obj );
 }
 
 // *******************************
@@ -88,6 +91,19 @@ model::SceneModelPtr		SceneModel::Clone		() const
 
 // *******************************
 //
+void						SceneModel::SetRootNode	( BasicNodePtr rootNode )
+{
+	m_sceneRootNode = rootNode;
+
+	if( m_modelSceneEditor )
+	{
+		delete m_modelSceneEditor;
+	}
+	m_modelSceneEditor = new ModelSceneEditor( m_sceneRootNode );
+}
+
+// *******************************
+//
 BasicNodePtr				SceneModel::GetRootNode	() const
 {
 	return m_sceneRootNode;
@@ -95,9 +111,24 @@ BasicNodePtr				SceneModel::GetRootNode	() const
 
 // *******************************
 //
+void						SceneModel::SetName		( std::string name )
+{
+	m_name = name;
+	m_timeline->SetName( name );
+}
+
+// *******************************
+//
 const std::string &			SceneModel::GetName		() const
 {
 	return m_name;
+}
+
+// *******************************
+//
+OffsetTimeEvaluatorPtr		SceneModel::GetTimeline	()  const
+{
+    return m_timeline;
 }
 
 // *******************************
@@ -119,7 +150,9 @@ ModelSceneEditor *			SceneModel::GetModelSceneEditor		() const
 SceneModelPtr				SceneModel::CreateEmptyScene		( const std::string & name )
 {
 	//FIXME: timeevaluator and camera can be nullptr because they're not used yet
-	return SceneModel::Create( name, BasicNode::Create( std::string(), nullptr ), nullptr );
+	auto scene = SceneModel::Create( name, nullptr );
+	scene->SetRootNode( BasicNode::Create( std::string(), nullptr ) );
+	return scene;
 }
 
 } // model

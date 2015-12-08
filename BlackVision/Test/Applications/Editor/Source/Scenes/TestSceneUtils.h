@@ -69,25 +69,25 @@ public:
 public:
 	static model::SceneModelPtr	ColoredRectangleScene				( const std::string & name, glm::vec4 color, glm::vec3 transform );
 
-	static model::BasicNodePtr	ColoredRectangle					( const std::string & name, Float32 width, Float32 height, glm::vec4 color, const std::string & alphaMask = "" );
-	static model::BasicNodePtr	ColoredGeometry						( const std::string & name, const std::string & plugin, glm::vec4 color, const std::string & alphaMask = "" );
+	static model::BasicNodePtr	ColoredRectangle					( model::ITimeEvaluatorPtr timeEval, const std::string & name, Float32 width, Float32 height, glm::vec4 color, const std::string & alphaMask = "" );
+	static model::BasicNodePtr	ColoredGeometry						( model::ITimeEvaluatorPtr timeEval, const std::string & name, const std::string & plugin, glm::vec4 color, const std::string & alphaMask = "" );
 	
-	static model::BasicNodePtr	TexturedRectangle					( const std::string & name, Float32 width, Float32 height, const std::string & path, const std::string & alphaMask = "" );
-	static model::BasicNodePtr	TexturedGeometry					( const std::string & name, const std::string & plugin, const std::string & path, const std::string & alphaMask = "" );
+	static model::BasicNodePtr	TexturedRectangle					( model::ITimeEvaluatorPtr timeEval, const std::string & name, Float32 width, Float32 height, const std::string & path, const std::string & alphaMask = "" );
+	static model::BasicNodePtr	TexturedGeometry					( model::ITimeEvaluatorPtr timeEval, const std::string & name, const std::string & plugin, const std::string & path, const std::string & alphaMask = "" );
 	
-	static model::BasicNodePtr	AnimatedRectangle					( const std::string & name, Float32 width, Float32 height, const std::string & path, const std::string & alphaMask = "" );
-	static model::BasicNodePtr	AnimatedGeometry					( const std::string & name, const std::string & plugin, const std::string & path, const std::string & alphaMask = "" );
+	static model::BasicNodePtr	AnimatedRectangle					( model::ITimeEvaluatorPtr timeEval, const std::string & name, Float32 width, Float32 height, const std::string & path, const std::string & alphaMask = "" );
+	static model::BasicNodePtr	AnimatedGeometry					( model::ITimeEvaluatorPtr timeEval, const std::string & name, const std::string & plugin, const std::string & path, const std::string & alphaMask = "" );
 	
-	static model::BasicNodePtr	GradientRectangle					( const std::string & name, Float32 width, Float32 height, glm::vec4 c1, glm::vec4 c2, const std::string & alphaMask = "" );
-	static model::BasicNodePtr	GradientGeometry					( const std::string & name, const std::string & plugin, glm::vec4 c1, glm::vec4 c2, const std::string & alphaMask = "" );
+	static model::BasicNodePtr	GradientRectangle					( model::ITimeEvaluatorPtr timeEval, const std::string & name, Float32 width, Float32 height, glm::vec4 c1, glm::vec4 c2, const std::string & alphaMask = "" );
+	static model::BasicNodePtr	GradientGeometry					( model::ITimeEvaluatorPtr timeEval, const std::string & name, const std::string & plugin, glm::vec4 c1, glm::vec4 c2, const std::string & alphaMask = "" );
 	
-	static model::BasicNodePtr	ColoredText							( const std::string & name, glm::vec4 color, UInt32 fontSize, const std::string & alphaMask = "" );
-	static model::BasicNodePtr	GradientText						( const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask = "" );
+	static model::BasicNodePtr	ColoredText							( model::ITimeEvaluatorPtr timeEval, const std::string & name, glm::vec4 color, UInt32 fontSize, const std::string & alphaMask = "" );
+	static model::BasicNodePtr	GradientText						( model::ITimeEvaluatorPtr timeEval, const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask = "" );
 	
-	static model::BasicNodePtr	ColoredTimer						( const std::string & name, glm::vec4 color, UInt32 fontSize, const std::string & alphaMask = "" );
-	static model::BasicNodePtr	GradientTimer						( const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask = "" );
+	static model::BasicNodePtr	ColoredTimer						( model::ITimeEvaluatorPtr timeEval, const std::string & name, glm::vec4 color, UInt32 fontSize, const std::string & alphaMask = "" );
+	static model::BasicNodePtr	GradientTimer						( model::ITimeEvaluatorPtr timeEval, const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask = "" );
 
-	static model::BasicNodePtr	VideoStreamDecoder					( const std::string & name, const std::string & plugin, const std::string & videoPath, const std::string & alphaMask = "" );
+	static model::BasicNodePtr	VideoStreamDecoder					( model::ITimeEvaluatorPtr timeEval, const std::string & name, const std::string & plugin, const std::string & videoPath, const std::string & alphaMask = "" );
 
 	static void					GenerateCheckboardTex				( const std::string & name, UInt32 width, UInt32 height, glm::uvec3 color );
 	static void					GenerateCheckboardAlphaMaskTex		( const std::string & name, UInt32 width, UInt32 height, UInt32 size = 32 );

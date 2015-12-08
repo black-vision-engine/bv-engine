@@ -32,21 +32,20 @@ const std::string	TestSceneUtils::PluginsNameArr[] = { "triangle", "circle", "el
 //
 model::SceneModelPtr	TestSceneUtils::ColoredRectangleScene		( const std::string & name, glm::vec4 color, glm::vec3 transform )
 {
-	auto timeline = model::TimelineManager::CreateOffsetTimeEvaluator( name, TimeType( 0.0 ) );
-	auto root = TestSceneUtils::ColoredRectangle( "root", 0.5f, 0.5f, color, ALPHA_MASK0_PATH );
+	auto scene = model::SceneModel::Create( name, new Camera() );
+	auto root = TestSceneUtils::ColoredRectangle( scene->GetTimeline(), "root", 0.5f, 0.5f, color, ALPHA_MASK0_PATH );
+	scene->SetRootNode( root );
+
     auto rootTransform  = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
     SetParameterTranslation( rootTransform, 0, 0.0f, transform );
 
-	return model::SceneModel::Create( name, root, new Camera() );
+	return scene;
 }
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::ColoredRectangle			( const std::string & name, Float32 width, Float32 height, glm::vec4 color, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::ColoredRectangle			( model::ITimeEvaluatorPtr timeEval, const std::string & name, Float32 width, Float32 height, glm::vec4 color, const std::string & alphaMask )
 {
-	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-	model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
-
     auto node = model::BasicNode::Create( name, nullptr );
 	
 	std::vector< std::string > plugins;
@@ -58,7 +57,7 @@ model::BasicNodePtr		TestSceneUtils::ColoredRectangle			( const std::string & na
 		plugins.push_back( "DEFAULT_ALPHA_MASK" );
 	}
 
-    auto success = node->AddPlugins( plugins, localTimeline );
+    auto success = node->AddPlugins( plugins, timeEval );
 	{ success; }
     assert( success );
 
@@ -77,11 +76,8 @@ model::BasicNodePtr		TestSceneUtils::ColoredRectangle			( const std::string & na
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::ColoredGeometry				( const std::string & name, const std::string & plugin, glm::vec4 color, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::ColoredGeometry				( model::ITimeEvaluatorPtr timeEval, const std::string & name, const std::string & plugin, glm::vec4 color, const std::string & alphaMask )
 {
-	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
-
     auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
@@ -93,7 +89,7 @@ model::BasicNodePtr		TestSceneUtils::ColoredGeometry				( const std::string & na
 		plugins.push_back( "DEFAULT_ALPHA_MASK" );
 	}
 
-    auto success = node->AddPlugins( plugins, localTimeline );
+    auto success = node->AddPlugins( plugins, timeEval );
 	{ success; }
     assert( success );
 
@@ -109,11 +105,8 @@ model::BasicNodePtr		TestSceneUtils::ColoredGeometry				( const std::string & na
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::TexturedRectangle		( const std::string & name, Float32 width, Float32 height, const std::string & path, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::TexturedRectangle		( model::ITimeEvaluatorPtr timeEval, const std::string & name, Float32 width, Float32 height, const std::string & path, const std::string & alphaMask )
 {
-	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
-
     auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
@@ -125,7 +118,7 @@ model::BasicNodePtr		TestSceneUtils::TexturedRectangle		( const std::string & na
 		plugins.push_back( "DEFAULT_ALPHA_MASK" );
 	}
 
-    auto success = node->AddPlugins( plugins, localTimeline );
+    auto success = node->AddPlugins( plugins, timeEval );
 
 	assert( success ); { success; }
 
@@ -144,11 +137,8 @@ model::BasicNodePtr		TestSceneUtils::TexturedRectangle		( const std::string & na
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::TexturedGeometry		( const std::string & name, const std::string & plugin, const std::string & path, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::TexturedGeometry		( model::ITimeEvaluatorPtr timeEval, const std::string & name, const std::string & plugin, const std::string & path, const std::string & alphaMask )
 {
-	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
-
     auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
@@ -160,7 +150,7 @@ model::BasicNodePtr		TestSceneUtils::TexturedGeometry		( const std::string & nam
 		plugins.push_back( "DEFAULT_ALPHA_MASK" );
 	}
 
-    auto success = node->AddPlugins( plugins, localTimeline );
+    auto success = node->AddPlugins( plugins, timeEval );
 
 	assert( success ); { success; }
 
@@ -176,11 +166,8 @@ model::BasicNodePtr		TestSceneUtils::TexturedGeometry		( const std::string & nam
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::AnimatedRectangle		( const std::string & name, Float32 width, Float32 height, const std::string & path, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::AnimatedRectangle		( model::ITimeEvaluatorPtr timeEval, const std::string & name, Float32 width, Float32 height, const std::string & path, const std::string & alphaMask )
 {
-	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-	model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
-
     auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
@@ -192,7 +179,7 @@ model::BasicNodePtr		TestSceneUtils::AnimatedRectangle		( const std::string & na
 		plugins.push_back( "DEFAULT_ALPHA_MASK" );
 	}
 
-    auto success = node->AddPlugins( plugins, localTimeline );
+    auto success = node->AddPlugins( plugins, timeEval );
 
 	assert( success ); { success; }
 
@@ -204,7 +191,7 @@ model::BasicNodePtr		TestSceneUtils::AnimatedRectangle		( const std::string & na
 	auto time = model::TimelineManager::GetInstance()->GetRootTimeline()->GetLocalTime();
     SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), time, 0.f );
     SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), time + TimeType( 0.25f * ( Float32 )ANIM_NUM / SPEED ), ( Float32 )ANIM_NUM );
-    node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( localTimeline );
+    node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( timeEval );
 
 	if( !alphaMask.empty() )
 	{
@@ -216,11 +203,8 @@ model::BasicNodePtr		TestSceneUtils::AnimatedRectangle		( const std::string & na
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::AnimatedGeometry		( const std::string & name, const std::string & plugin, const std::string & path, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::AnimatedGeometry		( model::ITimeEvaluatorPtr timeEval, const std::string & name, const std::string & plugin, const std::string & path, const std::string & alphaMask )
 {
-	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
-
     auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
@@ -232,7 +216,7 @@ model::BasicNodePtr		TestSceneUtils::AnimatedGeometry		( const std::string & nam
 		plugins.push_back( "DEFAULT_ALPHA_MASK" );
 	}
 
-    auto success = node->AddPlugins( plugins, localTimeline );
+    auto success = node->AddPlugins( plugins, timeEval );
 
 	assert( success ); { success; }
 
@@ -241,7 +225,7 @@ model::BasicNodePtr		TestSceneUtils::AnimatedGeometry		( const std::string & nam
 	auto time = model::TimelineManager::GetInstance()->GetRootTimeline()->GetLocalTime();
     SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), time, 0.f );
     SetParameter( node->GetPlugin( "animation" )->GetParameter( "frameNum" ), time + TimeType( 0.25f * ( Float32 )ANIM_NUM / SPEED ), ( Float32 )ANIM_NUM );
-    node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( localTimeline );
+    node->GetPlugin( "animation" )->GetParameter( "frameNum" )->SetTimeEvaluator( timeEval );
 
 	if( !alphaMask.empty() )
 	{
@@ -253,11 +237,8 @@ model::BasicNodePtr		TestSceneUtils::AnimatedGeometry		( const std::string & nam
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::GradientRectangle		( const std::string & name, Float32 width, Float32 height, glm::vec4 c1, glm::vec4 c2, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::GradientRectangle		( model::ITimeEvaluatorPtr timeEval, const std::string & name, Float32 width, Float32 height, glm::vec4 c1, glm::vec4 c2, const std::string & alphaMask )
 {
-	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
-
     auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
@@ -269,7 +250,7 @@ model::BasicNodePtr		TestSceneUtils::GradientRectangle		( const std::string & na
 		plugins.push_back( "DEFAULT_ALPHA_MASK" );
 	}
 
-    auto success = node->AddPlugins( plugins, localTimeline );
+    auto success = node->AddPlugins( plugins, timeEval );
 
 	assert( success ); { success; }
 
@@ -289,11 +270,8 @@ model::BasicNodePtr		TestSceneUtils::GradientRectangle		( const std::string & na
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::GradientGeometry		( const std::string & name, const std::string & plugin, glm::vec4 c1, glm::vec4 c2, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::GradientGeometry		( model::ITimeEvaluatorPtr timeEval, const std::string & name, const std::string & plugin, glm::vec4 c1, glm::vec4 c2, const std::string & alphaMask )
 {
-	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
-
     auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
@@ -305,7 +283,7 @@ model::BasicNodePtr		TestSceneUtils::GradientGeometry		( const std::string & nam
 		plugins.push_back( "DEFAULT_ALPHA_MASK" );
 	}
 
-    auto success = node->AddPlugins( plugins, localTimeline );
+    auto success = node->AddPlugins( plugins, timeEval );
 
 	assert( success ); { success; }
 
@@ -322,11 +300,8 @@ model::BasicNodePtr		TestSceneUtils::GradientGeometry		( const std::string & nam
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::ColoredText				( const std::string & name, glm::vec4 color, UInt32 fontSize, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::ColoredText				( model::ITimeEvaluatorPtr timeEval, const std::string & name, glm::vec4 color, UInt32 fontSize, const std::string & alphaMask )
 {
-	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
-
     auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
@@ -338,7 +313,7 @@ model::BasicNodePtr		TestSceneUtils::ColoredText				( const std::string & name, 
 		plugins.push_back( "DEFAULT_ALPHA_MASK" );
 	}
 
-    auto success = node->AddPlugins( plugins, localTimeline );
+    auto success = node->AddPlugins( plugins, timeEval );
 
 	assert( success ); { success; }
 
@@ -360,11 +335,8 @@ model::BasicNodePtr		TestSceneUtils::ColoredText				( const std::string & name, 
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::GradientText			( const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::GradientText			( model::ITimeEvaluatorPtr timeEval, const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask )
 {
-	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
-
     auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
@@ -376,7 +348,7 @@ model::BasicNodePtr		TestSceneUtils::GradientText			( const std::string & name, 
 		plugins.push_back( "DEFAULT_ALPHA_MASK" );
 	}
 
-    auto success = node->AddPlugins( plugins, localTimeline );
+    auto success = node->AddPlugins( plugins, timeEval );
 
 	assert( success ); { success; }
 
@@ -399,11 +371,8 @@ model::BasicNodePtr		TestSceneUtils::GradientText			( const std::string & name, 
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::ColoredTimer				( const std::string & name, glm::vec4 color, UInt32 fontSize, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::ColoredTimer				( model::ITimeEvaluatorPtr timeEval, const std::string & name, glm::vec4 color, UInt32 fontSize, const std::string & alphaMask )
 {
-	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
-
     auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
@@ -415,7 +384,7 @@ model::BasicNodePtr		TestSceneUtils::ColoredTimer				( const std::string & name,
 		plugins.push_back( "DEFAULT_ALPHA_MASK" );
 	}
 
-    auto success = node->AddPlugins( plugins, localTimeline );
+    auto success = node->AddPlugins( plugins, timeEval );
 
 	assert( success ); { success; }
 
@@ -439,11 +408,8 @@ model::BasicNodePtr		TestSceneUtils::ColoredTimer				( const std::string & name,
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::GradientTimer			( const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::GradientTimer			( model::ITimeEvaluatorPtr timeEval, const std::string & name, glm::vec4 c1, glm::vec4 c2, UInt32 fontSize, const std::string & alphaMask )
 {
-	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
-
     auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
@@ -455,7 +421,7 @@ model::BasicNodePtr		TestSceneUtils::GradientTimer			( const std::string & name,
 		plugins.push_back( "DEFAULT_ALPHA_MASK" );
 	}
 
-    auto success = node->AddPlugins( plugins, localTimeline );
+    auto success = node->AddPlugins( plugins, timeEval );
 
 	assert( success ); { success; }
 
@@ -480,11 +446,8 @@ model::BasicNodePtr		TestSceneUtils::GradientTimer			( const std::string & name,
 
 // ****************************
 //
-model::BasicNodePtr		TestSceneUtils::VideoStreamDecoder			( const std::string & name, const std::string & plugin, const std::string & videoPath, const std::string & alphaMask )
+model::BasicNodePtr		TestSceneUtils::VideoStreamDecoder			( model::ITimeEvaluatorPtr timeEval, const std::string & name, const std::string & plugin, const std::string & videoPath, const std::string & alphaMask )
 {
-	auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-    model::TimelineManager::GetInstance()->GetRootTimeline()->AddChild( localTimeline );
-
     auto node = model::BasicNode::Create( name, nullptr );
 
 	std::vector< std::string > plugins;
@@ -496,7 +459,7 @@ model::BasicNodePtr		TestSceneUtils::VideoStreamDecoder			( const std::string & 
 		plugins.push_back( "DEFAULT_ALPHA_MASK" );
 	}
 
-    auto success = node->AddPlugins( plugins, localTimeline );
+    auto success = node->AddPlugins( plugins, timeEval );
 
 	assert( success );
 

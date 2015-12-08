@@ -468,8 +468,8 @@ model::SceneModelPtr		TestScenesFactory::CreateSceneFromEnv       ( const std::s
 
 	auto sceneName = "sceneFromEnv: " + scene;
 
-	auto timeline = model::TimelineManager::CreateOffsetTimeEvaluator( sceneName, TimeType( 0.0 ) );
-	timelineManager->AddTimeline( timeline );
+	auto sceneModel = model::SceneModel::Create( sceneName, camera );
+	auto timeline = sceneModel->GetTimeline();
 
     if( scene == "TWO_TEXTURED_RECTANGLES" )
     {
@@ -564,7 +564,9 @@ model::SceneModelPtr		TestScenesFactory::CreateSceneFromEnv       ( const std::s
         node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
 
-	return model::SceneModel::Create( sceneName, node, camera );
+	sceneModel->SetRootNode( node );
+
+	return sceneModel;
 }
 
 // *****************************

@@ -151,8 +151,9 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
 {
     std::string pluginType = deser.GetAttribute( "uid" );
     std::string pluginName = deser.GetAttribute( "name" );
-    auto timeline = deser.GetAttribute( "timeline" );
 
+    auto timeline = deser.GetAttribute( "timeline" );
+	
     auto tm = TimelineManager::GetInstance();
     ITimeEvaluatorPtr te = tm->GetTimeEvaluator( timeline );
     if( te == nullptr ) 
