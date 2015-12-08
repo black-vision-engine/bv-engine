@@ -1749,8 +1749,6 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
     SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.1f, 0.f ) );
 
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
-    //SetParameter( node->GetPlugin( "timer" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 127.0f );
-    //SetParameter( node->GetPlugin( "timer" )->GetParameter( "blurSize" ), TimeType( 0.0 ), float( blurSize ) );
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Right ) );
 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 4.f / 1080.f );
@@ -1824,8 +1822,6 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTimerNode( model::TimelineMa
     SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.1f, 0.f ) );
 
     //SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
-    //SetParameter( node->GetPlugin( "timer" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 127.0f );
-    //SetParameter( node->GetPlugin( "timer" )->GetParameter( "blurSize" ), TimeType( 0.0 ), float( blurSize ) );
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Right ) );
 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 4.f / 1080.f );

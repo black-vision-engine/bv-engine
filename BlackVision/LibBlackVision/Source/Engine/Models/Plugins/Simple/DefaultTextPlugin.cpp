@@ -54,10 +54,10 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     SimpleWStringEvaluatorPtr   textEvaluator           = ParamValEvaluatorFactory::CreateSimpleWStringEvaluator( "text", timeEvaluator );
     SimpleFloatEvaluatorPtr     alphaEvaluator          = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator           = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
-    SimpleFloatEvaluatorPtr     fontSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
+    //SimpleFloatEvaluatorPtr     fontSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
 
-    SimpleFloatEvaluatorPtr     blurSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
-	SimpleFloatEvaluatorPtr     outlineSizeEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "outlineSize", timeEvaluator );
+    //SimpleFloatEvaluatorPtr     blurSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
+	//SimpleFloatEvaluatorPtr     outlineSizeEvaluator    = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "outlineSize", timeEvaluator );
 	SimpleVec4EvaluatorPtr      outlineColorEvaluator   = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "outlineColor", timeEvaluator );
 
     SimpleVec4EvaluatorPtr      rccBeginColorEvaluator  = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "rcc_beginColor", timeEvaluator );
@@ -103,11 +103,11 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     psModel->RegisterAll( transformTextEffectIdEvaluator );
 
     plModel->RegisterAll( textEvaluator );
-    plModel->RegisterAll( blurSizeEvaluator );
-	plModel->RegisterAll( outlineSizeEvaluator );
+    //plModel->RegisterAll( blurSizeEvaluator );
+	//plModel->RegisterAll( outlineSizeEvaluator );
     plModel->RegisterAll( spacingEvaluator );
     plModel->RegisterAll( alignmentEvaluator );
-    plModel->RegisterAll( fontSizeEvaluator );
+    //plModel->RegisterAll( fontSizeEvaluator );
     plModel->RegisterAll( maxTextLenghtEvaluator );
 
     //Set models structure
@@ -119,8 +119,8 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     textEvaluator->Parameter()->SetVal( L"", TimeType( 0.f ) );
     textEvaluator->Parameter()->AccessInterpolator().SetWrapPostMethod( WrapMethod::pingPong );
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
-    blurSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-	outlineSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+    //blurSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
+	//outlineSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     spacingEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     alignmentEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
 	outlineColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
@@ -137,7 +137,7 @@ DefaultPluginParamValModelPtr   DefaultTextPluginDesc::CreateDefaultModel( ITime
     explosionCenterEvaluator->Parameter()->SetVal( glm::vec2( 0.0, -0.2 ), TimeType( 0.f ) );
 
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
-    fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
+    //fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
     maxTextLenghtEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.f ) );
 
     transformEffectVal1Evaluator->Parameter()->SetVal( 1.f, TimeType( 0.f ) );
