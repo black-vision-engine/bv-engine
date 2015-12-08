@@ -87,9 +87,9 @@ class DefaultTimerPlugin : public BasePlugin< IPlugin >
 {
 private:
 
-    ParamFloatPtr                   m_fontSizeParam;
-    ParamFloatPtr                   m_blurSizeParam;
-	ParamFloatPtr                   m_outlineSizeParam;
+    SizeType                        m_fontSize;
+    SizeType                        m_blurSize;
+	SizeType                        m_outlineSize;
     ParamFloatPtr                   m_spacingParam;
     ParamFloatPtr                   m_alignmentParam;
 

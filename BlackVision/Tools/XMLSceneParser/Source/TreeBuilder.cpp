@@ -612,7 +612,6 @@ namespace bv{
 		result = result && SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 0.0 ), glm::vec4( rF,gF,bF,aF) );
 
         //todo: unhack 1.25 size
-        result = result && SetParameter( txt->GetParameter( "fontSize" ), TimeType( 0.0 ), size );
         result = result && model::LoadFont( node->GetPlugin( "text" ), font, (UInt32) size, blurSize, outlineSize, false );
 
 		
@@ -780,7 +779,6 @@ namespace bv{
         bv::model::DefaultTimerPlugin * timer =  (bv::model::DefaultTimerPlugin*)node->GetPlugin( "timer" ).get();
 
         //todo: unhack 1.25 size
-        result = result && SetParameter( timer->GetParameter( "fontSize" ), TimeType( 0.0 ), size );
         result = result && model::LoadFont( node->GetPlugin( "timer" ),font, (UInt32) size, 0, 0, false  );
 
         if(text->Align=="center")

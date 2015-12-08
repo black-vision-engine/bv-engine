@@ -228,6 +228,9 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
     , m_secSeparator(L'.')
     , m_widestGlyph( L'0' ) 
     , m_started(false)
+    , m_fontSize( 0 )
+    , m_blurSize( 0 )
+    , m_outlineSize( 0 )
 {
     m_spacingParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
 
@@ -240,9 +243,6 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
 	//FIXME: 'reserve' required texture
 	m_psc->GetTexturesDataImpl()->SetTexture( 0, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultTimerPluginDesc::TextureName(), m_pluginParamValModel->GetTimeEvaluator() ) );
 
-    m_fontSizeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
-    m_blurSizeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
-	m_outlineSizeParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "outlineSize" ) );
     m_spacingParam      = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
     m_alignmentParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "alignment" ) );
     m_precisionParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "precision" ) );
@@ -284,6 +284,10 @@ bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr
         InitBigestGlyph();
 
 		auto textureResource = m_textAtlas->GetAsset();
+
+        m_fontSize = txAssetDescr->GetFontSize();
+        m_blurSize = txAssetDescr->GetBlurSize();
+        m_outlineSize = txAssetDescr->GetOutlineSize();
 
         //FIXME: use some better API to handle resources in general and textures in this specific case
 		auto txDesc = std::make_shared< DefaultTextureDescriptor >( textureResource, DefaultTimerPluginDesc::TextureName(), DataBuffer::Semantic::S_TEXTURE_STATIC );
@@ -440,7 +444,7 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
 
 	auto viewWidth  = ApplicationContext::Instance().GetWidth();
     auto viewHeight = ApplicationContext::Instance().GetHeight();
-    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, false, viewWidth, viewHeight );
+    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, m_blurSize, m_spacingParam->Evaluate(), alignType, false, viewWidth, viewHeight );
 }
 
 ////////////////////////////

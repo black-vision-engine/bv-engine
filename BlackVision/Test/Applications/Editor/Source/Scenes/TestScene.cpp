@@ -184,7 +184,7 @@ void					TestScene::InitTestModelSceneEditor	()
 
 		editor->AddScene( model::SceneModel::CreateEmptyScene( SCENE_NAME1 ) );
 
-		auto copied = editor->AddNodeCopy( SCENE_NAME1, nullptr, editor->GetScene( SCENE_NAME )->GetRootNode() );
+		auto copied = editor->AddNodeCopy( SCENE_NAME1, nullptr, SCENE_NAME, editor->GetScene( SCENE_NAME )->GetRootNode() );
 		SetParameterTranslation( copied->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
 
 		success &= ( editor->GetScene( SCENE_NAME ) != nullptr );

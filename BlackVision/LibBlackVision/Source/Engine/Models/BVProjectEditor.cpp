@@ -318,6 +318,9 @@ model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( const std::string & d
 {
 	{ srcSceneName; }
 	auto copy = nodeToCopy->GetModelNodeEditor()->CopyNode();
+
+
+
 	if( copy )
 	{
 		if( destParentNode )
