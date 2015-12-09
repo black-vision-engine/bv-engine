@@ -52,6 +52,9 @@
     <Filter Include="Rendering\Logic\FullScreen">
       <UniqueIdentifier>{354a2ed1-25a2-4402-a29b-a8a85a779c6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering\Logic\FullScreen\Impl">
+      <UniqueIdentifier>{66790ad3-2099-428d-804d-34b46c7724f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -215,6 +218,18 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Utils\FullscreenUtils.cpp">
       <Filter>Rendering\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\OverwriteAlphaFullscreenEffect.cpp">
+      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\OverwriteChannelsFullscreenEffect.cpp">
+      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\MixChannelsFullscreenEffect.cpp">
+      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenVSShader.cpp">
+      <Filter>Rendering\Logic\FullScreen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -384,6 +399,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Utils\FullscreenUtils.h">
       <Filter>Rendering\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\OverwriteAlphaFullscreenEffect.h">
+      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\OverwriteChannelsFullscreenEffect.h">
+      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\MixChannelsFullscreenEffect.h">
+      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenVSShader.h">
+      <Filter>Rendering\Logic\FullScreen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

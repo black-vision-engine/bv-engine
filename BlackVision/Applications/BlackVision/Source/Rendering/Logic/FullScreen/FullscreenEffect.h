@@ -1,11 +1,15 @@
 #pragma once
 
+#include <string>
+
 
 namespace bv {
 
 class Renderer;
 class RenderableEntity;
 class Camera;
+class VertexShader;
+
 
 class FullscreenEffect
 {
@@ -31,6 +35,12 @@ protected:
 
     void                        ToggleFullscreenCamera  ( Renderer * renderer );
     void                        ToggleRegularCamera     ( Renderer * renderer );
+
+    virtual VertexShader *      CreateVS                ( unsigned int numUVChannels ) const;
+
+private:
+
+    std::string                 GetVSShaderSource       ( unsigned int numUVChannels ) const;
 
 };
 
