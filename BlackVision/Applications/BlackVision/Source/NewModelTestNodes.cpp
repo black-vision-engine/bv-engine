@@ -2295,7 +2295,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineMan
 //#define VERSION_COLOR
 
 	  //Timeline stuff
-    auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
 
     //someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( localTimeline );
