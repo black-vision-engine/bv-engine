@@ -37,6 +37,8 @@ public:
 
     virtual const IPluginListFinalized *    GetPluginList       () const                                                            = 0;
 
+	virtual std::vector< ITimeEvaluatorPtr > GetTimelines       () const                                                            = 0;
+
     virtual unsigned int                    GetNumChildren      () const                                                            = 0;
 
     // FIXME: TRANSITION - BEGIN

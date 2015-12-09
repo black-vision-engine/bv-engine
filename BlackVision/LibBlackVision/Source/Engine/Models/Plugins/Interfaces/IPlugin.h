@@ -76,6 +76,8 @@ public:
 
 	virtual ParamTransformVecPtr				GetParamTransform			() const = 0; //FIXME: BArdzo brzydki hack zeby zadzialal crawler
 
+	virtual std::vector< ITimeEvaluatorPtr >	GetTimelines				() const = 0;
+
     virtual                                     ~IPlugin                    (){}
 
 };

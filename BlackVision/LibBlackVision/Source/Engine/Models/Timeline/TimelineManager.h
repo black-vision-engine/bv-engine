@@ -45,14 +45,6 @@ public:
     virtual void            Serialize                       ( ISerializer& sob ) const;
     static ISerializablePtr Create                          ( const IDeserializer& dob );
 
-    static ITimeEvaluatorPtr       CreateOffsetTimeEvaluator       ( const std::string & name, TimeType startTime );
-    static ITimeEvaluatorPtr       CreateConstTimeEvaluator        ( const std::string & name, TimeType timeVal );
-    static ITimelinePtr            CreateDefaultTimeline           ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
-
-    static OffsetTimeEvaluatorPtr  CreateOffsetTimeEvaluatorImpl   ( const std::string & name, TimeType startTime );
-    static ConstTimeEvaluatorPtr   CreateConstTimeEvaluatorImpl    ( const std::string & name, TimeType timeVal );
-    static DefaultTimelinePtr      CreateDefaultTimelineImpl       ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
-    
     bool                    AddStopEventToTimeline          ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime );
     bool                    AddLoopReverseEventToTimeline   ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, unsigned int totalLoopCount );
     bool                    AddLoopJumpEventToTimeline      ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, unsigned int totalLoopCount, TimeType jumpToTime );

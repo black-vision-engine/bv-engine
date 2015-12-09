@@ -10,6 +10,7 @@
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
+#include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Engine/Models/Plugins/PluginsFactory.h"
 #include "TreeBuilder.h"
 

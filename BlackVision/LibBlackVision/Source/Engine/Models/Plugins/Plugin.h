@@ -97,6 +97,7 @@ public:
 
 	virtual ParamTransformVecPtr				GetParamTransform			() const override { return nullptr; }
 
+	virtual std::vector< ITimeEvaluatorPtr >	GetTimelines				() const override;
 
 protected:
 
@@ -497,4 +498,11 @@ ParamTransformVecPtr						GetCurrentParamTransform( const IPlugin * pl );
 typedef std::shared_ptr< const BasePlugin< IPlugin > > BasePluginConstPtr;
 
 } // model
+
+namespace CloneViaSerialization {
+
+model::IPluginPtr					ClonePlugin					( const model::IPlugin * obj, const std::string & prefix );
+
+} //CloneViaSerialization
+
 } // bv

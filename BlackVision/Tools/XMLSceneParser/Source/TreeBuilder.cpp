@@ -1,5 +1,6 @@
 #pragma warning(disable :4996)
 #include "Engine/Models/Plugins/PluginsFactory.h"
+#include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Engine/Models/BasicNode.h"
 //#include "Engine/Models/Resources/TextHelpers.h"
 #include <boost/lexical_cast.hpp>
@@ -893,8 +894,8 @@ namespace bv{
                 WrapMethod = TimelineWrapMethod::TWM_REPEAT;
             }
             float duration = (float)atof(Tree.Scene.Timelines[i]->duration.c_str());
-            DefaultTimelinePtr timeline = model::TimelineManager::CreateDefaultTimelineImpl( Tree.Scene.Meta.SceneName+"*"+ Tree.Scene.Timelines[i]->name, TimeType( duration ), WrapMethod, WrapMethod );
-            auto timeline_offset = model::TimelineManager::CreateOffsetTimeEvaluator( Tree.Scene.Meta.SceneName+"*"+Tree.Scene.Timelines[i]->name , TimeType( 0.0 ) );
+            DefaultTimelinePtr timeline = model::TimelineHelper::CreateDefaultTimelineImpl( Tree.Scene.Meta.SceneName+"*"+ Tree.Scene.Timelines[i]->name, TimeType( duration ), WrapMethod, WrapMethod );
+            auto timeline_offset = model::TimelineHelper::CreateOffsetTimeEvaluator( Tree.Scene.Meta.SceneName+"*"+Tree.Scene.Timelines[i]->name , TimeType( 0.0 ) );
             timeline->AddChild(timeline_offset);
 
             for(size_t j=0;j<Tree.Scene.Timelines[i]->keyframes.size();j++)

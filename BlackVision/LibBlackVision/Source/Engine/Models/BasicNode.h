@@ -73,6 +73,8 @@ public:
 
     virtual const IPluginListFinalized *    GetPluginList           () const override;
 
+	virtual std::vector< ITimeEvaluatorPtr > GetTimelines			() const override;
+
     virtual unsigned int                    GetNumChildren          () const override;
 
     virtual IModelNodeEffectPtr             GetNodeEffect           () const;
@@ -130,4 +132,12 @@ public:
 
 
 } // model
+
+
+namespace CloneViaSerialization {
+
+	model::BasicNodePtr		CloneNode		( const model::BasicNode * obj, const std::string & prefix );
+
+} //CloneViaSerialization
+
 } // bv

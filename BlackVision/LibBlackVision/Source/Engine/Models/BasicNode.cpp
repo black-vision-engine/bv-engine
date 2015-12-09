@@ -220,6 +220,19 @@ const IPluginListFinalized *    BasicNode::GetPluginList            () const
     return m_pluginList.get();
 }
 
+
+// ********************************
+//
+std::vector< ITimeEvaluatorPtr > BasicNode::GetTimelines			() const
+{
+	std::vector< ITimeEvaluatorPtr > ret;
+
+	//FIXME: implement me
+	assert( false );
+
+    return ret;
+}
+
 // ********************************
 //
 unsigned int                    BasicNode::GetNumChildren           () const
@@ -484,4 +497,23 @@ INodeLogicPtr                       BasicNode::GetLogic				    ()
 }
 
 } // model
+
+
+namespace CloneViaSerialization {
+
+// *******************************
+//FIXME: name of method should indicate that timelines are modified or sth?
+model::BasicNodePtr		CloneNode		( const model::BasicNode * obj, const std::string & prefix )
+{
+	{ obj; prefix; }
+
+    //FIXME: implement me
+	assert( false );
+	
+    return nullptr;
+}
+
+} //CloneViaSerialization
+
+
 } // bv

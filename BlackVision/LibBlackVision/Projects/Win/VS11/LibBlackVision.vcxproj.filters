@@ -1119,6 +1119,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\AlphaChannelShaders.cpp">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimelineHelper.cpp">
+      <Filter>Engine\Models\Timeline</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2395,6 +2398,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\AlphaChannelShaders.h">
       <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimelineHelper.h">
+      <Filter>Engine\Models\Timeline</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

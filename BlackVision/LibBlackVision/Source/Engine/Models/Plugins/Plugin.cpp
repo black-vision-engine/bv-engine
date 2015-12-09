@@ -228,11 +228,45 @@ IPluginPtr							BasePlugin< IPlugin >::Clone					() const
 // *******************************
 //
 template <>
-void                                BasePlugin< IPlugin >::SetRendererContext          ( RendererContextPtr context )
+void                                BasePlugin< IPlugin >::SetRendererContext       ( RendererContextPtr context )
 {
     auto psc = GetPixelShaderChannel();
     auto pscDefault = std::dynamic_pointer_cast< DefaultPixelShaderChannel >( psc );
     pscDefault->SetRendererContext( context );
 }
 
-} }
+// *******************************
+//
+template <>
+std::vector< ITimeEvaluatorPtr >    BasePlugin< IPlugin >::GetTimelines				() const
+{
+	std::vector< ITimeEvaluatorPtr > ret;
+
+	//FIXME: implement me
+	assert( false );
+
+    return ret;
+}
+
+} //model
+
+
+namespace CloneViaSerialization {
+
+// *******************************
+//FIXME: name of method should indicate that timelines are modified or sth?
+model::IPluginPtr				ClonePlugin					( const model::IPlugin * obj, const std::string & prefix )
+{
+	{ obj; prefix; }
+
+	//prefix will look like this: CopyX_
+
+    //FIXME: implement me
+	assert( false );
+	
+    return nullptr;
+}
+
+} //CloneViaSerialization
+
+} //bv

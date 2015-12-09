@@ -2118,7 +2118,7 @@ void						TestScene::CopyPlugin			( UInt32 rootIdx, const std::string & rootPlug
 	m_copiedPlugin = root->GetPlugin( rootPlugin );
 	editor->DeletePlugin( root, rootPlugin );
 	
-	editor->AddPluginCopy( root, child, childPlugin, rootIdx );
+	editor->AddPluginCopy( SCENE_NAME, root, SCENE_NAME, child, childPlugin, rootIdx );
 }
 
 // ****************************

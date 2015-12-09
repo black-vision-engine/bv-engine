@@ -27,7 +27,6 @@ private:
 
 	static const std::string	COPY_PREFIX;
 	static const std::string	COPY_REGEX;
-	static const std::string	COPY_REPLACE;
 	
     typedef std::hash_map< model::IModelNode *, SceneNode * >	TNodesMapping;
     typedef std::vector< model::SceneModelPtr >					SceneModelVec;
@@ -99,7 +98,7 @@ public:
 
 	/** Add a copy of plugin from srcNode with given name to the destNode on destIdx position.
 	@return Returns copied plugin. */
-	model::IPluginPtr		AddPluginCopy		( model::BasicNodePtr destNode, model::BasicNodePtr srcNode, const std::string & pluginNameToCopy, unsigned int destIdx );
+	model::IPluginPtr		AddPluginCopy		( const std::string & destSceneName, model::BasicNodePtr destNode, const std::string & srcSceneName, model::BasicNodePtr srcNode, const std::string & pluginNameToCopy, unsigned int destIdx );
 
 
 
@@ -116,7 +115,8 @@ private:
     SceneNode *             GetEngineNode       ( model::IModelNodePtr node );
 
 
-	std::string				GetScenePrefix		( const std::string & name );
+	std::string				PrefixSceneName		( const std::string & name );
+	static std::string		PrefixCopy			( UInt32 prefixNum );
 
     friend class BVProject;
 };

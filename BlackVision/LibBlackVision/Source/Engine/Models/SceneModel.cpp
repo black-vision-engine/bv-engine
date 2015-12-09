@@ -63,21 +63,23 @@ ISerializablePtr        SceneModel::Create          ( const IDeserializer& deser
     auto assets = SerializationHelper::DeserializeObjectLoadImpl< AssetDescsWithUIDs >( deser, "assets" );
     AssetDescsWithUIDs::SetInstance( *assets );
 
-// nodes
-    auto node = SerializationHelper::DeserializeObjectLoadImpl< model::BasicNode >( deser, "node" );
-    assert( node );
-
 	//FIXME: pass nullptr as camera because we don't have camera model yet
     auto obj = std::make_shared< SceneModel >( deser.GetAttribute( "name" ), nullptr );
-	obj->SetRootNode( node );
 
 // timelines
+	//FIXME: copying scene - invalid scene path
 	auto sceneTimeline = obj->GetTimeline();
 	auto timelines = SerializationHelper::DeserializeObjectLoadImpl< OffsetTimeEvaluator >( deser, "timeline" );
 	for( auto timeline : timelines->GetChildren() )
     {
 		sceneTimeline->AddChild( timeline );
     }
+
+// nodes
+    auto node = SerializationHelper::DeserializeObjectLoadImpl< model::BasicNode >( deser, "node" );
+    assert( node );
+	obj->SetRootNode( node );
+
 
 	return ISerializablePtr( obj );
 }

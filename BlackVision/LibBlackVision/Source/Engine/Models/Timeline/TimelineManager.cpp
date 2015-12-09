@@ -71,51 +71,6 @@ ISerializablePtr TimelineManager::Create                          ( const IDeser
 
 // *********************************
 //
-ITimeEvaluatorPtr       TimelineManager::CreateOffsetTimeEvaluator      ( const std::string & name, TimeType startTime )
-{
-    return CreateOffsetTimeEvaluatorImpl( name, startTime );
-}
-
-// *********************************
-//
-ITimeEvaluatorPtr       TimelineManager::CreateConstTimeEvaluator       ( const std::string & name, TimeType timeVal )
-{
-    return CreateConstTimeEvaluatorImpl( name, timeVal );
-}
-
-// *********************************
-//
-ITimelinePtr            TimelineManager::CreateDefaultTimeline          ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod )
-{
-    return CreateDefaultTimelineImpl( name, duration, preMethod, postMethod );
-}
-
-// *********************************
-//
-OffsetTimeEvaluatorPtr  TimelineManager::CreateOffsetTimeEvaluatorImpl  ( const std::string & name, TimeType startTime )
-{
-    return OffsetTimeEvaluatorPtr( new OffsetTimeEvaluator( name, -startTime ) ); 
-}
-
-// *********************************
-//
-ConstTimeEvaluatorPtr   TimelineManager::CreateConstTimeEvaluatorImpl   ( const std::string & name, TimeType timeVal )
-{
-    return ConstTimeEvaluatorPtr( new ConstTimeEvaluator( name, timeVal ) ); 
-}
-
-// *********************************
-//
-DefaultTimelinePtr      TimelineManager::CreateDefaultTimelineImpl      ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod )
-{
-    assert( duration > TimeType( 0.0 ) );
-    auto timeline = DefaultTimelinePtr( new DefaultTimeline( name, duration, preMethod, postMethod ) );
-
-    return timeline;
-}
-
-// *********************************
-//
 bool                    TimelineManager::AddStopEventToTimeline          ( ITimelinePtr timeline, const std::string & eventName, TimeType stopTime )
 {
     assert( timeline != nullptr );

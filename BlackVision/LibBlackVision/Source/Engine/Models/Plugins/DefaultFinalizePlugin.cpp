@@ -321,6 +321,15 @@ ParamTransformVecPtr				DefaultFinalizePlugin::GetParamTransform			() const
 
 // *******************************
 //
+std::vector< ITimeEvaluatorPtr >	DefaultFinalizePlugin::GetTimelines					() const
+{
+	std::vector< ITimeEvaluatorPtr > ret;
+	assert( false );
+    return ret;
+}
+
+// *******************************
+//
 bool								DefaultFinalizePlugin::IsValid						() const
 {
 	return m_prevPlugin->IsValid();

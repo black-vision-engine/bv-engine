@@ -25,6 +25,7 @@
 #include "Engine/Models/NodeEffects/ModelNodeEffectLightScattering.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
+#include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
 
 #include "Engine/Models/BasicNode.h"
@@ -564,11 +565,11 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMan
 model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
 {
         //Timeline stuff
-    auto someTimelineWithEvents = model::TimelineManager::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
 
-    auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
 
     someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( someTimelineWithEvents );
@@ -610,8 +611,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Tim
 model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator)
 {
 	{ timelineManager; }
-	auto offset5Timeline = model::TimelineManager::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
-	auto offset3Timeline  = model::TimelineManager::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
+	auto offset5Timeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
+	auto offset3Timeline  = model::TimelineHelper::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
 	timeEvaluator->AddChild(offset5Timeline);
 	timeEvaluator->AddChild(offset3Timeline);
 
@@ -662,8 +663,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::TimelineMana
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
 	{ timelineManager; }
-	auto offset5Timeline = model::TimelineManager::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
-	auto offset3Timeline  = model::TimelineManager::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
+	auto offset5Timeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
+	auto offset3Timeline  = model::TimelineHelper::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
 	timeEvaluator->AddChild(offset5Timeline);
 	timeEvaluator->AddChild(offset3Timeline);
 
@@ -1068,8 +1069,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPieChartNode( model::T
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator)
 {
 	{ timelineManager; }
-	auto offset5Timeline = model::TimelineManager::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
-	auto offset3Timeline  = model::TimelineManager::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
+	auto offset5Timeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
+	auto offset3Timeline  = model::TimelineHelper::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
 	timeEvaluator->AddChild(offset5Timeline);
 	timeEvaluator->AddChild(offset3Timeline);
 
@@ -1123,8 +1124,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::TimelineMan
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator)
 {
 	{ timelineManager; }
-	auto offset5Timeline = model::TimelineManager::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
-	auto offset3Timeline  = model::TimelineManager::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
+	auto offset5Timeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
+	auto offset3Timeline  = model::TimelineHelper::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
 	timeEvaluator->AddChild(offset5Timeline);
 	timeEvaluator->AddChild(offset3Timeline);
 
@@ -1218,11 +1219,11 @@ namespace
 model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
 {
     //Timeline stuff
-    auto someTimelineWithEvents = model::TimelineManager::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
 
     //someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( localTimeline );
@@ -1332,11 +1333,11 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedTextNode( model::Timeline
 {
 	{ timelineManager; }
     //Timeline stuff
-    auto someTimelineWithEvents = model::TimelineManager::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
 
     //someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( localTimeline );
@@ -1440,11 +1441,11 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
 {
 	{ timelineManager; }
     //Timeline stuff
-    auto someTimelineWithEvents = model::TimelineManager::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 2.0 ) );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
 
     someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( someTimelineWithEvents );
@@ -1500,9 +1501,9 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
 	{ timelineManager; }
 	{ useAlphaMask; }
     //Timeline stuff
-    auto someTimelineWithEvents = model::TimelineManager::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     
-    auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
 
     someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( someTimelineWithEvents );
@@ -1539,11 +1540,11 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
 model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, bool useAlphaMask )
 {
     //Timeline stuff
-    auto someTimelineWithEvents = model::TimelineManager::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
 
     someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( someTimelineWithEvents );
@@ -1719,11 +1720,11 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextWithShadowNode(   model::Timel
 model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, bool useAlphaMask )
 {
     //Timeline stuff
-    auto someTimelineWithEvents = model::TimelineManager::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 3.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 3.0 ) );
 
     someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( someTimelineWithEvents );
@@ -1790,11 +1791,11 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedTimerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, bool useAlphaMask )
 {
     //Timeline stuff
-    auto someTimelineWithEvents = model::TimelineManager::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 3.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 3.0 ) );
 
     someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( someTimelineWithEvents );
@@ -2008,11 +2009,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 #define SHOW_COGWHEEL
 
 	  //Timeline stuff
-    auto someTimelineWithEvents = model::TimelineManager::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
 
     //someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( localTimeline );
@@ -2294,11 +2295,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineMan
 //#define VERSION_COLOR
 
 	  //Timeline stuff
-    auto someTimelineWithEvents = model::TimelineManager::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
 
     //someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( localTimeline );
@@ -2370,11 +2371,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineMan
 model::BasicNodePtr SimpleNodesFactory::CreateTextCacheTest         ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, glm::vec3 translation, glm::vec4 color, const std::wstring text, const std::string& fontName )
 {
     //Timeline stuff
-    auto someTimelineWithEvents = model::TimelineManager::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
     timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
 
     someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( someTimelineWithEvents );

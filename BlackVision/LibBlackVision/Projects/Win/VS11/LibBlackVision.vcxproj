@@ -371,6 +371,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Static\ConstTimeEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Static\OffsetTimeEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimelineHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimelineManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.cpp" />
@@ -736,6 +737,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Static\ConstTimeEvaluator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Static\OffsetTimeEvaluator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimelineHelper.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimelineManager.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.h" />

@@ -7,9 +7,13 @@
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
 
+#include "Engine/Models/Plugins/Plugin.h"
+
 #include "Engine/Models/ModelSceneEditor.h"
 #include "Engine/Graphics/SceneGraph/SceneEditor.h"
 #include "Engine/Models/ModelNodeEditor.h"
+
+#include "Engine/Models/Timeline/TimelineHelper.h"
 
 #include "tools/Utils.h"
 
@@ -50,7 +54,7 @@ void    BVProjectEditor::AddScene       ( model::SceneModelPtr scene )
 	auto sceneName = scene->GetName();
 	if( m_project->GetScene( sceneName ) )
 	{
-		scene->SetName( GetScenePrefix( sceneName ) + sceneName );
+		scene->SetName( PrefixSceneName( sceneName ) );
 	}
 
 	m_project->AddScene( scene );
@@ -316,10 +320,24 @@ void            BVProjectEditor::DeleteDetachedNodes          ( const std::strin
 //
 model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( const std::string & destSceneName, model::BasicNodePtr destParentNode, const std::string & srcSceneName, model::BasicNodePtr nodeToCopy )
 {
-	{ srcSceneName; }
-	auto copy = nodeToCopy->GetModelNodeEditor()->CopyNode();
+	model::BasicNodePtr	copy = nullptr;
+	
+	if( srcSceneName == destSceneName )
+	{
+		//don't copy timelines, maybe it should be handled by CloneViaSerialization::ClonePlugin with empty prefix string?
+		copy = nodeToCopy->GetModelNodeEditor()->CopyNode();
+	}
+	else
+	{
+		auto destScene = m_project->GetScene( destSceneName );
+		assert( destScene != nullptr );
 
+		//copy timelines
+		auto timelines = nodeToCopy->GetTimelines();
+		auto prefixNum = model::TimelineHelper::CopyTimelines( destScene->GetTimeline(), timelines );
 
+		copy = CloneViaSerialization::CloneNode( nodeToCopy.get(), PrefixCopy( prefixNum ) );
+	}
 
 	if( copy )
 	{
@@ -431,28 +449,49 @@ bool					BVProjectEditor::DetachPlugin          ( model::BasicNodePtr node, unsi
 
 // *******************************
 //
-model::IPluginPtr		BVProjectEditor::GetDetachedPlugin    ( model::BasicNodePtr node )
+model::IPluginPtr		BVProjectEditor::GetDetachedPlugin		( model::BasicNodePtr node )
 {
 	return node->GetModelNodeEditor()->GetDetachedPlugin();
 }
 
 // *******************************
 //
-void					BVProjectEditor::ResetDetachedPlugin( model::BasicNodePtr node )
+void					BVProjectEditor::ResetDetachedPlugin	( model::BasicNodePtr node )
 {
 	return node->GetModelNodeEditor()->ResetDetachedPlugin();
 }
 
 // *******************************
 //
-model::IPluginPtr		BVProjectEditor::AddPluginCopy			( model::BasicNodePtr destNode, model::BasicNodePtr srcNode, const std::string & pluginNameToCopy, unsigned int destIdx )
+model::IPluginPtr		BVProjectEditor::AddPluginCopy			( const std::string & destSceneName, model::BasicNodePtr destNode, const std::string & srcSceneName, model::BasicNodePtr srcNode, const std::string & pluginNameToCopy, unsigned int destIdx )
 {
-	auto plugin = srcNode->GetModelNodeEditor()->CopyPlugin( pluginNameToCopy );
-	if( plugin )
+	model::IPluginPtr copy = nullptr;
+	
+	if( srcSceneName == destSceneName )
 	{
-		AddPlugin( destNode, plugin, destIdx );
+		//don't copy timelines, maybe it should be handled by CloneViaSerialization::ClonePlugin with empty prefix string?
+		copy = srcNode->GetModelNodeEditor()->CopyPlugin( pluginNameToCopy );
 	}
-	return plugin;
+	else
+	{
+		auto destScene = m_project->GetScene( destSceneName );
+		auto srcPlugin = srcNode->GetPlugin( pluginNameToCopy );
+
+		assert( destScene != nullptr );
+		assert( srcPlugin != nullptr );
+
+		//copy timelines
+		auto timelines = srcPlugin->GetTimelines();
+		auto prefixNum = model::TimelineHelper::CopyTimelines( destScene->GetTimeline(), timelines );
+		
+		copy = CloneViaSerialization::ClonePlugin( srcPlugin.get(), PrefixCopy( prefixNum ) );
+	}
+
+	if( copy )
+	{
+		AddPlugin( destNode, copy, destIdx );
+	}
+	return copy;
 }
 
 // *******************************
@@ -522,7 +561,7 @@ SceneNode *             BVProjectEditor::GetEngineNode      ( model::IModelNodeP
 
 // *******************************
 //
-std::string				BVProjectEditor::GetScenePrefix		( const std::string & name )
+std::string				BVProjectEditor::PrefixSceneName		( const std::string & name )
 {
 	UInt32 num = 0;
 	for( auto & scene : m_project->m_sceneModelVec )
@@ -542,9 +581,26 @@ std::string				BVProjectEditor::GetScenePrefix		( const std::string & name )
 		}
 	}
 
-	std::string result( COPY_PREFIX );
-	result.replace( result.find( "#" ), 1, num == 0 ? "" : toString( num ) );
+	std::string result( name );
+	std::regex_replace( result, std::regex( COPY_REGEX ), PrefixCopy( num ) );
 	return result;
 }
+
+// *******************************
+//
+std::string				BVProjectEditor::PrefixCopy			( UInt32 prefixNum )
+{
+	if( prefixNum == 0 )
+	{
+		std::string prefix( COPY_PREFIX );
+		prefix.replace( prefix.find( "#" ), 1, "" );
+		return prefix;
+	}
+
+	std::string prefix( COPY_PREFIX );
+	prefix.replace( prefix.find( "#" ), 1, toString( prefixNum ) );
+	return prefix;
+}
+
 
 } //bv
