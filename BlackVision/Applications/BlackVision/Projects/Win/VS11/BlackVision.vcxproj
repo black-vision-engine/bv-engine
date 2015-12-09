@@ -142,6 +142,7 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenVSShader.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\FullscreenRenderableEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\MixChannelsFullscreenEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\OverwriteAlphaFullscreenEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\OverwriteChannelsFullscreenEffect.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffect.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenVSShader.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\FullscreenRenderableEffect.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\MixChannelsFullscreenEffect.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\OverwriteAlphaFullscreenEffect.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\OverwriteChannelsFullscreenEffect.h" />

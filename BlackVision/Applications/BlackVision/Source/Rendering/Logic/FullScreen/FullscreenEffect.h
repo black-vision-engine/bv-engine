@@ -29,18 +29,12 @@ public:
 
 protected:
 
-    virtual RenderableEntity *  CreateFullscreenQuad    ( Renderer * renderer ) const = 0; //FIXME: make sure whether the renderer is really necessary
+    virtual RenderableEntity *  CreateFullscreenQuad    () const = 0;
 
 protected:
 
     void                        ToggleFullscreenCamera  ( Renderer * renderer );
     void                        ToggleRegularCamera     ( Renderer * renderer );
-
-    virtual VertexShader *      CreateVS                ( unsigned int numUVChannels ) const;
-
-private:
-
-    std::string                 GetVSShaderSource       ( unsigned int numUVChannels ) const;
 
 };
 

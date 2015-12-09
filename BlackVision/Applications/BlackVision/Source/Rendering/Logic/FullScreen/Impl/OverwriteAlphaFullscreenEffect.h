@@ -23,12 +23,17 @@ public:
 
 protected:
 
-    virtual RenderableEntity *  CreateFullscreenQuad            ( Renderer * renderer ) const override;
+    virtual RenderableEntity *  CreateFullscreenQuad            () const override;
 
 private:
 
-    RenderableEffectPtr         CreateRenderableEffect          ( Renderer * renderer ) const;
+    RenderableEffectPtr         CreateRenderableEffect          () const;
+
+    PixelShader *               CreatePS                        () const;
 
 };
+
+DEFINE_PTR_TYPE(OverwriteAlphaFullscreenEffect)
+DEFINE_CONST_PTR_TYPE(OverwriteAlphaFullscreenEffect)
 
 } //bv

@@ -1,9 +1,14 @@
 #include "OverwriteAlphaFullscreenEffect.h"
 
-#include "Rendering/Utils/FullscreenUtils.h"
+#include <cassert>
+
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 
-#include <cassert>
+#include "Rendering/Utils/FullscreenUtils.h"
+
+#include "Rendering/Logic/FullScreen/Impl/FullscreenRenderableEffect.h"
+
+#include "Engine/Models/Builder/RendererStatesBuilder.h"
 
 
 namespace bv {
@@ -40,9 +45,9 @@ float   OverwriteAlphaFullscreenEffect::GetAlpha                            () c
 
 // **************************
 //
-RenderableEntity *      OverwriteAlphaFullscreenEffect::CreateFullscreenQuad    ( Renderer * renderer ) const
+RenderableEntity *      OverwriteAlphaFullscreenEffect::CreateFullscreenQuad    () const
 {
-    auto effect = CreateRenderableEffect( renderer );
+    auto effect = CreateRenderableEffect();
 
     RenderableEntity * renderable = FullscreenUtils::CreateFullscreenQuad( effect, 1 );
 
@@ -51,11 +56,35 @@ RenderableEntity *      OverwriteAlphaFullscreenEffect::CreateFullscreenQuad    
 
 // **************************
 //
-RenderableEffectPtr     OverwriteAlphaFullscreenEffect::CreateRenderableEffect  ( Renderer * renderer ) const
+RenderableEffectPtr     OverwriteAlphaFullscreenEffect::CreateRenderableEffect  () const
 {
-    // Create All shaders
-    { renderer; }
+    auto vs = FullscreenRenderableEffect::CreateVS( 1 );
+    auto ps = CreatePS();
 
+    RenderablePass * pass = new RenderablePass( ps, vs, nullptr );
+
+    auto sinst = pass->GetStateInstance();
+    
+    RendererStatesBuilder::Create( sinst );
+
+    auto as = RenderStateAccessor::AccessAlphaState( sinst );
+    auto ds = RenderStateAccessor::AccessDepthState( sinst );
+    auto cs = RenderStateAccessor::AccessCullState( sinst );
+
+    as->blendEnabled = false;
+    ds->enabled = false;
+    cs->enabled = false;
+
+    auto effect = std::make_shared< FullscreenRenderableEffect >( pass );
+
+    return effect;
+}
+
+// **************************
+//
+PixelShader *       OverwriteAlphaFullscreenEffect::CreatePS                    () const
+{
+    //FIXME: implement
     return nullptr;
 }
 
