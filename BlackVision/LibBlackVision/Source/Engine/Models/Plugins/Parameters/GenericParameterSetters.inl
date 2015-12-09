@@ -78,6 +78,22 @@ inline bool SetParameter< glm::mat2 >( IParameterPtr param, TimeType t, const gl
     return SetSimpleTypedParameter< ParamMat2 >( param, t, val );
 }
 
+// *******************************
+//
+template<>
+inline bool SetParameter< std::wstring >( IParameterPtr param, TimeType t, const std::wstring & val )
+{
+    return SetSimpleTypedParameter< ParamWString >( param, t, val );
+}
+
+// *******************************
+//
+template<>
+inline bool SetParameter< std::string >( IParameterPtr param, TimeType t, const std::string & val )
+{
+    return SetSimpleTypedParameter< ParamString >( param, t, val );
+}
+
 //// *******************************
 ////
 //template<> template< typename T >

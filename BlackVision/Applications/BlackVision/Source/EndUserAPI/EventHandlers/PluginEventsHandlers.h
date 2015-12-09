@@ -20,6 +20,11 @@ public:
 
     void                    LoadAsset           ( bv::IEventPtr eventPtr );
     void                    TimerHandler        ( bv::IEventPtr eventPtr );
+
+private:    //Helpers
+    void                    AddParameter        ( std::shared_ptr<model::IParameter>& param, const std::wstring& value, TimeType keyTime );
+    void                    UpdateParameter     ( std::shared_ptr<model::IParameter>& param, const std::wstring& value, TimeType keyTime );
+    void                    RemoveParameter     ( std::shared_ptr<model::IParameter>& param, TimeType keyTime );
 };
 
 

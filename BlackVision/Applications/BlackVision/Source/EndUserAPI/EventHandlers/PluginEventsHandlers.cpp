@@ -18,6 +18,14 @@
 namespace bv
 {
 
+namespace
+{
+    const int     DEFAULT_INT_VALUE = 0;
+    const bool    DEFAULT_BOOL_VALUE = false;
+    const int     DEFAULT_ENUM_VALUE = 0;         // This value should always exist as enum, but maybe there's other better choise.
+
+} // annonymous
+
 // *********************************
 // constructor destructor
 PluginEventsHandlers::PluginEventsHandlers(  BVAppLogic* logic )
@@ -40,150 +48,103 @@ void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
     if( command != ParamKeyEvent::Command::AddKey )
         return;
 
-    std::string nodeName    = toString( setParamEvent->NodeName );
-    std::string pluginName  = toString( setParamEvent->PluginName );
-    std::string paramName   = toString( setParamEvent->ParamName );
-    std::string SceneName   = toString( setParamEvent->SceneName );
+    std::string& nodeName   = setParamEvent->NodeName;
+    std::string& pluginName = setParamEvent->PluginName;
+    std::string& paramName  = setParamEvent->ParamName;
+    std::string& sceneName  = setParamEvent->SceneName;
     std::wstring& value     = setParamEvent->Value;
 
     float keyTime           = setParamEvent->Time;
         
-    auto scene = m_appLogic->GetBVProject()->GetScene( setParamEvent->SceneName );
+    auto scene = m_appLogic->GetBVProject()->GetScene( sceneName );
+    if( scene == nullptr )
+        return;
 
-    if( scene )
+	auto root = scene->GetRootNode();
+    auto node = root->GetNode( nodeName );
+    if( node == nullptr )
     {
-
-
-		auto root = scene->GetRootNode();
-        auto node = root->GetNode( nodeName );
-        if( node == nullptr )
+        if( root->GetName() == nodeName )
+            node = root;
+        else
         {
-            if( root->GetName() == nodeName )
-                node = root;
-            else
-            {
-                LOG_MESSAGE( SeverityLevel::error ) << "AddParamKey() node ["+ nodeName+"] not found";
-                return;
-            }
+            LOG_MESSAGE( SeverityLevel::error ) << "AddParamKey() node ["+ nodeName+"] not found";
+            return;
         }
+    }
     
 
-        auto plugin = node->GetPlugin( pluginName );
-        if( plugin == nullptr )
+    auto plugin = node->GetPlugin( pluginName );
+    if( plugin == nullptr )
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "AddParamKey() node ["+ nodeName+"], plugin [" + pluginName + "] not found";
+        return;
+    }
+
+    if( pluginName == "transform" )
+    {
+        auto param = plugin->GetParameter("simple_transform");
+        if( param == nullptr )
         {
-            LOG_MESSAGE( SeverityLevel::error ) << "AddParamKey() node ["+ nodeName+"], plugin [" + pluginName + "] not found";
+            LOG_MESSAGE( SeverityLevel::error ) << "AddParamKey() node ["+ nodeName+"], plugin [" + pluginName + "], param [simple_transform] not found";
+            return;
+        }
+            
+        std::string stringValue = toString( value );
+        if( paramName == "translation" )
+        {
+            SetParameterTranslation( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
+            LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] translation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+        }
+        else if( paramName == "scale" )
+        {
+            SetParameterScale( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
+            LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] scale: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+        }
+        else if( paramName == "rotation" )
+        {
+            glm::vec4 rotAxisAngle = SerializationHelper::String2Vec4( stringValue );
+            glm::vec3 rotAxis = glm::vec3( rotAxisAngle );
+
+            SetParameterRotation( param, 0, (bv::TimeType)keyTime, rotAxis, rotAxisAngle.w );
+            LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] rotation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+        }
+    }
+    else if( pluginName == "alpha" )
+    {
+        if( paramName == "alpha" )
+        {
+            auto sceneNodeEffect = node->GetNodeEffect();
+
+            ParamFloatPtr alphaParam;
+
+            if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_ALPHA_MASK )
+            {
+                auto typeEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( sceneNodeEffect );
+                typeEffect->GetParamAlpha();
+            }
+
+            if( !alphaParam )
+            {
+                assert( false );
+                return;
+            }
+
+			float floatValue = stof( value );
+
+            SetParameter( alphaParam, (bv::TimeType)keyTime, floatValue );
+        }
+    }
+    else
+    {
+        auto param = plugin->GetParameter( paramName );
+        if( param == nullptr )
+        {
+            LOG_MESSAGE( SeverityLevel::error ) << "AddParamKey() node ["+ nodeName+"], plugin [" + pluginName + "], param [" + paramName + "] not found";
             return;
         }
 
-        if( pluginName == "transform" )
-        {
-            auto param = plugin->GetParameter("simple_transform");
-            if( param == nullptr )
-            {
-                LOG_MESSAGE( SeverityLevel::error ) << "AddParamKey() node ["+ nodeName+"], plugin [" + pluginName + "], param [simple_transform] not found";
-                return;
-            }
-            
-            std::string stringValue = toString( value );
-            if( paramName == "translation" )
-            {
-                SetParameterTranslation( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
-                LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] translation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
-                // @todo Realy do we want to send messages all the time, when this param changes??
-            }
-            else if( paramName == "scale" )
-            {
-                SetParameterScale( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
-                LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] scale: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
-                // @todo Realy do we want to send messages all the time, when this param changes??
-            }
-            else if( paramName == "rotation" )
-            {
-                glm::vec4 rotAxisAngle = SerializationHelper::String2Vec4( stringValue );
-                glm::vec3 rotAxis = glm::vec3( rotAxisAngle );
-
-                SetParameterRotation( param, 0, (bv::TimeType)keyTime, rotAxis, rotAxisAngle.w );
-                LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] rotation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
-                // @todo Realy do we want to send messages all the time, when this param changes??
-            }
-        }
-        else if( pluginName == "text")
-        {
-            if( paramName == "text" )
-            {
-                DefaultTextPlugin* textPlugin = dynamic_cast< DefaultTextPlugin* >( node->GetPlugin("text").get() );
-
-                if( textPlugin != nullptr )
-                    model::DefaultTextPlugin::SetText( plugin, value );
-                else
-                    LOG_MESSAGE( SeverityLevel::error ) << "AddParamKey() nNode ["+ nodeName+"], plugin [text] not found";
-            }
-        }
-        else if( setParamEvent->PluginName == "alpha" )
-        {
-            if( setParamEvent->ParamName == "alpha" )
-            {
-                auto sceneNodeEffect = node->GetNodeEffect();
-
-                ParamFloatPtr alphaParam;
-
-                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_ALPHA_MASK )
-                {
-                    auto typeEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( sceneNodeEffect );
-                    typeEffect->GetParamAlpha();
-                }
-
-                if( !alphaParam )
-                {
-                    assert( false );
-                    return;
-                }
-
-			    float floatValue = stof( value );
-
-                SetParameter( alphaParam, (bv::TimeType)keyTime, floatValue );
-            }
-        }
-        else
-        {
-            auto param = plugin->GetParameter( paramName );
-            if( param == nullptr )
-            {
-                LOG_MESSAGE( SeverityLevel::error ) << "AddParamKey() node ["+ nodeName+"], plugin [" + pluginName + "], param [" + paramName + "] not found";
-                return;
-            }
-
-            std::string stringValue = toString( value );
-            auto paramType = param->GetType();
-
-            switch( paramType )
-            {
-                case ModelParamType::MPT_FLOAT:
-                {
-                    float floatValue = stof( stringValue );
-                    SetParameter( param, (bv::TimeType)keyTime, floatValue );
-                    break;
-                }
-                case ModelParamType::MPT_VEC2:
-                {
-                    glm::vec2 vec2Value = SerializationHelper::String2Vec2( stringValue );
-                    SetParameter( param, (bv::TimeType)keyTime, vec2Value );
-                    break;
-                }
-                case ModelParamType::MPT_VEC3:
-                {
-                    glm::vec3 vec3Value = SerializationHelper::String2Vec3( stringValue );
-                    SetParameter( param, (bv::TimeType)keyTime, vec3Value );
-                    break;
-                }
-                case ModelParamType::MPT_VEC4:
-                {
-                    glm::vec4 vec4Value = SerializationHelper::String2Vec4( stringValue );
-                    SetParameter( param, (bv::TimeType)keyTime, vec4Value );
-                    break;
-                }
-            }
-        }
+        AddParameter( param, value, (TimeType)keyTime );
     }
 }
 
@@ -200,6 +161,78 @@ void PluginEventsHandlers::UpdateParamKey      ( bv::IEventPtr /*eventPtr*/ )
 void PluginEventsHandlers::RemoveParamKey      ( bv::IEventPtr /*eventPtr*/ )
 {
     assert( !"Implement meeee" );
+}
+
+
+// ***********************
+//
+void PluginEventsHandlers::AddParameter        ( std::shared_ptr<model::IParameter>& param, const std::wstring& value, TimeType keyTime )
+{
+    std::string stringValue = toString( value );
+    auto paramType = param->GetType();
+
+    switch( paramType )
+    {
+        case ModelParamType::MPT_FLOAT:
+        {
+            float floatValue = stof( stringValue );
+            SetParameter( param, (bv::TimeType)keyTime, floatValue );
+            break;
+        }
+        case ModelParamType::MPT_VEC2:
+        {
+            glm::vec2 vec2Value = SerializationHelper::String2Vec2( stringValue );
+            SetParameter( param, (bv::TimeType)keyTime, vec2Value );
+            break;
+        }
+        case ModelParamType::MPT_VEC3:
+        {
+            glm::vec3 vec3Value = SerializationHelper::String2Vec3( stringValue );
+            SetParameter( param, (bv::TimeType)keyTime, vec3Value );
+            break;
+        }
+        case ModelParamType::MPT_VEC4:
+        {
+            glm::vec4 vec4Value = SerializationHelper::String2Vec4( stringValue );
+            SetParameter( param, (bv::TimeType)keyTime, vec4Value );
+            break;
+        }
+        case ModelParamType::MPT_WSTRING:
+        {
+            SetParameter( param, (bv::TimeType)keyTime, value );
+            break;
+        }
+        case ModelParamType::MPT_STRING:
+        {
+            SetParameter( param, (bv::TimeType)keyTime, stringValue );
+            break;
+        }
+        case ModelParamType::MPT_INT:
+        {
+            int intValue = SerializationHelper::String2T<int>( stringValue, DEFAULT_INT_VALUE );
+            SetParameter( param, (bv::TimeType)keyTime, intValue );
+            break;
+        }
+        case ModelParamType::MPT_BOOL:
+        {
+            bool boolValue = SerializationHelper::String2T<bool>( stringValue, DEFAULT_BOOL_VALUE );
+            SetParameter( param, (bv::TimeType)keyTime, boolValue );
+            break;
+        }
+        case ModelParamType::MPT_ENUM:
+        {
+            int enumValue = SerializationHelper::String2T<int>( stringValue, DEFAULT_ENUM_VALUE );
+            SetParameter( param, (bv::TimeType)keyTime, enumValue );
+            break;
+        }
+        case ModelParamType::MPT_MAT2:
+        {
+            glm::vec4 vec4Value = SerializationHelper::String2Vec4( stringValue );
+            glm::mat2 mat2Value( vec4Value.x, vec4Value.y, vec4Value.z, vec4Value.w );
+            SetParameter( param, (bv::TimeType)keyTime, mat2Value );
+            break;
+        }
+    }
 }
 
 // *********************************
@@ -241,6 +274,8 @@ void PluginEventsHandlers::LoadAsset( bv::IEventPtr eventPtr )
     }
 }
 
+// ***********************
+//
 void PluginEventsHandlers::TimerHandler        ( bv::IEventPtr eventPtr )
 {
     if( eventPtr->GetEventType() != bv::TimerEvent::Type() )
