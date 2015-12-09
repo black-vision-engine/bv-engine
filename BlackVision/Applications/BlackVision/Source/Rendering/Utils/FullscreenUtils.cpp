@@ -15,14 +15,34 @@ namespace {
 
 // **************************
 //
+VertexDescriptor *  CreateVertexDescriptor( unsigned int numUVChannels )
+{
+    VertexDescriptor * vd = new VertexDescriptor( 1 + numUVChannels );
+
+    vd->SetAttribute( 0, 0, 0, AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION );
+
+    // Three position coordinates stored as floats
+    unsigned int offset = 3 * sizeof( float );
+
+    for( unsigned int i = 0; i < numUVChannels; ++i )
+    {
+        vd->SetAttribute( i + 1, i + 1, offset, AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD );
+    
+        offset += 2 * sizeof( float );
+    }
+
+    return vd;
+}
+
+// **************************
+//
 RenderableArrayDataArraysSingleVertexBuffer *   CreateTriStripArrayData( unsigned int numVertices, unsigned int numUVChannels, float * vbData )
 {
-    unsigned int vertexSize = 4 * sizeof( float ) + 2 * numUVChannels * sizeof( float );
+    //3 x float (positions) + numUVChannels x 2 x float (uv mapping for all textures)
+    unsigned int vertexSize = 3 * sizeof( float ) + 2 * numUVChannels * sizeof( float );
 
-    VertexBuffer * vb       = new VertexBuffer( 4, vertexSize, DataBuffer::Semantic::S_STATIC );
-    VertexDescriptor * vd   = VertexDescriptor::Create( 2,
-                                                        0, AttributeType::AT_FLOAT3, AttributeSemantic::AS_POSITION,
-                                                        1, AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD );
+    VertexBuffer * vb       = new VertexBuffer( 4, vertexSize, DataBuffer::Semantic::S_STATIC );    
+    VertexDescriptor * vd   = CreateVertexDescriptor( numUVChannels );
 
     memcpy( vb->Data(), vbData, numVertices * vertexSize );
 

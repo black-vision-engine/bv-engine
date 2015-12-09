@@ -5,6 +5,8 @@
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
+#include "Rendering/Utils/FullscreenUtils.h"
+
 
 namespace bv {
 
@@ -14,6 +16,7 @@ FullscreenEffect::FullscreenEffect      ()
     : m_fullscreenQuad( nullptr )
     , m_fullscreenCamera( nullptr )
 {
+    m_fullscreenCamera = FullscreenUtils::CreateDisplayCamera();
 }
 
 // **************************
