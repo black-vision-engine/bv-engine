@@ -8,6 +8,8 @@ uniform vec4    color2;
 uniform vec2    point1;
 uniform vec2    point2;
 
+uniform float 	alpha;
+
 uniform vec4    outlineColor;
 
 in vec2 uvCoord;
@@ -31,5 +33,5 @@ void main()
     
     vec4 alphaMask = texture( AlphaTex0, uvAlphaCoord );
     
-	FragColor = ( color * col1 + outlineColor * ( col2 * ( 1.0 - col1 ) ) ) * alphaMask.a;
+	FragColor = alpha * ( color * col1 + outlineColor * ( col2 * ( 1.0 - col1 ) ) ) * alphaMask.a;
 }

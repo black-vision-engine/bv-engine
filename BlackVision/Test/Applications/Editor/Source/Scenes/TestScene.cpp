@@ -1003,6 +1003,18 @@ void					TestScene::InitBasicGradientPluginTest	()
 	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, GRAD_NODE, "linear_gradient", 2 ); } );
 	m_testSteps.push_back( [&]{ SwapPlugins( "linear_gradient", 2, GRAD_NODE, "solid color", 2 ); } );
 
+	m_testSteps.push_back( [&]
+	{
+		auto time = m_timeEvaluator->GetLocalTime();
+		auto child = std::static_pointer_cast< model::BasicNode >( std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "root" ) )->GetChild( GRAD_NODE ) );
+		SetParameter( child->GetPlugin( "linear_gradient" )->GetParameter( "alpha" ), time, 1.f );
+		SetParameter( child->GetPlugin( "linear_gradient" )->GetParameter( "alpha" ), time+1.0f, 0.f );
+		SetParameter( child->GetPlugin( "linear_gradient" )->GetParameter( "alpha" ), time+1.1f, 1.f );
+	});
+
+	m_testSteps.push_back( [&] {} );
+	m_testSteps.push_back( [&] {} );
+
 	m_testSteps.push_back( [&]{ CopyPlugin( 2, "solid color", GRAD_NODE, "linear_gradient" ); } );
 	m_testSteps.push_back( [&]
 	{

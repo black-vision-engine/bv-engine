@@ -8,6 +8,8 @@ uniform vec4    color2;
 uniform vec2    point1;
 uniform vec2    point2;
 
+uniform float 	alpha;
+
 uniform vec4    outlineColor;
 
 in vec2 uvCoord;
@@ -27,5 +29,5 @@ void main()
     float col1 = texture( AtlasTex0, uvCoord ).b;
     float col2 = texture( AtlasTex0, uvCoord ).g;
     
-	FragColor = color * col1 + outlineColor * ( col2 * ( 1.0 - col1 ) );
+	FragColor = alpha * ( color * col1 + outlineColor * ( col2 * ( 1.0 - col1 ) ) );
 }
