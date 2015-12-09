@@ -16,12 +16,8 @@ class RemoteController;
 
 struct ResponseMsg
 {
-    std::wstring message;
-    int socketID;
-    bool sent;
-
-    ResponseMsg()
-    { sent = false; }
+    std::wstring    message;
+    int             socketID;
 };
 
 

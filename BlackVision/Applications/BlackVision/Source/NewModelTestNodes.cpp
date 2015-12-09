@@ -1820,17 +1820,17 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTimerNode( model::TimelineMa
     auto plugin = node->GetPlugin( "transform" );
     auto param = plugin->GetParameter( "simple_transform" );
 
-    SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.1f, 0.f ) );
+    SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, -1.0f, 0.f ) );
 
     //SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Right ) );
 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 4.f / 1080.f );
 
-	success = model::LoadFont( node->GetPlugin( "timer" ), "../dep/Media/fonts/arial.ttf", 127, blurSize, 0, false );
+	success = model::LoadFont( node->GetPlugin( "timer" ), "fonts/arial.ttf", 127, blurSize, 0, false );
     assert( success );
 
-    SetTimeTimerPlugin( node->GetPlugin( "timer" ), 12333.0f );
+    SetTimeTimerPlugin( node->GetPlugin( "timer" ), 0.0f );
 
     StartTimerPlugin( node->GetPlugin( "timer" ) );
 
@@ -2287,7 +2287,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 
 // *****************************
 //
-model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string& uid, glm::vec3 translation, std::string texturePath )
+model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineManager * /*timelineManager*/, model::ITimeEvaluatorPtr timeEvaluator, const std::string& uid, glm::vec3 translation, std::string texturePath )
 {
 
 #define VERSION_TEXTURE
@@ -2295,11 +2295,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineMan
 //#define VERSION_COLOR
 
 	  //Timeline stuff
-    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
-    
-    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+    auto localTimeline = model::TimelineManager::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
 
     //someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( localTimeline );

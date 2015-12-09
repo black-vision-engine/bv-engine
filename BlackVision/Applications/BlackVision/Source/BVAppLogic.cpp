@@ -113,8 +113,6 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
     m_renderLogic = new RenderLogic();
     m_remoteHandlers = new RemoteEventsHandlers;
     m_remoteController = new JsonCommandsListener;
-
-    m_renderMode.SetRenderLogic( m_renderLogic );
 }
 
 // *********************************
@@ -133,6 +131,8 @@ BVAppLogic::~BVAppLogic             ()
 //
 void BVAppLogic::Initialize         ()
 {
+    m_renderMode.Init( m_renderLogic, m_renderer );
+
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( model::DefaultBVPluginDescriptors() );
     m_pluginsManager = &model::PluginsManager::DefaultInstance();
 
@@ -396,13 +396,6 @@ void                            BVAppLogic::ReloadScene     ()
     LoadScene();
 }
 
-//pablito
-// *********************************
-//
-void            BVAppLogic::GrabCurrentFrame(  const std::string & path )
-{
-    m_grabFramePath = path;
-}
 
 // *********************************
 //FIXME: unsafe - consider returning const variant of this class (IParameters * without const should be accessible anyway)

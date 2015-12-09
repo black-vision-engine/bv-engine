@@ -347,6 +347,7 @@ void                                DefaultTimerPlugin::Update                  
     if( m_started )
     {
         m_currentLocalTime = m_localStartTime + (GetTickCount() -  m_globalStartTime);
+        /*m_currentLocalTime = m_localStartTime + ((unsigned long)( t * 1000.0f ) -  m_globalStartTime);*/
     }
 
     SetTime( m_currentLocalTime / 1000.f );

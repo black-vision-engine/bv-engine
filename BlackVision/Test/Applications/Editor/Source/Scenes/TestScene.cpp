@@ -102,7 +102,7 @@ void					TestScene::InitTestModelSceneEditor	()
 	m_testSteps.push_back([&] 
 	{
 		auto editor = m_project->GetProjectEditor();
-		bool success = true;
+        bool success = true;    { success; }
 
 		auto scene = editor->GetScene( SCENE_NAME );
 		auto root = scene->GetRootNode();
@@ -118,7 +118,7 @@ void					TestScene::InitTestModelSceneEditor	()
 	m_testSteps.push_back([&] 
 	{
 		auto editor = m_project->GetProjectEditor();
-		bool success = true;
+        bool success = true;    { success; }
 
 		auto scene = editor->GetScene( SCENE_NAME );
 		auto root = scene->GetRootNode();
