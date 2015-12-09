@@ -20,7 +20,7 @@ enum class TextAlignmentType
 {
     Left    = 0 ,
     Center      ,
-    Right,
+    Right       ,
 	Dot
 };
 
