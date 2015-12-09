@@ -49,12 +49,15 @@ DefaultPluginParamValModelPtr   DefaultGradientPluginDesc::CreateDefaultModel( I
 	SimpleVec2EvaluatorPtr		point1Evaluator	 = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator("point1", timeEvaluator );
 	SimpleVec2EvaluatorPtr		point2Evaluator	 = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator("point2", timeEvaluator );
 
+    SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
+
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
 	psModel->RegisterAll( color1Evaluator );
 	psModel->RegisterAll( color2Evaluator );
 	psModel->RegisterAll( point1Evaluator );
 	psModel->RegisterAll( point2Evaluator );
+    psModel->RegisterAll( alphaEvaluator );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
@@ -66,6 +69,7 @@ DefaultPluginParamValModelPtr   DefaultGradientPluginDesc::CreateDefaultModel( I
 	color2Evaluator->Parameter()->SetVal( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
 	point1Evaluator->Parameter()->SetVal( glm::vec2( 0.0f, 1.0f ), TimeType( 0.0 ) );
 	point2Evaluator->Parameter()->SetVal( glm::vec2( 0.0f, 0.0f ), TimeType( 0.0 ) );
+    alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
 
     return model;
 }
