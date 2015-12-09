@@ -8,7 +8,7 @@
 
 
 #include "../../BVAppLogic.h"
-#include "../../UseLogger.h"
+#include "../../UseLoggerBVAppModule.h"
 
 #include "Engine/Events/EventHelpers.h"             // wstring to string conversions and vice versa
 #include "Serialization/SerializationHelper.h"      // Conversions from string to glm types

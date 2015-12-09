@@ -3,7 +3,7 @@
 #include "../../BVAppLogic.h"
 #include "Engine/Models/Plugins/Custom/DefaultHeightMapPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
-#include "UseLogger.h"
+#include "../../UseLoggerBVAppModule.h"
 
 namespace bv
 {

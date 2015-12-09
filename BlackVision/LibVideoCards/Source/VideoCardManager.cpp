@@ -6,7 +6,7 @@
 #include <boost/lexical_cast.hpp>
 //#include <..\dep\vld\include\vld.h>
 
-#include "UseLogger.h"
+#include "UseLoggerVideoModule.h"
 
 namespace bv
 {
@@ -591,14 +591,14 @@ void bv::videocards::VideoCardManager::OnEventReceived                   ( bv::I
         wcout << "video : " << VideoCardEvent::CommandToWString( command ) << endl;
 
 
-        if( command == VideoCardEvent::Command::VideoCardOn )
+        if( command == VideoCardEvent::Command::EnableOutput )
         {
             for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
             {
                 m_VideoCards[i]->Enable();
             }
         }
-        else  if( command == VideoCardEvent::Command::VideoCardOff )
+        else  if( command == VideoCardEvent::Command::DisableOutput )
         {
             for(unsigned int i = 0   ;   i < m_VideoCards.size() ; i++)
             {
@@ -606,9 +606,9 @@ void bv::videocards::VideoCardManager::OnEventReceived                   ( bv::I
                 m_VideoCards[i]->Disable();
             }
         }
-        else if( command == VideoCardEvent::Command::KeyOn )
+        else if( command == VideoCardEvent::Command::EnableKey )
             SetKey( true );
-        else if( command == VideoCardEvent::Command::KeyOff )
+        else if( command == VideoCardEvent::Command::DisableKey )
             SetKey( false );
 
     }

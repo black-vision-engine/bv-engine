@@ -13,7 +13,7 @@
 
 #include "BVGL.h"
 
-#include "UseLogger.h"
+#include "../../UseLoggerBVAppModule.h"
 
 //pablito
 #define USE_VIDEOCARD	

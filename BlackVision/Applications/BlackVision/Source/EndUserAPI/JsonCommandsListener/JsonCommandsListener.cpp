@@ -7,7 +7,7 @@
 
 #include "Threading/ScopedCriticalSection.h"
 
-#include "UseLogger.h"
+#include "../../UseLoggerBVAppModule.h"
 
 #undef CreateEvent
 
@@ -85,11 +85,13 @@ void                JsonCommandsListener::TryParseRegularEvent( IDeserializer& d
     {
         do
         {
-            BaseEventPtr newEvent = std::static_pointer_cast<BaseEvent>( DeserializeEvent( deser ) );
-            newEvent->SocketID = socketID;
-
+            auto newEvent = DeserializeEvent( deser );
             if( newEvent != nullptr )
-                GetDefaultEventManager().ConcurrentQueueEvent( newEvent );
+            {
+                BaseEventPtr newEventBase = std::static_pointer_cast<BaseEvent>( newEvent );
+                newEventBase->SocketID = socketID;
+                GetDefaultEventManager().ConcurrentQueueEvent( newEventBase );
+            }
         }
         while( deser.NextChild() );
         deser.ExitChild();

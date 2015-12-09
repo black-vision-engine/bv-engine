@@ -1,6 +1,6 @@
 #include "Solution.h"
 #include "structure/AssetManager.h"
-#include "UseLogger.h"
+#include "UseLoggerXMLModule.h"
 #include <iostream>
 
 using namespace std;

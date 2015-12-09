@@ -289,7 +289,6 @@
     <ClInclude Include="..\..\..\Source\TestAI\TestAnimationKeyboardHandler.h">
       <Filter>TestAI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\UseLogger.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.h">
       <Filter>Rendering\Logic\NodeEffectRendering</Filter>
     </ClInclude>
@@ -345,6 +344,7 @@
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\AlphaChannelRenderLogic.h">
       <Filter>Rendering\Logic\NodeEffectRendering</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\UseLoggerBVAppModule.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\BVConfig.inl" />

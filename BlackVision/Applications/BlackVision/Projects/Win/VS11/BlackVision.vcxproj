@@ -373,7 +373,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestKeyboardHandler.h" />
     <ClInclude Include="..\..\..\Source\TestAI\TestVideoStreamDecoderKeyboardHandler.h" />
-    <ClInclude Include="..\..\..\Source\UseLogger.h" />
+    <ClInclude Include="..\..\..\Source\UseLoggerBVAppModule.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\DefaultVideoInputResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\ExampleVideoInput.h" />
     <ClInclude Include="..\..\..\Source\VideoInput\IVideoInput.h" />

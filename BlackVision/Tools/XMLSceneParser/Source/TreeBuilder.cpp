@@ -30,7 +30,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
 
 // Log
-#include "UseLogger.h"
+#include "UseLoggerXMLModule.h"
 //#include "../BVConfig.h"
 
 // ---------

@@ -2,7 +2,7 @@
 
 #include <string>
 #include "rapidxml.hpp" //"rapidxml.hpp"
-#include "UseLogger.h"
+#include "UseLoggerXMLModule.h"
 #include <boost/algorithm/string.hpp>
 
 using namespace rapidxml;

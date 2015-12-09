@@ -197,7 +197,7 @@
     <ClInclude Include="..\..\..\Source\structure\AssetManager.h" />
     <ClInclude Include="..\..\..\Source\structure\SurfaceDescriptor.h" />
     <ClInclude Include="..\..\..\Source\TreeBuilder.h" />
-    <ClInclude Include="..\..\..\Source\UseLogger.h" />
+    <ClInclude Include="..\..\..\Source\UseLoggerXMLModule.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\BlackTree.cpp" />

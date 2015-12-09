@@ -3,7 +3,7 @@
 #include "Engine/Models/BVProjectEditor.h"
 #include "Engine/Models/ModelNodeEditor.h"
 #include "../../BVAppLogic.h"
-#include "../../UseLogger.h"
+#include "../../UseLoggerBVAppModule.h"
 #include "Tools/IncludeJSON.h"
 
 #include "ProjectManager.h"
@@ -75,6 +75,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
     std::string& nodeName = structureEvent->NodeName;
     std::string& newNodeName = structureEvent->NewNodeName;
 	std::string& sceneName = structureEvent->SceneName;
+    //std::string& timelineName = structureEvent->TimelineName;
     auto command = structureEvent->SceneCommand;
 
     auto node = GetNode( sceneName, nodeName );

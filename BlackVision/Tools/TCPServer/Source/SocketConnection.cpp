@@ -1,6 +1,6 @@
 #include "SocketConnection.h"
 
-#include "UseLogger.h"
+#include "UseLoggerTCPModule.h"
 #include "Engine/Events/EventHelpers.h"
 
 #include <string>

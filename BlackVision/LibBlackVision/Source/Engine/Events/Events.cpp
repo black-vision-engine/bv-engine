@@ -84,6 +84,7 @@ const std::wstring EMPTY_WSTRING            = L"";
 const std::wstring EVENT_TYPE_WSTRING       = L"Event";
 const std::wstring NODE_NAME_WSTRING        = L"NodeName";
 const std::wstring PLUGIN_NAME_WSTRING      = L"PluginName";
+const std::wstring TIMELINE_NAME_WSTRING    = L"TimeLineName";      // TimeLineEvent and NodeStructureEvent
 const std::wstring COMMAND_WSTRING          = L"Command";
 
 // LoadAssetEvent
@@ -146,7 +147,6 @@ const std::wstring COMMAND_GOTO_WSTRING                 = L"Goto";
 const std::wstring COMMAND_GOTO_AND_PLAY_WSTRING        = L"GotoAndPlay";
 
 const std::wstring TIMELINE_TIME_VALUE_WSTRING          = L"Time";
-const std::wstring TIMELINE_NAME_WSTRING                = L"TimeLineName";
 const std::wstring SCENE_NAME_WSTRING                   = L"SceneName";
 
 // WidgetEvent
@@ -157,12 +157,26 @@ const std::wstring WIDGET_ACTION_WSTRING                = L"Action";
 const std::wstring WIDGET_TIME_VALUE_WSTRING            = L"Time";
 
 // VideoCardEvent
-const std::wstring VIDEO_CARD_ACTION_WSTRING            = L"Action";
+const std::wstring VIDEO_CARD_NUMBER_WSTRING            = L"Number";
+const std::wstring VIDEO_CARD_VALUE_WSTRING             = L"Value";
+const std::wstring VIDEO_CARD_REFERENCE_MODE_WSTRING    = L"ReferenceMode";
 
-const std::wstring COMMAND_VIDEO_CARD_OFF_WSTRING       = L"Off";
-const std::wstring COMMAND_VIDEO_CARD_ON_WSTRING        = L"On";
-const std::wstring COMMAND_VIDEO_CARD_KEY_OFF_WSTRING   = L"KeyOff";
-const std::wstring COMMAND_VIDEO_CARD_KEY_ON_WSTRING    = L"KeyOn";
+const std::wstring COMMAND_VIDEO_CARD_ENABLE_OUTPUT_WSTRING         = L"EnableOutput";
+const std::wstring COMMAND_VIDEO_CARD_DISABLE_OUTPUT_WSTRING        = L"DisableOutput";
+const std::wstring COMMAND_VIDEO_CARD_ENABLE_KEY_WSTRING            = L"EnableKey";
+const std::wstring COMMAND_VIDEO_CARD_DISABLE_KEY_WSTRING           = L"DisableKey";
+const std::wstring COMMAND_VIDEO_CARD_REFERENCE_MODE_WSTRING        = L"ReferenceMode";
+const std::wstring COMMAND_VIDEO_CARD_REFERENCE_OFFSET_H_WSTRING    = L"ReferenceOffsetH";
+const std::wstring COMMAND_VIDEO_CARD_REFERENCE_OFFSET_V_WSTRING    = L"ReferenceOffsetV";
+const std::wstring COMMAND_VIDEO_CARD_ENABLE_INPUT_WSTRING          = L"EnableInput";
+const std::wstring COMMAND_VIDEO_CARD_DISABLE_INPUT_WSTRING         = L"DisableInput";
+
+const std::wstring VIDEO_CARD_MODE_FREE_RUN_WSTRING             = L"FreeRun";
+const std::wstring VIDEO_CARD_MODE_ANALOG_BLACK_BURST_WSTRING   = L"AnalogBlackBurst";
+const std::wstring VIDEO_CARD_MODE_ANALOG_TRI_LEVEL_WSTRING     = L"AnalogTriLevel";
+const std::wstring VIDEO_CARD_MODE_DIGITAL_INPUT1_WSTRING       = L"DigitalInput1";
+const std::wstring VIDEO_CARD_MODE_DIGITAL_INPUT2_WSTRING       = L"DigitalInput2";
+
 
 // TimerEvent
 const std::wstring TIMER_HOURS_WSTRING                  = L"Hours";
@@ -641,6 +655,7 @@ void                NodeStructureEvent::Serialize            ( ISerializer& ser 
     ser.SetAttribute( Serial::NODE_NAME_WSTRING, toWString( NodeName ) );
     ser.SetAttribute( Serial::NEW_NODE_NAME_WSTRING, toWString( NewNodeName ) );
     ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( SceneCommand ) );
+    ser.SetAttribute( Serial::TIMELINE_NAME_WSTRING, toWString( TimelineName ) );
 }
 
 // *************************************
@@ -653,6 +668,7 @@ IEventPtr                NodeStructureEvent::Create          ( IDeserializer& de
         newEvent->SceneName         = toString( deser.GetAttribute( Serial::SCENE_NAME_WSTRING ) );
         newEvent->NodeName          = toString( deser.GetAttribute( Serial::NODE_NAME_WSTRING ) );
         newEvent->NewNodeName       = toString( deser.GetAttribute( Serial::NEW_NODE_NAME_WSTRING ) );
+        newEvent->TimelineName      = toString( deser.GetAttribute( Serial::TIMELINE_NAME_WSTRING ) );
         newEvent->SceneCommand      = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
         
         return newEvent;
@@ -1292,7 +1308,9 @@ void                VideoCardEvent::Serialize            ( ISerializer& ser ) co
 {
     ser.SetAttribute( Serial::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
     ser.SetAttribute( Serial::COMMAND_WSTRING, CommandToWString( VideoCommand ) );
-    ser.SetAttribute( Serial::WIDGET_ACTION_WSTRING, toWString( Action ) );
+    ser.SetAttribute( Serial::VIDEO_CARD_NUMBER_WSTRING, toWString( Number ) );
+    ser.SetAttribute( Serial::VIDEO_CARD_VALUE_WSTRING, toWString( Value ) );
+    ser.SetAttribute( Serial::VIDEO_CARD_REFERENCE_MODE_WSTRING, ReferenceModeToWString( Mode ) );
 }
 
 // *************************************
@@ -1303,7 +1321,19 @@ IEventPtr                VideoCardEvent::Create          ( IDeserializer& deser 
     {
         VideoCardEventPtr newEvent      = std::make_shared<VideoCardEvent>();
         newEvent->VideoCommand          = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
-        newEvent->Action                = toString( deser.GetAttribute( Serial::VIDEO_CARD_ACTION_WSTRING ) );
+        newEvent->Mode                  = WStringToReferenceMode( deser.GetAttribute( Serial::VIDEO_CARD_REFERENCE_MODE_WSTRING ) );
+        
+        std::wstring valueStr           = deser.GetAttribute( Serial::VIDEO_CARD_VALUE_WSTRING );
+        if( valueStr != Serial::EMPTY_WSTRING )
+            newEvent->Value = std::stof( valueStr );
+        else
+            newEvent->Value = 0.0f;     // Set sensible default
+
+        valueStr                        = deser.GetAttribute( Serial::VIDEO_CARD_NUMBER_WSTRING );
+        if( valueStr != Serial::EMPTY_WSTRING )
+            newEvent->Number = std::stoi( valueStr );
+        else
+            newEvent->Number = 0;        // Set sensible default
 
         return newEvent;
     }
@@ -1335,14 +1365,24 @@ EventType           VideoCardEvent::GetEventType() const
 //
 std::wstring VideoCardEvent::CommandToWString    ( Command cmd )
 {
-    if( cmd == Command::VideoCardOff )
-        return Serial::COMMAND_VIDEO_CARD_OFF_WSTRING;
-    else if( cmd == Command::VideoCardOn )
-        return Serial::COMMAND_VIDEO_CARD_ON_WSTRING;
-    else if( cmd == Command::KeyOn )
-        return Serial::COMMAND_VIDEO_CARD_KEY_ON_WSTRING;
-    else if( cmd == Command::KeyOff )
-        return Serial::COMMAND_VIDEO_CARD_KEY_OFF_WSTRING;
+    if( cmd == Command::DisableInput )
+        return Serial::COMMAND_VIDEO_CARD_DISABLE_INPUT_WSTRING;
+    else if( cmd == Command::DisableKey )
+        return Serial::COMMAND_VIDEO_CARD_DISABLE_KEY_WSTRING;
+    else if( cmd == Command::DisableOutput )
+        return Serial::COMMAND_VIDEO_CARD_DISABLE_OUTPUT_WSTRING;
+    else if( cmd == Command::EnableInput )
+        return Serial::COMMAND_VIDEO_CARD_ENABLE_INPUT_WSTRING;
+    else if( cmd == Command::EnableKey )
+        return Serial::COMMAND_VIDEO_CARD_ENABLE_KEY_WSTRING;
+    else if( cmd == Command::EnableOutput )
+        return Serial::COMMAND_VIDEO_CARD_ENABLE_OUTPUT_WSTRING;
+    else if( cmd == Command::ReferenceMode )
+        return Serial::COMMAND_VIDEO_CARD_REFERENCE_MODE_WSTRING;
+    else if( cmd == Command::ReferenceOffsetH )
+        return Serial::COMMAND_VIDEO_CARD_REFERENCE_OFFSET_H_WSTRING;
+    else if( cmd == Command::ReferenceOffsetV )
+        return Serial::COMMAND_VIDEO_CARD_REFERENCE_OFFSET_V_WSTRING;
     else
         return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
 }
@@ -1351,16 +1391,61 @@ std::wstring VideoCardEvent::CommandToWString    ( Command cmd )
 //
 VideoCardEvent::Command VideoCardEvent::WStringToCommand    ( const std::wstring& string )
 {
-    if( string == Serial::COMMAND_VIDEO_CARD_OFF_WSTRING )
-        return Command::VideoCardOff;
-    else if( string == Serial::COMMAND_VIDEO_CARD_ON_WSTRING )
-        return Command::VideoCardOn;
-    else if( string == Serial::COMMAND_VIDEO_CARD_KEY_ON_WSTRING )
-        return Command::KeyOn;
-    else if( string == Serial::COMMAND_VIDEO_CARD_KEY_OFF_WSTRING )
-        return Command::KeyOff;
+    if( string == Serial::COMMAND_VIDEO_CARD_DISABLE_INPUT_WSTRING )
+        return Command::DisableInput;
+    else if( string == Serial::COMMAND_VIDEO_CARD_DISABLE_KEY_WSTRING )
+        return Command::DisableKey;
+    else if( string == Serial::COMMAND_VIDEO_CARD_DISABLE_OUTPUT_WSTRING )
+        return Command::DisableOutput;
+    else if( string == Serial::COMMAND_VIDEO_CARD_ENABLE_INPUT_WSTRING )
+        return Command::EnableInput;
+    else if( string == Serial::COMMAND_VIDEO_CARD_ENABLE_KEY_WSTRING )
+        return Command::EnableKey;
+    else if( string == Serial::COMMAND_VIDEO_CARD_ENABLE_OUTPUT_WSTRING )
+        return Command::EnableOutput;
+    else if( string == Serial::COMMAND_VIDEO_CARD_REFERENCE_MODE_WSTRING )
+        return Command::ReferenceMode;
+    else if( string == Serial::COMMAND_VIDEO_CARD_REFERENCE_OFFSET_H_WSTRING )
+        return Command::ReferenceOffsetH;
+    else if( string == Serial::COMMAND_VIDEO_CARD_REFERENCE_OFFSET_V_WSTRING )
+        return Command::ReferenceOffsetV;
     else
         return Command::Fail;
+}
+
+// ***********************
+//
+std::wstring VideoCardEvent::ReferenceModeToWString      ( VideoReferenceMode mode )
+{
+    if( mode == VideoReferenceMode::AnalogBlackBurst )
+        return Serial::VIDEO_CARD_MODE_ANALOG_BLACK_BURST_WSTRING;
+    else if( mode == VideoReferenceMode::AnalogTriLevel )
+        return Serial::VIDEO_CARD_MODE_ANALOG_TRI_LEVEL_WSTRING;
+    else if( mode == VideoReferenceMode::DigitalInput1 )
+        return Serial::VIDEO_CARD_MODE_DIGITAL_INPUT1_WSTRING;
+    else if( mode == VideoReferenceMode::DigitalInput2 )
+        return Serial::VIDEO_CARD_MODE_DIGITAL_INPUT2_WSTRING;
+    else if( mode == VideoReferenceMode::FreeRun )
+        return Serial::VIDEO_CARD_MODE_FREE_RUN_WSTRING;
+    else
+        return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
+}
+
+// ***********************
+//
+VideoCardEvent::VideoReferenceMode VideoCardEvent::WStringToReferenceMode      ( const std::wstring& string )
+{
+    if( string == Serial::VIDEO_CARD_MODE_ANALOG_BLACK_BURST_WSTRING )
+        return VideoReferenceMode::AnalogBlackBurst;
+    else if( string == Serial::VIDEO_CARD_MODE_ANALOG_TRI_LEVEL_WSTRING )
+        return VideoReferenceMode::AnalogTriLevel;
+    else if( string == Serial::VIDEO_CARD_MODE_DIGITAL_INPUT1_WSTRING )
+        return VideoReferenceMode::DigitalInput1;
+    else if( string == Serial::VIDEO_CARD_MODE_DIGITAL_INPUT2_WSTRING )
+        return VideoReferenceMode::DigitalInput2;
+    else if( string == Serial::VIDEO_CARD_MODE_FREE_RUN_WSTRING )
+        return VideoReferenceMode::FreeRun;
+    else return VideoReferenceMode::FailMode;
 }
 
 

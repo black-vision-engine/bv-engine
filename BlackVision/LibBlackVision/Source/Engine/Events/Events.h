@@ -257,6 +257,7 @@ public:
     std::string                     SceneName;
     std::string                     NodeName;
     std::string                     NewNodeName;
+    std::string                     TimelineName;
 public:
     explicit                        NodeStructureEvent   () {}
 
@@ -386,7 +387,7 @@ DEFINE_PTR_TYPE( ResponseEvent )
 
     
 // ************************************* Information Event *************************************
-// Rename me later
+//
 class InfoEvent : public BaseEvent
 {
 public:
@@ -554,18 +555,35 @@ class VideoCardEvent : public BaseEvent
 public:
     typedef enum
     {
-        VideoCardOn,
-        VideoCardOff,
-        KeyOn,
-        KeyOff,
+        EnableOutput,
+        DisableOutput,
+        EnableKey,
+        DisableKey,
+        ReferenceMode,
+        ReferenceOffsetH,
+        ReferenceOffsetV,
+        EnableInput,
+        DisableInput,
         Fail            ///< Wrong command
     } Command;
+
+    typedef enum
+    {
+        FreeRun,
+        AnalogBlackBurst,
+        AnalogTriLevel,
+        DigitalInput1,
+        DigitalInput2,
+        FailMode            ///< Wrong ReferenceMode
+    } VideoReferenceMode;
 private:
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
 public:
     Command                     VideoCommand;
-    std::string                 Action;         // For future use.
+    int                         Number;
+    float                       Value;
+    VideoReferenceMode          Mode;
 public:
 
     explicit                        VideoCardEvent   () {};
@@ -582,6 +600,8 @@ public:
 public:
     static std::wstring             CommandToWString    ( Command cmd );
     static Command                  WStringToCommand    ( const std::wstring& string );
+    static std::wstring             ReferenceModeToWString      ( VideoReferenceMode mode );
+    static VideoReferenceMode       WStringToReferenceMode      ( const std::wstring& string );
 };
 
 DEFINE_PTR_TYPE( VideoCardEvent )

@@ -2,10 +2,17 @@
 
 #include "BVAppLogic.h"
 #include "Serialization/XML/XMLSerializer.h"
-#include "Serialization/Json/JsonSerializeObject.h"
+#include "Serialization/JsonSpirit/JsonSpiritSerializeObject.h"
+
 
 
 namespace bv {
+
+namespace
+{
+    void SerializeAllEvents();
+};
+
 
 // *********************************
 //
@@ -30,6 +37,11 @@ void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
         logic->GetBVProject()->Serialize( *sob );
         sob->Save( "test.json" );
         delete sob;
+    }
+    else if( c == 'e' )
+    {
+        // Serialize all events
+        SerializeAllEvents();
     }
 
 
@@ -64,5 +76,75 @@ void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
     //TODO: implement whatever you want here
 
 }
+
+
+namespace
+{
+
+
+void SerializeAllEvents()
+{
+    JsonSpiritSerializeObject* ser = new JsonSpiritSerializeObject();
+
+    HightmapEventPtr        heightmapEvent      = std::make_shared<HightmapEvent>();
+    RenderingModeEventPtr   renderingModeEvent  = std::make_shared<RenderingModeEvent>();
+    VideoCardEventPtr       videoCardEvent      = std::make_shared<VideoCardEvent>();
+    WidgetEventPtr          widgetEvent         = std::make_shared<WidgetEvent>();
+    TimerEventPtr           timerEvent          = std::make_shared<TimerEvent>();
+    TimeLineEventPtr        timelineEvent       = std::make_shared<TimeLineEvent>();
+    InfoEventPtr            infoEvent           = std::make_shared<InfoEvent>();
+    ProjectEventPtr         projectEvent        = std::make_shared<ProjectEvent>();
+    PluginStructureEventPtr pluginStructure     = std::make_shared<PluginStructureEvent>();
+    NodeStructureEventPtr   nodeStructureEvent  = std::make_shared<NodeStructureEvent>();
+    ParamKeyEventPtr        paramKeyEvent       = std::make_shared<ParamKeyEvent>();
+    LoadAssetEventPtr       loadAssetEvent      = std::make_shared<LoadAssetEvent>();
+
+    ResponseEventPtr        responseEvent       = std::make_shared<ResponseEvent>();
+
+    ser->EnterArray( L"Events" );
+        heightmapEvent->Serialize( *ser );
+    ser->ExitChild();
+    ser->EnterArray( L"Events" );
+        renderingModeEvent->Serialize( *ser );
+    ser->ExitChild();
+    ser->EnterArray( L"Events" );
+        videoCardEvent->Serialize( *ser );
+    ser->ExitChild();
+    ser->EnterArray( L"Events" );
+        widgetEvent->Serialize( *ser );
+    ser->ExitChild();
+    ser->EnterArray( L"Events" );
+        timerEvent->Serialize( *ser );
+    ser->ExitChild();
+    ser->EnterArray( L"Events" );
+        timelineEvent->Serialize( *ser );
+    ser->ExitChild();
+    ser->EnterArray( L"Events" );
+        infoEvent->Serialize( *ser );
+    ser->ExitChild();
+    ser->EnterArray( L"Events" );
+        projectEvent->Serialize( *ser );
+    ser->ExitChild();
+    ser->EnterArray( L"Events" );
+        pluginStructure->Serialize( *ser );
+    ser->ExitChild();
+    ser->EnterArray( L"Events" );
+        nodeStructureEvent->Serialize( *ser );
+    ser->ExitChild();
+    ser->EnterArray( L"Events" );
+        paramKeyEvent->Serialize( *ser );
+    ser->ExitChild();
+    ser->EnterArray( L"Events" );
+        loadAssetEvent->Serialize( *ser );
+    ser->ExitChild();
+    ser->EnterArray( L"Events" );
+        responseEvent->Serialize( *ser );
+    ser->ExitChild();
+
+    ser->Save( "serialization/Events.json", FORMATSTYLE_READABLE );
+}
+
+
+};
 
 } //bv

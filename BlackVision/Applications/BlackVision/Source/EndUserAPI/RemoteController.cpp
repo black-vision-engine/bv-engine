@@ -3,6 +3,9 @@
 #include "Serialization/IDeserializer.h"
 #include "Engine/Events/Events.h"
 
+#include "../UseLoggerBVAppModule.h"
+#include "Engine/Events/EventHelpers.h"
+
 namespace bv
 {
 
@@ -19,11 +22,14 @@ RemoteController::RemoteController()
     RegisterEvent( TimerEvent::Name(), TimerEvent::Create );
     RegisterEvent( PluginStructureEvent::Name(), PluginStructureEvent::Create );
     RegisterEvent( RenderingModeEvent::Name(), RenderingModeEvent::Create );
+    RegisterEvent( VideoCardEvent::Name(), VideoCardEvent::Create );
+    RegisterEvent( WidgetEvent::Name(), WidgetEvent::Create );
+    RegisterEvent( HightmapEvent::Name(), HightmapEvent::Create );
 }
 
 
 // ***********************
-//
+// Returns nullptr if event is unregistered and sends message to log.
 IEventPtr RemoteController::DeserializeEvent         ( IDeserializer& deser )
 {
     std::wstring command = deser.GetAttribute( L"Event" );
@@ -34,7 +40,10 @@ IEventPtr RemoteController::DeserializeEvent         ( IDeserializer& deser )
         return eventCreator( deser );
     }
     else
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Unregistered event cannot be deserialized: " + toString( command );
         return nullptr;
+    }
 }
 
 // ***********************

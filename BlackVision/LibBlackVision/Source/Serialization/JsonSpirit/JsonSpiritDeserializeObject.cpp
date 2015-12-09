@@ -67,7 +67,7 @@ std::wstring		JsonSpiritDeserializeObject::GetAttribute        ( const std::wstr
 {
     auto& JsonObject = m_currentNode->get_obj();
     auto value = FindValue( JsonObject, name );
-    if( value->type() != json_spirit::Value_type::str_type )
+    if( value == nullptr || value->type() != json_spirit::Value_type::str_type )
         return EMPTY_STRING;
 
     return value->get_str();

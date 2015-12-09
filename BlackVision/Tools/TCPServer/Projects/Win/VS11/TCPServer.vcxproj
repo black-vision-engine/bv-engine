@@ -21,7 +21,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\SocketConnection.h" />
     <ClInclude Include="..\..\..\Source\SocketServer.h" />
-    <ClInclude Include="..\..\..\Source\UseLogger.h" />
+    <ClInclude Include="..\..\..\Source\UseLoggerTCPModule.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\SocketConnection.cpp" />
