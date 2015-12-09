@@ -15,7 +15,12 @@ private:
 
 public:
 
-    virtual void        Render  ( Renderer * renderer, FullscreenEffect * effect );
+                            FullscreenEffectRenderLogic ();
+                            ~FullscreenEffectRenderLogic();
+
+    virtual void            Render                      ( Renderer * renderer, FullscreenEffect * effect );
+
+    static  TriangleStrip * CreateFullscreenQuad        ();
 
 };
 

@@ -116,7 +116,7 @@ public:
     void    NaiveReadback       ( char * buf, int w, int h );
 
     void    SetCamera           ( Camera * cam );
-	Camera * GetCamera           ();
+	Camera * GetCamera          ();
 
 public:
 
