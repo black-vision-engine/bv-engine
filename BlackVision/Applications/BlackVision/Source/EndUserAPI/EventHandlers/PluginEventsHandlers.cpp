@@ -279,10 +279,7 @@ void PluginEventsHandlers::TimerHandler        ( bv::IEventPtr eventPtr )
     else if( command == TimerEvent::Command::Stop )
         StopTimerPlugin( timerplugin );
     else if( command == TimerEvent::Command::Reset )
-    {
-        //FIXME: PAMIETAC o ResetTimerPlugin :P
-        //timer->Reset(0.0f);
-    }
+        ResetTimerPlugin( timerplugin );
     else if( command == TimerEvent::Command::SetTime )
         SetTimeTimerPlugin( timerplugin, time );
     else if( command == TimerEvent::Command::SetTimeStart )
