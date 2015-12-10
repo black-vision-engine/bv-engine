@@ -84,8 +84,9 @@ RenderableEffectPtr     OverwriteAlphaFullscreenEffect::CreateRenderableEffect  
 //
 PixelShader *       OverwriteAlphaFullscreenEffect::CreatePS                    () const
 {
-    //FIXME: implement
-    return nullptr;
+    auto shader = new PixelShader( ReadFullscreenShader( "overwritealpha.frag" ), new ShaderParameters() );
+
+    return shader;
 }
 
 } //bv

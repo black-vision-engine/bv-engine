@@ -36,6 +36,10 @@ protected:
     void                        ToggleFullscreenCamera  ( Renderer * renderer );
     void                        ToggleRegularCamera     ( Renderer * renderer );
 
+    static  std::string         GetEffectShadersDir     ();
+    static  std::string         ReadShaderFromFile      ( const std::string & fn );
+    static  std::string         ReadFullscreenShader    ( const std::string & fn );
+
 };
 
 } //bv
