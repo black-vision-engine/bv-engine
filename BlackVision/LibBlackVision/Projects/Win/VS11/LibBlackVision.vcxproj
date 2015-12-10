@@ -786,6 +786,7 @@
     <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h" />
     <ClInclude Include="..\..\..\Source\Serialization\XML\XMLDeserializer.h" />
     <ClInclude Include="..\..\..\Source\Serialization\XML\XMLSerializer.h" />
+    <ClInclude Include="..\..\..\Source\UseLoggerLibBlackVision.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl" />
