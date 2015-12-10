@@ -340,7 +340,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateNodeReplicatorTest       ( model:
     delta.startTime = 0.f;
     auto v = std::make_shared< ValueVec3 >( "" );
     delta.delta = v;
-    v->SetValue( glm::vec3( 0.1f, 0.1f, 0.0 ) );
+    v->SetValue( glm::vec3( 0.4f, 0.4f, 0.0 ) );
 
     shiftRepMod->AddParamShift( "transform", "translation", delta );
 
