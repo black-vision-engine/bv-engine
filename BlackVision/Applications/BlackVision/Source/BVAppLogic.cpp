@@ -199,7 +199,29 @@ void BVAppLogic::LoadScene          ( void )
     }
     else
     {
-		m_bvProject->GetProjectEditor()->AddScene( TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), m_renderer->GetCamera(), m_pluginsManager ) );
+
+        model::SceneModelPtr sceneModel = nullptr;
+
+        if( GetEnvScene() == "SERIALIZED_TEST" )
+        {
+            sceneModel = TestScenesFactory::CreateSerializedTestScene( m_pluginsManager );
+            m_bvProject->GetProjectEditor()->AddScene( sceneModel );
+            return;
+        }
+        else
+        {
+            auto sceneName = "sceneFromEnv: " + GetEnvScene();
+
+	        sceneModel = model::SceneModel::Create( sceneName, m_renderer->GetCamera() );
+
+            m_bvProject->GetProjectEditor()->AddScene( sceneModel );
+
+            auto node = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), sceneModel->GetTimeline(), m_pluginsManager ) ;
+
+            sceneModel->SetRootNode( node );
+        }
+
+
     }
 }
 
