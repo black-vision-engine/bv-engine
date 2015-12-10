@@ -2,13 +2,9 @@
 
 #include <cassert>
 
-#include "Engine/Graphics/SceneGraph/TriangleStrip.h"
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"
 
-#include "Rendering/Utils/FullscreenUtils.h"
-
-#include "Rendering/Logic/FullScreen/Impl/FullscreenRenderableEffect.h"
-
-#include "Engine/Models/Builder/RendererStatesBuilder.h"
+#include "Engine/Types/Values/ValuesFactory.h"
 
 
 namespace bv {
@@ -19,6 +15,8 @@ OverwriteAlphaFullscreenEffect::OverwriteAlphaFullscreenEffect              ( fl
     : m_alpha( alpha )
 {
     assert( alpha >= 0.0f && alpha <= 1.0f );
+
+    m_alphaVal = ValuesFactory::CreateValueFloat( "alpha" );
 }
 
 // **************************
@@ -47,46 +45,22 @@ float   OverwriteAlphaFullscreenEffect::GetAlpha                            () c
 //
 RenderableEntity *      OverwriteAlphaFullscreenEffect::CreateFullscreenQuad    () const
 {
-    auto effect = CreateRenderableEffect();
-
-    RenderableEntity * renderable = FullscreenUtils::CreateFullscreenQuad( effect, 1 );
-
-    return renderable;
+    return CreateDefaultFullscrQuad( CreatePS() );
 }
 
 // **************************
 //
-RenderableEffectPtr     OverwriteAlphaFullscreenEffect::CreateRenderableEffect  () const
+PixelShader *           OverwriteAlphaFullscreenEffect::CreatePS                () const
 {
-    auto vs = FullscreenRenderableEffect::CreateVS( 1 );
-    auto ps = CreatePS();
+    ShaderParameters * shaderParams = new ShaderParameters();
 
-    RenderablePass * pass = new RenderablePass( ps, vs, nullptr );
+    m_alphaVal->SetValue( m_alpha );
 
-    auto sinst = pass->GetStateInstance();
-    
-    RendererStatesBuilder::Create( sinst );
+    GenericShaderParam * param = ShaderParamFactory::CreateGenericParameter( m_alphaVal.get() );
 
-    auto as = RenderStateAccessor::AccessAlphaState( sinst );
-    auto ds = RenderStateAccessor::AccessDepthState( sinst );
-    auto cs = RenderStateAccessor::AccessCullState( sinst );
+    shaderParams->AddParameter( param );
 
-    as->blendEnabled = false;
-    ds->enabled = false;
-    cs->enabled = false;
-
-    auto effect = std::make_shared< FullscreenRenderableEffect >( pass );
-
-    return effect;
-}
-
-// **************************
-//
-PixelShader *       OverwriteAlphaFullscreenEffect::CreatePS                    () const
-{
-    auto shader = new PixelShader( ReadFullscreenShader( "overwritealpha.frag" ), new ShaderParameters() );
-
-    return shader;
+    return new PixelShader( ReadFullscreenShader( "overwritealpha.frag" ), shaderParams );
 }
 
 } //bv

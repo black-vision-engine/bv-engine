@@ -5,6 +5,7 @@
 
 #include "Rendering/Logic/FullScreen/FullscreenEffect.h"
 
+
 namespace bv {
 
 namespace {

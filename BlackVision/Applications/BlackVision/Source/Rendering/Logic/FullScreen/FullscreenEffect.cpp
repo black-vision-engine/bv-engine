@@ -3,13 +3,16 @@
 #include <sstream>
 
 #include "Engine/Graphics/SceneGraph/Camera.h"
-#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
+#include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
+#include "Engine/Models/Builder/RendererStatesBuilder.h"
+
+#include "Rendering/Logic/FullScreen/Impl/FullscreenRenderableEffect.h"
+
 #include "Rendering/Utils/FullscreenUtils.h"
 
-#include "System/Path.h"
 #include "IO/FileIO.h"
 
 
@@ -65,14 +68,50 @@ void    FullscreenEffect::ToggleRegularCamera   ( Renderer * renderer )
 
 // **************************
 //
-std::string     FullscreenEffect::GetEffectShadersDir   ()
+RenderableEffectPtr FullscreenEffect::CreateDefaultEffect   ( PixelShader * ps )
+{
+    auto vs = FullscreenRenderableEffect::CreateVS( 1 );
+
+    RenderablePass * pass = new RenderablePass( ps, vs, nullptr );
+
+    auto sinst = pass->GetStateInstance();
+    
+    RendererStatesBuilder::Create( sinst );
+
+    auto as = RenderStateAccessor::AccessAlphaState( sinst );
+    auto ds = RenderStateAccessor::AccessDepthState( sinst );
+    auto cs = RenderStateAccessor::AccessCullState( sinst );
+
+    as->blendEnabled = false;
+    ds->enabled = false;
+    cs->enabled = false;
+
+    auto effect = std::make_shared< FullscreenRenderableEffect >( pass );
+
+    return effect;
+}
+
+// **************************
+//
+RenderableEntity *  FullscreenEffect::CreateDefaultFullscrQuad  ( PixelShader * ps )
+{
+    auto effect = CreateDefaultEffect( ps );
+
+    RenderableEntity * renderable = FullscreenUtils::CreateFullscreenQuad( effect, 1 );
+
+    return renderable;
+}
+
+// **************************
+//
+std::string     FullscreenEffect::GetEffectShadersDir           ()
 {
     return "Assets/Shaders/FullscreenEffects/";
 }
 
 // *********************************
 //
-std::string     FullscreenEffect::ReadShaderFromFile    ( const std::string & fileName )
+std::string     FullscreenEffect::ReadShaderFromFile            ( const std::string & fileName )
 {
     std::stringstream shaderSource;
 
@@ -83,7 +122,7 @@ std::string     FullscreenEffect::ReadShaderFromFile    ( const std::string & fi
 
 // *********************************
 //
-std::string     FullscreenEffect::ReadFullscreenShader  ( const std::string & fn )
+std::string     FullscreenEffect::ReadFullscreenShader          ( const std::string & fn )
 {
     return ReadShaderFromFile( GetEffectShadersDir() + fn );
 }

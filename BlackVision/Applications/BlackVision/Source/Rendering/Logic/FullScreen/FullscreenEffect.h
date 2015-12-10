@@ -2,13 +2,17 @@
 
 #include <string>
 
+#include "Engine/Graphics/Shaders/RenderableEffect.h"
+
 
 namespace bv {
 
 class Renderer;
 class RenderableEntity;
 class Camera;
+
 class VertexShader;
+class PixelShader;
 
 
 class FullscreenEffect
@@ -35,6 +39,9 @@ protected:
 
     void                        ToggleFullscreenCamera  ( Renderer * renderer );
     void                        ToggleRegularCamera     ( Renderer * renderer );
+
+    static  RenderableEffectPtr CreateDefaultEffect     ( PixelShader * ps );
+    static  RenderableEntity *  CreateDefaultFullscrQuad( PixelShader * ps );
 
     static  std::string         GetEffectShadersDir     ();
     static  std::string         ReadShaderFromFile      ( const std::string & fn );

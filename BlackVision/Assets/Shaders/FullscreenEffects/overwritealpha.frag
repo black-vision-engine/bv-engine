@@ -6,10 +6,10 @@ in vec2 uvCoord;
 
 uniform sampler2D Tex0;
 
+uniform float alpha;
+
 void main()
 {
-	float alpha = 1.0;
-
 	vec4 col = texture( Tex0, uvCoord );
 	
 	FragColor = vec4( col.r, col.g, col.b, alpha );

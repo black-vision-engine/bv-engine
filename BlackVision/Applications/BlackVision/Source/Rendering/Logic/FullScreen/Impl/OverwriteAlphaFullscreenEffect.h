@@ -4,6 +4,8 @@
 
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 
+#include "Engine/Types/Values/TypedValues.h"
+
 
 namespace bv {
 
@@ -11,7 +13,9 @@ class OverwriteAlphaFullscreenEffect : public FullscreenEffect
 {
 private:
 
-    float m_alpha;
+    float           m_alpha;
+
+    ValueFloatPtr   m_alphaVal;
 
 public:
 
@@ -24,10 +28,6 @@ public:
 protected:
 
     virtual RenderableEntity *  CreateFullscreenQuad            () const override;
-
-private:
-
-    RenderableEffectPtr         CreateRenderableEffect          () const;
 
     PixelShader *               CreatePS                        () const;
 
