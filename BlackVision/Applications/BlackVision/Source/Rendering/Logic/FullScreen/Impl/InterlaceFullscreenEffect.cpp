@@ -76,6 +76,7 @@ RenderableEntity *  InterlaceFullscreenEffect::CreateFullscreenQuad         () c
 //
 PixelShader *       InterlaceFullscreenEffect::CreatePS                     () const
 {
+    //FIXME: add empty textures (nullptr) and create samplers. Textures can be set later on
     return nullptr;    
 }
 

@@ -118,6 +118,7 @@ PixelShader *       MixChannelsFullscreenEffect::CreatePS               () const
 
     shaderParams->AddParameter( param );
 
+    //FIXME: add empty textures (nullptr) and create samplers. Textures can be set later on
     return new PixelShader( ReadFullscreenShader( "mixchannels.frag" ), shaderParams );
 }
 

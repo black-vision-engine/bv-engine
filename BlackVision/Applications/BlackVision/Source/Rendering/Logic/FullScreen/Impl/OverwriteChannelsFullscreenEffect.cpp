@@ -162,6 +162,7 @@ PixelShader *               OverwriteChannelsFullscreenEffect::CreatePS         
     shaderParams->AddParameter( ShaderParamFactory::CreateGenericParameter( m_alphaVal.get() ) );
     shaderParams->AddParameter( ShaderParamFactory::CreateGenericParameter( m_overwriteAlphaVal.get() ) );
 
+    //FIXME: add empty textures (nullptr) and create samplers. Textures can be set later on
     return new PixelShader( ReadFullscreenShader( "overwritechannels.frag" ), shaderParams );
 }
 

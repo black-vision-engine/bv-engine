@@ -25,6 +25,7 @@ VertexShader *  FullscreenRenderableEffect::CreateVS      ( unsigned int numUVCh
 
     auto shader = new VertexShader( GetVSShaderSource( numUVChannels ), params );
 
+    //FIXME: add empty textures (nullptr) and create samplers. Textures can be set later on
     return shader;
 }
 

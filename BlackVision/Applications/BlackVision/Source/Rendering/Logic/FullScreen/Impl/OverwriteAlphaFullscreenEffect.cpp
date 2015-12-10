@@ -60,6 +60,7 @@ PixelShader *           OverwriteAlphaFullscreenEffect::CreatePS                
 
     shaderParams->AddParameter( param );
 
+    //FIXME: add empty textures (nullptr) and create samplers. Textures can be set later on
     return new PixelShader( ReadFullscreenShader( "overwritealpha.frag" ), shaderParams );
 }
 
