@@ -77,6 +77,7 @@ void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot
     renderer->ClearBuffers();
     renderer->PreDraw();
     
+    // Emable current render target
     renderer->Enable( m_offscreenDisplay->GetActiveRenderTarget() );
 
     // FIXME: verify that all rendering paths work as expected
@@ -108,9 +109,17 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 
     if ( node->IsVisible() )
     {
-        auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogicTr( node );
-                
-        effectRenderLogic->RenderNode( node, &ctx );
+        if( node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT )
+        {
+            // Default render logic
+            DrawNode( renderer, node );
+        }
+        else
+        {
+            auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogicTr( node );
+               
+            effectRenderLogic->RenderNode( node, &ctx );
+        }
     }
 }
 
