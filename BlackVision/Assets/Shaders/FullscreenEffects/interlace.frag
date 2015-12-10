@@ -12,7 +12,7 @@ uniform int 		height;
 
 int 	Y			()
 {
-	return (int)(uvCoord.y * height);
+	return (int)((1.0 - uvCoord.y) * height);
 }
 
 vec4 InterlaceEven	()
