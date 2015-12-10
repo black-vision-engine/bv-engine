@@ -32,6 +32,8 @@ void    OverwriteAlphaFullscreenEffect::SetAlpha                            ( fl
     assert( alpha >= 0.0f && alpha <= 1.0f );
 
     m_alpha = alpha;
+
+    m_alphaVal->SetValue( alpha );
 }
 
 // **************************
@@ -53,8 +55,6 @@ RenderableEntity *      OverwriteAlphaFullscreenEffect::CreateFullscreenQuad    
 PixelShader *           OverwriteAlphaFullscreenEffect::CreatePS                () const
 {
     ShaderParameters * shaderParams = new ShaderParameters();
-
-    m_alphaVal->SetValue( m_alpha );
 
     GenericShaderParam * param = ShaderParamFactory::CreateGenericParameter( m_alphaVal.get() );
 

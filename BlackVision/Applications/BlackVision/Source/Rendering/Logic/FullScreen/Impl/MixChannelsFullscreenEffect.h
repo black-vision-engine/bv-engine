@@ -13,7 +13,7 @@ class MixChannelsFullscreenEffect : public FullscreenEffect
 {
 private:
 
-    ValueIntPtr     m_channelMask;
+    ValueIntPtr     m_channelMaskVal;
 
     unsigned char   m_rIdx;
     unsigned char   m_gIdx;

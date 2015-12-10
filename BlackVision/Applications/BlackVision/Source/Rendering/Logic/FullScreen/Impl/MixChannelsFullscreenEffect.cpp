@@ -10,13 +10,17 @@ namespace bv {
 // **************************
 //
 MixChannelsFullscreenEffect::MixChannelsFullscreenEffect     ( unsigned char rIdx, unsigned char gIdx, unsigned char bIdx, unsigned char aIdx )
+    : m_rIdx( 0 )
+    , m_gIdx( 1 )
+    , m_bIdx( 2 )
+    , m_aIdx( 3 )
 {
+    m_channelMaskVal = ValuesFactory::CreateValueInt( "channelMask" );
+
     SetRIdx( rIdx );
     SetGIdx( gIdx );
     SetBIdx( bIdx );
     SetAIdx( aIdx );
-
-    m_channelMask = ValuesFactory::CreateValueInt( "channelMask" );
 }
 
 // **************************
@@ -32,6 +36,8 @@ void    MixChannelsFullscreenEffect::SetRIdx    ( unsigned char idx )
     assert( idx < 4 );
 
     m_rIdx = idx;
+
+    m_channelMaskVal->SetValue( GetChannelMask() );
 }
 
 // **************************
@@ -41,6 +47,8 @@ void    MixChannelsFullscreenEffect::SetGIdx    ( unsigned char idx )
     assert( idx < 4 );
 
     m_gIdx = idx;
+
+    m_channelMaskVal->SetValue( GetChannelMask() );
 }
 
 // **************************
@@ -50,6 +58,8 @@ void    MixChannelsFullscreenEffect::SetBIdx    ( unsigned char idx )
     assert( idx < 4 );
 
     m_bIdx = idx;
+
+    m_channelMaskVal->SetValue( GetChannelMask() );
 }
 
 // **************************
@@ -59,6 +69,8 @@ void    MixChannelsFullscreenEffect::SetAIdx    ( unsigned char idx )
     assert( idx < 4 );
 
     m_aIdx = idx;
+
+    m_channelMaskVal->SetValue( GetChannelMask() );
 }
 
 // **************************
@@ -102,9 +114,7 @@ PixelShader *       MixChannelsFullscreenEffect::CreatePS               () const
 {
     ShaderParameters * shaderParams = new ShaderParameters();
 
-    m_channelMask->SetValue( GetChannelMask() );
-
-    GenericShaderParam * param = ShaderParamFactory::CreateGenericParameter( m_channelMask.get() );
+    GenericShaderParam * param = ShaderParamFactory::CreateGenericParameter( m_channelMaskVal.get() );
 
     shaderParams->AddParameter( param );
 
