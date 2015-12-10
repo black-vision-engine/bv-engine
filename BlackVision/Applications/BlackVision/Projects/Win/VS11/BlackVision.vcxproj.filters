@@ -234,6 +234,12 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\FullscreenRenderableEffect.cpp">
       <Filter>Rendering\Logic\FullScreen\Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\InterlaceFullscreenEffect.cpp">
+      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\InterlaceOverwriteChannelsFullscreenEffect.cpp">
+      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -416,6 +422,12 @@
       <Filter>Rendering\Logic\FullScreen</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\FullscreenRenderableEffect.h">
+      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\InterlaceFullscreenEffect.h">
+      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\InterlaceOverwriteChannelsFullscreenEffect.h">
       <Filter>Rendering\Logic\FullScreen\Impl</Filter>
     </ClInclude>
   </ItemGroup>

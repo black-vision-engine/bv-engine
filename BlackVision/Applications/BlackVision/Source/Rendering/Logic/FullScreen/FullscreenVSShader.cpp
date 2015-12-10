@@ -11,6 +11,12 @@ std::string     FullscreenVSShader::GenerateDefaultVS    ( unsigned int numUVCha
     std::string uvInAttr  = DefaultInUVAttrName();
     std::string uvOutAttr = DefaultOutUVAttrName();
 
+    // Old version which generates uv mappings for all textures
+    //std::string decl = GenerateHeader() + GeneratePositionDecl( posAttr ) + GenerateUVDecl( numUVChannels, uvInAttr ) + GenerateMVPDecl() + GenerateUVOutVarsDecl( numUVChannels, uvOutAttr );
+    //std::string impl = GenerateMainStart() + GenerateOutGLPositionCode( posAttr ) + GenerateOutUVMappingCode( numUVChannels, uvOutAttr, uvInAttr ) + GenerateMainEnd();
+
+    // Old version which generates one uv mapping for all textures - by default these are identical, so there is no need to generate all of them
+    numUVChannels = 1;
     std::string decl = GenerateHeader() + GeneratePositionDecl( posAttr ) + GenerateUVDecl( numUVChannels, uvInAttr ) + GenerateMVPDecl() + GenerateUVOutVarsDecl( numUVChannels, uvOutAttr );
     std::string impl = GenerateMainStart() + GenerateOutGLPositionCode( posAttr ) + GenerateOutUVMappingCode( numUVChannels, uvOutAttr, uvInAttr ) + GenerateMainEnd();
 

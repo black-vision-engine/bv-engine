@@ -2,8 +2,6 @@
 
 #include "Rendering/Logic/FullScreen/FullscreenEffect.h"
 
-#include "Engine/Graphics/Shaders/RenderableEffect.h"
-
 #include "Engine/Types/Values/TypedValues.h"
 
 

@@ -2,8 +2,6 @@
 
 #include "Rendering/Logic/FullScreen/FullscreenEffect.h"
 
-#include "Engine/Graphics/Shaders/RenderableEffect.h"
-
 #include "Engine/Types/Values/TypedValues.h"
 
 
@@ -42,11 +40,9 @@ public:
     unsigned char               GetAIdx                             () const;
 
     void                        SetAlpha                            ( float alpha );
-
     float                       GetAlpha                            () const;
 
     void                        SetOverwriteAlpha                   ( bool overwriteAlpha );
-
     bool                        GetOverwriteAlpha                   () const;
 
 protected:
