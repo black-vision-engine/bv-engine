@@ -13,6 +13,8 @@
 #include "Engine/Events/EventHelpers.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 
+#include "EventHandlerHelpers.h"
+
 #include <limits>
 #undef max
 
@@ -28,41 +30,6 @@ SceneEventsHandlers::SceneEventsHandlers( BVAppLogic* logic )
 SceneEventsHandlers::~SceneEventsHandlers()
 {}
 
-// ***********************
-//
-bv::model::IModelNodePtr SceneEventsHandlers::GetRootNode( const std::string& sceneName )
-{
-    auto scene = m_appLogic->GetBVProject()->GetScene( sceneName );
-    if( scene == nullptr )
-    {
-        LOG_MESSAGE( SeverityLevel::error ) << "SceneStructureEvent() scene [" + sceneName +" ] not found";
-        return nullptr;
-    }
-
-    auto root = scene->GetRootNode();
-    return root;
-}
-
-// ***********************
-//
-bv::model::IModelNodePtr SceneEventsHandlers::GetNode( const std::string& sceneName, const std::string& nodeName )
-{
-    auto root = GetRootNode( sceneName );
-    if( root != nullptr ) return nullptr;
-
-    auto node = root->GetNode( nodeName );
-    if( node == nullptr )
-    {
-        if( root->GetName() == nodeName )
-            node = root;
-        else
-        {
-            LOG_MESSAGE( SeverityLevel::error ) << "SceneStructureEvent() node [" + nodeName + "] not found";
-            return nullptr;
-        }
-    }
-    return node;
-}
 
 // ***********************
 //
@@ -78,7 +45,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
     //std::string& timelineName = structureEvent->TimelineName;
     auto command = structureEvent->SceneCommand;
 
-    auto node = GetNode( sceneName, nodeName );
+    auto node = GetNode( m_appLogic, sceneName, nodeName );
     if( !node ) return;
 
     if( command == NodeStructureEvent::Command::AddNode )
@@ -88,7 +55,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
     }
     else if( command == NodeStructureEvent::Command::RemoveNode )
     {
-        auto root = GetRootNode( sceneName );   // Can't fail if we got here. Checked in GetNode function above.
+        auto root = GetRootNode( m_appLogic, sceneName );   // Can't fail if we got here. Checked in GetNode function above.
         auto parentNodeName = nodeName.substr( 0, nodeName.find_last_of("/") );
         auto childNode = nodeName.substr( nodeName.find_last_of("/") + 1 );
         auto parentNode = root->GetNode( parentNodeName );
@@ -121,7 +88,7 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
     unsigned int attachIndex = structureEvent->AttachIndex;
     auto command = structureEvent->PluginCommand;
 
-    auto node = GetNode( sceneName, nodeName );
+    auto node = GetNode( m_appLogic, sceneName, nodeName );
     if( !node ) return;
 
     bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );

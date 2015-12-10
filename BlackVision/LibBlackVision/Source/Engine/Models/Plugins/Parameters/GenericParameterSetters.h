@@ -7,6 +7,10 @@
 
 namespace bv { namespace model {
 
+
+enum GenericEnumType   : int    // bleee
+{};
+
 // *******************************
 //
 template< typename ValueType >

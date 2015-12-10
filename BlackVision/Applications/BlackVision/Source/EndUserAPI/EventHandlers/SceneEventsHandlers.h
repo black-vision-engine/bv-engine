@@ -23,10 +23,6 @@ public:
 	void        OnNodeAppearing     ( IEventPtr evt );
 	void        OnNodeLeaving       ( IEventPtr evt );
 	void        OnNoMoreNodes       ( IEventPtr evt );
-
-private:
-    bv::model::IModelNodePtr    GetNode     ( const std::string& sceneName, const std::string& nodeName );
-    bv::model::IModelNodePtr    GetRootNode ( const std::string& sceneName );
 };
 
 

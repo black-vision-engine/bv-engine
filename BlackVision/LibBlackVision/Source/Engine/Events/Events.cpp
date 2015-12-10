@@ -95,9 +95,12 @@ const std::wstring PARAM_NAME_WSTRING       = L"ParamName";
 const std::wstring PARAM_VALUE_WSTRING      = L"ParamValue";
 const std::wstring KEY_TIME_WSTRING         = L"Time";
 
-const std::wstring COMMAND_ADD_KEY_WSTRING  = L"AddKey";
+const std::wstring COMMAND_ADD_KEY_WSTRING      = L"AddKey";
 const std::wstring COMMAND_REMOVE_KEY_WSTRING   = L"RemoveKey";
 const std::wstring COMMAND_UPDATE_KEY_WSTRING   = L"UpdateKey";
+const std::wstring COMMAND_SET_INTERPOLATOR_WSTRING         = L"SetInterpolator";
+const std::wstring COMMAND_INTERPOLATOR_PRE_WRAP_WSTRING    = L"SetInterpolatorPreWrapMethod";
+const std::wstring COMMAND_INTERPOLATOR_POST_WRAP_WSTRING   = L"SetInterpolatorPostWrapMethod";
 
 // NodeStructureEvent
 const std::wstring NEW_NODE_NAME_WSTRING        = L"NewNodeName";
@@ -583,9 +586,14 @@ IEventPtr           ParamKeyEvent::Create          ( IDeserializer& deser )
         newEvent->NodeName          = toString( deser.GetAttribute( Serial::NODE_NAME_WSTRING ) );
         newEvent->ParamName         = toString( deser.GetAttribute( Serial::PARAM_NAME_WSTRING ) );
         newEvent->Value             = deser.GetAttribute( Serial::PARAM_VALUE_WSTRING );
-        newEvent->Time              = stof( deser.GetAttribute( Serial::KEY_TIME_WSTRING ) );
         newEvent->KeyCommand        = WStringToCommand( deser.GetAttribute( Serial::COMMAND_WSTRING ) );
-        
+
+        std::wstring valueStr       = deser.GetAttribute( Serial::KEY_TIME_WSTRING );
+        if( valueStr != Serial::EMPTY_WSTRING )
+            newEvent->Time = std::stof( valueStr );
+        else
+            newEvent->Time = 0.0f;     // Set sensible default
+
         return newEvent;
     }
     return nullptr;    
@@ -606,6 +614,12 @@ std::wstring ParamKeyEvent::CommandToWString    ( Command cmd )
         return Serial::COMMAND_REMOVE_KEY_WSTRING;
     else if( cmd == Command::UpdateKey )
         return Serial::COMMAND_UPDATE_KEY_WSTRING;
+    else if( cmd == Command::SetInterpolatorType )
+        return Serial::COMMAND_SET_INTERPOLATOR_WSTRING;
+    else if( cmd == Command::SetInterpolatorPreWrapMethod )
+        return Serial::COMMAND_INTERPOLATOR_PRE_WRAP_WSTRING;
+    else if( cmd == Command::SetInterpolatorPostWrapMethod )
+        return Serial::COMMAND_INTERPOLATOR_POST_WRAP_WSTRING;
     else
         return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
 }
@@ -619,6 +633,12 @@ ParamKeyEvent::Command ParamKeyEvent::WStringToCommand    ( const std::wstring& 
         return Command::RemoveKey;
     else if( string == Serial::COMMAND_UPDATE_KEY_WSTRING )
         return Command::UpdateKey;
+    else if( string == Serial::COMMAND_SET_INTERPOLATOR_WSTRING )
+        return Command::SetInterpolatorType;
+    else if( string == Serial::COMMAND_INTERPOLATOR_PRE_WRAP_WSTRING )
+        return Command::SetInterpolatorPreWrapMethod;
+    else if( string == Serial::COMMAND_INTERPOLATOR_POST_WRAP_WSTRING )
+        return Command::SetInterpolatorPostWrapMethod;
     else
         return Command::Fail;
 }

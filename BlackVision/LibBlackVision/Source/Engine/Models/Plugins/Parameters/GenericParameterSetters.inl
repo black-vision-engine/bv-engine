@@ -19,8 +19,31 @@ inline bool SetSimpleTypedParameter( IParameterPtr param, TimeType t, typename c
     return true;
 }
 
+template<>
+inline bool SetSimpleTypedParameter< ParamEnum< GenericEnumType > >( IParameterPtr param, TimeType t, const ParamEnum<GenericEnumType>::ValType & val )
+{
+    ParamEnum< GenericEnumType > * typedParam = QueryTypedParam< std::shared_ptr< ParamEnum< GenericEnumType > > >( param ).get();
+
+    if( typedParam == nullptr )
+    {
+        return false;
+    }
+
+    typedParam->SetVal( static_cast< GenericEnumType >( val ), t );
+
+    return true;
+}
+
 } //anonymous
 
+
+// *******************************
+//
+template<>
+inline bool SetParameter< GenericEnumType >( IParameterPtr param, TimeType t, const GenericEnumType & val )
+{
+    return SetSimpleTypedParameter< ParamEnum<GenericEnumType> >( param, t, int( val ) );
+}
 
 // *******************************
 //

@@ -10,9 +10,11 @@
 #include "../../BVAppLogic.h"
 #include "../../UseLoggerBVAppModule.h"
 
+#include "EventHandlerHelpers.h"
 #include "Engine/Events/EventHelpers.h"             // wstring to string conversions and vice versa
 #include "Serialization/SerializationHelper.h"      // Conversions from string to glm types
 #include "Engine/Events/EventManager.h"
+
 
 
 namespace bv
@@ -55,40 +57,12 @@ void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
     std::wstring& value     = setParamEvent->Value;
 
     float keyTime           = setParamEvent->Time;
-        
-    auto scene = m_appLogic->GetBVProject()->GetScene( sceneName );
-    if( scene == nullptr )
-        return;
-
-	auto root = scene->GetRootNode();
-    auto node = root->GetNode( nodeName );
-    if( node == nullptr )
-    {
-        if( root->GetName() == nodeName )
-            node = root;
-        else
-        {
-            LOG_MESSAGE( SeverityLevel::error ) << "AddParamKey() node ["+ nodeName+"] not found";
-            return;
-        }
-    }
-    
-
-    auto plugin = node->GetPlugin( pluginName );
-    if( plugin == nullptr )
-    {
-        LOG_MESSAGE( SeverityLevel::error ) << "AddParamKey() node ["+ nodeName+"], plugin [" + pluginName + "] not found";
-        return;
-    }
 
     if( pluginName == "transform" )
     {
-        auto param = plugin->GetParameter("simple_transform");
+        auto param = GetPluginParameter( sceneName, nodeName, pluginName, "simple_transform" );
         if( param == nullptr )
-        {
-            LOG_MESSAGE( SeverityLevel::error ) << "AddParamKey() node ["+ nodeName+"], plugin [" + pluginName + "], param [simple_transform] not found";
             return;
-        }
             
         std::string stringValue = toString( value );
         if( paramName == "translation" )
@@ -110,39 +84,37 @@ void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
             LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] rotation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
         }
     }
-    else if( pluginName == "alpha" )
-    {
-        if( paramName == "alpha" )
-        {
-            auto sceneNodeEffect = node->GetNodeEffect();
+// To wszystko bêdzie obs³u¿one spójnie jako global effect
+   // else if( pluginName == "alpha" )
+   // {
+   //     if( paramName == "alpha" )
+   //     {
+   //         auto sceneNodeEffect = node->GetNodeEffect();
 
-            ParamFloatPtr alphaParam;
+   //         ParamFloatPtr alphaParam;
 
-            if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_ALPHA_MASK )
-            {
-                auto typeEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( sceneNodeEffect );
-                typeEffect->GetParamAlpha();
-            }
+   //         if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_ALPHA_MASK )
+   //         {
+   //             auto typeEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( sceneNodeEffect );
+   //             typeEffect->GetParamAlpha();
+   //         }
 
-            if( !alphaParam )
-            {
-                assert( false );
-                return;
-            }
+   //         if( !alphaParam )
+   //         {
+   //             assert( false );
+   //             return;
+   //         }
 
-			float floatValue = stof( value );
+			//float floatValue = stof( value );
 
-            SetParameter( alphaParam, (bv::TimeType)keyTime, floatValue );
-        }
-    }
+   //         SetParameter( alphaParam, (bv::TimeType)keyTime, floatValue );
+   //     }
+   // }
     else
     {
-        auto param = plugin->GetParameter( paramName );
+        auto param = GetPluginParameter( sceneName, nodeName, pluginName, paramName );
         if( param == nullptr )
-        {
-            LOG_MESSAGE( SeverityLevel::error ) << "AddParamKey() node ["+ nodeName+"], plugin [" + pluginName + "], param [" + paramName + "] not found";
             return;
-        }
 
         AddParameter( param, value, (TimeType)keyTime );
     }
@@ -163,6 +135,33 @@ void PluginEventsHandlers::RemoveParamKey      ( bv::IEventPtr /*eventPtr*/ )
     assert( !"Implement meeee" );
 }
 
+// ***********************
+//
+ParameterPtr PluginEventsHandlers::GetPluginParameter  (    const std::string& sceneName,
+                                                            const std::string& nodeName,
+                                                            const std::string& pluginName,
+                                                            const std::string& paramName )
+{
+
+    auto node = GetNode( m_appLogic, sceneName, nodeName );
+    if( node == nullptr )
+        return nullptr;
+
+    auto plugin = node->GetPlugin( pluginName );
+    if( plugin == nullptr )
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Parameter event handler: node [" + nodeName + "], plugin [" + pluginName + "] not found";
+        return nullptr;
+    }
+
+    auto param = plugin->GetParameter( paramName );
+    if( param == nullptr )
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Parameter event handler: node [" + nodeName + "], plugin [" + pluginName + "], param [" + paramName + "] not found";
+        return nullptr;
+    }
+    return param;
+}
 
 // ***********************
 //
@@ -222,7 +221,7 @@ void PluginEventsHandlers::AddParameter        ( std::shared_ptr<model::IParamet
         case ModelParamType::MPT_ENUM:
         {
             int enumValue = SerializationHelper::String2T<int>( stringValue, DEFAULT_ENUM_VALUE );
-            SetParameter( param, (bv::TimeType)keyTime, enumValue );
+            SetParameter( param, (bv::TimeType)keyTime, static_cast<GenericEnumType>( enumValue ) );
             break;
         }
         case ModelParamType::MPT_MAT2:

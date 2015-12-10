@@ -203,6 +203,9 @@ public:
         AddKey,
         UpdateKey,
         RemoveKey,
+        SetInterpolatorType,
+        SetInterpolatorPreWrapMethod,
+        SetInterpolatorPostWrapMethod,
         Fail            ///< Wrong command
     } Command;
 private:
