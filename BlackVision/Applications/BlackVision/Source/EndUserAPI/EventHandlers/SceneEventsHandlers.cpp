@@ -327,7 +327,16 @@ void SceneEventsHandlers::TimelineHandler     ( bv::IEventPtr evt )
 		}
 		else if( command == TimeLineEvent::Command::DeleteTimeline )
         {
-			editor->DeleteTimeline( timeLineName );
+			auto success = editor->DeleteTimeline( timeLineName );
+			int senderID = timelineEvent->SocketID;
+			if( success )
+			{
+				SendOnSceneStructureResponse( senderID, "DeleteTimeline", "status", "OK" );
+			}
+			else
+			{
+				SendOnSceneStructureResponse( senderID, "DeleteTimeline", "status", "ERROR" );
+			}
         }
 		else if( command == TimeLineEvent::Command::ForceDeleteTimeline )
         {
