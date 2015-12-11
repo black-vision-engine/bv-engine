@@ -205,7 +205,7 @@ CurveType                                           BezierGetCurveType( IParamet
 
 // *******************************
 //
-bool                                                BezierSetWrapPostMethod  ( IParameterPtr parameter, WrapMethod method )
+bool                                                SetWrapPostMethod  ( IParameterPtr parameter, WrapMethod method )
 {
     auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
 
@@ -220,7 +220,7 @@ bool                                                BezierSetWrapPostMethod  ( I
 
 // *******************************
 //
-bool                                                BezierSetWrapPreMethod   ( IParameterPtr parameter, WrapMethod method )
+bool                                                SetWrapPreMethod   ( IParameterPtr parameter, WrapMethod method )
 {
     auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
 
@@ -235,7 +235,7 @@ bool                                                BezierSetWrapPreMethod   ( I
 
 // *******************************
 //
-WrapMethod                                          BezierGetWrapPostMethod  ( IParameterPtr parameter )
+WrapMethod                                          GetWrapPostMethod  ( IParameterPtr parameter )
 {
     auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
 
@@ -247,7 +247,7 @@ WrapMethod                                          BezierGetWrapPostMethod  ( I
 
 // *******************************
 //
-WrapMethod                                          BezierGetWrapPreMethod   ( IParameterPtr parameter )
+WrapMethod                                          GetWrapPreMethod   ( IParameterPtr parameter )
 {
     auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
 
