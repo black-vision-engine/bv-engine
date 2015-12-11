@@ -20,7 +20,6 @@ class BVProject;
 class SceneNode;
 class SceneEditor;
 
-
 class BVProjectEditor
 {
 private:
@@ -48,6 +47,8 @@ private:
 
 public:
 
+/* SCENES */
+
     void                    AddScene			( model::SceneModelPtr scene );
     void                    AddEmptyScene		( const std::string & sceneName );
 
@@ -63,12 +64,14 @@ public:
     bool                    DeleteSceneRootNode	( const std::string & sceneName );
 
 	model::SceneModelPtr    GetScene			( const std::string & sceneName );
-	void					RenameScene			( const std::string & oldSceneName, std::string newSceneName );
+	bool					RenameScene			( const std::string & oldSceneName, const std::string & newSceneName );
 
 	/** Add a copy of scene with given name to the project.
 	@return Returns copied scene. */
 	model::SceneModelPtr	AddSceneCopy		( const std::string & sceneNameToCopy );
 
+
+/* NODES */
 
     void                    AddChildNode        ( const std::string & sceneName, model::IModelNodePtr parentNode, model::IModelNodePtr childNode );
     bool                    DeleteChildNode     ( const std::string & sceneName, model::IModelNodePtr parentNode, const std::string & childNodeName );
@@ -83,6 +86,8 @@ public:
 	@return Returns copied node. */
 	model::BasicNodePtr		AddNodeCopy			( const std::string & destSceneName, model::BasicNodePtr destParentNode, const std::string & srcSceneName, model::BasicNodePtr nodeToCopy );
 
+
+/* PLUGINS */
 
 	bool                    AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, unsigned int idx );
     bool                    DeletePlugin		( model::BasicNodePtr node, unsigned int idx );
@@ -101,9 +106,27 @@ public:
 	model::IPluginPtr		AddPluginCopy		( const std::string & destSceneName, model::BasicNodePtr destNode, const std::string & srcSceneName, model::BasicNodePtr srcNode, const std::string & pluginNameToCopy, unsigned int destIdx );
 
 
+/* EFFECTS */
 
 	model::IModelNodeEffectPtr	GetNodeEffect   ( model::IModelNodePtr node );
     void						SetNodeEffect   ( model::IModelNodePtr node, model::IModelNodeEffectPtr nodeEffect );
+
+
+/* TIMELINES */
+
+	//FIXME: what about ConstTimeEvaluator & OffsetTimeEvaluator?
+	void                    AddTimeline					( const std::string & sceneName, const std::string & timelineName, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
+	void                    AddTimeline					( const std::string & sceneName, model::ITimeEvaluatorPtr timeline );
+	
+	bool                    DeleteTimeline				( const std::string & timelinePath );
+	void                    ForceDeleteTimeline			( const std::string & timelinePath, const std::string & newTimelinePath = std::string() );
+
+	bool                    RenameTimeline				( const std::string & timelinePath, const std::string & newName );
+
+	void                    SetTimelineDuration			( const std::string & timelinePath, TimeType duration );
+	void                    SetTimelineWrapPreBehavior	( const std::string & timelinePath, TimelineWrapMethod preMethod );
+	void                    SetTimelineWrapPostBehavior	( const std::string & timelinePath, TimelineWrapMethod postMethod );
+
 
 private:
 
@@ -117,6 +140,7 @@ private:
 
 	std::string				PrefixSceneName		( const std::string & name );
 	static std::string		PrefixCopy			( UInt32 prefixNum );
+
 
     friend class BVProject;
 };

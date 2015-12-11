@@ -135,6 +135,13 @@ ISerializablePtr                     DefaultTimeline::Create              ( cons
 
 // *********************************
 //
+void								DefaultTimeline::SetDuration        ( TimeType duration )
+{
+	m_timeEvalImpl.SetDuration( duration );
+}
+
+// *********************************
+//
 TimeType                            DefaultTimeline::GetDuration        () const
 {
     return m_timeEvalImpl.GetDuration();

@@ -37,6 +37,7 @@ public:
     virtual     IParamValModelPtr   GetVertexShaderChannelModel     () override;
     virtual     IParamValModelPtr   GetGeometryShaderChannelModel   () override;
 
+	virtual		void				SetTimeEvaluator				( ITimeEvaluatorPtr timeEvaluator );
 	virtual		ITimeEvaluatorPtr	GetTimeEvaluator				() const override;
 
     DefaultParamValModelPtr        PluginModelImpl                 ();

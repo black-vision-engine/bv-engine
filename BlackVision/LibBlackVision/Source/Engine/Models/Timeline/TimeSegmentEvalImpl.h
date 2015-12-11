@@ -67,6 +67,7 @@ public:
     TimelineWrapMethod      GetWrapPre          () const;
     TimelineWrapMethod      GetWrapPost         () const;
 
+    void	                SetDuration         ( TimeType duration );
     TimeType                GetDuration         () const;
 
     TimelinePlayDirection   GetDirection        () const;

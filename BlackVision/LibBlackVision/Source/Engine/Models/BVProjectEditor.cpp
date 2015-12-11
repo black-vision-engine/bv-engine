@@ -153,13 +153,15 @@ void    BVProjectEditor::SetSceneVisible		( const std::string & sceneName, bool 
 
 // *******************************
 //
-void    BVProjectEditor::RenameScene			( const std::string & sceneName, std::string newSceneName )
+bool    BVProjectEditor::RenameScene			( const std::string & sceneName, const std::string & newSceneName )
 {
 	auto scene = m_project->GetScene( sceneName );
-	if( scene )
+	if( scene && !m_project->GetScene( newSceneName ) )
 	{
 		scene->SetName( newSceneName );
+		return true;
 	}
+	return false;
 }
 
 // *******************************
@@ -512,6 +514,110 @@ void						BVProjectEditor::SetNodeEffect	( model::IModelNodePtr node, model::IMo
 
 // *******************************
 //
+void						BVProjectEditor::AddTimeline			( const std::string & sceneName, const std::string & timelineName, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod )
+{
+	auto timeline = model::TimelineHelper::CreateDefaultTimeline( timelineName, duration, preMethod, postMethod );
+	AddTimeline( sceneName, timeline );
+}
+
+// *******************************
+//
+void						BVProjectEditor::AddTimeline			( const std::string & sceneName, model::ITimeEvaluatorPtr timeline )
+{
+	auto scene = m_project->GetScene( sceneName );
+	if( scene )
+	{
+		//FIXME: duplicated names, how to handle?
+		scene->GetTimeline()->AddChild( timeline );
+	}
+}
+
+// *******************************
+//
+bool						BVProjectEditor::DeleteTimeline			( const std::string & timelinePath )
+{
+	auto scene = m_project->GetScene( model::TimelineHelper::GetParentNodePath( timelinePath ) );
+	auto timeEval = model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
+	
+	assert( scene && timeEval );
+	
+	if( timeEval.use_count() == 2 ) //FIXME: maybe it's more safe to go through node tree..
+	{
+		model::TimelineManager::GetInstance()->RemoveTimelineFromTimeline( timelinePath, model::TimelineHelper::GetParentNodePath( timelinePath ) );
+		return true;
+	}
+	return false;
+}
+
+// *******************************
+//
+void						BVProjectEditor::ForceDeleteTimeline	( const std::string & timelinePath, const std::string & newTimelinePath )
+{
+	auto sceneName = model::TimelineHelper::GetParentNodePath( timelinePath );
+	auto timeEval = model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
+
+	auto newTimeEval = model::TimelineManager::GetInstance()->GetTimeEvaluator( sceneName );
+	if( !newTimelinePath.empty() )
+	{
+		newTimeEval = model::TimelineManager::GetInstance()->GetTimeEvaluator( newTimelinePath );
+	}
+	assert( timeEval );
+	assert( newTimeEval );
+	
+	auto scene = m_project->GetScene( sceneName );
+	auto sceneRoot = scene->GetRootNode();
+	assert( scene );
+	assert( sceneRoot );
+
+	sceneRoot->GetModelNodeEditor()->ReplaceTimeline( timeEval, newTimeEval );
+
+	assert( timeEval.use_count() == 2 );
+	model::TimelineManager::GetInstance()->RemoveTimelineFromTimeline( timelinePath, model::TimelineHelper::GetParentNodePath( timelinePath ) );
+}
+	
+// *******************************
+//
+bool						BVProjectEditor::RenameTimeline			( const std::string & timelinePath, const std::string & newName )
+{
+	auto timelineManager = model::TimelineManager::GetInstance();
+	auto timeline = timelineManager->GetTimeline( timelinePath );
+	if( timeline && !timelineManager->GetTimeline( newName ) )
+	{
+		timeline->SetName( newName );
+		return true;
+	}
+	return false;
+}
+
+// *******************************
+//
+void						BVProjectEditor::SetTimelineDuration			( const std::string & timelinePath, TimeType duration )
+{
+	auto timeline = model::TimelineManager::GetInstance()->GetTimeline( timelinePath );
+	assert( timeline );
+	timeline->SetDuration( duration );
+}
+
+// *******************************
+//
+void						BVProjectEditor::SetTimelineWrapPreBehavior		( const std::string & timelinePath, TimelineWrapMethod preMethod )
+{
+	auto timeline = model::TimelineManager::GetInstance()->GetTimeline( timelinePath );
+	assert( timeline );
+	timeline->SetWrapBehavior( preMethod, timeline->GetWrapBehaviorPost() );
+}
+
+// *******************************
+//
+void						BVProjectEditor::SetTimelineWrapPostBehavior	( const std::string & timelinePath, TimelineWrapMethod postMethod )
+{
+	auto timeline = model::TimelineManager::GetInstance()->GetTimeline( timelinePath );
+	assert( timeline );
+	timeline->SetWrapBehavior( timeline->GetWrapBehaviorPre(), postMethod );
+}
+
+// *******************************
+//
 void                    BVProjectEditor::MappingsCleanup      ( model::IModelNodePtr node )
 {
     if( node )
@@ -601,6 +707,5 @@ std::string				BVProjectEditor::PrefixCopy			( UInt32 prefixNum )
 	prefix.replace( prefix.find( "#" ), 1, toString( prefixNum ) );
 	return prefix;
 }
-
 
 } //bv

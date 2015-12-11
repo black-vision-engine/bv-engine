@@ -1,5 +1,6 @@
 #include "TimelineHelper.h"
 
+#include "Engine/Models/Timeline/TimelineManager.h"
 #include "Tools/StringHeplers.h"
 #include <cassert>
 
@@ -60,6 +61,22 @@ UInt32					TimelineHelper::CopyTimelines					( ITimeEvaluatorPtr destTimeline, c
 
 	//return prefix number
 	return 0;
+}
+
+// *********************************
+//
+std::string				TimelineHelper::GetParentNodePath				( const std::string & timelinePath )
+{
+    auto path = Split( timelinePath, "/" );
+
+	std::string parentPath = "";
+	for( int i = 0; i < path.size() - 1; ++i )
+	{
+		parentPath += path[ i ];
+		if( i < path.size() - 2 )
+			parentPath += "/";
+	}
+	return parentPath;
 }
 
 } //model

@@ -307,52 +307,107 @@ void SceneEventsHandlers::TimelineHandler     ( bv::IEventPtr evt )
 {
     if( evt->GetEventType() == bv::TimeLineEvent::Type() )
     {
+		auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+
         bv::TimeLineEventPtr timelineEvent = std::static_pointer_cast<bv::TimeLineEvent>( evt );
 
-        std::string& timeLineName = timelineEvent->TimelineName;
+        std::string& sceneName = timelineEvent->SceneName;
+        std::string& timeLineName = timelineEvent->TimelineName; //path?
+        std::string& timelineNewName = timelineEvent->NewTimelineName;
+
         float time = timelineEvent->Time;
+        auto duration = timelineEvent->Duration;
+        auto wrapMethod = timelineEvent->WrapMethod;
+
         TimeLineEvent::Command command = timelineEvent->TimelineCommand;
 
-        auto scene = m_appLogic->GetBVProject()->GetScene( timelineEvent->SceneName );
-
-        if( scene )
+        if( command == TimeLineEvent::Command::AddTimeline )
+		{
+			editor->AddTimeline( sceneName, timelineNewName, duration, wrapMethod, wrapMethod );
+		}
+		else if( command == TimeLineEvent::Command::DeleteTimeline )
         {
-			//FIXME: GetTimeline returns first timeline with given name; names are not guaranteed to be unique
+			editor->DeleteTimeline( timeLineName );
+        }
+		else if( command == TimeLineEvent::Command::ForceDeleteTimeline )
+        {
+			//timelineNewName is more path of new timeline here..
+			editor->ForceDeleteTimeline( timeLineName, timelineNewName );
+        }
+		else if( command == TimeLineEvent::Command::RenameTimeline )
+        {
+			editor->RenameTimeline( timeLineName, timelineNewName );
+        }
+		else if( command == TimeLineEvent::Command::SetDuration )
+        {
+			editor->SetTimelineDuration( timeLineName, duration );
+        }
+		else if( command == TimeLineEvent::Command::SetWrapPreBehavior )
+        {
+			editor->SetTimelineWrapPreBehavior( timeLineName, wrapMethod );
+        }
+		else if( command == TimeLineEvent::Command::SetWrapPostBehavior )
+        {
+			editor->SetTimelineWrapPostBehavior( timeLineName, wrapMethod );
+        }
+        else if( command == TimeLineEvent::Command::Play )
+        {
 			auto timeline = TimelineManager::GetInstance()->GetTimeline( timeLineName );
+			if( timeline == nullptr )
+			{
+				LOG_MESSAGE( SeverityLevel::error ) << "Timeline ["+ timeLineName + "] does not exist.";
+				return;
+			}
 
-            if( timeline == nullptr )
-            {
-                LOG_MESSAGE( SeverityLevel::error ) << "Timeline ["+ timeLineName + "] does not exist.";
-                return;
-            }
-            bv::model::ITimeline* timelineTyped = static_cast<bv::model::ITimeline*>(timeline.get());
+            timeline->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
+            timeline->Play();
+        }
+        else if( command == TimeLineEvent::Command::Stop )
+        {
+			auto timeline = TimelineManager::GetInstance()->GetTimeline( timeLineName );
+			if( timeline == nullptr )
+			{
+				LOG_MESSAGE( SeverityLevel::error ) << "Timeline ["+ timeLineName + "] does not exist.";
+				return;
+			}
 
+            timeline->Stop();
+        }
+        else if( command == TimeLineEvent::Command::PlayReverse )
+        {
+			auto timeline = TimelineManager::GetInstance()->GetTimeline( timeLineName );
+			if( timeline == nullptr )
+			{
+				LOG_MESSAGE( SeverityLevel::error ) << "Timeline ["+ timeLineName + "] does not exist.";
+				return;
+			}
 
-            if( command == TimeLineEvent::Command::Play )
-            {
-                timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
-                timelineTyped->Play();
-            }
-            else if( command == TimeLineEvent::Command::Stop )
-            {
-                timelineTyped->Stop();
-            }
-            else if( command == TimeLineEvent::Command::PlayReverse )
-            {
-                timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_BACKWARD );
-                timelineTyped->Play();
-            }
-            else if( command == TimeLineEvent::Command::Goto )
-            {
-                timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
-                timelineTyped->SetTimeAndStop( (bv::TimeType)time );
-            }
-            else if( command == TimeLineEvent::Command::GotoAndPlay )
-            {
-                timelineTyped->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
-                timelineTyped->SetTimeAndPlay( (bv::TimeType)time );
-            }
-       
+            timeline->SetPlayDirection( bv::TimelinePlayDirection::TPD_BACKWARD );
+            timeline->Play();
+        }
+        else if( command == TimeLineEvent::Command::Goto )
+        {
+			auto timeline = TimelineManager::GetInstance()->GetTimeline( timeLineName );
+			if( timeline == nullptr )
+			{
+				LOG_MESSAGE( SeverityLevel::error ) << "Timeline ["+ timeLineName + "] does not exist.";
+				return;
+			}
+
+            timeline->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
+            timeline->SetTimeAndStop( (bv::TimeType)time );
+        }
+        else if( command == TimeLineEvent::Command::GotoAndPlay )
+        {
+			auto timeline = TimelineManager::GetInstance()->GetTimeline( timeLineName );
+			if( timeline == nullptr )
+			{
+				LOG_MESSAGE( SeverityLevel::error ) << "Timeline ["+ timeLineName + "] does not exist.";
+				return;
+			}
+
+            timeline->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
+            timeline->SetTimeAndPlay( (bv::TimeType)time );
         }
     }
 }
