@@ -114,6 +114,7 @@ namespace bv
 namespace SerializationHelper
 {
     static const std::wstring EMPTY_WSTRING = L"";
+    static const std::string EMPTY_STRING = "";
 
     // ***********************
     //
@@ -133,7 +134,7 @@ namespace SerializationHelper
     T WString2T( const std::pair< T, const std::wstring > t2s[], const std::wstring& s )
     {
         int i = 0;
-        while( t2s[i].second == EMPTY_WSTRING )
+        while( t2s[i].second != EMPTY_WSTRING )
         {
             if( t2s[i].second == s )
                 return t2s[i].first;
