@@ -240,6 +240,12 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\InterlaceOverwriteChannelsFullscreenEffect.cpp">
       <Filter>Rendering\Logic\FullScreen\Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\BlitAlphaMaskFullscreenEffect.cpp">
+      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\BlitFullscreenEffect.cpp">
+      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -428,6 +434,12 @@
       <Filter>Rendering\Logic\FullScreen\Impl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\InterlaceOverwriteChannelsFullscreenEffect.h">
+      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\BlitAlphaMaskFullscreenEffect.h">
+      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\BlitFullscreenEffect.h">
       <Filter>Rendering\Logic\FullScreen\Impl</Filter>
     </ClInclude>
   </ItemGroup>
