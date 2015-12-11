@@ -105,6 +105,60 @@ namespace
 	}
 
 
+
+
 } // anonymous
 
+namespace bv
+{
+namespace SerializationHelper
+{
+    static const std::wstring EMPTY_WSTRING = L"";
 
+    // ***********************
+    //
+    template< typename T >
+    const std::wstring& Enum2WString( const std::pair< T, const std::wstring > t2s[], const T& t )
+    {
+        for( int i = 0; ; i++ ) // FIXME so much
+            if( t2s[i].first == t )
+                return t2s[i].second;
+            else if( t2s[i].second == EMPTY_WSTRING )
+                return EMPTY_WSTRING;
+    }
+
+    // ***********************
+    //
+    template< typename T >
+    T WString2T( const std::pair< T, const std::wstring > t2s[], const std::wstring& s )
+    {
+        int i = 0;
+        while( t2s[i].second == EMPTY_WSTRING )
+        {
+            if( t2s[i].second == s )
+                return t2s[i].first;
+            ++i;
+        }
+        return t2s[i].first;
+    }
+
+    // ***********************
+    //
+    template< typename T >
+    T WString2T( const std::wstring& s )
+    {
+        assert( !"Implement spetialization" );
+        return T;
+    }
+
+    // ***********************
+    //
+    template< typename T >
+    const std::wstring& T2WString( T t )
+    {
+        assert( !"Implement spetialization" );
+        return EMPTY_WSTRING;
+    }
+
+} // SerializationHelper
+} // bv

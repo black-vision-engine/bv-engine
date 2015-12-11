@@ -30,11 +30,11 @@ private:    //Helpers
     void                    RemoveParameter     ( ParameterPtr& param, TimeType keyTime );
 
 
-    ParameterPtr            GetPluginParameter  (   const std::string& sceneName,
-                                                    const std::string& nodeName,
-                                                    const std::string& pluginName,
-                                                    const std::string& paramName );
-    ParameterPtr            GetGlobalEffectParameter  ( const std::string& sceneName,
+    ParameterPtr            GetPluginParameter      (   const std::string& sceneName,
+                                                        const std::string& nodeName,
+                                                        const std::string& pluginName,
+                                                        const std::string& paramName );
+    ParameterPtr            GetGlobalEffectParameter(   const std::string& sceneName,
                                                         const std::string& nodeName,
                                                         const std::string& globalEffect,
                                                         const std::string& paramName );
