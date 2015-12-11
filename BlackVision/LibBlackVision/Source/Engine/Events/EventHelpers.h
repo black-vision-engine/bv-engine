@@ -154,7 +154,7 @@ namespace SerializationHelper
     // ***********************
     //
     template< typename T >
-    const std::wstring& T2WString( T t )
+    const std::wstring& T2WString( T /*t*/ )
     {
         assert( !"Implement spetialization" );
         return EMPTY_WSTRING;
