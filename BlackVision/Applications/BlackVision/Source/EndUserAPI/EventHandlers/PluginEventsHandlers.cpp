@@ -26,19 +26,7 @@ namespace
     const bool    DEFAULT_BOOL_VALUE = false;
     const int     DEFAULT_ENUM_VALUE = 0;         // This value should always exist as enum, but maybe there's other better choise.
 
-
-    std::pair< WrapMethod, const std::wstring > ParameterWrapMethodMapping[] = 
-    {
-        std::make_pair( WrapMethod::clamp, L"clamp" )
-        , std::make_pair( WrapMethod::repeat, L"repeat" ) 
-        , std::make_pair( WrapMethod::pingPong, L"pingPong" ) 
-        , std::make_pair( WrapMethod::clamp, SerializationHelper::EMPTY_WSTRING )      // default
-    };
-
 } // annonymous
-
-template<> WrapMethod           SerializationHelper::WString2T    ( const std::wstring& s )          { return WString2T( ParameterWrapMethodMapping, s ); }
-template<> const std::wstring&  SerializationHelper::T2WString    ( WrapMethod t )                   { return Enum2WString( ParameterWrapMethodMapping, t ); }
 
 
 // *********************************
@@ -107,9 +95,9 @@ void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
     else if( command == ParamKeyEvent::Command::SetInterpolatorType )
         BezierSetCurveType( param, SerializationHelper::String2T( toString( value ), CurveType::CT_BEZIER ) );
     else if( command == ParamKeyEvent::Command::SetInterpolatorPreWrapMethod )
-        SetWrapPreMethod( param, SerializationHelper::WString2T<WrapMethod>( value ) );
+        SetWrapPreMethod( param, SerializationHelper::String2T( toString( value ), WrapMethod::clamp ) );
     else if( command == ParamKeyEvent::Command::SetInterpolatorPostWrapMethod )
-        SetWrapPostMethod( param, SerializationHelper::WString2T<WrapMethod>( value ) );
+        SetWrapPostMethod( param, SerializationHelper::String2T( toString( value ), WrapMethod::clamp ) );
 }
 
 

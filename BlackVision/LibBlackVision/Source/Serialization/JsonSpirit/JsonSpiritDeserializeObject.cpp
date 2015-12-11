@@ -16,6 +16,13 @@ JsonSpiritDeserializeObject::JsonSpiritDeserializeObject()
 JsonSpiritDeserializeObject::~JsonSpiritDeserializeObject()
 {}
 
+// *******************************
+//
+DeserializeContext* JsonSpiritDeserializeObject::GetDeserializeContext() const
+{
+    return m_context.get();
+}
+
 // ***********************
 //
 bool JsonSpiritDeserializeObject::LoadFile           ( const std::string& fileName )

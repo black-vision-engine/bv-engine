@@ -15,11 +15,14 @@ private:
 	mutable json_spirit::wValue*				m_currentNode;
 	mutable std::stack<json_spirit::wValue*>	m_nodeStack;
     mutable std::stack<unsigned int>            m_indexStack;
+
+    std::unique_ptr< DeserializeContext >       m_context;
+
 public:
     JsonSpiritDeserializeObject();
     ~JsonSpiritDeserializeObject();
 
-    virtual DeserializeContext* GetDeserializeContext() const { return nullptr; } // FIXME
+    virtual DeserializeContext* GetDeserializeContext() const;
 
     bool                LoadFile            ( const std::string& fileName );
     bool                LoadWString         ( const std::wstring& jsonString );
