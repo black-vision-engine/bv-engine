@@ -1087,10 +1087,10 @@ void                TimeLineEvent::Serialize            ( ISerializer& ser ) con
     ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, CommandToWString( TimelineCommand ) );
     ser.SetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING, toWString( TimelineName ) );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_WSTRING, toWString( SceneName ) );
-    ser.SetAttribute( Serial::TIMELINE_NEW_NAME_WSTRING, toWString( NewTimelineName ) );
+    ser.SetAttribute( SerializationHelper::TIMELINE_NEW_NAME_WSTRING, toWString( NewTimelineName ) );
     ser.SetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING, toWString( Time ) );
-    ser.SetAttribute( Serial::TIMELINE_DURATION_VALUE_WSTRING, toWString( Duration ) );
-    ser.SetAttribute( Serial::TIMELINE_WRAP_METHOD_WSTRING, WrapMethodToWString( WrapMethod ) );
+    ser.SetAttribute( SerializationHelper::TIMELINE_DURATION_VALUE_WSTRING, toWString( Duration ) );
+    ser.SetAttribute( SerializationHelper::TIMELINE_WRAP_METHOD_WSTRING, WrapMethodToWString( WrapMethod ) );
 }
 
 // *************************************
@@ -1103,10 +1103,10 @@ IEventPtr                TimeLineEvent::Create          ( IDeserializer& deser )
         newEvent->Time              = stof( deser.GetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING ) );
         newEvent->TimelineCommand   = WStringToCommand( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
         newEvent->TimelineName      = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
-        newEvent->Duration          = stof( deser.GetAttribute( Serial::TIMELINE_DURATION_VALUE_WSTRING ) );
-        newEvent->WrapMethod= WStringToWrapMethod( deser.GetAttribute( Serial::TIMELINE_WRAP_METHOD_WSTRING ) );
+        newEvent->Duration          = stof( deser.GetAttribute( SerializationHelper::TIMELINE_DURATION_VALUE_WSTRING ) );
+        newEvent->WrapMethod= WStringToWrapMethod( deser.GetAttribute( SerializationHelper::TIMELINE_WRAP_METHOD_WSTRING ) );
         newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
-        newEvent->NewTimelineName   = toString( deser.GetAttribute( Serial::TIMELINE_NEW_NAME_WSTRING ) );
+        newEvent->NewTimelineName   = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NEW_NAME_WSTRING ) );
 
         return newEvent;
     }
@@ -1139,21 +1139,21 @@ EventType           TimeLineEvent::GetEventType() const
 std::wstring TimeLineEvent::CommandToWString    ( Command cmd )
 {
 	if( cmd == Command::AddTimeline )
-        return Serial::COMMAND_ADD_TIMELINE_WSTRING;
+        return SerializationHelper::COMMAND_ADD_TIMELINE_WSTRING;
 	else if( cmd == Command::DeleteTimeline )
-        return Serial::COMMAND_DELETE_TIMELINE_WSTRING;
+        return SerializationHelper::COMMAND_DELETE_TIMELINE_WSTRING;
 	else if( cmd == Command::ForceDeleteTimeline )
-        return Serial::COMMAND_FORCE_DELETE_TIMELINE_WSTRING;
+        return SerializationHelper::COMMAND_FORCE_DELETE_TIMELINE_WSTRING;
 	else if( cmd == Command::RenameTimeline )
-        return Serial::COMMAND_RENAME_TIMELINE_WSTRING;
+        return SerializationHelper::COMMAND_RENAME_TIMELINE_WSTRING;
 	else if( cmd == Command::SetDuration )
-        return Serial::COMMAND_SET_DURATION_WSTRING;
+        return SerializationHelper::COMMAND_SET_DURATION_WSTRING;
 	else if( cmd == Command::SetWrapPreBehavior )
-        return Serial::COMMAND_SET_WRAP_PRE_BEHAVIOR_WSTRING;
+        return SerializationHelper::COMMAND_SET_WRAP_PRE_BEHAVIOR_WSTRING;
 	else if( cmd == Command::SetWrapPostBehavior )
-        return Serial::COMMAND_SET_WRAP_POST_BEHAVIOR_WSTRING;
+        return SerializationHelper::COMMAND_SET_WRAP_POST_BEHAVIOR_WSTRING;
     else if( cmd == Command::Goto )
-        return Serial::COMMAND_GOTO_WSTRING;
+        return SerializationHelper::COMMAND_GOTO_WSTRING;
     else if( cmd == Command::GotoAndPlay )
         return SerializationHelper::COMMAND_GOTO_AND_PLAY_WSTRING;
     else if( cmd == Command::Play )
@@ -1170,21 +1170,21 @@ std::wstring TimeLineEvent::CommandToWString    ( Command cmd )
 //
 TimeLineEvent::Command TimeLineEvent::WStringToCommand    ( const std::wstring& string )
 {
-	if( string == Serial::COMMAND_ADD_TIMELINE_WSTRING )
+	if( string == SerializationHelper::COMMAND_ADD_TIMELINE_WSTRING )
         return Command::AddTimeline;
-	else if( string == Serial::COMMAND_DELETE_TIMELINE_WSTRING )
+	else if( string == SerializationHelper::COMMAND_DELETE_TIMELINE_WSTRING )
         return Command::DeleteTimeline;
-	else if( string == Serial::COMMAND_FORCE_DELETE_TIMELINE_WSTRING )
+	else if( string == SerializationHelper::COMMAND_FORCE_DELETE_TIMELINE_WSTRING )
         return Command::ForceDeleteTimeline;
-	else if( string == Serial::COMMAND_RENAME_TIMELINE_WSTRING )
+	else if( string == SerializationHelper::COMMAND_RENAME_TIMELINE_WSTRING )
         return Command::RenameTimeline;
-	else if( string == Serial::COMMAND_SET_DURATION_WSTRING )
+	else if( string == SerializationHelper::COMMAND_SET_DURATION_WSTRING )
         return Command::SetDuration;
-	else if( string == Serial::COMMAND_SET_WRAP_PRE_BEHAVIOR_WSTRING )
+	else if( string == SerializationHelper::COMMAND_SET_WRAP_PRE_BEHAVIOR_WSTRING )
 		return Command::SetWrapPreBehavior;
-	else if( string == Serial::COMMAND_SET_WRAP_POST_BEHAVIOR_WSTRING )
+	else if( string == SerializationHelper::COMMAND_SET_WRAP_POST_BEHAVIOR_WSTRING )
 		return Command::SetWrapPostBehavior;
-    else if( string == Serial::COMMAND_GOTO_WSTRING )
+    else if( string == SerializationHelper::COMMAND_GOTO_WSTRING )
         return Command::Goto;
     else if( string == SerializationHelper::COMMAND_GOTO_AND_PLAY_WSTRING )
         return Command::GotoAndPlay;
@@ -1203,24 +1203,24 @@ TimeLineEvent::Command TimeLineEvent::WStringToCommand    ( const std::wstring& 
 std::wstring TimeLineEvent::WrapMethodToWString				( TimelineWrapMethod method )
 {
 	if( method == TimelineWrapMethod::TWM_CLAMP )
-        return Serial::TIMELINE_WRAP_METHOD_CLAMP;
+        return SerializationHelper::TIMELINE_WRAP_METHOD_CLAMP;
 	else if( method == TimelineWrapMethod::TWM_MIRROR )
-        return Serial::TIMELINE_WRAP_METHOD_MIRROR;
+        return SerializationHelper::TIMELINE_WRAP_METHOD_MIRROR;
 	else if( method == TimelineWrapMethod::TWM_REPEAT )
-        return Serial::TIMELINE_WRAP_METHOD_REPEAT;
+        return SerializationHelper::TIMELINE_WRAP_METHOD_REPEAT;
     else
-        return Serial::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
+        return SerializationHelper::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
 }
 
 // *************************************
 //
 TimelineWrapMethod	TimeLineEvent::WStringToWrapMethod		( const std::wstring& string )
 {
-	if( string == Serial::TIMELINE_WRAP_METHOD_CLAMP )
+	if( string == SerializationHelper::TIMELINE_WRAP_METHOD_CLAMP )
         return TimelineWrapMethod::TWM_CLAMP;
-	else if( string == Serial::TIMELINE_WRAP_METHOD_MIRROR )
+	else if( string == SerializationHelper::TIMELINE_WRAP_METHOD_MIRROR )
         return TimelineWrapMethod::TWM_MIRROR;
-	else if( string == Serial::TIMELINE_WRAP_METHOD_REPEAT )
+	else if( string == SerializationHelper::TIMELINE_WRAP_METHOD_REPEAT )
         return TimelineWrapMethod::TWM_REPEAT;
 	else
         return TimelineWrapMethod::TWM_CLAMP;
