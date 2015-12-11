@@ -5,6 +5,7 @@
 
 #include "Serialization/XML/XMLDeserializer.h"
 #include "Serialization/XML/XMLSerializer.h"
+#include "Serialization/BVDeserializeContext.h"
 
 #include "Assets/AssetDescsWithUIDs.h"
 

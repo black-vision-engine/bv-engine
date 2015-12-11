@@ -22,6 +22,8 @@ public:
 	JsonDeserializeObject();
     virtual ~JsonDeserializeObject();
 
+    virtual DeserializeContext* GetDeserializeContext() const { return nullptr; } // FIXME
+
     bool                        LoadFile            ( const std::string& fileName );
 	void						Load                ( const std::string& jsonString );
 	void						Load                ( std::istream& stream );

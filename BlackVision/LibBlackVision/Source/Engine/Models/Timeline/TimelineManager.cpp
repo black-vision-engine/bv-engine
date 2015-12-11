@@ -1,4 +1,7 @@
 #include "TimelineManager.h"
+
+#include "TimelineHelper.h"
+
 #include "Serialization/SerializationHelper.h"
 
 #include "Tools/StringHeplers.h"
@@ -132,79 +135,21 @@ ITimeEvaluatorPtr       TimelineManager::GetRootTimeline            ()
 //
 ITimeEvaluatorPtr       TimelineManager::GetTimeEvaluator           ( const std::string & name )
 {
-    return GetTimeEvaluator( name, m_rootTimeline );
+    return TimelineHelper::GetTimeEvaluator( name, m_rootTimeline );
 }
 
-// *********************************
-//
-ITimeEvaluatorPtr       TimelineManager::GetTimeEvaluator           ( const std::string & name, ITimeEvaluatorPtr parentTimeline )
-{
-    auto path = Split( name, "/" );
-    if( path.size() == 1 )
-        return FindTimelineByName( name, parentTimeline );
-    else
-    {
-        auto nextParent = FindTimelineByName( path[ 0 ], parentTimeline );
-        if( nextParent )
-        {
-            path.erase( path.begin() );
-            return GetTimeEvaluator( Join( path, "/"), nextParent );
-        }
-        else
-            return nullptr;
-    }
-}
-
-// *********************************
-// FIXME: requires RTTI, reimplement it later on
 ITimelinePtr            TimelineManager::GetTimeline                     ( const std::string & name )
 {
-    return GetTimeline( name, m_rootTimeline );
-}
-
-// *********************************
-// FIXME: requires RTTI, reimplement it later on
-ITimelinePtr            TimelineManager::GetTimeline                     ( const std::string & name, ITimeEvaluatorPtr parentTimeline )
-{
-	auto path = Split( name, "/" );
-    if( path.size() == 1 )
-		return std::dynamic_pointer_cast< ITimeline >( FindTimelineByName( name, parentTimeline ) );
-    else
-    {
-        auto nextParent = FindTimelineByName( path[ 0 ], parentTimeline );
-        if( nextParent )
-        {
-            path.erase( path.begin() );
-            return GetTimeline( Join( path, "/"), nextParent );
-        }
-        else
-            return nullptr;
-    }
+    return TimelineHelper::GetTimeline( name, m_rootTimeline );
 }
 
 // *********************************
 //
 std::string             TimelineManager::GetTimelinePath                 ( ITimeEvaluatorPtr timeline )
 {
-    return GetTimelinePath( timeline, m_rootTimeline );
+    return TimelineHelper::GetTimelinePath( timeline, m_rootTimeline );
 }
 
-
-// *********************************
-//
-std::string             TimelineManager::GetTimelinePath                 ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline )
-{
-    for( auto child : parentTimeline->GetChildren() )
-        if( child == timeline )
-            return timeline->GetName();
-        else
-        {
-            auto path = GetTimelinePath( timeline, child );
-            if( path != "" )
-                return child->GetName() + "/" + path;
-        }
-    return "";
-}
 
 // *********************************
 //
@@ -450,33 +395,6 @@ bool                    TimelineManager::RemoveParamFromTimeline        ( IParam
     }
 
     return false;
-}
-
-// *********************************
-//
-ITimeEvaluatorPtr       TimelineManager::FindTimelineByName             ( const std::string & name, ITimeEvaluatorPtr root )
-{
-    if( root != nullptr )
-    {
-        if( root->GetName() == name )
-        {
-            return root;
-        }
-        else
-        {
-            for( auto child : root->GetChildren() )
-            {
-                auto retTimeline = FindTimelineByName( name, child );
-
-                if( retTimeline != nullptr )
-                {
-                    return retTimeline;
-                }
-            }
-        }
-    }
-
-    return nullptr;
 }
 
 // *********************************

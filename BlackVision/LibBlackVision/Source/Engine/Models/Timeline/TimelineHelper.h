@@ -28,6 +28,10 @@ public:
 
 	static std::string				GetParentNodePath				( const std::string & timelinePath );
 	
+    static ITimeEvaluatorPtr        GetTimeEvaluator                ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
+    static ITimelinePtr             GetTimeline                     ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
+    static std::string              GetTimelinePath                 ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline );
+
 };
 
 } //model

@@ -4,12 +4,15 @@
 #include <fstream>
 #include <sstream>
 
+#include "Serialization/BVDeserializeContext.h"
+
 namespace bv {
 
 // *******************************
 //
 XMLDeserializer::XMLDeserializer( std::string filename )
     : m_rootDoc( new rapidxml::xml_document<> )
+    , m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext() ) ) 
 { 
     assert( Path::Exists( filename ) );
 
@@ -28,6 +31,7 @@ XMLDeserializer::XMLDeserializer( std::string filename )
 //
 XMLDeserializer::XMLDeserializer( std::istream & in, SizeType numBytes )
     : m_rootDoc( new rapidxml::xml_document<> )
+    , m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext() ) ) 
 {
     std::stringstream buffer;
 
@@ -49,6 +53,13 @@ XMLDeserializer::~XMLDeserializer()
 {
 }
 
+
+// *******************************
+//
+DeserializeContext* XMLDeserializer::GetDeserializeContext() const
+{
+    return m_context.get();
+}
 
 // *******************************
 //

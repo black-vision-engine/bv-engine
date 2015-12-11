@@ -2,7 +2,7 @@
 
 #include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
-#include "Engine/Models/Timeline/TimelineManager.h"
+#include "Engine/Models/Timeline/TimelineHelper.h"
 
 #include "Assets/AssetSerialization.h"
 #include "Serialization/CloneViaSerialization.h"
@@ -154,12 +154,12 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
 
     auto timeline = deser.GetAttribute( "timeline" );
 	
-    auto tm = TimelineManager::GetInstance();
-    ITimeEvaluatorPtr te = tm->GetTimeEvaluator( timeline );
+    auto sceneTimeline = dynamic_cast< BVDeserializeContext* >( deser.GetDeserializeContext() )->m_sceneTimeline;
+    ITimeEvaluatorPtr te = TimelineHelper::GetTimeEvaluator( timeline, sceneTimeline );
     if( te == nullptr ) 
     {
         assert( false );
-        te = tm->GetRootTimeline();
+        te = sceneTimeline;
     }
 
     IPluginPtr plugin_ = PluginsManager::DefaultInstanceRef().CreatePlugin( pluginType, pluginName, te );
