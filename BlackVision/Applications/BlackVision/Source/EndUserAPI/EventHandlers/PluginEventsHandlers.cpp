@@ -12,10 +12,10 @@
 
 #include "EventHandlerHelpers.h"
 #include "Engine/Events/EventHelpers.h"             // wstring to string conversions and vice versa
-#include "Serialization/SerializationHelper.h"      // Conversions from string to glm types
+#include "Serialization/SerializationHelper.h"
 #include "Engine/Events/EventManager.h"
 
-
+#include <typeinfo>
 
 namespace bv
 {
@@ -47,8 +47,6 @@ void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
     bv::ParamKeyEventPtr setParamEvent = std::static_pointer_cast<bv::ParamKeyEvent>( eventPtr );
         
     ParamKeyEvent::Command command  = setParamEvent->KeyCommand;
-    if( command != ParamKeyEvent::Command::AddKey )
-        return;
 
     std::string& nodeName   = setParamEvent->NodeName;
     std::string& pluginName = setParamEvent->PluginName;
@@ -58,65 +56,46 @@ void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
 
     float keyTime           = setParamEvent->Time;
 
-    if( pluginName == "transform" )
-    {
-        auto param = GetPluginParameter( sceneName, nodeName, pluginName, "simple_transform" );
-        if( param == nullptr )
-            return;
-            
-        std::string stringValue = toString( value );
-        if( paramName == "translation" )
-        {
-            SetParameterTranslation( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
-            LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] translation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
-        }
-        else if( paramName == "scale" )
-        {
-            SetParameterScale( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
-            LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] scale: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
-        }
-        else if( paramName == "rotation" )
-        {
-            glm::vec4 rotAxisAngle = SerializationHelper::String2Vec4( stringValue );
-            glm::vec3 rotAxis = glm::vec3( rotAxisAngle );
+    auto param = GetPluginParameter( sceneName, nodeName, pluginName, paramName );
+    if( param == nullptr )
+        return;
 
-            SetParameterRotation( param, 0, (bv::TimeType)keyTime, rotAxis, rotAxisAngle.w );
-            LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] rotation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+    if( command == ParamKeyEvent::Command::AddKey )
+    {
+        if( pluginName == "transform" )     // Only transform parameter
+        {
+            std::string stringValue = toString( value );
+            if( paramName == "translation" )
+            {
+                SetParameterTranslation( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
+                LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] translation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+            }
+            else if( paramName == "scale" )
+            {
+                SetParameterScale( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
+                LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] scale: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+            }
+            else if( paramName == "rotation" )
+            {
+                glm::vec4 rotAxisAngle = SerializationHelper::String2Vec4( stringValue );
+                glm::vec3 rotAxis = glm::vec3( rotAxisAngle );
+
+                SetParameterRotation( param, 0, (bv::TimeType)keyTime, rotAxis, rotAxisAngle.w );
+                LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] rotation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+            }
         }
+        else
+            AddParameter( param, value, (TimeType)keyTime );        // Regular parameter
     }
-// To wszystko bêdzie obs³u¿one spójnie jako global effect
-   // else if( pluginName == "alpha" )
-   // {
-   //     if( paramName == "alpha" )
-   //     {
-   //         auto sceneNodeEffect = node->GetNodeEffect();
-
-   //         ParamFloatPtr alphaParam;
-
-   //         if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_ALPHA_MASK )
-   //         {
-   //             auto typeEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( sceneNodeEffect );
-   //             typeEffect->GetParamAlpha();
-   //         }
-
-   //         if( !alphaParam )
-   //         {
-   //             assert( false );
-   //             return;
-   //         }
-
-			//float floatValue = stof( value );
-
-   //         SetParameter( alphaParam, (bv::TimeType)keyTime, floatValue );
-   //     }
-   // }
-    else
+    else if( command == ParamKeyEvent::Command::SetInterpolatorType )
+        BezierSetCurveType( param, SerializationHelper::String2T( toString( value ), CurveType::CT_BEZIER ) );
+    else if( command == ParamKeyEvent::Command::SetInterpolatorPreWrapMethod )
     {
-        auto param = GetPluginParameter( sceneName, nodeName, pluginName, paramName );
-        if( param == nullptr )
-            return;
 
-        AddParameter( param, value, (TimeType)keyTime );
+    }
+    else if( command == ParamKeyEvent::Command::SetInterpolatorPostWrapMethod )
+    {
+
     }
 }
 
