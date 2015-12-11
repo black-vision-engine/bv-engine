@@ -44,10 +44,19 @@ void JsonSerializeObject::EnterChild( const std::string& name )
 {
 	m_nodeStack.push( m_currentNode );
 
-    assert( !(*m_currentNode)[ name ].isArray() );
+//    assert( !(*m_currentNode)[ name ].isArray() );
 
-    (*m_currentNode)[ name ] = Json::ValueType::objectValue;
-    m_currentNode = &(*m_currentNode)[ name ];
+    if( m_currentNode->isArray() )
+    {
+        m_currentNode = &( ( *m_currentNode ).append( Json::ValueType::objectValue ) );
+    }
+    else
+    {
+        (*m_currentNode)[ name ] = Json::ValueType::objectValue;
+        m_currentNode = &(*m_currentNode)[ name ];
+    }
+
+    
 }
 
 // ***********************
@@ -86,16 +95,27 @@ void                JsonSerializeObject::EnterArray          ( const std::string
 {
 	m_nodeStack.push( m_currentNode );
 
-    unsigned int size = 0;  // Default value, when array doesn't exist yet.
-    if( (*m_currentNode)[ name ].isArray() )
-        size = (*m_currentNode)[ name ].size();
-    else if( (*m_currentNode)[ name ].isObject() )
+    if( m_currentNode->isMember( name ) )
     {
-        assert( !"It's not an array!" );
+        assert( false );
+    }
+    else
+    {
+        ( *m_currentNode )[ name ] = Json::ValueType::arrayValue;
     }
 
-    (*m_currentNode)[ name ][ size ] = Json::ValueType::objectValue;
-    m_currentNode = &(*m_currentNode)[ name ][ size ];
+    m_currentNode = &( ( *m_currentNode )[ name ] );
+
+    //unsigned int size = 0;  // Default value, when array doesn't exist yet.
+    //if( (*m_currentNode)[ name ].isArray() )
+    //    size = (*m_currentNode)[ name ].size();
+    //else if( (*m_currentNode)[ name ].isObject() )
+    //{
+    //    assert( !"It's not an array!" );
+    //}
+
+    //(*m_currentNode)[ name ][ size ] = Json::ValueType::objectValue;
+    
 }
 
 // ***********************
