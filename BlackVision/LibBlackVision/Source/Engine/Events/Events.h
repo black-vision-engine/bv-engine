@@ -3,6 +3,7 @@
 #include "Engine/Events/BaseEvent.h"
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 #include "Engine/Models/Interfaces/IModelNode.h"
+#include "Engine/Events/EventHelpers.h"
 
 #include  "Mathematics/glm_inc.h"
 
@@ -232,9 +233,6 @@ public:
 
     static EventType                Type                ();
     static std::string&             Name                ();
-private:
-    static std::wstring             CommandToWString    ( Command cmd );
-    static Command                  WStringToCommand    ( const std::wstring& string );
 };
 DEFINE_PTR_TYPE( ParamKeyEvent )
 
@@ -247,7 +245,6 @@ public:
     {
         AddNode,
         RemoveNode,
-        AddPlugin,
         SetNodeVisible,
         SetNodeInvisible,
         Fail            ///< Wrong command
@@ -272,10 +269,6 @@ public:
     static std::string&             Name                ();
     virtual const std::string &     GetName             () const;
     virtual EventType               GetEventType        () const;
-
-private:
-    static std::wstring             CommandToWString    ( Command cmd );
-    static Command                  WStringToCommand    ( const std::wstring& string );
 };
 
 DEFINE_PTR_TYPE( NodeStructureEvent )
@@ -314,10 +307,6 @@ public:
     static std::string&             Name                ();
     virtual const std::string &     GetName             () const;
     virtual EventType               GetEventType        () const;
-
-private:
-    static std::wstring             CommandToWString    ( Command cmd );
-    static Command                  WStringToCommand    ( const std::wstring& string );
 };
 
 DEFINE_PTR_TYPE( PluginStructureEvent )
@@ -356,10 +345,6 @@ public:
     static std::string&             Name                ();
     virtual const std::string &     GetName             () const;
     virtual EventType               GetEventType        () const;
-
-private:
-    static std::wstring             CommandToWString    ( Command cmd );
-    static Command                  WStringToCommand    ( const std::wstring& string );
 };
 
 DEFINE_PTR_TYPE( ProjectEvent )
@@ -421,10 +406,6 @@ public:
     static std::string&             Name                ();
     virtual const std::string &     GetName             () const;
     virtual EventType               GetEventType        () const;
-
-private:
-    static std::wstring             CommandToWString    ( Command cmd );
-    static Command                  WStringToCommand    ( const std::wstring& string );
 };
 
 DEFINE_PTR_TYPE( InfoEvent )
@@ -474,13 +455,6 @@ public:
     static std::string&             Name                ();
     virtual const std::string &     GetName             () const;
     virtual EventType               GetEventType        () const;
-private:
-    static std::wstring             CommandToWString    ( Command cmd );
-    static Command                  WStringToCommand    ( const std::wstring& string );
-
-	static std::wstring				WrapMethodToWString ( TimelineWrapMethod method );
-	static TimelineWrapMethod		WStringToWrapMethod ( const std::wstring& string );
-
 };
 
 DEFINE_PTR_TYPE( TimeLineEvent )
@@ -522,9 +496,6 @@ public:
     static std::string&             Name                ();
     virtual const std::string&      GetName             () const;
     virtual EventType               GetEventType        () const;
-private:
-    static std::wstring             CommandToWString    ( Command cmd );
-    static Command                  WStringToCommand    ( const std::wstring& string );
 };
 
 DEFINE_PTR_TYPE( TimerEvent )
@@ -559,9 +530,6 @@ public:
     static std::string&             Name                ();
     virtual const std::string &     GetName             () const;
     virtual EventType               GetEventType        () const;
-private:
-    static std::wstring             CommandToWString    ( Command cmd );
-    static Command                  WStringToCommand    ( const std::wstring& string );
 };
 
 DEFINE_PTR_TYPE( WidgetEvent )
@@ -615,12 +583,9 @@ public:
     static std::string&             Name                ();
     virtual const std::string &     GetName             () const;
     virtual EventType               GetEventType        () const;
-public:
-    static std::wstring             CommandToWString    ( Command cmd );
-    static Command                  WStringToCommand    ( const std::wstring& string );
-    static std::wstring             ReferenceModeToWString      ( VideoReferenceMode mode );
-    static VideoReferenceMode       WStringToReferenceMode      ( const std::wstring& string );
 };
+
+template<> const std::wstring& SerializationHelper::T2WString   ( VideoCardEvent::Command t );
 
 DEFINE_PTR_TYPE( VideoCardEvent )
 
@@ -654,9 +619,6 @@ public:
     static std::string&             Name                ();
     virtual const std::string &     GetName             () const;
     virtual EventType               GetEventType        () const;
-public:
-    static std::wstring             CommandToWString    ( Command cmd );
-    static Command                  WStringToCommand    ( const std::wstring& string );
 };
 
 DEFINE_PTR_TYPE( RenderingModeEvent )
@@ -699,9 +661,6 @@ public:
     static std::string&             Name                ();
     virtual const std::string &     GetName             () const;
     virtual EventType               GetEventType        () const;
-public:
-    static std::wstring             CommandToWString    ( Command cmd );
-    static Command                  WStringToCommand    ( const std::wstring& string );
 };
 
 DEFINE_PTR_TYPE( HightmapEvent )

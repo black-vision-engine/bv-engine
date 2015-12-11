@@ -110,17 +110,22 @@ std::pair< ParamKeyEvent::Command, const std::wstring > ParameterCommandMapping[
 template<> ParamKeyEvent::Command WString2T ( const std::wstring& s )    { return WString2T( ParameterCommandMapping, s ); }
 template<> const std::wstring& T2WString    ( ParamKeyEvent::Command t ) { return Enum2WString( ParameterCommandMapping, t ); }
 
-
-
 // ========================================================================= //
 // NodeStructureEvent
 // ========================================================================= //
 const std::wstring NEW_NODE_NAME_WSTRING        = L"NewNodeName";
 
-const std::wstring COMMAND_ADD_NODE_WSTRING         = L"AddNode";
-const std::wstring COMMAND_REMOVE_NODE_WSTRING      = L"RemoveNode";
-const std::wstring COMMAND_SET_NODE_VISIBLE_WSTRING     = L"SetNodeVisible";
-const std::wstring COMMAND_SET_NODE_INVISIBLE_WSTRING   = L"SetNodeInvisible";
+std::pair< NodeStructureEvent::Command, const std::wstring > NodeStructureCommandMapping[] = 
+{
+    std::make_pair( NodeStructureEvent::Command::AddNode, L"AddNode" )
+    , std::make_pair( NodeStructureEvent::Command::RemoveNode, L"RemoveNode" ) 
+    , std::make_pair( NodeStructureEvent::Command::SetNodeInvisible, L"SetNodeInvisible" ) 
+    , std::make_pair( NodeStructureEvent::Command::SetNodeVisible, L"SetNodeVisible" )
+    , std::make_pair( NodeStructureEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> NodeStructureEvent::Command WString2T ( const std::wstring& s )    { return WString2T( NodeStructureCommandMapping, s ); }
+template<> const std::wstring& T2WString    ( NodeStructureEvent::Command t ) { return Enum2WString( NodeStructureCommandMapping, t ); }
 
 // ========================================================================= //
 // PluginStructureEvent
@@ -128,25 +133,40 @@ const std::wstring COMMAND_SET_NODE_INVISIBLE_WSTRING   = L"SetNodeInvisible";
 const std::wstring PLUGIN_ATTACH_INDEX_WSTRING      = L"AttachIndex";
 const std::wstring PLUGIN_UID_WSTRING               = L"PluginUID";
 
-const std::wstring COMMAND_ATTACH_PLUGIN_WSTRING    = L"AttachPlugin";
-const std::wstring COMMAND_DETACH_PLUGIN_WSTRING    = L"DetachPlugin";
-const std::wstring COMMAND_ADD_PLUGIN_WSTRING       = L"AddPlugin";
-const std::wstring COMMAND_REMOVE_PLUGIN_WSTRING    = L"RemovePlugin";
+std::pair< PluginStructureEvent::Command, const std::wstring > PluginStructureCommandMapping[] = 
+{
+    std::make_pair( PluginStructureEvent::Command::AttachPlugin, L"AttachPlugin" )
+    , std::make_pair( PluginStructureEvent::Command::DetachPlugin, L"DetachPlugin" ) 
+    , std::make_pair( PluginStructureEvent::Command::AddPlugin, L"AddPlugin" ) 
+    , std::make_pair( PluginStructureEvent::Command::RemovePlugin, L"RemovePlugin" )
+    , std::make_pair( PluginStructureEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> PluginStructureEvent::Command WString2T ( const std::wstring& s )    { return WString2T( PluginStructureCommandMapping, s ); }
+template<> const std::wstring& T2WString    ( PluginStructureEvent::Command t ) { return Enum2WString( PluginStructureCommandMapping, t ); }
+
 
 // ========================================================================= //
 // ProjectEvent
 // ========================================================================= //
 const std::wstring REQUEST_WSTRING                          = L"Request";
 
-const std::wstring COMMAND_SAVE_SCENE_WSTRING               = L"SaveScene";
-const std::wstring COMMAND_LOAD_PROJECT_WSTRING             = L"LoadProject";
-const std::wstring COMMAND_NEW_PROJECT_WSTRING              = L"NewProject";
-const std::wstring COMMAND_SET_CURRENT_PROJECT_WSTRING      = L"SetCurrentProject";
-const std::wstring COMMAND_LIST_PROJECTS_NAMES_WSTRING      = L"ListProjectNames";
-const std::wstring COMMAND_LIST_SCENES_WSTRING              = L"ListScenes";
-const std::wstring COMMAND_LIST_ASSETS_PATHS_WSTRING        = L"ListAssetsPaths";
-const std::wstring COMMAND_LIST_CATEGORIES_NAMES_WSTRING    = L"ListCategoriesNames";
-const std::wstring COMMAND_LIST_PROJECTS_WSTRING            = L"ListProjects";
+std::pair< ProjectEvent::Command, const std::wstring > ProjectEventCommandMapping[] = 
+{
+    std::make_pair( ProjectEvent::Command::SaveScene, L"SaveScene" )
+    , std::make_pair( ProjectEvent::Command::LoadProject, L"LoadProject" ) 
+    , std::make_pair( ProjectEvent::Command::NewProject, L"NewProject" ) 
+    , std::make_pair( ProjectEvent::Command::SetCurrentProject, L"SetCurrentProject" )
+    , std::make_pair( ProjectEvent::Command::ListProjectNames, L"ListProjectNames" )
+    , std::make_pair( ProjectEvent::Command::ListScenes, L"ListScenes" )
+    , std::make_pair( ProjectEvent::Command::ListAssetsPaths, L"ListAssetsPaths" )
+    , std::make_pair( ProjectEvent::Command::ListCategoriesNames, L"ListCategoriesNames" )
+    , std::make_pair( ProjectEvent::Command::ListProjects, L"ListProjects" )
+    , std::make_pair( ProjectEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> ProjectEvent::Command WString2T ( const std::wstring& s )    { return WString2T( ProjectEventCommandMapping, s ); }
+template<> const std::wstring& T2WString    ( ProjectEvent::Command t ) { return Enum2WString( ProjectEventCommandMapping, t ); }
 
 // ========================================================================= //
 // ResponseEvent
@@ -156,42 +176,80 @@ const std::wstring RESPONSE_WSTRING                     = L"Response";
 // ========================================================================= //
 // InfoEvent
 // ========================================================================= //
-const std::wstring COMMAND_TREE_STRUCTURE_WSTRING       = L"TreeStructure";
-const std::wstring COMMAND_PERFORMANCE_WSTRING          = L"Performance";
-const std::wstring COMMAND_TIMELINES_WSTRING            = L"TimeLines";
-const std::wstring COMMAND_NODE_INFO_WSTRING            = L"NodeInfo";
-const std::wstring COMMAND_VIDEO_CARDS_WSTRING          = L"VideoCards";
+
+std::pair< InfoEvent::Command, const std::wstring > InfoEventCommandMapping[] = 
+{
+    std::make_pair( InfoEvent::Command::TreeStructure, L"TreeStructure" )
+    , std::make_pair( InfoEvent::Command::Performance, L"Performance" ) 
+    , std::make_pair( InfoEvent::Command::Timelines, L"TimeLines" ) 
+    , std::make_pair( InfoEvent::Command::NodeInfo, L"NodeInfo" )
+    , std::make_pair( InfoEvent::Command::Videocards, L"VideoCards" )
+    , std::make_pair( InfoEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> InfoEvent::Command WString2T     ( const std::wstring& s )   { return WString2T( InfoEventCommandMapping, s ); }
+template<> const std::wstring& T2WString    ( InfoEvent::Command t )    { return Enum2WString( InfoEventCommandMapping, t ); }
 
 // ========================================================================= //
 // TimeLineEvent
 // ========================================================================= //
-const std::wstring COMMAND_ADD_TIMELINE_WSTRING         = L"AddTimeline";
-const std::wstring COMMAND_DELETE_TIMELINE_WSTRING      = L"DeleteTimeline";
-const std::wstring COMMAND_FORCE_DELETE_TIMELINE_WSTRING= L"ForceDeleteTimeline";
-const std::wstring COMMAND_RENAME_TIMELINE_WSTRING      = L"RenameTimeline";
-const std::wstring COMMAND_SET_DURATION_WSTRING			= L"SetDuration";
-const std::wstring COMMAND_SET_WRAP_PRE_BEHAVIOR_WSTRING	= L"SetWrapPreBehavior";
-const std::wstring COMMAND_SET_WRAP_POST_BEHAVIOR_WSTRING	= L"SetWrapPostBehavior";
-const std::wstring COMMAND_PLAY_WSTRING                 = L"Play";
-const std::wstring COMMAND_STOP_WSTRING                 = L"Stop";
-const std::wstring COMMAND_PLAY_REVERSE_WSTRING         = L"PlayReverse";
-const std::wstring COMMAND_GOTO_WSTRING                 = L"Goto";
-const std::wstring COMMAND_GOTO_AND_PLAY_WSTRING        = L"GotoAndPlay";
-
 const std::wstring TIMELINE_TIME_VALUE_WSTRING          = L"Time";
 const std::wstring TIMELINE_DURATION_VALUE_WSTRING      = L"Duration";
 const std::wstring TIMELINE_NEW_NAME_WSTRING            = L"TimelineNewName";
 const std::wstring TIMELINE_WRAP_METHOD_WSTRING			= L"WrapMethod";
 const std::wstring SCENE_NAME_WSTRING                   = L"SceneName";
 
+// Timeline Command
+
+std::pair< TimeLineEvent::Command, const std::wstring > TimeLineEventCommandMapping[] = 
+{
+    std::make_pair( TimeLineEvent::Command::AddTimeline, L"AddTimeline" )
+    , std::make_pair( TimeLineEvent::Command::DeleteTimeline, L"DeleteTimeline" ) 
+    , std::make_pair( TimeLineEvent::Command::ForceDeleteTimeline, L"ForceDeleteTimeline" ) 
+    , std::make_pair( TimeLineEvent::Command::RenameTimeline, L"RenameTimeline" )
+    , std::make_pair( TimeLineEvent::Command::SetDuration, L"SetDuration" )
+    , std::make_pair( TimeLineEvent::Command::SetWrapPreBehavior, L"SetWrapPreBehavior" ) 
+    , std::make_pair( TimeLineEvent::Command::SetWrapPostBehavior, L"SetWrapPostBehavior" ) 
+    , std::make_pair( TimeLineEvent::Command::Play, L"Play" )
+    , std::make_pair( TimeLineEvent::Command::Stop, L"Stop" )
+    , std::make_pair( TimeLineEvent::Command::PlayReverse, L"PlayReverse" ) 
+    , std::make_pair( TimeLineEvent::Command::Goto, L"Goto" )
+    , std::make_pair( TimeLineEvent::Command::GotoAndPlay, L"GotoAndPlay" )
+    , std::make_pair( TimeLineEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> TimeLineEvent::Command WString2T     ( const std::wstring& s )       { return WString2T( TimeLineEventCommandMapping, s ); }
+template<> const std::wstring& T2WString        ( TimeLineEvent::Command t )    { return Enum2WString( TimeLineEventCommandMapping, t ); }
+
+// Timeline WrapMethod
+
+std::pair< TimelineWrapMethod, const std::wstring > TimelineWrapMethodMapping[] = 
+{
+    std::make_pair( TimelineWrapMethod::TWM_CLAMP, L"Clamp" )
+    , std::make_pair( TimelineWrapMethod::TWM_MIRROR, L"Mirror" ) 
+    , std::make_pair( TimelineWrapMethod::TWM_REPEAT, L"Repeat" ) 
+    , std::make_pair( TimelineWrapMethod::TWM_TOTAL, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> TimelineWrapMethod  WString2T    ( const std::wstring& s )           { return WString2T( TimelineWrapMethodMapping, s ); }
+template<> const std::wstring& T2WString    ( TimelineWrapMethod t )            { return Enum2WString( TimelineWrapMethodMapping, t ); }
+
+
 // ========================================================================= //
 // WidgetEvent
 // ========================================================================= //
-const std::wstring COMMAND_CRAWL_WSTRING                = L"Crawl";
-const std::wstring COMMAND_COUNTER_WSTRING              = L"Counter";
-
 const std::wstring WIDGET_ACTION_WSTRING                = L"Action";
 const std::wstring WIDGET_TIME_VALUE_WSTRING            = L"Time";
+
+std::pair< WidgetEvent::Command, const std::wstring > WidgetEventCommandMapping[] = 
+{
+    std::make_pair( WidgetEvent::Command::Crawl, L"Crawl" )
+    , std::make_pair( WidgetEvent::Command::Counter, L"Counter" ) 
+    , std::make_pair( WidgetEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> WidgetEvent::Command WString2T       ( const std::wstring& s )       { return WString2T( WidgetEventCommandMapping, s ); }
+template<> const std::wstring& T2WString        ( WidgetEvent::Command t )      { return Enum2WString( WidgetEventCommandMapping, t ); }
 
 // ========================================================================= //
 // VideoCardEvent
@@ -200,21 +258,37 @@ const std::wstring VIDEO_CARD_NUMBER_WSTRING            = L"Number";
 const std::wstring VIDEO_CARD_VALUE_WSTRING             = L"Value";
 const std::wstring VIDEO_CARD_REFERENCE_MODE_WSTRING    = L"ReferenceMode";
 
-const std::wstring COMMAND_VIDEO_CARD_ENABLE_OUTPUT_WSTRING         = L"EnableOutput";
-const std::wstring COMMAND_VIDEO_CARD_DISABLE_OUTPUT_WSTRING        = L"DisableOutput";
-const std::wstring COMMAND_VIDEO_CARD_ENABLE_KEY_WSTRING            = L"EnableKey";
-const std::wstring COMMAND_VIDEO_CARD_DISABLE_KEY_WSTRING           = L"DisableKey";
-const std::wstring COMMAND_VIDEO_CARD_REFERENCE_MODE_WSTRING        = L"ReferenceMode";
-const std::wstring COMMAND_VIDEO_CARD_REFERENCE_OFFSET_H_WSTRING    = L"ReferenceOffsetH";
-const std::wstring COMMAND_VIDEO_CARD_REFERENCE_OFFSET_V_WSTRING    = L"ReferenceOffsetV";
-const std::wstring COMMAND_VIDEO_CARD_ENABLE_INPUT_WSTRING          = L"EnableInput";
-const std::wstring COMMAND_VIDEO_CARD_DISABLE_INPUT_WSTRING         = L"DisableInput";
 
-const std::wstring VIDEO_CARD_MODE_FREE_RUN_WSTRING             = L"FreeRun";
-const std::wstring VIDEO_CARD_MODE_ANALOG_BLACK_BURST_WSTRING   = L"AnalogBlackBurst";
-const std::wstring VIDEO_CARD_MODE_ANALOG_TRI_LEVEL_WSTRING     = L"AnalogTriLevel";
-const std::wstring VIDEO_CARD_MODE_DIGITAL_INPUT1_WSTRING       = L"DigitalInput1";
-const std::wstring VIDEO_CARD_MODE_DIGITAL_INPUT2_WSTRING       = L"DigitalInput2";
+std::pair< VideoCardEvent::Command, const std::wstring > VideoCardEventCommandMapping[] = 
+{
+    std::make_pair( VideoCardEvent::Command::EnableOutput, L"EnableOutput" )
+    , std::make_pair( VideoCardEvent::Command::DisableOutput, L"DisableOutput" ) 
+    , std::make_pair( VideoCardEvent::Command::EnableKey, L"EnableKey" ) 
+    , std::make_pair( VideoCardEvent::Command::DisableKey, L"DisableKey" )
+    , std::make_pair( VideoCardEvent::Command::ReferenceMode, L"ReferenceMode" )
+    , std::make_pair( VideoCardEvent::Command::ReferenceOffsetH, L"ReferenceOffsetH" ) 
+    , std::make_pair( VideoCardEvent::Command::ReferenceOffsetV, L"ReferenceOffsetV" ) 
+    , std::make_pair( VideoCardEvent::Command::EnableInput, L"EnableInput" )
+    , std::make_pair( VideoCardEvent::Command::DisableInput, L"DisableInput" )
+    , std::make_pair( VideoCardEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> VideoCardEvent::Command WString2T    ( const std::wstring& s )       { return WString2T( VideoCardEventCommandMapping, s ); }
+template<> const std::wstring& T2WString        ( VideoCardEvent::Command t )   { return Enum2WString( VideoCardEventCommandMapping, t ); }
+
+
+std::pair< VideoCardEvent::VideoReferenceMode, const std::wstring > VideoCardVideoReferenceModeMapping[] = 
+{
+    std::make_pair( VideoCardEvent::VideoReferenceMode::FreeRun, L"FreeRun" )
+    , std::make_pair( VideoCardEvent::VideoReferenceMode::AnalogBlackBurst, L"AnalogBlackBurst" ) 
+    , std::make_pair( VideoCardEvent::VideoReferenceMode::AnalogTriLevel, L"AnalogTriLevel" ) 
+    , std::make_pair( VideoCardEvent::VideoReferenceMode::DigitalInput1, L"DigitalInput1" )
+    , std::make_pair( VideoCardEvent::VideoReferenceMode::DigitalInput2, L"DigitalInput2" )
+    , std::make_pair( VideoCardEvent::VideoReferenceMode::FailMode, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> VideoCardEvent::VideoReferenceMode WString2T ( const std::wstring& s )                   { return WString2T( VideoCardVideoReferenceModeMapping, s ); }
+template<> const std::wstring& T2WString                ( VideoCardEvent::VideoReferenceMode t )    { return Enum2WString( VideoCardVideoReferenceModeMapping, t ); }
 
 
 // ========================================================================= //
@@ -225,12 +299,19 @@ const std::wstring TIMER_MINUTES_WSTRING                = L"Minutes";
 const std::wstring TIMER_SECONDS_WSTRING                = L"Seconds";
 const std::wstring TIMER_MILLISECONDS_WSTRING           = L"Milliseconds";
 
-const std::wstring COMMAND_START_TIMER_WSTRING          = L"Start";
-const std::wstring COMMAND_STOP_TIMER_WSTRING           = L"Stop";
-const std::wstring COMMAND_RESET_TIMER_WSTRING          = L"Reset";
-const std::wstring COMMAND_SET_TIME_WSTRING             = L"SetTime";
-const std::wstring COMMAND_SET_TIME_START_WSTRING       = L"SetTimeStart";
-const std::wstring COMMAND_SET_TIME_STOP_WSTRING        = L"SetTimeStop";
+std::pair< TimerEvent::Command, const std::wstring > TimerEventCommandMapping[] = 
+{
+    std::make_pair( TimerEvent::Command::Start, L"Start" )
+    , std::make_pair( TimerEvent::Command::Stop, L"Stop" ) 
+    , std::make_pair( TimerEvent::Command::Reset, L"Reset" ) 
+    , std::make_pair( TimerEvent::Command::SetTime, L"SetTime" )
+    , std::make_pair( TimerEvent::Command::SetTimeStart, L"SetTimeStart" )
+    , std::make_pair( TimerEvent::Command::SetTimeStop, L"SetTimeStop" ) 
+    , std::make_pair( TimerEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> TimerEvent::Command WString2T    ( const std::wstring& s )       { return WString2T( TimerEventCommandMapping, s ); }
+template<> const std::wstring& T2WString    ( TimerEvent::Command t )       { return Enum2WString( TimerEventCommandMapping, t ); }
 
 // ========================================================================= //
 // RenderingModeEvent
@@ -239,8 +320,15 @@ const std::wstring REQUESTED_FPS_WSTRING                = L"FPS";
 const std::wstring NUM_FRAMES_WSTRING                   = L"NumberFrames";
 const std::wstring RENDERING_FILE_PATH                  = L"FilePath";
 
-const std::wstring COMMAND_SCREENSHOT_WSTRING           = L"ScreenShot";
-const std::wstring COMMAND_RENDER_OFFSCREEN_WSTRING     = L"RenderOffscreen";
+std::pair< RenderingModeEvent::Command, const std::wstring > RenderingModeEventCommandMapping[] = 
+{
+    std::make_pair( RenderingModeEvent::Command::ScreenShot, L"ScreenShot" )
+    , std::make_pair( RenderingModeEvent::Command::RenderOffscreen, L"RenderOffscreen" ) 
+    , std::make_pair( RenderingModeEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> RenderingModeEvent::Command WString2T    ( const std::wstring& s )               { return WString2T( RenderingModeEventCommandMapping, s ); }
+template<> const std::wstring& T2WString            ( RenderingModeEvent::Command t )       { return Enum2WString( RenderingModeEventCommandMapping, t ); }
 
 // ========================================================================= //
 // HightmapEvent
@@ -256,11 +344,23 @@ const std::wstring COMMAND_HM_ANIM_WSTRING      = L"Anim";
 const std::wstring COMMAND_HM_ANIM2_WSTRING     = L"Anim2";
 const std::wstring COMMAND_HM_SET3_WSTRING      = L"Set3";
 
+std::pair< HightmapEvent::Command, const std::wstring > HightmapEventCommandMapping[] = 
+{
+    std::make_pair( HightmapEvent::Command::Enable, L"Enable" )
+    , std::make_pair( HightmapEvent::Command::Start, L"Start" ) 
+    , std::make_pair( HightmapEvent::Command::Reset, L"Reset" ) 
+    , std::make_pair( HightmapEvent::Command::Show, L"Show" )
+    , std::make_pair( HightmapEvent::Command::Zoom, L"Zoom" )
+    , std::make_pair( HightmapEvent::Command::ZoomOut, L"ZoomOut" ) 
+    , std::make_pair( HightmapEvent::Command::Set, L"Set" ) 
+    , std::make_pair( HightmapEvent::Command::Anim, L"Anim" )
+    , std::make_pair( HightmapEvent::Command::Anim2, L"Anim2" )
+    , std::make_pair( HightmapEvent::Command::Set3, L"Set3" ) 
+    , std::make_pair( HightmapEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
+};
 
-//Timeline
-const std::wstring TIMELINE_WRAP_METHOD_CLAMP	= L"Clamp";
-const std::wstring TIMELINE_WRAP_METHOD_MIRROR	= L"Mirror";
-const std::wstring TIMELINE_WRAP_METHOD_REPEAT	= L"Repeat";
+template<> HightmapEvent::Command WString2T     ( const std::wstring& s )       { return WString2T( HightmapEventCommandMapping, s ); }
+template<> const std::wstring& T2WString        ( HightmapEvent::Command t )    { return Enum2WString( HightmapEventCommandMapping, t ); }
 
 }
 
@@ -672,10 +772,6 @@ const std::string &     ParamKeyEvent::GetName           () const
 EventType           ParamKeyEvent::GetEventType         () const
 { return this->m_sEventType; }
 
-
-
-
-
 //******************* NodeStructureEvent *************
 
 // *************************************
@@ -686,7 +782,7 @@ void                NodeStructureEvent::Serialize            ( ISerializer& ser 
     ser.SetAttribute( SerializationHelper::SCENE_NAME_WSTRING, toWString( SceneName ) );
     ser.SetAttribute( SerializationHelper::NODE_NAME_WSTRING, toWString( NodeName ) );
     ser.SetAttribute( SerializationHelper::NEW_NODE_NAME_WSTRING, toWString( NewNodeName ) );
-    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, CommandToWString( SceneCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( SceneCommand ) );
     ser.SetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING, toWString( TimelineName ) );
 }
 
@@ -701,7 +797,7 @@ IEventPtr                NodeStructureEvent::Create          ( IDeserializer& de
         newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
         newEvent->NewNodeName       = toString( deser.GetAttribute( SerializationHelper::NEW_NODE_NAME_WSTRING ) );
         newEvent->TimelineName      = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
-        newEvent->SceneCommand      = WStringToCommand( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->SceneCommand      = SerializationHelper::WString2T<NodeStructureEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
         
         return newEvent;
     }
@@ -729,36 +825,6 @@ const std::string&  NodeStructureEvent::GetName() const
 EventType           NodeStructureEvent::GetEventType() const
 {   return this->m_sEventType; }
 
-// *************************************
-//
-std::wstring NodeStructureEvent::CommandToWString    ( Command cmd )
-{
-    if( cmd == Command::AddNode )
-        return SerializationHelper::COMMAND_ADD_NODE_WSTRING;
-    else if( cmd == Command::RemoveNode )
-        return SerializationHelper::COMMAND_REMOVE_NODE_WSTRING;
-    else if( cmd == Command::SetNodeVisible )
-        return SerializationHelper::COMMAND_SET_NODE_VISIBLE_WSTRING;
-    else if( cmd == Command::SetNodeInvisible )
-        return SerializationHelper::COMMAND_SET_NODE_INVISIBLE_WSTRING;
-    else
-        return SerializationHelper::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
-}
-// *************************************
-//
-NodeStructureEvent::Command NodeStructureEvent::WStringToCommand    ( const std::wstring& string )
-{
-    if( string == SerializationHelper::COMMAND_ADD_NODE_WSTRING )
-        return Command::AddNode;
-    else if( string == SerializationHelper::COMMAND_REMOVE_NODE_WSTRING )
-        return Command::RemoveNode;
-    else if( string == SerializationHelper::COMMAND_SET_NODE_VISIBLE_WSTRING )
-        return Command::SetNodeVisible;
-    else if( string == SerializationHelper::COMMAND_SET_NODE_INVISIBLE_WSTRING )
-        return Command::SetNodeInvisible;
-    else
-        return Command::Fail;
-}
 
 //******************* PluginStructureEvent *************
 
@@ -769,7 +835,7 @@ void                PluginStructureEvent::Serialize            ( ISerializer& se
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
     ser.SetAttribute( SerializationHelper::NODE_NAME_WSTRING, toWString( NodeName ) );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_WSTRING, toWString( SceneName ) );
-    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, CommandToWString( PluginCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( PluginCommand ) );
     ser.SetAttribute( SerializationHelper::PLUGIN_NAME_WSTRING, toWString( PluginName ) );
     ser.SetAttribute( SerializationHelper::PLUGIN_ATTACH_INDEX_WSTRING, toWString( AttachIndex ) );
     ser.SetAttribute( SerializationHelper::PLUGIN_UID_WSTRING, toWString( PluginUID ) );
@@ -785,7 +851,7 @@ IEventPtr                PluginStructureEvent::Create          ( IDeserializer& 
         newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
         newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
         newEvent->PluginName        = toString( deser.GetAttribute( SerializationHelper::PLUGIN_NAME_WSTRING ) );
-        newEvent->PluginCommand     = WStringToCommand( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->PluginCommand     = SerializationHelper::WString2T<PluginStructureEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
         newEvent->AttachIndex       = std::stoul( deser.GetAttribute( SerializationHelper::PLUGIN_ATTACH_INDEX_WSTRING ) );
         newEvent->PluginUID         = toString( deser.GetAttribute( SerializationHelper::PLUGIN_UID_WSTRING ) );
 
@@ -815,37 +881,6 @@ const std::string&  PluginStructureEvent::GetName() const
 EventType           PluginStructureEvent::GetEventType() const
 {   return this->m_sEventType; }
 
-// *************************************
-//
-std::wstring PluginStructureEvent::CommandToWString    ( Command cmd )
-{
-    if( cmd == Command::AttachPlugin )
-        return SerializationHelper::COMMAND_ATTACH_PLUGIN_WSTRING;
-    else if( cmd == Command::DetachPlugin )
-        return SerializationHelper::COMMAND_DETACH_PLUGIN_WSTRING;
-    else if( cmd == Command::AddPlugin )
-        return SerializationHelper::COMMAND_ADD_PLUGIN_WSTRING;
-    else if( cmd == Command::RemovePlugin )
-        return SerializationHelper::COMMAND_REMOVE_PLUGIN_WSTRING;
-    else
-        return SerializationHelper::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
-}
-// *************************************
-//
-PluginStructureEvent::Command PluginStructureEvent::WStringToCommand    ( const std::wstring& string )
-{
-    if( string == SerializationHelper::COMMAND_ATTACH_PLUGIN_WSTRING)
-        return Command::AttachPlugin;
-    else if( string == SerializationHelper::COMMAND_DETACH_PLUGIN_WSTRING )
-        return Command::DetachPlugin;
-    else if( string == SerializationHelper::COMMAND_ADD_PLUGIN_WSTRING )
-        return Command::AddPlugin;
-    else if( string == SerializationHelper::COMMAND_REMOVE_PLUGIN_WSTRING )
-        return Command::RemovePlugin;
-    else
-        return Command::Fail;
-}
-
 
 //******************* ProjectEvent *************
 
@@ -855,7 +890,7 @@ void                ProjectEvent::Serialize            ( ISerializer& ser ) cons
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
     ser.SetAttribute( SerializationHelper::REQUEST_WSTRING, toWString( Request ) );
-    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, CommandToWString( ProjectCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( ProjectCommand ) );
 }
 
 // *************************************
@@ -866,7 +901,7 @@ IEventPtr                ProjectEvent::Create          ( IDeserializer& deser )
     {
         ProjectEventPtr newEvent            = std::make_shared<ProjectEvent>();
         newEvent->Request                   = toString( deser.GetAttribute( SerializationHelper::REQUEST_WSTRING ) );
-        newEvent->ProjectCommand            = WStringToCommand( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->ProjectCommand            = SerializationHelper::WString2T<ProjectEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
         
         return newEvent;
     }
@@ -893,58 +928,6 @@ const std::string&  ProjectEvent::GetName() const
 //
 EventType           ProjectEvent::GetEventType() const
 {   return this->m_sEventType; }
-
-// *************************************
-//
-std::wstring ProjectEvent::CommandToWString    ( Command cmd )
-{
-    if( cmd == Command::NewProject )
-        return SerializationHelper::COMMAND_NEW_PROJECT_WSTRING;
-    else if( cmd == Command::SetCurrentProject )
-        return SerializationHelper::COMMAND_SET_CURRENT_PROJECT_WSTRING;
-    else if( cmd == Command::ListAssetsPaths )
-        return SerializationHelper::COMMAND_LIST_ASSETS_PATHS_WSTRING;
-    else if( cmd == Command::ListCategoriesNames )
-        return SerializationHelper::COMMAND_LIST_CATEGORIES_NAMES_WSTRING;
-    else if( cmd == Command::ListProjectNames )
-        return SerializationHelper::COMMAND_LIST_PROJECTS_NAMES_WSTRING;
-    else if( cmd == Command::ListProjects )
-        return SerializationHelper::COMMAND_LIST_PROJECTS_WSTRING;
-    else if( cmd == Command::ListScenes )
-        return SerializationHelper::COMMAND_LIST_SCENES_WSTRING;
-    else if( cmd == Command::SaveScene )
-        return SerializationHelper::COMMAND_SAVE_SCENE_WSTRING;
-    else if( cmd == Command::LoadProject )
-        return SerializationHelper::COMMAND_LOAD_PROJECT_WSTRING;
-    else
-        return SerializationHelper::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
-}
-// *************************************
-//
-ProjectEvent::Command ProjectEvent::WStringToCommand    ( const std::wstring& string )
-{
-    if( string == SerializationHelper::COMMAND_NEW_PROJECT_WSTRING )
-        return Command::NewProject;
-    else if( string == SerializationHelper::COMMAND_SET_CURRENT_PROJECT_WSTRING )
-        return Command::SetCurrentProject;
-    else if( string == SerializationHelper::COMMAND_LIST_ASSETS_PATHS_WSTRING)
-        return Command::ListAssetsPaths;
-    else if( string == SerializationHelper::COMMAND_LIST_CATEGORIES_NAMES_WSTRING )
-        return Command::ListCategoriesNames;
-    else if( string == SerializationHelper::COMMAND_LIST_PROJECTS_NAMES_WSTRING )
-        return Command::ListProjectNames;
-    else if( string == SerializationHelper::COMMAND_LIST_PROJECTS_WSTRING )
-        return Command::ListProjects;
-    else if( string == SerializationHelper::COMMAND_LIST_SCENES_WSTRING )
-        return Command::ListScenes;
-    else if( string == SerializationHelper::COMMAND_SAVE_SCENE_WSTRING )
-        return Command::SaveScene;
-    else if( string == SerializationHelper::COMMAND_LOAD_PROJECT_WSTRING )
-        return Command::LoadProject;
-    else
-        return Command::Fail;
-}
-
 
 
 //******************* ResponseEvent *************
@@ -1001,7 +984,7 @@ EventType           ResponseEvent::GetEventType() const
 void                InfoEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
-    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, CommandToWString( InfoRequest ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( InfoRequest ) );
     ser.SetAttribute( SerializationHelper::NODE_NAME_WSTRING, toWString( NodeName ) );
 }
 
@@ -1011,9 +994,9 @@ IEventPtr                InfoEvent::Create          ( IDeserializer& deser )
 {
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
-        InfoEventPtr newEvent    = std::make_shared<InfoEvent>();
-        newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
-        newEvent->InfoRequest       = WStringToCommand( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        InfoEventPtr newEvent   = std::make_shared<InfoEvent>();
+        newEvent->NodeName      = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
+        newEvent->InfoRequest   = SerializationHelper::WString2T<InfoEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
         
         return newEvent;
     }
@@ -1041,41 +1024,6 @@ const std::string&  InfoEvent::GetName() const
 EventType           InfoEvent::GetEventType() const
 {   return this->m_sEventType; }
 
-// *************************************
-//
-std::wstring InfoEvent::CommandToWString    ( Command cmd )
-{
-    if( cmd == Command::NodeInfo )
-        return SerializationHelper::COMMAND_NODE_INFO_WSTRING;
-    else if( cmd == Command::Performance )
-        return SerializationHelper::COMMAND_PERFORMANCE_WSTRING;
-    else if( cmd == Command::Timelines )
-        return SerializationHelper::COMMAND_TIMELINES_WSTRING;
-    else if( cmd == Command::TreeStructure )
-        return SerializationHelper::COMMAND_TREE_STRUCTURE_WSTRING;
-    else if( cmd == Command::Videocards )
-        return SerializationHelper::COMMAND_VIDEO_CARDS_WSTRING;
-    else
-        return SerializationHelper::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
-}
-
-// *************************************
-//
-InfoEvent::Command InfoEvent::WStringToCommand    ( const std::wstring& string )
-{
-    if( string == SerializationHelper::COMMAND_NODE_INFO_WSTRING )
-        return Command::NodeInfo;
-    else if( string == SerializationHelper::COMMAND_PERFORMANCE_WSTRING )
-        return Command::Performance;
-    else if( string == SerializationHelper::COMMAND_TIMELINES_WSTRING)
-        return Command::Timelines;
-    else if( string == SerializationHelper::COMMAND_TREE_STRUCTURE_WSTRING )
-        return Command::TreeStructure;
-    else if( string == SerializationHelper::COMMAND_VIDEO_CARDS_WSTRING )
-        return Command::Videocards;
-    else
-        return Command::Fail;
-}
 
 //******************* TimeLineEvent *************
 
@@ -1084,13 +1032,13 @@ InfoEvent::Command InfoEvent::WStringToCommand    ( const std::wstring& string )
 void                TimeLineEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
-    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, CommandToWString( TimelineCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( TimelineCommand ) );
     ser.SetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING, toWString( TimelineName ) );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_WSTRING, toWString( SceneName ) );
     ser.SetAttribute( SerializationHelper::TIMELINE_NEW_NAME_WSTRING, toWString( NewTimelineName ) );
     ser.SetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING, toWString( Time ) );
     ser.SetAttribute( SerializationHelper::TIMELINE_DURATION_VALUE_WSTRING, toWString( Duration ) );
-    ser.SetAttribute( SerializationHelper::TIMELINE_WRAP_METHOD_WSTRING, WrapMethodToWString( WrapMethod ) );
+    ser.SetAttribute( SerializationHelper::TIMELINE_WRAP_METHOD_WSTRING, SerializationHelper::T2WString( WrapMethod ) );
 }
 
 // *************************************
@@ -1101,10 +1049,10 @@ IEventPtr                TimeLineEvent::Create          ( IDeserializer& deser )
     {
         TimeLineEventPtr newEvent   = std::make_shared<TimeLineEvent>();
         newEvent->Time              = stof( deser.GetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING ) );
-        newEvent->TimelineCommand   = WStringToCommand( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->TimelineCommand   = SerializationHelper::WString2T<TimeLineEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
         newEvent->TimelineName      = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
         newEvent->Duration          = stof( deser.GetAttribute( SerializationHelper::TIMELINE_DURATION_VALUE_WSTRING ) );
-        newEvent->WrapMethod= WStringToWrapMethod( deser.GetAttribute( SerializationHelper::TIMELINE_WRAP_METHOD_WSTRING ) );
+        newEvent->WrapMethod        = SerializationHelper::WString2T<TimelineWrapMethod>( deser.GetAttribute( SerializationHelper::TIMELINE_WRAP_METHOD_WSTRING ) );
         newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
         newEvent->NewTimelineName   = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NEW_NAME_WSTRING ) );
 
@@ -1134,97 +1082,6 @@ const std::string&  TimeLineEvent::GetName() const
 EventType           TimeLineEvent::GetEventType() const
 {   return this->m_sEventType; }
 
-// *************************************
-//
-std::wstring TimeLineEvent::CommandToWString    ( Command cmd )
-{
-	if( cmd == Command::AddTimeline )
-        return SerializationHelper::COMMAND_ADD_TIMELINE_WSTRING;
-	else if( cmd == Command::DeleteTimeline )
-        return SerializationHelper::COMMAND_DELETE_TIMELINE_WSTRING;
-	else if( cmd == Command::ForceDeleteTimeline )
-        return SerializationHelper::COMMAND_FORCE_DELETE_TIMELINE_WSTRING;
-	else if( cmd == Command::RenameTimeline )
-        return SerializationHelper::COMMAND_RENAME_TIMELINE_WSTRING;
-	else if( cmd == Command::SetDuration )
-        return SerializationHelper::COMMAND_SET_DURATION_WSTRING;
-	else if( cmd == Command::SetWrapPreBehavior )
-        return SerializationHelper::COMMAND_SET_WRAP_PRE_BEHAVIOR_WSTRING;
-	else if( cmd == Command::SetWrapPostBehavior )
-        return SerializationHelper::COMMAND_SET_WRAP_POST_BEHAVIOR_WSTRING;
-    else if( cmd == Command::Goto )
-        return SerializationHelper::COMMAND_GOTO_WSTRING;
-    else if( cmd == Command::GotoAndPlay )
-        return SerializationHelper::COMMAND_GOTO_AND_PLAY_WSTRING;
-    else if( cmd == Command::Play )
-        return SerializationHelper::COMMAND_PLAY_WSTRING;
-    else if( cmd == Command::PlayReverse )
-        return SerializationHelper::COMMAND_PLAY_REVERSE_WSTRING;
-    else if( cmd == Command::Stop )
-        return SerializationHelper::COMMAND_STOP_WSTRING;
-    else
-        return SerializationHelper::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
-}
-
-// *************************************
-//
-TimeLineEvent::Command TimeLineEvent::WStringToCommand    ( const std::wstring& string )
-{
-	if( string == SerializationHelper::COMMAND_ADD_TIMELINE_WSTRING )
-        return Command::AddTimeline;
-	else if( string == SerializationHelper::COMMAND_DELETE_TIMELINE_WSTRING )
-        return Command::DeleteTimeline;
-	else if( string == SerializationHelper::COMMAND_FORCE_DELETE_TIMELINE_WSTRING )
-        return Command::ForceDeleteTimeline;
-	else if( string == SerializationHelper::COMMAND_RENAME_TIMELINE_WSTRING )
-        return Command::RenameTimeline;
-	else if( string == SerializationHelper::COMMAND_SET_DURATION_WSTRING )
-        return Command::SetDuration;
-	else if( string == SerializationHelper::COMMAND_SET_WRAP_PRE_BEHAVIOR_WSTRING )
-		return Command::SetWrapPreBehavior;
-	else if( string == SerializationHelper::COMMAND_SET_WRAP_POST_BEHAVIOR_WSTRING )
-		return Command::SetWrapPostBehavior;
-    else if( string == SerializationHelper::COMMAND_GOTO_WSTRING )
-        return Command::Goto;
-    else if( string == SerializationHelper::COMMAND_GOTO_AND_PLAY_WSTRING )
-        return Command::GotoAndPlay;
-    else if( string == SerializationHelper::COMMAND_PLAY_WSTRING)
-        return Command::Play;
-    else if( string == SerializationHelper::COMMAND_PLAY_REVERSE_WSTRING )
-        return Command::PlayReverse;
-    else if( string == SerializationHelper::COMMAND_STOP_WSTRING )
-        return Command::Stop;
-    else
-        return Command::Fail;
-}
-
-// *************************************
-//
-std::wstring TimeLineEvent::WrapMethodToWString				( TimelineWrapMethod method )
-{
-	if( method == TimelineWrapMethod::TWM_CLAMP )
-        return SerializationHelper::TIMELINE_WRAP_METHOD_CLAMP;
-	else if( method == TimelineWrapMethod::TWM_MIRROR )
-        return SerializationHelper::TIMELINE_WRAP_METHOD_MIRROR;
-	else if( method == TimelineWrapMethod::TWM_REPEAT )
-        return SerializationHelper::TIMELINE_WRAP_METHOD_REPEAT;
-    else
-        return SerializationHelper::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
-}
-
-// *************************************
-//
-TimelineWrapMethod	TimeLineEvent::WStringToWrapMethod		( const std::wstring& string )
-{
-	if( string == SerializationHelper::TIMELINE_WRAP_METHOD_CLAMP )
-        return TimelineWrapMethod::TWM_CLAMP;
-	else if( string == SerializationHelper::TIMELINE_WRAP_METHOD_MIRROR )
-        return TimelineWrapMethod::TWM_MIRROR;
-	else if( string == SerializationHelper::TIMELINE_WRAP_METHOD_REPEAT )
-        return TimelineWrapMethod::TWM_REPEAT;
-	else
-        return TimelineWrapMethod::TWM_CLAMP;
-}
 
 //******************* TimerEvent *************
 
@@ -1233,7 +1090,7 @@ TimelineWrapMethod	TimeLineEvent::WStringToWrapMethod		( const std::wstring& str
 void                TimerEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
-    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, CommandToWString( TimerCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( TimerCommand ) );
     ser.SetAttribute( SerializationHelper::NODE_NAME_WSTRING, toWString( NodeName ) );
     ser.SetAttribute( SerializationHelper::TIMER_HOURS_WSTRING, toWString( Hours ) );
     ser.SetAttribute( SerializationHelper::TIMER_MINUTES_WSTRING, toWString( Minutes ) );
@@ -1248,7 +1105,7 @@ IEventPtr                TimerEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         TimerEventPtr newEvent      = std::make_shared<TimerEvent>();
-        newEvent->TimerCommand      = WStringToCommand( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->TimerCommand      = SerializationHelper::WString2T<TimerEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
         newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
         newEvent->Hours             = stof( deser.GetAttribute( SerializationHelper::TIMER_HOURS_WSTRING ) );
         newEvent->Minutes           = stof( deser.GetAttribute( SerializationHelper::TIMER_MINUTES_WSTRING ) );
@@ -1281,43 +1138,6 @@ const std::string&  TimerEvent::GetName() const
 EventType           TimerEvent::GetEventType() const
 {   return this->m_sEventType; }
 
-// *************************************
-//
-std::wstring TimerEvent::CommandToWString    ( Command cmd )
-{
-    if( cmd == Command::Start )
-        return SerializationHelper::COMMAND_START_TIMER_WSTRING;
-    if( cmd == Command::Stop )
-        return SerializationHelper::COMMAND_STOP_TIMER_WSTRING;
-    if( cmd == Command::Reset )
-        return SerializationHelper::COMMAND_RESET_TIMER_WSTRING;
-    if( cmd == Command::SetTime )
-        return SerializationHelper::COMMAND_SET_TIME_WSTRING;
-    if( cmd == Command::SetTimeStart )
-        return SerializationHelper::COMMAND_SET_TIME_START_WSTRING;
-    if( cmd == Command::SetTimeStop )
-        return SerializationHelper::COMMAND_SET_TIME_STOP_WSTRING;
-    return SerializationHelper::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
-}
-
-// *************************************
-//
-TimerEvent::Command TimerEvent::WStringToCommand    ( const std::wstring& string )
-{
-    if( string == SerializationHelper::COMMAND_START_TIMER_WSTRING )
-        return Command::Start;
-    else if( string == SerializationHelper::COMMAND_STOP_TIMER_WSTRING )
-        return Command::Stop;
-    else if( string == SerializationHelper::COMMAND_RESET_TIMER_WSTRING )
-        return Command::Reset;
-    else if( string == SerializationHelper::COMMAND_SET_TIME_WSTRING )
-        return Command::SetTime;
-    else if( string == SerializationHelper::COMMAND_SET_TIME_START_WSTRING )
-        return Command::SetTimeStart;
-    else if( string == SerializationHelper::COMMAND_SET_TIME_STOP_WSTRING )
-        return Command::SetTimeStop;
-    return Command::Fail;
-}
 
 //******************* WidgetEvent *************
 
@@ -1326,7 +1146,7 @@ TimerEvent::Command TimerEvent::WStringToCommand    ( const std::wstring& string
 void                WidgetEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
-    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, CommandToWString( WidgetCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( WidgetCommand ) );
     ser.SetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING, toWString( Time ) );
     ser.SetAttribute( SerializationHelper::NODE_NAME_WSTRING, toWString( NodeName ) );
     ser.SetAttribute( SerializationHelper::WIDGET_ACTION_WSTRING, toWString( Action ) );
@@ -1340,7 +1160,7 @@ IEventPtr                WidgetEvent::Create          ( IDeserializer& deser )
     {
         WidgetEventPtr newEvent     = std::make_shared<WidgetEvent>();
         newEvent->Time              = stof( deser.GetAttribute( SerializationHelper::WIDGET_TIME_VALUE_WSTRING ) );
-        newEvent->WidgetCommand     = WStringToCommand( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->WidgetCommand     = SerializationHelper::WString2T<WidgetEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
         newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
         newEvent->Action            = toString( deser.GetAttribute( SerializationHelper::WIDGET_ACTION_WSTRING ) );
 
@@ -1370,29 +1190,6 @@ const std::string&  WidgetEvent::GetName() const
 EventType           WidgetEvent::GetEventType() const
 {   return this->m_sEventType; }
 
-// *************************************
-//
-std::wstring WidgetEvent::CommandToWString    ( Command cmd )
-{
-    if( cmd == Command::Crawl )
-        return SerializationHelper::COMMAND_CRAWL_WSTRING;
-    else if( cmd == Command::Counter )
-        return SerializationHelper::COMMAND_COUNTER_WSTRING;
-    else
-        return SerializationHelper::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
-}
-
-// *************************************
-//
-WidgetEvent::Command WidgetEvent::WStringToCommand    ( const std::wstring& string )
-{
-    if( string == SerializationHelper::COMMAND_CRAWL_WSTRING )
-        return Command::Crawl;
-    else if( string == SerializationHelper::COMMAND_CRAWL_WSTRING )
-        return Command::Counter;
-    else
-        return Command::Fail;
-}
 
 //******************* VideoCardEvent *************
 
@@ -1401,10 +1198,10 @@ WidgetEvent::Command WidgetEvent::WStringToCommand    ( const std::wstring& stri
 void                VideoCardEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
-    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, CommandToWString( VideoCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( VideoCommand ) );
     ser.SetAttribute( SerializationHelper::VIDEO_CARD_NUMBER_WSTRING, toWString( Number ) );
     ser.SetAttribute( SerializationHelper::VIDEO_CARD_VALUE_WSTRING, toWString( Value ) );
-    ser.SetAttribute( SerializationHelper::VIDEO_CARD_REFERENCE_MODE_WSTRING, ReferenceModeToWString( Mode ) );
+    ser.SetAttribute( SerializationHelper::VIDEO_CARD_REFERENCE_MODE_WSTRING, SerializationHelper::T2WString( Mode ) );
 }
 
 // *************************************
@@ -1414,8 +1211,8 @@ IEventPtr                VideoCardEvent::Create          ( IDeserializer& deser 
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         VideoCardEventPtr newEvent      = std::make_shared<VideoCardEvent>();
-        newEvent->VideoCommand          = WStringToCommand( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
-        newEvent->Mode                  = WStringToReferenceMode( deser.GetAttribute( SerializationHelper::VIDEO_CARD_REFERENCE_MODE_WSTRING ) );
+        newEvent->VideoCommand          = SerializationHelper::WString2T<VideoCardEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->Mode                  = SerializationHelper::WString2T<VideoCardEvent::VideoReferenceMode>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_REFERENCE_MODE_WSTRING ) );
         
         std::wstring valueStr           = deser.GetAttribute( SerializationHelper::VIDEO_CARD_VALUE_WSTRING );
         if( valueStr != SerializationHelper::EMPTY_WSTRING )
@@ -1455,93 +1252,6 @@ const std::string&  VideoCardEvent::GetName() const
 EventType           VideoCardEvent::GetEventType() const
 {   return this->m_sEventType; }
 
-// *************************************
-//
-std::wstring VideoCardEvent::CommandToWString    ( Command cmd )
-{
-    if( cmd == Command::DisableInput )
-        return SerializationHelper::COMMAND_VIDEO_CARD_DISABLE_INPUT_WSTRING;
-    else if( cmd == Command::DisableKey )
-        return SerializationHelper::COMMAND_VIDEO_CARD_DISABLE_KEY_WSTRING;
-    else if( cmd == Command::DisableOutput )
-        return SerializationHelper::COMMAND_VIDEO_CARD_DISABLE_OUTPUT_WSTRING;
-    else if( cmd == Command::EnableInput )
-        return SerializationHelper::COMMAND_VIDEO_CARD_ENABLE_INPUT_WSTRING;
-    else if( cmd == Command::EnableKey )
-        return SerializationHelper::COMMAND_VIDEO_CARD_ENABLE_KEY_WSTRING;
-    else if( cmd == Command::EnableOutput )
-        return SerializationHelper::COMMAND_VIDEO_CARD_ENABLE_OUTPUT_WSTRING;
-    else if( cmd == Command::ReferenceMode )
-        return SerializationHelper::COMMAND_VIDEO_CARD_REFERENCE_MODE_WSTRING;
-    else if( cmd == Command::ReferenceOffsetH )
-        return SerializationHelper::COMMAND_VIDEO_CARD_REFERENCE_OFFSET_H_WSTRING;
-    else if( cmd == Command::ReferenceOffsetV )
-        return SerializationHelper::COMMAND_VIDEO_CARD_REFERENCE_OFFSET_V_WSTRING;
-    else
-        return SerializationHelper::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
-}
-
-// *************************************
-//
-VideoCardEvent::Command VideoCardEvent::WStringToCommand    ( const std::wstring& string )
-{
-    if( string == SerializationHelper::COMMAND_VIDEO_CARD_DISABLE_INPUT_WSTRING )
-        return Command::DisableInput;
-    else if( string == SerializationHelper::COMMAND_VIDEO_CARD_DISABLE_KEY_WSTRING )
-        return Command::DisableKey;
-    else if( string == SerializationHelper::COMMAND_VIDEO_CARD_DISABLE_OUTPUT_WSTRING )
-        return Command::DisableOutput;
-    else if( string == SerializationHelper::COMMAND_VIDEO_CARD_ENABLE_INPUT_WSTRING )
-        return Command::EnableInput;
-    else if( string == SerializationHelper::COMMAND_VIDEO_CARD_ENABLE_KEY_WSTRING )
-        return Command::EnableKey;
-    else if( string == SerializationHelper::COMMAND_VIDEO_CARD_ENABLE_OUTPUT_WSTRING )
-        return Command::EnableOutput;
-    else if( string == SerializationHelper::COMMAND_VIDEO_CARD_REFERENCE_MODE_WSTRING )
-        return Command::ReferenceMode;
-    else if( string == SerializationHelper::COMMAND_VIDEO_CARD_REFERENCE_OFFSET_H_WSTRING )
-        return Command::ReferenceOffsetH;
-    else if( string == SerializationHelper::COMMAND_VIDEO_CARD_REFERENCE_OFFSET_V_WSTRING )
-        return Command::ReferenceOffsetV;
-    else
-        return Command::Fail;
-}
-
-// ***********************
-//
-std::wstring VideoCardEvent::ReferenceModeToWString      ( VideoReferenceMode mode )
-{
-    if( mode == VideoReferenceMode::AnalogBlackBurst )
-        return SerializationHelper::VIDEO_CARD_MODE_ANALOG_BLACK_BURST_WSTRING;
-    else if( mode == VideoReferenceMode::AnalogTriLevel )
-        return SerializationHelper::VIDEO_CARD_MODE_ANALOG_TRI_LEVEL_WSTRING;
-    else if( mode == VideoReferenceMode::DigitalInput1 )
-        return SerializationHelper::VIDEO_CARD_MODE_DIGITAL_INPUT1_WSTRING;
-    else if( mode == VideoReferenceMode::DigitalInput2 )
-        return SerializationHelper::VIDEO_CARD_MODE_DIGITAL_INPUT2_WSTRING;
-    else if( mode == VideoReferenceMode::FreeRun )
-        return SerializationHelper::VIDEO_CARD_MODE_FREE_RUN_WSTRING;
-    else
-        return SerializationHelper::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
-}
-
-// ***********************
-//
-VideoCardEvent::VideoReferenceMode VideoCardEvent::WStringToReferenceMode      ( const std::wstring& string )
-{
-    if( string == SerializationHelper::VIDEO_CARD_MODE_ANALOG_BLACK_BURST_WSTRING )
-        return VideoReferenceMode::AnalogBlackBurst;
-    else if( string == SerializationHelper::VIDEO_CARD_MODE_ANALOG_TRI_LEVEL_WSTRING )
-        return VideoReferenceMode::AnalogTriLevel;
-    else if( string == SerializationHelper::VIDEO_CARD_MODE_DIGITAL_INPUT1_WSTRING )
-        return VideoReferenceMode::DigitalInput1;
-    else if( string == SerializationHelper::VIDEO_CARD_MODE_DIGITAL_INPUT2_WSTRING )
-        return VideoReferenceMode::DigitalInput2;
-    else if( string == SerializationHelper::VIDEO_CARD_MODE_FREE_RUN_WSTRING )
-        return VideoReferenceMode::FreeRun;
-    else return VideoReferenceMode::FailMode;
-}
-
 
 //******************* RenderingModeEvent *************
 
@@ -1553,7 +1263,7 @@ void                RenderingModeEvent::Serialize            ( ISerializer& ser 
     ser.SetAttribute( SerializationHelper::REQUESTED_FPS_WSTRING, toWString( FPS ) );
     ser.SetAttribute( SerializationHelper::RENDERING_FILE_PATH, toWString( FilePath ) );
     ser.SetAttribute( SerializationHelper::NUM_FRAMES_WSTRING, toWString( NumFrames ) );
-    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, CommandToWString( RenderingCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( RenderingCommand ) );
 }
 
 // *************************************
@@ -1562,11 +1272,11 @@ IEventPtr                RenderingModeEvent::Create          ( IDeserializer& de
 {
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
-        RenderingModeEventPtr newEvent     = std::make_shared<RenderingModeEvent>();
+        RenderingModeEventPtr newEvent  = std::make_shared<RenderingModeEvent>();
         newEvent->FilePath              = toString( deser.GetAttribute( SerializationHelper::RENDERING_FILE_PATH ) );
         newEvent->FPS                   = std::stof( toString( deser.GetAttribute( SerializationHelper::REQUESTED_FPS_WSTRING ) ) );
         newEvent->NumFrames             = std::stoi( toString( deser.GetAttribute( SerializationHelper::NUM_FRAMES_WSTRING ) ) );
-        newEvent->RenderingCommand      = WStringToCommand( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->RenderingCommand      = SerializationHelper::WString2T<RenderingModeEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
 
         return newEvent;
     }
@@ -1595,30 +1305,6 @@ EventType           RenderingModeEvent::GetEventType() const
 {   return this->m_sEventType; }
 
 
-// *************************************
-//
-std::wstring RenderingModeEvent::CommandToWString    ( Command cmd )
-{
-    if( cmd == Command::RenderOffscreen )
-        return SerializationHelper::COMMAND_RENDER_OFFSCREEN_WSTRING;
-    else if( cmd == Command::ScreenShot )
-        return SerializationHelper::COMMAND_SCREENSHOT_WSTRING;
-    else
-        return SerializationHelper::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
-}
-
-// *************************************
-//
-RenderingModeEvent::Command RenderingModeEvent::WStringToCommand    ( const std::wstring& string )
-{
-    if( string == SerializationHelper::COMMAND_RENDER_OFFSCREEN_WSTRING )
-        return Command::RenderOffscreen;
-    else if( string == SerializationHelper::COMMAND_SCREENSHOT_WSTRING )
-        return Command::ScreenShot;
-    else
-        return Command::Fail;
-}
-
 //******************* HightmapEvent *************
 
 // *************************************
@@ -1626,7 +1312,7 @@ RenderingModeEvent::Command RenderingModeEvent::WStringToCommand    ( const std:
 void                HightmapEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
-    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, CommandToWString( HightmapCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( HightmapCommand ) );
     ser.SetAttribute( SerializationHelper::TIMER_HOURS_WSTRING, toWString( Hours ) );
     ser.SetAttribute( SerializationHelper::TIMER_MINUTES_WSTRING, toWString( Minutes ) );
     ser.SetAttribute( SerializationHelper::TIMER_SECONDS_WSTRING, toWString( Seconds ) );
@@ -1640,7 +1326,7 @@ IEventPtr                HightmapEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         HightmapEventPtr newEvent   = std::make_shared<HightmapEvent>();
-        newEvent->HightmapCommand   = WStringToCommand( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->HightmapCommand   = SerializationHelper::WString2T<HightmapEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
         newEvent->Hours             = stof( deser.GetAttribute( SerializationHelper::TIMER_HOURS_WSTRING ) );
         newEvent->Minutes           = stof( deser.GetAttribute( SerializationHelper::TIMER_MINUTES_WSTRING ) );
         newEvent->Seconds           = stof( deser.GetAttribute( SerializationHelper::TIMER_SECONDS_WSTRING ) );
@@ -1671,62 +1357,6 @@ const std::string&  HightmapEvent::GetName() const
 //
 EventType           HightmapEvent::GetEventType() const
 {   return this->m_sEventType; }
-
-// *************************************
-//
-std::wstring HightmapEvent::CommandToWString    ( Command cmd )
-{
-    if( cmd == Command::Anim )
-        return SerializationHelper::COMMAND_HM_ANIM_WSTRING;
-    else if( cmd == Command::Anim2 )
-        return SerializationHelper::COMMAND_HM_ANIM2_WSTRING;
-    else if( cmd == Command::Enable )
-        return SerializationHelper::COMMAND_HM_ENABLE_WSTRING;
-    else if( cmd == Command::Reset )
-        return SerializationHelper::COMMAND_HM_RESET_WSTRING;
-    else if( cmd == Command::Set )
-        return SerializationHelper::COMMAND_HM_SET_WSTRING;
-    else if( cmd == Command::Set3 )
-        return SerializationHelper::COMMAND_HM_SET3_WSTRING;
-    else if( cmd == Command::Show )
-        return SerializationHelper::COMMAND_HM_SHOW_WSTRING;
-    else if( cmd == Command::Start )
-        return SerializationHelper::COMMAND_HM_START_WSTRING;
-    else if( cmd == Command::Zoom )
-        return SerializationHelper::COMMAND_HM_ZOOM_WSTRING;
-    else if( cmd == Command::ZoomOut )
-        return SerializationHelper::COMMAND_HM_ZOOM_OUT_WSTRING;
-    else
-        return SerializationHelper::EMPTY_WSTRING;     // No way to be here. warning: not all control paths return value
-}
-
-// *************************************
-//
-HightmapEvent::Command HightmapEvent::WStringToCommand    ( const std::wstring& string )
-{
-    if( string == SerializationHelper::COMMAND_HM_ANIM_WSTRING )
-        return Command::Anim;
-    else if( string == SerializationHelper::COMMAND_HM_ANIM2_WSTRING )
-        return Command::Anim2;
-    else if( string == SerializationHelper::COMMAND_HM_ENABLE_WSTRING )
-        return Command::Enable;
-    else if( string == SerializationHelper::COMMAND_HM_RESET_WSTRING )
-        return Command::Reset;
-    else if( string == SerializationHelper::COMMAND_HM_SET_WSTRING )
-        return Command::Set;
-    else if( string == SerializationHelper::COMMAND_HM_SET3_WSTRING )
-        return Command::Set3;
-    else if( string == SerializationHelper::COMMAND_HM_SHOW_WSTRING )
-        return Command::Show;
-    else if( string == SerializationHelper::COMMAND_HM_START_WSTRING )
-        return Command::Start;
-    else if( string == SerializationHelper::COMMAND_HM_ZOOM_WSTRING )
-        return Command::Zoom;
-    else if( string == SerializationHelper::COMMAND_HM_ZOOM_OUT_WSTRING )
-        return Command::ZoomOut;
-    else
-        return Command::Fail;
-}
 
 
 #pragma warning( pop )

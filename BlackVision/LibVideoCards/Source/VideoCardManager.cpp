@@ -5,6 +5,7 @@
 #include <iostream>
 #include <boost/lexical_cast.hpp>
 //#include <..\dep\vld\include\vld.h>
+#include "Engine/Events/EventHelpers.h"
 
 #include "UseLoggerVideoModule.h"
 
@@ -588,7 +589,7 @@ void bv::videocards::VideoCardManager::OnEventReceived                   ( bv::I
 		bv::VideoCardEventPtr videoEvent = std::static_pointer_cast<bv::VideoCardEvent>( evt );
         VideoCardEvent::Command command = videoEvent->VideoCommand;
 
-        wcout << "video : " << VideoCardEvent::CommandToWString( command ) << endl;
+        wcout << "video : " << bv::SerializationHelper::T2WString<VideoCardEvent::Command>( command ) << endl;
 
 
         if( command == VideoCardEvent::Command::EnableOutput )
