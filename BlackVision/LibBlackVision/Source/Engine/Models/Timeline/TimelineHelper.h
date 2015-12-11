@@ -26,6 +26,8 @@ public:
 	@return Returns group prefix number. */
 	static UInt32					CopyTimelines					( ITimeEvaluatorPtr destTimeline, const std::vector< ITimeEvaluatorPtr > & timelines );
 
+	static std::string				GetParentNodePath				( const std::string & timelinePath );
+	
 };
 
 } //model

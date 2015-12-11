@@ -436,6 +436,14 @@ class TimeLineEvent : public BaseEvent
 public:
     typedef enum
     {
+		AddTimeline,
+        DeleteTimeline,
+        ForceDeleteTimeline,
+        RenameTimeline,
+        SetDuration,
+        SetWrapPreBehavior,
+        SetWrapPostBehavior,
+
         Play,
         Stop,
         PlayReverse,
@@ -448,9 +456,12 @@ private:
     static std::string          m_sEventName;
 public:
     TimeLineEvent::Command      TimelineCommand;
-    std::string                 TimelineName;
     std::string                 SceneName;
+    std::string                 TimelineName; //path?
+    std::string                 NewTimelineName;
     float                       Time;
+    TimeType                    Duration;
+	TimelineWrapMethod			WrapMethod;
 
 public:
     explicit                        TimeLineEvent   () {}
@@ -466,6 +477,10 @@ public:
 private:
     static std::wstring             CommandToWString    ( Command cmd );
     static Command                  WStringToCommand    ( const std::wstring& string );
+
+	static std::wstring				WrapMethodToWString ( TimelineWrapMethod method );
+	static TimelineWrapMethod		WStringToWrapMethod ( const std::wstring& string );
+
 };
 
 DEFINE_PTR_TYPE( TimeLineEvent )

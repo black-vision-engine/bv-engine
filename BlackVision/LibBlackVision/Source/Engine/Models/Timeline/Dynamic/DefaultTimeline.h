@@ -34,6 +34,7 @@ public:
     static ISerializablePtr                     Create              ( const IDeserializer& dob );
 
     //ITimeline
+    virtual void		                        SetDuration         ( TimeType duration ) override;
     virtual TimeType                            GetDuration         () const override;
 
     //ITimeEvaluator

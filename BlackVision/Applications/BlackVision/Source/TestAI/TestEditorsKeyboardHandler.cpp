@@ -20,7 +20,7 @@ model::IModelNodePtr CreateTestModelNodeInSomeSpecificScope( BVAppLogic * logic,
 	auto timelineManager = TimelineManager::GetInstance();
 	auto globalTimeline = timelineManager->GetRootTimeline();
 
-    model::BasicNodePtr node = TestScenesFactory::CreateTestRandomNode( name, pluginsManager, timelineManager, globalTimeline );
+    model::BasicNodePtr node = TestScenesFactory::CreateTestRandomNode( name, pluginsManager, globalTimeline );
 
     return node;
 }

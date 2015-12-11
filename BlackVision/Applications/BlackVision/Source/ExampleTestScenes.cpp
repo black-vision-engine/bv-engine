@@ -79,10 +79,8 @@ model::BasicNodePtr CreateSingleTestNodeUidsOnly( const std::string & nodeName, 
 
 // *****************************
 //
-model::BasicNodePtr SolidRect( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr SolidRect( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    { timelineManager; } // FIXME: suppress unused warning
-
     auto rootNode =     CreateSingleTestNodeUidsOnly( "root", pluginsManager, timeEvaluator, 3,
                                                       "DEFAULT_TRANSFORM", 
                                                       "DEFAULT_RECTANGLE", 
@@ -101,10 +99,8 @@ model::BasicNodePtr SolidRect( const model::PluginsManager * pluginsManager, mod
 
 // *****************************
 //
-model::BasicNodePtr TexturedTestRandomRect( const std::string & name, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr TexturedTestRandomRect( const std::string & name, const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    { timelineManager; } // FIXME: suppress unused warning
-
     auto node =     CreateSingleTestNodeUidsOnly( name, pluginsManager, timeEvaluator, 3, "DEFAULT_TRANSFORM",  "DEFAULT_RECTANGLE",  "DEFAULT_TEXTURE" );
     assert( node );
 
@@ -129,10 +125,8 @@ model::BasicNodePtr TexturedTestRandomRect( const std::string & name, const mode
 
 // *****************************
 //
-model::BasicNodePtr TwoTexturedRectangles       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr TwoTexturedRectangles       ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    { timelineManager; } // FIXME: suppress unused warning
-
     auto rootNode =     CreateSingleTestNodeUidsOnly( "root", pluginsManager, timeEvaluator, 3,
                                                       "DEFAULT_TRANSFORM", 
                                                       "DEFAULT_RECTANGLE", 
