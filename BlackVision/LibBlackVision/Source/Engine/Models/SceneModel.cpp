@@ -48,7 +48,10 @@ ser.EnterChild( "scene" );
 
     assets.Serialize( ser );
 
-	m_timeline->Serialize( ser );
+    ser.EnterArray( "timelines" );
+    for( auto timeline : m_timeline->GetChildren() )
+        timeline->Serialize( ser );
+    ser.ExitChild(); // timelines
 
     m_sceneRootNode->Serialize( ser );                                    
 
