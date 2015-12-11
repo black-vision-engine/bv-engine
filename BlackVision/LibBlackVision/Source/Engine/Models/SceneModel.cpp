@@ -67,10 +67,9 @@ ISerializablePtr        SceneModel::Create          ( const IDeserializer& deser
     auto obj = std::make_shared< SceneModel >( deser.GetAttribute( "name" ), nullptr );
 
 // timelines
-	//FIXME: copying scene - invalid scene path
 	auto sceneTimeline = obj->GetTimeline();
-	auto timelines = SerializationHelper::DeserializeObjectLoadImpl< OffsetTimeEvaluator >( deser, "timeline" );
-	for( auto timeline : timelines->GetChildren() )
+    auto timelines = SerializationHelper::DeserializeObjectLoadArrayImpl< OffsetTimeEvaluator >( deser, "timelines" );
+	for( auto timeline : timelines )
     {
 		sceneTimeline->AddChild( timeline );
     }
