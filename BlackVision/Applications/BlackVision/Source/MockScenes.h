@@ -49,22 +49,22 @@ public:
 
 public:
 
-    static  model::SceneModelPtr	CreateSceneFromEnv				( const std::string& scene, Camera * camera, const model::PluginsManager * pluginsManager );
-    static  model::BasicNodePtr     CreateTestRandomNode            ( const std::string & name, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
-    static  model::BasicNodePtr     CreateTestScene                 ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, TestSceneSelector tss );
+    static  model::BasicNodePtr		CreateSceneFromEnv              ( const std::string& scene, model::ITimeEvaluatorPtr timeline, const model::PluginsManager * pluginsManager );
+    static  model::BasicNodePtr     CreateTestRandomNode            ( const std::string & name, const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     CreateTestScene                 ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator, TestSceneSelector tss );
 
-    static  model::BasicNodePtr     GlobalEffect05                  ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
-    static  model::BasicNodePtr     LightScatteringTestScene        ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
-    static  model::BasicNodePtr     NewModelTestScene               ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
-    static  model::BasicNodePtr     OlafTestScene                   ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
-    static  model::BasicNodePtr     CreedDeprecatedTestScene        ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
-    static  model::BasicNodePtr     CreedPrimitivePieChartTestScene ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
-    static  model::BasicNodePtr     CreedPrismTestScene             ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
-    static  model::BasicNodePtr     CreedVideoInputTestScene        ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
-    static  model::BasicNodePtr     CreedPieChartTestScene          ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
-    static  model::BasicNodePtr     CreedPrismBugTestScene          ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
-    static  model::BasicNodePtr     CreedCosineDemoScene            ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
-    static  model::BasicNodePtr      NodeReplicatorTestScene         ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     GlobalEffect05                  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     LightScatteringTestScene        ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     NewModelTestScene               ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     OlafTestScene                   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     CreedDeprecatedTestScene        ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     CreedPrimitivePieChartTestScene ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     CreedPrismTestScene             ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     CreedVideoInputTestScene        ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     CreedPieChartTestScene          ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     CreedPrismBugTestScene          ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     CreedCosineDemoScene            ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr      NodeReplicatorTestScene        ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator );
 
     static  model::BasicNodePtr     SimpeTextureTestScene           ();
@@ -81,16 +81,16 @@ public:
     static  model::BasicNodePtr     NonGeometryParent               ();
                             
     static  model::BasicNodePtr     XMLTestScene                    ();
-    static  model::SceneModelPtr    CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager );
+    static  model::SceneModelPtr    CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager );
                             
     static  model::BasicNodePtr     StackThemNow                    ( model::BasicNodePtr n0, model::BasicNodePtr n1 );
 
-	static	model::BasicNodePtr		BasicShapesShowScene		( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
-	static	model::BasicNodePtr		BasicShapesTest				( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+	static	model::BasicNodePtr		BasicShapesShowScene		    ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+	static	model::BasicNodePtr		BasicShapesTest				    ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
 
-    static  model::BasicNodePtr     AssetCacheTestScene         ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
-    static  model::BasicNodePtr     WSerializationTest          ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
-    static  model::BasicNodePtr     RemoteEventsTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     AssetCacheTestScene             ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     WSerializationTest              ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     RemoteEventsTestScene           ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
 };
 
 // ********************************

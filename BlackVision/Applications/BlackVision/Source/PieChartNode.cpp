@@ -2,7 +2,7 @@
 
 namespace bv {
 
-void PieChartNode::Init( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::vector< PieChartSubnodeDesc > descs )
+void PieChartNode::Init( model::ITimeEvaluatorPtr timeEvaluator, const std::vector< PieChartSubnodeDesc > descs )
 {
 	AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
@@ -20,9 +20,9 @@ void PieChartNode::Init( model::TimelineManager * timelineManager, model::ITimeE
 
 		model::BasicNodePtr node = NULL;
 		if( desc.type == PieChartSubnodeDesc::SubnodeType::COLORED)
-			node = SimpleNodesFactory::CreateCreedColoredPieChartNode( timelineManager, timeEvaluator, 0 );
+			node = SimpleNodesFactory::CreateCreedColoredPieChartNode( timeEvaluator, 0 );
 		else if( desc.type == PieChartSubnodeDesc::SubnodeType::LINEAR_GRADIENTED)
-			node = SimpleNodesFactory::CreateCreedGradedPieChartNode( timelineManager, timeEvaluator, 0 );
+			node = SimpleNodesFactory::CreateCreedGradedPieChartNode( timeEvaluator, 0 );
 		assert( node );
 
 		SetParameter( node->GetPlugin( "piechart" )->GetParameter( "angleStart" ), 0.f, angle );

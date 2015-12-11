@@ -159,27 +159,27 @@ ITimeEvaluatorPtr       TimelineManager::GetTimeEvaluator           ( const std:
 // FIXME: requires RTTI, reimplement it later on
 ITimelinePtr            TimelineManager::GetTimeline                     ( const std::string & name )
 {
-    return std::dynamic_pointer_cast< ITimeline >( FindTimelineByName( name, m_rootTimeline ) );
+    return GetTimeline( name, m_rootTimeline );
 }
 
 // *********************************
 // FIXME: requires RTTI, reimplement it later on
 ITimelinePtr            TimelineManager::GetTimeline                     ( const std::string & name, ITimeEvaluatorPtr parentTimeline )
 {
-    if( parentTimeline != nullptr )
+	auto path = Split( name, "/" );
+    if( path.size() == 1 )
+		return std::dynamic_pointer_cast< ITimeline >( FindTimelineByName( name, parentTimeline ) );
+    else
     {
-        for( auto child : parentTimeline->GetChildren() )
+        auto nextParent = FindTimelineByName( path[ 0 ], parentTimeline );
+        if( nextParent )
         {
-            auto retVal = FindTimelineByName( name, child );
-            
-            if( retVal != nullptr )
-            {
-                return std::dynamic_pointer_cast< ITimeline >( retVal );
-            }
+            path.erase( path.begin() );
+            return GetTimeline( Join( path, "/"), nextParent );
         }
+        else
+            return nullptr;
     }
-
-    return nullptr;
 }
 
 // *********************************

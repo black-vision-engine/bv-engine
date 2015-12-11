@@ -45,7 +45,9 @@ private:
 
 	static const std::string	SCENE_NAME;
 	static const std::string	SCENE_NAME1;
-
+	
+	static const std::string	TIMELINE_NAME;
+	static const std::string	TIMELINE_NAME1;
 	
 public:
 							TestScene				( BVProject * scene, Renderer * renderer );
@@ -57,6 +59,8 @@ private:
 	void					InitTestEditor				();
 
 	void					InitTestModelSceneEditor	();
+
+	void					InitTimelinesTest			();
 
 	void					InitBasicColorPluginTest	();
 	void					InitOrderColorPluginTest	();

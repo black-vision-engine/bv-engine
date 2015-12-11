@@ -94,6 +94,13 @@ IParamValModelPtr   DefaultPluginParamValModel::GetGeometryShaderChannelModel   
 
 // *******************************
 //
+void				DefaultPluginParamValModel::SetTimeEvaluator				( ITimeEvaluatorPtr timeEvaluator )
+{
+	m_timeEvaluator = timeEvaluator;
+}
+
+// *******************************
+//
 ITimeEvaluatorPtr   DefaultPluginParamValModel::GetTimeEvaluator				() const
 {
 	return m_timeEvaluator;

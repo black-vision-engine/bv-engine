@@ -259,8 +259,6 @@ model::IPluginPtr				ClonePlugin					( const model::IPlugin * obj, const std::st
 {
 	{ obj; prefix; }
 
-	//prefix will look like this: CopyX_
-
     //FIXME: implement me
 	assert( false );
 	

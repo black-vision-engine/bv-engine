@@ -379,20 +379,20 @@ void test_get_node( model::IModelNodePtr n, const std::string & path, bool res )
 
 // *****************************
 //
-void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator)
+void TestQueryNode( model::ITimeEvaluatorPtr timeEvaluator)
 {
     //GetNode tester - do not use:
-    auto rt = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "." );
-    auto n0 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node0" );
-    auto n1 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node01" );
-    auto n2 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node02" );
-    auto n3 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node011" );
-    auto n4 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node012" );
-    auto n5 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node013" );
-    auto n6 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node021" );
-    auto n7 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node022" );
-    auto n8 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node023" );
-    auto n9 = SimpleNodesFactory::CreateGreenRectNode( timelineManager, timeEvaluator, "node024" );
+    auto rt = SimpleNodesFactory::CreateGreenRectNode( timeEvaluator, "." );
+    auto n0 = SimpleNodesFactory::CreateGreenRectNode( timeEvaluator, "node0" );
+    auto n1 = SimpleNodesFactory::CreateGreenRectNode( timeEvaluator, "node01" );
+    auto n2 = SimpleNodesFactory::CreateGreenRectNode( timeEvaluator, "node02" );
+    auto n3 = SimpleNodesFactory::CreateGreenRectNode( timeEvaluator, "node011" );
+    auto n4 = SimpleNodesFactory::CreateGreenRectNode( timeEvaluator, "node012" );
+    auto n5 = SimpleNodesFactory::CreateGreenRectNode( timeEvaluator, "node013" );
+    auto n6 = SimpleNodesFactory::CreateGreenRectNode( timeEvaluator, "node021" );
+    auto n7 = SimpleNodesFactory::CreateGreenRectNode( timeEvaluator, "node022" );
+    auto n8 = SimpleNodesFactory::CreateGreenRectNode( timeEvaluator, "node023" );
+    auto n9 = SimpleNodesFactory::CreateGreenRectNode( timeEvaluator, "node024" );
 
     rt->AddChildToModelOnly( n0 );
 
@@ -461,91 +461,81 @@ void TestQueryNode(model::TimelineManager * timelineManager, model::ITimeEvaluat
 
 // *****************************
 //
-model::SceneModelPtr		TestScenesFactory::CreateSceneFromEnv       ( const std::string& scene, Camera * camera, const model::PluginsManager * pluginsManager )
+model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std::string& scene, model::ITimeEvaluatorPtr timeline, const model::PluginsManager * pluginsManager )
 {
-	auto timelineManager = model::TimelineManager::GetInstance();
     model::BasicNodePtr node = nullptr;
-
-	auto sceneName = "sceneFromEnv: " + scene;
-
-	auto sceneModel = model::SceneModel::Create( sceneName, camera );
-	auto timeline = sceneModel->GetTimeline();
 
     if( scene == "TWO_TEXTURED_RECTANGLES" )
     {
-        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timeline, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
     }
     else if( scene == "ONE_TEXTURED_RECTANGLE" )
     {
-        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeline, TestScenesFactory::TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE );
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timeline, TestScenesFactory::TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE );
     }
     else if( scene == "OLAF_TEST_SCENE" )
     {
-        node = TestScenesFactory::OlafTestScene( pluginsManager, timelineManager, timeline );
+        node = TestScenesFactory::OlafTestScene( pluginsManager, timeline );
     }
     else if( scene == "CREED_TEST_SCENE" )
     {
-        node = TestScenesFactory::CreedPieChartTestScene( pluginsManager, timelineManager, timeline );
+        node = TestScenesFactory::CreedPieChartTestScene( pluginsManager, timeline );
     }
     else if( scene == "VIDEO_INPUT_TEST_SCENE" )
     {
-        node = TestScenesFactory::CreedVideoInputTestScene( pluginsManager, timelineManager, timeline );
+        node = TestScenesFactory::CreedVideoInputTestScene( pluginsManager, timeline );
     }
     else if( scene == "DEFAULT_TEXT" )
     {
-        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
     else if( scene == "TSS_ANIMATION_RECTANGLE" )
     {
-        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeline, TestScenesFactory::TestSceneSelector::TSS_ANIMATION_RECTANGLE );
-    }
-    else if( scene == "SERIALIZED_TEST" )
-    {
-        return TestScenesFactory::CreateSerializedTestScene( pluginsManager, timelineManager );
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timeline, TestScenesFactory::TestSceneSelector::TSS_ANIMATION_RECTANGLE );
     }
 	else if( scene == "ALL_BASIC_SHAPES_SHOW" )
 	{
-		node = TestScenesFactory::BasicShapesShowScene( pluginsManager, timelineManager, timeline );
+		node = TestScenesFactory::BasicShapesShowScene( pluginsManager, timeline );
 	}
 	else if( scene == "BASIC_SHAPES_TEST_SCENE" )
 	{
-		node = TestScenesFactory::BasicShapesTest(  pluginsManager, timelineManager, timeline );
+		node = TestScenesFactory::BasicShapesTest(  pluginsManager, timeline );
 	}
     else if( scene == "INTERPOLATION_TEST_SCENE" )
     {
-        node = TestScenesFactory::CreedCosineDemoScene( pluginsManager, timelineManager, timeline );
+        node = TestScenesFactory::CreedCosineDemoScene( pluginsManager, timeline );
     }
     else if( scene == "GLOBAL_EFFECT_05" )
     {
-        node = TestScenesFactory::GlobalEffect05( pluginsManager, timelineManager, timeline );
+        node = TestScenesFactory::GlobalEffect05( pluginsManager, timeline );
     }
     else if( scene == "BASIC_SHAPES_TEST_SCENE" )
     {
-        node = TestScenesFactory::BasicShapesTest( pluginsManager, timelineManager, timeline );
+        node = TestScenesFactory::BasicShapesTest( pluginsManager, timeline );
     }
     else if( scene == "TEXT_CACHE_TEST" )
     {
-        node = TestScenesFactory::AssetCacheTestScene( pluginsManager, timelineManager, timeline );
+        node = TestScenesFactory::AssetCacheTestScene( pluginsManager, timeline );
     }
     else if( scene == "W_SERIALIZATION_TEST" )
     {
-        node = TestScenesFactory::WSerializationTest( pluginsManager, timelineManager, timeline );
+        node = TestScenesFactory::WSerializationTest( pluginsManager, timeline );
     }
     else if( scene == "VIDEO_STREAM_TEST_SCENE" )
    {
- 	node = SimpleNodesFactory::CreateVideoStreamDecoderRectNode( timelineManager, timeline, false );
+ 	node = SimpleNodesFactory::CreateVideoStreamDecoderRectNode( timeline, false );
     }
     else if( scene == "REMOTE_EVENTS_TEST_SCENE" )
     {
-        node = TestScenesFactory::RemoteEventsTestScene( pluginsManager, timelineManager, timeline );
+        node = TestScenesFactory::RemoteEventsTestScene( pluginsManager, timeline );
     }
     else if( scene == "LIGHT_SCATTERING_EFFECT" )
     {
-        node = TestScenesFactory::LightScatteringTestScene( pluginsManager, timelineManager, timeline );
+        node = TestScenesFactory::LightScatteringTestScene( pluginsManager, timeline );
     }
     else if( scene == "REPLICATOR_TEST_SCENE" )
     {
-        node = TestScenesFactory::NodeReplicatorTestScene( pluginsManager, timelineManager, timeline );
+        node = TestScenesFactory::NodeReplicatorTestScene( pluginsManager, timeline );
     }
     else
     {
@@ -561,39 +551,37 @@ model::SceneModelPtr		TestScenesFactory::CreateSceneFromEnv       ( const std::s
 
         //node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_ANIMATION_RECTANGLE );
 
-        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
 
-	sceneModel->SetRootNode( node );
-
-	return sceneModel;
+	return node;
 }
 
 // *****************************
 //
-model::BasicNodePtr     TestScenesFactory::CreateTestRandomNode        ( const std::string & name,  const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr     TestScenesFactory::CreateTestRandomNode        ( const std::string & name,  const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    return TexturedTestRandomRect( name, pluginsManager, timelineManager, timeEvaluator );
+    return TexturedTestRandomRect( name, pluginsManager, timeEvaluator );
 }
 
 // *****************************
 //
-model::BasicNodePtr     TestScenesFactory::CreateTestScene      ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, TestScenesFactory::TestSceneSelector tss )
+model::BasicNodePtr     TestScenesFactory::CreateTestScene      ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator, TestScenesFactory::TestSceneSelector tss )
 {
     switch( tss )
     {
         case TestSceneSelector::TSS_ONE_SOLID_COLOR_RECTANGLE:
-            return SolidRect( pluginsManager, timelineManager, timeEvaluator );
+            return SolidRect( pluginsManager, timeEvaluator );
         case TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES:
-            return TwoTexturedRectangles( pluginsManager, timelineManager, timeEvaluator );
+            return TwoTexturedRectangles( pluginsManager,  timeEvaluator );
         case TestSceneSelector::TSS_ONE_TEXTURED_RECTANGLE:
-            return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
+            return SimpleNodesFactory::CreateTexturedRectNode( timeEvaluator, false );
         case TestSceneSelector::TSS_TEXT:
-            return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
+            return SimpleNodesFactory::CreateTextNode( timeEvaluator, 0, false );
         case TestSceneSelector::TSS_ANIMATION_RECTANGLE:
-            return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, false );
+            return SimpleNodesFactory::CreateTextureAnimationRectNode( timeEvaluator, false );
         case TestSceneSelector::TSS_SOLID_RECTANGLE:
-            return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager, timeEvaluator, false );
+            return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timeEvaluator, false );
         default:
             assert( false );
 
@@ -603,36 +591,36 @@ model::BasicNodePtr     TestScenesFactory::CreateTestScene      ( const model::P
 
 // *****************************
 //
-model::BasicNodePtr     TestScenesFactory::GlobalEffect05           ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr     TestScenesFactory::GlobalEffect05           ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { pluginsManager; }
-    return SimpleNodesFactory::CreateGlobalEffectTest( timelineManager, timeEvaluator );
+    return SimpleNodesFactory::CreateGlobalEffectTest( timeEvaluator );
 }
 
 // *****************************
 //
-model::BasicNodePtr     TestScenesFactory::LightScatteringTestScene  ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr     TestScenesFactory::LightScatteringTestScene  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { pluginsManager; }
-    return SimpleNodesFactory::CreateLightScatteringTest( timelineManager, timeEvaluator );
+    return SimpleNodesFactory::CreateLightScatteringTest( timeEvaluator );
 }
 
 // *****************************
 //
-model::BasicNodePtr     TestScenesFactory::NodeReplicatorTestScene  ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr     TestScenesFactory::NodeReplicatorTestScene  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { pluginsManager; }
-    return SimpleNodesFactory::CreateNodeReplicatorTest( timelineManager, timeEvaluator );
+    return SimpleNodesFactory::CreateNodeReplicatorTest( timeEvaluator );
 }
 
 // *****************************
 //
-model::BasicNodePtr     TestScenesFactory::NewModelTestScene        ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr     TestScenesFactory::NewModelTestScene        ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { pluginsManager; } // FIXME: suppress unused warning
     //return SimpleNodesFactory::CreateHeightMapNode( timelineManager, timeEvaluator );
     
-    auto node0 = SimpleNodesFactory::CreateBasicShapesTestNode( timelineManager, timeEvaluator );
+    auto node0 = SimpleNodesFactory::CreateBasicShapesTestNode( timeEvaluator );
     //auto node0 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
     //auto node1 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
 
@@ -699,17 +687,17 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene        ( const mode
 
 // *****************************
 //
-model::BasicNodePtr     TestScenesFactory::OlafTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr     TestScenesFactory::OlafTestScene     ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { pluginsManager; } // FIXME: suppress unuse warning
-    auto rect = SimpleNodesFactory::CreateOlafRectNode( timelineManager, timeEvaluator );
-    auto clock = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
+    auto rect = SimpleNodesFactory::CreateOlafRectNode( timeEvaluator );
+    auto clock = SimpleNodesFactory::CreateTimerNode( timeEvaluator, 0, false );
     rect->AddChildToModelOnly( clock );
 
     return rect;
 }
 
-model::BasicNodePtr    TestScenesFactory::CreedPieChartTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    TestScenesFactory::CreedPieChartTestScene     ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { pluginsManager; } // FIXME: suppress unuse warning
     std::vector< PieChartSubnodeDesc > descs;
@@ -718,12 +706,12 @@ model::BasicNodePtr    TestScenesFactory::CreedPieChartTestScene     ( const mod
     descs.push_back( PieChartSubnodeDesc( 20.f, -.1f, PieChartSubnodeDesc::COLORED ) );
     //descs.push_back( PieChartSubnodeDesc( 50.f, .1f ) );
 
-    auto node = new PieChartNode( timelineManager, timeEvaluator, descs );
+    auto node = new PieChartNode( timeEvaluator, descs );
 
     return model::BasicNodePtr( node );
 }
 
-model::BasicNodePtr    TestScenesFactory::CreedDeprecatedTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    TestScenesFactory::CreedDeprecatedTestScene     ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { pluginsManager; } // FIXME: suppress unuse warning
     float percents[] = { 10.f, 20.f, 50.f };
@@ -731,12 +719,12 @@ model::BasicNodePtr    TestScenesFactory::CreedDeprecatedTestScene     ( const m
 
     const int noPieces = 3;
 
-    auto node = new PieChartNode( timelineManager, timeEvaluator, std::vector<float>( percents, percents+noPieces ), std::vector<float> (offsets, offsets+noPieces ) );
+    auto node = new PieChartNode( timeEvaluator, std::vector<float>( percents, percents+noPieces ), std::vector<float> (offsets, offsets+noPieces ) );
 
     return model::BasicNodePtr( node );
 }
 
-model::BasicNodePtr    TestScenesFactory::CreedPrimitivePieChartTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    TestScenesFactory::CreedPrimitivePieChartTestScene     ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { pluginsManager; } // FIXME: suppress unuse warning
     model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
@@ -748,8 +736,8 @@ model::BasicNodePtr    TestScenesFactory::CreedPrimitivePieChartTestScene     ( 
     SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
 
 
-    auto node1 = SimpleNodesFactory::CreateCreedColoredPieChartNode( timelineManager, timeEvaluator, 0 );
-    auto node2 = SimpleNodesFactory::CreateCreedGradedPieChartNode( timelineManager, timeEvaluator, 0 );
+    auto node1 = SimpleNodesFactory::CreateCreedColoredPieChartNode( timeEvaluator, 0 );
+    auto node2 = SimpleNodesFactory::CreateCreedGradedPieChartNode( timeEvaluator, 0 );
 
     SetParameter( node1->GetPlugin( "piechart" )->GetParameter( "angleStart" ), 0, 0.f );
     SetParameter( node1->GetPlugin( "piechart" )->GetParameter( "angleEnd" ), 0, 3.14f/4 );
@@ -760,7 +748,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrimitivePieChartTestScene     ( 
     return root;
 }
 
-model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { pluginsManager; } // FIXME: suppress unuse warning
     //auto rect = SimpleNodesFactory::CreateCreedTextNode( timelineManager, timeEvaluator );
@@ -784,7 +772,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
 
     //auto root = SimpleNodesFactory::CreateCreedRectNode( timelineManager, timeEvaluator );
 
-    auto prism = SimpleNodesFactory::CreateCreedColoredPrismNode( timelineManager, timeEvaluator, -1.5f );
+    auto prism = SimpleNodesFactory::CreateCreedColoredPrismNode( timeEvaluator, -1.5f );
     auto success = SetParameter( prism->GetPlugin( "prism" )->GetParameter( "n" ), 0.f, 4 );
     { success; }
     assert( success );
@@ -798,7 +786,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     SetParameterScale( prism->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 15.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
     SetParameterScale( prism->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 
-    auto prism2 = SimpleNodesFactory::CreateCreedTexturedPrismNode( timelineManager, timeEvaluator,-0.5f );
+    auto prism2 = SimpleNodesFactory::CreateCreedTexturedPrismNode( timeEvaluator,-0.5f );
 
     SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  3.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
     SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  7.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
@@ -811,7 +799,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
 
 //SetParameterRotation( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 50.f, glm::vec3( 1, 0, 0 ), -10000.f );
 
-    auto prism3 = SimpleNodesFactory::CreateCreedGradedPrismNode( timelineManager, timeEvaluator, 0.5f );
+    auto prism3 = SimpleNodesFactory::CreateCreedGradedPrismNode( timeEvaluator, 0.5f );
     SetParameter( prism3->GetPlugin( "prism" )->GetParameter( "n" ), 0.f, 12 );
     
     SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  7.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
@@ -821,7 +809,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
 
 //SetParameterRotation( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 50.f, glm::vec3( 1, 0, 0 ), 10000.f );
 
-    auto prism4 = SimpleNodesFactory::CreateCreedGradedPrismNode( timelineManager, timeEvaluator, 1.5f );
+    auto prism4 = SimpleNodesFactory::CreateCreedGradedPrismNode( timeEvaluator, 1.5f );
     SetParameter( prism4->GetPlugin( "prism" )->GetParameter( "n" ), 0.f, 36 );
     SetParameter( prism4->GetPlugin( "linear_gradient" )->GetParameter( "color1" ), 5.f, glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
     SetParameter( prism4->GetPlugin( "linear_gradient" )->GetParameter( "color2" ), 5.f, glm::vec4( 0.f, 0.f, 0.f, 1.f ) );
@@ -841,9 +829,8 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     return root;
 }
 
-model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    {timelineManager;}
     {pluginsManager;}
 
     model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
@@ -865,14 +852,14 @@ model::BasicNodePtr    TestScenesFactory::CreedVideoInputTestScene   ( const mod
     return root;
 }
 
-model::BasicNodePtr    TestScenesFactory::CreedPrismBugTestScene     ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    TestScenesFactory::CreedPrismBugTestScene     ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     {pluginsManager;}
 
     model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
-    auto prism2 = SimpleNodesFactory::CreateCreedTexturedPrismNode( timelineManager, timeEvaluator, 0 );
+    auto prism2 = SimpleNodesFactory::CreateCreedTexturedPrismNode( timeEvaluator, 0 );
     //auto prism2 = SimpleNodesFactory::CreateCreedColoredPrismNode( timelineManager, timeEvaluator, 0 );
     //auto prism2 = SimpleNodesFactory::CreateCreedGradedPrismNode( timelineManager, timeEvaluator, 0 );
 
@@ -933,7 +920,7 @@ model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr t
     return node;
 }
 
-model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model::PluginsManager * , model::TimelineManager * /*tm*/, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr    TestScenesFactory::CreedCosineDemoScene     ( const model::PluginsManager * , model::ITimeEvaluatorPtr timeEvaluator )
 {
     model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
@@ -1176,25 +1163,25 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedBasicGeometryTestScene     ( 
     return root;
 }
 
-    static  model::BasicNodePtr     CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager );
+    static  model::BasicNodePtr     CreateSerializedTestScene       ( const model::PluginsManager * pluginsManager );
 
 /**All basic shapes in one scene*/
-model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::PluginsManager* pluginsManager, model::TimelineManager* timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::PluginsManager* pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     pluginsManager;
 
-    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "textures/sand.jpg" );
-    auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "textures/sand.jpg" );
-    auto node2 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CIRCLE", glm::vec3( -2.0, 0.0, 3.0 ), "textures/water.jpg" );
-    auto node3 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_SPHERE", glm::vec3( -4.0, -3.0, 1.0 ), "textures/sand.jpg" );
-    auto node4 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_ROUNDEDRECT", glm::vec3( -3.0, -2.0, -3.0 ), "textures/sand.jpg" );
-    auto node5 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_TORUS", glm::vec3( 1.0, 0.0, -3.0 ), "textures/sand.jpg" );
-    auto node6 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_SPRING", glm::vec3( 5.0, -5.0, 0.0 ), "textures/water.jpg" );
-    auto node7 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_TRIANGLE", glm::vec3( 1.0, -0.7, -3.0 ), "textures/sand.jpg" );
-    auto node8 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CYLINDER", glm::vec3( -3.0, 2.0, -3.0 ), "textures/water.jpg" );
-    auto node9 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_ELLIPSE", glm::vec3( 0.0, -3.0, 4.0 ), "textures/sand.jpg" );
+    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "textures/sand.jpg" );
+    auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "textures/sand.jpg" );
+    auto node2 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CIRCLE", glm::vec3( -2.0, 0.0, 3.0 ), "textures/water.jpg" );
+    auto node3 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_SPHERE", glm::vec3( -4.0, -3.0, 1.0 ), "textures/sand.jpg" );
+    auto node4 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_ROUNDEDRECT", glm::vec3( -3.0, -2.0, -3.0 ), "textures/sand.jpg" );
+    auto node5 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_TORUS", glm::vec3( 1.0, 0.0, -3.0 ), "textures/sand.jpg" );
+    auto node6 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_SPRING", glm::vec3( 5.0, -5.0, 0.0 ), "textures/water.jpg" );
+    auto node7 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_TRIANGLE", glm::vec3( 1.0, -0.7, -3.0 ), "textures/sand.jpg" );
+    auto node8 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CYLINDER", glm::vec3( -3.0, 2.0, -3.0 ), "textures/water.jpg" );
+    auto node9 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_ELLIPSE", glm::vec3( 0.0, -3.0, 4.0 ), "textures/sand.jpg" );
     
-    auto node10 = SimpleNodesFactory::CreateCreedTimerNode( timelineManager, timeEvaluator, 0, false );
+    auto node10 = SimpleNodesFactory::CreateCreedTimerNode( timeEvaluator, 0, false );
 
     node0->AddChildToModelOnly( node1 );
     node0->AddChildToModelOnly( node2 );
@@ -1211,29 +1198,29 @@ model::BasicNodePtr		TestScenesFactory::BasicShapesShowScene		( const model::Plu
     return node0;
 }
 
-model::BasicNodePtr		TestScenesFactory::BasicShapesTest		( const model::PluginsManager* pluginsManager, model::TimelineManager* timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr		TestScenesFactory::BasicShapesTest		( const model::PluginsManager* pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     pluginsManager;
 
-    auto node0 = SimpleNodesFactory::CreateBasicShapesTestNode( timelineManager, timeEvaluator );
+    auto node0 = SimpleNodesFactory::CreateBasicShapesTestNode( timeEvaluator );
     return node0;
 }
 
-model::BasicNodePtr     TestScenesFactory::AssetCacheTestScene         ( const model::PluginsManager* pluginsManager, model::TimelineManager* timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr     TestScenesFactory::AssetCacheTestScene         ( const model::PluginsManager* pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     pluginsManager;
 
-    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "textures/sand.jpg" );
-    auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "textures/sand.jpg" );
-    auto node2 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CYLINDER", glm::vec3( -3.0, 2.0, -3.0 ), "textures/water.jpg" );
-    auto node3 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CUBE", glm::vec3( 5.0, -5.0, 0.0 ), "textures/water.jpg" );
+    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "textures/sand.jpg" );
+    auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "textures/sand.jpg" );
+    auto node2 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CYLINDER", glm::vec3( -3.0, 2.0, -3.0 ), "textures/water.jpg" );
+    auto node3 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CUBE", glm::vec3( 5.0, -5.0, 0.0 ), "textures/water.jpg" );
 
-    auto node4 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( 0.0, -0.4, 0.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 1", "fonts/Astera.TTF" );
-    auto node5 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( -3.0, 0.0, -3.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 2", "fonts/Astera.TTF" );
-    auto node6 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( -4.0, -3.0, 1.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Courbi tekst 1", "fonts/courbi.ttf" );
-    auto node7 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( 0.0, 0.0, 4.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Courbi tekst 2", "fonts/courbi.ttf" );
-    auto node8 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( 1.0, 0.0, -3.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Cour tekst 1", "fonts/cour.ttf" );
-    auto node9 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( -4.0, -3.0, 1.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Cour tekst 2", "fonts/cour.ttf" );
+    auto node4 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, glm::vec3( 0.0, -0.4, 0.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 1", "fonts/Astera.TTF" );
+    auto node5 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, glm::vec3( -3.0, 0.0, -3.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 2", "fonts/Astera.TTF" );
+    auto node6 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, glm::vec3( -4.0, -3.0, 1.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Courbi tekst 1", "fonts/courbi.ttf" );
+    auto node7 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, glm::vec3( 0.0, 0.0, 4.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Courbi tekst 2", "fonts/courbi.ttf" );
+    auto node8 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, glm::vec3( 1.0, 0.0, -3.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Cour tekst 1", "fonts/cour.ttf" );
+    auto node9 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, glm::vec3( -4.0, -3.0, 1.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Cour tekst 2", "fonts/cour.ttf" );
 
     node0->AddChildToModelOnly( node1 );
     node0->AddChildToModelOnly( node2 );
@@ -1249,7 +1236,7 @@ model::BasicNodePtr     TestScenesFactory::AssetCacheTestScene         ( const m
     return node0;
 }
 
-model::BasicNodePtr TestScenesFactory::WSerializationTest          ( const model::PluginsManager* pluginsManager, model::TimelineManager* timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr TestScenesFactory::WSerializationTest          ( const model::PluginsManager* pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
 
 //#define __W_STRING_SERIALIZATION_TEST
@@ -1266,7 +1253,7 @@ model::BasicNodePtr TestScenesFactory::WSerializationTest          ( const model
 #endif
 
     pluginsManager;
-    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "textures/sand.jpg" );
+    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "textures/sand.jpg" );
 
     Serializer serializeObject;
     serializeObject.EnterChild( MAKE_STR("asset") );
@@ -1319,12 +1306,12 @@ model::BasicNodePtr TestScenesFactory::WSerializationTest          ( const model
 #undef STRING
 }
 
-model::BasicNodePtr TestScenesFactory::RemoteEventsTestScene( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr TestScenesFactory::RemoteEventsTestScene( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     pluginsManager;
-    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "textures/water.jpg" );
-    auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timelineManager, timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "textures/sand.jpg" );
-    auto node2 = SimpleNodesFactory::CreateTextCacheTest( timelineManager, timeEvaluator, glm::vec3( 0.0, -0.4, 0.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 1", "fonts/courbi.TTF" );
+    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "textures/water.jpg" );
+    auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "textures/sand.jpg" );
+    auto node2 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, glm::vec3( 0.0, -0.4, 0.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 1", "fonts/courbi.TTF" );
 
     node0->AddChildToModelOnly( node1 );
     node0->AddChildToModelOnly( node2 );

@@ -832,7 +832,7 @@ model::BasicNodePtr      TestScenesFactory::SequenceAnimationTestScene  ()
     return nullptr;
 }
 
-model::SceneModelPtr LoadSceneFromFile( std::string filename, model::TimelineManager * )
+model::SceneModelPtr LoadSceneFromFile( std::string filename )
 {
     if( !Path::Exists( filename ) )
     {
@@ -852,10 +852,10 @@ model::SceneModelPtr LoadSceneFromFile( std::string filename, model::TimelineMan
     return model;
 }
 
-model::SceneModelPtr     TestScenesFactory::CreateSerializedTestScene       ( const model::PluginsManager *, model::TimelineManager * timelineManager  )
+model::SceneModelPtr     TestScenesFactory::CreateSerializedTestScene       ( const model::PluginsManager * )
 {
     //return LoadSceneFromFile( "Assets/07_Results.xml", pluginsManager, timelineManager );
-    return LoadSceneFromFile( "test.xml", timelineManager );
+    return LoadSceneFromFile( "test.xml" );
 }
 
 } // bv
