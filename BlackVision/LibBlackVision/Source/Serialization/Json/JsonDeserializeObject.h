@@ -5,6 +5,7 @@
 
 #include <fstream>
 #include <stack>
+#include <memory>
 
 namespace bv
 {
@@ -18,11 +19,14 @@ private:
 	mutable Json::Value*				m_currentNode;
 	mutable std::stack<Json::Value*>	m_nodeStack;
     mutable std::stack<unsigned int>    m_indexStack;
+
+    std::unique_ptr< DeserializeContext >       m_context;
+
 public:
 	JsonDeserializeObject();
     virtual ~JsonDeserializeObject();
 
-    virtual DeserializeContext* GetDeserializeContext() const { return nullptr; } // FIXME
+    virtual DeserializeContext* GetDeserializeContext() const;
 
     bool                        LoadFile            ( const std::string& fileName );
 	void						Load                ( const std::string& jsonString );

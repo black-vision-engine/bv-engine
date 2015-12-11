@@ -17,6 +17,13 @@ JsonDeserializeObject::JsonDeserializeObject()
 JsonDeserializeObject::~JsonDeserializeObject()
 {}
 
+// *******************************
+//
+DeserializeContext* JsonDeserializeObject::GetDeserializeContext() const
+{
+    return m_context.get();
+}
+
 // ***********************
 //
 bool JsonDeserializeObject::LoadFile        ( const std::string& fileName )
