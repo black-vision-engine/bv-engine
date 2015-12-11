@@ -194,7 +194,7 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& dob ) // F
             auto time = std::stof( value->time );
             param->SetVal( val, time );
         }
-
+        return param;
     }
     else if( type == "wstring" ) 
     {
