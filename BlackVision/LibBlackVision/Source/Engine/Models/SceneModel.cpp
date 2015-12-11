@@ -68,7 +68,7 @@ ISerializablePtr        SceneModel::Create          ( const IDeserializer& deser
 
 // timelines
 	auto sceneTimeline = obj->GetTimeline();
-    auto timelines = SerializationHelper::DeserializeObjectLoadArrayImpl< OffsetTimeEvaluator >( deser, "timelines" );
+    auto timelines = SerializationHelper::DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( deser, "timelines" );
 	for( auto timeline : timelines )
     {
 		sceneTimeline->AddChild( timeline );
