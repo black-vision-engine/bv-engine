@@ -19,6 +19,8 @@ public:
     JsonSpiritDeserializeObject();
     ~JsonSpiritDeserializeObject();
 
+    virtual DeserializeContext* GetDeserializeContext() const { return nullptr; } // FIXME
+
     bool                LoadFile            ( const std::string& fileName );
     bool                LoadWString         ( const std::wstring& jsonString );
 

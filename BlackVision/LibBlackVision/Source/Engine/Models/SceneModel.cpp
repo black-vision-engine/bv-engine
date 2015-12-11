@@ -74,6 +74,7 @@ ISerializablePtr        SceneModel::Create          ( const IDeserializer& deser
     {
 		sceneTimeline->AddChild( timeline );
     }
+    dynamic_cast< BVDeserializeContext* >( deser.GetDeserializeContext() )->m_sceneTimeline = sceneTimeline;
 
 // nodes
     auto node = SerializationHelper::DeserializeObjectLoadImpl< model::BasicNode >( deser, "node" );

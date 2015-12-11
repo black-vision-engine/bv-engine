@@ -2,6 +2,7 @@
 #include "XML/XMLDeserializer.h"
 
 #include "SerializationHelper.h"
+#include "BVDeserializeContext.h"
 
 namespace bv {
 

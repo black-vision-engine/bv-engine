@@ -56,12 +56,9 @@ public:
     ITimeEvaluatorPtr       GetRootTimeline                 ();
 
     ITimeEvaluatorPtr       GetTimeEvaluator                ( const std::string & name );
-    ITimeEvaluatorPtr       GetTimeEvaluator                ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
 
     ITimelinePtr            GetTimeline                     ( const std::string & name );
-    ITimelinePtr            GetTimeline                     ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
     std::string             GetTimelinePath                 ( ITimeEvaluatorPtr timeline );
-    std::string             GetTimelinePath                 ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline );
 
     bool                    AddTimeline                     ( ITimeEvaluatorPtr timeline );
     bool                    AddTimelineToTimeline           ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline );
@@ -87,7 +84,7 @@ public:
 
 private:
 
-    ITimeEvaluatorPtr       FindTimelineByName              ( const std::string & name, ITimeEvaluatorPtr root );
+    //ITimeEvaluatorPtr       FindTimelineByName              ( const std::string & name, ITimeEvaluatorPtr root );
     SimpleIParamSet *       GetParamSet                     ( ITimeEvaluatorPtr timeline );
     bool                    DeregisterParam                 ( IParameterPtr param, ITimeEvaluatorPtr timeline );
 

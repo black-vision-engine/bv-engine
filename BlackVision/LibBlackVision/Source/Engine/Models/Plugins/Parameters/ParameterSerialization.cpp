@@ -1,8 +1,10 @@
 #include "AbstractModelParameter.h"
 #include "ParametersFactory.h"
 #include "SimpleTypedParameters.h"
-#include "Engine/Models/Timeline/TimelineManager.h"
 #include <sstream>
+
+#include "Engine/Models/Timeline/TimelineHelper.h"
+#include "Serialization/BVDeserializeContext.h"
 
 //#include "Serialization/SerializationObjects.inl"
 #include "Serialization/SerializationHelper.h"
@@ -70,21 +72,21 @@ public:
 //        float val = 
 //}
 
-ISerializablePtr AbstractModelParameter::Create( const IDeserializer& dob ) // FIXME: rethink if is might be done cleaner
+ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) // FIXME: rethink if is might be done cleaner
 {
-    auto name = dob.GetAttribute( "name" );
-    auto type = dob.GetAttribute( "type" );
-    auto timeline = dob.GetAttribute( "timeline" );
+    auto name = deser.GetAttribute( "name" );
+    auto type = deser.GetAttribute( "type" );
+    auto timeline = deser.GetAttribute( "timeline" );
 
-    auto tm = TimelineManager::GetInstance();
-    ITimeEvaluatorPtr te = tm->GetTimeEvaluator( timeline );
+    auto sceneTimeline = dynamic_cast< BVDeserializeContext* >( deser.GetDeserializeContext() )->m_sceneTimeline;
+    ITimeEvaluatorPtr te = TimelineHelper::GetTimeEvaluator( timeline, sceneTimeline );
     if( te == nullptr ) 
     {
         assert( false );
-        te = tm->GetRootTimeline();
+        te = sceneTimeline;
     }
 
-    auto values = SerializationHelper::DeserializeObjectLoadArrayImpl< KeyFrame >( dob, "interpolator", "key" );
+    auto values = SerializationHelper::DeserializeObjectLoadArrayImpl< KeyFrame >( deser, "interpolator", "key" );
 
     if( type == "float" )
     {
@@ -142,7 +144,7 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& dob ) // F
     {
         auto param = ParametersFactory::CreateParameterTransform( name, te );
 
-        auto transform = SerializationHelper::DeserializeObjectLoadImpl< TransformF >( dob, "composite_transform" );
+        auto transform = SerializationHelper::DeserializeObjectLoadImpl< TransformF >( deser, "composite_transform" );
 
         param->Transform() = *transform;
 
@@ -153,7 +155,7 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& dob ) // F
     {
         auto param = ParametersFactory::CreateParameterTransformVec( name, te );
 
-        auto transes = SerializationHelper::DeserializeObjectLoadPropertiesImpl< TransformF >( dob, "composite_transform" );
+        auto transes = SerializationHelper::DeserializeObjectLoadPropertiesImpl< TransformF >( deser, "composite_transform" );
 
         int i = 0;
         for( auto trans : transes )

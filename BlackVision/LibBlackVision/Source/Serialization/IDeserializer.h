@@ -5,6 +5,11 @@
 
 namespace bv {
 
+class DeserializeContext
+{
+public:
+    virtual ~DeserializeContext() {}
+};
 
 class IDeserializer
 {
@@ -12,6 +17,8 @@ private:
 protected:
 public:
     virtual ~IDeserializer() {};
+
+    virtual DeserializeContext* GetDeserializeContext() const = 0;
 
 	virtual std::string			GetAttribute        ( const std::string& name ) const = 0;
     virtual std::wstring		GetAttribute        ( const std::wstring& name ) const = 0;
