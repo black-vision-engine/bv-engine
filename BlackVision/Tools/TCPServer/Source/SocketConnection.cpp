@@ -1,5 +1,6 @@
 #include "SocketConnection.h"
 
+#include "Tools/IncludeJSON.h"
 #include "UseLoggerTCPModule.h"
 #include "Engine/Events/EventHelpers.h"
 
@@ -82,8 +83,14 @@ void SocketConnection::MainThread()
             LogMsg logMsg;
             while( m_logQueue->TryPop( logMsg ) )
             {
+                Json::Value responseJson;
+                responseJson[ "cmd" ] = "Logger";
+                responseJson[ "Severity" ] = std::move( logMsg.severity );
+                responseJson[ "Module" ] = std::move( logMsg.module );
+                responseJson[ "Message" ] = std::move( logMsg.message );
+
                 ResponseMsg response;
-                response.message = toWString( "[" + std::move( logMsg.severity ) + "][" + std::move( logMsg.module ) + "]" + std::move( logMsg.message ) + "\n" );
+                response.message = toWString( responseJson.toStyledString() );
                 response.socketID = (int)m_socketID;
 
                 QueueResponse( std::move( response ) );
