@@ -418,7 +418,7 @@ std::string Kind2String( TransformKind kind )
 template<typename ParamT>
 void                                CompositeTransform<ParamT>::Serialize               ( ISerializer& doc ) const
 {
-    doc.EnterChild( "composite_transform" );
+    doc.EnterArray( "composite_transform" );
 
     for( auto trans : m_transformations )
     {
