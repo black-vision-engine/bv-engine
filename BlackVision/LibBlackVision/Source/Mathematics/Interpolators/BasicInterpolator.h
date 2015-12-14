@@ -54,6 +54,8 @@ public:
     void AddKey             ( TimeValueT t, const ValueT & v );
     void AddKey             ( const Key<TimeValueT, ValueT> & key );
 
+    bool RemoveKey          ( TimeValueT t );
+
     ValueT Evaluate         ( TimeValueT t ) const;
     ValueT EvaluatePoint    ( TimeValueT t ) const;
 

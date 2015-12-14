@@ -2346,9 +2346,6 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextCacheTest         ( model::ITi
 {
     //Timeline stuff
     auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-    model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
-    model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
-    
     auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
 
     someTimelineWithEvents->AddChild( localTimeline );
@@ -2359,7 +2356,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextCacheTest         ( model::ITi
 
 
     auto node = model::BasicNode::Create( "Text", timeEvaluator );
-    auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
+    auto success = node->AddPlugins( GSimplePluginsUIDS, someTimelineWithEvents );
     assert( success );
 
     SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, translation );

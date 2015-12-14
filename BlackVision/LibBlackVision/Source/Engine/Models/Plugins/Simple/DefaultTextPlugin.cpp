@@ -364,6 +364,7 @@ void                                DefaultTextPlugin::Update                   
     m_timeParam->SetVal( t, TimeType( 0.0 ) );
 	BasePlugin::Update( t );
 
+    auto text = m_textParam->Evaluate();
     if( m_currentText != m_textParam->Evaluate() )
     {
         SetText( m_textParam->Evaluate() );

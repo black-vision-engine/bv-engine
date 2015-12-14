@@ -34,6 +34,68 @@ inline bool SetSimpleTypedParameter< ParamEnum< GenericEnumType > >( IParameterP
     return true;
 }
 
+
+template<ModelParamType ParamType>
+class ParamTypeTrait
+{ public: typedef ParamBool ObjectType; };
+
+template<>
+class ParamTypeTrait<ModelParamType::MPT_BOOL>
+{ public: typedef ParamBool ObjectType; };
+
+template<>
+class ParamTypeTrait<ModelParamType::MPT_ENUM>
+{ public: typedef ParamEnum<GenericEnumType> ObjectType; };
+
+template<>
+class ParamTypeTrait<ModelParamType::MPT_FLOAT>
+{ public: typedef ParamFloat ObjectType; };
+
+template<>
+class ParamTypeTrait<ModelParamType::MPT_INT>
+{ public: typedef ParamInt ObjectType; };
+
+template<>
+class ParamTypeTrait<ModelParamType::MPT_MAT2>
+{ public: typedef ParamMat2 ObjectType; };
+
+template<>
+class ParamTypeTrait<ModelParamType::MPT_STRING>
+{ public: typedef ParamString ObjectType; };
+
+template<>
+class ParamTypeTrait<ModelParamType::MPT_VEC2>
+{ public: typedef ParamVec2 ObjectType; };
+
+template<>
+class ParamTypeTrait<ModelParamType::MPT_VEC3>
+{ public: typedef ParamVec3 ObjectType; };
+
+template<>
+class ParamTypeTrait<ModelParamType::MPT_VEC4>
+{ public: typedef ParamVec4 ObjectType; };
+
+template<>
+class ParamTypeTrait<ModelParamType::MPT_WSTRING>
+{ public: typedef ParamWString ObjectType; };
+
+
+template<ModelParamType ParamType>
+bool RemoveTypedParamKey( IParameterPtr parameter, TimeType t )
+{
+    typedef ParamTypeTrait<ParamType>::ObjectType CastType;
+
+    CastType* typedParam = QueryTypedParam< std::shared_ptr< CastType > >( parameter ).get();
+    if( typedParam == nullptr )
+    {
+        return false;
+    }
+
+    typedParam->RemoveVal( t );
+
+    return true;
+}
+
 } //anonymous
 
 

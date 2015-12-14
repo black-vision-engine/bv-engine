@@ -370,6 +370,22 @@ void BasicInterpolator<TimeValueT, ValueT, FloatT>::AddKey( const Key<TimeValueT
     }
 }
 
+// ***********************
+//
+template<class TimeValueT, class ValueT, class FloatT  >
+bool BasicInterpolator<TimeValueT, ValueT, FloatT>::RemoveKey       ( TimeValueT t )
+{
+    for( SizeType i = 0; i < keys.size(); ++i )
+    {
+        if( std::fabs( keys[ i ].t - t ) <= tolerance )
+        {
+            keys.erase( keys.begin() + i );
+            return true;
+        }
+    }
+    return false;
+}
+
 // *************************************
 //
 template<class TimeValueT, class ValueT, class FloatT  >

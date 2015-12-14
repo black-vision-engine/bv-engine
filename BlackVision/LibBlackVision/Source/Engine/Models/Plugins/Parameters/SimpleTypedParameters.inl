@@ -113,6 +113,14 @@ inline  void        SimpleParameterImpl< InterpolatorType, ValueType, type >::Se
     m_interpolator.AddKey( t, val );
 }
 
+// ***********************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+inline  bool        SimpleParameterImpl< InterpolatorType, ValueType, type >::RemoveVal ( TimeType t )
+{
+    return m_interpolator.RemoveKey( t );
+}
+
 // *******************************
 //
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
