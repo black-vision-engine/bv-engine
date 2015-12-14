@@ -253,6 +253,7 @@ void                BasicInterpolator<TimeValueT, ValueT, FloatT>::Serialize    
 {
     doc.EnterChild( "interpolator" );
     
+    doc.EnterArray( "keys" );
     for( auto key : keys )
     {
         doc.EnterChild( "key" );
@@ -260,6 +261,7 @@ void                BasicInterpolator<TimeValueT, ValueT, FloatT>::Serialize    
         doc.SetAttribute( "val", std::to_string( key.val ) );
         doc.ExitChild();
     }
+    doc.ExitChild();
 
     doc.ExitChild();
 }

@@ -93,20 +93,25 @@ CompositeBezierInterpolator< TimeValueT, ValueT >::CompositeBezierInterpolator( 
 template< class TimeValueT, class ValueT >
 void                                        CompositeBezierInterpolator< TimeValueT, ValueT >::Serialize       ( ISerializer& ser ) const
 {
-ser.EnterChild( "interpolator" );
+    ser.EnterChild( "interpolator" );
 
-    ser.SetAttribute( "curve_type", SerializationHelper::Enum2String< CurveType >( SerializationHelper::ct2s, m_type ) );
-    SerializationHelper::SerializeAttribute( ser, m_preMethod, "preMethod" );
-    SerializationHelper::SerializeAttribute( ser, m_postMethod, "postMethod" );
+        ser.SetAttribute( "curve_type", SerializationHelper::Enum2String< CurveType >( SerializationHelper::ct2s, m_type ) );
+        SerializationHelper::SerializeAttribute( ser, m_preMethod, "preMethod" );
+        SerializationHelper::SerializeAttribute( ser, m_postMethod, "postMethod" );
 
-    for( size_t i = 0; i < interpolators.size(); i++ )
-    {
-        keys[ i ].Serialize( ser );
-        interpolators[ i ]->Serialize( ser );
-    }
-    ( keys.end()-1 )->Serialize( ser );
+        ser.EnterArray( "keys" );
 
-ser.ExitChild();
+            for( size_t i = 0; i < interpolators.size(); i++ )
+            {
+                keys[ i ].Serialize( ser );
+                interpolators[ i ]->Serialize( ser );
+            }
+
+            ( keys.end()-1 )->Serialize( ser );
+
+        ser.ExitChild();
+
+    ser.ExitChild();
 }
 
 // *************************************
