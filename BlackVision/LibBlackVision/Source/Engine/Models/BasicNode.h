@@ -27,10 +27,6 @@ class ModelNodeEditor;
 
 class BasicNode : public IModelNode, public std::enable_shared_from_this< BasicNode >, public ISerializable
 {
-public:
-
-    //FIXME: hack
-    static std::hash_map< IModelNode *, SceneNode * >    ms_nodesMapping;
 
 private:
 
@@ -68,7 +64,7 @@ public:
 
     virtual IModelNodePtr                   GetNode                 ( const std::string & path, const std::string & separator = "/" ) override;
     virtual IModelNodePtr                   GetChild                ( const std::string & name ) override;
-
+    
 	INodeLogicPtr							GetLogic				();
 
     virtual const IPluginListFinalized *    GetPluginList           () const override;
@@ -89,7 +85,7 @@ public:
     BasicNodePtr                            GetChild                ( unsigned int i );
     unsigned int                            GetNumPlugins           () const;
 
-    void                                    AddChildToModelOnly     ( BasicNodePtr n );
+	void                                    AddChildToModelOnly     ( BasicNodePtr n );
     void                                    DetachChildNodeOnly     ( BasicNodePtr n );
 
 	ModelNodeEditor *						GetModelNodeEditor		();
