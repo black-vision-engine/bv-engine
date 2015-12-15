@@ -313,7 +313,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGlobalEffectTest      ( model::IT
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateLightScatteringTest      ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/test_frame_00018.bmp", false, 3.f, 3.f );
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/5.png", false, 3.f, 3.f );
 
      // ROOT
     auto root = bTex.CreateNode( "root", true );
