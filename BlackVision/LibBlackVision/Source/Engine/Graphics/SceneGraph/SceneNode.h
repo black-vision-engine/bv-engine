@@ -37,6 +37,7 @@ public:
     SizeType                NumChildNodes       () const;
 
     void                    AddChildNode        ( SceneNode * child );
+    void                    AddChildNode        ( SceneNode * child, UInt32 idx );
     void                    DetachChildNode     ( SceneNode * node );
     SceneNode *             DetachChildNode     ( unsigned int idx );
 

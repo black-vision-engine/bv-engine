@@ -100,26 +100,47 @@ SceneNode *             BVProject::GetEngineSceneRoot ()  const
 
 // *******************************
 //
-BVProjectEditor *         BVProject::GetProjectEditor     ( )
+BVProjectEditor *       BVProject::GetProjectEditor		()
 {
     return m_projectEditor;
 }
 
 // *******************************
 //
-void                    BVProject::AddScene           ( model::SceneModelPtr sceneModel )
+bool					BVProject::AddScene				( model::SceneModelPtr sceneModel )
 {
-	RemoveScene( sceneModel->GetName() ); 
-
-	m_sceneModelVec.push_back( sceneModel );
-	m_rootNode->AddChildToModelOnly( sceneModel->GetRootNode() );
-
-	m_globalTimeline->AddChild( sceneModel->GetTimeline() );
+	return AddScene( sceneModel, ( UInt32 )m_sceneModelVec.size() );
 }
 
 // *******************************
 //
-bool                    BVProject::RemoveScene        ( const std::string & name )
+bool                    BVProject::AddScene				( model::SceneModelPtr sceneModel, UInt32 idx )
+{
+	//FIXME: prevent adding two scenes with the same name
+	if( GetScene( sceneModel->GetName() ) )
+	{
+		return false;
+	}
+	
+	if( idx < m_sceneModelVec.size() )
+	{
+		m_sceneModelVec.insert( m_sceneModelVec.begin() + idx, sceneModel );
+	}
+	else
+	{
+		m_sceneModelVec.push_back( sceneModel );
+	}
+
+	m_rootNode->AddChildToModelOnly( sceneModel->GetRootNode(), idx );
+
+	m_globalTimeline->AddChild( sceneModel->GetTimeline() );
+	
+	return true;
+}
+
+// *******************************
+//
+bool                    BVProject::RemoveScene			( const std::string & name )
 {
 	for( unsigned int i = 0; i < m_sceneModelVec.size(); ++i )
 	{
@@ -176,6 +197,5 @@ void							BVProject::SetStartTime		( unsigned long millis )
 {
 	m_globalTimeline->SetTimeOffset( -TimeType( millis ) * TimeType( 0.001 ) );
 }
-
 
 } // bv

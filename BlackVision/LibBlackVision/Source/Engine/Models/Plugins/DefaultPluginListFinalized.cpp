@@ -43,7 +43,7 @@ IPluginPtr              DefaultPluginListFinalized::GetPlugin           ( const 
 
 // *******************************
 //
-IPluginPtr              DefaultPluginListFinalized::GetPlugin           ( unsigned int idx ) const
+IPluginPtr              DefaultPluginListFinalized::GetPlugin           ( UInt32 idx ) const
 {
     assert( idx < m_plugins.size() );
 
@@ -101,7 +101,7 @@ IPluginPtr               DefaultPluginListFinalized::GetPlugin           ( const
 
 // *******************************
 //
-IPluginPtr                DefaultPluginListFinalized::GetPlugin           ( unsigned int idx )
+IPluginPtr                DefaultPluginListFinalized::GetPlugin           ( UInt32 idx )
 {
     assert( idx < m_plugins.size() );
 
@@ -117,14 +117,22 @@ void                    DefaultPluginListFinalized::AttachPlugin        ( IPlugi
 
 // *******************************
 //
-bool                    DefaultPluginListFinalized::AttachPlugin        ( IPluginPtr plugin, unsigned int idx )
+bool                    DefaultPluginListFinalized::AttachPlugin        ( IPluginPtr plugin, UInt32 idx )
 {
-    if( plugin == nullptr || idx > m_plugins.size() )
+    if( plugin == nullptr )
 	{
 		return false;
 	}
 
-	m_plugins.insert( m_plugins.begin() + idx, plugin );
+	if( idx < m_plugins.size() )
+	{
+		m_plugins.insert( m_plugins.begin() + idx, plugin );
+	}
+	else
+	{
+		m_plugins.push_back( plugin );
+		idx = ( UInt32 )( m_plugins.size() - 1 );
+	}
 
 	for( UInt32 i = idx; i < m_plugins.size(); ++i )
 	{
@@ -159,7 +167,7 @@ IPluginPtr				DefaultPluginListFinalized::DetachPlugin	   ( const std::string & 
 
 // *******************************
 //
-IPluginPtr				DefaultPluginListFinalized::DetachPlugin	   ( unsigned int idx )
+IPluginPtr				DefaultPluginListFinalized::DetachPlugin	   ( UInt32 idx )
 {
     if( idx >= m_plugins.size() )
 	{

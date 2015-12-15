@@ -48,7 +48,8 @@ private:
 
     explicit                BVProject             ( Renderer * renderer );
 
-	void                    AddScene            ( model::SceneModelPtr sceneModel );
+	bool                    AddScene            ( model::SceneModelPtr sceneModel );
+	bool                    AddScene            ( model::SceneModelPtr sceneModel, UInt32 idx );
     bool                    RemoveScene         ( const std::string & name );
 
 public:

@@ -1,10 +1,8 @@
 #include "SceneEventsHandlers.h"
 
 #include "Engine/Models/BVProjectEditor.h"
-#include "Engine/Models/ModelNodeEditor.h"
 #include "../../BVAppLogic.h"
 #include "../../UseLoggerBVAppModule.h"
-#include "Tools/IncludeJSON.h"
 
 #include "ProjectManager.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
@@ -21,90 +19,31 @@
 namespace bv
 {
 
-// ***********************
+// *********************************
 //
-SceneEventsHandlers::SceneEventsHandlers( BVAppLogic* logic )
-    : m_appLogic( logic )
-{}
-
-SceneEventsHandlers::~SceneEventsHandlers()
-{}
-
-
-// ***********************
-//
-void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
+Json::Value ToJSONArray( const StringVector & v )
 {
-    if( evt->GetEventType() != bv::NodeStructureEvent::Type() )
-        return;
-    bv::NodeStructureEventPtr structureEvent = std::static_pointer_cast<bv::NodeStructureEvent>( evt );
+	Json::Value root;
 
-    std::string& nodeName = structureEvent->NodeName;
-    std::string& newNodeName = structureEvent->NewNodeName;
-	std::string& sceneName = structureEvent->SceneName;
-    //std::string& timelineName = structureEvent->TimelineName;
-    auto command = structureEvent->SceneCommand;
+	for( auto s : v )
+	{
+		root.append( s );
+	}
 
-    auto node = GetNode( m_appLogic, sceneName, nodeName );
-    if( !node ) return;
-
-    if( command == NodeStructureEvent::Command::AddNode )
-    {
-        auto newNode = model::BasicNode::Create( newNodeName, nullptr );
-		m_appLogic->GetBVProject()->GetProjectEditor()->AddChildNode( sceneName, node, newNode );
-    }
-    else if( command == NodeStructureEvent::Command::RemoveNode )
-    {
-        auto root = GetRootNode( m_appLogic, sceneName );   // Can't fail if we got here. Checked in GetNode function above.
-        auto parentNodeName = nodeName.substr( 0, nodeName.find_last_of("/") );
-        auto childNode = nodeName.substr( nodeName.find_last_of("/") + 1 );
-        auto parentNode = root->GetNode( parentNodeName );
-		
-        if( root == node )
-        {
-            parentNode = m_appLogic->GetBVProject()->GetModelSceneRoot();
-        }
-
-        m_appLogic->GetBVProject()->GetProjectEditor()->DeleteChildNode( sceneName, parentNode, childNode );
-    }
-    else if( command == NodeStructureEvent::Command::SetNodeVisible )
-        node->SetVisible( true );
-    else if( command == NodeStructureEvent::Command::SetNodeInvisible )
-        node->SetVisible( false );
+	return root;
+}
+// *********************************
+//
+Json::Value Str2Json( const std::string & data )
+{
+	return Json::Value( data );
 }
 
-// ***********************
+// *********************************
 //
-void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
+Json::Value GetRequestParamValue( std::string& request )
 {
-    if( evt->GetEventType() != bv::PluginStructureEvent::Type() )
-        return;
-    bv::PluginStructureEventPtr structureEvent = std::static_pointer_cast<bv::PluginStructureEvent>( evt );
-
-    std::string& nodeName = structureEvent->NodeName;
-    std::string& sceneName = structureEvent->SceneName;
-    std::string& pluginName = structureEvent->PluginName;
-    std::string& pluginUID = structureEvent->PluginUID;
-    unsigned int attachIndex = structureEvent->AttachIndex;
-    auto command = structureEvent->PluginCommand;
-
-    auto node = GetNode( m_appLogic, sceneName, nodeName );
-    if( !node ) return;
-
-    bv::model::BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
-
-    if( command == PluginStructureEvent::Command::AddPlugin )
-    {
-        auto plugin = PluginsManager::DefaultInstance().CreatePlugin( pluginUID, pluginName, nullptr, model::TimelineManager::GetInstance()->GetRootTimeline() );
-        m_appLogic->GetBVProject()->GetProjectEditor()->AddPlugin( basicNode, plugin, attachIndex );
-        //basicNode->AddPlugin( pluginUID, pluginName, m_appLogic->GetTimelineManager()->GetRootTimeline() );
-    }
-    else if( command == PluginStructureEvent::Command::RemovePlugin )
-        m_appLogic->GetBVProject()->GetProjectEditor()->DeletePlugin( basicNode, pluginName );
-    else if( command == PluginStructureEvent::Command::AttachPlugin )
-        m_appLogic->GetBVProject()->GetProjectEditor()->AttachPlugin( basicNode, attachIndex );
-    else if( command == PluginStructureEvent::Command::DetachPlugin )
-        m_appLogic->GetBVProject()->GetProjectEditor()->DetachPlugin( basicNode, pluginName );
+	return Str2Json( std::string( request.begin(), request.end() ) );
 }
 
 // *********************************
@@ -119,33 +58,6 @@ Json::Value ToJSONArray( const PathVec & v )
     }
 
     return root;
-}
-
-// *********************************
-//
-Json::Value ToJSONArray( const StringVector & v )
-{
-    Json::Value root;
-
-    for( auto s : v )
-    {
-        root.append( s );
-    }
-
-    return root;
-}
-// *********************************
-//
-Json::Value Str2Json( const std::string & data )
-{
-    return Json::Value( data );
-}
-
-// *********************************
-//
-Json::Value GetRequestParamValue( std::string& request )
-{
-    return Str2Json( std::string( request.begin(), request.end() ) );
 }
 
 // *********************************
@@ -167,6 +79,147 @@ void SendOnSceneStructureResponse( int socketID, const std::string & cmd, const 
     responseEvent->Response = WS;
     responseEvent->SocketID = socketID;
     GetDefaultEventManager().QueueResponse( responseEvent );
+}
+
+
+
+// ***********************
+//
+SceneEventsHandlers::SceneEventsHandlers( BVAppLogic* logic )
+    : m_appLogic( logic )
+{}
+
+SceneEventsHandlers::~SceneEventsHandlers()
+{}
+
+// ***********************
+//
+void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
+{
+    if( evt->GetEventType() != bv::NodeStructureEvent::Type() )
+        return;
+    bv::NodeStructureEventPtr structureEvent = std::static_pointer_cast<bv::NodeStructureEvent>( evt );
+
+	std::string& sceneName		= structureEvent->SceneName;
+    std::string& nodePath		= structureEvent->NodePath;
+    std::string& newNodeName	= structureEvent->NewNodeName;
+	std::string & request		= structureEvent->Request;
+    auto attachIndex			= structureEvent->AttachIndex;
+
+    auto command = structureEvent->SceneCommand;
+
+	auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+
+    if( command == NodeStructureEvent::Command::AddNode )
+    {
+		editor->AddChildNode( sceneName, nodePath, newNodeName );
+    }
+    else if( command == NodeStructureEvent::Command::RemoveNode )
+    {
+		editor->DeleteChildNode( sceneName, nodePath );
+    }
+    else if( command == NodeStructureEvent::Command::SetNodeVisible )
+	{
+		editor->SetNodeVisible( sceneName, nodePath, true );
+	}
+    else if( command == NodeStructureEvent::Command::SetNodeInvisible )
+	{
+		editor->SetNodeVisible( sceneName, nodePath, false );
+	}
+	else if( command == NodeStructureEvent::Command::RenameNode )
+	{
+		editor->RenameNode( sceneName, nodePath, newNodeName );
+	}
+	else if( command == NodeStructureEvent::Command::AttachNode )
+	{
+		editor->AttachChildNode( sceneName, nodePath, attachIndex );
+	}
+	else if( command == NodeStructureEvent::Command::DetachNode )
+	{
+		editor->DetachChildNode( sceneName, nodePath );
+	}
+	else if( command == NodeStructureEvent::Command::MoveNode )
+	{
+		//FIXME: replace with sth more generic
+		auto destSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
+		auto destNodePath = GetRequestParamValue( request )[ "DestPath" ].asString();
+		auto destIdx = GetRequestParamValue( request )[ "DestIndex" ].asUInt();
+		auto srcSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
+		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
+		
+		editor->MoveNode( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath );
+	}
+	else if( command == NodeStructureEvent::Command::CopyNode )
+	{
+		//FIXME: replace with sth more generic
+		auto destSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
+		auto destNodePath = GetRequestParamValue( request )[ "DestPath" ].asString();
+		auto srcSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
+		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
+
+		editor->AddNodeCopy( destSceneName, destNodePath, srcSceneName, srcNodePath );
+	}
+}
+
+// ***********************
+//
+void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
+{
+    if( evt->GetEventType() != bv::PluginStructureEvent::Type() )
+        return;
+    bv::PluginStructureEventPtr structureEvent = std::static_pointer_cast<bv::PluginStructureEvent>( evt );
+
+    std::string& nodePath		= structureEvent->NodePath;
+    std::string& sceneName		= structureEvent->SceneName;
+    std::string& pluginName		= structureEvent->PluginName;
+    std::string& pluginUID		= structureEvent->PluginUID;
+	std::string& timelinePath	= structureEvent->TimelinePath;
+	std::string & request		= structureEvent->Request;
+    unsigned int attachIndex	= structureEvent->AttachIndex;
+    auto command				= structureEvent->PluginCommand;
+
+	auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+
+    if( command == PluginStructureEvent::Command::AddPlugin )
+    {
+		editor->AddPlugin( sceneName, nodePath, pluginUID, pluginName, timelinePath, attachIndex );
+    }
+    else if( command == PluginStructureEvent::Command::RemovePlugin )
+	{
+		editor->DeletePlugin( sceneName, nodePath, pluginName );
+	}
+    else if( command == PluginStructureEvent::Command::AttachPlugin )
+	{
+		editor->AttachPlugin( sceneName, nodePath, attachIndex );
+	}
+    else if( command == PluginStructureEvent::Command::DetachPlugin )
+	{
+		editor->DetachPlugin( sceneName, nodePath, pluginName );
+	}
+    else if( command == PluginStructureEvent::Command::CopyPlugin )
+	{
+		//FIXME: replace with sth more generic
+		auto destSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
+		auto destNodePath = GetRequestParamValue( request )[ "DestPath" ].asString();
+		auto destIdx = GetRequestParamValue( request )[ "DestIndex" ].asUInt();
+		auto srcSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
+		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
+		auto srcPluginName = GetRequestParamValue( request )[ "SrcName" ].asString();
+
+		editor->AddPluginCopy( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName );
+	}
+	else if( command == PluginStructureEvent::Command::MovePlugin )
+	{
+		//FIXME: replace with sth more generic
+		auto destSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
+		auto destNodePath = GetRequestParamValue( request )[ "DestPath" ].asString();
+		auto destIdx = GetRequestParamValue( request )[ "DestIndex" ].asUInt();
+		auto srcSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
+		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
+		auto srcPluginName = GetRequestParamValue( request )[ "SrcName" ].asString();
+
+		editor->MovePlugin( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName );
+	}
 }
 
 // ***********************

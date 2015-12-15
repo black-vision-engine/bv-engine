@@ -247,6 +247,11 @@ public:
         RemoveNode,
         SetNodeVisible,
         SetNodeInvisible,
+        RenameNode,
+        AttachNode,
+        DetachNode,
+        MoveNode,
+        CopyNode,
         Fail            ///< Wrong command
     } Command;
 private:
@@ -255,9 +260,12 @@ private:
 public:
     NodeStructureEvent::Command     SceneCommand;
     std::string                     SceneName;
-    std::string                     NodeName;
+    std::string                     NodePath;
     std::string                     NewNodeName;
-    std::string                     TimelineName;
+	UInt32							AttachIndex;
+    std::string                     Request;
+
+    std::string                     TimelinePath; //not used
 public:
     explicit                        NodeStructureEvent   () {}
 
@@ -284,6 +292,8 @@ public:
         RemovePlugin,
         AttachPlugin,
         DetachPlugin,
+        CopyPlugin,
+        MovePlugin,
         Fail            ///< Wrong command
     } Command;
 private:
@@ -291,10 +301,12 @@ private:
     static std::string          m_sEventName;
 public:
     PluginStructureEvent::Command   PluginCommand;
-    std::string                     NodeName;
+    std::string                     NodePath;
     std::string                     SceneName;
     std::string                     PluginName;
     std::string                     PluginUID;
+    std::string                     TimelinePath;
+	std::string						Request;
     unsigned int                    AttachIndex;
 public:
     explicit                        PluginStructureEvent    () {}

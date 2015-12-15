@@ -100,9 +100,16 @@ bool                    ModelSceneEditor::DetachRootNode     ()
 //
 bool                    ModelSceneEditor::AttachChildNode    ( BasicNodePtr parent )
 {
+	return AttachChildNode( parent, ( UInt32 )parent->GetNumChildren() );
+}
+
+// ********************************
+//
+bool                    ModelSceneEditor::AttachChildNode    ( BasicNodePtr parent, UInt32 destIdx )
+{
     if( parent && m_detachedNode )
     {
-        parent->AddChildToModelOnly( m_detachedNode );
+        parent->AddChildToModelOnly( m_detachedNode, destIdx );
 
         m_detachedNode = nullptr;
 
