@@ -24,11 +24,10 @@ namespace bv {
     
 namespace model {
 
-// FIXME: hack
-std::hash_map< IModelNode *, SceneNode * >    BasicNode::ms_nodesMapping;
-
 namespace {
 
+// ********************************
+//
 IModelNodePtr  FindNode( const TNodeVec & vec, const std::string & name )
 {
     for( auto node : vec )
@@ -181,28 +180,22 @@ IModelNodePtr           BasicNode::GetNode                  ( const std::string 
     std::string suffix = path;
 
     auto name = SplitPrefix( suffix, separator );
-
-    if( name == "" || name == GetName() )
+    if( name == GetName() )
     {
-        if( suffix.size() > 0 )
-        {
-            return GetNode( suffix, separator );
-        }
-        else
-        {
-            return shared_from_this();
-        }
-    }
-    else
-    {
-        auto child = GetChild( name );
+		if( suffix.empty() )
+		{
+			return shared_from_this();
+		}
 
-        if( child != nullptr )
-        {
-            return child->GetNode( suffix );
-        }
+		for( auto & child : m_children )
+		{
+			auto node = child->GetNode( suffix, separator );
+			if( node )
+			{
+				return node;
+			}
+		}
     }
-
     return nullptr;
 }
 
@@ -332,7 +325,7 @@ unsigned int    BasicNode::GetNumPlugins                    () const
 //
 void            BasicNode::AddChildToModelOnly              ( BasicNodePtr n )
 {
-    m_children.push_back( n );
+	m_children.push_back( n );
 }
 
 // ********************************
@@ -470,6 +463,12 @@ void  BasicNode::SetVisible              ( bool visible )
 std::string                         BasicNode::SplitPrefix              ( std::string & str, const std::string & separator ) const
 {
     assert( separator.length() == 1 );
+
+	//strip unnecessary '/' 
+	if( !str.empty() && str[ 0 ] == '/' )
+		str.erase(0, 1);
+	if( !str.empty() && str[ str.size() - 1 ] == '/' )
+		str.erase(str.size() - 1);
 
     auto ret = Split( str, separator );
 
