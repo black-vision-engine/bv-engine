@@ -58,6 +58,8 @@ void                                DefaultTimeline::Serialize           ( ISeri
     ser.SetAttribute( "name", GetName() );
     ser.SetAttribute( "type", "default" );
 
+    SerializationHelper::SerializeAttribute( ser, m_timeEvalImpl.IsActive(), "play" );
+
     ser.SetAttribute( "duration", std::to_string( m_timeEvalImpl.GetDuration() ) );
     if( m_timeEvalImpl.GetWrapPre() == m_timeEvalImpl.GetWrapPost() && m_timeEvalImpl.GetWrapPost() == TimelineWrapMethod::TWM_REPEAT )
     {
