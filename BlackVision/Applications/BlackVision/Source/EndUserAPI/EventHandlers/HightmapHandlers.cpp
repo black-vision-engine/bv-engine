@@ -563,7 +563,7 @@ void    HightmapHandlers::UpdateHM        ()
      
                 float p = m_concentrateDistMarks[ i ];
 
-                model::DefaultTextPlugin::SetText( markConcentratedNode->GetPlugin( "text" ), to_wstring( int( p ) ) + L" km" );
+                SetParameter( markConcentratedNode->GetPlugin( "text" )->GetParameter( "text" ), 0.0, to_wstring( int( p ) ) + L" km" );
 
                 auto pos = tp->QueryEdgePosition( p * 1000.f );
                 float x = 1920.f / 1080.f * ( 2.f * pos.x - 1.f );

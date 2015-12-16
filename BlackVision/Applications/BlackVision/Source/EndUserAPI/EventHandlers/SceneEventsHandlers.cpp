@@ -103,7 +103,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 	std::string& sceneName		= structureEvent->SceneName;
     std::string& nodePath		= structureEvent->NodePath;
     std::string& newNodeName	= structureEvent->NewNodeName;
-	std::string & request		= structureEvent->Request;
+	std::string& request		= structureEvent->Request;
     auto attachIndex			= structureEvent->AttachIndex;
 
     auto command = structureEvent->SceneCommand;
@@ -638,7 +638,7 @@ void SceneEventsHandlers::OnNoMoreNodes       ( IEventPtr evt )
 			{
 				//model::DefaultTextPlugin::SetText( pl, examples[ i ] );
 
-                model::DefaultTextPlugin::SetText( pl, L"nowa wiadomoœæ "+to_wstring(examplesIndex) );
+                SetParameter( pl->GetParameter( "text" ), 0.0, L"nowa wiadomoœæ "+to_wstring(examplesIndex) );
                 examplesIndex=(examplesIndex+1)%20;
 
 				typedEvent->GetCrawler()->EnqueueNode( n );

@@ -1165,7 +1165,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTextNode( model::ITimeEvalua
     success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/arial.TTF", 423, 0, 0, false );
     assert( success );
 
-	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"1238" );
+    SetParameter( node->GetPlugin("text")->GetParameter( "text" ), 0.0, L"1238" );
 
 //return root;
 // LINEAR GRADIENT plugin
@@ -1589,7 +1589,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::ITimeEvaluatorPt
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AV::11A-AAAA\nBBBBCCCC\nDDD333DD88\nAAAAAAAA\nB3BBCCCC\nDDDD888DDD" );
 //    model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAABBBBCCCCDDDD" );
 	//model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"AV::11A-AAAABBBBCCCCDDD333DD88AAAAAAAAB3BBCCCCDDDD888DDD" );
-	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"123456789" );
+    SetParameter( node->GetPlugin("text")->GetParameter( "text" ), 0.0, L"123456789" );
 
     if( useAlphaMask )
     {
@@ -2342,21 +2342,21 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::ITimeEvalua
 #undef VERSION_COLOR
 }
 
-model::BasicNodePtr SimpleNodesFactory::CreateTextCacheTest         ( model::ITimeEvaluatorPtr timeEvaluator, glm::vec3 translation, glm::vec4 color, const std::wstring text, const std::string& fontName )
+model::BasicNodePtr SimpleNodesFactory::CreateTextCacheTest         ( model::ITimeEvaluatorPtr timeEvaluator, const std::string& nodeName, glm::vec3 translation, glm::vec4 color, const std::wstring text, const std::string& fontName )
 {
     //Timeline stuff
-    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-
-    someTimelineWithEvents->AddChild( localTimeline );
-    timeEvaluator->AddChild( someTimelineWithEvents );
+    timeEvaluator->AddChild( localTimeline );
 
     //Plugin stuff
-    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins3, GSimplePlugins3 + 3 );
+    std::vector< std::string > uids;
+	uids.push_back( "DEFAULT_TRANSFORM" );
+    uids.push_back( "DEFAULT_COLOR" );
+    uids.push_back( "DEFAULT_TEXT" );
 
 
-    auto node = model::BasicNode::Create( "Text", timeEvaluator );
-    auto success = node->AddPlugins( GSimplePluginsUIDS, someTimelineWithEvents );
+    auto node = model::BasicNode::Create( nodeName, timeEvaluator );
+    auto success = node->AddPlugins( uids, localTimeline );
     assert( success );
 
     SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, translation );
@@ -2374,10 +2374,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextCacheTest         ( model::ITi
     success = model::LoadFont( node->GetPlugin( "text" ), fontName, 30, 0, 0, true );
     assert( success );
 
-	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), text );
-
-    auto ai = TestAIManager::Instance().GetAIPreset( 2 );
-    ai->SetTimeline( someTimelineWithEvents );
+    SetParameter( node->GetPlugin("text")->GetParameter( "text" ), 0.0, text );
 
     return node;    
 }

@@ -61,7 +61,7 @@ private:
     //delegates
     void                                        OnSetText                   ( IEventPtr evt );
 
-    void                                        SetText                     ( const std::wstring & newText, TimeType t = TimeType( 0.f ) );
+    void                                        SetText                     ( const std::wstring & newText );
 
 	void										LoadTexture					(	DefaultTexturesDataPtr,
 																				TextureAssetConstPtr,
@@ -99,7 +99,6 @@ public:
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 
 	std::wstring                                GetText                     () const;
-    static bool									SetText						( IPluginPtr, const std::wstring& );
 };
 
 } // model

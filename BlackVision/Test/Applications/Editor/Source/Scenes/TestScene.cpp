@@ -6,6 +6,7 @@
 
 #include "Engine\Models\Plugins\Parameters\ParametersFactory.h"
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
+#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
 #include "Engine/Models/Timeline/TimelineHelper.h"
 
@@ -1454,7 +1455,7 @@ void					TestScene::InitColoredTextTest			()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TXT_NODE );
-		model::DefaultTextPlugin::SetText( child->GetPlugin( "text" ), L"test0\n4321" );
+        SetParameter( child->GetPlugin( "text" )->GetParameter("text"), 0.0, L"test0\n4321" );
 	});
 
 	m_testSteps.push_back( [&]

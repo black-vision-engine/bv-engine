@@ -445,11 +445,9 @@ void DefaultTextPlugin::ScaleToMaxTextLength		()
 
 // *************************************
 //
-void DefaultTextPlugin::SetText                     ( const std::wstring & newText, TimeType t )
+void DefaultTextPlugin::SetText                     ( const std::wstring & newText )
 {
-    m_textParam->SetVal( newText, t );
-
-    m_currentText = m_textParam->Evaluate();
+    m_currentText = newText;
 
     m_vaChannel->ClearAll();
 
@@ -464,18 +462,6 @@ void DefaultTextPlugin::SetText                     ( const std::wstring & newTe
 	HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
 }
 
-// *************************************
-//
-bool DefaultTextPlugin::SetText( IPluginPtr textPlugin, const std::wstring& text )
-{
-    if( textPlugin->GetTypeUid() == DefaultTextPluginDesc::UID() )
-    {
-        std::static_pointer_cast< DefaultTextPlugin >( textPlugin )->SetText( text );
-        return true;
-    }
-    else
-        return false;
-}
 
 } // model
 } // bv

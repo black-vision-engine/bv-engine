@@ -54,7 +54,7 @@ void		WidgetCounter::Update				( TimeType T)
 	 text = std::wstring(buffer);
 	 if( txt != nullptr )
 	 {
-	 	 model::DefaultTextPlugin::SetText( m_parentNode->GetPlugin("text"), text );
+         SetParameter( m_parentNode->GetPlugin("text")->GetParameter( "text" ), 0.0, text );
 	 }
 }
 

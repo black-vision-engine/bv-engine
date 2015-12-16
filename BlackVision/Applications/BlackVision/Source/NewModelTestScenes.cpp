@@ -37,6 +37,9 @@
 #include "Serialization/Json/JsonSerializeObject.h"
 #include "Serialization/Json/JsonDeserializeObject.h"
 
+#include "ProjectManager.h"
+#include <fstream>
+
 namespace bv {
 
 namespace {
@@ -536,6 +539,10 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     else if( scene == "REPLICATOR_TEST_SCENE" )
     {
         node = TestScenesFactory::NodeReplicatorTestScene( pluginsManager, timeline );
+    }
+    else if( scene == "STARWARS_TEST_SCENE" )
+    {
+        node = TestScenesFactory::FontTestScene( pluginsManager, timeline );
     }
     else
     {
@@ -1215,12 +1222,12 @@ model::BasicNodePtr     TestScenesFactory::AssetCacheTestScene         ( const m
     auto node2 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CYLINDER", glm::vec3( -3.0, 2.0, -3.0 ), "textures/water.jpg" );
     auto node3 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CUBE", glm::vec3( 5.0, -5.0, 0.0 ), "textures/water.jpg" );
 
-    auto node4 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, glm::vec3( 0.0, -0.4, 0.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 1", "fonts/Astera.TTF" );
-    auto node5 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, glm::vec3( -3.0, 0.0, -3.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 2", "fonts/Astera.TTF" );
-    auto node6 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, glm::vec3( -4.0, -3.0, 1.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Courbi tekst 1", "fonts/courbi.ttf" );
-    auto node7 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, glm::vec3( 0.0, 0.0, 4.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Courbi tekst 2", "fonts/courbi.ttf" );
-    auto node8 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, glm::vec3( 1.0, 0.0, -3.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Cour tekst 1", "fonts/cour.ttf" );
-    auto node9 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, glm::vec3( -4.0, -3.0, 1.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Cour tekst 2", "fonts/cour.ttf" );
+    auto node4 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, "Text", glm::vec3( 0.0, -0.4, 0.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 1", "fonts/Astera.TTF" );
+    auto node5 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, "Text", glm::vec3( -3.0, 0.0, -3.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 2", "fonts/Astera.TTF" );
+    auto node6 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, "Text", glm::vec3( -4.0, -3.0, 1.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Courbi tekst 1", "fonts/courbi.ttf" );
+    auto node7 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, "Text", glm::vec3( 0.0, 0.0, 4.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Courbi tekst 2", "fonts/courbi.ttf" );
+    auto node8 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, "Text", glm::vec3( 1.0, 0.0, -3.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Cour tekst 1", "fonts/cour.ttf" );
+    auto node9 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, "Text", glm::vec3( -4.0, -3.0, 1.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Cour tekst 2", "fonts/cour.ttf" );
 
     node0->AddChildToModelOnly( node1 );
     node0->AddChildToModelOnly( node2 );
@@ -1311,7 +1318,7 @@ model::BasicNodePtr TestScenesFactory::RemoteEventsTestScene( const model::Plugi
     pluginsManager;
     auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "textures/water.jpg" );
     auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "textures/sand.jpg" );
-    auto node2 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, glm::vec3( 0.0, -0.4, 0.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Astera tekst 1", "fonts/courbi.TTF" );
+    auto node2 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, "Text", glm::vec3( 0.0, -0.4, 0.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Long time ago in a galaxy", "fonts/StarWars.ttf" );
 
     node0->AddChildToModelOnly( node1 );
     node0->AddChildToModelOnly( node2 );
@@ -1319,5 +1326,39 @@ model::BasicNodePtr TestScenesFactory::RemoteEventsTestScene( const model::Plugi
     return node0;
 }
 
+model::BasicNodePtr TestScenesFactory::FontTestScene( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    pluginsManager;
+
+    glm::vec3 nodeTranslation( 0.0, -2.0, -1.0 );
+    glm::vec3 nextTranslation( 0.0, -0.1, 0.0 );
+    glm::vec4 color( 1.0, 0.7, 0.0, 1.0 );
+
+    auto node0 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, "Dummy", nodeTranslation, color, L"", "fonts/StarWars.ttf" );
+
+    auto rootPath = ProjectManager::GetInstance()->GetRootDir();
+    std::string textPath = "other/FontTestText.txt";
+    rootPath = rootPath.Join( textPath );
+    
+    std::string nextLine;
+    std::string line = "line";
+    unsigned int numLines = 0;
+
+    std::ifstream file( rootPath.Str() );
+    if( !file.fail() )
+    {
+        while( !file.eof() )
+        {
+            numLines++;
+            nodeTranslation += nextTranslation;
+
+            std::getline( file, nextLine );
+            auto newNode = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, line + std::to_string( numLines ), nodeTranslation, color, std::wstring( nextLine.begin(), nextLine.end() ), "fonts/StarWars.ttf" );
+            node0->AddChildToModelOnly( newNode );
+        }
+    }
+
+    return node0;
+}
 
 } //bv

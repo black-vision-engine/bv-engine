@@ -323,7 +323,7 @@ model::BasicNodePtr		TestSceneUtils::ColoredText				( model::ITimeEvaluatorPtr t
 	SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
     
 	LoadFont( node->GetPlugin( "text" ), "fonts/arial.TTF", fontSize, 0, 0, true );
-	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"tekst\n1234" );
+    SetParameter( node->GetPlugin( "text" )->GetParameter("text"), 0.0, L"tekst\n1234" );
 	
 	if( !alphaMask.empty() )
 	{
@@ -359,7 +359,7 @@ model::BasicNodePtr		TestSceneUtils::GradientText			( model::ITimeEvaluatorPtr t
 	SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
     
 	LoadFont( node->GetPlugin( "text" ), "fonts/arial.TTF", fontSize, 0, 0, true );
-	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"tekst\n1234" );
+    SetParameter( node->GetPlugin( "text" )->GetParameter("text"), 0.0, L"tekst\n1234" );
 	
 	if( !alphaMask.empty() )
 	{
