@@ -85,6 +85,7 @@ const std::wstring NODE_NAME_WSTRING        = L"NodeName";
 const std::wstring PLUGIN_NAME_WSTRING      = L"PluginName";
 const std::wstring TIMELINE_NAME_WSTRING    = L"TimelineName";      // TimeLineEvent and NodeStructureEvent
 const std::wstring COMMAND_WSTRING          = L"Command";
+const std::wstring REQUEST_WSTRING          = L"Request";           // ProjectStructureEvent InfoEvent
 
 // ========================================================================= //
 // LoadAssetEvent
@@ -180,8 +181,6 @@ template<> const std::wstring& T2WString    ( PluginStructureEvent::Command t ) 
 // ========================================================================= //
 // ProjectEvent
 // ========================================================================= //
-const std::wstring REQUEST_WSTRING                          = L"Request";
-
 std::pair< ProjectEvent::Command, const std::wstring > ProjectEventCommandMapping[] = 
 {
     std::make_pair( ProjectEvent::Command::SaveScene, L"SaveScene" )
@@ -211,6 +210,7 @@ const std::wstring RESPONSE_WSTRING                     = L"Response";
 std::pair< InfoEvent::Command, const std::wstring > InfoEventCommandMapping[] = 
 {
     std::make_pair( InfoEvent::Command::TreeStructure, L"TreeStructure" )
+    , std::make_pair( InfoEvent::Command::ListAssets, L"ListAssets" ) 
     , std::make_pair( InfoEvent::Command::Performance, L"Performance" ) 
     , std::make_pair( InfoEvent::Command::Timelines, L"TimeLines" ) 
     , std::make_pair( InfoEvent::Command::NodeInfo, L"NodeInfo" )
@@ -1079,8 +1079,9 @@ EventType           ResponseEvent::GetEventType() const
 void                InfoEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
-    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( InfoRequest ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( InfoCommand ) );
     ser.SetAttribute( SerializationHelper::NODE_NAME_WSTRING, toWString( NodeName ) );
+    ser.SetAttribute( SerializationHelper::REQUEST_WSTRING, toWString( Request ) );
 }
 
 // *************************************
@@ -1091,7 +1092,8 @@ IEventPtr                InfoEvent::Create          ( IDeserializer& deser )
     {
         InfoEventPtr newEvent   = std::make_shared<InfoEvent>();
         newEvent->NodeName      = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
-        newEvent->InfoRequest   = SerializationHelper::WString2T<InfoEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->InfoCommand   = SerializationHelper::WString2T<InfoEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->Request       = toString( deser.GetAttribute( SerializationHelper::REQUEST_WSTRING ) );
         
         return newEvent;
     }

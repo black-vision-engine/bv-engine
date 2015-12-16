@@ -438,6 +438,7 @@ public:
     typedef enum
     {
         TreeStructure,
+        ListAssets,
         Performance,
         Timelines,
         NodeInfo,
@@ -448,8 +449,9 @@ private:
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
 public:
-    InfoEvent::Command          InfoRequest;
+    InfoEvent::Command          InfoCommand;
     std::string                 NodeName;
+    std::string                 Request;
 
 public:
     explicit                        InfoEvent   () {}

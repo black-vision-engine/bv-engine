@@ -19,69 +19,6 @@
 namespace bv
 {
 
-// *********************************
-//
-Json::Value ToJSONArray( const StringVector & v )
-{
-	Json::Value root;
-
-	for( auto s : v )
-	{
-		root.append( s );
-	}
-
-	return root;
-}
-// *********************************
-//
-Json::Value Str2Json( const std::string & data )
-{
-	return Json::Value( data );
-}
-
-// *********************************
-//
-Json::Value GetRequestParamValue( std::string& request )
-{
-	return Str2Json( std::string( request.begin(), request.end() ) );
-}
-
-// *********************************
-//
-Json::Value ToJSONArray( const PathVec & v )
-{
-    Json::Value root;
-
-    for( auto pn : v )
-    {
-        root.append( pn.Str() );
-    }
-
-    return root;
-}
-
-// *********************************
-//
-void SendOnSceneStructureResponse( int socketID, const std::string & cmd, const std::string & msgKey, const Json::Value & msgVal )
-{
-    LOG_MESSAGE( SeverityLevel::info ) << cmd << " OK";
-
-    Json::Value scenes;
-
-    scenes[ "cmd" ] = cmd;
-    scenes[ msgKey ] = msgVal;
-
-    std::string S = scenes.toStyledString();
-
-    wstring WS = wstring( S.begin(), S.end() );
-
-    ResponseEventPtr responseEvent = std::make_shared<ResponseEvent>();
-    responseEvent->Response = WS;
-    responseEvent->SocketID = socketID;
-    GetDefaultEventManager().QueueResponse( responseEvent );
-}
-
-
 
 // ***********************
 //

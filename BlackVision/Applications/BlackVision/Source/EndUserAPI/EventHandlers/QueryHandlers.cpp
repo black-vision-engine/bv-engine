@@ -6,7 +6,8 @@
 #include "PerformanceMonitor.h"
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Events/EventHelpers.h"             // wstring to string conversions and vice versa
-
+#include "Assets/AssetDescsWithUIDs.h"
+#include "Serialization/Json/JsonDeserializeObject.h"
 
 namespace bv
 {
@@ -97,76 +98,20 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
     {
         bv::InfoEventPtr infoEvent = std::static_pointer_cast<bv::InfoEvent>( evt );
 
-        InfoEvent::Command command = infoEvent->InfoRequest;
+        InfoEvent::Command command = infoEvent->InfoCommand;
         std::string& nodeName = infoEvent->NodeName;
+        std::string& request = infoEvent->Request;
 
         wstring responseMessage;
 
         if( command == InfoEvent::Command::TreeStructure )
-        {
-            //Log::A("OK","Tree structure:");
-            ReqPrint( m_appLogic->GetBVProject()->GetModelSceneRoot(), 1 );
-
-            Json::Value root;
-            root[ "command" ] = "scene_tree";
-
-            root[ "scenes" ] = Json::arrayValue;
-
-            for( auto s : m_appLogic->GetBVProject()->GetScenes() )
-            {
-                Json::Value val;
-                root[ "scenes" ].append( SerializeSceneModel( s ) );
-            }
-
-
-            auto ret = root.toStyledString();
-            responseMessage = toWString( root.toStyledString() );
-        }
+            responseMessage = toWString( TreeStructureInfo( request ) );
+        else if( command == InfoEvent::Command::ListAssets )
+            responseMessage = toWString( ListAssets( request ) );
         else if( command == InfoEvent::Command::Performance )
-        {
-            //Log::A("SENDING","Performance:");
-                        
-            auto& frameStats = m_appLogic->FrameStats();
-            auto& sections = frameStats.RegisteredSections();
-
-            PerformanceMonitor::Calculate( m_appLogic->GetStatsCalculator() );
-
-            Json::Value root;
-            root["command"] = "performance";
-            root["fps"] = PerformanceMonitor::Stats.fps;
-            root["fps_avg"] = PerformanceMonitor::Stats.fps_avg;
-            root["ram"] = PerformanceMonitor::Stats.ram;
-            root["vram"] = PerformanceMonitor::Stats.vram;
-            root["cpu"] = PerformanceMonitor::Stats.cpu;
-
-            for( auto name : sections )
-            {
-                root[ name ]["average"] = frameStats.ExpectedValue( name );
-                root[ name ]["minVal"] = frameStats.MinVal( name );
-                root[ name ]["maxVal"] = frameStats.MaxVal( name );
-                root[ name ]["variance"] = frameStats.Variance( name );
-            }
-            
-            responseMessage = toWString( root.toStyledString() );
-        }
+            responseMessage = toWString( PerformanceInfo( request ) );
         else if( command == InfoEvent::Command::Timelines )
-        {
-            Json::Value ret;
-            ret[ "command" ] = "timelines";
-            ret[ "scenes" ] = Json::arrayValue;
-
-            for( auto s : m_appLogic->GetBVProject()->GetScenes() )
-            {
-                Json::Value val;
-				val[ "name" ] = s->GetName();
-                JsonSerializeObject ser;
-				s->GetTimeline()->Serialize(ser);
-                val[ "timelines" ] = ser.GetJson();
-                ret[ "scenes" ].append( val );
-            }
-
-            responseMessage = toWString( ret.toStyledString() );
-        }
+            responseMessage = toWString( GetTimeLinesInfo( request ) );
         else if( command == InfoEvent::Command::NodeInfo )
         {
 		    auto root = m_appLogic->GetBVProject()->GetModelSceneRoot();
@@ -198,16 +143,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             responseMessage = wstring( resStr.begin(), resStr.end() );
         }
         else if( command == InfoEvent::Command::Videocards )
-        {
-            Json::Value val;
-            val[ "cmd" ]        = "videocards";
-            val[ "visible" ]    = " no diggy diggy ";
-
-            string response = val.toStyledString();
-           
-            //Log::A( "SENDING", S );
-            responseMessage = wstring( response.begin(),response.end() );
-        }
+            responseMessage = toWString( VideoCardsInfo( request ) );
         
         ResponseEventPtr msg = std::make_shared<ResponseEvent>();
         msg->Response = responseMessage;
@@ -217,5 +153,121 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
 }
 
 
+// ***********************
+//
+std::string QueryHandlers::ListAssets  ( const std::string& request )
+{
+    JsonDeserializeObject deser;
+    JsonSerializeObject ser;
+    deser.Load( request );
+
+    std::string category = deser.GetAttribute( "CategoryName" );
+
+    ser.EnterArray( "assets" );
+    for( auto scene : m_appLogic->GetBVProject()->GetScenes() )
+    {
+        auto sceneRoot = scene->GetRootNode();
+
+        AssetDescsWithUIDs assets;
+        GetAssetsWithUIDs( assets, sceneRoot, true );
+        AssetDescsWithUIDs::SetInstance( assets );
+
+        auto descriptors = assets.GetAssetsDescs();
+
+        for( auto& descriptor : descriptors )
+        {
+            if( descriptor->GetUID() == category )
+                descriptor->Serialize( ser );
+        }
+    }
+    ser.ExitChild();
+
+    return ser.GetString();
+}
+
+// ***********************
+//
+std::string QueryHandlers::VideoCardsInfo      ( const std::string& /*request*/ )
+{
+    Json::Value val;
+    val[ "cmd" ]        = "videocards";
+    val[ "visible" ]    = " no diggy diggy ";
+
+    return val.toStyledString();
+}
+
+// ***********************
+//
+std::string QueryHandlers::GetNodeInfo         ( const std::string& /*request*/ )
+{
+    return "";
+}
+
+// ***********************
+//
+std::string QueryHandlers::GetTimeLinesInfo    ( const std::string& /*request*/ )
+{
+    Json::Value ret;
+    ret[ "command" ] = "timelines";
+    ret[ "scenes" ] = Json::arrayValue;
+
+    for( auto s : m_appLogic->GetBVProject()->GetScenes() )
+    {
+        Json::Value val;
+		val[ "name" ] = s->GetName();
+        JsonSerializeObject ser;
+		s->GetTimeline()->Serialize(ser);
+        val[ "timelines" ] = ser.GetJson();
+        ret[ "scenes" ].append( val );
+    }
+
+    return ret.toStyledString();
+}
+
+// ***********************
+//
+std::string QueryHandlers::PerformanceInfo  ( const std::string& /*request*/ )
+{       
+    auto& frameStats = m_appLogic->FrameStats();
+    auto& sections = frameStats.RegisteredSections();
+
+    PerformanceMonitor::Calculate( m_appLogic->GetStatsCalculator() );
+
+    Json::Value root;
+    root["command"] = "performance";
+    root["fps"] = PerformanceMonitor::Stats.fps;
+    root["fps_avg"] = PerformanceMonitor::Stats.fps_avg;
+    root["ram"] = PerformanceMonitor::Stats.ram;
+    root["vram"] = PerformanceMonitor::Stats.vram;
+    root["cpu"] = PerformanceMonitor::Stats.cpu;
+
+    for( auto name : sections )
+    {
+        root[ name ]["average"] = frameStats.ExpectedValue( name );
+        root[ name ]["minVal"] = frameStats.MinVal( name );
+        root[ name ]["maxVal"] = frameStats.MaxVal( name );
+        root[ name ]["variance"] = frameStats.Variance( name );
+    }
+
+    return root.toStyledString();
+}
+
+// ***********************
+//
+std::string QueryHandlers::TreeStructureInfo   ( const std::string& /*request*/ )
+{
+    ReqPrint( m_appLogic->GetBVProject()->GetModelSceneRoot(), 1 );
+
+    Json::Value root;
+    root[ "command" ] = "scene_tree";
+
+    root[ "scenes" ] = Json::arrayValue;
+
+    for( auto s : m_appLogic->GetBVProject()->GetScenes() )
+        root[ "scenes" ].append( SerializeSceneModel( s ) );
+
+
+    return root.toStyledString();
+}
 
 } //bv
