@@ -59,6 +59,7 @@ void JsonSerializeObject::EnterChild( const std::string& name )
     }
     else
     {
+        assert( !m_currentNode->isMember( name ) ); // if this assert fails, we've got two EnterChild's with the same name which leads to destroyed JSON!!!
         (*m_currentNode)[ name ] = Json::ValueType::objectValue;
         m_currentNode = &(*m_currentNode)[ name ];
     }
