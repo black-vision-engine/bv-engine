@@ -267,12 +267,14 @@ void							DefaultTextPlugin::LoadTexture(	DefaultTexturesDataPtr txData,
 
 // *************************************
 // 
-void							DefaultTextPlugin::LoadAtlas	( const FontAssetDescConstPtr & fontAssetDesc )
+bool							DefaultTextPlugin::LoadAtlas	( const FontAssetDescConstPtr & fontAssetDesc )
 {
 	auto txData = m_psc->GetTexturesDataImpl();
     assert( txData->GetTextures().size() <= 1 );
 
 	auto fontResource = LoadTypedAsset<FontAsset>( fontAssetDesc );
+    if( fontResource == nullptr )
+        return false;
 
 	m_atlas = TextHelper::GetAtlas( fontResource );
 
@@ -298,6 +300,8 @@ void							DefaultTextPlugin::LoadAtlas	( const FontAssetDescConstPtr & fontAsse
     auto texDesc = txData->GetTexture( DefaultTextPluginDesc::TextureName() );
     auto fontDesc = std::make_shared< DefaultFontDescriptor >( texDesc );
     txData->AddFont( fontDesc );
+
+    return true;
 }
 
 // *************************************
@@ -308,11 +312,14 @@ bool                            DefaultTextPlugin::LoadResource  ( AssetDescCons
 
     if ( txAssetDescr != nullptr )
     {
+		if( !LoadAtlas( txAssetDescr ) )
+            return false;
+
 		m_fontSize = txAssetDescr->GetFontSize();
 		m_blurSize = txAssetDescr->GetBlurSize();
 		m_outlineSize = txAssetDescr->GetOutlineSize();
-		LoadAtlas( txAssetDescr );
-		SetText( m_textParam->Evaluate() );
+
+        SetText( m_textParam->Evaluate() );
 
         auto fonts = m_psc->GetTexturesDataImpl()->GetFonts();
         //assert( fonts.size() == 1 );

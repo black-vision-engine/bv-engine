@@ -3,14 +3,16 @@
 #include "BVAppLogic.h"
 #include "Serialization/XML/XMLSerializer.h"
 #include "Serialization/JsonSpirit/JsonSpiritSerializeObject.h"
+#include "Serialization/Json/JsonSerializeObject.h"
 
-
+#include "Assets/Font/FontAssetDescriptor.h"
+#include "Assets/Texture/TextureAssetDescriptor.h"
 
 namespace bv {
 
 namespace
 {
-    void SerializeAllEvents();
+    void SerializeAllEvents( const std::string& fileName );
 };
 
 
@@ -41,7 +43,7 @@ void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
     else if( c == 'e' )
     {
         // Serialize all events
-        SerializeAllEvents();
+        SerializeAllEvents( "serialization/Events.json" );
     }
 
 
@@ -82,9 +84,10 @@ namespace
 {
 
 
-void SerializeAllEvents()
+void SerializeAllEvents( const std::string& fileName )
 {
-    JsonSpiritSerializeObject* ser = new JsonSpiritSerializeObject();
+    JsonSpiritSerializeObject*  ser = new JsonSpiritSerializeObject();
+    JsonSerializeObject*        serAsset = new JsonSerializeObject();
 
     HightmapEventPtr        heightmapEvent      = std::make_shared<HightmapEvent>();
     RenderingModeEventPtr   renderingModeEvent  = std::make_shared<RenderingModeEvent>();
@@ -97,9 +100,20 @@ void SerializeAllEvents()
     PluginStructureEventPtr pluginStructure     = std::make_shared<PluginStructureEvent>();
     NodeStructureEventPtr   nodeStructureEvent  = std::make_shared<NodeStructureEvent>();
     ParamKeyEventPtr        paramKeyEvent       = std::make_shared<ParamKeyEvent>();
-    LoadAssetEventPtr       loadAssetEvent      = std::make_shared<LoadAssetEvent>();
+    LoadAssetEventPtr       loadTextureEvent    = std::make_shared<LoadAssetEvent>();
+    LoadAssetEventPtr       loadFontEvent       = std::make_shared<LoadAssetEvent>();
 
     ResponseEventPtr        responseEvent       = std::make_shared<ResponseEvent>();
+    
+    
+    TextureAssetDescConstPtr    texAsset =      TextureAssetDesc::Create( std::string( "textures/poison.jpg" ), true );
+    FontAssetDescConstPtr       fontAsset =     FontAssetDesc::Create( std::string( "filePath.jpg" ), 0, 0, 0, false );
+    
+    texAsset->Serialize( *serAsset );
+    loadTextureEvent->AssetData = serAsset->GetString();
+
+    fontAsset->Serialize( *serAsset );
+    loadFontEvent->AssetData = serAsset->GetString();
 
     ser->EnterArray( L"Events" );
         heightmapEvent->Serialize( *ser );
@@ -135,13 +149,19 @@ void SerializeAllEvents()
         paramKeyEvent->Serialize( *ser );
     ser->ExitChild();
     ser->EnterArray( L"Events" );
-        loadAssetEvent->Serialize( *ser );
+        loadTextureEvent->Serialize( *ser );
+    ser->ExitChild();
+    ser->EnterArray( L"Events" );
+        loadFontEvent->Serialize( *ser );
     ser->ExitChild();
     ser->EnterArray( L"Events" );
         responseEvent->Serialize( *ser );
     ser->ExitChild();
 
-    ser->Save( "serialization/Events.json", FORMATSTYLE_READABLE );
+    ser->Save( fileName, FORMATSTYLE_READABLE );
+
+    delete ser;
+    delete serAsset;
 }
 
 
