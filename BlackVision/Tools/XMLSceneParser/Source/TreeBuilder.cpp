@@ -640,7 +640,7 @@ namespace bv{
         SetParameter( txt->GetParameter( "spacing" ), TimeType( 0.0 ), 0.0f );
         
         //FIXME: another set text hack
-        model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), text->Text ); 
+        SetParameter( txt->GetParameter( "text" ), 0.0, text->Text );
        
         bv::model::DefaultColorPlugin* color =  (bv::model::DefaultColorPlugin*)node->GetPlugin( "solid color" ).get();
 

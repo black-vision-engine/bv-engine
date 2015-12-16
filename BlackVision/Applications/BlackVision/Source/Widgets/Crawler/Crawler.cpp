@@ -350,9 +350,7 @@ void		Crawler::HackNoMoreNodes( )
 
 			if( pl )
 			{
-				//model::DefaultTextPlugin::SetText( pl, examples[ i ] );
-
-                model::DefaultTextPlugin::SetText( pl, message );
+                SetParameter( pl->GetParameter( "text" ), 0.0, message );
                 this->EnqueueNode( n );
 			}
 		}
