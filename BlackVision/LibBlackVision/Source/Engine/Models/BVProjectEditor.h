@@ -140,6 +140,8 @@ public:
 
 	void					MovePlugin			( const std::string & destSceneName, const std::string & destParentNode, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcParentNode, const std::string & pluginName );
 
+	bool					LoadAsset			( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, const std::string & serializedAssetData );
+
 	/* objects */
 	bool                    AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, UInt32 posIdx );
     bool                    DeletePlugin		( model::BasicNodePtr node, UInt32 pluginIdx );
@@ -158,6 +160,9 @@ public:
 	model::IPluginPtr		AddPluginCopy		( const std::string & destSceneName, model::BasicNodePtr destNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcNode, const std::string & pluginNameToCopy );
 
 	void					MovePlugin			( const std::string & destSceneName, model::BasicNodePtr destNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcNode, const std::string & pluginName );
+
+	bool					LoadAsset			( model::IPluginPtr plugin, AssetDescConstPtr assetDesc );
+
 
 /* EFFECTS */
 

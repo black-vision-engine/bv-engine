@@ -9,6 +9,8 @@
 
 #include "Engine/Models/Timeline/TimelineHelper.h"
 
+#include "Assets/Assets.h"
+
 #include "System/Path.h"
 #include "IO/FileIO.h"
 #include "IO/DirIO.h"
@@ -792,7 +794,9 @@ void					TestScene::InitAssetsTest		()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TEX_NODE );
-		LoadTexture( child->GetPlugin( "texture" ), TestSceneUtils::ANIM_PATH + "/f0.bmp" );
+
+		auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f0.bmp", false );
+		editor->LoadAsset( child->GetPlugin( "texture" ), desc );
 	});
 
 	m_testSteps.push_back( [&]
@@ -808,15 +812,15 @@ void					TestScene::InitAssetsTest		()
 //
 void					TestScene::InitTestEditor			()
 {
-	InitTestModelSceneEditor();
+	//InitTestModelSceneEditor();
 
 	//InitTimelinesTest();
 
 	//InitBasicColorPluginTest();
 	//InitOrderColorPluginTest();
 
-	//InitBasicTexturePluginTest();
-	//InitOrderTexturePluginTest();
+	InitBasicTexturePluginTest();
+	InitOrderTexturePluginTest();
 
 	//InitBasicAnimationPluginTest();
 	//InitOrderAnimationPluginTest();
@@ -1019,7 +1023,8 @@ void					TestScene::InitBasicTexturePluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		
-		LoadTexture( root->GetPlugin( "texture" ), TestSceneUtils::ANIM_PATH + "/f0.bmp" );
+		auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f0.bmp", false );
+		editor->LoadAsset( root->GetPlugin( "texture" ), desc );
 	});
 	m_testSteps.push_back( [&]{ RestoreRoot( 2, "texture" ); } );
 
@@ -1027,7 +1032,9 @@ void					TestScene::InitBasicTexturePluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TEX_NODE );
-		LoadTexture( child->GetPlugin( "texture" ), TestSceneUtils::ANIM_PATH + "/f0.bmp" );
+
+		auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f0.bmp", false );
+		editor->LoadAsset( child->GetPlugin( "texture" ), desc );
 	});
 }
 
@@ -1135,7 +1142,8 @@ void					TestScene::InitBasicAnimationPluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		
-		LoadAnimation( root->GetPlugin( "animation" ), TestSceneUtils::ANIM_PATH, "*.bmp" );
+		auto desc = AnimationAssetDesc::Create( TestSceneUtils::ANIM_PATH, "*.bmp" );
+		editor->LoadAsset( root->GetPlugin( "animation" ), desc );
 	});
 	m_testSteps.push_back( [&]{ RestoreRoot( 2, "animation" ); } );
 
@@ -1153,7 +1161,9 @@ void					TestScene::InitBasicAnimationPluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( ANIM_NODE );
-		LoadAnimation( child->GetPlugin( "animation" ), TestSceneUtils::ANIM_PATH, "*.bmp" );
+
+		auto desc = AnimationAssetDesc::Create( TestSceneUtils::ANIM_PATH, "*.bmp" );
+		editor->LoadAsset( root->GetPlugin( "animation" ), desc );
 
 		auto time = m_timeEvaluator->GetLocalTime();
 		SetParameter( child->GetPlugin( "animation" )->GetParameter( "frameNum" ), time, 0.f );
@@ -1434,7 +1444,8 @@ void					TestScene::InitColoredTextTest			()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		
-		LoadFont( root->GetPlugin( "text" ), "fonts/couri.TTF", 30, 0, 0, true );
+		auto desc = FontAssetDesc::Create( "fonts/couri.TTF", 30, 0, 0, true );
+		editor->LoadAsset( root->GetPlugin( "text" ), desc );
 	});
 	m_testSteps.push_back( [&]{ RestoreRoot( 1, "text" ); } );
 
@@ -1451,7 +1462,9 @@ void					TestScene::InitColoredTextTest			()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TXT_NODE );
-		LoadFont( child->GetPlugin( "text" ), "fonts/couri.TTF", 30, 0, 0, true );
+
+		auto desc = FontAssetDesc::Create( "fonts/couri.TTF", 30, 0, 0, true );
+		editor->LoadAsset( root->GetPlugin( "text" ), desc );
 	});
 
 	for( auto & test : tests )
@@ -1675,7 +1688,8 @@ void					TestScene::InitColoredTimerTest			()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		
-		LoadFont( root->GetPlugin( "timer" ), "Assets/Fonts/couri.TTF", 40, 0, 0, true );
+		auto desc = FontAssetDesc::Create( "Assets/Fonts/couri.TTF", 40, 0, 0, true );
+		editor->LoadAsset( root->GetPlugin( "timer" ), desc );
 	});
 	m_testSteps.push_back( []{} ); //empty step
 	m_testSteps.push_back( []{} ); //empty step
@@ -1697,7 +1711,9 @@ void					TestScene::InitColoredTimerTest			()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TMR_NODE );
-		LoadFont( child->GetPlugin( "timer" ), "Assets/Fonts/couri.TTF", 40, 0, 0, true );
+
+		auto desc = FontAssetDesc::Create( "Assets/Fonts/couri.TTF", 40, 0, 0, true );
+		editor->LoadAsset( root->GetPlugin( "timer" ), desc );
 	});
 	m_testSteps.push_back( []{} ); //empty step
 
@@ -1826,7 +1842,9 @@ void					TestScene::InitGradientTimerTest			()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TMR_NODE );
-		LoadFont( child->GetPlugin( "timer" ), "Assets/Fonts/couri.TTF", 40, 0, 0, true );
+
+		auto desc = FontAssetDesc::Create( "Assets/Fonts/couri.TTF", 40, 0, 0, true );
+		editor->LoadAsset( root->GetPlugin( "timer" ), desc );
 	});
 	m_testSteps.push_back( []{} ); //empty step
 
@@ -1979,7 +1997,9 @@ void					TestScene::InitTexturedGeometryTest		()
 		{
 			auto editor = m_project->GetProjectEditor();
 			auto geom = editor->GetScene( SCENE_NAME )->GetRootNode()->GetChild( GEOM_NODE );
-			model::LoadTexture( geom->GetPlugin( "texture" ), TestSceneUtils::ANIM_PATH + "/f0.bmp" );
+
+			auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f0.bmp", false );
+			editor->LoadAsset( geom->GetPlugin( "texture" ), desc );
 		});
 
 		auto pluginName = TestSceneUtils::PluginsNameArr[ i ];
@@ -2237,7 +2257,10 @@ void					TestScene::InitVideoStreamDecoderTest	()
 		{
 			auto editor = m_project->GetProjectEditor();
 			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
-			model::LoadVideoStream( root->GetPlugin( "video_stream_decoder" ), TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
+
+			auto desc = VideoStreamAssetDesc::Create( TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
+			editor->LoadAsset( root->GetPlugin( "video_stream_decoder" ), desc );
+
 			model::DefaultVideoStreamDecoderPlugin::Start( root->GetPlugin( "video_stream_decoder" ) );
 		});
 		m_testSteps.push_back( [&]{ RestoreRoot( 2, "video_stream_decoder" ); } );
@@ -2247,7 +2270,8 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			auto child = root->GetChild( VSD_NODE );
 
-			model::LoadVideoStream( child->GetPlugin( "video_stream_decoder" ), TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
+			auto desc = VideoStreamAssetDesc::Create( TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
+			editor->LoadAsset( root->GetPlugin( "video_stream_decoder" ), desc );
 
 			model::DefaultVideoStreamDecoderPlugin::Start( child->GetPlugin( "video_stream_decoder" ) );
 		});
@@ -2297,7 +2321,8 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			auto child = root->GetChild( VSD_NODE );
 
-			model::LoadVideoStream( child->GetPlugin( "video_stream_decoder" ), TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
+			auto desc = VideoStreamAssetDesc::Create( TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
+			editor->LoadAsset( child->GetPlugin( "video_stream_decoder" ), desc );
 
 			model::DefaultVideoStreamDecoderPlugin::Start( child->GetPlugin( "video_stream_decoder" ) );
 		});

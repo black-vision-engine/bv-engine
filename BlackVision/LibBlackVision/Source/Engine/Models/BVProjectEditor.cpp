@@ -16,6 +16,9 @@
 #include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 
+#include "Serialization/Json/JsonDeserializeObject.h"
+#include "Assets/AssetManager.h"
+
 #include "tools/Utils.h"
 #include "UseLoggerLibBlackVision.h"
 
@@ -586,6 +589,26 @@ void					BVProjectEditor::MovePlugin			( const std::string & destSceneName, cons
 
 // *******************************
 //
+bool					BVProjectEditor::LoadAsset			( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, const std::string & serializedAssetData )
+{
+	//not sure how to pass assets data
+    JsonDeserializeObject deserializer;
+    deserializer.Load( serializedAssetData );
+    auto assetDesc = AssetManager::GetInstance().CreateDesc( deserializer );
+
+	auto node = GetNode( sceneName, nodePath );
+	
+	model::IPluginPtr plugin = nullptr;
+	if( node )
+	{
+		plugin = node->GetPlugin( pluginName );
+	}
+
+	return LoadAsset( plugin, assetDesc );
+}
+
+// *******************************
+//
 bool					BVProjectEditor::AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, UInt32 idx )
 {
 	auto editor = node->GetModelNodeEditor();
@@ -727,7 +750,7 @@ model::IPluginPtr		BVProjectEditor::AddPluginCopy			( const std::string & destSc
 
 // *******************************
 //
-void			BVProjectEditor::MovePlugin		( const std::string & destSceneName, model::BasicNodePtr destNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcNode, const std::string & pluginName )
+void			BVProjectEditor::MovePlugin					( const std::string & destSceneName, model::BasicNodePtr destNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcNode, const std::string & pluginName )
 {
 	if( srcSceneName == destSceneName )
 	{
@@ -741,6 +764,19 @@ void			BVProjectEditor::MovePlugin		( const std::string & destSceneName, model::
 			DeletePlugin( srcNode, pluginName );
 		}
 	}
+}
+
+// *******************************
+//
+bool			BVProjectEditor::LoadAsset					( model::IPluginPtr plugin, AssetDescConstPtr assetDesc )
+{
+	if( plugin && assetDesc )
+	{
+		//FIXME: clear resources from engine
+		return plugin->LoadResource( assetDesc );
+	}
+
+	return false;
 }
 
 // *******************************
