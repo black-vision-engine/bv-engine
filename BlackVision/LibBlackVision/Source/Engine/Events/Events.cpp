@@ -71,6 +71,8 @@ std::string HightmapEvent::m_sEventName             = "HightmapEvent";
 const EventType RenderingModeEvent::m_sEventType       = 0x30000016;
 std::string RenderingModeEvent::m_sEventName           = "RenderingModeEvent";
 
+const EventType SceneEvent::m_sEventType			= 0x30000016;
+std::string SceneEvent::m_sEventName				= "SceneEvent";
 
 // ************************************* Events Serialization *****************************************
 
@@ -108,6 +110,29 @@ std::pair< ParamKeyEvent::Command, const std::wstring > ParameterCommandMapping[
 
 template<> ParamKeyEvent::Command WString2T ( const std::wstring& s )    { return WString2T( ParameterCommandMapping, s ); }
 template<> const std::wstring& T2WString    ( ParamKeyEvent::Command t ) { return Enum2WString( ParameterCommandMapping, t ); }
+
+// ========================================================================= //
+// SceneEvent
+// ========================================================================= //
+const std::wstring NEW_SCENE_NAME_WSTRING        = L"NewSceneName";
+
+std::pair< SceneEvent::Command, const std::wstring > SceneCommandMapping[] = 
+{
+    std::make_pair( SceneEvent::Command::AddScene, L"AddScene" )
+    , std::make_pair( SceneEvent::Command::RemoveScene, L"RemoveScene" ) 
+    , std::make_pair( SceneEvent::Command::SetSceneVisible, L"SetSceneVisible" ) 
+    , std::make_pair( SceneEvent::Command::SetSceneInvisible, L"SetSceneInvisible" )
+	, std::make_pair( SceneEvent::Command::RenameScene, L"RenameScene" )
+	, std::make_pair( SceneEvent::Command::AttachScene, L"AttachScene" )
+	, std::make_pair( SceneEvent::Command::DetachScene, L"DetachScene" )
+	, std::make_pair( SceneEvent::Command::MoveScene, L"MoveScene" )
+	, std::make_pair( SceneEvent::Command::CopyScene, L"CopyScene" )
+    , std::make_pair( SceneEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> SceneEvent::Command WString2T ( const std::wstring& s )    { return WString2T( SceneCommandMapping, s ); }
+template<> const std::wstring& T2WString    ( SceneEvent::Command t ) { return Enum2WString( SceneCommandMapping, t ); }
+
 
 // ========================================================================= //
 // NodeStructureEvent
@@ -781,6 +806,59 @@ const std::string &     ParamKeyEvent::GetName           () const
 EventType           ParamKeyEvent::GetEventType         () const
 { return this->m_sEventType; }
 
+
+//******************* SceneEvent *************
+
+// *************************************
+//
+void					SceneEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
+    ser.SetAttribute( SerializationHelper::SCENE_NAME_WSTRING, toWString( SceneName ) );
+    ser.SetAttribute( SerializationHelper::NEW_SCENE_NAME_WSTRING, toWString( NewSceneName ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( SceneCommand ) );
+    ser.SetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING, toWString( AttachIndex ) );
+}
+
+// *************************************
+//
+IEventPtr                SceneEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
+    {
+        SceneEventPtr newEvent		= std::make_shared< SceneEvent >();
+        newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
+        newEvent->NewSceneName      = toString( deser.GetAttribute( SerializationHelper::NEW_SCENE_NAME_WSTRING ) );
+        newEvent->SceneCommand      = SerializationHelper::WString2T< SceneEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->AttachIndex       = std::stoul( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING ) );
+        
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               SceneEvent::Clone             () const
+{   return IEventPtr( new SceneEvent( *this ) );  }
+
+// *************************************
+//
+EventType           SceneEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        SceneEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  SceneEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           SceneEvent::GetEventType() const
+{   return this->m_sEventType; }
+
+
 //******************* NodeStructureEvent *************
 
 // *************************************
@@ -792,7 +870,6 @@ void                NodeStructureEvent::Serialize            ( ISerializer& ser 
     ser.SetAttribute( SerializationHelper::NODE_NAME_WSTRING, toWString( NodePath ) );
     ser.SetAttribute( SerializationHelper::NEW_NODE_NAME_WSTRING, toWString( NewNodeName ) );
     ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( SceneCommand ) );
-    ser.SetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING, toWString( TimelinePath ) );
     ser.SetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING, toWString( TimelinePath ) );
     ser.SetAttribute( SerializationHelper::REQUEST_WSTRING, toWString( Request ) );
     ser.SetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING, toWString( AttachIndex ) );

@@ -50,7 +50,7 @@ public:
 
 /* SCENES */
 
-    void                    AddEmptyScene		( const std::string & sceneName );
+    void                    AddScene			( const std::string & sceneName );
     void                    AddScene			( model::SceneModelPtr scene );
 
     bool                    RemoveScene			( const std::string & sceneName );
@@ -64,6 +64,7 @@ public:
     void                    DeleteDetachedScenes();
 
 	void					SetSceneVisible		( const std::string & sceneName, bool visible );
+
     void                    SetSceneRootNode	( const std::string & sceneName, model::IModelNodePtr rootNode );
     bool                    DeleteSceneRootNode	( const std::string & sceneName );
 

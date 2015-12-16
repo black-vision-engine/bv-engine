@@ -29,6 +29,16 @@ void		SceneEditor::AddChildNode       ( SceneNode * parentNode, SceneNode * chil
 
 // *******************************
 //
+void		SceneEditor::AddChildNode       ( SceneNode * parentNode, SceneNode * childNode, UInt32 idx )
+{
+    if( parentNode != nullptr && childNode != nullptr )
+    {
+        parentNode->AddChildNode( childNode, idx );
+    }
+}
+
+// *******************************
+//
 bool		SceneEditor::DeleteChildNode    ( SceneNode * parentNode, SceneNode * childNode )
 {
     if( parentNode != nullptr && childNode != nullptr )

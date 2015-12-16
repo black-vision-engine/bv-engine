@@ -15,7 +15,7 @@ ModelSceneEditor::ModelSceneEditor                          ( BasicNodePtr & roo
 //
 void                    ModelSceneEditor::SetRootNode       ( BasicNodePtr mainRootNode, BasicNodePtr rootNode )
 {
-	if( m_rootNode && m_rootNode != rootNode )
+	if( m_rootNode && m_rootNode.get() != rootNode.get() )
 	{
 		mainRootNode->DetachChildNodeOnly( m_rootNode );
 	}

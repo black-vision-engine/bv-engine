@@ -45,6 +45,7 @@ private:
 
 	static const std::string	SCENE_NAME;
 	static const std::string	SCENE_NAME1;
+	static const std::string	EMPTY_SCENE;
 	
 	static const std::string	TIMELINE_NAME;
 	static const std::string	TIMELINE_NAME1;

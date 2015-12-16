@@ -23,7 +23,7 @@ SceneModelPtr    SceneModel::Create		( std::string name, Camera * camera )
 	, m_camera( camera )
 	, m_modelSceneEditor( nullptr )
 {
-	//m_modelSceneEditor = new ModelSceneEditor( m_sceneRootNode );
+	m_modelSceneEditor = new ModelSceneEditor( m_sceneRootNode );
 }
 
 // *******************************
@@ -154,10 +154,8 @@ ModelSceneEditor *			SceneModel::GetModelSceneEditor		() const
 //
 SceneModelPtr				SceneModel::CreateEmptyScene		( const std::string & name )
 {
-	//FIXME: timeevaluator and camera can be nullptr because they're not used yet
-	auto scene = SceneModel::Create( name, nullptr );
-	scene->SetRootNode( BasicNode::Create( std::string(), nullptr ) );
-	return scene;
+	//FIXME:camera can be nullptr because it's not used yet
+	return SceneModel::Create( name, nullptr );
 }
 
 } // model

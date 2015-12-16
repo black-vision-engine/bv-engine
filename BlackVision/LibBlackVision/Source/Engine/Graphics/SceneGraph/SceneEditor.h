@@ -25,6 +25,7 @@ public:
 							SceneEditor			( Renderer * renderer, SceneNode * & rootNode );
 
     void                    AddChildNode        ( SceneNode * parentNode, SceneNode * childNode );
+    void                    AddChildNode        ( SceneNode * parentNode, SceneNode * childNode, UInt32 idx );
     bool                    DeleteChildNode     ( SceneNode * parentNode, SceneNode * childNode );
 
 	bool                    AttachChildNode     ( SceneNode * parentNode );

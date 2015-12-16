@@ -94,6 +94,60 @@ SceneEventsHandlers::~SceneEventsHandlers()
 
 // ***********************
 //
+void SceneEventsHandlers::SceneStructure    ( bv::IEventPtr evt )
+{
+    if( evt->GetEventType() != bv::SceneEvent::Type() )
+        return;
+    bv::SceneEventPtr sceneEvent = std::static_pointer_cast< bv::SceneEvent >( evt );
+
+	std::string & sceneName		= sceneEvent->SceneName;
+    std::string & newSceneName	= sceneEvent->NewSceneName;
+    auto attachIndex			= sceneEvent->AttachIndex;
+
+    auto command = sceneEvent->SceneCommand;
+
+	auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+
+    if( command == SceneEvent::Command::AddScene )
+	{
+		editor->AddScene( newSceneName );
+	}
+    else if( command == SceneEvent::Command::RemoveScene )
+	{
+		editor->RemoveScene( sceneName );
+	}
+    else if( command == SceneEvent::Command::SetSceneVisible )
+	{
+		editor->SetSceneVisible( sceneName, true );
+	}
+    else if( command == SceneEvent::Command::SetSceneInvisible )
+	{
+		editor->SetSceneVisible( sceneName, false );
+	}
+    else if( command == SceneEvent::Command::RenameScene )
+	{
+		editor->RenameScene( sceneName, newSceneName );
+	}
+    else if( command == SceneEvent::Command::AttachScene )
+	{
+		editor->AttachScene( sceneName, attachIndex );
+	}
+    else if( command == SceneEvent::Command::DetachScene )
+	{
+		editor->DetachScene( sceneName );
+	}
+    else if( command == SceneEvent::Command::MoveScene )
+	{
+		editor->MoveScene( sceneName, attachIndex );
+	}
+    else if( command == SceneEvent::Command::CopyScene )
+	{
+		editor->AddSceneCopy( sceneName );
+	}
+}
+
+// ***********************
+//
 void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 {
     if( evt->GetEventType() != bv::NodeStructureEvent::Type() )

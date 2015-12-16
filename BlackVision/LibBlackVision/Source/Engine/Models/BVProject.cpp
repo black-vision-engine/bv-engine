@@ -131,7 +131,10 @@ bool                    BVProject::AddScene				( model::SceneModelPtr sceneModel
 		m_sceneModelVec.push_back( sceneModel );
 	}
 
-	m_rootNode->AddChildToModelOnly( sceneModel->GetRootNode(), idx );
+	if( sceneModel->GetRootNode() )
+	{
+		m_rootNode->AddChildToModelOnly( sceneModel->GetRootNode(), idx );
+	}
 
 	m_globalTimeline->AddChild( sceneModel->GetTimeline() );
 	

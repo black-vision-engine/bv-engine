@@ -31,6 +31,7 @@ const std::string	TestScene::VSD_NODE		= "vsd";
 
 const std::string	TestScene::SCENE_NAME	= "scene_0";
 const std::string	TestScene::SCENE_NAME1	= "scene_1";
+const std::string	TestScene::EMPTY_SCENE	= "empty_scene";
 
 const std::string	TestScene::TIMELINE_NAME = "timeline_0";
 const std::string	TestScene::TIMELINE_NAME1 = "timeline_1";
@@ -159,11 +160,34 @@ void					TestScene::InitTestModelSceneEditor	()
 		auto editor = m_project->GetProjectEditor();
 		bool success = true;
 
-		editor->AddEmptyScene( "empty_scene" );
+		editor->AddScene( EMPTY_SCENE );
 
-		success &= ( editor->GetScene( "empty_scene" ) != nullptr );
+		success &= ( editor->GetScene( EMPTY_SCENE ) != nullptr );
 
 		assert( success );
+	});
+
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto scene = editor->GetScene( EMPTY_SCENE );
+		bool success = true;
+
+		auto root = TestSceneUtils::ColoredRectangle( scene->GetTimeline(), "newRoot", 0.4f, 0.4f, glm::vec4( 0.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
+		auto rootTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+		SetParameterTranslation( rootTransform, 0, 0.0f, glm::vec3( ( float )0.0f, 0.0f, -1.0f ) );
+
+		editor->AddChildNode( EMPTY_SCENE, nullptr, root );
+
+		success &= ( editor->GetScene( EMPTY_SCENE ) != nullptr );
+
+		assert( success );
+	});
+
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		editor->MoveScene( EMPTY_SCENE, 0 );
 	});
 
 	//m_testSteps.push_back([&] 
@@ -262,6 +286,59 @@ void					TestScene::InitTestModelSceneEditor	()
 		SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )1.5f, -0.5f, 0.f ) );
 
 		editor->AddChildNode( SCENE_NAME, root, child );
+	});
+
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		editor->SetSceneVisible( SCENE_NAME, false );
+	});
+
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		editor->SetSceneVisible( SCENE_NAME, true );
+	});
+
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		editor->DetachScene( SCENE_NAME );
+	});
+
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		editor->DetachScene( EMPTY_SCENE );
+	});
+
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		editor->AttachScene( SCENE_NAME );
+	});
+
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		editor->AttachScene( EMPTY_SCENE );
+	});
+
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto scene = editor->GetScene( SCENE_NAME );
+		auto root = scene->GetRootNode();
+
+		bool success = true;
+		
+		success &= ( root->GetChild( 0 )->GetName() != "newChild" );
+
+		editor->MoveNode( SCENE_NAME, root, 0, SCENE_NAME, root, "newChild" );
+
+		success &= ( root->GetChild( 0 )->GetName() == "newChild" );
+
+		assert( success );
 	});
 
 	m_testSteps.push_back([&] 
@@ -467,10 +544,10 @@ void					TestScene::InitTestModelSceneEditor	()
 		auto rootTransform = newRoot->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 		SetParameterTranslation( rootTransform, 0, 0.0f, glm::vec3( -1.f, 0.5f, -1.f ) );
 
-		editor->SetSceneRootNode( SCENE_NAME, newRoot );
+		editor->AddChildNode( SCENE_NAME, nullptr, newRoot );
 		success &= ( editor->GetScene( SCENE_NAME )->GetRootNode() != nullptr );
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
-		success &= ( root == std::static_pointer_cast< model::BasicNode >( m_project->GetModelSceneRoot()->GetChild( "newRoot" ) ) );
+		success &= ( root == newRoot );
 
 		assert( success );
 	});
@@ -813,15 +890,15 @@ void					TestScene::InitAssetsTest		()
 //
 void					TestScene::InitTestEditor			()
 {
-	//InitTestModelSceneEditor();
+	InitTestModelSceneEditor();
 
 	//InitTimelinesTest();
 
 	//InitBasicColorPluginTest();
 	//InitOrderColorPluginTest();
 
-	InitBasicTexturePluginTest();
-	InitOrderTexturePluginTest();
+	//InitBasicTexturePluginTest();
+	//InitOrderTexturePluginTest();
 
 	//InitBasicAnimationPluginTest();
 	//InitOrderAnimationPluginTest();

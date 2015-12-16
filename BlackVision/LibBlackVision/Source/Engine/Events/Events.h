@@ -238,6 +238,48 @@ public:
 DEFINE_PTR_TYPE( ParamKeyEvent )
 
 
+// ************************************* SceneEvent Event *************************************
+class SceneEvent : public BaseEvent
+{
+public:
+    typedef enum
+    {
+        AddScene,
+        RemoveScene,
+        SetSceneVisible,
+        SetSceneInvisible,
+        RenameScene,
+        AttachScene,
+        DetachScene,
+        MoveScene,
+        CopyScene,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    SceneEvent::Command				SceneCommand;
+    std::string                     SceneName;
+    std::string                     NewSceneName;
+	UInt32							AttachIndex;
+
+public:
+    explicit                        SceneEvent   () {}
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+};
+
+DEFINE_PTR_TYPE( SceneEvent )
+
+
 // ************************************* SceneStructureEvent Event *************************************
 class NodeStructureEvent : public BaseEvent
 {
@@ -323,6 +365,7 @@ public:
 };
 
 DEFINE_PTR_TYPE( PluginStructureEvent )
+
 
 // ************************************* ProjectEvent Event *************************************
 class ProjectEvent : public BaseEvent
