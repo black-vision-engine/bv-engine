@@ -16,9 +16,7 @@ enum GenericEnumType   : int    // bleee
 template< typename ValueType >
 inline bool SetParameter( IParameterPtr parameter, TimeType t, const ValueType & val )
 {
-    parameter;
-    t;
-    val;
+    assert( !"If this function doesn't compile - don't fix it. It means that compiler didn't choose proper template spezialization" );
     return false;
 }
 

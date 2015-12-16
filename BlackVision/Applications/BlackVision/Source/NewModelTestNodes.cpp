@@ -1165,7 +1165,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTextNode( model::ITimeEvalua
     success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/arial.TTF", 423, 0, 0, false );
     assert( success );
 
-    SetParameter( node->GetPlugin("text")->GetParameter( "text" ), 0.0, L"1238" );
+    SetParameter( node->GetPlugin("text")->GetParameter( "text" ), 0.0, std::wstring( L"1238" ) );
 
 //return root;
 // LINEAR GRADIENT plugin
@@ -1589,7 +1589,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::ITimeEvaluatorPt
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AV::11A-AAAA\nBBBBCCCC\nDDD333DD88\nAAAAAAAA\nB3BBCCCC\nDDDD888DDD" );
 //    model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAABBBBCCCCDDDD" );
 	//model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"AV::11A-AAAABBBBCCCCDDD333DD88AAAAAAAAB3BBCCCCDDDD888DDD" );
-    SetParameter( node->GetPlugin("text")->GetParameter( "text" ), 0.0, L"123456789" );
+    SetParameter( node->GetPlugin("text")->GetParameter( "text" ), 0.0, std::wstring( L"123456789" ) );
 
     if( useAlphaMask )
     {

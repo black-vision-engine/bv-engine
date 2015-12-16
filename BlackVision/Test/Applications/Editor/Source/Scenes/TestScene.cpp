@@ -1532,7 +1532,7 @@ void					TestScene::InitColoredTextTest			()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TXT_NODE );
-        SetParameter( child->GetPlugin( "text" )->GetParameter("text"), 0.0, L"test0\n4321" );
+        SetParameter( child->GetPlugin( "text" )->GetParameter("text"), 0.0, std::wstring( L"test0\n4321" ) );
 	});
 
 	m_testSteps.push_back( [&]
