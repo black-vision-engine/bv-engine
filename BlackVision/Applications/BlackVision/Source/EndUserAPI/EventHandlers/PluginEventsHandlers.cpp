@@ -40,7 +40,7 @@ PluginEventsHandlers::~PluginEventsHandlers()
 
 // *********************************
 //
-void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
+void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
 {
     if( eventPtr->GetEventType() != bv::ParamKeyEvent::Type() )
         return;
@@ -98,22 +98,10 @@ void PluginEventsHandlers::AddParamKey( bv::IEventPtr eventPtr )
         SetWrapPreMethod( param, SerializationHelper::String2T( toString( value ), WrapMethod::clamp ) );
     else if( command == ParamKeyEvent::Command::SetInterpolatorPostWrapMethod )
         SetWrapPostMethod( param, SerializationHelper::String2T( toString( value ), WrapMethod::clamp ) );
+    else if( command == ParamKeyEvent::Command::RemoveKey )
+        RemoveParameterKey( param, (TimeType)keyTime );
 }
 
-
-// *********************************
-//
-void PluginEventsHandlers::UpdateParamKey      ( bv::IEventPtr /*eventPtr*/ )
-{
-    assert( !"Implement meeee" );
-}
-
-// *********************************
-//
-void PluginEventsHandlers::RemoveParamKey      ( bv::IEventPtr /*eventPtr*/ )
-{
-    assert( !"Implement meeee" );
-}
 
 // ***********************
 //
@@ -213,6 +201,7 @@ void PluginEventsHandlers::AddParameter        ( std::shared_ptr<model::IParamet
         }
     }
 }
+
 
 // *********************************
 //
