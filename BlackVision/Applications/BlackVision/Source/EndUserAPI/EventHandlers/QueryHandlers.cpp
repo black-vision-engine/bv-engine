@@ -160,8 +160,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
                 Json::Value val;
 				val[ "name" ] = s->GetName();
                 JsonSerializeObject ser;
-				//FIXME: only timelines used in scene should be serialized
-				TimelineManager::GetInstance()->Serialize(ser);
+				s->GetTimeline()->Serialize(ser);
                 val[ "timelines" ] = ser.GetJson();
                 ret[ "scenes" ].append( val );
             }
