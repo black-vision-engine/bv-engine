@@ -174,6 +174,7 @@ private:
     static std::string              m_sEventName;
 public:
     std::string                     NodeName;
+    std::string                     SceneName;
     std::string                     PluginName;
     std::string                     AssetData;
 
@@ -491,6 +492,7 @@ private:
     static std::string          m_sEventName;
 public:
     std::string                 NodeName;
+    std::string                 SceneName;
     Command                     TimerCommand;
     float                       Hours;
     float                       Minutes;
@@ -529,6 +531,7 @@ private:
 public:
     Command                     WidgetCommand;
     std::string                 NodeName;
+    std::string                 SceneName;
 	std::string                 Action;
     float						Time;
 public:

@@ -78,6 +78,8 @@ public:
 
 
 /* NODES */
+    model::IModelNodePtr		GetNode         ( const std::string & sceneName, const std::string & nodePath );
+	model::IModelNodePtr		GetParentNode   ( const std::string & sceneName, const std::string & nodePath );
 
 	/* paths */
     void                    AddChildNode        ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName );
@@ -172,6 +174,8 @@ public:
 
 /* TIMELINES */
 
+    model::ITimeEvaluatorPtr	GetTimeline     ( const std::string & timelinePath );
+
 	//FIXME: what about ConstTimeEvaluator & OffsetTimeEvaluator?
 	void                    AddTimeline					( const std::string & sceneName, const std::string & timelineName, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
 	void                    AddTimeline					( const std::string & sceneName, model::ITimeEvaluatorPtr timeline );
@@ -198,10 +202,6 @@ private:
 
 	
 	/* model scene helpers */
-	model::IModelNodePtr		GetNode				( const std::string & sceneName, const std::string & nodePath );
-	model::IModelNodePtr		GetParentNode		( const std::string & sceneName, const std::string & nodePath );
-	model::ITimeEvaluatorPtr	GetTimeline			( const std::string & timelinePath );
-
 	std::string					GetNodeName			( const std::string & nodePath );
 
 

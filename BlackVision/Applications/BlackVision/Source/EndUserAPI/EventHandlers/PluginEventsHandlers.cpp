@@ -6,7 +6,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 
-
+#include "Engine/Models/BVProjectEditor.h"
 #include "../../BVAppLogic.h"
 #include "../../UseLoggerBVAppModule.h"
 
@@ -213,32 +213,16 @@ void PluginEventsHandlers::LoadAsset( bv::IEventPtr eventPtr )
         
         std::string& nodeName = eventLoadAsset->NodeName;
         std::string& pluginName = eventLoadAsset->PluginName;
-        std::string& asssetData = eventLoadAsset->AssetData;
+        std::string& sceneName = eventLoadAsset->SceneName;
+        std::string& assetData = eventLoadAsset->AssetData;
 
-        auto root = m_appLogic->GetBVProject()->GetModelSceneRoot();
-        auto node = root->GetNode( nodeName );
-        if( node == nullptr )
-            return;
-
-        auto plugin = node->GetPlugin( pluginName );
-        if( plugin == nullptr )
-            return;
-
-        JsonDeserializeObject deserializer;
-        deserializer.Load( asssetData );
-
-        bool result = true;
-        auto assetDesc = AssetManager::GetInstance().CreateDesc( deserializer );
-
-        if( assetDesc != nullptr )
-            result = plugin->LoadResource( assetDesc );
-        else
-            result = false;
+        auto projectEditor = m_appLogic->GetBVProject()->GetProjectEditor();
+        bool result = projectEditor->LoadAsset( sceneName, nodeName, pluginName, assetData );
 
         if( result )
             LOG_MESSAGE( SeverityLevel::info ) << "Asset loaded succesfully. Node: [" + eventLoadAsset->NodeName + "] plugin [" + eventLoadAsset->PluginName + "]";
         else
-            LOG_MESSAGE( SeverityLevel::error ) << "Failed to load asset. Node [" + eventLoadAsset->NodeName + "] plugin [" + eventLoadAsset->PluginName + "]\n" << asssetData;
+            LOG_MESSAGE( SeverityLevel::error ) << "Failed to load asset. Node [" + eventLoadAsset->NodeName + "] plugin [" + eventLoadAsset->PluginName + "]\n" << assetData;
     }
 }
 
