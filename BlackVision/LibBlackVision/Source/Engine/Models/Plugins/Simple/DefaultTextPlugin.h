@@ -72,7 +72,7 @@ private:
 																				const glm::vec4 &,
 																				DataBuffer::Semantic );
 
-	void										LoadAtlas					( const FontAssetDescConstPtr & fontAssetDesc );
+	bool										LoadAtlas					( const FontAssetDescConstPtr & fontAssetDesc );
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 

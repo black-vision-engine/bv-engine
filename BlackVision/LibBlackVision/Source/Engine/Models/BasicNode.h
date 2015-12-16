@@ -86,6 +86,7 @@ public:
     unsigned int                            GetNumPlugins           () const;
 
 	void                                    AddChildToModelOnly     ( BasicNodePtr n );
+	void                                    AddChildToModelOnly     ( BasicNodePtr n, UInt32 idx );
     void                                    DetachChildNodeOnly     ( BasicNodePtr n );
 
 	ModelNodeEditor *						GetModelNodeEditor		();

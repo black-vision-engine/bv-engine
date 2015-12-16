@@ -42,6 +42,7 @@ public:
 
     inline  ValueType       Evaluate            () const;
     inline  void            SetVal              ( const ValueType & val, TimeType t );
+    inline  bool            RemoveVal           ( TimeType t );
 
 	InterpolatorType &		AccessInterpolator	();
 

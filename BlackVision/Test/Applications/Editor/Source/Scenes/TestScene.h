@@ -62,6 +62,8 @@ private:
 
 	void					InitTimelinesTest			();
 
+	void					InitAssetsTest				();
+
 	void					InitBasicColorPluginTest	();
 	void					InitOrderColorPluginTest	();
 

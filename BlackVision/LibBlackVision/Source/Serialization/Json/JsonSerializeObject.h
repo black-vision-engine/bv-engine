@@ -27,6 +27,7 @@ public:
 	void						Save                ( const std::string& filename, FormatStyle style = FormatStyle::FORMATSTYLE_SPARING );
 	void						Save                ( std::ostream& out );
     Json::Value                 GetJson             ();
+    std::string                 GetString           ();
 
 	void						SetAttribute        ( const std::string& name, const std::string& value ) override;
     std::string                 GetAttribute        ( const std::string& name ) override;

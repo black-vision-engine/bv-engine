@@ -46,6 +46,7 @@ public:
     static ISerializablePtr                             Create          ( const IDeserializer& );
 
     void                                                AddKey          ( TimeValueT t, const ValueT & v );
+    bool                                                RemoveKey       ( TimeValueT t );
     ValueT                                              Evaluate        ( TimeValueT t ) const;
 
     int                                                 GetNumKeys      ();

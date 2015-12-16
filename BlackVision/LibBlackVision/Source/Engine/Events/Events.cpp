@@ -72,7 +72,6 @@ const EventType RenderingModeEvent::m_sEventType       = 0x30000016;
 std::string RenderingModeEvent::m_sEventName           = "RenderingModeEvent";
 
 
-
 // ************************************* Events Serialization *****************************************
 
 namespace SerializationHelper
@@ -82,7 +81,7 @@ namespace SerializationHelper
 const std::wstring EVENT_TYPE_WSTRING       = L"Event";
 const std::wstring NODE_NAME_WSTRING        = L"NodeName";
 const std::wstring PLUGIN_NAME_WSTRING      = L"PluginName";
-const std::wstring TIMELINE_NAME_WSTRING    = L"TimeLineName";      // TimeLineEvent and NodeStructureEvent
+const std::wstring TIMELINE_NAME_WSTRING    = L"TimelineName";      // TimeLineEvent and NodeStructureEvent
 const std::wstring COMMAND_WSTRING          = L"Command";
 
 // ========================================================================= //
@@ -121,6 +120,11 @@ std::pair< NodeStructureEvent::Command, const std::wstring > NodeStructureComman
     , std::make_pair( NodeStructureEvent::Command::RemoveNode, L"RemoveNode" ) 
     , std::make_pair( NodeStructureEvent::Command::SetNodeInvisible, L"SetNodeInvisible" ) 
     , std::make_pair( NodeStructureEvent::Command::SetNodeVisible, L"SetNodeVisible" )
+	, std::make_pair( NodeStructureEvent::Command::RenameNode, L"RenameNode" )
+	, std::make_pair( NodeStructureEvent::Command::AttachNode, L"AttachNode" )
+	, std::make_pair( NodeStructureEvent::Command::DetachNode, L"DetachNode" )
+	, std::make_pair( NodeStructureEvent::Command::MoveNode, L"MoveNode" )
+	, std::make_pair( NodeStructureEvent::Command::CopyNode, L"CopyNode" )
     , std::make_pair( NodeStructureEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
@@ -130,7 +134,7 @@ template<> const std::wstring& T2WString    ( NodeStructureEvent::Command t ) { 
 // ========================================================================= //
 // PluginStructureEvent
 // ========================================================================= //
-const std::wstring PLUGIN_ATTACH_INDEX_WSTRING      = L"AttachIndex";
+const std::wstring ATTACH_INDEX_WSTRING				= L"AttachIndex";
 const std::wstring PLUGIN_UID_WSTRING               = L"PluginUID";
 
 std::pair< PluginStructureEvent::Command, const std::wstring > PluginStructureCommandMapping[] = 
@@ -139,6 +143,8 @@ std::pair< PluginStructureEvent::Command, const std::wstring > PluginStructureCo
     , std::make_pair( PluginStructureEvent::Command::DetachPlugin, L"DetachPlugin" ) 
     , std::make_pair( PluginStructureEvent::Command::AddPlugin, L"AddPlugin" ) 
     , std::make_pair( PluginStructureEvent::Command::RemovePlugin, L"RemovePlugin" )
+    , std::make_pair( PluginStructureEvent::Command::CopyPlugin, L"CopyPlugin" )
+    , std::make_pair( PluginStructureEvent::Command::MovePlugin, L"MovePlugin" )
     , std::make_pair( PluginStructureEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
@@ -358,6 +364,7 @@ std::pair< HightmapEvent::Command, const std::wstring > HightmapEventCommandMapp
     , std::make_pair( HightmapEvent::Command::Set3, L"Set3" ) 
     , std::make_pair( HightmapEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
+
 
 template<> HightmapEvent::Command WString2T     ( const std::wstring& s )       { return WString2T( HightmapEventCommandMapping, s ); }
 template<> const std::wstring& T2WString        ( HightmapEvent::Command t )    { return Enum2WString( HightmapEventCommandMapping, t ); }
@@ -668,6 +675,7 @@ void                LoadAssetEvent::Serialize            ( ISerializer& ser ) co
     ser.SetAttribute( SerializationHelper::NODE_NAME_WSTRING, toWString( NodeName ) );
     ser.SetAttribute( SerializationHelper::PLUGIN_NAME_WSTRING, toWString( PluginName ) );
     ser.SetAttribute( SerializationHelper::ASSET_DATA_WSTRING, toWString( AssetData ) );
+    ser.SetAttribute( SerializationHelper::SCENE_NAME_WSTRING, toWString( SceneName ) );
 }
 
 // *************************************
@@ -679,6 +687,7 @@ IEventPtr                LoadAssetEvent::Create          ( IDeserializer& deser 
         LoadAssetEventPtr newEvent  = std::make_shared<LoadAssetEvent>();
         newEvent->PluginName        = toString( deser.GetAttribute( SerializationHelper::PLUGIN_NAME_WSTRING ) );
         newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
+        newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
         newEvent->AssetData         = toString( deser.GetAttribute( SerializationHelper::ASSET_DATA_WSTRING ) );
         return newEvent;
     }
@@ -780,10 +789,13 @@ void                NodeStructureEvent::Serialize            ( ISerializer& ser 
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_WSTRING, toWString( SceneName ) );
-    ser.SetAttribute( SerializationHelper::NODE_NAME_WSTRING, toWString( NodeName ) );
+    ser.SetAttribute( SerializationHelper::NODE_NAME_WSTRING, toWString( NodePath ) );
     ser.SetAttribute( SerializationHelper::NEW_NODE_NAME_WSTRING, toWString( NewNodeName ) );
     ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( SceneCommand ) );
-    ser.SetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING, toWString( TimelineName ) );
+    ser.SetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING, toWString( TimelinePath ) );
+    ser.SetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING, toWString( TimelinePath ) );
+    ser.SetAttribute( SerializationHelper::REQUEST_WSTRING, toWString( Request ) );
+    ser.SetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING, toWString( AttachIndex ) );
 }
 
 // *************************************
@@ -794,10 +806,12 @@ IEventPtr                NodeStructureEvent::Create          ( IDeserializer& de
     {
         NodeStructureEventPtr newEvent   = std::make_shared<NodeStructureEvent>();
         newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
-        newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
+        newEvent->NodePath          = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
         newEvent->NewNodeName       = toString( deser.GetAttribute( SerializationHelper::NEW_NODE_NAME_WSTRING ) );
-        newEvent->TimelineName      = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
+        newEvent->TimelinePath      = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
         newEvent->SceneCommand      = SerializationHelper::WString2T<NodeStructureEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->Request           = toString( deser.GetAttribute( SerializationHelper::REQUEST_WSTRING ) );
+        newEvent->AttachIndex       = std::stoul( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING ) );
         
         return newEvent;
     }
@@ -833,12 +847,14 @@ EventType           NodeStructureEvent::GetEventType() const
 void                PluginStructureEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
-    ser.SetAttribute( SerializationHelper::NODE_NAME_WSTRING, toWString( NodeName ) );
+    ser.SetAttribute( SerializationHelper::NODE_NAME_WSTRING, toWString( NodePath ) );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_WSTRING, toWString( SceneName ) );
     ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( PluginCommand ) );
     ser.SetAttribute( SerializationHelper::PLUGIN_NAME_WSTRING, toWString( PluginName ) );
-    ser.SetAttribute( SerializationHelper::PLUGIN_ATTACH_INDEX_WSTRING, toWString( AttachIndex ) );
+    ser.SetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING, toWString( AttachIndex ) );
     ser.SetAttribute( SerializationHelper::PLUGIN_UID_WSTRING, toWString( PluginUID ) );
+    ser.SetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING, toWString( TimelinePath ) );
+	ser.SetAttribute( SerializationHelper::REQUEST_WSTRING, toWString( Request ) );
 }
 
 // *************************************
@@ -848,12 +864,14 @@ IEventPtr                PluginStructureEvent::Create          ( IDeserializer& 
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         PluginStructureEventPtr newEvent   = std::make_shared<PluginStructureEvent>();
-        newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
+        newEvent->NodePath          = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
         newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
         newEvent->PluginName        = toString( deser.GetAttribute( SerializationHelper::PLUGIN_NAME_WSTRING ) );
         newEvent->PluginCommand     = SerializationHelper::WString2T<PluginStructureEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
-        newEvent->AttachIndex       = std::stoul( deser.GetAttribute( SerializationHelper::PLUGIN_ATTACH_INDEX_WSTRING ) );
+        newEvent->AttachIndex       = std::stoul( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING ) );
         newEvent->PluginUID         = toString( deser.GetAttribute( SerializationHelper::PLUGIN_UID_WSTRING ) );
+        newEvent->TimelinePath      = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
+        newEvent->Request			= toString( deser.GetAttribute( SerializationHelper::REQUEST_WSTRING ) );
 
         return newEvent;
     }
@@ -1096,6 +1114,7 @@ void                TimerEvent::Serialize            ( ISerializer& ser ) const
     ser.SetAttribute( SerializationHelper::TIMER_MINUTES_WSTRING, toWString( Minutes ) );
     ser.SetAttribute( SerializationHelper::TIMER_SECONDS_WSTRING, toWString( Seconds ) );
     ser.SetAttribute( SerializationHelper::TIMER_MILLISECONDS_WSTRING, toWString( Milliseconds ) );
+    ser.SetAttribute( SerializationHelper::SCENE_NAME_WSTRING, toWString( SceneName ) );
 }
 
 // *************************************
@@ -1107,6 +1126,7 @@ IEventPtr                TimerEvent::Create          ( IDeserializer& deser )
         TimerEventPtr newEvent      = std::make_shared<TimerEvent>();
         newEvent->TimerCommand      = SerializationHelper::WString2T<TimerEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
         newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
+        newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
         newEvent->Hours             = stof( deser.GetAttribute( SerializationHelper::TIMER_HOURS_WSTRING ) );
         newEvent->Minutes           = stof( deser.GetAttribute( SerializationHelper::TIMER_MINUTES_WSTRING ) );
         newEvent->Seconds           = stof( deser.GetAttribute( SerializationHelper::TIMER_SECONDS_WSTRING ) );
@@ -1150,6 +1170,7 @@ void                WidgetEvent::Serialize            ( ISerializer& ser ) const
     ser.SetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING, toWString( Time ) );
     ser.SetAttribute( SerializationHelper::NODE_NAME_WSTRING, toWString( NodeName ) );
     ser.SetAttribute( SerializationHelper::WIDGET_ACTION_WSTRING, toWString( Action ) );
+    ser.SetAttribute( SerializationHelper::SCENE_NAME_WSTRING, toWString( SceneName ) );
 }
 
 // *************************************
@@ -1162,6 +1183,7 @@ IEventPtr                WidgetEvent::Create          ( IDeserializer& deser )
         newEvent->Time              = stof( deser.GetAttribute( SerializationHelper::WIDGET_TIME_VALUE_WSTRING ) );
         newEvent->WidgetCommand     = SerializationHelper::WString2T<WidgetEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
         newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
+        newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
         newEvent->Action            = toString( deser.GetAttribute( SerializationHelper::WIDGET_ACTION_WSTRING ) );
 
         return newEvent;

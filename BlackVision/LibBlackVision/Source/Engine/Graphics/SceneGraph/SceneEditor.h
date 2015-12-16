@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CoreDEF.h"
 
 namespace bv {
 
@@ -23,16 +24,11 @@ public:
 
 							SceneEditor			( Renderer * renderer, SceneNode * & rootNode );
 
-    //void                    SetRootNode         ( SceneNode * rootNode );
-    //bool                    DeleteRootNode      ();
-
     void                    AddChildNode        ( SceneNode * parentNode, SceneNode * childNode );
     bool                    DeleteChildNode     ( SceneNode * parentNode, SceneNode * childNode );
 
-    //void                    AttachRootNode      ();
-    //bool                    DetachRootNode      ();
-
 	bool                    AttachChildNode     ( SceneNode * parentNode );
+	bool                    AttachChildNode     ( SceneNode * parentNode, UInt32 idx );
     bool                    DetachChildNode     ( SceneNode * parentNode, SceneNode * childNode );
 
     SceneNode *				GetDetachedNode     ();

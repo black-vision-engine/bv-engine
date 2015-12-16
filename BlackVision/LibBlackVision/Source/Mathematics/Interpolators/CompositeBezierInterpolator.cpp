@@ -100,15 +100,13 @@ void                                        CompositeBezierInterpolator< TimeVal
         SerializationHelper::SerializeAttribute( ser, m_postMethod, "postMethod" );
 
         ser.EnterArray( "keys" );
-
-            for( size_t i = 0; i < interpolators.size(); i++ )
-            {
+            for( size_t i = 0; i < keys.size(); i++ )
                 keys[ i ].Serialize( ser );
+        ser.ExitChild();
+
+        ser.EnterArray( "interpolations" );
+            for( size_t i = 0; i < interpolators.size(); i++ )
                 interpolators[ i ]->Serialize( ser );
-            }
-
-            ( keys.end()-1 )->Serialize( ser );
-
         ser.ExitChild();
 
     ser.ExitChild();
@@ -304,6 +302,37 @@ void CompositeBezierInterpolator< TimeValueT, ValueT >::AddKey             ( Tim
             UpdateInterpolator( interpolators, j, m_type );
 }
 
+// ***********************
+//
+template< class TimeValueT, class ValueT >
+bool CompositeBezierInterpolator< TimeValueT, ValueT >::RemoveKey       ( TimeValueT t )
+{
+    if( keys.empty() )
+        return false;
+
+    // Find the proper key
+    SizeType i = 0;
+    SizeType keysSize = keys.size();
+    for( ; i < keysSize; ++i )
+    {
+        if( fabs( keys[ i ].t - t ) < m_tolerance )
+            break;
+    }
+    if( i == keysSize )
+        return false;       // Key not found.
+
+    if( i == 0 )
+        interpolators.erase( interpolators.begin() );
+    else if( i == keysSize - 1 )
+        interpolators.erase( interpolators.begin() + i - 1 );
+    else
+    {
+        interpolators.erase( interpolators.begin() + i );
+        interpolators[ i - 1 ]->SetValue( keys[ i ].t, keys[ i + 1 ].val );
+    }
+    keys.erase( keys.begin() + i );
+    return true;
+}
 
 // *******************************
 //

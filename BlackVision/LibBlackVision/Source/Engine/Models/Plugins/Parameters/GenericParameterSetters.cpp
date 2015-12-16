@@ -269,6 +269,36 @@ int                                                 BezierParameterGetNumKeys( I
         return -1;
 }
 
+// ***********************
+//
+bool RemoveParameterKey ( IParameterPtr parameter, TimeType t )
+{
+    auto paramType = parameter->GetType();
+    switch( paramType )
+    {
+        case ModelParamType::MPT_FLOAT:
+            return RemoveTypedParamKey<ModelParamType::MPT_FLOAT>( parameter, t );
+        case ModelParamType::MPT_VEC2:
+            return RemoveTypedParamKey<ModelParamType::MPT_VEC2>( parameter, t );
+        case ModelParamType::MPT_VEC3:
+            return RemoveTypedParamKey<ModelParamType::MPT_VEC3>( parameter, t );
+        case ModelParamType::MPT_VEC4:
+            return RemoveTypedParamKey<ModelParamType::MPT_VEC4>( parameter, t );
+        case ModelParamType::MPT_WSTRING:
+            return RemoveTypedParamKey<ModelParamType::MPT_WSTRING>( parameter, t );
+        case ModelParamType::MPT_STRING:
+            return RemoveTypedParamKey<ModelParamType::MPT_STRING>( parameter, t );
+        case ModelParamType::MPT_INT:
+            return RemoveTypedParamKey<ModelParamType::MPT_INT>( parameter, t );
+        case ModelParamType::MPT_BOOL:
+            return RemoveTypedParamKey<ModelParamType::MPT_BOOL>( parameter, t );
+        case ModelParamType::MPT_ENUM:
+            return RemoveTypedParamKey<ModelParamType::MPT_ENUM>( parameter, t );
+        case ModelParamType::MPT_MAT2:
+            return RemoveTypedParamKey<ModelParamType::MPT_MAT2>( parameter, t );
+    }
+    return false;
+}
 
 } //model
 } //bv

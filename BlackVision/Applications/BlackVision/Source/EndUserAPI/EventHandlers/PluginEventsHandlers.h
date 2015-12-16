@@ -17,16 +17,13 @@ public:
     PluginEventsHandlers( BVAppLogic* logic );
     ~PluginEventsHandlers();
 
-    void                    AddParamKey         ( bv::IEventPtr eventPtr );
-    void                    UpdateParamKey      ( bv::IEventPtr eventPtr );
-    void                    RemoveParamKey      ( bv::IEventPtr eventPtr );
+    void                    ParamHandler        ( bv::IEventPtr eventPtr );
 
     void                    LoadAsset           ( bv::IEventPtr eventPtr );
     void                    TimerHandler        ( bv::IEventPtr eventPtr );
 
 private:    //Helpers
     void                    AddParameter        ( ParameterPtr& param, const std::wstring& value, TimeType keyTime );
-    void                    UpdateParameter     ( ParameterPtr& param, const std::wstring& value, TimeType keyTime );
     void                    RemoveParameter     ( ParameterPtr& param, TimeType keyTime );
 
 

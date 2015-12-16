@@ -40,6 +40,13 @@ Json::Value JsonSerializeObject::GetJson()
 
 // ***********************
 //
+std::string JsonSerializeObject::GetString()
+{
+    return m_root.toStyledString();
+}
+
+// ***********************
+//
 void JsonSerializeObject::EnterChild( const std::string& name )
 {
 	m_nodeStack.push( m_currentNode );

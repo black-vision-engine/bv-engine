@@ -330,6 +330,20 @@ void            BasicNode::AddChildToModelOnly              ( BasicNodePtr n )
 
 // ********************************
 //
+void            BasicNode::AddChildToModelOnly              ( BasicNodePtr n, UInt32 idx )
+{
+	if( idx < m_children.size() )
+	{
+		m_children.insert( m_children.begin() + idx, n );
+	}
+	else
+	{
+		m_children.push_back( n );
+	}
+}
+
+// ********************************
+//
 void            BasicNode::DetachChildNodeOnly              ( BasicNodePtr n )
 {
     for( unsigned int i = 0; i < m_children.size(); ++i )

@@ -9,6 +9,8 @@
 
 #include "Engine/Models/Timeline/TimelineHelper.h"
 
+#include "Assets/Assets.h"
+
 #include "System/Path.h"
 #include "IO/FileIO.h"
 #include "IO/DirIO.h"
@@ -104,6 +106,22 @@ void					TestScene::InitTestModelSceneEditor	()
 		assert( root->GetChild( "child0" )->GetNumChildren() == 3 );
 	});
 
+	//m_testSteps.push_back([&] 
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	auto node0 = editor->GetNode( SCENE_NAME, "/root/child0/child01" );
+	//	auto node1 = editor->GetNode( SCENE_NAME, "/root/child01" );
+	//	auto node2 = editor->GetNode( SCENE_NAME, "/root/child0" );
+	//	auto node3 = editor->GetNode( SCENE_NAME, "/root/child2" );
+	//	auto node4 = editor->GetNode( SCENE_NAME, "/root/child2/child00" );
+	//	bool success = true;
+	//	success;
+	//	//success &= ( node0->GetName() == node1->GetName() );
+	//	//success &= ( node0.get() == node1.get() );
+
+	//	//assert( success );
+	//});
+
 	m_testSteps.push_back([&] 
 	{
 		auto editor = m_project->GetProjectEditor();
@@ -147,76 +165,85 @@ void					TestScene::InitTestModelSceneEditor	()
 		assert( success );
 	});
 
-	m_testSteps.push_back([&] 
-	{
-		auto editor = m_project->GetProjectEditor();
-		bool success = true;
+	//m_testSteps.push_back([&] 
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	bool success = true;
 
-		auto copied = editor->AddSceneCopy( SCENE_NAME );
-		auto root = copied->GetRootNode();
-		SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
+	//	auto copied = editor->AddSceneCopy( SCENE_NAME );
+	//	auto root = copied->GetRootNode();
+	//	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
 
-		for( UInt32 i = 0; i < root->GetNumChildren(); ++i )
-		{
-			model::SetParameter( root->GetChild( i )->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
-		}
+	//	for( UInt32 i = 0; i < root->GetNumChildren(); ++i )
+	//	{
+	//		model::SetParameter( root->GetChild( i )->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
+	//	}
 
-		//editor->AddScene( copied );
+	//	success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
+	//	success &= ( editor->GetScene( "Copy_" + SCENE_NAME ) != nullptr );
 
-		success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
-		success &= ( editor->GetScene( "Copy_" + SCENE_NAME ) != nullptr );
+	//	assert( success );
+	//});
 
-		assert( success );
-	});
+	//m_testSteps.push_back([&] 
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	bool success = true;
 
-	m_testSteps.push_back([&] 
-	{
-		auto editor = m_project->GetProjectEditor();
-		bool success = true;
+	//	auto copiedName = "Copy_" + SCENE_NAME;
 
-		editor->RemoveScene( "Copy_" + SCENE_NAME );
+	//	auto copied = editor->AddSceneCopy( copiedName );
+	//	auto root = copied->GetRootNode();
+	//	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, 0.5f, -1.f ) );
 
-		success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
-		success &= ( editor->GetScene( "Copy_" + SCENE_NAME ) == nullptr );
+	//	editor->RemoveScene( "Copy_" + SCENE_NAME );
 
-		assert( success );
-	});
+	//	success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
+	//	success &= ( editor->GetScene( "Copy_" + SCENE_NAME ) == nullptr );
+	//	success &= ( editor->GetScene( "Copy1_" + SCENE_NAME ) != nullptr );
 
-	m_testSteps.push_back([&] 
-	{
-		auto editor = m_project->GetProjectEditor();
-		bool success = true;
+	//	assert( success );
+	//});
 
-		editor->AddScene( model::SceneModel::CreateEmptyScene( SCENE_NAME1 ) );
+	//m_testSteps.push_back([&] 
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	bool success = true;
 
-		auto copied = editor->AddNodeCopy( SCENE_NAME1, nullptr, SCENE_NAME, editor->GetScene( SCENE_NAME )->GetRootNode() );
-		SetParameterTranslation( copied->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
+	//	editor->RenameScene( "Copy1_" + SCENE_NAME, SCENE_NAME1 );
+	//	success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
+	//	success &= ( editor->GetScene( "Copy1_" + SCENE_NAME ) == nullptr );
+	//	//editor->AddScene( model::SceneModel::CreateEmptyScene( SCENE_NAME1 ) );
 
-		success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
-		success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
+	//	auto scene = editor->GetScene( SCENE_NAME1 );
+	//	auto copied = editor->AddNodeCopy( SCENE_NAME1, scene->GetRootNode(), SCENE_NAME1, scene->GetRootNode() );
+	//	SetParameterTranslation( copied->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
 
-		assert( success );
-	});
+	//	success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
+	//	success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
 
-	m_testSteps.push_back([&] 
-	{
-		auto editor = m_project->GetProjectEditor();
-		bool success = true;
+	//	assert( success );
+	//});
 
-		auto scene = editor->GetScene( SCENE_NAME1 );
-		auto root = scene->GetRootNode();
-		SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.3f, 0.5f, -1.f ) );
+	//m_testSteps.push_back([&] 
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	bool success = true;
 
-		for( UInt32 i = 0; i < root->GetNumChildren(); ++i )
-		{
-			model::SetParameter( root->GetChild( i )->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
-		}
+	//	auto scene = editor->GetScene( SCENE_NAME1 );
+	//	auto root = scene->GetRootNode();
+	//	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.3f, 0.5f, -1.f ) );
 
-		success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
-		success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
+	//	for( UInt32 i = 0; i < root->GetNumChildren(); ++i )
+	//	{
+	//		model::SetParameter( root->GetChild( i )->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
+	//	}
 
-		assert( success );
-	});
+	//	success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
+	//	success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
+
+	//	assert( success );
+	//});
 	
 	m_testSteps.push_back([&] 
 	{ 
@@ -476,19 +503,19 @@ void					TestScene::InitTestModelSceneEditor	()
 		}
 	});
 
-	m_testSteps.push_back([&] 
-	{
-		auto editor = m_project->GetProjectEditor();
-		bool success = true;
+	//m_testSteps.push_back([&] 
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	bool success = true;
 
-		success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
+	//	success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
 
-		editor->RemoveScene( SCENE_NAME1 );
+	//	editor->RemoveScene( SCENE_NAME1 );
 
-		success &= ( !editor->GetScene( SCENE_NAME1 ) );
+	//	success &= ( !editor->GetScene( SCENE_NAME1 ) );
 
-		assert( success );
-	});
+	//	assert( success );
+	//});
 
 	m_testSteps.push_back([&] 
 	{
@@ -746,17 +773,54 @@ void					TestScene::InitTimelinesTest		()
 
 // ****************************
 //
+void					TestScene::InitAssetsTest		()
+{
+	auto add0 = [&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto scene = editor->GetScene( SCENE_NAME );
+		auto tex = TestSceneUtils::TexturedRectangle( scene->GetTimeline(), TEX_NODE, 0.3f, 0.3f, TestSceneUtils::TEXTURE_PATH );
+		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
+
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+		editor->DeleteChildNode( SCENE_NAME, root, TEX_NODE );
+		editor->AddChildNode( SCENE_NAME, root, tex );
+	};
+
+	m_testSteps.push_back( add0 );
+
+	m_testSteps.push_back( [&]
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+		auto child = root->GetChild( TEX_NODE );
+
+		auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f0.bmp", false );
+		editor->LoadAsset( child->GetPlugin( "texture" ), desc );
+	});
+
+	m_testSteps.push_back( [&]
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+		auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( TEX_NODE ) );
+		editor->DeletePlugin( child, "texture" );
+	});
+}
+
+// ****************************
+//
 void					TestScene::InitTestEditor			()
 {
 	//InitTestModelSceneEditor();
 
-	InitTimelinesTest();
+	//InitTimelinesTest();
 
 	//InitBasicColorPluginTest();
 	//InitOrderColorPluginTest();
 
-	//InitBasicTexturePluginTest();
-	//InitOrderTexturePluginTest();
+	InitBasicTexturePluginTest();
+	InitOrderTexturePluginTest();
 
 	//InitBasicAnimationPluginTest();
 	//InitOrderAnimationPluginTest();
@@ -959,7 +1023,8 @@ void					TestScene::InitBasicTexturePluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		
-		LoadTexture( root->GetPlugin( "texture" ), TestSceneUtils::ANIM_PATH + "/f0.bmp" );
+		auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f0.bmp", false );
+		editor->LoadAsset( root->GetPlugin( "texture" ), desc );
 	});
 	m_testSteps.push_back( [&]{ RestoreRoot( 2, "texture" ); } );
 
@@ -967,7 +1032,9 @@ void					TestScene::InitBasicTexturePluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TEX_NODE );
-		LoadTexture( child->GetPlugin( "texture" ), TestSceneUtils::ANIM_PATH + "/f0.bmp" );
+
+		auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f0.bmp", false );
+		editor->LoadAsset( child->GetPlugin( "texture" ), desc );
 	});
 }
 
@@ -1075,7 +1142,8 @@ void					TestScene::InitBasicAnimationPluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		
-		LoadAnimation( root->GetPlugin( "animation" ), TestSceneUtils::ANIM_PATH, "*.bmp" );
+		auto desc = AnimationAssetDesc::Create( TestSceneUtils::ANIM_PATH, "*.bmp" );
+		editor->LoadAsset( root->GetPlugin( "animation" ), desc );
 	});
 	m_testSteps.push_back( [&]{ RestoreRoot( 2, "animation" ); } );
 
@@ -1093,7 +1161,9 @@ void					TestScene::InitBasicAnimationPluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( ANIM_NODE );
-		LoadAnimation( child->GetPlugin( "animation" ), TestSceneUtils::ANIM_PATH, "*.bmp" );
+
+		auto desc = AnimationAssetDesc::Create( TestSceneUtils::ANIM_PATH, "*.bmp" );
+		editor->LoadAsset( root->GetPlugin( "animation" ), desc );
 
 		auto time = m_timeEvaluator->GetLocalTime();
 		SetParameter( child->GetPlugin( "animation" )->GetParameter( "frameNum" ), time, 0.f );
@@ -1374,7 +1444,8 @@ void					TestScene::InitColoredTextTest			()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		
-		LoadFont( root->GetPlugin( "text" ), "fonts/couri.TTF", 30, 0, 0, true );
+		auto desc = FontAssetDesc::Create( "fonts/couri.TTF", 30, 0, 0, true );
+		editor->LoadAsset( root->GetPlugin( "text" ), desc );
 	});
 	m_testSteps.push_back( [&]{ RestoreRoot( 1, "text" ); } );
 
@@ -1391,7 +1462,9 @@ void					TestScene::InitColoredTextTest			()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TXT_NODE );
-		LoadFont( child->GetPlugin( "text" ), "fonts/couri.TTF", 30, 0, 0, true );
+
+		auto desc = FontAssetDesc::Create( "fonts/couri.TTF", 30, 0, 0, true );
+		editor->LoadAsset( root->GetPlugin( "text" ), desc );
 	});
 
 	for( auto & test : tests )
@@ -1615,7 +1688,8 @@ void					TestScene::InitColoredTimerTest			()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		
-		LoadFont( root->GetPlugin( "timer" ), "Assets/Fonts/couri.TTF", 40, 0, 0, true );
+		auto desc = FontAssetDesc::Create( "Assets/Fonts/couri.TTF", 40, 0, 0, true );
+		editor->LoadAsset( root->GetPlugin( "timer" ), desc );
 	});
 	m_testSteps.push_back( []{} ); //empty step
 	m_testSteps.push_back( []{} ); //empty step
@@ -1637,7 +1711,9 @@ void					TestScene::InitColoredTimerTest			()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TMR_NODE );
-		LoadFont( child->GetPlugin( "timer" ), "Assets/Fonts/couri.TTF", 40, 0, 0, true );
+
+		auto desc = FontAssetDesc::Create( "Assets/Fonts/couri.TTF", 40, 0, 0, true );
+		editor->LoadAsset( root->GetPlugin( "timer" ), desc );
 	});
 	m_testSteps.push_back( []{} ); //empty step
 
@@ -1766,7 +1842,9 @@ void					TestScene::InitGradientTimerTest			()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TMR_NODE );
-		LoadFont( child->GetPlugin( "timer" ), "Assets/Fonts/couri.TTF", 40, 0, 0, true );
+
+		auto desc = FontAssetDesc::Create( "Assets/Fonts/couri.TTF", 40, 0, 0, true );
+		editor->LoadAsset( root->GetPlugin( "timer" ), desc );
 	});
 	m_testSteps.push_back( []{} ); //empty step
 
@@ -1919,7 +1997,9 @@ void					TestScene::InitTexturedGeometryTest		()
 		{
 			auto editor = m_project->GetProjectEditor();
 			auto geom = editor->GetScene( SCENE_NAME )->GetRootNode()->GetChild( GEOM_NODE );
-			model::LoadTexture( geom->GetPlugin( "texture" ), TestSceneUtils::ANIM_PATH + "/f0.bmp" );
+
+			auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f0.bmp", false );
+			editor->LoadAsset( geom->GetPlugin( "texture" ), desc );
 		});
 
 		auto pluginName = TestSceneUtils::PluginsNameArr[ i ];
@@ -2177,7 +2257,10 @@ void					TestScene::InitVideoStreamDecoderTest	()
 		{
 			auto editor = m_project->GetProjectEditor();
 			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
-			model::LoadVideoStream( root->GetPlugin( "video_stream_decoder" ), TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
+
+			auto desc = VideoStreamAssetDesc::Create( TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
+			editor->LoadAsset( root->GetPlugin( "video_stream_decoder" ), desc );
+
 			model::DefaultVideoStreamDecoderPlugin::Start( root->GetPlugin( "video_stream_decoder" ) );
 		});
 		m_testSteps.push_back( [&]{ RestoreRoot( 2, "video_stream_decoder" ); } );
@@ -2187,7 +2270,8 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			auto child = root->GetChild( VSD_NODE );
 
-			model::LoadVideoStream( child->GetPlugin( "video_stream_decoder" ), TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
+			auto desc = VideoStreamAssetDesc::Create( TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
+			editor->LoadAsset( root->GetPlugin( "video_stream_decoder" ), desc );
 
 			model::DefaultVideoStreamDecoderPlugin::Start( child->GetPlugin( "video_stream_decoder" ) );
 		});
@@ -2237,7 +2321,8 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			auto child = root->GetChild( VSD_NODE );
 
-			model::LoadVideoStream( child->GetPlugin( "video_stream_decoder" ), TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
+			auto desc = VideoStreamAssetDesc::Create( TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
+			editor->LoadAsset( child->GetPlugin( "video_stream_decoder" ), desc );
 
 			model::DefaultVideoStreamDecoderPlugin::Start( child->GetPlugin( "video_stream_decoder" ) );
 		});
@@ -2321,7 +2406,7 @@ void						TestScene::CopyPlugin			( UInt32 rootIdx, const std::string & rootPlug
 	m_copiedPlugin = root->GetPlugin( rootPlugin );
 	editor->DeletePlugin( root, rootPlugin );
 	
-	editor->AddPluginCopy( SCENE_NAME, root, SCENE_NAME, child, childPlugin, rootIdx );
+	editor->AddPluginCopy( SCENE_NAME, root, rootIdx, SCENE_NAME, child, childPlugin );
 }
 
 // ****************************
