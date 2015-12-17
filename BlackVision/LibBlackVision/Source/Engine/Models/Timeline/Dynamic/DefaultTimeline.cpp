@@ -58,6 +58,7 @@ void                                DefaultTimeline::Serialize           ( ISeri
     ser.SetAttribute( "name", GetName() );
     ser.SetAttribute( "type", "default" );
 
+    SerializationHelper::SerializeAttribute( ser, m_timeEvalImpl.GetLocalTime(), "local_time" );
     SerializationHelper::SerializeAttribute( ser, m_timeEvalImpl.IsActive(), "play" );
 
     ser.SetAttribute( "duration", std::to_string( m_timeEvalImpl.GetDuration() ) );

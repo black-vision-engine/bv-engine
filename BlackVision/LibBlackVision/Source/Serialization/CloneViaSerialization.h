@@ -18,6 +18,8 @@ std::shared_ptr< T >            Clone( const T* obj, std::string name )
     std::stringstream ss;
     ser.Save( ss );
 
+    //ser.Save( "clone.xml" ); // for debugging only
+
     XMLDeserializer deser( ss, ss.tellp() );
 
     return SerializationHelper::DeserializeObjectLoadImpl< T >( deser, name );
