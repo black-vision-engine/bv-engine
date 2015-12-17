@@ -76,58 +76,47 @@ void    RenderLogic::SetCamera       ( Camera * cam )
 //
 void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot )
 {
+    renderer->PreDraw();
+
 #ifndef USE_NEW_RENDER_LOGIC
     m_frameRenderLogic->RenderFrame( renderer, sceneRoot );
 #else
     NewRenderFrame( renderer, sceneRoot );
 #endif
+
+    renderer->PostDraw();
+    renderer->DisplayColorBuffer();
 }
 
 // *********************************
 //
 void    RenderLogic::NewRenderFrame  ( Renderer * renderer, SceneNode * sceneRoot )
 {
-    // Pre frame setup
-//    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 1.f, 1.0f ) );
-//    renderer->ClearBuffers();
-    renderer->PreDraw();
-    
-    // Enable current render target
     auto rt = m_offscreenDisplay->GetActiveRenderTarget();
-    renderer->Enable( rt );
 
-    renderer->SetClearColor( glm::vec4( 1.f, 1.f, 0.f, 1.0f ) );
-    renderer->ClearBuffers();
+    RenderRootNode( renderer, sceneRoot, rt );
+    BlitToPreview( renderer, rt );
+    UpdateOffscreenState();
+}
 
+// *********************************
+//
+void    RenderLogic::RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoot, RenderTarget * rt )
+{
     // FIXME: verify that all rendering paths work as expected
 	if( sceneRoot )
-		RenderNode( renderer, sceneRoot );
-
-    // Post frame logic
-    renderer->Disable( rt );
-
-    // Blit current render target - suxx a bit - there should be a separate initialization step
-    assert( rt == m_offscreenDisplay->GetActiveRenderTarget() );
-    
-    if ( !m_blitEffect )
     {
-        auto rtTex = rt->ColorTexture( 0 );
+        renderer->Enable( rt );
 
-        m_blitEffect = new BlitFullscreenEffect( rtTex, false );
+        {
+            renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+            renderer->ClearBuffers();
+
+            RenderNode( renderer, sceneRoot );
+        }
+
+        renderer->Disable( rt );
     }
-
-    //Update render target for future uses
-    m_offscreenDisplay->UpdateActiveRenderTargetIdx();
-
-    //Render fullscreen effect
-    m_blitEffect->Render( renderer );
-    //m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
-    //m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
-
-    // m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic );
-
-    renderer->PostDraw();
-    renderer->DisplayColorBuffer();
 }
 
 // *********************************
@@ -186,6 +175,40 @@ void    RenderLogic::RenderChildren  ( Renderer * renderer, SceneNode * node, in
         HPROFILER_SECTION( "RenderNode::RenderNode", PROFILER_THREAD1 );
         RenderNode  ( renderer, node->GetChild( i ) ); 
     }
+}
+
+// *********************************
+//
+BlitFullscreenEffect *  RenderLogic::AccessBlitEffect   ( RenderTarget * rt )
+{
+    if ( !m_blitEffect )
+    {
+        auto rtTex = rt->ColorTexture( 0 );
+
+        m_blitEffect = new BlitFullscreenEffect( rtTex, false );
+    }
+
+    return m_blitEffect;
+}
+
+// *********************************
+//
+void                    RenderLogic::BlitToPreview      ( Renderer * renderer, RenderTarget * rt )
+{
+    assert( rt == m_offscreenDisplay->GetActiveRenderTarget() );
+
+    // Blit current render target - suxx a bit - there should be a separate initialization step
+    // Render fullscreen effect
+    auto blitter = AccessBlitEffect( rt );
+
+    blitter->Render( renderer );
+}
+
+// *********************************
+//
+void                    RenderLogic::UpdateOffscreenState()
+{
+    m_offscreenDisplay->UpdateActiveRenderTargetIdx();
 }
 
 } //bv

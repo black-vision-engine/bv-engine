@@ -13,6 +13,8 @@ class Camera;
 class Renderer;
 class SceneNode;
 
+class RenderTarget;
+
 class RenderLogicImpl;
 class FrameRenderLogic;
 class PostFrameRenderLogic;
@@ -43,11 +45,25 @@ public:
 
     void    NewRenderFrame  ( Renderer * renderer, SceneNode * sceneRoot );
 
+private:
+
+    void    RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoot, RenderTarget * rt );
+
+public:
+
+
     void    RenderNode      ( Renderer * renderer, SceneNode * node );
     void    DrawNode        ( Renderer * renderer, SceneNode * node );
     void    DrawNodeOnly    ( Renderer * renderer, SceneNode * node );
     void    RenderChildren  ( Renderer * renderer, SceneNode * node, int firstChildIdx = 0 );
 
+private:
+
+    BlitFullscreenEffect *  AccessBlitEffect    ( RenderTarget * rt );
+
+    void                    BlitToPreview       ( Renderer * renderer, RenderTarget * rt );
+
+    void                    UpdateOffscreenState();
 };
 
 } // bv
