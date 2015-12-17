@@ -6,79 +6,13 @@
 #include "PerformanceMonitor.h"
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Events/EventHelpers.h"             // wstring to string conversions and vice versa
+#include "EventHandlerHelpers.h"
 #include "Assets/AssetDescsWithUIDs.h"
 #include "Serialization/Json/JsonDeserializeObject.h"
+#include "ProjectManager.h"
 
 namespace bv
 {
-
-namespace 
-{
-
-// *********************************
-//
-template< typename ParamTypePtr >
-Json::Value GetParamDescription( IParameterPtr p )
-{
-    string s_name = p->GetName();
-    auto paramType = p->GetType();
-
-    Json::Value entry;
-
-    entry[ "name" ] = s_name;
-    entry[ "type" ] = ParamTypeToString( paramType );
-
-    Json::Value jsonKeys;
-
-    auto typedParam = QueryTypedParam< ParamTypePtr >( p );
-    auto accessIntepolator = typedParam->AccessInterpolator();
-    auto keys = accessIntepolator.AccessKeys();
-    for( auto & k : keys )
-    {
-        jsonKeys.append( toString( k.t ) );
-        jsonKeys.append( toString( k.val ) );
-    }
-
-    entry[ "keys" ] = jsonKeys;
-
-    return entry;
-}
-
-// ***********************
-//
-Json::Value SerializeSceneModel( model::SceneModelPtr sceneModel )
-{
-    JsonSerializeObject ser;
-    sceneModel->Serialize( ser );
-
-    return ser.GetJson();
-}
-
-// ***********************
-//
-void ReqPrint( model::BasicNodePtr node, int level )
-{
-    string temp="-";
-    for( int i = 1; i < level; i++ )
-    {
-        temp+="-";
-    }
-
-    //Log::A("OK",temp+node->GetName());
-    
-    int NumChildren = (node)->GetNumChildren();
-    for( int i = 0; i < NumChildren; i++ )
-    {
-
-		model::IModelNodePtr ptr   = node->GetChild(i);
-        model::IModelNodePtr ptr2 = ptr;
-        model::BasicNodePtr nod = std::static_pointer_cast< model::BasicNode >( ptr2 );
-        ReqPrint( nod, level + 1 );
-    }
-
-}
-
-} //anonymous
 
 // ***********************
 //
@@ -108,6 +42,16 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             responseMessage = toWString( TreeStructureInfo( request ) );
         else if( command == InfoEvent::Command::ListAssets )
             responseMessage = toWString( ListAssets( request ) );
+        else if( command == InfoEvent::Command::ListAssetsPaths )
+            responseMessage = ListAssetsPaths( request );
+        else if( command == InfoEvent::Command::ListCategoriesNames )
+            responseMessage = ListCategoriesNames( request );
+        else if( command == InfoEvent::Command::ListProjectNames )
+            responseMessage = ListProjectNames( request );
+        else if( command == InfoEvent::Command::ListProjects )
+            responseMessage = ListProjects( request );
+        else if( command == InfoEvent::Command::ListScenes )
+            responseMessage = ListScenes( request );
         else if( command == InfoEvent::Command::Performance )
             responseMessage = toWString( PerformanceInfo( request ) );
         else if( command == InfoEvent::Command::Timelines )
@@ -268,6 +212,84 @@ std::string QueryHandlers::TreeStructureInfo   ( const std::string& /*request*/ 
 
 
     return root.toStyledString();
+}
+
+// ***********************
+//
+std::wstring QueryHandlers::ListProjectNames    ( const std::string& /*request*/ )
+{
+    auto pm = ProjectManager::GetInstance();
+    
+    auto pns = pm->ListProjectsNames();
+    auto pList = ToJSONArray( pns );
+
+    return MakeSceneStructureResponse( "ListProjectNames", "list", pList );
+}
+
+// ***********************
+//
+std::wstring QueryHandlers::ListScenes          ( const std::string& request )
+{
+    auto pm = ProjectManager::GetInstance();
+
+    auto name = GetRequestParamValue( request )[ "projectName" ].asString();
+    auto sns = pm->ListScenesNames( name );
+
+    auto pList = ToJSONArray( sns );
+
+    return MakeSceneStructureResponse( "ListScenes", "list", pList );
+}
+
+// ***********************
+//
+std::wstring QueryHandlers::ListAssetsPaths     ( const std::string& request )
+{
+    auto pm = ProjectManager::GetInstance();
+
+    auto projName = GetRequestParamValue( request )[ "projectName" ].asString();
+    auto catName = GetRequestParamValue( request )[ "categoryName" ].asString();
+
+    auto sns = pm->ListAssetsPaths( projName, catName );
+
+    auto pList = ToJSONArray( sns );
+
+    return MakeSceneStructureResponse( "ListAssetPaths", "list", pList );
+}
+
+// ***********************
+//
+std::wstring QueryHandlers::ListCategoriesNames ( const std::string& /*request*/ )
+{
+    auto pm = ProjectManager::GetInstance();
+
+    auto sns = pm->ListCategoriesNames();
+    auto pList = ToJSONArray( sns );
+
+    return MakeSceneStructureResponse( "ListCategoriesNames", "list", pList );
+}
+
+// ***********************
+//
+std::wstring QueryHandlers::ListProjects        ( const std::string& /*request*/ )
+{
+    auto pm = ProjectManager::GetInstance();
+
+    auto pns = pm->ListProjectsNames();
+
+    Json::Value list;
+
+    for( auto p : pns )
+    {
+        auto scenesCount = pm->ListScenesNames( p ).size();
+
+        Json::Value entry;
+        entry[ "name" ] = p.Str();
+        entry[ "scenes_count" ] = scenesCount;
+
+        list.append( entry );
+    }
+
+    return MakeSceneStructureResponse( "ListProjects", "list", list );
 }
 
 } //bv

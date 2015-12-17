@@ -227,49 +227,13 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     auto command = projectEvent->ProjectCommand;
     int senderID = projectEvent->SocketID;
 
-    if( command == ProjectEvent::Command::ListProjectNames )
-    {
-        auto pns = pm->ListProjectsNames();
-
-        auto pList = ToJSONArray( pns );
-
-        SendOnSceneStructureResponse( senderID, "ListProjectNames", "list", pList );
-    }
-    else if( command == ProjectEvent::Command::NewProject )
+    if( command == ProjectEvent::Command::NewProject )
     {
         auto name = GetRequestParamValue( request )[ "projectName" ].asString();
 
         pm->AddNewProject( name );
 
         SendOnSceneStructureResponse( senderID, "NewProject", "status", "OK" );
-    }
-    else if( command == ProjectEvent::Command::ListScenes )
-    {
-        auto name = GetRequestParamValue( request )[ "projectName" ].asString();
-        auto sns = pm->ListScenesNames( name );
-
-        auto pList = ToJSONArray( sns );
-
-        SendOnSceneStructureResponse( senderID, "ListScenes", "list", pList );
-    }
-    else if( command == ProjectEvent::Command::ListAssetsPaths )
-    {
-        auto projName = GetRequestParamValue( request )[ "projectName" ].asString();
-        auto catName = GetRequestParamValue( request )[ "categoryName" ].asString();
-
-        auto sns = pm->ListAssetsPaths( projName, catName );
-
-        auto pList = ToJSONArray( sns );
-
-        SendOnSceneStructureResponse( senderID, "ListAssetPaths", "list", pList );
-    }
-    else if( command == ProjectEvent::Command::ListCategoriesNames )
-    {
-        auto sns = pm->ListCategoriesNames();
-
-        auto pList = ToJSONArray( sns );
-
-        SendOnSceneStructureResponse( senderID, "ListCategoriesNames", "list", pList );
     }
     else if( command == ProjectEvent::Command::SetCurrentProject )
     {
@@ -278,25 +242,6 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         pm->SetCurrentProject( projName );
 
         SendOnSceneStructureResponse( senderID, "SetCurrentProject", "status", "OK" );
-    }
-    else if( command == ProjectEvent::Command::ListProjects )
-    {
-        auto pns = pm->ListProjectsNames();
-
-        Json::Value list;
-
-        for( auto p : pns )
-        {
-            auto scenesCount = pm->ListScenesNames( p ).size();
-
-            Json::Value entry;
-            entry[ "name" ] = p.Str();
-            entry[ "scenes_count" ] = scenesCount;
-
-            list.append( entry );
-        }
-
-        SendOnSceneStructureResponse( senderID, "ListProjects", "list", list );
     }
     else if( command == ProjectEvent::Command::LoadProject )
     {

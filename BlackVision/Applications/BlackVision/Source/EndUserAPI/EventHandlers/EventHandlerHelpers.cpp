@@ -66,7 +66,7 @@ Json::Value Str2Json( const std::string & data )
 
 // *********************************
 //
-Json::Value GetRequestParamValue( std::string& request )
+Json::Value GetRequestParamValue( const std::string& request )
 {
 	return Str2Json( std::string( request.begin(), request.end() ) );
 }
@@ -85,9 +85,9 @@ Json::Value ToJSONArray( const PathVec & v )
     return root;
 }
 
-// *********************************
+// ***********************
 //
-void SendOnSceneStructureResponse( int socketID, const std::string & cmd, const std::string & msgKey, const Json::Value & msgVal )
+std::wstring MakeSceneStructureResponse  ( const std::string & cmd, const std::string & msgKey, const Json::Value & msgVal )
 {
     LOG_MESSAGE( SeverityLevel::info ) << cmd << " OK";
 
@@ -98,12 +98,54 @@ void SendOnSceneStructureResponse( int socketID, const std::string & cmd, const 
 
     std::string S = scenes.toStyledString();
 
-    wstring WS = wstring( S.begin(), S.end() );
+    return wstring( S.begin(), S.end() );
+}
 
+// *********************************
+//
+void SendOnSceneStructureResponse( int socketID, const std::string & cmd, const std::string & msgKey, const Json::Value & msgVal )
+{
     ResponseEventPtr responseEvent = std::make_shared<ResponseEvent>();
-    responseEvent->Response = WS;
+    responseEvent->Response = MakeSceneStructureResponse( cmd, msgKey, msgVal );
     responseEvent->SocketID = socketID;
     GetDefaultEventManager().QueueResponse( responseEvent );
+}
+
+
+
+
+// ***********************
+//
+Json::Value SerializeSceneModel( model::SceneModelPtr sceneModel )
+{
+    JsonSerializeObject ser;
+    sceneModel->Serialize( ser );
+
+    return ser.GetJson();
+}
+
+// ***********************
+//
+void ReqPrint( model::BasicNodePtr node, int level )
+{
+    string temp="-";
+    for( int i = 1; i < level; i++ )
+    {
+        temp+="-";
+    }
+
+    //Log::A("OK",temp+node->GetName());
+    
+    int NumChildren = (node)->GetNumChildren();
+    for( int i = 0; i < NumChildren; i++ )
+    {
+
+		model::IModelNodePtr ptr   = node->GetChild(i);
+        model::IModelNodePtr ptr2 = ptr;
+        model::BasicNodePtr nod = std::static_pointer_cast< model::BasicNode >( ptr2 );
+        ReqPrint( nod, level + 1 );
+    }
+
 }
 
 

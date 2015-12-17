@@ -45,7 +45,7 @@ const EventType PluginStructureEvent::m_sEventType  = 0x30000015;
 std::string PluginStructureEvent::m_sEventName      = "PluginStructureEvent";
 
 const EventType ProjectEvent::m_sEventType          = 0x30000013;
-std::string ProjectEvent::m_sEventName              = "ProjectStructureEvent";
+std::string ProjectEvent::m_sEventName              = "ProjectEvent";
 
 const EventType ResponseEvent::m_sEventType         = 0x30000008;
 std::string ResponseEvent::m_sEventName             = "ResponseEvent";
@@ -187,11 +187,6 @@ std::pair< ProjectEvent::Command, const std::wstring > ProjectEventCommandMappin
     , std::make_pair( ProjectEvent::Command::LoadProject, L"LoadProject" ) 
     , std::make_pair( ProjectEvent::Command::NewProject, L"NewProject" ) 
     , std::make_pair( ProjectEvent::Command::SetCurrentProject, L"SetCurrentProject" )
-    , std::make_pair( ProjectEvent::Command::ListProjectNames, L"ListProjectNames" )
-    , std::make_pair( ProjectEvent::Command::ListScenes, L"ListScenes" )
-    , std::make_pair( ProjectEvent::Command::ListAssetsPaths, L"ListAssetsPaths" )
-    , std::make_pair( ProjectEvent::Command::ListCategoriesNames, L"ListCategoriesNames" )
-    , std::make_pair( ProjectEvent::Command::ListProjects, L"ListProjects" )
     , std::make_pair( ProjectEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
@@ -210,7 +205,12 @@ const std::wstring RESPONSE_WSTRING                     = L"Response";
 std::pair< InfoEvent::Command, const std::wstring > InfoEventCommandMapping[] = 
 {
     std::make_pair( InfoEvent::Command::TreeStructure, L"TreeStructure" )
-    , std::make_pair( InfoEvent::Command::ListAssets, L"ListAssets" ) 
+    , std::make_pair( InfoEvent::Command::ListAssets, L"ListAssets" )
+    , std::make_pair( InfoEvent::Command::ListProjectNames, L"ListProjectNames" )
+    , std::make_pair( InfoEvent::Command::ListScenes, L"ListScenes" )
+    , std::make_pair( InfoEvent::Command::ListAssetsPaths, L"ListAssetsPaths" )
+    , std::make_pair( InfoEvent::Command::ListCategoriesNames, L"ListCategoriesNames" )
+    , std::make_pair( InfoEvent::Command::ListProjects, L"ListProjects" )
     , std::make_pair( InfoEvent::Command::Performance, L"Performance" ) 
     , std::make_pair( InfoEvent::Command::Timelines, L"TimeLines" ) 
     , std::make_pair( InfoEvent::Command::NodeInfo, L"NodeInfo" )

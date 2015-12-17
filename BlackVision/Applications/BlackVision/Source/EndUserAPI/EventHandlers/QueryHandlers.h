@@ -19,6 +19,12 @@ public:
 
 private:
     std::string     ListAssets          ( const std::string& request );
+    std::wstring    ListProjectNames    ( const std::string& request );
+    std::wstring    ListScenes          ( const std::string& request );
+    std::wstring    ListAssetsPaths     ( const std::string& request );
+    std::wstring    ListCategoriesNames ( const std::string& request );
+    std::wstring    ListProjects        ( const std::string& request );
+
     std::string     VideoCardsInfo      ( const std::string& request );
     std::string     GetNodeInfo         ( const std::string& request );
     std::string     GetTimeLinesInfo    ( const std::string& request );

@@ -439,6 +439,11 @@ public:
     {
         TreeStructure,
         ListAssets,
+        ListProjectNames,
+        ListScenes,
+        ListAssetsPaths,
+        ListCategoriesNames,
+        ListProjects,
         Performance,
         Timelines,
         NodeInfo,
