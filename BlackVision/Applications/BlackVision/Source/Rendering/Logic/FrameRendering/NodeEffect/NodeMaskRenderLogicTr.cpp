@@ -9,6 +9,14 @@
 
 #include "Rendering/Utils/RenderLogicContext.h"
 
+#include "Engine/Types/Values/TypedValues.h"
+
+#include "Engine/Graphics/SceneGraph/SceneNode.h"
+
+#include "Rendering/Utils/RenderLogicContext.h"
+
+#include "Rendering/Logic/FullScreen/Impl/BlitAlphaMaskFullscreenEffect.h"
+
 
 namespace bv {
 
@@ -81,6 +89,22 @@ void    NodeMaskRenderLogicTr::RenderNode           ( SceneNode * node, RenderLo
 
         ctx->GetRenderLogic()->RenderChildren( renderer, node, 2 );
     }
+}
+
+// *********************************
+//
+BlitAlphaMaskFullscreenEffect *     NodeMaskRenderLogicTr::AccessBlitAlphaMaskEffect   ( RenderTarget * rt, RenderTarget * alphaRt, float alpha )
+{
+    { rt; alphaRt, alpha; }
+
+    return nullptr;
+}
+
+// *********************************
+//
+void                                NodeMaskRenderLogicTr::BlitWithAlphaMask           ( Renderer * renderer, RenderTarget * mainTarget, RenderTarget * foregroundTarget, RenderTarget * alphaTarget, float alpha )
+{
+    { renderer; mainTarget; foregroundTarget; alphaTarget; alpha; }
 }
 
 } //bv
