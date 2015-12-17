@@ -11,8 +11,6 @@ class BlitFullscreenEffect : public FullscreenEffect
 {
 private:
 
-    bool            m_useAlpha;
-
     float           m_alpha;
 
     ValueFloatPtr   m_alphaVal;
@@ -31,7 +29,7 @@ protected:
 
 private:
 
-    PixelShader *               CreatePS                ( Texture2DPtr tex ) const;
+    PixelShader *               CreatePS                ( Texture2DPtr tex, bool useAlpha ) const;
 
 };
 

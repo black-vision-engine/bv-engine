@@ -12,13 +12,12 @@ namespace bv {
 // ****************************
 //
 BlitFullscreenEffect::BlitFullscreenEffect      ( Texture2DPtr tex, bool useAlpha )
-    : m_useAlpha( useAlpha )
 {
     m_alphaVal = ValuesFactory::CreateValueFloat( "alpha" );
 
     SetAlpha( 1.f );
 
-    SetFullscreenQuad( CreateDefaultFullscrQuad( CreatePS( tex ) ) );
+    SetFullscreenQuad( CreateDefaultFullscrQuad( CreatePS( tex, useAlpha ) ) );
 }
 
 // ****************************
@@ -71,7 +70,7 @@ RenderableEntity *  BlitFullscreenEffect::CreateFullscreenQuad    () const
 
 // ****************************
 //
-PixelShader *       BlitFullscreenEffect::CreatePS                ( Texture2DPtr tex ) const
+PixelShader *       BlitFullscreenEffect::CreatePS                ( Texture2DPtr tex, bool useAlpha ) const
 {
     PixelShader * shader = nullptr;
 
@@ -80,7 +79,7 @@ PixelShader *       BlitFullscreenEffect::CreatePS                ( Texture2DPtr
 
     auto sampler = CreateDefaultSampler( "Texture" );
 
-    if( m_useAlpha )
+    if( useAlpha )
     {
         GenericShaderParam * param = ShaderParamFactory::CreateGenericParameter( m_alphaVal.get() );
 

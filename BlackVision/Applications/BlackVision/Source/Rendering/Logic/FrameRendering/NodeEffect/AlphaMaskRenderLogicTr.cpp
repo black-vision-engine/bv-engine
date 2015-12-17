@@ -6,6 +6,7 @@
 
 #include "Rendering/Utils/RenderLogicContext.h"
 
+#include "Rendering/Logic/FullScreen/Impl/BlitFullscreenEffect.h"
 
 
 namespace bv {
@@ -13,6 +14,7 @@ namespace bv {
 // *********************************
 //
 AlphaMaskRenderLogicTr::AlphaMaskRenderLogicTr      ()
+    : m_blitEffect( nullptr )
 { 
 }
 
@@ -46,19 +48,46 @@ void    AlphaMaskRenderLogicTr::RenderNode                  ( SceneNode * node, 
 
         ctx->GetRenderLogic()->DrawNode( renderer, node );
 
-        auto alphaVal = node->GetNodeEffect()->GetValue( "alpha" );
-        //GetOffscreenRenderLogic()->DrawTopAuxRenderTarget( renderer, alphaVal.get() );
-
         renderer->Disable( rt );
         rtAllocator->Free();
 
-        renderer->Enable( rtAllocator->Top() );
+        BlitWithAlpha( renderer, rtAllocator->Top(), rt, alphaValue );
 
-        //GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
-        //GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
+        renderer->Enable( rtAllocator->Top() );
     }
 
     // Do not render this node if alpha is more or less equal to zero
+}
+
+// *********************************
+//
+BlitFullscreenEffect *  AlphaMaskRenderLogicTr::AccessBlitAlphaEffect   ( RenderTarget * rt, float alpha )
+{
+    if ( !m_blitEffect )
+    {
+        auto rtTex = rt->ColorTexture( 0 );
+
+        m_blitEffect = new BlitFullscreenEffect( rtTex, true );
+    }
+
+    m_blitEffect->SetAlpha( alpha );
+
+    return m_blitEffect;    
+}
+
+// *********************************
+//
+void                    AlphaMaskRenderLogicTr::BlitWithAlpha           ( Renderer * renderer, RenderTarget * mainTarget, RenderTarget * alphaTarget, float alpha )
+{
+    assert( mainTarget != alphaTarget );
+
+    auto blitter = AccessBlitAlphaEffect( alphaTarget, alpha );
+
+    renderer->Enable( mainTarget );
+
+    blitter->Render( renderer );
+
+    renderer->Disable( mainTarget );
 }
 
 } //bv

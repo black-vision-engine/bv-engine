@@ -71,6 +71,7 @@ void    RenderLogic::SetCamera       ( Camera * cam )
 
 #define USE_NEW_RENDER_LOGIC
 #define USE_DEFAULT_EFFECT_ONLY
+//#define USE_DEFAULT_AND_ALPHA_EFFECTS_ONLY
 
 // *********************************
 //
@@ -96,6 +97,7 @@ void    RenderLogic::NewRenderFrame  ( Renderer * renderer, SceneNode * sceneRoo
 
     RenderRootNode( renderer, sceneRoot, rt );
     BlitToPreview( renderer, rt );
+
     UpdateOffscreenState();
 }
 
@@ -131,20 +133,32 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
     if ( node->IsVisible() )
     {
         #ifdef USE_DEFAULT_EFFECT_ONLY
-        // Default render logic
-        DrawNode( renderer, node );
-        #else
-        if( node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT )
-        {
             // Default render logic
             DrawNode( renderer, node );
-        }
-        else
-        {
-            auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogicTr( node );
+        #elif defined(USE_DEFAULT_AND_ALPHA_EFFECTS_ONLY)
+            if( node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT || node->GetNodeEffect()->GetType() != NodeEffect::Type::T_ALPHA_MASK )
+            {
+                // Default render logic
+                DrawNode( renderer, node );
+            }
+            else
+            {
+                auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogicTr( node );
                
-            effectRenderLogic->RenderNode( node, &ctx );
-        }
+                effectRenderLogic->RenderNode( node, &ctx );
+            }
+        #else
+            if( node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT )
+            {
+                // Default render logic
+                DrawNode( renderer, node );
+            }
+            else
+            {
+                auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogicTr( node );
+               
+                effectRenderLogic->RenderNode( node, &ctx );
+            }
         #endif
     }
 }
