@@ -377,11 +377,10 @@ public:
         SetCurrentProject,
         SaveScene,
         LoadProject,
-        ListProjectNames,
-        ListScenes,
-        ListAssetsPaths,
-        ListCategoriesNames,
-        ListProjects,
+        CopyAsset,
+        MoveAsset,
+        RemoveAsset,
+        ImportAsset,
         Fail            ///< Wrong command
     } Command;
 private:

@@ -267,7 +267,23 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         {
             SendOnSceneStructureResponse( senderID, "LoadProject", "status", "ERROR" );
         }
-    } 
+    }
+    else if( command == ProjectEvent::Command::CopyAsset )
+    {
+
+    }
+    else if( command == ProjectEvent::Command::MoveAsset )
+    {
+
+    }
+    else if( command == ProjectEvent::Command::RemoveAsset )
+    {
+
+    }
+    else if( command == ProjectEvent::Command::ImportAsset )
+    {
+
+    }
 //     else if( command == ProjectEvent::Command::SaveScene )
 //     {
 //         auto root = m_appLogic->GetBVProject()->GetModelSceneRoot();
