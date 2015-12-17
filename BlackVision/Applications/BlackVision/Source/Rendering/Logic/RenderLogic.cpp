@@ -69,8 +69,8 @@ void    RenderLogic::SetCamera       ( Camera * cam )
     // m_offscreenRenderLogic->SetRendererCamera( cam );
 }
 
-//#define USE_NEW_RENDER_LOGIC
-//#define USE_DEFAULT_EFFECT_ONLY
+#define USE_NEW_RENDER_LOGIC
+#define USE_DEFAULT_EFFECT_ONLY
 
 // *********************************
 //
@@ -88,13 +88,16 @@ void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot
 void    RenderLogic::NewRenderFrame  ( Renderer * renderer, SceneNode * sceneRoot )
 {
     // Pre frame setup
-    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 1.f, 1.0f ) );
-    renderer->ClearBuffers();
+//    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 1.f, 1.0f ) );
+//    renderer->ClearBuffers();
     renderer->PreDraw();
     
     // Enable current render target
     auto rt = m_offscreenDisplay->GetActiveRenderTarget();
     renderer->Enable( rt );
+
+    renderer->SetClearColor( glm::vec4( 1.f, 1.f, 0.f, 1.0f ) );
+    renderer->ClearBuffers();
 
     // FIXME: verify that all rendering paths work as expected
 	if( sceneRoot )

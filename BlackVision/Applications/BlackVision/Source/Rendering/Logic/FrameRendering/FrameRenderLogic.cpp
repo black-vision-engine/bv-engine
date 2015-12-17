@@ -70,8 +70,9 @@ void    FrameRenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * scen
 //
 void    FrameRenderLogic::PreFrameSetup  ( Renderer * renderer )
 {
-    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
-    renderer->ClearBuffers();
+//FIXME: it is a fullscreen render pass, so no such things are required nows
+//    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+//    renderer->ClearBuffers();
     renderer->PreDraw();
 
     m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );

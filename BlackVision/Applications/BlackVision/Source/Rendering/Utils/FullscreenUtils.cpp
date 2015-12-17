@@ -31,6 +31,8 @@ VertexDescriptor *  CreateVertexDescriptor( unsigned int numUVChannels )
         offset += 2 * sizeof( float );
     }
 
+    vd->SetStride( offset );
+
     return vd;
 }
 
@@ -164,8 +166,8 @@ float *                                         FullscreenUtils::CreateFullscree
     */
 
     //Raw data
-    glm::vec3 positions[] = { TopRightPosVertex(), BottomLeftPosVertex(), TopLeftPosVertex(), BottomRightPosVertex() };
-    glm::vec2 uv[] = { BottomRightUVData(), BottomLeftUVData(), TopRightUVData(), TopLeftUVData() };
+    glm::vec3 positions[] = { BottomLeftPosVertex(), BottomRightPosVertex(), TopLeftPosVertex(), TopRightPosVertex()  };
+    glm::vec2 uv[] = { BottomLeftUVData(), BottomRightUVData(), TopLeftUVData(), TopRightUVData() };
 
     for( unsigned int i = 0; i < 4; ++i )
     {
