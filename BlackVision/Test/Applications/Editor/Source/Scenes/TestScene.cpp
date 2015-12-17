@@ -190,25 +190,25 @@ void					TestScene::InitTestModelSceneEditor	()
 		editor->MoveScene( EMPTY_SCENE, 0 );
 	});
 
-	//m_testSteps.push_back([&] 
-	//{
-	//	auto editor = m_project->GetProjectEditor();
-	//	bool success = true;
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		bool success = true;
 
-	//	auto copied = editor->AddSceneCopy( SCENE_NAME );
-	//	auto root = copied->GetRootNode();
-	//	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
+		auto copied = editor->AddSceneCopy( SCENE_NAME );
+		auto root = copied->GetRootNode();
+		SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
 
-	//	for( UInt32 i = 0; i < root->GetNumChildren(); ++i )
-	//	{
-	//		model::SetParameter( root->GetChild( i )->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
-	//	}
+		for( UInt32 i = 0; i < root->GetNumChildren(); ++i )
+		{
+			model::SetParameter( root->GetChild( i )->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
+		}
 
-	//	success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
-	//	success &= ( editor->GetScene( "Copy_" + SCENE_NAME ) != nullptr );
+		success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
+		success &= ( editor->GetScene( "Copy_" + SCENE_NAME ) != nullptr );
 
-	//	assert( success );
-	//});
+		assert( success );
+	});
 
 	//m_testSteps.push_back([&] 
 	//{
