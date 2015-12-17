@@ -17,7 +17,20 @@ BlitFullscreenEffect::BlitFullscreenEffect      ( Texture2DPtr tex, bool useAlph
 
     SetAlpha( 1.f );
 
-    SetFullscreenQuad( CreateDefaultFullscrQuad( CreatePS( tex, useAlpha ) ) );
+    auto quad = CreateDefaultFullscrQuad( CreatePS( tex, useAlpha ) );
+    SetFullscreenQuad( quad );
+
+    if ( useAlpha )
+    {
+        auto eff  = quad->GetRenderableEffect();
+        auto pass = eff->GetPass( 0 );
+
+        auto sinst = pass->GetStateInstance();
+
+        auto as = RenderStateAccessor::AccessAlphaState( sinst );
+
+        as->blendEnabled = true;
+    }
 }
 
 // ****************************

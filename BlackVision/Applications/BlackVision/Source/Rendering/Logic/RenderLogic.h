@@ -30,7 +30,7 @@ private:
     OffscreenDisplay *              m_offscreenDisplay;
     BlitFullscreenEffect *          m_blitEffect;
 
-    RenderLogicImpl *           m_impl;
+    // RenderLogicImpl *           m_impl;
     FrameRenderLogic *          m_frameRenderLogic;
     PostFrameRenderLogic *      m_postFrameRenderLogic;
 

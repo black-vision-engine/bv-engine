@@ -40,6 +40,8 @@ void    AlphaMaskRenderLogicTr::RenderNode                  ( SceneNode * node, 
         auto renderer       = ctx->GetRenderer();
         auto rtAllocator    = ctx->GetRenderTargetAllocator();
 
+        renderer->Disable( rtAllocator->Top() );
+
         auto rt = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
         renderer->Enable( rt );
 

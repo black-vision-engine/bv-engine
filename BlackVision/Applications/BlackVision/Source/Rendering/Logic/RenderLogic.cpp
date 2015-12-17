@@ -35,8 +35,8 @@ namespace bv {
 // *********************************
 //
 RenderLogic::RenderLogic     ()
-    : m_impl( nullptr )
-    , m_rtStackAllocator( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), TextureFormat::F_A8R8G8B8 )
+    //: m_impl( nullptr )
+    : m_rtStackAllocator( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), TextureFormat::F_A8R8G8B8 )
     , m_blitEffect( nullptr )
 {
     auto videoCardEnabled   = DefaultConfig.ReadbackFlag();
@@ -44,7 +44,7 @@ RenderLogic::RenderLogic     ()
 
     m_offscreenDisplay = new OffscreenDisplay( &m_rtStackAllocator, videoCardEnabled || previewAsVideoCard );
 
-    m_impl = new RenderLogicImpl( &m_rtStackAllocator, videoCardEnabled || previewAsVideoCard );
+    //m_impl = new RenderLogicImpl( &m_rtStackAllocator, videoCardEnabled || previewAsVideoCard );
     m_frameRenderLogic = new FrameRenderLogic();
     m_postFrameRenderLogic = new PostFrameRenderLogic();
 }
@@ -54,7 +54,7 @@ RenderLogic::RenderLogic     ()
 RenderLogic::~RenderLogic    ()
 {
     delete m_offscreenDisplay;
-    delete m_impl;
+    //delete m_impl;
     delete m_frameRenderLogic;
     delete m_postFrameRenderLogic;
     delete m_blitEffect;
@@ -70,8 +70,8 @@ void    RenderLogic::SetCamera       ( Camera * cam )
 }
 
 #define USE_NEW_RENDER_LOGIC
-#define USE_DEFAULT_EFFECT_ONLY
-//#define USE_DEFAULT_AND_ALPHA_EFFECTS_ONLY
+//#define USE_DEFAULT_EFFECT_ONLY
+#define USE_DEFAULT_AND_ALPHA_EFFECTS_ONLY
 
 // *********************************
 //
