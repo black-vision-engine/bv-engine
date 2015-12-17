@@ -284,26 +284,50 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     {
 
     }
-//     else if( command == ProjectEvent::Command::SaveScene )
-//     {
-//         auto root = m_appLogic->GetBVProject()->GetModelSceneRoot();
-//         auto node = root->GetNode( nodeName );
+     else if( command == ProjectEvent::Command::SaveScene )
+     {
+         auto sceneName = GetRequestParamValue( request )[ "sceneName" ].asString();
 
-		//if( node == nullptr && root->GetName() == nodeName )
-		//{
-		//	//Log::A( "OK", "root node is node you're looking for [" + nodeName + "] Applying jedi fix now." );
-		//	node = root;
-		//}
+         auto saveTo = GetRequestParamValue( request )[ "saveTo" ].asString();
 
-//         auto basicNode = std::static_pointer_cast< model::BasicNode >( node );
+         auto forceSaveStr = GetRequestParamValue( request )[ "forceSave" ].asString();
 
-//         auto projName = std::string( request.begin(), request.end() );
+         bool forceSave = false;
 
-//         pm->AddScene( basicNode, "proj01", "dupa.scn" );
+         if( forceSaveStr == "true" )
+         {
+             forceSave = true;
+         }
 
+         auto scene = m_appLogic->GetBVProject()->GetScene( sceneName );
 
-//         SendOnSceneStructureResponse( "SAVE_SCENE", "status", "OK" );
-//     }
+         if( scene )
+         {
+             if( forceSave )
+             {
+                 if( saveTo.empty() )
+                 {
+                     pm->AddScene( scene, "", scene->GetName() );
+                 }
+                 else
+                 {
+                     pm->AddScene( scene, "", saveTo );
+                 }
+
+                 SendOnSceneStructureResponse( senderID, "SaveScene", "status", "OK" );
+             }
+             else
+             {
+                 SendOnSceneStructureResponse( senderID, "SaveScene", "status", "ERROR" );
+                 assert( false );
+                 // TODO: Implement
+             }
+         }
+         else
+         {
+             SendOnSceneStructureResponse( senderID, "SaveScene", "status", "ERROR" );
+         }
+     }
 }
 
 // ***********************
