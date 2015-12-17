@@ -13,6 +13,7 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 
 #include "Serialization/SerializationHelper.h"
+#include "Serialization/BVSerializeContext.h"
 //#include "Serialization/SerializationObjects.inl"
 #include "Serialization/CloneViaSerialization.h"
 #include "Assets/AssetDescsWithUIDs.h"
@@ -86,10 +87,13 @@ BasicNodePtr                    BasicNode::Create                   ( const std:
 //
 void                            BasicNode::Serialize               ( ISerializer& ser ) const
 {
+    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+
     ser.EnterChild( "node" );
     ser.SetAttribute( "name", GetName() );
 
-    ser.SetAttribute( "visible", m_visible ? "true" : "false" );
+    if( context->detailedInfo )
+        ser.SetAttribute( "visible", m_visible ? "true" : "false" );
 
     ser.EnterArray( "plugins" );
         for( unsigned int  i = 0; i < m_pluginList->NumPlugins(); i++ )
@@ -101,13 +105,16 @@ void                            BasicNode::Serialize               ( ISerializer
         }
     ser.ExitChild(); // plugins
 
-    if( m_modelNodeEffect )
+    if( context->detailedInfo && m_modelNodeEffect )
         m_modelNodeEffect->Serialize( ser );
 
-    ser.EnterArray( "nodes" );
-        for( auto child : m_children )
-            child->Serialize( ser );
-    ser.ExitChild();
+    if( context->recursive )
+    {
+        ser.EnterArray( "nodes" );
+            for( auto child : m_children )
+                child->Serialize( ser );
+        ser.ExitChild();
+    }
 
     ser.ExitChild();
 }

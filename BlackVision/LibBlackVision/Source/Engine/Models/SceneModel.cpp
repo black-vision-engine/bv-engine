@@ -4,6 +4,7 @@
 #include "Engine/Models/ModelSceneEditor.h"
 
 #include "Serialization/CloneViaSerialization.h"
+#include "Serialization/BVSerializeContext.h"
 
 namespace bv { namespace model {
 
@@ -37,25 +38,30 @@ SceneModelPtr    SceneModel::Create		( std::string name, Camera * camera )
 //
 void            SceneModel::Serialize           ( ISerializer& ser) const
 {
-ser.EnterChild( "scene" );
+    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
 
-    ser.SetAttribute( "name", m_name );
+    ser.EnterChild( "scene" );
 
-    //auto& assets = AssetDescsWithUIDs::GetInstance();
-    AssetDescsWithUIDs assets;
-    GetAssetsWithUIDs( assets, m_sceneRootNode );
-    AssetDescsWithUIDs::SetInstance( assets );
+        ser.SetAttribute( "name", m_name );
 
-    assets.Serialize( ser );
+        if( context->detailedInfo )
+        {
+            //auto& assets = AssetDescsWithUIDs::GetInstance();
+            AssetDescsWithUIDs assets;
+            GetAssetsWithUIDs( assets, m_sceneRootNode );
+            AssetDescsWithUIDs::SetInstance( assets );
 
-    ser.EnterArray( "timelines" );
-    for( auto timeline : m_timeline->GetChildren() )
-        timeline->Serialize( ser );
-    ser.ExitChild(); // timelines
+            assets.Serialize( ser );
 
-    m_sceneRootNode->Serialize( ser );                                    
+            ser.EnterArray( "timelines" );
+            for( auto timeline : m_timeline->GetChildren() )
+                timeline->Serialize( ser );
+            ser.ExitChild(); // timelines
+        }
 
-ser.ExitChild();
+        m_sceneRootNode->Serialize( ser );                                    
+
+    ser.ExitChild();
 }
 
 // *******************************

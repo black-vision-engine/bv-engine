@@ -7,6 +7,7 @@
 #include "Assets/AssetSerialization.h"
 #include "Serialization/CloneViaSerialization.h"
 #include "Assets/AssetDescsWithUIDs.h"
+#include "Serialization/BVSerializeContext.h"
 
 namespace bv { namespace model {
 
@@ -85,59 +86,64 @@ ResourceStateModelPtr              BasePlugin< IPlugin >::GetRSM                
 //
 void                                BasePlugin< IPlugin >::Serialize                   ( ISerializer& ser ) const
 {
+    auto serContext = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+
 ser.EnterChild( "plugin" );
     ser.SetAttribute( "uid", GetTypeUid() );
     ser.SetAttribute( "name", GetName() );
 
-    auto timeline = TimelineManager::GetInstance()->GetTimelinePath( GetTimeline( this ) );
-    ser.SetAttribute( "timeline", timeline );
-
-    auto context = GetRendererContext();
-    if( context )
-        context->Serialize( ser );
-
-    ser.EnterArray( "params" );
+    if( serContext->detailedInfo )
     {
-        IPluginParamValModelPtr pvm =    GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
-    
-        IParamValModelPtr models[] = {    pvm->GetPluginModel()
-                                        , pvm->GetTransformChannelModel()
-                                        , pvm->GetVertexAttributesChannelModel()
-                                        , pvm->GetPixelShaderChannelModel()
-                                        , pvm->GetVertexShaderChannelModel()
-                                        , pvm->GetGeometryShaderChannelModel() 
-                                    };
-    
-        for( auto model : models )
-            if( model ) 
-                //model->Serialize( ser );
-            {
-                for( auto param : model->GetParameters() )
-                    param->Serialize( ser );
-            }
-    }
-    ser.ExitChild(); // params
+        auto timeline = TimelineManager::GetInstance()->GetTimelinePath( GetTimeline( this ) );
+        ser.SetAttribute( "timeline", timeline );
 
-    auto assets = GetAssets();
-    if( assets.size() > 0 )
-    {
-        ser.EnterArray( "assets" );
-        for( auto asset : GetAssets() )
+        auto context = GetRendererContext();
+        if( context )
+            context->Serialize( ser );
+
+        ser.EnterArray( "params" );
         {
-            auto uid = AssetDescsWithUIDs::GetInstance().Key2UID( asset->GetKey() );
-            ser.EnterChild( "asset" );
-                if( uid != "" )
-                    ser.SetAttribute( "uid", uid );
-                else
-                    asset->Serialize( ser );
-
-                auto rsm = GetRSM( asset->GetKey() );
-                assert( rsm );
-                rsm->Serialize( ser );
-            ser.ExitChild();
+            IPluginParamValModelPtr pvm =    GetPluginParamValModel(); //FIXME: this is pretty hackish to avoid const correctness related errors
+    
+            IParamValModelPtr models[] = {    pvm->GetPluginModel()
+                                            , pvm->GetTransformChannelModel()
+                                            , pvm->GetVertexAttributesChannelModel()
+                                            , pvm->GetPixelShaderChannelModel()
+                                            , pvm->GetVertexShaderChannelModel()
+                                            , pvm->GetGeometryShaderChannelModel() 
+                                        };
+    
+            for( auto model : models )
+                if( model ) 
+                    //model->Serialize( ser );
+                {
+                    for( auto param : model->GetParameters() )
+                        param->Serialize( ser );
+                }
         }
-        ser.ExitChild(); // assets
-    }
+        ser.ExitChild(); // params
+
+        auto assets = GetAssets();
+        if( assets.size() > 0 )
+        {
+            ser.EnterArray( "assets" );
+            for( auto asset : GetAssets() )
+            {
+                auto uid = AssetDescsWithUIDs::GetInstance().Key2UID( asset->GetKey() );
+                ser.EnterChild( "asset" );
+                    if( uid != "" )
+                        ser.SetAttribute( "uid", uid );
+                    else
+                        asset->Serialize( ser );
+
+                    auto rsm = GetRSM( asset->GetKey() );
+                    assert( rsm );
+                    rsm->Serialize( ser );
+                ser.ExitChild();
+            }
+            ser.ExitChild(); // assets
+        }
+    }   // if( serContext->detailedInfo )
 
     ser.ExitChild(); // plugin
 }

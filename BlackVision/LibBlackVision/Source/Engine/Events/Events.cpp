@@ -87,6 +87,9 @@ const std::wstring TIMELINE_NAME_WSTRING    = L"TimelineName";      // TimeLineE
 const std::wstring COMMAND_WSTRING          = L"Command";
 const std::wstring REQUEST_WSTRING          = L"Request";           // ProjectStructureEvent InfoEvent
 
+const std::string RESPONSE_COMMAND_STRING   = "cmd";
+
+
 // ========================================================================= //
 // LoadAssetEvent
 // ========================================================================= //
@@ -219,6 +222,7 @@ std::pair< InfoEvent::Command, const std::wstring > InfoEventCommandMapping[] =
     , std::make_pair( InfoEvent::Command::Performance, L"Performance" ) 
     , std::make_pair( InfoEvent::Command::Timelines, L"TimeLines" ) 
     , std::make_pair( InfoEvent::Command::NodeInfo, L"NodeInfo" )
+    , std::make_pair( InfoEvent::Command::MinimalSceneInfo, L"MinimalSceneInfo" )
     , std::make_pair( InfoEvent::Command::Videocards, L"VideoCards" )
     , std::make_pair( InfoEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };

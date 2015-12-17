@@ -446,6 +446,7 @@ public:
         Performance,
         Timelines,
         NodeInfo,
+        MinimalSceneInfo,
         Videocards,
         Fail            ///< Wrong command
     } Command;
@@ -468,6 +469,9 @@ public:
     virtual const std::string &     GetName             () const;
     virtual EventType               GetEventType        () const;
 };
+
+template<> InfoEvent::Command       SerializationHelper::WString2T       ( const std::wstring& s );
+template<> const std::wstring&      SerializationHelper::T2WString       ( InfoEvent::Command t );
 
 DEFINE_PTR_TYPE( InfoEvent )
 

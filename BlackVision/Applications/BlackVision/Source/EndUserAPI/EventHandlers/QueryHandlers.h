@@ -27,6 +27,7 @@ private:
 
     std::string     VideoCardsInfo      ( const std::string& request );
     std::string     GetNodeInfo         ( const std::string& request );
+    std::string     GetMinimalSceneInfo ( const std::string& request );
     std::string     GetTimeLinesInfo    ( const std::string& request );
     std::string     PerformanceInfo     ( const std::string& request );
     std::string     TreeStructureInfo   ( const std::string& request );

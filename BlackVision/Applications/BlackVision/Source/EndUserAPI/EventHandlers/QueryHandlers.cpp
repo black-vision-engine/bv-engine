@@ -8,9 +8,11 @@
 #include "Engine/Events/EventHelpers.h"             // wstring to string conversions and vice versa
 #include "EventHandlerHelpers.h"
 #include "Assets/AssetDescsWithUIDs.h"
-#include "Serialization/Json/JsonDeserializeObject.h"
 #include "ProjectManager.h"
 #include "Engine/Models/BVProjectEditor.h"
+
+#include "Serialization/Json/JsonDeserializeObject.h"
+#include "Serialization/BVSerializeContext.h"
 
 namespace bv
 {
@@ -58,6 +60,8 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             responseMessage = toWString( GetTimeLinesInfo( request ) );
         else if( command == InfoEvent::Command::NodeInfo )
             responseMessage = toWString( GetNodeInfo( request ) );
+        else if( command == InfoEvent::Command::MinimalSceneInfo )
+            responseMessage = toWString( GetMinimalSceneInfo( request ) );
         else if( command == InfoEvent::Command::Videocards )
             responseMessage = toWString( VideoCardsInfo( request ) );
         
@@ -123,23 +127,50 @@ std::string QueryHandlers::GetNodeInfo         ( const std::string& request )
     std::string sceneName = deser.GetAttribute( "SceneName" );
     std::string nodePath = deser.GetAttribute( "NodePath" );
     
+    ser.SetAttribute( "cmd", toString( SerializationHelper::T2WString( InfoEvent::Command::NodeInfo ) ) );
+
     auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
     if( node == nullptr )
     {
-        Json::Value res;
-        res[ "cmd" ] = "NodeInfo";
-        res[ "node" ] = Json::nullValue;
-        return res.toStyledString();
+        ser.SetAttribute( "node", SerializationHelper::EMPTY_STRING );
+        return ser.GetString();
     }
+
+    // Prevent srialization from serializing child nodes.
+    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+    context->recursive = false;
 
     std::static_pointer_cast< model::BasicNode >( node )->Serialize( ser );
 
-    Json::Value res;
-    res[ "cmd" ] = "NodeInfo";
-    res[ "node" ] = ser.GetJson();
-    res[ "node" ]["node"].removeMember( "nodes" );
+    return ser.GetString();
+}
 
-    return res.toStyledString();
+// ***********************
+//
+std::string QueryHandlers::GetMinimalSceneInfo  ( const std::string& request )
+{
+    JsonDeserializeObject deser;
+    JsonSerializeObject ser;
+    deser.Load( request );
+
+    std::string sceneName = deser.GetAttribute( "SceneName" );
+    
+    ser.SetAttribute( "cmd", toString( SerializationHelper::T2WString( InfoEvent::Command::MinimalSceneInfo ) ) );
+
+    auto scene = m_appLogic->GetBVProject()->GetProjectEditor()->GetScene( sceneName );
+    if( scene == nullptr )
+    {
+        ser.SetAttribute( "scene", SerializationHelper::EMPTY_STRING );
+        return ser.GetString();
+    }
+
+    // Prevent srialization from serializing child nodes.
+    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+    context->detailedInfo = false;
+
+    scene->Serialize( ser );
+
+    return ser.GetString();
 }
 
 // ***********************
