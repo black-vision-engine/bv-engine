@@ -16,10 +16,14 @@ private:
     json_spirit::wValue                  m_root;
     json_spirit::wValue*                 m_currentNode;
     std::stack<json_spirit::wValue*>     m_nodeStack;
+
+    std::unique_ptr< SerializeContext >     m_context;
 public:
     JsonSpiritSerializeObject();
     ~JsonSpiritSerializeObject();
 
+
+    SerializeContext*           GetSerializeContext () const override;
 
     void						Save                ( const std::string& filename, FormatStyle style = FormatStyle::FORMATSTYLE_SPARING );
     std::wstring				Save                ( FormatStyle style = FormatStyle::FORMATSTYLE_SPARING );

@@ -6,6 +6,7 @@
 #include <stack>
 #include <fstream>
 #include <string>
+#include <memory>
 
 
 namespace bv
@@ -20,9 +21,13 @@ private:
 	
     std::stack<Json::Value*>	m_nodeStack;
 
+    std::unique_ptr< SerializeContext >     m_context;
+
 public:
 	JsonSerializeObject();
 	~JsonSerializeObject();
+
+    SerializeContext*           GetSerializeContext () const override;
 
 	void						Save                ( const std::string& filename, FormatStyle style = FormatStyle::FORMATSTYLE_SPARING );
 	void						Save                ( std::ostream& out );

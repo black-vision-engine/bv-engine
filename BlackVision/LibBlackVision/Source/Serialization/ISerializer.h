@@ -12,12 +12,22 @@ enum FormatStyle
     FORMATSTYLE_READABLE
 };
 
+class SerializeContext
+{
+public:
+    virtual ~SerializeContext() {}
+};
+
+
+
 class ISerializer
 {
 private:
 protected:
 public:
     virtual ~ISerializer() {};
+
+    virtual SerializeContext*   GetSerializeContext () const = 0;
 
     // Serializer on string
 	virtual void				SetAttribute        ( const std::string& name, const std::string& value ) = 0;

@@ -1,4 +1,5 @@
 #include "JsonSerializeObject.h"
+#include "Serialization/BVSerializeContext.h"
 
 #include <cassert>
 
@@ -8,6 +9,7 @@ namespace bv
 // ******************************************************************************************
 //
 JsonSerializeObject::JsonSerializeObject()
+    : m_context( std::unique_ptr< SerializeContext >( new BVSerializeContext() ) )
 {
     m_currentNode = &m_root;
 }
@@ -29,6 +31,13 @@ void JsonSerializeObject::Save( const std::string& filename, FormatStyle /*style
 void JsonSerializeObject::Save( std::ostream& out )
 {
 	out << m_root;
+}
+
+// *******************************
+//
+SerializeContext* JsonSerializeObject::GetSerializeContext() const
+{
+    return m_context.get();
 }
 
 // ***********************

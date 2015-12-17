@@ -1,4 +1,5 @@
 #include "JsonSpiritSerializeObject.h"
+#include "Serialization/BVSerializeContext.h"
 
 #include <cassert>
 #include <fstream>
@@ -9,6 +10,7 @@ namespace bv
 // ******************************************************************************************
 //
 JsonSpiritSerializeObject::JsonSpiritSerializeObject()
+    : m_context( std::unique_ptr< SerializeContext >( new BVSerializeContext() ) )
 {
     m_root = json_spirit::wObject();
     m_currentNode = &m_root;
@@ -37,6 +39,13 @@ std::wstring JsonSpiritSerializeObject::Save                ( FormatStyle style 
     else if( style == FormatStyle::FORMATSTYLE_READABLE )
         return json_spirit::write( m_root, json_spirit::pretty_print );
     return L"";
+}
+
+// *******************************
+//
+SerializeContext* JsonSpiritSerializeObject::GetSerializeContext() const
+{
+    return m_context.get();
 }
 
 // ***********************
