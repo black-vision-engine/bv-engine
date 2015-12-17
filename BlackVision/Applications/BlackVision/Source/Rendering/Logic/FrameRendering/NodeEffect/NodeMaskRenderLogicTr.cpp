@@ -93,18 +93,25 @@ void    NodeMaskRenderLogicTr::RenderNode           ( SceneNode * node, RenderLo
 
 // *********************************
 //
-BlitAlphaMaskFullscreenEffect *     NodeMaskRenderLogicTr::AccessBlitAlphaMaskEffect   ( RenderTarget * rt, RenderTarget * alphaRt, float alpha )
+BlitAlphaMaskFullscreenEffect *     NodeMaskRenderLogicTr::AccessBlitAlphaMaskEffect   ( RenderTarget * rt, RenderTarget * alphaRt )
 {
-    { rt; alphaRt, alpha; }
+    if ( !m_blitAlphaMaskEffect )
+    {
+        auto rtTex = rt->ColorTexture( 0 );
+        auto alphaTex = alphaRt->ColorTexture( 0 );
 
-    return nullptr;
+        m_blitAlphaMaskEffect = new BlitAlphaMaskFullscreenEffect( rtTex, alphaTex );
+    }
+
+    return m_blitAlphaMaskEffect;    
 }
 
 // *********************************
 //
-void                                NodeMaskRenderLogicTr::BlitWithAlphaMask           ( Renderer * renderer, RenderTarget * mainTarget, RenderTarget * foregroundTarget, RenderTarget * alphaTarget, float alpha )
+void                                NodeMaskRenderLogicTr::BlitWithAlphaMask           ( Renderer * renderer, RenderTarget * mainTarget, RenderTarget * foregroundTarget, RenderTarget * alphaTarget )
 {
-    { renderer; mainTarget; foregroundTarget; alphaTarget; alpha; }
+    // TODO: implement
+    { renderer; mainTarget; foregroundTarget; alphaTarget; }
 }
 
 } //bv
