@@ -7,6 +7,8 @@
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
+#include "Engine/Models/Plugins/EngineConstantsMapper.h"
+
 #include "Engine/Models/Builder/RendererStatesBuilder.h"
 
 #include "Rendering/Logic/FullScreen/Impl/FullscreenRenderableEffect.h"
@@ -53,7 +55,16 @@ void    FullscreenEffect::Render        ( Renderer * renderer )
 
 // **************************
 //
-void    FullscreenEffect::ToggleFullscreenCamera( Renderer * renderer )
+void    FullscreenEffect::SetFullscreenQuad         ( RenderableEntity * quad )
+{
+    assert( !m_fullscreenQuad );
+
+    m_fullscreenQuad = quad;
+}
+
+// **************************
+//
+void    FullscreenEffect::ToggleFullscreenCamera    ( Renderer * renderer )
 {
     m_lastRendererCamera = renderer->GetCamera();
     renderer->SetCamera( m_fullscreenCamera );
@@ -100,6 +111,22 @@ RenderableEntity *  FullscreenEffect::CreateDefaultFullscrQuad  ( PixelShader * 
     RenderableEntity * renderable = FullscreenUtils::CreateFullscreenQuad( effect, 1 );
 
     return renderable;
+}
+
+// **************************
+//
+TextureSampler *    FullscreenEffect::CreateDefaultSampler      ( const std::string & samplerName )
+{
+    auto wrapX          = EngineConstantsMapper::EngineConstant( TextureWrappingMode::TWM_CLAMP );
+    auto wrapY          = EngineConstantsMapper::EngineConstant( TextureWrappingMode::TWM_CLAMP );            
+    auto samplingMode   = SamplerSamplingMode::SSM_MODE_2D;
+    auto sfm            = EngineConstantsMapper::EngineConstant( TextureFilteringMode::TFM_POINT );
+
+    SamplerWrappingMode wrappingMode[] = { wrapX, wrapY, SamplerWrappingMode::SWM_REPEAT };
+
+    auto sampler = new TextureSampler( 0, samplerName, samplingMode, sfm, wrappingMode, glm::vec4( 0.f, 0.f, 0.f, 0.f ) ); 
+
+    return sampler;
 }
 
 // **************************

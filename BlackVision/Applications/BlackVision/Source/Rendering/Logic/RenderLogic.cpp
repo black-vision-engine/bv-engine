@@ -17,6 +17,8 @@
 #include "Rendering/Logic/FrameRendering/FrameRenderLogic.h"
 #include "Rendering/Logic/FrameRendering/PostFrameRenderLogic.h"
 
+#include "Rendering/Logic/FullScreen/Impl/BlitFullscreenEffect.h"
+
 #include "Tools/Profiler/HerarchicalProfiler.h"
 
 #include "Rendering/Utils/OffscreenRenderLogic.h"
@@ -35,6 +37,7 @@ namespace bv {
 RenderLogic::RenderLogic     ()
     : m_impl( nullptr )
     , m_rtStackAllocator( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), TextureFormat::F_A8R8G8B8 )
+    , m_blitEffect( nullptr )
 {
     auto videoCardEnabled   = DefaultConfig.ReadbackFlag();
     auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput();
@@ -54,6 +57,7 @@ RenderLogic::~RenderLogic    ()
     delete m_impl;
     delete m_frameRenderLogic;
     delete m_postFrameRenderLogic;
+    delete m_blitEffect;
 }
 
 // *********************************
@@ -65,37 +69,62 @@ void    RenderLogic::SetCamera       ( Camera * cam )
     // m_offscreenRenderLogic->SetRendererCamera( cam );
 }
 
+//#define USE_NEW_RENDER_LOGIC
+//#define USE_DEFAULT_EFFECT_ONLY
+
 // *********************************
 //
 void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot )
 {
+#ifndef USE_NEW_RENDER_LOGIC
     m_frameRenderLogic->RenderFrame( renderer, sceneRoot );
+#else
+    NewRenderFrame( renderer, sceneRoot );
+#endif
+}
 
-#if 0
+// *********************************
+//
+void    RenderLogic::NewRenderFrame  ( Renderer * renderer, SceneNode * sceneRoot )
+{
     // Pre frame setup
-    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 1.f, 1.0f ) );
     renderer->ClearBuffers();
     renderer->PreDraw();
     
-    // Emable current render target
-    renderer->Enable( m_offscreenDisplay->GetActiveRenderTarget() );
+    // Enable current render target
+    auto rt = m_offscreenDisplay->GetActiveRenderTarget();
+    renderer->Enable( rt );
 
     // FIXME: verify that all rendering paths work as expected
 	if( sceneRoot )
 		RenderNode( renderer, sceneRoot );
 
     // Post frame logic
-    renderer->Disable( m_offscreenDisplay->GetActiveRenderTarget() );
+    renderer->Disable( rt );
+
+    // Blit current render target - suxx a bit - there should be a separate initialization step
+    assert( rt == m_offscreenDisplay->GetActiveRenderTarget() );
+    
+    if ( !m_blitEffect )
+    {
+        auto rtTex = rt->ColorTexture( 0 );
+
+        m_blitEffect = new BlitFullscreenEffect( rtTex, false );
+    }
+
+    //Update render target for future uses
     m_offscreenDisplay->UpdateActiveRenderTargetIdx();
 
+    //Render fullscreen effect
+    m_blitEffect->Render( renderer );
     //m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
     //m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
 
-    //m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic );
+    // m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic );
 
     renderer->PostDraw();
     renderer->DisplayColorBuffer();
-#endif
 }
 
 // *********************************
@@ -109,6 +138,10 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 
     if ( node->IsVisible() )
     {
+        #ifdef USE_DEFAULT_EFFECT_ONLY
+        // Default render logic
+        DrawNode( renderer, node );
+        #else
         if( node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT )
         {
             // Default render logic
@@ -120,6 +153,7 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
                
             effectRenderLogic->RenderNode( node, &ctx );
         }
+        #endif
     }
 }
 

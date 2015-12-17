@@ -20,7 +20,9 @@ std::string     FullscreenVSShader::GenerateDefaultVS    ( unsigned int numUVCha
     std::string decl = GenerateHeader() + GeneratePositionDecl( posAttr ) + GenerateUVDecl( numUVChannels, uvInAttr ) + GenerateMVPDecl() + GenerateUVOutVarsDecl( numUVChannels, uvOutAttr );
     std::string impl = GenerateMainStart() + GenerateOutGLPositionCode( posAttr ) + GenerateOutUVMappingCode( numUVChannels, uvOutAttr, uvInAttr ) + GenerateMainEnd();
 
-    return decl + impl;
+    std::string res = decl + impl;
+
+    return res;
 }
 
 // ********************************
@@ -97,7 +99,7 @@ std::string     FullscreenVSShader::GenerateUVOutVarsDecl           ( unsigned i
     }
     else if( numUVChannels == 1 )
     {
-        return  std::string( "out " ) + uvOutAttrName + std::string( "; \n\n" );
+        return  std::string( "out vec2 " ) + uvOutAttrName + std::string( "; \n\n" );
     }
     else
     {
@@ -105,7 +107,7 @@ std::string     FullscreenVSShader::GenerateUVOutVarsDecl           ( unsigned i
 
         for( unsigned int i = 0; i < numUVChannels; ++i )
         {
-            std::string e = std::string( "out " ) + uvOutAttrName + std::to_string( i ) + std::string( "; \n\n" );
+            std::string e = std::string( "out vec2 " ) + uvOutAttrName + std::to_string( i ) + std::string( "; \n\n" );
 
             res += e;
         }

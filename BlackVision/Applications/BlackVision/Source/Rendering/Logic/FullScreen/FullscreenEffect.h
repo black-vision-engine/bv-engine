@@ -13,7 +13,7 @@ class Camera;
 
 class VertexShader;
 class PixelShader;
-
+class TextureSampler;
 
 class FullscreenEffect
 {
@@ -35,6 +35,8 @@ protected:
 
     virtual RenderableEntity *  CreateFullscreenQuad    () const = 0;
 
+    void                        SetFullscreenQuad       ( RenderableEntity * quad );
+
 protected:
 
     void                        ToggleFullscreenCamera  ( Renderer * renderer );
@@ -42,6 +44,7 @@ protected:
 
     static  RenderableEffectPtr CreateDefaultEffect     ( PixelShader * ps );
     static  RenderableEntity *  CreateDefaultFullscrQuad( PixelShader * ps );
+    static  TextureSampler *    CreateDefaultSampler    ( const std::string & samplerName );
 
     static  std::string         GetEffectShadersDir     ();
     static  std::string         ReadShaderFromFile      ( const std::string & fn );

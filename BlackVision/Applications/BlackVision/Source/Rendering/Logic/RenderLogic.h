@@ -17,6 +17,7 @@ class RenderLogicImpl;
 class FrameRenderLogic;
 class PostFrameRenderLogic;
 class OffscreenDisplay;
+class BlitFullscreenEffect;
 
 class RenderLogic
 {
@@ -25,6 +26,7 @@ private:
     RenderTargetStackAllocator      m_rtStackAllocator;
     NodeEffectRenderLogicSelector   m_nodeEffectRenderLogicSelector;
     OffscreenDisplay *              m_offscreenDisplay;
+    BlitFullscreenEffect *          m_blitEffect;
 
     RenderLogicImpl *           m_impl;
     FrameRenderLogic *          m_frameRenderLogic;
@@ -37,7 +39,9 @@ public:
 
     void    SetCamera       ( Camera * cam );
 
-    void    RenderFrame     ( Renderer * renderer, SceneNode * node );
+    void    RenderFrame     ( Renderer * renderer, SceneNode * sceneRoot );
+
+    void    NewRenderFrame  ( Renderer * renderer, SceneNode * sceneRoot );
 
     void    RenderNode      ( Renderer * renderer, SceneNode * node );
     void    DrawNode        ( Renderer * renderer, SceneNode * node );

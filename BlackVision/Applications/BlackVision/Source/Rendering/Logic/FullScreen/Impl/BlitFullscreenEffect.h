@@ -19,8 +19,11 @@ private:
 
 public:
 
-                                BlitFullscreenEffect    ( bool useAlpha );
+                                BlitFullscreenEffect    ( Texture2DPtr tex, bool useAlpha );
                                 ~BlitFullscreenEffect   ();
+
+    float                       GetAlpha                () const;
+    void                        SetAlpha                ( float alpha );
 
 protected:
 
@@ -28,7 +31,7 @@ protected:
 
 private:
 
-    PixelShader *               CreatePS                () const;
+    PixelShader *               CreatePS                ( Texture2DPtr tex ) const;
 
 };
 

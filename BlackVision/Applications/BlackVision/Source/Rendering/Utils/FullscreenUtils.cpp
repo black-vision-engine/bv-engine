@@ -83,6 +83,11 @@ TriangleStrip *                                 FullscreenUtils::CreateFullscree
 
     delete[] vbData;
 
+    std::vector< bv::Transform > vec;
+    vec.push_back( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
+
+    ret->SetWorldTransforms( vec );
+
     return ret;
 }
 
@@ -159,8 +164,8 @@ float *                                         FullscreenUtils::CreateFullscree
     */
 
     //Raw data
-    glm::vec3 positions[] = { BottomLeftPosVertex(), BottomRightPosVertex(), TopLeftPosVertex(), TopRightPosVertex() };
-    glm::vec2 uv[] = { BottomLeftUVData(), BottomRightUVData(), TopLeftUVData(), TopRightUVData() };
+    glm::vec3 positions[] = { TopRightPosVertex(), BottomLeftPosVertex(), TopLeftPosVertex(), BottomRightPosVertex() };
+    glm::vec2 uv[] = { BottomRightUVData(), BottomLeftUVData(), TopRightUVData(), TopLeftUVData() };
 
     for( unsigned int i = 0; i < 4; ++i )
     {
