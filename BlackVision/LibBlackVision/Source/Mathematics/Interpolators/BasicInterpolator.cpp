@@ -11,6 +11,7 @@
 #include "Mathematics/Defines.h"
 
 #include "Serialization/SerializationHelper.h"
+#include "Serialization/SerializationHelper.inl"
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
 
@@ -180,21 +181,12 @@ void                Key<TimeValueT, ValueT>::Serialize       ( ISerializer& ser 
 // *************************************
 //
 template<class TimeValueT, class ValueT >
-ISerializablePtr     Key<TimeValueT, ValueT>::Create          ( const IDeserializer& /*doc*/ )
+ISerializablePtr     Key<TimeValueT, ValueT>::Create          ( const IDeserializer& deser )
 {
-    assert( !"Don't run me please ;)" );
-    return nullptr;
-}
-
-// *************************************
-//
-template<>
-ISerializablePtr     Key< bv::TimeType, float >::Create          ( const IDeserializer& doc )
-{
-    auto time = doc.GetAttribute( "time" );
-    auto val = doc.GetAttribute( "val" );
-    auto key = std::make_shared< Key< bv::TimeType, float > >( std::stof( time ), std::stof( val ) );
-    return key;
+    auto time = deser.GetAttribute( "time" );
+    auto val = deser.GetAttribute( "val" );
+    
+    return std::make_shared< Key< TimeValueT, ValueT > >( SerializationHelper::_String2T< TimeValueT >( time ), SerializationHelper::_String2T< ValueT >( val ) );
 }
 
 std::vector<std::string> &split_(const std::string &s, char delim, std::vector<std::string> &elems) { // FIXME: this "_" is so weak
