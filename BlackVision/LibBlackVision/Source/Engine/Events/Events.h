@@ -455,7 +455,6 @@ private:
     static std::string          m_sEventName;
 public:
     InfoEvent::Command          InfoCommand;
-    std::string                 NodeName;
     std::string                 Request;
 
 public:

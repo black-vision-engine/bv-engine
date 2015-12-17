@@ -10,6 +10,7 @@
 #include "Assets/AssetDescsWithUIDs.h"
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "ProjectManager.h"
+#include "Engine/Models/BVProjectEditor.h"
 
 namespace bv
 {
@@ -33,7 +34,6 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
         bv::InfoEventPtr infoEvent = std::static_pointer_cast<bv::InfoEvent>( evt );
 
         InfoEvent::Command command = infoEvent->InfoCommand;
-        std::string& nodeName = infoEvent->NodeName;
         std::string& request = infoEvent->Request;
 
         wstring responseMessage;
@@ -57,35 +57,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
         else if( command == InfoEvent::Command::Timelines )
             responseMessage = toWString( GetTimeLinesInfo( request ) );
         else if( command == InfoEvent::Command::NodeInfo )
-        {
-		    auto root = m_appLogic->GetBVProject()->GetModelSceneRoot();
-			auto node = root->GetNode( nodeName );
-
-			if( node == nullptr && root->GetName() == nodeName )
-			{
-				//Log::A( "OK", "root node is node you're looking for [" + nodeName + "] Applying jedi fix now." );
-				node = root;
-			}
-
-			if( node==nullptr )
-			{
-				//Log::A( "error", "Error NodeInfo() node [" + nodeName + "] not found" );
-				return;
-			}
-
-            JsonSerializeObject ser;
-            std::static_pointer_cast< model::BasicNode >( node )->Serialize( ser );
-
-            Json::Value res;
-            res[ "cmd" ] = "node_info";
-            res[ "node" ] = ser.GetJson();
-            res[ "node" ]["node"].removeMember( "nodes" );
-
-            auto resStr = res.toStyledString();
-
-            //Log::A( "SENDING", resStr );
-            responseMessage = wstring( resStr.begin(), resStr.end() );
-        }
+            responseMessage = toWString( GetNodeInfo( request ) );
         else if( command == InfoEvent::Command::Videocards )
             responseMessage = toWString( VideoCardsInfo( request ) );
         
@@ -142,9 +114,32 @@ std::string QueryHandlers::VideoCardsInfo      ( const std::string& /*request*/ 
 
 // ***********************
 //
-std::string QueryHandlers::GetNodeInfo         ( const std::string& /*request*/ )
+std::string QueryHandlers::GetNodeInfo         ( const std::string& request )
 {
-    return "";
+    JsonDeserializeObject deser;
+    JsonSerializeObject ser;
+    deser.Load( request );
+
+    std::string sceneName = deser.GetAttribute( "SceneName" );
+    std::string nodePath = deser.GetAttribute( "NodePath" );
+    
+    auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
+    if( node == nullptr )
+    {
+        Json::Value res;
+        res[ "cmd" ] = "NodeInfo";
+        res[ "node" ] = Json::nullValue;
+        return res.toStyledString();
+    }
+
+    std::static_pointer_cast< model::BasicNode >( node )->Serialize( ser );
+
+    Json::Value res;
+    res[ "cmd" ] = "NodeInfo";
+    res[ "node" ] = ser.GetJson();
+    res[ "node" ]["node"].removeMember( "nodes" );
+
+    return res.toStyledString();
 }
 
 // ***********************

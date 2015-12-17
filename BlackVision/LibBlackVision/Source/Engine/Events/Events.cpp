@@ -1080,7 +1080,6 @@ void                InfoEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
     ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( InfoCommand ) );
-    ser.SetAttribute( SerializationHelper::NODE_NAME_WSTRING, toWString( NodeName ) );
     ser.SetAttribute( SerializationHelper::REQUEST_WSTRING, toWString( Request ) );
 }
 
@@ -1091,7 +1090,6 @@ IEventPtr                InfoEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         InfoEventPtr newEvent   = std::make_shared<InfoEvent>();
-        newEvent->NodeName      = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
         newEvent->InfoCommand   = SerializationHelper::WString2T<InfoEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
         newEvent->Request       = toString( deser.GetAttribute( SerializationHelper::REQUEST_WSTRING ) );
         
