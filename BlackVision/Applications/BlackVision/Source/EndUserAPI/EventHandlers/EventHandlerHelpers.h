@@ -27,32 +27,7 @@ void                    ReqPrint                    ( model::BasicNodePtr node, 
 Json::Value             SerializeSceneModel         ( model::SceneModelPtr sceneModel );
 
 
-template< typename ParamTypePtr >
-Json::Value GetParamDescription( model::IParameterPtr p )
-{
-    string s_name = p->GetName();
-    auto paramType = p->GetType();
-
-    Json::Value entry;
-
-    entry[ "name" ] = s_name;
-    entry[ "type" ] = ParamTypeToString( paramType );
-
-    Json::Value jsonKeys;
-
-    auto typedParam = QueryTypedParam< ParamTypePtr >( p );
-    auto accessIntepolator = typedParam->AccessInterpolator();
-    auto keys = accessIntepolator.AccessKeys();
-    for( auto & k : keys )
-    {
-        jsonKeys.append( toString( k.t ) );
-        jsonKeys.append( toString( k.val ) );
-    }
-
-    entry[ "keys" ] = jsonKeys;
-
-    return entry;
-}
-
 } //bv
+
+#include "EventHandlerHelpers.inl"
 

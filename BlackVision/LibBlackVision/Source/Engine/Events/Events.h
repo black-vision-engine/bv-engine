@@ -449,6 +449,7 @@ public:
         ListProjects,
         Performance,
         Timelines,
+        CheckTimelineTime,
         NodeInfo,
         MinimalSceneInfo,
         Videocards,
