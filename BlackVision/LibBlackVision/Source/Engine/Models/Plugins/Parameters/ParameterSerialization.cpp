@@ -143,6 +143,7 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     {
         auto param = ParametersFactory::CreateParameterTransformVec( name, te );
 
+        //auto transes = SerializationHelper::DeserializeObjectLoadArrayImpl< TransformF >( deser, "composite_transform", "transform" );
         auto transes = SerializationHelper::DeserializeObjectLoadPropertiesImpl< TransformF >( deser, "composite_transform" );
 
         int i = 0;

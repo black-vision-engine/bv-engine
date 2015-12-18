@@ -116,8 +116,20 @@ std::string T2String( const T& t );
 //template< typename T >
 //T String2T( const std::pair< T, const char* > t2s[], const std::string& s ); // include SerializationHelper.inl for the definition
 
-//template< typename T >
-//T String2T( std::string s ); // obsolete
+template< typename T >
+struct Expected
+{
+    T ham;
+    bool isValid;
+
+    Expected( T h ) : ham( h ), isValid( true ) {}
+    bool operator==( const T& that ) { return isValid && ham==that; }
+    bool operator!=( const T& that ) { return !(*this==that); }
+    operator T&() { if( !isValid ) assert( false ); return ham; }
+};
+
+template< typename T >
+Expected<T> String2T( std::string s );
 
 template< typename T >
 T String2T( std::string s, const T& default );
@@ -136,3 +148,5 @@ namespace std
     string to_string( const std::string & val );
     string to_string( const std::wstring & val );
 }
+
+#include "SerializationHelper.inl"

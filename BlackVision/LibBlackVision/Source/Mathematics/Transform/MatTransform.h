@@ -42,7 +42,9 @@ enum class TransformKind : int
     rotation,
     scale,
     translation,
-    inv_center
+    inv_center,
+
+    invalid
 };
 
 template<typename ParamT>
@@ -81,6 +83,8 @@ public:
     {
         return std::make_shared< SimpleTransform >( tk, p0, p1, p2 );
     }
+
+    static std::shared_ptr< SimpleTransform >    CreateDefaultTransform( TransformKind kind );
 
     void  SetValues ( TimeType t, float v0, float v1, float v2 )
     {
