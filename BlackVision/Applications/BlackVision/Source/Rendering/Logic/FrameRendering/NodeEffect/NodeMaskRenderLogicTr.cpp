@@ -39,29 +39,41 @@ void    NodeMaskRenderLogicTr::RenderNode           ( SceneNode * node, RenderLo
 {
     if( node->NumChildNodes() < 2 )
     {
-        logic( ctx )->DrawNode( ctx->GetRenderer(), node );
+        logic( ctx )->DrawNode( renderer( ctx ), node );
     }
-    else
+    else 
     {
+        auto alphaVal = node->GetNodeEffect()->GetValue( "alpha" );
+        auto alphaValue = QueryTypedValue< ValueFloatPtr >( alphaVal )->GetValue();
+       
         auto renderer       = ctx->GetRenderer();
-        auto rtAllocator    = ctx->GetRenderTargetAllocator();
         auto logic          = ctx->GetRenderLogic();
+        
+        if( alphaValue < 0.01f )
+        {
+            logic->DrawNodeOnly( renderer, node );
+            logic->RenderChildren( renderer, node, 2 );
+        }
+        else
+        {
+            auto rtAllocator    = ctx->GetRenderTargetAllocator();
 
-        logic->DrawNodeOnly( renderer, node );
+            logic->DrawNodeOnly( renderer, node );
 
-        renderer->Disable( rtAllocator->Top() );
+            renderer->Disable( rtAllocator->Top() );
 
-        auto foregroundRt   = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
-        auto maskRt         = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+            auto foregroundRt   = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+            auto maskRt         = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
 
-        RenderItermediateData( ctx, foregroundRt, maskRt, node );
+            RenderItermediateData( ctx, foregroundRt, maskRt, node );
 
-        rtAllocator->Free();
-        rtAllocator->Free();
+            rtAllocator->Free();
+            rtAllocator->Free();
 
-        BlitWithMask( ctx, foregroundRt, maskRt );
+            BlitWithMask( ctx, foregroundRt, maskRt, alphaValue );
 
-        logic->RenderChildren( renderer, node, 2 );
+            logic->RenderChildren( renderer, node, 2 );
+        }
     }
 }
 
@@ -73,7 +85,6 @@ void                                NodeMaskRenderLogicTr::RenderItermediateData
 
     auto maskIdxVal = std::static_pointer_cast< ValueInt >( effect->GetValue( "bgIdx" ) );
     auto fgIdxVal   = std::static_pointer_cast< ValueInt >( effect->GetValue( "fgIdx" ) );
-    // auto alphaVal = effect->GetValue( "alpha" );
 
     auto maskIdx = maskIdxVal->GetValue();
     auto fgIdx   = fgIdxVal->GetValue();
@@ -119,12 +130,13 @@ BlitAlphaMaskFullscreenEffect *     NodeMaskRenderLogicTr::AccessBlitAlphaMaskEf
 
 // *********************************
 //
-void                                NodeMaskRenderLogicTr::BlitWithMask                ( RenderLogicContext * ctx, RenderTarget * foregroundRt, RenderTarget * maskRt )
+void                                NodeMaskRenderLogicTr::BlitWithMask                ( RenderLogicContext * ctx, RenderTarget * foregroundRt, RenderTarget * maskRt, float alpha )
 {
     auto renderer  = ctx->GetRenderer();
 
     auto blitter = AccessBlitAlphaMaskEffect( foregroundRt, maskRt );
-    
+    blitter->SetAlpha( alpha );
+
     renderer->Enable( allocator( ctx )->Top() );
     blitter->Render( renderer );
 }

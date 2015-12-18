@@ -16,6 +16,8 @@ public:
         BlitAlphaMaskFullscreenEffect   ( Texture2DPtr tex, Texture2DPtr alpha );
         ~BlitAlphaMaskFullscreenEffect  ();
 
+        void                SetAlpha    ( float alpha );
+
 protected:
 
     virtual RenderableEntity *  CreateFullscreenQuad    () const override;

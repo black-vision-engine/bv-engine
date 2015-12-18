@@ -37,6 +37,15 @@ BlitAlphaMaskFullscreenEffect::~BlitAlphaMaskFullscreenEffect           ()
 
 // ****************************
 //
+void                BlitAlphaMaskFullscreenEffect::SetAlpha             ( float alpha )
+{
+    assert( alpha >= 0.0f && alpha <= 1.0f );
+
+    m_alphaVal->SetValue( alpha );
+}
+
+// ****************************
+//
 RenderableEntity *  BlitAlphaMaskFullscreenEffect::CreateFullscreenQuad () const
 {
     assert( false );
