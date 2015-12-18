@@ -37,6 +37,8 @@ void    AlphaMaskRenderLogicTr::RenderNode                  ( SceneNode * node, 
     }
     else if ( alphaValue > 0.01f )
     {
+        Start( ctx );
+
         auto rt = RenderToRenderTarget( ctx, node );
 
         BlitWithAlpha( ctx, rt, alphaValue );
@@ -54,15 +56,13 @@ RenderTarget * AlphaMaskRenderLogicTr::RenderToRenderTarget         ( RenderLogi
     auto renderer       = ctx->GetRenderer();
     auto rtAllocator    = ctx->GetRenderTargetAllocator();
 
-    renderer->Disable( rtAllocator->Top() );
-
     auto rt = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
     renderer->Enable( rt );
 
     renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
     renderer->ClearBuffers();
 
-    ctx->GetRenderLogic()->DrawNode( renderer, node );
+    logic( ctx )->DrawNode( renderer, node );
 
     renderer->Disable( rt );
     rtAllocator->Free();
@@ -72,9 +72,17 @@ RenderTarget * AlphaMaskRenderLogicTr::RenderToRenderTarget         ( RenderLogi
 
 // *********************************
 //
+void                    AlphaMaskRenderLogicTr::Start                   ( RenderLogicContext * ctx )
+{
+    renderer( ctx )->Disable( allocator( ctx )->Top() );    
+}
+
+// *********************************
+//
 void                    AlphaMaskRenderLogicTr::Finalize                ( RenderLogicContext * ctx )
 {
-    renderer( ctx )->Enable( allocator( ctx )->Top() );
+    { ctx; }
+    // renderer( ctx )->Enable( allocator( ctx )->Top() );
 }
 
 // *********************************
@@ -108,7 +116,7 @@ void                    AlphaMaskRenderLogicTr::BlitWithAlpha           ( Render
 
     blitter->Render( renderer );
 
-    renderer->Disable( mainTarget );
+    //renderer->Disable( mainTarget );
 }
 
 } //bv

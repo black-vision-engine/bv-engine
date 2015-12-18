@@ -8,8 +8,8 @@ layout (location = 0) out vec4 FragColor;
 in vec2 uvCoord; 
 
 uniform float alpha; 
-uniform sampler2D Texture; 
-uniform sampler2D Mask; 
+layout (binding = 0) uniform sampler2D Texture; 
+layout (binding = 1) uniform sampler2D Mask; 
 
 subroutine( blendValueGetter ) 
 float getAlpha( vec4 col ) 

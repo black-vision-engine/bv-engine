@@ -27,6 +27,7 @@ private:
 
     RenderTarget *          RenderToRenderTarget                ( RenderLogicContext * ctx, SceneNode * node );
 
+    void                    Start                               ( RenderLogicContext * ctx );
     void                    Finalize                            ( RenderLogicContext * ctx );
 
     BlitFullscreenEffect *  AccessBlitAlphaEffect               ( RenderTarget * rt, float alpha );

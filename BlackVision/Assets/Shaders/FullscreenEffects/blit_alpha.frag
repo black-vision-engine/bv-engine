@@ -5,7 +5,7 @@ layout (location = 0) out vec4 FragColor;
 in vec2 uvCoord;
 
 uniform float alpha;
-uniform sampler2D Texture;
+layout (binding = 0) uniform sampler2D Texture;
 
 void main()
 {

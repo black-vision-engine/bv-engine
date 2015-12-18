@@ -25,10 +25,12 @@ public:
 
 private:
 
+    void                                RenderItermediateData       ( RenderLogicContext * ctx, RenderTarget * foregroundRt, RenderTarget * maskRt, SceneNode * node );
+    void                                RenderToRenderTarget        ( RenderLogicContext * ctx, RenderTarget * rt, SceneNode * node );
+
     BlitAlphaMaskFullscreenEffect *     AccessBlitAlphaMaskEffect   ( RenderTarget * rt, RenderTarget * alphaRt );
 
-    void                                BlitWithAlphaMask           ( Renderer * renderer, RenderTarget * mainTarget, RenderTarget * foregroundTarget, RenderTarget * alphaTarget );
-
+    void                                BlitWithMask                ( RenderLogicContext * ctx, RenderTarget * foregroundRt, RenderTarget * maskRt );
 };
 
 } // bv

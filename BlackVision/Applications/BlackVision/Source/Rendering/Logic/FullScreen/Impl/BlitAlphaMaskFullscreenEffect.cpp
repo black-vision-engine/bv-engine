@@ -48,6 +48,7 @@ RenderableEntity *  BlitAlphaMaskFullscreenEffect::CreateFullscreenQuad () const
 //
 PixelShader *       BlitAlphaMaskFullscreenEffect::CreatePS             ( Texture2DPtr tex, Texture2DPtr alpha ) const
 {
+    // FIXME: at some point allow usages with no alpha and implemented soubroutines
     bool useAlpha = true;
 
     PixelShader * shader = nullptr;
@@ -65,11 +66,11 @@ PixelShader *       BlitAlphaMaskFullscreenEffect::CreatePS             ( Textur
         
         shaderParams->AddParameter( param );
 
-        shader = new PixelShader( ReadFullscreenShader( "blit_mask_alpha.frag.frag" ), shaderParams );
+        shader = new PixelShader( ReadFullscreenShader( "blit_mask_alpha.frag" ), shaderParams );
     }
     else
     {
-        shader = new PixelShader( ReadFullscreenShader( "blit_mask_no_alpha.frag.frag" ), shaderParams );
+        shader = new PixelShader( ReadFullscreenShader( "blit_mask_no_alpha.frag" ), shaderParams );
     }
 
     shader->AddTextureSampler( samplerTex );
