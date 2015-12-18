@@ -197,6 +197,9 @@
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\EventHandlerHelpers.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.cpp">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -349,6 +352,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UseLoggerBVAppModule.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\EventHandlerHelpers.h">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\AssetHandlers.h">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClInclude>
   </ItemGroup>

@@ -71,8 +71,11 @@ std::string HightmapEvent::m_sEventName             = "HightmapEvent";
 const EventType RenderingModeEvent::m_sEventType       = 0x30000016;
 std::string RenderingModeEvent::m_sEventName           = "RenderingModeEvent";
 
-const EventType SceneEvent::m_sEventType			= 0x30000016;
+const EventType SceneEvent::m_sEventType			= 0x30000017;
 std::string SceneEvent::m_sEventName				= "SceneEvent";
+
+const EventType AssetEvent::m_sEventType			= 0x30000018;
+std::string AssetEvent::m_sEventName				= "AssetEvent";
 
 // ************************************* Events Serialization *****************************************
 
@@ -114,6 +117,21 @@ std::pair< ParamKeyEvent::Command, const std::wstring > ParameterCommandMapping[
 
 template<> ParamKeyEvent::Command WString2T ( const std::wstring& s )    { return WString2T( ParameterCommandMapping, s ); }
 template<> const std::wstring& T2WString    ( ParamKeyEvent::Command t ) { return Enum2WString( ParameterCommandMapping, t ); }
+
+
+// ========================================================================= //
+// AssetEvent
+// ========================================================================= //
+
+std::pair< AssetEvent::Command, const std::wstring > AssetCommandMapping[] = 
+{
+    std::make_pair( AssetEvent::Command::ClearUnusedCachedAssets, L"ClearUnusedCachedAssets" )
+    , std::make_pair( AssetEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> AssetEvent::Command WString2T ( const std::wstring& s )    { return WString2T( AssetCommandMapping, s ); }
+template<> const std::wstring& T2WString    ( AssetEvent::Command t ) { return Enum2WString( AssetCommandMapping, t ); }
+
 
 // ========================================================================= //
 // SceneEvent
@@ -815,6 +833,51 @@ const std::string &     ParamKeyEvent::GetName           () const
 //
 EventType           ParamKeyEvent::GetEventType         () const
 { return this->m_sEventType; }
+
+
+//******************* AssetEvent *************
+
+// *************************************
+//
+void					AssetEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( AssetCommand ) );
+}
+
+// *************************************
+//
+IEventPtr                AssetEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
+    {
+        AssetEventPtr newEvent		= std::make_shared< AssetEvent >();
+        newEvent->AssetCommand      = SerializationHelper::WString2T< AssetEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               AssetEvent::Clone             () const
+{   return IEventPtr( new AssetEvent( *this ) );  }
+
+// *************************************
+//
+EventType           AssetEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        AssetEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  AssetEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           AssetEvent::GetEventType() const
+{   return this->m_sEventType; }
 
 
 //******************* SceneEvent *************
