@@ -108,7 +108,7 @@ ISerializablePtr     SimpleTransform<ParamT>::Create          ( const IDeseriali
         return std::make_shared< Rotation< ParamT > >( *angle.get(), *rotAxis ); // FIXME: sucks as hell!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
-    auto params = SerializationHelper::DeserializeObjectLoadPropertiesImpl< ParamT >( dob, "interpolator" );
+    auto params = SerializationHelper::DeserializeObjectLoadArrayImpl< ParamT >( dob, "interpolators" );
     
     if( params.size() != 3 && ( kind != "rotation" || params.size() != 2 ) ) // de Morgan FTW!
     {
