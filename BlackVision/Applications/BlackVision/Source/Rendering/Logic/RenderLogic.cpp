@@ -136,7 +136,7 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
             // Default render logic
             DrawNode( renderer, node );
         #elif defined(USE_DEFAULT_AND_ALPHA_EFFECTS_ONLY)
-        if( node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT || node->GetNodeEffect()->GetType() == NodeEffect::Type::T_WIREFRAME )
+        if( node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT )
             {
                 // Default render logic
                 DrawNode( renderer, node );
