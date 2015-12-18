@@ -445,17 +445,13 @@ void                                CompositeTransform<ParamT>::Serialize       
         }
         else
         {
-            //doc.EnterChild( "x" );
+            doc.EnterArray( "interpolators" );
+            
             trans->GetP0MotylaNoga().Serialize( doc );
-            //doc.ExitChild();
-
-            //doc.EnterChild( "y" );
             trans->GetP1MotylaNoga().Serialize( doc );
-            //doc.ExitChild();
-
-            //doc.EnterChild( "z" );
             trans->GetP2MotylaNoga().Serialize( doc );
-            //doc.ExitChild();
+
+            doc.ExitChild();
         }
 
         doc.ExitChild(); // transform
