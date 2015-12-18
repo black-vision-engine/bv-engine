@@ -13,8 +13,6 @@ class BaseEvent : public IEvent
 private:
     TimeType        m_timeStamp;
 public:
-    int             SocketID;       ///< Client which sent event.
-
     explicit        BaseEvent       ( TimeType timeStamp = TimeType( 0.0 ) );
 
     TimeType        GetTimeStamp    () const;
@@ -25,5 +23,17 @@ public:
 };
 
 DEFINE_PTR_TYPE( BaseEvent );
+
+class RemoteEvent : public BaseEvent
+{
+public:
+    int             SocketID;       ///< Client which sent event.
+    unsigned int    EventID;        ///< This field helps editor to find out, which response is to which event.
+public:
+    explicit        RemoteEvent     ()
+        : EventID( 0 ) {}
+};
+
+DEFINE_PTR_TYPE( RemoteEvent );
 
 } //bv

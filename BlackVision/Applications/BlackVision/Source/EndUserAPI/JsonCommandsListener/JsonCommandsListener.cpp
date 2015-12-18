@@ -57,8 +57,9 @@ void                JsonCommandsListener::TryParseEventsGroup ( IDeserializer& d
         {
             do
             {
-                BaseEventPtr newEvent = std::static_pointer_cast<BaseEvent>( DeserializeEvent( deser ) );
+                RemoteEventPtr newEvent = std::static_pointer_cast<RemoteEvent>( DeserializeEvent( deser ) );
                 newEvent->SocketID = socketID;
+                newEvent->EventID = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( L"EventID" ) );
 
                 if( newEvent != nullptr )
                     AddTriggeredEvent( frameTrigger, newEvent );
@@ -71,7 +72,7 @@ void                JsonCommandsListener::TryParseEventsGroup ( IDeserializer& d
 
 // ***********************
 //
-void                JsonCommandsListener::AddTriggeredEvent   ( unsigned int requestedFrame, BaseEventPtr& eventPtr )
+void                JsonCommandsListener::AddTriggeredEvent   ( unsigned int requestedFrame, RemoteEventPtr& eventPtr )
 {
     ScopedCriticalSection lock( m_eventsMapLock );
     m_triggeredEvents.insert( std::make_pair( requestedFrame, eventPtr ) );
@@ -88,8 +89,10 @@ void                JsonCommandsListener::TryParseRegularEvent( IDeserializer& d
             auto newEvent = DeserializeEvent( deser );
             if( newEvent != nullptr )
             {
-                BaseEventPtr newEventBase = std::static_pointer_cast<BaseEvent>( newEvent );
+                RemoteEventPtr newEventBase = std::static_pointer_cast<RemoteEvent>( newEvent );
                 newEventBase->SocketID = socketID;
+                newEventBase->EventID = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( L"EventID" ) );
+
                 GetDefaultEventManager().ConcurrentQueueEvent( newEventBase );
             }
         }

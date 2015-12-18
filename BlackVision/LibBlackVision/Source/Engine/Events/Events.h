@@ -167,7 +167,7 @@ DEFINE_PTR_TYPE( KeyPressedEvent )
 
 
 // ************************************* LoadAssetEvent *************************************
-class LoadAssetEvent : public BaseEvent
+class LoadAssetEvent : public RemoteEvent
 {
 private:
     static const EventType          m_sEventType;
@@ -197,7 +197,7 @@ DEFINE_PTR_TYPE( LoadAssetEvent )
 
 
 // ************************************* ParamKeyEvent *************************************
-class ParamKeyEvent : public BaseEvent
+class ParamKeyEvent : public RemoteEvent
 {
 public:
     typedef enum
@@ -239,7 +239,7 @@ DEFINE_PTR_TYPE( ParamKeyEvent )
 
 
 // ************************************* SceneEvent Event *************************************
-class AssetEvent : public BaseEvent
+class AssetEvent : public RemoteEvent
 {
 
 public:
@@ -274,7 +274,7 @@ public:
 DEFINE_PTR_TYPE( AssetEvent )
 
 // ************************************* SceneEvent Event *************************************
-class SceneEvent : public BaseEvent
+class SceneEvent : public RemoteEvent
 {
 public:
     typedef enum
@@ -316,7 +316,7 @@ DEFINE_PTR_TYPE( SceneEvent )
 
 
 // ************************************* SceneStructureEvent Event *************************************
-class NodeStructureEvent : public BaseEvent
+class NodeStructureEvent : public RemoteEvent
 {
 public:
     typedef enum
@@ -361,7 +361,7 @@ DEFINE_PTR_TYPE( NodeStructureEvent )
 
 
 // ************************************* PluginStructureEvent Event *************************************
-class PluginStructureEvent : public BaseEvent
+class PluginStructureEvent : public RemoteEvent
 {
 public:
     typedef enum
@@ -403,7 +403,7 @@ DEFINE_PTR_TYPE( PluginStructureEvent )
 
 
 // ************************************* ProjectEvent Event *************************************
-class ProjectEvent : public BaseEvent
+class ProjectEvent : public RemoteEvent
 {
 public:
     typedef enum
@@ -445,7 +445,7 @@ DEFINE_PTR_TYPE( ProjectEvent )
 
 
 // ************************************* Response Event *************************************
-class ResponseEvent : public BaseEvent
+class ResponseEvent : public RemoteEvent
 {
 private:
     static const EventType      m_sEventType;
@@ -470,7 +470,7 @@ DEFINE_PTR_TYPE( ResponseEvent )
     
 // ************************************* Information Event *************************************
 //
-class InfoEvent : public BaseEvent
+class InfoEvent : public RemoteEvent
 {
 public:
     typedef enum
@@ -517,7 +517,7 @@ DEFINE_PTR_TYPE( InfoEvent )
 
 
 // ************************************* TimelineCmd *************************************
-class TimeLineEvent : public BaseEvent
+class TimeLineEvent : public RemoteEvent
 {
 public:
     typedef enum
@@ -566,7 +566,7 @@ DEFINE_PTR_TYPE( TimeLineEvent )
 
 
 // ************************************* TimerEvent *************************************
-class TimerEvent : public BaseEvent
+class TimerEvent : public RemoteEvent
 {
 public:
     typedef enum
@@ -608,7 +608,7 @@ DEFINE_PTR_TYPE( TimerEvent )
 
 
 // ************************************* WidgetEvent *************************************
-class WidgetEvent : public BaseEvent
+class WidgetEvent : public RemoteEvent
 {
 public:
     typedef enum
@@ -643,7 +643,7 @@ DEFINE_PTR_TYPE( WidgetEvent )
 
 
 // ************************************* VideoCardEvent *************************************
-class VideoCardEvent : public BaseEvent
+class VideoCardEvent : public RemoteEvent
 {
 public:
     typedef enum
@@ -697,7 +697,7 @@ template<> const std::wstring& SerializationHelper::T2WString   ( VideoCardEvent
 DEFINE_PTR_TYPE( VideoCardEvent )
 
 // ************************************* RenderingModeEvent *************************************
-class RenderingModeEvent : public BaseEvent
+class RenderingModeEvent : public RemoteEvent
 {
 public:
     typedef enum
@@ -731,7 +731,7 @@ public:
 DEFINE_PTR_TYPE( RenderingModeEvent )
 
 // ************************************* HightmapEvent *************************************
-class HightmapEvent : public BaseEvent
+class HightmapEvent : public RemoteEvent
 {
 public:
     typedef enum

@@ -30,7 +30,7 @@ private:
     void                TryParseEventsGroup ( IDeserializer& deser, int socketID );
     void                TryParseRegularEvent( IDeserializer& deser, int socketID );
 
-    void                AddTriggeredEvent   ( unsigned int requestedFrame, BaseEventPtr& eventPtr );
+    void                AddTriggeredEvent   ( unsigned int requestedFrame, RemoteEventPtr& eventPtr );
 };
 
 } //bv
