@@ -270,19 +270,47 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::CopyAsset )
     {
+        auto categoryName = GetRequestParamValue( request )[ "category" ].asString();
 
+        auto srcAssetName = GetRequestParamValue( request )[ "srcAssetName" ].asString();
+        auto dstAssetName = GetRequestParamValue( request )[ "dstAssetName" ].asString();
+
+        pm->CopyAsset( "", categoryName, srcAssetName, "", dstAssetName );
+
+        SendOnSceneStructureResponse( senderID, "CopyAsset", "status", "OK" );
     }
     else if( command == ProjectEvent::Command::MoveAsset )
     {
+        auto categoryName = GetRequestParamValue( request )[ "category" ].asString();
 
+        auto srcAssetName = GetRequestParamValue( request )[ "srcAssetName" ].asString();
+        auto dstAssetName = GetRequestParamValue( request )[ "dstAssetName" ].asString();
+
+        pm->MoveAsset( "", categoryName, srcAssetName, "", dstAssetName );
+
+        SendOnSceneStructureResponse( senderID, "MoveAsset", "status", "OK" );
     }
     else if( command == ProjectEvent::Command::RemoveAsset )
     {
+        auto categoryName = GetRequestParamValue( request )[ "category" ].asString();
 
+        auto assetName = GetRequestParamValue( request )[ "assetName" ].asString();
+
+        pm->RemoveAsset( "", categoryName, assetName );
+
+        SendOnSceneStructureResponse( senderID, "RemoveAsset", "status", "OK" );
     }
     else if( command == ProjectEvent::Command::ImportAsset )
     {
+        auto categoryName = GetRequestParamValue( request )[ "category" ].asString();
 
+        auto assetFilePath = GetRequestParamValue( request )[ "assetFilePath" ].asString();
+
+        auto dstAssetPath = GetRequestParamValue( request )[ "dstAssetPath" ].asString();
+
+        pm->ImportAssetFromFile( "", categoryName, dstAssetPath, assetFilePath );
+
+        SendOnSceneStructureResponse( senderID, "ImportAsset", "status", "OK" );
     }
     else if( command == ProjectEvent::Command::SaveScene )
     {
