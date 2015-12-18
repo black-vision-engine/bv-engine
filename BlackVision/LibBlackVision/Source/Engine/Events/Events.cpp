@@ -222,11 +222,13 @@ std::pair< InfoEvent::Command, const std::wstring > InfoEventCommandMapping[] =
     , std::make_pair( InfoEvent::Command::ListProjects, L"ListProjects" )
     , std::make_pair( InfoEvent::Command::Performance, L"Performance" ) 
     , std::make_pair( InfoEvent::Command::Timelines, L"TimeLines" ) 
+    , std::make_pair( InfoEvent::Command::CheckTimelineTime, L"CheckTimelineTime" ) 
     , std::make_pair( InfoEvent::Command::NodeInfo, L"NodeInfo" )
     , std::make_pair( InfoEvent::Command::MinimalSceneInfo, L"MinimalSceneInfo" )
     , std::make_pair( InfoEvent::Command::Videocards, L"VideoCards" )
     , std::make_pair( InfoEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
+
 
 template<> InfoEvent::Command WString2T     ( const std::wstring& s )   { return WString2T( InfoEventCommandMapping, s ); }
 template<> const std::wstring& T2WString    ( InfoEvent::Command t )    { return Enum2WString( InfoEventCommandMapping, t ); }

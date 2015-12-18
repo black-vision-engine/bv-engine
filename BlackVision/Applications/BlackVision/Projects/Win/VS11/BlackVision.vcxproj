@@ -390,6 +390,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
   <ItemGroup>
     <None Include="..\..\..\Source\bvAppLogInitializer.inl" />
     <None Include="..\..\..\Source\BVConfig.inl" />
+    <None Include="..\..\..\Source\EndUserAPI\EventHandlers\EventHandlerHelpers.inl" />
     <None Include="..\..\..\Source\FrameStatsService.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -356,5 +356,8 @@
     <None Include="..\..\..\Source\BVConfig.inl" />
     <None Include="..\..\..\Source\FrameStatsService.inl" />
     <None Include="..\..\..\Source\bvAppLogInitializer.inl" />
+    <None Include="..\..\..\Source\EndUserAPI\EventHandlers\EventHandlerHelpers.inl">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </None>
   </ItemGroup>
 </Project>
