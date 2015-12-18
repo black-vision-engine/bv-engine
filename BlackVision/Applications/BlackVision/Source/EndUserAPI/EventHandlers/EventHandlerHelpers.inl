@@ -34,6 +34,8 @@ Json::Value GetParamDescription( model::IParameterPtr p )
     return entry;
 }
 
+
+const static std::string EVENT_ID_TYPE_STRING       = "EventID";
 const static std::string COMMAND_TYPE_STRING        = "cmd";
 const static std::string COMMAND_SUCCESS_STRING     = "CommandSuccess";
 const static std::string TRUE_STRING                = "true";
@@ -42,8 +44,9 @@ const static std::string FALSE_STRING               = "false";
 // ***********************
 //
 template< typename CommandType >
-void PrepareResponseTemplate( ISerializer& ser, CommandType commandType, bool success )
+void PrepareResponseTemplate( ISerializer& ser, CommandType commandType, unsigned int eventID, bool success )
 {
+    ser.SetAttribute( EVENT_ID_TYPE_STRING, toString( eventID ) );
     ser.SetAttribute( COMMAND_TYPE_STRING, toString( SerializationHelper::T2WString( commandType ) ) );
     if( success )
         ser.SetAttribute( COMMAND_SUCCESS_STRING, TRUE_STRING );

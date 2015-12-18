@@ -37,35 +37,36 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
 
         InfoEvent::Command command = infoEvent->InfoCommand;
         std::string& request = infoEvent->Request;
+        unsigned int requestID = infoEvent->EventID;
 
         wstring responseMessage;
 
         if( command == InfoEvent::Command::TreeStructure )
-            responseMessage = toWString( TreeStructureInfo( request ) );
+            responseMessage = toWString( TreeStructureInfo( request, requestID ) );
         else if( command == InfoEvent::Command::ListAssets )
-            responseMessage = toWString( ListAssets( request ) );
+            responseMessage = toWString( ListAssets( request, requestID ) );
         else if( command == InfoEvent::Command::ListAssetsPaths )
-            responseMessage = ListAssetsPaths( request );
+            responseMessage = ListAssetsPaths( request, requestID );
         else if( command == InfoEvent::Command::ListCategoriesNames )
-            responseMessage = ListCategoriesNames( request );
+            responseMessage = ListCategoriesNames( request, requestID );
         else if( command == InfoEvent::Command::ListProjectNames )
-            responseMessage = ListProjectNames( request );
+            responseMessage = ListProjectNames( request, requestID );
         else if( command == InfoEvent::Command::ListProjects )
-            responseMessage = ListProjects( request );
+            responseMessage = ListProjects( request, requestID );
         else if( command == InfoEvent::Command::ListScenes )
-            responseMessage = ListScenes( request );
+            responseMessage = ListScenes( request, requestID );
         else if( command == InfoEvent::Command::Performance )
-            responseMessage = toWString( PerformanceInfo( request ) );
+            responseMessage = toWString( PerformanceInfo( request, requestID ) );
         else if( command == InfoEvent::Command::Timelines )
-            responseMessage = toWString( GetTimeLinesInfo( request ) );
+            responseMessage = toWString( GetTimeLinesInfo( request, requestID ) );
         else if( command == InfoEvent::Command::NodeInfo )
-            responseMessage = toWString( GetNodeInfo( request ) );
+            responseMessage = toWString( GetNodeInfo( request, requestID ) );
         else if( command == InfoEvent::Command::MinimalSceneInfo )
-            responseMessage = toWString( GetMinimalSceneInfo( request ) );
+            responseMessage = toWString( GetMinimalSceneInfo( request, requestID ) );
         else if( command == InfoEvent::Command::Videocards )
-            responseMessage = toWString( VideoCardsInfo( request ) );
+            responseMessage = toWString( VideoCardsInfo( request, requestID ) );
         else if( command == InfoEvent::Command::CheckTimelineTime )
-            responseMessage = toWString( CheckTimelineTime( request ) );
+            responseMessage = toWString( CheckTimelineTime( request, requestID ) );
         
         ResponseEventPtr msg = std::make_shared<ResponseEvent>();
         msg->Response = responseMessage;
@@ -77,7 +78,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
 
 // ***********************
 //
-std::string QueryHandlers::ListAssets  ( const std::string& request )
+std::string QueryHandlers::ListAssets  ( const std::string& request, unsigned int /*requestID*/ )
 {
     JsonDeserializeObject deser;
     JsonSerializeObject ser;
@@ -109,7 +110,7 @@ std::string QueryHandlers::ListAssets  ( const std::string& request )
 
 // ***********************
 //
-std::string QueryHandlers::VideoCardsInfo      ( const std::string& /*request*/ )
+std::string QueryHandlers::VideoCardsInfo      ( const std::string& /*request*/, unsigned int /*requestID*/ )
 {
     Json::Value val;
     val[ "cmd" ]        = "videocards";
@@ -120,7 +121,7 @@ std::string QueryHandlers::VideoCardsInfo      ( const std::string& /*request*/ 
 
 // ***********************
 //
-std::string QueryHandlers::GetNodeInfo         ( const std::string& request )
+std::string QueryHandlers::GetNodeInfo         ( const std::string& request, unsigned int requestID )
 {
     JsonDeserializeObject deser;
     JsonSerializeObject ser;
@@ -132,7 +133,7 @@ std::string QueryHandlers::GetNodeInfo         ( const std::string& request )
     auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
     if( node == nullptr )
     {
-        PrepareResponseTemplate( ser, InfoEvent::Command::NodeInfo, false );
+        PrepareResponseTemplate( ser, InfoEvent::Command::NodeInfo, requestID, false );
         return ser.GetString();
     }
 
@@ -140,7 +141,7 @@ std::string QueryHandlers::GetNodeInfo         ( const std::string& request )
     auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
     context->recursive = false;
 
-    PrepareResponseTemplate( ser, InfoEvent::Command::NodeInfo, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::NodeInfo, requestID, true );
     std::static_pointer_cast< model::BasicNode >( node )->Serialize( ser );
 
     return ser.GetString();
@@ -148,7 +149,7 @@ std::string QueryHandlers::GetNodeInfo         ( const std::string& request )
 
 // ***********************
 //
-std::string QueryHandlers::GetMinimalSceneInfo  ( const std::string& request )
+std::string QueryHandlers::GetMinimalSceneInfo  ( const std::string& request, unsigned int /*requestID*/ )
 {
     JsonDeserializeObject deser;
     JsonSerializeObject ser;
@@ -176,10 +177,14 @@ std::string QueryHandlers::GetMinimalSceneInfo  ( const std::string& request )
 
 // ***********************
 //
-std::string QueryHandlers::GetTimeLinesInfo    ( const std::string& /*request*/ )
+std::string QueryHandlers::GetTimeLinesInfo    ( const std::string& /*request*/, unsigned int requestID )
 {
     // Fixme: There's no need to use JsonCpp and JsonSerializeObject at the same time.
     // Rewrite this part of code to use only JsonSerializeObject.
+    JsonSerializeObject ser;
+    PrepareResponseTemplate( ser, InfoEvent::Command::Timelines, requestID, true );
+    
+
     Json::Value ret;
     ret[ "command" ] = "timelines";
     ret[ "scenes" ] = Json::arrayValue;
@@ -199,7 +204,7 @@ std::string QueryHandlers::GetTimeLinesInfo    ( const std::string& /*request*/ 
 
 // ***********************
 //
-std::string QueryHandlers::PerformanceInfo  ( const std::string& /*request*/ )
+std::string QueryHandlers::PerformanceInfo  ( const std::string& /*request*/, unsigned int /*requestID*/ )
 {       
     auto& frameStats = m_appLogic->FrameStats();
     auto& sections = frameStats.RegisteredSections();
@@ -227,7 +232,7 @@ std::string QueryHandlers::PerformanceInfo  ( const std::string& /*request*/ )
 
 // ***********************
 //
-std::string QueryHandlers::TreeStructureInfo   ( const std::string& /*request*/ )
+std::string QueryHandlers::TreeStructureInfo   ( const std::string& /*request*/, unsigned int /*requestID*/ )
 {
     // Fixme: There's no need to use JsonCpp and JsonSerializeObject at the same time.
     // Rewrite this part of code to use only JsonSerializeObject.
@@ -247,7 +252,7 @@ std::string QueryHandlers::TreeStructureInfo   ( const std::string& /*request*/ 
 
 // ***********************
 //
-std::wstring QueryHandlers::ListProjectNames    ( const std::string& /*request*/ )
+std::wstring QueryHandlers::ListProjectNames    ( const std::string& /*request*/, unsigned int /*requestID*/ )
 {
     auto pm = ProjectManager::GetInstance();
     
@@ -259,7 +264,7 @@ std::wstring QueryHandlers::ListProjectNames    ( const std::string& /*request*/
 
 // ***********************
 //
-std::wstring QueryHandlers::ListScenes          ( const std::string& request )
+std::wstring QueryHandlers::ListScenes          ( const std::string& request, unsigned int /*requestID*/ )
 {
     auto pm = ProjectManager::GetInstance();
 
@@ -273,7 +278,7 @@ std::wstring QueryHandlers::ListScenes          ( const std::string& request )
 
 // ***********************
 //
-std::wstring QueryHandlers::ListAssetsPaths     ( const std::string& request )
+std::wstring QueryHandlers::ListAssetsPaths     ( const std::string& request, unsigned int /*requestID*/ )
 {
     auto pm = ProjectManager::GetInstance();
 
@@ -289,7 +294,7 @@ std::wstring QueryHandlers::ListAssetsPaths     ( const std::string& request )
 
 // ***********************
 //
-std::wstring QueryHandlers::ListCategoriesNames ( const std::string& /*request*/ )
+std::wstring QueryHandlers::ListCategoriesNames ( const std::string& /*request*/, unsigned int /*requestID*/ )
 {
     auto pm = ProjectManager::GetInstance();
 
@@ -301,7 +306,7 @@ std::wstring QueryHandlers::ListCategoriesNames ( const std::string& /*request*/
 
 // ***********************
 //
-std::wstring QueryHandlers::ListProjects        ( const std::string& /*request*/ )
+std::wstring QueryHandlers::ListProjects        ( const std::string& /*request*/, unsigned int /*requestID*/ )
 {
     auto pm = ProjectManager::GetInstance();
 
@@ -325,7 +330,7 @@ std::wstring QueryHandlers::ListProjects        ( const std::string& /*request*/
 
 // ***********************
 //
-std::string QueryHandlers::CheckTimelineTime   ( const std::string& request )
+std::string QueryHandlers::CheckTimelineTime   ( const std::string& request, unsigned int requestID )
 {
     JsonDeserializeObject deser;
     JsonSerializeObject ser;
@@ -337,7 +342,7 @@ std::string QueryHandlers::CheckTimelineTime   ( const std::string& request )
     auto scene = m_appLogic->GetBVProject()->GetScene( sceneName );
     if( scene == nullptr )
     {
-        PrepareResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, false );
+        PrepareResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, requestID, false );
         return ser.GetString();
     }
 
@@ -345,11 +350,11 @@ std::string QueryHandlers::CheckTimelineTime   ( const std::string& request )
     auto checkedTimeline = sceneTimeline->GetChild( timelineName );
     if( checkedTimeline == nullptr )
     {
-        PrepareResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, false );
+        PrepareResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, requestID, false );
         return ser.GetString();
     }
 
-    PrepareResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, requestID, true );
     TimeType time = checkedTimeline->GetLocalTime();
     ser.SetAttribute( "Time", toString( time ) );
 

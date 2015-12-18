@@ -18,20 +18,20 @@ public:
     void        Info        ( bv::IEventPtr evt );
 
 private:
-    std::string     ListAssets          ( const std::string& request );
-    std::wstring    ListProjectNames    ( const std::string& request );
-    std::wstring    ListScenes          ( const std::string& request );
-    std::wstring    ListAssetsPaths     ( const std::string& request );
-    std::wstring    ListCategoriesNames ( const std::string& request );
-    std::wstring    ListProjects        ( const std::string& request );
+    std::string     ListAssets          ( const std::string& request, unsigned int requestID );
+    std::wstring    ListProjectNames    ( const std::string& request, unsigned int requestID );
+    std::wstring    ListScenes          ( const std::string& request, unsigned int requestID );
+    std::wstring    ListAssetsPaths     ( const std::string& request, unsigned int requestID );
+    std::wstring    ListCategoriesNames ( const std::string& request, unsigned int requestID );
+    std::wstring    ListProjects        ( const std::string& request, unsigned int requestID );
 
-    std::string     VideoCardsInfo      ( const std::string& request );
-    std::string     GetNodeInfo         ( const std::string& request );
-    std::string     GetMinimalSceneInfo ( const std::string& request );
-    std::string     GetTimeLinesInfo    ( const std::string& request );
-    std::string     PerformanceInfo     ( const std::string& request );
-    std::string     TreeStructureInfo   ( const std::string& request );
-    std::string     CheckTimelineTime   ( const std::string& request );
+    std::string     VideoCardsInfo      ( const std::string& request, unsigned int requestID );
+    std::string     GetNodeInfo         ( const std::string& request, unsigned int requestID );
+    std::string     GetMinimalSceneInfo ( const std::string& request, unsigned int requestID );
+    std::string     GetTimeLinesInfo    ( const std::string& request, unsigned int requestID );
+    std::string     PerformanceInfo     ( const std::string& request, unsigned int requestID );
+    std::string     TreeStructureInfo   ( const std::string& request, unsigned int requestID );
+    std::string     CheckTimelineTime   ( const std::string& request, unsigned int requestID );
 };
 
 } //bv
