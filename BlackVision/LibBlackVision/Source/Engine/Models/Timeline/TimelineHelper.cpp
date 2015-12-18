@@ -70,7 +70,7 @@ std::string				TimelineHelper::GetParentNodePath				( const std::string & timeli
     auto path = Split( timelinePath, "/" );
 
 	std::string parentPath = "";
-	for( int i = 0; i < path.size() - 1; ++i )
+	for( unsigned int i = 0; i < path.size() - 1; ++i )
 	{
 		parentPath += path[ i ];
 		if( i < path.size() - 2 )

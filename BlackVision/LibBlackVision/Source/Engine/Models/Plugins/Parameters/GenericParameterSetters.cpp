@@ -117,6 +117,50 @@ bool SetCenterMass              ( ParamTransformVecPtr pt, unsigned int idx, Tim
     return true;
 }
 
+// ***********************
+//
+bool    RemoveRotationKey       ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->RemoveRotation( idx, t );
+    return true;
+}
+
+// ***********************
+//
+bool    RemoveScaleKey          ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->RemoveScale( idx, t );
+    return true;
+}
+
+// ***********************
+//
+bool    RemoveTranslationKey    ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->RemoveTranslation( idx, t );
+    return true;
+}
+
+// ***********************
+//
+bool    RemoveCenterMassKey     ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->RemoveCenter( idx, t );
+    return true;
+}
+
 } //anonymous
 
 
@@ -175,6 +219,34 @@ bool    SetParameterCenterMass  ( IParameterPtr parameter, unsigned int idx, Tim
 {
     return SetCenterMass( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, center );
 }
+
+// ========================================================================= //
+// Remove transformation keys
+// ========================================================================= //
+
+// ***********************
+//
+bool    RemoveRotationKey       ( IParameterPtr parameter, unsigned int idx, TimeType t )
+{    return RemoveRotationKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t );  }
+
+// ***********************
+//
+bool    RemoveScaleKey          ( IParameterPtr parameter, unsigned int idx, TimeType t )
+{    return RemoveScaleKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t );  }
+// ***********************
+//
+bool    RemoveTranslationKey    ( IParameterPtr parameter, unsigned int idx, TimeType t )
+{    return RemoveTranslationKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t );  }
+
+// ***********************
+//
+bool    RemoveCenterMassKey     ( IParameterPtr parameter, unsigned int idx, TimeType t )
+{    return RemoveCenterMassKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t );  }
+
+
+// ========================================================================= //
+// Curve types and wrap methods
+// ========================================================================= //
 
 // *******************************
 //

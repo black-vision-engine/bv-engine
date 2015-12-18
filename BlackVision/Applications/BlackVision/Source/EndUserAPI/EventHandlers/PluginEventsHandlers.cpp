@@ -99,7 +99,29 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
     else if( command == ParamKeyEvent::Command::SetInterpolatorPostWrapMethod )
         SetWrapPostMethod( param, SerializationHelper::String2T( toString( value ), WrapMethod::clamp ) );
     else if( command == ParamKeyEvent::Command::RemoveKey )
-        RemoveParameterKey( param, (TimeType)keyTime );
+    {
+        if( pluginName == "transform" )     // Only transform parameter
+        {
+            std::string stringValue = toString( value );
+            if( paramName == "translation" )
+            {
+                RemoveTranslationKey( param, 0, (bv::TimeType)keyTime );
+                LOG_MESSAGE( SeverityLevel::info ) << "RemoveParamKey() Node [" + nodeName + "] translation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+            }
+            else if( paramName == "scale" )
+            {
+                RemoveScaleKey( param, 0, (bv::TimeType)keyTime );
+                LOG_MESSAGE( SeverityLevel::info ) << "RemoveParamKey() Node [" + nodeName + "] scale: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+            }
+            else if( paramName == "rotation" )
+            {
+                RemoveRotationKey( param, 0, (bv::TimeType)keyTime );
+                LOG_MESSAGE( SeverityLevel::info ) << "RemoveParamKey() Node [" + nodeName + "] rotation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+            }
+        }
+        else
+            RemoveParameterKey( param, (TimeType)keyTime );
+    }
 }
 
 

@@ -40,6 +40,11 @@ public:
     inline  void        SetTranslation  ( const glm::vec3 & translation, TimeType t );
     inline  void        SetCenter       ( const glm::vec3 & center, TimeType t );
 
+    inline  void        RemoveRotation      ( TimeType t );
+    inline  void        RemoveScale         ( TimeType t );
+    inline  void        RemoveTranslation   ( TimeType t );
+    inline  void        RemoveCenter        ( TimeType t );
+
     inline  TransformF& Transform       ();
 
     inline  glm::mat4   Evaluate        () const;
@@ -95,6 +100,11 @@ public:
     inline  void        SetScale            ( unsigned int transformNum, const glm::vec3 & scale, TimeType t );
     inline  void        SetTranslation      ( unsigned int transformNum, const glm::vec3 & translation, TimeType t );
     inline  void        SetCenter           ( unsigned int transformNum, const glm::vec3 & center, TimeType t );
+
+    inline  void        RemoveRotation      ( unsigned int transformNum, TimeType t );
+    inline  void        RemoveScale         ( unsigned int transformNum, TimeType t );
+    inline  void        RemoveTranslation   ( unsigned int transformNum, TimeType t );
+    inline  void        RemoveCenter        ( unsigned int transformNum, TimeType t );
 
     inline  TransformF& Transform           ( unsigned int transformNum );
 

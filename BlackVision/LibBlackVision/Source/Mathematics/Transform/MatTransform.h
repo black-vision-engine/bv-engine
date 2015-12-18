@@ -94,6 +94,13 @@ public:
         SetValues( t, v[ 0 ], v[ 1 ], v[ 2 ] );
     }
 
+    void  RemoveValues ( TimeType t )
+    {
+        p0.RemoveKey( t );
+        p1.RemoveKey( t );
+        p2.RemoveKey( t );
+    }
+
     TransformKind		KindKurwaMac()
     {
         return kind;
@@ -155,6 +162,12 @@ public:
     {
         m_angle.AddKey( t, angle_ );
         m_rotationAxis.AddKey( t, rotAxis );
+    }
+
+    void                        RemoveRotation  ( TimeType t )
+    {
+        m_angle.RemoveKey( t );
+        m_rotationAxis.RemoveKey( t );
     }
 
 	Vec3Interpolator &			AccessRotAxis	()

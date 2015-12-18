@@ -30,6 +30,11 @@ bool    SetParameterScale       ( IParameterPtr parameter, unsigned int idx, Tim
 bool    SetParameterTranslation ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & translation );
 bool    SetParameterCenterMass  ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & center );
 
+bool    RemoveRotationKey       ( IParameterPtr parameter, unsigned int idx, TimeType t );
+bool    RemoveScaleKey          ( IParameterPtr parameter, unsigned int idx, TimeType t );
+bool    RemoveTranslationKey    ( IParameterPtr parameter, unsigned int idx, TimeType t );
+bool    RemoveCenterMassKey     ( IParameterPtr parameter, unsigned int idx, TimeType t );
+
 
 // *******************************
 //

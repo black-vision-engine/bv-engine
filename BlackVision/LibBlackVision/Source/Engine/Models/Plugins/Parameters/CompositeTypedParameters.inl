@@ -65,6 +65,61 @@ inline  void        ParamTransform::SetCenter       ( const glm::vec3 & center, 
     }
 }
 
+// ***********************
+//
+inline  void ParamTransform::RemoveRotation      ( TimeType t )
+{
+    for( unsigned int i = 0; i < m_transformModel.Size(); ++i )
+    {
+        if( m_transformModel[ i ]->KindKurwaMac() == TransformKind::rotation )
+        {
+            static_cast< RotationF * >( m_transformModel[ i ] )->RemoveRotation( t );
+            return;
+        }
+    }
+}
+
+// ***********************
+//
+inline  void ParamTransform::RemoveScale         ( TimeType t )
+{
+    for( unsigned int i = 0; i < m_transformModel.Size(); ++i )
+    {
+        if( m_transformModel[ i ]->KindKurwaMac() == TransformKind::scale )
+        {
+            static_cast< SimpleTransformF * >( m_transformModel[ i ] )->RemoveValues( t );
+            return;
+        }
+    }
+}
+
+// ***********************
+//
+inline  void ParamTransform::RemoveTranslation   ( TimeType t )
+{
+    for( unsigned int i = 0; i < m_transformModel.Size(); ++i )
+    {
+        if( m_transformModel[ i ]->KindKurwaMac() == TransformKind::translation )
+        {
+            static_cast< SimpleTransformF * >( m_transformModel[ i ] )->RemoveValues( t );
+            return;
+        }
+    }
+}
+
+// ***********************
+//
+inline  void ParamTransform::RemoveCenter        ( TimeType t )
+{
+    for( unsigned int i = 0; i < m_transformModel.Size(); ++i )
+    {
+        if( m_transformModel[ i ]->KindKurwaMac() == TransformKind::fwd_center )
+            static_cast< SimpleTransformF * >( m_transformModel[ i ] )->RemoveValues( t );
+        else if( m_transformModel[ i ]->KindKurwaMac() == TransformKind::inv_center )
+            static_cast< SimpleTransformF * >( m_transformModel[ i ] )->RemoveValues( t );
+    }
+}
+
 // *******************************
 // FIXME: reimplement with SQT paramter model
 inline  TransformF& ParamTransform::Transform       ()
@@ -195,6 +250,69 @@ inline  void        ParamTransformVec::SetCenter   ( unsigned int transformNum, 
         }
     }
 }
+
+
+// ========================================================================= //
+// Remove keys
+// ========================================================================= //
+
+
+// ***********************
+//
+inline  void ParamTransformVec::RemoveRotation      ( unsigned int transformNum, TimeType t )
+{
+    for( unsigned int i = 0; i < m_transformModelVec[ transformNum ].Size(); ++i )
+    {
+        if( m_transformModelVec[ transformNum ][ i ]->KindKurwaMac() == TransformKind::rotation )
+        {
+            static_cast< RotationF * >( m_transformModelVec[ transformNum ][ i ] )->RemoveRotation( t );
+            return;
+        }
+    }
+}
+
+// ***********************
+//
+inline  void ParamTransformVec::RemoveScale         ( unsigned int transformNum, TimeType t )
+{
+    for( unsigned int i = 0; i < m_transformModelVec[ transformNum ].Size(); ++i )
+    {
+        if( m_transformModelVec[ transformNum ][ i ]->KindKurwaMac() == TransformKind::scale )
+        {
+            static_cast< SimpleTransformF * >( m_transformModelVec[ transformNum ][ i ] )->RemoveValues( t );
+            return;
+        }
+    }
+}
+
+// ***********************
+//
+inline  void ParamTransformVec::RemoveTranslation   ( unsigned int transformNum, TimeType t )
+{
+    for( unsigned int i = 0; i < m_transformModelVec[ transformNum ].Size(); ++i )
+    {
+        if( m_transformModelVec[ transformNum ][ i ]->KindKurwaMac() == TransformKind::translation )
+        {
+            static_cast< SimpleTransformF * >( m_transformModelVec[ transformNum ][ i ] )->RemoveValues( t );
+            return;
+        }
+    }
+}
+
+// ***********************
+//
+inline  void ParamTransformVec::RemoveCenter        ( unsigned int transformNum, TimeType t )
+{
+    for( unsigned int i = 0; i < m_transformModelVec[ transformNum ].Size(); ++i )
+    {
+        if( m_transformModelVec[ transformNum ][ i ]->KindKurwaMac() == TransformKind::fwd_center )
+            static_cast< SimpleTransformF * >( m_transformModelVec[ transformNum ][ i ] )->RemoveValues( t );
+        else if( m_transformModelVec[ transformNum ][ i ]->KindKurwaMac() == TransformKind::inv_center )
+            static_cast< SimpleTransformF * >( m_transformModelVec[ transformNum ][ i ] )->RemoveValues( t );
+    }
+}
+
+
 
 // *******************************
 // FIXME: reimplement with SQT paramter model
