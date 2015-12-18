@@ -60,7 +60,7 @@ public:
     
     virtual std::vector< IParameterPtr >        GetParameters               () const; // FIXME: ugly hack for serialization
     virtual std::vector< AssetDescConstPtr >    GetAssets                   () const; // FIXME: ugly hack for serialization
-    virtual void                                AddAsset                    ( AssetDescConstPtr asset, ResourceStateModelPtr rsm ); // FIXME: ugly hack for serialization
+    virtual void                                SetAsset                    ( int i, AssetDescConstPtr asset, ResourceStateModelPtr rsm ); // FIXME: ugly hack for serialization
     virtual ResourceStateModelPtr               GetRSM                      ( std::string key ) const; // FIXME: ugly hack for serialization
 
     virtual void                                Update                      ( TimeType t );
