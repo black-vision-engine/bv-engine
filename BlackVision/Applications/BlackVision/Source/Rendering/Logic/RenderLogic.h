@@ -6,17 +6,13 @@
 #include "Rendering/Logic/FrameRendering/NodeEffectRenderLogicSelector.h"
 
 
-
 namespace bv {
 
-class Camera;
 class Renderer;
 class SceneNode;
 
 class RenderTarget;
 
-class RenderLogicImpl;
-class FrameRenderLogic;
 class PostFrameRenderLogic;
 class OffscreenDisplay;
 class BlitFullscreenEffect;
@@ -30,27 +26,18 @@ private:
     OffscreenDisplay *              m_offscreenDisplay;
     BlitFullscreenEffect *          m_blitEffect;
 
-    // RenderLogicImpl *           m_impl;
-    FrameRenderLogic *          m_frameRenderLogic;
-    PostFrameRenderLogic *      m_postFrameRenderLogic;
-
 public:
 
             RenderLogic     ();
             ~RenderLogic    ();
 
-    void    SetCamera       ( Camera * cam );
-
     void    RenderFrame     ( Renderer * renderer, SceneNode * sceneRoot );
-
-    void    NewRenderFrame  ( Renderer * renderer, SceneNode * sceneRoot );
 
 private:
 
     void    RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoot, RenderTarget * rt );
 
 public:
-
 
     void    RenderNode      ( Renderer * renderer, SceneNode * node );
     void    DrawNode        ( Renderer * renderer, SceneNode * node );
@@ -64,6 +51,7 @@ private:
     void                    BlitToPreview       ( Renderer * renderer, RenderTarget * rt );
 
     void                    UpdateOffscreenState();
+
 };
 
 } // bv

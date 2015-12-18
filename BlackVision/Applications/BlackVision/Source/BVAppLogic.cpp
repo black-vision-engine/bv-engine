@@ -174,7 +174,6 @@ void BVAppLogic::InitCamera         ( unsigned int w, unsigned int h )
     }
 
     m_renderer->SetCamera( cam );
-    m_renderLogic->SetCamera( cam );
 
     //FIXME: read from configuration file and change the camera appropriately when current resoultion changes
 }

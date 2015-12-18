@@ -12,10 +12,6 @@
 #include "BVGL.h"
 
 #include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
-#include "Rendering/Logic/FrameRendering/NodeEffect/DefaultEffectRenderLogic.h"
-#include "Rendering/Logic/FrameRendering/NodeEffect/AlphaMaskRenderLogic.h"
-#include "Rendering/Logic/FrameRendering/NodeEffect/NodeMaskRenderLogic.h"
-#include "Rendering/Logic/FrameRendering/NodeEffect/WireframeRenderLogic.h"
 
 #include "Rendering/Logic/VideoOutputRendering/DefaultVideoOutputRenderLogic.h"
 
@@ -28,11 +24,12 @@ FrameRenderLogic::FrameRenderLogic     ()
 {
     m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffersPerRT() );
     m_videoOutputRenderLogic = new DefaultVideoOutputRenderLogic( DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
-
+/*
     m_customNodeRenderLogic.push_back( new DefaultEffectRenderLogic( this, m_offscreenRenderLogic ) );
     m_customNodeRenderLogic.push_back( new AlphaMaskRenderLogic( this, m_offscreenRenderLogic ) );
     m_customNodeRenderLogic.push_back( new NodeMaskRenderLogic( this, m_offscreenRenderLogic ) );
     m_customNodeRenderLogic.push_back( new WireframeRenderLogic( this, m_offscreenRenderLogic ) );
+*/
 }
 
 // *********************************
@@ -102,7 +99,8 @@ void    FrameRenderLogic::RenderNode     ( Renderer * renderer, SceneNode * node
     {
         auto effectRenderLogic = GetNodeEffectRenderLogic( node );
         
-        effectRenderLogic->RenderNode( renderer, node );
+        { renderer; effectRenderLogic; }
+        //effectRenderLogic->RenderNode( renderer, node );
     }
 }
 

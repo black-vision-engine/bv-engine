@@ -8,7 +8,6 @@
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
 #include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
-#include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogicTr.h"
 
 #include "Rendering/Utils/RenderLogicContext.h"
 
@@ -35,7 +34,6 @@ namespace bv {
 // *********************************
 //
 RenderLogic::RenderLogic     ()
-    //: m_impl( nullptr )
     : m_rtStackAllocator( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), TextureFormat::F_A8R8G8B8 )
     , m_blitEffect( nullptr )
 {
@@ -43,10 +41,6 @@ RenderLogic::RenderLogic     ()
     auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput();
 
     m_offscreenDisplay = new OffscreenDisplay( &m_rtStackAllocator, videoCardEnabled || previewAsVideoCard );
-
-    //m_impl = new RenderLogicImpl( &m_rtStackAllocator, videoCardEnabled || previewAsVideoCard );
-    m_frameRenderLogic = new FrameRenderLogic();
-    m_postFrameRenderLogic = new PostFrameRenderLogic();
 }
 
 // *********************************
@@ -54,24 +48,8 @@ RenderLogic::RenderLogic     ()
 RenderLogic::~RenderLogic    ()
 {
     delete m_offscreenDisplay;
-    //delete m_impl;
-    delete m_frameRenderLogic;
-    delete m_postFrameRenderLogic;
     delete m_blitEffect;
 }
-
-// *********************************
-//
-void    RenderLogic::SetCamera       ( Camera * cam )
-{
-    m_frameRenderLogic->SetCamera( cam );
-    
-    // m_offscreenRenderLogic->SetRendererCamera( cam );
-}
-
-#define USE_NEW_RENDER_LOGIC
-//#define USE_DEFAULT_EFFECT_ONLY
-#define USE_DEFAULT_AND_ALPHA_EFFECTS_ONLY
 
 // *********************************
 //
@@ -79,26 +57,17 @@ void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot
 {
     renderer->PreDraw();
 
-#ifndef USE_NEW_RENDER_LOGIC
-    m_frameRenderLogic->RenderFrame( renderer, sceneRoot );
-#else
-    NewRenderFrame( renderer, sceneRoot );
-#endif
-
-    renderer->PostDraw();
-    renderer->DisplayColorBuffer();
-}
-
-// *********************************
-//
-void    RenderLogic::NewRenderFrame  ( Renderer * renderer, SceneNode * sceneRoot )
-{
+    //FIXME: use frameRenderLogic to implement machinery required to properly render 
+    //m_frameRenderLogic->RenderFrame( renderer, sceneRoot );
     auto rt = m_offscreenDisplay->GetActiveRenderTarget();
 
     RenderRootNode( renderer, sceneRoot, rt );
     BlitToPreview( renderer, rt );
 
     UpdateOffscreenState();
+
+    renderer->PostDraw();
+    renderer->DisplayColorBuffer();
 }
 
 // *********************************
@@ -132,34 +101,17 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 
     if ( node->IsVisible() )
     {
-        #ifdef USE_DEFAULT_EFFECT_ONLY
+        if( node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT )
+        {
             // Default render logic
             DrawNode( renderer, node );
-        #elif defined(USE_DEFAULT_AND_ALPHA_EFFECTS_ONLY)
-        if( node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT )
-            {
-                // Default render logic
-                DrawNode( renderer, node );
-            }
-            else
-            {
-                auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogicTr( node );
+        }
+        else
+        {
+            auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogic( node );
                
-                effectRenderLogic->RenderNode( node, &ctx );
-            }
-        #else
-            if( node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT )
-            {
-                // Default render logic
-                DrawNode( renderer, node );
-            }
-            else
-            {
-                auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogicTr( node );
-               
-                effectRenderLogic->RenderNode( node, &ctx );
-            }
-        #endif
+            effectRenderLogic->RenderNode( node, &ctx );
+        }
     }
 }
 
@@ -195,6 +147,7 @@ void    RenderLogic::RenderChildren  ( Renderer * renderer, SceneNode * node, in
 //
 BlitFullscreenEffect *  RenderLogic::AccessBlitEffect   ( RenderTarget * rt )
 {
+    // FIXME: Blit current render target - suxx a bit - there should be a separate initialization step
     if ( !m_blitEffect )
     {
         auto rtTex = rt->ColorTexture( 0 );
@@ -211,7 +164,6 @@ void                    RenderLogic::BlitToPreview      ( Renderer * renderer, R
 {
     assert( rt == m_offscreenDisplay->GetActiveRenderTarget() );
 
-    // Blit current render target - suxx a bit - there should be a separate initialization step
     // Render fullscreen effect
     auto blitter = AccessBlitEffect( rt );
 

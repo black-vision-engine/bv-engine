@@ -1,79 +1,133 @@
 #include "NodeMaskRenderLogic.h"
 
-#include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
-#include "Rendering/Utils/OffscreenRenderLogic.h"
+#include "Rendering/Utils/RenderLogicContext.h"
 
-#include "Rendering/Logic/FrameRendering/FrameRenderLogic.h"
+#include "Rendering/Logic/FullScreen/Impl/BlitAlphaMaskFullscreenEffect.h"
 
 
 namespace bv {
 
 // *********************************
 //
-NodeMaskRenderLogic::NodeMaskRenderLogic         ( FrameRenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic )
-    : NodeEffectRenderLogic( renderLogic, offscreenRenderLogic )
+NodeMaskRenderLogic::NodeMaskRenderLogic        ()
+    : m_blitAlphaMaskEffect( nullptr )
 {
 }
 
 // *********************************
 //
-NodeMaskRenderLogic::~NodeMaskRenderLogic        ()
+NodeMaskRenderLogic::~NodeMaskRenderLogic       ()
 {
 }
 
 // *********************************
 //
-void    NodeMaskRenderLogic::RenderNode                  ( Renderer * renderer, SceneNode * node )
+void    NodeMaskRenderLogic::RenderNode           ( SceneNode * node, RenderLogicContext * ctx )
 {
     if( node->NumChildNodes() < 2 )
     {
-        GetRenderLogic()->DrawNode( renderer, node );
+        logic( ctx )->DrawNode( renderer( ctx ), node );
     }
-    else
+    else 
     {
-        GetRenderLogic()->DrawNodeOnly( renderer, node );
+        auto alphaVal = node->GetNodeEffect()->GetValue( "alpha" );
+        auto alphaValue = QueryTypedValue< ValueFloatPtr >( alphaVal )->GetValue();
+       
+        auto renderer       = ctx->GetRenderer();
+        auto logic          = ctx->GetRenderLogic();
+        
+        if( alphaValue < 0.01f )
+        {
+            logic->DrawNodeOnly( renderer, node );
+            logic->RenderChildren( renderer, node, 2 );
+        }
+        else
+        {
+            auto rtAllocator    = ctx->GetRenderTargetAllocator();
 
-        GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
-        GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
+            logic->DrawNodeOnly( renderer, node );
 
-        renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
-        renderer->ClearBuffers();
+            renderer->Disable( rtAllocator->Top() );
 
-        auto effect = node->GetNodeEffect();
+            auto foregroundRt   = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+            auto maskRt         = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
 
-        auto maskIdxVal = std::static_pointer_cast< ValueInt >( effect->GetValue( "bgIdx" ) );
-        auto fgIdxVal = std::static_pointer_cast< ValueInt >( effect->GetValue( "fgIdx" ) );
-        auto alphaVal = effect->GetValue( "alpha" );
+            RenderItermediateData( ctx, foregroundRt, maskRt, node );
 
-        auto maskIdx= maskIdxVal->GetValue();
-        auto fgIdx = fgIdxVal->GetValue();
+            rtAllocator->Free();
+            rtAllocator->Free();
 
-        assert( maskIdx == 0 || maskIdx == 1 );
-        assert( fgIdx == 0 || fgIdx == 1 );
-        assert( maskIdx != fgIdx );
+            BlitWithMask( ctx, foregroundRt, maskRt, alphaValue );
 
-        // MASK
-        GetRenderLogic()->RenderNode( renderer, node->GetChild( maskIdx ) );
-
-        GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
-        GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
-        renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
-        renderer->ClearBuffers();
-
-        // FOREGROUND
-        GetRenderLogic()->RenderNode( renderer, node->GetChild( fgIdx ) ); 
-
-        GetOffscreenRenderLogic()->DrawAMTopTwoRenderTargets( renderer, alphaVal.get() );
-    
-        GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
-        GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
-
-        GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
-
-        GetRenderLogic()->DrawChildren( renderer, node, 2 );
+            logic->RenderChildren( renderer, node, 2 );
+        }
     }
+}
+
+// *********************************
+//
+void                                NodeMaskRenderLogic::RenderItermediateData       ( RenderLogicContext * ctx, RenderTarget * foregroundRt, RenderTarget * maskRt, SceneNode * node )
+{
+    auto effect = node->GetNodeEffect();
+
+    auto maskIdxVal = std::static_pointer_cast< ValueInt >( effect->GetValue( "bgIdx" ) );
+    auto fgIdxVal   = std::static_pointer_cast< ValueInt >( effect->GetValue( "fgIdx" ) );
+
+    auto maskIdx = maskIdxVal->GetValue();
+    auto fgIdx   = fgIdxVal->GetValue();
+
+    assert( maskIdx == 0 || maskIdx == 1 );
+    assert( fgIdx == 0 || fgIdx == 1 );
+    assert( maskIdx != fgIdx );
+
+    RenderToRenderTarget( ctx, foregroundRt, node->GetChild( fgIdx ) );
+    RenderToRenderTarget( ctx, maskRt, node->GetChild( maskIdx ) );
+}
+
+// *********************************
+//
+void                                NodeMaskRenderLogic::RenderToRenderTarget        ( RenderLogicContext * ctx, RenderTarget * rt, SceneNode * node )
+{
+    auto renderer  = ctx->GetRenderer();
+
+    renderer->Enable( rt );
+
+    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+    renderer->ClearBuffers();
+
+    logic( ctx )->RenderNode( renderer, node ); 
+
+    renderer->Disable( rt );
+}
+
+// *********************************
+//
+BlitAlphaMaskFullscreenEffect *     NodeMaskRenderLogic::AccessBlitAlphaMaskEffect   ( RenderTarget * rt, RenderTarget * maskRt )
+{
+    if ( !m_blitAlphaMaskEffect )
+    {
+        auto rtTex = rt->ColorTexture( 0 );
+        auto maskTex = maskRt->ColorTexture( 0 );
+
+        m_blitAlphaMaskEffect = new BlitAlphaMaskFullscreenEffect( rtTex, maskTex );
+    }
+
+    return m_blitAlphaMaskEffect;    
+}
+
+// *********************************
+//
+void                                NodeMaskRenderLogic::BlitWithMask                ( RenderLogicContext * ctx, RenderTarget * foregroundRt, RenderTarget * maskRt, float alpha )
+{
+    auto renderer  = ctx->GetRenderer();
+
+    auto blitter = AccessBlitAlphaMaskEffect( foregroundRt, maskRt );
+    blitter->SetAlpha( alpha );
+
+    renderer->Enable( allocator( ctx )->Top() );
+    blitter->Render( renderer );
 }
 
 } //bv

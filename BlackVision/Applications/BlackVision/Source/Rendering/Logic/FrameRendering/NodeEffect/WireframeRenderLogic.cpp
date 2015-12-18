@@ -1,21 +1,19 @@
 #include "WireframeRenderLogic.h"
 
-#include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
-#include "Rendering/Logic/FrameRendering/FrameRenderLogic.h"
-
 #include "Engine/Graphics/Effects/WireframeEffect.h"
+
+#include "Rendering/Utils/RenderLogicContext.h"
 
 
 namespace bv {
 
 // *********************************
 //
-WireframeRenderLogic::WireframeRenderLogic  ( FrameRenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic )
-    : NodeEffectRenderLogic( renderLogic, offscreenRenderLogic )
-    , m_effect( new WireframeEffect() )
+WireframeRenderLogic::WireframeRenderLogic  ()
+    : m_effect( new WireframeEffect() )
 {
 }
 
@@ -23,15 +21,16 @@ WireframeRenderLogic::WireframeRenderLogic  ( FrameRenderLogic * renderLogic, Of
 //
 WireframeRenderLogic::~WireframeRenderLogic ()
 {
+    delete m_effect;
 }
 
 // *********************************
 //
-void    WireframeRenderLogic::RenderNode                ( Renderer * renderer, SceneNode * node )
+void    WireframeRenderLogic::RenderNode      ( SceneNode * node, RenderLogicContext * ctx )
 {
-    GetRenderLogic()->DrawNode( renderer, node );
+    logic( ctx )->DrawNode( renderer( ctx ), node );
 
-    RenderWireframeOverlay( renderer, node );
+    RenderWireframeOverlay( renderer( ctx ), node );
 }
 
 // *********************************

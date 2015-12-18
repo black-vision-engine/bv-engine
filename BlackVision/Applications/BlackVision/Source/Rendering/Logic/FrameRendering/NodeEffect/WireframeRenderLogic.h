@@ -7,6 +7,8 @@
 namespace bv {
 
 class WireframeEffect;
+class Renderer;
+
 
 class WireframeRenderLogic : public NodeEffectRenderLogic
 {
@@ -16,10 +18,10 @@ private:
 
 public:
 
-                    WireframeRenderLogic        ( FrameRenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic );
+                    WireframeRenderLogic        ();
     virtual         ~WireframeRenderLogic       ();
 
-    virtual void    RenderNode                  ( Renderer * renderer, SceneNode * node ) override;
+    virtual void    RenderNode                  ( SceneNode * node, RenderLogicContext * ctx ) override;
 
 private:
 

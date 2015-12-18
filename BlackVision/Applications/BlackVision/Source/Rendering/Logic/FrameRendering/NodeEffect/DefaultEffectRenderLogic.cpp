@@ -1,17 +1,13 @@
 #include "DefaultEffectRenderLogic.h"
 
-#include "Engine/Graphics/Renderers/Renderer.h"
-#include "Engine/Graphics/SceneGraph/SceneNode.h"
-
-#include "Rendering/Logic/FrameRendering/FrameRenderLogic.h"
+#include "Rendering/Utils/RenderLogicContext.h"
 
 
 namespace bv {
 
 // *********************************
 //
-DefaultEffectRenderLogic::DefaultEffectRenderLogic  ( FrameRenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic )
-    : NodeEffectRenderLogic( renderLogic, offscreenRenderLogic )
+DefaultEffectRenderLogic::DefaultEffectRenderLogic  ()
 {
 }
 
@@ -23,9 +19,9 @@ DefaultEffectRenderLogic::~DefaultEffectRenderLogic ()
 
 // *********************************
 //
-void    DefaultEffectRenderLogic::RenderNode        ( Renderer * renderer, SceneNode * node )
+void    DefaultEffectRenderLogic::RenderNode        ( SceneNode * node, RenderLogicContext * ctx )
 {
-    GetRenderLogic()->DrawNode( renderer, node );
+    logic( ctx )->DrawNode( renderer( ctx ), node );
 }
 
 } //bv

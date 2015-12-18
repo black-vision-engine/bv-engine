@@ -57,7 +57,8 @@ void    RenderLogicImpl::RenderNode          ( Renderer * renderer, SceneNode * 
     {
         auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogic( node );
         
-        effectRenderLogic->RenderNode( renderer, node );
+        { renderer; effectRenderLogic; }
+        // effectRenderLogic->RenderNode( renderer, node );
     }
 }
 
