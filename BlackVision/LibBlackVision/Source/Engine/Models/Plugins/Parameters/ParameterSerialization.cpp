@@ -78,7 +78,9 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     auto type = deser.GetAttribute( "type" );
     auto timeline = deser.GetAttribute( "timeline" );
 
-    auto sceneTimeline = dynamic_cast< BVDeserializeContext* >( deser.GetDeserializeContext() )->m_sceneTimeline;
+	ITimeEvaluatorPtr sceneTimeline = dynamic_cast< BVDeserializeContext* >( deser.GetDeserializeContext() )->m_sceneTimeline;
+	if( sceneTimeline == nullptr )
+		sceneTimeline = TimelineManager::GetInstance()->GetRootTimeline();
     ITimeEvaluatorPtr te = TimelineHelper::GetTimeEvaluator( timeline, sceneTimeline );
     if( te == nullptr ) 
     {
