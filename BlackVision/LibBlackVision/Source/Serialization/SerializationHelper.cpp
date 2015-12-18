@@ -63,6 +63,11 @@ template<> glm::vec2 _String2T( std::string s ) { return String2Vec2( s ); }
 template<> glm::vec3 _String2T( std::string s ) { return String2Vec3( s ); }
 template<> glm::vec4 _String2T( std::string s ) { return String2Vec4( s ); }
 
+// FIXME: are those three needed?
+template<> double _String2T( std::string s ) { return std::stod( s ); }
+template<> std::string _String2T( std::string s ) { return s; }
+template<> std::wstring _String2T( std::string s ) { return std::wstring( s.begin(), s.end() ); }
+
 template<> unsigned int String2T( std::string s, const unsigned int& default ) 
 { 
     if( s == "" ) 

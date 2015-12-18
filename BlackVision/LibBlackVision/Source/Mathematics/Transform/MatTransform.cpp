@@ -445,17 +445,17 @@ void                                CompositeTransform<ParamT>::Serialize       
         }
         else
         {
-            doc.EnterChild( "x" );
+            //doc.EnterChild( "x" );
             trans->GetP0MotylaNoga().Serialize( doc );
-            doc.ExitChild();
+            //doc.ExitChild();
 
-            doc.EnterChild( "y" );
+            //doc.EnterChild( "y" );
             trans->GetP1MotylaNoga().Serialize( doc );
-            doc.ExitChild();
+            //doc.ExitChild();
 
-            doc.EnterChild( "z" );
+            //doc.EnterChild( "z" );
             trans->GetP2MotylaNoga().Serialize( doc );
-            doc.ExitChild();
+            //doc.ExitChild();
         }
 
         doc.ExitChild(); // transform

@@ -119,13 +119,14 @@ ISerializablePtr     CompositeBezierInterpolator< TimeValueT, ValueT >::Create  
 {
     auto interpolator = std::make_shared< CompositeBezierInterpolator< TimeValueT, ValueT > >();
 
-    auto keys = SerializationHelper::DeserializeObjectLoadPropertiesImpl< Key >( deser, "key" );
+    auto keys = SerializationHelper::DeserializeObjectLoadArrayImpl< Key >( deser, "keys" );
 
-    if( deser.EnterChild( "interpolation" ) == false )
+    if( keys.size() == 1 || deser.EnterChild( "interpolations" ) == false )
         for( auto key : keys ) // no interpolation types
             interpolator->AddKey( key->t, key->val );
     else
     {
+        deser.EnterChild( "interpolation" );
         for( auto key : keys )
         {
             interpolator->AddKey( key->t, key->val );
@@ -156,6 +157,8 @@ ISerializablePtr     CompositeBezierInterpolator< TimeValueT, ValueT >::Create  
     interpolator->SetCurveType( SerializationHelper::String2T< CurveType >( SerializationHelper::ct2s, deser.GetAttribute( "curve_type" ) ) );
     interpolator->SetWrapPreMethod( SerializationHelper::String2T< WrapMethod >( SerializationHelper::wm2s, deser.GetAttribute( "preMethod" ) ) );
     interpolator->SetWrapPostMethod( SerializationHelper::String2T< WrapMethod >( SerializationHelper::wm2s, deser.GetAttribute( "postMethod" ) ) );
+
+    assert( interpolator->GetNumKeys() > 0 );
 
     return interpolator;
 }

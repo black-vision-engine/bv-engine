@@ -86,18 +86,13 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
         te = sceneTimeline;
     }
 
-    auto values = SerializationHelper::DeserializeObjectLoadArrayImpl< KeyFrame >( deser, "interpolator", "key" );
-
     if( type == "float" )
     {
         auto param = ParametersFactory::CreateParameterFloat( name, te );
-        
-        for( auto value : values )
-        {
-            float val = std::stof( value->value );
-            float t = std::stof( value->time );
-            param->SetVal( val , t );
-        }
+
+        auto interpolator = SerializationHelper::DeserializeObjectLoadImpl< FloatInterpolator >( deser, "interpolator" );
+
+        param->AccessInterpolator() = *interpolator;
 
         return param;
     } 
@@ -105,12 +100,9 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     {
         auto param = ParametersFactory::CreateParameterVec2( name, te );
         
-        for( auto value : values )
-        {
-            auto val = SerializationHelper::String2Vec2( value->value );
-            float t = std::stof( value->time );
-            param->SetVal( val , t );
-        }
+        auto interpolator = SerializationHelper::DeserializeObjectLoadImpl< Vec2Interpolator >( deser, "interpolator" );
+
+        param->AccessInterpolator() = *interpolator;
 
         return param;
     } 
@@ -118,12 +110,9 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     {
         auto param = ParametersFactory::CreateParameterVec3( name, te );
         
-        for( auto value : values )
-        {
-            auto val = SerializationHelper::String2Vec3( value->value );
-            float t = std::stof( value->time );
-            param->SetVal( val , t );
-        }
+        auto interpolator = SerializationHelper::DeserializeObjectLoadImpl< Vec3Interpolator >( deser, "interpolator" );
+
+        param->AccessInterpolator() = *interpolator;
 
         return param;
     } 
@@ -131,12 +120,9 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     {
         auto param = ParametersFactory::CreateParameterVec4( name, te );
         
-        for( auto value : values )
-        {
-            auto val = SerializationHelper::String2Vec4( value->value );
-            float t = std::stof( value->time );
-            param->SetVal( val , t );
-        }
+        auto interpolator = SerializationHelper::DeserializeObjectLoadImpl< Vec4Interpolator >( deser, "interpolator" );
+
+        param->AccessInterpolator() = *interpolator;
 
         return param;
     } 
@@ -168,46 +154,40 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     else if( type == "7" || type == "int" )
     {
         auto param = ParametersFactory::CreateTypedSimpleParameter< ParamInt >( name, te );
-        for( auto value : values )
-        {
-            auto val = std::stoi( value->value );
-            auto time = std::stof( value->time );
-            param->SetVal( val, time );
-        }
+        
+        auto interpolator = SerializationHelper::DeserializeObjectLoadImpl< IntInterpolator >( deser, "interpolator" );
+
+        param->AccessInterpolator() = *interpolator;
+
         return param;
     } 
     else if( type == "bool" )
     {
         auto param = ParametersFactory::CreateTypedSimpleParameter< ParamBool >( name, te );
-        for( auto value : values )
-        {
-            bool val = std::stoi( value->value ) == 1;
-            auto time = std::stof( value->time );
-            param->SetVal( val, time );
-        }
+
+        auto interpolator = SerializationHelper::DeserializeObjectLoadImpl< BoolInterpolator >( deser, "interpolator" );
+
+        param->AccessInterpolator() = *interpolator;
+
         return param;
     } 
     else if( type == "9" || type == "enum" )
     {
         auto param = ParametersFactory::CreateParameterEnum< int >( name, te );
-        for( auto value : values )
-        {
-            auto val = std::stoi( value->value );
-            auto time = std::stof( value->time );
-            param->SetVal( val, time );
-        }
+
+        auto interpolator = SerializationHelper::DeserializeObjectLoadImpl< IntInterpolator >( deser, "interpolator" );
+
+        param->AccessInterpolator() = *interpolator;
+
         return param;
     }
     else if( type == "wstring" ) 
     {
         auto param = ParametersFactory::CreateParameterWString( name, te );
 
-        for( auto value : values )
-        {
-            auto val = value->value;
-            float t = std::stof( value->time );
-            param->SetVal( std::wstring( val.begin(), val.end() ) , t );
-        }
+        auto interpolator = SerializationHelper::DeserializeObjectLoadImpl< WStringInterpolator >( deser, "interpolator" );
+
+        param->AccessInterpolator() = *interpolator;
 
         return param;
 
@@ -216,12 +196,9 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     {
         auto param = ParametersFactory::CreateParameterString( name, te );
 
-        for( auto value : values )
-        {
-            auto val = value->value;
-            float t = std::stof( value->time );
-            param->SetVal( val, t );
-        }
+        auto interpolator = SerializationHelper::DeserializeObjectLoadImpl< StringInterpolator >( deser, "interpolator" );
+
+        param->AccessInterpolator() = *interpolator;
 
         return param;
     }

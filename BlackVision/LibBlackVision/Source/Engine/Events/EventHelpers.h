@@ -3,6 +3,7 @@
 #include "Engine/Models/Plugins/PluginUtils.h"
 #include "Engine/Types/Enums.h"
 
+#include <cstdlib>
 #include <string>
 
 namespace 
@@ -159,6 +160,41 @@ namespace SerializationHelper
     {
         assert( !"Implement spetialization" );
         return EMPTY_WSTRING;
+    }
+
+    // ***********************
+    //
+    template<>
+    inline int WString2T( const std::wstring& s )
+    {
+        auto str = toString( s );
+        return strtol( str.c_str(), nullptr, 10 );
+    }
+
+    // ***********************
+    //
+    template<>
+    inline unsigned int WString2T( const std::wstring& s )
+    {
+        auto str = toString( s );
+        return strtoul( str.c_str(), nullptr, 10 );
+    }
+
+    // ***********************
+    //
+    template<>
+    inline double WString2T( const std::wstring& s )
+    {
+        auto str = toString( s );
+        return strtod( str.c_str(), nullptr );
+    }
+
+    // ***********************
+    //
+    template<>
+    inline float WString2T( const std::wstring& s )
+    {
+        return static_cast<float>( WString2T<double>( s ) );
     }
 
 } // SerializationHelper
