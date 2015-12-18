@@ -25,10 +25,13 @@ public:
 
 private:
 
+    RenderTarget *          RenderToRenderTarget                ( RenderLogicContext * ctx, SceneNode * node );
+
+    void                    Finalize                            ( RenderLogicContext * ctx );
+
     BlitFullscreenEffect *  AccessBlitAlphaEffect               ( RenderTarget * rt, float alpha );
 
-    void                    BlitWithAlpha                       ( Renderer * renderer, RenderTarget * mainTarget, RenderTarget * alphaTarget, float alpha );
-
+    void                    BlitWithAlpha                       ( RenderLogicContext * ctx, RenderTarget * alphaTarget, float alpha );
 };
 
 } // bv

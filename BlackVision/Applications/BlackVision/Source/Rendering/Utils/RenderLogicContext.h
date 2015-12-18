@@ -26,4 +26,25 @@ public:
 
 };
 
+// *******************************
+//
+inline Renderer *                   renderer( RenderLogicContext * ctx )
+{
+    return ctx->GetRenderer();
+}
+
+// *******************************
+//
+inline RenderTargetStackAllocator * allocator( RenderLogicContext * ctx )
+{
+    return ctx->GetRenderTargetAllocator();
+}
+
+// *******************************
+//
+inline RenderLogic *                logic   ( RenderLogicContext * ctx )
+{
+    return ctx->GetRenderLogic();
+}
+
 } // bv
