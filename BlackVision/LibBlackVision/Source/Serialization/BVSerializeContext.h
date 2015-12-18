@@ -8,7 +8,7 @@ namespace bv {
 class BVSerializeContext : public SerializeContext
 {
 public:
-    ~BVSerializeContext()
+    BVSerializeContext()
     {
         recursive = true;
         detailedInfo = true;
