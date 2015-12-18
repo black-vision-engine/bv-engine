@@ -780,12 +780,7 @@ IEventPtr           ParamKeyEvent::Create          ( IDeserializer& deser )
         newEvent->ParamName         = toString( deser.GetAttribute( SerializationHelper::PARAM_NAME_WSTRING ) );
         newEvent->Value             = deser.GetAttribute( SerializationHelper::PARAM_VALUE_WSTRING );
         newEvent->KeyCommand        = SerializationHelper::WString2T<ParamKeyEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
-
-        std::wstring valueStr       = deser.GetAttribute( SerializationHelper::KEY_TIME_WSTRING );
-        if( valueStr != SerializationHelper::EMPTY_WSTRING )
-            newEvent->Time = std::stof( valueStr );
-        else
-            newEvent->Time = 0.0f;     // Set sensible default
+        newEvent->Time              = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::KEY_TIME_WSTRING ) );
 
         return newEvent;
     }
@@ -840,7 +835,7 @@ IEventPtr                SceneEvent::Create          ( IDeserializer& deser )
         newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
         newEvent->NewSceneName      = toString( deser.GetAttribute( SerializationHelper::NEW_SCENE_NAME_WSTRING ) );
         newEvent->SceneCommand      = SerializationHelper::WString2T< SceneEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
-        newEvent->AttachIndex       = std::stoul( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING ) );
+        newEvent->AttachIndex       = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING ) );
         
         return newEvent;
     }
@@ -898,7 +893,7 @@ IEventPtr                NodeStructureEvent::Create          ( IDeserializer& de
         newEvent->TimelinePath      = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
         newEvent->SceneCommand      = SerializationHelper::WString2T<NodeStructureEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
         newEvent->Request           = toString( deser.GetAttribute( SerializationHelper::REQUEST_WSTRING ) );
-        newEvent->AttachIndex       = std::stoul( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING ) );
+        newEvent->AttachIndex       = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING ) );
         
         return newEvent;
     }
@@ -955,7 +950,7 @@ IEventPtr                PluginStructureEvent::Create          ( IDeserializer& 
         newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
         newEvent->PluginName        = toString( deser.GetAttribute( SerializationHelper::PLUGIN_NAME_WSTRING ) );
         newEvent->PluginCommand     = SerializationHelper::WString2T<PluginStructureEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
-        newEvent->AttachIndex       = std::stoul( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING ) );
+        newEvent->AttachIndex       = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING ) );
         newEvent->PluginUID         = toString( deser.GetAttribute( SerializationHelper::PLUGIN_UID_WSTRING ) );
         newEvent->TimelinePath      = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
         newEvent->Request			= toString( deser.GetAttribute( SerializationHelper::REQUEST_WSTRING ) );
@@ -1153,10 +1148,10 @@ IEventPtr                TimeLineEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         TimeLineEventPtr newEvent   = std::make_shared<TimeLineEvent>();
-        newEvent->Time              = stof( deser.GetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING ) );
+        newEvent->Time              = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING ) );
         newEvent->TimelineCommand   = SerializationHelper::WString2T<TimeLineEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
         newEvent->TimelineName      = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
-        newEvent->Duration          = stof( deser.GetAttribute( SerializationHelper::TIMELINE_DURATION_VALUE_WSTRING ) );
+        newEvent->Duration          = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMELINE_DURATION_VALUE_WSTRING ) );
         newEvent->WrapMethod        = SerializationHelper::WString2T<TimelineWrapMethod>( deser.GetAttribute( SerializationHelper::TIMELINE_WRAP_METHOD_WSTRING ) );
         newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
         newEvent->NewTimelineName   = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NEW_NAME_WSTRING ) );
@@ -1214,10 +1209,10 @@ IEventPtr                TimerEvent::Create          ( IDeserializer& deser )
         newEvent->TimerCommand      = SerializationHelper::WString2T<TimerEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
         newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
         newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
-        newEvent->Hours             = stof( deser.GetAttribute( SerializationHelper::TIMER_HOURS_WSTRING ) );
-        newEvent->Minutes           = stof( deser.GetAttribute( SerializationHelper::TIMER_MINUTES_WSTRING ) );
-        newEvent->Seconds           = stof( deser.GetAttribute( SerializationHelper::TIMER_SECONDS_WSTRING ) );
-        newEvent->Milliseconds      = stof( deser.GetAttribute( SerializationHelper::TIMER_MILLISECONDS_WSTRING ) );
+        newEvent->Hours             = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_HOURS_WSTRING ) );
+        newEvent->Minutes           = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MINUTES_WSTRING ) );
+        newEvent->Seconds           = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_SECONDS_WSTRING ) );
+        newEvent->Milliseconds      = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MILLISECONDS_WSTRING ) );
 
         return newEvent;
     }
@@ -1267,7 +1262,7 @@ IEventPtr                WidgetEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         WidgetEventPtr newEvent     = std::make_shared<WidgetEvent>();
-        newEvent->Time              = stof( deser.GetAttribute( SerializationHelper::WIDGET_TIME_VALUE_WSTRING ) );
+        newEvent->Time              = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::WIDGET_TIME_VALUE_WSTRING ) );
         newEvent->WidgetCommand     = SerializationHelper::WString2T<WidgetEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
         newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
         newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
@@ -1322,18 +1317,8 @@ IEventPtr                VideoCardEvent::Create          ( IDeserializer& deser 
         VideoCardEventPtr newEvent      = std::make_shared<VideoCardEvent>();
         newEvent->VideoCommand          = SerializationHelper::WString2T<VideoCardEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
         newEvent->Mode                  = SerializationHelper::WString2T<VideoCardEvent::VideoReferenceMode>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_REFERENCE_MODE_WSTRING ) );
-        
-        std::wstring valueStr           = deser.GetAttribute( SerializationHelper::VIDEO_CARD_VALUE_WSTRING );
-        if( valueStr != SerializationHelper::EMPTY_WSTRING )
-            newEvent->Value = std::stof( valueStr );
-        else
-            newEvent->Value = 0.0f;     // Set sensible default
-
-        valueStr                        = deser.GetAttribute( SerializationHelper::VIDEO_CARD_NUMBER_WSTRING );
-        if( valueStr != SerializationHelper::EMPTY_WSTRING )
-            newEvent->Number = std::stoi( valueStr );
-        else
-            newEvent->Number = 0;        // Set sensible default
+        newEvent->Value                 = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_VALUE_WSTRING ) );
+        newEvent->Number                = SerializationHelper::WString2T<int>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_NUMBER_WSTRING ) );
 
         return newEvent;
     }
@@ -1383,8 +1368,8 @@ IEventPtr                RenderingModeEvent::Create          ( IDeserializer& de
     {
         RenderingModeEventPtr newEvent  = std::make_shared<RenderingModeEvent>();
         newEvent->FilePath              = toString( deser.GetAttribute( SerializationHelper::RENDERING_FILE_PATH ) );
-        newEvent->FPS                   = std::stof( toString( deser.GetAttribute( SerializationHelper::REQUESTED_FPS_WSTRING ) ) );
-        newEvent->NumFrames             = std::stoi( toString( deser.GetAttribute( SerializationHelper::NUM_FRAMES_WSTRING ) ) );
+        newEvent->FPS                   = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::REQUESTED_FPS_WSTRING ) );
+        newEvent->NumFrames             = SerializationHelper::WString2T<int>( deser.GetAttribute( SerializationHelper::NUM_FRAMES_WSTRING ) );
         newEvent->RenderingCommand      = SerializationHelper::WString2T<RenderingModeEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
 
         return newEvent;
@@ -1436,10 +1421,10 @@ IEventPtr                HightmapEvent::Create          ( IDeserializer& deser )
     {
         HightmapEventPtr newEvent   = std::make_shared<HightmapEvent>();
         newEvent->HightmapCommand   = SerializationHelper::WString2T<HightmapEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
-        newEvent->Hours             = stof( deser.GetAttribute( SerializationHelper::TIMER_HOURS_WSTRING ) );
-        newEvent->Minutes           = stof( deser.GetAttribute( SerializationHelper::TIMER_MINUTES_WSTRING ) );
-        newEvent->Seconds           = stof( deser.GetAttribute( SerializationHelper::TIMER_SECONDS_WSTRING ) );
-        newEvent->Milliseconds      = stof( deser.GetAttribute( SerializationHelper::TIMER_MILLISECONDS_WSTRING ) );
+        newEvent->Hours             = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_HOURS_WSTRING ) );
+        newEvent->Minutes           = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MINUTES_WSTRING ) );
+        newEvent->Seconds           = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_SECONDS_WSTRING ) );
+        newEvent->Milliseconds      = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MILLISECONDS_WSTRING ) );
 
         return newEvent;
     }
