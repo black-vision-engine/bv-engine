@@ -48,6 +48,7 @@ private:
 	void					CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 	void					RemoveScene			( const Path & projectName, const Path & path );
 	void					MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
+    model::SceneModelPtr    LoadScene           ( const Path & projectName, const Path & path ) const;
 
 	// categories
 	void					RegisterCategory	( const AssetCategoryConstPtr & category);

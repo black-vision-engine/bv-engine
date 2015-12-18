@@ -187,6 +187,10 @@ template<> const std::wstring& T2WString    ( PluginStructureEvent::Command t ) 
 std::pair< ProjectEvent::Command, const std::wstring > ProjectEventCommandMapping[] = 
 {
     std::make_pair( ProjectEvent::Command::SaveScene, L"SaveScene" )
+    , std::make_pair( ProjectEvent::Command::LoadScene, L"LoadScene" )
+    , std::make_pair( ProjectEvent::Command::RemoveScene, L"RemoveScene" )
+    , std::make_pair( ProjectEvent::Command::CopyScene, L"CopyScene" )
+    , std::make_pair( ProjectEvent::Command::MoveScene, L"MoveScene" )
     , std::make_pair( ProjectEvent::Command::LoadProject, L"LoadProject" ) 
     , std::make_pair( ProjectEvent::Command::NewProject, L"NewProject" ) 
     , std::make_pair( ProjectEvent::Command::SetCurrentProject, L"SetCurrentProject" )
@@ -194,7 +198,6 @@ std::pair< ProjectEvent::Command, const std::wstring > ProjectEventCommandMappin
     , std::make_pair( ProjectEvent::Command::MoveAsset, L"MoveAsset" ) 
     , std::make_pair( ProjectEvent::Command::RemoveAsset, L"RemoveAsset" ) 
     , std::make_pair( ProjectEvent::Command::ImportAsset, L"ImportAsset" ) 
-    , std::make_pair( ProjectEvent::Command::SaveScene, L"SaveScene" ) 
     , std::make_pair( ProjectEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 

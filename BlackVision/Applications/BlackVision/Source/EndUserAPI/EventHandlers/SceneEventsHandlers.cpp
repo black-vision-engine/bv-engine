@@ -284,50 +284,93 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     {
 
     }
-     else if( command == ProjectEvent::Command::SaveScene )
-     {
-         auto sceneName = GetRequestParamValue( request )[ "sceneName" ].asString();
+    else if( command == ProjectEvent::Command::SaveScene )
+    {
+        auto sceneName = GetRequestParamValue( request )[ "sceneName" ].asString();
 
-         auto saveTo = GetRequestParamValue( request )[ "saveTo" ].asString();
+        auto saveTo = GetRequestParamValue( request )[ "saveTo" ].asString();
 
-         auto forceSaveStr = GetRequestParamValue( request )[ "forceSave" ].asString();
+        auto forceSaveStr = GetRequestParamValue( request )[ "forceSave" ].asString();
 
-         bool forceSave = false;
+        bool forceSave = false;
 
-         if( forceSaveStr == "true" )
-         {
-             forceSave = true;
-         }
+        if( forceSaveStr == "true" )
+        {
+            forceSave = true;
+        }
 
-         auto scene = m_appLogic->GetBVProject()->GetScene( sceneName );
+        auto scene = m_appLogic->GetBVProject()->GetScene( sceneName );
 
-         if( scene )
-         {
-             if( forceSave )
-             {
-                 if( saveTo.empty() )
-                 {
-                     pm->AddScene( scene, "", scene->GetName() );
-                 }
-                 else
-                 {
-                     pm->AddScene( scene, "", saveTo );
-                 }
+        if( scene )
+        {
+            if( forceSave )
+            {
+                if( saveTo.empty() )
+                {
+                    pm->AddScene( scene, "", scene->GetName() );
+                }
+                else
+                {
+                    pm->AddScene( scene, "", saveTo );
+                }
 
-                 SendOnSceneStructureResponse( senderID, "SaveScene", "status", "OK" );
-             }
-             else
-             {
-                 SendOnSceneStructureResponse( senderID, "SaveScene", "status", "ERROR" );
-                 assert( false );
-                 // TODO: Implement
-             }
-         }
-         else
-         {
-             SendOnSceneStructureResponse( senderID, "SaveScene", "status", "ERROR" );
-         }
-     }
+                SendOnSceneStructureResponse( senderID, "SaveScene", "status", "OK" );
+            }
+            else
+            {
+                SendOnSceneStructureResponse( senderID, "SaveScene", "status", "ERROR" );
+                assert( false );
+                // TODO: Implement
+            }
+        }
+        else
+        {
+            SendOnSceneStructureResponse( senderID, "SaveScene", "status", "ERROR" );
+        }
+    }
+    else if( command == ProjectEvent::Command::LoadScene )
+    {
+        auto sceneName = GetRequestParamValue( request )[ "sceneName" ].asString();
+
+        auto scene = pm->LoadScene( "", sceneName );
+
+        if( scene )
+        {
+            m_appLogic->GetBVProject()->GetProjectEditor()->AddScene( scene );
+            SendOnSceneStructureResponse( senderID, "LoadScene", "status", "OK" );
+        }
+        else
+        {
+            SendOnSceneStructureResponse( senderID, "LoadScene", "status", "ERROR" );
+        }
+    }
+    else if( command == ProjectEvent::Command::RemoveScene )
+    {
+        auto sceneName = GetRequestParamValue( request )[ "sceneName" ].asString();
+
+        pm->RemoveScene( "", sceneName );
+
+        SendOnSceneStructureResponse( senderID, "CopyScene", "status", "OK" );
+    }
+    else if( command == ProjectEvent::Command::CopyScene )
+    {
+        auto sceneName = GetRequestParamValue( request )[ "sceneName" ].asString();
+        auto destSceneName = GetRequestParamValue( request )[ "destToSceneName" ].asString();
+
+        pm->CopyScene( "", sceneName, "", destSceneName );
+
+        SendOnSceneStructureResponse( senderID, "CopyScene", "status", "OK" );
+    }
+    else if( command == ProjectEvent::Command::MoveScene )
+    {
+        auto sceneName = GetRequestParamValue( request )[ "sceneName" ].asString();
+        auto destSceneName = GetRequestParamValue( request )[ "destSceneName" ].asString();
+
+        pm->MoveScene( "", sceneName, "", destSceneName );
+
+        SendOnSceneStructureResponse( senderID, "MoveScene", "status", "OK" );
+    }
+
 }
 
 // ***********************
