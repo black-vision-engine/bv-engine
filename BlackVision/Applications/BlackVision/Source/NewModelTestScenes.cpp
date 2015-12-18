@@ -1266,14 +1266,35 @@ model::BasicNodePtr TestScenesFactory::WSerializationTest          ( const model
     serializeObject.EnterChild( MAKE_STR("asset") );
         serializeObject.SetAttribute( MAKE_STR("path"), MAKE_STR("sand.jpg") );
         serializeObject.SetAttribute( MAKE_STR("type"), MAKE_STR("texture") );
-        serializeObject.EnterArray( MAKE_STR("mipmap") );
-            serializeObject.SetAttribute( MAKE_STR("path"), MAKE_STR("fire.jpg") );
-            serializeObject.SetAttribute( MAKE_STR("type"), MAKE_STR("texture") );
+        serializeObject.EnterArray( MAKE_STR("mipmaps") );
+            serializeObject.EnterChild( MAKE_STR("mipmap") );
+                serializeObject.SetAttribute( MAKE_STR("path"), MAKE_STR("fire.jpg") );
+                serializeObject.SetAttribute( MAKE_STR("type"), MAKE_STR("texture") );
+            serializeObject.ExitChild();
+            serializeObject.EnterChild( MAKE_STR("mipmap") );
+                serializeObject.SetAttribute( MAKE_STR("path"), MAKE_STR("water.jpg") );
+                serializeObject.SetAttribute( MAKE_STR("type"), MAKE_STR("texture") );
+            serializeObject.ExitChild();
+            serializeObject.EnterChild( MAKE_STR("mipmap") );
+                serializeObject.SetAttribute( MAKE_STR("path"), MAKE_STR("fire.jpg") );
+                serializeObject.SetAttribute( MAKE_STR("type"), MAKE_STR("texture") );
+            serializeObject.ExitChild();
+            serializeObject.EnterChild( MAKE_STR("mipmap") );
+                serializeObject.SetAttribute( MAKE_STR("path"), MAKE_STR("poison.jpg") );
+                serializeObject.SetAttribute( MAKE_STR("type"), MAKE_STR("texture") );
+            serializeObject.ExitChild();
         serializeObject.ExitChild();
-        serializeObject.EnterArray( MAKE_STR("mipmap") );
-            serializeObject.SetAttribute( MAKE_STR("path"), MAKE_STR("water.jpg") );
-            serializeObject.SetAttribute( MAKE_STR("type"), MAKE_STR("texture") );
+
+        serializeObject.EnterChild( MAKE_STR("RendererContext") );
+            serializeObject.SetAttribute( MAKE_STR("BackFaceCulling"), MAKE_STR("true") );
         serializeObject.ExitChild();
+
+        // Shouldn't be added. RendererContext exists already. This causes assert.
+        serializeObject.EnterChild( MAKE_STR("RendererContext") );
+            serializeObject.SetAttribute( MAKE_STR("BackFaceCulling"), MAKE_STR("false") );
+        serializeObject.ExitChild();
+
+
         // This should assert or report error
         //serializeObject.EnterChild( MAKE_STR("mipmap") );
         //    serializeObject.SetAttribute( MAKE_STR("path"), MAKE_STR("poison.jpg") );

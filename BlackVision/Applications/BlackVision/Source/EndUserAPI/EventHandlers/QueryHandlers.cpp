@@ -64,6 +64,8 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             responseMessage = toWString( GetMinimalSceneInfo( request ) );
         else if( command == InfoEvent::Command::Videocards )
             responseMessage = toWString( VideoCardsInfo( request ) );
+        else if( command == InfoEvent::Command::CheckTimelineTime )
+            responseMessage = toWString( CheckTimelineTime( request ) );
         
         ResponseEventPtr msg = std::make_shared<ResponseEvent>();
         msg->Response = responseMessage;
@@ -127,12 +129,10 @@ std::string QueryHandlers::GetNodeInfo         ( const std::string& request )
     std::string sceneName = deser.GetAttribute( "SceneName" );
     std::string nodePath = deser.GetAttribute( "NodePath" );
     
-    ser.SetAttribute( "cmd", toString( SerializationHelper::T2WString( InfoEvent::Command::NodeInfo ) ) );
-
     auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
     if( node == nullptr )
     {
-        ser.SetAttribute( "node", SerializationHelper::EMPTY_STRING );
+        PrepareResponseTemplate( ser, InfoEvent::Command::NodeInfo, false );
         return ser.GetString();
     }
 
@@ -140,6 +140,7 @@ std::string QueryHandlers::GetNodeInfo         ( const std::string& request )
     auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
     context->recursive = false;
 
+    PrepareResponseTemplate( ser, InfoEvent::Command::NodeInfo, true );
     std::static_pointer_cast< model::BasicNode >( node )->Serialize( ser );
 
     return ser.GetString();
@@ -177,6 +178,8 @@ std::string QueryHandlers::GetMinimalSceneInfo  ( const std::string& request )
 //
 std::string QueryHandlers::GetTimeLinesInfo    ( const std::string& /*request*/ )
 {
+    // Fixme: There's no need to use JsonCpp and JsonSerializeObject at the same time.
+    // Rewrite this part of code to use only JsonSerializeObject.
     Json::Value ret;
     ret[ "command" ] = "timelines";
     ret[ "scenes" ] = Json::arrayValue;
@@ -226,6 +229,8 @@ std::string QueryHandlers::PerformanceInfo  ( const std::string& /*request*/ )
 //
 std::string QueryHandlers::TreeStructureInfo   ( const std::string& /*request*/ )
 {
+    // Fixme: There's no need to use JsonCpp and JsonSerializeObject at the same time.
+    // Rewrite this part of code to use only JsonSerializeObject.
     ReqPrint( m_appLogic->GetBVProject()->GetModelSceneRoot(), 1 );
 
     Json::Value root;
@@ -316,6 +321,39 @@ std::wstring QueryHandlers::ListProjects        ( const std::string& /*request*/
     }
 
     return MakeSceneStructureResponse( "ListProjects", "list", list );
+}
+
+// ***********************
+//
+std::string QueryHandlers::CheckTimelineTime   ( const std::string& request )
+{
+    JsonDeserializeObject deser;
+    JsonSerializeObject ser;
+    deser.Load( request );
+
+    std::string sceneName = deser.GetAttribute( "SceneName" );
+    std::string timelineName = deser.GetAttribute( "TimelineName" );
+
+    auto scene = m_appLogic->GetBVProject()->GetScene( sceneName );
+    if( scene == nullptr )
+    {
+        PrepareResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, false );
+        return ser.GetString();
+    }
+
+    auto sceneTimeline = scene->GetTimeline();
+    auto checkedTimeline = sceneTimeline->GetChild( timelineName );
+    if( checkedTimeline == nullptr )
+    {
+        PrepareResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, false );
+        return ser.GetString();
+    }
+
+    PrepareResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, true );
+    TimeType time = checkedTimeline->GetLocalTime();
+    ser.SetAttribute( "Time", toString( time ) );
+
+    return ser.GetString();
 }
 
 } //bv

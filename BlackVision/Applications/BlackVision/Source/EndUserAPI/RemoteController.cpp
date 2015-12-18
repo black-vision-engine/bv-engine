@@ -26,6 +26,7 @@ RemoteController::RemoteController()
     RegisterEvent( VideoCardEvent::Name(), VideoCardEvent::Create );
     RegisterEvent( WidgetEvent::Name(), WidgetEvent::Create );
     RegisterEvent( HightmapEvent::Name(), HightmapEvent::Create );
+    RegisterEvent( AssetEvent::Name(), AssetEvent::Create );
 }
 
 

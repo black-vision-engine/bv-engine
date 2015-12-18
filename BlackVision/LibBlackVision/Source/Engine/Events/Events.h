@@ -239,6 +239,41 @@ DEFINE_PTR_TYPE( ParamKeyEvent )
 
 
 // ************************************* SceneEvent Event *************************************
+class AssetEvent : public BaseEvent
+{
+
+public:
+
+    typedef enum
+    {
+        ClearUnusedCachedAssets,
+        Fail            ///< Wrong command
+    } Command;
+
+private:
+
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+
+public:
+
+    AssetEvent::Command         AssetCommand;
+
+public:
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+
+    virtual EventType               GetEventType        () const;
+    virtual const std::string &     GetName             () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+};
+DEFINE_PTR_TYPE( AssetEvent )
+
+// ************************************* SceneEvent Event *************************************
 class SceneEvent : public BaseEvent
 {
 public:
@@ -449,6 +484,7 @@ public:
         ListProjects,
         Performance,
         Timelines,
+        CheckTimelineTime,
         NodeInfo,
         MinimalSceneInfo,
         Videocards,

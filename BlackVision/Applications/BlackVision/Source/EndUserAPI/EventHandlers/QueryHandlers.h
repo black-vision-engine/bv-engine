@@ -31,6 +31,7 @@ private:
     std::string     GetTimeLinesInfo    ( const std::string& request );
     std::string     PerformanceInfo     ( const std::string& request );
     std::string     TreeStructureInfo   ( const std::string& request );
+    std::string     CheckTimelineTime   ( const std::string& request );
 };
 
 } //bv
