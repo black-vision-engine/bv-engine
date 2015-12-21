@@ -23,7 +23,7 @@ namespace bv {
 FrameRenderLogic::FrameRenderLogic     ()
 {
     m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffersPerRT() );
-    m_videoOutputRenderLogic = new VideoOutputRenderLogic();
+    m_videoOutputRenderLogic = new VideoOutputRenderLogic( DefaultConfig.DefaultHeight() );
     // DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() 
 /*
     m_customNodeRenderLogic.push_back( new DefaultEffectRenderLogic( this, m_offscreenRenderLogic ) );

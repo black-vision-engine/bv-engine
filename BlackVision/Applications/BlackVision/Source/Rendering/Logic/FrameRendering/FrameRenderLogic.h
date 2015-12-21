@@ -17,7 +17,7 @@ class FrameRenderLogic
 private:
 
     OffscreenRenderLogic *                  m_offscreenRenderLogic;
-    VideoOutputRenderLogic *         m_videoOutputRenderLogic;
+    VideoOutputRenderLogic *                m_videoOutputRenderLogic;
 
     std::vector< NodeEffectRenderLogic * >  m_customNodeRenderLogic;
 

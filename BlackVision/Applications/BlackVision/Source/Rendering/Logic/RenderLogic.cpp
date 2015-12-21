@@ -67,7 +67,7 @@ void    RenderLogic::RenderFrameImpl ( Renderer * renderer, SceneNode * sceneRoo
 //
 void    RenderLogic::FrameRendered   ( Renderer * renderer )
 {
-    if( m_displayVideoCardPreview )
+    if( !m_displayVideoCardPreview )
     {
         BlitToPreview( renderer, m_offscreenDisplay->GetActiveRenderTarget() );
     }
