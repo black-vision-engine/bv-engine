@@ -10,6 +10,8 @@ public:
     VideoOutputRenderLogic          ();
     ~VideoOutputRenderLogic         ();
 
+    void    Render                  ();
+
 };
 
 } //bv

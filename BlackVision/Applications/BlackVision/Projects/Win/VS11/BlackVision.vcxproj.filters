@@ -135,9 +135,6 @@
     <ClCompile Include="..\..\..\Source\TestAI\TestAnimationKeyboardHandler.cpp">
       <Filter>TestAI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.cpp">
-      <Filter>Rendering\Logic\VideoOutputRendering</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\FrameRenderLogic.cpp">
       <Filter>Rendering\Logic\FrameRendering</Filter>
     </ClCompile>
@@ -228,6 +225,9 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\WireframeRenderLogic.cpp">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\VideoOutputRenderLogic.cpp">
+      <Filter>Rendering\Logic\VideoOutputRendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -312,9 +312,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\TestAI\TestAnimationKeyboardHandler.h">
       <Filter>TestAI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\DefaultVideoOutputRenderLogic.h">
-      <Filter>Rendering\Logic\VideoOutputRendering</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\FrameRenderLogic.h">
       <Filter>Rendering\Logic\FrameRendering</Filter>
@@ -405,6 +402,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\WireframeRenderLogic.h">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\VideoOutputRenderLogic.h">
+      <Filter>Rendering\Logic\VideoOutputRendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

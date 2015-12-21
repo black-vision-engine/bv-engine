@@ -13,7 +13,7 @@
 
 #include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
 
-#include "Rendering/Logic/VideoOutputRendering/DefaultVideoOutputRenderLogic.h"
+#include "Rendering/Logic/VideoOutputRendering/VideoOutputRenderLogic.h"
 
 
 namespace bv {
@@ -23,7 +23,8 @@ namespace bv {
 FrameRenderLogic::FrameRenderLogic     ()
 {
     m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffersPerRT() );
-    m_videoOutputRenderLogic = new DefaultVideoOutputRenderLogic( DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
+    m_videoOutputRenderLogic = new VideoOutputRenderLogic();
+    // DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() 
 /*
     m_customNodeRenderLogic.push_back( new DefaultEffectRenderLogic( this, m_offscreenRenderLogic ) );
     m_customNodeRenderLogic.push_back( new AlphaMaskRenderLogic( this, m_offscreenRenderLogic ) );
@@ -85,7 +86,7 @@ void    FrameRenderLogic::PostFrameSetup ( Renderer * renderer )
     m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
     m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
 
-    m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic );
+    // m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic );
 
     renderer->PostDraw();
     renderer->DisplayColorBuffer();
