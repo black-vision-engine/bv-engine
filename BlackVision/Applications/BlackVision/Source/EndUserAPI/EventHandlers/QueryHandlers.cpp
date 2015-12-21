@@ -208,7 +208,7 @@ std::string QueryHandlers::PerformanceInfo  ( const std::string& /*request*/, un
     PerformanceMonitor::Calculate( m_appLogic->GetStatsCalculator() );
     JsonSerializeObject ser;
 
-    PrepareResponseTemplate( ser, InfoEvent::Command::Timelines, requestID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::Performance, requestID, true );
 
     ser.SetAttribute( "fps", toString( PerformanceMonitor::Stats.fps ) );
     ser.SetAttribute( "fps_avg", toString( PerformanceMonitor::Stats.fps_avg ) );
@@ -233,22 +233,23 @@ std::string QueryHandlers::PerformanceInfo  ( const std::string& /*request*/, un
 
 // ***********************
 //
-std::string QueryHandlers::TreeStructureInfo   ( const std::string& /*request*/, unsigned int /*requestID*/ )
+std::string QueryHandlers::TreeStructureInfo   ( const std::string& /*request*/, unsigned int requestID )
 {
-    // Fixme: There's no need to use JsonCpp and JsonSerializeObject at the same time.
-    // Rewrite this part of code to use only JsonSerializeObject.
-    ReqPrint( m_appLogic->GetBVProject()->GetModelSceneRoot(), 1 );
+    JsonSerializeObject ser;
+    PrepareResponseTemplate( ser, InfoEvent::Command::TreeStructure, requestID, true );
 
-    Json::Value root;
-    root[ "command" ] = "scene_tree";
+    ser.EnterArray( "scenes" );
 
-    root[ "scenes" ] = Json::arrayValue;
+    for( auto sceneModel : m_appLogic->GetBVProject()->GetScenes() )
+    {
+        ser.EnterChild( "scene" );
+        sceneModel->Serialize( ser );
+        ser.ExitChild();
+    }
 
-    for( auto s : m_appLogic->GetBVProject()->GetScenes() )
-        root[ "scenes" ].append( SerializeSceneModel( s ) );
+    ser.ExitChild();
 
-
-    return root.toStyledString();
+    return ser.GetString();
 }
 
 // ***********************

@@ -113,41 +113,4 @@ void SendOnSceneStructureResponse( int socketID, const std::string & cmd, const 
 
 
 
-
-// ***********************
-//
-Json::Value SerializeSceneModel( model::SceneModelPtr sceneModel )
-{
-    JsonSerializeObject ser;
-    sceneModel->Serialize( ser );
-
-    return ser.GetJson();
-}
-
-// ***********************
-//
-void ReqPrint( model::BasicNodePtr node, int level )
-{
-    string temp="-";
-    for( int i = 1; i < level; i++ )
-    {
-        temp+="-";
-    }
-
-    //Log::A("OK",temp+node->GetName());
-    
-    int NumChildren = (node)->GetNumChildren();
-    for( int i = 0; i < NumChildren; i++ )
-    {
-
-		model::IModelNodePtr ptr   = node->GetChild(i);
-        model::IModelNodePtr ptr2 = ptr;
-        model::BasicNodePtr nod = std::static_pointer_cast< model::BasicNode >( ptr2 );
-        ReqPrint( nod, level + 1 );
-    }
-
-}
-
-
-
 } //bv

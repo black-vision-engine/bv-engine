@@ -23,9 +23,6 @@ Json::Value             GetRequestParamValue        ( const std::string& request
 Json::Value             Str2Json                    ( const std::string& data );
 Json::Value             ToJSONArray                 ( const StringVector& v );
 
-void                    ReqPrint                    ( model::BasicNodePtr node, int level );
-Json::Value             SerializeSceneModel         ( model::SceneModelPtr sceneModel );
-
 
 } //bv
 
