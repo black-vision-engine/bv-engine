@@ -57,17 +57,48 @@ void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot
 {
     renderer->PreDraw();
 
-    //FIXME: use frameRenderLogic to implement machinery required to properly render 
-    //m_frameRenderLogic->RenderFrame( renderer, sceneRoot );
-    auto rt = m_offscreenDisplay->GetActiveRenderTarget();
+    RenderFrameImpl( renderer, sceneRoot );
 
-    RenderRootNode( renderer, sceneRoot, rt );
-    BlitToPreview( renderer, rt );
-
-    UpdateOffscreenState();
+    FrameRendered( renderer );
 
     renderer->PostDraw();
     renderer->DisplayColorBuffer();
+}
+
+// *********************************
+//
+void    RenderLogic::RenderFrameImpl ( Renderer * renderer, SceneNode * sceneRoot )
+{
+    //FIXME: use frameRenderLogic to implement machinery required to properly render 
+    //m_frameRenderLogic->RenderFrame( renderer, sceneRoot );
+    auto rt = m_offscreenDisplay->GetActiveRenderTarget();
+    RenderRootNode( renderer, sceneRoot, rt );
+}
+
+// *********************************
+//
+void    RenderLogic::FrameRendered   ( Renderer * renderer )
+{
+    /*
+    if not DisplayAsVideoOutput:
+        BlitToWindow()
+    else:
+        GPURenderPreVideo()
+        BlitToWindow()
+
+        if PushToVideoCard:
+            Readback()
+            Push()
+
+
+    if not PushToVideoCard:
+        else:
+            BlitToWindow()
+*/
+
+    BlitToPreview( renderer, m_offscreenDisplay->GetActiveRenderTarget() );
+
+    UpdateOffscreenState();
 }
 
 // *********************************

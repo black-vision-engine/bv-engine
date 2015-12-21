@@ -35,6 +35,9 @@ public:
 
 private:
 
+    void    RenderFrameImpl ( Renderer * renderer, SceneNode * sceneRoot );
+    void    FrameRendered   ( Renderer * renderer );
+
     void    RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoot, RenderTarget * rt );
 
 public:
