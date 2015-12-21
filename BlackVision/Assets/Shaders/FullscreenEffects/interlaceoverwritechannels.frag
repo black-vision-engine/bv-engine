@@ -13,11 +13,15 @@ uniform int			channelMask;
 uniform int			overwriteAlpha;
 uniform float 		alpha;
 
+// *********************************
+//
 int 	Y			()
 {
 	return (int)( (1.0 - uvCoord.y) * height);
 }
 
+// *********************************
+//
 vec4 InterlaceEven	()
 {
 	int y = Y();
@@ -32,6 +36,8 @@ vec4 InterlaceEven	()
 	}
 }
 
+// *********************************
+//
 vec4 InterlaceOdd	()
 {
 	int y = Y();
@@ -46,27 +52,44 @@ vec4 InterlaceOdd	()
 	}
 }
 
-void main()
+// *********************************
+//
+vec4 	ReadInterlaced		()
 {
-	//Read interlaced data
-	vec4 intres;
+	vec4 res;
 
-	if( startEven )
+	if( startEven > 0 )
 	{
-		intres = InterlaceEven();
+		res = InterlaceEven();
 	}
 	else
 	{
-		intres = InterlaceOdd();
+		res = InterlaceOdd();
 	}
 
+	return res;
+}
+
+// *********************************
+//
+vec4 	ApplyMaskChannels 		( vec4 col )
+{
 	// Apply channel mask logic
 	int rIdx = ( channelMask >> 0 ) & 0x3;
 	int gIdx = ( channelMask >> 2 ) & 0x3;
 	int bIdx = ( channelMask >> 4 ) & 0x3;
 	int aIdx = ( channelMask >> 6 ) & 0x3;
 	
-	vec4 res( intres[ rIdx ], intres[ gIdx ], intres[ bIdx ], intres[ aIdx ] );
+	vec4 res( col[ rIdx ], col[ gIdx ], col[ bIdx ], col[ aIdx ] );
+
+	return res;
+}
+
+// *********************************
+//
+vec4 	ApplyOverwriteAlpha 	( vec4 col )
+{
+	vec4 res = col;
 
 	// Apply overwrite alpha logic
 	if( overwriteAlpha )
@@ -74,11 +97,12 @@ void main()
 		res.a = alpha;
 	}
 
-	FragColor = res;
+	return res;
 }
 
+// *********************************
+//
 void main()
-{	
-
-	FragColor = res;
+{
+	FragColor = ApplyOverwriteAlpha( ApplyMaskChannels( ReadInterlaced() ) );
 }

@@ -26,6 +26,9 @@ private:
     OffscreenDisplay *              m_offscreenDisplay;
     BlitFullscreenEffect *          m_blitEffect;
 
+    bool                            m_displayVideoCardPreview;
+    bool                            m_useVideoCardOutput;
+
 public:
 
             RenderLogic     ();

@@ -1,31 +1,16 @@
 #include "RenderLogic.h"
 
-#include "Rendering/Logic/RenderLogicImpl/RenderLogicRawPreview.h"
-#include "Rendering/Logic/RenderLogicImpl/RenderLogicVideoPreview.h"
-
-#include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
-#include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
-
 #include "Rendering/Utils/RenderLogicContext.h"
-
 #include "Rendering/Utils/OffscreenDisplay.h"
 
-#include "Rendering/Logic/FrameRendering/FrameRenderLogic.h"
-#include "Rendering/Logic/FrameRendering/PostFrameRenderLogic.h"
-
+#include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
 #include "Rendering/Logic/FullScreen/Impl/BlitFullscreenEffect.h"
 
 #include "Tools/Profiler/HerarchicalProfiler.h"
 
-#include "Rendering/Utils/OffscreenRenderLogic.h"
-#include "BVConfig.h"
-
-#include "BVGL.h"
-
-#include "Rendering/Logic/VideoOutputRendering/DefaultVideoOutputRenderLogic.h"
 #include "BVConfig.h"
 
 
@@ -41,6 +26,9 @@ RenderLogic::RenderLogic     ()
     auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput();
 
     m_offscreenDisplay = new OffscreenDisplay( &m_rtStackAllocator, videoCardEnabled || previewAsVideoCard );
+
+    m_displayVideoCardPreview = previewAsVideoCard;
+    m_useVideoCardOutput = videoCardEnabled;
 }
 
 // *********************************
@@ -79,6 +67,14 @@ void    RenderLogic::RenderFrameImpl ( Renderer * renderer, SceneNode * sceneRoo
 //
 void    RenderLogic::FrameRendered   ( Renderer * renderer )
 {
+    if( m_displayVideoCardPreview )
+    {
+        BlitToPreview( renderer, m_offscreenDisplay->GetActiveRenderTarget() );
+    }
+    else
+    {
+    }
+
     /*
     if not DisplayAsVideoOutput:
         BlitToWindow()
@@ -96,7 +92,6 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
             BlitToWindow()
 */
 
-    BlitToPreview( renderer, m_offscreenDisplay->GetActiveRenderTarget() );
 
     UpdateOffscreenState();
 }
