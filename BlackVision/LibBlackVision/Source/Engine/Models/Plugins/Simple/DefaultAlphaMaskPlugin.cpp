@@ -137,6 +137,7 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( AssetDescCon
 			
 			auto txData = m_psc->GetTexturesDataImpl();
 			txData->SetTexture( 0, txDesc );
+            SetAsset( 0, assetDescr, txDesc->GetSamplerState() );
 
 			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
@@ -144,8 +145,6 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( AssetDescCon
             m_textureHeight = txDesc->GetHeight();
 
 			RecalculateUVChannel();
-
-            AddAsset( assetDescr, txDesc->GetSamplerState() );
 
             return true;
         }

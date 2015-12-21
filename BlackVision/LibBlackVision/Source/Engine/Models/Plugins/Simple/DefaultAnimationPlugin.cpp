@@ -149,10 +149,9 @@ bool                            DefaultAnimationPlugin::LoadResource  ( AssetDes
 			
 			auto txData = m_psc->GetTexturesDataImpl();
 			txData->SetAnimation( 0, animDesc );
+            SetAsset( 0, animAssetDescr, animDesc->GetSamplerState() );
 
 			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
-            
-            AddAsset( animAssetDescr, animDesc->GetSamplerState() );
     
 			return true;
         }

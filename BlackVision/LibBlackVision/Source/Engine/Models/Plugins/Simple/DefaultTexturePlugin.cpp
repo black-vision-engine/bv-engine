@@ -145,13 +145,13 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
 			
 			auto txData = m_psc->GetTexturesDataImpl();
             txData->SetTexture( 0, txDesc );
+            SetAsset( 0, assetDescr, txDesc->GetSamplerState() );
 
 			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
 			m_textureWidth = txAssetDescr->GetOrigTextureDesc()->GetWidth();
             m_textureHeight = txAssetDescr->GetOrigTextureDesc()->GetHeight();
 
-            AddAsset( assetDescr, txDesc->GetSamplerState() );
 
             return true;
         }

@@ -9,6 +9,8 @@
 #include "Assets/AssetDescsWithUIDs.h"
 #include "Serialization/BVSerializeContext.h"
 
+#include "UseLoggerLibBlackVision.h"
+
 namespace bv { namespace model {
 
 // *******************************
@@ -69,9 +71,10 @@ std::vector< AssetDescConstPtr >    BasePlugin< IPlugin >::GetAssets            
 
 // *******************************
 //
-void                                BasePlugin< IPlugin >::AddAsset                    ( AssetDescConstPtr asset, ResourceStateModelPtr rsm )
+void                                BasePlugin< IPlugin >::SetAsset                    ( int i, AssetDescConstPtr asset, ResourceStateModelPtr rsm )
 {
-    m_assets.push_back( asset );
+    m_assets.resize( i+1 );
+    m_assets[ i ] = asset;
     m_key2rsm[ asset->GetKey() ] = rsm;
 }
 
@@ -160,7 +163,9 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
 
     auto timeline = deser.GetAttribute( "timeline" );
 	
-    auto sceneTimeline = dynamic_cast< BVDeserializeContext* >( deser.GetDeserializeContext() )->m_sceneTimeline;
+	ITimeEvaluatorPtr sceneTimeline = dynamic_cast< BVDeserializeContext* >( deser.GetDeserializeContext() )->m_sceneTimeline;
+	if( sceneTimeline == nullptr )
+		sceneTimeline = TimelineManager::GetInstance()->GetRootTimeline();
     ITimeEvaluatorPtr te = TimelineHelper::GetTimeEvaluator( timeline, sceneTimeline );
     if( te == nullptr ) 
     {
@@ -176,11 +181,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
     for( auto param : params )
     {
         if( plugin->GetParameter( param->GetName() ) == nullptr )
-        {
-            //std::cout << "[ERROR] Parameter " << param->GetName() << " is not a parameter of " << pluginType << std::endl; // FIXME: error handling :D
-            //assert( false );  // TODO: text plugin has parameters registered in runtime. This rule doesn't apply here.
-            continue;
-        }
+            LOG_MESSAGE( SeverityLevel::warning ) << "plugin " << pluginName << " does not have parameter " << param->GetName() << ", which is serialized.";
 
         SetParameter( plugin->GetPluginParamValModel(), param );
     }
