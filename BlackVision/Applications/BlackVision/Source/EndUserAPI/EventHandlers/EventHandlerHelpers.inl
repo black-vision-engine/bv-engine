@@ -37,7 +37,7 @@ Json::Value GetParamDescription( model::IParameterPtr p )
 
 const static std::string EVENT_ID_TYPE_STRING       = "EventID";
 const static std::string COMMAND_TYPE_STRING        = "cmd";
-const static std::string COMMAND_SUCCESS_STRING     = "CommandSuccess";
+const static std::string COMMAND_SUCCESS_STRING     = "Success";
 const static std::string TRUE_STRING                = "true";
 const static std::string FALSE_STRING               = "false";
 

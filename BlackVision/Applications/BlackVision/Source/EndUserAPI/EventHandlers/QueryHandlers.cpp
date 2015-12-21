@@ -179,27 +179,19 @@ std::string QueryHandlers::GetMinimalSceneInfo  ( const std::string& request, un
 //
 std::string QueryHandlers::GetTimeLinesInfo    ( const std::string& /*request*/, unsigned int requestID )
 {
-    // Fixme: There's no need to use JsonCpp and JsonSerializeObject at the same time.
-    // Rewrite this part of code to use only JsonSerializeObject.
     JsonSerializeObject ser;
     PrepareResponseTemplate( ser, InfoEvent::Command::Timelines, requestID, true );
-    
 
-    Json::Value ret;
-    ret[ "command" ] = "timelines";
-    ret[ "scenes" ] = Json::arrayValue;
-
+    ser.EnterArray( "scenes" );
     for( auto s : m_appLogic->GetBVProject()->GetScenes() )
     {
-        Json::Value val;
-		val[ "name" ] = s->GetName();
-        JsonSerializeObject ser;
-		s->GetTimeline()->Serialize(ser);
-        val[ "timelines" ] = ser.GetJson();
-        ret[ "scenes" ].append( val );
+        ser.EnterChild( "scene" );
+        ser.SetAttribute( "name", s->GetName() );
+        ser.EnterChild( "timelines" );
+        s->GetTimeline()->Serialize(ser);
     }
 
-    return ret.toStyledString();
+    return ser.GetString();
 }
 
 // ***********************
