@@ -186,40 +186,49 @@ std::string QueryHandlers::GetTimeLinesInfo    ( const std::string& /*request*/,
     for( auto s : m_appLogic->GetBVProject()->GetScenes() )
     {
         ser.EnterChild( "scene" );
+
         ser.SetAttribute( "name", s->GetName() );
         ser.EnterChild( "timelines" );
         s->GetTimeline()->Serialize(ser);
+
+        ser.ExitChild();
     }
+    ser.ExitChild();
 
     return ser.GetString();
 }
 
 // ***********************
 //
-std::string QueryHandlers::PerformanceInfo  ( const std::string& /*request*/, unsigned int /*requestID*/ )
+std::string QueryHandlers::PerformanceInfo  ( const std::string& /*request*/, unsigned int requestID )
 {       
     auto& frameStats = m_appLogic->FrameStats();
     auto& sections = frameStats.RegisteredSections();
 
     PerformanceMonitor::Calculate( m_appLogic->GetStatsCalculator() );
+    JsonSerializeObject ser;
 
-    Json::Value root;
-    root["command"] = "performance";
-    root["fps"] = PerformanceMonitor::Stats.fps;
-    root["fps_avg"] = PerformanceMonitor::Stats.fps_avg;
-    root["ram"] = PerformanceMonitor::Stats.ram;
-    root["vram"] = PerformanceMonitor::Stats.vram;
-    root["cpu"] = PerformanceMonitor::Stats.cpu;
+    PrepareResponseTemplate( ser, InfoEvent::Command::Timelines, requestID, true );
+
+    ser.SetAttribute( "fps", toString( PerformanceMonitor::Stats.fps ) );
+    ser.SetAttribute( "fps_avg", toString( PerformanceMonitor::Stats.fps_avg ) );
+    ser.SetAttribute( "ram", toString( PerformanceMonitor::Stats.ram ) );
+    ser.SetAttribute( "vram", toString( PerformanceMonitor::Stats.vram ) );
+    ser.SetAttribute( "cpu", toString( PerformanceMonitor::Stats.cpu ) );
 
     for( auto name : sections )
     {
-        root[ name ]["average"] = frameStats.ExpectedValue( name );
-        root[ name ]["minVal"] = frameStats.MinVal( name );
-        root[ name ]["maxVal"] = frameStats.MaxVal( name );
-        root[ name ]["variance"] = frameStats.Variance( name );
+        ser.EnterChild( name );
+
+        ser.SetAttribute( "average", toString( frameStats.ExpectedValue( name ) ) );
+        ser.SetAttribute( "minVal", toString( frameStats.MinVal( name ) ) );
+        ser.SetAttribute( "maxVal", toString( frameStats.MaxVal( name ) ) );
+        ser.SetAttribute( "variance", toString( frameStats.Variance( name ) ) );
+
+        ser.ExitChild();
     }
 
-    return root.toStyledString();
+    return ser.GetString();
 }
 
 // ***********************
