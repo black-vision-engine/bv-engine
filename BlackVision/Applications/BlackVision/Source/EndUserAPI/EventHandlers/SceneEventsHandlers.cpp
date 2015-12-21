@@ -40,9 +40,10 @@ void SceneEventsHandlers::SceneStructure    ( bv::IEventPtr evt )
 	std::string & sceneName		= sceneEvent->SceneName;
     std::string & newSceneName	= sceneEvent->NewSceneName;
     auto attachIndex			= sceneEvent->AttachIndex;
+    auto command                = sceneEvent->SceneCommand;
+    auto eventID                = sceneEvent->EventID;
 
-    auto command = sceneEvent->SceneCommand;
-
+    bool result = true;
 	auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
     if( command == SceneEvent::Command::AddScene )
@@ -51,7 +52,7 @@ void SceneEventsHandlers::SceneStructure    ( bv::IEventPtr evt )
 	}
     else if( command == SceneEvent::Command::RemoveScene )
 	{
-		editor->RemoveScene( sceneName );
+		result = editor->RemoveScene( sceneName );
 	}
     else if( command == SceneEvent::Command::SetSceneVisible )
 	{
@@ -63,15 +64,15 @@ void SceneEventsHandlers::SceneStructure    ( bv::IEventPtr evt )
 	}
     else if( command == SceneEvent::Command::RenameScene )
 	{
-		editor->RenameScene( sceneName, newSceneName );
+		result = editor->RenameScene( sceneName, newSceneName );
 	}
     else if( command == SceneEvent::Command::AttachScene )
 	{
-		editor->AttachScene( sceneName, attachIndex );
+		result = editor->AttachScene( sceneName, attachIndex );
 	}
     else if( command == SceneEvent::Command::DetachScene )
 	{
-		editor->DetachScene( sceneName );
+		result = editor->DetachScene( sceneName );
 	}
     else if( command == SceneEvent::Command::MoveScene )
 	{
@@ -79,8 +80,20 @@ void SceneEventsHandlers::SceneStructure    ( bv::IEventPtr evt )
 	}
     else if( command == SceneEvent::Command::CopyScene )
 	{
-		editor->AddSceneCopy( sceneName );
+		auto sceneCopy = editor->AddSceneCopy( sceneName );
+        if( sceneCopy == nullptr )
+            result = false;
 	}
+    else
+        result = false;
+
+    JsonSerializeObject ser;
+    PrepareResponseTemplate( ser, command, eventID, result );
+
+    ResponseEventPtr msg = std::make_shared<ResponseEvent>();
+    msg->Response = toWString( ser.GetString() );
+    msg->SocketID = sceneEvent->SocketID;
+    GetDefaultEventManager().QueueResponse( msg );
 }
 
 // ***********************

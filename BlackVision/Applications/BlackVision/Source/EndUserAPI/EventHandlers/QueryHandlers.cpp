@@ -133,7 +133,7 @@ std::string QueryHandlers::GetNodeInfo         ( const std::string& request, uns
     auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
     if( node == nullptr )
     {
-        PrepareResponseTemplate( ser, InfoEvent::Command::NodeInfo, requestID, false );
+        ErrorResponseTemplate( ser, InfoEvent::Command::NodeInfo, requestID, "Node not found." );
         return ser.GetString();
     }
 
@@ -149,7 +149,7 @@ std::string QueryHandlers::GetNodeInfo         ( const std::string& request, uns
 
 // ***********************
 //
-std::string QueryHandlers::GetMinimalSceneInfo  ( const std::string& request, unsigned int /*requestID*/ )
+std::string QueryHandlers::GetMinimalSceneInfo  ( const std::string& request, unsigned int requestID )
 {
     JsonDeserializeObject deser;
     JsonSerializeObject ser;
@@ -157,12 +157,10 @@ std::string QueryHandlers::GetMinimalSceneInfo  ( const std::string& request, un
 
     std::string sceneName = deser.GetAttribute( "SceneName" );
     
-    ser.SetAttribute( "cmd", toString( SerializationHelper::T2WString( InfoEvent::Command::MinimalSceneInfo ) ) );
-
     auto scene = m_appLogic->GetBVProject()->GetProjectEditor()->GetScene( sceneName );
     if( scene == nullptr )
     {
-        ser.SetAttribute( "scene", SerializationHelper::EMPTY_STRING );
+        ErrorResponseTemplate( ser, InfoEvent::Command::MinimalSceneInfo, requestID, "Scene not found." );
         return ser.GetString();
     }
 
@@ -171,6 +169,7 @@ std::string QueryHandlers::GetMinimalSceneInfo  ( const std::string& request, un
     context->detailedInfo = false;
 
     scene->Serialize( ser );
+    PrepareResponseTemplate( ser, InfoEvent::Command::MinimalSceneInfo, requestID, true );
 
     return ser.GetString();
 }
@@ -254,14 +253,24 @@ std::string QueryHandlers::TreeStructureInfo   ( const std::string& /*request*/,
 
 // ***********************
 //
-std::wstring QueryHandlers::ListProjectNames    ( const std::string& /*request*/, unsigned int /*requestID*/ )
+std::wstring QueryHandlers::ListProjectNames    ( const std::string& /*request*/, unsigned int requestID )
 {
-    auto pm = ProjectManager::GetInstance();
-    
-    auto pns = pm->ListProjectsNames();
-    auto pList = ToJSONArray( pns );
+    JsonSerializeObject ser;
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListProjectNames, requestID, true );
 
-    return MakeSceneStructureResponse( "ListProjectNames", "list", pList );
+    auto pm = ProjectManager::GetInstance();
+    auto pns = pm->ListProjectsNames();
+    
+    ser.EnterArray( "Projects" );
+    for( auto pn : pns )
+    {
+        ser.EnterChild( "name" );
+        ser.SetAttribute( "Name", pn.Str() );
+        ser.ExitChild();
+    }
+    ser.ExitChild();
+
+    return toWString( ser.GetString() );
 }
 
 // ***********************
@@ -344,7 +353,7 @@ std::string QueryHandlers::CheckTimelineTime   ( const std::string& request, uns
     auto scene = m_appLogic->GetBVProject()->GetScene( sceneName );
     if( scene == nullptr )
     {
-        PrepareResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, requestID, false );
+        ErrorResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, requestID, "Scene not found." );
         return ser.GetString();
     }
 
@@ -352,7 +361,7 @@ std::string QueryHandlers::CheckTimelineTime   ( const std::string& request, uns
     auto checkedTimeline = sceneTimeline->GetChild( timelineName );
     if( checkedTimeline == nullptr )
     {
-        PrepareResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, requestID, false );
+        ErrorResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, requestID, "Timeline not found." );
         return ser.GetString();
     }
 
