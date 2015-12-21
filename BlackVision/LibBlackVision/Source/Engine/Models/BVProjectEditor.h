@@ -63,7 +63,7 @@ public:
     bool                    DetachScene			( const std::string & sceneName );
     void                    DeleteDetachedScenes();
 
-	void					SetSceneVisible		( const std::string & sceneName, bool visible );
+	bool					SetSceneVisible		( const std::string & sceneName, bool visible );
 
     void                    SetSceneRootNode	( const std::string & sceneName, model::IModelNodePtr rootNode );
     bool                    DeleteSceneRootNode	( const std::string & sceneName );
@@ -75,7 +75,7 @@ public:
 	@return Returns copied scene. */
 	model::SceneModelPtr	AddSceneCopy		( const std::string & sceneNameToCopy );
 
-	void					MoveScene			( const std::string & sceneName, UInt32 posIdx );
+	bool					MoveScene			( const std::string & sceneName, UInt32 posIdx );
 
 
 /* NODES */
@@ -98,7 +98,7 @@ public:
 
 	void					SetNodeVisible		( const std::string & sceneName, const std::string & nodePath, bool visible );
 	
-	void					RenameNode			( const std::string & sceneName, const std::string & nodePath, const std::string & newNodeName );
+	bool					RenameNode			( const std::string & sceneName, const std::string & nodePath, const std::string & newNodeName );
 
 	/* objects */
     void                    AddChildNode        ( const std::string & sceneName, model::IModelNodePtr parentNode, model::IModelNodePtr childNode );
@@ -119,7 +119,7 @@ public:
 
 	void					SetNodeVisible		( model::IModelNodePtr node, bool visible );
 
-	void					RenameNode			( model::IModelNodePtr node, const std::string & newNodeName );
+	bool					RenameNode			( model::IModelNodePtr node, const std::string & newNodeName );
 
 
     void                    DeleteDetachedNodes ( const std::string & sceneName );

@@ -175,7 +175,7 @@ model::SceneModelPtr    BVProjectEditor::GetScene ( const std::string & sceneNam
 
 // *******************************
 //
-void    BVProjectEditor::SetSceneVisible		( const std::string & sceneName, bool visible )
+bool    BVProjectEditor::SetSceneVisible		( const std::string & sceneName, bool visible )
 {
 	auto scene = m_project->GetScene( sceneName );
 	if( scene )
@@ -185,8 +185,10 @@ void    BVProjectEditor::SetSceneVisible		( const std::string & sceneName, bool 
 		{
 			root->SetVisible( visible );
 			GetEngineNode( root )->SetVisible( visible );
+            return true;
 		}
 	}
+    return false;
 }
 
 // *******************************
@@ -218,10 +220,11 @@ model::SceneModelPtr	BVProjectEditor::AddSceneCopy		( const std::string & sceneN
 
 // *******************************
 //
-void	BVProjectEditor::MoveScene				( const std::string & sceneName, UInt32 posIdx )
+bool	BVProjectEditor::MoveScene				( const std::string & sceneName, UInt32 posIdx )
 {
-	DetachScene( sceneName );
-	AttachScene( sceneName, posIdx );
+	if( DetachScene( sceneName ) )
+	    return AttachScene( sceneName, posIdx );
+    return false;
 }
 
 // *******************************
@@ -469,10 +472,10 @@ void            BVProjectEditor::SetNodeVisible				( const std::string & sceneNa
 
 // *******************************
 //
-void            BVProjectEditor::RenameNode					( const std::string & sceneName, const std::string & nodePath, const std::string & newNodeName )
+bool            BVProjectEditor::RenameNode					( const std::string & sceneName, const std::string & nodePath, const std::string & newNodeName )
 {
 	auto node =  GetNode( sceneName, nodePath );
-	RenameNode( node, newNodeName );
+	return RenameNode( node, newNodeName );
 }
 
 // *******************************
@@ -823,9 +826,13 @@ void            BVProjectEditor::SetNodeVisible				( model::IModelNodePtr node, 
 
 // *******************************
 //
-void            BVProjectEditor::RenameNode					( model::IModelNodePtr node, const std::string & newNodeName )
+bool            BVProjectEditor::RenameNode					( model::IModelNodePtr node, const std::string & newNodeName )
 {
+    if( node = nullptr )
+        return false;
+
 	QueryTyped( node )->SetName( newNodeName );
+    return true;
 }
 
 // *******************************

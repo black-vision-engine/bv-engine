@@ -360,6 +360,9 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
+template<> NodeStructureEvent::Command      SerializationHelper::WString2T ( const std::wstring& s );
+template<> const std::wstring&              SerializationHelper::T2WString    ( NodeStructureEvent::Command t );
+
 DEFINE_PTR_TYPE( NodeStructureEvent )
 
 

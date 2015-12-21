@@ -56,11 +56,11 @@ void SceneEventsHandlers::SceneStructure    ( bv::IEventPtr evt )
 	}
     else if( command == SceneEvent::Command::SetSceneVisible )
 	{
-		editor->SetSceneVisible( sceneName, true );
+		result = editor->SetSceneVisible( sceneName, true );
 	}
     else if( command == SceneEvent::Command::SetSceneInvisible )
 	{
-		editor->SetSceneVisible( sceneName, false );
+		result = editor->SetSceneVisible( sceneName, false );
 	}
     else if( command == SceneEvent::Command::RenameScene )
 	{
@@ -76,7 +76,7 @@ void SceneEventsHandlers::SceneStructure    ( bv::IEventPtr evt )
 	}
     else if( command == SceneEvent::Command::MoveScene )
 	{
-		editor->MoveScene( sceneName, attachIndex );
+		result = editor->MoveScene( sceneName, attachIndex );
 	}
     else if( command == SceneEvent::Command::CopyScene )
 	{
@@ -87,13 +87,7 @@ void SceneEventsHandlers::SceneStructure    ( bv::IEventPtr evt )
     else
         result = false;
 
-    JsonSerializeObject ser;
-    PrepareResponseTemplate( ser, command, eventID, result );
-
-    ResponseEventPtr msg = std::make_shared<ResponseEvent>();
-    msg->Response = toWString( ser.GetString() );
-    msg->SocketID = sceneEvent->SocketID;
-    GetDefaultEventManager().QueueResponse( msg );
+    SendSimpleResponse( command, eventID, sceneEvent->SocketID, result );
 }
 
 // ***********************
@@ -109,9 +103,11 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
     std::string& newNodeName	= structureEvent->NewNodeName;
 	std::string& request		= structureEvent->Request;
     auto attachIndex			= structureEvent->AttachIndex;
+    auto eventID                = structureEvent->EventID;
 
     auto command = structureEvent->SceneCommand;
 
+    bool result = true;
 	auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
     if( command == NodeStructureEvent::Command::AddNode )
@@ -120,7 +116,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
     }
     else if( command == NodeStructureEvent::Command::RemoveNode )
     {
-		editor->DeleteChildNode( sceneName, nodePath );
+		result = editor->DeleteChildNode( sceneName, nodePath );
     }
     else if( command == NodeStructureEvent::Command::SetNodeVisible )
 	{
@@ -132,15 +128,15 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 	}
 	else if( command == NodeStructureEvent::Command::RenameNode )
 	{
-		editor->RenameNode( sceneName, nodePath, newNodeName );
+		result = editor->RenameNode( sceneName, nodePath, newNodeName );
 	}
 	else if( command == NodeStructureEvent::Command::AttachNode )
 	{
-		editor->AttachChildNode( sceneName, nodePath, attachIndex );
+		result = editor->AttachChildNode( sceneName, nodePath, attachIndex );
 	}
 	else if( command == NodeStructureEvent::Command::DetachNode )
 	{
-		editor->DetachChildNode( sceneName, nodePath );
+		result = editor->DetachChildNode( sceneName, nodePath );
 	}
 	else if( command == NodeStructureEvent::Command::MoveNode )
 	{
@@ -161,8 +157,13 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 		auto srcSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
 		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
 
-		editor->AddNodeCopy( destSceneName, destNodePath, srcSceneName, srcNodePath );
+		auto copyPtr = editor->AddNodeCopy( destSceneName, destNodePath, srcSceneName, srcNodePath );
+        if( copyPtr == nullptr )
+            result = false;
 	}
+    else result = false;
+
+    SendSimpleResponse( command, eventID, structureEvent->SocketID, result );
 }
 
 // ***********************

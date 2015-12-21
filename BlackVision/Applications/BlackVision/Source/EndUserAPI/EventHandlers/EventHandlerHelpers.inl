@@ -64,4 +64,18 @@ inline void ErrorResponseTemplate( ISerializer& ser, CommandType commandType, un
     ser.SetAttribute( ERROR_INFO_STRING, errorString );
 }
 
+// ***********************
+//
+template< typename CommandType >
+inline void SendSimpleResponse( CommandType commandType, unsigned int eventID, int socketID, bool success )
+{
+    JsonSerializeObject ser;
+    PrepareResponseTemplate( ser, commandType, eventID, success );
+
+    ResponseEventPtr msg = std::make_shared<ResponseEvent>();
+    msg->Response = toWString( ser.GetString() );
+    msg->SocketID = socketID;
+    GetDefaultEventManager().QueueResponse( msg );
+}
+
 } //bv
