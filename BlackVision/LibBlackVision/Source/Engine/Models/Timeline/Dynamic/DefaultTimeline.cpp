@@ -14,7 +14,23 @@
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/SerializationHelper.inl"
 
-namespace bv { namespace model {
+namespace bv { 
+
+namespace SerializationHelper {
+
+std::pair< TimelineWrapMethod, const char* > TWM2S[] = {
+    std::make_pair( TimelineWrapMethod::TWM_CLAMP, "clamp" ),
+    std::make_pair( TimelineWrapMethod::TWM_MIRROR, "mirror" ),
+    std::make_pair( TimelineWrapMethod::TWM_REPEAT, "repeat" ),
+    std::make_pair( TimelineWrapMethod::TWM_CLAMP, "" ) };
+
+template<> std::string T2String( const TimelineWrapMethod& twm ) { return Enum2String( TWM2S, twm ); }
+
+template<> Expected< TimelineWrapMethod > String2T( std::string s ) { return String2T( TWM2S, s ); }
+
+} // SerializationHelper
+
+namespace model {
 
 namespace {
 
@@ -62,13 +78,15 @@ void                                DefaultTimeline::Serialize           ( ISeri
     SerializationHelper::SerializeAttribute( ser, m_timeEvalImpl.IsActive(), "play" );
 
     ser.SetAttribute( "duration", std::to_string( m_timeEvalImpl.GetDuration() ) );
-    if( m_timeEvalImpl.GetWrapPre() == m_timeEvalImpl.GetWrapPost() && m_timeEvalImpl.GetWrapPost() == TimelineWrapMethod::TWM_REPEAT )
+    if( m_timeEvalImpl.GetWrapPre() == m_timeEvalImpl.GetWrapPost() )
     {
-        ser.SetAttribute( "loop", "true" );
+        ser.SetAttribute( "loop", SerializationHelper::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPre() ) );
     }
     else
     {
-        ser.SetAttribute( "loop", "false" ); // FIXME include more general cases
+        ser.SetAttribute( "loop", "true" );
+        ser.SetAttribute( "loopPre", SerializationHelper::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPre() ) );
+        ser.SetAttribute( "loopPost", SerializationHelper::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPre() ) );
     }
 
     ser.EnterArray( "events" );
@@ -85,12 +103,6 @@ void                                DefaultTimeline::Serialize           ( ISeri
 }
 
 
-std::pair< TimelineWrapMethod, const char* > TWM2S[] = {
-    std::make_pair( TimelineWrapMethod::TWM_CLAMP, "clamp" ),
-    std::make_pair( TimelineWrapMethod::TWM_MIRROR, "mirror" ),
-    std::make_pair( TimelineWrapMethod::TWM_REPEAT, "repeat" ),
-    std::make_pair( TimelineWrapMethod::TWM_CLAMP, "" ) };
-
 // *********************************
 //
 ISerializablePtr                     DefaultTimeline::Create              ( const IDeserializer& deser )
@@ -99,8 +111,17 @@ ISerializablePtr                     DefaultTimeline::Create              ( cons
 
     auto duration = SerializationHelper::String2T< float >( deser.GetAttribute( "duration" ), 777.f );
 
-    TimelineWrapMethod preWrap = SerializationHelper::String2T< TimelineWrapMethod >( TWM2S, deser.GetAttribute( "loop" ) );
-    TimelineWrapMethod postWrap = preWrap; // FIXME
+    auto loop = deser.GetAttribute( "loop" );
+    TimelineWrapMethod preWrap, postWrap;
+    if( loop == "true" )
+    {
+        preWrap = SerializationHelper::String2T< TimelineWrapMethod >( deser.GetAttribute( "loopPre" ) );
+        postWrap = SerializationHelper::String2T< TimelineWrapMethod >( deser.GetAttribute( "loopPost" ) );
+    }
+    else
+    {
+        preWrap = postWrap = SerializationHelper::String2T< TimelineWrapMethod >( loop );
+    }
 
     auto te = std::make_shared< DefaultTimeline >( name, duration, preWrap, postWrap );
 
