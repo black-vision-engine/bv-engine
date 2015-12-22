@@ -99,7 +99,7 @@ model::BasicNodePtr SolidRect( const model::PluginsManager * pluginsManager, mod
     auto simpleTransform = rootNode->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
     SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
-    SetParameterRotation ( simpleTransform, 0, 30.0f, glm::vec3( 0.f, 0.f, 1.f ), 8000.f );
+    SetParameterRotation ( simpleTransform, 0, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 20000.f );
 
     return rootNode;
 }

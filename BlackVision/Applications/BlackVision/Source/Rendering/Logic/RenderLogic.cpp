@@ -25,7 +25,7 @@ RenderLogic::RenderLogic     ()
     , m_videoOutputRenderLogic( nullptr )
 {
     auto videoCardEnabled   = DefaultConfig.ReadbackFlag();
-    auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput() || true;
+    auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput(); // || true;
 
     unsigned int numFrameRenderTargets = videoCardEnabled || previewAsVideoCard ? 2 : 1;
 
