@@ -32,6 +32,8 @@ void                            VideoOutputRenderLogic::Render          ( Render
     auto effect = AccessEffect( curFrameRenderTarget, prevFrameRenderTarget );
     effect->Render( renderer );
 
+    effect->SwapTextures();
+
     renderer->Disable   ( videoRenderTarget );
 }
 

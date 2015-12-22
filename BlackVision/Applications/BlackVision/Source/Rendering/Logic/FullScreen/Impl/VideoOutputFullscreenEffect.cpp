@@ -10,7 +10,8 @@ namespace bv {
 // **************************
 //
 VideoOutputFullscreenEffect::VideoOutputFullscreenEffect      ( Texture2DPtr tex0, Texture2DPtr tex1 )
-    : m_useInterlace( true )
+    : m_pixelShader( nullptr )
+    , m_useInterlace( true )
     , m_startEven( false )
     , m_height( 1080 )
     , m_rIdx( 0 )
@@ -50,6 +51,19 @@ VideoOutputFullscreenEffect::VideoOutputFullscreenEffect      ( Texture2DPtr tex
 //
 VideoOutputFullscreenEffect::~VideoOutputFullscreenEffect         ()
 {
+}
+
+// **************************
+//
+void                        VideoOutputFullscreenEffect::SwapTextures           ()
+{
+    auto params = m_pixelShader->GetParameters();
+
+    auto tex0 = params->GetTexture( 0 );
+    auto tex1 = params->GetTexture( 1 );
+
+    params->SetTexture( 0, tex1 );
+    params->SetTexture( 1, tex0 );
 }
 
 // **************************
@@ -242,6 +256,8 @@ PixelShader *               VideoOutputFullscreenEffect::CreatePS               
 
     shader->AddTextureSampler( samplerTex0 );
     shader->AddTextureSampler( samplerTex1 );
+
+    m_pixelShader = shader;
 
     return shader;
 }

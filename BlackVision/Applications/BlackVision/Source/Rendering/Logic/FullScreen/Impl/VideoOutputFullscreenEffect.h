@@ -11,6 +11,8 @@ class VideoOutputFullscreenEffect : public FullscreenEffect
 {
 private:
 
+    mutable PixelShader *   m_pixelShader;
+
     ValueIntPtr     m_useInterlaceValue;
     ValueIntPtr     m_startEvenValue;
     ValueIntPtr     m_heightValue;
@@ -36,6 +38,8 @@ public:
 
                                 VideoOutputFullscreenEffect                 ( Texture2DPtr tex0, Texture2DPtr tex1 );
                                 ~VideoOutputFullscreenEffect                ();
+
+    void                        SwapTextures                                ();
 
     void                        SetInterlaceEnabled                         ( bool enabled );
     bool                        GetInterlaceEnabled                         () const;
