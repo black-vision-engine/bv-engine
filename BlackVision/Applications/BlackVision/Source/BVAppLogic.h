@@ -93,6 +93,8 @@ public:
     BVScenePtr                      GetBVScene          ();
     const model::PluginsManager *   GetPluginsManager   () const;
 
+    RenderLogic *                   GetRenderLogic      ();
+
 private:
 
     void                            InitializeKbdHandler();

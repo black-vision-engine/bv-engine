@@ -47,6 +47,49 @@ void                            VideoOutputRenderLogic::Render          ( Render
 
 // *********************************
 //
+void    VideoOutputRenderLogic::SetChannelMapping       ( unsigned char rIdx, unsigned char gIdx, unsigned char bIdx, unsigned char aIdx )
+{
+    if( m_effect )
+    {
+        m_effect->SetRIdx( rIdx );
+        m_effect->SetGIdx( gIdx );
+        m_effect->SetBIdx( bIdx );
+        m_effect->SetAIdx( aIdx );
+    }
+}
+
+// *********************************
+//
+void    VideoOutputRenderLogic::SetOverwriteAlpha       ( bool overwriteAlpha )
+{
+    if( m_effect )
+    {
+        m_effect->SetOverwriteAlpha( overwriteAlpha );
+    }
+}
+
+// *********************************
+//
+void    VideoOutputRenderLogic::SetAlpha                ( float alpha )
+{
+    if( m_effect )
+    {
+        m_effect->SetAlpha( alpha );
+    }
+}
+
+// *********************************
+//
+void    VideoOutputRenderLogic::SetHeight               ( int height )
+{
+    if( m_effect )
+    {
+        m_effect->SetHeight( height );
+    }
+}
+
+// *********************************
+//
 VideoOutputFullscreenEffect *   VideoOutputRenderLogic::AccessEffect    ( RenderTarget * curFrameRenderTarget, RenderTarget * prevFrameRenderTarget )
 {
     if ( !m_effect )

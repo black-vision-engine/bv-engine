@@ -59,6 +59,10 @@ private:
 
     void                            UpdateOffscreenState    ();
 
+public:
+
+    VideoOutputRenderLogic *        GedVideoOutputRenderLogic   ();
+
 };
 
 } // bv

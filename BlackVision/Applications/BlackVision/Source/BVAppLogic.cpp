@@ -10,7 +10,6 @@
 #include "Tools/Profiler/HerarchicalProfiler.h"
 
 #include "Rendering/Logic/RenderLogic.h"
-//#include "Rendering/Logic/FrameRendering/FrameRenderLogic.h"
 #include "ModelInteractionEvents.h"
 
 #include "Widgets/Crawler/CrawlerEvents.h"
@@ -24,6 +23,7 @@
 
 //FIXME: remove
 #include "TestAI/TestGlobalEffectKeyboardHandler.h"
+#include "TestAI/TestVideoOutputKeyboardHandler.h"
 #include "testai/TestAIManager.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "BVGL.h"
@@ -356,6 +356,13 @@ const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
 
 // *********************************
 //
+RenderLogic *                   BVAppLogic::GetRenderLogic      ()
+{
+    return m_renderLogic;
+}
+
+// *********************************
+//
 void                            BVAppLogic::InitializeKbdHandler()
 {
     auto envScene = Env::GetVar( DefaultConfig.DefaultSceneEnvVarName() );
@@ -363,6 +370,10 @@ void                            BVAppLogic::InitializeKbdHandler()
     if ( envScene == "GLOBAL_EFFECT_05" )
     {
         m_kbdHandler = new TestGlobalEfectKeyboardHandler();
+    }
+    else if( envScene == "GLOBAL_EFFECT_VIDEO_OUTPUT" )
+    {
+        m_kbdHandler = new TestVideoOutputKeyboardHandler();
     }
     else
     {

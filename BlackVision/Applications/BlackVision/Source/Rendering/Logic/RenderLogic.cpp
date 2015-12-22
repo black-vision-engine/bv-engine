@@ -25,7 +25,7 @@ RenderLogic::RenderLogic     ()
     , m_videoOutputRenderLogic( nullptr )
 {
     auto videoCardEnabled   = DefaultConfig.ReadbackFlag();
-    auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput(); // || true;
+    auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput();
 
     unsigned int numFrameRenderTargets = videoCardEnabled || previewAsVideoCard ? 2 : 1;
 
@@ -206,6 +206,13 @@ void                    RenderLogic::BlitToPreview      ( Renderer * renderer, R
 void                    RenderLogic::UpdateOffscreenState()
 {
     m_offscreenDisplay->UpdateActiveRenderTargetIdx();
+}
+
+// *********************************
+//
+VideoOutputRenderLogic *    RenderLogic::GedVideoOutputRenderLogic  ()
+{
+    return m_videoOutputRenderLogic;
 }
 
 } //bv

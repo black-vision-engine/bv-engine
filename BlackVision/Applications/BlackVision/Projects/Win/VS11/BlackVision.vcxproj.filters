@@ -216,6 +216,9 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\VideoOutputFullscreenEffect.cpp">
       <Filter>Rendering\Logic\FullScreen\Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.cpp">
+      <Filter>TestAI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -384,6 +387,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\VideoOutputFullscreenEffect.h">
       <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.h">
+      <Filter>TestAI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

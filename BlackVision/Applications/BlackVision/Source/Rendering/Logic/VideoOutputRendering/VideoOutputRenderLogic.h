@@ -24,6 +24,11 @@ public:
 
     void    Render                  ( Renderer * renderer, RenderTarget * videoRenderTarget, RenderTarget * curFrameRenderTarget, RenderTarget * prevFrameRenderTarget );
 
+    void    SetChannelMapping       ( unsigned char rIdx, unsigned char gIdx, unsigned char bIdx, unsigned char aIdx );
+    void    SetOverwriteAlpha       ( bool overwriteAlpha );
+    void    SetAlpha                ( float alpha );
+    void    SetHeight               ( int height );
+
 private:
 
     VideoOutputFullscreenEffect *  AccessEffect  ( RenderTarget * curFrameRenderTarget, RenderTarget * prevFrameRenderTarget );
