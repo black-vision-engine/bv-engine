@@ -27,6 +27,14 @@ VideoOutputRenderLogic::~VideoOutputRenderLogic         ()
 //
 void                            VideoOutputRenderLogic::Render          ( Renderer * renderer, RenderTarget * videoRenderTarget, RenderTarget * curFrameRenderTarget, RenderTarget * prevFrameRenderTarget )
 {
+    if( !m_effect )
+    {
+        //FIXME: fake initialize curFrameRenderTarget (as it will be used by the effect a moment after this)
+        //FIXME: this suxx but there is an assert in the renderer and maybe it makes sense to leave it there
+        renderer->Enable( prevFrameRenderTarget );
+        renderer->Disable( prevFrameRenderTarget );
+    }
+
     renderer->Enable    ( videoRenderTarget );
 
     auto effect = AccessEffect( curFrameRenderTarget, prevFrameRenderTarget );

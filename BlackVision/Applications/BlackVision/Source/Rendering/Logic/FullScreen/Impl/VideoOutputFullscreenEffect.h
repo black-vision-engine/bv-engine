@@ -15,7 +15,7 @@ private:
 
     ValueIntPtr     m_useInterlaceValue;
     ValueIntPtr     m_startEvenValue;
-    ValueIntPtr     m_heightValue;
+    ValueFloatPtr   m_heightValue;
 
     ValueIntPtr     m_channelMaskVal;
     ValueFloatPtr   m_alphaVal;

@@ -23,7 +23,7 @@ VideoOutputFullscreenEffect::VideoOutputFullscreenEffect      ( Texture2DPtr tex
 {
     m_useInterlaceValue = ValuesFactory::CreateValueInt     ( "useInterlace" );
     m_startEvenValue    = ValuesFactory::CreateValueInt     ( "startEven" );
-    m_heightValue       = ValuesFactory::CreateValueInt     ( "height" );
+    m_heightValue       = ValuesFactory::CreateValueFloat   ( "height" );
     m_channelMaskVal    = ValuesFactory::CreateValueInt     ( "channelMask" );
     m_alphaVal          = ValuesFactory::CreateValueFloat   ( "alpha" );
     m_overwriteAlphaVal = ValuesFactory::CreateValueInt     ( "overwriteAlpha" );
@@ -107,7 +107,7 @@ void                        VideoOutputFullscreenEffect::SetHeight              
 
     m_height = height;
 
-    m_heightValue->SetValue( height );
+    m_heightValue->SetValue( (float) height );
 }
 
 // **************************

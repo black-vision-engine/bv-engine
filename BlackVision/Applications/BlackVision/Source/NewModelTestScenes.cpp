@@ -472,6 +472,11 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
 
     model::BasicNodePtr node = nullptr;
 
+    //if( pluginsManager )
+    //{
+    //    node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_ONE_SOLID_COLOR_RECTANGLE );
+    //}
+    //else
     if( scene == "TWO_TEXTURED_RECTANGLES" )
     {
         node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );

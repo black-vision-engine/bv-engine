@@ -29,11 +29,11 @@ RenderLogic::RenderLogic     ()
 
     unsigned int numFrameRenderTargets = videoCardEnabled || previewAsVideoCard ? 2 : 1;
 
-    m_offscreenDisplay          = new OffscreenDisplay( &m_rtStackAllocator, numFrameRenderTargets, videoCardEnabled );
+    m_offscreenDisplay          = new OffscreenDisplay( &m_rtStackAllocator, numFrameRenderTargets, videoCardEnabled || previewAsVideoCard );
     m_videoOutputRenderLogic    = new VideoOutputRenderLogic( DefaultConfig.DefaultHeight() ); // FIXME: interlace odd/even setup
 
-    m_displayVideoCardPreview = previewAsVideoCard;
-    m_useVideoCardOutput = videoCardEnabled;
+    m_displayVideoCardPreview   = previewAsVideoCard;
+    m_useVideoCardOutput        = videoCardEnabled;
 }
 
 // *********************************
