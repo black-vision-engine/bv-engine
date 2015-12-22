@@ -82,5 +82,6 @@ vec4 	ApplyOverwriteAlpha 	( vec4 col )
 //
 void main()
 {
-	FragColor = ApplyOverwriteAlpha( ApplyMaskChannels( ReadPixel() ) );
+	//FragColor = ApplyOverwriteAlpha( ApplyMaskChannels( ReadPixel() ) );
+	FragColor = ReadPixel();
 }
