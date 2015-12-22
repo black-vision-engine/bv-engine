@@ -57,9 +57,11 @@ public:
     virtual IStatedValuePtr                     GetState                    ( const std::string & name ) const;
     
 	virtual IParamValModelPtr					GetResourceStateModel		( const std::string & name ) const override;
+    virtual std::vector< IParameterPtr >        GetResourceStateModelParameters () const override;
     
-    virtual std::vector< IParameterPtr >        GetParameters               () const; // FIXME: ugly hack for serialization
-    virtual std::vector< AssetDescConstPtr >    GetAssets                   () const; // FIXME: ugly hack for serialization
+    virtual std::vector< IParameterPtr >        GetParameters               () const override;
+
+    virtual std::vector< AssetDescConstPtr >    GetAssets                   () const; // FIXME: not assets, but resources=loaded assets
     virtual void                                SetAsset                    ( int i, AssetDescConstPtr asset, ResourceStateModelPtr rsm ); // FIXME: ugly hack for serialization
     virtual ResourceStateModelPtr               GetRSM                      ( std::string key ) const; // FIXME: ugly hack for serialization
 
@@ -259,9 +261,44 @@ IParamValModelPtr				BasePlugin< Iface >::GetResourceStateModel		 ( const std::s
 				return anim->GetSamplerState();
 			}
 		}
+
+        for( auto font : txData->GetFonts() )
+        {
+            if( font->GetName() == name )
+            {
+                return font->GetStateModel();
+            }
+        }
 	}
 	return nullptr;
 }
+
+// *******************************
+//
+template< class Iface >
+std::vector< IParameterPtr >        BasePlugin< Iface >::GetResourceStateModelParameters () const
+{
+    std::vector< IParameterPtr > ret;
+
+    auto txData = GetPixelShaderChannel()->GetTexturesData();
+	for( auto & tx : txData->GetTextures() )
+    {
+        auto params = tx->GetSamplerState()->GetParameters();
+        ret.insert( ret.end(), params.begin(), params.end() );
+    }
+	for( auto & anim : txData->GetAnimations() )
+    {
+        auto params = anim->GetSamplerState()->GetParameters();
+        ret.insert( ret.end(), params.begin(), params.end() );
+    }
+	for( auto & font : txData->GetFonts() )
+    {
+        auto params = font->GetStateModel()->GetParameters();
+        ret.insert( ret.end(), params.begin(), params.end() );
+    }
+    return ret;
+}
+
 
 // *******************************
 //

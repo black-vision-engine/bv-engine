@@ -8,6 +8,7 @@ DEFINE_CONST_PTR_TYPE(DefaultFontDescriptor)
 
 class DefaultFontDescriptor : public IFontDescriptor
 {
+    std::string                             m_name;
     ITextureDescriptorPtr                   m_atlas;
     ResourceStateModelPtr                   m_stateModel;
 public:
@@ -15,13 +16,14 @@ public:
     typedef uintptr_t   uid_t;
 
 public:
-    DefaultFontDescriptor( ITextureDescriptorPtr atlas );
+    DefaultFontDescriptor( ITextureDescriptorPtr atlas, std::string name );
     ~DefaultFontDescriptor();
 
     virtual uid_t                           GetUID              () const;
 
-    virtual ITextureDescriptorPtr           GetAtlas            () const;
-    virtual model::ResourceStateModelPtr    GetStateModel       () const;
+    virtual const std::string               GetName             () const override;
+    virtual ITextureDescriptorPtr           GetAtlas            () const override;
+    virtual model::ResourceStateModelPtr    GetStateModel       () const override;
 };
 
 } }

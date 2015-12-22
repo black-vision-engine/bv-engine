@@ -220,6 +220,29 @@ const IPluginListFinalized *    BasicNode::GetPluginList            () const
     return m_pluginList.get();
 }
 
+// ********************************
+//
+std::vector< IParameterPtr >    BasicNode::GetParameters           () const
+{
+    std::vector< IParameterPtr > ret;
+
+    auto plugins = GetPluginList();
+
+    for( UInt32 i = 0; i < plugins->NumPlugins(); i++ )
+    {
+        auto params =  plugins->GetPlugin( i )->GetParameters();
+        ret.insert( ret.end(), params.begin(), params.end() );
+
+        params = plugins->GetPlugin( i )->GetResourceStateModelParameters();
+        ret.insert( ret.end(), params.begin(), params.end() );
+    }
+
+	//FIXME: get parameters from node effect
+	//auto effect = GetNodeEffect();
+
+    return ret;
+}
+
 
 // ********************************
 //
@@ -227,8 +250,10 @@ std::vector< ITimeEvaluatorPtr > BasicNode::GetTimelines			() const
 {
 	std::vector< ITimeEvaluatorPtr > ret;
 
-	//FIXME: implement me
-	assert( false );
+    auto params = GetParameters();
+
+    for( auto param : params )
+        ret.push_back( param->GetTimeEvaluator() );
 
     return ret;
 }

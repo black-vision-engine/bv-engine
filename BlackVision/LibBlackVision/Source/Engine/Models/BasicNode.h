@@ -68,7 +68,7 @@ public:
 	INodeLogicPtr							GetLogic				();
 
     virtual const IPluginListFinalized *    GetPluginList           () const override;
-
+    virtual std::vector< IParameterPtr >    GetParameters           () const override;
 	virtual std::vector< ITimeEvaluatorPtr > GetTimelines			() const override;
 
     virtual unsigned int                    GetNumChildren          () const override;

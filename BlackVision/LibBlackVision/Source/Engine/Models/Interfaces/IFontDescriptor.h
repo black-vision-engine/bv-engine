@@ -14,6 +14,8 @@ public:
 
     virtual uid_t                           GetUID              () const = 0;
 
+    
+    virtual const std::string               GetName             () const = 0;
     virtual ITextureDescriptorPtr           GetAtlas            () const = 0;
     virtual model::ResourceStateModelPtr    GetStateModel       () const = 0;
 
