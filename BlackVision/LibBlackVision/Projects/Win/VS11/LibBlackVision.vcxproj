@@ -111,6 +111,7 @@
     <ClCompile Include="..\..\..\Source\Assets\Assets.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Cache\HardDriveRawDataCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Cache\RawDataCache.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\DefaultAssets.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\AtlasCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\Engines\FreeTypeEngine.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\FontAsset.cpp" />
@@ -410,6 +411,8 @@
     <ClInclude Include="..\..\..\Source\Assets\AssetCache.h" />
     <ClInclude Include="..\..\..\Source\Assets\AssetDescsWithUIDs.h" />
     <ClInclude Include="..\..\..\Source\Assets\AssetSerialization.h" />
+    <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.h" />
+    <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.inl" />
     <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h" />

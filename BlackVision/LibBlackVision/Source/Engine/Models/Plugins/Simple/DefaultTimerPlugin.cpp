@@ -11,6 +11,7 @@
 #include "Assets/Font/Text.h"
 #include "Assets/Font/Glyph.h"
 #include "Assets/Font/FontAssetDescriptor.h"
+#include "Assets/DefaultAssets.h"
 
 #include "Application/ApplicationContext.h"
 
@@ -240,12 +241,11 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
 	
 	SetPrevPlugin( prev );
 
-	//FIXME: 'reserve' required texture
-	m_psc->GetTexturesDataImpl()->SetTexture( 0, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultTimerPluginDesc::TextureName(), m_pluginParamValModel->GetTimeEvaluator() ) );
-
     m_spacingParam      = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
     m_alignmentParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "alignment" ) );
     m_precisionParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "precision" ) );
+    
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< FontAssetDesc >() );
 }
 
 // *************************************

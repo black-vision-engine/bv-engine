@@ -6,6 +6,9 @@
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 #include "Application/ApplicationContext.h"
 
+#include "Assets/DefaultAssets.h"
+
+
 namespace bv { namespace model {
 
 namespace {
@@ -101,8 +104,7 @@ DefaultAlphaMaskPlugin::DefaultAlphaMaskPlugin  ( const std::string & name, cons
     
 	SetPrevPlugin( prev );
 
-	//FIXME: 'reserve' required texture
-	m_psc->GetTexturesDataImpl()->SetTexture( 0, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultAlphaMaskPluginDesc::TextureName(), m_pluginParamValModel->GetTimeEvaluator() ) );
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< TextureAssetDesc >() );
 }
 
 // *************************************
@@ -136,9 +138,10 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( AssetDescCon
 			txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
 			
 			auto txData = m_psc->GetTexturesDataImpl();
+
 			txData->SetTexture( 0, txDesc );
             SetAsset( 0, assetDescr, txDesc->GetSamplerState() );
-
+            
 			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
             m_textureWidth = txDesc->GetWidth();

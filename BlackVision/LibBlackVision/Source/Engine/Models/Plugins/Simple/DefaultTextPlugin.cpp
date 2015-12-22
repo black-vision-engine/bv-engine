@@ -19,6 +19,9 @@
 #include "Engine/Events/Events.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
 
+#include "Assets/DefaultAssets.h"
+
+
 namespace bv { namespace model {
 
 extern TextArranger CircleArranger;
@@ -218,9 +221,6 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
 
     SetPrevPlugin( prev );
 
-	//FIXME: 'reserve' required texture
-	m_psc->GetTexturesDataImpl()->SetTexture( 0, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultTextPluginDesc::TextureName(), m_pluginParamValModel->GetTimeEvaluator() ) );
-
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &DefaultTextPlugin::OnSetText ), KeyPressedEvent::Type() );
 
     m_spacingParam          = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
@@ -229,6 +229,8 @@ DefaultTextPlugin::DefaultTextPlugin         ( const std::string & name, const s
     m_textParam             = QueryTypedParam< ParamWStringPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "text" ) );
     
     m_timeParam             = QueryTypedParam< ParamFloatPtr >( GetParameter( "time" ) );
+
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< FontAssetDesc >() );
 }
 
 // *************************************

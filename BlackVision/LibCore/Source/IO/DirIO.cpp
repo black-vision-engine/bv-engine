@@ -34,10 +34,14 @@ std::vector< std::string > Dir::ListFiles( const std::string & path, const std::
  
     for(;;)
     {
-        fs::path fullFilePath = rootDir / fs::path( WStringToString( fd.cFileName ) );
+        auto fileName = WStringToString( fd.cFileName );
 
-        foundFiles.push_back( fullFilePath.string() );
- 
+        if( fileName != "." && fileName != ".." )
+        {
+            fs::path fullFilePath = rootDir / fs::path( fileName );
+            foundFiles.push_back( fullFilePath.string() );
+        }
+
         if( FindNextFile( h, &fd ) == FALSE )
             break;
     }

@@ -14,6 +14,9 @@
 #include "Engine/Events/Events.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
 
+#include "Assets/DefaultAssets.h"
+
+
 namespace bv { namespace model {
 
 
@@ -187,8 +190,7 @@ DefaultText3DPlugin::DefaultText3DPlugin         ( const std::string & name, con
     
 	SetPrevPlugin( prev );
 
-	//FIXME: 'reserve' required texture
-	m_psc->GetTexturesDataImpl()->SetTexture( 0, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultText3DPluginDesc::TextureName(), m_pluginParamValModel->GetTimeEvaluator() ) );
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< TextureAssetDesc >() );
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &DefaultText3DPlugin::OnSetText ), KeyPressedEvent::Type() );
 

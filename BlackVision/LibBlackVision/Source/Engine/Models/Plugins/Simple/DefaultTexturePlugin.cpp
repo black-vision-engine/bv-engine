@@ -10,7 +10,7 @@
 
 #include "Engine/Models/Plugins/HelperUVGenerator.h"
 
-#include "Assets/Texture/TextureAssetDescriptor.h"
+#include "Assets/DefaultAssets.h"
 
 
 namespace bv { namespace model {
@@ -109,8 +109,7 @@ DefaultTexturePlugin::DefaultTexturePlugin         ( const std::string & name, c
 
     SetPrevPlugin( prev );
 
-	//FIXME: 'reserve' required texture
-	m_psc->GetTexturesDataImpl()->SetTexture( 0, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultTexturePluginDesc::TextureName(), m_pluginParamValModel->GetTimeEvaluator() ) );
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< TextureAssetDesc >() );
 }
 
 // *************************************
@@ -131,7 +130,7 @@ bool							DefaultTexturePlugin::IsValid     () const
 bool                            DefaultTexturePlugin::LoadResource  ( AssetDescConstPtr assetDescr )
 {
 	auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( assetDescr );
-
+	
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( txAssetDescr != nullptr )
     {

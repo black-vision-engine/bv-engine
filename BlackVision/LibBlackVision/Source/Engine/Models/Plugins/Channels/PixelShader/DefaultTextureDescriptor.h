@@ -63,8 +63,6 @@ public:
 
 	static DefaultTextureDescriptorPtr LoadTexture   ( const TextureAssetDescConstPtr & textureResDesc, const std::string & name );
 
-	static DefaultTextureDescriptorPtr CreateEmptyTexture2DDesc	( const std::string & name, ITimeEvaluatorPtr timeEvaluator );
-
 };
 
 } //model

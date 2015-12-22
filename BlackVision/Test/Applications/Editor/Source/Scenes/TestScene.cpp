@@ -17,6 +17,7 @@
 #include "IO/DirIO.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultVideoStreamDecoderPlugin.h"
+#include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 
 namespace bv {
 
@@ -210,65 +211,65 @@ void					TestScene::InitTestModelSceneEditor	()
 		assert( success );
 	});
 
-	//m_testSteps.push_back([&] 
-	//{
-	//	auto editor = m_project->GetProjectEditor();
-	//	bool success = true;
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		bool success = true;
 
-	//	auto copiedName = "Copy_" + SCENE_NAME;
+		auto copiedName = "Copy_" + SCENE_NAME;
 
-	//	auto copied = editor->AddSceneCopy( copiedName );
-	//	auto root = copied->GetRootNode();
-	//	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, 0.5f, -1.f ) );
+		auto copied = editor->AddSceneCopy( copiedName );
+		auto root = copied->GetRootNode();
+		SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, 0.5f, -1.f ) );
 
-	//	editor->RemoveScene( "Copy_" + SCENE_NAME );
+		editor->RemoveScene( "Copy_" + SCENE_NAME );
 
-	//	success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
-	//	success &= ( editor->GetScene( "Copy_" + SCENE_NAME ) == nullptr );
-	//	success &= ( editor->GetScene( "Copy1_" + SCENE_NAME ) != nullptr );
+		success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
+		success &= ( editor->GetScene( "Copy_" + SCENE_NAME ) == nullptr );
+		success &= ( editor->GetScene( "Copy1_" + SCENE_NAME ) != nullptr );
 
-	//	assert( success );
-	//});
+		assert( success );
+	});
 
-	//m_testSteps.push_back([&] 
-	//{
-	//	auto editor = m_project->GetProjectEditor();
-	//	bool success = true;
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		bool success = true;
 
-	//	editor->RenameScene( "Copy1_" + SCENE_NAME, SCENE_NAME1 );
-	//	success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
-	//	success &= ( editor->GetScene( "Copy1_" + SCENE_NAME ) == nullptr );
-	//	//editor->AddScene( model::SceneModel::CreateEmptyScene( SCENE_NAME1 ) );
+		editor->RenameScene( "Copy1_" + SCENE_NAME, SCENE_NAME1 );
+		success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
+		success &= ( editor->GetScene( "Copy1_" + SCENE_NAME ) == nullptr );
+		//editor->AddScene( model::SceneModel::CreateEmptyScene( SCENE_NAME1 ) );
 
-	//	auto scene = editor->GetScene( SCENE_NAME1 );
-	//	auto copied = editor->AddNodeCopy( SCENE_NAME1, scene->GetRootNode(), SCENE_NAME1, scene->GetRootNode() );
-	//	SetParameterTranslation( copied->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
+		auto scene = editor->GetScene( SCENE_NAME1 );
+		auto copied = editor->AddNodeCopy( SCENE_NAME1, scene->GetRootNode(), SCENE_NAME1, scene->GetRootNode() );
+		SetParameterTranslation( copied->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
 
-	//	success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
-	//	success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
+		success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
+		success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
 
-	//	assert( success );
-	//});
+		assert( success );
+	});
 
-	//m_testSteps.push_back([&] 
-	//{
-	//	auto editor = m_project->GetProjectEditor();
-	//	bool success = true;
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		bool success = true;
 
-	//	auto scene = editor->GetScene( SCENE_NAME1 );
-	//	auto root = scene->GetRootNode();
-	//	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.3f, 0.5f, -1.f ) );
+		auto scene = editor->GetScene( SCENE_NAME1 );
+		auto root = scene->GetRootNode();
+		SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.3f, 0.5f, -1.f ) );
 
-	//	for( UInt32 i = 0; i < root->GetNumChildren(); ++i )
-	//	{
-	//		model::SetParameter( root->GetChild( i )->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
-	//	}
+		for( UInt32 i = 0; i < root->GetNumChildren(); ++i )
+		{
+			model::SetParameter( root->GetChild( i )->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
+		}
 
-	//	success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
-	//	success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
+		success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
+		success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
 
-	//	assert( success );
-	//});
+		assert( success );
+	});
 	
 	m_testSteps.push_back([&] 
 	{ 
@@ -890,9 +891,11 @@ void					TestScene::InitAssetsTest		()
 //
 void					TestScene::InitTestEditor			()
 {
-	InitTestModelSceneEditor();
+	//InitTestModelSceneEditor();
 
 	//InitTimelinesTest();
+
+	//InitAssetsTest();
 
 	//InitBasicColorPluginTest();
 	//InitOrderColorPluginTest();
@@ -917,7 +920,7 @@ void					TestScene::InitTestEditor			()
 	//InitAnimatedGeometryTest();
 	//InitGradientGeometryTest();
 
-	//InitVideoStreamDecoderTest();
+	InitVideoStreamDecoderTest();
 }
 
 // ****************************
@@ -1067,18 +1070,18 @@ void					TestScene::InitBasicTexturePluginTest	()
 	m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, TEX_NODE, "alpha_mask", 3 ); } );
 	m_testSteps.push_back( [&]{ SwapPlugins( "alpha_mask", 3, TEX_NODE, "alpha_mask", 3 ); } );
 
-	m_testSteps.push_back( [&]
-	{
-		auto editor = m_project->GetProjectEditor();
-		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
-		auto child = root->GetChild( TEX_NODE );
-		
-		//auto time = m_timeEvaluator->GetLocalTime();
-		model::SetParameter( child->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "filteringMode" ), 0.f, static_cast< Int32 >( TextureFilteringMode::TFM_POINT ) );
-		//model::SetParameter( child->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "filteringMode" ), time + TimeType( 1.0f ), static_cast< Int32 >( TextureFilteringMode::TFM_LINEAR ) );
-	});
+	//m_testSteps.push_back( [&]
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+	//	auto child = root->GetChild( TEX_NODE );
+	//	
+	//	//auto time = m_timeEvaluator->GetLocalTime();
+	//	model::SetParameter( child->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "filteringMode" ), 0.f, static_cast< Int32 >( TextureFilteringMode::TFM_POINT ) );
+	//	//model::SetParameter( child->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "filteringMode" ), time + TimeType( 1.0f ), static_cast< Int32 >( TextureFilteringMode::TFM_LINEAR ) );
+	//});
 
-	m_testSteps.push_back( [&]{ CopyPlugin( 2, "solid color", TEX_NODE, "texture" ); } );
+	/*m_testSteps.push_back( [&]{ CopyPlugin( 2, "solid color", TEX_NODE, "texture" ); } );
 	m_testSteps.push_back( [&]
 	{
 		auto editor = m_project->GetProjectEditor();
@@ -1104,7 +1107,7 @@ void					TestScene::InitBasicTexturePluginTest	()
 		auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f0.bmp", false );
 		editor->LoadAsset( root->GetPlugin( "texture" ), desc );
 	});
-	m_testSteps.push_back( [&]{ RestoreRoot( 2, "texture" ); } );
+	m_testSteps.push_back( [&]{ RestoreRoot( 2, "texture" ); } );*/
 
 	m_testSteps.push_back( [&]{
 		auto editor = m_project->GetProjectEditor();
@@ -1114,6 +1117,19 @@ void					TestScene::InitBasicTexturePluginTest	()
 		auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f0.bmp", false );
 		editor->LoadAsset( child->GetPlugin( "texture" ), desc );
 	});
+
+	//m_testSteps.push_back( [&]{
+	//	auto editor = m_project->GetProjectEditor();
+	//	auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+	//	auto child = root->GetChild( TEX_NODE );
+
+	//	auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f1.bmp", false );
+	//	editor->LoadAsset( child->GetPlugin( "texture" ), desc );
+	//});
+
+	//m_testSteps.push_back( [&]{
+	//	GTexture2DCache.ClearUnused();
+	//});
 }
 
 // ****************************

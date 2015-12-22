@@ -12,6 +12,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultRectPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 
+#include "Assets/DefaultAssets.h"
+
 
 namespace bv { namespace model {
 
@@ -202,12 +204,12 @@ DefaultHeightMapPlugin::DefaultHeightMapPlugin         ( const std::string & nam
     ctx->cullCtx->enabled = false;
     ctx->alphaCtx->blendEnabled = true;
 
-	//FIXME: 'reserve' required texture
-	auto timeEval = m_pluginParamValModel->GetTimeEvaluator();
-	m_psc->GetTexturesDataImpl()->SetTexture( 0, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultHeightMapPluginDesc::HeightMapTextureName(), timeEval ) );
-	m_psc->GetTexturesDataImpl()->SetTexture( 1, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultHeightMapPluginDesc::HillTextureName(), timeEval ) );
-	m_psc->GetTexturesDataImpl()->SetTexture( 2, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultHeightMapPluginDesc::CoveredDistTextureName(), timeEval ) );
-	m_psc->GetTexturesDataImpl()->SetTexture( 3, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultHeightMapPluginDesc::BackgroundTextureName(), timeEval ) );
+    //'reserve' required textures
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< TextureAssetDesc >() );
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< TextureAssetDesc >() );
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< TextureAssetDesc >() );
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< TextureAssetDesc >() );
+	m_currTextureIdx = 0;
     
 	m_hmHeightScale     = QueryTypedParam< ParamFloatPtr >( GetParameter( "hmHeightScale" ) );
     m_GroundLevelHeight = QueryTypedParam< ParamFloatPtr >( GetParameter( "hmGroundLevelHeight" ) );

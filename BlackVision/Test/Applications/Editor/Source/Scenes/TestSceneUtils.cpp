@@ -393,7 +393,7 @@ model::BasicNodePtr		TestSceneUtils::ColoredTimer				( model::ITimeEvaluatorPtr 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
 	SetParameter( node->GetPlugin( "timer" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
     
-	LoadFont( node->GetPlugin( "timer" ), "fonts/arial.TTF", fontSize, 0, 0, true );
+    LoadFont( node->GetPlugin( "timer" ), "fonts/arial.TTF", fontSize, 0, 0, true );
     
 	if( !alphaMask.empty() )
 	{

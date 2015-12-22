@@ -6,6 +6,9 @@
 
 #include "Engine/Models/Plugins/HelperUVGenerator.h"
 
+#include "Assets/DefaultAssets.h"
+
+
 namespace bv { namespace model {
 
 
@@ -108,8 +111,7 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
 
     m_texturesData = m_psc->GetTexturesDataImpl();
 	
-	//FIXME: 'reserve' required texture
-	m_texturesData->SetAnimation( 0, DefaultAnimationDescriptor::CreateEmptyDesc( DefaultAnimationPluginDesc::TextureName(), m_pluginParamValModel->GetTimeEvaluator() ) );
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< AnimationAssetDesc >() );
 
     //Direct param state access (to bypass model querying)
     auto psModel = PixelShaderChannelModel();

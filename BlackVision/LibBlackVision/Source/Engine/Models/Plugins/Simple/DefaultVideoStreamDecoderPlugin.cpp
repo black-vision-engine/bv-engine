@@ -10,7 +10,8 @@
 
 #include "Engine/Models/Plugins/HelperUVGenerator.h"
 
-#include "Assets/VideoStream/VideoStreamAssetDescriptor.h"
+#include "Assets/DefaultAssets.h"
+
 
 namespace bv { namespace model {
 
@@ -103,8 +104,7 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
 
 	SetPrevPlugin( prev );
 
-	//FIXME: 'reserve' required texture
-	m_psc->GetTexturesDataImpl()->SetTexture( 0, DefaultTextureDescriptor::CreateEmptyTexture2DDesc( DefaultVideoStreamDecoderPluginDesc::TextureName(), m_pluginParamValModel->GetTimeEvaluator() ) );
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< VideoStreamAssetDesc >() );
 }
 
 // *************************************

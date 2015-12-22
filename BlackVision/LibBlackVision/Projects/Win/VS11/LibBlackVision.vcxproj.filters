@@ -1122,6 +1122,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimelineHelper.cpp">
       <Filter>Engine\Models\Timeline</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\DefaultAssets.cpp">
+      <Filter>Assets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2408,6 +2411,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Serialization\BVSerializeContext.h">
       <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.h">
+      <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.inl">
+      <Filter>Assets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -308,21 +308,5 @@ DefaultTextureDescriptorPtr  DefaultTextureDescriptor::LoadTexture    ( const Te
     return desc;
 }
 
-// **************************
-//
-DefaultTextureDescriptorPtr  DefaultTextureDescriptor::CreateEmptyTexture2DDesc    ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
-{
-	auto desc = std::make_shared< DefaultTextureDescriptor >();
-    desc->SetBits( nullptr );
-    desc->SetName( name );
-    desc->SetWidth( 1 );
-    desc->SetHeight( 2 );
-	desc->SetDepth( 1 );
-    desc->SetFormat( TextureFormat::F_A8R8G8B8 );
-	desc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
-	desc->SetSamplerState( SamplerStateModel::Create( timeEvaluator ) );
-    return desc;
-}
-
 } //model
 } //bv
