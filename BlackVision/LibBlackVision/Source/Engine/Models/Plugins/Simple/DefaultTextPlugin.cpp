@@ -324,7 +324,7 @@ bool                            DefaultTextPlugin::LoadResource  ( AssetDescCons
         SetText( m_textParam->Evaluate() );
 
         auto fonts = m_psc->GetTexturesDataImpl()->GetFonts();
-        assert( fonts.size() == 1 );
+        //assert( fonts.size() == 1 );
         SetAsset( 0, assetDescr, fonts[ 0 ]->GetStateModel() );
 
 		return true;

@@ -2,7 +2,7 @@
 
 #include <hash_map>
 #include <string>
-#include <regex>
+//#include <regex>
 
 #include "Engine/Models/Interfaces/IModelNode.h"
 #include "Engine/Models/BasicNode.h"
@@ -24,9 +24,6 @@ class BVProjectEditor
 {
 private:
 
-	static const std::string	COPY_PREFIX;
-	static const std::string	COPY_REGEX;
-	
     typedef std::hash_map< model::IModelNode *, SceneNode * >	TNodesMapping;
     typedef std::vector< model::SceneModelPtr >					SceneModelVec;
 
@@ -208,11 +205,6 @@ private:
 
 	/* renaming helpers */
 	std::string				PrefixSceneName		( const std::string & name );
-
-	//FIXME: shouldn't be here
-	Int32					MatchNames			( const std::string & S, const std::string & T );
-	static std::string		PrefixCopy			( Int32 prefixNum );
-
 
     friend class BVProject;
 };

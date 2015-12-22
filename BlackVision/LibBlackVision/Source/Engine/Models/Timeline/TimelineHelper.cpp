@@ -52,15 +52,28 @@ DefaultTimelinePtr		TimelineHelper::CreateDefaultTimelineImpl      ( const std::
 
 // *********************************
 //
+UInt32                  GetIndex( ITimeEvaluatorPtr parent, std::string name )
+{
+    assert( false );
+    return 0;
+}
+
+// *********************************
+//
 UInt32					TimelineHelper::CopyTimelines					( ITimeEvaluatorPtr destTimeline, const std::vector< ITimeEvaluatorPtr > & timelines )
 {
-	{ timelines; destTimeline; }
+    UInt32 index = 0;
+	
+    for( auto timeline : timelines )
+        index = std::max( index, GetIndex( destTimeline, timeline->GetName() ) );
 
-	//FIXME: copy timelines from vector and add them to destTimeline (prefix their names if necessary)
-	assert( false );
+    for( auto timeline : timelines )
+    {
+        assert( false );
+        //auto clone = timeline->Clone( index );
+    }
 
-	//return prefix number
-	return 0;
+	return index;
 }
 
 // *********************************

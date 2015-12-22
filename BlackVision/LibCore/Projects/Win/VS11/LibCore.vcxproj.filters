@@ -101,6 +101,9 @@
     <ClInclude Include="..\..\..\Source\Tools\Logger\LoggerEnums.h">
       <Filter>Tools\Logger</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\PrefixHelper.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">
@@ -153,6 +156,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\IO\NamedPipe.cpp">
       <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\PrefixHelper.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
