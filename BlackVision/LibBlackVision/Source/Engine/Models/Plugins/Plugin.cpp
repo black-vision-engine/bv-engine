@@ -249,8 +249,10 @@ std::vector< ITimeEvaluatorPtr >    BasePlugin< IPlugin >::GetTimelines				() co
 {
 	std::vector< ITimeEvaluatorPtr > ret;
 
-	//FIXME: implement me
-	assert( false );
+    auto params = GetParameters();
+
+    for( auto param : params )
+        ret.push_back( param->GetTimeEvaluator() );
 
     return ret;
 }

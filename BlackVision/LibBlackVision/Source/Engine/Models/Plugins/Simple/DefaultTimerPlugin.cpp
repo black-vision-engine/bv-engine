@@ -299,7 +299,7 @@ bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr
 			txData->SetTexture( 0, txDesc );
 
 			//FIXME: on runtime reload it will add another descriptor instead of replacing the old one
-			txData->AddFont( std::make_shared< DefaultFontDescriptor >( txDesc ) );
+			txData->AddFont( std::make_shared< DefaultFontDescriptor >( txDesc, txDesc->GetName() ) );
 
 			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 

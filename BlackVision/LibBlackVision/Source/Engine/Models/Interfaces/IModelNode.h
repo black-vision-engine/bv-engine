@@ -36,7 +36,7 @@ public:
     virtual IModelNodePtr                   GetChild            ( const std::string & name )                                        = 0;
 
     virtual const IPluginListFinalized *    GetPluginList       () const                                                            = 0;
-
+    virtual std::vector< IParameterPtr >    GetParameters       () const                                                            = 0;
 	virtual std::vector< ITimeEvaluatorPtr > GetTimelines       () const                                                            = 0;
 
     virtual unsigned int                    GetNumChildren      () const                                                            = 0;

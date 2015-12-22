@@ -298,7 +298,7 @@ bool							DefaultTextPlugin::LoadAtlas	( const FontAssetDescConstPtr & fontAsse
                 ,   DataBuffer::Semantic::S_TEXTURE_STATIC );
 
     auto texDesc = txData->GetTexture( DefaultTextPluginDesc::TextureName() );
-    auto fontDesc = std::make_shared< DefaultFontDescriptor >( texDesc );
+    auto fontDesc = std::make_shared< DefaultFontDescriptor >( texDesc, texDesc->GetName() );
     txData->AddFont( fontDesc );
 
     return true;

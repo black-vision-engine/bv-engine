@@ -2,9 +2,10 @@
 
 namespace bv { namespace model {
 
-DefaultFontDescriptor::DefaultFontDescriptor( ITextureDescriptorPtr atlas )
+DefaultFontDescriptor::DefaultFontDescriptor( ITextureDescriptorPtr atlas, std::string name )
     : m_atlas( atlas )
     , m_stateModel( std::make_shared< ResourceStateModel >() )
+    , m_name( name )
 {
 }
 
@@ -16,6 +17,10 @@ DefaultFontDescriptor::uid_t                           DefaultFontDescriptor::Ge
 {
     assert( false );
     return 0;
+}
+const std::string               DefaultFontDescriptor::GetName             () const
+{
+    return m_name;
 }
 
 ITextureDescriptorPtr           DefaultFontDescriptor::GetAtlas            () const

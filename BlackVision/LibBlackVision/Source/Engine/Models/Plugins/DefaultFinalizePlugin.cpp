@@ -94,6 +94,23 @@ IParamValModelPtr					DefaultFinalizePlugin::GetResourceStateModel		( const std:
 
 // *******************************
 //
+std::vector< IParameterPtr >        DefaultFinalizePlugin::GetResourceStateModelParameters () const
+{
+    assert( false );
+    return std::vector< IParameterPtr >();
+}
+
+// *******************************
+//
+std::vector< IParameterPtr >        DefaultFinalizePlugin::GetParameters               () const
+{
+    assert( false );
+    return std::vector< IParameterPtr >();
+}
+
+
+// *******************************
+//
 bv::IValueConstPtr                  DefaultFinalizePlugin::GetValue                    ( const std::string & name ) const
 {
     { name; } // FIXME: suppress unuse warning
