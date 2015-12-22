@@ -25,7 +25,7 @@ RenderLogic::RenderLogic     ()
     , m_videoOutputRenderLogic( nullptr )
 {
     auto videoCardEnabled   = DefaultConfig.ReadbackFlag();
-    auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput();
+    auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput() || true;
 
     unsigned int numFrameRenderTargets = videoCardEnabled || previewAsVideoCard ? 2 : 1;
 
@@ -51,7 +51,7 @@ void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot
     renderer->PreDraw();
 
     RenderFrameImpl( renderer, sceneRoot );
-
+    
     renderer->PostDraw();
     renderer->DisplayColorBuffer();
 }

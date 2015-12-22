@@ -266,7 +266,7 @@ PixelShader *               VideoOutputFullscreenEffect::CreatePS               
 //
 int                         VideoOutputFullscreenEffect::GetChannelMask         () const
 {
-    return ( m_aIdx & 0x3 << 6 ) | ( m_bIdx & 0x3 << 4 ) | ( m_gIdx & 0x3 << 2 ) | ( m_rIdx & 0x3 << 6 );
+    return ( ( m_aIdx & 0x3 ) << 6 ) | ( ( m_bIdx & 0x3 ) << 4 ) | ( ( m_gIdx & 0x3 ) << 2 ) | ( ( m_rIdx & 0x3 ) << 6 );
 }
 
 } //bv

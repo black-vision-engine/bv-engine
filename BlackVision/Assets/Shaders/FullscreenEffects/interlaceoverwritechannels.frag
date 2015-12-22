@@ -18,6 +18,22 @@ uniform float 		alpha;
 
 // *********************************
 //
+vec4 	FetchTex0	()
+{
+	//return vec4( 0.0, 0.0, 0.0, 1.0 );
+	return texture( Tex0, uvCoord );
+}
+
+// *********************************
+//
+vec4 	FetchTex1	()
+{
+	//return vec4( 1.0, 1.0, 1.0, 1.0 );
+	return texture( Tex1, uvCoord );
+}
+
+// *********************************
+//
 int 	Y			()
 {
 	return int( ( 1.0 - uvCoord.y ) * height );
@@ -27,14 +43,14 @@ int 	Y			()
 //
 vec4 InterlaceEven	()
 {
-	return ( Y() & 0x1 ) == 1 ? texture( Tex1, uvCoord ) : texture( Tex0, uvCoord );
+	return ( Y() & 0x1 ) == 1 ? FetchTex1() : FetchTex0();
 }
 
 // *********************************
 //
 vec4 InterlaceOdd	()
 {
-	return ( Y() & 0x1 ) == 1 ? texture( Tex0, uvCoord ) : texture( Tex1, uvCoord );
+	return ( Y() & 0x1 ) == 1 ? FetchTex0() : FetchTex1();
 }
 
 // *********************************
@@ -48,7 +64,7 @@ vec4 	ReadInterlaced		()
 //
 vec4 	ReadNonInterlaced	()
 {
-	return texture( Tex0, uvCoord );
+	return FetchTex0();
 }
 
 // *********************************
@@ -82,6 +98,5 @@ vec4 	ApplyOverwriteAlpha 	( vec4 col )
 //
 void main()
 {
-	//FragColor = ApplyOverwriteAlpha( ApplyMaskChannels( ReadPixel() ) );
-	FragColor = ReadPixel();
+	FragColor = ApplyOverwriteAlpha( ApplyMaskChannels( ReadPixel() ) );
 }
