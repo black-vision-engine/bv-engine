@@ -8,6 +8,7 @@
 
 #include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
 #include "Rendering/Logic/FullScreen/Impl/BlitFullscreenEffect.h"
+#include "Rendering/Logic/VideoOutputRendering/VideoOutputRenderLogic.h"
 
 #include "Tools/Profiler/HerarchicalProfiler.h"
 
@@ -21,11 +22,15 @@ namespace bv {
 RenderLogic::RenderLogic     ()
     : m_rtStackAllocator( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), TextureFormat::F_A8R8G8B8 )
     , m_blitEffect( nullptr )
+    , m_videoOutputRenderLogic( nullptr )
 {
     auto videoCardEnabled   = DefaultConfig.ReadbackFlag();
     auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput();
 
-    m_offscreenDisplay = new OffscreenDisplay( &m_rtStackAllocator, videoCardEnabled || previewAsVideoCard );
+    unsigned int numFrameRenderTargets = videoCardEnabled || previewAsVideoCard ? 2 : 1;
+
+    m_offscreenDisplay          = new OffscreenDisplay( &m_rtStackAllocator, numFrameRenderTargets, videoCardEnabled );
+    m_videoOutputRenderLogic    = new VideoOutputRenderLogic( DefaultConfig.DefaultHeight() ); // FIXME: interlace odd/even setup
 
     m_displayVideoCardPreview = previewAsVideoCard;
     m_useVideoCardOutput = videoCardEnabled;
@@ -47,8 +52,6 @@ void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot
 
     RenderFrameImpl( renderer, sceneRoot );
 
-    FrameRendered( renderer );
-
     renderer->PostDraw();
     renderer->DisplayColorBuffer();
 }
@@ -57,43 +60,48 @@ void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot
 //
 void    RenderLogic::RenderFrameImpl ( Renderer * renderer, SceneNode * sceneRoot )
 {
-    //FIXME: use frameRenderLogic to implement machinery required to properly render 
-    //m_frameRenderLogic->RenderFrame( renderer, sceneRoot );
-    auto rt = m_offscreenDisplay->GetActiveRenderTarget();
+    auto rt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
+
     RenderRootNode( renderer, sceneRoot, rt );
+
+    FrameRendered( renderer );
+
+    UpdateOffscreenState();
 }
 
 // *********************************
 //
+//  if not DisplayAsVideoOutput:
+//      BlitToWindow()
+//  else:
+//      GPURenderPreVideo()
+//      BlitToWindow()
+//
+//      if PushToVideoCard:
+//          Readback()
+//          Push()
+//
 void    RenderLogic::FrameRendered   ( Renderer * renderer )
 {
-    if( !m_displayVideoCardPreview )
+    auto prevRt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
+
+    if( m_displayVideoCardPreview )
     {
-        BlitToPreview( renderer, m_offscreenDisplay->GetActiveRenderTarget() );
+        auto videoRt    = m_offscreenDisplay->GetVideoRenderTarget          ();
+        auto curFrameRt = m_offscreenDisplay->GetCurrentFrameRenderTarget   ();
+        auto prvFrameRt = m_offscreenDisplay->GetPreviousFrameRenderTarget  ();
+
+        m_videoOutputRenderLogic->Render( renderer, videoRt, curFrameRt, prvFrameRt );
+
+        prevRt = videoRt;
     }
-    else
+     
+    BlitToPreview( renderer, prevRt );
+
+    if( m_useVideoCardOutput )
     {
+        //FIXME: VIDEO CART CODE (PUSH FRAME) to be placed here
     }
-
-    /*
-    if not DisplayAsVideoOutput:
-        BlitToWindow()
-    else:
-        GPURenderPreVideo()
-        BlitToWindow()
-
-        if PushToVideoCard:
-            Readback()
-            Push()
-
-
-    if not PushToVideoCard:
-        else:
-            BlitToWindow()
-*/
-
-
-    UpdateOffscreenState();
 }
 
 // *********************************
@@ -188,9 +196,6 @@ BlitFullscreenEffect *  RenderLogic::AccessBlitEffect   ( RenderTarget * rt )
 //
 void                    RenderLogic::BlitToPreview      ( Renderer * renderer, RenderTarget * rt )
 {
-    assert( rt == m_offscreenDisplay->GetActiveRenderTarget() );
-
-    // Render fullscreen effect
     auto blitter = AccessBlitEffect( rt );
 
     blitter->Render( renderer );

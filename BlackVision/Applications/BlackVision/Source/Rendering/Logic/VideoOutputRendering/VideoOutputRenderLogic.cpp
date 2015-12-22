@@ -1,6 +1,9 @@
 #include "VideoOutputRenderLogic.h"
 
-#include "Rendering/Logic/FullScreen/Impl/InterlaceOverwriteChannelsFullscreenEffect.h"
+#include "Rendering/Logic/FullScreen/Impl/VideoOutputFullscreenEffect.h"
+
+#include "Engine/Graphics/Resources/RenderTarget.h"
+#include "Engine/Graphics/Renderers/Renderer.h"
 
 
 namespace bv {
@@ -22,20 +25,29 @@ VideoOutputRenderLogic::~VideoOutputRenderLogic         ()
 
 // *********************************
 //
-void    VideoOutputRenderLogic::Render                  ( )
+void                            VideoOutputRenderLogic::Render          ( Renderer * renderer, RenderTarget * videoRenderTarget, RenderTarget * curFrameRenderTarget, RenderTarget * prevFrameRenderTarget )
 {
-    //Get last two frames
-    //Apply super kewl ultra effect
-    //Render to specified target
+    renderer->Enable    ( videoRenderTarget );
+
+    auto effect = AccessEffect( curFrameRenderTarget, prevFrameRenderTarget );
+    effect->Render( renderer );
+
+    renderer->Disable   ( videoRenderTarget );
 }
 
 // *********************************
 //
-InterlaceOverwriteChannelsFullscreenEffect *  VideoOutputRenderLogic::AccessEffect  ()
+VideoOutputFullscreenEffect *   VideoOutputRenderLogic::AccessEffect    ( RenderTarget * curFrameRenderTarget, RenderTarget * prevFrameRenderTarget )
 {
     if ( !m_effect )
     {
-        m_effect = new InterlaceOverwriteChannelsFullscreenEffect();
+        auto tex0 = curFrameRenderTarget->ColorTexture( 0 );
+        auto tex1 = prevFrameRenderTarget->ColorTexture( 0 );
+
+        m_effect = new VideoOutputFullscreenEffect( tex0, tex1 );
+    
+        m_effect->SetHeight( m_height );
+        m_effect->SetStartEven( !m_interlaceOdd );
     }
 
     return m_effect;        

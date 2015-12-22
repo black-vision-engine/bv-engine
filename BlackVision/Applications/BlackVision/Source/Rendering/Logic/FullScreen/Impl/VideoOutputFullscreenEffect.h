@@ -7,11 +7,11 @@
 
 namespace bv {
 
-class InterlaceOverwriteChannelsFullscreenEffect : public FullscreenEffect
+class VideoOutputFullscreenEffect : public FullscreenEffect
 {
 private:
 
-
+    ValueIntPtr     m_useInterlaceValue;
     ValueIntPtr     m_startEvenValue;
     ValueIntPtr     m_heightValue;
 
@@ -29,14 +29,16 @@ private:
 
     float           m_alpha;
 
+    bool            m_useInterlace;
     bool            m_overwriteAlpha;
 
 public:
 
-                                InterlaceOverwriteChannelsFullscreenEffect  ( unsigned char rIdx = 0, unsigned char gIdx = 1, unsigned char bIdx = 2, unsigned char aIdx = 3, float alpha = 1.0f, bool startEven = false, int height = 1080 );
-                                ~InterlaceOverwriteChannelsFullscreenEffect ();
+                                VideoOutputFullscreenEffect                 ( Texture2DPtr tex0, Texture2DPtr tex1 );
+                                ~VideoOutputFullscreenEffect                ();
 
-    void                        SetInterlaceTextures                        ( Texture2DPtr tex0, Texture2DPtr tex1 );
+    void                        SetInterlaceEnabled                         ( bool enabled );
+    bool                        GetInterlaceEnabled                         () const;
 
     void                        SetStartEven                                ( bool startEven );
     bool                        GetStartEven                                () const;
@@ -66,13 +68,13 @@ protected:
 
 private:
 
-    PixelShader *               CreatePS                            () const;
+    PixelShader *               CreatePS                            ( Texture2DPtr tex0, Texture2DPtr tex1 ) const;
 
     int                         GetChannelMask                      () const;
 
 };
 
-DEFINE_PTR_TYPE(InterlaceOverwriteChannelsFullscreenEffect)
-DEFINE_CONST_PTR_TYPE(InterlaceOverwriteChannelsFullscreenEffect)
+DEFINE_PTR_TYPE(VideoOutputFullscreenEffect)
+DEFINE_CONST_PTR_TYPE(VideoOutputFullscreenEffect)
 
 } //bv

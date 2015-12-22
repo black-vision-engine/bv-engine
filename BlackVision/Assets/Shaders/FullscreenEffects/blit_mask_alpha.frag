@@ -1,4 +1,4 @@
-#version 400 
+#version 430 
 
 subroutine float blendValueGetter( vec4 col ); 
 subroutine uniform blendValueGetter getBlendValue; 

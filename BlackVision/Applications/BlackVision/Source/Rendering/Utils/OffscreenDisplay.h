@@ -13,24 +13,26 @@ class OffscreenDisplay
 {
 private:
 
-    std::vector< RenderTarget * >   m_renderTargets;
+    std::vector< RenderTarget * >   m_bufferedFramesRenderTargets;
+    RenderTarget *                  m_videoRenderTarget;
 
-    unsigned int                    m_activeRtIdx;
+    unsigned int                    m_currentFrameRtIdx;
 
 public:
 
-                    OffscreenDisplay            ( RenderTargetStackAllocator * rtAllocator, bool useTwoRenderTargets );
+                    OffscreenDisplay            ( RenderTargetStackAllocator * rtAllocator, unsigned int numBufferedRenderTargets, bool hasVideoRenderTarget );
                     ~OffscreenDisplay           ();
 
-    //void            EnableActiveRenderTarget    ( Renderer * renderer );
-    //void            DisableActiveRenderTarget   ( Renderer * renderer );
-
+    //Frame rendering
     void            UpdateActiveRenderTargetIdx ();
 
-    RenderTarget *  GetActiveRenderTarget       ();
-    RenderTarget *  GetPreviousRenderTarget     ();
+    RenderTarget *  GetCurrentFrameRenderTarget ();
+    RenderTarget *  GetPreviousFrameRenderTarget();
 
-    unsigned int    TotalRenderTargets          () const;
+    unsigned int    TotalFrameRenderTargets     () const;
+
+    //Video display
+    RenderTarget *  GetVideoRenderTarget        ();
 
 };
 

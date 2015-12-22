@@ -1,10 +1,10 @@
-#version 400
+#version 430
 
 layout (location = 0) out vec4 FragColor;
 
 in vec2 uvCoord;
 
-uniform sampler2D 	Tex0;
+layout (binding = 0) uniform sampler2D 	Tex0;
 
 uniform int			channelMask;
 uniform int			overwriteAlpha;

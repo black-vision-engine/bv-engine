@@ -16,6 +16,7 @@ class RenderTarget;
 class PostFrameRenderLogic;
 class OffscreenDisplay;
 class BlitFullscreenEffect;
+class VideoOutputRenderLogic;
 
 class RenderLogic
 {
@@ -25,6 +26,7 @@ private:
     NodeEffectRenderLogicSelector   m_nodeEffectRenderLogicSelector;
     OffscreenDisplay *              m_offscreenDisplay;
     BlitFullscreenEffect *          m_blitEffect;
+    VideoOutputRenderLogic *        m_videoOutputRenderLogic;
 
     bool                            m_displayVideoCardPreview;
     bool                            m_useVideoCardOutput;
@@ -42,7 +44,7 @@ private:
     void    FrameRendered   ( Renderer * renderer );
 
     void    RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoot, RenderTarget * rt );
-
+       
 public:
 
     void    RenderNode      ( Renderer * renderer, SceneNode * node );
@@ -52,11 +54,10 @@ public:
 
 private:
 
-    BlitFullscreenEffect *  AccessBlitEffect    ( RenderTarget * rt );
+    BlitFullscreenEffect *          AccessBlitEffect        ( RenderTarget * rt );
+    void                            BlitToPreview           ( Renderer * renderer, RenderTarget * rt );
 
-    void                    BlitToPreview       ( Renderer * renderer, RenderTarget * rt );
-
-    void                    UpdateOffscreenState();
+    void                            UpdateOffscreenState    ();
 
 };
 

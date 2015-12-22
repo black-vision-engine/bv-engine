@@ -3,28 +3,30 @@
 
 namespace bv {
 
-class InterlaceOverwriteChannelsFullscreenEffect;
+class Renderer;
+class RenderTarget;
+class VideoOutputFullscreenEffect;
 
 
 class VideoOutputRenderLogic
 {
 private:
 
-    InterlaceOverwriteChannelsFullscreenEffect *    m_effect;
+    VideoOutputFullscreenEffect *   m_effect;
 
-    unsigned int                                    m_height;
-    bool                                            m_interlaceOdd;
+    unsigned int                    m_height;
+    bool                            m_interlaceOdd;
 
 public:
 
     VideoOutputRenderLogic          ( unsigned int height, bool interlaceOdd = false );
     ~VideoOutputRenderLogic         ();
 
-    void    Render                  ();
+    void    Render                  ( Renderer * renderer, RenderTarget * videoRenderTarget, RenderTarget * curFrameRenderTarget, RenderTarget * prevFrameRenderTarget );
 
 private:
 
-    InterlaceOverwriteChannelsFullscreenEffect *  AccessEffect  ();
+    VideoOutputFullscreenEffect *  AccessEffect  ( RenderTarget * curFrameRenderTarget, RenderTarget * prevFrameRenderTarget );
 
 };
 
