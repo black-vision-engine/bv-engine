@@ -57,10 +57,13 @@ opening record and creating record pump. Otherwise warnings occur.*/
 class LoggingHelper
 {
 private:
+
 	boost::log::record										m_record;
-	LoggerType&												m_logger;
+	LoggerType &									        m_logger;
+
 public:
-	LoggingHelper( LoggerType& logger, SeverityLevel level, ModuleEnum module );
+
+    LoggingHelper( LoggerType & logger, SeverityLevel level, ModuleEnum module );
 
 	::boost::log::aux::record_pump< LoggerType > 		recordPump();
 	bool												operator!()	{ return !m_record; }
@@ -70,8 +73,8 @@ public:
 namespace LogHelperString
 {
 
-extern const char* FILE_DESC_STRING;
-extern const char* LINE_DESC_STRING;
+extern const char * FILE_DESC_STRING;
+extern const char * LINE_DESC_STRING;
 
 }
 
@@ -87,33 +90,36 @@ for( LoggingHelper loggingHelper( bv::Logger::GetLogger().Get(), severityLevel, 
 class Logger
 {
 private:
-	LoggerType				m_logger;
+
+    LoggerType				m_logger;
 
 	boost::log::formatter	m_formatter;
 
 	unsigned int			m_fileRotationSize;
+
 private:
+
 	Logger();
 	~Logger();
 
 	void						InitForamatter		();
+
 public:
-	void						AddLogFile			( const std::string& fileName, SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
+
+    void						AddLogFile			( const std::string & fileName, SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
 	void						AddConsole			( SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
 
 
 	/// Affects all files, that will be added after this call.
 	void						SetFileRotationSize	( unsigned int newSize )	{ m_fileRotationSize = newSize; }
 	
-	LoggerType&					Get					()							{ return m_logger; }
-	static Logger&				GetLogger			();
+	LoggerType &				Get					()							{ return m_logger; }
+
+    static Logger &				GetLogger			();
+
 };
 
-
-
 } // bv
-
-
 
 #pragma warning( default : 4512 )
 #pragma warning( default : 4100 )
