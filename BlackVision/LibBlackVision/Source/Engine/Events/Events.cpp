@@ -98,6 +98,14 @@ const std::string RESPONSE_COMMAND_STRING   = "cmd";
 // ========================================================================= //
 const std::wstring ASSET_DATA_WSTRING       = L"AssetData";
 
+std::pair< LoadAssetEvent::Command, const std::wstring > LoadAssetMapping[] = 
+    { std::make_pair( LoadAssetEvent::Command::LoadAsset, L"LoadAsset" )
+    , std::make_pair( LoadAssetEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> LoadAssetEvent::Command WString2T ( const std::wstring& s )    { return WString2T( LoadAssetMapping, s ); }
+template<> const std::wstring& T2WString    ( LoadAssetEvent::Command t ) { return Enum2WString( LoadAssetMapping, t ); }
+
 // ========================================================================= //
 // ParamKeyEvent
 // ========================================================================= //
