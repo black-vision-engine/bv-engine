@@ -301,7 +301,7 @@ bool							DefaultTextPlugin::LoadAtlas	( const FontAssetDescConstPtr & fontAsse
 
     auto texDesc = txData->GetTexture( DefaultTextPluginDesc::TextureName() );
     auto fontDesc = std::make_shared< DefaultFontDescriptor >( texDesc, texDesc->GetName() );
-    txData->AddFont( fontDesc );
+    txData->SetFont( 0, fontDesc );
 
     return true;
 }
@@ -324,7 +324,7 @@ bool                            DefaultTextPlugin::LoadResource  ( AssetDescCons
         SetText( m_textParam->Evaluate() );
 
         auto fonts = m_psc->GetTexturesDataImpl()->GetFonts();
-        //assert( fonts.size() == 1 );
+        assert( fonts.size() == 1 );
         SetAsset( 0, assetDescr, fonts[ 0 ]->GetStateModel() );
 
 		return true;

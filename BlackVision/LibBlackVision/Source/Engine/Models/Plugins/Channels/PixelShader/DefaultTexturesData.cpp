@@ -131,6 +131,16 @@ void                                                    DefaultTexturesData::Add
 
 // ******************************
 //
+void                                                    DefaultTexturesData::SetFont             ( unsigned int idx, IFontDescriptorPtr fontDesc )
+{
+    if( idx >= m_fontDescriptors.size() )
+        m_fontDescriptors.resize( idx + 1 );
+    m_fontDescriptors[ idx ] = fontDesc;
+}
+
+
+// ******************************
+//
 void                                            DefaultTexturesData::UpdateResourceModels	()
 {
 	for( auto tx : m_textureDescriptors )

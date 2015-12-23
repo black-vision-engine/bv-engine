@@ -35,6 +35,7 @@ public:
 
     bool                                                    SetAnimationFrame   ( unsigned int idx, unsigned int frameNum );
 
+    void                                                    SetFont             ( unsigned int idx, IFontDescriptorPtr fontDesc );
     void                                                    AddFont             ( IFontDescriptorPtr fontDesc );
 
 	void													UpdateResourceModels();
