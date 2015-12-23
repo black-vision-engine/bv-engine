@@ -217,6 +217,7 @@ public:
         SetInterpolatorType,
         SetInterpolatorPreWrapMethod,
         SetInterpolatorPostWrapMethod,
+        AssignTimeline,
         Fail            ///< Wrong command
     } Command;
 private:
