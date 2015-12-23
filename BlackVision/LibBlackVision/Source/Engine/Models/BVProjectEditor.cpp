@@ -316,23 +316,23 @@ model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( const std::string & d
 
 // *******************************
 //
-void					BVProjectEditor::MoveNode			( const std::string & destSceneName, const std::string & destNodePath, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcNodePath )
+bool					BVProjectEditor::MoveNode			( const std::string & destSceneName, const std::string & destNodePath, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcNodePath )
 {
 	if( srcSceneName == destSceneName )
 	{
-		DetachChildNode( srcSceneName, srcNodePath );
-		AttachChildNode( destSceneName, destNodePath, destIdx );
+		if( DetachChildNode( srcSceneName, srcNodePath ) )
+		    return AttachChildNode( destSceneName, destNodePath, destIdx );
 	}
 	else
 	{
 		if( AddNodeCopy( destSceneName, destNodePath, srcSceneName, srcNodePath ) )
 		{
-			DeleteChildNode( srcSceneName, srcNodePath );
-
-			DetachChildNode( destSceneName, destNodePath );
-			AttachChildNode( destSceneName, destNodePath, destIdx );
+			if( DeleteChildNode( srcSceneName, srcNodePath ) )
+			    if( DetachChildNode( destSceneName, destNodePath ) )
+			        return AttachChildNode( destSceneName, destNodePath, destIdx );
 		}
 	}
+    return false;
 }
 
 // *******************************
@@ -463,11 +463,16 @@ void            BVProjectEditor::DeleteDetachedNodes          ( const std::strin
 
 // *******************************
 //
-void            BVProjectEditor::SetNodeVisible				( const std::string & sceneName, const std::string & nodePath, bool visible )
+bool            BVProjectEditor::SetNodeVisible				( const std::string & sceneName, const std::string & nodePath, bool visible )
 {
 	auto node =  GetNode( sceneName, nodePath );
-	node->SetVisible( visible );
-	GetEngineNode( node )->SetVisible( visible );
+    if( node )
+    {
+	    node->SetVisible( visible );
+	    GetEngineNode( node )->SetVisible( visible );
+        return true;
+    }
+    return false;
 }
 
 // *******************************
@@ -510,23 +515,23 @@ model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( const std::string & d
 
 // *******************************
 //
-void					BVProjectEditor::MoveNode			( const std::string & destSceneName, model::BasicNodePtr destParentNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcParentNode, const std::string & srcNodeName )
+bool					BVProjectEditor::MoveNode			( const std::string & destSceneName, model::BasicNodePtr destParentNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcParentNode, const std::string & srcNodeName )
 {
 	if( srcSceneName == destSceneName )
 	{
-		DetachChildNode( srcSceneName, srcParentNode, srcNodeName );
-		AttachChildNode( destSceneName, destParentNode, destIdx );
+		if( DetachChildNode( srcSceneName, srcParentNode, srcNodeName ) )
+		    return AttachChildNode( destSceneName, destParentNode, destIdx );
 	}
 	else
 	{
 		if( AddNodeCopy( destSceneName, destParentNode, srcSceneName, QueryTyped( srcParentNode->GetChild( srcNodeName ) ) ) )
 		{
-			DeleteChildNode( srcSceneName, srcParentNode, srcNodeName );
-
-			DetachChildNode( destSceneName, destParentNode, srcNodeName );
-			AttachChildNode( destSceneName, destParentNode, destIdx );
+			if( DeleteChildNode( srcSceneName, srcParentNode, srcNodeName ) )
+			    if( DetachChildNode( destSceneName, destParentNode, srcNodeName ) )
+			        return AttachChildNode( destSceneName, destParentNode, destIdx );
 		}
 	}
+    return false;
 }
 
 // *******************************
@@ -616,7 +621,7 @@ model::IPluginPtr		BVProjectEditor::AddPluginCopy			( const std::string & destSc
 
 // *******************************
 //
-void					BVProjectEditor::MovePlugin			( const std::string & destSceneName, const std::string & destNodePath, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcNodePath, const std::string & pluginName )
+bool					BVProjectEditor::MovePlugin			( const std::string & destSceneName, const std::string & destNodePath, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcNodePath, const std::string & pluginName )
 {
 	auto srcNode =  QueryTyped( GetNode( srcSceneName, srcNodePath ) );
 	auto destNode =  QueryTyped( GetNode( destSceneName, destNodePath ) );
@@ -787,20 +792,21 @@ model::IPluginPtr		BVProjectEditor::AddPluginCopy			( const std::string & destSc
 
 // *******************************
 //
-void			BVProjectEditor::MovePlugin					( const std::string & destSceneName, model::BasicNodePtr destNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcNode, const std::string & pluginName )
+bool			BVProjectEditor::MovePlugin					( const std::string & destSceneName, model::BasicNodePtr destNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcNode, const std::string & pluginName )
 {
 	if( srcSceneName == destSceneName )
 	{
-		DetachPlugin( srcNode, pluginName );
-		AttachPlugin( destNode, destIdx );
+		if( DetachPlugin( srcNode, pluginName ) )
+		    return AttachPlugin( destNode, destIdx );
 	}
 	else
 	{
 		if( AddPluginCopy( destSceneName, destNode, destIdx, srcSceneName, srcNode, pluginName ) )
 		{
-			DeletePlugin( srcNode, pluginName );
+			return DeletePlugin( srcNode, pluginName );
 		}
 	}
+    return false;
 }
 
 // *******************************

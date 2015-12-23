@@ -94,9 +94,9 @@ public:
 	
 	model::BasicNodePtr		AddNodeCopy			( const std::string & destSceneName, const std::string & destParentPath, const std::string & srcSceneName, const std::string & srcNodePath );
 	
-	void					MoveNode			( const std::string & destSceneName, const std::string & destNodePath, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcNodePath );
+	bool					MoveNode			( const std::string & destSceneName, const std::string & destNodePath, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcNodePath );
 
-	void					SetNodeVisible		( const std::string & sceneName, const std::string & nodePath, bool visible );
+	bool					SetNodeVisible		( const std::string & sceneName, const std::string & nodePath, bool visible );
 	
 	bool					RenameNode			( const std::string & sceneName, const std::string & nodePath, const std::string & newNodeName );
 
@@ -115,7 +115,7 @@ public:
 	@return Returns copied node. */
 	model::BasicNodePtr		AddNodeCopy			( const std::string & destSceneName, model::BasicNodePtr destParentNode, const std::string & srcSceneName, model::BasicNodePtr srcNode );
 	
-	void					MoveNode			( const std::string & destSceneName, model::BasicNodePtr destParentNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcParentNode, const std::string & srcNodeName );
+	bool					MoveNode			( const std::string & destSceneName, model::BasicNodePtr destParentNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcParentNode, const std::string & srcNodeName );
 
 	void					SetNodeVisible		( model::IModelNodePtr node, bool visible );
 
@@ -141,7 +141,7 @@ public:
 
 	model::IPluginPtr		AddPluginCopy		( const std::string & destSceneName, const std::string & destNodePath, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcNodePath, const std::string & pluginNameToCopy );
 
-	void					MovePlugin			( const std::string & destSceneName, const std::string & destParentNode, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcParentNode, const std::string & pluginName );
+	bool					MovePlugin			( const std::string & destSceneName, const std::string & destParentNode, UInt32 destIdx, const std::string & srcSceneName, const std::string & srcParentNode, const std::string & pluginName );
 
 	bool					LoadAsset			( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, const std::string & serializedAssetData );
 
@@ -162,7 +162,7 @@ public:
 	@return Returns copied plugin. */
 	model::IPluginPtr		AddPluginCopy		( const std::string & destSceneName, model::BasicNodePtr destNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcNode, const std::string & pluginNameToCopy );
 
-	void					MovePlugin			( const std::string & destSceneName, model::BasicNodePtr destNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcNode, const std::string & pluginName );
+	bool					MovePlugin			( const std::string & destSceneName, model::BasicNodePtr destNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcNode, const std::string & pluginName );
 
 	bool					LoadAsset			( model::IPluginPtr plugin, AssetDescConstPtr assetDesc );
 

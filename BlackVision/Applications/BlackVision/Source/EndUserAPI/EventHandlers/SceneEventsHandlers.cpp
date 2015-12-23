@@ -120,11 +120,11 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
     }
     else if( command == NodeStructureEvent::Command::SetNodeVisible )
 	{
-		editor->SetNodeVisible( sceneName, nodePath, true );
+		result = editor->SetNodeVisible( sceneName, nodePath, true );
 	}
     else if( command == NodeStructureEvent::Command::SetNodeInvisible )
 	{
-		editor->SetNodeVisible( sceneName, nodePath, false );
+		result = editor->SetNodeVisible( sceneName, nodePath, false );
 	}
 	else if( command == NodeStructureEvent::Command::RenameNode )
 	{
@@ -147,7 +147,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 		auto srcSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
 		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
 		
-		editor->MoveNode( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath );
+		result = editor->MoveNode( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath );
 	}
 	else if( command == NodeStructureEvent::Command::CopyNode )
 	{
@@ -182,24 +182,26 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
 	std::string & request		= structureEvent->Request;
     unsigned int attachIndex	= structureEvent->AttachIndex;
     auto command				= structureEvent->PluginCommand;
+    auto eventID                = structureEvent->EventID;
 
+    bool result = true;
 	auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
     if( command == PluginStructureEvent::Command::AddPlugin )
     {
-		editor->AddPlugin( sceneName, nodePath, pluginUID, pluginName, timelinePath, attachIndex );
+		result = editor->AddPlugin( sceneName, nodePath, pluginUID, pluginName, timelinePath, attachIndex );
     }
     else if( command == PluginStructureEvent::Command::RemovePlugin )
 	{
-		editor->DeletePlugin( sceneName, nodePath, pluginName );
+		result = editor->DeletePlugin( sceneName, nodePath, pluginName );
 	}
     else if( command == PluginStructureEvent::Command::AttachPlugin )
 	{
-		editor->AttachPlugin( sceneName, nodePath, attachIndex );
+		result = editor->AttachPlugin( sceneName, nodePath, attachIndex );
 	}
     else if( command == PluginStructureEvent::Command::DetachPlugin )
 	{
-		editor->DetachPlugin( sceneName, nodePath, pluginName );
+		result = editor->DetachPlugin( sceneName, nodePath, pluginName );
 	}
     else if( command == PluginStructureEvent::Command::CopyPlugin )
 	{
@@ -211,7 +213,9 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
 		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
 		auto srcPluginName = GetRequestParamValue( request )[ "SrcName" ].asString();
 
-		editor->AddPluginCopy( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName );
+		auto pluginPtr = editor->AddPluginCopy( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName );
+        if( pluginPtr == nullptr )
+            result = false;
 	}
 	else if( command == PluginStructureEvent::Command::MovePlugin )
 	{
@@ -223,8 +227,11 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
 		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
 		auto srcPluginName = GetRequestParamValue( request )[ "SrcName" ].asString();
 
-		editor->MovePlugin( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName );
+		result = editor->MovePlugin( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName );
 	}
+    else result = false;
+
+    SendSimpleResponse( command, eventID, structureEvent->SocketID, result );
 }
 
 // ***********************
