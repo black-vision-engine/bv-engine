@@ -98,9 +98,8 @@ OffscreenRenderLogic::OffscreenRenderLogic   ( unsigned int width, unsigned int 
     , m_readbackTextures( numReadBuffers * GNumRenderTargets ) //two display targets that can be potentially used
     , m_displayCamera( nullptr )
     , m_rendererCamera( camera )
-    , m_curDisplayTarget( 0 )
     , m_buffersPerTarget( numReadBuffers )
-    , m_displayRTEnabled( false )
+    , m_rtStack( width, height, fmt )
 {
     m_displayCamera         = MainDisplayTarget::CreateDisplayCamera();
 
@@ -144,61 +143,35 @@ void                OffscreenRenderLogic::SetRendererCamera         ( Camera * c
 //
 void                OffscreenRenderLogic::AllocateNewRenderTarget     ( Renderer * renderer )
 {
-    if( m_topRenderTargetEnabled )
+    if( m_rtStack.TotalActiveRenderTargets() == 0 )
     {
-        DisableTopRenderTarget( renderer );
+        m_rtStack.AllocateNewRenderTarget( renderer, RenderTarget::RTSemantic::S_DRAW_READ );
     }
-    
-    m_usedStackedRenderTargets++;
-
-    auto auxRenderTargets = m_usedStackedRenderTargets - 1;
-
-    if( auxRenderTargets > m_auxRenderTargets.size() )
+    else
     {
-        m_auxRenderTargets.push_back( MainDisplayTarget::CreateAuxRenderTarget( m_textureData.m_width, m_textureData.m_height, m_textureData.m_fmt ) );
+        m_rtStack.AllocateNewRenderTarget( renderer, RenderTarget::RTSemantic::S_DRAW_ONLY );
     }
-
-    assert( auxRenderTargets <= m_auxRenderTargets.size() );
 }
 
 // **************************
 //
 void                OffscreenRenderLogic::EnableTopRenderTarget       ( Renderer * renderer )
 {
-    assert( m_usedStackedRenderTargets > 0 );
-
-    if( !m_topRenderTargetEnabled )
-    {
-        renderer->Enable( GetRenderTargetAt( -1 ) );
-
-        m_topRenderTargetEnabled = true;
-    }
+    m_rtStack.EnableTopRenderTarget( renderer );
 }
 
 // **************************
 //
 void                OffscreenRenderLogic::DiscardCurrentRenderTarget  ( Renderer * renderer )
 {
-    assert( m_usedStackedRenderTargets > 0 );
-
-    if( m_topRenderTargetEnabled )
-    {
-        DisableTopRenderTarget( renderer );
-    }
-
-    m_usedStackedRenderTargets--;
+    m_rtStack.DiscardCurrentRenderTarget( renderer );
 }
 
 // **************************
 //
 void                OffscreenRenderLogic::DisableTopRenderTarget    ( Renderer * renderer )
 {
-    if( m_topRenderTargetEnabled )
-    {
-        renderer->Disable( GetRenderTargetAt( -1 ) );
-
-        m_topRenderTargetEnabled = false;
-    }
+    m_rtStack.DisableTopRenderTarget( renderer );
 }
 
 // **************************
@@ -224,8 +197,8 @@ void                OffscreenRenderLogic::DrawTopAuxRenderTarget    ( Renderer *
 {
     DisableTopRenderTarget( renderer );
 
-    auto topRTD = GetRenderTargetAt( -1 );
-    auto prvRTD = GetRenderTargetAt( -2 );
+    auto topRTD = m_rtStack.GetRenderTargetAt( -1 );
+    auto prvRTD = m_rtStack.GetRenderTargetAt( -2 );
 
     m_renderData.UseTexture2DEffect ( alphaVal, topRTD->ColorTexture( 0 ) );
 
@@ -242,9 +215,9 @@ void                OffscreenRenderLogic::DrawAMTopTwoRenderTargets ( Renderer *
 {
     DisableTopRenderTarget( renderer );
 
-    auto maskRT     = GetRenderTargetAt( -1 );
-    auto textureRT  = GetRenderTargetAt( -2 );
-    auto mainRT     = GetRenderTargetAt( -3 );
+    auto maskRT     = m_rtStack.GetRenderTargetAt( -1 );
+    auto textureRT  = m_rtStack.GetRenderTargetAt( -2 );
+    auto mainRT     = m_rtStack.GetRenderTargetAt( -3 );
 
     m_renderData.UseTexture2DEffect( alphaVal, textureRT->ColorTexture( 0 ), maskRT->ColorTexture( 0 ) );
 
@@ -259,7 +232,6 @@ void                OffscreenRenderLogic::DrawAMTopTwoRenderTargets ( Renderer *
 //
 void                OffscreenRenderLogic::DrawWithAllVideoEffects   ( Renderer * renderer )
 {
-    // m_renderData.UseChannelMaskEffect( 
     { renderer; }
 }
 
@@ -267,18 +239,43 @@ void                OffscreenRenderLogic::DrawWithAllVideoEffects   ( Renderer *
 //
 void                OffscreenRenderLogic::DrawDisplayRenderTarget   ( Renderer * renderer )
 {
-    assert( m_displayRTEnabled == false );
+    // FIXME: make sure that render logic does not discard this target before it is used (right now it is not a problem as discarding RT does not free any data and simply changes and index)
+    assert( m_rtStack.TotalAllocatedRenderTargets() >= 1 );
+    assert( m_rtStack.TotalActiveRenderTargets() == 0 );
 
+    //FIXME: hack - make sure that top render target (display) is active
+    m_rtStack.AllocateNewRenderTarget( renderer, RenderTarget::RTSemantic::S_DRAW_READ );
+    auto rt = m_rtStack.GetRenderTargetAt( 0 ); // DISPLAY
+
+    // FIXME: create fake, shitty effect
+    // FIXME: this shit requires an immediate fix
+    if( m_tmpOutput.quad == nullptr )
+    {
+        std::vector< bv::Transform > vec;
+        vec.push_back( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
+
+        m_tmpOutput.renderTarget = nullptr;
+
+        m_tmpOutput.quad = MainDisplayTarget::CreateDisplayRect( rt->ColorTexture( 0 ) );
+        m_tmpOutput.quad->SetWorldTransforms( vec );
+    }
+
+    auto & rtd = CurDisplayRenderTargetData();
+
+    //Display render target
     renderer->SetCamera( m_displayCamera );
-    renderer->Draw( CurDisplayRenderTargetData().quad );
+    renderer->Draw( rtd.quad );
     renderer->SetCamera( m_rendererCamera );
+            
+    m_rtStack.DiscardCurrentRenderTarget( renderer );
 }
 
 // **************************
 //
 void                OffscreenRenderLogic::SwapDisplayRenderTargets  ()
 {
-    m_curDisplayTarget = ( m_curDisplayTarget + 1 ) % GNumRenderTargets;
+    // FIXME: what here
+    // m_curDisplayTarget = ( m_curDisplayTarget + 1 ) % GNumRenderTargets;
 }
 
 // **************************
@@ -310,24 +307,24 @@ Texture2DConstPtr   OffscreenRenderLogic::ReadDisplayTarget         ( Renderer *
     return m_readbackTextures[ bufferIdx ];
 }
 
-// **************************
-//
-Texture2DConstPtr   OffscreenRenderLogic::GetColorTextureAt           ( int i ) const
-{
-    auto rt = GetRenderTargetAt( i );
-    if( rt != nullptr )
-    {
-        return rt->ColorTexture( 0 );
-    }
-    else
-    {
-        return nullptr;
-    }
-}
+//// **************************
+////
+//Texture2DConstPtr   OffscreenRenderLogic::GetColorTextureAt           ( int i ) const
+//{
+//    auto rt = GetRenderTargetAt( i );
+//    if( rt != nullptr )
+//    {
+//        return rt->ColorTexture( 0 );
+//    }
+//    else
+//    {
+//        return nullptr;
+//    }
+//}
 
 // **************************
 // Python-like logic, where negative numbers are used to index the array backwards
-RenderTarget *      OffscreenRenderLogic::GetRenderTargetAt         ( int i ) const
+RenderTarget *      OffscreenRenderLogic::GetRenderTargetAt         ( int i )
 {
     int numUsedRT = (int) m_usedStackedRenderTargets;
 
@@ -398,7 +395,10 @@ RenderTargetData    OffscreenRenderLogic::CreateVideoOutputRenderTargetData () c
 //
 unsigned int      OffscreenRenderLogic::CurDisplayRenderTargetNum           () const
 {
-    return m_curDisplayTarget;
+    //FIXME: what here
+    // return m_curDisplayTarget;
+
+    return 0;
 }
 
 //pablito
@@ -423,9 +423,11 @@ std::vector< int >    OffscreenRenderLogic::GetHackBuffersUids          ( Render
 
 // **************************
 //
-RenderTargetData  OffscreenRenderLogic::CurDisplayRenderTargetData          () const
+RenderTargetData &  OffscreenRenderLogic::CurDisplayRenderTargetData        ()
 {
-    return m_displayRenderTargetData[ m_curDisplayTarget ];
+    assert( m_tmpOutput.quad != nullptr );
+
+    return m_tmpOutput;
 }
 
 } //bv

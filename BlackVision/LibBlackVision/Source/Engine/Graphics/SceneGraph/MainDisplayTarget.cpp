@@ -19,6 +19,28 @@ namespace bv {
 
 // **************************
 //
+RenderTarget *  MainDisplayTarget::CreateRenderTarget           ( RenderTarget::RTSemantic semantic, unsigned int width, unsigned int height, TextureFormat fmt )
+{
+    auto retRT = static_cast< RenderTarget * >( nullptr );
+
+    if ( semantic == RenderTarget::RTSemantic::S_DRAW_READ )
+    {
+        retRT = CreateDisplayRenderTarget( width, height, fmt );    
+    }
+    else if( semantic == RenderTarget::RTSemantic::S_DRAW_ONLY )
+    {
+        retRT = CreateAuxRenderTarget( width, height, fmt );    
+    }
+    else
+    {
+        assert( false );
+    }
+
+    return retRT;
+}
+
+// **************************
+//
 RenderTarget *  MainDisplayTarget::CreateDisplayRenderTarget    ( unsigned int width, unsigned int height, TextureFormat fmt )
 {
     assert( width > 0 );
@@ -98,7 +120,7 @@ RenderableArrayDataArraysSingleVertexBuffer * MainDisplayTarget::CreateTexDispRe
 //
 RenderableArrayDataArraysSingleVertexBuffer * MainDisplayTarget::CreateTriStripArrayData( unsigned int numVertices, float * vbData )
 {
-    unsigned int vertexSize = 4 * sizeof( float ) + 2 * sizeof( float );
+    unsigned int vertexSize = 3 * sizeof( float ) + 2 * sizeof( float );
 
     VertexBuffer * vb       = new VertexBuffer( 4, vertexSize, DataBuffer::Semantic::S_STATIC );
     VertexDescriptor * vd   = VertexDescriptor::Create( 2,

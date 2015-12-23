@@ -1,6 +1,6 @@
 #include "ScreenShotLogic.h"
 
-#include "Rendering/OffscreenRenderLogic.h"
+#include "Rendering/Utils/OffscreenRenderLogic.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "LibImage.h"
 

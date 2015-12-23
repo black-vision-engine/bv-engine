@@ -4,62 +4,80 @@
 #include "VideoCardManager.h"
 #include <vector>
 
+#include "Rendering/Utils/RenderTargetStackAllocator.h"
+#include "Rendering/Logic/FrameRendering/NodeEffectRenderLogicSelector.h"
+
 
 namespace bv {
 
 class Renderer;
-class OffscreenRenderLogic;
 class SceneNode;
 class Camera;
 class NodeEffectRenderLogic;
 class DefaultVideoOutputRenderLogic;
 class ScreenShotLogic;
 
+class RenderTarget;
+
+class PostFrameRenderLogic;
+class OffscreenDisplay;
+class BlitFullscreenEffect;
+class VideoOutputRenderLogic;
+
 class RenderLogic
 {
 private:
 
 	bv::videocards::VideoCardManager *      m_VideoCardManager;
+    RenderTargetStackAllocator      m_rtStackAllocator;
+    NodeEffectRenderLogicSelector   m_nodeEffectRenderLogicSelector;
+    OffscreenDisplay *              m_offscreenDisplay;
+    BlitFullscreenEffect *          m_blitEffect;
+    VideoOutputRenderLogic *        m_videoOutputRenderLogic;
 
-    OffscreenRenderLogic *                  m_offscreenRenderLogic;
-    DefaultVideoOutputRenderLogic *         m_videoOutputRenderLogic;
     ScreenShotLogic*                        m_screenShotLogic;
 
-    std::vector< NodeEffectRenderLogic * >  m_customNodeRenderLogic;
+    bool                            m_displayVideoCardPreview;
+    bool                            m_useVideoCardOutput;
 
 public:
 
             RenderLogic     ();
             ~RenderLogic    ();
 
-    void    SetCamera       ( Camera * cam );
+    void    RenderFrame     ( Renderer * renderer, SceneNode * sceneRoot );
 
-    void    RenderFrame     ( Renderer * renderer, SceneNode * node );
-    void    PreFrameSetup   ( Renderer * renderer );
-    void    PostFrameSetup  ( Renderer * renderer );
 	//pablito
-	void	SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager, Renderer * renderer);
-	void	InitVideoCards     ( Renderer * renderer );
+	void	SetVideoCardManager ( bv::videocards::VideoCardManager* videoCardManager );
+private:
+    void	InitVideoCards      ();
+    // pablito end
 
-// FIXME: this interface should be private or moved to another service class used by RenderLogic and Effects
+private:
+
+
+    void    RenderFrameImpl ( Renderer * renderer, SceneNode * sceneRoot );
+    void    FrameRendered   ( Renderer * renderer );
+
+    void    RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoot, RenderTarget * rt );
+       
 public:
 
     void    RenderNode      ( Renderer * renderer, SceneNode * node );
+    void    DrawNode        ( Renderer * renderer, SceneNode * node );
+    void    DrawNodeOnly    ( Renderer * renderer, SceneNode * node );
+    void    RenderChildren  ( Renderer * renderer, SceneNode * node, int firstChildIdx = 0 );
 
 private:
 
-    NodeEffectRenderLogic *     GetNodeEffectRenderLogic    ( SceneNode * node ) const;
+    BlitFullscreenEffect *          AccessBlitEffect        ( RenderTarget * rt );
+    void                            BlitToPreview           ( Renderer * renderer, RenderTarget * rt );
+
+    void                            UpdateOffscreenState    ();
 
 public:
 
-    void    DrawNode        ( Renderer * renderer, SceneNode * node );
-
-    void    DrawNodeOnly    ( Renderer * renderer, SceneNode * node );
-    void    DrawChildren    ( Renderer * renderer, SceneNode * node, int firstChildIdx = 0 );
-
-private:
-
-    void    PrintGLStats    ( bool detailed );
+    VideoOutputRenderLogic *        GedVideoOutputRenderLogic   ();
 
 public:
     void    MakeScreenShot  ( const std::string& path, unsigned int numFrames );

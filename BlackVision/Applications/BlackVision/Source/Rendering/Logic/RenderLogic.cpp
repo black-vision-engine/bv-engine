@@ -1,88 +1,86 @@
 #include "RenderLogic.h"
 
-#include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
+
+#include "Rendering/Utils/RenderLogicContext.h"
+#include "Rendering/Utils/OffscreenDisplay.h"
+
+#include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
+#include "Rendering/Logic/FullScreen/Impl/BlitFullscreenEffect.h"
+#include "Rendering/Logic/VideoOutputRendering/VideoOutputRenderLogic.h"
+#include "Rendering/Logic/OfflineRendering/ScreenShotLogic.h"
 
 #include "Tools/Profiler/HerarchicalProfiler.h"
 #include "FrameStatsService.h"
 
-#include "Rendering/Logic/OfflineRendering/ScreenShotLogic.h"
-#include "Rendering/OffscreenRenderLogic.h"
+#include "UseLoggerBVAppModule.h"
+
 #include "BVConfig.h"
 
-#include "BVGL.h"
-
-#include "../../UseLoggerBVAppModule.h"
 
 //pablito
 #define USE_VIDEOCARD	
 #include "ConfigManager.h"
 #include <boost/lexical_cast.hpp>
-#include "Rendering/Logic/NodeEffectRendering/NodeEffectRenderLogic.h"
-#include "Rendering/Logic/NodeEffectRendering/DefaultEffectRenderLogic.h"
-#include "Rendering/Logic/NodeEffectRendering/AlphaMaskRenderLogic.h"
-#include "Rendering/Logic/NodeEffectRendering/NodeMaskRenderLogic.h"
-#include "Rendering/Logic/NodeEffectRendering/WireframeRenderLogic.h"
-#include "Rendering/Logic/NodeEffectRendering/LightScatteringRenderLogic.h"
-#include "Rendering/Logic/NodeEffectRendering/AlphaChannelRenderLogic.h"
-
-#include "Rendering/Logic/VideoOutputRendering/DefaultVideoOutputRenderLogic.h"
-
 
 namespace bv {
 
 // *********************************
 //
 RenderLogic::RenderLogic     ()
+    : m_rtStackAllocator( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), TextureFormat::F_A8R8G8B8 )
+    , m_blitEffect( nullptr )
+    , m_videoOutputRenderLogic( nullptr )
 {
-    m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffersPerRT() );
-    m_videoOutputRenderLogic = new DefaultVideoOutputRenderLogic( DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
-    m_screenShotLogic = new ScreenShotLogic( m_offscreenRenderLogic->NumReadBuffersPerRT() );
+    auto videoCardEnabled   = DefaultConfig.ReadbackFlag();
+    auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput();
 
-    m_customNodeRenderLogic.push_back( new DefaultEffectRenderLogic( this, m_offscreenRenderLogic ) );
-    m_customNodeRenderLogic.push_back( new AlphaMaskRenderLogic( this, m_offscreenRenderLogic ) );
-    m_customNodeRenderLogic.push_back( new NodeMaskRenderLogic( this, m_offscreenRenderLogic ) );
-    m_customNodeRenderLogic.push_back( new WireframeRenderLogic( this, m_offscreenRenderLogic ) );
-    m_customNodeRenderLogic.push_back( new LightScatteringRenderLogic( this, m_offscreenRenderLogic ) );
-    m_customNodeRenderLogic.push_back( new AlphaChannelRenderLogic( this, m_offscreenRenderLogic ) );
+    unsigned int numFrameRenderTargets = videoCardEnabled || previewAsVideoCard ? 2 : 1;
+
+    m_offscreenDisplay          = new OffscreenDisplay( &m_rtStackAllocator, numFrameRenderTargets, videoCardEnabled || previewAsVideoCard );
+    m_videoOutputRenderLogic    = new VideoOutputRenderLogic( DefaultConfig.DefaultHeight() ); // FIXME: interlace odd/even setup
+
+    m_displayVideoCardPreview   = previewAsVideoCard;
+    m_useVideoCardOutput        = videoCardEnabled;
 }
 
 // *********************************
 //
 RenderLogic::~RenderLogic    ()
 {
-	m_VideoCardManager->m_IsEnding = true;
-    for ( auto rl : m_customNodeRenderLogic )
-        delete rl;
-
-    delete m_offscreenRenderLogic;
-    delete m_videoOutputRenderLogic;
+    delete m_offscreenDisplay;
+    delete m_blitEffect;
 }
 
 // *********************************
 //
-void    RenderLogic::SetCamera       ( Camera * cam )
+void    RenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot )
 {
-    m_offscreenRenderLogic->SetRendererCamera( cam );
+    renderer->PreDraw();
+
+    RenderFrameImpl( renderer, sceneRoot );
+    
+    renderer->PostDraw();
+    renderer->DisplayColorBuffer();
 }
 
 //pablito:
 // *********************************
 //
-void	RenderLogic::SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager,Renderer * renderer)
+void	RenderLogic::SetVideoCardManager( bv::videocards::VideoCardManager* videoCardManager )
 {
 		m_VideoCardManager = videoCardManager;
 		#ifdef USE_VIDEOCARD
 			m_VideoCardManager = videoCardManager;
-			InitVideoCards( renderer );
+			InitVideoCards();
 		#endif
 		
 }
 
 // *********************************
 //
-void RenderLogic::InitVideoCards     ( Renderer * renderer )
+void RenderLogic::InitVideoCards     ()
 {
 	if(!DefaultConfig.ReadbackFlag() )
     {
@@ -156,8 +154,8 @@ void RenderLogic::InitVideoCards     ( Renderer * renderer )
 			}
 		}
 
-		if(m_VideoCardManager->InitVideoCardManager(m_offscreenRenderLogic->GetHackBuffersUids( renderer ))) 
-		m_VideoCardManager->StartVideoCards();
+		//if(m_VideoCardManager->InitVideoCardManager(m_offscreenRenderLogic->GetHackBuffersUids( renderer )))   // FIXME: default->TDP2015
+		//    m_VideoCardManager->StartVideoCards();
 
 
 	}
@@ -222,101 +220,121 @@ void RenderLogic::InitVideoCards     ( Renderer * renderer )
 }
 // *********************************
 //
-void    RenderLogic::RenderFrame     ( Renderer * renderer, SceneNode * node )
+void    RenderLogic::RenderFrameImpl ( Renderer * renderer, SceneNode * sceneRoot )
 {
+    auto rt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
+
+    RenderRootNode( renderer, sceneRoot, rt );
     {
         HPROFILER_SECTION( "PreFrame Setup", PROFILER_THREAD1 );
-        PreFrameSetup( renderer );
+        // PreFrameSetup( renderer );  // FIXME: default->TDP2015
     }
 
-    {
-        HPROFILER_SECTION( "RenderNode", PROFILER_THREAD1 );
-        // FIXME: verify that all rendering paths work as expected
-	    if( node )
-		    RenderNode( renderer, node );
-    }
+    FrameRendered( renderer );
 
+    UpdateOffscreenState();
+}
+
+// *********************************
+//
+//  if not DisplayAsVideoOutput:
+//      BlitToWindow()
+//  else:
+//      GPURenderPreVideo()
+//      BlitToWindow()
+//
+//      if PushToVideoCard:
+//          Readback()
+//          Push()
+//
+void    RenderLogic::FrameRendered   ( Renderer * renderer )
+{
+    auto prevRt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
+
+    if( m_displayVideoCardPreview )
     {
-        HPROFILER_SECTION( "PostFrame Setup", PROFILER_THREAD1 );
-        PostFrameSetup( renderer );
+        auto videoRt    = m_offscreenDisplay->GetVideoRenderTarget          ();
+        auto curFrameRt = m_offscreenDisplay->GetCurrentFrameRenderTarget   ();
+        auto prvFrameRt = m_offscreenDisplay->GetPreviousFrameRenderTarget  ();
+
+        m_videoOutputRenderLogic->Render( renderer, videoRt, curFrameRt, prvFrameRt );
+
+        prevRt = videoRt;
+    }
+     
+    BlitToPreview( renderer, prevRt );
+
+    if( m_useVideoCardOutput )
+    {
+        //FIXME: VIDEO CART CODE (PUSH FRAME) to be placed here
     }
 }
 
 // *********************************
 //
-void    RenderLogic::PreFrameSetup  ( Renderer * renderer )
+void    RenderLogic::RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoot, RenderTarget * rt )
 {
-    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
-    renderer->ClearBuffers();
-    renderer->PreDraw();
-
-    m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
-    m_offscreenRenderLogic->EnableTopRenderTarget( renderer );
-
-    renderer->ClearBuffers();
-}
-
-// *********************************
-//
-void    RenderLogic::PostFrameSetup ( Renderer * renderer )
-{
+    // FIXME: verify that all rendering paths work as expected
+	if( sceneRoot )
     {
-        HPROFILER_SECTION( "Video Output Logic", PROFILER_THREAD1 );
-        m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
-        m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
+        renderer->Enable( rt );
 
-        m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic, m_VideoCardManager );
-        //m_screenShotLogic->FrameRendered( renderer, m_offscreenRenderLogic );
-    }
+        {
+            renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+            renderer->ClearBuffers();
 
-    {
-        HPROFILER_SECTION( "Display Color Buffer", PROFILER_THREAD1 );
-        renderer->PostDraw();
-        renderer->DisplayColorBuffer();
+            RenderNode( renderer, sceneRoot );
+        }
+
+        renderer->Disable( rt );
     }
 }
 
 // *********************************
 //
-void    RenderLogic::RenderNode     ( Renderer * renderer, SceneNode * node )
+void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
 {
+    //FIXME: assumes only one renderer instance per application
+    static RenderLogicContext ctx( renderer, &m_rtStackAllocator, this );
+
+    assert( renderer == ctx.GetRenderer() );
+
     if ( node->IsVisible() )
     {
-        auto effectRenderLogic = GetNodeEffectRenderLogic( node );
-        
-        effectRenderLogic->RenderNode( renderer, node );
+        if( node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT )
+        {
+            // Default render logic
+            DrawNode( renderer, node );
+        }
+        else
+        {
+            auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogic( node );
+               
+            effectRenderLogic->RenderNode( node, &ctx );
+        }
     }
 }
 
 // *********************************
 //
-NodeEffectRenderLogic *     RenderLogic::GetNodeEffectRenderLogic    ( SceneNode * node ) const
-{
-    assert( (unsigned int) node->GetNodeEffect()->GetType() < (unsigned int) NodeEffect::Type::T_TOTAL );
-
-    return m_customNodeRenderLogic[ (unsigned int) node->GetNodeEffect()->GetType() ];
-}
-
-// *********************************
-//
-void    RenderLogic::DrawNode       ( Renderer * renderer, SceneNode * node )
+void    RenderLogic::DrawNode        ( Renderer * renderer, SceneNode * node )
 {
 	HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor", PROFILER_THREAD1 );
     DrawNodeOnly( renderer, node );
 
-    DrawChildren( renderer, node );
+    RenderChildren( renderer, node );
 }
 
 // *********************************
 //
-void    RenderLogic::DrawNodeOnly   ( Renderer * renderer, SceneNode * node )
+void    RenderLogic::DrawNodeOnly    ( Renderer * renderer, SceneNode * node )
 {
     renderer->Draw( static_cast<bv::RenderableEntity *>( node->GetTransformable() ) );
 }
 
 // *********************************
 //
-void    RenderLogic::DrawChildren   ( Renderer * renderer, SceneNode * node, int firstChildIdx )
+void    RenderLogic::RenderChildren  ( Renderer * renderer, SceneNode * node, int firstChildIdx )
 {
     for ( unsigned int i = firstChildIdx; i < (unsigned int) node->NumChildNodes(); i++ )
     {
@@ -327,28 +345,50 @@ void    RenderLogic::DrawChildren   ( Renderer * renderer, SceneNode * node, int
 
 // *********************************
 //
-void    RenderLogic::PrintGLStats    (  bool detailed  )
+BlitFullscreenEffect *  RenderLogic::AccessBlitEffect   ( RenderTarget * rt )
 {
-    if ( detailed )
+    // FIXME: Blit current render target - suxx a bit - there should be a separate initialization step
+    if ( !m_blitEffect )
     {
-        BVGL::PrintCompleteSummary( " ************************* DETAILED GL STATS ********************************** " );
+        auto rtTex = rt->ColorTexture( 0 );
+
+        m_blitEffect = new BlitFullscreenEffect( rtTex, false );
     }
-    else
-    {
-        BVGL::PrintShortSummary( " ************************* SHORT GL STATS ********************************** " );
-    }
+
+    return m_blitEffect;
 }
 
-// ***********************
+// *********************************
 //
-void    RenderLogic::MakeScreenShot  ( const std::string& path, unsigned int numFrames )
+void                    RenderLogic::BlitToPreview      ( Renderer * renderer, RenderTarget * rt )
+{
+    auto blitter = AccessBlitEffect( rt );
+
+    blitter->Render( renderer );
+}
+
+// *********************************
+//
+void                        RenderLogic::UpdateOffscreenState()
+{
+    m_offscreenDisplay->UpdateActiveRenderTargetIdx();
+}
+
+// *********************************
+//
+VideoOutputRenderLogic *    RenderLogic::GedVideoOutputRenderLogic  ()
+{
+    return m_videoOutputRenderLogic;
+}
+
+// *********************************
+//
+void                        RenderLogic::MakeScreenShot  ( const std::string& path, unsigned int numFrames )
 {
     m_screenShotLogic->MakeScreenShot( path, numFrames );
 }
 
-
 } //bv
-
 
 /* 
 
