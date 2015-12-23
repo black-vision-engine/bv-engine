@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Rendering/Logic/NodeEffectRendering/NodeEffectRenderLogic.h"
+#include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
 
 #include "Engine/Graphics/Effects/AlphaChannelEffect.h"
 
 namespace bv {
 
-
+class Renderer;
 class AlphaChannelRenderLogic : public NodeEffectRenderLogic
 {
 private:
@@ -15,10 +15,10 @@ private:
 
 public:
 
-                    AlphaChannelRenderLogic     ( RenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic );
+                    AlphaChannelRenderLogic     ();
     virtual         ~AlphaChannelRenderLogic    ();
 
-    virtual void    RenderNode                  ( Renderer * renderer, SceneNode * node ) override;
+    virtual void    RenderNode                  ( SceneNode * node, RenderLogicContext * ctx  ) override;
 
 	void            DrawNodeOnly				( Renderer * renderer, SceneNode * node );
     void            DrawChildren				( Renderer * renderer, SceneNode * node );

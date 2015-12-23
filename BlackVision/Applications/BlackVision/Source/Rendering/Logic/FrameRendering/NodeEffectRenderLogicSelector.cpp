@@ -8,7 +8,8 @@
 #include "Rendering/Logic/FrameRendering/NodeEffect/AlphaMaskRenderLogic.h"
 #include "Rendering/Logic/FrameRendering/NodeEffect/NodeMaskRenderLogic.h"
 #include "Rendering/Logic/FrameRendering/NodeEffect/WireframeRenderLogic.h"
-
+#include "Rendering/Logic/FrameRendering/NodeEffect/LightScatteringRenderLogic.h"
+#include "Rendering/Logic/FrameRendering/NodeEffect/AlphaChannelRenderLogic.h"
 
 namespace bv {
 
@@ -20,6 +21,8 @@ NodeEffectRenderLogicSelector::NodeEffectRenderLogicSelector                    
     m_nodeRenderLogicVec.push_back( new AlphaMaskRenderLogic() );
     m_nodeRenderLogicVec.push_back( new NodeMaskRenderLogic() );
     m_nodeRenderLogicVec.push_back( new WireframeRenderLogic() );
+    m_nodeRenderLogicVec.push_back( new LightScatteringRenderLogic() );
+    m_nodeRenderLogicVec.push_back( new AlphaChannelRenderLogic() );
 }
 
 // ****************************
