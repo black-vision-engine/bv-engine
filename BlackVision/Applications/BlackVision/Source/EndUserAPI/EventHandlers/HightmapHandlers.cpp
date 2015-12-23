@@ -5,6 +5,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "../../UseLoggerBVAppModule.h"
 
+#include "EventHandlerHelpers.h"
+
 namespace bv
 {
 
@@ -90,6 +92,14 @@ void            HightmapHandlers::HightmapHandler         ( bv::IEventPtr eventP
     {
         // this->HMStart( 150 );
     }
+    else
+    {
+        SendSimpleErrorResponse( command, evtHightmap->EventID, evtHightmap->SocketID, "Unknown command" );
+        return;
+    }
+
+    //SendSimpleResponse( command, evtHightmap->EventID, evtHightmap->SocketID, true );
+    SendSimpleErrorResponse( command, evtHightmap->EventID, evtHightmap->SocketID, "Hightmap events are not implemented yet" );
 }
 
 

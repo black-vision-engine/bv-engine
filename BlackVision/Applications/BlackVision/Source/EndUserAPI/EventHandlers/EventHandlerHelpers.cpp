@@ -46,19 +46,6 @@ bv::model::IModelNodePtr GetNode( BVAppLogic* appLogic, const std::string& scene
 
 // *********************************
 //
-Json::Value ToJSONArray( const StringVector & v )
-{
-	Json::Value root;
-
-	for( auto s : v )
-	{
-		root.append( s );
-	}
-
-	return root;
-}
-// *********************************
-//
 Json::Value Str2Json( const std::string & data )
 {
 	return Json::Value( data );
@@ -70,47 +57,5 @@ Json::Value GetRequestParamValue( const std::string& request )
 {
 	return Str2Json( std::string( request.begin(), request.end() ) );
 }
-
-// *********************************
-//
-Json::Value ToJSONArray( const PathVec & v )
-{
-    Json::Value root;
-
-    for( auto pn : v )
-    {
-        root.append( pn.Str() );
-    }
-
-    return root;
-}
-
-// ***********************
-//
-std::wstring MakeSceneStructureResponse  ( const std::string & cmd, const std::string & msgKey, const Json::Value & msgVal )
-{
-    LOG_MESSAGE( SeverityLevel::info ) << cmd << " OK";
-
-    Json::Value scenes;
-
-    scenes[ "cmd" ] = cmd;
-    scenes[ msgKey ] = msgVal;
-
-    std::string S = scenes.toStyledString();
-
-    return wstring( S.begin(), S.end() );
-}
-
-// *********************************
-//
-void SendOnSceneStructureResponse( int socketID, const std::string & cmd, const std::string & msgKey, const Json::Value & msgVal )
-{
-    ResponseEventPtr responseEvent = std::make_shared<ResponseEvent>();
-    responseEvent->Response = MakeSceneStructureResponse( cmd, msgKey, msgVal );
-    responseEvent->SocketID = socketID;
-    GetDefaultEventManager().QueueResponse( responseEvent );
-}
-
-
 
 } //bv
