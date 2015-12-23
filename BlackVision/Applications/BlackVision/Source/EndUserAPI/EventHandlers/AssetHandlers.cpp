@@ -3,6 +3,7 @@
 #include "../../BVAppLogic.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 #include "Engine/Events/EventHelpers.h"             // wstring to string conversions and vice versa
+#include "EventHandlerHelpers.h"
 
 
 namespace bv
@@ -33,7 +34,10 @@ void		AssetHandlers::CacheHandler			( bv::IEventPtr evt )
         if( command == AssetEvent::Command::ClearUnusedCachedAssets )
 		{
 			GTexture2DCache.ClearUnused();
+            SendSimpleResponse( command, assetEvent->EventID, assetEvent->SocketID, true );
 		}
+        else
+            SendSimpleErrorResponse( command, assetEvent->EventID, assetEvent->SocketID, "Unknown command" );
     }
 }
 

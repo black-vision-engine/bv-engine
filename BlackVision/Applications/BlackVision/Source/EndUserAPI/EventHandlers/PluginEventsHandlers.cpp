@@ -63,7 +63,12 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
     else
         param = GetPluginParameter( sceneName, nodeName, pluginName, paramName );
     if( param == nullptr )
+    {
+        SendSimpleErrorResponse( command, setParamEvent->EventID, setParamEvent->SocketID, "Parameter not found" );
         return;
+    }
+
+    bool result = true;
 
     if( command == ParamKeyEvent::Command::AddKey )
     {
@@ -93,11 +98,11 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
             AddParameter( param, value, (TimeType)keyTime );        // Regular parameter
     }
     else if( command == ParamKeyEvent::Command::SetInterpolatorType )
-        BezierSetCurveType( param, SerializationHelper::String2T( toString( value ), CurveType::CT_BEZIER ) );
+        result = BezierSetCurveType( param, SerializationHelper::String2T( toString( value ), CurveType::CT_BEZIER ) );
     else if( command == ParamKeyEvent::Command::SetInterpolatorPreWrapMethod )
-        SetWrapPreMethod( param, SerializationHelper::String2T( toString( value ), WrapMethod::clamp ) );
+        result = SetWrapPreMethod( param, SerializationHelper::String2T( toString( value ), WrapMethod::clamp ) );
     else if( command == ParamKeyEvent::Command::SetInterpolatorPostWrapMethod )
-        SetWrapPostMethod( param, SerializationHelper::String2T( toString( value ), WrapMethod::clamp ) );
+        result = SetWrapPostMethod( param, SerializationHelper::String2T( toString( value ), WrapMethod::clamp ) );
     else if( command == ParamKeyEvent::Command::RemoveKey )
     {
         if( pluginName == "transform" )     // Only transform parameter
@@ -122,6 +127,10 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
         else
             RemoveParameterKey( param, (TimeType)keyTime );
     }
+    else
+        result = false;
+
+    SendSimpleResponse( command, setParamEvent->EventID, setParamEvent->SocketID, result );
 }
 
 
@@ -245,6 +254,8 @@ void PluginEventsHandlers::LoadAsset( bv::IEventPtr eventPtr )
             LOG_MESSAGE( SeverityLevel::info ) << "Asset loaded succesfully. Node: [" + eventLoadAsset->NodeName + "] plugin [" + eventLoadAsset->PluginName + "]";
         else
             LOG_MESSAGE( SeverityLevel::error ) << "Failed to load asset. Node [" + eventLoadAsset->NodeName + "] plugin [" + eventLoadAsset->PluginName + "]\n" << assetData;
+
+        SendSimpleResponse( LoadAssetEvent::Command::LoadAsset, eventLoadAsset->EventID, eventLoadAsset->SocketID, result );
     }
 }
 
@@ -260,6 +271,7 @@ void PluginEventsHandlers::TimerHandler        ( bv::IEventPtr eventPtr )
     auto root = modelScene->GetModelSceneRoot();
         
     std::string& nodeName = evtTimer->NodeName;
+    std::string& sceneName = evtTimer->SceneName;
     TimerEvent::Command command = evtTimer->TimerCommand;
     float hours = evtTimer->Hours;
     float minutes = evtTimer->Minutes;
@@ -268,20 +280,20 @@ void PluginEventsHandlers::TimerHandler        ( bv::IEventPtr eventPtr )
 
     TimeType time = ( hours * 3600.0f + minutes * 60.0f + seconds ) + millis * 0.001f;
 
-    auto node = root->GetNode( nodeName );
-
-    if( node == nullptr && root->GetName() == nodeName )
-    {
-        LOG_MESSAGE( SeverityLevel::info ) << "root node is node you're looking for [" + nodeName + "] Applying jedi fix now.";
-        node = root;
-    }
+    auto node = GetNode( m_appLogic, sceneName, nodeName );
     if( node == nullptr )
     {
-        LOG_MESSAGE( SeverityLevel::error ) << "Error OnSetParam() node [" + nodeName + "] not found";
+        SendSimpleErrorResponse( command, evtTimer->EventID, evtTimer->SocketID, "Node not found" );
         return;
     }
        
+    bool result = true;
     auto timerplugin = node->GetPlugin("timer");
+    if( timerplugin == nullptr )
+    {
+        SendSimpleErrorResponse( command, evtTimer->EventID, evtTimer->SocketID, "Timer plugin not found" );
+        return;
+    }
 
     if( command == TimerEvent::Command::Start )
         StartTimerPlugin( timerplugin );
@@ -301,6 +313,13 @@ void PluginEventsHandlers::TimerHandler        ( bv::IEventPtr eventPtr )
         SetTimeTimerPlugin( timerplugin, time );
         StopTimerPlugin( timerplugin );
     }
+    else
+    {
+        SendSimpleErrorResponse( command, evtTimer->EventID, evtTimer->SocketID, "Unknown command" );
+        return;
+    }
+
+    SendSimpleResponse( command, evtTimer->EventID, evtTimer->SocketID, result );
 }
 
 

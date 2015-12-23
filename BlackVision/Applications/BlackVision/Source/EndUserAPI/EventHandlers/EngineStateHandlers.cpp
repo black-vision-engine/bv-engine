@@ -1,6 +1,7 @@
 #include "EngineStateHandlers.h"
 
 #include "../../BVAppLogic.h"
+#include "EventHandlerHelpers.h"
 
 namespace bv
 {
@@ -34,7 +35,13 @@ void EngineStateHandlers::RenderingModeEvent( IEventPtr evt )
         renderMode.MakeScreenShot( filePath );
     else if( command == RenderingModeEvent::Command::RenderOffscreen )
         renderMode.SetRenderToFileMode( filePath, requestedFPS, numFrames );
+    else
+    {
+        SendSimpleErrorResponse( command, modeEvent->EventID, modeEvent->SocketID, "Unknown command" );
+        return;
+    }
 
+    SendSimpleResponse( command, modeEvent->EventID, modeEvent->SocketID, true );
 }
 
 

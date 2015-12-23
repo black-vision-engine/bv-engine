@@ -169,6 +169,12 @@ DEFINE_PTR_TYPE( KeyPressedEvent )
 // ************************************* LoadAssetEvent *************************************
 class LoadAssetEvent : public RemoteEvent
 {
+public:
+    typedef enum
+    {
+        LoadAsset,
+        Fail            ///< Wrong command
+    } Command;
 private:
     static const EventType          m_sEventType;
     static std::string              m_sEventName;
@@ -192,6 +198,9 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
+
+template<> LoadAssetEvent::Command  SerializationHelper::WString2T      ( const std::wstring& s );
+template<> const std::wstring&      SerializationHelper::T2WString      ( LoadAssetEvent::Command t );
 
 DEFINE_PTR_TYPE( LoadAssetEvent )
 
@@ -235,6 +244,10 @@ public:
     static EventType                Type                ();
     static std::string&             Name                ();
 };
+
+template<> ParamKeyEvent::Command   SerializationHelper::WString2T ( const std::wstring& s );
+template<> const std::wstring&      SerializationHelper::T2WString    ( ParamKeyEvent::Command t );
+
 DEFINE_PTR_TYPE( ParamKeyEvent )
 
 
@@ -271,6 +284,10 @@ public:
     static EventType                Type                ();
     static std::string&             Name                ();
 };
+
+template<> AssetEvent::Command SerializationHelper::WString2T   ( const std::wstring& s );
+template<> const std::wstring& SerializationHelper::T2WString   ( AssetEvent::Command t );
+
 DEFINE_PTR_TYPE( AssetEvent )
 
 // ************************************* SceneEvent Event *************************************
@@ -619,6 +636,9 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
+template<> TimerEvent::Command      SerializationHelper::WString2T    ( const std::wstring& s );
+template<> const std::wstring&      SerializationHelper::T2WString    ( TimerEvent::Command t );
+
 DEFINE_PTR_TYPE( TimerEvent )
 
 
@@ -745,6 +765,9 @@ public:
     virtual const std::string &     GetName             () const;
     virtual EventType               GetEventType        () const;
 };
+
+template<> RenderingModeEvent::Command  SerializationHelper::WString2T  ( const std::wstring& s );
+template<> const std::wstring&          SerializationHelper::T2WString  ( RenderingModeEvent::Command t );
 
 DEFINE_PTR_TYPE( RenderingModeEvent )
 
