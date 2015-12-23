@@ -36,12 +36,12 @@ void    AlphaMaskRenderLogic::RenderNode                  ( SceneNode * node, Re
     else if ( alphaValue > 0.01f )
     {
         auto renderer = ctx->GetRenderer();
-        auto mainTarget = ctx->GetBoundRenderTarget();
-        renderer->Disable( mainTarget );
+        auto mainTarget = disableBoundRT( ctx );
 
         auto intermediateTarget = RenderToRenderTarget( ctx, node );
 
-        renderer->Enable( mainTarget );    
+        enable( ctx, mainTarget );
+
         BlitWithAlpha( renderer, intermediateTarget, alphaValue );
     }
 
@@ -56,14 +56,14 @@ RenderTarget * AlphaMaskRenderLogic::RenderToRenderTarget         ( RenderLogicC
     auto rtAllocator    = ctx->GetRenderTargetAllocator();
 
     auto rt = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
-    renderer->Enable( rt );
+    
+    enable( ctx, rt );
 
-    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
-    renderer->ClearBuffers();
+    clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
     logic( ctx )->DrawNode( renderer, node, ctx );
 
-    renderer->Disable( rt );
+    disableBoundRT( ctx );
     rtAllocator->Free();
 
     return rt;

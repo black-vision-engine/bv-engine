@@ -49,8 +49,7 @@ void    NodeMaskRenderLogic::RenderNode           ( SceneNode * node, RenderLogi
 
             logic->DrawNodeOnly( renderer, node );
 
-            auto mainTarget = ctx->GetBoundRenderTarget();
-            renderer->Disable( mainTarget );
+            auto mainTarget = disableBoundRT( ctx );
 
             auto foregroundRt   = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
             auto maskRt         = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
@@ -60,7 +59,8 @@ void    NodeMaskRenderLogic::RenderNode           ( SceneNode * node, RenderLogi
             rtAllocator->Free();
             rtAllocator->Free();
 
-            renderer->Enable( mainTarget );
+            enable( ctx, mainTarget );
+
             BlitWithMask( renderer, foregroundRt, maskRt, alphaValue );
 
             logic->RenderChildren( renderer, node, ctx, 2 );
@@ -92,16 +92,12 @@ void                                NodeMaskRenderLogic::RenderItermediateData  
 //
 void                                NodeMaskRenderLogic::RenderToRenderTarget        ( RenderLogicContext * ctx, RenderTarget * rt, SceneNode * node )
 {
-    auto renderer  = ctx->GetRenderer();
+    enable( ctx, rt );
+    clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
-    renderer->Enable( rt );
+    logic( ctx )->RenderNode( renderer( ctx ), node, ctx ); 
 
-    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
-    renderer->ClearBuffers();
-
-    logic( ctx )->RenderNode( renderer, node, ctx ); 
-
-    renderer->Disable( rt );
+    disableBoundRT( ctx );
 }
 
 // *********************************

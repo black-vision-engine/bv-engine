@@ -109,24 +109,21 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
 void    RenderLogic::RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoot, RenderTarget * rt )
 {
     //FIXME: assumes only one renderer instance per application
-    static RenderLogicContext ctx( renderer, &m_rtStackAllocator, this );
-    assert( renderer == ctx.GetRenderer() );
+    static RenderLogicContext ctx_( renderer, &m_rtStackAllocator, this );
+    static RenderLogicContext * ctx = &ctx_;
+
+    assert( renderer == ctx_.GetRenderer() );
 
     // FIXME: verify that all rendering paths work as expected
 	if( sceneRoot )
     {
-        renderer->Enable( rt );
+        enable( ctx, rt );
 
-        {
-            renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
-            renderer->ClearBuffers();
+        clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
-            ctx.SetBoundRenderTarget( rt );
+        RenderNode( renderer, sceneRoot, ctx );
 
-            RenderNode( renderer, sceneRoot, &ctx );
-        }
-
-        renderer->Disable( rt );
+        disableBoundRT( ctx );
     }
 }
 
