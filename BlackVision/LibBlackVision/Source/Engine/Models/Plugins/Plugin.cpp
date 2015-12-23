@@ -74,6 +74,10 @@ std::vector< AssetDescConstPtr >    BasePlugin< IPlugin >::GetAssets            
 void                                BasePlugin< IPlugin >::SetAsset                    ( int i, AssetDescConstPtr asset, ResourceStateModelPtr rsm )
 {
     m_assets.resize( i+1 );
+    if( m_assets[ i ] )
+    {
+        m_key2rsm.erase( m_assets[ i ]->GetKey() );
+    }
     m_assets[ i ] = asset;
     m_key2rsm[ asset->GetKey() ] = rsm;
 }
