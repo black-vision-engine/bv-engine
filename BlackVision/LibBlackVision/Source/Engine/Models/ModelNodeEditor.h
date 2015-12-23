@@ -40,13 +40,6 @@ public:
 
 	void					RefreshNode			( SceneNode * sceneNode, Renderer * renderer );
 
-private:
-
-	void					ReplaceTimeline		( model::BasicNodePtr node, const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline );
-	void					ReplaceTimeline		( model::IPluginPtr plugin, const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline );
-	void					ReplaceTimeline		( ITexturesDataPtr txData, const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline );
-	void					ReplaceTimeline		( model::IParamValModelPtr paramValModel, const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline );
-
 };
 
 } //model

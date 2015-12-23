@@ -900,13 +900,15 @@ bool						BVProjectEditor::DeleteTimeline			( const std::string & timelinePath )
 //
 void						BVProjectEditor::ForceDeleteTimeline	( const std::string & timelinePath, const std::string & newTimelinePath )
 {
-    auto sceneName = model::TimelineHelper::GetParentNodePath( timelinePath );
-    auto timeEval = model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
+    auto tm = model::TimelineManager::GetInstance();
 
-    auto newTimeEval = model::TimelineManager::GetInstance()->GetTimeEvaluator( sceneName );
+    auto sceneName = model::TimelineHelper::GetParentNodePath( timelinePath );
+    auto timeEval = tm->GetTimeEvaluator( timelinePath );
+
+    auto newTimeEval = tm->GetTimeEvaluator( sceneName );
     if( !newTimelinePath.empty() )
     {
-        newTimeEval = model::TimelineManager::GetInstance()->GetTimeEvaluator( newTimelinePath );
+        newTimeEval = tm->GetTimeEvaluator( newTimelinePath );
     }
     assert( timeEval );
     assert( newTimeEval );
@@ -918,8 +920,9 @@ void						BVProjectEditor::ForceDeleteTimeline	( const std::string & timelinePat
 
     sceneRoot->GetModelNodeEditor()->ReplaceTimeline( timeEval, newTimeEval );
 
-    assert( timeEval.use_count() == 2 );
-    model::TimelineManager::GetInstance()->RemoveTimelineFromTimeline( timelinePath, model::TimelineHelper::GetParentNodePath( timelinePath ) );
+    tm->RemoveTimelineFromTimeline( timelinePath, model::TimelineHelper::GetParentNodePath( timelinePath ) );
+    
+    assert( timeEval.use_count() == 1 );
 }
     
 // *******************************

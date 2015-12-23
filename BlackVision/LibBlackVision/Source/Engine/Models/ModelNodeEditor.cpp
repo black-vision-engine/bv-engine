@@ -180,105 +180,34 @@ void				ModelNodeEditor::RefreshNode		( SceneNode * sceneNode, Renderer * render
 void				ModelNodeEditor::ReplaceTimeline	( const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline )
 {
 	auto node = m_node.lock();
-	ReplaceTimeline( node, oldTimeline, newTimeline );
-}
-
-// *********************************************************************************************
-
-
-// *******************************
-//
-void				ModelNodeEditor::ReplaceTimeline	( model::BasicNodePtr node, const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline )
-{
-	if( node == nullptr ) return;
-
-	auto plugins = node->GetPluginList();
-	for( UInt32 i = 0; i < plugins->NumPlugins(); ++i )
-	{
-		ReplaceTimeline( plugins->GetPlugin( i ), oldTimeline, newTimeline );
-	}
-
-	//FIXME: update model in node effect
-	//auto effect = node->GetNodeEffect();
-
-	for( UInt32 i = 0; i < node->GetNumChildren(); ++i )
-	{
-		ReplaceTimeline( node->GetChild( i ), oldTimeline, newTimeline );
-	}
-}
-
-// *******************************
-//
-void				ModelNodeEditor::ReplaceTimeline	( model::IPluginPtr plugin, const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline )
-{
-	if( plugin == nullptr ) return;
-
-	auto pluginModel = plugin->GetPluginParamValModel();
-	if( pluginModel )
-	{
-		if( pluginModel->GetTimeEvaluator() == oldTimeline )
-		{
-			//FIXME: cast
-			std::static_pointer_cast< model::DefaultPluginParamValModel >( pluginModel )->SetTimeEvaluator( newTimeline );
-		}
-
-		//update all models
-		ReplaceTimeline( pluginModel->GetPluginModel(), oldTimeline, newTimeline );
-		ReplaceTimeline( pluginModel->GetTransformChannelModel(), oldTimeline, newTimeline );
-		ReplaceTimeline( pluginModel->GetVertexAttributesChannelModel(), oldTimeline, newTimeline );
-		ReplaceTimeline( pluginModel->GetPixelShaderChannelModel(), oldTimeline, newTimeline );
-		ReplaceTimeline( pluginModel->GetVertexShaderChannelModel(), oldTimeline, newTimeline );
-		ReplaceTimeline( pluginModel->GetGeometryShaderChannelModel(), oldTimeline, newTimeline );
-	}
-
-	//update resource models
-	//FIXME: cast const
-	if( plugin->GetVertexShaderChannel() )
-		ReplaceTimeline( std::const_pointer_cast< ITexturesData >( plugin->GetVertexShaderChannel()->GetTexturesData() ), oldTimeline, newTimeline );
-	if( plugin->GetPixelShaderChannel() )
-		ReplaceTimeline( std::const_pointer_cast< ITexturesData >( plugin->GetPixelShaderChannel()->GetTexturesData() ), oldTimeline, newTimeline );
-	if( plugin->GetGeometryShaderChannel() )
-		ReplaceTimeline( std::const_pointer_cast< ITexturesData >( plugin->GetGeometryShaderChannel()->GetTexturesData() ), oldTimeline, newTimeline );
 	
-}
-
-// *******************************
-//
-void				ModelNodeEditor::ReplaceTimeline	( ITexturesDataPtr txData, const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline )
-{
-	if( txData == nullptr ) return;
-
-	for( auto & tx : txData->GetTextures() )
-		ReplaceTimeline( tx->GetSamplerState(), oldTimeline, newTimeline );
-	for( auto & anim : txData->GetAnimations() )
-		ReplaceTimeline( anim->GetSamplerState(), oldTimeline, newTimeline );
-	for( auto & font : txData->GetFonts() )
-		ReplaceTimeline( font->GetStateModel(), oldTimeline, newTimeline );
-}
-
-// *******************************
-//
-void				ModelNodeEditor::ReplaceTimeline	( model::IParamValModelPtr paramValModel, const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline )
-{
-	if( paramValModel == nullptr ) return;
-
-	for( auto & eval : paramValModel->GetEvaluators() )
-	{
-		for( auto & param : eval->GetParameters() )
-		{
-			if( param->GetTimeEvaluator() == oldTimeline )
-			{
-				param->SetTimeEvaluator( newTimeline );
-			}
-		}
-	}
-	
-	for( auto & param : paramValModel->GetParameters() )
-	{
-		if( param->GetTimeEvaluator() == oldTimeline )
+    //replace timeevaluators in parameters
+    for( auto & param : node->GetParameters() )
+    {
+        if( param->GetTimeEvaluator() == oldTimeline )
 		{
 			param->SetTimeEvaluator( newTimeline );
 		}
+    }
+
+    //replace timeevaluator in plugin model
+    auto plugins = node->GetPluginList();
+    for( UInt32 i = 0; i < plugins->NumPlugins(); ++i )
+    {
+        auto pluginModel = plugins->GetPlugin( i )->GetPluginParamValModel();
+	    if( pluginModel )
+	    {
+		    if( pluginModel->GetTimeEvaluator() == oldTimeline )
+		    {
+			    //FIXME: cast
+			    std::static_pointer_cast< model::DefaultPluginParamValModel >( pluginModel )->SetTimeEvaluator( newTimeline );
+		    }
+        }
+    }
+
+	for( UInt32 i = 0; i < node->GetNumChildren(); ++i )
+	{
+        node->GetChild( i )->GetModelNodeEditor()->ReplaceTimeline( oldTimeline, newTimeline );
 	}
 }
 
