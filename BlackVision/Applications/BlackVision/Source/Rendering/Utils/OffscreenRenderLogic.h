@@ -8,13 +8,15 @@
 #include "Engine/Graphics/Effects/Texture2DEffect.h"
 #include "Engine/Graphics/Effects/Texture2DEffectWithMask.h"
 
+#include "Rendering/Utils/RenderTargetStack.h"
+
+
 namespace bv {
 
 class RenderTarget;
-class Renderer;
 class Camera;
 class TriangleStrip;
-class Rednerer;
+class Renderer;
 class Texture2DEffect;
 class Texture2DEffectWithMask;
 class IValue;
@@ -56,7 +58,7 @@ struct OffscreenRenderData
 
 typedef std::vector< RenderTarget * >  RenderTargetVec;
 
-}
+} // anonymous
 
 class OffscreenRenderLogic
 {
@@ -72,7 +74,8 @@ private:
     RenderTargetData    m_displayRenderTargetData[ 2 ];
     RenderTargetData    m_videoOutputRenderTarget;
 
-    unsigned int        m_curDisplayTarget;
+    RenderTargetData    m_tmpOutput;
+
     unsigned int        m_buffersPerTarget;
 
     std::vector< Texture2DPtr > m_readbackTextures;
@@ -80,7 +83,9 @@ private:
     Camera *            m_displayCamera;
     Camera *            m_rendererCamera;
 
-    bool                m_displayRTEnabled;
+    // bool                m_displayRTEnabled;
+
+    RenderTargetStack   m_rtStack;
 
 public:
 
@@ -107,14 +112,14 @@ public:
     unsigned int        NumReadBuffersPerRT         () const;
 
     Texture2DConstPtr   ReadDisplayTarget           ( Renderer * renderer, unsigned int bufNum );
-    Texture2DConstPtr   GetColorTextureAt           ( int i ) const;
+    //Texture2DConstPtr   GetColorTextureAt           ( int i ) const;
 
 	//pablito
 	std::vector< int >  GetHackBuffersUids          ( Renderer * renderer ) const;
 
 
 
-    RenderTarget *      GetRenderTargetAt               ( int i ) const;
+    RenderTarget *      GetRenderTargetAt               ( int i );
 
 private:
 
@@ -124,6 +129,7 @@ private:
     unsigned int        CurDisplayRenderTargetNum           () const;
 
     RenderTargetData    CurDisplayRenderTargetData          () const;
+    RenderTargetData &  CurDisplayRenderTargetData          ();
 
 };
 

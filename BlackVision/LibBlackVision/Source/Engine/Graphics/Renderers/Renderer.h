@@ -123,7 +123,7 @@ public:
     void    NaiveReadback       ( char * buf, int w, int h );
 
     void    SetCamera           ( Camera * cam );
-	Camera * GetCamera           ();
+	Camera * GetCamera          ();
 
     void    SetVSync            ( bool enable, int verticalBufferFrameCount );
     void    SetFlushFinish      ( bool flush, bool finish );

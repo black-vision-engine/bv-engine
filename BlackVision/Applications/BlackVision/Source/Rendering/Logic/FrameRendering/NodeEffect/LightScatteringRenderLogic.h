@@ -1,10 +1,14 @@
 #pragma once
 
-#include "Rendering/Logic/NodeEffectRendering/NodeEffectRenderLogic.h"
+#include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
 
 #include <memory>
 
 namespace bv {
+
+
+class RenderLogic;
+class OffscreenRenderLogic;
 
 class LightScatteringEffect;
 
@@ -14,10 +18,10 @@ class LightScatteringRenderLogic : public NodeEffectRenderLogic
 
 public:
 
-                    LightScatteringRenderLogic  ( RenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic );
+                    LightScatteringRenderLogic  ();
     virtual         ~LightScatteringRenderLogic ();
 
-    virtual void    RenderNode                  ( Renderer * renderer, SceneNode * node ) override;
+    virtual void    RenderNode                  ( SceneNode * node, RenderLogicContext * ctx ) override;
 
 };
 

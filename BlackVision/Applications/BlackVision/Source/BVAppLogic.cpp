@@ -28,6 +28,7 @@
 #include "TestAI/TestEditorsKeyboardHandler.h"
 #include "TestAI/TestVideoStreamDecoderKeyboardHandler.h"
 
+#include "TestAI/TestVideoOutputKeyboardHandler.h"
 #include "testai/TestAIManager.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "BVGL.h"
@@ -113,6 +114,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
     m_renderLogic = new RenderLogic();
     m_remoteHandlers = new RemoteEventsHandlers;
     m_remoteController = new JsonCommandsListener;
+    //m_renderLogic = new FrameRenderLogic();
 }
 
 // *********************************
@@ -249,7 +251,6 @@ void BVAppLogic::InitCamera         ( unsigned int w, unsigned int h )
 	}
 
     m_renderer->SetCamera( cam );
-    m_renderLogic->SetCamera( cam );
 
     //FIXME: read from configuration file and change the camera appropriately when current resoultion changes
 }
@@ -359,10 +360,10 @@ void BVAppLogic::ShutDown           ()
 }
 
 //pablito:
-void	BVAppLogic::SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager)
+void	BVAppLogic::SetVideoCardManager( bv::videocards::VideoCardManager* videoCardManager )
 {
         m_videoCardManager = videoCardManager;
-        m_renderLogic->SetVideoCardManager(videoCardManager,m_renderer);
+        m_renderLogic->SetVideoCardManager( videoCardManager );
 }
 
 // *********************************
@@ -435,6 +436,13 @@ const model::PluginsManager *   BVAppLogic::GetPluginsManager   () const
 
 // *********************************
 //
+RenderLogic *                   BVAppLogic::GetRenderLogic      ()
+{
+    return m_renderLogic;
+}
+
+// *********************************
+//
 void                            BVAppLogic::InitializeKbdHandler()
 {
     auto envScene = GetEnvScene();
@@ -454,6 +462,10 @@ void                            BVAppLogic::InitializeKbdHandler()
     else if( envScene == "LIGHT_SCATTERING_EFFECT" )
     {
         m_kbdHandler = new TestEditorsKeyboardHandler();
+    }
+    else if( envScene == "GLOBAL_EFFECT_VIDEO_OUTPUT" )
+    {
+        m_kbdHandler = new TestVideoOutputKeyboardHandler();
     }
     else
     {

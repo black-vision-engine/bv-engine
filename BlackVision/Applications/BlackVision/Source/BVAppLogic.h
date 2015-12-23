@@ -63,6 +63,7 @@ private:
 
     Renderer *                      m_renderer;
     RenderLogic *                   m_renderLogic;
+    //FrameRenderLogic *              m_renderLogic;
     TestKeyboardHandler *           m_kbdHandler;
 
     RemoteEventsHandlers*           m_remoteHandlers;
@@ -119,6 +120,7 @@ public:
     RenderMode&                     GetRenderMode       ()  { return m_renderMode; }
 
     void            LoadScenes      ( const PathVec & pathVec );
+    RenderLogic *                   GetRenderLogic      ();
 
 private:
 
