@@ -5,6 +5,7 @@
 #include <iomanip>
 #include "UseLogger.h"
 
+
 #pragma warning( disable : 4512 )
 // warning: could not generate contructor for...
 #pragma warning( disable : 4100 )
@@ -14,6 +15,7 @@
 // warning '_vsnprintf': This function or variable may be unsafe. Consider using _vsnprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS.
 #pragma warning( disable : 4714 )
 // warning: funcion marked as __forceinline not inlined
+
 
 #include <boost/log/support/date_time.hpp>
 #include <boost/smart_ptr/shared_ptr.hpp>
@@ -26,23 +28,25 @@
 #include <boost\log\sinks\text_file_backend.hpp>
 #include <boost/core/null_deleter.hpp>
 
+
 typedef boost::log::sinks::asynchronous_sink< boost::log::sinks::text_file_backend > ASyncFileSink;
 typedef boost::log::sinks::asynchronous_sink< boost::log::sinks::text_ostream_backend > ASyncStreamSink;
 typedef bv::LoggerType::char_type char_type;
 typedef std::unordered_map< bv::ModuleEnum, std::string > ModuleMapping;
 
+
 namespace bv { namespace LogHelperString {
-	const char* FILE_DESC_STRING = "In File: ";
+	const char  * FILE_DESC_STRING = "In File: ";
 	const char* LINE_DESC_STRING = ", Line ";
 }}
 
 
 
-const char* SEVERITY_DEBUG_STRING		= "debug";
-const char* SEVERITY_INFO_STRING		= "info";
-const char* SEVERITY_WARNING_STRING		= "warning";
-const char* SEVERITY_ERROR_STRING		= "error";
-const char* SEVERITY_CRITICAL_STRING	= "critical";
+const char * SEVERITY_DEBUG_STRING		= "debug";
+const char * SEVERITY_INFO_STRING		= "info";
+const char * SEVERITY_WARNING_STRING		= "warning";
+const char * SEVERITY_ERROR_STRING		= "error";
+const char * SEVERITY_CRITICAL_STRING	= "critical";
 
 static const char* SEVERITY_STRINGS[] =
 {
@@ -58,6 +62,8 @@ ModuleMapping moduleString;
 unsigned int modulesStringAlignment = 14;
 unsigned int severityLevelAlignment = 8;
 
+// *********************************
+//
 void InitializeModuleMapping()
 {
 	moduleString[bv::ModuleEnum::ME_LibBlackVision]		= "LibBlackVision";
@@ -70,7 +76,7 @@ void InitializeModuleMapping()
 	modulesStringAlignment = 17;
 }
 
-
+// *********************************
 // Template specializaion is used to supress warning
 // warning: funcion marked as __forceinline not inlined
 template<>
@@ -85,7 +91,9 @@ template<>
 struct severity_tag;
 struct module_tag;
 
-boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream& strm, boost::log::to_log_manip< bv::SeverityLevel, severity_tag > const& manip )
+// *********************************
+//
+boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream & strm, const boost::log::to_log_manip< bv::SeverityLevel, severity_tag > & manip )
 {
     bv::SeverityLevel level = manip.get();
     if (static_cast< std::size_t >(level) < sizeof(SEVERITY_STRINGS) / sizeof(*SEVERITY_STRINGS))
@@ -96,6 +104,8 @@ boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream& str
     return strm;
 }
 
+// *********************************
+//
 boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream& strm, boost::log::to_log_manip< bv::ModuleEnum, module_tag > const& manip )
 {
     bv::ModuleEnum level = manip.get();
@@ -116,7 +126,8 @@ namespace bv{
 // ==================================================================== //
 //					Helper function
 
-/**Sets filter*/
+// *********************************
+// Sets filter
 template<typename Type>
 void SetFilter( boost::shared_ptr<Type> sink, SeverityLevel minLevel, int modules )
 {
@@ -167,7 +178,9 @@ void SetFilter( boost::shared_ptr<Type> sink, SeverityLevel minLevel, int module
 // ==================================================================== //
 //					Logging object
 
-LoggingHelper::LoggingHelper( LoggerType& logger, SeverityLevel level, ModuleEnum module )
+// *********************************
+//
+LoggingHelper::LoggingHelper( LoggerType & logger, SeverityLevel level, ModuleEnum module )
 	:	m_record( logger.open_record( (boost::log::keywords::channel = module, boost::log::keywords::severity = level) ) ),
 	m_logger( logger )
 {}
@@ -180,13 +193,17 @@ LoggingHelper::LoggingHelper( LoggerType& logger, SeverityLevel level, ModuleEnu
 // ==================================================================== //
 //					Logger class
 
-Logger& Logger::GetLogger()
+// *********************************
+//
+Logger & Logger::GetLogger()
 {
 	static Logger sEngineLogger;
 
 	return sEngineLogger;
 }
 
+// *********************************
+//
 Logger::Logger()
 {
 	InitializeModuleMapping();
@@ -197,11 +214,14 @@ Logger::Logger()
 	m_fileRotationSize = 5 * 1024 * 1024;
 }
 
-
+// *********************************
+//
 Logger::~Logger()
 {
 }
 
+// *********************************
+//
 void Logger::InitForamatter()
 {
 	namespace expr = boost::log::expressions;
@@ -215,9 +235,9 @@ void Logger::InitForamatter()
             << expr::message;
 }
 
-
-
-void Logger::AddLogFile( const std::string& fileName, SeverityLevel minLevel, int modules )
+// *********************************
+//
+void Logger::AddLogFile( const std::string & fileName, SeverityLevel minLevel, int modules )
 {
     boost::shared_ptr< boost::log::sinks::text_file_backend > backend =
         boost::make_shared< boost::log::sinks::text_file_backend >(
@@ -235,6 +255,8 @@ void Logger::AddLogFile( const std::string& fileName, SeverityLevel minLevel, in
 	boost::log::core::get()->add_sink( newSink );
 }
 
+// *********************************
+//
 void Logger::AddConsole			( SeverityLevel minLevel, int modules )
 {
 	boost::shared_ptr< ASyncStreamSink > newSink = boost::make_shared< ASyncStreamSink >();

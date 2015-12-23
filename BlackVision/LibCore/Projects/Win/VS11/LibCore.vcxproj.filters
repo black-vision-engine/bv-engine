@@ -88,6 +88,9 @@
     <ClInclude Include="..\..\..\Source\IO\NamedPipe.h">
       <Filter>IO</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\PrintGuard.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">
@@ -140,6 +143,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\IO\NamedPipe.cpp">
       <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\PrintGuard.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -138,7 +138,6 @@ void BVAppLogic::Initialize         ()
     InitializeKbdHandler();
 }
 
-
 // *********************************
 //
 void BVAppLogic::LoadScene          ( void )

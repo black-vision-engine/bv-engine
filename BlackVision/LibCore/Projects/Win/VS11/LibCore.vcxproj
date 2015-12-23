@@ -33,6 +33,7 @@
     <ClInclude Include="..\..\..\Source\Threading\CriticalSection.h" />
     <ClInclude Include="..\..\..\Source\Threading\ScopedCriticalSection.h" />
     <ClInclude Include="..\..\..\Source\Threading\Thread.h" />
+    <ClInclude Include="..\..\..\Source\Tools\PrintGuard.h" />
     <ClInclude Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.h" />
     <ClInclude Include="..\..\..\Source\Tools\HRTimer.h" />
     <ClInclude Include="..\..\..\Source\Tools\Logger\Logger.h" />
@@ -53,6 +54,7 @@
     <ClCompile Include="..\..\..\Source\Threading\CriticalSection.cpp" />
     <ClCompile Include="..\..\..\Source\Threading\ScopedCriticalSection.cpp" />
     <ClCompile Include="..\..\..\Source\Threading\Thread.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\PrintGuard.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\HRTimer.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Logger\Logger.cpp" />
