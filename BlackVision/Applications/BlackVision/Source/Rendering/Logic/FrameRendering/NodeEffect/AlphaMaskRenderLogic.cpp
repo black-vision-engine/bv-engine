@@ -31,17 +31,18 @@ void    AlphaMaskRenderLogic::RenderNode                  ( SceneNode * node, Re
 
     if( alphaValue > 0.99f )
     {
-        ctx->GetRenderLogic()->DrawNode( ctx->GetRenderer(), node );
+        ctx->GetRenderLogic()->DrawNode( ctx->GetRenderer(), node, ctx );
     }
     else if ( alphaValue > 0.01f )
     {
-        Start( ctx );
+        auto renderer = ctx->GetRenderer();
+        auto mainTarget = ctx->GetBoundRenderTarget();
+        renderer->Disable( mainTarget );
 
-        auto rt = RenderToRenderTarget( ctx, node );
+        auto intermediateTarget = RenderToRenderTarget( ctx, node );
 
-        BlitWithAlpha( ctx, rt, alphaValue );
-
-        Finalize( ctx );
+        renderer->Enable( mainTarget );    
+        BlitWithAlpha( renderer, intermediateTarget, alphaValue );
     }
 
     // Do not render this node if alpha is more or less equal to zero
@@ -60,27 +61,12 @@ RenderTarget * AlphaMaskRenderLogic::RenderToRenderTarget         ( RenderLogicC
     renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
     renderer->ClearBuffers();
 
-    logic( ctx )->DrawNode( renderer, node );
+    logic( ctx )->DrawNode( renderer, node, ctx );
 
     renderer->Disable( rt );
     rtAllocator->Free();
 
     return rt;
-}
-
-// *********************************
-//
-void                    AlphaMaskRenderLogic::Start                   ( RenderLogicContext * ctx )
-{
-    renderer( ctx )->Disable( allocator( ctx )->Top() );    
-}
-
-// *********************************
-//
-void                    AlphaMaskRenderLogic::Finalize                ( RenderLogicContext * ctx )
-{
-    { ctx; }
-    // renderer( ctx )->Enable( allocator( ctx )->Top() );
 }
 
 // *********************************
@@ -101,17 +87,9 @@ BlitFullscreenEffect *  AlphaMaskRenderLogic::AccessBlitAlphaEffect   ( RenderTa
 
 // *********************************
 //
-void                    AlphaMaskRenderLogic::BlitWithAlpha           ( RenderLogicContext * ctx, RenderTarget * alphaTarget, float alpha )
+void                    AlphaMaskRenderLogic::BlitWithAlpha           ( Renderer * renderer, RenderTarget * alphaTarget, float alpha )
 {
-    assert( ctx->GetRenderTargetAllocator()->Top() != alphaTarget );
-
-    auto mainTarget = ctx->GetRenderTargetAllocator()->Top();
-    auto renderer = ctx->GetRenderer();
-
     auto blitter = AccessBlitAlphaEffect( alphaTarget, alpha );
-
-    renderer->Enable( mainTarget );
-
     blitter->Render( renderer );
 
     //renderer->Disable( mainTarget );

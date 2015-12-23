@@ -17,6 +17,7 @@ class PostFrameRenderLogic;
 class OffscreenDisplay;
 class BlitFullscreenEffect;
 class VideoOutputRenderLogic;
+class RenderLogicContext;
 
 class RenderLogic
 {
@@ -47,10 +48,10 @@ private:
        
 public:
 
-    void    RenderNode      ( Renderer * renderer, SceneNode * node );
-    void    DrawNode        ( Renderer * renderer, SceneNode * node );
+    void    RenderNode      ( Renderer * renderer, SceneNode * node, RenderLogicContext * ctx );
+    void    DrawNode        ( Renderer * renderer, SceneNode * node, RenderLogicContext * ctx );
     void    DrawNodeOnly    ( Renderer * renderer, SceneNode * node );
-    void    RenderChildren  ( Renderer * renderer, SceneNode * node, int firstChildIdx = 0 );
+    void    RenderChildren  ( Renderer * renderer, SceneNode * node, RenderLogicContext * ctx, int firstChildIdx = 0 );
 
 private:
 

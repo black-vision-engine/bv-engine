@@ -28,7 +28,7 @@ WireframeRenderLogic::~WireframeRenderLogic ()
 //
 void    WireframeRenderLogic::RenderNode      ( SceneNode * node, RenderLogicContext * ctx )
 {
-    logic( ctx )->DrawNode( renderer( ctx ), node );
+    logic( ctx )->DrawNode( renderer( ctx ), node, ctx );
 
     RenderWireframeOverlay( renderer( ctx ), node );
 }

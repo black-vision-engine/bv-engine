@@ -28,7 +28,7 @@ void    NodeMaskRenderLogic::RenderNode           ( SceneNode * node, RenderLogi
 {
     if( node->NumChildNodes() < 2 )
     {
-        logic( ctx )->DrawNode( renderer( ctx ), node );
+        logic( ctx )->DrawNode( renderer( ctx ), node, ctx );
     }
     else 
     {
@@ -41,7 +41,7 @@ void    NodeMaskRenderLogic::RenderNode           ( SceneNode * node, RenderLogi
         if( alphaValue < 0.01f )
         {
             logic->DrawNodeOnly( renderer, node );
-            logic->RenderChildren( renderer, node, 2 );
+            logic->RenderChildren( renderer, node, ctx, 2 );
         }
         else
         {
@@ -49,7 +49,8 @@ void    NodeMaskRenderLogic::RenderNode           ( SceneNode * node, RenderLogi
 
             logic->DrawNodeOnly( renderer, node );
 
-            renderer->Disable( rtAllocator->Top() );
+            auto mainTarget = ctx->GetBoundRenderTarget();
+            renderer->Disable( mainTarget );
 
             auto foregroundRt   = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
             auto maskRt         = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
@@ -59,9 +60,10 @@ void    NodeMaskRenderLogic::RenderNode           ( SceneNode * node, RenderLogi
             rtAllocator->Free();
             rtAllocator->Free();
 
-            BlitWithMask( ctx, foregroundRt, maskRt, alphaValue );
+            renderer->Enable( mainTarget );
+            BlitWithMask( renderer, foregroundRt, maskRt, alphaValue );
 
-            logic->RenderChildren( renderer, node, 2 );
+            logic->RenderChildren( renderer, node, ctx, 2 );
         }
     }
 }
@@ -97,14 +99,14 @@ void                                NodeMaskRenderLogic::RenderToRenderTarget   
     renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
     renderer->ClearBuffers();
 
-    logic( ctx )->RenderNode( renderer, node ); 
+    logic( ctx )->RenderNode( renderer, node, ctx ); 
 
     renderer->Disable( rt );
 }
 
 // *********************************
 //
-BlitAlphaMaskFullscreenEffect *     NodeMaskRenderLogic::AccessBlitAlphaMaskEffect   ( RenderTarget * rt, RenderTarget * maskRt )
+BlitAlphaMaskFullscreenEffect *     NodeMaskRenderLogic::AccessBlitAlphaMaskEffect   ( RenderTarget * rt, RenderTarget * maskRt, float alpha )
 {
     if ( !m_blitAlphaMaskEffect )
     {
@@ -114,19 +116,17 @@ BlitAlphaMaskFullscreenEffect *     NodeMaskRenderLogic::AccessBlitAlphaMaskEffe
         m_blitAlphaMaskEffect = new BlitAlphaMaskFullscreenEffect( rtTex, maskTex );
     }
 
+    m_blitAlphaMaskEffect->SetAlpha( alpha );
+
     return m_blitAlphaMaskEffect;    
 }
 
 // *********************************
 //
-void                                NodeMaskRenderLogic::BlitWithMask                ( RenderLogicContext * ctx, RenderTarget * foregroundRt, RenderTarget * maskRt, float alpha )
+void                                NodeMaskRenderLogic::BlitWithMask                ( Renderer * renderer, RenderTarget * foregroundRt, RenderTarget * maskRt, float alpha )
 {
-    auto renderer  = ctx->GetRenderer();
+    auto blitter = AccessBlitAlphaMaskEffect( foregroundRt, maskRt, alpha );
 
-    auto blitter = AccessBlitAlphaMaskEffect( foregroundRt, maskRt );
-    blitter->SetAlpha( alpha );
-
-    renderer->Enable( allocator( ctx )->Top() );
     blitter->Render( renderer );
 }
 

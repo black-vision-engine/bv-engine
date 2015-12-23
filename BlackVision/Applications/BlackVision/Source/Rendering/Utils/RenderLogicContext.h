@@ -14,6 +14,7 @@ private:
     Renderer *                      m_renderer;
     RenderTargetStackAllocator *    m_rtAllocator;
     RenderLogic *                   m_renderLogic;
+    RenderTarget *                  m_boundRenderTarget;
 
 public:
 
@@ -23,6 +24,9 @@ public:
     Renderer *                      GetRenderer             () const;
     RenderTargetStackAllocator *    GetRenderTargetAllocator() const;
     RenderLogic *                   GetRenderLogic          () const;
+    RenderTarget *                  GetBoundRenderTarget    () const;
+
+    void                            SetBoundRenderTarget    ( RenderTarget * target );
 
 };
 

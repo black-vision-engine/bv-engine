@@ -39,4 +39,18 @@ RenderLogic *                   RenderLogicContext::GetRenderLogic          () c
     return m_renderLogic;
 }
 
+// ***************************
+//
+RenderTarget *                  RenderLogicContext::GetBoundRenderTarget    () const
+{
+    return m_boundRenderTarget;
+}
+
+// ***************************
+//
+void                            RenderLogicContext::SetBoundRenderTarget    ( RenderTarget * target )
+{
+    m_boundRenderTarget = target;
+}
+
 } // bv

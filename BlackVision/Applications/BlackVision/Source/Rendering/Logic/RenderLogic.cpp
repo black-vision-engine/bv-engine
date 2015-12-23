@@ -108,6 +108,10 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
 //
 void    RenderLogic::RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoot, RenderTarget * rt )
 {
+    //FIXME: assumes only one renderer instance per application
+    static RenderLogicContext ctx( renderer, &m_rtStackAllocator, this );
+    assert( renderer == ctx.GetRenderer() );
+
     // FIXME: verify that all rendering paths work as expected
 	if( sceneRoot )
     {
@@ -117,7 +121,9 @@ void    RenderLogic::RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoo
             renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
             renderer->ClearBuffers();
 
-            RenderNode( renderer, sceneRoot );
+            ctx.SetBoundRenderTarget( rt );
+
+            RenderNode( renderer, sceneRoot, &ctx );
         }
 
         renderer->Disable( rt );
@@ -126,37 +132,32 @@ void    RenderLogic::RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoo
 
 // *********************************
 //
-void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node )
+void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node, RenderLogicContext * ctx )
 {
-    //FIXME: assumes only one renderer instance per application
-    static RenderLogicContext ctx( renderer, &m_rtStackAllocator, this );
-
-    assert( renderer == ctx.GetRenderer() );
-
     if ( node->IsVisible() )
     {
         if( node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT )
         {
             // Default render logic
-            DrawNode( renderer, node );
+            DrawNode( renderer, node, ctx );
         }
         else
         {
             auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogic( node );
                
-            effectRenderLogic->RenderNode( node, &ctx );
+            effectRenderLogic->RenderNode( node, ctx );
         }
     }
 }
 
 // *********************************
 //
-void    RenderLogic::DrawNode        ( Renderer * renderer, SceneNode * node )
+void    RenderLogic::DrawNode        ( Renderer * renderer, SceneNode * node, RenderLogicContext * ctx )
 {
 	HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor", PROFILER_THREAD1 );
     DrawNodeOnly( renderer, node );
 
-    RenderChildren( renderer, node );
+    RenderChildren( renderer, node, ctx );
 }
 
 // *********************************
@@ -168,12 +169,12 @@ void    RenderLogic::DrawNodeOnly    ( Renderer * renderer, SceneNode * node )
 
 // *********************************
 //
-void    RenderLogic::RenderChildren  ( Renderer * renderer, SceneNode * node, int firstChildIdx )
+void    RenderLogic::RenderChildren  ( Renderer * renderer, SceneNode * node, RenderLogicContext * ctx, int firstChildIdx )
 {
     for ( unsigned int i = firstChildIdx; i < (unsigned int) node->NumChildNodes(); i++ )
     {
         HPROFILER_SECTION( "RenderNode::RenderNode", PROFILER_THREAD1 );
-        RenderNode  ( renderer, node->GetChild( i ) ); 
+        RenderNode  ( renderer, node->GetChild( i ), ctx ); 
     }
 }
 

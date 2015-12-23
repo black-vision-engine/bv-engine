@@ -34,9 +34,9 @@ bool         Env::GetVar ( const std::string & var, std::string * varVal )
 //
 std::string  Env::GetVar ( const std::string & var )
 {
-    {var;}
-    return "GLOBAL_EFFECT_05";
-/*    std::string varVal;
+//    {var;}
+//    return "GLOBAL_EFFECT_05";
+    std::string varVal;
 
     auto success = Env::GetVar( var, &varVal );
     
@@ -45,7 +45,7 @@ std::string  Env::GetVar ( const std::string & var )
         varVal = "";
     }
 
-    return varVal;*/
+    return varVal;
 }
 
 } //bv

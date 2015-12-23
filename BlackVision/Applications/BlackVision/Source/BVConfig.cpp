@@ -2,7 +2,7 @@
 
 //#define USE_READBACK_API
 //#define FULLSCREEN_MODE
-#define DISPLAY_VIDEO_CARD_OUTPUT
+//#define DISPLAY_VIDEO_CARD_OUTPUT
 #define PERSPECTIVE_CAMERA
 
 namespace bv
@@ -25,7 +25,7 @@ BVConfig::BVConfig                      ()
     m_defaultWindowHeight   = m_defaultHeight / 2;
 #endif
 
-    m_fps               = 1;
+    m_fps               = 20;
     m_frameTimeMillis   = 1000 / m_fps;
 
 #ifdef USE_READBACK_API
