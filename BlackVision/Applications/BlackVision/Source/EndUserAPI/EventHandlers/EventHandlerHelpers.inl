@@ -81,7 +81,7 @@ inline void SendSimpleResponse( CommandType commandType, unsigned int eventID, i
 // ***********************
 //
 template< typename CommandType >
-inline void SendSimpleErrorMessage( CommandType commandType, unsigned int eventID, int socketID, const char* errorString )
+inline void SendSimpleErrorResponse( CommandType commandType, unsigned int eventID, int socketID, const char* errorString )
 {
     JsonSerializeObject ser;
     ErrorResponseTemplate( ser, commandType, eventID, errorString );

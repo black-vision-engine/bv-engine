@@ -370,7 +370,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         }
         else
         {
-            SendSimpleErrorMessage( command, projectEvent->EventID, senderID, "Scene not found." );
+            SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Scene not found." );
         }
     }
     else if( command == ProjectEvent::Command::LoadScene )
@@ -386,7 +386,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         }
         else
         {
-            SendSimpleErrorMessage( command, projectEvent->EventID, senderID, "Scene not found." );
+            SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Scene not found." );
         }
     }
     else if( command == ProjectEvent::Command::RemoveScene )
@@ -435,106 +435,106 @@ void SceneEventsHandlers::TimelineHandler     ( bv::IEventPtr evt )
         float time = timelineEvent->Time;
         auto duration = timelineEvent->Duration;
         auto wrapMethod = timelineEvent->WrapMethod;
-
         TimeLineEvent::Command command = timelineEvent->TimelineCommand;
 
         if( command == TimeLineEvent::Command::AddTimeline )
 		{
 			editor->AddTimeline( sceneName, timelineNewName, duration, wrapMethod, wrapMethod );
+            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
 		}
 		else if( command == TimeLineEvent::Command::DeleteTimeline )
         {
 			auto success = editor->DeleteTimeline( timeLineName );
-			int senderID = timelineEvent->SocketID;
+
 			if( success )
-			{
-				SendOnSceneStructureResponse( senderID, "DeleteTimeline", "status", "OK" );
-			}
+				SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
 			else
-			{
-				SendOnSceneStructureResponse( senderID, "DeleteTimeline", "status", "ERROR" );
-			}
+				SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, false );
         }
 		else if( command == TimeLineEvent::Command::ForceDeleteTimeline )
         {
 			//timelineNewName is more path of new timeline here..
 			editor->ForceDeleteTimeline( timeLineName, timelineNewName );
+            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
         }
 		else if( command == TimeLineEvent::Command::RenameTimeline )
         {
-			editor->RenameTimeline( timeLineName, timelineNewName );
+			if( editor->RenameTimeline( timeLineName, timelineNewName ) )
+                SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
+            else
+                SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, false );
         }
 		else if( command == TimeLineEvent::Command::SetDuration )
         {
 			editor->SetTimelineDuration( timeLineName, duration );
+            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
         }
 		else if( command == TimeLineEvent::Command::SetWrapPreBehavior )
         {
 			editor->SetTimelineWrapPreBehavior( timeLineName, wrapMethod );
+            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
         }
 		else if( command == TimeLineEvent::Command::SetWrapPostBehavior )
         {
 			editor->SetTimelineWrapPostBehavior( timeLineName, wrapMethod );
+            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
         }
         else if( command == TimeLineEvent::Command::Play )
         {
 			auto timeline = TimelineManager::GetInstance()->GetTimeline( timeLineName );
 			if( timeline == nullptr )
-			{
-				LOG_MESSAGE( SeverityLevel::error ) << "Timeline ["+ timeLineName + "] does not exist.";
-				return;
-			}
+                SendSimpleErrorResponse( command, timelineEvent->EventID, timelineEvent->SocketID, "Timeline not found" );
 
             timeline->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
             timeline->Play();
+
+            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
         }
         else if( command == TimeLineEvent::Command::Stop )
         {
 			auto timeline = TimelineManager::GetInstance()->GetTimeline( timeLineName );
 			if( timeline == nullptr )
-			{
-				LOG_MESSAGE( SeverityLevel::error ) << "Timeline ["+ timeLineName + "] does not exist.";
-				return;
-			}
+                SendSimpleErrorResponse( command, timelineEvent->EventID, timelineEvent->SocketID, "Timeline not found" );
 
             timeline->Stop();
+
+            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
         }
         else if( command == TimeLineEvent::Command::PlayReverse )
         {
 			auto timeline = TimelineManager::GetInstance()->GetTimeline( timeLineName );
 			if( timeline == nullptr )
-			{
-				LOG_MESSAGE( SeverityLevel::error ) << "Timeline ["+ timeLineName + "] does not exist.";
-				return;
-			}
+                SendSimpleErrorResponse( command, timelineEvent->EventID, timelineEvent->SocketID, "Timeline not found" );
 
             timeline->SetPlayDirection( bv::TimelinePlayDirection::TPD_BACKWARD );
             timeline->Play();
+
+            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
         }
         else if( command == TimeLineEvent::Command::Goto )
         {
 			auto timeline = TimelineManager::GetInstance()->GetTimeline( timeLineName );
 			if( timeline == nullptr )
-			{
-				LOG_MESSAGE( SeverityLevel::error ) << "Timeline ["+ timeLineName + "] does not exist.";
-				return;
-			}
+                SendSimpleErrorResponse( command, timelineEvent->EventID, timelineEvent->SocketID, "Timeline not found" );
 
             timeline->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
             timeline->SetTimeAndStop( (bv::TimeType)time );
+
+            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
         }
         else if( command == TimeLineEvent::Command::GotoAndPlay )
         {
 			auto timeline = TimelineManager::GetInstance()->GetTimeline( timeLineName );
 			if( timeline == nullptr )
-			{
-				LOG_MESSAGE( SeverityLevel::error ) << "Timeline ["+ timeLineName + "] does not exist.";
-				return;
-			}
+                SendSimpleErrorResponse( command, timelineEvent->EventID, timelineEvent->SocketID, "Timeline not found" );
 
             timeline->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
             timeline->SetTimeAndPlay( (bv::TimeType)time );
+
+            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
         }
+        else
+            SendSimpleErrorResponse( command, timelineEvent->EventID, timelineEvent->SocketID, "Unknown command" );
     }
 }
 
@@ -548,29 +548,23 @@ void SceneEventsHandlers::WidgetHandler       ( bv::IEventPtr evt )
 	bv::WidgetEventPtr widgetEvent = std::static_pointer_cast<bv::WidgetEvent>( evt );        
     auto root = m_appLogic->GetBVProject()->GetModelSceneRoot();
         
-    std::string nodeName = widgetEvent->NodeName;
-    std::string action = widgetEvent->Action;
+    std::string& nodeName = widgetEvent->NodeName;
+    std::string& sceneName = widgetEvent->SceneName;
+    std::string& action = widgetEvent->Action;
     WidgetEvent::Command command = widgetEvent->WidgetCommand;
     float time = widgetEvent->Time;
 
-
-    BasicNodePtr node = std::static_pointer_cast< bv::model::BasicNode >( root->GetNode( nodeName ) );
-    if( node == nullptr && root->GetName() == nodeName )
-    {
-        LOG_MESSAGE( SeverityLevel::info ) << "root node is node you're looking for [" + nodeName + "] Applying jedi fix now.";
-        node = root;
-    }
+    auto node = GetNode( m_appLogic, sceneName, nodeName );
     if( node == nullptr )
-    {
-        LOG_MESSAGE( SeverityLevel::error ) << "Error OnSetParam() node [" + nodeName + "] not found";
-        return;
-    }
-		
-    INodeLogic* logic = node->GetLogic().get();
+        SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "Node not found" );
+
+
+    BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
+    INodeLogic* logic = basicNode->GetLogic().get();
 	if( logic == nullptr )
 	{
-        LOG_MESSAGE( SeverityLevel::error ) << "Error OnWidgetCmd () node [" + nodeName + "] , logic [] not found";
-        return;
+        LOG_MESSAGE( SeverityLevel::warning ) << "Error OnWidgetCmd () node [" + nodeName + "] , logic [] not found";
+        SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "NodeLogic not found" );
 	}
 		
 
@@ -584,35 +578,35 @@ void SceneEventsHandlers::WidgetHandler       ( bv::IEventPtr evt )
 
 		if( crawlAction == "stop" )
 		{
-			//Log::A("OK","crawl stop...");
 			crawler->Stop();
+            SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
 		}
 		else if( crawlAction == "start" )
 		{
-			//Log::A("OK","crawl start...");
 			crawler->Start();
+            SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
 		}
         else if( crawlAction == "add_text" )
 		{
-			//Log::A(L"OK",L"crawl add text..."+ widgetEvent->Param);
 			crawler->AddMessage( toWString( param ) );
+            SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
 		}
         else if( crawlAction == "reset" )
 		{
-			//Log::A(L"OK",L"crawl reset...");
 			crawler->Reset();
+            SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
 		}
 		else if( crawlAction == "clear" )
 		{
-			//Log::A(L"OK",L"crawl clear...");
 			crawler->Clear();
+            SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
 		}
         else if( crawlAction == "set_speed" )
 		{
-			//Log::A(L"OK",L"crawl set speed.."+ widgetEvent->Param);
 			float speed = 0.5;
 			speed = (float)atof( param.c_str() );
 			crawler->SetSpeed( speed );
+            SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
 		}
 	}
     else if( command == WidgetEvent::Command::Counter )
@@ -626,13 +620,13 @@ void SceneEventsHandlers::WidgetHandler       ( bv::IEventPtr evt )
 
 		auto paramPtr = counter->GetValueParam();
 		if( paramPtr == nullptr )
-		{
-			LOG_MESSAGE( SeverityLevel::error ) << "Error OnSetParam() plugin [counter] param [" + param + "] not found";
-            return;
-		}
+            SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "Could not get parameter" );
 
         SetParameter( paramPtr, (bv::TimeType)time, value );
+        SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
 	}
+    else
+        SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "Unknown command" );
 }
 
 // ***********************

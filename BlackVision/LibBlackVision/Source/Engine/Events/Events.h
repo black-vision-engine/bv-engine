@@ -450,8 +450,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> ProjectEvent::Command    SerializationHelper::WString2T ( const std::wstring& s );
-template<> const std::wstring&      SerializationHelper::T2WString    ( ProjectEvent::Command t );
+template<> ProjectEvent::Command    SerializationHelper::WString2T  ( const std::wstring& s );
+template<> const std::wstring&      SerializationHelper::T2WString  ( ProjectEvent::Command t );
 
 DEFINE_PTR_TYPE( ProjectEvent )
 
@@ -574,6 +574,9 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
+template<> TimeLineEvent::Command   SerializationHelper::WString2T  ( const std::wstring& s );
+template<> const std::wstring&      SerializationHelper::T2WString  ( TimeLineEvent::Command t );
+
 DEFINE_PTR_TYPE( TimeLineEvent )
 
 
@@ -650,6 +653,9 @@ public:
     virtual const std::string &     GetName             () const;
     virtual EventType               GetEventType        () const;
 };
+
+template<> WidgetEvent::Command     SerializationHelper::WString2T      ( const std::wstring& s );
+template<> const std::wstring&      SerializationHelper::T2WString      ( WidgetEvent::Command t );
 
 DEFINE_PTR_TYPE( WidgetEvent )
 
