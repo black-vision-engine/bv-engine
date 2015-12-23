@@ -150,7 +150,8 @@ const std::wstring NEW_SCENE_NAME_WSTRING        = L"NewSceneName";
 std::pair< SceneEvent::Command, const std::wstring > SceneCommandMapping[] = 
 {
     std::make_pair( SceneEvent::Command::AddScene, L"AddScene" )
-    , std::make_pair( SceneEvent::Command::RemoveScene, L"RemoveScene" ) 
+    , std::make_pair( SceneEvent::Command::RemoveScene, L"RemoveScene" )
+    , std::make_pair( SceneEvent::Command::RemoveAllScenes, L"RemoveAllScenes" )
     , std::make_pair( SceneEvent::Command::SetSceneVisible, L"SetSceneVisible" ) 
     , std::make_pair( SceneEvent::Command::SetSceneInvisible, L"SetSceneInvisible" )
 	, std::make_pair( SceneEvent::Command::RenameScene, L"RenameScene" )

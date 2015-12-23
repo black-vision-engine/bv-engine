@@ -299,6 +299,7 @@ public:
     {
         AddScene,
         RemoveScene,
+        RemoveAllScenes,
         SetSceneVisible,
         SetSceneInvisible,
         RenameScene,

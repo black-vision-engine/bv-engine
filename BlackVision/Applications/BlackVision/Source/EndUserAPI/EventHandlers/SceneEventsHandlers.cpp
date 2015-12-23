@@ -54,6 +54,10 @@ void SceneEventsHandlers::SceneStructure    ( bv::IEventPtr evt )
 	{
 		result = editor->RemoveScene( sceneName );
 	}
+    else if( command == SceneEvent::Command::RemoveAllScenes )
+    {
+        editor->RemoveAllScenes();
+    }
     else if( command == SceneEvent::Command::SetSceneVisible )
 	{
 		result = editor->SetSceneVisible( sceneName, true );
