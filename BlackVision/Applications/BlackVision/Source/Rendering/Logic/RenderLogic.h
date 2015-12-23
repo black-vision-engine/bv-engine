@@ -72,6 +72,7 @@ private:
 
     BlitFullscreenEffect *          AccessBlitEffect        ( RenderTarget * rt );
     void                            BlitToPreview           ( Renderer * renderer, RenderTarget * rt );
+    void                            PushToVideoCard         ( Texture2DConstPtr frame );
 
     void                            UpdateOffscreenState    ();
 

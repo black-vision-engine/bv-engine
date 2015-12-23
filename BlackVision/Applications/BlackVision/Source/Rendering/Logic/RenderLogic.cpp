@@ -154,6 +154,7 @@ void RenderLogic::InitVideoCards     ()
 			}
 		}
 
+        m_VideoCardManager->StartVideoCards();
 		//if(m_VideoCardManager->InitVideoCardManager(m_offscreenRenderLogic->GetHackBuffersUids( renderer )))   // FIXME: default->TDP2015
 		//    m_VideoCardManager->StartVideoCards();
 
@@ -227,7 +228,6 @@ void    RenderLogic::RenderFrameImpl ( Renderer * renderer, SceneNode * sceneRoo
     RenderRootNode( renderer, sceneRoot, rt );
     {
         HPROFILER_SECTION( "PreFrame Setup", PROFILER_THREAD1 );
-        // PreFrameSetup( renderer );  // FIXME: default->TDP2015
     }
 
     FrameRendered( renderer );
@@ -266,8 +266,32 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
 
     if( m_useVideoCardOutput )
     {
+        auto videoRt    = m_offscreenDisplay->GetVideoRenderTarget          ();
+
+        PushToVideoCard( videoRt->ColorTexture( 0 ) );
         //FIXME: VIDEO CART CODE (PUSH FRAME) to be placed here
     }
+}
+
+
+// *********************************
+//
+void    RenderLogic::PushToVideoCard  ( Texture2DConstPtr frame ) // FIXME: pablito source code.
+{
+    //GPUDirect;
+	if(m_VideoCardManager->IsEnabled())
+	{
+		if( m_VideoCardManager->m_CurrentTransferMode == bv::videocards::VideoCard_RAM_GPU::GPU )
+		{          
+			//m_offscreenRenderLogic->TransferFromGPUToSDI( renderer, m_VideoCardManager );
+			//m_offscreenRenderLogic->SwapDisplayRenderTargets();
+			//todo: fix gpu direct
+		}
+		else if( m_VideoCardManager->m_CurrentTransferMode==bv::videocards::VideoCard_RAM_GPU::RAM )
+		{
+			m_VideoCardManager->GetBufferFromRenderer( frame );
+		}
+	}
 }
 
 // *********************************

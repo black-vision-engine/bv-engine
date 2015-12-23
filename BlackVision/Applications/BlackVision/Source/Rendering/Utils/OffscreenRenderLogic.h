@@ -112,12 +112,6 @@ public:
     unsigned int        NumReadBuffersPerRT         () const;
 
     Texture2DConstPtr   ReadDisplayTarget           ( Renderer * renderer, unsigned int bufNum );
-    //Texture2DConstPtr   GetColorTextureAt           ( int i ) const;
-
-	//pablito
-	std::vector< int >  GetHackBuffersUids          ( Renderer * renderer ) const;
-
-
 
     RenderTarget *      GetRenderTargetAt               ( int i );
 

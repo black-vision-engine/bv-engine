@@ -401,26 +401,6 @@ unsigned int      OffscreenRenderLogic::CurDisplayRenderTargetNum           () c
     return 0;
 }
 
-//pablito
-
-// **************************
-//
-std::vector< int >    OffscreenRenderLogic::GetHackBuffersUids          ( Renderer * renderer ) const
-{
-	{renderer;}
-    const static int NUM_RENDERTARGETS = 2;
-    // FIXME: display rendertargets num
-    std::vector< int > res( NUM_RENDERTARGETS );
-
-    for( int i = 0; i < NUM_RENDERTARGETS; ++i )
-    {
-		//fixme
-        //res[ i ] = renderer->GetHackBufferUid( m_displayRenderTargetData[ i ].renderTarget );
-    }
-
-    return res;
-}
-
 // **************************
 //
 RenderTargetData &  OffscreenRenderLogic::CurDisplayRenderTargetData        ()
