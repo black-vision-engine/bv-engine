@@ -7,6 +7,14 @@ namespace bv {
 
 // *********************************
 //
+PrintGuard::PrintGuard      ( const std::string & message )
+    : m_leaveMessage( message )
+{
+    std::cout << "Enter: " << message << std::endl;
+}
+
+// *********************************
+//
 PrintGuard::PrintGuard      ( const std::string & onEnterMessage, const std::string & onLeaveMessage )
     : m_leaveMessage( onLeaveMessage )
 {

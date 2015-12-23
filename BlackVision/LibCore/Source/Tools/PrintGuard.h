@@ -13,7 +13,9 @@ private:
 
 public:
     
+    PrintGuard      ( const std::string & message );
     PrintGuard      ( const std::string & onEnterMessage, const std::string & onLeaveMessage );
+
     ~PrintGuard     ();
 
 };

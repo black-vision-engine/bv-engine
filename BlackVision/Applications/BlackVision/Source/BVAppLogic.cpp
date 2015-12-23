@@ -21,6 +21,8 @@
 #include "DefaultPlugins.h"
 #include "LibEffect.h"
 
+#include "Tools/PrintGuard.h"
+
 //FIXME: remove
 #include "TestAI/TestGlobalEffectKeyboardHandler.h"
 #include "TestAI/TestVideoOutputKeyboardHandler.h"
@@ -190,6 +192,7 @@ void BVAppLogic::SetStartTime       ( unsigned long millis )
 void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
 {
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
+    PrintGuard g0( "BVAppLogic::OnUpdate" );
 
     assert( m_state != BVAppState::BVS_INVALID );
     if( m_state == BVAppState::BVS_RUNNING )
@@ -207,10 +210,18 @@ void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
             FRAME_STATS_SECTION( "Update" );
             HPROFILER_SECTION( "update total", PROFILER_THREAD1 );
 
+            {
+            PrintGuard g0( "    GlobalTimeline::SetGlobalTimelie" );
             m_globalTimeline->SetGlobalTime( t );
+            }
+            {
+            PrintGuard g0( "    ModelScene::UpdateScene" );
             m_bvScene->Update( t );
+            }
         }
         {
+            PrintGuard g0( "    RenderLogic::RenderFrame" );
+            m_bvScene->Update( t );
             FRAME_STATS_SECTION( "Render" );
             HPROFILER_SECTION( "Render", PROFILER_THREAD1 );
 
