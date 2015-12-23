@@ -5,7 +5,7 @@
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 #include "Engine/Graphics/Resources/RenderTarget.h"
 
-#include "Rendering/OffscreenRenderLogic.h"
+#include "Rendering/Utils/OffscreenRenderLogic.h"
 
 #include "Rendering/Logic/RenderLogic.h"
 
@@ -15,9 +15,8 @@ namespace bv {
 
 // *********************************
 //
-AlphaChannelRenderLogic::AlphaChannelRenderLogic        ( RenderLogic * renderLogic, OffscreenRenderLogic * offscreenRenderLogic )
-    : NodeEffectRenderLogic( renderLogic, offscreenRenderLogic )
-	, m_effect( nullptr )
+AlphaChannelRenderLogic::AlphaChannelRenderLogic        ()
+	: m_effect( nullptr )
 {
 	m_effect = std::make_shared< AlphaChannelEffect >();
 }
@@ -30,24 +29,25 @@ AlphaChannelRenderLogic::~AlphaChannelRenderLogic       ()
 
 // *********************************
 //
-void    AlphaChannelRenderLogic::RenderNode             ( Renderer * renderer, SceneNode * node )
+void    AlphaChannelRenderLogic::RenderNode             ( SceneNode * , RenderLogicContext *   )
+// void    AlphaChannelRenderLogic::RenderNode             ( Renderer * renderer, SceneNode * node )
 {
-	GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
-	GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
-	
-	renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
-	renderer->ClearBuffers();
+	//GetOffscreenRenderLogic()->AllocateNewRenderTarget( renderer );
+	//GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
+	//
+	//renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
+	//renderer->ClearBuffers();
 
-    DrawNodeOnly( renderer, node );
-	DrawChildren( renderer, node );
+ //   DrawNodeOnly( renderer, node );
+	//DrawChildren( renderer, node );
 
-    auto texture = GetOffscreenRenderLogic()->GetColorTextureAt( -1 );
-	m_effect->SetTexture( std::const_pointer_cast< Texture2D >( texture ) );
-	
-	GetOffscreenRenderLogic()->DrawTopAuxRenderTarget( renderer, m_effect );
-	 
-	GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
-	GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
+ //   auto texture = GetOffscreenRenderLogic()->GetColorTextureAt( -1 );
+	//m_effect->SetTexture( std::const_pointer_cast< Texture2D >( texture ) );
+	//
+	//GetOffscreenRenderLogic()->DrawTopAuxRenderTarget( renderer, m_effect );
+	// 
+	//GetOffscreenRenderLogic()->DiscardCurrentRenderTarget( renderer );
+	//GetOffscreenRenderLogic()->EnableTopRenderTarget( renderer );
 
 }
 
