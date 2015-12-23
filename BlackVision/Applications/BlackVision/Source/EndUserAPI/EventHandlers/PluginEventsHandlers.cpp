@@ -103,6 +103,21 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
         result = SetWrapPreMethod( param, SerializationHelper::String2T( toString( value ), WrapMethod::clamp ) );
     else if( command == ParamKeyEvent::Command::SetInterpolatorPostWrapMethod )
         result = SetWrapPostMethod( param, SerializationHelper::String2T( toString( value ), WrapMethod::clamp ) );
+    else if( command == ParamKeyEvent::Command::AssignTimeline )
+    {
+        auto sceneTimeline = m_appLogic->GetBVProject()->GetProjectEditor()->GetTimeline( sceneName );
+
+        bv::model::ITimeEvaluatorPtr timeEvaluator = nullptr;
+        if( sceneTimeline != nullptr )
+            timeEvaluator = sceneTimeline->GetChild( toString( value ) );
+        if( timeEvaluator == nullptr )
+        {
+            SendSimpleErrorResponse( command, setParamEvent->EventID, setParamEvent->SocketID, "Timeline not found" );
+            return;
+        }
+
+        param->SetTimeEvaluator( timeEvaluator );
+    }
     else if( command == ParamKeyEvent::Command::RemoveKey )
     {
         if( pluginName == "transform" )     // Only transform parameter
