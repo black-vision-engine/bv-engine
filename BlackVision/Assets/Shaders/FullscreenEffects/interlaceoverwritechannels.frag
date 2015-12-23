@@ -28,8 +28,9 @@ vec4 	FetchTex0	()
 //
 vec4 	FetchTex1	()
 {
+	return texture( Tex0, uvCoord );
 	//return vec4( 1.0, 1.0, 1.0, 1.0 );
-	return texture( Tex1, uvCoord );
+	//return texture( Tex1, uvCoord );
 }
 
 // *********************************

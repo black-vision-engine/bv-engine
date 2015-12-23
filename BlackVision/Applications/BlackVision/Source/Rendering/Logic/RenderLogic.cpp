@@ -95,7 +95,7 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
 
         prevRt = videoRt;
     }
-     
+   
     BlitToPreview( renderer, prevRt );
 
     if( m_useVideoCardOutput )

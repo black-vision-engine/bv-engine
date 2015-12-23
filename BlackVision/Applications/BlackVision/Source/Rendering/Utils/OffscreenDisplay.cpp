@@ -13,14 +13,14 @@ OffscreenDisplay::OffscreenDisplay    ( RenderTargetStackAllocator * rtAllocator
     : m_currentFrameRtIdx( 0 )
     , m_videoRenderTarget( nullptr )
 {
-    for( unsigned int i = 0; i < numBufferedRenderTargets; ++i )
-    {
-        m_bufferedFramesRenderTargets.push_back( rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_READ ) );
-    }
-
     if( hasVideoRenderTarget )
     {
         m_videoRenderTarget = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_READ );
+    }
+
+    for( unsigned int i = 0; i < numBufferedRenderTargets; ++i )
+    {
+        m_bufferedFramesRenderTargets.push_back( rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_READ ) );
     }
 }
 
