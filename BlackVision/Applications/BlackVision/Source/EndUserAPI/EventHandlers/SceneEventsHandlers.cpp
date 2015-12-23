@@ -120,11 +120,11 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
     }
     else if( command == NodeStructureEvent::Command::SetNodeVisible )
 	{
-		editor->SetNodeVisible( sceneName, nodePath, true );
+		result = editor->SetNodeVisible( sceneName, nodePath, true );
 	}
     else if( command == NodeStructureEvent::Command::SetNodeInvisible )
 	{
-		editor->SetNodeVisible( sceneName, nodePath, false );
+		result = editor->SetNodeVisible( sceneName, nodePath, false );
 	}
 	else if( command == NodeStructureEvent::Command::RenameNode )
 	{
@@ -147,7 +147,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 		auto srcSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
 		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
 		
-		editor->MoveNode( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath );
+		result = editor->MoveNode( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath );
 	}
 	else if( command == NodeStructureEvent::Command::CopyNode )
 	{
@@ -182,24 +182,26 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
 	std::string & request		= structureEvent->Request;
     unsigned int attachIndex	= structureEvent->AttachIndex;
     auto command				= structureEvent->PluginCommand;
+    auto eventID                = structureEvent->EventID;
 
+    bool result = true;
 	auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
     if( command == PluginStructureEvent::Command::AddPlugin )
     {
-		editor->AddPlugin( sceneName, nodePath, pluginUID, pluginName, timelinePath, attachIndex );
+		result = editor->AddPlugin( sceneName, nodePath, pluginUID, pluginName, timelinePath, attachIndex );
     }
     else if( command == PluginStructureEvent::Command::RemovePlugin )
 	{
-		editor->DeletePlugin( sceneName, nodePath, pluginName );
+		result = editor->DeletePlugin( sceneName, nodePath, pluginName );
 	}
     else if( command == PluginStructureEvent::Command::AttachPlugin )
 	{
-		editor->AttachPlugin( sceneName, nodePath, attachIndex );
+		result = editor->AttachPlugin( sceneName, nodePath, attachIndex );
 	}
     else if( command == PluginStructureEvent::Command::DetachPlugin )
 	{
-		editor->DetachPlugin( sceneName, nodePath, pluginName );
+		result = editor->DetachPlugin( sceneName, nodePath, pluginName );
 	}
     else if( command == PluginStructureEvent::Command::CopyPlugin )
 	{
@@ -211,7 +213,9 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
 		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
 		auto srcPluginName = GetRequestParamValue( request )[ "SrcName" ].asString();
 
-		editor->AddPluginCopy( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName );
+		auto pluginPtr = editor->AddPluginCopy( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName );
+        if( pluginPtr == nullptr )
+            result = false;
 	}
 	else if( command == PluginStructureEvent::Command::MovePlugin )
 	{
@@ -223,8 +227,11 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
 		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
 		auto srcPluginName = GetRequestParamValue( request )[ "SrcName" ].asString();
 
-		editor->MovePlugin( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName );
+		result = editor->MovePlugin( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName );
 	}
+    else result = false;
+
+    SendSimpleResponse( command, eventID, structureEvent->SocketID, result );
 }
 
 // ***********************
@@ -247,7 +254,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         pm->AddNewProject( name );
 
-        SendOnSceneStructureResponse( senderID, "NewProject", "status", "OK" );
+        SendSimpleResponse( command, projectEvent->EventID, senderID, true );
     }
     else if( command == ProjectEvent::Command::SetCurrentProject )
     {
@@ -255,7 +262,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         pm->SetCurrentProject( projName );
 
-        SendOnSceneStructureResponse( senderID, "SetCurrentProject", "status", "OK" );
+        SendSimpleResponse( command, projectEvent->EventID, senderID, true );
     }
     else if( command == ProjectEvent::Command::LoadProject )
     {
@@ -274,13 +281,9 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         }
 
         if( status )
-        {
-            SendOnSceneStructureResponse( senderID, "LoadProject", "status", "OK" );
-        }
+            SendSimpleResponse( command, projectEvent->EventID, senderID, true );
         else
-        {
-            SendOnSceneStructureResponse( senderID, "LoadProject", "status", "ERROR" );
-        }
+            SendSimpleResponse( command, projectEvent->EventID, senderID, false );
     }
     else if( command == ProjectEvent::Command::CopyAsset )
     {
@@ -291,7 +294,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         pm->CopyAsset( "", categoryName, srcAssetName, "", dstAssetName );
 
-        SendOnSceneStructureResponse( senderID, "CopyAsset", "status", "OK" );
+        SendSimpleResponse( command, projectEvent->EventID, senderID, true );
     }
     else if( command == ProjectEvent::Command::MoveAsset )
     {
@@ -302,7 +305,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         pm->MoveAsset( "", categoryName, srcAssetName, "", dstAssetName );
 
-        SendOnSceneStructureResponse( senderID, "MoveAsset", "status", "OK" );
+        SendSimpleResponse( command, projectEvent->EventID, senderID, true );
     }
     else if( command == ProjectEvent::Command::RemoveAsset )
     {
@@ -312,7 +315,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         pm->RemoveAsset( "", categoryName, assetName );
 
-        SendOnSceneStructureResponse( senderID, "RemoveAsset", "status", "OK" );
+        SendSimpleResponse( command, projectEvent->EventID, senderID, true );
     }
     else if( command == ProjectEvent::Command::ImportAsset )
     {
@@ -324,7 +327,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         pm->ImportAssetFromFile( "", categoryName, dstAssetPath, assetFilePath );
 
-        SendOnSceneStructureResponse( senderID, "ImportAsset", "status", "OK" );
+        SendSimpleResponse( command, projectEvent->EventID, senderID, true );
     }
     else if( command == ProjectEvent::Command::SaveScene )
     {
@@ -356,18 +359,18 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
                     pm->AddScene( scene, "", saveTo );
                 }
 
-                SendOnSceneStructureResponse( senderID, "SaveScene", "status", "OK" );
+                SendSimpleResponse( command, projectEvent->EventID, senderID, true );
             }
             else
             {
-                SendOnSceneStructureResponse( senderID, "SaveScene", "status", "ERROR" );
+                SendSimpleResponse( command, projectEvent->EventID, senderID, false );
                 assert( false );
                 // TODO: Implement
             }
         }
         else
         {
-            SendOnSceneStructureResponse( senderID, "SaveScene", "status", "ERROR" );
+            SendSimpleErrorMessage( command, projectEvent->EventID, senderID, "Scene not found." );
         }
     }
     else if( command == ProjectEvent::Command::LoadScene )
@@ -379,11 +382,11 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         if( scene )
         {
             m_appLogic->GetBVProject()->GetProjectEditor()->AddScene( scene );
-            SendOnSceneStructureResponse( senderID, "LoadScene", "status", "OK" );
+            SendSimpleResponse( command, projectEvent->EventID, senderID, false );
         }
         else
         {
-            SendOnSceneStructureResponse( senderID, "LoadScene", "status", "ERROR" );
+            SendSimpleErrorMessage( command, projectEvent->EventID, senderID, "Scene not found." );
         }
     }
     else if( command == ProjectEvent::Command::RemoveScene )
@@ -392,7 +395,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         pm->RemoveScene( "", sceneName );
 
-        SendOnSceneStructureResponse( senderID, "CopyScene", "status", "OK" );
+        SendSimpleResponse( command, projectEvent->EventID, senderID, true );
     }
     else if( command == ProjectEvent::Command::CopyScene )
     {
@@ -401,7 +404,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         pm->CopyScene( "", sceneName, "", destSceneName );
 
-        SendOnSceneStructureResponse( senderID, "CopyScene", "status", "OK" );
+        SendSimpleResponse( command, projectEvent->EventID, senderID, true );
     }
     else if( command == ProjectEvent::Command::MoveScene )
     {
@@ -410,7 +413,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         pm->MoveScene( "", sceneName, "", destSceneName );
 
-        SendOnSceneStructureResponse( senderID, "MoveScene", "status", "OK" );
+        SendSimpleResponse( command, projectEvent->EventID, senderID, true );
     }
 
 }

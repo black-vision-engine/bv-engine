@@ -78,4 +78,18 @@ inline void SendSimpleResponse( CommandType commandType, unsigned int eventID, i
     GetDefaultEventManager().QueueResponse( msg );
 }
 
+// ***********************
+//
+template< typename CommandType >
+inline void SendSimpleErrorMessage( CommandType commandType, unsigned int eventID, int socketID, const char* errorString )
+{
+    JsonSerializeObject ser;
+    ErrorResponseTemplate( ser, commandType, eventID, errorString );
+
+    ResponseEventPtr msg = std::make_shared<ResponseEvent>();
+    msg->Response = toWString( ser.GetString() );
+    msg->SocketID = socketID;
+    GetDefaultEventManager().QueueResponse( msg );
+}
+
 } //bv
