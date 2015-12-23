@@ -33,6 +33,7 @@ template< class TimeValueT, class ValueT >
 class CompositeBezierInterpolator
 {
 private:
+
     typedef Key< TimeValueT, ValueT >                   Key;
     typedef IEvaluator< TimeValueT, ValueT >            IEvaluator;
 
@@ -44,6 +45,7 @@ private:
     WrapMethod                                          m_preMethod, m_postMethod;
 
 public:
+
     typedef TimeValueT  TimeType;
     typedef ValueT      ValueType;
 
@@ -51,23 +53,24 @@ public:
     typedef ValueT                      ValT;
 
 public:
-    CompositeBezierInterpolator( float tolerance = 0.000001 );
-    CompositeBezierInterpolator( const CompositeBezierInterpolator& that );
 
-    void                                                AddKey             ( TimeValueT t, const ValueT & v );
-    ValueT                                              Evaluate         ( TimeValueT t ) const;
+    CompositeBezierInterpolator( float tolerance = 0.000001 );
+    CompositeBezierInterpolator( const CompositeBezierInterpolator & that );
+
+    void                                                AddKey              ( TimeValueT t, const ValueT & v );
+    ValueT                                              Evaluate            ( TimeValueT t ) const;
 
     const std::vector< Key > &                          GetKeys();
-    const std::vector< IEvaluator* > &                  GetInterpolators();
+    const std::vector< IEvaluator* > &                  GetInterpolators    ();
 
-    void                                                SetCurveType( CurveType type );
-    void                                                SetWrapPostMethod  ( WrapMethod method );
-    void                                                SetWrapPreMethod   ( WrapMethod method );
+    void                                                SetCurveType        ( CurveType type );
+    void                                                SetWrapPostMethod   ( WrapMethod method );
+    void                                                SetWrapPreMethod    ( WrapMethod method );
 
-    void                                                SetKey1( int i, Key key );
-    void                                                SetKey2( int i, Key key );
-    void                                                SetV1( int i, Key v );
-    void                                                SetV2( int i, Key v );
+    void                                                SetKey1             ( int i, Key key );
+    void                                                SetKey2             ( int i, Key key );
+    void                                                SetV1               ( int i, Key v );
+    void                                                SetV2               ( int i, Key v );
 
 // FIXME: below is to remove
     const std::vector<Key> & AccessKeys() const { static std::vector<Key> ret; return ret; };
@@ -77,4 +80,4 @@ private:
     ValueT                                              PostEvaluate( TimeValueT t ) const;
 };
 
-}
+} //bv

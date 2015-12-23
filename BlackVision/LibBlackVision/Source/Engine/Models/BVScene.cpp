@@ -9,6 +9,7 @@
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
+
 namespace bv {
 
 // *******************************
@@ -73,7 +74,7 @@ void            BVScene::Update( TimeType t )
     if( m_pModelSceneRoot )
     {
         m_pModelSceneRoot->Update( t );
-
+        
         UpdatersManager::Get().UpdateStep();
 
         auto viewMat = m_pCamera->GetViewMatrix();
