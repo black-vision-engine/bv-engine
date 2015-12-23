@@ -272,7 +272,9 @@
     <ClCompile Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.cpp">
       <Filter>TestAI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\LightScatteringRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\LightScatteringRenderLogic.cpp">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -490,10 +492,9 @@
     <ClInclude Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.h">
       <Filter>TestAI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeEffectRenderLogic.h" />
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeMaskRenderLogic.h" />
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.h" />
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\LightScatteringRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\LightScatteringRenderLogic.h">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\BVConfig.inl" />

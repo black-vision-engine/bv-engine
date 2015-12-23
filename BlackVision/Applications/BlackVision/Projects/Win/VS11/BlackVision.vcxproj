@@ -378,9 +378,6 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\NewModelTestNodes.h" />
     <ClInclude Include="..\..\..\Source\PerformanceMonitor.h" />
     <ClInclude Include="..\..\..\Source\PieChartNode.h" />
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeEffectRenderLogic.h" />
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\NodeMaskRenderLogic.h" />
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffectRendering\WireframeRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\FrameRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffectRenderLogicSelector.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\AlphaMaskRenderLogic.h" />
