@@ -78,13 +78,15 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
 
 // ***********************
 //
-std::string QueryHandlers::ListAssets  ( const std::string& request, unsigned int /*requestID*/ )
+std::string QueryHandlers::ListAssets  ( const std::string& request, unsigned int requestID )
 {
     JsonDeserializeObject deser;
     JsonSerializeObject ser;
     deser.Load( request );
 
     std::string category = deser.GetAttribute( "CategoryName" );
+
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListAssets, requestID, true );
 
     ser.EnterArray( "assets" );
     for( auto scene : m_appLogic->GetBVProject()->GetScenes() )
@@ -110,13 +112,14 @@ std::string QueryHandlers::ListAssets  ( const std::string& request, unsigned in
 
 // ***********************
 //
-std::string QueryHandlers::VideoCardsInfo      ( const std::string& /*request*/, unsigned int /*requestID*/ )
+std::string QueryHandlers::VideoCardsInfo      ( const std::string& /*request*/, unsigned int requestID )
 {
-    Json::Value val;
-    val[ "cmd" ]        = "videocards";
-    val[ "visible" ]    = " no diggy diggy ";
+    JsonSerializeObject ser;
+    PrepareResponseTemplate( ser, InfoEvent::Command::Videocards, requestID, true );
 
-    return val.toStyledString();
+    ser.SetAttribute( "visible", " no diggy diggy " );
+
+    return ser.GetString();
 }
 
 // ***********************
@@ -275,22 +278,31 @@ std::wstring QueryHandlers::ListProjectNames    ( const std::string& /*request*/
 
 // ***********************
 //
-std::wstring QueryHandlers::ListScenes          ( const std::string& request, unsigned int /*requestID*/ )
+std::wstring QueryHandlers::ListScenes          ( const std::string& request, unsigned int requestID )
 {
+    JsonSerializeObject ser;
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListScenes, requestID, true );
+
     auto pm = ProjectManager::GetInstance();
 
     auto name = GetRequestParamValue( request )[ "projectName" ].asString();
     auto sns = pm->ListScenesNames( name );
 
-    auto pList = ToJSONArray( sns );
+    ser.EnterArray( "list" );
+    for( auto scene : sns )
+        ser.SetAttribute( "", scene.Str() );
+    ser.ExitChild();
 
-    return MakeSceneStructureResponse( "ListScenes", "list", pList );
+    return toWString( ser.GetString() );
 }
 
 // ***********************
 //
-std::wstring QueryHandlers::ListAssetsPaths     ( const std::string& request, unsigned int /*requestID*/ )
+std::wstring QueryHandlers::ListAssetsPaths     ( const std::string& request, unsigned int requestID )
 {
+    JsonSerializeObject ser;
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListAssetsPaths, requestID, true );
+
     auto pm = ProjectManager::GetInstance();
 
     auto projName = GetRequestParamValue( request )[ "projectName" ].asString();
@@ -298,45 +310,53 @@ std::wstring QueryHandlers::ListAssetsPaths     ( const std::string& request, un
 
     auto sns = pm->ListAssetsPaths( projName, catName );
 
-    auto pList = ToJSONArray( sns );
+    ser.EnterArray( "list" );
+    for( auto assetPath : sns )
+        ser.SetAttribute( "", assetPath.Str() );
+    ser.ExitChild();
 
-    return MakeSceneStructureResponse( "ListAssetPaths", "list", pList );
+    return toWString( ser.GetString() );
 }
 
 // ***********************
 //
-std::wstring QueryHandlers::ListCategoriesNames ( const std::string& /*request*/, unsigned int /*requestID*/ )
+std::wstring QueryHandlers::ListCategoriesNames ( const std::string& /*request*/, unsigned int requestID )
 {
-    auto pm = ProjectManager::GetInstance();
+    JsonSerializeObject ser;
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListCategoriesNames, requestID, true );
 
+    auto pm = ProjectManager::GetInstance();
     auto sns = pm->ListCategoriesNames();
-    auto pList = ToJSONArray( sns );
 
-    return MakeSceneStructureResponse( "ListCategoriesNames", "list", pList );
+    ser.EnterArray( "list" );
+    for( auto category : sns )
+        ser.SetAttribute( "", category );
+    ser.ExitChild();
+
+    return toWString( ser.GetString() );
 }
 
 // ***********************
 //
-std::wstring QueryHandlers::ListProjects        ( const std::string& /*request*/, unsigned int /*requestID*/ )
+std::wstring QueryHandlers::ListProjects        ( const std::string& /*request*/, unsigned int requestID )
 {
-    auto pm = ProjectManager::GetInstance();
+    JsonSerializeObject ser;
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListProjects, requestID, true );
 
+    auto pm = ProjectManager::GetInstance();
     auto pns = pm->ListProjectsNames();
 
-    Json::Value list;
-
+    ser.EnterArray( "list" );
     for( auto p : pns )
     {
         auto scenesCount = pm->ListScenesNames( p ).size();
 
-        Json::Value entry;
-        entry[ "name" ] = p.Str();
-        entry[ "scenes_count" ] = scenesCount;
-
-        list.append( entry );
+        ser.SetAttribute( "name", p.Str() );
+        ser.SetAttribute( "scenesCount", toString( scenesCount ) );
     }
+    ser.ExitChild();
 
-    return MakeSceneStructureResponse( "ListProjects", "list", list );
+    return toWString( ser.GetString() );
 }
 
 // ***********************

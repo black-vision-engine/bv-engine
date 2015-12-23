@@ -81,9 +81,16 @@ void JsonSerializeObject::EnterChild( const std::string& name )
 //
 void JsonSerializeObject::SetAttribute( const std::string& name, const std::string& value )
 {
-    assert( ((*m_currentNode).isObject()) );
+    //assert( (*m_currentNode).isObject() || (*m_currentNode).isArray() );
 
-	(*m_currentNode)[ name ] = value;
+    if( (*m_currentNode).isObject() )
+	    (*m_currentNode)[ name ] = value;
+    else if( (*m_currentNode).isArray() )
+        (*m_currentNode).append( value );
+    else
+    {
+        assert( false );
+    }
 }
 
 // ***********************
