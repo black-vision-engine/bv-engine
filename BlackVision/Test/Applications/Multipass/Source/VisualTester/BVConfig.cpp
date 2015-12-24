@@ -1,7 +1,7 @@
 #include "BVConfig.h"
 
 //#define USE_READBACK_API
-//#define DISPLAY_VIDEO_CARD_OUTPUT
+#define DISPLAY_VIDEO_CARD_OUTPUT
 //#define FULLSCREEN_MODE
 #define PERSPECTIVE_CAMERA
 

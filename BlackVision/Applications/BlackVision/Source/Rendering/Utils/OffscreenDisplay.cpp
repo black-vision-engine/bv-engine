@@ -1,9 +1,12 @@
 #include "OffscreenDisplay.h"
 
-// #include "Engine/Graphics/Renderers/Renderer.h"
-
 #include "Rendering/Utils/RenderTargetStackAllocator.h"
 
+namespace {
+
+    const unsigned int GNumVideoRenderTaregets = 1;
+
+} // anonymous
 
 namespace bv {
 
@@ -11,11 +14,14 @@ namespace bv {
 //
 OffscreenDisplay::OffscreenDisplay    ( RenderTargetStackAllocator * rtAllocator, unsigned int numBufferedRenderTargets, bool hasVideoRenderTarget )
     : m_currentFrameRtIdx( 0 )
-    , m_videoRenderTarget( nullptr )
+    , m_currentVideoRtIdx( 0 )
 {
     if( hasVideoRenderTarget )
     {
-        m_videoRenderTarget = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_READ );
+        for( unsigned int i = 0; i < GNumVideoRenderTaregets; ++i )
+        {
+            m_videoRenderTargets.push_back( rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_READ ) );
+        }
     }
 
     for( unsigned int i = 0; i < numBufferedRenderTargets; ++i )
@@ -35,6 +41,13 @@ OffscreenDisplay::~OffscreenDisplay                         ()
 void            OffscreenDisplay::UpdateActiveRenderTargetIdx   ()
 {
     m_currentFrameRtIdx = ( m_currentFrameRtIdx + 1 ) % TotalFrameRenderTargets();
+}
+
+// **************************
+//
+void            OffscreenDisplay::UpdateVideoRenderTargetIdx    ()
+{
+    m_currentVideoRtIdx = ( m_currentVideoRtIdx + 1 ) % GNumVideoRenderTaregets;
 }
 
 // **************************
@@ -62,9 +75,16 @@ unsigned int    OffscreenDisplay::TotalFrameRenderTargets   () const
 
 // **************************
 //
+unsigned int    OffscreenDisplay::TotalVideoRenderTargets     () const
+{
+    return GNumVideoRenderTaregets;
+}
+
+// **************************
+//
 RenderTarget *  OffscreenDisplay::GetVideoRenderTarget      ()
 {
-    return m_videoRenderTarget;
+    return m_videoRenderTargets[ m_currentVideoRtIdx ];
 }
 
 } //bv

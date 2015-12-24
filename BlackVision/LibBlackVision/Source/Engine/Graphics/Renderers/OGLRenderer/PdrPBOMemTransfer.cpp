@@ -19,7 +19,7 @@ PdrPBOMemTransfer::PdrPBOMemTransfer    ( DataBuffer::Semantic semantic, SizeTyp
     m_numPBOs   = NumPBOs( semantic );
 
     // FIXME: for the time being
-    m_numPBOs = 1;
+    //m_numPBOs = 1;
 
     assert( m_numPBOs > 0 );
 

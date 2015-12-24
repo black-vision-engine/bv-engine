@@ -59,6 +59,7 @@ private:
     void                            BlitToPreview           ( Renderer * renderer, RenderTarget * rt );
 
     void                            UpdateOffscreenState    ();
+    void                            OnVideoFrameRendered    ( Renderer * renderer );
 
 public:
 

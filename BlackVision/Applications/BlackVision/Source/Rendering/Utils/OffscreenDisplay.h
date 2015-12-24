@@ -14,9 +14,10 @@ class OffscreenDisplay
 private:
 
     std::vector< RenderTarget * >   m_bufferedFramesRenderTargets;
-    RenderTarget *                  m_videoRenderTarget;
+    std::vector< RenderTarget * >   m_videoRenderTargets;
 
     unsigned int                    m_currentFrameRtIdx;
+    unsigned int                    m_currentVideoRtIdx;
 
 public:
 
@@ -25,11 +26,13 @@ public:
 
     //Frame rendering
     void            UpdateActiveRenderTargetIdx ();
+    void            UpdateVideoRenderTargetIdx  ();
 
     RenderTarget *  GetCurrentFrameRenderTarget ();
     RenderTarget *  GetPreviousFrameRenderTarget();
 
     unsigned int    TotalFrameRenderTargets     () const;
+    unsigned int    TotalVideoRenderTargets     () const;
 
     //Video display
     RenderTarget *  GetVideoRenderTarget        ();

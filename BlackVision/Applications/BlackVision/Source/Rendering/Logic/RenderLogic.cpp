@@ -14,6 +14,10 @@
 
 #include "BVConfig.h"
 
+//FIXME: remove
+#include "LibImage.h"
+#include "Engine/Graphics/Resources/Texture2DImpl.h"
+
 
 namespace bv {
 
@@ -100,7 +104,7 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
 
     if( m_useVideoCardOutput )
     {
-        //FIXME: VIDEO CART CODE (PUSH FRAME) to be placed here
+        OnVideoFrameRendered( renderer );
     }
 }
 
@@ -201,9 +205,34 @@ void                    RenderLogic::BlitToPreview      ( Renderer * renderer, R
 
 // *********************************
 //
-void                    RenderLogic::UpdateOffscreenState()
+void                    RenderLogic::UpdateOffscreenState   ()
 {
     m_offscreenDisplay->UpdateActiveRenderTargetIdx();
+    m_offscreenDisplay->UpdateVideoRenderTargetIdx();
+}
+
+// *********************************
+//
+void                    RenderLogic::OnVideoFrameRendered   ( Renderer * renderer )
+{
+    //FIXME: VIDEO CART CODE (PUSH FRAME) to be placed here
+    static int i = 0;
+
+    static Texture2DPtr tx[] = {nullptr, nullptr};
+
+    auto rt = m_offscreenDisplay->GetVideoRenderTarget();
+
+    auto name = std::string( "frame" ) + std::to_string( 10000 + i ) + ".bmp";
+
+    // m_videoOutputRenderLogic->Get
+    //renderer->ReadColorTexture( 0, rt, tx[ i % 2 ] );
+    //image::SaveBMPImage( name, tx[ i % 2 ]->GetData(), 1920, 1080, 32 );
+    /*
+    renderer->ReadColorTexture( 0, rt, tx[ 0 ] );
+    image::SaveBMPImage( name, tx[ 0 ]->GetData(), 1920, 1080, 32 );
+    */
+    { renderer; rt; }
+    ++i;
 }
 
 // *********************************
