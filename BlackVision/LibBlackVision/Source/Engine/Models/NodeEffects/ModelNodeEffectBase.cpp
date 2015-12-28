@@ -32,7 +32,14 @@ void            ModelNodeEffectBase::Update  ( TimeType t )
 
 // ********************************
 //
-const std::vector< bv::IValueConstPtr > &   ModelNodeEffectBase::GetValues () const
+model::IParameterPtr                        ModelNodeEffectBase::GetParameter   ( const std::string & name ) const
+{
+    return m_paramValModel->GetParameter( name );
+}
+
+// ********************************
+//
+const std::vector< bv::IValueConstPtr > &   ModelNodeEffectBase::GetValues      () const
 {
     return m_paramValModel->GetValues();
 }

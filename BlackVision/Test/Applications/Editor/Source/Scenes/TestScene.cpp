@@ -150,8 +150,7 @@ void					TestScene::InitTestModelSceneEditor	()
 		auto root = scene->GetRootNode();
 		auto child = root->GetChild( 0 );
 
-		auto effect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( editor->GetNodeEffect( child ) );
-		effect ->GetParamAlpha()->SetVal( 0.5f, 0.f );
+        model::SetParameter( editor->GetNodeEffect( child )->GetParameter( "alpha" ), 0.f, 0.5f );
 
 		assert( success );
 	});
@@ -891,7 +890,7 @@ void					TestScene::InitAssetsTest		()
 //
 void					TestScene::InitTestEditor			()
 {
-	//InitTestModelSceneEditor();
+	InitTestModelSceneEditor();
 
 	//InitTimelinesTest();
 
@@ -920,7 +919,7 @@ void					TestScene::InitTestEditor			()
 	//InitAnimatedGeometryTest();
 	//InitGradientGeometryTest();
 
-	InitVideoStreamDecoderTest();
+	//InitVideoStreamDecoderTest();
 }
 
 // ****************************

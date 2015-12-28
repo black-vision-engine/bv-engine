@@ -20,7 +20,8 @@ public:
 
     virtual void            Update                  ( TimeType t ) override;
 
-    const std::vector< bv::IValueConstPtr > &   GetValues () const override;
+    IParameterPtr                               GetParameter    ( const std::string & name ) const override;
+    const std::vector< bv::IValueConstPtr > &   GetValues       () const override;
 
 };
 
