@@ -79,26 +79,8 @@ const IPluginDescriptor *                           PluginsManager::GetDescripto
 
 // *********************************
 //
-bool                                                PluginsManager::CanBeAttachedTo         ( const std::string & uid, IPluginPtr prev ) const
-{
-    if( !IsRegistered( uid ) )
-    {
-        std::cout << uid + " is not a registered plugin" << std::endl;
-        return false;
-    }
-
-    return GetDescriptor( uid )->CanBeAttachedTo( prev );
-}
-
-// *********************************
-//
 IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    if( !CanBeAttachedTo( uid, prev ) )
-    {
-        return nullptr;
-    }
-
     return GetDescriptor( uid )->CreatePlugin( name, prev, timeEvaluator );
 }
 
@@ -106,11 +88,6 @@ IPluginPtr                                          PluginsManager::CreatePlugin
 //
 IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    if( !CanBeAttachedTo( uid, prev ) )
-    {
-        return nullptr;
-    }
-
     return CreatePlugin( uid, GetDescriptor( uid )->DefaultPluginName(), prev, timeEvaluator );
 }
 
@@ -217,15 +194,6 @@ DefaultPluginListFinalized *                        PluginsManager::CreatePlugin
         if( !IsRegistered( uid ) )
         {
             printf( "PLUGIN UID %s not registered\n", uid.c_str() );
-            return nullptr;
-        }
-    
-        if( !CanBeAttachedTo( uid, prev ) )
-        {
-            std::string prevpl = prev ? prev->GetName() : "NULL";
-
-            printf( "PLIUGIN with UID %s cannot be attached to %s\n", uid.c_str(), prevpl.c_str() );
-
             return nullptr;
         }
     

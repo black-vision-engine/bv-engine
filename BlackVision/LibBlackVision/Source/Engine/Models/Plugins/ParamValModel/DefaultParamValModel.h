@@ -29,7 +29,9 @@ public:
 
             DefaultParamValModel            ();
             ~DefaultParamValModel           ();
-                                        
+
+    virtual void                                        Serialize       ( ISerializer& ser ) const;
+
     virtual std::vector< IParameterPtr > &              GetParameters   () override;
     virtual const std::vector< bv::IValueConstPtr > &   GetValues       () const override;
     virtual std::vector< IParamValEvaluatorPtr > &      GetEvaluators   () override;
@@ -40,6 +42,7 @@ public:
 
     virtual void                                        Update          () override;
 
+    void                                                SetParameter    ( IParameterPtr param );
     void                                                AddParameter    ( IParameterPtr param );
     void                                                AddValue        ( bv::IValuePtr val );
     void                                                AddValue        ( bv::IValueConstPtr val );

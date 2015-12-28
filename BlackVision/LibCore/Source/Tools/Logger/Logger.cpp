@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <iomanip>
 #include "UseLogger.h"
+#include "QueueSink.h"
 
 
 #pragma warning( disable : 4512 )
@@ -27,10 +28,13 @@
 #include <boost\log\sinks\text_ostream_backend.hpp>
 #include <boost\log\sinks\text_file_backend.hpp>
 #include <boost/core/null_deleter.hpp>
+#include <boost/log/sinks/sync_frontend.hpp>
 
+#include "DataTypes/QueueConcurrent.h"
 
 typedef boost::log::sinks::asynchronous_sink< boost::log::sinks::text_file_backend > ASyncFileSink;
 typedef boost::log::sinks::asynchronous_sink< boost::log::sinks::text_ostream_backend > ASyncStreamSink;
+typedef boost::log::sinks::synchronous_sink< bv::QueueSink > SyncQueueSink;
 typedef bv::LoggerType::char_type char_type;
 typedef std::unordered_map< bv::ModuleEnum, std::string > ModuleMapping;
 
@@ -72,6 +76,9 @@ void InitializeModuleMapping()
 	moduleString[bv::ModuleEnum::ME_Prototyper]			= "Prototyper";
 	moduleString[bv::ModuleEnum::ME_BlackVisionApp]		= "BlackVisionApp";
 	moduleString[bv::ModuleEnum::ME_LibProjectManager]	= "LibProjectManager";
+    moduleString[bv::ModuleEnum::ME_TCPServer]          = "LibTCPServer";
+    moduleString[bv::ModuleEnum::ME_LibVideoCards]      = "LibVideoCards";
+    moduleString[bv::ModuleEnum::ME_XMLScenParser]      = "LibXMLSceneParser";
 
 	modulesStringAlignment = 17;
 }
@@ -106,15 +113,21 @@ boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream & st
 
 // *********************************
 //
+std::string toString( bv::ModuleEnum moduleEnum )
+{
+	auto module = moduleString.find( moduleEnum );
+	if( module != moduleString.end() )
+		return module->second;
+	else
+		return"Unknown Module";
+}
+
+// *********************************
+//
 boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream& strm, boost::log::to_log_manip< bv::ModuleEnum, module_tag > const& manip )
 {
     bv::ModuleEnum level = manip.get();
-
-	auto module = moduleString.find( level );
-	if( module != moduleString.end() )
-		strm << module->second;
-	else
-		strm << "Unknown Module";
+    strm << toString( level );
 
     return strm;
 }
@@ -123,6 +136,60 @@ boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream& str
 
 namespace bv{
 	
+
+// ==================================================================== //
+//					Logging object
+
+LoggingHelper::LoggingHelper( LoggerType& logger, SeverityLevel level, ModuleEnum module )
+	:	m_record( logger.open_record( (boost::log::keywords::channel = module, boost::log::keywords::severity = level) ) ),
+	m_logger( logger )
+{}
+
+::boost::log::aux::record_pump< LoggerType > 		LoggingHelper::recordPump()
+{
+	return ::boost::log::aux::make_record_pump((m_logger), m_record);
+}
+
+// ==================================================================== //
+//					Logger class
+
+Logger& Logger::GetLogger()
+{
+	static Logger sEngineLogger;
+
+	return sEngineLogger;
+}
+
+Logger::Logger()
+{
+	InitializeModuleMapping();
+
+	InitForamatter();
+	boost::log::add_common_attributes();
+
+	m_fileRotationSize = 5 * 1024 * 1024;
+}
+
+
+Logger::~Logger()
+{
+}
+
+void Logger::InitForamatter()
+{
+	namespace expr = boost::log::expressions;
+
+    m_formatter = expr::stream
+			<< std::left
+			<< "[" << std::setw( modulesStringAlignment ) << expr::attr< bv::ModuleEnum, module_tag >("Channel") << "] "
+			<< std::right
+            << expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d %H:%M:%S") << " "
+			<< std::setw( severityLevelAlignment ) << expr::attr< bv::SeverityLevel, severity_tag >("Severity") << ": "
+            << expr::message;
+}
+
+
+
 // ==================================================================== //
 //					Helper function
 
@@ -142,9 +209,9 @@ void SetFilter( boost::shared_ptr<Type> sink, SeverityLevel minLevel, int module
 			|| (module == (modules & ( modules & (0x1 << 3) )))
 			|| (module == (modules & ( modules & (0x1 << 4) )))
 			|| (module == (modules & ( modules & (0x1 << 5) )))
-			//|| (module == (modules & ( modules & (0x1 << 6) )))
-			//|| (module == (modules & ( modules & (0x1 << 7) )))
-			//|| (module == (modules & ( modules & (0x1 << 8) )))
+			|| (module == (modules & ( modules & (0x1 << 6) )))
+			|| (module == (modules & ( modules & (0x1 << 7) )))
+			|| (module == (modules & ( modules & (0x1 << 8) )))
 			//|| (module == (modules & ( modules & (0x1 << 9) )))
 			//|| (module == (modules & ( modules & (0x1 << 10) )))
 			//|| (module == (modules & ( modules & (0x1 << 11) )))
@@ -174,70 +241,41 @@ void SetFilter( boost::shared_ptr<Type> sink, SeverityLevel minLevel, int module
 }
 
 
+// ========================================================================= //
+// Functions adding sinks
+// ========================================================================= //
 
-// ==================================================================== //
-//					Logging object
-
-// *********************************
-//
-LoggingHelper::LoggingHelper( LoggerType & logger, SeverityLevel level, ModuleEnum module )
-	:	m_record( logger.open_record( (boost::log::keywords::channel = module, boost::log::keywords::severity = level) ) ),
-	m_logger( logger )
-{}
-
-::boost::log::aux::record_pump< LoggerType > 		LoggingHelper::recordPump()
-{
-	return ::boost::log::aux::make_record_pump((m_logger), m_record);
-}
-
-// ==================================================================== //
-//					Logger class
 
 // *********************************
 //
-Logger & Logger::GetLogger()
-{
-	static Logger sEngineLogger;
+std::unordered_map< int, boost::shared_ptr< boost::log::sinks::sink > >  globalSinksMap;
+CriticalSection sinksLock;
+int sinkID = 1;
 
-	return sEngineLogger;
-}
-
-// *********************************
+// ***********************
 //
-Logger::Logger()
+int AddNewSink( boost::shared_ptr< boost::log::sinks::sink > newSink )
 {
-	InitializeModuleMapping();
+    int newSinkId;
+    {
+        ScopedCriticalSection lock( sinksLock );
+        newSinkId = sinkID;
+        globalSinksMap.insert( std::make_pair( sinkID++, newSink ) );
+    }
 
-	InitForamatter();
-	boost::log::add_common_attributes();
-
-	m_fileRotationSize = 5 * 1024 * 1024;
+	boost::log::core::get()->add_sink( newSink );
+    return newSinkId;
 }
 
 // *********************************
 //
-Logger::~Logger()
-{
-}
-
 // *********************************
 //
-void Logger::InitForamatter()
-{
-	namespace expr = boost::log::expressions;
-
-    m_formatter = expr::stream
-			<< std::left
-			<< "[" << std::setw( modulesStringAlignment ) << expr::attr< bv::ModuleEnum, module_tag >("Channel") << "] "
-			<< std::right
-            << expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d %H:%M:%S") << " "
-			<< std::setw( severityLevelAlignment ) << expr::attr< bv::SeverityLevel, severity_tag >("Severity") << ": "
-            << expr::message;
-}
-
 // *********************************
 //
-void Logger::AddLogFile( const std::string & fileName, SeverityLevel minLevel, int modules )
+// *********************************
+//
+int Logger::AddLogFile( const std::string & fileName, SeverityLevel minLevel, int modules )
 {
     boost::shared_ptr< boost::log::sinks::text_file_backend > backend =
         boost::make_shared< boost::log::sinks::text_file_backend >(
@@ -251,21 +289,65 @@ void Logger::AddLogFile( const std::string & fileName, SeverityLevel minLevel, i
 
     newSink->set_formatter( m_formatter );
 	SetFilter( newSink, minLevel, modules );
-
-	boost::log::core::get()->add_sink( newSink );
+    
+    return AddNewSink( newSink );
 }
 
 // *********************************
 //
-void Logger::AddConsole			( SeverityLevel minLevel, int modules )
+int Logger::AddConsole			( SeverityLevel minLevel, int modules )
 {
 	boost::shared_ptr< ASyncStreamSink > newSink = boost::make_shared< ASyncStreamSink >();
 	boost::shared_ptr< std::ostream > stream(&std::clog, boost::null_deleter());
 	newSink->locked_backend()->add_stream( stream );
 
     newSink->set_formatter( m_formatter );
-	boost::log::core::get()->add_sink( newSink );
+    SetFilter( newSink, minLevel, modules );
+
+    return AddNewSink( newSink );
 }
+
+// ***********************
+//
+QueueConcurrent<LogMsg>& Logger::AddLogQueue         ( int& logID, SeverityLevel minLevel, int modules )
+{
+    boost::shared_ptr< QueueSink > backend = boost::make_shared< QueueSink >();
+    boost::shared_ptr< SyncQueueSink > newSink( new SyncQueueSink( backend ) );
+
+	SetFilter( newSink, minLevel, modules );
+    logID = AddNewSink( newSink );
+
+    return backend->GetQueueReference();
+}
+
+// ***********************
+//
+void Logger::RemoveLog           ( int logID )
+{
+    ScopedCriticalSection lock( sinksLock );
+
+    auto findResult = globalSinksMap.find( logID );
+    if( findResult != globalSinksMap.end() )
+    {
+        boost::log::core::get()->remove_sink( findResult->second );
+        globalSinksMap.erase( findResult );
+    }
+}
+
+// ***********************
+//
+void QueueSink::consume( boost::log::record_view const& rec )
+{
+    namespace expr = boost::log::expressions;
+
+    LogMsg message;
+    message.message = *rec[ expr::smessage ];
+    message.severity = SEVERITY_STRINGS[ rec[ ::bv::severity ].get() ];
+    message.module = toString( rec[ ::bv::module ].get() );
+
+    m_queue.Push( message );
+}
+
 
 } //bv
 

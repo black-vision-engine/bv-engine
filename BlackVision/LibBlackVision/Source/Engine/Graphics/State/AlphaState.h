@@ -14,8 +14,10 @@ class AlphaState
 public:
 
     bool                blendEnabled;   // false
-    AlphaSrcBlendMode   srcBlendMode;   // ASBM_SRC_ALPHA
-    AlphaDstBlendMode   dstBlendMode;   // ADBM_ONE_MINUS_SRC_ALPHA
+    AlphaSrcBlendMode   srcRGBBlendMode;   // ASBM_SRC_ALPHA
+    AlphaDstBlendMode   dstRGBBlendMode;   // ADBM_ONE_MINUS_SRC_ALPHA
+    AlphaSrcBlendMode   srcAlphaBlendMode;   // ASBM_ONE
+    AlphaDstBlendMode   dstAlphaBlendMode;   // ADBM_ONE
 
     glm::vec4           blendColor;     // (0,0,0,0)
 

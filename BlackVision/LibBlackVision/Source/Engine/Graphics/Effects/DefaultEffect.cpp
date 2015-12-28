@@ -10,8 +10,7 @@
 
 #include "Engine/Models/Plugins/EngineConstantsMapper.h"
 
-#include "Engine/Graphics/Resources/Texture2DImpl.h"
-#include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 
 #include "Engine/Graphics/Shaders/Parameters/ShaderParameters.h"
@@ -149,14 +148,14 @@ void               DefaultEffect::AddTextures       ( Shader * shader, ITextures
         auto params     = shader->GetParameters ();
         auto textures   = txData->GetTextures   ();
         auto animations = txData->GetAnimations ();
-
+		
         for( auto tx : textures )
         {
             auto sampler = CreateSampler( tx, samplerNum );
             auto texture = GetTexture( tx );
 
             shader->AddTextureSampler( sampler );
-            params->AddTexture( texture );
+            params->AddTexture( texture, CreateSamplerParameters( tx ) );
 
             samplerNum++;
         }
@@ -169,7 +168,7 @@ void               DefaultEffect::AddTextures       ( Shader * shader, ITextures
                 auto sequence   = GetSequence( anim );
 
                 shader->AddTextureSampler( sampler );
-                params->AddTexture( sequence );
+                params->AddTexture( sequence, CreateSamplerParameters( anim ) );
 
                 samplerNum++;
             }
@@ -201,11 +200,11 @@ ShaderParameters *      DefaultEffect::CreateDefaultParamsImpl ( const IShaderDa
 
 // *********************************
 //
-TextureSampler *        DefaultEffect::CreateSampler   ( const ITextureParams * txParams, unsigned int samplerNum ) const
+TextureSampler *        DefaultEffect::CreateSampler   ( const ITextureParamsPtr & txParams, unsigned int samplerNum ) const
 {
-    auto wrapX          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeX() );
-    auto wrapY          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeY() );
-	auto wrapZ          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeZ() );
+ //   auto wrapX          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeX() );
+ //   auto wrapY          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeY() );
+	//auto wrapZ          = EngineConstantsMapper::EngineConstant( txParams->GetWrappingModeZ() );
 
 	auto w = txParams->GetWidth();
 	auto h = txParams->GetHeight();
@@ -230,28 +229,37 @@ TextureSampler *        DefaultEffect::CreateSampler   ( const ITextureParams * 
 		samplingMode = SamplerSamplingMode::SSM_MODE_3D;
 	}
 
-    auto filteringMode  = EngineConstantsMapper::EngineConstant( txParams->GetFilteringMode() );
-    auto borderColor    = txParams->BorderColor();
+    //auto filteringMode  = EngineConstantsMapper::EngineConstant( txParams->GetFilteringMode() );
+    //auto borderColor    = txParams->BorderColor();
 
-    SamplerWrappingMode wrappingMode[] = { wrapX, wrapY, wrapZ };
+    //SamplerWrappingMode wrappingMode[] = { wrapX, wrapY, wrapZ };
 
-    auto sampler = new TextureSampler( samplerNum, txParams->GetName(), samplingMode, filteringMode, wrappingMode, borderColor ); 
+    auto sampler = new TextureSampler( samplerNum, txParams->GetName(), samplingMode ); 
 
     return sampler;
 }
 
 // *********************************
 //
-Texture2DPtr            DefaultEffect::GetTexture           ( const ITextureDescriptor * txParams ) const
+Texture2DPtr            DefaultEffect::GetTexture           ( const ITextureDescriptorPtr & txParams ) const
 {
-    return GTexture2DCache.GetTexture( txParams );
+    return GTexture2DCache.GetTexture( txParams.get() );
 }
 
 // *********************************
 //
-Texture2DPtr            DefaultEffect::GetSequence          ( const IAnimationDescriptor * animParams ) const
+Texture2DPtr            DefaultEffect::GetSequence          ( const IAnimationDescriptorPtr & animParams ) const
 {
-    return GTexture2DCache.GetSequence( animParams );
+    return GTexture2DCache.GetSequence( animParams.get() );
+}
+
+// *********************************
+//
+SamplerShaderParametersPtr	DefaultEffect::CreateSamplerParameters  ( const ITextureParamsPtr & txParams ) const
+{
+	auto samplerState = txParams->GetSamplerState();
+	return std::make_shared< SamplerShaderParameters >( ( SamplerWrappingMode )samplerState->GetWrappingModeX(), ( SamplerWrappingMode )samplerState->GetWrappingModeY(), 
+						( SamplerWrappingMode )samplerState->GetWrappingModeZ(), ( SamplerFilteringMode )samplerState->GetFilteringMode(), samplerState->GetBorderColor() );
 }
 
 } //bv

@@ -1,7 +1,8 @@
 #pragma once
 
 #include <string>
-
+#include "DataTypes/QueueConcurrent.h"
+#include "LogMsgStruct.h"
 
 #pragma warning( disable : 4512 )
 // warning: could not generate contructor for...
@@ -15,35 +16,12 @@
 #include <boost\log\sinks\async_frontend.hpp>
 
 
+#include "LoggerEnums.h"
 
-namespace bv{
+namespace bv
+{
 
 class Logger;
-
-enum SeverityLevel : int
-{
-	debug			= 0,
-	info			= 1,
-	warning			= 2,
-	error			= 3,
-	critical		= 4
-};
-
-enum ModuleEnum : int
-{
-	ME_LibBlackVision	= 1 << 0,
-	ME_LibCore			= 1 << 1,
-	ME_LibImage			= 1 << 2,
-	ME_Prototyper		= 1 << 3,
-	ME_BlackVisionApp	= 1 << 4,
-	ME_LibProjectManager= 1 << 5
-};
-
-/**Adding new modules - instruction:
-- Add new constant to ModuleEnum
-- Add string with the name of module in InitializeModuleMapping function (.cpp file).
-- Uncomment line with module number in function SetFilter. Otherwise all messages from new module
-will be filtered.*/
 
 
 BOOST_LOG_ATTRIBUTE_KEYWORD(severity, "Severity", ::bv::SeverityLevel)
@@ -106,9 +84,12 @@ private:
 
 public:
 
-    void						AddLogFile			( const std::string & fileName, SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
-	void						AddConsole			( SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
+    int						    AddLogFile			( const std::string & fileName, SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
+	int						    AddConsole			( SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
 
+    /// You must ensure someone gets messages from queue.
+    QueueConcurrent<LogMsg>&    AddLogQueue         ( int& logID, SeverityLevel minLevel = SeverityLevel::debug, int modules = 0xFFFFFFFF );
+    void                        RemoveLog           ( int logID );
 
 	/// Affects all files, that will be added after this call.
 	void						SetFileRotationSize	( unsigned int newSize )	{ m_fileRotationSize = newSize; }

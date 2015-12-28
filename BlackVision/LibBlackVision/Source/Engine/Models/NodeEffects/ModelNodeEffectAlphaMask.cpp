@@ -1,19 +1,22 @@
 #include "ModelNodeEffectAlphaMask.h"
 
-#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
+#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 
 
 namespace bv { namespace model {
 
-
 // ********************************
 //
 ModelNodeEffectAlphaMask::ModelNodeEffectAlphaMask( ITimeEvaluatorPtr timeEvaluator )
-    : m_alpha( 1.f )
+    : ModelNodeEffectBase( timeEvaluator )
+    , m_alphaVal( 1.f )
 {
-    m_paramAlpha = ParametersFactory::CreateParameterFloat( "alpha", timeEvaluator );
+    auto alphaEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
+    alphaEval->Parameter()->SetVal( m_alphaVal, 0.f );
 
-    m_paramAlpha->SetVal( 1.f, 0.f );
+    m_paramValModel->RegisterAll( alphaEval );
+
+    m_paramAlpha = alphaEval->Parameter();
 }
 
 // ********************************
@@ -25,24 +28,25 @@ NodeEffectType  ModelNodeEffectAlphaMask::GetType() const
 
 // ********************************
 //
-ParamFloatPtr   ModelNodeEffectAlphaMask::GetParamAlpha ()
+void            ModelNodeEffectAlphaMask::Update  ( TimeType t )
+{
+    ModelNodeEffectBase::Update( t );
+    
+    m_alphaVal = m_paramAlpha->Evaluate();
+}
+
+// ********************************
+//
+ParamFloatPtr   ModelNodeEffectAlphaMask::GetParamAlpha  () const
 {
     return m_paramAlpha;
 }
 
 // ********************************
 //
-void            ModelNodeEffectAlphaMask::Update    ( TimeType t )
+float           ModelNodeEffectAlphaMask::GetAlpha      () const
 {
-    { t; }
-    m_alpha = m_paramAlpha->Evaluate();
-}
-
-// ********************************
-//
-float           ModelNodeEffectAlphaMask::GetAlpha  () const
-{
-    return m_alpha;
+    return m_alphaVal;
 }
 
 } // model

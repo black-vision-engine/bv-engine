@@ -1,0 +1,44 @@
+﻿instrukcja: https://www.ffmpeg.org/platform.html#Microsoft-Visual-C_002b_002b-or-Intel-C_002b_002b-Compiler-for-Windows
+
+1. Instalacja MSYS2
+http://msys2.github.io/
+
+Shell MSYS2:
+
+	pacman --needed -Sy bash pacman pacman-mirrors msys2-runtime
+	(uruchomić ponownie terminal)
+	pacman -S make
+
+2. Dodać ścieżkę do tych plików do PATH
+
+- YASM: zmienić nazwę na yasm.exe
+http://yasm.tortall.net/Download.html (do ściągnięcia jest zbudowana wersja, choć budowanie ze źródeł jest dość oczywiste - CMake)
+* ewentualnie zamiast tego można zainstalować paczkę w msys: pacman -S yasm
+
+- (tylko VS2012) C99-to-C89 Converter & Wrapper: c99wrap.exe, c99conv.exe
+https://github.com/libav/c99-to-c89/releases (do ściągnięcia jest zbudowana wersja; budowanie ze źródeł wymaga ściągnięcia Clanga 3.6.2 - nowsze wersje wymagają VS2013, a jak ktoś i to chce zbudować, to ściąga LLVM 3.6.2, całość buduje się długo, ale chociaż bezproblemowo - CMake)
+
+- (tylko VS2012) inttypes.h
+https://code.google.com/p/msinttypes/downloads/list
+
+3. Z wiersza poleceń: uruchomić vcvarsall (z odpowiednią wersją w jakiej chce się zbudować FFmpega: x86/amd64) i msys2 shell.
+
+	C:\Program Files (x86)\Microsoft Visual Studio X.0\VC\vcvarsall.bat amd64
+	C:\msys64\msys2_shell.bat
+	
+4. W shellu msys:
+W zależności od wersji --arch=x86/amd64
+Dla VS2012 --toolchain=msvc
+Dla VS2013 --toolchain=icl
+
+	which link.exe
+//Jeśli zwraca coś zupełnie innego niż '/c/Program Files (x86)/Microsoft Visual Studio X.0/VC/BIN/link.exe', to należy dany link.exe usunąć, np. 'rm /bin/link.exe'
+
+	cd path_to_FFmpeg
+	./configure --toolchain=msvc --disable-static --enable-shared --disable-programs --disable-doc --prefix=path_to_ffmpeg_build --arch=amd64
+	make
+	make install
+	make clean
+	make distclean
+	
+Zbudowane biblioteki będą w folderze wskazanym wpisanym w prefix.

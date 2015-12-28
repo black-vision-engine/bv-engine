@@ -175,6 +175,23 @@ void                OffscreenRenderLogic::DisableTopRenderTarget    ( Renderer *
 }
 
 // **************************
+//FIXME
+void                OffscreenRenderLogic::DrawTopAuxRenderTarget    ( Renderer * renderer, RenderableEffectPtr effect )
+{
+    DisableTopRenderTarget( renderer );
+
+    auto mainRT = GetRenderTargetAt( -2 );
+
+	m_renderData.auxQuad->SetRenderableEffect( effect );
+
+    renderer->Enable( mainRT );
+    renderer->SetCamera( m_displayCamera );
+    renderer->Draw( m_renderData.auxQuad );
+    renderer->SetCamera( m_rendererCamera );
+    renderer->Disable( mainRT );
+}
+
+// **************************
 //
 void                OffscreenRenderLogic::DrawTopAuxRenderTarget    ( Renderer * renderer, const IValue * alphaVal )
 {
@@ -275,6 +292,8 @@ unsigned int    OffscreenRenderLogic::NumReadBuffersPerRT           () const
     return TotalNumReadBuffers() / GNumRenderTargets;
 }
 
+
+
 // **************************
 //
 Texture2DConstPtr   OffscreenRenderLogic::ReadDisplayTarget         ( Renderer * renderer, unsigned int bufNum )
@@ -287,6 +306,21 @@ Texture2DConstPtr   OffscreenRenderLogic::ReadDisplayTarget         ( Renderer *
 
     return m_readbackTextures[ bufferIdx ];
 }
+
+//// **************************
+////
+//Texture2DConstPtr   OffscreenRenderLogic::GetColorTextureAt           ( int i ) const
+//{
+//    auto rt = GetRenderTargetAt( i );
+//    if( rt != nullptr )
+//    {
+//        return rt->ColorTexture( 0 );
+//    }
+//    else
+//    {
+//        return nullptr;
+//    }
+//}
 
 // **************************
 // Python-like logic, where negative numbers are used to index the array backwards

@@ -1,6 +1,6 @@
 #include "TestAnimationKeyboardHandler.h"
 
-#include "Engine/Models/BVSceneEditor.h"
+#include "Engine/Models/BVProjectEditor.h"
 
 #include "MockScenes.h"
 #include "BVAppLogic.h"

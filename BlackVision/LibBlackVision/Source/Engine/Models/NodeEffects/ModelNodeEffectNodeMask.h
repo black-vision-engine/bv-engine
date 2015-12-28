@@ -1,12 +1,11 @@
 #pragma once
 
-#include "Engine/Models/Interfaces/IModelNodeEffect.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectBase.h"
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
-
 
 namespace bv { namespace model {
 
-class ModelNodeEffectNodeMask : public IModelNodeEffect
+class ModelNodeEffectNodeMask : public ModelNodeEffectBase
 {
 private:
 
@@ -22,13 +21,15 @@ public:
 
                             ModelNodeEffectNodeMask ( ITimeEvaluatorPtr timeEvaluator ); 
 
+    static ISerializablePtr Create          ( const IDeserializer& deser );
+
     virtual NodeEffectType  GetType                 () const override;
 
-    ParamIntPtr             GetParamBgIdx           ();
-    ParamIntPtr             GetParamFgIdx           ();
-    ParamFloatPtr           GetParamAlpha           ();
+	virtual void			Update					( TimeType t ) override;
 
-    virtual void            Update                  ( TimeType t ) override;
+    ParamIntPtr             GetParamBgIdx           () const;
+    ParamIntPtr             GetParamFgIdx           () const;
+    ParamFloatPtr           GetParamAlpha           () const;
 
     unsigned int            GetBackgroundChildIdx   () const;
     unsigned int            GetForegroundChildIdx   () const;

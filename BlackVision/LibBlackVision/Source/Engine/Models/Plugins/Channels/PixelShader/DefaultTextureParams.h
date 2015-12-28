@@ -2,7 +2,6 @@
 
 #include "Engine/Models/Interfaces/ITextureParams.h"
 
-
 namespace bv { namespace model {
 
 class DefaultTextureParams : public ITextureParams
@@ -17,18 +16,12 @@ private:
    
     TextureFormat           m_format;
     
-    TextureWrappingMode     m_wrappingModeY;
-    TextureWrappingMode     m_wrappingModeX;
-	TextureWrappingMode     m_wrappingModeZ;
-    
-    TextureFilteringMode    m_filteringMode;
-    
-    glm::vec4               m_borderColor;
+    SamplerStateModelPtr	m_samplerState;
 
 public:
 
             DefaultTextureParams ();
-            DefaultTextureParams ( const std::string & name, UInt32 w, UInt32 h, UInt32 d, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureWrappingMode wmz, TextureFilteringMode fm, const glm::vec4 & bc );
+            DefaultTextureParams ( const std::string & name, UInt32 w, UInt32 h, UInt32 d, TextureFormat fmt );
             ~DefaultTextureParams();
 
     virtual const std::string       GetName         () const override;
@@ -39,13 +32,7 @@ public:
 
     virtual TextureFormat           GetFormat       () const override;
 
-    virtual TextureWrappingMode     GetWrappingModeX() const override;
-    virtual TextureWrappingMode     GetWrappingModeY() const override;
-	virtual TextureWrappingMode     GetWrappingModeZ() const override;
-
-    virtual TextureFilteringMode    GetFilteringMode() const override;
-
-    virtual glm::vec4               BorderColor     () const override;
+	virtual model::SamplerStateModelPtr	GetSamplerState () const override;
 
     void                            SetName         ( const std::string & name );
     void                            SetWidth        ( UInt32 w );
@@ -53,14 +40,7 @@ public:
 	void                            SetDepth		( UInt32 z );
     void                            SetFormat       ( TextureFormat fmt );
 
-    void                            SetWrappingModeX( TextureWrappingMode wm );
-    void                            SetWrappingModeY( TextureWrappingMode wm );
-	void                            SetWrappingModeZ( TextureWrappingMode wm );
-
-    void                            SetFilteringMode( TextureFilteringMode fm );
-
-    void                            SetBorderColor  ( const glm::vec4 & bc );
-
+	void							SetSamplerState ( SamplerStateModelPtr samplerState );
 };
 
 } //model

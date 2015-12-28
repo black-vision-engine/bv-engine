@@ -45,6 +45,20 @@ void                    SceneNode::AddChildNode         ( SceneNode * child )
 
 // ********************************
 //
+void                    SceneNode::AddChildNode         ( SceneNode * child, UInt32 idx )
+{
+	if( idx < m_sceneNodes.size() )
+	{
+	    m_sceneNodes.insert( m_sceneNodes.begin() + idx, child );
+	}
+	else
+	{
+		m_sceneNodes.push_back( child );
+	}
+}
+
+// ********************************
+//
 void                    SceneNode::DetachChildNode      ( SceneNode * node )
 {
     for( auto it = m_sceneNodes.begin(); it != m_sceneNodes.end(); ++it )

@@ -2,12 +2,131 @@
 #include "LibImage.h"
 #include "Engine/Types/EnumsUtils.h"
 #include "Tools/Utils.h"
+#include "ProjectManager.h"
 #include <cassert>
+
+#include "Serialization/SerializationHelper.h"
 
 namespace bv
 {
 
 const std::string TextureAssetDesc::uid = "TEXTURE_ASSET_DESC";
+
+
+// Serialization strings
+//const std::string 
+
+// ***********************
+//
+std::string Filter2String( MipMapFilterType filter )
+{
+    if( filter == MipMapFilterType::BILINEAR )
+        return "bilinear";
+    else
+    {
+        assert( false );
+        return std::to_string( (int) filter );
+    }
+}
+
+// ***********************
+//
+void                TextureAssetDesc::Serialize       ( ISerializer& ser ) const
+{
+ser.EnterChild( "asset" );
+    ser.SetAttribute( "type", UID() );
+    ser.SetAttribute( "path", m_originalTextureDesc->GetImagePath() );
+
+    if( m_mipMapsDescs )
+        ser.SetAttribute( "filter", Filter2String( m_mipMapsDescs->GetFilter() ) );
+    else
+        ser.SetAttribute( "filter", "none" );
+
+    if( m_loadingType == TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE )
+        ser.SetAttribute( "loading_type", "ONLY_ORIGINAL" );
+    else if( m_loadingType == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS )
+        ser.SetAttribute( "loading_type", "GENERATE_MIPMAPS" );
+    else
+        ser.SetAttribute( "loading_type", "LOAD_WITH_MIPMAPS" );
+
+    if( m_loadingType == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS )
+    {
+        m_mipMapsDescs->Serialize( ser );
+    }
+
+ser.ExitChild();
+}
+
+// ***********************
+//
+void TextureAssetDesc::Deserialize     ( const IDeserializer& sob )
+{
+    auto obj = SerializationHelper::Create< const TextureAssetDesc >( sob );
+
+    if( obj == nullptr || obj->GetUID() != uid )
+    {
+        assert( !"Failed" ); //FIXME: Error handling.
+        return;
+    }
+
+    *this = *obj; // if you think this is ugly, see why it cannot be done:
+
+//sob.EnterChild( "asset" );
+//    if( UID() != sob.GetAttribute( "uid" ) )
+//        assert( false ); // FIXME: error handling
+//
+//    sob.SetAttribute( "path", m_originalTextureDesc->GetImagePath() );
+//
+//    if( m_mipMapsDescs )
+//        sob.SetAttribute( "mipmap", Filter2String( m_mipMapsDescs->GetFilter() ) );
+//    else
+//        sob.SetAttribute( "mipmap", "none" );
+//sob.ExitChild();
+}
+
+MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
+{
+//std::pair< MipMapFilterType, std::string > p[] =
+//    { std::make_pair( MipMapFilterType::BICUBIC, "bicubic" ),
+//    std::make_pair( MipMapFilterType::BILINEAR, "bilinear" ) };
+
+    if( string == "bilinear" )
+        return MipMapFilterType::BILINEAR;
+    //else if( string == "none" )
+    //    return MipMapFilterType::MMFT_TOTAL;
+    else
+    {
+        assert( false );
+        return (MipMapFilterType) std::stoi( string );
+    }
+}
+
+
+
+// ***********************
+//
+ISerializableConstPtr TextureAssetDesc::Create          ( const IDeserializer& deser )
+{
+    auto path = deser.GetAttribute( "path" );
+
+    if( deser.EnterChild( "mipmaps" ) )
+    {
+        deser.EnterChild( "asset" );
+        do
+        {
+        } while( deser.NextChild() );
+        deser.ExitChild(); // asset
+
+        deser.ExitChild(); // mipmaps
+    }
+
+    auto filterS = deser.GetAttribute( "filter" );
+    if( filterS == "none" )
+        return Create( path, true );
+    else
+        return Create( path, String2Filter( filterS ), true );
+}
+
 
 // ***********************
 //
@@ -41,7 +160,7 @@ VoidConstPtr TextureAssetDesc::QueryThis() const
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFilePath, bool isCacheable )
 {
-	auto props = image::GetImageProps( imageFilePath );
+    auto props = image::GetImageProps( ProjectManager::GetInstance()->ToAbsPath( imageFilePath ).Str() );
 
 	if( !props.error.empty() )
 	{
@@ -55,7 +174,7 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFile
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFilePath, MipMapFilterType mmFilter, bool isCacheable )
 {
-	auto props = image::GetImageProps( imageFilePath );
+    auto props = image::GetImageProps( ProjectManager::GetInstance()->ToAbsPath( imageFilePath ).Str() );
 
 	if( !props.error.empty() )
 	{
@@ -69,7 +188,7 @@ TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFile
 //
 TextureAssetDescConstPtr	TextureAssetDesc::Create( const std::string & imageFilePath, const StringVector & mipMapsPaths, bool isCacheable )
 {
-	auto props = image::GetImageProps( imageFilePath );
+	auto props = image::GetImageProps( ProjectManager::GetInstance()->ToAbsPath( imageFilePath ).Str() );
 
 	if( !props.error.empty() )
 	{
@@ -185,6 +304,13 @@ std::string				TextureAssetDesc::GetKey		() const
 	}
 }
 
+// ***********************
+//
+std::string             TextureAssetDesc::GetProposedShortKey () const
+{
+    auto basename = AssetDesc::GetProposedShortKey();
+    return basename.substr( 0, basename.find( '.' ) );
+}
 // ***********************
 //
 SingleTextureAssetDescConstPtr TextureAssetDesc::GetOrigTextureDesc() const

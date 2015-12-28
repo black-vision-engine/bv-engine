@@ -28,10 +28,6 @@ public:
 
     virtual const IAttributeChannelDescriptor *     GetDescriptor       ()  const;
     virtual std::string                             GetName             ()  const;
-
-
-    static IAttributeChannelPtr                     GetPositionChannel( const std::vector< IAttributeChannelPtr > & channels );
-    static IAttributeChannelPtr                     GetUVChannel( const std::vector< IAttributeChannelPtr >& channels, SizeType index );
 };
 
 DEFINE_PTR_TYPE(AttributeChannel)

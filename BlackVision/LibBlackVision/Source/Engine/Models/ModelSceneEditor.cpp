@@ -13,25 +13,28 @@ ModelSceneEditor::ModelSceneEditor                          ( BasicNodePtr & roo
 
 // ********************************
 //
-void                    ModelSceneEditor::SetRootNode       ( BasicNodePtr rootNode )
+void                    ModelSceneEditor::SetRootNode       ( BasicNodePtr mainRootNode, BasicNodePtr rootNode )
 {
-	if( m_rootNode != rootNode )
+	if( m_rootNode && m_rootNode.get() != rootNode.get() )
 	{
-		if( m_rootNode != nullptr )
-		{
-			m_rootNode = nullptr;
-		}
+		mainRootNode->DetachChildNodeOnly( m_rootNode );
 	}
 
 	m_rootNode = rootNode;
+
+	if( rootNode != nullptr )
+	{
+		mainRootNode->AddChildToModelOnly( rootNode );
+	}
 }
 
 // ********************************
 //
-bool                    ModelSceneEditor::DeleteRootNode     ()
+bool                    ModelSceneEditor::DeleteRootNode     ( BasicNodePtr mainRootNode )
 {
     if( m_rootNode )
     {
+		mainRootNode->DetachChildNodeOnly( m_rootNode );
         m_rootNode = nullptr;
 
         return true;
@@ -97,9 +100,16 @@ bool                    ModelSceneEditor::DetachRootNode     ()
 //
 bool                    ModelSceneEditor::AttachChildNode    ( BasicNodePtr parent )
 {
+	return AttachChildNode( parent, ( UInt32 )parent->GetNumChildren() );
+}
+
+// ********************************
+//
+bool                    ModelSceneEditor::AttachChildNode    ( BasicNodePtr parent, UInt32 destIdx )
+{
     if( parent && m_detachedNode )
     {
-        parent->AddChildToModelOnly( m_detachedNode );
+        parent->AddChildToModelOnly( m_detachedNode, destIdx );
 
         m_detachedNode = nullptr;
 

@@ -6,24 +6,23 @@
 #include "Engine/Types/Enums.h"
 
 #include "CoreDEF.h"
-#include <Engine/Interfaces/ISerializable.h>
+#include <Serialization/ISerializable.h>
 
+#include "Mathematics/Interpolators/InterpolatorBasicTypes.h"
 
 namespace bv { namespace model {
 
 class AbstractModelParameter;
 DEFINE_PTR_TYPE(AbstractModelParameter)
 
-class AbstractModelParameter : public IParameter, public std::enable_shared_from_this< AbstractModelParameter >, public ISerializable
+class AbstractModelParameter : public IParameter, public std::enable_shared_from_this< AbstractModelParameter >
 {
 protected:
 
-    ITimeEvaluatorPtr       m_timeEvaluator;
+    ITimeEvaluatorPtr           m_timeEvaluator;
 
-    std::string             m_name;
-    ModelParamType          m_type;
-    //InterpolationMethod     m_method;
-    //CurveType               m_curveType;
+    std::string                 m_name;
+    ModelParamType              m_type;
 
 protected:
 
@@ -31,15 +30,21 @@ protected:
     virtual                     ~AbstractModelParameter ();
 
 public:
-    virtual void                Serialize       ( SerializeObject &/*doc*/ ) const {};
-    static ISerializablePtr     Create          ( DeserializeObject &/*doc*/ );
+    virtual void                Serialize               ( ISerializer& doc ) const override = 0;
+    static ISerializablePtr     Create                  ( const IDeserializer& doc );
 
     virtual const std::string & GetName                 () const override;
     virtual ModelParamType      GetType                 () const override;
 
-    //virtual void                SetCurveType    ( CurveType type ) { m_curveType = type; }
-	//virtual void                SetInterpolationMethod ( InterpolationMethod method ) override;
-	//virtual InterpolationMethod GetInterpolationMethod () const override;
+    virtual void                SetCurveType            ( CurveType type ) = 0;
+    virtual CurveType           GetCurveType            () = 0;
+
+    virtual void                SetWrapPostMethod       ( WrapMethod method ) = 0;
+    virtual void                SetWrapPreMethod        ( WrapMethod method ) = 0;
+    virtual WrapMethod          GetWrapPostMethod       () = 0;
+    virtual WrapMethod          GetWrapPreMethod        () = 0;
+
+    virtual int                 GetNumKeys              () = 0;
 
     virtual ITimeEvaluatorPtr   GetTimeEvaluator        () override;
     virtual void                SetTimeEvaluator        ( ITimeEvaluatorPtr timeEvaluator ) override;

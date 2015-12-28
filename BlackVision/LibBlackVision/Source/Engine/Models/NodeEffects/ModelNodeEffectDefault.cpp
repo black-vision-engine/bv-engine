@@ -1,13 +1,15 @@
 #include "ModelNodeEffectDefault.h"
 
+#include "Serialization/SerializationHelper.h"
+
 
 namespace bv { namespace model {
 
 // ********************************
 //
 ModelNodeEffectDefault::ModelNodeEffectDefault  ( ITimeEvaluatorPtr timeEvaluator )
+	: ModelNodeEffectBase( timeEvaluator )
 {
-    { timeEvaluator; }
 }
 
 // ********************************
@@ -15,13 +17,6 @@ ModelNodeEffectDefault::ModelNodeEffectDefault  ( ITimeEvaluatorPtr timeEvaluato
 NodeEffectType  ModelNodeEffectDefault::GetType () const
 {
     return NodeEffectType::NET_DEFAULT;
-}
-
-// ********************************
-//
-void            ModelNodeEffectDefault::Update  ( TimeType t )
-{
-    { t; }
 }
 
 } // model

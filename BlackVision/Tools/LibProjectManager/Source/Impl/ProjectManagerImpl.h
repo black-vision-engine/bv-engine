@@ -5,6 +5,9 @@
 #include "ProjectManager.h"
 #include "Project.h"
 
+#include  "Accessors/SceneAccessor.h"
+#include  "Accessors/PresetAccessor.h"
+
 #include <map>
 
 namespace bv
@@ -17,7 +20,7 @@ private:
 	// listing
 	PathVec					ListProjectsNames	() const;
 	PathVec					ListScenesNames		( const Path & projectName = Path("") ) const;
-	PathVec					ListCategoriesNames	() const;
+	StringVector			ListCategoriesNames	() const;
 	PathVec					ListAssetsPaths		( const Path & projectName,  const std::string & categoryName = "" ) const;
 
 	PathVec					ListAllUsedAssets	() const;
@@ -35,15 +38,17 @@ private:
 
 	// 
 	void					CopyAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath );
-	void					RemoveAsset			( const Path & projectName, const std::string & categoryName, const Path & path );
+	void					RemoveAsset			( const Path & projectName, const std::string & categoryName, const Path & path ) const;
 	void					MoveAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath );
-	void					RemoveUnusedAssets	( const Path & projectName, const std::string & categoryName );
-	void					RemoveUnusedAssets	( const Path & projectName );
+	void					RemoveUnusedAssets	( const Path & projectName, const std::string & categoryName ) const;
+	void					RemoveUnusedAssets	( const Path & projectName ) const;
+    void				    RemoveUnusedAssets	() const;
 
-	void					AddScene			( const model::BasicNode & sceneRootNode, const Path & projectName, const Path & outPath );
+	void					AddScene			( const model::SceneModelPtr & scene, const Path & projectName, const Path & outPath );
 	void					CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 	void					RemoveScene			( const Path & projectName, const Path & path );
 	void					MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
+    model::SceneModelPtr    LoadScene           ( const Path & projectName, const Path & path ) const;
 
 	// categories
 	void					RegisterCategory	( const AssetCategoryConstPtr & category);
@@ -62,7 +67,7 @@ private:
 
 	// projects
 	void					ExportProjectToFile	( const Path & projectName, const Path &  outputFilePath ) const;
-	void					ImportProjectFromFile( const Path & expFilePath, const Path & importToPath );
+	void					ImportProjectFromFile( const Path & expFilePath, const Path & projectName );
 
 	// *********************************
 	// getting scenes and assets descriptors
@@ -71,12 +76,27 @@ private:
 	AssetDescConstPtr		GetAssetDesc		( const Path & projectName, const std::string & categoryName, const Path & pathInProject ) const;
 
 	//SceneDesc				GetSceneDescLoc		( loc )
-	SceneDesc *				GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
+	SceneDescriptor			GetSceneDesc		( const Path & path ) const;
+	SceneDescriptor			GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
+
+    // *********************************
+	// loading, saving presets
+    model::SceneModelPtr    LoadPreset          ( const Path & projectName, const Path & path ) const;
+    void                    SavePreset          ( const model::SceneModelPtr & node, const Path & projectName, const Path & path ) const;
+    PathVec                 ListPresets         ( const Path & projectName, const Path & path ) const;
+    PathVec                 ListPresets         ( const Path & projectName ) const;
+    PathVec                 ListPresets         () const;
 
 	void					InitializeProjects	();
+	void					InitializeScenes	();
+    void				    InitializePresets	();
+    void				    InitializeAssets	();
 
-	Path					TranslateToPathCaegory( const Path & projectName, const Path & path ) const;
+	Path					TranslateToPathCategory( const Path & projectName, const Path & path ) const;
 	Path					TranslateToPathInPMRootFolder( const Path & projectName, const std::string & categoryName, const Path & path ) const;
+
+    Path                    ToAbsPath           ( const Path & path ) const;
+    bool                    IsExternalPath      ( const Path & path ) const;
 
 	explicit ProjectManagerImpl( const Path & rootPath );
 			~ProjectManagerImpl();
@@ -90,10 +110,32 @@ private:
 	CategoryMap				m_categories;
 	ProjectMap				m_projects;
 
+	SceneAccessorConstPtr	m_sceneAccessor;
+    PresetAccessorConstPtr  m_presetAccessor;
+
 	Path					m_rootPath;
 	Path					m_projectsPath;
+	Path					m_scenesPath;
+    Path					m_presetsPath;
 
 	friend ProjectManager;
+
+	struct Location
+	{
+		std::string		categoryName;
+		Path			projectName;
+		Path			path;
+
+        bool            IsValid () const
+        {
+            return !categoryName.empty();
+        }
+	};
+
+	Location				Path2Location		( const Path & path ) const;
+	Path					Location2Path		( const Location & loc ) const;
+    bool                    IsValidPMPath       ( const Path & path ) const;
+    bool                    PathExistsInPM      ( const Path & path ) const;
 };
 
 

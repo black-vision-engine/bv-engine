@@ -22,12 +22,28 @@ public:
 
     explicit            ParamTransform  ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator );
 
+    void                Serialize       ( ISerializer& doc ) const;
+
     void                SetCurveType    ( CurveType type );
+    CurveType           GetCurveType    ();
+
+    virtual void        SetWrapPostMethod ( WrapMethod method );
+    virtual void        SetWrapPreMethod ( WrapMethod method );
+    virtual WrapMethod  GetWrapPostMethod ();
+    virtual WrapMethod  GetWrapPreMethod ();
+
+    virtual int         GetNumKeys      ();
+
 
     inline  void        SetRotation     ( const glm::vec3 & rotAxis, float angle, TimeType t );
     inline  void        SetScale        ( const glm::vec3 & scale, TimeType t );
     inline  void        SetTranslation  ( const glm::vec3 & translation, TimeType t );
     inline  void        SetCenter       ( const glm::vec3 & center, TimeType t );
+
+    inline  void        RemoveRotation      ( TimeType t );
+    inline  void        RemoveScale         ( TimeType t );
+    inline  void        RemoveTranslation   ( TimeType t );
+    inline  void        RemoveCenter        ( TimeType t );
 
     inline  TransformF& Transform       ();
 
@@ -63,9 +79,20 @@ public:
     explicit            ParamTransformVec   ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator );
     explicit            ParamTransformVec   ( const std::string & name, const ITimeEvaluatorPtr evaluator );
 
+    void                Serialize           ( ISerializer& doc ) const;
     void                SetCurveType        ( CurveType type );
+    CurveType           GetCurveType        ();
+
+    virtual void        SetWrapPostMethod   ( WrapMethod method );
+    virtual void        SetWrapPreMethod    ( WrapMethod method );
+    virtual WrapMethod  GetWrapPostMethod   ();
+    virtual WrapMethod  GetWrapPreMethod    ();
+
+    virtual int         GetNumKeys          ();
+
 
     void                AppendTransform     ( const TransformF & transform );
+    void                InsertTransform     ( unsigned int transformNum, const TransformF & transform );
 
     inline unsigned int NumTransforms       () const;
 
@@ -73,6 +100,11 @@ public:
     inline  void        SetScale            ( unsigned int transformNum, const glm::vec3 & scale, TimeType t );
     inline  void        SetTranslation      ( unsigned int transformNum, const glm::vec3 & translation, TimeType t );
     inline  void        SetCenter           ( unsigned int transformNum, const glm::vec3 & center, TimeType t );
+
+    inline  void        RemoveRotation      ( unsigned int transformNum, TimeType t );
+    inline  void        RemoveScale         ( unsigned int transformNum, TimeType t );
+    inline  void        RemoveTranslation   ( unsigned int transformNum, TimeType t );
+    inline  void        RemoveCenter        ( unsigned int transformNum, TimeType t );
 
     inline  TransformF& Transform           ( unsigned int transformNum );
 

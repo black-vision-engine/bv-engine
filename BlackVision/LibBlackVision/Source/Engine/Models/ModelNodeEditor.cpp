@@ -1,29 +1,43 @@
 #include "ModelNodeEditor.h"
 
-#include "Engine/Models/BVSceneTools.h"
+#include "Engine/Models/BVProjectTools.h"
+
+#include "Engine/Models/Plugins/Plugin.h"
+#include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
+
 
 namespace bv { namespace model {
 
 // *******************************
 //
-				ModelNodeEditor::ModelNodeEditor		( BasicNodePtr model )
-    : m_model( model )
+				ModelNodeEditor::ModelNodeEditor		( BasicNodePtr node )
+    : m_node( node )
 	, m_detachedPlugin( nullptr )
 {
 }
 
 // ********************************
 //
+BasicNodePtr			ModelNodeEditor::CopyNode				()
+{
+    auto node = m_node.lock();
+	return std::static_pointer_cast< BasicNode >( node->Clone() );
+}
+
+// ********************************
+//
 bool			ModelNodeEditor::AddPlugin				( IPluginPtr plugin, unsigned int idx )
 {
-	return m_model->GetPlugins()->AttachPlugin( plugin, idx );
+	auto node = m_node.lock();
+	return node->GetPlugins()->AttachPlugin( plugin, idx );
 }
 
 // ********************************
 //
 bool			ModelNodeEditor::DeletePlugin				( const std::string & name )
 {
-	auto plugin = m_model->GetPlugins()->DetachPlugin( name );
+	auto node = m_node.lock();
+	auto plugin = node->GetPlugins()->DetachPlugin( name );
 	if( plugin )
 	{
 		plugin = nullptr;
@@ -36,7 +50,8 @@ bool			ModelNodeEditor::DeletePlugin				( const std::string & name )
 //
 bool			ModelNodeEditor::DeletePlugin				( unsigned int idx )
 {
-	auto plugin = m_model->GetPlugins()->DetachPlugin( idx );
+	auto node = m_node.lock();
+	auto plugin = node->GetPlugins()->DetachPlugin( idx );
 	if( plugin )
 	{
 		plugin = nullptr;
@@ -49,7 +64,8 @@ bool			ModelNodeEditor::DeletePlugin				( unsigned int idx )
 //
 bool				ModelNodeEditor::AttachPlugin			( unsigned int idx )
 {
-	if( m_model->GetPlugins()->AttachPlugin( m_detachedPlugin, idx ) )
+	auto node = m_node.lock();
+	if( node->GetPlugins()->AttachPlugin( m_detachedPlugin, idx ) )
 	{
 		m_detachedPlugin = nullptr;
 		return true;
@@ -77,7 +93,8 @@ bool				ModelNodeEditor::AttachPlugin			( BasicNodePtr sourceNode, unsigned int 
 //
 bool				ModelNodeEditor::DetachPlugin			( const std::string & name )
 {
-	auto plugin = m_model->GetPlugins()->DetachPlugin( name );
+	auto node = m_node.lock();
+	auto plugin = node->GetPlugins()->DetachPlugin( name );
 
 	if ( plugin )
 	{
@@ -92,7 +109,8 @@ bool				ModelNodeEditor::DetachPlugin			( const std::string & name )
 //
 bool				ModelNodeEditor::DetachPlugin			( unsigned int idx )
 {
-	auto plugin = m_model->GetPlugins()->DetachPlugin( idx );
+	auto node = m_node.lock();
+	auto plugin = node->GetPlugins()->DetachPlugin( idx );
 
 	if ( plugin )
 	{
@@ -119,12 +137,79 @@ void				ModelNodeEditor::ResetDetachedPlugin	()
 
 // ********************************
 //
-void				ModelNodeEditor::RefreshNode ( SceneNode * sceneNode, Renderer * renderer )
+IPluginPtr			ModelNodeEditor::CopyPlugin				( const std::string & name )
 {
-		BVSceneTools::ClearSingleNode( sceneNode, renderer );
-		BVSceneTools::SyncSingleNode( m_model, sceneNode );
+    auto node = m_node.lock();
+	auto plugin = node->GetPlugin( name );
+
+	if( plugin )
+	{
+		return plugin->Clone();
+	}
+    return nullptr;
 }
 
+// *******************************
+//
+IModelNodeEffectPtr	ModelNodeEditor::GetNodeEffect		()
+{
+	auto node = m_node.lock();
+	return node->GetNodeEffect();
+}
+
+// *******************************
+//
+void				ModelNodeEditor::SetNodeEffect		( IModelNodeEffectPtr nodeEffect )
+{
+	auto node = m_node.lock();
+	node->SetNodeEffect( nodeEffect );
+}
+
+// ********************************
+//
+void				ModelNodeEditor::RefreshNode		( SceneNode * sceneNode, Renderer * renderer )
+{
+	auto node = m_node.lock();
+	BVProjectTools::ClearSingleNode( sceneNode, renderer );
+	BVProjectTools::SyncSingleNode( node, sceneNode );
+}
+
+
+// ********************************
+//
+void				ModelNodeEditor::ReplaceTimeline	( const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline )
+{
+	auto node = m_node.lock();
+	
+    //replace timeevaluators in parameters
+    for( auto & param : node->GetParameters() )
+    {
+        if( param->GetTimeEvaluator() == oldTimeline )
+		{
+			param->SetTimeEvaluator( newTimeline );
+		}
+    }
+
+    //replace timeevaluator in plugin model
+    auto plugins = node->GetPluginList();
+    for( UInt32 i = 0; i < plugins->NumPlugins(); ++i )
+    {
+        auto pluginModel = plugins->GetPlugin( i )->GetPluginParamValModel();
+	    if( pluginModel )
+	    {
+		    if( pluginModel->GetTimeEvaluator() == oldTimeline )
+		    {
+			    //FIXME: cast
+			    std::static_pointer_cast< model::DefaultPluginParamValModel >( pluginModel )->SetTimeEvaluator( newTimeline );
+		    }
+        }
+    }
+
+	for( UInt32 i = 0; i < node->GetNumChildren(); ++i )
+	{
+        node->GetChild( i )->GetModelNodeEditor()->ReplaceTimeline( oldTimeline, newTimeline );
+	}
+}
 
 } //model
 } //bv

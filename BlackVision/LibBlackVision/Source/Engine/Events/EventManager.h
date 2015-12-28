@@ -48,6 +48,7 @@ public:
 
     virtual bool    Update                  ( unsigned long maxEvaluationMillis = millisINFINITE );
 
+    virtual void    QueueResponse           ( const IEventPtr evt ) override;
 };
 
 } //bv

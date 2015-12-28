@@ -21,6 +21,8 @@ public:
                                                         TimeEvaluatorBase   ( const std::string & name );
     virtual                                             ~TimeEvaluatorBase  ();
 
+	static ISerializablePtr                             Create              ( const IDeserializer&  );
+
     virtual void                                        AddChild            ( ITimeEvaluatorPtr child ) override;
 
     virtual ITimeEvaluatorPtr                           GetChild            ( const std::string & name ) override;
@@ -29,6 +31,7 @@ public:
     virtual bool                                        RemoveChild         ( ITimeEvaluatorPtr child ) override;
     virtual bool                                        RemoveChild         ( const std::string & name ) override;
 
+    virtual void				                        SetName             ( std::string ) override;
     virtual const std::string &                         GetName             () const override;
 
     virtual void                                        SetGlobalTime       ( TimeType t ) override;

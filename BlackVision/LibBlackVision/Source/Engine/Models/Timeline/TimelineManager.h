@@ -19,10 +19,15 @@
 #include "Engine/Models/Timeline/Dynamic/TimelineEventNull.h"
 #include "Engine/Models/Timeline/Dynamic/TimelineEventStop.h"
 
+#include "Serialization/ISerializable.h"
+
 
 namespace bv { namespace model {
 
-class TimelineManager
+class TimelineManager;
+DEFINE_PTR_TYPE( TimelineManager );
+
+class TimelineManager : public ISerializable
 {
 private:
 
@@ -31,18 +36,15 @@ private:
     ITimeEvaluatorPtr                                       m_rootTimeline;
 
 public:
+    static TimelineManager* GetInstance                     ();
+    static void             SetInstance                     ( TimelineManager* );
 
                             TimelineManager                 ();
                             ~TimelineManager                ();
 
-    ITimeEvaluatorPtr       CreateOffsetTimeEvaluator       ( const std::string & name, TimeType startTime );
-    ITimeEvaluatorPtr       CreateConstTimeEvaluator        ( const std::string & name, TimeType timeVal );
-    ITimelinePtr            CreateDefaultTimeline           ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
+    virtual void            Serialize                       ( ISerializer& sob ) const;
+    static ISerializablePtr Create                          ( const IDeserializer& dob );
 
-    OffsetTimeEvaluatorPtr  CreateOffsetTimeEvaluatorImpl   ( const std::string & name, TimeType startTime );
-    ConstTimeEvaluatorPtr   CreateConstTimeEvaluatorImpl    ( const std::string & name, TimeType timeVal );
-    DefaultTimelinePtr      CreateDefaultTimelineImpl       ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
-    
     bool                    AddStopEventToTimeline          ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime );
     bool                    AddLoopReverseEventToTimeline   ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, unsigned int totalLoopCount );
     bool                    AddLoopJumpEventToTimeline      ( ITimelinePtr timeline, const std::string & eventName, TimeType eventTime, unsigned int totalLoopCount, TimeType jumpToTime );
@@ -54,10 +56,9 @@ public:
     ITimeEvaluatorPtr       GetRootTimeline                 ();
 
     ITimeEvaluatorPtr       GetTimeEvaluator                ( const std::string & name );
-    ITimeEvaluatorPtr       GetTimeEvaluator                ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
 
     ITimelinePtr            GetTimeline                     ( const std::string & name );
-    ITimelinePtr            GetTimeline                     ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
+    std::string             GetTimelinePath                 ( ITimeEvaluatorPtr timeline );
 
     bool                    AddTimeline                     ( ITimeEvaluatorPtr timeline );
     bool                    AddTimelineToTimeline           ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline );
@@ -83,10 +84,11 @@ public:
 
 private:
 
-    ITimeEvaluatorPtr       FindTimelineByName              ( const std::string & name, ITimeEvaluatorPtr root );
+    //ITimeEvaluatorPtr       FindTimelineByName              ( const std::string & name, ITimeEvaluatorPtr root );
     SimpleIParamSet *       GetParamSet                     ( ITimeEvaluatorPtr timeline );
     bool                    DeregisterParam                 ( IParameterPtr param, ITimeEvaluatorPtr timeline );
 
+    static TimelineManager* instance;
 };
 
 } //model

@@ -8,13 +8,20 @@
 
 namespace bv { 
 
+namespace model
+{
+class TextArranger;
+
+} // model
+
 class TextAtlas;
 
 enum class TextAlignmentType
 {
     Left    = 0 ,
     Center      ,
-    Right
+    Right       ,
+	Dot
 };
 
 class TextHelper
@@ -32,11 +39,11 @@ public:
 
     /////////////////////////////////////
     // This function creates empty VertexAttributeChannel for text with proper attribute descriptor. ( position, texture cord )
-    static model::VertexAttributesChannel * CreateEmptyVACForText   ();
+    static model::VertexAttributesChannelPtr CreateEmptyVACForText   ();
 
     /////////////////////////////////////
     // This function builds VertexAttributeChannel for text and fontAsset.
-    static float                        BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring& text, unsigned int blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, bool useKerning = true );
+    static float                        BuildVACForText     ( model::VertexAttributesChannel * vertexAttributeChannel, const TextAtlasConstPtr & textAtlas, const std::wstring& text, SizeType blurSize, float spacing, TextAlignmentType tat, SizeType outlineSize, UInt32 viewWidth, UInt32 viewHeight, model::TextArranger * arranger = nullptr, bool useKerning = true );
 };
 
 

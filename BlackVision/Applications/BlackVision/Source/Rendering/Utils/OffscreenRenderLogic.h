@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Engine/Types/Enums.h"
-#include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 #include "Engine/Graphics/Effects/Texture2DEffect.h"
 #include "Engine/Graphics/Effects/Texture2DEffectWithMask.h"
@@ -99,6 +99,8 @@ public:
     void                DiscardCurrentRenderTarget  ( Renderer * renderer );
     void                DisableTopRenderTarget      ( Renderer * renderer );
 
+    void                DrawTopAuxRenderTarget      ( Renderer * renderer, RenderableEffectPtr effect );
+
     void                DrawTopAuxRenderTarget      ( Renderer * renderer, const IValue * alphaVal );
     void                DrawAMTopTwoRenderTargets   ( Renderer * renderer, const IValue * alphaVal );
 
@@ -111,14 +113,16 @@ public:
 
     Texture2DConstPtr   ReadDisplayTarget           ( Renderer * renderer, unsigned int bufNum );
 
-private:
-
     RenderTarget *      GetRenderTargetAt               ( int i );
+
+private:
 
     RenderTargetData    CreateDisplayRenderTargetData       () const;
     RenderTargetData    CreateVideoOutputRenderTargetData   () const;
 
     unsigned int        CurDisplayRenderTargetNum           () const;
+
+    RenderTargetData    CurDisplayRenderTargetData          () const;
     RenderTargetData &  CurDisplayRenderTargetData          ();
 
 };

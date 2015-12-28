@@ -26,7 +26,7 @@ IPluginPtr              DefaultTransformPluginDesc::CreatePlugin                
 //
 DefaultPluginParamValModelPtr   DefaultTransformPluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    DefaultPluginParamValModelPtr model         = std::make_shared< DefaultPluginParamValModel >();
+    DefaultPluginParamValModelPtr model         = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
     DefaultParamValModelPtr trModel             = std::make_shared< DefaultParamValModel >();
     auto evaluator                              = ParamValEvaluatorFactory::CreateTransformVecEvaluator( "simple_transform", timeEvaluator );
 
@@ -87,9 +87,8 @@ ITransformChannelConstPtr           DefaultTransformPlugin::GetTransformChannel 
 //
 void                                DefaultTransformPlugin::Update                      ( TimeType t )
 {
-    { t; } // FIXME: suppress unused warning
+	BasePlugin::Update( t );
 
-    m_paramValModel->Update();
     m_transformChannel->PostUpdate();
 }
 
@@ -99,7 +98,6 @@ ParamTransformVecPtr				DefaultTransformPlugin::GetParamTransform			() const
 {
 	return std::static_pointer_cast< ParamTransformVec >( m_paramValModel->GetTransformChannelModel()->GetParameters()[ 0 ] );
 }
-
 
 } // model
 } // bv

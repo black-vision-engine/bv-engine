@@ -1,22 +1,20 @@
 #pragma once
 
-#include "Engine/Models/Interfaces/IModelNodeEffect.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectBase.h"
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 
 
 namespace bv { namespace model {
 
-class ModelNodeEffectWireframe : public IModelNodeEffect
+class ModelNodeEffectWireframe : public ModelNodeEffectBase
 {
-private:
-
 public:
 
                             ModelNodeEffectWireframe( ITimeEvaluatorPtr timeEvaluator );
 
-        virtual void            Update              ( TimeType t ) override;
+    static ISerializablePtr Create              ( const IDeserializer& deser );
 
-        virtual NodeEffectType  GetType             () const override;
+    virtual NodeEffectType  GetType             () const override;
 
 };
 
