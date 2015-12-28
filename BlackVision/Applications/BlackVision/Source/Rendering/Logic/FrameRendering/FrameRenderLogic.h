@@ -10,14 +10,14 @@ class OffscreenRenderLogic;
 class SceneNode;
 class Camera;
 class NodeEffectRenderLogic;
-class DefaultVideoOutputRenderLogic;
+class VideoOutputRenderLogic;
 
 class FrameRenderLogic
 {
 private:
 
     OffscreenRenderLogic *                  m_offscreenRenderLogic;
-    DefaultVideoOutputRenderLogic *         m_videoOutputRenderLogic;
+    VideoOutputRenderLogic *                m_videoOutputRenderLogic;
 
     std::vector< NodeEffectRenderLogic * >  m_customNodeRenderLogic;
 

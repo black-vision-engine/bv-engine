@@ -12,12 +12,8 @@
 #include "BVGL.h"
 
 #include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
-#include "Rendering/Logic/FrameRendering/NodeEffect/DefaultEffectRenderLogic.h"
-#include "Rendering/Logic/FrameRendering/NodeEffect/AlphaMaskRenderLogic.h"
-#include "Rendering/Logic/FrameRendering/NodeEffect/NodeMaskRenderLogic.h"
-#include "Rendering/Logic/FrameRendering/NodeEffect/WireframeRenderLogic.h"
 
-#include "Rendering/Logic/VideoOutputRendering/DefaultVideoOutputRenderLogic.h"
+#include "Rendering/Logic/VideoOutputRendering/VideoOutputRenderLogic.h"
 
 
 namespace bv {
@@ -27,12 +23,14 @@ namespace bv {
 FrameRenderLogic::FrameRenderLogic     ()
 {
     m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffersPerRT() );
-    m_videoOutputRenderLogic = new DefaultVideoOutputRenderLogic( DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
-
+    m_videoOutputRenderLogic = new VideoOutputRenderLogic( DefaultConfig.DefaultHeight() );
+    // DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() 
+/*
     m_customNodeRenderLogic.push_back( new DefaultEffectRenderLogic( this, m_offscreenRenderLogic ) );
     m_customNodeRenderLogic.push_back( new AlphaMaskRenderLogic( this, m_offscreenRenderLogic ) );
     m_customNodeRenderLogic.push_back( new NodeMaskRenderLogic( this, m_offscreenRenderLogic ) );
     m_customNodeRenderLogic.push_back( new WireframeRenderLogic( this, m_offscreenRenderLogic ) );
+*/
 }
 
 // *********************************
@@ -55,13 +53,13 @@ void    FrameRenderLogic::SetCamera       ( Camera * cam )
 
 // *********************************
 //
-void    FrameRenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * node )
+void    FrameRenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * sceneRoot )
 {
     PreFrameSetup( renderer );
 
     // FIXME: verify that all rendering paths work as expected
-	if( node )
-		RenderNode( renderer, node );
+	if( sceneRoot )
+		RenderNode( renderer, sceneRoot );
 
     PostFrameSetup( renderer );
 }
@@ -70,8 +68,9 @@ void    FrameRenderLogic::RenderFrame    ( Renderer * renderer, SceneNode * node
 //
 void    FrameRenderLogic::PreFrameSetup  ( Renderer * renderer )
 {
-    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
-    renderer->ClearBuffers();
+//FIXME: it is a fullscreen render pass, so no such things are required now
+//    renderer->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+//    renderer->ClearBuffers();
     renderer->PreDraw();
 
     m_offscreenRenderLogic->AllocateNewRenderTarget( renderer );
@@ -87,7 +86,7 @@ void    FrameRenderLogic::PostFrameSetup ( Renderer * renderer )
     m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
     m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
 
-    m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic );
+    // m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic );
 
     renderer->PostDraw();
     renderer->DisplayColorBuffer();
@@ -101,7 +100,8 @@ void    FrameRenderLogic::RenderNode     ( Renderer * renderer, SceneNode * node
     {
         auto effectRenderLogic = GetNodeEffectRenderLogic( node );
         
-        effectRenderLogic->RenderNode( renderer, node );
+        { renderer; effectRenderLogic; }
+        //effectRenderLogic->RenderNode( renderer, node );
     }
 }
 

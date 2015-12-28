@@ -2,31 +2,66 @@
 
 #include <vector>
 
+#include "Rendering/Utils/RenderTargetStackAllocator.h"
+#include "Rendering/Logic/FrameRendering/NodeEffectRenderLogicSelector.h"
+
 
 namespace bv {
 
-class Camera;
 class Renderer;
 class SceneNode;
 
-class FrameRenderLogic;
+class RenderTarget;
+
 class PostFrameRenderLogic;
+class OffscreenDisplay;
+class BlitFullscreenEffect;
+class VideoOutputRenderLogic;
 
 class RenderLogic
 {
 private:
 
-    FrameRenderLogic *                      m_frameRenderLogic;
-    PostFrameRenderLogic *                  m_postFrameRenderLogic;
+    RenderTargetStackAllocator      m_rtStackAllocator;
+    NodeEffectRenderLogicSelector   m_nodeEffectRenderLogicSelector;
+    OffscreenDisplay *              m_offscreenDisplay;
+    BlitFullscreenEffect *          m_blitEffect;
+    VideoOutputRenderLogic *        m_videoOutputRenderLogic;
+
+    bool                            m_displayVideoCardPreview;
+    bool                            m_useVideoCardOutput;
 
 public:
 
             RenderLogic     ();
             ~RenderLogic    ();
 
-    void    SetCamera       ( Camera * cam );
+    void    RenderFrame     ( Renderer * renderer, SceneNode * sceneRoot );
 
-    void    RenderFrame     ( Renderer * renderer, SceneNode * node );
+private:
+
+    void    RenderFrameImpl ( Renderer * renderer, SceneNode * sceneRoot );
+    void    FrameRendered   ( Renderer * renderer );
+
+    void    RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoot, RenderTarget * rt );
+       
+public:
+
+    void    RenderNode      ( Renderer * renderer, SceneNode * node );
+    void    DrawNode        ( Renderer * renderer, SceneNode * node );
+    void    DrawNodeOnly    ( Renderer * renderer, SceneNode * node );
+    void    RenderChildren  ( Renderer * renderer, SceneNode * node, int firstChildIdx = 0 );
+
+private:
+
+    BlitFullscreenEffect *          AccessBlitEffect        ( RenderTarget * rt );
+    void                            BlitToPreview           ( Renderer * renderer, RenderTarget * rt );
+
+    void                            UpdateOffscreenState    ();
+
+public:
+
+    VideoOutputRenderLogic *        GedVideoOutputRenderLogic   ();
 
 };
 

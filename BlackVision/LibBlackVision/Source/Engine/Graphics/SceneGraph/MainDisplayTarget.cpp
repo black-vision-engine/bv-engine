@@ -120,7 +120,7 @@ RenderableArrayDataArraysSingleVertexBuffer * MainDisplayTarget::CreateTexDispRe
 //
 RenderableArrayDataArraysSingleVertexBuffer * MainDisplayTarget::CreateTriStripArrayData( unsigned int numVertices, float * vbData )
 {
-    unsigned int vertexSize = 4 * sizeof( float ) + 2 * sizeof( float );
+    unsigned int vertexSize = 3 * sizeof( float ) + 2 * sizeof( float );
 
     VertexBuffer * vb       = new VertexBuffer( 4, vertexSize, DataBuffer::Semantic::S_STATIC );
     VertexDescriptor * vd   = VertexDescriptor::Create( 2,

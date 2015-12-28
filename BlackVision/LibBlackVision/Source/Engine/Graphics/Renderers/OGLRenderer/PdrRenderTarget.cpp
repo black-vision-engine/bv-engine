@@ -183,7 +183,8 @@ void            PdrRenderTarget::AddColorAttachments( Renderer * renderer, const
     for( unsigned int i = 0; i < rt->NumTargets(); ++i )
     {
         Texture2DPtr tx = rt->ColorTexture( i );
-        assert( !renderer->IsRegistered( tx.get() ) );
+        //FIXME: is this really necessary (maybe already attached texture cannot be used as render target texture - i don't know - check this at some point)
+        assert( !renderer->IsRegistered( tx.get() ) ); 
 
         PdrTexture2D * pdrTx = PdrTexture2D::Create( tx.get() );
         renderer->RegisterTexture2D( tx.get(), pdrTx );

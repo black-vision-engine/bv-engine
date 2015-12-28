@@ -521,6 +521,10 @@ model::BasicNodePtr     TestScenesFactory::CreateSceneFromEnv       ( const mode
     {
         node = TestScenesFactory::GlobalEffect05( pluginsManager, timelineManager, timeEvaluator );
     }
+    else if( scene == "GLOBAL_EFFECT_VIDEO_OUTPUT" )
+    {
+        node = TestScenesFactory::CreateTestScene( pluginsManager, timelineManager, timeEvaluator, TestScenesFactory::TestSceneSelector::TSS_TWO_TEXTURED_RECTANGLES );
+    }
     else
     {
         printf( "Environment variable %s not set or invalid. Creating default scene.\n", DefaultConfig.DefaultSceneEnvVarName().c_str() );

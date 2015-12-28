@@ -1,7 +1,7 @@
 #include "BVConfig.h"
 
 //#define USE_READBACK_API
-//#define FULLSCREEN_MODE
+#define FULLSCREEN_MODE
 #define DISPLAY_VIDEO_CARD_OUTPUT
 #define PERSPECTIVE_CAMERA
 
@@ -25,7 +25,7 @@ BVConfig::BVConfig                      ()
     m_defaultWindowHeight   = m_defaultHeight / 2;
 #endif
 
-    m_fps               = 5000;
+    m_fps               = 50;
     m_frameTimeMillis   = 1000 / m_fps;
 
 #ifdef USE_READBACK_API
