@@ -77,6 +77,11 @@ std::string SceneEvent::m_sEventName				= "SceneEvent";
 const EventType AssetEvent::m_sEventType			= 0x30000018;
 std::string AssetEvent::m_sEventName				= "AssetEvent";
 
+
+const EventType GlobalEffectEvent::m_sEventType			= 0x30000019;
+std::string GlobalEffectEvent::m_sEventName				= "GlobalEffectEvent";
+
+
 // ************************************* Events Serialization *****************************************
 
 namespace SerializationHelper
@@ -403,6 +408,21 @@ std::pair< RenderingModeEvent::Command, const std::wstring > RenderingModeEventC
 
 template<> RenderingModeEvent::Command WString2T    ( const std::wstring& s )               { return WString2T( RenderingModeEventCommandMapping, s ); }
 template<> const std::wstring& T2WString            ( RenderingModeEvent::Command t )       { return Enum2WString( RenderingModeEventCommandMapping, t ); }
+
+// ========================================================================= //
+// GlobalEffectEvent
+// ========================================================================= //
+const std::wstring GLOBAL_EFFECT_NAME_WSTRING                = L"GlobalEffectName";
+
+std::pair< GlobalEffectEvent::Command, const std::wstring > GlobalEffectEventCommandMapping[] = 
+{
+    std::make_pair( GlobalEffectEvent::Command::SetGlobalEffect, L"SetGlobalEffect" )
+    , std::make_pair( GlobalEffectEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> GlobalEffectEvent::Command WString2T     ( const std::wstring& s )               { return WString2T( GlobalEffectEventCommandMapping, s ); }
+template<> const std::wstring& T2WString            ( GlobalEffectEvent::Command t )        { return Enum2WString( GlobalEffectEventCommandMapping, t ); }
+
 
 // ========================================================================= //
 // HightmapEvent
@@ -1474,6 +1494,56 @@ const std::string&  RenderingModeEvent::GetName() const
 // *************************************
 //
 EventType           RenderingModeEvent::GetEventType() const
+{   return this->m_sEventType; }
+
+
+//******************* GlobalEffectEvent *************
+
+// *************************************
+//
+void                GlobalEffectEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
+    ser.SetAttribute( SerializationHelper::SCENE_NAME_WSTRING, toWString( SceneName ) );
+    ser.SetAttribute( SerializationHelper::NODE_NAME_WSTRING, toWString( NodePath ) );
+    ser.SetAttribute( SerializationHelper::GLOBAL_EFFECT_NAME_WSTRING, toWString( EffectName) );
+}
+
+// *************************************
+//
+IEventPtr                GlobalEffectEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
+    {
+        GlobalEffectEventPtr newEvent   = std::make_shared<GlobalEffectEvent>();
+        newEvent->NodePath              = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
+        newEvent->SceneName             = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
+        newEvent->EffectName            = toString( deser.GetAttribute( SerializationHelper::GLOBAL_EFFECT_NAME_WSTRING ) );
+
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               GlobalEffectEvent::Clone             () const
+{   return IEventPtr( new GlobalEffectEvent( *this ) );  }
+
+// *************************************
+//
+EventType           GlobalEffectEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        GlobalEffectEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  GlobalEffectEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           GlobalEffectEvent::GetEventType() const
 {   return this->m_sEventType; }
 
 

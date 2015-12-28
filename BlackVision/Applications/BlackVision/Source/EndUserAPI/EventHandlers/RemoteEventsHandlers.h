@@ -11,6 +11,7 @@ class QueryHandlers;
 class HightmapHandlers;
 class EngineStateHandlers;
 class AssetHandlers;
+class GlobalEffectHandler;
 
 class RemoteEventsHandlers
 {
@@ -22,6 +23,7 @@ public:
     HightmapHandlers*               m_heightmapEvents;
     EngineStateHandlers*            m_engineStateEvents;
     AssetHandlers*					m_assetEvents;
+    GlobalEffectHandler*            m_globalEffectEvents;
 
 public:
 

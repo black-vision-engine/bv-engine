@@ -27,6 +27,7 @@ RemoteController::RemoteController()
     RegisterEvent( WidgetEvent::Name(), WidgetEvent::Create );
     RegisterEvent( HightmapEvent::Name(), HightmapEvent::Create );
     RegisterEvent( AssetEvent::Name(), AssetEvent::Create );
+    RegisterEvent( GlobalEffectEvent::Name(), GlobalEffectEvent::Create );
 }
 
 
