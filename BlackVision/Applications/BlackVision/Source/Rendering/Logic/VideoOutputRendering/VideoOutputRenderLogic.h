@@ -35,6 +35,8 @@ public:
     void    SetAlpha                ( float alpha );
     void    SetHeight               ( int height );
 
+    Texture2DPtr GetLastVideoFrame  ();
+
 private:
 
     VideoOutputFullscreenEffect *  AccessEffect  ( RenderTarget * curFrameRenderTarget, RenderTarget * prevFrameRenderTarget );

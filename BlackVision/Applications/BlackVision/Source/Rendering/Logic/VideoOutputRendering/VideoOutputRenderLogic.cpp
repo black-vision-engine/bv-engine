@@ -100,6 +100,13 @@ void    VideoOutputRenderLogic::SetHeight               ( int height )
 
 // *********************************
 //
+Texture2DPtr    VideoOutputRenderLogic::GetLastVideoFrame  ()
+{
+    return m_videoFrame;
+}
+
+// *********************************
+//
 VideoOutputFullscreenEffect *   VideoOutputRenderLogic::AccessEffect    ( RenderTarget * curFrameRenderTarget, RenderTarget * prevFrameRenderTarget )
 {
     if ( !m_effect )
