@@ -22,6 +22,8 @@
 
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 
+#include "Engine/Models/Builder/ModelNodeEffectFactory.h"
+
 #include "Tools/Utils.h"
 #include "Tools/PrefixHelper.h"
 #include "UseLoggerLibBlackVision.h"
@@ -857,6 +859,25 @@ void						BVProjectEditor::SetNodeEffect	( model::IModelNodePtr node, model::IMo
     auto modelNode = QueryTyped( node );
     modelNode->SetNodeEffect( nodeEffect );
     BVProjectTools::UpdateSceneNodeEffect( GetEngineNode( node ), modelNode );
+}
+
+// ***********************
+//
+bool                        BVProjectEditor::SetNodeEffect   ( const std::string& sceneName, const std::string& nodePath, const std::string& timelinePath, const std::string& effectName )
+{
+    auto timeEvaluator = GetTimeline( timelinePath );
+    auto node = GetNode( sceneName, nodePath );
+
+    if( !node || !timeEvaluator )
+        return false;
+
+    auto newEffect = model::ModelNodeEffectFactory::Create( effectName, timeEvaluator );
+
+    if( !newEffect )
+        return false;
+
+    SetNodeEffect( node, newEffect );
+    return true;
 }
 
 // *******************************

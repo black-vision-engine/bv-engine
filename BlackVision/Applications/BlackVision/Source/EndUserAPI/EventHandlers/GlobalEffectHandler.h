@@ -19,9 +19,6 @@ public:
     ~GlobalEffectHandler();
 
     void        GlobalEffectEventHandler    ( bv::IEventPtr evt );
-
-private:
-    bool        CreateAndSetGlobalEffect    ( const std::string& sceneName, const std::string& nodePath, const std::string& timelinePath, const std::string& effectName );
 };
 
 

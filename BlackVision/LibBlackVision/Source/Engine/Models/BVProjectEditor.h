@@ -164,7 +164,7 @@ public:
 
 	model::IModelNodeEffectPtr	GetNodeEffect   ( model::IModelNodePtr node );
     void						SetNodeEffect   ( model::IModelNodePtr node, model::IModelNodeEffectPtr nodeEffect );
-
+    bool                        SetNodeEffect   ( const std::string& sceneName, const std::string& nodePath, const std::string& timelinePath, const std::string& effectName );
 
 /* TIMELINES */
 

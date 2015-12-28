@@ -1,6 +1,5 @@
 #include "GlobalEffectHandler.h"
 #include "EventHandlerHelpers.h"
-#include "Engine/Models/Builder/ModelNodeEffectFactory.h"
 #include "Engine/Models/BVProjectEditor.h"
 #include "../../BVAppLogic.h"
 
@@ -34,10 +33,11 @@ void        GlobalEffectHandler::GlobalEffectEventHandler			( bv::IEventPtr evt 
         auto eventID = effectEvent->EventID;
         auto socketID = effectEvent->SocketID;
 
+        auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
         bool result = true;
 
         if( command == GlobalEffectEvent::Command::SetGlobalEffect )
-            result = CreateAndSetGlobalEffect( sceneName, nodePath, timelinePath, effectName );
+            result = editor->SetNodeEffect( sceneName, nodePath, timelinePath, effectName );
         else
         {
             SendSimpleErrorResponse( command, eventID, socketID, "Unknown command" );
@@ -48,27 +48,6 @@ void        GlobalEffectHandler::GlobalEffectEventHandler			( bv::IEventPtr evt 
     }
 }
 
-
-// ***********************
-//
-bool        GlobalEffectHandler::CreateAndSetGlobalEffect    ( const std::string& sceneName, const std::string& nodePath, const std::string& timelinePath, const std::string& effectName )
-{
-    auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
-
-    auto timeEvaluator = editor->GetTimeline( timelinePath );
-    auto node = editor->GetNode( sceneName, nodePath );
-
-    if( !node || !timeEvaluator )
-        return false;
-
-    auto newEffect = model::ModelNodeEffectFactory::Create( effectName, timeEvaluator );
-
-    if( !newEffect )
-        return false;
-
-    editor->SetNodeEffect( node, newEffect );
-    return true;
-}
 
 
 } //bv
