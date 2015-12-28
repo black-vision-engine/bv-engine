@@ -35,7 +35,11 @@ private:    //Helpers
                                                         const std::string& nodeName,
                                                         const std::string& globalEffect,
                                                         const std::string& paramName );
-
+    ParameterPtr            GetResourceParameter    (   const std::string& sceneName,
+                                                        const std::string& nodeName,
+                                                        const std::string& pluginName,
+                                                        const std::string& textureName,
+                                                        const std::string& paramName );
 };
 
 } //bv

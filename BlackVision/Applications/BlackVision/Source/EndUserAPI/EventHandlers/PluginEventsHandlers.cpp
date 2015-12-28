@@ -177,6 +177,35 @@ ParameterPtr PluginEventsHandlers::GetPluginParameter  (    const std::string& s
 
 // ***********************
 //
+ParameterPtr PluginEventsHandlers::GetResourceParameter    (    const std::string& sceneName,
+                                                                const std::string& nodeName,
+                                                                const std::string& pluginName,
+                                                                const std::string& textureName,
+                                                                const std::string& paramName )
+{
+    auto node = GetNode( m_appLogic, sceneName, nodeName );
+    if( node == nullptr )
+        return nullptr;
+
+    auto plugin = node->GetPlugin( pluginName );
+    if( plugin == nullptr )
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Parameter event handler: node [" + nodeName + "], plugin [" + pluginName + "] not found";
+        return nullptr;
+    }
+
+    auto resourceModel = plugin->GetResourceStateModel( textureName );
+    if( resourceModel == nullptr )
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "Parameter event handler: node [" + nodeName + "], plugin [" + pluginName + "], texture [" + textureName + " not found";
+        return nullptr;
+    }
+    
+    return resourceModel->GetParameter( paramName );
+}
+
+// ***********************
+//
 void PluginEventsHandlers::AddParameter        ( std::shared_ptr<model::IParameter>& param, const std::wstring& value, TimeType keyTime )
 {
     std::string stringValue = toString( value );
