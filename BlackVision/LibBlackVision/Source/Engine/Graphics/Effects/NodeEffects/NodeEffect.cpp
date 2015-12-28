@@ -5,6 +5,7 @@
 
 namespace bv {
 
+
 // *********************************
 //
 NodeEffect::NodeEffect  ( NodeEffect::Type type )

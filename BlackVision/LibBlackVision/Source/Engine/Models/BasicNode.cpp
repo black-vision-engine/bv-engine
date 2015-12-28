@@ -138,6 +138,7 @@ ISerializablePtr BasicNode::Create( const IDeserializer& dob )
     for( auto plugin : plugins )
         node->AddPlugin( plugin );
 
+//@todo use ModelNodeEffectFactory
 //// node effect
 //    if( m_modelNodeEffect )
 //        m_modelNodeEffect->Serialize( dob );

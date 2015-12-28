@@ -1125,6 +1125,9 @@
     <ClCompile Include="..\..\..\Source\Assets\DefaultAssets.cpp">
       <Filter>Assets</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Builder\ModelNodeEffectFactory.cpp">
+      <Filter>Engine\Models\Builder</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2417,6 +2420,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.inl">
       <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Builder\ModelNodeEffectFactory.h">
+      <Filter>Engine\Models\Builder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

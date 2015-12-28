@@ -3,7 +3,7 @@
 #include "ModelNodeEffectNodeMask.h"
 #include "ModelNodeEffectWireframe.h"
 
-//#include "Serialization/SerializationHelper.h"
+#include "Serialization/SerializationHelper.h"
 //#include "Serialization/SerializationHelper.inl"
 
 namespace bv { 
@@ -22,6 +22,15 @@ template<>
 std::string T2String< bv::NodeEffectType >( const bv::NodeEffectType& t )
 {
     return SerializationHelper::Enum2String< bv::NodeEffectType >( ne2s, t );
+}
+
+template<>
+bv::NodeEffectType String2T( std::string s, const bv::NodeEffectType& defaultType )
+{
+    auto effectType = String2T( ne2s, s );
+    if( effectType == NodeEffectType::NET_TOTAL )
+        return defaultType;
+    return effectType;
 }
 
 } // SerializationHelper

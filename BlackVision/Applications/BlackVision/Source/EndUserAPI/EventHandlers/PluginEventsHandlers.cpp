@@ -15,8 +15,6 @@
 #include "Serialization/SerializationHelper.h"
 #include "Engine/Events/EventManager.h"
 
-#include <typeinfo>
-
 namespace bv
 {
 

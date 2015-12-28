@@ -792,6 +792,8 @@ public:
     std::string                     NodePath;
     std::string                     SceneName;
     std::string                     EffectName;
+    std::string                     TimelinePath;
+
 public:
     explicit                        GlobalEffectEvent   () {}
 

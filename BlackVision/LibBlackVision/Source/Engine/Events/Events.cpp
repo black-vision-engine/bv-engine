@@ -1507,6 +1507,8 @@ void                GlobalEffectEvent::Serialize            ( ISerializer& ser )
     ser.SetAttribute( SerializationHelper::SCENE_NAME_WSTRING, toWString( SceneName ) );
     ser.SetAttribute( SerializationHelper::NODE_NAME_WSTRING, toWString( NodePath ) );
     ser.SetAttribute( SerializationHelper::GLOBAL_EFFECT_NAME_WSTRING, toWString( EffectName) );
+    ser.SetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING, toWString( TimelinePath ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( EffectCommand ) );
 }
 
 // *************************************
@@ -1519,6 +1521,8 @@ IEventPtr                GlobalEffectEvent::Create          ( IDeserializer& des
         newEvent->NodePath              = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
         newEvent->SceneName             = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
         newEvent->EffectName            = toString( deser.GetAttribute( SerializationHelper::GLOBAL_EFFECT_NAME_WSTRING ) );
+        newEvent->TimelinePath          = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
+        newEvent->EffectCommand         = SerializationHelper::WString2T<GlobalEffectEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
 
         return newEvent;
     }

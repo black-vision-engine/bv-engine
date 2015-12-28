@@ -87,7 +87,6 @@ namespace
 void SerializeAllEvents( const std::string& fileName )
 {
     JsonSpiritSerializeObject*  ser = new JsonSpiritSerializeObject();
-    JsonSerializeObject*        serAsset = new JsonSerializeObject();
 
     HightmapEventPtr        heightmapEvent      = std::make_shared<HightmapEvent>();
     RenderingModeEventPtr   renderingModeEvent  = std::make_shared<RenderingModeEvent>();
@@ -102,6 +101,7 @@ void SerializeAllEvents( const std::string& fileName )
     ParamKeyEventPtr        paramKeyEvent       = std::make_shared<ParamKeyEvent>();
     LoadAssetEventPtr       loadTextureEvent    = std::make_shared<LoadAssetEvent>();
     LoadAssetEventPtr       loadFontEvent       = std::make_shared<LoadAssetEvent>();
+    GlobalEffectEventPtr    globalEffectEvent   = std::make_shared<GlobalEffectEvent>();
 
     ResponseEventPtr        responseEvent       = std::make_shared<ResponseEvent>();
     
@@ -109,11 +109,13 @@ void SerializeAllEvents( const std::string& fileName )
     TextureAssetDescConstPtr    texAsset =      TextureAssetDesc::Create( std::string( "textures/poison.jpg" ), true );
     FontAssetDescConstPtr       fontAsset =     FontAssetDesc::Create( std::string( "filePath.jpg" ), 0, 0, 0, false );
     
-    texAsset->Serialize( *serAsset );
-    loadTextureEvent->AssetData = serAsset->GetString();
+    JsonSerializeObject serAssetTex;
+    texAsset->Serialize( serAssetTex );
+    loadTextureEvent->AssetData = serAssetTex.GetString();
 
-    fontAsset->Serialize( *serAsset );
-    loadFontEvent->AssetData = serAsset->GetString();
+    JsonSerializeObject serAssetFont;
+    fontAsset->Serialize( serAssetFont );
+    loadFontEvent->AssetData = serAssetFont.GetString();
 
     ser->EnterArray( L"Events" );
         heightmapEvent->Serialize( *ser );
@@ -157,11 +159,13 @@ void SerializeAllEvents( const std::string& fileName )
     ser->EnterArray( L"Events" );
         responseEvent->Serialize( *ser );
     ser->ExitChild();
+    ser->EnterArray( L"Events" );
+        globalEffectEvent->Serialize( *ser );
+    ser->ExitChild();
 
     ser->Save( fileName, FORMATSTYLE_READABLE );
 
     delete ser;
-    delete serAsset;
 }
 
 
