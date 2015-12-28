@@ -47,6 +47,14 @@ ModelNodeEffectLightScattering::ModelNodeEffectLightScattering  ( ITimeEvaluator
     m_paramLightPositionOnScreen->AccessInterpolator().SetWrapPostMethod( WrapMethod::pingPong );
 
     m_paramNumSamples->SetVal( 100.f, 0.f );
+
+
+    m_paramValModel->RegisterAll( exposureEval );
+    m_paramValModel->RegisterAll( weightEval );
+    m_paramValModel->RegisterAll( decayEval );
+    m_paramValModel->RegisterAll( densityEval );
+    m_paramValModel->RegisterAll( lightPositionOnScreenEval );
+    m_paramValModel->RegisterAll( numSamplesEval );
 }
 
 // ********************************

@@ -38,19 +38,17 @@ LightScatteringRenderLogic::~LightScatteringRenderLogic        ()
 //
 Texture2DPtr LightScatteringRenderLogic::DrawInput             ( SceneNode * node, RenderLogicContext * ctx )
 {
-    renderer( ctx )->Disable( allocator( ctx )->Top() );    
-
     auto rtAllocator    = ctx->GetRenderTargetAllocator();
 
     auto rt = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
-    renderer( ctx )->Enable( rt );
 
-    renderer( ctx )->SetClearColor( glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
-    renderer( ctx )->ClearBuffers();
+    enable( ctx, rt );
+
+    clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
     logic( ctx )->DrawNode( renderer( ctx ), node, ctx );
 
-    renderer( ctx )->Disable( rt );
+    disableBoundRT( ctx );
     rtAllocator->Free();
 
     return rt->ColorTexture( 0 );
@@ -87,11 +85,13 @@ void    LightScatteringRenderLogic::RenderNode                  ( SceneNode * no
 {
     //logic( ctx )->DrawNode( ctx->GetRenderer(), node );
 
+    auto mainTarget = disableBoundRT( ctx );
+
     auto input = DrawInput( node, ctx );
 
     auto renderableEntity = SetupEffect( input, node->GetNodeEffect() );
 
-    renderer( ctx )->Enable( allocator( ctx )->Top() );   
+    enable( ctx, mainTarget );
 
     renderer( ctx )->Draw( renderableEntity );
 }
