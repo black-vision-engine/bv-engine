@@ -14,6 +14,7 @@ VideoOutputRenderLogic::VideoOutputRenderLogic          ( unsigned int height, b
     : m_height( height )
     , m_effect( nullptr )
     , m_interlaceOdd( interlaceOdd )
+    , m_videoFrame( nullptr )
 {
 }
 
@@ -43,6 +44,15 @@ void                            VideoOutputRenderLogic::Render          ( Render
     effect->SwapTextures();
 
     renderer->Disable   ( videoRenderTarget );
+}
+
+// *********************************
+//
+void    VideoOutputRenderLogic::VideoFrameRendered      ( Renderer * renderer, RenderTarget * videoRenderTarget )
+{
+    renderer->ReadColorTexture( 0, videoRenderTarget, m_videoFrame );
+    
+    // FIXME: add video manager code somewhere near this piece of logic
 }
 
 // *********************************

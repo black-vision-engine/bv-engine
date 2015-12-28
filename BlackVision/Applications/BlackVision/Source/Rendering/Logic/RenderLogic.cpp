@@ -215,24 +215,9 @@ void                    RenderLogic::UpdateOffscreenState   ()
 //
 void                    RenderLogic::OnVideoFrameRendered   ( Renderer * renderer )
 {
-    //FIXME: VIDEO CART CODE (PUSH FRAME) to be placed here
-    static int i = 0;
-
-    static Texture2DPtr tx[] = {nullptr, nullptr};
-
     auto rt = m_offscreenDisplay->GetVideoRenderTarget();
 
-    auto name = std::string( "frame" ) + std::to_string( 10000 + i ) + ".bmp";
-
-    // m_videoOutputRenderLogic->Get
-    //renderer->ReadColorTexture( 0, rt, tx[ i % 2 ] );
-    //image::SaveBMPImage( name, tx[ i % 2 ]->GetData(), 1920, 1080, 32 );
-    /*
-    renderer->ReadColorTexture( 0, rt, tx[ 0 ] );
-    image::SaveBMPImage( name, tx[ 0 ]->GetData(), 1920, 1080, 32 );
-    */
-    { renderer; rt; }
-    ++i;
+    m_videoOutputRenderLogic->VideoFrameRendered( renderer, rt );
 }
 
 // *********************************
