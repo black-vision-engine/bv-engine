@@ -27,8 +27,8 @@ public:
     void                SetNumSamplesVal            ( const IValue * numSamplesVal );
     void                AddTexture                  ( Texture2DPtr texture );
 
-                        LightScatteringEffect ();
-                        ~LightScatteringEffect();
+                        LightScatteringEffect       ();
+                        ~LightScatteringEffect      ();
 
 private:
 
