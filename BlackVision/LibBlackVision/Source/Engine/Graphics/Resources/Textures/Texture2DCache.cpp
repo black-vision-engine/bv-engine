@@ -3,8 +3,7 @@
 #include <iostream>
 #include <cassert>
 
-#include "Engine/Graphics/Resources/Texture2DImpl.h"
-#include "Engine/Graphics/Resources/Texture2DSequenceImpl.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 #define PRINT_TEXTURE_CACHE_STATS
 
@@ -33,10 +32,11 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
     auto format     = txParams->GetFormat();
     auto width      = txParams->GetWidth();
     auto height     = txParams->GetHeight();
-    
-    Texture2DImplPtr tx = nullptr;
 
-    if( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC )
+    Texture2DPtr tx = nullptr;
+
+	if( txParams->GetBits( 0 ) &&
+		( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC ) )
     {
         auto it = m_tex2DCache.find( txParams->GetUID() );
 
@@ -49,10 +49,11 @@ Texture2DPtr    Texture2DCache::GetTexture              ( const ITextureDescript
         }
     }
 
-    tx = CreateEmptyTexture( format, width, height, semantic );
-	tx->SetRawData( txParams->GetBits(), format, txParams->GetWidth(), txParams->GetHeight() );
+	tx = CreateEmptyTexture( format, width, height, semantic, txParams->GetNumLevels() );
+	tx->SetData( txParams->GetBits(), txParams->GetFormat(), txParams->GetWidth(), txParams->GetHeight(), txParams->GetNumLevels() );
 
-    if( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC )
+	if( txParams->GetBits( 0 ) &&
+		( semantic == DataBuffer::Semantic::S_STATIC || semantic == DataBuffer::Semantic::S_TEXTURE_STATIC ) )
     {
         assert( m_tex2DSet.find( tx.get() ) == m_tex2DSet.end() );
 
@@ -73,15 +74,10 @@ Texture2DPtr    Texture2DCache::GetSequence             ( const IAnimationDescri
     auto format     = animParams->GetFormat();
     auto width      = animParams->GetWidth();
     auto height     = animParams->GetHeight();
-    
-    auto sequence   = CreateEmptySequence( format, width, height );
-
-    for( unsigned int i = 0; i < animParams->NumTextures(); ++i )
-    {
-        bool bAdded = sequence->AddTextureSettingRawData( animParams->GetBits( i ), format, width, height );
-        { bAdded; } // FIXME: suppress unused warning
-        assert( bAdded );
-    }
+	
+	//FIXME: assumption that animation texture has only one level (anim desc doesn't provide that info)
+    auto sequence   = CreateEmptyTexture( format, width, height, DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE, 1 ); //FIXME: are there any chances that other semantics can be used for animations??
+	sequence->SetData( animParams->GetBits( 0 ) );
 
     return sequence;
 }
@@ -90,7 +86,7 @@ Texture2DPtr    Texture2DCache::GetSequence             ( const IAnimationDescri
 //
 bool            Texture2DCache::IsRegistered            ( const ITextureDescriptor * txParams ) const
 {
-    return m_tex2DCache.find( txParams->GetUID() ) != m_tex2DCache.end();
+	return !txParams->GetBits().empty() && m_tex2DCache.find( txParams->GetUID() ) != m_tex2DCache.end();
 }
 
 // *********************************
@@ -113,32 +109,48 @@ void            Texture2DCache::ClearCache              ()
 
 // *********************************
 //
-Texture2DImplPtr         Texture2DCache::CreateEmptyTexture    ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic )
+void            Texture2DCache::ClearUnused				()
 {
-    auto texture = std::make_shared< Texture2DImpl >( format, width, height, semantic );
+	auto unused = 0;
+	auto it = m_tex2DCache.begin();
+	for( auto it = m_tex2DCache.begin(); it != m_tex2DCache.end(); )
+	{
+		auto & tx = it->second;
+		if( tx.use_count() == 1 )
+		{
+			it = m_tex2DCache.erase( it );    
+			m_tex2DSet.erase( tx.get() );
+			unused++;
+		}
+		else
+		{
+			++it;
+		}
+	}
+
+#ifdef PRINT_TEXTURE_CACHE_STATS
+    printf( "Removed %d unused entries from texture cache\n", unused );
+#endif
+}
+
+// *********************************
+//
+Texture2DPtr         Texture2DCache::CreateEmptyTexture    ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, UInt32 levels )
+{
+    auto texture = std::make_shared< Texture2D >( format, width, height, semantic, levels );
 
     return texture;
 }
 
 // *********************************
 //
-Texture2DImplPtr         Texture2DCache::CreateTexture          ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, MemoryChunkConstPtr data )
+Texture2DPtr         Texture2DCache::CreateTexture          ( TextureFormat format, UInt32 width, UInt32 height, DataBuffer::Semantic semantic, MemoryChunkConstPtr data )
 {
-    auto texture = CreateEmptyTexture( format, width, height, semantic );
-	std::vector< MemoryChunkConstPtr > tex;
-	tex.push_back( data );
-	texture->SetRawData( tex, format, width, height );
+	//FIXME assumption that texture has only one level
+    auto texture = CreateEmptyTexture( format, width, height, semantic, 1 );
+	texture->SetData( data );
 
     return texture;
-}
-
-// *********************************
-//
-Texture2DSequenceImplPtr Texture2DCache::CreateEmptySequence   ( TextureFormat format, UInt32 width, UInt32 height )
-{
-    auto sequence   = std::make_shared< Texture2DSequenceImpl >( format, width, height );
-
-    return sequence;
 }
 
 } // bv

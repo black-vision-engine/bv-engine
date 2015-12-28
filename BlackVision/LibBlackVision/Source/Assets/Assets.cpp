@@ -43,7 +43,7 @@ FontAssetConstPtr	LoadFontAsset	(	const std::string & fontFileName,
 //
 AnimationAssetConstPtr LoadAnimationAsset( const std::string & path, const std::string & filter )
 {
-	return std::static_pointer_cast< const AnimationAsset >( AssetManager::GetInstance().LoadAsset( AnimationAssetDesc::CreateFromDirFrames( path, filter ) ) );
+	return std::static_pointer_cast< const AnimationAsset >( AssetManager::GetInstance().LoadAsset( AnimationAssetDesc::Create( path, filter ) ) );
 }
 
 } // bv

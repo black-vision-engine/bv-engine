@@ -15,6 +15,9 @@
 #include "Assets/Font/FontLoader.h"
 #include "Assets/Font/FontAsset.h"
 
+#include "Assets/VideoStream/VideoStreamAssetDescriptor.h"
+#include "Assets/VideoStream/VideoStreamAsset.h"
+
 #include "Assets/AssetManager.h"
 
 namespace bv

@@ -2,6 +2,7 @@
 
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
+#include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
@@ -28,7 +29,7 @@ IPluginPtr              DefaultColorPluginDesc::CreatePlugin                ( co
 DefaultPluginParamValModelPtr   DefaultColorPluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
     START_MODEL( timeEvaluator )
-        ADD_PS_EVAL_PARAM( "color", glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ) )
+        ADD_PS_EVAL_PARAM( "color", glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ) )
         //START_COMPOSITE_PS_EVAL_PARAM( "color" )
         //    ADD_PS_PARAM( "r", 0.f )
         //END_COMPOSITE_PS_PARAM()
@@ -45,6 +46,19 @@ std::string             DefaultColorPluginDesc::UID                         ()
 
 // ************************************************************************* PLUGIN ************************************************************************* 
 
+
+// *************************************
+// 
+void DefaultColorPlugin::SetPrevPlugin( IPluginPtr prev )
+{
+    BasePlugin::SetPrevPlugin( prev );
+
+	HelperPixelShaderChannel::CloneRenderContext( m_pixelShaderChannel, prev );
+    m_pixelShaderChannel->GetRendererContext()->alphaCtx->blendEnabled = true;
+	//HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
+}
+
+
 // *******************************
 //
 DefaultColorPlugin::DefaultColorPlugin  ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
@@ -52,8 +66,9 @@ DefaultColorPlugin::DefaultColorPlugin  ( const std::string & name, const std::s
     , m_pixelShaderChannel( nullptr )
     , m_paramValModel( model )
 { 
-    m_pixelShaderChannel = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
-    m_pixelShaderChannel->GetRendererContext()->alphaCtx->blendEnabled = true;
+    m_pixelShaderChannel = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
+
+	SetPrevPlugin( prev );
 }
 
 // *************************************
@@ -64,7 +79,7 @@ DefaultColorPlugin::~DefaultColorPlugin ()
 
 // *************************************
 //
-IPixelShaderChannelConstPtr         DefaultColorPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr              DefaultColorPlugin::GetPixelShaderChannel       () const
 {
     return m_pixelShaderChannel;    
 }
@@ -73,8 +88,8 @@ IPixelShaderChannelConstPtr         DefaultColorPlugin::GetPixelShaderChannel   
 //
 void                                DefaultColorPlugin::Update                      ( TimeType t )
 {
-    { t; } // FIXME: suppress unused variable
-    m_paramValModel->Update();
+	BasePlugin::Update( t );
+
     m_pixelShaderChannel->PostUpdate();
 }
 

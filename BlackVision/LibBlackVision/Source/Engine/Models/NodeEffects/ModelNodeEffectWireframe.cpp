@@ -2,6 +2,8 @@
 
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 
+#include "Serialization/SerializationHelper.h"
+
 
 namespace bv { namespace model {
 

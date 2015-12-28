@@ -52,5 +52,18 @@ ValueMat4Ptr          ValuesFactory::CreateValueMat4     ( const std::string & n
     return std::make_shared< ValueMat4 >( name );
 }
 
+// *******************************
+//
+ValueStringPtr       ValuesFactory::CreateValueString    ( const std::string & name )
+{
+    return std::make_shared< ValueString >( name );
+}
+
+// *******************************
+//
+ValueWStringPtr      ValuesFactory::CreateValueWString   ( const std::string & name )
+{
+    return std::make_shared< ValueWString >( name );
+}
 
 } // bv

@@ -21,6 +21,8 @@ public:
 
                             ModelNodeEffectNodeMask ( ITimeEvaluatorPtr timeEvaluator ); 
 
+    static ISerializablePtr Create          ( const IDeserializer& deser );
+
     virtual NodeEffectType  GetType                 () const override;
 
 	virtual void			Update					( TimeType t ) override;

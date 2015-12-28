@@ -5,7 +5,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(LibCoreDir)\Source;$(LibBlackVisionDir)\Source;$(LibBVGLDir)\Source;$(LibImageDir)\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(LibVideoCardsDir)\Source;$(LibCoreDir)\Source;$(LibBlackVisionDir)\Source;$(LibBVGLDir)\Source;$(LibImageDir)\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />

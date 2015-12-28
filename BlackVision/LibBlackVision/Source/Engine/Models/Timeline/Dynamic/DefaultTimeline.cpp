@@ -10,8 +10,27 @@
 #include "Engine/Models/Timeline/Dynamic/TimelineEventNull.h"
 #include "Engine/Models/Timeline/Dynamic/TimelineEventStop.h"
 
+#include "Serialization/IDeserializer.h"
+#include "Serialization/SerializationHelper.h"
+#include "Serialization/SerializationHelper.inl"
 
-namespace bv { namespace model {
+namespace bv { 
+
+namespace SerializationHelper {
+
+std::pair< TimelineWrapMethod, const char* > TWM2S[] = {
+    std::make_pair( TimelineWrapMethod::TWM_CLAMP, "clamp" ),
+    std::make_pair( TimelineWrapMethod::TWM_MIRROR, "mirror" ),
+    std::make_pair( TimelineWrapMethod::TWM_REPEAT, "repeat" ),
+    std::make_pair( TimelineWrapMethod::TWM_CLAMP, "" ) };
+
+template<> std::string T2String( const TimelineWrapMethod& twm ) { return Enum2String( TWM2S, twm ); }
+
+template<> Expected< TimelineWrapMethod > String2T( std::string s ) { return String2T( TWM2S, s ); }
+
+} // SerializationHelper
+
+namespace model {
 
 namespace {
 
@@ -45,6 +64,104 @@ DefaultTimeline::~DefaultTimeline    ()
     {
         delete evt;
     }
+}
+
+// *********************************
+//
+void                                DefaultTimeline::Serialize           ( ISerializer& ser ) const
+{
+    ser.EnterChild( "timeline" );
+    ser.SetAttribute( "name", GetName() );
+    ser.SetAttribute( "type", "default" );
+
+    SerializationHelper::SerializeAttribute( ser, m_timeEvalImpl.GetLocalTime(), "local_time" );
+    SerializationHelper::SerializeAttribute( ser, m_timeEvalImpl.IsActive(), "play" );
+
+    ser.SetAttribute( "duration", std::to_string( m_timeEvalImpl.GetDuration() ) );
+    if( m_timeEvalImpl.GetWrapPre() == m_timeEvalImpl.GetWrapPost() )
+    {
+        ser.SetAttribute( "loop", SerializationHelper::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPre() ) );
+    }
+    else
+    {
+        ser.SetAttribute( "loop", "true" );
+        ser.SetAttribute( "loopPre", SerializationHelper::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPre() ) );
+        ser.SetAttribute( "loopPost", SerializationHelper::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPre() ) );
+    }
+
+    ser.EnterArray( "events" );
+    for( auto event : m_keyFrameEvents )
+        event->Serialize( ser );
+    ser.ExitChild();
+
+    ser.EnterArray( "children" );
+    for( auto child : m_children )
+        child->Serialize( ser );
+    ser.ExitChild(); // children
+
+    ser.ExitChild();
+}
+
+
+// *********************************
+//
+ISerializablePtr                     DefaultTimeline::Create              ( const IDeserializer& deser )
+{
+    auto name = deser.GetAttribute( "name" );
+
+    auto duration = SerializationHelper::String2T< float >( deser.GetAttribute( "duration" ), 777.f );
+
+    auto loop = deser.GetAttribute( "loop" );
+    TimelineWrapMethod preWrap, postWrap;
+    if( loop == "true" )
+    {
+        preWrap = SerializationHelper::String2T< TimelineWrapMethod >( deser.GetAttribute( "loopPre" ) );
+        postWrap = SerializationHelper::String2T< TimelineWrapMethod >( deser.GetAttribute( "loopPost" ) );
+    }
+    else
+    {
+        preWrap = postWrap = SerializationHelper::String2T< TimelineWrapMethod >( loop );
+    }
+
+    auto te = std::make_shared< DefaultTimeline >( name, duration, preWrap, postWrap );
+
+    if( deser.EnterChild( "events" ) )
+    {
+        do
+        {
+            deser.EnterChild( "event" );
+            auto type = deser.GetAttribute( "type" );
+            if( type == "loop" )
+                te->AddKeyFrame( TimelineEventLoop::Create( deser, te.get() ) );
+            else if( type == "null" )
+                te->AddKeyFrame( TimelineEventNull::Create( deser, te.get() ) );
+            else if( type == "stop" )
+                te->AddKeyFrame( TimelineEventStop::Create( deser, te.get() ) );
+            else
+                assert( false );
+            deser.ExitChild(); // event
+        }
+        while( deser.NextChild() ); // events
+        
+        deser.ExitChild();
+    }
+
+    auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( deser, "children", "timeline" );
+
+    for( auto child : children )
+        te->AddChild( child );
+
+    if( SerializationHelper::String2T< bool >( deser.GetAttribute( "play" ), false ) )
+        te->Play();
+
+    return te;
+}
+
+// *********************************
+//
+void								DefaultTimeline::SetDuration        ( TimeType duration )
+{
+	m_timeEvalImpl.SetDuration( duration );
 }
 
 // *********************************

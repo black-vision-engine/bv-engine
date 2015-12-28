@@ -41,14 +41,6 @@ const std::string &     BasePluginDescriptor::GetPluginTypeAbbrv() const
 
 // *********************************
 //
-bool                    BasePluginDescriptor::CanBeAttachedTo   ( IPluginConstPtr plugin )  const
-{
-    //By default assume that plugin can be connected just to any other plugin
-    return true;
-}
-
-// *********************************
-//
 IPluginParamValModelPtr BasePluginDescriptor::CreateModel       ( ITimeEvaluatorPtr timeEvaluator ) const
 {
     return CreateDefaultModel( timeEvaluator );

@@ -26,6 +26,7 @@ public:
 	UInt32						m_mmLevelsNum;
     UInt32						m_atlasWidth;
     UInt32						m_atlasHeight;
+    std::wstring                m_charSetFileName;
 
     FontAtlasCacheEntry ();
     FontAtlasCacheEntry ( const TextAtlasConstPtr & textAtlas
@@ -35,6 +36,7 @@ public:
 						, SizeType outlineWidth
                         , const std::string & fontFilePath
 						, UInt32 mmLevelsNum
+                        , const std::wstring & charSetFileName
 						);
 };
 
@@ -53,7 +55,7 @@ private:
 
 public:
 
-    FontAtlasCacheEntry *               GetEntry            ( const std::string& fontName, SizeType fontSize, SizeType blurSize, SizeType outlineWidth, bool withMipMaps );
+    FontAtlasCacheEntry *               GetEntry            ( const std::string& fontName, SizeType fontSize, SizeType blurSize, SizeType outlineWidth, bool withMipMaps, const std::wstring & charSetFileName );
     void                                AddEntry            ( const FontAtlasCacheEntry& data, bool forceInvalidate = true );
 
     void                                Update              ();

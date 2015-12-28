@@ -1,5 +1,6 @@
 #include "AssetManager.h"
 #include "Assets.h"
+#include "Serialization/IDeserializer.h"
 
 #include <memory>
 
@@ -8,20 +9,50 @@ namespace bv
 
 // ***********************
 //
-AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc ) const
+AssetDescConstPtr AssetManager::CreateDesc( const IDeserializer& deserializer )
 {
-	auto it = m_loaders.find( desc->GetUID() );
+    bool success = deserializer.EnterChild( "asset" );
+	if( !success )
+		return nullptr;
+
+    std::string assetUID  = deserializer.GetAttribute( "type" );
+
+	auto it = m_loaders.find( assetUID );
 
 	if( it != m_loaders.end() )
-	{
-		auto asset = it->second->LoadAsset( desc );
-		if( asset != nullptr )
-		{
-			return asset;
-		}
-	}
+    {
+        auto desc = it->second->CreateDescriptor( deserializer );
+        deserializer.ExitChild();
+        return desc;
+    }
 
+    deserializer.ExitChild();
 	return nullptr;
+}
+
+
+// ***********************
+//
+AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc )
+{
+	if( m_assetCache.Exists( desc ) )
+		return m_assetCache.Get( desc );
+	else
+	{
+		auto it = m_loaders.find( desc->GetUID() );
+
+		if( it != m_loaders.end() )
+		{
+			auto asset = it->second->LoadAsset( desc );
+			if( asset != nullptr )
+			{
+				m_assetCache.Add( desc, asset );
+				return asset;
+			}
+		}
+
+		return nullptr;
+	}
 }
 
 // ***********************
@@ -54,6 +85,20 @@ bool AssetManager::UnregisterLoader( const std::string & assetDescUID )
 		m_loaders.erase( it );
 		return true;
 	}
+}
+
+// ***********************
+//
+void AssetManager::AddToCache               ( AssetDescConstPtr& desc, AssetConstPtr asset )
+{
+    m_assetCache.Add( desc, asset );
+}
+
+// ***********************
+//
+AssetConstPtr AssetManager::GetFromCache    ( AssetDescConstPtr& desc )
+{
+    return m_assetCache.Get( desc );
 }
 
 // ***********************

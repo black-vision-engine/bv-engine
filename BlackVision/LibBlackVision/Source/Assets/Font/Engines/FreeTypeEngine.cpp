@@ -3,7 +3,7 @@
 #include "Assets/Font/Glyph.h"
 #include "Assets/Font/Text.h"
 #include "Assets/Font/TextAtlas.h"
-#include "Assets/Texture/TextureCache.h"
+#include "ProjectManager.h"
 
 #include "LibImage.h"
 
@@ -302,10 +302,60 @@ Glyph*							FreeTypeEngine::RenderGlyph( wchar_t ch, Spans & spans, SizeType ou
 	return nullptr;
 }
 
+namespace
+{
+
+// *******************************
+//
+size_t GetSizeOfFile( const std::wstring& path )
+{
+	struct _stat fileinfo;
+	_wstat(path.c_str(), &fileinfo);
+	return fileinfo.st_size;
+}
+} // anonymous
+// *******************************
+//
+std::wstring LoadUtf8FileToString(const std::wstring & _filename)
+{
+    auto filenameStr = ProjectManager::GetInstance()->ToAbsPath( std::string( _filename.begin(), _filename.end() ) ).Str();
+
+    auto filename = std::wstring( filenameStr.begin(), filenameStr.end() );
+
+	std::wstring buffer;            // stores file contents
+	FILE* f = nullptr;
+    _wfopen_s(&f, filename.c_str(), L"rtS, ccs=UTF-8");
+
+	// Failed to open file
+	if (f == NULL)
+	{
+		// ...handle some error...
+		return buffer;
+	}
+
+	size_t filesize = GetSizeOfFile(filename);
+
+	// Read entire file contents in to memory
+	if (filesize > 0)
+	{
+		buffer.resize(filesize);
+		size_t wchars_read = fread(&(buffer.front()), sizeof(wchar_t), filesize, f);
+		buffer.resize(wchars_read);
+		buffer.shrink_to_fit();
+	}
+
+	fclose(f);
+
+	return buffer;
+}
+
+
 // *********************************
 //
-TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth, const std::wstring & wcharsSet, bool makeSizesPowerOf2 )
+TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWidth, const std::wstring & wcharsSetFile, bool makeSizesPowerOf2 )
 {
+    auto wcharsSet = LoadUtf8FileToString( wcharsSetFile );
+
 	SizeType							glyphsNum	= wcharsSet.size();
 	Int32								spadding	= (Int32)padding;
 
@@ -376,6 +426,7 @@ TextAtlasConstPtr	FreeTypeEngine::CreateAtlas( UInt32 padding, UInt32 outlineWid
 
 				if( glyph == nullptr )
 				{
+                    currAddress += ( m_maxWidth + padding ) * 4;
 					continue;
 				}
 

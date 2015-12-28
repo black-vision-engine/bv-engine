@@ -5,7 +5,7 @@
 #include <boost/filesystem.hpp>
 
 #include <iostream>
-#include <windows.h>
+#include "win_sock.h"
 
 
 namespace fs = boost::filesystem;
@@ -34,10 +34,14 @@ std::vector< std::string > Dir::ListFiles( const std::string & path, const std::
  
     for(;;)
     {
-        fs::path fullFilePath = rootDir / fs::path( WStringToString( fd.cFileName ) );
+        auto fileName = WStringToString( fd.cFileName );
 
-        foundFiles.push_back( fullFilePath.string() );
- 
+        if( fileName != "." && fileName != ".." )
+        {
+            fs::path fullFilePath = rootDir / fs::path( fileName );
+            foundFiles.push_back( fullFilePath.string() );
+        }
+
         if( FindNextFile( h, &fd ) == FALSE )
             break;
     }
@@ -96,18 +100,13 @@ bool						Dir::CreateDir			( const std::string & path, bool createRecusive )
 
 
 	if( createRecusive )
-	{
-		boost::filesystem::path currPath("");
-		for( auto it : p )
+	{    
+        boost::filesystem::create_directories( path, ec );
+
+		if( ec )
 		{
-			currPath += it;
-			currPath += "/";
-			boost::filesystem::create_directory( currPath, ec );
-			if( ec )
-			{
-				std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
-				return false;
-			}
+			std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
+			return false;
 		}
 
 		return true;

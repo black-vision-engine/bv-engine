@@ -86,7 +86,7 @@ void    FrameRenderLogic::PostFrameSetup ( Renderer * renderer )
     m_offscreenRenderLogic->DisableTopRenderTarget( renderer );
     m_offscreenRenderLogic->DiscardCurrentRenderTarget( renderer );
 
-    // m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic );
+    //m_videoOutputRenderLogic->FrameRenderedNewImpl( renderer, m_offscreenRenderLogic );
 
     renderer->PostDraw();
     renderer->DisplayColorBuffer();

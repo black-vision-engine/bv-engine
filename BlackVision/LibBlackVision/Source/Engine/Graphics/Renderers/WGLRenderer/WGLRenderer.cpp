@@ -9,6 +9,9 @@ namespace bv {
 
 namespace {
 
+typedef BOOL (APIENTRY * PFNWGLSWAPINTERVALEXTPROC)(int);
+PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = nullptr;
+
 // *********************************
 //
 bool	InitializeGLContext( RendererInput & ri, WGLRendererData * data )
@@ -82,8 +85,6 @@ bool	InitializeGL	()
 bool	InitializeVSync( const RendererInput & ri )
 {
     // Load wglSwapIntervalExt
-    typedef BOOL (APIENTRY * PFNWGLSWAPINTERVALEXTPROC)(int);
-    PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = nullptr; 
     wglSwapIntervalEXT = reinterpret_cast< PFNWGLSWAPINTERVALEXTPROC >( wglGetProcAddress( "wglSwapIntervalEXT" ) );
 
     if ( !wglSwapIntervalEXT )
@@ -95,18 +96,46 @@ bool	InitializeVSync( const RendererInput & ri )
     if ( ri.m_DisableVerticalSync )
     {
         wglSwapIntervalEXT( 0 );
-    }
+    }else
+    {
+		wglSwapIntervalEXT( ri.m_VerticalBufferFrameCount );
+	}
 
     return true;
 }
 
 } //anonymous namespace
 
+// ***********************
+//
+void Renderer::SetVSync ( bool enable, int verticalBufferFrameCount )
+{
+    if ( !enable )
+    {
+        wglSwapIntervalEXT( 0 );
+    }
+    else
+    {
+		wglSwapIntervalEXT( verticalBufferFrameCount );
+	}
+}
+
+// ***********************
+//
+void Renderer::SetFlushFinish      ( bool flush, bool finish )
+{
+    m_EnableGLFinish = finish;
+	m_EnableGLFlush = flush;
+}
+
 // *********************************
 //
 Renderer::Renderer ( RendererInput & ri, int w, int h, TextureFormat colorFormat )
 {
     Initialize( w, h, colorFormat );
+	m_EnableGLFinish = ri.m_EnableGLFinish;
+	m_EnableGLFlush = ri.m_EnableGLFlush;
+
 
     WGLRendererData * data = new WGLRendererData();
     m_RendererData = static_cast< RendererData * >( data );
@@ -162,6 +191,12 @@ Renderer::~Renderer ()
 void Renderer::DisplayColorBuffer ()
 {
     SwapBuffers( static_cast< WGLRendererData * >( m_RendererData )->m_WindowDC );
+	if(m_EnableGLFlush)
+		BVGL::bvglFlush();
+	if(m_EnableGLFinish)
+		BVGL::bvglFinish();
+
+	//bvgl da fuck
 }
 
 } //bv

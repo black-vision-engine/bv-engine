@@ -66,7 +66,7 @@ void    Texture2DEffect::SetAlphaValModel   ( const IValue * val )
         auto value = QueryTypedValue< ValueFloat >( val );
         assert( value != nullptr );
 
-        m_alphaParam->SetModelValue( value );
+		m_alphaParam->SetValue( value->GetValue() );
     }
 }
 

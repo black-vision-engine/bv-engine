@@ -1,8 +1,8 @@
 #include "TextureUtils.h"
 
-#include "Assets/Texture/TextureCache.h"
 #include "MipMapBuilder.h"
 #include "Assets/Cache/RawDataCache.h"
+#include "ProjectManager.h"
 
 #include <cassert>
 
@@ -154,7 +154,7 @@ SingleTextureAssetConstPtr	TextureUtils::LoadSingleTexture( const SingleTextureA
 		UInt32 bpp			= 0;
 		UInt32 channelNum	= 0;
 
-		auto imgPath		= singleTextureResDesc->GetImagePath();
+        auto imgPath		= ProjectManager::GetInstance()->ToAbsPath( singleTextureResDesc->GetImagePath() ).Str();
 
 		mmChunk = LoadImage( imgPath, &w, &h, &bpp, &channelNum );
 		
@@ -197,8 +197,10 @@ TextureAssetConstPtr TextureUtils::LoadOrginalTextureOnly			( const TextureAsset
 	assert( desc->GetLoadingType() == TextureAssetLoadingType::LOAD_ONLY_ORIGINAL_TEXTURE );
 
 	auto origRes = LoadSingleTexture( desc->GetOrigTextureDesc(), false );
-	
-	return TextureAsset::Create( origRes, nullptr );
+	if( origRes != nullptr )
+		return TextureAsset::Create( origRes, nullptr );
+	else
+		return nullptr;
 }
 
 // ******************************
@@ -208,6 +210,8 @@ TextureAssetConstPtr TextureUtils::LoadTextureAndMipMaps			( const TextureAssetD
 	assert( desc->GetLoadingType() == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_MIP_MAPS );
 
 	auto origRes = LoadSingleTexture( desc->GetOrigTextureDesc(), false );
+	if( origRes == nullptr )
+		return nullptr;
 
 	auto mipMapsSize = desc->GetMipMapsDesc()->GetLevelsNum();
 
@@ -216,7 +220,11 @@ TextureAssetConstPtr TextureUtils::LoadTextureAndMipMaps			( const TextureAssetD
 	for( SizeType i = 0; i < mipMapsSize; ++i )
 	{
 		auto levelDesc = desc->GetMipMapsDesc()->GetLevelDesc( i );
-		mipMapsRes.push_back( LoadSingleTexture( levelDesc, false ) );
+		auto newMipMap = LoadSingleTexture( levelDesc, false );
+		if( newMipMap != nullptr )
+			mipMapsRes.push_back( newMipMap );
+		else
+			return nullptr;
 	}
 
 	auto mipMapRes = MipMapAsset::Create( mipMapsRes );
@@ -234,7 +242,7 @@ TextureAssetConstPtr TextureUtils::LoadTextureAndGenerateMipMaps	( const Texture
 
 	if( desc->IsCacheable() )  // check if already in cache
 	{
-		auto cachedTextureAsset = TextureCache::GetInstance().Get( desc );
+		auto cachedTextureAsset = GetFromRawDataCache( desc );
 
 		if( cachedTextureAsset )
 		{
@@ -243,6 +251,8 @@ TextureAssetConstPtr TextureUtils::LoadTextureAndGenerateMipMaps	( const Texture
 	}
 
 	SingleTextureAssetConstPtr origRes = LoadSingleTexture( desc->GetOrigTextureDesc(), false );
+	if( origRes == nullptr )
+		return nullptr;
 
 	std::vector< SingleTextureAssetConstPtr > mipMapsRes;
 
@@ -325,11 +335,82 @@ TextureAssetConstPtr TextureUtils::LoadTextureAndGenerateMipMaps	( const Texture
 
 	if( desc->IsCacheable() )  // Cache the texture asset
 	{
-		TextureCache::GetInstance().Add( desc, textureAsset );
+		AddToRawDataCache( textureAsset );
 	}
 
 	return textureAsset;
 }
 
+// ******************************
+//
+SingleTextureAssetConstPtr	TextureUtils::GetFromRawDataCache	( const SingleTextureAssetDescConstPtr & desc )
+{
+	auto key = desc->GetKey();
+	auto mChunk = RawDataCache::GetInstance().Get( Hash::FromString( key ) );
+
+	if( mChunk )
+	{
+		return SingleTextureAsset::Create( mChunk, key, desc->GetWidth(), desc->GetHeight(), desc->GetFormat(), true );
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+// ******************************
+//
+TextureAssetConstPtr TextureUtils::GetFromRawDataCache             ( const TextureAssetDescConstPtr & desc )
+{
+	auto origAsset = GetFromRawDataCache( desc->GetOrigTextureDesc() );
+
+	if( !origAsset )
+	{
+		return nullptr;
+	}
+
+	auto mmDesc = desc->GetMipMapsDesc();
+
+	MipMapAssetConstPtr mmAsset = nullptr;
+
+	if( mmDesc )
+	{
+		std::vector< SingleTextureAssetConstPtr > mms;
+		for( SizeType i = 0; i < mmDesc->GetLevelsNum(); ++i )
+		{
+			auto singleTextAssetDesc = mmDesc->GetLevelDesc( i );
+			auto mmSibleTextureAssetAsset = GetFromRawDataCache( singleTextAssetDesc );
+
+			if( !mmSibleTextureAssetAsset )
+			{
+				return nullptr;
+			}
+
+			mms.push_back( mmSibleTextureAssetAsset );
+		}
+
+		mmAsset = MipMapAsset::Create( mms );
+	}
+
+	return TextureAsset::Create( origAsset, mmAsset );
+}
+
+// ******************************
+//
+void TextureUtils::AddToRawDataCache( const TextureAssetConstPtr & textureRes )
+{
+	auto orig = textureRes->GetOriginal();
+	RawDataCache::GetInstance().Add( Hash::FromString( orig->GetKey()), orig->GetData(), orig->GetCacheOnHardDrive() );
+
+	auto mm = textureRes->GetMipMaps();
+
+	if( mm )
+	{
+		for( SizeType i = 0; i < mm->GetLevelsNum(); ++i )
+		{
+			RawDataCache::GetInstance().Add( Hash::FromString( mm->GetLevel( i )->GetKey()), mm->GetLevel( i )->GetData(),  mm->GetLevel( i )->GetCacheOnHardDrive() );
+		}
+	}
+}
 
 }  // bv

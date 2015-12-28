@@ -9,20 +9,17 @@ class ShaderParamInt : public GenericShaderParam
 {
 private:
 
-    const ValueInt *		m_valModel;
+    Int32					m_val;
     
 public:
 
-							ShaderParamInt		( const std::string & name, const ValueInt * value );
-                            ~ShaderParamInt		();
+							ShaderParamInt		( const std::string & name, Int32 value  = 0 );
 
-    void                    SetModelValue       ( const ValueInt * value );
+    void                    SetValue			( Int32 value );
 
-    virtual const void *    GetValuePtr         () const override;
-    virtual void *          AccessValuePtr      () override //FIXME: temporary, REMOVE
-    {
-        return const_cast< ValueInt * >(m_valModel);
-    }
+private:
+   
+	virtual const void *    GetValuePtr         () const override;
 
 };
 

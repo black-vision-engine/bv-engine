@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Channels/Transform/DefaultTransformChannel.h"
-#include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/RectComponent.h"
+
+#include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
 
 
@@ -18,7 +18,6 @@ public:
 
     DefaultRectPluginDesc                                       ();
 
-    virtual bool                            CanBeAttachedTo     ( IPluginConstPtr plugin )  const override;
     virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
    
@@ -52,6 +51,8 @@ public:
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
     virtual void                                Update                      ( TimeType t ) override;
 
+private:
+	bool                                UpdateState					();
 };
 
 DEFINE_PTR_TYPE(DefaultRectPlugin)

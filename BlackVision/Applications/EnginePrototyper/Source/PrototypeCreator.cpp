@@ -11,6 +11,8 @@
 #include "Prototypes/Engine/MemManagement/PboUpdatesInspector.h"
 #include "Prototypes/DrawingCommands/DrawingPrototype.h"
 #include "Prototypes/Engine/Multipass/MultipassTest.h"
+#include "Prototypes/TextureTest/TextureTest.h"
+
 
 namespace  bv {
 
@@ -18,7 +20,7 @@ bool			CreatePrototype			()
 {
 	bool success = false;
 	
-	success = BasicWindowApp::RegisterInitializer( &SimpleVAOPrototype0::Create, "SimpleVAOPrototype0", 800, 600 );
+	//success = BasicWindowApp::RegisterInitializer( &SimpleVAOPrototype0::Create, "SimpleVAOPrototype0", 800, 600 );
 
 	//success = BasicWindowApp::RegisterInitializer( &PboUpdatesInspector::Create, "PboUpdatesInspector", 800, 600 );
 
@@ -32,6 +34,8 @@ bool			CreatePrototype			()
 	//success = BasicWindowApp::RegisterInitializer( &DrawingPrototype::Create, "DrawingPrototype", 800, 600 );
 
 	//success = BasicWindowApp::RegisterInitializer( &MultipassTest::Create, "MultipassTest", 800, 600 );
+
+	success = BasicWindowApp::RegisterInitializer( &TextureTest::Create, "TextureTest", 800, 600 );
 
 	BasicWindowApp::RegisterConsoleInitializer();
 

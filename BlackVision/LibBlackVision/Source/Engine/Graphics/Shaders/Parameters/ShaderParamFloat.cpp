@@ -7,30 +7,24 @@ namespace bv {
 
 // ****************************
 //
-ShaderParamFloat::ShaderParamFloat              ( const std::string & name, const ValueFloat * value )
+ShaderParamFloat::ShaderParamFloat              ( const std::string & name, Float32 value )
     : GenericShaderParam( ShaderParamTypeTraits< ValueFloat::ValueType >::paramType, name )
-    , m_valModel( value )
+    , m_val( value )
 {
 }
 
 // ****************************
 //
-ShaderParamFloat::~ShaderParamFloat             ()
+void            ShaderParamFloat::SetValue		( Float32 value )
 {
+    m_val = value;
 }
 
 // ****************************
 //
-void            ShaderParamFloat::SetModelValue ( const ValueFloat * value )
+const void *    ShaderParamFloat::GetValuePtr	() const
 {
-    m_valModel = value;
-}
-
-// ****************************
-//
-const void *    ShaderParamFloat::GetValuePtr   () const
-{
-    return &m_valModel->GetValue();
+    return &m_val;
 }
 
 } //bv

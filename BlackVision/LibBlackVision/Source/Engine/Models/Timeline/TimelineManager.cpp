@@ -1,10 +1,31 @@
 #include "TimelineManager.h"
 
+#include "TimelineHelper.h"
+
+#include "Serialization/SerializationHelper.h"
+
+#include "Tools/StringHeplers.h"
 #include <cassert>
 
 
 namespace bv { namespace model {
 
+TimelineManager* TimelineManager::instance = nullptr; // FIXME: this may be moved to static initilizer
+
+// *********************************
+//
+TimelineManager* TimelineManager::GetInstance                     ()
+{
+    return instance;
+}
+
+// *********************************
+//
+void             TimelineManager::SetInstance                     ( TimelineManager* i )
+{
+    instance = i;
+}
+    
 // *********************************
 //
 TimelineManager::TimelineManager         ()
@@ -24,47 +45,31 @@ TimelineManager::~TimelineManager        ()
 
 // *********************************
 //
-ITimeEvaluatorPtr       TimelineManager::CreateOffsetTimeEvaluator      ( const std::string & name, TimeType startTime )
+void            TimelineManager::Serialize                       ( ISerializer& sob ) const
 {
-    return CreateOffsetTimeEvaluatorImpl( name, startTime );
+    sob.EnterArray( "timelines" );
+
+    for( auto child : m_rootTimeline->GetChildren() )
+        child->Serialize( sob );
+
+    sob.ExitChild();
 }
 
 // *********************************
 //
-ITimeEvaluatorPtr       TimelineManager::CreateConstTimeEvaluator       ( const std::string & name, TimeType timeVal )
+ISerializablePtr TimelineManager::Create                          ( const IDeserializer& deser )
 {
-    return CreateConstTimeEvaluatorImpl( name, timeVal );
-}
+    auto tm = std::make_shared< model::TimelineManager >();    
 
-// *********************************
-//
-ITimelinePtr            TimelineManager::CreateDefaultTimeline          ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod )
-{
-    return CreateDefaultTimelineImpl( name, duration, preMethod, postMethod );
-}
+    auto timelines = SerializationHelper::DeserializeObjectLoadPropertiesImpl< model::TimeEvaluatorBase< model::ITimeEvaluator > >( deser, "timeline" );
+    for( auto timeline : timelines )
+    {
+        tm->AddTimeline( timeline );
+    }
 
-// *********************************
-//
-OffsetTimeEvaluatorPtr  TimelineManager::CreateOffsetTimeEvaluatorImpl  ( const std::string & name, TimeType startTime )
-{
-    return OffsetTimeEvaluatorPtr( new OffsetTimeEvaluator( name, -startTime ) ); 
-}
+    tm->RegisterRootTimeline( timelines[ 0 ] );
 
-// *********************************
-//
-ConstTimeEvaluatorPtr   TimelineManager::CreateConstTimeEvaluatorImpl   ( const std::string & name, TimeType timeVal )
-{
-    return ConstTimeEvaluatorPtr( new ConstTimeEvaluator( name, timeVal ) ); 
-}
-
-// *********************************
-//
-DefaultTimelinePtr      TimelineManager::CreateDefaultTimelineImpl      ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod )
-{
-    assert( duration > TimeType( 0.0 ) );
-    auto timeline = DefaultTimelinePtr( new DefaultTimeline( name, duration, preMethod, postMethod ) );
-
-    return timeline;
+    return tm;
 }
 
 // *********************************
@@ -130,55 +135,21 @@ ITimeEvaluatorPtr       TimelineManager::GetRootTimeline            ()
 //
 ITimeEvaluatorPtr       TimelineManager::GetTimeEvaluator           ( const std::string & name )
 {
-    return FindTimelineByName( name, m_rootTimeline );
+    return TimelineHelper::GetTimeEvaluator( name, m_rootTimeline );
+}
+
+ITimelinePtr            TimelineManager::GetTimeline                     ( const std::string & name )
+{
+    return TimelineHelper::GetTimeline( name, m_rootTimeline );
 }
 
 // *********************************
 //
-ITimeEvaluatorPtr       TimelineManager::GetTimeEvaluator           ( const std::string & name, ITimeEvaluatorPtr parentTimeline )
+std::string             TimelineManager::GetTimelinePath                 ( ITimeEvaluatorPtr timeline )
 {
-    if( parentTimeline != nullptr )
-    {
-        for( auto child : parentTimeline->GetChildren() )
-        {
-            auto retVal = FindTimelineByName( name, child );
-            
-            if( retVal != nullptr )
-            {
-                return retVal;
-            }
-        }
-    }
-
-    return nullptr;
+    return TimelineHelper::GetTimelinePath( timeline, m_rootTimeline );
 }
 
-// *********************************
-// FIXME: requires RTTI, reimplement it later on
-ITimelinePtr            TimelineManager::GetTimeline                     ( const std::string & name )
-{
-    return std::dynamic_pointer_cast< ITimeline >( FindTimelineByName( name, m_rootTimeline ) );
-}
-
-// *********************************
-// FIXME: requires RTTI, reimplement it later on
-ITimelinePtr            TimelineManager::GetTimeline                     ( const std::string & name, ITimeEvaluatorPtr parentTimeline )
-{
-    if( parentTimeline != nullptr )
-    {
-        for( auto child : parentTimeline->GetChildren() )
-        {
-            auto retVal = FindTimelineByName( name, child );
-            
-            if( retVal != nullptr )
-            {
-                return std::dynamic_pointer_cast< ITimeline >( retVal );
-            }
-        }
-    }
-
-    return nullptr;
-}
 
 // *********************************
 //
@@ -190,8 +161,11 @@ bool                    TimelineManager::AddTimeline                     ( ITime
     {
         return AddTimelineToTimeline( timeline, m_rootTimeline );
     }
-
-    return false;
+    else
+    {
+        RegisterRootTimeline( timeline );
+        return true;
+    }
 }
 
 // *********************************
@@ -421,33 +395,6 @@ bool                    TimelineManager::RemoveParamFromTimeline        ( IParam
     }
 
     return false;
-}
-
-// *********************************
-//
-ITimeEvaluatorPtr       TimelineManager::FindTimelineByName             ( const std::string & name, ITimeEvaluatorPtr root )
-{
-    if( root != nullptr )
-    {
-        if( root->GetName() == name )
-        {
-            return root;
-        }
-        else
-        {
-            for( auto child : root->GetChildren() )
-            {
-                auto retTimeline = FindTimelineByName( name, child );
-
-                if( retTimeline != nullptr )
-                {
-                    return retTimeline;
-                }
-            }
-        }
-    }
-
-    return nullptr;
 }
 
 // *********************************

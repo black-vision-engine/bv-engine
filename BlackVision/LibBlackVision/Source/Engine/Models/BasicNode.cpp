@@ -10,13 +10,25 @@
 #include "Engine/Models/Plugins/Plugin.h"
 
 
-namespace bv { namespace model {
+#include "Engine/Models/Timeline/TimelineManager.h"
 
-// FIXME: hack
-std::hash_map< IModelNode *, SceneNode * >    BasicNode::ms_nodesMapping;
+#include "Serialization/SerializationHelper.h"
+#include "Serialization/BVSerializeContext.h"
+//#include "Serialization/SerializationObjects.inl"
+#include "Serialization/CloneViaSerialization.h"
+#include "Assets/AssetDescsWithUIDs.h"
+
+namespace bv { 
+    
+// serialization stuff
+//template std::shared_ptr< model::BasicNode >                                        DeserializeObjectLoadImpl( const IDeserializer& pimpl, std::string name );
+    
+namespace model {
 
 namespace {
 
+// ********************************
+//
 IModelNodePtr  FindNode( const TNodeVec & vec, const std::string & name )
 {
     for( auto node : vec )
@@ -34,9 +46,9 @@ IModelNodePtr  FindNode( const TNodeVec & vec, const std::string & name )
 
 // ********************************
 //
-BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager )
+BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr, const PluginsManager * pluginsManager )
     : m_name( name )
-    , m_pluginList( nullptr )
+    , m_pluginList( std::make_shared< DefaultPluginListFinalized >() )
     , m_pluginsManager( pluginsManager )
     , m_visible( true )
 	, m_modelNodeEditor ( nullptr )
@@ -46,13 +58,13 @@ BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator,
     {
         m_pluginsManager = &PluginsManager::DefaultInstance();
     }
-
 }
 
 // ********************************
 //
 BasicNode::~BasicNode()
 {
+    delete m_modelNodeEditor;
 }
 
 // ********************************
@@ -66,38 +78,93 @@ BasicNodePtr                    BasicNode::Create                   ( const std:
         {
         }
     };
-
 	auto node = std::make_shared<make_shared_enabler_BasicNode>( name, timeEvaluator, pluginsManager );
-
-	node->SetModelNodeEditor( new ModelNodeEditor( node ) );
-
+	node->m_modelNodeEditor = new ModelNodeEditor( node );
     return node;
 }
 
 // ********************************
 //
-ISerializablePtr BasicNode::Create( DeserializeObject& dob )
+void                            BasicNode::Serialize               ( ISerializer& ser ) const
 {
-    assert( dob.GetName() == "node" );
+    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
 
-    auto name = dob.GetValue( "name" );
-    auto timeEvaluator = dob.m_tm->GetRootTimeline();
-    
-    auto node = Create( name, timeEvaluator );
+    ser.EnterChild( "node" );
+    ser.SetAttribute( "name", GetName() );
+
+    if( context->detailedInfo )
+        ser.SetAttribute( "visible", m_visible ? "true" : "false" );
+
+    ser.EnterArray( "plugins" );
+        for( unsigned int  i = 0; i < m_pluginList->NumPlugins(); i++ )
+        {
+            auto plugin_ = m_pluginList->GetPlugin( i );
+            auto plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
+            assert( plugin );
+            plugin->Serialize( ser );
+        }
+    ser.ExitChild(); // plugins
+
+    if( context->detailedInfo && m_modelNodeEffect )
+        m_modelNodeEffect->Serialize( ser );
+
+    if( context->recursive )
+    {
+        ser.EnterArray( "nodes" );
+            for( auto child : m_children )
+                child->Serialize( ser );
+        ser.ExitChild();
+    }
+
+    ser.ExitChild();
+}
+
+// ********************************
+//
+ISerializablePtr BasicNode::Create( const IDeserializer& dob )
+{
+    //assert( dob.GetName() == "node" ); FIXME
+
+    auto name = dob.GetAttribute( "name" );
+
+	//FIXME: nullptr because timeEvaluator is not used in BasicNode
+    auto node = Create( name, nullptr );
+
+    node->m_visible = dob.GetAttribute( "visible" ) == "false" ? false : true;
 
 // plugins
-    auto plugins = dob.LoadArray< BasePlugin< IPlugin > >( "plugins" );
-
+    auto plugins = SerializationHelper::DeserializeObjectLoadArrayImpl< BasePlugin< IPlugin > >( dob, "plugins" );
+	
     for( auto plugin : plugins )
         node->AddPlugin( plugin );
 
+//@todo use ModelNodeEffectFactory
+//// node effect
+//    if( m_modelNodeEffect )
+//        m_modelNodeEffect->Serialize( dob );
+
 // children
-    auto children = dob.LoadArray< BasicNode >( "nodes" );
+    auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< BasicNode >( dob, "nodes" );
 
     for( auto child : children )
         node->AddChildToModelOnly( child );
 
     return node;
+
+
+    //SetParamVal("nodePath" ,"plugin", { name: "translataion", type:"vec3" , val:"0 ,0 ,0" } );
+}
+
+// *******************************
+//
+IModelNodePtr					BasicNode::Clone			() const
+{
+	AssetDescsWithUIDs assets;
+	//FIXME: const hack
+	GetAssetsWithUIDs( assets, std::const_pointer_cast< BasicNode >( shared_from_this() ) );
+	AssetDescsWithUIDs::SetInstance( assets );
+
+	return CloneViaSerialization::Clone( this, "node" );
 }
 
 // ********************************
@@ -121,28 +188,22 @@ IModelNodePtr           BasicNode::GetNode                  ( const std::string 
     std::string suffix = path;
 
     auto name = SplitPrefix( suffix, separator );
-
-    if( name == "" || name == GetName() )
+    if( name == GetName() )
     {
-        if( suffix.size() > 0 )
-        {
-            return GetNode( suffix, separator );
-        }
-        else
-        {
-            return shared_from_this();
-        }
-    }
-    else
-    {
-        auto child = GetChild( name );
+		if( suffix.empty() )
+		{
+			return shared_from_this();
+		}
 
-        if( child != nullptr )
-        {
-            return child->GetNode( suffix );
-        }
+		for( auto & child : m_children )
+		{
+			auto node = child->GetNode( suffix, separator );
+			if( node )
+			{
+				return node;
+			}
+		}
     }
-
     return nullptr;
 }
 
@@ -158,6 +219,44 @@ IModelNodePtr                   BasicNode::GetChild                 ( const std:
 const IPluginListFinalized *    BasicNode::GetPluginList            () const
 {
     return m_pluginList.get();
+}
+
+// ********************************
+//
+std::vector< IParameterPtr >    BasicNode::GetParameters           () const
+{
+    std::vector< IParameterPtr > ret;
+
+    auto plugins = GetPluginList();
+
+    for( UInt32 i = 0; i < plugins->NumPlugins(); i++ )
+    {
+        auto params =  plugins->GetPlugin( i )->GetParameters();
+        ret.insert( ret.end(), params.begin(), params.end() );
+
+        params = plugins->GetPlugin( i )->GetResourceStateModelParameters();
+        ret.insert( ret.end(), params.begin(), params.end() );
+    }
+
+	//FIXME: get parameters from node effect
+	//auto effect = GetNodeEffect();
+
+    return ret;
+}
+
+
+// ********************************
+//
+std::vector< ITimeEvaluatorPtr > BasicNode::GetTimelines			() const
+{
+	std::vector< ITimeEvaluatorPtr > ret;
+
+    auto params = GetParameters();
+
+    for( auto param : params )
+        ret.push_back( param->GetTimeEvaluator() );
+
+    return ret;
 }
 
 // ********************************
@@ -199,44 +298,44 @@ void                            BasicNode::SetName                  ( const std:
 //
 mathematics::Rect 			    BasicNode::GetAABB			        () const
 {
-	mathematics::Rect r;
+    mathematics::Rect r;
 
-	auto trans = m_pluginList->GetFinalizePlugin()->GetParamTransform()->Evaluate( 0 );
+    auto trans = m_pluginList->GetFinalizePlugin()->GetParamTransform()->Evaluate( 0 );
 
-	auto plRect = m_pluginList->GetFinalizePlugin()->GetAABB( trans );
+    auto plRect = m_pluginList->GetFinalizePlugin()->GetAABB( trans );
 
-	if( plRect )
-		r.Include( *plRect );
+    if( plRect )
+        r.Include( *plRect );
 
 
-	for( auto ch : m_children )
-	{
-		r.Include( ch->GetAABB( trans ) );
-	}
+    for( auto ch : m_children )
+    {
+        r.Include( ch->GetAABB( trans ) );
+    }
 
-	return r;
+    return r;
 }
 
 // ********************************
 //
 mathematics::Rect 			BasicNode::GetAABB						( const glm::mat4 & parentTransformation ) const
 {
-	mathematics::Rect r;
+    mathematics::Rect r;
 
-	auto trans = parentTransformation * m_pluginList->GetFinalizePlugin()->GetParamTransform()->Evaluate( 0 );
+    auto trans = parentTransformation * m_pluginList->GetFinalizePlugin()->GetParamTransform()->Evaluate( 0 );
 
-	auto plRect = m_pluginList->GetFinalizePlugin()->GetAABB( trans );
+    auto plRect = m_pluginList->GetFinalizePlugin()->GetAABB( trans );
 
-	if( plRect )
-		r.Include( *plRect );
+    if( plRect )
+        r.Include( *plRect );
 
 
-	for( auto ch : m_children )
-	{
-		r.Include( ch->GetAABB( trans ) );
-	}
+    for( auto ch : m_children )
+    {
+        r.Include( ch->GetAABB( trans ) );
+    }
 
-	return r;
+    return r;
 }
 
 // ********************************
@@ -259,7 +358,21 @@ unsigned int    BasicNode::GetNumPlugins                    () const
 //
 void            BasicNode::AddChildToModelOnly              ( BasicNodePtr n )
 {
-    m_children.push_back( n );
+	m_children.push_back( n );
+}
+
+// ********************************
+//
+void            BasicNode::AddChildToModelOnly              ( BasicNodePtr n, UInt32 idx )
+{
+	if( idx < m_children.size() )
+	{
+		m_children.insert( m_children.begin() + idx, n );
+	}
+	else
+	{
+		m_children.push_back( n );
+	}
 }
 
 // ********************************
@@ -283,27 +396,17 @@ void            BasicNode::DetachChildNodeOnly              ( BasicNodePtr n )
 //
 ModelNodeEditor *					BasicNode::GetModelNodeEditor		()
 {
-	if( !m_modelNodeEditor)
-	{
-		m_modelNodeEditor = new ModelNodeEditor( shared_from_this() );
-	}
-	return m_modelNodeEditor;
-}
-
-// ********************************
-//
-void								BasicNode::SetModelNodeEditor		( ModelNodeEditor * editor )
-{
-	delete m_modelNodeEditor; //?
-	m_modelNodeEditor = editor;
+    if( !m_modelNodeEditor)
+    {
+        m_modelNodeEditor = new ModelNodeEditor( shared_from_this() );
+    }
+    return m_modelNodeEditor;
 }
 
 // ********************************
 //
 DefaultPluginListFinalizedPtr		BasicNode::GetPlugins		()
 {
-    NonNullPluginsListGuard();
-
     return m_pluginList;
 }
 
@@ -316,29 +419,8 @@ void            BasicNode::SetPlugins                       ( DefaultPluginListF
 
 // ********************************
 //
-void             BasicNode::NonNullPluginsListGuard ()
-{
-    if( !m_pluginList )
-    {
-        m_pluginList = std::make_shared< DefaultPluginListFinalized >();
-    }
-}
-
-// ********************************
-//
 bool            BasicNode::AddPlugin                        ( IPluginPtr plugin )
 {
-    NonNullPluginsListGuard();
-
-    IPluginPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
-
-    assert( m_pluginsManager->CanBeAttachedTo( plugin->GetTypeUid(), prev ) );
-
-    if( !m_pluginsManager->CanBeAttachedTo( plugin->GetTypeUid(), prev ) )
-    {
-        return false;
-    }
-
     m_pluginList->AttachPlugin( plugin );
 
     return true;
@@ -348,16 +430,7 @@ bool            BasicNode::AddPlugin                        ( IPluginPtr plugin 
 //
 bool            BasicNode::AddPlugin                        ( const std::string & uid, ITimeEvaluatorPtr timeEvaluator )
 {
-    NonNullPluginsListGuard ();
-
     IPluginPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
-
-    if( !m_pluginsManager->CanBeAttachedTo( uid, prev ) )
-    {
-        std::cout << uid << " cannot be attached to " << prev->GetTypeUid() << std::endl;
-		assert( false ); // FIXME(?)
-    }
-
     m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, prev, timeEvaluator ) );
 
     return true;
@@ -367,14 +440,7 @@ bool            BasicNode::AddPlugin                        ( const std::string 
 //
 bool            BasicNode::AddPlugin                    ( const std::string & uid, const std::string & name, ITimeEvaluatorPtr timeEvaluator )
 {
-    NonNullPluginsListGuard ();
-
     IPluginPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
-
-    if( !m_pluginsManager->CanBeAttachedTo( uid, prev ) )
-    {
-        return false;
-    }
 
     m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, name, prev, timeEvaluator ) );
 
@@ -398,29 +464,10 @@ bool           BasicNode::AddPlugins              ( const std::vector< std::stri
 
 // ********************************
 //
-bool           BasicNode::AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator )
-{
-    if( uids.size() != names.size() )
-    {
-        return false;
-    }
-
-    for( unsigned int i = 0; i < names.size(); ++i )
-    {
-        if( !AddPlugin( uids[ i ], names[ i ], timeEvaluator ) )
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-// ********************************
-//
 void			BasicNode::SetLogic					( INodeLogicPtr logic )
 {
-	m_nodeLogic = logic;
+    m_nodeLogic = logic;
+    m_nodeLogic->Initialize();
 }
 
 // ********************************
@@ -436,8 +483,8 @@ void BasicNode::Update( TimeType t )
 
         m_pluginList->Update( t );
 
-		if( m_nodeLogic )
-			m_nodeLogic->Update( t );
+        if( m_nodeLogic )
+            m_nodeLogic->Update( t );
 
         for( auto ch : m_children )
             ch->Update( t );
@@ -464,6 +511,12 @@ std::string                         BasicNode::SplitPrefix              ( std::s
 {
     assert( separator.length() == 1 );
 
+	//strip unnecessary '/' 
+	if( !str.empty() && str[ 0 ] == '/' )
+		str.erase(0, 1);
+	if( !str.empty() && str[ str.size() - 1 ] == '/' )
+		str.erase(str.size() - 1);
+
     auto ret = Split( str, separator );
 
     if( ret.size() == 0 )
@@ -482,5 +535,31 @@ std::string                         BasicNode::SplitPrefix              ( std::s
     return ret[ 0 ];
 }
 
+// ********************************
+//
+INodeLogicPtr                       BasicNode::GetLogic				    ()
+{
+    return m_nodeLogic;
+}
+
 } // model
+
+
+namespace CloneViaSerialization {
+
+// *******************************
+//FIXME: name of method should indicate that timelines are modified or sth?
+model::BasicNodePtr		CloneNode		( const model::BasicNode * obj, const std::string & prefix )
+{
+	{ obj; prefix; }
+
+    //FIXME: implement me
+	assert( false );
+	
+    return nullptr;
+}
+
+} //CloneViaSerialization
+
+
 } // bv

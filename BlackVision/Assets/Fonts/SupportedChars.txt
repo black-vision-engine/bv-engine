@@ -1,9 +1,10 @@
-﻿abcdefghijklmnopqrstwuvxyząęćźżłśóń
-ABCDEFGHIJKLMNOPQRSTWUVXYZĄĘĆŹŻŁŚÓŃ
+﻿1234568790
+.~,/?“‘:;[]{}\|`!@#$%^&*()-_+=<>–°
+abcdefghijklmnopqrstuvxyząęćźżłśóńw
+ABCDEFGHIJKLMNOPQRSTUVXYZĄĘĆŹŻŁŚÓŃW
 ÄÖÜ
 AAOAŠŽ
 n
 AÇÉEEËÎIÔOUUÜY
-1234568790
-~,./?“‘:;[]{}\|`!@#$%^&*()-_+=<>'
+
 

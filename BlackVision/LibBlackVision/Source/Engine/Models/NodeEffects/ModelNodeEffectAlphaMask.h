@@ -18,11 +18,13 @@ public:
 
                             ModelNodeEffectAlphaMask( ITimeEvaluatorPtr timeEvaluator );
 
+    static ISerializablePtr Create          ( const IDeserializer& deser );
+
     virtual NodeEffectType  GetType                 () const override;
 
-	virtual void			Update					( TimeType t ) override;
+    virtual void            Update                  ( TimeType t ) override;
 
-	ParamFloatPtr           GetParamAlpha           () const;
+    ParamFloatPtr           GetParamAlpha           () const;
 
     float                   GetAlpha                () const;
 

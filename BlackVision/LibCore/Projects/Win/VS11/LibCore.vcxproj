@@ -33,13 +33,19 @@
     <ClInclude Include="..\..\..\Source\Threading\CriticalSection.h" />
     <ClInclude Include="..\..\..\Source\Threading\ScopedCriticalSection.h" />
     <ClInclude Include="..\..\..\Source\Threading\Thread.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Logger\LoggerEnums.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Logger\LogMsgStruct.h" />
+    <ClInclude Include="..\..\..\Source\Tools\Logger\QueueSink.h" />
+    <ClInclude Include="..\..\..\Source\Tools\PrefixHelper.h" />
     <ClInclude Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.h" />
     <ClInclude Include="..\..\..\Source\Tools\HRTimer.h" />
+    <ClInclude Include="..\..\..\Source\Tools\IncludeJSON.h" />
     <ClInclude Include="..\..\..\Source\Tools\Logger\Logger.h" />
     <ClInclude Include="..\..\..\Source\Tools\Logger\UseLogger.h" />
     <ClInclude Include="..\..\..\Source\Tools\SimpleTimer.h" />
     <ClInclude Include="..\..\..\Source\Tools\StringHeplers.h" />
     <ClInclude Include="..\..\..\Source\Tools\Utils.h" />
+    <ClInclude Include="..\..\..\Source\win_sock.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp" />
@@ -53,6 +59,7 @@
     <ClCompile Include="..\..\..\Source\Threading\CriticalSection.cpp" />
     <ClCompile Include="..\..\..\Source\Threading\ScopedCriticalSection.cpp" />
     <ClCompile Include="..\..\..\Source\Threading\Thread.cpp" />
+    <ClCompile Include="..\..\..\Source\Tools\PrefixHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\HRTimer.cpp" />
     <ClCompile Include="..\..\..\Source\Tools\Logger\Logger.cpp" />

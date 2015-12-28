@@ -1,24 +1,39 @@
 #include "WindowedApplication.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
-
+#include "Application/ApplicationContext.h"
 
 namespace bv {
 
 // *********************************
 //
-WindowedApplication::WindowedApplication			( const char * title, int x, int y, int w, int h, bool fullScreen )
+WindowedApplication::WindowedApplication			( const char * title, int x, int y, int w, int h, WindowMode windowMode, RendererInput ri )
     : m_WindowId( 0 )
     , m_WindowTitle( title )
     , m_xPos( x )
     , m_yPos( y )
     , m_Width( w )
     , m_Height( h )
-    , m_AllowResize( true && !fullScreen )
-    , m_FullScreen( fullScreen )
+    , m_MultipleMonitors(false)
     , m_ClearColor( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ) )
     , m_Renderer( nullptr )
 {
+	if(windowMode==WindowMode::WINDOWED)
+        m_AllowResize = true;
+    else
+        m_AllowResize = false;
+
+    if(windowMode==WindowMode::FULLSCREEN)
+        m_FullScreen = true;
+    else
+        m_FullScreen = false;
+
+    if(windowMode==WindowMode::MULTIPLE_SCREENS)
+        m_MultipleMonitors = true;
+    else
+        m_MultipleMonitors = false;
+
+	m_RendererInput = ri;
 }
 
 // *********************************
@@ -32,6 +47,13 @@ WindowedApplication::~WindowedApplication			()
 std::string		WindowedApplication::Title			() const
 {
     return m_WindowTitle;
+}
+
+// *********************************
+//
+RendererInput		WindowedApplication::GetRendererInput	() const
+{
+    return m_RendererInput;
 }
 
 // *********************************
@@ -67,6 +89,13 @@ int		WindowedApplication::Height					() const
 bool	WindowedApplication::ResizeAllowed			() const
 {
     return m_AllowResize;
+}
+
+// *********************************
+//
+bool	WindowedApplication::MultipleMonitors		() const
+{
+    return m_MultipleMonitors;
 }
 
 // *********************************

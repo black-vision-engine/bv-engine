@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Plugin.h"
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Assets/Asset.h"
@@ -30,8 +29,6 @@ public:
     virtual IPluginPtr                      CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const override;
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const override;
    
-    virtual bool                            CanBeAttachedTo     ( IPluginConstPtr plugin )  const override;
-
     static  std::string                     UID                 ();
 
     static  std::string                     TextureName         ();
@@ -90,9 +87,9 @@ class DefaultTimerPlugin : public BasePlugin< IPlugin >
 {
 private:
 
-    ParamFloatPtr                   m_fontSizeParam;
-    ParamFloatPtr                   m_blurSizeParam;
-	ParamFloatPtr                   m_outlineSizeParam;
+    SizeType                        m_fontSize;
+    SizeType                        m_blurSize;
+	SizeType                        m_outlineSize;
     ParamFloatPtr                   m_spacingParam;
     ParamFloatPtr                   m_alignmentParam;
 
@@ -116,13 +113,10 @@ private:
 
     VertexAttributesChannelPtr      m_vaChannel;
 
-    TextureInfoVec                  m_textures;
-
     TextAtlasConstPtr               m_textAtlas;
 
     std::wstring                    m_timePatern;
     TimeInfo                        m_timePaternInfo;
-    DefaultPluginParamValModelPtr   m_paramValModel;
 
     bool                            CheckTimeConsistency ( const std::wstring & time ) const;
 
@@ -143,20 +137,21 @@ private:
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
 
+public:
+
     virtual IVertexAttributesChannelConstPtr    GetVertexAttributesChannel  () const override;
-    virtual IPixelShaderChannelConstPtr         GetPixelShaderChannel       () const override;
+    virtual IPixelShaderChannelPtr              GetPixelShaderChannel       () const override;
     virtual IVertexShaderChannelConstPtr        GetVertexShaderChannel      () const override;
 
-    virtual void                                Update                      ( TimeType t ) override;
+private:
+
+	virtual void                                Update                      ( TimeType t ) override;
 
     void                                        Start                       ();
     void                                        Stop                        ();
     void                                        Reset                       ( float localTime );
 
 private:
-
-    void                                        InitAttributesChannel       ( IPluginPtr prev );
-
 
 	friend bool            SetTimeTimerPlugin( IPluginPtr timerPlugin, TimeType time );
 	friend bool            StartTimerPlugin( IPluginPtr timerPlugin );
@@ -166,6 +161,8 @@ private:
 public:
 	explicit               DefaultTimerPlugin          ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model );
 							~DefaultTimerPlugin         ();
+
+    virtual void			SetPrevPlugin               ( IPluginPtr plugin ) override;
 };
 
 

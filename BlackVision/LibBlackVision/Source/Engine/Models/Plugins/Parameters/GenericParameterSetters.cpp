@@ -117,6 +117,50 @@ bool SetCenterMass              ( ParamTransformVecPtr pt, unsigned int idx, Tim
     return true;
 }
 
+// ***********************
+//
+bool    RemoveRotationKey       ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->RemoveRotation( idx, t );
+    return true;
+}
+
+// ***********************
+//
+bool    RemoveScaleKey          ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->RemoveScale( idx, t );
+    return true;
+}
+
+// ***********************
+//
+bool    RemoveTranslationKey    ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->RemoveTranslation( idx, t );
+    return true;
+}
+
+// ***********************
+//
+bool    RemoveCenterMassKey     ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->RemoveCenter( idx, t );
+    return true;
+}
+
 } //anonymous
 
 
@@ -174,6 +218,158 @@ bool    SetParameterTranslation ( IParameterPtr parameter, unsigned int idx, Tim
 bool    SetParameterCenterMass  ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & center )
 {
     return SetCenterMass( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, center );
+}
+
+// ========================================================================= //
+// Remove transformation keys
+// ========================================================================= //
+
+// ***********************
+//
+bool    RemoveRotationKey       ( IParameterPtr parameter, unsigned int idx, TimeType t )
+{    return RemoveRotationKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t );  }
+
+// ***********************
+//
+bool    RemoveScaleKey          ( IParameterPtr parameter, unsigned int idx, TimeType t )
+{    return RemoveScaleKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t );  }
+// ***********************
+//
+bool    RemoveTranslationKey    ( IParameterPtr parameter, unsigned int idx, TimeType t )
+{    return RemoveTranslationKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t );  }
+
+// ***********************
+//
+bool    RemoveCenterMassKey     ( IParameterPtr parameter, unsigned int idx, TimeType t )
+{    return RemoveCenterMassKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t );  }
+
+
+// ========================================================================= //
+// Curve types and wrap methods
+// ========================================================================= //
+
+// *******************************
+//
+bool                                                BezierSetCurveType( IParameterPtr parameter, CurveType type )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+    {
+        abstract_parameter->SetCurveType( type );
+        return true;
+    }
+    else
+        return false;
+}
+
+// *******************************
+//
+CurveType                                           BezierGetCurveType( IParameterPtr parameter )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+        return abstract_parameter->GetCurveType();
+    else
+        return CurveType::CT_TOTAL;
+}
+
+// *******************************
+//
+bool                                                SetWrapPostMethod  ( IParameterPtr parameter, WrapMethod method )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+    {
+        abstract_parameter->SetWrapPostMethod( method );
+        return true;
+    }
+    else
+        return false;
+}
+
+// *******************************
+//
+bool                                                SetWrapPreMethod   ( IParameterPtr parameter, WrapMethod method )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+    {
+        abstract_parameter->SetWrapPreMethod( method );
+        return true;
+    }
+    else
+        return false;
+}
+
+// *******************************
+//
+WrapMethod                                          GetWrapPostMethod  ( IParameterPtr parameter )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+        return abstract_parameter->GetWrapPostMethod();
+    else
+        return WrapMethod( -1 );
+}
+
+// *******************************
+//
+WrapMethod                                          GetWrapPreMethod   ( IParameterPtr parameter )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+        return abstract_parameter->GetWrapPreMethod();
+    else
+        return WrapMethod( -1 );
+}
+
+// *******************************
+//
+int                                                 BezierParameterGetNumKeys( IParameterPtr parameter )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+        return abstract_parameter->GetNumKeys();
+    else
+        return -1;
+}
+
+// ***********************
+//
+bool RemoveParameterKey ( IParameterPtr parameter, TimeType t )
+{
+    auto paramType = parameter->GetType();
+    switch( paramType )
+    {
+        case ModelParamType::MPT_FLOAT:
+            return RemoveTypedParamKey<ModelParamType::MPT_FLOAT>( parameter, t );
+        case ModelParamType::MPT_VEC2:
+            return RemoveTypedParamKey<ModelParamType::MPT_VEC2>( parameter, t );
+        case ModelParamType::MPT_VEC3:
+            return RemoveTypedParamKey<ModelParamType::MPT_VEC3>( parameter, t );
+        case ModelParamType::MPT_VEC4:
+            return RemoveTypedParamKey<ModelParamType::MPT_VEC4>( parameter, t );
+        case ModelParamType::MPT_WSTRING:
+            return RemoveTypedParamKey<ModelParamType::MPT_WSTRING>( parameter, t );
+        case ModelParamType::MPT_STRING:
+            return RemoveTypedParamKey<ModelParamType::MPT_STRING>( parameter, t );
+        case ModelParamType::MPT_INT:
+            return RemoveTypedParamKey<ModelParamType::MPT_INT>( parameter, t );
+        case ModelParamType::MPT_BOOL:
+            return RemoveTypedParamKey<ModelParamType::MPT_BOOL>( parameter, t );
+        case ModelParamType::MPT_ENUM:
+            return RemoveTypedParamKey<ModelParamType::MPT_ENUM>( parameter, t );
+        case ModelParamType::MPT_MAT2:
+            return RemoveTypedParamKey<ModelParamType::MPT_MAT2>( parameter, t );
+    }
+    return false;
 }
 
 } //model

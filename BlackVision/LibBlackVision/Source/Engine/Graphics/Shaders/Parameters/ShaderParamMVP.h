@@ -19,9 +19,11 @@ public:
                             ShaderParamMVP  ( const std::string & name );
                             ~ShaderParamMVP ();
 
-    virtual const void *    GetValuePtr     () const override;
-
     virtual void            Update          ( RenderableEntity * renderable, Camera * camera ) override;
+
+private:
+
+    virtual const void *    GetValuePtr     () const override;
 
 };
 

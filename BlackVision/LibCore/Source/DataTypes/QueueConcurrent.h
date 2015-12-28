@@ -16,7 +16,7 @@ class QueueConcurrent
 {
 private:
 
-    CriticalSection     m_criticalSection;
+    mutable CriticalSection     m_criticalSection;
 
     std::queue< T >     m_queue;
     HANDLE              m_dataPushed;
@@ -30,6 +30,7 @@ public:
     size_t      Size                () const;
 
     void        Push                ( const T & val );
+    void        Push                ( const T && val );
 
     bool        TryPop              ( T & val );
     void        WaitAndPop          ( T & val );
@@ -78,6 +79,20 @@ size_t      QueueConcurrent< T >::Size                () const
 //
 template< typename T >
 void        QueueConcurrent< T >::Push        ( const T & val )
+{
+    {
+        ScopedCriticalSection lock( m_criticalSection );
+
+        m_queue.push( val );
+    }
+
+    PulseEvent( m_dataPushed );
+}
+
+// ***********************
+//
+template< typename T >
+void        QueueConcurrent< T >::Push                ( const T && val )
 {
     {
         ScopedCriticalSection lock( m_criticalSection );

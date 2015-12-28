@@ -2,18 +2,19 @@
 
 #include "CoreDEF.h"
 #include "Engine/Interfaces/IUpdatable.h"
-#include "Engine/Types//Enums.h"
+#include "Engine/Types/Enums.h"
+#include "Serialization/ISerializable.h"
 #include "Engine/Interfaces/IValue.h"
+
 
 namespace bv { namespace model {
 
-class IModelNodeEffect : public bv::IUpdatable
+class IModelNodeEffect : public bv::IUpdatable, public ISerializable
 {
 public:
 
     virtual NodeEffectType								GetType			() const = 0;
-	
-	virtual const std::vector< bv::IValueConstPtr > &	GetValues		() const = 0;
+    virtual const std::vector< bv::IValueConstPtr > &	                                GetValues		() const = 0;
 
     virtual                 ~IModelNodeEffect   () {};
 

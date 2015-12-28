@@ -1,6 +1,8 @@
+#pragma warning(disable :4996)
 #include "bvApp.h"
 
 #include "System/InitSubsystem.h"
+#include "EndUserAPI/RemoteController.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
@@ -17,6 +19,8 @@
 #include "BVAppLogic.h"
 #include "BVConfig.h"
 
+#include "Application/ApplicationContext.h"
+
 // Log initializer
 #include "bvAppLogInitializer.inl"
 
@@ -24,6 +28,7 @@
 // FIXME: move it to a valid BV windowed version of engine and wrap with a macro
 void			bv::BlackVisionApp::StaticInitializer	()
 {
+	
     bv::ApplicationBase::MainFun = &bv::WindowedApplication::MainImpl;
     bv::ApplicationBase::ApplicationInstance = new bv::BlackVisionApp();
 }
@@ -46,10 +51,11 @@ namespace bv {
 // *********************************
 //
 BlackVisionApp::BlackVisionApp	()
-    : WindowedApplication( "BlackVision prealpha test app", 0, 0, DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight(), DefaultConfig.FullScreenMode() )
+    : WindowedApplication( "BlackVision prealpha test app", 0, 0, DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight(), DefaultConfig.GetWindowMode(), DefaultConfig.GetRendererInput() )
     , m_processManager( nullptr )
     , m_app( nullptr )
 {
+	ApplicationContext::Instance().SetResolution( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight() );
 }
 
 // *********************************
@@ -61,7 +67,6 @@ BlackVisionApp::~BlackVisionApp ()
 
     m_app->ShutDown();
     delete m_app;
-
     FreeConsole();
 }
 
@@ -92,6 +97,8 @@ void BlackVisionApp::OnIdle		()
 
     UpdateSubsystems( millis );
 
+	ApplicationContext::Instance().SetTimestamp( millis );
+
     m_app->OnUpdate( millis, m_Renderer );
 
     PostFrame( millis );
@@ -110,10 +117,16 @@ void BlackVisionApp::OnPreMainLoop  ()
 bool BlackVisionApp::OnInitialize       ()
 {
     m_processManager = new ProcessManager();
+		//pablito
+    InitializeLicenses      ();
+    InitializeConfig        ();
+
 
     InitializeConsole       ();
     InitializeAppLogic      ();
     InitializeSelfState     ();
+
+
 
     return WindowedApplication::OnInitialize();
 }
@@ -149,6 +162,38 @@ void    BlackVisionApp::InitializeConsole   ()
     }
 }
 
+
+// *********************************
+//
+bool    BlackVisionApp::InitializeLicenses   ()
+{
+    LicenseManager::LoadLicenses();
+    bool license = LicenseManager::VerifyLicense();
+
+	if( license )
+	{
+        LOG_MESSAGE( SeverityLevel::info ) << "License is valid. Proceeding...";
+	}
+    else
+    {
+        LOG_MESSAGE( SeverityLevel::critical ) << "License is not valid. Please contact your administrator or sales representative";
+	}
+    return license;
+}
+
+
+// *********************************
+//
+void    BlackVisionApp::InitializeConfig  ()
+{
+    //ConfigManager::LoadConfig();
+    ConfigManager::LoadXMLConfig();
+    BB::AssetManager::SetMediaFolderPath(ConfigManager::GetString("MediaFolder"));
+
+	BB::AssetManager::LoadSurfaces();
+
+}
+
 // *********************************
 //
 void    BlackVisionApp::InitializeAppLogic  ()
@@ -170,6 +215,7 @@ void    BlackVisionApp::InitializeAppLogic  ()
     m_app = new BVAppLogic( m_Renderer );
 
     // FIXME: InitCamera depends implicitly ond LoadScene - which suxx (as camera is created by LoadScene and passed to bvScene)
+	m_app->SetVideoCardManager( &m_videoCardManager );
     m_app->Initialize();
     m_app->LoadScene();
     m_app->InitCamera( m_Width, m_Height );

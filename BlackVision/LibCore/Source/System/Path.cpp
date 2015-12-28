@@ -1,4 +1,8 @@
+#pragma warning(disable : 4100)
+#pragma warning(disable : 4996)
+
 #include "Path.h"
+#include "IO/DirIO.h"
 
 #include "Tools/Logger/Logger.h"
 #define LOG_MODULE ModuleEnum::ME_LibCore
@@ -7,6 +11,7 @@
 #pragma warning(disable : 4100)
 #include "boost/filesystem/operations.hpp"
 #include "boost/regex.hpp"
+#include "boost/algorithm/string.hpp"
 #pragma warning(pop)
 
 #include <cstdarg>
@@ -90,7 +95,7 @@ std::string		Path::Str		() const
 //
 Path			Path::Join		( const Path & p ) const
 {
-	boost::filesystem::path bp( p.Str() );
+	boost::filesystem::path bp( this->Str() );
 	bp /= boost::filesystem::path( p.Str() );
 
 	return Path( bp.string() );
@@ -124,6 +129,27 @@ Path			Path::Join		( int count, ... ) const
 
 // *********************************
 //
+bool			Path::operator <		( const Path & l ) const
+{
+	return this->Str() < l.Str();
+}
+
+// *********************************
+//
+bool			Path::operator ==		( const Path & l ) const
+{
+	return this->Str() == l.Str();
+}
+
+// *********************************
+//
+bool			Path::operator !=		( const Path & l ) const
+{
+    return this->Str() != l.Str();
+}
+
+// *********************************
+//
 Path			Path::operator /		( const Path & p ) const
 {
 	return this->Join( p );
@@ -134,6 +160,14 @@ Path			Path::operator /		( const Path & p ) const
 bool			Path::Copy				( const Path & from, const Path & to )
 {
 	boost::system::error_code ec;
+
+	auto parent = boost::filesystem::path( to.Str() ).parent_path();
+
+	if( !Path::Exists( parent.string() ) )
+	{
+		Dir::CreateDir( parent.string(), true );
+	}
+
 	boost::filesystem::copy( boost::filesystem::path( from.Str() ), boost::filesystem::path( to.Str() ), ec );
 
 	if( ec )
@@ -206,26 +240,50 @@ bool			Path::Exists			( const Path & path )
 
 // *********************************
 //
-PathVec			Path::List				( const Path & path, const std::string exp )
+PathVec			Path::List				( const Path & path, bool recursive, const std::string exp )
 {
-	boost::filesystem::path cp( path.Str() ); 
-	boost::regex pattern( exp );
+    if( Path::Exists( path ) )
+    {
+	    boost::filesystem::path cp( path.Str() ); 
+	    boost::regex pattern( exp );
 
-	PathVec ret;
+	    PathVec ret;
 
-	for (	boost::filesystem::recursive_directory_iterator iter( cp ), end;
-			iter != end;
-			++iter)
-	{
-		std::string name = iter->path().filename().string();
-		if (regex_match(name, pattern))
-		{
-			auto p = iter->path();
-			ret.push_back( Path( iter->path().string() ) );
-		}
-	}
+        if( recursive )
+        {
+	        for (	boost::filesystem::recursive_directory_iterator iter( cp ), end;
+			        iter != end;
+			        ++iter)
+	        {
+		        std::string name = iter->path().filename().string();
+		        if (regex_match(name, pattern))
+		        {
+			        auto p = iter->path();
+			        ret.push_back( Path( iter->path().string() ) );
+		        }
+            }
+        }
+        else
+        {
+            for (	boost::filesystem::directory_iterator iter( cp ), end;
+			        iter != end;
+			        ++iter)
+	        {
+		        std::string name = iter->path().filename().string();
+		        if (regex_match(name, pattern))
+		        {
+			        auto p = iter->path();
+			        ret.push_back( Path( iter->path().string() ) );
+		        }
+            }
+        }
 
-	return ret;
+        return ret;
+    }
+    else
+    {
+        return PathVec();
+    }
 }
 
 
@@ -238,4 +296,36 @@ Path			Path::RelativePath		( const Path & path, const Path & start )
 	return Path( rel.string() );
 }
 
+// *********************************
+//
+StringVector    Path::Split				() const
+{
+    StringVector results;
+    boost::split(results, m_path, boost::is_any_of("\\"));
+
+	return results;
+}
+
+// *********************************
+//
+Path            Path::ParentPath        () const
+{
+    return boost::filesystem::path( m_path ).parent_path().string();
+}
+
+// *********************************
+//
+Path            Path::Absolute          () const
+{
+    return boost::filesystem::absolute( m_path ).string();
+}
+
+// *********************************
+//
+std::ostream & operator << ( std::ostream & os, const Path & p )
+{
+    return os << p.Str();
+}
+
 } // bv
+

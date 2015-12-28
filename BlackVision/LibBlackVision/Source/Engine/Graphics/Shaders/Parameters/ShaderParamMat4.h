@@ -9,16 +9,17 @@ class ShaderParamMat4 : public GenericShaderParam
 {
 private:
 
-    const ValueMat4 *   m_valModel;
+    glm::mat4				m_val;
     
 public:
 
-                            ShaderParamMat4     ( const std::string & name, const ValueMat4 * value );
-                            ~ShaderParamMat4    ();
+                            ShaderParamMat4     ( const std::string & name, const glm::mat4 & value = glm::mat4( 0.f ) );
 
-    void                    SetModelValue       ( const ValueMat4 * value );
+    void                    SetValue			( const glm::mat4 & value );
 
-    virtual const void *    GetValuePtr         () const override;
+private:
+ 
+	virtual const void *    GetValuePtr         () const override;
 
 };
 

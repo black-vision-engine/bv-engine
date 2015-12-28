@@ -11,7 +11,7 @@
 
 
 #include <algorithm>
-#include <Windows.h>
+#include "win_sock.h"
 
 namespace bv { namespace widgets { 
 
@@ -53,12 +53,36 @@ void		Crawler::AddNext			( bv::model::BasicNodePtr node )
 bool		Crawler::Finalize			()
 {
 	if( m_isFinalized )
-		assert(!"Crawler: Already finalized!");
+		;//assert(!"Crawler: Already finalized!");
 	else
 	{
 		auto copy = m_nodesStates.m_nonActives;
-		for( auto n : copy )	
-			SetActiveNode( n );
+		for( auto n : copy )
+		{
+			m_shifts[ n ] = m_view->xmax;
+			UpdateVisibility( n );
+			auto trPlugin = n->GetPlugin( "transform" );
+			if( trPlugin )
+			{
+				auto trParam = trPlugin->GetParameter( "simple_transform" );
+				model::SetParameterTranslation( trParam, 0, 0.0f, glm::vec3( 5.0f, 0.0f, 0.0f ) );
+			}
+		}
+		//m_shifts[ 0 ]+=m_interspace;
+		for( auto elem : m_shifts )
+		{
+			//if( IsActive( elem.first ) )
+			{
+				auto trPlugin = elem.first->GetPlugin( "transform" );
+				if( trPlugin )
+				{
+					auto trParam = trPlugin->GetParameter( "simple_transform" );
+					model::SetParameterTranslation( trParam, 0, 0.0f, glm::vec3( elem.second, 0.0f, 0.0f ) );
+				}
+			}
+		}
+		//for( auto n : copy )	
+			//SetActiveNode( n );
 
 		LayoutNodes();
 		m_isFinalized = true;
@@ -102,6 +126,78 @@ void		Crawler::LayoutNodes		()
 		UpdateTransforms();
 	}
 }
+
+// *******************************
+//
+void		Crawler::AddMessage			(std::wstring msg)
+{
+	m_messages_new.push_back(msg);
+	
+	
+}
+// *******************************
+//
+void		Crawler::Clear()
+{
+	m_messages_new.clear();
+	m_messages_displayed.clear();
+
+}
+
+
+// *******************************
+//
+void		Crawler::Reset()
+{
+	m_nodesStates.m_visibles.clear();
+	/*while(m_nodesStates.m_actives.size()>0)
+	{
+		BasicNode *node = m_nodesStates.m_actives.push_back();
+
+
+	}*/
+
+	m_nodesStates.m_nonActives.insert(m_nodesStates.m_nonActives.end(), m_nodesStates.m_actives.begin(), m_nodesStates.m_actives.end());
+
+	m_nodesStates.m_actives.clear();
+	m_nodesStates.m_visibles.clear();
+
+
+	for( auto elem : m_shifts )
+	{
+		
+			auto trPlugin = elem.first->GetPlugin( "transform" );
+			if( trPlugin )
+			{
+				auto trParam = trPlugin->GetParameter( "simple_transform" );
+				model::SetParameterTranslation( trParam, 0, 0.0f, glm::vec3( 5.0f, 0.0f, 0.0f ) );
+			}
+			UpdateVisibility(elem.first );
+		
+	}
+
+	
+		
+	Finalize();
+
+
+
+}
+
+// *******************************
+//
+void		Crawler::SetPromoMessage			(std::wstring msg)
+{
+	m_promo_msg = msg;
+}
+
+// *******************************
+//
+void		Crawler::SetPromoFrequency			(int freq)
+{
+	m_promo_freq = freq;
+}
+
 
 // *******************************
 //
@@ -202,8 +298,8 @@ void		Crawler::NotifyVisibilityChanged( bv::model::BasicNode * n, bool visibilit
 	else
 		eventManager.TriggerEvent( std::make_shared< NodeLeavingCrawlerEvent >( shared_from_this(), n ) );
 
-	printf( "Visibility of %p changed on %i \n", n, visibility );
-	printf( "Active : %i NonActive: %i Visible %i \n", m_nodesStates.ActiveSize(), m_nodesStates.NonActiveSize(), m_nodesStates.VisibleSize() );
+	//printf( "Visibility of %p changed on %i \n", n, visibility );
+	//printf( "Active : %i NonActive: %i Visible %i \n", m_nodesStates.ActiveSize(), m_nodesStates.NonActiveSize(), m_nodesStates.VisibleSize() );
 }
 
 // *******************************
@@ -212,6 +308,57 @@ void		Crawler::NotifyNoMoreNodes( )
 {
 	auto & eventManager = GetDefaultEventManager();
 	eventManager.TriggerEvent( std::make_shared< NoMoreNodesCrawlerEvent >( shared_from_this() ) );
+	HackNoMoreNodes();
+}
+
+// *******************************
+//
+void		Crawler::HackNoMoreNodes( )
+{
+	auto n = this->GetNonActiveNode();
+	std::wstring	 message	=	L"";
+
+	if(m_total_displayed_msgs % m_promo_freq == 0)
+	{
+		message = m_promo_msg;
+	}else if(m_messages_new.size()>0)
+	{
+		message = m_messages_new[0];
+		m_messages_displayed.push_back(message);
+		m_messages_new.erase(m_messages_new.begin());
+	}else
+		if(m_messages_displayed.size()>0)
+		{
+			if((SizeType)m_displayed_index >= m_messages_displayed.size())
+			{
+				m_displayed_index = 0;
+			}
+
+			message = m_messages_displayed[m_displayed_index];
+			m_displayed_index++;
+		
+	}else{
+		message = m_promo_msg;
+	}
+
+	if( n && message!=L"")
+	{
+		auto textNode = n->GetChild( "Text" );
+		if( textNode )
+		{
+			auto pl = textNode->GetPlugin( "text" );
+
+			if( pl )
+			{
+                SetParameter( pl->GetParameter( "text" ), 0.0, message );
+                this->EnqueueNode( n );
+			}
+		}
+	}
+	m_total_displayed_msgs++;
+
+
+	
 }
 
 // *******************************
@@ -251,7 +398,7 @@ void		Crawler::EnqueueNode			( model::BasicNode * n)
 
 			auto nodeShift = m_shifts[ lastActiveNode ] + lastActiveNode->GetAABB().Width() + m_interspace;
 
-			nodeShift = max( nodeShift, m_view->xmax );
+			//nodeShift = max( nodeShift, m_view->xmax );
 
 			m_shifts[ n ] = nodeShift;
 			m_nodesStates.Acivate( n );
@@ -259,7 +406,7 @@ void		Crawler::EnqueueNode			( model::BasicNode * n)
 		}
 		else
 		{
-			auto nodeShift = m_view->xmax;
+			auto nodeShift = m_view->xmax+m_interspace;
 
 			m_shifts[ n ] = nodeShift;
 			m_nodesStates.Acivate( n );

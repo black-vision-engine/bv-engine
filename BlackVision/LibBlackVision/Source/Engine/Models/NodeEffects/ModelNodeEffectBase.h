@@ -10,15 +10,17 @@ class ModelNodeEffectBase : public IModelNodeEffect
 {
 protected:
 
-	DefaultParamValModelPtr	m_paramValModel;
+    DefaultParamValModelPtr m_paramValModel;
 
 public:
 
-							ModelNodeEffectBase		( ITimeEvaluatorPtr timeEvaluator );
+                            ModelNodeEffectBase     ( ITimeEvaluatorPtr timeEvaluator );
 
-    virtual void            Update					( TimeType t ) override;
+    virtual void            Serialize               ( ISerializer& ser ) const;
 
-	const std::vector< bv::IValueConstPtr > &	GetValues () const override;
+    virtual void            Update                  ( TimeType t ) override;
+
+    const std::vector< bv::IValueConstPtr > &   GetValues () const override;
 
 };
 

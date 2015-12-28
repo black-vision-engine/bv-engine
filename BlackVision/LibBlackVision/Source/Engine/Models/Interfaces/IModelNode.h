@@ -25,6 +25,7 @@ DEFINE_CONST_PTR_TYPE(IModelNode)
 class IModelNode : public bv::IUpdatable
 {
 public:
+	virtual IModelNodePtr					Clone				() const															= 0;
 
     virtual const std::string &             GetName             () const                                                            = 0;
 
@@ -35,6 +36,8 @@ public:
     virtual IModelNodePtr                   GetChild            ( const std::string & name )                                        = 0;
 
     virtual const IPluginListFinalized *    GetPluginList       () const                                                            = 0;
+    virtual std::vector< IParameterPtr >    GetParameters       () const                                                            = 0;
+	virtual std::vector< ITimeEvaluatorPtr > GetTimelines       () const                                                            = 0;
 
     virtual unsigned int                    GetNumChildren      () const                                                            = 0;
 
@@ -61,6 +64,9 @@ public:
     // FIXME: remove when proper GlobalEfect is implemented
 
     virtual bool                            IsVisible           () const                                                            = 0;
+
+	//pablito
+	virtual void                            SetVisible           (bool visible)                                                             = 0;
 
     virtual                                 ~IModelNode         () {};
 

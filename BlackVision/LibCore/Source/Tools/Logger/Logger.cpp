@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <iomanip>
 #include "UseLogger.h"
+#include "QueueSink.h"
 
 #pragma warning( disable : 4512 )
 // warning: could not generate contructor for...
@@ -25,9 +26,13 @@
 #include <boost\log\sinks\text_ostream_backend.hpp>
 #include <boost\log\sinks\text_file_backend.hpp>
 #include <boost/core/null_deleter.hpp>
+#include <boost/log/sinks/sync_frontend.hpp>
+
+#include "DataTypes/QueueConcurrent.h"
 
 typedef boost::log::sinks::asynchronous_sink< boost::log::sinks::text_file_backend > ASyncFileSink;
 typedef boost::log::sinks::asynchronous_sink< boost::log::sinks::text_ostream_backend > ASyncStreamSink;
+typedef boost::log::sinks::synchronous_sink< bv::QueueSink > SyncQueueSink;
 typedef bv::LoggerType::char_type char_type;
 typedef std::unordered_map< bv::ModuleEnum, std::string > ModuleMapping;
 
@@ -66,6 +71,9 @@ void InitializeModuleMapping()
 	moduleString[bv::ModuleEnum::ME_Prototyper]			= "Prototyper";
 	moduleString[bv::ModuleEnum::ME_BlackVisionApp]		= "BlackVisionApp";
 	moduleString[bv::ModuleEnum::ME_LibProjectManager]	= "LibProjectManager";
+    moduleString[bv::ModuleEnum::ME_TCPServer]          = "LibTCPServer";
+    moduleString[bv::ModuleEnum::ME_LibVideoCards]      = "LibVideoCards";
+    moduleString[bv::ModuleEnum::ME_XMLScenParser]      = "LibXMLSceneParser";
 
 	modulesStringAlignment = 17;
 }
@@ -96,15 +104,19 @@ boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream& str
     return strm;
 }
 
+std::string toString( bv::ModuleEnum moduleEnum )
+{
+	auto module = moduleString.find( moduleEnum );
+	if( module != moduleString.end() )
+		return module->second;
+	else
+		return"Unknown Module";
+}
+
 boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream& strm, boost::log::to_log_manip< bv::ModuleEnum, module_tag > const& manip )
 {
     bv::ModuleEnum level = manip.get();
-
-	auto module = moduleString.find( level );
-	if( module != moduleString.end() )
-		strm << module->second;
-	else
-		strm << "Unknown Module";
+    strm << toString( level );
 
     return strm;
 }
@@ -113,56 +125,6 @@ boost::log::formatting_ostream& operator<< ( boost::log::formatting_ostream& str
 
 namespace bv{
 	
-// ==================================================================== //
-//					Helper function
-
-/**Sets filter*/
-template<typename Type>
-void SetFilter( boost::shared_ptr<Type> sink, SeverityLevel minLevel, int modules )
-{
-	//I don't know how to do this with loop. It don't want to work.
-	//Operator & isn't defined for filters, so I can't do this like this ( module & modules )
-	auto filter = 
-		(severity >= minLevel) &&
-		(
-			(module == (modules & ( modules & (0x1 << 0) )))
-			|| (module == (modules & ( modules & (0x1 << 1) )))
-			|| (module == (modules & ( modules & (0x1 << 2) )))
-			|| (module == (modules & ( modules & (0x1 << 3) )))
-			|| (module == (modules & ( modules & (0x1 << 4) )))
-			|| (module == (modules & ( modules & (0x1 << 5) )))
-			//|| (module == (modules & ( modules & (0x1 << 6) )))
-			//|| (module == (modules & ( modules & (0x1 << 7) )))
-			//|| (module == (modules & ( modules & (0x1 << 8) )))
-			//|| (module == (modules & ( modules & (0x1 << 9) )))
-			//|| (module == (modules & ( modules & (0x1 << 10) )))
-			//|| (module == (modules & ( modules & (0x1 << 11) )))
-			//|| (module == (modules & ( modules & (0x1 << 12) )))
-			//|| (module == (modules & ( modules & (0x1 << 13) )))
-			//|| (module == (modules & ( modules & (0x1 << 14) )))
-			//|| (module == (modules & ( modules & (0x1 << 15) )))
-			//|| (module == (modules & ( modules & (0x1 << 16) )))
-			//|| (module == (modules & ( modules & (0x1 << 17) )))
-			//|| (module == (modules & ( modules & (0x1 << 18) )))
-			//|| (module == (modules & ( modules & (0x1 << 19) )))
-			//|| (module == (modules & ( modules & (0x1 << 20) )))
-			//|| (module == (modules & ( modules & (0x1 << 21) )))
-			//|| (module == (modules & ( modules & (0x1 << 22) )))
-			//|| (module == (modules & ( modules & (0x1 << 23) )))
-			//|| (module == (modules & ( modules & (0x1 << 24) )))
-			//|| (module == (modules & ( modules & (0x1 << 25) )))
-			//|| (module == (modules & ( modules & (0x1 << 26) )))
-			//|| (module == (modules & ( modules & (0x1 << 27) )))
-			//|| (module == (modules & ( modules & (0x1 << 28) )))
-			//|| (module == (modules & ( modules & (0x1 << 29) )))
-			//|| (module == (modules & ( modules & (0x1 << 30) )))
-			//|| (module == (modules & ( modules & (0x1 << 31) )))
-		);
-
-	sink->set_filter( filter );
-}
-
-
 
 // ==================================================================== //
 //					Logging object
@@ -217,7 +179,83 @@ void Logger::InitForamatter()
 
 
 
-void Logger::AddLogFile( const std::string& fileName, SeverityLevel minLevel, int modules )
+// ==================================================================== //
+//					Helper function
+
+/**Sets filter*/
+template<typename Type>
+void SetFilter( boost::shared_ptr<Type> sink, SeverityLevel minLevel, int modules )
+{
+	//I don't know how to do this with loop. It don't want to work.
+	//Operator & isn't defined for filters, so I can't do this like this ( module & modules )
+	auto filter = 
+		(severity >= minLevel) &&
+		(
+			(module == (modules & ( modules & (0x1 << 0) )))
+			|| (module == (modules & ( modules & (0x1 << 1) )))
+			|| (module == (modules & ( modules & (0x1 << 2) )))
+			|| (module == (modules & ( modules & (0x1 << 3) )))
+			|| (module == (modules & ( modules & (0x1 << 4) )))
+			|| (module == (modules & ( modules & (0x1 << 5) )))
+			|| (module == (modules & ( modules & (0x1 << 6) )))
+			|| (module == (modules & ( modules & (0x1 << 7) )))
+			|| (module == (modules & ( modules & (0x1 << 8) )))
+			//|| (module == (modules & ( modules & (0x1 << 9) )))
+			//|| (module == (modules & ( modules & (0x1 << 10) )))
+			//|| (module == (modules & ( modules & (0x1 << 11) )))
+			//|| (module == (modules & ( modules & (0x1 << 12) )))
+			//|| (module == (modules & ( modules & (0x1 << 13) )))
+			//|| (module == (modules & ( modules & (0x1 << 14) )))
+			//|| (module == (modules & ( modules & (0x1 << 15) )))
+			//|| (module == (modules & ( modules & (0x1 << 16) )))
+			//|| (module == (modules & ( modules & (0x1 << 17) )))
+			//|| (module == (modules & ( modules & (0x1 << 18) )))
+			//|| (module == (modules & ( modules & (0x1 << 19) )))
+			//|| (module == (modules & ( modules & (0x1 << 20) )))
+			//|| (module == (modules & ( modules & (0x1 << 21) )))
+			//|| (module == (modules & ( modules & (0x1 << 22) )))
+			//|| (module == (modules & ( modules & (0x1 << 23) )))
+			//|| (module == (modules & ( modules & (0x1 << 24) )))
+			//|| (module == (modules & ( modules & (0x1 << 25) )))
+			//|| (module == (modules & ( modules & (0x1 << 26) )))
+			//|| (module == (modules & ( modules & (0x1 << 27) )))
+			//|| (module == (modules & ( modules & (0x1 << 28) )))
+			//|| (module == (modules & ( modules & (0x1 << 29) )))
+			//|| (module == (modules & ( modules & (0x1 << 30) )))
+			//|| (module == (modules & ( modules & (0x1 << 31) )))
+		);
+
+	sink->set_filter( filter );
+}
+
+
+// ========================================================================= //
+// Functions adding sinks
+// ========================================================================= //
+
+
+std::unordered_map< int, boost::shared_ptr< boost::log::sinks::sink > >  globalSinksMap;
+CriticalSection sinksLock;
+int sinkID = 1;
+
+// ***********************
+//
+int AddNewSink( boost::shared_ptr< boost::log::sinks::sink > newSink )
+{
+    int newSinkId;
+    {
+        ScopedCriticalSection lock( sinksLock );
+        newSinkId = sinkID;
+        globalSinksMap.insert( std::make_pair( sinkID++, newSink ) );
+    }
+
+	boost::log::core::get()->add_sink( newSink );
+    return newSinkId;
+}
+
+// ***********************
+//
+int Logger::AddLogFile( const std::string& fileName, SeverityLevel minLevel, int modules )
 {
     boost::shared_ptr< boost::log::sinks::text_file_backend > backend =
         boost::make_shared< boost::log::sinks::text_file_backend >(
@@ -231,19 +269,65 @@ void Logger::AddLogFile( const std::string& fileName, SeverityLevel minLevel, in
 
     newSink->set_formatter( m_formatter );
 	SetFilter( newSink, minLevel, modules );
-
-	boost::log::core::get()->add_sink( newSink );
+    
+    return AddNewSink( newSink );
 }
 
-void Logger::AddConsole			( SeverityLevel minLevel, int modules )
+// ***********************
+//
+int Logger::AddConsole			( SeverityLevel minLevel, int modules )
 {
 	boost::shared_ptr< ASyncStreamSink > newSink = boost::make_shared< ASyncStreamSink >();
 	boost::shared_ptr< std::ostream > stream(&std::clog, boost::null_deleter());
 	newSink->locked_backend()->add_stream( stream );
 
     newSink->set_formatter( m_formatter );
-	boost::log::core::get()->add_sink( newSink );
+    SetFilter( newSink, minLevel, modules );
+
+    return AddNewSink( newSink );
 }
+
+// ***********************
+//
+QueueConcurrent<LogMsg>& Logger::AddLogQueue         ( int& logID, SeverityLevel minLevel, int modules )
+{
+    boost::shared_ptr< QueueSink > backend = boost::make_shared< QueueSink >();
+    boost::shared_ptr< SyncQueueSink > newSink( new SyncQueueSink( backend ) );
+
+	SetFilter( newSink, minLevel, modules );
+    logID = AddNewSink( newSink );
+
+    return backend->GetQueueReference();
+}
+
+// ***********************
+//
+void Logger::RemoveLog           ( int logID )
+{
+    ScopedCriticalSection lock( sinksLock );
+
+    auto findResult = globalSinksMap.find( logID );
+    if( findResult != globalSinksMap.end() )
+    {
+        boost::log::core::get()->remove_sink( findResult->second );
+        globalSinksMap.erase( findResult );
+    }
+}
+
+// ***********************
+//
+void QueueSink::consume( boost::log::record_view const& rec )
+{
+    namespace expr = boost::log::expressions;
+
+    LogMsg message;
+    message.message = *rec[ expr::smessage ];
+    message.severity = SEVERITY_STRINGS[ rec[ ::bv::severity ].get() ];
+    message.module = toString( rec[ ::bv::module ].get() );
+
+    m_queue.Push( message );
+}
+
 
 } //bv
 

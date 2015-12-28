@@ -24,28 +24,17 @@ IPluginPtr              DefaultNoPerspectiveTexturePluginDesc::CreatePlugin     
 DefaultPluginParamValModelPtr   DefaultNoPerspectiveTexturePluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     //Create all models
-    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >();
+    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
     DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
     //Create all parameters and evaluators
-    SimpleVec4EvaluatorPtr      borderColorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
     SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
 
-    ParamFloatPtr  paramWrapModeX     = ParametersFactory::CreateParameterFloat( "wrapModeX", timeEvaluator );
-    ParamFloatPtr  paramWrapModeY     = ParametersFactory::CreateParameterFloat( "wrapModeY", timeEvaluator );
-    ParamFloatPtr  paramFilteringMode = ParametersFactory::CreateParameterFloat( "filteringMode", timeEvaluator );
-    ParamFloatPtr  paramAttachMode    = ParametersFactory::CreateParameterFloat( "attachmentMode", timeEvaluator );
-
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
-    psModel->RegisterAll( borderColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
-    psModel->AddParameter( paramWrapModeX );
-    psModel->AddParameter( paramWrapModeY );
-    psModel->AddParameter( paramFilteringMode );
-    psModel->AddParameter( paramAttachMode );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
@@ -53,40 +42,9 @@ DefaultPluginParamValModelPtr   DefaultNoPerspectiveTexturePluginDesc::CreateDef
 
     //Set default values of all parameters
     alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
-    borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
 
-    //FIXME: integer parmeters should be used here
-    paramWrapModeX->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
-    paramWrapModeY->SetVal( (float) TextureWrappingMode::TWM_REPEAT, TimeType( 0.f ) );
-    paramFilteringMode->SetVal( (float) TextureFilteringMode::TFM_LINEAR, TimeType( 0.f ) );
-    paramAttachMode->SetVal( (float) TextureAttachmentMode::MM_ATTACHED, TimeType( 0.f ) );
-
     return model;
-}
-
-// *******************************
-//
-bool                   DefaultNoPerspectiveTexturePluginDesc::CanBeAttachedTo     ( IPluginConstPtr plugin ) const
-{
-    if ( plugin == nullptr )
-    {
-        return false;
-    }
-
-    auto  vac = plugin->GetVertexAttributesChannel();
-    if ( vac == nullptr )
-    {
-        return false;
-    }
-
-    //auto numChannels = vac->GetDescriptor()->GetNumVertexChannels();
-    //if ( numChannels != 1 ) //only vertex attribute data allowed here
-    //{
-    //    return false;
-    //}
-
-    return true;
 }
 
 // *******************************

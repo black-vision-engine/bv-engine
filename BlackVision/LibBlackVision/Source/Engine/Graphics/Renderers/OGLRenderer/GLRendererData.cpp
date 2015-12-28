@@ -63,8 +63,8 @@ void    RendererData::RenderState::InitializeAlphaState     ( AlphaStateConstPtr
 {
     assert( as );
 
-    GLuint srcBlend = ConstantsMapper::GLConstant( as->srcBlendMode );
-    GLuint dstBlend = ConstantsMapper::GLConstant( as->dstBlendMode );
+    GLuint srcBlend = ConstantsMapper::GLConstant( as->srcRGBBlendMode );
+    GLuint dstBlend = ConstantsMapper::GLConstant( as->dstRGBBlendMode );
 
     const glm::vec4 & blendColor = as->blendColor;
 

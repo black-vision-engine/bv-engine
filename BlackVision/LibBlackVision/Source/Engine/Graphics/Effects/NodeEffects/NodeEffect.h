@@ -18,6 +18,8 @@ public:
         T_ALPHA_MASK,
         T_NODE_MASK,
         T_WIREFRAME,
+        T_LIGHT_SCATTERING,
+        //T_ALPHA_CHANNEL,
 
         T_TOTAL
     };

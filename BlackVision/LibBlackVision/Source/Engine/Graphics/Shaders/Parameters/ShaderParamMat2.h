@@ -9,16 +9,17 @@ class ShaderParamMat2 : public GenericShaderParam
 {
 private:
 
-    const ValueMat2 *   m_valModel;
+    glm::mat2				m_val;
     
 public:
 
-                            ShaderParamMat2     ( const std::string & name, const ValueMat2 * value );
-                            ~ShaderParamMat2    ();
+                            ShaderParamMat2     ( const std::string & name, const glm::mat2 & value = glm::mat2( 0.f ) );
 
-    void                    SetModelValue       ( const ValueMat2 * value );
+    void                    SetValue			( const glm::mat2 & value );
 
-    virtual const void *    GetValuePtr         () const override;
+private:
+   
+	virtual const void *    GetValuePtr         () const override;
 
 };
 

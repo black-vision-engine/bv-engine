@@ -1,5 +1,7 @@
 #include "ModelNodeEffectDefault.h"
 
+#include "Serialization/SerializationHelper.h"
+
 
 namespace bv { namespace model {
 

@@ -52,13 +52,17 @@ public:
     bool            blendEnabled;   //false
     glm::vec4       blendColor;     //(0,0,0,0)
 
-    SrcBlendMode    srcBlendMode;   //SBM_SRC_ALPHA
-    DstBlendMode    dstBlendMode;   //DBM_ONE_MINUS_SRC_ALPHA
+    SrcBlendMode    srcRGBBlendMode;   //SBM_SRC_ALPHA
+    DstBlendMode    dstRGBBlendMode;   //DBM_ONE_MINUS_SRC_ALPHA
+
+    SrcBlendMode    srcAlphaBlendMode;   //SBM_ONE
+    DstBlendMode    dstAlphaBlendMode;   //DBM_ONE
 
 public:
 
-    AlphaContext();
+							AlphaContext	();
 
+    AlphaContext *			Clone			() const;
 };
 
 } //model

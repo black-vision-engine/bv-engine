@@ -31,7 +31,6 @@ public:
     virtual const std::string &             DefaultPluginName   () const override;
     virtual const std::string &             GetPluginTypeAbbrv  () const override;
 
-    virtual bool                            CanBeAttachedTo     ( IPluginConstPtr plugin )  const override;
     virtual IPluginParamValModelPtr         CreateModel         ( ITimeEvaluatorPtr timeEvaluator ) const override;
 
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const = 0;
@@ -54,7 +53,7 @@ protected:
         ITimeEvaluatorPtr                       m_lastTimeEvaluator;
 
     public:
-        ModelHelper(  ITimeEvaluatorPtr te ) : m_lastTimeEvaluator( te ) { m_model = std::make_shared< DefaultPluginParamValModel >(); }
+        ModelHelper(  ITimeEvaluatorPtr te ) : m_lastTimeEvaluator( te ) { m_model = std::make_shared< DefaultPluginParamValModel >( te ); }
         DefaultPluginParamValModelPtr           GetModel() { return m_model; }
 
         void                                    CreateVacModel      ();

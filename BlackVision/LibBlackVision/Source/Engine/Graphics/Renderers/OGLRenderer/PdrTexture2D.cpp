@@ -2,6 +2,7 @@
 
 #include <cassert>
 
+#include "Engine/Graphics/Renderers/OGLRenderer/PdrTexture.h"
 //#define POOR_PROFILE_TEXTURE_STREAMING
 
 
@@ -20,12 +21,7 @@ extern HighResolutionTimer GTimer;
 // FIXME: implement streaming via two PBOs to make prebuffering "blazingly" fast
 // FIXME: implement mipmapping machinery
 PdrTexture2D::PdrTexture2D                      ( const Texture2D * texture )
-    : m_textureID( 0 )
-    , m_prevTextureID( 0 )
-    , m_pboMem( nullptr )
-    , m_prevFrameUpdated( false )
-    , m_curFrameUpdated( false )
-    , m_width( 0 )
+	: m_width( 0 )
     , m_height( 0 )
 {
     Update( texture );
@@ -42,6 +38,7 @@ void    PdrTexture2D::Initialize      ( const Texture2D * texture )
     m_width     = texture->GetWidth();
     m_height    = texture->GetHeight();
 
+
     //FIXME: allow more texture types here
     assert( m_txFormat == TextureFormat::F_A8R8G8B8 ||
 			m_txFormat == TextureFormat::F_R8G8B8 ||
@@ -52,17 +49,24 @@ void    PdrTexture2D::Initialize      ( const Texture2D * texture )
     m_format            = ConstantsMapper::GLConstantTextureFormat( m_txFormat );
     m_type              = ConstantsMapper::GLConstantTextureType( m_txFormat );
 
-    auto txSemantic     = texture->GetSemantic();
+	auto levels			= texture->GetNumLevels();
 
+    auto txSemantic     = texture->GetSemantic();
     if( PdrPBOMemTransfer::PBORequired( txSemantic ) )
     {
-        m_pboMem = new PdrPBOMemTransfer( txSemantic, texture->RawFrameSize() );
+		m_pboMem.reserve( levels );
+		for( unsigned int lvl = 0; lvl < levels; ++lvl )
+		{
+			m_pboMem.push_back( std::unique_ptr< PdrUploadPBO >( new PdrUploadPBO( txSemantic, texture->RawFrameSize( lvl ) ) ) );
+		}
     }
+
 
     BVGL::bvglGenTextures   ( 1, &m_textureID );
     GLuint prevTex = Bind();
 
-    if( m_pboMem )
+#ifndef BV_GL_VERSION_4_5
+	if( !m_pboMem.empty() )
     {
         //NOTE: wystarczy tylko tak, bo update i tak pojdzie dwa razy (raz przy tworzeniu tekstury, a raz przy jej enablowaniu, co oznacza, ze oba PBO zosatana zaladowane poprawnie danymi tekstury i nie bedzie
         //NOTE: jednej pustej ramki z pustym przebiegiem renderera (czyli dokladnie tak, jak byc powinno) - pesymistycznie nalezy tutaj zaladowac od razu jedno PBO, i z niego poprawnie odczytaja sie dane w pierwszym feczu
@@ -70,24 +74,46 @@ void    PdrTexture2D::Initialize      ( const Texture2D * texture )
     }
     else
     {
-		if( texture->GetNumLevels() == 1 )
+		if( levels > 1 )
 		{
-			BVGL::bvglTexImage2D( GL_TEXTURE_2D, 0, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height, 0, m_format, m_type, texture->GetData()->Get() );
+			BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, ( GLsizei )levels - 1 );
 		}
-		else
-		{
-			auto numLevels = texture->GetNumLevels();
-			if( numLevels > 1 )
-			{
-				BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, ( GLsizei )numLevels - 1 );
-			}
 
-			for( UInt32 i = 0; i < numLevels; ++i )
+		for( UInt32 lvl = 0; lvl < levels; ++lvl )
+		{
+			auto data = texture->GetData( lvl );
+			if( data )
 			{
-				BVGL::bvglTexImage2D( GL_TEXTURE_2D, i, m_internalFormat, ( GLsizei )texture->GetWidth( i ), ( GLsizei )texture->GetHeight( i ), 0, m_format, m_type, texture->GetData( i )->Get() );
+				BVGL::bvglTexImage2D( GL_TEXTURE_2D, lvl, m_internalFormat, ( GLsizei )texture->GetWidth( lvl ), ( GLsizei )texture->GetHeight( lvl ), 0, m_format, m_type, texture->GetData( lvl )->Get() );
+			}
+			else
+			{
+				BVGL::bvglTexImage2D( GL_TEXTURE_2D, lvl, m_internalFormat, ( GLsizei )texture->GetWidth( lvl ), ( GLsizei )texture->GetHeight( lvl ), 0, m_format, m_type, 0 );
 			}
 		}
     }
+#else
+	//supported from 4.2
+
+	BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+	BVGL::bvglTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, ( GLint )levels );
+	
+	BVGL::bvglTexStorage2D( GL_TEXTURE_2D, ( GLint )levels, m_internalFormat, ( GLsizei )m_width, ( GLsizei )m_height );
+	
+	if( m_pboMem.empty() )
+	{
+		for (unsigned int lvl = 0; lvl < levels; ++lvl)
+		{
+			auto data = texture->GetData( lvl );
+			if( data )
+			{
+				BVGL::bvglTexSubImage2D( GL_TEXTURE_2D, lvl, 0, 0, 
+					( GLsizei )texture->GetWidth( lvl ), ( GLsizei )texture->GetHeight( lvl ), 
+					m_format, m_type, data->Get() );
+			}
+		}
+	}
+#endif
 
     BVGL::bvglBindTexture( GL_TEXTURE_2D, prevTex );
 }
@@ -101,24 +127,25 @@ void    PdrTexture2D::Deinitialize    ()
         BVGL::bvglDeleteTextures( 1, &m_textureID );
     }
 
-    delete m_pboMem;
-    m_pboMem = nullptr;
+	m_pboMem.clear();
 }
 
 // *******************************
 //
 void    PdrTexture2D::UpdateTexData     ( const Texture2D * texture )
 {
-    assert( m_pboMem );
+    assert( !m_pboMem.empty() );
 
 #ifdef POOR_PROFILE_TEXTURE_STREAMING
     double writeStart = GTimer.CurElapsed();
 #endif
 
-    void * data = m_pboMem->LockTexture( MemoryLockingType::MLT_WRITE_ONLY, m_textureID, ( GLuint )m_width, ( GLuint )m_height, m_format, m_type );
-    memcpy( data, texture->GetData()->Get(), texture->RawFrameSize() );
-    // printf( "TEXTURE ASYNC MEM TRAQNSFER TRIGGERED\n");
-    m_pboMem->UnlockTexture( m_textureID, ( GLuint )m_width, ( GLuint )m_height, m_format, m_type );
+	for( unsigned int lvl = 0; lvl < texture->GetNumLevels(); ++lvl )
+	{
+		m_pboMem[ lvl ]->LockUpload( texture->GetData( lvl )->Get(), texture->RawFrameSize( lvl ) );
+		PBOUploadData( texture, lvl );
+		m_pboMem[ lvl ]->UnlockUpload();
+	}
 
 #ifdef POOR_PROFILE_TEXTURE_STREAMING
     double writeTime = GTimer.CurElapsed() - writeStart;
@@ -128,36 +155,20 @@ void    PdrTexture2D::UpdateTexData     ( const Texture2D * texture )
 
 // *******************************
 //
+void    PdrTexture2D::PBOUploadData     ( const Texture2D * texture, UInt32 lvl )
+{
+	GLint prevTex = Bind();
+	BVGL::bvglTexSubImage2D( GL_TEXTURE_2D, lvl, 0, 0, 
+		( GLsizei )texture->GetWidth( lvl ), ( GLsizei )texture->GetHeight( lvl ), 
+		m_format, m_type, 0 );
+	BVGL::bvglBindTexture( GL_TEXTURE_2D, prevTex );
+}
+
+// *******************************
+//
 PdrTexture2D::~PdrTexture2D         ()
 {
     Deinitialize();
-}
-
-// *******************************
-//
-void            PdrTexture2D::Enable        ( Renderer * renderer, int textureUnit )
-{
-    
-    { renderer; } // FIXME: suppress unused
-
-    //if( m_prevFrameUpdated && !m_curFrameUpdated )
-    //{
-    //    m_pboMem->Flush( textureUnit );
-    //}
-
-    BVGL::bvglActiveTexture( GL_TEXTURE0 + textureUnit );
-    m_prevTextureID = Bind();
-
-    m_prevFrameUpdated = m_curFrameUpdated;
-}
-
-// *******************************
-//
-void            PdrTexture2D::Disable       ( Renderer * renderer, int textureUnit )
-{
-    { renderer; } // FIXME: suppress unused
-    BVGL::bvglActiveTexture ( GL_TEXTURE0 + textureUnit );
-    Unbind();
 }
 
 // *******************************
@@ -170,17 +181,10 @@ void        PdrTexture2D::Update            ( const Texture2D * texture )
         Initialize( texture );
     }
 
-    if( m_pboMem )
+	if( !m_pboMem.empty() )
     {
         UpdateTexData( texture );
     }
-}
-
-// *******************************
-//
-void    PdrTexture2D::SetUpdated    ( bool updated )
-{
-    m_curFrameUpdated = updated;
 }
 
 // *******************************
@@ -200,13 +204,6 @@ GLuint      PdrTexture2D::Bind             ()
 void        PdrTexture2D::Unbind            ()
 {
     BVGL::bvglBindTexture   ( GL_TEXTURE_2D, m_prevTextureID );     
-}
-
-// *******************************
-//
-GLuint      PdrTexture2D::GetTextureID    () const
-{
-    return m_textureID;
 }
 
 // *******************************

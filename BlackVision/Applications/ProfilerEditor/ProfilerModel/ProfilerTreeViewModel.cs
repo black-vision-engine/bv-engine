@@ -37,8 +37,11 @@ namespace ProfilerEditor.ProfilerModel
 		/**This funnction is used to update tree, on basis of data from another tree.*/
 		public void Update( ProfilerTreeViewModel treeView )
 		{
-			for( int i = 0; i < m_topLevelSamples.Count; ++i )
-				m_topLevelSamples[ i ].Update( treeView.m_topLevelSamples[ i ] );
+            for( int i = 0; i < m_topLevelSamples.Count; ++i )
+            {
+                m_topLevelSamples[i].ClearAverageDuration();        // Force clearing nodes that don't exist in new tree.
+                m_topLevelSamples[i].Update( treeView.m_topLevelSamples[i] );
+            }
 		}
 
 		public void Average( uint numFrames )

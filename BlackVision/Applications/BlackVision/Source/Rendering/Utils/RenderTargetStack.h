@@ -4,7 +4,7 @@
 
 #include "Engine/Types/Enums.h"
 
-#include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 #include "Engine/Graphics/Resources/RenderTarget.h"
 
 #include "Rendering/Utils/RenderTargetEntryDesc.h"

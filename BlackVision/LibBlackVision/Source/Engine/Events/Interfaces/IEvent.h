@@ -13,16 +13,20 @@
 
 #pragma warning( pop )
 
+#include "Serialization/ISerializable.h"
 
 namespace bv 
 {
 
 typedef unsigned long EventType;
 
+class ISerializer;
+class IDeserializer;
+
 class IEvent;
 DEFINE_PTR_TYPE(IEvent)
 
-class IEvent
+class IEvent : public ISerializable
 {
 public:
 
@@ -32,9 +36,6 @@ public:
 
     virtual EventType               GetEventType    () const                            = 0;
     virtual TimeType                GetTimeStamp    () const                            = 0;
-
-    virtual void                    Serialize       ( std::ostringstream & out ) const  = 0;
-    virtual void                    Deserialize     ( std::istringstream & in )         = 0;
 
     virtual const std::string &     GetName         () const                            = 0;
 

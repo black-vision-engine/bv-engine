@@ -15,7 +15,7 @@ namespace bv {
 class Renderer;
 class Texture2D;
 
-class PdrPBOMemTransfer;
+class PdrDownloadPBO;
 
 class PdrRenderTarget
 {
@@ -58,7 +58,7 @@ public:
     void            Enable              ( Renderer * renderer );
     void            Disable             ( Renderer * renderer );
 
-    void            ReadColorTexture    ( unsigned int i, Renderer * renderer, PdrPBOMemTransfer * pboMem, Texture2DPtr & outputTex );
+    void            ReadColorTexture    ( unsigned int i, Renderer * renderer, PdrDownloadPBO * pboMem, Texture2DPtr & outputTex );
 
 private:
 
@@ -68,6 +68,7 @@ private:
     void            AddDepthBuffer      ( Renderer * renderer, const RenderTarget * rt );
     bool            FramebuferStatusOK  () const;
 
+	void			PBODownloadData		( unsigned int i );
 };
 
 } //bv

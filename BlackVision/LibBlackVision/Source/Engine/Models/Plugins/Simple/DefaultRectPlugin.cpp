@@ -1,10 +1,7 @@
 #include "DefaultRectPlugin.h"
 
-#include "Engine/Models/Plugins/PluginsFactory.h"
 #include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
-#include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
-#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
-#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
 
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
@@ -18,24 +15,6 @@ namespace bv { namespace model {
 DefaultRectPluginDesc::DefaultRectPluginDesc                                ()
     : BasePluginDescriptor( UID(), "rectangle" )
 {
-}
-
-// *******************************
-//
-bool                            DefaultRectPluginDesc::CanBeAttachedTo      ( IPluginConstPtr plugin )  const
-{
-    if( !BasePluginDescriptor::CanBeAttachedTo( plugin ) )
-    {
-        return false;
-    }
-
-    //Geometry generator cannot be attached to a plugin which generates geometry itself
-    if( plugin && plugin->GetVertexAttributesChannel() )
-    {
-        return false;
-    }
-
-    return true;
 }
 
 // *******************************
@@ -122,27 +101,32 @@ IVertexAttributesChannelConstPtr    DefaultRectPlugin::GetVertexAttributesChanne
 //
 void                                DefaultRectPlugin::Update                      ( TimeType t )
 {
-    { t; } // FIXME: suppress unused warning
+	BasePlugin::Update( t );
     //FIXME: reimplement va channel (no time, no explicit update and so on)
-    m_paramValModel->Update();
 
+	if( UpdateState() )
+	{
+		HelperVertexAttributesChannel::SetAttributesUpdate( m_vaChannel );
+	}
+	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
+}
+
+// *************************************
+//
+bool								DefaultRectPlugin::UpdateState					()
+{
     //This code has to be executed in a plugin as only plugin knows how to translate its state to geometry representation
-    float w = m_widthParam->Evaluate();
-    float h = m_heightParam->Evaluate();
+	auto w = m_widthParam->Evaluate();
+	auto h = m_heightParam->Evaluate();
+	if( ( fabs( m_lastW - w ) + fabs( m_lastH - h ) ) > 0.001f )
+	{
+		m_lastW = w;
+		m_lastH = h;
+		m_rct->SetRectSize( w, h );
 
-    auto needssAttrsUpdate = false;
-
-    if( ( fabs( m_lastW - w ) + fabs( m_lastH - h ) ) > 0.001f )
-    {
-        m_rct->SetRectSize( w, h );
-
-        needssAttrsUpdate = true;
-
-        m_lastW = w;
-        m_lastH = h;
-    }
-
-    m_vaChannel->SetNeedsAttributesUpdate( needssAttrsUpdate );
+		return true;
+	}
+	return false;
 }
 
 } // model

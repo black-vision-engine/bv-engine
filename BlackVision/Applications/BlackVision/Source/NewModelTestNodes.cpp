@@ -17,10 +17,15 @@
 #include "Engine/Models/Plugins/Simple/DefaultCylinderPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCogWheelPlugin.h"
+#include "Widgets/NodeReplicator/NodeReplicator.h"
+#include "Widgets/NodeReplicator/ShiftReplicationModifier.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
 
+#include "Engine/Models/NodeEffects/ModelNodeEffectLightScattering.h"
+
 #include "Engine/Models/Timeline/TimelineManager.h"
+#include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
 
 #include "Engine/Models/BasicNode.h"
@@ -34,15 +39,21 @@
 
 #include "BVConfig.h"
 
+#include "Serialization/Json/JsonDeserializeObject.h"
+#include "Serialization/Json/JsonSerializeObject.h"
+
+#include <fstream>
+
 namespace {
 
-    std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR", "DEFAULT_GRADIENT" };
+    std::string GSimplePlugins0[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_COLOR" };
     std::string GSimplePlugins1[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_TEXTURE" };
     std::string GSimplePlugins2[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_ANIMATION" };
     std::string GSimplePlugins3[] = { "DEFAULT_TRANSFORM", "DEFAULT_COLOR", "DEFAULT_TEXT" };
     std::string GSimplePlugins4[] = { "DEFAULT_TRANSFORM", "DEFAULT_TEXT" };
     std::string GSimplePlugins5[] = { "DEFAULT_TRANSFORM", "DEFAULT_COLOR", "DEFAULT_TIMER" };
     std::string GSimplePlugins6[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_HEIGHT_MAP" };
+    std::string GSimplePlugins7[] = { "DEFAULT_TRANSFORM", "DEFAULT_RECTANGLE", "DEFAULT_VIDEO_STREAM_DECODER" };
 
 
     // *****************************
@@ -131,9 +142,8 @@ namespace bv {
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateSolidRectNode      ( const std::string & name, float w, float h, const glm::vec3 & pos, const glm::vec4 col, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  SimpleNodesFactory::CreateSolidRectNode      ( const std::string & name, float w, float h, const glm::vec3 & pos, const glm::vec4 col, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    { timelineManager; } // FIXME: suppress unuse warning
     //Plugin list
     std::vector< std::string > uids;
 
@@ -163,9 +173,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateSolidRectNode      ( const std::s
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode   ( const std::string & name, float w, float h, const glm::vec3 & pos, const std::string & txFileName, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode   ( const std::string & name, float w, float h, const glm::vec3 & pos, const std::string & txFileName, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    { timelineManager; } // FIXME: suppress unuse warning
     //Plugin stuff
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins1, GSimplePlugins1 + 3 );
 
@@ -189,9 +198,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode   ( const std::s
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateGlobalEffectTest      ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  SimpleNodesFactory::CreateGlobalEffectTest      ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    { timelineManager; } // FIXME: suppress unused warning
     SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 0.f, 1.f ), 3.4f, 1.9f );
     TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_01.jpg", false, 3.4f, 0.7f );
 
@@ -303,9 +311,56 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGlobalEffectTest      ( model::Ti
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  SimpleNodesFactory::CreateLightScatteringTest      ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    { timelineManager; } // FIXME: suppress unused warning
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/5.png", false, 3.f, 3.f );
+
+     // ROOT
+    auto root = bTex.CreateNode( "root", true );
+
+    root->SetNodeEffect( std::make_shared< model::ModelNodeEffectLightScattering >( timeEvaluator ) );
+
+    return root;
+}
+
+// *****************************
+//
+model::BasicNodePtr  SimpleNodesFactory::CreateNodeReplicatorTest       ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/rus.jpg", false, 0.6f, 0.6f );
+
+    // ROOT
+    auto root = bTex.CreateNode( "root", true );
+
+    auto shiftRepMod = model::ShiftReplicationModifier::Create();
+
+    model::ParamValDelta delta;
+
+    delta.deltaTime = 0.f;
+    delta.startTime = 0.f;
+    auto v = std::make_shared< ValueVec3 >( "" );
+    delta.delta = v;
+    v->SetValue( glm::vec3( 0.4f, 0.4f, 0.0 ) );
+
+    shiftRepMod->AddParamShift( "transform", "translation", delta );
+
+    auto repLogic = model::NodeReplicator::Create( root, 5, shiftRepMod );
+
+    auto image = bTex.CreateNode( "piateczka", true );
+
+    root->AddChildToModelOnly( image );
+
+    root->SetLogic( repLogic );
+
+    root->SetNodeEffect( std::make_shared< model::ModelNodeEffectLightScattering >( timeEvaluator ) );
+
+    return root;
+}
+
+// *****************************
+//
+model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::ITimeEvaluatorPtr timeEvaluator )
+{
     TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_01.jpg", false, 3.4f, 0.7f );
     SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 1.f, 0.75f ), .85f, 0.31f );
 
@@ -369,9 +424,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::Timel
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateOverrideNodeMaskTest ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  SimpleNodesFactory::CreateOverrideNodeMaskTest ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    { timelineManager; } // FIXME: suppress unuse warning
     TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_00.jpg", false, 3.4f, 1.7f );
     SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 1.f, 0.75f ), .85f, 0.31f );
 
@@ -407,9 +461,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideNodeMaskTest ( model::Tim
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateOverrideNodeMaskTest1 ( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  SimpleNodesFactory::CreateOverrideNodeMaskTest1 ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    { timelineManager; } // FIXME: suppress unuse warning
     TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/simless_00.jpg", false, 3.4f, 1.7f );
     SolidRectNodeBuilder bSolid( timeEvaluator, glm::vec4( 0.f, 1.f, 1.f, 0.75f ), .85f, 0.31f );
 
@@ -461,9 +514,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideNodeMaskTest1 ( model::Ti
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string & nodeName )
+model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::ITimeEvaluatorPtr timeEvaluator, const std::string & nodeName )
 {
-    { timelineManager; } // FIXME: suppress unuse warning
     //Plugin list
     std::vector< std::string > uids;
 
@@ -501,14 +553,14 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNode( model::TimelineMan
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
+model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
 {
         //Timeline stuff
-    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
+    model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
 
-    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
 
     someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( someTimelineWithEvents );
@@ -547,10 +599,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::Tim
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator)
+model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::ITimeEvaluatorPtr timeEvaluator)
 {
-	auto offset5Timeline = timelineManager->CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
-	auto offset3Timeline  = timelineManager->CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
+	auto offset5Timeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
+	auto offset3Timeline  = model::TimelineHelper::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
 	timeEvaluator->AddChild(offset5Timeline);
 	timeEvaluator->AddChild(offset3Timeline);
 
@@ -598,10 +650,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::TimelineMana
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
+model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
-	auto offset5Timeline = timelineManager->CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
-	auto offset3Timeline  = timelineManager->CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
+	auto offset5Timeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
+	auto offset3Timeline  = model::TimelineHelper::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
 	timeEvaluator->AddChild(offset5Timeline);
 	timeEvaluator->AddChild(offset3Timeline);
 
@@ -674,9 +726,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::TimelineMa
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPrismNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
+model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPrismNode( model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
-    { timelineManager; } // FIXME: suppress unuse warning
 	//Plugin list
     std::vector< std::string > uids;
 
@@ -736,9 +787,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPrismNode( model::Tim
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPrismNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
+model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPrismNode( model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
-    { timelineManager; } // FIXME: suppress unuse warning
 	//Plugin list
     std::vector< std::string > uids;
 
@@ -802,9 +852,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPrismNode( model::Time
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
+model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
-    { timelineManager; } // FIXME: suppress unuse warning
 	//Plugin list
     std::vector< std::string > uids;
 
@@ -823,8 +872,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::Ti
 // TEXTURE plugin
 	if( root->GetPlugin( "texture" ) )
 	{
-        SetParameter( root->GetPlugin( "texture" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 1, 0, 1 ) );
 		success = model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
+        SetParameter( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 1, 0, 1 ) );
 		root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
 		assert( success );
 	}
@@ -865,9 +914,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::Ti
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPieChartNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
+model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPieChartNode( model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
-    { timelineManager; } // FIXME: suppress unuse warning
     { offset; } // FIXME: suppress unuse warning
 	//Plugin list
     std::vector< std::string > uids;
@@ -935,9 +983,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPieChartNode( model::
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPieChartNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, float offset )
+model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPieChartNode( model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
-    { timelineManager; } // FIXME: suppress unuse warning
     { offset; } // FIXME: suppress unuse warning
 	//Plugin list
     std::vector< std::string > uids;
@@ -1003,10 +1050,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPieChartNode( model::T
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator)
+model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::ITimeEvaluatorPtr timeEvaluator)
 {
-	auto offset5Timeline = timelineManager->CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
-	auto offset3Timeline  = timelineManager->CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
+	auto offset5Timeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
+	auto offset3Timeline  = model::TimelineHelper::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
 	timeEvaluator->AddChild(offset5Timeline);
 	timeEvaluator->AddChild(offset3Timeline);
 
@@ -1057,10 +1104,10 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::TimelineMan
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateCreedTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator)
+model::BasicNodePtr  SimpleNodesFactory::CreateCreedTextNode( model::ITimeEvaluatorPtr timeEvaluator)
 {
-	auto offset5Timeline = timelineManager->CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
-	auto offset3Timeline  = timelineManager->CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
+	auto offset5Timeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
+	auto offset3Timeline  = model::TimelineHelper::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
 	timeEvaluator->AddChild(offset5Timeline);
 	timeEvaluator->AddChild(offset3Timeline);
 
@@ -1118,7 +1165,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTextNode( model::TimelineMan
     success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/arial.TTF", 423, 0, 0, false );
     assert( success );
 
-	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"1238" );
+    SetParameter( node->GetPlugin("text")->GetParameter( "text" ), 0.0, std::wstring( L"1238" ) );
 
 //return root;
 // LINEAR GRADIENT plugin
@@ -1151,14 +1198,14 @@ namespace
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
+model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
 {
     //Timeline stuff
-    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
+    model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
 
     //someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( localTimeline );
@@ -1216,7 +1263,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "4float.exr" );
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "4float.exr", MipMapFilterType::BILINEAR );
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
-	success = model::LoadTexture( node->GetPlugin( "texture" ), "64bit.png", MipMapFilterType::BILINEAR );
+	success = model::LoadTexture( node->GetPlugin( "texture" ), "Desert.jpg", MipMapFilterType::BILINEAR );
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "64bit.png" );
 
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "sand.jpg" );
@@ -1264,14 +1311,14 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::Timeline
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateTexturedTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
+model::BasicNodePtr  SimpleNodesFactory::CreateTexturedTextNode( model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
 {
     //Timeline stuff
-    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
+    model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
 
     //someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( localTimeline );
@@ -1371,14 +1418,14 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedTextNode( model::Timeline
 
 // *****************************
 //
-model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
+model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
 {
     //Timeline stuff
-    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 2.0 ) );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 2.0 ) );
+    model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
 
     someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( someTimelineWithEvents );
@@ -1406,8 +1453,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 1.f );
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
 
-	success = model::LoadAnimation( node->GetPlugin( "animation" ), "rsrcy/test_anim", "*.png" );
-	//success = model::LoadAnimation( node->GetPlugin( "animation" ), "rsrcy/test_anim", "*.jpg" );
+	success = model::LoadAnimation( node->GetPlugin( "animation" ), "FullHD/alfai", "*.tga" );
     //success = model::LoadAnimation( node->GetPlugin( "animation" ), "d:/src/media/sequences/FullHD/alfai/", "*.tga" );
     assert( success );
 
@@ -1427,16 +1473,57 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::T
     return node;    
 }
 
+
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, bool useAlphaMask )
+model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
+{
+	{ useAlphaMask; }
+    //Timeline stuff
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+
+    someTimelineWithEvents->AddChild( localTimeline );
+    timeEvaluator->AddChild( someTimelineWithEvents );
+
+    std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins7, GSimplePlugins7 + 3 );
+
+    auto node = model::BasicNode::Create( "video_node", timeEvaluator );
+
+    auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
+    assert( success );
+
+    model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 1.f );
+    model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
+
+	//http://samples.ffmpeg.org/game-formats/bink/ActivisionLogo.bik
+	//success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/ActivisionLogo.bik", TextureFormat::F_A8R8G8B8 );
+
+	//http://www.cinemartin.com/cinec/_Sample_Videos/Samsung_Galaxy_Note_3/20140117_142047_CINEC_ProRes4444.mov
+	success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/20140117_142047_CINEC_ProRes4444.mov", TextureFormat::F_A8R8G8B8 );
+
+	//http://download.openbricks.org/sample/H264/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4
+	//success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4", TextureFormat::F_A8R8G8B8 );
+	
+	//http://trace.eas.asu.edu/yuv/akiyo/akiyo_cif.7z
+	//success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/akiyo_cif.yuv", TextureFormat::F_A8R8G8B8, 352, 288, 25.0, VideoPixelFormat::VPF_YUV420P );
+	
+    assert( success );
+
+    return node;    
+}
+
+// *****************************
+//
+model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, bool useAlphaMask )
 {
     //Timeline stuff
-    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
+    model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
 
     someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( someTimelineWithEvents );
@@ -1486,14 +1573,14 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
 
 	SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
 	node->GetPlugin( "text" )->GetParameter( "maxTextLenght" )->SetTimeEvaluator( timeEvaluator );
-    SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 0.0 ), 0.2f );
+    //SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 0.0 ), 0.2f );
 	//SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 5.0 ), 0.1f );
 	//SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 10.0 ), 0.5f );
 
 
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/courbi.ttf" );
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/cour.ttf" );
-    success = model::LoadFont( node->GetPlugin( "text" ), "Assets/Fonts/arial.TTF", 60, blurSize, 0, true );
+    success = model::LoadFont( node->GetPlugin( "text" ), "fonts/Astera.TTF", 30, blurSize, 0, true );
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/ARIALUNI.TTF" );
     assert( success );
 
@@ -1502,7 +1589,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AV::11A-AAAA\nBBBBCCCC\nDDD333DD88\nAAAAAAAA\nB3BBCCCC\nDDDD888DDD" );
 //    model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAABBBBCCCCDDDD" );
 	//model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"AV::11A-AAAABBBBCCCCDDD333DD88AAAAAAAAB3BBCCCCDDDD888DDD" );
-	model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"za¿ó³æ111 \n gêœl¹ jaŸñ11" );
+    SetParameter( node->GetPlugin("text")->GetParameter( "text" ), 0.0, std::wstring( L"123456789" ) );
 
     if( useAlphaMask )
     {
@@ -1524,35 +1611,35 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::TimelineManager 
 
 // *****************************
 //
-model::BasicNodePtr	SimpleNodesFactory::CreateCrawlerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr	SimpleNodesFactory::CreateCrawlerNode( model::ITimeEvaluatorPtr timeEvaluator )
 {
 	//model::BasicNode::Create( "Root", timeEvaluator );
 	//node->AddPlugin( "DEFAULT_TRANSFORM", "transform", timeEvaluator );
 
-	auto node = CreateGreenRectNode( timelineManager, timeEvaluator, "green rect"); 
+	auto node = CreateGreenRectNode( timeEvaluator, "green rect"); 
 
 	auto crawler = widgets::Crawler::Create( node.get(), mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
 
 	node->SetLogic( crawler );
 
-	auto texture = CreateTexturedRectNode( timelineManager, timeEvaluator, false );
-	texture->AddChildToModelOnly( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	auto texture = CreateTexturedRectNode( timeEvaluator, false );
+	texture->AddChildToModelOnly( CreateTextNode( timeEvaluator, 0, false ) );
 	crawler->AddNext( texture );
-	texture = CreateTexturedRectNode( timelineManager, timeEvaluator, false );
-	texture->AddChildToModelOnly( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	texture = CreateTexturedRectNode( timeEvaluator, false );
+	texture->AddChildToModelOnly( CreateTextNode( timeEvaluator, 0, false ) );
 	crawler->AddNext( texture );
-	texture = CreateTexturedRectNode( timelineManager, timeEvaluator, false );
-	texture->AddChildToModelOnly( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	texture = CreateTexturedRectNode( timeEvaluator, false );
+	texture->AddChildToModelOnly( CreateTextNode( timeEvaluator, 0, false ) );
 	crawler->AddNext( texture );
-	texture = CreateTexturedRectNode( timelineManager, timeEvaluator, false );
-	texture->AddChildToModelOnly( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	texture = CreateTexturedRectNode( timeEvaluator, false );
+	texture->AddChildToModelOnly( CreateTextNode( timeEvaluator, 0, false ) );
 	crawler->AddNext( texture );
-	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
-	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
-	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
-	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
-	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
-	//crawler->AddNext( CreateTextNode( timelineManager, timeEvaluator, 0, false ) );
+	//crawler->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
+	//crawler->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
+	//crawler->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
+	//crawler->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
+	//crawler->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
+	//crawler->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
 
 	crawler->SetSpeed( 0.4f );
 	crawler->SetInterspace( 0.4f );
@@ -1565,12 +1652,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateCrawlerNode( model::TimelineManage
 
 // *****************************
 //
-model::BasicNodePtr SimpleNodesFactory::CreateTextWithShadowNode(   model::TimelineManager * timelineManager,
-                                                                    model::ITimeEvaluatorPtr timeEvaluator,
+model::BasicNodePtr SimpleNodesFactory::CreateTextWithShadowNode(   model::ITimeEvaluatorPtr timeEvaluator,
                                                                     unsigned int blurSize,
                                                                     const glm::vec3 shadowTranslation )
 {
-    auto shadowNode =  SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, blurSize, false );
+    auto shadowNode =  SimpleNodesFactory::CreateTextNode( timeEvaluator, blurSize, false );
     auto transPlugin = shadowNode->GetPlugin( "transform" );
 
     auto param = transPlugin->GetParameter( "simple_transform" );
@@ -1578,7 +1664,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextWithShadowNode(   model::Timel
 
     model::SetParameterTranslation ( param, 0, 0.0f, shadowTranslation );
 
-    auto node =  SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
+    auto node =  SimpleNodesFactory::CreateTextNode( timeEvaluator, 0, false );
 
     transPlugin = node->GetPlugin( "transform" );
 
@@ -1609,14 +1695,15 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextWithShadowNode(   model::Timel
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, bool useAlphaMask )
+model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, bool useAlphaMask )
 {
     //Timeline stuff
-    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    timeEvaluator->AddChild( someTimelineWithEvents );
+    model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
+    model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 3.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 3.0 ) );
 
     someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( someTimelineWithEvents );
@@ -1642,8 +1729,6 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
     SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.1f, 0.f ) );
 
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
-    //SetParameter( node->GetPlugin( "timer" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 127.0f );
-    //SetParameter( node->GetPlugin( "timer" )->GetParameter( "blurSize" ), TimeType( 0.0 ), float( blurSize ) );
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Right ) );
 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 4.f / 1080.f );
@@ -1682,14 +1767,14 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::TimelineManager
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateCreedTimerNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, bool useAlphaMask )
+model::BasicNodePtr  SimpleNodesFactory::CreateCreedTimerNode( model::ITimeEvaluatorPtr timeEvaluator, unsigned int blurSize, bool useAlphaMask )
 {
     //Timeline stuff
-    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
+    model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 3.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 3.0 ) );
 
     someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( someTimelineWithEvents );
@@ -1714,19 +1799,17 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTimerNode( model::TimelineMa
     auto plugin = node->GetPlugin( "transform" );
     auto param = plugin->GetParameter( "simple_transform" );
 
-    SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.1f, 0.f ) );
+    SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, -1.0f, 0.f ) );
 
     //SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
-    //SetParameter( node->GetPlugin( "timer" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 127.0f );
-    //SetParameter( node->GetPlugin( "timer" )->GetParameter( "blurSize" ), TimeType( 0.0 ), float( blurSize ) );
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Right ) );
 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 4.f / 1080.f );
 
-	success = model::LoadFont( node->GetPlugin( "timer" ), "../dep/Media/fonts/arial.ttf", 127, blurSize, 0, false );
+	success = model::LoadFont( node->GetPlugin( "timer" ), "fonts/arial.ttf", 127, blurSize, 0, false );
     assert( success );
 
-    SetTimeTimerPlugin( node->GetPlugin( "timer" ), 12333.0f );
+    SetTimeTimerPlugin( node->GetPlugin( "timer" ), 0.0f );
 
     StartTimerPlugin( node->GetPlugin( "timer" ) );
 
@@ -1765,9 +1848,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTimerNode( model::TimelineMa
 
 // *****************************
 //
-model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    { timelineManager; } // FIXME: suppress unuse warning
     //Plugin stuff
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins6, GSimplePlugins6 + 3 );
 
@@ -1883,7 +1965,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateHeightMapNode( model::TimelineMan
 
 // *****************************
 //
-model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeEvaluatorPtr timeEvaluator )
 {
 
 #define VERSION_TEXTURE
@@ -1905,11 +1987,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 #define SHOW_COGWHEEL
 
 	  //Timeline stuff
-    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
+    model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
     
-    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
 
     //someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( localTimeline );
@@ -1977,7 +2059,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
     auto root = model::BasicNode::Create( "Root", timeEvaluator );
 
     auto success = root->AddPlugins( uids, localTimeline );
-    assert( success );
+    assert( success );  { success;  }
 
 // ============================================ //
 // Tranformations
@@ -2153,16 +2235,24 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 #endif
 	
 #ifdef VERSION_TEXTURE
+	auto texDesc_ = TextureAssetDesc::Create( "sand.jpg", MipMapFilterType::BILINEAR, true );
+	JsonSerializeObject serializeObject;
+	texDesc_->Serialize( serializeObject );
+	serializeObject.Save( "serialization/textureSerialize.json" );
 
-	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
-	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+	fstream file;
+	file.open( "serialization/textureSerialize.json", std::ios_base::in );
+	JsonDeserializeObject deserializeObject;
+    deserializeObject.Load( file );
+	file.close();
 
-	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg" );	//, MipMapFilterType::BOX
-	//success = model::LoadTexture( root->GetPlugin( "texture" ), "Skybox.jpg", MipMapFilterType::BILINEAR );
-	assert( success );
-	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
-	model::SetParameter( texturePlugin->GetParameter("borderColor"), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
-	//root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
+    auto texDesc = AssetManager::GetInstance().CreateDesc( deserializeObject );
+    root->GetPlugin( "texture" )->LoadResource( std::static_pointer_cast<const AssetDesc>( texDesc ) );
+
+	model::SetParameter( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+	model::SetParameter( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+
+	//success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );	//, MipMapFilterType::BOX
 #endif
 
 
@@ -2175,7 +2265,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::Timeli
 
 // *****************************
 //
-model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::string& uid, glm::vec3 translation )
+model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::ITimeEvaluatorPtr timeEvaluator, const std::string& uid, glm::vec3 translation, std::string texturePath )
 {
 
 #define VERSION_TEXTURE
@@ -2183,11 +2273,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineMan
 //#define VERSION_COLOR
 
 	  //Timeline stuff
-    auto someTimelineWithEvents = timelineManager->CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
-    timelineManager->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
-    
-    auto localTimeline = timelineManager->CreateOffsetTimeEvaluator( "timeline0" , TimeType( 1.0 ) );
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
 
     //someTimelineWithEvents->AddChild( localTimeline );
     timeEvaluator->AddChild( localTimeline );
@@ -2214,7 +2300,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineMan
 	#endif
 #endif
 
-    auto root = model::BasicNode::Create( "Root", timeEvaluator );
+    auto root = model::BasicNode::Create( uid, timeEvaluator );
 
     auto success = root->AddPlugins( uids, localTimeline );
     assert( success );
@@ -2240,14 +2326,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineMan
 #endif
 	
 #ifdef VERSION_TEXTURE
-
-	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
-	model::SetParameter( root->GetPlugin( "texture" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
-
-	success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
+	success = model::LoadTexture( root->GetPlugin( "texture" ), texturePath, MipMapFilterType::BILINEAR );
 	assert( success );
-	auto texturePlugin =  QuaryPluginTyped< model::DefaultTexturePlugin >( root->GetPlugin( "texture" ) );
-	model::SetParameter( texturePlugin->GetParameter("borderColor"), 0.0, glm::vec4( 1.0, 1.0, 1.0, 1.0 ) );
+	auto texturePlugin =  root->GetPlugin( "texture" );
+	model::SetParameter( texturePlugin->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+	model::SetParameter( texturePlugin->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
 	//root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
 #endif
 
@@ -2259,93 +2342,131 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::TimelineMan
 #undef VERSION_COLOR
 }
 
+model::BasicNodePtr SimpleNodesFactory::CreateTextCacheTest         ( model::ITimeEvaluatorPtr timeEvaluator, const std::string& nodeName, glm::vec3 translation, glm::vec4 color, const std::wstring text, const std::string& fontName )
+{
+    //Timeline stuff
+    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+    timeEvaluator->AddChild( localTimeline );
+
+    //Plugin stuff
+    std::vector< std::string > uids;
+	uids.push_back( "DEFAULT_TRANSFORM" );
+    uids.push_back( "DEFAULT_COLOR" );
+    uids.push_back( "DEFAULT_TEXT" );
+
+
+    auto node = model::BasicNode::Create( nodeName, timeEvaluator );
+    auto success = node->AddPlugins( uids, localTimeline );
+    assert( success );
+
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, translation );
+	SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.f, 2.f, 1.f ) );
+    
+
+	//node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( timeEvaluator );
+	//node->GetPlugin( "text" )->GetParameter( "outlineColor" )->SetTimeEvaluator( timeEvaluator );
+
+    SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), color );
+	SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 0.0f, 1.0f ) );
+    SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
+	SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
+
+    success = model::LoadFont( node->GetPlugin( "text" ), fontName, 30, 0, 0, true );
+    assert( success );
+
+    SetParameter( node->GetPlugin("text")->GetParameter( "text" ), 0.0, text );
+
+    return node;    
+}
+
 // *****************************
 //
-void					SimpleNodesFactory::TestTypedParamQueries	( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+void					SimpleNodesFactory::TestTypedParamQueries	( model::ITimeEvaluatorPtr timeEvaluator )
 {
-	auto node = CreateSolidRectNode( "rect_node", 1.0f, 1.0f, glm::vec3( 0.f, 0.f, 0.f ), glm::vec4( 1.f, 1.f, 1.f, 1.f ), timelineManager, timeEvaluator );
+    assert( false ); timeEvaluator;
+	//auto node = CreateSolidRectNode( "rect_node", 1.0f, 1.0f, glm::vec3( 0.f, 0.f, 0.f ), glm::vec4( 1.f, 1.f, 1.f, 1.f ), timelineManager, timeEvaluator );
 
-	///////////////////////////////////////////////////
-	// Acessing simple interpolator and time evaluator for float parmameter
-    auto paramWidth					= node->GetPlugin( "rectangle" )->GetParameter( "width" );
-	auto paramWidth_Float			= model::QueryTypedParam< model::ParamFloatPtr >( paramWidth );
-	auto & paramWidth_Interpolator	= paramWidth_Float->AccessInterpolator(); // auto & is necessary as AccessInterpolator returns reference to the interpolator
-	auto paramWidt_timeline			= paramWidth_Float->GetTimeEvaluator();
-	
-	paramWidth_Interpolator.AddKey( 0.f, 3.f );
-	auto & keys = paramWidth_Interpolator.AccessKeys(); // returns const reference to keys, to change keys use: paramWidth_Interpolator.AddKey(...)
+	/////////////////////////////////////////////////////
+	//// Acessing simple interpolator and time evaluator for float parmameter
+ //   auto paramWidth					= node->GetPlugin( "rectangle" )->GetParameter( "width" );
+	//auto paramWidth_Float			= model::QueryTypedParam< model::ParamFloatPtr >( paramWidth );
+	//auto & paramWidth_Interpolator	= paramWidth_Float->AccessInterpolator(); // auto & is necessary as AccessInterpolator returns reference to the interpolator
+	//auto paramWidt_timeline			= paramWidth_Float->GetTimeEvaluator();
+	//
+	//paramWidth_Interpolator.AddKey( 0.f, 3.f );
+	//auto & keys = paramWidth_Interpolator.AccessKeys(); // returns const reference to keys, to change keys use: paramWidth_Interpolator.AddKey(...)
 
-	auto & key_val	= keys.at( 0 ); // equal to: keys[ 0 ]
-	TimeType time	= key_val.t;
-	float value		= key_val.val;
+	//auto & key_val	= keys.at( 0 ); // equal to: keys[ 0 ]
+	//TimeType time	= key_val.t;
+	//float value		= key_val.val;
 
-	///////////////////////////////////////////////////
-	// Acessing simple interpolator for vec4 parmameter
-    auto paramColor					= node->GetPlugin( "solid color" )->GetParameter( "color" );
-	auto paramColor_Float			= model::QueryTypedParam< model::ParamVec4Ptr >( paramColor );
-	auto & paramColor_Interpolator	= paramColor_Float->AccessInterpolator();
+	/////////////////////////////////////////////////////
+	//// Acessing simple interpolator for vec4 parmameter
+ //   auto paramColor					= node->GetPlugin( "solid color" )->GetParameter( "color" );
+	//auto paramColor_Float			= model::QueryTypedParam< model::ParamVec4Ptr >( paramColor );
+	//auto & paramColor_Interpolator	= paramColor_Float->AccessInterpolator();
 
-	auto & paramColor_keys			= paramColor_Interpolator.AccessKeys();
-	
-	// inspect the first key (TimeType, glm::vec4)
-	TimeType paramColor_keys_0_t	= paramColor_keys[ 0 ].t;
-	glm::vec4 paramColor_keys_0_val = paramColor_keys[ 0 ].val;
+	//auto & paramColor_keys			= paramColor_Interpolator.AccessKeys();
+	//
+	//// inspect the first key (TimeType, glm::vec4)
+	//TimeType paramColor_keys_0_t	= paramColor_keys[ 0 ].t;
+	//glm::vec4 paramColor_keys_0_val = paramColor_keys[ 0 ].val;
 
 
-	///////////////////////////////////////////////////
-	// Acessing simple interpolator for transform parameter
-	auto paramTrans					= node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-	auto paramTrans_TV				= model::QueryTypedParam< model::ParamTransformVecPtr >( paramTrans );
-	
-	auto & transform				= paramTrans_TV->Transform( 0 );
-	auto translation				= transform[ 1 ];								// translation
-	auto rotation					= static_cast<RotationF *>( transform[ 2 ] );	// rotation transform[ 2 ] == SimpleTransformF * but can be cast to RotationF, as it is a rotation by default
+	/////////////////////////////////////////////////////
+	//// Acessing simple interpolator for transform parameter
+	//auto paramTrans					= node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+	//auto paramTrans_TV				= model::QueryTypedParam< model::ParamTransformVecPtr >( paramTrans );
+	//
+	//auto & transform				= paramTrans_TV->Transform( 0 );
+	//auto translation				= transform[ 1 ];								// translation
+	//auto rotation					= static_cast<RotationF *>( transform[ 2 ] );	// rotation transform[ 2 ] == SimpleTransformF * but can be cast to RotationF, as it is a rotation by default
 
-	auto & transform_x_interpolator = translation->GetP0MotylaNoga();
-	auto & transform_y_interpolator = translation->GetP1MotylaNoga();
-	auto & transform_z_interpolator = translation->GetP2MotylaNoga();
+	//auto & transform_x_interpolator = translation->GetP0MotylaNoga();
+	//auto & transform_y_interpolator = translation->GetP1MotylaNoga();
+	//auto & transform_z_interpolator = translation->GetP2MotylaNoga();
 
-	auto & t_x_keys					= transform_x_interpolator.AccessKeys();
+	//auto & t_x_keys					= transform_x_interpolator.AccessKeys();
 
-	// inspect the first key (TimeType, float)
-	TimeType t_x_0_key_time			= t_x_keys[ 0 ].t;
-	float	 t_x_0_key_val			= t_x_keys[ 0 ].val;
+	//// inspect the first key (TimeType, float)
+	//TimeType t_x_0_key_time			= t_x_keys[ 0 ].t;
+	//float	 t_x_0_key_val			= t_x_keys[ 0 ].val;
 
-	// Make sure that vec4 interpolator is used for rotation axis interpolation
-	assert( rotation->IsAxisVec3() );
+	//// Make sure that vec4 interpolator is used for rotation axis interpolation
+	//assert( rotation->IsAxisVec3() );
 
-	auto & rot_angle_interpolator	= rotation->AccessAngle();
-	auto & rot_angle_keys			= rot_angle_interpolator.AccessKeys();
+	//auto & rot_angle_interpolator	= rotation->AccessAngle();
+	//auto & rot_angle_keys			= rot_angle_interpolator.AccessKeys();
 
-	// inspect the first key (TimeType, float)
-	TimeType rot_angle_key_0_time	= rot_angle_keys[ 0 ].t; 
-	float rot_angle_key_0_value		= rot_angle_keys[ 0 ].val; 
-	
-	auto & rot_axis_interpolator	= rotation->AccessRotAxis();
-	auto & rot_axis_keys			= rot_axis_interpolator.AccessKeys();
+	//// inspect the first key (TimeType, float)
+	//TimeType rot_angle_key_0_time	= rot_angle_keys[ 0 ].t; 
+	//float rot_angle_key_0_value		= rot_angle_keys[ 0 ].val; 
+	//
+	//auto & rot_axis_interpolator	= rotation->AccessRotAxis();
+	//auto & rot_axis_keys			= rot_axis_interpolator.AccessKeys();
 
-	// inspect the first key (TimeType, glm::vec3)
-	TimeType rot_axis_key_0_time	= rot_axis_keys[ 0 ].t; 
-	glm::vec3 rot_axis_key_0_value	= rot_axis_keys[ 0 ].val; 
-	
-	// suppress warnings
-	{ transform_y_interpolator; }
-	{ transform_z_interpolator; }
+	//// inspect the first key (TimeType, glm::vec3)
+	//TimeType rot_axis_key_0_time	= rot_axis_keys[ 0 ].t; 
+	//glm::vec3 rot_axis_key_0_value	= rot_axis_keys[ 0 ].val; 
+	//
+	//// suppress warnings
+	//{ transform_y_interpolator; }
+	//{ transform_z_interpolator; }
 
-	{ time; }
-	{ value; }
+	//{ time; }
+	//{ value; }
 
-	{ t_x_0_key_time; }
-	{ t_x_0_key_val; }
+	//{ t_x_0_key_time; }
+	//{ t_x_0_key_val; }
 
-	{ paramColor_keys_0_t; }
-	{ paramColor_keys_0_val; }
+	//{ paramColor_keys_0_t; }
+	//{ paramColor_keys_0_val; }
 
-	{ rot_angle_key_0_time; }
-	{ rot_angle_key_0_value; }
+	//{ rot_angle_key_0_time; }
+	//{ rot_angle_key_0_value; }
 
-	{ rot_axis_key_0_time; }
-	{ rot_axis_key_0_value; }
+	//{ rot_axis_key_0_time; }
+	//{ rot_axis_key_0_value; }
 }
 
 } //bv
