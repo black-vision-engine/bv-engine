@@ -11,24 +11,8 @@ namespace bv { namespace model {
 // ********************************
 //
 ModelNodeEffectWireframe::ModelNodeEffectWireframe  ( ITimeEvaluatorPtr timeEvaluator )
+	: ModelNodeEffectBase( timeEvaluator )
 { 
-    { timeEvaluator; }
-}
-
-// ********************************
-//
-void            ModelNodeEffectWireframe::Serialize       ( ISerializer& ser ) const
-{
-ser.EnterChild( "effect" );
-    ser.SetAttribute( "type", SerializationHelper::T2String< NodeEffectType >( GetType() ) );
-ser.ExitChild();
-}
-
-// ********************************
-//
-void            ModelNodeEffectWireframe::Update    ( TimeType t )
-{
-    { t; }
 }
 
 // ********************************

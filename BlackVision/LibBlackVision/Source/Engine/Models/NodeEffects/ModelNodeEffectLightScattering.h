@@ -1,14 +1,16 @@
 #pragma once
 
-#include "Engine/Models/Interfaces/IModelNodeEffect.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectBase.h"
+
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 
 
 namespace bv { namespace model {
 
-class ModelNodeEffectLightScattering : public IModelNodeEffect
+class ModelNodeEffectLightScattering : public ModelNodeEffectBase
 {
 private:
+
      ParamFloatPtr  m_paramExposure;
      ParamFloatPtr  m_paramWeight;
      ParamFloatPtr  m_paramDecay;
@@ -25,25 +27,24 @@ private:
 
 public:
 
-                            ModelNodeEffectLightScattering( ITimeEvaluatorPtr timeEvaluator );
+                            ModelNodeEffectLightScattering  ( ITimeEvaluatorPtr timeEvaluator );
 
         
-    ParamFloatPtr           GetParamExposure                ();
-    ParamFloatPtr           GetParamWeight                  ();
-    ParamFloatPtr           GetParamDecay                   ();
-    ParamFloatPtr           GetParamDensity                 ();
-    ParamVec2Ptr            GetParamLightPositionOnScreen   ();
-    ParamFloatPtr           GetParamNumSamples              ();         
+    ParamFloatPtr           GetParamExposure                () const;
+    ParamFloatPtr           GetParamWeight                  () const;
+    ParamFloatPtr           GetParamDecay                   () const;
+    ParamFloatPtr           GetParamDensity                 () const;
+    ParamVec2Ptr            GetParamLightPositionOnScreen   () const;
+    ParamFloatPtr           GetParamNumSamples              () const;         
 
-    float                   GetExposure                     ();
-    float                   GetWeight                       ();
-    float                   GetDecay                        ();
-    float                   GetDensity                      ();
-    glm::vec2               GetLightPositionOnScreen        ();
-    float                   GetNumSamples                   ();   
+    float                   GetExposure                     () const;
+    float                   GetWeight                       () const;
+    float                   GetDecay                        () const;
+    float                   GetDensity                      () const;
+    glm::vec2               GetLightPositionOnScreen        () const;
+    float                   GetNumSamples                   () const;   
 
-    virtual void            Serialize       ( ISerializer& ser ) const;
-    static ISerializablePtr Create          ( const IDeserializer& deser );
+    static ISerializablePtr Create              ( const IDeserializer& deser );
 
     virtual void            Update              ( TimeType t ) override;
 

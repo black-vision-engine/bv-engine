@@ -289,4 +289,12 @@ void	NodeUpdater::UpdateTypedShaderParam   ( IValueConstPtr source, GenericShade
 	static_cast< ShaderParamType * >( dest )->SetValue( QueryTypedValue< ValType >( source )->GetValue() );
 }
 
+// *******************************
+//
+template< typename ValType >
+void	NodeUpdater::UpdateTypedValue   ( IValueConstPtr source, IValuePtr dest )
+{
+	QueryTypedValue< ValType >( dest )->SetValue( QueryTypedValue< ValType >( source )->GetValue() );
+}
+
 } //bv

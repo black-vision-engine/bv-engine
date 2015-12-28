@@ -22,7 +22,7 @@ NodeEffectRenderLogicSelector::NodeEffectRenderLogicSelector                    
     m_nodeRenderLogicVec.push_back( new NodeMaskRenderLogic() );
     m_nodeRenderLogicVec.push_back( new WireframeRenderLogic() );
     m_nodeRenderLogicVec.push_back( new LightScatteringRenderLogic() );
-    m_nodeRenderLogicVec.push_back( new AlphaChannelRenderLogic() );
+    //m_nodeRenderLogicVec.push_back( new AlphaChannelRenderLogic() );
 }
 
 // ****************************

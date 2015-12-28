@@ -142,7 +142,6 @@ void    NodeUpdater::DoUpdate               ()
         m_sceneNode->SetVisible( true );
 
         // Add, when all mechanisms are implemented
-        UpdateNodeEffect();
         UpdateTransform();
 
         if( m_hasEffect )
@@ -152,7 +151,9 @@ void    NodeUpdater::DoUpdate               ()
                 UpdateGeometry();
             }
 
+            UpdateNodeEffect();
 			UpdateShaderParams();
+
             UpdateTexturesData();
             UpdateRendererState();
         }
@@ -164,89 +165,18 @@ void    NodeUpdater::DoUpdate               ()
 }
 
 // *****************************
-// FIXME: change effects if required or assert that they cannot be changed in runtime
+//
 void    NodeUpdater::UpdateNodeEffect       ()
 {
-    auto name = m_modelNode->GetName();
     auto nodeEffect = m_modelNode->GetNodeEffect();
-
     if( nodeEffect )
     {
-        switch( nodeEffect->GetType() )
-        {
-            case NodeEffectType::NET_ALPHA_MASK:
-            {
-                auto alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( nodeEffect );
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-
-                auto paramAlpha = alphaMaskEffect->GetParamAlpha();
-                auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );
-
-                if ( alphaVal != nullptr )
-                {
-                    alphaVal->SetValue( alphaMaskEffect->GetAlpha() );
-                }
-
-                break;
-            }
-            case NodeEffectType::NET_NODE_MASK:
-            {
-                auto nodeMaskEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( nodeEffect );
-
-                auto paramBgIdx = nodeMaskEffect->GetParamBgIdx();
-                auto paramFgIdx = nodeMaskEffect->GetParamFgIdx();
-                auto paramAlpha = nodeMaskEffect->GetParamAlpha();
-
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-
-				auto bgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramBgIdx->GetName() ) );
-                auto fgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramFgIdx->GetName() ) );
-                auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );
-
-                if ( bgIdxVal != nullptr && fgIdxVal != nullptr && alphaVal != nullptr )
-                {
-                    bgIdxVal->SetValue( nodeMaskEffect->GetBackgroundChildIdx() );
-                    fgIdxVal->SetValue( nodeMaskEffect->GetForegroundChildIdx() );
-                    alphaVal->SetValue( nodeMaskEffect->GetAlpha() );
-                }
-
-                break;
-            }
-            case NodeEffectType::NET_LIGHT_SCATTERING:
-            {
-                auto lightScatteringEffect = std::static_pointer_cast< model::ModelNodeEffectLightScattering >( nodeEffect );
-
-                auto paramExposure = lightScatteringEffect->GetParamExposure();
-                auto paramWeight = lightScatteringEffect->GetParamWeight();
-                auto paramDecay = lightScatteringEffect->GetParamDecay();
-                auto paramDensity = lightScatteringEffect->GetParamDensity();
-                auto paramLightPositionOnScreen = lightScatteringEffect->GetParamLightPositionOnScreen();
-                auto paramNumSamples = lightScatteringEffect->GetParamNumSamples();
-                
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-
-				auto exposureVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramExposure->GetName() ) );
-                auto weightVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramWeight->GetName() ) );
-                auto decayVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramDecay->GetName() ) );
-                auto densityVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramDensity->GetName() ) );
-                auto lightPositionOnScreenVal = std::static_pointer_cast< ValueVec2 >( sceneNodeEffect->GetValue( paramLightPositionOnScreen->GetName() ) );
-                auto numSamplesVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramNumSamples->GetName() ) );
-
-
-                if ( exposureVal != nullptr && weightVal != nullptr && decayVal != nullptr && 
-                     densityVal != nullptr && lightPositionOnScreenVal != nullptr && numSamplesVal != nullptr )
-                {
-                    exposureVal->SetValue( lightScatteringEffect->GetExposure() );
-                    weightVal->SetValue( lightScatteringEffect->GetWeight() );
-                    decayVal->SetValue( lightScatteringEffect->GetDecay() );
-                    densityVal->SetValue( lightScatteringEffect->GetDensity() );
-                    lightPositionOnScreenVal->SetValue( lightScatteringEffect->GetLightPositionOnScreen() );
-                    numSamplesVal->SetValue( lightScatteringEffect->GetNumSamples() );
-                }
-
-                break;
-            }
-        }
+		auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+		for( auto & val : nodeEffect->GetValues() )
+		{
+			UpdateValue( val, sceneNodeEffect->GetValue( val->GetName() ) );
+		}
+            
     }
 }
 
@@ -373,6 +303,43 @@ void            NodeUpdater::UpdateShaderParam				( IValueConstPtr source, Gener
 	case ParamType::PT_MAT4:
 		UpdateTypedShaderParam< ValueMat4Ptr, ShaderParamMat4 >( source, dest );
 		break;
+	}
+}
+
+// *****************************
+//
+void	NodeUpdater::UpdateValue			( IValueConstPtr source, IValuePtr dest )
+{
+	assert( source && source->GetType() == dest->GetType() );
+
+	switch( source->GetType() )
+	{
+		case ParamType::PT_INT:
+			UpdateTypedValue< ValueIntPtr >( source, dest );
+			break;
+		case ParamType::PT_FLOAT1:
+			UpdateTypedValue< ValueFloatPtr >( source, dest );
+			break;
+		case ParamType::PT_FLOAT2:
+			UpdateTypedValue< ValueVec2Ptr >( source, dest );
+			break;
+		case ParamType::PT_FLOAT3:
+			UpdateTypedValue< ValueVec3Ptr >( source, dest );
+			break;
+		case ParamType::PT_FLOAT4:
+			UpdateTypedValue< ValueVec4Ptr >( source, dest );
+			break;
+		case ParamType::PT_MAT2:
+			UpdateTypedValue< ValueMat2Ptr >( source, dest );
+			break;
+		case ParamType::PT_MAT3:
+			UpdateTypedValue< ValueMat3Ptr >( source, dest );
+			break;
+		case ParamType::PT_MAT4:
+			UpdateTypedValue< ValueMat4Ptr >( source, dest );
+			break;
+		default:
+			assert( false );
 	}
 }
 

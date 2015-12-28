@@ -105,8 +105,6 @@ public:
 
 private:
 
-    void            UpdateNodeEffect    ();
-
     void            RegisterTexturesData( IShaderDataSourceConstPtr psTxData, IShaderDataSourceConstPtr vsTxData, IShaderDataSourceConstPtr gsTxData, RenderablePass * pass );
     bool            MustBeRegistered    ( IShaderDataSourceConstPtr shaderDataSrc, ShaderParameters * shaderParams );
 
@@ -120,6 +118,8 @@ private:
     }
 
     void            RegisterTex2Params  ( ITexturesDataConstPtr texturesData, ShaderParameters * shaderParams );
+
+    void            UpdateNodeEffect    ();
 
     inline  void    UpdateTransform     ();
     inline  void    UpdateGeometry      ();
@@ -140,6 +140,13 @@ private:
 
 	template< typename ValType, typename ShaderParamType >
     void			UpdateTypedShaderParam   ( IValueConstPtr source, GenericShaderParam * dest );
+
+private:
+	
+	void			UpdateValue			( IValueConstPtr source, IValuePtr dest );
+
+	template< typename ValType >
+    void			UpdateTypedValue    ( IValueConstPtr source, IValuePtr dest );
 
 };
 

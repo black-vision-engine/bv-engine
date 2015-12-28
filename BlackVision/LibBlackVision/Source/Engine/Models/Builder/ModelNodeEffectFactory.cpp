@@ -1,7 +1,6 @@
 #include "ModelNodeEffectFactory.h"
 #include "Serialization/SerializationHelper.h"
 
-#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaChannel.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectDefault.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectLightScattering.h"
@@ -36,9 +35,6 @@ IModelNodeEffectPtr     ModelNodeEffectFactory::Create       ( NodeEffectType ef
 {
     switch ( effectType )
     {
-    case NodeEffectType::NET_ALPHA_CHANNEL:
-        return std::make_shared<ModelNodeEffectAlphaChannel>( timeEvaluator );
-        break;
     case NodeEffectType::NET_ALPHA_MASK:
         return std::make_shared<ModelNodeEffectAlphaMask>( timeEvaluator );
         break;

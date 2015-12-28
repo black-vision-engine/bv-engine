@@ -1,9 +1,6 @@
 #include "ModelNodeEffectNodeMask.h"
 
-#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
-
-#include "Serialization/SerializationHelper.h"
-
+#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 
 namespace bv { namespace model {
 
@@ -11,55 +8,52 @@ namespace bv { namespace model {
 // ********************************
 //
 ModelNodeEffectNodeMask::ModelNodeEffectNodeMask( ITimeEvaluatorPtr timeEvaluator )
-    : m_bgVal( 0 )
-    , m_fgVal( 1 )
+	: ModelNodeEffectBase( timeEvaluator )
+	, m_bgVal( 0 )
+	, m_fgVal( 1 )
+	, m_alphaVal( 1.f )
 { 
-    m_paramBgIdx = ParametersFactory::CreateParameterInt( "bgIdx", timeEvaluator );
-    m_paramFgIdx = ParametersFactory::CreateParameterInt( "fgIdx", timeEvaluator );
-    m_paramAlpha = ParametersFactory::CreateParameterFloat( "alpha", timeEvaluator );
+	auto bgIdxEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "bgIdx", timeEvaluator );
+	auto fgIdxEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "fgIdx", timeEvaluator );
+	auto alphaEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
 
-    m_paramBgIdx->SetVal( 0, 0.f );
-    m_paramFgIdx->SetVal( 1, 0.f );
-    m_paramAlpha->SetVal( 1.f, 0.f );
+    bgIdxEval->Parameter()->SetVal( m_bgVal, 0.f );
+    fgIdxEval->Parameter()->SetVal( m_fgVal, 0.f );
+    alphaEval->Parameter()->SetVal( m_alphaVal, 0.f );
+
+	m_paramValModel->RegisterAll( bgIdxEval );
+	m_paramValModel->RegisterAll( fgIdxEval );
+	m_paramValModel->RegisterAll( alphaEval );
+
+	m_paramBgIdx = bgIdxEval->Parameter();
+	m_paramFgIdx = fgIdxEval->Parameter();
+	m_paramAlpha = alphaEval->Parameter();
 }
 
 // ********************************
 //
-void            ModelNodeEffectNodeMask::Serialize       ( ISerializer& ser ) const
-{
-    ser.EnterChild( "effect" );
-    ser.SetAttribute( "type", SerializationHelper::T2String< NodeEffectType >( GetType() ) );
-
-    m_paramAlpha->Serialize( ser );
-    m_paramBgIdx->Serialize( ser );
-    m_paramFgIdx->Serialize( ser );
-    ser.ExitChild();
-}
-
-// ********************************
-//
-NodeEffectType  ModelNodeEffectNodeMask::GetType() const
+NodeEffectType  ModelNodeEffectNodeMask::GetType				() const
 {
     return NodeEffectType::NET_NODE_MASK;
 }
 
 // ********************************
 //
-ParamIntPtr     ModelNodeEffectNodeMask::GetParamBgIdx           ()
+ParamIntPtr     ModelNodeEffectNodeMask::GetParamBgIdx           () const
 {
     return m_paramBgIdx;
 }
 
 // ********************************
 //
-ParamIntPtr     ModelNodeEffectNodeMask::GetParamFgIdx           ()
+ParamIntPtr     ModelNodeEffectNodeMask::GetParamFgIdx           () const
 {
     return m_paramFgIdx;
 }
 
 // ********************************
 //
-ParamFloatPtr   ModelNodeEffectNodeMask::GetParamAlpha           ()
+ParamFloatPtr   ModelNodeEffectNodeMask::GetParamAlpha           () const
 {
     return m_paramAlpha;
 }
@@ -68,11 +62,13 @@ ParamFloatPtr   ModelNodeEffectNodeMask::GetParamAlpha           ()
 //
 void            ModelNodeEffectNodeMask::Update  ( TimeType t )
 {
-    { t; }
+	ModelNodeEffectBase::Update( t );
 
-    m_bgVal = m_paramBgIdx->Evaluate();
-    m_fgVal = m_paramFgIdx->Evaluate();
-    m_alphaVal = m_paramAlpha->Evaluate();
+	m_paramValModel->Update();
+	
+	m_bgVal = m_paramBgIdx->Evaluate();
+	m_fgVal = m_paramFgIdx->Evaluate();
+	m_alphaVal = m_paramAlpha->Evaluate();
 
     assert( m_bgVal != m_fgVal );
 }

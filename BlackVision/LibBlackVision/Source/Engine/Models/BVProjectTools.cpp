@@ -103,11 +103,11 @@ void                BVProjectTools::UpdateSceneNodeEffect                 ( Scen
         auto sceneNodeLightScatteringEffect = std::make_shared< LightScatteringNodeEffect >();
         node->SetNodeEffect( sceneNodeLightScatteringEffect );
     }
-	else if( modelNodeEffect->GetType() ==  NodeEffectType::NET_ALPHA_CHANNEL )
-    {
-        auto sceneNodeAlphaChannelEffect = std::make_shared< AlphaChannelNodeEffect >();
-        node->SetNodeEffect( sceneNodeAlphaChannelEffect );
-    }
+	//else if( modelNodeEffect->GetType() ==  NodeEffectType::NET_ALPHA_CHANNEL )
+ //   {
+ //       auto sceneNodeAlphaChannelEffect = std::make_shared< AlphaChannelNodeEffect >();
+ //       node->SetNodeEffect( sceneNodeAlphaChannelEffect );
+ //   }
     else
     {
         //Did you forget to implement an additional effect
