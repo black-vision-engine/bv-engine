@@ -230,6 +230,14 @@ void    NodeUpdater::UpdateNodeEffect       ()
                 }
                 break;
             }
+            case NodeEffectType::NET_MIX_CHANNELS:
+            {
+                assert( false );
+
+                //FIXME: implement
+
+                break;
+            }
             default:
                 assert( false );
         }

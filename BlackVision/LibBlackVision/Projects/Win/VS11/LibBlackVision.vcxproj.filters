@@ -924,11 +924,14 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShadeders.cpp">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\MaskChannelsShaders.cpp">
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsShaders.cpp">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\MaskChannelsEffect.cpp">
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsEffect.cpp">
       <Filter>Engine\Graphics\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectMixChannels.cpp">
+      <Filter>Engine\Models\NodeEffects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1874,11 +1877,14 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShadeders.h">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MaskChannelsShaders.h">
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsEffect.h">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MaskChannelsEffect.h">
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsShaders.h">
       <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectMixChannels.h">
+      <Filter>Engine\Models\NodeEffects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

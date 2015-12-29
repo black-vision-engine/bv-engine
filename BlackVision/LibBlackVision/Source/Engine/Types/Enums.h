@@ -47,6 +47,7 @@ enum class NodeEffectType : int
 	NET_ALPHA_MASK,
 	NET_NODE_MASK,
     NET_WIREFRAME,
+    NET_MIX_CHANNELS,
 	
 	NET_TOTAL
 };

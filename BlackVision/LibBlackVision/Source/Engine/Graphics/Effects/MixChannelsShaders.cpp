@@ -1,4 +1,4 @@
-#include "MaskChannelsShaders.h"
+#include "MixChannelsShaders.h"
 
 #include <sstream>
 
@@ -33,16 +33,16 @@ std::string     ReadShaderContentsFromFile  ( const std::string & fileName )
 
 // ****************************
 //
-std::string GetMaskChannelPixelShaderCode   ()
+std::string GetMixChannelPixelShaderCode   ()
 {
-    return ReadShaderContentsFromFile( EffectShadersDir() + "mask_channels.frag" );
+    return ReadShaderContentsFromFile( EffectShadersDir() + "mix_channels.frag" );
 }
 
 // ****************************
 //
-std::string GetMaskChannelVertexShaderCode  ()
+std::string GetMixChannelVertexShaderCode  ()
 {
-    return ReadShaderContentsFromFile( EffectShadersDir() + "mask_channels.vert" );
+    return ReadShaderContentsFromFile( EffectShadersDir() + "mix_channels.vert" );
 }
 
 } // bv
