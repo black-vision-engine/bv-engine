@@ -161,6 +161,8 @@
       <Filter>IO</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Tools\PrefixHelper.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Tools\PrintGuard.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
