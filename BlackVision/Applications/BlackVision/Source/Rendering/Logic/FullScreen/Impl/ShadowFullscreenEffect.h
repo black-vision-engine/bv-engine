@@ -19,6 +19,7 @@ private:
     ValueVec2Ptr                m_shiftVal;
     ValueFloatPtr               m_blurSizeVal;
 
+    ValueVec2Ptr                m_textureSize;
     Texture2DPtr                m_texture;
 
 public:

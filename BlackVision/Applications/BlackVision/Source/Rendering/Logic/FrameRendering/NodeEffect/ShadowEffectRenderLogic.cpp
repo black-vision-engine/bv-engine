@@ -47,8 +47,6 @@ void    ShadowEffectRenderLogic::RenderNode           ( SceneNode * node, Render
     {
         auto rtAllocator    = ctx->GetRenderTargetAllocator();
 
-        logic->DrawNodeOnly( renderer, node );
-
         auto mainTarget = disableBoundRT( ctx );
 
         auto foregroundRt   = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
@@ -60,8 +58,6 @@ void    ShadowEffectRenderLogic::RenderNode           ( SceneNode * node, Render
         enable( ctx, mainTarget );
 
         AddShadowEffect( renderer, foregroundRt, colorValue, shiftValue, blurSizeValue );
-
-        logic->DrawNode( renderer, node, ctx );
     }
 }
 
@@ -79,7 +75,7 @@ void                        ShadowEffectRenderLogic::RenderToRenderTarget   ( Re
     enable( ctx, rt );
     clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
-    logic( ctx )->RenderNode( renderer( ctx ), node, ctx ); 
+    logic( ctx )->DrawNode( renderer( ctx ), node, ctx ); 
 
     disableBoundRT( ctx );
 }

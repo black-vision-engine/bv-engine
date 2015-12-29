@@ -66,6 +66,9 @@ PixelShader *   ShadowFullscreenEffect::CreatePS            () const
     param = ShaderParamFactory::CreateGenericParameter( m_blurSizeVal.get() );
     shaderParams->AddParameter( param );
 
+    param = ShaderParamFactory::CreateGenericParameter( m_textureSize.get() );
+    shaderParams->AddParameter( param );
+
     //FIXME: add empty textures (nullptr) and create samplers. Textures can be set later on
     return new PixelShader( ReadFullscreenShader( "shadow.frag" ), shaderParams );
 }
@@ -77,6 +80,10 @@ ShadowFullscreenEffect::ShadowFullscreenEffect      ( Texture2DPtr tex )
     m_colorVal      = ValuesFactory::CreateValueVec4( "color" );
     m_shiftVal      = ValuesFactory::CreateValueVec2( "shift" );
     m_blurSizeVal   = ValuesFactory::CreateValueFloat( "blurSize" );
+
+    m_textureSize   = ValuesFactory::CreateValueVec2( "textureSize" );
+
+    m_textureSize->SetValue( glm::vec2( float( tex->GetWidth() ), float( tex->GetHeight() ) ) );
 
     m_texture       = tex;
 }
@@ -90,8 +97,7 @@ ShadowFullscreenEffect::~ShadowFullscreenEffect     ()
 //
 RenderableEntity *  ShadowFullscreenEffect::CreateFullscreenQuad    () const
 {
-    assert( false );
-    return nullptr;
+    return CreateDefaultFullscrQuad( CreatePS() );
 }
 
 } // bv
