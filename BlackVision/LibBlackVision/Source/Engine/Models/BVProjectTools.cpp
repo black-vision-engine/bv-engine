@@ -18,6 +18,7 @@
 #include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/WireframeNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/LightScatteringNodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/ShadowNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/AlphaChannelNodeEffect.h"
 
 
@@ -102,6 +103,11 @@ void                BVProjectTools::UpdateSceneNodeEffect                 ( Scen
     {
         auto sceneNodeLightScatteringEffect = std::make_shared< LightScatteringNodeEffect >();
         node->SetNodeEffect( sceneNodeLightScatteringEffect );
+    }
+    else if( modelNodeEffect->GetType() ==  NodeEffectType::NET_SHADOW )
+    {
+        auto sceneNodeShadowEffect = std::make_shared< ShadowNodeEffect >();
+        node->SetNodeEffect( sceneNodeShadowEffect );
     }
 	//else if( modelNodeEffect->GetType() ==  NodeEffectType::NET_ALPHA_CHANNEL )
  //   {

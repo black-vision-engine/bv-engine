@@ -55,6 +55,7 @@ public:
 
     static  model::BasicNodePtr     GlobalEffect05                  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     LightScatteringTestScene        ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     ShadowEffectTestScene           ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     NewModelTestScene               ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     OlafTestScene                   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreedDeprecatedTestScene        ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );

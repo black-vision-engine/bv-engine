@@ -536,6 +536,10 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::LightScatteringTestScene( pluginsManager, timeline );
     }
+    else if( scene == "SHADOW_EFFECT" )
+    {
+        node = TestScenesFactory::ShadowEffectTestScene( pluginsManager, timeline );
+    }
     else if( scene == "REPLICATOR_TEST_SCENE" )
     {
         node = TestScenesFactory::NodeReplicatorTestScene( pluginsManager, timeline );
@@ -614,6 +618,14 @@ model::BasicNodePtr     TestScenesFactory::LightScatteringTestScene  ( const mod
 {
     { pluginsManager; }
     return SimpleNodesFactory::CreateLightScatteringTest( timeEvaluator );
+}
+
+// *****************************
+//
+model::BasicNodePtr     TestScenesFactory::ShadowEffectTestScene  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { pluginsManager; }
+    return SimpleNodesFactory::CreateShadowTest( timeEvaluator );
 }
 
 // *****************************

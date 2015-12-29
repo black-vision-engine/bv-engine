@@ -41,7 +41,7 @@ void    ShadowEffectRenderLogic::RenderNode           ( SceneNode * node, Render
         
     if( colorValue.a < 0.01f )
     {
-        logic->RenderNode( renderer, node, ctx );
+        logic->DrawNode( renderer, node, ctx );
     }
     else
     {
@@ -61,7 +61,7 @@ void    ShadowEffectRenderLogic::RenderNode           ( SceneNode * node, Render
 
         AddShadowEffect( renderer, foregroundRt, colorValue, shiftValue, blurSizeValue );
 
-        logic->RenderNode( renderer, node, ctx );
+        logic->DrawNode( renderer, node, ctx );
     }
 }
 

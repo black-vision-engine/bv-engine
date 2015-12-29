@@ -23,6 +23,7 @@
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"
 
 #include "Engine/Models/NodeEffects/ModelNodeEffectLightScattering.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectShadow.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
@@ -319,6 +320,21 @@ model::BasicNodePtr  SimpleNodesFactory::CreateLightScatteringTest      ( model:
     auto root = bTex.CreateNode( "root", true );
 
     root->SetNodeEffect( std::make_shared< model::ModelNodeEffectLightScattering >( timeEvaluator ) );
+
+    return root;
+}
+
+
+// *****************************
+//
+model::BasicNodePtr  SimpleNodesFactory::CreateShadowTest               ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/5.png", false, 3.f, 3.f );
+
+     // ROOT
+    auto root = bTex.CreateNode( "root", true );
+
+    root->SetNodeEffect( std::make_shared< model::ModelNodeEffectShadow >( timeEvaluator ) );
 
     return root;
 }
