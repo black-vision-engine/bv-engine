@@ -1131,6 +1131,12 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Builder\ModelNodeEffectFactory.cpp">
       <Filter>Engine\Models\Builder</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\ShadowNodeEffect.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectShadow.cpp">
+      <Filter>Engine\Models\NodeEffects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2429,6 +2435,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Builder\ModelNodeEffectFactory.h">
       <Filter>Engine\Models\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\ShadowNodeEffect.h">
+      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectShadow.h">
+      <Filter>Engine\Models\NodeEffects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

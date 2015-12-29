@@ -52,6 +52,7 @@ enum class NodeEffectType : int
 	NET_NODE_MASK,
     NET_WIREFRAME,
     NET_LIGHT_SCATTERING,
+    NET_SHADOW,
 	NET_ALPHA_CHANNEL,
 	
 	NET_TOTAL

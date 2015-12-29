@@ -281,6 +281,12 @@
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GlobalEffectHandler.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\ShadowFullscreenEffect.cpp">
+      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\ShadowEffectRenderLogic.cpp">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -506,6 +512,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\GlobalEffectHandler.h">
       <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\ShadowFullscreenEffect.h">
+      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\ShadowEffectRenderLogic.h">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -154,6 +154,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\LightScatteringNodeEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeMaskNodeEffect.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\ShadowNodeEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\WireframeNodeEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectShaders.cpp" />
@@ -257,6 +258,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectDefault.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectLightScattering.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectNodeMask.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectShadow.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectWireframe.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\NodeEffectSerialization.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\ChannelsFactory.cpp" />
@@ -428,11 +430,13 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\LightScatteringShaders.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\AlphaChannelNodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\LightScatteringNodeEffect.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\ShadowNodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Builder\ModelNodeEffectFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\IDGenerator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IFontDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectAlphaChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectLightScattering.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectShadow.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultFontDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultVideoStreamDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceEffect.h" />
