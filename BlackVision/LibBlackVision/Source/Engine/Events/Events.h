@@ -849,8 +849,7 @@ private:
     static std::string          m_sEventName;
 public:
     TimelineKeyframeEvent::Command      KeyframeCommand;
-    KeyframeType                        NewKeyframeType;
-    std::string                         SceneName;
+    TimelineKeyframeEvent::KeyframeType NewKeyframeType;
     std::string                         TimelinePath;
     std::string                         KeyframeName;
 
@@ -873,6 +872,9 @@ public:
 
 template<> TimelineKeyframeEvent::Command   SerializationHelper::WString2T  ( const std::wstring& s );
 template<> const std::wstring&              SerializationHelper::T2WString  ( TimelineKeyframeEvent::Command t );
+
+template<> TimelineKeyframeEvent::KeyframeType  SerializationHelper::WString2T   ( const std::wstring& s );
+template<> const std::wstring&                  SerializationHelper::T2WString   ( TimelineKeyframeEvent::KeyframeType t );
 
 DEFINE_PTR_TYPE( TimelineKeyframeEvent )
 

@@ -1604,7 +1604,6 @@ EventType           GlobalEffectEvent::GetEventType() const
 void                TimelineKeyframeEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
-    ser.SetAttribute( SerializationHelper::SCENE_NAME_WSTRING, toWString( SceneName ) );
     ser.SetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING, toWString( TimelinePath ) );
     ser.SetAttribute( SerializationHelper::KEYFRAME_NAME_WSTRING, toWString( KeyframeName ) );
     ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( KeyframeCommand ) );
@@ -1622,7 +1621,6 @@ IEventPtr                TimelineKeyframeEvent::Create          ( IDeserializer&
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         TimelineKeyframeEventPtr newEvent   = std::make_shared<TimelineKeyframeEvent>();
-        newEvent->SceneName             = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
         newEvent->TimelinePath          = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
         newEvent->KeyframeName          = toString( deser.GetAttribute( SerializationHelper::KEYFRAME_NAME_WSTRING ) );
         newEvent->KeyframeCommand       = SerializationHelper::WString2T<TimelineKeyframeEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
