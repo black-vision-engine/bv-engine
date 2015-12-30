@@ -66,7 +66,7 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
         else if( targetType == ParamKeyEvent::TargetType::GlobalEffectParam )
             param = GetGlobalEffectParameter( sceneName, nodeName, paramName );
         else if( targetType == ParamKeyEvent::TargetType::ResourceParam )
-            param = GetResourceParameter( sceneName, nodeName, pluginName, "tex0", paramName ); // @todo Change tex0 to generic method of getting resources
+            param = GetResourceParameter( sceneName, nodeName, pluginName, "Tex0", paramName ); // @todo Change tex0 to generic method of getting resources
         else
             param = GetPluginParameter( sceneName, nodeName, pluginName, paramName );           // Temporary for backward compatibility
     }

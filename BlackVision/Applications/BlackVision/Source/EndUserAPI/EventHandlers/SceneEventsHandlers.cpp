@@ -183,7 +183,7 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
     std::string& pluginName		= structureEvent->PluginName;
     std::string& pluginUID		= structureEvent->PluginUID;
 	std::string& timelinePath	= structureEvent->TimelinePath;
-	std::string & request		= structureEvent->Request;
+	std::string& request		= structureEvent->Request;
     unsigned int attachIndex	= structureEvent->AttachIndex;
     auto command				= structureEvent->PluginCommand;
     auto eventID                = structureEvent->EventID;

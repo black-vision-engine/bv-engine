@@ -249,7 +249,7 @@ IParamValModelPtr				BasePlugin< Iface >::GetResourceStateModel		 ( const std::s
 	{
         if( !channel ) continue;
 
-		auto txData = GetPixelShaderChannel()->GetTexturesData();
+		auto txData = channel->GetTexturesData();
 		for( auto tx : txData->GetTextures() )
 		{
 			if( tx->GetName() == name )
@@ -291,7 +291,7 @@ std::vector< IParameterPtr >        BasePlugin< Iface >::GetResourceStateModelPa
     {
         if( !channel ) continue;
 
-        auto txData = GetPixelShaderChannel()->GetTexturesData();
+        auto txData = channel->GetTexturesData();
 	    for( auto & tx : txData->GetTextures() )
         {
             auto params = tx->GetSamplerState()->GetParameters();
