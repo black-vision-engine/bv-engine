@@ -220,6 +220,14 @@ public:
         AssignTimeline,
         Fail            ///< Wrong command
     } Command;
+
+    typedef enum
+    {
+        PluginParam,
+        GlobalEffectParam,
+        ResourceParam,
+        FailTarget      ///< Wrong target type
+    } TargetType;
 private:
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
@@ -231,7 +239,8 @@ public:
     std::wstring                    Value;
 
     float                           Time;
-    ParamKeyEvent::Command          KeyCommand;
+    ParamKeyEvent::Command          ParamCommand;
+    ParamKeyEvent::TargetType       ParamTargetType;
 
 public:
     virtual void                    Serialize           ( ISerializer& ser ) const;
@@ -246,8 +255,11 @@ public:
     static std::string&             Name                ();
 };
 
-template<> ParamKeyEvent::Command   SerializationHelper::WString2T ( const std::wstring& s );
-template<> const std::wstring&      SerializationHelper::T2WString    ( ParamKeyEvent::Command t );
+template<> ParamKeyEvent::Command       SerializationHelper::WString2T      ( const std::wstring& s );
+template<> const std::wstring&          SerializationHelper::T2WString      ( ParamKeyEvent::Command t );
+
+template<> ParamKeyEvent::TargetType    SerializationHelper::WString2T      ( const std::wstring& s );
+template<> const std::wstring&          SerializationHelper::T2WString      ( ParamKeyEvent::TargetType t );
 
 DEFINE_PTR_TYPE( ParamKeyEvent )
 

@@ -33,7 +33,6 @@ private:    //Helpers
                                                         const std::string& paramName );
     ParameterPtr            GetGlobalEffectParameter(   const std::string& sceneName,
                                                         const std::string& nodeName,
-                                                        const std::string& globalEffect,
                                                         const std::string& paramName );
     ParameterPtr            GetResourceParameter    (   const std::string& sceneName,
                                                         const std::string& nodeName,

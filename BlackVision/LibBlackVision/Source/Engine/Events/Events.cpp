@@ -114,9 +114,10 @@ template<> const std::wstring& T2WString    ( LoadAssetEvent::Command t ) { retu
 // ========================================================================= //
 // ParamKeyEvent
 // ========================================================================= //
-const std::wstring PARAM_NAME_WSTRING       = L"ParamName";
-const std::wstring PARAM_VALUE_WSTRING      = L"ParamValue";
-const std::wstring KEY_TIME_WSTRING         = L"Time";
+const std::wstring PARAM_NAME_WSTRING           = L"ParamName";
+const std::wstring PARAM_VALUE_WSTRING          = L"ParamValue";
+const std::wstring KEY_TIME_WSTRING             = L"Time";
+const std::wstring PARAM_TARGET_TYPE_WSTRING    = L"Target";
 
 std::pair< ParamKeyEvent::Command, const std::wstring > ParameterCommandMapping[] = 
     { std::make_pair( ParamKeyEvent::Command::AddKey, L"AddKey" )
@@ -132,6 +133,16 @@ std::pair< ParamKeyEvent::Command, const std::wstring > ParameterCommandMapping[
 template<> ParamKeyEvent::Command WString2T ( const std::wstring& s )    { return WString2T( ParameterCommandMapping, s ); }
 template<> const std::wstring& T2WString    ( ParamKeyEvent::Command t ) { return Enum2WString( ParameterCommandMapping, t ); }
 
+
+std::pair< ParamKeyEvent::TargetType, const std::wstring > TargetTypeMapping[] = 
+    { std::make_pair( ParamKeyEvent::TargetType::GlobalEffectParam, L"GlobalEffectParam" )
+    , std::make_pair( ParamKeyEvent::TargetType::PluginParam, L"PluginParam" ) 
+    , std::make_pair( ParamKeyEvent::TargetType::ResourceParam, L"ResourceParam" ) 
+    , std::make_pair( ParamKeyEvent::TargetType::FailTarget, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> ParamKeyEvent::TargetType WString2T      ( const std::wstring& s )           { return WString2T( TargetTypeMapping, s ); }
+template<> const std::wstring& T2WString            ( ParamKeyEvent::TargetType t )     { return Enum2WString( TargetTypeMapping, t ); }
 
 // ========================================================================= //
 // AssetEvent
@@ -817,7 +828,8 @@ void                ParamKeyEvent::Serialize            ( ISerializer& ser ) con
     ser.SetAttribute( SerializationHelper::PARAM_NAME_WSTRING, toWString( ParamName ) );
     ser.SetAttribute( SerializationHelper::PARAM_VALUE_WSTRING, Value );
     ser.SetAttribute( SerializationHelper::KEY_TIME_WSTRING, std::to_wstring( Time ) );
-    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( KeyCommand ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( ParamCommand ) );
+    ser.SetAttribute( SerializationHelper::PARAM_TARGET_TYPE_WSTRING, SerializationHelper::T2WString( ParamTargetType ) );
 }
 
 // *************************************
@@ -832,7 +844,8 @@ IEventPtr           ParamKeyEvent::Create          ( IDeserializer& deser )
         newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
         newEvent->ParamName         = toString( deser.GetAttribute( SerializationHelper::PARAM_NAME_WSTRING ) );
         newEvent->Value             = deser.GetAttribute( SerializationHelper::PARAM_VALUE_WSTRING );
-        newEvent->KeyCommand        = SerializationHelper::WString2T<ParamKeyEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->ParamCommand      = SerializationHelper::WString2T<ParamKeyEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->ParamTargetType   = SerializationHelper::WString2T<ParamKeyEvent::TargetType>( deser.GetAttribute( SerializationHelper::PARAM_TARGET_TYPE_WSTRING ) );
         newEvent->Time              = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::KEY_TIME_WSTRING ) );
 
         return newEvent;

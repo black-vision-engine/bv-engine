@@ -45,7 +45,8 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
 
     bv::ParamKeyEventPtr setParamEvent = std::static_pointer_cast<bv::ParamKeyEvent>( eventPtr );
         
-    ParamKeyEvent::Command command  = setParamEvent->KeyCommand;
+    ParamKeyEvent::Command command  = setParamEvent->ParamCommand;
+    ParamKeyEvent::TargetType targetType = setParamEvent->ParamTargetType;
 
     std::string& nodeName   = setParamEvent->NodeName;
     std::string& pluginName = setParamEvent->PluginName;
@@ -59,7 +60,17 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
     if( pluginName == "transform" )     // Hack for transformations. Maybe it's eternal hack.
         param = GetPluginParameter( sceneName, nodeName, pluginName, "simple_transform" );
     else
-        param = GetPluginParameter( sceneName, nodeName, pluginName, paramName );
+    {
+        if( targetType == ParamKeyEvent::TargetType::PluginParam )
+            param = GetPluginParameter( sceneName, nodeName, pluginName, paramName );
+        else if( targetType == ParamKeyEvent::TargetType::GlobalEffectParam )
+            param = GetGlobalEffectParameter( sceneName, nodeName, paramName );
+        else if( targetType == ParamKeyEvent::TargetType::ResourceParam )
+            param = GetResourceParameter( sceneName, nodeName, pluginName, "tex0", paramName ); // @todo Change tex0 to generic method of getting resources
+        else
+            param = GetPluginParameter( sceneName, nodeName, pluginName, paramName );           // Temporary for backward compatibility
+    }
+
     if( param == nullptr )
     {
         SendSimpleErrorResponse( command, setParamEvent->EventID, setParamEvent->SocketID, "Parameter not found" );
@@ -154,7 +165,6 @@ ParameterPtr PluginEventsHandlers::GetPluginParameter  (    const std::string& s
                                                             const std::string& pluginName,
                                                             const std::string& paramName )
 {
-
     auto node = GetNode( m_appLogic, sceneName, nodeName );
     if( node == nullptr )
         return nullptr;
@@ -162,18 +172,46 @@ ParameterPtr PluginEventsHandlers::GetPluginParameter  (    const std::string& s
     auto plugin = node->GetPlugin( pluginName );
     if( plugin == nullptr )
     {
-        LOG_MESSAGE( SeverityLevel::error ) << "Parameter event handler: node [" + nodeName + "], plugin [" + pluginName + "] not found";
+        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodeName + "], plugin [" + pluginName + "] not found";
         return nullptr;
     }
 
     auto param = plugin->GetParameter( paramName );
     if( param == nullptr )
     {
-        LOG_MESSAGE( SeverityLevel::error ) << "Parameter event handler: node [" + nodeName + "], plugin [" + pluginName + "], param [" + paramName + "] not found";
+        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodeName + "], plugin [" + pluginName + "], param [" + paramName + "] not found";
         return nullptr;
     }
     return param;
 }
+
+// ***********************
+//
+ParameterPtr PluginEventsHandlers::GetGlobalEffectParameter(    const std::string& sceneName,
+                                                                const std::string& nodeName,
+                                                                const std::string& paramName )
+{
+    auto node = GetNode( m_appLogic, sceneName, nodeName );
+    if( node == nullptr )
+        return nullptr;
+
+    auto effect = node->GetNodeEffect();
+    if( effect == nullptr )
+    {
+        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodeName + "], effect not found";
+        return nullptr;
+    }
+
+    effect->GetParameter( paramName );
+    auto param = effect->GetParameter( paramName );
+    if( param == nullptr )
+    {
+        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodeName + "], param [" + paramName + "] not found";
+        return nullptr;
+    }
+    return param;
+}
+
 
 // ***********************
 //
@@ -190,14 +228,14 @@ ParameterPtr PluginEventsHandlers::GetResourceParameter    (    const std::strin
     auto plugin = node->GetPlugin( pluginName );
     if( plugin == nullptr )
     {
-        LOG_MESSAGE( SeverityLevel::error ) << "Parameter event handler: node [" + nodeName + "], plugin [" + pluginName + "] not found";
+        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodeName + "], plugin [" + pluginName + "] not found";
         return nullptr;
     }
 
     auto resourceModel = plugin->GetResourceStateModel( textureName );
     if( resourceModel == nullptr )
     {
-        LOG_MESSAGE( SeverityLevel::error ) << "Parameter event handler: node [" + nodeName + "], plugin [" + pluginName + "], texture [" + textureName + " not found";
+        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodeName + "], plugin [" + pluginName + "], texture [" + textureName + " not found";
         return nullptr;
     }
     
