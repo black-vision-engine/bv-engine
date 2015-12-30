@@ -81,6 +81,9 @@ std::string AssetEvent::m_sEventName				= "AssetEvent";
 const EventType GlobalEffectEvent::m_sEventType			= 0x30000019;
 std::string GlobalEffectEvent::m_sEventName				= "GlobalEffectEvent";
 
+const EventType TimelineKeyframeEvent::m_sEventType			= 0x30000020;
+std::string TimelineKeyframeEvent::m_sEventName				= "TimelineKeyframeEvent";
+
 
 // ************************************* Events Serialization *****************************************
 
@@ -434,6 +437,36 @@ std::pair< GlobalEffectEvent::Command, const std::wstring > GlobalEffectEventCom
 template<> GlobalEffectEvent::Command WString2T     ( const std::wstring& s )               { return WString2T( GlobalEffectEventCommandMapping, s ); }
 template<> const std::wstring& T2WString            ( GlobalEffectEvent::Command t )        { return Enum2WString( GlobalEffectEventCommandMapping, t ); }
 
+
+// ========================================================================= //
+// TimelineKeyframeEvent
+// ========================================================================= //
+const std::wstring KEYFRAME_NAME_WSTRING                = L"KeyframeName";
+const std::wstring NEW_KEYFRAME_TYPE_WSTRING            = L"NewKeyframeType";
+const std::wstring JUMP_TO_TIME_WSTRING                 = L"JumpToTime";
+const std::wstring TOTAL_LOOP_COUNT_WSTRING             = L"TotalLoopCount";
+
+std::pair< TimelineKeyframeEvent::Command, const std::wstring > TimelineKeyframeEventCommandMapping[] = 
+{
+    std::make_pair( TimelineKeyframeEvent::Command::AddKeyframe, L"AddKeyframe" )
+    , std::make_pair( TimelineKeyframeEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> TimelineKeyframeEvent::Command   WString2T   ( const std::wstring& s )               { return WString2T( TimelineKeyframeEventCommandMapping, s ); }
+template<> const std::wstring&              T2WString   ( TimelineKeyframeEvent::Command t )    { return Enum2WString( TimelineKeyframeEventCommandMapping, t ); }
+
+std::pair< TimelineKeyframeEvent::KeyframeType, const std::wstring > KeyframeTypeMapping[] = 
+{
+    std::make_pair( TimelineKeyframeEvent::KeyframeType::StopKeyframe, L"StopKeyframe" )
+    , std::make_pair( TimelineKeyframeEvent::KeyframeType::LoopReverseKeyframe, L"LoopReverseKeyframe" )
+    , std::make_pair( TimelineKeyframeEvent::KeyframeType::LoopJumpKeyframe, L"LoopJumpKeyframe" )
+    , std::make_pair( TimelineKeyframeEvent::KeyframeType::LoopRestartKeyframe, L"LoopRestartKeyframe" )
+    , std::make_pair( TimelineKeyframeEvent::KeyframeType::NullKeyframe, L"NullKeyframe" )
+    , std::make_pair( TimelineKeyframeEvent::KeyframeType::KeyframeTypeFail, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> TimelineKeyframeEvent::KeyframeType  WString2T   ( const std::wstring& s )                   { return WString2T( KeyframeTypeMapping, s ); }
+template<> const std::wstring&                  T2WString   ( TimelineKeyframeEvent::KeyframeType t )   { return Enum2WString( KeyframeTypeMapping, t ); }
 
 // ========================================================================= //
 // HightmapEvent
@@ -1561,6 +1594,66 @@ const std::string&  GlobalEffectEvent::GetName() const
 // *************************************
 //
 EventType           GlobalEffectEvent::GetEventType() const
+{   return this->m_sEventType; }
+
+
+//******************* TimelineKeyframeEvent *************
+
+// *************************************
+//
+void                TimelineKeyframeEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
+    ser.SetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING, toWString( TimelinePath ) );
+    ser.SetAttribute( SerializationHelper::KEYFRAME_NAME_WSTRING, toWString( KeyframeName ) );
+    ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( KeyframeCommand ) );
+    ser.SetAttribute( SerializationHelper::NEW_KEYFRAME_TYPE_WSTRING, SerializationHelper::T2WString( NewKeyframeType ) );
+
+    ser.SetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING, toWString( Time ) );
+    ser.SetAttribute( SerializationHelper::JUMP_TO_TIME_WSTRING, toWString( JumpToTime ) );
+    ser.SetAttribute( SerializationHelper::TOTAL_LOOP_COUNT_WSTRING, toWString( TotalLoopCount ) );
+}
+
+// *************************************
+//
+IEventPtr                TimelineKeyframeEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
+    {
+        TimelineKeyframeEventPtr newEvent   = std::make_shared<TimelineKeyframeEvent>();
+        newEvent->TimelinePath          = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
+        newEvent->KeyframeName          = toString( deser.GetAttribute( SerializationHelper::KEYFRAME_NAME_WSTRING ) );
+        newEvent->KeyframeCommand       = SerializationHelper::WString2T<TimelineKeyframeEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->NewKeyframeType       = SerializationHelper::WString2T<TimelineKeyframeEvent::KeyframeType>( deser.GetAttribute( SerializationHelper::NEW_KEYFRAME_TYPE_WSTRING ) );
+
+        newEvent->Time                  = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING ) );
+        newEvent->JumpToTime            = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::JUMP_TO_TIME_WSTRING ) );
+        newEvent->TotalLoopCount        = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( SerializationHelper::TOTAL_LOOP_COUNT_WSTRING ) );
+
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               TimelineKeyframeEvent::Clone             () const
+{   return IEventPtr( new TimelineKeyframeEvent( *this ) );  }
+
+// *************************************
+//
+EventType           TimelineKeyframeEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        TimelineKeyframeEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  TimelineKeyframeEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           TimelineKeyframeEvent::GetEventType() const
 {   return this->m_sEventType; }
 
 
