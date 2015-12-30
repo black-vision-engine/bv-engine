@@ -927,11 +927,14 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsShaders.cpp">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsEffect.cpp">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectMixChannels.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\MixChannelsNodeEffect.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsEffect.cpp">
+      <Filter>Engine\Graphics\Effects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1877,14 +1880,17 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShadeders.h">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsEffect.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsShaders.h">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectMixChannels.h">
       <Filter>Engine\Models\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\MixChannelsNodeEffect.h">
+      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsEffect.h">
+      <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

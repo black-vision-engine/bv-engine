@@ -13,4 +13,7 @@ public:
     ~AlphaMaskNodeEffect    ();
 };
 
+DEFINE_PTR_TYPE(AlphaMaskNodeEffect)
+DEFINE_CONST_PTR_TYPE(AlphaMaskNodeEffect)
+
 } //bv

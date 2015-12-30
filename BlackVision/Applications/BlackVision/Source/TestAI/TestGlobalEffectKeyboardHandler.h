@@ -7,6 +7,7 @@
 #include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectWireframe.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectMixChannels.h"
 
 
 namespace bv {
@@ -20,10 +21,11 @@ private:
     unsigned int            m_curWireframeNodeIdx;
     bool                    m_wireframeDisabled;
 
-    std::shared_ptr< model::ModelNodeEffectDefault >    m_defaultEffect;
-    std::shared_ptr< model::ModelNodeEffectAlphaMask >  m_alphaMaskEffect;
-    std::shared_ptr< model::ModelNodeEffectNodeMask >   m_nodeMaskEffect;
-    std::shared_ptr< model::ModelNodeEffectWireframe >  m_wireframeEffect;
+    std::shared_ptr< model::ModelNodeEffectDefault >        m_defaultEffect;
+    std::shared_ptr< model::ModelNodeEffectAlphaMask >      m_alphaMaskEffect;
+    std::shared_ptr< model::ModelNodeEffectNodeMask >       m_nodeMaskEffect;
+    std::shared_ptr< model::ModelNodeEffectWireframe >      m_wireframeEffect;
+    std::shared_ptr< model::ModelNodeEffectMixChannels >    m_mixChannelsEffect;
 
 public:
 
@@ -37,6 +39,7 @@ private:
     void                    HandleDecrement     ( BVAppLogic * logic );
     void                    HandleSpace         ( BVAppLogic * logic );
     void                    HandleToggleEffect  ( BVAppLogic * logic );
+    void                    HandleMixChannels   ( BVAppLogic * logic );
 
     model::BasicNodePtr     GetRootNode         ( BVAppLogic * logic );
     model::BasicNodePtr     GetNodeByPath       ( BVAppLogic * logic, const std::string & path );

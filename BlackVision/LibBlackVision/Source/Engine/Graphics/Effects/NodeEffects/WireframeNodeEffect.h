@@ -13,4 +13,7 @@ public:
     ~WireframeNodeEffect    ();
 };
 
+DEFINE_PTR_TYPE(WireframeNodeEffect)
+DEFINE_CONST_PTR_TYPE(WireframeNodeEffect)
+
 } //bv

@@ -73,6 +73,12 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
 
             break;
         }
+        case '5':
+        {
+            HandleMixChannels( logic );
+
+            break;
+        }
         case '[':
             HandleDecrement( logic );
 
@@ -311,6 +317,26 @@ void                    TestGlobalEfectKeyboardHandler::HandleToggleEffect  ( BV
                 assert( false );
             }
         }
+    }
+}
+
+// *********************************
+//
+void                    TestGlobalEfectKeyboardHandler::HandleMixChannels   ( BVAppLogic * logic )
+{
+    auto root = GetRootNode( logic );
+
+    auto effect = root->GetNodeEffect();
+
+    if ( effect->GetType() == NodeEffectType::NET_MIX_CHANNELS )
+    {
+        root->SetNodeEffect( m_defaultEffect );
+    }
+    else
+    {
+        assert( effect->GetType() == NodeEffectType::NET_DEFAULT );
+
+        root->SetNodeEffect( m_mixChannelsEffect );
     }
 }
 

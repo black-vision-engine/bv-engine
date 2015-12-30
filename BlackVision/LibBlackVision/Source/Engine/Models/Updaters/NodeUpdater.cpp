@@ -18,11 +18,13 @@
 #include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectWireframe.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectMixChannels.h"
 
 #include "Engine/Graphics/Effects/NodeEffects/NodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/NodeMaskNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/WireframeNodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/MixChannelsNodeEffect.h"
 
 
 namespace bv 
@@ -232,9 +234,15 @@ void    NodeUpdater::UpdateNodeEffect       ()
             }
             case NodeEffectType::NET_MIX_CHANNELS:
             {
-                assert( false );
+                auto nodeMixhChannelsEffect = std::static_pointer_cast< model::ModelNodeEffectMixChannels >( nodeEffect );
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
-                //FIXME: implement
+                if( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_MIX_CHANNELS )
+                {
+                    sceneNodeEffect = std::make_shared< MixChannelsNodeEffect >();
+                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
+                }
+                //FIXME: update parameters
 
                 break;
             }

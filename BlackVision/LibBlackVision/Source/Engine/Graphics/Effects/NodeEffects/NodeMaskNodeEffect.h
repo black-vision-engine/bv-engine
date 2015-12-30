@@ -9,12 +9,11 @@ class NodeMaskNodeEffect : public NodeEffect
 {
 public:
 
-                    NodeMaskNodeEffect  ();
-                    ~NodeMaskNodeEffect ();
-
-    unsigned int    GetForegroundIdx    () const;
-    unsigned int    GetBackgroundIdx    () const;
-
+            NodeMaskNodeEffect  ();
+            ~NodeMaskNodeEffect ();
 };
+
+DEFINE_PTR_TYPE(NodeMaskNodeEffect)
+DEFINE_CONST_PTR_TYPE(NodeMaskNodeEffect)
 
 } //bv

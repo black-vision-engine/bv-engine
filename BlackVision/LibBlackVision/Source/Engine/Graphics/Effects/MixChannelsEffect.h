@@ -23,8 +23,8 @@ private:
 
 public:
 
-                        MixChannelsEffect ();
-                        ~MixChannelsEffect();
+                        MixChannelsEffect   ();
+                        ~MixChannelsEffect  ();
 
     void                SetRIdx         ( unsigned char idx );
     void                SetGIdx         ( unsigned char idx );
