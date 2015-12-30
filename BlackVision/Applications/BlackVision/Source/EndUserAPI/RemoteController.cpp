@@ -28,6 +28,7 @@ RemoteController::RemoteController()
     RegisterEvent( HightmapEvent::Name(), HightmapEvent::Create );
     RegisterEvent( AssetEvent::Name(), AssetEvent::Create );
     RegisterEvent( GlobalEffectEvent::Name(), GlobalEffectEvent::Create );
+    RegisterEvent( TimelineKeyframeEvent::Name(), TimelineKeyframeEvent::Create );
 }
 
 

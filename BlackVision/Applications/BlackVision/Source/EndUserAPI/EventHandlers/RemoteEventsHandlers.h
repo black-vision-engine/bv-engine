@@ -12,6 +12,7 @@ class HightmapHandlers;
 class EngineStateHandlers;
 class AssetHandlers;
 class GlobalEffectHandler;
+class TimelineHandlers;
 
 class RemoteEventsHandlers
 {
@@ -24,6 +25,7 @@ public:
     EngineStateHandlers*            m_engineStateEvents;
     AssetHandlers*					m_assetEvents;
     GlobalEffectHandler*            m_globalEffectEvents;
+    TimelineHandlers*               m_timelineHandlers;
 
 public:
 
