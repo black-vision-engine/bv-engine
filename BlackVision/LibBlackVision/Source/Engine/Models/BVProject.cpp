@@ -143,11 +143,11 @@ bool                    BVProject::AddScene				( model::SceneModelPtr sceneModel
 
 // *******************************
 //
-bool                    BVProject::RemoveScene			( const std::string & name )
+bool                    BVProject::RemoveScene			( model::SceneModelPtr sceneModel )
 {
 	for( unsigned int i = 0; i < m_sceneModelVec.size(); ++i )
 	{
-		if( m_sceneModelVec[ i ]->GetName() == name )
+		if( m_sceneModelVec[ i ] == sceneModel )
 		{
 			m_rootNode->DetachChildNodeOnly( m_sceneModelVec[ i ]->GetRootNode() );
 			m_globalTimeline->RemoveChild( m_sceneModelVec[ i ]->GetTimeline() );
@@ -189,7 +189,18 @@ model::SceneModelPtr    BVProject::GetScene            ( const std::string & nam
 
 // *******************************
 //
-const model::SceneModelVec &	BVProject::GetScenes			() const
+model::SceneModelPtr    BVProject::GetScene            ( UInt32 idx ) const
+{
+    if( idx < m_sceneModelVec.size() )
+    {
+        return m_sceneModelVec[ idx ];
+    }
+    return nullptr;
+}
+
+// *******************************
+//
+const model::SceneModelVec &    BVProject::GetScenes    () const
 {
     return m_sceneModelVec;
 }

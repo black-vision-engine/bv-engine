@@ -243,6 +243,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\State\RendererStateInstance.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\State\StencilState.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Types\Transform.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\AssetTracker.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BasicNode.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Builder\ModelNodeEffectFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Builder\RendererStatesBuilder.cpp" />
@@ -430,6 +431,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\LightScatteringShaders.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\AlphaChannelNodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\LightScatteringNodeEffect.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\AssetTracker.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\ShadowNodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Builder\ModelNodeEffectFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\IDGenerator.h" />

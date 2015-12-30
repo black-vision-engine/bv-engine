@@ -48,6 +48,17 @@ void				    Texture2D::SetData      ( MemoryChunkConstPtr data, UInt32 level )
 
 // *********************************
 //
+void				    Texture2D::SetData      ( MemoryChunkConstPtr data, TextureFormat format, UInt32 width, UInt32 height, UInt32 level ) 
+{
+	m_format = format;
+	m_width = width;
+	m_height = height;
+
+    SetData( data, level );
+}
+
+// *********************************
+//
 void				    Texture2D::SetData		( const std::vector< MemoryChunkConstPtr > & data, TextureFormat format, UInt32 width, UInt32 height, UInt32 levels )
 {
 	m_format = format;

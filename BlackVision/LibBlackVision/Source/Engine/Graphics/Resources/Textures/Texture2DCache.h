@@ -35,7 +35,7 @@ public:
     Texture2DPtr                    GetSequence         ( const IAnimationDescriptor * animParams );
 
     bool                            IsRegistered        ( const ITextureDescriptor * txParams ) const;
-    bool                            IsStored            ( Texture2DPtr tex ) const;
+    bool                            IsStored            ( Texture2DConstPtr tex ) const;
 
     void                            ClearCache          ();
     void                            ClearUnused         ();

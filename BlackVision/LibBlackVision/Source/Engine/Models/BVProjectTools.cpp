@@ -12,6 +12,7 @@
 
 #include "Engine/Models/Updaters/NodeUpdater.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
+#include "Engine/Models/AssetTracker.h"
 
 #include "Engine/Graphics/Effects/NodeEffects/NodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/NodeMaskNodeEffect.h"
@@ -118,6 +119,20 @@ void                BVProjectTools::UpdateSceneNodeEffect                 ( Scen
     {
         //Did you forget to implement an additional effect
         assert( false );
+    }
+}
+
+// *******************************
+//
+void                BVProjectTools::ReleaseUnusedResources                  ( Renderer * renderer )
+{
+    auto assets = AssetTracker::Instance().GetUnusedAssets();
+    for( auto asset : assets )
+    {
+        //FIXME: for now only texture2d are used
+        auto tex = std::static_pointer_cast< const Texture2D >( asset );
+        assert( tex );
+        renderer->DeletePDR( tex.get() );
     }
 }
 

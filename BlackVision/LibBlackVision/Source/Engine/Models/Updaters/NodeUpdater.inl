@@ -261,7 +261,7 @@ inline void		NodeUpdater::UpdateTexturesData				()
 			{
 				if( currFrame < numTextures )
 				{
-					tex2D->SetData( animDesc->GetBits( currFrame ) );
+					tex2D->SetData( animDesc->GetBits( currFrame ), animDesc->GetFormat(), animDesc->GetWidth(), animDesc->GetHeight() );
 				}
 				else if ( currFrame == numTextures )
 				{

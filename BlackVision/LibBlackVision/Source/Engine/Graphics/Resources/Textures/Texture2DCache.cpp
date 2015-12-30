@@ -91,7 +91,7 @@ bool            Texture2DCache::IsRegistered            ( const ITextureDescript
 
 // *********************************
 //
-bool            Texture2DCache::IsStored                ( Texture2DPtr tex ) const
+bool            Texture2DCache::IsStored                ( Texture2DConstPtr tex ) const
 {
     return m_tex2DSet.find( tex.get() ) != m_tex2DSet.end();
 }

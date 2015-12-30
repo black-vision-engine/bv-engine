@@ -57,6 +57,7 @@ public:
 	void					TestEditor				( TimeType time );
 
 private:
+
 	void					InitTestEditor				();
 
 	void					InitTestModelSceneEditor	();
@@ -95,6 +96,7 @@ private:
 	void					CopyPlugin					( UInt32 rootIdx, const std::string & rootPlugin, const std::string & childName, const std::string & childPlugin );
 	void					RestoreRoot					( UInt32 rootIdx, const std::string & childPlugin );
 
+    void                    Wait                        ( UInt32 sec );
 };
 
 DEFINE_PTR_TYPE( TestScene )

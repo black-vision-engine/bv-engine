@@ -20,7 +20,7 @@
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Assets/AssetManager.h"
 
-#include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
+#include "Engine/Models/AssetTracker.h"
 
 #include "Engine/Models/Builder/ModelNodeEffectFactory.h"
 
@@ -86,9 +86,16 @@ void    BVProjectEditor::AddScene			( const std::string & sceneName )
 bool    BVProjectEditor::RemoveScene		( const std::string & sceneName )
 {
     auto scene = m_project->GetScene( sceneName );
+    return RemoveScene( scene );
+}
+
+// *******************************
+//
+bool    BVProjectEditor::RemoveScene		( model::SceneModelPtr scene )
+{
     if( scene )
     {
-        m_project->RemoveScene( sceneName );
+        m_project->RemoveScene( scene );
         m_engineSceneEditor->DeleteChildNode( m_engineSceneEditor->GetRootNode(), GetEngineNode( scene->GetRootNode() ) );
         MappingsCleanup( scene->GetRootNode() );
         return true;
@@ -102,7 +109,7 @@ void    BVProjectEditor::RemoveAllScenes		()
 {
     while( !m_project->m_sceneModelVec.empty() )
     {
-        RemoveScene( m_project->m_sceneModelVec[ 0 ]->GetName() );
+        RemoveScene( m_project->m_sceneModelVec[ 0 ] );
     }
 }
 
@@ -121,7 +128,7 @@ bool    BVProjectEditor::DetachScene			( const std::string & sceneName )
         }
 
         m_detachedScenes.push_back( scene );
-        m_project->RemoveScene( sceneName );
+        m_project->RemoveScene( scene );
 
         return true;
     }
@@ -818,8 +825,8 @@ bool			BVProjectEditor::LoadAsset					( model::IPluginPtr plugin, AssetDescConst
 {
 	if( plugin && assetDesc )
 	{
-		auto success = plugin->LoadResource( assetDesc );
-        //FIXME: clear resources from engine
+        auto success = plugin->LoadResource( assetDesc );
+        BVProjectTools::ReleaseUnusedResources( m_project->m_renderer );
         return success;
 	}
 
@@ -904,14 +911,15 @@ void						BVProjectEditor::AddTimeline			( const std::string & sceneName, model:
 //
 bool						BVProjectEditor::DeleteTimeline			( const std::string & timelinePath )
 {
+    auto tm = model::TimelineManager::GetInstance();
     auto scene = m_project->GetScene( model::TimelineHelper::GetParentNodePath( timelinePath ) );
-    auto timeEval = model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
+    auto timeEval = tm->GetTimeEvaluator( timelinePath );
     
     assert( scene && timeEval );
     
     if( timeEval.use_count() == 2 ) //FIXME: maybe it's more safe to go through node tree..
     {
-        model::TimelineManager::GetInstance()->RemoveTimelineFromTimeline( timelinePath, model::TimelineHelper::GetParentNodePath( timelinePath ) );
+        tm->RemoveTimelineFromTimeline( timelinePath, model::TimelineHelper::GetParentNodePath( timelinePath ) );
         return true;
     }
     return false;
@@ -950,6 +958,8 @@ void						BVProjectEditor::ForceDeleteTimeline	( const std::string & timelinePat
 //
 bool						BVProjectEditor::RenameTimeline			( const std::string & timelinePath, const std::string & newName )
 {
+    //FIXME: renaming scene timelines should not be allowed
+
     auto timelineManager = model::TimelineManager::GetInstance();
     auto timeline = timelineManager->GetTimeline( timelinePath );
     if( timeline && !timelineManager->GetTimeline( newName ) )

@@ -3,6 +3,9 @@
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureDescriptor.h"
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultAnimationDescriptor.h"
 
+#include "Engine/Models/AssetTracker.h"
+
+
 namespace bv { namespace model {
 
 // ******************************
@@ -79,8 +82,15 @@ void                                            DefaultTexturesData::SetTexture 
     if( idx >= m_textureDescriptors.size() )
 	{
 		m_textureDescriptors.resize( idx + 1 );
-	} 
+	}
+
+    if( m_textureDescriptors[ idx ] )
+    {
+        AssetTracker::Instance().UnregisterAsset( m_textureDescriptors[ idx ] );
+    }
+
 	m_textureDescriptors[ idx ] = textureDesc;
+    AssetTracker::Instance().RegisterAsset( textureDesc );
 }
 
 // ******************************
@@ -88,6 +98,7 @@ void                                            DefaultTexturesData::SetTexture 
 void                                            DefaultTexturesData::AddTexture         ( ITextureDescriptorPtr textureDesc )
 {
     m_textureDescriptors.push_back( textureDesc );
+    AssetTracker::Instance().RegisterAsset( textureDesc );
 }
 
 // ******************************
@@ -162,6 +173,11 @@ void                                            DefaultTexturesData::UpdateResou
 //
 void                                            DefaultTexturesData::ClearAll				()
 {
+    for( auto tx : m_textureDescriptors )
+    {
+        AssetTracker::Instance().UnregisterAsset( tx );
+    }
+
 	m_textureDescriptors.clear();
 	m_animationDescriptors.clear();
     m_fontDescriptors.clear();
