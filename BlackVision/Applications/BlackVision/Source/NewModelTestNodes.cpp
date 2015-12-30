@@ -329,10 +329,12 @@ model::BasicNodePtr  SimpleNodesFactory::CreateLightScatteringTest      ( model:
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateShadowTest               ( model::ITimeEvaluatorPtr timeEvaluator )
 {
-    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/butterfly1.png", false, 3.f, 3.f );
+    auto root = CreateTextNode( timeEvaluator, 0, false );
+    
 
+    //TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/butterfly1.png", false, 3.f, 3.f );
      // ROOT
-    auto root = bTex.CreateNode( "root", true );
+    //auto root = bTex.CreateNode( "root", true );
 
     root->SetNodeEffect( std::make_shared< model::ModelNodeEffectShadow >( timeEvaluator ) );
 

@@ -93,7 +93,7 @@ ShadowFullscreenEffect *     ShadowEffectRenderLogic::AccessShadowEffect    ( Re
 
     m_shadowEffect->SetColor( color );
     m_shadowEffect->SetShift( shift );
-    m_shadowEffect->SetBlurSize( bs );
+    m_shadowEffect->SetBlurSize( bs );  
 
     return m_shadowEffect;    
 }

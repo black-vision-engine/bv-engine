@@ -69,8 +69,16 @@ PixelShader *   ShadowFullscreenEffect::CreatePS            () const
     param = ShaderParamFactory::CreateGenericParameter( m_textureSize.get() );
     shaderParams->AddParameter( param );
 
+    shaderParams->AddTexture( m_texture );
+
     //FIXME: add empty textures (nullptr) and create samplers. Textures can be set later on
-    return new PixelShader( ReadFullscreenShader( "shadow.frag" ), shaderParams );
+    auto shader = new PixelShader( ReadFullscreenShader( "shadow.frag" ), shaderParams );
+
+    auto samplerTex = CreateDefaultSampler( "Tex0" );
+
+    shader->AddTextureSampler( samplerTex );
+
+    return shader;
 }
 
 // **************************

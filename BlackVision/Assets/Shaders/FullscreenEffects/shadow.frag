@@ -1,10 +1,10 @@
-#version 430
+#version 400
 
 layout (location = 0) out vec4 FragColor;
 
 in vec2 uvCoord;
 
-layout (binding = 0) uniform sampler2D 	Tex0;
+uniform sampler2D       Tex0;
 
 uniform vec4			color;
 uniform vec2			shift;
