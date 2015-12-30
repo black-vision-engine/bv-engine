@@ -1131,6 +1131,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Builder\ModelNodeEffectFactory.cpp">
       <Filter>Engine\Models\Builder</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\AssetTracker.cpp">
+      <Filter>Engine\Models</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\ShadowNodeEffect.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
     </ClCompile>
@@ -2435,6 +2438,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Builder\ModelNodeEffectFactory.h">
       <Filter>Engine\Models\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\AssetTracker.h">
+      <Filter>Engine\Models</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\ShadowNodeEffect.h">
       <Filter>Engine\Graphics\Effects\NodeEffects</Filter>

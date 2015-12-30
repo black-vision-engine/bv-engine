@@ -50,7 +50,7 @@ private:
 
 	bool                    AddScene            ( model::SceneModelPtr sceneModel );
 	bool                    AddScene            ( model::SceneModelPtr sceneModel, UInt32 idx );
-    bool                    RemoveScene         ( const std::string & name );
+    bool                    RemoveScene         ( model::SceneModelPtr sceneModel );
 
 public:
 
@@ -59,9 +59,8 @@ public:
     static BVProjectPtr     Create              ( Renderer * renderer );
 
     model::SceneModelPtr    GetScene            ( const std::string & name ) const;
-
-	//FIXME: for tests only
-    const model::SceneModelVec &  GetScenes() const;
+    model::SceneModelPtr    GetScene            ( UInt32 idx ) const;
+    const model::SceneModelVec &  GetScenes     () const;
 
     StringVector            ListScenesNames     () const;
 

@@ -4,7 +4,9 @@
 
 #include "TestSceneUtils.h"
 
-#include "Engine\Models\Plugins\Parameters\ParametersFactory.h"
+#include "Engine/Graphics/Renderers/Renderer.h"
+
+#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
@@ -18,6 +20,7 @@
 
 #include "Engine/Models/Plugins/Simple/DefaultVideoStreamDecoderPlugin.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
+
 
 namespace bv {
 
@@ -857,49 +860,131 @@ void					TestScene::InitAssetsTest		()
 	{
 		auto editor = m_project->GetProjectEditor();
 		auto scene = editor->GetScene( SCENE_NAME );
-		auto tex = TestSceneUtils::TexturedRectangle( scene->GetTimeline(), TEX_NODE, 0.3f, 0.3f, TestSceneUtils::TEXTURE_PATH );
+		auto tex = TestSceneUtils::TexturedRectangle( scene->GetTimeline(), "tex0", 0.3f, 0.3f, TestSceneUtils::TEXTURE_PATH );
 		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
 
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
-		editor->DeleteChildNode( SCENE_NAME, root, TEX_NODE );
+		editor->AddChildNode( SCENE_NAME, root, tex );
+	};
+
+	auto add1 = [&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto scene = editor->GetScene( SCENE_NAME );
+		auto tex = TestSceneUtils::TexturedRectangle( scene->GetTimeline(), "tex1", 0.3f, 0.3f, TestSceneUtils::TEXTURE_PATH );
+		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
+
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		editor->AddChildNode( SCENE_NAME, root, tex );
 	};
 
 	m_testSteps.push_back( add0 );
+	m_testSteps.push_back( add1 );
 
 	m_testSteps.push_back( [&]
 	{
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
-		auto child = root->GetChild( TEX_NODE );
+		auto child = root->GetChild( "tex0" );
 
 		auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f0.bmp", false );
-		editor->LoadAsset( child->GetPlugin( "texture" ), desc );
+        editor->LoadAsset( child->GetPlugin( "texture" ), desc );
 	});
 
 	m_testSteps.push_back( [&]
 	{
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
-		auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( TEX_NODE ) );
+		auto child = root->GetChild( "tex0" );
+
+		auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f1.bmp", false );
+        auto prevDesc = child->GetPlugin( "texture" )->GetPixelShaderChannel()->GetTexturesData()->GetTextures()[ 0 ];
+		
+        editor->LoadAsset( child->GetPlugin( "texture" ), desc );
+	});
+
+	m_testSteps.push_back( [&]
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+		auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( "tex0" ) );
 		editor->DeletePlugin( child, "texture" );
 	});
+
+    m_testSteps.push_back( [&]
+	{
+		auto editor = m_project->GetProjectEditor();
+        auto scene = editor->GetScene( SCENE_NAME );
+		auto root = scene->GetRootNode();
+		auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( "tex0" ) );
+
+        auto anim = model::PluginsManager::DefaultInstance().CreatePlugin( "DEFAULT_ANIMATION", "animation", scene->GetTimeline() );
+        editor->AddPlugin( child, anim, 2 );
+	});
+
+    m_testSteps.push_back( [&]
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+		auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( "tex0" ) );
+		auto desc = AnimationAssetDesc::Create( TestSceneUtils::ANIM_PATH, "*.bmp" );
+		editor->LoadAsset( child->GetPlugin( "animation" ), desc );
+
+        auto time = editor->GetScene( SCENE_NAME )->GetTimeline()->GetLocalTime();
+        model::SetParameter( child->GetPlugin( "animation" )->GetParameter( "frameNum" ), time, 0.f );
+        model::SetParameter( child->GetPlugin( "animation" )->GetParameter( "frameNum" ), time + 2.f, ( Float32 )TestSceneUtils::ANIM_NUM );
+    });
+
+    Wait( 2 );
+
+	m_testSteps.push_back( [&]
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+		auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( "tex0" ) );
+		editor->DeletePlugin( child, "animation" );
+	});
+
+    m_testSteps.push_back( [&]
+	{
+		auto editor = m_project->GetProjectEditor();
+        auto scene = editor->GetScene( SCENE_NAME );
+		auto root = scene->GetRootNode();
+		auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( "tex0" ) );
+
+        auto color = model::PluginsManager::DefaultInstance().CreatePlugin( "DEFAULT_COLOR", "color", scene->GetTimeline() );
+        editor->AddPlugin( child, color, 2 );
+        SetParameter( child->GetPlugin( "color" )->GetParameter( "color" ), 0.0, glm::vec4( 1.f, 0.f, 0.f, 1.f ) );
+
+        auto text = model::PluginsManager::DefaultInstance().CreatePlugin( "DEFAULT_TEXT", "text", scene->GetTimeline() );
+        editor->AddPlugin( child, text, 3 );
+        SetParameter( child->GetPlugin( "text" )->GetParameter( "text" ), 0.0, std::wstring( L"tekst" ) );
+	});
+
+    m_testSteps.push_back( [&]
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
+		auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( "tex0" ) );
+    	auto desc = FontAssetDesc::Create( "fonts/couri.TTF", 30, 0, 0, true );
+		editor->LoadAsset( child->GetPlugin( "text" ), desc );
+    });
 }
 
 // ****************************
 //
 void					TestScene::InitTestEditor			()
 {
-	InitTestModelSceneEditor();
+	//InitTestModelSceneEditor();
 
 	//InitTimelinesTest();
 
-	//InitAssetsTest();
+	InitAssetsTest();
 
 	//InitBasicColorPluginTest();
 	//InitOrderColorPluginTest();
 
-	//InitBasicTexturePluginTest();
+    //InitBasicTexturePluginTest();
 	//InitOrderTexturePluginTest();
 
 	//InitBasicAnimationPluginTest();
@@ -1124,10 +1209,6 @@ void					TestScene::InitBasicTexturePluginTest	()
 
 	//	auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f1.bmp", false );
 	//	editor->LoadAsset( child->GetPlugin( "texture" ), desc );
-	//});
-
-	//m_testSteps.push_back( [&]{
-	//	GTexture2DCache.ClearUnused();
 	//});
 }
 
@@ -1760,7 +1841,7 @@ void					TestScene::InitColoredTimerTest			()
 //---------------
 
 	m_testSteps.push_back( add );
-	m_testSteps.push_back( []{} ); //empty step
+    Wait( 1 );
 	
 	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TMR_NODE, "solid color", 1 ); } );
 	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TMR_NODE, "solid color", 1 ); } );
@@ -1774,8 +1855,7 @@ void					TestScene::InitColoredTimerTest			()
 		model::SetTimeTimerPlugin( root->GetPlugin( "timer" ), 12333.0f );
 		model::StartTimerPlugin( root->GetPlugin( "timer" ) );
 	} );
-	m_testSteps.push_back( []{} ); //empty step
-	m_testSteps.push_back( []{} ); //empty step
+    Wait( 2 );
 	m_testSteps.push_back( [&]
 	{
 		auto editor = m_project->GetProjectEditor();
@@ -1784,8 +1864,7 @@ void					TestScene::InitColoredTimerTest			()
 		auto desc = FontAssetDesc::Create( "Assets/Fonts/couri.TTF", 40, 0, 0, true );
 		editor->LoadAsset( root->GetPlugin( "timer" ), desc );
 	});
-	m_testSteps.push_back( []{} ); //empty step
-	m_testSteps.push_back( []{} ); //empty step
+    Wait( 2 );
 	m_testSteps.push_back( [&]{ RestoreRoot( 1, "timer" ); } );
 
 
@@ -1797,7 +1876,7 @@ void					TestScene::InitColoredTimerTest			()
 		model::SetTimeTimerPlugin( child->GetPlugin( "timer" ), 15.0f );
 		model::StartTimerPlugin( child->GetPlugin( "timer" ) );
 	});
-	m_testSteps.push_back( []{} ); //empty step
+    Wait( 1 );
 
 	m_testSteps.push_back( [&]
 	{ 
@@ -1808,12 +1887,12 @@ void					TestScene::InitColoredTimerTest			()
 		auto desc = FontAssetDesc::Create( "Assets/Fonts/couri.TTF", 40, 0, 0, true );
 		editor->LoadAsset( root->GetPlugin( "timer" ), desc );
 	});
-	m_testSteps.push_back( []{} ); //empty step
+    Wait( 1 );
 
 	for( auto & test : tests )
 	{
 		m_testSteps.push_back( recoverScene );
-		m_testSteps.push_back( []{} ); //empty step
+        Wait( 1 );
 		InitOrderTest( test );
 	}
 }
@@ -1915,7 +1994,7 @@ void					TestScene::InitGradientTimerTest			()
 
 	m_testSteps.push_back( add0 );
 	m_testSteps.push_back( add1 );
-	m_testSteps.push_back( []{} ); //empty step
+    Wait( 1 );
 	
 	m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, TMR_NODE, "linear_gradient", 1 ); } );
 	m_testSteps.push_back( [&]{ SwapPlugins( "linear_gradient", 2, TMR_NODE, "solid color", 2 ); } );
@@ -1928,7 +2007,7 @@ void					TestScene::InitGradientTimerTest			()
 		model::SetTimeTimerPlugin( child->GetPlugin( "timer" ), 15.0f );
 		model::StartTimerPlugin( child->GetPlugin( "timer" ) );
 	});
-	m_testSteps.push_back( []{} ); //empty step
+    Wait( 1 );
 
 	m_testSteps.push_back( [&]
 	{ 
@@ -1939,12 +2018,12 @@ void					TestScene::InitGradientTimerTest			()
 		auto desc = FontAssetDesc::Create( "Assets/Fonts/couri.TTF", 40, 0, 0, true );
 		editor->LoadAsset( root->GetPlugin( "timer" ), desc );
 	});
-	m_testSteps.push_back( []{} ); //empty step
+    Wait( 1 );
 
 	for( auto & test : tests )
 	{
 		m_testSteps.push_back( recoverScene );
-		m_testSteps.push_back( []{} ); //empty step
+        Wait( 1 );
 		InitOrderTest( test );
 	}
 	m_testSteps.push_back( recoverScene );
@@ -1974,7 +2053,7 @@ void					TestScene::InitColoredGeometryTest		()
 			editor->DeleteChildNode( SCENE_NAME, root, GEOM_NODE );
 			editor->AddChildNode( SCENE_NAME, root, geom );
 		});
-		m_testSteps.push_back( []{} );
+        Wait( 1 );
 
 		m_testSteps.push_back( [ plugin, this ]
 		{
@@ -2061,7 +2140,7 @@ void					TestScene::InitTexturedGeometryTest		()
 			editor->DeleteChildNode( SCENE_NAME, root, GEOM_NODE );
 			editor->AddChildNode( SCENE_NAME, root, geom );
 		});
-		m_testSteps.push_back( []{} );
+        Wait( 1 );
 
 		m_testSteps.push_back( [ plugin, this ]
 		{
@@ -2152,7 +2231,7 @@ void					TestScene::InitAnimatedGeometryTest		()
 			editor->DeleteChildNode( SCENE_NAME, root, GEOM_NODE );
 			editor->AddChildNode( SCENE_NAME, root, geom );
 		});
-		m_testSteps.push_back( []{} );
+        Wait( 1 );
 
 		m_testSteps.push_back( [ plugin, this ]
 		{
@@ -2234,7 +2313,7 @@ void					TestScene::InitGradientGeometryTest		()
 			editor->DeleteChildNode( SCENE_NAME, root, GEOM_NODE );
 			editor->AddChildNode( SCENE_NAME, root, geom );
 		});
-		m_testSteps.push_back( []{} );
+        Wait( 1 );
 
 		m_testSteps.push_back( [ plugin, this ]
 		{
@@ -2329,7 +2408,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 		};
 
 		m_testSteps.push_back( add0 );
-		m_testSteps.push_back( []{} );
+        Wait( 1 );
 		m_testSteps.push_back( add1 );
 	
 		m_testSteps.push_back( [&]{ SwapPlugins( "solid color", 2, VSD_NODE, "video_stream_decoder", 2 ); } );
@@ -2345,7 +2424,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 			model::DefaultVideoStreamDecoderPlugin::Start( root->GetPlugin( "video_stream_decoder" ) );
 		} );
-		m_testSteps.push_back( []{} );
+        Wait( 1 );
 		m_testSteps.push_back( [&]
 		{
 			auto editor = m_project->GetProjectEditor();
@@ -2420,9 +2499,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			model::DefaultVideoStreamDecoderPlugin::Start( child->GetPlugin( "video_stream_decoder" ) );
 		});
 
-		m_testSteps.push_back( []{} );
-		m_testSteps.push_back( []{} );
-		m_testSteps.push_back( []{} );
+        Wait( 3 );
 		
 		m_testSteps.push_back( [&]
 		{
@@ -2511,6 +2588,16 @@ void						TestScene::RestoreRoot			( UInt32 rootIdx, const std::string & childPl
 
 	editor->DeletePlugin( root, childPlugin );
 	editor->AddPlugin( root, m_copiedPlugin, rootIdx );
+}
+
+// ****************************
+//
+void                    TestScene::Wait                     ( UInt32 sec )
+{
+    for( UInt32 i = 0; i < sec; ++i )
+    {
+        m_testSteps.push_back( []{} );
+    }
 }
 
 // ****************************

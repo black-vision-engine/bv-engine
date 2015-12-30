@@ -53,4 +53,7 @@ protected:
 
 };
 
+DEFINE_PTR_TYPE(Texture)
+DEFINE_CONST_PTR_TYPE(Texture)
+
 } //bv

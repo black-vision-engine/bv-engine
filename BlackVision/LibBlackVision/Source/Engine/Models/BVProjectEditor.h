@@ -51,6 +51,7 @@ public:
     void                    AddScene			( model::SceneModelPtr scene );
 
     bool                    RemoveScene			( const std::string & sceneName );
+    bool                    RemoveScene			( model::SceneModelPtr scene );
     void                    RemoveAllScenes		();
 
 	/** Insert scene at the end. */
@@ -66,6 +67,7 @@ public:
     bool                    DeleteSceneRootNode	( const std::string & sceneName );
 
 	model::SceneModelPtr    GetScene			( const std::string & sceneName );
+
 	bool					RenameScene			( const std::string & oldSceneName, const std::string & newSceneName );
 
 	/** Add a copy of scene with given name to the project.
