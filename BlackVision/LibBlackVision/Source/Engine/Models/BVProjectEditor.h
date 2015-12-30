@@ -174,15 +174,15 @@ public:
 	bool                    AddTimeline					( model::ITimeEvaluatorPtr parentTimeline, model::ITimeEvaluatorPtr timeline );
 	
 	bool                    DeleteTimeline				( const std::string & timelinePath );
-	void                    ForceDeleteTimeline			( const std::string & timelinePath, const std::string & newTimelinePath = std::string() );
+	bool                    ForceDeleteTimeline			( const std::string & timelinePath, const std::string & newTimelinePath = std::string() );
 
 	bool                    RenameTimeline				( const std::string & timelinePath, const std::string & newName );
 
-	void                    SetTimelineDuration			( const std::string & timelinePath, TimeType duration );
-	void                    SetTimelineWrapPreBehavior	( const std::string & timelinePath, TimelineWrapMethod preMethod );
-	void                    SetTimelineWrapPostBehavior	( const std::string & timelinePath, TimelineWrapMethod postMethod );
+	bool                    SetTimelineDuration			( const std::string & timelinePath, TimeType duration );
+	bool                    SetTimelineWrapPreBehavior	( const std::string & timelinePath, TimelineWrapMethod preMethod );
+	bool                    SetTimelineWrapPostBehavior	( const std::string & timelinePath, TimelineWrapMethod postMethod );
 
-    model::ITimeEvaluatorPtr GetTimeEvaluator        ( const std::string & timelinePath );
+    model::ITimeEvaluatorPtr GetTimeEvaluator           ( const std::string & timelinePath );
 
 /* ASSETS */
 

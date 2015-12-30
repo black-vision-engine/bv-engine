@@ -912,45 +912,41 @@ bool						BVProjectEditor::AddTimeline			( model::ITimeEvaluatorPtr parentTimeli
 //
 bool						BVProjectEditor::DeleteTimeline			( const std::string & timelinePath )
 {
-    auto tm = model::TimelineManager::GetInstance();
     auto scene = m_project->GetScene( model::TimelineHelper::GetSceneName( timelinePath ) );
-    auto timeEval = tm->GetTimeEvaluator( timelinePath );
+    auto timeEval = GetTimeEvaluator( timelinePath );
     
     if( scene && timeEval && timeEval.use_count() == 2 ) //FIXME: maybe it's more safe to go through node tree..
     {
-        tm->RemoveTimelineFromTimeline( timelinePath, model::TimelineHelper::GetSceneName( timelinePath ) );
-        return true;
+        return model::TimelineManager::GetInstance()->RemoveTimelineFromTimeline( timelinePath, scene->GetName() );
     }
     return false;
 }
 
 // *******************************
 //
-void						BVProjectEditor::ForceDeleteTimeline	( const std::string & timelinePath, const std::string & newTimelinePath )
+bool						BVProjectEditor::ForceDeleteTimeline	( const std::string & timelinePath, const std::string & newTimelinePath )
 {
-    auto tm = model::TimelineManager::GetInstance();
-
     auto sceneName = model::TimelineHelper::GetSceneName( timelinePath );
-    auto timeEval = tm->GetTimeEvaluator( timelinePath );
+    auto scene = m_project->GetScene( sceneName );
+    auto timeEval = GetTimeEvaluator( timelinePath );
 
-    auto newTimeEval = tm->GetTimeEvaluator( sceneName );
+    auto newTimeEval = GetTimeEvaluator( sceneName );
     if( !newTimelinePath.empty() )
     {
-        newTimeEval = tm->GetTimeEvaluator( newTimelinePath );
+        newTimeEval = GetTimeEvaluator( newTimelinePath );
     }
-    assert( timeEval );
-    assert( newTimeEval );
-    
-    auto scene = m_project->GetScene( sceneName );
-    auto sceneRoot = scene->GetRootNode();
-    assert( scene );
-    assert( sceneRoot );
 
-    sceneRoot->GetModelNodeEditor()->ReplaceTimeline( timeEval, newTimeEval );
+    if( !timeEval || !newTimeEval || !scene || !scene->GetRootNode() )
+    {
+        return false;
+    }
 
-    tm->RemoveTimelineFromTimeline( timelinePath, model::TimelineHelper::GetSceneName( timelinePath ) );
+    scene->GetRootNode()->GetModelNodeEditor()->ReplaceTimeline( timeEval, newTimeEval );
+    model::TimelineManager::GetInstance()->RemoveTimelineFromTimeline( timelinePath, model::TimelineHelper::GetSceneName( timelinePath ) );
     
     assert( timeEval.use_count() == 1 );
+    
+    return true;
 }
     
 // *******************************
@@ -962,9 +958,8 @@ bool						BVProjectEditor::RenameTimeline			( const std::string & timelinePath, 
         return false; //renaming scene timeline is not allowed
     }
 
-    auto timelineManager = model::TimelineManager::GetInstance();
-    auto timeline = timelineManager->GetTimeline( timelinePath );
-    if( timeline && !timelineManager->GetTimeline( newName ) )
+    auto timeline = GetTimeEvaluator( timelinePath );
+    if( timeline && !GetTimeEvaluator( newName ) )
     {
         timeline->SetName( newName );
         return true;
@@ -974,29 +969,41 @@ bool						BVProjectEditor::RenameTimeline			( const std::string & timelinePath, 
 
 // *******************************
 //
-void						BVProjectEditor::SetTimelineDuration			( const std::string & timelinePath, TimeType duration )
+bool						BVProjectEditor::SetTimelineDuration			( const std::string & timelinePath, TimeType duration )
 {
-    auto timeline = model::TimelineManager::GetInstance()->GetTimeline( timelinePath );
-    assert( timeline );
-    timeline->SetDuration( duration );
+    auto timeline = std::static_pointer_cast< model::ITimeline >( GetTimeEvaluator( timelinePath ) );
+    if( timeline )
+    {
+        timeline->SetDuration( duration );
+        return true;
+    }
+    return false;
 }
 
 // *******************************
 //
-void						BVProjectEditor::SetTimelineWrapPreBehavior		( const std::string & timelinePath, TimelineWrapMethod preMethod )
+bool						BVProjectEditor::SetTimelineWrapPreBehavior		( const std::string & timelinePath, TimelineWrapMethod preMethod )
 {
-    auto timeline = model::TimelineManager::GetInstance()->GetTimeline( timelinePath );
-    assert( timeline );
-    timeline->SetWrapBehavior( preMethod, timeline->GetWrapBehaviorPost() );
+    auto timeline = std::static_pointer_cast< model::ITimeline >( GetTimeEvaluator( timelinePath ) );
+    if( timeline )
+    {
+        timeline->SetWrapBehavior( preMethod, timeline->GetWrapBehaviorPost() );
+        return true;
+    }
+    return false;
 }
 
 // *******************************
 //
-void						BVProjectEditor::SetTimelineWrapPostBehavior	( const std::string & timelinePath, TimelineWrapMethod postMethod )
+bool						BVProjectEditor::SetTimelineWrapPostBehavior	( const std::string & timelinePath, TimelineWrapMethod postMethod )
 {
-    auto timeline = model::TimelineManager::GetInstance()->GetTimeline( timelinePath );
-    assert( timeline );
-    timeline->SetWrapBehavior( timeline->GetWrapBehaviorPre(), postMethod );
+    auto timeline = std::static_pointer_cast< model::ITimeline >( GetTimeEvaluator( timelinePath ) );
+    if( timeline )
+    {
+        timeline->SetWrapBehavior( timeline->GetWrapBehaviorPre(), postMethod );
+        return true;
+    }
+    return false;
 }
 
 // *******************************
