@@ -9,8 +9,8 @@ namespace bv { namespace model {
 //
 ModelNodeEffectShadow::ModelNodeEffectShadow( ITimeEvaluatorPtr timeEvaluator )
 	: ModelNodeEffectBase( timeEvaluator )
-	, m_colorVal( glm::vec4( 1.f, 0.f, 0.f, 1.f ) )
-	, m_shiftVal( glm::vec2( 0.f, 0.f ) )
+	, m_colorVal( glm::vec4( 1.f, 1.f, 1.f, 0.5f ) )
+	, m_shiftVal( glm::vec2( 0.002f, -0.002f ) )
 	, m_blurSizeVal( 15.0f )
 { 
 	auto colorEval = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", timeEvaluator );
