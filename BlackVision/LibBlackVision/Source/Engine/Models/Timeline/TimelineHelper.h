@@ -14,6 +14,8 @@ class TimelineHelper
 {
 public:
 
+    static ITimeEvaluatorPtr        CreateTimeEvaluator             ( const std::string & name, TimelineType type );
+
     static ITimeEvaluatorPtr		CreateOffsetTimeEvaluator       ( const std::string & name, TimeType startTime );
     static ITimeEvaluatorPtr		CreateConstTimeEvaluator        ( const std::string & name, TimeType timeVal );
     static ITimelinePtr				CreateDefaultTimeline           ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
@@ -26,11 +28,16 @@ public:
 	@return Returns group prefix number. */
 	static UInt32					CopyTimelines					( ITimeEvaluatorPtr destTimeline, const std::vector< ITimeEvaluatorPtr > & timelines );
 
-	static std::string				GetParentNodePath				( const std::string & timelinePath );
+	static std::string				GetSceneName        			( const std::string & timelinePath );
+	static std::string				GetParentTimelinePath			( const std::string & timelinePath );
 	
     static ITimeEvaluatorPtr        GetTimeEvaluator                ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
     static ITimelinePtr             GetTimeline                     ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
     static std::string              GetTimelinePath                 ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline );
+
+private:
+
+    static ITimeEvaluatorPtr        FindTimelineByName               ( const std::string & name, ITimeEvaluatorPtr root );
 
 };
 

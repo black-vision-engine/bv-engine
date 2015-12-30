@@ -18,6 +18,7 @@ std::string     WStringToString ( const std::wstring & data );
 
 StrVec          Split           ( const std::string & str, const std::string & sep );
 std::string     Join            ( const StrVec & strVec, const std::string & sep );
+std::string     Trim            ( const std::string & str, const std::string & mark );
 
 } //bv
 

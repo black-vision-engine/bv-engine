@@ -286,6 +286,7 @@ template<> const std::wstring& T2WString    ( InfoEvent::Command t )    { return
 // ========================================================================= //
 // TimeLineEvent
 // ========================================================================= //
+const std::wstring TIMELINE_TYPE_WSTRING                = L"Type";
 const std::wstring TIMELINE_TIME_VALUE_WSTRING          = L"Time";
 const std::wstring TIMELINE_DURATION_VALUE_WSTRING      = L"Duration";
 const std::wstring TIMELINE_NEW_NAME_WSTRING            = L"TimelineNewName";
@@ -326,6 +327,20 @@ std::pair< TimelineWrapMethod, const std::wstring > TimelineWrapMethodMapping[] 
 
 template<> TimelineWrapMethod  WString2T    ( const std::wstring& s )           { return WString2T( TimelineWrapMethodMapping, s ); }
 template<> const std::wstring& T2WString    ( TimelineWrapMethod t )            { return Enum2WString( TimelineWrapMethodMapping, t ); }
+
+
+// Timeline Type
+
+std::pair< TimelineType, const std::wstring > TimelineTypeMapping[] = 
+{
+    std::make_pair( TimelineType::TT_DEFAULT, L"Default" )
+    , std::make_pair( TimelineType::TT_OFFSET, L"Offset" ) 
+    , std::make_pair( TimelineType::TT_CONST, L"Const" ) 
+    , std::make_pair( TimelineType::TT_TOTAL, SerializationHelper::EMPTY_WSTRING )      // default
+};
+
+template<> TimelineType         WString2T    ( const std::wstring& s )          { return WString2T( TimelineTypeMapping, s ); }
+template<> const std::wstring&  T2WString    ( TimelineType t )                 { return Enum2WString( TimelineTypeMapping, t ); }
 
 
 // ========================================================================= //
@@ -1273,13 +1288,13 @@ EventType           InfoEvent::GetEventType() const
 
 // *************************************
 //
-void                TimeLineEvent::Serialize            ( ISerializer& ser ) const
+void                TimeLineEvent::Serialize            ( ISerializer & ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
     ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( TimelineCommand ) );
     ser.SetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING, toWString( TimelineName ) );
-    ser.SetAttribute( SerializationHelper::SCENE_NAME_WSTRING, toWString( SceneName ) );
     ser.SetAttribute( SerializationHelper::TIMELINE_NEW_NAME_WSTRING, toWString( NewTimelineName ) );
+    ser.SetAttribute( SerializationHelper::TIMELINE_TYPE_WSTRING, SerializationHelper::T2WString( TimelineType ) );
     ser.SetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING, toWString( Time ) );
     ser.SetAttribute( SerializationHelper::TIMELINE_DURATION_VALUE_WSTRING, toWString( Duration ) );
     ser.SetAttribute( SerializationHelper::TIMELINE_WRAP_METHOD_WSTRING, SerializationHelper::T2WString( WrapMethod ) );
@@ -1287,44 +1302,57 @@ void                TimeLineEvent::Serialize            ( ISerializer& ser ) con
 
 // *************************************
 //
-IEventPtr                TimeLineEvent::Create          ( IDeserializer& deser )
+IEventPtr                TimeLineEvent::Create          ( IDeserializer & deser )
 {
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
-        TimeLineEventPtr newEvent   = std::make_shared<TimeLineEvent>();
-        newEvent->Time              = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING ) );
-        newEvent->TimelineCommand   = SerializationHelper::WString2T<TimeLineEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        TimeLineEventPtr newEvent   = std::make_shared< TimeLineEvent >();
+        newEvent->Time              = SerializationHelper::WString2T< float >( deser.GetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING ) );
+        newEvent->TimelineCommand   = SerializationHelper::WString2T< TimeLineEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
         newEvent->TimelineName      = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
-        newEvent->Duration          = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMELINE_DURATION_VALUE_WSTRING ) );
-        newEvent->WrapMethod        = SerializationHelper::WString2T<TimelineWrapMethod>( deser.GetAttribute( SerializationHelper::TIMELINE_WRAP_METHOD_WSTRING ) );
-        newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
+        newEvent->TimelineType      = SerializationHelper::WString2T< bv::TimelineType >( deser.GetAttribute( SerializationHelper::TIMELINE_TYPE_WSTRING ) );
+        newEvent->Duration          = SerializationHelper::WString2T< float >( deser.GetAttribute( SerializationHelper::TIMELINE_DURATION_VALUE_WSTRING ) );
+        newEvent->WrapMethod        = SerializationHelper::WString2T< TimelineWrapMethod >( deser.GetAttribute( SerializationHelper::TIMELINE_WRAP_METHOD_WSTRING ) );
         newEvent->NewTimelineName   = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NEW_NAME_WSTRING ) );
 
         return newEvent;
     }
     return nullptr;    
 }
-// *************************************
-//
-IEventPtr               TimeLineEvent::Clone             () const
-{   return IEventPtr( new TimeLineEvent( *this ) );  }
 
 // *************************************
 //
-EventType           TimeLineEvent::Type()
-{   return m_sEventType;   }
+IEventPtr           TimeLineEvent::Clone        () const
+{   
+    return IEventPtr( new TimeLineEvent( *this ) );  
+}
+
 // *************************************
 //
-std::string&        TimeLineEvent::Name()
-{   return m_sEventName;   }
+EventType           TimeLineEvent::Type         ()
+{   
+    return m_sEventType;   
+}
 // *************************************
 //
-const std::string&  TimeLineEvent::GetName() const
-{   return Name();   }
+std::string &       TimeLineEvent::Name         ()
+{   
+    return m_sEventName;   
+}
+
 // *************************************
 //
-EventType           TimeLineEvent::GetEventType() const
-{   return this->m_sEventType; }
+const std::string & TimeLineEvent::GetName      () const
+{   
+    return Name();   
+}
+
+// *************************************
+//
+EventType           TimeLineEvent::GetEventType () const
+{   
+    return this->m_sEventType;
+}
 
 
 //******************* TimerEvent *************

@@ -563,6 +563,7 @@ DEFINE_PTR_TYPE( InfoEvent )
 class TimeLineEvent : public RemoteEvent
 {
 public:
+
     typedef enum
     {
 		AddTimeline,
@@ -580,33 +581,39 @@ public:
         GotoAndPlay,
         Fail            ///< Wrong command
     } Command;
+
 private:
+
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
+
 public:
+
     TimeLineEvent::Command      TimelineCommand;
-    std::string                 SceneName;
     std::string                 TimelineName; //path?
     std::string                 NewTimelineName;
     float                       Time;
+    TimelineType                TimelineType;
     TimeType                    Duration;
 	TimelineWrapMethod			WrapMethod;
 
 public:
+
     explicit                        TimeLineEvent   () {}
 
-    virtual void                    Serialize           ( ISerializer& ser ) const;
-    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual void                    Serialize           ( ISerializer & ser ) const;
+    static IEventPtr                Create              ( IDeserializer & deser );
     virtual IEventPtr               Clone               () const;
 
     static EventType                Type                ();
-    static std::string&             Name                ();
+    static std::string &            Name                ();
     virtual const std::string &     GetName             () const;
     virtual EventType               GetEventType        () const;
+
 };
 
-template<> TimeLineEvent::Command   SerializationHelper::WString2T  ( const std::wstring& s );
-template<> const std::wstring&      SerializationHelper::T2WString  ( TimeLineEvent::Command t );
+template<> TimeLineEvent::Command   SerializationHelper::WString2T  ( const std::wstring & s );
+template<> const std::wstring &     SerializationHelper::T2WString  ( TimeLineEvent::Command t );
 
 DEFINE_PTR_TYPE( TimeLineEvent )
 

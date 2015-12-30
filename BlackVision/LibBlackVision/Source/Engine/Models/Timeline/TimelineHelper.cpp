@@ -8,6 +8,23 @@
 namespace bv { namespace model {
 
 // *********************************
+//maybe should be moved into TimeEvalFactory or sth
+ITimeEvaluatorPtr       TimelineHelper::CreateTimeEvaluator             ( const std::string & name, TimelineType type )
+{
+    switch ( type )
+    {
+    case TimelineType::TT_DEFAULT:
+        return CreateDefaultTimeline( name, 1.f, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    case TimelineType::TT_OFFSET:
+        return CreateOffsetTimeEvaluator( name, 0.f );
+    case TimelineType::TT_CONST:
+        return CreateConstTimeEvaluator( name, 0.f );
+    default:
+        return nullptr;
+    }
+}
+
+// *********************************
 //
 ITimeEvaluatorPtr       TimelineHelper::CreateOffsetTimeEvaluator      ( const std::string & name, TimeType startTime )
 {
@@ -78,15 +95,29 @@ UInt32					TimelineHelper::CopyTimelines					( ITimeEvaluatorPtr destTimeline, c
 
 // *********************************
 //
-std::string				TimelineHelper::GetParentNodePath				( const std::string & timelinePath )
+std::string				TimelineHelper::GetSceneName        			( const std::string & timelinePath )
 {
-    auto path = Split( timelinePath, "/" );
+    auto path = Trim( timelinePath, "/" );
+    auto names = Split( path, "/" );
+    if( !names.empty() )
+    {
+        return names[ 0 ];
+    }
+    return "";
+}
+
+// *********************************
+//
+std::string				TimelineHelper::GetParentTimelinePath           ( const std::string & timelinePath )
+{
+    auto path = Trim( timelinePath, "/" );
+    auto names = Split( timelinePath, "/" );
 
 	std::string parentPath = "";
-	for( unsigned int i = 0; i < path.size() - 1; ++i )
+	for( unsigned int i = 0; i < names.size() - 1; ++i )
 	{
-		parentPath += path[ i ];
-		if( i < path.size() - 2 )
+		parentPath += names[ i ];
+		if( i < names.size() - 2 )
 			parentPath += "/";
 	}
 	return parentPath;
@@ -94,7 +125,7 @@ std::string				TimelineHelper::GetParentNodePath				( const std::string & timeli
 
 // *********************************
 //
-ITimeEvaluatorPtr       FindTimelineByName             ( const std::string & name, ITimeEvaluatorPtr root )
+ITimeEvaluatorPtr       TimelineHelper::FindTimelineByName          ( const std::string & name, ITimeEvaluatorPtr root )
 {
     if( root != nullptr )
     {

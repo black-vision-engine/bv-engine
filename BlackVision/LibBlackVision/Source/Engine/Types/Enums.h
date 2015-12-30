@@ -173,6 +173,15 @@ enum class PluginResourceType : int
     PRT_TOTAL
 };
 
+enum class TimelineType : int
+{
+    TT_DEFAULT = 0,
+    TT_OFFSET,
+    TT_CONST,
+
+    TT_TOTAL
+};
+
 enum class TimelineEventType : int
 {
     TET_STOP = 0,

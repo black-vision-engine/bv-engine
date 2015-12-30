@@ -677,7 +677,7 @@ void					TestScene::InitTimelinesTest		()
 		auto editor = m_project->GetProjectEditor();
 		bool success = true;
 
-		editor->AddTimeline( SCENE_NAME, TIMELINE_NAME, 1.0, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+        editor->AddTimeline( SCENE_NAME, TIMELINE_NAME, TimelineType::TT_DEFAULT );
 
 		success &= ( m_timelineManager->GetTimeline( SCENE_NAME + "/" + TIMELINE_NAME ) != nullptr );
 
@@ -713,7 +713,7 @@ void					TestScene::InitTimelinesTest		()
 		auto scene = editor->GetScene( SCENE_NAME );
 
 		auto timeline = model::TimelineHelper::CreateDefaultTimeline( TIMELINE_NAME, 1.0, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-		editor->AddTimeline( SCENE_NAME, timeline );
+        editor->AddTimeline( scene->GetTimeline(), timeline );
 
 		auto tex = TestSceneUtils::TexturedRectangle( timeline, TEX_NODE, 0.3f, 0.3f, TestSceneUtils::TEXTURE_PATH );
 		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
@@ -735,6 +735,7 @@ void					TestScene::InitTimelinesTest		()
 	m_testSteps.push_back([&] 
 	{
 		auto editor = m_project->GetProjectEditor();
+		auto scene = editor->GetScene( SCENE_NAME );
 		bool success = true;
 
 		auto oldTimeline = SCENE_NAME + "/" + TIMELINE_NAME;
@@ -742,7 +743,7 @@ void					TestScene::InitTimelinesTest		()
 		
 		auto time = m_timeEvaluator->GetLocalTime();
 		auto timeline = model::TimelineHelper::CreateDefaultTimeline( TIMELINE_NAME1, time+2.0f, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-		editor->AddTimeline( SCENE_NAME, timeline );
+		editor->AddTimeline( scene->GetTimeline(), timeline );
 		timeline->Play();
 		
 		success &= (!editor->DeleteTimeline( oldTimeline ) );
@@ -765,7 +766,7 @@ void					TestScene::InitTimelinesTest		()
 		SetParameter( child->GetPlugin( "texture" )->GetParameter( "alpha" ), time+2.f, 0.f );
 	});
 	
-	m_testSteps.push_back([&]{});
+	Wait( 1 );
 
 	m_testSteps.push_back([&] 
 	{
@@ -777,7 +778,7 @@ void					TestScene::InitTimelinesTest		()
 		auto oldTimeline = SCENE_NAME + "/" + TIMELINE_NAME1;
 		
 		auto timeline = model::TimelineHelper::CreateDefaultTimeline( TIMELINE_NAME, 2.0f, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_REPEAT );
-		editor->AddTimeline( SCENE_NAME, timeline );
+		editor->AddTimeline( scene->GetTimeline(), timeline );
 		timeline->Play();
 		
 		success &= (!editor->DeleteTimeline( oldTimeline ) );
@@ -795,8 +796,7 @@ void					TestScene::InitTimelinesTest		()
 		assert( success );
 	});
 
-	m_testSteps.push_back([&]{});
-	m_testSteps.push_back([&]{});
+	Wait( 2 );
 
 	m_testSteps.push_back([&] 
 	{
@@ -813,9 +813,7 @@ void					TestScene::InitTimelinesTest		()
 		assert( success );
 	});
 
-	m_testSteps.push_back([&]{});
-	m_testSteps.push_back([&]{});
-	m_testSteps.push_back([&]{});
+	Wait( 3 );
 
 	m_testSteps.push_back([&] 
 	{
@@ -848,8 +846,6 @@ void					TestScene::InitTimelinesTest		()
 
 		assert( success );
 	});
-
-
 }
 
 // ****************************
@@ -977,9 +973,9 @@ void					TestScene::InitTestEditor			()
 {
 	//InitTestModelSceneEditor();
 
-	//InitTimelinesTest();
+	InitTimelinesTest();
 
-	InitAssetsTest();
+	//InitAssetsTest();
 
 	//InitBasicColorPluginTest();
 	//InitOrderColorPluginTest();

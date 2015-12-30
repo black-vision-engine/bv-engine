@@ -432,28 +432,24 @@ void SceneEventsHandlers::TimelineHandler     ( bv::IEventPtr evt )
 
         bv::TimeLineEventPtr timelineEvent = std::static_pointer_cast<bv::TimeLineEvent>( evt );
 
-        std::string& sceneName = timelineEvent->SceneName;
         std::string& timeLineName = timelineEvent->TimelineName; //path?
         std::string& timelineNewName = timelineEvent->NewTimelineName;
 
         float time = timelineEvent->Time;
+        auto type = timelineEvent->TimelineType;
         auto duration = timelineEvent->Duration;
         auto wrapMethod = timelineEvent->WrapMethod;
         TimeLineEvent::Command command = timelineEvent->TimelineCommand;
 
         if( command == TimeLineEvent::Command::AddTimeline )
 		{
-			editor->AddTimeline( sceneName, timelineNewName, duration, wrapMethod, wrapMethod );
-            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
+			auto success = editor->AddTimeline( timeLineName, timelineNewName, type );
+            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, success );
 		}
 		else if( command == TimeLineEvent::Command::DeleteTimeline )
         {
 			auto success = editor->DeleteTimeline( timeLineName );
-
-			if( success )
-				SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
-			else
-				SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, false );
+			SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, success );
         }
 		else if( command == TimeLineEvent::Command::ForceDeleteTimeline )
         {
@@ -463,10 +459,8 @@ void SceneEventsHandlers::TimelineHandler     ( bv::IEventPtr evt )
         }
 		else if( command == TimeLineEvent::Command::RenameTimeline )
         {
-			if( editor->RenameTimeline( timeLineName, timelineNewName ) )
-                SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
-            else
-                SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, false );
+			auto success = editor->RenameTimeline( timeLineName, timelineNewName );
+            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, success );
         }
 		else if( command == TimeLineEvent::Command::SetDuration )
         {

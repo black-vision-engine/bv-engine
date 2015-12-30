@@ -50,4 +50,14 @@ std::string     Join            ( const StrVec & strVec, const std::string & sep
     return boost::algorithm::join( strVec, sep );
 }
 
+// *******************************
+//
+std::string     Trim            ( const std::string & str, const std::string & mark )
+{
+    auto ret = str;
+    ret.erase( ret.find_last_not_of( mark ) + 1 );
+    ret.erase( 0, ret.find_first_not_of( mark ) );
+    return ret;
+}
+
 } //bv

@@ -78,8 +78,8 @@ public:
 
 
 /* NODES */
-    model::IModelNodePtr		GetNode         ( const std::string & sceneName, const std::string & nodePath );
-	model::IModelNodePtr		GetParentNode   ( const std::string & sceneName, const std::string & nodePath );
+    model::IModelNodePtr	GetNode             ( const std::string & sceneName, const std::string & nodePath );
+	model::IModelNodePtr	GetParentNode       ( const std::string & sceneName, const std::string & nodePath );
 
 	/* paths */
     void                    AddChildNode        ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName );
@@ -170,11 +170,8 @@ public:
 
 /* TIMELINES */
 
-    model::ITimeEvaluatorPtr	GetTimeline     ( const std::string & timelinePath );
-
-	//FIXME: what about ConstTimeEvaluator & OffsetTimeEvaluator?
-	void                    AddTimeline					( const std::string & sceneName, const std::string & timelineName, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
-	void                    AddTimeline					( const std::string & sceneName, model::ITimeEvaluatorPtr timeline );
+	bool                    AddTimeline					( const std::string & parentTimelinePath, const std::string & timelineName, TimelineType timelineType );
+	bool                    AddTimeline					( model::ITimeEvaluatorPtr parentTimeline, model::ITimeEvaluatorPtr timeline );
 	
 	bool                    DeleteTimeline				( const std::string & timelinePath );
 	void                    ForceDeleteTimeline			( const std::string & timelinePath, const std::string & newTimelinePath = std::string() );
@@ -184,6 +181,8 @@ public:
 	void                    SetTimelineDuration			( const std::string & timelinePath, TimeType duration );
 	void                    SetTimelineWrapPreBehavior	( const std::string & timelinePath, TimelineWrapMethod preMethod );
 	void                    SetTimelineWrapPostBehavior	( const std::string & timelinePath, TimelineWrapMethod postMethod );
+
+    model::ITimeEvaluatorPtr GetTimeEvaluator        ( const std::string & timelinePath );
 
 /* ASSETS */
 
@@ -199,14 +198,14 @@ private:
     void                    UnregisterUpdaters  ( model::IModelNodePtr node );
 
     SceneNode *             GetEngineNode       ( model::IModelNodePtr node );
-
+    
 	
 	/* model scene helpers */
-	std::string					GetNodeName			( const std::string & nodePath );
+	std::string				GetNodeName			( const std::string & nodePath );
 
 
 	/* renaming helpers */
-	std::string				PrefixSceneName		( const std::string & name );
+	std::string             PrefixSceneName		( const std::string & name );
 
     friend class BVProject;
 };

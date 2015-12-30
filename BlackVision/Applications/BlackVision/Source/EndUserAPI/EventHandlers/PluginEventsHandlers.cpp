@@ -114,18 +114,15 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
         result = SetWrapPostMethod( param, SerializationHelper::String2T( toString( value ), WrapMethod::clamp ) );
     else if( command == ParamKeyEvent::Command::AssignTimeline )
     {
-        auto sceneTimeline = m_appLogic->GetBVProject()->GetProjectEditor()->GetTimeline( sceneName );
+        auto svalue = toString( value ); //timeline path (with scene timeline name)
+        auto timeEval = m_appLogic->GetBVProject()->GetProjectEditor()->GetTimeEvaluator( svalue );
 
-        bv::model::ITimeEvaluatorPtr timeEvaluator = nullptr;
-        if( sceneTimeline != nullptr )
-            timeEvaluator = sceneTimeline->GetChild( toString( value ) );
-        if( timeEvaluator == nullptr )
+        if( !timeEval || TimelineHelper::GetSceneName( svalue ) != sceneName )
         {
             SendSimpleErrorResponse( command, setParamEvent->EventID, setParamEvent->SocketID, "Timeline not found" );
             return;
         }
-
-        param->SetTimeEvaluator( timeEvaluator );
+        param->SetTimeEvaluator( timeEval );
     }
     else if( command == ParamKeyEvent::Command::RemoveKey )
     {
