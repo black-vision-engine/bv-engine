@@ -6,6 +6,8 @@
 #include "Engine/Models/NodeEffects/ModelNodeEffectLightScattering.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectWireframe.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectLightScattering.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectShadow.h"
 
 namespace bv
 {
@@ -49,6 +51,9 @@ IModelNodeEffectPtr     ModelNodeEffectFactory::Create       ( NodeEffectType ef
         break;
     case NodeEffectType::NET_WIREFRAME:
         return std::make_shared<ModelNodeEffectWireframe>( timeEvaluator );
+        break;
+    case NodeEffectType::NET_SHADOW:
+        return std::make_shared<ModelNodeEffectShadow>( timeEvaluator );
         break;
     default:
         return nullptr;
