@@ -287,6 +287,9 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\ShadowEffectRenderLogic.cpp">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\TimelineHandlers.cpp">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -518,6 +521,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\ShadowEffectRenderLogic.h">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\TimelineHandlers.h">
+      <Filter>EndUserAPI\EventHandlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

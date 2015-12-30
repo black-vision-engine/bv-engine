@@ -279,6 +279,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\QueryHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\RemoteEventsHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\TimelineHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\RemoteController.cpp" />
     <ClCompile Include="..\..\..\Source\ExampleTestScenes.cpp" />
@@ -365,6 +366,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\QueryHandlers.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\RemoteEventsHandlers.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\SceneEventsHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\TimelineHandlers.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\IEventServer.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteController.h" />

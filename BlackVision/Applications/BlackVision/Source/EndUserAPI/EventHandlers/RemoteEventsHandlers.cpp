@@ -7,6 +7,7 @@
 #include "EngineStateHandlers.h"
 #include "AssetHandlers.h"
 #include "GlobalEffectHandler.h"
+#include "TimelineHandlers.h"
 
 #include "Engine/Events/EventManager.h"
 #include "Widgets/Crawler/CrawlerEvents.h"
@@ -22,8 +23,9 @@ RemoteEventsHandlers::RemoteEventsHandlers()
         m_sceneEvents( nullptr ),
         m_queryEvents( nullptr ),
         m_engineStateEvents( nullptr ),
-        m_heightmapEvents( nullptr )
-		, m_assetEvents( nullptr )
+        m_heightmapEvents( nullptr ),
+		m_assetEvents( nullptr ),
+        m_timelineHandlers( nullptr )
 {}
 
 RemoteEventsHandlers::~RemoteEventsHandlers()
@@ -40,6 +42,8 @@ RemoteEventsHandlers::~RemoteEventsHandlers()
         delete m_heightmapEvents;
 	if( m_assetEvents )
 		delete m_assetEvents;
+    if( m_timelineHandlers )
+        delete m_timelineHandlers;
 }
 
 // ***********************
@@ -53,6 +57,7 @@ void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic* appLogic )
     m_heightmapEvents   = new HightmapHandlers( appLogic );     // Unused for now.
 	m_assetEvents	    = new AssetHandlers( appLogic );
     m_globalEffectEvents= new GlobalEffectHandler( appLogic );
+    m_timelineHandlers  = new TimelineHandlers( appLogic );
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_pluginEvents, &PluginEventsHandlers::LoadAsset ), LoadAssetEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_pluginEvents, &PluginEventsHandlers::ParamHandler ), ParamKeyEvent::Type() );
@@ -67,6 +72,7 @@ void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic* appLogic )
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_engineStateEvents, &EngineStateHandlers::RenderingModeEvent ), RenderingModeEvent::Type() );
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_assetEvents, &AssetHandlers::CacheHandler ), AssetEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_globalEffectEvents, &GlobalEffectHandler::GlobalEffectEventHandler ), GlobalEffectEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_timelineHandlers, &TimelineHandlers::TimelineKeyframe ), TimelineKeyframeEvent::Type() );
 
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::OnNodeAppearing ), widgets::NodeAppearingCrawlerEvent::Type() );
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );

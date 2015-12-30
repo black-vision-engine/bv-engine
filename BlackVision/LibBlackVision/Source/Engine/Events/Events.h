@@ -824,6 +824,59 @@ template<> const std::wstring&          SerializationHelper::T2WString  ( Global
 
 DEFINE_PTR_TYPE( GlobalEffectEvent )
 
+
+// ************************************* TimelineKeyframeEvent *************************************
+class TimelineKeyframeEvent : public RemoteEvent
+{
+public:
+    typedef enum
+    {
+        AddKeyframe,
+        Fail            ///< Wrong command
+    } Command;
+
+    typedef enum
+    {
+        StopKeyframe,
+        LoopReverseKeyframe,
+        LoopJumpKeyframe,
+        LoopRestartKeyframe,
+        NullKeyframe,
+        KeyframeTypeFail
+    } KeyframeType;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+public:
+    TimelineKeyframeEvent::Command      KeyframeCommand;
+    KeyframeType                        NewKeyframeType;
+    std::string                         SceneName;
+    std::string                         TimelinePath;
+    std::string                         KeyframeName;
+
+    float                               Time;
+    float                               JumpToTime;
+    unsigned int                        TotalLoopCount;
+
+public:
+    explicit                        TimelineKeyframeEvent   () {}
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+};
+
+template<> TimelineKeyframeEvent::Command   SerializationHelper::WString2T  ( const std::wstring& s );
+template<> const std::wstring&              SerializationHelper::T2WString  ( TimelineKeyframeEvent::Command t );
+
+DEFINE_PTR_TYPE( TimelineKeyframeEvent )
+
+
 // ************************************* HightmapEvent *************************************
 class HightmapEvent : public RemoteEvent
 {
