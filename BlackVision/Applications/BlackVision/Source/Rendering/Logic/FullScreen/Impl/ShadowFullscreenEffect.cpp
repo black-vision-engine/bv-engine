@@ -4,6 +4,8 @@
 
 #include "Engine/Types/Values/ValuesFactory.h"
 
+#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
+
 namespace bv {
 
 // **************************
@@ -105,7 +107,18 @@ ShadowFullscreenEffect::~ShadowFullscreenEffect     ()
 //
 RenderableEntity *  ShadowFullscreenEffect::CreateFullscreenQuad    () const
 {
-    return CreateDefaultFullscrQuad( CreatePS() );
+    auto quad = CreateDefaultFullscrQuad( CreatePS() );
+
+    auto eff  = quad->GetRenderableEffect();
+    auto pass = eff->GetPass( 0 );
+
+    auto sinst = pass->GetStateInstance();
+    
+    auto as = RenderStateAccessor::AccessAlphaState( sinst );
+
+    as->blendEnabled = true;
+
+    return quad;
 }
 
 } // bv

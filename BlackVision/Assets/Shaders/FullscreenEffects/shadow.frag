@@ -35,7 +35,14 @@ void main()
 
 	float alpha = texture( Tex0, uvCoord - shift ).a;
     
+    vec4 res = ( 1.0 - col.a ) * color * alpha + col;
     
-    FragColor = ( 1.0 - col.a ) * color * alpha + col;
+    FragColor = res;
+    
+    // if(res.a > 0.0)
+        // FragColor = res;
+    // else
+        // discard;
+    
 	//FragColor = color * alpha * col.a;
 }
