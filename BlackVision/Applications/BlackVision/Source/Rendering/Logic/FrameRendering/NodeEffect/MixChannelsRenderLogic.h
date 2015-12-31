@@ -8,7 +8,7 @@ namespace bv {
 
 class MixChannelsEffect;
 class Renderer;
-
+class RenderTarget;
 
 class MixChannelsRenderLogic : public NodeEffectRenderLogic
 {
@@ -26,6 +26,10 @@ public:
 private:
 
     void            EnableMixChannelsEffect     ( Renderer * renderer, SceneNode * node );
+
+    MixChannelsEffect *  AccessMixChannelsEffect( RenderTarget * rt, int mixMask );
+
+    void            BlitWithMixchannels         ( Renderer * renderer, RenderTarget * rt, int mixMask );
 
 };
 

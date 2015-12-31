@@ -30,6 +30,7 @@ private:
     BlitFullscreenEffect *  AccessBlitAlphaEffect               ( RenderTarget * rt, float alpha );
 
     void                    BlitWithAlpha                       ( Renderer * renderer, RenderTarget * alphaTarget, float alpha );
+
 };
 
 } // bv

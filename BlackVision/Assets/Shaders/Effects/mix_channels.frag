@@ -7,6 +7,7 @@ in vec2 uvCoord;
 layout (binding = 0) uniform sampler2D 	Tex0;
 
 uniform int			channelMask;
+univorm vec4 		multMask;
 
 // *********************************
 //
@@ -18,7 +19,7 @@ vec4 	ApplyMaskChannels 		( vec4 col )
 	int bIdx = ( channelMask >> 4 ) & 0x3;
 	int aIdx = ( channelMask >> 6 ) & 0x3;
 
-	return vec4( col[ rIdx ], col[ gIdx ], col[ bIdx ], col[ aIdx ] );
+	return vec4( col[ rIdx ], col[ gIdx ], col[ bIdx ], col[ aIdx ] ) * multMask;
 }
 
 // *********************************
