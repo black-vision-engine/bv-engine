@@ -58,6 +58,11 @@ void        TimelineHandlers::TimelineKeyframe           ( bv::IEventPtr eventPt
         result = AddKeyframe( targetType, timeline, keyframeName, keyTime, loopCount, jumpToTime );
         SendSimpleResponse( command, setParamEvent->EventID, setParamEvent->SocketID, result );
     }
+    else if( command == TimelineKeyframeEvent::Command::RemoveKeyframe )
+    {
+        result = timeline->RemoveKeyFrameEvent( keyframeName );
+        SendSimpleResponse( command, setParamEvent->EventID, setParamEvent->SocketID, result );
+    }
     else
         SendSimpleErrorResponse( command, setParamEvent->EventID, setParamEvent->SocketID, "Unknown command" );
 
