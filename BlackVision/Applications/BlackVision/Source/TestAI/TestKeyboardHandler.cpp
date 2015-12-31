@@ -102,6 +102,7 @@ void SerializeAllEvents( const std::string& fileName )
     LoadAssetEventPtr       loadTextureEvent    = std::make_shared<LoadAssetEvent>();
     LoadAssetEventPtr       loadFontEvent       = std::make_shared<LoadAssetEvent>();
     GlobalEffectEventPtr    globalEffectEvent   = std::make_shared<GlobalEffectEvent>();
+    TimelineKeyframeEventPtr        timelineKeyframeEvent     = std::make_shared<TimelineKeyframeEvent>();
 
     ResponseEventPtr        responseEvent       = std::make_shared<ResponseEvent>();
     
@@ -161,6 +162,9 @@ void SerializeAllEvents( const std::string& fileName )
     ser->ExitChild();
     ser->EnterArray( L"Events" );
         globalEffectEvent->Serialize( *ser );
+    ser->ExitChild();
+    ser->EnterArray( L"Events" );
+    timelineKeyframeEvent->Serialize( *ser );
     ser->ExitChild();
 
     ser->Save( fileName, FORMATSTYLE_READABLE );

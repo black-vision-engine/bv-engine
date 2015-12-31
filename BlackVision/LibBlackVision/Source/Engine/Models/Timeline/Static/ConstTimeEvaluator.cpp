@@ -57,5 +57,25 @@ TimeType            ConstTimeEvaluator::GetLocalTime        () const
     return m_timeVal;
 }
 
+// ***********************
+//
+const std::string&        ConstTimeEvaluator::GetType             ()
+{
+    return Type();
+}
+
+// ***********************
+//
+namespace {
+const std::string ConstTimeEvaluatorType = "ConstTimeEvaluator";
+} //annonymous
+
+// ***********************
+//
+const std::string&        ConstTimeEvaluator::Type                ()
+{
+    return ConstTimeEvaluatorType;
+}
+
 } //model
 } //bv

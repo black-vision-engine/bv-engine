@@ -32,6 +32,8 @@ public:
 
     virtual                                             ~ITimeEvaluator () {}
 
+
+    virtual const std::string&                          GetType         () = 0;
 };
 
 } //model

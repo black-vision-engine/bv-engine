@@ -28,6 +28,8 @@ public:
     virtual void                SetGlobalTimeImpl   ( TimeType t ) override;
     virtual TimeType            GetLocalTime        () const override;
 
+    virtual const std::string&  GetType             () override;
+    static const std::string&   Type                ();
 };
 
 DEFINE_PTR_TYPE(ConstTimeEvaluator)

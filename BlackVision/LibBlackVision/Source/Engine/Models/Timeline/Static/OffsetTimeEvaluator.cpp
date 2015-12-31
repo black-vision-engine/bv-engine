@@ -79,5 +79,25 @@ TimeType            OffsetTimeEvaluator::GetLocalTime       () const
     return ( m_globalTime + m_timeOffset ) * m_timeScale;
 }
 
+// ***********************
+//
+const std::string&        OffsetTimeEvaluator::GetType             ()
+{
+    return Type();
+}
+
+// ***********************
+//
+namespace {
+const std::string OffsetTimeEvaluatorType = "OffsetTimeEvaluator";
+} //annonymous
+
+// ***********************
+//
+const std::string&        OffsetTimeEvaluator::Type                ()
+{
+    return OffsetTimeEvaluatorType;
+}
+
 } //model
 } //bv

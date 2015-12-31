@@ -50,6 +50,7 @@ public:
 
     virtual                         ~ITimeline      () {}
 
+    virtual const std::string&      GetType         () = 0;
 };
 
 DEFINE_PTR_TYPE(ITimeline)

@@ -536,5 +536,25 @@ void                                DefaultTimeline::PostUpdateEventStep    ()
     }
 }
 
+// ***********************
+//
+const std::string&        DefaultTimeline::GetType             ()
+{
+    return Type();
+}
+
+// ***********************
+//
+namespace {
+const std::string DefaultTimelineType = "DefaultTimeline";
+} //annonymous
+
+// ***********************
+//
+const std::string&        DefaultTimeline::Type                ()
+{
+    return DefaultTimelineType;
+}
+
 } //model
 } //bv

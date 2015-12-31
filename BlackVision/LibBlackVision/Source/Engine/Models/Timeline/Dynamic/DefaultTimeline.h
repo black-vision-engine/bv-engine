@@ -79,6 +79,9 @@ private:
     void                                        TriggerEventStep    ( TimeType curTime, TimeType prevTime );
     void                                        PostUpdateEventStep ();
 
+public:
+    virtual const std::string&                  GetType             () override;
+    static const std::string&                   Type                ();
 };
 
 DEFINE_PTR_TYPE(DefaultTimeline)

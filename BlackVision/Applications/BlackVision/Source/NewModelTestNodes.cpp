@@ -2291,11 +2291,13 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::ITimeEvalua
 //#define NO_PERSPECTIVE
 //#define VERSION_COLOR
 
-	  //Timeline stuff
-    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+        //Timeline stuff
+    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 1000.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
 
-    //someTimelineWithEvents->AddChild( localTimeline );
-    timeEvaluator->AddChild( localTimeline );
+	  //Timeline stuff
+    //auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
+
+    timeEvaluator->AddChild( someTimelineWithEvents );
 
 // ============================================ //
 // Plugins stuff
@@ -2321,7 +2323,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::ITimeEvalua
 
     auto root = model::BasicNode::Create( uid, timeEvaluator );
 
-    auto success = root->AddPlugins( uids, localTimeline );
+    auto success = root->AddPlugins( uids, someTimelineWithEvents );
     assert( success );
 
 // ============================================ //
