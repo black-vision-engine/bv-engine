@@ -18,7 +18,7 @@ namespace bv { namespace model {
 
 // ********************************
 //
-BasicNodePtr			ModelNodeEditor::CopyNode				()
+BasicNodePtr			ModelNodeEditor::CopyNode       ()
 {
     auto node = m_node.lock();
 	return std::static_pointer_cast< BasicNode >( node->Clone() );
@@ -29,7 +29,11 @@ BasicNodePtr			ModelNodeEditor::CopyNode				()
 bool			ModelNodeEditor::AddPlugin				( IPluginPtr plugin, unsigned int idx )
 {
 	auto node = m_node.lock();
-	return node->GetPlugins()->AttachPlugin( plugin, idx );
+    if( plugin )
+    {
+	    return node->GetPlugins()->AttachPlugin( plugin, idx );
+    }
+    return false;
 }
 
 // ********************************
@@ -173,7 +177,6 @@ void				ModelNodeEditor::RefreshNode		( SceneNode * sceneNode, Renderer * render
 	BVProjectTools::ClearSingleNode( sceneNode, renderer );
 	BVProjectTools::SyncSingleNode( node, sceneNode );
 }
-
 
 // ********************************
 //

@@ -149,7 +149,10 @@ bool                    BVProject::RemoveScene			( model::SceneModelPtr sceneMod
 	{
 		if( m_sceneModelVec[ i ] == sceneModel )
 		{
-			m_rootNode->DetachChildNodeOnly( m_sceneModelVec[ i ]->GetRootNode() );
+            if( m_sceneModelVec[ i ]->GetRootNode() )
+            {
+			    m_rootNode->DetachChildNodeOnly( m_sceneModelVec[ i ]->GetRootNode() );
+            }
 			m_globalTimeline->RemoveChild( m_sceneModelVec[ i ]->GetTimeline() );
 
 			m_sceneModelVec.erase( m_sceneModelVec.begin() + i );

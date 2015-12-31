@@ -5,28 +5,28 @@
 #include "Engine/Models/BVProjectTools.h"
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
+#include "Engine/Graphics/SceneGraph/SceneEditor.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
-#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
 #include "Engine/Models/Plugins/Plugin.h"
-
-#include "Engine/Models/ModelSceneEditor.h"
-#include "Engine/Graphics/SceneGraph/SceneEditor.h"
-#include "Engine/Models/ModelNodeEditor.h"
-
-#include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 
-#include "Serialization/Json/JsonDeserializeObject.h"
-#include "Assets/AssetManager.h"
-
-#include "Engine/Models/AssetTracker.h"
+#include "Engine/Models/ModelNodeEditor.h"
+#include "Engine/Models/ModelSceneEditor.h"
 
 #include "Engine/Models/Builder/ModelNodeEffectFactory.h"
+#include "Engine/Models/Timeline/TimelineHelper.h"
+#include "Engine/Models/AssetTracker.h"
+
+#include "Serialization/Json/JsonDeserializeObject.h"
+
+#include "Assets/AssetManager.h"
 
 #include "Tools/Utils.h"
 #include "Tools/PrefixHelper.h"
+
 #include "UseLoggerLibBlackVision.h"
+
 
 namespace bv {
 
@@ -96,10 +96,13 @@ bool    BVProjectEditor::RemoveScene		( model::SceneModelPtr scene )
     if( scene )
     {
         m_project->RemoveScene( scene );
+        
         m_engineSceneEditor->DeleteChildNode( m_engineSceneEditor->GetRootNode(), GetEngineNode( scene->GetRootNode() ) );
         MappingsCleanup( scene->GetRootNode() );
+
         return true;
     }
+
     return false;
 }
 
@@ -120,18 +123,15 @@ bool    BVProjectEditor::DetachScene			( const std::string & sceneName )
     auto scene = m_project->GetScene( sceneName );
     if( scene )
     {
-        auto sceneRoot = scene->GetRootNode();
-        if( sceneRoot )
-        {
-            m_engineSceneEditor->DeleteChildNode( m_engineSceneEditor->GetRootNode(), GetEngineNode( sceneRoot ) );
-            MappingsCleanup( sceneRoot );
-        }
+        m_engineSceneEditor->DeleteChildNode( m_engineSceneEditor->GetRootNode(), GetEngineNode( scene->GetRootNode() ) );
+        MappingsCleanup( scene->GetRootNode() );
 
         m_detachedScenes.push_back( scene );
         m_project->RemoveScene( scene );
 
         return true;
     }
+
     return false;
 }
 
@@ -141,7 +141,6 @@ bool    BVProjectEditor::AttachScene			( const std::string & sceneName )
 {
     return AttachScene( sceneName, ( UInt32 )m_project->m_sceneModelVec.size() );
 }
-
 
 // *******************************
 //
@@ -161,9 +160,11 @@ bool    BVProjectEditor::AttachScene			( const std::string & sceneName, UInt32 p
             }
 
             m_detachedScenes.erase( m_detachedScenes.begin() + i );
+
             return true;
         }
     }
+
     return false;
 }
 
@@ -173,7 +174,6 @@ bool    BVProjectEditor::AttachScene			( const std::string & sceneName, UInt32 p
 void    BVProjectEditor::DeleteDetachedScenes	()
 {
     m_detachedScenes.clear();
-    m_detachedScenes.resize( 0 );
 }
 
 // *******************************
@@ -188,16 +188,16 @@ model::SceneModelPtr    BVProjectEditor::GetScene ( const std::string & sceneNam
 bool    BVProjectEditor::SetSceneVisible		( const std::string & sceneName, bool visible )
 {
 	auto scene = m_project->GetScene( sceneName );
-	if( scene )
+	if( scene && scene->GetRootNode() )
 	{
 		auto root = scene->GetRootNode();
-		if( root )
-		{
-			root->SetVisible( visible );
-			GetEngineNode( root )->SetVisible( visible );
-            return true;
-		}
+
+		root->SetVisible( visible );
+		GetEngineNode( root )->SetVisible( visible );
+
+        return true;
 	}
+
     return false;
 }
 
@@ -209,8 +209,10 @@ bool    BVProjectEditor::RenameScene			( const std::string & sceneName, const st
     if( scene && !m_project->GetScene( newSceneName ) )
     {
         scene->SetName( newSceneName );
+
         return true;
     }
+
     return false;
 }
 
@@ -223,8 +225,10 @@ model::SceneModelPtr	BVProjectEditor::AddSceneCopy		( const std::string & sceneN
     {
         auto copy = scene->Clone();
         AddScene( copy );
+
         return copy;
     }
+
     return nullptr;
 }
 
@@ -233,54 +237,57 @@ model::SceneModelPtr	BVProjectEditor::AddSceneCopy		( const std::string & sceneN
 bool	BVProjectEditor::MoveScene				( const std::string & sceneName, UInt32 posIdx )
 {
 	if( DetachScene( sceneName ) )
+    {
 	    return AttachScene( sceneName, posIdx );
+    }
+
     return false;
 }
 
 // *******************************
 //
-void    BVProjectEditor::SetSceneRootNode		( const std::string & sceneName, model::IModelNodePtr rootNode )
+void    BVProjectEditor::SetSceneRootNode		( model::SceneModelPtr scene, model::IModelNodePtr rootNode )
 {
-    auto scene = m_project->GetScene( sceneName );
-    if( scene )
-    {
-        auto oldRoot = scene->GetRootNode();
-        if( oldRoot )
-        {
-            m_engineSceneEditor->DeleteChildNode( m_engineSceneEditor->GetRootNode(), GetEngineNode( oldRoot ) );
-            MappingsCleanup( oldRoot );
-        }
+    assert( scene );
+    assert( rootNode );
 
-        auto modelNode = QueryTyped( rootNode );
-        scene->GetModelSceneEditor()->SetRootNode( m_rootNode, modelNode );
-        auto engineNode = BVProjectTools::BuildEngineSceneNode( modelNode, m_nodesMapping );
-        m_engineSceneEditor->AddChildNode( m_engineSceneEditor->GetRootNode(), engineNode );
+    auto oldRoot = scene->GetRootNode();
+    if( oldRoot )
+    {
+        m_engineSceneEditor->DeleteChildNode( m_engineSceneEditor->GetRootNode(), GetEngineNode( oldRoot ) );
+        MappingsCleanup( oldRoot );
     }
+
+    auto modelNode = QueryTyped( rootNode );
+    scene->GetModelSceneEditor()->SetRootNode( m_rootNode, modelNode );
+
+    auto engineNode = BVProjectTools::BuildEngineSceneNode( modelNode, m_nodesMapping );
+    m_engineSceneEditor->AddChildNode( m_engineSceneEditor->GetRootNode(), engineNode );
 }
 
 // *******************************
 //
-bool    BVProjectEditor::DeleteSceneRootNode	( const std::string & sceneName )
+void    BVProjectEditor::DeleteSceneRootNode	( model::SceneModelPtr scene )
 {
-    auto scene = m_project->GetScene( sceneName );
-    if( scene )
-    {
-        auto root = scene->GetRootNode();
-        m_engineSceneEditor->DeleteChildNode( m_engineSceneEditor->GetRootNode(), GetEngineNode( root ) );
-        MappingsCleanup( root );
+    assert( scene );
 
-        scene->GetModelSceneEditor()->SetRootNode( m_rootNode, nullptr );
-    }
-    return false;
+    auto root = scene->GetRootNode();
+
+    m_engineSceneEditor->DeleteChildNode( m_engineSceneEditor->GetRootNode(), GetEngineNode( root ) );
+    MappingsCleanup( root );
+
+    scene->GetModelSceneEditor()->SetRootNode( m_rootNode, nullptr );
 }
 
 // *******************************
 //
-void    BVProjectEditor::AddChildNode         ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName )
+bool    BVProjectEditor::AddChildNode         ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName )
 {
     auto newNode = model::BasicNode::Create( newNodeName, nullptr );
     auto parentNode =  GetNode( sceneName, parentPath );
-    AddChildNode( sceneName, parentNode, newNode );
+    auto scene = m_project->GetScene( sceneName );
+
+    return AddChildNode( scene, parentNode, newNode );
 }
 
 // *******************************
@@ -288,7 +295,9 @@ void    BVProjectEditor::AddChildNode         ( const std::string & sceneName, c
 bool    BVProjectEditor::DeleteChildNode      ( const std::string & sceneName, const std::string & nodePath )
 { 
     auto parentNode =  GetParentNode( sceneName, nodePath );
-    return DeleteChildNode( sceneName, parentNode, GetNodeName( nodePath ) );
+    auto scene = m_project->GetScene( sceneName );
+
+    return DeleteChildNode( scene, parentNode, GetNodeName( nodePath ) );
 }
 
 // *******************************
@@ -296,7 +305,8 @@ bool    BVProjectEditor::DeleteChildNode      ( const std::string & sceneName, c
 bool                    BVProjectEditor::AttachChildNode     ( const std::string & sceneName, const std::string & parentPath )
 {
     auto parentNode = GetNode( sceneName, parentPath );
-    return AttachChildNode( sceneName, parentNode );
+    auto scene = m_project->GetScene( sceneName );
+    return AttachChildNode( scene, parentNode );
 }
 
 // *******************************
@@ -304,7 +314,8 @@ bool                    BVProjectEditor::AttachChildNode     ( const std::string
 bool                    BVProjectEditor::AttachChildNode     ( const std::string & sceneName, const std::string & parentPath, UInt32 posIdx )
 {
     auto parentNode =  GetNode( sceneName, parentPath );
-    return AttachChildNode( sceneName, parentNode, posIdx );
+    auto scene = m_project->GetScene( sceneName );
+    return AttachChildNode( scene, parentNode, posIdx );
 }
 
 // *******************************
@@ -312,7 +323,8 @@ bool                    BVProjectEditor::AttachChildNode     ( const std::string
 bool                    BVProjectEditor::DetachChildNode     ( const std::string & sceneName, const std::string & nodeToDetachPath )
 {
     auto nodeToDetach =  GetNode( sceneName, nodeToDetachPath );
-    return DetachChildNode( sceneName, nodeToDetach, GetNodeName( nodeToDetachPath ) );
+    auto scene = m_project->GetScene( sceneName );
+    return DetachChildNode( scene, nodeToDetach, GetNodeName( nodeToDetachPath ) );
 }
 
 // *******************************
@@ -321,7 +333,9 @@ model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( const std::string & d
 {
     auto destParent = QueryTyped( GetNode( destSceneName, destParentPath ) );
     auto srcNode = QueryTyped( GetNode( srcSceneName, srcNodePath ) );
-    return AddNodeCopy( destSceneName, destParent, srcSceneName, srcNode );
+    auto destScene = m_project->GetScene( destSceneName );
+    auto srcScene = m_project->GetScene( srcSceneName );
+    return AddNodeCopy( destScene, destParent, srcScene, srcNode );
 }
 
 // *******************************
@@ -337,9 +351,9 @@ bool					BVProjectEditor::MoveNode			( const std::string & destSceneName, const 
     {
         if( AddNodeCopy( destSceneName, destNodePath, srcSceneName, srcNodePath ) )
         {
-			if( DeleteChildNode( srcSceneName, srcNodePath ) )
-			    if( DetachChildNode( destSceneName, destNodePath ) )
-			        return AttachChildNode( destSceneName, destNodePath, destIdx );
+			DeleteChildNode( srcSceneName, srcNodePath );
+            DetachChildNode( destSceneName, destNodePath );
+			return AttachChildNode( destSceneName, destNodePath, destIdx );
         }
     }
     return false;
@@ -347,79 +361,71 @@ bool					BVProjectEditor::MoveNode			( const std::string & destSceneName, const 
 
 // *******************************
 //
-void    BVProjectEditor::AddChildNode         ( const std::string & sceneName, model::IModelNodePtr parentNode, model::IModelNodePtr childNode )
+bool    BVProjectEditor::AddChildNode         ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, model::IModelNodePtr childNode )
 {
-    auto scene = m_project->GetScene( sceneName );
-    assert( scene != nullptr );
-
-    if( childNode )
+    if( !scene || !childNode )
     {
-        if( parentNode )
-        {
-            auto engineParent = GetEngineNode( parentNode );
-            auto engineChild = BVProjectTools::BuildEngineSceneNode( QueryTyped( childNode ), m_nodesMapping );
-
-            auto sceneEditor = scene->GetModelSceneEditor();
-            sceneEditor->AddChildNode( QueryTyped( parentNode ), QueryTyped( childNode ) );
-
-            m_engineSceneEditor->AddChildNode( engineParent, engineChild );
-        }
-        else
-        {
-            SetSceneRootNode( sceneName, childNode );
-        }
+        return false;
     }
+
+    if( parentNode )
+    {
+        auto engineParent = GetEngineNode( parentNode );
+        auto engineChild = BVProjectTools::BuildEngineSceneNode( QueryTyped( childNode ), m_nodesMapping );
+
+        auto sceneEditor = scene->GetModelSceneEditor();
+        sceneEditor->AddChildNode( QueryTyped( parentNode ), QueryTyped( childNode ) );
+
+        m_engineSceneEditor->AddChildNode( engineParent, engineChild );
+    }
+    else
+    {
+        SetSceneRootNode( scene, childNode );
+    }
+    
+    return true;
 }
 
 // *******************************
 //
-bool    BVProjectEditor::DeleteChildNode      ( const std::string & sceneName, model::IModelNodePtr parentNode, const std::string & childNodeName )
+bool    BVProjectEditor::DeleteChildNode      ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, const std::string & childNodeName )
 {    
-    auto scene = m_project->GetScene( sceneName );
-    assert( scene != nullptr );
-
     if( parentNode )
     {
         auto modelParentNode = QueryTyped( parentNode );
         auto modelChildNode = QueryTyped( modelParentNode->GetChild( childNodeName ) );
+        auto sceneEditor = scene->GetModelSceneEditor();
 
-        if( modelChildNode )
-        {
-            auto sceneEditor = scene->GetModelSceneEditor();
-            sceneEditor->DeleteChildNode( modelParentNode, childNodeName );
+        auto success = true;
 
-            m_engineSceneEditor->DeleteChildNode( GetEngineNode( parentNode ), GetEngineNode( modelChildNode ) );
-            
-            MappingsCleanup( modelChildNode );
+        success &= sceneEditor->DeleteChildNode( modelParentNode, childNodeName );
+        success &= m_engineSceneEditor->DeleteChildNode( GetEngineNode( parentNode ), GetEngineNode( modelChildNode ) );
+        
+        MappingsCleanup( modelChildNode );
 
-            return true;
-        }
+        return success;
     }
     else
     {
-        DeleteSceneRootNode( sceneName );
+        DeleteSceneRootNode( scene );
+        return true;
     }
-
-    return false;
 }
 
 // *******************************
 //
-bool                    BVProjectEditor::AttachChildNode     ( const std::string & sceneName, model::IModelNodePtr parent )
+bool                    BVProjectEditor::AttachChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parent )
 {
-    return AttachChildNode( sceneName, parent, parent->GetNumChildren() );
+    return AttachChildNode( scene, parent, parent->GetNumChildren() );
 }
 
 // *******************************
 //
-bool                    BVProjectEditor::AttachChildNode     ( const std::string & sceneName, model::IModelNodePtr parent, UInt32 posIdx )
+bool                    BVProjectEditor::AttachChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parent, UInt32 posIdx )
 {
-    auto scene = m_project->GetScene( sceneName );
-    assert( scene != nullptr );
-
-    auto sceneEditor = scene->GetModelSceneEditor();
-    if( parent )
+    if( scene && parent )
     {
+        auto sceneEditor = scene->GetModelSceneEditor();
         auto attachModel    = sceneEditor->AttachChildNode( QueryTyped( parent ), posIdx );
         auto attachEngine   = m_engineSceneEditor->AttachChildNode( GetEngineNode( parent ), posIdx );
 
@@ -431,12 +437,9 @@ bool                    BVProjectEditor::AttachChildNode     ( const std::string
 
 // *******************************
 //
-bool                    BVProjectEditor::DetachChildNode     ( const std::string & sceneName, model::IModelNodePtr parent, const std::string & nodeToDetach )
+bool                    BVProjectEditor::DetachChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parent, const std::string & nodeToDetach )
 {
-    auto scene = m_project->GetScene( sceneName );
-    assert( scene != nullptr );
-
-    if( parent )
+    if( scene && parent )
     {
         auto childNode = parent->GetChild( nodeToDetach );
 
@@ -460,55 +463,53 @@ bool                    BVProjectEditor::DetachChildNode     ( const std::string
 void            BVProjectEditor::DeleteDetachedNodes          ( const std::string & sceneName )
 {
     auto scene = m_project->GetScene( sceneName );
-    assert( scene != nullptr );
 
-    auto sceneEditor = scene->GetModelSceneEditor();
+    if( scene )
+    {
+        auto sceneEditor = scene->GetModelSceneEditor();
+        auto detachedNode = sceneEditor->GetDetachedNode();
+        
+        MappingsCleanup( detachedNode );
 
-    auto detachedNode = sceneEditor->GetDetachedNode();
-    MappingsCleanup( detachedNode );
-
-    sceneEditor->DeleteDetachedNode();
-    m_engineSceneEditor->DeleteDetachedNode();
+        sceneEditor->DeleteDetachedNode();
+        m_engineSceneEditor->DeleteDetachedNode();
+    }
 }
 
 // *******************************
 //
 bool            BVProjectEditor::SetNodeVisible				( const std::string & sceneName, const std::string & nodePath, bool visible )
 {
-    auto node =  GetNode( sceneName, nodePath );
-    if( node )
-    {
-	    node->SetVisible( visible );
-	    GetEngineNode( node )->SetVisible( visible );
-        return true;
-    }
-    return false;
+    auto node = GetNode( sceneName, nodePath );
+    return SetNodeVisible( node, visible );
 }
 
 // *******************************
 //
 bool            BVProjectEditor::RenameNode					( const std::string & sceneName, const std::string & nodePath, const std::string & newNodeName )
 {
-	auto node =  GetNode( sceneName, nodePath );
+	auto node = GetNode( sceneName, nodePath );
 	return RenameNode( node, newNodeName );
 }
 
 // *******************************
 //
-model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( const std::string & destSceneName, model::BasicNodePtr destParentNode, const std::string & srcSceneName, model::BasicNodePtr srcNode )
+model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( model::SceneModelPtr destScene, model::BasicNodePtr destParentNode, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode )
 {
+    if( !srcScene || !destScene )
+    {
+        return false;
+    }
+
     model::BasicNodePtr	copy = nullptr;
     
-    if( srcSceneName == destSceneName )
+    if( srcScene == destScene )
     {
         //don't copy timelines, maybe it should be handled by CloneViaSerialization::ClonePlugin with empty prefix string?
         copy = srcNode->GetModelNodeEditor()->CopyNode();
     }
     else
     {
-        auto destScene = m_project->GetScene( destSceneName );
-        assert( destScene != nullptr );
-
         //copy timelines
         auto timelines = srcNode->GetTimelines();
         auto prefixNum = model::TimelineHelper::CopyTimelines( destScene->GetTimeline(), timelines );
@@ -518,29 +519,38 @@ model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( const std::string & d
 
     if( copy )
     {
-        AddChildNode( destSceneName, destParentNode, copy );
+        AddChildNode( destScene, destParentNode, copy );
     }
+
     return copy;
 }
 
 // *******************************
 //
-bool					BVProjectEditor::MoveNode			( const std::string & destSceneName, model::BasicNodePtr destParentNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcParentNode, const std::string & srcNodeName )
+bool					BVProjectEditor::MoveNode			( model::SceneModelPtr destScene, model::BasicNodePtr destParentNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcParentNode, const std::string & srcNodeName )
 {
-    if( srcSceneName == destSceneName )
+    if( !srcScene || !destScene )
     {
-		if( DetachChildNode( srcSceneName, srcParentNode, srcNodeName ) )
-		    return AttachChildNode( destSceneName, destParentNode, destIdx );
+        return false;
+    }
+
+    if( srcScene == destScene )
+    {
+		if( DetachChildNode( srcScene, srcParentNode, srcNodeName ) )
+        {
+		    return AttachChildNode( destScene, destParentNode, destIdx );
+        }
     }
     else
     {
-        if( AddNodeCopy( destSceneName, destParentNode, srcSceneName, QueryTyped( srcParentNode->GetChild( srcNodeName ) ) ) )
+        if( AddNodeCopy( destScene, destParentNode, srcScene, QueryTyped( srcParentNode->GetChild( srcNodeName ) ) ) )
         {
-			if( DeleteChildNode( srcSceneName, srcParentNode, srcNodeName ) )
-			    if( DetachChildNode( destSceneName, destParentNode, srcNodeName ) )
-			        return AttachChildNode( destSceneName, destParentNode, destIdx );
+            DeleteChildNode( srcScene, srcParentNode, srcNodeName );
+            DetachChildNode( destScene, destParentNode, srcNodeName );
+            return AttachChildNode( destScene, destParentNode, destIdx );
         }
     }
+
     return false;
 }
 
@@ -550,7 +560,7 @@ bool					BVProjectEditor::AddPlugin			( const std::string & sceneName, const std
 {
     auto timeEval = GetTimeEvaluator( timelinePath );
     auto plugin = model::PluginsManager::DefaultInstance().CreatePlugin( pluginUID, pluginName, timeEval );
-    auto node =  QueryTyped( GetNode( sceneName, nodePath ) );
+    auto node = QueryTyped( GetNode( sceneName, nodePath ) );
     return AddPlugin( node, plugin, idx );
 }
 
@@ -625,8 +635,10 @@ model::IPluginPtr		BVProjectEditor::AddPluginCopy			( const std::string & destSc
 {
     auto srcNode =  QueryTyped( GetNode( srcSceneName, srcNodePath ) );
     auto destNode =  QueryTyped( GetNode( destSceneName, destNodePath ) );
-    
-    return AddPluginCopy( destSceneName, destNode, destIdx, srcSceneName, srcNode, pluginNameToCopy );
+    auto destScene = m_project->GetScene( destSceneName );
+    auto srcScene = m_project->GetScene( srcSceneName );
+
+    return AddPluginCopy( destScene, destNode, destIdx, srcScene, srcNode, pluginNameToCopy );
 }
 
 // *******************************
@@ -635,19 +647,24 @@ bool					BVProjectEditor::MovePlugin			( const std::string & destSceneName, cons
 {
     auto srcNode =  QueryTyped( GetNode( srcSceneName, srcNodePath ) );
     auto destNode =  QueryTyped( GetNode( destSceneName, destNodePath ) );
-    
-    return MovePlugin( destSceneName, destNode, destIdx, srcSceneName, srcNode, pluginName );
+    auto destScene = m_project->GetScene( destSceneName );
+    auto srcScene = m_project->GetScene( srcSceneName );
+
+    return MovePlugin( destScene, destNode, destIdx, srcScene, srcNode, pluginName );
 }
 
 // *******************************
 //
 bool					BVProjectEditor::AddPlugin			( model::BasicNodePtr node, model::IPluginPtr plugin, UInt32 idx )
 {
-    auto editor = node->GetModelNodeEditor();
-    if( editor->AddPlugin( plugin, idx ) )
+    if( node )
     {
-        editor->RefreshNode( GetEngineNode( node ), m_project->m_renderer );
-        return true;
+        auto editor = node->GetModelNodeEditor();
+        if( editor->AddPlugin( plugin, idx ) )
+        {
+            editor->RefreshNode( GetEngineNode( node ), m_project->m_renderer );
+            return true;
+        }
     }
     return false;
 }
@@ -656,11 +673,14 @@ bool					BVProjectEditor::AddPlugin			( model::BasicNodePtr node, model::IPlugin
 //
 bool					BVProjectEditor::DeletePlugin          ( model::BasicNodePtr node, const std::string & name )
 {
-    auto editor = node->GetModelNodeEditor();
-    if ( editor->DeletePlugin( name ) )
+    if( node )
     {
-        editor->RefreshNode( GetEngineNode( node ), m_project->m_renderer );
-        return true;
+        auto editor = node->GetModelNodeEditor();
+        if( editor->DeletePlugin( name ) )
+        {
+            editor->RefreshNode( GetEngineNode( node ), m_project->m_renderer );
+            return true;
+        }
     }
     return false;
 }
@@ -669,11 +689,14 @@ bool					BVProjectEditor::DeletePlugin          ( model::BasicNodePtr node, cons
 //
 bool					BVProjectEditor::DeletePlugin          ( model::BasicNodePtr node, UInt32 posIdx )
 {
-    auto editor = node->GetModelNodeEditor();
-    if ( editor->DeletePlugin( posIdx ) )
+    if( node )
     {
-        editor->RefreshNode( GetEngineNode( node ), m_project->m_renderer );
-        return true;
+        auto editor = node->GetModelNodeEditor();
+        if ( editor->DeletePlugin( posIdx ) )
+        {
+            editor->RefreshNode( GetEngineNode( node ), m_project->m_renderer );
+            return true;
+        }
     }
     return false;
 }
@@ -682,11 +705,14 @@ bool					BVProjectEditor::DeletePlugin          ( model::BasicNodePtr node, UInt
 //
 bool					BVProjectEditor::AttachPlugin          ( model::BasicNodePtr node, UInt32 posIdx )
 {
-    auto editor = node->GetModelNodeEditor();
-    if( editor->AttachPlugin( posIdx ) )
+    if( node )
     {
-        editor->RefreshNode( GetEngineNode( node ), m_project->m_renderer );
-        return true;
+        auto editor = node->GetModelNodeEditor();
+        if( editor->AttachPlugin( posIdx ) )
+        {
+            editor->RefreshNode( GetEngineNode( node ), m_project->m_renderer );
+            return true;
+        }
     }
     return false;
 }
@@ -695,14 +721,17 @@ bool					BVProjectEditor::AttachPlugin          ( model::BasicNodePtr node, UInt
 //
 bool                    BVProjectEditor::AttachPlugin			( model::BasicNodePtr destNode, model::BasicNodePtr srcNode, UInt32 posIdx )
 {
-    auto sourceEditor = srcNode->GetModelNodeEditor();
-    auto destEditor = destNode->GetModelNodeEditor();
-
-    if( destEditor->AddPlugin(sourceEditor->GetDetachedPlugin(), posIdx ) )
+    if( srcNode && destNode )
     {
-        sourceEditor->ResetDetachedPlugin();
-        destEditor->RefreshNode( GetEngineNode( destNode ), m_project->m_renderer );
-        return true;
+        auto sourceEditor = srcNode->GetModelNodeEditor();
+        auto destEditor = destNode->GetModelNodeEditor();
+
+        if( destEditor->AddPlugin(sourceEditor->GetDetachedPlugin(), posIdx ) )
+        {
+            sourceEditor->ResetDetachedPlugin();
+            destEditor->RefreshNode( GetEngineNode( destNode ), m_project->m_renderer );
+            return true;
+        }
     }
     return false;
 }
@@ -711,11 +740,14 @@ bool                    BVProjectEditor::AttachPlugin			( model::BasicNodePtr de
 //
 bool					BVProjectEditor::DetachPlugin          ( model::BasicNodePtr node, const std::string & name )
 {
-    auto editor = node->GetModelNodeEditor();
-    if ( editor->DetachPlugin( name ) )
+    if( node )
     {
-        editor->RefreshNode( GetEngineNode( node ), m_project->m_renderer );
-        return true;
+        auto editor = node->GetModelNodeEditor();
+        if( editor->DetachPlugin( name ) )
+        {
+            editor->RefreshNode( GetEngineNode( node ), m_project->m_renderer );
+            return true;
+        }
     }
     return false;
 }
@@ -724,11 +756,14 @@ bool					BVProjectEditor::DetachPlugin          ( model::BasicNodePtr node, cons
 //
 bool					BVProjectEditor::DetachPlugin          ( model::BasicNodePtr node, UInt32 posIdx )
 {
-    auto editor = node->GetModelNodeEditor();
-    if ( editor->DetachPlugin( posIdx ) )
+    if( node )
     {
-        editor->RefreshNode( GetEngineNode( node ), m_project->m_renderer );
-        return true;
+        auto editor = node->GetModelNodeEditor();
+        if( editor->DetachPlugin( posIdx ) )
+        {
+            editor->RefreshNode( GetEngineNode( node ), m_project->m_renderer );
+            return true;
+        }
     }
     return false;
 }
@@ -737,66 +772,86 @@ bool					BVProjectEditor::DetachPlugin          ( model::BasicNodePtr node, UInt
 //
 model::IPluginPtr		BVProjectEditor::GetDetachedPlugin		( model::BasicNodePtr node )
 {
-    return node->GetModelNodeEditor()->GetDetachedPlugin();
+    if( node )
+    {
+        return node->GetModelNodeEditor()->GetDetachedPlugin();
+    }
+
+    return nullptr;
 }
 
 // *******************************
 //
 void					BVProjectEditor::ResetDetachedPlugin	( model::BasicNodePtr node )
 {
-    return node->GetModelNodeEditor()->ResetDetachedPlugin();
+    if( node )
+    {
+        node->GetModelNodeEditor()->ResetDetachedPlugin();
+    }
 }
 
 // *******************************
 //
-model::IPluginPtr		BVProjectEditor::AddPluginCopy			( const std::string & destSceneName, model::BasicNodePtr destNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcNode, const std::string & pluginNameToCopy )
+model::IPluginPtr		BVProjectEditor::AddPluginCopy			( model::SceneModelPtr destScene, model::BasicNodePtr destNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode, const std::string & pluginNameToCopy )
 {
+    if( !srcScene || !destScene || !srcNode )
+    {
+        return nullptr;
+    }
+
     model::IPluginPtr copy = nullptr;
-    
-    if( srcSceneName == destSceneName )
+    if( srcScene == destScene )
     {
         //don't copy timelines, maybe it should be handled by CloneViaSerialization::ClonePlugin with empty prefix string?
         copy = srcNode->GetModelNodeEditor()->CopyPlugin( pluginNameToCopy );
     }
     else
     {
-        auto destScene = m_project->GetScene( destSceneName );
         auto srcPlugin = srcNode->GetPlugin( pluginNameToCopy );
-
-        assert( destScene != nullptr );
-        assert( srcPlugin != nullptr );
-
-        //copy timelines
-        auto timelines = srcPlugin->GetTimelines();
-        auto prefixNum = model::TimelineHelper::CopyTimelines( destScene->GetTimeline(), timelines );
+        if( srcPlugin )
+        {
+            //copy timelines
+            auto timelines = srcPlugin->GetTimelines();
+            auto prefixNum = model::TimelineHelper::CopyTimelines( destScene->GetTimeline(), timelines );
         
-        copy = CloneViaSerialization::ClonePlugin( srcPlugin.get(), PrefixHelper::PrefixCopy( prefixNum ) );
+            copy = CloneViaSerialization::ClonePlugin( srcPlugin.get(), PrefixHelper::PrefixCopy( prefixNum ) );
+        }
     }
 
     if( copy )
     {
         AddPlugin( destNode, copy, destIdx );
     }
+
     return copy;
 }
 
 // *******************************
 //
-bool			BVProjectEditor::MovePlugin					( const std::string & destSceneName, model::BasicNodePtr destNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcNode, const std::string & pluginName )
+bool			BVProjectEditor::MovePlugin					( model::SceneModelPtr destScene, model::BasicNodePtr destNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode, const std::string & pluginName )
 {
-    if( srcSceneName == destSceneName )
+    if( !srcScene || !destScene )
     {
-		if( DetachPlugin( srcNode, pluginName ) )
-		    return AttachPlugin( destNode, destIdx );
+        return false;
+    }
+
+	bool success = true;
+    if( srcScene == destScene )
+    {
+        if( DetachPlugin( srcNode, pluginName ) )
+	    {
+            return AttachPlugin( destNode, destIdx );
+        }
     }
     else
     {
-        if( AddPluginCopy( destSceneName, destNode, destIdx, srcSceneName, srcNode, pluginName ) )
-        {
-			return DeletePlugin( srcNode, pluginName );
-        }
+       if( AddPluginCopy( destScene, destNode, destIdx, srcScene, srcNode, pluginName ) )
+       {
+	        return DeletePlugin( srcNode, pluginName );
+       }
     }
-    return false;
+
+    return success;
 }
 
 // *******************************
@@ -835,56 +890,71 @@ bool			BVProjectEditor::LoadAsset					( model::IPluginPtr plugin, AssetDescConst
 
 // *******************************
 //
-void            BVProjectEditor::SetNodeVisible				( model::IModelNodePtr node, bool visible )
+bool            BVProjectEditor::SetNodeVisible				( model::IModelNodePtr node, bool visible )
 {
-    node->SetVisible( visible );
-    m_nodesMapping[ node.get() ]->SetVisible( visible );
+    if( node )
+    {
+        node->SetVisible( visible );
+	    GetEngineNode( node )->SetVisible( visible );
+        return true;
+    }
+
+    return false;
 }
 
 // *******************************
 //
 bool            BVProjectEditor::RenameNode					( model::IModelNodePtr node, const std::string & newNodeName )
 {
-    if( node = nullptr )
-        return false;
+    if( node )
+    {
+    	QueryTyped( node )->SetName( newNodeName );
+        return true;
+    }
 
-	QueryTyped( node )->SetName( newNodeName );
-    return true;
+    return false;
 }
 
 // *******************************
 //
 model::IModelNodeEffectPtr	BVProjectEditor::GetNodeEffect	( model::IModelNodePtr node )
 {
-    return QueryTyped( node )->GetNodeEffect();
+    if( node )
+    {
+        return QueryTyped( node )->GetNodeEffect();
+    }
+
+    return nullptr;
 }
 
 // *******************************
 //
-void						BVProjectEditor::SetNodeEffect	( model::IModelNodePtr node, model::IModelNodeEffectPtr nodeEffect )
+bool						BVProjectEditor::SetNodeEffect	( model::IModelNodePtr node, model::IModelNodeEffectPtr nodeEffect )
 {
-    auto modelNode = QueryTyped( node );
-    modelNode->SetNodeEffect( nodeEffect );
-    BVProjectTools::UpdateSceneNodeEffect( GetEngineNode( node ), modelNode );
+    if( node && nodeEffect )
+    {
+        auto modelNode = QueryTyped( node );
+        modelNode->SetNodeEffect( nodeEffect );
+        BVProjectTools::UpdateSceneNodeEffect( GetEngineNode( node ), modelNode );
+        return true;
+    }
+
+    return false;
 }
 
 // ***********************
 //
-bool                        BVProjectEditor::SetNodeEffect   ( const std::string& sceneName, const std::string& nodePath, const std::string& timelinePath, const std::string& effectName )
+bool                        BVProjectEditor::SetNodeEffect   ( const std::string & sceneName, const std::string & nodePath, const std::string & timelinePath, const std::string & effectName )
 {
     auto timeEvaluator = GetTimeEvaluator( timelinePath );
-    auto node = GetNode( sceneName, nodePath );
+    if( timeEvaluator )
+    {
+        auto newEffect = model::ModelNodeEffectFactory::Create( effectName, timeEvaluator );
+        auto node = GetNode( sceneName, nodePath );
+        return SetNodeEffect( node, newEffect );
+    }
 
-    if( !node || !timeEvaluator )
-        return false;
-
-    auto newEffect = model::ModelNodeEffectFactory::Create( effectName, timeEvaluator );
-
-    if( !newEffect )
-        return false;
-
-    SetNodeEffect( node, newEffect );
-    return true;
+    return false;
 }
 
 // *******************************
@@ -1053,7 +1123,7 @@ void                    BVProjectEditor::UnregisterUpdaters   ( model::IModelNod
 model::IModelNodePtr	BVProjectEditor::GetNode			( const std::string & sceneName, const std::string & nodePath )
 {
     auto scene = m_project->GetScene( sceneName );
-    if( scene )
+    if( scene && scene->GetRootNode() )
     {
         auto node = scene->GetRootNode()->GetNode( nodePath );
         if( node )
@@ -1061,7 +1131,9 @@ model::IModelNodePtr	BVProjectEditor::GetNode			( const std::string & sceneName,
             return node;
         }
     }
+
     LOG_MESSAGE( SeverityLevel::error ) << "Node [" + nodePath + "] not found";
+
     return nullptr;
 }
 
@@ -1070,18 +1142,7 @@ model::IModelNodePtr	BVProjectEditor::GetNode			( const std::string & sceneName,
 model::IModelNodePtr	BVProjectEditor::GetParentNode		( const std::string & sceneName, const std::string & nodePath )
 {
     auto parentNodePath = nodePath.substr( 0, nodePath.find_last_of("/") );
-
-    auto scene = m_project->GetScene( sceneName );
-    if( scene )
-    {
-        auto node = scene->GetRootNode()->GetNode( parentNodePath );
-        if( node )
-        {
-            return node;
-        }
-    }
-    LOG_MESSAGE( SeverityLevel::error ) << "Node [" + parentNodePath + "] not found";
-    return nullptr;
+    return GetNode( sceneName, parentNodePath );
 }
 
 // ***********************
