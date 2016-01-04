@@ -63,9 +63,9 @@ void    ShadowEffectRenderLogic::RenderNode           ( SceneNode * node, Render
 
 // *********************************
 //
-void                                ShadowEffectRenderLogic::RenderItermediateData       ( RenderLogicContext * ctx, RenderTarget * foregroundRt, SceneNode * node )
+void                                ShadowEffectRenderLogic::RenderItermediateData       ( RenderLogicContext * ctx, RenderTarget * tr, SceneNode * node )
 {
-    RenderToRenderTarget( ctx, foregroundRt, node );
+    RenderToRenderTarget( ctx, tr, node );
 }
 
 // *********************************

@@ -20,6 +20,7 @@ public:
         T_WIREFRAME,
         T_LIGHT_SCATTERING,
         T_SHADOW,
+        T_BLUR,
         //T_ALPHA_CHANNEL,
 
         T_TOTAL
