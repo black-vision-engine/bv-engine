@@ -1,5 +1,7 @@
 #include "BasicNode.h"
 
+#include <set>
+
 //FIXME: node na INode
 #include "Tools/StringHeplers.h"
 
@@ -247,8 +249,12 @@ std::vector< IParameterPtr >    BasicNode::GetParameters           () const
         ret.insert( ret.end(), params.begin(), params.end() );
     }
 
-	//FIXME: get parameters from node effect
-	//auto effect = GetNodeEffect();
+	auto effect = GetNodeEffect();
+    if( effect )
+    {
+        auto params =  effect->GetParameters();
+        ret.insert( ret.end(), params.begin(), params.end() );
+    }
 
     return ret;
 }
@@ -258,14 +264,16 @@ std::vector< IParameterPtr >    BasicNode::GetParameters           () const
 //
 std::vector< ITimeEvaluatorPtr > BasicNode::GetTimelines			() const
 {
-	std::vector< ITimeEvaluatorPtr > ret;
+	std::set< ITimeEvaluatorPtr > timelines;
 
     auto params = GetParameters();
 
     for( auto param : params )
-        ret.push_back( param->GetTimeEvaluator() );
+    {
+        timelines.insert( param->GetTimeEvaluator() );
+    }
 
-    return ret;
+    return std::vector< ITimeEvaluatorPtr >( timelines.begin(), timelines.end() );
 }
 
 // ********************************

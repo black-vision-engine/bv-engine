@@ -39,6 +39,13 @@ model::IParameterPtr                        ModelNodeEffectBase::GetParameter   
 
 // ********************************
 //
+const std::vector< IParameterPtr > &        ModelNodeEffectBase::GetParameters   () const
+{
+    return m_paramValModel->GetParameters();
+}
+
+// ********************************
+//
 const std::vector< bv::IValueConstPtr > &   ModelNodeEffectBase::GetValues      () const
 {
     return m_paramValModel->GetValues();

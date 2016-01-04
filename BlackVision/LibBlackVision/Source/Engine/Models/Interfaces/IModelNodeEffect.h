@@ -16,8 +16,9 @@ public:
     virtual NodeEffectType								GetType			() const = 0;
 
     virtual IParameterPtr                               GetParameter    ( const std::string & name ) const = 0;
+    virtual const std::vector< IParameterPtr > &        GetParameters	() const = 0;
 
-    virtual const std::vector< bv::IValueConstPtr > &   GetValues		() const = 0;
+    virtual const std::vector< IValueConstPtr > &       GetValues		() const = 0;
 
     virtual                 ~IModelNodeEffect   () {};
 
