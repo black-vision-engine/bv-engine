@@ -433,22 +433,23 @@ void SceneEventsHandlers::WidgetHandler       ( bv::IEventPtr evt )
 	bv::WidgetEventPtr widgetEvent = std::static_pointer_cast<bv::WidgetEvent>( evt );        
     auto root = m_appLogic->GetBVProject()->GetModelSceneRoot();
         
-    std::string& nodeName = widgetEvent->NodeName;
+    std::string& nodePath = widgetEvent->NodeName;
     std::string& sceneName = widgetEvent->SceneName;
     std::string& action = widgetEvent->Action;
     WidgetEvent::Command command = widgetEvent->WidgetCommand;
     float time = widgetEvent->Time;
 
-    auto node = GetNode( m_appLogic, sceneName, nodeName );
+    auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
     if( node == nullptr )
+    {
         SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "Node not found" );
-
+    }
 
     BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
     INodeLogic* logic = basicNode->GetLogic().get();
 	if( logic == nullptr )
 	{
-        LOG_MESSAGE( SeverityLevel::warning ) << "Error OnWidgetCmd () node [" + nodeName + "] , logic [] not found";
+        LOG_MESSAGE( SeverityLevel::warning ) << "Error OnWidgetCmd () node [" + nodePath + "] , logic [] not found";
         SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "NodeLogic not found" );
 	}
 		

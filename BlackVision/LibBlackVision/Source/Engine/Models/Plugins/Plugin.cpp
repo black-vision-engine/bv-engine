@@ -1,5 +1,7 @@
 #include "Plugin.h"
 
+#include <set>
+
 #include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 #include "Engine/Models/Plugins/Channels/DefaultPixelShaderChannel.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
@@ -10,6 +12,7 @@
 #include "Serialization/BVSerializeContext.h"
 
 #include "UseLoggerLibBlackVision.h"
+
 
 namespace bv { namespace model {
 
@@ -48,8 +51,15 @@ std::vector< IParameterPtr >        BasePlugin< IPlugin >::GetParameters        
                                 };
     
     for( auto model : models )
-        if( model ) for( auto param : model->GetParameters() )
-            ret.push_back( param );
+    {
+        if( model ) 
+        {
+            for( auto param : model->GetParameters() )
+            {
+                ret.push_back( param );
+            }
+        }
+    }
 
     return ret;
 }
@@ -251,14 +261,16 @@ void                                BasePlugin< IPlugin >::SetRendererContext   
 template <>
 std::vector< ITimeEvaluatorPtr >    BasePlugin< IPlugin >::GetTimelines				() const
 {
-	std::vector< ITimeEvaluatorPtr > ret;
+	std::set< ITimeEvaluatorPtr > timelines;
 
     auto params = GetParameters();
 
     for( auto param : params )
-        ret.push_back( param->GetTimeEvaluator() );
+    {
+        timelines.insert( param->GetTimeEvaluator() );
+    }
 
-    return ret;
+    return std::vector< ITimeEvaluatorPtr >( timelines.begin(), timelines.end() );
 }
 
 } //model
