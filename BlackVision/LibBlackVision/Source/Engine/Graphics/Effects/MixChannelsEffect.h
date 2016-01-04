@@ -28,7 +28,7 @@ private:
 
 public:
 
-                        MixChannelsEffect   ();
+                        MixChannelsEffect   ( Texture2DPtr tex );
                         ~MixChannelsEffect  ();
 
     void                SetRIdx         ( unsigned char idx );
@@ -47,7 +47,7 @@ public:
 
 private:
 
-    PixelShader *       CreatePS        ();
+    PixelShader *       CreatePS        ( Texture2DPtr tex );
     VertexShader *      CreateVS        ();
 
     int                 GetChannelMask  () const;

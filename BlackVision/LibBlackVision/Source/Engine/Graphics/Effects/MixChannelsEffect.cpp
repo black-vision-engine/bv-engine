@@ -142,7 +142,7 @@ unsigned char   MixChannelsEffect::GetAIdx    () const
 
 // ****************************
 //
-PixelShader *       MixChannelsEffect::CreatePS        ()
+PixelShader *       MixChannelsEffect::CreatePS        ( Texture2DPtr tex )
 {
     ShaderParameters * shaderParams = new ShaderParameters();
 
@@ -154,6 +154,7 @@ PixelShader *       MixChannelsEffect::CreatePS        ()
 
     auto shader = new PixelShader( GetMixChannelPixelShaderCode(), shaderParams );
 
+    //FIXME: create samplers
     return shader;
 }
 
