@@ -62,10 +62,11 @@ public:
     virtual IPluginPtr                      GetPlugin               ( const std::string & name ) const override;
     virtual IFinalizePluginConstPtr         GetFinalizePlugin       () const override;
 
+    /** @param[ path ] relative path */
     virtual IModelNodePtr                   GetNode                 ( const std::string & path, const std::string & separator = "/" ) override;
     virtual IModelNodePtr                   GetChild                ( const std::string & name ) override;
     
-	INodeLogicPtr							GetLogic				();
+	INodeLogicPtr							GetLogic				() const;
 
     virtual const IPluginListFinalized *    GetPluginList           () const override;
     virtual std::vector< IParameterPtr >    GetParameters           () const override;
@@ -117,9 +118,16 @@ public:
     virtual bool                            IsVisible               () const override;
     void                                    SetVisible              ( bool visible );
 
-private:
+public:
 
-    std::string                         SplitPrefix                     ( std::string & str, const std::string & separator = "/" ) const;
+    /**@brief Remove prefix from path.
+    @param[ path ] Returns path without prefix.
+    @return Returns prefix. */
+    static std::string                      SplitPrefix             ( std::string & path, const std::string & separator = "/" );
+
+    /**@brief Try to convert string to integer if it matches the pattern "[escapeChar][integer]" (e.g. "#0").
+    @return Returns parsed index or -1 if string didn't match the pattern. */
+    static Int32                            TryParseIndex           ( std::string & str, const char escapeChar = '#' );
 
 public:
 

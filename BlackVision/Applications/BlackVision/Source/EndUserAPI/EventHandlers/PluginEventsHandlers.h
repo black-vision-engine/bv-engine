@@ -28,14 +28,14 @@ private:    //Helpers
 
 
     ParameterPtr            GetPluginParameter      (   const std::string& sceneName,
-                                                        const std::string& nodeName,
+                                                        const std::string& nodePath,
                                                         const std::string& pluginName,
                                                         const std::string& paramName );
     ParameterPtr            GetGlobalEffectParameter(   const std::string& sceneName,
-                                                        const std::string& nodeName,
+                                                        const std::string& nodePath,
                                                         const std::string& paramName );
     ParameterPtr            GetResourceParameter    (   const std::string& sceneName,
-                                                        const std::string& nodeName,
+                                                        const std::string& nodePath,
                                                         const std::string& pluginName,
                                                         const std::string& textureName,
                                                         const std::string& paramName );

@@ -1120,29 +1120,29 @@ void                    BVProjectEditor::UnregisterUpdaters   ( model::IModelNod
 
 // *******************************
 //
-model::IModelNodePtr	BVProjectEditor::GetNode			( const std::string & sceneName, const std::string & nodePath )
+model::IModelNodePtr	BVProjectEditor::GetNode			( const std::string & sceneName, const std::string & nodePath, const std::string & separator )
 {
     auto scene = m_project->GetScene( sceneName );
-    if( scene && scene->GetRootNode() )
+    if( scene )
     {
-        auto node = scene->GetRootNode()->GetNode( nodePath );
+        auto node = scene->GetModelSceneEditor()->GetNode( nodePath, separator );
         if( node )
         {
             return node;
         }
     }
 
-    LOG_MESSAGE( SeverityLevel::error ) << "Node [" + nodePath + "] not found";
+    LOG_MESSAGE( SeverityLevel::error ) << "Node [" + nodePath + "] in scene [" +  sceneName + "] not found";
 
     return nullptr;
 }
 
 // ***********************
 //
-model::IModelNodePtr	BVProjectEditor::GetParentNode		( const std::string & sceneName, const std::string & nodePath )
+model::IModelNodePtr	BVProjectEditor::GetParentNode		( const std::string & sceneName, const std::string & nodePath, const std::string & separator )
 {
-    auto parentNodePath = nodePath.substr( 0, nodePath.find_last_of("/") );
-    return GetNode( sceneName, parentNodePath );
+    auto parentNodePath = nodePath.substr( 0, nodePath.find_last_of( separator ) );
+    return GetNode( sceneName, parentNodePath, separator );
 }
 
 // ***********************

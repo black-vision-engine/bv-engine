@@ -35,10 +35,12 @@ public:
     bool                    AttachChildNode     ( BasicNodePtr parent, UInt32 destIdx );
     bool                    DetachChildNode     ( BasicNodePtr parent, const std::string & nodeToDetach );
 
-    BasicNodePtr            GetDetachedNode     ();
+    BasicNodePtr            GetDetachedNode     () const;
     void                    DeleteDetachedNode  ();
 
-    BasicNodePtr            GetRootNode         ();
+    BasicNodePtr            GetRootNode         () const;
+
+    IModelNodePtr           GetNode             ( const std::string & path, const std::string & separator ) const;
 
 };
 

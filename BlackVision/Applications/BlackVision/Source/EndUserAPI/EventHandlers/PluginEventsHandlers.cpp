@@ -158,25 +158,27 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
 // ***********************
 //
 ParameterPtr PluginEventsHandlers::GetPluginParameter  (    const std::string& sceneName,
-                                                            const std::string& nodeName,
+                                                            const std::string& nodePath,
                                                             const std::string& pluginName,
                                                             const std::string& paramName )
 {
-    auto node = GetNode( m_appLogic, sceneName, nodeName );
+    auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
     if( node == nullptr )
+    {
         return nullptr;
+    }
 
     auto plugin = node->GetPlugin( pluginName );
     if( plugin == nullptr )
     {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodeName + "], plugin [" + pluginName + "] not found";
+        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodePath + "], plugin [" + pluginName + "] not found";
         return nullptr;
     }
 
     auto param = plugin->GetParameter( paramName );
     if( param == nullptr )
     {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodeName + "], plugin [" + pluginName + "], param [" + paramName + "] not found";
+        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodePath + "], plugin [" + pluginName + "], param [" + paramName + "] not found";
         return nullptr;
     }
     return param;
@@ -185,17 +187,19 @@ ParameterPtr PluginEventsHandlers::GetPluginParameter  (    const std::string& s
 // ***********************
 //
 ParameterPtr PluginEventsHandlers::GetGlobalEffectParameter(    const std::string& sceneName,
-                                                                const std::string& nodeName,
+                                                                const std::string& nodePath,
                                                                 const std::string& paramName )
 {
-    auto node = GetNode( m_appLogic, sceneName, nodeName );
+    auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
     if( node == nullptr )
+    {
         return nullptr;
+    }
 
     auto effect = node->GetNodeEffect();
     if( effect == nullptr )
     {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodeName + "], effect not found";
+        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodePath + "], effect not found";
         return nullptr;
     }
 
@@ -203,7 +207,7 @@ ParameterPtr PluginEventsHandlers::GetGlobalEffectParameter(    const std::strin
     auto param = effect->GetParameter( paramName );
     if( param == nullptr )
     {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodeName + "], param [" + paramName + "] not found";
+        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodePath + "], param [" + paramName + "] not found";
         return nullptr;
     }
     return param;
@@ -213,26 +217,28 @@ ParameterPtr PluginEventsHandlers::GetGlobalEffectParameter(    const std::strin
 // ***********************
 //
 ParameterPtr PluginEventsHandlers::GetResourceParameter    (    const std::string& sceneName,
-                                                                const std::string& nodeName,
+                                                                const std::string& nodePath,
                                                                 const std::string& pluginName,
                                                                 const std::string& textureName,
                                                                 const std::string& paramName )
 {
-    auto node = GetNode( m_appLogic, sceneName, nodeName );
+    auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
     if( node == nullptr )
+    {
         return nullptr;
+    }
 
     auto plugin = node->GetPlugin( pluginName );
     if( plugin == nullptr )
     {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodeName + "], plugin [" + pluginName + "] not found";
+        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodePath + "], plugin [" + pluginName + "] not found";
         return nullptr;
     }
 
     auto resourceModel = plugin->GetResourceStateModel( textureName );
     if( resourceModel == nullptr )
     {
-        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodeName + "], plugin [" + pluginName + "], texture [" + textureName + " not found";
+        LOG_MESSAGE( SeverityLevel::warning ) << "Parameter event handler: scene [" + sceneName + "], node [" + nodePath + "], plugin [" + pluginName + "], texture [" + textureName + " not found";
         return nullptr;
     }
     
@@ -347,7 +353,7 @@ void PluginEventsHandlers::TimerHandler        ( bv::IEventPtr eventPtr )
 	BVProjectPtr modelScene = m_appLogic->GetBVProject();
     auto root = modelScene->GetModelSceneRoot();
         
-    std::string& nodeName = evtTimer->NodeName;
+    std::string & nodePath = evtTimer->NodeName;
     std::string& sceneName = evtTimer->SceneName;
     TimerEvent::Command command = evtTimer->TimerCommand;
     float hours = evtTimer->Hours;
@@ -357,7 +363,7 @@ void PluginEventsHandlers::TimerHandler        ( bv::IEventPtr eventPtr )
 
     TimeType time = ( hours * 3600.0f + minutes * 60.0f + seconds ) + millis * 0.001f;
 
-    auto node = GetNode( m_appLogic, sceneName, nodeName );
+    auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
     if( node == nullptr )
     {
         SendSimpleErrorResponse( command, evtTimer->EventID, evtTimer->SocketID, "Node not found" );

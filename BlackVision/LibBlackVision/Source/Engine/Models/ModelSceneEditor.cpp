@@ -142,23 +142,42 @@ bool                    ModelSceneEditor::DetachChildNode    ( BasicNodePtr pare
 
 // ********************************
 //
-BasicNodePtr     ModelSceneEditor::GetDetachedNode    ()
+BasicNodePtr    ModelSceneEditor::GetDetachedNode   () const
 {
     return m_detachedNode;
 }
 
 // ********************************
 //
-void                    ModelSceneEditor::DeleteDetachedNode ()
+void            ModelSceneEditor::DeleteDetachedNode()
 {
     m_detachedNode = nullptr;
 }
 
 // ********************************
 //
-BasicNodePtr     ModelSceneEditor::GetRootNode        ()
+BasicNodePtr    ModelSceneEditor::GetRootNode       () const
 {
     return m_rootNode;
+}
+
+// ********************************
+//
+IModelNodePtr   ModelSceneEditor::GetNode           ( const std::string & path, const std::string & separator ) const
+{
+    if( m_rootNode )
+    {
+        std::string childPath = path;
+        auto rootName = BasicNode::SplitPrefix( childPath, separator );
+        auto rootIdx = BasicNode::TryParseIndex( rootName );
+
+        if( ( rootIdx == 0 ) || ( rootIdx < 0 && ( m_rootNode->GetName() == rootName ) ) )
+        {
+            return m_rootNode->GetNode( childPath, separator );
+        }
+    }
+
+    return nullptr;
 }
 
 } // model

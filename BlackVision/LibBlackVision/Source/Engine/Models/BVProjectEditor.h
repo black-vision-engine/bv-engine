@@ -69,8 +69,8 @@ public:
 
 
 /* NODES */
-    model::IModelNodePtr	GetNode             ( const std::string & sceneName, const std::string & nodePath );
-	model::IModelNodePtr	GetParentNode       ( const std::string & sceneName, const std::string & nodePath );
+    model::IModelNodePtr	GetNode             ( const std::string & sceneName, const std::string & nodePath, const std::string & separator = "/" );
+	model::IModelNodePtr	GetParentNode       ( const std::string & sceneName, const std::string & nodePath, const std::string & separator = "/" );
 
 	/* paths */
     bool                    AddChildNode        ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName );

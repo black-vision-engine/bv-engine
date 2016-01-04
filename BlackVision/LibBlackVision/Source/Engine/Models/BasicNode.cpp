@@ -176,34 +176,43 @@ IPluginPtr                      BasicNode::GetPlugin                ( const std:
 
 // ********************************
 //
-IFinalizePluginConstPtr BasicNode::GetFinalizePlugin        () const
+IFinalizePluginConstPtr BasicNode::GetFinalizePlugin                () const
 {
     return m_pluginList->GetFinalizePlugin();
 }
 
 // ********************************
 //
-IModelNodePtr           BasicNode::GetNode                  ( const std::string & path, const std::string & separator )
+IModelNodePtr           BasicNode::GetNode                          ( const std::string & path, const std::string & separator )
 {
-    std::string suffix = path;
+    std::string childPath = path;
 
-    auto name = SplitPrefix( suffix, separator );
-    if( name == GetName() )
+    if( childPath.empty() )
+	{
+		return shared_from_this();
+	}
+
+    auto childName = SplitPrefix( childPath, separator );
+    auto childIdx = TryParseIndex( childName );
+        
+    if( childIdx >= 0 )
     {
-		if( suffix.empty() )
-		{
-			return shared_from_this();
-		}
+        if( childIdx < m_children.size() )
+        {
+            return m_children[ childIdx ]->GetNode( childPath, separator );
+        }
 
-		for( auto & child : m_children )
-		{
-			auto node = child->GetNode( suffix, separator );
-			if( node )
-			{
-				return node;
-			}
-		}
+        return nullptr;
     }
+
+	for( auto & child : m_children )
+	{
+        if( child->GetName() == childName )
+		{
+            return child->GetNode( childPath, separator );
+        }
+	}
+
     return nullptr;
 }
 
@@ -484,10 +493,14 @@ void BasicNode::Update( TimeType t )
         m_pluginList->Update( t );
 
 		if( m_nodeLogic )
+        {
 		    m_nodeLogic->Update( t );
+        }
 
         for( auto ch : m_children )
+        {
             ch->Update( t );
+        }
     }
 }
 
@@ -507,17 +520,19 @@ void  BasicNode::SetVisible              ( bool visible )
 
 // ********************************
 //
-std::string                         BasicNode::SplitPrefix              ( std::string & str, const std::string & separator ) const
+INodeLogicPtr                       BasicNode::GetLogic				    () const
+{
+    return m_nodeLogic;
+}
+
+// ********************************
+//
+std::string                         BasicNode::SplitPrefix              ( std::string & path, const std::string & separator )
 {
     assert( separator.length() == 1 );
 
-	//strip unnecessary '/' 
-	if( !str.empty() && str[ 0 ] == '/' )
-		str.erase(0, 1);
-	if( !str.empty() && str[ str.size() - 1 ] == '/' )
-		str.erase(str.size() - 1);
-
-    auto ret = Split( str, separator );
+    path = Trim( path, separator ); //strip unnecessary separators
+    auto ret = Split( path, separator );
 
     if( ret.size() == 0 )
     {
@@ -525,11 +540,11 @@ std::string                         BasicNode::SplitPrefix              ( std::s
     }
     else if ( ret.size() == 1 )
     {
-        str = "";
+        path = "";
     }
     else
     {
-        str = Join( std::vector< std::string >( ret.begin() + 1, ret.end() ), separator );
+        path = Join( std::vector< std::string >( ret.begin() + 1, ret.end() ), separator );
     }
 
     return ret[ 0 ];
@@ -537,9 +552,19 @@ std::string                         BasicNode::SplitPrefix              ( std::s
 
 // ********************************
 //
-INodeLogicPtr                       BasicNode::GetLogic				    ()
+Int32                               BasicNode::TryParseIndex            ( std::string & str, const char escapeChar )
 {
-    return m_nodeLogic;
+    if( !str.empty() && str[ 0 ] == escapeChar )
+    {
+        Int32 result;
+        bool success = ( ( std::stringstream( str.substr( 1, str.length() ) ) >> result ) != nullptr );
+        if( success )
+        {
+            return result;
+        }
+    }
+
+    return -1;
 }
 
 } // model

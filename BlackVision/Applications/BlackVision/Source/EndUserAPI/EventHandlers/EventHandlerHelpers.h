@@ -12,9 +12,6 @@ namespace bv
 {
 class BVAppLogic;
 
-model::IModelNodePtr    GetNode     ( BVAppLogic* appLogic, const std::string& sceneName, const std::string& nodeName );
-model::IModelNodePtr    GetRootNode ( BVAppLogic* appLogic, const std::string& sceneName );
-
 Json::Value             GetRequestParamValue        ( const std::string& request );
 Json::Value             Str2Json                    ( const std::string& data );
 

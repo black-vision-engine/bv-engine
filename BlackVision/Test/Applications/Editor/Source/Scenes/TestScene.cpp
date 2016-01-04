@@ -84,49 +84,81 @@ OrderTestCase::OrderTestCase	( const std::string & node, const std::string & tes
 
 // ****************************
 //
-void					TestScene::InitTestModelSceneEditor	()
+void                    TestScene::InitTestModelSceneEditor ()
 {
-	m_testSteps.push_back([&] 
-	{ 
-		auto editor = m_project->GetProjectEditor();
-		auto scene = editor->GetScene( SCENE_NAME );
-		auto root = scene->GetRootNode();
-		
-		auto timeline = scene->GetTimeline();
-		for( unsigned int i = 0; i < 3; ++i )
-		{
-			auto child = TestSceneUtils::ColoredRectangle( timeline, "child" + toString( i ), 0.3f, 0.3f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-			auto childTransform = child->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-			SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )0.5*i, -0.5f, 0.f ) );
-			editor->AddChildNode( scene, root, child );
-		}
-		assert( root->GetNumChildren() == 3 );
+    m_testSteps.push_back([&] 
+    { 
+        auto editor = m_project->GetProjectEditor();
+        auto scene = editor->GetScene( SCENE_NAME );
+        auto root = scene->GetRootNode();
+        
+        auto timeline = scene->GetTimeline();
+        for( unsigned int i = 0; i < 3; ++i )
+        {
+            auto child = TestSceneUtils::ColoredRectangle( timeline, "child" + toString( i ), 0.3f, 0.3f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+            auto childTransform = child->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+            SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )0.5*i, -0.5f, 0.f ) );
+            editor->AddChildNode( scene, root, child );
+        }
+        assert( root->GetNumChildren() == 3 );
 
-		for( unsigned int i = 0; i < 3; ++i )
-		{
-			auto child = TestSceneUtils::ColoredRectangle( timeline, "child0" + toString( i ), 0.2f, 0.2f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-			auto childTransform = child->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-			SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )i, -0.5f, 0.f ) );
-			editor->AddChildNode( scene, root->GetChild( "child0" ), child );
-		}
-		assert( root->GetChild( "child0" )->GetNumChildren() == 3 );
-	});
+        for( unsigned int i = 0; i < 3; ++i )
+        {
+            auto child = TestSceneUtils::ColoredRectangle( timeline, "child0" + toString( i ), 0.2f, 0.2f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+            auto childTransform = child->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+            SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )i, -0.5f, 0.f ) );
+            editor->AddChildNode( scene, root->GetChild( "child0" ), child );
+        }
+        assert( root->GetChild( "child0" )->GetNumChildren() == 3 );
+    });
 
-	//m_testSteps.push_back([&] 
-	//{
-	//	auto editor = m_project->GetProjectEditor();
-	//	auto node0 = editor->GetNode( SCENE_NAME, "/root/child0/child01" );
-	//	auto node1 = editor->GetNode( SCENE_NAME, "/root/child01" );
-	//	auto node2 = editor->GetNode( SCENE_NAME, "/root/child0" );
-	//	auto node3 = editor->GetNode( SCENE_NAME, "/root/child2" );
-	//	auto node4 = editor->GetNode( SCENE_NAME, "/root/child2/child00" );
-	//	bool success = true;
-	//	success;
-	//	//success &= ( node0->GetName() == node1->GetName() );
-	//	//success &= ( node0.get() == node1.get() );
+    m_testSteps.push_back([&] 
+    {
+        auto editor = m_project->GetProjectEditor();
+        auto node0 = editor->GetNode( SCENE_NAME, "/root/child0/child01" );
+        auto node1 = editor->GetNode( SCENE_NAME, "/root/child01" );
+        auto node2 = editor->GetNode( SCENE_NAME, "/root/child0" );
+        auto node3 = editor->GetNode( SCENE_NAME, "/root/child2" );
+        auto node4 = editor->GetNode( SCENE_NAME, "/root/child2/child00" );
+        bool success = true;
 
-	//	//assert( success );
-	//});
+        success &= ( node0->GetName() == "child01" );
+        success &= ( node1 == nullptr );
+        success &= ( node2->GetName() == "child0" );
+        success &= ( node3->GetName() == "child2" );
+        success &= ( node4 == nullptr );
+
+        assert( success );
+    });
+
+    m_testSteps.push_back([&] 
+    {
+        auto editor = m_project->GetProjectEditor();
+        auto node0 = editor->GetNode( SCENE_NAME, "/root/child0/child01" );
+        auto node1 = editor->GetNode( SCENE_NAME, "/root/#5" );
+        auto node2 = editor->GetNode( SCENE_NAME, "/root/#0" );
+        auto node3 = editor->GetNode( SCENE_NAME, "/root/#2" );
+        auto node4 = editor->GetNode( SCENE_NAME, "/root/#2/child00" );
+        auto node5 = editor->GetNode( SCENE_NAME, "/root/#0/child01" );
+        auto node6 = editor->GetNode( SCENE_NAME, "/root/child0/#2" );
+        auto node7 = editor->GetNode( SCENE_NAME, "/#0/#0/#2" );
+        auto node8 = editor->GetNode( SCENE_NAME, "/#0/#0/#1" );
+        auto node9 = editor->GetNode( SCENE_NAME, "/#1/child0/#2" );
+        bool success = true;
+
+        success &= ( node0->GetName() == "child01" );
+        success &= ( node1 == nullptr );
+        success &= ( node2->GetName() == "child0" );
+        success &= ( node3->GetName() == "child2" );
+        success &= ( node4 == nullptr );
+        success &= ( node5->GetName() == "child01" );
+        success &= ( node6->GetName() == "child02" );
+        success &= ( node6 == node7 );
+        success &= ( node0 == node8 );
+        success &= ( node9 == nullptr );
+
+        assert( success );
+    });
 
 	m_testSteps.push_back([&] 
 	{
