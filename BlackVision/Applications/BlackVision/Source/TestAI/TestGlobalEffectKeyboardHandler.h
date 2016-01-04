@@ -19,6 +19,7 @@ private:
     NodeEffectType          m_curSelectedNode;
     
     unsigned int            m_curWireframeNodeIdx;
+    unsigned int            m_curMixChannelsPreset;
     bool                    m_wireframeDisabled;
 
     std::shared_ptr< model::ModelNodeEffectDefault >        m_defaultEffect;
@@ -35,19 +36,21 @@ public:
         
 private:
 
-    void                    HandleIncrement     ( BVAppLogic * logic );
-    void                    HandleDecrement     ( BVAppLogic * logic );
-    void                    HandleSpace         ( BVAppLogic * logic );
-    void                    HandleToggleEffect  ( BVAppLogic * logic );
-    void                    HandleMixChannels   ( BVAppLogic * logic );
+    void                    HandleIncrement         ( BVAppLogic * logic );
+    void                    HandleDecrement         ( BVAppLogic * logic );
+    void                    HandleSpace             ( BVAppLogic * logic );
+    void                    HandleToggleEffect      ( BVAppLogic * logic );
+    void                    HandleMixChannels       ( BVAppLogic * logic );
 
-    model::BasicNodePtr     GetRootNode         ( BVAppLogic * logic );
-    model::BasicNodePtr     GetNodeByPath       ( BVAppLogic * logic, const std::string & path );
+    void                    SetNextMixChannelsPreset();
 
-    model::BasicNodePtr     GetVanillaNode      ( BVAppLogic * logic );
-    model::BasicNodePtr     GetAlphaMaskNode    ( BVAppLogic * logic );
-    model::BasicNodePtr     GetNodeMaskNode     ( BVAppLogic * logic );
-    model::BasicNodePtr     GetWireframeNode    ( BVAppLogic * logic );
+    model::BasicNodePtr     GetRootNode             ( BVAppLogic * logic );
+    model::BasicNodePtr     GetNodeByPath           ( BVAppLogic * logic, const std::string & path );
+
+    model::BasicNodePtr     GetVanillaNode          ( BVAppLogic * logic );
+    model::BasicNodePtr     GetAlphaMaskNode        ( BVAppLogic * logic );
+    model::BasicNodePtr     GetNodeMaskNode         ( BVAppLogic * logic );
+    model::BasicNodePtr     GetWireframeNode        ( BVAppLogic * logic );
 
     model::IModelNodeEffectPtr  GetAlphaMaskNodeEffect  ( BVAppLogic * logic );
     model::IModelNodeEffectPtr  GetNodeMaskNodeEffect   ( BVAppLogic * logic );

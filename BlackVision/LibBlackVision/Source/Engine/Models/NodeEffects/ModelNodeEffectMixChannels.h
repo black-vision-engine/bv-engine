@@ -11,9 +11,11 @@ class ModelNodeEffectMixChannels : public IModelNodeEffect
 {
 private:
 
-    ParamIntPtr     m_paramChannelMask;
-    
-    int             m_channelMask;
+    ParamIntPtr     m_paramChannelMixMask;
+    ParamVec4Ptr    m_paramChannelMaskMask;
+
+    int             m_channelMixMask;
+    glm::vec4       m_channelMaskMask;
 
 public:
 
@@ -21,11 +23,15 @@ public:
 
     virtual NodeEffectType  GetType                 () const override;
 
-    ParamIntPtr             GetParamChannelMask     ();
+    ParamIntPtr             GetParamChannelMixMask  ();
+    ParamVec4Ptr            GetParamChannelMaskMask ();
 
     virtual void            Update                  ( TimeType t ) override;
 
-    int                     GetChannelMask          () const;
+    glm::vec4               GetChannelMaskMask      () const;
+    int                     GetChannelMixMask       () const;
+
+    static unsigned int     GetChannelMixMask       ( unsigned int rIdx, unsigned int gIdx, unsigned int bIdx, unsigned int aIdx );
 
 private:
 

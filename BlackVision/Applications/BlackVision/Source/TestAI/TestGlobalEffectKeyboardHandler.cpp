@@ -3,6 +3,7 @@
 #include "BVAppLogic.h"
 
 #include "Engine/Models/NodeEffects/ModelNodeEffectDefault.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectMixChannels.h"
 
 
 namespace bv {
@@ -15,6 +16,7 @@ TestGlobalEfectKeyboardHandler::TestGlobalEfectKeyboardHandler  ()
     m_alphaMaskEffect = nullptr;
     m_nodeMaskEffect = nullptr;
     m_curWireframeNodeIdx = 0;
+    m_curMixChannelsPreset = 0;
     m_wireframeDisabled = true;
 }
 
@@ -224,15 +226,19 @@ void                    TestGlobalEfectKeyboardHandler::HandleSpace         ( BV
 
             auto paramBg = tEffect->GetParamBgIdx();
             auto paramFg = tEffect->GetParamFgIdx();
-    
+
             auto bgIdx = tEffect->GetBackgroundChildIdx();
             auto fgIdx = tEffect->GetForegroundChildIdx();
-    
+
             paramBg->SetVal( fgIdx, 0.f );
             paramFg->SetVal( bgIdx, 0.f );
 
             // printf( "New node mask bg: %d fg: %d\n", effect->GetBackgroundChildIdx(), effect->GetForegroundChildIdx() );
         }
+    }
+    else if( GetRootNode( logic )->GetNodeEffect()->GetType() == NodeEffectType::NET_MIX_CHANNELS )
+    {
+        SetNextMixChannelsPreset();
     }
 }
 
@@ -338,6 +344,37 @@ void                    TestGlobalEfectKeyboardHandler::HandleMixChannels   ( BV
 
         root->SetNodeEffect( m_mixChannelsEffect );
     }
+}
+
+// *********************************
+//
+void                    TestGlobalEfectKeyboardHandler::SetNextMixChannelsPreset()
+{
+    auto normal = model::ModelNodeEffectMixChannels::GetChannelMixMask( 0, 1, 2, 3 );
+
+    auto r_all  = model::ModelNodeEffectMixChannels::GetChannelMixMask( 0, 0, 0, 3 );
+    auto g_all  = model::ModelNodeEffectMixChannels::GetChannelMixMask( 1, 1, 1, 3 );
+    auto b_all  = model::ModelNodeEffectMixChannels::GetChannelMixMask( 2, 2, 2, 3 );
+    auto a_all  = model::ModelNodeEffectMixChannels::GetChannelMixMask( 3, 3, 3, 3 );
+
+    auto all_mask   = glm::vec4( 1.f, 1.f, 1.f, 1.f );
+    auto r_mask     = glm::vec4( 1.f, 0.f, 0.f, 1.f );
+    auto g_mask     = glm::vec4( 0.f, 1.f, 0.f, 1.f );
+    auto b_mask     = glm::vec4( 0.f, 0.f, 1.f, 1.f );
+
+    unsigned int mix_masks[]    = { normal, r_all, g_all, b_all, a_all, normal, normal, normal };
+    glm::vec4 channel_masks[]   = { all_mask, all_mask, all_mask, all_mask, all_mask, r_mask, g_mask, b_mask };
+
+    auto cur_mix_mask = int(mix_masks[ m_curMixChannelsPreset ]);
+    auto cur_chn_mask = channel_masks[ m_curMixChannelsPreset ];
+
+    m_curMixChannelsPreset = ( m_curMixChannelsPreset + 1 ) % 8;
+
+    auto paramMix  = m_mixChannelsEffect->GetParamChannelMixMask();
+    auto paramMask = m_mixChannelsEffect->GetParamChannelMaskMask();
+
+    paramMix->SetVal( cur_mix_mask, 0.f );
+    paramMask->SetVal( cur_chn_mask, 0.f );
 }
 
 // *********************************
