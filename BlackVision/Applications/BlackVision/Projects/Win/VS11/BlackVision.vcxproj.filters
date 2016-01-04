@@ -290,6 +290,12 @@
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\TimelineHandlers.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\BlurFullscreenEffect.cpp">
+      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\BlurEffectRenderLogic.cpp">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -524,6 +530,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\TimelineHandlers.h">
       <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\BlurFullscreenEffect.h">
+      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\BlurEffectRenderLogic.h">
+      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

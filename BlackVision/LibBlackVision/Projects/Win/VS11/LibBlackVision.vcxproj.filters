@@ -1140,6 +1140,12 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectShadow.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\BlurNodeEffect.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectBlur.cpp">
+      <Filter>Engine\Models\NodeEffects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2446,6 +2452,12 @@
       <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectShadow.h">
+      <Filter>Engine\Models\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\BlurNodeEffect.h">
+      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectBlur.h">
       <Filter>Engine\Models\NodeEffects</Filter>
     </ClInclude>
   </ItemGroup>
