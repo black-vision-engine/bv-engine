@@ -1,12 +1,6 @@
 #pragma once
 
-#include <hash_map>
-#include <string>
-//#include <regex>
-
-#include "Engine/Models/Interfaces/IModelNode.h"
 #include "Engine/Models/BasicNode.h"
-#include "Engine/Models/Interfaces/IModelNode.h"
 #include "Engine/Models/SceneModel.h"
 
 
@@ -63,9 +57,6 @@ public:
 
 	bool					SetSceneVisible		( const std::string & sceneName, bool visible );
 
-    void                    SetSceneRootNode	( const std::string & sceneName, model::IModelNodePtr rootNode );
-    bool                    DeleteSceneRootNode	( const std::string & sceneName );
-
 	model::SceneModelPtr    GetScene			( const std::string & sceneName );
 
 	bool					RenameScene			( const std::string & oldSceneName, const std::string & newSceneName );
@@ -82,7 +73,7 @@ public:
 	model::IModelNodePtr	GetParentNode       ( const std::string & sceneName, const std::string & nodePath );
 
 	/* paths */
-    void                    AddChildNode        ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName );
+    bool                    AddChildNode        ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName );
     bool                    DeleteChildNode     ( const std::string & sceneName, const std::string & nodePath );
 
 	/** Insert node at the end. */
@@ -99,29 +90,28 @@ public:
 	
 	bool					RenameNode			( const std::string & sceneName, const std::string & nodePath, const std::string & newNodeName );
 
+    void                    DeleteDetachedNodes ( const std::string & sceneName );
+
 	/* objects */
-    void                    AddChildNode        ( const std::string & sceneName, model::IModelNodePtr parentNode, model::IModelNodePtr childNode );
-    bool                    DeleteChildNode     ( const std::string & sceneName, model::IModelNodePtr parentNode, const std::string & childNodeName );
+    bool                    AddChildNode        ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, model::IModelNodePtr childNode );
+    bool                    DeleteChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, const std::string & childNodeName );
 	
 	/** Insert node at the end. */
-    bool                    AttachChildNode     ( const std::string & sceneName, model::IModelNodePtr parent );
+    bool                    AttachChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parent );
 	/** Insert node at destIdx position. */
-    bool                    AttachChildNode     ( const std::string & sceneName, model::IModelNodePtr parent, UInt32 posIdx );
-	bool                    DetachChildNode     ( const std::string & sceneName, model::IModelNodePtr parent, const std::string & nodeToDetach );
+    bool                    AttachChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parent, UInt32 posIdx );
+	bool                    DetachChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parent, const std::string & nodeToDetach );
 
 	/** Add a copy of node to the destParentNode from the given scene.
 	@param[ destParentNode ] If nullptr, set node copy as root node of the scene.
 	@return Returns copied node. */
-	model::BasicNodePtr		AddNodeCopy			( const std::string & destSceneName, model::BasicNodePtr destParentNode, const std::string & srcSceneName, model::BasicNodePtr srcNode );
+	model::BasicNodePtr		AddNodeCopy			( model::SceneModelPtr destScene, model::BasicNodePtr destParentNode, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode );
 	
-	bool					MoveNode			( const std::string & destSceneName, model::BasicNodePtr destParentNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcParentNode, const std::string & srcNodeName );
+	bool					MoveNode			( model::SceneModelPtr destScene, model::BasicNodePtr destParentNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcParentNode, const std::string & srcNodeName );
 
-	void					SetNodeVisible		( model::IModelNodePtr node, bool visible );
+	bool					SetNodeVisible		( model::IModelNodePtr node, bool visible );
 
 	bool					RenameNode			( model::IModelNodePtr node, const std::string & newNodeName );
-
-
-    void                    DeleteDetachedNodes ( const std::string & sceneName );
 
 /* PLUGINS */
 	
@@ -157,16 +147,16 @@ public:
 
 	/** Add a copy of plugin from srcNode with given name to the destNode on destIdx position.
 	@return Returns copied plugin. */
-	model::IPluginPtr		AddPluginCopy		( const std::string & destSceneName, model::BasicNodePtr destNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcNode, const std::string & pluginNameToCopy );
+	model::IPluginPtr		AddPluginCopy		( model::SceneModelPtr destScene, model::BasicNodePtr destNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode, const std::string & pluginNameToCopy );
 
-	bool					MovePlugin			( const std::string & destSceneName, model::BasicNodePtr destNode, UInt32 destIdx, const std::string & srcSceneName, model::BasicNodePtr srcNode, const std::string & pluginName );
+	bool					MovePlugin			( model::SceneModelPtr destScene, model::BasicNodePtr destNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode, const std::string & pluginName );
 
 
 /* EFFECTS */
 
 	model::IModelNodeEffectPtr	GetNodeEffect   ( model::IModelNodePtr node );
-    void						SetNodeEffect   ( model::IModelNodePtr node, model::IModelNodeEffectPtr nodeEffect );
-    bool                        SetNodeEffect   ( const std::string& sceneName, const std::string& nodePath, const std::string& timelinePath, const std::string& effectName );
+    bool						SetNodeEffect   ( model::IModelNodePtr node, model::IModelNodeEffectPtr nodeEffect );
+    bool                        SetNodeEffect   ( const std::string & sceneName, const std::string & nodePath, const std::string & timelinePath, const std::string & effectName );
 
 /* TIMELINES */
 
@@ -201,6 +191,10 @@ private:
     
 	
 	/* model scene helpers */
+
+    void                    SetSceneRootNode	( model::SceneModelPtr scene, model::IModelNodePtr rootNode );
+    void                    DeleteSceneRootNode	( model::SceneModelPtr scene );
+
 	std::string				GetNodeName			( const std::string & nodePath );
 
 
@@ -208,6 +202,7 @@ private:
 	std::string             PrefixSceneName		( const std::string & name );
 
     friend class BVProject;
+
 };
 
 } //bv

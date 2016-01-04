@@ -81,14 +81,26 @@ const IPluginDescriptor *                           PluginsManager::GetDescripto
 //
 IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return GetDescriptor( uid )->CreatePlugin( name, prev, timeEvaluator );
+    auto desc = GetDescriptor( uid );
+    if( desc )
+    {
+        return desc->CreatePlugin( name, prev, timeEvaluator );
+    }
+
+    return nullptr;
 }
 
 // *********************************
 //
 IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreatePlugin( uid, GetDescriptor( uid )->DefaultPluginName(), prev, timeEvaluator );
+    auto desc = GetDescriptor( uid );
+    if( desc )
+    {
+        return CreatePlugin( uid, desc->DefaultPluginName(), prev, timeEvaluator );
+    }
+    
+    return nullptr;
 }
 
 // *********************************
@@ -102,16 +114,26 @@ const std::vector< const IPluginDescriptor * > &    PluginsManager::GetRegistere
 //
 IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, const std::string & name, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    assert( IsRegistered( uid ) );
+    auto desc = GetDescriptor( uid );
+    if( desc )
+    {
+        return desc->CreatePlugin( name, nullptr, timeEvaluator );
+    }
 
-    return GetDescriptor( uid )->CreatePlugin( name, nullptr, timeEvaluator );
+    return nullptr;
 }
 
 // *********************************
 //
 IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreatePlugin( uid, GetDescriptor( uid )->DefaultPluginName(), nullptr, timeEvaluator );
+    auto desc = GetDescriptor( uid );
+    if( desc )
+    {
+        return CreatePlugin( uid, desc->DefaultPluginName(), nullptr, timeEvaluator );
+    }
+    
+    return nullptr;
 }
 
 // *********************************

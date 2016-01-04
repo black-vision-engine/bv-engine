@@ -839,6 +839,7 @@ public:
     typedef enum
     {
         AddKeyframe,
+        RemoveKeyframe,
         Fail            ///< Wrong command
     } Command;
 

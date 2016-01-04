@@ -464,6 +464,7 @@ const std::wstring TOTAL_LOOP_COUNT_WSTRING             = L"TotalLoopCount";
 std::pair< TimelineKeyframeEvent::Command, const std::wstring > TimelineKeyframeEventCommandMapping[] = 
 {
     std::make_pair( TimelineKeyframeEvent::Command::AddKeyframe, L"AddKeyframe" )
+    , std::make_pair( TimelineKeyframeEvent::Command::RemoveKeyframe, L"RemoveKeyframe" )
     , std::make_pair( TimelineKeyframeEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
