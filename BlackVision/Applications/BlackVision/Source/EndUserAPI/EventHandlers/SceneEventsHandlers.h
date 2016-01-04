@@ -18,7 +18,6 @@ public:
     void        PluginStructure     ( bv::IEventPtr evt );
     void        ProjectStructure    ( bv::IEventPtr evt );
     void        SceneStructure	    ( bv::IEventPtr evt );
-    void        TimelineHandler     ( bv::IEventPtr evt );
     void        WidgetHandler       ( bv::IEventPtr evt );
 
 	void        OnNodeAppearing     ( IEventPtr evt );

@@ -18,7 +18,8 @@ public:
     TimelineHandlers( BVAppLogic* logic );
     ~TimelineHandlers();
 
-    void        TimelineKeyframe           ( bv::IEventPtr eventPtr );
+    void        TimelineKeyframe            ( bv::IEventPtr eventPtr );
+    void        TimelineHandler             ( bv::IEventPtr evt );
 
 private:
     bool        AddKeyframe     (   TimelineKeyframeEvent::KeyframeType keyframeType,
