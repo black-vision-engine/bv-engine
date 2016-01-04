@@ -15,10 +15,13 @@ namespace bv {
 // ****************************
 //
 MixChannelsEffect::MixChannelsEffect ()
-    : m_maskParam( nullptr )
-    , m_channelMaskVal( nullptr )
+    : m_mixMaskParam( nullptr )
+    , m_maskMaskParam( nullptr )
+    , m_channelMixMaskVal( nullptr )
+    , m_channelMaskMaskVal( nullptr )
 {
-    m_channelMaskVal    = ValuesFactory::CreateValueInt( "channelMask" );
+    m_channelMixMaskVal     = ValuesFactory::CreateValueInt( "channelMixMask" );
+    m_channelMaskMaskVal    = ValuesFactory::CreateValueVec4( "channelMaskMask" );
     
     auto ps = CreatePS();
     auto vs = CreateVS();
@@ -57,7 +60,7 @@ void    MixChannelsEffect::SetRIdx    ( unsigned char idx )
 
     m_rIdx = idx;
 
-    m_channelMaskVal->SetValue( GetChannelMask() );
+    m_channelMixMaskVal->SetValue( GetChannelMask() );
 }
 
 // **************************
@@ -68,7 +71,7 @@ void    MixChannelsEffect::SetGIdx    ( unsigned char idx )
 
     m_gIdx = idx;
 
-    m_channelMaskVal->SetValue( GetChannelMask() );
+    m_channelMixMaskVal->SetValue( GetChannelMask() );
 }
 
 // **************************
@@ -79,18 +82,34 @@ void    MixChannelsEffect::SetBIdx    ( unsigned char idx )
 
     m_bIdx = idx;
 
-    m_channelMaskVal->SetValue( GetChannelMask() );
+    m_channelMixMaskVal->SetValue( GetChannelMask() );
 }
 
 // **************************
 //
-void    MixChannelsEffect::SetAIdx    ( unsigned char idx )
+void    MixChannelsEffect::SetAIdx      ( unsigned char idx )
 {
     assert( idx < 4 );
 
     m_aIdx = idx;
 
-    m_channelMaskVal->SetValue( GetChannelMask() );
+    m_channelMixMaskVal->SetValue( GetChannelMask() );
+}
+
+// **************************
+//
+glm::vec4   MixChannelsEffect::GetMask         () const
+{
+    return m_maskMask;
+}
+
+// **************************
+//
+void    MixChannelsEffect::SetMask      ( const glm::vec4 & mask )
+{
+    m_maskMask = mask;
+
+    m_channelMaskMaskVal->SetValue( mask );
 }
 
 // **************************
@@ -127,9 +146,11 @@ PixelShader *       MixChannelsEffect::CreatePS        ()
 {
     ShaderParameters * shaderParams = new ShaderParameters();
 
-    GenericShaderParam * param = ShaderParamFactory::CreateGenericParameter( m_channelMaskVal.get() );
+    GenericShaderParam * param0 = ShaderParamFactory::CreateGenericParameter( m_channelMixMaskVal.get() );
+    GenericShaderParam * param1 = ShaderParamFactory::CreateGenericParameter( m_channelMaskMaskVal.get() );
 
-    shaderParams->AddParameter( param );
+    shaderParams->AddParameter( param0 );
+    shaderParams->AddParameter( param1 );
 
     auto shader = new PixelShader( GetMixChannelPixelShaderCode(), shaderParams );
 
