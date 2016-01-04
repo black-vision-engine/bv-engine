@@ -6,6 +6,8 @@
 
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
+#include "Engine/Interfaces/IValue.h"
+
 namespace bv {
 
 // **************************
@@ -29,6 +31,11 @@ void            BlurFullscreenEffect::SetVertical ( bool val )
 {
     m_vertical = val;
     m_verticalVal->SetValue( val );
+
+    if( m_pixelShader )
+    {
+        static_cast< ShaderParamInt * >( m_pixelShader->GetParameters()->AccessParam( 2 ) )->SetValue( val );
+    }
 }
 
 // **************************
@@ -44,6 +51,11 @@ void            BlurFullscreenEffect::SetTexture  ( Texture2DPtr tex )
 {
     m_texture = tex;
     m_textureSize->SetValue( glm::vec2( float( tex->GetWidth() ), float( tex->GetHeight() ) ) );
+    
+    if( m_pixelShader )
+    {
+        m_pixelShader->GetParameters()->SetTexture( 0, tex );
+    }
 }
 
 // **************************
@@ -76,6 +88,7 @@ PixelShader *   BlurFullscreenEffect::CreatePS            () const
 // **************************
 //
 BlurFullscreenEffect::BlurFullscreenEffect  ( Texture2DPtr tex )
+    : m_pixelShader( nullptr )
 {
     m_blurSizeVal   = ValuesFactory::CreateValueFloat( "blurSize" );
 
@@ -98,7 +111,8 @@ BlurFullscreenEffect::~BlurFullscreenEffect ()
 //
 RenderableEntity *  BlurFullscreenEffect::CreateFullscreenQuad  () const
 {
-    auto quad = CreateDefaultFullscrQuad( CreatePS() );
+    m_pixelShader = CreatePS();
+    auto quad = CreateDefaultFullscrQuad( m_pixelShader );
 
     auto eff  = quad->GetRenderableEffect();
     auto pass = eff->GetPass( 0 );

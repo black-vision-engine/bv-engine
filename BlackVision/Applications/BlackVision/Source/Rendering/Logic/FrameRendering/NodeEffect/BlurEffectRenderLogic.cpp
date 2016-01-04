@@ -43,24 +43,23 @@ void                        BlurEffectRenderLogic::RenderNode           ( SceneN
         auto mainTarget = disableBoundRT( ctx );
 
         auto foregroundRt   = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+        auto hBluredRenderTarget = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
 
         RenderItermediateData( ctx, foregroundRt, node );
 
-        rtAllocator->Free();
-
-        auto hBluredRenderTarget = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
-
         enable( ctx, hBluredRenderTarget );
+        clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
-        ApplyBlurEffect( renderer, foregroundRt, blurSizeValue, true );
+        ApplyBlurEffect( renderer, foregroundRt, blurSizeValue, false );
 
+        rtAllocator->Free();
         rtAllocator->Free();
 
         disableBoundRT( ctx );
 
         enable( ctx, mainTarget );
 
-        ApplyBlurEffect( renderer, hBluredRenderTarget, blurSizeValue, false );
+        ApplyBlurEffect( renderer, hBluredRenderTarget, blurSizeValue, true );
     }
 }
 

@@ -13,7 +13,6 @@ uniform int             vertical;
 void pass0()
 {
     float pixelW = 1.0 / textureSize.x;
-    float pixelH = 1.0 / textureSize.y;
 
     vec4 sum = vec4( 0, 0, 0, 0 );
 
@@ -30,7 +29,6 @@ void pass0()
 
 void pass1()
 {
-    float pixelW = 1.0 / textureSize.x;
     float pixelH = 1.0 / textureSize.y;
 
     vec4 sum = vec4( 0, 0, 0, 0 );
@@ -52,9 +50,12 @@ void main()
     {
     case 0:
         pass0();
+        break;
     case 1:
         pass1();
+        break;
     default:
         FragColor = texture( Tex0, uvCoord );
+        break;
     }
 }

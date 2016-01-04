@@ -7,6 +7,7 @@
 namespace bv {
 
 class ShadowFullscreenEffect;
+class BlurFullscreenEffect;
 class RenderTarget;
 class Renderer;
 
@@ -15,7 +16,8 @@ class ShadowEffectRenderLogic : public NodeEffectRenderLogic
 {
 private:
 
-    ShadowFullscreenEffect *     m_shadowEffect;
+    ShadowFullscreenEffect *    m_shadowEffect;
+    BlurFullscreenEffect *      m_blurEffect;
 
 public:
 
@@ -32,6 +34,10 @@ private:
     ShadowFullscreenEffect *            AccessShadowEffect          ( RenderTarget * rt, const glm::vec4 & color, const glm::vec2 & shift, float bs );
 
     void                                AddShadowEffect             ( Renderer * renderer, RenderTarget * foregroundRt, const glm::vec4 & color, const glm::vec2 & shift, float bs );
+
+    BlurFullscreenEffect *              AccessBlurEffect            ( RenderTarget * rt, float bs, bool vertical );
+
+    void                                ApplyBlurEffect             ( Renderer * renderer, RenderTarget * foregroundRt, float bs, bool vertical );
 };
 
 } // bv

@@ -20,6 +20,8 @@ private:
     ValueVec2Ptr                m_textureSize;
     Texture2DPtr                m_texture;
 
+    mutable PixelShader *       m_pixelShader;
+
 public:
 
     void                        SetBlurSize ( float s );

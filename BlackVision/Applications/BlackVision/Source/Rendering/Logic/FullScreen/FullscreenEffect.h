@@ -36,6 +36,7 @@ protected:
     virtual RenderableEntity *  CreateFullscreenQuad    () const = 0;
 
     void                        SetFullscreenQuad       ( RenderableEntity * quad );
+    RenderableEntity *          GetFullscreenQuad       ( );
 
 protected:
 

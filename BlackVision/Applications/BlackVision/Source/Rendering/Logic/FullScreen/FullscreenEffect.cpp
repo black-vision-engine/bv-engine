@@ -64,6 +64,14 @@ void    FullscreenEffect::SetFullscreenQuad         ( RenderableEntity * quad )
 
 // **************************
 //
+RenderableEntity * FullscreenEffect::GetFullscreenQuad( )
+{
+    return m_fullscreenQuad;
+}
+
+
+// **************************
+//
 void    FullscreenEffect::ToggleFullscreenCamera    ( Renderer * renderer )
 {
     m_lastRendererCamera = renderer->GetCamera();

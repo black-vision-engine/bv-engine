@@ -338,7 +338,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateShadowTest               ( model:
     root->AddChildToModelOnly( text );
 
     text->SetNodeEffect( std::make_shared< model::ModelNodeEffectShadow >( timeEvaluator ) );
-    text->SetNodeEffect( std::make_shared< model::ModelNodeEffectBlur >( timeEvaluator ) );
+    //text->SetNodeEffect( std::make_shared< model::ModelNodeEffectBlur >( timeEvaluator ) );
 
     return root;
 }
