@@ -9,6 +9,8 @@
 
 #pragma warning( pop )
 
+#include <limits>
+
 namespace bv
 {
 class RemoteController;

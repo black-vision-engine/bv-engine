@@ -1,6 +1,6 @@
 #include "SocketServer.h"
 #include "UseLoggerTCPModule.h"
-#include "Engine/Events/EventHelpers.h"
+#include "Engine/Events/Events.h"
 
 #include <thread>
 #include "Threading/ScopedCriticalSection.h"
@@ -158,9 +158,18 @@ void SocketServer::RemoveUnusedClients     ()
 void SocketServer::SendResponse( ResponseMsg& message )
 {
     ScopedCriticalSection lock( clientsCriticalSection );
-    auto client = clientsMap.find( message.socketID );
-    if( client != clientsMap.end() )
-        client->second->QueueResponse( std::move( message ) );
+
+    if( message.socketID == SEND_BROADCAST_EVENT )
+    {
+        for( auto& client : clientsMap )
+            client.second->QueueResponse( message );
+    }
+    else
+    {
+        auto client = clientsMap.find( message.socketID );
+        if( client != clientsMap.end() )
+            client->second->QueueResponse( std::move( message ) );
+    }
 }
 
 // ***********************

@@ -2,7 +2,7 @@
 
 #include "Tools/IncludeJSON.h"
 #include "UseLoggerTCPModule.h"
-#include "Engine/Events/EventHelpers.h"
+#include "Engine/Events/Events.h"
 
 #include <string>
 #include <codecvt>
@@ -100,7 +100,7 @@ void SocketConnection::MainThread()
         ResponseMsg response;
         while( m_responseQueue.TryPop( response ) )
         {
-            if( response.socketID == (int)m_socketID )
+            if( response.socketID == (int)m_socketID || response.socketID == SEND_BROADCAST_EVENT )
             {
 				wchar_t CHAR_BEGIN = 0x02;
 				wchar_t CHAR_END = 0x03;
@@ -222,9 +222,18 @@ bool SocketConnection::Authorization       ( SOCKET /*socketID*/ )
     return true;
 }
 
-void SocketConnection::QueueResponse       ( ResponseMsg&& message )
+// ***********************
+//
+void SocketConnection::QueueResponse       ( const ResponseMsg& message )
 {
     m_responseQueue.Push( message );
+}
+
+// ***********************
+//
+void SocketConnection::QueueResponse       ( ResponseMsg&& message )
+{
+    m_responseQueue.Push( std::move( message ) );
 }
 
 // ***********************

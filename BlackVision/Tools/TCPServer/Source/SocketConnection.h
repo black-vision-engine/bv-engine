@@ -44,6 +44,7 @@ public:
     SocketConnection( SOCKET socketID, QueueEventCallback callback );
     ~SocketConnection();
 
+    void            QueueResponse       ( const ResponseMsg& message );
     void            QueueResponse       ( ResponseMsg&& message );
     void            KillClient          ();
     void            InitThread          ();

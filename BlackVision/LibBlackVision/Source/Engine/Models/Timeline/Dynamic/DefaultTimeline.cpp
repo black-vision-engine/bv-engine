@@ -3,6 +3,7 @@
 #include <cassert>
 #include <algorithm>
 
+#include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Engine/Models/Interfaces/ITimelineEvent.h"
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
 
@@ -13,6 +14,12 @@
 #include "Serialization/IDeserializer.h"
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/SerializationHelper.inl"
+
+#include "Serialization/Json/JsonSerializeObject.h"
+#include "Engine/Events/EventManager.h"
+#include "Engine/Events/Events.h"
+#undef min
+#undef max
 
 namespace bv { 
 
@@ -449,6 +456,7 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 
     DeactivateEvent( evt );
 
+    TimelineKeyframeEvent::KeyframeType keyframeType = TimelineKeyframeEvent::KeyframeType::KeyframeTypeFail;
     switch( evt->GetType() )
     {
         case TimelineEventType::TET_STOP:
@@ -458,6 +466,9 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
             m_timeEvalImpl.Stop();
             //printf( "Event STOP %s prev: %.4f, cur: %.4f\n", evt->GetName().c_str(), prevTime, curTime );
             printf( "Event STOP %s \n", evt->GetName().c_str() );
+            
+            keyframeType = TimelineKeyframeEvent::KeyframeType::StopKeyframe;
+
             break;
         }
         case TimelineEventType::TET_LOOP:
@@ -476,6 +487,8 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
                     m_activeEvent->SetActive( true ); //Reset current event (forthcomming play will trigger its set of event problems - e.g. first event at 0.0 to pass by).
                     m_activeEvent = nullptr;
 
+                    keyframeType = TimelineKeyframeEvent::KeyframeType::LoopJumpKeyframe;
+
                     printf( "Event LOOP -> GOTO: %.4f %s\n", evtImpl->GetTargetTime(), evt->GetName().c_str() );
                     break;
                 case LoopEventAction::LEA_RESTART:
@@ -487,11 +500,16 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
                     m_activeEvent = nullptr;
 
                     Play(); //FIXME: really start or should we wait for the user to trigger this timeline?
+
+                    keyframeType = TimelineKeyframeEvent::KeyframeType::LoopRestartKeyframe;
+
                     printf( "Event LOOP -> RESTART %s\n", evt->GetName().c_str() );                    
                     break;
                 case LoopEventAction::LEA_REVERSE:
                     Reverse();
                     
+                    keyframeType = TimelineKeyframeEvent::KeyframeType::LoopReverseKeyframe;
+
                     printf( "Event LOOP -> REVERSE %s\n", evt->GetName().c_str() );
                     
                     break;
@@ -510,6 +528,8 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
             auto evtImpl = static_cast< TimelineEventNull * >( evt );
             evtImpl->SetActive( false );
 
+            keyframeType = TimelineKeyframeEvent::KeyframeType::NullKeyframe;
+
             printf( "Event NULL\n" );
 
             break;
@@ -517,6 +537,19 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
         default:
             assert( false );
     }
+
+    JsonSerializeObject ser;
+    ser.SetAttribute( "cmd", "KeyframeEvent" );
+    ser.SetAttribute( "KeyframeType", toString( SerializationHelper::T2WString( keyframeType ) ) );      // @todo This conversion is stupid. We need to use only strings instead of wstrings.
+    ser.SetAttribute( "KeyframeName", evt->GetName() );
+    ser.SetAttribute( "Timeline", this->GetName() );
+    ser.SetAttribute( "SceneName", TimelineHelper::GetSceneName( this ) );
+    ser.SetAttribute( "Time", toString( this->GetLocalTime() ) );
+
+    ResponseEventPtr msg = std::make_shared<ResponseEvent>();
+    msg->Response = toWString( ser.GetString() );
+    msg->SocketID = SEND_BROADCAST_EVENT;
+    GetDefaultEventManager().QueueResponse( msg );
 }
 
 // *********************************

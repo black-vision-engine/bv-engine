@@ -93,6 +93,24 @@ UInt32					TimelineHelper::CopyTimelines					( ITimeEvaluatorPtr destTimeline, c
 	return index;
 }
 
+// ***********************
+//
+std::string              TimelineHelper::GetSceneName                    ( const ITimeEvaluator* timeline )
+{
+    auto rootTimeline = TimelineManager::GetInstance()->GetRootTimeline();
+    auto& scenesTimelines = rootTimeline->GetChildren();
+    for( auto& sceneTimeline : scenesTimelines )
+    {
+        auto& childTimelines = sceneTimeline->GetChildren();
+        for( auto& child : childTimelines )
+        {
+            if( child.get() == timeline )
+                return sceneTimeline->GetName();
+        }
+    }
+    return "";
+}
+
 // *********************************
 //
 std::string				TimelineHelper::GetSceneName        			( const std::string & timelinePath )

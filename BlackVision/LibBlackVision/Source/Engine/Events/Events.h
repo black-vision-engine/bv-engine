@@ -16,6 +16,8 @@ namespace model
     class IModelNode;
 }
 
+const static unsigned int SEND_BROADCAST_EVENT = UINT_MAX;
+
 class Renderer;
 
 // ************************************* PluginAddedEvent *************************************
