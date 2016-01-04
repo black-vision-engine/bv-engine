@@ -29,9 +29,9 @@ private:
     void                                RenderItermediateData       ( RenderLogicContext * ctx, RenderTarget * foregroundRt, SceneNode * node );
     void                                RenderToRenderTarget        ( RenderLogicContext * ctx, RenderTarget * rt, SceneNode * node );
 
-    BlurFullscreenEffect *              AccessBlurEffect            ( RenderTarget * rt, float bs );
+    BlurFullscreenEffect *              AccessBlurEffect            ( RenderTarget * rt, float bs, bool vertical );
 
-    void                                ApplyBlurEffect             ( Renderer * renderer, RenderTarget * foregroundRt, float bs );
+    void                                ApplyBlurEffect             ( Renderer * renderer, RenderTarget * foregroundRt, float bs, bool vertical );
 };
 
 } // bv

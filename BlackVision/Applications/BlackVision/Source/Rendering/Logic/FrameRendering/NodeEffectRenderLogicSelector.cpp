@@ -10,6 +10,7 @@
 #include "Rendering/Logic/FrameRendering/NodeEffect/WireframeRenderLogic.h"
 #include "Rendering/Logic/FrameRendering/NodeEffect/LightScatteringRenderLogic.h"
 #include "Rendering/Logic/FrameRendering/NodeEffect/ShadowEffectRenderLogic.h"
+#include "Rendering/Logic/FrameRendering/NodeEffect/BlurEffectRenderLogic.h"
 #include "Rendering/Logic/FrameRendering/NodeEffect/AlphaChannelRenderLogic.h"
 
 namespace bv {
@@ -24,6 +25,7 @@ NodeEffectRenderLogicSelector::NodeEffectRenderLogicSelector                    
     m_nodeRenderLogicVec.push_back( new WireframeRenderLogic() );
     m_nodeRenderLogicVec.push_back( new LightScatteringRenderLogic() );
     m_nodeRenderLogicVec.push_back( new ShadowEffectRenderLogic() );
+    m_nodeRenderLogicVec.push_back( new BlurEffectRenderLogic() );
     //m_nodeRenderLogicVec.push_back( new AlphaChannelRenderLogic() );
 }
 

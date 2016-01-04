@@ -20,6 +20,7 @@
 #include "Engine/Graphics/Effects/NodeEffects/WireframeNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/LightScatteringNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/ShadowNodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/BlurNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/AlphaChannelNodeEffect.h"
 
 
@@ -109,6 +110,11 @@ void                BVProjectTools::UpdateSceneNodeEffect                 ( Scen
     {
         auto sceneNodeShadowEffect = std::make_shared< ShadowNodeEffect >();
         node->SetNodeEffect( sceneNodeShadowEffect );
+    }
+    else if( modelNodeEffect->GetType() ==  NodeEffectType::NET_BLUR )
+    {
+        auto sceneNodeBlurEffect = std::make_shared< BlurNodeEffect >();
+        node->SetNodeEffect( sceneNodeBlurEffect );
     }
 	//else if( modelNodeEffect->GetType() ==  NodeEffectType::NET_ALPHA_CHANNEL )
  //   {

@@ -25,6 +25,29 @@ float           BlurFullscreenEffect::GetBlurSize   () const
 
 // **************************
 //
+void            BlurFullscreenEffect::SetVertical ( bool val )
+{
+    m_vertical = val;
+    m_verticalVal->SetValue( val );
+}
+
+// **************************
+//
+bool            BlurFullscreenEffect::GetVertical () const
+{
+    return m_vertical;
+}
+
+// **************************
+//
+void            BlurFullscreenEffect::SetTexture  ( Texture2DPtr tex )
+{
+    m_texture = tex;
+    m_textureSize->SetValue( glm::vec2( float( tex->GetWidth() ), float( tex->GetHeight() ) ) );
+}
+
+// **************************
+//
 PixelShader *   BlurFullscreenEffect::CreatePS            () const
 {
     ShaderParameters * shaderParams = new ShaderParameters();
@@ -36,6 +59,9 @@ PixelShader *   BlurFullscreenEffect::CreatePS            () const
     shaderParams->AddParameter( param );
 
     shaderParams->AddTexture( m_texture );
+
+    param = ShaderParamFactory::CreateGenericParameter( m_verticalVal.get() );
+    shaderParams->AddParameter( param );
 
     //FIXME: add empty textures (nullptr) and create samplers. Textures can be set later on
     auto shader = new PixelShader( ReadFullscreenShader( "blur.frag" ), shaderParams );
@@ -58,6 +84,9 @@ BlurFullscreenEffect::BlurFullscreenEffect  ( Texture2DPtr tex )
     m_textureSize->SetValue( glm::vec2( float( tex->GetWidth() ), float( tex->GetHeight() ) ) );
 
     m_texture       = tex;
+
+    m_verticalVal   = ValuesFactory::CreateValueInt( "vertical" );
+    m_verticalVal->SetValue( 0 );
 }
 
 // **************************

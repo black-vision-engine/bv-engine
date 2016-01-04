@@ -12,7 +12,9 @@ class BlurFullscreenEffect : public FullscreenEffect
 private:
 
     float                       m_blurSize;
+    bool                        m_vertical;
 
+    ValueIntPtr                 m_verticalVal;
     ValueFloatPtr               m_blurSizeVal;
 
     ValueVec2Ptr                m_textureSize;
@@ -23,6 +25,10 @@ public:
     void                        SetBlurSize ( float s );
     float                       GetBlurSize () const;
 
+    void                        SetVertical ( bool val );
+    bool                        GetVertical () const;
+
+    void                        SetTexture  ( Texture2DPtr tex );
 
                                 BlurFullscreenEffect    ( Texture2DPtr tex );
                                 ~BlurFullscreenEffect   ();

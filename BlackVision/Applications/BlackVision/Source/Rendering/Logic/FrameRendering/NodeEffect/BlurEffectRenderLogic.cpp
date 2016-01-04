@@ -48,9 +48,19 @@ void                        BlurEffectRenderLogic::RenderNode           ( SceneN
 
         rtAllocator->Free();
 
+        auto hBluredRenderTarget = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+
+        enable( ctx, hBluredRenderTarget );
+
+        ApplyBlurEffect( renderer, foregroundRt, blurSizeValue, true );
+
+        rtAllocator->Free();
+
+        disableBoundRT( ctx );
+
         enable( ctx, mainTarget );
 
-        ApplyBlurEffect( renderer, foregroundRt, blurSizeValue );
+        ApplyBlurEffect( renderer, hBluredRenderTarget, blurSizeValue, false );
     }
 }
 
@@ -75,27 +85,30 @@ void                        BlurEffectRenderLogic::RenderToRenderTarget ( Render
 
 // *********************************
 //
-BlurFullscreenEffect *     BlurEffectRenderLogic::AccessBlurEffect      ( RenderTarget * rt, float bs )
+BlurFullscreenEffect *      BlurEffectRenderLogic::AccessBlurEffect      ( RenderTarget * rt, float bs, bool vertical )
 {
+    auto rtTex = rt->ColorTexture( 0 );
+
     if ( !m_blurEffect )
     {
-        auto rtTex = rt->ColorTexture( 0 );
-
         m_blurEffect = new BlurFullscreenEffect( rtTex );
     }
 
-    m_blurEffect->SetBlurSize( bs );  
+    m_blurEffect->SetTexture( rtTex );
+
+    m_blurEffect->SetBlurSize( bs );
+    m_blurEffect->SetVertical( vertical );
 
     return m_blurEffect;    
 }
 
 // *********************************
 //
-void                        BlurEffectRenderLogic::ApplyBlurEffect      ( Renderer * renderer, RenderTarget * foregroundRt, float bs )
+void                        BlurEffectRenderLogic::ApplyBlurEffect      ( Renderer * renderer, RenderTarget * foregroundRt, float bs, bool vertical )
 {
-    auto shadower = AccessBlurEffect( foregroundRt, bs );
+    auto blurer = AccessBlurEffect( foregroundRt, bs, vertical );
 
-    shadower->Render( renderer );
+    blurer->Render( renderer );
 }
 
 } //bv

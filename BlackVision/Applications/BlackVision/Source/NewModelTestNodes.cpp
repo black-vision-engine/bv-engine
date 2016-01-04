@@ -24,6 +24,7 @@
 
 #include "Engine/Models/NodeEffects/ModelNodeEffectLightScattering.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectShadow.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectBlur.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
@@ -337,6 +338,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateShadowTest               ( model:
     root->AddChildToModelOnly( text );
 
     text->SetNodeEffect( std::make_shared< model::ModelNodeEffectShadow >( timeEvaluator ) );
+    text->SetNodeEffect( std::make_shared< model::ModelNodeEffectBlur >( timeEvaluator ) );
 
     return root;
 }

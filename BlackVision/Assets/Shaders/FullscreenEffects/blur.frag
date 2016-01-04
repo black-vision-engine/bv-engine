@@ -8,7 +8,7 @@ uniform sampler2D       Tex0;
 
 uniform float			blurSize;
 uniform vec2			textureSize;
-uniform int             runPass;
+uniform int             vertical;
 
 void pass0()
 {
@@ -48,7 +48,7 @@ void pass1()
 
 void main()
 {
-    switch( runPass )
+    switch( vertical )
     {
     case 0:
         pass0();
