@@ -308,8 +308,8 @@ void    RenderLogic::RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoo
 	if( sceneRoot )
     {
         enable( ctx, rt );
-
-        clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+        
+        clearBoundRT( ctx, DefaultConfig.ClearColor() );
 
         RenderNode( renderer, sceneRoot, ctx );
 
