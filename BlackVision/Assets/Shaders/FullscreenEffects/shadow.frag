@@ -17,5 +17,7 @@ void main()
     
     float alpha  = texture( BluredTex0, uvCoord + shift ).a;
     
+    //FragColor = ( 1.0 - alpha ) * color * col.a + alpha * col; // inner shadow and glow
+    
     FragColor = ( 1.0 - col.a ) * color * alpha + col;
 }

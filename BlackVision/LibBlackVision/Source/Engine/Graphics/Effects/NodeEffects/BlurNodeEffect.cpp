@@ -14,8 +14,6 @@ BlurNodeEffect::BlurNodeEffect     ()
 
     auto valueBlurSize = ValuesFactory::CreateValueFloat( "blurSize" );
 
-    valueBlurSize->SetValue( 0.f );
-
     values.push_back( valueBlurSize );
 }
 

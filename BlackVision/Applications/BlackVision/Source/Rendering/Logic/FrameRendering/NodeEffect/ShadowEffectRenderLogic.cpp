@@ -53,12 +53,6 @@ void    ShadowEffectRenderLogic::RenderNode           ( SceneNode * node, Render
 
         auto foregroundRt   = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
 
-        auto localTransform = node->GetTransformable()->LocalTransform();
-        auto worldTransform = node->GetTransformable()->WorldTransforms();
-
-        node->GetTransformable()->ResetLocalTransform();
-        //node->GetTransformable()->ResetWorldTransforms();
-
         RenderItermediateData( ctx, foregroundRt, node );
 
         auto vBluredRenderTarget = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
