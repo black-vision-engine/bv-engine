@@ -275,9 +275,6 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\LightScatteringRenderLogic.cpp">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\AlphaChannelRenderLogic.cpp">
-      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GlobalEffectHandler.cpp">
       <Filter>EndUserAPI\EventHandlers</Filter>
     </ClCompile>
@@ -514,9 +511,6 @@
       <Filter>TestAI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\LightScatteringRenderLogic.h">
-      <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\AlphaChannelRenderLogic.h">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\GlobalEffectHandler.h">

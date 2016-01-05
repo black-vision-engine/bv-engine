@@ -1110,18 +1110,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\IDGenerator.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectAlphaChannel.cpp">
-      <Filter>Engine\Models\NodeEffects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\AlphaChannelNodeEffect.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\AlphaChannelEffect.cpp">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\AlphaChannelShaders.cpp">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimelineHelper.cpp">
       <Filter>Engine\Models\Timeline</Filter>
     </ClCompile>
@@ -2387,18 +2375,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\BVProjectTools.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectAlphaChannel.h">
-      <Filter>Engine\Models\NodeEffects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\AlphaChannelNodeEffect.h">
-      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\AlphaChannelEffect.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\AlphaChannelShaders.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\IDGenerator.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
@@ -2413,18 +2389,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\PolynomialFunction.h">
       <Filter>Mathematics\Interpolators\Functions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectAlphaChannel.h">
-      <Filter>Engine\Models\NodeEffects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\AlphaChannelNodeEffect.h">
-      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\AlphaChannelEffect.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\AlphaChannelShaders.h">
-      <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimelineHelper.h">
       <Filter>Engine\Models\Timeline</Filter>

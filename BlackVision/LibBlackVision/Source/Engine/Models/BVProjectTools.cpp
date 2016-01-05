@@ -21,7 +21,6 @@
 #include "Engine/Graphics/Effects/NodeEffects/LightScatteringNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/ShadowNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/BlurNodeEffect.h"
-#include "Engine/Graphics/Effects/NodeEffects/AlphaChannelNodeEffect.h"
 
 
 namespace bv {
@@ -116,11 +115,6 @@ void                BVProjectTools::UpdateSceneNodeEffect                 ( Scen
         auto sceneNodeBlurEffect = std::make_shared< BlurNodeEffect >();
         node->SetNodeEffect( sceneNodeBlurEffect );
     }
-	//else if( modelNodeEffect->GetType() ==  NodeEffectType::NET_ALPHA_CHANNEL )
- //   {
- //       auto sceneNodeAlphaChannelEffect = std::make_shared< AlphaChannelNodeEffect >();
- //       node->SetNodeEffect( sceneNodeAlphaChannelEffect );
- //   }
     else
     {
         //Did you forget to implement an additional effect

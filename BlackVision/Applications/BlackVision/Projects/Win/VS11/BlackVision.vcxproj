@@ -296,7 +296,6 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\NewModelTestScenes.cpp" />
     <ClCompile Include="..\..\..\Source\PerformanceMonitor.cpp" />
     <ClCompile Include="..\..\..\Source\PieChartNode.cpp" />
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\AlphaChannelRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\BlurEffectRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\ShadowEffectRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\BlurFullscreenEffect.cpp" />
@@ -372,7 +371,6 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\EndUserAPI\IEventServer.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\JsonCommandsListener\JsonCommandsListener.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\RemoteController.h" />
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\AlphaChannelRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\BlurEffectRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\ShadowEffectRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\BlurFullscreenEffect.h" />
