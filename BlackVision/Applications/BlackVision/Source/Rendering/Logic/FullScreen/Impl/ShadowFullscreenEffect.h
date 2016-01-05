@@ -13,14 +13,13 @@ private:
 
     glm::vec4                   m_color;
     glm::vec2                   m_shift;
-    float                       m_blurSize;
 
     ValueVec4Ptr                m_colorVal;
     ValueVec2Ptr                m_shiftVal;
-    ValueFloatPtr               m_blurSizeVal;
 
     ValueVec2Ptr                m_textureSize;
     Texture2DPtr                m_texture;
+    Texture2DPtr                m_bluredTexture;
 
 public:
     void                        SetColor    ( const glm::vec4 & color );
@@ -33,7 +32,7 @@ public:
     float                       GetBlurSize () const;
 
 
-                                ShadowFullscreenEffect    ( Texture2DPtr tex );
+                                ShadowFullscreenEffect    ( Texture2DPtr tex, Texture2DPtr bluredTexture );
                                 ~ShadowFullscreenEffect   ();
 
 protected:

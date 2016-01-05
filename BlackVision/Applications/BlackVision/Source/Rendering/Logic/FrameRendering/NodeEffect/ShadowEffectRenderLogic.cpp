@@ -83,7 +83,7 @@ void    ShadowEffectRenderLogic::RenderNode           ( SceneNode * node, Render
 
         enable( ctx, mainTarget );
 
-        AddShadowEffect( renderer, vBluredRenderTarget, colorValue, shiftValue, 0 );
+        AddShadowEffect( renderer, foregroundRt->ColorTexture( 0 ), vBluredRenderTarget->ColorTexture( 0 ), colorValue, shiftValue );
     }
 }
 
@@ -108,27 +108,24 @@ void                        ShadowEffectRenderLogic::RenderToRenderTarget   ( Re
 
 // *********************************
 //
-ShadowFullscreenEffect *     ShadowEffectRenderLogic::AccessShadowEffect    ( RenderTarget * rt, const glm::vec4 & color, const glm::vec2 & shift, float bs )
+ShadowFullscreenEffect *     ShadowEffectRenderLogic::AccessShadowEffect    ( Texture2DPtr tex, Texture2DPtr bluredTex, const glm::vec4 & color, const glm::vec2 & shift )
 {
     if ( !m_shadowEffect )
     {
-        auto rtTex = rt->ColorTexture( 0 );
-
-        m_shadowEffect = new ShadowFullscreenEffect( rtTex );
+        m_shadowEffect = new ShadowFullscreenEffect( tex, bluredTex );
     }
 
     m_shadowEffect->SetColor( color );
     m_shadowEffect->SetShift( shift );
-    m_shadowEffect->SetBlurSize( bs );  
 
     return m_shadowEffect;    
 }
 
 // *********************************
 //
-void                                ShadowEffectRenderLogic::AddShadowEffect        ( Renderer * renderer, RenderTarget * foregroundRt, const glm::vec4 & color, const glm::vec2 & shift, float bs )
+void                                ShadowEffectRenderLogic::AddShadowEffect        ( Renderer * renderer, Texture2DPtr tex, Texture2DPtr bluredTex, const glm::vec4 & color, const glm::vec2 & shift )
 {
-    auto shadower = AccessShadowEffect( foregroundRt, color, shift, bs );
+    auto shadower = AccessShadowEffect( tex, bluredTex, color, shift );
 
     shadower->Render( renderer );
 }

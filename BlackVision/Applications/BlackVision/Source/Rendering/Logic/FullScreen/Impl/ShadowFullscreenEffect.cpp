@@ -40,21 +40,6 @@ glm::vec2       ShadowFullscreenEffect::GetShift      () const
 
 // **************************
 //
-void            ShadowFullscreenEffect::SetBlurSize   ( float s )
-{
-    m_blurSize = s;
-    m_blurSizeVal->SetValue( s );
-}
-
-// **************************
-//
-float           ShadowFullscreenEffect::GetBlurSize   () const
-{
-    return m_blurSize;
-}
-
-// **************************
-//
 PixelShader *   ShadowFullscreenEffect::CreatePS            () const
 {
     ShaderParameters * shaderParams = new ShaderParameters();
@@ -65,37 +50,37 @@ PixelShader *   ShadowFullscreenEffect::CreatePS            () const
     param = ShaderParamFactory::CreateGenericParameter( m_shiftVal.get() );
     shaderParams->AddParameter( param );
 
-    param = ShaderParamFactory::CreateGenericParameter( m_blurSizeVal.get() );
-    shaderParams->AddParameter( param );
-
     param = ShaderParamFactory::CreateGenericParameter( m_textureSize.get() );
     shaderParams->AddParameter( param );
 
     shaderParams->AddTexture( m_texture );
+    shaderParams->AddTexture( m_bluredTexture );
 
     //FIXME: add empty textures (nullptr) and create samplers. Textures can be set later on
     auto shader = new PixelShader( ReadFullscreenShader( "shadow.frag" ), shaderParams );
 
     auto samplerTex = CreateDefaultSampler( "Tex0" );
+    auto samplerBluredTex = CreateDefaultSampler( "BluredTex0" );
 
     shader->AddTextureSampler( samplerTex );
+    shader->AddTextureSampler( samplerBluredTex );
 
     return shader;
 }
 
 // **************************
 //
-ShadowFullscreenEffect::ShadowFullscreenEffect      ( Texture2DPtr tex )
+ShadowFullscreenEffect::ShadowFullscreenEffect      ( Texture2DPtr tex, Texture2DPtr bluredTexture )
 {
     m_colorVal      = ValuesFactory::CreateValueVec4( "color" );
     m_shiftVal      = ValuesFactory::CreateValueVec2( "shift" );
-    m_blurSizeVal   = ValuesFactory::CreateValueFloat( "blurSize" );
 
     m_textureSize   = ValuesFactory::CreateValueVec2( "textureSize" );
 
     m_textureSize->SetValue( glm::vec2( float( tex->GetWidth() ), float( tex->GetHeight() ) ) );
 
     m_texture       = tex;
+    m_bluredTexture = bluredTexture;
 }
 
 // **************************
