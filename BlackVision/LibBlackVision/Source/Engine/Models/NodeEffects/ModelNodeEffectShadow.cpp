@@ -9,12 +9,12 @@ namespace bv { namespace model {
 //
 ModelNodeEffectShadow::ModelNodeEffectShadow( ITimeEvaluatorPtr timeEvaluator )
 	: ModelNodeEffectBase( timeEvaluator )
-	, m_colorVal( glm::vec4( 1.f, 0.f, 0.f, 0.4f ) ) // Test params values for shadow
-	, m_shiftVal( glm::vec2( 0.002f, -0.002f ) )
-	, m_blurSizeVal( 0.0f )
-	//, m_colorVal( glm::vec4( 1.f, 0.f, 0.f, 1.f ) ) // Test params values for glow
-	//, m_shiftVal( glm::vec2( 0.f, 0.f ) )
-	//, m_blurSizeVal( 5.0f )
+	//, m_colorVal( glm::vec4( 1.f, 0.f, 0.f, 0.4f ) ) // Test params values for shadow
+	//, m_shiftVal( glm::vec2( 0.002f, -0.002f ) )
+	//, m_blurSizeVal( 0.0f )
+	, m_colorVal( glm::vec4( 1.f, 0.f, 0.f, 1.f ) ) // Test params values for glow
+	, m_shiftVal( glm::vec2( 0.f, 0.f ) )
+	, m_blurSizeVal( 5.0f )
 { 
 	auto colorEval = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", timeEvaluator );
 	auto shiftEval = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "shift", timeEvaluator );
