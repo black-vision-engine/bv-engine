@@ -16,10 +16,6 @@ ShadowNodeEffect::ShadowNodeEffect     ()
     auto valueShift = ValuesFactory::CreateValueVec2( "shift" );
     auto valueBlurSize = ValuesFactory::CreateValueFloat( "blurSize" );
 
-    valueColor->SetValue( glm::vec4( 1.f, 1.f, 1.f, 1.f ) );
-    valueShift->SetValue( glm::vec2( 0.f, 0.f ) );
-    valueBlurSize->SetValue( 0.01f );
-
     values.push_back( valueColor );
     values.push_back( valueShift );
     values.push_back( valueBlurSize );
