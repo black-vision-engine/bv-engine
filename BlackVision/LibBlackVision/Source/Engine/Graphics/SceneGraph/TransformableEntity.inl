@@ -40,7 +40,7 @@ inline void   TransformableEntity::ResetLocalTransform             ()
 //
 inline void   TransformableEntity::ResetWorldTransforms            ()
 {
-    for( auto t : m_worldTransforms )
+    for( auto & t : m_worldTransforms )
     {
         t.Reset();
     }

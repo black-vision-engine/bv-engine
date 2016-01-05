@@ -10,7 +10,7 @@ namespace bv { namespace model {
 ModelNodeEffectBlur::ModelNodeEffectBlur( ITimeEvaluatorPtr timeEvaluator )
 	: ModelNodeEffectBase( timeEvaluator )
 	//, m_blurSizeVal( 5.0f )
-	, m_blurSizeVal( 35.0f )
+	, m_blurSizeVal( 5.0f )
 { 
 	auto blurSizeEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
 
