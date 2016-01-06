@@ -123,6 +123,7 @@ void SocketConnection::MainThread()
                     {
                         LOG_MESSAGE( SeverityLevel::info ) << "Client disconnected";
                         OnEndMainThread();
+                        break;
                     }
 
                     bufferSent += sentSize;
