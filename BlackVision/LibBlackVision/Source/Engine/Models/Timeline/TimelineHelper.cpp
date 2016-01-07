@@ -128,15 +128,15 @@ std::string				TimelineHelper::GetSceneName        			( const std::string & time
 //
 std::string				TimelineHelper::GetParentTimelinePath           ( const std::string & timelinePath )
 {
-    auto path = Trim( timelinePath, "/" );
-    auto names = Split( timelinePath, "/" );
+    auto path = Trim( timelinePath, "%" );
+    auto names = Split( timelinePath, "%" );
 
 	std::string parentPath = "";
 	for( unsigned int i = 0; i < names.size() - 1; ++i )
 	{
 		parentPath += names[ i ];
 		if( i < names.size() - 2 )
-			parentPath += "/";
+			parentPath += "%";
 	}
 	return parentPath;
 }
@@ -172,7 +172,7 @@ ITimeEvaluatorPtr       TimelineHelper::FindTimelineByName          ( const std:
 //
 ITimeEvaluatorPtr       TimelineHelper::GetTimeEvaluator           ( const std::string & name, ITimeEvaluatorPtr parentTimeline )
 {
-    auto path = Split( name, "/" );
+    auto path = Split( name, "%" );
     if( path.size() == 1 )
         return FindTimelineByName( name, parentTimeline );
     else
@@ -181,7 +181,7 @@ ITimeEvaluatorPtr       TimelineHelper::GetTimeEvaluator           ( const std::
         if( nextParent )
         {
             path.erase( path.begin() );
-            return GetTimeEvaluator( Join( path, "/"), nextParent );
+            return GetTimeEvaluator( Join( path, "%"), nextParent );
         }
         else
             return nullptr;
@@ -192,7 +192,7 @@ ITimeEvaluatorPtr       TimelineHelper::GetTimeEvaluator           ( const std::
 // FIXME: requires RTTI, reimplement it later on
 ITimelinePtr            TimelineHelper::GetTimeline                     ( const std::string & name, ITimeEvaluatorPtr parentTimeline )
 {
-	auto path = Split( name, "/" );
+	auto path = Split( name, "%" );
     if( path.size() == 1 )
 		return std::dynamic_pointer_cast< ITimeline >( FindTimelineByName( name, parentTimeline ) );
     else
@@ -201,7 +201,7 @@ ITimelinePtr            TimelineHelper::GetTimeline                     ( const 
         if( nextParent )
         {
             path.erase( path.begin() );
-            return GetTimeline( Join( path, "/"), nextParent );
+            return GetTimeline( Join( path, "%"), nextParent );
         }
         else
             return nullptr;
@@ -219,7 +219,7 @@ std::string             TimelineHelper::GetTimelinePath                 ( ITimeE
         {
             auto path = GetTimelinePath( timeline, child );
             if( path != "" )
-                return child->GetName() + "/" + path;
+                return child->GetName() + "%" + path;
         }
     return "";
 }
