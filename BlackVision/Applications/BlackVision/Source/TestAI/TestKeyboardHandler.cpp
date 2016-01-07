@@ -96,6 +96,7 @@ void SerializeAllEvents( const std::string& fileName )
     TimeLineEventPtr        timelineEvent       = std::make_shared<TimeLineEvent>();
     InfoEventPtr            infoEvent           = std::make_shared<InfoEvent>();
     ProjectEventPtr         projectEvent        = std::make_shared<ProjectEvent>();
+    SceneEventPtr           sceneEvent          = std::make_shared<SceneEvent>();
     PluginStructureEventPtr pluginStructure     = std::make_shared<PluginStructureEvent>();
     NodeStructureEventPtr   nodeStructureEvent  = std::make_shared<NodeStructureEvent>();
     ParamKeyEventPtr        paramKeyEvent       = std::make_shared<ParamKeyEvent>();
@@ -141,6 +142,9 @@ void SerializeAllEvents( const std::string& fileName )
     ser->ExitChild();
     ser->EnterArray( L"Events" );
         projectEvent->Serialize( *ser );
+    ser->ExitChild();
+    ser->EnterArray( L"Events" );
+        sceneEvent->Serialize( *ser );
     ser->ExitChild();
     ser->EnterArray( L"Events" );
         pluginStructure->Serialize( *ser );

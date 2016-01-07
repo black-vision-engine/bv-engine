@@ -132,7 +132,7 @@ namespace SerializationHelper
     // ***********************
     //
     template< typename T >
-    T WString2T( const std::pair< T, const std::wstring > t2s[], const std::wstring& s )
+    T WString2T( const std::pair< T, const std::wstring > t2s[], const std::wstring& s, const T& defautlVal )
     {
         int i = 0;
         while( t2s[i].second != EMPTY_WSTRING )
@@ -141,13 +141,13 @@ namespace SerializationHelper
                 return t2s[i].first;
             ++i;
         }
-        return t2s[i].first;
+        return defautlVal;
     }
 
     // ***********************
     //
     template< typename T >
-    T WString2T( const std::wstring& s )
+    T WString2T( const std::wstring& s, const T& defaultVal )
     {
         assert( !"Implement spetialization" );
         return T;
@@ -165,36 +165,57 @@ namespace SerializationHelper
     // ***********************
     //
     template<>
-    inline int WString2T( const std::wstring& s )
+    inline int WString2T( const std::wstring& s, const int& defaultVal )
     {
         auto str = toString( s );
-        return strtol( str.c_str(), nullptr, 10 );
+        
+        char* end = nullptr;
+        int result = strtol( str.c_str(), &end, 10 );
+
+        // We reached end of string and it wasn't empty.
+        if( !*end && end != str.c_str() )
+            return result;
+        return defaultVal;
     }
 
     // ***********************
     //
     template<>
-    inline unsigned int WString2T( const std::wstring& s )
+    inline unsigned int WString2T( const std::wstring& s, const unsigned int& defaultVal )
     {
         auto str = toString( s );
-        return strtoul( str.c_str(), nullptr, 10 );
+        
+        char* end = nullptr;
+        int result = strtoul( str.c_str(), &end, 10 );
+
+        // We reached end of string and it wasn't empty.
+        if( !*end && end != str.c_str() )
+            return result;
+        return defaultVal;
     }
 
     // ***********************
     //
     template<>
-    inline double WString2T( const std::wstring& s )
+    inline double WString2T( const std::wstring& s, const double& defaultVal )
     {
         auto str = toString( s );
-        return strtod( str.c_str(), nullptr );
+
+        char* end = nullptr;
+        double result = strtod( str.c_str(), &end );
+
+        // We reached end of string and it wasn't empty.
+        if( !*end && end != str.c_str() )
+            return result;
+        return defaultVal;
     }
 
     // ***********************
     //
     template<>
-    inline float WString2T( const std::wstring& s )
+    inline float WString2T( const std::wstring& s, const float& defaultVal )
     {
-        return static_cast<float>( WString2T<double>( s ) );
+        return static_cast<float>( WString2T<double>( s, defaultVal ) );
     }
 
 } // SerializationHelper

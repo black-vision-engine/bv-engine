@@ -25,29 +25,30 @@ void        TimelineHandlers::TimelineKeyframe           ( bv::IEventPtr eventPt
     if( eventPtr->GetEventType() != bv::TimelineKeyframeEvent::Type() )
         return;
 
-    bv::TimelineKeyframeEventPtr setParamEvent = std::static_pointer_cast<bv::TimelineKeyframeEvent>( eventPtr );
+    bv::TimelineKeyframeEventPtr keyframeEvent = std::static_pointer_cast<bv::TimelineKeyframeEvent>( eventPtr );
 
-    TimelineKeyframeEvent::Command command  = setParamEvent->KeyframeCommand;
-    TimelineKeyframeEvent::KeyframeType targetType = setParamEvent->NewKeyframeType;
+    TimelineKeyframeEvent::Command command  = keyframeEvent->KeyframeCommand;
+    TimelineKeyframeEvent::KeyframeType targetType = keyframeEvent->NewKeyframeType;
 
-    std::string& timelinePath   = setParamEvent->TimelinePath;
-    std::string& keyframeName   = setParamEvent->KeyframeName;
+    std::string& timelinePath   = keyframeEvent->TimelinePath;
+    std::string& keyframeName   = keyframeEvent->KeyframeName;
+    int keyframeIndex           = keyframeEvent->KeyframeIndex;
 
-    TimeType keyTime            = setParamEvent->Time;
-    TimeType jumpToTime         = setParamEvent->JumpToTime;
-    unsigned int loopCount      = setParamEvent->TotalLoopCount;
+    TimeType keyTime            = keyframeEvent->Time;
+    TimeType jumpToTime         = keyframeEvent->JumpToTime;
+    unsigned int loopCount      = keyframeEvent->TotalLoopCount;
 
     auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
     auto timeEvaluator = editor->GetTimeEvaluator( timelinePath );
     if( timeEvaluator == nullptr )
     {
-        SendSimpleErrorResponse( command, setParamEvent->EventID, setParamEvent->SocketID, "Timeline not found" );
+        SendSimpleErrorResponse( command, keyframeEvent->EventID, keyframeEvent->SocketID, "Timeline not found" );
         return;
     }
 
     if( timeEvaluator->GetType() != DefaultTimeline::Type() )
     {
-        SendSimpleErrorResponse( command, setParamEvent->EventID, setParamEvent->SocketID, "Time evaluator can't be casted to DefaultTimeline" );
+        SendSimpleErrorResponse( command, keyframeEvent->EventID, keyframeEvent->SocketID, "Time evaluator can't be casted to DefaultTimeline" );
         return;
     }
     auto timeline = std::static_pointer_cast<DefaultTimeline>( timeEvaluator );
@@ -56,15 +57,18 @@ void        TimelineHandlers::TimelineKeyframe           ( bv::IEventPtr eventPt
     if( command == TimelineKeyframeEvent::Command::AddKeyframe )
     {
         result = AddKeyframe( targetType, timeline, keyframeName, keyTime, loopCount, jumpToTime );
-        SendSimpleResponse( command, setParamEvent->EventID, setParamEvent->SocketID, result );
+        SendSimpleResponse( command, keyframeEvent->EventID, keyframeEvent->SocketID, result );
     }
     else if( command == TimelineKeyframeEvent::Command::RemoveKeyframe )
     {
-        result = timeline->RemoveKeyFrameEvent( keyframeName );
-        SendSimpleResponse( command, setParamEvent->EventID, setParamEvent->SocketID, result );
+        if( keyframeIndex > 0 )
+            result = timeline->RemoveKeyFrameEvent( keyframeIndex );
+        else
+            result = timeline->RemoveKeyFrameEvent( keyframeName );
+        SendSimpleResponse( command, keyframeEvent->EventID, keyframeEvent->SocketID, result );
     }
     else
-        SendSimpleErrorResponse( command, setParamEvent->EventID, setParamEvent->SocketID, "Unknown command" );
+        SendSimpleErrorResponse( command, keyframeEvent->EventID, keyframeEvent->SocketID, "Unknown command" );
 
 }
 

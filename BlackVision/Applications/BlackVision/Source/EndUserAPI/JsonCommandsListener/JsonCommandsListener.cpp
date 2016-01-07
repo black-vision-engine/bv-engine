@@ -10,6 +10,7 @@
 #include "../../UseLoggerBVAppModule.h"
 
 #undef CreateEvent
+#undef max
 
 namespace bv
 {
@@ -59,7 +60,7 @@ void                JsonCommandsListener::TryParseEventsGroup ( IDeserializer& d
             {
                 RemoteEventPtr newEvent = std::static_pointer_cast<RemoteEvent>( DeserializeEvent( deser ) );
                 newEvent->SocketID = socketID;
-                newEvent->EventID = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( L"EventID" ) );
+                newEvent->EventID = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( L"EventID" ), std::numeric_limits<unsigned int>::max() );
 
                 if( newEvent != nullptr )
                     AddTriggeredEvent( frameTrigger, newEvent );
@@ -91,7 +92,7 @@ void                JsonCommandsListener::TryParseRegularEvent( IDeserializer& d
             {
                 RemoteEventPtr newEventBase = std::static_pointer_cast<RemoteEvent>( newEvent );
                 newEventBase->SocketID = socketID;
-                newEventBase->EventID = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( L"EventID" ) );
+                newEventBase->EventID = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( L"EventID" ), std::numeric_limits<unsigned int>::max() );
 
                 GetDefaultEventManager().ConcurrentQueueEvent( newEventBase );
             }
