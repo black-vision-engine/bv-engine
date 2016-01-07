@@ -14,7 +14,7 @@ namespace bv {
 
 // ****************************
 //
-MixChannelsEffect::MixChannelsEffect ()
+MixChannelsEffect::MixChannelsEffect ( Texture2DPtr tex )
     : m_mixMaskParam( nullptr )
     , m_maskMaskParam( nullptr )
     , m_channelMixMaskVal( nullptr )
@@ -23,7 +23,7 @@ MixChannelsEffect::MixChannelsEffect ()
     m_channelMixMaskVal     = ValuesFactory::CreateValueInt( "channelMixMask" );
     m_channelMaskMaskVal    = ValuesFactory::CreateValueVec4( "channelMaskMask" );
     
-    auto ps = CreatePS();
+    auto ps = CreatePS( tex );
     auto vs = CreateVS();
 
     RenderablePass * pass = new RenderablePass( ps, vs, nullptr );
@@ -155,6 +155,8 @@ PixelShader *       MixChannelsEffect::CreatePS        ( Texture2DPtr tex )
     auto shader = new PixelShader( GetMixChannelPixelShaderCode(), shaderParams );
 
     //FIXME: create samplers
+
+    //FIXME: add textures
     return shader;
 }
 

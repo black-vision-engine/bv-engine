@@ -12,7 +12,7 @@ class ModelNodeEffectAlphaMask : public IModelNodeEffect
 private:
 
     ParamFloatPtr       m_paramAlpha;
-    
+
     float               m_alpha;
 
 public:

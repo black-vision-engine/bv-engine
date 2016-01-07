@@ -13,7 +13,7 @@ namespace bv {
 // *********************************
 //
 MixChannelsRenderLogic::MixChannelsRenderLogic  ()
-    : m_effect( new MixChannelsEffect() )
+    : m_effect( nullptr )
 {
 }
 
@@ -78,7 +78,7 @@ MixChannelsEffect *  MixChannelsRenderLogic::AccessMixChannelsEffect    ( Render
 
         { mixMask; }
         //FIXME: texture
-        m_effect = new MixChannelsEffect();
+        m_effect = new MixChannelsEffect( rtTex );
     }
 
     //FIXME: mixChannelsMask
