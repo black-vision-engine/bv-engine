@@ -249,6 +249,44 @@ void                    TestScene::InitTestModelSceneEditor ()
 	m_testSteps.push_back([&] 
 	{
 		auto editor = m_project->GetProjectEditor();
+		auto scene = editor->GetScene( EMPTY_SCENE );
+        bool success = true;
+
+        auto root = model::BasicNode::Create( "root", nullptr );
+        success &= editor->AddChildNode( scene, nullptr, root );
+
+        assert( success );
+	});
+
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto scene = editor->GetScene( EMPTY_SCENE );
+        bool success = true;
+
+        auto root = scene->GetRootNode();
+
+        success &= editor->AddPlugin( EMPTY_SCENE, "root", "DEFAULT_TRANSFORM", "test", "", 0 );
+
+        assert( !success );
+	});
+
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto scene = editor->GetScene( EMPTY_SCENE );
+        bool success = true;
+
+        auto root = scene->GetRootNode();
+
+        success &= editor->AddPlugin( EMPTY_SCENE, "root", "DEFAULT_TRANSFORM", "test", EMPTY_SCENE, 0 );
+
+        assert( success );
+	});
+
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
 		bool success = true;
 
 		auto copied = editor->AddSceneCopy( SCENE_NAME );
