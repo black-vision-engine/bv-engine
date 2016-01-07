@@ -234,6 +234,9 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\SimpleFullscreenEffect.cpp">
       <Filter>Rendering\Logic\FullScreen</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenRenderableEffectTr.cpp">
+      <Filter>Rendering\Logic\FullScreen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -419,6 +422,9 @@
       <Filter>Rendering\Logic\FullScreen</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\SimpleFullscreenEffect.h">
+      <Filter>Rendering\Logic\FullScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenRenderableEffectTr.h">
       <Filter>Rendering\Logic\FullScreen</Filter>
     </ClInclude>
   </ItemGroup>

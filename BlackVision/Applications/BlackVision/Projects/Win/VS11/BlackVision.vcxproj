@@ -140,6 +140,7 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectContext.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectData.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenRenderableEffectTr.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenVSShader.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\BlitAlphaMaskFullscreenEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\BlitFullscreenEffect.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectContext.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectData.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenRenderableEffectTr.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenVSShader.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\BlitAlphaMaskFullscreenEffect.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\BlitFullscreenEffect.h" />
