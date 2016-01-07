@@ -16,7 +16,7 @@ ITimeEvaluatorPtr       TimelineHelper::CreateTimeEvaluator             ( const 
     switch ( type )
     {
     case TimelineType::TT_DEFAULT:
-        return CreateDefaultTimeline( name, 1.f, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+        return CreateDefaultTimeline( name, 1000000.f, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     case TimelineType::TT_OFFSET:
         return CreateOffsetTimeEvaluator( name, 0.f );
     case TimelineType::TT_CONST:

@@ -121,9 +121,10 @@ void SocketConnection::MainThread()
                     int sentSize = send( m_socketID, buffer + bufferSent, (int)bufferSize - bufferSent, 0);
                     if( sentSize < 0 )
                     {
-                        LOG_MESSAGE( SeverityLevel::info ) << "Client disconnected";
-                        OnEndMainThread();
-                        break;
+                        int error_code = WSAGetLastError();
+                        LOG_MESSAGE( SeverityLevel::info ) << "send error ... -1 "<<error_code;
+                        //OnEndMainThread();
+                        //break;
                     }
 
                     bufferSent += sentSize;

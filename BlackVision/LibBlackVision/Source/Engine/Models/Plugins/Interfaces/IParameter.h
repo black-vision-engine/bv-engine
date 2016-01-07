@@ -39,7 +39,9 @@ namespace bv { namespace model {
 	ParamTypePtr  QueryTypedParam( IParameterPtr param )
 	{
         assert( param );
-		if( param->GetType() != ParamTypePtr::element_type::Type() )
+        ModelParamType paramType = param->GetType();
+        ModelParamType elementType = ParamTypePtr::element_type::Type();
+		if( paramType != elementType)
 		{
 			return nullptr;
 		}
