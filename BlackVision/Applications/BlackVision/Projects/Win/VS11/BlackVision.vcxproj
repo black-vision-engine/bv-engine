@@ -135,6 +135,9 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\NodeMaskRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\WireframeRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\PostFrameRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\CompositeFullscreenEffect.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectGraph.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectGraphNode.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectTr.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectContext.cpp" />
@@ -207,6 +210,9 @@
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\NodeMaskRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\WireframeRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\PostFrameRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\CompositeFullscreenEffect.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectGraph.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectGraphNode.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectTr.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffect.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectContext.h" />

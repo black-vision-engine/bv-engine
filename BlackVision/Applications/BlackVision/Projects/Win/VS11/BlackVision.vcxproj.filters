@@ -237,6 +237,15 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenRenderableEffectTr.cpp">
       <Filter>Rendering\Logic\FullScreen</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\CompositeFullscreenEffect.cpp">
+      <Filter>Rendering\Logic\FullScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectGraph.cpp">
+      <Filter>Rendering\Logic\FullScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectGraphNode.cpp">
+      <Filter>Rendering\Logic\FullScreen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -425,6 +434,15 @@
       <Filter>Rendering\Logic\FullScreen</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenRenderableEffectTr.h">
+      <Filter>Rendering\Logic\FullScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\CompositeFullscreenEffect.h">
+      <Filter>Rendering\Logic\FullScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectGraph.h">
+      <Filter>Rendering\Logic\FullScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectGraphNode.h">
       <Filter>Rendering\Logic\FullScreen</Filter>
     </ClInclude>
   </ItemGroup>

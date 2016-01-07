@@ -25,10 +25,10 @@ private:
     
 public:
 
-                    SimpleFullscreenEffect  ( const FullscreenEffectData & inputData );
-                    ~SimpleFullscreenEffect ();
+                    SimpleFullscreenEffect      ( const FullscreenEffectData & inputData );
+                    ~SimpleFullscreenEffect     ();
 
-    virtual void    Render                  ( FullscreenEffectContext * ctx ) override;
+    virtual void    Render                      ( FullscreenEffectContext * ctx ) override;
 
 private:
 
@@ -44,5 +44,8 @@ private:
     TextureSampler *    CreateSampler           ( const std::string & samplerName ) const;
 
 };
+
+DEFINE_PTR_TYPE(SimpleFullscreenEffect)
+DEFINE_CONST_PTR_TYPE(SimpleFullscreenEffect)
 
 } //bv
