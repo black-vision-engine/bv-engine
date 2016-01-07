@@ -7,16 +7,18 @@
 //#include "Serialization/SerializationObjects.inl"
 #include "Serialization/IDeserializer.h"
 
+#include "Serialization/CloneViaSerialization.h"
+
 namespace bv { 
     
 // serialization stuff
-//template std::vector< std::shared_ptr< model::TimeEvaluatorBase< model::ITimeEvaluator > > >                         DeserializeObjectLoadArrayImpl( const IDeserializer&, std::string name );
+//template std::vector< std::shared_ptr< model::TimeEvaluatorBase< model::ITimeEvaluator > > >                         DeserializeArray( const IDeserializer&, std::string name );
 
 namespace model {
 
 // *******************************
 //
-ISerializablePtr     TimeEvaluatorBase< ITimeEvaluator >::Create              ( const IDeserializer& dob )
+ITimeEvaluator*            TimeEvaluatorBase< ITimeEvaluator >::Create              ( const IDeserializer& dob )
 {
     auto type = dob.GetAttribute( "type" );
 
@@ -32,5 +34,22 @@ ISerializablePtr     TimeEvaluatorBase< ITimeEvaluator >::Create              ( 
         return nullptr;
     }
 }
+
+// *******************************
+//
+ITimeEvaluator*            TimeEvaluatorBase< ITimeEvaluator >::Clone               () const
+{
+    return CloneViaSerialization::Clone( this, "timeline" );
+}
+
+// *******************************
+//
+ITimeEvaluator*            TimeEvaluatorBase< ITimeline >::Clone               () const
+{
+    auto thisTE = dynamic_cast< const TimeEvaluatorBase< ITimeEvaluator >* >( this );
+    auto clone = CloneViaSerialization::Clone< TimeEvaluatorBase< ITimeEvaluator > >( thisTE, "timeline" );
+    return clone;
+}
+
 
 } }

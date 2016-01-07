@@ -2,8 +2,10 @@
 
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Tools/StringHeplers.h"
+#include "tools/PrefixHelper.h"
+#include "Serialization/CloneViaSerialization.h"
 #include <cassert>
-
+#include <algorithm>
 
 namespace bv { namespace model {
 
@@ -69,25 +71,41 @@ DefaultTimelinePtr		TimelineHelper::CreateDefaultTimelineImpl      ( const std::
 
 // *********************************
 //
-UInt32                  GetIndex( ITimeEvaluatorPtr parent, std::string name )
+Int32                  GetIndex( ITimeEvaluatorPtr parent, std::string name )
 {
-    assert( false );
-    return 0;
+    Int32 num = -1;
+    for( auto & timeline : parent->GetChildren() )
+    {
+        auto res = PrefixHelper::MatchNames( name, timeline->GetName() );
+        if( num < res )
+        {
+            num = res;
+        }
+    }
+
+    return num + 1;
 }
 
 // *********************************
 //
 UInt32					TimelineHelper::CopyTimelines					( ITimeEvaluatorPtr destTimeline, const std::vector< ITimeEvaluatorPtr > & timelines )
 {
-    UInt32 index = 0;
+    if( timelines.size() == 0 )
+    {
+        assert( false );
+        return UInt32( -1 );
+    }
+
+    Int32 index = 0;
 	
     for( auto timeline : timelines )
         index = std::max( index, GetIndex( destTimeline, timeline->GetName() ) );
 
     for( auto timeline : timelines )
     {
-        assert( false );
-        //auto clone = timeline->Clone( index );
+        auto clone = Clone( timeline );
+        clone->SetName( PrefixHelper::PrefixCopy( index ) + timeline->GetName() );
+        destTimeline->AddChild( clone );
     }
 
 	return index;

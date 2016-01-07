@@ -61,7 +61,7 @@ ISerializablePtr TimelineManager::Create                          ( const IDeser
 {
     auto tm = std::make_shared< model::TimelineManager >();    
 
-    auto timelines = SerializationHelper::DeserializeObjectLoadPropertiesImpl< model::TimeEvaluatorBase< model::ITimeEvaluator > >( deser, "timeline" );
+    auto timelines = SerializationHelper::DeserializeProperties< model::TimeEvaluatorBase< model::ITimeEvaluator > >( deser, "timeline" );
     for( auto timeline : timelines )
     {
         tm->AddTimeline( timeline );

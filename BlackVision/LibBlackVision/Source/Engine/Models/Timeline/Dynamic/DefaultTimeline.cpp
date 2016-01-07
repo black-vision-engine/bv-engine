@@ -112,7 +112,7 @@ void                                DefaultTimeline::Serialize           ( ISeri
 
 // *********************************
 //
-ISerializablePtr                     DefaultTimeline::Create              ( const IDeserializer& deser )
+DefaultTimeline *                     DefaultTimeline::Create              ( const IDeserializer& deser )
 {
     auto name = deser.GetAttribute( "name" );
 
@@ -130,7 +130,7 @@ ISerializablePtr                     DefaultTimeline::Create              ( cons
         preWrap = postWrap = SerializationHelper::String2T< TimelineWrapMethod >( loop );
     }
 
-    auto te = std::make_shared< DefaultTimeline >( name, duration, preWrap, postWrap );
+    auto te = new DefaultTimeline( name, duration, preWrap, postWrap );
 
     if( deser.EnterChild( "events" ) )
     {
@@ -139,11 +139,11 @@ ISerializablePtr                     DefaultTimeline::Create              ( cons
             deser.EnterChild( "event" );
             auto type = deser.GetAttribute( "type" );
             if( type == "loop" )
-                te->AddKeyFrame( TimelineEventLoop::Create( deser, te.get() ) );
+                te->AddKeyFrame( TimelineEventLoop::Create( deser, te ) );
             else if( type == "null" )
-                te->AddKeyFrame( TimelineEventNull::Create( deser, te.get() ) );
+                te->AddKeyFrame( TimelineEventNull::Create( deser, te ) );
             else if( type == "stop" )
-                te->AddKeyFrame( TimelineEventStop::Create( deser, te.get() ) );
+                te->AddKeyFrame( TimelineEventStop::Create( deser, te ) );
             else
                 assert( false );
             deser.ExitChild(); // event
@@ -153,7 +153,7 @@ ISerializablePtr                     DefaultTimeline::Create              ( cons
         deser.ExitChild();
     }
 
-    auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( deser, "children", "timeline" );
+    auto children = SerializationHelper::DeserializeArray< TimeEvaluatorBase< ITimeEvaluator > >( deser, "children", "timeline" );
 
     for( auto child : children )
         te->AddChild( child );
@@ -168,7 +168,7 @@ ISerializablePtr                     DefaultTimeline::Create              ( cons
 //
 void								DefaultTimeline::SetDuration        ( TimeType duration )
 {
-	m_timeEvalImpl.SetDuration( duration );
+    m_timeEvalImpl.SetDuration( duration );
 }
 
 // *********************************

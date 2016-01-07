@@ -105,8 +105,8 @@ ISerializablePtr     SimpleTransform<ParamT>::Create          ( const IDeseriali
 
     if( kind == TransformKind::rotation ) // very special case indeed :)
     {
-        auto angleArray = SerializationHelper::DeserializeObjectLoadArrayImpl< ParamT >( dob, "angle", "interpolator" );
-        auto rotAxisArray = SerializationHelper::DeserializeObjectLoadArrayImpl< Vec3Interpolator >( dob, "rotaxis", "interpolator" );
+        auto angleArray = SerializationHelper::DeserializeArray< ParamT >( dob, "angle", "interpolator" );
+        auto rotAxisArray = SerializationHelper::DeserializeArray< Vec3Interpolator >( dob, "rotaxis", "interpolator" );
 
         if( angleArray.size() != 1 )
         {
@@ -125,7 +125,7 @@ ISerializablePtr     SimpleTransform<ParamT>::Create          ( const IDeseriali
         return std::make_shared< Rotation< ParamT > >( *angle, *rotAxis );
     }
 
-    auto params = SerializationHelper::DeserializeObjectLoadArrayImpl< ParamT >( dob, "interpolators" );
+    auto params = SerializationHelper::DeserializeArray< ParamT >( dob, "interpolators" );
     
     if( params.size() != 3 && ( kind != TransformKind::rotation || params.size() != 2 ) ) // de Morgan FTW!
     {
@@ -454,11 +454,11 @@ CompositeTransform<ParamT>::CompositeTransform  ( const CompositeTransform & src
 // *************************************
 //
 template<typename ParamT>
-ISerializablePtr                     CompositeTransform<ParamT>::Create                  ( const IDeserializer& dob )
+CompositeTransform< ParamT >*                     CompositeTransform<ParamT>::Create                  ( const IDeserializer& dob )
 {
-    auto transform = std::make_shared< CompositeTransform< ParamT > >();
+    auto transform = new CompositeTransform< ParamT >();
 
-    auto transes = SerializationHelper::DeserializeObjectLoadPropertiesImpl< SimpleTransform< ParamT > >( dob, "transform" );
+    auto transes = SerializationHelper::DeserializeProperties< SimpleTransform< ParamT > >( dob, "transform" );
 
     int i = 0;
     for( auto trans : transes )

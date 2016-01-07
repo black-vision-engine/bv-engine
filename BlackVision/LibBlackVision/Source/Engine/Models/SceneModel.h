@@ -24,35 +24,35 @@ private:
 
     BasicNodePtr            m_sceneRootNode;
 
-	OffsetTimeEvaluatorPtr  m_timeline;
+    OffsetTimeEvaluatorPtr  m_timeline;
 
-	Camera *                m_camera; //FIXME: camera model
+    Camera *                m_camera; //FIXME: camera model
 
     ModelSceneEditor *		m_modelSceneEditor;
 
 public:
-							SceneModel			( std::string name, Camera * camera );
+                            SceneModel			( std::string name, Camera * camera );
     virtual					~SceneModel			();
 
     static SceneModelPtr    Create              ( std::string name, Camera * camera );
-    static ISerializablePtr Create              ( const IDeserializer& deser );
+    static SceneModel *     Create              ( const IDeserializer& deser );
     virtual void            Serialize           ( ISerializer& doc) const override;
 
-	model::SceneModelPtr	Clone				() const;
+    model::SceneModel * 	Clone				() const;
 
-	void					SetRootNode			( BasicNodePtr rootNode );
-	BasicNodePtr			GetRootNode			() const;
+    void					SetRootNode			( BasicNodePtr rootNode );
+    BasicNodePtr			GetRootNode			() const;
 
-	void					SetName				( std::string name );
-	const std::string &		GetName				() const;
+    void					SetName				( std::string name );
+    const std::string &		GetName				() const;
 
-	OffsetTimeEvaluatorPtr  GetTimeline         () const;
+    OffsetTimeEvaluatorPtr  GetTimeline         () const;
 
-	Camera *                GetCamera           () const;
+    Camera *                GetCamera           () const;
 
-	ModelSceneEditor *		GetModelSceneEditor	() const;
+    ModelSceneEditor *		GetModelSceneEditor	() const;
 
-	static SceneModelPtr	CreateEmptyScene	( const std::string & name );
+    static SceneModelPtr	CreateEmptyScene	( const std::string & name );
 };
 
 typedef std::vector< model::SceneModelPtr > SceneModelVec;

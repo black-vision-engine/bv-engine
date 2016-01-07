@@ -21,7 +21,7 @@ namespace bv { namespace model {
 BasicNodePtr			ModelNodeEditor::CopyNode       ()
 {
     auto node = m_node.lock();
-	return std::static_pointer_cast< BasicNode >( node->Clone() );
+    return std::static_pointer_cast< BasicNode >( IModelNodePtr( node->Clone() ) );
 }
 
 // ********************************

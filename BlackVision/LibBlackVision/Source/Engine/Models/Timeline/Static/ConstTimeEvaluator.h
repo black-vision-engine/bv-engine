@@ -21,7 +21,7 @@ public:
             ~ConstTimeEvaluator                     ();
 
     virtual void                Serialize           ( ISerializer& sob ) const;
-    static ISerializablePtr     Create              ( const IDeserializer& dob );
+    static ConstTimeEvaluator * Create              ( const IDeserializer& dob );
 
     void    SetConstTimeValue                       ( TimeType t );
 

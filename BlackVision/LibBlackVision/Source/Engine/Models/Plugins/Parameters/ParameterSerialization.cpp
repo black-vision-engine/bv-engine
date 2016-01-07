@@ -92,7 +92,7 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     {
         auto param = ParametersFactory::CreateParameterFloat( name, te );
 
-        auto interpolator = SerializationHelper::DeserializeObjectLoadImpl< FloatInterpolator >( deser, "interpolator" );
+        auto interpolator = SerializationHelper::DeserializeObject< FloatInterpolator >( deser, "interpolator" );
 
         param->AccessInterpolator() = *interpolator;
 
@@ -102,7 +102,7 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     {
         auto param = ParametersFactory::CreateParameterVec2( name, te );
         
-        auto interpolator = SerializationHelper::DeserializeObjectLoadImpl< Vec2Interpolator >( deser, "interpolator" );
+        auto interpolator = SerializationHelper::DeserializeObject< Vec2Interpolator >( deser, "interpolator" );
 
         param->AccessInterpolator() = *interpolator;
 
@@ -112,7 +112,7 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     {
         auto param = ParametersFactory::CreateParameterVec3( name, te );
         
-        auto interpolator = SerializationHelper::DeserializeObjectLoadImpl< Vec3Interpolator >( deser, "interpolator" );
+        auto interpolator = SerializationHelper::DeserializeObject< Vec3Interpolator >( deser, "interpolator" );
 
         param->AccessInterpolator() = *interpolator;
 
@@ -122,7 +122,7 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     {
         auto param = ParametersFactory::CreateParameterVec4( name, te );
         
-        auto interpolator = SerializationHelper::DeserializeObjectLoadImpl< Vec4Interpolator >( deser, "interpolator" );
+        auto interpolator = SerializationHelper::DeserializeObject< Vec4Interpolator >( deser, "interpolator" );
 
         param->AccessInterpolator() = *interpolator;
 
@@ -132,7 +132,7 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     {
         auto param = ParametersFactory::CreateParameterTransform( name, te );
 
-        auto transform = SerializationHelper::DeserializeObjectLoadImpl< TransformF >( deser, "composite_transform" );
+        auto transform = SerializationHelper::DeserializeObject< TransformF >( deser, "composite_transform" );
 
         param->Transform() = *transform;
 
@@ -143,8 +143,8 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     {
         auto param = ParametersFactory::CreateParameterTransformVec( name, te );
 
-        //auto transes = SerializationHelper::DeserializeObjectLoadArrayImpl< TransformF >( deser, "composite_transform", "transform" );
-        auto transes = SerializationHelper::DeserializeObjectLoadPropertiesImpl< TransformF >( deser, "composite_transform" );
+        //auto transes = SerializationHelper::DeserializeArray< TransformF >( deser, "composite_transform", "transform" );
+        auto transes = SerializationHelper::DeserializeProperties< TransformF >( deser, "composite_transform" );
 
         int i = 0;
         for( auto trans : transes )
@@ -158,7 +158,7 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     {
         auto param = ParametersFactory::CreateTypedSimpleParameter< ParamInt >( name, te );
         
-        auto interpolator = SerializationHelper::DeserializeObjectLoadImpl< IntInterpolator >( deser, "interpolator" );
+        auto interpolator = SerializationHelper::DeserializeObject< IntInterpolator >( deser, "interpolator" );
 
         param->AccessInterpolator() = *interpolator;
 
@@ -168,7 +168,7 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     {
         auto param = ParametersFactory::CreateTypedSimpleParameter< ParamBool >( name, te );
 
-        auto interpolator = SerializationHelper::DeserializeObjectLoadImpl< BoolInterpolator >( deser, "interpolator" );
+        auto interpolator = SerializationHelper::DeserializeObject< BoolInterpolator >( deser, "interpolator" );
 
         param->AccessInterpolator() = *interpolator;
 
@@ -178,7 +178,7 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     {
         auto param = ParametersFactory::CreateParameterEnum< int >( name, te );
 
-        auto interpolator = SerializationHelper::DeserializeObjectLoadImpl< IntInterpolator >( deser, "interpolator" );
+        auto interpolator = SerializationHelper::DeserializeObject< IntInterpolator >( deser, "interpolator" );
 
         param->AccessInterpolator() = *interpolator;
 
@@ -188,7 +188,7 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     {
         auto param = ParametersFactory::CreateParameterWString( name, te );
 
-        auto interpolator = SerializationHelper::DeserializeObjectLoadImpl< WStringInterpolator >( deser, "interpolator" );
+        auto interpolator = SerializationHelper::DeserializeObject< WStringInterpolator >( deser, "interpolator" );
 
         param->AccessInterpolator() = *interpolator;
 
@@ -199,7 +199,7 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     {
         auto param = ParametersFactory::CreateParameterString( name, te );
 
-        auto interpolator = SerializationHelper::DeserializeObjectLoadImpl< StringInterpolator >( deser, "interpolator" );
+        auto interpolator = SerializationHelper::DeserializeObject< StringInterpolator >( deser, "interpolator" );
 
         param->AccessInterpolator() = *interpolator;
 

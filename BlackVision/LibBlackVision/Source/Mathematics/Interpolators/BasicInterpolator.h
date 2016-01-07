@@ -49,7 +49,7 @@ public:
     virtual ~BasicInterpolator  () {};
 
     virtual void                Serialize       ( ISerializer& doc ) const override;
-    static ISerializablePtr     Create          ( const IDeserializer& doc );
+    static BasicInterpolator< TimeValueT, ValueT, FloatT >*     Create          ( const IDeserializer& doc );
 
     void AddKey             ( TimeValueT t, const ValueT & v );
     void AddKey             ( const Key<TimeValueT, ValueT> & key );

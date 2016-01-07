@@ -41,16 +41,16 @@ void                OffsetTimeEvaluator::Serialize           ( ISerializer& ser 
 
 // *******************************
 //
-ISerializablePtr     OffsetTimeEvaluator::Create              ( const IDeserializer& dob )
+OffsetTimeEvaluator *     OffsetTimeEvaluator::Create              ( const IDeserializer& dob )
 {
     auto name = dob.GetAttribute( "name" );
 
     auto offset = SerializationHelper::String2T< float >( dob.GetAttribute( "offset" ), 0.f );
     auto scale = SerializationHelper::String2T< float >( dob.GetAttribute( "scale" ), 1.f );
 
-    auto te = std::make_shared< OffsetTimeEvaluator >( name, offset, scale );
+    auto te = new OffsetTimeEvaluator( name, offset, scale );
 
-    auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( dob, "children", "timeline" );
+    auto children = SerializationHelper::DeserializeArray< TimeEvaluatorBase< ITimeEvaluator > >( dob, "children", "timeline" );
 
     for( auto child : children )
         te->AddChild( child );

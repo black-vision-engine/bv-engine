@@ -206,7 +206,7 @@ public:
     explicit        CompositeTransform  ();
                     CompositeTransform  ( const CompositeTransform & src );
 
-    static ISerializablePtr                     Create                  ( const IDeserializer& dob );
+    static CompositeTransform< ParamT >*        Create                  ( const IDeserializer& dob );
     virtual void                                Serialize               ( ISerializer& doc ) const;
 
     void            InitializeDefaultSRT();

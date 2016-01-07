@@ -31,7 +31,7 @@ public:
                                                 ~DefaultTimeline    ();
 
     virtual void                                Serialize           ( ISerializer& sob ) const;
-    static ISerializablePtr                     Create              ( const IDeserializer& dob );
+    static DefaultTimeline *                    Create              ( const IDeserializer& dob );
 
     //ITimeline
     virtual void		                        SetDuration         ( TimeType duration ) override;

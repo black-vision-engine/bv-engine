@@ -36,11 +36,11 @@ DEFINE_CONST_PTR_TYPE(IPlugin)
 class IPlugin : public IUpdatable
 {
 public:
-	virtual IPluginPtr							Clone						() const = 0;
+    virtual IPluginPtr							Clone						() const = 0;
 
     virtual UInt32				                GetID		                () const = 0;
     
-	virtual const std::string &                 GetName                     () const = 0;
+    virtual const std::string &                 GetName                     () const = 0;
     virtual const std::string &                 GetTypeUid                  () const = 0;
 
     virtual bool								IsValid						() const = 0;
@@ -51,7 +51,7 @@ public:
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const = 0;
     virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const = 0;
 
-	virtual IParamValModelPtr					GetResourceStateModel		( const std::string & name ) const = 0;
+    virtual IParamValModelPtr					GetResourceStateModel		( const std::string & name ) const = 0;
     virtual std::vector< IParameterPtr >        GetResourceStateModelParameters () const = 0;
 
     virtual std::vector< IParameterPtr >        GetParameters               () const = 0;
@@ -69,17 +69,17 @@ public:
     virtual IPluginPtr							GetPrevPlugin				() = 0;
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) = 0;
 
-	// axis-aligned bounding box
-	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const = 0;
+    // axis-aligned bounding box
+    virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & ) const = 0;
 
     //FIXME: implement a more generic interface for resource loading
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) = 0;
     virtual std::vector< AssetDescConstPtr >    GetAssets                   () const = 0;
 
 
-	virtual ParamTransformVecPtr				GetParamTransform			() const = 0; //FIXME: BArdzo brzydki hack zeby zadzialal crawler
+    virtual ParamTransformVecPtr				GetParamTransform			() const = 0; //FIXME: BArdzo brzydki hack zeby zadzialal crawler
 
-	virtual std::vector< ITimeEvaluatorPtr >	GetTimelines				() const = 0;
+    virtual std::vector< ITimeEvaluatorPtr >	GetTimelines				() const = 0;
 
     virtual                                     ~IPlugin                    (){}
 

@@ -261,11 +261,11 @@ void                BasicInterpolator<TimeValueT, ValueT, FloatT>::Serialize    
 // *************************************
 //
 template<class TimeValueT, class ValueT, class FloatT >
-ISerializablePtr     BasicInterpolator<TimeValueT, ValueT, FloatT>::Create          ( const IDeserializer& doc ) // FIXME: this works for floats only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+BasicInterpolator< TimeValueT, ValueT, FloatT >*     BasicInterpolator<TimeValueT, ValueT, FloatT>::Create          ( const IDeserializer& doc ) // FIXME: this works for floats only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 {
-    auto keys = SerializationHelper::DeserializeObjectLoadPropertiesImpl< Key<TimeValueT, ValueT> >( doc, "key" );
+    auto keys = SerializationHelper::DeserializeProperties< Key<TimeValueT, ValueT> >( doc, "key" );
 
-    auto interpolator = std::make_shared< BasicInterpolator<TimeValueT, ValueT, FloatT> >();
+    auto interpolator = new BasicInterpolator<TimeValueT, ValueT, FloatT>();
 
     for( auto key : keys )
         interpolator->AddKey( key->t, key->val );

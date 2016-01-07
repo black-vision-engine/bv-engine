@@ -13,19 +13,27 @@ namespace SerializationHelper {
 // *************************************
 //
 template< typename T >
-std::shared_ptr< T >                                        DeserializeObjectLoadImpl( const IDeserializer& deser, std::string name )
+T*                                                          DeserializeObject( const IDeserializer& deser, std::string name )
 {
     auto sucess = deser.EnterChild( name );
     assert( sucess ); { sucess; } // FIXME error handling
     auto obj = T::Create( deser );
     deser.ExitChild();
-    return std::static_pointer_cast< T >( obj );
+    return static_cast< T* >( obj );
 }
 
 // *************************************
 //
 template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadArrayImpl( const IDeserializer& deser, std::string nameParent, std::string nameChild="" )
+std::shared_ptr< T >                                        DeserializeObjectPtr( const IDeserializer& deser, std::string name )
+{
+    return std::shared_ptr< T >( DeserializeObject< T >( deser, name ) );
+}
+
+// *************************************
+//
+template< typename T >
+std::vector< std::shared_ptr< T > >                         DeserializeArray( const IDeserializer& deser, std::string nameParent, std::string nameChild="" )
 {
     std::vector< std::shared_ptr< T > > ret;
 
@@ -44,7 +52,7 @@ std::vector< std::shared_ptr< T > >                         DeserializeObjectLoa
     {
         do
         {
-            auto obj = T::Create( deser );
+            auto obj = ISerializablePtr( T::Create( deser ) );
             ret.push_back( std::static_pointer_cast< T >( obj ) );
         }while( deser.NextChild() );
         deser.ExitChild(); // nameChild
@@ -57,7 +65,7 @@ std::vector< std::shared_ptr< T > >                         DeserializeObjectLoa
 // *************************************
 //
 template< typename T >
-std::vector< std::shared_ptr< T > >                         DeserializeObjectLoadPropertiesImpl( const IDeserializer& deser, std::string name )
+std::vector< std::shared_ptr< T > >                         DeserializeProperties( const IDeserializer& deser, std::string name )
 {
     std::vector< std::shared_ptr< T > > ret;
 
@@ -65,7 +73,7 @@ std::vector< std::shared_ptr< T > >                         DeserializeObjectLoa
     {
         do
         {
-            auto obj = T::Create( deser );
+            auto obj = ISerializablePtr( T::Create( deser ) );
 
             ret.push_back( std::static_pointer_cast< T >( obj ) );
         }while( deser.NextChild( ) );

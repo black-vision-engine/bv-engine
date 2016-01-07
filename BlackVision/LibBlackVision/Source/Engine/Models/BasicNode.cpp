@@ -123,19 +123,20 @@ void                            BasicNode::Serialize               ( ISerializer
 
 // ********************************
 //
-ISerializablePtr BasicNode::Create( const IDeserializer& dob )
+BasicNode * BasicNode::Create( const IDeserializer& dob )
 {
     //assert( dob.GetName() == "node" ); FIXME
 
     auto name = dob.GetAttribute( "name" );
 
 	//FIXME: nullptr because timeEvaluator is not used in BasicNode
-    auto node = Create( name, nullptr );
+    //auto node = Create( name, nullptr );
+    auto node = new BasicNode( name, nullptr );
 
     node->m_visible = dob.GetAttribute( "visible" ) == "false" ? false : true;
 
 // plugins
-    auto plugins = SerializationHelper::DeserializeObjectLoadArrayImpl< BasePlugin< IPlugin > >( dob, "plugins" );
+    auto plugins = SerializationHelper::DeserializeArray< BasePlugin< IPlugin > >( dob, "plugins" );
 	
     for( auto plugin : plugins )
         node->AddPlugin( plugin );
@@ -146,7 +147,7 @@ ISerializablePtr BasicNode::Create( const IDeserializer& dob )
 //        m_modelNodeEffect->Serialize( dob );
 
 // children
-    auto children = SerializationHelper::DeserializeObjectLoadArrayImpl< BasicNode >( dob, "nodes" );
+    auto children = SerializationHelper::DeserializeArray< BasicNode >( dob, "nodes" );
 
     for( auto child : children )
         node->AddChildToModelOnly( child );
@@ -159,7 +160,7 @@ ISerializablePtr BasicNode::Create( const IDeserializer& dob )
 
 // *******************************
 //
-IModelNodePtr					BasicNode::Clone			() const
+IModelNode *					BasicNode::Clone			() const
 {
 	AssetDescsWithUIDs assets;
 	//FIXME: const hack

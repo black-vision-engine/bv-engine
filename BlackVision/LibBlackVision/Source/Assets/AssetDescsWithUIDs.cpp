@@ -63,11 +63,11 @@ void GetAssetsWithUIDs( AssetDescsWithUIDs& map, const model::IPlugin * plugin )
 
 // *******************************
 //
-ISerializablePtr                                 AssetDescsWithUIDs::Create          ( const IDeserializer& deser )
+AssetDescsWithUIDs *                                 AssetDescsWithUIDs::Create          ( const IDeserializer& deser )
 {
-    auto assetsWithUIDs = SerializationHelper::DeserializeObjectLoadPropertiesImpl< AssetDescWithUID >( deser, "uid" );
+    auto assetsWithUIDs = SerializationHelper::DeserializeProperties< AssetDescWithUID >( deser, "uid" );
 
-    auto assets = std::make_shared< AssetDescsWithUIDs >();
+    auto assets = new AssetDescsWithUIDs();
     for( auto asset : assetsWithUIDs )
         assets->AddAssetDescWithUID( asset->GetDesc(), asset->GetUID() );
     return assets;

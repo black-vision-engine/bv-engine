@@ -43,7 +43,7 @@ public:
     CompositeBezierInterpolator         ( const CompositeBezierInterpolator & that );
 
     virtual void                                        Serialize           ( ISerializer & ) const override;
-    static ISerializablePtr                             Create              ( const IDeserializer & );
+    static CompositeBezierInterpolator< TimeValueT, ValueT >* Create              ( const IDeserializer & );
 
     void                                                AddKey              ( TimeValueT t, const ValueT & v );
     bool                                                RemoveKey           ( TimeValueT t );

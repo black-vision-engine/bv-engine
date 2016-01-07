@@ -18,12 +18,14 @@ class AssetDescsWithUIDs : public ISerializable
     std::map< std::string, std::string >                    m_key2uid;
 
     void                                                    AddAssetDescWithUID( AssetDescConstPtr desc, std::string uid );
-public:
-    static AssetDescsWithUIDs&                              GetInstance() { return instance; }
-    static void                                             SetInstance( AssetDescsWithUIDs& i ) { instance = i; }
 
-    virtual void                                            Serialize       ( ISerializer& ser ) const;
-    static ISerializablePtr                                 Create          ( const IDeserializer& deser );
+public:
+
+    static AssetDescsWithUIDs &                             GetInstance() { return instance; }
+    static void                                             SetInstance( AssetDescsWithUIDs & i ) { instance = i; }
+
+    virtual void                                            Serialize       ( ISerializer & ser ) const;
+    static AssetDescsWithUIDs *                             Create          ( const IDeserializer & deser );
 
     void                                                    AddAssetDesc( AssetDescConstPtr asset );
 

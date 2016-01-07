@@ -2460,6 +2460,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectBlur.h">
       <Filter>Engine\Models\NodeEffects</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Interfaces\ICloneable.h">
+      <Filter>Engine\Interfaces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

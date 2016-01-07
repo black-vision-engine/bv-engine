@@ -66,18 +66,18 @@ void            SceneModel::Serialize           ( ISerializer& ser) const
 
 // *******************************
 //
-ISerializablePtr        SceneModel::Create          ( const IDeserializer& deser )
+SceneModel *        SceneModel::Create          ( const IDeserializer& deser )
 {
 // assets
-    auto assets = SerializationHelper::DeserializeObjectLoadImpl< AssetDescsWithUIDs >( deser, "assets" );
+    auto assets = SerializationHelper::DeserializeObject< AssetDescsWithUIDs >( deser, "assets" );
     AssetDescsWithUIDs::SetInstance( *assets );
 
 	//FIXME: pass nullptr as camera because we don't have camera model yet
-    auto obj = std::make_shared< SceneModel >( deser.GetAttribute( "name" ), nullptr );
+    auto obj = new SceneModel( deser.GetAttribute( "name" ), nullptr );
 
 // timelines
 	auto sceneTimeline = obj->GetTimeline();
-    auto timelines = SerializationHelper::DeserializeObjectLoadArrayImpl< TimeEvaluatorBase< ITimeEvaluator > >( deser, "timelines" );
+    auto timelines = SerializationHelper::DeserializeArray< TimeEvaluatorBase< ITimeEvaluator > >( deser, "timelines" );
 	for( auto timeline : timelines )
     {
 		sceneTimeline->AddChild( timeline );
@@ -85,17 +85,17 @@ ISerializablePtr        SceneModel::Create          ( const IDeserializer& deser
     dynamic_cast< BVDeserializeContext* >( deser.GetDeserializeContext() )->m_sceneTimeline = sceneTimeline;
 
 // nodes
-    auto node = SerializationHelper::DeserializeObjectLoadImpl< model::BasicNode >( deser, "node" );
+    auto node = SerializationHelper::DeserializeObjectPtr< model::BasicNode >( deser, "node" );
     assert( node );
 	obj->SetRootNode( node );
 
 
-	return ISerializablePtr( obj );
+	return obj;
 }
 
 // *******************************
 //
-model::SceneModelPtr		SceneModel::Clone		() const
+model::SceneModel *		SceneModel::Clone		() const
 {
 	return CloneViaSerialization::Clone( this, "scene" );
 }

@@ -434,6 +434,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\AlphaChannelNodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\BlurNodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\LightScatteringNodeEffect.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Interfaces\ICloneable.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\AssetTracker.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\ShadowNodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Builder\ModelNodeEffectFactory.h" />

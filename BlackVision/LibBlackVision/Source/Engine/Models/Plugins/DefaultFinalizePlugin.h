@@ -25,7 +25,7 @@ private:
     static std::string              m_uid;
 
     DefaultVertexShaderChannelPtr   m_defaultVSChannel;
-	ITransformChannelConstPtr		m_defaultTransformChannel;
+    ITransformChannelConstPtr		m_defaultTransformChannel;
 
     mutable DefaultFinalizePixelShaderChannelPtr    m_finalizePSC;
     mutable DefaultFinalizeVertexShaderChannelPtr   m_finalizeVSC;
@@ -36,7 +36,7 @@ public:
                                                 DefaultFinalizePlugin       ();
                                                 ~DefaultFinalizePlugin      ();
 
-	virtual IPluginPtr							Clone						() const override;
+    virtual IPluginPtr							Clone						() const override;
 
     virtual UInt32				                GetID		                () const override;
     virtual const std::string &                 GetName                     () const override;
@@ -46,8 +46,8 @@ public:
     virtual IParameterPtr                       GetParameter                ( const std::string & name ) const override;
     virtual bv::IValueConstPtr                  GetValue                    ( const std::string & name ) const override;
     virtual ICachedParameterPtr                 GetCachedParameter          ( const std::string & name ) const override;
-	
-	virtual IParamValModelPtr					GetResourceStateModel		( const std::string & name ) const override;
+    
+    virtual IParamValModelPtr					GetResourceStateModel		( const std::string & name ) const override;
     virtual std::vector< IParameterPtr >        GetResourceStateModelParameters () const;
 
     virtual std::vector< IParameterPtr >        GetParameters               () const;
@@ -63,7 +63,7 @@ public:
 
     virtual IPluginConstPtr                     GetPrevPlugin               () const override;
     virtual IPluginPtr							GetPrevPlugin               () override;
-	virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & currentTransformation ) const override;
+    virtual mathematics::RectConstPtr			GetAABB						( const glm::mat4 & currentTransformation ) const override;
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) override;
     virtual std::vector< AssetDescConstPtr >    GetAssets                   () const;
@@ -75,20 +75,20 @@ public:
 
     static std::string                          ShadersDir                  ();
 
-	virtual ParamTransformVecPtr				GetParamTransform			() const override;
-	
-	virtual std::vector< ITimeEvaluatorPtr >	GetTimelines				() const override;
+    virtual ParamTransformVecPtr				GetParamTransform			() const override;
+    
+    virtual std::vector< ITimeEvaluatorPtr >	GetTimelines				() const override;
 
     virtual bool								IsValid						() const override;
 
 private:
-	void										UpdateShaderChannelModel	( DefaultParamValModelPtr psModel, DefaultTexturesDataPtr txData, IPluginPtr plugin ) const;
-	void										UpdateTexturesData			( DefaultPixelShaderChannelPtr psc ) const;
-	
-	void										AddModel					( DefaultParamValModelPtr psModel, IParamValModelPtr model ) const;
-	void										AddTextures					( DefaultTexturesDataPtr txData, IPluginPtr plugin ) const;
-	
-	void										UpdatePixelShaderChannel	() const;
+    void										UpdateShaderChannelModel	( DefaultParamValModelPtr psModel, DefaultTexturesDataPtr txData, IPluginPtr plugin ) const;
+    void										UpdateTexturesData			( DefaultPixelShaderChannelPtr psc ) const;
+    
+    void										AddModel					( DefaultParamValModelPtr psModel, IParamValModelPtr model ) const;
+    void										AddTextures					( DefaultTexturesDataPtr txData, IPluginPtr plugin ) const;
+    
+    void										UpdatePixelShaderChannel	() const;
 
     std::vector< std::string >                  GetUIDS                    () const;
 

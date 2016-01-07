@@ -844,7 +844,7 @@ model::SceneModelPtr LoadSceneFromFile( std::string filename )
     //deser.Load( filename );
     XMLDeserializer deser( filename );
 
-    auto model = SerializationHelper::DeserializeObjectLoadImpl< SceneModel >( deser, "scene" );
+    auto model = SerializationHelper::DeserializeObjectPtr< SceneModel >( deser, "scene" );
 
 	//auto teClone = CloneViaSerialization::Clone( model::TimelineManager::GetInstance(), "timelines" );
     //auto plClone = model->GetRootNode()->GetPlugins()->GetPlugin( 2 )->Clone();

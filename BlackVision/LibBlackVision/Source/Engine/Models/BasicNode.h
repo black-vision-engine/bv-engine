@@ -53,10 +53,10 @@ public:
     virtual ~BasicNode();
 
     static BasicNodePtr                     Create                  ( const std::string & name, ITimeEvaluatorPtr, const PluginsManager * pluginsManager = nullptr );
-    static ISerializablePtr                 Create                  ( const IDeserializer& doc );
+    static BasicNode *                      Create                  ( const IDeserializer& doc );
     virtual void                            Serialize               ( ISerializer& doc ) const;
 
-	virtual IModelNodePtr					Clone					() const override;
+	virtual IModelNode *					Clone					() const override;
 
 
     virtual IPluginPtr                      GetPlugin               ( const std::string & name ) const override;

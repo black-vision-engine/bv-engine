@@ -223,7 +223,7 @@ model::SceneModelPtr	BVProjectEditor::AddSceneCopy		( const std::string & sceneN
     auto scene = m_project->GetScene( sceneNameToCopy );
     if( scene )
     {
-        auto copy = scene->Clone();
+        auto copy = model::SceneModelPtr( scene->Clone() );
         AddScene( copy );
 
         return copy;

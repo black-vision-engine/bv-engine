@@ -115,11 +115,11 @@ void                                        CompositeBezierInterpolator< TimeVal
 // *************************************
 //
 template< class TimeValueT, class ValueT >
-ISerializablePtr     CompositeBezierInterpolator< TimeValueT, ValueT >::Create          ( const IDeserializer& deser )
+CompositeBezierInterpolator< TimeValueT, ValueT >*     CompositeBezierInterpolator< TimeValueT, ValueT >::Create          ( const IDeserializer& deser )
 {
-    auto interpolator = std::make_shared< CompositeBezierInterpolator< TimeValueT, ValueT > >();
+    auto interpolator = new CompositeBezierInterpolator< TimeValueT, ValueT >();
 
-    auto keys = SerializationHelper::DeserializeObjectLoadArrayImpl< Key >( deser, "keys" );
+    auto keys = SerializationHelper::DeserializeArray< Key >( deser, "keys" );
 
     if( keys.size() == 1 || deser.EnterChild( "interpolations" ) == false )
         for( auto key : keys ) // no interpolation types

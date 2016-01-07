@@ -176,10 +176,10 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
     std::string pluginName = deser.GetAttribute( "name" );
 
     auto timeline = deser.GetAttribute( "timeline" );
-	
-	ITimeEvaluatorPtr sceneTimeline = dynamic_cast< BVDeserializeContext* >( deser.GetDeserializeContext() )->m_sceneTimeline;
-	if( sceneTimeline == nullptr )
-		sceneTimeline = TimelineManager::GetInstance()->GetRootTimeline();
+    
+    ITimeEvaluatorPtr sceneTimeline = dynamic_cast< BVDeserializeContext* >( deser.GetDeserializeContext() )->m_sceneTimeline;
+    if( sceneTimeline == nullptr )
+        sceneTimeline = TimelineManager::GetInstance()->GetRootTimeline();
     ITimeEvaluatorPtr te = TimelineHelper::GetTimeEvaluator( timeline, sceneTimeline );
     if( te == nullptr ) 
     {
@@ -191,7 +191,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
     std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
 
 // params
-    auto params = SerializationHelper::DeserializeObjectLoadArrayImpl< AbstractModelParameter >( deser, "params" );
+    auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );
     for( auto param : params )
     {
         if( plugin->GetParameter( param->GetName() ) == nullptr )
@@ -200,28 +200,28 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
         SetParameter( plugin->GetPluginParamValModel(), param );
     }
 
-	if( deser.EnterChild( "assets" ) )
-	{
-		do
-		{
-			deser.EnterChild( "asset" );
+    if( deser.EnterChild( "assets" ) )
+    {
+        do
+        {
+            deser.EnterChild( "asset" );
 
             auto uid = deser.GetAttribute( "uid" );
             AssetDescConstPtr asset;
             if( uid != "" )
-			    asset = AssetDescsWithUIDs::GetInstance().UID2Asset( uid );
+                asset = AssetDescsWithUIDs::GetInstance().UID2Asset( uid );
             else
                 asset = AssetManager::GetInstance().CreateDesc( deser );
-			plugin->LoadResource( asset );
+            plugin->LoadResource( asset );
         
-			auto params = SerializationHelper::DeserializeObjectLoadArrayImpl< AbstractModelParameter >( deser, "params" );
-			auto rsm = plugin->GetRSM( asset->GetKey() );
-			for( auto param : params )
-				rsm->SetParameter( param );
-			deser.ExitChild(); // asset
-		}while( deser.NextChild() );
-		deser.ExitChild(); // assets
-	}
+            auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );
+            auto rsm = plugin->GetRSM( asset->GetKey() );
+            for( auto param : params )
+                rsm->SetParameter( param );
+            deser.ExitChild(); // asset
+        }while( deser.NextChild() );
+        deser.ExitChild(); // assets
+    }
 
     if( deser.EnterChild( "renderer_context" ) )
     {
@@ -239,11 +239,11 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
 template <>
 IPluginPtr							BasePlugin< IPlugin >::Clone					() const
 {
-	AssetDescsWithUIDs assets;
-	GetAssetsWithUIDs( assets, this );
-	AssetDescsWithUIDs::SetInstance( assets );
+    AssetDescsWithUIDs assets;
+    GetAssetsWithUIDs( assets, this );
+    AssetDescsWithUIDs::SetInstance( assets );
 
-	return bv::CloneViaSerialization::Clone( this, "plugin" );
+    return bv::CloneViaSerialization::ClonePtr( this, "plugin" );
 }
 
 // *******************************
@@ -261,7 +261,7 @@ void                                BasePlugin< IPlugin >::SetRendererContext   
 template <>
 std::vector< ITimeEvaluatorPtr >    BasePlugin< IPlugin >::GetTimelines				() const
 {
-	std::set< ITimeEvaluatorPtr > timelines;
+    std::set< ITimeEvaluatorPtr > timelines;
 
     auto params = GetParameters();
 
@@ -282,11 +282,11 @@ namespace CloneViaSerialization {
 //FIXME: name of method should indicate that timelines are modified or sth?
 model::IPluginPtr				ClonePlugin					( const model::IPlugin * obj, const std::string & prefix )
 {
-	{ obj; prefix; }
+    { obj; prefix; }
 
     //FIXME: implement me
-	assert( false );
-	
+    assert( false );
+    
     return nullptr;
 }
 

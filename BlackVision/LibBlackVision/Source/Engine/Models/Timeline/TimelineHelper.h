@@ -24,14 +24,14 @@ public:
     static ConstTimeEvaluatorPtr	CreateConstTimeEvaluatorImpl    ( const std::string & name, TimeType timeVal );
     static DefaultTimelinePtr		CreateDefaultTimelineImpl       ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
     
-	/** Make copy of timelines from vector and add them to destTimeline.
-	@return Returns group prefix number. */
-	static UInt32					CopyTimelines					( ITimeEvaluatorPtr destTimeline, const std::vector< ITimeEvaluatorPtr > & timelines );
+    /** Make copy of timelines from vector and add them to destTimeline.
+    @return Returns group prefix number. */
+    static UInt32					CopyTimelines					( ITimeEvaluatorPtr destTimeline, const std::vector< ITimeEvaluatorPtr > & timelines );
 
     static std::string              GetSceneName                    ( const ITimeEvaluator* timeline );
-	static std::string				GetSceneName        			( const std::string & timelinePath );
-	static std::string				GetParentTimelinePath			( const std::string & timelinePath );
-	
+    static std::string				GetSceneName        			( const std::string & timelinePath );
+    static std::string				GetParentTimelinePath			( const std::string & timelinePath );
+    
     static ITimeEvaluatorPtr        GetTimeEvaluator                ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
     static ITimelinePtr             GetTimeline                     ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
     static std::string              GetTimelinePath                 ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline );

@@ -98,9 +98,9 @@ model::SceneModelPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeType n
 {
     auto deser = XMLDeserializer( in, numBytes );
 
-    auto scene = SerializationHelper::DeserializeObjectLoadImpl< model::SceneModel >( deser, "scene" );
+    auto scene = SerializationHelper::DeserializeObject< model::SceneModel >( deser, "scene" );
 
-    return scene;
+    return model::SceneModelPtr( scene );
 }
 
 // ********************************
@@ -124,7 +124,7 @@ AssetDescVec SceneDescriptor::ListSceneAssets ( std::istream & in, SizeType numB
     auto deser = XMLDeserializer( in, numBytes );
 
     // assets
-    auto assets = SerializationHelper::DeserializeObjectLoadImpl< AssetDescsWithUIDs >( deser, "assets" );
+    auto assets = SerializationHelper::DeserializeObject< AssetDescsWithUIDs >( deser, "assets" );
 
     return assets->GetAssetsDescs();
 }
