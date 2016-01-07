@@ -133,8 +133,8 @@ std::string              TimelineHelper::GetSceneName                    ( const
 //
 std::string				TimelineHelper::GetSceneName        			( const std::string & timelinePath )
 {
-    auto path = Trim( timelinePath, "/" );
-    auto names = Split( path, "/" );
+    auto path = Trim( timelinePath, "%" );
+    auto names = Split( path, "%" );
     if( !names.empty() )
     {
         return names[ 0 ];
