@@ -514,7 +514,7 @@ model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( model::SceneModelPtr 
         auto timelines = srcNode->GetTimelines();
         auto prefixNum = model::TimelineHelper::CopyTimelines( destScene->GetTimeline(), timelines );
 
-        copy = CloneViaSerialization::CloneNode( srcNode.get(), PrefixHelper::PrefixCopy( prefixNum ) );
+        copy = CloneViaSerialization::CloneNode( srcNode.get(), PrefixHelper::PrefixCopy( prefixNum ), srcScene->GetName(), destScene->GetName() );
     }
 
     if( copy )
@@ -821,7 +821,7 @@ model::IPluginPtr		BVProjectEditor::AddPluginCopy			( model::SceneModelPtr destS
             auto timelines = srcPlugin->GetTimelines();
             auto prefixNum = model::TimelineHelper::CopyTimelines( destScene->GetTimeline(), timelines );
         
-            copy = CloneViaSerialization::ClonePlugin( srcPlugin.get(), PrefixHelper::PrefixCopy( prefixNum ) );
+            copy = CloneViaSerialization::ClonePlugin( srcPlugin.get(), PrefixHelper::PrefixCopy( prefixNum ), srcScene->GetName(), destScene->GetName() );
         }
     }
 

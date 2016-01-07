@@ -280,14 +280,19 @@ namespace CloneViaSerialization {
 
 // *******************************
 //FIXME: name of method should indicate that timelines are modified or sth?
-model::IPluginPtr				ClonePlugin					( const model::IPlugin * obj, const std::string & prefix )
+model::IPluginPtr				ClonePlugin					( const model::IPlugin * obj, const std::string & prefix, std::string srcScene, std::string destScene )
 {
-    { obj; prefix; }
+    assert( false ); obj; prefix; srcScene; destScene; return nullptr;
+    //auto clone = obj->Clone();
+    //
+    //for( auto param : clone->GetParameters() )
+    //{
+    //    auto name = param->GetTimeEvaluator()->GetName();
+    //    auto timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( prefix + name );
+    //    param->SetTimeEvaluator( timeline );
+    //}
 
-    //FIXME: implement me
-    assert( false );
-    
-    return nullptr;
+    //return clone;
 }
 
 } //CloneViaSerialization
