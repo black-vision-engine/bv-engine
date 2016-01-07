@@ -99,12 +99,17 @@ VertexShader *      SimpleFullscreenEffect::CreateVertexShader      ( const Full
 //
 PixelShader *       SimpleFullscreenEffect::CreatePixelShader       ( const FullscreenEffectData & inputData ) const
 {
-    { inputData; }
-
     PixelShader * shader = nullptr;
 
     ShaderParameters * shaderParams = new ShaderParameters();
     
+    for( unsigned int i = 0; i < inputData.GetNumValues(); ++i )
+    {
+        auto param = ShaderParamFactory::CreateGenericParameter( inputData.GetValueAt( i ).get() );
+
+        shaderParams->AddParameter( param );
+    }
+
     for( unsigned int i = 0; i < inputData.GetNumTextures(); ++i )
     {
         auto tx = inputData.GetInputTextureAt( i );
