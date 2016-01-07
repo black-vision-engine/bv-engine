@@ -194,8 +194,10 @@ std::string QueryHandlers::GetTimeLinesInfo    ( const std::string& /*request*/,
         s->GetTimeline()->Serialize(ser);
 
         ser.ExitChild();
+        ser.ExitChild();
     }
-    ser.ExitChild();
+    
+   
 
     return ser.GetString();
 }

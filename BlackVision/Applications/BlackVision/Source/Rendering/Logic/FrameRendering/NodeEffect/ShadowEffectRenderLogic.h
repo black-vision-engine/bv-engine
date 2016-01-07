@@ -2,6 +2,8 @@
 
 #include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
 
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
+
 #include "Mathematics/glm_inc.h"
 
 namespace bv {
@@ -31,9 +33,9 @@ private:
     void                                RenderItermediateData       ( RenderLogicContext * ctx, RenderTarget * foregroundRt, SceneNode * node );
     void                                RenderToRenderTarget        ( RenderLogicContext * ctx, RenderTarget * rt, SceneNode * node );
 
-    ShadowFullscreenEffect *            AccessShadowEffect          ( RenderTarget * rt, const glm::vec4 & color, const glm::vec2 & shift, float bs );
+    ShadowFullscreenEffect *            AccessShadowEffect          ( Texture2DPtr tex, Texture2DPtr bluredTex, const glm::vec4 & color, const glm::vec2 & shift );
 
-    void                                AddShadowEffect             ( Renderer * renderer, RenderTarget * foregroundRt, const glm::vec4 & color, const glm::vec2 & shift, float bs );
+    void                                AddShadowEffect             ( Renderer * renderer, Texture2DPtr tex, Texture2DPtr bluredTex, const glm::vec4 & color, const glm::vec2 & shift );
 
     BlurFullscreenEffect *              AccessBlurEffect            ( RenderTarget * rt, float bs, bool vertical );
 

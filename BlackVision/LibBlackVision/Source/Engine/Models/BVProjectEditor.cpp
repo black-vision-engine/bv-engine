@@ -558,10 +558,17 @@ bool					BVProjectEditor::MoveNode			( model::SceneModelPtr destScene, model::Ba
 //
 bool					BVProjectEditor::AddPlugin			( const std::string & sceneName, const std::string & nodePath, const std::string & pluginUID, const std::string & pluginName, const std::string & timelinePath, UInt32 idx )
 {
+	auto scene = m_project->GetScene( sceneName );
     auto timeEval = GetTimeEvaluator( timelinePath );
-    auto plugin = model::PluginsManager::DefaultInstance().CreatePlugin( pluginUID, pluginName, timeEval );
-    auto node = QueryTyped( GetNode( sceneName, nodePath ) );
-    return AddPlugin( node, plugin, idx );
+
+    if( scene && timeEval )
+    {
+        auto plugin = model::PluginsManager::DefaultInstance().CreatePlugin( pluginUID, pluginName, timeEval );
+        auto node = QueryTyped( GetNode( sceneName, nodePath ) );
+        return AddPlugin( node, plugin, idx );
+    }
+
+    return false;
 }
 
 // *******************************
