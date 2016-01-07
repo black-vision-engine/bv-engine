@@ -1083,9 +1083,11 @@ void					TestScene::InitTestEditor			()
 {
 	//InitTestModelSceneEditor();
 
-	InitTimelinesTest();
+	//InitTimelinesTest();
 
 	//InitAssetsTest();
+
+    InitCopyNodeTest();
 
 	//InitBasicColorPluginTest();
 	//InitOrderColorPluginTest();
@@ -1111,6 +1113,43 @@ void					TestScene::InitTestEditor			()
 	//InitGradientGeometryTest();
 
 	//InitVideoStreamDecoderTest();
+}
+
+// ****************************
+//
+void					TestScene::InitCopyNodeTest	()
+{
+	auto add = [&] 
+	{ 
+		auto editor = m_project->GetProjectEditor();
+		auto scene = editor->GetScene( SCENE_NAME );
+		auto col = TestSceneUtils::ColoredRectangle( scene->GetTimeline(), COL_NODE, 0.3f, 0.3f, glm::vec4( 0.f, 1.f, 1.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
+		SetParameterTranslation( col->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.5f, 0.f ) );
+
+		bool success = true;
+
+		auto root = scene->GetRootNode();
+		editor->AddChildNode( scene, root, col );
+
+		//auto lChild = TestSceneUtils::ColoredRectangle( scene->GetTimeline(), "lChild", 0.1f, 0.1f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+		//SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
+		//auto rChild = TestSceneUtils::ColoredRectangle( scene->GetTimeline(), "rChild", 0.1f, 0.1f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
+		//SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
+		//editor->AddChildNode( scene, col, lChild );
+		//editor->AddChildNode( scene, col, rChild );
+		//success &= ( col->GetNumChildren() == 2 );
+
+        editor->AddScene( SCENE_NAME1 );
+        scene = editor->GetScene( SCENE_NAME1 );
+        root = model::BasicNode::Create( "root", nullptr );
+        success &= editor->AddChildNode( scene, nullptr, root );
+        success &= editor->AddPlugin( SCENE_NAME1, "root", "DEFAULT_TRANSFORM", "test", SCENE_NAME1, 0 );
+        editor->AddNodeCopy( SCENE_NAME1, "root", SCENE_NAME, "root/" + COL_NODE );
+
+        assert( success ); { success; }
+	};
+
+	m_testSteps.push_back( add );
 }
 
 // ****************************
