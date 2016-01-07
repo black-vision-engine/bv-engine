@@ -15,11 +15,20 @@ void pass0()
     float pixelW = 1.0 / textureSize.x;
 
     vec4 sum = vec4( 0, 0, 0, 0 );
-
+    float weight = 1.0;
     for( int i = int( -blurSize ); i <= int( blurSize ); ++i )
     {
+        // if( ( int( blurSize ) - abs( i ) )  < 2 )
+        // {
+            // weight = 1.0 / ( blurSize * 2.0 + 1.0 );
+        // }
+        // else
+        // {
+            // weight = 1.0;
+        // }
+        
         vec2 pixelDelta = vec2( i * pixelW, 0 );
-        sum += texture( Tex0, uvCoord + pixelDelta );
+        sum += texture( Tex0, uvCoord + pixelDelta ) * weight;
     }
 
     sum /= ( blurSize * 2.0 + 1.0 );
@@ -32,11 +41,20 @@ void pass1()
     float pixelH = 1.0 / textureSize.y;
 
     vec4 sum = vec4( 0, 0, 0, 0 );
-
+    float weight = 1.0;
     for( int i = int( -blurSize ); i <= int( blurSize ); ++i )
     {
+        // if( ( int( blurSize ) - abs( i ) )  < 2 )
+        // {
+            // weight = 1.0 / ( blurSize * 2.0 + 1.0 );
+        // }
+        // else
+        // {
+            // weight = 1.0;
+        // }
+    
         vec2 pixelDelta = vec2( 0, i * pixelH );
-        sum += texture( Tex0, uvCoord + pixelDelta );
+        sum += texture( Tex0, uvCoord + pixelDelta ) * weight;
     }
 
     sum /= ( blurSize * 2.0 + 1.0 );
