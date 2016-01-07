@@ -46,6 +46,7 @@
 #define XML
 #include "ConfigManager.h"
 
+#define HIDE_PROFILE_STATS
 
 namespace bv
 {
@@ -373,9 +374,10 @@ void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int m
 {
     if( m_statsCalculator.WasSampledMaxVal( DefaultConfig.FrameStatsSection() ) )
     {
-        unsigned int frame = m_statsCalculator.CurFrame() - 1;
+
 
 #ifndef HIDE_PROFILE_STATS
+                unsigned int frame = m_statsCalculator.CurFrame() - 1;
         FrameStatsFormatter::PrintFrameStatsToConsole( frame, m_statsCalculator, "LONGEST FRAME SO FAR", 10 );
         HPROFILER_SET_FORCED_DISPLAY();
 #endif

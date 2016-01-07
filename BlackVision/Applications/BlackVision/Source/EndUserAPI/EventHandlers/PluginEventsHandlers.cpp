@@ -59,6 +59,8 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
     IParameterPtr param;
     if( pluginName == "transform" )     // Hack for transformations. Maybe it's eternal hack.
         param = GetPluginParameter( sceneName, nodeName, pluginName, "simple_transform" );
+    else if( pluginName == "texture" && (paramName=="translation" || paramName=="scale") )     // Hack for transformations. Maybe it's eternal hack.
+        param = GetPluginParameter( sceneName, nodeName, pluginName, "txMat" );
     else
     {
         if( targetType == ParamKeyEvent::TargetType::PluginParam )
@@ -93,6 +95,27 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
             {
                 SetParameterScale( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
                 LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] scale: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+            }
+            else if( paramName == "rotation" )
+            {
+                glm::vec4 rotAxisAngle = SerializationHelper::String2Vec4( stringValue );
+                glm::vec3 rotAxis = glm::vec3( rotAxisAngle );
+
+                SetParameterRotation( param, 0, (bv::TimeType)keyTime, rotAxis, rotAxisAngle.w );
+                LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] rotation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+            }
+        }else if( pluginName == "texture" && (paramName=="translation" || paramName=="scale"))     // Only texture transform parameter
+        {
+            std::string stringValue = toString( value );
+            if( paramName == "translation" )
+            {
+                SetParameterTranslation( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
+                LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] translation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+            }
+            else if( paramName == "scale" )
+            {
+                bool success = SetParameterScale( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
+                LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] scale: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s"+std::to_string(success);
             }
             else if( paramName == "rotation" )
             {
