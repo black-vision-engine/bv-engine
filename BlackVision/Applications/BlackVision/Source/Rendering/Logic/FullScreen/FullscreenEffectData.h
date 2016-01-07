@@ -7,32 +7,23 @@
 
 namespace bv {
 
-class RenderTarget;
-
-
 class FullscreenEffectData
 {
 private:
-
-    RenderTarget *              m_outputRenderTarget;
 
     std::vector< Texture2DPtr > m_inputTextures;
 
 public:
 
 
-                    FullscreenEffectData    ( RenderTarget * outputRenderTarget = nullptr );
+                    FullscreenEffectData    ();
                     ~FullscreenEffectData   ();
 
-    void            SetOutputRenderTarget   ( RenderTarget * rt );
     void            AppendInputTexture      ( Texture2DPtr tex );
-
 
     unsigned int    GetNumTextures          () const;
 
     Texture2DPtr    GetInputTextureAt       ( unsigned int i );
-
-    RenderTarget *  GetOutputRenderTarget   ();
 
 };
 

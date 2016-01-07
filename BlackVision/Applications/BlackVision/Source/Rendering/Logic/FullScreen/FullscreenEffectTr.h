@@ -5,13 +5,14 @@
 
 namespace bv {
 
-class BaseFullscreenEffect
+class FullscreenEffectTr
 {
 public:
 
-    virtual         ~BaseFullscreenEffect() {}
+    virtual         ~FullscreenEffectTr();
 
     virtual void    Render( FullscreenEffectContext * ctx ) = 0;
 
-}; 
+};
+
 } //bv

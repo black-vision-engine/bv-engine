@@ -5,23 +5,18 @@ namespace bv {
 
 // **************************
 //
-FullscreenEffectContext::FullscreenEffectContext            ( Renderer * renderer, RenderTargetStackAllocator * allocator )
+FullscreenEffectContext::FullscreenEffectContext            ( Renderer * renderer, RenderTarget * outputRenderTarget, RenderTargetStackAllocator * allocator )
     : m_renderer( renderer )
+    , m_outputRenderTarget( nullptr )
     , m_rtAllocator( allocator )
 {
+    SetOutputRenderTarget( outputRenderTarget );
 }
 
 // **************************
 //
 FullscreenEffectContext::~FullscreenEffectContext           ()
 {
-}
-
-// **************************
-//
-FullscreenEffectData &          FullscreenEffectContext::AccessData                  ()
-{
-    return m_data;
 }
 
 // **************************
@@ -33,9 +28,23 @@ Renderer *                      FullscreenEffectContext::GetRenderer            
 
 // **************************
 //
+RenderTarget *                  FullscreenEffectContext::GetOutputRenderTarget       ()
+{
+    return m_outputRenderTarget;
+}
+
+// **************************
+//
 RenderTargetStackAllocator *    FullscreenEffectContext::GetRenderTargetAllocator    ()
 {
     return m_rtAllocator;
+}
+
+// **************************
+//
+void                            FullscreenEffectContext::SetOutputRenderTarget       ( RenderTarget * rt )
+{
+    m_outputRenderTarget = rt;
 }
 
 } //bv

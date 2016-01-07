@@ -1,30 +1,29 @@
 #pragma once
 
-#include "Rendering/Logic/FullScreen/FullscreenEffectData.h"
-
 
 namespace bv {
 
 class Renderer;
+class RenderTarget;
 class RenderTargetStackAllocator;
 
 class FullscreenEffectContext
 {
 private:
 
-    FullscreenEffectData            m_data;
-
     Renderer *                      m_renderer;
-
+    RenderTarget *                  m_outputRenderTarget;
     RenderTargetStackAllocator *    m_rtAllocator;
 
 public:
-                                    FullscreenEffectContext     ( Renderer * renderer, RenderTargetStackAllocator * allocator );
+                                    FullscreenEffectContext     ( Renderer * renderer, RenderTarget * outputRenderTarget, RenderTargetStackAllocator * allocator );
                                     ~FullscreenEffectContext    ();
 
-    FullscreenEffectData &          AccessData                  ();
     Renderer *                      GetRenderer                 ();
+    RenderTarget *                  GetOutputRenderTarget       ();
     RenderTargetStackAllocator *    GetRenderTargetAllocator    ();
+
+    void                            SetOutputRenderTarget       ( RenderTarget * rt );
 
 };
 
