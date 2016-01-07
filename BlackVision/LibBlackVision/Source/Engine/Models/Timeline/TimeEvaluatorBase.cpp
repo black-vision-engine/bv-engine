@@ -46,7 +46,7 @@ ITimeEvaluator*            TimeEvaluatorBase< ITimeEvaluator >::Clone           
 //
 ITimeEvaluator*            TimeEvaluatorBase< ITimeline >::Clone               () const
 {
-    auto thisTE = dynamic_cast< const TimeEvaluatorBase< ITimeEvaluator >* >( this );
+    auto thisTE = reinterpret_cast< const TimeEvaluatorBase< ITimeEvaluator >* >( this );
     auto clone = CloneViaSerialization::Clone< TimeEvaluatorBase< ITimeEvaluator > >( thisTE, "timeline" );
     return clone;
 }

@@ -774,178 +774,188 @@ void					TestScene::InitTimelinesTest		()
 {
 	m_testSteps.push_back([&] 
 	{
-		auto editor = m_project->GetProjectEditor();
-		bool success = true;
-
+        auto editor = m_project->GetProjectEditor();
         editor->AddTimeline( SCENE_NAME, TIMELINE_NAME, TimelineType::TT_DEFAULT );
 
-		success &= ( m_timelineManager->GetTimeline( SCENE_NAME + "/" + TIMELINE_NAME ) != nullptr );
+        auto scene = editor->GetScene( SCENE_NAME );
+        auto copy = editor->AddSceneCopy( SCENE_NAME );
+        model::TimelineHelper::CopyTimelines( copy->GetTimeline(), scene->GetTimeline()->GetChildren() );        
+        model::TimelineHelper::CopyTimelines( copy->GetTimeline(), scene->GetTimeline()->GetChildren() );        
+    });
+	//m_testSteps.push_back([&] 
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	bool success = true;
 
-		assert( success );
-	});
+ //       editor->AddTimeline( SCENE_NAME, TIMELINE_NAME, TimelineType::TT_DEFAULT );
 
-	m_testSteps.push_back([&] 
-	{
-		auto editor = m_project->GetProjectEditor();
-		bool success = true;
+	//	success &= ( m_timelineManager->GetTimeline( SCENE_NAME + "/" + TIMELINE_NAME ) != nullptr );
 
-		editor->RenameTimeline( SCENE_NAME + "/" + TIMELINE_NAME, TIMELINE_NAME1 );
+	//	assert( success );
+	//});
 
-		success &= ( m_timelineManager->GetTimeline( SCENE_NAME + "/" + TIMELINE_NAME ) == nullptr );
-		success &= ( m_timelineManager->GetTimeline( SCENE_NAME + "/" + TIMELINE_NAME1 ) != nullptr );
+	//m_testSteps.push_back([&] 
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	bool success = true;
 
-		assert( success );
-	});
+	//	editor->RenameTimeline( SCENE_NAME + "/" + TIMELINE_NAME, TIMELINE_NAME1 );
 
-	m_testSteps.push_back([&] 
-	{
-		auto editor = m_project->GetProjectEditor();
-		bool success = true;
+	//	success &= ( m_timelineManager->GetTimeline( SCENE_NAME + "/" + TIMELINE_NAME ) == nullptr );
+	//	success &= ( m_timelineManager->GetTimeline( SCENE_NAME + "/" + TIMELINE_NAME1 ) != nullptr );
 
-		success &= editor->DeleteTimeline( SCENE_NAME + "/" + TIMELINE_NAME1 );
+	//	assert( success );
+	//});
 
-		assert( success );
-	});
+	//m_testSteps.push_back([&] 
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	bool success = true;
 
-	m_testSteps.push_back([&] 
-	{
-		auto editor = m_project->GetProjectEditor();
-		auto scene = editor->GetScene( SCENE_NAME );
+	//	success &= editor->DeleteTimeline( SCENE_NAME + "/" + TIMELINE_NAME1 );
 
-		auto timeline = model::TimelineHelper::CreateDefaultTimeline( TIMELINE_NAME, 1.0, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-        editor->AddTimeline( scene->GetTimeline(), timeline );
+	//	assert( success );
+	//});
 
-		auto tex = TestSceneUtils::TexturedRectangle( timeline, TEX_NODE, 0.3f, 0.3f, TestSceneUtils::TEXTURE_PATH );
-		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
+	//m_testSteps.push_back([&] 
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	auto scene = editor->GetScene( SCENE_NAME );
 
-		auto root = scene->GetRootNode();
-		editor->AddChildNode( scene, root, tex );
-	});
+	//	auto timeline = model::TimelineHelper::CreateDefaultTimeline( TIMELINE_NAME, 1.0, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+ //       editor->AddTimeline( scene->GetTimeline(), timeline );
 
-	m_testSteps.push_back([&] 
-	{
-		auto editor = m_project->GetProjectEditor();
-		bool success = true;
+	//	auto tex = TestSceneUtils::TexturedRectangle( timeline, TEX_NODE, 0.3f, 0.3f, TestSceneUtils::TEXTURE_PATH );
+	//	SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
 
-		success &= (!editor->DeleteTimeline( SCENE_NAME + "/" + TIMELINE_NAME ) );
+	//	auto root = scene->GetRootNode();
+	//	editor->AddChildNode( scene, root, tex );
+	//});
 
-		assert( success );
-	});
+	//m_testSteps.push_back([&] 
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	bool success = true;
 
-	m_testSteps.push_back([&] 
-	{
-		auto editor = m_project->GetProjectEditor();
-		auto scene = editor->GetScene( SCENE_NAME );
-		bool success = true;
+	//	success &= (!editor->DeleteTimeline( SCENE_NAME + "/" + TIMELINE_NAME ) );
 
-		auto oldTimeline = SCENE_NAME + "/" + TIMELINE_NAME;
-		auto newTimeline = SCENE_NAME + "/" + TIMELINE_NAME1;
-		
-		auto time = m_timeEvaluator->GetLocalTime();
-		auto timeline = model::TimelineHelper::CreateDefaultTimeline( TIMELINE_NAME1, time+2.0f, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-		editor->AddTimeline( scene->GetTimeline(), timeline );
-		timeline->Play();
-		
-		success &= (!editor->DeleteTimeline( oldTimeline ) );
-		
-		editor->ForceDeleteTimeline( oldTimeline, newTimeline );
+	//	assert( success );
+	//});
 
-		success &= ( m_timelineManager->GetTimeline( oldTimeline ) == nullptr );
-		success &= ( m_timelineManager->GetTimeline( newTimeline ) != nullptr );
+	//m_testSteps.push_back([&] 
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	auto scene = editor->GetScene( SCENE_NAME );
+	//	bool success = true;
 
-		assert( success );
-	});
+	//	auto oldTimeline = SCENE_NAME + "/" + TIMELINE_NAME;
+	//	auto newTimeline = SCENE_NAME + "/" + TIMELINE_NAME1;
+	//	
+	//	auto time = m_timeEvaluator->GetLocalTime();
+	//	auto timeline = model::TimelineHelper::CreateDefaultTimeline( TIMELINE_NAME1, time+2.0f, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+	//	editor->AddTimeline( scene->GetTimeline(), timeline );
+	//	timeline->Play();
+	//	
+	//	success &= (!editor->DeleteTimeline( oldTimeline ) );
+	//	
+	//	editor->ForceDeleteTimeline( oldTimeline, newTimeline );
 
-	m_testSteps.push_back([&] 
-	{
-		auto editor = m_project->GetProjectEditor();
-		auto scene = editor->GetScene( SCENE_NAME );
-		auto child = scene->GetRootNode()->GetChild( TEX_NODE );
-		auto time = m_timeEvaluator->GetLocalTime();
-		SetParameter( child->GetPlugin( "texture" )->GetParameter( "alpha" ), time, 1.f );
-		SetParameter( child->GetPlugin( "texture" )->GetParameter( "alpha" ), time+2.f, 0.f );
-	});
-	
-	Wait( 1 );
+	//	success &= ( m_timelineManager->GetTimeline( oldTimeline ) == nullptr );
+	//	success &= ( m_timelineManager->GetTimeline( newTimeline ) != nullptr );
 
-	m_testSteps.push_back([&] 
-	{
-		auto editor = m_project->GetProjectEditor();
-		auto scene = editor->GetScene( SCENE_NAME );
-		bool success = true;
+	//	assert( success );
+	//});
 
-		auto newTimeline = SCENE_NAME + "/" + TIMELINE_NAME;
-		auto oldTimeline = SCENE_NAME + "/" + TIMELINE_NAME1;
-		
-		auto timeline = model::TimelineHelper::CreateDefaultTimeline( TIMELINE_NAME, 2.0f, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_REPEAT );
-		editor->AddTimeline( scene->GetTimeline(), timeline );
-		timeline->Play();
-		
-		success &= (!editor->DeleteTimeline( oldTimeline ) );
-		
-		editor->ForceDeleteTimeline( oldTimeline, newTimeline );
+	//m_testSteps.push_back([&] 
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	auto scene = editor->GetScene( SCENE_NAME );
+	//	auto child = scene->GetRootNode()->GetChild( TEX_NODE );
+	//	auto time = m_timeEvaluator->GetLocalTime();
+	//	SetParameter( child->GetPlugin( "texture" )->GetParameter( "alpha" ), time, 1.f );
+	//	SetParameter( child->GetPlugin( "texture" )->GetParameter( "alpha" ), time+2.f, 0.f );
+	//});
+	//
+	//Wait( 1 );
 
-		success &= ( m_timelineManager->GetTimeline( oldTimeline ) == nullptr );
-		success &= ( m_timelineManager->GetTimeline( newTimeline ) != nullptr );
+	//m_testSteps.push_back([&] 
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	auto scene = editor->GetScene( SCENE_NAME );
+	//	bool success = true;
 
-		auto child = scene->GetRootNode()->GetChild( TEX_NODE );
-		SetParameter( child->GetPlugin( "texture" )->GetParameter( "alpha" ), 0.f, 1.f );
-		SetParameter( child->GetPlugin( "texture" )->GetParameter( "alpha" ), 2.f, 0.f );
-		success &= ( child->GetPlugin( "texture" )->GetParameter( "alpha" )->GetTimeEvaluator()->GetName() == TIMELINE_NAME );
+	//	auto newTimeline = SCENE_NAME + "/" + TIMELINE_NAME;
+	//	auto oldTimeline = SCENE_NAME + "/" + TIMELINE_NAME1;
+	//	
+	//	auto timeline = model::TimelineHelper::CreateDefaultTimeline( TIMELINE_NAME, 2.0f, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_REPEAT );
+	//	editor->AddTimeline( scene->GetTimeline(), timeline );
+	//	timeline->Play();
+	//	
+	//	success &= (!editor->DeleteTimeline( oldTimeline ) );
+	//	
+	//	editor->ForceDeleteTimeline( oldTimeline, newTimeline );
 
-		assert( success );
-	});
+	//	success &= ( m_timelineManager->GetTimeline( oldTimeline ) == nullptr );
+	//	success &= ( m_timelineManager->GetTimeline( newTimeline ) != nullptr );
 
-	Wait( 2 );
+	//	auto child = scene->GetRootNode()->GetChild( TEX_NODE );
+	//	SetParameter( child->GetPlugin( "texture" )->GetParameter( "alpha" ), 0.f, 1.f );
+	//	SetParameter( child->GetPlugin( "texture" )->GetParameter( "alpha" ), 2.f, 0.f );
+	//	success &= ( child->GetPlugin( "texture" )->GetParameter( "alpha" )->GetTimeEvaluator()->GetName() == TIMELINE_NAME );
 
-	m_testSteps.push_back([&] 
-	{
-		auto editor = m_project->GetProjectEditor();
-		auto scene = editor->GetScene( SCENE_NAME );
-		bool success = true;
+	//	assert( success );
+	//});
 
-		auto timeline = SCENE_NAME + "/" + TIMELINE_NAME;
-		editor->SetTimelineDuration( timeline, 3.f );
-		
-		success &= ( m_timelineManager->GetTimeline( timeline ) != nullptr );
-		success &= ( m_timelineManager->GetTimeline( timeline )->GetDuration() == 3.f );
+	//Wait( 2 );
 
-		assert( success );
-	});
+	//m_testSteps.push_back([&] 
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	auto scene = editor->GetScene( SCENE_NAME );
+	//	bool success = true;
 
-	Wait( 3 );
+	//	auto timeline = SCENE_NAME + "/" + TIMELINE_NAME;
+	//	editor->SetTimelineDuration( timeline, 3.f );
+	//	
+	//	success &= ( m_timelineManager->GetTimeline( timeline ) != nullptr );
+	//	success &= ( m_timelineManager->GetTimeline( timeline )->GetDuration() == 3.f );
 
-	m_testSteps.push_back([&] 
-	{
-		auto editor = m_project->GetProjectEditor();
-		auto scene = editor->GetScene( SCENE_NAME );
-		bool success = true;
+	//	assert( success );
+	//});
 
-		auto timeline = SCENE_NAME + "/" + TIMELINE_NAME;
-		editor->SetTimelineWrapPostBehavior( timeline, TimelineWrapMethod::TWM_CLAMP );
-		
-		success &= ( m_timelineManager->GetTimeline( timeline ) != nullptr );
-		success &= ( m_timelineManager->GetTimeline( timeline )->GetDuration() == 3.f );
-		success &= ( m_timelineManager->GetTimeline( timeline )->GetWrapBehaviorPost() == TimelineWrapMethod::TWM_CLAMP );
+	//Wait( 3 );
 
-		assert( success );
-	});
+	//m_testSteps.push_back([&] 
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	auto scene = editor->GetScene( SCENE_NAME );
+	//	bool success = true;
 
-	m_testSteps.push_back([&] 
-	{
-		auto editor = m_project->GetProjectEditor();
-		auto scene = editor->GetScene( SCENE_NAME );
-		bool success = true;
+	//	auto timeline = SCENE_NAME + "/" + TIMELINE_NAME;
+	//	editor->SetTimelineWrapPostBehavior( timeline, TimelineWrapMethod::TWM_CLAMP );
+	//	
+	//	success &= ( m_timelineManager->GetTimeline( timeline ) != nullptr );
+	//	success &= ( m_timelineManager->GetTimeline( timeline )->GetDuration() == 3.f );
+	//	success &= ( m_timelineManager->GetTimeline( timeline )->GetWrapBehaviorPost() == TimelineWrapMethod::TWM_CLAMP );
 
-		auto timeline = SCENE_NAME + "/" + TIMELINE_NAME;
-		editor->SetTimelineDuration( timeline, 0.5f );
-		
-		success &= ( m_timelineManager->GetTimeline( timeline ) != nullptr );
-		success &= ( m_timelineManager->GetTimeline( timeline )->GetDuration() == 0.5f );
-		success &= ( m_timelineManager->GetTimeline( timeline )->GetWrapBehaviorPost() == TimelineWrapMethod::TWM_CLAMP );
+	//	assert( success );
+	//});
 
-		assert( success );
-	});
+	//m_testSteps.push_back([&] 
+	//{
+	//	auto editor = m_project->GetProjectEditor();
+	//	auto scene = editor->GetScene( SCENE_NAME );
+	//	bool success = true;
+
+	//	auto timeline = SCENE_NAME + "/" + TIMELINE_NAME;
+	//	editor->SetTimelineDuration( timeline, 0.5f );
+	//	
+	//	success &= ( m_timelineManager->GetTimeline( timeline ) != nullptr );
+	//	success &= ( m_timelineManager->GetTimeline( timeline )->GetDuration() == 0.5f );
+	//	success &= ( m_timelineManager->GetTimeline( timeline )->GetWrapBehaviorPost() == TimelineWrapMethod::TWM_CLAMP );
+
+	//	assert( success );
+	//});
 }
 
 // ****************************
@@ -1071,9 +1081,9 @@ void					TestScene::InitAssetsTest		()
 //
 void					TestScene::InitTestEditor			()
 {
-	InitTestModelSceneEditor();
+	//InitTestModelSceneEditor();
 
-	//InitTimelinesTest();
+	InitTimelinesTest();
 
 	//InitAssetsTest();
 

@@ -134,23 +134,21 @@ DefaultTimeline *                     DefaultTimeline::Create              ( con
 
     if( deser.EnterChild( "events" ) )
     {
-        do
-        {
-            deser.EnterChild( "event" );
-            auto type = deser.GetAttribute( "type" );
-            if( type == "loop" )
-                te->AddKeyFrame( TimelineEventLoop::Create( deser, te ) );
-            else if( type == "null" )
-                te->AddKeyFrame( TimelineEventNull::Create( deser, te ) );
-            else if( type == "stop" )
-                te->AddKeyFrame( TimelineEventStop::Create( deser, te ) );
-            else
-                assert( false );
-            deser.ExitChild(); // event
-        }
-        while( deser.NextChild() ); // events
+        if( deser.EnterChild( "event" ) )
+            do
+            {
+                auto type = deser.GetAttribute( "type" );
+                if( type == "loop" )
+                    te->AddKeyFrame( TimelineEventLoop::Create( deser, te ) );
+                else if( type == "null" )
+                    te->AddKeyFrame( TimelineEventNull::Create( deser, te ) );
+                else if( type == "stop" )
+                    te->AddKeyFrame( TimelineEventStop::Create( deser, te ) );
+                else
+                    assert( false );
+            }while( deser.NextChild() ); // event
         
-        deser.ExitChild();
+        deser.ExitChild(); // events
     }
 
     auto children = SerializationHelper::DeserializeArray< TimeEvaluatorBase< ITimeEvaluator > >( deser, "children", "timeline" );

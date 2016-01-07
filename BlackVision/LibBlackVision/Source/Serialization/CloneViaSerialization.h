@@ -20,7 +20,7 @@ T*                              Clone( const T* obj, std::string name, model::Of
     std::stringstream ss;
     ser.Save( ss );
 
-    //ser.Save( "clone.xml" ); // for debugging only
+    ser.Save( "clone.xml" ); // for debugging only
 
     XMLDeserializer deser( ss, ss.tellp() );
 
