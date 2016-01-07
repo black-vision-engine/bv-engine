@@ -21,7 +21,7 @@ private:
 public:
 
 
-                    FullscreenEffectData    ( RenderTarget * outputRenderTarget );
+                    FullscreenEffectData    ( RenderTarget * outputRenderTarget = nullptr );
                     ~FullscreenEffectData   ();
 
     void            SetOutputRenderTarget   ( RenderTarget * rt );
@@ -35,4 +35,5 @@ public:
     RenderTarget *  GetOutputRenderTarget   ();
 
 };
+
 } //bv
