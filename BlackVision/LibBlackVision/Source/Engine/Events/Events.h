@@ -451,13 +451,22 @@ public:
     typedef enum
     {
         NewProject,
+        LoadProject,
         SetCurrentProject,
+        MoveProject,
+        DeleteProject,
+        RenameProject,
+
+        AddExistingSceneToProject,
+        RemoveSceneFromProject,
+        CreateSceneInProject,
+
         SaveScene,
         LoadScene,
         RemoveScene,
         CopyScene,
         MoveScene,
-        LoadProject,
+
         CopyAsset,
         MoveAsset,
         RemoveAsset,

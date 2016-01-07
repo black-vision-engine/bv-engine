@@ -240,16 +240,24 @@ std::pair< ProjectEvent::Command, const std::wstring > ProjectEventCommandMappin
     , std::make_pair( ProjectEvent::Command::RemoveScene, L"RemoveScene" )
     , std::make_pair( ProjectEvent::Command::CopyScene, L"CopyScene" )
     , std::make_pair( ProjectEvent::Command::MoveScene, L"MoveScene" )
+
+    , std::make_pair( ProjectEvent::Command::AddExistingSceneToProject, L"AddExistingSceneToProject" )
+    , std::make_pair( ProjectEvent::Command::RemoveSceneFromProject, L"RemoveSceneFromProject" )
+    , std::make_pair( ProjectEvent::Command::CreateSceneInProject, L"CreateSceneInProject" )
+
     , std::make_pair( ProjectEvent::Command::LoadProject, L"LoadProject" ) 
     , std::make_pair( ProjectEvent::Command::NewProject, L"NewProject" ) 
     , std::make_pair( ProjectEvent::Command::SetCurrentProject, L"SetCurrentProject" )
+    , std::make_pair( ProjectEvent::Command::MoveProject, L"MoveProject" )
+    , std::make_pair( ProjectEvent::Command::DeleteProject, L"DeleteProject" )
+    , std::make_pair( ProjectEvent::Command::RenameProject, L"RenameProject" )
+
     , std::make_pair( ProjectEvent::Command::CopyAsset, L"CopyAsset" ) 
     , std::make_pair( ProjectEvent::Command::MoveAsset, L"MoveAsset" ) 
     , std::make_pair( ProjectEvent::Command::RemoveAsset, L"RemoveAsset" ) 
     , std::make_pair( ProjectEvent::Command::ImportAsset, L"ImportAsset" ) 
     , std::make_pair( ProjectEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
-
 
 template<> ProjectEvent::Command WString2T  ( const std::wstring& s, const ProjectEvent::Command& defaultVal )  { return WString2T( ProjectEventCommandMapping, s, defaultVal ); }
 template<> const std::wstring& T2WString    ( ProjectEvent::Command t )                                         { return Enum2WString( ProjectEventCommandMapping, t ); }

@@ -419,9 +419,34 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         SendSimpleResponse( command, projectEvent->EventID, senderID, true );
     }
+    else if( command == ProjectEvent::Command::MoveProject )
+    {
+
+    }
+    else if( command == ProjectEvent::Command::DeleteProject )
+    {
+
+    }
+    else if( command == ProjectEvent::Command::RenameProject )
+    {
+
+    }
+    else if( command == ProjectEvent::Command::AddExistingSceneToProject )
+    {
+
+    }
+    else if( command == ProjectEvent::Command::RemoveSceneFromProject )
+    {
+
+    }
+    else if( command == ProjectEvent::Command::CreateSceneInProject )
+    {
+
+    }
+    else
+        SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Unknown command" );
 
 }
-
 
 // ***********************
 //
