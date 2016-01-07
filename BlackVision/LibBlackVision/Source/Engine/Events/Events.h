@@ -201,7 +201,7 @@ public:
 };
 
 
-template<> LoadAssetEvent::Command  SerializationHelper::WString2T      ( const std::wstring& s );
+template<> LoadAssetEvent::Command  SerializationHelper::WString2T      ( const std::wstring& s, const LoadAssetEvent::Command& defaultVal );
 template<> const std::wstring&      SerializationHelper::T2WString      ( LoadAssetEvent::Command t );
 
 DEFINE_PTR_TYPE( LoadAssetEvent )
@@ -257,10 +257,10 @@ public:
     static std::string&             Name                ();
 };
 
-template<> ParamKeyEvent::Command       SerializationHelper::WString2T      ( const std::wstring& s );
+template<> ParamKeyEvent::Command       SerializationHelper::WString2T      ( const std::wstring& s, const ParamKeyEvent::Command& defaultVal );
 template<> const std::wstring&          SerializationHelper::T2WString      ( ParamKeyEvent::Command t );
 
-template<> ParamKeyEvent::TargetType    SerializationHelper::WString2T      ( const std::wstring& s );
+template<> ParamKeyEvent::TargetType    SerializationHelper::WString2T      ( const std::wstring& s, const ParamKeyEvent::TargetType& defaultVal );
 template<> const std::wstring&          SerializationHelper::T2WString      ( ParamKeyEvent::TargetType t );
 
 DEFINE_PTR_TYPE( ParamKeyEvent )
@@ -300,7 +300,7 @@ public:
     static std::string&             Name                ();
 };
 
-template<> AssetEvent::Command SerializationHelper::WString2T   ( const std::wstring& s );
+template<> AssetEvent::Command SerializationHelper::WString2T   ( const std::wstring& s, const AssetEvent::Command& defaultVal );
 template<> const std::wstring& SerializationHelper::T2WString   ( AssetEvent::Command t );
 
 DEFINE_PTR_TYPE( AssetEvent )
@@ -345,7 +345,7 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> SceneEvent::Command SerializationHelper::WString2T ( const std::wstring& s );
+template<> SceneEvent::Command SerializationHelper::WString2T ( const std::wstring& s, const SceneEvent::Command& defaultVal );
 template<> const std::wstring& SerializationHelper::T2WString    ( SceneEvent::Command t );
 
 DEFINE_PTR_TYPE( SceneEvent )
@@ -393,8 +393,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> NodeStructureEvent::Command      SerializationHelper::WString2T ( const std::wstring& s );
-template<> const std::wstring&              SerializationHelper::T2WString    ( NodeStructureEvent::Command t );
+template<> NodeStructureEvent::Command      SerializationHelper::WString2T      ( const std::wstring& s, const NodeStructureEvent::Command& defaultVal );
+template<> const std::wstring&              SerializationHelper::T2WString      ( NodeStructureEvent::Command t );
 
 DEFINE_PTR_TYPE( NodeStructureEvent )
 
@@ -438,7 +438,7 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> PluginStructureEvent::Command    SerializationHelper::WString2T( const std::wstring& s );
+template<> PluginStructureEvent::Command    SerializationHelper::WString2T( const std::wstring& s, const PluginStructureEvent::Command& defaultVal );
 template<> const std::wstring&              SerializationHelper::T2WString( PluginStructureEvent::Command t );
 
 DEFINE_PTR_TYPE( PluginStructureEvent )
@@ -451,13 +451,22 @@ public:
     typedef enum
     {
         NewProject,
+        LoadProject,
         SetCurrentProject,
+        MoveProject,
+        DeleteProject,
+        RenameProject,
+
+        AddExistingSceneToProject,
+        RemoveSceneFromProject,
+        CreateSceneInProject,
+
         SaveScene,
         LoadScene,
         RemoveScene,
         CopyScene,
         MoveScene,
-        LoadProject,
+
         CopyAsset,
         MoveAsset,
         RemoveAsset,
@@ -483,7 +492,7 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> ProjectEvent::Command    SerializationHelper::WString2T  ( const std::wstring& s );
+template<> ProjectEvent::Command    SerializationHelper::WString2T  ( const std::wstring& s, const ProjectEvent::Command& defaultVal );
 template<> const std::wstring&      SerializationHelper::T2WString  ( ProjectEvent::Command t );
 
 DEFINE_PTR_TYPE( ProjectEvent )
@@ -555,7 +564,7 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> InfoEvent::Command       SerializationHelper::WString2T       ( const std::wstring& s );
+template<> InfoEvent::Command       SerializationHelper::WString2T       ( const std::wstring& s, const InfoEvent::Command& defaultVal );
 template<> const std::wstring&      SerializationHelper::T2WString       ( InfoEvent::Command t );
 
 DEFINE_PTR_TYPE( InfoEvent )
@@ -614,7 +623,7 @@ public:
 
 };
 
-template<> TimeLineEvent::Command   SerializationHelper::WString2T  ( const std::wstring & s );
+template<> TimeLineEvent::Command   SerializationHelper::WString2T  ( const std::wstring& s, const TimeLineEvent::Command& defaultVal );
 template<> const std::wstring &     SerializationHelper::T2WString  ( TimeLineEvent::Command t );
 
 DEFINE_PTR_TYPE( TimeLineEvent )
@@ -659,7 +668,7 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> TimerEvent::Command      SerializationHelper::WString2T    ( const std::wstring& s );
+template<> TimerEvent::Command      SerializationHelper::WString2T    ( const std::wstring& s, const TimerEvent::Command& defaultVal );
 template<> const std::wstring&      SerializationHelper::T2WString    ( TimerEvent::Command t );
 
 DEFINE_PTR_TYPE( TimerEvent )
@@ -697,7 +706,7 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> WidgetEvent::Command     SerializationHelper::WString2T      ( const std::wstring& s );
+template<> WidgetEvent::Command     SerializationHelper::WString2T      ( const std::wstring& s, const WidgetEvent::Command& defaultVal );
 template<> const std::wstring&      SerializationHelper::T2WString      ( WidgetEvent::Command t );
 
 DEFINE_PTR_TYPE( WidgetEvent )
@@ -789,7 +798,7 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> RenderingModeEvent::Command  SerializationHelper::WString2T  ( const std::wstring& s );
+template<> RenderingModeEvent::Command  SerializationHelper::WString2T  ( const std::wstring& s, const RenderingModeEvent::Command& defaultVal );
 template<> const std::wstring&          SerializationHelper::T2WString  ( RenderingModeEvent::Command t );
 
 DEFINE_PTR_TYPE( RenderingModeEvent )
@@ -828,7 +837,7 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> GlobalEffectEvent::Command   SerializationHelper::WString2T  ( const std::wstring& s );
+template<> GlobalEffectEvent::Command   SerializationHelper::WString2T  ( const std::wstring& s, const GlobalEffectEvent::Command& defaultVal );
 template<> const std::wstring&          SerializationHelper::T2WString  ( GlobalEffectEvent::Command t );
 
 DEFINE_PTR_TYPE( GlobalEffectEvent )
@@ -862,6 +871,7 @@ public:
     TimelineKeyframeEvent::KeyframeType NewKeyframeType;
     std::string                         TimelinePath;
     std::string                         KeyframeName;
+    int                                 KeyframeIndex;
 
     float                               Time;
     float                               JumpToTime;
@@ -880,10 +890,10 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> TimelineKeyframeEvent::Command   SerializationHelper::WString2T  ( const std::wstring& s );
+template<> TimelineKeyframeEvent::Command   SerializationHelper::WString2T  ( const std::wstring& s, const TimelineKeyframeEvent::Command& defaultVal );
 template<> const std::wstring&              SerializationHelper::T2WString  ( TimelineKeyframeEvent::Command t );
 
-template<> TimelineKeyframeEvent::KeyframeType  SerializationHelper::WString2T   ( const std::wstring& s );
+template<> TimelineKeyframeEvent::KeyframeType  SerializationHelper::WString2T   ( const std::wstring& s, const TimelineKeyframeEvent::KeyframeType& defaultVal );
 template<> const std::wstring&                  SerializationHelper::T2WString   ( TimelineKeyframeEvent::KeyframeType t );
 
 DEFINE_PTR_TYPE( TimelineKeyframeEvent )
@@ -929,7 +939,7 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> HightmapEvent::Command       SerializationHelper::WString2T      ( const std::wstring& s );
+template<> HightmapEvent::Command       SerializationHelper::WString2T      ( const std::wstring& s, const HightmapEvent::Command& defaultVal );
 template<> const std::wstring&          SerializationHelper::T2WString      ( HightmapEvent::Command t );
 
 DEFINE_PTR_TYPE( HightmapEvent )

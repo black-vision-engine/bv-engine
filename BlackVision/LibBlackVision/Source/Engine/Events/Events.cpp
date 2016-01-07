@@ -9,6 +9,8 @@
 #include "Serialization/IDeserializer.h"
 #include "EventHelpers.h"
 
+#include <limits>
+
 namespace bv 
 {
 
@@ -44,7 +46,7 @@ std::string NodeStructureEvent::m_sEventName        = "NodeStructureEvent";
 const EventType PluginStructureEvent::m_sEventType  = 0x30000015;
 std::string PluginStructureEvent::m_sEventName      = "PluginStructureEvent";
 
-const EventType ProjectEvent::m_sEventType          = 0x30000013;
+const EventType ProjectEvent::m_sEventType          = 0x30000001;
 std::string ProjectEvent::m_sEventName              = "ProjectEvent";
 
 const EventType ResponseEvent::m_sEventType         = 0x30000008;
@@ -111,8 +113,8 @@ std::pair< LoadAssetEvent::Command, const std::wstring > LoadAssetMapping[] =
     , std::make_pair( LoadAssetEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> LoadAssetEvent::Command WString2T ( const std::wstring& s )    { return WString2T( LoadAssetMapping, s ); }
-template<> const std::wstring& T2WString    ( LoadAssetEvent::Command t ) { return Enum2WString( LoadAssetMapping, t ); }
+template<> LoadAssetEvent::Command WString2T    ( const std::wstring& s, const LoadAssetEvent::Command& defaultVal )    { return WString2T( LoadAssetMapping, s, defaultVal ); }
+template<> const std::wstring& T2WString        ( LoadAssetEvent::Command t )                                           { return Enum2WString( LoadAssetMapping, t ); }
 
 // ========================================================================= //
 // ParamKeyEvent
@@ -133,8 +135,8 @@ std::pair< ParamKeyEvent::Command, const std::wstring > ParameterCommandMapping[
     , std::make_pair( ParamKeyEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> ParamKeyEvent::Command WString2T ( const std::wstring& s )    { return WString2T( ParameterCommandMapping, s ); }
-template<> const std::wstring& T2WString    ( ParamKeyEvent::Command t ) { return Enum2WString( ParameterCommandMapping, t ); }
+template<> ParamKeyEvent::Command WString2T ( const std::wstring& s, const ParamKeyEvent::Command& defaultVal )     { return WString2T( ParameterCommandMapping, s, defaultVal ); }
+template<> const std::wstring& T2WString    ( ParamKeyEvent::Command t )                                            { return Enum2WString( ParameterCommandMapping, t ); }
 
 
 std::pair< ParamKeyEvent::TargetType, const std::wstring > TargetTypeMapping[] = 
@@ -144,8 +146,8 @@ std::pair< ParamKeyEvent::TargetType, const std::wstring > TargetTypeMapping[] =
     , std::make_pair( ParamKeyEvent::TargetType::FailTarget, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> ParamKeyEvent::TargetType WString2T      ( const std::wstring& s )           { return WString2T( TargetTypeMapping, s ); }
-template<> const std::wstring& T2WString            ( ParamKeyEvent::TargetType t )     { return Enum2WString( TargetTypeMapping, t ); }
+template<> ParamKeyEvent::TargetType WString2T      ( const std::wstring& s, const ParamKeyEvent::TargetType& defaultVal )      { return WString2T( TargetTypeMapping, s, defaultVal ); }
+template<> const std::wstring& T2WString            ( ParamKeyEvent::TargetType t )                                             { return Enum2WString( TargetTypeMapping, t ); }
 
 // ========================================================================= //
 // AssetEvent
@@ -157,8 +159,8 @@ std::pair< AssetEvent::Command, const std::wstring > AssetCommandMapping[] =
     , std::make_pair( AssetEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> AssetEvent::Command WString2T ( const std::wstring& s )    { return WString2T( AssetCommandMapping, s ); }
-template<> const std::wstring& T2WString    ( AssetEvent::Command t ) { return Enum2WString( AssetCommandMapping, t ); }
+template<> AssetEvent::Command WString2T    ( const std::wstring& s, const AssetEvent::Command& defaultVal )    { return WString2T( AssetCommandMapping, s, defaultVal ); }
+template<> const std::wstring& T2WString    ( AssetEvent::Command t )                                           { return Enum2WString( AssetCommandMapping, t ); }
 
 
 // ========================================================================= //
@@ -181,8 +183,8 @@ std::pair< SceneEvent::Command, const std::wstring > SceneCommandMapping[] =
     , std::make_pair( SceneEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> SceneEvent::Command WString2T ( const std::wstring& s )    { return WString2T( SceneCommandMapping, s ); }
-template<> const std::wstring& T2WString    ( SceneEvent::Command t ) { return Enum2WString( SceneCommandMapping, t ); }
+template<> SceneEvent::Command WString2T    ( const std::wstring& s, const SceneEvent::Command& defaultVal )    { return WString2T( SceneCommandMapping, s, defaultVal ); }
+template<> const std::wstring& T2WString    ( SceneEvent::Command t )                                           { return Enum2WString( SceneCommandMapping, t ); }
 
 
 // ========================================================================= //
@@ -204,8 +206,8 @@ std::pair< NodeStructureEvent::Command, const std::wstring > NodeStructureComman
     , std::make_pair( NodeStructureEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> NodeStructureEvent::Command WString2T ( const std::wstring& s )    { return WString2T( NodeStructureCommandMapping, s ); }
-template<> const std::wstring& T2WString    ( NodeStructureEvent::Command t ) { return Enum2WString( NodeStructureCommandMapping, t ); }
+template<> NodeStructureEvent::Command  WString2T   ( const std::wstring& s, const NodeStructureEvent::Command& defaultVal )    { return WString2T( NodeStructureCommandMapping, s, defaultVal ); }
+template<> const std::wstring&          T2WString   ( NodeStructureEvent::Command t )                                           { return Enum2WString( NodeStructureCommandMapping, t ); }
 
 // ========================================================================= //
 // PluginStructureEvent
@@ -224,8 +226,8 @@ std::pair< PluginStructureEvent::Command, const std::wstring > PluginStructureCo
     , std::make_pair( PluginStructureEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> PluginStructureEvent::Command WString2T ( const std::wstring& s )    { return WString2T( PluginStructureCommandMapping, s ); }
-template<> const std::wstring& T2WString    ( PluginStructureEvent::Command t ) { return Enum2WString( PluginStructureCommandMapping, t ); }
+template<> PluginStructureEvent::Command    WString2T   ( const std::wstring& s, const PluginStructureEvent::Command& defaultVal )  { return WString2T( PluginStructureCommandMapping, s, defaultVal ); }
+template<> const std::wstring&              T2WString   ( PluginStructureEvent::Command t )                                         { return Enum2WString( PluginStructureCommandMapping, t ); }
 
 
 // ========================================================================= //
@@ -238,9 +240,18 @@ std::pair< ProjectEvent::Command, const std::wstring > ProjectEventCommandMappin
     , std::make_pair( ProjectEvent::Command::RemoveScene, L"RemoveScene" )
     , std::make_pair( ProjectEvent::Command::CopyScene, L"CopyScene" )
     , std::make_pair( ProjectEvent::Command::MoveScene, L"MoveScene" )
+
+    , std::make_pair( ProjectEvent::Command::AddExistingSceneToProject, L"AddExistingSceneToProject" )
+    , std::make_pair( ProjectEvent::Command::RemoveSceneFromProject, L"RemoveSceneFromProject" )
+    , std::make_pair( ProjectEvent::Command::CreateSceneInProject, L"CreateSceneInProject" )
+
     , std::make_pair( ProjectEvent::Command::LoadProject, L"LoadProject" ) 
     , std::make_pair( ProjectEvent::Command::NewProject, L"NewProject" ) 
     , std::make_pair( ProjectEvent::Command::SetCurrentProject, L"SetCurrentProject" )
+    , std::make_pair( ProjectEvent::Command::MoveProject, L"MoveProject" )
+    , std::make_pair( ProjectEvent::Command::DeleteProject, L"DeleteProject" )
+    , std::make_pair( ProjectEvent::Command::RenameProject, L"RenameProject" )
+
     , std::make_pair( ProjectEvent::Command::CopyAsset, L"CopyAsset" ) 
     , std::make_pair( ProjectEvent::Command::MoveAsset, L"MoveAsset" ) 
     , std::make_pair( ProjectEvent::Command::RemoveAsset, L"RemoveAsset" ) 
@@ -248,9 +259,8 @@ std::pair< ProjectEvent::Command, const std::wstring > ProjectEventCommandMappin
     , std::make_pair( ProjectEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-
-template<> ProjectEvent::Command WString2T ( const std::wstring& s )    { return WString2T( ProjectEventCommandMapping, s ); }
-template<> const std::wstring& T2WString    ( ProjectEvent::Command t ) { return Enum2WString( ProjectEventCommandMapping, t ); }
+template<> ProjectEvent::Command WString2T  ( const std::wstring& s, const ProjectEvent::Command& defaultVal )  { return WString2T( ProjectEventCommandMapping, s, defaultVal ); }
+template<> const std::wstring& T2WString    ( ProjectEvent::Command t )                                         { return Enum2WString( ProjectEventCommandMapping, t ); }
 
 // ========================================================================= //
 // ResponseEvent
@@ -280,8 +290,8 @@ std::pair< InfoEvent::Command, const std::wstring > InfoEventCommandMapping[] =
 };
 
 
-template<> InfoEvent::Command WString2T     ( const std::wstring& s )   { return WString2T( InfoEventCommandMapping, s ); }
-template<> const std::wstring& T2WString    ( InfoEvent::Command t )    { return Enum2WString( InfoEventCommandMapping, t ); }
+template<> InfoEvent::Command WString2T     ( const std::wstring& s, const InfoEvent::Command& defaultVal )     { return WString2T( InfoEventCommandMapping, s, defaultVal ); }
+template<> const std::wstring& T2WString    ( InfoEvent::Command t )                                            { return Enum2WString( InfoEventCommandMapping, t ); }
 
 // ========================================================================= //
 // TimeLineEvent
@@ -312,8 +322,8 @@ std::pair< TimeLineEvent::Command, const std::wstring > TimeLineEventCommandMapp
     , std::make_pair( TimeLineEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> TimeLineEvent::Command WString2T     ( const std::wstring& s )       { return WString2T( TimeLineEventCommandMapping, s ); }
-template<> const std::wstring& T2WString        ( TimeLineEvent::Command t )    { return Enum2WString( TimeLineEventCommandMapping, t ); }
+template<> TimeLineEvent::Command WString2T     ( const std::wstring& s, const TimeLineEvent::Command& defaultVal )     { return WString2T( TimeLineEventCommandMapping, s, defaultVal ); }
+template<> const std::wstring& T2WString        ( TimeLineEvent::Command t )                                            { return Enum2WString( TimeLineEventCommandMapping, t ); }
 
 // Timeline WrapMethod
 
@@ -325,8 +335,8 @@ std::pair< TimelineWrapMethod, const std::wstring > TimelineWrapMethodMapping[] 
     , std::make_pair( TimelineWrapMethod::TWM_TOTAL, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> TimelineWrapMethod  WString2T    ( const std::wstring& s )           { return WString2T( TimelineWrapMethodMapping, s ); }
-template<> const std::wstring& T2WString    ( TimelineWrapMethod t )            { return Enum2WString( TimelineWrapMethodMapping, t ); }
+template<> TimelineWrapMethod  WString2T    ( const std::wstring& s, const TimelineWrapMethod& defaultVal )     { return WString2T( TimelineWrapMethodMapping, s, defaultVal ); }
+template<> const std::wstring& T2WString    ( TimelineWrapMethod t )                                            { return Enum2WString( TimelineWrapMethodMapping, t ); }
 
 
 // Timeline Type
@@ -339,8 +349,8 @@ std::pair< TimelineType, const std::wstring > TimelineTypeMapping[] =
     , std::make_pair( TimelineType::TT_TOTAL, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> TimelineType         WString2T    ( const std::wstring& s )          { return WString2T( TimelineTypeMapping, s ); }
-template<> const std::wstring&  T2WString    ( TimelineType t )                 { return Enum2WString( TimelineTypeMapping, t ); }
+template<> TimelineType         WString2T    ( const std::wstring& s, const TimelineType& defaultVal )  { return WString2T( TimelineTypeMapping, s, defaultVal ); }
+template<> const std::wstring&  T2WString    ( TimelineType t )                                         { return Enum2WString( TimelineTypeMapping, t ); }
 
 
 // ========================================================================= //
@@ -356,8 +366,8 @@ std::pair< WidgetEvent::Command, const std::wstring > WidgetEventCommandMapping[
     , std::make_pair( WidgetEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> WidgetEvent::Command WString2T       ( const std::wstring& s )       { return WString2T( WidgetEventCommandMapping, s ); }
-template<> const std::wstring& T2WString        ( WidgetEvent::Command t )      { return Enum2WString( WidgetEventCommandMapping, t ); }
+template<> WidgetEvent::Command WString2T       ( const std::wstring& s, const WidgetEvent::Command& defaultVal )   { return WString2T( WidgetEventCommandMapping, s, defaultVal ); }
+template<> const std::wstring& T2WString        ( WidgetEvent::Command t )                                          { return Enum2WString( WidgetEventCommandMapping, t ); }
 
 // ========================================================================= //
 // VideoCardEvent
@@ -381,8 +391,8 @@ std::pair< VideoCardEvent::Command, const std::wstring > VideoCardEventCommandMa
     , std::make_pair( VideoCardEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> VideoCardEvent::Command WString2T    ( const std::wstring& s )       { return WString2T( VideoCardEventCommandMapping, s ); }
-template<> const std::wstring& T2WString        ( VideoCardEvent::Command t )   { return Enum2WString( VideoCardEventCommandMapping, t ); }
+template<> VideoCardEvent::Command WString2T    ( const std::wstring& s, const VideoCardEvent::Command& defaultVal )    { return WString2T( VideoCardEventCommandMapping, s, defaultVal ); }
+template<> const std::wstring& T2WString        ( VideoCardEvent::Command t )                                           { return Enum2WString( VideoCardEventCommandMapping, t ); }
 
 
 std::pair< VideoCardEvent::VideoReferenceMode, const std::wstring > VideoCardVideoReferenceModeMapping[] = 
@@ -395,8 +405,8 @@ std::pair< VideoCardEvent::VideoReferenceMode, const std::wstring > VideoCardVid
     , std::make_pair( VideoCardEvent::VideoReferenceMode::FailMode, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> VideoCardEvent::VideoReferenceMode WString2T ( const std::wstring& s )                   { return WString2T( VideoCardVideoReferenceModeMapping, s ); }
-template<> const std::wstring& T2WString                ( VideoCardEvent::VideoReferenceMode t )    { return Enum2WString( VideoCardVideoReferenceModeMapping, t ); }
+template<> VideoCardEvent::VideoReferenceMode WString2T ( const std::wstring& s, const VideoCardEvent::VideoReferenceMode& defaultVal )     { return WString2T( VideoCardVideoReferenceModeMapping, s, defaultVal ); }
+template<> const std::wstring& T2WString                ( VideoCardEvent::VideoReferenceMode t )                                            { return Enum2WString( VideoCardVideoReferenceModeMapping, t ); }
 
 
 // ========================================================================= //
@@ -418,8 +428,8 @@ std::pair< TimerEvent::Command, const std::wstring > TimerEventCommandMapping[] 
     , std::make_pair( TimerEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> TimerEvent::Command WString2T    ( const std::wstring& s )       { return WString2T( TimerEventCommandMapping, s ); }
-template<> const std::wstring& T2WString    ( TimerEvent::Command t )       { return Enum2WString( TimerEventCommandMapping, t ); }
+template<> TimerEvent::Command WString2T    ( const std::wstring& s, const TimerEvent::Command& defaultVal )    { return WString2T( TimerEventCommandMapping, s, defaultVal ); }
+template<> const std::wstring& T2WString    ( TimerEvent::Command t )                                           { return Enum2WString( TimerEventCommandMapping, t ); }
 
 // ========================================================================= //
 // RenderingModeEvent
@@ -435,8 +445,8 @@ std::pair< RenderingModeEvent::Command, const std::wstring > RenderingModeEventC
     , std::make_pair( RenderingModeEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> RenderingModeEvent::Command WString2T    ( const std::wstring& s )               { return WString2T( RenderingModeEventCommandMapping, s ); }
-template<> const std::wstring& T2WString            ( RenderingModeEvent::Command t )       { return Enum2WString( RenderingModeEventCommandMapping, t ); }
+template<> RenderingModeEvent::Command WString2T    ( const std::wstring& s, const RenderingModeEvent::Command& defaultVal )    { return WString2T( RenderingModeEventCommandMapping, s, defaultVal ); }
+template<> const std::wstring& T2WString            ( RenderingModeEvent::Command t )                                           { return Enum2WString( RenderingModeEventCommandMapping, t ); }
 
 // ========================================================================= //
 // GlobalEffectEvent
@@ -449,14 +459,15 @@ std::pair< GlobalEffectEvent::Command, const std::wstring > GlobalEffectEventCom
     , std::make_pair( GlobalEffectEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> GlobalEffectEvent::Command WString2T     ( const std::wstring& s )               { return WString2T( GlobalEffectEventCommandMapping, s ); }
-template<> const std::wstring& T2WString            ( GlobalEffectEvent::Command t )        { return Enum2WString( GlobalEffectEventCommandMapping, t ); }
+template<> GlobalEffectEvent::Command WString2T     ( const std::wstring& s, const GlobalEffectEvent::Command& defaultVal )     { return WString2T( GlobalEffectEventCommandMapping, s, defaultVal ); }
+template<> const std::wstring& T2WString            ( GlobalEffectEvent::Command t )                                            { return Enum2WString( GlobalEffectEventCommandMapping, t ); }
 
 
 // ========================================================================= //
 // TimelineKeyframeEvent
 // ========================================================================= //
 const std::wstring KEYFRAME_NAME_WSTRING                = L"KeyframeName";
+const std::wstring KEYFRAME_INDEX_WSTRING               = L"KeyframeIndex";
 const std::wstring NEW_KEYFRAME_TYPE_WSTRING            = L"NewKeyframeType";
 const std::wstring JUMP_TO_TIME_WSTRING                 = L"JumpToTime";
 const std::wstring TOTAL_LOOP_COUNT_WSTRING             = L"TotalLoopCount";
@@ -468,8 +479,8 @@ std::pair< TimelineKeyframeEvent::Command, const std::wstring > TimelineKeyframe
     , std::make_pair( TimelineKeyframeEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> TimelineKeyframeEvent::Command   WString2T   ( const std::wstring& s )               { return WString2T( TimelineKeyframeEventCommandMapping, s ); }
-template<> const std::wstring&              T2WString   ( TimelineKeyframeEvent::Command t )    { return Enum2WString( TimelineKeyframeEventCommandMapping, t ); }
+template<> TimelineKeyframeEvent::Command   WString2T   ( const std::wstring& s, const TimelineKeyframeEvent::Command& defaultVal )     { return WString2T( TimelineKeyframeEventCommandMapping, s, defaultVal ); }
+template<> const std::wstring&              T2WString   ( TimelineKeyframeEvent::Command t )                                            { return Enum2WString( TimelineKeyframeEventCommandMapping, t ); }
 
 std::pair< TimelineKeyframeEvent::KeyframeType, const std::wstring > KeyframeTypeMapping[] = 
 {
@@ -481,8 +492,8 @@ std::pair< TimelineKeyframeEvent::KeyframeType, const std::wstring > KeyframeTyp
     , std::make_pair( TimelineKeyframeEvent::KeyframeType::KeyframeTypeFail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> TimelineKeyframeEvent::KeyframeType  WString2T   ( const std::wstring& s )                   { return WString2T( KeyframeTypeMapping, s ); }
-template<> const std::wstring&                  T2WString   ( TimelineKeyframeEvent::KeyframeType t )   { return Enum2WString( KeyframeTypeMapping, t ); }
+template<> TimelineKeyframeEvent::KeyframeType  WString2T   ( const std::wstring& s, const TimelineKeyframeEvent::KeyframeType& defaultVal )    { return WString2T( KeyframeTypeMapping, s, defaultVal ); }
+template<> const std::wstring&                  T2WString   ( TimelineKeyframeEvent::KeyframeType t )                                           { return Enum2WString( KeyframeTypeMapping, t ); }
 
 // ========================================================================= //
 // HightmapEvent
@@ -514,8 +525,8 @@ std::pair< HightmapEvent::Command, const std::wstring > HightmapEventCommandMapp
 };
 
 
-template<> HightmapEvent::Command WString2T     ( const std::wstring& s )       { return WString2T( HightmapEventCommandMapping, s ); }
-template<> const std::wstring& T2WString        ( HightmapEvent::Command t )    { return Enum2WString( HightmapEventCommandMapping, t ); }
+template<> HightmapEvent::Command WString2T     ( const std::wstring& s, const HightmapEvent::Command& defaultVal )     { return WString2T( HightmapEventCommandMapping, s, defaultVal ); }
+template<> const std::wstring& T2WString        ( HightmapEvent::Command t )                                            { return Enum2WString( HightmapEventCommandMapping, t ); }
 
 }
 
@@ -893,9 +904,9 @@ IEventPtr           ParamKeyEvent::Create          ( IDeserializer& deser )
         newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
         newEvent->ParamName         = toString( deser.GetAttribute( SerializationHelper::PARAM_NAME_WSTRING ) );
         newEvent->Value             = deser.GetAttribute( SerializationHelper::PARAM_VALUE_WSTRING );
-        newEvent->ParamCommand      = SerializationHelper::WString2T<ParamKeyEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
-        newEvent->ParamTargetType   = SerializationHelper::WString2T<ParamKeyEvent::TargetType>( deser.GetAttribute( SerializationHelper::PARAM_TARGET_TYPE_WSTRING ) );
-        newEvent->Time              = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::KEY_TIME_WSTRING ) );
+        newEvent->ParamCommand      = SerializationHelper::WString2T<ParamKeyEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), ParamKeyEvent::Command::Fail );
+        newEvent->ParamTargetType   = SerializationHelper::WString2T<ParamKeyEvent::TargetType>( deser.GetAttribute( SerializationHelper::PARAM_TARGET_TYPE_WSTRING ), ParamKeyEvent::TargetType::FailTarget );
+        newEvent->Time              = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::KEY_TIME_WSTRING ), std::numeric_limits<float>::quiet_NaN() );
 
         return newEvent;
     }
@@ -943,7 +954,7 @@ IEventPtr                AssetEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         AssetEventPtr newEvent		= std::make_shared< AssetEvent >();
-        newEvent->AssetCommand      = SerializationHelper::WString2T< AssetEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->AssetCommand      = SerializationHelper::WString2T< AssetEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), AssetEvent::Command::Fail );
         
         return newEvent;
     }
@@ -994,8 +1005,8 @@ IEventPtr                SceneEvent::Create          ( IDeserializer& deser )
         SceneEventPtr newEvent		= std::make_shared< SceneEvent >();
         newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
         newEvent->NewSceneName      = toString( deser.GetAttribute( SerializationHelper::NEW_SCENE_NAME_WSTRING ) );
-        newEvent->SceneCommand      = SerializationHelper::WString2T< SceneEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
-        newEvent->AttachIndex       = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING ) );
+        newEvent->SceneCommand      = SerializationHelper::WString2T< SceneEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), SceneEvent::Command::Fail );
+        newEvent->AttachIndex       = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING ), 0 );
         
         return newEvent;
     }
@@ -1051,9 +1062,9 @@ IEventPtr                NodeStructureEvent::Create          ( IDeserializer& de
         newEvent->NodePath          = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
         newEvent->NewNodeName       = toString( deser.GetAttribute( SerializationHelper::NEW_NODE_NAME_WSTRING ) );
         newEvent->TimelinePath      = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
-        newEvent->SceneCommand      = SerializationHelper::WString2T<NodeStructureEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->SceneCommand      = SerializationHelper::WString2T<NodeStructureEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), NodeStructureEvent::Command::Fail );
         newEvent->Request           = toString( deser.GetAttribute( SerializationHelper::REQUEST_WSTRING ) );
-        newEvent->AttachIndex       = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING ) );
+        newEvent->AttachIndex       = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING ), 0 );
         
         return newEvent;
     }
@@ -1109,8 +1120,8 @@ IEventPtr                PluginStructureEvent::Create          ( IDeserializer& 
         newEvent->NodePath          = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
         newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
         newEvent->PluginName        = toString( deser.GetAttribute( SerializationHelper::PLUGIN_NAME_WSTRING ) );
-        newEvent->PluginCommand     = SerializationHelper::WString2T<PluginStructureEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
-        newEvent->AttachIndex       = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING ) );
+        newEvent->PluginCommand     = SerializationHelper::WString2T<PluginStructureEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), PluginStructureEvent::Command::Fail );
+        newEvent->AttachIndex       = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_WSTRING ), 0 );
         newEvent->PluginUID         = toString( deser.GetAttribute( SerializationHelper::PLUGIN_UID_WSTRING ) );
         newEvent->TimelinePath      = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
         newEvent->Request			= toString( deser.GetAttribute( SerializationHelper::REQUEST_WSTRING ) );
@@ -1161,7 +1172,7 @@ IEventPtr                ProjectEvent::Create          ( IDeserializer& deser )
     {
         ProjectEventPtr newEvent            = std::make_shared<ProjectEvent>();
         newEvent->Request                   = toString( deser.GetAttribute( SerializationHelper::REQUEST_WSTRING ) );
-        newEvent->ProjectCommand            = SerializationHelper::WString2T<ProjectEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->ProjectCommand            = SerializationHelper::WString2T<ProjectEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), ProjectEvent::Command::Fail );
         
         return newEvent;
     }
@@ -1255,7 +1266,7 @@ IEventPtr                InfoEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         InfoEventPtr newEvent   = std::make_shared<InfoEvent>();
-        newEvent->InfoCommand   = SerializationHelper::WString2T<InfoEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->InfoCommand   = SerializationHelper::WString2T<InfoEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), InfoEvent::Command::Fail );
         newEvent->Request       = toString( deser.GetAttribute( SerializationHelper::REQUEST_WSTRING ) );
         
         return newEvent;
@@ -1308,12 +1319,12 @@ IEventPtr                TimeLineEvent::Create          ( IDeserializer & deser 
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         TimeLineEventPtr newEvent   = std::make_shared< TimeLineEvent >();
-        newEvent->Time              = SerializationHelper::WString2T< float >( deser.GetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING ) );
-        newEvent->TimelineCommand   = SerializationHelper::WString2T< TimeLineEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->Time              = SerializationHelper::WString2T< float >( deser.GetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING ), std::numeric_limits<float>::quiet_NaN() );
+        newEvent->TimelineCommand   = SerializationHelper::WString2T< TimeLineEvent::Command >( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), TimeLineEvent::Command::Fail );
         newEvent->TimelineName      = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
-        newEvent->TimelineType      = SerializationHelper::WString2T< bv::TimelineType >( deser.GetAttribute( SerializationHelper::TIMELINE_TYPE_WSTRING ) );
-        newEvent->Duration          = SerializationHelper::WString2T< float >( deser.GetAttribute( SerializationHelper::TIMELINE_DURATION_VALUE_WSTRING ) );
-        newEvent->WrapMethod        = SerializationHelper::WString2T< TimelineWrapMethod >( deser.GetAttribute( SerializationHelper::TIMELINE_WRAP_METHOD_WSTRING ) );
+        newEvent->TimelineType      = SerializationHelper::WString2T< bv::TimelineType >( deser.GetAttribute( SerializationHelper::TIMELINE_TYPE_WSTRING ), bv::TimelineType::TT_OFFSET );
+        newEvent->Duration          = SerializationHelper::WString2T< float >( deser.GetAttribute( SerializationHelper::TIMELINE_DURATION_VALUE_WSTRING ), 0.0f );
+        newEvent->WrapMethod        = SerializationHelper::WString2T< TimelineWrapMethod >( deser.GetAttribute( SerializationHelper::TIMELINE_WRAP_METHOD_WSTRING ), TimelineWrapMethod::TWM_CLAMP );
         newEvent->NewTimelineName   = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NEW_NAME_WSTRING ) );
 
         return newEvent;
@@ -1379,13 +1390,13 @@ IEventPtr                TimerEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         TimerEventPtr newEvent      = std::make_shared<TimerEvent>();
-        newEvent->TimerCommand      = SerializationHelper::WString2T<TimerEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->TimerCommand      = SerializationHelper::WString2T<TimerEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), TimerEvent::Command::Fail );
         newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
         newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
-        newEvent->Hours             = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_HOURS_WSTRING ) );
-        newEvent->Minutes           = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MINUTES_WSTRING ) );
-        newEvent->Seconds           = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_SECONDS_WSTRING ) );
-        newEvent->Milliseconds      = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MILLISECONDS_WSTRING ) );
+        newEvent->Hours             = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_HOURS_WSTRING ), 0.0f );
+        newEvent->Minutes           = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MINUTES_WSTRING ), 0.0f );
+        newEvent->Seconds           = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_SECONDS_WSTRING ), 0.0f );
+        newEvent->Milliseconds      = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MILLISECONDS_WSTRING ), 0.0f );
 
         return newEvent;
     }
@@ -1435,8 +1446,8 @@ IEventPtr                WidgetEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         WidgetEventPtr newEvent     = std::make_shared<WidgetEvent>();
-        newEvent->Time              = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::WIDGET_TIME_VALUE_WSTRING ) );
-        newEvent->WidgetCommand     = SerializationHelper::WString2T<WidgetEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->Time              = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::WIDGET_TIME_VALUE_WSTRING ), std::numeric_limits<float>::quiet_NaN() );
+        newEvent->WidgetCommand     = SerializationHelper::WString2T<WidgetEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), WidgetEvent::Command::Fail );
         newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
         newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
         newEvent->Action            = toString( deser.GetAttribute( SerializationHelper::WIDGET_ACTION_WSTRING ) );
@@ -1488,10 +1499,10 @@ IEventPtr                VideoCardEvent::Create          ( IDeserializer& deser 
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         VideoCardEventPtr newEvent      = std::make_shared<VideoCardEvent>();
-        newEvent->VideoCommand          = SerializationHelper::WString2T<VideoCardEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
-        newEvent->Mode                  = SerializationHelper::WString2T<VideoCardEvent::VideoReferenceMode>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_REFERENCE_MODE_WSTRING ) );
-        newEvent->Value                 = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_VALUE_WSTRING ) );
-        newEvent->Number                = SerializationHelper::WString2T<int>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_NUMBER_WSTRING ) );
+        newEvent->VideoCommand          = SerializationHelper::WString2T<VideoCardEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), VideoCardEvent::Command::Fail );
+        newEvent->Mode                  = SerializationHelper::WString2T<VideoCardEvent::VideoReferenceMode>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_REFERENCE_MODE_WSTRING ), VideoCardEvent::VideoReferenceMode::FailMode );
+        newEvent->Value                 = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_VALUE_WSTRING ), 0.0f );
+        newEvent->Number                = SerializationHelper::WString2T<int>( deser.GetAttribute( SerializationHelper::VIDEO_CARD_NUMBER_WSTRING ), 0 );
 
         return newEvent;
     }
@@ -1541,9 +1552,9 @@ IEventPtr                RenderingModeEvent::Create          ( IDeserializer& de
     {
         RenderingModeEventPtr newEvent  = std::make_shared<RenderingModeEvent>();
         newEvent->FilePath              = toString( deser.GetAttribute( SerializationHelper::RENDERING_FILE_PATH ) );
-        newEvent->FPS                   = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::REQUESTED_FPS_WSTRING ) );
-        newEvent->NumFrames             = SerializationHelper::WString2T<int>( deser.GetAttribute( SerializationHelper::NUM_FRAMES_WSTRING ) );
-        newEvent->RenderingCommand      = SerializationHelper::WString2T<RenderingModeEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->FPS                   = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::REQUESTED_FPS_WSTRING ), 60 );
+        newEvent->NumFrames             = SerializationHelper::WString2T<int>( deser.GetAttribute( SerializationHelper::NUM_FRAMES_WSTRING ), 0 );
+        newEvent->RenderingCommand      = SerializationHelper::WString2T<RenderingModeEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), RenderingModeEvent::Command::Fail );
 
         return newEvent;
     }
@@ -1597,7 +1608,7 @@ IEventPtr                GlobalEffectEvent::Create          ( IDeserializer& des
         newEvent->SceneName             = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
         newEvent->EffectName            = toString( deser.GetAttribute( SerializationHelper::GLOBAL_EFFECT_NAME_WSTRING ) );
         newEvent->TimelinePath          = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
-        newEvent->EffectCommand         = SerializationHelper::WString2T<GlobalEffectEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
+        newEvent->EffectCommand         = SerializationHelper::WString2T<GlobalEffectEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), GlobalEffectEvent::Command::Fail );
 
         return newEvent;
     }
@@ -1637,6 +1648,7 @@ void                TimelineKeyframeEvent::Serialize            ( ISerializer& s
     ser.SetAttribute( SerializationHelper::KEYFRAME_NAME_WSTRING, toWString( KeyframeName ) );
     ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( KeyframeCommand ) );
     ser.SetAttribute( SerializationHelper::NEW_KEYFRAME_TYPE_WSTRING, SerializationHelper::T2WString( NewKeyframeType ) );
+    ser.SetAttribute( SerializationHelper::KEYFRAME_INDEX_WSTRING, toWString( KeyframeIndex ) );
 
     ser.SetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING, toWString( Time ) );
     ser.SetAttribute( SerializationHelper::JUMP_TO_TIME_WSTRING, toWString( JumpToTime ) );
@@ -1652,12 +1664,13 @@ IEventPtr                TimelineKeyframeEvent::Create          ( IDeserializer&
         TimelineKeyframeEventPtr newEvent   = std::make_shared<TimelineKeyframeEvent>();
         newEvent->TimelinePath          = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
         newEvent->KeyframeName          = toString( deser.GetAttribute( SerializationHelper::KEYFRAME_NAME_WSTRING ) );
-        newEvent->KeyframeCommand       = SerializationHelper::WString2T<TimelineKeyframeEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
-        newEvent->NewKeyframeType       = SerializationHelper::WString2T<TimelineKeyframeEvent::KeyframeType>( deser.GetAttribute( SerializationHelper::NEW_KEYFRAME_TYPE_WSTRING ) );
+        newEvent->KeyframeCommand       = SerializationHelper::WString2T<TimelineKeyframeEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), TimelineKeyframeEvent::Command::Fail );
+        newEvent->NewKeyframeType       = SerializationHelper::WString2T<TimelineKeyframeEvent::KeyframeType>( deser.GetAttribute( SerializationHelper::NEW_KEYFRAME_TYPE_WSTRING ), TimelineKeyframeEvent::KeyframeType::KeyframeTypeFail );
+        newEvent->KeyframeIndex         = SerializationHelper::WString2T( deser.GetAttribute( SerializationHelper::KEYFRAME_INDEX_WSTRING ), -1 );
 
-        newEvent->Time                  = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING ) );
-        newEvent->JumpToTime            = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::JUMP_TO_TIME_WSTRING ) );
-        newEvent->TotalLoopCount        = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( SerializationHelper::TOTAL_LOOP_COUNT_WSTRING ) );
+        newEvent->Time                  = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING ), std::numeric_limits<float>::quiet_NaN() );
+        newEvent->JumpToTime            = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::JUMP_TO_TIME_WSTRING ), std::numeric_limits<float>::quiet_NaN() );
+        newEvent->TotalLoopCount        = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( SerializationHelper::TOTAL_LOOP_COUNT_WSTRING ), 0 );
 
         return newEvent;
     }
@@ -1707,11 +1720,11 @@ IEventPtr                HightmapEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         HightmapEventPtr newEvent   = std::make_shared<HightmapEvent>();
-        newEvent->HightmapCommand   = SerializationHelper::WString2T<HightmapEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ) );
-        newEvent->Hours             = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_HOURS_WSTRING ) );
-        newEvent->Minutes           = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MINUTES_WSTRING ) );
-        newEvent->Seconds           = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_SECONDS_WSTRING ) );
-        newEvent->Milliseconds      = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MILLISECONDS_WSTRING ) );
+        newEvent->HightmapCommand   = SerializationHelper::WString2T<HightmapEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), HightmapEvent::Command::Fail );
+        newEvent->Hours             = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_HOURS_WSTRING ), 0.0f );
+        newEvent->Minutes           = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MINUTES_WSTRING ), 0.0f );
+        newEvent->Seconds           = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_SECONDS_WSTRING ), 0.0f );
+        newEvent->Milliseconds      = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::TIMER_MILLISECONDS_WSTRING ), 0.0f );
 
         return newEvent;
     }

@@ -11,7 +11,10 @@ namespace bv
 //
 Json::Value Str2Json( const std::string & data )
 {
-	return Json::Value( data );
+	Json::Value json;
+    Json::Reader reader;
+	reader.parse( data, json );
+    return json;
 }
 
 // *********************************
