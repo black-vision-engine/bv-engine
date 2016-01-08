@@ -8,16 +8,17 @@ class LinearEvaluator : public IEvaluator< TimeValueT, ValueT >
     typedef Key< TimeValueT, ValueT > Key;
 
     Key key1, key2;
+    TimeValueT m_tolerance;
 public:
-    LinearEvaluator( Key k1, Key k2 ) : key1( k1 ), key2( k2 ) {}
+    LinearEvaluator( Key k1, Key k2, TimeValueT tolerance ) : key1( k1 ), key2( k2 ), m_tolerance( tolerance ) {}
 
     virtual EvaluatorType GetType() override { return EvaluatorType::ET_LINEAR; }
 
     virtual void SetValue( TimeValueT t, ValueT v ) override
     {
-        if( key1.t == t )
+        if( fabs( key1.t - t ) < m_tolerance )
             key1.val = v;
-        else if( key2.t == t )
+        else if( fabs( key2.t - t ) < m_tolerance )
             key2.val = v;
         else
             assert( false );
