@@ -76,20 +76,11 @@ namespace
 //
 void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & scene, std::ostream & out )
 {
-	auto sob = XMLSerializer();
+	auto ser = XMLSerializer();
 
-    sob.EnterChild( "scene" );
+    scene->Serialize( ser );
 
-    AssetDescsWithUIDs assets;
-	GetAssetsWithUIDs( assets, scene->GetRootNode() );
-    AssetDescsWithUIDs::SetInstance( assets );
-
-    assets.Serialize( sob );
-
-    scene->Serialize( sob );
-
-    sob.ExitChild();
-    sob.Save( out );
+    ser.Save( out );
 }
 
 // ********************************
