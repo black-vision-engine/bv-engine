@@ -96,6 +96,11 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
                 SetParameterScale( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
                 LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] scale: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
             }
+            else if( paramName == "fwd_center" )
+            {
+                SetParameterCenterMass( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
+                LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] center mass: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+            }
             else if( paramName == "rotation" )
             {
                 glm::vec4 rotAxisAngle = SerializationHelper::String2Vec4( stringValue );
