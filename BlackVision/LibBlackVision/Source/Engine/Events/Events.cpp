@@ -274,6 +274,7 @@ const std::wstring RESPONSE_WSTRING                     = L"Response";
 std::pair< InfoEvent::Command, const std::wstring > InfoEventCommandMapping[] = 
 {
     std::make_pair( InfoEvent::Command::TreeStructure, L"TreeStructure" )
+    , std::make_pair( InfoEvent::Command::MinimalTreeStructure, L"MinimalTreeStructure" )
     , std::make_pair( InfoEvent::Command::ListAssets, L"ListAssets" )
     , std::make_pair( InfoEvent::Command::ListProjectNames, L"ListProjectNames" )
     , std::make_pair( InfoEvent::Command::ListScenes, L"ListScenes" )

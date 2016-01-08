@@ -3,6 +3,7 @@
 #include "../RemoteController.h"
 #include "../IEventServer.h"
 #include "Threading/CriticalSection.h"
+#include "Engine/Events/Events.h"
 
 #include <map>
 

@@ -530,6 +530,7 @@ public:
     typedef enum
     {
         TreeStructure,
+        MinimalTreeStructure,
         ListAssets,
         ListProjectNames,
         ListScenes,

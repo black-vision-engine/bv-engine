@@ -32,6 +32,8 @@ private:
     std::string     PerformanceInfo     ( const std::string& request, unsigned int requestID );
     std::string     TreeStructureInfo   ( const std::string& request, unsigned int requestID );
     std::string     CheckTimelineTime   ( const std::string& request, unsigned int requestID );
+
+    std::string     MinimalTreeStructureInfo        ( const std::string& request, unsigned int requestID );
 };
 
 } //bv
