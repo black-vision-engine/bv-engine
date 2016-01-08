@@ -145,6 +145,10 @@ std::string QueryHandlers::GetNodeInfo         ( const std::string& request, uns
     context->recursive = false;
 
     PrepareResponseTemplate( ser, InfoEvent::Command::NodeInfo, requestID, true );
+
+    ser.SetAttribute( "SceneName", sceneName );
+    ser.SetAttribute( "NodePath", nodePath );
+
     std::static_pointer_cast< model::BasicNode >( node )->Serialize( ser );
 
     return ser.GetString();
