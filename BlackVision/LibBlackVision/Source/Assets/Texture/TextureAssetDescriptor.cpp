@@ -15,21 +15,62 @@ const std::string TextureAssetDesc::uid = "TEXTURE_ASSET_DESC";
 
 namespace SerializationHelper
 {
+// ***********************
+//
+std::pair< MipMapFilterType, const char* > mipmapFiltering[] =
+    { std::make_pair( MipMapFilterType::BICUBIC, "bicubic" )
+    , std::make_pair( MipMapFilterType::BILINEAR, "bilinear" )
+    , std::make_pair( MipMapFilterType::BOX, "box" )
+    , std::make_pair( MipMapFilterType::B_SPLINE, "b spline" )
+    , std::make_pair( MipMapFilterType::CATMULL_ROM, "catmull rom" )
+    , std::make_pair( MipMapFilterType::LANCZOS, "lanczos" )
+    , std::make_pair( MipMapFilterType::MMFT_TOTAL, "none" )
+};
 
-} // SerializationHelper
+
+template<> MipMapFilterType         String2T      ( std::string s, const MipMapFilterType& defaultVal )
+{
+    auto filter = String2T( mipmapFiltering, s );
+    if( filter == MipMapFilterType::MMFT_TOTAL )
+        return defaultVal;
+    return filter;
+}
+
+template<> std::string              T2String      ( const MipMapFilterType& t )                         { return Enum2String( mipmapFiltering, t ); }
+
+
+// ***********************
+//
+MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
+{
+    MipMapFilterType filter = String2T( mipmapFiltering, string );
+
+    if( filter == MipMapFilterType::MMFT_TOTAL )
+    {
+        assert( false );
+        return (MipMapFilterType) std::stoi( string );
+    }
+    return filter;
+}
+
 
 // ***********************
 //
 std::string Filter2String( MipMapFilterType filter )
 {
-    if( filter == MipMapFilterType::BILINEAR )
-        return "bilinear";
-    else
+    std::string filterString = Enum2String( mipmapFiltering, filter );
+
+    if( filterString == "none" )
     {
         assert( false );
         return std::to_string( (int) filter );
     }
+    return std::move( filterString );
 }
+
+
+} // SerializationHelper
+
 
 // ***********************
 //
@@ -40,7 +81,7 @@ ser.EnterChild( "asset" );
     ser.SetAttribute( "path", m_originalTextureDesc->GetImagePath() );
 
     if( m_mipMapsDescs )
-        ser.SetAttribute( "filter", Filter2String( m_mipMapsDescs->GetFilter() ) );
+        ser.SetAttribute( "filter", SerializationHelper::T2String( m_mipMapsDescs->GetFilter() ) );
     else
         ser.SetAttribute( "filter", "none" );
 
@@ -86,24 +127,6 @@ void TextureAssetDesc::Deserialize     ( const IDeserializer& sob )
 //sob.ExitChild();
 }
 
-MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
-{
-//std::pair< MipMapFilterType, std::string > p[] =
-//    { std::make_pair( MipMapFilterType::BICUBIC, "bicubic" ),
-//    std::make_pair( MipMapFilterType::BILINEAR, "bilinear" ) };
-
-    if( string == "bilinear" )
-        return MipMapFilterType::BILINEAR;
-    //else if( string == "none" )
-    //    return MipMapFilterType::MMFT_TOTAL;
-    else
-    {
-        assert( false );
-        return (MipMapFilterType) std::stoi( string );
-    }
-}
-
-
 
 // ***********************
 //
@@ -126,7 +149,7 @@ ISerializableConstPtr TextureAssetDesc::Create          ( const IDeserializer& d
     if( filterS == "none" )
         return Create( path, true );
     else
-        return Create( path, String2Filter( filterS ), true );
+        return Create( path, SerializationHelper::String2T( filterS, MipMapFilterType::BILINEAR ), true );
 }
 
 
