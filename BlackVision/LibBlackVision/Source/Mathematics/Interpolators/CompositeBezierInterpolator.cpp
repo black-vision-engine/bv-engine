@@ -211,31 +211,31 @@ IEvaluator<TimeValueT, ValueT >* CreateDummyInterpolator( CurveType type, Key< T
     if( type == CurveType::CT_POINT )
         return new ConstEvaluator< TimeValueT, ValueT >( k1.val );
     else if( type == CurveType::CT_LINEAR )
-        return new LinearEvaluator< TimeValueT, ValueT >( k1, k2 );
+        return new LinearEvaluator< TimeValueT, ValueT >( k1, k2, tolerance );
     else if( type == CurveType::CT_BEZIER )
         return new BezierEvaluator< TimeValueT, ValueT >( k1, k2, Key< TimeValueT, ValueT >( 0, ValueT() ), Key< TimeValueT, ValueT >( 0, ValueT() ), tolerance );
     else if( type == CurveType::CT_COSINE_LIKE )
         return new BezierEvaluator< TimeValueT, ValueT >( k1, k2, Key< TimeValueT, ValueT >( 0, ValueT() ), Key< TimeValueT, ValueT >( 0, ValueT() ), tolerance );
     else if( type == CurveType::CT_CUBIC_IN )
-        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 0, 0, 1, 0, 0 );
+        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 0, 0, 1, 0, 0, tolerance );
     else if( type == CurveType::CT_CUBIC_OUT )
-        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 0, 0, 1, -3, 3 );
+        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 0, 0, 1, -3, 3, tolerance );
     else if( type == CurveType::CT_ELASTIC_IN )
-        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 33, -59, 32, -5, 0 );
+        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 33, -59, 32, -5, 0, tolerance );
     else if( type == CurveType::CT_ELASTIC_OUT )
-        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 33, -106, 126, -67, 15 );
+        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 33, -106, 126, -67, 15, tolerance );
     //else if( type == CT_CUBIC_IN_BOUNCE )
     //    return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 0, 0, 1, 0, 0, true );
     //else if( type == CT_CUBIC_OUT_BOUNCE )
     //    return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 0, 0, 1, -3, 3, true );
     else if( type == CT_ELASTIC_IN_BOUNCE )
-        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 33, -59, 32, -5, 0, true );
+        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 33, -59, 32, -5, 0, tolerance, true );
     else if( type == CT_ELASTIC_OUT_BOUNCE )
-        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 33, -106, 126, -67, 15, true );
+        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 33, -106, 126, -67, 15, tolerance, true );
     else if( type == CT_QUARTIC_INOUT )
-        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 6, -15, 10, 0, 0 );
+        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 6, -15, 10, 0, 0, tolerance );
     else if( type == CT_CUBIC_INTOUT )
-        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 0, 0, -2, 3, 0 );
+        return new PolynomialEvaluator< TimeValueT, ValueT >( k1, k2, 0, 0, -2, 3, 0, tolerance );
     else
     {
         assert( false );
@@ -339,13 +339,23 @@ bool CompositeBezierInterpolator< TimeValueT, ValueT >::RemoveKey       ( TimeVa
     if( i == 0 )
         interpolators.erase( interpolators.begin() );
     else if( i == keysSize - 1 )
-        interpolators.erase( interpolators.begin() + i - 1 );
+        interpolators.erase( interpolators.begin() + ( i - 1 ) );
     else
     {
-        interpolators.erase( interpolators.begin() + i );
-        interpolators[ i - 1 ]->SetValue( keys[ i ].t, keys[ i + 1 ].val );
+        // Erase pair of interpolators touching keys
+        interpolators.erase( interpolators.begin() + ( i - 1 ) );
+        interpolators.erase( interpolators.begin() + ( i - 1 ) );
+
+        // Insert new interpolator instead
+        interpolators.insert( interpolators.begin() + ( i - 1 ), CreateDummyInterpolator( m_type, keys[ i - 1 ], keys[ i + 1 ], m_tolerance ) );
     }
     keys.erase( keys.begin() + i );
+
+// update interpolators
+    for( SizeType j = int( i-2 ); j <= int( i+1 ); j++ )
+        if( j >= 0 && j < interpolators.size() )
+            UpdateInterpolator( interpolators, j, m_type );
+
     return true;
 }
 

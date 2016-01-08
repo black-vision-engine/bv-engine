@@ -13,7 +13,14 @@ Json::Value Str2Json( const std::string & data )
 {
 	Json::Value json;
     Json::Reader reader;
-	reader.parse( data, json );
+
+	bool success = reader.parse( data, json );
+    if( !success )
+    {
+        std::string error = reader.getFormattedErrorMessages();
+        assert( success );  { success; }
+    }
+
     return json;
 }
 

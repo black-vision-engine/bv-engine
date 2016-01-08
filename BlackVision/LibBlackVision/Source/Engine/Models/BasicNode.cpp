@@ -97,15 +97,18 @@ void                            BasicNode::Serialize               ( ISerializer
     if( context->detailedInfo )
         ser.SetAttribute( "visible", m_visible ? "true" : "false" );
 
-    ser.EnterArray( "plugins" );
-        for( unsigned int  i = 0; i < m_pluginList->NumPlugins(); i++ )
-        {
-            auto plugin_ = m_pluginList->GetPlugin( i );
-            auto plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
-            assert( plugin );
-            plugin->Serialize( ser );
-        }
-    ser.ExitChild(); // plugins
+    if( context->pluginsInfo )
+    {
+        ser.EnterArray( "plugins" );
+            for( unsigned int  i = 0; i < m_pluginList->NumPlugins(); i++ )
+            {
+                auto plugin_ = m_pluginList->GetPlugin( i );
+                auto plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
+                assert( plugin );
+                plugin->Serialize( ser );
+            }
+        ser.ExitChild(); // plugins
+    }
 
     if( context->detailedInfo && m_modelNodeEffect )
         m_modelNodeEffect->Serialize( ser );

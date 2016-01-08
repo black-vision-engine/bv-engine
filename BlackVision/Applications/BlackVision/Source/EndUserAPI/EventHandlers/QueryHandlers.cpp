@@ -43,6 +43,8 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
 
         if( command == InfoEvent::Command::TreeStructure )
             responseMessage = toWString( TreeStructureInfo( request, requestID ) );
+        else if( command == InfoEvent::Command::MinimalTreeStructure )
+            responseMessage = toWString( MinimalTreeStructureInfo( request, requestID ) );
         else if( command == InfoEvent::Command::ListAssets )
             responseMessage = toWString( ListAssets( request, requestID ) );
         else if( command == InfoEvent::Command::ListAssetsPaths )
@@ -145,6 +147,10 @@ std::string QueryHandlers::GetNodeInfo         ( const std::string& request, uns
     context->recursive = false;
 
     PrepareResponseTemplate( ser, InfoEvent::Command::NodeInfo, requestID, true );
+
+    ser.SetAttribute( "SceneName", sceneName );
+    ser.SetAttribute( "NodePath", nodePath );
+
     std::static_pointer_cast< model::BasicNode >( node )->Serialize( ser );
 
     return ser.GetString();
@@ -390,6 +396,33 @@ std::string QueryHandlers::CheckTimelineTime   ( const std::string& request, uns
     PrepareResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, requestID, true );
     TimeType time = checkedTimeline->GetLocalTime();
     ser.SetAttribute( "Time", toString( time ) );
+    ser.SetAttribute( "SceneName", sceneName );
+    ser.SetAttribute( "TimelineName", timelineName );
+
+    return ser.GetString();
+}
+
+std::string     QueryHandlers::MinimalTreeStructureInfo        ( const std::string& /*request*/, unsigned int requestID )
+{
+    JsonSerializeObject ser;
+    
+    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+    context->recursive = true;
+    context->detailedInfo = false;
+    context->pluginsInfo = false;
+    
+    PrepareResponseTemplate( ser, InfoEvent::Command::TreeStructure, requestID, true );
+
+    ser.EnterArray( "scenes" );
+
+    for( auto sceneModel : m_appLogic->GetBVProject()->GetScenes() )
+    {
+        ser.EnterChild( "scene" );
+        sceneModel->Serialize( ser );
+        ser.ExitChild();
+    }
+
+    ser.ExitChild();
 
     return ser.GetString();
 }

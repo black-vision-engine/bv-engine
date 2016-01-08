@@ -104,7 +104,8 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
                 SetParameterRotation( param, 0, (bv::TimeType)keyTime, rotAxis, rotAxisAngle.w );
                 LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] rotation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
             }
-        }else if( pluginName == "texture" && (paramName=="translation" || paramName=="scale"))     // Only texture transform parameter
+        }
+        else if( pluginName == "texture" && (paramName=="translation" || paramName=="scale"))     // Only texture transform parameter
         {
             std::string stringValue = toString( value );
             if( paramName == "translation" )

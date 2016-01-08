@@ -12,10 +12,12 @@ public:
     {
         recursive = true;
         detailedInfo = true;
+        pluginsInfo = true;
     }
 
     bool            recursive;
     bool            detailedInfo;
+    bool            pluginsInfo;
 };
 
 }

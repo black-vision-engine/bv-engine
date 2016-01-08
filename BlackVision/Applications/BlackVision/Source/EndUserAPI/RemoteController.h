@@ -1,12 +1,13 @@
 #pragma once
 
-#include "Engine/Events/Events.h"
+#include "Engine/Events/Interfaces/IEvent.h"
 #include "Tools/Logger/LoggerEnums.h"
 
 #include <unordered_map>
 
 namespace bv
 {
+class IEvent;
 
 typedef IEventPtr (*EventCreatorDelegate)( IDeserializer& deser );
 
