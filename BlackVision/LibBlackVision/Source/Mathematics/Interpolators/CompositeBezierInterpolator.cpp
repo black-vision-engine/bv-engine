@@ -339,13 +339,23 @@ bool CompositeBezierInterpolator< TimeValueT, ValueT >::RemoveKey       ( TimeVa
     if( i == 0 )
         interpolators.erase( interpolators.begin() );
     else if( i == keysSize - 1 )
-        interpolators.erase( interpolators.begin() + i - 1 );
+        interpolators.erase( interpolators.begin() + ( i - 1 ) );
     else
     {
-        interpolators.erase( interpolators.begin() + i );
-        interpolators[ i - 1 ]->SetValue( keys[ i ].t, keys[ i + 1 ].val );
+        // Erase pair of interpolators touching keys
+        interpolators.erase( interpolators.begin() + ( i - 1 ) );
+        interpolators.erase( interpolators.begin() + ( i - 1 ) );
+
+        // Insert new interpolator instead
+        interpolators.insert( interpolators.begin() + ( i - 1 ), CreateDummyInterpolator( m_type, keys[ i - 1 ], keys[ i + 1 ], m_tolerance ) );
     }
     keys.erase( keys.begin() + i );
+
+// update interpolators
+    for( SizeType j = int( i-2 ); j <= int( i+1 ); j++ )
+        if( j >= 0 && j < interpolators.size() )
+            UpdateInterpolator( interpolators, j, m_type );
+
     return true;
 }
 
