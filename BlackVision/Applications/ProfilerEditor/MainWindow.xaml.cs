@@ -451,7 +451,16 @@ namespace ProfilerEditor
                 System.Buffer.BlockCopy( command, 0, message, 1, command.Length );
                 message[command.Length + 1] = 0x003;        // End transmission sign
 
-                m_networkStream.Write( message, 0, command.Length + 2 );
+                try
+                {
+                    m_networkStream.Write(message, 0, command.Length + 2);
+                }
+                catch (Exception exc) 
+                {
+                    // Cannot send message.
+                    var error = exc.ToString();
+                    MessageBox.Show("Cannot send message. Error: \n" + error);
+                }
             }
         }
 
