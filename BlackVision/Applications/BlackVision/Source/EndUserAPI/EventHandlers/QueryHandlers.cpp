@@ -390,6 +390,8 @@ std::string QueryHandlers::CheckTimelineTime   ( const std::string& request, uns
     PrepareResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, requestID, true );
     TimeType time = checkedTimeline->GetLocalTime();
     ser.SetAttribute( "Time", toString( time ) );
+    ser.SetAttribute( "SceneName", sceneName );
+    ser.SetAttribute( "TimelineName", timelineName );
 
     return ser.GetString();
 }

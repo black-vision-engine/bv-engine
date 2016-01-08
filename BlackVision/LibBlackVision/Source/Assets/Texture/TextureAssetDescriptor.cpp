@@ -13,8 +13,10 @@ namespace bv
 const std::string TextureAssetDesc::uid = "TEXTURE_ASSET_DESC";
 
 
-// Serialization strings
-//const std::string 
+namespace SerializationHelper
+{
+
+} // SerializationHelper
 
 // ***********************
 //
