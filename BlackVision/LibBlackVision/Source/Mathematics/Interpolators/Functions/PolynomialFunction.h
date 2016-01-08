@@ -9,10 +9,11 @@ class PolynomialEvaluator : public IEvaluator< TimeValueT, ValueT >
     Coefficient a, b, c, d, e; // a*t^5+b*t^4+c*t^3+d*t^2+e*t
     bool bounce;
     Key key1, key2;
+    TimeValueT m_tolerance;
 public:
-    PolynomialEvaluator( Key k1, Key k2, Coefficient a, Coefficient b, Coefficient c, Coefficient d, Coefficient e, bool bounce = false )
+    PolynomialEvaluator( Key k1, Key k2, Coefficient a, Coefficient b, Coefficient c, Coefficient d, Coefficient e, TimeValueT tolerance, bool bounce = false )
         : a( a ), b( b ), c( c ), d( d ), e( e ), bounce( bounce )
-        , key1( k1 ), key2( k2 )
+        , key1( k1 ), key2( k2 ), m_tolerance( tolerance )
     {
     }
 
@@ -20,9 +21,9 @@ public:
 
     virtual void                                        SetValue( TimeValueT t, ValueT v ) override
     {
-        if( key1.t == t )
+        if( fabs( key1.t - t ) < m_tolerance )
             key1.val = v;
-        else if( key2.t == t )
+        else if( fabs( key2.t - t ) < m_tolerance )
             key2.val = v;
         else
             assert( false );
