@@ -35,8 +35,11 @@ void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & sc
 
     auto f = File::Open( outputFilePath.Str(), File::OpenMode::FOMReadWrite );
 
-    SaveScene( scene, *f.StreamBuf() );
-    f.Close();
+    if( f.Good() )
+    {
+        SaveScene( scene, *f.StreamBuf() );
+        f.Close();
+    }
 }
 
 // ********************************
@@ -45,12 +48,19 @@ model::SceneModelPtr	    SceneDescriptor::LoadScene		( const Path & inputFilePat
 {
     auto f = File::Open( inputFilePath.Str() );
 
-    auto size = File::Size( inputFilePath.Str() );
+    if( f.Good() )
+    {
+        auto size = File::Size( inputFilePath.Str() );
 
-    auto ret = LoadScene( *f.StreamBuf(), size );
-    f.Close();
+        auto ret = LoadScene( *f.StreamBuf(), size );
+        f.Close();
 
-    return ret;
+        return ret;
+    }
+    else
+    {
+        return nullptr;
+    }
 }
 
 namespace 
@@ -100,12 +110,19 @@ AssetDescVec SceneDescriptor::ListSceneAssets ( const Path & sceneFile )
 {
     auto f = File::Open( sceneFile.Str() );
 
-    auto size = File::Size( sceneFile.Str() );
+    if( f.Good() )
+    {
+        auto size = File::Size( sceneFile.Str() );
 
-    auto ret = ListSceneAssets( *f.StreamBuf(), size );
-    f.Close();
+        auto ret = ListSceneAssets( *f.StreamBuf(), size );
+        f.Close();
 
-    return ret;
+        return ret;
+    }
+    else
+    {
+        return AssetDescVec();
+    }
 }
 
 // ********************************
