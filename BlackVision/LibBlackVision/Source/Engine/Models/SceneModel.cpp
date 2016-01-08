@@ -59,7 +59,10 @@ void            SceneModel::Serialize           ( ISerializer& ser) const
             ser.ExitChild(); // timelines
         }
 
-        m_sceneRootNode->Serialize( ser );                                    
+        if( m_sceneRootNode )
+        {
+            m_sceneRootNode->Serialize( ser );
+        }
 
     ser.ExitChild();
 }
@@ -78,17 +81,21 @@ SceneModel *        SceneModel::Create          ( const IDeserializer& deser )
 // timelines
 	auto sceneTimeline = obj->GetTimeline();
     auto timelines = SerializationHelper::DeserializeArray< TimeEvaluatorBase< ITimeEvaluator > >( deser, "timelines" );
-	for( auto timeline : timelines )
+
+    for( auto timeline : timelines )
     {
 		sceneTimeline->AddChild( timeline );
     }
+
     dynamic_cast< BVDeserializeContext* >( deser.GetDeserializeContext() )->m_sceneTimeline = sceneTimeline;
 
 // nodes
     auto node = SerializationHelper::DeserializeObjectPtr< model::BasicNode >( deser, "node" );
-    assert( node );
-	obj->SetRootNode( node );
 
+    if( node )
+    {
+        obj->SetRootNode( node );
+    }
 
 	return obj;
 }

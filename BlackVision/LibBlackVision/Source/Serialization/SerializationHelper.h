@@ -16,10 +16,17 @@ template< typename T >
 T*                                                          DeserializeObject( const IDeserializer& deser, std::string name )
 {
     auto sucess = deser.EnterChild( name );
-    assert( sucess ); { sucess; } // FIXME error handling
-    auto obj = T::Create( deser );
-    deser.ExitChild();
-    return static_cast< T* >( obj );
+
+    if( sucess )
+    {
+        auto obj = T::Create( deser );
+        deser.ExitChild();
+        return static_cast< T* >( obj );
+    }
+    else
+    {
+        return nullptr;
+    }
 }
 
 // *************************************
