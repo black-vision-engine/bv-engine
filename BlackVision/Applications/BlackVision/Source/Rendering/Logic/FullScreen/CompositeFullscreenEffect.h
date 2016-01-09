@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Rendering/Logic/FullScreen/FullscreenEffectTr.h"
+#include "Rendering/Logic/FullScreen/FullscreenEffectGraphNode.h"
 
 
 namespace bv {
@@ -19,6 +20,10 @@ public:
                     ~CompositeFullscreenEffect  ();
 
     virtual void    Render                      ( FullscreenEffectContext * ctx ) override;
+
+private:
+
+    void            RenderGraphNode             ( FullscreenEffectGraphNodePtr node, Renderer * renderer, RenderTarget * outputRenderTarget, RenderTargetStackAllocator * allocator );
 
 };
 
