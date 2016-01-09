@@ -30,6 +30,7 @@ public:
     FullscreenEffectTr *                                GetEffect   ();
 
     void                                                AddInput    ( FullscreenEffectTr * fullscreenEffect );
+    void                                                AddInput    ( FullscreenEffectGraphNodePtr node );
 
     const std::vector< FullscreenEffectGraphNodePtr > & GetInputVec () const; 
 

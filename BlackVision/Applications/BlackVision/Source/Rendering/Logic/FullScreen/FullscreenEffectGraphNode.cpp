@@ -30,7 +30,14 @@ FullscreenEffectTr *                                FullscreenEffectGraphNode::G
 //
 void                                                FullscreenEffectGraphNode::AddInput    ( FullscreenEffectTr * fullscreenEffect )
 {
-    m_inputNodes.push_back( std::make_shared< FullscreenEffectGraphNode >( fullscreenEffect ) );
+    AddInput( std::make_shared< FullscreenEffectGraphNode >( fullscreenEffect ) );
+}
+
+// ****************************
+//
+void                                                FullscreenEffectGraphNode::AddInput    ( FullscreenEffectGraphNodePtr node )
+{
+    m_inputNodes.push_back( node );
 }
 
 // ****************************

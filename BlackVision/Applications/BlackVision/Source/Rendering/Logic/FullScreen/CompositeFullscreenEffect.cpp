@@ -6,6 +6,8 @@
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
+#include "Rendering/Logic/FullScreen/FullscreenEffectGraph.h"
+
 
 namespace bv {
 
@@ -27,12 +29,7 @@ CompositeFullscreenEffect::~CompositeFullscreenEffect  ()
 //
 void    CompositeFullscreenEffect::Render                      ( FullscreenEffectContext * ctx )
 {
-    auto renderer = ctx->GetRenderer();
-
-    renderer->Enable( ctx->GetOutputRenderTarget() );
-
-
-    renderer->Disable( ctx->GetOutputRenderTarget() );
+    RenderGraphNode( m_graph->GetSinkNode(), ctx->GetRenderer(), ctx->GetOutputRenderTarget(), ctx->GetRenderTargetAllocator() );
 }
 
 // ****************************
