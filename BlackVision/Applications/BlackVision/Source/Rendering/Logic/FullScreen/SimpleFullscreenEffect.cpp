@@ -2,6 +2,8 @@
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
+#include "Engine/Graphics/Resources/RenderTarget.h"
+
 #include "Engine/Graphics/SceneGraph/Camera.h"
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 
@@ -46,9 +48,13 @@ void    SimpleFullscreenEffect::Render          ( FullscreenEffectContext * ctx 
 
     auto rendererCamera = renderer->GetCamera();
     renderer->SetCamera( m_fullscreenCamera );
+    renderer->Enable( ctx->GetOutputRenderTarget() );
+    
+    SynchronizeInputData( ctx->AccessInputRenderTargets() );
 
     renderer->Draw( m_fullscreenQuad );
 
+    renderer->Disable( ctx->GetOutputRenderTarget() );
     renderer->SetCamera( rendererCamera );
 }
 
@@ -112,12 +118,8 @@ PixelShader *       SimpleFullscreenEffect::CreatePixelShader       ( const Full
 
     for( unsigned int i = 0; i < inputData.GetNumTextures(); ++i )
     {
-        auto tx = inputData.GetInputTextureAt( i );
-
-        //FIXME: Really necessary?
-        assert( tx != nullptr );
-
-        shaderParams->AddTexture( tx );
+        // nullptr textures are allowed
+        shaderParams->AddTexture( inputData.GetInputTextureAt( i ) );
     }
 
     shader = new PixelShader( inputData.GetPixelShaderSource(), shaderParams );
@@ -170,6 +172,42 @@ TextureSampler *    SimpleFullscreenEffect::CreateSampler           ( const std:
     auto sampler = new TextureSampler( 0, samplerName, samplingMode, sfm, wrappingMode, glm::vec4( 0.f, 0.f, 0.f, 0.f ) ); 
 
     return sampler;
+}
+
+// **************************
+//
+void                SimpleFullscreenEffect::SynchronizeInputData    ( const std::vector< RenderTarget * > & rtVec )
+{
+    if( m_data.GetNumInitializedTextures() < (unsigned int) rtVec.size() )
+    {
+        assert( m_data.GetNumTextures() == (unsigned int) rtVec.size() );
+        
+        for( unsigned int i = 0; i < m_data.GetNumTextures(); ++i )
+        {
+            m_data.SetInputTexture( rtVec[ i ]->ColorTexture( 0 ), i );
+        }
+    }
+    else
+    {
+        assert( DebugVerifyInput( rtVec ) );
+    }
+}
+
+// **************************
+//
+bool                SimpleFullscreenEffect::DebugVerifyInput        ( const std::vector< RenderTarget * > & rtVec )
+{
+    assert( m_data.GetNumInitializedTextures() == m_data.GetNumTextures() );
+    assert( m_data.GetNumInitializedTextures() == (unsigned int) rtVec.size() );
+
+    bool success = true;
+
+    for( unsigned int i = 0; i < m_data.GetNumTextures(); ++i )
+    {
+        success &= m_data.GetInputTextureAt( i ) == rtVec[ i ]->ColorTexture( 0 );
+    }
+
+    return success;
 }
 
 } //bv

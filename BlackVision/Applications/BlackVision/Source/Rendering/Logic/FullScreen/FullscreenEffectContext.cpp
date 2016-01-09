@@ -47,4 +47,18 @@ void                            FullscreenEffectContext::SetOutputRenderTarget  
     m_outputRenderTarget = rt;
 }
 
+// **************************
+//
+void                            FullscreenEffectContext::AppendInputRenderTarget    ( RenderTarget * rt )
+{
+    m_inputRenderTargets.push_back( rt );
+}
+
+// **************************
+//
+std::vector< RenderTarget * > &   FullscreenEffectContext::AccessInputRenderTargets ()
+{
+    return m_inputRenderTargets;
+}
+
 } //bv

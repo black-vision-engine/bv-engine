@@ -43,6 +43,11 @@ private:
 
     TextureSampler *    CreateSampler           ( const std::string & samplerName ) const;
 
+private:
+
+    void                SynchronizeInputData    ( const std::vector< RenderTarget * > & rtVec );
+    bool                DebugVerifyInput        ( const std::vector< RenderTarget * > & rtVec );
+
 };
 
 DEFINE_PTR_TYPE(SimpleFullscreenEffect)

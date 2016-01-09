@@ -21,26 +21,31 @@ private:
 
     std::string                 m_pixelShaderSource;
 
+    unsigned int                m_numInitializedTextures;
+
 public:
 
 
-                    FullscreenEffectData    ();
-                    ~FullscreenEffectData   ();
+                    FullscreenEffectData        ();
+                    ~FullscreenEffectData       ();
 
-    void            AppendInputTexture      ( Texture2DPtr tex, const std::string & samplerName );
+    void            AppendInputTexture          ( Texture2DPtr tex, const std::string & samplerName );
+    void            SetInputTexture             ( Texture2DPtr tex, unsigned int idx );
 
-    Texture2DPtr    GetInputTextureAt       ( unsigned int i ) const;
-    std::string     GetSamplerNameAt        ( unsigned int i ) const;
+    Texture2DPtr    GetInputTextureAt           ( unsigned int i ) const;
+    std::string     GetSamplerNameAt            ( unsigned int i ) const;
 
-    unsigned int    GetNumTextures          () const;
+    unsigned int    GetNumTextures              () const;
 
-    void            AppendValue             ( IValuePtr val );
-    IValuePtr       GetValueAt              ( unsigned int i ) const;
+    void            AppendValue                 ( IValuePtr val );
+    IValuePtr       GetValueAt                  ( unsigned int i ) const;
 
-    unsigned int    GetNumValues            () const;
+    unsigned int    GetNumValues                () const;
 
-    void            SetPixelShaderSource    ( const std::string & src );
-    std::string     GetPixelShaderSource    () const;
+    void            SetPixelShaderSource        ( const std::string & src );
+    std::string     GetPixelShaderSource        () const;
+
+    unsigned int    GetNumInitializedTextures   () const;
 
 };
 

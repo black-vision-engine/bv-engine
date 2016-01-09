@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 
 namespace bv {
 
@@ -14,6 +16,7 @@ private:
     Renderer *                      m_renderer;
     RenderTarget *                  m_outputRenderTarget;
     RenderTargetStackAllocator *    m_rtAllocator;
+    std::vector< RenderTarget * >   m_inputRenderTargets;
 
 public:
                                     FullscreenEffectContext     ( Renderer * renderer, RenderTarget * outputRenderTarget, RenderTargetStackAllocator * allocator );
@@ -24,6 +27,9 @@ public:
     RenderTargetStackAllocator *    GetRenderTargetAllocator    ();
 
     void                            SetOutputRenderTarget       ( RenderTarget * rt );
+
+    void                            AppendInputRenderTarget     ( RenderTarget * rt );
+    std::vector< RenderTarget * > & AccessInputRenderTargets    ();
 
 };
 

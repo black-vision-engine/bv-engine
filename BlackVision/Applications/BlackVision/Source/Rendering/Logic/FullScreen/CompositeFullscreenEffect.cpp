@@ -53,10 +53,12 @@ void    CompositeFullscreenEffect::RenderGraphNode             ( FullscreenEffec
 
     auto effect = node->GetEffect();
 
+    auto ctx = FullscreenEffectContext( renderer, outputRenderTarget, allocator );
+    ctx.AccessInputRenderTargets() = inputResults;
+
     renderer->Enable( outputRenderTarget );
-    { effect; }
+    effect->Render( &ctx );
     renderer->Disable( outputRenderTarget );
-    // effect->
 }
 
 } //bv
