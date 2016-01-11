@@ -244,6 +244,28 @@ bool    RemoveCenterMassKey     ( IParameterPtr parameter, unsigned int idx, Tim
 {    return RemoveCenterMassKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t );  }
 
 
+
+//// ***********************
+////
+//bool    RemoveRotationKey       ( IParameterPtr parameter, TimeType t )
+//{    return RemoveRotationKey( QueryTypedParam< ParamTransformPtr >( parameter ), t );  }
+//
+//// ***********************
+////
+//bool    RemoveScaleKey          ( IParameterPtr parameter, TimeType t )
+//{    return RemoveScaleKey( QueryTypedParam< ParamTransformPtr >( parameter ), t );  }
+//// ***********************
+////
+//bool    RemoveTranslationKey    ( IParameterPtr parameter, TimeType t )
+//{    return RemoveTranslationKey( QueryTypedParam< ParamTransformPtr >( parameter ), t );  }
+//
+//// ***********************
+////
+//bool    RemoveCenterMassKey     ( IParameterPtr parameter, TimeType t )
+//{    return RemoveCenterMassKey( QueryTypedParam< ParamTransformPtr >( parameter ), t );  }
+
+
+
 // ========================================================================= //
 // Curve types and wrap methods
 // ========================================================================= //
