@@ -35,6 +35,12 @@ bool    RemoveScaleKey          ( IParameterPtr parameter, unsigned int idx, Tim
 bool    RemoveTranslationKey    ( IParameterPtr parameter, unsigned int idx, TimeType t );
 bool    RemoveCenterMassKey     ( IParameterPtr parameter, unsigned int idx, TimeType t );
 
+bool    RemoveRotationKey       ( IParameterPtr parameter, TimeType t );
+bool    RemoveScaleKey          ( IParameterPtr parameter, TimeType t );
+bool    RemoveTranslationKey    ( IParameterPtr parameter, TimeType t );
+bool    RemoveCenterMassKey     ( IParameterPtr parameter, TimeType t );
+
+
 
 // *******************************
 //
