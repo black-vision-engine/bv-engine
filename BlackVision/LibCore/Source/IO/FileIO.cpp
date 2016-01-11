@@ -34,6 +34,8 @@ public:
     void                Write       ( const char * in , SizeType numBytes );
 	void                Write       ( const std::string & str );
 
+    bool                Good        () const;
+
 	std::fstream *		StreamBuf	();
 
     void                Close       ();
@@ -176,6 +178,13 @@ bool        FileImpl::Exists      ( const std::string & fileName )
 
     ret = stat( fileName.c_str(), &info );
     return 0 == ret;
+}
+
+// *******************************
+//
+bool        FileImpl::Good        () const
+{
+    return m_fileHandle->good();
 }
 
 // *******************************
@@ -358,6 +367,13 @@ void        File::operator >> ( std::ostream & out )
 std::fstream *	File::StreamBuf	()
 {
 	return m_impl->StreamBuf();
+}
+
+// *******************************
+//
+bool             File::Good      () const
+{
+    return m_impl->Good();
 }
 
 // *******************************

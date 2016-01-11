@@ -59,7 +59,7 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
     IParameterPtr param;
     if( pluginName == "transform" )     // Hack for transformations. Maybe it's eternal hack.
         param = GetPluginParameter( sceneName, nodeName, pluginName, "simple_transform" );
-    else if( pluginName == "texture" && (paramName=="translation" || paramName=="scale") )     // Hack for transformations. Maybe it's eternal hack.
+    else if( pluginName == "texture" && ( paramName == "translation" || paramName == "scale" || paramName == "rotation" ) )     // Hack for transformations. Maybe it's eternal hack.
         param = GetPluginParameter( sceneName, nodeName, pluginName, "txMat" );
     else
     {
@@ -96,6 +96,11 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
                 SetParameterScale( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
                 LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] scale: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
             }
+            else if( paramName == "fwd_center" )
+            {
+                SetParameterCenterMass( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
+                LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] center mass: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+            }
             else if( paramName == "rotation" )
             {
                 glm::vec4 rotAxisAngle = SerializationHelper::String2Vec4( stringValue );
@@ -105,17 +110,17 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
                 LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] rotation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
             }
         }
-        else if( pluginName == "texture" && (paramName=="translation" || paramName=="scale"))     // Only texture transform parameter
+        else if( pluginName == "texture" && ( paramName == "translation" || paramName == "scale" || paramName == "rotation" ) )     // Only texture transform parameter
         {
             std::string stringValue = toString( value );
             if( paramName == "translation" )
             {
-                SetParameterTranslation( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
+                SetParameterTranslation( param, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
                 LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] translation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
             }
             else if( paramName == "scale" )
             {
-                bool success = SetParameterScale( param, 0, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
+                bool success = SetParameterScale( param, (bv::TimeType)keyTime, SerializationHelper::String2Vec3( stringValue ) );
                 LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] scale: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s"+std::to_string(success);
             }
             else if( paramName == "rotation" )
@@ -123,7 +128,7 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
                 glm::vec4 rotAxisAngle = SerializationHelper::String2Vec4( stringValue );
                 glm::vec3 rotAxis = glm::vec3( rotAxisAngle );
 
-                SetParameterRotation( param, 0, (bv::TimeType)keyTime, rotAxis, rotAxisAngle.w );
+                SetParameterRotation( param, (bv::TimeType)keyTime, rotAxis, rotAxisAngle.w );
                 LOG_MESSAGE( SeverityLevel::info ) << "AddParamKey() Node [" + nodeName + "] rotation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
             }
         }
@@ -166,6 +171,25 @@ void PluginEventsHandlers::ParamHandler( bv::IEventPtr eventPtr )
             else if( paramName == "rotation" )
             {
                 RemoveRotationKey( param, 0, (bv::TimeType)keyTime );
+                LOG_MESSAGE( SeverityLevel::info ) << "RemoveParamKey() Node [" + nodeName + "] rotation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+            }
+        }
+        else if( pluginName == "texture" && ( paramName == "translation" || paramName == "scale" || paramName == "rotation" ) )     // Only texture transform parameter
+        {
+            std::string stringValue = toString( value );
+            if( paramName == "translation" )
+            {
+                RemoveTranslationKey( param, (bv::TimeType)keyTime );
+                LOG_MESSAGE( SeverityLevel::info ) << "RemoveParamKey() Node [" + nodeName + "] translation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+            }
+            else if( paramName == "scale" )
+            {
+                RemoveScaleKey( param, (bv::TimeType)keyTime );
+                LOG_MESSAGE( SeverityLevel::info ) << "RemoveParamKey() Node [" + nodeName + "] scale: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
+            }
+            else if( paramName == "rotation" )
+            {
+                RemoveRotationKey( param, (bv::TimeType)keyTime );
                 LOG_MESSAGE( SeverityLevel::info ) << "RemoveParamKey() Node [" + nodeName + "] rotation: (" + stringValue + ") key: " + std::to_string( keyTime ) + " s";
             }
         }

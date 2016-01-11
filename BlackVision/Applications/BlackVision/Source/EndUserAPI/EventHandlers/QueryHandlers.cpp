@@ -61,14 +61,23 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             responseMessage = toWString( PerformanceInfo( request, requestID ) );
         else if( command == InfoEvent::Command::Timelines )
             responseMessage = toWString( GetTimeLinesInfo( request, requestID ) );
+        else if( command == InfoEvent::Command::ListTimelineKeyframes )
+            responseMessage = toWString( ListTimelineKeyframes( request, requestID ) );
         else if( command == InfoEvent::Command::NodeInfo )
             responseMessage = toWString( GetNodeInfo( request, requestID ) );
+        else if ( command == InfoEvent::Command::PluginInfo )
+            responseMessage = toWString( PluginInfo( request, requestID ) );
         else if( command == InfoEvent::Command::MinimalSceneInfo )
             responseMessage = toWString( GetMinimalSceneInfo( request, requestID ) );
         else if( command == InfoEvent::Command::Videocards )
             responseMessage = toWString( VideoCardsInfo( request, requestID ) );
         else if( command == InfoEvent::Command::CheckTimelineTime )
             responseMessage = toWString( CheckTimelineTime( request, requestID ) );
+        else
+        {
+            SendSimpleErrorResponse( command, requestID, infoEvent->SocketID, "Unknown command" );
+            return;
+        }
         
         ResponseEventPtr msg = std::make_shared<ResponseEvent>();
         msg->Response = responseMessage;
@@ -402,6 +411,8 @@ std::string QueryHandlers::CheckTimelineTime   ( const std::string& request, uns
     return ser.GetString();
 }
 
+// ***********************
+//
 std::string     QueryHandlers::MinimalTreeStructureInfo        ( const std::string& /*request*/, unsigned int requestID )
 {
     JsonSerializeObject ser;
@@ -409,7 +420,7 @@ std::string     QueryHandlers::MinimalTreeStructureInfo        ( const std::stri
     auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
     context->recursive = true;
     context->detailedInfo = false;
-    context->pluginsInfo = false;
+    context->pluginsInfo = true;
     
     PrepareResponseTemplate( ser, InfoEvent::Command::TreeStructure, requestID, true );
 
@@ -423,6 +434,82 @@ std::string     QueryHandlers::MinimalTreeStructureInfo        ( const std::stri
     }
 
     ser.ExitChild();
+
+    return ser.GetString();
+}
+
+// ***********************
+//
+std::string     QueryHandlers::PluginInfo          ( const std::string& request, unsigned int requestID )
+{
+    JsonDeserializeObject deser;
+    JsonSerializeObject ser;
+    deser.Load( request );
+
+
+    std::string nodePath = deser.GetAttribute( "NodePath" );
+    std::string pluginName = deser.GetAttribute( "PluginName" );
+    std::string sceneName = deser.GetAttribute( "SceneName" );
+
+    auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
+    if( node == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::PluginInfo, requestID, "Node not found" );
+        return ser.GetString();
+    }
+
+    auto iplugin = node->GetPlugin( pluginName );
+    if( iplugin == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::PluginInfo, requestID, "Plugin not found" );
+        return ser.GetString();
+    }
+
+    PrepareResponseTemplate( ser, InfoEvent::Command::PluginInfo, requestID, true );
+
+    auto plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( iplugin );
+    plugin->Serialize( ser );
+
+
+    return ser.GetString();
+}
+
+// ***********************
+//
+std::string     QueryHandlers::ListTimelineKeyframes           ( const std::string& request, unsigned int requestID )
+{
+    JsonDeserializeObject deser;
+    JsonSerializeObject ser;
+    deser.Load( request );
+
+    std::string TimelinePath = deser.GetAttribute( "TimelinePath" );
+
+    auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+    auto timeEvaluator = editor->GetTimeEvaluator( TimelinePath );
+    if( timeEvaluator == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::ListTimelineKeyframes, requestID, "Timeline not found" );
+        return ser.GetString();
+    }
+
+    if( timeEvaluator->GetType() != DefaultTimeline::Type() )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::ListTimelineKeyframes, requestID, "Time evaluator can't be casted to DefaultTimeline" );
+        return ser.GetString();
+    }
+    auto timeline = std::static_pointer_cast<DefaultTimeline>( timeEvaluator );
+    
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListTimelineKeyframes, requestID, true );
+
+    ser.EnterArray( "Keyframes" );
+    for( int i = 0; i < timeline->NumKeyFrames(); ++i )
+    {
+        auto keyframeEvent = timeline->GetKeyFrameEvent( i );
+        keyframeEvent->Serialize( ser );
+    }
+    ser.ExitChild();
+
+    ser.SetAttribute( "TimelinePath", TimelinePath );
 
     return ser.GetString();
 }

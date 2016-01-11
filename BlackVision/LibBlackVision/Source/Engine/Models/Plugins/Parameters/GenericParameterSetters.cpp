@@ -161,6 +161,51 @@ bool    RemoveCenterMassKey     ( ParamTransformVecPtr parameter, unsigned int i
     return true;
 }
 
+// ***********************
+//
+bool    RemoveRotationKey       ( ParamTransformPtr parameter, TimeType t )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->RemoveRotation( t );
+
+    return true;
+}
+
+// ***********************
+//
+bool    RemoveScaleKey          ( ParamTransformPtr parameter, TimeType t )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->RemoveScale( t );
+    return true;
+}
+
+// ***********************
+//
+bool    RemoveTranslationKey    ( ParamTransformPtr parameter, TimeType t )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->RemoveTranslation( t );
+    return true;
+}
+
+// ***********************
+//
+bool    RemoveCenterMassKey     ( ParamTransformPtr parameter, TimeType t )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->RemoveCenter( t );
+    return true;
+}
+
 } //anonymous
 
 
@@ -242,6 +287,28 @@ bool    RemoveTranslationKey    ( IParameterPtr parameter, unsigned int idx, Tim
 //
 bool    RemoveCenterMassKey     ( IParameterPtr parameter, unsigned int idx, TimeType t )
 {    return RemoveCenterMassKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t );  }
+
+
+
+// ***********************
+//
+bool    RemoveRotationKey       ( IParameterPtr parameter, TimeType t )
+{    return RemoveRotationKey( QueryTypedParam< ParamTransformPtr >( parameter ), t );  }
+
+// ***********************
+//
+bool    RemoveScaleKey          ( IParameterPtr parameter, TimeType t )
+{    return RemoveScaleKey( QueryTypedParam< ParamTransformPtr >( parameter ), t );  }
+// ***********************
+//
+bool    RemoveTranslationKey    ( IParameterPtr parameter, TimeType t )
+{    return RemoveTranslationKey( QueryTypedParam< ParamTransformPtr >( parameter ), t );  }
+
+// ***********************
+//
+bool    RemoveCenterMassKey     ( IParameterPtr parameter, TimeType t )
+{    return RemoveCenterMassKey( QueryTypedParam< ParamTransformPtr >( parameter ), t );  }
+
 
 
 // ========================================================================= //

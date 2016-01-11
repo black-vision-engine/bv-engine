@@ -122,7 +122,15 @@ void SocketConnection::MainThread()
                     if( sentSize < 0 )
                     {
                         int error_code = WSAGetLastError();
+                        if(error_code==10054)
+                        {
+                            LOG_MESSAGE( SeverityLevel::info ) << "connection reset by client, WSA_error_code: "<<error_code;
+                            OnEndMainThread();
+                            break;
+                        }
                         LOG_MESSAGE( SeverityLevel::info ) << "send error ... -1 "<<error_code;
+                        if(error_code==10035)
+                            Sleep(100);
                         //OnEndMainThread();
                         //break;
                     }

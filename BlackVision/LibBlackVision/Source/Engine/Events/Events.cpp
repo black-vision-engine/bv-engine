@@ -283,8 +283,10 @@ std::pair< InfoEvent::Command, const std::wstring > InfoEventCommandMapping[] =
     , std::make_pair( InfoEvent::Command::ListProjects, L"ListProjects" )
     , std::make_pair( InfoEvent::Command::Performance, L"Performance" ) 
     , std::make_pair( InfoEvent::Command::Timelines, L"TimeLines" ) 
+    , std::make_pair( InfoEvent::Command::ListTimelineKeyframes, L"ListTimelineKeyframes" ) 
     , std::make_pair( InfoEvent::Command::CheckTimelineTime, L"CheckTimelineTime" ) 
     , std::make_pair( InfoEvent::Command::NodeInfo, L"NodeInfo" )
+    , std::make_pair( InfoEvent::Command::PluginInfo, L"PluginInfo" )
     , std::make_pair( InfoEvent::Command::MinimalSceneInfo, L"MinimalSceneInfo" )
     , std::make_pair( InfoEvent::Command::Videocards, L"VideoCards" )
     , std::make_pair( InfoEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default

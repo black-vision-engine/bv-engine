@@ -52,7 +52,7 @@ SceneDescriptor	SceneAccessor::GetSceneDesc( const Path & path ) const
 //
 model::SceneModelPtr	SceneAccessor::GetScene( const Path & path ) const
 {
-    return SceneDescriptor::LoadScene( path );
+    return SceneDescriptor::LoadScene( m_rootDir / path );
 }
 
 // ********************************

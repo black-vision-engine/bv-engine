@@ -350,7 +350,7 @@ SingleTextureAssetConstPtr	TextureUtils::GetFromRawDataCache	( const SingleTextu
 
 	if( mChunk )
 	{
-		return SingleTextureAsset::Create( mChunk, key, desc->GetWidth(), desc->GetHeight(), desc->GetFormat(), true );
+        return SingleTextureAsset::Create( mChunk, key, desc->GetWidth(), desc->GetHeight(), TextureUtils::NearestSupportedTextureFormat( desc->GetFormat() ), true );
 	}
 	else
 	{

@@ -512,10 +512,6 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::GlobalEffect05( pluginsManager, timeline );
     }
-    else if( scene == "BASIC_SHAPES_TEST_SCENE" )
-    {
-        node = TestScenesFactory::BasicShapesTest( pluginsManager, timeline );
-    }
     else if( scene == "TEXT_CACHE_TEST" )
     {
         node = TestScenesFactory::AssetCacheTestScene( pluginsManager, timeline );

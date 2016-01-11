@@ -540,7 +540,9 @@ public:
         Performance,
         Timelines,
         CheckTimelineTime,
+        ListTimelineKeyframes,
         NodeInfo,
+        PluginInfo,
         MinimalSceneInfo,
         Videocards,
         Fail            ///< Wrong command

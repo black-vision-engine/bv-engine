@@ -35,19 +35,22 @@ public:
 //
 void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root, bool recursive )
 {
-    auto plugins = root->GetPlugins();
-    for( unsigned int i = 0; i < root->GetNumPlugins(); i++ )
+    if( root )
     {
-        auto assets = root->GetPlugins()->GetPlugin( i )->GetAssets();
-        for( auto asset : assets )
+        auto plugins = root->GetPlugins();
+        for( unsigned int i = 0; i < root->GetNumPlugins(); i++ )
         {
-            map.AddAssetDesc( asset );
+            auto assets = root->GetPlugins()->GetPlugin( i )->GetAssets();
+            for( auto asset : assets )
+            {
+                map.AddAssetDesc( asset );
+            }
         }
-    }
 
-    if( recursive )
-        for( unsigned int i = 0; i < root->GetNumChildren(); i++ )
-            GetAssetsWithUIDs( map, root->GetChild( i ), true );
+        if( recursive )
+            for( unsigned int i = 0; i < root->GetNumChildren(); i++ )
+                GetAssetsWithUIDs( map, root->GetChild( i ), true );
+    }
 }
 
 // *******************************

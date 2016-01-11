@@ -41,6 +41,8 @@ public:
     void                operator << ( std::istream & );
     void                operator >> ( std::ostream & );
 
+    bool                Good        () const;
+
 	std::fstream *		StreamBuf	();
 
     virtual             ~File       ();
