@@ -33,7 +33,8 @@ private:
     std::string     TreeStructureInfo   ( const std::string& request, unsigned int requestID );
     std::string     CheckTimelineTime   ( const std::string& request, unsigned int requestID );
     std::string     PluginInfo          ( const std::string& request, unsigned int requestID );
-
+    
+    std::string     ListTimelineKeyframes           ( const std::string& request, unsigned int requestID );
     std::string     MinimalTreeStructureInfo        ( const std::string& request, unsigned int requestID );
 };
 
