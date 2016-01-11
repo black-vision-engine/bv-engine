@@ -63,6 +63,7 @@ public:
     bool                    DetachPlugin		( model::BasicNodePtr node, unsigned int idx );
     bool                    DetachPlugin		( model::BasicNodePtr node, const std::string & name );
     
+    bool					SetNodeEffect       ( model::IModelNodePtr node, model::IModelNodeEffectPtr nodeEffect );
 
 private:
 
