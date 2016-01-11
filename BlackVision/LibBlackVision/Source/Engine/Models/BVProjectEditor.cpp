@@ -1161,9 +1161,9 @@ model::ITimeEvaluatorPtr    BVProjectEditor::GetTimeEvaluator( const std::string
 
 // ***********************
 //
-std::string				BVProjectEditor::GetNodeName		( const std::string & nodePath )
+std::string				BVProjectEditor::GetNodeName		( const std::string & nodePath, const std::string & separator )
 {
-    return nodePath.substr( nodePath.find_last_of( "/" ) + 1, nodePath.length() );
+    return nodePath.substr( nodePath.find_last_of( separator ) + 1, nodePath.length() );
 }
 
 // *******************************

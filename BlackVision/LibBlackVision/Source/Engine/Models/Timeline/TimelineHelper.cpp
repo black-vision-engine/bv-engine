@@ -9,6 +9,9 @@
 
 namespace bv { namespace model {
 
+
+const std::string    TimelineHelper::SEPARATOR      = "%";
+
 // *********************************
 //maybe should be moved into TimeEvalFactory or sth
 ITimeEvaluatorPtr       TimelineHelper::CreateTimeEvaluator             ( const std::string & name, TimelineType type )
@@ -133,8 +136,8 @@ std::string              TimelineHelper::GetSceneName                    ( const
 //
 std::string				TimelineHelper::GetSceneName        			( const std::string & timelinePath )
 {
-    auto path = Trim( timelinePath, "%" );
-    auto names = Split( path, "%" );
+    auto path = Trim( timelinePath, SEPARATOR );
+    auto names = Split( path, SEPARATOR );
     if( !names.empty() )
     {
         return names[ 0 ];
@@ -146,15 +149,17 @@ std::string				TimelineHelper::GetSceneName        			( const std::string & time
 //
 std::string				TimelineHelper::GetParentTimelinePath           ( const std::string & timelinePath )
 {
-    auto path = Trim( timelinePath, "%" );
-    auto names = Split( timelinePath, "%" );
+    auto path = Trim( timelinePath, SEPARATOR );
+    auto names = Split( timelinePath, SEPARATOR );
 
 	std::string parentPath = "";
 	for( unsigned int i = 0; i < names.size() - 1; ++i )
 	{
 		parentPath += names[ i ];
 		if( i < names.size() - 2 )
-			parentPath += "%";
+        {
+			parentPath += SEPARATOR;
+        }
 	}
 	return parentPath;
 }
@@ -190,19 +195,23 @@ ITimeEvaluatorPtr       TimelineHelper::FindTimelineByName          ( const std:
 //
 ITimeEvaluatorPtr       TimelineHelper::GetTimeEvaluator           ( const std::string & name, ITimeEvaluatorPtr parentTimeline )
 {
-    auto path = Split( name, "%" );
+    auto path = Split( name, SEPARATOR );
     if( path.size() == 1 )
+    {
         return FindTimelineByName( name, parentTimeline );
+    }
     else
     {
         auto nextParent = FindTimelineByName( path[ 0 ], parentTimeline );
         if( nextParent )
         {
             path.erase( path.begin() );
-            return GetTimeEvaluator( Join( path, "%"), nextParent );
+            return GetTimeEvaluator( CombineTimelinePath( path ), nextParent );
         }
         else
+        {
             return nullptr;
+        }
     }
 }
 
@@ -210,19 +219,23 @@ ITimeEvaluatorPtr       TimelineHelper::GetTimeEvaluator           ( const std::
 // FIXME: requires RTTI, reimplement it later on
 ITimelinePtr            TimelineHelper::GetTimeline                     ( const std::string & name, ITimeEvaluatorPtr parentTimeline )
 {
-	auto path = Split( name, "%" );
+	auto path = Split( name, SEPARATOR );
     if( path.size() == 1 )
+    {
 		return std::dynamic_pointer_cast< ITimeline >( FindTimelineByName( name, parentTimeline ) );
+    }
     else
     {
         auto nextParent = FindTimelineByName( path[ 0 ], parentTimeline );
         if( nextParent )
         {
             path.erase( path.begin() );
-            return GetTimeline( Join( path, "%"), nextParent );
+            return GetTimeline( CombineTimelinePath( path ), nextParent );
         }
         else
+        {
             return nullptr;
+        }
     }
 }
 
@@ -231,17 +244,37 @@ ITimelinePtr            TimelineHelper::GetTimeline                     ( const 
 std::string             TimelineHelper::GetTimelinePath                 ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline )
 {
     for( auto child : parentTimeline->GetChildren() )
+    {
         if( child == timeline )
+        {
             return timeline->GetName();
+        }
         else
         {
             auto path = GetTimelinePath( timeline, child );
             if( path != "" )
-                return child->GetName() + "%" + path;
+            {
+                return CombineTimelinePath( child->GetName(), path );
+            }
         }
+    }
+
     return "";
 }
 
+// *********************************
+//
+std::string              TimelineHelper::CombineTimelinePath            ( const std::vector< std::string > & strVec )
+{
+    return Join( strVec, SEPARATOR );
+}
+
+// *********************************
+//
+std::string              TimelineHelper::CombineTimelinePath            ( const std::string & pathA, const std::string & pathB )
+{
+    return pathA + SEPARATOR + pathB;
+}
 
 } //model
 } //bv

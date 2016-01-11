@@ -12,6 +12,10 @@ namespace bv { namespace model {
 
 class TimelineHelper
 {
+private:
+
+    static const std::string        SEPARATOR; //FIXME: probably not the best idea
+
 public:
 
     static ITimeEvaluatorPtr        CreateTimeEvaluator             ( const std::string & name, TimelineType type );
@@ -35,6 +39,9 @@ public:
     static ITimeEvaluatorPtr        GetTimeEvaluator                ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
     static ITimelinePtr             GetTimeline                     ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
     static std::string              GetTimelinePath                 ( ITimeEvaluatorPtr timeline, ITimeEvaluatorPtr parentTimeline );
+
+    static std::string              CombineTimelinePath             ( const std::vector< std::string > & strVec );
+    static std::string              CombineTimelinePath             ( const std::string & pathA, const std::string & pathB );
 
 private:
 

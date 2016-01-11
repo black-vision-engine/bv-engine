@@ -195,7 +195,7 @@ private:
     void                    SetSceneRootNode	( model::SceneModelPtr scene, model::IModelNodePtr rootNode );
     void                    DeleteSceneRootNode	( model::SceneModelPtr scene );
 
-	std::string				GetNodeName			( const std::string & nodePath );
+	std::string				GetNodeName			( const std::string & nodePath, const std::string & separator = "/" );
 
 
 	/* renaming helpers */
