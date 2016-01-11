@@ -63,6 +63,8 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             responseMessage = toWString( GetTimeLinesInfo( request, requestID ) );
         else if( command == InfoEvent::Command::NodeInfo )
             responseMessage = toWString( GetNodeInfo( request, requestID ) );
+        else if ( command == InfoEvent::Command::PluginInfo )
+            responseMessage = toWString( PluginInfo( request, requestID ) );
         else if( command == InfoEvent::Command::MinimalSceneInfo )
             responseMessage = toWString( GetMinimalSceneInfo( request, requestID ) );
         else if( command == InfoEvent::Command::Videocards )
@@ -423,6 +425,40 @@ std::string     QueryHandlers::MinimalTreeStructureInfo        ( const std::stri
     }
 
     ser.ExitChild();
+
+    return ser.GetString();
+}
+
+std::string     QueryHandlers::PluginInfo          ( const std::string& request, unsigned int requestID )
+{
+    JsonDeserializeObject deser;
+    JsonSerializeObject ser;
+    deser.Load( request );
+
+
+    std::string nodePath = deser.GetAttribute( "NodePath" );
+    std::string pluginName = deser.GetAttribute( "PluginName" );
+    std::string sceneName = deser.GetAttribute( "SceneName" );
+
+    auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
+    if( node == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::PluginInfo, requestID, "Node not found" );
+        return ser.GetString();
+    }
+
+    auto iplugin = node->GetPlugin( pluginName );
+    if( iplugin == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::PluginInfo, requestID, "Plugin not found" );
+        return ser.GetString();
+    }
+
+    PrepareResponseTemplate( ser, InfoEvent::Command::PluginInfo, requestID, true );
+
+    auto plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( iplugin );
+    plugin->Serialize( ser );
+
 
     return ser.GetString();
 }

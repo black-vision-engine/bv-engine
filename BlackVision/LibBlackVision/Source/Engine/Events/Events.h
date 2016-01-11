@@ -541,6 +541,7 @@ public:
         Timelines,
         CheckTimelineTime,
         NodeInfo,
+        PluginInfo,
         MinimalSceneInfo,
         Videocards,
         Fail            ///< Wrong command
