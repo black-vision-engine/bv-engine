@@ -409,7 +409,7 @@ std::string     QueryHandlers::MinimalTreeStructureInfo        ( const std::stri
     auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
     context->recursive = true;
     context->detailedInfo = false;
-    context->pluginsInfo = false;
+    context->pluginsInfo = true;
     
     PrepareResponseTemplate( ser, InfoEvent::Command::TreeStructure, requestID, true );
 
