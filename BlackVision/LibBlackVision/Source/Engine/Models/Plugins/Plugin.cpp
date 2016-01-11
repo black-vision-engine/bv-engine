@@ -223,11 +223,14 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
         deser.ExitChild(); // assets
     }
 
-    if( deser.EnterChild( "renderer_context" ) )
+    if( plugin->GetPixelShaderChannel() )
     {
-        auto context = RendererContext::Create( deser );
-        deser.ExitChild();
-        plugin->SetRendererContext( context );    
+        if( deser.EnterChild( "renderer_context" ) )
+        {
+            auto context = RendererContext::Create( deser );
+            deser.ExitChild();
+            plugin->SetRendererContext( context );    
+        }
     }
 
     ISerializablePtr serializablePlugin = std::static_pointer_cast< ISerializable >( plugin );

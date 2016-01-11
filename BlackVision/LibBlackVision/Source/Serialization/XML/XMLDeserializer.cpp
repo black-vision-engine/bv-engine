@@ -120,11 +120,13 @@ bool                XMLDeserializer::NextChild           () const
         m_doc = m_doc->next_sibling();
     }while( m_doc && strcmp( name, m_doc->name() ) );
 
-    m_nodes.pop();
-    m_nodes.push( m_doc );
 
     if( m_doc )
+    {
+        m_nodes.pop();
+        m_nodes.push( m_doc );
         return true;
+    }
     else
         return false;
 }

@@ -152,6 +152,7 @@ CompositeBezierInterpolator< TimeValueT, ValueT >*     CompositeBezierInterpolat
             interpolators[ i++ ]->Deserialize( deser );
         } while( deser.NextChild() );
         deser.ExitChild();
+        deser.ExitChild();
     }
 
     interpolator->SetCurveType( SerializationHelper::String2T< CurveType >( SerializationHelper::ct2s, deser.GetAttribute( "curve_type" ) ) );
