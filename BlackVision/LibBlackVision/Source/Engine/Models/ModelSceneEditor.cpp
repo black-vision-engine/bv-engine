@@ -165,11 +165,6 @@ BasicNodePtr    ModelSceneEditor::GetRootNode       () const
 //
 IModelNodePtr   ModelSceneEditor::GetNode           ( const std::string & path, const std::string & separator ) const
 {
-    if( path == "/" ) 
-    {
-        return m_rootNode; // hack zeby mozna by³o dodac nodea- na poziomie "0" w drzewie sceny
-    }
-
     if( m_rootNode )
     {
         std::string childPath = path;
