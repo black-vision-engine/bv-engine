@@ -60,6 +60,13 @@ void    SimpleFullscreenEffect::Render          ( FullscreenEffectContext * ctx 
 
 // **************************
 //
+unsigned int    SimpleFullscreenEffect::GetNumInputs    () const
+{
+    return m_data.GetNumTextures();
+}
+
+// **************************
+//
 TriangleStrip *     SimpleFullscreenEffect::CreateFullscreenQuad    ( const FullscreenEffectData & inputData ) const
 {
     auto effect = CreateEffect( inputData );

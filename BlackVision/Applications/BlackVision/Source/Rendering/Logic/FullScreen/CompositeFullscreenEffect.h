@@ -16,10 +16,12 @@ private:
 
 public:
 
-                    CompositeFullscreenEffect   ( FullscreenEffectGraph * graph );
-                    ~CompositeFullscreenEffect  ();
+                            CompositeFullscreenEffect   ( FullscreenEffectGraph * graph );
+                            ~CompositeFullscreenEffect  ();
 
-    virtual void    Render                      ( FullscreenEffectContext * ctx ) override;
+    virtual void            Render                      ( FullscreenEffectContext * ctx ) override;
+
+    virtual unsigned int    GetNumInputs                () const override;
 
 private:
 

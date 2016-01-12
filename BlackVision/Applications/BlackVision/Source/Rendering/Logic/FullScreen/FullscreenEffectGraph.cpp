@@ -51,4 +51,21 @@ void                            FullscreenEffectGraph::SetSinkNode      ( Fullsc
     m_sinkNode = node;
 }
 
+// ****************************
+//
+void                            FullscreenEffectGraph::MarkSourceNode          ( FullscreenEffectGraphNodePtr node )
+{
+    assert( m_nodes.find( node ) != m_nodes.end() );
+    assert( node->GetNumInputNodes() == 0 );
+
+    m_sourceNodes.push_back( node );
+}
+
+// ****************************
+//
+const std::vector< FullscreenEffectGraphNodePtr > &     FullscreenEffectGraph::GetSourceNodes  () const
+{
+    return m_sourceNodes;
+}
+
 } //bv

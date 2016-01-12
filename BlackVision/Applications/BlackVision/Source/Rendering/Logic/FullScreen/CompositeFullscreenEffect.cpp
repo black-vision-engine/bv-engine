@@ -34,6 +34,20 @@ void    CompositeFullscreenEffect::Render                      ( FullscreenEffec
 
 // ****************************
 //
+unsigned int    CompositeFullscreenEffect::GetNumInputs                () const
+{
+    unsigned int sum = 0;
+
+    for( auto node : m_graph->GetSourceNodes() )
+    {
+        sum += node->GetNumInputNodes();
+    }
+
+    return sum;
+}
+
+// ****************************
+//
 void    CompositeFullscreenEffect::RenderGraphNode             ( FullscreenEffectGraphNodePtr node, Renderer * renderer, RenderTarget * outputRenderTarget, RenderTargetStackAllocator * allocator )
 {
     std::vector< RenderTarget * >   inputResults( node->GetInputVec().size() );

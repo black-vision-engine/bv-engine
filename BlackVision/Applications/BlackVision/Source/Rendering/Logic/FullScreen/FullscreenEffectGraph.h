@@ -13,7 +13,8 @@ class FullscreenEffectGraph
 private:
 
     std::set< FullscreenEffectGraphNodePtr >    m_nodes;
-
+   
+    std::vector< FullscreenEffectGraphNodePtr > m_sourceNodes;
     FullscreenEffectGraphNodePtr                m_sinkNode;
 
 public:
@@ -25,6 +26,10 @@ public:
 
     void                            InsertNode              ( FullscreenEffectGraphNodePtr node, const std::vector< FullscreenEffectGraphNodePtr > & predcessors );
     void                            SetSinkNode             ( FullscreenEffectGraphNodePtr node );
+
+    void                            MarkSourceNode          ( FullscreenEffectGraphNodePtr node );
+
+    const std::vector< FullscreenEffectGraphNodePtr > &     GetSourceNodes  () const;
 
 };
 

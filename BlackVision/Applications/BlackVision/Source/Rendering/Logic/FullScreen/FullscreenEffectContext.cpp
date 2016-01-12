@@ -5,10 +5,11 @@ namespace bv {
 
 // **************************
 //
-FullscreenEffectContext::FullscreenEffectContext            ( Renderer * renderer, RenderTarget * outputRenderTarget, RenderTargetStackAllocator * allocator )
+FullscreenEffectContext::FullscreenEffectContext            ( Renderer * renderer, RenderTarget * outputRenderTarget, RenderTargetStackAllocator * allocator, unsigned int startIndex )
     : m_renderer( renderer )
     , m_outputRenderTarget( nullptr )
     , m_rtAllocator( allocator )
+    , m_startIndex( startIndex )
 {
     SetOutputRenderTarget( outputRenderTarget );
 }
@@ -56,9 +57,23 @@ void                            FullscreenEffectContext::AppendInputRenderTarget
 
 // **************************
 //
-std::vector< RenderTarget * > &   FullscreenEffectContext::AccessInputRenderTargets ()
+std::vector< RenderTarget * > & FullscreenEffectContext::AccessInputRenderTargets ()
 {
     return m_inputRenderTargets;
+}
+
+// **************************
+//
+void                            FullscreenEffectContext::SetFirstRenderTargetIndex   ( unsigned int startIndex )
+{
+    m_startIndex = startIndex;
+}
+
+// **************************
+//
+unsigned int                    FullscreenEffectContext::GetFirstRenderTargetIndex   () const
+{
+    return m_startIndex;
 }
 
 } //bv

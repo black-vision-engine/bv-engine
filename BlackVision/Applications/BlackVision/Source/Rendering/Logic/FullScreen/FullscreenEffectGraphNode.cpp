@@ -42,6 +42,13 @@ void                                                FullscreenEffectGraphNode::A
 
 // ****************************
 //
+unsigned int                                        FullscreenEffectGraphNode::GetNumInputNodes    () const
+{
+    return (unsigned int) m_inputNodes.size();
+}
+
+// ****************************
+//
 const std::vector< FullscreenEffectGraphNodePtr > & FullscreenEffectGraphNode::GetInputVec () const
 {
     return m_inputNodes;

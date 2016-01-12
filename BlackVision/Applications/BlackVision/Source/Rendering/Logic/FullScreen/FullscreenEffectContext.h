@@ -18,8 +18,10 @@ private:
     RenderTargetStackAllocator *    m_rtAllocator;
     std::vector< RenderTarget * >   m_inputRenderTargets;
 
+    unsigned int                    m_startIndex;
+
 public:
-                                    FullscreenEffectContext     ( Renderer * renderer, RenderTarget * outputRenderTarget, RenderTargetStackAllocator * allocator );
+                                    FullscreenEffectContext     ( Renderer * renderer, RenderTarget * outputRenderTarget, RenderTargetStackAllocator * allocator, unsigned int startIndex = 0 );
                                     ~FullscreenEffectContext    ();
 
     Renderer *                      GetRenderer                 ();
@@ -30,6 +32,9 @@ public:
 
     void                            AppendInputRenderTarget     ( RenderTarget * rt );
     std::vector< RenderTarget * > & AccessInputRenderTargets    ();
+
+    void                            SetFirstRenderTargetIndex   ( unsigned int startIndex );
+    unsigned int                    GetFirstRenderTargetIndex   () const;
 
 };
 

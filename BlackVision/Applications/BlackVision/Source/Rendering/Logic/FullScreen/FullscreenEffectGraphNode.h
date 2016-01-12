@@ -23,16 +23,18 @@ private:
 
 public:
 
-                            FullscreenEffectGraphNode               ( FullscreenEffectTr * fullscreenEffect );
-                            ~FullscreenEffectGraphNode              ();
+                            FullscreenEffectGraphNode                       ( FullscreenEffectTr * fullscreenEffect );
+                            ~FullscreenEffectGraphNode                      ();
 
 
-    FullscreenEffectTr *                                GetEffect   ();
+    FullscreenEffectTr *                                GetEffect           ();
 
-    void                                                AddInput    ( FullscreenEffectTr * fullscreenEffect );
-    void                                                AddInput    ( FullscreenEffectGraphNodePtr node );
+    void                                                AddInput            ( FullscreenEffectTr * fullscreenEffect );
+    void                                                AddInput            ( FullscreenEffectGraphNodePtr node );
 
-    const std::vector< FullscreenEffectGraphNodePtr > & GetInputVec () const; 
+    unsigned int                                        GetNumInputNodes    () const;
+
+    const std::vector< FullscreenEffectGraphNodePtr > & GetInputVec         () const; 
 
 };
 
