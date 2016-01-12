@@ -32,6 +32,8 @@ public:
 
     virtual unsigned int    GetNumInputs        () const override;
 
+    virtual void            SynchronizeInputData( FullscreenEffectContext * ctx ) override;
+
 private:
 
     TriangleStrip *     CreateFullscreenQuad    ( const FullscreenEffectData & inputData ) const;
@@ -47,7 +49,6 @@ private:
 
 protected:
 
-    virtual void        SynchronizeInputData    ( FullscreenEffectContext * ctx ) override;
 
     bool                DebugVerifyInput        ( const std::vector< RenderTarget * > * rtVec, unsigned int startIdx );
 

@@ -17,8 +17,6 @@ public:
 
     virtual unsigned int    GetNumInputs            () const                            = 0;
 
-protected:
-
     virtual void            SynchronizeInputData    ( FullscreenEffectContext * ctx )   = 0;
 
 };

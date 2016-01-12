@@ -31,9 +31,7 @@ CompositeFullscreenEffect::~CompositeFullscreenEffect  ()
 //
 void    CompositeFullscreenEffect::Render                      ( FullscreenEffectContext * ctx )
 {
-    assert( GetNumInputs() <= ( ctx->AccessInputRenderTargets()->size() - ctx->GetFirstRenderTargetIndex() ) );
-
-    SetInputRenderTargets( m_graph->GetSourceNodes(), ctx->AccessInputRenderTargets(), ctx->GetFirstRenderTargetIndex() );
+    SynchronizeInputData( ctx );
 
     RenderGraphNode( m_graph->GetSinkNode(), ctx->GetRenderer(), ctx->GetOutputRenderTarget(), ctx->GetRenderTargetAllocator() );
 }
@@ -50,6 +48,29 @@ unsigned int    CompositeFullscreenEffect::GetNumInputs                () const
     }
 
     return sum;
+}
+
+// ****************************
+//
+void    CompositeFullscreenEffect::SynchronizeInputData        ( FullscreenEffectContext * ctx )
+{
+    assert( ctx->AccessInputRenderTargets() != nullptr );
+    assert( GetNumInputs() <= ( ctx->AccessInputRenderTargets()->size() - ctx->GetFirstRenderTargetIndex() ) );
+    
+    auto curIdx     = ctx->GetFirstRenderTargetIndex();
+    auto rtVec      = *ctx->AccessInputRenderTargets();
+
+    for( auto node : m_graph->GetSourceNodes() )
+    {
+        assert( node->GetNumInputNodes() == 0 );
+
+        auto effect = node->GetEffect();
+        
+        ctx->SetFirstRenderTargetIndex( curIdx );
+        effect->SynchronizeInputData( ctx );
+
+        curIdx += effect->GetNumInputs();
+    }
 }
 
 // ****************************
@@ -76,23 +97,6 @@ void    CompositeFullscreenEffect::RenderGraphNode             ( FullscreenEffec
     renderer->Enable( outputRenderTarget );
     effect->Render( &ctx );
     renderer->Disable( outputRenderTarget );
-}
-
-// ****************************
-//
-void    CompositeFullscreenEffect::SetInputRenderTargets    ( const std::vector< FullscreenEffectGraphNodePtr > & sourceNodes, const std::vector< RenderTarget * > * inputRenderTargets, unsigned int startIdx ) const
-{
-    { sourceNodes; inputRenderTargets; startIdx; }
-    for( auto node : sourceNodes )
-    {
-    }
-}
-
-// ****************************
-//
-void    CompositeFullscreenEffect::SynchronizeInputData        ( FullscreenEffectContext * ctx )
-{
-    { ctx; }
 }
 
 } //bv

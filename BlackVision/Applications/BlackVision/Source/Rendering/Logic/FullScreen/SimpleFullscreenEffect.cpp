@@ -67,6 +67,30 @@ unsigned int    SimpleFullscreenEffect::GetNumInputs    () const
 
 // **************************
 //
+void                SimpleFullscreenEffect::SynchronizeInputData    ( FullscreenEffectContext * ctx )
+{
+    auto rtVec = ctx->AccessInputRenderTargets();
+    auto startIdx = ctx->GetFirstRenderTargetIndex();
+
+    assert( rtVec != nullptr );
+
+    if( m_data.GetNumInitializedTextures() < m_data.GetNumTextures() )
+    {
+        assert( m_data.GetNumTextures() <= (unsigned int) ( rtVec->size() - startIdx ) );
+        
+        for( unsigned int i = 0; i < m_data.GetNumTextures(); ++i )
+        {
+            m_data.SetInputTexture( (*rtVec)[ i + startIdx ]->ColorTexture( 0 ), i );
+        }
+    }
+    else
+    {
+        assert( DebugVerifyInput( rtVec, startIdx ) );
+    }
+}
+
+// **************************
+//
 TriangleStrip *     SimpleFullscreenEffect::CreateFullscreenQuad    ( const FullscreenEffectData & inputData ) const
 {
     auto effect = CreateEffect( inputData );
@@ -179,30 +203,6 @@ TextureSampler *    SimpleFullscreenEffect::CreateSampler           ( const std:
     auto sampler = new TextureSampler( 0, samplerName, samplingMode, sfm, wrappingMode, glm::vec4( 0.f, 0.f, 0.f, 0.f ) ); 
 
     return sampler;
-}
-
-// **************************
-//
-void                SimpleFullscreenEffect::SynchronizeInputData    ( FullscreenEffectContext * ctx )
-{
-    auto rtVec = ctx->AccessInputRenderTargets();
-    auto startIdx = ctx->GetFirstRenderTargetIndex();
-
-    assert( rtVec != nullptr );
-
-    if( m_data.GetNumInitializedTextures() < m_data.GetNumTextures() )
-    {
-        assert( m_data.GetNumTextures() <= (unsigned int) ( rtVec->size() - startIdx ) );
-        
-        for( unsigned int i = 0; i < m_data.GetNumTextures(); ++i )
-        {
-            m_data.SetInputTexture( (*rtVec)[ i + startIdx ]->ColorTexture( 0 ), i );
-        }
-    }
-    else
-    {
-        assert( DebugVerifyInput( rtVec, startIdx ) );
-    }
 }
 
 // **************************
