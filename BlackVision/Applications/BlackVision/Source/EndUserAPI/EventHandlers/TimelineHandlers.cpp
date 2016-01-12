@@ -178,6 +178,7 @@ void        TimelineHandlers::TimelineHandler     ( bv::IEventPtr evt )
             }else{
 
                 timeline->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
+                timeline->Play();
                 timeline->SetTimeAndStop( ( bv::TimeType )time );
 
                 SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
