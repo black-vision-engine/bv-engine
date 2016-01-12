@@ -52,6 +52,12 @@
     <Filter Include="Rendering\Logic\FullScreen\Impl">
       <UniqueIdentifier>{66790ad3-2099-428d-804d-34b46c7724f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering\Logic\NodeEffect">
+      <UniqueIdentifier>{fa48ceda-49af-4e40-8b32-92c32f726474}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Logic\NodeEffect\Impl">
+      <UniqueIdentifier>{480ddd9a-7331-40dc-8d11-2826d15b0810}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -245,6 +251,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectGraphNode.cpp">
       <Filter>Rendering\Logic\FullScreen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\PostFullScreenEffectLogic.cpp">
+      <Filter>Rendering\Logic\NodeEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\PreFullScreenEffectLogic.cpp">
+      <Filter>Rendering\Logic\NodeEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -444,6 +456,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectGraphNode.h">
       <Filter>Rendering\Logic\FullScreen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\PostFullScreenEffectLogic.h">
+      <Filter>Rendering\Logic\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\PreFullScreenEffectLogic.h">
+      <Filter>Rendering\Logic\NodeEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
