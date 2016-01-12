@@ -48,8 +48,12 @@ void                    AssetTracker::UnregisterAsset       ( TextureConstPtr as
 //
 void                    AssetTracker::RegisterAsset         ( ITextureDescriptorConstPtr asset )
 {
+    //FIXME: register only cached textures
     auto tex = GTexture2DCache.GetTexture( asset.get() );
-    RegisterAsset( tex );
+    if( GTexture2DCache.IsRegistered( asset.get() ) )
+    {
+        RegisterAsset( tex );
+    }
 }
 
 // *************************************

@@ -76,7 +76,6 @@ void				VideoDecoderThread::Run			()
 		{
 			m_paused = false;
 			m_stopped = true;
-			m_cond.wait( lock );
 			break;
 		}
 

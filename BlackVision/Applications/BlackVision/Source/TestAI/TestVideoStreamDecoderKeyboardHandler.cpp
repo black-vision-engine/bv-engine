@@ -43,7 +43,8 @@ void TestVideoStreamDecoderKeyboardHandler::HandleKey( unsigned char c, BVAppLog
 	else if( c == 'x' )
     {
 		DefaultVideoStreamDecoderPlugin::Stop( node->GetPlugin( "video_stream_decoder" ) );
-		model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4", TextureFormat::F_A8R8G8B8 );
+		auto desc = VideoStreamAssetDesc::Create( "rsrcy/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4", TextureFormat::F_A8R8G8B8 );
+        editor->LoadAsset( node->GetPlugin( "video_stream_decoder" ), desc );
 		model::DefaultVideoStreamDecoderPlugin::Start( node->GetPlugin( "video_stream_decoder" ) );
     }
 	else if( c == 'z' )
