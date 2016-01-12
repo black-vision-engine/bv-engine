@@ -45,10 +45,11 @@ private:
 
     TextureSampler *    CreateSampler           ( const std::string & samplerName ) const;
 
-private:
+protected:
 
-    void                SynchronizeInputData    ( const std::vector< RenderTarget * > & rtVec );
-    bool                DebugVerifyInput        ( const std::vector< RenderTarget * > & rtVec );
+    virtual void        SynchronizeInputData    ( FullscreenEffectContext * ctx ) override;
+
+    bool                DebugVerifyInput        ( const std::vector< RenderTarget * > * rtVec, unsigned int startIdx );
 
 };
 

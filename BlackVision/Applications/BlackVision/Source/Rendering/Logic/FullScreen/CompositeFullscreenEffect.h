@@ -27,6 +27,12 @@ private:
 
     void            RenderGraphNode             ( FullscreenEffectGraphNodePtr node, Renderer * renderer, RenderTarget * outputRenderTarget, RenderTargetStackAllocator * allocator );
 
+    void            SetInputRenderTargets       ( const std::vector< FullscreenEffectGraphNodePtr > & sourceNodes, const std::vector< RenderTarget * > * inputRenderTargets, unsigned int startIdx ) const;
+
+protected:
+
+    virtual void    SynchronizeInputData        ( FullscreenEffectContext * ctx ) override;
+
 };
 
 DEFINE_PTR_TYPE(CompositeFullscreenEffect)

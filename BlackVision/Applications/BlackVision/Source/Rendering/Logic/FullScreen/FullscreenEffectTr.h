@@ -11,11 +11,15 @@ class FullscreenEffectTr
 {
 public:
 
-    virtual                 ~FullscreenEffectTr();
+    virtual                 ~FullscreenEffectTr     ();
 
-    virtual void            Render          ( FullscreenEffectContext * ctx )   = 0;
+    virtual void            Render                  ( FullscreenEffectContext * ctx )   = 0;
 
-    virtual unsigned int    GetNumInputs    () const                            = 0;
+    virtual unsigned int    GetNumInputs            () const                            = 0;
+
+protected:
+
+    virtual void            SynchronizeInputData    ( FullscreenEffectContext * ctx )   = 0;
 
 };
 

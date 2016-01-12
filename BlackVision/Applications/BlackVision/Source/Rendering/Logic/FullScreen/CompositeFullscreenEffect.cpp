@@ -1,5 +1,7 @@
 #include "CompositeFullscreenEffect.h"
 
+#include <cassert>
+
 #include "Rendering/Logic/FullScreen/FullscreenEffectGraph.h"
 
 #include "Rendering/Utils/RenderTargetStackAllocator.h"
@@ -29,6 +31,10 @@ CompositeFullscreenEffect::~CompositeFullscreenEffect  ()
 //
 void    CompositeFullscreenEffect::Render                      ( FullscreenEffectContext * ctx )
 {
+    assert( GetNumInputs() <= ( ctx->AccessInputRenderTargets()->size() - ctx->GetFirstRenderTargetIndex() ) );
+
+    SetInputRenderTargets( m_graph->GetSourceNodes(), ctx->AccessInputRenderTargets(), ctx->GetFirstRenderTargetIndex() );
+
     RenderGraphNode( m_graph->GetSinkNode(), ctx->GetRenderer(), ctx->GetOutputRenderTarget(), ctx->GetRenderTargetAllocator() );
 }
 
@@ -50,11 +56,11 @@ unsigned int    CompositeFullscreenEffect::GetNumInputs                () const
 //
 void    CompositeFullscreenEffect::RenderGraphNode             ( FullscreenEffectGraphNodePtr node, Renderer * renderer, RenderTarget * outputRenderTarget, RenderTargetStackAllocator * allocator )
 {
-    std::vector< RenderTarget * >   inputResults( node->GetInputVec().size() );
+    std::vector< RenderTarget * >   inputResults( node->GetNumInputNodes() );
 
     for( auto it : node->GetInputVec() )
     {
-        auto nodeOutRt = allocator->Allocate(RenderTarget::RTSemantic::S_DRAW_ONLY );
+        auto nodeOutRt = allocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
         RenderGraphNode( it, renderer, nodeOutRt, allocator );
         
         inputResults.push_back( nodeOutRt );
@@ -64,13 +70,29 @@ void    CompositeFullscreenEffect::RenderGraphNode             ( FullscreenEffec
 
     auto effect = node->GetEffect();
 
-    auto ctx = FullscreenEffectContext( renderer, outputRenderTarget, allocator );
-    ctx.AccessInputRenderTargets() = inputResults;
+    auto ctx = FullscreenEffectContext( renderer, outputRenderTarget, allocator, 0 );
+    ctx.SetInputRenderTargets( &inputResults );
 
     renderer->Enable( outputRenderTarget );
     effect->Render( &ctx );
     renderer->Disable( outputRenderTarget );
 }
 
-} //bv
+// ****************************
+//
+void    CompositeFullscreenEffect::SetInputRenderTargets    ( const std::vector< FullscreenEffectGraphNodePtr > & sourceNodes, const std::vector< RenderTarget * > * inputRenderTargets, unsigned int startIdx ) const
+{
+    { sourceNodes; inputRenderTargets; startIdx; }
+    for( auto node : sourceNodes )
+    {
+    }
+}
 
+// ****************************
+//
+void    CompositeFullscreenEffect::SynchronizeInputData        ( FullscreenEffectContext * ctx )
+{
+    { ctx; }
+}
+
+} //bv
