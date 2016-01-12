@@ -261,16 +261,26 @@ void                BasicInterpolator<TimeValueT, ValueT, FloatT>::Serialize    
 // *************************************
 //
 template<class TimeValueT, class ValueT, class FloatT >
-BasicInterpolator< TimeValueT, ValueT, FloatT >*     BasicInterpolator<TimeValueT, ValueT, FloatT>::Create          ( const IDeserializer& doc ) // FIXME: this works for floats only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+BasicInterpolator< TimeValueT, ValueT, FloatT >*     BasicInterpolator<TimeValueT, ValueT, FloatT>::Create          ( const IDeserializer& deser ) // FIXME: this works for floats only!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 {
-    auto keys = SerializationHelper::DeserializeProperties< Key<TimeValueT, ValueT> >( doc, "key" );
+    if( deser.EnterChild( "keys" ) )
+    {
+        auto keys = SerializationHelper::DeserializeProperties< Key<TimeValueT, ValueT> >( deser, "key" );
 
-    auto interpolator = new BasicInterpolator<TimeValueT, ValueT, FloatT>();
+        auto interpolator = new BasicInterpolator<TimeValueT, ValueT, FloatT>();
 
-    for( auto key : keys )
-        interpolator->AddKey( key->t, key->val );
+        for( auto key : keys )
+            interpolator->AddKey( key->t, key->val );
 
-    return interpolator;
+        deser.ExitChild(); // keys
+
+        return interpolator;
+    }
+    else
+    {
+        assert( false );
+        return nullptr;
+    }
 }
 
 // *************************************

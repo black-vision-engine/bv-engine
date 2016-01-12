@@ -13,6 +13,7 @@
 
 
 #include "Engine/Models/Timeline/TimelineManager.h"
+#include "Engine/Models/Timeline/TimelineHelper.h"
 
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/BVSerializeContext.h"
@@ -597,7 +598,7 @@ model::BasicNodePtr		CloneNode		( const model::BasicNode * obj, const std::strin
         if( name == srcScene )
             timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( destScene );
         else
-            timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( destScene + "/" + prefix + param->GetTimeEvaluator()->GetName() );
+            timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( model::TimelineHelper::CombineTimelinePath( destScene,  prefix + param->GetTimeEvaluator()->GetName() ) );
         param->SetTimeEvaluator( timeline );
     }
 

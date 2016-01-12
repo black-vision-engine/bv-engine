@@ -294,7 +294,7 @@ model::IPluginPtr				ClonePlugin					( const model::IPlugin * obj, const std::st
         if( name == srcScene )
             timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( destScene );
         else
-            timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( destScene + "/" + prefix + param->GetTimeEvaluator()->GetName() );
+            timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( model::TimelineHelper::CombineTimelinePath( destScene, prefix + param->GetTimeEvaluator()->GetName() ) );
         param->SetTimeEvaluator( timeline );
     }
 
