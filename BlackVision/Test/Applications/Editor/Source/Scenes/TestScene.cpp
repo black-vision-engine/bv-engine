@@ -207,7 +207,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 		auto editor = m_project->GetProjectEditor();
 		bool success = true;
 
-        editor->DetachScene( EMPTY_SCENE );
+        success = editor->DetachScene( EMPTY_SCENE );
 
 		assert( success );
 	});
@@ -218,7 +218,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 		auto editor = m_project->GetProjectEditor();
 		bool success = true;
 
-        editor->AttachScene( EMPTY_SCENE, 0 );
+         success = editor->AttachScene( EMPTY_SCENE, 0 );
 
 		assert( success );
 	});
