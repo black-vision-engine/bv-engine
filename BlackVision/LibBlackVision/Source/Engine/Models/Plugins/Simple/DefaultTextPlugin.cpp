@@ -197,10 +197,12 @@ void DefaultTextPlugin::SetPrevPlugin( IPluginPtr prev )
 
 	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
 	auto ctx = m_psc->GetRendererContext();
-	ctx->cullCtx->enabled = false;
-	ctx->alphaCtx->blendEnabled = true;
-	ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
-	ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+    ctx->cullCtx->enabled = false;
+    
+    ctx->alphaCtx->blendEnabled = true;
+    ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
+    ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+	//HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 }
 
 // *************************************
