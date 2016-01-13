@@ -255,10 +255,10 @@ bool                                DefaultFinalizePlugin::LoadResource         
 
 // *******************************
 //
-std::vector< AssetDescConstPtr >    DefaultFinalizePlugin::GetAssets                   () const
+std::vector< LAsset >    DefaultFinalizePlugin::GetLAssets                   () const
 {
     assert( false && "how did you get here?");
-    return std::vector< AssetDescConstPtr >();
+    return std::vector< LAsset >();
 }
 
 

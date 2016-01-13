@@ -40,10 +40,10 @@ void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root, bool 
         auto plugins = root->GetPlugins();
         for( unsigned int i = 0; i < root->GetNumPlugins(); i++ )
         {
-            auto assets = root->GetPlugins()->GetPlugin( i )->GetAssets();
-            for( auto asset : assets )
+            auto lassets = root->GetPlugins()->GetPlugin( i )->GetLAssets();
+            for( auto lasset : lassets )
             {
-                map.AddAssetDesc( asset );
+                map.AddAssetDesc( lasset.assetDesc );
             }
         }
 
@@ -57,10 +57,10 @@ void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root, bool 
 //
 void GetAssetsWithUIDs( AssetDescsWithUIDs& map, const model::IPlugin * plugin )
 {
-    auto assets = plugin->GetAssets();
-    for( auto asset : assets )
+    auto lassets = plugin->GetLAssets();
+    for( auto lasset : lassets )
     {
-        map.AddAssetDesc( asset );
+        map.AddAssetDesc( lasset.assetDesc );
     }
 }
 
