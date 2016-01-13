@@ -21,6 +21,8 @@
 #include "Serialization/CloneViaSerialization.h"
 #include "Assets/AssetDescsWithUIDs.h"
 
+#include "UseLoggerLibBlackVision.h"
+
 namespace bv { 
     
 // serialization stuff
@@ -133,6 +135,15 @@ BasicNode * BasicNode::Create( const IDeserializer& dob )
 
     auto name = dob.GetAttribute( "name" );
 
+    auto deserContext = Cast< BVDeserializeContext * >( dob.GetDeserializeContext() );
+
+    if( deserContext == nullptr )
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "node " << name << " serilization aborded because of an error";
+        assert( !"Wrong DeserializeContext casting." );
+        return nullptr;
+    }
+
 	//FIXME: nullptr because timeEvaluator is not used in BasicNode
     //auto node = Create( name, nullptr );
     auto node = new BasicNode( name, nullptr );
@@ -140,10 +151,23 @@ BasicNode * BasicNode::Create( const IDeserializer& dob )
     node->m_visible = dob.GetAttribute( "visible" ) == "false" ? false : true;
 
 // plugins
+    deserContext->ClearRendererContextes();
     auto plugins = SerializationHelper::DeserializeArray< BasePlugin< IPlugin > >( dob, "plugins" );
-	
+
+    auto itRC = deserContext->RendererContextes().begin();
+
     for( auto plugin : plugins )
+    {
         node->AddPlugin( plugin );
+
+        // override renderer context
+        assert( itRC != deserContext->RendererContextes().end() );  // A little bit of defensive programming
+        if( plugin->GetPixelShaderChannel() )
+        {
+            plugin->SetRendererContext( *itRC );
+            ++itRC;
+        }
+    }
 
 //@todo use ModelNodeEffectFactory
 //// node effect
