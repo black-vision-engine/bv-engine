@@ -1580,7 +1580,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::ITimeEvaluatorPt
 	//SetParameterScale ( param, 0, 0.0f, glm::vec3( 0.002f, 0.002f, 1.f ) );
 
 
-	SetParameterRotation ( param, 0, 10.0f, glm::vec3( 0.0f, 0.0f, -1.f ), 360 );
+	SetParameterRotation ( param, 0, 10.0f, glm::vec3( 0.0f, 0.0f, 1.f ), 360 );
 
 	node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( timeEvaluator );
 	node->GetPlugin( "text" )->GetParameter( "outlineColor" )->SetTimeEvaluator( timeEvaluator );
