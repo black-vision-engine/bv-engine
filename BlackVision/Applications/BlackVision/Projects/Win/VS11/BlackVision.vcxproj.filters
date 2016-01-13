@@ -293,6 +293,9 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\BlurEffectRenderLogic.cpp">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\NodeLogicHandlers.cpp">
+      <Filter>EndUserAPI\EventHandlers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -530,6 +533,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\BlurEffectRenderLogic.h">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\NodeLogicHandlers.h">
+      <Filter>EndUserAPI\EventHandlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

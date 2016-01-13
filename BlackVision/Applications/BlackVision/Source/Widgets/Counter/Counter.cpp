@@ -59,5 +59,19 @@ void		WidgetCounter::Update				( TimeType T)
 }
 
 
+// ***********************
+//
+void                WidgetCounter::Serialize       ( ISerializer& /*ser*/ ) const
+{
+
+}
+
+// ***********************
+//
+ISerializablePtr     WidgetCounter::Create          ( const IDeserializer& /*deser*/ )
+{
+    return nullptr;
+}
+
 }
 }
