@@ -8,6 +8,7 @@
 #include "AssetHandlers.h"
 #include "GlobalEffectHandler.h"
 #include "TimelineHandlers.h"
+#include "NodeLogicHandlers.h"
 
 #include "Engine/Events/EventManager.h"
 #include "Widgets/Crawler/CrawlerEvents.h"
@@ -25,7 +26,8 @@ RemoteEventsHandlers::RemoteEventsHandlers()
         m_engineStateEvents( nullptr ),
         m_heightmapEvents( nullptr ),
 		m_assetEvents( nullptr ),
-        m_timelineHandlers( nullptr )
+        m_timelineHandlers( nullptr ),
+        m_nodeLogicHandlers( nullptr )
 {}
 
 RemoteEventsHandlers::~RemoteEventsHandlers()
@@ -44,6 +46,8 @@ RemoteEventsHandlers::~RemoteEventsHandlers()
 		delete m_assetEvents;
     if( m_timelineHandlers )
         delete m_timelineHandlers;
+    if( m_nodeLogicHandlers )
+        delete m_nodeLogicHandlers;
 }
 
 // ***********************
@@ -58,24 +62,31 @@ void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic* appLogic )
 	m_assetEvents	    = new AssetHandlers( appLogic );
     m_globalEffectEvents= new GlobalEffectHandler( appLogic );
     m_timelineHandlers  = new TimelineHandlers( appLogic );
+    m_nodeLogicHandlers = new NodeLogicHandlers( appLogic );
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_pluginEvents, &PluginEventsHandlers::LoadAsset ), LoadAssetEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_pluginEvents, &PluginEventsHandlers::ParamHandler ), ParamKeyEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_pluginEvents, &PluginEventsHandlers::TimerHandler ), TimerEvent::Type() );
+
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::NodeStructure ), NodeStructureEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::PluginStructure ), PluginStructureEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::ProjectStructure ), ProjectEvent::Type() );
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::SceneStructure ), SceneEvent::Type() );
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::WidgetHandler ), WidgetEvent::Type() );
+
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_queryEvents, &QueryHandlers::Info ), InfoEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_engineStateEvents, &EngineStateHandlers::RenderingModeEvent ), RenderingModeEvent::Type() );
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_assetEvents, &AssetHandlers::CacheHandler ), AssetEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_globalEffectEvents, &GlobalEffectHandler::GlobalEffectEventHandler ), GlobalEffectEvent::Type() );
+
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_timelineHandlers, &TimelineHandlers::TimelineKeyframe ), TimelineKeyframeEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_timelineHandlers, &TimelineHandlers::TimelineHandler ), TimeLineEvent::Type() );
 
-	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::OnNodeAppearing ), widgets::NodeAppearingCrawlerEvent::Type() );
-	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_sceneEvents, &SceneEventsHandlers::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );
+
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_nodeLogicHandlers, &NodeLogicHandlers::WidgetHandler ), WidgetEvent::Type() );
+
+
+	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_nodeLogicHandlers, &NodeLogicHandlers::OnNodeAppearing ), widgets::NodeAppearingCrawlerEvent::Type() );
+	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_nodeLogicHandlers, &NodeLogicHandlers::OnNodeLeaving ), widgets::NodeLeavingCrawlerEvent::Type() );
 }
 
 // ***********************

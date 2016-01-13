@@ -275,6 +275,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\EventHandlerHelpers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\GlobalEffectHandler.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\HightmapHandlers.cpp" />
+    <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\NodeLogicHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\PluginEventsHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\QueryHandlers.cpp" />
     <ClCompile Include="..\..\..\Source\EndUserAPI\EventHandlers\RemoteEventsHandlers.cpp" />
@@ -363,6 +364,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\EventHandlerHelpers.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\GlobalEffectHandler.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\HightmapHandlers.h" />
+    <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\NodeLogicHandlers.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\PluginEventsHandlers.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\QueryHandlers.h" />
     <ClInclude Include="..\..\..\Source\EndUserAPI\EventHandlers\RemoteEventsHandlers.h" />

@@ -13,6 +13,7 @@ class EngineStateHandlers;
 class AssetHandlers;
 class GlobalEffectHandler;
 class TimelineHandlers;
+class NodeLogicHandlers;
 
 class RemoteEventsHandlers
 {
@@ -26,6 +27,7 @@ public:
     AssetHandlers*					m_assetEvents;
     GlobalEffectHandler*            m_globalEffectEvents;
     TimelineHandlers*               m_timelineHandlers;
+    NodeLogicHandlers*              m_nodeLogicHandlers;
 
 public:
 
