@@ -10,6 +10,7 @@
 #include "Serialization/CloneViaSerialization.h"
 #include "Assets/AssetDescsWithUIDs.h"
 #include "Serialization/BVSerializeContext.h"
+#include "Serialization/BVDeserializeContext.h"
 
 #include "UseLoggerLibBlackVision.h"
 
@@ -36,6 +37,8 @@ void SetParameter( IPluginParamValModelPtr pvm, AbstractModelParameterPtr param 
             }
 }
 
+// *******************************
+//
 std::vector< IParameterPtr >        BasePlugin< IPlugin >::GetParameters               () const
 {
     std::vector< IParameterPtr > ret;
@@ -64,44 +67,41 @@ std::vector< IParameterPtr >        BasePlugin< IPlugin >::GetParameters        
     return ret;
 }
 
-
-ITimeEvaluatorPtr GetTimeline( const BasePlugin< IPlugin >* plugin )
+namespace 
+{
+// *******************************
+//
+ITimeEvaluatorPtr GetTimeline                                               ( const BasePlugin< IPlugin >* plugin )
 {
     auto ps = plugin->GetParameters();
     assert( ps.size() > 0 );
     return ps[ 0 ]->GetTimeEvaluator();
 }
 
+} // anonymous
+
 // *******************************
 //
-std::vector< AssetDescConstPtr >    BasePlugin< IPlugin >::GetAssets                   () const
+std::vector< LAsset >    BasePlugin< IPlugin >::GetLAssets                   () const
 {
     return m_assets;
 }
 
 // *******************************
 //
-void                                BasePlugin< IPlugin >::SetAsset                    ( int i, AssetDescConstPtr asset, ResourceStateModelPtr rsm )
+void                                BasePlugin< IPlugin >::SetAsset                    ( int i, LAsset lasset )
 {
-    m_assets.resize( i+1 );
-    if( m_assets[ i ] )
-    {
-        m_key2rsm.erase( m_assets[ i ]->GetKey() );
-    }
-    m_assets[ i ] = asset;
-    m_key2rsm[ asset->GetKey() ] = rsm;
+    if( m_assets.size() < i )
+        assert( false );
+    else if( m_assets.size() == i )
+        m_assets.push_back( lasset );
+    else
+        m_assets[ i ] = lasset;
 }
 
 // *******************************
 //
-ResourceStateModelPtr              BasePlugin< IPlugin >::GetRSM                    ( std::string key ) const
-{
-    return m_key2rsm.at( key );
-}
-
-// *******************************
-//
-void                                BasePlugin< IPlugin >::Serialize                   ( ISerializer& ser ) const
+void                                BasePlugin< IPlugin >::Serialize        ( ISerializer& ser ) const
 {
     auto serContext = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
 
@@ -140,20 +140,24 @@ ser.EnterChild( "plugin" );
         }
         ser.ExitChild(); // params
 
-        auto assets = GetAssets();
+        auto assets = GetLAssets();
         if( assets.size() > 0 )
         {
             ser.EnterArray( "assets" );
-            for( auto asset : GetAssets() )
+            for( auto lasset : assets )
             {
-                auto uid = AssetDescsWithUIDs::GetInstance().Key2UID( asset->GetKey() );
+                auto asset = lasset.asset;
+                auto assetDesc = lasset.assetDesc;
+                auto uid = AssetDescsWithUIDs::GetInstance().Key2UID( assetDesc->GetKey() );
                 ser.EnterChild( "asset" );
                     if( uid != "" )
                         ser.SetAttribute( "uid", uid );
                     else
-                        asset->Serialize( ser );
+                        lasset.assetDesc->Serialize( ser );
 
-                    auto rsm = GetRSM( asset->GetKey() );
+                    ser.SetAttribute( "name", lasset.name );
+
+                    auto rsm = lasset.rsm;
                     assert( rsm );
                     rsm->Serialize( ser );
                 ser.ExitChild();
@@ -170,16 +174,28 @@ ser.EnterChild( "plugin" );
 // *******************************
 //
 template <>
-ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
+ISerializablePtr BasePlugin< IPlugin >::Create                              ( const IDeserializer & deser )
 {
     std::string pluginType = deser.GetAttribute( "uid" );
     std::string pluginName = deser.GetAttribute( "name" );
 
+    auto deserContext = Cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
+
+    if( deserContext == nullptr )
+    {
+        LOG_MESSAGE( SeverityLevel::error ) << "plugin " << pluginName << " serilization aborded because of an error";
+        assert( !"Wrong DeserializeContext casting." );
+        return nullptr;
+    }
+
     auto timeline = deser.GetAttribute( "timeline" );
     
-    ITimeEvaluatorPtr sceneTimeline = dynamic_cast< BVDeserializeContext* >( deser.GetDeserializeContext() )->m_sceneTimeline;
+    ITimeEvaluatorPtr sceneTimeline = deserContext->m_sceneTimeline;
     if( sceneTimeline == nullptr )
+    {
         sceneTimeline = TimelineManager::GetInstance()->GetRootTimeline();
+    }
+
     ITimeEvaluatorPtr te = TimelineHelper::GetTimeEvaluator( timeline, sceneTimeline );
     if( te == nullptr ) 
     {
@@ -190,16 +206,19 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
     IPluginPtr plugin_ = PluginsManager::DefaultInstanceRef().CreatePlugin( pluginType, pluginName, te );
     std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
 
-// params
+    // params
     auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );
     for( auto param : params )
     {
         if( plugin->GetParameter( param->GetName() ) == nullptr )
+        {
             LOG_MESSAGE( SeverityLevel::warning ) << "plugin " << pluginName << " does not have parameter " << param->GetName() << ", which is serialized.";
+        }
 
         SetParameter( plugin->GetPluginParamValModel(), param );
     }
 
+    // assets
     if( deser.EnterChild( "assets" ) )
     {
         do
@@ -207,34 +226,56 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
             deser.EnterChild( "asset" );
 
             auto uid = deser.GetAttribute( "uid" );
+
             AssetDescConstPtr asset;
             if( uid != "" )
+            {
                 asset = AssetDescsWithUIDs::GetInstance().UID2Asset( uid );
+            }
             else
+            {
                 asset = AssetManager::GetInstance().CreateDesc( deser );
+            }
+
             plugin->LoadResource( asset );
         
             auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );
-            auto rsm = plugin->GetRSM( asset->GetKey() );
+            auto rsm = std::dynamic_pointer_cast< ResourceStateModel >( plugin->GetResourceStateModel( deser.GetAttribute( "name" ) ) );
+            
             for( auto param : params )
+            {
                 rsm->SetParameter( param );
+            }
+
             deser.ExitChild(); // asset
-        }while( deser.NextChild() );
+        }
+        while( deser.NextChild() );
+        
         deser.ExitChild(); // assets
     }
 
+    // renderer_context
+    bool rcAdded = false;
     if( plugin->GetPixelShaderChannel() )
     {
         if( deser.EnterChild( "renderer_context" ) )
         {
             auto context = RendererContext::Create( deser );
             deser.ExitChild();
-            plugin->SetRendererContext( context );    
+
+            deserContext->Push( context );
+            rcAdded = true;
+            
+            plugin->SetRendererContext( context );
         }
     }
 
-    ISerializablePtr serializablePlugin = std::static_pointer_cast< ISerializable >( plugin );
-    return serializablePlugin;
+    if( !rcAdded )
+    {
+        deserContext->Push( nullptr );
+    }
+
+    return plugin;
 }
 
 // *******************************

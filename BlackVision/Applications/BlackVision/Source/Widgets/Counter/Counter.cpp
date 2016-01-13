@@ -59,5 +59,27 @@ void		WidgetCounter::Update				( TimeType T)
 }
 
 
+// ***********************
+//
+void                WidgetCounter::Serialize       ( ISerializer& /*ser*/ ) const
+{
+
+}
+
+// ***********************
+//
+ISerializablePtr     WidgetCounter::Create          ( const IDeserializer& /*deser*/ )
+{
+    return nullptr;
+}
+
+// ***********************
+//
+bool                WidgetCounter::HandleEvent     ( IDeserializer& /*eventSer*/, ISerializer& /*response*/ )
+{
+    // @todo Implement all posible interactions with this widget.
+    return false;
+}
+
 }
 }

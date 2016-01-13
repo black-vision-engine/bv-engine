@@ -6,8 +6,6 @@
 
 #include "ProjectManager.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
-#include "Widgets/Crawler/CrawlerEvents.h"
-#include "Widgets/Counter/Counter.h"
 #include "Engine/Events/EventHelpers.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 
@@ -443,177 +441,19 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     {
 
     }
+    else if( command == ProjectEvent::Command::CreateFolder )
+    {
+
+    }
+    else if( command == ProjectEvent::Command::DeleteFolder )
+    {
+
+    }
     else
         SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Unknown command" );
 
 }
 
-// ***********************
-//
-void SceneEventsHandlers::WidgetHandler       ( bv::IEventPtr evt )
-{
-	if( evt->GetEventType() == bv::WidgetEvent::Type() )
-        return;
 
-	bv::WidgetEventPtr widgetEvent = std::static_pointer_cast<bv::WidgetEvent>( evt );        
-    auto root = m_appLogic->GetBVProject()->GetModelSceneRoot();
-        
-    std::string& nodePath = widgetEvent->NodeName;
-    std::string& sceneName = widgetEvent->SceneName;
-    std::string& action = widgetEvent->Action;
-    WidgetEvent::Command command = widgetEvent->WidgetCommand;
-    float time = widgetEvent->Time;
-
-    auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
-    if( node == nullptr )
-    {
-        SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "Node not found" );
-    }
-
-    BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
-    INodeLogic* logic = basicNode->GetLogic().get();
-	if( logic == nullptr )
-	{
-        LOG_MESSAGE( SeverityLevel::warning ) << "Error OnWidgetCmd () node [" + nodePath + "] , logic [] not found";
-        SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "NodeLogic not found" );
-	}
-		
-
-    if( command == WidgetEvent::Command::Crawl )
-    {
-		bv::widgets::Crawler* crawler =  (bv::widgets::Crawler*)logic;
-        Json::Value parseAction( action );
-
-        std::string crawlAction = parseAction.get( "Action", "" ).asString();
-        std::string param = parseAction.get( "Param", "" ).asString();
-
-		if( crawlAction == "stop" )
-		{
-			crawler->Stop();
-            SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
-		}
-		else if( crawlAction == "start" )
-		{
-			crawler->Start();
-            SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
-		}
-        else if( crawlAction == "add_text" )
-		{
-			crawler->AddMessage( toWString( param ) );
-            SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
-		}
-        else if( crawlAction == "reset" )
-		{
-			crawler->Reset();
-            SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
-		}
-		else if( crawlAction == "clear" )
-		{
-			crawler->Clear();
-            SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
-		}
-        else if( crawlAction == "set_speed" )
-		{
-			float speed = 0.5;
-			speed = (float)atof( param.c_str() );
-			crawler->SetSpeed( speed );
-            SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
-		}
-	}
-    else if( command == WidgetEvent::Command::Counter )
-    {
-		bv::widgets::WidgetCounter* counter = (bv::widgets::WidgetCounter*)logic;
-        
-        Json::Value parseAction( action );
-        std::string param = parseAction.get( "Param", "" ).asString();
-        float value = parseAction.get( "Value", 1.0f ).asFloat();
-
-
-		auto paramPtr = counter->GetValueParam();
-		if( paramPtr == nullptr )
-            SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "Could not get parameter" );
-
-        SetParameter( paramPtr, (bv::TimeType)time, value );
-        SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
-	}
-    else
-        SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "Unknown command" );
-}
-
-// ***********************
-//
-void SceneEventsHandlers::OnNodeAppearing     ( IEventPtr evt )
-{
-
-}
-
-// ***********************
-//
-void SceneEventsHandlers::OnNodeLeaving       ( IEventPtr evt )
-{
-
-}
-
-
-// *********************************
-//
-namespace 
-{
-    const std::wstring* examples2 = new std::wstring[20];
-   
-
-    int examplesIndex=0;
-
-
-	const static std::wstring examples[] = 
-	{
-		L"Jasiu kup kie³basê !!",
-		L"wielojêzyczny projekt internetortej treœci. Funkcjonuje wykorzystuj¹c",
-		L"Wikipedia powsta³a 15 stycznia ertów i nieistniej¹cej ju¿ Nupedii. ",
-		L"iostrzane. Wikipedia jest jedn¹], a wiele stron uruchomi³o jej mirrory lub forki.",
-		L"Wspó³za³o¿yciel Wikipedii Jimmyia wielojêzycznej",
-		L"wolnej encyklopedii o najwy¿szyw³asnym jêzyku”[8].",
-		L"Kontrowersje budzi wiarygodnoœæeœci artyku³ów ",
-		L"i brak weryfikacji kompetencji .",
-		L"Z drugiej",
-		L"strony mo¿liwoœæ swobodnej dyst Ÿród³em informacji",
-		L"Jasiu kup kie³basê !!",
-	};
-
-   
-
-   
-
-	auto exampleSize = sizeof( examples ) / sizeof( std::wstring );
-}
-
-
-// ***********************
-//
-void SceneEventsHandlers::OnNoMoreNodes       ( IEventPtr evt )
-{
-	auto typedEvent = std::static_pointer_cast< widgets::NoMoreNodesCrawlerEvent >( evt );
-	// Remove code below. Only for testing.
-	auto n = typedEvent->GetCrawler()->GetNonActiveNode();
-	if( n )
-	{
-
-		auto textNode = n->GetChild( "Text" );
-		if( textNode )
-		{
-			auto pl = textNode->GetPlugin( "text" );
-
-			if( pl )
-			{
-				//model::DefaultTextPlugin::SetText( pl, examples[ i ] );
-
-                SetParameter( pl->GetParameter( "text" ), 0.0, L"nowa wiadomoœæ "+to_wstring(examplesIndex) );
-                examplesIndex=(examplesIndex+1)%20;
-
-				typedEvent->GetCrawler()->EnqueueNode( n );
-			}
-		}
-	}
-}
 
 } //bv

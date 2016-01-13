@@ -12,6 +12,7 @@
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 #include "Engine/Models/Plugins/Interfaces/IPluginParamValModel.h"
 #include "Assets/AssetDescriptor.h"
+#include "Assets/LAsset.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
@@ -74,7 +75,7 @@ public:
 
     //FIXME: implement a more generic interface for resource loading
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr ) = 0;
-    virtual std::vector< AssetDescConstPtr >    GetAssets                   () const = 0;
+    virtual std::vector< LAsset >               GetLAssets                  () const = 0;
 
 
     virtual ParamTransformVecPtr				GetParamTransform			() const = 0; //FIXME: BArdzo brzydki hack zeby zadzialal crawler

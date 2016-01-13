@@ -65,5 +65,28 @@ void					    NodeReplicator::Update( TimeType )
 void					    NodeReplicator::Deinitialize()
 {}
 
+
+// ***********************
+//
+void                NodeReplicator::Serialize       ( ISerializer& /*ser*/ ) const
+{
+
+}
+
+// ***********************
+//
+ISerializablePtr     NodeReplicator::Create          ( const IDeserializer& /*deser*/ )
+{
+    return nullptr;
+}
+
+// ***********************
+//
+bool                NodeReplicator::HandleEvent     ( IDeserializer& /*eventSer*/, ISerializer& /*response*/ )
+{
+    // @todo Implement all posible interactions with this widget.
+    return false;
+}
+
 } // model
 } // bv

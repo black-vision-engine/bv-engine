@@ -7,6 +7,7 @@
 
 #include "Assets/Font/FontAssetDescriptor.h"
 #include "Assets/Texture/TextureAssetDescriptor.h"
+#include "Assets/Texture/AnimationAssetDescriptor.h"
 
 namespace bv {
 
@@ -102,6 +103,7 @@ void SerializeAllEvents( const std::string& fileName )
     ParamKeyEventPtr        paramKeyEvent       = std::make_shared<ParamKeyEvent>();
     LoadAssetEventPtr       loadTextureEvent    = std::make_shared<LoadAssetEvent>();
     LoadAssetEventPtr       loadFontEvent       = std::make_shared<LoadAssetEvent>();
+    LoadAssetEventPtr       loadAnimEvent       = std::make_shared<LoadAssetEvent>();
     GlobalEffectEventPtr    globalEffectEvent   = std::make_shared<GlobalEffectEvent>();
     TimelineKeyframeEventPtr        timelineKeyframeEvent     = std::make_shared<TimelineKeyframeEvent>();
 
@@ -110,6 +112,7 @@ void SerializeAllEvents( const std::string& fileName )
     
     TextureAssetDescConstPtr    texAsset =      TextureAssetDesc::Create( std::string( "textures/poison.jpg" ), true );
     FontAssetDescConstPtr       fontAsset =     FontAssetDesc::Create( std::string( "filePath.jpg" ), 0, 0, 0, false );
+    AnimationAssetDescConstPtr  animAsset =     AnimationAssetDesc::Create( std::string( "filePath.jpg" ), 1, ".*" );
     
     JsonSerializeObject serAssetTex;
     texAsset->Serialize( serAssetTex );
@@ -118,6 +121,10 @@ void SerializeAllEvents( const std::string& fileName )
     JsonSerializeObject serAssetFont;
     fontAsset->Serialize( serAssetFont );
     loadFontEvent->AssetData = serAssetFont.GetString();
+
+    JsonSerializeObject serAssetAnim;
+    animAsset->Serialize( serAssetAnim );
+    loadAnimEvent->AssetData = serAssetAnim.GetString();
 
     ser->EnterArray( L"Events" );
         heightmapEvent->Serialize( *ser );
@@ -162,13 +169,16 @@ void SerializeAllEvents( const std::string& fileName )
         loadFontEvent->Serialize( *ser );
     ser->ExitChild();
     ser->EnterArray( L"Events" );
+        loadAnimEvent->Serialize( *ser );
+    ser->ExitChild();
+    ser->EnterArray( L"Events" );
         responseEvent->Serialize( *ser );
     ser->ExitChild();
     ser->EnterArray( L"Events" );
         globalEffectEvent->Serialize( *ser );
     ser->ExitChild();
     ser->EnterArray( L"Events" );
-    timelineKeyframeEvent->Serialize( *ser );
+        timelineKeyframeEvent->Serialize( *ser );
     ser->ExitChild();
 
     ser->Save( fileName, FORMATSTYLE_READABLE );

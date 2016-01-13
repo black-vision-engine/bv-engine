@@ -881,7 +881,7 @@ Path                        ProjectManagerImpl::ToAbsPath           ( const Path
     }
     else if ( path.Str().find( "seq:/" ) == 0 )
     {
-        return path.Str().substr( 4 );
+        return path.Str().substr( 5 );
     }
     else if ( path.Str().find( "stream:/" ) == 0 )
     {

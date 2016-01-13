@@ -45,8 +45,8 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             responseMessage = toWString( TreeStructureInfo( request, requestID ) );
         else if( command == InfoEvent::Command::MinimalTreeStructure )
             responseMessage = toWString( MinimalTreeStructureInfo( request, requestID ) );
-        else if( command == InfoEvent::Command::ListAssets )
-            responseMessage = toWString( ListAssets( request, requestID ) );
+        else if( command == InfoEvent::Command::ListSceneAssets )
+            responseMessage = toWString( ListSceneAssets( request, requestID ) );
         else if( command == InfoEvent::Command::ListAssetsPaths )
             responseMessage = ListAssetsPaths( request, requestID );
         else if( command == InfoEvent::Command::ListCategoriesNames )
@@ -57,6 +57,16 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             responseMessage = ListProjects( request, requestID );
         else if( command == InfoEvent::Command::ListScenes )
             responseMessage = ListScenes( request, requestID );
+
+        else if( command == InfoEvent::Command::ListAllScenes )
+            responseMessage = ListAllScenes( request, requestID );
+        else if( command == InfoEvent::Command::ListAllFolders )
+            responseMessage = ListAllFolders( request, requestID );
+        else if( command == InfoEvent::Command::ListResourcesInFolders )
+            responseMessage = ListResourcesInFolders( request, requestID );
+        else if( command == InfoEvent::Command::ListAllResources )
+            responseMessage = ListAllResources( request, requestID );
+
         else if( command == InfoEvent::Command::Performance )
             responseMessage = toWString( PerformanceInfo( request, requestID ) );
         else if( command == InfoEvent::Command::Timelines )
@@ -89,7 +99,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
 
 // ***********************
 //
-std::string QueryHandlers::ListAssets  ( const std::string& request, unsigned int requestID )
+std::string QueryHandlers::ListSceneAssets  ( const std::string& request, unsigned int requestID )
 {
     JsonDeserializeObject deser;
     JsonSerializeObject ser;
@@ -97,7 +107,7 @@ std::string QueryHandlers::ListAssets  ( const std::string& request, unsigned in
 
     std::string category = deser.GetAttribute( "CategoryName" );
 
-    PrepareResponseTemplate( ser, InfoEvent::Command::ListAssets, requestID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListSceneAssets, requestID, true );
 
     ser.EnterArray( "assets" );
     for( auto scene : m_appLogic->GetBVProject()->GetScenes() )
@@ -476,7 +486,7 @@ std::string     QueryHandlers::PluginInfo          ( const std::string& request,
 
 // ***********************
 //
-std::string     QueryHandlers::ListTimelineKeyframes           ( const std::string& request, unsigned int requestID )
+std::string     QueryHandlers::ListTimelineKeyframes    ( const std::string& request, unsigned int requestID )
 {
     JsonDeserializeObject deser;
     JsonSerializeObject ser;
@@ -513,5 +523,58 @@ std::string     QueryHandlers::ListTimelineKeyframes           ( const std::stri
 
     return ser.GetString();
 }
+
+// ***********************
+//
+std::wstring    QueryHandlers::ListAllScenes           ( const std::string& /*request*/, unsigned int /*requestID*/ )
+{
+    // @todo Zaimplementowaæ
+    // S¹ stworzone funkcje do ustawiania domyœlnych wartoœci, jakie powinny byæ w odpowiedziach do eventów:
+    // - PrepareResponseTemplate
+    // - ErrorResponseTemplate
+    // Zobacz jak s¹ u¿ywane w innych eventach.
+
+    return L"";
+}
+
+// ***********************
+//
+std::wstring    QueryHandlers::ListAllFolders          ( const std::string& /*request*/, unsigned int /*requestID*/ )
+{
+    // @todo Zaimplementowaæ
+    // S¹ stworzone funkcje do ustawiania domyœlnych wartoœci, jakie powinny byæ w odpowiedziach do eventów:
+    // - PrepareResponseTemplate
+    // - ErrorResponseTemplate
+    // Zobacz jak s¹ u¿ywane w innych eventach.
+
+    return L"";
+}
+
+// ***********************
+//
+std::wstring    QueryHandlers::ListResourcesInFolders  ( const std::string& /*request*/, unsigned int /*requestID*/ )
+{
+    // @todo Zaimplementowaæ
+    // S¹ stworzone funkcje do ustawiania domyœlnych wartoœci, jakie powinny byæ w odpowiedziach do eventów:
+    // - PrepareResponseTemplate
+    // - ErrorResponseTemplate
+    // Zobacz jak s¹ u¿ywane w innych eventach.
+
+    return L"";
+}
+
+// ***********************
+//
+std::wstring    QueryHandlers::ListAllResources        ( const std::string& /*request*/, unsigned int /*requestID*/ )
+{
+    // @todo Zaimplementowaæ
+    // S¹ stworzone funkcje do ustawiania domyœlnych wartoœci, jakie powinny byæ w odpowiedziach do eventów:
+    // - PrepareResponseTemplate
+    // - ErrorResponseTemplate
+    // Zobacz jak s¹ u¿ywane w innych eventach.
+
+    return L"";
+}
+
 
 } //bv

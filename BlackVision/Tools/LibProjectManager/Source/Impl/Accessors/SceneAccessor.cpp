@@ -322,8 +322,11 @@ AssetDescVec SceneAccessor::ListSceneAssetsDescs( const model::BasicNodeConstPtr
 
 	while( lastPlugin )
 	{
-		auto assetsDescs = std::static_pointer_cast< model::BasePlugin< model::IPlugin > >( lastPlugin )->GetAssets();
-		allDescs.insert( allDescs.end(), assetsDescs.begin(), assetsDescs.end() );
+		auto lassets = std::static_pointer_cast< model::BasePlugin< model::IPlugin > >( lastPlugin )->GetLAssets();
+		
+        for( auto lasset : lassets )
+            allDescs.push_back( lasset.assetDesc );
+
         lastPlugin = lastPlugin->GetPrevPlugin();
 	}
 
@@ -332,7 +335,7 @@ AssetDescVec SceneAccessor::ListSceneAssetsDescs( const model::BasicNodeConstPtr
     for( auto ad : allDescs )
     {
         auto sa = UnpackSimpleAssets( ad );
-        simpleAssetsDescs.insert( simpleAssetsDescs. end(), sa.begin(), sa.end() );
+        //simpleAssetsDescs.insert( simpleAssetsDescs. end(), sa.begin(), sa.end() );
     }
 
 	return simpleAssetsDescs;

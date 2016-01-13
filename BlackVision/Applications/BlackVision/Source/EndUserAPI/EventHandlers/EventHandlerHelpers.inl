@@ -3,6 +3,7 @@
 #include "Serialization/ISerializer.h"
 #include "Serialization/Json/JsonSerializeObject.h"
 #include "Engine/Events/EventManager.h"
+#include "Engine/Events/Events.h"
 
 namespace bv
 {
@@ -44,6 +45,18 @@ const static std::string ERROR_INFO_STRING          = "ErrorInfo";
 const static std::string TRUE_STRING                = "true";
 const static std::string FALSE_STRING               = "false";
 
+
+// ***********************
+//
+// eventID for future use. It allows to determine, if event should be sent or not, by comparing value to -1.
+inline void SendResponse( JsonSerializeObject& ser, int socketID, unsigned int /*eventID*/ )
+{
+    ResponseEventPtr msg = std::make_shared<ResponseEvent>();
+    msg->Response = toWString( ser.GetString() );
+    msg->SocketID = socketID;
+    GetDefaultEventManager().QueueResponse( msg );
+}
+
 // ***********************
 //
 template< typename CommandType >
@@ -74,10 +87,7 @@ inline void SendSimpleResponse( CommandType commandType, unsigned int eventID, i
     JsonSerializeObject ser;
     PrepareResponseTemplate( ser, commandType, eventID, success );
 
-    ResponseEventPtr msg = std::make_shared<ResponseEvent>();
-    msg->Response = toWString( ser.GetString() );
-    msg->SocketID = socketID;
-    GetDefaultEventManager().QueueResponse( msg );
+    SendResponse( ser, socketID, eventID );
 }
 
 // ***********************
@@ -88,10 +98,7 @@ inline void SendSimpleErrorResponse( CommandType commandType, unsigned int event
     JsonSerializeObject ser;
     ErrorResponseTemplate( ser, commandType, eventID, errorString );
 
-    ResponseEventPtr msg = std::make_shared<ResponseEvent>();
-    msg->Response = toWString( ser.GetString() );
-    msg->SocketID = socketID;
-    GetDefaultEventManager().QueueResponse( msg );
+    SendResponse( ser, socketID, eventID );
 }
 
 } //bv

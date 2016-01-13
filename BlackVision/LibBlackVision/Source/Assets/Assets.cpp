@@ -39,11 +39,4 @@ FontAssetConstPtr	LoadFontAsset	(	const std::string & fontFileName,
 										generateMipmaps ) ) );
 }
 
-// ***********************
-//
-AnimationAssetConstPtr LoadAnimationAsset( const std::string & path, const std::string & filter )
-{
-	return std::static_pointer_cast< const AnimationAsset >( AssetManager::GetInstance().LoadAsset( AnimationAssetDesc::Create( path, filter ) ) );
-}
-
 } // bv
