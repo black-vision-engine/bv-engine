@@ -18,12 +18,17 @@ public:
     void        Info        ( bv::IEventPtr evt );
 
 private:
-    std::string     ListAssets          ( const std::string& request, unsigned int requestID );
+    std::string     ListSceneAssets     ( const std::string& request, unsigned int requestID );
     std::wstring    ListProjectNames    ( const std::string& request, unsigned int requestID );
     std::wstring    ListScenes          ( const std::string& request, unsigned int requestID );
     std::wstring    ListAssetsPaths     ( const std::string& request, unsigned int requestID );
     std::wstring    ListCategoriesNames ( const std::string& request, unsigned int requestID );
     std::wstring    ListProjects        ( const std::string& request, unsigned int requestID );
+
+    std::wstring    ListAllScenes           ( const std::string& request, unsigned int requestID );
+    std::wstring    ListAllFolders          ( const std::string& request, unsigned int requestID );
+    std::wstring    ListResourcesInFolders  ( const std::string& request, unsigned int requestID );
+    std::wstring    ListAllResources        ( const std::string& request, unsigned int requestID );
 
     std::string     VideoCardsInfo      ( const std::string& request, unsigned int requestID );
     std::string     GetNodeInfo         ( const std::string& request, unsigned int requestID );

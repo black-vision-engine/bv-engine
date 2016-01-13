@@ -1473,7 +1473,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::I
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 1.f );
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
 
-	success = model::LoadAnimation( node->GetPlugin( "animation" ), "FullHD/alfai", "*.tga" );
+	success = model::LoadAnimation( node->GetPlugin( "animation" ), "FullHD/alfai", ".*tga" );      // @fixme Set proper regular expression for filter
     //success = model::LoadAnimation( node->GetPlugin( "animation" ), "d:/src/media/sequences/FullHD/alfai/", "*.tga" );
     assert( success );
 
@@ -1580,7 +1580,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::ITimeEvaluatorPt
 	//SetParameterScale ( param, 0, 0.0f, glm::vec3( 0.002f, 0.002f, 1.f ) );
 
 
-	SetParameterRotation ( param, 0, 10.0f, glm::vec3( 0.0f, 0.0f, -1.f ), 360 );
+	SetParameterRotation ( param, 0, 10.0f, glm::vec3( 0.0f, 0.0f, 1.f ), 360 );
 
 	node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( timeEvaluator );
 	node->GetPlugin( "text" )->GetParameter( "outlineColor" )->SetTimeEvaluator( timeEvaluator );

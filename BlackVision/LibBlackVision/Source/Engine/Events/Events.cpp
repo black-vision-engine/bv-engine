@@ -252,6 +252,9 @@ std::pair< ProjectEvent::Command, const std::wstring > ProjectEventCommandMappin
     , std::make_pair( ProjectEvent::Command::DeleteProject, L"DeleteProject" )
     , std::make_pair( ProjectEvent::Command::RenameProject, L"RenameProject" )
 
+    , std::make_pair( ProjectEvent::Command::CreateFolder, L"CreateFolder" )
+    , std::make_pair( ProjectEvent::Command::DeleteFolder, L"DeleteFolder" )
+
     , std::make_pair( ProjectEvent::Command::CopyAsset, L"CopyAsset" ) 
     , std::make_pair( ProjectEvent::Command::MoveAsset, L"MoveAsset" ) 
     , std::make_pair( ProjectEvent::Command::RemoveAsset, L"RemoveAsset" ) 
@@ -275,23 +278,29 @@ std::pair< InfoEvent::Command, const std::wstring > InfoEventCommandMapping[] =
 {
     std::make_pair( InfoEvent::Command::TreeStructure, L"TreeStructure" )
     , std::make_pair( InfoEvent::Command::MinimalTreeStructure, L"MinimalTreeStructure" )
-    , std::make_pair( InfoEvent::Command::ListAssets, L"ListAssets" )
+    , std::make_pair( InfoEvent::Command::NodeInfo, L"NodeInfo" )
+    , std::make_pair( InfoEvent::Command::PluginInfo, L"PluginInfo" )
+    , std::make_pair( InfoEvent::Command::MinimalSceneInfo, L"MinimalSceneInfo" )
+
+    , std::make_pair( InfoEvent::Command::ListSceneAssets, L"ListSceneAssets" )
     , std::make_pair( InfoEvent::Command::ListProjectNames, L"ListProjectNames" )
     , std::make_pair( InfoEvent::Command::ListScenes, L"ListScenes" )
     , std::make_pair( InfoEvent::Command::ListAssetsPaths, L"ListAssetsPaths" )
     , std::make_pair( InfoEvent::Command::ListCategoriesNames, L"ListCategoriesNames" )
     , std::make_pair( InfoEvent::Command::ListProjects, L"ListProjects" )
-    , std::make_pair( InfoEvent::Command::Performance, L"Performance" ) 
+    , std::make_pair( InfoEvent::Command::ListAllScenes, L"ListAllScenes" )
+    , std::make_pair( InfoEvent::Command::ListAllFolders, L"ListAllFolders" )
+    , std::make_pair( InfoEvent::Command::ListResourcesInFolders, L"ListResourcesInFolders" )
+    , std::make_pair( InfoEvent::Command::ListAllResources, L"ListAllResources" )
+
     , std::make_pair( InfoEvent::Command::Timelines, L"TimeLines" ) 
     , std::make_pair( InfoEvent::Command::ListTimelineKeyframes, L"ListTimelineKeyframes" ) 
-    , std::make_pair( InfoEvent::Command::CheckTimelineTime, L"CheckTimelineTime" ) 
-    , std::make_pair( InfoEvent::Command::NodeInfo, L"NodeInfo" )
-    , std::make_pair( InfoEvent::Command::PluginInfo, L"PluginInfo" )
-    , std::make_pair( InfoEvent::Command::MinimalSceneInfo, L"MinimalSceneInfo" )
+    , std::make_pair( InfoEvent::Command::CheckTimelineTime, L"CheckTimelineTime" )
+
+    , std::make_pair( InfoEvent::Command::Performance, L"Performance" )
     , std::make_pair( InfoEvent::Command::Videocards, L"VideoCards" )
     , std::make_pair( InfoEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
-
 
 template<> InfoEvent::Command WString2T     ( const std::wstring& s, const InfoEvent::Command& defaultVal )     { return WString2T( InfoEventCommandMapping, s, defaultVal ); }
 template<> const std::wstring& T2WString    ( InfoEvent::Command t )                                            { return Enum2WString( InfoEventCommandMapping, t ); }

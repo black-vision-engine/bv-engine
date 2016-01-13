@@ -443,6 +443,14 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     {
 
     }
+    else if( command == ProjectEvent::Command::CreateFolder )
+    {
+
+    }
+    else if( command == ProjectEvent::Command::DeleteFolder )
+    {
+
+    }
     else
         SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Unknown command" );
 
