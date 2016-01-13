@@ -74,29 +74,21 @@ ITimeEvaluatorPtr GetTimeline( const BasePlugin< IPlugin >* plugin )
 
 // *******************************
 //
-std::vector< AssetDescConstPtr >    BasePlugin< IPlugin >::GetAssets                   () const
+std::vector< LAsset >    BasePlugin< IPlugin >::GetLAssets                   () const
 {
     return m_assets;
 }
 
 // *******************************
 //
-void                                BasePlugin< IPlugin >::SetAsset                    ( int i, AssetDescConstPtr asset, ResourceStateModelPtr rsm )
+void                                BasePlugin< IPlugin >::SetAsset                    ( int i, LAsset lasset )
 {
-    m_assets.resize( i+1 );
-    if( m_assets[ i ] )
-    {
-        m_key2rsm.erase( m_assets[ i ]->GetKey() );
-    }
-    m_assets[ i ] = asset;
-    m_key2rsm[ asset->GetKey() ] = rsm;
-}
-
-// *******************************
-//
-ResourceStateModelPtr              BasePlugin< IPlugin >::GetRSM                    ( std::string key ) const
-{
-    return m_key2rsm.at( key );
+    if( m_assets.size() < i )
+        assert( false );
+    else if( m_assets.size() == i )
+        m_assets.push_back( lasset );
+    else
+        m_assets[ i ] = lasset;
 }
 
 // *******************************
@@ -140,20 +132,24 @@ ser.EnterChild( "plugin" );
         }
         ser.ExitChild(); // params
 
-        auto assets = GetAssets();
+        auto assets = GetLAssets();
         if( assets.size() > 0 )
         {
             ser.EnterArray( "assets" );
-            for( auto asset : GetAssets() )
+            for( auto lasset : assets )
             {
-                auto uid = AssetDescsWithUIDs::GetInstance().Key2UID( asset->GetKey() );
+                auto asset = lasset.asset;
+                auto assetDesc = lasset.assetDesc;
+                auto uid = AssetDescsWithUIDs::GetInstance().Key2UID( assetDesc->GetKey() );
                 ser.EnterChild( "asset" );
                     if( uid != "" )
                         ser.SetAttribute( "uid", uid );
                     else
-                        asset->Serialize( ser );
+                        lasset.assetDesc->Serialize( ser );
 
-                    auto rsm = GetRSM( asset->GetKey() );
+                    ser.SetAttribute( "name", lasset.name );
+
+                    auto rsm = lasset.rsm;
                     assert( rsm );
                     rsm->Serialize( ser );
                 ser.ExitChild();
@@ -215,7 +211,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create( const IDeserializer& deser )
             plugin->LoadResource( asset );
         
             auto params = SerializationHelper::DeserializeArray< AbstractModelParameter >( deser, "params" );
-            auto rsm = plugin->GetRSM( asset->GetKey() );
+            auto rsm = std::dynamic_pointer_cast< ResourceStateModel >( plugin->GetResourceStateModel( deser.GetAttribute( "name" ) ) );
             for( auto param : params )
                 rsm->SetParameter( param );
             deser.ExitChild(); // asset

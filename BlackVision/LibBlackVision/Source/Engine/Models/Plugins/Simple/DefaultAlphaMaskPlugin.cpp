@@ -140,7 +140,9 @@ bool                        DefaultAlphaMaskPlugin::LoadResource  ( AssetDescCon
 			auto txData = m_psc->GetTexturesDataImpl();
 
 			txData->SetTexture( 0, txDesc );
-            SetAsset( 0, assetDescr, txDesc->GetSamplerState() );
+            SetAsset( 0, LAsset( txDesc->GetName(), assetDescr, 
+                                                                AssetConstPtr( reinterpret_cast< Asset* >( txDesc.get() ) ), // FIXME so very much
+                txDesc->GetSamplerState() ) );
             
 			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 

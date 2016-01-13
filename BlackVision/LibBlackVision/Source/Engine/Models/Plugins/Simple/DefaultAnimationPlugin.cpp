@@ -83,17 +83,17 @@ std::string             DefaultAnimationPluginDesc::TextureName               ()
 
 void								DefaultAnimationPlugin::SetPrevPlugin               ( IPluginPtr prev )
 {
-	BasePlugin::SetPrevPlugin( prev );
+    BasePlugin::SetPrevPlugin( prev );
 
     InitVertexAttributesChannel();
-	    
-	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
-	auto ctx = m_psc->GetRendererContext();
+        
+    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+    auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
-	ctx->alphaCtx->blendEnabled = true;
-	ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
-	ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
-	//HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
+    ctx->alphaCtx->blendEnabled = true;
+    ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
+    ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+    //HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 }
 
 // *************************************
@@ -110,7 +110,7 @@ DefaultAnimationPlugin::DefaultAnimationPlugin         ( const std::string & nam
     SetPrevPlugin( prev );
 
     m_texturesData = m_psc->GetTexturesDataImpl();
-	
+    
     LoadResource( DefaultAssets::Instance().GetDefaultDesc< AnimationAssetDesc >() );
 
     //Direct param state access (to bypass model querying)
@@ -130,14 +130,14 @@ DefaultAnimationPlugin::~DefaultAnimationPlugin         ()
 // 
 bool							DefaultAnimationPlugin::IsValid     () const
 {
-	return ( m_vaChannel && m_prevPlugin->IsValid() );
+    return ( m_vaChannel && m_prevPlugin->IsValid() );
 }
 
 // *************************************
 // 
 bool                            DefaultAnimationPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
 {
-	auto animAssetDescr = QueryTypedDesc< AnimationAssetDescConstPtr >( assetDescr );
+    auto animAssetDescr = QueryTypedDesc< AnimationAssetDescConstPtr >( assetDescr );
 
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( animAssetDescr != nullptr )
@@ -147,15 +147,17 @@ bool                            DefaultAnimationPlugin::LoadResource  ( AssetDes
 
         if( animDesc != nullptr )
         {
-			animDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
-			
-			auto txData = m_psc->GetTexturesDataImpl();
-			txData->SetAnimation( 0, animDesc );
-            SetAsset( 0, animAssetDescr, animDesc->GetSamplerState() );
+            animDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
+            
+            auto txData = m_psc->GetTexturesDataImpl();
+            txData->SetAnimation( 0, animDesc );
+            SetAsset( 0, LAsset( animDesc->GetName(), animAssetDescr, 
+                                                                            AssetConstPtr( reinterpret_cast< Asset* >( animDesc.get() ) ), // FIXME so much
+                animDesc->GetSamplerState() ) );
 
-			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
+            HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
     
-			return true;
+            return true;
         }
     }
 
@@ -187,18 +189,18 @@ IVertexShaderChannelConstPtr        DefaultAnimationPlugin::GetVertexShaderChann
 // 
 void                                DefaultAnimationPlugin::Update                      ( TimeType t )
 {
-	BasePlugin::Update( t );
+    BasePlugin::Update( t );
 
     unsigned int frameNum = ( unsigned int )m_paramFrameNum->Evaluate(); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
     m_texturesData->SetAnimationFrame( 0, frameNum ); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
 
-	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
-	if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
-	{
-		InitVertexAttributesChannel();
-	}
+    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
+    if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+    {
+        InitVertexAttributesChannel();
+    }
 
-	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -208,33 +210,33 @@ void                                DefaultAnimationPlugin::Update              
 //
 void		DefaultAnimationPlugin::InitVertexAttributesChannel		()
 {
-	if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
-	{
-		m_vaChannel = nullptr;
-		return;
-	}
+    if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
+    {
+        m_vaChannel = nullptr;
+        return;
+    }
 
     auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
-	auto prevCC = prevGeomChannel->GetComponents();
+    auto prevCC = prevGeomChannel->GetComponents();
     
     //Only one texture
-	VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
-	if( !vaChannelDesc.GetAttrChannelDescriptor( AttributeSemantic::AS_TEXCOORD ) )
-	{
-		vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
-	}
+    VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
+    if( !vaChannelDesc.GetAttrChannelDescriptor( AttributeSemantic::AS_TEXCOORD ) )
+    {
+        vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    }
 
-	if( !m_vaChannel )
-	{
-		m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
-	}
-	else
-	{
-		m_vaChannel->ClearAll();
-		m_vaChannel->SetDescriptor( vaChannelDesc );
-	}
-	
-	auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    if( !m_vaChannel )
+    {
+        m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+    }
+    else
+    {
+        m_vaChannel->ClearAll();
+        m_vaChannel->SetDescriptor( vaChannelDesc );
+    }
+    
+    auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
     for( unsigned int i = 0; i < prevCC.size(); ++i )
     {
         auto connComp = ConnectedComponent::Create();
@@ -246,18 +248,18 @@ void		DefaultAnimationPlugin::InitVertexAttributesChannel		()
             connComp->AddAttributeChannel( prevCompCh );
         }
 
-		auto posChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
-		if( posChannel && !prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) )
-		{
-			//FIXME: only one texture - convex hull calculations
-			auto uvs = new model::Float2AttributeChannel( desc, DefaultAnimationPluginDesc::TextureName(), true );
-			auto uvsPtr = Float2AttributeChannelPtr( uvs );
-			
-			Helper::UVGenerator::generateUV( reinterpret_cast< const glm::vec3 * >( posChannel->GetData() ), posChannel->GetNumEntries(),
-											uvsPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ), true );
+        auto posChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
+        if( posChannel && !prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) )
+        {
+            //FIXME: only one texture - convex hull calculations
+            auto uvs = new model::Float2AttributeChannel( desc, DefaultAnimationPluginDesc::TextureName(), true );
+            auto uvsPtr = Float2AttributeChannelPtr( uvs );
+            
+            Helper::UVGenerator::generateUV( reinterpret_cast< const glm::vec3 * >( posChannel->GetData() ), posChannel->GetNumEntries(),
+                                            uvsPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ), true );
 
-			connComp->AddAttributeChannel( uvsPtr );
-		}
+            connComp->AddAttributeChannel( uvsPtr );
+        }
 
         m_vaChannel->AddConnectedComponent( connComp );
     }

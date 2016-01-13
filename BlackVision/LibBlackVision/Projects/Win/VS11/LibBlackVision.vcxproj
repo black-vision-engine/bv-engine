@@ -417,6 +417,7 @@
     <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.h" />
     <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.inl" />
     <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h" />
+    <ClInclude Include="..\..\..\Source\Assets\LAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h" />
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamAsset.h" />
