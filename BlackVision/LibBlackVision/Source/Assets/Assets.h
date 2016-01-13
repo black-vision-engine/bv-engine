@@ -43,8 +43,4 @@ FontAssetConstPtr		LoadFontAsset	(	const std::string & fontFileName,
 											UInt32 outlineSize,
 											bool generateMipmaps );
 
-// ***********************
-//
-AnimationAssetConstPtr	LoadAnimationAsset( const std::string & path, const std::string & filter );
-
 } // bv

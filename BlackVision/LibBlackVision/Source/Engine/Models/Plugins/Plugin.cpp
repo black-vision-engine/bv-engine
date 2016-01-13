@@ -259,6 +259,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create                              ( co
     }
 
     // renderer_context
+    bool rcAdded = false;
     if( plugin->GetPixelShaderChannel() )
     {
         if( deser.EnterChild( "renderer_context" ) )
@@ -267,9 +268,15 @@ ISerializablePtr BasePlugin< IPlugin >::Create                              ( co
             deser.ExitChild();
 
             deserContext->Push( context );
+            rcAdded = true;
             
             plugin->SetRendererContext( context );
         }
+    }
+
+    if( !rcAdded )
+    {
+        deserContext->Push( nullptr );
     }
 
     return plugin;

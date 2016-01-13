@@ -9,9 +9,8 @@
 
 #include "CrawlerEvents.h"
 
-
 #include <algorithm>
-#include "win_sock.h"
+#include <ctime>
 
 namespace bv { namespace widgets { 
 
@@ -206,7 +205,7 @@ void		Crawler::Start			()
 	if(! m_started )
 	{
 		m_started = true;
-		m_currTime = timeGetTime();
+		m_currTime = std::time( nullptr );
 	}
 }
 
@@ -223,7 +222,7 @@ void		Crawler::Update				( TimeType )
 {
 	if( m_started )
 	{
-		auto t = timeGetTime();
+		auto t = std::time( nullptr );
 		auto shift = m_speed * ( ( t - m_currTime ) / 1000.f );
 
 		m_currTime = t;

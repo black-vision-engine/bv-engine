@@ -35,21 +35,23 @@ public:
 
     std::string                     GetPath		() const;
     std::string                     GetFilter   () const;
+    SizeType                        GetNumFrames() const;
 
 	//const std::vector< TextureAssetDescConstPtr > &  GetFrames		() const;
 
 	//const std::vector< TextureAssetDescConstPtr > &  GetFrames		() const;
 
-    static AnimationAssetDescConstPtr			Create ( const std::string & path, const std::string & filter );
+    static AnimationAssetDescConstPtr			Create ( const std::string & path, SizeType numFrames, const std::string & filter );
     //static AnimationAssetDescConstPtr			Create ( const std::vector< TextureAssetDescConstPtr > & frames );
 
 private:
-	explicit						AnimationAssetDesc	( const std::string & frames, const std::string & filter );
+	explicit						AnimationAssetDesc	( const std::string & frames, SizeType numFrames, const std::string & filter );
 	//explicit						AnimationAssetDesc	( const std::vector< TextureAssetDescConstPtr > & frames );
 
     //std::vector< TextureAssetDescConstPtr > m_frames;
     std::string                             m_path;
     std::string                             m_filter;
+    SizeType                                m_numFrames;
 };
 
 // ***********************

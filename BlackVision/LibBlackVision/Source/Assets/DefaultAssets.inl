@@ -29,7 +29,7 @@ inline std::shared_ptr< const AnimationAssetDesc >  DefaultAssets::GetDefaultDes
     static AnimationAssetDescConstPtr animation2DDesc;
 	if( !animation2DDesc )
     {
-        animation2DDesc = AnimationAssetDesc::Create( m_config.animation2DDir, m_config.animationFilter );
+        animation2DDesc = AnimationAssetDesc::Create( m_config.animation2DDir, 1, m_config.animationFilter );
     }
     return animation2DDesc;
 }
