@@ -457,6 +457,9 @@ public:
         DeleteProject,
         RenameProject,
 
+        CreateFolder,
+        DeleteFolder,
+
         AddExistingSceneToProject,
         RemoveSceneFromProject,
         CreateSceneInProject,
@@ -531,19 +534,26 @@ public:
     {
         TreeStructure,
         MinimalTreeStructure,
-        ListAssets,
+        NodeInfo,
+        PluginInfo,
+        MinimalSceneInfo,
+
+        ListSceneAssets,
         ListProjectNames,
         ListScenes,
         ListAssetsPaths,
         ListCategoriesNames,
         ListProjects,
-        Performance,
+        ListAllScenes,
+        ListAllFolders,
+        ListResourcesInFolders,
+        ListAllResources,
+
         Timelines,
         CheckTimelineTime,
         ListTimelineKeyframes,
-        NodeInfo,
-        PluginInfo,
-        MinimalSceneInfo,
+
+        Performance,
         Videocards,
         Fail            ///< Wrong command
     } Command;
