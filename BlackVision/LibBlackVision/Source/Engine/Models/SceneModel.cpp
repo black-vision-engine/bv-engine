@@ -3,10 +3,15 @@
 #include "Assets/AssetDescsWithUIDs.h"
 #include "Engine/Models/ModelSceneEditor.h"
 
+#include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
+
 #include "Serialization/CloneViaSerialization.h"
 #include "Serialization/BVSerializeContext.h"
 
 namespace bv { namespace model {
+
+const std::string       SceneModel::DEFAULT_ROOT_NAME = "root";
+const std::string       SceneModel::DEFAULT_TRANSFORM_PLUGIN_NAME = "transform";
 
 // *******************************
 //
@@ -19,11 +24,13 @@ SceneModelPtr    SceneModel::Create		( std::string name, Camera * camera )
 //
 				SceneModel::SceneModel	( std::string name, Camera * camera )
     : m_name( name )
-    , m_sceneRootNode( nullptr )
     , m_timeline( new model::OffsetTimeEvaluator( name, TimeType( 0.0 ) ) )
 	, m_camera( camera )
 	, m_modelSceneEditor( nullptr )
 {
+    m_sceneRootNode = BasicNode::Create( DEFAULT_ROOT_NAME, nullptr );
+    m_sceneRootNode->AddPlugin( DefaultTransformPluginDesc::UID(), DEFAULT_TRANSFORM_PLUGIN_NAME, m_timeline );
+
 	m_modelSceneEditor = new ModelSceneEditor( m_sceneRootNode );
 }
 
