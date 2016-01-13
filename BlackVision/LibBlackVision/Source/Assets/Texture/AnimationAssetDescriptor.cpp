@@ -1,6 +1,7 @@
 #include "AnimationAssetDescriptor.h"
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
+#include "Serialization/SerializationHelper.h"
 
 #include <cassert>
 
@@ -25,7 +26,8 @@ sob.ExitChild();
 //
 ISerializableConstPtr     AnimationAssetDesc::Create          ( const IDeserializer& dob )
 {
-    return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetAttribute( "path" ), std::stol( dob.GetAttribute( "numFrames" ) ), dob.GetAttribute( "filter" ) ) );
+    return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetAttribute( "path" ), dob.GetAttribute( "filter" ) ) );
+    //return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetAttribute( "path" ), SerializationHelper::String2T( dob.GetAttribute( "numFrames" ), 0 ), dob.GetAttribute( "filter" ) ) );
 }
 
 //// ***********************
@@ -37,11 +39,20 @@ ISerializableConstPtr     AnimationAssetDesc::Create          ( const IDeseriali
 
 // *******************************
 //
+AnimationAssetDesc::AnimationAssetDesc							( const std::string & path, const std::string & filter )
+    : m_path( path )
+    , m_filter( filter )
+    , m_numFrames( 0 )
+{}
+
+// *******************************
+//
 AnimationAssetDesc::AnimationAssetDesc							( const std::string & path, SizeType numFrames, const std::string & filter )
     : m_path( path )
     , m_filter( filter )
     , m_numFrames( numFrames )
 {}
+
 
 //// *******************************
 ////

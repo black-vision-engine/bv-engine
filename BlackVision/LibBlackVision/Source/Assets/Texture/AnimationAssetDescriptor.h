@@ -46,6 +46,7 @@ public:
 
 private:
 	explicit						AnimationAssetDesc	( const std::string & frames, SizeType numFrames, const std::string & filter );
+    explicit						AnimationAssetDesc	( const std::string & frames, const std::string & filter );
 	//explicit						AnimationAssetDesc	( const std::vector< TextureAssetDescConstPtr > & frames );
 
     //std::vector< TextureAssetDescConstPtr > m_frames;
