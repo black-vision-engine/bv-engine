@@ -20,6 +20,12 @@ DEFINE_CONST_PTR_TYPE( SceneModel );
 class SceneModel : public ISerializable
 {
 private:
+    
+    static const std::string    DEFAULT_ROOT_NAME;
+    static const std::string    DEFAULT_TRANSFORM_PLUGIN_NAME;
+
+private:
+
     std::string             m_name;
 
     BasicNodePtr            m_sceneRootNode;

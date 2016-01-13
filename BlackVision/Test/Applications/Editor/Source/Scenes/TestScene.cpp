@@ -197,7 +197,14 @@ void                    TestScene::InitTestModelSceneEditor ()
 
 		editor->AddScene( EMPTY_SCENE );
 
-		success &= ( editor->GetScene( EMPTY_SCENE ) != nullptr );
+        auto scene = editor->GetScene( EMPTY_SCENE );
+        auto root = scene->GetRootNode();
+
+		success &= ( scene != nullptr );
+        success &= ( root != nullptr );
+        success &= ( root->GetName() == "root" );
+        success &= ( root->GetNumPlugins() == 1 );
+        success &= ( root->GetPlugin( "transform" ) != nullptr );
 
 		assert( success );
 	});
