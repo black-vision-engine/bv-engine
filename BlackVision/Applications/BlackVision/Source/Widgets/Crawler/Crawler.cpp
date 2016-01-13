@@ -8,6 +8,7 @@
 #include "Engine/Events/Interfaces/IEventManager.h"
 
 #include "CrawlerEvents.h"
+#include "Serialization/SerializationHelper.h"
 
 
 #include <algorithm>
@@ -418,9 +419,24 @@ void		Crawler::EnqueueNode			( model::BasicNode * n)
 
 // ***********************
 //
-void                Crawler::Serialize       ( ISerializer& /*ser*/ ) const
+void                Crawler::Serialize       ( ISerializer& ser ) const
 {
+    ser.EnterChild( "Crawler" );
+        ser.EnterChild( "view" );
+            ser.SetAttribute( "empty", SerializationHelper::T2String( m_view->m_empty ) );
+            if( !m_view->m_empty )
+            {
+                ser.SetAttribute( "xmin", SerializationHelper::T2String( m_view->xmin ) );
+                ser.SetAttribute( "xmax", SerializationHelper::T2String( m_view->xmax ) );
+                ser.SetAttribute( "ymin", SerializationHelper::T2String( m_view->ymin ) );
+                ser.SetAttribute( "ymax", SerializationHelper::T2String( m_view->ymax ) );
+            }
+        ser.ExitChild();
 
+        ser.SetAttribute( "speed", SerializationHelper::T2String( m_speed ) );
+        ser.SetAttribute( "interspace", SerializationHelper::T2String( m_interspace ) );
+
+    ser.ExitChild();
 }
 
 // ***********************
