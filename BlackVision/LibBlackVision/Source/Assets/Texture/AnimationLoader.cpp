@@ -36,7 +36,7 @@ AssetConstPtr AnimationLoader::LoadAsset( const AssetDescConstPtr & desc ) const
 	assert( typedDesc );
 
     auto p = ProjectManager::GetInstance()->ToAbsPath( typedDesc->GetPath() );
-    auto files = Dir::ListFiles( p.Str(), typedDesc->GetFilter() );
+    auto files = bv::Path::List( p.Str(), false, typedDesc->GetFilter() );//Dir::ListFiles( p.Str(), typedDesc->GetFilter() );
 
     TextureAssetDescVec framesDesc;
 
@@ -44,7 +44,7 @@ AssetConstPtr AnimationLoader::LoadAsset( const AssetDescConstPtr & desc ) const
     {
 	    for( auto f : files )
 	    {
-            framesDesc.push_back( TextureAssetDesc::Create( "file:/" + f, true ) );
+            framesDesc.push_back( TextureAssetDesc::Create( "file:/" + f.Str(), true ) );
         }
     }
 

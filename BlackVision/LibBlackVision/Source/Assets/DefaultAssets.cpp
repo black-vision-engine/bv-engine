@@ -11,7 +11,7 @@ namespace bv
     m_config.texture2DPath = "file:/Assets/DefaultAssets/textures/2D/default";
 
     m_config.animation2DDir = "seq:/Assets/DefaultAssets/animations/2D";
-    m_config.animationFilter = "*";
+    m_config.animationFilter = ".*";
 
     m_config.fontName = "file:/Assets/DefaultAssets/fonts/default.ttf";
     m_config.fontSize = 24;
