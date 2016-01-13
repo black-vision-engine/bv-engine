@@ -154,6 +154,8 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\OverwriteAlphaFullscreenEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\OverwriteChannelsFullscreenEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\SimpleFullscreenEffect.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\DefaultPostFullscreenLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\SplitChildrenPreFullscreenLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\PostFullScreenEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\PreFullScreenEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogic.cpp" />
@@ -231,6 +233,8 @@
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\OverwriteAlphaFullscreenEffect.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\OverwriteChannelsFullscreenEffect.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\SimpleFullscreenEffect.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\DefaultPostFullscreenLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\SplitChildrenPreFullscreenLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\PostFullScreenEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\PreFullScreenEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogic.h" />

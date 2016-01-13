@@ -6,9 +6,8 @@
 namespace bv {
 
 class SceneNode;
-class Renderer;
 class RenderTarget;
-class RenderTargetStackAllocator;
+class RenderLogicContext;
 
 class PreFullScreenEffectLogic
 {
@@ -18,7 +17,7 @@ public:
 
     virtual         ~PreFullScreenEffectLogic   ();
 
-    virtual void    Render                      ( SceneNode * node, Renderer * renderer, RenderTargetStackAllocator * allocator, const std::vector< RenderTarget * > & outputs ) = 0;
+    virtual void    Render                      ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > & outputs ) = 0;
 
 };
 

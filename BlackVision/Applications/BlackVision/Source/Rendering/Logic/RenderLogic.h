@@ -48,10 +48,10 @@ private:
        
 public:
 
-    void    RenderNode      ( Renderer * renderer, SceneNode * node, RenderLogicContext * ctx );
-    void    DrawNode        ( Renderer * renderer, SceneNode * node, RenderLogicContext * ctx );
+    void    RenderNode      ( SceneNode * node, RenderLogicContext * ctx );
+    void    DrawNode        ( SceneNode * node, RenderLogicContext * ctx );
     void    DrawNodeOnly    ( Renderer * renderer, SceneNode * node );
-    void    RenderChildren  ( Renderer * renderer, SceneNode * node, RenderLogicContext * ctx, int firstChildIdx = 0 );
+    void    RenderChildren  ( SceneNode * node, RenderLogicContext * ctx, int firstChildIdx = 0 );
 
 private:
 

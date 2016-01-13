@@ -33,7 +33,7 @@ void    MixChannelsRenderLogic::RenderNode      ( SceneNode * node, RenderLogicC
 
     if( mixMask == 228 ) //FIXME: magic number (meaning that no mixing takes place
     {
-        logic( ctx )->DrawNode( renderer( ctx ), node, ctx );
+        logic( ctx )->DrawNode( node, ctx );
     }
     else
     {
@@ -47,7 +47,7 @@ void    MixChannelsRenderLogic::RenderNode      ( SceneNode * node, RenderLogicC
 
         clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
-        logic( ctx )->DrawNode( renderer, node, ctx );
+        logic( ctx )->DrawNode( node, ctx );
 
         disableBoundRT( ctx );
         rtAllocator->Free();

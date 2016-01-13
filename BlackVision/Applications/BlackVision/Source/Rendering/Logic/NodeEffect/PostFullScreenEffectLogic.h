@@ -4,9 +4,8 @@
 namespace bv {
 
 class SceneNode;
-class Renderer;
 class RenderTarget;
-class RenderTargetStackAllocator;
+class RenderLogicContext;
 
 class PostFullScreenEffectLogic
 {
@@ -16,7 +15,7 @@ public:
 
     virtual         ~PostFullScreenEffectLogic  ();
 
-    virtual void    Render                      ( SceneNode * node, Renderer * renderer, RenderTargetStackAllocator * allocator, RenderTarget * inputRenderTarget ) = 0;
+    virtual void    Render                      ( SceneNode * node, RenderLogicContext * ctx, RenderTarget * inputRenderTarget ) = 0;
 
 };
 

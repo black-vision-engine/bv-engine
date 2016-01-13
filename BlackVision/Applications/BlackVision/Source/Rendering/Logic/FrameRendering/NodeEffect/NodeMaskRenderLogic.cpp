@@ -28,7 +28,7 @@ void    NodeMaskRenderLogic::RenderNode           ( SceneNode * node, RenderLogi
 {
     if( node->NumChildNodes() < 2 )
     {
-        logic( ctx )->DrawNode( renderer( ctx ), node, ctx );
+        logic( ctx )->DrawNode( node, ctx );
     }
     else 
     {
@@ -41,7 +41,7 @@ void    NodeMaskRenderLogic::RenderNode           ( SceneNode * node, RenderLogi
         if( alphaValue < 0.01f )
         {
             logic->DrawNodeOnly( renderer, node );
-            logic->RenderChildren( renderer, node, ctx, 2 );
+            logic->RenderChildren( node, ctx, 2 );
         }
         else
         {
@@ -63,7 +63,7 @@ void    NodeMaskRenderLogic::RenderNode           ( SceneNode * node, RenderLogi
 
             BlitWithMask( renderer, foregroundRt, maskRt, alphaValue );
 
-            logic->RenderChildren( renderer, node, ctx, 2 );
+            logic->RenderChildren( node, ctx, 2 );
         }
     }
 }
@@ -95,7 +95,7 @@ void                                NodeMaskRenderLogic::RenderToRenderTarget   
     enable( ctx, rt );
     clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
-    logic( ctx )->RenderNode( renderer( ctx ), node, ctx ); 
+    logic( ctx )->RenderNode( node, ctx ); 
 
     disableBoundRT( ctx );
 }

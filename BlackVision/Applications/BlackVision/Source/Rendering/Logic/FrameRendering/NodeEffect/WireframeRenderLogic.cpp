@@ -28,7 +28,7 @@ WireframeRenderLogic::~WireframeRenderLogic ()
 //
 void    WireframeRenderLogic::RenderNode      ( SceneNode * node, RenderLogicContext * ctx )
 {
-    logic( ctx )->DrawNode( renderer( ctx ), node, ctx );
+    logic( ctx )->DrawNode( node, ctx );
 
     RenderWireframeOverlay( renderer( ctx ), node );
 }
@@ -57,7 +57,7 @@ void    WireframeRenderLogic::EnableWireframeEffect       ( Renderer * renderer,
 //
 void    WireframeRenderLogic::DrawWirefreameNodeOnly      ( Renderer * renderer, SceneNode * node )
 {
-    auto renderable = static_cast<bv::RenderableEntity *>( node->GetTransformable() );
+    auto renderable = static_cast< bv::RenderableEntity * >( node->GetTransformable() );
 
     renderer->DrawRenderable( renderable );
 }

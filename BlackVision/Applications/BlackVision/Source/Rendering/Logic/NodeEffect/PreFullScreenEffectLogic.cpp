@@ -3,4 +3,10 @@
 
 namespace bv {
 
+// *********************************
+//
+PreFullScreenEffectLogic::~PreFullScreenEffectLogic   ()
+{
+}
+
 } //bv

@@ -125,7 +125,7 @@ void    RenderLogic::RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoo
 
         clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
-        RenderNode( renderer, sceneRoot, ctx );
+        RenderNode( sceneRoot, ctx );
 
         disableBoundRT( ctx );
     }
@@ -133,14 +133,14 @@ void    RenderLogic::RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoo
 
 // *********************************
 //
-void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node, RenderLogicContext * ctx )
+void    RenderLogic::RenderNode      ( SceneNode * node, RenderLogicContext * ctx )
 {
     if ( node->IsVisible() )
     {
         if( node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT )
         {
             // Default render logic
-            DrawNode( renderer, node, ctx );
+            DrawNode( node, ctx );
         }
         else
         {
@@ -153,12 +153,12 @@ void    RenderLogic::RenderNode      ( Renderer * renderer, SceneNode * node, Re
 
 // *********************************
 //
-void    RenderLogic::DrawNode        ( Renderer * renderer, SceneNode * node, RenderLogicContext * ctx )
+void    RenderLogic::DrawNode        ( SceneNode * node, RenderLogicContext * ctx )
 {
 	HPROFILER_SECTION( "RenderNode::renderer->Draw Anchor", PROFILER_THREAD1 );
-    DrawNodeOnly( renderer, node );
+    DrawNodeOnly( renderer( ctx ), node );
 
-    RenderChildren( renderer, node, ctx );
+    RenderChildren( node, ctx );
 }
 
 // *********************************
@@ -170,12 +170,12 @@ void    RenderLogic::DrawNodeOnly    ( Renderer * renderer, SceneNode * node )
 
 // *********************************
 //
-void    RenderLogic::RenderChildren  ( Renderer * renderer, SceneNode * node, RenderLogicContext * ctx, int firstChildIdx )
+void    RenderLogic::RenderChildren  ( SceneNode * node, RenderLogicContext * ctx, int firstChildIdx )
 {
     for ( unsigned int i = firstChildIdx; i < (unsigned int) node->NumChildNodes(); i++ )
     {
         HPROFILER_SECTION( "RenderNode::RenderNode", PROFILER_THREAD1 );
-        RenderNode  ( renderer, node->GetChild( i ), ctx ); 
+        RenderNode  ( node->GetChild( i ), ctx ); 
     }
 }
 

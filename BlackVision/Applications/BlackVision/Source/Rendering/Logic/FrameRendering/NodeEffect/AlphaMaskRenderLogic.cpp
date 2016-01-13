@@ -31,7 +31,7 @@ void    AlphaMaskRenderLogic::RenderNode                  ( SceneNode * node, Re
 
     if( alphaValue > 0.99f )
     {
-        ctx->GetRenderLogic()->DrawNode( ctx->GetRenderer(), node, ctx );
+        ctx->GetRenderLogic()->DrawNode( node, ctx );
     }
     else if ( alphaValue > 0.01f )
     {
@@ -52,7 +52,6 @@ void    AlphaMaskRenderLogic::RenderNode                  ( SceneNode * node, Re
 //
 RenderTarget * AlphaMaskRenderLogic::RenderToRenderTarget         ( RenderLogicContext * ctx, SceneNode * node )
 {
-    auto renderer       = ctx->GetRenderer();
     auto rtAllocator    = ctx->GetRenderTargetAllocator();
 
     auto rt = rtAllocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
@@ -61,7 +60,7 @@ RenderTarget * AlphaMaskRenderLogic::RenderToRenderTarget         ( RenderLogicC
 
     clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
-    logic( ctx )->DrawNode( renderer, node, ctx );
+    logic( ctx )->DrawNode( node, ctx );
 
     disableBoundRT( ctx );
     rtAllocator->Free();
