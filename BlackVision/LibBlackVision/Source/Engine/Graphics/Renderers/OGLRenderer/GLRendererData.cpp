@@ -65,11 +65,13 @@ void    RendererData::RenderState::InitializeAlphaState     ( AlphaStateConstPtr
 
     GLuint srcBlend = ConstantsMapper::GLConstant( as->srcRGBBlendMode );
     GLuint dstBlend = ConstantsMapper::GLConstant( as->dstRGBBlendMode );
+	GLuint srcAlphaBlend = ConstantsMapper::GLConstant( as->srcAlphaBlendMode );
+	GLuint dstAlphaBlend = ConstantsMapper::GLConstant( as->dstAlphaBlendMode );
 
     const glm::vec4 & blendColor = as->blendColor;
 
     EnableDisable( as->blendEnabled, GL_BLEND );
-    BVGL::bvglBlendFunc( srcBlend, dstBlend );
+    BVGL::bvglBlendFuncSeparate( srcBlend, dstBlend, srcAlphaBlend, dstAlphaBlend );
     
     BVGL::bvglBlendColor( blendColor[ 0 ], blendColor[ 1 ], blendColor[ 2 ], blendColor[ 3 ] );
 }

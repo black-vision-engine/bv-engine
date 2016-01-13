@@ -1134,6 +1134,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectBlur.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\BVDeserializeContext.cpp">
+      <Filter>Serialization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">

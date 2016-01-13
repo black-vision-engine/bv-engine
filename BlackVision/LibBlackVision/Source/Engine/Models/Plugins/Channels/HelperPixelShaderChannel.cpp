@@ -20,6 +20,14 @@ void			HelperPixelShaderChannel::SetRendererContextUpdate		( DefaultPixelShaderC
 
 // ******************************
 //
+void		    HelperPixelShaderChannel::SetRendererContextUpdate		( IPixelShaderChannelPtr psChannel )
+{
+    assert( std::dynamic_pointer_cast< DefaultPixelShaderChannel >( psChannel ) );
+    SetRendererContextUpdate( std::static_pointer_cast< DefaultPixelShaderChannel >( psChannel ) );
+}
+
+// ******************************
+//
 bool			HelperPixelShaderChannel::PropagateTexturesDataUpdate	( DefaultPixelShaderChannelPtr psChannel, IPluginPtr prevPlugin )
 {
 	if( prevPlugin && prevPlugin->GetPixelShaderChannel() )

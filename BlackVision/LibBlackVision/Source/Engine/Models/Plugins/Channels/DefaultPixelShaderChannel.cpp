@@ -51,7 +51,6 @@ RendererContextPtr          DefaultPixelShaderChannel::GetRendererContext  ()
 void                        DefaultPixelShaderChannel::SetRendererContext  ( RendererContextPtr ctx )
 {
     m_rendererContext = ctx;
-
 }
 
 // ******************************
