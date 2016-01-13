@@ -4,6 +4,8 @@
 #include "../../BVAppLogic.h"
 #include "../../UseLoggerBVAppModule.h"
 #include "EventHandlerHelpers.h"
+#include "Serialization/Json/JsonSerializeObject.h"
+#include "Serialization/Json/JsonDeserializeObject.h"
 
 #include "Widgets/Crawler/CrawlerEvents.h"
 #include "Widgets/Counter/Counter.h"
@@ -65,43 +67,15 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
     if( command == WidgetEvent::Command::Crawl )
     {
 		bv::widgets::Crawler* crawler =  (bv::widgets::Crawler*)logic;
-        Json::Value parseAction( action );
+        
+        JsonSerializeObject ser;
+        JsonDeserializeObject deser;
+        deser.Load( action );
 
-        std::string crawlAction = parseAction.get( "Action", "" ).asString();
-        std::string param = parseAction.get( "Param", "" ).asString();
+        bool result = crawler->HandleEvent( deser, ser );
 
-		if( crawlAction == "stop" )
-		{
-			crawler->Stop();
-            SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
-		}
-		else if( crawlAction == "start" )
-		{
-			crawler->Start();
-            SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
-		}
-        else if( crawlAction == "add_text" )
-		{
-			crawler->AddMessage( toWString( param ) );
-            SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
-		}
-        else if( crawlAction == "reset" )
-		{
-			crawler->Reset();
-            SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
-		}
-		else if( crawlAction == "clear" )
-		{
-			crawler->Clear();
-            SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
-		}
-        else if( crawlAction == "set_speed" )
-		{
-			float speed = 0.5;
-			speed = (float)atof( param.c_str() );
-			crawler->SetSpeed( speed );
-            SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
-		}
+        PrepareResponseTemplate( ser, command, widgetEvent->SocketID, result );
+        SendResponse( ser, widgetEvent->SocketID, widgetEvent->EventID );
 	}
     else if( command == WidgetEvent::Command::Counter )
     {

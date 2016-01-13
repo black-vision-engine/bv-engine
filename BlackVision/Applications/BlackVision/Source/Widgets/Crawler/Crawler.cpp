@@ -9,6 +9,7 @@
 
 #include "CrawlerEvents.h"
 #include "Serialization/SerializationHelper.h"
+#include "Engine/Events/EventHelpers.h"
 
 #include <algorithm>
 #include <ctime>
@@ -443,6 +444,42 @@ void                Crawler::Serialize       ( ISerializer& ser ) const
 ISerializablePtr    Crawler::Create          ( const IDeserializer& /*deser*/ )
 {
     return nullptr;
+}
+
+// ***********************
+//
+bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISerializer& /*response*/ )
+{
+    std::string crawlAction = eventSer.GetAttribute( "Action" );
+
+	if( crawlAction == "Stop" )
+	{
+		Stop();
+	}
+	else if( crawlAction == "Start" )
+	{
+		Start();
+	}
+    else if( crawlAction == "AddText" )
+	{
+        std::string param = eventSer.GetAttribute( "Message" );
+		AddMessage( toWString( param ) );
+	}
+    else if( crawlAction == "Reset" )
+	{
+		Reset();
+	}
+	else if( crawlAction == "clear" )
+	{
+		Clear();
+	}
+    else if( crawlAction == "SetSpeed" )
+	{
+        std::string param = eventSer.GetAttribute( "Param" );
+        float speed = SerializationHelper::String2T( param, 0.5f );
+		SetSpeed( speed );
+	}
+    return true;
 }
 
 } // widgets

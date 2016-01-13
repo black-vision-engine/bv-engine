@@ -44,6 +44,8 @@ public:
 
     virtual void                Serialize       ( ISerializer& ser ) const override;
     static ISerializablePtr     Create          ( const IDeserializer& deser );
+
+    virtual bool                HandleEvent     ( IDeserializer& eventSer, ISerializer& response ) override;
 };
 
 }

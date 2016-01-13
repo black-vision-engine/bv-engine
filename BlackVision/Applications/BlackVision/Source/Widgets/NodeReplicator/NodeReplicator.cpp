@@ -80,5 +80,13 @@ ISerializablePtr     NodeReplicator::Create          ( const IDeserializer& /*de
     return nullptr;
 }
 
+// ***********************
+//
+bool                NodeReplicator::HandleEvent     ( IDeserializer& /*eventSer*/, ISerializer& /*response*/ )
+{
+    // @todo Implement all posible interactions with this widget.
+    return false;
+}
+
 } // model
 } // bv

@@ -15,6 +15,8 @@ public:
 	virtual void					Update			( TimeType t )	= 0;
 	virtual void					Deinitialize	()				= 0;
 
+    virtual bool                    HandleEvent     ( IDeserializer& eventStr, ISerializer& response ) = 0;
+
 };
 
 DEFINE_PTR_TYPE(INodeLogic)

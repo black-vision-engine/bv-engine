@@ -73,5 +73,13 @@ ISerializablePtr     WidgetCounter::Create          ( const IDeserializer& /*des
     return nullptr;
 }
 
+// ***********************
+//
+bool                WidgetCounter::HandleEvent     ( IDeserializer& /*eventSer*/, ISerializer& /*response*/ )
+{
+    // @todo Implement all posible interactions with this widget.
+    return false;
+}
+
 }
 }
