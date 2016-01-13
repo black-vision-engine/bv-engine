@@ -2,11 +2,12 @@
 
 #include "CoreDEF.h"
 #include "Engine/Interfaces/IUpdatable.h"
+#include "Serialization/ISerializable.h"
 
 
 namespace bv { namespace model {
 
-class INodeLogic : public IUpdatable
+class INodeLogic : public IUpdatable, public ISerializable
 {
 public:
 

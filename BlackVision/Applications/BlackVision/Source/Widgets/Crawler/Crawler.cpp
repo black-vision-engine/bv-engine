@@ -416,5 +416,19 @@ void		Crawler::EnqueueNode			( model::BasicNode * n)
 }
 
 
+// ***********************
+//
+void                Crawler::Serialize       ( ISerializer& /*ser*/ ) const
+{
+
+}
+
+// ***********************
+//
+ISerializablePtr    Crawler::Create          ( const IDeserializer& /*deser*/ )
+{
+    return nullptr;
+}
+
 } // widgets
 } // bv

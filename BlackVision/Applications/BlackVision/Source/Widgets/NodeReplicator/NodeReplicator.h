@@ -22,6 +22,10 @@ public:
 
     static NodeReplicatorPtr        Create          ( const BasicNodePtr & node, SizeType repNum, const IReplicationModifierConstPtr & modifier );
 
+
+    virtual void                Serialize       ( ISerializer& ser ) const override;
+    static ISerializablePtr     Create          ( const IDeserializer& deser );
+
 private:
     explicit                        NodeReplicator  ( const BasicNodePtr & node, SizeType repNum, const IReplicationModifierConstPtr & modifier = nullptr );
 

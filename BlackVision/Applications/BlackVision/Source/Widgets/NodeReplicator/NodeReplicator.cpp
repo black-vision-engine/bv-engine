@@ -65,5 +65,20 @@ void					    NodeReplicator::Update( TimeType )
 void					    NodeReplicator::Deinitialize()
 {}
 
+
+// ***********************
+//
+void                NodeReplicator::Serialize       ( ISerializer& /*ser*/ ) const
+{
+
+}
+
+// ***********************
+//
+ISerializablePtr     NodeReplicator::Create          ( const IDeserializer& /*deser*/ )
+{
+    return nullptr;
+}
+
 } // model
 } // bv
