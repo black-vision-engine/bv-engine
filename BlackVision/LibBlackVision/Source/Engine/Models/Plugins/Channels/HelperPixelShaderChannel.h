@@ -12,6 +12,7 @@ class HelperPixelShaderChannel
 public:
 	static void			SetTexturesDataUpdate			( DefaultPixelShaderChannelPtr psChannel );
 	static void			SetRendererContextUpdate		( DefaultPixelShaderChannelPtr psChannel );
+    static void		    SetRendererContextUpdate		( IPixelShaderChannelPtr psChannel );
 
 	static bool			PropagateTexturesDataUpdate		( DefaultPixelShaderChannelPtr psChannel, IPluginPtr prevPlugin );
 	static bool			PropagateRendererContextUpdate	( DefaultPixelShaderChannelPtr psChannel, IPluginPtr prevPlugin );

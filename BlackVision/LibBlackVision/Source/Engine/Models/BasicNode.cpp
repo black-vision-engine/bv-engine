@@ -19,6 +19,7 @@
 #include "Serialization/BVSerializeContext.h"
 //#include "Serialization/SerializationObjects.inl"
 #include "Serialization/CloneViaSerialization.h"
+#include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 #include "Assets/AssetDescsWithUIDs.h"
 
 #include "UseLoggerLibBlackVision.h"
@@ -168,6 +169,8 @@ BasicNode * BasicNode::Create( const IDeserializer& dob )
             ++itRC;
         }
     }
+
+    HelperPixelShaderChannel::SetRendererContextUpdate( plugins.back()->GetPixelShaderChannel() );
 
 //@todo use ModelNodeEffectFactory
 //// node effect
