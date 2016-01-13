@@ -1473,7 +1473,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::I
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 1.f );
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
 
-	success = model::LoadAnimation( node->GetPlugin( "animation" ), "FullHD/alfai", "*.tga" );
+	success = model::LoadAnimation( node->GetPlugin( "animation" ), "FullHD/alfai", ".*tga" );      // @fixme Set proper regular expression for filter
     //success = model::LoadAnimation( node->GetPlugin( "animation" ), "d:/src/media/sequences/FullHD/alfai/", "*.tga" );
     assert( success );
 
