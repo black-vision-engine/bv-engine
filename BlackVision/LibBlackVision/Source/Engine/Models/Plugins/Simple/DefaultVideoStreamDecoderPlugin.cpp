@@ -138,7 +138,7 @@ bool                            DefaultVideoStreamDecoderPlugin::LoadResource		(
 			auto txData = m_psc->GetTexturesDataImpl();
 			txData->SetTexture( 0, vsDesc );
 
-			SetAsset( 0, LAsset( vsDesc->GetName(), assetDescr, nullptr, vsDesc->GetSamplerState() ) );
+			SetAsset( 0, LAsset( vsDesc->GetName(), assetDescr, vsDesc->GetSamplerState() ) );
 
 			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
