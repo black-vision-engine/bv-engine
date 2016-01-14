@@ -38,8 +38,10 @@ public:
 	virtual void	Initialize		()				override {}
 	virtual void	Update			( TimeType t )	override;
 	virtual void	Deinitialize	()				override {}
-	static		WidgetCounterPtr Create	( bv::model::BasicNode * parent,bv::model:: ITimeEvaluatorPtr timeEvaluator);
-	bv::model::IParameterPtr       GetValueParam       ();
+
+
+	static WidgetCounterPtr         Create              ( bv::model::BasicNode * parent,bv::model:: ITimeEvaluatorPtr timeEvaluator);
+	bv::model::IParameterPtr        GetValueParam       ();
 
 
     virtual void                Serialize       ( ISerializer& ser ) const override;

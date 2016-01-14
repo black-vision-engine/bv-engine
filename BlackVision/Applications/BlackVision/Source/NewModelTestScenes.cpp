@@ -1367,29 +1367,30 @@ model::BasicNodePtr TestScenesFactory::FontTestScene( const model::PluginsManage
     glm::vec3 nextTranslation( 0.0, -0.1, 0.0 );
     glm::vec4 color( 1.0, 0.7, 0.0, 1.0 );
 
-    auto node0 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, "Dummy", nodeTranslation, color, L"", "fonts/StarWars.ttf" );
+    auto node0 = SimpleNodesFactory::CreateCrawlerNode( timeEvaluator );
+    //auto node0 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, "Dummy", nodeTranslation, color, L"", "fonts/StarWars.ttf" );
 
-    auto rootPath = ProjectManager::GetInstance()->GetRootDir();
-    std::string textPath = "other/FontTestText.txt";
-    rootPath = rootPath.Join( textPath );
-    
-    std::string nextLine;
-    std::string line = "line";
-    unsigned int numLines = 0;
+    //auto rootPath = ProjectManager::GetInstance()->GetRootDir();
+    //std::string textPath = "other/FontTestText.txt";
+    //rootPath = rootPath.Join( textPath );
+    //
+    //std::string nextLine;
+    //std::string line = "line";
+    //unsigned int numLines = 0;
 
-    std::ifstream file( rootPath.Str() );
-    if( !file.fail() )
-    {
-        while( !file.eof() )
-        {
-            numLines++;
-            nodeTranslation += nextTranslation;
+    //std::ifstream file( rootPath.Str() );
+    //if( !file.fail() )
+    //{
+    //    while( !file.eof() )
+    //    {
+    //        numLines++;
+    //        nodeTranslation += nextTranslation;
 
-            std::getline( file, nextLine );
-            auto newNode = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, line + std::to_string( numLines ), nodeTranslation, color, std::wstring( nextLine.begin(), nextLine.end() ), "fonts/StarWars.ttf" );
-            node0->AddChildToModelOnly( newNode );
-        }
-    }
+    //        std::getline( file, nextLine );
+    //        auto newNode = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, line + std::to_string( numLines ), nodeTranslation, color, std::wstring( nextLine.begin(), nextLine.end() ), "fonts/StarWars.ttf" );
+    //        node0->AddChildToModelOnly( newNode );
+    //    }
+    //}
 
     return node0;
 }

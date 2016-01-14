@@ -37,7 +37,7 @@ NodeLogicHandlers::~NodeLogicHandlers()
 //
 void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
 {
-	if( evt->GetEventType() == bv::NodeLogicEvent::Type() )
+	if( evt->GetEventType() != bv::NodeLogicEvent::Type() )
         return;
 
 	bv::NodeLogicEventPtr widgetEvent = std::static_pointer_cast<bv::NodeLogicEvent>( evt );        
