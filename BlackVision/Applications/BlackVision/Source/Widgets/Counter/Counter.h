@@ -40,6 +40,12 @@ public:
 	virtual void	Deinitialize	()				override {}
 	static		WidgetCounterPtr Create	( bv::model::BasicNode * parent,bv::model:: ITimeEvaluatorPtr timeEvaluator);
 	bv::model::IParameterPtr       GetValueParam       ();
+
+
+    virtual void                Serialize       ( ISerializer& ser ) const override;
+    static ISerializablePtr     Create          ( const IDeserializer& deser );
+
+    virtual bool                HandleEvent     ( IDeserializer& eventSer, ISerializer& response ) override;
 };
 
 }

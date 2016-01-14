@@ -43,9 +43,10 @@ AssetDescConstPtr AnimationAssetAccessor::GetAssetDesc( const Path & path ) cons
     {
         for( auto fe : m_fileExts )
         {
-            if( Path::List( path, false, fe ).size() > 0 )
+            auto numFrames = Path::List( path, false, fe ).size();
+            if( numFrames > 0 )
             {
-                return AnimationAssetDesc::Create( ( Path( "sequences" ) / path ).Str(), fe );
+                return AnimationAssetDesc::Create( ( Path( "sequences" ) / path ).Str(), numFrames, fe );
             }
         }
     }

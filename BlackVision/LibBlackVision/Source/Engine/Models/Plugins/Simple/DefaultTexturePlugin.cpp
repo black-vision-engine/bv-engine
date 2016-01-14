@@ -86,14 +86,14 @@ void DefaultTexturePlugin::SetPrevPlugin( IPluginPtr prev )
 
     InitVertexAttributesChannel();
 
-	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
-	auto ctx = m_psc->GetRendererContext();
+    HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+    auto ctx = m_psc->GetRendererContext();
     ctx->cullCtx->enabled = false;
     
     ctx->alphaCtx->blendEnabled = true;
     ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_SRC_ALPHA;
     ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
-	//HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
+    //HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 }
 
 // *************************************
@@ -122,15 +122,15 @@ DefaultTexturePlugin::~DefaultTexturePlugin         ()
 // 
 bool							DefaultTexturePlugin::IsValid     () const
 {
-	return ( m_vaChannel && m_prevPlugin->IsValid() );
+    return ( m_vaChannel && m_prevPlugin->IsValid() );
 }
 
 // *************************************
 // 
 bool                            DefaultTexturePlugin::LoadResource  ( AssetDescConstPtr assetDescr )
 {
-	auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( assetDescr );
-	
+    auto txAssetDescr = QueryTypedDesc< TextureAssetDescConstPtr >( assetDescr );
+    
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( txAssetDescr != nullptr )
     {
@@ -139,16 +139,18 @@ bool                            DefaultTexturePlugin::LoadResource  ( AssetDescC
 
         if( txDesc != nullptr )
         {
-			txDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
-			txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
-			
-			auto txData = m_psc->GetTexturesDataImpl();
+            txDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
+            txDesc->SetSemantic( DataBuffer::Semantic::S_TEXTURE_STATIC );
+            
+            auto txData = m_psc->GetTexturesDataImpl();
             txData->SetTexture( 0, txDesc );
-            SetAsset( 0, assetDescr, txDesc->GetSamplerState() );
+            SetAsset( 0, LAsset( txDesc->GetName(), assetDescr, 
+                                                                AssetConstPtr( reinterpret_cast< Asset* >( txDesc.get() ) ), // FIXME so very much
+                txDesc->GetSamplerState() ) );
 
-			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
+            HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
-			m_textureWidth = txAssetDescr->GetOrigTextureDesc()->GetWidth();
+            m_textureWidth = txAssetDescr->GetOrigTextureDesc()->GetWidth();
             m_textureHeight = txAssetDescr->GetOrigTextureDesc()->GetHeight();
 
 
@@ -184,15 +186,15 @@ IVertexShaderChannelConstPtr        DefaultTexturePlugin::GetVertexShaderChannel
 // 
 void                                DefaultTexturePlugin::Update                      ( TimeType t )
 {
-	BasePlugin::Update( t );
-	
-	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
-	if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
-	{
-		InitVertexAttributesChannel();
-	}
-	
-	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+    BasePlugin::Update( t );
+    
+    HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
+    if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
+    {
+        InitVertexAttributesChannel();
+    }
+    
+    HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
 
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
@@ -202,33 +204,33 @@ void                                DefaultTexturePlugin::Update                
 //
 void		DefaultTexturePlugin::InitVertexAttributesChannel		()
 {
-	if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
-	{
-		m_vaChannel = nullptr;
-		return;
-	}
+    if( !( m_prevPlugin && m_prevPlugin->GetVertexAttributesChannel() ) )
+    {
+        m_vaChannel = nullptr;
+        return;
+    }
 
     auto prevGeomChannel = m_prevPlugin->GetVertexAttributesChannel();
-	auto prevCC = prevGeomChannel->GetComponents();
+    auto prevCC = prevGeomChannel->GetComponents();
 
     //Only one texture
-	VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
-	if( !vaChannelDesc.GetAttrChannelDescriptor( AttributeSemantic::AS_TEXCOORD ) )
-	{
-		vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
-	}
-	
-	if( !m_vaChannel )
-	{		
-		m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
-	}
-	else
-	{
-		m_vaChannel->ClearAll();
-		m_vaChannel->SetDescriptor( vaChannelDesc );
-	}
+    VertexAttributesChannelDescriptor vaChannelDesc( * static_cast< const VertexAttributesChannelDescriptor * >( prevGeomChannel->GetDescriptor() ) );
+    if( !vaChannelDesc.GetAttrChannelDescriptor( AttributeSemantic::AS_TEXCOORD ) )
+    {
+        vaChannelDesc.AddAttrChannelDesc( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    }
+    
+    if( !m_vaChannel )
+    {		
+        m_vaChannel = std::make_shared< VertexAttributesChannel >( prevGeomChannel->GetPrimitiveType(), vaChannelDesc, true, prevGeomChannel->IsTimeInvariant() );
+    }
+    else
+    {
+        m_vaChannel->ClearAll();
+        m_vaChannel->SetDescriptor( vaChannelDesc );
+    }
 
-	auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
+    auto desc = new AttributeChannelDescriptor( AttributeType::AT_FLOAT2, AttributeSemantic::AS_TEXCOORD, ChannelRole::CR_PROCESSOR );
     for( unsigned int i = 0; i < prevCC.size(); ++i )
     {
         auto connComp = ConnectedComponent::Create();
@@ -241,22 +243,22 @@ void		DefaultTexturePlugin::InitVertexAttributesChannel		()
             connComp->AddAttributeChannel( prevCompCh );
         }
 
-		auto posChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
-		if( posChannel && !prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) )
-		{
-			//FIXME: only one texture - convex hull calculations
-			auto uvs = new model::Float2AttributeChannel( desc, DefaultTexturePluginDesc::TextureName(), true );
-			auto uvsPtr = Float2AttributeChannelPtr( uvs );
-			
-			Helper::UVGenerator::generateUV( reinterpret_cast< const glm::vec3 * >( posChannel->GetData() ), posChannel->GetNumEntries(),
-											uvsPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ), true );
+        auto posChannel = prevConnComp->GetAttrChannel( AttributeSemantic::AS_POSITION );
+        if( posChannel && !prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) )
+        {
+            //FIXME: only one texture - convex hull calculations
+            auto uvs = new model::Float2AttributeChannel( desc, DefaultTexturePluginDesc::TextureName(), true );
+            auto uvsPtr = Float2AttributeChannelPtr( uvs );
+            
+            Helper::UVGenerator::generateUV( reinterpret_cast< const glm::vec3 * >( posChannel->GetData() ), posChannel->GetNumEntries(),
+                                            uvsPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ), true );
 
-			connComp->AddAttributeChannel( uvsPtr );
-		}
+            connComp->AddAttributeChannel( uvsPtr );
+        }
 
         m_vaChannel->AddConnectedComponent( connComp );
     }
-	
+    
     assert( prevGeomChannel->GetComponents().size() > 0 );
 }
 
@@ -278,25 +280,25 @@ SizeType									DefaultTexturePlugin::GetTextureHeight            () const
 // 
 mathematics::RectConstPtr					DefaultTexturePlugin::GetAABB						( const glm::mat4 & trans ) const
 {
-	//auto trParam = GetCurrentParamTransform( this );
+    //auto trParam = GetCurrentParamTransform( this );
 
-	//if( !trParam )
-	//	return nullptr;
+    //if( !trParam )
+    //	return nullptr;
 
-	//assert( trParam->NumTransforms() <= 1 );
+    //assert( trParam->NumTransforms() <= 1 );
 
-	//if( trParam->NumTransforms() == 1 )
-	//{
-	//	auto trValue = trParam->Evaluate( 0 );
+    //if( trParam->NumTransforms() == 1 )
+    //{
+    //	auto trValue = trParam->Evaluate( 0 );
 
-		auto rect = mathematics::Rect::Create();
-		if( AABB( m_vaChannel.get(), trans, rect.get() ) )
-			return rect;
-		else
-			return nullptr;
-	//}
-	//	
-	//return nullptr;
+        auto rect = mathematics::Rect::Create();
+        if( AABB( m_vaChannel.get(), trans, rect.get() ) )
+            return rect;
+        else
+            return nullptr;
+    //}
+    //	
+    //return nullptr;
 }
 
 } // model

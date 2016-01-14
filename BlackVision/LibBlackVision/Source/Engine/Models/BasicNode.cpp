@@ -157,17 +157,19 @@ BasicNode * BasicNode::Create( const IDeserializer& dob )
 
     auto itRC = deserContext->RendererContextes().begin();
 
+    assert( plugins.size() == deserContext->RendererContextes().size() );  // A little bit of defensive programming
+
     for( auto plugin : plugins )
     {
         node->AddPlugin( plugin );
 
         // override renderer context
-        assert( itRC != deserContext->RendererContextes().end() );  // A little bit of defensive programming
-        if( plugin->GetPixelShaderChannel() )
+        if( *itRC && plugin->GetPixelShaderChannel() )
         {
             plugin->SetRendererContext( *itRC );
-            ++itRC;
         }
+
+        ++itRC;
     }
 
     HelperPixelShaderChannel::SetRendererContextUpdate( plugins.back()->GetPixelShaderChannel() );

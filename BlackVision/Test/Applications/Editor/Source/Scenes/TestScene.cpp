@@ -21,6 +21,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultVideoStreamDecoderPlugin.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 
+#include "ProjectManager.h"
+
 
 namespace bv {
 
@@ -214,7 +216,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 		auto editor = m_project->GetProjectEditor();
 		bool success = true;
 
-        editor->DetachScene( EMPTY_SCENE );
+        success = editor->DetachScene( EMPTY_SCENE );
 
 		assert( success );
 	});
@@ -225,7 +227,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 		auto editor = m_project->GetProjectEditor();
 		bool success = true;
 
-        editor->AttachScene( EMPTY_SCENE, 0 );
+         success = editor->AttachScene( EMPTY_SCENE, 0 );
 
 		assert( success );
 	});
@@ -1043,7 +1045,7 @@ void					TestScene::InitAssetsTest		()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( "tex0" ) );
-		auto desc = AnimationAssetDesc::Create( TestSceneUtils::ANIM_PATH, "*.bmp" );
+        auto desc = ProjectManager::GetInstance()->GetAssetDesc( "", "sequences", TestSceneUtils::ANIM_PATH );
 		editor->LoadAsset( child->GetPlugin( "animation" ), desc );
 
         auto time = editor->GetScene( SCENE_NAME )->GetTimeline()->GetLocalTime();
@@ -1518,7 +1520,7 @@ void					TestScene::InitBasicAnimationPluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		
-		auto desc = AnimationAssetDesc::Create( TestSceneUtils::ANIM_PATH, "*.bmp" );
+		auto desc =  ProjectManager::GetInstance()->GetAssetDesc( "", "sequences", TestSceneUtils::ANIM_PATH );
 		editor->LoadAsset( root->GetPlugin( "animation" ), desc );
 	});
 	m_testSteps.push_back( [&]{ RestoreRoot( 2, "animation" ); } );
@@ -1538,7 +1540,7 @@ void					TestScene::InitBasicAnimationPluginTest	()
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( ANIM_NODE );
 
-		auto desc = AnimationAssetDesc::Create( TestSceneUtils::ANIM_PATH, "*.bmp" );
+		auto desc =  ProjectManager::GetInstance()->GetAssetDesc( "", "sequences", TestSceneUtils::ANIM_PATH );
 		editor->LoadAsset( root->GetPlugin( "animation" ), desc );
 
 		auto time = m_timeEvaluator->GetLocalTime();

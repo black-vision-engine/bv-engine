@@ -309,7 +309,7 @@ bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr
 
 			auto fonts = m_psc->GetTexturesDataImpl()->GetFonts();
 			assert( fonts.size() == 1 );
-			SetAsset( 0, assetDescr, fonts[ 0 ]->GetStateModel() );
+            SetAsset( 0, LAsset( txDesc->GetName(), assetDescr, fontResource, fonts[ 0 ]->GetStateModel() ) );
 
             return true;
         }

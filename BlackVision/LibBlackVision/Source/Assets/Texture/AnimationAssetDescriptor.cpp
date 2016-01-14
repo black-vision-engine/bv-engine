@@ -1,6 +1,7 @@
 #include "AnimationAssetDescriptor.h"
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
+#include "Serialization/SerializationHelper.h"
 
 #include <cassert>
 
@@ -16,6 +17,7 @@ void                AnimationAssetDesc::Serialize       ( ISerializer& sob ) con
 sob.EnterChild( "asset" );
     sob.SetAttribute( "type", UID() );
     sob.SetAttribute( "path", m_path );
+    sob.SetAttribute( "numFrames", std::to_string( m_numFrames ) );
     sob.SetAttribute( "filter", m_filter );
 sob.ExitChild();
 }
@@ -25,6 +27,7 @@ sob.ExitChild();
 ISerializableConstPtr     AnimationAssetDesc::Create          ( const IDeserializer& dob )
 {
     return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetAttribute( "path" ), dob.GetAttribute( "filter" ) ) );
+    //return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetAttribute( "path" ), SerializationHelper::String2T( dob.GetAttribute( "numFrames" ), 0 ), dob.GetAttribute( "filter" ) ) );
 }
 
 //// ***********************
@@ -39,7 +42,17 @@ ISerializableConstPtr     AnimationAssetDesc::Create          ( const IDeseriali
 AnimationAssetDesc::AnimationAssetDesc							( const std::string & path, const std::string & filter )
     : m_path( path )
     , m_filter( filter )
+    , m_numFrames( 0 )
 {}
+
+// *******************************
+//
+AnimationAssetDesc::AnimationAssetDesc							( const std::string & path, SizeType numFrames, const std::string & filter )
+    : m_path( path )
+    , m_filter( filter )
+    , m_numFrames( numFrames )
+{}
+
 
 //// *******************************
 ////
@@ -77,9 +90,9 @@ std::string                     AnimationAssetDesc::GetKey      () const
 
 // *******************************
 //
-AnimationAssetDescConstPtr		AnimationAssetDesc::Create( const std::string & path, const std::string & filter )
+AnimationAssetDescConstPtr		AnimationAssetDesc::Create( const std::string & path, SizeType numFrames, const std::string & filter )
 {
-    return AnimationAssetDescConstPtr( new AnimationAssetDesc ( path, filter ) );
+    return AnimationAssetDescConstPtr( new AnimationAssetDesc ( path, numFrames, filter ) );
 }
 
 // *******************************
@@ -122,6 +135,13 @@ std::string         AnimationAssetDesc::GetPath		() const
 std::string         AnimationAssetDesc::GetFilter   () const
 {
     return m_filter;
+}
+
+// *******************************
+//
+SizeType             AnimationAssetDesc::GetNumFrames() const
+{
+    return m_numFrames;
 }
 
 } //bv

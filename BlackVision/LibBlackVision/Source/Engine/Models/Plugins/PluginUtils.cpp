@@ -2,6 +2,8 @@
 
 #include "Assets/Assets.h"
 
+#include "ProjectManager.h"
+
 namespace bv { namespace model {
 
 // *******************************
@@ -33,9 +35,9 @@ bool    LoadTexture     ( IPluginPtr plugin, const std::string & textureFile, co
 
 // *******************************
 //
-bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, const std::string & filter )
+bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, const std::string & )
 {
-	auto desc = AnimationAssetDesc::Create( animationPath, filter );
+    auto desc = ProjectManager::GetInstance()->GetAssetDesc( "", "sequences", animationPath );
 
     if( desc == nullptr )
     {

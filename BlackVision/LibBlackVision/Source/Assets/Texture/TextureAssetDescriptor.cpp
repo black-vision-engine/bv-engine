@@ -80,6 +80,9 @@ ser.EnterChild( "asset" );
     ser.SetAttribute( "type", UID() );
     ser.SetAttribute( "path", m_originalTextureDesc->GetImagePath() );
 
+    ser.SetAttribute( "width", SerializationHelper::T2String( m_originalTextureDesc->GetWidth() ) );
+    ser.SetAttribute( "height", SerializationHelper::T2String( m_originalTextureDesc->GetHeight() ) );
+
     if( m_mipMapsDescs )
         ser.SetAttribute( "filter", SerializationHelper::T2String( m_mipMapsDescs->GetFilter() ) );
     else
