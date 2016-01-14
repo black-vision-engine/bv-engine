@@ -87,6 +87,15 @@ private:
     PathVec                 ListPresets         ( const Path & projectName ) const;
     PathVec                 ListPresets         () const;
 
+    // *********************************
+	// handling directories
+    PathVec                 ListAssetsDirs      ( const std::string & categoryName, const Path & path ) const;
+    PathVec                 ListScenesDirs      ( const Path & path ) const;
+    bool                    CreateAssetDir      ( const std::string & categoryName, const Path & path ) const;
+    bool                    CreateSceneDir      ( const Path & path ) const;
+    bool                    RemoveAssetDir      ( const std::string & categoryName, const Path & path ) const;
+    bool                    RemoveSceneDir      ( const Path & path ) const;
+
 	void					InitializeProjects	();
 	void					InitializeScenes	();
     void				    InitializePresets	();

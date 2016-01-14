@@ -126,4 +126,31 @@ bool						Dir::CreateDir			( const std::string & path, bool createRecusive )
 	}
 }
 
+// *******************************
+//
+bool                    Dir::RemoveDir			( const std::string & path )
+{
+    if( Exists( path ) )
+	{
+        boost::system::error_code ec;
+	    boost::filesystem::path p( path );
+
+        boost::filesystem::remove( path, ec );
+
+		if( ec )
+		{
+			std::cout << "[File::CreateDir] create_directory error: " << ec << std::endl;
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+    else
+    {
+        return false;
+    }
+}
+
 } //bv

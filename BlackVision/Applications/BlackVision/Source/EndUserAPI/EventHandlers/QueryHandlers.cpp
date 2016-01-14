@@ -57,16 +57,12 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             responseMessage = ListProjects( request, requestID );
         else if( command == InfoEvent::Command::ListScenes )
             responseMessage = ListScenes( request, requestID );
-
-        else if( command == InfoEvent::Command::ListAllScenes )
-            responseMessage = ListAllScenes( request, requestID );
         else if( command == InfoEvent::Command::ListAllFolders )
             responseMessage = ListAllFolders( request, requestID );
         else if( command == InfoEvent::Command::ListResourcesInFolders )
             responseMessage = ListResourcesInFolders( request, requestID );
         else if( command == InfoEvent::Command::ListAllResources )
             responseMessage = ListAllResources( request, requestID );
-
         else if( command == InfoEvent::Command::Performance )
             responseMessage = toWString( PerformanceInfo( request, requestID ) );
         else if( command == InfoEvent::Command::Timelines )
@@ -325,7 +321,7 @@ std::wstring QueryHandlers::ListScenes          ( const std::string& request, un
 
 // ***********************
 //
-std::wstring QueryHandlers::ListAssetsPaths     ( const std::string& request, unsigned int requestID )
+std::wstring QueryHandlers::ListAssetsPaths     ( const std::string & request, unsigned int requestID )
 {
     JsonSerializeObject ser;
     PrepareResponseTemplate( ser, InfoEvent::Command::ListAssetsPaths, requestID, true );
@@ -347,7 +343,7 @@ std::wstring QueryHandlers::ListAssetsPaths     ( const std::string& request, un
 
 // ***********************
 //
-std::wstring QueryHandlers::ListCategoriesNames ( const std::string& /*request*/, unsigned int requestID )
+std::wstring QueryHandlers::ListCategoriesNames ( const std::string & /*request*/, unsigned int requestID )
 {
     JsonSerializeObject ser;
     PrepareResponseTemplate( ser, InfoEvent::Command::ListCategoriesNames, requestID, true );
@@ -365,7 +361,7 @@ std::wstring QueryHandlers::ListCategoriesNames ( const std::string& /*request*/
 
 // ***********************
 //
-std::wstring QueryHandlers::ListProjects        ( const std::string& /*request*/, unsigned int requestID )
+std::wstring QueryHandlers::ListProjects        ( const std::string & /*request*/, unsigned int requestID )
 {
     JsonSerializeObject ser;
     PrepareResponseTemplate( ser, InfoEvent::Command::ListProjects, requestID, true );
@@ -526,7 +522,26 @@ std::string     QueryHandlers::ListTimelineKeyframes    ( const std::string& req
 
 // ***********************
 //
-std::wstring    QueryHandlers::ListAllScenes           ( const std::string& /*request*/, unsigned int /*requestID*/ )
+std::wstring    QueryHandlers::ListAllFolders          ( const std::string & , unsigned int  )
+{
+    //JsonSerializeObject ser;
+    //PrepareResponseTemplate( ser, InfoEvent::Command::ListAllFolders, requestID, true );
+
+    //auto pm = ProjectManager::GetInstance();
+    //auto sns = pm->ListCategoriesNames();
+
+    //ser.EnterArray( "list" );
+    //for( auto category : sns )
+    //    ser.SetAttribute( "", category );
+    //ser.ExitChild();
+
+    //return toWString( ser.GetString() );
+    return L"";
+}
+
+// ***********************
+//
+std::wstring    QueryHandlers::ListResourcesInFolders  ( const std::string & /*request*/, unsigned int /*requestID*/ )
 {
     // @todo Zaimplementowaæ
     // S¹ stworzone funkcje do ustawiania domyœlnych wartoœci, jakie powinny byæ w odpowiedziach do eventów:
@@ -539,33 +554,7 @@ std::wstring    QueryHandlers::ListAllScenes           ( const std::string& /*re
 
 // ***********************
 //
-std::wstring    QueryHandlers::ListAllFolders          ( const std::string& /*request*/, unsigned int /*requestID*/ )
-{
-    // @todo Zaimplementowaæ
-    // S¹ stworzone funkcje do ustawiania domyœlnych wartoœci, jakie powinny byæ w odpowiedziach do eventów:
-    // - PrepareResponseTemplate
-    // - ErrorResponseTemplate
-    // Zobacz jak s¹ u¿ywane w innych eventach.
-
-    return L"";
-}
-
-// ***********************
-//
-std::wstring    QueryHandlers::ListResourcesInFolders  ( const std::string& /*request*/, unsigned int /*requestID*/ )
-{
-    // @todo Zaimplementowaæ
-    // S¹ stworzone funkcje do ustawiania domyœlnych wartoœci, jakie powinny byæ w odpowiedziach do eventów:
-    // - PrepareResponseTemplate
-    // - ErrorResponseTemplate
-    // Zobacz jak s¹ u¿ywane w innych eventach.
-
-    return L"";
-}
-
-// ***********************
-//
-std::wstring    QueryHandlers::ListAllResources        ( const std::string& /*request*/, unsigned int /*requestID*/ )
+std::wstring    QueryHandlers::ListAllResources        ( const std::string & /*request*/, unsigned int /*requestID*/ )
 {
     // @todo Zaimplementowaæ
     // S¹ stworzone funkcje do ustawiania domyœlnych wartoœci, jakie powinny byæ w odpowiedziach do eventów:

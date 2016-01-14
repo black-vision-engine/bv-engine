@@ -944,4 +944,106 @@ bool                        ProjectManagerImpl::PathExistsInPM      ( const Path
     }
 }
 
+// ********************************
+//
+PathVec                     ProjectManagerImpl::ListAssetsDirs      ( const std::string & categoryName, const Path & path ) const
+{
+    auto paths = Path::List( Path( categoryName ) / path, true );
+
+    PathVec ret;
+
+    for( auto p : paths )
+    {
+        if( Path::IsDir( p ) )
+        {
+            ret.push_back( p );
+        }
+    }
+
+    return ret;
+}
+
+// ********************************
+//
+PathVec                     ProjectManagerImpl::ListScenesDirs      ( const Path & path ) const
+{
+    auto paths = Path::List( Path( "scenes" ) / path, true );
+
+    PathVec ret;
+
+    for( auto p : paths )
+    {
+        if( Path::IsDir( p ) )
+        {
+            ret.push_back( p );
+        }
+    }
+
+    return ret;
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::CreateAssetDir      ( const std::string & categoryName, const Path & path ) const
+{
+    auto p = Path( categoryName ) / path;
+    if( !Path::Exists( p ) )
+    {
+        return Dir::CreateDir( p.Str(), true );
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::CreateSceneDir      ( const Path & path ) const
+{
+    auto p = Path( "scenes" ) / path;
+    if( !Path::Exists( p ) )
+    {
+        return Dir::CreateDir( p.Str(), true );
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::RemoveAssetDir      ( const std::string & categoryName, const Path & path ) const
+{
+    auto p = Path( categoryName ) / path;
+    if( Path::Exists( p ) )
+    {
+        return Dir::RemoveDir( p.Str() );
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// ********************************
+//
+bool                        ProjectManagerImpl::RemoveSceneDir      ( const Path & path ) const
+{
+    auto p = Path( "scenes" ) / path;
+    if( Path::Exists( p ) )
+    {
+        return Dir::RemoveDir( p.Str() );
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// ********************************
+//
+
+
 } // bv

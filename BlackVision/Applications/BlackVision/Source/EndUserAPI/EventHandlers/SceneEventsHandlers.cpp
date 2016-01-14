@@ -420,27 +420,41 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::MoveProject )
     {
-
+        assert( false ); // TODO: Implement
     }
     else if( command == ProjectEvent::Command::DeleteProject )
     {
-
+        assert( false ); // TODO: Implement
     }
     else if( command == ProjectEvent::Command::RenameProject )
     {
-
+        assert( false ); // TODO: Implement
     }
     else if( command == ProjectEvent::Command::AddExistingSceneToProject )
     {
+        auto inSceneName = GetRequestParamValue( request )[ "inSceneName" ].asString();
+        auto projectName = GetRequestParamValue( request )[ "projectName" ].asString();
+        auto outSceneName = GetRequestParamValue( request )[ "outSceneName" ].asString();
 
+        pm->CopyScene( "", inSceneName, projectName, outSceneName );
+
+        SendSimpleResponse( command, projectEvent->EventID, senderID, true );
     }
     else if( command == ProjectEvent::Command::RemoveSceneFromProject )
     {
-        // Already implemented by event RemoveScene
+        // Already implemented by event RemoveScene. Use that event.
+        assert( false );
     }
     else if( command == ProjectEvent::Command::CreateSceneInProject )
     {
+        auto inSceneName = GetRequestParamValue( request )[ "inSceneName" ].asString();
+        auto projectName = GetRequestParamValue( request )[ "projectName" ].asString();
 
+        auto scene = SceneModel::Create( ( Path( projectName ) / Path( inSceneName ) ).Str(), nullptr );
+
+        pm->AddScene( scene, projectName, inSceneName );
+
+        SendSimpleResponse( command, projectEvent->EventID, senderID, true );
     }
     else if( command == ProjectEvent::Command::CreateFolder )
     {
@@ -451,7 +465,9 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
     }
     else
+    {
         SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Unknown command" );
+    }
 
 }
 
