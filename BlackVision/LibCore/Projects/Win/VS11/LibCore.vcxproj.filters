@@ -77,9 +77,6 @@
     <ClInclude Include="..\..\..\Source\Tools\Logger\Logger.h">
       <Filter>Tools\Logger</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Tools\Logger\UseLogger.h">
-      <Filter>Tools\Logger</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.h">
       <Filter>Tools\Profiler</Filter>
     </ClInclude>
@@ -102,8 +99,8 @@
       <Filter>Tools\Logger</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\PrefixHelper.h">
-	  <Filter>Tools</Filter>
-	</ClInclude>
+      <Filter>Tools</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\PrintGuard.h">
       <Filter>Tools</Filter>
     </ClInclude>

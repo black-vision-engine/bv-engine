@@ -3,7 +3,6 @@
 #include <fstream>
 #include <unordered_map>
 #include <iomanip>
-#include "UseLogger.h"
 #include "QueueSink.h"
 
 
@@ -46,11 +45,11 @@ namespace bv { namespace LogHelperString {
 
 
 
-const char * SEVERITY_DEBUG_STRING		= "debug";
-const char * SEVERITY_INFO_STRING		= "info";
-const char * SEVERITY_WARNING_STRING		= "warning";
-const char * SEVERITY_ERROR_STRING		= "error";
-const char * SEVERITY_CRITICAL_STRING	= "critical";
+const char * SEVERITY_DEBUG_STRING      = "debug";
+const char * SEVERITY_INFO_STRING       = "info";
+const char * SEVERITY_WARNING_STRING    = "warning";
+const char * SEVERITY_ERROR_STRING      = "error";
+const char * SEVERITY_CRITICAL_STRING   = "critical";
 
 static const char* SEVERITY_STRINGS[] =
 {
