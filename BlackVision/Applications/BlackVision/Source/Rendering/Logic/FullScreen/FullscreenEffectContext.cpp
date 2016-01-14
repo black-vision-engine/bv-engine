@@ -30,9 +30,23 @@ Renderer *                      FullscreenEffectContext::GetRenderer            
 
 // **************************
 //
+void                            FullscreenEffectContext::SetRenderer                 ( Renderer * renderer )
+{
+    m_renderer = renderer;
+}
+
+// **************************
+//
 RenderTarget *                  FullscreenEffectContext::GetOutputRenderTarget       ()
 {
     return m_outputRenderTarget;
+}
+
+// **************************
+//
+void                            FullscreenEffectContext::SetRenderTargetAllocator    ( RenderTargetStackAllocator * allocator )
+{
+    m_rtAllocator = allocator;
 }
 
 // **************************

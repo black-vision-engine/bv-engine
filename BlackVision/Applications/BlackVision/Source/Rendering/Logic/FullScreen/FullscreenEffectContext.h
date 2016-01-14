@@ -28,7 +28,9 @@ public:
     RenderTarget *                  GetOutputRenderTarget       ();
     RenderTargetStackAllocator *    GetRenderTargetAllocator    ();
 
+    void                            SetRenderer                 ( Renderer * renderer );
     void                            SetOutputRenderTarget       ( RenderTarget * rt );
+    void                            SetRenderTargetAllocator    ( RenderTargetStackAllocator * allocator );
 
     void                            SetInputRenderTargets       ( const std::vector< RenderTarget * > * renderTargets );
     const std::vector< RenderTarget * > * AccessInputRenderTargets    () const;

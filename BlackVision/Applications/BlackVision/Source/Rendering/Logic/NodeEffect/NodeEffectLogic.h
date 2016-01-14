@@ -16,11 +16,15 @@ class NodeEffectLogic
 {
 private:
 
-    PreFullscreenEffectLogic *  m_preFSELogic;
+    std::vector< RenderTarget * >   m_renderTargetsFSE;
+    FullscreenEffectContext         m_FSECtx;
+    bool                            m_FSEInitialized;
+
+    PreFullscreenEffectLogic *      m_preFSELogic;
     
-    FullscreenEffectTr *        m_FSE;
+    FullscreenEffectTr *            m_FSE;
     
-    PostFullscreenEffectLogic * m_postFSELogic;
+    PostFullscreenEffectLogic *     m_postFSELogic;
 
 public:
 
@@ -32,6 +36,14 @@ public:
     void    SetPreFullscreenEffectLogic ( PreFullscreenEffectLogic * logic );
     void    SetPostFullscreenEffectLogic( PostFullscreenEffectLogic * logic );
     void    SetFullscreenEffect         ( FullscreenEffectTr * fse );
+
+private:
+
+    void    FSEInitializedGuard         ( RenderLogicContext * ctx, std::vector< RenderTarget * > * fseInputsVec, FullscreenEffectContext * fseCtx );
+
+    void    PreFSERenderLogic           ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > & outputs ) const;
+    void    FSERenderLogic              ( RenderTarget * output, FullscreenEffectContext * ctx );
+    void    PostFSERenderLogic          ( SceneNode * node, RenderLogicContext * ctx ) const;
 
 };
 

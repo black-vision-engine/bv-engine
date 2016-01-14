@@ -15,7 +15,7 @@ public:
 
     virtual         ~PostFullscreenEffectLogic  ();
 
-    virtual void    Render                      ( SceneNode * node, RenderLogicContext * ctx, RenderTarget * inputRenderTarget ) = 0;
+    virtual void    Render                      ( SceneNode * node, RenderLogicContext * ctx ) = 0;
 
 };
 
