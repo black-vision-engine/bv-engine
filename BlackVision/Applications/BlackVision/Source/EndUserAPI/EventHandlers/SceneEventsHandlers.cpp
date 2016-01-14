@@ -394,8 +394,9 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     else if( command == ProjectEvent::Command::RemoveScene )
     {
         auto sceneName = GetRequestParamValue( request )[ "sceneName" ].asString();
+        auto projectName = GetRequestParamValue( request )[ "projectName" ].asString();
 
-        pm->RemoveScene( "", sceneName );
+        pm->RemoveScene( projectName, sceneName );
 
         SendSimpleResponse( command, projectEvent->EventID, senderID, true );
     }
@@ -435,7 +436,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::RemoveSceneFromProject )
     {
-
+        // Already implemented by event RemoveScene
     }
     else if( command == ProjectEvent::Command::CreateSceneInProject )
     {
