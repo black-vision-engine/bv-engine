@@ -82,7 +82,7 @@ void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic* appLogic )
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_timelineHandlers, &TimelineHandlers::TimelineHandler ), TimeLineEvent::Type() );
 
 
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_nodeLogicHandlers, &NodeLogicHandlers::WidgetHandler ), WidgetEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_nodeLogicHandlers, &NodeLogicHandlers::WidgetHandler ), NodeLogicEvent::Type() );
 
 
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_nodeLogicHandlers, &NodeLogicHandlers::OnNodeAppearing ), widgets::NodeAppearingCrawlerEvent::Type() );

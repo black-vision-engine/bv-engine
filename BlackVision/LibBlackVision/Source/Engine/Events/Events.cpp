@@ -61,8 +61,8 @@ std::string TimeLineEvent::m_sEventName             = "TimeLineEvent";
 const EventType TimerEvent::m_sEventType            = 0x30000010;
 std::string TimerEvent::m_sEventName                = "TimerEvent";
 
-const EventType WidgetEvent::m_sEventType           = 0x30000011;
-std::string WidgetEvent::m_sEventName               = "WidgetEvent";
+const EventType NodeLogicEvent::m_sEventType           = 0x30000011;
+std::string NodeLogicEvent::m_sEventName               = "NodeLogicEvent";
 
 const EventType VideoCardEvent::m_sEventType        = 0x30000005;
 std::string VideoCardEvent::m_sEventName            = "VideoCardEvent";
@@ -366,20 +366,21 @@ template<> const std::wstring&  T2WString    ( TimelineType t )                 
 
 
 // ========================================================================= //
-// WidgetEvent
+// NodeLogicEvent
 // ========================================================================= //
 const std::wstring WIDGET_ACTION_WSTRING                = L"Action";
 const std::wstring WIDGET_TIME_VALUE_WSTRING            = L"Time";
 
-std::pair< WidgetEvent::Command, const std::wstring > WidgetEventCommandMapping[] = 
+std::pair< NodeLogicEvent::Command, const std::wstring > NodeLogicEventCommandMapping[] = 
 {
-    std::make_pair( WidgetEvent::Command::Crawl, L"Crawl" )
-    , std::make_pair( WidgetEvent::Command::Counter, L"Counter" ) 
-    , std::make_pair( WidgetEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
+    std::make_pair( NodeLogicEvent::Command::AddNodeLogic, L"AddNodeLogic" )
+    , std::make_pair( NodeLogicEvent::Command::DeleteNodeLogic, L"DeleteNodeLogic" )
+    , std::make_pair( NodeLogicEvent::Command::SetLogicParam, L"SetLogicParam" ) 
+    , std::make_pair( NodeLogicEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> WidgetEvent::Command WString2T       ( const std::wstring& s, const WidgetEvent::Command& defaultVal )   { return WString2T( WidgetEventCommandMapping, s, defaultVal ); }
-template<> const std::wstring& T2WString        ( WidgetEvent::Command t )                                          { return Enum2WString( WidgetEventCommandMapping, t ); }
+template<> NodeLogicEvent::Command WString2T       ( const std::wstring& s, const NodeLogicEvent::Command& defaultVal )   { return WString2T( NodeLogicEventCommandMapping, s, defaultVal ); }
+template<> const std::wstring& T2WString        ( NodeLogicEvent::Command t )                                          { return Enum2WString( NodeLogicEventCommandMapping, t ); }
 
 // ========================================================================= //
 // VideoCardEvent
@@ -1437,11 +1438,11 @@ EventType           TimerEvent::GetEventType() const
 {   return this->m_sEventType; }
 
 
-//******************* WidgetEvent *************
+//******************* NodeLogicEvent *************
 
 // *************************************
 //
-void                WidgetEvent::Serialize            ( ISerializer& ser ) const
+void                NodeLogicEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
     ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( WidgetCommand ) );
@@ -1452,12 +1453,12 @@ void                WidgetEvent::Serialize            ( ISerializer& ser ) const
 
 // *************************************
 //
-IEventPtr                WidgetEvent::Create          ( IDeserializer& deser )
+IEventPtr                NodeLogicEvent::Create          ( IDeserializer& deser )
 {
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
-        WidgetEventPtr newEvent     = std::make_shared<WidgetEvent>();
-        newEvent->WidgetCommand     = SerializationHelper::WString2T<WidgetEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), WidgetEvent::Command::Fail );
+        NodeLogicEventPtr newEvent     = std::make_shared<NodeLogicEvent>();
+        newEvent->WidgetCommand     = SerializationHelper::WString2T<NodeLogicEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), NodeLogicEvent::Command::Fail );
         newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
         newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
         newEvent->Action            = toString( deser.GetAttribute( SerializationHelper::WIDGET_ACTION_WSTRING ) );
@@ -1468,24 +1469,24 @@ IEventPtr                WidgetEvent::Create          ( IDeserializer& deser )
 }
 // *************************************
 //
-IEventPtr               WidgetEvent::Clone             () const
-{   return IEventPtr( new WidgetEvent( *this ) );  }
+IEventPtr               NodeLogicEvent::Clone             () const
+{   return IEventPtr( new NodeLogicEvent( *this ) );  }
 
 // *************************************
 //
-EventType           WidgetEvent::Type()
+EventType           NodeLogicEvent::Type()
 {   return m_sEventType;   }
 // *************************************
 //
-std::string&        WidgetEvent::Name()
+std::string&        NodeLogicEvent::Name()
 {   return m_sEventName;   }
 // *************************************
 //
-const std::string&  WidgetEvent::GetName() const
+const std::string&  NodeLogicEvent::GetName() const
 {   return Name();   }
 // *************************************
 //
-EventType           WidgetEvent::GetEventType() const
+EventType           NodeLogicEvent::GetEventType() const
 {   return this->m_sEventType; }
 
 

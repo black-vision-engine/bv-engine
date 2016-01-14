@@ -687,14 +687,15 @@ template<> const std::wstring&      SerializationHelper::T2WString    ( TimerEve
 DEFINE_PTR_TYPE( TimerEvent )
 
 
-// ************************************* WidgetEvent *************************************
-class WidgetEvent : public RemoteEvent
+// ************************************* NodeLogicEvent *************************************
+class NodeLogicEvent : public RemoteEvent
 {
 public:
     typedef enum
     {
-        Crawl,
-        Counter,
+        AddNodeLogic,
+        DeleteNodeLogic,
+        SetLogicParam,
         Fail            ///< Wrong command
     } Command;
 private:
@@ -707,7 +708,7 @@ public:
 	std::string                 Action;
 
 public:
-    explicit                        WidgetEvent			(){};
+    explicit                        NodeLogicEvent			(){};
 
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );
@@ -719,10 +720,10 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> WidgetEvent::Command     SerializationHelper::WString2T      ( const std::wstring& s, const WidgetEvent::Command& defaultVal );
-template<> const std::wstring&      SerializationHelper::T2WString      ( WidgetEvent::Command t );
+template<> NodeLogicEvent::Command     SerializationHelper::WString2T      ( const std::wstring& s, const NodeLogicEvent::Command& defaultVal );
+template<> const std::wstring&      SerializationHelper::T2WString      ( NodeLogicEvent::Command t );
 
-DEFINE_PTR_TYPE( WidgetEvent )
+DEFINE_PTR_TYPE( NodeLogicEvent )
 
 
 // ************************************* VideoCardEvent *************************************

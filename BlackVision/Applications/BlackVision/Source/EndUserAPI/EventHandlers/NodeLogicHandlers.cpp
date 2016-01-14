@@ -37,16 +37,16 @@ NodeLogicHandlers::~NodeLogicHandlers()
 //
 void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
 {
-	if( evt->GetEventType() == bv::WidgetEvent::Type() )
+	if( evt->GetEventType() == bv::NodeLogicEvent::Type() )
         return;
 
-	bv::WidgetEventPtr widgetEvent = std::static_pointer_cast<bv::WidgetEvent>( evt );        
+	bv::NodeLogicEventPtr widgetEvent = std::static_pointer_cast<bv::NodeLogicEvent>( evt );        
     auto root = m_appLogic->GetBVProject()->GetModelSceneRoot();
         
     std::string& nodePath = widgetEvent->NodeName;
     std::string& sceneName = widgetEvent->SceneName;
     std::string& action = widgetEvent->Action;
-    WidgetEvent::Command command = widgetEvent->WidgetCommand;
+    NodeLogicEvent::Command command = widgetEvent->WidgetCommand;
 
     auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
     if( node == nullptr )
@@ -58,21 +58,31 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
     INodeLogic* logic = basicNode->GetLogic().get();
 	if( logic == nullptr )
 	{
-        LOG_MESSAGE( SeverityLevel::warning ) << "Error OnWidgetCmd () node [" + nodePath + "] , logic [] not found";
+        LOG_MESSAGE( SeverityLevel::warning ) << "Error NodeLogicEvent node [" + nodePath + "] , logic [] not found";
         SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "NodeLogic not found" );
 	}
 		
+    if( command == NodeLogicEvent::Command::AddNodeLogic )
+    {
 
-    JsonSerializeObject ser;
-    JsonDeserializeObject deser;
-    deser.Load( action );
+    }
+    else if( command == NodeLogicEvent::Command::DeleteNodeLogic )
+    {
 
-    bool result = logic->HandleEvent( deser, ser );
+    }
+    else if ( command == NodeLogicEvent::Command::SetLogicParam )
+    {
+        JsonSerializeObject ser;
+        JsonDeserializeObject deser;
+        deser.Load( action );
 
-    PrepareResponseTemplate( ser, command, widgetEvent->SocketID, result );
-    SendResponse( ser, widgetEvent->SocketID, widgetEvent->EventID );
+        bool result = logic->HandleEvent( deser, ser );
 
-    //SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "Unknown command" );
+        PrepareResponseTemplate( ser, command, widgetEvent->SocketID, result );
+        SendResponse( ser, widgetEvent->SocketID, widgetEvent->EventID );
+    }
+    else
+        SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "Unknown command" );
 }
 
 // ***********************

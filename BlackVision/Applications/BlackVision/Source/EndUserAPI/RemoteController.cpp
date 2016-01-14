@@ -24,7 +24,7 @@ RemoteController::RemoteController()
     RegisterEvent( PluginStructureEvent::Name(), PluginStructureEvent::Create );
     RegisterEvent( RenderingModeEvent::Name(), RenderingModeEvent::Create );
     RegisterEvent( VideoCardEvent::Name(), VideoCardEvent::Create );
-    RegisterEvent( WidgetEvent::Name(), WidgetEvent::Create );
+    RegisterEvent( NodeLogicEvent::Name(), NodeLogicEvent::Create );
     RegisterEvent( HightmapEvent::Name(), HightmapEvent::Create );
     RegisterEvent( AssetEvent::Name(), AssetEvent::Create );
     RegisterEvent( GlobalEffectEvent::Name(), GlobalEffectEvent::Create );

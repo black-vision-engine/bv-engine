@@ -92,7 +92,7 @@ void SerializeAllEvents( const std::string& fileName )
     HightmapEventPtr        heightmapEvent      = std::make_shared<HightmapEvent>();
     RenderingModeEventPtr   renderingModeEvent  = std::make_shared<RenderingModeEvent>();
     VideoCardEventPtr       videoCardEvent      = std::make_shared<VideoCardEvent>();
-    WidgetEventPtr          widgetEvent         = std::make_shared<WidgetEvent>();
+    NodeLogicEventPtr       widgetEvent         = std::make_shared<NodeLogicEvent>();
     TimerEventPtr           timerEvent          = std::make_shared<TimerEvent>();
     TimeLineEventPtr        timelineEvent       = std::make_shared<TimeLineEvent>();
     InfoEventPtr            infoEvent           = std::make_shared<InfoEvent>();
