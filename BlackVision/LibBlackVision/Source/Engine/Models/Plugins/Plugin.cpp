@@ -146,7 +146,7 @@ ser.EnterChild( "plugin" );
             ser.EnterArray( "assets" );
             for( auto lasset : assets )
             {
-                auto asset = lasset.asset;
+                //auto asset = lasset.asset;
                 auto assetDesc = lasset.assetDesc;
                 auto uid = AssetDescsWithUIDs::GetInstance().Key2UID( assetDesc->GetKey() );
                 ser.EnterChild( "asset" );

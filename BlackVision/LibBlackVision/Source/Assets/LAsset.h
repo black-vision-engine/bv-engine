@@ -10,11 +10,11 @@ struct LAsset // = loaded asset :)
     std::string                     name;
 
     AssetDescConstPtr               assetDesc;
-    AssetConstPtr                   asset;
+//    AssetConstPtr                   asset;
     model::ResourceStateModelPtr    rsm;
 
     LAsset( std::string name, AssetDescConstPtr assetDesc, AssetConstPtr asset, model::ResourceStateModelPtr rsm )
-        : name( name ), assetDesc( assetDesc ), asset( asset ), rsm( rsm ) {}
+        : name( name ), assetDesc( assetDesc ), /*asset( asset ),*/ rsm( rsm ) {}
 
 };
 
