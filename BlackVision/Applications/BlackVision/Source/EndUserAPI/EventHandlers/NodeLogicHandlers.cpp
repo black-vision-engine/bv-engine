@@ -47,7 +47,6 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
     std::string& sceneName = widgetEvent->SceneName;
     std::string& action = widgetEvent->Action;
     WidgetEvent::Command command = widgetEvent->WidgetCommand;
-    float time = widgetEvent->Time;
 
     auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
     if( node == nullptr )
@@ -64,37 +63,16 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
 	}
 		
 
-    if( command == WidgetEvent::Command::Crawl )
-    {
-		bv::widgets::Crawler* crawler =  (bv::widgets::Crawler*)logic;
-        
-        JsonSerializeObject ser;
-        JsonDeserializeObject deser;
-        deser.Load( action );
+    JsonSerializeObject ser;
+    JsonDeserializeObject deser;
+    deser.Load( action );
 
-        bool result = crawler->HandleEvent( deser, ser );
+    bool result = logic->HandleEvent( deser, ser );
 
-        PrepareResponseTemplate( ser, command, widgetEvent->SocketID, result );
-        SendResponse( ser, widgetEvent->SocketID, widgetEvent->EventID );
-	}
-    else if( command == WidgetEvent::Command::Counter )
-    {
-		bv::widgets::WidgetCounter* counter = (bv::widgets::WidgetCounter*)logic;
-        
-        Json::Value parseAction( action );
-        std::string param = parseAction.get( "Param", "" ).asString();
-        float value = parseAction.get( "Value", 1.0f ).asFloat();
+    PrepareResponseTemplate( ser, command, widgetEvent->SocketID, result );
+    SendResponse( ser, widgetEvent->SocketID, widgetEvent->EventID );
 
-
-		auto paramPtr = counter->GetValueParam();
-		if( paramPtr == nullptr )
-            SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "Could not get parameter" );
-
-        SetParameter( paramPtr, (bv::TimeType)time, value );
-        SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
-	}
-    else
-        SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "Unknown command" );
+    //SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "Unknown command" );
 }
 
 // ***********************

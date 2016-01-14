@@ -705,7 +705,7 @@ public:
     std::string                 NodeName;
     std::string                 SceneName;
 	std::string                 Action;
-    float						Time;
+
 public:
     explicit                        WidgetEvent			(){};
 

@@ -469,7 +469,7 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
 	{
 		Reset();
 	}
-	else if( crawlAction == "clear" )
+	else if( crawlAction == "Clear" )
 	{
 		Clear();
 	}

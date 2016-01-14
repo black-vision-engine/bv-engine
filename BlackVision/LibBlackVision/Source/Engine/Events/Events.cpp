@@ -1445,7 +1445,6 @@ void                WidgetEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
     ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( WidgetCommand ) );
-    ser.SetAttribute( SerializationHelper::TIMELINE_TIME_VALUE_WSTRING, toWString( Time ) );
     ser.SetAttribute( SerializationHelper::NODE_NAME_WSTRING, toWString( NodeName ) );
     ser.SetAttribute( SerializationHelper::WIDGET_ACTION_WSTRING, toWString( Action ) );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_WSTRING, toWString( SceneName ) );
@@ -1458,7 +1457,6 @@ IEventPtr                WidgetEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
         WidgetEventPtr newEvent     = std::make_shared<WidgetEvent>();
-        newEvent->Time              = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::WIDGET_TIME_VALUE_WSTRING ), std::numeric_limits<float>::quiet_NaN() );
         newEvent->WidgetCommand     = SerializationHelper::WString2T<WidgetEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), WidgetEvent::Command::Fail );
         newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
         newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );

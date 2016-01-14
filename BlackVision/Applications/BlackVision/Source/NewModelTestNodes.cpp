@@ -2000,12 +2000,12 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 //#define SHOW_CIRCLE
 //#define SHOW_ELLIPSE
 //#define SHOW_ROUNDEDRECT
-//#define SHOW_TRIANGLE
+#define SHOW_TRIANGLE
 //#define SHOW_TORUS
 //#define SHOW_SPRING
 //#define SHOW_GEOSPHERE
 //#define SHOW_SIMPLE_CUBE
-#define SHOW_COGWHEEL
+//#define SHOW_COGWHEEL
 
 	  //Timeline stuff
     auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimelineImpl( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
@@ -2252,22 +2252,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 	auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
 	SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 1.f, 1.f ) );
 	//root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
-	root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
+	//root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
 #endif
 	
 #ifdef VERSION_TEXTURE
-	auto texDesc_ = TextureAssetDesc::Create( "sand.jpg", MipMapFilterType::BILINEAR, true );
-	JsonSerializeObject serializeObject;
-	texDesc_->Serialize( serializeObject );
-	serializeObject.Save( "serialization/textureSerialize.json" );
-
-	fstream file;
-	file.open( "serialization/textureSerialize.json", std::ios_base::in );
-	JsonDeserializeObject deserializeObject;
-    deserializeObject.Load( file );
-	file.close();
-
-    auto texDesc = AssetManager::GetInstance().CreateDesc( deserializeObject );
+	auto texDesc = TextureAssetDesc::Create( "textures/sand.jpg", MipMapFilterType::BILINEAR, true );
     root->GetPlugin( "texture" )->LoadResource( std::static_pointer_cast<const AssetDesc>( texDesc ) );
 
 	model::SetParameter( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );

@@ -5,6 +5,9 @@
 #include <string>
 #include <iostream>
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
+
+#include "EndUserAPI/EventHandlers/EventHandlerHelpers.h"
+
 namespace bv {
 namespace widgets {
 
@@ -75,10 +78,29 @@ ISerializablePtr     WidgetCounter::Create          ( const IDeserializer& /*des
 
 // ***********************
 //
-bool                WidgetCounter::HandleEvent     ( IDeserializer& /*eventSer*/, ISerializer& /*response*/ )
+bool                WidgetCounter::HandleEvent     ( IDeserializer& eventSer, ISerializer& response )
 {
-    // @todo Implement all posible interactions with this widget.
-    return false;
+    std::string param = eventSer.GetAttribute( "Param" );
+    float value = SerializationHelper::String2T( eventSer.GetAttribute( "Value" ), 1.0f );
+    float time = SerializationHelper::String2T( eventSer.GetAttribute( "Time" ), std::numeric_limits<float>::quiet_NaN() );
+
+
+    if( time == std::numeric_limits<float>::quiet_NaN() )
+    {
+        response.SetAttribute( ERROR_INFO_STRING, "Not valid time." );
+        return false;
+    }
+
+	auto paramPtr = this->GetValueParam();
+	if( paramPtr == nullptr )
+    {
+        response.SetAttribute( ERROR_INFO_STRING, "Could not get parameter" );
+        return false;
+    }
+
+    SetParameter( paramPtr, (bv::TimeType)time, value );
+
+    return true;
 }
 
 }
