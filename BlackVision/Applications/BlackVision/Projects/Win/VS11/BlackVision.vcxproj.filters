@@ -267,6 +267,9 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\NodeEffectLogic.cpp">
       <Filter>Rendering\Logic\NodeEffect</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\NodeEffectTr.cpp">
+      <Filter>Rendering\Logic\NodeEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -479,6 +482,9 @@
       <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\NodeEffectLogic.h">
+      <Filter>Rendering\Logic\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\NodeEffectTr.h">
       <Filter>Rendering\Logic\NodeEffect</Filter>
     </ClInclude>
   </ItemGroup>
