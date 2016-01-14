@@ -91,6 +91,13 @@ Int32                  GetIndex( ITimeEvaluatorPtr parent, std::string name )
 
 // *********************************
 //
+bool					IsSceneRootTimeline( ITimeEvaluatorPtr timeline )
+{
+	return ( timeline->GetType() == OffsetTimeEvaluator::Type() ); // FIXME: not really the best implementation
+}
+
+// *********************************
+//
 UInt32					TimelineHelper::CopyTimelines					( ITimeEvaluatorPtr destTimeline, const std::vector< ITimeEvaluatorPtr > & timelines )
 {
     if( timelines.size() == 0 )
@@ -102,10 +109,17 @@ UInt32					TimelineHelper::CopyTimelines					( ITimeEvaluatorPtr destTimeline, c
     Int32 index = 0;
 	
     for( auto timeline : timelines )
-        index = std::max( index, GetIndex( destTimeline, timeline->GetName() ) );
+	{
+		if( IsSceneRootTimeline( timeline ) )
+			continue;
+		index = std::max( index, GetIndex( destTimeline, timeline->GetName() ) );
+	}
 
     for( auto timeline : timelines )
     {
+		if( IsSceneRootTimeline( timeline ) )
+			continue;
+
         auto clone = Clone( timeline );
         clone->SetName( PrefixHelper::PrefixCopy( index ) + timeline->GetName() );
         destTimeline->AddChild( clone );
