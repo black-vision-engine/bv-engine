@@ -5,7 +5,7 @@
 
 namespace bv {
 
-class SplitChildrenPreFullscreenLogic : public PreFullScreenEffectLogic
+class SplitChildrenPreFullscreenLogic : public PreFullscreenEffectLogic
 {
 private:
 

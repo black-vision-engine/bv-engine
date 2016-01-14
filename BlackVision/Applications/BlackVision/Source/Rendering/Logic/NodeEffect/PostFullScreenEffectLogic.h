@@ -7,13 +7,13 @@ class SceneNode;
 class RenderTarget;
 class RenderLogicContext;
 
-class PostFullScreenEffectLogic
+class PostFullscreenEffectLogic
 {
 private:
 
 public:
 
-    virtual         ~PostFullScreenEffectLogic  ();
+    virtual         ~PostFullscreenEffectLogic  ();
 
     virtual void    Render                      ( SceneNode * node, RenderLogicContext * ctx, RenderTarget * inputRenderTarget ) = 0;
 

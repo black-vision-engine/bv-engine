@@ -5,7 +5,7 @@ namespace bv {
 
 // *********************************
 //
-PreFullScreenEffectLogic::~PreFullScreenEffectLogic   ()
+PreFullscreenEffectLogic::~PreFullscreenEffectLogic   ()
 {
 }
 
