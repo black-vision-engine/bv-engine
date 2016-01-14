@@ -273,6 +273,18 @@
     <ClCompile Include="..\..\..\Source\Rendering\Utils\ShaderSourceProvider.cpp">
       <Filter>Rendering\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\AlphaMaskPreFullscreenEffectLogic.cpp">
+      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\DefaultPreFullscreenEffectLogic.cpp">
+      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\InterlacePreFullscreenEffectLogic.cpp">
+      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\NodeMaskPreFullscreenEffectLogic.cpp">
+      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -492,6 +504,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Utils\ShaderSourceProvider.h">
       <Filter>Rendering\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\AlphaMaskPreFullscreenEffectLogic.h">
+      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\DefaultPreFullscreenEffectLogic.h">
+      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\InterlacePreFullscreenEffectLogic.h">
+      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\NodeMaskPreFullscreenEffectLogic.h">
+      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
