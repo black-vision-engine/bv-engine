@@ -55,18 +55,13 @@ void                    ModelSceneEditor::AddChildNode       ( BasicNodePtr pare
 
 // ********************************
 //
-bool                    ModelSceneEditor::DeleteChildNode    ( BasicNodePtr parentNode, const std::string & childNodeName )
+bool                    ModelSceneEditor::DeleteChildNode    ( BasicNodePtr parentNode, BasicNodePtr childNode )
 {
-    if( parentNode )
+    if( parentNode && childNode )
     {
-        auto childNode = std::static_pointer_cast< BasicNode >( parentNode->GetChild( childNodeName ) );
+        parentNode->DetachChildNodeOnly( childNode );
 
-        if( childNode )
-        {
-            parentNode->DetachChildNodeOnly( childNode );
-
-            return true;
-        }
+        return true;
     }
 
     return false;
@@ -121,20 +116,15 @@ bool                    ModelSceneEditor::AttachChildNode    ( BasicNodePtr pare
 
 // ********************************
 //
-bool                    ModelSceneEditor::DetachChildNode    ( BasicNodePtr parent, const std::string & nodeToDetach )
+bool                    ModelSceneEditor::DetachChildNode    ( BasicNodePtr parent, BasicNodePtr nodeToDetach )
 {
-    if( parent )
+    if( parent && nodeToDetach )
     {
-        auto childNode = std::static_pointer_cast< BasicNode >( parent->GetChild( nodeToDetach ) );
+        parent->DetachChildNodeOnly( nodeToDetach );
 
-        if( childNode )
-        {
-            parent->DetachChildNodeOnly( childNode );
+        m_detachedNode = nodeToDetach;
 
-            m_detachedNode = childNode;
-
-            return true;
-        }
+        return true;
     }
 
     return false;

@@ -94,20 +94,20 @@ public:
 
 	/* objects */
     bool                    AddChildNode        ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, model::IModelNodePtr childNode );
-    bool                    DeleteChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, const std::string & childNodeName );
+    bool                    DeleteChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, model::IModelNodePtr childNode );
 	
 	/** Insert node at the end. */
     bool                    AttachChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parent );
 	/** Insert node at destIdx position. */
     bool                    AttachChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parent, UInt32 posIdx );
-	bool                    DetachChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parent, const std::string & nodeToDetach );
+	bool                    DetachChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parent, model::IModelNodePtr nodeToDetach );
 
 	/** Add a copy of node to the destParentNode from the given scene.
 	@param[ destParentNode ] If nullptr, set node copy as root node of the scene.
 	@return Returns copied node. */
 	model::BasicNodePtr		AddNodeCopy			( model::SceneModelPtr destScene, model::BasicNodePtr destParentNode, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode );
 	
-	bool					MoveNode			( model::SceneModelPtr destScene, model::BasicNodePtr destParentNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcParentNode, const std::string & srcNodeName );
+	bool					MoveNode			( model::SceneModelPtr destScene, model::BasicNodePtr destParentNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcParentNode, model::BasicNodePtr srcNode );
 
 	bool					SetNodeVisible		( model::IModelNodePtr node, bool visible );
 
@@ -194,8 +194,6 @@ private:
 
     void                    SetSceneRootNode	( model::SceneModelPtr scene, model::IModelNodePtr rootNode );
     void                    DeleteSceneRootNode	( model::SceneModelPtr scene );
-
-	std::string				GetNodeName			( const std::string & nodePath, const std::string & separator = "/" );
 
 
 	/* renaming helpers */

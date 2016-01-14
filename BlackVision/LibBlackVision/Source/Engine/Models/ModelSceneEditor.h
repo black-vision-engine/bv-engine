@@ -26,14 +26,14 @@ public:
     bool                    DeleteRootNode      ( BasicNodePtr mainRootNode );
 
     void                    AddChildNode        ( BasicNodePtr parentNode, BasicNodePtr childNode );
-    bool                    DeleteChildNode     ( BasicNodePtr parentNode, const std::string & childNodeName );
+    bool                    DeleteChildNode     ( BasicNodePtr parentNode, BasicNodePtr childNode );
 
     void                    AttachRootNode      ();
     bool                    DetachRootNode      ();
 
     bool                    AttachChildNode     ( BasicNodePtr parent );
     bool                    AttachChildNode     ( BasicNodePtr parent, UInt32 destIdx );
-    bool                    DetachChildNode     ( BasicNodePtr parent, const std::string & nodeToDetach );
+    bool                    DetachChildNode     ( BasicNodePtr parent, BasicNodePtr nodeToDetach );
 
     BasicNodePtr            GetDetachedNode     () const;
     void                    DeleteDetachedNode  ();

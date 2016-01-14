@@ -295,9 +295,10 @@ bool    BVProjectEditor::AddChildNode         ( const std::string & sceneName, c
 bool    BVProjectEditor::DeleteChildNode      ( const std::string & sceneName, const std::string & nodePath )
 { 
     auto parentNode =  GetParentNode( sceneName, nodePath );
+    auto node =  GetNode( sceneName, nodePath );
     auto scene = m_project->GetScene( sceneName );
 
-    return DeleteChildNode( scene, parentNode, GetNodeName( nodePath ) );
+    return DeleteChildNode( scene, parentNode, node );
 }
 
 // *******************************
@@ -322,9 +323,10 @@ bool                    BVProjectEditor::AttachChildNode     ( const std::string
 //
 bool                    BVProjectEditor::DetachChildNode     ( const std::string & sceneName, const std::string & nodeToDetachPath )
 {
+    auto parentNode =  GetParentNode( sceneName, nodeToDetachPath );
     auto nodeToDetach =  GetNode( sceneName, nodeToDetachPath );
     auto scene = m_project->GetScene( sceneName );
-    return DetachChildNode( scene, nodeToDetach, GetNodeName( nodeToDetachPath ) );
+    return DetachChildNode( scene, parentNode, nodeToDetach );
 }
 
 // *******************************
@@ -388,17 +390,17 @@ bool    BVProjectEditor::AddChildNode         ( model::SceneModelPtr scene, mode
 
 // *******************************
 //
-bool    BVProjectEditor::DeleteChildNode      ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, const std::string & childNodeName )
+bool    BVProjectEditor::DeleteChildNode      ( model::SceneModelPtr scene, model::IModelNodePtr parentNode, model::IModelNodePtr node )
 {    
     if( parentNode )
     {
         auto modelParentNode = QueryTyped( parentNode );
-        auto modelChildNode = QueryTyped( modelParentNode->GetChild( childNodeName ) );
+        auto modelChildNode = QueryTyped( node );
         auto sceneEditor = scene->GetModelSceneEditor();
 
         auto success = true;
 
-        success &= sceneEditor->DeleteChildNode( modelParentNode, childNodeName );
+        success &= sceneEditor->DeleteChildNode( modelParentNode, modelChildNode );
         success &= m_engineSceneEditor->DeleteChildNode( GetEngineNode( parentNode ), GetEngineNode( modelChildNode ) );
         
         MappingsCleanup( modelChildNode );
@@ -437,22 +439,17 @@ bool                    BVProjectEditor::AttachChildNode     ( model::SceneModel
 
 // *******************************
 //
-bool                    BVProjectEditor::DetachChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parent, const std::string & nodeToDetach )
+bool                    BVProjectEditor::DetachChildNode     ( model::SceneModelPtr scene, model::IModelNodePtr parent, model::IModelNodePtr nodeToDetach )
 {
-    if( scene && parent )
+    if( scene && parent && nodeToDetach )
     {
-        auto childNode = parent->GetChild( nodeToDetach );
+        auto sceneEditor = scene->GetModelSceneEditor();
+        MappingsCleanup( sceneEditor->GetDetachedNode() );
 
-        if( childNode )
-        {
-            auto sceneEditor = scene->GetModelSceneEditor();
-            MappingsCleanup( sceneEditor->GetDetachedNode() );
-
-            auto detachModel    = sceneEditor->DetachChildNode( QueryTyped( parent ), nodeToDetach );
-            auto detachEngine   = m_engineSceneEditor->DetachChildNode( GetEngineNode( parent ), GetEngineNode( childNode ) );
+        auto detachModel    = sceneEditor->DetachChildNode( QueryTyped( parent ), QueryTyped( nodeToDetach ) );
+        auto detachEngine   = m_engineSceneEditor->DetachChildNode( GetEngineNode( parent ), GetEngineNode( nodeToDetach ) );
         
-            return detachModel && detachEngine;
-        }
+        return detachModel && detachEngine;
     }
 
     return false;
@@ -527,7 +524,7 @@ model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( model::SceneModelPtr 
 
 // *******************************
 //
-bool					BVProjectEditor::MoveNode			( model::SceneModelPtr destScene, model::BasicNodePtr destParentNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcParentNode, const std::string & srcNodeName )
+bool					BVProjectEditor::MoveNode			( model::SceneModelPtr destScene, model::BasicNodePtr destParentNode, UInt32 destIdx, model::SceneModelPtr srcScene, model::BasicNodePtr srcParentNode, model::BasicNodePtr srcNode )
 {
     if( !srcScene || !destScene )
     {
@@ -536,17 +533,17 @@ bool					BVProjectEditor::MoveNode			( model::SceneModelPtr destScene, model::Ba
 
     if( srcScene == destScene )
     {
-		if( DetachChildNode( srcScene, srcParentNode, srcNodeName ) )
+		if( DetachChildNode( srcScene, srcParentNode, srcNode ) )
         {
 		    return AttachChildNode( destScene, destParentNode, destIdx );
         }
     }
     else
     {
-        if( AddNodeCopy( destScene, destParentNode, srcScene, QueryTyped( srcParentNode->GetChild( srcNodeName ) ) ) )
+        if( AddNodeCopy( destScene, destParentNode, srcScene, srcNode ) )
         {
-            DeleteChildNode( srcScene, srcParentNode, srcNodeName );
-            DetachChildNode( destScene, destParentNode, srcNodeName );
+            DeleteChildNode( srcScene, srcParentNode, srcNode );
+            DetachChildNode( destScene, destParentNode, srcNode );
             return AttachChildNode( destScene, destParentNode, destIdx );
         }
     }
@@ -1157,13 +1154,6 @@ model::IModelNodePtr	BVProjectEditor::GetParentNode		( const std::string & scene
 model::ITimeEvaluatorPtr    BVProjectEditor::GetTimeEvaluator( const std::string & timelinePath )
 {
     return model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
-}
-
-// ***********************
-//
-std::string				BVProjectEditor::GetNodeName		( const std::string & nodePath, const std::string & separator )
-{
-    return nodePath.substr( nodePath.find_last_of( separator ) + 1, nodePath.length() );
 }
 
 // *******************************
