@@ -170,6 +170,7 @@
     <ClCompile Include="..\..\..\Source\Rendering\Utils\RenderTargetFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Utils\RenderTargetStack.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Utils\RenderTargetStackAllocator.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Utils\ShaderSourceProvider.cpp" />
     <ClCompile Include="..\..\..\Source\StatsFormatters.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\AICommands.cpp" />
     <ClCompile Include="..\..\..\Source\TestAI\TestAI.cpp" />
@@ -251,6 +252,7 @@
     <ClInclude Include="..\..\..\Source\Rendering\Utils\RenderTargetFactory.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Utils\RenderTargetStack.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Utils\RenderTargetStackAllocator.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Utils\ShaderSourceProvider.h" />
     <ClInclude Include="..\..\..\Source\StatsFormatters.h" />
     <ClInclude Include="..\..\..\Source\TestAI\AICommands.h" />
     <ClInclude Include="..\..\..\Source\TestAI\IAICommand.h" />
