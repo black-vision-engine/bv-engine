@@ -264,6 +264,9 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\SplitChildrenPreFullscreenLogic.cpp">
       <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\NodeEffectLogic.cpp">
+      <Filter>Rendering\Logic\NodeEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -474,6 +477,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\SplitChildrenPreFullscreenLogic.h">
       <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\NodeEffectLogic.h">
+      <Filter>Rendering\Logic\NodeEffect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
