@@ -1,3 +1,5 @@
+#pragma once
+
 #include "DefaultGeometryPluginBase.h"
 
 namespace bv { namespace model {

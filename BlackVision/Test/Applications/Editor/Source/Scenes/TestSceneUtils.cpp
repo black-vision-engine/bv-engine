@@ -544,7 +544,7 @@ std::vector< model::IPluginDescriptor * >  TestSceneUtils::DefaultBVPluginDescri
     std::vector< model::IPluginDescriptor * > descriptors;
 
     descriptors.push_back( new model::DefaultTransformPluginDesc() );
-    descriptors.push_back( new model::DefaultRectPluginDesc() );
+    descriptors.push_back( new model::DefaultRect::PluginDesc() );
     descriptors.push_back( new model::DefaultColorPluginDesc() );
     descriptors.push_back( new model::DefaultTexturePluginDesc() );
     descriptors.push_back( new model::DefaultAnimationPluginDesc() );

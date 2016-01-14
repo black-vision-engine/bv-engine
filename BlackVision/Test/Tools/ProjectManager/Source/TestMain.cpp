@@ -51,7 +51,7 @@ bv::model::SceneModelPtr CreateTestScene0()
     std::vector< model::IPluginDescriptor * > descriptors;
 
     descriptors.push_back( new model::DefaultTransformPluginDesc() );
-    descriptors.push_back( new model::DefaultRectPluginDesc() );
+    descriptors.push_back( new model::DefaultRect::PluginDesc() );
     descriptors.push_back( new model::DefaultTexturePluginDesc() );
 
     model::PluginsManager::DefaultInstanceRef().RegisterDescriptors( descriptors );

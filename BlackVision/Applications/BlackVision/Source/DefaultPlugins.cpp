@@ -40,7 +40,7 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     std::vector< IPluginDescriptor * > descriptors;
 
     descriptors.push_back( new DefaultTransformPluginDesc() );
-    descriptors.push_back( new DefaultRectPluginDesc() );
+    descriptors.push_back( new DefaultRect::PluginDesc() );
     descriptors.push_back( new DefaultColorPluginDesc() );
 	descriptors.push_back( new DefaultGradientPluginDesc() );
     descriptors.push_back( new DefaultTexturePluginDesc() );
