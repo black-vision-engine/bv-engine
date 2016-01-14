@@ -20,7 +20,7 @@ Too write mesage to log you can simply write:
 LOG_MESSAGE( SeverityLevel::warning ) << "Message";
 */
 
-#include "Logger.h"
+#include "Tools/Logger/Logger.h"
 
 #if defined(LOG_MODULE)
     #error LOG_MODULE already defined.

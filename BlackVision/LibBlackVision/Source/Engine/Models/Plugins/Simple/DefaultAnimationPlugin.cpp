@@ -151,9 +151,7 @@ bool                            DefaultAnimationPlugin::LoadResource  ( AssetDes
             
             auto txData = m_psc->GetTexturesDataImpl();
             txData->SetAnimation( 0, animDesc );
-            SetAsset( 0, LAsset( animDesc->GetName(), animAssetDescr, 
-                                                                            AssetConstPtr( reinterpret_cast< Asset* >( animDesc.get() ) ), // FIXME so much
-                animDesc->GetSamplerState() ) );
+            SetAsset( 0, LAsset( animDesc->GetName(), animAssetDescr, nullptr, animDesc->GetSamplerState() ) );
 
             HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
     
