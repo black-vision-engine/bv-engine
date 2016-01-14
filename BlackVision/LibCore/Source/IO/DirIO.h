@@ -17,7 +17,7 @@ public:
     static std::string                  WorkingDirectory    ();
 	static bool							Exists				( const std::string & path );
 	static bool							CreateDir			( const std::string & path, bool createRecusive = false );
-
+    static bool							RemoveDir			( const std::string & path );
 };
 
 } //bv

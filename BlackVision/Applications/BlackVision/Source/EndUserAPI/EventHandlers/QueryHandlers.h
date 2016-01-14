@@ -10,12 +10,13 @@ class BVAppLogic;
 class QueryHandlers
 {
 private:
-    BVAppLogic*         m_appLogic;
-public:
-    QueryHandlers( BVAppLogic* appLogic );
-    ~QueryHandlers();
+    BVAppLogic *        m_appLogic;
 
-    void        Info        ( bv::IEventPtr evt );
+public:
+    explicit            QueryHandlers   ( BVAppLogic * appLogic );
+                        ~QueryHandlers  ();
+
+    void                Info            ( bv::IEventPtr evt );
 
 private:
     std::string     ListSceneAssets     ( const std::string& request, unsigned int requestID );
