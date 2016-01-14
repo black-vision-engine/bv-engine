@@ -1091,13 +1091,13 @@ void					TestScene::InitAssetsTest		()
 //
 void					TestScene::InitTestEditor			()
 {
-	//InitTestModelSceneEditor();
+	InitTestModelSceneEditor();
 
 	//InitTimelinesTest();
 
 	//InitAssetsTest();
 
-    InitCopyNodeTest();
+    //InitCopyNodeTest();
 
 	//InitBasicColorPluginTest();
 	//InitOrderColorPluginTest();
