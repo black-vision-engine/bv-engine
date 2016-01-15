@@ -296,9 +296,9 @@ std::vector< IParameterPtr >    BasicNode::GetParameters           () const
 
 // ********************************
 //
-std::vector< ITimeEvaluatorPtr > BasicNode::GetTimelines			() const
+std::unordered_set< ITimeEvaluatorPtr > BasicNode::GetTimelines			( bool recursive ) const
 {
-	std::set< ITimeEvaluatorPtr > timelines;
+	std::unordered_set< ITimeEvaluatorPtr > timelines;
 
     auto params = GetParameters();
 
@@ -307,7 +307,16 @@ std::vector< ITimeEvaluatorPtr > BasicNode::GetTimelines			() const
         timelines.insert( param->GetTimeEvaluator() );
     }
 
-    return std::vector< ITimeEvaluatorPtr >( timelines.begin(), timelines.end() );
+	if( recursive )
+	{
+		for( auto child : m_children )
+		{
+			auto ts = child->GetTimelines( true );
+			timelines.insert( ts.begin(), ts.end() ); // FIXME: remove duplicates
+		}
+	}
+
+    return timelines;
 }
 
 // ********************************
@@ -614,13 +623,9 @@ Int32                               BasicNode::TryParseIndex            ( std::s
 
 namespace CloneViaSerialization {
 
-// *******************************
-//FIXME: name of method should indicate that timelines are modified or sth?
-model::BasicNodePtr		CloneNode		( const model::BasicNode * obj, const std::string & prefix, std::string srcScene, std::string destScene )
+void UpdateTimelines( model::BasicNode * obj, const std::string & prefix, std::string srcScene, std::string destScene, bool recursive )
 {
-    auto clone = obj->Clone();
-
-    for( auto param : clone->GetParameters() )
+    for( auto param : obj->GetParameters() )
     {
         auto name = model::TimelineManager::GetInstance()->GetTimelinePath( param->GetTimeEvaluator() );
         model::ITimeEvaluatorPtr timeline;
@@ -630,6 +635,19 @@ model::BasicNodePtr		CloneNode		( const model::BasicNode * obj, const std::strin
             timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( model::TimelineHelper::CombineTimelinePath( destScene,  prefix + param->GetTimeEvaluator()->GetName() ) );
         param->SetTimeEvaluator( timeline );
     }
+
+	if( recursive )
+		for( unsigned int i = 0; i < obj->GetNumChildren(); i++ )
+			UpdateTimelines( obj->GetChild( i ).get(), prefix, srcScene, destScene, true );
+}
+
+// *******************************
+//FIXME: name of method should indicate that timelines are modified or sth?
+model::BasicNodePtr		CloneNode		( const model::BasicNode * obj, const std::string & prefix, std::string srcScene, std::string destScene )
+{
+    auto clone = static_cast< model::BasicNode* >( obj->Clone() );
+
+	UpdateTimelines( clone, prefix, srcScene, destScene, true );
 
     return model::BasicNodePtr( dynamic_cast< model::BasicNode* >( clone ) );
 }

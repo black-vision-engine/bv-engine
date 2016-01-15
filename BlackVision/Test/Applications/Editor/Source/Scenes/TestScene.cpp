@@ -11,6 +11,7 @@
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
 #include "Engine/Models/Timeline/TimelineHelper.h"
+#include "Tools/PrefixHelper.h"
 
 #include "Assets/Assets.h"
 
@@ -82,6 +83,44 @@ OrderTestCase::OrderTestCase	( const std::string & node, const std::string & tes
 //
 						TestScene::~TestScene				()
 {
+}
+
+// ****************************
+//
+void					TestScene::InitTestEditor			()
+{
+	//InitTestModelSceneEditor();
+
+	//InitTimelinesTest();
+
+	//InitAssetsTest();
+
+    InitCopyNodeTest();
+
+	//InitBasicColorPluginTest();
+	//InitOrderColorPluginTest();
+
+    //InitBasicTexturePluginTest();
+	//InitOrderTexturePluginTest();
+
+	//InitBasicAnimationPluginTest();
+	//InitOrderAnimationPluginTest();
+
+	//InitBasicGradientPluginTest();
+	//InitOrderGradientPluginTest();
+
+	//InitColoredTextTest();
+	//InitGradientTextTest();
+	
+	//InitColoredTimerTest();
+	//InitGradientTimerTest();
+
+	//InitColoredGeometryTest();
+	//InitTexturedGeometryTest();
+	//InitAnimatedGeometryTest();
+	//InitGradientGeometryTest();
+
+	//InitVideoStreamDecoderTest();
 }
 
 // ****************************
@@ -1091,44 +1130,6 @@ void					TestScene::InitAssetsTest		()
 
 // ****************************
 //
-void					TestScene::InitTestEditor			()
-{
-	InitTestModelSceneEditor();
-
-	//InitTimelinesTest();
-
-	//InitAssetsTest();
-
-    //InitCopyNodeTest();
-
-	//InitBasicColorPluginTest();
-	//InitOrderColorPluginTest();
-
-    //InitBasicTexturePluginTest();
-	//InitOrderTexturePluginTest();
-
-	//InitBasicAnimationPluginTest();
-	//InitOrderAnimationPluginTest();
-
-	//InitBasicGradientPluginTest();
-	//InitOrderGradientPluginTest();
-
-	//InitColoredTextTest();
-	//InitGradientTextTest();
-	
-	//InitColoredTimerTest();
-	//InitGradientTimerTest();
-
-	//InitColoredGeometryTest();
-	//InitTexturedGeometryTest();
-	//InitAnimatedGeometryTest();
-	//InitGradientGeometryTest();
-
-	//InitVideoStreamDecoderTest();
-}
-
-// ****************************
-//
 void					TestScene::InitCopyNodeTest	()
 {
 	m_testSteps.push_back( [&] 
@@ -1172,8 +1173,8 @@ void					TestScene::InitCopyNodeTest	()
 
         success &= ( editor->AddNodeCopy( SCENE_NAME1, "", SCENE_NAME, srcScene->GetRootNode()->GetName() ) != nullptr );
 
-        auto destTimeline = editor->GetTimeEvaluator( model::TimelineHelper::CombineTimelinePath( SCENE_NAME1, TIMELINE_NAME ) );
-        auto destTimeline1 = editor->GetTimeEvaluator( model::TimelineHelper::CombineTimelinePath( SCENE_NAME1, TIMELINE_NAME1 ) );
+		auto destTimeline = editor->GetTimeEvaluator( model::TimelineHelper::CombineTimelinePath( SCENE_NAME1, PrefixHelper::PrefixCopy( 0 ) + TIMELINE_NAME ) );
+        auto destTimeline1 = editor->GetTimeEvaluator( model::TimelineHelper::CombineTimelinePath( SCENE_NAME1, PrefixHelper::PrefixCopy( 0 ) + TIMELINE_NAME1 ) );
 
 		auto srcRoot = srcScene->GetRootNode();
         auto destRoot = destScene->GetRootNode();
