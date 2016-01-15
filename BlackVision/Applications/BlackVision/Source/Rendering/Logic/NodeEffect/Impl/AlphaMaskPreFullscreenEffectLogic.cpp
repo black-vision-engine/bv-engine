@@ -1,7 +1,10 @@
 #include "AlphaMaskPreFullscreenEffectLogic.h"
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
+
 #include "Rendering/Utils/RenderLogicContext.h"
+
+#include "Engine/Types/Values/ValuesFactory.h"
 
 
 namespace bv {
@@ -14,6 +17,9 @@ AlphaMaskPreFullscreenEffectLogic::AlphaMaskPreFullscreenEffectLogic    ( float 
 {
     assert( minAlphaThreshold >= 0.f && minAlphaThreshold < maxAlphaThreshold && minAlphaThreshold <= 1.f );
     assert( maxAlphaThreshold > 0.f && maxAlphaThreshold <= 1.f );
+
+    m_alphaValue = ValuesFactory::CreateValueFloat( "alpha" );
+    m_alphaValue->SetValue( 1.f );
 }
 
 // *********************************

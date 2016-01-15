@@ -3,12 +3,13 @@
 #include "Rendering/Logic/NodeEffect/PreFullScreenEffectLogic.h"
 #include "Engine/Types/Values/TypedValues.h"
 
+
 namespace bv {
 
 class AlphaMaskPreFullscreenEffectLogic : public PreFullscreenEffectLogic
 {
 private:
-    
+
     ValueFloatPtr   m_alphaValue;
     
     float           m_minAlphaThreshold;

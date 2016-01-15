@@ -24,6 +24,10 @@ public:
 
     virtual std::vector< IValuePtr >    GetValues                   () const = 0;
 
+protected:
+
+    void                                RenderToRenderTarget        ( RenderLogicContext * ctx, RenderTarget * rt, SceneNode * node );
+
 };
 
 } //bv
