@@ -1,5 +1,9 @@
 #pragma once
 
+#include <vector>
+
+#include "Engine/Interfaces/IValue.h"
+
 
 namespace bv {
 
@@ -13,9 +17,11 @@ private:
 
 public:
 
-    virtual         ~PostFullscreenEffectLogic  ();
+    virtual                             ~PostFullscreenEffectLogic  ();
 
-    virtual void    Render                      ( SceneNode * node, RenderLogicContext * ctx ) = 0;
+    virtual void                        Render                      ( SceneNode * node, RenderLogicContext * ctx ) = 0;
+
+    virtual std::vector< IValuePtr >    GetValues                   () const = 0;
 
 };
 

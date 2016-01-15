@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "Engine/Interfaces/IValue.h"
+
 
 namespace bv {
 
@@ -13,11 +15,14 @@ class PreFullscreenEffectLogic
 {
 private:
 
+
 public:
 
-    virtual         ~PreFullscreenEffectLogic   ();
+    virtual                             ~PreFullscreenEffectLogic   ();
 
-    virtual void    Render                      ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > & outputs ) = 0;
+    virtual void                        Render                      ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > & outputs ) = 0;
+
+    virtual std::vector< IValuePtr >    GetValues                   () const = 0;
 
 };
 

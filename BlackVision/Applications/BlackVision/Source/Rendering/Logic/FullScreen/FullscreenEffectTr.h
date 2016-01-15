@@ -1,6 +1,10 @@
 #pragma once
 
+#include <vector>
+
 #include "CoreDEF.h"
+
+#include "Engine/Interfaces/IValue.h"
 
 #include "Rendering/Logic/FullScreen/FullscreenEffectContext.h"
 
@@ -11,13 +15,15 @@ class FullscreenEffectTr
 {
 public:
 
-    virtual                 ~FullscreenEffectTr     ();
+    virtual                             ~FullscreenEffectTr     ();
 
-    virtual void            Render                  ( FullscreenEffectContext * ctx )   = 0;
+    virtual void                        Render                  ( FullscreenEffectContext * ctx )   = 0;
 
-    virtual unsigned int    GetNumInputs            () const                            = 0;
+    virtual unsigned int                GetNumInputs            () const                            = 0;
 
-    virtual void            SynchronizeInputData    ( FullscreenEffectContext * ctx )   = 0;
+    virtual void                        SynchronizeInputData    ( FullscreenEffectContext * ctx )   = 0;
+
+    virtual std::vector< IValuePtr >    GetValues               () const                            = 0;
 
 };
 

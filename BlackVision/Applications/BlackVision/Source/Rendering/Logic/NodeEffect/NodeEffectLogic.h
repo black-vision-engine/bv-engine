@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Engine/Interfaces/IValue.h"
+
 #include "Rendering/Logic/NodeEffect/PreFullScreenEffectLogic.h"
 #include "Rendering/Logic/NodeEffect/PostFullScreenEffectLogic.h"
 
@@ -15,6 +17,8 @@ class SceneNode;
 class NodeEffectLogic
 {
 private:
+
+    std::vector< IValuePtr >        m_values;
 
     std::vector< RenderTarget * >   m_renderTargetsFSE;
     FullscreenEffectContext         m_FSECtx;
@@ -38,6 +42,8 @@ public:
     void    SetFullscreenEffect         ( FullscreenEffectTr * fse );
 
 private:
+
+    void    RecreateValues              ( std::vector< IValuePtr > & values );
 
     void    FSEInitializedGuard         ( RenderLogicContext * ctx, std::vector< RenderTarget * > * fseInputsVec, FullscreenEffectContext * fseCtx );
 

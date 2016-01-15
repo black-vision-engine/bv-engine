@@ -52,6 +52,8 @@ void    NodeEffectLogic::SetPreFullscreenEffectLogic ( PreFullscreenEffectLogic 
     delete m_preFSELogic;
 
     m_preFSELogic = logic;
+
+    RecreateValues( m_values );
 }
 
 // *********************************
@@ -61,6 +63,8 @@ void    NodeEffectLogic::SetPostFullscreenEffectLogic( PostFullscreenEffectLogic
     delete m_postFSELogic;
 
     m_postFSELogic = logic;
+
+    RecreateValues( m_values );
 }
 
 // *********************************
@@ -82,6 +86,18 @@ void    NodeEffectLogic::SetFullscreenEffect         ( FullscreenEffectTr * fse 
             m_renderTargetsFSE[ i ] = nullptr;
         }
     }
+
+    RecreateValues( m_values );
+}
+
+// *********************************
+//
+void    NodeEffectLogic::RecreateValues              ( std::vector< IValuePtr > & values )
+{
+    values.clear();
+
+
+    //FIXME: implement
 }
 
 // *********************************
