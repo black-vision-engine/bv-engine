@@ -32,14 +32,18 @@ private:
 
 public:
 
-            NodeEffectLogic             ();
-            ~NodeEffectLogic            ();
+                    NodeEffectLogic             ();
+                    ~NodeEffectLogic            ();
 
-    void    Render                      ( SceneNode * node, RenderLogicContext * ctx );
+    void            Render                      ( SceneNode * node, RenderLogicContext * ctx );
 
-    void    SetPreFullscreenEffectLogic ( PreFullscreenEffectLogic * logic );
-    void    SetPostFullscreenEffectLogic( PostFullscreenEffectLogic * logic );
-    void    SetFullscreenEffect         ( FullscreenEffectTr * fse );
+    void            SetPreFullscreenEffectLogic ( PreFullscreenEffectLogic * logic );
+    void            SetPostFullscreenEffectLogic( PostFullscreenEffectLogic * logic );
+    void            SetFullscreenEffect         ( FullscreenEffectTr * fse );
+
+    unsigned int    GetNumValues                () const;
+    IValuePtr       GetValueAt                  ( unsigned int i ) const;
+    IValuePtr       GetValue                    ( const std::string & name ) const;
 
 private:
 

@@ -92,12 +92,61 @@ void    NodeEffectLogic::SetFullscreenEffect         ( FullscreenEffectTr * fse 
 
 // *********************************
 //
+unsigned int    NodeEffectLogic::GetNumValues                () const
+{
+    return (unsigned int ) m_values.size();
+}
+
+// *********************************
+//
+IValuePtr       NodeEffectLogic::GetValueAt                  ( unsigned int i ) const
+{
+    assert( i < m_values.size() );
+
+    return m_values[ i ];
+}
+
+// *********************************
+//
+IValuePtr       NodeEffectLogic::GetValue                    ( const std::string & name ) const
+{
+    for( auto val : m_values )
+    {
+        if( val->GetName() == name )
+        {
+            return val;
+        }
+    }
+
+    return nullptr;
+}
+
+// *********************************
+//
 void    NodeEffectLogic::RecreateValues              ( std::vector< IValuePtr > & values )
 {
     values.clear();
 
+    if( m_preFSELogic )
+    {
+        auto second = m_preFSELogic->GetValues();
 
-    //FIXME: implement
+        values.insert( values.end(), second.begin(), second.end() );
+    }
+
+    if( m_FSE )
+    {
+        auto second = m_FSE->GetValues();
+
+        values.insert( values.end(), second.begin(), second.end() );
+    }
+
+    if( m_postFSELogic )
+    {
+        auto second = m_postFSELogic->GetValues();
+
+        values.insert( values.end(), second.begin(), second.end() );
+    }
 }
 
 // *********************************
