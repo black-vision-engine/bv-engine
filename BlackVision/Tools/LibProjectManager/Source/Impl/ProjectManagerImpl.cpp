@@ -324,7 +324,7 @@ void						ProjectManagerImpl::CopyScene			( const Path & inProjectName, const Pa
 
 	auto sceneDesc = m_sceneAccessor->GetSceneDesc( inPathInScenes );
 
-	Path::Copy( sceneDesc.GetPath(), outPathInScenes );
+	Path::Copy( sceneDesc.GetPath(), m_rootPath / "scenes" / outPathInScenes );
 }
 
 // ********************************
@@ -333,7 +333,7 @@ void						ProjectManagerImpl::RemoveScene			( const Path & projectName, const Pa
 {
 	auto pathInScenes = TranslateToPathCategory( projectName, path );
 
-	Path::Remove( m_rootPath / pathInScenes );
+	Path::Remove( m_rootPath / "scenes" / pathInScenes );
 }
 
 // ********************************
