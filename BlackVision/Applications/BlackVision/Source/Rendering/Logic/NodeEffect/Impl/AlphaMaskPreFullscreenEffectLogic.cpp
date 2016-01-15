@@ -8,39 +8,52 @@ namespace bv {
 
 // *********************************
 //
-AlphaMaskPreFullscreenEffectLogic::AlphaMaskPreFullscreenEffectLogic    ()
-    : m_intRT( nullptr )
+AlphaMaskPreFullscreenEffectLogic::AlphaMaskPreFullscreenEffectLogic    ( float minAlphaThreshold, float maxAlphaThreshold )
+    : m_minAlphaThreshold( minAlphaThreshold )
+    , m_maxAlphaThreshold( maxAlphaThreshold )
 {
+    assert( minAlphaThreshold >= 0.f && minAlphaThreshold < maxAlphaThreshold && minAlphaThreshold <= 1.f );
+    assert( maxAlphaThreshold > 0.f && maxAlphaThreshold <= 1.f );
 }
 
 // *********************************
 //
 void    AlphaMaskPreFullscreenEffectLogic::Render                       ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > & outputs )
 {
-    { outputs;} 
-    //FIXME: some better allocation patter for render targets (current pattern requires resetting effect textures every frame, where render target was changed).
-    auto mainRT = disableBoundRT( ctx );
+    assert( outputs.size() == 1 );
 
-    //FIXME: make sure
-    if( m_intRT == nullptr )
+    auto alpha = m_alphaValue->GetValue();
+    
+    if( alpha > m_maxAlphaThreshold )       // No alpha mask in this case
     {
-        m_intRT = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+        logic( ctx )->DrawNode( node, ctx );
     }
-    else
+    else if( alpha > m_minAlphaThreshold )  // Alpha mask rendering to a separate render target
     {
-        auto rt = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
-        assert( rt == m_intRT ); //FIXME this assumption is invalid
+        auto mainRT = disableBoundRT( ctx );
+        auto outRT  = outputs[ 0 ];
+
+        enable( ctx, outRT );
+        clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+
+        logic( ctx )->DrawNode( node, ctx );
+
+        disableBoundRT( ctx );
+
+        enable( ctx, mainRT );
     }
 
-    enable( ctx, m_intRT );
-    clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
+    // No rendering in case of alpha too close to zero (treat it as a fully transparent object)
+}
 
-    logic( ctx )->DrawNode( node, ctx );
+// *********************************
+//
+std::vector< IValuePtr >    AlphaMaskPreFullscreenEffectLogic::GetValues    () const
+{
+    std::vector< IValuePtr > res( 1 );
+    res.push_back( m_alphaValue );
 
-    disableBoundRT( ctx );
-    allocator( ctx )->Free();
-
-    enable( ctx, mainRT );
+    return res;
 }
 
 } //bv
