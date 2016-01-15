@@ -98,6 +98,7 @@ void					DefaultGradientPlugin::SetPrevPlugin				( IPluginPtr prev )
     InitVertexAttributesChannel();
 
 	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+    m_psc->GetRendererContext()->cullCtx->enabled = false;
 }
 
 // *************************************

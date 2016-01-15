@@ -117,6 +117,9 @@ void                            BasicNode::Serialize               ( ISerializer
     if( context->detailedInfo && m_modelNodeEffect )
         m_modelNodeEffect->Serialize( ser );
 
+    if( context->detailedInfo && m_nodeLogic )
+        m_nodeLogic->Serialize( ser );
+
     if( context->recursive )
     {
         ser.EnterArray( "nodes" );

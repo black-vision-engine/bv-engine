@@ -82,8 +82,8 @@ bool		Crawler::Finalize			()
 				}
 			}
 		}
-		//for( auto n : copy )	
-			//SetActiveNode( n );
+		for( auto n : copy )	
+			SetActiveNode( n );
 
 		LayoutNodes();
 		m_isFinalized = true;
@@ -421,7 +421,8 @@ void		Crawler::EnqueueNode			( model::BasicNode * n)
 //
 void                Crawler::Serialize       ( ISerializer& ser ) const
 {
-    ser.EnterChild( "Crawler" );
+    ser.EnterChild( "logic" );
+        ser.SetAttribute( "type", "crawler" );
         ser.EnterChild( "view" );
             ser.SetAttribute( "empty", SerializationHelper::T2String( m_view->m_empty ) );
             if( !m_view->m_empty )
@@ -441,9 +442,29 @@ void                Crawler::Serialize       ( ISerializer& ser ) const
 
 // ***********************
 //
-ISerializablePtr    Crawler::Create          ( const IDeserializer& /*deser*/ )
+ISerializablePtr    Crawler::Create          ( const IDeserializer & deser, bv::model::BasicNode * parent )
 {
-    return nullptr;
+    mathematics::RectPtr rect = std::make_shared<mathematics::Rect>();
+
+    deser.EnterChild( "view" );
+        bool empty = SerializationHelper::String2T( deser.GetAttribute( "empty" ), true );
+        if( !empty )
+        {
+            rect->xmin = SerializationHelper::String2T( deser.GetAttribute( "xmin" ), 0.0f );
+            rect->xmax = SerializationHelper::String2T( deser.GetAttribute( "xmax" ), 0.0f );
+            rect->ymax = SerializationHelper::String2T( deser.GetAttribute( "ymax" ), 0.0f );
+            rect->ymin = SerializationHelper::String2T( deser.GetAttribute( "ymin" ), 0.0f );
+        }
+    deser.ExitChild();
+
+    float speed = SerializationHelper::String2T( deser.GetAttribute( "speed" ), 0.0f );
+    float interspace = SerializationHelper::String2T( deser.GetAttribute( "interspace" ), 0.0f );
+
+    auto crawler = Crawler::Create( parent, rect );
+    crawler->SetSpeed( speed );
+    crawler->SetInterspace( interspace );
+
+    return crawler;
 }
 
 // ***********************

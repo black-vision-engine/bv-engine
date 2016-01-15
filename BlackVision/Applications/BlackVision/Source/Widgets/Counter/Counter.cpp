@@ -66,7 +66,8 @@ void		WidgetCounter::Update				( TimeType T)
 //
 void                WidgetCounter::Serialize       ( ISerializer& ser ) const
 {
-    ser.EnterChild( "Counter" );
+    ser.EnterChild( "logic" );
+        ser.SetAttribute( "type", "counter" );
         m_param->Serialize( ser );
     ser.ExitChild();
 }
