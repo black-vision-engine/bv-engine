@@ -242,7 +242,6 @@ std::pair< ProjectEvent::Command, const std::wstring > ProjectEventCommandMappin
     , std::make_pair( ProjectEvent::Command::MoveScene, L"MoveScene" )
 
     , std::make_pair( ProjectEvent::Command::AddExistingSceneToProject, L"AddExistingSceneToProject" )
-    , std::make_pair( ProjectEvent::Command::RemoveSceneFromProject, L"RemoveSceneFromProject" )
     , std::make_pair( ProjectEvent::Command::CreateSceneInProject, L"CreateSceneInProject" )
 
     , std::make_pair( ProjectEvent::Command::LoadProject, L"LoadProject" ) 

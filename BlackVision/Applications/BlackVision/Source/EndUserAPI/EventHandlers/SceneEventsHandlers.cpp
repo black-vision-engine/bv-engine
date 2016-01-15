@@ -440,11 +440,6 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         SendSimpleResponse( command, projectEvent->EventID, senderID, true );
     }
-    else if( command == ProjectEvent::Command::RemoveSceneFromProject )
-    {
-        // Already implemented by event RemoveScene. Use that event.
-        assert( false );
-    }
     else if( command == ProjectEvent::Command::CreateSceneInProject )
     {
         auto inSceneName = GetRequestParamValue( request )[ "inSceneName" ].asString();

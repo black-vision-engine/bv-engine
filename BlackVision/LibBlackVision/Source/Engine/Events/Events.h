@@ -461,7 +461,6 @@ public:
         DeleteFolder,
 
         AddExistingSceneToProject,
-        RemoveSceneFromProject,
         CreateSceneInProject,
 
         SaveScene,
