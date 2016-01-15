@@ -285,6 +285,12 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\NodeMaskPreFullscreenEffectLogic.cpp">
       <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\WireframePostFullscreenEffectLogic.cpp">
+      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\NodeMaskPostFullscreenEffectLogic.cpp">
+      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -515,6 +521,12 @@
       <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\NodeMaskPreFullscreenEffectLogic.h">
+      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\WireframePostFullscreenEffectLogic.h">
+      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\NodeMaskPostFullscreenEffectLogic.h">
       <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
     </ClInclude>
   </ItemGroup>

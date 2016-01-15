@@ -3,4 +3,10 @@
 
 namespace bv {
 
+// *********************************
+//
+PostFullscreenEffectLogic::~PostFullscreenEffectLogic  ()
+{
+}
+
 } //bv

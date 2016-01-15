@@ -158,8 +158,10 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\DefaultPostFullscreenLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\DefaultPreFullscreenEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\InterlacePreFullscreenEffectLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\NodeMaskPostFullscreenEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\NodeMaskPreFullscreenEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\SplitChildrenPreFullscreenLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\WireframePostFullscreenEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\NodeEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\NodeEffectTr.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\PostFullScreenEffectLogic.cpp" />
@@ -244,8 +246,10 @@
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\DefaultPostFullscreenLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\DefaultPreFullscreenEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\InterlacePreFullscreenEffectLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\NodeMaskPostFullscreenEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\NodeMaskPreFullscreenEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\SplitChildrenPreFullscreenLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\WireframePostFullscreenEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\NodeEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\NodeEffectTr.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\PostFullScreenEffectLogic.h" />

@@ -38,9 +38,7 @@ void    WireframeRenderLogic::RenderNode      ( SceneNode * node, RenderLogicCon
 void    WireframeRenderLogic::RenderWireframeOverlay    ( Renderer * renderer, SceneNode * node )
 {
     EnableWireframeEffect( renderer, node );
-
     DrawWirefreameNodeOnly( renderer, node );
-    // DrawWireframeChildren( renderer, node );
 }
 
 // *********************************
