@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Events/Events.h"
+#include "Serialization/Json/JsonSerializeObject.h"
 
 namespace bv
 {
@@ -10,38 +11,41 @@ class BVAppLogic;
 class QueryHandlers
 {
 private:
+
     BVAppLogic *        m_appLogic;
 
 public:
+
     explicit            QueryHandlers   ( BVAppLogic * appLogic );
                         ~QueryHandlers  ();
 
     void                Info            ( bv::IEventPtr evt );
 
 private:
-    std::string     ListSceneAssets     ( const std::string& request, unsigned int requestID );
-    std::wstring    ListProjectNames    ( const std::string& request, unsigned int requestID );
-    std::wstring    ListScenes          ( const std::string& request, unsigned int requestID );
-    std::wstring    ListAssetsPaths     ( const std::string& request, unsigned int requestID );
-    std::wstring    ListCategoriesNames ( const std::string& request, unsigned int requestID );
-    std::wstring    ListProjects        ( const std::string& request, unsigned int requestID );
 
-    std::wstring    ListAllScenes           ( const std::string& request, unsigned int requestID );
-    std::wstring    ListAllFolders          ( const std::string& request, unsigned int requestID );
-    std::wstring    ListResourcesInFolders  ( const std::string& request, unsigned int requestID );
-    std::wstring    ListAllResources        ( const std::string& request, unsigned int requestID );
+    void     ListSceneAssets         ( JsonSerializeObject & ser, const std::string & request, int eventID );
+    void     ListProjectNames        ( JsonSerializeObject & ser, const std::string & request, int eventID );
+    void     ListScenes              ( JsonSerializeObject & ser, const std::string & request, int eventID );
+    void     ListAssetsPaths         ( JsonSerializeObject & ser, const std::string & request, int eventID );
+    void     ListCategoriesNames     ( JsonSerializeObject & ser, const std::string & request, int eventID );
+    void     ListProjects            ( JsonSerializeObject & ser, const std::string & request, int eventID );
 
-    std::string     VideoCardsInfo      ( const std::string& request, unsigned int requestID );
-    std::string     GetNodeInfo         ( const std::string& request, unsigned int requestID );
-    std::string     GetMinimalSceneInfo ( const std::string& request, unsigned int requestID );
-    std::string     GetTimeLinesInfo    ( const std::string& request, unsigned int requestID );
-    std::string     PerformanceInfo     ( const std::string& request, unsigned int requestID );
-    std::string     TreeStructureInfo   ( const std::string& request, unsigned int requestID );
-    std::string     CheckTimelineTime   ( const std::string& request, unsigned int requestID );
-    std::string     PluginInfo          ( const std::string& request, unsigned int requestID );
+    void     ListAllFolders          ( JsonSerializeObject & ser, const std::string & request, int eventID );
+    void     ListResourcesInFolders  ( JsonSerializeObject & ser, const std::string & request, int eventID );
+    void     ListAllResources        ( JsonSerializeObject & ser, const std::string & request, int eventID );
+
+    void     VideoCardsInfo          ( JsonSerializeObject & ser, const std::string & request, int eventID );
+    void     GetNodeInfo             ( JsonSerializeObject & ser, const std::string & request, int eventID );
+    void     GetMinimalSceneInfo     ( JsonSerializeObject & ser, const std::string & request, int eventID );
+    void     GetTimeLinesInfo        ( JsonSerializeObject & ser, const std::string & request, int eventID );
+    void     PerformanceInfo         ( JsonSerializeObject & ser, const std::string & request, int eventID );
+    void     TreeStructureInfo       ( JsonSerializeObject & ser, const std::string & request, int eventID );
+    void     CheckTimelineTime       ( JsonSerializeObject & ser, const std::string & request, int eventID );
+    void     PluginInfo              ( JsonSerializeObject & ser, const std::string & request, int eventID );
     
-    std::string     ListTimelineKeyframes           ( const std::string& request, unsigned int requestID );
-    std::string     MinimalTreeStructureInfo        ( const std::string& request, unsigned int requestID );
+    void     ListTimelineKeyframes   ( JsonSerializeObject & ser, const std::string & request, int eventID );
+    void     MinimalTreeStructureInfo( JsonSerializeObject & ser, const std::string & request, int eventID );
+
 };
 
 } //bv
