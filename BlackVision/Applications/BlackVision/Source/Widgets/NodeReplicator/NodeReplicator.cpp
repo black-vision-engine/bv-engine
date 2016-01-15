@@ -68,9 +68,12 @@ void					    NodeReplicator::Deinitialize()
 
 // ***********************
 //
-void                NodeReplicator::Serialize       ( ISerializer& /*ser*/ ) const
+void                NodeReplicator::Serialize       ( ISerializer& ser ) const
 {
+    ser.EnterChild( "Replicator" );
+        ser.SetAttribute( "NumRepetitions", SerializationHelper::T2String( m_repNum ) );
 
+    ser.ExitChild();
 }
 
 // ***********************

@@ -59,6 +59,8 @@ template<> float _String2T( std::string s ) { return std::stof( s ); }
 template<> bool _String2T( std::string s ) { if( s == "true" ) return true; else if( s == "false" ) return false; assert( false ); return false; } // FIXME error handling
 template<> unsigned int _String2T( std::string s ) { return std::stoul( s ); }
 template<> int _String2T( std::string s ) { return std::stoi( s ); }
+template<> UInt64 _String2T( std::string s ) { return std::stoull( s ); }
+template<> Int64 _String2T( std::string s ) { return std::stoll( s ); }
 template<> glm::vec2 _String2T( std::string s ) { return String2Vec2( s ); }
 template<> glm::vec3 _String2T( std::string s ) { return String2Vec3( s ); }
 template<> glm::vec4 _String2T( std::string s ) { return String2Vec4( s ); }
@@ -77,6 +79,22 @@ template<> unsigned int String2T( std::string s, const unsigned int& default )
 }
 
 template<> int String2T( std::string s, const int& default ) 
+{ 
+    if( s == "" ) 
+        return default; 
+    else 
+        return _String2T< int >( s ); 
+}
+
+template<> UInt64 String2T( std::string s, const UInt64& default ) 
+{ 
+    if( s == "" ) 
+        return default; 
+    else 
+        return _String2T< unsigned int >( s ); 
+}
+
+template<> Int64 String2T( std::string s, const Int64& default ) 
 { 
     if( s == "" ) 
         return default; 
@@ -145,6 +163,8 @@ template std::string T2String( const glm::vec4& v );
 template std::string T2String( const float& v );
 template std::string T2String( const int& v );
 template std::string T2String( const unsigned int& v );
+template std::string T2String( const UInt64& v );
+template std::string T2String( const Int64& v );
 
 } }
 

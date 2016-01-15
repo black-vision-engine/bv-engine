@@ -64,9 +64,11 @@ void		WidgetCounter::Update				( TimeType T)
 
 // ***********************
 //
-void                WidgetCounter::Serialize       ( ISerializer& /*ser*/ ) const
+void                WidgetCounter::Serialize       ( ISerializer& ser ) const
 {
-
+    ser.EnterChild( "Counter" );
+        m_param->Serialize( ser );
+    ser.ExitChild();
 }
 
 // ***********************

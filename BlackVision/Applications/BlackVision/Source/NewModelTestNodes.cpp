@@ -1999,8 +1999,8 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 //#define SHOW_SPHERE
 //#define SHOW_CIRCLE
 //#define SHOW_ELLIPSE
-//#define SHOW_ROUNDEDRECT
-#define SHOW_TRIANGLE
+#define SHOW_ROUNDEDRECT
+//#define SHOW_TRIANGLE
 //#define SHOW_TORUS
 //#define SHOW_SPRING
 //#define SHOW_GEOSPHERE
@@ -2185,7 +2185,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 #ifdef SHOW_ROUNDEDRECT
 	auto plugin = root->GetPlugin( "rounded rect" );
 	model::SetParameter( plugin->GetParameter( "bevels" ), 0.0f, glm::vec4( 0.4f, 0.2f, 0.2f, 0.2f ) );
-	model::SetParameter( plugin->GetParameter( "size" ), 0.0f, glm::vec2( 2.0, 0.5 ) );
+	model::SetParameter( plugin->GetParameter( "size" ), 0.0f, glm::vec2( 2.0, 0.9 ) );
 #endif
 #ifdef SHOW_TRIANGLE
 	auto plugin = root->GetPlugin( "triangle" );
@@ -2389,6 +2389,36 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextCacheTest         ( model::ITi
     SetParameter( node->GetPlugin("text")->GetParameter( "text" ), 0.0, text );
 
     return node;    
+}
+
+
+
+model::BasicNodePtr  SimpleNodesFactory::CreateCrawlerTestNode       ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    glm::vec3 nodeTranslation( 0.0, 0.0, 0.0 );
+    glm::vec4 color( 1.0, 0.7, 0.0, 1.0 );
+
+	auto node = CreateTextCacheTest( timeEvaluator, "Dummy0", nodeTranslation, color, L"", "fonts/StarWars.ttf" );
+
+	auto crawler = widgets::Crawler::Create( node.get(), mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
+
+	node->SetLogic( crawler );
+
+    
+    crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy1", nodeTranslation, color, L"Teskt1", "fonts/StarWars.ttf" ) );
+	crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy2", nodeTranslation, color, L"Teskt2", "fonts/StarWars.ttf" ) );
+	crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy3", nodeTranslation, color, L"Teskt3", "fonts/StarWars.ttf" ) );
+	crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy4", nodeTranslation, color, L"Teskt4", "fonts/StarWars.ttf" ) );
+	crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy5", nodeTranslation, color, L"Teskt5", "fonts/StarWars.ttf" ) );
+	crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy6", nodeTranslation, color, L"Teskt6", "fonts/StarWars.ttf" ) );
+
+	crawler->SetSpeed( 400.0f );
+	crawler->SetInterspace( 1.0f );
+
+	crawler->Finalize();
+	crawler->Start();
+
+	return node;
 }
 
 // *****************************

@@ -1459,7 +1459,7 @@ IEventPtr                NodeLogicEvent::Create          ( IDeserializer& deser 
     {
         NodeLogicEventPtr newEvent     = std::make_shared<NodeLogicEvent>();
         newEvent->WidgetCommand     = SerializationHelper::WString2T<NodeLogicEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), NodeLogicEvent::Command::Fail );
-        newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::TIMELINE_NAME_WSTRING ) );
+        newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
         newEvent->SceneName         = toString( deser.GetAttribute( SerializationHelper::SCENE_NAME_WSTRING ) );
         newEvent->Action            = toString( deser.GetAttribute( SerializationHelper::WIDGET_ACTION_WSTRING ) );
 
