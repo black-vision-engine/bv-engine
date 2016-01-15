@@ -461,7 +461,14 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         auto categoryName = GetRequestParamValue( request )[ "categoryName" ].asString();
         auto path = GetRequestParamValue( request )[ "path" ].asString();
 
-        auto success = pm->CreateAssetDir( categoryName, path );
+        auto recursive = false;
+        auto recStr = GetRequestParamValue( request )[ "recursive" ].asString();
+        if( recStr == "true" )
+        {
+            recursive = true;
+        }
+
+        auto success = pm->CreateAssetDir( categoryName, path, recursive );
 
         SendSimpleResponse( command, projectEvent->EventID, senderID, success );
     }

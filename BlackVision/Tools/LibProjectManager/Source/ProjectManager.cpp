@@ -315,9 +315,9 @@ PathVec                     ProjectManager::ListScenesDirs      ( const Path & p
 
 // ********************************
 //
-bool                        ProjectManager::CreateAssetDir      ( const std::string & categoryName, const Path & path ) const
+bool                        ProjectManager::CreateAssetDir      ( const std::string & categoryName, const Path & path, bool recursive ) const
 {
-    return m_impl->CreateAssetDir( categoryName, path );
+    return m_impl->CreateAssetDir( categoryName, path, recursive );
 }
 
 // ********************************
