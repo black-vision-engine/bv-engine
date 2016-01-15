@@ -458,11 +458,21 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::CreateFolder )
     {
+        auto categoryName = GetRequestParamValue( request )[ "categoryName" ].asString();
+        auto path = GetRequestParamValue( request )[ "path" ].asString();
 
+        auto success = pm->CreateAssetDir( categoryName, path );
+
+        SendSimpleResponse( command, projectEvent->EventID, senderID, success );
     }
     else if( command == ProjectEvent::Command::DeleteFolder )
     {
+        auto categoryName = GetRequestParamValue( request )[ "categoryName" ].asString();
+        auto path = GetRequestParamValue( request )[ "path" ].asString();
 
+        auto success = pm->RemoveAssetDir( categoryName, path );
+
+        SendSimpleResponse( command, projectEvent->EventID, senderID, success );
     }
     else
     {

@@ -171,8 +171,13 @@ BasicNode * BasicNode::Create( const IDeserializer& dob )
 
         ++itRC;
     }
+    
+    auto psc = plugins.back()->GetPixelShaderChannel();
 
-    HelperPixelShaderChannel::SetRendererContextUpdate( plugins.back()->GetPixelShaderChannel() );
+    if( psc )
+    {
+        HelperPixelShaderChannel::SetRendererContextUpdate( psc );
+    }
 
 //@todo use ModelNodeEffectFactory
 //// node effect

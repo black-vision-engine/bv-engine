@@ -63,10 +63,10 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             ListScenes( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::ListAllFolders )
             ListAllFolders( responseJSON, request, eventID );
-        else if( command == InfoEvent::Command::ListResourcesInFolders )
-            ListResourcesInFolders( responseJSON, request, eventID );
-        else if( command == InfoEvent::Command::ListAllResources )
-            ListAllResources( responseJSON, request, eventID );
+        //else if( command == InfoEvent::Command::ListResourcesInFolders )
+        //    ListResourcesInFolders( responseJSON, request, eventID );
+        //else if( command == InfoEvent::Command::ListAllResources )
+        //    ListAllResources( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::Performance )
             PerformanceInfo( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::Timelines )
@@ -479,42 +479,46 @@ void         QueryHandlers::ListTimelineKeyframes    ( JsonSerializeObject & ser
 
 // ***********************
 //
-void    QueryHandlers::ListAllFolders          ( JsonSerializeObject & ser, const std::string & , int /*eventID*/ )
+void    QueryHandlers::ListAllFolders          ( JsonSerializeObject & ser, const std::string & request, int eventID )
 {
-    { ser; }
-    //PrepareResponseTemplate( ser, InfoEvent::Command::ListAllFolders, eventID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListAllFolders, eventID, true );
 
-    //auto pm = ProjectManager::GetInstance();
-    //auto sns = pm->ListCategoriesNames();
+    auto catName = GetRequestParamValue( request )[ "categoryName" ].asString();
+    auto path = GetRequestParamValue( request )[ "path" ].asString();
 
-    //ser.EnterArray( "list" );
-    //for( auto category : sns )
-    //    ser.SetAttribute( "", category );
-    //ser.ExitChild();
+    auto pm = ProjectManager::GetInstance();
+    auto sns = pm->ListAssetsDirs( catName, path );
+
+    ser.EnterArray( "list" );
+    for( auto d : sns )
+    {
+        ser.SetAttribute( "", d.Str() );
+    }
+    ser.ExitChild();
 }
 
-// ***********************
+//// ***********************
+////
+//void    QueryHandlers::ListResourcesInFolders  ( JsonSerializeObject & ser, const std::string & /*request*/, int /*eventID*/ )
+//{
+//    { ser; }
+//    // @todo Zaimplementowaæ
+//    // S¹ stworzone funkcje do ustawiania domyœlnych wartoœci, jakie powinny byæ w odpowiedziach do eventów:
+//    // - PrepareResponseTemplate
+//    // - ErrorResponseTemplate
+//    // Zobacz jak s¹ u¿ywane w innych eventach.
+//}
 //
-void    QueryHandlers::ListResourcesInFolders  ( JsonSerializeObject & ser, const std::string & /*request*/, int /*eventID*/ )
-{
-    { ser; }
-    // @todo Zaimplementowaæ
-    // S¹ stworzone funkcje do ustawiania domyœlnych wartoœci, jakie powinny byæ w odpowiedziach do eventów:
-    // - PrepareResponseTemplate
-    // - ErrorResponseTemplate
-    // Zobacz jak s¹ u¿ywane w innych eventach.
-}
-
-// ***********************
-//
-void    QueryHandlers::ListAllResources        ( JsonSerializeObject & ser, const std::string & /*request*/, int /*eventID*/ )
-{
-    { ser; }
-    // @todo Zaimplementowaæ
-    // S¹ stworzone funkcje do ustawiania domyœlnych wartoœci, jakie powinny byæ w odpowiedziach do eventów:
-    // - PrepareResponseTemplate
-    // - ErrorResponseTemplate
-    // Zobacz jak s¹ u¿ywane w innych eventach.
-}
+//// ***********************
+////
+//void    QueryHandlers::ListAllResources        ( JsonSerializeObject & ser, const std::string & /*request*/, int /*eventID*/ )
+//{
+//    { ser; }
+//    // @todo Zaimplementowaæ
+//    // S¹ stworzone funkcje do ustawiania domyœlnych wartoœci, jakie powinny byæ w odpowiedziach do eventów:
+//    // - PrepareResponseTemplate
+//    // - ErrorResponseTemplate
+//    // Zobacz jak s¹ u¿ywane w innych eventach.
+//}
 
 } //bv
