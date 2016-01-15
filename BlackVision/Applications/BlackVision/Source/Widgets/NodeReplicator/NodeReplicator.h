@@ -24,7 +24,7 @@ public:
 
 
     virtual void                    Serialize       ( ISerializer& ser ) const override;
-    static ISerializablePtr         Create          ( const IDeserializer& deser );
+    static NodeReplicatorPtr        Create          ( const IDeserializer & deser, bv::model::BasicNode * parentNode );
 
     virtual bool                    HandleEvent     ( IDeserializer& eventSer, ISerializer& response ) override;
 

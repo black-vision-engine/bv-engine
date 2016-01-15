@@ -70,15 +70,16 @@ void					    NodeReplicator::Deinitialize()
 //
 void                NodeReplicator::Serialize       ( ISerializer& ser ) const
 {
-    ser.EnterChild( "Replicator" );
-        ser.SetAttribute( "NumRepetitions", SerializationHelper::T2String( m_repNum ) );
+    ser.EnterChild( "logic" );
+        ser.SetAttribute( "type", "replicator" );
+        ser.SetAttribute( "numRepetitions", SerializationHelper::T2String( m_repNum ) );
 
     ser.ExitChild();
 }
 
 // ***********************
 //
-ISerializablePtr     NodeReplicator::Create          ( const IDeserializer& /*deser*/ )
+NodeReplicatorPtr    NodeReplicator::Create          ( const IDeserializer & /*deser*/, bv::model::BasicNode * /*parentNode*/ )
 {
     return nullptr;
 }
