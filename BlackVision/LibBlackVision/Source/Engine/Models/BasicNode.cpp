@@ -296,9 +296,9 @@ std::vector< IParameterPtr >    BasicNode::GetParameters           () const
 
 // ********************************
 //
-std::vector< ITimeEvaluatorPtr > BasicNode::GetTimelines			() const
+std::unordered_set< ITimeEvaluatorPtr > BasicNode::GetTimelines			( bool recursive ) const
 {
-	std::set< ITimeEvaluatorPtr > timelines;
+	std::unordered_set< ITimeEvaluatorPtr > timelines;
 
     auto params = GetParameters();
 
@@ -307,7 +307,16 @@ std::vector< ITimeEvaluatorPtr > BasicNode::GetTimelines			() const
         timelines.insert( param->GetTimeEvaluator() );
     }
 
-    return std::vector< ITimeEvaluatorPtr >( timelines.begin(), timelines.end() );
+	if( recursive )
+	{
+		for( auto child : m_children )
+		{
+			auto ts = child->GetTimelines( true );
+			timelines.insert( ts.begin(), ts.end() ); // FIXME: remove duplicates
+		}
+	}
+
+    return timelines;
 }
 
 // ********************************
