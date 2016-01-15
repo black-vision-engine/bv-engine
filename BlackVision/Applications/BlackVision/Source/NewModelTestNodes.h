@@ -61,6 +61,7 @@ public:
 	static model::BasicNodePtr	CreateBasicShapeShow        ( model::ITimeEvaluatorPtr timeEvaluator, const std::string& uid, glm::vec3 translation, std::string = "textures/sand.jpg" );
     static model::BasicNodePtr  CreateTextCacheTest         ( model::ITimeEvaluatorPtr timeEvaluator, const std::string& nodeName, glm::vec3 translation, glm::vec4 color, const std::wstring text, const std::string& fontName );
     static model::BasicNodePtr  CreateNodeReplicatorTest    ( model::ITimeEvaluatorPtr timeEvaluator );
+    static model::BasicNodePtr  CreateCrawlerTestNode       ( model::ITimeEvaluatorPtr timeEvaluator );
 
 	static void					TestTypedParamQueries	    ( model::ITimeEvaluatorPtr timeEvaluator );
 

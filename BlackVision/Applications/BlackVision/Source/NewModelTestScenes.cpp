@@ -1367,7 +1367,7 @@ model::BasicNodePtr TestScenesFactory::FontTestScene( const model::PluginsManage
     glm::vec3 nextTranslation( 0.0, -0.1, 0.0 );
     glm::vec4 color( 1.0, 0.7, 0.0, 1.0 );
 
-    auto node0 = SimpleNodesFactory::CreateCrawlerNode( timeEvaluator );
+    auto node0 = SimpleNodesFactory::CreateCrawlerTestNode( timeEvaluator );
     //auto node0 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, "Dummy", nodeTranslation, color, L"", "fonts/StarWars.ttf" );
 
     //auto rootPath = ProjectManager::GetInstance()->GetRootDir();

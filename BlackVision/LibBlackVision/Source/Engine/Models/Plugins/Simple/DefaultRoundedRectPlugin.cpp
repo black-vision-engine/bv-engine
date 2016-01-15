@@ -14,6 +14,7 @@ DefaultPluginParamValModelPtr   DefaultRoundedRectPluginDesc::CreateDefaultModel
     h.CreateVacModel();
     h.AddSimpleParam( DefaultRoundedRectPlugin::PN_SIZE, glm::vec2( 1, 1 ), true, true );
     h.AddSimpleParam( DefaultRoundedRectPlugin::PN_BEVELS, glm::vec4( 0.1, 0.1, 0.1, 0.1 ), true, true );
+    h.AddSimpleParam( DefaultRoundedRectPlugin::PN_TESSELATION, 10, true, true );
 
     return h.GetModel();
 }
@@ -32,6 +33,7 @@ IPluginPtr                      DefaultRoundedRectPluginDesc::CreatePlugin      
 
 const std::string DefaultRoundedRectPlugin::PN_SIZE = "size";
 const std::string DefaultRoundedRectPlugin::PN_BEVELS = "bevels";
+const std::string DefaultRoundedRectPlugin::PN_TESSELATION = "tesselation";
 
 class RoundedRectGenerator : public IGeometryOnlyGenerator
 {
@@ -39,8 +41,8 @@ class RoundedRectGenerator : public IGeometryOnlyGenerator
     glm::vec4 bevels;
     int tesselation;
 public:
-    RoundedRectGenerator( glm::vec2 s, glm::vec4 b )
-        : size( s ), bevels( b ), tesselation( 10 ) { }
+    RoundedRectGenerator( glm::vec2 s, glm::vec4 b, int tesselation )
+        : size( s ), bevels( b ), tesselation( tesselation ) { }
 
     Type GetType() { return Type::GEOMETRY_ONLY; }
 private:
@@ -92,13 +94,14 @@ DefaultRoundedRectPlugin::DefaultRoundedRectPlugin( const std::string & name, co
 
 std::vector<IGeometryGeneratorPtr>                 DefaultRoundedRectPlugin::GetGenerators()
 {
-    return std::vector<IGeometryGeneratorPtr>( 1, IGeometryGeneratorPtr( new RoundedRectGenerator( GetSize(), GetBevels() ) ) );
+    return std::vector<IGeometryGeneratorPtr>( 1, IGeometryGeneratorPtr( new RoundedRectGenerator( GetSize(), GetBevels(), GetTesselation() ) ) );
 }
 
 bool                                DefaultRoundedRectPlugin::NeedsTopologyUpdate()
 {
     return ParameterChanged( PN_SIZE )
-        || ParameterChanged( PN_BEVELS );
+        || ParameterChanged( PN_BEVELS )
+        || ParameterChanged( PN_TESSELATION );
 }
 
 glm::vec2                                   DefaultRoundedRectPlugin::GetSize()
@@ -112,6 +115,13 @@ glm::vec4                                   DefaultRoundedRectPlugin::GetBevels(
 {
     auto param = GetParameter( PN_BEVELS );
     auto tParam = QueryTypedParam< ParamVec4Ptr >( param );
+    return tParam->Evaluate();
+}
+
+int                                         DefaultRoundedRectPlugin::GetTesselation()
+{
+    auto param = GetParameter( PN_TESSELATION );
+    auto tParam = QueryTypedParam< ParamIntPtr >( param );
     return tParam->Evaluate();
 }
 

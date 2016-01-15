@@ -18,6 +18,7 @@ class DefaultRoundedRectPlugin : public DefaultGeometryPluginBase
 public:
     static const std::string PN_SIZE;
     static const std::string PN_BEVELS;
+    static const std::string PN_TESSELATION;
 
 private:
     virtual std::vector<IGeometryGeneratorPtr>    GetGenerators() override;
@@ -26,6 +27,7 @@ private:
 
     glm::vec2                                   GetSize();
     glm::vec4                                   GetBevels();
+    int                                         GetTesselation();
 public:
     DefaultRoundedRectPlugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model );
 };
