@@ -33,6 +33,10 @@ public:
 
     bool                Free                        ();
 
+    unsigned int        GetTopIndex                 () const;
+
+    RenderTarget *      CreateRenderTarget          ( RenderTarget::RTSemantic semantic );
+
 }; 
 
 } //bv

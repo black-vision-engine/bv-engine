@@ -25,6 +25,10 @@ RenderTargetStackAllocator::RenderTargetStackAllocator      ( unsigned int width
 //
 RenderTargetStackAllocator::~RenderTargetStackAllocator     ()
 {
+    for( auto rt : m_allocatedRenderTargets )
+    {
+        delete rt;
+    }
 }
 
 // *********************************
@@ -77,6 +81,20 @@ bool                RenderTargetStackAllocator::Free        ()
     }
 
     return false;
+}
+
+// *********************************
+//
+unsigned int        RenderTargetStackAllocator::GetTopIndex                 () const
+{
+    return m_topIdx;
+}
+
+// *********************************
+//
+RenderTarget *      RenderTargetStackAllocator::CreateRenderTarget          ( RenderTarget::RTSemantic semantic )
+{
+    return RenderTargetFactory::CreateRenderTarget( semantic, m_width, m_height, m_fmt );
 }
 
 } //bv

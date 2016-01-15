@@ -49,7 +49,6 @@ private:
 
 protected:
 
-
     bool                DebugVerifyInput        ( const std::vector< RenderTarget * > * rtVec, unsigned int startIdx );
 
 };
