@@ -48,7 +48,7 @@ void                JsonCommandsListener::QueueEvent          ( const std::wstri
 
 // ***********************
 //
-void                JsonCommandsListener::TryParseEventsGroup ( IDeserializer& deser, int socketID )
+void                JsonCommandsListener::TryParseEventsGroup ( IDeserializer & deser, int socketID )
 {
     if( deser.EnterChild( L"EventsGroups" ) )
     {
@@ -58,9 +58,9 @@ void                JsonCommandsListener::TryParseEventsGroup ( IDeserializer& d
         {
             do
             {
-                RemoteEventPtr newEvent = std::static_pointer_cast<RemoteEvent>( DeserializeEvent( deser ) );
+                RemoteEventPtr newEvent = std::static_pointer_cast< RemoteEvent >( DeserializeEvent( deser ) );
                 newEvent->SocketID = socketID;
-                newEvent->EventID = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( L"EventID" ), std::numeric_limits<unsigned int>::max() );
+                newEvent->EventID = SerializationHelper::WString2T< int >( deser.GetAttribute( L"EventID" ), std::numeric_limits< int >::max() );
 
                 if( newEvent != nullptr )
                     AddTriggeredEvent( frameTrigger, newEvent );
@@ -81,7 +81,7 @@ void                JsonCommandsListener::AddTriggeredEvent   ( unsigned int req
 
 // ***********************
 //
-void                JsonCommandsListener::TryParseRegularEvent( IDeserializer& deser, int socketID )
+void                JsonCommandsListener::TryParseRegularEvent( IDeserializer & deser, int socketID )
 {
     if( deser.EnterChild( L"Events" ) )
     {
@@ -90,9 +90,9 @@ void                JsonCommandsListener::TryParseRegularEvent( IDeserializer& d
             auto newEvent = DeserializeEvent( deser );
             if( newEvent != nullptr )
             {
-                RemoteEventPtr newEventBase = std::static_pointer_cast<RemoteEvent>( newEvent );
+                RemoteEventPtr newEventBase = std::static_pointer_cast< RemoteEvent >( newEvent );
                 newEventBase->SocketID = socketID;
-                newEventBase->EventID = SerializationHelper::WString2T<unsigned int>( deser.GetAttribute( L"EventID" ), std::numeric_limits<unsigned int>::max() );
+                newEventBase->EventID = SerializationHelper::WString2T< int >( deser.GetAttribute( L"EventID" ), std::numeric_limits< int >::max() );
 
                 GetDefaultEventManager().ConcurrentQueueEvent( newEventBase );
             }

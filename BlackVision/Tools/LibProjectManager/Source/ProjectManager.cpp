@@ -301,6 +301,48 @@ PathVec                     ProjectManager::ListPresets         () const
 
 // ********************************
 //
+PathVec                     ProjectManager::ListAssetsDirs      ( const std::string & categoryName, const Path & path ) const
+{
+    return m_impl->ListAssetsDirs( categoryName, path );
+}
+
+// ********************************
+//
+PathVec                     ProjectManager::ListScenesDirs      ( const Path & path ) const
+{
+    return m_impl->ListScenesDirs( path );
+}
+
+// ********************************
+//
+bool                        ProjectManager::CreateAssetDir      ( const std::string & categoryName, const Path & path, bool recursive ) const
+{
+    return m_impl->CreateAssetDir( categoryName, path, recursive );
+}
+
+// ********************************
+//
+bool                        ProjectManager::CreateSceneDir      ( const Path & path ) const
+{
+    return m_impl->CreateSceneDir( path );
+}
+
+// ********************************
+//
+bool                        ProjectManager::RemoveAssetDir      ( const std::string & categoryName, const Path & path ) const
+{
+    return m_impl->RemoveAssetDir( categoryName, path );
+}
+
+// ********************************
+//
+bool                        ProjectManager::RemoveSceneDir      ( const Path & path ) const
+{
+    return m_impl->RemoveSceneDir( path );
+}
+
+// ********************************
+//
 Path                        ProjectManager::ToAbsPath           ( const Path & path ) const
 {
     return m_impl->ToAbsPath( path );

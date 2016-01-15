@@ -70,7 +70,7 @@ public:
 
     virtual const IPluginListFinalized *    GetPluginList           () const override;
     virtual std::vector< IParameterPtr >    GetParameters           () const override;
-	virtual std::vector< ITimeEvaluatorPtr > GetTimelines			() const override;
+	virtual std::unordered_set< ITimeEvaluatorPtr > GetTimelines			( bool recursive ) const override;
 
     virtual unsigned int                    GetNumChildren          () const override;
 

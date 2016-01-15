@@ -508,7 +508,8 @@ model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( model::SceneModelPtr 
     else
     {
         //copy timelines
-        auto timelines = srcNode->GetTimelines();
+        auto timelines_ = srcNode->GetTimelines( true );
+        auto timelines = std::vector< model::ITimeEvaluatorPtr >( timelines_.begin(), timelines_.end() );
         auto prefixNum = model::TimelineHelper::CopyTimelines( destScene->GetTimeline(), timelines );
 
         copy = CloneViaSerialization::CloneNode( srcNode.get(), PrefixHelper::PrefixCopy( prefixNum ), srcScene->GetName(), destScene->GetName() );

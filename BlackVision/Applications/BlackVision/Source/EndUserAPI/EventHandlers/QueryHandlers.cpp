@@ -14,18 +14,22 @@
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Serialization/BVSerializeContext.h"
 
+
 namespace bv
 {
 
 // ***********************
 //
-QueryHandlers::QueryHandlers( BVAppLogic* appLogic )
+QueryHandlers::QueryHandlers    ( BVAppLogic * appLogic )
     :   m_appLogic( appLogic )
-{}
+{
+}
 
-QueryHandlers::~QueryHandlers()
-{}
-
+// ***********************
+//
+QueryHandlers::~QueryHandlers   ()
+{
+}
 
 // ***********************
 //
@@ -36,74 +40,69 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
         bv::InfoEventPtr infoEvent = std::static_pointer_cast<bv::InfoEvent>( evt );
 
         InfoEvent::Command command = infoEvent->InfoCommand;
-        std::string& request = infoEvent->Request;
-        unsigned int requestID = infoEvent->EventID;
+        auto & request = infoEvent->Request;
+        auto eventID = infoEvent->EventID;
 
-        wstring responseMessage;
+        JsonSerializeObject responseJSON;
 
         if( command == InfoEvent::Command::TreeStructure )
-            responseMessage = toWString( TreeStructureInfo( request, requestID ) );
+            TreeStructureInfo( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::MinimalTreeStructure )
-            responseMessage = toWString( MinimalTreeStructureInfo( request, requestID ) );
+            MinimalTreeStructureInfo( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::ListSceneAssets )
-            responseMessage = toWString( ListSceneAssets( request, requestID ) );
+            ListSceneAssets( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::ListAssetsPaths )
-            responseMessage = ListAssetsPaths( request, requestID );
+            ListAssetsPaths( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::ListCategoriesNames )
-            responseMessage = ListCategoriesNames( request, requestID );
+            ListCategoriesNames( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::ListProjectNames )
-            responseMessage = ListProjectNames( request, requestID );
+            ListProjectNames( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::ListProjects )
-            responseMessage = ListProjects( request, requestID );
+            ListProjects( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::ListScenes )
-            responseMessage = ListScenes( request, requestID );
+            ListScenes( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::ListAllFolders )
-            responseMessage = ListAllFolders( request, requestID );
-        else if( command == InfoEvent::Command::ListResourcesInFolders )
-            responseMessage = ListResourcesInFolders( request, requestID );
-        else if( command == InfoEvent::Command::ListAllResources )
-            responseMessage = ListAllResources( request, requestID );
+            ListAllFolders( responseJSON, request, eventID );
+        //else if( command == InfoEvent::Command::ListResourcesInFolders )
+        //    ListResourcesInFolders( responseJSON, request, eventID );
+        //else if( command == InfoEvent::Command::ListAllResources )
+        //    ListAllResources( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::Performance )
-            responseMessage = toWString( PerformanceInfo( request, requestID ) );
+            PerformanceInfo( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::Timelines )
-            responseMessage = toWString( GetTimeLinesInfo( request, requestID ) );
+            GetTimeLinesInfo( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::ListTimelineKeyframes )
-            responseMessage = toWString( ListTimelineKeyframes( request, requestID ) );
+            ListTimelineKeyframes( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::NodeInfo )
-            responseMessage = toWString( GetNodeInfo( request, requestID ) );
+            GetNodeInfo( responseJSON, request, eventID );
         else if ( command == InfoEvent::Command::PluginInfo )
-            responseMessage = toWString( PluginInfo( request, requestID ) );
+            PluginInfo( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::MinimalSceneInfo )
-            responseMessage = toWString( GetMinimalSceneInfo( request, requestID ) );
+            GetMinimalSceneInfo( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::Videocards )
-            responseMessage = toWString( VideoCardsInfo( request, requestID ) );
+            VideoCardsInfo( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::CheckTimelineTime )
-            responseMessage = toWString( CheckTimelineTime( request, requestID ) );
+            CheckTimelineTime( responseJSON, request, eventID );
         else
         {
-            SendSimpleErrorResponse( command, requestID, infoEvent->SocketID, "Unknown command" );
+            SendSimpleErrorResponse( command, eventID, infoEvent->SocketID, "Unknown command" );
             return;
         }
         
-        ResponseEventPtr msg = std::make_shared<ResponseEvent>();
-        msg->Response = responseMessage;
-        msg->SocketID = infoEvent->SocketID;
-        GetDefaultEventManager().QueueResponse( msg );
+        SendResponse( responseJSON, infoEvent->SocketID, infoEvent->EventID );
     }
 }
 
-
 // ***********************
 //
-std::string QueryHandlers::ListSceneAssets  ( const std::string& request, unsigned int requestID )
+void         QueryHandlers::ListSceneAssets          ( JsonSerializeObject & ser, const std::string & request, int eventID )
 {
     JsonDeserializeObject deser;
-    JsonSerializeObject ser;
     deser.Load( request );
 
     std::string category = deser.GetAttribute( "CategoryName" );
 
-    PrepareResponseTemplate( ser, InfoEvent::Command::ListSceneAssets, requestID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListSceneAssets, eventID, true );
 
     ser.EnterArray( "assets" );
     for( auto scene : m_appLogic->GetBVProject()->GetScenes() )
@@ -119,64 +118,58 @@ std::string QueryHandlers::ListSceneAssets  ( const std::string& request, unsign
         for( auto& descriptor : descriptors )
         {
             if( descriptor->GetUID() == category )
+            {
                 descriptor->Serialize( ser );
+            }
         }
     }
     ser.ExitChild();
-
-    return ser.GetString();
 }
 
 // ***********************
 //
-std::string QueryHandlers::VideoCardsInfo      ( const std::string& /*request*/, unsigned int requestID )
+void         QueryHandlers::VideoCardsInfo               ( JsonSerializeObject & ser, const std::string & /*request*/, int eventID )
 {
-    JsonSerializeObject ser;
-    PrepareResponseTemplate( ser, InfoEvent::Command::Videocards, requestID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::Videocards, eventID, true );
 
     ser.SetAttribute( "visible", " no diggy diggy " );
-
-    return ser.GetString();
 }
 
 // ***********************
 //
-std::string QueryHandlers::GetNodeInfo         ( const std::string& request, unsigned int requestID )
+void         QueryHandlers::GetNodeInfo                  ( JsonSerializeObject & ser, const std::string & request, int eventID )
 {
     JsonDeserializeObject deser;
-    JsonSerializeObject ser;
     deser.Load( request );
 
     std::string sceneName = deser.GetAttribute( "SceneName" );
     std::string nodePath = deser.GetAttribute( "NodePath" );
     
     auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
-    if( node == nullptr )
+    if( node )
     {
-        ErrorResponseTemplate( ser, InfoEvent::Command::NodeInfo, requestID, "Node not found." );
-        return ser.GetString();
+        // Prevent srialization from serializing child nodes.
+        auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+        context->recursive = false;
+
+        PrepareResponseTemplate( ser, InfoEvent::Command::NodeInfo, eventID, true );
+
+        ser.SetAttribute( "SceneName", sceneName );
+        ser.SetAttribute( "NodePath", nodePath );
+
+        std::static_pointer_cast< model::BasicNode >( node )->Serialize( ser );
     }
-
-    // Prevent srialization from serializing child nodes.
-    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
-    context->recursive = false;
-
-    PrepareResponseTemplate( ser, InfoEvent::Command::NodeInfo, requestID, true );
-
-    ser.SetAttribute( "SceneName", sceneName );
-    ser.SetAttribute( "NodePath", nodePath );
-
-    std::static_pointer_cast< model::BasicNode >( node )->Serialize( ser );
-
-    return ser.GetString();
+    else
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::NodeInfo, eventID, "Node not found." );
+    }
 }
 
 // ***********************
 //
-std::string QueryHandlers::GetMinimalSceneInfo  ( const std::string& request, unsigned int requestID )
+void         QueryHandlers::GetMinimalSceneInfo          ( JsonSerializeObject & ser, const std::string & request, int eventID )
 {
     JsonDeserializeObject deser;
-    JsonSerializeObject ser;
     deser.Load( request );
 
     std::string sceneName = deser.GetAttribute( "SceneName" );
@@ -184,26 +177,23 @@ std::string QueryHandlers::GetMinimalSceneInfo  ( const std::string& request, un
     auto scene = m_appLogic->GetBVProject()->GetProjectEditor()->GetScene( sceneName );
     if( scene == nullptr )
     {
-        ErrorResponseTemplate( ser, InfoEvent::Command::MinimalSceneInfo, requestID, "Scene not found." );
-        return ser.GetString();
+        ErrorResponseTemplate( ser, InfoEvent::Command::MinimalSceneInfo, eventID, "Scene not found." );
+        return;
     }
 
     // Prevent srialization from serializing child nodes.
-    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+    auto context = static_cast< BVSerializeContext * >( ser.GetSerializeContext() );
     context->detailedInfo = false;
 
     scene->Serialize( ser );
-    PrepareResponseTemplate( ser, InfoEvent::Command::MinimalSceneInfo, requestID, true );
-
-    return ser.GetString();
+    PrepareResponseTemplate( ser, InfoEvent::Command::MinimalSceneInfo, eventID, true );
 }
 
 // ***********************
 //
-std::string QueryHandlers::GetTimeLinesInfo    ( const std::string& /*request*/, unsigned int requestID )
+void         QueryHandlers::GetTimeLinesInfo         ( JsonSerializeObject & ser, const std::string & /*request*/, int eventID )
 {
-    JsonSerializeObject ser;
-    PrepareResponseTemplate( ser, InfoEvent::Command::Timelines, requestID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::Timelines, eventID, true );
 
     ser.EnterArray( "scenes" );
     for( auto s : m_appLogic->GetBVProject()->GetScenes() )
@@ -217,23 +207,18 @@ std::string QueryHandlers::GetTimeLinesInfo    ( const std::string& /*request*/,
         ser.ExitChild();
         ser.ExitChild();
     }
-    
-   
-
-    return ser.GetString();
 }
 
 // ***********************
 //
-std::string QueryHandlers::PerformanceInfo  ( const std::string& /*request*/, unsigned int requestID )
+void         QueryHandlers::PerformanceInfo          ( JsonSerializeObject & ser, const std::string & /*request*/, int eventID )
 {       
-    auto& frameStats = m_appLogic->FrameStats();
-    auto& sections = frameStats.RegisteredSections();
+    auto & frameStats = m_appLogic->FrameStats();
+    auto & sections = frameStats.RegisteredSections();
 
     PerformanceMonitor::Calculate( m_appLogic->GetStatsCalculator() );
-    JsonSerializeObject ser;
 
-    PrepareResponseTemplate( ser, InfoEvent::Command::Performance, requestID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::Performance, eventID, true );
 
     ser.SetAttribute( "fps", toString( PerformanceMonitor::Stats.fps ) );
     ser.SetAttribute( "fps_avg", toString( PerformanceMonitor::Stats.fps_avg ) );
@@ -252,16 +237,13 @@ std::string QueryHandlers::PerformanceInfo  ( const std::string& /*request*/, un
 
         ser.ExitChild();
     }
-
-    return ser.GetString();
 }
 
 // ***********************
 //
-std::string QueryHandlers::TreeStructureInfo   ( const std::string& /*request*/, unsigned int requestID )
+void         QueryHandlers::TreeStructureInfo    ( JsonSerializeObject & ser, const std::string & /*request*/, int eventID )
 {
-    JsonSerializeObject ser;
-    PrepareResponseTemplate( ser, InfoEvent::Command::TreeStructure, requestID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::TreeStructure, eventID, true );
 
     ser.EnterArray( "scenes" );
 
@@ -273,16 +255,13 @@ std::string QueryHandlers::TreeStructureInfo   ( const std::string& /*request*/,
     }
 
     ser.ExitChild();
-
-    return ser.GetString();
 }
 
 // ***********************
 //
-std::wstring QueryHandlers::ListProjectNames    ( const std::string& /*request*/, unsigned int requestID )
+void         QueryHandlers::ListProjectNames     ( JsonSerializeObject & ser, const std::string & /*request*/, int eventID )
 {
-    JsonSerializeObject ser;
-    PrepareResponseTemplate( ser, InfoEvent::Command::ListProjectNames, requestID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListProjectNames, eventID, true );
 
     auto pm = ProjectManager::GetInstance();
     auto pns = pm->ListProjectsNames();
@@ -295,16 +274,13 @@ std::wstring QueryHandlers::ListProjectNames    ( const std::string& /*request*/
         ser.ExitChild();
     }
     ser.ExitChild();
-
-    return toWString( ser.GetString() );
 }
 
 // ***********************
 //
-std::wstring QueryHandlers::ListScenes          ( const std::string& request, unsigned int requestID )
+void         QueryHandlers::ListScenes           ( JsonSerializeObject & ser, const std::string & request, int eventID )
 {
-    JsonSerializeObject ser;
-    PrepareResponseTemplate( ser, InfoEvent::Command::ListScenes, requestID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListScenes, eventID, true );
 
     auto pm = ProjectManager::GetInstance();
 
@@ -313,18 +289,17 @@ std::wstring QueryHandlers::ListScenes          ( const std::string& request, un
 
     ser.EnterArray( "list" );
     for( auto scene : sns )
+    {
         ser.SetAttribute( "", scene.Str() );
+    }
     ser.ExitChild();
-
-    return toWString( ser.GetString() );
 }
 
 // ***********************
 //
-std::wstring QueryHandlers::ListAssetsPaths     ( const std::string & request, unsigned int requestID )
+void        QueryHandlers::ListAssetsPaths     ( JsonSerializeObject & ser, const std::string & request, int eventID )
 {
-    JsonSerializeObject ser;
-    PrepareResponseTemplate( ser, InfoEvent::Command::ListAssetsPaths, requestID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListAssetsPaths, eventID, true );
 
     auto pm = ProjectManager::GetInstance();
 
@@ -335,36 +310,34 @@ std::wstring QueryHandlers::ListAssetsPaths     ( const std::string & request, u
 
     ser.EnterArray( "list" );
     for( auto assetPath : sns )
+    {
         ser.SetAttribute( "", assetPath.Str() );
+    }
     ser.ExitChild();
-
-    return toWString( ser.GetString() );
 }
 
 // ***********************
 //
-std::wstring QueryHandlers::ListCategoriesNames ( const std::string & /*request*/, unsigned int requestID )
+void        QueryHandlers::ListCategoriesNames ( JsonSerializeObject & ser, const std::string & /*request*/, int eventID )
 {
-    JsonSerializeObject ser;
-    PrepareResponseTemplate( ser, InfoEvent::Command::ListCategoriesNames, requestID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListCategoriesNames, eventID, true );
 
     auto pm = ProjectManager::GetInstance();
     auto sns = pm->ListCategoriesNames();
 
     ser.EnterArray( "list" );
     for( auto category : sns )
+    {
         ser.SetAttribute( "", category );
+    }
     ser.ExitChild();
-
-    return toWString( ser.GetString() );
 }
 
 // ***********************
 //
-std::wstring QueryHandlers::ListProjects        ( const std::string & /*request*/, unsigned int requestID )
+void        QueryHandlers::ListProjects        ( JsonSerializeObject & ser, const std::string & /*request*/, int eventID )
 {
-    JsonSerializeObject ser;
-    PrepareResponseTemplate( ser, InfoEvent::Command::ListProjects, requestID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListProjects, eventID, true );
 
     auto pm = ProjectManager::GetInstance();
     auto pns = pm->ListProjectsNames();
@@ -378,16 +351,13 @@ std::wstring QueryHandlers::ListProjects        ( const std::string & /*request*
         ser.SetAttribute( "scenesCount", toString( scenesCount ) );
     }
     ser.ExitChild();
-
-    return toWString( ser.GetString() );
 }
 
 // ***********************
 //
-std::string QueryHandlers::CheckTimelineTime   ( const std::string& request, unsigned int requestID )
+void         QueryHandlers::CheckTimelineTime    ( JsonSerializeObject & ser, const std::string & request, int eventID )
 {
     JsonDeserializeObject deser;
-    JsonSerializeObject ser;
     deser.Load( request );
 
     std::string sceneName = deser.GetAttribute( "SceneName" );
@@ -396,39 +366,35 @@ std::string QueryHandlers::CheckTimelineTime   ( const std::string& request, uns
     auto scene = m_appLogic->GetBVProject()->GetScene( sceneName );
     if( scene == nullptr )
     {
-        ErrorResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, requestID, "Scene not found." );
-        return ser.GetString();
+        ErrorResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, eventID, "Scene not found." );
+        return;
     }
 
     auto sceneTimeline = scene->GetTimeline();
     auto checkedTimeline = sceneTimeline->GetChild( timelineName );
     if( checkedTimeline == nullptr )
     {
-        ErrorResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, requestID, "Timeline not found." );
-        return ser.GetString();
+        ErrorResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, eventID, "Timeline not found." );
+        return;
     }
 
-    PrepareResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, requestID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, eventID, true );
     TimeType time = checkedTimeline->GetLocalTime();
     ser.SetAttribute( "Time", toString( time ) );
     ser.SetAttribute( "SceneName", sceneName );
     ser.SetAttribute( "TimelineName", timelineName );
-
-    return ser.GetString();
 }
 
 // ***********************
 //
-std::string     QueryHandlers::MinimalTreeStructureInfo        ( const std::string& /*request*/, unsigned int requestID )
+void         QueryHandlers::MinimalTreeStructureInfo ( JsonSerializeObject & ser, const std::string & /*request*/, int eventID )
 {
-    JsonSerializeObject ser;
-    
     auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
     context->recursive = true;
     context->detailedInfo = false;
     context->pluginsInfo = true;
     
-    PrepareResponseTemplate( ser, InfoEvent::Command::TreeStructure, requestID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::TreeStructure, eventID, true );
 
     ser.EnterArray( "scenes" );
 
@@ -440,16 +406,13 @@ std::string     QueryHandlers::MinimalTreeStructureInfo        ( const std::stri
     }
 
     ser.ExitChild();
-
-    return ser.GetString();
 }
 
 // ***********************
 //
-std::string     QueryHandlers::PluginInfo          ( const std::string& request, unsigned int requestID )
+void         QueryHandlers::PluginInfo           ( JsonSerializeObject & ser, const std::string & request, int eventID )
 {
     JsonDeserializeObject deser;
-    JsonSerializeObject ser;
     deser.Load( request );
 
 
@@ -460,32 +423,28 @@ std::string     QueryHandlers::PluginInfo          ( const std::string& request,
     auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
     if( node == nullptr )
     {
-        ErrorResponseTemplate( ser, InfoEvent::Command::PluginInfo, requestID, "Node not found" );
-        return ser.GetString();
+        ErrorResponseTemplate( ser, InfoEvent::Command::PluginInfo, eventID, "Node not found" );
+        return;
     }
 
     auto iplugin = node->GetPlugin( pluginName );
     if( iplugin == nullptr )
     {
-        ErrorResponseTemplate( ser, InfoEvent::Command::PluginInfo, requestID, "Plugin not found" );
-        return ser.GetString();
+        ErrorResponseTemplate( ser, InfoEvent::Command::PluginInfo, eventID, "Plugin not found" );
+        return;
     }
 
-    PrepareResponseTemplate( ser, InfoEvent::Command::PluginInfo, requestID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::PluginInfo, eventID, true );
 
     auto plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( iplugin );
     plugin->Serialize( ser );
-
-
-    return ser.GetString();
 }
 
 // ***********************
 //
-std::string     QueryHandlers::ListTimelineKeyframes    ( const std::string& request, unsigned int requestID )
+void         QueryHandlers::ListTimelineKeyframes    ( JsonSerializeObject & ser, const std::string& request, int eventID )
 {
     JsonDeserializeObject deser;
-    JsonSerializeObject ser;
     deser.Load( request );
 
     std::string TimelinePath = deser.GetAttribute( "TimelinePath" );
@@ -494,18 +453,18 @@ std::string     QueryHandlers::ListTimelineKeyframes    ( const std::string& req
     auto timeEvaluator = editor->GetTimeEvaluator( TimelinePath );
     if( timeEvaluator == nullptr )
     {
-        ErrorResponseTemplate( ser, InfoEvent::Command::ListTimelineKeyframes, requestID, "Timeline not found" );
-        return ser.GetString();
+        ErrorResponseTemplate( ser, InfoEvent::Command::ListTimelineKeyframes, eventID, "Timeline not found" );
+        return;
     }
 
     if( timeEvaluator->GetType() != DefaultTimeline::Type() )
     {
-        ErrorResponseTemplate( ser, InfoEvent::Command::ListTimelineKeyframes, requestID, "Time evaluator can't be casted to DefaultTimeline" );
-        return ser.GetString();
+        ErrorResponseTemplate( ser, InfoEvent::Command::ListTimelineKeyframes, eventID, "Time evaluator can't be casted to DefaultTimeline" );
+        return;
     }
     auto timeline = std::static_pointer_cast<DefaultTimeline>( timeEvaluator );
     
-    PrepareResponseTemplate( ser, InfoEvent::Command::ListTimelineKeyframes, requestID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListTimelineKeyframes, eventID, true );
 
     ser.EnterArray( "Keyframes" );
     for( int i = 0; i < timeline->NumKeyFrames(); ++i )
@@ -516,54 +475,50 @@ std::string     QueryHandlers::ListTimelineKeyframes    ( const std::string& req
     ser.ExitChild();
 
     ser.SetAttribute( "TimelinePath", TimelinePath );
-
-    return ser.GetString();
 }
 
 // ***********************
 //
-std::wstring    QueryHandlers::ListAllFolders          ( const std::string & , unsigned int  )
+void    QueryHandlers::ListAllFolders          ( JsonSerializeObject & ser, const std::string & request, int eventID )
 {
-    //JsonSerializeObject ser;
-    //PrepareResponseTemplate( ser, InfoEvent::Command::ListAllFolders, requestID, true );
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListAllFolders, eventID, true );
 
-    //auto pm = ProjectManager::GetInstance();
-    //auto sns = pm->ListCategoriesNames();
+    auto catName = GetRequestParamValue( request )[ "categoryName" ].asString();
+    auto path = GetRequestParamValue( request )[ "path" ].asString();
 
-    //ser.EnterArray( "list" );
-    //for( auto category : sns )
-    //    ser.SetAttribute( "", category );
-    //ser.ExitChild();
+    auto pm = ProjectManager::GetInstance();
+    auto sns = pm->ListAssetsDirs( catName, path );
 
-    //return toWString( ser.GetString() );
-    return L"";
+    ser.EnterArray( "list" );
+    for( auto d : sns )
+    {
+        ser.SetAttribute( "", d.Str() );
+    }
+    ser.ExitChild();
 }
 
-// ***********************
+//// ***********************
+////
+//void    QueryHandlers::ListResourcesInFolders  ( JsonSerializeObject & ser, const std::string & /*request*/, int /*eventID*/ )
+//{
+//    { ser; }
+//    // @todo Zaimplementowaæ
+//    // S¹ stworzone funkcje do ustawiania domyœlnych wartoœci, jakie powinny byæ w odpowiedziach do eventów:
+//    // - PrepareResponseTemplate
+//    // - ErrorResponseTemplate
+//    // Zobacz jak s¹ u¿ywane w innych eventach.
+//}
 //
-std::wstring    QueryHandlers::ListResourcesInFolders  ( const std::string & /*request*/, unsigned int /*requestID*/ )
-{
-    // @todo Zaimplementowaæ
-    // S¹ stworzone funkcje do ustawiania domyœlnych wartoœci, jakie powinny byæ w odpowiedziach do eventów:
-    // - PrepareResponseTemplate
-    // - ErrorResponseTemplate
-    // Zobacz jak s¹ u¿ywane w innych eventach.
-
-    return L"";
-}
-
-// ***********************
-//
-std::wstring    QueryHandlers::ListAllResources        ( const std::string & /*request*/, unsigned int /*requestID*/ )
-{
-    // @todo Zaimplementowaæ
-    // S¹ stworzone funkcje do ustawiania domyœlnych wartoœci, jakie powinny byæ w odpowiedziach do eventów:
-    // - PrepareResponseTemplate
-    // - ErrorResponseTemplate
-    // Zobacz jak s¹ u¿ywane w innych eventach.
-
-    return L"";
-}
-
+//// ***********************
+////
+//void    QueryHandlers::ListAllResources        ( JsonSerializeObject & ser, const std::string & /*request*/, int /*eventID*/ )
+//{
+//    { ser; }
+//    // @todo Zaimplementowaæ
+//    // S¹ stworzone funkcje do ustawiania domyœlnych wartoœci, jakie powinny byæ w odpowiedziach do eventów:
+//    // - PrepareResponseTemplate
+//    // - ErrorResponseTemplate
+//    // Zobacz jak s¹ u¿ywane w innych eventach.
+//}
 
 } //bv

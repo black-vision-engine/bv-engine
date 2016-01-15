@@ -948,7 +948,7 @@ bool                        ProjectManagerImpl::PathExistsInPM      ( const Path
 //
 PathVec                     ProjectManagerImpl::ListAssetsDirs      ( const std::string & categoryName, const Path & path ) const
 {
-    auto paths = Path::List( Path( categoryName ) / path, true );
+    auto paths = Path::List( m_rootPath / Path( categoryName ) / path, true );
 
     PathVec ret;
 
@@ -967,7 +967,7 @@ PathVec                     ProjectManagerImpl::ListAssetsDirs      ( const std:
 //
 PathVec                     ProjectManagerImpl::ListScenesDirs      ( const Path & path ) const
 {
-    auto paths = Path::List( Path( "scenes" ) / path, true );
+    auto paths = Path::List( m_rootPath / Path( "scenes" ) / path, true );
 
     PathVec ret;
 
@@ -984,12 +984,12 @@ PathVec                     ProjectManagerImpl::ListScenesDirs      ( const Path
 
 // ********************************
 //
-bool                        ProjectManagerImpl::CreateAssetDir      ( const std::string & categoryName, const Path & path ) const
+bool                        ProjectManagerImpl::CreateAssetDir      ( const std::string & categoryName, const Path & path, bool recursive ) const
 {
-    auto p = Path( categoryName ) / path;
+    auto p = m_rootPath / Path( categoryName ) / path;
     if( !Path::Exists( p ) )
     {
-        return Dir::CreateDir( p.Str(), true );
+        return Dir::CreateDir( p.Str(), recursive );
     }
     else
     {
@@ -1001,7 +1001,7 @@ bool                        ProjectManagerImpl::CreateAssetDir      ( const std:
 //
 bool                        ProjectManagerImpl::CreateSceneDir      ( const Path & path ) const
 {
-    auto p = Path( "scenes" ) / path;
+    auto p = m_rootPath / Path( "scenes" ) / path;
     if( !Path::Exists( p ) )
     {
         return Dir::CreateDir( p.Str(), true );
@@ -1016,7 +1016,7 @@ bool                        ProjectManagerImpl::CreateSceneDir      ( const Path
 //
 bool                        ProjectManagerImpl::RemoveAssetDir      ( const std::string & categoryName, const Path & path ) const
 {
-    auto p = Path( categoryName ) / path;
+    auto p = m_rootPath / Path( categoryName ) / path;
     if( Path::Exists( p ) )
     {
         return Dir::RemoveDir( p.Str() );
@@ -1031,7 +1031,7 @@ bool                        ProjectManagerImpl::RemoveAssetDir      ( const std:
 //
 bool                        ProjectManagerImpl::RemoveSceneDir      ( const Path & path ) const
 {
-    auto p = Path( "scenes" ) / path;
+    auto p = m_rootPath / Path( "scenes" ) / path;
     if( Path::Exists( p ) )
     {
         return Dir::RemoveDir( p.Str() );

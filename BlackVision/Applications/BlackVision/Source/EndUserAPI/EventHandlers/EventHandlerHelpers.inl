@@ -5,13 +5,14 @@
 #include "Engine/Events/EventManager.h"
 #include "Engine/Events/Events.h"
 
+
 namespace bv
 {
 
 // ***********************
 //
 template< typename ParamTypePtr >
-Json::Value GetParamDescription( model::IParameterPtr p )
+Json::Value             GetParamDescription         ( model::IParameterPtr p )
 {
     string s_name = p->GetName();
     auto paramType = p->GetType();
@@ -37,7 +38,8 @@ Json::Value GetParamDescription( model::IParameterPtr p )
     return entry;
 }
 
-
+// ***********************
+//
 const static std::string EVENT_ID_TYPE_STRING       = "EventID";
 const static std::string COMMAND_TYPE_STRING        = "cmd";
 const static std::string COMMAND_SUCCESS_STRING     = "Success";
@@ -45,35 +47,41 @@ const static std::string ERROR_INFO_STRING          = "ErrorInfo";
 const static std::string TRUE_STRING                = "true";
 const static std::string FALSE_STRING               = "false";
 
-
 // ***********************
 //
-// eventID for future use. It allows to determine, if event should be sent or not, by comparing value to -1.
-inline void SendResponse( JsonSerializeObject& ser, int socketID, unsigned int /*eventID*/ )
+inline void             SendResponse                ( JsonSerializeObject & ser, int socketID, int eventID )
 {
-    ResponseEventPtr msg = std::make_shared<ResponseEvent>();
-    msg->Response = toWString( ser.GetString() );
-    msg->SocketID = socketID;
-    GetDefaultEventManager().QueueResponse( msg );
+    //Do not respond for requests with eventID < 0
+    if( eventID >= 0 )
+    {
+        ResponseEventPtr msg = std::make_shared< ResponseEvent >();
+        msg->Response = toWString( ser.GetString() );
+        msg->SocketID = socketID;
+        GetDefaultEventManager().QueueResponse( msg );
+    }
 }
 
 // ***********************
 //
 template< typename CommandType >
-inline void PrepareResponseTemplate( ISerializer& ser, CommandType commandType, unsigned int eventID, bool success )
+inline void             PrepareResponseTemplate     ( ISerializer & ser, CommandType commandType, Int32 eventID, bool success )
 {
     ser.SetAttribute( EVENT_ID_TYPE_STRING, toString( eventID ) );
     ser.SetAttribute( COMMAND_TYPE_STRING, toString( SerializationHelper::T2WString( commandType ) ) );
     if( success )
+    {
         ser.SetAttribute( COMMAND_SUCCESS_STRING, TRUE_STRING );
+    }
     else
+    {
         ser.SetAttribute( COMMAND_SUCCESS_STRING, FALSE_STRING );
+    }
 }
 
 // ***********************
 //
 template< typename CommandType >
-inline void ErrorResponseTemplate( ISerializer& ser, CommandType commandType, unsigned int eventID, const char* errorString )
+inline void             ErrorResponseTemplate       ( ISerializer & ser, CommandType commandType, int eventID, const char * errorString )
 {
     PrepareResponseTemplate( ser, commandType, eventID, false );
     ser.SetAttribute( ERROR_INFO_STRING, errorString );
@@ -82,7 +90,7 @@ inline void ErrorResponseTemplate( ISerializer& ser, CommandType commandType, un
 // ***********************
 //
 template< typename CommandType >
-inline void SendSimpleResponse( CommandType commandType, unsigned int eventID, int socketID, bool success )
+inline void             SendSimpleResponse          ( CommandType commandType, int eventID, int socketID, bool success )
 {
     JsonSerializeObject ser;
     PrepareResponseTemplate( ser, commandType, eventID, success );
@@ -93,7 +101,7 @@ inline void SendSimpleResponse( CommandType commandType, unsigned int eventID, i
 // ***********************
 //
 template< typename CommandType >
-inline void SendSimpleErrorResponse( CommandType commandType, unsigned int eventID, int socketID, const char* errorString )
+inline void             SendSimpleErrorResponse     ( CommandType commandType, int eventID, int socketID, const char * errorString )
 {
     JsonSerializeObject ser;
     ErrorResponseTemplate( ser, commandType, eventID, errorString );
