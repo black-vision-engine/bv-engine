@@ -55,6 +55,7 @@ void DefaultColorPlugin::SetPrevPlugin( IPluginPtr prev )
 
 	HelperPixelShaderChannel::CloneRenderContext( m_pixelShaderChannel, prev );
     m_pixelShaderChannel->GetRendererContext()->alphaCtx->blendEnabled = true;
+    m_pixelShaderChannel->GetRendererContext()->cullCtx->enabled = false;
 	//HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
 }
 
