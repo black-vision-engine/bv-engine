@@ -74,7 +74,7 @@ void                WidgetCounter::Serialize       ( ISerializer& ser ) const
 
 // ***********************
 //
-ISerializablePtr     WidgetCounter::Create          ( const IDeserializer& /*deser*/ )
+WidgetCounterPtr     WidgetCounter::Create          ( const IDeserializer& /*deser*/, bv::model::BasicNode * /*parent*/, bv::model:: ITimeEvaluatorPtr /*timeEvaluator*/ )
 {
     return nullptr;
 }

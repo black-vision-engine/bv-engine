@@ -15,7 +15,12 @@ public:
     virtual ~INodeLogicFactory();
 
 
-    virtual model::INodeLogicPtr        CreateLogic  ( model::BasicNodePtr /*logicParent*/, const IDeserializer & /*deser*/ ) { return nullptr; }
+    virtual model::INodeLogicPtr        CreateLogic  (  const std::string&              /*logicType*/,
+                                                        model::BasicNodePtr             /*logicParent*/,
+                                                        bv::model::ITimeEvaluatorPtr    /*timeEvaluator*/,
+                                                        const IDeserializer &           /*deser*/          
+                                                     )
+    { return nullptr; }
 };
 
 

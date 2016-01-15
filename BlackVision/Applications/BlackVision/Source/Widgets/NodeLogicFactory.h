@@ -12,7 +12,10 @@ class NodeLogicFactory : public INodeLogicFactory
 {
 private:
 public:
-    virtual model::INodeLogicPtr        CreateLogic  ( model::BasicNodePtr logicParent, const IDeserializer & deser ) override;
+    virtual model::INodeLogicPtr        CreateLogic  (  const std::string&              logicType,
+                                                        model::BasicNodePtr             logicParent,
+                                                        bv::model::ITimeEvaluatorPtr    timeEvaluator,
+                                                        const IDeserializer &           deser           ) override;
 };
 
 } //bv

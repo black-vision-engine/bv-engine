@@ -95,7 +95,7 @@ public:
 	static		CrawlerPtr Create	( bv::model::BasicNode * parent, const mathematics::RectConstPtr & view );
 
     virtual void                Serialize       ( ISerializer& ser ) const override;
-    static ISerializablePtr     Create          ( const IDeserializer & deser, bv::model::BasicNode * parentNode );
+    static CrawlerPtr           Create          ( const IDeserializer & deser, bv::model::BasicNode * parentNode );
 
     virtual bool                HandleEvent     ( IDeserializer& eventSer, ISerializer& response ) override;
 };

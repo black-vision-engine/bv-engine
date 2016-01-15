@@ -442,7 +442,7 @@ void                Crawler::Serialize       ( ISerializer& ser ) const
 
 // ***********************
 //
-ISerializablePtr    Crawler::Create          ( const IDeserializer & deser, bv::model::BasicNode * parent )
+CrawlerPtr      Crawler::Create          ( const IDeserializer & deser, bv::model::BasicNode * parent )
 {
     mathematics::RectPtr rect = std::make_shared<mathematics::Rect>();
 
