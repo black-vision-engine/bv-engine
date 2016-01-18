@@ -4,10 +4,10 @@
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
-#include "Rendering/Logic/FrameRendering/NodeEffect/DefaultEffectRenderLogic.h"
-#include "Rendering/Logic/FrameRendering/NodeEffect/AlphaMaskRenderLogic.h"
-#include "Rendering/Logic/FrameRendering/NodeEffect/NodeMaskRenderLogic.h"
-#include "Rendering/Logic/FrameRendering/NodeEffect/WireframeRenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/FrameRendering/NodeEffect/DefaultEffectRenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/FrameRendering/NodeEffect/AlphaMaskRenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/FrameRendering/NodeEffect/NodeMaskRenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/FrameRendering/NodeEffect/WireframeRenderLogic.h"
 
 
 namespace bv {
