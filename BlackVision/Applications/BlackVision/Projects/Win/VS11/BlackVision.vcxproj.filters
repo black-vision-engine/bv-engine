@@ -46,18 +46,6 @@
     <Filter Include="Rendering\Utils">
       <UniqueIdentifier>{4d2c2449-8f44-49bc-b3eb-1c514447afc6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Rendering\Logic\FullScreen">
-      <UniqueIdentifier>{354a2ed1-25a2-4402-a29b-a8a85a779c6b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Rendering\Logic\FullScreen\Impl">
-      <UniqueIdentifier>{66790ad3-2099-428d-804d-34b46c7724f5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Rendering\Logic\NodeEffect">
-      <UniqueIdentifier>{fa48ceda-49af-4e40-8b32-92c32f726474}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Rendering\Logic\NodeEffect\Impl">
-      <UniqueIdentifier>{480ddd9a-7331-40dc-8d11-2826d15b0810}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -168,38 +156,8 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffectRenderLogicSelector.cpp">
       <Filter>Rendering\Logic\FrameRendering</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffect.cpp">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectRenderLogic.cpp">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Utils\FullscreenUtils.cpp">
       <Filter>Rendering\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\OverwriteAlphaFullscreenEffect.cpp">
-      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\OverwriteChannelsFullscreenEffect.cpp">
-      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\MixChannelsFullscreenEffect.cpp">
-      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenVSShader.cpp">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\FullscreenRenderableEffect.cpp">
-      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\InterlaceFullscreenEffect.cpp">
-      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\BlitAlphaMaskFullscreenEffect.cpp">
-      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\BlitFullscreenEffect.cpp">
-      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\AlphaMaskRenderLogic.cpp">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
@@ -219,83 +177,14 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\VideoOutputRenderLogic.cpp">
       <Filter>Rendering\Logic\VideoOutputRendering</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\VideoOutputFullscreenEffect.cpp">
-      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.cpp">
       <Filter>TestAI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\MixChannelsRenderLogic.cpp">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectContext.cpp">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectData.cpp">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectTr.cpp">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\SimpleFullscreenEffect.cpp">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenRenderableEffectTr.cpp">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\CompositeFullscreenEffect.cpp">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectGraph.cpp">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectGraphNode.cpp">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\PostFullScreenEffectLogic.cpp">
-      <Filter>Rendering\Logic\NodeEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\PreFullScreenEffectLogic.cpp">
-      <Filter>Rendering\Logic\NodeEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\DefaultPostFullscreenLogic.cpp">
-      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\SplitChildrenPreFullscreenLogic.cpp">
-      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\NodeEffectLogic.cpp">
-      <Filter>Rendering\Logic\NodeEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\NodeEffectTr.cpp">
-      <Filter>Rendering\Logic\NodeEffect</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Utils\ShaderSourceProvider.cpp">
       <Filter>Rendering\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\AlphaMaskPreFullscreenEffectLogic.cpp">
-      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\DefaultPreFullscreenEffectLogic.cpp">
-      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\InterlacePreFullscreenEffectLogic.cpp">
-      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\NodeMaskPreFullscreenEffectLogic.cpp">
-      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\WireframePostFullscreenEffectLogic.cpp">
-      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\NodeMaskPostFullscreenEffectLogic.cpp">
-      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectFactory.cpp">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectTypes.cpp">
-      <Filter>Rendering\Logic\FullScreen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -412,38 +301,8 @@
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffectRenderLogicSelector.h">
       <Filter>Rendering\Logic\FrameRendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffect.h">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectRenderLogic.h">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Utils\FullscreenUtils.h">
       <Filter>Rendering\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\OverwriteAlphaFullscreenEffect.h">
-      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\OverwriteChannelsFullscreenEffect.h">
-      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\MixChannelsFullscreenEffect.h">
-      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenVSShader.h">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\FullscreenRenderableEffect.h">
-      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\InterlaceFullscreenEffect.h">
-      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\BlitAlphaMaskFullscreenEffect.h">
-      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\BlitFullscreenEffect.h">
-      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\AlphaMaskRenderLogic.h">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
@@ -463,83 +322,14 @@
     <ClInclude Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\VideoOutputRenderLogic.h">
       <Filter>Rendering\Logic\VideoOutputRendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\VideoOutputFullscreenEffect.h">
-      <Filter>Rendering\Logic\FullScreen\Impl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\TestAI\TestVideoOutputKeyboardHandler.h">
       <Filter>TestAI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\MixChannelsRenderLogic.h">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectContext.h">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectData.h">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectTr.h">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\SimpleFullscreenEffect.h">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenRenderableEffectTr.h">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\CompositeFullscreenEffect.h">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectGraph.h">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectGraphNode.h">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\PostFullScreenEffectLogic.h">
-      <Filter>Rendering\Logic\NodeEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\PreFullScreenEffectLogic.h">
-      <Filter>Rendering\Logic\NodeEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\DefaultPostFullscreenLogic.h">
-      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\SplitChildrenPreFullscreenLogic.h">
-      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\NodeEffectLogic.h">
-      <Filter>Rendering\Logic\NodeEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\NodeEffectTr.h">
-      <Filter>Rendering\Logic\NodeEffect</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Utils\ShaderSourceProvider.h">
       <Filter>Rendering\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\AlphaMaskPreFullscreenEffectLogic.h">
-      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\DefaultPreFullscreenEffectLogic.h">
-      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\InterlacePreFullscreenEffectLogic.h">
-      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\NodeMaskPreFullscreenEffectLogic.h">
-      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\WireframePostFullscreenEffectLogic.h">
-      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\NodeEffect\Impl\NodeMaskPostFullscreenEffectLogic.h">
-      <Filter>Rendering\Logic\NodeEffect\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectFactory.h">
-      <Filter>Rendering\Logic\FullScreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\FullscreenEffectTypes.h">
-      <Filter>Rendering\Logic\FullScreen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
