@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Rendering/Logic/FullScreen/FullscreenEffectTypes.h"
+#include "Engine/Graphics/Effects/FullScreen/FullscreenEffectTypes.h"
 
 
 namespace bv {

@@ -2,13 +2,13 @@
 
 #include <cassert>
 
-#include "Rendering/Logic/FullScreen/FullscreenEffectGraph.h"
+#include "Engine/Graphics/Effects/FullScreen/FullscreenEffectGraph.h"
 
-#include "Rendering/Utils/RenderTargetStackAllocator.h"
+#include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
-#include "Rendering/Logic/FullScreen/FullscreenEffectGraph.h"
+#include "Engine/Graphics/Effects/FullScreen/FullscreenEffectGraph.h"
 
 
 namespace bv {

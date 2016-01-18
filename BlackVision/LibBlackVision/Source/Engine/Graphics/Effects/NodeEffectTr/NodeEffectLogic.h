@@ -2,10 +2,10 @@
 
 #include "Engine/Interfaces/IValue.h"
 
-#include "Rendering/Logic/NodeEffect/PreFullScreenEffectLogic.h"
-#include "Rendering/Logic/NodeEffect/PostFullScreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffectTr/PreFullScreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffectTr/PostFullScreenEffectLogic.h"
 
-#include "Rendering/Logic/Fullscreen/FullscreenEffectTr.h"
+#include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectTr.h"
 
 
 namespace bv {

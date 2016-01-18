@@ -23,7 +23,7 @@ private:
 
 public:
 
-            FrameRenderLogic    ();
+            FrameRenderLogic    ( unsigned int width, unsigned int height, unsigned int numReadbackBuffersPerRT );
             ~FrameRenderLogic   ();
 
     void    SetCamera           ( Camera * cam );

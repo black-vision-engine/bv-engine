@@ -3,7 +3,7 @@
 #include <set>
 #include <vector>
 
-#include "Rendering/Logic/FullScreen/FullscreenEffectGraphNode.h"
+#include "Engine/Graphics/Effects/FullScreen/FullscreenEffectGraphNode.h"
 
 
 namespace bv {

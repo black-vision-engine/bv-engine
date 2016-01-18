@@ -6,24 +6,23 @@
 
 #include "Tools/Profiler/HerarchicalProfiler.h"
 
-#include "Rendering/Utils/OffscreenRenderLogic.h"
-#include "BVConfig.h"
+#include "Engine/Graphics/Effects/Utils/OffscreenRenderLogic.h"
 
 #include "BVGL.h"
 
-#include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
 
-#include "Rendering/Logic/VideoOutputRendering/VideoOutputRenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/VideoOutputRendering/VideoOutputRenderLogic.h"
 
 
 namespace bv {
 
 // *********************************
-//
-FrameRenderLogic::FrameRenderLogic     ()
+// DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffersPerRT()
+FrameRenderLogic::FrameRenderLogic     ( unsigned int width, unsigned int height, unsigned int numReadbackBuffersPerRT )
 {
-    m_offscreenRenderLogic = new OffscreenRenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.NumRedbackBuffersPerRT() );
-    m_videoOutputRenderLogic = new VideoOutputRenderLogic( DefaultConfig.DefaultHeight() );
+    m_offscreenRenderLogic = new OffscreenRenderLogic( width, height, numReadbackBuffersPerRT );
+    m_videoOutputRenderLogic = new VideoOutputRenderLogic( height );
     // DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() 
 /*
     m_customNodeRenderLogic.push_back( new DefaultEffectRenderLogic( this, m_offscreenRenderLogic ) );

@@ -2,9 +2,9 @@
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
-#include "Rendering/Utils/RenderLogicContext.h"
+#include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 
-#include "Rendering/Logic/FullScreen/Impl/BlitFullscreenEffect.h"
+#include "Engine/Graphics/Effects/FullScreen/Impl/BlitFullscreenEffect.h"
 
 
 namespace bv {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Rendering/Logic/NodeEffect/PostFullScreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffectTr/PostFullScreenEffectLogic.h"
 
 #include "Engine/Types/Values/TypedValues.h"
 

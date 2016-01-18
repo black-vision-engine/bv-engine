@@ -1,6 +1,6 @@
 #include "PreFullScreenEffectLogic.h"
 
-#include "Rendering/Utils/RenderLogicContext.h"
+#include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 
 
 namespace bv {

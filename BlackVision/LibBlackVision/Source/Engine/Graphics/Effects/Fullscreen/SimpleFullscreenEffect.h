@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Rendering/Logic/FullScreen/FullscreenEffectTr.h"
-#include "Rendering/Logic/FullScreen/FullscreenEffectData.h"
+#include "Engine/Graphics/Effects/FullScreen/FullscreenEffectTr.h"
+#include "Engine/Graphics/Effects/FullScreen/FullscreenEffectData.h"
 
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 #include "Engine/Interfaces/IValue.h"

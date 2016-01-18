@@ -6,7 +6,7 @@
 
 #include "Engine/Interfaces/IValue.h"
 
-#include "Rendering/Logic/FullScreen/FullscreenEffectContext.h"
+#include "Engine/Graphics/Effects/FullScreen/FullscreenEffectContext.h"
 
 
 namespace bv {

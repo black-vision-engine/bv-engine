@@ -1,7 +1,7 @@
 #include "SplitChildrenPreFullscreenLogic.h"
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
-#include "Rendering/Utils/RenderLogicContext.h"
+#include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 
 
 namespace bv {

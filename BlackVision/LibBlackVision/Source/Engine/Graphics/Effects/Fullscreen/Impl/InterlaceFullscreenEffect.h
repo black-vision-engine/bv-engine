@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Rendering/Logic/FullScreen/FullscreenEffect.h"
+#include "Engine/Graphics/Effects/FullScreen/FullscreenEffect.h"
 
 #include "Engine/Graphics/Resources/Texture2D.h"
 

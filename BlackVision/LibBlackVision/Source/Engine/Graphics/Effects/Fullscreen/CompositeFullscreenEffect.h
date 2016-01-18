@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Rendering/Logic/FullScreen/FullscreenEffectTr.h"
-#include "Rendering/Logic/FullScreen/FullscreenEffectGraphNode.h"
+#include "Engine/Graphics/Effects/FullScreen/FullscreenEffectTr.h"
+#include "Engine/Graphics/Effects/FullScreen/FullscreenEffectGraphNode.h"
 
 
 namespace bv {

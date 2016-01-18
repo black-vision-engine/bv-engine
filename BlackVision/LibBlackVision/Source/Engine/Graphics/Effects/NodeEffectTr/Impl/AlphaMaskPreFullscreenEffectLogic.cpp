@@ -2,7 +2,7 @@
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
-#include "Rendering/Utils/RenderLogicContext.h"
+#include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 
 #include "Engine/Types/Values/ValuesFactory.h"
 

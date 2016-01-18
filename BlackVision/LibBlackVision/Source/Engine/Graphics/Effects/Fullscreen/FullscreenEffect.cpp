@@ -11,9 +11,9 @@
 
 #include "Engine/Models/Builder/RendererStatesBuilder.h"
 
-#include "Rendering/Logic/FullScreen/Impl/FullscreenRenderableEffect.h"
+#include "Engine/Graphics/Effects/FullScreen/Impl/FullscreenRenderableEffect.h"
 
-#include "Rendering/Utils/FullscreenUtils.h"
+#include "Engine/Graphics/Effects/Utils/FullscreenUtils.h"
 
 #include "IO/FileIO.h"
 

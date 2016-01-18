@@ -2,9 +2,9 @@
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 
-#include "Rendering/Utils/RenderLogicContext.h"
+#include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 
-#include "Rendering/Logic/FullScreen/Impl/BlitAlphaMaskFullscreenEffect.h"
+#include "Engine/Graphics/Effects/FullScreen/Impl/BlitAlphaMaskFullscreenEffect.h"
 
 
 namespace bv {

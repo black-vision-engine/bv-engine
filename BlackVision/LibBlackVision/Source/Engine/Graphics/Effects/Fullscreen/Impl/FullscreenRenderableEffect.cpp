@@ -2,7 +2,7 @@
 
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"
 
-#include "Rendering/Logic/FullScreen/FullscreenVSShader.h"
+#include "Engine/Graphics/Effects/FullScreen/FullscreenVSShader.h"
 
 
 namespace bv {
