@@ -7,18 +7,49 @@ namespace bv {
 
 // **************************
 //
+FullscreenEffectTr *    CreateSimpleBlitFSE         ()
+{
+    return nullptr;
+}
+
+// **************************
+//
+FullscreenEffectTr *    CreateBlitWithAlphaFSE      ()
+{
+    return nullptr;
+}
+
+// **************************
+//
+FullscreenEffectTr *    CreateBlitWithAlphaMaskFSE  ()
+{
+    return nullptr;
+}
+
+// **************************
+//
+FullscreenEffectTr *    CreateInterlaceFSE          ()
+{
+    return nullptr;
+}
+
+namespace {
+}
+
+// **************************
+//
 FullscreenEffectTr *    CreateFullscreenEffect( FullscreenEffectTypes fseType )
 {
     switch( fseType )
     {
         case FullscreenEffectTypes::FET_SIMPLE_BLIT:
-            return nullptr;
+            return CreateSimpleBlitFSE();
         case FullscreenEffectTypes::FET_BLIT_WITH_ALPHA:
-            return nullptr;
+            return CreateBlitWithAlphaFSE();
         case FullscreenEffectTypes::FET_BLIT_WITH_ALPHA_MASK:
-            return nullptr;
+            return CreateBlitWithAlphaMaskFSE();
         case FullscreenEffectTypes::FET_INTERLACE:
-            return nullptr;
+            return CreateInterlaceFSE();
         default:
             assert( false );
     }
