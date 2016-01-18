@@ -1662,7 +1662,7 @@ model::BasicNodePtr	SimpleNodesFactory::CrawlerNodeTestScene( model::ITimeEvalua
 	//crawler->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
 	//crawler->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
 
-	crawler->SetSpeed( 0.4f );
+	crawler->SetSpeed( 0.1f );
 	crawler->SetInterspace( 0.4f );
 
 	crawler->Finalize();
@@ -2419,7 +2419,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCrawlerTestNode       ( model::IT
     crawler->AddMessage( L"Message 5" );
     crawler->AddMessage( L"Message 6" );
 
-	crawler->SetSpeed( 400.0f );
+	crawler->SetSpeed( 400000.0f );
 	crawler->SetInterspace( 1.0f );
 
 	crawler->Finalize();
