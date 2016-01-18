@@ -10,6 +10,42 @@ namespace bv { namespace model
 ShiftReplicationModifier::ShiftReplicationModifier()
 {}
 
+// ***********************
+//
+void                            ShiftReplicationModifier::Serialize       ( ISerializer& ser ) const
+{
+    ser.EnterArray( "replicatorModifier" );
+        ser.SetAttribute( "type", "shiftReplicationModifier" );
+
+        ser.EnterArray( "paramShifts" );
+        for( auto& shift : m_paramsShifts )
+        {
+            ser.EnterChild( "paramShift" );
+                ser.SetAttribute( "pluginName", shift.first.first );
+                ser.SetAttribute( "paramName", shift.first.second );
+
+                ser.EnterChild( "paramDelta" );
+                    ser.SetAttribute( "startTime", SerializationHelper::T2String( shift.second.startTime ) );
+                    ser.SetAttribute( "deltaTime", SerializationHelper::T2String( shift.second.deltaTime ) );
+
+                ser.ExitChild();
+
+            ser.ExitChild();
+        }
+        ser.ExitChild();
+
+
+    ser.ExitChild();
+}
+
+// ***********************
+//
+ShiftReplicationModifierPtr     ShiftReplicationModifier::Create          ( const IDeserializer& /*deser*/ )
+{
+    auto shiftModifier = ShiftReplicationModifier::Create();
+    return shiftModifier;
+}
+
 // *******************************
 //
 void                            ShiftReplicationModifier::AddParamShift( const std::string & pluginName, const std::string & paramName, const ParamValDelta & shift )

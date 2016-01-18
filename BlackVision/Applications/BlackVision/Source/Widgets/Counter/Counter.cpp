@@ -74,9 +74,20 @@ void                WidgetCounter::Serialize       ( ISerializer& ser ) const
 
 // ***********************
 //
-WidgetCounterPtr     WidgetCounter::Create          ( const IDeserializer& /*deser*/, bv::model::BasicNode * /*parent*/, bv::model:: ITimeEvaluatorPtr /*timeEvaluator*/ )
+WidgetCounterPtr     WidgetCounter::Create          ( const IDeserializer& deser, bv::model::BasicNode * parent, bv::model:: ITimeEvaluatorPtr timeEvaluator )
 {
-    return nullptr;
+    auto newCounter = WidgetCounter::Create( parent, timeEvaluator );
+    
+    if( deser.EnterChild( "param" ) )
+    {
+        auto oldParam = std::static_pointer_cast<model::ParamFloat>( newCounter->GetValueParam() );
+        auto newParam = std::static_pointer_cast<model::ParamFloat>( model::AbstractModelParameter::Create( deser ) );
+        
+        newParam->SetTimeEvaluator( oldParam->GetTimeEvaluator() );
+        newParam->AccessInterpolator() = oldParam->AccessInterpolator();
+    }
+
+    return newCounter;
 }
 
 // ***********************

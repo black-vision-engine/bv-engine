@@ -1,10 +1,12 @@
 #pragma once
+
 #include "Engine/Models/BasicNode.h"
+#include "Serialization/ISerializable.h"
 
 namespace bv { namespace model
 {
 
-class IReplicationModifier
+class IReplicationModifier  : public ISerializable
 {
 public:
 

@@ -2405,12 +2405,19 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCrawlerTestNode       ( model::IT
 	node->SetLogic( crawler );
 
     
-    crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy1", nodeTranslation, color, L"Teskt1", "fonts/StarWars.ttf" ) );
-	crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy2", nodeTranslation, color, L"Teskt2", "fonts/StarWars.ttf" ) );
-	crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy3", nodeTranslation, color, L"Teskt3", "fonts/StarWars.ttf" ) );
-	crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy4", nodeTranslation, color, L"Teskt4", "fonts/StarWars.ttf" ) );
-	crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy5", nodeTranslation, color, L"Teskt5", "fonts/StarWars.ttf" ) );
-	crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy6", nodeTranslation, color, L"Teskt6", "fonts/StarWars.ttf" ) );
+    crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt1", "fonts/StarWars.ttf" ) );
+	//crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy2", nodeTranslation, color, L"Teskt2", "fonts/StarWars.ttf" ) );
+	//crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy3", nodeTranslation, color, L"Teskt3", "fonts/StarWars.ttf" ) );
+	//crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy4", nodeTranslation, color, L"Teskt4", "fonts/StarWars.ttf" ) );
+	//crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy5", nodeTranslation, color, L"Teskt5", "fonts/StarWars.ttf" ) );
+	//crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy6", nodeTranslation, color, L"Teskt6", "fonts/StarWars.ttf" ) );
+
+    crawler->AddMessage( L"Message 1" );
+    crawler->AddMessage( L"Message 2" );
+    crawler->AddMessage( L"Message 3" );
+    crawler->AddMessage( L"Message 4" );
+    crawler->AddMessage( L"Message 5" );
+    crawler->AddMessage( L"Message 6" );
 
 	crawler->SetSpeed( 400.0f );
 	crawler->SetInterspace( 1.0f );

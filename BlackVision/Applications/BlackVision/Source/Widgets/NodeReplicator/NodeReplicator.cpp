@@ -74,6 +74,8 @@ void                NodeReplicator::Serialize       ( ISerializer& ser ) const
         ser.SetAttribute( "type", "replicator" );
         ser.SetAttribute( "numRepetitions", SerializationHelper::T2String( m_repNum ) );
 
+        m_repModifier->Serialize( ser );
+
     ser.ExitChild();
 }
 
@@ -81,6 +83,11 @@ void                NodeReplicator::Serialize       ( ISerializer& ser ) const
 //
 NodeReplicatorPtr    NodeReplicator::Create          ( const IDeserializer & /*deser*/, bv::model::BasicNode * /*parentNode*/ )
 {
+    //SizeType repetitions = SerializationHelper::String2T( deser.GetAttribute( "numRepetitions" ), 0 );
+    
+    
+    //auto replicator = NodeReplicator::Create( 
+
     return nullptr;
 }
 

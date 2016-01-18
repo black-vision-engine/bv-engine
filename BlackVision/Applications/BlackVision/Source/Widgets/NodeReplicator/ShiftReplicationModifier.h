@@ -27,6 +27,9 @@ public:
 
     static ShiftReplicationModifierPtr      Create  ();
 
+    virtual void                            Serialize           ( ISerializer& ser ) const override;
+    static ShiftReplicationModifierPtr      Create              ( const IDeserializer& deser );
+
 private:
 
     void                                    ApplyTranslationDelta ( const ParamValDelta & delta, const BasicNodePtr & node ) const;
@@ -37,6 +40,7 @@ private:
 
     typedef std::map< std::pair< std::string, std::string >, ParamValDelta > ParamsShiftsMapType;
     ParamsShiftsMapType     m_paramsShifts;
+
 };
 
 } // model
