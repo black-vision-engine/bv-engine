@@ -384,7 +384,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         if( scene )
         {
             m_appLogic->GetBVProject()->GetProjectEditor()->AddScene( scene );
-            SendSimpleResponse( command, projectEvent->EventID, senderID, false );
+            SendSimpleResponse( command, projectEvent->EventID, senderID, true );
         }
         else
         {
