@@ -536,6 +536,10 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::ShadowEffectTestScene( pluginsManager, timeline );
     }
+    else if( scene == "CRAWLER_TEST_SCENE" )
+    {
+        node = TestScenesFactory::CrawlerNodeTestScene( pluginsManager, timeline );
+    }
     else if( scene == "REPLICATOR_TEST_SCENE" )
     {
         node = TestScenesFactory::NodeReplicatorTestScene( pluginsManager, timeline );
@@ -624,6 +628,12 @@ model::BasicNodePtr     TestScenesFactory::ShadowEffectTestScene  ( const model:
     return SimpleNodesFactory::CreateShadowTest( timeEvaluator );
 }
 
+model::BasicNodePtr     TestScenesFactory::CrawlerNodeTestScene   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { pluginsManager; }
+    return SimpleNodesFactory::CrawlerNodeTestScene( timeEvaluator );
+}
+
 // *****************************
 //
 model::BasicNodePtr     TestScenesFactory::NodeReplicatorTestScene  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
@@ -638,7 +648,7 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene        ( const mode
 {
     { pluginsManager; } // FIXME: suppress unused warning
     //return SimpleNodesFactory::CreateHeightMapNode( timelineManager, timeEvaluator );
-    
+    //return SimpleNodesFactory::CreateCrawlerNode( timeEvaluator );
     auto node0 = SimpleNodesFactory::CreateBasicShapesTestNode( timeEvaluator );
     //auto node0 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
     //auto node1 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );

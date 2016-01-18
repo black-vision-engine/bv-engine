@@ -56,6 +56,7 @@ public:
     static  model::BasicNodePtr     GlobalEffect05                  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     LightScatteringTestScene        ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     ShadowEffectTestScene           ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     CrawlerNodeTestScene            ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     NewModelTestScene               ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     OlafTestScene                   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreedDeprecatedTestScene        ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
@@ -65,7 +66,7 @@ public:
     static  model::BasicNodePtr     CreedPieChartTestScene          ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreedPrismBugTestScene          ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreedCosineDemoScene            ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
-    static  model::BasicNodePtr      NodeReplicatorTestScene        ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
+    static  model::BasicNodePtr     NodeReplicatorTestScene        ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator );
     static  model::BasicNodePtr     CreedBasicGeometryTestScene     ( model::ITimeEvaluatorPtr timeEvaluator );
 
     static  model::BasicNodePtr     SimpeTextureTestScene           ();

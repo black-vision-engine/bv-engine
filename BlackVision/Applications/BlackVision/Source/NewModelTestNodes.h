@@ -55,7 +55,7 @@ public:
 
     static model::BasicNodePtr  CreateHeightMapNode         ( model::ITimeEvaluatorPtr timeEvaluator );
 
-	static model::BasicNodePtr	CreateCrawlerNode           ( model::ITimeEvaluatorPtr timeEvaluator );
+	static model::BasicNodePtr	CrawlerNodeTestScene        ( model::ITimeEvaluatorPtr timeEvaluator );
 
 	static model::BasicNodePtr	CreateBasicShapesTestNode   ( model::ITimeEvaluatorPtr timeEvaluator );
 	static model::BasicNodePtr	CreateBasicShapeShow        ( model::ITimeEvaluatorPtr timeEvaluator, const std::string& uid, glm::vec3 translation, std::string = "textures/sand.jpg" );
