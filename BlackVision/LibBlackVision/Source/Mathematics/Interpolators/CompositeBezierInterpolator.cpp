@@ -24,7 +24,7 @@ std::pair< WrapMethod, const char* > wm2s[] =
 , std::make_pair( WrapMethod::clamp, "" ) };
 
 template<> std::string T2String< WrapMethod >( const WrapMethod& wm )       { return Enum2String( wm2s, wm ); }
-template<> WrapMethod String2T( std::string s, const WrapMethod& default )
+template<> WrapMethod String2T( const std::string & s, const WrapMethod& default )
 {
     if( s == "" ) 
         return default; 
@@ -50,7 +50,7 @@ std::pair< CurveType, const char* > ct2s[] =
 
 
 template<> std::string T2String< CurveType >( const CurveType& ct )         { return Enum2String( ct2s, ct ); }
-template<> CurveType String2T( std::string s, const CurveType& default )
+template<> CurveType String2T( const std::string & s, const CurveType& default )
 {
     if( s == "" ) 
         return default; 

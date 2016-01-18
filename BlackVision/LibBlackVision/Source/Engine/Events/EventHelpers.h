@@ -1,10 +1,8 @@
 #pragma once
 
-#include "Engine/Models/Plugins/PluginUtils.h"
 #include "Engine/Types/Enums.h"
+#include "Serialization/SerializationHelper.h"
 
-#include <cstdlib>
-#include <string>
 
 namespace 
 {
@@ -147,10 +145,34 @@ namespace SerializationHelper
     // ***********************
     //
     template< typename T >
-    T WString2T( const std::wstring& s, const T& defaultVal )
+    inline T               WString2T       ( const std::wstring & s, const T & defaultVal )
     {
         assert( !"Implement spetialization" );
         return T;
+    }
+
+    // ***********************
+    //
+    template<>
+    inline int             WString2T       ( const std::wstring & s, const int & defaultVal )
+    {
+        return SerializationHelper::String2T( toString( s ), defaultVal );
+    }
+    
+    // ***********************
+    //
+    template<>
+    inline unsigned int    WString2T       ( const std::wstring & s, const unsigned int & defaultVal )
+    {
+        return SerializationHelper::String2T( toString( s ), defaultVal );
+    }
+
+    // ***********************
+    //
+    template<>
+    inline float           WString2T       ( const std::wstring & s, const float & defaultVal )
+    {
+        return SerializationHelper::String2T( toString( s ), defaultVal );
     }
 
     // ***********************
@@ -160,62 +182,6 @@ namespace SerializationHelper
     {
         assert( !"Implement spetialization" );
         return EMPTY_WSTRING;
-    }
-
-    // ***********************
-    //
-    template<>
-    inline int WString2T( const std::wstring& s, const int& defaultVal )
-    {
-        auto str = toString( s );
-        
-        char* end = nullptr;
-        int result = strtol( str.c_str(), &end, 10 );
-
-        // We reached end of string and it wasn't empty.
-        if( !*end && end != str.c_str() )
-            return result;
-        return defaultVal;
-    }
-
-    // ***********************
-    //
-    template<>
-    inline unsigned int WString2T( const std::wstring& s, const unsigned int& defaultVal )
-    {
-        auto str = toString( s );
-        
-        char* end = nullptr;
-        int result = strtoul( str.c_str(), &end, 10 );
-
-        // We reached end of string and it wasn't empty.
-        if( !*end && end != str.c_str() )
-            return result;
-        return defaultVal;
-    }
-
-    // ***********************
-    //
-    template<>
-    inline double WString2T( const std::wstring& s, const double& defaultVal )
-    {
-        auto str = toString( s );
-
-        char* end = nullptr;
-        double result = strtod( str.c_str(), &end );
-
-        // We reached end of string and it wasn't empty.
-        if( !*end && end != str.c_str() )
-            return result;
-        return defaultVal;
-    }
-
-    // ***********************
-    //
-    template<>
-    inline float WString2T( const std::wstring& s, const float& defaultVal )
-    {
-        return static_cast<float>( WString2T<double>( s, defaultVal ) );
     }
 
 } // SerializationHelper

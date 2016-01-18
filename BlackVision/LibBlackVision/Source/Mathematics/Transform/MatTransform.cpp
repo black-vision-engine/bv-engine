@@ -21,7 +21,19 @@ std::pair< TransformKind, const char* > tk2s[] = {
 
 template<> std::string T2String( const TransformKind& tk ) { return Enum2String( tk2s, tk ); }
 
-template<> Expected< TransformKind > String2T( std::string s ) { return String2T( tk2s, s ); }
+// *************************************
+//
+template<> TransformKind String2T( const std::string & s, const TransformKind & defaultVal )
+{
+    auto transform = String2T( tk2s, s );
+    if( transform == TransformKind::invalid )
+    {
+        return defaultVal;
+    }
+    return transform;
+}
+
+template<> Expected< TransformKind > String2T( const std::string & s ) { return String2T( tk2s, s ); }
 
 } // SerializationHelper
 

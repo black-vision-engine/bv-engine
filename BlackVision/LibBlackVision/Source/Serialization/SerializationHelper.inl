@@ -36,10 +36,10 @@ T String2T( const std::pair< T, const char* > t2s[], const std::string& s )
 std::vector<std::string> split(const std::string &s, char delim);
 
 template< typename T >
-T _String2T( std::string s );
+T _String2T( const std::string & s );
 
 template< typename T, typename U >
-std::pair< T, U > String2Pair( std::string s )
+std::pair< T, U > String2Pair( const std::string & s )
 {
     auto ss = split( s, ',' );
     assert( ss.size() == 2 );

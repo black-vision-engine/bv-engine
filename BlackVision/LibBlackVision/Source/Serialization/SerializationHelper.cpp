@@ -1,8 +1,5 @@
 #include "SerializationHelper.h"
-#include "SerializationHelper.inl"
 
-
-#include <vector>
 #include <sstream>
 
 namespace bv {
@@ -28,7 +25,7 @@ inline std::vector<std::string> _split(const std::string &s, char delim)
 
 std::vector<std::string> split(const std::string &s, char delim ) { return _split( s, delim ); }
 
-glm::vec4               String2Vec4( std::string s )
+glm::vec4               String2Vec4( const std::string & s )
 {
     auto vals = SerializationHelper::_split( s, ',' );
     assert( vals.size() == 4 );
@@ -38,7 +35,7 @@ glm::vec4               String2Vec4( std::string s )
         std::stof( vals[3] ) );
 }
 
-glm::vec3               String2Vec3( std::string s )
+glm::vec3               String2Vec3( const std::string & s )
 {
     auto vals = SerializationHelper::_split( s, ',' );
     assert( vals.size() == 3 );
@@ -47,7 +44,7 @@ glm::vec3               String2Vec3( std::string s )
         std::stof( vals[2] ) );
 }
 
-glm::vec2               String2Vec2( std::string s )
+glm::vec2               String2Vec2( const std::string & s )
 {
     auto vals = SerializationHelper::_split( s, ',' );
     assert( vals.size() == 2 );
@@ -55,93 +52,149 @@ glm::vec2               String2Vec2( std::string s )
         std::stof( vals[1] ) );
 }
 
-template<> float _String2T( std::string s ) { return std::stof( s ); }
-template<> bool _String2T( std::string s ) { if( s == "true" ) return true; else if( s == "false" ) return false; assert( false ); return false; } // FIXME error handling
-template<> unsigned int _String2T( std::string s ) { return std::stoul( s ); }
-template<> int _String2T( std::string s ) { return std::stoi( s ); }
-template<> UInt64 _String2T( std::string s ) { return std::stoull( s ); }
-template<> Int64 _String2T( std::string s ) { return std::stoll( s ); }
-template<> glm::vec2 _String2T( std::string s ) { return String2Vec2( s ); }
-template<> glm::vec3 _String2T( std::string s ) { return String2Vec3( s ); }
-template<> glm::vec4 _String2T( std::string s ) { return String2Vec4( s ); }
+template<> Float32 _String2T( const std::string & s ) { return std::stof( s ); }
+template<> bool _String2T( const std::string & s ) { if( s == "true" ) return true; else if( s == "false" ) return false; assert( false ); return false; } // FIXME error handling
+template<> UInt32 _String2T( const std::string & s ) { return std::stoul( s ); }
+template<> Int32 _String2T( const std::string & s ) { return std::stoi( s ); }
+template<> UInt64 _String2T( const std::string & s ) { return std::stoull( s ); }
+template<> Int64 _String2T( const std::string & s ) { return std::stoll( s ); }
+template<> glm::vec2 _String2T( const std::string & s ) { return String2Vec2( s ); }
+template<> glm::vec3 _String2T( const std::string & s ) { return String2Vec3( s ); }
+template<> glm::vec4 _String2T( const std::string & s ) { return String2Vec4( s ); }
+
 
 // FIXME: are those three needed?
-template<> double _String2T( std::string s ) { return std::stod( s ); }
-template<> std::string _String2T( std::string s ) { return s; }
-template<> std::wstring _String2T( std::string s ) { return std::wstring( s.begin(), s.end() ); }
+template<> double _String2T( const std::string & s ) { return std::stod( s ); }
+template<> std::string _String2T( const std::string & s ) { return s; }
+template<> std::wstring _String2T( const std::string & s ) { return std::wstring( s.begin(), s.end() ); }
 
-template<> unsigned int String2T( std::string s, const unsigned int& default ) 
+
+// *************************************
+//
+template<> 
+UInt32       String2T        ( const std::string & s, const UInt32 & defaultVal ) 
 { 
-    if( s == "" ) 
-        return default; 
-    else 
-        return _String2T< unsigned int >( s ); 
+    char * end = nullptr;
+    auto ret = strtoul( s.c_str(), &end, 10 );
+
+    if( !*end && end != s.c_str() )
+    {
+        if ( ret < std::numeric_limits< UInt32 >::min() )
+            return std::numeric_limits< UInt32 >::min();
+
+        if ( ret > std::numeric_limits< UInt32 >::max() ) 
+            return std::numeric_limits< UInt32 >::max();
+
+        return ( UInt32 )ret;
+    }
+
+    return defaultVal;
 }
 
-template<> int String2T( std::string s, const int& default ) 
+// *************************************
+//
+template<> 
+Int32       String2T        ( const std::string & s, const Int32 & defaultVal ) 
 { 
-    if( s == "" ) 
-        return default; 
-    else 
-        return _String2T< int >( s ); 
+    char * end = nullptr;
+    auto ret = strtol( s.c_str(), &end, 10 );
+
+    if( !*end && end != s.c_str() )
+    {
+        if ( ret < std::numeric_limits< Int32 >::min() )
+            return std::numeric_limits< Int32 >::min();
+
+        if ( ret > std::numeric_limits< Int32 >::max() ) 
+            return std::numeric_limits< Int32 >::max();
+
+        return ( Int32 )ret;
+    }
+
+    return defaultVal;
 }
 
-template<> UInt64 String2T( std::string s, const UInt64& default ) 
+// *************************************
+//
+template<> 
+Float32       String2T        ( const std::string & s, const Float32 & defaultVal ) 
 { 
-    if( s == "" ) 
-        return default; 
-    else 
-        return _String2T< unsigned int >( s ); 
+    char * end = nullptr;
+    auto ret = strtod( s.c_str(), &end );
+
+    if( !*end && end != s.c_str() )
+    {
+        if ( ret < std::numeric_limits< Float32 >::min() )
+            return std::numeric_limits< Float32 >::min();
+
+        if ( ret > std::numeric_limits< Float32 >::max() ) 
+            return std::numeric_limits< Float32 >::max();
+
+        return ( Float32 )ret;
+    }
+
+    return defaultVal;
 }
 
-template<> Int64 String2T( std::string s, const Int64& default ) 
+// *************************************
+//
+template<> 
+bool        String2T    ( const std::string & s, const bool & defaultVal ) 
 { 
-    if( s == "" ) 
-        return default; 
-    else 
-        return _String2T< int >( s ); 
-}
-
-template<> float String2T( std::string s, const float& default ) 
-{ 
-    if( s == "" ) 
-        return default; 
-    else 
-        return _String2T< float >( s ); 
-}
-
-template<> bool String2T( std::string s, const bool& default ) 
-{ 
-    if( s == "" ) 
-        return default; 
+    if( s == "true" || s == "1" )
+        return true;
+    else if( s == "false" || s == "0" )
+        return false;
     else
-        return _String2T< bool >( s );
+        return defaultVal;
 }
 
-template<> glm::vec2 String2T( std::string s, const glm::vec2& default )
+// *************************************
+//
+template<> 
+glm::vec2   String2T    ( const std::string & s, const glm::vec2 & defaultVal )
 {
-    if( s == "" )
-        return default;
-    else
-        return String2Vec2( s );
+    auto vals = SerializationHelper::_split( s, ',' );
+    if( vals.size() == 2 )
+    {
+        return glm::vec2( String2T< Float32 >( vals[ 0 ], defaultVal.x ), 
+                          String2T< Float32 >( vals[ 1 ], defaultVal.y ) );
+    }
+    return defaultVal;
 }
 
-template<> glm::vec3 String2T( std::string s, const glm::vec3& default )
+// *************************************
+//
+template<> 
+glm::vec3   String2T    ( const std::string & s, const glm::vec3 & defaultVal )
 {
-    if( s == "" )
-        return default;
-    else
-        return String2Vec3( s );
+    auto vals = SerializationHelper::_split( s, ',' );
+    if( vals.size() == 3 )
+    {
+        return glm::vec3( String2T< Float32 >( vals[ 0 ], defaultVal.x ), 
+                          String2T< Float32 >( vals[ 1 ], defaultVal.y ),
+                          String2T< Float32 >( vals[ 2 ], defaultVal.z ) );
+    }
+    return defaultVal;
 }
 
-template<> glm::vec4 String2T( std::string s, const glm::vec4& default )
+// *************************************
+//
+template<> 
+glm::vec4   String2T    ( const std::string & s, const glm::vec4 & defaultVal )
 {
-    if( s == "" )
-        return default;
-    else
-        return String2Vec4( s );
+    auto vals = SerializationHelper::_split( s, ',' );
+    if( vals.size() == 4 )
+    {
+        return glm::vec4( String2T< Float32 >( vals[ 0 ], defaultVal.x ), 
+                          String2T< Float32 >( vals[ 1 ], defaultVal.y ),
+                          String2T< Float32 >( vals[ 2 ], defaultVal.z ),
+                          String2T< Float32 >( vals[ 3 ], defaultVal.w ) );
+    }
+    return defaultVal;
 }
 
+// *************************************
+//
 template< typename T >
 std::string T2String( const T& t )
 {
