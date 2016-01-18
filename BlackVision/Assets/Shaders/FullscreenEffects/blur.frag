@@ -12,11 +12,17 @@ uniform int             vertical;
 
 void pass0()
 {
-    float pixelW = 1.0 / textureSize.x;
+    float blurSizeFloor = floor( blurSize );
+    float blurSizeCeil = ceil( blurSize );
+    float subPixelWeight = blurSize - blurSizeFloor;
+    int t = int( blurSizeFloor );
 
-    vec4 sum = vec4( 0, 0, 0, 0 );
+    float pixelW = 1.0 / textureSize.x;
+    
+    vec4 sum = texture( Tex0, uvCoord + vec2( pixelW * blurSizeCeil, 0 ) ) * subPixelWeight;
+    
     float weight = 1.0;
-    for( int i = int( -blurSize ); i <= int( blurSize ); ++i )
+    for( int i = -t; i <= t; ++i )
     {
         // if( ( int( blurSize ) - abs( i ) )  < 2 )
         // {
@@ -32,17 +38,23 @@ void pass0()
     }
 
     sum /= ( blurSize * 2.0 + 1.0 );
-
-    FragColor = sum;
+    FragColor = sum;  
 }
 
 void pass1()
 {
+    float blurSizeFloor = floor( blurSize );
+    float blurSizeCeil = ceil( blurSize );
+    float subPixelWeight = blurSize - blurSizeFloor;
+    int t = int( blurSizeFloor );
+
     float pixelH = 1.0 / textureSize.y;
 
-    vec4 sum = vec4( 0, 0, 0, 0 );
+    vec4 sum = texture( Tex0, uvCoord + vec2( 0, pixelH * blurSizeCeil ) ) * subPixelWeight;
+    
     float weight = 1.0;
-    for( int i = int( -blurSize ); i <= int( blurSize ); ++i )
+    
+    for( int i = -t; i <= t; ++i )
     {
         // if( ( int( blurSize ) - abs( i ) )  < 2 )
         // {
@@ -58,7 +70,6 @@ void pass1()
     }
 
     sum /= ( blurSize * 2.0 + 1.0 );
-
     FragColor = sum;
 }
 
@@ -77,3 +88,4 @@ void main()
         break;
     }
 }
+

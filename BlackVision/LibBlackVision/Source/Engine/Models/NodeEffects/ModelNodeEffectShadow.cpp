@@ -14,7 +14,7 @@ ModelNodeEffectShadow::ModelNodeEffectShadow( ITimeEvaluatorPtr timeEvaluator )
 	//, m_blurSizeVal( 0.0f )
 	, m_colorVal( glm::vec4( 1.f, 0.f, 0.f, 1.f ) ) // Test params values for glow
 	, m_shiftVal( glm::vec2( 0.f, 0.f ) )
-	, m_blurSizeVal( 5.0f )
+	, m_blurSizeVal( 5.5f )
 { 
 	auto colorEval = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", timeEvaluator );
 	auto shiftEval = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "shift", timeEvaluator );

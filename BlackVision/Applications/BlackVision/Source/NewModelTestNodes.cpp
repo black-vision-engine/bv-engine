@@ -1570,7 +1570,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::ITimeEvaluatorPt
     auto param = plugin->GetParameter( "simple_transform" );
 
     //SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.f, 0.f ) );
-	//SetParameterTranslation( param, 0, 10.0f, glm::vec3( 0.005f, 0.f, 0.f ) );
+	//SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.1f, 0.f, 0.f ) );
 
 	//SetParameterScale ( param, 0, 0.0f, glm::vec3( 2.f, 2.f, 1.f ) );
 	//SetParameterScale ( param, 0, 30.0f, glm::vec3( 12.f, 12.f, 1.f ) );
@@ -1586,13 +1586,13 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::ITimeEvaluatorPt
 	node->GetPlugin( "text" )->GetParameter( "outlineColor" )->SetTimeEvaluator( timeEvaluator );
 
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
-	SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 0.0 ), glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ) );
+	//SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 0.0 ), glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ) );
 	//SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 10.0 ), glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ) );
 	//SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 10.0 ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ) );
 
     SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
 
-	SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
+	//SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
 	node->GetPlugin( "text" )->GetParameter( "maxTextLenght" )->SetTimeEvaluator( timeEvaluator );
     //SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 0.0 ), 0.2f );
 	//SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 5.0 ), 0.1f );
@@ -1610,7 +1610,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::ITimeEvaluatorPt
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AV::11A-AAAA\nBBBBCCCC\nDDD333DD88\nAAAAAAAA\nB3BBCCCC\nDDDD888DDD" );
 //    model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAABBBBCCCCDDDD" );
 	//model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"AV::11A-AAAABBBBCCCCDDD333DD88AAAAAAAAB3BBCCCCDDDD888DDD" );
-    SetParameter( node->GetPlugin("text")->GetParameter( "text" ), 0.0, std::wstring( L"123456789" ) );
+    SetParameter( node->GetPlugin("text")->GetParameter( "text" ), 0.0, std::wstring( L"1234567890000000000000000000000000000000000" ) );
 
     if( useAlphaMask )
     {
