@@ -26,7 +26,7 @@ std::string T2String< bv::NodeEffectType >( const bv::NodeEffectType& t )
 }
 
 template<>
-bv::NodeEffectType String2T( std::string s, const bv::NodeEffectType& defaultType )
+bv::NodeEffectType String2T( const std::string & s, const bv::NodeEffectType& defaultType )
 {
     auto effectType = String2T( ne2s, s );
     if( effectType == NodeEffectType::NET_TOTAL )

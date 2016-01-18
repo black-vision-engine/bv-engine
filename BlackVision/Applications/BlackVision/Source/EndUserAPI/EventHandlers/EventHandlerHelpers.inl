@@ -46,13 +46,14 @@ const static std::string COMMAND_SUCCESS_STRING     = "Success";
 const static std::string ERROR_INFO_STRING          = "ErrorInfo";
 const static std::string TRUE_STRING                = "true";
 const static std::string FALSE_STRING               = "false";
+const static int         NO_RESPONSE_EVENT_ID       = -1;
 
 // ***********************
 //
 inline void             SendResponse                ( JsonSerializeObject & ser, int socketID, int eventID )
 {
-    //Do not respond for requests with eventID < 0
-    if( eventID >= 0 )
+    //Do not respond for requests with eventID == NO_RESPONSE_EVENT_ID
+    if( eventID != NO_RESPONSE_EVENT_ID )
     {
         ResponseEventPtr msg = std::make_shared< ResponseEvent >();
         msg->Response = toWString( ser.GetString() );

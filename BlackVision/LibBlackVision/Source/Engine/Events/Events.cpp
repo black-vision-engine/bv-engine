@@ -120,6 +120,7 @@ template<> const std::wstring& T2WString        ( LoadAssetEvent::Command t )   
 // ParamKeyEvent
 // ========================================================================= //
 const std::wstring PARAM_NAME_WSTRING           = L"ParamName";
+const std::wstring PARAM_SUB_NAME_WSTRING           = L"ParamSubName";
 const std::wstring PARAM_VALUE_WSTRING          = L"ParamValue";
 const std::wstring KEY_TIME_WSTRING             = L"Time";
 const std::wstring PARAM_TARGET_TYPE_WSTRING    = L"Target";
@@ -898,6 +899,7 @@ void                ParamKeyEvent::Serialize            ( ISerializer& ser ) con
     ser.SetAttribute( SerializationHelper::NODE_NAME_WSTRING, toWString( NodeName ) );
     ser.SetAttribute( SerializationHelper::PLUGIN_NAME_WSTRING, toWString( PluginName ) );
     ser.SetAttribute( SerializationHelper::PARAM_NAME_WSTRING, toWString( ParamName ) );
+    ser.SetAttribute( SerializationHelper::PARAM_SUB_NAME_WSTRING, toWString( ParamSubName ) );
     ser.SetAttribute( SerializationHelper::PARAM_VALUE_WSTRING, Value );
     ser.SetAttribute( SerializationHelper::KEY_TIME_WSTRING, std::to_wstring( Time ) );
     ser.SetAttribute( SerializationHelper::COMMAND_WSTRING, SerializationHelper::T2WString( ParamCommand ) );
@@ -915,6 +917,7 @@ IEventPtr           ParamKeyEvent::Create          ( IDeserializer& deser )
         newEvent->PluginName        = toString( deser.GetAttribute( SerializationHelper::PLUGIN_NAME_WSTRING ) );
         newEvent->NodeName          = toString( deser.GetAttribute( SerializationHelper::NODE_NAME_WSTRING ) );
         newEvent->ParamName         = toString( deser.GetAttribute( SerializationHelper::PARAM_NAME_WSTRING ) );
+        newEvent->ParamSubName      = toString( deser.GetAttribute( SerializationHelper::PARAM_SUB_NAME_WSTRING ) );
         newEvent->Value             = deser.GetAttribute( SerializationHelper::PARAM_VALUE_WSTRING );
         newEvent->ParamCommand      = SerializationHelper::WString2T<ParamKeyEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), ParamKeyEvent::Command::Fail );
         newEvent->ParamTargetType   = SerializationHelper::WString2T<ParamKeyEvent::TargetType>( deser.GetAttribute( SerializationHelper::PARAM_TARGET_TYPE_WSTRING ), ParamKeyEvent::TargetType::FailTarget );

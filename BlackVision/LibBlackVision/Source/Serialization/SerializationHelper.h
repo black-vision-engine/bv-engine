@@ -118,12 +118,12 @@ std::shared_ptr< T > Create( const IDeserializer& deser )
 
 // glm stuff
 
-glm::vec4               String2Vec4( std::string s );
-glm::vec3               String2Vec3( std::string s );
-glm::vec2               String2Vec2( std::string s );
+glm::vec4               String2Vec4( const std::string & s );
+glm::vec3               String2Vec3( const std::string & s );
+glm::vec2               String2Vec2( const std::string & s );
 
 template< typename T >
-std::string T2String( const T& t );
+std::string T2String( const T & t );
 
 //template< typename T >
 //std::string T2String( const std::pair< T, const char* > t2s[], const T& t ); // include SerializationHelper.inl for the definition
@@ -145,10 +145,10 @@ struct Expected
 };
 
 template< typename T >
-Expected<T> String2T( std::string s );
+Expected<T> String2T( const std::string & s );
 
 template< typename T >
-T String2T( std::string s, const T& default );
+T String2T( const std::string & s, const T & defaultVal );
 
 //template< typename T, typename U >
 //std::pair< T, U > String2Pair( std::string s ); // include SerializationHelper.inl for the definition

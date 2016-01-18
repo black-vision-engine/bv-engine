@@ -237,6 +237,7 @@ public:
     std::string                     NodeName;
     std::string                     PluginName;
     std::string                     ParamName;
+    std::string                     ParamSubName;
     std::string                     SceneName;
     std::wstring                    Value;
 

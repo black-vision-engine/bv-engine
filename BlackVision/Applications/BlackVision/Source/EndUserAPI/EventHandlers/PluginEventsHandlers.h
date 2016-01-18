@@ -2,43 +2,57 @@
 
 #include "Engine/Events/Events.h"
 
+
 namespace bv
 {
-class BVAppLogic;
 
+class BVAppLogic;
+class BVProjectEditor;
 
 typedef std::shared_ptr<model::IParameter> ParameterPtr;
 
 class PluginEventsHandlers
 {
 private:
-    BVAppLogic*             m_appLogic;
+
+    BVProjectEditor *       m_projectEditor;
+
 public:
-    PluginEventsHandlers( BVAppLogic* logic );
-    ~PluginEventsHandlers();
+
+                            PluginEventsHandlers    ( BVAppLogic * logic );
+                            ~PluginEventsHandlers   ();
 
     void                    ParamHandler        ( bv::IEventPtr eventPtr );
 
     void                    LoadAsset           ( bv::IEventPtr eventPtr );
     void                    TimerHandler        ( bv::IEventPtr eventPtr );
 
-private:    //Helpers
-    void                    AddParameter        ( ParameterPtr& param, const std::wstring& value, TimeType keyTime );
-    void                    RemoveParameter     ( ParameterPtr& param, TimeType keyTime );
+private:
+
+    //Helpers
+    bool                    AddParameter        ( ParameterPtr & param, const std::string & stringValue, TimeType keyTime );
+    bool                    RemoveParameter     ( ParameterPtr & param, TimeType keyTime );
 
 
-    ParameterPtr            GetPluginParameter      (   const std::string& sceneName,
-                                                        const std::string& nodePath,
-                                                        const std::string& pluginName,
-                                                        const std::string& paramName );
-    ParameterPtr            GetGlobalEffectParameter(   const std::string& sceneName,
-                                                        const std::string& nodePath,
-                                                        const std::string& paramName );
-    ParameterPtr            GetResourceParameter    (   const std::string& sceneName,
-                                                        const std::string& nodePath,
-                                                        const std::string& pluginName,
-                                                        const std::string& textureName,
-                                                        const std::string& paramName );
+    ParameterPtr            GetPluginParameter      ( const std::string & sceneName,
+                                                      const std::string & nodePath,
+                                                      const std::string & pluginName,
+                                                      const std::string & paramName );
+    ParameterPtr            GetGlobalEffectParameter( const std::string & sceneName,
+                                                      const std::string & nodePath,
+                                                      const std::string & paramName );
+    ParameterPtr            GetResourceParameter    ( const std::string & sceneName,
+                                                      const std::string & nodePath,
+                                                      const std::string & pluginName,
+                                                      const std::string & textureName,
+                                                      const std::string & paramName );
+
+    bool                    AddTransformKey         ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime, const std::string & strValue );
+    bool                    RemoveTransformKey      ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime );
+
+    bool                    AddTransformVecKey      ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime, const std::string & strValue );
+    bool                    RemoveTransformVecKey   ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime );
+
 };
 
 } //bv

@@ -28,7 +28,7 @@ std::pair< MipMapFilterType, const char* > mipmapFiltering[] =
 };
 
 
-template<> MipMapFilterType         String2T      ( std::string s, const MipMapFilterType& defaultVal )
+template<> MipMapFilterType         String2T      ( const std::string & s, const MipMapFilterType & defaultVal )
 {
     auto filter = String2T( mipmapFiltering, s );
     if( filter == MipMapFilterType::MMFT_TOTAL )
