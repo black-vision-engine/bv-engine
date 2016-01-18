@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Engine/Graphics/Renderers\Renderer.h"
-#include "Rendering/Utils/RenderTargetStackAllocator.h"
-#include "Rendering/Logic/RenderLogic.h"
+#include "Engine/Graphics/Renderers/Renderer.h"
+#include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
+#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
 
 
 namespace bv {

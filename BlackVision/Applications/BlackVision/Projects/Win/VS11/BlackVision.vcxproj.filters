@@ -43,9 +43,6 @@
     <Filter Include="Rendering\Logic\FrameRendering\NodeEffect">
       <UniqueIdentifier>{77a0dacd-e2f0-415a-bbf3-02b686401e90}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Rendering\Utils">
-      <UniqueIdentifier>{4d2c2449-8f44-49bc-b3eb-1c514447afc6}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AnotherTestScene.cpp" />
@@ -111,9 +108,6 @@
     <ClCompile Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.cpp">
       <Filter>VideoInput</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogic.cpp">
-      <Filter>Rendering\Logic</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.cpp">
       <Filter>TestAI</Filter>
     </ClCompile>
@@ -132,32 +126,8 @@
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\PostFrameRenderLogic.cpp">
       <Filter>Rendering\Logic\FrameRendering</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogic.cpp">
-      <Filter>Rendering\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Utils\RenderTargetStack.cpp">
-      <Filter>Rendering\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Utils\RenderTargetEntryDesc.cpp">
-      <Filter>Rendering\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Utils\RenderTargetFactory.cpp">
-      <Filter>Rendering\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Utils\RenderLogicContext.cpp">
-      <Filter>Rendering\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Utils\RenderTargetStackAllocator.cpp">
-      <Filter>Rendering\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Utils\OffscreenDisplay.cpp">
-      <Filter>Rendering\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffectRenderLogicSelector.cpp">
       <Filter>Rendering\Logic\FrameRendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Utils\FullscreenUtils.cpp">
-      <Filter>Rendering\Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\AlphaMaskRenderLogic.cpp">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
@@ -182,9 +152,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\MixChannelsRenderLogic.cpp">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Rendering\Utils\ShaderSourceProvider.cpp">
-      <Filter>Rendering\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -256,9 +223,6 @@
     <ClInclude Include="..\..\..\..\..\LibBlackVision\Source\Engine\Models\Plugins\Simple\DefaultVideoInputPlugin.h">
       <Filter>VideoInput</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Logic\RenderLogic.h">
-      <Filter>Rendering\Logic</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\TestAI\TestGlobalEffectKeyboardHandler.h">
       <Filter>TestAI</Filter>
     </ClInclude>
@@ -277,32 +241,8 @@
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\PostFrameRenderLogic.h">
       <Filter>Rendering\Logic\FrameRendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Utils\OffscreenRenderLogic.h">
-      <Filter>Rendering\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Utils\RenderTargetStack.h">
-      <Filter>Rendering\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Utils\RenderTargetEntryDesc.h">
-      <Filter>Rendering\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Utils\RenderTargetFactory.h">
-      <Filter>Rendering\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Utils\RenderLogicContext.h">
-      <Filter>Rendering\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Utils\RenderTargetStackAllocator.h">
-      <Filter>Rendering\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Utils\OffscreenDisplay.h">
-      <Filter>Rendering\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffectRenderLogicSelector.h">
       <Filter>Rendering\Logic\FrameRendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Utils\FullscreenUtils.h">
-      <Filter>Rendering\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\AlphaMaskRenderLogic.h">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
@@ -327,9 +267,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FrameRendering\NodeEffect\MixChannelsRenderLogic.h">
       <Filter>Rendering\Logic\FrameRendering\NodeEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Rendering\Utils\ShaderSourceProvider.h">
-      <Filter>Rendering\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

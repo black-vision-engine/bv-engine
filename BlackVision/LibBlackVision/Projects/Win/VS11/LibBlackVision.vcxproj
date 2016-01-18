@@ -159,6 +159,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\SimpleFullscreenEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShadeders.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\RenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsShaders.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\AlphaMaskNodeEffect.cpp" />
@@ -181,6 +182,15 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectShaders.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectWithMask.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\FullscreenUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenDisplay.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenRenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderLogicContext.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetEntryDesc.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetFactory.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetStack.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetStackAllocator.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\ShaderSourceProvider.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\WireframeShaders.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRenderer.cpp" />
@@ -416,6 +426,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\SimpleFullscreenEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShadeders.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\RenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsShaders.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\AlphaMaskNodeEffect.h" />
@@ -435,6 +446,15 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\NodeEffectTr.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\PostFullScreenEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\PreFullScreenEffectLogic.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\FullscreenUtils.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenDisplay.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenRenderLogic.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderLogicContext.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetEntryDesc.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetFactory.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetStack.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetStackAllocator.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\ShaderSourceProvider.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeShaders.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.h" />

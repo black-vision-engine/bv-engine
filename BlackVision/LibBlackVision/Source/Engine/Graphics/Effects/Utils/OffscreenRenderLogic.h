@@ -8,7 +8,7 @@
 #include "Engine/Graphics/Effects/Texture2DEffect.h"
 #include "Engine/Graphics/Effects/Texture2DEffectWithMask.h"
 
-#include "Rendering/Utils/RenderTargetStack.h"
+#include "Engine/Graphics/Effects/Utils/RenderTargetStack.h"
 
 
 namespace bv {

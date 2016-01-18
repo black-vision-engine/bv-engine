@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "Rendering/Utils/RenderTargetStackAllocator.h"
-#include "Rendering/Logic/FrameRendering/NodeEffectRenderLogicSelector.h"
+#include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
+#include "Engine/Graphics/Effects/Logic/FrameRendering/NodeEffectRenderLogicSelector.h"
 
 
 namespace bv {

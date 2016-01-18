@@ -7,7 +7,7 @@
 #include "Engine/Graphics/Resources/Texture2D.h"
 #include "Engine/Graphics/Resources/RenderTarget.h"
 
-#include "Rendering/Utils/RenderTargetEntryDesc.h"
+#include "Engine/Graphics/Effects/Utils/RenderTargetEntryDesc.h"
 
 
 // Forward declarations and typedefs

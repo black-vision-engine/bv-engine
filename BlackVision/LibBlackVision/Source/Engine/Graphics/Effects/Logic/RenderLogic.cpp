@@ -3,12 +3,12 @@
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
-#include "Rendering/Utils/RenderLogicContext.h"
-#include "Rendering/Utils/OffscreenDisplay.h"
+#include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
+#include "Engine/Graphics/Effects/Utils/OffscreenDisplay.h"
 
-#include "Rendering/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
-#include "Rendering/Logic/FullScreen/Impl/BlitFullscreenEffect.h"
-#include "Rendering/Logic/VideoOutputRendering/VideoOutputRenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/FrameEngine/Graphics/Effects/NodeEffect/NodeEffectRenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/FullScreen/Impl/BlitFullscreenEffect.h"
+#include "Engine/Graphics/Effects/Logic/VideoOutputEngine/Graphics/Effects/VideoOutputRenderLogic.h"
 
 #include "Tools/Profiler/HerarchicalProfiler.h"
 

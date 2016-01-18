@@ -4,7 +4,7 @@
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
-#include "Rendering/Utils/RenderTargetFactory.h"
+#include "Engine/Graphics/Effects/Utils/RenderTargetFactory.h"
 
 
 namespace bv {

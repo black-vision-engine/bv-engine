@@ -1,6 +1,7 @@
 #include "OffscreenDisplay.h"
 
-#include "Rendering/Utils/RenderTargetStackAllocator.h"
+#include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
+
 
 namespace {
 
