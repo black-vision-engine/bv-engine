@@ -9,7 +9,7 @@
 #include "Tools/SimpleTimer.h"
 #include "Tools/Profiler/HerarchicalProfiler.h"
 
-#include "Rendering/Logic/RenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
 #include "ModelInteractionEvents.h"
 
 #include "Widgets/Crawler/CrawlerEvents.h"
@@ -101,7 +101,7 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
     GTimer.StartTimer();
 
     m_renderer = renderer;
-    m_renderLogic = new RenderLogic();
+    m_renderLogic = new RenderLogic( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput() );
     //m_renderLogic = new FrameRenderLogic();
 }
 

@@ -2,8 +2,8 @@
 
 #include "BVAppLogic.h"
 
-#include "Rendering/Logic/RenderLogic.h"
-#include "Rendering/Logic/VideoOutputRendering/VideoOutputRenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/RenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/VideoOutputRendering/VideoOutputRenderLogic.h"
 
 
 namespace bv {
