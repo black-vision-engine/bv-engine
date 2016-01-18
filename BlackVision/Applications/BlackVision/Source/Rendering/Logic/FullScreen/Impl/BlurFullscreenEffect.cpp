@@ -8,6 +8,8 @@
 
 #include "Engine/Interfaces/IValue.h"
 
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamFloat.h"
+
 namespace bv {
 
 // **************************
@@ -16,6 +18,11 @@ void            BlurFullscreenEffect::SetBlurSize   ( float s )
 {
     m_blurSize = s;
     m_blurSizeVal->SetValue( s );
+
+    if( m_pixelShader )
+    {
+        static_cast< ShaderParamFloat * >( m_pixelShader->GetParameters()->AccessParam( 0 ) )->SetValue( s );
+    }
 }
 
 // **************************

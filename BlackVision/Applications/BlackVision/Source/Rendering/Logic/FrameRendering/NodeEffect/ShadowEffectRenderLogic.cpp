@@ -38,6 +38,9 @@ void    ShadowEffectRenderLogic::RenderNode           ( SceneNode * node, Render
     auto blurSizeVal = node->GetNodeEffect()->GetValue( "blurSize" );
     auto blurSizeValue = QueryTypedValue< ValueFloatPtr >( blurSizeVal )->GetValue();
 
+    auto scaleX = glm::length( node->GetTransformable()->WorldTransforms()[ 0 ].Matrix() * glm::vec4( 1.f, 0.f, 0.f, 0.f ) );
+    auto scaleY = glm::length( node->GetTransformable()->WorldTransforms()[ 0 ].Matrix() * glm::vec4( 0.f, 1.f, 0.f, 0.f ) );
+
     auto renderer       = ctx->GetRenderer();
     auto logic          = ctx->GetRenderLogic();
         
@@ -63,7 +66,7 @@ void    ShadowEffectRenderLogic::RenderNode           ( SceneNode * node, Render
             enable( ctx, hBluredRenderTarget );
             clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
-            ApplyBlurEffect( renderer, foregroundRt, blurSizeValue, false );
+            ApplyBlurEffect( renderer, foregroundRt, blurSizeValue * scaleX, false );
 
             rtAllocator->Free();
 
@@ -72,7 +75,7 @@ void    ShadowEffectRenderLogic::RenderNode           ( SceneNode * node, Render
             enable( ctx, vBluredRenderTarget );
             clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
-            ApplyBlurEffect( renderer, hBluredRenderTarget, blurSizeValue, true );
+            ApplyBlurEffect( renderer, hBluredRenderTarget, blurSizeValue * scaleY, true );
 
             rtAllocator->Free();
 

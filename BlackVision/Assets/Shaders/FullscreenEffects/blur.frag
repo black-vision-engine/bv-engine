@@ -19,7 +19,7 @@ void pass0()
 
     float pixelW = 1.0 / textureSize.x;
     
-    vec4 sum = texture( Tex0, uvCoord + vec2( pixelW * blurSizeCeil, 0 ) ) * subPixelWeight;
+    vec4 sum = texture( Tex0, uvCoord - vec2( pixelW * blurSizeCeil, 0 ) ) * subPixelWeight;
     
     float weight = 1.0;
     for( int i = -t; i <= t; ++i )
@@ -37,6 +37,8 @@ void pass0()
         sum += texture( Tex0, uvCoord + pixelDelta ) * weight;
     }
 
+    sum += texture( Tex0, uvCoord + vec2( pixelW * blurSizeCeil, 0 ) ) * subPixelWeight;
+    
     sum /= ( blurSize * 2.0 + 1.0 );
     FragColor = sum;  
 }
@@ -50,7 +52,7 @@ void pass1()
 
     float pixelH = 1.0 / textureSize.y;
 
-    vec4 sum = texture( Tex0, uvCoord + vec2( 0, pixelH * blurSizeCeil ) ) * subPixelWeight;
+    vec4 sum = texture( Tex0, uvCoord - vec2( 0, pixelH * blurSizeCeil ) ) * subPixelWeight;
     
     float weight = 1.0;
     
@@ -69,6 +71,8 @@ void pass1()
         sum += texture( Tex0, uvCoord + pixelDelta ) * weight;
     }
 
+    sum += texture( Tex0, uvCoord + vec2( 0, pixelH * blurSizeCeil ) ) * subPixelWeight;
+    
     sum /= ( blurSize * 2.0 + 1.0 );
     FragColor = sum;
 }
