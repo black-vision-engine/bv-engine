@@ -536,6 +536,10 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::ShadowEffectTestScene( pluginsManager, timeline );
     }
+    else if( scene == "MULTI_SHADOW_EFFECT" )
+    {
+        node = TestScenesFactory::MultiShadowEffectTestScene( pluginsManager, timeline );
+    }    
     else if( scene == "CRAWLER_TEST_SCENE" )
     {
         node = TestScenesFactory::CrawlerNodeTestScene( pluginsManager, timeline );
@@ -626,6 +630,14 @@ model::BasicNodePtr     TestScenesFactory::ShadowEffectTestScene  ( const model:
 {
     { pluginsManager; }
     return SimpleNodesFactory::CreateShadowTest( timeEvaluator );
+}
+
+// *****************************
+//
+model::BasicNodePtr     TestScenesFactory::MultiShadowEffectTestScene  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { pluginsManager; }
+    return SimpleNodesFactory::CreateMultiShadowTest( timeEvaluator );
 }
 
 model::BasicNodePtr     TestScenesFactory::CrawlerNodeTestScene   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )

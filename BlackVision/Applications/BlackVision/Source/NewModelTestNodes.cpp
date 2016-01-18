@@ -331,9 +331,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateLightScatteringTest      ( model:
 model::BasicNodePtr  SimpleNodesFactory::CreateShadowTest               ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/butterfly1.png", false, 3.f, 3.f );
-    bTex.SetScale( 5.f, 5.f, 1.f, 0.f );
-    bTex.SetScale( 1.f, 1.f, 1.f, 5.f );
-    bTex.SetScale( 0.3f, 0.3f, 1.f, 20.f );
+    //bTex.SetScale( 5.f, 5.f, 1.f, 0.f );
+    //bTex.SetScale( 1.f, 1.f, 1.f, 5.f );
+    //bTex.SetScale( 0.3f, 0.3f, 1.f, 20.f );
     auto root = bTex.CreateNode( "root", true );
 
     
@@ -344,6 +344,46 @@ model::BasicNodePtr  SimpleNodesFactory::CreateShadowTest               ( model:
 
     text->SetNodeEffect( std::make_shared< model::ModelNodeEffectShadow >( timeEvaluator ) );
     //text->SetNodeEffect( std::make_shared< model::ModelNodeEffectBlur >( timeEvaluator ) );
+
+    return root;
+}
+
+// *****************************
+//
+model::BasicNodePtr  SimpleNodesFactory::CreateMultiShadowTest          ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/butterfly1.png", false, 3.f, 3.f );
+    //bTex.SetScale( 5.f, 5.f, 1.f, 0.f );
+    //bTex.SetScale( 1.f, 1.f, 1.f, 5.f );
+    //bTex.SetScale( 0.3f, 0.3f, 1.f, 20.f );
+    auto root = bTex.CreateNode( "root", true );
+
+    auto n1 = CreateShadowTest( timeEvaluator );
+
+    auto simpleTransform = n1->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+	simpleTransform->SetTimeEvaluator( timeEvaluator );
+
+	SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( 0.f, 0.2f, 0.f ) );
+
+    root->AddChildToModelOnly( n1 );
+
+    auto n2 = CreateShadowTest( timeEvaluator );
+
+    simpleTransform = n2->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+	simpleTransform->SetTimeEvaluator( timeEvaluator );
+
+	SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( 0.f, 0.4f, 0.f ) );
+
+    root->AddChildToModelOnly( n2 );
+    
+    auto n3 = CreateShadowTest( timeEvaluator );
+
+    simpleTransform = n3->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+	simpleTransform->SetTimeEvaluator( timeEvaluator );
+
+	SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( 0.f, 0.6f, 0.f ) );
+
+    root->AddChildToModelOnly( n3 );
 
     return root;
 }
