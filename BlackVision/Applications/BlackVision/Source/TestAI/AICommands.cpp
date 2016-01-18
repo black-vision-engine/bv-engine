@@ -5,8 +5,7 @@
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
-
-#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
+#include "Engine/Models/NodeEffects/ModelFullscreenEffectAlphaMask.h"
 
 #include "Engine/Models/Plugins/PluginUtils.h"
 
@@ -322,11 +321,11 @@ bool        AICommandEnableOverridenAlpha::TriggerImpl          ( TimeType t )
     { t; } 
     if ( m_node )
     {
-        auto effect = m_node->GetNodeEffect();
+        auto fse = m_node->GetNodeEffect()->GetFullscreenEffect();
 
-        if( effect->GetType() == NodeEffectType::NET_ALPHA_MASK )
+        if( fse->GetType() == NodeEffectType::NET_ALPHA_MASK )
         {
-            auto alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( effect );
+            auto alphaMaskEffect = std::static_pointer_cast< model::ModelFullscreenEffectAlphaMask >( fse );
             auto alpha = alphaMaskEffect->GetParamAlpha();
 
             SetParameter( alpha, t, 1.f );
@@ -426,11 +425,11 @@ bool        AICommandEnableOverridenAlphaNM::TriggerImpl            ( TimeType t
     { t; } // FIXME: suppress unuse warning
     if ( m_node )
     {
-        auto effect = m_node->GetNodeEffect();
+        auto fse = m_node->GetNodeEffect()->GetFullscreenEffect();
 
-        if( effect->GetType() == NodeEffectType::NET_ALPHA_MASK )
+        if( fse->GetType() == NodeEffectType::NET_ALPHA_MASK )
         {
-            auto alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( effect );
+            auto alphaMaskEffect = std::static_pointer_cast< model::ModelFullscreenEffectAlphaMask >( fse );
             auto alpha = alphaMaskEffect->GetParamAlpha();
 
             SetParameter( alpha, t, 1.f );
