@@ -43,6 +43,8 @@ private:
 
     ParamWStringPtr                 m_textParam;
     std::wstring                    m_currentText;
+    Float32                         m_currentAligment;
+    Float32                         m_currentSpacing;
     TextAtlasConstPtr				m_atlas;
 	Float32							m_textLength;
 

@@ -375,7 +375,9 @@ void                                DefaultTextPlugin::Update                   
     m_timeParam->SetVal( t, TimeType( 0.0 ) );
 	BasePlugin::Update( t );
 
-    if( m_currentText != m_textParam->Evaluate() )
+    if( m_currentText != m_textParam->Evaluate() || 
+        m_currentAligment != m_alignmentParam->Evaluate() ||
+        m_currentSpacing != m_spacingParam->Evaluate() )
     {
         SetText( m_textParam->Evaluate() );
     }
@@ -451,14 +453,16 @@ void DefaultTextPlugin::ScaleToMaxTextLength		()
 void DefaultTextPlugin::SetText                     ( const std::wstring & newText )
 {
     m_currentText = newText;
+    m_currentAligment = m_alignmentParam->Evaluate();
+    m_currentSpacing = m_spacingParam->Evaluate();
 
     m_vaChannel->ClearAll();
 
-    auto alignType		=  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
+    auto alignType		=  TextAlignmentType( (int)m_currentAligment );
 
 	auto viewWidth  = ApplicationContext::Instance().GetWidth();
     auto viewHeight = ApplicationContext::Instance().GetHeight();
-    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_currentText, m_blurSize, m_spacingParam->Evaluate(), alignType, m_outlineSize, viewWidth, viewHeight, m_arranger, false );
+    m_textLength = TextHelper::BuildVACForText( m_vaChannel.get(), m_atlas, m_currentText, m_blurSize, m_currentSpacing, alignType, m_outlineSize, viewWidth, viewHeight, m_arranger, false );
 
 	ScaleToMaxTextLength();
 
