@@ -6,13 +6,11 @@
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 #include "Engine/Graphics/Effects/Utils/OffscreenDisplay.h"
 
-#include "Engine/Graphics/Effects/Logic/FrameEngine/Graphics/Effects/NodeEffect/NodeEffectRenderLogic.h"
-#include "Engine/Graphics/Effects/Logic/FullScreen/Impl/BlitFullscreenEffect.h"
-#include "Engine/Graphics/Effects/Logic/VideoOutputEngine/Graphics/Effects/VideoOutputRenderLogic.h"
+#include "Engine/Graphics/Effects/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
+#include "Engine/Graphics/Effects/FullScreen/Impl/BlitFullscreenEffect.h"
+#include "Engine/Graphics/Effects/Logic/VideoOutputRendering/VideoOutputRenderLogic.h"
 
 #include "Tools/Profiler/HerarchicalProfiler.h"
-
-#include "BVConfig.h"
 
 //FIXME: remove
 #include "LibImage.h"
@@ -22,19 +20,19 @@
 namespace bv {
 
 // *********************************
-//
-RenderLogic::RenderLogic     ()
-    : m_rtStackAllocator( DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), TextureFormat::F_A8R8G8B8 )
+//DefaultConfig.DefaultWidth(), DefaultConfig.DefaultHeight(), DefaultConfig.ReadbackFlag(), DefaultConfig.DisplayVideoCardOutput()
+RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, bool useReadback, bool useVideoCardOutput )
+    : m_rtStackAllocator( width, height, TextureFormat::F_A8R8G8B8 )
     , m_blitEffect( nullptr )
     , m_videoOutputRenderLogic( nullptr )
 {
-    auto videoCardEnabled   = DefaultConfig.ReadbackFlag();
-    auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput();
+    auto videoCardEnabled   = useReadback;
+    auto previewAsVideoCard = useVideoCardOutput;
 
     unsigned int numFrameRenderTargets = videoCardEnabled || previewAsVideoCard ? 2 : 1;
 
     m_offscreenDisplay          = new OffscreenDisplay( &m_rtStackAllocator, numFrameRenderTargets, videoCardEnabled || previewAsVideoCard );
-    m_videoOutputRenderLogic    = new VideoOutputRenderLogic( DefaultConfig.DefaultHeight() ); // FIXME: interlace odd/even setup
+    m_videoOutputRenderLogic    = new VideoOutputRenderLogic( height ); // FIXME: interlace odd/even setup
 
     m_displayVideoCardPreview   = previewAsVideoCard;
     m_useVideoCardOutput        = videoCardEnabled;

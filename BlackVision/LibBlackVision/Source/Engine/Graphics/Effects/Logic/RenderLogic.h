@@ -34,7 +34,7 @@ private:
 
 public:
 
-            RenderLogic     ();
+            RenderLogic     ( unsigned int width, unsigned int height, bool useReadback, bool useVideoCardOutput );
             ~RenderLogic    ();
 
     void    RenderFrame     ( Renderer * renderer, SceneNode * sceneRoot );
