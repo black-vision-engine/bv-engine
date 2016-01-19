@@ -489,6 +489,8 @@ void    QueryHandlers::ListAllFolders          ( JsonSerializeObject & ser, cons
     auto pm = ProjectManager::GetInstance();
     auto sns = pm->ListAssetsDirs( catName, path );
 
+    ser.SetAttribute( "categoryName", catName );
+
     ser.EnterArray( "list" );
     for( auto d : sns )
     {

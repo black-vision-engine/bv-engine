@@ -956,7 +956,7 @@ PathVec                     ProjectManagerImpl::ListAssetsDirs      ( const std:
     {
         if( Path::IsDir( p ) )
         {
-            ret.push_back( p );
+            ret.push_back( Path::RelativePath( p, m_rootPath / categoryName ) );
         }
     }
 
