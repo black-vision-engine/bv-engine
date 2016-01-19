@@ -13,8 +13,10 @@ private:
 
     float                       m_blurSize;
     bool                        m_vertical;
+    bool                        m_normalize;
 
     ValueIntPtr                 m_verticalVal;
+    ValueIntPtr                 m_normalizeVal;
     ValueFloatPtr               m_blurSizeVal;
 
     ValueVec2Ptr                m_textureSize;
@@ -29,6 +31,8 @@ public:
 
     void                        SetVertical ( bool val );
     bool                        GetVertical () const;
+
+    void                        SetNormalize( bool val );
 
     void                        SetTexture  ( Texture2DPtr tex );
 

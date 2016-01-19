@@ -9,6 +9,7 @@ uniform sampler2D       Tex0;
 uniform float			blurSize;
 uniform vec2			textureSize;
 uniform int             vertical;
+uniform int             normalize = 1;
 
 void pass0()
 {
@@ -39,7 +40,11 @@ void pass0()
 
     sum += texture( Tex0, uvCoord + vec2( pixelW * blurSizeCeil, 0 ) ) * subPixelWeight;
     
-    sum /= ( blurSize * 2.0 + 1.0 );
+    if( normalize != 0 )
+    {
+        sum /= ( blurSize * 2.0 + 1.0 );
+    }
+    
     FragColor = sum;  
 }
 
@@ -73,7 +78,11 @@ void pass1()
 
     sum += texture( Tex0, uvCoord + vec2( 0, pixelH * blurSizeCeil ) ) * subPixelWeight;
     
-    sum /= ( blurSize * 2.0 + 1.0 );
+    if( normalize != 0 )
+    {
+        sum /= ( blurSize * 2.0 + 1.0 );
+    }
+    
     FragColor = sum;
 }
 

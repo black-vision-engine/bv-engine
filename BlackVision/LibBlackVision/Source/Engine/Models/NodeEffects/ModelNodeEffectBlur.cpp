@@ -11,12 +11,16 @@ ModelNodeEffectBlur::ModelNodeEffectBlur( ITimeEvaluatorPtr timeEvaluator )
 	: ModelNodeEffectBase( timeEvaluator )
 	//, m_blurSizeVal( 5.0f )
 	, m_blurSizeVal( 5.5f )
+    , m_normalizeVal( 1 )
 { 
 	auto blurSizeEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
+    auto normalizeEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "normalize", timeEvaluator );
 
     blurSizeEval->Parameter()->SetVal( m_blurSizeVal, 0.f );
+    normalizeEval->Parameter()->SetVal( m_normalizeVal, 0.f );
 
 	m_paramValModel->RegisterAll( blurSizeEval );
+    m_paramValModel->RegisterAll( normalizeEval );
 
 	m_paramBlurSize = blurSizeEval->Parameter();
 }
@@ -28,12 +32,12 @@ NodeEffectType  ModelNodeEffectBlur::GetType				    () const
     return NodeEffectType::NET_BLUR;
 }
 
-// ********************************
-//
-ParamFloatPtr   ModelNodeEffectBlur::GetParamBlurSize         () const
-{
-    return m_paramBlurSize;
-}
+//// ********************************
+////
+//ParamFloatPtr   ModelNodeEffectBlur::GetParamBlurSize         () const
+//{
+//    return m_paramBlurSize;
+//}
 
 // ********************************
 //
@@ -46,12 +50,27 @@ void            ModelNodeEffectBlur::Update                   ( TimeType t )
 	m_blurSizeVal = m_paramBlurSize->Evaluate();
 }
 
-// ********************************
+//// ********************************
+////
+//Float32           ModelNodeEffectBlur::GetBlurSize              () const
+//{
+//    return m_blurSizeVal;
+//}
 //
-float           ModelNodeEffectBlur::GetBlurSize              () const
-{
-    return m_blurSizeVal;
-}
+//// ********************************
+////
+//ParamIntPtr     ModelNodeEffectBlur::GetParamNormalize       () const
+//{
+//    return m_paramNormalize;
+//}
+//
+//// ********************************
+////
+//Int32           ModelNodeEffectBlur::GetNormalize            () const
+//{
+//    return m_normalizeVal;
+//}
+
 
 } // model
 } // bv

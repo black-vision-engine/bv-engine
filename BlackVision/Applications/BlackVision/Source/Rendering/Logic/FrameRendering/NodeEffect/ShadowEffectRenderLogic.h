@@ -37,9 +37,9 @@ private:
 
     void                                AddShadowEffect             ( Renderer * renderer, Texture2DPtr tex, Texture2DPtr bluredTex, const glm::vec4 & color, const glm::vec2 & shift );
 
-    BlurFullscreenEffect *              AccessBlurEffect            ( RenderTarget * rt, float bs, bool vertical );
+    BlurFullscreenEffect *              AccessBlurEffect            ( RenderTarget * rt, float bs, bool vertical, bool normalize );
 
-    void                                ApplyBlurEffect             ( Renderer * renderer, RenderTarget * foregroundRt, float bs, bool vertical );
+    void                                ApplyBlurEffect             ( Renderer * renderer, RenderTarget * foregroundRt, float bs, bool vertical, bool normalize );
 };
 
 } // bv

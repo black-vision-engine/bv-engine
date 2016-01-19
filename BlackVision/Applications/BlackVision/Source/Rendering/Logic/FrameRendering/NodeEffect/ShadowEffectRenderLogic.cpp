@@ -38,6 +38,9 @@ void    ShadowEffectRenderLogic::RenderNode           ( SceneNode * node, Render
     auto blurSizeVal = node->GetNodeEffect()->GetValue( "blurSize" );
     auto blurSizeValue = QueryTypedValue< ValueFloatPtr >( blurSizeVal )->GetValue();
 
+    auto normalizeVal = node->GetNodeEffect()->GetValue( "normalize" );
+    auto normalizeFlagValue = QueryTypedValue< ValueIntPtr >( normalizeVal )->GetValue() > 0 ? true : false;
+
     auto scaleX = glm::length( node->GetTransformable()->WorldTransforms()[ 0 ].Matrix() * glm::vec4( 1.f, 0.f, 0.f, 0.f ) );
     auto scaleY = glm::length( node->GetTransformable()->WorldTransforms()[ 0 ].Matrix() * glm::vec4( 0.f, 1.f, 0.f, 0.f ) );
 
@@ -66,7 +69,7 @@ void    ShadowEffectRenderLogic::RenderNode           ( SceneNode * node, Render
             enable( ctx, hBluredRenderTarget );
             clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
-            ApplyBlurEffect( renderer, foregroundRt, blurSizeValue * scaleX, false );
+            ApplyBlurEffect( renderer, foregroundRt, blurSizeValue * scaleX, false, normalizeFlagValue );
 
             rtAllocator->Free();
 
@@ -75,7 +78,7 @@ void    ShadowEffectRenderLogic::RenderNode           ( SceneNode * node, Render
             enable( ctx, vBluredRenderTarget );
             clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
-            ApplyBlurEffect( renderer, hBluredRenderTarget, blurSizeValue * scaleY, true );
+            ApplyBlurEffect( renderer, hBluredRenderTarget, blurSizeValue * scaleY, true, normalizeFlagValue );
 
             rtAllocator->Free();
 
@@ -135,7 +138,7 @@ void                                ShadowEffectRenderLogic::AddShadowEffect    
 
 // *********************************
 //
-BlurFullscreenEffect *              ShadowEffectRenderLogic::AccessBlurEffect       ( RenderTarget * rt, float bs, bool vertical )
+BlurFullscreenEffect *              ShadowEffectRenderLogic::AccessBlurEffect       ( RenderTarget * rt, float bs, bool vertical, bool normalize )
 {
     auto rtTex = rt->ColorTexture( 0 );
 
@@ -148,15 +151,16 @@ BlurFullscreenEffect *              ShadowEffectRenderLogic::AccessBlurEffect   
 
     m_blurEffect->SetBlurSize( bs );
     m_blurEffect->SetVertical( vertical );
+    m_blurEffect->SetNormalize( normalize );
 
     return m_blurEffect;    
 }
 
 // *********************************
 //
-void                                ShadowEffectRenderLogic::ApplyBlurEffect        ( Renderer * renderer, RenderTarget * foregroundRt, float bs, bool vertical )
+void                                ShadowEffectRenderLogic::ApplyBlurEffect        ( Renderer * renderer, RenderTarget * foregroundRt, float bs, bool vertical, bool normalize )
 {
-    auto blurer = AccessBlurEffect( foregroundRt, bs, vertical );
+    auto blurer = AccessBlurEffect( foregroundRt, bs, vertical, normalize );
 
     blurer->Render( renderer );
 }

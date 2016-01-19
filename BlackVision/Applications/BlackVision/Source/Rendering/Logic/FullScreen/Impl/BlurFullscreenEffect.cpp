@@ -47,6 +47,19 @@ void            BlurFullscreenEffect::SetVertical ( bool val )
 
 // **************************
 //
+void            BlurFullscreenEffect::SetNormalize ( bool val )
+{
+    m_normalize = val;
+    m_normalizeVal->SetValue( val );
+
+    if( m_pixelShader )
+    {
+        static_cast< ShaderParamInt * >( m_pixelShader->GetParameters()->AccessParam( 3 ) )->SetValue( val );
+    }
+}
+
+// **************************
+//
 bool            BlurFullscreenEffect::GetVertical () const
 {
     return m_vertical;
@@ -81,6 +94,9 @@ PixelShader *   BlurFullscreenEffect::CreatePS            () const
 
     param = ShaderParamFactory::CreateGenericParameter( m_verticalVal.get() );
     shaderParams->AddParameter( param );
+        
+    param = ShaderParamFactory::CreateGenericParameter( m_normalizeVal.get() );
+    shaderParams->AddParameter( param );
 
     //FIXME: add empty textures (nullptr) and create samplers. Textures can be set later on
     auto shader = new PixelShader( ReadFullscreenShader( "blur.frag" ), shaderParams );
@@ -107,6 +123,9 @@ BlurFullscreenEffect::BlurFullscreenEffect  ( Texture2DPtr tex )
 
     m_verticalVal   = ValuesFactory::CreateValueInt( "vertical" );
     m_verticalVal->SetValue( 0 );
+
+    m_normalizeVal  = ValuesFactory::CreateValueInt( "normalize" );
+    m_normalizeVal->SetValue( 1 );
 }
 
 // **************************

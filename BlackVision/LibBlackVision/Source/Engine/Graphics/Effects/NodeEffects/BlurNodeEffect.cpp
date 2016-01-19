@@ -13,8 +13,10 @@ BlurNodeEffect::BlurNodeEffect     ()
     auto & values = AccessValues();
 
     auto valueBlurSize = ValuesFactory::CreateValueFloat( "blurSize" );
+    auto valueNormalize = ValuesFactory::CreateValueInt( "normalize" );
 
     values.push_back( valueBlurSize );
+    values.push_back( valueNormalize );
 }
 
 // *********************************

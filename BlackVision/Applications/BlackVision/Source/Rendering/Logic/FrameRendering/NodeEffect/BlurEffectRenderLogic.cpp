@@ -27,7 +27,9 @@ BlurEffectRenderLogic::~BlurEffectRenderLogic       ()
 void                        BlurEffectRenderLogic::RenderNode           ( SceneNode * node, RenderLogicContext * ctx )
 {
     auto blurSizeVal = node->GetNodeEffect()->GetValue( "blurSize" );
+    auto normalizeVal = node->GetNodeEffect()->GetValue( "normalize" );
     auto blurSizeValue = QueryTypedValue< ValueFloatPtr >( blurSizeVal )->GetValue();
+    auto normalizeFlagValue = QueryTypedValue< ValueIntPtr >( normalizeVal )->GetValue() > 0 ? true : false;
 
     auto renderer       = ctx->GetRenderer();
     auto logic          = ctx->GetRenderLogic();
@@ -50,7 +52,7 @@ void                        BlurEffectRenderLogic::RenderNode           ( SceneN
         enable( ctx, hBluredRenderTarget );
         clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
-        ApplyBlurEffect( renderer, foregroundRt, blurSizeValue, false );
+        ApplyBlurEffect( renderer, foregroundRt, blurSizeValue, false, normalizeFlagValue );
 
         rtAllocator->Free();
         rtAllocator->Free();
@@ -59,7 +61,7 @@ void                        BlurEffectRenderLogic::RenderNode           ( SceneN
 
         enable( ctx, mainTarget );
 
-        ApplyBlurEffect( renderer, hBluredRenderTarget, blurSizeValue, true );
+        ApplyBlurEffect( renderer, hBluredRenderTarget, blurSizeValue, true, normalizeFlagValue );
     }
 }
 
@@ -84,7 +86,7 @@ void                        BlurEffectRenderLogic::RenderToRenderTarget ( Render
 
 // *********************************
 //
-BlurFullscreenEffect *      BlurEffectRenderLogic::AccessBlurEffect      ( RenderTarget * rt, float bs, bool vertical )
+BlurFullscreenEffect *      BlurEffectRenderLogic::AccessBlurEffect      ( RenderTarget * rt, float bs, bool vertical, bool normalize )
 {
     auto rtTex = rt->ColorTexture( 0 );
 
@@ -97,15 +99,16 @@ BlurFullscreenEffect *      BlurEffectRenderLogic::AccessBlurEffect      ( Rende
 
     m_blurEffect->SetBlurSize( bs );
     m_blurEffect->SetVertical( vertical );
+    m_blurEffect->SetNormalize( normalize );
 
     return m_blurEffect;    
 }
 
 // *********************************
 //
-void                        BlurEffectRenderLogic::ApplyBlurEffect      ( Renderer * renderer, RenderTarget * foregroundRt, float bs, bool vertical )
+void                        BlurEffectRenderLogic::ApplyBlurEffect      ( Renderer * renderer, RenderTarget * foregroundRt, float bs, bool vertical, bool normalize )
 {
-    auto blurer = AccessBlurEffect( foregroundRt, bs, vertical );
+    auto blurer = AccessBlurEffect( foregroundRt, bs, vertical, normalize );
 
     blurer->Render( renderer );
 }

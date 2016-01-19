@@ -15,22 +15,27 @@ ModelNodeEffectShadow::ModelNodeEffectShadow( ITimeEvaluatorPtr timeEvaluator )
 	, m_colorVal( glm::vec4( 1.f, 0.f, 0.f, 1.f ) ) // Test params values for glow
 	, m_shiftVal( glm::vec2( 0.f, 0.f ) )
 	, m_blurSizeVal( 5.5f )
+    , m_normalizeVal( 1 )
 { 
 	auto colorEval = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", timeEvaluator );
 	auto shiftEval = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "shift", timeEvaluator );
 	auto blurSizeEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
+    auto normalizeEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "normalize", timeEvaluator );
 
     colorEval->Parameter()->SetVal( m_colorVal, 0.f );
     shiftEval->Parameter()->SetVal( m_shiftVal, 0.f );
     blurSizeEval->Parameter()->SetVal( m_blurSizeVal, 0.f );
+    normalizeEval->Parameter()->SetVal( m_normalizeVal, 0.f );
 
 	m_paramValModel->RegisterAll( colorEval );
 	m_paramValModel->RegisterAll( shiftEval );
-	m_paramValModel->RegisterAll( blurSizeEval );
+    m_paramValModel->RegisterAll( blurSizeEval );
+	m_paramValModel->RegisterAll( normalizeEval );
 
 	m_paramColor = colorEval->Parameter();
 	m_paramShift = shiftEval->Parameter();
 	m_paramBlurSize = blurSizeEval->Parameter();
+    m_paramNormalize = normalizeEval->Parameter();
 }
 
 // ********************************
@@ -40,26 +45,26 @@ NodeEffectType  ModelNodeEffectShadow::GetType				    () const
     return NodeEffectType::NET_SHADOW;
 }
 
-// ********************************
+//// ********************************
+////
+//ParamVec4Ptr   ModelNodeEffectShadow::GetParamColor             () const
+//{
+//    return m_paramColor;
+//}
 //
-ParamVec4Ptr   ModelNodeEffectShadow::GetParamColor             () const
-{
-    return m_paramColor;
-}
-
-// ********************************
+//// ********************************
+////
+//ParamVec2Ptr   ModelNodeEffectShadow::GetParamShift             () const
+//{
+//    return m_paramShift;
+//}
 //
-ParamVec2Ptr   ModelNodeEffectShadow::GetParamShift             () const
-{
-    return m_paramShift;
-}
-
-// ********************************
-//
-ParamFloatPtr   ModelNodeEffectShadow::GetParamBlurSize         () const
-{
-    return m_paramBlurSize;
-}
+//// ********************************
+////
+//ParamFloatPtr   ModelNodeEffectShadow::GetParamBlurSize         () const
+//{
+//    return m_paramBlurSize;
+//}
 
 // ********************************
 //
@@ -74,26 +79,40 @@ void            ModelNodeEffectShadow::Update                   ( TimeType t )
 	m_blurSizeVal = m_paramBlurSize->Evaluate();
 }
 
-// ********************************
+//// ********************************
+////
+//glm::vec4       ModelNodeEffectShadow::GetColor                 () const
+//{
+//    return m_colorVal;
+//}
 //
-glm::vec4       ModelNodeEffectShadow::GetColor                 () const
-{
-    return m_colorVal;
-}
-
-// ********************************
+//// ********************************
+////
+//glm::vec2       ModelNodeEffectShadow::GetShift                 () const
+//{
+//    return m_shiftVal;
+//}
 //
-glm::vec2       ModelNodeEffectShadow::GetShift                 () const
-{
-    return m_shiftVal;
-}
-
-// ********************************
+//// ********************************
+////
+//float           ModelNodeEffectShadow::GetBlurSize              () const
+//{
+//    return m_blurSizeVal;
+//}
 //
-float           ModelNodeEffectShadow::GetBlurSize              () const
-{
-    return m_blurSizeVal;
-}
+//// ********************************
+////
+//ParamIntPtr     ModelNodeEffectShadow::GetParamNormalize        () const
+//{
+//    return m_paramNormalize;
+//}
+//
+//// ********************************
+////
+//Int32           ModelNodeEffectShadow::GetNormalize            () const
+//{
+//    return m_normalizeVal;
+//}
 
 } // model
 } // bv

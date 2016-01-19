@@ -10,8 +10,10 @@ class ModelNodeEffectBlur : public ModelNodeEffectBase
 private:
 
     ParamFloatPtr   m_paramBlurSize;
+    ParamIntPtr     m_paramNormalize;
 
-    float           m_blurSizeVal;
+    Float32         m_blurSizeVal;
+    Int32           m_normalizeVal;
 
 public:
 
@@ -23,9 +25,14 @@ public:
 
 	virtual void			Update					( TimeType t ) override;
 
-    ParamFloatPtr           GetParamBlurSize        () const;
+    //ParamFloatPtr           GetParamBlurSize        () const;
 
-    float                   GetBlurSize             () const;
+    //Float32                 GetBlurSize             () const;
+
+    //ParamIntPtr             GetParamNormalize       () const;
+
+    //Int32                   GetNormalize            () const;
+
 
 };
 
