@@ -17,6 +17,7 @@
 #include "Engine/Graphics/Effects/NodeEffects/NodeMaskNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/WireframeNodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffects/MixChannelsNodeEffect.h"
 
 
 namespace bv {
@@ -71,36 +72,48 @@ SceneNode *         BVSceneTools::BuildEngineSceneNode                  ( model:
 }
 
 // *******************************
-//
+//FIXME: change effects if required or assert that they cannot be changed in runtime
 void                BVSceneTools::UpdateSceneNodeEffect                 ( SceneNode * node, model::BasicNodePtr modelNode )
 {
-    auto modelNodeEffect = modelNode->GetNodeEffect();
+    NodeEffectPtr sceneNodeEffect = nullptr;
 
-    if ( !modelNodeEffect || modelNodeEffect->GetType() == NodeEffectType::NET_DEFAULT )
+    auto modelNodeEffect = modelNode->GetNodeEffect();
+    
+    if( !modelNodeEffect )
     {
-        auto sceneNodeDefaultEffect = std::make_shared< NodeEffect >( NodeEffect::Type::T_DEFAULT );
-        node->SetNodeEffect( sceneNodeDefaultEffect );
+        sceneNodeEffect = std::make_shared< NodeEffect >( NodeEffect::Type::T_DEFAULT );
+        node->SetNodeEffect( sceneNodeEffect );
+        return;
     }
-    else if( modelNodeEffect->GetType() == NodeEffectType::NET_ALPHA_MASK )
+
+    auto modelFullscreenEffectType = modelNodeEffect->GetFullscreenEffect()->GetType();
+    if ( modelFullscreenEffectType == NodeEffectType::NET_DEFAULT )
     {
-        auto sceneNodeAMEffect = std::make_shared< AlphaMaskNodeEffect >();
-        node->SetNodeEffect( sceneNodeAMEffect );
+        sceneNodeEffect = std::make_shared< NodeEffect >( NodeEffect::Type::T_DEFAULT );
     }
-    else if( modelNodeEffect->GetType() == NodeEffectType::NET_NODE_MASK )
+    else if( modelFullscreenEffectType == NodeEffectType::NET_ALPHA_MASK )
     {
-        auto sceneNodeNMEffect = std::make_shared< NodeMaskNodeEffect >();
-        node->SetNodeEffect( sceneNodeNMEffect );
+        sceneNodeEffect = std::make_shared< AlphaMaskNodeEffect >();
     }
-    else if( modelNodeEffect->GetType() ==  NodeEffectType::NET_WIREFRAME )
+    else if( modelFullscreenEffectType == NodeEffectType::NET_NODE_MASK )
     {
-        auto sceneNodeWireframeEffect = std::make_shared< WireframeNodeEffect >();
-        node->SetNodeEffect( sceneNodeWireframeEffect );
+        sceneNodeEffect = std::make_shared< NodeMaskNodeEffect >();
+    }
+    else if( modelFullscreenEffectType ==  NodeEffectType::NET_WIREFRAME )
+    {
+        sceneNodeEffect = std::make_shared< WireframeNodeEffect >();
+    }
+    else if( modelFullscreenEffectType ==  NodeEffectType::NET_MIX_CHANNELS )
+    {
+        sceneNodeEffect = std::make_shared< MixChannelsNodeEffect >();
     }
     else
     {
         //Did you forget to implement an additional effect
         assert( false );
     }
+
+    node->SetNodeEffect( sceneNodeEffect );
 }
 
 // *******************************

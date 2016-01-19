@@ -3,11 +3,8 @@
 #include "Engine/Models/BasicNode.h"
 #include "TestAI/TestKeyboardHandler.h"
 
-#include "Engine/Models/NodeEffects/ModelNodeEffectDefault.h"
-#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
-#include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
-#include "Engine/Models/NodeEffects/ModelNodeEffectWireframe.h"
-#include "Engine/Models/NodeEffects/ModelNodeEffectMixChannels.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffect.h"
+#include "Engine/Models/BVSceneEditor.h"
 
 
 namespace bv {
@@ -16,17 +13,19 @@ class TestGlobalEfectKeyboardHandler : public TestKeyboardHandler
 {
 private:
 
-    NodeEffectType          m_curSelectedNode;
+	BVSceneEditor *		m_editor;
+
+    NodeEffectType    m_curSelectedNode;
     
     unsigned int            m_curWireframeNodeIdx;
     unsigned int            m_curMixChannelsPreset;
     bool                    m_wireframeDisabled;
 
-    std::shared_ptr< model::ModelNodeEffectDefault >        m_defaultEffect;
-    std::shared_ptr< model::ModelNodeEffectAlphaMask >      m_alphaMaskEffect;
-    std::shared_ptr< model::ModelNodeEffectNodeMask >       m_nodeMaskEffect;
-    std::shared_ptr< model::ModelNodeEffectWireframe >      m_wireframeEffect;
-    std::shared_ptr< model::ModelNodeEffectMixChannels >    m_mixChannelsEffect;
+    model::IModelNodeEffectPtr  m_defaultEffect;
+    model::IModelNodeEffectPtr  m_alphaMaskEffect;
+    model::IModelNodeEffectPtr  m_nodeMaskEffect;
+    model::IModelNodeEffectPtr  m_wireframeEffect;
+    model::IModelNodeEffectPtr  m_mixChannelsEffect;
 
 public:
 
