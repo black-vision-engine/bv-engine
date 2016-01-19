@@ -23,30 +23,60 @@ FullscreenEffectTr *    CreateSimpleBlitFSE         ()
     fseData.AppendInputTexture( nullptr, "Texture" );
     fseData.SetPixelShaderSource( src );
 
-    auto fse = new SimpleFullscreenEffect( fseData );
-
-    return fse;
+    return new SimpleFullscreenEffect( fseData );
 }
 
 // **************************
 //
 FullscreenEffectTr *    CreateBlitWithAlphaFSE      ()
 {
-    return nullptr;
+    FullscreenEffectData fseData;
+    auto src = FSEShaderSourceProvider->ReadShader( "blit_alpha.frag" );
+    auto val = ValuesFactory::CreateValueFloat( "alpha" );
+    val->SetValue( 1.f );
+
+    fseData.AppendInputTexture( nullptr, "Texture" );
+    fseData.AppendValue( val );
+    fseData.SetPixelShaderSource( src );
+
+    return new SimpleFullscreenEffect( fseData );
 }
 
 // **************************
 //
 FullscreenEffectTr *    CreateBlitWithAlphaMaskFSE  ()
 {
-    return nullptr;
+    FullscreenEffectData fseData;
+    auto src = FSEShaderSourceProvider->ReadShader( "blit_mask_alpha.frag" );
+    auto val = ValuesFactory::CreateValueFloat( "alpha" );
+    val->SetValue( 1.f );
+
+    fseData.AppendInputTexture( nullptr, "Texture" );
+    fseData.AppendInputTexture( nullptr, "Mask" );
+    fseData.AppendValue( val );
+    fseData.SetPixelShaderSource( src );
+
+    return new SimpleFullscreenEffect( fseData );
 }
 
 // **************************
 //
 FullscreenEffectTr *    CreateInterlaceFSE          ()
 {
-    return nullptr;
+    FullscreenEffectData fseData;
+    auto src = FSEShaderSourceProvider->ReadShader( "interlace.frag" );
+    auto val0 = ValuesFactory::CreateValueInt( "startEven" );
+    auto val1 = ValuesFactory::CreateValueInt( "height" );
+    val0->SetValue( 0 );
+    val1->SetValue( 1080 );
+
+    fseData.AppendInputTexture( nullptr, "Tex0" );
+    fseData.AppendInputTexture( nullptr, "Tex1" );
+    fseData.AppendValue( val0 );
+    fseData.AppendValue( val1 );
+    fseData.SetPixelShaderSource( src );
+
+    return new SimpleFullscreenEffect( fseData );
 }
 
 } // anonymous
