@@ -305,8 +305,9 @@ void        QueryHandlers::ListAssetsPaths     ( JsonSerializeObject & ser, cons
 
     auto projName = GetRequestParamValue( request )[ "projectName" ].asString();
     auto catName = GetRequestParamValue( request )[ "categoryName" ].asString();
+    auto path = GetRequestParamValue( request )[ "path" ].asString();
 
-    auto sns = pm->ListAssetsPaths( projName, catName );
+    auto sns = pm->ListAssetsPaths( projName, catName, path );
 
     ser.EnterArray( "list" );
     for( auto assetPath : sns )

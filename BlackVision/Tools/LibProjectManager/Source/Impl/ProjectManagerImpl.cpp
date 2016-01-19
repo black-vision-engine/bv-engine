@@ -91,7 +91,7 @@ StringVector	ProjectManagerImpl::ListCategoriesNames	() const
 
 // ********************************
 //
-PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  const std::string & categoryName ) const
+PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  const std::string & categoryName, const Path & path ) const
 {
 	if( !categoryName.empty() )
 	{
@@ -99,7 +99,7 @@ PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  cons
 
 		if( cit != m_categories.end() )
 		{
-			auto pathInCategory = TranslateToPathCategory( projectName, "" );
+			auto pathInCategory = TranslateToPathCategory( projectName, path );
 			auto cv = cit->second->ListAssets( pathInCategory );
             for( auto & p : cv )
             {
@@ -119,7 +119,7 @@ PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  cons
 		PathVec ret;
 		for( auto c : m_categories )
 		{
-			auto pathInCategory = TranslateToPathCategory( projectName, "" );
+			auto pathInCategory = TranslateToPathCategory( projectName, path );
 			auto cv = c.second->ListAssets( pathInCategory );
 
             for( auto & p : cv )
@@ -483,7 +483,7 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 
 	if( project )
 	{
-		auto projectAssets = ListAssetsPaths( projectName );
+		auto projectAssets = ListAssetsPaths( projectName, "", "" );
 		auto projectScenes = ListScenesNames( projectName );
 
 		std::set< Path > uniqueAssets;
