@@ -2,14 +2,30 @@
 
 #include <cassert>
 
+#include "Engine/Graphics/Effects/Fullscreen/SimpleFullscreenEffect.h"
+
+#include "Engine/Types/Values/ValuesFactory.h"
+
+#include "Engine/Graphics/Effects/Utils/ShaderSourceProvider.h"
+
 
 namespace bv {
+
+namespace {
 
 // **************************
 //
 FullscreenEffectTr *    CreateSimpleBlitFSE         ()
 {
-    return nullptr;
+    FullscreenEffectData fseData;
+    auto src = FSEShaderSourceProvider->ReadShader( "blit_no_alpha.frag" );
+
+    fseData.AppendInputTexture( nullptr, "Texture" );
+    fseData.SetPixelShaderSource( src );
+
+    auto fse = new SimpleFullscreenEffect( fseData );
+
+    return fse;
 }
 
 // **************************
@@ -33,8 +49,7 @@ FullscreenEffectTr *    CreateInterlaceFSE          ()
     return nullptr;
 }
 
-namespace {
-}
+} // anonymous
 
 // **************************
 //

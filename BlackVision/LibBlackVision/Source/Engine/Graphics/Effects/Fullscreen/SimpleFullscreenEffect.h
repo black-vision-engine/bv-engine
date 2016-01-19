@@ -28,11 +28,13 @@ public:
                     SimpleFullscreenEffect      ( const FullscreenEffectData & inputData );
                     ~SimpleFullscreenEffect     ();
 
-    virtual void            Render              ( FullscreenEffectContext * ctx ) override;
+    virtual void                        Render              ( FullscreenEffectContext * ctx ) override;
 
-    virtual unsigned int    GetNumInputs        () const override;
+    virtual unsigned int                GetNumInputs        () const override;
 
-    virtual void            SynchronizeInputData( FullscreenEffectContext * ctx ) override;
+    virtual void                        SynchronizeInputData( FullscreenEffectContext * ctx ) override;
+
+    virtual std::vector< IValuePtr >    GetValues           () const override;
 
 private:
 

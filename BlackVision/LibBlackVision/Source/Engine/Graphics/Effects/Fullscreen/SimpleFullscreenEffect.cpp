@@ -91,6 +91,13 @@ void                SimpleFullscreenEffect::SynchronizeInputData    ( Fullscreen
 
 // **************************
 //
+std::vector< IValuePtr >    SimpleFullscreenEffect::GetValues       () const
+{
+    return m_data.GetValues();
+}
+
+// **************************
+//
 TriangleStrip *     SimpleFullscreenEffect::CreateFullscreenQuad    ( const FullscreenEffectData & inputData ) const
 {
     auto effect = CreateEffect( inputData );

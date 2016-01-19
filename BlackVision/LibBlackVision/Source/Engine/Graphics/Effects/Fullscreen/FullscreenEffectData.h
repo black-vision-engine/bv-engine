@@ -47,6 +47,8 @@ public:
 
     unsigned int    GetNumInitializedTextures   () const;
 
+    std::vector< IValuePtr >    GetValues       () const;
+
 };
 
 } //bv

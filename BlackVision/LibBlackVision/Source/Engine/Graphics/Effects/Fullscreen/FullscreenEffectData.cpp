@@ -122,4 +122,11 @@ unsigned int    FullscreenEffectData::GetNumInitializedTextures () const
     return m_numInitializedTextures;
 }
 
+// **************************
+//
+std::vector< IValuePtr >    FullscreenEffectData::GetValues     () const
+{
+    return m_values;
+}
+
 } //bv
