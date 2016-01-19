@@ -309,6 +309,8 @@ void        QueryHandlers::ListAssetsPaths     ( JsonSerializeObject & ser, cons
 
     auto sns = pm->ListAssetsPaths( projName, catName, path );
 
+    ser.SetAttribute( "categoryName", catName );
+
     ser.EnterArray( "list" );
     for( auto assetPath : sns )
     {
