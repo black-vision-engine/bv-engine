@@ -13,11 +13,13 @@ private:
     ParamVec2Ptr    m_paramShift;
     ParamFloatPtr   m_paramBlurSize;
     ParamIntPtr     m_paramNormalize;
+    ParamIntPtr     m_paramInner;
 
     glm::vec4       m_colorVal;
     glm::vec2       m_shiftVal;
     Float32         m_blurSizeVal;
     Int32           m_normalizeVal;
+    Int32           m_innerVal;
 
 public:
 

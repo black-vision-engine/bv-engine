@@ -41,6 +41,9 @@ void    ShadowEffectRenderLogic::RenderNode           ( SceneNode * node, Render
     auto normalizeVal = node->GetNodeEffect()->GetValue( "normalize" );
     auto normalizeFlagValue = QueryTypedValue< ValueIntPtr >( normalizeVal )->GetValue() > 0 ? true : false;
 
+    auto innerVal = node->GetNodeEffect()->GetValue( "inner" );
+    auto innerValue = QueryTypedValue< ValueIntPtr >( innerVal )->GetValue();
+
     auto scaleX = glm::length( node->GetTransformable()->WorldTransforms()[ 0 ].Matrix() * glm::vec4( 1.f, 0.f, 0.f, 0.f ) );
     auto scaleY = glm::length( node->GetTransformable()->WorldTransforms()[ 0 ].Matrix() * glm::vec4( 0.f, 1.f, 0.f, 0.f ) );
 
@@ -89,7 +92,7 @@ void    ShadowEffectRenderLogic::RenderNode           ( SceneNode * node, Render
 
         enable( ctx, mainTarget );
 
-        AddShadowEffect( renderer, foregroundRt->ColorTexture( 0 ), vBluredRenderTarget->ColorTexture( 0 ), colorValue, shiftValue );
+        AddShadowEffect( renderer, foregroundRt->ColorTexture( 0 ), vBluredRenderTarget->ColorTexture( 0 ), colorValue, shiftValue, innerValue );
     }
 }
 
@@ -114,7 +117,7 @@ void                        ShadowEffectRenderLogic::RenderToRenderTarget   ( Re
 
 // *********************************
 //
-ShadowFullscreenEffect *     ShadowEffectRenderLogic::AccessShadowEffect    ( Texture2DPtr tex, Texture2DPtr bluredTex, const glm::vec4 & color, const glm::vec2 & shift )
+ShadowFullscreenEffect *     ShadowEffectRenderLogic::AccessShadowEffect    ( Texture2DPtr tex, Texture2DPtr bluredTex, const glm::vec4 & color, const glm::vec2 & shift, Int32 inner )
 {
     if ( !m_shadowEffect )
     {
@@ -123,15 +126,16 @@ ShadowFullscreenEffect *     ShadowEffectRenderLogic::AccessShadowEffect    ( Te
 
     m_shadowEffect->SetColor( color );
     m_shadowEffect->SetShift( shift );
+    m_shadowEffect->SetInner( inner );
 
     return m_shadowEffect;    
 }
 
 // *********************************
 //
-void                                ShadowEffectRenderLogic::AddShadowEffect        ( Renderer * renderer, Texture2DPtr tex, Texture2DPtr bluredTex, const glm::vec4 & color, const glm::vec2 & shift )
+void                                ShadowEffectRenderLogic::AddShadowEffect        ( Renderer * renderer, Texture2DPtr tex, Texture2DPtr bluredTex, const glm::vec4 & color, const glm::vec2 & shift, Int32 inner )
 {
-    auto shadower = AccessShadowEffect( tex, bluredTex, color, shift );
+    auto shadower = AccessShadowEffect( tex, bluredTex, color, shift, inner );
 
     shadower->Render( renderer );
 }

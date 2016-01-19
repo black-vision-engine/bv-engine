@@ -16,26 +16,31 @@ ModelNodeEffectShadow::ModelNodeEffectShadow( ITimeEvaluatorPtr timeEvaluator )
 	, m_shiftVal( glm::vec2( 0.f, 0.f ) )
 	, m_blurSizeVal( 5.5f )
     , m_normalizeVal( 1 )
+    , m_innerVal( 0 )
 { 
 	auto colorEval = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", timeEvaluator );
 	auto shiftEval = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "shift", timeEvaluator );
 	auto blurSizeEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
     auto normalizeEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "normalize", timeEvaluator );
+    auto innerEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "inner", timeEvaluator );
 
     colorEval->Parameter()->SetVal( m_colorVal, 0.f );
     shiftEval->Parameter()->SetVal( m_shiftVal, 0.f );
     blurSizeEval->Parameter()->SetVal( m_blurSizeVal, 0.f );
     normalizeEval->Parameter()->SetVal( m_normalizeVal, 0.f );
+    innerEval->Parameter()->SetVal( m_innerVal, 0.f );
 
 	m_paramValModel->RegisterAll( colorEval );
 	m_paramValModel->RegisterAll( shiftEval );
     m_paramValModel->RegisterAll( blurSizeEval );
 	m_paramValModel->RegisterAll( normalizeEval );
+    m_paramValModel->RegisterAll( innerEval );
 
 	m_paramColor = colorEval->Parameter();
 	m_paramShift = shiftEval->Parameter();
 	m_paramBlurSize = blurSizeEval->Parameter();
     m_paramNormalize = normalizeEval->Parameter();
+    m_paramInner = innerEval->Parameter();
 }
 
 // ********************************

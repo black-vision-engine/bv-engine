@@ -16,6 +16,7 @@ private:
 
     ValueVec4Ptr                m_colorVal;
     ValueVec2Ptr                m_shiftVal;
+    ValueIntPtr                 m_innerVal;
 
     ValueVec2Ptr                m_textureSize;
     Texture2DPtr                m_texture;
@@ -30,6 +31,8 @@ public:
 
     void                        SetBlurSize ( float s );
     float                       GetBlurSize () const;
+
+    void                        SetInner    ( Int32 flag );
 
 
                                 ShadowFullscreenEffect    ( Texture2DPtr tex, Texture2DPtr bluredTexture );

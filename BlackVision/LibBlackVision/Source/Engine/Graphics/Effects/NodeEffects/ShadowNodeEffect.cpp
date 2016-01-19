@@ -16,11 +16,13 @@ ShadowNodeEffect::ShadowNodeEffect     ()
     auto valueShift = ValuesFactory::CreateValueVec2( "shift" );
     auto valueBlurSize = ValuesFactory::CreateValueFloat( "blurSize" );
     auto valueNormalize = ValuesFactory::CreateValueInt( "normalize" );
+    auto valueInner = ValuesFactory::CreateValueInt( "inner" );
 
     values.push_back( valueColor );
     values.push_back( valueShift );
     values.push_back( valueBlurSize );
     values.push_back( valueNormalize );
+    values.push_back( valueInner );
 }
 
 // *********************************

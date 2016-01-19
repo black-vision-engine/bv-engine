@@ -40,6 +40,13 @@ glm::vec2       ShadowFullscreenEffect::GetShift      () const
 
 // **************************
 //
+void            ShadowFullscreenEffect::SetInner     ( Int32 flag )
+{
+    m_innerVal->SetValue( flag );
+}
+
+// **************************
+//
 PixelShader *   ShadowFullscreenEffect::CreatePS            () const
 {
     ShaderParameters * shaderParams = new ShaderParameters();
@@ -48,6 +55,9 @@ PixelShader *   ShadowFullscreenEffect::CreatePS            () const
     shaderParams->AddParameter( param );
 
     param = ShaderParamFactory::CreateGenericParameter( m_shiftVal.get() );
+    shaderParams->AddParameter( param );
+
+    param = ShaderParamFactory::CreateGenericParameter( m_innerVal.get() );
     shaderParams->AddParameter( param );
 
     param = ShaderParamFactory::CreateGenericParameter( m_textureSize.get() );
@@ -74,6 +84,7 @@ ShadowFullscreenEffect::ShadowFullscreenEffect      ( Texture2DPtr tex, Texture2
 {
     m_colorVal      = ValuesFactory::CreateValueVec4( "color" );
     m_shiftVal      = ValuesFactory::CreateValueVec2( "shift" );
+    m_innerVal      = ValuesFactory::CreateValueInt( "inner" );
 
     m_textureSize   = ValuesFactory::CreateValueVec2( "textureSize" );
 
