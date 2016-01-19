@@ -303,6 +303,8 @@ bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr
 
 			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
+            m_timePatern = L""; // force reseting time patern. New font's loading.
+
             SetTimePatern( GenerateTimePatern( 0.f ) );
 
             SetTime(0.);
@@ -704,8 +706,10 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
 
             ret.push_back( m_defaultSeparator );
             ret.append( L"SS" );
-			int prec =  EvaluateAsInt< int >( m_precisionParam );
-            if(prec>0){
+			
+            auto prec =  EvaluateAsInt< int >( m_precisionParam );
+            if( prec > 0 )
+            {
 				ret.push_back( m_secSeparator );
 				ret.append( L"s" );
 			}
@@ -719,8 +723,9 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
             else
                 ret.push_back( L'S' );
 
-			int prec =  EvaluateAsInt< int >( m_precisionParam );
-           if(prec>0){
+			auto prec =  EvaluateAsInt< int >( m_precisionParam );
+            if( prec > 0 )
+            {
 				ret.push_back( m_secSeparator );
 				ret.append( L"s" );
 			}

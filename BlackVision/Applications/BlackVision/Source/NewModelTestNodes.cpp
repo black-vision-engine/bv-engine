@@ -1802,7 +1802,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::ITimeEvaluatorP
 	success = model::LoadFont( node->GetPlugin( "timer" ), "Assets/Fonts/arial.ttf", 127, blurSize, 0, false );
     assert( success );
 
-    SetTimeTimerPlugin( node->GetPlugin( "timer" ), 12333.0f );
+    SetTimeTimerPlugin( node->GetPlugin( "timer" ), 0.0f );
 
     StartTimerPlugin( node->GetPlugin( "timer" ) );
     //StopTimerPlugin( node->GetPlugin( "timer" ) );
