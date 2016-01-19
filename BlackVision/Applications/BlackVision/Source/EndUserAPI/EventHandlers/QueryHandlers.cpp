@@ -11,8 +11,9 @@
 #include "ProjectManager.h"
 #include "Engine/Models/BVProjectEditor.h"
 
-#include "Serialization/Json/JsonDeserializeObject.h"
-#include "Serialization/BVSerializeContext.h"
+#include "Serialization/BV/Json/JsonDeserializeObject.h"
+#include "Serialization/BV/BVSerializeContext.h"
+#include "Serialization/BV/BVDeserializeContext.h"
 
 
 namespace bv
@@ -98,6 +99,9 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
 void         QueryHandlers::ListSceneAssets          ( JsonSerializeObject & ser, const std::string & request, int eventID )
 {
     JsonDeserializeObject deser;
+
+    auto bvDeserCo = Cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
+
     deser.Load( request );
 
     std::string category = deser.GetAttribute( "CategoryName" );
@@ -111,7 +115,7 @@ void         QueryHandlers::ListSceneAssets          ( JsonSerializeObject & ser
 
         AssetDescsWithUIDs assets;
         GetAssetsWithUIDs( assets, sceneRoot, true );
-        AssetDescsWithUIDs::SetInstance( assets );
+        bvDeserCo->SetAssets( AssetDescsWithUIDsPtr( &assets ) );
 
         auto descriptors = assets.GetAssetsDescs();
 

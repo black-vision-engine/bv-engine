@@ -4,8 +4,8 @@
 #include "../../BVAppLogic.h"
 #include "../../UseLoggerBVAppModule.h"
 #include "EventHandlerHelpers.h"
-#include "Serialization/Json/JsonSerializeObject.h"
-#include "Serialization/Json/JsonDeserializeObject.h"
+#include "Serialization/BV/Json/JsonSerializeObject.h"
+#include "Serialization/BV/Json/JsonDeserializeObject.h"
 
 #include "Widgets/Crawler/CrawlerEvents.h"
 #include "Widgets/Counter/Counter.h"

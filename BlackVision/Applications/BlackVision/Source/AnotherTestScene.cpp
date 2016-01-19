@@ -35,10 +35,10 @@
 #include "Engine/Models/BVProject.h"
 #include "System/Path.h"
 
-#include "Serialization/XML/XMLDeserializer.h"
-#include "Serialization/Json/JsonDeserializeObject.h"
+#include "Serialization/BV/XML/XMLDeserializer.h"
+#include "Serialization/BV/Json/JsonDeserializeObject.h"
 #include "Serialization/SerializationHelper.h"
-#include "Serialization/CloneViaSerialization.h"
+#include "Serialization/BV/CloneViaSerialization.h"
 
 #include "Application/WindowedApplication.h"
 #include "Engine/Graphics/Renderers/Renderer.h"

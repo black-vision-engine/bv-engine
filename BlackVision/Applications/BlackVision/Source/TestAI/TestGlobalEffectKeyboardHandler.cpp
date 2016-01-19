@@ -4,7 +4,7 @@
 
 #include "Engine/Models/NodeEffects/ModelNodeEffectDefault.h"
 
-#include "Serialization/XML/XMLSerializer.h"
+#include "Serialization/BV/XML/XMLSerializer.h"
 #include "Assets/AssetDescsWithUIDs.h"
 
 namespace bv {

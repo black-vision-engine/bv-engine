@@ -1,9 +1,9 @@
 #include "TestKeyboardHandler.h"
 
 #include "BVAppLogic.h"
-#include "Serialization/XML/XMLSerializer.h"
-#include "Serialization/JsonSpirit/JsonSpiritSerializeObject.h"
-#include "Serialization/Json/JsonSerializeObject.h"
+#include "Serialization/BV/XML/XMLSerializer.h"
+#include "Serialization/BV/JsonSpirit/JsonSpiritSerializeObject.h"
+#include "Serialization/BV/Json/JsonSerializeObject.h"
 
 #include "Assets/Font/FontAssetDescriptor.h"
 #include "Assets/Texture/TextureAssetDescriptor.h"

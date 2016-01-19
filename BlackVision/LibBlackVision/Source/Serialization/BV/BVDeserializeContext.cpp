@@ -10,6 +10,35 @@ namespace bv
 BVDeserializeContext::~BVDeserializeContext                                 ()
 {}
 
+
+// ***********************
+//
+model::OffsetTimeEvaluatorPtr       BVDeserializeContext::GetSceneTimeline        ()
+{
+    return m_sceneTimeline;
+}
+
+// ***********************
+//
+void                                BVDeserializeContext::SetSceneTimeline        ( const model::OffsetTimeEvaluatorPtr & timeline )
+{
+    m_sceneTimeline = timeline;
+}
+
+// ***********************
+//
+AssetDescsWithUIDsPtr               BVDeserializeContext::GetAssets               ()
+{
+    return m_assets;
+}
+
+// ***********************
+//
+void                                BVDeserializeContext::SetAssets               ( const AssetDescsWithUIDsPtr & assets )
+{
+    m_assets = assets;
+}
+
 // ***********************
 //
 void                        BVDeserializeContext::Push                      ( const model::RendererContextPtr & context )

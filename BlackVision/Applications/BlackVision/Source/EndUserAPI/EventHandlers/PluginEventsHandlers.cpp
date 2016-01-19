@@ -1,6 +1,6 @@
 #include "PluginEventsHandlers.h"
 
-#include "Serialization/Json/JsonDeserializeObject.h"
+#include "Serialization/BV/Json/JsonDeserializeObject.h"
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 
 #include "Engine/Models/BVProjectEditor.h"

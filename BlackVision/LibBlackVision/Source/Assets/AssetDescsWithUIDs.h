@@ -21,8 +21,8 @@ class AssetDescsWithUIDs : public ISerializable
 
 public:
 
-    static AssetDescsWithUIDs &                             GetInstance() { return instance; }
-    static void                                             SetInstance( AssetDescsWithUIDs & i ) { instance = i; }
+    //static AssetDescsWithUIDs &                             GetInstance() { return instance; }
+    //static void                                             SetInstance( AssetDescsWithUIDs & i ) { instance = i; }
 
     virtual void                                            Serialize       ( ISerializer & ser ) const;
     static AssetDescsWithUIDs *                             Create          ( const IDeserializer & deser );
@@ -34,6 +34,8 @@ public:
     std::string                                             Key2UID( std::string key ) { return m_key2uid[ key ]; }
     AssetDescConstPtr                                       UID2Asset( std::string uid ) { return m_uid2asset[ uid ]; }
 };
+
+DEFINE_PTR_TYPE( AssetDescsWithUIDs );
 
 void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root, bool recursive = true );
 void GetAssetsWithUIDs( AssetDescsWithUIDs& map, const model::IPlugin * plugin );

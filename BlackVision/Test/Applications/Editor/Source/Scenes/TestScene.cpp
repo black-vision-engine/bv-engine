@@ -24,7 +24,7 @@
 
 #include "ProjectManager.h"
 
-#include "Serialization/XML/XMLSerializer.h"
+#include "Serialization/BV/XML/XMLSerializer.h"
 
 namespace bv {
 

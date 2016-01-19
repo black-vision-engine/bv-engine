@@ -17,7 +17,7 @@
 #include "System/Env.h"
 #include "BVConfig.h"
 #include "ProjectManager.h"
-#include "Serialization/XML/XMLSerializer.h"
+#include "Serialization/BV/XML/XMLSerializer.h"
 
 #include "MockScenes.h"
 #include "DefaultPlugins.h"

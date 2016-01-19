@@ -169,9 +169,6 @@
     <Filter Include="Engine\Graphics\Effects\NodeEffects">
       <UniqueIdentifier>{926a5c13-9933-41dd-b4b9-d446aeeba1cd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Serialization\Json">
-      <UniqueIdentifier>{e844025f-aef2-44c2-bbb0-ee813866268e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Models\NodeEffects">
       <UniqueIdentifier>{f4797669-e3c0-4f97-833c-4ea85f2ed340}</UniqueIdentifier>
     </Filter>
@@ -184,20 +181,26 @@
     <Filter Include="Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg">
       <UniqueIdentifier>{b85fcf6c-90be-4820-9c89-3f272705f078}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Serialization\XML">
-      <UniqueIdentifier>{719969e2-b26b-4293-85e3-d733a281968c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Serialization\JsonSpirit">
-      <UniqueIdentifier>{b7b800d7-36bd-4291-a6fb-e61ad91d484b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Serialization\JsonSpirit\JsonSpiritSource">
-      <UniqueIdentifier>{3f32f7df-24cd-4102-8f39-1c982a3001c4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Models\Plugins\Channels\Transform\VertexShader">
       <UniqueIdentifier>{35597ded-e812-4814-8ade-2f4ce1473665}</UniqueIdentifier>
     </Filter>
     <Filter Include="Mathematics\Interpolators\Functions">
       <UniqueIdentifier>{27519ebb-c46f-4471-9667-85c65d77b043}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Serialization\BV">
+      <UniqueIdentifier>{0244b571-d200-4f49-a103-34a420db3d44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Serialization\BV\XML">
+      <UniqueIdentifier>{719969e2-b26b-4293-85e3-d733a281968c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Serialization\BV\Json">
+      <UniqueIdentifier>{e844025f-aef2-44c2-bbb0-ee813866268e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Serialization\BV\JsonSpirit">
+      <UniqueIdentifier>{b7b800d7-36bd-4291-a6fb-e61ad91d484b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Serialization\BV\JsonSpirit\JsonSpiritSource">
+      <UniqueIdentifier>{3f32f7df-24cd-4102-8f39-1c982a3001c4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -987,38 +990,11 @@
     <ClCompile Include="..\..\..\Source\Assets\AssetCache.cpp">
       <Filter>Assets</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\Json\JsonSerializeObject.cpp">
-      <Filter>Serialization\Json</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.cpp">
-      <Filter>Serialization\Json</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Serialization\SerializationHelper.cpp">
       <Filter>Serialization</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\XML\XMLDeserializer.cpp">
-      <Filter>Serialization\XML</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\XML\XMLSerializer.cpp">
-      <Filter>Serialization\XML</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\SceneModel.cpp">
       <Filter>Engine\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritDeserializeObject.cpp">
-      <Filter>Serialization\JsonSpirit</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSerializeObject.cpp">
-      <Filter>Serialization\JsonSpirit</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_reader.cpp">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_value.cpp">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer.cpp">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectWireframe.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
@@ -1134,11 +1110,38 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectBlur.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\BVDeserializeContext.cpp">
-      <Filter>Serialization</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Builder\NodeLogicHolder.cpp">
       <Filter>Engine\Models\Builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\BV\XML\XMLDeserializer.cpp">
+      <Filter>Serialization\BV\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\BV\XML\XMLSerializer.cpp">
+      <Filter>Serialization\BV\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\BV\Json\JsonDeserializeObject.cpp">
+      <Filter>Serialization\BV\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\BV\Json\JsonSerializeObject.cpp">
+      <Filter>Serialization\BV\Json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritDeserializeObject.cpp">
+      <Filter>Serialization\BV\JsonSpirit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSerializeObject.cpp">
+      <Filter>Serialization\BV\JsonSpirit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSource\json_spirit_reader.cpp">
+      <Filter>Serialization\BV\JsonSpirit\JsonSpiritSource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSource\json_spirit_value.cpp">
+      <Filter>Serialization\BV\JsonSpirit\JsonSpiritSource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSource\json_spirit_writer.cpp">
+      <Filter>Serialization\BV\JsonSpirit\JsonSpiritSource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.cpp">
+      <Filter>Serialization\BV</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2195,56 +2198,11 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Text3DUtils.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\Json\JsonSerializeObject.h">
-      <Filter>Serialization\Json</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Serialization\IDeserializer.h">
       <Filter>Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\XML\XMLSerializer.h">
-      <Filter>Serialization\XML</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\XML\XMLDeserializer.h">
-      <Filter>Serialization\XML</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSerializeObject.h">
-      <Filter>Serialization\JsonSpirit</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_error_position.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_reader.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_reader_template.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_stream_reader.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_utils.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_value.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer_options.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer_template.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Events\EventHelpers.h">
       <Filter>Engine\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritDeserializeObject.h">
-      <Filter>Serialization\JsonSpirit</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectWireframe.h">
       <Filter>Engine\Models\NodeEffects</Filter>
@@ -2369,9 +2327,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultFontDescriptor.h">
       <Filter>Engine\Models\Plugins\Channels\PixelShader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\CloneViaSerialization.h">
-      <Filter>Serialization</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\BVProject.h">
       <Filter>Engine\Models</Filter>
     </ClInclude>
@@ -2400,12 +2355,6 @@
       <Filter>Engine\Models\Timeline</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UseLoggerLibBlackVision.h" />
-    <ClInclude Include="..\..\..\Source\Serialization\BVDeserializeContext.h">
-      <Filter>Serialization</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\BVSerializeContext.h">
-      <Filter>Serialization</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.h">
       <Filter>Assets</Filter>
     </ClInclude>
@@ -2438,6 +2387,63 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Builder\NodeLogicHolder.h">
       <Filter>Engine\Models\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\XML\XMLDeserializer.h">
+      <Filter>Serialization\BV\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\XML\XMLSerializer.h">
+      <Filter>Serialization\BV\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\Json\JsonDeserializeObject.h">
+      <Filter>Serialization\BV\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\Json\JsonSerializeObject.h">
+      <Filter>Serialization\BV\Json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritDeserializeObject.h">
+      <Filter>Serialization\BV\JsonSpirit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSerializeObject.h">
+      <Filter>Serialization\BV\JsonSpirit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSource\json_spirit.h">
+      <Filter>Serialization\BV\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSource\json_spirit_error_position.h">
+      <Filter>Serialization\BV\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSource\json_spirit_reader.h">
+      <Filter>Serialization\BV\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSource\json_spirit_reader_template.h">
+      <Filter>Serialization\BV\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSource\json_spirit_stream_reader.h">
+      <Filter>Serialization\BV\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSource\json_spirit_utils.h">
+      <Filter>Serialization\BV\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSource\json_spirit_value.h">
+      <Filter>Serialization\BV\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSource\json_spirit_writer.h">
+      <Filter>Serialization\BV\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSource\json_spirit_writer_options.h">
+      <Filter>Serialization\BV\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSource\json_spirit_writer_template.h">
+      <Filter>Serialization\BV\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.h">
+      <Filter>Serialization\BV</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\BVSerializeContext.h">
+      <Filter>Serialization\BV</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\CloneViaSerialization.h">
+      <Filter>Serialization\BV</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2497,9 +2503,6 @@
     </None>
     <None Include="..\..\..\Source\Engine\Models\Plugins\Descriptor\ModelHelper.h">
       <Filter>Engine\Models\Plugins\Descriptor</Filter>
-    </None>
-    <None Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.h">
-      <Filter>Serialization\Json</Filter>
     </None>
     <None Include="..\..\..\Source\Serialization\SerializationHelper.inl">
       <Filter>Serialization</Filter>

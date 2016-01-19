@@ -3,9 +3,9 @@
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
 
-#include "Serialization/XML/XMLDeserializer.h"
-#include "Serialization/XML/XMLSerializer.h"
-#include "Serialization/BVDeserializeContext.h"
+#include "Serialization/BV/XML/XMLDeserializer.h"
+#include "Serialization/BV/XML/XMLSerializer.h"
+#include "Serialization/BV/BVDeserializeContext.h"
 
 #include "Assets/AssetDescsWithUIDs.h"
 

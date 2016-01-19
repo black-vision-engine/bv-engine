@@ -1,7 +1,7 @@
 #include "XML/XMLSerializer.h"
 #include "XML/XMLDeserializer.h"
 
-#include "SerializationHelper.h"
+#include "Serialization/SerializationHelper.h"
 #include "BVDeserializeContext.h"
 
 #include <sstream>
@@ -11,7 +11,7 @@ namespace bv {
 namespace CloneViaSerialization {
 
 template< typename T >
-T*                              Clone( const T* obj, std::string name, model::OffsetTimeEvaluatorPtr sceneTimeline = nullptr )
+T*                              Clone( const T* obj, std::string name, AssetDescsWithUIDsPtr assets, model::OffsetTimeEvaluatorPtr sceneTimeline )
 {
     XMLSerializer ser;
     
@@ -24,13 +24,15 @@ T*                              Clone( const T* obj, std::string name, model::Of
 
     XMLDeserializer deser( ss, ss.tellp() );
 
-	dynamic_cast< BVDeserializeContext* >( deser.GetDeserializeContext() )->m_sceneTimeline = sceneTimeline;
+    auto bvDeserCo = Cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
+	bvDeserCo->SetSceneTimeline( sceneTimeline );
+    bvDeserCo->SetAssets( assets );
 
     return SerializationHelper::DeserializeObject< T >( deser, name );
 }
 
 template< typename T >
-std::shared_ptr< T >                              ClonePtr( const T* obj, std::string name, model::OffsetTimeEvaluatorPtr sceneTimeline = nullptr )
+std::shared_ptr< T >                              ClonePtr( const T* obj, std::string name, AssetDescsWithUIDsPtr assets, model::OffsetTimeEvaluatorPtr sceneTimeline )
 {
     XMLSerializer ser;
     
@@ -43,8 +45,10 @@ std::shared_ptr< T >                              ClonePtr( const T* obj, std::s
 
     XMLDeserializer deser( ss, ss.tellp() );
 
-	dynamic_cast< BVDeserializeContext* >( deser.GetDeserializeContext() )->m_sceneTimeline = sceneTimeline;
-
+    auto bvDeserCo = Cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
+	bvDeserCo->SetSceneTimeline( sceneTimeline );
+    bvDeserCo->SetAssets( assets );
+	
     auto sucess = deser.EnterChild( name );
     assert( sucess ); { sucess; } // FIXME error handling
     auto clone = T::Create( deser );

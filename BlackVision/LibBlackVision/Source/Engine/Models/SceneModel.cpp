@@ -5,8 +5,8 @@
 
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
 
-#include "Serialization/CloneViaSerialization.h"
-#include "Serialization/BVSerializeContext.h"
+#include "Serialization/BV/CloneViaSerialization.h"
+#include "Serialization/BV/BVSerializeContext.h"
 
 namespace bv { namespace model {
 
@@ -53,10 +53,9 @@ void            SceneModel::Serialize           ( ISerializer& ser) const
 
         if( context->detailedInfo )
         {
-            //auto& assets = AssetDescsWithUIDs::GetInstance();
             AssetDescsWithUIDs assets;
             GetAssetsWithUIDs( assets, m_sceneRootNode );
-            AssetDescsWithUIDs::SetInstance( assets );
+            context->SetAssets( AssetDescsWithUIDsPtr( &assets ) );
 
             assets.Serialize( ser );
 
@@ -78,9 +77,10 @@ void            SceneModel::Serialize           ( ISerializer& ser) const
 //
 SceneModel *        SceneModel::Create          ( const IDeserializer& deser )
 {
+    auto bvDeserCo = Cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
 // assets
-    auto assets = SerializationHelper::DeserializeObject< AssetDescsWithUIDs >( deser, "assets" );
-    AssetDescsWithUIDs::SetInstance( *assets );
+    auto assets = SerializationHelper::DeserializeObjectPtr< AssetDescsWithUIDs >( deser, "assets" );
+    bvDeserCo->SetAssets( assets );
 
 	//FIXME: pass nullptr as camera because we don't have camera model yet
     auto obj = new SceneModel( deser.GetAttribute( "name" ), nullptr );
@@ -94,7 +94,7 @@ SceneModel *        SceneModel::Create          ( const IDeserializer& deser )
 		sceneTimeline->AddChild( timeline );
     }
 
-    dynamic_cast< BVDeserializeContext* >( deser.GetDeserializeContext() )->m_sceneTimeline = sceneTimeline;
+	bvDeserCo->SetSceneTimeline( sceneTimeline );
 
 // nodes
     auto node = SerializationHelper::DeserializeObjectPtr< model::BasicNode >( deser, "node" );
@@ -111,7 +111,7 @@ SceneModel *        SceneModel::Create          ( const IDeserializer& deser )
 //
 model::SceneModel *		SceneModel::Clone		() const
 {
-	return CloneViaSerialization::Clone( this, "scene" );
+	return CloneViaSerialization::Clone( this, "scene", nullptr, nullptr ); // FIXME probably
 }
 
 // *******************************

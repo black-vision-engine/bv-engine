@@ -16,9 +16,9 @@
 #include "Engine/Models/Timeline/TimelineHelper.h"
 
 #include "Serialization/SerializationHelper.h"
-#include "Serialization/BVSerializeContext.h"
+#include "Serialization/BV/BVSerializeContext.h"
 //#include "Serialization/SerializationObjects.inl"
-#include "Serialization/CloneViaSerialization.h"
+#include "Serialization/BV/CloneViaSerialization.h"
 #include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 #include "Assets/AssetDescsWithUIDs.h"
 
@@ -203,12 +203,11 @@ BasicNode * BasicNode::Create( const IDeserializer& dob )
 //
 IModelNode *					BasicNode::Clone			() const
 {
-	AssetDescsWithUIDs assets;
-	//FIXME: const hack
-	GetAssetsWithUIDs( assets, std::const_pointer_cast< BasicNode >( shared_from_this() ) );
-	AssetDescsWithUIDs::SetInstance( assets );
+	//AssetDescsWithUIDs assets;
+	////FIXME: const hack
+	//GetAssetsWithUIDs( assets, std::const_pointer_cast< BasicNode >( shared_from_this() ) );
 
-	return CloneViaSerialization::Clone( this, "node" );
+	return CloneViaSerialization::Clone( this, "node", nullptr, nullptr );
 }
 
 // ********************************

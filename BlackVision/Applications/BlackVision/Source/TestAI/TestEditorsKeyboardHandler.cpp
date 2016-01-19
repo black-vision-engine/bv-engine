@@ -1,8 +1,8 @@
 #include "TestEditorsKeyboardHandler.h"
 
 #include "Engine/Models/BVProjectEditor.h"
-#include "Serialization/XML/XMLSerializer.h"
-#include "Serialization/Json/JsonSerializeObject.h"
+#include "Serialization/BV/XML/XMLSerializer.h"
+#include "Serialization/BV/Json/JsonSerializeObject.h"
 
 #include "MockScenes.h"
 #include "BVAppLogic.h"

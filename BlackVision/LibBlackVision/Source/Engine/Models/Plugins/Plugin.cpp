@@ -7,10 +7,10 @@
 #include "Engine/Models/Timeline/TimelineHelper.h"
 
 #include "Assets/AssetSerialization.h"
-#include "Serialization/CloneViaSerialization.h"
+#include "Serialization/BV/CloneViaSerialization.h"
 #include "Assets/AssetDescsWithUIDs.h"
-#include "Serialization/BVSerializeContext.h"
-#include "Serialization/BVDeserializeContext.h"
+#include "Serialization/BV/BVSerializeContext.h"
+#include "Serialization/BV/BVDeserializeContext.h"
 
 #include "UseLoggerLibBlackVision.h"
 
@@ -146,9 +146,8 @@ ser.EnterChild( "plugin" );
             ser.EnterArray( "assets" );
             for( auto lasset : assets )
             {
-                //auto asset = lasset.asset;
                 auto assetDesc = lasset.assetDesc;
-                auto uid = AssetDescsWithUIDs::GetInstance().Key2UID( assetDesc->GetKey() );
+                auto uid = serContext->GetAssets()->Key2UID( assetDesc->GetKey() );
                 ser.EnterChild( "asset" );
                     if( uid != "" )
                         ser.SetAttribute( "uid", uid );
@@ -190,7 +189,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create                              ( co
 
     auto timeline = deser.GetAttribute( "timeline" );
     
-    ITimeEvaluatorPtr sceneTimeline = deserContext->m_sceneTimeline;
+    ITimeEvaluatorPtr sceneTimeline = deserContext->GetSceneTimeline();
     if( sceneTimeline == nullptr )
     {
         sceneTimeline = TimelineManager::GetInstance()->GetRootTimeline();
@@ -230,7 +229,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create                              ( co
             AssetDescConstPtr asset;
             if( uid != "" )
             {
-                asset = AssetDescsWithUIDs::GetInstance().UID2Asset( uid );
+                asset = deserContext->GetAssets()->UID2Asset( uid );
             }
             else
             {
@@ -283,11 +282,10 @@ ISerializablePtr BasePlugin< IPlugin >::Create                              ( co
 template <>
 IPluginPtr							BasePlugin< IPlugin >::Clone					() const
 {
-    AssetDescsWithUIDs assets;
-    GetAssetsWithUIDs( assets, this );
-    AssetDescsWithUIDs::SetInstance( assets );
+    //AssetDescsWithUIDs assets;
+    //GetAssetsWithUIDs( assets, this );
 
-    return bv::CloneViaSerialization::ClonePtr( this, "plugin" );
+    return bv::CloneViaSerialization::ClonePtr( this, "plugin", nullptr, nullptr ); // FIXME(?)
 }
 
 // *******************************

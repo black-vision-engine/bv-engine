@@ -41,8 +41,8 @@
 
 #include "BVConfig.h"
 
-#include "Serialization/Json/JsonDeserializeObject.h"
-#include "Serialization/Json/JsonSerializeObject.h"
+#include "Serialization/BV/Json/JsonDeserializeObject.h"
+#include "Serialization/BV/Json/JsonSerializeObject.h"
 
 #include <fstream>
 
