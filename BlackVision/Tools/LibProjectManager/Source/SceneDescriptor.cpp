@@ -86,7 +86,7 @@ namespace
 //
 void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & scene, std::ostream & out )
 {
-	auto ser = XMLSerializer();
+	auto ser = XMLSerializer( nullptr ); // FIXME(?)
 
     scene->Serialize( ser );
 

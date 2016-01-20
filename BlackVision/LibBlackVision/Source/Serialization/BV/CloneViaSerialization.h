@@ -1,4 +1,4 @@
-#include "XML/XMLSerializer.h"
+#include "XML/BVXMLSerializer.h"
 #include "XML/XMLDeserializer.h"
 
 #include "Serialization/SerializationHelper.h"
@@ -13,7 +13,7 @@ namespace CloneViaSerialization {
 template< typename T >
 T*                              Clone( const T* obj, std::string name, AssetDescsWithUIDsPtr assets, model::OffsetTimeEvaluatorPtr sceneTimeline )
 {
-    XMLSerializer ser;
+    BVXMLSerializer ser( assets );
     
     obj->Serialize( ser );
 
@@ -34,7 +34,7 @@ T*                              Clone( const T* obj, std::string name, AssetDesc
 template< typename T >
 std::shared_ptr< T >                              ClonePtr( const T* obj, std::string name, AssetDescsWithUIDsPtr assets, model::OffsetTimeEvaluatorPtr sceneTimeline )
 {
-    XMLSerializer ser;
+    BVXMLSerializer ser;
     
     obj->Serialize( ser );
 

@@ -396,6 +396,7 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\BV\BVSerializeContext.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritDeserializeObject.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSerializeObject.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSource\json_spirit_reader.cpp">
@@ -408,6 +409,7 @@
     <ClCompile Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSource\json_spirit_writer.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\Json\JsonDeserializeObject.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\Json\JsonSerializeObject.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\BV\XML\BVXMLSerializer.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\XML\XMLDeserializer.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\XML\XMLSerializer.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\SerializationHelper.cpp" />
@@ -798,12 +800,15 @@
     <ClInclude Include="..\..\..\Source\Serialization\BV\JsonSpirit\JsonSpiritSource\json_spirit_writer_template.h" />
     <ClInclude Include="..\..\..\Source\Serialization\BV\Json\JsonDeserializeObject.h" />
     <ClInclude Include="..\..\..\Source\Serialization\BV\Json\JsonSerializeObject.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\BV\XML\BVXMLSerializer.h" />
     <ClInclude Include="..\..\..\Source\Serialization\BV\XML\XMLDeserializer.h" />
     <ClInclude Include="..\..\..\Source\Serialization\BV\XML\XMLSerializer.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\DeserializeContext.h" />
     <ClInclude Include="..\..\..\Source\Serialization\IDeserializer.h" />
     <ClInclude Include="..\..\..\Source\Serialization\ISerializable.h" />
     <ClInclude Include="..\..\..\Source\Serialization\ISerializer.h" />
     <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\SerializeContext.h" />
     <ClInclude Include="..\..\..\Source\UseLoggerLibBlackVision.h" />
   </ItemGroup>
   <ItemGroup>

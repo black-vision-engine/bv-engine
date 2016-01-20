@@ -203,11 +203,11 @@ BasicNode * BasicNode::Create( const IDeserializer& dob )
 //
 IModelNode *					BasicNode::Clone			() const
 {
-	//AssetDescsWithUIDs assets;
-	////FIXME: const hack
-	//GetAssetsWithUIDs( assets, std::const_pointer_cast< BasicNode >( shared_from_this() ) );
+	auto assets = std::make_shared< AssetDescsWithUIDs >();
+	//FIXME: const hack
+	GetAssetsWithUIDs( *assets, std::const_pointer_cast< BasicNode >( shared_from_this() ) );
 
-	return CloneViaSerialization::Clone( this, "node", nullptr, nullptr );
+	return CloneViaSerialization::Clone( this, "node", assets, nullptr );
 }
 
 // ********************************

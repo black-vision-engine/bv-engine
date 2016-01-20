@@ -4,7 +4,6 @@
 #include <rapidxml/RapidXml_Print.hpp>
 #include <fstream>
 #include <stack>
-#include "Serialization/BV/BVSerializeContext.h"
 
 #include "System/Path.h"
 
@@ -12,8 +11,8 @@ namespace bv {
 
 // *******************************
 //
-XMLSerializer::XMLSerializer()
-    : m_context( std::unique_ptr< SerializeContext >( new BVSerializeContext() ) )
+XMLSerializer::XMLSerializer( SerializeContext* context )
+    : m_context( context )
 {
     m_roots.push( &m_doc );
 }
@@ -47,6 +46,13 @@ void XMLSerializer::Save( std::ostream & out )
 SerializeContext* XMLSerializer::GetSerializeContext() const
 {
     return m_context.get();
+}
+
+// *******************************
+//
+void                        XMLSerializer::SetSerializeContext ( SerializeContext* context )
+{
+    m_context = std::unique_ptr< SerializeContext >( context );
 }
 
 // *******************************

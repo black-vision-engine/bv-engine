@@ -1,7 +1,7 @@
 #include "TestKeyboardHandler.h"
 
 #include "BVAppLogic.h"
-#include "Serialization/BV/XML/XMLSerializer.h"
+#include "Serialization/BV/XML/BVXMLSerializer.h"
 #include "Serialization/BV/JsonSpirit/JsonSpiritSerializeObject.h"
 #include "Serialization/BV/Json/JsonSerializeObject.h"
 
@@ -29,7 +29,7 @@ void TestKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
 {
     if( c == 's' )
     {
-        auto sob = new XMLSerializer();
+        auto sob = new BVXMLSerializer();
         logic->GetBVProject()->GetScenes()[ 0 ]->Serialize( *sob );
         sob->Save( "test.xml" );
         delete sob;

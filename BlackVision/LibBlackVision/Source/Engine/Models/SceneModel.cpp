@@ -53,11 +53,11 @@ void            SceneModel::Serialize           ( ISerializer& ser) const
 
         if( context->detailedInfo )
         {
-            AssetDescsWithUIDs assets;
-            GetAssetsWithUIDs( assets, m_sceneRootNode );
-            context->SetAssets( AssetDescsWithUIDsPtr( &assets ) );
+            auto assets = std::make_shared< AssetDescsWithUIDs >();
+            GetAssetsWithUIDs( *assets, m_sceneRootNode );
+            context->SetAssets( assets );
 
-            assets.Serialize( ser );
+            assets->Serialize( ser );
 
             ser.EnterArray( "timelines" );
             for( auto timeline : m_timeline->GetChildren() )

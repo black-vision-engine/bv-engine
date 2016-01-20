@@ -1143,6 +1143,12 @@
     <ClCompile Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.cpp">
       <Filter>Serialization\BV</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\BV\BVSerializeContext.cpp">
+      <Filter>Serialization\BV</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Serialization\BV\XML\BVXMLSerializer.cpp">
+      <Filter>Serialization\BV\XML</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2444,6 +2450,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Serialization\BV\CloneViaSerialization.h">
       <Filter>Serialization\BV</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\DeserializeContext.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\SerializeContext.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Serialization\BV\XML\BVXMLSerializer.h">
+      <Filter>Serialization\BV\XML</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

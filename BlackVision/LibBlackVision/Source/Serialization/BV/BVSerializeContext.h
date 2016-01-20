@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Serialization/SerializeContext.h"
+
 #include "CoreDEF.h"
 
 namespace bv {
@@ -15,6 +17,7 @@ class BVSerializeContext : public SerializeContext
 
 public:
     BVSerializeContext()
+        : m_assets( nullptr )
     {
         recursive = true;
         detailedInfo = true;
