@@ -325,6 +325,26 @@ model::BasicNodePtr  SimpleNodesFactory::CreateLightScatteringTest      ( model:
     return root;
 }
 
+// *****************************
+//
+model::BasicNodePtr  SimpleNodesFactory::CreateBlurTest               ( model::ITimeEvaluatorPtr timeEvaluator )
+{
+    TexturedRectNodeBuilder bTex( timeEvaluator, "rsrcy/butterfly1.png", false, 3.f, 3.f );
+    //bTex.SetScale( 5.f, 5.f, 1.f, 0.f );
+    //bTex.SetScale( 1.f, 1.f, 1.f, 5.f );
+    //bTex.SetScale( 0.3f, 0.3f, 1.f, 20.f );
+    auto root = bTex.CreateNode( "root", true );
+
+    
+
+    auto text = CreateTextNode( timeEvaluator, 0, false );
+
+    root->AddChildToModelOnly( text );
+
+    root->SetNodeEffect( std::make_shared< model::ModelNodeEffectBlur >( timeEvaluator ) );
+
+    return root;
+}
 
 // *****************************
 //
@@ -1802,7 +1822,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::ITimeEvaluatorP
 	success = model::LoadFont( node->GetPlugin( "timer" ), "Assets/Fonts/arial.ttf", 127, blurSize, 0, false );
     assert( success );
 
-    SetTimeTimerPlugin( node->GetPlugin( "timer" ), 12333.0f );
+    SetTimeTimerPlugin( node->GetPlugin( "timer" ), 0.0f );
 
     StartTimerPlugin( node->GetPlugin( "timer" ) );
     //StopTimerPlugin( node->GetPlugin( "timer" ) );

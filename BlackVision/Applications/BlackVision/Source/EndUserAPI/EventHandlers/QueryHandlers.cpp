@@ -309,8 +309,12 @@ void        QueryHandlers::ListAssetsPaths     ( JsonSerializeObject & ser, cons
 
     auto projName = GetRequestParamValue( request )[ "projectName" ].asString();
     auto catName = GetRequestParamValue( request )[ "categoryName" ].asString();
+    auto path = GetRequestParamValue( request )[ "path" ].asString();
 
-    auto sns = pm->ListAssetsPaths( projName, catName );
+    auto sns = pm->ListAssetsPaths( projName, catName, path );
+
+    ser.SetAttribute( "categoryName", catName );
+    ser.SetAttribute( "path", path );
 
     ser.EnterArray( "list" );
     for( auto assetPath : sns )
@@ -492,6 +496,8 @@ void    QueryHandlers::ListAllFolders          ( JsonSerializeObject & ser, cons
 
     auto pm = ProjectManager::GetInstance();
     auto sns = pm->ListAssetsDirs( catName, path );
+
+    ser.SetAttribute( "categoryName", catName );
 
     ser.EnterArray( "list" );
     for( auto d : sns )

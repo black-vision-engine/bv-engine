@@ -532,6 +532,10 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::LightScatteringTestScene( pluginsManager, timeline );
     }
+    else if( scene == "BLUR_EFFECT" )
+    {
+        node = TestScenesFactory::BlurEffectTestScene( pluginsManager, timeline );
+    }
     else if( scene == "SHADOW_EFFECT" )
     {
         node = TestScenesFactory::ShadowEffectTestScene( pluginsManager, timeline );
@@ -540,6 +544,10 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::MultiShadowEffectTestScene( pluginsManager, timeline );
     }    
+    else if( scene == "TIMER_TEST_SCENE" )
+    {
+        node = TestScenesFactory::TimerTestScene( pluginsManager, timeline );
+    }
     else if( scene == "CRAWLER_TEST_SCENE" )
     {
         node = TestScenesFactory::CrawlerNodeTestScene( pluginsManager, timeline );
@@ -626,6 +634,14 @@ model::BasicNodePtr     TestScenesFactory::LightScatteringTestScene  ( const mod
 
 // *****************************
 //
+model::BasicNodePtr     TestScenesFactory::BlurEffectTestScene  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { pluginsManager; }
+    return SimpleNodesFactory::CreateBlurTest( timeEvaluator );
+}
+
+// *****************************
+//
 model::BasicNodePtr     TestScenesFactory::ShadowEffectTestScene  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { pluginsManager; }
@@ -638,6 +654,14 @@ model::BasicNodePtr     TestScenesFactory::MultiShadowEffectTestScene  ( const m
 {
     { pluginsManager; }
     return SimpleNodesFactory::CreateMultiShadowTest( timeEvaluator );
+}
+
+// *****************************
+//
+model::BasicNodePtr     TestScenesFactory::TimerTestScene  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { pluginsManager; }
+    return SimpleNodesFactory::CreateTimerNode( timeEvaluator, 0, false );
 }
 
 model::BasicNodePtr     TestScenesFactory::CrawlerNodeTestScene   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )

@@ -77,9 +77,9 @@ StringVector	ProjectManager::ListCategoriesNames	() const
 
 // ********************************
 //
-PathVec			ProjectManager::ListAssetsPaths		( const Path & projectName,  const std::string & categoryName ) const
+PathVec			ProjectManager::ListAssetsPaths		( const Path & projectName,  const std::string & categoryName, const Path & path ) const
 {
-	return m_impl->ListAssetsPaths( projectName, categoryName );
+	return m_impl->ListAssetsPaths( projectName, categoryName, path );
 }
 
 // ********************************
