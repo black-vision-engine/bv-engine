@@ -35,8 +35,8 @@
 #include "Engine/Models/BVProject.h"
 #include "System/Path.h"
 
-#include "Serialization/BV/XML/XMLDeserializer.h"
-#include "Serialization/BV/Json/JsonDeserializeObject.h"
+#include "Serialization/BV/XML/BVXMLDeserializer.h"
+#include "Serialization/Json/JsonDeserializeObject.h"
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/BV/CloneViaSerialization.h"
 
@@ -842,7 +842,7 @@ model::SceneModelPtr LoadSceneFromFile( std::string filename )
 
     //JsonDeserializeObject deser;
     //deser.Load( filename );
-    XMLDeserializer deser( filename );
+    BVXMLDeserializer deser( filename, nullptr, nullptr );
 
     auto model = SerializationHelper::DeserializeObjectPtr< SceneModel >( deser, "scene" );
 

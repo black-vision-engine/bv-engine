@@ -15,7 +15,7 @@
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/SerializationHelper.inl"
 
-#include "Serialization/BV/Json/JsonSerializeObject.h"
+#include "Serialization/Json/JsonSerializeObject.h"
 #include "Engine/Events/EventManager.h"
 #include "Engine/Events/Events.h"
 #undef min

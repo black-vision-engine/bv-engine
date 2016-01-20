@@ -7,6 +7,14 @@ namespace bv
 
 // ***********************
 //
+BVDeserializeContext::BVDeserializeContext( model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets )
+{
+    SetAssets( assets );
+    SetSceneTimeline( timeline );
+}
+
+// ***********************
+//
 BVDeserializeContext::~BVDeserializeContext                                 ()
 {}
 

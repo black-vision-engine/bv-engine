@@ -3,8 +3,8 @@
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
 
-#include "Serialization/BV/XML/XMLDeserializer.h"
-#include "Serialization/BV/XML/XMLSerializer.h"
+#include "Serialization/XML/XMLDeserializer.h"
+#include "Serialization/XML/XMLSerializer.h"
 #include "Serialization/BV/BVDeserializeContext.h"
 
 #include "Assets/AssetDescsWithUIDs.h"
@@ -97,7 +97,7 @@ void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & sc
 //
 model::SceneModelPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeType numBytes )
 {
-    auto deser = XMLDeserializer( in, numBytes );
+    auto deser = XMLDeserializer( in, numBytes, new BVDeserializeContext( nullptr, nullptr ) );
 
     auto scene = SerializationHelper::DeserializeObject< model::SceneModel >( deser, "scene" );
 
@@ -129,7 +129,7 @@ AssetDescVec SceneDescriptor::ListSceneAssets ( const Path & sceneFile )
 //
 AssetDescVec SceneDescriptor::ListSceneAssets ( std::istream & in, SizeType numBytes )
 {
-    auto deser = XMLDeserializer( in, numBytes );
+    auto deser = XMLDeserializer( in, numBytes, new BVDeserializeContext( nullptr, nullptr ) );
 
     // assets
     auto assets = SerializationHelper::DeserializeObject< AssetDescsWithUIDs >( deser, "assets" );

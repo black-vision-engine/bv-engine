@@ -1,5 +1,5 @@
 #include "XML/BVXMLSerializer.h"
-#include "XML/XMLDeserializer.h"
+#include "XML/BVXMLDeserializer.h"
 
 #include "Serialization/SerializationHelper.h"
 #include "BVDeserializeContext.h"
@@ -22,11 +22,7 @@ T*                              Clone( const T* obj, std::string name, AssetDesc
 
     //ser.Save( "clone.xml" ); // for debugging only
 
-    XMLDeserializer deser( ss, ss.tellp() );
-
-    auto bvDeserCo = Cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
-	bvDeserCo->SetSceneTimeline( sceneTimeline );
-    bvDeserCo->SetAssets( assets );
+    BVXMLDeserializer deser( ss, ss.tellp(), sceneTimeline, assets );
 
     return SerializationHelper::DeserializeObject< T >( deser, name );
 }
@@ -43,11 +39,7 @@ std::shared_ptr< T >                              ClonePtr( const T* obj, std::s
 
     //ser.Save( "clone.xml" ); // for debugging only
 
-    XMLDeserializer deser( ss, ss.tellp() );
-
-    auto bvDeserCo = Cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
-	bvDeserCo->SetSceneTimeline( sceneTimeline );
-    bvDeserCo->SetAssets( assets );
+    BVXMLDeserializer deser( ss, ss.tellp(), sceneTimeline, assets );
 	
     auto sucess = deser.EnterChild( name );
     assert( sucess ); { sucess; } // FIXME error handling

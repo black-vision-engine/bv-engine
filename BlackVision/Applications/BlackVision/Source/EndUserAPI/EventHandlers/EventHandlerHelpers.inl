@@ -1,7 +1,7 @@
 #include "EventHandlerHelpers.h"
 
 #include "Serialization/ISerializer.h"
-#include "Serialization/BV/Json/JsonSerializeObject.h"
+#include "Serialization/Json/JsonSerializeObject.h"
 #include "Engine/Events/EventManager.h"
 #include "Engine/Events/Events.h"
 
