@@ -532,6 +532,10 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::LightScatteringTestScene( pluginsManager, timeline );
     }
+    else if( scene == "BLUR_EFFECT" )
+    {
+        node = TestScenesFactory::BlurEffectTestScene( pluginsManager, timeline );
+    }
     else if( scene == "SHADOW_EFFECT" )
     {
         node = TestScenesFactory::ShadowEffectTestScene( pluginsManager, timeline );
@@ -626,6 +630,14 @@ model::BasicNodePtr     TestScenesFactory::LightScatteringTestScene  ( const mod
 {
     { pluginsManager; }
     return SimpleNodesFactory::CreateLightScatteringTest( timeEvaluator );
+}
+
+// *****************************
+//
+model::BasicNodePtr     TestScenesFactory::BlurEffectTestScene  ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
+{
+    { pluginsManager; }
+    return SimpleNodesFactory::CreateBlurTest( timeEvaluator );
 }
 
 // *****************************

@@ -24,6 +24,7 @@ public:
     static model::BasicNodePtr  CreateGlobalEffectTest      ( model::ITimeEvaluatorPtr timeEvaluator );
     static model::BasicNodePtr  CreateLightScatteringTest   ( model::ITimeEvaluatorPtr timeEvaluator );
     static model::BasicNodePtr  CreateShadowTest            ( model::ITimeEvaluatorPtr timeEvaluator );
+    static model::BasicNodePtr  CreateBlurTest              ( model::ITimeEvaluatorPtr timeEvaluator );
     static model::BasicNodePtr  CreateMultiShadowTest       ( model::ITimeEvaluatorPtr timeEvaluator );
     static model::BasicNodePtr  CreateOverrideAlphaTest     ( model::ITimeEvaluatorPtr timeEvaluator );
     static model::BasicNodePtr  CreateOverrideNodeMaskTest  ( model::ITimeEvaluatorPtr timeEvaluator );
