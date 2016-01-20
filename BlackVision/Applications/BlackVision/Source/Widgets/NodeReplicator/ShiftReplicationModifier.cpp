@@ -1,7 +1,7 @@
 #include "ShiftReplicationModifier.h"
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
-#include "Engine/Models/Plugins/Parameters/ParameterSerialization.h"
+#include "../NodeLogicHelper.h"
 
 namespace bv { namespace model
 {
@@ -29,10 +29,11 @@ void                            ShiftReplicationModifier::Serialize       ( ISer
                     ser.SetAttribute( "startTime", SerializationHelper::T2String( shift.second.startTime ) );
                     ser.SetAttribute( "deltaTime", SerializationHelper::T2String( shift.second.deltaTime ) );
 
-                    ser.EnterChild( "value" );
-                        ser.SetAttribute( "type", SerializationHelper::T2String( shift.second.delta->GetType() ) );
+                    ser.EnterChild( "delta" );
 
-                    ser.ExitChild();
+                        SerializationHelper::SerializeValue( ser, shift.second.delta );
+
+                    ser.ExitChild();    // delta
 
                 ser.ExitChild();
 
@@ -62,10 +63,16 @@ ShiftReplicationModifierPtr     ShiftReplicationModifier::Create          ( cons
                 shift.deltaTime = SerializationHelper::String2T( deser.GetAttribute( "deltaTime" ), 0.0f );
                 shift.startTime = SerializationHelper::String2T( deser.GetAttribute( "startTime" ), 0.0f );
 
-            deser.ExitChild();
+                deser.EnterChild( "delta" );
+
+                    shift.delta = SerializationHelper::CreateValue( deser, "delta" );
+
+                deser.ExitChild();  // value 
+
+            deser.ExitChild();  // paramDelta
 
         } while( deser.NextChild() );
-        deser.ExitChild();
+        deser.ExitChild();  // paramShifts
     }
 
     return shiftModifier;

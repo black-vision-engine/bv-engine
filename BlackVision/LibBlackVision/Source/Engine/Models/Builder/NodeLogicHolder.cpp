@@ -16,7 +16,7 @@ public:
     virtual ~INodeLogicHolder();
 
     static void                         SetFactory      ( INodeLogicFactory * newFactory );
-
+    static INodeLogicFactory *          GetFactory      ();
 };
 
 static INodeLogicHolder     holder;
@@ -47,11 +47,29 @@ void            INodeLogicHolder::SetFactory      ( INodeLogicFactory * newFacto
 
 // ***********************
 //
+INodeLogicFactory *          INodeLogicHolder::GetFactory      ()
+{
+    return factory;
+}
+
+} // annonymous
+
+
+// ***********************
+//
+INodeLogicFactory *         GetNodeLogicFactory         ()
+{
+    return INodeLogicHolder::GetFactory();
+}
+
+
+// ***********************
+//
 void    SetNodeLogicFactory         ( INodeLogicFactory * factory )
 {
     INodeLogicHolder::SetFactory( factory );
 }
 
 
-} // annonymous
+
 } // bv

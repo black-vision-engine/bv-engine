@@ -350,6 +350,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerEvents.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\NodeLogicFactory.cpp" />
+    <ClCompile Include="..\..\..\Source\Widgets\NodeLogicHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.cpp" />
     <ClCompile Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.cpp" />
   </ItemGroup>
@@ -443,6 +444,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerEvents.h" />
     <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.h" />
     <ClInclude Include="..\..\..\Source\Widgets\NodeLogicFactory.h" />
+    <ClInclude Include="..\..\..\Source\Widgets\NodeLogicHelper.h" />
     <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\NodeReplicator.h" />
     <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\IReplicationModifier.h" />
     <ClInclude Include="..\..\..\Source\Widgets\NodeReplicator\ShiftReplicationModifier.h" />

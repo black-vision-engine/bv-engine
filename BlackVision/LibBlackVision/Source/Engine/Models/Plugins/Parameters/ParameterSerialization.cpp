@@ -8,6 +8,7 @@
 
 //#include "Serialization/SerializationObjects.inl"
 #include "Serialization/SerializationHelper.h"
+#include "ParameterSerialization.h"
 //#include "Serialization/SerializationObjects.h"
 //#include "Serialization/SerializationObjects.inl"
 
@@ -57,6 +58,15 @@ template<>
 std::string T2String< bv::ParamType>( const bv::ParamType& t )
 {
     return SerializationHelper::Enum2String< bv::ParamType >( ParamTypeStringsArray, t );
+}
+
+template<>
+bv::ParamType         String2T< bv::ParamType>            ( const std::string& s, const bv::ParamType& defaultVal )
+{
+    auto result = SerializationHelper::String2T< bv::ParamType >( ParamTypeStringsArray, s );
+    if( result == ParamType::PT_TOTAL )
+        return defaultVal;
+    return result;
 }
 
 }
@@ -231,7 +241,6 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     assert( false ); // FIXME
     return ParametersFactory::CreateParameterBool( name, te );
 }
-
 
 
 } }

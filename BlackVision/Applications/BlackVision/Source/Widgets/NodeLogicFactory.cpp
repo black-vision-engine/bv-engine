@@ -10,8 +10,10 @@
 namespace bv
 {
 
-model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const std::string& logicType, model::BasicNodePtr logicParent, bv::model:: ITimeEvaluatorPtr timeEvaluator, const IDeserializer & deser )
+model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer & deser, model::BasicNodePtr logicParent, bv::model:: ITimeEvaluatorPtr timeEvaluator )
 {
+    const std::string& logicType = deser.GetAttribute( "type" );
+
     if( logicType == "crawler" )
         return nodelogic::Crawler::Create( deser, logicParent.get() );
     else if( logicType == "counter" )
