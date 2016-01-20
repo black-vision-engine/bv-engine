@@ -1,7 +1,7 @@
 #include "CrawlerEvents.h"
 
 
-namespace bv { namespace widgets {
+namespace bv { namespace nodelogic {
 
 const EventType NodeAppearingCrawlerEvent::m_sEventType     = 0x01000006;
 std::string NodeAppearingCrawlerEvent::m_sEventName         = "Event_NodeAppearingCrawlerEvent";

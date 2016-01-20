@@ -137,7 +137,7 @@ namespace
 //
 void NodeLogicHandlers::OnNoMoreNodes       ( IEventPtr evt )
 {
-	auto typedEvent = std::static_pointer_cast< widgets::NoMoreNodesCrawlerEvent >( evt );
+	auto typedEvent = std::static_pointer_cast< nodelogic::NoMoreNodesCrawlerEvent >( evt );
 	// Remove code below. Only for testing.
 	auto n = typedEvent->GetCrawler()->GetNonActiveNode();
 	if( n )

@@ -20,7 +20,7 @@ Json::Value             GetParamDescription         ( model::IParameterPtr p )
     Json::Value entry;
 
     entry[ "name" ] = s_name;
-    entry[ "type" ] = ParamTypeToString( paramType );
+    entry[ "type" ] = SerializationHelper::T2String( paramType );
 
     Json::Value jsonKeys;
 

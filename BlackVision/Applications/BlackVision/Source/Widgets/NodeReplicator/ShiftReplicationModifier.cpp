@@ -1,6 +1,7 @@
 #include "ShiftReplicationModifier.h"
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
+#include "Engine/Models/Plugins/Parameters/ParameterSerialization.h"
 
 namespace bv { namespace model
 {
@@ -28,6 +29,11 @@ void                            ShiftReplicationModifier::Serialize       ( ISer
                     ser.SetAttribute( "startTime", SerializationHelper::T2String( shift.second.startTime ) );
                     ser.SetAttribute( "deltaTime", SerializationHelper::T2String( shift.second.deltaTime ) );
 
+                    ser.EnterChild( "value" );
+                        ser.SetAttribute( "type", SerializationHelper::T2String( shift.second.delta->GetType() ) );
+
+                    ser.ExitChild();
+
                 ser.ExitChild();
 
             ser.ExitChild();
@@ -40,9 +46,28 @@ void                            ShiftReplicationModifier::Serialize       ( ISer
 
 // ***********************
 //
-ShiftReplicationModifierPtr     ShiftReplicationModifier::Create          ( const IDeserializer& /*deser*/ )
+ShiftReplicationModifierPtr     ShiftReplicationModifier::Create          ( const IDeserializer& deser )
 {
     auto shiftModifier = ShiftReplicationModifier::Create();
+
+    if( deser.EnterChild( "paramShifts" ) )
+    {
+        do
+        {
+            model::ParamValDelta shift;
+            std::string pluginName = deser.GetAttribute( "pluginName" );
+            std::string paramName = deser.GetAttribute( "paramName" );
+
+            deser.EnterChild( "paramDelta" );
+                shift.deltaTime = SerializationHelper::String2T( deser.GetAttribute( "deltaTime" ), 0.0f );
+                shift.startTime = SerializationHelper::String2T( deser.GetAttribute( "startTime" ), 0.0f );
+
+            deser.ExitChild();
+
+        } while( deser.NextChild() );
+        deser.ExitChild();
+    }
+
     return shiftModifier;
 }
 

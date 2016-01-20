@@ -14,7 +14,7 @@ typedef std::shared_ptr< BasicNode > BasicNodePtr;
 } // model
 } // bv
 
-namespace bv { namespace widgets {
+namespace bv { namespace nodelogic {
 
 
 	class WidgetCounter;

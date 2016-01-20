@@ -1684,7 +1684,7 @@ model::BasicNodePtr	SimpleNodesFactory::CrawlerNodeTestScene( model::ITimeEvalua
 
 	auto node = CreateGreenRectNode( timeEvaluator, "green rect"); 
 
-	auto crawler = widgets::Crawler::Create( node.get(), mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
+	auto crawler = nodelogic::Crawler::Create( node.get(), mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
 
 	node->SetLogic( crawler );
 
@@ -2445,17 +2445,31 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCrawlerTestNode       ( model::IT
 
 	auto node = CreateTextCacheTest( timeEvaluator, "Dummy0", nodeTranslation, color, L"", "fonts/StarWars.ttf" );
 
-	auto crawler = widgets::Crawler::Create( node.get(), mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
+	auto crawler = nodelogic::Crawler::Create( node.get(), mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
 
 	node->SetLogic( crawler );
 
     
-    crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt1", "fonts/StarWars.ttf" ) );
+    //crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt1", "fonts/StarWars.ttf" ) );
 	//crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy2", nodeTranslation, color, L"Teskt2", "fonts/StarWars.ttf" ) );
 	//crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy3", nodeTranslation, color, L"Teskt3", "fonts/StarWars.ttf" ) );
 	//crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy4", nodeTranslation, color, L"Teskt4", "fonts/StarWars.ttf" ) );
 	//crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy5", nodeTranslation, color, L"Teskt5", "fonts/StarWars.ttf" ) );
 	//crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy6", nodeTranslation, color, L"Teskt6", "fonts/StarWars.ttf" ) );
+
+    auto texture = CreateTexturedRectNode( timeEvaluator, false );
+	texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt1", "fonts/StarWars.ttf" ) );
+	crawler->AddNext( texture );
+	texture = CreateTexturedRectNode( timeEvaluator, false );
+	texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt2", "fonts/StarWars.ttf" ) );
+	crawler->AddNext( texture );
+	texture = CreateTexturedRectNode( timeEvaluator, false );
+	texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt3", "fonts/StarWars.ttf" ) );
+	crawler->AddNext( texture );
+	texture = CreateTexturedRectNode( timeEvaluator, false );
+	texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt4", "fonts/StarWars.ttf" ) );
+	crawler->AddNext( texture );
+
 
     crawler->AddMessage( L"Message 1" );
     crawler->AddMessage( L"Message 2" );
