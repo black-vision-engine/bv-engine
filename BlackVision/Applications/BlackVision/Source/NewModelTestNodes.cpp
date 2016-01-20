@@ -335,8 +335,6 @@ model::BasicNodePtr  SimpleNodesFactory::CreateBlurTest               ( model::I
     //bTex.SetScale( 0.3f, 0.3f, 1.f, 20.f );
     auto root = bTex.CreateNode( "root", true );
 
-    
-
     auto text = CreateTextNode( timeEvaluator, 0, false );
 
     root->AddChildToModelOnly( text );

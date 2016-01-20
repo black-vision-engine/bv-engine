@@ -11,9 +11,11 @@ private:
 
     ParamFloatPtr   m_paramBlurSize;
     ParamIntPtr     m_paramNormalize;
+    ParamIntPtr     m_paramBlurKernelType;
 
     Float32         m_blurSizeVal;
     Int32           m_normalizeVal;
+    Int32           m_blurKernelType;
 
 public:
 

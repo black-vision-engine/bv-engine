@@ -14,9 +14,11 @@ private:
     float                       m_blurSize;
     bool                        m_vertical;
     bool                        m_normalize;
+    Int32                       m_blurKernelType;
 
     ValueIntPtr                 m_verticalVal;
     ValueIntPtr                 m_normalizeVal;
+    ValueIntPtr                 m_blurKernelTypeVal;
     ValueFloatPtr               m_blurSizeVal;
 
     ValueVec2Ptr                m_textureSize;
@@ -26,24 +28,26 @@ private:
 
 public:
 
-    void                        SetBlurSize ( float s );
-    float                       GetBlurSize () const;
+    void                        SetBlurSize             ( float s );
+    float                       GetBlurSize             () const;
 
-    void                        SetVertical ( bool val );
-    bool                        GetVertical () const;
+    void                        SetVertical             ( bool val );
+    bool                        GetVertical             () const;
 
-    void                        SetNormalize( bool val );
+    void                        SetNormalize            ( bool val );
 
-    void                        SetTexture  ( Texture2DPtr tex );
+    void                        SetBlurKernelTypeSize   ( Int32 val );
+
+    void                        SetTexture              ( Texture2DPtr tex );
 
                                 BlurFullscreenEffect    ( Texture2DPtr tex );
                                 ~BlurFullscreenEffect   ();
 
 protected:
 
-    virtual RenderableEntity *  CreateFullscreenQuad        () const override;
+    virtual RenderableEntity *  CreateFullscreenQuad    () const override;
 
-    PixelShader *               CreatePS                    () const;
+    PixelShader *               CreatePS                () const;
 
 };
 
