@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Serialization/SerializationHelper.h"
+#include "SerializationHelper.h"
 
 namespace bv { namespace SerializationHelper {
 

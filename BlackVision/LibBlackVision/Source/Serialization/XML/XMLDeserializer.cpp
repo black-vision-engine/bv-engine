@@ -10,9 +10,9 @@ namespace bv {
 
 // *******************************
 //
-XMLDeserializer::XMLDeserializer( std::string filename )
+XMLDeserializer::XMLDeserializer( std::string filename, DeserializeContext* context )
     : m_rootDoc( new rapidxml::xml_document<> )
-    , m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext() ) ) 
+    , m_context( std::unique_ptr< DeserializeContext >( context ) ) 
 { 
     assert( Path::Exists( filename ) );
 
@@ -29,9 +29,9 @@ XMLDeserializer::XMLDeserializer( std::string filename )
 
 // *******************************
 //
-XMLDeserializer::XMLDeserializer( std::istream & in, SizeType numBytes )
+XMLDeserializer::XMLDeserializer( std::istream & in, SizeType numBytes, DeserializeContext* context )
     : m_rootDoc( new rapidxml::xml_document<> )
-    , m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext() ) ) 
+    , m_context( std::unique_ptr< DeserializeContext >( context ) ) 
 {
     std::stringstream buffer;
 

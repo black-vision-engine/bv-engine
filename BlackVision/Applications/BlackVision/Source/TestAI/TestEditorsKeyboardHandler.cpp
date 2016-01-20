@@ -1,7 +1,7 @@
 #include "TestEditorsKeyboardHandler.h"
 
 #include "Engine/Models/BVProjectEditor.h"
-#include "Serialization/XML/XMLSerializer.h"
+#include "Serialization/BV/XML/BVXMLSerializer.h"
 #include "Serialization/Json/JsonSerializeObject.h"
 
 #include "MockScenes.h"
@@ -33,11 +33,10 @@ void    TestEditorsKeyboardHandler::HandleKey   ( unsigned char c, BVAppLogic * 
 {
 	if( c == 's' )
     {
-        auto sob = new XMLSerializer();
+        BVXMLSerializer ser;
         //auto sob = new JsonSerializeObject();
-        logic->GetBVProject()->GetScenes()[ 0 ]->Serialize( *sob );
-        sob->Save( "test.xml" );
-        delete sob;
+        logic->GetBVProject()->GetScenes()[ 0 ]->Serialize( ser );
+        ser.Save( "test.xml" );
     }
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SerializeContext.h"
 
 #include <string>
 
@@ -12,11 +13,6 @@ enum FormatStyle
     FORMATSTYLE_READABLE
 };
 
-class SerializeContext
-{
-public:
-    virtual ~SerializeContext() {}
-};
 
 
 

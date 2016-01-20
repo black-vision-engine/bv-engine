@@ -1,5 +1,7 @@
 #include "JsonSpiritSerializeObject.h"
-#include "Serialization/BVSerializeContext.h"
+#include "Serialization/BV/BVSerializeContext.h"
+
+#include "Assets/AssetDescsWithUIDs.h"
 
 #include <cassert>
 #include <fstream>

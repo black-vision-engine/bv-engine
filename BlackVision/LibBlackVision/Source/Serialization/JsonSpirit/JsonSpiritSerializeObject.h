@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Serialization/ISerializer.h"
-#include "Serialization/JsonSpirit/JsonSpiritSource/json_spirit.h"
+#include "JsonSpiritSource/json_spirit.h"
 
 #include <stack>
 #include <fstream>

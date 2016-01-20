@@ -4,7 +4,7 @@
 
 #include "Engine/Models/NodeEffects/ModelNodeEffectDefault.h"
 
-#include "Serialization/XML/XMLSerializer.h"
+#include "Serialization/BV/XML/BVXMLSerializer.h"
 #include "Assets/AssetDescsWithUIDs.h"
 
 namespace bv {
@@ -39,16 +39,15 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
     {
         case 's': 
         {
-            auto sob = new XMLSerializer();
-            logic->GetBVProject()->GetScenes()[ 0 ]->Serialize( *sob );
-            sob->Save( "test.xml" );
-            delete sob; 
+            BVXMLSerializer ser;
+            logic->GetBVProject()->GetScenes()[ 0 ]->Serialize( ser );
+            ser.Save( "test.xml" );
 
             break;
         }
         case 'p':
         {
-            XMLSerializer ser;
+            BVXMLSerializer ser;
             
             auto node = GetVanillaNode( logic )->GetChild( "vanilla_tex" );
 

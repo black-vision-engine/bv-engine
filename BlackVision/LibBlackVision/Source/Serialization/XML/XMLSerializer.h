@@ -14,20 +14,22 @@ class XMLSerializer : public ISerializer
     rapidxml::xml_document<>                                m_doc;
     std::stack< rapidxml::xml_node<>* >                     m_roots;
 
-    std::unique_ptr< SerializeContext >     m_context;
+    std::unique_ptr< SerializeContext >                     m_context;
+
+    void                        SetName( const std::string & name );
+    void                        SetValue( const std::string & name, const std::string & value );
+	void                        SetContent( const std::string & value );
+    void                        Pop();
+
 public:
-    XMLSerializer();
+    XMLSerializer( SerializeContext* context );
     ~XMLSerializer();
 
+    void						Save                ( const std::string & filename );
+	void						Save                ( std::ostream & out );
+
     SerializeContext*           GetSerializeContext () const override;
-
-    void										            Save( const std::string & filename );
-	void										            Save( std::ostream & out );
-
-    void                                                    SetName( const std::string & name );
-    void                                                    SetValue( const std::string & name, const std::string & value );
-	void                                                    SetContent( const std::string & value );
-    void                                                    Pop();
+    void                        SetSerializeContext ( SerializeContext* context );
 
     virtual void				SetAttribute        ( const std::string& name, const std::string& value ) override;
     virtual std::string			GetAttribute        ( const std::string& name ) override;

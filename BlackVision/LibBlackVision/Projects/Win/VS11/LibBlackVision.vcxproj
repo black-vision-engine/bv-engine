@@ -395,17 +395,21 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeBezierInterpolator.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
-    <ClCompile Include="..\..\..\Source\Serialization\BVDeserializeContext.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\BV\BVSerializeContext.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\BV\XML\BVXMLDeserializer.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\BV\XML\BVXMLSerializer.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritDeserializeObject.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSerializeObject.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_reader.cpp">
-      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/bigobj</AdditionalOptions>
-      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">/bigobj</AdditionalOptions>
-      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/bigobj</AdditionalOptions>
-      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">/bigobj</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_value.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\Json\JsonSerializeObject.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\SerializationHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\XML\XMLDeserializer.cpp" />
@@ -780,9 +784,12 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Rect.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Transform\MatTransform.h" />
-    <ClInclude Include="..\..\..\Source\Serialization\BVDeserializeContext.h" />
-    <ClInclude Include="..\..\..\Source\Serialization\BVSerializeContext.h" />
-    <ClInclude Include="..\..\..\Source\Serialization\CloneViaSerialization.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\BV\BVSerializeContext.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\BV\CloneViaSerialization.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\BV\XML\BVXMLDeserializer.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\BV\XML\BVXMLSerializer.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\DeserializeContext.h" />
     <ClInclude Include="..\..\..\Source\Serialization\IDeserializer.h" />
     <ClInclude Include="..\..\..\Source\Serialization\ISerializable.h" />
     <ClInclude Include="..\..\..\Source\Serialization\ISerializer.h" />
@@ -798,8 +805,10 @@
     <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer.h" />
     <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer_options.h" />
     <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer_template.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.h" />
     <ClInclude Include="..\..\..\Source\Serialization\Json\JsonSerializeObject.h" />
     <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\SerializeContext.h" />
     <ClInclude Include="..\..\..\Source\Serialization\XML\XMLDeserializer.h" />
     <ClInclude Include="..\..\..\Source\Serialization\XML\XMLSerializer.h" />
     <ClInclude Include="..\..\..\Source\UseLoggerLibBlackVision.h" />
@@ -824,8 +833,6 @@
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.inl" />
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.inl" />
     <None Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.inl" />
-    <ClCompile Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.cpp" />
-    <None Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.h" />
     <None Include="..\..\..\Source\Serialization\SerializationHelper.inl" />
   </ItemGroup>
   <ItemGroup>

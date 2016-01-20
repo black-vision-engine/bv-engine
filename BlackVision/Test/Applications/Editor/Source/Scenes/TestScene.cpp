@@ -24,7 +24,7 @@
 
 #include "ProjectManager.h"
 
-#include "Serialization/XML/XMLSerializer.h"
+#include "Serialization/BV/XML/BVXMLSerializer.h"
 
 namespace bv {
 
@@ -1210,7 +1210,7 @@ void					TestScene::InitCopyNodeTest	()
 
         assert( success );
 
-        XMLSerializer ser;
+        BVXMLSerializer ser;
         srcScene->Serialize( ser );
         destScene->Serialize( ser );
         ser.Save( "test.xml" );

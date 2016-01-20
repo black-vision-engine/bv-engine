@@ -9,8 +9,6 @@
 namespace bv
 {
 
-class BVDeserializeContext;
-
 class XMLDeserializer  : public IDeserializer
 {
     rapidxml::xml_document<>*                               m_rootDoc;
@@ -19,8 +17,8 @@ class XMLDeserializer  : public IDeserializer
     std::unique_ptr< DeserializeContext >                   m_context;
 
 public:
-    XMLDeserializer( std::string filename );
-    XMLDeserializer( std::istream & in, SizeType numBytes );
+    XMLDeserializer( std::string filename, DeserializeContext* context );
+    XMLDeserializer( std::istream & in, SizeType numBytes, DeserializeContext* context );
     ~XMLDeserializer();
 
     virtual DeserializeContext*                     GetDeserializeContext() const;

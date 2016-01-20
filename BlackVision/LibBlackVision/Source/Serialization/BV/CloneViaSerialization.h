@@ -1,7 +1,7 @@
-#include "XML/XMLSerializer.h"
-#include "XML/XMLDeserializer.h"
+#include "XML/BVXMLSerializer.h"
+#include "XML/BVXMLDeserializer.h"
 
-#include "SerializationHelper.h"
+#include "Serialization/SerializationHelper.h"
 #include "BVDeserializeContext.h"
 
 #include <sstream>
@@ -11,9 +11,9 @@ namespace bv {
 namespace CloneViaSerialization {
 
 template< typename T >
-T*                              Clone( const T* obj, std::string name, model::OffsetTimeEvaluatorPtr sceneTimeline = nullptr )
+T*                              Clone( const T* obj, std::string name, AssetDescsWithUIDsPtr assets, model::OffsetTimeEvaluatorPtr sceneTimeline )
 {
-    XMLSerializer ser;
+    BVXMLSerializer ser( assets );
     
     obj->Serialize( ser );
 
@@ -22,17 +22,15 @@ T*                              Clone( const T* obj, std::string name, model::Of
 
     //ser.Save( "clone.xml" ); // for debugging only
 
-    XMLDeserializer deser( ss, ss.tellp() );
-
-	dynamic_cast< BVDeserializeContext* >( deser.GetDeserializeContext() )->m_sceneTimeline = sceneTimeline;
+    BVXMLDeserializer deser( ss, ss.tellp(), sceneTimeline, assets );
 
     return SerializationHelper::DeserializeObject< T >( deser, name );
 }
 
 template< typename T >
-std::shared_ptr< T >                              ClonePtr( const T* obj, std::string name, model::OffsetTimeEvaluatorPtr sceneTimeline = nullptr )
+std::shared_ptr< T >                              ClonePtr( const T* obj, std::string name, AssetDescsWithUIDsPtr assets, model::OffsetTimeEvaluatorPtr sceneTimeline )
 {
-    XMLSerializer ser;
+    BVXMLSerializer ser;
     
     obj->Serialize( ser );
 
@@ -41,10 +39,8 @@ std::shared_ptr< T >                              ClonePtr( const T* obj, std::s
 
     //ser.Save( "clone.xml" ); // for debugging only
 
-    XMLDeserializer deser( ss, ss.tellp() );
-
-	dynamic_cast< BVDeserializeContext* >( deser.GetDeserializeContext() )->m_sceneTimeline = sceneTimeline;
-
+    BVXMLDeserializer deser( ss, ss.tellp(), sceneTimeline, assets );
+	
     auto sucess = deser.EnterChild( name );
     assert( sucess ); { sucess; } // FIXME error handling
     auto clone = T::Create( deser );

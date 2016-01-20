@@ -4,10 +4,10 @@
 #include "Static/ConstTimeEvaluator.h"
 #include "Static/OffsetTimeEvaluator.h"
 
-//#include "Serialization/SerializationObjects.inl"
 #include "Serialization/IDeserializer.h"
 
-#include "Serialization/CloneViaSerialization.h"
+#include "Serialization/BV/CloneViaSerialization.h"
+#include "Assets/AssetDescsWithUIDs.h"
 
 namespace bv { 
     
@@ -39,7 +39,7 @@ ITimeEvaluator*            TimeEvaluatorBase< ITimeEvaluator >::Create          
 //
 ITimeEvaluator*            TimeEvaluatorBase< ITimeEvaluator >::Clone               () const
 {
-    return CloneViaSerialization::Clone( this, "timeline" );
+    return CloneViaSerialization::Clone( this, "timeline", nullptr, nullptr );
 }
 
 // *******************************
@@ -47,7 +47,7 @@ ITimeEvaluator*            TimeEvaluatorBase< ITimeEvaluator >::Clone           
 ITimeEvaluator*            TimeEvaluatorBase< ITimeline >::Clone               () const
 {
     auto thisTE = reinterpret_cast< const TimeEvaluatorBase< ITimeEvaluator >* >( this );
-    auto clone = CloneViaSerialization::Clone< TimeEvaluatorBase< ITimeEvaluator > >( thisTE, "timeline" );
+    auto clone = CloneViaSerialization::Clone< TimeEvaluatorBase< ITimeEvaluator > >( thisTE, "timeline", nullptr, nullptr );
     return clone;
 }
 

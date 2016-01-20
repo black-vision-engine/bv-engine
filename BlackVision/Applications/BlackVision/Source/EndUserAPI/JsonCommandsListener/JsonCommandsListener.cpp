@@ -1,7 +1,7 @@
 #include "JsonCommandsListener.h"
 
-#include "Serialization/JsonSpirit/JsonSpiritDeserializeObject.h"
-#include "Serialization/JsonSpirit/JsonSpiritSerializeObject.h"
+#include "Serialization/BV/JsonSpirit/JsonSpiritDeserializeObject.h"
+#include "Serialization/BV/JsonSpirit/JsonSpiritSerializeObject.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Engine/Events/EventHelpers.h"
 

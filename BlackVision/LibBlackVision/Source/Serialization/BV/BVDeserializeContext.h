@@ -32,6 +32,7 @@ private:
     AssetDescsWithUIDsPtr               m_assets;
 
 public:
+    BVDeserializeContext( model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets );
     virtual                             ~BVDeserializeContext   ();
 
     model::OffsetTimeEvaluatorPtr       GetSceneTimeline        ();

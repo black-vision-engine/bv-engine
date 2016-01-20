@@ -1,15 +1,10 @@
 #pragma once
 
+#include "DeserializeContext.h"
 
 #include <string>
 
 namespace bv {
-
-class DeserializeContext
-{
-public:
-    virtual ~DeserializeContext() {}
-};
 
 class IDeserializer
 {
