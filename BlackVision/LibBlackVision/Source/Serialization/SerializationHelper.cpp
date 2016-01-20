@@ -79,8 +79,8 @@ UInt32       String2T        ( const std::string & s, const UInt32 & defaultVal 
 
     if( !*end && end != s.c_str() )
     {
-        if ( ret < std::numeric_limits< UInt32 >::min() )
-            return std::numeric_limits< UInt32 >::min();
+        if ( ret < std::numeric_limits< UInt32 >::lowest() )
+            return std::numeric_limits< UInt32 >::lowest();
 
         if ( ret > std::numeric_limits< UInt32 >::max() ) 
             return std::numeric_limits< UInt32 >::max();
@@ -101,8 +101,8 @@ Int32       String2T        ( const std::string & s, const Int32 & defaultVal )
 
     if( !*end && end != s.c_str() )
     {
-        if ( ret < std::numeric_limits< Int32 >::min() )
-            return std::numeric_limits< Int32 >::min();
+        if ( ret < std::numeric_limits< Int32 >::lowest() )
+            return std::numeric_limits< Int32 >::lowest();
 
         if ( ret > std::numeric_limits< Int32 >::max() ) 
             return std::numeric_limits< Int32 >::max();
@@ -123,8 +123,8 @@ Float32       String2T        ( const std::string & s, const Float32 & defaultVa
 
     if( !*end && end != s.c_str() )
     {
-        if ( ret < std::numeric_limits< Float32 >::min() )
-            return std::numeric_limits< Float32 >::min();
+        if ( ret < std::numeric_limits< Float32 >::lowest() )
+            return std::numeric_limits< Float32 >::lowest();
 
         if ( ret > std::numeric_limits< Float32 >::max() ) 
             return std::numeric_limits< Float32 >::max();
