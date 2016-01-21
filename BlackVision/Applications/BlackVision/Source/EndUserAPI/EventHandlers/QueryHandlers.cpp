@@ -114,7 +114,7 @@ void         QueryHandlers::ListSceneAssets          ( JsonSerializeObject & ser
         auto sceneRoot = scene->GetRootNode();
 
         AssetDescsWithUIDs assets;
-        GetAssetsWithUIDs( assets, sceneRoot, true );
+        GetAssetsWithUIDs( assets, sceneRoot.get(), true );
         bvDeserCo->SetAssets( AssetDescsWithUIDsPtr( &assets ) );
 
         auto descriptors = assets.GetAssetsDescs();

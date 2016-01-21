@@ -33,14 +33,14 @@ public:
 
 // *******************************
 //
-void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root, bool recursive )
+void GetAssetsWithUIDs( AssetDescsWithUIDs& map, const model::BasicNode * root, bool recursive )
 {
     if( root )
     {
-        auto plugins = root->GetPlugins();
+        auto plugins = root->GetPluginList();
         for( unsigned int i = 0; i < root->GetNumPlugins(); i++ )
         {
-            auto lassets = root->GetPlugins()->GetPlugin( i )->GetLAssets();
+            auto lassets = plugins->GetPlugin( i )->GetLAssets();
             for( auto lasset : lassets )
             {
                 map.AddAssetDesc( lasset.assetDesc );
@@ -48,8 +48,12 @@ void GetAssetsWithUIDs( AssetDescsWithUIDs& map, model::BasicNodePtr root, bool 
         }
 
         if( recursive )
+        {
             for( unsigned int i = 0; i < root->GetNumChildren(); i++ )
+            {
                 GetAssetsWithUIDs( map, root->GetChild( i ), true );
+            }
+        }
     }
 }
 

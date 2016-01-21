@@ -182,6 +182,7 @@ public:
 private:
 
 	/* engine scene helpers */
+	void					RefreshNode			( model::BasicNodePtr modelNode, SceneNode * sceneNode, Renderer * renderer );
     void                    MappingsCleanup     ( model::IModelNodePtr node );
 
     void                    RemoveNodeMapping   ( model::IModelNodePtr node );

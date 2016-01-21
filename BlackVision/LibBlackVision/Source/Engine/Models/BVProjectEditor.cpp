@@ -667,7 +667,7 @@ bool					BVProjectEditor::AddPlugin			( model::BasicNodePtr node, model::IPlugin
         auto editor = node->GetModelNodeEditor();
         if( editor->AddPlugin( plugin, idx ) )
         {
-            editor->RefreshNode( GetEngineNode( node ), m_project->m_renderer );
+            RefreshNode( node, GetEngineNode( node ), m_project->m_renderer );
             return true;
         }
     }
@@ -683,7 +683,7 @@ bool					BVProjectEditor::DeletePlugin          ( model::BasicNodePtr node, cons
         auto editor = node->GetModelNodeEditor();
         if( editor->DeletePlugin( name ) )
         {
-            editor->RefreshNode( GetEngineNode( node ), m_project->m_renderer );
+            RefreshNode( node, GetEngineNode( node ), m_project->m_renderer );
             return true;
         }
     }
@@ -699,7 +699,7 @@ bool					BVProjectEditor::DeletePlugin          ( model::BasicNodePtr node, UInt
         auto editor = node->GetModelNodeEditor();
         if ( editor->DeletePlugin( posIdx ) )
         {
-            editor->RefreshNode( GetEngineNode( node ), m_project->m_renderer );
+            RefreshNode( node, GetEngineNode( node ), m_project->m_renderer );
             return true;
         }
     }
@@ -715,7 +715,7 @@ bool					BVProjectEditor::AttachPlugin          ( model::BasicNodePtr node, UInt
         auto editor = node->GetModelNodeEditor();
         if( editor->AttachPlugin( posIdx ) )
         {
-            editor->RefreshNode( GetEngineNode( node ), m_project->m_renderer );
+            RefreshNode( node, GetEngineNode( node ), m_project->m_renderer );
             return true;
         }
     }
@@ -734,7 +734,7 @@ bool                    BVProjectEditor::AttachPlugin			( model::BasicNodePtr de
         if( destEditor->AddPlugin(sourceEditor->GetDetachedPlugin(), posIdx ) )
         {
             sourceEditor->ResetDetachedPlugin();
-            destEditor->RefreshNode( GetEngineNode( destNode ), m_project->m_renderer );
+            RefreshNode( destNode, GetEngineNode( destNode ), m_project->m_renderer );
             return true;
         }
     }
@@ -750,7 +750,7 @@ bool					BVProjectEditor::DetachPlugin          ( model::BasicNodePtr node, cons
         auto editor = node->GetModelNodeEditor();
         if( editor->DetachPlugin( name ) )
         {
-            editor->RefreshNode( GetEngineNode( node ), m_project->m_renderer );
+            RefreshNode( node, GetEngineNode( node ), m_project->m_renderer );
             return true;
         }
     }
@@ -766,7 +766,7 @@ bool					BVProjectEditor::DetachPlugin          ( model::BasicNodePtr node, UInt
         auto editor = node->GetModelNodeEditor();
         if( editor->DetachPlugin( posIdx ) )
         {
-            editor->RefreshNode( GetEngineNode( node ), m_project->m_renderer );
+            RefreshNode( node, GetEngineNode( node ), m_project->m_renderer );
             return true;
         }
     }
@@ -1079,6 +1079,14 @@ bool						BVProjectEditor::SetTimelineWrapPostBehavior	( const std::string & tim
         return true;
     }
     return false;
+}
+
+// *******************************
+//
+void                    BVProjectEditor::RefreshNode        (  model::BasicNodePtr modelNode, SceneNode * sceneNode, Renderer * renderer )
+{
+    BVProjectTools::ClearSingleNode( sceneNode, renderer );
+	BVProjectTools::SyncSingleNode( modelNode, sceneNode );
 }
 
 // *******************************
