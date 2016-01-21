@@ -1,5 +1,7 @@
 #include "BVSerializeContext.h"
 
+#include "Assets/AssetDescsWithUIDs.h"
+
 namespace bv {
 
 // ***********************
