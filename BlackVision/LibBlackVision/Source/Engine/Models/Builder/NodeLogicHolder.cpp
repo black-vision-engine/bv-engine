@@ -46,9 +46,11 @@ void            INodeLogicHolder::SetFactory      ( INodeLogicFactory * newFacto
 }
 
 // ***********************
-//
+// Creates INodeLogicFactory object in case no one has set instance of derived class.
 INodeLogicFactory *          INodeLogicHolder::GetFactory      ()
 {
+    if( !factory )
+        factory = new INodeLogicFactory();
     return factory;
 }
 

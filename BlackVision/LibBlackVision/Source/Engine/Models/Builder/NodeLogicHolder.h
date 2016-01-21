@@ -12,7 +12,7 @@ class INodeLogicFactory
 {
 private:
 public:
-    virtual ~INodeLogicFactory();
+    virtual ~INodeLogicFactory() {};
 
 
     virtual model::INodeLogicPtr        CreateLogic  (  const IDeserializer &           /*deser*/,

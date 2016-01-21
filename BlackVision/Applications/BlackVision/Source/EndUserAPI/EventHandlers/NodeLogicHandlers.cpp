@@ -54,6 +54,7 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
     if( node == nullptr )
     {
         SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "Node not found" );
+        return;
     }
 
 
@@ -74,6 +75,12 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
         auto logic = GetNodeLogicFactory()->CreateLogic( deser, basicNode, timeline );
         
         deser.ExitChild();  // nodeLogic
+
+        if( logic == nullptr)
+        {
+            SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "Logic could not be created" );
+            return;
+        }
 
         basicNode->SetLogic( logic );
     }

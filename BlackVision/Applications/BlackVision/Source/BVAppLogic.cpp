@@ -12,6 +12,8 @@
 #include "Rendering/Logic/RenderLogic.h"
 #include "ModelInteractionEvents.h"
 
+#include "Widgets/NodeLogicFactory.h"
+
 #include "Widgets/Crawler/CrawlerEvents.h"
 
 #include "System/Env.h"
@@ -139,6 +141,7 @@ void BVAppLogic::Initialize         ()
     m_pluginsManager = &model::PluginsManager::DefaultInstance();
 
     bv::effect::InitializeLibEffect( m_renderer );
+    SetNodeLogicFactory( new NodeLogicFactory );
 
     InitializeKbdHandler();
     InitializeRemoteCommunication();

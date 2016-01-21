@@ -112,6 +112,7 @@ ser.EnterChild( "plugin" );
     if( serContext->detailedInfo )
     {
         auto timeline = TimelineManager::GetInstance()->GetTimelinePath( GetTimeline( this ) );
+        assert( timeline != "" );
         ser.SetAttribute( "timeline", timeline );
 
         auto context = GetRendererContext();
