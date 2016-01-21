@@ -152,7 +152,7 @@ void BVAppLogic::LoadScenes( const PathVec & pathVec )
 
     for( auto p : pathVec )
     {
-		auto scene = SceneDescriptor::LoadScene( ProjectManager::GetInstance()->ToAbsPath( p ) );
+        auto scene = ProjectManager::GetInstance()->LoadScene( "", p );
 		m_bvProject->GetProjectEditor()->AddScene( scene );
     }
 
