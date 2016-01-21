@@ -270,7 +270,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     {
         auto projName = std::string( request.begin(), request.end() );
 
-        auto projectScenesNames = pm->ListScenesNames( projName );
+        auto projectScenesNames = pm->ListScenesNames( projName, "" );
 
         bool status = false;
 
