@@ -3,14 +3,12 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Tools/StringHeplers.h"
 #include "tools/PrefixHelper.h"
-#include "Serialization/BV/CloneViaSerialization.h"
-#include <cassert>
-#include <algorithm>
+
 
 namespace bv { namespace model {
 
-
-const std::string    TimelineHelper::SEPARATOR      = "%";
+const std::string   TimelineHelper::PATH_SEPARATOR     = "%";
+const TimeType      TimelineHelper::INFINITE_DURATION  = std::numeric_limits< TimeType >::max();
 
 // *********************************
 //maybe should be moved into TimeEvalFactory or sth
@@ -19,7 +17,7 @@ ITimeEvaluatorPtr       TimelineHelper::CreateTimeEvaluator             ( const 
     switch ( type )
     {
     case TimelineType::TT_DEFAULT:
-        return CreateDefaultTimeline( name, 1000000.f, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+        return CreateDefaultTimeline( name, INFINITE_DURATION, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     case TimelineType::TT_OFFSET:
         return CreateOffsetTimeEvaluator( name, 0.f );
     case TimelineType::TT_CONST:
@@ -31,42 +29,21 @@ ITimeEvaluatorPtr       TimelineHelper::CreateTimeEvaluator             ( const 
 
 // *********************************
 //
-ITimeEvaluatorPtr       TimelineHelper::CreateOffsetTimeEvaluator      ( const std::string & name, TimeType startTime )
-{
-    return CreateOffsetTimeEvaluatorImpl( name, startTime );
-}
-
-// *********************************
-//
-ITimeEvaluatorPtr       TimelineHelper::CreateConstTimeEvaluator       ( const std::string & name, TimeType timeVal )
-{
-    return CreateConstTimeEvaluatorImpl( name, timeVal );
-}
-
-// *********************************
-//
-ITimelinePtr            TimelineHelper::CreateDefaultTimeline          ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod )
-{
-    return CreateDefaultTimelineImpl( name, duration, preMethod, postMethod );
-}
-
-// *********************************
-//
-OffsetTimeEvaluatorPtr	TimelineHelper::CreateOffsetTimeEvaluatorImpl  ( const std::string & name, TimeType startTime )
+OffsetTimeEvaluatorPtr	TimelineHelper::CreateOffsetTimeEvaluator       ( const std::string & name, TimeType startTime )
 {
     return std::make_shared< OffsetTimeEvaluator >( name, -startTime ); 
 }
 
 // *********************************
 //
-ConstTimeEvaluatorPtr	TimelineHelper::CreateConstTimeEvaluatorImpl   ( const std::string & name, TimeType timeVal )
+ConstTimeEvaluatorPtr	TimelineHelper::CreateConstTimeEvaluator        ( const std::string & name, TimeType timeVal )
 {
     return std::make_shared< ConstTimeEvaluator >( name, timeVal ); 
 }
 
 // *********************************
 //
-DefaultTimelinePtr		TimelineHelper::CreateDefaultTimelineImpl      ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod )
+DefaultTimelinePtr		TimelineHelper::CreateDefaultTimeline           ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod )
 {
     assert( duration > TimeType( 0.0 ) );
     return std::make_shared< DefaultTimeline >( name, duration, preMethod, postMethod );
@@ -130,52 +107,20 @@ UInt32					TimelineHelper::CopyTimelines					( ITimeEvaluatorPtr destTimeline, c
 
 // ***********************
 //
-std::string              TimelineHelper::GetSceneName                    ( const ITimeEvaluator* timeline )
+std::string              TimelineHelper::GetSceneName                    ( const ITimeEvaluator * timeline )
 {
     auto rootTimeline = TimelineManager::GetInstance()->GetRootTimeline();
-    auto& scenesTimelines = rootTimeline->GetChildren();
-    for( auto& sceneTimeline : scenesTimelines )
+    auto & scenesTimelines = rootTimeline->GetChildren();
+    for( auto & sceneTimeline : scenesTimelines )
     {
-        auto& childTimelines = sceneTimeline->GetChildren();
-        for( auto& child : childTimelines )
+        auto & childTimelines = sceneTimeline->GetChildren();
+        for( auto & child : childTimelines )
         {
             if( child.get() == timeline )
                 return sceneTimeline->GetName();
         }
     }
     return "";
-}
-
-// *********************************
-//
-std::string				TimelineHelper::GetSceneName        			( const std::string & timelinePath )
-{
-    auto path = Trim( timelinePath, SEPARATOR );
-    auto names = Split( path, SEPARATOR );
-    if( !names.empty() )
-    {
-        return names[ 0 ];
-    }
-    return "";
-}
-
-// *********************************
-//
-std::string				TimelineHelper::GetParentTimelinePath           ( const std::string & timelinePath )
-{
-    auto path = Trim( timelinePath, SEPARATOR );
-    auto names = Split( timelinePath, SEPARATOR );
-
-	std::string parentPath = "";
-	for( unsigned int i = 0; i < names.size() - 1; ++i )
-	{
-		parentPath += names[ i ];
-		if( i < names.size() - 2 )
-        {
-			parentPath += SEPARATOR;
-        }
-	}
-	return parentPath;
 }
 
 // *********************************
@@ -207,12 +152,12 @@ ITimeEvaluatorPtr       TimelineHelper::FindTimelineByName          ( const std:
 
 // *********************************
 //
-ITimeEvaluatorPtr       TimelineHelper::GetTimeEvaluator           ( const std::string & name, ITimeEvaluatorPtr parentTimeline )
+ITimeEvaluatorPtr       TimelineHelper::GetTimeEvaluator           ( const std::string & timelinePath, ITimeEvaluatorPtr parentTimeline )
 {
-    auto path = Split( name, SEPARATOR );
+    auto path = Split( timelinePath, PATH_SEPARATOR );
     if( path.size() == 1 )
     {
-        return FindTimelineByName( name, parentTimeline );
+        return FindTimelineByName( timelinePath, parentTimeline );
     }
     else
     {
@@ -231,12 +176,12 @@ ITimeEvaluatorPtr       TimelineHelper::GetTimeEvaluator           ( const std::
 
 // *********************************
 // FIXME: requires RTTI, reimplement it later on
-ITimelinePtr            TimelineHelper::GetTimeline                     ( const std::string & name, ITimeEvaluatorPtr parentTimeline )
+ITimelinePtr            TimelineHelper::GetTimeline                     ( const std::string & timelinePath, ITimeEvaluatorPtr parentTimeline )
 {
-	auto path = Split( name, SEPARATOR );
+	auto path = Split( timelinePath, PATH_SEPARATOR );
     if( path.size() == 1 )
     {
-		return std::dynamic_pointer_cast< ITimeline >( FindTimelineByName( name, parentTimeline ) );
+		return std::dynamic_pointer_cast< ITimeline >( FindTimelineByName( timelinePath, parentTimeline ) );
     }
     else
     {
@@ -280,14 +225,14 @@ std::string             TimelineHelper::GetTimelinePath                 ( ITimeE
 //
 std::string              TimelineHelper::CombineTimelinePath            ( const std::vector< std::string > & strVec )
 {
-    return Join( strVec, SEPARATOR );
+    return Join( strVec, PATH_SEPARATOR );
 }
 
 // *********************************
 //
 std::string              TimelineHelper::CombineTimelinePath            ( const std::string & pathA, const std::string & pathB )
 {
-    return pathA + SEPARATOR + pathB;
+    return pathA + PATH_SEPARATOR + pathB;
 }
 
 } //model

@@ -894,7 +894,7 @@ namespace bv{
                 WrapMethod = TimelineWrapMethod::TWM_REPEAT;
             }
             float duration = (float)atof(Tree.Scene.Timelines[i]->duration.c_str());
-            DefaultTimelinePtr timeline = model::TimelineHelper::CreateDefaultTimelineImpl( Tree.Scene.Meta.SceneName+"*"+ Tree.Scene.Timelines[i]->name, TimeType( duration ), WrapMethod, WrapMethod );
+            DefaultTimelinePtr timeline = model::TimelineHelper::CreateDefaultTimeline( Tree.Scene.Meta.SceneName+"*"+ Tree.Scene.Timelines[i]->name, TimeType( duration ), WrapMethod, WrapMethod );
             auto timeline_offset = model::TimelineHelper::CreateOffsetTimeEvaluator( Tree.Scene.Meta.SceneName+"*"+Tree.Scene.Timelines[i]->name , TimeType( 0.0 ) );
             timeline->AddChild(timeline_offset);
 

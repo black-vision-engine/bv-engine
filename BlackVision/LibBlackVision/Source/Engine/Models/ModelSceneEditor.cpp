@@ -167,7 +167,6 @@ IModelNodePtr   ModelSceneEditor::GetNode           ( const std::string & path, 
         }
     }
 
-
     return nullptr;
 }
 

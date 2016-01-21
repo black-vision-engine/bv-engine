@@ -43,11 +43,13 @@
 
 #include "BVGL.h"
 
+
 namespace bv {
 
 class TestSceneUtils
 {
 public:
+
 	static const std::string	TEXTURE_PATH;
 	static const std::string	ALPHA_MASK_PATH;
 	static const std::string	ALPHA_MASK0_PATH;
@@ -62,12 +64,14 @@ public:
 	static const UInt32			AM_SIZE;
 
 public:
+
 	static const UInt32				GEOM_PLUGINS_NUM;
 	static const std::string		PluginsArr[];
 	static const std::string		PluginsNameArr[];
 
 public:
-	static model::SceneModelPtr	ColoredRectangleScene				( const std::string & name, glm::vec4 color, glm::vec3 transform );
+
+	static void	                AddColoredRectangleScene			( BVProjectEditor * editor, const std::string & name, glm::vec4 color, glm::vec3 transform );
 
 	static model::BasicNodePtr	ColoredRectangle					( model::ITimeEvaluatorPtr timeEval, const std::string & name, Float32 width, Float32 height, glm::vec4 color, const std::string & alphaMask = "" );
 	static model::BasicNodePtr	ColoredGeometry						( model::ITimeEvaluatorPtr timeEval, const std::string & name, const std::string & plugin, glm::vec4 color, const std::string & alphaMask = "" );

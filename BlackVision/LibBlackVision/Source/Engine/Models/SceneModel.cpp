@@ -4,33 +4,29 @@
 #include "Engine/Models/ModelSceneEditor.h"
 
 #include "Engine/Models/Plugins/Simple/DefaultTransformPlugin.h"
+#include "Engine/Models/Timeline/TimelineHelper.h"
 
 #include "Serialization/BV/CloneViaSerialization.h"
 #include "Serialization/BV/BVSerializeContext.h"
 
-namespace bv { namespace model {
 
-const std::string       SceneModel::DEFAULT_ROOT_NAME = "root";
-const std::string       SceneModel::DEFAULT_TRANSFORM_PLUGIN_NAME = "transform";
+namespace bv { namespace model {
 
 // *******************************
 //
-SceneModelPtr    SceneModel::Create		( std::string name, Camera * camera )
+SceneModelPtr    SceneModel::Create		( const std::string & name, Camera * camera )
 {
     return std::make_shared< SceneModel >( name, camera );
 }
 
 // *******************************
 //
-				SceneModel::SceneModel	( std::string name, Camera * camera )
+				SceneModel::SceneModel	( const std::string & name, Camera * camera )
     : m_name( name )
     , m_timeline( new model::OffsetTimeEvaluator( name, TimeType( 0.0 ) ) )
 	, m_camera( camera )
 	, m_modelSceneEditor( nullptr )
 {
-    m_sceneRootNode = BasicNode::Create( DEFAULT_ROOT_NAME, nullptr );
-    m_sceneRootNode->AddPlugin( DefaultTransformPluginDesc::UID(), DEFAULT_TRANSFORM_PLUGIN_NAME, m_timeline );
-
 	m_modelSceneEditor = new ModelSceneEditor( m_sceneRootNode );
 }
 
@@ -43,7 +39,7 @@ SceneModelPtr    SceneModel::Create		( std::string name, Camera * camera )
 
 // *******************************
 //
-void            SceneModel::Serialize           ( ISerializer& ser) const
+void            SceneModel::Serialize           ( ISerializer & ser) const
 {
     auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
 
@@ -75,7 +71,7 @@ void            SceneModel::Serialize           ( ISerializer& ser) const
 
 // *******************************
 //
-SceneModel *        SceneModel::Create          ( const IDeserializer& deser )
+SceneModel *        SceneModel::Create          ( const IDeserializer & deser )
 {
     auto bvDeserCo = Cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
 // assets
@@ -136,7 +132,7 @@ BasicNodePtr				SceneModel::GetRootNode	() const
 
 // *******************************
 //
-void						SceneModel::SetName		( std::string name )
+void						SceneModel::SetName		( const std::string & name )
 {
 	m_name = name;
 	m_timeline->SetName( name );

@@ -5,14 +5,13 @@
 
 #include "Engine/Interfaces/IUpdatable.h"
 #include "Serialization/ISerializable.h"
-#include "Serialization/ISerializable.h"
 
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
 
-
 #include "SceneModel.h"
+
 
 namespace bv {
 
@@ -28,10 +27,12 @@ DEFINE_CONST_PTR_TYPE(BVProject)
 class BVProject : public IUpdatable
 {
 private:
+
 	static const std::string	MAIN_ROOT_NAME;
 	static const std::string	GLOBAL_TIMELINE_NAME;
     
 private:
+
     BVProjectEditor *       m_projectEditor;
 	Renderer *              m_renderer;
 

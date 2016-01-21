@@ -1,15 +1,11 @@
 #pragma once
 
 #include "Engine/Models/BasicNode.h"
-#include "Engine/Models/Timeline/TimelineManager.h"
 #include "Serialization/ISerializable.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
-#include "CoreDEF.h"
 
-namespace bv {
-
-namespace model {
+namespace bv { namespace model {
 
 class ModelSceneEditor;
 
@@ -19,11 +15,6 @@ DEFINE_CONST_PTR_TYPE( SceneModel );
 
 class SceneModel : public ISerializable
 {
-private:
-    
-    static const std::string    DEFAULT_ROOT_NAME;
-    static const std::string    DEFAULT_TRANSFORM_PLUGIN_NAME;
-
 private:
 
     std::string             m_name;
@@ -37,19 +28,19 @@ private:
     ModelSceneEditor *		m_modelSceneEditor;
 
 public:
-                            SceneModel			( std::string name, Camera * camera );
+                            SceneModel			( const std::string & name, Camera * camera );
     virtual					~SceneModel			();
 
-    static SceneModelPtr    Create              ( std::string name, Camera * camera );
-    static SceneModel *     Create              ( const IDeserializer& deser );
-    virtual void            Serialize           ( ISerializer& doc) const override;
+    static SceneModelPtr    Create              ( const std::string & name, Camera * camera );
+    static SceneModel *     Create              ( const IDeserializer & deser );
+    virtual void            Serialize           ( ISerializer & doc) const override;
 
     model::SceneModel * 	Clone				() const;
 
     void					SetRootNode			( BasicNodePtr rootNode );
     BasicNodePtr			GetRootNode			() const;
 
-    void					SetName				( std::string name );
+    void					SetName				( const std::string & name );
     const std::string &		GetName				() const;
 
     OffsetTimeEvaluatorPtr  GetTimeline         () const;
@@ -64,4 +55,4 @@ public:
 typedef std::vector< model::SceneModelPtr > SceneModelVec;
 
 } // model
-}
+} //bv
