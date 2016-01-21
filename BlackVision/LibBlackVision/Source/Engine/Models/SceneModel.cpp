@@ -54,7 +54,7 @@ void            SceneModel::Serialize           ( ISerializer& ser) const
         if( context->detailedInfo )
         {
             auto assets = std::make_shared< AssetDescsWithUIDs >();
-            GetAssetsWithUIDs( *assets, m_sceneRootNode );
+            GetAssetsWithUIDs( *assets, m_sceneRootNode.get() );
             context->SetAssets( assets );
 
             assets->Serialize( ser );

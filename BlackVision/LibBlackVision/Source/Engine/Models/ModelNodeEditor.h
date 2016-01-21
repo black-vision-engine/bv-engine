@@ -11,11 +11,13 @@ namespace bv { namespace model {
 class ModelNodeEditor
 {
 private:
-	BasicNodeWeakPtr	m_node;
+
+	BasicNode *	        m_node;
     IPluginPtr			m_detachedPlugin;
 
 public:
-                            ModelNodeEditor		( BasicNodePtr node ); 
+
+                            ModelNodeEditor		( BasicNode * node ); 
 
     BasicNodePtr			CopyNode			();
 
@@ -37,8 +39,6 @@ public:
     void					SetNodeEffect		( IModelNodeEffectPtr nodeEffect );
 
 	void                    ReplaceTimeline		( const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline );
-
-	void					RefreshNode			( SceneNode * sceneNode, Renderer * renderer );
 
 };
 

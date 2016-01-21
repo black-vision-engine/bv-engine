@@ -84,6 +84,7 @@ public:
 	mathematics::Rect 						GetAABB					() const;
 
     BasicNodePtr                            GetChild                ( unsigned int i );
+    const BasicNode *                       GetChild                ( unsigned int i ) const;
     unsigned int                            GetNumPlugins           () const;
 
 	void                                    AddChildToModelOnly     ( BasicNodePtr n );
