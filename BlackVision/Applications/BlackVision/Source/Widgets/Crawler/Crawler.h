@@ -25,7 +25,7 @@ typedef std::shared_ptr< BasicNode > BasicNodePtr;
 } // model
 } // bv
 
-namespace bv { namespace widgets {
+namespace bv { namespace nodelogic {
 
 class Crawler;
 
@@ -77,6 +77,7 @@ public:
 				~Crawler			() {}
 
 	void		AddNext				( bv::model::BasicNodePtr node );
+    bool		AddNext				( const std::string& childNodeName );
 	bool		Finalize			();
 
 	model::BasicNode *	GetNonActiveNode();

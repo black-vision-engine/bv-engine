@@ -1,7 +1,7 @@
 #include "Engine/Events/BaseEvent.h"
 #include "Crawler.h"
 
-namespace bv { namespace widgets {
+namespace bv { namespace nodelogic {
 
 class CrawlerEvent : public BaseEvent
 {

@@ -2,43 +2,11 @@
 
 #include "Engine/Types/Enums.h"
 #include "Serialization/SerializationHelper.h"
+#include "Engine/Models/Plugins/Parameters/ParameterSerialization.h"
 
 
 namespace 
 {
-
-    // *********************************
-    //
-    std::string ParamTypeToString( bv::ModelParamType pType )
-    {
-        switch( pType )
-        {
-        case bv::ModelParamType::MPT_FLOAT:
-            return "float";
-        case bv::ModelParamType::MPT_MAT2:
-            return "mat2";
-        case bv::ModelParamType::MPT_VEC2:
-            return "vec2";
-        case bv::ModelParamType::MPT_VEC3:
-            return "vec3";
-        case bv::ModelParamType::MPT_VEC4:
-            return "vec4";
-        case bv::ModelParamType::MPT_TRANSFORM:
-            return "transform";
-        case bv::ModelParamType::MPT_TRANSFORM_VEC:
-            return "transform_vec";
-        case bv::ModelParamType::MPT_INT:
-            return "int";
-        case bv::ModelParamType::MPT_BOOL:
-            return "bool";
-        case bv::ModelParamType::MPT_ENUM:
-            return "enum";
-        default:
-            assert( !"Should never be here" );
-            return "";
-        }
-    }
-
 	template< typename T > 
 	std::string toString( const T & t )
 	{

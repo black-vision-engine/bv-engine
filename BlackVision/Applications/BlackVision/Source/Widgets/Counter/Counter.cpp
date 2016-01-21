@@ -9,7 +9,7 @@
 #include "EndUserAPI/EventHandlers/EventHandlerHelpers.h"
 
 namespace bv {
-namespace widgets {
+namespace nodelogic {
 
 	
 // *******************************

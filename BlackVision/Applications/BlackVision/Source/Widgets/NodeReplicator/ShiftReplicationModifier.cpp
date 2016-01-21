@@ -1,6 +1,7 @@
 #include "ShiftReplicationModifier.h"
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
+#include "../NodeLogicHelper.h"
 
 namespace bv { namespace model
 {
@@ -28,6 +29,12 @@ void                            ShiftReplicationModifier::Serialize       ( ISer
                     ser.SetAttribute( "startTime", SerializationHelper::T2String( shift.second.startTime ) );
                     ser.SetAttribute( "deltaTime", SerializationHelper::T2String( shift.second.deltaTime ) );
 
+                    ser.EnterChild( "delta" );
+
+                        SerializationHelper::SerializeValue( ser, shift.second.delta );
+
+                    ser.ExitChild();    // delta
+
                 ser.ExitChild();
 
             ser.ExitChild();
@@ -40,9 +47,34 @@ void                            ShiftReplicationModifier::Serialize       ( ISer
 
 // ***********************
 //
-ShiftReplicationModifierPtr     ShiftReplicationModifier::Create          ( const IDeserializer& /*deser*/ )
+ShiftReplicationModifierPtr     ShiftReplicationModifier::Create          ( const IDeserializer& deser )
 {
     auto shiftModifier = ShiftReplicationModifier::Create();
+
+    if( deser.EnterChild( "paramShifts" ) )
+    {
+        do
+        {
+            model::ParamValDelta shift;
+            std::string pluginName = deser.GetAttribute( "pluginName" );
+            std::string paramName = deser.GetAttribute( "paramName" );
+
+            deser.EnterChild( "paramDelta" );
+                shift.deltaTime = SerializationHelper::String2T( deser.GetAttribute( "deltaTime" ), 0.0f );
+                shift.startTime = SerializationHelper::String2T( deser.GetAttribute( "startTime" ), 0.0f );
+
+                deser.EnterChild( "delta" );
+
+                    shift.delta = SerializationHelper::CreateValue( deser, "delta" );
+
+                deser.ExitChild();  // value 
+
+            deser.ExitChild();  // paramDelta
+
+        } while( deser.NextChild() );
+        deser.ExitChild();  // paramShifts
+    }
+
     return shiftModifier;
 }
 

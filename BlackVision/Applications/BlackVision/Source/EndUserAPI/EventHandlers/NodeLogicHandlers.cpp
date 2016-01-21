@@ -4,6 +4,9 @@
 #include "../../BVAppLogic.h"
 #include "../../UseLoggerBVAppModule.h"
 #include "EventHandlerHelpers.h"
+#include "../../Widgets/NodeLogicFactory.h"
+#include "Engine/Models/BasicNode.h"
+
 #include "Serialization/Json/JsonSerializeObject.h"
 #include "Serialization/Json/JsonDeserializeObject.h"
 
@@ -30,9 +33,6 @@ NodeLogicHandlers::~NodeLogicHandlers()
 
 
 
-
-
-
 // ***********************
 //
 void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
@@ -41,6 +41,8 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
         return;
 
 	bv::NodeLogicEventPtr widgetEvent = std::static_pointer_cast<bv::NodeLogicEvent>( evt );        
+    auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+    
     auto root = m_appLogic->GetBVProject()->GetModelSceneRoot();
         
     std::string& nodePath = widgetEvent->NodeName;
@@ -54,17 +56,26 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
         SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "Node not found" );
     }
 
-    BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
-    INodeLogic* logic = basicNode->GetLogic().get();
-	if( logic == nullptr )
-	{
-        LOG_MESSAGE( SeverityLevel::warning ) << "Error NodeLogicEvent node [" + nodePath + "] , logic [] not found";
-        SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "NodeLogic not found" );
-	}
+
+
+    JsonSerializeObject ser;
+    JsonDeserializeObject deser;
+    deser.Load( action );
+
 		
     if( command == NodeLogicEvent::Command::AddNodeLogic )
     {
+        std::string timelinePath = deser.GetAttribute( "timelinePath" );
+        auto timeline = editor->GetTimeEvaluator( timelinePath );
+        auto basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
 
+        deser.EnterChild( "logic" );
+        
+        auto logic = GetNodeLogicFactory()->CreateLogic( deser, basicNode, timeline );
+        
+        deser.ExitChild();  // nodeLogic
+
+        basicNode->SetLogic( logic );
     }
     else if( command == NodeLogicEvent::Command::DeleteNodeLogic )
     {
@@ -72,9 +83,13 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
     }
     else if ( command == NodeLogicEvent::Command::SetLogicParam )
     {
-        JsonSerializeObject ser;
-        JsonDeserializeObject deser;
-        deser.Load( action );
+        BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
+        INodeLogic* logic = basicNode->GetLogic().get();
+        if( logic == nullptr )
+        {
+            LOG_MESSAGE( SeverityLevel::warning ) << "Error NodeLogicEvent node [" + nodePath + "] , logic [] not found";
+            SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "NodeLogic not found" );
+        }
 
         bool result = logic->HandleEvent( deser, ser );
 
@@ -137,7 +152,7 @@ namespace
 //
 void NodeLogicHandlers::OnNoMoreNodes       ( IEventPtr evt )
 {
-	auto typedEvent = std::static_pointer_cast< widgets::NoMoreNodesCrawlerEvent >( evt );
+	auto typedEvent = std::static_pointer_cast< nodelogic::NoMoreNodesCrawlerEvent >( evt );
 	// Remove code below. Only for testing.
 	auto n = typedEvent->GetCrawler()->GetNonActiveNode();
 	if( n )

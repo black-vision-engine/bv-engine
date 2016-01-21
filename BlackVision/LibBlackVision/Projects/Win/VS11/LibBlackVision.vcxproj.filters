@@ -2400,6 +2400,9 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Builder\NodeLogicHolder.h">
       <Filter>Engine\Models\Builder</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Parameters\ParameterSerialization.h">
+      <Filter>Engine\Models\Plugins\Parameters</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.h">
       <Filter>Serialization\BV</Filter>
     </ClInclude>

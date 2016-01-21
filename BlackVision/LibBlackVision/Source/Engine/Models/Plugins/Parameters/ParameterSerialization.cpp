@@ -8,6 +8,7 @@
 
 //#include "Serialization/SerializationObjects.inl"
 #include "Serialization/SerializationHelper.h"
+#include "ParameterSerialization.h"
 //#include "Serialization/SerializationObjects.h"
 //#include "Serialization/SerializationObjects.inl"
 
@@ -36,6 +37,37 @@ std::string T2String< bv::ModelParamType>( const bv::ModelParamType& t )
     return SerializationHelper::Enum2String< bv::ModelParamType >( mpt2s, t );
 }
 
+
+std::pair< bv::ParamType, const char* > ParamTypeStringsArray[] = {
+    std::make_pair( bv::ParamType::PT_BOOL, "bool" ),
+    std::make_pair( bv::ParamType::PT_ENUM, "enum" ),
+    std::make_pair( bv::ParamType::PT_FLOAT1, "float" ),
+    std::make_pair( bv::ParamType::PT_INT, "int" ),
+    std::make_pair( bv::ParamType::PT_MAT2, "mat2" ),
+    std::make_pair( bv::ParamType::PT_MAT3, "mat3" ),
+    std::make_pair( bv::ParamType::PT_MAT4, "mat4" ),
+    std::make_pair( bv::ParamType::PT_STRING, "string" ),
+    std::make_pair( bv::ParamType::PT_FLOAT2, "vec2" ),
+    std::make_pair( bv::ParamType::PT_FLOAT3, "vec3" ),
+    std::make_pair( bv::ParamType::PT_FLOAT4, "vec4" ),
+    std::make_pair( bv::ParamType::PT_WSTRING, "wstring" ),
+    std::make_pair( bv::ParamType::PT_TOTAL, "" ),
+};
+
+template<>
+std::string T2String< bv::ParamType>( const bv::ParamType& t )
+{
+    return SerializationHelper::Enum2String< bv::ParamType >( ParamTypeStringsArray, t );
+}
+
+template<>
+bv::ParamType         String2T< bv::ParamType>            ( const std::string& s, const bv::ParamType& defaultVal )
+{
+    auto result = SerializationHelper::String2T< bv::ParamType >( ParamTypeStringsArray, s );
+    if( result == ParamType::PT_TOTAL )
+        return defaultVal;
+    return result;
+}
 
 }
 
@@ -210,5 +242,6 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
     assert( false ); // FIXME
     return ParametersFactory::CreateParameterBool( name, te );
 }
+
 
 } }

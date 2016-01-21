@@ -14,7 +14,7 @@
 #include <algorithm>
 #include <ctime>
 
-namespace bv { namespace widgets { 
+namespace bv { namespace nodelogic { 
 
 // *******************************
 //
@@ -47,6 +47,25 @@ void		Crawler::AddNext			( bv::model::BasicNodePtr node )
 	}
 	else
 		assert(!"Crawler: Cannot add node after finalization!");
+}
+
+// ***********************
+//
+bool		Crawler::AddNext            ( const std::string& childNodeName )
+{
+    if(! m_isFinalized )
+	{
+        auto node = std::static_pointer_cast<bv::model::BasicNode>( m_parentNode->GetNode( childNodeName ) );
+        if( !m_nodesStates.Exist( node.get() ) )
+        {
+		    m_nodesStates.Add( node.get() );
+            return true;
+        }
+	}
+	else
+		assert(!"Crawler: Cannot add node after finalization!");
+
+    return false;
 }
 
 // *******************************
@@ -486,6 +505,11 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
         std::string param = eventSer.GetAttribute( "Message" );
 		AddMessage( toWString( param ) );
 	}
+    else if( crawlAction == "AddNode" )
+    {
+        std::string newNode = eventSer.GetAttribute( "NodeName" );
+        AddNext( newNode );
+    }
     else if( crawlAction == "Reset" )
 	{
 		Reset();
@@ -503,5 +527,5 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
     return true;
 }
 
-} // widgets
+} // nodelogic
 } // bv

@@ -668,7 +668,7 @@ namespace bv{
 		bool autostart=false;
 		if(crawl->autostart=="true")autostart=true;
 
-		auto crawler = widgets::Crawler::Create( node.get(), mathematics::Rect::Create( -2.2f, -1.f, 2.2f, 1.f ) );
+		auto crawler = nodelogic::Crawler::Create( node.get(), mathematics::Rect::Create( -2.2f, -1.f, 2.2f, 1.f ) );
 
 		node->SetLogic(crawler);
 		
@@ -732,7 +732,7 @@ namespace bv{
 
 		{counter_meta;}
       
-		auto counter = widgets::WidgetCounter::Create( node.get(),GetTimeline(plugin->timeline));
+		auto counter = nodelogic::WidgetCounter::Create( node.get(),GetTimeline(plugin->timeline));
 		node->SetLogic(counter);
 
 		 auto counter_param = counter->GetValueParam();

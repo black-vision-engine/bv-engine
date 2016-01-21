@@ -15,10 +15,9 @@ public:
     virtual ~INodeLogicFactory();
 
 
-    virtual model::INodeLogicPtr        CreateLogic  (  const std::string&              /*logicType*/,
+    virtual model::INodeLogicPtr        CreateLogic  (  const IDeserializer &           /*deser*/,
                                                         model::BasicNodePtr             /*logicParent*/,
-                                                        bv::model::ITimeEvaluatorPtr    /*timeEvaluator*/,
-                                                        const IDeserializer &           /*deser*/          
+                                                        bv::model::ITimeEvaluatorPtr    /*timeEvaluator*/
                                                      )
     { return nullptr; }
 };
@@ -26,6 +25,7 @@ public:
 
 // Sets node logic factory.
 // Factory will be deleted automatically
-void    SetNodeLogicFactory         ( INodeLogicFactory * factory );
+void                    SetNodeLogicFactory         ( INodeLogicFactory * factory );
+INodeLogicFactory *     GetNodeLogicFactory         ();
 
 } //bv
