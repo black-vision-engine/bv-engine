@@ -1,5 +1,8 @@
 #include "JsonSpiritDeserializeObject.h"
 
+#include "../BV/BVDeserializeContext.h"
+#include "Assets/AssetDescsWithUIDs.h"
+
 #include <cassert>
 #include <fstream>
 
@@ -10,6 +13,7 @@ const std::wstring EMPTY_STRING = L"";
 // ***********************
 //
 JsonSpiritDeserializeObject::JsonSpiritDeserializeObject()
+    : m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
 {
     m_currentNode = nullptr;
 }

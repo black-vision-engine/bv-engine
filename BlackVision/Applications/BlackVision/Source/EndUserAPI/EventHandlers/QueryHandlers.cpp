@@ -115,11 +115,11 @@ void         QueryHandlers::ListSceneAssets          ( JsonSerializeObject & ser
     {
         auto sceneRoot = scene->GetRootNode();
 
-        AssetDescsWithUIDs assets;
-        GetAssetsWithUIDs( assets, sceneRoot.get(), true );
-        bvDeserCo->SetAssets( AssetDescsWithUIDsPtr( &assets ) );
+        auto assets = std::make_shared< AssetDescsWithUIDs >();
+        GetAssetsWithUIDs( *assets, sceneRoot.get(), true );
+        bvDeserCo->SetAssets( assets );
 
-        auto descriptors = assets.GetAssetsDescs();
+        auto descriptors = assets->GetAssetsDescs();
 
         for( auto& descriptor : descriptors )
         {

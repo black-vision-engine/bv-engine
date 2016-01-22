@@ -1,5 +1,8 @@
 #include "JsonDeserializeObject.h"
 
+#include "../BV/BVDeserializeContext.h"
+#include "Assets/AssetDescsWithUIDs.h"
+
 #include <fstream>
 #include <cassert>
 
@@ -11,6 +14,7 @@ namespace bv
 //
 
 JsonDeserializeObject::JsonDeserializeObject()
+    : m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
 {
     m_currentNode = nullptr;
 }
