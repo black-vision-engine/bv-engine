@@ -4,6 +4,7 @@
 
 #include "Engine/Graphics/SceneGraph/TransformableEntity.h"
 #include "Engine/Graphics/Effects/NodeEffects/NodeEffect.h"
+#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectTr.h"
 
 #include "CoreDEF.h"
 
@@ -25,6 +26,9 @@ private:
 
     SceneNodeVec            m_sceneNodes;
     NodeEffectPtr           m_nodeEffect;
+
+    NodeEffectTrPtr         m_nodeEffectTr;
+
     TransformableEntity *   m_transformable;
 
     bool                    m_visible;
@@ -47,6 +51,9 @@ public:
    
     NodeEffectPtr           GetNodeEffect       ();
     void                    SetNodeEffect       ( NodeEffectPtr nodeEffect );
+
+    NodeEffectTrPtr         GetNodeEffectTr     ();
+    void                    SetNodeEffectTr     ( NodeEffectTrPtr nodeEffect );
 
 private:
 

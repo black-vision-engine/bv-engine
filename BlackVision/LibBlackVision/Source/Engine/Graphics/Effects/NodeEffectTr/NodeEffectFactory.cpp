@@ -26,9 +26,9 @@ namespace {
 
 // **************************
 //
-NodeEffectTr *  CreateNodeEffect( NodeEffectLogic * logic )
+NodeEffectTrPtr  CreateNodeEffect( NodeEffectLogic * logic, NodeEffectType neType )
 {
-    return new NodeEffectTr( logic );
+    return std::make_shared< NodeEffectTr >( logic, neType );
 }
 
 // **************************
@@ -63,18 +63,18 @@ void    SetLogicComponents( NodeEffectLogic * logic, PreFullscreenEffectLogic * 
 
 // **************************
 //
-NodeEffectTr *  CreateDefaultNodeEffect()
+NodeEffectTrPtr  CreateDefaultNodeEffect()
 {
     auto logic = CreateNodeEffectLogic();
     
     SetLogicComponents( logic, new DefaultPreFullscreenEffectLogic(), nullptr, nullptr );
 
-    return CreateNodeEffect( logic );
+    return CreateNodeEffect( logic, NodeEffectType::NET_DEFAULT );
 }
 
 // **************************
 //
-NodeEffectTr *  CreateAlphaMaskNodeEffect()
+NodeEffectTrPtr  CreateAlphaMaskNodeEffect()
 {
     auto logic = CreateNodeEffectLogic();
 
@@ -83,12 +83,12 @@ NodeEffectTr *  CreateAlphaMaskNodeEffect()
 
     SetLogicComponents( logic, pre, fse, nullptr );
 
-    return CreateNodeEffect( logic );
+    return CreateNodeEffect( logic, NodeEffectType::NET_ALPHA_MASK );
 }
 
 // **************************
 //
-NodeEffectTr *  CreateNodeMaskNodeEffect()
+NodeEffectTrPtr  CreateNodeMaskNodeEffect()
 {
     auto logic = CreateNodeEffectLogic();
 
@@ -98,12 +98,12 @@ NodeEffectTr *  CreateNodeMaskNodeEffect()
 
     SetLogicComponents( logic, pre, fse, post );
 
-    return CreateNodeEffect( logic );
+    return CreateNodeEffect( logic, NodeEffectType::NET_NODE_MASK );
 }
 
 // **************************
 //
-NodeEffectTr *  CreateWireframeNodeEffect()
+NodeEffectTrPtr  CreateWireframeNodeEffect()
 {
     auto logic = CreateNodeEffectLogic();
 
@@ -112,12 +112,12 @@ NodeEffectTr *  CreateWireframeNodeEffect()
 
     SetLogicComponents( logic, pre, nullptr, post );
 
-    return CreateNodeEffect( logic );
+    return CreateNodeEffect( logic, NodeEffectType::NET_WIREFRAME );
 }
 
 // **************************
 //
-NodeEffectTr *  CreateMixchannelsNodeEffect()
+NodeEffectTrPtr  CreateMixchannelsNodeEffect()
 {
     auto logic = CreateNodeEffectLogic();
 
@@ -126,7 +126,7 @@ NodeEffectTr *  CreateMixchannelsNodeEffect()
 
     SetLogicComponents( logic, pre, fse, nullptr );
 
-    return CreateNodeEffect( logic );
+    return CreateNodeEffect( logic, NodeEffectType::NET_MIX_CHANNELS );
 }
  
 } // anonoymnous
@@ -134,7 +134,7 @@ NodeEffectTr *  CreateMixchannelsNodeEffect()
 
 // **************************
 //
-NodeEffectTr *    CreateNodeEffect( NodeEffectType nodeEffectType )
+NodeEffectTrPtr    CreateNodeEffect( NodeEffectType nodeEffectType )
 {
     switch( nodeEffectType )
     {

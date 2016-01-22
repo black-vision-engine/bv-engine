@@ -46,7 +46,6 @@ protected:
 
 };
 
-
 DEFINE_PTR_TYPE(NodeEffect)
 DEFINE_CONST_PTR_TYPE(NodeEffect)
 

@@ -7,8 +7,9 @@ namespace bv {
 
 // *********************************
 //
-NodeEffectTr::NodeEffectTr                ( NodeEffectLogic * logic )
+NodeEffectTr::NodeEffectTr                ( NodeEffectLogic * logic, NodeEffectType neType )
     : m_logic( logic )
+    , m_type( neType )
 {
     assert( m_logic );
 }
@@ -25,6 +26,13 @@ NodeEffectTr::~NodeEffectTr               ()
 void            NodeEffectTr::Render                      ( SceneNode * node, RenderLogicContext * ctx )
 {
     m_logic->Render( node, ctx );
+}
+
+// *********************************
+//
+NodeEffectType  NodeEffectTr::GetType                     () const
+{
+    return m_type;
 }
 
 // *********************************

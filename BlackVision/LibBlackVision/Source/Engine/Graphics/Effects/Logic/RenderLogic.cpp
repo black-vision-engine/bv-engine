@@ -135,16 +135,24 @@ void    RenderLogic::RenderNode      ( SceneNode * node, RenderLogicContext * ct
 {
     if ( node->IsVisible() )
     {
-        if( node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT )
+        if( node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT && !node->GetNodeEffectTr() )
         {
             // Default render logic
             DrawNode( node, ctx );
         }
         else
         {
-            auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogic( node );
+            if( node->GetNodeEffectTr() )
+            {
+                auto effect = node->GetNodeEffectTr();
+                effect->Render( node, ctx );
+            }
+            else
+            {
+                auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogic( node );
                
-            effectRenderLogic->RenderNode( node, ctx );
+                effectRenderLogic->RenderNode( node, ctx );
+            }
         }
     }
 }

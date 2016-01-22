@@ -122,6 +122,20 @@ void                    SceneNode::SetNodeEffect       ( NodeEffectPtr nodeEffec
 
 // ********************************
 //
+NodeEffectTrPtr SceneNode::GetNodeEffectTr  ()
+{
+    return m_nodeEffectTr;
+}
+
+// ********************************
+//
+void            SceneNode::SetNodeEffectTr  ( NodeEffectTrPtr nodeEffect )
+{
+    m_nodeEffectTr = nodeEffect;
+}
+
+// ********************************
+//
 void            SceneNode::SetTransformable     ( TransformableEntity * transformable )
 {
     DeleteTransformable();

@@ -26,6 +26,8 @@
 #include "Engine/Graphics/Effects/NodeEffects/WireframeNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/MixChannelsNodeEffect.h"
 
+#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectFactory.h"
+
 
 namespace bv 
 {
@@ -174,12 +176,12 @@ void    NodeUpdater::UpdateNodeEffect       ()
                 auto alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( nodeEffect );
                 auto paramAlpha = alphaMaskEffect->GetParamAlpha();
 
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffectTr();
 
-                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_ALPHA_MASK )
+                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_ALPHA_MASK )
                 {
-                    sceneNodeEffect = std::make_shared< AlphaMaskNodeEffect >();
-                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
+                    sceneNodeEffect = CreateNodeEffect( NodeEffectType::NET_ALPHA_MASK );
+                    m_sceneNode->SetNodeEffectTr( sceneNodeEffect );
                 }
 
                 auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );

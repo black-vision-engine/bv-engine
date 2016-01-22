@@ -2,11 +2,13 @@
 
 #include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectTypes.h"
 
+#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectTr.h"
+
 
 namespace bv {
 
 class NodeEffectTr;
 
-NodeEffectTr *    CreateNodeEffect( NodeEffectType nodeEffectType );
+NodeEffectTrPtr    CreateNodeEffect( NodeEffectType nodeEffectType );
 
 } //bv
