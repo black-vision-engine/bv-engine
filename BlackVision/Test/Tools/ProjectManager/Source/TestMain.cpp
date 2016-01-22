@@ -214,7 +214,7 @@ TEST( RemovingUnusedAssets, ProjectManager )
 
 TEST( SavingPresets, ProjectManager )
 {
-    g_pm0->SavePreset( CreateTestScene0(), "proj00", "pres/proj1.bvpreset" );
+    g_pm0->SavePreset( CreateTestScene0()->GetRootNode(), "proj00", "pres/proj1.bvpreset" );
 }
 
 TEST( ListingPresets, ProjectManager )
@@ -229,7 +229,7 @@ TEST( ListingPresets, ProjectManager )
 
 TEST( LoadingPresets, ProjectManager )
 {
-    ASSERT_TRUE( g_pm0->LoadPreset( "proj00", "pres/proj1.bvpreset" ) );
+    ASSERT_TRUE( g_pm0->LoadPreset( "proj00", "pres/proj1.bvpreset", nullptr ) ); // FIXME: 
 }
 
 TEST( CreatingSecondPM, ProjectManager )

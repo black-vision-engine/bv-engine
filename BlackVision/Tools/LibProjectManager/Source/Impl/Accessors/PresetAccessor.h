@@ -15,8 +15,8 @@ DEFINE_CONST_PTR_TYPE( PresetAccessor )
 class PresetAccessor
 {
 public:
-    void                        SavePreset          ( const model::SceneModelPtr node, const Path & path ) const;
-    model::SceneModelPtr        LoadPreset          ( const Path & path ) const;
+    void                        SavePreset          ( const model::BasicNodePtr node, const Path & path ) const;
+    model::BasicNodePtr         LoadPreset          ( const Path & path, const model::OffsetTimeEvaluatorPtr & timeline ) const;
 
     PathVec                     ListPresets         ( const Path & path ) const;
     PathVec                     ListPresets         () const;

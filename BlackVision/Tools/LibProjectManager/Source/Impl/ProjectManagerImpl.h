@@ -81,8 +81,8 @@ private:
 
     // *********************************
 	// loading, saving presets
-    model::SceneModelPtr    LoadPreset          ( const Path & projectName, const Path & path ) const;
-    void                    SavePreset          ( const model::SceneModelPtr & node, const Path & projectName, const Path & path ) const;
+    model::BasicNodePtr     LoadPreset          ( const Path & projectName, const Path & path, const model::OffsetTimeEvaluatorPtr & timeline ) const;
+    void                    SavePreset          ( const model::BasicNodePtr & node, const Path & projectName, const Path & path ) const;
     PathVec                 ListPresets         ( const Path & projectName, const Path & path ) const;
     PathVec                 ListPresets         ( const Path & projectName ) const;
     PathVec                 ListPresets         () const;

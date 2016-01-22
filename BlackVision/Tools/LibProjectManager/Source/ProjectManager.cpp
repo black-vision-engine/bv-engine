@@ -266,14 +266,14 @@ SceneDescriptor			    ProjectManager::GetSceneDesc		( const Path & path ) const
 
 // ********************************
 //
-model::SceneModelPtr        ProjectManager::LoadPreset          ( const Path & projectName, const Path & path ) const
+model::BasicNodePtr        ProjectManager::LoadPreset          ( const Path & projectName, const Path & path, const model::OffsetTimeEvaluatorPtr & timeline ) const
 {
-    return m_impl->LoadPreset( projectName, path );
+    return m_impl->LoadPreset( projectName, path, timeline );
 }
 
 // ********************************
 //
-void                        ProjectManager::SavePreset          ( const model::SceneModelPtr & node, const Path & projectName, const Path & path ) const
+void                        ProjectManager::SavePreset          ( const model::BasicNodePtr & node, const Path & projectName, const Path & path ) const
 {
     m_impl->SavePreset( node, projectName, path );
 }

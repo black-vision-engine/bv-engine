@@ -470,6 +470,9 @@ public:
         CopyScene,
         MoveScene,
 
+        SavePreset,
+        LoadPreset,
+
         CopyAsset,
         MoveAsset,
         RemoveAsset,

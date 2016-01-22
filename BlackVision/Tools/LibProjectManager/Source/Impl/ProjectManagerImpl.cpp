@@ -835,15 +835,15 @@ Path						ProjectManagerImpl::Location2Path( const Location & loc ) const
 
 // ********************************
 //
-model::SceneModelPtr        ProjectManagerImpl::LoadPreset          ( const Path & projectName, const Path & path ) const
+model::BasicNodePtr        ProjectManagerImpl::LoadPreset          ( const Path & projectName, const Path & path, const model::OffsetTimeEvaluatorPtr & timeline ) const
 {
     auto pathInCategory = TranslateToPathCategory( projectName, path );
-    return m_presetAccessor->LoadPreset( pathInCategory );
+    return m_presetAccessor->LoadPreset( pathInCategory, timeline );
 }
 
 // ********************************
 //
-void                        ProjectManagerImpl::SavePreset          ( const model::SceneModelPtr & node, const Path & projectName, const Path & path ) const
+void                        ProjectManagerImpl::SavePreset          ( const model::BasicNodePtr & node, const Path & projectName, const Path & path ) const
 {
     auto pathInCategory = TranslateToPathCategory( projectName, path );
     return m_presetAccessor->SavePreset( node, pathInCategory );

@@ -451,6 +451,58 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         SendSimpleResponse( command, projectEvent->EventID, senderID, true );
     }
+    else if( command == ProjectEvent::Command::SavePreset )
+    {
+        auto destProjectName = GetRequestParamValue( request )[ "DestProjectName" ].asString();
+        auto destPath = GetRequestParamValue( request )[ "DestPath" ].asString();
+        auto sceneName = GetRequestParamValue( request )[ "SceneName" ].asString();
+        auto nodePath = GetRequestParamValue( request )[ "NodePath" ].asString();
+
+        auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+
+        auto n = editor->GetNode( sceneName, nodePath );
+        assert( std::dynamic_pointer_cast< model::BasicNode >( n ) );
+        auto bn = std::static_pointer_cast< model::BasicNode >( n );
+
+        pm->SavePreset( bn, destProjectName, destPath );
+
+        SendSimpleResponse( command, projectEvent->EventID, senderID, true );
+    }
+    else if( command == ProjectEvent::Command::LoadPreset )
+    {
+        auto projectName = GetRequestParamValue( request )[ "ProjectName" ].asString();
+        auto path = GetRequestParamValue( request )[ "Path" ].asString();
+        auto sceneName = GetRequestParamValue( request )[ "SceneName" ].asString();
+        auto nodePath = GetRequestParamValue( request )[ "NodePath" ].asString();
+
+        auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+
+        auto timeline = editor->GetTimeEvaluator( sceneName );
+
+        assert( std::dynamic_pointer_cast< model::OffsetTimeEvaluator >( timeline ) );
+        auto offsetTimeline = std::static_pointer_cast< model::OffsetTimeEvaluator >( timeline );
+
+        auto node = pm->LoadPreset( projectName, path, offsetTimeline );
+
+        auto parentNode = editor->GetNode( sceneName, nodePath );
+        auto scene = editor->GetScene( sceneName );
+
+        auto success = false;
+
+        if( node && parentNode && scene )
+        {
+            success = editor->AddChildNode( scene, parentNode, node );
+        }
+
+        if( success )
+        {
+            SendSimpleResponse( command, projectEvent->EventID, senderID, true );
+        }
+        else
+        {
+            SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Cannot load preset" );
+        }
+    }
     else if( command == ProjectEvent::Command::CreateFolder )
     {
         auto categoryName = GetRequestParamValue( request )[ "categoryName" ].asString();
