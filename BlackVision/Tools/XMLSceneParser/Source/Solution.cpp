@@ -63,7 +63,7 @@ namespace bv
 
         // create scenes
 
-        auto TimeLineDefault =model::TimelineHelper::CreateDefaultTimelineImpl( "default", TimeType( 50.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+        auto TimeLineDefault =model::TimelineHelper::CreateDefaultTimeline( "default", TimeType( 50.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
         timelineManager->AddStopEventToTimeline( TimeLineDefault, "stop1", TimeType( 0.0 ) );
         auto timeline_default = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline_default" , TimeType( 0.0 ) );
         auto timeline_default_alpha = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline_default_alpha" , TimeType( 0.0 ) );

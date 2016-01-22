@@ -7,6 +7,7 @@
 
 #include "LibImage.h"
 
+
 namespace bv {
 
 const std::string	TestSceneUtils::TEXTURE_PATH	= "Assets/checkboard.bmp";
@@ -30,16 +31,14 @@ const std::string	TestSceneUtils::PluginsNameArr[] = { "triangle", "circle", "el
 
 // ****************************
 //
-model::SceneModelPtr	TestSceneUtils::ColoredRectangleScene		( const std::string & name, glm::vec4 color, glm::vec3 transform )
+void	                TestSceneUtils::AddColoredRectangleScene	( BVProjectEditor * editor, const std::string & name, glm::vec4 color, glm::vec3 transform )
 {
-	auto scene = model::SceneModel::Create( name, new Camera() );
-	auto root = TestSceneUtils::ColoredRectangle( scene->GetTimeline(), "root", 0.5f, 0.5f, color, ALPHA_MASK0_PATH );
-	scene->SetRootNode( root );
-
-    auto rootTransform  = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-    SetParameterTranslation( rootTransform, 0, 0.0f, transform );
-
-	return scene;
+    auto sceneModel = model::SceneModel::Create( name, new Camera() );
+	editor->AddScene( sceneModel );
+    
+    auto root = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( sceneModel ), "root", 0.5f, 0.5f, color, ALPHA_MASK0_PATH );
+    SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, transform );
+    editor->AddChildNode( sceneModel, nullptr, root );
 }
 
 // ****************************

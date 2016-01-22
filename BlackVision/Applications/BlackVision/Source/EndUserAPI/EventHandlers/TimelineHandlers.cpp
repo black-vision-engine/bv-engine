@@ -86,120 +86,107 @@ void        TimelineHandlers::TimelineHandler     ( bv::IEventPtr evt )
         std::string & timelinePath = timelineEvent->TimelineName; //path?
         std::string & timelineNewName = timelineEvent->NewTimelineName;
 
-        float time = timelineEvent->Time;
+        TimeType time = timelineEvent->Time;
         auto type = timelineEvent->TimelineType;
         auto duration = timelineEvent->Duration;
         auto wrapMethod = timelineEvent->WrapMethod;
         TimeLineEvent::Command command = timelineEvent->TimelineCommand;
 
+        auto success = false;
+
         if( command == TimeLineEvent::Command::AddTimeline )
 		{
-			auto success = editor->AddTimeline( timelinePath, timelineNewName, type );
-            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, success );
+			success = editor->AddTimeline( timelinePath, timelineNewName, type );
 		}
 		else if( command == TimeLineEvent::Command::DeleteTimeline )
         {
-			auto success = editor->DeleteTimeline( timelinePath );
-			SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, success );
+			success = editor->DeleteTimeline( timelinePath );
         }
 		else if( command == TimeLineEvent::Command::ForceDeleteTimeline )
         {
 			//timelineNewName is more path of new timeline here..
-			auto success = editor->ForceDeleteTimeline( timelinePath, timelineNewName );
-            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, success );
+			success = editor->ForceDeleteTimeline( timelinePath, timelineNewName );
         }
 		else if( command == TimeLineEvent::Command::RenameTimeline )
         {
-			auto success = editor->RenameTimeline( timelinePath, timelineNewName );
-            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, success );
+			success = editor->RenameTimeline( timelinePath, timelineNewName );
         }
 		else if( command == TimeLineEvent::Command::SetDuration )
         {
-			auto success = editor->SetTimelineDuration( timelinePath, duration );
-            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, success );
+			success = editor->SetTimelineDuration( timelinePath, duration );
         }
 		else if( command == TimeLineEvent::Command::SetWrapPreBehavior )
         {
-			auto success = editor->SetTimelineWrapPreBehavior( timelinePath, wrapMethod );
-            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, success );
+			success = editor->SetTimelineWrapPreBehavior( timelinePath, wrapMethod );
         }
 		else if( command == TimeLineEvent::Command::SetWrapPostBehavior )
         {
-			auto success = editor->SetTimelineWrapPostBehavior( timelinePath, wrapMethod );
-            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, success );
+			success = editor->SetTimelineWrapPostBehavior( timelinePath, wrapMethod );
         }
         else if( command == TimeLineEvent::Command::Play )
         {
-            auto timeline = std::static_pointer_cast< model::ITimeline >( editor->GetTimeEvaluator( timelinePath ) );
-			if( timeline == nullptr )
+            auto timeline = editor->GetTimeline( timelinePath );
+			if( timeline )
             {
-                SendSimpleErrorResponse( command, timelineEvent->EventID, timelineEvent->SocketID, string("Timeline not found ["+timelinePath+"]").c_str()  );
-            }else{
-
                 timeline->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
                 timeline->Play();
-
-                SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
+                success = true;
             }
         }
         else if( command == TimeLineEvent::Command::Stop )
         {
-            auto timeline = std::static_pointer_cast< model::ITimeline >( editor->GetTimeEvaluator( timelinePath ) );
-			if( timeline == nullptr )
+            auto timeline = editor->GetTimeline( timelinePath );
+			if( timeline )
             {
-                SendSimpleErrorResponse( command, timelineEvent->EventID, timelineEvent->SocketID, string("Timeline not found ["+timelinePath+"]").c_str() );
-            }else{
-
                 timeline->Stop();
-
-                SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
+                success = true;
             }
         }
         else if( command == TimeLineEvent::Command::PlayReverse )
         {
-            auto timeline = std::static_pointer_cast< model::ITimeline >( editor->GetTimeEvaluator( timelinePath ) );
-			if( timeline == nullptr )
+            auto timeline = editor->GetTimeline( timelinePath );
+			if( timeline )
             {
-                SendSimpleErrorResponse( command, timelineEvent->EventID, timelineEvent->SocketID, string("Timeline not found ["+timelinePath+"]").c_str()   );
-            }else{
-
                 timeline->SetPlayDirection( bv::TimelinePlayDirection::TPD_BACKWARD );
                 timeline->Play();
-
-                SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
+                success = true;
             }
         }
         else if( command == TimeLineEvent::Command::Goto )
         {
-            auto timeline = std::static_pointer_cast< model::ITimeline >( editor->GetTimeEvaluator( timelinePath ) );
-			if( timeline == nullptr )
+            auto timeline = editor->GetTimeline( timelinePath );
+			if( timeline )
             {
-                SendSimpleErrorResponse( command, timelineEvent->EventID, timelineEvent->SocketID, string("Timeline not found ["+timelinePath+"]").c_str()   );
-            }else{
-
                 timeline->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
                 timeline->Play();
-                timeline->SetTimeAndStop( ( bv::TimeType )time );
-
-                SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
+                timeline->SetTimeAndStop( time );
+                success = true;
             }
         }
         else if( command == TimeLineEvent::Command::GotoAndPlay )
         {
-            auto timeline = std::static_pointer_cast< model::ITimeline >( editor->GetTimeEvaluator( timelinePath ) );
-			if( timeline == nullptr )
+            auto timeline = editor->GetTimeline( timelinePath );
+			if( timeline )
             {
-                SendSimpleErrorResponse( command, timelineEvent->EventID, timelineEvent->SocketID, string("Timeline not found ["+timelinePath+"]").c_str()   );
-            }else{
-
                 timeline->SetPlayDirection( bv::TimelinePlayDirection::TPD_FORWAD );
-                timeline->SetTimeAndPlay( ( bv::TimeType )time );
-
-                SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, true );
+                timeline->SetTimeAndPlay( time );
+                success = true;
             }
         }
         else
+        {
             SendSimpleErrorResponse( command, timelineEvent->EventID, timelineEvent->SocketID, "Unknown command" );
+        }
+
+
+        if( success )
+        {
+            SendSimpleResponse( command, timelineEvent->EventID, timelineEvent->SocketID, success );
+        }
+        else
+        {
+            SendSimpleErrorResponse( command, timelineEvent->EventID, timelineEvent->SocketID, std::string( "Timeline not found [" + timelinePath + "]" ).c_str() );
+        }
     }
 }
 

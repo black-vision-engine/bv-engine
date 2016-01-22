@@ -143,7 +143,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     {
         auto timeEval = m_projectEditor->GetTimeEvaluator( value );
             
-        if( !timeEval || TimelineHelper::GetSceneName( value ) != sceneName )
+        if( !timeEval || TimelineHelper::GetSceneName( timeEval.get() ) != sceneName )
         {
             SendSimpleErrorResponse( command, setParamEvent->EventID, setParamEvent->SocketID, "Timeline not found" );
             return;

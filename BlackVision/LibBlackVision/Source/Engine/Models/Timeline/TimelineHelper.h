@@ -5,8 +5,6 @@
 #include "Engine/Models/Timeline/Static/ConstTimeEvaluator.h"
 #include "Engine/Models/Timeline/Dynamic/DefaultTimeline.h"
 
-#include "CoreDEF.h"
-
 
 namespace bv { namespace model {
 
@@ -14,27 +12,22 @@ class TimelineHelper
 {
 private:
 
-    static const std::string        SEPARATOR; //FIXME: probably not the best idea
+    static const std::string        PATH_SEPARATOR; //FIXME: probably not the best idea
+    static const TimeType           INFINITE_DURATION; //FIXME: probably not the best idea
 
 public:
 
     static ITimeEvaluatorPtr        CreateTimeEvaluator             ( const std::string & name, TimelineType type );
 
-    static ITimeEvaluatorPtr		CreateOffsetTimeEvaluator       ( const std::string & name, TimeType startTime );
-    static ITimeEvaluatorPtr		CreateConstTimeEvaluator        ( const std::string & name, TimeType timeVal );
-    static ITimelinePtr				CreateDefaultTimeline           ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
-
-    static OffsetTimeEvaluatorPtr	CreateOffsetTimeEvaluatorImpl   ( const std::string & name, TimeType startTime );
-    static ConstTimeEvaluatorPtr	CreateConstTimeEvaluatorImpl    ( const std::string & name, TimeType timeVal );
-    static DefaultTimelinePtr		CreateDefaultTimelineImpl       ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
+    static OffsetTimeEvaluatorPtr	CreateOffsetTimeEvaluator       ( const std::string & name, TimeType startTime );
+    static ConstTimeEvaluatorPtr	CreateConstTimeEvaluator        ( const std::string & name, TimeType timeVal );
+    static DefaultTimelinePtr		CreateDefaultTimeline           ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
     
     /** Make copy of timelines from vector and add them to destTimeline.
     @return Returns group prefix number. */
     static UInt32					CopyTimelines					( ITimeEvaluatorPtr destTimeline, const std::vector< ITimeEvaluatorPtr > & timelines );
 
-    static std::string              GetSceneName                    ( const ITimeEvaluator* timeline );
-    static std::string				GetSceneName        			( const std::string & timelinePath );
-    static std::string				GetParentTimelinePath			( const std::string & timelinePath );
+    static std::string              GetSceneName                    ( const ITimeEvaluator * timeline );
     
     static ITimeEvaluatorPtr        GetTimeEvaluator                ( const std::string & name, ITimeEvaluatorPtr parentTimeline );
     static ITimelinePtr             GetTimeline                     ( const std::string & name, ITimeEvaluatorPtr parentTimeline );

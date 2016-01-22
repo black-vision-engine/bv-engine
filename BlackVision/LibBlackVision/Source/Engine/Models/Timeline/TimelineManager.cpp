@@ -133,14 +133,14 @@ ITimeEvaluatorPtr       TimelineManager::GetRootTimeline            ()
 
 // *********************************
 //
-ITimeEvaluatorPtr       TimelineManager::GetTimeEvaluator           ( const std::string & name )
+ITimeEvaluatorPtr       TimelineManager::GetTimeEvaluator           ( const std::string & timelinePath )
 {
-    return TimelineHelper::GetTimeEvaluator( name, m_rootTimeline );
+    return TimelineHelper::GetTimeEvaluator( timelinePath, m_rootTimeline );
 }
 
-ITimelinePtr            TimelineManager::GetTimeline                     ( const std::string & name )
+ITimelinePtr            TimelineManager::GetTimeline                     ( const std::string & timelinePath )
 {
-    return TimelineHelper::GetTimeline( name, m_rootTimeline );
+    return TimelineHelper::GetTimeline( timelinePath, m_rootTimeline );
 }
 
 // *********************************

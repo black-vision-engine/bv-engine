@@ -21,7 +21,6 @@ private:
     typedef std::hash_map< model::IModelNode *, SceneNode * >	TNodesMapping;
     typedef std::vector< model::SceneModelPtr >					SceneModelVec;
 
-
 private:
 
 	BVProject *					m_project;
@@ -57,7 +56,7 @@ public:
 
 	bool					SetSceneVisible		( const std::string & sceneName, bool visible );
 
-	model::SceneModelPtr    GetScene			( const std::string & sceneName );
+	model::SceneModelPtr    GetScene			( const std::string & sceneName ) const;
 
 	bool					RenameScene			( const std::string & oldSceneName, const std::string & newSceneName );
 
@@ -69,8 +68,9 @@ public:
 
 
 /* NODES */
-    model::IModelNodePtr	GetNode             ( const std::string & sceneName, const std::string & nodePath, const std::string & separator = "/" );
-	model::IModelNodePtr	GetParentNode       ( const std::string & sceneName, const std::string & nodePath, const std::string & separator = "/" );
+
+    model::IModelNodePtr	GetNode             ( const std::string & sceneName, const std::string & nodePath, const std::string & separator = "/" ) const;
+	model::IModelNodePtr	GetParentNode       ( const std::string & sceneName, const std::string & nodePath, const std::string & separator = "/" ) const;
 
 	/* paths */
     bool                    AddChildNode        ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName );
@@ -142,7 +142,7 @@ public:
     bool                    DetachPlugin		( model::BasicNodePtr node, UInt32 posIdx );
     bool                    DetachPlugin		( model::BasicNodePtr node, const std::string & name );
     
-	model::IPluginPtr		GetDetachedPlugin	( model::BasicNodePtr node );
+	model::IPluginPtr		GetDetachedPlugin	( model::BasicNodePtr node ) const;
     void                    ResetDetachedPlugin	( model::BasicNodePtr node );
 
 	/** Add a copy of plugin from srcNode with given name to the destNode on destIdx position.
@@ -154,7 +154,7 @@ public:
 
 /* EFFECTS */
 
-	model::IModelNodeEffectPtr	GetNodeEffect   ( model::IModelNodePtr node );
+	model::IModelNodeEffectPtr	GetNodeEffect   ( model::IModelNodePtr node ) const;
     bool						SetNodeEffect   ( model::IModelNodePtr node, model::IModelNodeEffectPtr nodeEffect );
     bool                        SetNodeEffect   ( const std::string & sceneName, const std::string & nodePath, const std::string & timelinePath, const std::string & effectName );
 
@@ -172,7 +172,9 @@ public:
 	bool                    SetTimelineWrapPreBehavior	( const std::string & timelinePath, TimelineWrapMethod preMethod );
 	bool                    SetTimelineWrapPostBehavior	( const std::string & timelinePath, TimelineWrapMethod postMethod );
 
-    model::ITimeEvaluatorPtr GetTimeEvaluator           ( const std::string & timelinePath );
+    model::ITimeEvaluatorPtr    GetTimeEvaluator        ( const std::string & timelinePath ) const;
+    model::ITimelinePtr         GetTimeline             ( const std::string & timelinePath ) const;
+
 
 /* ASSETS */
 
@@ -188,7 +190,7 @@ private:
     void                    RemoveNodeMapping   ( model::IModelNodePtr node );
     void                    UnregisterUpdaters  ( model::IModelNodePtr node );
 
-    SceneNode *             GetEngineNode       ( model::IModelNodePtr node );
+    SceneNode *             GetEngineNode       ( model::IModelNodePtr node ) const;
     
 	
 	/* model scene helpers */
@@ -198,9 +200,25 @@ private:
 
 
 	/* renaming helpers */
-	std::string             PrefixSceneName		( const std::string & name );
+	std::string             PrefixSceneName		( const std::string & name ) const;
 
     friend class BVProject;
+
+
+// CUSTOM DEFAULTS
+
+public:
+
+    model::ITimelinePtr         GetSceneDefaultTimeline ( model::SceneModelConstPtr scene ) const;
+
+private:
+
+    void                        InitDefaultScene	    ( model::SceneModelPtr scene );
+    
+    bool                        IsTimelineEditable      ( const model::ITimeEvaluator * timeEval ) const;
+    
+    static const std::string    DEFAULT_ROOT_NAME;
+    static const std::string    DEFAULT_TIMELINE_NAME;
 
 };
 

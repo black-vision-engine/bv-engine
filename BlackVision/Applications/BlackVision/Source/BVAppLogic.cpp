@@ -166,11 +166,8 @@ void BVAppLogic::LoadScenes( const PathVec & pathVec )
 //
 void BVAppLogic::LoadScene          ( void )
 {
-    //auto te = m_timelineManager->CreateDefaultTimeline( "", 10.f, TimelineWrapMethod::TWM_MIRROR, TimelineWrapMethod::TWM_MIRROR );
-    //te->Play();
-    //m_globalTimeline->AddChild( te );
-
     auto projectEditor = m_bvProject->GetProjectEditor();
+
     if( !ConfigManager::GetBool( "Debug/LoadSceneFromEnv" ) )
     {
         if( ConfigManager::GetBool( "Debug/LoadSolution" ) )
@@ -178,10 +175,10 @@ void BVAppLogic::LoadScene          ( void )
             //m_solution.SetTimeline(m_timelineManager);
             m_solution.LoadSolution( ConfigManager::GetString("solution") );
 
-			auto scene = SceneModel::Create( "root", m_renderer->GetCamera() );
-			scene->SetRootNode( m_solution.GetRoot() );
+			auto sceneModel = SceneModel::Create( "root", m_renderer->GetCamera() );
+			projectEditor->AddScene( sceneModel );
 
-			projectEditor->AddScene( scene );
+            projectEditor->AddChildNode( sceneModel, nullptr, m_solution.GetRoot() );
 
             //if(ConfigManager::GetBool("hm"))
             //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
@@ -205,14 +202,12 @@ void BVAppLogic::LoadScene          ( void )
     }
     else
     {
-
         model::SceneModelPtr sceneModel = nullptr;
 
         if( GetEnvScene() == "SERIALIZED_TEST" )
         {
             sceneModel = TestScenesFactory::CreateSerializedTestScene( m_pluginsManager );
             projectEditor->AddScene( sceneModel );
-            return;
         }
         else
         {
@@ -221,7 +216,7 @@ void BVAppLogic::LoadScene          ( void )
 	        sceneModel = model::SceneModel::Create( sceneName, m_renderer->GetCamera() );
             projectEditor->AddScene( sceneModel );
 
-            auto node = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), sceneModel->GetTimeline(), m_pluginsManager ) ;
+            auto node = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), projectEditor->GetSceneDefaultTimeline( sceneModel ), m_pluginsManager ) ;
             projectEditor->AddChildNode( sceneModel, nullptr, node );
         }
     }
