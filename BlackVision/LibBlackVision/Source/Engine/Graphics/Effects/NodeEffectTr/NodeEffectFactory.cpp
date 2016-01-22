@@ -41,7 +41,7 @@ NodeEffectTr *  CreateMixchannelsNodeEffect()
 {
     return nullptr;
 }
-
+ 
 } // anonoymnous
 
 
