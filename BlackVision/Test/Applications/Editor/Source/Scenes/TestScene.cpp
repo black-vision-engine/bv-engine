@@ -63,14 +63,14 @@ OrderTestCase::OrderTestCase	( const std::string & node, const std::string & tes
 {
 	auto size = TestSceneUtils::IMG_SIZE;
 
-	auto dir = TestSceneUtils::ANIM_PATH;
+	auto dir = "DefaultPMDir/sequences/" + ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str();
 	if( ( !Path::Exists( dir ) ) && ( !dir.empty() ) )
-            Dir::CreateDir( dir );
+            Dir::CreateDir( dir, true );
 
 	TestSceneUtils::GenerateCheckboardTex( TestSceneUtils::TEXTURE_PATH, size, size, glm::uvec3( 32 ) );
 	TestSceneUtils::GenerateCheckboardAlphaMaskTex( TestSceneUtils::ALPHA_MASK_PATH, TestSceneUtils::AM_SIZE, TestSceneUtils::AM_SIZE );
 	TestSceneUtils::GenerateCheckboardAlphaMaskTex( TestSceneUtils::ALPHA_MASK0_PATH, TestSceneUtils::AM_SIZE, TestSceneUtils::AM_SIZE, 64 );
-	TestSceneUtils::GenerateCheckboardAnim( TestSceneUtils::ANIM_PATH, size, size, TestSceneUtils::ANIM_NUM );
+	TestSceneUtils::GenerateCheckboardAnim( dir, size, size, TestSceneUtils::ANIM_NUM );
 
     auto editor = m_project->GetProjectEditor();
 
@@ -94,14 +94,14 @@ void					TestScene::InitTestEditor			()
 {
 	//InitTestModelSceneEditor();
 
-	InitTimelinesTest();
+	//InitTimelinesTest();
 
 	//InitAssetsTest();
 
     //InitCopyNodeTest();
 
-	//InitBasicColorPluginTest();
-	//InitOrderColorPluginTest();
+	InitBasicColorPluginTest();
+	InitOrderColorPluginTest();
 
     //InitBasicTexturePluginTest();
 	//InitOrderTexturePluginTest();
@@ -305,32 +305,6 @@ void                    TestScene::InitTestModelSceneEditor ()
 
         auto root = model::BasicNode::Create( "root", nullptr );
         success &= editor->AddChildNode( scene, nullptr, root );
-
-        assert( success );
-	});
-
-	m_testSteps.push_back([&] 
-	{
-		auto editor = m_project->GetProjectEditor();
-		auto scene = editor->GetScene( EMPTY_SCENE );
-        bool success = true;
-
-        auto root = scene->GetRootNode();
-
-        success &= editor->AddPlugin( EMPTY_SCENE, "root", "DEFAULT_TRANSFORM", "test", "", 0 );
-
-        assert( !success );
-	});
-
-	m_testSteps.push_back([&] 
-	{
-		auto editor = m_project->GetProjectEditor();
-		auto scene = editor->GetScene( EMPTY_SCENE );
-        bool success = true;
-
-        auto root = scene->GetRootNode();
-
-        success &= editor->AddPlugin( EMPTY_SCENE, "root", "DEFAULT_TRANSFORM", "test", EMPTY_SCENE, 0 );
 
         assert( success );
 	});
@@ -890,6 +864,130 @@ void					TestScene::InitTimelinesTest		()
 	{
 		auto editor = m_project->GetProjectEditor();
 		auto scene = editor->GetScene( SCENE_NAME );
+        auto timeline = editor->GetSceneDefaultTimeline( scene );
+
+        auto anim = TestSceneUtils::AnimatedRectangle( editor->GetSceneDefaultTimeline( scene ), ANIM_NODE, 0.3f, 0.3f, ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() );
+		SetParameterTranslation( anim->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
+
+		auto root = scene->GetRootNode();
+		editor->AddChildNode( scene, root, anim );
+	});
+
+    m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto scene = editor->GetScene( SCENE_NAME );
+        auto timeline = editor->GetSceneDefaultTimeline( scene );
+        timeline->Play();
+	});
+
+    Wait( 5 );
+
+    m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto scene = editor->GetScene( SCENE_NAME );
+        auto timeline = editor->GetSceneDefaultTimeline( scene );
+		bool success = true;
+
+        auto defaultTimelinePath = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" );
+
+        success &= ( !editor->DeleteTimeline( defaultTimelinePath ) );
+        success &= ( editor->GetTimeline( defaultTimelinePath ) != nullptr );
+
+        success &= ( !editor->ForceDeleteTimeline( defaultTimelinePath ) );
+        success &= ( editor->GetTimeline( defaultTimelinePath ) != nullptr );
+
+        success &= ( !editor->RenameTimeline( defaultTimelinePath, "test" ) );
+        success &= ( editor->GetTimeline( defaultTimelinePath ) != nullptr );
+        success &= ( editor->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "test" ) ) == nullptr );
+        
+        timeline->Stop();
+
+		assert( success );
+	});
+
+    m_testSteps.push_back([&] 
+	{
+        auto editor = m_project->GetProjectEditor();
+		auto scene = editor->GetScene( SCENE_NAME );
+		auto child = scene->GetRootNode()->GetChild( ANIM_NODE );
+		bool success = true;
+
+		auto timeline = model::TimelineHelper::CreateDefaultTimeline( TIMELINE_NAME, 10000.0, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+        editor->AddTimeline( scene->GetTimeline(), timeline );
+
+        success &= ( editor->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) ) != nullptr );
+
+        for( auto param : child->GetParameters() )
+        {
+            param->SetTimeEvaluator( timeline );
+        }
+	});
+
+    m_testSteps.push_back([&] 
+	{
+        auto editor = m_project->GetProjectEditor();
+		auto scene = editor->GetScene( SCENE_NAME );
+        auto timeline = editor->GetSceneDefaultTimeline( scene );
+        timeline->SetTimeAndPlay( 0.0f );
+	});
+
+    Wait( 5 );
+
+    m_testSteps.push_back([&] 
+	{
+        auto editor = m_project->GetProjectEditor();
+		auto scene = editor->GetScene( SCENE_NAME );
+        auto timeline = editor->GetTimeline( model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME ) );
+        timeline->SetTimeAndPlay( 0.0f );
+	});
+
+    Wait( 5 );
+
+    m_testSteps.push_back([&] 
+	{
+        auto editor = m_project->GetProjectEditor();
+		auto scene = editor->GetScene( SCENE_NAME );
+        auto timeline = editor->GetSceneDefaultTimeline( scene );
+        auto timelinePath = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, TIMELINE_NAME );
+        auto defaultTimelinePath = model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "default" );
+		bool success = true;
+        
+        success &= ( !editor->DeleteTimeline( timelinePath ) );
+        success &= ( editor->GetTimeline( timelinePath ) != nullptr );
+
+        success &= ( editor->ForceDeleteTimeline( timelinePath ) );
+        success &= ( editor->GetTimeline( timelinePath ) == nullptr );
+        success &= ( editor->GetTimeline( defaultTimelinePath ) != nullptr );
+
+		auto child = scene->GetRootNode()->GetChild( ANIM_NODE );
+        for( auto param : child->GetParameters() )
+        {
+            success &= ( param->GetTimeEvaluator() == timeline );
+        }
+
+        timeline->SetTimeAndPlay( 0.0f );
+
+		assert( success );
+	});
+
+    m_testSteps.push_back([&] 
+	{
+        auto editor = m_project->GetProjectEditor();
+		auto scene = editor->GetScene( SCENE_NAME );
+		auto root = scene->GetRootNode();
+		bool success = true;
+
+        success &= ( editor->DeleteChildNode( scene, root, root->GetChild( ANIM_NODE ) ) );
+		
+        assert( success );
+    });
+
+	m_testSteps.push_back([&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+		auto scene = editor->GetScene( SCENE_NAME );
 
 		auto timeline = model::TimelineHelper::CreateDefaultTimeline( TIMELINE_NAME, 1.0, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
         editor->AddTimeline( scene->GetTimeline(), timeline );
@@ -1073,7 +1171,7 @@ void					TestScene::InitAssetsTest		()
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( "tex0" );
 
-		auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f0.bmp", false );
+		auto desc = TextureAssetDesc::Create( ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() + "/f0.bmp", false );
         editor->LoadAsset( child->GetPlugin( "texture" ), desc );
 	});
 
@@ -1083,7 +1181,7 @@ void					TestScene::InitAssetsTest		()
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( "tex0" );
 
-		auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f1.bmp", false );
+		auto desc = TextureAssetDesc::Create( ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() + "/f1.bmp", false );
         auto prevDesc = child->GetPlugin( "texture" )->GetPixelShaderChannel()->GetTexturesData()->GetTextures()[ 0 ];
 		
         editor->LoadAsset( child->GetPlugin( "texture" ), desc );
@@ -1113,7 +1211,7 @@ void					TestScene::InitAssetsTest		()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = std::static_pointer_cast< model::BasicNode >( root->GetChild( "tex0" ) );
-        auto desc = ProjectManager::GetInstance()->GetAssetDesc( "", "sequences", TestSceneUtils::ANIM_PATH );
+        auto desc = ProjectManager::GetInstance()->GetAssetDesc( "", "sequences", ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() );
 		editor->LoadAsset( child->GetPlugin( "animation" ), desc );
 
         auto time = editor->GetScene( SCENE_NAME )->GetTimeline()->GetLocalTime();
@@ -1426,7 +1524,7 @@ void					TestScene::InitBasicTexturePluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		
-		auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f0.bmp", false );
+		auto desc = TextureAssetDesc::Create( ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() + "/f0.bmp", false );
 		editor->LoadAsset( root->GetPlugin( "texture" ), desc );
 	});
 	m_testSteps.push_back( [&]{ RestoreRoot( 2, "texture" ); } );
@@ -1436,7 +1534,7 @@ void					TestScene::InitBasicTexturePluginTest	()
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( TEX_NODE );
 
-		auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f0.bmp", false );
+		auto desc = TextureAssetDesc::Create( ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() + "/f0.bmp", false );
 		editor->LoadAsset( child->GetPlugin( "texture" ), desc );
 	});
 
@@ -1445,7 +1543,7 @@ void					TestScene::InitBasicTexturePluginTest	()
 	//	auto root = scene->GetRootNode();
 	//	auto child = root->GetChild( TEX_NODE );
 
-	//	auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f1.bmp", false );
+	//	auto desc = TextureAssetDesc::Create( ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() + "/f1.bmp", false );
 	//	editor->LoadAsset( child->GetPlugin( "texture" ), desc );
 	//});
 }
@@ -1508,7 +1606,7 @@ void					TestScene::InitBasicAnimationPluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto scene = editor->GetScene( SCENE_NAME );
 
-		auto anim = TestSceneUtils::AnimatedRectangle( editor->GetSceneDefaultTimeline( scene ), ANIM_NODE, 0.3f, 0.3f, TestSceneUtils::ANIM_PATH );
+		auto anim = TestSceneUtils::AnimatedRectangle( editor->GetSceneDefaultTimeline( scene ), ANIM_NODE, 0.3f, 0.3f, ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() );
 		SetParameterTranslation( anim->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
 		
 		auto root = scene->GetRootNode();
@@ -1521,7 +1619,7 @@ void					TestScene::InitBasicAnimationPluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto scene = editor->GetScene( SCENE_NAME );
 
-		auto anim = TestSceneUtils::AnimatedRectangle( editor->GetSceneDefaultTimeline( scene ), ANIM_NODE, 0.3f, 0.3f, TestSceneUtils::ANIM_PATH, TestSceneUtils::ALPHA_MASK_PATH );
+		auto anim = TestSceneUtils::AnimatedRectangle( editor->GetSceneDefaultTimeline( scene ), ANIM_NODE, 0.3f, 0.3f, ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str(), TestSceneUtils::ALPHA_MASK_PATH );
 		SetParameterTranslation( anim->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
 		
 		bool success = true;
@@ -1554,7 +1652,7 @@ void					TestScene::InitBasicAnimationPluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		
-		auto desc =  ProjectManager::GetInstance()->GetAssetDesc( "", "sequences", TestSceneUtils::ANIM_PATH );
+		auto desc =  ProjectManager::GetInstance()->GetAssetDesc( "", "sequences", ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() );
 		editor->LoadAsset( root->GetPlugin( "animation" ), desc );
 	});
 	m_testSteps.push_back( [&]{ RestoreRoot( 2, "animation" ); } );
@@ -1574,7 +1672,7 @@ void					TestScene::InitBasicAnimationPluginTest	()
 		auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
 		auto child = root->GetChild( ANIM_NODE );
 
-		auto desc =  ProjectManager::GetInstance()->GetAssetDesc( "", "sequences", TestSceneUtils::ANIM_PATH );
+		auto desc =  ProjectManager::GetInstance()->GetAssetDesc( "", "sequences", ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() );
 		editor->LoadAsset( root->GetPlugin( "animation" ), desc );
 
 		auto time = m_timeEvaluator->GetLocalTime();
@@ -1609,7 +1707,7 @@ void					TestScene::InitOrderAnimationPluginTest	()
 	{
 		auto editor = m_project->GetProjectEditor();
 		auto scene = editor->GetScene( SCENE_NAME );
-		auto anim = TestSceneUtils::AnimatedRectangle( editor->GetSceneDefaultTimeline( scene ), ANIM_NODE, 0.3f, 0.3f, TestSceneUtils::ANIM_PATH, TestSceneUtils::ALPHA_MASK_PATH );
+		auto anim = TestSceneUtils::AnimatedRectangle( editor->GetSceneDefaultTimeline( scene ), ANIM_NODE, 0.3f, 0.3f, ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str(), TestSceneUtils::ALPHA_MASK_PATH );
 		SetParameterTranslation( anim->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
 		
 		bool success = true;
@@ -1654,7 +1752,7 @@ void					TestScene::InitBasicGradientPluginTest	()
 		auto root = scene->GetRootNode();
 		editor->AddChildNode( scene, root, grad );
 		
-		auto lChild = TestSceneUtils::AnimatedRectangle( editor->GetSceneDefaultTimeline( scene ), "lChild", 0.1f, 0.1f, TestSceneUtils::ANIM_PATH );
+		auto lChild = TestSceneUtils::AnimatedRectangle( editor->GetSceneDefaultTimeline( scene ), "lChild", 0.1f, 0.1f, ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() );
 		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
 		auto rChild = TestSceneUtils::TexturedRectangle( editor->GetSceneDefaultTimeline( scene ), "rChild", 0.1f, 0.1f, TestSceneUtils::TEXTURE_PATH );
 		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
@@ -2408,7 +2506,7 @@ void					TestScene::InitTexturedGeometryTest		()
 			auto editor = m_project->GetProjectEditor();
 			auto geom = editor->GetScene( SCENE_NAME )->GetRootNode()->GetChild( GEOM_NODE );
 
-			auto desc = TextureAssetDesc::Create( TestSceneUtils::ANIM_PATH + "/f0.bmp", false );
+			auto desc = TextureAssetDesc::Create( ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() + "/f0.bmp", false );
 			editor->LoadAsset( geom->GetPlugin( "texture" ), desc );
 		});
 
@@ -2457,7 +2555,7 @@ void					TestScene::InitAnimatedGeometryTest		()
 			auto editor = m_project->GetProjectEditor();
 			auto scene = editor->GetScene( SCENE_NAME );
 
-			auto geom = TestSceneUtils::AnimatedGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, TestSceneUtils::ANIM_PATH );
+			auto geom = TestSceneUtils::AnimatedGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() );
 			
 			auto time = m_timeEvaluator->GetLocalTime();
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.0f, -0.1f, -2.f ) );
@@ -2476,7 +2574,7 @@ void					TestScene::InitAnimatedGeometryTest		()
 			auto editor = m_project->GetProjectEditor();
 			auto scene = editor->GetScene( SCENE_NAME );
 
-			auto geom = TestSceneUtils::AnimatedGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, TestSceneUtils::ANIM_PATH, TestSceneUtils::ALPHA_MASK_PATH );
+			auto geom = TestSceneUtils::AnimatedGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str(), TestSceneUtils::ALPHA_MASK_PATH );
 			
 			auto time = m_timeEvaluator->GetLocalTime();
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.0f, -0.1f, -2.f ) );
@@ -2509,7 +2607,7 @@ void					TestScene::InitAnimatedGeometryTest		()
 				auto editor = m_project->GetProjectEditor();
 				auto scene = editor->GetScene( SCENE_NAME );
 
-				auto geom = TestSceneUtils::AnimatedGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, TestSceneUtils::ANIM_PATH, TestSceneUtils::ALPHA_MASK_PATH );
+				auto geom = TestSceneUtils::AnimatedGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str(), TestSceneUtils::ALPHA_MASK_PATH );
 
 				auto time = m_timeEvaluator->GetLocalTime();
 				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.0f, -0.1f, -2.f ) );

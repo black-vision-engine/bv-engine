@@ -706,6 +706,7 @@ void				        ProjectManagerImpl::InitializeAssets	()
 	exts.push_back( ".*\\.jpg" );
 	exts.push_back( ".*\\.tga" );
 	exts.push_back( ".*\\.png" );
+	exts.push_back( ".*\\.bmp" );
 
 	auto taa = TextureAssetAccessor::Create( GetRootDir() / "textures", exts );
 	RegisterCategory( AssetCategory::Create( "textures", taa ) );
