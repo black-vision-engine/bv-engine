@@ -216,8 +216,11 @@ void BVAppLogic::LoadScene          ( void )
 	        sceneModel = model::SceneModel::Create( sceneName, m_renderer->GetCamera() );
             projectEditor->AddScene( sceneModel );
 
-            auto node = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), projectEditor->GetSceneDefaultTimeline( sceneModel ), m_pluginsManager ) ;
+            auto defaultTimeline = projectEditor->GetSceneDefaultTimeline( sceneModel );
+            auto node = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), defaultTimeline, m_pluginsManager ) ;
             projectEditor->AddChildNode( sceneModel, nullptr, node );
+
+            defaultTimeline->Play();
         }
     }
 }
