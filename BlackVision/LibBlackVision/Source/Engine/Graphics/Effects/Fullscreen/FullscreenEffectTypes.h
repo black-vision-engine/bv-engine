@@ -3,7 +3,7 @@
 
 namespace bv {
 
-enum class FullscreenEffectTypes : int
+enum class FullscreenEffectType : int
 {
     FET_SIMPLE_BLIT = 0,
     FET_BLIT_WITH_ALPHA,

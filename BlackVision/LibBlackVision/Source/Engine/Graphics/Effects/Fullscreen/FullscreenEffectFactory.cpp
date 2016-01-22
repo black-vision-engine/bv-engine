@@ -83,17 +83,17 @@ FullscreenEffectTr *    CreateInterlaceFSE          ()
 
 // **************************
 //
-FullscreenEffectTr *    CreateFullscreenEffect( FullscreenEffectTypes fseType )
+FullscreenEffectTr *    CreateFullscreenEffect( FullscreenEffectType fseType )
 {
     switch( fseType )
     {
-        case FullscreenEffectTypes::FET_SIMPLE_BLIT:
+        case FullscreenEffectType::FET_SIMPLE_BLIT:
             return CreateSimpleBlitFSE();
-        case FullscreenEffectTypes::FET_BLIT_WITH_ALPHA:
+        case FullscreenEffectType::FET_BLIT_WITH_ALPHA:
             return CreateBlitWithAlphaFSE();
-        case FullscreenEffectTypes::FET_BLIT_WITH_ALPHA_MASK:
+        case FullscreenEffectType::FET_BLIT_WITH_ALPHA_MASK:
             return CreateBlitWithAlphaMaskFSE();
-        case FullscreenEffectTypes::FET_INTERLACE:
+        case FullscreenEffectType::FET_INTERLACE:
             return CreateInterlaceFSE();
         default:
             assert( false );

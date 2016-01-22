@@ -1122,6 +1122,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\VideoOutputRendering\VideoOutputRenderLogic.cpp">
       <Filter>Engine\Graphics\Effects\Logic\VideoOutputRendering</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\NodeEffectFactory.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffectTr</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2236,6 +2239,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\VideoOutputRendering\VideoOutputRenderLogic.h">
       <Filter>Engine\Graphics\Effects\Logic\VideoOutputRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\NodeEffectFactory.h">
+      <Filter>Engine\Graphics\Effects\NodeEffectTr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\NodeEffectTypes.h">
+      <Filter>Engine\Graphics\Effects\NodeEffectTr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

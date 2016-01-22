@@ -7,6 +7,6 @@ namespace bv {
 
 class FullscreenEffectTr;
 
-FullscreenEffectTr *    CreateFullscreenEffect( FullscreenEffectTypes fseType );
+FullscreenEffectTr *    CreateFullscreenEffect( FullscreenEffectType fseType );
 
 } // bv
