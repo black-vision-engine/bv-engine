@@ -456,6 +456,16 @@ void                Crawler::Serialize       ( ISerializer& ser ) const
         ser.SetAttribute( "speed", SerializationHelper::T2String( m_speed ) );
         ser.SetAttribute( "interspace", SerializationHelper::T2String( m_interspace ) );
 
+        ser.EnterArray( "nodeNames" );
+            for( auto& node : m_shifts )
+            {
+                ser.EnterChild( "nodeName" );
+                    ser.SetAttribute( "name", node.first->GetName() );
+                ser.ExitChild(); // node
+            }
+
+        ser.ExitChild(); // nodes
+
     ser.ExitChild(); // logic
 }
 

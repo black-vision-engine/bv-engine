@@ -548,6 +548,7 @@ public:
         ListAllFolders,
         ListResourcesInFolders,
         ListAllResources,
+        GetAssetDescriptor,
 
         Timelines,
         CheckTimelineTime,

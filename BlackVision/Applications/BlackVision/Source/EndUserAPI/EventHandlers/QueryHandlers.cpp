@@ -64,6 +64,8 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             ListScenes( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::ListAllFolders )
             ListAllFolders( responseJSON, request, eventID );
+        else if( command == InfoEvent::Command::GetAssetDescriptor )
+            GetAssetDescriptor( responseJSON, request, eventID );
         //else if( command == InfoEvent::Command::ListResourcesInFolders )
         //    ListResourcesInFolders( responseJSON, request, eventID );
         //else if( command == InfoEvent::Command::ListAllResources )
@@ -360,6 +362,13 @@ void        QueryHandlers::ListProjects        ( JsonSerializeObject & ser, cons
         ser.SetAttribute( "scenesCount", toString( scenesCount ) );
     }
     ser.ExitChild();
+}
+
+// ***********************
+//
+void         QueryHandlers::GetAssetDescriptor      ( JsonSerializeObject & /*ser*/, const std::string & /*request*/, int /*eventID*/ )
+{
+
 }
 
 // ***********************
