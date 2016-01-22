@@ -148,11 +148,12 @@ ser.EnterChild( "plugin" );
             for( auto lasset : assets )
             {
                 auto assetDesc = lasset.assetDesc;
-                assert( serContext->GetAssets() );
-                auto uid = serContext->GetAssets()->Key2UID( assetDesc->GetKey() );
                 ser.EnterChild( "asset" );
-                    if( uid != "" )
+                    if( serContext->GetAssets() )
+                    {
+                        auto uid = serContext->GetAssets()->Key2UID( assetDesc->GetKey() );
                         ser.SetAttribute( "uid", uid );
+                    }
                     else
                         lasset.assetDesc->Serialize( ser );
 

@@ -451,12 +451,12 @@ void                Crawler::Serialize       ( ISerializer& ser ) const
                 ser.SetAttribute( "ymin", SerializationHelper::T2String( m_view->ymin ) );
                 ser.SetAttribute( "ymax", SerializationHelper::T2String( m_view->ymax ) );
             }
-        ser.ExitChild();
+        ser.ExitChild(); // view
 
         ser.SetAttribute( "speed", SerializationHelper::T2String( m_speed ) );
         ser.SetAttribute( "interspace", SerializationHelper::T2String( m_interspace ) );
 
-    ser.ExitChild();
+    ser.ExitChild(); // logic
 }
 
 // ***********************
