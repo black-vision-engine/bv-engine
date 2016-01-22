@@ -88,9 +88,9 @@ void					AssetCategory::ExportAll	( const Path & expAssetFilePath ) const
 
 // ********************************
 //
-PathVec					AssetCategory::ListAssets	( const Path & path ) const
+PathVec					AssetCategory::ListAssets	( const Path & path, bool recursive ) const
 {
-	return m_assetAccessor->ListAll( path );
+	return m_assetAccessor->ListAll( path, recursive );
 }
 
 } // bv

@@ -226,9 +226,9 @@ void				AnimationAssetAccessor::ExportAll			( const Path & expAssetFilePath ) co
 
 // ********************************
 //
-PathVec				AnimationAssetAccessor::ListAll				( const Path & path ) const
+PathVec				AnimationAssetAccessor::ListAll				( const Path & path, bool recursive ) const
 {
-    auto pathList = Path::List( m_rootPath / path, true );
+    auto pathList = Path::List( m_rootPath / path, recursive );
 
     PathVec ret; 
 
@@ -252,7 +252,7 @@ PathVec				AnimationAssetAccessor::ListAll				( const Path & path ) const
 //
 PathVec				AnimationAssetAccessor::ListAllUnique		( const Path & path ) const
 {
-	auto l = ListAll( path );
+	auto l = ListAll( path, true );
 
 	std::set< Path  > unique;
 

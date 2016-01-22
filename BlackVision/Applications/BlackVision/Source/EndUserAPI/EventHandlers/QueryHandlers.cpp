@@ -292,7 +292,15 @@ void         QueryHandlers::ListScenes           ( JsonSerializeObject & ser, co
 
     auto name = GetRequestParamValue( request )[ "projectName" ].asString();
     auto path = GetRequestParamValue( request )[ "path" ].asString();
-    auto sns = pm->ListScenesNames( name, path );
+
+    auto recursive = false;
+    auto recStr = GetRequestParamValue( request )[ "recursive" ].asString();
+    if( recStr == "true" )
+    {
+        recursive = true;
+    }
+
+    auto sns = pm->ListScenesNames( name, path, recursive );
 
     ser.EnterArray( "list" );
     for( auto scene : sns )
@@ -314,7 +322,14 @@ void        QueryHandlers::ListAssetsPaths     ( JsonSerializeObject & ser, cons
     auto catName = GetRequestParamValue( request )[ "categoryName" ].asString();
     auto path = GetRequestParamValue( request )[ "path" ].asString();
 
-    auto sns = pm->ListAssetsPaths( projName, catName, path );
+    auto recursive = false;
+    auto recStr = GetRequestParamValue( request )[ "recursive" ].asString();
+    if( recStr == "true" )
+    {
+        recursive = true;
+    }
+
+    auto sns = pm->ListAssetsPaths( projName, catName, path, recursive );
 
     ser.SetAttribute( "categoryName", catName );
     ser.SetAttribute( "path", path );
@@ -356,7 +371,7 @@ void        QueryHandlers::ListProjects        ( JsonSerializeObject & ser, cons
     ser.EnterArray( "list" );
     for( auto p : pns )
     {
-        auto scenesCount = pm->ListScenesNames( p, "" ).size();
+        auto scenesCount = pm->ListScenesNames( p, "", true ).size();
 
         ser.SetAttribute( "name", p.Str() );
         ser.SetAttribute( "scenesCount", toString( scenesCount ) );

@@ -185,12 +185,12 @@ void			 	FontAssetAccessor::ExportAll		( const Path & expAssetFilePath ) const
 
 // ********************************
 //
-PathVec	FontAssetAccessor::ListAll		( const Path & path ) const
+PathVec	FontAssetAccessor::ListAll		( const Path & path, bool recursive ) const
 {
 	PathVec ret;
 	for( auto ext : m_fileExts )
 	{
-		auto l = Path::List( m_rootPath / path, true, ext );
+		auto l = Path::List( m_rootPath / path, recursive, ext );
 
         for( auto & p : l )
         {
@@ -207,7 +207,7 @@ PathVec	FontAssetAccessor::ListAll		( const Path & path ) const
 //
 PathVec	FontAssetAccessor::ListAllUnique	( const Path & path ) const
 {
-	auto l = ListAll( path );
+	auto l = ListAll( path, true );
 
 	std::set< Path  > unique;
 

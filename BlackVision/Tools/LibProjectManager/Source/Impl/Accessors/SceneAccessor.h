@@ -53,7 +53,7 @@ public:
 	void				ImportSceneFromFile		( const Path & expFilePath, const Path & importToProject, const Path & importToPath ) const;
 	void				ExportSceneToFile		( const Path & projectName, const Path & outputFileName, const Path & path ) const;
 
-	PathVec				ListScenes				( const Path & path ) const;
+	PathVec				ListScenes				( const Path & path, bool recursive ) const;
 
 	PathVec				ListAllUsedAssets		( const Path & path ) const;
 
