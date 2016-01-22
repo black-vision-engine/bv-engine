@@ -14,7 +14,30 @@
 #include <algorithm>
 #include <ctime>
 
-namespace bv { namespace nodelogic { 
+namespace bv { namespace nodelogic {
+
+
+namespace
+{
+
+
+// ***********************
+//
+bv::model::BasicNodePtr         GetNode     ( bv::model::BasicNode * parent, Int32 nodeIdx )
+{
+    return std::static_pointer_cast<bv::model::BasicNode>( parent->GetChild( nodeIdx ) );
+}
+
+// ***********************
+//
+bv::model::BasicNodePtr         GetNode     ( bv::model::BasicNode * parent, const std::string& nodeName )
+{
+    return std::static_pointer_cast<bv::model::BasicNode>( parent->GetNode( nodeName ) );
+}
+
+
+} // anonymous
+
 
 // *******************************
 //
@@ -51,12 +74,30 @@ void		Crawler::AddNext			( bv::model::BasicNodePtr node )
 
 // ***********************
 //
-bool		Crawler::AddNext            ( const std::string& childNodeName )
+bool		Crawler::AddNext            ( Int32 nodeIdx )
+{
+    auto newNode = GetNode( m_parentNode, nodeIdx );
+    return AddNode( newNode );
+}
+
+// ***********************
+//
+bool		Crawler::AddNext				( const std::string& childNodeName )
+{
+    auto newNode = GetNode( m_parentNode, childNodeName );
+    return AddNode( newNode );
+}
+
+// ***********************
+//
+bool        Crawler::AddNode             ( bv::model::BasicNodePtr node )
 {
     if(! m_isFinalized )
 	{
-        auto node = std::static_pointer_cast<bv::model::BasicNode>( m_parentNode->GetNode( childNodeName ) );
-        if( !m_nodesStates.Exist( node.get() ) )
+        bool alreadyExists = m_nodesStates.Exist( node.get() );
+        assert( !alreadyExists );
+
+        if( !alreadyExists )
         {
 		    m_nodesStates.Add( node.get() );
             return true;
@@ -532,8 +573,7 @@ CrawlerPtr      Crawler::Create          ( const IDeserializer & deser, bv::mode
             assert( nodeIdx >= 0 && nodeIdx < parent->GetNumChildren() );
             if( nodeIdx >= 0 && nodeIdx < parent->GetNumChildren() )
             {
-                auto newNode = parent->GetChild( nodeIdx );
-                crawler->AddNext( newNode );
+                crawler->AddNext( nodeIdx );
             }
 
         } while( deser.NextChild() );
@@ -583,6 +623,10 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
         float speed = SerializationHelper::String2T( param, 0.5f );
 		SetSpeed( speed );
 	}
+    else if( crawlAction == "Finalize" )
+    {
+        Finalize();
+    }
     return true;
 }
 

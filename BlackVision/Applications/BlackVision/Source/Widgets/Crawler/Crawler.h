@@ -64,6 +64,8 @@ private:
 	void		NotifyVisibilityChanged( bv::model::BasicNode *, bool );
 	void		NotifyNoMoreNodes	();
 	void		HackNoMoreNodes		();
+    
+    bool        AddNode             ( bv::model::BasicNodePtr node );
 
 public:
 
@@ -77,6 +79,7 @@ public:
 				~Crawler			() {}
 
 	void		AddNext				( bv::model::BasicNodePtr node );
+    bool		AddNext				( Int32 nodeIdx );
     bool		AddNext				( const std::string& childNodeName );
 	bool		Finalize			();
 
