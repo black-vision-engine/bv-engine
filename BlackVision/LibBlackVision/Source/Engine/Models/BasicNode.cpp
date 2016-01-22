@@ -8,14 +8,15 @@
 #include "Tools/StringHeplers.h"
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
+#include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
 
 #include "Engine/Models/ModelNodeEditor.h"
 
 #include "Engine/Models/Plugins/Plugin.h"
 
-
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
+#include "Tools/PrefixHelper.h"
 
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/BV/BVSerializeContext.h"
@@ -25,6 +26,7 @@
 #include "Assets/AssetDescsWithUIDs.h"
 
 #include "UseLoggerLibBlackVision.h"
+
 
 namespace bv { 
     
@@ -311,15 +313,25 @@ std::vector< IParameterPtr >    BasicNode::GetParameters           () const
 
 // ********************************
 //
-std::unordered_set< ITimeEvaluatorPtr > BasicNode::GetTimelines			( bool recursive ) const
+std::vector< ITimeEvaluatorPtr >    BasicNode::GetTimelines			( bool recursive ) const
 {
-	std::unordered_set< ITimeEvaluatorPtr > timelines;
+	std::set< ITimeEvaluatorPtr > timelines;
 
     auto params = GetParameters();
 
     for( auto param : params )
     {
         timelines.insert( param->GetTimeEvaluator() );
+    }
+
+    auto plugins = GetPluginList();
+    for( UInt32 i = 0; i < plugins->NumPlugins(); i++ )
+    {
+        auto pluginParamValModel = plugins->GetPlugin( i )->GetPluginParamValModel();
+        if( pluginParamValModel )
+        {
+            timelines.insert( pluginParamValModel->GetTimeEvaluator() );
+        }
     }
 
 	if( recursive )
@@ -331,7 +343,7 @@ std::unordered_set< ITimeEvaluatorPtr > BasicNode::GetTimelines			( bool recursi
 		}
 	}
 
-    return timelines;
+    return std::vector< ITimeEvaluatorPtr >( timelines.begin(), timelines.end() );
 }
 
 // ********************************
@@ -644,36 +656,51 @@ Int32                               BasicNode::TryParseIndex            ( std::s
 
 namespace CloneViaSerialization {
 
-void UpdateTimelines( model::BasicNode * obj, const std::string & prefix, std::string srcScene, std::string destScene, bool recursive )
+// *******************************
+//
+void                    UpdateTimelines ( model::BasicNode * obj, const std::string & prefix, std::string srcScene, std::string destScene, bool recursive )
 {
     for( auto param : obj->GetParameters() )
     {
         auto name = model::TimelineManager::GetInstance()->GetTimelinePath( param->GetTimeEvaluator() );
-        model::ITimeEvaluatorPtr timeline;
-        if( name == srcScene )
-            timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( destScene );
-        else
-            timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( model::TimelineHelper::CombineTimelinePath( destScene,  prefix + param->GetTimeEvaluator()->GetName() ) );
+        auto timelinePath = model::TimelineHelper::CombineTimelinePath( destScene, prefix + param->GetTimeEvaluator()->GetName() );
+        auto timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
         param->SetTimeEvaluator( timeline );
     }
 
+    auto plugins = obj->GetPluginList();
+    for( UInt32 i = 0; i < plugins->NumPlugins(); i++ )
+    {
+        auto pluginModel = plugins->GetPlugin( i )->GetPluginParamValModel();
+        if( pluginModel )
+        {
+			//FIXME: cast
+            auto timelinePath = model::TimelineHelper::CombineTimelinePath( destScene, prefix + pluginModel->GetTimeEvaluator()->GetName() );
+            auto timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
+			std::static_pointer_cast< model::DefaultPluginParamValModel >( pluginModel )->SetTimeEvaluator( timeline );
+        }
+    }
+
 	if( recursive )
+    {
 		for( unsigned int i = 0; i < obj->GetNumChildren(); i++ )
+        {
 			UpdateTimelines( obj->GetChild( i ).get(), prefix, srcScene, destScene, true );
+        }
+    }
 }
 
 // *******************************
 //FIXME: name of method should indicate that timelines are modified or sth?
 model::BasicNodePtr		CloneNode		( const model::BasicNode * obj, const std::string & prefix, std::string srcScene, std::string destScene )
 {
-    auto clone = static_cast< model::BasicNode* >( obj->Clone() );
+    auto clone = static_cast< model::BasicNode * >( obj->Clone() );
 
 	UpdateTimelines( clone, prefix, srcScene, destScene, true );
 
-    return model::BasicNodePtr( dynamic_cast< model::BasicNode* >( clone ) );
+    return model::BasicNodePtr( clone );
 }
 
 } //CloneViaSerialization
-
 
 } // bv

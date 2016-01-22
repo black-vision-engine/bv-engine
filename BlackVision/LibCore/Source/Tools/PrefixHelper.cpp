@@ -2,6 +2,7 @@
 
 #include <regex>
 
+
 namespace bv {
 
 const std::string	PrefixHelper::COPY_PREFIX	=		"Copy#_";
@@ -12,10 +13,10 @@ const std::string	PrefixHelper::COPY_REGEX	=		"^(Copy([0-9]*)_)?";
 Int32					PrefixHelper::MatchNames		( const std::string & srcName, const std::string & destName )
 {
 	Int32 num = -1;
-	auto nameWithoutPrefix = std::regex_replace( srcName, std::regex( COPY_REGEX ), "" );
+	//auto nameWithoutPrefix = std::regex_replace( srcName, std::regex( COPY_REGEX ), "" );
 
 	std::smatch sm;
-	if( std::regex_match( destName, sm, std::regex( COPY_REGEX + nameWithoutPrefix  + "$" ) ) )
+	if( std::regex_match( destName, sm, std::regex( COPY_REGEX + srcName  + "$" ) ) )
 	{
 		if( sm[ 2 ].matched )
 		{

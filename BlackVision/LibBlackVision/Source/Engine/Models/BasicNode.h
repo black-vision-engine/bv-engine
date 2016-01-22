@@ -70,7 +70,7 @@ public:
 
     virtual const IPluginListFinalized *    GetPluginList           () const override;
     virtual std::vector< IParameterPtr >    GetParameters           () const override;
-	virtual std::unordered_set< ITimeEvaluatorPtr > GetTimelines			( bool recursive ) const override;
+	virtual std::vector< ITimeEvaluatorPtr >GetTimelines			( bool recursive ) const override;
 
     virtual unsigned int                    GetNumChildren          () const override;
 
@@ -143,6 +143,8 @@ public:
 namespace CloneViaSerialization {
 
 	model::BasicNodePtr		CloneNode		( const model::BasicNode * obj, const std::string & prefix, std::string srcScene, std::string destScene );
+    
+    void                    UpdateTimelines ( model::BasicNode * obj, const std::string & prefix, std::string srcScene, std::string destScene, bool recursive );
 
 } //CloneViaSerialization
 

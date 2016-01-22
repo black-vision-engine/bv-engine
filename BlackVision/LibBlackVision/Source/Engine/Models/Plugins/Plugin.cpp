@@ -315,6 +315,8 @@ std::vector< ITimeEvaluatorPtr >    BasePlugin< IPlugin >::GetTimelines				() co
         timelines.insert( param->GetTimeEvaluator() );
     }
 
+    timelines.insert( m_pluginParamValModel->GetTimeEvaluator() );
+
     return std::vector< ITimeEvaluatorPtr >( timelines.begin(), timelines.end() );
 }
 
@@ -334,9 +336,14 @@ model::IPluginPtr				ClonePlugin					( const model::IPlugin * obj, const std::st
         auto name = model::TimelineManager::GetInstance()->GetTimelinePath( param->GetTimeEvaluator() );
         model::ITimeEvaluatorPtr timeline;
         if( name == srcScene )
-            timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( destScene );
+        {
+            timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( destScene ); //not needed
+        }
         else
-            timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( model::TimelineHelper::CombineTimelinePath( destScene, prefix + param->GetTimeEvaluator()->GetName() ) );
+        {
+            auto timelinePath = model::TimelineHelper::CombineTimelinePath( destScene, prefix + param->GetTimeEvaluator()->GetName() );
+            timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
+        }
         param->SetTimeEvaluator( timeline );
     }
 
