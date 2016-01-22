@@ -177,7 +177,7 @@ TEST( AddingAssets, ProjectManager )
 	g_pm0->AddAsset( "proj01", "textures", "flagi/ger.jpg", SingleTextureAssetDesc::Create( "test_data.file", 0, 0, TextureFormat::F_A8R8G8B8, false ) );
 	g_pm0->AddAsset( "proj02", "textures", "flagi/rus.jpg", SingleTextureAssetDesc::Create( "test_data.file", 0, 0, TextureFormat::F_A8R8G8B8, false ) );
 
-	auto assets = g_pm0->ListAssetsPaths( "", "", "" );
+	auto assets = g_pm0->ListAssetsPaths( "", "", "", true );
 
 	ASSERT_TRUE( g_pm0->GetAssetDesc( "proj00", "textures", "flagi/pol.jpg" ) );
 	ASSERT_TRUE( g_pm0->GetAssetDesc( "proj01", "textures", "flagi/ger.jpg" ) );

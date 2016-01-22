@@ -43,7 +43,7 @@ public:
 	
 	void					ExportAll		( const Path & expAssetFilePath ) const;
 	
-	PathVec					ListAssets		( const Path & projectName ) const;
+	PathVec					ListAssets		( const Path & projectName, bool recursive ) const;
 
 };
 

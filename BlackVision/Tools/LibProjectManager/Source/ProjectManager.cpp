@@ -63,9 +63,9 @@ PathVec			ProjectManager::ListProjectsNames	() const
 
 // ********************************
 //
-PathVec			ProjectManager::ListScenesNames		( const Path & projectName, const Path & path ) const
+PathVec			ProjectManager::ListScenesNames		( const Path & projectName, const Path & path, bool recursive ) const
 {
-	return m_impl->ListScenesNames( projectName, path );
+	return m_impl->ListScenesNames( projectName, path, recursive );
 }
 
 // ********************************
@@ -77,9 +77,9 @@ StringVector	ProjectManager::ListCategoriesNames	() const
 
 // ********************************
 //
-PathVec			ProjectManager::ListAssetsPaths		( const Path & projectName,  const std::string & categoryName, const Path & path ) const
+PathVec			ProjectManager::ListAssetsPaths		( const Path & projectName,  const std::string & categoryName, const Path & path, bool recursive ) const
 {
-	return m_impl->ListAssetsPaths( projectName, categoryName, path );
+	return m_impl->ListAssetsPaths( projectName, categoryName, path, recursive );
 }
 
 // ********************************

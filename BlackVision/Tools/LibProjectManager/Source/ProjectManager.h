@@ -31,9 +31,9 @@ public:
 
 	// listing
 	PathVec					ListProjectsNames	() const;
-	PathVec					ListScenesNames		( const Path & projectName, const Path & path ) const;
+	PathVec					ListScenesNames		( const Path & projectName, const Path & path, bool recursive ) const;
 	StringVector			ListCategoriesNames	() const;
-	PathVec					ListAssetsPaths		( const Path & projectName,  const std::string & categoryName, const Path & path ) const;
+	PathVec					ListAssetsPaths		( const Path & projectName,  const std::string & categoryName, const Path & path, bool recursive ) const;
 
 	PathVec					ListAllUsedAssets	() const;
 	PathVec					ListAllUnusedAssets	( const Path & projectName, const std::string & categoryName ) const;
