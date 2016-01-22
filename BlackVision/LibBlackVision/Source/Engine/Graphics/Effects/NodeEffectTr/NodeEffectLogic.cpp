@@ -155,6 +155,9 @@ void    NodeEffectLogic::FSEInitializedGuard         ( RenderLogicContext * ctx,
 {
     if( m_FSE && !m_FSEInitialized )
     {
+        assert( m_preFSELogic );
+        assert( m_preFSELogic->GetPreferredNumOutputs() == fseInputsVec->size() );
+
         //Initialize output vector
         for( unsigned int i = 0; i < fseInputsVec->size(); ++i )
         {

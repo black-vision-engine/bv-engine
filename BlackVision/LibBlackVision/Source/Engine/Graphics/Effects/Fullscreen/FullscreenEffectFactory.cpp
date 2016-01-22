@@ -79,6 +79,23 @@ FullscreenEffectTr *    CreateInterlaceFSE          ()
     return new SimpleFullscreenEffect( fseData );
 }
 
+// **************************
+//
+FullscreenEffectTr *    CreateMixChannelsFSE        ()
+{
+    FullscreenEffectData fseData;
+    auto src = FSEShaderSourceProvider->ReadShader( "mixchannels.frag" );
+    auto val0 = ValuesFactory::CreateValueInt( "channelMask" );
+
+    val0->SetValue( ( ( 3 & 0x3 ) << 6 ) | ( ( 2 & 0x3 ) << 4 ) | ( ( 1 & 0x3 ) << 2 ) | ( ( 0 & 0x3 ) << 0 ) );
+
+    fseData.AppendInputTexture( nullptr, "Tex0" );
+    fseData.AppendValue( val0 );
+    fseData.SetPixelShaderSource( src );
+
+    return new SimpleFullscreenEffect( fseData );
+}
+
 } // anonymous
 
 // **************************
@@ -95,6 +112,8 @@ FullscreenEffectTr *    CreateFullscreenEffect( FullscreenEffectType fseType )
             return CreateBlitWithAlphaMaskFSE();
         case FullscreenEffectType::FET_INTERLACE:
             return CreateInterlaceFSE();
+        case FullscreenEffectType::FET_MIX_CHANNELS:
+            return CreateMixChannelsFSE();
         default:
             assert( false );
     }

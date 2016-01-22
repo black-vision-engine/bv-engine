@@ -122,9 +122,9 @@ NodeEffectTr *  CreateMixchannelsNodeEffect()
     auto logic = CreateNodeEffectLogic();
 
     auto pre  = new RenderOffscreenPreFullscreenEffectLogic();
-    auto post = new WireframePostFullscreenEffectLogic();
+    auto fse  = CreateFullscreenEffect( FullscreenEffectType::FET_MIX_CHANNELS );
 
-    SetLogicComponents( logic, pre, nullptr, post );
+    SetLogicComponents( logic, pre, fse, nullptr );
 
     return CreateNodeEffect( logic );
 }
@@ -148,6 +148,7 @@ NodeEffectTr *    CreateNodeEffect( NodeEffectType nodeEffectType )
             return CreateWireframeNodeEffect();
         case NodeEffectType::NET_MIX_CHANNELS:
             return CreateMixchannelsNodeEffect();
+        //Interlace and so on
         default:
             assert( false );
     }
