@@ -48,7 +48,9 @@ AssetDescConstPtr	TextureAssetAccessor::GetAssetDesc	( const Path & path ) const
 	{
 		auto props = image::GetImageProps( p.Str() );
 	
-		return SingleTextureAssetDesc::Create( ( Path( "textures" ) / path ).Str(), props.width, props.height, EnumsUtils::Convert( props.format ), true );
+		auto origTextureDesc = SingleTextureAssetDesc::Create( ( Path( "textures" ) / path ).Str(), props.width, props.height, EnumsUtils::Convert( props.format ), true );
+
+        return TextureAssetDesc::Create( origTextureDesc );
 	}
 	else
 	{

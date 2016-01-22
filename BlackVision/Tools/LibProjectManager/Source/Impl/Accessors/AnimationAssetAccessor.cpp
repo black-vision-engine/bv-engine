@@ -39,11 +39,11 @@ AnimationAssetAccessorConstPtr AnimationAssetAccessor::Create( const Path & root
 //
 AssetDescConstPtr AnimationAssetAccessor::GetAssetDesc( const Path & path ) const
 {
-    if( Path::Exists( path ) )
+    if( Path::Exists( m_rootPath / path ) )
     {
         for( auto fe : m_fileExts )
         {
-            auto numFrames = Path::List( path, false, fe ).size();
+            auto numFrames = Path::List( m_rootPath / path, false, fe ).size();
             if( numFrames > 0 )
             {
                 return AnimationAssetDesc::Create( ( Path( "sequences" ) / path ).Str(), numFrames, fe );
