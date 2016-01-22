@@ -6,6 +6,10 @@
 #include <iostream>
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 
+#include "Engine/Models/Timeline/TimelineManager.h"
+#include "Engine/Models/Timeline/TimelineHelper.h"
+#include "Serialization/BVDeserializeContext.h"
+
 #include "EndUserAPI/EventHandlers/EventHandlerHelpers.h"
 
 namespace bv {
@@ -67,8 +71,13 @@ void		WidgetCounter::Update				( TimeType T)
 void                WidgetCounter::Serialize       ( ISerializer& ser ) const
 {
     ser.EnterChild( "logic" );
+
         ser.SetAttribute( "type", "counter" );
         m_param->Serialize( ser );
+
+        auto timeline = bv::model::TimelineManager::GetInstance()->GetTimelinePath( m_param->GetTimeEvaluator() );
+        ser.SetAttribute( "timelinePath", timeline );
+
     ser.ExitChild();
 }
 
@@ -76,9 +85,36 @@ void                WidgetCounter::Serialize       ( ISerializer& ser ) const
 //
 WidgetCounterPtr     WidgetCounter::Create          ( const IDeserializer& deser, bv::model::BasicNode * parent )
 {
-    assert( !"Timeline" );
+    bv::model::ITimeEvaluatorPtr timeEvaluator = nullptr;
 
-    auto newCounter = WidgetCounter::Create( parent, /*timeEvaluator*/nullptr );
+    std::string timeline = deser.GetAttribute( "timelinePath" );
+
+    assert( timeline != "" );
+
+    if( timeline != "" )
+    {
+        auto deserContext = static_cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
+
+        if( deserContext == nullptr )
+        {
+            return nullptr;
+        }
+
+        bv::model::ITimeEvaluatorPtr sceneTimeline = deserContext->GetSceneTimeline();
+        if( sceneTimeline == nullptr )
+        {
+            sceneTimeline = bv::model::TimelineManager::GetInstance()->GetRootTimeline();
+        }
+
+        bv::model::ITimeEvaluatorPtr timeEvaluator = bv::model::TimelineHelper::GetTimeEvaluator( timeline, sceneTimeline );
+        if( timeEvaluator == nullptr ) 
+        {
+            assert( false );
+            timeEvaluator = sceneTimeline;
+        }
+    }
+
+    auto newCounter = WidgetCounter::Create( parent, timeEvaluator );
     
     if( deser.EnterChild( "param" ) )
     {
