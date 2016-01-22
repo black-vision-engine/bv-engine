@@ -193,12 +193,12 @@ void			 	TextureAssetAccessor::ExportAll		( const Path & expAssetFilePath ) cons
 
 // ********************************
 //
-PathVec	TextureAssetAccessor::ListAll		( const Path & path ) const
+PathVec	TextureAssetAccessor::ListAll		( const Path & path, bool recursive ) const
 {
 	PathVec ret;
 	for( auto ext : m_fileExts )
 	{
-		auto l = Path::List( m_rootPath / path, true, ext );
+		auto l = Path::List( m_rootPath / path, recursive, ext );
 
         for( auto & p : l )
         {
@@ -215,7 +215,7 @@ PathVec	TextureAssetAccessor::ListAll		( const Path & path ) const
 //
 PathVec	TextureAssetAccessor::ListAllUnique	( const Path & path ) const
 {
-	auto l = ListAll( path );
+	auto l = ListAll( path, true );
 
 	std::set< Path  > unique;
 

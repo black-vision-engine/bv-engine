@@ -194,7 +194,7 @@ void BVAppLogic::LoadScene          ( void )
             
             if( !projectName.empty() )
             {
-                auto projectScenesNames = pm->ListScenesNames( projectName, "" );
+                auto projectScenesNames = pm->ListScenesNames( projectName, "", true );
 
                 if( !projectScenesNames.empty() )
                 {

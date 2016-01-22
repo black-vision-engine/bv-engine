@@ -63,10 +63,10 @@ PathVec			ProjectManagerImpl::ListProjectsNames	() const
 
 // ********************************
 //
-PathVec			ProjectManagerImpl::ListScenesNames		( const Path & projectName, const Path & path ) const
+PathVec			ProjectManagerImpl::ListScenesNames		( const Path & projectName, const Path & path, bool recursive ) const
 {
 	auto pathInScenes = TranslateToPathCategory( projectName, path );
-	auto scenes = m_sceneAccessor->ListScenes( pathInScenes );
+	auto scenes = m_sceneAccessor->ListScenes( pathInScenes, recursive );
 
     return scenes;
 }
@@ -86,7 +86,7 @@ StringVector	ProjectManagerImpl::ListCategoriesNames	() const
 
 // ********************************
 //
-PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  const std::string & categoryName, const Path & path ) const
+PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  const std::string & categoryName, const Path & path, bool recursive ) const
 {
 	if( !categoryName.empty() )
 	{
@@ -95,7 +95,7 @@ PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  cons
 		if( cit != m_categories.end() )
 		{
 			auto pathInCategory = TranslateToPathCategory( projectName, path );
-			auto cv = cit->second->ListAssets( pathInCategory );
+			auto cv = cit->second->ListAssets( pathInCategory, recursive );
             for( auto & p : cv )
             {
                 p = Path( categoryName ) / p;
@@ -115,7 +115,7 @@ PathVec			ProjectManagerImpl::ListAssetsPaths		( const Path & projectName,  cons
 		for( auto c : m_categories )
 		{
 			auto pathInCategory = TranslateToPathCategory( projectName, path );
-			auto cv = c.second->ListAssets( pathInCategory );
+			auto cv = c.second->ListAssets( pathInCategory, recursive );
 
             for( auto & p : cv )
             {
@@ -252,9 +252,9 @@ void						ProjectManagerImpl::RemoveUnusedAssets	( const Path & projectName, con
     {
         if( it != m_categories.end() )
         {
-            auto assetsInCategory = it->second->ListAssets( projectName );
+            auto assetsInCategory = it->second->ListAssets( projectName, true );
 
-            auto scenes = m_sceneAccessor->ListScenes( "" );
+            auto scenes = m_sceneAccessor->ListScenes( "", true );
 
             std::set< Path > usedAssets;
 
@@ -478,8 +478,8 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 
 	if( project )
 	{
-		auto projectAssets = ListAssetsPaths( projectName, "", "" );
-		auto projectScenes = ListScenesNames( projectName, "" );
+		auto projectAssets = ListAssetsPaths( projectName, "", "", true );
+		auto projectScenes = ListScenesNames( projectName, "", true );
 
         for( auto & s : projectScenes )
         {
