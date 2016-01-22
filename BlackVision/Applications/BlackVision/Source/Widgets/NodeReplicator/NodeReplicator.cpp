@@ -6,7 +6,7 @@ namespace bv{ namespace model {
 
 // *******************************
 //
-NodeReplicator::NodeReplicator( const BasicNodePtr & node, SizeType repNum, const IReplicationModifierConstPtr & modifier )
+NodeReplicator::NodeReplicator( BasicNode * node, SizeType repNum, const IReplicationModifierConstPtr & modifier )
     : m_node( node )
     , m_repModifier( modifier )
     , m_repNum( repNum )
@@ -16,7 +16,7 @@ NodeReplicator::NodeReplicator( const BasicNodePtr & node, SizeType repNum, cons
 
 // *******************************
 //
-NodeReplicatorPtr           NodeReplicator::Create( const BasicNodePtr & node, SizeType repNum, const IReplicationModifierConstPtr & modifier )
+NodeReplicatorPtr           NodeReplicator::Create( BasicNode * node, SizeType repNum, const IReplicationModifierConstPtr & modifier )
 {
     return NodeReplicatorPtr( new NodeReplicator( node, repNum, modifier ) );
 }

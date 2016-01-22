@@ -2,6 +2,8 @@
 
 #include <set>
 
+#include "Engine/Models/Builder/NodeLogicHolder.h"
+
 //FIXME: node na INode
 #include "Tools/StringHeplers.h"
 
@@ -131,13 +133,13 @@ void                            BasicNode::Serialize               ( ISerializer
 
 // ********************************
 //
-BasicNode * BasicNode::Create( const IDeserializer& dob )
+BasicNode * BasicNode::Create( const IDeserializer& deser )
 {
-    //assert( dob.GetName() == "node" ); FIXME
+    //assert( deser.GetName() == "node" ); FIXME
 
-    auto name = dob.GetAttribute( "name" );
+    auto name = deser.GetAttribute( "name" );
 
-    auto deserContext = Cast< BVDeserializeContext * >( dob.GetDeserializeContext() );
+    auto deserContext = Cast< BVDeserializeContext * >( deser.GetDeserializeContext() );
 
     if( deserContext == nullptr )
     {
@@ -150,11 +152,11 @@ BasicNode * BasicNode::Create( const IDeserializer& dob )
     //auto node = Create( name, nullptr );
     auto node = new BasicNode( name, nullptr );
 
-    node->m_visible = dob.GetAttribute( "visible" ) == "false" ? false : true;
+    node->m_visible = deser.GetAttribute( "visible" ) == "false" ? false : true;
 
 // plugins
     deserContext->ClearRendererContextes();
-    auto plugins = SerializationHelper::DeserializeArray< BasePlugin< IPlugin > >( dob, "plugins" );
+    auto plugins = SerializationHelper::DeserializeArray< BasePlugin< IPlugin > >( deser, "plugins" );
 
     auto itRC = deserContext->RendererContextes().begin();
 
@@ -180,20 +182,28 @@ BasicNode * BasicNode::Create( const IDeserializer& dob )
         HelperPixelShaderChannel::SetRendererContextUpdate( psc );
     }
 
-//@todo use ModelNodeEffectFactory
-//// node effect
-//    if( m_modelNodeEffect )
-//        m_modelNodeEffect->Serialize( dob );
+//@todo Deserialize Global effects; use ModelNodeEffectFactory.
 
 // children
-    auto children = SerializationHelper::DeserializeArray< BasicNode >( dob, "nodes" );
+    auto children = SerializationHelper::DeserializeArray< BasicNode >( deser, "nodes" );
 
     for( auto child : children )
         node->AddChildToModelOnly( child );
 
+// node logic
+// Node logic creation should take place always after all children are deserialized.
+    if( deser.EnterChild( "logic" ) )
+    {
+        auto factory = GetNodeLogicFactory();
+        auto newLogic = factory->CreateLogic( deser, node );
+
+        if( newLogic )
+            node->SetLogic( newLogic );
+
+        deser.ExitChild();  // logic
+    }
+
     return node;
-
-
     //SetParamVal("nodePath" ,"plugin", { name: "translataion", type:"vec3" , val:"0 ,0 ,0" } );
 }
 

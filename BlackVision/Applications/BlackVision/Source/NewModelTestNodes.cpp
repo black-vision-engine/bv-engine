@@ -427,7 +427,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateNodeReplicatorTest       ( model:
 
     shiftRepMod->AddParamShift( "transform", "translation", delta );
 
-    auto repLogic = model::NodeReplicator::Create( root, 5, shiftRepMod );
+    auto repLogic = model::NodeReplicator::Create( root.get(), 5, shiftRepMod );
 
     auto image = bTex.CreateNode( "piateczka", true );
 

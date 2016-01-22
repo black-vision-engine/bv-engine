@@ -45,7 +45,7 @@ public:
 
 
     virtual void                Serialize       ( ISerializer& ser ) const override;
-    static WidgetCounterPtr     Create          ( const IDeserializer& deser, bv::model::BasicNode * parent, bv::model::ITimeEvaluatorPtr timeEvaluator );
+    static WidgetCounterPtr     Create          ( const IDeserializer& deser, bv::model::BasicNode * parent );
 
     virtual bool                HandleEvent     ( IDeserializer& eventSer, ISerializer& response ) override;
 };

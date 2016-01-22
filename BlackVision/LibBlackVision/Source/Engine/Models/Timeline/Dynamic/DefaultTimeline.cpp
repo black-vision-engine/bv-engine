@@ -135,6 +135,7 @@ DefaultTimeline *                     DefaultTimeline::Create              ( con
     if( deser.EnterChild( "events" ) )
     {
         if( deser.EnterChild( "event" ) )
+        {
             do
             {
                 auto type = deser.GetAttribute( "type" );
@@ -146,8 +147,11 @@ DefaultTimeline *                     DefaultTimeline::Create              ( con
                     te->AddKeyFrame( TimelineEventStop::Create( deser, te ) );
                 else
                     assert( false );
-            }while( deser.NextChild() ); // event
-        
+
+            } while( deser.NextChild() );
+
+            deser.ExitChild(); // event
+        }
         deser.ExitChild(); // events
     }
 
