@@ -6,6 +6,8 @@
 
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
+#include "Engine/Graphics/Shaders/Parameters/ShaderParamVec2.h"
+
 namespace bv {
 
 // **************************
@@ -14,6 +16,11 @@ void            ShadowFullscreenEffect::SetColor      ( const glm::vec4 & color 
 {
     m_color = color;
     m_colorVal->SetValue( color );
+
+    if( m_pixelShader )
+    {
+        static_cast< ShaderParamVec4 * >( m_pixelShader->GetParameters()->AccessParam( 0 ) )->SetValue( color );
+    }
 }
 
 // **************************
@@ -29,6 +36,11 @@ void            ShadowFullscreenEffect::SetShift      ( const glm::vec2 & xy )
 {
     m_shift = xy;
     m_shiftVal->SetValue( xy );
+
+    if( m_pixelShader )
+    {
+        static_cast< ShaderParamVec2 * >( m_pixelShader->GetParameters()->AccessParam( 1 ) )->SetValue( xy );
+    }
 }
 
 // **************************
@@ -43,6 +55,11 @@ glm::vec2       ShadowFullscreenEffect::GetShift      () const
 void            ShadowFullscreenEffect::SetInner     ( Int32 flag )
 {
     m_innerVal->SetValue( flag );
+
+    if( m_pixelShader )
+    {
+        static_cast< ShaderParamInt * >( m_pixelShader->GetParameters()->AccessParam( 2 ) )->SetValue( flag );
+    }
 }
 
 // **************************
@@ -81,6 +98,7 @@ PixelShader *   ShadowFullscreenEffect::CreatePS            () const
 // **************************
 //
 ShadowFullscreenEffect::ShadowFullscreenEffect      ( Texture2DPtr tex, Texture2DPtr bluredTexture )
+    : m_pixelShader( nullptr )
 {
     m_colorVal      = ValuesFactory::CreateValueVec4( "color" );
     m_shiftVal      = ValuesFactory::CreateValueVec2( "shift" );
@@ -103,7 +121,8 @@ ShadowFullscreenEffect::~ShadowFullscreenEffect     ()
 //
 RenderableEntity *  ShadowFullscreenEffect::CreateFullscreenQuad    () const
 {
-    auto quad = CreateDefaultFullscrQuad( CreatePS() );
+    m_pixelShader = CreatePS();
+    auto quad = CreateDefaultFullscrQuad( m_pixelShader );
 
     auto eff  = quad->GetRenderableEffect();
     auto pass = eff->GetPass( 0 );

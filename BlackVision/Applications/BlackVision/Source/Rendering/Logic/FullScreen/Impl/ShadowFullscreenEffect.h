@@ -22,6 +22,8 @@ private:
     Texture2DPtr                m_texture;
     Texture2DPtr                m_bluredTexture;
 
+    mutable PixelShader *       m_pixelShader;
+
 public:
     void                        SetColor    ( const glm::vec4 & color );
     glm::vec4                   GetColor    () const;
