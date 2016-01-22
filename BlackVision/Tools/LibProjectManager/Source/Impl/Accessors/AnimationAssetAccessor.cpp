@@ -39,11 +39,13 @@ AnimationAssetAccessorConstPtr AnimationAssetAccessor::Create( const Path & root
 //
 AssetDescConstPtr AnimationAssetAccessor::GetAssetDesc( const Path & path ) const
 {
-    if( Path::Exists( m_rootPath / path ) )
+	auto p = m_rootPath / path;
+
+    if( Path::Exists( p ) )
     {
         for( auto fe : m_fileExts )
         {
-            auto numFrames = Path::List( m_rootPath / path, false, fe ).size();
+            auto numFrames = Path::List( p, false, fe ).size();
             if( numFrames > 0 )
             {
                 return AnimationAssetDesc::Create( ( Path( "sequences" ) / path ).Str(), numFrames, fe );
@@ -51,7 +53,7 @@ AssetDescConstPtr AnimationAssetAccessor::GetAssetDesc( const Path & path ) cons
         }
     }
 
-    LOG_MESSAGE( SeverityLevel::warning ) << "Asset '" << path << "' doesn't exist.";
+    LOG_MESSAGE( SeverityLevel::warning ) << "Asset '" << p.Str() << "' doesn't exist.";
     
     return nullptr;
 }
