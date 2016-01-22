@@ -63,15 +63,10 @@ PathVec			ProjectManagerImpl::ListProjectsNames	() const
 
 // ********************************
 //
-PathVec			ProjectManagerImpl::ListScenesNames		( const Path & projectName ) const
+PathVec			ProjectManagerImpl::ListScenesNames		( const Path & projectName, const Path & path ) const
 {
-	auto pathInScenes = TranslateToPathCategory( projectName, "" );
+	auto pathInScenes = TranslateToPathCategory( projectName, path );
 	auto scenes = m_sceneAccessor->ListScenes( pathInScenes );
-
-    for( auto & s : scenes )
-    {
-        s = Path( "scenes" ) / s;
-    }
 
     return scenes;
 }
@@ -484,7 +479,12 @@ void						ProjectManagerImpl::ExportProjectToFile	( const Path & projectName, co
 	if( project )
 	{
 		auto projectAssets = ListAssetsPaths( projectName, "", "" );
-		auto projectScenes = ListScenesNames( projectName );
+		auto projectScenes = ListScenesNames( projectName, "" );
+
+        for( auto & s : projectScenes )
+        {
+            s = Path( "scenes" ) / s;
+        }
 
 		std::set< Path > uniqueAssets;
 

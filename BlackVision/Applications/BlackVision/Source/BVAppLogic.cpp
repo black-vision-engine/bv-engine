@@ -155,7 +155,7 @@ void BVAppLogic::LoadScenes( const PathVec & pathVec )
 
     for( auto p : pathVec )
     {
-		auto scene = SceneDescriptor::LoadScene( ProjectManager::GetInstance()->ToAbsPath( p ) );
+        auto scene = ProjectManager::GetInstance()->LoadScene( "", p );
 		m_bvProject->GetProjectEditor()->AddScene( scene );
     }
 
@@ -170,6 +170,7 @@ void BVAppLogic::LoadScene          ( void )
     //te->Play();
     //m_globalTimeline->AddChild( te );
 
+    auto projectEditor = m_bvProject->GetProjectEditor();
     if( !ConfigManager::GetBool( "Debug/LoadSceneFromEnv" ) )
     {
         if( ConfigManager::GetBool( "Debug/LoadSolution" ) )
@@ -180,7 +181,7 @@ void BVAppLogic::LoadScene          ( void )
 			auto scene = SceneModel::Create( "root", m_renderer->GetCamera() );
 			scene->SetRootNode( m_solution.GetRoot() );
 
-			m_bvProject->GetProjectEditor()->AddScene( scene );
+			projectEditor->AddScene( scene );
 
             //if(ConfigManager::GetBool("hm"))
             //root->AddChildToModelOnly(TestScenesFactory::NewModelTestScene( m_pluginsManager, m_timelineManager, m_globalTimeline ));
@@ -193,7 +194,7 @@ void BVAppLogic::LoadScene          ( void )
             
             if( !projectName.empty() )
             {
-                auto projectScenesNames = pm->ListScenesNames( projectName );
+                auto projectScenesNames = pm->ListScenesNames( projectName, "" );
 
                 if( !projectScenesNames.empty() )
                 {
@@ -210,7 +211,7 @@ void BVAppLogic::LoadScene          ( void )
         if( GetEnvScene() == "SERIALIZED_TEST" )
         {
             sceneModel = TestScenesFactory::CreateSerializedTestScene( m_pluginsManager );
-            m_bvProject->GetProjectEditor()->AddScene( sceneModel );
+            projectEditor->AddScene( sceneModel );
             return;
         }
         else
@@ -218,15 +219,11 @@ void BVAppLogic::LoadScene          ( void )
             auto sceneName = "sceneFromEnv: " + GetEnvScene();
 
 	        sceneModel = model::SceneModel::Create( sceneName, m_renderer->GetCamera() );
+            projectEditor->AddScene( sceneModel );
 
             auto node = TestScenesFactory::CreateSceneFromEnv( GetEnvScene(), sceneModel->GetTimeline(), m_pluginsManager ) ;
-
-            sceneModel->SetRootNode( node );
-
-            m_bvProject->GetProjectEditor()->AddScene( sceneModel );
+            projectEditor->AddChildNode( sceneModel, nullptr, node );
         }
-
-
     }
 }
 

@@ -57,7 +57,7 @@ BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr, const Plugins
     , m_pluginList( std::make_shared< DefaultPluginListFinalized >() )
     , m_pluginsManager( pluginsManager )
     , m_visible( true )
-	, m_modelNodeEditor ( nullptr )
+	, m_modelNodeEditor ( new ModelNodeEditor( this ) )
     , m_modelNodeEffect( nullptr )
 {
     if( pluginsManager == nullptr )
@@ -84,9 +84,7 @@ BasicNodePtr                    BasicNode::Create                   ( const std:
         {
         }
     };
-	auto node = std::make_shared<make_shared_enabler_BasicNode>( name, timeEvaluator, pluginsManager );
-	node->m_modelNodeEditor = new ModelNodeEditor( node );
-    return node;
+	return std::make_shared< make_shared_enabler_BasicNode >( name, timeEvaluator, pluginsManager );
 }
 
 // ********************************
@@ -205,7 +203,7 @@ IModelNode *					BasicNode::Clone			() const
 {
 	auto assets = std::make_shared< AssetDescsWithUIDs >();
 	//FIXME: const hack
-	GetAssetsWithUIDs( *assets, std::const_pointer_cast< BasicNode >( shared_from_this() ) );
+	GetAssetsWithUIDs( *assets, this );
 
 	return CloneViaSerialization::Clone( this, "node", assets, nullptr );
 }
@@ -416,6 +414,15 @@ BasicNodePtr    BasicNode::GetChild                         ( unsigned int i )
 
 // ********************************
 //
+const BasicNode *   BasicNode::GetChild                     ( unsigned int i ) const
+{
+    assert( i < m_children.size() );
+
+    return m_children[ i ].get();
+}
+
+// ********************************
+//
 unsigned int    BasicNode::GetNumPlugins                    () const
 {
     return m_pluginList->NumPlugins();
@@ -463,10 +470,7 @@ void            BasicNode::DetachChildNodeOnly              ( BasicNodePtr n )
 //
 ModelNodeEditor *					BasicNode::GetModelNodeEditor		()
 {
-    if( !m_modelNodeEditor)
-    {
-        m_modelNodeEditor = new ModelNodeEditor( shared_from_this() );
-    }
+    assert( m_modelNodeEditor );
     return m_modelNodeEditor;
 }
 

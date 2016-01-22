@@ -114,7 +114,7 @@ void         QueryHandlers::ListSceneAssets          ( JsonSerializeObject & ser
         auto sceneRoot = scene->GetRootNode();
 
         AssetDescsWithUIDs assets;
-        GetAssetsWithUIDs( assets, sceneRoot, true );
+        GetAssetsWithUIDs( assets, sceneRoot.get(), true );
         bvDeserCo->SetAssets( AssetDescsWithUIDsPtr( &assets ) );
 
         auto descriptors = assets.GetAssetsDescs();
@@ -289,7 +289,8 @@ void         QueryHandlers::ListScenes           ( JsonSerializeObject & ser, co
     auto pm = ProjectManager::GetInstance();
 
     auto name = GetRequestParamValue( request )[ "projectName" ].asString();
-    auto sns = pm->ListScenesNames( name );
+    auto path = GetRequestParamValue( request )[ "path" ].asString();
+    auto sns = pm->ListScenesNames( name, path );
 
     ser.EnterArray( "list" );
     for( auto scene : sns )
@@ -353,7 +354,7 @@ void        QueryHandlers::ListProjects        ( JsonSerializeObject & ser, cons
     ser.EnterArray( "list" );
     for( auto p : pns )
     {
-        auto scenesCount = pm->ListScenesNames( p ).size();
+        auto scenesCount = pm->ListScenesNames( p, "" ).size();
 
         ser.SetAttribute( "name", p.Str() );
         ser.SetAttribute( "scenesCount", toString( scenesCount ) );

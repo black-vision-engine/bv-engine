@@ -12,16 +12,39 @@ uniform int             vertical;
 uniform int             normalize = 1;
 uniform int             blurKernelType = 0;
 
+float blurSizeCeil = ceil( blurSize );
+float blurSizeFloor = floor( blurSize );
+float subPixelWeight = blurSize - blurSizeFloor;
+
+float gauss[ 5 ] = float[]( 0.22508352 , 0.11098164 , 0.01330373 , 0.00038771 , 0.0 );
+//float gauss[ 5 ] = float[]( 1.0 , 0.75 , 0.5 , 0.25 , 0.0 );
+
 float evaluateWeight( float dist )
 {
+    dist = abs( dist );
+
     switch( blurKernelType )
     {
         case 0: // Box filter
             return 1.0;
             
         case 1: // Triangle filter
-            return( ( blurSize + 2 ) - dist ) / ( blurSize + 2 );
-            
+            return( ( blurSize ) - dist ) / ( blurSize );
+
+        case 2: // Gaussian filter
+
+            float d = ( blurSizeCeil / 4 );
+
+            float l = floor( dist / d );
+            float r = ceil( dist / d );
+
+            int li = int( l );
+            int ri = int( r );
+
+            float t = ( dist / d ) - l;
+
+            return gauss[ li ] * ( 1 - t ) + gauss[ ri ] * t;
+
         default:
             return 1.0;      
     }
@@ -29,9 +52,6 @@ float evaluateWeight( float dist )
 
 void pass0()
 {
-    float blurSizeFloor = floor( blurSize );
-    float blurSizeCeil = ceil( blurSize );
-    float subPixelWeight = blurSize - blurSizeFloor;
     int t = int( blurSizeFloor );
 
     float pixelW = 1.0 / textureSize.x;
@@ -62,9 +82,6 @@ void pass0()
 
 void pass1()
 {
-    float blurSizeFloor = floor( blurSize );
-    float blurSizeCeil = ceil( blurSize );
-    float subPixelWeight = blurSize - blurSizeFloor;
     int t = int( blurSizeFloor );
 
     float pixelH = 1.0 / textureSize.y;

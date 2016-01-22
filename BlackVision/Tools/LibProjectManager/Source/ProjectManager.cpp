@@ -63,9 +63,9 @@ PathVec			ProjectManager::ListProjectsNames	() const
 
 // ********************************
 //
-PathVec			ProjectManager::ListScenesNames		( const Path & projectName ) const
+PathVec			ProjectManager::ListScenesNames		( const Path & projectName, const Path & path ) const
 {
-	return m_impl->ListScenesNames( projectName );
+	return m_impl->ListScenesNames( projectName, path );
 }
 
 // ********************************
