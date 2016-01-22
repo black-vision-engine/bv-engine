@@ -456,11 +456,37 @@ void                Crawler::Serialize       ( ISerializer& ser ) const
         ser.SetAttribute( "speed", SerializationHelper::T2String( m_speed ) );
         ser.SetAttribute( "interspace", SerializationHelper::T2String( m_interspace ) );
 
-        ser.EnterArray( "nodeNames" );
+
+        // Node names aren't enough to identify node. Checking children indicies.
+        SizeType numChildren = m_parentNode->GetNumChildren();
+        std::vector<bv::model::BasicNode*>     childrenNodes;
+        childrenNodes.reserve( numChildren );
+        
+        // Copy all node's to vector
+        for( Int32 i = 0; i < numChildren; ++i )
+            childrenNodes.push_back( m_parentNode->GetChild( i ).get() );
+
+
+        ser.EnterArray( "crawlerNodes" );
             for( auto& node : m_shifts )
             {
-                ser.EnterChild( "nodeName" );
+                ser.EnterChild( "crawlerNode" );
                     ser.SetAttribute( "name", node.first->GetName() );
+
+                    // Find node index
+                    Int32  nodeIndex = -1;
+                    for( Int32 i = 0; i < numChildren; ++i )
+                    {
+                        if( childrenNodes[ i ] == node.first )
+                        {
+                            nodeIndex = i;
+                            break;
+                        }
+                    }
+
+                    assert( nodeIndex >= 0 );   // Node held by crawler exists in tree no more.
+                    ser.SetAttribute( "nodeIdx", SerializationHelper::T2String( nodeIndex ) );
+
                 ser.ExitChild(); // node
             }
 
