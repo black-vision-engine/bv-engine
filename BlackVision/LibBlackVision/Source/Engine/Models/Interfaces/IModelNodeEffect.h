@@ -1,8 +1,11 @@
 #pragma once
 
 #include "CoreDEF.h"
+
 #include "Engine/Interfaces/IUpdatable.h"
-#include "Engine/Types//Enums.h"
+
+#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectTypes.h"
+
 
 namespace bv { namespace model {
 

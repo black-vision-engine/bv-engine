@@ -2,6 +2,11 @@
 
 #include <cassert>
 
+#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectTr.h"
+#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectLogic.h"
+
+#include "Engine/Graphics/Effects/NodeEffectTr/Impl/DefaultPreFullscreenEffectLogic.h"
+
 
 namespace bv {
 
@@ -9,9 +14,20 @@ namespace {
 
 // **************************
 //
+NodeEffectTr *  CreateNodeEffect( NodeEffectLogic * logic )
+{
+    return new NodeEffectTr( logic );
+}
+
+// **************************
+//
 NodeEffectTr *  CreateDefaultNodeEffect()
 {
-    return nullptr;
+    NodeEffectLogic * logic = new NodeEffectLogic();
+    
+    logic->SetPreFullscreenEffectLogic( new DefaultPreFullscreenEffectLogic() );
+
+    return CreateNodeEffect( logic );
 }
 
 // **************************

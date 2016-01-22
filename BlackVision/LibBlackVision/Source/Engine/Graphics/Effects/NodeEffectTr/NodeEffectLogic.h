@@ -47,13 +47,13 @@ public:
 
 private:
 
-    void    RecreateValues              ( std::vector< IValuePtr > & values );
+    void            RecreateValues              ( std::vector< IValuePtr > & values );
 
-    void    FSEInitializedGuard         ( RenderLogicContext * ctx, std::vector< RenderTarget * > * fseInputsVec, FullscreenEffectContext * fseCtx );
+    void            FSEInitializedGuard         ( RenderLogicContext * ctx, std::vector< RenderTarget * > * fseInputsVec, FullscreenEffectContext * fseCtx );
 
-    void    PreFSERenderLogic           ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > & outputs ) const;
-    void    FSERenderLogic              ( RenderTarget * output, FullscreenEffectContext * ctx );
-    void    PostFSERenderLogic          ( SceneNode * node, RenderLogicContext * ctx ) const;
+    void            PreFSERenderLogic           ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > & outputs ) const;
+    void            FSERenderLogic              ( RenderTarget * output, FullscreenEffectContext * ctx );
+    void            PostFSERenderLogic          ( SceneNode * node, RenderLogicContext * ctx ) const;
 
 };
 
