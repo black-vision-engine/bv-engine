@@ -183,6 +183,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\InterlacePreFullscreenEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\NodeMaskPostFullscreenEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\NodeMaskPreFullscreenEffectLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\RenderOffscreenPreFullscreenEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\SplitChildrenPreFullscreenLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\WireframePostFullscreenEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\NodeEffectFactory.cpp" />
@@ -461,6 +462,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\InterlacePreFullscreenEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\NodeMaskPostFullscreenEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\NodeMaskPreFullscreenEffectLogic.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\RenderOffscreenPreFullscreenEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\SplitChildrenPreFullscreenLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\WireframePostFullscreenEffectLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\NodeEffectFactory.h" />

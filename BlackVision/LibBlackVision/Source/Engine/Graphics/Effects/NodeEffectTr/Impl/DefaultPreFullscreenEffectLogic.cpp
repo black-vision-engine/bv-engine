@@ -23,4 +23,11 @@ std::vector< IValuePtr >    DefaultPreFullscreenEffectLogic::GetValues          
     return std::vector< IValuePtr >();
 }
 
+// *********************************
+//
+unsigned int                DefaultPreFullscreenEffectLogic::GetPreferredNumOutputs              () const
+{
+    return 0;
+}
+
 } //bv

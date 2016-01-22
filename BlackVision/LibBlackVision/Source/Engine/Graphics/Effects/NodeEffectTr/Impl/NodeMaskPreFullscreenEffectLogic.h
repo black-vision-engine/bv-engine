@@ -25,6 +25,8 @@ public:
 
     virtual std::vector< IValuePtr >    GetValues                           () const override;
 
+    virtual unsigned int                GetPreferredNumOutputs              () const override;
+
 };
 
 } //bv

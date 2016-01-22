@@ -83,4 +83,11 @@ std::vector< IValuePtr >    NodeMaskPreFullscreenEffectLogic::GetValues     () c
     return res;
 }
 
+// *********************************
+//
+unsigned int                NodeMaskPreFullscreenEffectLogic::GetPreferredNumOutputs              () const
+{
+    return 2;
+}
+
 } //bv

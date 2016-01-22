@@ -1125,6 +1125,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\DefaultPostFullscreenEffectLogic.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffectTr\Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\RenderOffscreenPreFullscreenEffectLogic.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffectTr\Impl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2244,6 +2247,9 @@
       <Filter>Engine\Graphics\Effects\NodeEffectTr</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\DefaultPostFullscreenEffectLogic.h">
+      <Filter>Engine\Graphics\Effects\NodeEffectTr\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\RenderOffscreenPreFullscreenEffectLogic.h">
       <Filter>Engine\Graphics\Effects\NodeEffectTr\Impl</Filter>
     </ClInclude>
   </ItemGroup>

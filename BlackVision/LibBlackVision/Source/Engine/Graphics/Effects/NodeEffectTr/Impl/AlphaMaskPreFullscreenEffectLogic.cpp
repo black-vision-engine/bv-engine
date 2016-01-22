@@ -54,12 +54,19 @@ void    AlphaMaskPreFullscreenEffectLogic::Render                       ( SceneN
 
 // *********************************
 //
-std::vector< IValuePtr >    AlphaMaskPreFullscreenEffectLogic::GetValues    () const
+std::vector< IValuePtr >    AlphaMaskPreFullscreenEffectLogic::GetValues                () const
 {
     std::vector< IValuePtr > res( 1 );
     res.push_back( m_alphaValue );
 
     return res;
+}
+
+// *********************************
+//
+unsigned int                AlphaMaskPreFullscreenEffectLogic::GetPreferredNumOutputs   () const
+{
+    return 1;
 }
 
 } //bv

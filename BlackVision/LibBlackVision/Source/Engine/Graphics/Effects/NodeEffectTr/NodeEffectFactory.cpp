@@ -10,12 +10,14 @@
 #include "Engine/Graphics/Effects/NodeEffectTr/Impl/AlphaMaskPreFullscreenEffectLogic.h"
 #include "Engine/Graphics/Effects/NodeEffectTr/Impl/NodeMaskPreFullscreenEffectLogic.h"
 #include "Engine/Graphics/Effects/NodeEffectTr/Impl/InterlacePreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffectTr/Impl/RenderOffscreenPreFullscreenEffectLogic.h"
 
 //FSE
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectFactory.h"
 
 //POST
 #include "Engine/Graphics/Effects/NodeEffectTr/Impl/DefaultPostFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffectTr/Impl/WireframePostFullscreenEffectLogic.h"
 
 
 namespace bv {
@@ -103,14 +105,28 @@ NodeEffectTr *  CreateNodeMaskNodeEffect()
 //
 NodeEffectTr *  CreateWireframeNodeEffect()
 {
-    return nullptr;
+    auto logic = CreateNodeEffectLogic();
+
+    auto pre  = new DefaultPreFullscreenEffectLogic();
+    auto post = new WireframePostFullscreenEffectLogic();
+
+    SetLogicComponents( logic, pre, nullptr, post );
+
+    return CreateNodeEffect( logic );
 }
 
 // **************************
 //
 NodeEffectTr *  CreateMixchannelsNodeEffect()
 {
-    return nullptr;
+    auto logic = CreateNodeEffectLogic();
+
+    auto pre  = new RenderOffscreenPreFullscreenEffectLogic();
+    auto post = new WireframePostFullscreenEffectLogic();
+
+    SetLogicComponents( logic, pre, nullptr, post );
+
+    return CreateNodeEffect( logic );
 }
  
 } // anonoymnous

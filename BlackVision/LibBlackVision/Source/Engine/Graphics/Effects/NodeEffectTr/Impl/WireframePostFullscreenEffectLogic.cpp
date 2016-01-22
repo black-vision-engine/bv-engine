@@ -28,6 +28,8 @@ WireframePostFullscreenEffectLogic::~WireframePostFullscreenEffectLogic         
 //
 void                        WireframePostFullscreenEffectLogic::Render          ( SceneNode * node, RenderLogicContext * ctx )
 {
+    assert( ctx->GetBoundRenderTarget() != nullptr );
+
     EnableWireframeEffect( renderer( ctx ), node );
     DrawWirefreameNodeOnly( renderer( ctx ), node );
 }
