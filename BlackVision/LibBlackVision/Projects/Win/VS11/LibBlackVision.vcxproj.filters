@@ -978,9 +978,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\AlphaMaskPreFullscreenEffectLogic.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffectTr\Impl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\DefaultPostFullscreenLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffectTr\Impl</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\DefaultPreFullscreenEffectLogic.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffectTr\Impl</Filter>
     </ClCompile>
@@ -1124,6 +1121,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\NodeEffectFactory.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffectTr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\DefaultPostFullscreenEffectLogic.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffectTr\Impl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2096,9 +2096,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\AlphaMaskPreFullscreenEffectLogic.h">
       <Filter>Engine\Graphics\Effects\NodeEffectTr\Impl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\DefaultPostFullscreenLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffectTr\Impl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\DefaultPreFullscreenEffectLogic.h">
       <Filter>Engine\Graphics\Effects\NodeEffectTr\Impl</Filter>
     </ClInclude>
@@ -2245,6 +2242,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\NodeEffectTypes.h">
       <Filter>Engine\Graphics\Effects\NodeEffectTr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffectTr\Impl\DefaultPostFullscreenEffectLogic.h">
+      <Filter>Engine\Graphics\Effects\NodeEffectTr\Impl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

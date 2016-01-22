@@ -5,7 +5,17 @@
 #include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectTr.h"
 #include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectLogic.h"
 
+//PRE
 #include "Engine/Graphics/Effects/NodeEffectTr/Impl/DefaultPreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffectTr/Impl/AlphaMaskPreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffectTr/Impl/NodeMaskPreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffectTr/Impl/InterlacePreFullscreenEffectLogic.h"
+
+//FSE
+#include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectFactory.h"
+
+//POST
+#include "Engine/Graphics/Effects/NodeEffectTr/Impl/DefaultPostFullscreenEffectLogic.h"
 
 
 namespace bv {
@@ -21,11 +31,41 @@ NodeEffectTr *  CreateNodeEffect( NodeEffectLogic * logic )
 
 // **************************
 //
+NodeEffectLogic *  CreateNodeEffectLogic()
+{
+    return new NodeEffectLogic();
+}
+
+// **************************
+//
+void    SetLogicComponents( NodeEffectLogic * logic, PreFullscreenEffectLogic * pre, FullscreenEffectTr * fse, PostFullscreenEffectLogic * post )
+{
+    assert( logic );
+    assert( pre || fse || post );
+
+    if( pre )
+    {
+        logic->SetPreFullscreenEffectLogic( pre );
+    }
+
+    if( fse )
+    {
+        logic->SetFullscreenEffect( fse );
+    }
+
+    if( post )
+    {
+        logic->SetPostFullscreenEffectLogic( post );
+    }
+}
+
+// **************************
+//
 NodeEffectTr *  CreateDefaultNodeEffect()
 {
-    NodeEffectLogic * logic = new NodeEffectLogic();
+    auto logic = CreateNodeEffectLogic();
     
-    logic->SetPreFullscreenEffectLogic( new DefaultPreFullscreenEffectLogic() );
+    SetLogicComponents( logic, new DefaultPreFullscreenEffectLogic(), nullptr, nullptr );
 
     return CreateNodeEffect( logic );
 }
@@ -34,14 +74,29 @@ NodeEffectTr *  CreateDefaultNodeEffect()
 //
 NodeEffectTr *  CreateAlphaMaskNodeEffect()
 {
-    return nullptr;
+    auto logic = CreateNodeEffectLogic();
+
+    auto pre  = new AlphaMaskPreFullscreenEffectLogic( 0.01f, 0.99f );
+    auto fse  = CreateFullscreenEffect( FullscreenEffectType::FET_BLIT_WITH_ALPHA );
+
+    SetLogicComponents( logic, pre, fse, nullptr );
+
+    return CreateNodeEffect( logic );
 }
 
 // **************************
 //
 NodeEffectTr *  CreateNodeMaskNodeEffect()
 {
-    return nullptr;
+    auto logic = CreateNodeEffectLogic();
+
+    auto pre  = new NodeMaskPreFullscreenEffectLogic( 0.01f );
+    auto fse  = CreateFullscreenEffect( FullscreenEffectType::FET_BLIT_WITH_ALPHA_MASK );
+    auto post = new DefaultPostFullscreenEffectLogic( 2 );
+
+    SetLogicComponents( logic, pre, fse, post );
+
+    return CreateNodeEffect( logic );
 }
 
 // **************************

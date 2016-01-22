@@ -5,7 +5,7 @@
 
 namespace bv {
 
-class DefaultPostFullscreenLogic : public PostFullscreenEffectLogic
+class DefaultPostFullscreenEffectLogic : public PostFullscreenEffectLogic
 {
 private:
 
@@ -13,7 +13,7 @@ private:
 
 public:
 
-                    DefaultPostFullscreenLogic      ();
+                    DefaultPostFullscreenEffectLogic( unsigned int firstChild = 0 );
 
             void    SetFirstChild                   ( unsigned int i );
 
