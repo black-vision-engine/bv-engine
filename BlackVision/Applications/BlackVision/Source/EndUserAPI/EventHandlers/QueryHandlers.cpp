@@ -366,9 +366,30 @@ void        QueryHandlers::ListProjects        ( JsonSerializeObject & ser, cons
 
 // ***********************
 //
-void         QueryHandlers::GetAssetDescriptor      ( JsonSerializeObject & /*ser*/, const std::string & /*request*/, int /*eventID*/ )
+void         QueryHandlers::GetAssetDescriptor      ( JsonSerializeObject & ser, const std::string & request, int eventID )
 {
+    auto projectName = GetRequestParamValue( request )[ "projectName" ].asString();
+    auto categoryName = GetRequestParamValue( request )[ "categoryName" ].asString();
+    auto path = GetRequestParamValue( request )[ "path" ].asString();
 
+    auto pm = ProjectManager::GetInstance();
+    auto desc = pm->GetAssetDesc( projectName, categoryName, path );
+
+    if( desc )
+    {
+        PrepareResponseTemplate( ser, InfoEvent::Command::GetAssetDescriptor, eventID, true );
+        ser.SetAttribute( "projectName", projectName );
+        ser.SetAttribute( "categoryName", categoryName );
+        ser.SetAttribute( "path", path );
+
+        ser.EnterChild( "AssetData" );
+        desc->Serialize( ser );
+        ser.ExitChild();
+    }
+    else
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetDescriptor, eventID, "Cannot find asset." );
+    }
 }
 
 // ***********************
