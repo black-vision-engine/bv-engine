@@ -72,7 +72,7 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
 
         deser.EnterChild( "logic" );
         
-        auto logic = GetNodeLogicFactory()->CreateLogic( deser, basicNode, timeline );
+        auto logic = GetNodeLogicFactory()->CreateLogic( deser, basicNode.get() );
         
         deser.ExitChild();  // nodeLogic
 

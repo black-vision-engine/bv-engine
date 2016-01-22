@@ -519,6 +519,29 @@ CrawlerPtr      Crawler::Create          ( const IDeserializer & deser, bv::mode
     crawler->SetSpeed( speed );
     crawler->SetInterspace( interspace );
 
+
+    if( !deser.EnterChild( "crawlerNodes" ) )
+        return crawler;
+    
+    if( deser.EnterChild( "crawlerNode" ) )
+    {
+        do
+        {
+            UInt32 nodeIdx = SerializationHelper::String2T( deser.GetAttribute( "nodeIdx" ), -1 );
+            
+            assert( nodeIdx >= 0 && nodeIdx < parent->GetNumChildren() );
+            if( nodeIdx >= 0 && nodeIdx < parent->GetNumChildren() )
+            {
+                auto newNode = parent->GetChild( nodeIdx );
+                crawler->AddNext( newNode );
+            }
+
+        } while( deser.NextChild() );
+        deser.ExitChild(); // crawlerNode
+    }
+
+    deser.ExitChild(); // crawlerNodes
+
     return crawler;
 }
 

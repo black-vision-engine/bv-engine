@@ -74,9 +74,11 @@ void                WidgetCounter::Serialize       ( ISerializer& ser ) const
 
 // ***********************
 //
-WidgetCounterPtr     WidgetCounter::Create          ( const IDeserializer& deser, bv::model::BasicNode * parent, bv::model:: ITimeEvaluatorPtr timeEvaluator )
+WidgetCounterPtr     WidgetCounter::Create          ( const IDeserializer& deser, bv::model::BasicNode * parent )
 {
-    auto newCounter = WidgetCounter::Create( parent, timeEvaluator );
+    assert( !"Timeline" );
+
+    auto newCounter = WidgetCounter::Create( parent, /*timeEvaluator*/nullptr );
     
     if( deser.EnterChild( "param" ) )
     {

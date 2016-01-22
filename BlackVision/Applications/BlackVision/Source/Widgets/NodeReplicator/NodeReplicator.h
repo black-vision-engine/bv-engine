@@ -20,7 +20,7 @@ public:
 	virtual void					Update			( TimeType t )	override;
 	virtual void					Deinitialize	()				override;
 
-    static NodeReplicatorPtr        Create          ( const BasicNodePtr & node, SizeType repNum, const IReplicationModifierConstPtr & modifier );
+    static NodeReplicatorPtr        Create          ( BasicNode * node, SizeType repNum, const IReplicationModifierConstPtr & modifier );
 
 
     virtual void                    Serialize       ( ISerializer& ser ) const override;
@@ -29,10 +29,10 @@ public:
     virtual bool                    HandleEvent     ( IDeserializer& eventSer, ISerializer& response ) override;
 
 private:
-    explicit                        NodeReplicator  ( const BasicNodePtr & node, SizeType repNum, const IReplicationModifierConstPtr & modifier = nullptr );
+    explicit                        NodeReplicator  ( BasicNode * node, SizeType repNum, const IReplicationModifierConstPtr & modifier = nullptr );
 
 
-    BasicNodePtr                    m_node;
+    BasicNode *                     m_node;
     IReplicationModifierConstPtr    m_repModifier;
     SizeType                        m_repNum;
     bool                            m_initialized;
