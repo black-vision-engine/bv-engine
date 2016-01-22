@@ -143,7 +143,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 	else if( command == NodeStructureEvent::Command::MoveNode )
 	{
 		//FIXME: replace with sth more generic
-		auto destSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
+		auto destSceneName = GetRequestParamValue( request )[ "DestSceneName" ].asString();
 		auto destNodePath = GetRequestParamValue( request )[ "DestPath" ].asString();
 		auto destIdx = GetRequestParamValue( request )[ "DestIndex" ].asUInt();
 		auto srcSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
@@ -154,7 +154,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 	else if( command == NodeStructureEvent::Command::CopyNode )
 	{
 		//FIXME: replace with sth more generic
-		auto destSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
+		auto destSceneName = GetRequestParamValue( request )[ "DestSceneName" ].asString();
 		auto destNodePath = GetRequestParamValue( request )[ "DestPath" ].asString();
 		auto srcSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
 		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
