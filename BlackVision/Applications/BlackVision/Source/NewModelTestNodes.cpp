@@ -2463,9 +2463,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCrawlerTestNode       ( model::IT
 
 	auto node = CreateTextCacheTest( timeEvaluator, "Dummy0", nodeTranslation, color, L"", "fonts/StarWars.ttf" );
 
-	auto crawler = nodelogic::Crawler::Create( node.get(), mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
+	//auto crawler = nodelogic::Crawler::Create( node.get(), mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
 
-	node->SetLogic( crawler );
+	//node->SetLogic( crawler );
 
     
     //crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt1", "fonts/StarWars.ttf" ) );
@@ -2477,30 +2477,38 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCrawlerTestNode       ( model::IT
 
     auto texture = CreateTexturedRectNode( timeEvaluator, false );
 	texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt1", "fonts/StarWars.ttf" ) );
-	crawler->AddNext( texture );
+	//crawler->AddNext( texture );
+    node->AddChildToModelOnly( texture );
+
 	texture = CreateTexturedRectNode( timeEvaluator, false );
 	texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt2", "fonts/StarWars.ttf" ) );
-	crawler->AddNext( texture );
+	//crawler->AddNext( texture );
+    node->AddChildToModelOnly( texture );
+
 	texture = CreateTexturedRectNode( timeEvaluator, false );
 	texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt3", "fonts/StarWars.ttf" ) );
-	crawler->AddNext( texture );
+	//crawler->AddNext( texture );
+    node->AddChildToModelOnly( texture );
+
 	texture = CreateTexturedRectNode( timeEvaluator, false );
 	texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt4", "fonts/StarWars.ttf" ) );
-	crawler->AddNext( texture );
+	//crawler->AddNext( texture );
+    node->AddChildToModelOnly( texture );
 
 
-    crawler->AddMessage( L"Message 1" );
-    crawler->AddMessage( L"Message 2" );
-    crawler->AddMessage( L"Message 3" );
-    crawler->AddMessage( L"Message 4" );
-    crawler->AddMessage( L"Message 5" );
-    crawler->AddMessage( L"Message 6" );
 
-	crawler->SetSpeed( 400000.0f );
-	crawler->SetInterspace( 1.0f );
+ //   crawler->AddMessage( L"Message 1" );
+ //   crawler->AddMessage( L"Message 2" );
+ //   crawler->AddMessage( L"Message 3" );
+ //   crawler->AddMessage( L"Message 4" );
+ //   crawler->AddMessage( L"Message 5" );
+ //   crawler->AddMessage( L"Message 6" );
 
-	crawler->Finalize();
-	crawler->Start();
+	//crawler->SetSpeed( 400000.0f );
+	//crawler->SetInterspace( 1.0f );
+
+	//crawler->Finalize();
+	//crawler->Start();
 
 	return node;
 }

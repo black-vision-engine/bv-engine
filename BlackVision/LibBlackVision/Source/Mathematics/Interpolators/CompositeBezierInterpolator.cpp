@@ -507,6 +507,18 @@ template< class TimeValueT, class ValueT >
 void                                                CompositeBezierInterpolator< TimeValueT, ValueT >::SetCurveType( CurveType type )
 {
     m_type = type;
+    interpolators.clear();
+    auto prevKey = keys.begin();
+    auto nextKey = prevKey + 1;
+    while( nextKey != keys.end() )
+    {
+        interpolators.push_back( CreateDummyInterpolator( type, *prevKey, *nextKey, m_tolerance ) );
+        prevKey++;
+        nextKey++;
+    }
+
+    for( int i = 0; i < interpolators.size(); i++ )
+        UpdateInterpolator( interpolators, i, type );
 }
 
 // *******************************
