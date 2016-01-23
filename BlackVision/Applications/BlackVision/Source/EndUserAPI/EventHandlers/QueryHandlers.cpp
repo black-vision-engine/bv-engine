@@ -303,6 +303,7 @@ void         QueryHandlers::ListScenes           ( JsonSerializeObject & ser, co
     auto sns = pm->ListScenesNames( name, path, recursive );
 
     ser.EnterArray( "list" );
+    ser.SetAttribute( "path", path );
     for( auto scene : sns )
     {
         ser.SetAttribute( "", scene.Str() );
