@@ -163,6 +163,7 @@ void BlackMagicVideoCard::DeliverFrameFromRAM(unsigned char * buffer)
     {
         int hdVideo =  output->Channels[i].OutputId-1;
         HRESULT result = HardwareOutputs[hdVideo]->DisplayVideoFrameSync(VideoFrames[hdVideo]);
+		 
 		{result;} 
 	}
 

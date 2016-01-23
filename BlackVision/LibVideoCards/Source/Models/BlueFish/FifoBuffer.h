@@ -22,7 +22,7 @@ public:
 	void	Init(BLUE_UINT32 Count, BLUE_UINT32 Size, BLUE_UINT32 BytesPerLine);
 
 	void	PushKillerFrame();
-	ThreadSafeQueue<std::shared_ptr<CFrame>,2> m_threadsafebuffer;
+	ThreadSafeQueue<std::shared_ptr<CFrame>,1> m_threadsafebuffer;
 	ULONG m_GoldenSize;
 	ULONG m_BytesPerLine;
 

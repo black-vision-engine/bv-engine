@@ -20,13 +20,13 @@ namespace videocards{
 
         public:
 	        
-			ThreadSafeQueue<Texture2DConstPtr,2> m_threadsafebuffer;
+			ThreadSafeQueue<Texture2DConstPtr,1> m_threadsafebuffer;
             VideoMidgard(void);
             ~VideoMidgard(void);
             void GetBufferFromRenderer (Texture2DConstPtr buffer);
             void PushKillerFrame ();
         
-			ThreadSafeQueue<Texture2DConstPtr,2> & Buffer();
+			ThreadSafeQueue<Texture2DConstPtr,1> & Buffer();
 		};
 
 

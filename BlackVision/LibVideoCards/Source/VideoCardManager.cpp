@@ -316,16 +316,16 @@ unsigned int __stdcall VideoCardManager::copy_buffer_thread( void * args )
 
 		auto rawData = (unsigned char*)data->Get();
 
-        unsigned char *  frameBuf = rawData;// (unsigned char*)m_Midgard->m_threadsafebuffer.getLast().get()->get()->GetData()->Get();//(unsigned char*)m_Midgard->GetBufferForVideoCard();
-        //unsigned char *  frameBuf = (unsigned char*)(m_Midgard->m_threadsafebufferSimple.getLast().get()->m_pBuffer);// (unsigned char*)m_Midgard->m_threadsafebuffer.getLast().get()->get()->GetData()->Get();//(unsigned char*)m_Midgard->GetBufferForVideoCard();
-        unsigned int next_buf = ( cur_buf + 1 ) % frames_count;
-
-        memcpy( &buf[ next_buf * fhd ], frameBuf, fhd );       
-        unsigned char * prevFrameBuf = &buf[ cur_buf * fhd ];
+        unsigned char *  frameBuf = rawData;
 
 		bool enable_interlace = false;
 		if(enable_interlace)
 		{
+			 unsigned int next_buf = ( cur_buf + 1 ) % frames_count;
+
+			memcpy( &buf[ next_buf * fhd ], frameBuf, fhd );       
+			unsigned char * prevFrameBuf = &buf[ cur_buf * fhd ];
+
 			for( unsigned int i = 0;  i < 1080; i += 2 )
 			{
 				unsigned int cur_i = i + 1;
@@ -348,8 +348,7 @@ unsigned int __stdcall VideoCardManager::copy_buffer_thread( void * args )
 					frameBuf[ i+3 ]=0;
 				}
 			}
-        //std::shared_ptr<CFrame>  LastFrame = std::make_shared<CFrame>(frameBuf, 1, fhd, width_bytes);
-
+       
 		pParams->DeliverFrameFromRAM( frameBuf ); 
 
         cur_buf = ( cur_buf + 1 ) % frames_count; 

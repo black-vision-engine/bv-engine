@@ -38,7 +38,7 @@ namespace bv
             m_threadsafebuffer.push( m_killerFrame );
         }
        
-		ThreadSafeQueue<Texture2DConstPtr,2> & VideoMidgard::Buffer()
+		ThreadSafeQueue<Texture2DConstPtr,1> & VideoMidgard::Buffer()
 		{
 			return m_threadsafebuffer;
 		}

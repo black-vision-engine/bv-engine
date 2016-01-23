@@ -275,7 +275,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 	unsigned long Underrun = 0;
 	unsigned long LastUnderrun = 0;
 	unsigned long UniqueId = 0;
-	unsigned int nFramesTobuffer = 5;
+	unsigned int nFramesTobuffer = 1;
 	unsigned int nFramesPlayed = 0;
 	BOOL bPlaybackStarted = FALSE;
 	std::shared_ptr<CFrame> pFrame = NULL;
@@ -359,7 +359,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThreadNotSynchronised(void * pArg)
 	unsigned long Underrun = 0;
 	unsigned long LastUnderrun = 0;
 	unsigned long UniqueId = 0;
-	unsigned int nFramesTobuffer = 5;
+	unsigned int nFramesTobuffer = 1;
 	unsigned int nFramesPlayed = 0;
 	BOOL bPlaybackStarted = FALSE;
 	std::shared_ptr<CFrame> pFrame = NULL;
