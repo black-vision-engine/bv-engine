@@ -17,6 +17,7 @@
 #include "UseLoggerBVAppModule.h"
 
 #include "BVConfig.h"
+#include "LibImage.h"
 
 //pablito
 #define USE_VIDEOCARD	
@@ -33,7 +34,7 @@ RenderLogic::RenderLogic     ()
     , m_videoOutputRenderLogic( nullptr )
 {
     auto videoCardEnabled   = DefaultConfig.ReadbackFlag();
-    auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput();
+    auto previewAsVideoCard = DefaultConfig.DisplayVideoCardOutput() || true;
 
     unsigned int numFrameRenderTargets = videoCardEnabled || previewAsVideoCard ? 2 : 1;
 
@@ -153,11 +154,11 @@ void RenderLogic::InitVideoCards     ()
 			}
 		}
 
-        m_VideoCardManager->StartVideoCards();
-		//if(m_VideoCardManager->InitVideoCardManager(m_offscreenRenderLogic->GetHackBuffersUids( renderer )))   // FIXME: default->TDP2015
-		//    m_VideoCardManager->StartVideoCards();
-
-
+        // m_VideoCardManager->StartVideoCards();
+		if(m_VideoCardManager->InitVideoCardManager(std::vector<int>()))   // FIXME: default->TDP2015
+		{
+			m_VideoCardManager->StartVideoCards();
+		}
 	}
 
 
@@ -265,9 +266,6 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
 
     if( m_useVideoCardOutput )
     {
-        auto videoRt    = m_offscreenDisplay->GetVideoRenderTarget          ();
-
-        PushToVideoCard( videoRt->ColorTexture( 0 ) );
         //FIXME: VIDEO CART CODE (PUSH FRAME) to be placed here
         OnVideoFrameRendered( renderer );
     }
@@ -279,7 +277,7 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
 void    RenderLogic::PushToVideoCard  ( Texture2DConstPtr frame ) // FIXME: pablito source code.
 {
     //GPUDirect;
-	if(m_VideoCardManager->IsEnabled())
+	if( m_VideoCardManager->IsEnabled() )
 	{
 		if( m_VideoCardManager->m_CurrentTransferMode == bv::videocards::VideoCard_RAM_GPU::GPU )
 		{          
@@ -401,24 +399,41 @@ void                    RenderLogic::UpdateOffscreenState   ()
 //
 void                    RenderLogic::OnVideoFrameRendered   ( Renderer * renderer )
 {
-    //FIXME: VIDEO CART CODE (PUSH FRAME) to be placed here
-    static int i = 0;
+	static Texture2DPtr vtx[] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+	const static unsigned int numTextures = 7;
+	static unsigned int i = 0;
+	
+	auto vrt = m_offscreenDisplay->GetVideoRenderTarget          ();
 
-    static Texture2DPtr tx[] = {nullptr, nullptr};
+	renderer->ReadColorTexture( 0, vrt, vtx[ i % numTextures ] );
 
-    auto rt = m_offscreenDisplay->GetVideoRenderTarget();
+	auto name = std::string( "e:/grabs/frame" ) + std::to_string( 10000 + i ) + ".bmp";
+	{ name; }
+	// image::SaveBMPImage( name, vtx[ i % numTextures ]->GetData(), 1920, 1080, 32 );
 
-    auto name = std::string( "frame" ) + std::to_string( 10000 + i ) + ".bmp";
+	PushToVideoCard( vtx[ i % numTextures ] );
 
-    // m_videoOutputRenderLogic->Get
-    //renderer->ReadColorTexture( 0, rt, tx[ i % 2 ] );
-    //image::SaveBMPImage( name, tx[ i % 2 ]->GetData(), 1920, 1080, 32 );
-    /*
-    renderer->ReadColorTexture( 0, rt, tx[ 0 ] );
-    image::SaveBMPImage( name, tx[ 0 ]->GetData(), 1920, 1080, 32 );
-    */
-    { renderer; rt; }
-    ++i;
+	++i;
+	{ renderer; }
+
+    ////FIXME: VIDEO CART CODE (PUSH FRAME) to be placed here
+    //static int i = 0;
+
+    //static Texture2DPtr tx[] = {nullptr, nullptr};
+
+    //auto rt = m_offscreenDisplay->GetVideoRenderTarget();
+
+    //auto name = std::string( "frame" ) + std::to_string( 10000 + i ) + ".bmp";
+
+    //// m_videoOutputRenderLogic->Get
+    ////renderer->ReadColorTexture( 0, rt, tx[ i % 2 ] );
+    ////image::SaveBMPImage( name, tx[ i % 2 ]->GetData(), 1920, 1080, 32 );
+    ///*
+    //renderer->ReadColorTexture( 0, rt, tx[ 0 ] );
+    //image::SaveBMPImage( name, tx[ 0 ]->GetData(), 1920, 1080, 32 );
+    //*/
+    //{ renderer; rt; }
+    //++i;
 }
 
 // *********************************

@@ -114,7 +114,7 @@ public:
     void                    OnEventReceived         (bv::IEventPtr evt);
 	void                    DeliverFrameFromRAM     (unsigned char * buffer);
 	void                    DeliverFrameFromRAM     (std::shared_ptr<CFrame> buffer);
-	VideoMidgard*           GetMidgard				();
+	VideoMidgard *          GetMidgard				();
 	void					GetBufferFromRenderer	(Texture2DConstPtr buffer);
 	unsigned char *			GetCaptureBufferForShaderProccessing    (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);    
     bool	                CheckIfNewFrameArrived                  (unsigned int VideCardID, std::string ChannelName/*A,B,C,D,E,F*/);    

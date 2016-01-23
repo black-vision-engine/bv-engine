@@ -286,7 +286,7 @@ void VideoCardManager::ResumeVideoCards()
 }
 //**************************************
 //
-unsigned int __stdcall VideoCardManager::copy_buffer_thread(void *args)
+unsigned int __stdcall VideoCardManager::copy_buffer_thread( void * args )
 {
 	VideoCardManager* pParams = (VideoCardManager*)args;
     static const unsigned int frames_count = 2;
@@ -300,29 +300,44 @@ unsigned int __stdcall VideoCardManager::copy_buffer_thread(void *args)
     bv::HighResolutionTimer GTimer;
     //unsigned char * FinalFrame = new unsigned char[fhd];
 
-    while(!pParams->m_midgardThreadStopping)
+    while( !pParams->m_midgardThreadStopping )
     {
         //double writeStart = GTimer.CurElapsed();
 
-        unsigned char *  frameBuf = (unsigned char*)pParams->m_Midgard->m_threadsafebuffer.pop().get()->GetData()->Get();// (unsigned char*)m_Midgard->m_threadsafebuffer.getLast().get()->get()->GetData()->Get();//(unsigned char*)m_Midgard->GetBufferForVideoCard();
+		auto mid = pParams->GetMidgard();
+		auto & buf_ = mid->Buffer();
+		auto frame = buf_.pop();
+
+		assert( frame );
+
+		auto data = frame->GetData();
+
+		assert( data );
+
+		auto rawData = (unsigned char*)data->Get();
+
+        unsigned char *  frameBuf = rawData;// (unsigned char*)m_Midgard->m_threadsafebuffer.getLast().get()->get()->GetData()->Get();//(unsigned char*)m_Midgard->GetBufferForVideoCard();
         //unsigned char *  frameBuf = (unsigned char*)(m_Midgard->m_threadsafebufferSimple.getLast().get()->m_pBuffer);// (unsigned char*)m_Midgard->m_threadsafebuffer.getLast().get()->get()->GetData()->Get();//(unsigned char*)m_Midgard->GetBufferForVideoCard();
         unsigned int next_buf = ( cur_buf + 1 ) % frames_count;
 
         memcpy( &buf[ next_buf * fhd ], frameBuf, fhd );       
         unsigned char * prevFrameBuf = &buf[ cur_buf * fhd ];
 
-        for( unsigned int i = 0; i < 1080; i += 2 )
-        {
-            unsigned int cur_i = i + 1;
-            unsigned int prev_i = i + 1;
+		bool enable_interlace = false;
+		if(enable_interlace)
+		{
+			for( unsigned int i = 0;  i < 1080; i += 2 )
+			{
+				unsigned int cur_i = i + 1;
+				unsigned int prev_i = i + 1;
 
-            unsigned int cur_scanline = width_bytes * cur_i;
-            unsigned int prev_scanline = width_bytes * prev_i;
+				unsigned int cur_scanline = width_bytes * cur_i;
+				unsigned int prev_scanline = width_bytes * prev_i;
 
-            memcpy(&frameBuf[ cur_scanline ], &prevFrameBuf[ prev_scanline ], width_bytes );
-			
+				memcpy(&frameBuf[ cur_scanline ], &prevFrameBuf[ prev_scanline ], width_bytes );
 
-        }
+			}
+		}
 		if(!pParams->m_key_active)
 			{
 				for(int i=0;i<1920*1080*4;i+=4)
@@ -422,9 +437,11 @@ VideoMidgard* VideoCardManager::GetMidgard()
 
 //**************************************
 //
-void VideoCardManager::GetBufferFromRenderer	(Texture2DConstPtr buffer)
+void VideoCardManager::GetBufferFromRenderer	( Texture2DConstPtr buffer )
 {
-	GetMidgard()->GetBufferFromRenderer(buffer);
+	auto mid = GetMidgard();
+	
+	mid->GetBufferFromRenderer( buffer );
 }
 
 //**************************************

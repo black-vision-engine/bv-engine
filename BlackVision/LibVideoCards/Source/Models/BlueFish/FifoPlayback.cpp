@@ -291,7 +291,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 		if(!pFrame)
 		{
 			cout << "Couldn't get buffer from Live queue (playback)" << endl;
-			pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FIELD, CurrentFieldCount);
+			pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
 			continue;
 		}
 		if(BLUE_OK(pThis->m_pSDK->video_playback_allocate((void**)&NotUsedAddress, BufferId, Underrun)))
@@ -315,10 +315,10 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 				    pThis->m_pSDK->video_playback_start(0, 0);
                 }
             }
-		    pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FIELD, CurrentFieldCount);
+		    pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
 		}
 		else
-			pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FIELD, CurrentFieldCount);
+			pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
 	}
 
     bool blackout = false;
@@ -338,7 +338,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThread(void * pArg)
 	    }
         else
         {
-            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FIELD, CurrentFieldCount);
+            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
         }
     }
 	cout << "Playback Thread Stopped..." << endl;
@@ -401,7 +401,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThreadNotSynchronised(void * pArg)
 		}
         else
         {
-            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FIELD, CurrentFieldCount);
+            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
         }
 	}
     
@@ -422,7 +422,7 @@ unsigned int __stdcall CFifoPlayback::PlaybackThreadNotSynchronised(void * pArg)
 	    }
         else
         {
-            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FIELD, CurrentFieldCount);
+            pThis->m_pSDK->wait_output_video_synch(UPD_FMT_FRAME, CurrentFieldCount);
         }
     }
 	cout << "Playback Thread Stopped..." << endl;

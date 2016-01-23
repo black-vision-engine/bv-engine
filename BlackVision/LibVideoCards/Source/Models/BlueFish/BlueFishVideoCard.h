@@ -37,8 +37,9 @@ private:
     ULONG                   BufferIdChA;
 	std::map<std::string, vector<ULONG>> ChannelOptions;
 
+	vector<Channel*>		Channels;
+
 public:
-	vector<Channel*>	Channels;
 	                    BlueFishVideoCard               (void);
                         BlueFishVideoCard               (unsigned int id);
 	virtual             ~BlueFishVideoCard              () override; 

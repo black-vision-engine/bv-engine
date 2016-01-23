@@ -14,31 +14,42 @@ RenderMode::RenderMode()
         m_frameNumber( 0 ),
         m_currentTime( 0 ),
         m_renderMode( RenderingMode::RenderRealTime )
-{}
+{
+	m_fps = ConfigManager::GetInt( "Renderer/TimerFPS" );
+
+	if( m_fps == 0 )
+	{
+		m_fps = 25;
+	}
+}
 
 // ***********************
 //
 RenderMode::~RenderMode()
-{}
+{
+}
 
 // ***********************
 //
 void RenderMode::SetStartTime( unsigned long time )
 {
-    m_startTime = time;
+	unsigned long d = unsigned long( 1000.f / float( m_fps ) );
+    m_startTime = time - time % d;
     m_currentTime = TimeType( m_startTime ) * TimeType( 0.001 );
     m_frameNumber = 0;
 }
 
 // ***********************
 //
-void RenderMode::SetRenderToFileMode( const std::string& filePath, float requestedFPS, unsigned int numFrames )
+void RenderMode::SetRenderToFileMode( const std::string & filePath, float requestedFPS, unsigned int numFrames )
 {
     m_nextFrameOffset = TimeType( 1 / requestedFPS );
     m_framesToRender = numFrames;
 
     if( m_renderLogic )
+	{
         m_renderLogic->MakeScreenShot( filePath, numFrames );
+	}
 
     if( m_renderer )
     {
@@ -52,16 +63,21 @@ void RenderMode::SetRenderToFileMode( const std::string& filePath, float request
 
 // ***********************
 //
-void RenderMode::MakeScreenShot( const std::string& filePath )
+void RenderMode::MakeScreenShot( const std::string & filePath )
 {
     if( m_renderLogic )
+	{
         m_renderLogic->MakeScreenShot( filePath, 1 );
+	}
 }
 
 // ***********************
 //
 TimeType RenderMode::StartFrame( unsigned long millis )
 {
+	unsigned long d = unsigned long( 1000.f / float( m_fps ) );
+	millis = millis - millis % d;
+
     m_frameNumber++;
     m_realTime = TimeType( millis ) * TimeType( 0.001 );
 
@@ -91,5 +107,11 @@ TimeType RenderMode::StartFrame( unsigned long millis )
     return 0.0f;
 }
 
+// ***********************
+//
+TimeType	RenderMode::GetFramesDelta				() const
+{
+	return 1.f / (float) m_fps;
+}
 
 } //bv
