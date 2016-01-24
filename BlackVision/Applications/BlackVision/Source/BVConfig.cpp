@@ -17,6 +17,9 @@ BVConfig::BVConfig                      ()
     m_defaultWidth      = 1920;
     m_defaultHeight     = 1080;
 
+	
+	m_renderToSharedMemory	= bv::ConfigManager::GetBool("Renderer/RenderToSharedMemory");
+
     if( ConfigManager::GetString( "Resolution" ) == "SD" )
     {
         m_defaultWidth      = 720;

@@ -302,6 +302,9 @@
     <ClCompile Include="..\..\..\Source\Widgets\NodeLogicHelper.cpp">
       <Filter>Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Rendering\SharedMemoryVideoBuffer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -548,6 +551,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Widgets\NodeLogicHelper.h">
       <Filter>Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Rendering\SharedMemoryVideoBuffer.h">
+      <Filter>Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

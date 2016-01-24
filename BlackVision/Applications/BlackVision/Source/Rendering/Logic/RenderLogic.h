@@ -6,7 +6,7 @@
 
 #include "Rendering/Utils/RenderTargetStackAllocator.h"
 #include "Rendering/Logic/FrameRendering/NodeEffectRenderLogicSelector.h"
-
+#include "Rendering/SharedMemoryVideoBuffer.h"
 
 namespace bv {
 
@@ -40,6 +40,7 @@ private:
 
     bool                            m_displayVideoCardPreview;
     bool                            m_useVideoCardOutput;
+	SharedMemoryVideoBuffer*		m_SharedMemoryVideoBuffer;
 
 public:
 

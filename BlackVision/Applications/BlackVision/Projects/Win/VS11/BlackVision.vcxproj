@@ -323,6 +323,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\OverwriteAlphaFullscreenEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\OverwriteChannelsFullscreenEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\RenderLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Rendering\SharedMemoryVideoBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\RenderMode.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Logic\VideoOutputRendering\VideoOutputRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Rendering\Utils\FullscreenUtils.cpp" />
@@ -380,6 +381,7 @@ xcopy $(DepDir)\Common\Rockey\dll64\Rockey2.dll $(OutDir) /c /y
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\BlurFullscreenEffect.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\FullScreen\Impl\ShadowFullscreenEffect.h" />
     <ClInclude Include="..\..\..\Source\Rendering\Logic\OfflineRendering\ScreenShotLogic.h" />
+    <ClInclude Include="..\..\..\Source\Rendering\SharedMemoryVideoBuffer.h" />
     <ClInclude Include="..\..\..\Source\RenderMode.h" />
     <ClInclude Include="..\..\..\Source\ExampleTestScenes.h" />
     <ClInclude Include="..\..\..\Source\FrameStatsService.h" />

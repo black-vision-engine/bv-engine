@@ -74,6 +74,13 @@ inline bool     BVConfig::IsCameraPerspactive                   () const
 
 // *********************************
 //
+inline bool     BVConfig::RenderToSharedMemory                   () const
+{
+    return m_renderToSharedMemory;
+}
+
+// *********************************
+//
 inline unsigned int BVConfig::EventLoopUpdateMillis             () const
 {
     return m_eventLoopUpdateMillis;

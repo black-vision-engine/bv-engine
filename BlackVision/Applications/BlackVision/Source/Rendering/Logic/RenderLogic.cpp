@@ -40,9 +40,11 @@ RenderLogic::RenderLogic     ()
 
     m_offscreenDisplay          = new OffscreenDisplay( &m_rtStackAllocator, numFrameRenderTargets, videoCardEnabled || previewAsVideoCard );
     m_videoOutputRenderLogic    = new VideoOutputRenderLogic( DefaultConfig.DefaultHeight() ); // FIXME: interlace odd/even setup
-
+	m_SharedMemoryVideoBuffer	= new SharedMemoryVideoBuffer();
     m_displayVideoCardPreview   = previewAsVideoCard;
     m_useVideoCardOutput        = videoCardEnabled;
+
+	
 }
 
 // *********************************
@@ -288,8 +290,14 @@ void    RenderLogic::PushToVideoCard  ( Texture2DConstPtr frame ) // FIXME: pabl
 		else if( m_VideoCardManager->m_CurrentTransferMode==bv::videocards::VideoCard_RAM_GPU::RAM )
 		{
 			m_VideoCardManager->GetBufferFromRenderer( frame );
+
+			
+
 		}
 	}
+	
+	if(DefaultConfig.RenderToSharedMemory())
+		m_SharedMemoryVideoBuffer->DistributeFrame(frame);
 }
 
 // *********************************
