@@ -135,25 +135,21 @@ void    RenderLogic::RenderNode      ( SceneNode * node, RenderLogicContext * ct
 {
     if ( node->IsVisible() )
     {
-        if( node->GetNodeEffectTr() )
+        auto effect = node->GetNodeEffect();
+
+        if( !effect || effect->GetType() ==  NodeEffectType::NET_DEFAULT )
         {
-            auto effect = node->GetNodeEffectTr();
-            effect->Render( node, ctx );
+            // Default render logic
+            DrawNode( node, ctx );
         }
         else
         {
-            if( node->GetNodeEffect()->GetType() == NodeEffect::Type::T_DEFAULT )
-            {
-                // Default render logic
-                DrawNode( node, ctx );
-            }
-            else
-            {
-                auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogic( node );
-
-                effectRenderLogic->RenderNode( node, ctx );
-            }
+            effect->Render( node, ctx );
         }
+
+        //FIXME: remove these files
+        //auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogic( node );
+        //effectRenderLogic->RenderNode( node, ctx );
     }
 }
 

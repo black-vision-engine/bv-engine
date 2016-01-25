@@ -36,7 +36,7 @@ NodeEffectRenderLogicSelector::~NodeEffectRenderLogicSelector                   
 //
 NodeEffectRenderLogic * NodeEffectRenderLogicSelector::GetNodeEffectRenderLogic ( SceneNode * node )
 {
-    assert( (unsigned int) node->GetNodeEffect()->GetType() < (unsigned int) NodeEffect::Type::T_TOTAL );
+    assert( (unsigned int) node->GetNodeEffect()->GetType() < (unsigned int) NodeEffectType::NET_TOTAL );
 
     return m_nodeRenderLogicVec[ (unsigned int) node->GetNodeEffect()->GetType() ];
 }

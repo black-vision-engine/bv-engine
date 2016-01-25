@@ -108,7 +108,7 @@ void    FrameRenderLogic::RenderNode     ( Renderer * renderer, SceneNode * node
 //
 NodeEffectRenderLogic *     FrameRenderLogic::GetNodeEffectRenderLogic    ( SceneNode * node ) const
 {
-    assert( (unsigned int) node->GetNodeEffect()->GetType() < (unsigned int) NodeEffect::Type::T_TOTAL );
+    assert( (unsigned int) node->GetNodeEffect()->GetType() < (unsigned int) NodeEffectType::NET_TOTAL );
 
     return m_customNodeRenderLogic[ (unsigned int) node->GetNodeEffect()->GetType() ];
 }

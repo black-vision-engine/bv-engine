@@ -5,6 +5,8 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
+#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectFactory.h"
+
 
 namespace bv {
 
@@ -12,9 +14,9 @@ namespace bv {
 //
 SceneNode::SceneNode           ( TransformableEntity * transformable )
     : m_transformable( transformable )
-    , m_nodeEffect( nullptr )
+    , m_nodeEffectTr( nullptr )
 {
-    m_nodeEffect = std::make_shared< NodeEffect >( NodeEffect::Type::T_DEFAULT );
+    m_nodeEffectTr = CreateNodeEffect( NodeEffectType::NET_DEFAULT );
 }
 
 // ********************************
@@ -108,30 +110,14 @@ TransformableEntity *   SceneNode::GetTransformable     ()
 
 // ********************************
 //
-NodeEffectPtr           SceneNode::GetNodeEffect       ()
-{
-    assert( false );
-    return m_nodeEffect;
-}
-
-// ********************************
-//
-void                    SceneNode::SetNodeEffect       ( NodeEffectPtr nodeEffect )
-{
-    assert( false );
-    m_nodeEffect = nodeEffect;
-}
-
-// ********************************
-//
-NodeEffectTrPtr SceneNode::GetNodeEffectTr  ()
+NodeEffectTrPtr SceneNode::GetNodeEffect  ()
 {
     return m_nodeEffectTr;
 }
 
 // ********************************
 //
-void            SceneNode::SetNodeEffectTr  ( NodeEffectTrPtr nodeEffect )
+void            SceneNode::SetNodeEffect  ( NodeEffectTrPtr nodeEffect )
 {
     m_nodeEffectTr = nodeEffect;
 }

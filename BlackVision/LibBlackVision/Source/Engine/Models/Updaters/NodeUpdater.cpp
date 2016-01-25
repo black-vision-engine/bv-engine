@@ -162,12 +162,12 @@ void    NodeUpdater::UpdateNodeEffect       ()
             {
                 auto defaultEffect = std::static_pointer_cast< model::ModelNodeEffectDefault >( nodeEffect );
 
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffectTr();
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
                 if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_DEFAULT )
                 {
                     sceneNodeEffect = CreateNodeEffect( NodeEffectType::NET_DEFAULT );
-                    m_sceneNode->SetNodeEffectTr( sceneNodeEffect );
+                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
                 }
                 break;
             }
@@ -176,12 +176,12 @@ void    NodeUpdater::UpdateNodeEffect       ()
                 auto alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( nodeEffect );
                 auto paramAlpha = alphaMaskEffect->GetParamAlpha();
 
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffectTr();
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
                 if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_ALPHA_MASK )
                 {
                     sceneNodeEffect = CreateNodeEffect( NodeEffectType::NET_ALPHA_MASK );
-                    m_sceneNode->SetNodeEffectTr( sceneNodeEffect );
+                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
                 }
 
                 auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );
@@ -201,12 +201,12 @@ void    NodeUpdater::UpdateNodeEffect       ()
                 auto paramFgIdx = nodeMaskEffect->GetParamFgIdx();
                 auto paramAlpha = nodeMaskEffect->GetParamAlpha();
 
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffectTr();
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
                 if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_NODE_MASK )
                 {
                     sceneNodeEffect = CreateNodeEffect( NodeEffectType::NET_NODE_MASK );
-                    m_sceneNode->SetNodeEffectTr( sceneNodeEffect );
+                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
                 }
 
                 auto bgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramBgIdx->GetName() ) );
@@ -225,24 +225,24 @@ void    NodeUpdater::UpdateNodeEffect       ()
             case NodeEffectType::NET_WIREFRAME:
             {
                 auto nodeMaskEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( nodeEffect );
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffectTr();
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
                 if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_WIREFRAME )
                 {
                     sceneNodeEffect = CreateNodeEffect( NodeEffectType::NET_WIREFRAME );
-                    m_sceneNode->SetNodeEffectTr( sceneNodeEffect );
+                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
                 }
                 break;
             }
             case NodeEffectType::NET_MIX_CHANNELS:
             {
                 auto nodeMixhChannelsEffect = std::static_pointer_cast< model::ModelNodeEffectMixChannels >( nodeEffect );
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffectTr();
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
 
                 if( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_MIX_CHANNELS )
                 {
                     sceneNodeEffect = CreateNodeEffect( NodeEffectType::NET_MIX_CHANNELS );
-                    m_sceneNode->SetNodeEffectTr( sceneNodeEffect );
+                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
                 }
                 //FIXME: update parameters
 

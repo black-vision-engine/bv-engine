@@ -81,22 +81,22 @@ void                BVSceneTools::UpdateSceneNodeEffect                 ( SceneN
     if ( !modelNodeEffect || modelNodeEffect->GetType() == NodeEffectType::NET_DEFAULT )
     {
         auto sceneNodeDefaultEffect = CreateNodeEffect( NodeEffectType::NET_DEFAULT );
-        node->SetNodeEffectTr( sceneNodeDefaultEffect );
+        node->SetNodeEffect( sceneNodeDefaultEffect );
     }
     else if( modelNodeEffect->GetType() == NodeEffectType::NET_ALPHA_MASK )
     {
         auto sceneNodeAMEffect = CreateNodeEffect( NodeEffectType::NET_ALPHA_MASK );
-        node->SetNodeEffectTr( sceneNodeAMEffect );
+        node->SetNodeEffect( sceneNodeAMEffect );
     }
     else if( modelNodeEffect->GetType() == NodeEffectType::NET_NODE_MASK )
     {
         auto sceneNodeNMEffect = CreateNodeEffect( NodeEffectType::NET_NODE_MASK );
-        node->SetNodeEffectTr( sceneNodeNMEffect );
+        node->SetNodeEffect( sceneNodeNMEffect );
     }
     else if( modelNodeEffect->GetType() ==  NodeEffectType::NET_WIREFRAME )
     {
         auto sceneNodeWireframeEffect = CreateNodeEffect( NodeEffectType::NET_WIREFRAME );
-        node->SetNodeEffectTr( sceneNodeWireframeEffect );
+        node->SetNodeEffect( sceneNodeWireframeEffect );
     }
     else
     {

@@ -236,9 +236,15 @@ void                    TestGlobalEfectKeyboardHandler::HandleSpace         ( BV
             // printf( "New node mask bg: %d fg: %d\n", effect->GetBackgroundChildIdx(), effect->GetForegroundChildIdx() );
         }
     }
-    else if( GetRootNode( logic )->GetNodeEffect()->GetType() == NodeEffectType::NET_MIX_CHANNELS )
+    else
     {
-        SetNextMixChannelsPreset();
+        auto root = GetRootNode( logic );
+        auto effect = root->GetNodeEffect();
+
+        if( effect->GetType() == NodeEffectType::NET_MIX_CHANNELS )
+        {
+            SetNextMixChannelsPreset();
+        }
     }
 }
 
@@ -334,13 +340,20 @@ void                    TestGlobalEfectKeyboardHandler::HandleMixChannels   ( BV
 
     auto effect = root->GetNodeEffect();
 
-    if ( effect && effect->GetType() == NodeEffectType::NET_MIX_CHANNELS )
+    if( !effect )
+    {
+        root->SetNodeEffect( m_defaultEffect );
+    
+        effect = m_defaultEffect;
+    }
+
+    if ( effect->GetType() == NodeEffectType::NET_MIX_CHANNELS )
     {
         root->SetNodeEffect( m_defaultEffect );
     }
     else
     {
-        assert( !effect || effect->GetType() == NodeEffectType::NET_DEFAULT );
+        assert( effect->GetType() == NodeEffectType::NET_DEFAULT );
 
         root->SetNodeEffect( m_mixChannelsEffect );
     }

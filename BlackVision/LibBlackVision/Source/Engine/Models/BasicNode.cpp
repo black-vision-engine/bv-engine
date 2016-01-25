@@ -89,13 +89,17 @@ ISerializablePtr BasicNode::Create( DeserializeObject& dob )
     auto plugins = dob.LoadArray< BasePlugin< IPlugin > >( "plugins" );
 
     for( auto plugin : plugins )
+    {
         node->AddPlugin( plugin );
+    }
 
 // children
     auto children = dob.LoadArray< BasicNode >( "nodes" );
 
     for( auto child : children )
+    {
         node->AddChildToModelOnly( child );
+    }
 
     return node;
 }
@@ -206,8 +210,9 @@ mathematics::Rect 			    BasicNode::GetAABB			        () const
 	auto plRect = m_pluginList->GetFinalizePlugin()->GetAABB( trans );
 
 	if( plRect )
+    {
 		r.Include( *plRect );
-
+    }
 
 	for( auto ch : m_children )
 	{
