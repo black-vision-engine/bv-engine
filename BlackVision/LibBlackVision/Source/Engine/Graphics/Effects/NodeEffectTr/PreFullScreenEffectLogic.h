@@ -30,7 +30,8 @@ public:
 
     virtual bool                        IsFSERequired               () const = 0;
 
-    virtual bool                        UpdateOutputRenderTargets   ( RenderLogicContext * ctx, std::vector< RenderTarget * > * outputRtVec );
+    virtual bool                        AllocateOutputRenderTargets ( RenderLogicContext * ctx, std::vector< RenderTarget * > * outputRtVec );
+    virtual void                        FreeOutputRenderTargets     ( RenderLogicContext * ctx, const std::vector< RenderTarget * > * outputRtVec );
 
 protected:
 

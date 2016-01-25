@@ -20,24 +20,34 @@ PreFullscreenEffectLogic::~PreFullscreenEffectLogic     ()
 
 // *********************************
 //
-bool    PreFullscreenEffectLogic::UpdateOutputRenderTargets   ( RenderLogicContext * ctx, std::vector< RenderTarget * > * outputRtVec )
+bool    PreFullscreenEffectLogic::AllocateOutputRenderTargets   ( RenderLogicContext * ctx, std::vector< RenderTarget * > * outputRtVec )
 {
-    bool changed = false;
-
     auto alc = allocator( ctx );
 
-    if ( alc->GetTopIndex() != m_lastUsedRenderTargetNum )
+    //FIXME: optimize (if necessary) by simply incrementing allocator inner index instead of calling full Allocate method
+    // Always allocate
+    for( unsigned int i = 0; i < outputRtVec->size(); ++i )
     {
-
-        for( unsigned int i = 0; i < outputRtVec->size(); ++i )
-        {
-            (*outputRtVec)[ i ] = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
-        }
-
-        changed = true;
+        (*outputRtVec)[ i ] = alc->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
     }
 
+    auto changed = alc->GetTopIndex() != m_lastUsedRenderTargetNum;
+
+    m_lastUsedRenderTargetNum = alc->GetTopIndex();
+
     return changed;
+}
+
+// *********************************
+//
+void    PreFullscreenEffectLogic::FreeOutputRenderTargets   ( RenderLogicContext * ctx, const std::vector< RenderTarget * > * outputRtVec )
+{
+    auto alc = allocator( ctx );
+
+    // Always free
+    assert( m_lastUsedRenderTargetNum == alc->GetTopIndex() );
+
+    alc->Free( (unsigned int) outputRtVec->size() );
 }
 
 // *********************************

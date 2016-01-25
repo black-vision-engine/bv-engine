@@ -32,6 +32,7 @@ public:
     RenderTarget *      Top                         ();
 
     bool                Free                        ();
+    bool                Free                        ( unsigned int num );
 
     unsigned int        GetTopIndex                 () const;
 

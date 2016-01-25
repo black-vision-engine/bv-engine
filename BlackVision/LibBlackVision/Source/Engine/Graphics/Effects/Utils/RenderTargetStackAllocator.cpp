@@ -85,6 +85,20 @@ bool                RenderTargetStackAllocator::Free        ()
 
 // *********************************
 //
+bool                RenderTargetStackAllocator::Free                        ( unsigned int num )
+{
+    auto fsc = true;
+
+    for( unsigned int i = 0; i < num; ++i )
+    {
+        fsc &= Free();
+    }
+
+    return fsc;
+}
+
+// *********************************
+//
 unsigned int        RenderTargetStackAllocator::GetTopIndex                 () const
 {
     return m_topIdx;

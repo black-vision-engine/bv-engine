@@ -159,9 +159,9 @@ void    NodeEffectLogic::FSEInitializedGuard         ( RenderLogicContext * ctx,
         assert( m_preFSELogic );
         assert( m_preFSELogic->GetPreferredNumOutputs() == fseInputsVec->size() );
 
-        auto updated = m_preFSELogic->UpdateOutputRenderTargets( ctx, fseInputsVec );
+        auto changed = m_preFSELogic->AllocateOutputRenderTargets( ctx, fseInputsVec );
 
-        fseCtx->SetSyncRequired( updated );
+        fseCtx->SetSyncRequired( changed );
 
         if( !m_FSEInitialized )
         {
@@ -210,6 +210,11 @@ void    NodeEffectLogic::FSERenderLogic             ( RenderTarget * output, Ful
 //
 void    NodeEffectLogic::PostFSERenderLogic          ( SceneNode * node, RenderLogicContext * ctx ) const
 {
+    if( m_preFSELogic )
+    {
+        m_preFSELogic->FreeOutputRenderTargets( ctx, &m_renderTargetsFSE );
+    }
+
     if( m_postFSELogic )
     {
         m_postFSELogic->Render( node, ctx );
