@@ -413,4 +413,11 @@ void TextureUtils::AddToRawDataCache( const TextureAssetConstPtr & textureRes )
 	}
 }
 
+// ******************************
+//
+ThumbnailConstPtr TextureUtils::LoadThumbnail( const TextureAssetDescConstPtr & )
+{
+    return nullptr;
+}
+
 }  // bv

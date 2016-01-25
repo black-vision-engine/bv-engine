@@ -77,4 +77,12 @@ AssetDescConstPtr	AnimationLoader::CreateDescriptor	( const IDeserializer& deser
 	return std::static_pointer_cast<const AssetDesc>( AnimationAssetDesc::Create( deserializeObject ) );
 }
 
+///////////////////////////////
+//
+ThumbnailConstPtr   AnimationLoader::LoadThumbnail      ( const AssetDescConstPtr & ) const
+{
+    return nullptr;
+}
+
+
 } // bv

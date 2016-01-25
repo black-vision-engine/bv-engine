@@ -28,6 +28,8 @@ public:
     void                            AddToCache      ( AssetDescConstPtr & desc, AssetConstPtr asset );
     AssetConstPtr                   GetFromCache    ( AssetDescConstPtr & desc );
 
+    ThumbnailConstPtr		        LoadThumbnail	( const AssetDescConstPtr & desc );
+
 	static AssetManager &			GetInstance		();
 
 private:

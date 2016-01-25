@@ -48,5 +48,14 @@ AssetDescConstPtr TextureLoader::CreateDescriptor( const IDeserializer& deserial
 	return std::static_pointer_cast<const AssetDesc>( TextureAssetDesc::Create( deserializeObject ) );
 }
 
+ThumbnailConstPtr TextureLoader::LoadThumbnail   ( const AssetDescConstPtr & desc ) const
+{
+    auto typedDesc = QueryTypedDesc< TextureAssetDescConstPtr >( desc );
+
+	assert( typedDesc );
+
+    return TextureUtils::LoadThumbnail( typedDesc );
+}
+
 
 } // bv
