@@ -2,6 +2,8 @@
 
 #include "Engine/Models/ModelNodeEditor.h"
 
+#include "ShiftReplicationModifier.h"
+
 namespace bv{ namespace model {
 
 // *******************************
@@ -81,14 +83,31 @@ void                NodeReplicator::Serialize       ( ISerializer& ser ) const
 
 // ***********************
 //
-NodeReplicatorPtr    NodeReplicator::Create          ( const IDeserializer & /*deser*/, bv::model::BasicNode * /*parentNode*/ )
+NodeReplicatorPtr    NodeReplicator::Create          ( const IDeserializer & deser, bv::model::BasicNode * parentNode )
 {
-    //SizeType repetitions = SerializationHelper::String2T( deser.GetAttribute( "numRepetitions" ), 0 );
+    SizeType repetitions = SerializationHelper::String2T( deser.GetAttribute( "numRepetitions" ), 0 );
     
-    
-    //auto replicator = NodeReplicator::Create( 
+    deser.EnterChild( "replicatorModifier" );
+        std::string modifierType = deser.GetAttribute( "type" );
+        
+        IReplicationModifierConstPtr modifier;
+        if( modifierType == "shiftReplicationModifier" )
+        {
+            modifier = ShiftReplicationModifier::Create( deser );\
+        }
+        else
+        {
+            modifier = nullptr;
+        }
 
-    return nullptr;
+
+    deser.ExitChild();  // replicatorModifier
+    
+    if( !modifier )
+        return nullptr;
+
+    auto replicator = NodeReplicator::Create( parentNode, repetitions, modifier );
+    return replicator;
 }
 
 // ***********************

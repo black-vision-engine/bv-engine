@@ -51,7 +51,8 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
     NodeLogicEvent::Command command = widgetEvent->WidgetCommand;
 
     auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
-    if( node == nullptr )
+    auto basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
+    if( basicNode == nullptr )
     {
         SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "Node not found" );
         return;
@@ -68,7 +69,6 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
     {
         std::string timelinePath = deser.GetAttribute( "timelinePath" );
         auto timeline = editor->GetTimeEvaluator( timelinePath );
-        auto basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
 
         deser.EnterChild( "logic" );
         
@@ -86,11 +86,10 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
     }
     else if( command == NodeLogicEvent::Command::DeleteNodeLogic )
     {
-
+        basicNode->RemoveLogic();
     }
-    else if ( command == NodeLogicEvent::Command::SetLogicParam )
+    else if ( command == NodeLogicEvent::Command::LogicAction )
     {
-        BasicNodePtr basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
         INodeLogic* logic = basicNode->GetLogic().get();
         if( logic == nullptr )
         {

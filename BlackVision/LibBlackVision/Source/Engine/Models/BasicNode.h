@@ -113,6 +113,7 @@ public:
     bool                                    AddPlugins              ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator );
 
 	void									SetLogic				( INodeLogicPtr logic );
+    void                                    RemoveLogic             ();
 
     virtual void                            Update                  ( TimeType t ) override;
 

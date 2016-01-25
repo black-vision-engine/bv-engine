@@ -376,7 +376,7 @@ std::pair< NodeLogicEvent::Command, const std::wstring > NodeLogicEventCommandMa
 {
     std::make_pair( NodeLogicEvent::Command::AddNodeLogic, L"AddNodeLogic" )
     , std::make_pair( NodeLogicEvent::Command::DeleteNodeLogic, L"DeleteNodeLogic" )
-    , std::make_pair( NodeLogicEvent::Command::SetLogicParam, L"SetLogicParam" ) 
+    , std::make_pair( NodeLogicEvent::Command::LogicAction, L"LogicAction" ) 
     , std::make_pair( NodeLogicEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 

@@ -699,7 +699,7 @@ public:
     {
         AddNodeLogic,
         DeleteNodeLogic,
-        SetLogicParam,
+        LogicAction,
         Fail            ///< Wrong command
     } Command;
 private:

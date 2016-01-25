@@ -563,6 +563,13 @@ void			BasicNode::SetLogic					( INodeLogicPtr logic )
     m_nodeLogic->Initialize();
 }
 
+// ***********************
+//
+void            BasicNode::RemoveLogic              ()
+{
+    m_nodeLogic = nullptr;
+}
+
 // ********************************
 //
 void BasicNode::Update( TimeType t )
