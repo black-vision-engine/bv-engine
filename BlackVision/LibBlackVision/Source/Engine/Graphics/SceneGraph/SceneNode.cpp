@@ -110,6 +110,7 @@ TransformableEntity *   SceneNode::GetTransformable     ()
 //
 NodeEffectPtr           SceneNode::GetNodeEffect       ()
 {
+    assert( false );
     return m_nodeEffect;
 }
 
@@ -117,6 +118,7 @@ NodeEffectPtr           SceneNode::GetNodeEffect       ()
 //
 void                    SceneNode::SetNodeEffect       ( NodeEffectPtr nodeEffect )
 {
+    assert( false );
     m_nodeEffect = nodeEffect;
 }
 

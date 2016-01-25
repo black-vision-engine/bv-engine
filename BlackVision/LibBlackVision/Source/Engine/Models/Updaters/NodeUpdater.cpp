@@ -162,12 +162,12 @@ void    NodeUpdater::UpdateNodeEffect       ()
             {
                 auto defaultEffect = std::static_pointer_cast< model::ModelNodeEffectDefault >( nodeEffect );
 
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffectTr();
 
-                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_DEFAULT )
+                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_DEFAULT )
                 {
-                    sceneNodeEffect = std::make_shared< NodeEffect >( NodeEffect::Type::T_DEFAULT );
-                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
+                    sceneNodeEffect = CreateNodeEffect( NodeEffectType::NET_DEFAULT );
+                    m_sceneNode->SetNodeEffectTr( sceneNodeEffect );
                 }
                 break;
             }
@@ -225,24 +225,24 @@ void    NodeUpdater::UpdateNodeEffect       ()
             case NodeEffectType::NET_WIREFRAME:
             {
                 auto nodeMaskEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( nodeEffect );
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffectTr();
 
-                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_WIREFRAME )
+                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_WIREFRAME )
                 {
-                    sceneNodeEffect = std::make_shared< WireframeNodeEffect >();
-                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
+                    sceneNodeEffect = CreateNodeEffect( NodeEffectType::NET_WIREFRAME );
+                    m_sceneNode->SetNodeEffectTr( sceneNodeEffect );
                 }
                 break;
             }
             case NodeEffectType::NET_MIX_CHANNELS:
             {
                 auto nodeMixhChannelsEffect = std::static_pointer_cast< model::ModelNodeEffectMixChannels >( nodeEffect );
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffectTr();
 
-                if( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_MIX_CHANNELS )
+                if( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_MIX_CHANNELS )
                 {
-                    sceneNodeEffect = std::make_shared< MixChannelsNodeEffect >();
-                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
+                    sceneNodeEffect = CreateNodeEffect( NodeEffectType::NET_MIX_CHANNELS );
+                    m_sceneNode->SetNodeEffectTr( sceneNodeEffect );
                 }
                 //FIXME: update parameters
 

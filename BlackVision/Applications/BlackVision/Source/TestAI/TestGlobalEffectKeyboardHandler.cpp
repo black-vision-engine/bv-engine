@@ -334,13 +334,13 @@ void                    TestGlobalEfectKeyboardHandler::HandleMixChannels   ( BV
 
     auto effect = root->GetNodeEffect();
 
-    if ( effect->GetType() == NodeEffectType::NET_MIX_CHANNELS )
+    if ( effect && effect->GetType() == NodeEffectType::NET_MIX_CHANNELS )
     {
         root->SetNodeEffect( m_defaultEffect );
     }
     else
     {
-        assert( effect->GetType() == NodeEffectType::NET_DEFAULT );
+        assert( !effect || effect->GetType() == NodeEffectType::NET_DEFAULT );
 
         root->SetNodeEffect( m_mixChannelsEffect );
     }
