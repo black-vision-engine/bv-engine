@@ -177,11 +177,14 @@ BasicNode * BasicNode::Create( const IDeserializer& deser )
         ++itRC;
     }
     
-    auto psc = plugins.back()->GetPixelShaderChannel();
-
-    if( psc )
+    if( plugins.size() > 0 )
     {
-        HelperPixelShaderChannel::SetRendererContextUpdate( psc );
+        auto psc = plugins.back()->GetPixelShaderChannel();
+
+        if( psc )
+        {
+            HelperPixelShaderChannel::SetRendererContextUpdate( psc );
+        }
     }
 
 //@todo Deserialize Global effects; use ModelNodeEffectFactory.
