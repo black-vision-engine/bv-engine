@@ -15,7 +15,7 @@ ShiftReplicationModifier::ShiftReplicationModifier()
 //
 void                            ShiftReplicationModifier::Serialize       ( ISerializer& ser ) const
 {
-    ser.EnterArray( "replicatorModifier" );
+    ser.EnterChild( "replicatorModifier" );
         ser.SetAttribute( "type", "shiftReplicationModifier" );
 
         ser.EnterArray( "paramShifts" );
