@@ -73,7 +73,7 @@ void					    NodeReplicator::Deinitialize()
 void                NodeReplicator::Serialize       ( ISerializer& ser ) const
 {
     ser.EnterChild( "logic" );
-        ser.SetAttribute( "type", "replicator" );
+        ser.SetAttribute( "type", "replicate" );
         ser.SetAttribute( "numRepetitions", SerializationHelper::T2String( m_repNum ) );
 
         m_repModifier->Serialize( ser );

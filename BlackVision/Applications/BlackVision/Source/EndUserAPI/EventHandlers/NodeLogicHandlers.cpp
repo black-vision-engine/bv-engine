@@ -83,6 +83,8 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
         }
 
         basicNode->SetLogic( logic );
+
+        SendSimpleResponse( command, widgetEvent->EventID, widgetEvent->SocketID, true );
     }
     else if( command == NodeLogicEvent::Command::DeleteNodeLogic )
     {

@@ -51,7 +51,10 @@ ShiftReplicationModifierPtr     ShiftReplicationModifier::Create          ( cons
 {
     auto shiftModifier = ShiftReplicationModifier::Create();
 
-    if( deser.EnterChild( "paramShifts" ) )
+    if( !deser.EnterChild( "paramShifts" ) )
+        return nullptr;
+
+    if( deser.EnterChild( "paramShift" ) )
     {
         do
         {
@@ -72,8 +75,10 @@ ShiftReplicationModifierPtr     ShiftReplicationModifier::Create          ( cons
             deser.ExitChild();  // paramDelta
 
         } while( deser.NextChild() );
-        deser.ExitChild();  // paramShifts
+        deser.ExitChild();  // paramShift
     }
+
+    deser.ExitChild();  // paramShifts
 
     return shiftModifier;
 }
