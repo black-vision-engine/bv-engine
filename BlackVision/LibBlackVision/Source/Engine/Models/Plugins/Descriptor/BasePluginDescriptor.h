@@ -57,6 +57,7 @@ protected:
         DefaultPluginParamValModelPtr           GetModel() { return m_model; }
 
         void                                    CreateVacModel      ();
+        void                                    CreatePSModel       ();
 
 
         template< typename InterpolatorType, typename ValueType, ModelParamType MPT, ParamType PT, typename ParamImpl >

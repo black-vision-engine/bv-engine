@@ -61,6 +61,8 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
         ( DefaultCube::PN::WEIGHTCENTERZ, Plugin::WeightCenter::CENTER, true, true );
   	h.AddParam< IntInterpolator, Plugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
 		( PN::MAPPINGTYPE, Plugin::MappingType::OLDSTYLE, true, true );
+    
+    h.CreatePSModel();
 
     return h.GetModel();
 }

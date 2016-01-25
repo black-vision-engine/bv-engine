@@ -55,5 +55,14 @@ void BasePluginDescriptor::ModelHelper::CreateVacModel         ()
     m_lastParamValModel = vacModel;
 }
 
+// *********************************
+//
+void BasePluginDescriptor::ModelHelper::CreatePSModel         ()
+{
+    auto psModel = std::make_shared< DefaultParamValModel >();
+    m_model->SetPixelShaderChannelModel( psModel );
+    //m_lastParamValModel = psModel;
+}
+
 } //model
 } //bv

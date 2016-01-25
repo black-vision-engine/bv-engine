@@ -35,6 +35,8 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
     h.AddSimpleParam<int>( PN::TESSELATION, 6, true, true );
 	h.AddSimpleParam<float>( PN::RADIUS, 2.0f, true, true );
 
+    h.CreatePSModel();
+
     return h.GetModel();
 }
 

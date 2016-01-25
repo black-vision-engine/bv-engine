@@ -83,6 +83,7 @@ DefaultPluginParamValModelPtr   DefaultCylinderPluginDesc::CreateDefaultModel  (
 	h.AddParam< IntInterpolator, DefaultPlugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
 		( PN::MAPPINGTYPE, DefaultPlugin::MappingType::GOODMAPPING, true, true );
 
+    h.CreatePSModel();
 
     return h.GetModel();
 }

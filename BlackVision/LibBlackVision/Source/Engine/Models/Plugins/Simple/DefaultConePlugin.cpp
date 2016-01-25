@@ -92,6 +92,8 @@ DefaultPluginParamValModelPtr   DefaultConePluginDesc::CreateDefaultModel  ( ITi
   	h.AddParam< IntInterpolator, DefaultConePlugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
 		( PN::MAPPINGTYPE, DefaultConePlugin::MappingType::OLDSTYLE, true, true );
 
+    h.CreatePSModel();
+
     return h.GetModel();
 }
 

@@ -16,6 +16,8 @@ DefaultPluginParamValModelPtr   DefaultRoundedRectPluginDesc::CreateDefaultModel
     h.AddSimpleParam( DefaultRoundedRectPlugin::PN_BEVELS, glm::vec4( 0.1, 0.1, 0.1, 0.1 ), true, true );
     h.AddSimpleParam( DefaultRoundedRectPlugin::PN_TESSELATION, 10, true, true );
 
+    h.CreatePSModel();
+
     return h.GetModel();
 }
 

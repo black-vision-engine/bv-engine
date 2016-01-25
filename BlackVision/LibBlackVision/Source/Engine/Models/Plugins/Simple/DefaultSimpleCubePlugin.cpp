@@ -32,6 +32,8 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
     h.CreateVacModel();
     h.AddSimpleParam( PN::DIMENSIONS, glm::vec3( 1, 1, 1 ), true, true );
 
+    h.CreatePSModel();
+
     return h.GetModel();
 }
 

@@ -54,6 +54,8 @@ DefaultPluginParamValModelPtr       PluginDesc::CreateDefaultModel  ( ITimeEvalu
 	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
         ( DefaultRect::PN::WEIGHTCENTERY, Plugin::WeightCenter::CENTER, true, true );
 
+    h.CreatePSModel();
+
     return h.GetModel();
 }
 
