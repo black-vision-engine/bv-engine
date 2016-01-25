@@ -1,5 +1,7 @@
 #include "NodeEffectLogic.h"
 
+#include <set>
+
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 
 
@@ -126,28 +128,32 @@ IValuePtr       NodeEffectLogic::GetValue                    ( const std::string
 void    NodeEffectLogic::RecreateValues              ( std::vector< IValuePtr > & values )
 {
     //FIXME: make sure that there are no duplicate values
+    std::set< IValuePtr > uniqueValues;
+
     values.clear();
 
     if( m_preFSELogic )
     {
         auto second = m_preFSELogic->GetValues();
 
-        values.insert( values.end(), second.begin(), second.end() );
+        uniqueValues.insert( second.begin(), second.end() );
     }
 
     if( m_FSE )
     {
         auto second = m_FSE->GetValues();
 
-        values.insert( values.end(), second.begin(), second.end() );
+        uniqueValues.insert( second.begin(), second.end() );
     }
 
     if( m_postFSELogic )
     {
         auto second = m_postFSELogic->GetValues();
 
-        values.insert( values.end(), second.begin(), second.end() );
+        uniqueValues.insert( second.begin(), second.end() );
     }
+
+    values.insert( values.begin(), uniqueValues.begin(), uniqueValues.end() );
 }
 
 // *********************************
