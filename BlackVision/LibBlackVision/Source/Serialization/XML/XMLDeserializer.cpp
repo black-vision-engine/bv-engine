@@ -11,7 +11,7 @@ namespace bv {
 
 // *******************************
 //
-XMLDeserializer::XMLDeserializer        ( std::string fileName, DeserializeContext * context )
+XMLDeserializer::XMLDeserializer        ( const std::string & fileName, DeserializeContext * context )
     : m_rootDoc( new rapidxml::xml_document<> )
     , m_context( std::unique_ptr< DeserializeContext >( context ) ) 
 { 
@@ -60,16 +60,23 @@ XMLDeserializer::~XMLDeserializer()
 
 // *******************************
 //
-DeserializeContext*                                     XMLDeserializer::GetDeserializeContext  () const
+DeserializeContext *                                    XMLDeserializer::GetDeserializeContext  () const
 {
     return m_context.get();
 }
 
 // *******************************
 //
-std::string                                             XMLDeserializer::GetName                ()
+std::string                                             XMLDeserializer::GetName                () const
 {
     return GetDoc()->name();
+}
+
+// *******************************
+//
+XMLDeserializer::XmlNode *                              XMLDeserializer::GetDoc                  () const 
+{
+    return m_nodes.top();
 }
 
 // *******************************
