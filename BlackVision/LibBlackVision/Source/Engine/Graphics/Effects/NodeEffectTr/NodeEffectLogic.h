@@ -23,6 +23,7 @@ private:
     std::vector< RenderTarget * >   m_renderTargetsFSE;
     FullscreenEffectContext         m_FSECtx;
     bool                            m_FSEInitialized;
+    unsigned int                    m_lastActive;
 
     PreFullscreenEffectLogic *      m_preFSELogic;
     

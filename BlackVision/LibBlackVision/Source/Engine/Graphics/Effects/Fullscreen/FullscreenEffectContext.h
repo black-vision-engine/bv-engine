@@ -19,6 +19,7 @@ private:
     const std::vector< RenderTarget * > *   m_inputRenderTargets;
 
     unsigned int                            m_startIndex;
+    bool                                    m_syncRequired;
 
 public:
                                     FullscreenEffectContext     ( Renderer * renderer, RenderTarget * outputRenderTarget, RenderTargetStackAllocator * allocator, unsigned int startIndex = 0 );
@@ -37,6 +38,9 @@ public:
 
     void                            SetFirstRenderTargetIndex   ( unsigned int startIndex );
     unsigned int                    GetFirstRenderTargetIndex   () const;
+
+    void                            SetSyncRequired             ( bool syncRequired );
+    bool                            IsSyncRequired              () const;
 
 };
 

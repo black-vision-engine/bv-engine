@@ -91,4 +91,18 @@ unsigned int                    FullscreenEffectContext::GetFirstRenderTargetInd
     return m_startIndex;
 }
 
+// **************************
+//
+void                            FullscreenEffectContext::SetSyncRequired             ( bool syncRequired )
+{
+    m_syncRequired = syncRequired;
+}
+
+// **************************
+//
+bool                            FullscreenEffectContext::IsSyncRequired              () const
+{
+    return m_syncRequired;
+}
+
 } //bv

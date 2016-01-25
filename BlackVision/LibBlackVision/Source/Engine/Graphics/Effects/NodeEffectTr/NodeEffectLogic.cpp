@@ -125,6 +125,7 @@ IValuePtr       NodeEffectLogic::GetValue                    ( const std::string
 //
 void    NodeEffectLogic::RecreateValues              ( std::vector< IValuePtr > & values )
 {
+    //FIXME: make sure that there are no duplicate values
     values.clear();
 
     if( m_preFSELogic )
@@ -153,24 +154,25 @@ void    NodeEffectLogic::RecreateValues              ( std::vector< IValuePtr > 
 //
 void    NodeEffectLogic::FSEInitializedGuard         ( RenderLogicContext * ctx, std::vector< RenderTarget * > * fseInputsVec, FullscreenEffectContext * fseCtx )
 {
-    if( m_FSE && !m_FSEInitialized )
+    if( m_FSE )
     {
         assert( m_preFSELogic );
         assert( m_preFSELogic->GetPreferredNumOutputs() == fseInputsVec->size() );
 
-        //Initialize output vector
-        for( unsigned int i = 0; i < fseInputsVec->size(); ++i )
+        auto updated = m_preFSELogic->UpdateOutputRenderTargets( ctx, fseInputsVec );
+
+        fseCtx->SetSyncRequired( updated );
+
+        if( !m_FSEInitialized )
         {
-            (*fseInputsVec)[ i ] = allocator( ctx )->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+            fseCtx->SetRenderer( renderer( ctx ) );
+            fseCtx->SetRenderTargetAllocator( allocator( ctx ) );
+            fseCtx->SetOutputRenderTarget( nullptr );
+            fseCtx->SetInputRenderTargets( fseInputsVec );
+            fseCtx->SetFirstRenderTargetIndex( 0 );
+
+            m_FSEInitialized = true;
         }
-
-        fseCtx->SetRenderer( renderer( ctx ) );
-        fseCtx->SetRenderTargetAllocator( allocator( ctx ) );
-        fseCtx->SetOutputRenderTarget( nullptr );
-        fseCtx->SetInputRenderTargets( fseInputsVec );
-        fseCtx->SetFirstRenderTargetIndex( 0 );
-
-        m_FSEInitialized = true;
     }
 }
 
@@ -198,6 +200,8 @@ void    NodeEffectLogic::FSERenderLogic             ( RenderTarget * output, Ful
 
             // FIXME: by default we render to the currently bound render target
             m_FSE->Render( ctx );
+
+            ctx->SetSyncRequired( false );
         }
     }
 }

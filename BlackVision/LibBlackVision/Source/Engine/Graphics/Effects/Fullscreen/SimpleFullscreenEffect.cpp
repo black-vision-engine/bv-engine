@@ -49,7 +49,7 @@ void    SimpleFullscreenEffect::Render          ( FullscreenEffectContext * ctx 
     auto rendererCamera = renderer->GetCamera();
     renderer->SetCamera( m_fullscreenCamera );
     // renderer->Enable( ctx->GetOutputRenderTarget() );
-    
+
     SynchronizeInputData( ctx );
 
     renderer->Draw( m_fullscreenQuad );
@@ -74,7 +74,7 @@ void                SimpleFullscreenEffect::SynchronizeInputData    ( Fullscreen
 
     assert( rtVec != nullptr );
 
-    if( m_data.GetNumInitializedTextures() < m_data.GetNumTextures() )
+    if( m_data.GetNumInitializedTextures() < m_data.GetNumTextures() || ctx->IsSyncRequired() )
     {
         assert( m_data.GetNumTextures() <= (unsigned int) ( rtVec->size() - startIdx ) );
         

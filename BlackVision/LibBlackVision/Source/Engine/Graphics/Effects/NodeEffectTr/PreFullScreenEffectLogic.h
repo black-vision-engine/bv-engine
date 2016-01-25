@@ -15,9 +15,11 @@ class PreFullscreenEffectLogic
 {
 private:
 
+    unsigned int m_lastUsedRenderTargetNum;
 
 public:
 
+                                        PreFullscreenEffectLogic    ();
     virtual                             ~PreFullscreenEffectLogic   ();
 
     virtual void                        Render                      ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > & outputs ) = 0;
@@ -27,6 +29,8 @@ public:
     virtual unsigned int                GetPreferredNumOutputs      () const = 0;
 
     virtual bool                        IsFSERequired               () const = 0;
+
+    virtual bool                        UpdateOutputRenderTargets   ( RenderLogicContext * ctx, std::vector< RenderTarget * > * outputRtVec );
 
 protected:
 
