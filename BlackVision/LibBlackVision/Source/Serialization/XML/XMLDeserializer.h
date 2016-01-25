@@ -5,12 +5,12 @@
 #include "CoreDEF.h"
 #include <stack>
 
-namespace rapidxml
+namespace rapidxml // Forward declarations of rapidxml classes. FIXME: Should be moved to impl-like design pattern to avoid defining this namespace.
 {
-    template<class Ch >
+    template< class Ch >
     class xml_node;
 
-    template<class Ch >
+    template< class Ch >
     class xml_document;
 
 } // rapidxml
