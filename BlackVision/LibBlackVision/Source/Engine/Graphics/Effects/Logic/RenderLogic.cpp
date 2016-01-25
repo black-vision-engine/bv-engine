@@ -150,7 +150,7 @@ void    RenderLogic::RenderNode      ( SceneNode * node, RenderLogicContext * ct
             else
             {
                 auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogic( node );
-               
+
                 effectRenderLogic->RenderNode( node, ctx );
             }
         }

@@ -76,9 +76,9 @@ void                        NodeMaskPreFullscreenEffectLogic::Render        ( Sc
 std::vector< IValuePtr >    NodeMaskPreFullscreenEffectLogic::GetValues     () const
 {
     std::vector< IValuePtr > res( 3 );
-    res.push_back( m_alphaValue );
-    res.push_back( m_maskIndex );
-    res.push_back( m_foregroundIndex );
+    res[ 0 ] = m_alphaValue;
+    res[ 1 ] = m_maskIndex;
+    res[ 2 ] = m_foregroundIndex;
 
     return res;
 }
