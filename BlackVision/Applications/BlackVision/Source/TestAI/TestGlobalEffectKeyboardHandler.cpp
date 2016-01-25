@@ -131,7 +131,7 @@ void                    TestGlobalEfectKeyboardHandler::HandleIncrement     ( BV
             auto alpha = tEffect->GetParamAlpha();
 
             alpha->SetVal( min( 1.f, alpha->Evaluate() + .1f ), 0.f );
-    
+
             printf( "New node mask alpha value: %4f\n", alpha->Evaluate() );
         }
     }

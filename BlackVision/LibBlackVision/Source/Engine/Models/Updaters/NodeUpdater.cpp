@@ -201,12 +201,12 @@ void    NodeUpdater::UpdateNodeEffect       ()
                 auto paramFgIdx = nodeMaskEffect->GetParamFgIdx();
                 auto paramAlpha = nodeMaskEffect->GetParamAlpha();
 
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+                auto sceneNodeEffect = m_sceneNode->GetNodeEffectTr();
 
-                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffect::Type::T_NODE_MASK )
+                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_NODE_MASK )
                 {
-                    sceneNodeEffect = std::make_shared< NodeMaskNodeEffect >();
-                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
+                    sceneNodeEffect = CreateNodeEffect( NodeEffectType::NET_NODE_MASK );
+                    m_sceneNode->SetNodeEffectTr( sceneNodeEffect );
                 }
 
                 auto bgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramBgIdx->GetName() ) );

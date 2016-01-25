@@ -12,7 +12,7 @@ ModelNodeEffectNodeMask::ModelNodeEffectNodeMask( ITimeEvaluatorPtr timeEvaluato
     : m_bgVal( 0 )
     , m_fgVal( 1 )
 { 
-    m_paramBgIdx = ParametersFactory::CreateParameterInt( "bgIdx", timeEvaluator );
+    m_paramBgIdx = ParametersFactory::CreateParameterInt( "maskIdx", timeEvaluator );
     m_paramFgIdx = ParametersFactory::CreateParameterInt( "fgIdx", timeEvaluator );
     m_paramAlpha = ParametersFactory::CreateParameterFloat( "alpha", timeEvaluator );
 
