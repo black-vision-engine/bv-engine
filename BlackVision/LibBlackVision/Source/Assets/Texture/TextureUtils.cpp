@@ -3,6 +3,9 @@
 #include "MipMapBuilder.h"
 #include "Assets/Cache/RawDataCache.h"
 #include "ProjectManager.h"
+#include "Assets/Thumbnail/Impl/TextureAssetThumbnail.h"
+#include "Serialization/Json/JsonSerializeObject.h"
+#include "Serialization/Json/JsonDeserializeObject.h"
 
 #include <cassert>
 
@@ -415,9 +418,33 @@ void TextureUtils::AddToRawDataCache( const TextureAssetConstPtr & textureRes )
 
 // ******************************
 //
-ThumbnailConstPtr TextureUtils::LoadThumbnail( const TextureAssetDescConstPtr & )
+ThumbnailConstPtr TextureUtils::LoadThumbnail( const TextureAssetDescConstPtr & desc )
 {
-    return nullptr;
+    auto texPath = desc->GetOrigTextureDesc()->GetImagePath();
+
+    auto thumbPath = Path( texPath ) / ".bvthumb";
+
+    if( Path::Exists( thumbPath ) )
+    {
+        JsonDeserializeObject deser;
+        return TextureAssetThumbnail::Create( deser );
+    }
+    else
+    {
+        auto t = LoadSingleTexture( desc->GetOrigTextureDesc(), false );
+
+        auto resized = image::Resize( t->GetData(), t->GetWidth(), t->GetHeight(), ToBPP( t->GetFormat() ), 128, 128, image::FilterType::FT_LANCZOS );
+
+        auto thumb = TextureAssetThumbnail::Create( resized, 128, 128, ToBPP( t->GetFormat() ) );
+
+        JsonSerializeObject ser;
+
+        thumb->Serialize( ser );
+
+        ser.Save( thumbPath.Str() );
+
+        return thumb;
+    }
 }
 
 }  // bv
