@@ -1310,22 +1310,14 @@ void					TestScene::InitCopyNodeTest	()
         success &= ( srcRoot->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator() == editor->GetSceneDefaultTimeline( srcScene ) );
         success &= ( destRoot->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator()->GetName() == "Copy_default" );
 
-        auto destTimelines = destRoot->GetTimelines( true );
+        auto destTimelines = destScene->GetTimeline()->GetChildren();
 
-        std::string timelines0 [ 6 ] = { "default", "timeline_0", "timeline_1", "Copy_default", "Copy_timeline_0", "Copy_timeline_1" };
-        success &= ( destTimelines.size() == 6 );
+        std::string timelines0 [ 4 ] = { "default", "Copy_default", "Copy_timeline_0", "Copy_timeline_1" };
+        std::vector< std::string > vtimelines0( timelines0, timelines0 + 4 );
+        success &= ( destTimelines.size() == 4 );
         for( auto i = 0; i < destTimelines.size(); ++i )
         {
-            bool contains = false;
-            for( auto j = 0; j < destTimelines.size(); ++j )
-            {
-                if( destTimelines[ i ]->GetName() == timelines0[ j ] )
-                {
-                    contains = true;
-                    break;
-                }
-            }
-            success &= contains;
+            success &= ( std::find( vtimelines0.begin(), vtimelines0.end(), destTimelines[ i ]->GetName() ) != vtimelines0.end() );
         }
 
         auto srcChild0Node = srcRoot->GetChild( "child0" );
@@ -1349,106 +1341,66 @@ void					TestScene::InitCopyNodeTest	()
 
         success &= ( editor->AddNodeCopy( SCENE_NAME1, "/root/child0/child00", SCENE_NAME, "/root/child0" ) != nullptr );
 
-        destTimelines = destRoot->GetTimelines( true );
+        destTimelines = destScene->GetTimeline()->GetChildren();
 
-        std::string timelines1[ 5 ] = { "timeline_0", "timeline_1", "Copy_default", "Copy_timeline_0", "Copy_timeline_1" };
-        success &= ( destTimelines.size() == 8 );
+        std::string timelines1[ 6 ] = { "default", "Copy_default", "Copy_timeline_0", "Copy_timeline_1", "Copy1_timeline_0", "Copy1_timeline_1" };
+        std::vector< std::string > vtimelines1( timelines1, timelines1 + 6 );
+        success &= ( destTimelines.size() == 6 );
         for( auto i = 0; i < destTimelines.size(); ++i )
         {
-            bool contains = false;
-            for( auto j = 0; j < destTimelines.size(); ++j )
-            {
-                if( destTimelines[ i ]->GetName() == timelines1[ j ] )
-                {
-                    contains = true;
-                    break;
-                }
-            }
-            success &= contains;
+            success &= ( std::find( vtimelines1.begin(), vtimelines1.end(), destTimelines[ i ]->GetName() ) != vtimelines1.end() );
         }
 
         
         success &= ( editor->AddNodeCopy( SCENE_NAME1, "/root/child0/child00/child0/child00", SCENE_NAME, "/root/child0" ) != nullptr );
 
-        destTimelines = destRoot->GetTimelines( true );
+        destTimelines = destScene->GetTimeline()->GetChildren();
 
-        std::string timelines2[ 10 ] = { "default", "timeline_0", "timeline_1", "Copy2_timeline_0", "Copy2_timeline_1", "Copy1_timeline_0", "Copy1_timeline_1", "Copy_default", "Copy_timeline_0", "Copy_timeline_1" };
-        success &= ( destTimelines.size() == 10 );
+        std::string timelines2[ 8 ] = { "default", "Copy_default", "Copy_timeline_0", "Copy_timeline_1", "Copy1_timeline_0", "Copy1_timeline_1", "Copy2_timeline_0", "Copy2_timeline_1" };
+        std::vector< std::string > vtimelines2( timelines2, timelines2 + 8 );
+        success &= ( destTimelines.size() == 8 );
         for( auto i = 0; i < destTimelines.size(); ++i )
         {
-            bool contains = false;
-            for( auto j = 0; j < destTimelines.size(); ++j )
-            {
-                if( destTimelines[ i ]->GetName() == timelines2[ j ] )
-                {
-                    contains = true;
-                    break;
-                }
-            }
-            success &= contains;
+            success &= ( std::find( vtimelines2.begin(), vtimelines2.end(), destTimelines[ i ]->GetName() ) != vtimelines2.end() );
         }
 
 
         success &= ( editor->AddNodeCopy( SCENE_NAME1, "/root/child0/child00/child0/child00/child0/child00", SCENE_NAME, "/root/child0" ) != nullptr );
 
-        destTimelines = destRoot->GetTimelines( true );
+        destTimelines = destScene->GetTimeline()->GetChildren();
 
-        std::string timelines3[ 12 ] = { "default", "timeline_0", "timeline_1", "Copy3_timeline_0", "Copy3_timeline_1", "Copy2_timeline_0", "Copy2_timeline_1", "Copy1_timeline_0", "Copy1_timeline_1", "Copy_default", "Copy_timeline_0", "Copy_timeline_1" };
-        success &= ( destTimelines.size() == 12 );
+        std::string timelines3[ 10 ] = { "default", "Copy_default", "Copy_timeline_0", "Copy_timeline_1", "Copy1_timeline_0", "Copy1_timeline_1", "Copy2_timeline_0", "Copy2_timeline_1", "Copy3_timeline_0", "Copy3_timeline_1" };
+        std::vector< std::string > vtimelines3( timelines3, timelines3 + 10 );
+        success &= ( destTimelines.size() == 10 );
         for( auto i = 0; i < destTimelines.size(); ++i )
         {
-            bool contains = false;
-            for( auto j = 0; j < destTimelines.size(); ++j )
-            {
-                if( destTimelines[ i ]->GetName() == timelines3[ j ] )
-                {
-                    contains = true;
-                    break;
-                }
-            }
-            success &= contains;
+            success &= ( std::find( vtimelines3.begin(), vtimelines3.end(), destTimelines[ i ]->GetName() ) != vtimelines3.end() );
         }
 
 
         success &= ( editor->AddNodeCopy( SCENE_NAME, "/root/child0/child00", SCENE_NAME1, "/root/child0/child00/child0" ) != nullptr );
         
-        auto srcTimelines = srcRoot->GetTimelines( true );
+        auto srcTimelines = srcScene->GetTimeline()->GetChildren();
         
-        std::string timelines4[ 9 ] = { "default", "timeline_0", "timeline_1", "Copy_Copy3_timeline_0", "Copy_Copy3_timeline_1", "Copy_Copy2_timeline_0", "Copy_Copy2_timeline_1", "Copy_Copy1_timeline_0", "Copy_Copy1_timeline_1" };
+        std::string timelines4[ 9 ] = { "default", "timeline_0", "timeline_1", "Copy_Copy1_timeline_0", "Copy_Copy1_timeline_1", "Copy_Copy2_timeline_0", "Copy_Copy2_timeline_1", "Copy_Copy3_timeline_0", "Copy_Copy3_timeline_1" };
+        std::vector< std::string > vtimelines4( timelines4, timelines4 + 9 );
         success &= ( srcTimelines.size() == 9 );
         for( auto i = 0; i < srcTimelines.size(); ++i )
         {
-            bool contains = false;
-            for( auto j = 0; j < srcTimelines.size(); ++j )
-            {
-                if( srcTimelines[ i ]->GetName() == timelines4[ j ] )
-                {
-                    contains = true;
-                    break;
-                }
-            }
-            success &= contains;
+            success &= ( std::find( vtimelines4.begin(), vtimelines4.end(), srcTimelines[ i ]->GetName() ) != vtimelines4.end() );
         }
 
 
         success &= ( editor->AddNodeCopy( SCENE_NAME, "/root/child0/child00", SCENE_NAME1, "/root/child0/child00/child0" ) != nullptr );
 
-        srcTimelines = srcRoot->GetTimelines( true );
+        srcTimelines = srcScene->GetTimeline()->GetChildren();
         
-        std::string timelines5[ 15 ] = { "default", "timeline_0", "timeline_1", "Copy_Copy3_timeline_0", "Copy_Copy3_timeline_1", "Copy_Copy2_timeline_0", "Copy_Copy2_timeline_1", "Copy_Copy1_timeline_0", "Copy_Copy1_timeline_1", "Copy1_Copy3_timeline_0", "Copy1_Copy3_timeline_1", "Copy1_Copy2_timeline_0", "Copy1_Copy2_timeline_1", "Copy1_Copy1_timeline_0", "Copy1_Copy1_timeline_1" };
+        std::string timelines5[ 15 ] = { "default", "timeline_0", "timeline_1", "Copy_Copy1_timeline_0", "Copy_Copy1_timeline_1", "Copy_Copy2_timeline_0", "Copy_Copy2_timeline_1", "Copy_Copy3_timeline_0", "Copy_Copy3_timeline_1", "Copy1_Copy1_timeline_0", "Copy1_Copy1_timeline_1", "Copy1_Copy2_timeline_0", "Copy1_Copy2_timeline_1", "Copy1_Copy3_timeline_0", "Copy1_Copy3_timeline_1" };
+        std::vector< std::string > vtimelines5( timelines5, timelines5 + 15 );
         success &= ( srcTimelines.size() == 15 );
         for( auto i = 0; i < srcTimelines.size(); ++i )
         {
-            bool contains = false;
-            for( auto j = 0; j < srcTimelines.size(); ++j )
-            {
-                if( srcTimelines[ i ]->GetName() == timelines5[ j ] )
-                {
-                    contains = true;
-                    break;
-                }
-            }
-            success &= contains;
+            success &= ( std::find( vtimelines5.begin(), vtimelines5.end(), srcTimelines[ i ]->GetName() ) != vtimelines5.end() );
         }
 
 
@@ -1460,18 +1412,39 @@ void					TestScene::InitCopyNodeTest	()
         assert( success );
 	});
 
-//    m_testSteps.push_back( [&] 
-//	{
-//		auto editor = m_project->GetProjectEditor();
-//
-//        auto srcScene = editor->GetScene( SCENE_NAME );
-//		auto destScene = editor->GetScene( SCENE_NAME1 );
-//        bool success = true;
-//
-//
-//
-//        assert( success );
-//    });
+    m_testSteps.push_back( [&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+
+        auto node = editor->GetNode( SCENE_NAME, "/root/child0/child00/child0/child00" );
+
+        auto timeEval = node->GetPlugin( "solid color" )->GetParameter( "color" )->GetTimeEvaluator();
+        std::static_pointer_cast< model::ITimeline >( timeEval )->Play();
+    });
+
+    Wait( 5 );
+
+    m_testSteps.push_back( [&] 
+	{
+		auto editor = m_project->GetProjectEditor();
+        auto scene = editor->GetScene( SCENE_NAME1 );
+
+        editor->AddPluginCopy( SCENE_NAME1, "/root/child0", 2, SCENE_NAME, "/root/child0/child00/child0/child00", "solid color" );
+
+        auto srcTimelinePath = model::TimelineManager::GetInstance()->GetTimelinePath( editor->GetNode( SCENE_NAME, "/root/child0/child00/child0/child00" )->GetPlugin( "solid color" )->GetParameter( "color" )->GetTimeEvaluator() );
+        auto destTimelinePath = model::TimelineManager::GetInstance()->GetTimelinePath( editor->GetNode( SCENE_NAME1, "/root/child0" )->GetPlugin( "solid color" )->GetParameter( "color" )->GetTimeEvaluator() );
+
+        bool success = true;
+
+        success &= ( srcTimelinePath == model::TimelineHelper::CombineTimelinePath( SCENE_NAME, "Copy_Copy1_timeline_1" ) );
+        success &= ( destTimelinePath == model::TimelineHelper::CombineTimelinePath( SCENE_NAME1, "Copy_Copy_Copy1_timeline_1" ) );
+
+        BVXMLSerializer ser;
+        scene->Serialize( ser );
+        ser.Save( "test.xml" );
+
+        assert( success );
+    });
 }
 
 // ****************************

@@ -508,7 +508,7 @@ model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( model::SceneModelPtr 
     
     if( srcScene == destScene )
     {
-        //don't copy timelines, maybe it should be handled by CloneViaSerialization::ClonePlugin with empty prefix string?
+        //don't copy timelines, maybe it should be also handled by CloneViaSerialization::CloneNode
         copy = srcNode->GetModelNodeEditor()->CopyNode();
     }
     else
@@ -517,7 +517,7 @@ model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( model::SceneModelPtr 
         auto timelines = srcNode->GetTimelines( true );
         auto prefixNum = model::TimelineHelper::CopyTimelines( destScene->GetTimeline(), timelines );
 
-        copy = CloneViaSerialization::CloneNode( srcNode.get(), PrefixHelper::PrefixCopy( prefixNum ), srcScene->GetName(), destScene->GetName() );
+        copy = CloneViaSerialization::CloneNode( srcNode.get(), PrefixHelper::PrefixCopy( prefixNum ), destScene->GetName() );
     }
 
     if( copy )
@@ -822,7 +822,7 @@ model::IPluginPtr		BVProjectEditor::AddPluginCopy			( model::SceneModelPtr destS
     model::IPluginPtr copy = nullptr;
     if( srcScene == destScene )
     {
-        //don't copy timelines, maybe it should be handled by CloneViaSerialization::ClonePlugin with empty prefix string?
+        //don't copy timelines, maybe it should be also handled by CloneViaSerialization::ClonePlugin
         copy = srcNode->GetModelNodeEditor()->CopyPlugin( pluginNameToCopy );
     }
     else
@@ -834,7 +834,7 @@ model::IPluginPtr		BVProjectEditor::AddPluginCopy			( model::SceneModelPtr destS
             auto timelines = srcPlugin->GetTimelines();
             auto prefixNum = model::TimelineHelper::CopyTimelines( destScene->GetTimeline(), timelines );
         
-            copy = CloneViaSerialization::ClonePlugin( srcPlugin.get(), PrefixHelper::PrefixCopy( prefixNum ), srcScene->GetName(), destScene->GetName() );
+            copy = CloneViaSerialization::ClonePlugin( srcPlugin.get(), PrefixHelper::PrefixCopy( prefixNum ), destScene->GetName() );
         }
     }
 

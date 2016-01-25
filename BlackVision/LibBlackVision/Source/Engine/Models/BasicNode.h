@@ -143,9 +143,9 @@ public:
 
 namespace CloneViaSerialization {
 
-	model::BasicNodePtr		CloneNode		( const model::BasicNode * obj, const std::string & prefix, std::string srcScene, std::string destScene );
+	model::BasicNodePtr		CloneNode		( const model::BasicNode * obj, const std::string & prefix, const std::string & destScene );
     
-    void                    UpdateTimelines ( model::BasicNode * obj, const std::string & prefix, std::string srcScene, std::string destScene, bool recursive );
+    void                    UpdateTimelines ( model::BasicNode * obj, const std::string & prefix, const std::string & destScene, bool recursive );
 
 } //CloneViaSerialization
 

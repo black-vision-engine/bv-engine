@@ -327,24 +327,27 @@ namespace CloneViaSerialization {
 
 // *******************************
 //FIXME: name of method should indicate that timelines are modified or sth?
-model::IPluginPtr				ClonePlugin					( const model::IPlugin * obj, const std::string & prefix, std::string srcScene, std::string destScene )
+model::IPluginPtr				ClonePlugin					( const model::IPlugin * obj, const std::string & prefix, const std::string & destScene )
 {
     auto clone = obj->Clone();
     
     for( auto param : clone->GetParameters() )
     {
-        auto name = model::TimelineManager::GetInstance()->GetTimelinePath( param->GetTimeEvaluator() );
-        model::ITimeEvaluatorPtr timeline;
-        if( name == srcScene )
-        {
-            timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( destScene ); //not needed
-        }
-        else
+        if( param->GetTimeEvaluator() )
         {
             auto timelinePath = model::TimelineHelper::CombineTimelinePath( destScene, prefix + param->GetTimeEvaluator()->GetName() );
-            timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
+            auto timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
+            param->SetTimeEvaluator( timeline );
         }
-        param->SetTimeEvaluator( timeline );
+    }
+
+    auto pluginModel = obj->GetPluginParamValModel();
+    if( pluginModel && pluginModel->GetTimeEvaluator() )
+    {
+        auto timelinePath = model::TimelineHelper::CombineTimelinePath( destScene, prefix + pluginModel->GetTimeEvaluator()->GetName() );
+        auto timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
+		//FIXME: cast
+		std::static_pointer_cast< model::DefaultPluginParamValModel >( pluginModel )->SetTimeEvaluator( timeline );
     }
 
     return clone;
