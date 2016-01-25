@@ -25,6 +25,12 @@ public:
 
     virtual unsigned int                GetPreferredNumOutputs              () const override;
 
+    virtual bool                        IsFSERequired                       () const override;
+
+private:
+
+    bool                                IsApplicable                        () const;
+
 };
 
 } //bv

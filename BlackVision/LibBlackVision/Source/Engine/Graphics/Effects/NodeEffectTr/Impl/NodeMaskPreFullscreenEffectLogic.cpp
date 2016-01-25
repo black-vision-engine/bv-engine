@@ -90,4 +90,13 @@ unsigned int                NodeMaskPreFullscreenEffectLogic::GetPreferredNumOut
     return 2;
 }
 
+// *********************************
+//
+bool                        NodeMaskPreFullscreenEffectLogic::IsFSERequired                       () const
+{
+    auto alpha = m_alphaValue->GetValue();
+
+    return alpha >= m_minAlphaThreshold;
+}
+
 } //bv

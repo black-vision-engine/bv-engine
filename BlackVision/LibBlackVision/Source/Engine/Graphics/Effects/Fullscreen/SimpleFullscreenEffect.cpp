@@ -48,13 +48,13 @@ void    SimpleFullscreenEffect::Render          ( FullscreenEffectContext * ctx 
 
     auto rendererCamera = renderer->GetCamera();
     renderer->SetCamera( m_fullscreenCamera );
-    renderer->Enable( ctx->GetOutputRenderTarget() );
+    // renderer->Enable( ctx->GetOutputRenderTarget() );
     
     SynchronizeInputData( ctx );
 
     renderer->Draw( m_fullscreenQuad );
 
-    renderer->Disable( ctx->GetOutputRenderTarget() );
+    // renderer->Disable( ctx->GetOutputRenderTarget() );
     renderer->SetCamera( rendererCamera );
 }
 
@@ -78,9 +78,17 @@ void                SimpleFullscreenEffect::SynchronizeInputData    ( Fullscreen
     {
         assert( m_data.GetNumTextures() <= (unsigned int) ( rtVec->size() - startIdx ) );
         
+        auto effect = m_fullscreenQuad->GetRenderableEffect();
+        auto pass = effect->GetPass( 0 );
+        auto ps = pass->GetPixelShader();
+        auto psParams = ps->GetParameters();
+
         for( unsigned int i = 0; i < m_data.GetNumTextures(); ++i )
         {
-            m_data.SetInputTexture( (*rtVec)[ i + startIdx ]->ColorTexture( 0 ), i );
+            auto texture = (*rtVec)[ i + startIdx ]->ColorTexture( 0 );
+
+            m_data.SetInputTexture( texture, i );
+            psParams->SetTexture( i, texture );
         }
     }
     else

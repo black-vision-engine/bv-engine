@@ -30,7 +30,7 @@ void    AlphaMaskPreFullscreenEffectLogic::Render                       ( SceneN
 
     auto alpha = m_alphaValue->GetValue();
     
-    if( alpha > m_maxAlphaThreshold )       // No alpha mask in this case
+    if( alpha > 0.f * m_maxAlphaThreshold )       // No alpha mask in this case
     {
         logic( ctx )->DrawNode( node, ctx );
     }
@@ -67,6 +67,22 @@ std::vector< IValuePtr >    AlphaMaskPreFullscreenEffectLogic::GetValues        
 unsigned int                AlphaMaskPreFullscreenEffectLogic::GetPreferredNumOutputs   () const
 {
     return 1;
+}
+
+// *********************************
+//
+bool                        AlphaMaskPreFullscreenEffectLogic::IsFSERequired            () const
+{
+    return IsApplicable();
+}
+
+// *********************************
+//
+bool                        AlphaMaskPreFullscreenEffectLogic::IsApplicable             () const
+{
+    auto v = m_alphaValue->GetValue();
+
+    return  v > m_minAlphaThreshold && v <= 0.f * m_maxAlphaThreshold;
 }
 
 } //bv

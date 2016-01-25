@@ -8,6 +8,7 @@ namespace bv {
 // **************************
 //
 FullscreenEffectData::FullscreenEffectData                      ()
+    : m_numInitializedTextures( 0 )
 {
 }
 

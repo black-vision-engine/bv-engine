@@ -190,8 +190,15 @@ void    NodeEffectLogic::FSERenderLogic             ( RenderTarget * output, Ful
 {
     if( m_FSE )
     {
-        ctx->SetOutputRenderTarget( output );
-        m_FSE->Render( ctx );
+        bool applicable = ( m_preFSELogic && m_preFSELogic->IsFSERequired() ) || !m_preFSELogic;
+
+        if( applicable )
+        {
+            ctx->SetOutputRenderTarget( output );
+
+            // FIXME: by default we render to the currently bound render target
+            m_FSE->Render( ctx );
+        }
     }
 }
 

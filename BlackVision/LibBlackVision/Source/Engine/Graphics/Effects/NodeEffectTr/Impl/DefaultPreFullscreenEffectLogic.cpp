@@ -30,4 +30,11 @@ unsigned int                DefaultPreFullscreenEffectLogic::GetPreferredNumOutp
     return 0;
 }
 
+// *********************************
+//
+bool                        DefaultPreFullscreenEffectLogic::IsFSERequired                       () const
+{
+    return true;
+}
+
 } //bv

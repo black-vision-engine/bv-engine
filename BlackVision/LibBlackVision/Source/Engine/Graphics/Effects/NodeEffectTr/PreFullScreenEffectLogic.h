@@ -26,6 +26,8 @@ public:
 
     virtual unsigned int                GetPreferredNumOutputs      () const = 0;
 
+    virtual bool                        IsFSERequired               () const = 0;
+
 protected:
 
     void                                RenderToRenderTarget        ( RenderLogicContext * ctx, RenderTarget * rt, SceneNode * node );

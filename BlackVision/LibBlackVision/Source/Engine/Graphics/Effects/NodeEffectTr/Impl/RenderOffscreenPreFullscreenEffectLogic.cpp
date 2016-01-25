@@ -36,4 +36,11 @@ unsigned int                RenderOffscreenPreFullscreenEffectLogic::GetPreferre
     return 1;
 }
 
+// *********************************
+//
+bool                        RenderOffscreenPreFullscreenEffectLogic::IsFSERequired              () const
+{
+    return true;
+}
+
 } //bv
