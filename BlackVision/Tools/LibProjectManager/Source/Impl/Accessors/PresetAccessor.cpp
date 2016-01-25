@@ -100,16 +100,23 @@ model::BasicNodePtr         PresetAccessor::LoadPreset( const Path & path, const
 
 // ********************************
 //
-PathVec                     PresetAccessor::ListPresets( const Path & path ) const
+PathVec                     PresetAccessor::ListPresets( const Path & path, bool recursive ) const
 {
-    return Path::List( ( m_path / path ).Str(), true, m_fileExt );
+    auto presetList = Path::List( ( m_path / path ).Str(), recursive, m_fileExt );
+
+    for( auto & p : presetList )
+    {
+        p = Path::RelativePath( p, m_path );
+    }
+
+    return presetList;
 }
 
 // ********************************
 //
 PathVec                     PresetAccessor::ListPresets() const
 {
-    return Path::List( m_path, true, m_fileExt );
+    return ListPresets( m_path, true );
 }
 
 } // bv

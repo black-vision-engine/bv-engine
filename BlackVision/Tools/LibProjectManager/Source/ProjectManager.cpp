@@ -280,9 +280,9 @@ void                        ProjectManager::SavePreset          ( const model::B
 
 // ********************************
 //
-PathVec                     ProjectManager::ListPresets         ( const Path & projectName, const Path & path ) const
+PathVec                     ProjectManager::ListPresets         ( const Path & projectName, const Path & path, bool recursive ) const
 {
-    return m_impl->ListPresets( projectName, path );
+    return m_impl->ListPresets( projectName, path, recursive );
 }
 
 // ********************************

@@ -83,7 +83,7 @@ private:
 	// loading, saving presets
     model::BasicNodePtr     LoadPreset          ( const Path & projectName, const Path & path, const model::OffsetTimeEvaluatorPtr & timeline ) const;
     void                    SavePreset          ( const model::BasicNodePtr & node, const Path & projectName, const Path & path ) const;
-    PathVec                 ListPresets         ( const Path & projectName, const Path & path ) const;
+    PathVec                 ListPresets         ( const Path & projectName, const Path & path, bool recursive ) const;
     PathVec                 ListPresets         ( const Path & projectName ) const;
     PathVec                 ListPresets         () const;
 

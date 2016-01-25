@@ -62,6 +62,8 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             ListProjects( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::ListScenes )
             ListScenes( responseJSON, request, eventID );
+        else if( command == InfoEvent::Command::ListPresets )
+            ListPresets( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::ListAllFolders )
             ListAllFolders( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::GetAssetDescriptor )
@@ -301,6 +303,36 @@ void         QueryHandlers::ListScenes           ( JsonSerializeObject & ser, co
     }
 
     auto sns = pm->ListScenesNames( name, path, recursive );
+
+	ser.SetAttribute( "path", path );
+    ser.EnterArray( "list" );
+    
+    for( auto scene : sns )
+    {
+        ser.SetAttribute( "", scene.Str() );
+    }
+    ser.ExitChild();
+}
+
+// ***********************
+//
+void         QueryHandlers::ListPresets           ( JsonSerializeObject & ser, const std::string & request, int eventID )
+{
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListPresets, eventID, true );
+
+    auto pm = ProjectManager::GetInstance();
+
+    auto name = GetRequestParamValue( request )[ "projectName" ].asString();
+    auto path = GetRequestParamValue( request )[ "path" ].asString();
+
+    auto recursive = false;
+    auto recStr = GetRequestParamValue( request )[ "recursive" ].asString();
+    if( recStr == "true" )
+    {
+        recursive = true;
+    }
+
+    auto sns = pm->ListPresets( name, path, recursive );
 
 	ser.SetAttribute( "path", path );
     ser.EnterArray( "list" );

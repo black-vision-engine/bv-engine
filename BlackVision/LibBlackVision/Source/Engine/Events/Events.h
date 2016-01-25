@@ -544,6 +544,7 @@ public:
         ListSceneAssets,
         ListProjectNames,
         ListScenes,
+        ListPresets,
         ListAssetsPaths,
         ListCategoriesNames,
         ListProjects,
