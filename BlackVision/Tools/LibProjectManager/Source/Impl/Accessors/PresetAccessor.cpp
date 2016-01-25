@@ -8,6 +8,8 @@
 #include "Engine/Models/Interfaces/ITimeEvaluator.h"
 #include "Engine/Models/Timeline/TimeEvaluatorBase.h"
 
+#include "IO/DirIO.h"
+
 #include "Assets/AssetDescsWithUIDs.h"
 
 namespace bv
@@ -47,40 +49,53 @@ void                        PresetAccessor::SavePreset ( const model::BasicNodeP
 
     ser.ExitChild(); // timelines
 
-    ser.EnterChild( "node" );
     node->Serialize( ser );   
-    ser.ExitChild(); // node
 
     ser.ExitChild(); // preset
 
-    ser.Save( ( m_path / path ).Str() );
+    auto fileName = m_path / path;
+
+    auto dirName = fileName.ParentPath();
+
+    Dir::CreateDir( dirName.Str(), true );
+
+    File::Touch( fileName.Str() );
+
+    ser.Save( fileName.Str() );
 }
     
 // ********************************
 //
 model::BasicNodePtr         PresetAccessor::LoadPreset( const Path & path, const model::OffsetTimeEvaluatorPtr & timeline ) const
 {
-    BVXMLDeserializer deser( ( m_path / path ).Str(), timeline, nullptr );
-
-    deser.EnterChild( "preset" );
-
-    auto timelines = SerializationHelper::DeserializeArray< model::TimeEvaluatorBase< model::ITimeEvaluator > >( deser, "timelines" );
-
-    for( auto t : timelines )
+    if( Path::Exists( m_path / path ) )
     {
-        if( !timeline->GetChild( t->GetName() ) )
+        BVXMLDeserializer deser( ( m_path / path ).Str(), timeline, nullptr );
+
+        deser.EnterChild( "preset" );
+
+        auto timelines = SerializationHelper::DeserializeArray< model::TimeEvaluatorBase< model::ITimeEvaluator > >( deser, "timelines" );
+
+        for( auto t : timelines )
         {
-            timeline->AddChild( t );
+            if( !timeline->GetChild( t->GetName() ) )
+            {
+                timeline->AddChild( t );
+            }
         }
+
+        deser.EnterChild( "node" );
+        auto nodePreset = model::BasicNodePtr( model::BasicNode::Create( deser ) );
+        deser.ExitChild(); // node
+
+        deser.ExitChild(); // preset
+
+        return nodePreset;
     }
-
-    deser.EnterChild( "node" );
-    auto nodePreset = model::BasicNodePtr( model::BasicNode::Create( deser ) );
-    deser.ExitChild(); // node
-
-    deser.ExitChild(); // preset
-
-    return nodePreset;
+    else
+    {
+        return nullptr;
+    }
 }
 
 // ********************************

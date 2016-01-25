@@ -259,6 +259,8 @@ std::pair< ProjectEvent::Command, const std::wstring > ProjectEventCommandMappin
     , std::make_pair( ProjectEvent::Command::MoveAsset, L"MoveAsset" ) 
     , std::make_pair( ProjectEvent::Command::RemoveAsset, L"RemoveAsset" ) 
     , std::make_pair( ProjectEvent::Command::ImportAsset, L"ImportAsset" ) 
+    , std::make_pair( ProjectEvent::Command::SavePreset, L"SavePreset" ) 
+    , std::make_pair( ProjectEvent::Command::LoadPreset, L"LoadPreset" ) 
     , std::make_pair( ProjectEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
