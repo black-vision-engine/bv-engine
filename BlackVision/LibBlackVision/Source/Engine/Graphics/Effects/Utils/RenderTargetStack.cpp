@@ -36,7 +36,7 @@ void    RenderTargetStack::AllocateNewRenderTarget              ( Renderer * ren
 
     m_topActiveRenderTargetIdx++;
 
-    if( m_topActiveRenderTargetIdx >= m_allocatedRenderTargets.size() )
+    if( m_topActiveRenderTargetIdx >= (int) m_allocatedRenderTargets.size() )
     {
         auto rt = RenderTargetFactory::CreateRenderTarget( semantic, m_renderTargetDescriptor.width, m_renderTargetDescriptor.height, m_renderTargetDescriptor.fmt );
 

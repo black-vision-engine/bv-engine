@@ -18,6 +18,8 @@
 #include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/WireframeNodeEffect.h"
 
+#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectFactory.h"
+
 
 namespace bv {
 
@@ -78,23 +80,23 @@ void                BVSceneTools::UpdateSceneNodeEffect                 ( SceneN
 
     if ( !modelNodeEffect || modelNodeEffect->GetType() == NodeEffectType::NET_DEFAULT )
     {
-        auto sceneNodeDefaultEffect = std::make_shared< NodeEffect >( NodeEffect::Type::T_DEFAULT );
-        node->SetNodeEffect( sceneNodeDefaultEffect );
+        auto sceneNodeDefaultEffect = CreateNodeEffect( NodeEffectType::NET_DEFAULT );
+        node->SetNodeEffectTr( sceneNodeDefaultEffect );
     }
     else if( modelNodeEffect->GetType() == NodeEffectType::NET_ALPHA_MASK )
     {
-        auto sceneNodeAMEffect = std::make_shared< AlphaMaskNodeEffect >();
-        node->SetNodeEffect( sceneNodeAMEffect );
+        auto sceneNodeAMEffect = CreateNodeEffect( NodeEffectType::NET_ALPHA_MASK );
+        node->SetNodeEffectTr( sceneNodeAMEffect );
     }
     else if( modelNodeEffect->GetType() == NodeEffectType::NET_NODE_MASK )
     {
-        auto sceneNodeNMEffect = std::make_shared< NodeMaskNodeEffect >();
-        node->SetNodeEffect( sceneNodeNMEffect );
+        auto sceneNodeNMEffect = CreateNodeEffect( NodeEffectType::NET_NODE_MASK );
+        node->SetNodeEffectTr( sceneNodeNMEffect );
     }
     else if( modelNodeEffect->GetType() ==  NodeEffectType::NET_WIREFRAME )
     {
-        auto sceneNodeWireframeEffect = std::make_shared< WireframeNodeEffect >();
-        node->SetNodeEffect( sceneNodeWireframeEffect );
+        auto sceneNodeWireframeEffect = CreateNodeEffect( NodeEffectType::NET_WIREFRAME );
+        node->SetNodeEffectTr( sceneNodeWireframeEffect );
     }
     else
     {

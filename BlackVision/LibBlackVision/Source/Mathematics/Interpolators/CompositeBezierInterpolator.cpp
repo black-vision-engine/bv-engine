@@ -294,7 +294,7 @@ void CompositeBezierInterpolator< TimeValueT, ValueT >::AddKey             ( Tim
 
 // update interpolators
     for( int j = int( i-2 ); j <= int( i+1 ); j++ )
-        if( j >= 0 && j < interpolators.size() )
+        if( j >= 0 && j < (int) interpolators.size() )
             UpdateInterpolator( interpolators, j, m_type );
 }
 
@@ -398,11 +398,15 @@ ValueT CompositeBezierInterpolator< TimeValueT, ValueT >::Evaluate         ( Tim
         return PreEvaluate( t );
 
     int i = 0;
-    while( t > keys[ i+1 ].t && i < keys.size()-2 )
+    while( t > keys[ i+1 ].t && i < (int) keys.size()-2 )
+    {
         i++;
+    }
 
     if( t > keys[ i+1 ].t )
+    {
         return PostEvaluate( t );
+    }
 
     return interpolators[ i ]->Evaluate( t );
 
