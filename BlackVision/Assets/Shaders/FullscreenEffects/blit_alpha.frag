@@ -10,7 +10,7 @@ layout (binding = 0) uniform sampler2D Texture;
 void main()
 {
     vec4 col = texture( Texture, uvCoord );
-    //if( col.a * alpha < 0.9 )
+    //if( uvCoord.y < 0.5 )
     //    discard;
     FragColor = col.rgba * alpha;
 }

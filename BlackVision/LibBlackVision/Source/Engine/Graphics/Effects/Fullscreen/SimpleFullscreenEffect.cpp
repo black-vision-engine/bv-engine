@@ -197,9 +197,9 @@ RenderablePass *    SimpleFullscreenEffect::CreateRenderablePass    ( PixelShade
     auto cs = RenderStateAccessor::AccessCullState( sinst );
 
     //FIXME: read it from the inputData
-    as->blendEnabled = false;
-    ds->enabled = false;
-    cs->enabled = false;
+    as->blendEnabled = inputData.IsBlendEnabled();
+    ds->enabled = inputData.IsDepthTestEnabled();
+    cs->enabled = inputData.IsCullEnabled();
 
     return pass;
 }

@@ -15,56 +15,86 @@ namespace {
 
 // **************************
 //
-FullscreenEffectTr *    CreateSimpleBlitFSE         ()
+ void AppendValues( FullscreenEffectData * fseData, const std::vector< IValuePtr > & values )
+ {
+    for( auto val : values )
+    {
+        fseData->AppendValue( val );
+    }
+ }
+    
+// **************************
+//
+FullscreenEffectTr *    CreateSimpleBlitFSE         ( const std::vector< IValuePtr > & values )
 {
     FullscreenEffectData fseData;
     auto src = FSEShaderSourceProvider->ReadShader( "blit_no_alpha.frag" );
 
+    AppendValues( &fseData, values );
+
     fseData.AppendInputTexture( nullptr, "Texture" );
     fseData.SetPixelShaderSource( src );
+    fseData.SetBlendEnabled( false );
+    fseData.SetCullEnabled( false );
+    fseData.SetDepthTestEnabled( false );
 
     return new SimpleFullscreenEffect( fseData );
 }
 
 // **************************
 //
-FullscreenEffectTr *    CreateBlitWithAlphaFSE      ()
+FullscreenEffectTr *    CreateBlitWithAlphaFSE      ( const std::vector< IValuePtr > & values )
 {
     FullscreenEffectData fseData;
     auto src = FSEShaderSourceProvider->ReadShader( "blit_alpha.frag" );
-    auto val = ValuesFactory::CreateValueFloat( "alpha" );
-    val->SetValue( 1.f );
+
+    assert( values.size() == 1 );
+    assert( values[ 0 ]->GetName() == "alpha" );
+
+    AppendValues( &fseData, values );
 
     fseData.AppendInputTexture( nullptr, "Texture" );
-    fseData.AppendValue( val );
     fseData.SetPixelShaderSource( src );
+    fseData.SetBlendEnabled( true );
+    fseData.SetCullEnabled( false );
+    fseData.SetDepthTestEnabled( false );
 
     return new SimpleFullscreenEffect( fseData );
 }
 
 // **************************
 //
-FullscreenEffectTr *    CreateBlitWithAlphaMaskFSE  ()
+FullscreenEffectTr *    CreateBlitWithAlphaMaskFSE  ( const std::vector< IValuePtr > & values )
 {
     FullscreenEffectData fseData;
     auto src = FSEShaderSourceProvider->ReadShader( "blit_mask_alpha.frag" );
-    auto val = ValuesFactory::CreateValueFloat( "alpha" );
-    val->SetValue( 1.f );
+
+    assert( values.size() == 3 );
+    assert( values[ 0 ]->GetName() == "alpha" );
+    assert( values[ 1 ]->GetName() == "maskIdx" );
+    assert( values[ 2 ]->GetName() == "fgIdx" );
+
+    AppendValues( &fseData, values );
 
     fseData.AppendInputTexture( nullptr, "Texture" );
     fseData.AppendInputTexture( nullptr, "Mask" );
-    fseData.AppendValue( val );
     fseData.SetPixelShaderSource( src );
+    fseData.SetBlendEnabled( true );
+    fseData.SetCullEnabled( false );
+    fseData.SetDepthTestEnabled( false );
 
     return new SimpleFullscreenEffect( fseData );
 }
 
 // **************************
 //
-FullscreenEffectTr *    CreateInterlaceFSE          ()
+FullscreenEffectTr *    CreateInterlaceFSE          ( const std::vector< IValuePtr > & values )
 {
     FullscreenEffectData fseData;
     auto src = FSEShaderSourceProvider->ReadShader( "interlace.frag" );
+
+    assert( values.size() == 0 );
+
     auto val0 = ValuesFactory::CreateValueInt( "startEven" );
     auto val1 = ValuesFactory::CreateValueInt( "height" );
     val0->SetValue( 0 );
@@ -75,16 +105,22 @@ FullscreenEffectTr *    CreateInterlaceFSE          ()
     fseData.AppendValue( val0 );
     fseData.AppendValue( val1 );
     fseData.SetPixelShaderSource( src );
+    fseData.SetBlendEnabled( false );
+    fseData.SetCullEnabled( false );
+    fseData.SetDepthTestEnabled( false );
 
     return new SimpleFullscreenEffect( fseData );
 }
 
 // **************************
 //
-FullscreenEffectTr *    CreateMixChannelsFSE        ()
+FullscreenEffectTr *    CreateMixChannelsFSE        ( const std::vector< IValuePtr > & values )
 {
     FullscreenEffectData fseData;
     auto src = FSEShaderSourceProvider->ReadShader( "mixchannels.frag" );
+
+    assert( values.size() == 0 );
+
     auto val0 = ValuesFactory::CreateValueInt( "channelMask" );
 
     val0->SetValue( ( ( 3 & 0x3 ) << 6 ) | ( ( 2 & 0x3 ) << 4 ) | ( ( 1 & 0x3 ) << 2 ) | ( ( 0 & 0x3 ) << 0 ) );
@@ -92,6 +128,9 @@ FullscreenEffectTr *    CreateMixChannelsFSE        ()
     fseData.AppendInputTexture( nullptr, "Tex0" );
     fseData.AppendValue( val0 );
     fseData.SetPixelShaderSource( src );
+    fseData.SetBlendEnabled( false );
+    fseData.SetCullEnabled( false );
+    fseData.SetDepthTestEnabled( false );
 
     return new SimpleFullscreenEffect( fseData );
 }
@@ -100,25 +139,42 @@ FullscreenEffectTr *    CreateMixChannelsFSE        ()
 
 // **************************
 //
-FullscreenEffectTr *    CreateFullscreenEffect( FullscreenEffectType fseType )
+FullscreenEffectTr *    CreateFullscreenEffect( FullscreenEffectType fseType, const std::vector< IValuePtr > & values )
 {
     switch( fseType )
     {
         case FullscreenEffectType::FET_SIMPLE_BLIT:
-            return CreateSimpleBlitFSE();
+        {
+            return CreateSimpleBlitFSE( values );
+        }
         case FullscreenEffectType::FET_BLIT_WITH_ALPHA:
-            return CreateBlitWithAlphaFSE();
+        {
+            return CreateBlitWithAlphaFSE( values );
+        }
         case FullscreenEffectType::FET_BLIT_WITH_ALPHA_MASK:
-            return CreateBlitWithAlphaMaskFSE();
+        {
+            return CreateBlitWithAlphaMaskFSE( values );
+        }
         case FullscreenEffectType::FET_INTERLACE:
-            return CreateInterlaceFSE();
+        {
+            return CreateInterlaceFSE( values );
+        }
         case FullscreenEffectType::FET_MIX_CHANNELS:
-            return CreateMixChannelsFSE();
+        {
+            return CreateMixChannelsFSE( values );
+        }
         default:
             assert( false );
     }
 
     return nullptr;
+}
+
+// **************************
+//
+FullscreenEffectTr *    CreateFullscreenEffect( FullscreenEffectType fseType )
+{
+    return CreateFullscreenEffect( fseType, std::vector< IValuePtr >() );
 }
 
 } // bv

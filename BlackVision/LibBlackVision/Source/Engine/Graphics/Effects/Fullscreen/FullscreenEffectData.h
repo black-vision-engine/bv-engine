@@ -23,6 +23,10 @@ private:
 
     unsigned int                m_numInitializedTextures;
 
+    bool                        m_blendEnabled;
+    bool                        m_cullEnabled;
+    bool                        m_depthTestEnabled;
+
 public:
 
 
@@ -48,6 +52,15 @@ public:
     unsigned int    GetNumInitializedTextures   () const;
 
     std::vector< IValuePtr >    GetValues       () const;
+
+    bool            IsBlendEnabled              () const;
+    void            SetBlendEnabled             ( bool enabled );
+
+    bool            IsCullEnabled               () const;
+    void            SetCullEnabled              ( bool enabled );
+
+    bool            IsDepthTestEnabled          () const;
+    void            SetDepthTestEnabled         ( bool enabled );
 
 };
 

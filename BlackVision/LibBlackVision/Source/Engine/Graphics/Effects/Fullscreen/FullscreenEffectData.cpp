@@ -9,6 +9,9 @@ namespace bv {
 //
 FullscreenEffectData::FullscreenEffectData                      ()
     : m_numInitializedTextures( 0 )
+    , m_blendEnabled( false )
+    , m_cullEnabled( false )
+    , m_depthTestEnabled( false )
 {
 }
 
@@ -128,6 +131,48 @@ unsigned int    FullscreenEffectData::GetNumInitializedTextures () const
 std::vector< IValuePtr >    FullscreenEffectData::GetValues     () const
 {
     return m_values;
+}
+
+// **************************
+//
+bool            FullscreenEffectData::IsBlendEnabled              () const
+{
+    return m_blendEnabled;
+}
+
+// **************************
+//
+void            FullscreenEffectData::SetBlendEnabled             ( bool enabled )
+{
+    m_blendEnabled = enabled;
+}
+
+// **************************
+//
+bool            FullscreenEffectData::IsCullEnabled               () const
+{
+    return m_cullEnabled;
+}
+
+// **************************
+//
+void            FullscreenEffectData::SetCullEnabled              ( bool enabled )
+{
+    m_cullEnabled = enabled;
+}
+
+// **************************
+//
+bool            FullscreenEffectData::IsDepthTestEnabled          () const
+{
+    return m_depthTestEnabled;
+}
+
+// **************************
+//
+void            FullscreenEffectData::SetDepthTestEnabled         ( bool enabled )
+{
+    m_depthTestEnabled = enabled;
 }
 
 } //bv

@@ -79,7 +79,7 @@ NodeEffectTrPtr  CreateAlphaMaskNodeEffect()
     auto logic = CreateNodeEffectLogic();
 
     auto pre  = new AlphaMaskPreFullscreenEffectLogic( 0.01f, 0.99f );
-    auto fse  = CreateFullscreenEffect( FullscreenEffectType::FET_BLIT_WITH_ALPHA );
+    auto fse  = CreateFullscreenEffect( FullscreenEffectType::FET_BLIT_WITH_ALPHA, pre->GetValues() );
 
     SetLogicComponents( logic, pre, fse, nullptr );
 
@@ -93,7 +93,7 @@ NodeEffectTrPtr  CreateNodeMaskNodeEffect()
     auto logic = CreateNodeEffectLogic();
 
     auto pre  = new NodeMaskPreFullscreenEffectLogic( 0.01f );
-    auto fse  = CreateFullscreenEffect( FullscreenEffectType::FET_BLIT_WITH_ALPHA_MASK );
+    auto fse  = CreateFullscreenEffect( FullscreenEffectType::FET_BLIT_WITH_ALPHA_MASK, pre->GetValues() );
     auto post = new DefaultPostFullscreenEffectLogic( 2 );
 
     SetLogicComponents( logic, pre, fse, post );
