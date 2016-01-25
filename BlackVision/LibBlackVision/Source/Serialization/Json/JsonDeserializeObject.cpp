@@ -97,21 +97,23 @@ std::string JsonDeserializeObject::GetParentAttribute        ( const std::string
 //
 bool JsonDeserializeObject::EnterChild          ( const std::string& name ) const
 {
-	m_nodeStack.push( m_currentNode );
-	
-    auto& node = (*m_currentNode)[ name ];
-    if( node.isArray() )
+    if( m_currentNode->isArray() )
     {
-        if( node.size() == 0 )
+        if( m_currentNode->size() == 0 )
             return false;
-        // Always push both node's when making an array.
-        // Array node can never be the current node.
-        m_nodeStack.push( &node );
-        m_indexStack.push( 0 );         //After EnterChild we are always in first array element.
-        m_currentNode = &( node[ 0 ] );
+
+        m_nodeStack.push( m_currentNode );
+
+        m_indexStack.push( 0 );                     //After EnterChild we are always in first array element.
+        m_currentNode = &( (*m_currentNode)[ 0 ] );
     }
     else
+    {
+        m_nodeStack.push( m_currentNode );
+
+        auto& node = (*m_currentNode)[ name ];
         m_currentNode = &node;
+    }
 
 	if( m_currentNode->isNull() )
     {
@@ -125,23 +127,16 @@ bool JsonDeserializeObject::EnterChild          ( const std::string& name ) cons
 //
 bool JsonDeserializeObject::ExitChild           () const
 {
+    assert( !m_nodeStack.empty() );
+
     if( m_nodeStack.empty() )
         return false;
 
+    if( m_currentNode->isArray() )
+        m_indexStack.pop();         // Restore last index, before we entered array.
+
 	m_currentNode = m_nodeStack.top();
     m_nodeStack.pop();
-
-    // If we took array node from stack, we have to take next top node too.
-    // Array node can never be the current node.
-    if( (*m_currentNode).isArray() )
-    {
-        if( m_nodeStack.empty() )
-            return false;       // Stack corrupted. It's very very bad.
-
-        m_currentNode = m_nodeStack.top();
-        m_nodeStack.pop();
-        m_indexStack.pop();     // Restore last index, before we entered array.
-    }
 
     return true;
 }
@@ -150,6 +145,8 @@ bool JsonDeserializeObject::ExitChild           () const
 //
 bool JsonDeserializeObject::NextChild           () const
 {
+    assert( !m_nodeStack.empty() );
+
     if( m_nodeStack.empty() )
         return false;
 
