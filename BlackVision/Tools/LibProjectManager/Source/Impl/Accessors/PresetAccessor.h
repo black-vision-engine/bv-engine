@@ -18,7 +18,7 @@ public:
     void                        SavePreset          ( const model::BasicNodePtr node, const Path & path ) const;
     model::BasicNodePtr         LoadPreset          ( const Path & path, const model::OffsetTimeEvaluatorPtr & timeline ) const;
 
-    PathVec                     ListPresets         ( const Path & path ) const;
+    PathVec                     ListPresets         ( const Path & path, bool recursive ) const;
     PathVec                     ListPresets         () const;
 
     static PresetAccessorConstPtr Create            ( const Path & path );

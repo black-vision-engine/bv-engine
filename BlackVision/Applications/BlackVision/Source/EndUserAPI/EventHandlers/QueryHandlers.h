@@ -26,6 +26,7 @@ private:
     void     ListSceneAssets         ( JsonSerializeObject & ser, const std::string & request, int eventID );
     void     ListProjectNames        ( JsonSerializeObject & ser, const std::string & request, int eventID );
     void     ListScenes              ( JsonSerializeObject & ser, const std::string & request, int eventID );
+    void     ListPresets             ( JsonSerializeObject & ser, const std::string & request, int eventID );
     void     ListAssetsPaths         ( JsonSerializeObject & ser, const std::string & request, int eventID );
     void     ListCategoriesNames     ( JsonSerializeObject & ser, const std::string & request, int eventID );
     void     ListProjects            ( JsonSerializeObject & ser, const std::string & request, int eventID );

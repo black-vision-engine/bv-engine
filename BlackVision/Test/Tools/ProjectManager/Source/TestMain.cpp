@@ -219,12 +219,12 @@ TEST( SavingPresets, ProjectManager )
 
 TEST( ListingPresets, ProjectManager )
 {
-    ASSERT_TRUE( g_pm0->ListPresets( "proj00", "pres" ).size() == 1 );
+    ASSERT_TRUE( g_pm0->ListPresets( "proj00", "pres", true ).size() == 1 );
     ASSERT_TRUE( g_pm0->ListPresets( "proj00" ).size() == 1 );
     ASSERT_TRUE( g_pm0->ListPresets().size() == 1 );
 
     ASSERT_TRUE( g_pm0->ListPresets( "proj01" ).size() == 0 );
-    ASSERT_TRUE( g_pm0->ListPresets( "proj01", "pres" ).size() == 0 );
+    ASSERT_TRUE( g_pm0->ListPresets( "proj01", "pres", true ).size() == 0 );
 }
 
 TEST( LoadingPresets, ProjectManager )

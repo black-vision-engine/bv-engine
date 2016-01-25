@@ -851,10 +851,10 @@ void                        ProjectManagerImpl::SavePreset          ( const mode
 
 // ********************************
 //
-PathVec                     ProjectManagerImpl::ListPresets         ( const Path & projectName, const Path & path ) const
+PathVec                     ProjectManagerImpl::ListPresets         ( const Path & projectName, const Path & path, bool recursive ) const
 {
     auto pathInCategory = TranslateToPathCategory( projectName, path );
-    return m_presetAccessor->ListPresets( pathInCategory );
+    return m_presetAccessor->ListPresets( pathInCategory, recursive );
 }
 
 // ********************************
@@ -862,14 +862,14 @@ PathVec                     ProjectManagerImpl::ListPresets         ( const Path
 PathVec                     ProjectManagerImpl::ListPresets         ( const Path & projectName ) const
 {
     auto pathInCategory = TranslateToPathCategory( projectName, "" );
-    return m_presetAccessor->ListPresets( pathInCategory );
+    return m_presetAccessor->ListPresets( pathInCategory, true );
 }
 
 // ********************************
 //
 PathVec                     ProjectManagerImpl::ListPresets         () const
 {
-    return m_presetAccessor->ListPresets( "" );
+    return m_presetAccessor->ListPresets( "", true );
 }
 
 // ********************************
