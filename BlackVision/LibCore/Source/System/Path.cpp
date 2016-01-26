@@ -250,14 +250,24 @@ PathVec			Path::List				( const Path & path, bool recursive, const std::string e
 
 	        PathVec ret;
 
+            if( IsFile( path ) )
+            {
+                if( regex_match( path.Str(), pattern ) )
+                {
+                    ret.push_back( path );
+                }
+
+                return ret;
+            }
+
             if( recursive )
             {
 	            for (	boost::filesystem::recursive_directory_iterator iter( cp ), end;
 			            iter != end;
-			            ++iter)
+			            ++iter )
 	            {
 		            std::string name = iter->path().filename().string();
-		            if (regex_match(name, pattern))
+		            if ( regex_match( name, pattern ) )
 		            {
 			            auto p = iter->path();
 			            ret.push_back( Path( iter->path().string() ) );
@@ -268,10 +278,10 @@ PathVec			Path::List				( const Path & path, bool recursive, const std::string e
             {
                 for (	boost::filesystem::directory_iterator iter( cp ), end;
 			            iter != end;
-			            ++iter)
+			            ++iter )
 	            {
 		            std::string name = iter->path().filename().string();
-		            if (regex_match(name, pattern))
+		            if ( regex_match( name, pattern ) )
 		            {
 			            auto p = iter->path();
 			            ret.push_back( Path( iter->path().string() ) );

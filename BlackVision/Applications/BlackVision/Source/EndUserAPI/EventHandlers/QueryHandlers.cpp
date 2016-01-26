@@ -470,21 +470,14 @@ void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser,
 
     PrepareResponseTemplate( ser, InfoEvent::Command::GetAssetThumbnail, eventID, true );
 
-    //if( desc )
-    //{
-    //    
-    //    ser.SetAttribute( "projectName", projectName );
-    //    ser.SetAttribute( "categoryName", categoryName );
-    //    ser.SetAttribute( "path", path );
+    ser.EnterArray( "thumbnails" );
 
-    //    ser.EnterChild( "AssetData" );
-    //    desc->Serialize( ser );
-    //    ser.ExitChild();
-    //}
-    //else
-    //{
-    //    ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetDescriptor, eventID, "Cannot find asset." );
-    //}
+    for( auto t : thumbs )
+    {
+        t->Serialize( ser );
+    }
+
+    ser.ExitChild(); // thumbnails
 }
 
 // ***********************

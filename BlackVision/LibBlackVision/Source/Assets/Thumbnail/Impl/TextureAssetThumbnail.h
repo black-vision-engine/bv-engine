@@ -33,7 +33,7 @@ public:
     static TextureAssetThumbnailConstPtr    Create      ( const MemoryChunkConstPtr & data, SizeType width, SizeType height, UInt32 bpp, const Hash & h );
     static TextureAssetThumbnailConstPtr    Create      ( IDeserializer & deser );
 
-    void                                    Serialize   ( ISerializer & ser ) const;
+    void                                    Serialize   ( ISerializer & ser ) const override;
 
     virtual     ~TextureAssetThumbnail  ();
 };
