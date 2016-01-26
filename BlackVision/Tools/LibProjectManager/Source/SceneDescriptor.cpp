@@ -4,7 +4,7 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 
 #include "Serialization/XML/XMLDeserializer.h"
-#include "Serialization/XML/XMLSerializer.h"
+#include "Serialization/BV/XML/BVXMLSerializer.h"
 #include "Serialization/BV/BVDeserializeContext.h"
 
 #include "Assets/AssetDescsWithUIDs.h"
@@ -86,7 +86,7 @@ namespace
 //
 void			            SceneDescriptor::SaveScene		( const model::SceneModelPtr & scene, std::ostream & out )
 {
-	auto ser = XMLSerializer( nullptr ); // FIXME(?)
+	auto ser = BVXMLSerializer();
 
     scene->Serialize( ser );
 
