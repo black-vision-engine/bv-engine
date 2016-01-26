@@ -5,9 +5,6 @@
 namespace bv
 {
 
-class Thumbnail;
-DEFINE_CONST_PTR_TYPE( Thumbnail )
-
 class ISerializer;
 
 class Thumbnail
@@ -25,5 +22,7 @@ public:
         // Override in sub-classes;
     };
 };
+
+DEFINE_CONST_PTR_TYPE( Thumbnail )
 
 } // bv
