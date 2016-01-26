@@ -285,6 +285,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelCompositeFullscreenEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelFullscreenEffectAlphaMask.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelFullscreenEffectDefault.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelFullscreenEffectMixChannels.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelFullscreenEffectNodeMask.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelFullscreenEffectWireframe.cpp" />
@@ -491,6 +492,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelCompositeFullscreenEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelFullscreenEffectAlphaMask.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelFullscreenEffectDefault.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelFullscreenEffectMixChannels.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelFullscreenEffectNodeMask.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelFullscreenEffectWireframe.h" />

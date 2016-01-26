@@ -2,8 +2,10 @@
 
 #include "BVAppLogic.h"
 
-#include "Engine/Models/NodeEffects/ModelNodeEffectDefault.h"
-#include "Engine/Models/NodeEffects/ModelNodeEffectMixChannels.h"
+#include "Engine/Models/NodeEffects/ModelNodeEffectFactory.h"
+#include "Engine/Models/NodeEffects/ModelFullscreenEffectMixChannels.h"
+
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 
 
 namespace bv {
@@ -18,15 +20,22 @@ TestGlobalEfectKeyboardHandler::TestGlobalEfectKeyboardHandler  ()
     m_curWireframeNodeIdx = 0;
     m_curMixChannelsPreset = 0;
     m_wireframeDisabled = true;
+
+    m_editor = nullptr;
 }
 
 // *********************************
 //
 void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic * logic )
 {
+    if( !m_editor ) 
+	{
+        m_editor = logic->GetBVScene()->GetSceneEditor();
+    }
+
     if( !m_defaultEffect )
     {
-        m_defaultEffect = std::make_shared< model::ModelNodeEffectDefault >( logic->GetGlobalTimeline() );
+        m_defaultEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_DEFAULT, "default", logic->GetGlobalTimeline() );
     }
 
     switch( c )
@@ -109,11 +118,11 @@ void                    TestGlobalEfectKeyboardHandler::HandleIncrement     ( BV
     if ( m_curSelectedNode == NodeEffectType::NET_ALPHA_MASK )
     {
         auto effect = GetAlphaMaskNodeEffect( logic );
-        if( effect->GetType() == NodeEffectType::NET_ALPHA_MASK )
+        auto fse = effect->GetFullscreenEffect();
+
+        if( fse->GetType() == NodeEffectType::NET_ALPHA_MASK )
         {
-            auto tEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( effect );
-        
-            auto alpha = tEffect->GetParamAlpha();
+            auto alpha = model::QueryTypedParam< model::ParamFloatPtr >( fse->GetParameter( "alpha" ) );
 
             alpha->SetVal( min( 1.f, alpha->Evaluate() + .1f ), 0.f );
 
@@ -122,13 +131,11 @@ void                    TestGlobalEfectKeyboardHandler::HandleIncrement     ( BV
     }
     else if ( m_curSelectedNode == NodeEffectType::NET_NODE_MASK )
     {
-        auto effect = GetNodeMaskNodeEffect( logic );
+        auto fse = GetNodeMaskNodeEffect( logic )->GetFullscreenEffect();
 
-        if( effect->GetType() == NodeEffectType::NET_NODE_MASK )
+        if( fse->GetType() == NodeEffectType::NET_NODE_MASK )
         {
-            auto tEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( effect );
-
-            auto alpha = tEffect->GetParamAlpha();
+            auto alpha = model::QueryTypedParam< model::ParamFloatPtr >( fse->GetParameter( "alpha" ) );
 
             alpha->SetVal( min( 1.f, alpha->Evaluate() + .1f ), 0.f );
 
@@ -146,9 +153,9 @@ void                    TestGlobalEfectKeyboardHandler::HandleIncrement     ( BV
             auto curNode = GetWireframeNode( logic, curIdx );
             auto nextNode = GetWireframeNode( logic, m_curWireframeNodeIdx );
 
-            curNode->SetNodeEffect( m_defaultEffect );
-            auto newEffect = std::make_shared< model::ModelNodeEffectWireframe >( logic->GetGlobalTimeline() );
-            nextNode->SetNodeEffect( newEffect );
+            m_editor->SetNodeEffect( curNode, m_defaultEffect );
+            auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_WIREFRAME, "wireframe", logic->GetGlobalTimeline() );
+            m_editor->SetNodeEffect( nextNode, newEffect );
         }        
     }
 }
@@ -159,13 +166,11 @@ void                    TestGlobalEfectKeyboardHandler::HandleDecrement     ( BV
 {
     if ( m_curSelectedNode == NodeEffectType::NET_ALPHA_MASK )
     {
-        auto effect = GetAlphaMaskNodeEffect( logic );
+        auto fse = GetAlphaMaskNodeEffect( logic )->GetFullscreenEffect();
 
-        if( effect->GetType() == NodeEffectType::NET_ALPHA_MASK )
+        if( fse->GetType() == NodeEffectType::NET_ALPHA_MASK )
         {
-            auto tEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( effect );
-
-            auto alpha = tEffect->GetParamAlpha();
+            auto alpha = model::QueryTypedParam< model::ParamFloatPtr >( fse->GetParameter( "alpha" ) );
 
             alpha->SetVal( max( 0.f, alpha->Evaluate() - .1f ), 0.f );
 
@@ -174,13 +179,11 @@ void                    TestGlobalEfectKeyboardHandler::HandleDecrement     ( BV
     }
     else if ( m_curSelectedNode == NodeEffectType::NET_NODE_MASK )
     {
-        auto effect = GetNodeMaskNodeEffect( logic );
+        auto fse = GetNodeMaskNodeEffect( logic )->GetFullscreenEffect();
 
-        if( effect->GetType() == NodeEffectType::NET_NODE_MASK )
+        if( fse->GetType() == NodeEffectType::NET_NODE_MASK )
         {
-            auto tEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( effect );
-
-            auto alpha = tEffect->GetParamAlpha();
+            auto alpha = model::QueryTypedParam< model::ParamFloatPtr >( fse->GetParameter( "alpha" ) );
 
             alpha->SetVal( max( 0.f, alpha->Evaluate() - .1f ), 0.f );
 
@@ -205,9 +208,9 @@ void                    TestGlobalEfectKeyboardHandler::HandleDecrement     ( BV
             auto curNode = GetWireframeNode( logic, curIdx );
             auto nextNode = GetWireframeNode( logic, m_curWireframeNodeIdx );
 
-            curNode->SetNodeEffect( m_defaultEffect );
-            auto newEffect = std::make_shared< model::ModelNodeEffectWireframe >( logic->GetGlobalTimeline() );
-            nextNode->SetNodeEffect( newEffect );
+            m_editor->SetNodeEffect( curNode, m_defaultEffect );
+            auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_WIREFRAME, "wireframe", logic->GetGlobalTimeline() );
+            m_editor->SetNodeEffect( nextNode, newEffect );
         }
     }
 }
@@ -218,17 +221,15 @@ void                    TestGlobalEfectKeyboardHandler::HandleSpace         ( BV
 {
     if ( m_curSelectedNode == NodeEffectType::NET_NODE_MASK )
     {
-        auto effect = GetNodeMaskNodeEffect( logic );
+        auto fse = GetNodeMaskNodeEffect( logic )->GetFullscreenEffect();
         
-        if( effect->GetType() == NodeEffectType::NET_NODE_MASK )
+        if( fse->GetType() == NodeEffectType::NET_NODE_MASK )
         {
-            auto tEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( effect );
+            auto paramBg = model::QueryTypedParam< model::ParamIntPtr >( fse->GetParameter( "maskIdx" ) );
+            auto paramFg = model::QueryTypedParam< model::ParamIntPtr >( fse->GetParameter( "fgIdx" ) );
 
-            auto paramBg = tEffect->GetParamBgIdx();
-            auto paramFg = tEffect->GetParamFgIdx();
-
-            auto bgIdx = tEffect->GetBackgroundChildIdx();
-            auto fgIdx = tEffect->GetForegroundChildIdx();
+            auto bgIdx = paramBg->Evaluate();
+            auto fgIdx = paramFg->Evaluate();
 
             paramBg->SetVal( fgIdx, 0.f );
             paramFg->SetVal( bgIdx, 0.f );
@@ -239,9 +240,9 @@ void                    TestGlobalEfectKeyboardHandler::HandleSpace         ( BV
     else
     {
         auto root = GetRootNode( logic );
-        auto effect = root->GetNodeEffect();
+        auto fse = root->GetNodeEffect()->GetFullscreenEffect();
 
-        if( effect->GetType() == NodeEffectType::NET_MIX_CHANNELS )
+        if( fse->GetType() == NodeEffectType::NET_MIX_CHANNELS )
         {
             SetNextMixChannelsPreset();
         }
@@ -259,16 +260,18 @@ void                    TestGlobalEfectKeyboardHandler::HandleToggleEffect  ( BV
 
         if ( effect )
         {
-            if ( effect->GetType() == NodeEffectType::NET_ALPHA_MASK )
+            auto fse = effect->GetFullscreenEffect();
+
+            if ( fse->GetType() == NodeEffectType::NET_ALPHA_MASK )
             {
-                m_alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( effect );
-                node->SetNodeEffect( m_defaultEffect );
+                m_alphaMaskEffect = effect;
+                m_editor->SetNodeEffect( node, m_defaultEffect );
             }
-            else if( effect->GetType() == NodeEffectType::NET_DEFAULT )
+            else if( fse->GetType() == NodeEffectType::NET_DEFAULT )
             {
                 assert( m_alphaMaskEffect );
                 
-                node->SetNodeEffect( m_alphaMaskEffect );
+                m_editor->SetNodeEffect( node, m_alphaMaskEffect );
                 m_alphaMaskEffect = nullptr;
             }
             else
@@ -284,16 +287,18 @@ void                    TestGlobalEfectKeyboardHandler::HandleToggleEffect  ( BV
 
         if ( effect )
         {
-            if ( effect->GetType() == NodeEffectType::NET_NODE_MASK )
+            auto fse = effect->GetFullscreenEffect();
+
+            if ( fse->GetType() == NodeEffectType::NET_NODE_MASK )
             {
-                m_nodeMaskEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( effect );
-                node->SetNodeEffect( m_defaultEffect );
+                m_nodeMaskEffect = effect;
+                m_editor->SetNodeEffect( node, m_defaultEffect );
             }
-            else if( effect->GetType() == NodeEffectType::NET_DEFAULT )
+            else if( fse->GetType() == NodeEffectType::NET_DEFAULT )
             {
                 assert( m_nodeMaskEffect );
                 
-                node->SetNodeEffect( m_nodeMaskEffect );
+                m_editor->SetNodeEffect( node, m_nodeMaskEffect );
                 m_nodeMaskEffect = nullptr;
             }
             else
@@ -309,17 +314,19 @@ void                    TestGlobalEfectKeyboardHandler::HandleToggleEffect  ( BV
 
         if ( effect )
         {
-            if ( effect->GetType() == NodeEffectType::NET_WIREFRAME )
+            auto fse = effect->GetFullscreenEffect();
+
+            if ( fse->GetType() == NodeEffectType::NET_WIREFRAME )
             {
-                m_wireframeEffect = std::static_pointer_cast< model::ModelNodeEffectWireframe >( effect );
-                node->SetNodeEffect( m_defaultEffect );
+                m_wireframeEffect = effect;
+                m_editor->SetNodeEffect( node, m_defaultEffect );
                 m_wireframeDisabled = true;
             }
-            else if( effect->GetType() == NodeEffectType::NET_DEFAULT )
+            else if( fse->GetType() == NodeEffectType::NET_DEFAULT )
             {
                 assert( m_wireframeEffect );
                 
-                node->SetNodeEffect( m_wireframeEffect );
+                m_editor->SetNodeEffect( node, m_wireframeEffect );
                 m_wireframeEffect = nullptr;
 
                 m_wireframeDisabled = false;
@@ -342,20 +349,22 @@ void                    TestGlobalEfectKeyboardHandler::HandleMixChannels   ( BV
 
     if( !effect )
     {
-        root->SetNodeEffect( m_defaultEffect );
+        m_editor->SetNodeEffect( root, m_defaultEffect );
     
         effect = m_defaultEffect;
     }
 
-    if ( effect->GetType() == NodeEffectType::NET_MIX_CHANNELS )
+    auto fse = effect->GetFullscreenEffect();
+
+    if ( fse->GetType() == NodeEffectType::NET_MIX_CHANNELS )
     {
-        root->SetNodeEffect( m_defaultEffect );
+        m_editor->SetNodeEffect( root, m_defaultEffect );
     }
     else
     {
-        assert( effect->GetType() == NodeEffectType::NET_DEFAULT );
+        assert( fse->GetType() == NodeEffectType::NET_DEFAULT );
 
-        root->SetNodeEffect( m_mixChannelsEffect );
+        m_editor->SetNodeEffect( root, m_mixChannelsEffect );
     }
 }
 
@@ -363,12 +372,12 @@ void                    TestGlobalEfectKeyboardHandler::HandleMixChannels   ( BV
 //
 void                    TestGlobalEfectKeyboardHandler::SetNextMixChannelsPreset()
 {
-    auto normal = model::ModelNodeEffectMixChannels::GetChannelMixMask( 0, 1, 2, 3 );
+    auto normal = model::ModelFullscreenEffectMixChannels::GetChannelMixMask( 0, 1, 2, 3 );
 
-    auto r_all  = model::ModelNodeEffectMixChannels::GetChannelMixMask( 0, 0, 0, 3 );
-    auto g_all  = model::ModelNodeEffectMixChannels::GetChannelMixMask( 1, 1, 1, 3 );
-    auto b_all  = model::ModelNodeEffectMixChannels::GetChannelMixMask( 2, 2, 2, 3 );
-    auto a_all  = model::ModelNodeEffectMixChannels::GetChannelMixMask( 3, 3, 3, 3 );
+    auto r_all  = model::ModelFullscreenEffectMixChannels::GetChannelMixMask( 0, 0, 0, 3 );
+    auto g_all  = model::ModelFullscreenEffectMixChannels::GetChannelMixMask( 1, 1, 1, 3 );
+    auto b_all  = model::ModelFullscreenEffectMixChannels::GetChannelMixMask( 2, 2, 2, 3 );
+    auto a_all  = model::ModelFullscreenEffectMixChannels::GetChannelMixMask( 3, 3, 3, 3 );
 
     auto all_mask   = glm::vec4( 1.f, 1.f, 1.f, 1.f );
     auto r_mask     = glm::vec4( 1.f, 0.f, 0.f, 1.f );
@@ -383,8 +392,8 @@ void                    TestGlobalEfectKeyboardHandler::SetNextMixChannelsPreset
 
     m_curMixChannelsPreset = ( m_curMixChannelsPreset + 1 ) % 8;
 
-    auto paramMix  = m_mixChannelsEffect->GetParamChannelMixMask();
-    auto paramMask = m_mixChannelsEffect->GetParamChannelMaskMask();
+    auto paramMix = model::QueryTypedParam< model::ParamIntPtr >( m_mixChannelsEffect->GetFullscreenEffect()->GetParameter( "channelMixMask" ) );
+    auto paramMask = model::QueryTypedParam< model::ParamVec4Ptr >( m_mixChannelsEffect->GetFullscreenEffect()->GetParameter( "channelMaskMask" ) );
 
     paramMix->SetVal( cur_mix_mask, 0.f );
     paramMask->SetVal( cur_chn_mask, 0.f );
@@ -454,8 +463,8 @@ model::IModelNodeEffectPtr TestGlobalEfectKeyboardHandler::GetAlphaMaskNodeEffec
 
     if (!effect) // || effect->GetType() != NodeEffectType::NET_ALPHA_MASK )
     {
-        auto newEffect = std::make_shared< model::ModelNodeEffectAlphaMask >( logic->GetGlobalTimeline() );
-        node->SetNodeEffect( newEffect );
+        auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_ALPHA_MASK, "alphamask", logic->GetGlobalTimeline() );
+        m_editor->SetNodeEffect( node, newEffect );
     }
 
     return node->GetNodeEffect();
@@ -470,8 +479,8 @@ model::IModelNodeEffectPtr  TestGlobalEfectKeyboardHandler::GetNodeMaskNodeEffec
 
     if (!effect) // || effect->GetType() != NodeEffectType::NET_NODE_MASK )
     {
-        auto newEffect = std::make_shared< model::ModelNodeEffectNodeMask >( logic->GetGlobalTimeline() );
-        node->SetNodeEffect( newEffect );
+        auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_NODE_MASK, "nodemask", logic->GetGlobalTimeline() );
+        m_editor->SetNodeEffect( node, newEffect );
     }
 
     return node->GetNodeEffect();
@@ -486,8 +495,8 @@ model::IModelNodeEffectPtr  TestGlobalEfectKeyboardHandler::GetNodeWireframeEffe
 
     if (!effect) // || effect->GetType() != NodeEffectType::NET_WIREFRAME )
     {
-        auto newEffect = std::make_shared< model::ModelNodeEffectWireframe >( logic->GetGlobalTimeline() );
-        node->SetNodeEffect( newEffect );
+        auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_WIREFRAME, "wireframe", logic->GetGlobalTimeline() );
+        m_editor->SetNodeEffect( node, newEffect );
     }
 
     return node->GetNodeEffect();

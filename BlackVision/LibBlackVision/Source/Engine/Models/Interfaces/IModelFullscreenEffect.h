@@ -1,10 +1,11 @@
 #pragma once
 
-#include "CoreDEF.h"
 #include "Engine/Interfaces/IUpdatable.h"
-#include "Engine/Types/Enums.h"
 #include "Engine/Interfaces/IValue.h"
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
+#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectTypes.h"
+
+#include "CoreDEF.h"
 
 
 namespace bv { namespace model {

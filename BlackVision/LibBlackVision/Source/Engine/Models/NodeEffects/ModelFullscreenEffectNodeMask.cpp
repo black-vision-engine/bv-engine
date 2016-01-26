@@ -14,7 +14,7 @@ ModelFullscreenEffectNodeMask::ModelFullscreenEffectNodeMask( const std::string 
 	, m_fgVal( 1 )
 	, m_alphaVal( 1.f )
 { 
-	auto bgIdxEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "bgIdx", timeEvaluator );
+	auto bgIdxEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "maskIdx", timeEvaluator );
 	auto fgIdxEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "fgIdx", timeEvaluator );
 	auto alphaEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
 
