@@ -34,10 +34,10 @@ public:
     static  void                SyncSingleNode                      ( model::BasicNodePtr modelNode, SceneNode * node );
 
     static  SceneNode *         BuildEngineSceneNode                ( model::BasicNodePtr modelNode, std::hash_map< model::IModelNode *, SceneNode * > & nodesMapping );
+    
+    static void                 UpdateSceneNodeEffect               ( SceneNode * node, model::BasicNodePtr modelNode );
 
 private:
-
-    static void                 UpdateSceneNodeEffect               ( SceneNode * node, model::BasicNodePtr modelNode );
 
     static  SceneNode *         BuildSingleEngineNode               ( model::BasicNodePtr modelNode );
 

@@ -14,12 +14,6 @@
 #include "Engine/Models/Plugins/Interfaces/IVertexShaderChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IGeometryShaderChannel.h"
 
-#include "Engine/Models/NodeEffects/ModelNodeEffectDefault.h"
-#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
-#include "Engine/Models/NodeEffects/ModelNodeEffectNodeMask.h"
-#include "Engine/Models/NodeEffects/ModelNodeEffectWireframe.h"
-#include "Engine/Models/NodeEffects/ModelNodeEffectMixChannels.h"
-
 #include "Engine/Graphics/Effects/NodeEffects/NodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/NodeMaskNodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
@@ -148,109 +142,17 @@ void    NodeUpdater::DoUpdate               ()
 }
 
 // *****************************
-// FIXME: change effects if required or assert that they cannot be changed in runtime
+//
 void    NodeUpdater::UpdateNodeEffect       ()
 {
-    auto name = m_modelNode->GetName();
     auto nodeEffect = m_modelNode->GetNodeEffect();
-
     if( nodeEffect )
     {
-        switch( nodeEffect->GetType() )
-        {
-            case NodeEffectType::NET_DEFAULT:
-            {
-                auto defaultEffect = std::static_pointer_cast< model::ModelNodeEffectDefault >( nodeEffect );
-
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-
-                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_DEFAULT )
-                {
-                    sceneNodeEffect = CreateNodeEffect( NodeEffectType::NET_DEFAULT );
-                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
-                }
-                break;
-            }
-            case NodeEffectType::NET_ALPHA_MASK:
-            {
-                auto alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( nodeEffect );
-                auto paramAlpha = alphaMaskEffect->GetParamAlpha();
-
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-
-                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_ALPHA_MASK )
-                {
-                    sceneNodeEffect = CreateNodeEffect( NodeEffectType::NET_ALPHA_MASK );
-                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
-                }
-
-                auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );
-
-                if ( alphaVal != nullptr )
-                {
-                    alphaVal->SetValue( alphaMaskEffect->GetAlpha() );
-                }
-
-                break;
-            }
-            case NodeEffectType::NET_NODE_MASK:
-            {
-                auto nodeMaskEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( nodeEffect );
-
-                auto paramBgIdx = nodeMaskEffect->GetParamBgIdx();
-                auto paramFgIdx = nodeMaskEffect->GetParamFgIdx();
-                auto paramAlpha = nodeMaskEffect->GetParamAlpha();
-
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-
-                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_NODE_MASK )
-                {
-                    sceneNodeEffect = CreateNodeEffect( NodeEffectType::NET_NODE_MASK );
-                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
-                }
-
-                auto bgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramBgIdx->GetName() ) );
-                auto fgIdxVal = std::static_pointer_cast< ValueInt >( sceneNodeEffect->GetValue( paramFgIdx->GetName() ) );
-                auto alphaVal = std::static_pointer_cast< ValueFloat >( sceneNodeEffect->GetValue( paramAlpha->GetName() ) );
-
-                if ( bgIdxVal != nullptr && fgIdxVal != nullptr && alphaVal != nullptr )
-                {
-                    bgIdxVal->SetValue( nodeMaskEffect->GetBackgroundChildIdx() );
-                    fgIdxVal->SetValue( nodeMaskEffect->GetForegroundChildIdx() );
-                    alphaVal->SetValue( nodeMaskEffect->GetAlpha() );
-                }
-
-                break;
-            }
-            case NodeEffectType::NET_WIREFRAME:
-            {
-                auto nodeMaskEffect = std::static_pointer_cast< model::ModelNodeEffectNodeMask >( nodeEffect );
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-
-                if ( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_WIREFRAME )
-                {
-                    sceneNodeEffect = CreateNodeEffect( NodeEffectType::NET_WIREFRAME );
-                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
-                }
-                break;
-            }
-            case NodeEffectType::NET_MIX_CHANNELS:
-            {
-                auto nodeMixhChannelsEffect = std::static_pointer_cast< model::ModelNodeEffectMixChannels >( nodeEffect );
-                auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
-
-                if( !sceneNodeEffect || sceneNodeEffect->GetType() != NodeEffectType::NET_MIX_CHANNELS )
-                {
-                    sceneNodeEffect = CreateNodeEffect( NodeEffectType::NET_MIX_CHANNELS );
-                    m_sceneNode->SetNodeEffect( sceneNodeEffect );
-                }
-                //FIXME: update parameters
-
-                break;
-            }
-            default:
-                assert( false );
-        }
+	    auto sceneNodeEffect = m_sceneNode->GetNodeEffect();
+        for( auto & val : nodeEffect->GetFullscreenEffect()->GetValues() )
+	    {
+		    UpdateValue( val, sceneNodeEffect->GetValue( val->GetName() ) );
+	    }
     }
 }
 
@@ -321,6 +223,43 @@ void            NodeUpdater::RegisterTex2Params  ( ITexturesDataConstPtr texture
         m_animMappingVec.push_back( std::make_pair( animations[ i ], tex2DSeq ) );
     }
 */
+}
+
+// *****************************
+//
+void    NodeUpdater::UpdateValue            ( IValueConstPtr source, IValuePtr dest )
+{
+    assert( source && source->GetType() == dest->GetType() );
+
+    switch( source->GetType() )
+    {
+        case ParamType::PT_INT:
+            UpdateTypedValue< ValueIntPtr >( source, dest );
+            break;
+        case ParamType::PT_FLOAT1:
+            UpdateTypedValue< ValueFloatPtr >( source, dest );
+            break;
+        case ParamType::PT_FLOAT2:
+            UpdateTypedValue< ValueVec2Ptr >( source, dest );
+            break;
+        case ParamType::PT_FLOAT3:
+            UpdateTypedValue< ValueVec3Ptr >( source, dest );
+            break;
+        case ParamType::PT_FLOAT4:
+            UpdateTypedValue< ValueVec4Ptr >( source, dest );
+            break;
+        case ParamType::PT_MAT2:
+            UpdateTypedValue< ValueMat2Ptr >( source, dest );
+            break;
+        case ParamType::PT_MAT3:
+            UpdateTypedValue< ValueMat3Ptr >( source, dest );
+            break;
+        case ParamType::PT_MAT4:
+            UpdateTypedValue< ValueMat4Ptr >( source, dest );
+            break;
+        default:
+            assert( false );
+    }
 }
 
 } //bv
