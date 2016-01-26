@@ -205,6 +205,12 @@
     <Filter Include="Serialization\JsonSpirit\JsonSpiritSource">
       <UniqueIdentifier>{3ff2194a-b846-4abc-a9c5-a29d2d702398}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Assets\Thumbnail">
+      <UniqueIdentifier>{7967207c-245f-44ac-9b20-e2f8846fba00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Thumbnail\Impl">
+      <UniqueIdentifier>{d3b25ace-ed29-4d73-836e-65e757857713}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -1154,6 +1160,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer.cpp">
       <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Thumbnail.cpp">
+      <Filter>Assets\Thumbnail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\TextureAssetThumbnail.cpp">
+      <Filter>Assets\Thumbnail\Impl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2471,6 +2483,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer_template.h">
       <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Thumbnail.h">
+      <Filter>Assets\Thumbnail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\TextureAssetThumbnail.h">
+      <Filter>Assets\Thumbnail\Impl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

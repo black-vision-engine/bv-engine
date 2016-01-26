@@ -77,9 +77,18 @@ TextConstPtr		FontLoader::TryLoadFont( const std::string & file, UInt32 size, UI
 }
 
 
+///////////////////////////////
+//
 AssetDescConstPtr FontLoader::CreateDescriptor	( const IDeserializer& deserializeObject ) const
 {
 	return std::static_pointer_cast<const AssetDesc>( FontAssetDesc::Create( deserializeObject ) );
+}
+
+///////////////////////////////
+//
+ThumbnailConstPtr FontLoader::LoadThumbnail     ( const AssetDescConstPtr & ) const
+{
+    return nullptr;
 }
 
 } // bv

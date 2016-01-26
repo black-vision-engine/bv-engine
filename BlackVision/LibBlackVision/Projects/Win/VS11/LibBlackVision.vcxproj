@@ -132,6 +132,8 @@
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\TextureAssetThumbnail.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Thumbnail.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\BaseEvent.cpp" />
@@ -426,6 +428,8 @@
     <ClInclude Include="..\..\..\Source\Assets\LAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\TextureAssetThumbnail.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Thumbnail.h" />
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\EventHelpers.h" />

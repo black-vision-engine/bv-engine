@@ -57,6 +57,22 @@ AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc )
 
 // ***********************
 //
+ThumbnailConstPtr   AssetManager::LoadThumbnail	( const AssetDescConstPtr & desc )
+{
+	auto it = m_loaders.find( desc->GetUID() );
+
+	if( it != m_loaders.end() )
+	{
+		return it->second->LoadThumbnail( desc );
+	}
+    else
+    {
+        return nullptr;
+    }
+}
+
+// ***********************
+//
 bool AssetManager::RegisterLoader( const std::string & assetDescUID, const AssetLoaderConstPtr & loader )
 {
 	auto it = m_loaders.find( assetDescUID );

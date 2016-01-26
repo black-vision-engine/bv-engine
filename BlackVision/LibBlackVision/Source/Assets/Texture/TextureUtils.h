@@ -23,6 +23,8 @@ struct TextureUtils
     static TextureAssetConstPtr         GetFromRawDataCache             ( const TextureAssetDescConstPtr & desc );
     static SingleTextureAssetConstPtr	GetFromRawDataCache             ( const SingleTextureAssetDescConstPtr & desc );
     static void                         AddToRawDataCache               ( const TextureAssetConstPtr & textureRes );
+
+    static ThumbnailConstPtr            LoadThumbnail                   ( const TextureAssetDescConstPtr & desc );
 };
 
 }  // bv

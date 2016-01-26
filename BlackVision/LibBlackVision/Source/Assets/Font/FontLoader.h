@@ -19,6 +19,8 @@ public:
 	AssetConstPtr			LoadAsset			( const bv::AssetDescConstPtr & ) const override;
 	AssetDescConstPtr		CreateDescriptor	( const IDeserializer& deserializeObject ) const override;
 
+    ThumbnailConstPtr       LoadThumbnail       ( const AssetDescConstPtr & desc ) const override;
+
     explicit                FontLoader( ){}
 
     virtual ~FontLoader(){}
