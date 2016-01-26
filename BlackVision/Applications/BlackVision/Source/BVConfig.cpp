@@ -94,6 +94,10 @@ BVConfig::BVConfig                      ()
     m_defaultNearClippingPlane  = 0.1f;
     m_defaultFarClippingPlane   = 100.f;
 
+	m_defaultFOV = ConfigManager::GetFloat( "camera/fov" );
+	if(m_defaultFOV==0.0f)
+		m_defaultFOV = 90.0f;
+
     m_defaultCameraPosition  = glm::vec3( ConfigManager::GetFloat( "camera/position/x" ), ConfigManager::GetFloat( "camera/position/y" ), ConfigManager::GetFloat( "camera/position/z" ) );
     m_defaultCameraDirection = glm::vec3( 0.f, 0.f, 0.f );
     m_defaultCameraUp        = glm::vec3( 0.f, 1.f, 0.f );
