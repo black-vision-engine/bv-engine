@@ -553,6 +553,7 @@ public:
         ListResourcesInFolders,
         ListAllResources,
         GetAssetDescriptor,
+        GetAssetThumbnail,
 
         Timelines,
         CheckTimelineTime,

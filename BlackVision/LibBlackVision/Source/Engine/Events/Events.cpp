@@ -296,6 +296,7 @@ std::pair< InfoEvent::Command, const std::wstring > InfoEventCommandMapping[] =
     , std::make_pair( InfoEvent::Command::ListResourcesInFolders, L"ListResourcesInFolders" )
     , std::make_pair( InfoEvent::Command::ListAllResources, L"ListAllResources" )
     , std::make_pair( InfoEvent::Command::GetAssetDescriptor, L"GetAssetDescriptor" )
+    , std::make_pair( InfoEvent::Command::GetAssetThumbnail, L"GetAssetThumbnail" )
 
     , std::make_pair( InfoEvent::Command::Timelines, L"TimeLines" ) 
     , std::make_pair( InfoEvent::Command::ListTimelineKeyframes, L"ListTimelineKeyframes" ) 

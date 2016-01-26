@@ -11,7 +11,8 @@ class Hash
 {
 public:
 
-	static Hash					FromString( const std::string & str );
+	static Hash					FromString  ( const std::string & str );
+    static Hash					FromFile    ( const std::string & path );
 
 	bool						operator <	( const Hash & b ) const;
 	bool						operator == ( const Hash & b ) const;

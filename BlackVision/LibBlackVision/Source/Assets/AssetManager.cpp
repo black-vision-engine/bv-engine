@@ -57,7 +57,7 @@ AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc )
 
 // ***********************
 //
-ThumbnailConstPtr   AssetManager::LoadThumbnail	( const AssetDescConstPtr & desc )
+ThumbnailConstPtr   AssetManager::LoadThumbnail	( const AssetDescConstPtr & desc ) const
 {
 	auto it = m_loaders.find( desc->GetUID() );
 

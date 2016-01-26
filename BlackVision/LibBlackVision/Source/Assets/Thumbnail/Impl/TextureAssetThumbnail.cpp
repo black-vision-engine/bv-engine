@@ -66,11 +66,12 @@ char * DecodeBase64( const std::string & enc )
 
 // ******************************
 //
-TextureAssetThumbnail::TextureAssetThumbnail    ( const MemoryChunkConstPtr & data, SizeType width, SizeType height, UInt32 bpp )
+TextureAssetThumbnail::TextureAssetThumbnail    ( const MemoryChunkConstPtr & data, SizeType width, SizeType height, UInt32 bpp, const Hash & h )
     : m_data( data )
     , m_width( width )
     , m_height( height )
     , m_bpp( bpp )
+    , m_origDataHash( h )
 {
 }
 
@@ -83,6 +84,7 @@ TextureAssetThumbnail::~TextureAssetThumbnail   ()
 // ******************************
 //
 TextureAssetThumbnail::TextureAssetThumbnail    ( IDeserializer & deser )
+    : m_origDataHash( "" )
 {
     deser.EnterChild( "thumbnail" );
     
@@ -91,6 +93,7 @@ TextureAssetThumbnail::TextureAssetThumbnail    ( IDeserializer & deser )
     m_width = std::stol( deser.GetAttribute( "width" ) );
     m_height = std::stol( deser.GetAttribute( "height" ) );
     m_bpp = std::stol( deser.GetAttribute( "bpp" ) );
+    m_origDataHash = Hash( deser.GetAttribute( "hash" ) );
 
     m_data = MemoryChunk::Create( DecodeBase64( deser.GetAttribute( "data" ) ), m_width * m_height * m_bpp / 8 );
 
@@ -101,9 +104,9 @@ TextureAssetThumbnail::TextureAssetThumbnail    ( IDeserializer & deser )
 
 // ******************************
 //
-TextureAssetThumbnailConstPtr       TextureAssetThumbnail::Create      ( const MemoryChunkConstPtr & data, SizeType width, SizeType height, UInt32 bpp )
+TextureAssetThumbnailConstPtr       TextureAssetThumbnail::Create      ( const MemoryChunkConstPtr & data, SizeType width, SizeType height, UInt32 bpp, const Hash & h )
 {
-    return TextureAssetThumbnailConstPtr( new TextureAssetThumbnail( data, width, height, bpp ) );
+    return TextureAssetThumbnailConstPtr( new TextureAssetThumbnail( data, width, height, bpp, h ) );
 }
 
 // ******************************
@@ -122,6 +125,13 @@ const char *                        TextureAssetThumbnail::DataBase64  () const
 
 // ******************************
 //
+const Hash &                        TextureAssetThumbnail::GetHash     () const
+{
+    return m_origDataHash;
+}
+
+// ******************************
+//
 void                                TextureAssetThumbnail::Serialize   ( ISerializer & ser ) const
 {
     ser.EnterChild( "thumbnail" );
@@ -129,6 +139,7 @@ void                                TextureAssetThumbnail::Serialize   ( ISerial
     ser.SetAttribute( "width", std::to_string( m_width ) );
     ser.SetAttribute( "height", std::to_string( m_height ) );
     ser.SetAttribute( "bpp", std::to_string( m_bpp ) );
+    ser.SetAttribute( "hash", m_origDataHash.Get() );
 
     ser.SetAttribute( "data", EncodeBase64( m_data->Get(), m_data->Size() ) );
 

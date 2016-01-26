@@ -35,6 +35,7 @@ private:
     //void     ListResourcesInFolders  ( JsonSerializeObject & ser, const std::string & request, int eventID );
     //void     ListAllResources        ( JsonSerializeObject & ser, const std::string & request, int eventID );
     void     GetAssetDescriptor      ( JsonSerializeObject & ser, const std::string & request, int eventID );
+    void     GetAssetThumbnail       ( JsonSerializeObject & ser, const std::string & request, int eventID );
 
     void     VideoCardsInfo          ( JsonSerializeObject & ser, const std::string & request, int eventID );
     void     GetNodeInfo             ( JsonSerializeObject & ser, const std::string & request, int eventID );

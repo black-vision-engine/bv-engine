@@ -68,6 +68,8 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             ListAllFolders( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::GetAssetDescriptor )
             GetAssetDescriptor( responseJSON, request, eventID );
+        else if( command == InfoEvent::Command::GetAssetThumbnail )
+            GetAssetThumbnail( responseJSON, request, eventID );
         //else if( command == InfoEvent::Command::ListResourcesInFolders )
         //    ListResourcesInFolders( responseJSON, request, eventID );
         //else if( command == InfoEvent::Command::ListAllResources )
@@ -439,6 +441,50 @@ void         QueryHandlers::GetAssetDescriptor      ( JsonSerializeObject & ser,
     {
         ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetDescriptor, eventID, "Cannot find asset." );
     }
+}
+
+// ***********************
+//
+void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser, const std::string & request, int eventID )
+{
+    auto projectName = GetRequestParamValue( request )[ "projectName" ].asString();
+    auto categoryName = GetRequestParamValue( request )[ "categoryName" ].asString();
+    auto path = GetRequestParamValue( request )[ "path" ].asString();
+
+    auto pm = ProjectManager::GetInstance();
+    auto aps = pm->ListAssetsPaths( projectName, categoryName, path, true );
+    
+    std::vector< ThumbnailConstPtr > thumbs;
+
+    for( auto & ap : aps )
+    {
+        ap = Path( ap.Str().substr( ap.Str().find_first_not_of( categoryName ) ) );
+        auto desc = pm->GetAssetDesc( projectName, categoryName, ap );
+
+        if( desc )
+        {
+            auto thumb = AssetManager::GetInstance().LoadThumbnail( desc );
+            thumbs.push_back( thumb );
+        }
+    }
+
+    PrepareResponseTemplate( ser, InfoEvent::Command::GetAssetThumbnail, eventID, true );
+
+    //if( desc )
+    //{
+    //    
+    //    ser.SetAttribute( "projectName", projectName );
+    //    ser.SetAttribute( "categoryName", categoryName );
+    //    ser.SetAttribute( "path", path );
+
+    //    ser.EnterChild( "AssetData" );
+    //    desc->Serialize( ser );
+    //    ser.ExitChild();
+    //}
+    //else
+    //{
+    //    ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetDescriptor, eventID, "Cannot find asset." );
+    //}
 }
 
 // ***********************

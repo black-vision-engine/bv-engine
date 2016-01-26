@@ -6,6 +6,7 @@
 #include "Assets/Thumbnail/Impl/TextureAssetThumbnail.h"
 #include "Serialization/Json/JsonSerializeObject.h"
 #include "Serialization/Json/JsonDeserializeObject.h"
+#include "DataTypes/Hash.h"
 
 #include <cassert>
 
@@ -422,29 +423,41 @@ ThumbnailConstPtr TextureUtils::LoadThumbnail( const TextureAssetDescConstPtr & 
 {
     auto texPath = desc->GetOrigTextureDesc()->GetImagePath();
 
-    auto thumbPath = Path( texPath ) / ".bvthumb";
+    auto absTexPath = ProjectManager::GetInstance()->ToAbsPath( texPath );
+
+    auto thumbPath = Path( absTexPath.Str() + ".bvthumb" );
 
     if( Path::Exists( thumbPath ) )
     {
         JsonDeserializeObject deser;
-        return TextureAssetThumbnail::Create( deser );
+        deser.LoadFile( thumbPath.Str() );
+
+        auto thumb = TextureAssetThumbnail::Create( deser );
+
+        auto h = Hash::FromFile( absTexPath.Str() );
+
+        if( h == thumb->GetHash() )
+        {
+            return thumb;
+        }
+
     }
-    else
-    {
-        auto t = LoadSingleTexture( desc->GetOrigTextureDesc(), false );
 
-        auto resized = image::Resize( t->GetData(), t->GetWidth(), t->GetHeight(), ToBPP( t->GetFormat() ), 128, 128, image::FilterType::FT_LANCZOS );
+    auto t = LoadSingleTexture( desc->GetOrigTextureDesc(), false );
 
-        auto thumb = TextureAssetThumbnail::Create( resized, 128, 128, ToBPP( t->GetFormat() ) );
+    auto resized = image::Resize( t->GetData(), t->GetWidth(), t->GetHeight(), ToBPP( t->GetFormat() ), 128, 128, image::FilterType::FT_LANCZOS );
 
-        JsonSerializeObject ser;
+    auto h = Hash::FromFile( absTexPath.Str() );
 
-        thumb->Serialize( ser );
+    auto thumb = TextureAssetThumbnail::Create( resized, 128, 128, ToBPP( t->GetFormat() ), h );
 
-        ser.Save( thumbPath.Str() );
+    JsonSerializeObject ser;
 
-        return thumb;
-    }
+    thumb->Serialize( ser );
+
+    ser.Save( thumbPath.Str() );
+
+    return thumb;
 }
 
 }  // bv
