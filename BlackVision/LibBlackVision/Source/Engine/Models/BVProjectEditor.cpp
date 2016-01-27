@@ -1261,7 +1261,7 @@ void				    BVProjectEditor::InitDefaultScene       ( model::SceneModelPtr scene
     {
         auto modelSceneRootNode = model::BasicNode::Create( DEFAULT_ROOT_NAME, nullptr );
         modelSceneRootNode->AddPlugin( model::DefaultTransformPluginDesc::UID(), "transform", defaultTimeline );
-        scene->SetRootNode( modelSceneRootNode );
+        scene->GetModelSceneEditor()->SetRootNode( m_rootNode, modelSceneRootNode );
     }
 }
 
