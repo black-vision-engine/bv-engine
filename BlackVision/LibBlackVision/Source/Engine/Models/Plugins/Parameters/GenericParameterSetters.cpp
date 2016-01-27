@@ -206,6 +206,100 @@ bool    RemoveCenterMassKey     ( ParamTransformPtr parameter, TimeType t )
     return true;
 }
 
+//
+//
+//
+
+// ***********************
+//
+bool    MoveRotationKey       ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t, TimeType newTime )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->MoveRotation( idx, t, newTime );
+    return true;
+}
+
+// ***********************
+//
+bool    MoveScaleKey          ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t, TimeType newTime )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->MoveScale( idx, t, newTime );
+    return true;
+}
+
+// ***********************
+//
+bool    MoveTranslationKey    ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t, TimeType newTime )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->MoveTranslation( idx, t, newTime );
+    return true;
+}
+
+// ***********************
+//
+bool    MoveCenterMassKey     ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t, TimeType newTime )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->MoveCenter( idx, t, newTime );
+    return true;
+}
+
+// ***********************
+//
+bool    MoveRotationKey       ( ParamTransformPtr parameter, TimeType t, TimeType newTime )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->MoveRotation( t, newTime );
+
+    return true;
+}
+
+// ***********************
+//
+bool    MoveScaleKey          ( ParamTransformPtr parameter, TimeType t, TimeType newTime )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->MoveScale( t, newTime );
+    return true;
+}
+
+// ***********************
+//
+bool    MoveTranslationKey    ( ParamTransformPtr parameter, TimeType t, TimeType newTime )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->MoveTranslation( t, newTime );
+    return true;
+}
+
+// ***********************
+//
+bool    MoveCenterMassKey     ( ParamTransformPtr parameter, TimeType t, TimeType newTime )
+{
+    if( parameter == nullptr )
+        return false;
+
+    parameter->MoveCenter( t, newTime );
+    return true;
+}
+
+
 } //anonymous
 
 
@@ -309,6 +403,50 @@ bool    RemoveTranslationKey    ( IParameterPtr parameter, TimeType t )
 bool    RemoveCenterMassKey     ( IParameterPtr parameter, TimeType t )
 {    return RemoveCenterMassKey( QueryTypedParam< ParamTransformPtr >( parameter ), t );  }
 
+
+// ========================================================================= //
+// Move transformation key
+// ========================================================================= //
+
+// ***********************
+//
+bool    MoveRotationKey         ( IParameterPtr parameter, unsigned int idx, TimeType t, TimeType newTime )
+{    return MoveRotationKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, newTime );  }
+
+// ***********************
+//
+bool    MoveScaleKey          ( IParameterPtr parameter, unsigned int idx, TimeType t, TimeType newTime )
+{    return MoveScaleKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, newTime );  }
+// ***********************
+//
+bool    MoveTranslationKey    ( IParameterPtr parameter, unsigned int idx, TimeType t, TimeType newTime )
+{    return MoveTranslationKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, newTime );  }
+
+// ***********************
+//
+bool    MoveCenterMassKey     ( IParameterPtr parameter, unsigned int idx, TimeType t, TimeType newTime )
+{    return MoveCenterMassKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, newTime );  }
+
+
+
+// ***********************
+//
+bool    MoveRotationKey       ( IParameterPtr parameter, TimeType t, TimeType newTime )
+{    return MoveRotationKey( QueryTypedParam< ParamTransformPtr >( parameter ), t, newTime );  }
+
+// ***********************
+//
+bool    MoveScaleKey          ( IParameterPtr parameter, TimeType t, TimeType newTime )
+{    return MoveScaleKey( QueryTypedParam< ParamTransformPtr >( parameter ), t, newTime );  }
+// ***********************
+//
+bool    MoveTranslationKey    ( IParameterPtr parameter, TimeType t, TimeType newTime )
+{    return MoveTranslationKey( QueryTypedParam< ParamTransformPtr >( parameter ), t, newTime );  }
+
+// ***********************
+//
+bool    MoveCenterMassKey     ( IParameterPtr parameter, TimeType t, TimeType newTime )
+{    return MoveCenterMassKey( QueryTypedParam< ParamTransformPtr >( parameter ), t, newTime );  }
 
 
 // ========================================================================= //
@@ -435,6 +573,37 @@ bool RemoveParameterKey ( IParameterPtr parameter, TimeType t )
             return RemoveTypedParamKey<ModelParamType::MPT_ENUM>( parameter, t );
         case ModelParamType::MPT_MAT2:
             return RemoveTypedParamKey<ModelParamType::MPT_MAT2>( parameter, t );
+    }
+    return false;
+}
+
+// ***********************
+//
+bool MoveParameterKey   ( IParameterPtr parameter, TimeType t, TimeType newTime )
+{
+    auto paramType = parameter->GetType();
+    switch( paramType )
+    {
+        case ModelParamType::MPT_FLOAT:
+            return MoveTypedParamKey<ModelParamType::MPT_FLOAT>( parameter, t, newTime );
+        case ModelParamType::MPT_VEC2:
+            return MoveTypedParamKey<ModelParamType::MPT_VEC2>( parameter, t, newTime );
+        case ModelParamType::MPT_VEC3:
+            return MoveTypedParamKey<ModelParamType::MPT_VEC3>( parameter, t, newTime );
+        case ModelParamType::MPT_VEC4:
+            return MoveTypedParamKey<ModelParamType::MPT_VEC4>( parameter, t, newTime );
+        case ModelParamType::MPT_WSTRING:
+            return MoveTypedParamKey<ModelParamType::MPT_WSTRING>( parameter, t, newTime );
+        case ModelParamType::MPT_STRING:
+            return MoveTypedParamKey<ModelParamType::MPT_STRING>( parameter, t, newTime );
+        case ModelParamType::MPT_INT:
+            return MoveTypedParamKey<ModelParamType::MPT_INT>( parameter, t, newTime );
+        case ModelParamType::MPT_BOOL:
+            return MoveTypedParamKey<ModelParamType::MPT_BOOL>( parameter, t, newTime );
+        case ModelParamType::MPT_ENUM:
+            return MoveTypedParamKey<ModelParamType::MPT_ENUM>( parameter, t, newTime );
+        case ModelParamType::MPT_MAT2:
+            return MoveTypedParamKey<ModelParamType::MPT_MAT2>( parameter, t, newTime );
     }
     return false;
 }

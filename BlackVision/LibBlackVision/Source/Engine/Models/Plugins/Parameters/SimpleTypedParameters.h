@@ -43,6 +43,7 @@ public:
     inline  ValueType       Evaluate            () const;
     inline  void            SetVal              ( const ValueType & val, TimeType t );
     inline  bool            RemoveVal           ( TimeType t );
+    inline  bool            MoveKey             ( TimeType t, TimeType newTime );
 
 	InterpolatorType &		AccessInterpolator	();
 

@@ -96,6 +96,23 @@ bool RemoveTypedParamKey( IParameterPtr parameter, TimeType t )
     return true;
 }
 
+template<ModelParamType ParamType>
+bool MoveTypedParamKey( IParameterPtr parameter, TimeType t, TimeType newTime )
+{
+    typedef ParamTypeTrait<ParamType>::ObjectType CastType;
+
+    CastType* typedParam = QueryTypedParam< std::shared_ptr< CastType > >( parameter ).get();
+    if( typedParam == nullptr )
+    {
+        return false;
+    }
+
+    typedParam->MoveKey( t, newTime );
+
+    return true;
+}
+
+
 } //anonymous
 
 
@@ -179,12 +196,87 @@ inline bool SetParameter< std::string >( IParameterPtr param, TimeType t, const 
     return SetSimpleTypedParameter< ParamString >( param, t, val );
 }
 
+
+
+//
 //// *******************************
 ////
-//template<> template< typename T >
-//inline bool SetParameter< T >( IParameterPtr param, TimeType t, const T & val )
+//template<>
+//inline bool MoveParameterKey< GenericEnumType >( IParameterPtr param, TimeType t, TimeType newTime )
 //{
-//    return SetSimpleTypedParameter< ParamEnum<T> >( param, t, val );
+//    return MoveTypedParamKey< ParamEnum<GenericEnumType> >( param, t, newTime );
+//}
+//
+//// *******************************
+////
+//template<>
+//inline bool MoveParameterKey< bool >( IParameterPtr param, TimeType t, TimeType newTime )
+//{
+//    return MoveTypedParamKey< ParamBool >( param, t, newTime );
+//}
+//
+//// *******************************
+////
+//template<>
+//inline bool MoveParameterKey< int >( IParameterPtr param, TimeType t, TimeType newTime )
+//{
+//    return MoveTypedParamKey< ParamInt >( param, t, newTime );
+//}
+//
+//// *******************************
+////
+//template<>
+//inline bool MoveParameterKey< float >( IParameterPtr param, TimeType t, TimeType newTime )
+//{
+//    return MoveTypedParamKey< ParamFloat >( param, t, newTime );
+//}
+//
+//// *******************************
+////
+//template<>
+//inline bool MoveParameterKey< glm::vec2 >( IParameterPtr param, TimeType t, TimeType newTime )
+//{
+//    return MoveTypedParamKey< ParamVec2 >( param, t, newTime );
+//}
+//
+//// *******************************
+////
+//template<>
+//inline bool MoveParameterKey< glm::vec3 >( IParameterPtr param, TimeType t, TimeType newTime )
+//{
+//    return MoveTypedParamKey< ParamVec3 >( param, t, newTime );
+//}
+//
+//// *******************************
+////
+//template<>
+//inline bool MoveParameterKey< glm::vec4 >( IParameterPtr param, TimeType t, TimeType newTime )
+//{
+//    return MoveTypedParamKey< ParamVec4 >( param, t, newTime );
+//}
+//
+//// *******************************
+////
+//template<>
+//inline bool MoveParameterKey< glm::mat2 >( IParameterPtr param, TimeType t, TimeType newTime )
+//{
+//    return MoveTypedParamKey< ParamMat2 >( param, t, newTime );
+//}
+//
+//// *******************************
+////
+//template<>
+//inline bool MoveParameterKey< std::wstring >( IParameterPtr param, TimeType t, TimeType newTime )
+//{
+//    return MoveTypedParamKey< ParamWString >( param, t, newTime );
+//}
+//
+//// *******************************
+////
+//template<>
+//inline bool MoveParameterKey< std::string >( IParameterPtr param, TimeType t, TimeType newTime )
+//{
+//    return MoveTypedParamKey< ParamString >( param, t, newTime );
 //}
 
 

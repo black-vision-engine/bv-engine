@@ -105,6 +105,17 @@ public:
         p2.RemoveKey( t );
     }
 
+    bool  MoveValues    ( TimeType t, TimeType newTime )
+    {
+        bool result = true;
+
+        result = result && p0.MoveKey( t, newTime );
+        result = result && p1.MoveKey( t, newTime );
+        result = result && p2.MoveKey( t, newTime );
+        
+        return result;
+    }
+
     TransformKind		KindKurwaMac()
     {
         return kind;
@@ -172,6 +183,16 @@ public:
     {
         m_angle.RemoveKey( t );
         m_rotationAxis.RemoveKey( t );
+    }
+
+    bool                        MoveRotation    ( TimeType t, TimeType newTime )
+    {
+        bool result = true;
+
+        result = result && m_angle.MoveKey( t, newTime );
+        result = result && m_rotationAxis.MoveKey( t, newTime );
+        
+        return result;
     }
 
 	Vec3Interpolator &			AccessRotAxis	()

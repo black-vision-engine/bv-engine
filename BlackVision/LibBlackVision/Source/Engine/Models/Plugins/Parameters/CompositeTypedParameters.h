@@ -45,6 +45,11 @@ public:
     inline  void        RemoveTranslation   ( TimeType t );
     inline  void        RemoveCenter        ( TimeType t );
 
+    inline  bool        MoveRotation        ( TimeType t, TimeType newTime );
+    inline  bool        MoveScale           ( TimeType t, TimeType newTime );
+    inline  bool        MoveTranslation     ( TimeType t, TimeType newTime );
+    inline  bool        MoveCenter          ( TimeType t, TimeType newTime );
+
     inline  TransformF& Transform       ();
 
     inline  glm::mat4   Evaluate        () const;
@@ -105,6 +110,11 @@ public:
     inline  void        RemoveScale         ( unsigned int transformNum, TimeType t );
     inline  void        RemoveTranslation   ( unsigned int transformNum, TimeType t );
     inline  void        RemoveCenter        ( unsigned int transformNum, TimeType t );
+
+    inline  bool        MoveRotation        ( unsigned int transformNum, TimeType t, TimeType newTime );
+    inline  bool        MoveScale           ( unsigned int transformNum, TimeType t, TimeType newTime );
+    inline  bool        MoveTranslation     ( unsigned int transformNum, TimeType t, TimeType newTime );
+    inline  bool        MoveCenter          ( unsigned int transformNum, TimeType t, TimeType newTime );
 
     inline  TransformF& Transform           ( unsigned int transformNum );
 

@@ -128,7 +128,7 @@ const std::wstring PARAM_TARGET_TYPE_WSTRING    = L"Target";
 std::pair< ParamKeyEvent::Command, const std::wstring > ParameterCommandMapping[] = 
     { std::make_pair( ParamKeyEvent::Command::AddKey, L"AddKey" )
     , std::make_pair( ParamKeyEvent::Command::RemoveKey, L"RemoveKey" ) 
-    , std::make_pair( ParamKeyEvent::Command::UpdateKey, L"UpdateKey" ) 
+    , std::make_pair( ParamKeyEvent::Command::MoveKey, L"MoveKey" ) 
     , std::make_pair( ParamKeyEvent::Command::SetInterpolatorType, L"SetInterpolator" ) 
     , std::make_pair( ParamKeyEvent::Command::SetInterpolatorPreWrapMethod, L"SetInterpolatorPreWrapMethod" )
     , std::make_pair( ParamKeyEvent::Command::SetInterpolatorPostWrapMethod, L"SetInterpolatorPostWrapMethod" )

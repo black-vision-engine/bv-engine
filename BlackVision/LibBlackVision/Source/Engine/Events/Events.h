@@ -214,8 +214,8 @@ public:
     typedef enum
     {
         AddKey,
-        UpdateKey,
         RemoveKey,
+        MoveKey,
         SetInterpolatorType,
         SetInterpolatorPreWrapMethod,
         SetInterpolatorPostWrapMethod,

@@ -53,6 +53,8 @@ private:
     bool                    AddTransformVecKey      ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime, const std::string & strValue );
     bool                    RemoveTransformVecKey   ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime );
 
+    bool                    MoveTransformKey        ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime, TimeType newTime );
+    bool                    MoveTransformVecKey     ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime, TimeType newTime );
 };
 
 } //bv
