@@ -14,9 +14,9 @@ namespace bv {
 //
 SceneNode::SceneNode           ( TransformableEntity * transformable )
     : m_transformable( transformable )
-    , m_nodeEffectTr( nullptr )
+    , m_nodeEffect( nullptr )
 {
-    m_nodeEffectTr = CreateNodeEffect( NodeEffectType::NET_DEFAULT );
+    m_nodeEffect = CreateNodeEffect( NodeEffectType::NET_DEFAULT );
 }
 
 // ********************************
@@ -110,16 +110,16 @@ TransformableEntity *   SceneNode::GetTransformable     ()
 
 // ********************************
 //
-NodeEffectTrPtr SceneNode::GetNodeEffect  ()
+NodeEffectPtr   SceneNode::GetNodeEffect  ()
 {
-    return m_nodeEffectTr;
+    return m_nodeEffect;
 }
 
 // ********************************
 //
-void            SceneNode::SetNodeEffect  ( NodeEffectTrPtr nodeEffect )
+void            SceneNode::SetNodeEffect  ( NodeEffectPtr nodeEffect )
 {
-    m_nodeEffectTr = nodeEffect;
+    m_nodeEffect = nodeEffect;
 }
 
 // ********************************

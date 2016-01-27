@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include "Engine/Graphics/Effects/NodeEffect/NodeEffectTr.h"
+#include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffectLogic.h"
 
 //PRE
@@ -26,9 +26,9 @@ namespace {
 
 // **************************
 //
-NodeEffectTrPtr  CreateNodeEffect( NodeEffectLogic * logic, NodeEffectType neType )
+NodeEffectPtr  CreateNodeEffect( NodeEffectLogic * logic, NodeEffectType neType )
 {
-    return std::make_shared< NodeEffectTr >( logic, neType );
+    return std::make_shared< NodeEffect >( logic, neType );
 }
 
 // **************************
@@ -63,7 +63,7 @@ void    SetLogicComponents( NodeEffectLogic * logic, PreFullscreenEffectLogic * 
 
 // **************************
 //
-NodeEffectTrPtr  CreateDefaultNodeEffect()
+NodeEffectPtr       CreateDefaultNodeEffect()
 {
     auto logic = CreateNodeEffectLogic();
     
@@ -74,7 +74,7 @@ NodeEffectTrPtr  CreateDefaultNodeEffect()
 
 // **************************
 //
-NodeEffectTrPtr  CreateAlphaMaskNodeEffect()
+NodeEffectPtr       CreateAlphaMaskNodeEffect()
 {
     auto logic = CreateNodeEffectLogic();
 
@@ -88,7 +88,7 @@ NodeEffectTrPtr  CreateAlphaMaskNodeEffect()
 
 // **************************
 //
-NodeEffectTrPtr  CreateNodeMaskNodeEffect()
+NodeEffectPtr       CreateNodeMaskNodeEffect()
 {
     auto logic = CreateNodeEffectLogic();
 
@@ -103,7 +103,7 @@ NodeEffectTrPtr  CreateNodeMaskNodeEffect()
 
 // **************************
 //
-NodeEffectTrPtr  CreateWireframeNodeEffect()
+NodeEffectPtr       CreateWireframeNodeEffect()
 {
     auto logic = CreateNodeEffectLogic();
 
@@ -117,7 +117,7 @@ NodeEffectTrPtr  CreateWireframeNodeEffect()
 
 // **************************
 //
-NodeEffectTrPtr  CreateMixchannelsNodeEffect()
+NodeEffectPtr       CreateMixchannelsNodeEffect()
 {
     auto logic = CreateNodeEffectLogic();
 
@@ -134,7 +134,7 @@ NodeEffectTrPtr  CreateMixchannelsNodeEffect()
 
 // **************************
 //
-NodeEffectTrPtr    CreateNodeEffect( NodeEffectType nodeEffectType )
+NodeEffectPtr       CreateNodeEffect( NodeEffectType nodeEffectType )
 {
     switch( nodeEffectType )
     {

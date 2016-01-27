@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Engine/Graphics/SceneGraph/TransformableEntity.h"
-#include "Engine/Graphics/Effects/NodeEffect/NodeEffectTr.h"
+#include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
 
 #include "CoreDEF.h"
 
@@ -25,7 +25,7 @@ private:
 
     SceneNodeVec            m_sceneNodes;
 
-    NodeEffectTrPtr         m_nodeEffectTr;
+    NodeEffectPtr           m_nodeEffect;
 
     TransformableEntity *   m_transformable;
 
@@ -47,8 +47,8 @@ public:
 
     TransformableEntity *   GetTransformable    ();
    
-    NodeEffectTrPtr         GetNodeEffect       ();
-    void                    SetNodeEffect       ( NodeEffectTrPtr nodeEffect );
+    NodeEffectPtr           GetNodeEffect       ();
+    void                    SetNodeEffect       ( NodeEffectPtr nodeEffect );
 
 private:
 

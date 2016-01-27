@@ -11,7 +11,7 @@ class NodeEffectLogic;
 class SceneNode;
 class RenderLogicContext;
 
-class NodeEffectTr
+class NodeEffect
 {
 private:
 
@@ -20,8 +20,8 @@ private:
 
 public:
 
-                    NodeEffectTr                ( NodeEffectLogic * logic,  NodeEffectType nodeEffectType );
-                    ~NodeEffectTr               ();
+                    NodeEffect                  ( NodeEffectLogic * logic,  NodeEffectType nodeEffectType );
+                    ~NodeEffect                 ();
 
     
     void            Render                      ( SceneNode * node, RenderLogicContext * ctx );
@@ -35,7 +35,7 @@ public:
 
 };
 
-DEFINE_PTR_TYPE(NodeEffectTr)
-DEFINE_CONST_PTR_TYPE(NodeEffectTr)
+DEFINE_PTR_TYPE(NodeEffect)
+DEFINE_CONST_PTR_TYPE(NodeEffect)
 
 } //bv

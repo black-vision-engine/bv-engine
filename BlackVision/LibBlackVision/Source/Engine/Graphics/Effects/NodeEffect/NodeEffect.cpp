@@ -1,4 +1,4 @@
-#include "NodeEffectTr.h"
+#include "NodeEffect.h"
 
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffectLogic.h"
 
@@ -7,7 +7,7 @@ namespace bv {
 
 // *********************************
 //
-NodeEffectTr::NodeEffectTr                ( NodeEffectLogic * logic, NodeEffectType neType )
+NodeEffect::NodeEffect              ( NodeEffectLogic * logic, NodeEffectType neType )
     : m_logic( logic )
     , m_type( neType )
 {
@@ -16,42 +16,42 @@ NodeEffectTr::NodeEffectTr                ( NodeEffectLogic * logic, NodeEffectT
 
 // *********************************
 //
-NodeEffectTr::~NodeEffectTr               ()
+NodeEffect::~NodeEffect             ()
 {
     delete m_logic;
 }
 
 // *********************************
 //
-void            NodeEffectTr::Render                      ( SceneNode * node, RenderLogicContext * ctx )
+void            NodeEffect::Render                      ( SceneNode * node, RenderLogicContext * ctx )
 {
     m_logic->Render( node, ctx );
 }
 
 // *********************************
 //
-NodeEffectType  NodeEffectTr::GetType                     () const
+NodeEffectType  NodeEffect::GetType                     () const
 {
     return m_type;
 }
 
 // *********************************
 //
-unsigned int    NodeEffectTr::GetNumValues                () const
+unsigned int    NodeEffect::GetNumValues                () const
 {
     return m_logic->GetNumValues();
 }
 
 // *********************************
 //
-IValuePtr       NodeEffectTr::GetValueAt                  ( unsigned int i ) const
+IValuePtr       NodeEffect::GetValueAt                  ( unsigned int i ) const
 {
     return m_logic->GetValueAt( i );
 }
 
 // *********************************
 //
-IValuePtr       NodeEffectTr::GetValue                    ( const std::string & name ) const
+IValuePtr       NodeEffect::GetValue                    ( const std::string & name ) const
 {
     return m_logic->GetValue( name );
 }

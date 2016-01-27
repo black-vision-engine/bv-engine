@@ -1,14 +1,13 @@
 #pragma once
 
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffectTypes.h"
-
-#include "Engine/Graphics/Effects/NodeEffect/NodeEffectTr.h"
+#include "Engine/Graphics/Effects/NodeEffect/NodeEffect.h"
 
 
 namespace bv {
 
-class NodeEffectTr;
+class NodeEffect;
 
-NodeEffectTrPtr    CreateNodeEffect( NodeEffectType nodeEffectType );
+NodeEffectPtr   CreateNodeEffect( NodeEffectType nodeEffectType );
 
 } //bv
