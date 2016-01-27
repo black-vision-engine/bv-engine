@@ -5,7 +5,7 @@
 #include "Engine/Graphics/Effects/NodeEffect/PreFullScreenEffectLogic.h"
 #include "Engine/Graphics/Effects/NodeEffect/PostFullScreenEffectLogic.h"
 
-#include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectTr.h"
+#include "Engine/Graphics/Effects/Fullscreen/FullscreenEffect.h"
 
 
 namespace bv {
@@ -27,7 +27,7 @@ private:
 
     PreFullscreenEffectLogic *      m_preFSELogic;
     
-    FullscreenEffectTr *            m_FSE;
+    FullscreenEffect *              m_FSE;
     
     PostFullscreenEffectLogic *     m_postFSELogic;
 
@@ -40,7 +40,7 @@ public:
 
     void            SetPreFullscreenEffectLogic ( PreFullscreenEffectLogic * logic );
     void            SetPostFullscreenEffectLogic( PostFullscreenEffectLogic * logic );
-    void            SetFullscreenEffect         ( FullscreenEffectTr * fse );
+    void            SetFullscreenEffect         ( FullscreenEffect * fse );
 
     unsigned int    GetNumValues                () const;
     IValuePtr       GetValueAt                  ( unsigned int i ) const;

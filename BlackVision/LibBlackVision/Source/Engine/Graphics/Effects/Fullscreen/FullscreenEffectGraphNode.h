@@ -7,7 +7,7 @@
 
 namespace bv {
 
-class FullscreenEffectTr;
+class FullscreenEffect;
 class FullscreenEffectGraphNode;
 
 DEFINE_PTR_TYPE(FullscreenEffectGraphNode)
@@ -17,19 +17,19 @@ class FullscreenEffectGraphNode
 {
 private:
 
-    FullscreenEffectTr *                            m_fullscreenEffect;
+    FullscreenEffect *                              m_fullscreenEffect;
 
     std::vector< FullscreenEffectGraphNodePtr >     m_inputNodes;
 
 public:
 
-                            FullscreenEffectGraphNode                       ( FullscreenEffectTr * fullscreenEffect );
+                            FullscreenEffectGraphNode                       ( FullscreenEffect * fullscreenEffect );
                             ~FullscreenEffectGraphNode                      ();
 
 
-    FullscreenEffectTr *                                GetEffect           ();
+    FullscreenEffect *                                  GetEffect           ();
 
-    void                                                AddInput            ( FullscreenEffectTr * fullscreenEffect );
+    void                                                AddInput            ( FullscreenEffect * fullscreenEffect );
     void                                                AddInput            ( FullscreenEffectGraphNodePtr node );
 
     unsigned int                                        GetNumInputNodes    () const;

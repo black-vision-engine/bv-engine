@@ -1,13 +1,13 @@
 #include "FullscreenEffectGraphNode.h"
 
-#include "Engine/Graphics/Effects/FullScreen/FullscreenEffectTr.h"
+#include "Engine/Graphics/Effects/FullScreen/FullscreenEffect.h"
 
 
 namespace  bv {
 
 // ****************************
 //
-FullscreenEffectGraphNode::FullscreenEffectGraphNode               ( FullscreenEffectTr * fullscreenEffect )
+FullscreenEffectGraphNode::FullscreenEffectGraphNode               ( FullscreenEffect * fullscreenEffect )
     : m_fullscreenEffect( fullscreenEffect )
 {
 }
@@ -21,14 +21,14 @@ FullscreenEffectGraphNode::~FullscreenEffectGraphNode              ()
 
 // ****************************
 //
-FullscreenEffectTr *                                FullscreenEffectGraphNode::GetEffect   ()
+FullscreenEffect *                                  FullscreenEffectGraphNode::GetEffect   ()
 {
     return m_fullscreenEffect;
 }
 
 // ****************************
 //
-void                                                FullscreenEffectGraphNode::AddInput    ( FullscreenEffectTr * fullscreenEffect )
+void                                                FullscreenEffectGraphNode::AddInput    ( FullscreenEffect * fullscreenEffect )
 {
     AddInput( std::make_shared< FullscreenEffectGraphNode >( fullscreenEffect ) );
 }

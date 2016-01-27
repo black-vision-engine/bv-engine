@@ -5,7 +5,7 @@
 
 #include "Engine/Models/Plugins/EngineConstantsMapper.h"
 
-#include "Engine/Graphics/Effects/InterlaceShadeders.h"
+#include "Engine/Graphics/Effects/InterlaceShaders.h"
 
 
 namespace bv {

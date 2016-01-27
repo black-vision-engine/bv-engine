@@ -40,7 +40,7 @@ NodeEffectLogic *  CreateNodeEffectLogic()
 
 // **************************
 //
-void    SetLogicComponents( NodeEffectLogic * logic, PreFullscreenEffectLogic * pre, FullscreenEffectTr * fse, PostFullscreenEffectLogic * post )
+void    SetLogicComponents( NodeEffectLogic * logic, PreFullscreenEffectLogic * pre, FullscreenEffect * fse, PostFullscreenEffectLogic * post )
 {
     assert( logic );
     assert( pre || fse || post );

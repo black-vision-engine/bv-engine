@@ -8,9 +8,9 @@
 
 namespace bv {
 
-class FullscreenEffectTr;
+class FullscreenEffect;
 
-FullscreenEffectTr *    CreateFullscreenEffect( FullscreenEffectType fseType, const std::vector< IValuePtr > & values );
-FullscreenEffectTr *    CreateFullscreenEffect( FullscreenEffectType fseType );
+FullscreenEffect *  CreateFullscreenEffect  ( FullscreenEffectType fseType, const std::vector< IValuePtr > & values );
+FullscreenEffect *  CreateFullscreenEffect  ( FullscreenEffectType fseType );
 
 } // bv

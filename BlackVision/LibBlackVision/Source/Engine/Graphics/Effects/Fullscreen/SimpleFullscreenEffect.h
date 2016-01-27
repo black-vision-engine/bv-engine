@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/Effects/FullScreen/FullscreenEffectTr.h"
+#include "Engine/Graphics/Effects/FullScreen/FullscreenEffect.h"
 #include "Engine/Graphics/Effects/FullScreen/FullscreenEffectData.h"
 
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
@@ -13,7 +13,7 @@ class TriangleStrip;
 class VertexShader;
 class PixelShader;
 
-class SimpleFullscreenEffect : public FullscreenEffectTr
+class SimpleFullscreenEffect : public FullscreenEffect
 {
 private:
 

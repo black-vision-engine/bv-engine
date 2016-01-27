@@ -142,7 +142,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectGraph.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectGraphNode.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectRenderLogic.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectTr.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectTypes.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenRenderableEffectTr.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenVSShader.cpp" />
@@ -155,7 +155,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\Impl\VideoOutputFullscreenEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\SimpleFullscreenEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceEffect.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShadeders.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShaders.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\RenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\VideoOutputRendering\VideoOutputRenderLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsEffect.cpp" />
@@ -403,7 +403,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectGraph.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectGraphNode.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectRenderLogic.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectTr.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectTypes.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenRenderableEffectTr.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenVSShader.h" />
@@ -416,7 +416,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\Impl\VideoOutputFullscreenEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\SimpleFullscreenEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceEffect.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShadeders.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShaders.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\RenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\VideoOutputRendering\VideoOutputRenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsEffect.h" />

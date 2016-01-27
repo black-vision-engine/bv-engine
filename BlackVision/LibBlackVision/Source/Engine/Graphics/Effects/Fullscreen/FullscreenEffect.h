@@ -11,11 +11,11 @@
 
 namespace bv {
 
-class FullscreenEffectTr
+class FullscreenEffect
 {
 public:
 
-    virtual                             ~FullscreenEffectTr     ();
+    virtual                             ~FullscreenEffect       ();
 
     virtual void                        Render                  ( FullscreenEffectContext * ctx )   = 0;
 
@@ -27,7 +27,7 @@ public:
 
 };
 
-DEFINE_PTR_TYPE(FullscreenEffectTr)
-DEFINE_CONST_PTR_TYPE(FullscreenEffectTr)
+DEFINE_PTR_TYPE(FullscreenEffect)
+DEFINE_CONST_PTR_TYPE(FullscreenEffect)
 
 } //bv

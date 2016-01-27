@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/Effects/FullScreen/FullscreenEffectTr.h"
+#include "Engine/Graphics/Effects/FullScreen/FullscreenEffect.h"
 #include "Engine/Graphics/Effects/FullScreen/FullscreenEffectGraphNode.h"
 
 
@@ -8,7 +8,7 @@ namespace bv {
 
 class FullscreenEffectGraph;
 
-class CompositeFullscreenEffect : public FullscreenEffectTr
+class CompositeFullscreenEffect : public FullscreenEffect
 {
 private:
 

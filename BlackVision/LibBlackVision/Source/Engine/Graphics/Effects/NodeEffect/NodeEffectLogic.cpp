@@ -71,7 +71,7 @@ void    NodeEffectLogic::SetPostFullscreenEffectLogic( PostFullscreenEffectLogic
 
 // *********************************
 //
-void    NodeEffectLogic::SetFullscreenEffect         ( FullscreenEffectTr * fse )
+void    NodeEffectLogic::SetFullscreenEffect         ( FullscreenEffect * fse )
 {
     delete m_FSE;
 

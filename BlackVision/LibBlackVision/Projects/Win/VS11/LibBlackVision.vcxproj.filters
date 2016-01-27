@@ -927,9 +927,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceEffect.cpp">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShadeders.cpp">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsShaders.cpp">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClCompile>
@@ -958,9 +955,6 @@
       <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectRenderLogic.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectTr.cpp">
       <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectTypes.cpp">
@@ -1067,6 +1061,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\Impl\VideoOutputFullscreenEffect.cpp">
       <Filter>Engine\Graphics\Effects\Fullscreen\Old\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShaders.cpp">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffect.cpp">
+      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1994,9 +1994,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceEffect.h">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShadeders.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsShaders.h">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
@@ -2025,9 +2022,6 @@
       <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectRenderLogic.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectTr.h">
       <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectTypes.h">
@@ -2137,6 +2131,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\Impl\VideoOutputFullscreenEffect.h">
       <Filter>Engine\Graphics\Effects\Fullscreen\Old\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShaders.h">
+      <Filter>Engine\Graphics\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffect.h">
+      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

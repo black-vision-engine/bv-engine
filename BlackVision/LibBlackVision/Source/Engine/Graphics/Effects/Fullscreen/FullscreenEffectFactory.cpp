@@ -25,7 +25,7 @@ namespace {
     
 // **************************
 //
-FullscreenEffectTr *    CreateSimpleBlitFSE         ( const std::vector< IValuePtr > & values )
+FullscreenEffect *  CreateSimpleBlitFSE         ( const std::vector< IValuePtr > & values )
 {
     FullscreenEffectData fseData;
     auto src = FSEShaderSourceProvider->ReadShader( "blit_no_alpha.frag" );
@@ -43,7 +43,7 @@ FullscreenEffectTr *    CreateSimpleBlitFSE         ( const std::vector< IValueP
 
 // **************************
 //
-FullscreenEffectTr *    CreateBlitWithAlphaFSE      ( const std::vector< IValuePtr > & values )
+FullscreenEffect *  CreateBlitWithAlphaFSE      ( const std::vector< IValuePtr > & values )
 {
     FullscreenEffectData fseData;
     auto src = FSEShaderSourceProvider->ReadShader( "blit_alpha.frag" );
@@ -64,7 +64,7 @@ FullscreenEffectTr *    CreateBlitWithAlphaFSE      ( const std::vector< IValueP
 
 // **************************
 //
-FullscreenEffectTr *    CreateBlitWithAlphaMaskFSE  ( const std::vector< IValuePtr > & values )
+FullscreenEffect *  CreateBlitWithAlphaMaskFSE  ( const std::vector< IValuePtr > & values )
 {
     FullscreenEffectData fseData;
     auto src = FSEShaderSourceProvider->ReadShader( "blit_mask_alpha.frag" );
@@ -88,7 +88,7 @@ FullscreenEffectTr *    CreateBlitWithAlphaMaskFSE  ( const std::vector< IValueP
 
 // **************************
 //
-FullscreenEffectTr *    CreateInterlaceFSE          ( const std::vector< IValuePtr > & values )
+FullscreenEffect *  CreateInterlaceFSE          ( const std::vector< IValuePtr > & values )
 {
     FullscreenEffectData fseData;
     auto src = FSEShaderSourceProvider->ReadShader( "interlace.frag" );
@@ -114,7 +114,7 @@ FullscreenEffectTr *    CreateInterlaceFSE          ( const std::vector< IValueP
 
 // **************************
 //
-FullscreenEffectTr *    CreateMixChannelsFSE        ( const std::vector< IValuePtr > & values )
+FullscreenEffect *  CreateMixChannelsFSE        ( const std::vector< IValuePtr > & values )
 {
     FullscreenEffectData fseData;
     auto src = FSEShaderSourceProvider->ReadShader( "mixchannels.frag" );
@@ -139,7 +139,7 @@ FullscreenEffectTr *    CreateMixChannelsFSE        ( const std::vector< IValueP
 
 // **************************
 //
-FullscreenEffectTr *    CreateFullscreenEffect( FullscreenEffectType fseType, const std::vector< IValuePtr > & values )
+FullscreenEffect *  CreateFullscreenEffect( FullscreenEffectType fseType, const std::vector< IValuePtr > & values )
 {
     switch( fseType )
     {
@@ -172,7 +172,7 @@ FullscreenEffectTr *    CreateFullscreenEffect( FullscreenEffectType fseType, co
 
 // **************************
 //
-FullscreenEffectTr *    CreateFullscreenEffect( FullscreenEffectType fseType )
+FullscreenEffect *  CreateFullscreenEffect( FullscreenEffectType fseType )
 {
     return CreateFullscreenEffect( fseType, std::vector< IValuePtr >() );
 }
