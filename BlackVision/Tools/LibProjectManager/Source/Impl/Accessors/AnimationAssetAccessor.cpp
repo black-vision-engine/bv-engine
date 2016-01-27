@@ -243,6 +243,11 @@ PathVec				AnimationAssetAccessor::ListAll				( const Path & path, bool recursiv
             }
         }
     }
+
+    for( auto & p : ret )
+    {
+        p = Path::RelativePath( p, m_rootPath );
+    }
     
     return ret;
 }

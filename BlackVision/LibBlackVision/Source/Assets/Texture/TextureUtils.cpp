@@ -427,14 +427,14 @@ ThumbnailConstPtr TextureUtils::LoadThumbnail( const TextureAssetDescConstPtr & 
 
     auto thumbPath = Path( absTexPath.Str() + ".bvthumb" );
 
+    auto h = Hash::FromFile( absTexPath.Str() );
+
     if( Path::Exists( thumbPath ) )
     {
         JsonDeserializeObject deser;
         deser.LoadFile( thumbPath.Str() );
 
         auto thumb = TextureAssetThumbnail::Create( deser );
-
-        auto h = Hash::FromFile( absTexPath.Str() );
 
         if( h == thumb->GetHash() )
         {
@@ -447,9 +447,9 @@ ThumbnailConstPtr TextureUtils::LoadThumbnail( const TextureAssetDescConstPtr & 
 
     auto resized = image::Resize( t->GetData(), t->GetWidth(), t->GetHeight(), ToBPP( t->GetFormat() ), 128, 128, image::FilterType::FT_LANCZOS );
 
-    auto h = Hash::FromFile( absTexPath.Str() );
+    auto compresed = image::SaveTGAToHandle( resized, 128, 128, 32 );
 
-    auto thumb = TextureAssetThumbnail::Create( resized, 128, 128, ToBPP( t->GetFormat() ), h );
+    auto thumb = TextureAssetThumbnail::Create( compresed, h );
 
     JsonSerializeObject ser;
 
