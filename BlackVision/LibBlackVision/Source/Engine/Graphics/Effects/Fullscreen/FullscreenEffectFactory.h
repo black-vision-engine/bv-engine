@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Engine/Graphics/Effects/FullScreen/FullscreenEffectTypes.h"
+#include "Engine/Graphics/Effects/FullScreen/FullscreenEffect.h"
 #include "Engine/Interfaces/IValue.h"
 
 

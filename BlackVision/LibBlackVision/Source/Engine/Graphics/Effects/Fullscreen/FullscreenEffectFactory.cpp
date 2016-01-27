@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include "Engine/Graphics/Effects/Fullscreen/SimpleFullscreenEffect.h"
+#include "Engine/Graphics/Effects/Fullscreen/Impl/SimpleFullscreenEffect.h"
 
 #include "Engine/Types/Values/ValuesFactory.h"
 

@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Engine/Graphics/Effects/FullScreen/FullscreenEffect.h"
-#include "Engine/Graphics/Effects/FullScreen/FullscreenEffectData.h"
+#include "Engine/Graphics/Effects/FullScreen/Impl/FullscreenEffectData.h"
 
 #include "Engine/Graphics/Shaders/RenderableEffect.h"
 #include "Engine/Interfaces/IValue.h"
 
 namespace  bv {
 
+class RenderTarget;
 class Camera;
 class TriangleStrip;
 class VertexShader;

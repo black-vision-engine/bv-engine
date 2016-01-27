@@ -10,8 +10,8 @@
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"
 
 #include "Engine/Graphics/Effects/Utils/FullscreenUtils.h"
-#include "Engine/Graphics/Effects/FullScreen/FullscreenVSShader.h"
-#include "Engine/Graphics/Effects/FullScreen/FullscreenRenderableEffect.h"
+#include "Engine/Graphics/Effects/FullScreen/Impl/FullscreenVSShader.h"
+#include "Engine/Graphics/Effects/FullScreen/Impl/FullscreenRenderableEffect.h"
 
 #include "Engine/Models/Plugins/EngineConstantsMapper.h"
 
