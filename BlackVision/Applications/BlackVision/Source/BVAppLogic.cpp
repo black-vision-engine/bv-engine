@@ -404,7 +404,7 @@ void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int m
     if( frameMillis < DefaultConfig.FrameTimeMillis() )
     {
         Sleep( DefaultConfig.FrameTimeMillis() - frameMillis );
-        printf( "Sleeping: %d\n", DefaultConfig.FrameTimeMillis() - frameMillis );
+        //printf( "Sleeping: %d\n", DefaultConfig.FrameTimeMillis() - frameMillis );
     }
 }
 

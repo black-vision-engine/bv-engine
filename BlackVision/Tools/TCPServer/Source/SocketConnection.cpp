@@ -109,7 +109,7 @@ void SocketConnection::MainThread()
 
                 // do the actual conversion
                 std::vector<char> buffer;
-                SizeType bufferSize = toSend.length();
+                SizeType bufferSize = toSend.length()+1;
                 buffer.resize( bufferSize );
 
                 wcstombs_s( &bufferSize, buffer.data(), bufferSize, toSend.c_str(), _TRUNCATE );
