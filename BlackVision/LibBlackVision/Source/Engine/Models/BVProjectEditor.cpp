@@ -62,9 +62,9 @@ void    BVProjectEditor::AddScene       ( model::SceneModelPtr scene )
         scene->SetName( PrefixSceneName( sceneName ) );
     }
 
-    InitDefaultScene( scene );
-
     m_project->AddScene( scene );
+
+    InitDefaultScene( scene );
 
     auto sceneRoot = scene->GetRootNode();
     if( sceneRoot )
