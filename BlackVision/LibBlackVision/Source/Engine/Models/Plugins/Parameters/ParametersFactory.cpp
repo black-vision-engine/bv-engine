@@ -40,7 +40,7 @@ ParamFloat                          ParametersFactory::CreateParameter          
 
 // *******************************
 //
-ParamTransform                      ParametersFactory::CreateParameter                     ( const std::string & name, const TransformF & interpolator, ITimeEvaluatorPtr timeline )
+ParamTransform                      ParametersFactory::CreateParameter                     ( const std::string & name, const CompositeTransform & interpolator, ITimeEvaluatorPtr timeline )
 {
     return ParamTransform( name, interpolator, timeline );
 }
@@ -106,7 +106,7 @@ ParamFloatPtr                        ParametersFactory::CreateParameterFloat    
 //
 ParamTransformPtr                    ParametersFactory::CreateParameterTransform            ( const std::string & name, ITimeEvaluatorPtr timeline )
 {
-    return std::make_shared< ParamTransform >( name, TransformF(), timeline );
+    return std::make_shared< ParamTransform >( name, CompositeTransform(), timeline );
 }
 
 //// *******************************

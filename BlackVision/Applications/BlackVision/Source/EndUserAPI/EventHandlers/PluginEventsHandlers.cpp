@@ -423,6 +423,8 @@ bool        PluginEventsHandlers::AddTransformKey        ( ParameterPtr & param,
         }
         case TransformKind::scale:
             return SetParameterScale( param, keyTime, SerializationHelper::String2T( strValue, glm::vec3( 1.f ) ) );
+        case TransformKind::fwd_center:
+            return SetParameterCenterMass( param, keyTime, SerializationHelper::String2T( strValue, glm::vec3( 1.f ) ) );
         default:
             return false;;
     }

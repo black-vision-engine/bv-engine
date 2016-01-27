@@ -8,19 +8,16 @@
 
 namespace bv { namespace model {
 
-class ParamTransform;
-DEFINE_PTR_TYPE( ParamTransform )
-
 // *******************************************
 class ParamTransform : public AbstractModelParameter
 {
 private:
 
-    TransformF m_transformModel;
+    CompositeTransform  m_transformModel;
 
 public:
 
-    explicit            ParamTransform  ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator );
+    explicit            ParamTransform  ( const std::string & name, const CompositeTransform & transform, ITimeEvaluatorPtr evaluator );
 
     void                Serialize       ( ISerializer& doc ) const;
 
@@ -34,7 +31,6 @@ public:
 
     virtual int         GetNumKeys      ();
 
-
     inline  void        SetRotation     ( const glm::vec3 & rotAxis, float angle, TimeType t );
     inline  void        SetScale        ( const glm::vec3 & scale, TimeType t );
     inline  void        SetTranslation  ( const glm::vec3 & translation, TimeType t );
@@ -45,23 +41,19 @@ public:
     inline  void        RemoveTranslation   ( TimeType t );
     inline  void        RemoveCenter        ( TimeType t );
 
-    inline  TransformF& Transform       ();
+    inline  CompositeTransform & Transform      ();
 
-    inline  glm::mat4   Evaluate        () const;
+    inline  glm::mat4           Evaluate        () const;
 
-    virtual VoidPtr     QueryParamTyped () override;
+    virtual VoidPtr             QueryParamTyped () override;
 
-    const TransformF &  GetTransformF   () const
-    {
-        return m_transformModel;
-    }
+    const CompositeTransform &  GetTransform    () const;
 
-    static  ModelParamType  Type        ()
-    {
-        return ModelParamType::MPT_TRANSFORM;
-    }
+    static  ModelParamType      Type            ();
 
 };
+
+DEFINE_PTR_TYPE( ParamTransform )
 
 //class ParamTransformVec;
 //DEFINE_PTR_TYPE(ParamTransformVec)

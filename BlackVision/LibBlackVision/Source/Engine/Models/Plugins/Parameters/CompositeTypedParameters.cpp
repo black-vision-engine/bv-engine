@@ -6,7 +6,7 @@ namespace bv { namespace model {
 
 // *******************************
 //
-ParamTransform::ParamTransform  ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator )
+ParamTransform::ParamTransform  ( const std::string & name, const CompositeTransform & transform, ITimeEvaluatorPtr evaluator )
     : AbstractModelParameter( name, ModelParamType::MPT_TRANSFORM, evaluator )
     , m_transformModel( transform )
 {
@@ -89,6 +89,19 @@ VoidPtr    ParamTransform::QueryParamTyped  ()
     return std::static_pointer_cast< void >( shared_from_this() );
 }
 
+// *************************************
+//
+const CompositeTransform &      ParamTransform::GetTransform   () const
+{
+    return m_transformModel;
+}
+
+// *************************************
+//
+ModelParamType                  ParamTransform::Type            ()
+{
+    return ModelParamType::MPT_TRANSFORM;
+}
 
 // ******************************************************************************************
 

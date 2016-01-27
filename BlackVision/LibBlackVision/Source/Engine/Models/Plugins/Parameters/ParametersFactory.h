@@ -17,7 +17,7 @@ public:
     static ParamVec3            CreateParameter                     ( const std::string & name, const Vec3Interpolator & interpolator, ITimeEvaluatorPtr timeline );
     static ParamVec4            CreateParameter                     ( const std::string & name, const Vec4Interpolator & interpolator, ITimeEvaluatorPtr timeline );
     static ParamFloat           CreateParameter                     ( const std::string & name, const FloatInterpolator & interpolator, ITimeEvaluatorPtr timeline );
-    static ParamTransform       CreateParameter                     ( const std::string & name, const TransformF & interpolator, ITimeEvaluatorPtr timeline );
+    static ParamTransform       CreateParameter                     ( const std::string & name, const CompositeTransform & interpolator, ITimeEvaluatorPtr timeline );
 //    static ParamTransformVec    CreateParameter                     ( const std::string & name, const TransformF & interpolator, ITimeEvaluatorPtr timeline, int dummy );
 
     template<typename T>
