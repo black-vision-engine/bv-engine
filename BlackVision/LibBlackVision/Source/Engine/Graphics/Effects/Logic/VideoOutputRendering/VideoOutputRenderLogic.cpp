@@ -1,6 +1,6 @@
 #include "VideoOutputRenderLogic.h"
 
-#include "Engine/Graphics/Effects/FullScreen/Impl/VideoOutputFullscreenEffect.h"
+#include "Engine/Graphics/Effects/FullScreen/Old/Impl/VideoOutputFullscreenEffect.h"
 
 #include "Engine/Graphics/Resources/RenderTarget.h"
 #include "Engine/Graphics/Renderers/Renderer.h"

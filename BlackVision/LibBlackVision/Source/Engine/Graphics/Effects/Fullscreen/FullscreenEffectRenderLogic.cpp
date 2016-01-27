@@ -3,7 +3,7 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
 
-#include "Engine/Graphics/Effects/FullScreen/FullscreenEffect.h"
+#include "Engine/Graphics/Effects/FullScreen/Old/FullscreenEffectOld.h"
 
 
 namespace bv {

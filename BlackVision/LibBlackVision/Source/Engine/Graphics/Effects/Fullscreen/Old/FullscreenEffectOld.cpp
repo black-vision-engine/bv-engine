@@ -1,4 +1,4 @@
-#include "FullscreenEffect.h"
+#include "FullscreenEffectOld.h"
 
 #include <sstream>
 
@@ -11,7 +11,7 @@
 
 #include "Engine/Models/Builder/RendererStatesBuilder.h"
 
-#include "Engine/Graphics/Effects/FullScreen/Impl/FullscreenRenderableEffect.h"
+#include "Engine/Graphics/Effects/FullScreen/Old/Impl/FullscreenRenderableEffect.h"
 
 #include "Engine/Graphics/Effects/Utils/FullscreenUtils.h"
 
@@ -22,7 +22,7 @@ namespace bv {
 
 // **************************
 //
-FullscreenEffect::FullscreenEffect      ()
+FullscreenEffectOld::FullscreenEffectOld      ()
     : m_fullscreenQuad( nullptr )
     , m_fullscreenCamera( nullptr )
 {
@@ -31,7 +31,7 @@ FullscreenEffect::FullscreenEffect      ()
 
 // **************************
 //
-FullscreenEffect::~FullscreenEffect     ()
+FullscreenEffectOld::~FullscreenEffectOld     ()
 {
     delete m_fullscreenCamera;
     delete m_fullscreenQuad;
@@ -39,7 +39,7 @@ FullscreenEffect::~FullscreenEffect     ()
 
 // **************************
 //
-void    FullscreenEffect::Render        ( Renderer * renderer )
+void    FullscreenEffectOld::Render        ( Renderer * renderer )
 {
     if( !m_fullscreenQuad )
     {
@@ -55,7 +55,7 @@ void    FullscreenEffect::Render        ( Renderer * renderer )
 
 // **************************
 //
-void    FullscreenEffect::SetFullscreenQuad         ( RenderableEntity * quad )
+void    FullscreenEffectOld::SetFullscreenQuad         ( RenderableEntity * quad )
 {
     assert( !m_fullscreenQuad );
 
@@ -64,7 +64,7 @@ void    FullscreenEffect::SetFullscreenQuad         ( RenderableEntity * quad )
 
 // **************************
 //
-void    FullscreenEffect::ToggleFullscreenCamera    ( Renderer * renderer )
+void    FullscreenEffectOld::ToggleFullscreenCamera    ( Renderer * renderer )
 {
     m_lastRendererCamera = renderer->GetCamera();
     renderer->SetCamera( m_fullscreenCamera );
@@ -72,14 +72,14 @@ void    FullscreenEffect::ToggleFullscreenCamera    ( Renderer * renderer )
 
 // **************************
 //
-void    FullscreenEffect::ToggleRegularCamera   ( Renderer * renderer )
+void    FullscreenEffectOld::ToggleRegularCamera   ( Renderer * renderer )
 {
     renderer->SetCamera( m_lastRendererCamera );
 }
 
 // **************************
 //
-RenderableEffectPtr FullscreenEffect::CreateDefaultEffect   ( PixelShader * ps )
+RenderableEffectPtr FullscreenEffectOld::CreateDefaultEffect   ( PixelShader * ps )
 {
     auto vs = FullscreenRenderableEffect::CreateVS( 1 );
 
@@ -104,7 +104,7 @@ RenderableEffectPtr FullscreenEffect::CreateDefaultEffect   ( PixelShader * ps )
 
 // **************************
 //
-RenderableEntity *  FullscreenEffect::CreateDefaultFullscrQuad  ( PixelShader * ps )
+RenderableEntity *  FullscreenEffectOld::CreateDefaultFullscrQuad  ( PixelShader * ps )
 {
     auto effect = CreateDefaultEffect( ps );
 
@@ -115,7 +115,7 @@ RenderableEntity *  FullscreenEffect::CreateDefaultFullscrQuad  ( PixelShader * 
 
 // **************************
 //
-TextureSampler *    FullscreenEffect::CreateDefaultSampler      ( const std::string & samplerName )
+TextureSampler *    FullscreenEffectOld::CreateDefaultSampler      ( const std::string & samplerName )
 {
     auto wrapX          = EngineConstantsMapper::EngineConstant( TextureWrappingMode::TWM_CLAMP );
     auto wrapY          = EngineConstantsMapper::EngineConstant( TextureWrappingMode::TWM_CLAMP );            
@@ -131,14 +131,14 @@ TextureSampler *    FullscreenEffect::CreateDefaultSampler      ( const std::str
 
 // **************************
 //
-std::string     FullscreenEffect::GetEffectShadersDir           ()
+std::string     FullscreenEffectOld::GetEffectShadersDir           ()
 {
     return "Assets/Shaders/FullscreenEffects/";
 }
 
 // *********************************
 //
-std::string     FullscreenEffect::ReadShaderFromFile            ( const std::string & fileName )
+std::string     FullscreenEffectOld::ReadShaderFromFile            ( const std::string & fileName )
 {
     std::stringstream shaderSource;
 
@@ -149,7 +149,7 @@ std::string     FullscreenEffect::ReadShaderFromFile            ( const std::str
 
 // *********************************
 //
-std::string     FullscreenEffect::ReadFullscreenShader          ( const std::string & fn )
+std::string     FullscreenEffectOld::ReadFullscreenShader          ( const std::string & fn )
 {
     return ReadShaderFromFile( GetEffectShadersDir() + fn );
 }

@@ -15,7 +15,7 @@ class VertexShader;
 class PixelShader;
 class TextureSampler;
 
-class FullscreenEffect
+class FullscreenEffectOld
 {
 private:
 
@@ -26,8 +26,8 @@ private:
 
 public:
 
-                                FullscreenEffect        ();
-                                ~FullscreenEffect       ();
+                                FullscreenEffectOld     ();
+                                ~FullscreenEffectOld    ();
 
     virtual void                Render                  ( Renderer * renderer );
 

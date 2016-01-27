@@ -6,7 +6,7 @@
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 #include "Engine/Graphics/Effects/Utils/OffscreenDisplay.h"
 
-#include "Engine/Graphics/Effects/FullScreen/Impl/BlitFullscreenEffect.h"
+#include "Engine/Graphics/Effects/FullScreen/Old/Impl/BlitFullscreenEffect.h"
 #include "Engine/Graphics/Effects/Logic/VideoOutputRendering/VideoOutputRenderLogic.h"
 
 #include "Tools/Profiler/HerarchicalProfiler.h"

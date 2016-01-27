@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Engine/Graphics/Effects/FullScreen/FullscreenEffect.h"
+#include "Engine/Graphics/Effects/FullScreen/Old/FullscreenEffectOld.h"
 
 #include "Engine/Types/Values/TypedValues.h"
 
 
 namespace bv {
 
-class VideoOutputFullscreenEffect : public FullscreenEffect
+class VideoOutputFullscreenEffect : public FullscreenEffectOld
 {
 private:
 
