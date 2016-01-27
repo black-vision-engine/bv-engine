@@ -360,6 +360,43 @@ bool CompositeBezierInterpolator< TimeValueT, ValueT >::RemoveKey       ( TimeVa
     return true;
 }
 
+
+// ***********************
+//
+template< class TimeValueT, class ValueT >
+bool CompositeBezierInterpolator< TimeValueT, ValueT >::MoveKey             ( TimeValueT t, TimeValueT newTime )
+{
+    // Find key to move
+    SizeType index = std::numeric_limits<SizeType>::max();
+    for( SizeType i = 0; i < keys.size(); ++i )
+    {
+        if( std::fabs( keys[ i ].t - t ) <= m_tolerance )
+        {
+            index = i;
+            break;
+        }
+    }
+
+    // Key to move not found.
+    if( index == std::numeric_limits<SizeType>::max() )
+        return false;
+
+    // Check newTime. If key under this time exists, return.
+    for( SizeType i = 0; i < keys.size(); ++i )
+    {
+        if( std::fabs( keys[ i ].t - newTime ) <= m_tolerance )
+        {// Key already exists. Don't move.
+            return false;
+        }
+    }
+
+    AddKey( newTime, keys[ index ].val );
+    RemoveKey( t );
+    
+    return true;
+}
+
+
 // *******************************
 //
 template< class TimeValueT, class ValueT >

@@ -20,6 +20,17 @@ inline bool SetParameter( IParameterPtr parameter, TimeType t, const ValueType &
     return false;
 }
 
+
+// *******************************
+//
+template< typename ValueType >
+inline bool MoveParameterKey( IParameterPtr parameter, TimeType t, TimeType newTime )
+{
+    assert( !"If this function doesn't compile - don't fix it. It means that compiler didn't choose proper template spezialization" );
+    return false;
+}
+
+
 bool    SetParameterRotation    ( IParameterPtr parameter, TimeType t, const glm::vec3 & rotAxis, float angle );
 bool    SetParameterScale       ( IParameterPtr parameter, TimeType t, const glm::vec3 & scale );
 bool    SetParameterTranslation ( IParameterPtr parameter, TimeType t, const glm::vec3 & translation );
@@ -40,11 +51,21 @@ bool    RemoveScaleKey          ( IParameterPtr parameter, TimeType t );
 bool    RemoveTranslationKey    ( IParameterPtr parameter, TimeType t );
 bool    RemoveCenterMassKey     ( IParameterPtr parameter, TimeType t );
 
+bool    MoveRotationKey         ( IParameterPtr parameter, unsigned int idx, TimeType t, TimeType newTime );
+bool    MoveScaleKey            ( IParameterPtr parameter, unsigned int idx, TimeType t, TimeType newTime );
+bool    MoveTranslationKey      ( IParameterPtr parameter, unsigned int idx, TimeType t, TimeType newTime );
+bool    MoveCenterMassKey       ( IParameterPtr parameter, unsigned int idx, TimeType t, TimeType newTime );
+
+bool    MoveRotationKey         ( IParameterPtr parameter, TimeType t, TimeType newTime );
+bool    MoveScaleKey            ( IParameterPtr parameter, TimeType t, TimeType newTime );
+bool    MoveTranslationKey      ( IParameterPtr parameter, TimeType t, TimeType newTime );
+bool    MoveCenterMassKey       ( IParameterPtr parameter, TimeType t, TimeType newTime );
 
 
 // *******************************
 //
 bool                                                RemoveParameterKey ( IParameterPtr parameter, TimeType t );
+bool                                                MoveParameterKey   ( IParameterPtr parameter, TimeType t, TimeType newTime );
 
 bool                                                BezierSetCurveType ( IParameterPtr parameter, CurveType type );
 CurveType                                           BezierGetCurveType ( IParameterPtr parameter );

@@ -47,6 +47,7 @@ public:
 
     void                                                AddKey              ( TimeValueT t, const ValueT & v );
     bool                                                RemoveKey           ( TimeValueT t );
+    bool                                                MoveKey             ( TimeValueT t, TimeValueT newTime );
     ValueT                                              Evaluate            ( TimeValueT t ) const;
 
     int                                                 GetNumKeys          ();
