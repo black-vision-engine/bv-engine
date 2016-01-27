@@ -48,7 +48,11 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     std::string & paramName    = setParamEvent->ParamName;
     std::string & paramSubName = setParamEvent->ParamSubName;
     std::string & sceneName    = setParamEvent->SceneName;
-    std::string value          = toString( setParamEvent->Value );
+    std::wstring value         = setParamEvent->Value;
+    
+    
+    // In some cases this is waste of work. Buto in future we must get rid of wstrings.
+    std::string stringValue    = toString( value );
 
     TimeType keyTime           = setParamEvent->Time;
 
@@ -105,11 +109,11 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     {
         if( param->GetType() == ModelParamType::MPT_TRANSFORM ) //FIXME: special case for transform param
         {
-            result = AddTransformKey( param, paramSubName, keyTime, value );
+            result = AddTransformKey( param, paramSubName, keyTime, stringValue );
         }
         else if( param->GetType() == ModelParamType::MPT_TRANSFORM_VEC ) //FIXME: special case for transformVec param
         {
-            result = AddTransformVecKey( param, paramSubName, keyTime, value );
+            result = AddTransformVecKey( param, paramSubName, keyTime, stringValue );
         }
         else
         {
@@ -134,14 +138,14 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     else if( command == ParamKeyEvent::Command::RemoveKey )
         result = RemoveParameterKey( param, (TimeType)keyTime );
     else if( command == ParamKeyEvent::Command::SetInterpolatorType )
-        result = BezierSetCurveType( param, SerializationHelper::String2T( value, CurveType::CT_BEZIER ) );
+        result = BezierSetCurveType( param, SerializationHelper::String2T( stringValue, CurveType::CT_BEZIER ) );
     else if( command == ParamKeyEvent::Command::SetInterpolatorPreWrapMethod )
-        result = SetWrapPreMethod( param, SerializationHelper::String2T( value, WrapMethod::clamp ) );
+        result = SetWrapPreMethod( param, SerializationHelper::String2T( stringValue, WrapMethod::clamp ) );
     else if( command == ParamKeyEvent::Command::SetInterpolatorPostWrapMethod )
-        result = SetWrapPostMethod( param, SerializationHelper::String2T( value, WrapMethod::clamp ) );
+        result = SetWrapPostMethod( param, SerializationHelper::String2T( stringValue, WrapMethod::clamp ) );
     else if( command == ParamKeyEvent::Command::AssignTimeline )
     {
-        auto timeEval = m_projectEditor->GetTimeEvaluator( value );
+        auto timeEval = m_projectEditor->GetTimeEvaluator( stringValue );
             
         //FIXME: logic below should be somewhere else - editor maybe
         //don't allow setting scene timeline or timeline from other scene
@@ -258,9 +262,10 @@ ParameterPtr PluginEventsHandlers::GetResourceParameter    (    const std::strin
 
 // ***********************
 //
-bool PluginEventsHandlers::AddParameter        ( std::shared_ptr< model::IParameter > & param, const std::string & stringValue, TimeType keyTime )
+bool PluginEventsHandlers::AddParameter        ( std::shared_ptr< model::IParameter > & param, const std::wstring & wstringValue, TimeType keyTime )
 {
     auto paramType = param->GetType();
+    std::string stringValue = toString( stringValue );
 
     switch( paramType )
     {
@@ -289,7 +294,7 @@ bool PluginEventsHandlers::AddParameter        ( std::shared_ptr< model::IParame
             return SetParameter( param, ( TimeType )keyTime, vec4Value );
         }
         case ModelParamType::MPT_WSTRING:
-            return SetParameter( param, ( TimeType )keyTime, toWString( stringValue ) );
+            return SetParameter( param, ( TimeType )keyTime, wstringValue );
         case ModelParamType::MPT_STRING:
             return SetParameter( param, ( TimeType )keyTime, stringValue );
         case ModelParamType::MPT_INT:
