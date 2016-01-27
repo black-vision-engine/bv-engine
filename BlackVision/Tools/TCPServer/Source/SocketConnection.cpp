@@ -104,21 +104,21 @@ void SocketConnection::MainThread()
             {
 				wchar_t CHAR_BEGIN = 0x02;
 				wchar_t CHAR_END = 0x03;
-                std::wstring to_send = CHAR_BEGIN + response.message + CHAR_END;
-                const wchar_t* tmpBuffer = to_send.c_str();
-
-                size_t bufferSize;
-                wcstombs_s(&bufferSize, NULL, 0, tmpBuffer, _TRUNCATE);
+                std::wstring toSend = CHAR_BEGIN + response.message + CHAR_END;
+                
 
                 // do the actual conversion
-                char *buffer = (char*) malloc( bufferSize );
-                wcstombs_s(&bufferSize, buffer, bufferSize, tmpBuffer, _TRUNCATE);
+                std::vector<char> buffer;
+                SizeType bufferSize = toSend.length();
+                buffer.resize( bufferSize );
+
+                wcstombs_s( &bufferSize, buffer.data(), bufferSize, toSend.c_str(), _TRUNCATE );
 
                 // send the data
                 int bufferSent = 0;
                 while ( bufferSent < (int)bufferSize )
-				{
-                    int sentSize = send( m_socketID, buffer + bufferSent, (int)bufferSize - bufferSent, 0);
+                {
+                    int sentSize = send( m_socketID, buffer.data() + bufferSent, (int)bufferSize - bufferSent, 0);
                     if( sentSize < 0 )
                     {
                         int error_code = WSAGetLastError();
