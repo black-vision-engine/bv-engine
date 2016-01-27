@@ -16,13 +16,12 @@ DEFINE_CONST_PTR_TYPE( TextureAssetThumbnail )
 class TextureAssetThumbnail : public Thumbnail
 {
 private:
-    MemoryChunkConstPtr m_data;
-    SizeType            m_width;
-    SizeType            m_height;
-    UInt32              m_bpp;
-    Hash                m_origDataHash;
+    mutable MemoryChunkConstPtr m_data;
+    mutable std::string         m_dataBase64;
+    Hash                        m_origDataHash;
 
-    explicit        TextureAssetThumbnail   ( const MemoryChunkConstPtr & data, SizeType width, SizeType height, UInt32 bpp, const Hash & h );
+    explicit        TextureAssetThumbnail   ( const MemoryChunkConstPtr & data, const Hash & h );
+    explicit        TextureAssetThumbnail   ( const std::string & data, const Hash & h );
     explicit        TextureAssetThumbnail   ( IDeserializer & deser );
 
 public:
@@ -30,7 +29,7 @@ public:
     virtual const char *                    DataBase64  () const override;
     const Hash &                            GetHash     () const;
 
-    static TextureAssetThumbnailConstPtr    Create      ( const MemoryChunkConstPtr & data, SizeType width, SizeType height, UInt32 bpp, const Hash & h );
+    static TextureAssetThumbnailConstPtr    Create      ( const MemoryChunkConstPtr & data, const Hash & h );
     static TextureAssetThumbnailConstPtr    Create      ( IDeserializer & deser );
 
     void                                    Serialize   ( ISerializer & ser ) const override;

@@ -2,6 +2,7 @@
 #include "Engine/Types/EnumsUtils.h"
 #include "DataTypes/Hash.h"
 
+#include "Tools/Base64.h"
 #include "LibImage.h"
 
 #include "gtest/gtest.h"
@@ -17,6 +18,12 @@ auto AssetsPath = "Assets/AssetManager/";
 
 TEST(HashTest, Hash)
 {
+    static char c[7] = {'a','a','a','a','a','a','a'};
+    auto m = MemoryChunk::Create( c , 7);
+    auto str = EncodeBase64( m );
+
+    auto d = DecodeBase64( str );
+
 	auto h0 = Hash::FromString( imagePath_512x512 );
 	auto h1 = Hash::FromString( imagePath );
 	auto h2 = Hash::FromString( AssetsPath + std::string("checkerboard2_512X512.png") );

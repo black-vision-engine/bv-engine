@@ -469,5 +469,49 @@ MemoryChunkConstPtr		Resize( const MemoryChunkConstPtr & in, UInt32 width, UInt3
 	return MemoryChunk::Create( pixels, numBytes );
 }
 
+// ******************************
+//
+MemoryChunkConstPtr     SaveTGAToHandle ( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bpp )
+{
+    FIBITMAP * inBitmap = nullptr;
+	if( bpp <= 32 )
+	{
+		inBitmap = FreeImage_Allocate( ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+	}
+	else
+	{
+		inBitmap = FreeImage_AllocateT( FIT_RGBAF, ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+	}
+
+    memcpy( FreeImage_GetBits( inBitmap ), in->Get(), width * height * bpp / 8 );
+
+    FIMEMORY * destStream = FreeImage_OpenMemory();  
+
+    MemoryChunkConstPtr ret = nullptr;
+
+    if( FreeImage_SaveToMemory( FIF_TARGA, inBitmap, destStream ) )
+    {
+        FreeImage_SeekMemory( destStream, 0, SEEK_END );
+        auto size = FreeImage_TellMemory( destStream );
+        
+        FreeImage_SeekMemory( destStream, 0, SEEK_SET );
+        
+        BYTE * pixelsR = nullptr;
+        DWORD readBytes = 0;
+        FreeImage_AcquireMemory( destStream, &pixelsR, &readBytes );
+
+        char * pixels = new char[ size ];
+
+        memcpy( pixels, pixelsR, size );
+
+	    FreeImage_Unload( inBitmap );
+        FreeImage_CloseMemory( destStream );
+
+        ret = MemoryChunk::Create( ( char * )pixels, size );
+    }
+
+    return ret;
+}
+
 } // image
 } // bv

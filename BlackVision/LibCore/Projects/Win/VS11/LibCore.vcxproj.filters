@@ -104,6 +104,9 @@
     <ClInclude Include="..\..\..\Source\Tools\PrintGuard.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Base64.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">
@@ -161,6 +164,9 @@
       <Filter>Tools</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Tools\PrintGuard.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\Base64.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>

@@ -15,14 +15,11 @@ DEFINE_CONST_PTR_TYPE( AnimationAssetThumbnail )
 
 class AnimationAssetThumbnail : public Thumbnail
 {
-private:
+public:
     MemoryChunkVector   m_data;
-    SizeType            m_width;
-    SizeType            m_height;
-    UInt32              m_bpp;
     Hash                m_origDataHash;
 
-    explicit        AnimationAssetThumbnail   ( const MemoryChunkVector & data, SizeType width, SizeType height, UInt32 bpp, const Hash & h );
+    explicit        AnimationAssetThumbnail   ( const MemoryChunkVector & data, const Hash & h );
     explicit        AnimationAssetThumbnail   ( IDeserializer & deser );
 
 public:
@@ -30,7 +27,7 @@ public:
     virtual const char *                    DataBase64  () const override;
     const Hash &                            GetHash     () const;
 
-    static AnimationAssetThumbnailConstPtr  Create      ( const MemoryChunkVector & data, SizeType width, SizeType height, UInt32 bpp, const Hash & h );
+    static AnimationAssetThumbnailConstPtr  Create      ( const MemoryChunkVector & data, const Hash & h );
     static AnimationAssetThumbnailConstPtr  Create      ( IDeserializer & deser );
 
     void                                    Serialize   ( ISerializer & ser ) const override;
