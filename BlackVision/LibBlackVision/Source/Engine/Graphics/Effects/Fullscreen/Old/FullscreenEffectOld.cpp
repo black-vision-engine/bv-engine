@@ -11,7 +11,7 @@
 
 #include "Engine/Models/Builder/RendererStatesBuilder.h"
 
-#include "Engine/Graphics/Effects/FullScreen/Old/Impl/FullscreenRenderableEffect.h"
+#include "Engine/Graphics/Effects/FullScreen/Old/Impl/FullscreenRenderableEffectOld.h"
 
 #include "Engine/Graphics/Effects/Utils/FullscreenUtils.h"
 
@@ -81,7 +81,7 @@ void    FullscreenEffectOld::ToggleRegularCamera   ( Renderer * renderer )
 //
 RenderableEffectPtr FullscreenEffectOld::CreateDefaultEffect   ( PixelShader * ps )
 {
-    auto vs = FullscreenRenderableEffect::CreateVS( 1 );
+    auto vs = FullscreenRenderableEffectOld::CreateVS( 1 );
 
     RenderablePass * pass = new RenderablePass( ps, vs, nullptr );
 
@@ -97,7 +97,7 @@ RenderableEffectPtr FullscreenEffectOld::CreateDefaultEffect   ( PixelShader * p
     ds->enabled = false;
     cs->enabled = false;
 
-    auto effect = std::make_shared< FullscreenRenderableEffect >( pass );
+    auto effect = std::make_shared< FullscreenRenderableEffectOld >( pass );
 
     return effect;
 }

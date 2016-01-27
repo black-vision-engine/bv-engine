@@ -1,4 +1,4 @@
-#include "FullscreenRenderableEffect.h"
+#include "FullscreenRenderableEffectOld.h"
 
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"
 
@@ -9,14 +9,14 @@ namespace bv {
 
 // **************************
 //
-FullscreenRenderableEffect::FullscreenRenderableEffect  ( RenderablePass * pass )
+FullscreenRenderableEffectOld::FullscreenRenderableEffectOld  ( RenderablePass * pass )
 {
     AddPass( pass );
 }
 
 // **************************
 //
-VertexShader *  FullscreenRenderableEffect::CreateVS      ( unsigned int numUVChannels )
+VertexShader *  FullscreenRenderableEffectOld::CreateVS      ( unsigned int numUVChannels )
 {
     auto params     = new ShaderParameters();
     auto mvpParam   = ShaderParamFactory::CreateMVPParameter();
@@ -31,7 +31,7 @@ VertexShader *  FullscreenRenderableEffect::CreateVS      ( unsigned int numUVCh
 
 // **************************
 //
-std::string     FullscreenRenderableEffect::GetVSShaderSource ( unsigned int numUVChannels )
+std::string     FullscreenRenderableEffectOld::GetVSShaderSource ( unsigned int numUVChannels )
 {
     return FullscreenVSShader::GenerateDefaultVS( numUVChannels );
 }

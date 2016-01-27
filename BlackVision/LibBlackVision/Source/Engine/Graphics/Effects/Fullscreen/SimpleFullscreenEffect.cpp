@@ -11,7 +11,7 @@
 
 #include "Engine/Graphics/Effects/Utils/FullscreenUtils.h"
 #include "Engine/Graphics/Effects/FullScreen/FullscreenVSShader.h"
-#include "Engine/Graphics/Effects/FullScreen/FullscreenRenderableEffectTr.h"
+#include "Engine/Graphics/Effects/FullScreen/FullscreenRenderableEffect.h"
 
 #include "Engine/Models/Plugins/EngineConstantsMapper.h"
 
@@ -124,7 +124,7 @@ RenderableEffectPtr SimpleFullscreenEffect::CreateEffect            ( const Full
 
     RenderablePass * pass = CreateRenderablePass( ps, vs, inputData );
 
-    auto effect = std::make_shared< FullscreenRenderableEffectTr >( pass );
+    auto effect = std::make_shared< FullscreenRenderableEffect >( pass );
 
     return effect;
 }
