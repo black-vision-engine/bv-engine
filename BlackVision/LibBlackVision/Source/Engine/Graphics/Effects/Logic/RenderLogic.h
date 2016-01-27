@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
-#include "Engine/Graphics/Effects/Logic/FrameRendering/NodeEffectRenderLogicSelector.h"
 
 
 namespace bv {
@@ -24,7 +23,6 @@ class RenderLogic
 private:
 
     RenderTargetStackAllocator      m_rtStackAllocator;
-    NodeEffectRenderLogicSelector   m_nodeEffectRenderLogicSelector;
     OffscreenDisplay *              m_offscreenDisplay;
     BlitFullscreenEffect *          m_blitEffect;
     VideoOutputRenderLogic *        m_videoOutputRenderLogic;

@@ -6,7 +6,6 @@
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 #include "Engine/Graphics/Effects/Utils/OffscreenDisplay.h"
 
-#include "Engine/Graphics/Effects/Logic/FrameRendering/NodeEffect/NodeEffectRenderLogic.h"
 #include "Engine/Graphics/Effects/FullScreen/Impl/BlitFullscreenEffect.h"
 #include "Engine/Graphics/Effects/Logic/VideoOutputRendering/VideoOutputRenderLogic.h"
 

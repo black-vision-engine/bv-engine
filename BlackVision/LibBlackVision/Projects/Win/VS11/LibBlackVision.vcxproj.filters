@@ -178,9 +178,6 @@
     <Filter Include="Engine\Graphics\Effects\Logic\FrameRendering">
       <UniqueIdentifier>{33092da4-7a14-4a94-8cc8-52ac0a5c63ac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect">
-      <UniqueIdentifier>{eb15b506-c3a7-4ebc-826e-5adfbc24e980}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\Effects\Logic\VideoOutputRendering">
       <UniqueIdentifier>{44035e72-4b3b-4ada-baaf-33b1ada04001}</UniqueIdentifier>
     </Filter>
@@ -990,9 +987,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenRenderableEffect.cpp">
       <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\InterlaceFullscreenEffect.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\MixChannelsFullscreenEffect.cpp">
       <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
     </ClCompile>
@@ -1035,32 +1029,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\ShaderSourceProvider.cpp">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FrameRendering\NodeEffectRenderLogicSelector.cpp">
-      <Filter>Engine\Graphics\Effects\Logic\FrameRendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FrameRendering\FrameRenderLogic.cpp">
-      <Filter>Engine\Graphics\Effects\Logic\FrameRendering</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FrameRendering\PostFrameRenderLogic.cpp">
       <Filter>Engine\Graphics\Effects\Logic\FrameRendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect\AlphaMaskRenderLogic.cpp">
-      <Filter>Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect\DefaultEffectRenderLogic.cpp">
-      <Filter>Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect\MixChannelsRenderLogic.cpp">
-      <Filter>Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect\NodeEffectRenderLogic.cpp">
-      <Filter>Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect\NodeMaskRenderLogic.cpp">
-      <Filter>Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect\WireframeRenderLogic.cpp">
-      <Filter>Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Logic\VideoOutputRendering\VideoOutputRenderLogic.cpp">
       <Filter>Engine\Graphics\Effects\Logic\VideoOutputRendering</Filter>
@@ -2090,9 +2060,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenRenderableEffect.h">
       <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\InterlaceFullscreenEffect.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\MixChannelsFullscreenEffect.h">
       <Filter>Engine\Graphics\Effects\Fullscreen\Impl</Filter>
     </ClInclude>
@@ -2135,32 +2102,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\ShaderSourceProvider.h">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FrameRendering\NodeEffectRenderLogicSelector.h">
-      <Filter>Engine\Graphics\Effects\Logic\FrameRendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FrameRendering\FrameRenderLogic.h">
-      <Filter>Engine\Graphics\Effects\Logic\FrameRendering</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FrameRendering\PostFrameRenderLogic.h">
       <Filter>Engine\Graphics\Effects\Logic\FrameRendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect\AlphaMaskRenderLogic.h">
-      <Filter>Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect\DefaultEffectRenderLogic.h">
-      <Filter>Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect\MixChannelsRenderLogic.h">
-      <Filter>Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect\NodeEffectRenderLogic.h">
-      <Filter>Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect\NodeMaskRenderLogic.h">
-      <Filter>Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect\WireframeRenderLogic.h">
-      <Filter>Engine\Graphics\Effects\Logic\FrameRendering\NodeEffect</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\VideoOutputRendering\VideoOutputRenderLogic.h">
       <Filter>Engine\Graphics\Effects\Logic\VideoOutputRendering</Filter>
