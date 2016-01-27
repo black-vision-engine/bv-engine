@@ -154,15 +154,15 @@ void            SceneNode::DeleteTransformable  ()
 
 // ********************************
 //
-void            SceneNode::Update               ( const std::vector< Transform > & parentTransforms )
+void            SceneNode::Update               ( const Transform & parentTransform )
 {
-    m_transformable->UpdateTransforms( parentTransforms );
+    m_transformable->UpdateTransform( parentTransform );
 
-    const std::vector< Transform > & worldTransforms = m_transformable->WorldTransforms();
+    auto worldTransform = m_transformable->WorldTransform();
 
     for ( auto node : m_sceneNodes )
     {
-        node->Update( worldTransforms );
+        node->Update( worldTransform );
     }
 }
 

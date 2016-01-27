@@ -72,7 +72,7 @@ bv::model::SceneModelPtr CreateTestScene0()
 
     success &= SetParameter( wp, 0.f, 1.f );
     success &= SetParameter( hp, 0.f, 1.f );
-    success &= SetParameterTranslation( tr, 0, 0.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+    success &= SetParameterTranslation( tr, 0.0f, glm::vec3( 1.f, 1.f, 1.f ) );
 
     success = LoadTexture( root->GetPlugin( "texture" ), "proj00", "flagi/pol.jpg" );
     assert( success );    

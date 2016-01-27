@@ -51,10 +51,7 @@ EffectRenderData::EffectRenderData(  const RenderableEffectPtr & e  )
 	effect					= e;
 	auxQuad->SetRenderableEffect( e );
 
-    std::vector< bv::Transform > vec;
-    vec.push_back( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
-
-    auxQuad->SetWorldTransforms( vec );
+    auxQuad->SetWorldTransform( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
 }
 
 // *********************************************** EFFECT RENDER LOGIC *********************************************************
@@ -114,13 +111,10 @@ RenderTargetData    EffectRenderLogic::CreateRenderTargetData () const
 {
     RenderTargetData ret;
 
-    std::vector< bv::Transform > vec;
-    vec.push_back( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
-
     auto rt   = MainDisplayTarget::CreateDisplayRenderTarget( m_textureData.m_width, m_textureData.m_height, m_textureData.m_fmt );
     auto quad = MainDisplayTarget::CreateDisplayRect( rt->ColorTexture( 0 ) );
     
-    quad->SetWorldTransforms( vec );
+    quad->SetWorldTransform( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
 
     ret.renderTarget            = rt;
     ret.quad                    = quad;

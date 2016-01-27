@@ -55,10 +55,7 @@ void    ScenePrototype::SetLocalTransform   ( SceneNode * node, const Transform 
 //
 void    ScenePrototype::SetWorldTransform   ( SceneNode * node, const Transform & transform )
 {
-    std::vector<Transform> tr;
-    tr.push_back( transform );
-
-    node->Update( tr );
+    node->Update( transform );
 }
 
 // **************************

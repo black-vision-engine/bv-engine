@@ -24,7 +24,7 @@ std::pair< bv::ModelParamType, const char* > mpt2s[] = {
     std::make_pair( bv::ModelParamType::MPT_MAT2, "mat2" ),
     std::make_pair( bv::ModelParamType::MPT_STRING, "string" ),
     std::make_pair( bv::ModelParamType::MPT_TRANSFORM, "transform" ),
-    std::make_pair( bv::ModelParamType::MPT_TRANSFORM_VEC, "transform_vec" ),
+//  std::make_pair( bv::ModelParamType::MPT_TRANSFORM_VEC, "transform_vec" ),
     std::make_pair( bv::ModelParamType::MPT_VEC2, "vec2" ),
     std::make_pair( bv::ModelParamType::MPT_VEC3, "vec3" ),
     std::make_pair( bv::ModelParamType::MPT_VEC4, "vec4" ),
@@ -172,21 +172,21 @@ ISerializablePtr AbstractModelParameter::Create( const IDeserializer& deser ) //
         return param;
 
     }
-    else if( type == "6" || type == "transform_vec" ) // FIXME: this should be made a constant somewhere
-    {
-        auto param = ParametersFactory::CreateParameterTransformVec( name, te );
+    //else if( type == "6" || type == "transform_vec" ) // FIXME: this should be made a constant somewhere
+    //{
+    //    auto param = ParametersFactory::CreateParameterTransformVec( name, te );
 
-        //auto transes = SerializationHelper::DeserializeArray< TransformF >( deser, "composite_transform", "transform" );
-        auto transes = SerializationHelper::DeserializeProperties< TransformF >( deser, "composite_transform" );
+    //    //auto transes = SerializationHelper::DeserializeArray< TransformF >( deser, "composite_transform", "transform" );
+    //    auto transes = SerializationHelper::DeserializeProperties< TransformF >( deser, "composite_transform" );
 
-        int i = 0;
-        for( auto trans : transes )
-        {
-            param->InsertTransform( i++, *trans.get() ); // FIXME (?)
-        }
-        
-        return param;
-    } 
+    //    int i = 0;
+    //    for( auto trans : transes )
+    //    {
+    //        param->InsertTransform( i++, *trans.get() ); // FIXME (?)
+    //    }
+    //    
+    //    return param;
+    //} 
     else if( type == "7" || type == "int" )
     {
         auto param = ParametersFactory::CreateTypedSimpleParameter< ParamInt >( name, te );

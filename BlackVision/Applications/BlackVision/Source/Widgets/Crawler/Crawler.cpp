@@ -126,7 +126,7 @@ bool		Crawler::Finalize			()
 			if( trPlugin )
 			{
 				auto trParam = trPlugin->GetParameter( "simple_transform" );
-				model::SetParameterTranslation( trParam, 0, 0.0f, glm::vec3( 5.0f, 0.0f, 0.0f ) );
+				model::SetParameterTranslation( trParam, 0.0f, glm::vec3( 5.0f, 0.0f, 0.0f ) );
 			}
 		}
 		//m_shifts[ 0 ]+=m_interspace;
@@ -138,7 +138,7 @@ bool		Crawler::Finalize			()
 				if( trPlugin )
 				{
 					auto trParam = trPlugin->GetParameter( "simple_transform" );
-					model::SetParameterTranslation( trParam, 0, 0.0f, glm::vec3( elem.second, 0.0f, 0.0f ) );
+					model::SetParameterTranslation( trParam, 0.0f, glm::vec3( elem.second, 0.0f, 0.0f ) );
 				}
 			}
 		}
@@ -231,7 +231,7 @@ void		Crawler::Reset()
 			if( trPlugin )
 			{
 				auto trParam = trPlugin->GetParameter( "simple_transform" );
-				model::SetParameterTranslation( trParam, 0, 0.0f, glm::vec3( 5.0f, 0.0f, 0.0f ) );
+				model::SetParameterTranslation( trParam, 0.0f, glm::vec3( 5.0f, 0.0f, 0.0f ) );
 			}
 			UpdateVisibility(elem.first );
 		
@@ -311,7 +311,7 @@ void		Crawler::UpdateTransforms	()
 			if( trPlugin )
 			{
 				auto trParam = trPlugin->GetParameter( "simple_transform" );
-				model::SetParameterTranslation( trParam, 0, 0.0f, glm::vec3( elem.second, 0.0f, 0.0f ) );
+				model::SetParameterTranslation( trParam, 0.0f, glm::vec3( elem.second, 0.0f, 0.0f ) );
 			}
 		}
 	}

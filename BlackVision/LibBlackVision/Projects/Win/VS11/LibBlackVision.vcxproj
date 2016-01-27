@@ -329,6 +329,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformParamValEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Plugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\PluginsFactory.cpp" />
@@ -505,6 +506,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Parameters\ParameterSerialization.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleTypedStates.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\CompositeVideoInputResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h" />
     <ClInclude Include="..\..\..\Source\Application\ConsoleApplication.h" />
@@ -708,7 +710,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\DefaultPluginParamValModel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformParamValEvaluator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Plugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\PluginsFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\PluginUtils.h" />

@@ -270,9 +270,9 @@ void  QueryPropertiesDefaultSceneConvenienceAPIParameterSetters ( const model::P
 
     bool success = true;
 
-    success &= SetParameterRotation( transform_p, 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 90.f );
-    success &= SetParameterScale( transform_p, 0, 0.0f, glm::vec3( 1.f, 2.f, 1.f ) );
-    success &= SetParameterTranslation( transform_p, 0, 0.0f, glm::vec3( 0.f, 1.f, -2.f ) );
+    success &= SetParameterRotation( transform_p, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 90.f );
+    success &= SetParameterScale( transform_p, 0.0f, glm::vec3( 1.f, 2.f, 1.f ) );
+    success &= SetParameterTranslation( transform_p, 0.0f, glm::vec3( 0.f, 1.f, -2.f ) );
 
     success &= SetParameter( width_p, 0.f, 1.0f );
     success &= SetParameter( height_p, 0.f, 1.0f );
@@ -288,9 +288,9 @@ void  QueryPropertiesDefaultSceneConvenienceAPIParameterSettersNoErrorChecking (
 {
     auto  n = DefaultTestNodeNewNodeImpl( pluginsManager, timeEvaluator );
 
-    SetParameterRotation    ( n->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 90.f );
-    SetParameterScale       ( n->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, 2.f, 1.f ) );
-    SetParameterTranslation ( n->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 1.f, -2.f ) );
+    SetParameterRotation    ( n->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 90.f );
+    SetParameterScale       ( n->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 1.f, 2.f, 1.f ) );
+    SetParameterTranslation ( n->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, 1.f, -2.f ) );
 
     SetParameter( n->GetPlugin( "rectangle" )->GetParameter( "width" ), 0.f, 1.0f );
     SetParameter( n->GetPlugin( "rectangle" )->GetParameter( "height" ), 0.f, 1.0f );
@@ -796,9 +796,9 @@ model::BasicNodePtr    TestScenesFactory::CreedPrimitivePieChartTestScene     ( 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
     auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-    SetParameterScale( simpleTransform, 0, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
-    SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( 0, 0, -1.f) );
-    SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+    SetParameterScale( simpleTransform, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
+    SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( 0, 0, -1.f) );
+    SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
 
 
     auto node1 = SimpleNodesFactory::CreateCreedColoredPieChartNode( timeEvaluator, 0 );
@@ -833,7 +833,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
 
     model::BasicNodePtr root = model::BasicNode::Create( "rootNode", timeEvaluator );
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
-//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 50.f, glm::vec3( 1, 0, 0 ), 1000.f );
+//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 50.f, glm::vec3( 1, 0, 0 ), 1000.f );
 
     //auto root = SimpleNodesFactory::CreateCreedRectNode( timelineManager, timeEvaluator );
 
@@ -846,33 +846,33 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     SetParameter( prism->GetPlugin( "prism" )->GetParameter( "n" ), 10.f, 10 );
     //prism->GetPlugin( "prism" )->GetParameter( "n" )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
 
-    SetParameterScale( prism->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  5.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-    SetParameterScale( prism->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 10.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
-    SetParameterScale( prism->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 15.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
-    SetParameterScale( prism->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    SetParameterScale( prism->GetPlugin( "transform" )->GetParameter( "simple_transform" ),  5.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    SetParameterScale( prism->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 10.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+    SetParameterScale( prism->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 15.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+    SetParameterScale( prism->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 
     auto prism2 = SimpleNodesFactory::CreateCreedTexturedPrismNode( timeEvaluator,-0.5f );
 
-    SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  3.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-    SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  7.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
-    SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 13.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
-    SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 17.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-    SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ),  3.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ),  7.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+    SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 13.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+    SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 17.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 
     auto param = prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" );
     //param->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
 
-//SetParameterRotation( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 50.f, glm::vec3( 1, 0, 0 ), -10000.f );
+//SetParameterRotation( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 50.f, glm::vec3( 1, 0, 0 ), -10000.f );
 
     auto prism3 = SimpleNodesFactory::CreateCreedGradedPrismNode( timeEvaluator, 0.5f );
     SetParameter( prism3->GetPlugin( "prism" )->GetParameter( "n" ), 0.f, 12 );
     
-    SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  7.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-    SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 13.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
-    SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 17.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
-    SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ),  7.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 13.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+    SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 17.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+    SetParameterScale( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 
-//SetParameterRotation( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 50.f, glm::vec3( 1, 0, 0 ), 10000.f );
+//SetParameterRotation( prism3->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 50.f, glm::vec3( 1, 0, 0 ), 10000.f );
 
     auto prism4 = SimpleNodesFactory::CreateCreedGradedPrismNode( timeEvaluator, 1.5f );
     SetParameter( prism4->GetPlugin( "prism" )->GetParameter( "n" ), 0.f, 36 );
@@ -880,10 +880,10 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     SetParameter( prism4->GetPlugin( "linear_gradient" )->GetParameter( "color2" ), 5.f, glm::vec4( 0.f, 0.f, 0.f, 1.f ) );
     //prism4->GetPlugin( "linear_gradient" )->GetParameter( "color2" )->SetInterpolationMethod( model::IParameter::InterpolationMethod::COSINE );
     
-    SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  7.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
-    SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  8.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
-    SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 11.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-    SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ),  7.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+    SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ),  8.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+    SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 11.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 
     root->AddChildToModelOnly( prism );
     root->AddChildToModelOnly( prism2 );
@@ -928,19 +928,19 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismBugTestScene     ( const mod
     //auto prism2 = SimpleNodesFactory::CreateCreedColoredPrismNode( timelineManager, timeEvaluator, 0 );
     //auto prism2 = SimpleNodesFactory::CreateCreedGradedPrismNode( timelineManager, timeEvaluator, 0 );
 
-    SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  0.f, glm::vec3( 1.f, 1.f, 1.f ) );
-    SetParameterTranslation( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  0.f, glm::vec3( 0.f, -.5f, -10.f ) );
-    SetParameterRotation ( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 100.0f, glm::vec3( 1.f, 0.f, 0.f ), 10100.f );
+    SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ),  0.f, glm::vec3( 1.f, 1.f, 1.f ) );
+    SetParameterTranslation( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ),  0.f, glm::vec3( 0.f, -.5f, -10.f ) );
+    SetParameterRotation ( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 100.0f, glm::vec3( 1.f, 0.f, 0.f ), 10100.f );
 
     model::SetParameter( prism2->GetPlugin( "prism" )->GetParameter( "n" ), 10.f, 10.f );
 
     model::SetParameter( prism2->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "borderColor") , 0.f, glm::vec4( 1, 0, 0, 1 ) );
 
-    //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  3.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-    //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0,  7.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
-    //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 13.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
-    //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 17.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-    //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ),  3.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ),  7.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+    //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 13.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
+    //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 17.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    //SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 
     root->AddChildToModelOnly( prism2 );
 
@@ -965,14 +965,14 @@ model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr t
 
     auto param = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
-    auto qParam = model::QueryTypedParam< model::ParamTransformVecPtr >( param );
+    auto qParam = model::QueryTypedParam< model::ParamTransformPtr >( param );
     assert( qParam );
     qParam->SetCurveType( type );
 
-    model::SetParameterTranslation( param, 0, 5.f, offset + glm::vec3( 0, -2, 0 ) );
-    model::SetParameterTranslation( param, 0, 1.f, offset );
-    model::SetParameterTranslation( param, 0, 0.f, offset );
-    model::SetParameterScale( param, 0, 0.f, glm::vec3( 0.25f, 0.25f, 1.f ) );
+    model::SetParameterTranslation( param, 5.f, offset + glm::vec3( 0, -2, 0 ) );
+    model::SetParameterTranslation( param, 1.f, offset );
+    model::SetParameterTranslation( param, 0.f, offset );
+    model::SetParameterScale( param, 0.f, glm::vec3( 0.25f, 0.25f, 1.f ) );
     model::SetWrapPostMethod( param, WrapMethod::pingPong );
 
     //param = node->GetPlugin( "rectangle" )->GetParameter( "width" );
@@ -1108,10 +1108,10 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedConeTestScene     ( model::IT
     root->AddPlugin( "DEFAULT_CONE", timeEvaluator );
     root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
 
-    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), 0.f );
-    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 10.f, glm::vec3( 1, 0, 0 ), -90.f );
-    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), -90.f );
-    model::SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0, 0, -1 ) );
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1, 0, 0 ), 0.f );
+    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 10.f, glm::vec3( 1, 0, 0 ), -90.f );
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1, 0, 0 ), -90.f );
+    model::SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0, 0, -1 ) );
 
     auto plugin = root->GetPlugin( "cone" );
     assert( plugin );
@@ -1138,11 +1138,11 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
     root->AddPlugin( "DEFAULT_CUBE", timeEvaluator );
     //root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
 
-    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), 0.f );
-    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 1.f, glm::vec3( 0, 1, 0 ), 45.f );
-    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0, 0, 0 ), -90.f );
-    model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1.5, 1.5, 1.5 ) );
-    model::SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0, 0, -1 ) );
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1, 0, 0 ), 0.f );
+    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 1.f, glm::vec3( 0, 1, 0 ), 45.f );
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0, 0, 0 ), -90.f );
+    model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1.5, 1.5, 1.5 ) );
+    model::SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0, 0, -1 ) );
 
     auto plugin = root->GetPlugin( "cube" );
     assert( plugin );
@@ -1171,11 +1171,11 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedTorusBasicGeometryTestScene  
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_TORUS", timeEvaluator );
 
-    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), 0.f );
-    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 5.f, glm::vec3( 1, 0, 0 ), 90.f );
-    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), -90.f );
-    model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1.5, 1.5, 1.5 ) );
-    SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0, 0, -4 ) );
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1, 0, 0 ), 0.f );
+    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 5.f, glm::vec3( 1, 0, 0 ), 90.f );
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1, 0, 0 ), -90.f );
+    model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1.5, 1.5, 1.5 ) );
+    SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0, 0, -4 ) );
 
     auto plugin = root->GetPlugin( "torus" );
     assert( plugin );
@@ -1204,11 +1204,11 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedBasicGeometryTestScene     ( 
     root->AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
     root->AddPlugin( "DEFAULT_SPRING", timeEvaluator );
 
-    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), 0.f );
-    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 5.f, glm::vec3( 1, 0, 0 ), 90.f );
-    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 0, 0 ), -90.f );
-    model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 1, 2, 1 ) );
-    SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0, -1, -1 ) );
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1, 0, 0 ), 0.f );
+    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 5.f, glm::vec3( 1, 0, 0 ), 90.f );
+    //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1, 0, 0 ), -90.f );
+    model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1, 2, 1 ) );
+    SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0, -1, -1 ) );
 
     auto plugin = root->GetPlugin( "spring" );
     assert( plugin );

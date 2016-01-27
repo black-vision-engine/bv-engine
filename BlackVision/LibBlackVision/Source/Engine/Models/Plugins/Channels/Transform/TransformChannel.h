@@ -15,7 +15,7 @@ class TransformChannel : public ITransformChannel
 {
 protected:
 
-    std::vector< TransformPtr >                     m_transformations;
+    TransformPtr                                    m_transformation;
     bool                                            m_readOnly;
 
 public:
@@ -23,7 +23,7 @@ public:
                                                     TransformChannel    ( bool readOnly = false );
 
     virtual bool                                    IsReadOnly          () const;
-    virtual const std::vector< TransformPtr > &     GetTransformChannels() const;
+    virtual TransformPtr                            GetTransformChannels() const;
 
     virtual ~TransformChannel();
 

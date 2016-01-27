@@ -164,9 +164,7 @@ void DefaultText3DPlugin::SetPrevPlugin( IPluginPtr prev )
 
 	m_scaleValue =  ValuesFactory::CreateValueMat4( "" );
 	m_scaleValue->SetValue( glm::mat4( 1.0 ) );
-    ValueMat4PtrVec values;
-	values.push_back( m_scaleValue );
-	m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( m_prevPlugin, values, false ) ); //<3
+	m_transformChannel = DefaultTransformChannelPtr( DefaultTransformChannel::Create( m_prevPlugin, m_scaleValue, false ) ); //<3
 
 	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
 	auto ctx = m_psc->GetRendererContext();

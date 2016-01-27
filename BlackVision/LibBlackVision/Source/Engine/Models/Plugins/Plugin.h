@@ -95,7 +95,7 @@ public:
 
     virtual bool                                LoadResource                ( AssetDescConstPtr assetDescr );
 
-	virtual ParamTransformVecPtr				GetParamTransform			() const override { return nullptr; }
+	virtual ParamTransformPtr				    GetParamTransform			() const override { return nullptr; }
 
 	virtual std::vector< ITimeEvaluatorPtr >	GetTimelines				() const override;
 
@@ -541,7 +541,7 @@ bool                                        BasePlugin< Iface >::ParameterChange
     return state->StateChanged();
 }
 
-ParamTransformVecPtr						GetCurrentParamTransform( const IPlugin * pl );
+ParamTransformPtr						    GetCurrentParamTransform( const IPlugin * pl );
 
 typedef std::shared_ptr< const BasePlugin< IPlugin > > BasePluginConstPtr;
 

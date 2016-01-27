@@ -215,14 +215,14 @@ void                                    ShiftReplicationModifier::ApplyTranslati
 {
     auto transformParam = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
-    if( transformParam->GetType() == ModelParamType::MPT_TRANSFORM_VEC )
+    if( transformParam->GetType() == ModelParamType::MPT_TRANSFORM )
     {
-        auto transformParamTyped = QueryTypedParam< ParamTransformVecPtr >( transformParam );
+        auto transformParamTyped = QueryTypedParam< ParamTransformPtr >( transformParam );
 
         // X
         bool valueSet = false;
 
-        for( auto & k : transformParamTyped->Transform( 0 )[ 1 ]->GetP0MotylaNoga().GetKeys() )
+        for( auto & k : transformParamTyped->Transform()[ 1 ]->GetP0MotylaNoga().GetKeys() )
         {
             if( k.t == delta.startTime )
             {
@@ -237,7 +237,7 @@ void                                    ShiftReplicationModifier::ApplyTranslati
        
         if( !valueSet )
         {
-            auto interpolator = transformParamTyped->Transform( 0 )[ 1 ]->GetP0MotylaNoga();
+            auto interpolator = transformParamTyped->Transform()[ 1 ]->GetP0MotylaNoga();
 
             auto val = interpolator.Evaluate( delta.startTime );
 
@@ -249,7 +249,7 @@ void                                    ShiftReplicationModifier::ApplyTranslati
         // Y
         valueSet = false;
 
-        for( auto & k : transformParamTyped->Transform( 0 )[ 1 ]->GetP1MotylaNoga().GetKeys() )
+        for( auto & k : transformParamTyped->Transform()[ 1 ]->GetP1MotylaNoga().GetKeys() )
         {
             if( k.t == delta.startTime )
             {
@@ -264,7 +264,7 @@ void                                    ShiftReplicationModifier::ApplyTranslati
        
         if( !valueSet )
         {
-            auto interpolator = transformParamTyped->Transform( 0 )[ 1 ]->GetP1MotylaNoga();
+            auto interpolator = transformParamTyped->Transform()[ 1 ]->GetP1MotylaNoga();
 
             auto val = interpolator.Evaluate( delta.startTime );
 
@@ -276,7 +276,7 @@ void                                    ShiftReplicationModifier::ApplyTranslati
         // Z
         valueSet = false;
 
-        for( auto & k : transformParamTyped->Transform( 0 )[ 1 ]->GetP2MotylaNoga().GetKeys() )
+        for( auto & k : transformParamTyped->Transform()[ 1 ]->GetP2MotylaNoga().GetKeys() )
         {
             if( k.t == delta.startTime )
             {
@@ -291,7 +291,7 @@ void                                    ShiftReplicationModifier::ApplyTranslati
        
         if( !valueSet )
         {
-            auto interpolator = transformParamTyped->Transform( 0 )[ 1 ]->GetP2MotylaNoga();
+            auto interpolator = transformParamTyped->Transform()[ 1 ]->GetP2MotylaNoga();
 
             auto val = interpolator.Evaluate( delta.startTime );
 
@@ -308,14 +308,14 @@ void                                    ShiftReplicationModifier::ApplyScaleDelt
 {
     auto transformParam = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
-    if( transformParam->GetType() == ModelParamType::MPT_TRANSFORM_VEC )
+    if( transformParam->GetType() == ModelParamType::MPT_TRANSFORM )
     {
-        auto transformParamTyped = QueryTypedParam< ParamTransformVecPtr >( transformParam );
+        auto transformParamTyped = QueryTypedParam< ParamTransformPtr >( transformParam );
 
         // X
         bool valueSet = false;
 
-        for( auto & k : transformParamTyped->Transform( 0 )[ 3 ]->GetP0MotylaNoga().GetKeys() )
+        for( auto & k : transformParamTyped->Transform()[ 3 ]->GetP0MotylaNoga().GetKeys() )
         {
             if( k.t == delta.startTime )
             {
@@ -330,7 +330,7 @@ void                                    ShiftReplicationModifier::ApplyScaleDelt
        
         if( !valueSet )
         {
-            auto interpolator = transformParamTyped->Transform( 0 )[ 3 ]->GetP0MotylaNoga();
+            auto interpolator = transformParamTyped->Transform()[ 3 ]->GetP0MotylaNoga();
 
             auto val = interpolator.Evaluate( delta.startTime );
 
@@ -342,7 +342,7 @@ void                                    ShiftReplicationModifier::ApplyScaleDelt
         // Y
         valueSet = false;
 
-        for( auto & k : transformParamTyped->Transform( 0 )[ 3 ]->GetP1MotylaNoga().GetKeys() )
+        for( auto & k : transformParamTyped->Transform()[ 3 ]->GetP1MotylaNoga().GetKeys() )
         {
             if( k.t == delta.startTime )
             {
@@ -357,7 +357,7 @@ void                                    ShiftReplicationModifier::ApplyScaleDelt
        
         if( !valueSet )
         {
-            auto interpolator = transformParamTyped->Transform( 0 )[ 3 ]->GetP1MotylaNoga();
+            auto interpolator = transformParamTyped->Transform()[ 3 ]->GetP1MotylaNoga();
 
             auto val = interpolator.Evaluate( delta.startTime );
 
@@ -369,7 +369,7 @@ void                                    ShiftReplicationModifier::ApplyScaleDelt
         // Z
         valueSet = false;
 
-        for( auto & k : transformParamTyped->Transform( 0 )[ 3 ]->GetP2MotylaNoga().GetKeys() )
+        for( auto & k : transformParamTyped->Transform()[ 3 ]->GetP2MotylaNoga().GetKeys() )
         {
             if( k.t == delta.startTime )
             {
@@ -384,7 +384,7 @@ void                                    ShiftReplicationModifier::ApplyScaleDelt
        
         if( !valueSet )
         {
-            auto interpolator = transformParamTyped->Transform( 0 )[ 3 ]->GetP2MotylaNoga();
+            auto interpolator = transformParamTyped->Transform()[ 3 ]->GetP2MotylaNoga();
 
             auto val = interpolator.Evaluate( delta.startTime );
 
@@ -402,14 +402,14 @@ void                                    ShiftReplicationModifier::ApplyRotationD
 {
     auto transformParam = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
-    if( transformParam->GetType() == ModelParamType::MPT_TRANSFORM_VEC )
+    if( transformParam->GetType() == ModelParamType::MPT_TRANSFORM )
     {
-        auto transformParamTyped = QueryTypedParam< ParamTransformVecPtr >( transformParam );
+        auto transformParamTyped = QueryTypedParam< ParamTransformPtr >( transformParam );
 
         // X
         bool valueSet = false;
 
-        for( auto & k : transformParamTyped->Transform( 0 )[ 2 ]->GetP0MotylaNoga().GetKeys() )
+        for( auto & k : transformParamTyped->Transform()[ 2 ]->GetP0MotylaNoga().GetKeys() )
         {
             if( k.t == delta.startTime )
             {
@@ -424,7 +424,7 @@ void                                    ShiftReplicationModifier::ApplyRotationD
        
         if( !valueSet )
         {
-            auto interpolator = transformParamTyped->Transform( 0 )[ 2 ]->GetP0MotylaNoga();
+            auto interpolator = transformParamTyped->Transform()[ 2 ]->GetP0MotylaNoga();
 
             auto val = interpolator.Evaluate( delta.startTime );
 
@@ -436,7 +436,7 @@ void                                    ShiftReplicationModifier::ApplyRotationD
         // Y
         valueSet = false;
 
-        for( auto & k : transformParamTyped->Transform( 0 )[ 2 ]->GetP1MotylaNoga().GetKeys() )
+        for( auto & k : transformParamTyped->Transform()[ 2 ]->GetP1MotylaNoga().GetKeys() )
         {
             if( k.t == delta.startTime )
             {
@@ -451,7 +451,7 @@ void                                    ShiftReplicationModifier::ApplyRotationD
        
         if( !valueSet )
         {
-            auto interpolator = transformParamTyped->Transform( 0 )[ 2 ]->GetP1MotylaNoga();
+            auto interpolator = transformParamTyped->Transform()[ 2 ]->GetP1MotylaNoga();
 
             auto val = interpolator.Evaluate( delta.startTime );
 
@@ -463,7 +463,7 @@ void                                    ShiftReplicationModifier::ApplyRotationD
         // Z
         valueSet = false;
 
-        for( auto & k : transformParamTyped->Transform( 0 )[ 2 ]->GetP2MotylaNoga().GetKeys() )
+        for( auto & k : transformParamTyped->Transform()[ 2 ]->GetP2MotylaNoga().GetKeys() )
         {
             if( k.t == delta.startTime )
             {
@@ -478,7 +478,7 @@ void                                    ShiftReplicationModifier::ApplyRotationD
        
         if( !valueSet )
         {
-            auto interpolator = transformParamTyped->Transform( 0 )[ 2 ]->GetP2MotylaNoga();
+            auto interpolator = transformParamTyped->Transform()[ 2 ]->GetP2MotylaNoga();
 
             auto val = interpolator.Evaluate( delta.startTime );
 

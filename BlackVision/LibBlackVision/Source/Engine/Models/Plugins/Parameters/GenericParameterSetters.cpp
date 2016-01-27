@@ -60,106 +60,106 @@ bool SetCenterMass              ( ParamTransformPtr pt, TimeType t, const glm::v
 
     return true;
 }
-
-// *******************************
 //
-bool SetRotation                ( ParamTransformVecPtr pt, unsigned int idx, TimeType t, const glm::vec3 & rotAxis, float angle )
-{
-    if( pt == nullptr || pt->NumTransforms() <= idx )
-    {
-        return false;
-    }
-
-    pt->SetRotation( idx, rotAxis, angle, t );
-
-    return true;
-}
-
-// *******************************
+//// *******************************
+////
+//bool SetRotation                ( ParamTransformVecPtr pt, unsigned int idx, TimeType t, const glm::vec3 & rotAxis, float angle )
+//{
+//    if( pt == nullptr || pt->NumTransforms() <= idx )
+//    {
+//        return false;
+//    }
 //
-bool SetScale                   ( ParamTransformVecPtr pt, unsigned int idx, TimeType t, const glm::vec3 & scale )
-{
-    if( pt == nullptr || pt->NumTransforms() <= idx )
-    {
-        return false;
-    }
-
-    pt->SetScale( idx, scale, t );
-
-    return true;
-}
-
-// *******************************
+//    pt->SetRotation( idx, rotAxis, angle, t );
 //
-bool SetTranslation             ( ParamTransformVecPtr pt, unsigned int idx, TimeType t, const glm::vec3 & translation )
-{
-    if( pt == nullptr || pt->NumTransforms() <= idx )
-    {
-        return false;
-    }
-
-    pt->SetTranslation( idx, translation, t );
-
-    return true;
-}
-
-// *******************************
+//    return true;
+//}
 //
-bool SetCenterMass              ( ParamTransformVecPtr pt, unsigned int idx, TimeType t, const glm::vec3 & center )
-{
-    if( pt == nullptr || pt->NumTransforms() <= idx )
-    {
-        return false;
-    }
-
-    pt->SetCenter( idx, center, t );
-
-    return true;
-}
-
-// ***********************
+//// *******************************
+////
+//bool SetScale                   ( ParamTransformVecPtr pt, unsigned int idx, TimeType t, const glm::vec3 & scale )
+//{
+//    if( pt == nullptr || pt->NumTransforms() <= idx )
+//    {
+//        return false;
+//    }
 //
-bool    RemoveRotationKey       ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t )
-{
-    if( parameter == nullptr )
-        return false;
-
-    parameter->RemoveRotation( idx, t );
-    return true;
-}
-
-// ***********************
+//    pt->SetScale( idx, scale, t );
 //
-bool    RemoveScaleKey          ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t )
-{
-    if( parameter == nullptr )
-        return false;
-
-    parameter->RemoveScale( idx, t );
-    return true;
-}
-
-// ***********************
+//    return true;
+//}
 //
-bool    RemoveTranslationKey    ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t )
-{
-    if( parameter == nullptr )
-        return false;
-
-    parameter->RemoveTranslation( idx, t );
-    return true;
-}
-
-// ***********************
+//// *******************************
+////
+//bool SetTranslation             ( ParamTransformVecPtr pt, unsigned int idx, TimeType t, const glm::vec3 & translation )
+//{
+//    if( pt == nullptr || pt->NumTransforms() <= idx )
+//    {
+//        return false;
+//    }
 //
-bool    RemoveCenterMassKey     ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t )
-{
-    if( parameter == nullptr )
-        return false;
-
-    parameter->RemoveCenter( idx, t );
-    return true;
-}
+//    pt->SetTranslation( idx, translation, t );
+//
+//    return true;
+//}
+//
+//// *******************************
+////
+//bool SetCenterMass              ( ParamTransformVecPtr pt, unsigned int idx, TimeType t, const glm::vec3 & center )
+//{
+//    if( pt == nullptr || pt->NumTransforms() <= idx )
+//    {
+//        return false;
+//    }
+//
+//    pt->SetCenter( idx, center, t );
+//
+//    return true;
+//}
+//
+//// ***********************
+////
+//bool    RemoveRotationKey       ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t )
+//{
+//    if( parameter == nullptr )
+//        return false;
+//
+//    parameter->RemoveRotation( idx, t );
+//    return true;
+//}
+//
+//// ***********************
+////
+//bool    RemoveScaleKey          ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t )
+//{
+//    if( parameter == nullptr )
+//        return false;
+//
+//    parameter->RemoveScale( idx, t );
+//    return true;
+//}
+//
+//// ***********************
+////
+//bool    RemoveTranslationKey    ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t )
+//{
+//    if( parameter == nullptr )
+//        return false;
+//
+//    parameter->RemoveTranslation( idx, t );
+//    return true;
+//}
+//
+//// ***********************
+////
+//bool    RemoveCenterMassKey     ( ParamTransformVecPtr parameter, unsigned int idx, TimeType t )
+//{
+//    if( parameter == nullptr )
+//        return false;
+//
+//    parameter->RemoveCenter( idx, t );
+//    return true;
+//}
 
 // ***********************
 //
@@ -237,56 +237,56 @@ bool    SetParameterCenterMass  ( IParameterPtr parameter, TimeType t, const glm
     return SetCenterMass( QueryTypedParam< ParamTransformPtr >( parameter ), t, center );
 }
 
-// *******************************
+//// *******************************
+////
+//bool    SetParameterRotation    ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & rotAxis, float angle )
+//{
+//    return SetRotation( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, rotAxis, angle );
+//}
 //
-bool    SetParameterRotation    ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & rotAxis, float angle )
-{
-    return SetRotation( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, rotAxis, angle );
-}
-
-// *******************************
+//// *******************************
+////
+//bool    SetParameterScale       ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & scale )
+//{
+//    return SetScale( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, scale );
+//}
 //
-bool    SetParameterScale       ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & scale )
-{
-    return SetScale( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, scale );
-}
-
-// *******************************
+//// *******************************
+////
+//bool    SetParameterTranslation ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & translation )
+//{
+//    return SetTranslation( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, translation );
+//}
 //
-bool    SetParameterTranslation ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & translation )
-{
-    return SetTranslation( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, translation );
-}
-
-// *******************************
-//
-bool    SetParameterCenterMass  ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & center )
-{
-    return SetCenterMass( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, center );
-}
+//// *******************************
+////
+//bool    SetParameterCenterMass  ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & center )
+//{
+//    return SetCenterMass( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t, center );
+//}
 
 // ========================================================================= //
 // Remove transformation keys
 // ========================================================================= //
 
-// ***********************
+//// ***********************
+////
+//bool    RemoveRotationKey       ( IParameterPtr parameter, unsigned int idx, TimeType t )
+//{    return RemoveRotationKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t );  }
 //
-bool    RemoveRotationKey       ( IParameterPtr parameter, unsigned int idx, TimeType t )
-{    return RemoveRotationKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t );  }
-
-// ***********************
+//// ***********************
+////
+//bool    RemoveScaleKey          ( IParameterPtr parameter, unsigned int idx, TimeType t )
+//{    return RemoveScaleKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t );  }
+//// ***********************
+////
+//bool    RemoveTranslationKey    ( IParameterPtr parameter, unsigned int idx, TimeType t )
+//{    return RemoveTranslationKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t );  }
 //
-bool    RemoveScaleKey          ( IParameterPtr parameter, unsigned int idx, TimeType t )
-{    return RemoveScaleKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t );  }
-// ***********************
-//
-bool    RemoveTranslationKey    ( IParameterPtr parameter, unsigned int idx, TimeType t )
-{    return RemoveTranslationKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t );  }
-
-// ***********************
-//
-bool    RemoveCenterMassKey     ( IParameterPtr parameter, unsigned int idx, TimeType t )
-{    return RemoveCenterMassKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t );  }
+//// ***********************
+////
+//bool    RemoveCenterMassKey     ( IParameterPtr parameter, unsigned int idx, TimeType t )
+//{    return RemoveCenterMassKey( QueryTypedParam< ParamTransformVecPtr >( parameter ), idx, t );  }
 
 
 

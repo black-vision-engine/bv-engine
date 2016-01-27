@@ -46,7 +46,6 @@ private:
     static  RenderableEntity *  CreateRenderableEntity              ( model::BasicNodePtr modelNode, const model::IPluginConstPtr & finalizer );
 
     static  RenderableEffectPtr CreateDefaultEffect                 ( const model::IPluginConstPtr & finalizer );
-    static  TransformVec        CreateTransformVec                  ( const model::IPluginConstPtr & finalizer );
 
     static  RADASVB *           CreateRenderableArrayDataTriStrip   ( model::BasicNodePtr modelNode, const model::IPluginConstPtr & finalizer );
     static  RADASVB *           CreateRenderableArrayDataArrays     ( const std::vector< model::IConnectedComponentPtr > & ccVec, const model::IVertexAttributesChannelDescriptor * desc, bool isTimeInvariant );

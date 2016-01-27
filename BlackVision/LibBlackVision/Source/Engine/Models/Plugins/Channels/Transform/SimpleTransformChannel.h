@@ -14,17 +14,17 @@ class SimpleTransformChannel : public TransformChannel
 {
 private:
 
-    ParamTransformVec   m_transformParams;
+    ParamTransform      m_transformParam;
 
 public:
 
-    explicit            SimpleTransformChannel  ( const ParamTransformVec & paramTransformVec );
+    explicit            SimpleTransformChannel  ( const ParamTransform & paramTransform );
 
     virtual void        Update                  ( TimeType t );
 
 //    void                                            AddTransform            ( const ParamTransform & transInt );
 
-    ParamTransformVec * GetParamTransformVec    ();
+    ParamTransform *    GetParamTransform    ();
 
 };
 

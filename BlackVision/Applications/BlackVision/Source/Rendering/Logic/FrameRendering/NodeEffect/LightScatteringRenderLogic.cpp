@@ -67,10 +67,7 @@ RenderableEntity *  LightScatteringRenderLogic::SetupEffect                 ( Te
 
     auto ts = MainDisplayTarget::CreateAuxRect( std::const_pointer_cast< Texture2D >( input ) );
 
-    std::vector< bv::Transform > vec;
-    vec.push_back( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
-
-    ts->SetWorldTransforms( vec );
+    ts->SetWorldTransform( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
 
     m_effect->AddTexture( std::const_pointer_cast< Texture2D >( input ) );
 
