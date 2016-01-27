@@ -187,6 +187,9 @@
     <Filter Include="Engine\Graphics\Effects\Fullscreen\Old\Impl">
       <UniqueIdentifier>{6cc37185-358f-415e-a2e5-7f122828dc63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Graphics\Effects\Fullscreen\Graph">
+      <UniqueIdentifier>{b1d55d67-2107-4804-a158-bbc078b820c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp">
@@ -948,12 +951,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectFactory.cpp">
       <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectGraph.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectGraphNode.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectRenderLogic.cpp">
       <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
     </ClCompile>
@@ -1067,6 +1064,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffect.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Graph\FullscreenEffectGraph.cpp">
+      <Filter>Engine\Graphics\Effects\Fullscreen\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Graph\FullscreenEffectGraphNode.cpp">
+      <Filter>Engine\Graphics\Effects\Fullscreen\Graph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2015,12 +2018,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectFactory.h">
       <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectGraph.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectGraphNode.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectRenderLogic.h">
       <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
     </ClInclude>
@@ -2137,6 +2134,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffect.h">
       <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Graph\FullscreenEffectGraph.h">
+      <Filter>Engine\Graphics\Effects\Fullscreen\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Graph\FullscreenEffectGraphNode.h">
+      <Filter>Engine\Graphics\Effects\Fullscreen\Graph</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
