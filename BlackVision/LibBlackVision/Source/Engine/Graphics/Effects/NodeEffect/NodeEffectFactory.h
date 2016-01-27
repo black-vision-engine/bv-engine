@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectTypes.h"
+#include "Engine/Graphics/Effects/NodeEffect/NodeEffectTypes.h"
 
-#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectTr.h"
+#include "Engine/Graphics/Effects/NodeEffect/NodeEffectTr.h"
 
 
 namespace bv {

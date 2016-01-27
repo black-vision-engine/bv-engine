@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Engine/Graphics/SceneGraph/TransformableEntity.h"
-#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectTr.h"
+#include "Engine/Graphics/Effects/NodeEffect/NodeEffectTr.h"
 
 #include "CoreDEF.h"
 

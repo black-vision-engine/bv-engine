@@ -2,8 +2,8 @@
 
 #include "Engine/Interfaces/IValue.h"
 
-#include "Engine/Graphics/Effects/NodeEffectTr/PreFullScreenEffectLogic.h"
-#include "Engine/Graphics/Effects/NodeEffectTr/PostFullScreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/PreFullScreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/PostFullScreenEffectLogic.h"
 
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectTr.h"
 

@@ -1,6 +1,6 @@
 #include "NodeEffectTr.h"
 
-#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/NodeEffectLogic.h"
 
 
 namespace bv {

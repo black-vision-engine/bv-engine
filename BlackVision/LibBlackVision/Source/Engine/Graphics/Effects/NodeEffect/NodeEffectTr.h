@@ -2,7 +2,7 @@
 
 #include "Engine/Interfaces/IValue.h"
 
-#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectTypes.h"
+#include "Engine/Graphics/Effects/NodeEffect/NodeEffectTypes.h"
 
 
 namespace bv {

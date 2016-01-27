@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/Effects/NodeEffectTr/PreFullScreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/PreFullScreenEffectLogic.h"
 
 #include "Engine/Types/Values/TypedValues.h"
 

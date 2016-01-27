@@ -20,13 +20,7 @@
 #include "Engine/Models/NodeEffects/ModelNodeEffectWireframe.h"
 #include "Engine/Models/NodeEffects/ModelNodeEffectMixChannels.h"
 
-#include "Engine/Graphics/Effects/NodeEffects/NodeEffect.h"
-#include "Engine/Graphics/Effects/NodeEffects/NodeMaskNodeEffect.h"
-#include "Engine/Graphics/Effects/NodeEffects/AlphaMaskNodeEffect.h"
-#include "Engine/Graphics/Effects/NodeEffects/WireframeNodeEffect.h"
-#include "Engine/Graphics/Effects/NodeEffects/MixChannelsNodeEffect.h"
-
-#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectFactory.h"
+#include "Engine/Graphics/Effects/NodeEffect/NodeEffectFactory.h"
 
 
 namespace bv 

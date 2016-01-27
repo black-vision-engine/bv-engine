@@ -2,22 +2,22 @@
 
 #include <cassert>
 
-#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectTr.h"
-#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/NodeEffectTr.h"
+#include "Engine/Graphics/Effects/NodeEffect/NodeEffectLogic.h"
 
 //PRE
-#include "Engine/Graphics/Effects/NodeEffectTr/Impl/DefaultPreFullscreenEffectLogic.h"
-#include "Engine/Graphics/Effects/NodeEffectTr/Impl/AlphaMaskPreFullscreenEffectLogic.h"
-#include "Engine/Graphics/Effects/NodeEffectTr/Impl/NodeMaskPreFullscreenEffectLogic.h"
-#include "Engine/Graphics/Effects/NodeEffectTr/Impl/InterlacePreFullscreenEffectLogic.h"
-#include "Engine/Graphics/Effects/NodeEffectTr/Impl/RenderOffscreenPreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Impl/DefaultPreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Impl/AlphaMaskPreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Impl/NodeMaskPreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Impl/InterlacePreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Impl/RenderOffscreenPreFullscreenEffectLogic.h"
 
 //FSE
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectFactory.h"
 
 //POST
-#include "Engine/Graphics/Effects/NodeEffectTr/Impl/DefaultPostFullscreenEffectLogic.h"
-#include "Engine/Graphics/Effects/NodeEffectTr/Impl/WireframePostFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Impl/DefaultPostFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Impl/WireframePostFullscreenEffectLogic.h"
 
 
 namespace bv {

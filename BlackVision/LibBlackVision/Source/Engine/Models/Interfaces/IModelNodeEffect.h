@@ -4,7 +4,7 @@
 
 #include "Engine/Interfaces/IUpdatable.h"
 
-#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectTypes.h"
+#include "Engine/Graphics/Effects/NodeEffect/NodeEffectTypes.h"
 
 
 namespace bv { namespace model {

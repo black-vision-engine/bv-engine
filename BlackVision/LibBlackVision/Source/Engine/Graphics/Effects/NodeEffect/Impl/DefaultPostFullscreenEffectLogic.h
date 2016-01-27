@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Graphics/Effects/NodeEffectTr/PostFullScreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/PostFullScreenEffectLogic.h"
 
 
 namespace bv {

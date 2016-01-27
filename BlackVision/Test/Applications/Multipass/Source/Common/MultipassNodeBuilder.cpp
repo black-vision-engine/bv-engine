@@ -1,7 +1,6 @@
 #include "MultipassNodeBuilder.h"
 #include "Common/GeometryBuilder.h"
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
-#include "Engine/Graphics/Effects/DefaultMultipassEffect.h"
 
 
 namespace bv {
@@ -40,13 +39,15 @@ RenderableEffectPtr MultipassNodeBuilder::CreateMultipassRenderableEffect( Shade
 
 	float alfa =  1.0;
 
-    DefaultMultipassEffectPtr effect;
+    // FIXME: implement
+    // DefaultMultipassEffectPtr effect;
 
 	//IShaderDataSourceConstPtr fsds;
 	IShaderDataSourceConstPtr vsds;
 	
-	RenderablePass* newPass;
-	RendererStateInstance* stateInstance;
+    // FIXME: implement
+	//RenderablePass* newPass;
+	//RendererStateInstance* stateInstance;
 
 
 	for( unsigned short pass = 0; pass < passes; pass++ )
@@ -65,14 +66,16 @@ RenderableEffectPtr MultipassNodeBuilder::CreateMultipassRenderableEffect( Shade
 			vsds = ShaderDataSourceCreator::VertexShader( sdst );
 			dummyFuckerReferenceKeeper.push_back( vsds );
 
-			effect = std::make_shared<DefaultMultipassEffect>( fsds.get(), vsds.get(), nullptr );
+            // FIXME: implement
+			//effect = std::make_shared<DefaultMultipassEffect>( fsds.get(), vsds.get(), nullptr );
 
-			stateInstance = effect->GetPass( 0 )->GetStateInstance();
+			//stateInstance = effect->GetPass( 0 )->GetStateInstance();
 		}
 		else
 		{
-			newPass = effect->addPass( fsds.get(), vsds.get(), nullptr );
-			stateInstance = newPass->GetStateInstance();
+			// FIXME: implement
+            //newPass = effect->addPass( fsds.get(), vsds.get(), nullptr );
+			//stateInstance = newPass->GetStateInstance();
 		}
 		
 		AlphaState alfaState;
@@ -81,10 +84,13 @@ RenderableEffectPtr MultipassNodeBuilder::CreateMultipassRenderableEffect( Shade
 		alfaState.dstBlendMode = AlphaDstBlendMode::ADBM_ONE_MINUS_SRC_ALPHA;
 		alfaState.srcBlendMode = AlphaSrcBlendMode::ASBM_SRC_ALPHA;
 		
-		stateInstance->SetState( std::make_shared<AlphaState>( alfaState ) );
+		//stateInstance->SetState( std::make_shared<AlphaState>( alfaState ) );
 	}
 
-	return effect;
+	// FIXME: implement
+    //return effect;
+
+    return nullptr;
 }
 
 

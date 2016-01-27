@@ -5,7 +5,7 @@
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Graphics/SceneGraph/RenderableEntity.h"
 
-#include "Engine/Graphics/Effects/NodeEffectTr/NodeEffectFactory.h"
+#include "Engine/Graphics/Effects/NodeEffect/NodeEffectFactory.h"
 
 
 namespace bv {

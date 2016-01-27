@@ -1,7 +1,7 @@
 #include "MultipassNodeBuilder.h"
 #include "Prototypes/Engine/Common/GeometryBuilder.h"
 #include "Engine/Graphics/SceneGraph/TriangleStrip.h"
-#include "Engine/Graphics/Effects/DefaultMultipassEffect.h"
+//#include "Engine/Graphics/Effects/DefaultMultipassEffect.h"
 
 
 namespace bv {
@@ -34,55 +34,58 @@ SceneNode *		MultipassNodeBuilder::CreateMultipassRectNodeTexture( float w, floa
 
 RenderableEffectPtr MultipassNodeBuilder::CreateMultipassRenderableEffect( ShaderDataSourceType sdst, unsigned short passes, std::string** textureFile, const std::string & textureName )
 {
-	// Replace everything
-	assert( passes > 0 );
-    static std::vector< IShaderDataSourceConstPtr > dummyFuckerReferenceKeeper; // FIXME:L keeps references to shader params - this suxx as hell - and must be fixed in the model and engine
+    { sdst; passes; textureFile; textureName; }
+	//// Replace everything
+	//assert( passes > 0 );
+ //   static std::vector< IShaderDataSourceConstPtr > dummyFuckerReferenceKeeper; // FIXME:L keeps references to shader params - this suxx as hell - and must be fixed in the model and engine
 
-	float alfa =  1.0;
+	//float alfa =  1.0;
 
-    DefaultMultipassEffectPtr effect;
+ //   //DefaultMultipassEffectPtr effect;
 
-	//IShaderDataSourceConstPtr fsds;
-	IShaderDataSourceConstPtr vsds;
-	
-	RenderablePass* newPass;
-	RendererStateInstance* stateInstance;
+	////IShaderDataSourceConstPtr fsds;
+	//IShaderDataSourceConstPtr vsds;
+	//
+	//RenderablePass* newPass;
+	//RendererStateInstance* stateInstance;
 
 
-	for( unsigned short pass = 0; pass < passes; pass++ )
-	{
-		/*alfa = 0.5;*/
-		alfa = (float)(passes - pass) / (float)passes;
+	//for( unsigned short pass = 0; pass < passes; pass++ )
+	//{
+	//	/*alfa = 0.5;*/
+	//	alfa = (float)(passes - pass) / (float)passes;
 
-		IShaderDataSourceConstPtr fsds = ShaderDataSourceCreator::FragmentShader( sdst, alfa, *(textureFile[pass]), textureName + std::to_string(pass) );
-		dummyFuckerReferenceKeeper.push_back( fsds );
+	//	IShaderDataSourceConstPtr fsds = ShaderDataSourceCreator::FragmentShader( sdst, alfa, *(textureFile[pass]), textureName + std::to_string(pass) );
+	//	dummyFuckerReferenceKeeper.push_back( fsds );
 
-		if( pass == 0 )
-		{
-			// FIXME: these pointers get deleted when function leaves this scope so this is bound to fail, these references must be kept somewhere
-			vsds = ShaderDataSourceCreator::VertexShader( sdst );
-			dummyFuckerReferenceKeeper.push_back( vsds );
+	//	if( pass == 0 )
+	//	{
+	//		// FIXME: these pointers get deleted when function leaves this scope so this is bound to fail, these references must be kept somewhere
+	//		vsds = ShaderDataSourceCreator::VertexShader( sdst );
+	//		dummyFuckerReferenceKeeper.push_back( vsds );
 
-			effect = std::make_shared<DefaultMultipassEffect>( fsds.get(), vsds.get(), nullptr );
+	//		effect = std::make_shared<DefaultMultipassEffect>( fsds.get(), vsds.get(), nullptr );
 
-			stateInstance = effect->GetPass( 0 )->GetStateInstance();
-		}
-		else
-		{
-			newPass = effect->addPass( fsds.get(), vsds.get(), nullptr );
-			stateInstance = newPass->GetStateInstance();
-		}
-		
-		AlphaState alfaState;
-		alfaState.blendEnabled = true;
-		alfaState.blendColor = glm::vec4( alfa, alfa, alfa, alfa );
-		alfaState.dstBlendMode = AlphaDstBlendMode::ADBM_ONE_MINUS_SRC_ALPHA;
-		alfaState.srcBlendMode = AlphaSrcBlendMode::ASBM_SRC_ALPHA;
-		
-		stateInstance->SetState( std::make_shared<AlphaState>( alfaState ) );
-	}
+	//		stateInstance = effect->GetPass( 0 )->GetStateInstance();
+	//	}
+	//	else
+	//	{
+	//		newPass = effect->addPass( fsds.get(), vsds.get(), nullptr );
+	//		stateInstance = newPass->GetStateInstance();
+	//	}
+	//	
+	//	AlphaState alfaState;
+	//	alfaState.blendEnabled = true;
+	//	alfaState.blendColor = glm::vec4( alfa, alfa, alfa, alfa );
+	//	alfaState.dstBlendMode = AlphaDstBlendMode::ADBM_ONE_MINUS_SRC_ALPHA;
+	//	alfaState.srcBlendMode = AlphaSrcBlendMode::ASBM_SRC_ALPHA;
+	//	
+	//	stateInstance->SetState( std::make_shared<AlphaState>( alfaState ) );
+	//}
 
-	return effect;
+	//return effect;
+
+    return nullptr;
 }
 
 
