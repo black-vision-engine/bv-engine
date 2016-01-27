@@ -6,18 +6,18 @@
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffectLogic.h"
 
 //PRE
-#include "Engine/Graphics/Effects/NodeEffect/Impl/DefaultPreFullscreenEffectLogic.h"
-#include "Engine/Graphics/Effects/NodeEffect/Impl/AlphaMaskPreFullscreenEffectLogic.h"
-#include "Engine/Graphics/Effects/NodeEffect/Impl/NodeMaskPreFullscreenEffectLogic.h"
-#include "Engine/Graphics/Effects/NodeEffect/Impl/InterlacePreFullscreenEffectLogic.h"
-#include "Engine/Graphics/Effects/NodeEffect/Impl/RenderOffscreenPreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/DefaultPreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/AlphaMaskPreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/NodeMaskPreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/InterlacePreFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Logic/PreImpl/RenderOffscreenPreFullscreenEffectLogic.h"
 
 //FSE
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectFactory.h"
 
 //POST
-#include "Engine/Graphics/Effects/NodeEffect/Impl/DefaultPostFullscreenEffectLogic.h"
-#include "Engine/Graphics/Effects/NodeEffect/Impl/WireframePostFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Logic/PostImpl/DefaultPostFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Logic/PostImpl/WireframePostFullscreenEffectLogic.h"
 
 
 namespace bv {

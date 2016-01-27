@@ -178,9 +178,6 @@
     <Filter Include="Engine\Graphics\Effects\NodeEffect">
       <UniqueIdentifier>{2ab7cdfd-ddff-495c-988b-7db7fbae6cfd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\Effects\NodeEffect\Impl">
-      <UniqueIdentifier>{62ab7f86-fcb6-4035-829f-a720a442ab16}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\Effects\Fullscreen\Old">
       <UniqueIdentifier>{20dbb99c-af71-4b58-a492-e683a2c45d1c}</UniqueIdentifier>
     </Filter>
@@ -195,6 +192,12 @@
     </Filter>
     <Filter Include="Engine\Graphics\Effects\NodeEffect\Logic">
       <UniqueIdentifier>{43d446f0-5e12-4f1b-9635-b67e96810147}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\NodeEffect\Logic\PreImpl">
+      <UniqueIdentifier>{6f23f78e-197c-4dee-9498-fbf57a4c4278}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Effects\NodeEffect\Logic\PostImpl">
+      <UniqueIdentifier>{376393a3-2168-46be-ba38-773c029d8d27}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -987,30 +990,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffectLogic.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Impl\AlphaMaskPreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Impl\DefaultPostFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Impl\DefaultPreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Impl\InterlacePreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Impl\NodeMaskPostFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Impl\NodeMaskPreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Impl\RenderOffscreenPreFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Impl\WireframePostFullscreenEffectLogic.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Impl</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\FullscreenEffectOld.cpp">
       <Filter>Engine\Graphics\Effects\Fullscreen\Old</Filter>
     </ClCompile>
@@ -1070,6 +1049,30 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreFullScreenEffectLogic.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffect\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\DefaultPostFullscreenEffectLogic.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\NodeMaskPostFullscreenEffectLogic.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\WireframePostFullscreenEffectLogic.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\AlphaMaskPreFullscreenEffectLogic.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\DefaultPreFullscreenEffectLogic.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\InterlacePreFullscreenEffectLogic.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\NodeMaskPreFullscreenEffectLogic.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\RenderOffscreenPreFullscreenEffectLogic.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2048,30 +2051,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffectLogic.h">
       <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Impl\AlphaMaskPreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Impl\DefaultPostFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Impl\DefaultPreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Impl\InterlacePreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Impl\NodeMaskPostFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Impl\NodeMaskPreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Impl\RenderOffscreenPreFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Impl\WireframePostFullscreenEffectLogic.h">
-      <Filter>Engine\Graphics\Effects\NodeEffect\Impl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\FullscreenEffectOld.h">
       <Filter>Engine\Graphics\Effects\Fullscreen\Old</Filter>
     </ClInclude>
@@ -2131,6 +2110,30 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreFullScreenEffectLogic.h">
       <Filter>Engine\Graphics\Effects\NodeEffect\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\DefaultPostFullscreenEffectLogic.h">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\NodeMaskPostFullscreenEffectLogic.h">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PostImpl\WireframePostFullscreenEffectLogic.h">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PostImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\AlphaMaskPreFullscreenEffectLogic.h">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\DefaultPreFullscreenEffectLogic.h">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\InterlacePreFullscreenEffectLogic.h">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\NodeMaskPreFullscreenEffectLogic.h">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\RenderOffscreenPreFullscreenEffectLogic.h">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
