@@ -313,7 +313,7 @@ void CompositeBezierInterpolator< TimeValueT, ValueT >::AddKey             ( Tim
     }
 
 // update interpolators
-    for( SizeType j = int( i-2 ); j <= int( i+1 ); j++ )
+    for( int j = int( i-2 ); j <= int( i+1 ); j++ )
         if( j >= 0 && j < interpolators.size() )
             UpdateInterpolator( interpolators, j, m_type );
 }
