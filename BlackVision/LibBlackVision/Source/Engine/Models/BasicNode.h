@@ -56,7 +56,7 @@ public:
     static BasicNode *                      Create                  ( const IDeserializer& doc );
     virtual void                            Serialize               ( ISerializer& doc ) const;
 
-	virtual IModelNode *					Clone					() const override;
+	BasicNodePtr					        Clone					() const;
 
 
     virtual IPluginPtr                      GetPlugin               ( const std::string & name ) const override;
@@ -143,8 +143,6 @@ public:
 
 namespace CloneViaSerialization {
 
-	model::BasicNodePtr		CloneNode		( const model::BasicNode * obj, const std::string & prefix, const std::string & destScene );
-    
     void                    UpdateTimelines ( model::BasicNode * obj, const std::string & prefix, const std::string & destScene, bool recursive );
 
 } //CloneViaSerialization

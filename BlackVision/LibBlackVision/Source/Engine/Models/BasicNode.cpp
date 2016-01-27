@@ -214,13 +214,13 @@ BasicNode * BasicNode::Create( const IDeserializer& deser )
 
 // *******************************
 //
-IModelNode *					BasicNode::Clone			() const
+BasicNodePtr					BasicNode::Clone			() const
 {
 	auto assets = std::make_shared< AssetDescsWithUIDs >();
 	//FIXME: const hack
 	GetAssetsWithUIDs( *assets, this );
 
-	return CloneViaSerialization::Clone( this, "node", assets, nullptr );
+	return BasicNodePtr( CloneViaSerialization::Clone( this, "node", assets, nullptr ) );
 }
 
 // ********************************
@@ -700,17 +700,6 @@ void                    UpdateTimelines ( model::BasicNode * obj, const std::str
 			UpdateTimelines( obj->GetChild( i ).get(), prefix, destScene, true );
         }
     }
-}
-
-// *******************************
-//FIXME: name of method should indicate that timelines are modified or sth?
-model::BasicNodePtr		CloneNode		( const model::BasicNode * obj, const std::string & prefix, const std::string & destScene )
-{
-    auto clone = static_cast< model::BasicNode * >( obj->Clone() );
-
-	UpdateTimelines( clone, prefix, destScene, true );
-
-    return model::BasicNodePtr( clone );
 }
 
 } //CloneViaSerialization

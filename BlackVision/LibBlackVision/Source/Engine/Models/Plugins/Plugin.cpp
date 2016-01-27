@@ -326,12 +326,10 @@ std::vector< ITimeEvaluatorPtr >    BasePlugin< IPlugin >::GetTimelines				() co
 namespace CloneViaSerialization {
 
 // *******************************
-//FIXME: name of method should indicate that timelines are modified or sth?
-model::IPluginPtr				ClonePlugin					( const model::IPlugin * obj, const std::string & prefix, const std::string & destScene )
+//
+void				UpdateTimelines				    ( const model::IPlugin * obj, const std::string & prefix, const std::string & destScene )
 {
-    auto clone = obj->Clone();
-    
-    for( auto param : clone->GetParameters() )
+    for( auto param : obj->GetParameters() )
     {
         if( param->GetTimeEvaluator() )
         {
@@ -349,8 +347,6 @@ model::IPluginPtr				ClonePlugin					( const model::IPlugin * obj, const std::st
 		//FIXME: cast
 		std::static_pointer_cast< model::DefaultPluginParamValModel >( pluginModel )->SetTimeEvaluator( timeline );
     }
-
-    return clone;
 }
 
 } //CloneViaSerialization

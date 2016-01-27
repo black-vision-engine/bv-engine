@@ -27,7 +27,6 @@ DEFINE_CONST_PTR_TYPE(IModelNode)
 class IModelNode : public bv::IUpdatable
 {
 public:
-    virtual IModelNode * 								Clone				() const															= 0;
 
     virtual const std::string &							GetName             () const                                                            = 0;
 

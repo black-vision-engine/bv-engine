@@ -549,7 +549,7 @@ typedef std::shared_ptr< const BasePlugin< IPlugin > > BasePluginConstPtr;
 
 namespace CloneViaSerialization {
 
-    model::IPluginPtr					ClonePlugin					( const model::IPlugin * obj, const std::string & prefix, const std::string & destScene );
+void					UpdateTimelines				( const model::IPlugin * obj, const std::string & prefix, const std::string & destScene );
 
 } //CloneViaSerialization
 

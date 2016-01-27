@@ -20,7 +20,7 @@ namespace bv { namespace model {
 //
 BasicNodePtr			ModelNodeEditor::CopyNode       ()
 {
-    return std::static_pointer_cast< BasicNode >( IModelNodePtr( m_node->Clone() ) );
+    return m_node->Clone();
 }
 
 // ********************************

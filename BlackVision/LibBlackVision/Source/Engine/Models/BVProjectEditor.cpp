@@ -499,31 +499,23 @@ bool            BVProjectEditor::RenameNode					( const std::string & sceneName,
 //
 model::BasicNodePtr		BVProjectEditor::AddNodeCopy        ( model::SceneModelPtr destScene, model::BasicNodePtr destParentNode, model::SceneModelPtr srcScene, model::BasicNodePtr srcNode )
 {
-    if( !srcScene || !destScene )
+    if( !srcScene || !destScene || !srcNode )
     {
         return false;
     }
 
-    model::BasicNodePtr	copy = nullptr;
+    auto copy = srcNode->GetModelNodeEditor()->CopyNode();
     
-    if( srcScene == destScene )
-    {
-        //don't copy timelines, maybe it should be also handled by CloneViaSerialization::CloneNode
-        copy = srcNode->GetModelNodeEditor()->CopyNode();
-    }
-    else
+    if( srcScene != destScene )
     {
         //copy timelines
         auto timelines = srcNode->GetTimelines( true );
         auto prefixNum = model::TimelineHelper::CopyTimelines( destScene->GetTimeline(), timelines );
-
-        copy = CloneViaSerialization::CloneNode( srcNode.get(), PrefixHelper::PrefixCopy( prefixNum ), destScene->GetName() );
+        
+        CloneViaSerialization::UpdateTimelines( copy.get(), PrefixHelper::PrefixCopy( prefixNum ), destScene->GetName(), true );
     }
 
-    if( copy )
-    {
-        AddChildNode( destScene, destParentNode, copy );
-    }
+    AddChildNode( destScene, destParentNode, copy );
 
     return copy;
 }
@@ -818,32 +810,28 @@ model::IPluginPtr		BVProjectEditor::AddPluginCopy			( model::SceneModelPtr destS
     {
         return nullptr;
     }
+    
+    auto srcPlugin = srcNode->GetPlugin( pluginNameToCopy );
 
-    model::IPluginPtr copy = nullptr;
-    if( srcScene == destScene )
+    if( srcPlugin )
     {
-        //don't copy timelines, maybe it should be also handled by CloneViaSerialization::ClonePlugin
-        copy = srcNode->GetModelNodeEditor()->CopyPlugin( pluginNameToCopy );
-    }
-    else
-    {
-        auto srcPlugin = srcNode->GetPlugin( pluginNameToCopy );
-        if( srcPlugin )
+        auto copy = srcNode->GetModelNodeEditor()->CopyPlugin( pluginNameToCopy );
+
+        if( srcScene != destScene )
         {
             //copy timelines
             auto timelines = srcPlugin->GetTimelines();
             auto prefixNum = model::TimelineHelper::CopyTimelines( destScene->GetTimeline(), timelines );
         
-            copy = CloneViaSerialization::ClonePlugin( srcPlugin.get(), PrefixHelper::PrefixCopy( prefixNum ), destScene->GetName() );
+            CloneViaSerialization::UpdateTimelines( copy.get(), PrefixHelper::PrefixCopy( prefixNum ), destScene->GetName() );
         }
-    }
 
-    if( copy )
-    {
         AddPlugin( destNode, copy, destIdx );
+
+        return copy;
     }
 
-    return copy;
+    return nullptr;
 }
 
 // *******************************
