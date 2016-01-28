@@ -513,5 +513,28 @@ MemoryChunkConstPtr     SaveTGAToHandle ( const MemoryChunkConstPtr & in, UInt32
     return ret;
 }
 
+// ******************************
+//
+MemoryChunkConstPtr     SwapChannels    ( const MemoryChunkConstPtr & in, UInt32 bpp, UInt32 b, UInt32 g, UInt32 r, UInt32 a )
+{
+    assert( bpp == 32 );
+
+    auto out = MemoryChunk::Create( new char[ in->Size() ], in->Size() );
+
+    auto o = out->GetWritable();
+
+    for( auto p = in->Get(); p < in->Get() + in->Size(); p += 4, o += 4 )
+    {
+        *( ( UInt32 * )( o ) ) = ( ( UInt32 )p[ 0 ] & b )
+                                + ( ( ( UInt32 )p[ 1 ] << 8 ) & g ) 
+                                + ( ( ( UInt32 )p[ 2 ] << 16 ) & r )
+                                + ( ( ( UInt32 )p[ 3 ] << 24 ) & a );
+        auto r1 = *( ( UInt32 * )( o ) );
+        { r1; }
+    }
+
+    return out;
+}
+
 } // image
 } // bv
