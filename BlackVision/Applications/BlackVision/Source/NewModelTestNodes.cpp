@@ -81,34 +81,34 @@ namespace {
         auto param = plugin->GetParameter( "simple_transform" );
         assert( param );
 
-        SetParameterScale ( param, 0, 0.0f, glm::vec3( 1.f, 1.f, 1.f ) );
-        SetParameterScale ( param, 0, 1.0f, glm::vec3( 0.5f, 0.5f, 1.f ) );
-        SetParameterScale ( param, 0, 2.0f, glm::vec3( 1.f, 1.f, 1.f ) );
-        SetParameterScale ( param, 0, 3.0f, glm::vec3( 0.2f, 0.2f, 1.f ) );
-        SetParameterScale ( param, 0, 4.0f, glm::vec3( 1.f, 1.f, 1.f ) );
-        SetParameterScale ( param, 0, 5.0f, glm::vec3( 0.3f, 0.3f, 1.f ) );
-        SetParameterScale ( param, 0, 6.0f, glm::vec3( 1.f, 1.f, 1.f ) );
-        SetParameterScale ( param, 0, 7.0f, glm::vec3( 0.6f, 0.6f, 1.f ) );
-        SetParameterScale ( param, 0, 8.0f, glm::vec3( 1.f, 1.f, 1.f ) );
-        SetParameterScale ( param, 0, 9.0f, glm::vec3( 0.4f, 0.4f, 1.f ) );
-        SetParameterScale ( param, 0, 10.0f, glm::vec3( 1.f, 1.f, 1.f ) );
-        SetParameterScale ( param, 0, 12.0f, glm::vec3( 0.2f, 3.f, 1.f ) );
-        SetParameterScale ( param, 0, 16.0f, glm::vec3( 3.f, 0.5f, 1.f ) );
-        SetParameterScale ( param, 0, 18.0f, glm::vec3( 1.f, 1.f, 1.f ) );
-        SetParameterScale ( param, 0, 21.0f, glm::vec3( 1.f, 1.f, 1.f ) );
-        SetParameterScale ( param, 0, 25.0f, glm::vec3( 2.f, 2.f, 1.f ) );
+        SetParameterScale ( param, 0.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+        SetParameterScale ( param, 1.0f, glm::vec3( 0.5f, 0.5f, 1.f ) );
+        SetParameterScale ( param, 2.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+        SetParameterScale ( param, 3.0f, glm::vec3( 0.2f, 0.2f, 1.f ) );
+        SetParameterScale ( param, 4.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+        SetParameterScale ( param, 5.0f, glm::vec3( 0.3f, 0.3f, 1.f ) );
+        SetParameterScale ( param, 6.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+        SetParameterScale ( param, 7.0f, glm::vec3( 0.6f, 0.6f, 1.f ) );
+        SetParameterScale ( param, 8.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+        SetParameterScale ( param, 9.0f, glm::vec3( 0.4f, 0.4f, 1.f ) );
+        SetParameterScale ( param, 10.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+        SetParameterScale ( param, 12.0f, glm::vec3( 0.2f, 3.f, 1.f ) );
+        SetParameterScale ( param, 16.0f, glm::vec3( 3.f, 0.5f, 1.f ) );
+        SetParameterScale ( param, 18.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+        SetParameterScale ( param, 21.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+        SetParameterScale ( param, 25.0f, glm::vec3( 2.f, 2.f, 1.f ) );
 
-        SetParameterRotation ( param, 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
-        SetParameterRotation ( param, 0, 30.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
+        SetParameterRotation ( param, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
+        SetParameterRotation ( param, 30.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
 
-        SetParameterCenterMass( param, 0, 0.f, glm::vec3( 1.5f, 1.5f, 0.f ) );
-        SetParameterCenterMass( param, 0, 10.f, glm::vec3( -.5f, -1.0f, 0.f ) );
-        SetParameterCenterMass( param, 0, 15.f, glm::vec3( 0.f, 0.f, 0.f ) );
+        SetParameterCenterMass( param, 0.f, glm::vec3( 1.5f, 1.5f, 0.f ) );
+        SetParameterCenterMass( param, 10.f, glm::vec3( -.5f, -1.0f, 0.f ) );
+        SetParameterCenterMass( param, 15.f, glm::vec3( 0.f, 0.f, 0.f ) );
 
-        SetParameterTranslation( param, 0, 23.f, glm::vec3( 0.f, 0.f, 0.f ) );
-        SetParameterTranslation( param, 0, 25.f, glm::vec3( 2.f, 0.f, 0.f ) );
-        SetParameterTranslation( param, 0, 27.5f, glm::vec3( -2.f, 0.f, 0.f ) );
-        SetParameterTranslation( param, 0, 30.f, glm::vec3( 0.f, 0.f, 0.f ) );
+        SetParameterTranslation( param, 23.f, glm::vec3( 0.f, 0.f, 0.f ) );
+        SetParameterTranslation( param, 25.f, glm::vec3( 2.f, 0.f, 0.f ) );
+        SetParameterTranslation( param, 27.5f, glm::vec3( -2.f, 0.f, 0.f ) );
+        SetParameterTranslation( param, 30.f, glm::vec3( 0.f, 0.f, 0.f ) );
     }
 
     // *****************************
@@ -166,7 +166,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateSolidRectNode      ( const std::s
     success &= SetParameter( wp, 0.f, w );
     success &= SetParameter( hp, 0.f, h );
     success &= SetParameter( color, 0.f, col );
-    success &= SetParameterTranslation( tr, 0, 0.0f, pos );
+    success &= SetParameterTranslation( tr, 0.0f, pos );
 
     assert( success );
 
@@ -190,7 +190,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode   ( const std::s
 
     success &= SetParameter( wp, 0.f, w );
     success &= SetParameter( hp, 0.f, h );
-    success &= SetParameterTranslation( tr, 0, 0.0f, pos );
+    success &= SetParameterTranslation( tr, 0.0f, pos );
 
     success = model::LoadTexture( root->GetPlugin( "texture" ), txFileName );
     assert( success );
@@ -381,7 +381,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateMultiShadowTest          ( model:
     auto simpleTransform = n1->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 	simpleTransform->SetTimeEvaluator( timeEvaluator );
 
-	SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( 0.f, 0.2f, 0.f ) );
+	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( 0.f, 0.2f, 0.f ) );
 
     root->AddChildToModelOnly( n1 );
 
@@ -390,7 +390,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateMultiShadowTest          ( model:
     simpleTransform = n2->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 	simpleTransform->SetTimeEvaluator( timeEvaluator );
 
-	SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( 0.f, 0.4f, 0.f ) );
+	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( 0.f, 0.4f, 0.f ) );
 
     root->AddChildToModelOnly( n2 );
     
@@ -399,7 +399,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateMultiShadowTest          ( model:
     simpleTransform = n3->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 	simpleTransform->SetTimeEvaluator( timeEvaluator );
 
-	SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( 0.f, 0.6f, 0.f ) );
+	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( 0.f, 0.6f, 0.f ) );
 
     root->AddChildToModelOnly( n3 );
 
@@ -705,8 +705,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::ITimeEvaluat
 	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 	simpleTransform->SetTimeEvaluator(offset3Timeline);
 
-	SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
-	SetParameterRotation ( simpleTransform, 0, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
+	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
+	SetParameterRotation ( simpleTransform, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
 
     auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
     assert( color );
@@ -780,12 +780,12 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::ITimeEvalu
 
 // TRANSFORM plugin
 
-	SetParameterScale( simpleTransform, 0, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-	SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( offset, -.3f, 0.f) );
-	//SetParameterTranslation( simpleTransform, 0, 10.0f, glm::vec3( 1.f, 1.0f, -100.f) );
-	SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
-	//SetParameterRotation ( simpleTransform, 0, 10.0f, glm::vec3( 1.f, 0.f, 0.f ), 360.f );
-	//SetParameterRotation ( simpleTransform, 0, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
+	SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
+	//SetParameterTranslation( simpleTransform, 10.0f, glm::vec3( 1.f, 1.0f, -100.f) );
+	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+	//SetParameterRotation ( simpleTransform, 10.0f, glm::vec3( 1.f, 0.f, 0.f ), 360.f );
+	//SetParameterRotation ( simpleTransform, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
 
 // LINEAR GRADIENT plugin
 	if( root->GetPlugin( "linear_gradient" ) )
@@ -844,9 +844,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPrismNode( model::ITi
 
 // TRANSFORM plugin
 
-	SetParameterScale( simpleTransform, 0, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-	SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( offset, -.3f, 0.f) );
-	SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+	SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
+	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
 
 // LINEAR GRADIENT plugin
 	if( root->GetPlugin( "linear_gradient" ) )
@@ -905,9 +905,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPrismNode( model::ITim
 
 // TRANSFORM plugin
 
-	SetParameterScale( simpleTransform, 0, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-	SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( offset, -.3f, 0.f) );
-	SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+	SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
+	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
 
 // LINEAR GRADIENT plugin
 	if( root->GetPlugin( "linear_gradient" ) )
@@ -971,9 +971,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::IT
 
 // TRANSFORM plugin
 
-	SetParameterScale( simpleTransform, 0, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-	SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( offset, -.3f, 0.f) );
-	SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+	SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
+	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
 
 // LINEAR GRADIENT plugin
 	if( root->GetPlugin( "linear_gradient" ) )
@@ -1036,13 +1036,13 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPieChartNode( model::
 
 // TRANSFORM plugin
 
-	//SetParameterScale( simpleTransform, 0, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
-	//SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( offset, 0, -1.f) );
-	//SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+	//SetParameterScale( simpleTransform, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
+	//SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, 0, -1.f) );
+	//SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
 
-	////SetParameterScale( simpleTransform, 0, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-	//SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( offset, -.3f, 0.f) );
-	//SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+	////SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+	//SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
+	//SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
 
 // LINEAR GRADIENT plugin
 	if( root->GetPlugin( "linear_gradient" ) )
@@ -1106,9 +1106,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPieChartNode( model::I
 
 // TRANSFORM plugin
 
-	//SetParameterScale( simpleTransform, 0, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
-	//SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( offset, 0, -1.f) );
-	//SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+	//SetParameterScale( simpleTransform, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
+	//SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, 0, -1.f) );
+	//SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
 
 // LINEAR GRADIENT plugin
 	if( root->GetPlugin( "linear_gradient" ) )
@@ -1155,7 +1155,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::ITimeEvalua
 
 	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 	simpleTransform->SetTimeEvaluator(offset3Timeline);
-	//SetParameterScale( simpleTransform, 0, 0.f, glm::vec3( 0, 0, 0 ) );
+	//SetParameterScale( simpleTransform, 0.f, glm::vec3( 0, 0, 0 ) );
 
 // RECT plugin
 
@@ -1216,8 +1216,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTextNode( model::ITimeEvalua
 
 // TRANSFORM plugin
 
-	//SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
-	//SetParameterRotation ( simpleTransform, 0, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
+	//SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
+	//SetParameterRotation ( simpleTransform, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
 
 // RECT plugin
 
@@ -1306,12 +1306,12 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::ITimeEva
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
 
-	SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.05f, 0.05f, 1.f ) );
-	//SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0.f, 1.f, 0.f ), 0.f );
-	//SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 5.f, glm::vec3( 0.f, 1.f, 0.f ), 70.f );
-	//SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 100.f, glm::vec3( 0.f, 1.f, 0.f ), -70.f );
-	//SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 20.0f, glm::vec3( 1.f/15.f, 1.f/15.f, 1.f ) );
-	//SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 40.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+	SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.05f, 0.05f, 1.f ) );
+	//SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 1.f, 0.f ), 0.f );
+	//SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 5.f, glm::vec3( 0.f, 1.f, 0.f ), 70.f );
+	//SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 100.f, glm::vec3( 0.f, 1.f, 0.f ), -70.f );
+	//SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 20.0f, glm::vec3( 1.f/15.f, 1.f/15.f, 1.f ) );
+	//SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 40.0f, glm::vec3( 1.f, 1.f, 1.f ) );
 
     node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( timeEvaluator );
 
@@ -1322,17 +1322,17 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::ITimeEva
     //SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.0f, 0.f, 0.f ) );
 
     /*
-    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0.f, 0.f, 0.0f ) );
-    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 2.f, glm::vec3( 0.f, 0.f, 0.0f ) );
-    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 5.f, glm::vec3( 0.f, 0.f, -2.f ) );
-    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 6.f, glm::vec3( 0.f, 0.f, -5.f ) );
-    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 12.f, glm::vec3( 0.f, 0.f, 0.f ) );
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 0.f, 0.0f ) );
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 2.f, glm::vec3( 0.f, 0.f, 0.0f ) );
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 5.f, glm::vec3( 0.f, 0.f, -2.f ) );
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 6.f, glm::vec3( 0.f, 0.f, -5.f ) );
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 12.f, glm::vec3( 0.f, 0.f, 0.f ) );
 
-    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0.f, 1.f, 1.f ), 0.f );
-    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 4.f, glm::vec3( 1.f, 1.f, 0.f ), 90.f );
-    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 8.f, glm::vec3( 1.f, 0.f, 1.f ), 180.f );
-    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 12.f, glm::vec3( 1.f, 0.f, 0.f ), 270.f );
-    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 16.f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 1.f, 1.f ), 0.f );
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 4.f, glm::vec3( 1.f, 1.f, 0.f ), 90.f );
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 8.f, glm::vec3( 1.f, 0.f, 1.f ), 180.f );
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 12.f, glm::vec3( 1.f, 0.f, 0.f ), 270.f );
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 16.f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
     */
     node->GetPlugin( "texture" )->GetParameter( "alpha" )->SetTimeEvaluator( timeEvaluator );
 
@@ -1439,20 +1439,20 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedTextNode( model::ITimeEva
     auto plugin = node->GetPlugin( "transform" );
     auto param = plugin->GetParameter( "simple_transform" );
 
-    SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.0f, 0.f, 0.f ) );
+    SetParameterTranslation( param, 0.0f, glm::vec3( 0.0f, 0.f, 0.f ) );
 
     /*
-    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0.f, 0.f, 0.0f ) );
-    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 2.f, glm::vec3( 0.f, 0.f, 0.0f ) );
-    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 5.f, glm::vec3( 0.f, 0.f, -2.f ) );
-    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 6.f, glm::vec3( 0.f, 0.f, -5.f ) );
-    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 12.f, glm::vec3( 0.f, 0.f, 0.f ) );
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 0.f, 0.0f ) );
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 2.f, glm::vec3( 0.f, 0.f, 0.0f ) );
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 5.f, glm::vec3( 0.f, 0.f, -2.f ) );
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 6.f, glm::vec3( 0.f, 0.f, -5.f ) );
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 12.f, glm::vec3( 0.f, 0.f, 0.f ) );
 
-    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, glm::vec3( 0.f, 1.f, 1.f ), 0.f );
-    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 4.f, glm::vec3( 1.f, 1.f, 0.f ), 90.f );
-    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 8.f, glm::vec3( 1.f, 0.f, 1.f ), 180.f );
-    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 12.f, glm::vec3( 1.f, 0.f, 0.f ), 270.f );
-    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 16.f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 1.f, 1.f ), 0.f );
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 4.f, glm::vec3( 1.f, 1.f, 0.f ), 90.f );
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 8.f, glm::vec3( 1.f, 0.f, 1.f ), 180.f );
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 12.f, glm::vec3( 1.f, 0.f, 0.f ), 270.f );
+    SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 16.f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
     */
     node->GetPlugin( "texture" )->GetParameter( "alpha" )->SetTimeEvaluator( timeEvaluator );
 
@@ -1746,7 +1746,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextWithShadowNode(   model::ITime
     auto param = transPlugin->GetParameter( "simple_transform" );
     assert( param );
 
-    model::SetParameterTranslation ( param, 0, 0.0f, shadowTranslation );
+    model::SetParameterTranslation ( param, 0.0f, shadowTranslation );
 
     auto node =  SimpleNodesFactory::CreateTextNode( timeEvaluator, 0, false );
 
@@ -1755,7 +1755,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextWithShadowNode(   model::ITime
     param = transPlugin->GetParameter( "simple_transform" );
     assert( param );
 
-    model::SetParameterTranslation ( param, 0, 0.0f, -shadowTranslation );
+    model::SetParameterTranslation ( param, 0.0f, -shadowTranslation );
 
   /*  auto tx =  SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0 );
 
@@ -1810,7 +1810,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::ITimeEvaluatorP
     auto plugin = node->GetPlugin( "transform" );
     auto param = plugin->GetParameter( "simple_transform" );
 
-    SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.1f, 0.f ) );
+    SetParameterTranslation( param, 0.0f, glm::vec3( 0.f, 0.1f, 0.f ) );
 
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Right ) );
@@ -1883,7 +1883,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTimerNode( model::ITimeEvalu
     auto plugin = node->GetPlugin( "transform" );
     auto param = plugin->GetParameter( "simple_transform" );
 
-    SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, -1.0f, 0.f ) );
+    SetParameterTranslation( param, 0.0f, glm::vec3( 0.f, -1.0f, 0.f ) );
 
     //SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Right ) );
@@ -2150,11 +2150,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 	glm::vec3 rotation_axis( 1.0f, 0.0f, 0.0f );
 	glm::vec3 rotation_axis2( -1.f, 1.f, -1.f );
 
-	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, rotation_axis, 0.f );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 200.f, rotation_axis, 7200.f );
-	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 40.f, rotation_axis2, -720.f );
-	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, glm::vec3( 0.0, 0.0, -2.0f ) );
+	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, rotation_axis, 0.f );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 200.f, rotation_axis, 7200.f );
+	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 40.f, rotation_axis2, -720.f );
+	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0, glm::vec3( 0.0, 0.0, -2.0f ) );
 
 
 // ============================================ //
@@ -2385,11 +2385,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::ITimeEvalua
 	glm::vec3 rotation_axis( 0.f, 1.f, 0.f );
 	glm::vec3 rotation_axis2( -1.f, 1.f, 0.f );
 
-	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.f, rotation_axis, 0.f );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 100.f, rotation_axis, -7200.f );
-	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 40.f, rotation_axis2, 50.f );
-	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0, translation );
+	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, rotation_axis, 0.f );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 100.f, rotation_axis, -7200.f );
+	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 40.f, rotation_axis2, 50.f );
+	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0, translation );
 
 // ============================================ //
 // Color, texture plugins parameters
@@ -2434,8 +2434,8 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextCacheTest         ( model::ITi
     auto success = node->AddPlugins( uids, localTimeline );
     assert( success );
 
-    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, translation );
-	SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.f, 2.f, 1.f ) );
+    SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, translation );
+	SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.f, 2.f, 1.f ) );
     
 
 	//node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( timeEvaluator );

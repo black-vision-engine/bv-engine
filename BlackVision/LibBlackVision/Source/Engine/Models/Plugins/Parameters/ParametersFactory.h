@@ -17,8 +17,7 @@ public:
     static ParamVec3            CreateParameter                     ( const std::string & name, const Vec3Interpolator & interpolator, ITimeEvaluatorPtr timeline );
     static ParamVec4            CreateParameter                     ( const std::string & name, const Vec4Interpolator & interpolator, ITimeEvaluatorPtr timeline );
     static ParamFloat           CreateParameter                     ( const std::string & name, const FloatInterpolator & interpolator, ITimeEvaluatorPtr timeline );
-    static ParamTransform       CreateParameter                     ( const std::string & name, const TransformF & interpolator, ITimeEvaluatorPtr timeline );
-    static ParamTransformVec    CreateParameter                     ( const std::string & name, const TransformF & interpolator, ITimeEvaluatorPtr timeline, int dummy );
+    static ParamTransform       CreateParameter                     ( const std::string & name, const CompositeTransform & interpolator, ITimeEvaluatorPtr timeline );
 
     template<typename T>
     static std::shared_ptr<ParamEnum<T>>      CreateParameterEnum                 ( const std::string & name, ITimeEvaluatorPtr timeline ) // FIXME, rather
@@ -33,7 +32,6 @@ public:
     static ParamIntPtr          CreateParameterInt                  ( const std::string & name, ITimeEvaluatorPtr timeline );
     static ParamFloatPtr        CreateParameterFloat                ( const std::string & name, ITimeEvaluatorPtr timeline );
     static ParamTransformPtr    CreateParameterTransform            ( const std::string & name, ITimeEvaluatorPtr timeline );
-    static ParamTransformVecPtr CreateParameterTransformVec         ( const std::string & name, ITimeEvaluatorPtr timeline, int numTransforms = 1 );
     static ParamStringPtr       CreateParameterString               ( const std::string & name, ITimeEvaluatorPtr timeline );
     static ParamWStringPtr      CreateParameterWString              ( const std::string & name, ITimeEvaluatorPtr timeline );
 

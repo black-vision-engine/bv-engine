@@ -68,8 +68,6 @@ void            BVProject::Update( TimeType t )
 {
 	m_globalTimeline->SetGlobalTime( t );
 
-    static std::vector< Transform > vec(1);
-
     if( m_rootNode )
     {
         m_rootNode->Update( t );
@@ -78,9 +76,9 @@ void            BVProject::Update( TimeType t )
 
 		//FIXME: camera should be per scene model
 		auto viewMat = m_renderer->GetCamera()->GetViewMatrix();
-        vec[ 0 ] = Transform( viewMat, glm::inverse( viewMat ) );
+        auto transform = Transform( viewMat, glm::inverse( viewMat ) );
 
-        m_engineSceneRoot->Update( vec );
+        m_engineSceneRoot->Update( transform );
     }
 }
 

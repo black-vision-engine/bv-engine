@@ -37,7 +37,7 @@ void	                TestSceneUtils::AddColoredRectangleScene	( BVProjectEditor 
 	editor->AddScene( sceneModel );
     
     auto root = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( sceneModel ), "root", 0.5f, 0.5f, color, ALPHA_MASK0_PATH );
-    SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, transform );
+    SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, transform );
     editor->AddChildNode( sceneModel, nullptr, root );
 }
 

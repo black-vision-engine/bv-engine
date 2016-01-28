@@ -58,10 +58,7 @@ OffscreenRenderData::OffscreenRenderData()
     effectTexture2D         = std::static_pointer_cast<Texture2DEffect>( auxQuad->GetRenderableEffect() );
     effectTexture2DWithMask = std::make_shared<Texture2DEffectWithMask>( nullptr, nullptr, true );
 
-    std::vector< bv::Transform > vec;
-    vec.push_back( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
-
-    auxQuad->SetWorldTransforms( vec );
+    auxQuad->SetWorldTransform( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
 }
 
 // **************************
@@ -314,13 +311,10 @@ RenderTargetData    OffscreenRenderLogicTst::CreateDisplayRenderTargetData () co
 {
     RenderTargetData ret;
 
-    std::vector< bv::Transform > vec;
-    vec.push_back( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
-
     auto rt   = MainDisplayTarget::CreateDisplayRenderTarget( m_textureData.m_width, m_textureData.m_height, m_textureData.m_fmt );
     auto quad = MainDisplayTarget::CreateDisplayRect( rt->ColorTexture( 0 ) );
     
-    quad->SetWorldTransforms( vec );
+    quad->SetWorldTransform( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
 
     ret.renderTarget            = rt;
     ret.quad                    = quad;

@@ -141,7 +141,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         {
             auto child = TestSceneUtils::ColoredRectangle( timeline, "child" + toString( i ), 0.3f, 0.3f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
             auto childTransform = child->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-            SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )0.5*i, -0.5f, 0.f ) );
+            SetParameterTranslation( childTransform, 0.0f, glm::vec3( ( float )0.5*i, -0.5f, 0.f ) );
             editor->AddChildNode( scene, root, child );
         }
         assert( root->GetNumChildren() == 3 );
@@ -150,7 +150,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         {
             auto child = TestSceneUtils::ColoredRectangle( timeline, "child0" + toString( i ), 0.2f, 0.2f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
             auto childTransform = child->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-            SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )i, -0.5f, 0.f ) );
+            SetParameterTranslation( childTransform, 0.0f, glm::vec3( ( float )i, -0.5f, 0.f ) );
             editor->AddChildNode( scene, root->GetChild( "child0" ), child );
         }
         assert( root->GetChild( "child0" )->GetNumChildren() == 3 );
@@ -282,7 +282,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
 		auto root = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( scene ), "newRoot", 0.4f, 0.4f, glm::vec4( 0.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
 		auto rootTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-		SetParameterTranslation( rootTransform, 0, 0.0f, glm::vec3( ( float )0.0f, 0.0f, -1.0f ) );
+		SetParameterTranslation( rootTransform, 0.0f, glm::vec3( ( float )0.0f, 0.0f, -1.0f ) );
 
 		editor->AddChildNode( scene, nullptr, root );
 
@@ -316,7 +316,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
 		auto copied = editor->AddSceneCopy( SCENE_NAME );
 		auto root = copied->GetRootNode();
-		SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
+		SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
 
 		for( UInt32 i = 0; i < root->GetNumChildren(); ++i )
 		{
@@ -338,7 +338,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
 		auto copied = editor->AddSceneCopy( copiedName );
 		auto root = copied->GetRootNode();
-		SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, 0.5f, -1.f ) );
+		SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.5f, 0.5f, -1.f ) );
 
 		editor->RemoveScene( "Copy_" + SCENE_NAME );
 
@@ -361,7 +361,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
 		auto scene = editor->GetScene( SCENE_NAME1 );
 		auto copied = editor->AddNodeCopy( scene, scene->GetRootNode(), scene, scene->GetRootNode() );
-		SetParameterTranslation( copied->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
+		SetParameterTranslation( copied->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
 
 		success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
 		success &= ( editor->GetScene( SCENE_NAME1 ) != nullptr );
@@ -376,7 +376,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
 		auto scene = editor->GetScene( SCENE_NAME1 );
 		auto root = scene->GetRootNode();
-		SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.3f, 0.5f, -1.f ) );
+		SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.3f, 0.5f, -1.f ) );
 
 		for( UInt32 i = 0; i < root->GetNumChildren(); ++i )
 		{
@@ -402,7 +402,7 @@ void                    TestScene::InitTestModelSceneEditor ()
         
 		auto child = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( scene ), "newChild", 0.2f, 0.2f, glm::vec4( 0.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
 		auto childTransform = child->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-		SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )1.5f, -0.5f, 0.f ) );
+		SetParameterTranslation( childTransform, 0.0f, glm::vec3( ( float )1.5f, -0.5f, 0.f ) );
 
 		editor->AddChildNode( scene, root, child );
 	});
@@ -671,7 +671,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
 		auto newRoot = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( scene ), "newRoot", 0.5f, 0.5f, glm::vec4( 0.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK0_PATH );
 		auto rootTransform = newRoot->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-		SetParameterTranslation( rootTransform, 0, 0.0f, glm::vec3( -1.f, 0.5f, -1.f ) );
+		SetParameterTranslation( rootTransform, 0.0f, glm::vec3( -1.f, 0.5f, -1.f ) );
 
 		editor->AddChildNode( scene, nullptr, newRoot );
 		success &= ( editor->GetScene( SCENE_NAME )->GetRootNode() != nullptr );
@@ -690,7 +690,7 @@ void                    TestScene::InitTestModelSceneEditor ()
 
 		auto newChild = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( scene ), "newChild", 0.3f, 0.3f, glm::vec4( 1.f, 0.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
 		auto childTransform = newChild->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-		SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )0.5, -0.5f, 0.2f ) );
+		SetParameterTranslation( childTransform, 0.0f, glm::vec3( ( float )0.5, -0.5f, 0.2f ) );
 
 		auto root = scene->GetRootNode();
 		editor->AddChildNode( scene, root, newChild );
@@ -867,7 +867,7 @@ void					TestScene::InitTimelinesTest		()
         auto timeline = editor->GetSceneDefaultTimeline( scene );
 
         auto anim = TestSceneUtils::AnimatedRectangle( editor->GetSceneDefaultTimeline( scene ), ANIM_NODE, 0.3f, 0.3f, ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() );
-		SetParameterTranslation( anim->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
+		SetParameterTranslation( anim->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
 
 		auto root = scene->GetRootNode();
 		editor->AddChildNode( scene, root, anim );
@@ -993,7 +993,7 @@ void					TestScene::InitTimelinesTest		()
         editor->AddTimeline( scene->GetTimeline(), timeline );
 
 		auto tex = TestSceneUtils::TexturedRectangle( timeline, TEX_NODE, 0.3f, 0.3f, TestSceneUtils::TEXTURE_PATH );
-		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
+		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
 
 		auto root = scene->GetRootNode();
 		editor->AddChildNode( scene, root, tex );
@@ -1145,7 +1145,7 @@ void					TestScene::InitAssetsTest		()
 		auto editor = m_project->GetProjectEditor();
 		auto scene = editor->GetScene( SCENE_NAME );
 		auto tex = TestSceneUtils::TexturedRectangle( editor->GetSceneDefaultTimeline( scene ), "tex0", 0.3f, 0.3f, TestSceneUtils::TEXTURE_PATH );
-		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
+		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
 
 		auto root = scene->GetRootNode();
 		editor->AddChildNode( scene, root, tex );
@@ -1156,7 +1156,7 @@ void					TestScene::InitAssetsTest		()
 		auto editor = m_project->GetProjectEditor();
 		auto scene = editor->GetScene( SCENE_NAME );
 		auto tex = TestSceneUtils::TexturedRectangle( editor->GetSceneDefaultTimeline( scene ), "tex1", 0.3f, 0.3f, TestSceneUtils::TEXTURE_PATH );
-		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
+		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
 
 		auto root = scene->GetRootNode();
 		editor->AddChildNode( scene, root, tex );
@@ -1273,14 +1273,14 @@ void					TestScene::InitCopyNodeTest	()
 
         auto child = TestSceneUtils::ColoredRectangle( timeline, "child0", 0.3f, 0.3f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
         auto childTransform = child->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-        SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( 0.f, -0.5f, 0.f ) );
+        SetParameterTranslation( childTransform, 0.0f, glm::vec3( 0.f, -0.5f, 0.f ) );
         editor->AddChildNode( scene, root, child );
 
         for( unsigned int i = 0; i < 2; ++i )
         {
             auto child = TestSceneUtils::ColoredRectangle( timeline1, "child0" + toString( i ), 0.2f, 0.2f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
             auto childTransform = child->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-            SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( ( float )i * 0.25f, -0.5f, 0.f ) );
+            SetParameterTranslation( childTransform, 0.0f, glm::vec3( ( float )i * 0.25f, -0.5f, 0.f ) );
             editor->AddChildNode( scene, root->GetChild( "child0" ), child );
         }
 
@@ -1305,7 +1305,7 @@ void					TestScene::InitCopyNodeTest	()
 
 		auto srcRoot = srcScene->GetRootNode();
         auto destRoot = destScene->GetRootNode();
-		SetParameterTranslation( destRoot->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
+		SetParameterTranslation( destRoot->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, 0.5f, -1.f ) );
 
         success &= ( srcRoot->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator() == editor->GetSceneDefaultTimeline( srcScene ) );
         success &= ( destRoot->GetPlugin( "transform" )->GetParameter( "simple_transform" )->GetTimeEvaluator()->GetName() == "Copy_default" );
@@ -1456,7 +1456,7 @@ void					TestScene::InitBasicColorPluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto scene = editor->GetScene( SCENE_NAME );
 		auto col = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( scene ), COL_NODE, 0.3f, 0.3f, glm::vec4( 0.f, 1.f, 1.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
-		SetParameterTranslation( col->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.5f, 0.f ) );
+		SetParameterTranslation( col->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, -0.5f, 0.f ) );
 
 		bool success = true;
 
@@ -1464,9 +1464,9 @@ void					TestScene::InitBasicColorPluginTest	()
 		editor->AddChildNode( scene, root, col );
 
 		auto lChild = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( scene ), "lChild", 0.1f, 0.1f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
+		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
 		auto rChild = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( scene ), "rChild", 0.1f, 0.1f, glm::vec4( 0.f, 0.f, 1.f, 1.f ) );
-		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
+		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
 		editor->AddChildNode( scene, col, lChild );
 		editor->AddChildNode( scene, col, rChild );
 		success &= ( col->GetNumChildren() == 2 );
@@ -1518,7 +1518,7 @@ void					TestScene::InitOrderColorPluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto scene = editor->GetScene( SCENE_NAME );
 		auto col = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( scene ), COL_NODE, 0.3f, 0.3f, glm::vec4( 0.f, 1.f, 1.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
-		SetParameterTranslation( col->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.5f, 0.f ) );
+		SetParameterTranslation( col->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, -0.5f, 0.f ) );
 
 		bool success = true;
 
@@ -1553,7 +1553,7 @@ void					TestScene::InitBasicTexturePluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto scene = editor->GetScene( SCENE_NAME );
 		auto tex = TestSceneUtils::TexturedRectangle( editor->GetSceneDefaultTimeline( scene ), TEX_NODE, 0.3f, 0.3f, TestSceneUtils::TEXTURE_PATH );
-		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
+		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
 
 		auto root = scene->GetRootNode();
         editor->DeleteChildNode( scene, root, root->GetChild( TEX_NODE ) );
@@ -1565,7 +1565,7 @@ void					TestScene::InitBasicTexturePluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto scene = editor->GetScene( SCENE_NAME );
 		auto tex = TestSceneUtils::TexturedRectangle( editor->GetSceneDefaultTimeline( scene ), TEX_NODE, 0.3f, 0.3f, TestSceneUtils::TEXTURE_PATH, TestSceneUtils::ALPHA_MASK_PATH );
-		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
+		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
 
 		bool success = true;
 
@@ -1574,9 +1574,9 @@ void					TestScene::InitBasicTexturePluginTest	()
 		editor->AddChildNode( scene, root, tex );
 		
 		auto lChild = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( scene ), "lChild", 0.1f, 0.1f, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
-		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
+		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
 		auto rChild = TestSceneUtils::TexturedRectangle( editor->GetSceneDefaultTimeline( scene ), "rChild", 0.1f, 0.1f, TestSceneUtils::TEXTURE_PATH );
-		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
+		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
 		editor->AddChildNode( scene, tex, lChild );
 		editor->AddChildNode( scene, tex, rChild );
 
@@ -1676,7 +1676,7 @@ void					TestScene::InitOrderTexturePluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto scene = editor->GetScene( SCENE_NAME );
 		auto tex = TestSceneUtils::TexturedRectangle( editor->GetSceneDefaultTimeline( scene ), TEX_NODE, 0.3f, 0.3f, TestSceneUtils::TEXTURE_PATH, TestSceneUtils::ALPHA_MASK_PATH );
-		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
+		SetParameterTranslation( tex->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.5f, -0.5f, 0.f ) );
 
 		bool success = true;
 
@@ -1711,7 +1711,7 @@ void					TestScene::InitBasicAnimationPluginTest	()
 		auto scene = editor->GetScene( SCENE_NAME );
 
 		auto anim = TestSceneUtils::AnimatedRectangle( editor->GetSceneDefaultTimeline( scene ), ANIM_NODE, 0.3f, 0.3f, ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() );
-		SetParameterTranslation( anim->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
+		SetParameterTranslation( anim->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
 		
 		auto root = scene->GetRootNode();
         editor->DeleteChildNode( scene, root, root->GetChild( ANIM_NODE ) );
@@ -1724,7 +1724,7 @@ void					TestScene::InitBasicAnimationPluginTest	()
 		auto scene = editor->GetScene( SCENE_NAME );
 
 		auto anim = TestSceneUtils::AnimatedRectangle( editor->GetSceneDefaultTimeline( scene ), ANIM_NODE, 0.3f, 0.3f, ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str(), TestSceneUtils::ALPHA_MASK_PATH );
-		SetParameterTranslation( anim->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
+		SetParameterTranslation( anim->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
 		
 		bool success = true;
 
@@ -1733,9 +1733,9 @@ void					TestScene::InitBasicAnimationPluginTest	()
 		editor->AddChildNode( scene, root, anim );
 		
 		auto lChild = TestSceneUtils::TexturedRectangle( editor->GetSceneDefaultTimeline( scene ), "lChild", 0.1f, 0.1f, TestSceneUtils::TEXTURE_PATH );
-		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
+		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
 		auto rChild = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( scene ), "rChild", 0.1f, 0.1f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
-		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
+		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
 		editor->AddChildNode( scene, anim, lChild );
 		editor->AddChildNode( scene, anim, rChild );
 
@@ -1812,7 +1812,7 @@ void					TestScene::InitOrderAnimationPluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto scene = editor->GetScene( SCENE_NAME );
 		auto anim = TestSceneUtils::AnimatedRectangle( editor->GetSceneDefaultTimeline( scene ), ANIM_NODE, 0.3f, 0.3f, ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str(), TestSceneUtils::ALPHA_MASK_PATH );
-		SetParameterTranslation( anim->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
+		SetParameterTranslation( anim->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 1.f, -0.5f, 0.f ) );
 		
 		bool success = true;
 
@@ -1849,7 +1849,7 @@ void					TestScene::InitBasicGradientPluginTest	()
 		auto scene = editor->GetScene( SCENE_NAME );
 
 		auto grad = TestSceneUtils::GradientRectangle( editor->GetSceneDefaultTimeline( scene ), GRAD_NODE, 0.3f, 0.3f, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 1.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
-		SetParameterTranslation( grad->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.5f, -0.5f, 0.f ) );
+		SetParameterTranslation( grad->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 1.5f, -0.5f, 0.f ) );
 
 		bool success = true;
 
@@ -1857,9 +1857,9 @@ void					TestScene::InitBasicGradientPluginTest	()
 		editor->AddChildNode( scene, root, grad );
 		
 		auto lChild = TestSceneUtils::AnimatedRectangle( editor->GetSceneDefaultTimeline( scene ), "lChild", 0.1f, 0.1f, ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() );
-		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
+		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
 		auto rChild = TestSceneUtils::TexturedRectangle( editor->GetSceneDefaultTimeline( scene ), "rChild", 0.1f, 0.1f, TestSceneUtils::TEXTURE_PATH );
-		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
+		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
 		editor->AddChildNode( scene, grad, lChild );
 		editor->AddChildNode( scene, grad, rChild );
 
@@ -1925,7 +1925,7 @@ void					TestScene::InitOrderGradientPluginTest	()
 		auto editor = m_project->GetProjectEditor();
 		auto scene = editor->GetScene( SCENE_NAME );
 		auto grad = TestSceneUtils::GradientRectangle( editor->GetSceneDefaultTimeline( scene ), GRAD_NODE, 0.3f, 0.3f, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 1.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
-		SetParameterTranslation( grad->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.5f, -0.5f, 0.f ) );
+		SetParameterTranslation( grad->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 1.5f, -0.5f, 0.f ) );
 
 		bool success = true;
 
@@ -1960,7 +1960,7 @@ void					TestScene::InitColoredTextTest			()
 		auto scene = editor->GetScene( SCENE_NAME );
 
 		auto txt = TestSceneUtils::ColoredText( editor->GetSceneDefaultTimeline( scene ), TXT_NODE, glm::vec4( 1.f, 1.f, 0.f, 1.f ), 40 );
-		SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
+		SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
 		
 		auto root = scene->GetRootNode();
         editor->DeleteChildNode( scene, root, root->GetChild( TXT_NODE ) );
@@ -1973,7 +1973,7 @@ void					TestScene::InitColoredTextTest			()
 		auto scene = editor->GetScene( SCENE_NAME );
 
 		auto txt = TestSceneUtils::ColoredText( editor->GetSceneDefaultTimeline( scene ), TXT_NODE, glm::vec4( 1.f, 1.f, 0.f, 1.f ), 40, TestSceneUtils::ALPHA_MASK_PATH );
-		SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
+		SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
 
 		bool success = true;
 
@@ -1982,9 +1982,9 @@ void					TestScene::InitColoredTextTest			()
 		editor->AddChildNode( scene, root, txt );
 		
 		auto lChild = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( scene ), "lChild", 0.1f, 0.1f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
-		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
+		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
 		auto rChild = TestSceneUtils::TexturedRectangle( editor->GetSceneDefaultTimeline( scene ), "rChild", 0.1f, 0.1f, TestSceneUtils::TEXTURE_PATH );
-		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
+		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
 		editor->AddChildNode( scene, txt, lChild );
 		editor->AddChildNode( scene, txt, rChild );
 
@@ -2025,7 +2025,7 @@ void					TestScene::InitColoredTextTest			()
 		auto editor = m_project->GetProjectEditor();
 		auto scene = editor->GetScene( SCENE_NAME );
 		auto txt = TestSceneUtils::ColoredText( editor->GetSceneDefaultTimeline( scene ), TXT_NODE, glm::vec4( 1.f, 1.f, 0.f, 1.f ), 40, TestSceneUtils::ALPHA_MASK_PATH );
-		SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
+		SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
 
 		bool success = true;
 
@@ -2099,7 +2099,7 @@ void					TestScene::InitGradientTextTest			()
 		auto scene = editor->GetScene( SCENE_NAME );
 
 		auto txt = TestSceneUtils::GradientText( editor->GetSceneDefaultTimeline( scene ), TXT_NODE, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 0.f, 1.f, 0.f, 1.f ), 40 );
-		SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
+		SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
 
 		auto root = scene->GetRootNode();
         editor->DeleteChildNode( scene, root, root->GetChild( TXT_NODE ) );
@@ -2112,7 +2112,7 @@ void					TestScene::InitGradientTextTest			()
 		auto scene = editor->GetScene( SCENE_NAME );
 
 		auto txt = TestSceneUtils::GradientText( editor->GetSceneDefaultTimeline( scene ), TXT_NODE, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 0.f, 1.f, 0.f, 1.f ), 40, TestSceneUtils::ALPHA_MASK_PATH );
-		SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
+		SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
 
 		bool success = true;
 
@@ -2121,9 +2121,9 @@ void					TestScene::InitGradientTextTest			()
 		editor->AddChildNode( scene, root, txt );
 		
 		auto lChild = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( scene ), "lChild", 0.1f, 0.1f, glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
-		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
+		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
 		auto rChild = TestSceneUtils::TexturedRectangle( editor->GetSceneDefaultTimeline( scene ), "rChild", 0.1f, 0.1f, TestSceneUtils::TEXTURE_PATH );
-		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
+		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
 		editor->AddChildNode( scene, txt, lChild );
 		editor->AddChildNode( scene, txt, rChild );
 
@@ -2164,7 +2164,7 @@ void					TestScene::InitGradientTextTest			()
 		auto editor = m_project->GetProjectEditor();
 		auto scene = editor->GetScene( SCENE_NAME );
 		auto txt = TestSceneUtils::GradientText( editor->GetSceneDefaultTimeline( scene ), TXT_NODE, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 0.f, 1.f, 0.f, 1.f ), 40, TestSceneUtils::ALPHA_MASK_PATH );
-		SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
+		SetParameterTranslation( txt->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.0f, -0.5f, 0.f ) );
 
 		bool success = true;
 
@@ -2208,7 +2208,7 @@ void					TestScene::InitColoredTimerTest			()
 		auto scene = editor->GetScene( SCENE_NAME );
 
 		auto tmr = TestSceneUtils::ColoredTimer( editor->GetSceneDefaultTimeline( scene ), TMR_NODE, glm::vec4( 1.f, 1.f, 0.f, 1.f ), 40, TestSceneUtils::ALPHA_MASK_PATH );
-		SetParameterTranslation( tmr->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, 0.f, 0.f ) );
+		SetParameterTranslation( tmr->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.0f, 0.f, 0.f ) );
 
 		bool success = true;
 
@@ -2217,9 +2217,9 @@ void					TestScene::InitColoredTimerTest			()
 		editor->AddChildNode( scene, root, tmr );
 		
 		auto lChild = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( scene ), "lChild", 0.1f, 0.1f, glm::vec4( 0.f, 1.f, 1.f, 1.f ) );
-		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
+		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
 		auto rChild = TestSceneUtils::TexturedRectangle( editor->GetSceneDefaultTimeline( scene ), "rChild", 0.1f, 0.1f, TestSceneUtils::TEXTURE_PATH );
-		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
+		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
 		editor->AddChildNode( scene, tmr, lChild );
 		editor->AddChildNode( scene, tmr, rChild );
 
@@ -2260,7 +2260,7 @@ void					TestScene::InitColoredTimerTest			()
 		auto editor = m_project->GetProjectEditor();
 		auto scene = editor->GetScene( SCENE_NAME );
 		auto tmr = TestSceneUtils::ColoredTimer( editor->GetSceneDefaultTimeline( scene ), TMR_NODE, glm::vec4( 1.f, 1.f, 0.f, 1.f ), 40, TestSceneUtils::ALPHA_MASK_PATH );
-		SetParameterTranslation( tmr->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, 0.f, 0.f ) );
+		SetParameterTranslation( tmr->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.0f, 0.f, 0.f ) );
 
 		bool success = true;
 
@@ -2347,7 +2347,7 @@ void					TestScene::InitGradientTimerTest			()
 		auto scene = editor->GetScene( SCENE_NAME );
 
 		auto tmr = TestSceneUtils::GradientTimer( editor->GetSceneDefaultTimeline( scene ), TMR_NODE, glm::vec4( 1.f, 1.f, 0.f, 1.f ), glm::vec4( 1.f, 0.f, 1.f, 1.f ), 40 );
-		SetParameterTranslation( tmr->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, 0.f, 0.f ) );
+		SetParameterTranslation( tmr->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.0f, 0.f, 0.f ) );
 
 		auto root = scene->GetRootNode();
 		editor->DeleteChildNode( scene, root, root->GetChild( TMR_NODE ) );
@@ -2360,7 +2360,7 @@ void					TestScene::InitGradientTimerTest			()
 		auto scene = editor->GetScene( SCENE_NAME );
 
 		auto tmr = TestSceneUtils::GradientTimer( editor->GetSceneDefaultTimeline( scene ), TMR_NODE, glm::vec4( 1.f, 1.f, 0.f, 1.f ), glm::vec4( 1.f, 0.f, 1.f, 1.f ), 40, TestSceneUtils::ALPHA_MASK_PATH );
-		SetParameterTranslation( tmr->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, 0.f, 0.f ) );
+		SetParameterTranslation( tmr->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.0f, 0.f, 0.f ) );
 
 		bool success = true;
 
@@ -2369,9 +2369,9 @@ void					TestScene::InitGradientTimerTest			()
 		editor->AddChildNode( scene, root, tmr );
 		
 		auto lChild = TestSceneUtils::ColoredRectangle( editor->GetSceneDefaultTimeline( scene ), "lChild", 0.1f, 0.1f, glm::vec4( 0.f, 1.f, 1.f, 1.f ) );
-		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
+		SetParameterTranslation( lChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, 0.25f, 0.0f ) );
 		auto rChild = TestSceneUtils::TexturedRectangle( editor->GetSceneDefaultTimeline( scene ), "rChild", 0.1f, 0.1f, TestSceneUtils::TEXTURE_PATH );
-		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
+		SetParameterTranslation( rChild->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, -0.25f, 0.0f ) );
 		editor->AddChildNode( scene, tmr, lChild );
 		editor->AddChildNode( scene, tmr, rChild );
 
@@ -2412,7 +2412,7 @@ void					TestScene::InitGradientTimerTest			()
 		auto editor = m_project->GetProjectEditor();
 		auto scene = editor->GetScene( SCENE_NAME );
 		auto tmr = TestSceneUtils::GradientTimer( editor->GetSceneDefaultTimeline( scene ), TMR_NODE, glm::vec4( 1.f, 1.f, 0.f, 1.f ), glm::vec4( 1.f, 0.f, 1.f, 1.f ), 40, TestSceneUtils::ALPHA_MASK_PATH );
-		SetParameterTranslation( tmr->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 2.0f, 0.f, 0.f ) );
+		SetParameterTranslation( tmr->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.0f, 0.f, 0.f ) );
 
 		bool success = true;
 
@@ -2484,10 +2484,10 @@ void					TestScene::InitColoredGeometryTest		()
 			auto geom = TestSceneUtils::ColoredGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ) );
 			
 			auto time = m_timeEvaluator->GetLocalTime(); {time;}
-			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
-			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 1.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 1.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
 			auto root = scene->GetRootNode();
             editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2503,10 +2503,10 @@ void					TestScene::InitColoredGeometryTest		()
 			auto geom = TestSceneUtils::ColoredGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
 			
 			auto time = m_timeEvaluator->GetLocalTime();
-			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
-			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 5.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 5.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
 			auto root = scene->GetRootNode();
 			editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2541,10 +2541,10 @@ void					TestScene::InitColoredGeometryTest		()
 				auto geom = TestSceneUtils::ColoredGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, glm::vec4( 1.f, 1.f, 0.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
 				
 				auto time = m_timeEvaluator->GetLocalTime();
-				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
-				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 3.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 3.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
+				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
 				auto root = scene->GetRootNode();
 				editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2571,10 +2571,10 @@ void					TestScene::InitTexturedGeometryTest		()
 			auto geom = TestSceneUtils::TexturedGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, TestSceneUtils::TEXTURE_PATH );
 			
 			auto time = m_timeEvaluator->GetLocalTime();
-			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
-			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 1.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 1.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
 			auto root = scene->GetRootNode();
 			editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2590,10 +2590,10 @@ void					TestScene::InitTexturedGeometryTest		()
 			auto geom = TestSceneUtils::TexturedGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, TestSceneUtils::TEXTURE_PATH, TestSceneUtils::ALPHA_MASK_PATH );
 			
 			auto time = m_timeEvaluator->GetLocalTime();
-			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
-			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 5.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 5.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
 			auto root = scene->GetRootNode();
 			editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2632,10 +2632,10 @@ void					TestScene::InitTexturedGeometryTest		()
 				auto geom = TestSceneUtils::TexturedGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, TestSceneUtils::TEXTURE_PATH, TestSceneUtils::ALPHA_MASK_PATH );
 
 				auto time = m_timeEvaluator->GetLocalTime();
-				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
-				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 3.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 3.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
+				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
 				auto root = scene->GetRootNode();
 				editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2662,10 +2662,10 @@ void					TestScene::InitAnimatedGeometryTest		()
 			auto geom = TestSceneUtils::AnimatedGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str() );
 			
 			auto time = m_timeEvaluator->GetLocalTime();
-			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
-			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 1.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 1.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
 			auto root = scene->GetRootNode();
 			editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2681,10 +2681,10 @@ void					TestScene::InitAnimatedGeometryTest		()
 			auto geom = TestSceneUtils::AnimatedGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str(), TestSceneUtils::ALPHA_MASK_PATH );
 			
 			auto time = m_timeEvaluator->GetLocalTime();
-			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
-			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 5.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 5.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
 			auto root = scene->GetRootNode();
 			editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2714,10 +2714,10 @@ void					TestScene::InitAnimatedGeometryTest		()
 				auto geom = TestSceneUtils::AnimatedGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, ProjectManager::GetInstance()->ToAbsPath( TestSceneUtils::ANIM_PATH ).Str(), TestSceneUtils::ALPHA_MASK_PATH );
 
 				auto time = m_timeEvaluator->GetLocalTime();
-				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
-				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 3.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 3.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
+				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
 				auto root = scene->GetRootNode();
 			    editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2744,10 +2744,10 @@ void					TestScene::InitGradientGeometryTest		()
 			auto time = m_timeEvaluator->GetLocalTime();
 			auto geom = TestSceneUtils::GradientGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
 			
-			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
-			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 1.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 1.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
 			auto root = scene->GetRootNode();
 			editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2763,10 +2763,10 @@ void					TestScene::InitGradientGeometryTest		()
 			auto time = m_timeEvaluator->GetLocalTime();
 			auto geom = TestSceneUtils::GradientGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 1.f, 0.f, 1.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
 			
-			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
-			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 5.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 5.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
 			auto root = scene->GetRootNode();
 			editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2797,10 +2797,10 @@ void					TestScene::InitGradientGeometryTest		()
 				auto geom = TestSceneUtils::GradientGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 1.f, 0.f, 1.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
 			
 				auto time = m_timeEvaluator->GetLocalTime();
-				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
-				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 3.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, time + 3.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
+				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
 
 				auto root = scene->GetRootNode();
 			    editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2824,7 +2824,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			auto editor = m_project->GetProjectEditor();
 			auto scene = editor->GetScene( SCENE_NAME );
 			auto vsd = TestSceneUtils::VideoStreamDecoder( editor->GetSceneDefaultTimeline( scene ), VSD_NODE, plugin, TestSceneUtils::VIDEO_PATH0 );
-			SetParameterTranslation( vsd->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterTranslation( vsd->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 
 			auto root = scene->GetRootNode();
 			editor->DeleteChildNode( scene, root, root->GetChild( VSD_NODE ) );
@@ -2838,7 +2838,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			auto editor = m_project->GetProjectEditor();
 			auto scene = editor->GetScene( SCENE_NAME );
 			auto vsd = TestSceneUtils::VideoStreamDecoder( editor->GetSceneDefaultTimeline( scene ), VSD_NODE, plugin, TestSceneUtils::VIDEO_PATH0, TestSceneUtils::ALPHA_MASK_PATH );
-			SetParameterTranslation( vsd->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterTranslation( vsd->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 
 			auto root = scene->GetRootNode();
 			editor->DeleteChildNode( scene, root, root->GetChild( VSD_NODE ) );
@@ -2903,7 +2903,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 				auto editor = m_project->GetProjectEditor();
 				auto scene = editor->GetScene( SCENE_NAME );
 				auto vsd = TestSceneUtils::VideoStreamDecoder( editor->GetSceneDefaultTimeline( scene ), VSD_NODE, plugin, TestSceneUtils::VIDEO_PATH0, TestSceneUtils::ALPHA_MASK_PATH );
-				SetParameterTranslation( vsd->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+				SetParameterTranslation( vsd->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 
 				auto root = scene->GetRootNode();
 			    editor->DeleteChildNode( scene, root, root->GetChild( VSD_NODE ) );
@@ -2919,7 +2919,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			auto editor = m_project->GetProjectEditor();
 			auto scene = editor->GetScene( SCENE_NAME );
 			auto vsd = TestSceneUtils::VideoStreamDecoder( editor->GetSceneDefaultTimeline( scene ), VSD_NODE, plugin, TestSceneUtils::VIDEO_PATH0, TestSceneUtils::ALPHA_MASK_PATH );
-			SetParameterTranslation( vsd->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, glm::vec3( 1.0f, -0.1f, -2.f ) );
+			SetParameterTranslation( vsd->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 1.0f, -0.1f, -2.f ) );
 
 			auto root = scene->GetRootNode();
 			editor->DeleteChildNode( scene, root, root->GetChild( VSD_NODE ) );

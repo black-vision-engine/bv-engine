@@ -36,25 +36,10 @@ bool    SetParameterScale       ( IParameterPtr parameter, TimeType t, const glm
 bool    SetParameterTranslation ( IParameterPtr parameter, TimeType t, const glm::vec3 & translation );
 bool    SetParameterCenterMass  ( IParameterPtr parameter, TimeType t, const glm::vec3 & center );
 
-bool    SetParameterRotation    ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & rotAxis, float angle );
-bool    SetParameterScale       ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & scale );
-bool    SetParameterTranslation ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & translation );
-bool    SetParameterCenterMass  ( IParameterPtr parameter, unsigned int idx, TimeType t, const glm::vec3 & center );
-
-bool    RemoveRotationKey       ( IParameterPtr parameter, unsigned int idx, TimeType t );
-bool    RemoveScaleKey          ( IParameterPtr parameter, unsigned int idx, TimeType t );
-bool    RemoveTranslationKey    ( IParameterPtr parameter, unsigned int idx, TimeType t );
-bool    RemoveCenterMassKey     ( IParameterPtr parameter, unsigned int idx, TimeType t );
-
 bool    RemoveRotationKey       ( IParameterPtr parameter, TimeType t );
 bool    RemoveScaleKey          ( IParameterPtr parameter, TimeType t );
 bool    RemoveTranslationKey    ( IParameterPtr parameter, TimeType t );
 bool    RemoveCenterMassKey     ( IParameterPtr parameter, TimeType t );
-
-bool    MoveRotationKey         ( IParameterPtr parameter, unsigned int idx, TimeType t, TimeType newTime );
-bool    MoveScaleKey            ( IParameterPtr parameter, unsigned int idx, TimeType t, TimeType newTime );
-bool    MoveTranslationKey      ( IParameterPtr parameter, unsigned int idx, TimeType t, TimeType newTime );
-bool    MoveCenterMassKey       ( IParameterPtr parameter, unsigned int idx, TimeType t, TimeType newTime );
 
 bool    MoveRotationKey         ( IParameterPtr parameter, TimeType t, TimeType newTime );
 bool    MoveScaleKey            ( IParameterPtr parameter, TimeType t, TimeType newTime );

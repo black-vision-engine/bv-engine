@@ -15,21 +15,21 @@ class IPlugin;
 class DefaultTransformChannel : public ITransformChannel
 {
 private:
-    ValueMat4PtrVec             m_values;
-    const ValueMat4PtrVec *     m_prevValues;
+    ValueMat4Ptr                m_value;
+    const ValueMat4Ptr *        m_prevValue;
 
     bool                        m_isReadOnly;
 
 private:
 
-    explicit                            DefaultTransformChannel ( IPluginPtr prev, const ValueMat4PtrVec & values, bool isReadOnly );
+    explicit                            DefaultTransformChannel ( IPluginPtr prev, const ValueMat4Ptr & value, bool isReadOnly );
 
 public:
 
     static  DefaultTransformChannel *   Create                  ();
-    static  DefaultTransformChannel *   Create                  ( IPluginPtr prev, const ValueMat4PtrVec & values, bool isReadOnly = false );
+    static  DefaultTransformChannel *   Create                  ( IPluginPtr prev, const ValueMat4Ptr & value, bool isReadOnly = false );
 
-    virtual const ValueMat4PtrVec &     GetTransformValues      ()  const override;
+    virtual const ValueMat4Ptr &        GetTransformValue       ()  const override;
 
     virtual bool                        IsReadOnly              ()  const override;  //IChannel
 

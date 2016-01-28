@@ -591,9 +591,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.cpp">
       <Filter>Engine\Models\Plugins\ParamValModel</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.cpp">
-      <Filter>Engine\Models\Plugins\ParamValModel</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAlphaMaskPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
@@ -1167,6 +1164,9 @@
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\TextureAssetThumbnail.cpp">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformParamValEvaluator.cpp">
+      <Filter>Engine\Models\Plugins\ParamValModel</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\AnimationAssetThumbnail.cpp">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClCompile>
@@ -1677,9 +1677,6 @@
       <Filter>Engine\Models\Plugins\ParamValModel</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.h">
-      <Filter>Engine\Models\Plugins\ParamValModel</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.h">
       <Filter>Engine\Models\Plugins\ParamValModel</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultAlphaMaskPlugin.h">
@@ -2492,6 +2489,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\TextureAssetThumbnail.h">
       <Filter>Assets\Thumbnail\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\AnimationAssetThumbnail.h">
+      <Filter>Assets\Thumbnail\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformParamValEvaluator.h">
+      <Filter>Engine\Models\Plugins\ParamValModel</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\AnimationAssetThumbnail.h">
       <Filter>Assets\Thumbnail\Impl</Filter>

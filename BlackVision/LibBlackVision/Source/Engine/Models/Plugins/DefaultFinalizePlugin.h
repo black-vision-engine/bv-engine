@@ -75,7 +75,7 @@ public:
 
     static std::string                          ShadersDir                  ();
 
-    virtual ParamTransformVecPtr				GetParamTransform			() const override;
+    virtual ParamTransformPtr				    GetParamTransform			() const override;
     
     virtual std::vector< ITimeEvaluatorPtr >	GetTimelines				() const override;
 
