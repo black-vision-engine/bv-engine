@@ -16,10 +16,15 @@ auto imagePath = "Assets/AssetManager/checkerboard2.png";
 auto imagePath_512x512 = "Assets/AssetManager/checkerboard2_512X512.png";
 auto AssetsPath = "Assets/AssetManager/";
 
+TEST(LoadingThumbnailsTest, LoadingThumbnails)
+{
+
+}
+
 TEST(HashTest, Hash)
 {
-    static char c[7] = {'a','a','a','a','a','a','a'};
-    auto m = MemoryChunk::Create( c , 7);
+    static char c[6] = {'a','a','a','a','a','a'};
+    auto m = MemoryChunk::Create( c , 6);
     auto str = EncodeBase64( m );
 
     auto d = DecodeBase64( str );

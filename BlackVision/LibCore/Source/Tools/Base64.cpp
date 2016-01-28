@@ -34,7 +34,12 @@ std::string EncodeBase64( MemoryChunkConstPtr data )
 
     std::stringstream os;
 
-    auto padding = ( 3 - data->Size() % 3 );
+    auto padding = data->Size() % 3;
+
+    if( padding > 0 )
+    {
+        padding = 3 - padding;
+    }
 
     std::copy(
         bin_to_base64( data->Get() ),

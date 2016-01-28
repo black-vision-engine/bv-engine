@@ -168,8 +168,6 @@ ThumbnailConstPtr   AnimationLoader::LoadThumbnail      ( const AssetDescConstPt
 
         auto thumb = AnimationAssetThumbnail::Create( deser );
 
-        File::Write( thumb->m_data[0]->Get(), thumb->m_data[0]->Size(), "dump.tga", false );
-
         if( h == thumb->GetHash() )
         {
             return thumb;
