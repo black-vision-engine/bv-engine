@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
+#include "Engine/Graphics/Effects/Fullscreen/FullscreenEffect.h"
 
 
 namespace bv {
@@ -17,6 +18,7 @@ class OffscreenDisplay;
 class BlitFullscreenEffect;
 class VideoOutputRenderLogic;
 class RenderLogicContext;
+class SimpleFullscreenEffect;
 
 class RenderLogic
 {
@@ -26,6 +28,11 @@ private:
     OffscreenDisplay *              m_offscreenDisplay;
     BlitFullscreenEffect *          m_blitEffect;
     VideoOutputRenderLogic *        m_videoOutputRenderLogic;
+        
+    //FIXME: implement wrapper class which uses al three to implement an effect (thin accessors wrapper)
+    FullscreenEffect *              m_blitEffectTr;
+    //FullscreenEffectContext         m_blitCtx;
+    std::vector< RenderTarget * >   m_blitInputRt;
 
     bool                            m_displayVideoCardPreview;
     bool                            m_useVideoCardOutput;
@@ -54,7 +61,10 @@ public:
 private:
 
     BlitFullscreenEffect *          AccessBlitEffect        ( RenderTarget * rt );
+    FullscreenEffect *              AccessBlitEffectTr      ( Renderer * renderer, RenderTargetStackAllocator * allocator, RenderTarget * rt );
+
     void                            BlitToPreview           ( Renderer * renderer, RenderTarget * rt );
+    void                            BlitToPreviewTr         ( Renderer * renderer, RenderTarget * rt );
 
     void                            UpdateOffscreenState    ();
     void                            OnVideoFrameRendered    ( Renderer * renderer );

@@ -177,4 +177,22 @@ FullscreenEffect *  CreateFullscreenEffect( FullscreenEffectType fseType )
     return CreateFullscreenEffect( fseType, std::vector< IValuePtr >() );
 }
 
+// **************************
+//
+FullscreenEffectInstance *  CreateFullscreenEffectInstance  ( FullscreenEffectType fseType, const std::vector< IValuePtr > & values )
+{
+    auto effect = std::shared_ptr< FullscreenEffect >( CreateFullscreenEffect( fseType, values ) );
+
+    return new FullscreenEffectInstance( effect );
+}
+
+// **************************
+//
+FullscreenEffectInstance *  CreateFullscreenEffectInstance  ( FullscreenEffectType fseType )
+{
+    auto effect = std::shared_ptr< FullscreenEffect >( CreateFullscreenEffect( fseType ) );
+
+    return new FullscreenEffectInstance( effect );
+}
+
 } // bv

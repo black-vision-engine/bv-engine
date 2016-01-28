@@ -70,30 +70,34 @@ unsigned int    SimpleFullscreenEffect::GetNumInputs    () const
 void                SimpleFullscreenEffect::SynchronizeInputData    ( FullscreenEffectContext * ctx )
 {
     auto rtVec = ctx->AccessInputRenderTargets();
-    auto startIdx = ctx->GetFirstRenderTargetIndex();
-
-    assert( rtVec != nullptr );
-
-    if( m_data.GetNumInitializedTextures() < m_data.GetNumTextures() || ctx->IsSyncRequired() )
+    
+    if( rtVec != nullptr )
     {
-        assert( m_data.GetNumTextures() <= (unsigned int) ( rtVec->size() - startIdx ) );
-        
-        auto effect = m_fullscreenQuad->GetRenderableEffect();
-        auto pass = effect->GetPass( 0 );
-        auto ps = pass->GetPixelShader();
-        auto psParams = ps->GetParameters();
+        auto startIdx = ctx->GetFirstRenderTargetIndex();
 
-        for( unsigned int i = 0; i < m_data.GetNumTextures(); ++i )
+        assert( rtVec != nullptr );
+
+        if( m_data.GetNumInitializedTextures() < m_data.GetNumTextures() || ctx->IsSyncRequired() )
         {
-            auto texture = (*rtVec)[ i + startIdx ]->ColorTexture( 0 );
+            assert( m_data.GetNumTextures() <= (unsigned int) ( rtVec->size() - startIdx ) );
+        
+            auto effect = m_fullscreenQuad->GetRenderableEffect();
+            auto pass = effect->GetPass( 0 );
+            auto ps = pass->GetPixelShader();
+            auto psParams = ps->GetParameters();
 
-            m_data.SetInputTexture( texture, i );
-            psParams->SetTexture( i, texture );
+            for( unsigned int i = 0; i < m_data.GetNumTextures(); ++i )
+            {
+                auto texture = (*rtVec)[ i + startIdx ]->ColorTexture( 0 );
+
+                m_data.SetInputTexture( texture, i );
+                psParams->SetTexture( i, texture );
+            }
         }
-    }
-    else
-    {
-        assert( DebugVerifyInput( rtVec, startIdx ) );
+        else
+        {
+            assert( DebugVerifyInput( rtVec, startIdx ) );
+        }
     }
 }
 
