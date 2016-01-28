@@ -42,23 +42,11 @@ NodeEffectLogic *  CreateNodeEffectLogic()
 //
 void    SetLogicComponents( NodeEffectLogic * logic, PreFullscreenEffectLogic * pre, FullscreenEffectInstance * fse, PostFullscreenEffectLogic * post )
 {
-    assert( logic );
-    assert( pre || fse || post );
+    assert( logic && ( pre || fse || post ) );
 
-    if( pre )
-    {
-        logic->SetComponent( pre );
-    }
-
-    if( fse )
-    {
-        logic->SetComponent( fse );
-    }
-
-    if( post )
-    {
-        logic->SetComponent( post );
-    }
+    logic->SetComponent( pre );
+    logic->SetComponent( fse );
+    logic->SetComponent( post );
 }
 
 // **************************

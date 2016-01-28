@@ -32,40 +32,74 @@ void    NodeEffectLogic::Render                      ( SceneNode * node, RenderL
     auto mainTarget = ctx->GetBoundRenderTarget();
     assert( mainTarget != nullptr );
 
-    if( m_FSE && m_preFSELogic && m_preFSELogic->AllocateOutputRenderTargets( ctx ) )
-    {
-        m_FSE->UpdateInputRenderTargets( m_preFSELogic->GetOutputRenderTargets() );
-    }
+    AllocateRenderTargets   ( ctx );
+    RenderPre               ( node, ctx );
 
+    assert( mainTarget == ctx->GetBoundRenderTarget() );
+
+    RenderFSE               ( mainTarget, ctx );
+    FreeRenderTargets       ( ctx );
+    RenderPost              ( node, ctx );
+}
+
+// *********************************
+//
+void    NodeEffectLogic::RenderPre                   ( SceneNode * node, RenderLogicContext * ctx )
+{
     if( m_preFSELogic )
     {
         m_preFSELogic->Render( node, ctx );
     }
+}
 
-    assert( mainTarget == ctx->GetBoundRenderTarget() );
-
-    if( m_FSE )
+// *********************************
+//
+void    NodeEffectLogic::RenderFSE                   ( RenderTarget * output, RenderLogicContext * ctx )
+{
+    if( m_FSE && IsFSERequired() )
     {
-        bool applicable = ( m_preFSELogic && m_preFSELogic->IsFSERequired() ) || !m_preFSELogic;
-
-        if( applicable )
-        {
-            // FIXME: by default we render to the currently bound render target
-            m_FSE->Render( mainTarget, ctx );
-        }
+        // FIXME: by default we render to the currently bound render target
+        m_FSE->Render( output, ctx );
     }
+}
 
+// *********************************
+//
+void    NodeEffectLogic::RenderPost                  ( SceneNode * node, RenderLogicContext * ctx )
+{
+    if( m_postFSELogic )
+    {
+        m_postFSELogic->Render( node, ctx );
+    }
+}
+
+// *********************************
+//
+bool    NodeEffectLogic::IsFSERequired               () const
+{
+    return !m_preFSELogic || m_preFSELogic && m_preFSELogic->IsFSERequired();
+}
+
+// *********************************
+//
+void    NodeEffectLogic::AllocateRenderTargets       ( RenderLogicContext * ctx )
+{
+    if( m_FSE && m_preFSELogic && m_preFSELogic->AllocateOutputRenderTargets( ctx ) )
+    {
+        m_FSE->UpdateInputRenderTargets( m_preFSELogic->GetOutputRenderTargets() );
+    }
+}
+
+// *********************************
+//
+void    NodeEffectLogic::FreeRenderTargets           ( RenderLogicContext * ctx )
+{
     if( m_preFSELogic && m_FSE )
     {
         if( m_FSE )
         {
             m_preFSELogic->FreeOutputRenderTargets( ctx );
         }
-    }
-
-    if( m_postFSELogic )
-    {
-        m_postFSELogic->Render( node, ctx );
     }
 }
 
@@ -165,5 +199,8 @@ void    NodeEffectLogic::RecreateValues              ( std::vector< IValuePtr > 
 
     values.insert( values.begin(), uniqueValues.begin(), uniqueValues.end() );
 }
+
+void            AllocateRenderTargets       ();
+void            FreeRenderTargets           ();
 
 } //bv

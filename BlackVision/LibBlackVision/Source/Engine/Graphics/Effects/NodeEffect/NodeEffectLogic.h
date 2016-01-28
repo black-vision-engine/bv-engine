@@ -33,6 +33,19 @@ public:
 
     void            Render                      ( SceneNode * node, RenderLogicContext * ctx );
 
+private:
+
+    void            RenderPre                   ( SceneNode * node, RenderLogicContext * ctx );
+    void            RenderFSE                   ( RenderTarget * output, RenderLogicContext * ctx );
+    void            RenderPost                  ( SceneNode * node, RenderLogicContext * ctx );
+
+    bool            IsFSERequired               () const;
+
+    void            AllocateRenderTargets       ( RenderLogicContext * ctx );
+    void            FreeRenderTargets           ( RenderLogicContext * ctx );
+
+public:
+
     void            SetComponent                ( PreFullscreenEffectLogic * logic );
     void            SetComponent                ( PostFullscreenEffectLogic * logic );
     void            SetComponent                ( FullscreenEffectInstance * fse );
