@@ -56,7 +56,7 @@ private:
 
 public:
 
-    void                    Update              ( const std::vector< Transform > & parentTransforms );
+    void                    Update              ( const Transform & parentTransform );
 
     bool                    IsVisible           () const;
     void                    SetVisible          ( bool visible );

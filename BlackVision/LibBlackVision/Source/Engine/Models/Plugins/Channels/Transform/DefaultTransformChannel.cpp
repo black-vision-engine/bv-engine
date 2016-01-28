@@ -8,16 +8,14 @@ namespace bv { namespace model
 
 // *********************************
 //
-DefaultTransformChannel::DefaultTransformChannel( IPluginPtr prev, const ValueMat4PtrVec & values, bool isReadOnly )
-    : m_values( values )
+DefaultTransformChannel::DefaultTransformChannel( IPluginPtr prev, const ValueMat4Ptr & value, bool isReadOnly )
+    : m_value( value )
     , m_isReadOnly( isReadOnly )
-    , m_prevValues( nullptr )
+    , m_prevValue( nullptr )
 {
     if( prev != nullptr && prev->GetTransformChannel() != nullptr )
 	{
-        m_prevValues = static_cast< const ValueMat4PtrVec * >( &prev->GetTransformChannel()->GetTransformValues() );
-
-		assert( m_prevValues->size() == values.size() );
+        m_prevValue = static_cast< const ValueMat4Ptr * >( &prev->GetTransformChannel()->GetTransformValue() );
     }
 }
 
@@ -25,23 +23,21 @@ DefaultTransformChannel::DefaultTransformChannel( IPluginPtr prev, const ValueMa
 //
 DefaultTransformChannel *   DefaultTransformChannel::Create              ()
 {
-	ValueMat4PtrVec values;
-    values.push_back( ValuesFactory::CreateValueMat4( "" ) );
-    return new DefaultTransformChannel( nullptr, values, true );
+    return new DefaultTransformChannel( nullptr, ValuesFactory::CreateValueMat4( "" ), true );
 }
 
 // *********************************
 //
-DefaultTransformChannel *   DefaultTransformChannel::Create              ( IPluginPtr prev, const ValueMat4PtrVec & values, bool isReadOnly )
+DefaultTransformChannel *   DefaultTransformChannel::Create              ( IPluginPtr prev, const ValueMat4Ptr & value, bool isReadOnly )
 {
-    return new DefaultTransformChannel( prev, values, isReadOnly );
+    return new DefaultTransformChannel( prev, value, isReadOnly );
 }
 
 // *********************************
 //
-const ValueMat4PtrVec &     DefaultTransformChannel::GetTransformValues  ()  const
+const ValueMat4Ptr &        DefaultTransformChannel::GetTransformValue   ()  const
 {
-    return m_values;
+    return m_value;
 }
 
 // *********************************
@@ -55,16 +51,12 @@ bool                        DefaultTransformChannel::IsReadOnly          ()  con
 //
 void                        DefaultTransformChannel::PostUpdate          () 
 {
-    if( m_prevValues )
+    if( m_prevValue )
     {
-        for( unsigned int i = 0; i < m_values.size(); ++i )
-        {
-            
-            ValueMat4 & m   = *m_values[ i ];
-            ValueMat4 & mp  = *(*m_prevValues)[ i ];
+        ValueMat4 & m   = *m_value;
+        ValueMat4 & mp  = *(*m_prevValue);
 
-            m.SetValue( mp.GetValue() * m.GetValue() ); //FIXME: be careful with multiplication order
-        }
+        m.SetValue( mp.GetValue() * m.GetValue() ); //FIXME: be careful with multiplication order
     }
 }
 

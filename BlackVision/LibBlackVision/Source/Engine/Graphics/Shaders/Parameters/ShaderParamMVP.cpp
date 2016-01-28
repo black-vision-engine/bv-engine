@@ -35,9 +35,7 @@ void            ShaderParamMVP::Update      ( RenderableEntity * renderable, Cam
 
         auto projMat = camera->GetProjectionMatrix();
 
-        //FIXME: add proper loop here
-        auto worldTrans = renderable->WorldTransforms()[ 0 ].Matrix(); //FIXME: instancing to be added here
-        m_mvp        = projMat * worldTrans;
+        m_mvp        = projMat * renderable->WorldTransform().Matrix();
     }
 }
 

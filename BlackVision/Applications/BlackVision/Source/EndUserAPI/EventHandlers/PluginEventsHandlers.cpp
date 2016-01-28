@@ -111,10 +111,6 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
         {
             result = AddTransformKey( param, paramSubName, keyTime, stringValue );
         }
-        else if( param->GetType() == ModelParamType::MPT_TRANSFORM_VEC ) //FIXME: special case for transformVec param
-        {
-            result = AddTransformVecKey( param, paramSubName, keyTime, stringValue );
-        }
         else
         {
             result = AddParameter( param, value, keyTime );
@@ -125,10 +121,6 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
         if( param->GetType() == ModelParamType::MPT_TRANSFORM ) // FIXME: special case for transform param
         {
             result = RemoveTransformKey( param, paramSubName, keyTime );
-        }
-        else if( param->GetType() == ModelParamType::MPT_TRANSFORM_VEC ) //FIXME: special case for transformVec param
-        {
-            result = RemoveTransformVecKey( param, paramSubName, keyTime );
         }
         else
         {
@@ -144,10 +136,6 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
             if( param->GetType() == ModelParamType::MPT_TRANSFORM ) //FIXME: special case for transform param
             {
                 result = MoveTransformKey( param, paramSubName, keyTime, newKeyTime );
-            }
-            else if( param->GetType() == ModelParamType::MPT_TRANSFORM_VEC ) //FIXME: special case for transformVec param
-            {
-                result = MoveTransformVecKey( param, paramSubName, keyTime, newKeyTime );
             }
             else
             {
@@ -449,6 +437,8 @@ bool        PluginEventsHandlers::AddTransformKey        ( ParameterPtr & param,
         }
         case TransformKind::scale:
             return SetParameterScale( param, keyTime, SerializationHelper::String2T( strValue, glm::vec3( 1.f ) ) );
+        case TransformKind::fwd_center:
+            return SetParameterCenterMass( param, keyTime, SerializationHelper::String2T( strValue, glm::vec3( 1.f ) ) );
         default:
             return false;;
     }
@@ -476,53 +466,6 @@ bool        PluginEventsHandlers::RemoveTransformKey        ( ParameterPtr & par
 }
 
 // ***********************
-// FIXME: 'duplicate' of HandleTransform - handling ModelParamType::MPT_TRANSFORM_VEC
-bool        PluginEventsHandlers::AddTransformVecKey       ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime, const std::string & strValue )
-{
-    auto transformKind = SerializationHelper::String2T( paramSubName, TransformKind::invalid );
-
-    switch ( transformKind )
-    {
-        case TransformKind::translation:
-            return SetParameterTranslation( param, 0, keyTime, SerializationHelper::String2T( strValue, glm::vec3( 0.f ) ) );
-        case TransformKind::rotation:
-        {
-            glm::vec4 rotAxisAngle = SerializationHelper::String2T( strValue, glm::vec4( 0.f ) );
-            glm::vec3 rotAxis = glm::vec3( rotAxisAngle );
-
-            return SetParameterRotation( param, 0, keyTime, rotAxis, rotAxisAngle.w );
-        }
-        case TransformKind::scale:
-            return SetParameterScale( param, 0, keyTime, SerializationHelper::String2T( strValue, glm::vec3( 1.f ) ) );
-        case TransformKind::fwd_center:
-            return SetParameterCenterMass( param, 0, keyTime, SerializationHelper::String2T( strValue, glm::vec3( 0.f ) ) );
-        default:
-            return false;
-    }
-}
-
-// ***********************
-// FIXME: 'duplicate' of HandleTransform - handling ModelParamType::MPT_TRANSFORM_VEC
-bool        PluginEventsHandlers::RemoveTransformVecKey    ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime )
-{
-    auto transformKind = SerializationHelper::String2T( paramSubName, TransformKind::invalid );
-
-    switch ( transformKind )
-    {
-        case TransformKind::translation:
-            return RemoveTranslationKey( param, 0, keyTime );
-        case TransformKind::rotation:
-            return RemoveRotationKey( param, 0, keyTime );
-        case TransformKind::scale:
-            return RemoveScaleKey( param, 0, keyTime );
-        case TransformKind::fwd_center:
-            return RemoveCenterMassKey( param, 0, keyTime );
-        default:
-            return false;
-    }
-}
-
-// ***********************
 //
 bool        PluginEventsHandlers::MoveTransformKey        ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime, TimeType newTime )
 {
@@ -538,28 +481,6 @@ bool        PluginEventsHandlers::MoveTransformKey        ( ParameterPtr & param
             return MoveScaleKey( param, keyTime, newTime );
         case TransformKind::fwd_center:
             return MoveCenterMassKey( param, keyTime, newTime );
-        default:
-            return false;
-    }
-}
-
-
-// ***********************
-// FIXME: 'duplicate' of HandleTransform - handling ModelParamType::MPT_TRANSFORM_VEC
-bool        PluginEventsHandlers::MoveTransformVecKey    ( ParameterPtr & param, const std::string & paramSubName, TimeType keyTime, TimeType newTime )
-{
-    auto transformKind = SerializationHelper::String2T( paramSubName, TransformKind::invalid );
-
-    switch ( transformKind )
-    {
-        case TransformKind::translation:
-            return MoveTranslationKey( param, 0, keyTime, newTime );
-        case TransformKind::rotation:
-            return MoveRotationKey( param, 0, keyTime, newTime );
-        case TransformKind::scale:
-            return MoveScaleKey( param, 0, keyTime, newTime );
-        case TransformKind::fwd_center:
-            return MoveCenterMassKey( param, 0, keyTime, newTime );
         default:
             return false;
     }

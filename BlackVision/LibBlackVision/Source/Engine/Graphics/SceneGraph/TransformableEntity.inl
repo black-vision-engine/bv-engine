@@ -2,48 +2,45 @@ namespace bv {
 
 // *********************************
 //
-inline const Transform &   TransformableEntity::LocalTransform                 () const
+inline const Transform &   TransformableEntity::LocalTransform      () const
 {
     return m_localTransform;
 }
 
 // *********************************
 //
-inline void                TransformableEntity::SetLocalTransform              ( const Transform & t )
+inline void                TransformableEntity::SetLocalTransform   ( const Transform & t )
 {
     m_localTransform = t;
 }
 
 // *********************************
 //
-inline const std::vector< Transform > &  TransformableEntity::WorldTransforms  () const
+inline const Transform &  TransformableEntity::WorldTransform       () const
 {
-    return m_worldTransforms;
+    return m_worldTransform;
 }
 
     
 // *********************************
 //
-inline void  TransformableEntity::SetWorldTransforms                           ( const std::vector< Transform > & transforms )
+inline void  TransformableEntity::SetWorldTransform                 ( const Transform & transform )
 {
-    m_worldTransforms = transforms;
+    m_worldTransform = transform;
 }
 
 // *********************************
 //
-inline void   TransformableEntity::ResetLocalTransform             ()
+inline void   TransformableEntity::ResetLocalTransform              ()
 {
     m_localTransform.Reset();
 }
 
 // *********************************
 //
-inline void   TransformableEntity::ResetWorldTransforms            ()
+inline void   TransformableEntity::ResetWorldTransform              ()
 {
-    for( auto & t : m_worldTransforms )
-    {
-        t.Reset();
-    }
+    m_worldTransform.Reset();
 }
 
 } //bv

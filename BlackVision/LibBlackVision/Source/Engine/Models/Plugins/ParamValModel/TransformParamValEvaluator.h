@@ -10,22 +10,22 @@
 
 namespace bv { namespace model {
 
-class TransformVecParamValEvaluator;
-DEFINE_PTR_TYPE(TransformVecParamValEvaluator)
+class TransformParamValEvaluator;
+DEFINE_PTR_TYPE(TransformParamValEvaluator)
 
-class TransformVecParamValEvaluator : public IParamValEvaluator
+class TransformParamValEvaluator : public IParamValEvaluator
 {
 private:
 
-    ParamTransformVecPtr    m_param;
-    ValueMat4PtrVec         m_mat4Values;
+    ParamTransformPtr       m_param;
+    ValueMat4Ptr            m_mat4Values;
 
     std::vector< IParameterPtr >        m_paramWrapper;
     std::vector< bv::IValueConstPtr >   m_values;
 
 public:
 
-                    TransformVecParamValEvaluator ( ParamTransformVecPtr param, const ValueMat4PtrVec val );
+                    TransformParamValEvaluator ( ParamTransformPtr param, const ValueMat4Ptr val );
 
 public:
 
@@ -37,8 +37,8 @@ public:
 
     virtual void                                        Evaluate        () override;
 
-    ParamTransformVecPtr                                Parameter       ();
-    ValueMat4PtrVec &                                   Value           ();
+    ParamTransformPtr                                   Parameter       ();
+    ValueMat4Ptr &                                      Value           ();
 
     friend class ParamValEvaluatorFactory;
 

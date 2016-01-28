@@ -215,90 +215,15 @@ void                                    ShiftReplicationModifier::ApplyTranslati
 {
     auto transformParam = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
-    if( transformParam->GetType() == ModelParamType::MPT_TRANSFORM_VEC )
+    if( transformParam->GetType() == ModelParamType::MPT_TRANSFORM )
     {
-        auto transformParamTyped = QueryTypedParam< ParamTransformVecPtr >( transformParam );
+        auto transformParamTyped = QueryTypedParam< ParamTransformPtr >( transformParam );
 
-        // X
-        bool valueSet = false;
+        auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+        auto val = transformParamTyped->GetTransform().GetTranslation( delta.startTime );
 
-        for( auto & k : transformParamTyped->Transform( 0 )[ 1 ]->GetP0MotylaNoga().GetKeys() )
-        {
-            if( k.t == delta.startTime )
-            {
-                k.t += delta.deltaTime;
-
-                auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-
-                k.val += dv.x;
-                valueSet = true;
-            }
-        }
-       
-        if( !valueSet )
-        {
-            auto interpolator = transformParamTyped->Transform( 0 )[ 1 ]->GetP0MotylaNoga();
-
-            auto val = interpolator.Evaluate( delta.startTime );
-
-            auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-
-            interpolator.AddKey( delta.startTime + delta.deltaTime,  val + dv.x );
-        }
-
-        // Y
-        valueSet = false;
-
-        for( auto & k : transformParamTyped->Transform( 0 )[ 1 ]->GetP1MotylaNoga().GetKeys() )
-        {
-            if( k.t == delta.startTime )
-            {
-                k.t += delta.deltaTime;
-
-                auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-
-                k.val += dv.y;
-                valueSet = true;
-            }
-        }
-       
-        if( !valueSet )
-        {
-            auto interpolator = transformParamTyped->Transform( 0 )[ 1 ]->GetP1MotylaNoga();
-
-            auto val = interpolator.Evaluate( delta.startTime );
-
-            auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-
-            interpolator.AddKey( delta.startTime + delta.deltaTime,  val + dv.y );
-        }
-
-        // Z
-        valueSet = false;
-
-        for( auto & k : transformParamTyped->Transform( 0 )[ 1 ]->GetP2MotylaNoga().GetKeys() )
-        {
-            if( k.t == delta.startTime )
-            {
-                k.t += delta.deltaTime;
-
-                auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-
-                k.val += dv.z;
-                valueSet = true;
-            }
-        }
-       
-        if( !valueSet )
-        {
-            auto interpolator = transformParamTyped->Transform( 0 )[ 1 ]->GetP2MotylaNoga();
-
-            auto val = interpolator.Evaluate( delta.startTime );
-
-            auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-
-            interpolator.AddKey( delta.startTime + delta.deltaTime,  val + dv.z );
-        }
+        //FIXME: it might not work as original (previous) code
+        transformParamTyped->SetTranslation( val + dv, delta.startTime + delta.deltaTime );
     }
 }
 
@@ -308,90 +233,15 @@ void                                    ShiftReplicationModifier::ApplyScaleDelt
 {
     auto transformParam = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
-    if( transformParam->GetType() == ModelParamType::MPT_TRANSFORM_VEC )
+    if( transformParam->GetType() == ModelParamType::MPT_TRANSFORM )
     {
-        auto transformParamTyped = QueryTypedParam< ParamTransformVecPtr >( transformParam );
+        auto transformParamTyped = QueryTypedParam< ParamTransformPtr >( transformParam );
 
-        // X
-        bool valueSet = false;
+        auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+        auto val = transformParamTyped->GetTransform().GetScale( delta.startTime );
 
-        for( auto & k : transformParamTyped->Transform( 0 )[ 3 ]->GetP0MotylaNoga().GetKeys() )
-        {
-            if( k.t == delta.startTime )
-            {
-                k.t += delta.deltaTime;
-
-                auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-
-                k.val += dv.x;
-                valueSet = true;
-            }
-        }
-       
-        if( !valueSet )
-        {
-            auto interpolator = transformParamTyped->Transform( 0 )[ 3 ]->GetP0MotylaNoga();
-
-            auto val = interpolator.Evaluate( delta.startTime );
-
-            auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-
-            interpolator.AddKey( delta.startTime + delta.deltaTime,  val + dv.x );
-        }
-
-        // Y
-        valueSet = false;
-
-        for( auto & k : transformParamTyped->Transform( 0 )[ 3 ]->GetP1MotylaNoga().GetKeys() )
-        {
-            if( k.t == delta.startTime )
-            {
-                k.t += delta.deltaTime;
-
-                auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-
-                k.val += dv.y;
-                valueSet = true;
-            }
-        }
-       
-        if( !valueSet )
-        {
-            auto interpolator = transformParamTyped->Transform( 0 )[ 3 ]->GetP1MotylaNoga();
-
-            auto val = interpolator.Evaluate( delta.startTime );
-
-            auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-
-            interpolator.AddKey( delta.startTime + delta.deltaTime,  val + dv.y );
-        }
-
-        // Z
-        valueSet = false;
-
-        for( auto & k : transformParamTyped->Transform( 0 )[ 3 ]->GetP2MotylaNoga().GetKeys() )
-        {
-            if( k.t == delta.startTime )
-            {
-                k.t += delta.deltaTime;
-
-                auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-
-                k.val += dv.z;
-                valueSet = true;
-            }
-        }
-       
-        if( !valueSet )
-        {
-            auto interpolator = transformParamTyped->Transform( 0 )[ 3 ]->GetP2MotylaNoga();
-
-            auto val = interpolator.Evaluate( delta.startTime );
-
-            auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-
-            interpolator.AddKey( delta.startTime + delta.deltaTime,  val + dv.z );
-        }
+        //FIXME: it might not work as original (previous) code
+        transformParamTyped->SetScale( val + dv, delta.startTime + delta.deltaTime );
     }
 
 }
@@ -402,90 +252,16 @@ void                                    ShiftReplicationModifier::ApplyRotationD
 {
     auto transformParam = node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
-    if( transformParam->GetType() == ModelParamType::MPT_TRANSFORM_VEC )
+    if( transformParam->GetType() == ModelParamType::MPT_TRANSFORM )
     {
-        auto transformParamTyped = QueryTypedParam< ParamTransformVecPtr >( transformParam );
+        auto transformParamTyped = QueryTypedParam< ParamTransformPtr >( transformParam );
 
-        // X
-        bool valueSet = false;
+        auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
+        auto valAxis = transformParamTyped->GetTransform().GetRotationAxis( delta.startTime );
+        auto valAngle = transformParamTyped->GetTransform().GetRotationAngle( delta.startTime );
 
-        for( auto & k : transformParamTyped->Transform( 0 )[ 2 ]->GetP0MotylaNoga().GetKeys() )
-        {
-            if( k.t == delta.startTime )
-            {
-                k.t += delta.deltaTime;
-
-                auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-
-                k.val += dv.x;
-                valueSet = true;
-            }
-        }
-       
-        if( !valueSet )
-        {
-            auto interpolator = transformParamTyped->Transform( 0 )[ 2 ]->GetP0MotylaNoga();
-
-            auto val = interpolator.Evaluate( delta.startTime );
-
-            auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-
-            interpolator.AddKey( delta.startTime + delta.deltaTime,  val + dv.x );
-        }
-
-        // Y
-        valueSet = false;
-
-        for( auto & k : transformParamTyped->Transform( 0 )[ 2 ]->GetP1MotylaNoga().GetKeys() )
-        {
-            if( k.t == delta.startTime )
-            {
-                k.t += delta.deltaTime;
-
-                auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-
-                k.val += dv.y;
-                valueSet = true;
-            }
-        }
-       
-        if( !valueSet )
-        {
-            auto interpolator = transformParamTyped->Transform( 0 )[ 2 ]->GetP1MotylaNoga();
-
-            auto val = interpolator.Evaluate( delta.startTime );
-
-            auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-
-            interpolator.AddKey( delta.startTime + delta.deltaTime,  val + dv.y );
-        }
-
-        // Z
-        valueSet = false;
-
-        for( auto & k : transformParamTyped->Transform( 0 )[ 2 ]->GetP2MotylaNoga().GetKeys() )
-        {
-            if( k.t == delta.startTime )
-            {
-                k.t += delta.deltaTime;
-
-                auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-
-                k.val += dv.z;
-                valueSet = true;
-            }
-        }
-       
-        if( !valueSet )
-        {
-            auto interpolator = transformParamTyped->Transform( 0 )[ 2 ]->GetP2MotylaNoga();
-
-            auto val = interpolator.Evaluate( delta.startTime );
-
-            auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-
-            interpolator.AddKey( delta.startTime + delta.deltaTime,  val + dv.z );
-        }
+        //FIXME: it might not work as original (previous) code
+        transformParamTyped->SetRotation( valAxis + dv, valAngle, delta.startTime + delta.deltaTime );
     }
 }
 

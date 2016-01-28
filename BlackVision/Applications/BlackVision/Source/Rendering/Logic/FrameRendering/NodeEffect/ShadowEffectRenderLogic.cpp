@@ -44,8 +44,8 @@ void    ShadowEffectRenderLogic::RenderNode           ( SceneNode * node, Render
     auto innerVal = node->GetNodeEffect()->GetValue( "inner" );
     auto innerValue = QueryTypedValue< ValueIntPtr >( innerVal )->GetValue();
 
-    auto scaleX = glm::length( node->GetTransformable()->WorldTransforms()[ 0 ].Matrix() * glm::vec4( 1.f, 0.f, 0.f, 0.f ) );
-    auto scaleY = glm::length( node->GetTransformable()->WorldTransforms()[ 0 ].Matrix() * glm::vec4( 0.f, 1.f, 0.f, 0.f ) );
+    auto scaleX = glm::length( node->GetTransformable()->WorldTransform().Matrix() * glm::vec4( 1.f, 0.f, 0.f, 0.f ) );
+    auto scaleY = glm::length( node->GetTransformable()->WorldTransform().Matrix() * glm::vec4( 0.f, 1.f, 0.f, 0.f ) );
 
     auto renderer       = ctx->GetRenderer();
     auto logic          = ctx->GetRenderLogic();

@@ -48,9 +48,10 @@ inline  void    NodeUpdater::UpdateTransform     ()
     //FIXME: rili rili
     m_renderable->ResetLocalTransform();
 
-    for( auto t : m_transformChannel->GetTransformValues() )
+    auto transform = m_transformChannel->GetTransformValue();
+    if( transform )
     {
-        const glm::mat4 & mat = t->GetValue();
+        const glm::mat4 & mat = transform->GetValue();
 
         m_renderable->SetLocalTransform( m_renderable->LocalTransform() * Transform( mat, glm::inverse( mat ) ) );
     }

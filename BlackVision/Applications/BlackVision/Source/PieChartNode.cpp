@@ -7,9 +7,9 @@ void PieChartNode::Init( model::ITimeEvaluatorPtr timeEvaluator, const std::vect
 	AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
 	auto simpleTransform = GetPlugin( "transform" )->GetParameter( "simple_transform" );
-	SetParameterScale( simpleTransform, 0, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
-	SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( 0, 0, -1.f) );
-	SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+	SetParameterScale( simpleTransform, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
+	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( 0, 0, -1.f) );
+	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
 
 	float angle = 0;
 
@@ -34,7 +34,7 @@ void PieChartNode::Init( model::ITimeEvaluatorPtr timeEvaluator, const std::vect
 		glm::vec3 vecOffset = glm::vec3( cos( angleMid ), 0, sin( angleMid ) );
 		vecOffset *= offset;
 
-		SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, vecOffset );
+		SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, vecOffset );
 	}
 }
 

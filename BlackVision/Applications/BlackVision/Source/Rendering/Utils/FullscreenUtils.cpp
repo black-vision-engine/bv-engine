@@ -85,10 +85,7 @@ TriangleStrip *                                 FullscreenUtils::CreateFullscree
 
     delete[] vbData;
 
-    std::vector< bv::Transform > vec;
-    vec.push_back( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
-
-    ret->SetWorldTransforms( vec );
+    ret->SetWorldTransform( Transform( glm::mat4( 1.0f ), glm::mat4( 1.0f ) ) );
 
     return ret;
 }

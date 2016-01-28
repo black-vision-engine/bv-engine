@@ -152,17 +152,6 @@ void CopyParameter( IParameterPtr out, IParameterPtr in )
 
         outT->AccessInterpolator() = inT->AccessInterpolator();
     } 
-    else if( out->GetType() == ModelParamType::MPT_TRANSFORM_VEC )
-    {
-        auto inT = QueryTypedParam< ParamTransformVecPtr >( in );
-        auto outT = QueryTypedParam< ParamTransformVecPtr >( out );
-
-        for( unsigned int i = 0; i < inT->NumTransforms(); i++ )
-        {
-            auto trans = inT->Transform( i );
-            outT->InsertTransform( i, trans );
-        }
-    } 
     else if( out->GetType() == ModelParamType::MPT_TRANSFORM )
     {
         auto inT = QueryTypedParam< ParamTransformPtr >( in );

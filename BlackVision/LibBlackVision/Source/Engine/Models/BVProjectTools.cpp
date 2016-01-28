@@ -194,9 +194,9 @@ RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( mode
         renderable = new TriangleStrip( nullptr, nullptr );
     }
 
-    auto worldTransformVec = CreateTransformVec( finalizer );
-    renderable->SetWorldTransforms( worldTransformVec );
 
+    assert( finalizer->GetTransformChannel() );
+    
     return renderable;
 }
 
@@ -212,27 +212,6 @@ RenderableEffectPtr     BVProjectTools::CreateDefaultEffect               ( cons
     assert( vsChannel != nullptr );
 
     return std::make_shared< DefaultEffect >( psChannel.get(), vsChannel.get(), gsChannel.get() ); 
-}
-
-// *******************************
-//
-TransformVec            BVProjectTools::CreateTransformVec                ( const model::IPluginConstPtr & finalizer )
-{
-    auto tc = finalizer->GetTransformChannel();
-    assert( tc );
-
-    auto numTransforms = tc->GetTransformValues().size();
-    assert( numTransforms > 0 );
-
-    std::vector< Transform > worldTransformVec;
-
-    for( unsigned int i = 0; i < numTransforms; ++i )
-    {
-        Transform worldTrans;
-        worldTransformVec.push_back( worldTrans );
-    }
-
-    return worldTransformVec;
 }
 
 // *******************************

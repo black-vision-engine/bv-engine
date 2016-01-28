@@ -13,7 +13,7 @@ class ITransformChannel
 {
 public:
 
-    virtual const ValueMat4PtrVec & GetTransformValues          ()  const   = 0;
+    virtual const ValueMat4Ptr &    GetTransformValue           ()  const   = 0;
 
     virtual bool                    IsReadOnly                  ()  const = 0;  //IChannel
 
