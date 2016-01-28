@@ -21,9 +21,9 @@ bool                                    TransformChannel::IsReadOnly          ()
 
 // ***********************************
 //
-const std::vector< TransformPtr >&      TransformChannel::GetTransformChannels() const
+TransformPtr                             TransformChannel::GetTransformChannels() const
 {
-    return m_transformations;
+    return m_transformation;
 }
 
 // ***********************************

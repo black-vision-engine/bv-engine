@@ -40,8 +40,7 @@ public:
     virtual ITransformChannelConstPtr           GetTransformChannel         () const override;
     virtual void                                Update                      ( TimeType t ) override;
 
-	virtual ParamTransformVecPtr				GetParamTransform			() const override;
-
+	virtual ParamTransformPtr				    GetParamTransform			() const override;
 
 };
 

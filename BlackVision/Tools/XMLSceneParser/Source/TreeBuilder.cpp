@@ -327,6 +327,8 @@ namespace bv{
     //**********************************
     bool SetTransformParams(IParameterPtr transform, XMLPlugin* plugin, bool ZeroParam=true)
     {
+        { ZeroParam; }
+
         bool result = true;
         for(unsigned int i=0;i<plugin->properties.size();i++)
 		{
@@ -370,33 +372,16 @@ namespace bv{
                 }
                 if(propertyName=="position")
                 {
-                    if(ZeroParam)
-                        result = result && SetParameterTranslation (transform, 0, tF, glm::vec3(x,y,z));
-                    else
-                        result = result && SetParameterTranslation (transform, tF, glm::vec3(x,y,z));
+                    result = result && SetParameterTranslation (transform, tF, glm::vec3(x,y,z));
                 }else if(propertyName=="rotation")
                 {
-                     if(ZeroParam)
-                     {
-                         result = result && SetParameterRotation ( transform,0, tF, glm::vec3( x,y,z ), angle );
-                     }
-                     else
-                     {
-                         result = result && SetParameterRotation ( transform, tF, glm::vec3( x,y,z ), angle );
-                         
-                     }
+                    result = result && SetParameterRotation ( transform, tF, glm::vec3( x,y,z ), angle );
                 }else if(propertyName=="scaling")
                 {
-                    if(ZeroParam)
-                        result = result && SetParameterScale (transform, 0, tF, glm::vec3(x,y,z));
-                    else
-                        result = result && SetParameterScale (transform, tF, glm::vec3(x,y,z));
+                    result = result && SetParameterScale (transform, tF, glm::vec3(x,y,z));
                 }else if(propertyName=="weight")
                 {
-                    if(ZeroParam)
-                        result = SetParameterCenterMass( transform, 0, tF, glm::vec3( x,y,z ) );
-                    else
-                        result = result && SetParameterCenterMass (transform, tF, glm::vec3(x,y,z));
+                    result = result && SetParameterCenterMass (transform, tF, glm::vec3(x,y,z));
                 }
                 
             }

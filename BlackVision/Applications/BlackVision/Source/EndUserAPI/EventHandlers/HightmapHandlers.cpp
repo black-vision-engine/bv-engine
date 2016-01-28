@@ -142,7 +142,7 @@ void            HightmapHandlers::UpdateCyclistPosition    ( int cyclistPos, flo
         float x = 1920.f / 1080.f * ( 2.f * pos.x - 1.f );
         float y = ( 2.f * pos.y - 1.f );
 
-        SetParameterTranslation( param, 0, 0.0f, glm::vec3( x, y, 0.f ) );
+        SetParameterTranslation( param, 0.0f, glm::vec3( x, y, 0.f ) );
 
     }
 }
@@ -170,7 +170,7 @@ void            HightmapHandlers::HMShow                  ()
 
     
     
-    SetParameterTranslation( tr, 0, time2, glm::vec3(0,0,0) );
+    SetParameterTranslation( tr, time2, glm::vec3(0,0,0) );
 
     timeline->Play();
 }
@@ -381,9 +381,9 @@ void            HightmapHandlers::HMConcentratedDistanceAnimStart( int num )
         auto transformPlugin = markTextConcentratedRoot->GetPlugin( "transform" );
         auto param = transformPlugin->GetParameter( "simple_transform" );
 
-        model::SetParameterTranslation( param, 0, time3, glm::vec3( 0.f, -1.1f, 0.f ) );
+        model::SetParameterTranslation( param, time3, glm::vec3( 0.f, -1.1f, 0.f ) );
 
-        model::SetParameterTranslation( param, 0, time4, glm::vec3( 0.f, -0.87f, 0.f ) );
+        model::SetParameterTranslation( param, time4, glm::vec3( 0.f, -0.87f, 0.f ) );
     }
 
     {
@@ -392,9 +392,9 @@ void            HightmapHandlers::HMConcentratedDistanceAnimStart( int num )
         auto transformPlugin = markTextRoot->GetPlugin( "transform" );
         auto param = transformPlugin->GetParameter( "simple_transform" );
 
-        model::SetParameterTranslation( param, 0, time4, glm::vec3( 0.f, -1.1f, 0.f ) );
+        model::SetParameterTranslation( param, time4, glm::vec3( 0.f, -1.1f, 0.f ) );
 
-        model::SetParameterTranslation( param, 0, time3, glm::vec3( 0.f, -0.87f, 0.f ) );
+        model::SetParameterTranslation( param, time3, glm::vec3( 0.f, -0.87f, 0.f ) );
     }
 
     timeline->Play();
@@ -428,9 +428,9 @@ void            HightmapHandlers::HMConcentratedDistanceAnimStart2( int num )
         auto transformPlugin = markTextConcentratedRoot->GetPlugin( "transform" );
         auto param = transformPlugin->GetParameter( "simple_transform" );
 
-        model::SetParameterTranslation( param, 0, time4, glm::vec3( 0.f, -1.1f, 0.f ) );
+        model::SetParameterTranslation( param, time4, glm::vec3( 0.f, -1.1f, 0.f ) );
 
-        model::SetParameterTranslation( param, 0, time3, glm::vec3( 0.f, -0.87f, 0.f ) );
+        model::SetParameterTranslation( param, time3, glm::vec3( 0.f, -0.87f, 0.f ) );
     }
 
     {
@@ -439,9 +439,9 @@ void            HightmapHandlers::HMConcentratedDistanceAnimStart2( int num )
         auto transformPlugin = markTextRoot->GetPlugin( "transform" );
         auto param = transformPlugin->GetParameter( "simple_transform" );
 
-        model::SetParameterTranslation( param, 0, time3, glm::vec3( 0.f, -1.1f, 0.f ) );
+        model::SetParameterTranslation( param, time3, glm::vec3( 0.f, -1.1f, 0.f ) );
 
-        model::SetParameterTranslation( param, 0, time4, glm::vec3( 0.f, -0.87f, 0.f ) );
+        model::SetParameterTranslation( param, time4, glm::vec3( 0.f, -0.87f, 0.f ) );
     }
 
     timeline->Play();
@@ -467,14 +467,14 @@ void    HightmapHandlers::UpdateHM        ()
         //kreska
         //auto pos = tp->QueryEdgePosition( 73000.f );
         //float x = 1920.f / 1080.f * ( 2.f * pos.x - 1.f );
-        ////SetParameterTranslation( param, 0, 0.0f, glm::vec3( x, 2.f * 98.f / 1080.f, 0.f ) );
-        //SetParameterTranslation( param, 0, 0.0f, glm::vec3( x, -( pos.y + 98.0f / 1080.f ) * 2.f, 0.f ) );
-        //SetParameterScale( param, 0, 0.0f, glm::vec3( 1.f, pos.y, 1.f ) );
+        ////SetParameterTranslation( param, 0.0f, glm::vec3( x, 2.f * 98.f / 1080.f, 0.f ) );
+        //SetParameterTranslation( param, 0.0f, glm::vec3( x, -( pos.y + 98.0f / 1080.f ) * 2.f, 0.f ) );
+        //SetParameterScale( param, 0.0f, glm::vec3( 1.f, pos.y, 1.f ) );
 
         //auto pos = tp->QueryEdgePosition( 73000.f );
         //float x = 1920.f / 1080.f * ( 2.f * pos.x - 1.f );
         //float y = ( 2.f * pos.y - 1.f );
-        //SetParameterTranslation( param, 0, 0.0f, glm::vec3( x, y, 0.f ) );
+        //SetParameterTranslation( param, 0.0f, glm::vec3( x, y, 0.f ) );
 
 
         auto startFinishRoot = root->GetChild( "startFinishRoot" );
@@ -490,7 +490,7 @@ void    HightmapHandlers::UpdateHM        ()
                 float x = 1920.f / 1080.f * ( 2.f * pos.x - 1.f );
                 float y = ( 2.f * pos.y - 1.f );
 
-                SetParameterTranslation( param, 0, 0.0f, glm::vec3( x, y + 180.f / 1080.f , 0.f ) );
+                SetParameterTranslation( param, 0.0f, glm::vec3( x, y + 180.f / 1080.f , 0.f ) );
             }
 
             {
@@ -502,7 +502,7 @@ void    HightmapHandlers::UpdateHM        ()
                 float x = 1920.f / 1080.f * ( 2.f * pos.x - 1.f );
                 float y = ( 2.f * pos.y - 1.f );
 
-                SetParameterTranslation( param, 0, 0.0f, glm::vec3( x, y + 180.f / 1080.f, 0.f ) );
+                SetParameterTranslation( param, 0.0f, glm::vec3( x, y + 180.f / 1080.f, 0.f ) );
             }
 
 
@@ -522,7 +522,7 @@ void    HightmapHandlers::UpdateHM        ()
             //        float x = 1920.f / 1080.f * ( 2.f * pos.x - 1.f );
             //        float y = ( 2.f * pos.y - 1.f );
 
-            //        SetParameterTranslation( param, 0, 0.0f, glm::vec3( x, 0.f, 0.f ) );
+            //        SetParameterTranslation( param, 0.0f, glm::vec3( x, 0.f, 0.f ) );
             //    }
             //    else
             //    {
@@ -553,7 +553,7 @@ void    HightmapHandlers::UpdateHM        ()
                     float x = 1920.f / 1080.f * ( 2.f * pos.x - 1.f );
                     //float y = ( 2.f * pos.y - 1.f );
 
-                    SetParameterTranslation( param, 0, 0.0f, glm::vec3( x, 0.f, 0.f ) );
+                    SetParameterTranslation( param, 0.0f, glm::vec3( x, 0.f, 0.f ) );
                 }
                 else
                 {
@@ -582,7 +582,7 @@ void    HightmapHandlers::UpdateHM        ()
                 auto transformPlugin = markConcentratedNode->GetPlugin( "transform" );
                 auto param = transformPlugin->GetParameter( "simple_transform" );
 
-                SetParameterTranslation( param, 0, 0.0f, glm::vec3( x, 0.f, 0.f ) );
+                SetParameterTranslation( param, 0.0f, glm::vec3( x, 0.f, 0.f ) );
 
             }
         }

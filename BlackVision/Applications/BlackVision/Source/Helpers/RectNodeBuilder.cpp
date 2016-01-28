@@ -60,7 +60,7 @@ void    RectNodeBuilder::SetH        ( float h, TimeType t )
 void    RectNodeBuilder::SetPosition ( float x, float y, float z, TimeType t )
 {
     assert( m_node );
-    bool success = model::SetParameterTranslation( GetTRansformPlugin()->GetParameter( TransformParamName() ), 0, t, glm::vec3( x, y, z ) );
+    bool success = model::SetParameterTranslation( GetTRansformPlugin()->GetParameter( TransformParamName() ), t, glm::vec3( x, y, z ) );
     { success; } // FIXME: suppress unused warning
     assert( success );
 }
@@ -70,7 +70,7 @@ void    RectNodeBuilder::SetPosition ( float x, float y, float z, TimeType t )
 void    RectNodeBuilder::SetRotation ( float x, float y, float z, float angle, TimeType t )
 {
     assert( m_node );
-    bool success = model::SetParameterRotation( GetTRansformPlugin()->GetParameter( TransformParamName() ), 0, t, glm::vec3( x, y, z ), angle );
+    bool success = model::SetParameterRotation( GetTRansformPlugin()->GetParameter( TransformParamName() ), t, glm::vec3( x, y, z ), angle );
     { success; } // FIXME: suppress unused warning
     assert( success );
 }
@@ -80,7 +80,7 @@ void    RectNodeBuilder::SetRotation ( float x, float y, float z, float angle, T
 void    RectNodeBuilder::SetScale    ( float sx, float sy, float sz, TimeType t )
 {
     assert( m_node );
-    bool success = model::SetParameterScale( GetTRansformPlugin()->GetParameter( TransformParamName() ), 0, t, glm::vec3( sx, sy, sz ) );
+    bool success = model::SetParameterScale( GetTRansformPlugin()->GetParameter( TransformParamName() ), t, glm::vec3( sx, sy, sz ) );
     { success; } // FIXME: suppress unused warning
     assert( success );
 }

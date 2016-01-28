@@ -390,7 +390,7 @@ mathematics::Rect 			    BasicNode::GetAABB			        () const
 {
     mathematics::Rect r;
 
-    auto trans = m_pluginList->GetFinalizePlugin()->GetParamTransform()->Evaluate( 0 );
+    auto trans = m_pluginList->GetFinalizePlugin()->GetParamTransform()->Evaluate();
 
     auto plRect = m_pluginList->GetFinalizePlugin()->GetAABB( trans );
 
@@ -412,7 +412,7 @@ mathematics::Rect 			BasicNode::GetAABB						( const glm::mat4 & parentTransform
 {
     mathematics::Rect r;
 
-    auto trans = parentTransformation * m_pluginList->GetFinalizePlugin()->GetParamTransform()->Evaluate( 0 );
+    auto trans = parentTransformation * m_pluginList->GetFinalizePlugin()->GetParamTransform()->Evaluate();
 
     auto plRect = m_pluginList->GetFinalizePlugin()->GetAABB( trans );
 
