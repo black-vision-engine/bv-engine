@@ -489,7 +489,7 @@ MemoryChunkConstPtr     SaveTGAToHandle ( const MemoryChunkConstPtr & in, UInt32
 
     MemoryChunkConstPtr ret = nullptr;
 
-    if( FreeImage_SaveToMemory( FIF_TARGA, inBitmap, destStream ) )
+    if( FreeImage_SaveToMemory( FIF_TARGA, inBitmap, destStream, TARGA_SAVE_RLE ) )
     {
         FreeImage_SeekMemory( destStream, 0, SEEK_END );
         auto size = FreeImage_TellMemory( destStream );
