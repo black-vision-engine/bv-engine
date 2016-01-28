@@ -6,7 +6,6 @@
 
 #include "ProjectManager.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
-#include "Engine/Events/EventHelpers.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 
 #include "EventHandlerHelpers.h"
@@ -145,7 +144,7 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 		//FIXME: replace with sth more generic
 		auto destSceneName = GetRequestParamValue( request )[ "DestSceneName" ].asString();
 		auto destNodePath = GetRequestParamValue( request )[ "DestPath" ].asString();
-		auto destIdx = GetRequestParamValue( request )[ "DestIndex" ].asUInt();
+        auto destIdx = SerializationHelper::String2T< UInt32 >( GetRequestParamValue( request )[ "DestIndex" ].asString(), 0 );
 		auto srcSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
 		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
 		
@@ -210,7 +209,7 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
 		//FIXME: replace with sth more generic
 		auto destSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
 		auto destNodePath = GetRequestParamValue( request )[ "DestPath" ].asString();
-		auto destIdx = GetRequestParamValue( request )[ "DestIndex" ].asUInt();
+        auto destIdx = SerializationHelper::String2T< UInt32 >( GetRequestParamValue( request )[ "DestIndex" ].asString(), 0 );
 		auto srcSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
 		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
 		auto srcPluginName = GetRequestParamValue( request )[ "SrcName" ].asString();
@@ -224,7 +223,7 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
 		//FIXME: replace with sth more generic
 		auto destSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
 		auto destNodePath = GetRequestParamValue( request )[ "DestPath" ].asString();
-		auto destIdx = GetRequestParamValue( request )[ "DestIndex" ].asUInt();
+        auto destIdx = SerializationHelper::String2T< UInt32 >( GetRequestParamValue( request )[ "DestIndex" ].asString(), 0 );
 		auto srcSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
 		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
 		auto srcPluginName = GetRequestParamValue( request )[ "SrcName" ].asString();
