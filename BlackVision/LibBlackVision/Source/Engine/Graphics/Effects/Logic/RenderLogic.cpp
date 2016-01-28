@@ -27,6 +27,7 @@ RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, bool use
     , m_blitEffect( nullptr )
     , m_blitEffectTr( nullptr )
     , m_videoOutputRenderLogic( nullptr )
+    , m_ctx( nullptr )
 {
     auto videoCardEnabled   = useReadback;
     auto previewAsVideoCard = useVideoCardOutput;
@@ -48,6 +49,7 @@ RenderLogic::~RenderLogic    ()
     delete m_offscreenDisplay;
     delete m_blitEffect;
     delete m_blitEffectTr;
+    delete m_ctx;
 }
 
 // *********************************
@@ -103,8 +105,9 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
     }
    
     //FIXME: blit to preview using effect instance here
+    m_blitEffectTr->Render( prevRt, GetContext( renderer ) );
     //BlitToPreviewTr( renderer, prevRt );
-    BlitToPreview( renderer, prevRt );
+    //BlitToPreview( renderer, prevRt );
 
     if( m_useVideoCardOutput )
     {
@@ -117,10 +120,9 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
 void    RenderLogic::RenderRootNode  ( Renderer * renderer, SceneNode * sceneRoot, RenderTarget * rt )
 {
     //FIXME: assumes only one renderer instance per application
-    static RenderLogicContext ctx_( renderer, &m_rtStackAllocator, this );
-    static RenderLogicContext * ctx = &ctx_;
+    auto ctx = GetContext( renderer );
 
-    assert( renderer == ctx_.GetRenderer() );
+    assert( renderer == ctx->GetRenderer() );
 
     // FIXME: verify that all rendering paths work as expected
 	if( sceneRoot )
@@ -185,6 +187,18 @@ void    RenderLogic::RenderChildren  ( SceneNode * node, RenderLogicContext * ct
         HPROFILER_SECTION( "RenderNode::RenderNode", PROFILER_THREAD1 );
         RenderNode  ( node->GetChild( i ), ctx ); 
     }
+}
+
+// *********************************
+//
+RenderLogicContext *    RenderLogic::GetContext         ( Renderer * renderer )
+{
+    if( !m_ctx )
+    {
+        m_ctx = new RenderLogicContext( renderer, &m_rtStackAllocator, this );
+    }
+
+    return m_ctx;
 }
 
 // *********************************

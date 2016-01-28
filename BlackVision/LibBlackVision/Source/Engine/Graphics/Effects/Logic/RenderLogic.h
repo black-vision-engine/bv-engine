@@ -29,7 +29,8 @@ private:
     OffscreenDisplay *              m_offscreenDisplay;
     BlitFullscreenEffect *          m_blitEffect;
     VideoOutputRenderLogic *        m_videoOutputRenderLogic;
-        
+    RenderLogicContext *            m_ctx;
+
     //FIXME: implement wrapper class which uses al three to implement an effect (thin accessors wrapper)
     FullscreenEffectInstance *      m_blitEffectTr;
     //FullscreenEffectContext         m_blitCtx;
@@ -60,6 +61,8 @@ public:
     void    RenderChildren  ( SceneNode * node, RenderLogicContext * ctx, int firstChildIdx = 0 );
 
 private:
+
+    RenderLogicContext *            GetContext              ( Renderer * renderer );
 
     BlitFullscreenEffect *          AccessBlitEffect        ( RenderTarget * rt );
     FullscreenEffectInstance *      AccessBlitEffectTr      ( Renderer * renderer, RenderTargetStackAllocator * allocator, RenderTarget * rt );
