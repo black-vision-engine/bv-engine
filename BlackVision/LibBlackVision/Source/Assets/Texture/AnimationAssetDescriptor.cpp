@@ -17,7 +17,10 @@ void                AnimationAssetDesc::Serialize       ( ISerializer& sob ) con
 sob.EnterChild( "asset" );
     sob.SetAttribute( "type", UID() );
     sob.SetAttribute( "path", m_path );
-    sob.SetAttribute( "numFrames", std::to_string( m_numFrames ) );
+    
+    if( m_numFrames < std::numeric_limits<UInt32>::max() )
+        sob.SetAttribute( "numFrames", std::to_string( m_numFrames ) );
+
     sob.SetAttribute( "filter", m_filter );
 sob.ExitChild();
 }
@@ -26,8 +29,9 @@ sob.ExitChild();
 //
 ISerializableConstPtr     AnimationAssetDesc::Create          ( const IDeserializer& dob )
 {
-    return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetAttribute( "path" ), dob.GetAttribute( "filter" ) ) );
-    //return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetAttribute( "path" ), SerializationHelper::String2T( dob.GetAttribute( "numFrames" ), 0 ), dob.GetAttribute( "filter" ) ) );
+    //return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetAttribute( "path" ), dob.GetAttribute( "filter" ) ) );
+    SizeType numFrames = SerializationHelper::String2T( dob.GetAttribute( "numFrames" ), std::numeric_limits<UInt32>::max() );
+    return AnimationAssetDescConstPtr( new AnimationAssetDesc( dob.GetAttribute( "path" ), numFrames, dob.GetAttribute( "filter" ) ) );
 }
 
 //// ***********************
