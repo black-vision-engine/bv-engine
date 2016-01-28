@@ -22,18 +22,23 @@ PreFullscreenEffectLogic::~PreFullscreenEffectLogic     ()
 //
 bool    PreFullscreenEffectLogic::AllocateOutputRenderTargets   ( RenderLogicContext * ctx, std::vector< RenderTarget * > * outputRtVec )
 {
-    auto alc = allocator( ctx );
+    auto changed = false;
 
-    //FIXME: optimize (if necessary) by simply incrementing allocator inner index instead of calling full Allocate method
-    // Always allocate
-    for( unsigned int i = 0; i < outputRtVec->size(); ++i )
+    if ( outputRtVec )
     {
-        (*outputRtVec)[ i ] = alc->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+        auto alc = allocator( ctx );
+
+        //FIXME: optimize (if necessary) by simply incrementing allocator inner index instead of calling full Allocate method
+        // Always allocate
+        for( unsigned int i = 0; i < outputRtVec->size(); ++i )
+        {
+            (*outputRtVec)[ i ] = alc->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+        }
+
+        changed = alc->GetTopIndex() != m_lastUsedRenderTargetNum;
+
+        m_lastUsedRenderTargetNum = alc->GetTopIndex();
     }
-
-    auto changed = alc->GetTopIndex() != m_lastUsedRenderTargetNum;
-
-    m_lastUsedRenderTargetNum = alc->GetTopIndex();
 
     return changed;
 }

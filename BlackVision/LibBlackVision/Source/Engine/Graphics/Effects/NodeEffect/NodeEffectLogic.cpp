@@ -35,6 +35,7 @@ void    NodeEffectLogic::Render                      ( SceneNode * node, RenderL
     FSEInitializedGuard( ctx );
 
     PreFSERenderLogic( node, ctx );
+
     assert( mainTarget == ctx->GetBoundRenderTarget() );
 
     FSERenderLogic( mainTarget, ctx );
@@ -147,15 +148,22 @@ void    NodeEffectLogic::FSEInitializedGuard         ( RenderLogicContext * ctx 
     {
         auto fseInputsVec = m_FSE->AccessInputRenderTargets();
 
-        assert( m_preFSELogic );
-        assert( m_preFSELogic->GetPreferredNumOutputs() == fseInputsVec->size() );
+        if( !m_preFSELogic )
+        {
+            assert( !fseInputsVec || fseInputsVec->size() == 0 );
+        }
+        else if ( !fseInputsVec )
+        {
+            assert( m_preFSELogic->GetPreferredNumOutputs() == 0 );
+        }
+        else
+        {
+            assert( m_preFSELogic->GetPreferredNumOutputs() == fseInputsVec->size() );
+        }
 
         auto changed = m_preFSELogic->AllocateOutputRenderTargets( ctx, fseInputsVec );
 
-        if( changed )
-        {
-            m_FSE->SetSyncRequired();
-        }
+        m_FSE->SetSyncRequired( changed );
     }
 }
 

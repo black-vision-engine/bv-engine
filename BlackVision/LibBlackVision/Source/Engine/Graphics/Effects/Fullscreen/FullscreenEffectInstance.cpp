@@ -45,9 +45,9 @@ std::vector< RenderTarget * > *     FullscreenEffectInstance::AccessInputRenderT
 
 // **************************
 //
-void        FullscreenEffectInstance::SetSyncRequired       ()
+void        FullscreenEffectInstance::SetSyncRequired       ( bool required )
 {
-    m_ctx.SetSyncRequired( true );
+    m_ctx.SetSyncRequired( required );
 }
 
 // **************************

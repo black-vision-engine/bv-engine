@@ -26,7 +26,7 @@ public:
     void                                Render                      ( RenderTarget * output, RenderLogicContext * ctx );
 
     std::vector< RenderTarget * > *     AccessInputRenderTargets    ();
-    void                                SetSyncRequired             ();
+    void                                SetSyncRequired             ( bool required );
 
     std::vector< IValuePtr >            GetValues                   () const;
 
