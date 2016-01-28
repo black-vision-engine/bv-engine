@@ -126,32 +126,39 @@ CompositeBezierInterpolator< TimeValueT, ValueT >*     CompositeBezierInterpolat
             interpolator->AddKey( key->t, key->val );
     else
     {
-        deser.EnterChild( "interpolation" );
-        for( auto key : keys )
-        {
-            interpolator->AddKey( key->t, key->val );
-            if( key != keys.back() )
-            {
-                interpolator->SetCurveType( SerializationHelper::String2T< CurveType >( SerializationHelper::ct2s, deser.GetAttribute( "type" ) ) );
-                if( deser.NextChild() == false )
-                    if( key == keys.end()[-2] ) // everything is OK, this is the end, we need to go out
-                        deser.ExitChild();
-                    else // we've got malformed XML
-                    {
-                        assert( false ); // FIXME: error handling
-                        return nullptr;
-                    }
-            }
-        }
+        if( deser.EnterChild( "interpolation" ) )
+		{
+			for( auto key : keys )
+			{
+				interpolator->AddKey( key->t, key->val );
+				if( key != keys.back() )
+				{
+					interpolator->SetCurveType( SerializationHelper::String2T< CurveType >( SerializationHelper::ct2s, deser.GetAttribute( "type" ) ) );
+					if( deser.NextChild() == false )
+						if( key == keys.end()[-2] ) // everything is OK, this is the end, we need to go out
+							deser.ExitChild();
+						else // we've got malformed XML
+						{
+							assert( false ); // FIXME: error handling
+							return nullptr;
+						}
+				}
+			}
 
-        deser.EnterChild( "interpolation" );
-        size_t i = 0;
-        do
-        {
-            auto interpolators = interpolator->GetInterpolators();
-            interpolators[ i++ ]->Deserialize( deser );
-        } while( deser.NextChild() );
-        deser.ExitChild(); // exit "interpolation"
+			deser.EnterChild( "interpolation" );
+			size_t i = 0;
+			do
+			{
+				auto interpolators = interpolator->GetInterpolators();
+				interpolators[ i++ ]->Deserialize( deser );
+			} while( deser.NextChild() );
+			deser.ExitChild(); // exit "interpolation"
+		}
+		else
+		{
+			for( auto key : keys ) // no interpolation types
+				interpolator->AddKey( key->t, key->val );
+		}
         deser.ExitChild(); // exit "interpolations"
     }
 
