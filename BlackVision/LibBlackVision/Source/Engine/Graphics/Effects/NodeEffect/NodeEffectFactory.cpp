@@ -47,17 +47,17 @@ void    SetLogicComponents( NodeEffectLogic * logic, PreFullscreenEffectLogic * 
 
     if( pre )
     {
-        logic->SetPreFullscreenEffectLogic( pre );
+        logic->SetComponent( pre );
     }
 
     if( fse )
     {
-        logic->SetFullscreenEffect( fse );
+        logic->SetComponent( fse );
     }
 
     if( post )
     {
-        logic->SetPostFullscreenEffectLogic( post );
+        logic->SetComponent( post );
     }
 }
 

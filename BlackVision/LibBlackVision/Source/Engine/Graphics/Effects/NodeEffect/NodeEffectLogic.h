@@ -20,8 +20,6 @@ private:
 
     std::vector< IValuePtr >        m_values;
 
-    unsigned int                    m_lastActive;
-
     PreFullscreenEffectLogic *      m_preFSELogic;
     
     FullscreenEffectInstance *      m_FSE;
@@ -35,9 +33,9 @@ public:
 
     void            Render                      ( SceneNode * node, RenderLogicContext * ctx );
 
-    void            SetPreFullscreenEffectLogic ( PreFullscreenEffectLogic * logic );
-    void            SetPostFullscreenEffectLogic( PostFullscreenEffectLogic * logic );
-    void            SetFullscreenEffect         ( FullscreenEffectInstance * fse );
+    void            SetComponent                ( PreFullscreenEffectLogic * logic );
+    void            SetComponent                ( PostFullscreenEffectLogic * logic );
+    void            SetComponent                ( FullscreenEffectInstance * fse );
 
     unsigned int    GetNumValues                () const;
     IValuePtr       GetValueAt                  ( unsigned int i ) const;
@@ -46,12 +44,6 @@ public:
 private:
 
     void            RecreateValues              ( std::vector< IValuePtr > & values );
-
-    void            FSEInitializedGuard         ( RenderLogicContext * ctx );
-
-    void            PreFSERenderLogic           ( SceneNode * node, RenderLogicContext * ctx ) const;
-    void            FSERenderLogic              ( RenderTarget * output, RenderLogicContext * ctx );
-    void            PostFSERenderLogic          ( SceneNode * node, RenderLogicContext * ctx ) const;
 
 };
 

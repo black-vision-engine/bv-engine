@@ -32,20 +32,46 @@ void    NodeEffectLogic::Render                      ( SceneNode * node, RenderL
     auto mainTarget = ctx->GetBoundRenderTarget();
     assert( mainTarget != nullptr );
 
-    FSEInitializedGuard( ctx );
+    if( m_FSE && m_preFSELogic && m_preFSELogic->AllocateOutputRenderTargets( ctx ) )
+    {
+        m_FSE->UpdateInputRenderTargets( m_preFSELogic->GetOutputRenderTargets() );
+    }
 
-    PreFSERenderLogic( node, ctx );
+    if( m_preFSELogic )
+    {
+        m_preFSELogic->Render( node, ctx );
+    }
 
     assert( mainTarget == ctx->GetBoundRenderTarget() );
 
-    FSERenderLogic( mainTarget, ctx );
+    if( m_FSE )
+    {
+        bool applicable = ( m_preFSELogic && m_preFSELogic->IsFSERequired() ) || !m_preFSELogic;
 
-    PostFSERenderLogic( node, ctx );
+        if( applicable )
+        {
+            // FIXME: by default we render to the currently bound render target
+            m_FSE->Render( mainTarget, ctx );
+        }
+    }
+
+    if( m_preFSELogic && m_FSE )
+    {
+        if( m_FSE )
+        {
+            m_preFSELogic->FreeOutputRenderTargets( ctx );
+        }
+    }
+
+    if( m_postFSELogic )
+    {
+        m_postFSELogic->Render( node, ctx );
+    }
 }
 
 // *********************************
 //
-void    NodeEffectLogic::SetPreFullscreenEffectLogic ( PreFullscreenEffectLogic * logic )
+void    NodeEffectLogic::SetComponent       ( PreFullscreenEffectLogic * logic )
 {
     delete m_preFSELogic;
 
@@ -56,7 +82,7 @@ void    NodeEffectLogic::SetPreFullscreenEffectLogic ( PreFullscreenEffectLogic 
 
 // *********************************
 //
-void    NodeEffectLogic::SetPostFullscreenEffectLogic( PostFullscreenEffectLogic * logic )
+void    NodeEffectLogic::SetComponent       ( PostFullscreenEffectLogic * logic )
 {
     delete m_postFSELogic;
 
@@ -67,7 +93,7 @@ void    NodeEffectLogic::SetPostFullscreenEffectLogic( PostFullscreenEffectLogic
 
 // *********************************
 //
-void    NodeEffectLogic::SetFullscreenEffect         ( FullscreenEffectInstance * fse )
+void    NodeEffectLogic::SetComponent       ( FullscreenEffectInstance * fse )
 {
     delete m_FSE;
 
@@ -138,63 +164,6 @@ void    NodeEffectLogic::RecreateValues              ( std::vector< IValuePtr > 
     }
 
     values.insert( values.begin(), uniqueValues.begin(), uniqueValues.end() );
-}
-
-// *********************************
-//
-void    NodeEffectLogic::FSEInitializedGuard         ( RenderLogicContext * ctx )
-{
-    if( m_FSE && m_preFSELogic )
-    {
-        if( m_preFSELogic->AllocateOutputRenderTargets( ctx ) )
-        {
-            m_FSE->UpdateInputRenderTargets( m_preFSELogic->GetOutputRenderTargets() );
-        }
-    }
-}
-
-// *********************************
-//
-void    NodeEffectLogic::PreFSERenderLogic          ( SceneNode * node, RenderLogicContext * ctx ) const
-{
-    if( m_preFSELogic )
-    {
-        m_preFSELogic->Render( node, ctx );
-    }
-}
-
-// *********************************
-//
-void    NodeEffectLogic::FSERenderLogic             ( RenderTarget * output, RenderLogicContext * ctx )
-{
-    if( m_FSE )
-    {
-        bool applicable = ( m_preFSELogic && m_preFSELogic->IsFSERequired() ) || !m_preFSELogic;
-
-        if( applicable )
-        {
-            // FIXME: by default we render to the currently bound render target
-            m_FSE->Render( output, ctx );
-        }
-    }
-}
-
-// *********************************
-//
-void    NodeEffectLogic::PostFSERenderLogic          ( SceneNode * node, RenderLogicContext * ctx ) const
-{
-    if( m_preFSELogic && m_FSE )
-    {
-        if( m_FSE )
-        {
-            m_preFSELogic->FreeOutputRenderTargets( ctx );
-        }
-    }
-
-    if( m_postFSELogic )
-    {
-        m_postFSELogic->Render( node, ctx );
-    }
 }
 
 } //bv
