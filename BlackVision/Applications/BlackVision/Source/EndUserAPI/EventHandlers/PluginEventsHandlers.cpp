@@ -271,7 +271,7 @@ ParameterPtr PluginEventsHandlers::GetResourceParameter    (    const std::strin
 bool PluginEventsHandlers::AddParameter        ( std::shared_ptr< model::IParameter > & param, const std::wstring & wstringValue, TimeType keyTime )
 {
     auto paramType = param->GetType();
-    std::string stringValue = toString( stringValue );
+    std::string stringValue = toString( wstringValue );
 
     switch( paramType )
     {

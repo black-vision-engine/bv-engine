@@ -72,9 +72,10 @@ const char *                        TextureAssetThumbnail::DataBase64  () const
 {
     if( m_dataBase64.empty() )
     {
-        m_dataBase64 = EncodeBase64( m_data );
+        m_dataBase64 = m_data ? EncodeBase64( m_data ) : "";
     }
-    return nullptr;
+
+    return m_dataBase64.c_str();
 }
 
 // ******************************
