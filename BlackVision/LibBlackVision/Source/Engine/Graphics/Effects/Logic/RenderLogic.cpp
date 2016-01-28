@@ -25,7 +25,6 @@ namespace bv {
 RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, bool useReadback, bool useVideoCardOutput )
     : m_rtStackAllocator( width, height, TextureFormat::F_A8R8G8B8 )
     , m_blitEffect( nullptr )
-    , m_blitEffectTr( nullptr )
     , m_videoOutputRenderLogic( nullptr )
     , m_ctx( nullptr )
 {
@@ -34,7 +33,7 @@ RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, bool use
 
     unsigned int numFrameRenderTargets = videoCardEnabled || previewAsVideoCard ? 2 : 1;
 
-    m_blitEffectTr              = CreateFullscreenEffectInstance( FullscreenEffectType::FET_SIMPLE_BLIT );
+    m_blitEffect                = CreateFullscreenEffectInstance( FullscreenEffectType::FET_SIMPLE_BLIT );
     m_offscreenDisplay          = new OffscreenDisplay( &m_rtStackAllocator, numFrameRenderTargets, videoCardEnabled || previewAsVideoCard );
     m_videoOutputRenderLogic    = new VideoOutputRenderLogic( height ); // FIXME: interlace odd/even setup
 
@@ -48,7 +47,7 @@ RenderLogic::~RenderLogic    ()
 {
     delete m_offscreenDisplay;
     delete m_blitEffect;
-    delete m_blitEffectTr;
+    delete m_blitEffect;
     delete m_ctx;
 }
 
@@ -103,11 +102,6 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
 
         prevRt = videoRt;
     }
-   
-    //FIXME: blit to preview using effect instance here
-    m_blitEffectTr->Render( prevRt, GetContext( renderer ) );
-    //BlitToPreviewTr( renderer, prevRt );
-    //BlitToPreview( renderer, prevRt );
 
     if( m_useVideoCardOutput )
     {
@@ -154,10 +148,6 @@ void    RenderLogic::RenderNode      ( SceneNode * node, RenderLogicContext * ct
         {
             effect->Render( node, ctx );
         }
-
-        //FIXME: remove these files
-        //auto effectRenderLogic = m_nodeEffectRenderLogicSelector.GetNodeEffectRenderLogic( node );
-        //effectRenderLogic->RenderNode( node, ctx );
     }
 }
 
@@ -203,57 +193,14 @@ RenderLogicContext *    RenderLogic::GetContext         ( Renderer * renderer )
 
 // *********************************
 //
-BlitFullscreenEffect *  RenderLogic::AccessBlitEffect   ( RenderTarget * rt )
+void                    RenderLogic::BlitToPreview          ( Renderer * renderer, RenderTarget * rt )
 {
-    // FIXME: Blit current render target - suxx a bit - there should be a separate initialization step
-    if ( !m_blitEffect )
+    if( m_blitEffect->GetRenderTarget( 0 ) != rt )
     {
-        auto rtTex = rt->ColorTexture( 0 );
-
-        m_blitEffect = new BlitFullscreenEffect( rtTex, false );
+        m_blitEffect->SetRenderTarget( 0, rt );
     }
 
-    return m_blitEffect;
-}
-
-// *********************************
-//
-FullscreenEffectInstance *  RenderLogic::AccessBlitEffectTr   ( Renderer * renderer, RenderTargetStackAllocator * allocator, RenderTarget * rt )
-{
-    { rt; allocator; renderer; }
-    // FIXME: Blit current render target - suxx a bit - there should be a separate initialization step
-    if ( !m_blitEffect )
-    {
-        //auto rtTex = rt->ColorTexture( 0 );
-
-        //m_blitEffectTr = CreateFullscreenEffect( FullscreenEffectType::FET_SIMPLE_BLIT );
-    
-        //m_blitCtx.SetRenderer( renderer );
-        //m_blitCtx.SetRenderTargetAllocator( allocator );
-        //m_blitCtx.SetOutputRenderTarget( nullptr );
-        //m_blitCtx.SetInputRenderTargets( nullptr ); //FIXME: add a vector here
-        //m_blitCtx.SetFirstRenderTargetIndex( 0 );
-    }
-
-    return m_blitEffectTr;
-}
-
-// *********************************
-//
-void                    RenderLogic::BlitToPreview      ( Renderer * renderer, RenderTarget * rt )
-{
-    auto blitter = AccessBlitEffect( rt );
-
-    blitter->Render( renderer );
-}
-
-// *********************************
-//
-void                    RenderLogic::BlitToPreviewTr    ( Renderer * renderer, RenderTarget * rt )
-{
-    auto blitter = AccessBlitEffect( rt );
-
-    blitter->Render( renderer );
+    m_blitEffect->Render( rt, GetContext( renderer ) );
 }
 
 // *********************************

@@ -18,7 +18,6 @@ class OffscreenDisplay;
 class BlitFullscreenEffect;
 class VideoOutputRenderLogic;
 class RenderLogicContext;
-class SimpleFullscreenEffect;
 class FullscreenEffectInstance;
 
 class RenderLogic
@@ -27,14 +26,9 @@ private:
 
     RenderTargetStackAllocator      m_rtStackAllocator;
     OffscreenDisplay *              m_offscreenDisplay;
-    BlitFullscreenEffect *          m_blitEffect;
+    FullscreenEffectInstance *      m_blitEffect;
     VideoOutputRenderLogic *        m_videoOutputRenderLogic;
     RenderLogicContext *            m_ctx;
-
-    //FIXME: implement wrapper class which uses al three to implement an effect (thin accessors wrapper)
-    FullscreenEffectInstance *      m_blitEffectTr;
-    //FullscreenEffectContext         m_blitCtx;
-    std::vector< RenderTarget * >   m_blitInputRt;
 
     bool                            m_displayVideoCardPreview;
     bool                            m_useVideoCardOutput;
@@ -64,11 +58,7 @@ private:
 
     RenderLogicContext *            GetContext              ( Renderer * renderer );
 
-    BlitFullscreenEffect *          AccessBlitEffect        ( RenderTarget * rt );
-    FullscreenEffectInstance *      AccessBlitEffectTr      ( Renderer * renderer, RenderTargetStackAllocator * allocator, RenderTarget * rt );
-
     void                            BlitToPreview           ( Renderer * renderer, RenderTarget * rt );
-    void                            BlitToPreviewTr         ( Renderer * renderer, RenderTarget * rt );
 
     void                            UpdateOffscreenState    ();
     void                            OnVideoFrameRendered    ( Renderer * renderer );

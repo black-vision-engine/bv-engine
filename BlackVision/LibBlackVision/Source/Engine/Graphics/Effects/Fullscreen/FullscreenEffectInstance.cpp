@@ -55,6 +55,31 @@ std::vector< IValuePtr >    FullscreenEffectInstance::GetValues () const
 
 // **************************
 //
+unsigned int                FullscreenEffectInstance::GetNumInputRenderTargets    () const
+{
+    return (unsigned int) m_inputRenderTargets.size();
+}
+
+// **************************
+//
+const RenderTarget *        FullscreenEffectInstance::GetRenderTarget             ( unsigned int i ) const
+{
+    assert( i < m_inputRenderTargets.size() );
+
+    return m_inputRenderTargets[ i ];
+}
+
+// **************************
+//
+void                        FullscreenEffectInstance::SetRenderTarget             ( unsigned int i, RenderTarget * rt )
+{
+    assert( i < m_inputRenderTargets.size() );
+
+    m_inputRenderTargets[ i ] = rt;
+}
+
+// **************************
+//
 void                        FullscreenEffectInstance::InitializeGuard             ( RenderLogicContext * ctx )
 {
     //FIXME: assumes that only one renderer is used

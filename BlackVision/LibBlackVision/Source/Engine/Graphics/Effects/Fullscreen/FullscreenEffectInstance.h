@@ -29,6 +29,10 @@ public:
 
     std::vector< IValuePtr >    GetValues                   () const;
 
+    unsigned int                GetNumInputRenderTargets    () const;
+    const RenderTarget *        GetRenderTarget             ( unsigned int i ) const;
+    void                        SetRenderTarget             ( unsigned int i, RenderTarget * rt );
+
 private:
 
     void                        InitializeGuard             ( RenderLogicContext * ctx );
