@@ -36,230 +36,50 @@ template<> Expected< TransformKind > String2T( const std::string & s ) { return 
 
 } // SerializationHelper
 
+
+// ******************* Transform **************** 
+
 namespace model {
 
-    // *************************************
-    //
-    Transform::Transform()
-        : m_mat( glm::mat4x4( 1.f ) )
-    {
-    }
+// *************************************
+//
+Transform::Transform()
+    : m_mat( glm::mat4x4( 1.f ) )
+{
+}
 
-    // *************************************
-    //
-    Transform::Transform( const glm::mat4x4 & m )
-        :   m_mat( m )
-    {
-    }
+// *************************************
+//
+Transform::Transform( const glm::mat4x4 & m )
+    :   m_mat( m )
+{
+}
 
-    // *************************************
-    //
-    Transform               Transform::operator *    ( const Transform & m )    const
-    {
-        return Transform( m_mat * m.m_mat );
-    }
+// *************************************
+//
+Transform               Transform::operator *    ( const Transform & m )    const
+{
+    return Transform( m_mat * m.m_mat );
+}
 
-    // *************************************
-    //
-    void     Transform::SetMatrix   ( const glm::mat4x4 & m )
-    {
-        m_mat = m;
-    }
+// *************************************
+//
+void     Transform::SetMatrix   ( const glm::mat4x4 & m )
+{
+    m_mat = m;
+}
 
-    // *************************************
-    //
-    const glm::mat4x4 &      Transform::GetMatrix   ()                       const
-    {
-        return m_mat;
-    }
+// *************************************
+//
+const glm::mat4x4 &      Transform::GetMatrix   ()                       const
+{
+    return m_mat;
+}
 
 } // model
 
-//// *************************************
-////
-//template<typename ParamT>
-//SimpleTransform<ParamT>::SimpleTransform( const TransformKind kind, const ParamT p0, const ParamT p1, const ParamT p2 )
-//    : kind( kind ), p0( p0 ), p1( p1 ), p2 (p2 )
-//{
-//}
-//
-//// *************************************
-////
-//template<typename ParamT>
-//SimpleTransform<ParamT>::SimpleTransform( TransformKind kind )
-//    : kind( kind )
-//{
-//}
-//
-//// *************************************
-////
-//template<typename ParamT>
-//void                SimpleTransform<ParamT>::Serialize       ( ISerializer& sob ) const
-//{ 
-//    assert( !"Tell me why I'm not implemented ;)" );
-//    sob;
-//}
-//
-//// *************************************
-////
-//template<typename ParamT>
-//ISerializablePtr     SimpleTransform<ParamT>::Create          ( const IDeserializer& dob )
-//{
-//    //if( dob.GetName() != "transform" )
-//    //{
-//    //    std::cerr << "SimpleTransform<ParamT>::Create failed" << std::endl;
-//    //    return nullptr; // FIXME so much: error handling
-//    //}
-//
-//    auto kindName = dob.GetAttribute( "kind" );
-//    auto kind = SerializationHelper::String2T< TransformKind >( kindName );
-//
-//    if( kind == TransformKind::rotation ) // very special case indeed :)
-//    {
-//        auto angleArray = SerializationHelper::DeserializeArray< ParamT >( dob, "angle", "interpolator" );
-//        auto rotAxisArray = SerializationHelper::DeserializeArray< Vec3Interpolator >( dob, "rotaxis", "interpolator" );
-//
-//        if( angleArray.size() != 1 )
-//        {
-//            LOG_MESSAGE( SeverityLevel::error ) << "CompositeTransform<ParamT>::Create failed, incorrect entry for angle in rotation";
-//            return SimpleTransform< ParamT >::CreateDefaultTransform( TransformKind::rotation );
-//        }
-//        if( rotAxisArray.size() != 1 )
-//        {
-//            LOG_MESSAGE( SeverityLevel::error ) << "CompositeTransform<ParamT>::Create failed, incorrect entry for rotAxis in rotation";
-//            return SimpleTransform< ParamT >::CreateDefaultTransform( TransformKind::rotation );
-//        }
-//
-//        auto angle = angleArray[0];
-//        auto rotAxis = rotAxisArray[0];
-//
-//        return std::make_shared< Rotation< ParamT > >( *angle, *rotAxis );
-//    }
-//
-//    auto params = SerializationHelper::DeserializeArray< ParamT >( dob, "interpolators" );
-//    
-//    if( params.size() != 3 && ( kind != TransformKind::rotation || params.size() != 2 ) ) // de Morgan FTW!
-//    {
-//        LOG_MESSAGE( SeverityLevel::error ) << "CompositeTransform<ParamT>::Create failed, incorrect number of interpolators in " << kindName;
-//        return SimpleTransform< ParamT >::CreateDefaultTransform( kind );
-//    }
-//
-//    if( kind == TransformKind::fwd_center )
-//        return std::make_shared< SimpleTransform< ParamT > >( TransformKind::fwd_center, *params[0], *params[1], *params[2] );
-//    else if( kind == TransformKind::translation )
-//        return std::make_shared< SimpleTransform< ParamT > >( TransformKind::translation, *params[0], *params[1], *params[2] );
-//    else if( kind == TransformKind::scale )
-//        return std::make_shared< SimpleTransform< ParamT > >( TransformKind::scale, *params[0], *params[1], *params[2] );
-//    else if( kind == TransformKind::inv_center )
-//        return std::make_shared< SimpleTransform< ParamT > >( TransformKind::inv_center, *params[0], *params[1], *params[2] );
-//
-//    assert( false );
-//    return nullptr;
-//}
-//
-//// *************************************
-////
-//template<typename ParamT>
-//std::shared_ptr< SimpleTransform< ParamT > >    SimpleTransform<ParamT>::CreateDefaultTransform( TransformKind kind )
-//{
-//    auto t =  TimeType( 0.0 );
-//
-//    ParamT::ValueType   v0  = ParamT::ValueType( 0.0 );
-//    ParamT::ValueType   v1  = ParamT::ValueType( 1.0 );
-//
-//
-//    if( kind == TransformKind::fwd_center )
-//    {
-//        ParamT ctx, cty, ctz;
-//
-//        ctx.AddKey( t, v0 ); cty.AddKey( t, v0 ); ctz.AddKey( t, v0 );
-//
-//        return CreateTranslation( ctx, cty, ctz, kind );
-//    } 
-//    else if( kind == TransformKind::translation )
-//    {
-//        ParamT tx, ty, tz;
-//
-//        tx.AddKey( t, v0 ); ty.AddKey( t, v0 ); tz.AddKey( t, v0 );
-//
-//        return CreateTranslation( tx, ty, tz, kind );
-//    }
-//    else if( kind == TransformKind::rotation )
-//    {
-//        ParamT angle;
-//        Vec3Interpolator rotAxis;
-//
-//        angle.AddKey( t, v0 );
-//        rotAxis.AddKey( t, glm::vec3( v0, v0, v1 ) );
-//
-//        return std::make_shared< Rotation< ParamT > >( angle, rotAxis );
-//    }
-//    else if( kind == TransformKind::scale )
-//    {
-//        ParamT sx, sy, sz;
-//
-//        sx.AddKey( t, v1 ); sy.AddKey( t, v1 ); sz.AddKey( t, v1 );
-//
-//        return CreateScale( sx, sy, sz );
-//    }
-//    else if( kind == TransformKind::inv_center )
-//    {
-//        ParamT ictx, icty, ictz;
-//
-//        ictx.AddKey( t, v0 ); icty.AddKey( t, v0 ); ictz.AddKey( t, v0 );
-//
-//        return CreateTranslation( ictx, icty, ictz, kind );
-//    }
-//
-//    assert( false );
-//    return nullptr;
-//}
-//
-//template<typename ParamT>
-//Rotation<ParamT>::Rotation    ( ParamT angle, const Vec3Interpolator & rotAxis )
-//    : SimpleTransform( TransformKind::rotation )
-//    , m_angle( angle )
-//    , m_hasRotAxisInterpolator( true )
-//    , m_rotationAxis( rotAxis ) 
-//{
-//}
-//
-//// *************************************
-////
-//template<typename ParamT>
-//Rotation<ParamT>::Rotation( ParamT angle, ParamT p0, ParamT p1, ParamT p2 )
-//    : SimpleTransform( TransformKind::rotation, p0, p1, p2 )
-//    , m_angle( angle )
-//    , m_hasRotAxisInterpolator( false )
-//{
-//}
-//
-//// *************************************
-////
-//template<typename ParamT>
-//void Rotation<ParamT>::SetCurveType( CurveType type )
-//{
-//    m_angle.SetCurveType( type );
-//    m_rotationAxis.SetCurveType( type );
-//}
-//
-//// *************************************
-////
-//template<typename ParamT>
-//void                Rotation<ParamT>::SetWrapPostMethod   ( WrapMethod method )
-//{
-//    m_angle.SetWrapPostMethod( method );
-//    m_rotationAxis.SetWrapPostMethod( method );
-//}
-//
-//// *************************************
-////
-//template<typename ParamT>
-//void                Rotation<ParamT>::SetWrapPreMethod    ( WrapMethod method )
-//{
-//    m_angle.SetWrapPreMethod( method );
-//    m_rotationAxis.SetWrapPreMethod( method );
-//}
+
+// ******************* CompositeTransform **************** 
 
 // *************************************
 //
@@ -421,24 +241,76 @@ void            CompositeTransform::RemoveCenter         ( TimeType time )
 //
 CompositeTransform::CompositeTransform      ()
 {
+    InitializeDefaultSRT();
 }
 
 // *************************************
 //
-CompositeTransform *    CompositeTransform::Create      ( const IDeserializer & dob )
+CompositeTransform *    CompositeTransform::Create      ( const IDeserializer & deser )
 {
-    { dob; }
+    //maintain serialization backward compatibility
 
     auto transform = new CompositeTransform();
 
-    //auto transes = SerializationHelper::DeserializeProperties< SimpleTransform< ParamT > >( dob, "transform" );
+    if( deser.EnterChild( "transform" ) )
+    {
+        do
+        {
+            auto kindName = deser.GetAttribute( "kind" );
+            auto kind = SerializationHelper::String2T< TransformKind >( kindName );
 
-    //int i = 0;
-    //for( auto trans : transes )
-    //{
-    //    transform->InsertTransform( i, trans );
-    //    i++;
-    //}
+            if( kind == TransformKind::rotation )
+            {
+                auto angleArray = SerializationHelper::DeserializeArray< FloatInterpolator >( deser, "angle", "interpolator" );
+                auto rotAxisArray = SerializationHelper::DeserializeArray< Vec3Interpolator >( deser, "rotaxis", "interpolator" );
+
+                if( angleArray.size() != 1 )
+                {
+                    LOG_MESSAGE( SeverityLevel::error ) << "CompositeTransform::Create failed, incorrect entry for angle in rotation";
+                }
+                else if( rotAxisArray.size() != 1 )
+                {
+                    LOG_MESSAGE( SeverityLevel::error ) << "CompositeTransform::Create failed, incorrect entry for rotAxis in rotation";
+                }
+                else
+                {
+                    transform->m_rotationAngle = *angleArray[ 0 ];
+                    transform->m_rotationAxis = *rotAxisArray[ 0 ];
+                }
+            }
+            else
+            {
+                auto params = SerializationHelper::DeserializeArray< FloatInterpolator >( deser, "interpolators" );
+                if( params.size() == 3 )
+                {
+                    if( kind == TransformKind::fwd_center )
+                    {
+                        transform->m_centerX = *params[ 0 ];
+                        transform->m_centerY = *params[ 1 ];
+                        transform->m_centerZ = *params[ 2 ];
+                    }
+                    else if( kind == TransformKind::translation )
+                    {
+                        transform->m_translationX = *params[ 0 ];
+                        transform->m_translationY = *params[ 1 ];
+                        transform->m_translationZ = *params[ 2 ];
+                    }
+                    else if( kind == TransformKind::scale )
+                    {
+                        transform->m_scaleX = *params[ 0 ];
+                        transform->m_scaleY = *params[ 1 ];
+                        transform->m_scaleZ = *params[ 2 ];
+                    }
+                }
+                else
+                {
+                    LOG_MESSAGE( SeverityLevel::error ) << "CompositeTransform::Create failed, incorrect number of interpolators in " << kindName;
+                }
+            }
+        } while( deser.NextChild() );
+
+        deser.ExitChild();
+    }
 
     return transform;
 }
@@ -447,46 +319,65 @@ CompositeTransform *    CompositeTransform::Create      ( const IDeserializer & 
 //
 void                                CompositeTransform::Serialize               ( ISerializer & ser ) const
 {
-    { ser; }
+    //maintain serialization backward compatibility
 
     ser.EnterArray( "composite_transform" );
 
-    //for( auto trans : m_transformations )
-    //{
-    //    ser.EnterChild( "transform" );
-    //    SerializationHelper::SerializeAttribute( ser, trans->KindKurwaMac(), "kind" );
 
-    //    if( trans->KindKurwaMac() == TransformKind::rotation ) // FIXME: this really should be virtualized
-    //    {
-    //        auto rotation = std::static_pointer_cast< Rotation< ParamT > >( trans );
-    //        if( rotation->IsAxisVec3() )
-    //        {
-    //            ser.SetAttribute( "isaxisvec3", "true" );
+    //center
+    ser.EnterChild( "transform" );
+    SerializationHelper::SerializeAttribute( ser, TransformKind::fwd_center, "kind" );
+    ser.EnterArray( "interpolators" );
 
-    //            ser.EnterChild( "angle" );
-    //                rotation->AccessAngle().Serialize( ser );
-    //            ser.ExitChild();
+    m_centerX.Serialize( ser );
+    m_centerY.Serialize( ser );
+    m_centerZ.Serialize( ser );
 
-    //            ser.EnterChild( "rotaxis" );
-    //                rotation->AccessRotAxis().Serialize( ser );
-    //            ser.ExitChild();
-    //        }
-    //        else
-    //            assert( false );
-    //    }
-    //    else
-    //    {
-    //        ser.EnterArray( "interpolators" );
-    //        
-    //        trans->GetP0MotylaNoga().Serialize( ser );
-    //        trans->GetP1MotylaNoga().Serialize( ser );
-    //        trans->GetP2MotylaNoga().Serialize( ser );
+    ser.ExitChild(); // interpolators
+    ser.ExitChild(); // transform
+    
 
-    //        ser.ExitChild();
-    //    }
+    //translation
+    ser.EnterChild( "transform" );
+    SerializationHelper::SerializeAttribute( ser, TransformKind::translation, "kind" );
+    ser.EnterArray( "interpolators" );
 
-    //    ser.ExitChild(); // transform
-    //}
+    m_translationX.Serialize( ser );
+    m_translationY.Serialize( ser );
+    m_translationZ.Serialize( ser );
+
+    ser.ExitChild(); // interpolators
+    ser.ExitChild(); // transform
+
+
+    //rotation
+    ser.EnterChild( "transform" );
+    SerializationHelper::SerializeAttribute( ser, TransformKind::rotation, "kind" );
+    ser.SetAttribute( "isaxisvec3", "true" ); //?
+
+    ser.EnterChild( "angle" );
+    m_rotationAngle.Serialize( ser );
+    ser.ExitChild();
+
+    ser.EnterChild( "rotaxis" );
+    m_rotationAxis.Serialize( ser );
+    ser.ExitChild();
+
+    ser.ExitChild(); // transform
+
+
+    //scale
+    ser.EnterChild( "transform" );
+    SerializationHelper::SerializeAttribute( ser, TransformKind::scale, "kind" );
+    ser.EnterArray( "interpolators" );
+
+    m_scaleX.Serialize( ser );
+    m_scaleY.Serialize( ser );
+    m_scaleZ.Serialize( ser );
+
+    ser.ExitChild(); // interpolators
+    ser.ExitChild(); // transform
+
 
     ser.ExitChild(); // composite_transform
 }
@@ -505,36 +396,5 @@ glm::mat4x4         CompositeTransform::Evaluate        ( TimeType t ) const
 
     return ret; 
 }
-
-//// *************************************
-////
-//template<typename ParamT>
-//glm::mat4x4 SimpleTransform<ParamT>::Evaluate( typename ParamT::TimeT t ) const
-//{
-//    switch( kind )
-//    {
-//    case TransformKind::translation:
-//    case TransformKind::fwd_center:
-//    case TransformKind::inv_center:
-//        return glm::translate( glm::mat4( 1.0f ), glm::vec3( p0.Evaluate( t ), p1.Evaluate( t ), p2.Evaluate( t ) ) );
-//    case TransformKind::scale:
-//        return glm::scale( glm::mat4( 1.0f ), glm::vec3( p0.Evaluate( t ), p1.Evaluate( t ), p2.Evaluate( t ) ) );
-//    case TransformKind::rotation:
-//        assert( false );
-//        return glm::mat4( 1.0f);
-//    default:
-//        assert( false );
-//        return glm::mat4( 1.0f );
-//    }
-//}
-//
-//// *************************************
-////
-//template<typename ParamT>
-//SimpleTransform<ParamT> * SimpleTransform<ParamT>::Clone() const
-//{
-//    //return new SimpleTransform( *this );
-//    return new SimpleTransform( kind, p0, p1, p2 );
-//}
 
 } //bv

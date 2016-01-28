@@ -55,62 +55,6 @@ public:
 
 DEFINE_PTR_TYPE( ParamTransform )
 
-//class ParamTransformVec;
-//DEFINE_PTR_TYPE(ParamTransformVec)
-//
-//
-//// *******************************************
-//class ParamTransformVec : public AbstractModelParameter
-//{
-//private:
-//
-//    std::vector< TransformF >   m_transformModelVec;
-//
-//public:
-//
-//    explicit            ParamTransformVec   ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator );
-//    explicit            ParamTransformVec   ( const std::string & name, const ITimeEvaluatorPtr evaluator );
-//
-//    void                Serialize           ( ISerializer& doc ) const;
-//    void                SetCurveType        ( CurveType type );
-//    CurveType           GetCurveType        ();
-//
-//    virtual void        SetWrapPostMethod   ( WrapMethod method );
-//    virtual void        SetWrapPreMethod    ( WrapMethod method );
-//    virtual WrapMethod  GetWrapPostMethod   ();
-//    virtual WrapMethod  GetWrapPreMethod    ();
-//
-//    virtual int         GetNumKeys          ();
-//
-//
-//    void                AppendTransform     ( const TransformF & transform );
-//    void                InsertTransform     ( unsigned int transformNum, const TransformF & transform );
-//
-//    inline unsigned int NumTransforms       () const;
-//
-//    inline  void        SetRotation         ( unsigned int transformNum, const glm::vec3 & rotAxis, float angle, TimeType t );
-//    inline  void        SetScale            ( unsigned int transformNum, const glm::vec3 & scale, TimeType t );
-//    inline  void        SetTranslation      ( unsigned int transformNum, const glm::vec3 & translation, TimeType t );
-//    inline  void        SetCenter           ( unsigned int transformNum, const glm::vec3 & center, TimeType t );
-//
-//    inline  void        RemoveRotation      ( unsigned int transformNum, TimeType t );
-//    inline  void        RemoveScale         ( unsigned int transformNum, TimeType t );
-//    inline  void        RemoveTranslation   ( unsigned int transformNum, TimeType t );
-//    inline  void        RemoveCenter        ( unsigned int transformNum, TimeType t );
-//
-//    inline  TransformF& Transform           ( unsigned int transformNum );
-//
-//    inline  glm::mat4   Evaluate            ( unsigned int transformNum ) const;
-//
-//    virtual VoidPtr     QueryParamTyped     () override;
-//
-//    static  ModelParamType  Type        ()
-//    {
-//        return ModelParamType::MPT_TRANSFORM_VEC;
-//    }
-//
-//};
-
 } //model
 } //bv
 

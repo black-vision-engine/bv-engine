@@ -45,14 +45,6 @@ ParamTransform                      ParametersFactory::CreateParameter          
     return ParamTransform( name, interpolator, timeline );
 }
 
-//// *******************************
-////
-//ParamTransformVec                   ParametersFactory::CreateParameter                     ( const std::string & name, const TransformF & interpolator, ITimeEvaluatorPtr timeline, int dummy )
-//{
-//    { dummy; } // FIXME: suppress unused variable
-//    return ParamTransformVec( name, interpolator, timeline );
-//}
-
 // *******************************
 //
 ParamMat2Ptr                         ParametersFactory::CreateParameterMat2                 ( const std::string & name, ITimeEvaluatorPtr timeline )
@@ -108,20 +100,6 @@ ParamTransformPtr                    ParametersFactory::CreateParameterTransform
 {
     return std::make_shared< ParamTransform >( name, CompositeTransform(), timeline );
 }
-
-//// *******************************
-////
-//ParamTransformVecPtr                 ParametersFactory::CreateParameterTransformVec         ( const std::string & name, ITimeEvaluatorPtr timeline, int numTransforms )
-//{
-//    ParamTransformVecPtr ptv = std::make_shared< ParamTransformVec >( name, timeline );
-//
-//    for( int i = 0; i < numTransforms; ++i )
-//    {
-//        ptv->AppendTransform( TransformF() );
-//    }
-//
-//    return ptv;
-//}
 
 // *******************************
 //

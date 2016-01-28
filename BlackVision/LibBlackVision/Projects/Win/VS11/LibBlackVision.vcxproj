@@ -330,7 +330,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformParamValEvaluator.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Plugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\PluginsFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\PluginUtils.cpp" />
@@ -506,7 +505,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Parameters\ParameterSerialization.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleTypedStates.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\CompositeVideoInputResourceDescr.h" />
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h" />
     <ClInclude Include="..\..\..\Source\Application\ConsoleApplication.h" />
