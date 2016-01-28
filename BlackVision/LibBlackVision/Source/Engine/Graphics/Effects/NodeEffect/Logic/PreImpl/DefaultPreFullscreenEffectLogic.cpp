@@ -7,11 +7,11 @@ namespace bv {
 
 // *********************************
 //
-void                        DefaultPreFullscreenEffectLogic::Render                              ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > & outputs )
+void                        DefaultPreFullscreenEffectLogic::Render                              ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > * outputs )
 {
     { outputs; }
     assert( ctx->GetBoundRenderTarget() != nullptr );
-    assert( outputs.size() == 0 );
+    assert( !outputs || outputs->size() == 0 );
 
     logic( ctx )->DrawNode( node, ctx );
 }

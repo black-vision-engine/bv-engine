@@ -28,9 +28,9 @@ NodeMaskPreFullscreenEffectLogic::NodeMaskPreFullscreenEffectLogic          ( fl
 
 // *********************************
 //
-void                        NodeMaskPreFullscreenEffectLogic::Render        ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > & outputs )
+void                        NodeMaskPreFullscreenEffectLogic::Render        ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > * outputs )
 {
-    assert( outputs.size() == 2 );
+    assert( outputs && outputs->size() == 2 );
 
     if( node->NumChildNodes() < 2 )
     {
@@ -63,8 +63,8 @@ void                        NodeMaskPreFullscreenEffectLogic::Render        ( Sc
             assert( maskIdx != fgIdx );
 
             // Render outputs
-            RenderToRenderTarget( ctx, outputs[ 0 ], node->GetChild( fgIdx ) );
-            RenderToRenderTarget( ctx, outputs[ 1 ], node->GetChild( maskIdx ) );
+            RenderToRenderTarget( ctx, (*outputs)[ 0 ], node->GetChild( fgIdx ) );
+            RenderToRenderTarget( ctx, (*outputs)[ 1 ], node->GetChild( maskIdx ) );
 
             enable( ctx, mainRT );
         }

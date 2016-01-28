@@ -11,8 +11,14 @@ FullscreenEffectInstance::FullscreenEffectInstance( FullscreenEffectPtr effect )
     : m_initialized( false )
     , m_ctx( nullptr, nullptr, nullptr, 0 )
     , m_effect( effect )
+    , m_inputRenderTargets( effect->GetNumInputs() )
 {
     assert( effect != nullptr );
+
+    for( unsigned int i = 0; i < effect->GetNumInputs(); ++i )
+    {
+        m_inputRenderTargets[ i ] = nullptr;
+    }
 }
 
 // **************************
@@ -32,10 +38,15 @@ void        FullscreenEffectInstance::Render                ( RenderTarget * out
 
 // **************************
 //
-void        FullscreenEffectInstance::UpdateInputRTState    ( const std::vector< RenderTarget * > & renderTargets )
+std::vector< RenderTarget * > *     FullscreenEffectInstance::AccessInputRenderTargets    ()
 {
-    m_inputRenderTargets = renderTargets;
+    return &m_inputRenderTargets;
+}
 
+// **************************
+//
+void        FullscreenEffectInstance::SetSyncRequired       ()
+{
     m_ctx.SetSyncRequired( true );
 }
 

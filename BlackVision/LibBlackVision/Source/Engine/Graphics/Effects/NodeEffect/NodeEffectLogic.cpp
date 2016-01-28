@@ -10,9 +10,7 @@ namespace bv {
 // *********************************
 //
 NodeEffectLogic::NodeEffectLogic                    ()
-    : m_FSEInitialized( false )
-    , m_FSECtx( nullptr, nullptr, nullptr, 0 )
-    , m_preFSELogic( nullptr )
+    : m_preFSELogic( nullptr )
     , m_FSE( nullptr )
     , m_postFSELogic( nullptr )
 {
@@ -31,18 +29,15 @@ NodeEffectLogic::~NodeEffectLogic                   ()
 //
 void    NodeEffectLogic::Render                      ( SceneNode * node, RenderLogicContext * ctx )
 {
-    auto fseCtx     = &m_FSECtx;
-    auto fseRtVec   = &m_renderTargetsFSE;
-
     auto mainTarget = ctx->GetBoundRenderTarget();
     assert( mainTarget != nullptr );
 
-    FSEInitializedGuard( ctx, fseRtVec, fseCtx );
+    FSEInitializedGuard( ctx );
 
-    PreFSERenderLogic( node, ctx, m_renderTargetsFSE );
+    PreFSERenderLogic( node, ctx );
     assert( mainTarget == ctx->GetBoundRenderTarget() );
 
-    FSERenderLogic( mainTarget, fseCtx );
+    FSERenderLogic( mainTarget, ctx );
 
     PostFSERenderLogic( node, ctx );
 }
@@ -71,23 +66,11 @@ void    NodeEffectLogic::SetPostFullscreenEffectLogic( PostFullscreenEffectLogic
 
 // *********************************
 //
-void    NodeEffectLogic::SetFullscreenEffect         ( FullscreenEffect * fse )
+void    NodeEffectLogic::SetFullscreenEffect         ( FullscreenEffectInstance * fse )
 {
     delete m_FSE;
 
     m_FSE = fse;
-
-    m_renderTargetsFSE.clear();
-
-    if( fse )
-    {
-        m_renderTargetsFSE.resize( fse->GetNumInputs() );
-
-        for( unsigned int i = 0; i < fse->GetNumInputs(); ++i )
-        {
-            m_renderTargetsFSE[ i ] = nullptr;
-        }
-    }
 
     RecreateValues( m_values );
 }
@@ -158,43 +141,44 @@ void    NodeEffectLogic::RecreateValues              ( std::vector< IValuePtr > 
 
 // *********************************
 //
-void    NodeEffectLogic::FSEInitializedGuard         ( RenderLogicContext * ctx, std::vector< RenderTarget * > * fseInputsVec, FullscreenEffectContext * fseCtx )
+void    NodeEffectLogic::FSEInitializedGuard         ( RenderLogicContext * ctx )
 {
     if( m_FSE )
     {
+        auto fseInputsVec = m_FSE->AccessInputRenderTargets();
+
         assert( m_preFSELogic );
         assert( m_preFSELogic->GetPreferredNumOutputs() == fseInputsVec->size() );
 
         auto changed = m_preFSELogic->AllocateOutputRenderTargets( ctx, fseInputsVec );
 
-        fseCtx->SetSyncRequired( changed );
-
-        if( !m_FSEInitialized )
+        if( changed )
         {
-            fseCtx->SetRenderer( renderer( ctx ) );
-            fseCtx->SetRenderTargetAllocator( allocator( ctx ) );
-            fseCtx->SetOutputRenderTarget( nullptr );
-            fseCtx->SetInputRenderTargets( fseInputsVec );
-            fseCtx->SetFirstRenderTargetIndex( 0 );
-
-            m_FSEInitialized = true;
+            m_FSE->SetSyncRequired();
         }
     }
 }
 
 // *********************************
 //
-void    NodeEffectLogic::PreFSERenderLogic          ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > & outputs ) const
+void    NodeEffectLogic::PreFSERenderLogic          ( SceneNode * node, RenderLogicContext * ctx ) const
 {
     if( m_preFSELogic )
     {
+        std::vector< RenderTarget * > * outputs = nullptr;
+
+        if( m_FSE )
+        {
+            outputs = m_FSE->AccessInputRenderTargets();
+        }
+
         m_preFSELogic->Render( node, ctx, outputs );
     }
 }
 
 // *********************************
 //
-void    NodeEffectLogic::FSERenderLogic             ( RenderTarget * output, FullscreenEffectContext * ctx )
+void    NodeEffectLogic::FSERenderLogic             ( RenderTarget * output, RenderLogicContext * ctx )
 {
     if( m_FSE )
     {
@@ -202,12 +186,8 @@ void    NodeEffectLogic::FSERenderLogic             ( RenderTarget * output, Ful
 
         if( applicable )
         {
-            ctx->SetOutputRenderTarget( output );
-
             // FIXME: by default we render to the currently bound render target
-            m_FSE->Render( ctx );
-
-            ctx->SetSyncRequired( false );
+            m_FSE->Render( output, ctx );
         }
     }
 }
@@ -216,9 +196,12 @@ void    NodeEffectLogic::FSERenderLogic             ( RenderTarget * output, Ful
 //
 void    NodeEffectLogic::PostFSERenderLogic          ( SceneNode * node, RenderLogicContext * ctx ) const
 {
-    if( m_preFSELogic )
+    if( m_preFSELogic && m_FSE )
     {
-        m_preFSELogic->FreeOutputRenderTargets( ctx, &m_renderTargetsFSE );
+        if( m_FSE )
+        {
+            m_preFSELogic->FreeOutputRenderTargets( ctx, m_FSE->AccessInputRenderTargets() );
+        }
     }
 
     if( m_postFSELogic )

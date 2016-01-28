@@ -5,7 +5,7 @@
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PreFullScreenEffectLogic.h"
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PostFullScreenEffectLogic.h"
 
-#include "Engine/Graphics/Effects/Fullscreen/FullscreenEffect.h"
+#include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectInstance.h"
 
 
 namespace bv {
@@ -20,14 +20,11 @@ private:
 
     std::vector< IValuePtr >        m_values;
 
-    std::vector< RenderTarget * >   m_renderTargetsFSE;
-    FullscreenEffectContext         m_FSECtx;
-    bool                            m_FSEInitialized;
     unsigned int                    m_lastActive;
 
     PreFullscreenEffectLogic *      m_preFSELogic;
     
-    FullscreenEffect *              m_FSE;
+    FullscreenEffectInstance *      m_FSE;
     
     PostFullscreenEffectLogic *     m_postFSELogic;
 
@@ -40,7 +37,7 @@ public:
 
     void            SetPreFullscreenEffectLogic ( PreFullscreenEffectLogic * logic );
     void            SetPostFullscreenEffectLogic( PostFullscreenEffectLogic * logic );
-    void            SetFullscreenEffect         ( FullscreenEffect * fse );
+    void            SetFullscreenEffect         ( FullscreenEffectInstance * fse );
 
     unsigned int    GetNumValues                () const;
     IValuePtr       GetValueAt                  ( unsigned int i ) const;
@@ -50,10 +47,10 @@ private:
 
     void            RecreateValues              ( std::vector< IValuePtr > & values );
 
-    void            FSEInitializedGuard         ( RenderLogicContext * ctx, std::vector< RenderTarget * > * fseInputsVec, FullscreenEffectContext * fseCtx );
+    void            FSEInitializedGuard         ( RenderLogicContext * ctx );
 
-    void            PreFSERenderLogic           ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > & outputs ) const;
-    void            FSERenderLogic              ( RenderTarget * output, FullscreenEffectContext * ctx );
+    void            PreFSERenderLogic           ( SceneNode * node, RenderLogicContext * ctx ) const;
+    void            FSERenderLogic              ( RenderTarget * output, RenderLogicContext * ctx );
     void            PostFSERenderLogic          ( SceneNode * node, RenderLogicContext * ctx ) const;
 
 };

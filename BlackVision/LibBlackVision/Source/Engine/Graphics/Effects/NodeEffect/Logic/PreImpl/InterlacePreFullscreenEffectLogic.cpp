@@ -12,7 +12,7 @@ InterlacePreFullscreenEffectLogic::InterlacePreFullscreenEffectLogic        ( un
 
 // *********************************
 //
-void                        InterlacePreFullscreenEffectLogic::Render       ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > & outputs )
+void                        InterlacePreFullscreenEffectLogic::Render       ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > * outputs )
 {
     { node; }
     { ctx; }

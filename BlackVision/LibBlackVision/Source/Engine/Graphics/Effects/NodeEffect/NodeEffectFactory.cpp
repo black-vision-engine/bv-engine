@@ -40,7 +40,7 @@ NodeEffectLogic *  CreateNodeEffectLogic()
 
 // **************************
 //
-void    SetLogicComponents( NodeEffectLogic * logic, PreFullscreenEffectLogic * pre, FullscreenEffect * fse, PostFullscreenEffectLogic * post )
+void    SetLogicComponents( NodeEffectLogic * logic, PreFullscreenEffectLogic * pre, FullscreenEffectInstance * fse, PostFullscreenEffectLogic * post )
 {
     assert( logic );
     assert( pre || fse || post );
@@ -79,7 +79,7 @@ NodeEffectPtr       CreateAlphaMaskNodeEffect()
     auto logic = CreateNodeEffectLogic();
 
     auto pre  = new AlphaMaskPreFullscreenEffectLogic( 0.01f, 0.99f );
-    auto fse  = CreateFullscreenEffect( FullscreenEffectType::FET_BLIT_WITH_ALPHA, pre->GetValues() );
+    auto fse  = CreateFullscreenEffectInstance( FullscreenEffectType::FET_BLIT_WITH_ALPHA, pre->GetValues() );
 
     SetLogicComponents( logic, pre, fse, nullptr );
 
@@ -93,7 +93,7 @@ NodeEffectPtr       CreateNodeMaskNodeEffect()
     auto logic = CreateNodeEffectLogic();
 
     auto pre  = new NodeMaskPreFullscreenEffectLogic( 0.01f );
-    auto fse  = CreateFullscreenEffect( FullscreenEffectType::FET_BLIT_WITH_ALPHA_MASK, pre->GetValues() );
+    auto fse  = CreateFullscreenEffectInstance( FullscreenEffectType::FET_BLIT_WITH_ALPHA_MASK, pre->GetValues() );
     auto post = new DefaultPostFullscreenEffectLogic( 2 );
 
     SetLogicComponents( logic, pre, fse, post );
@@ -122,7 +122,7 @@ NodeEffectPtr       CreateMixchannelsNodeEffect()
     auto logic = CreateNodeEffectLogic();
 
     auto pre  = new RenderOffscreenPreFullscreenEffectLogic();
-    auto fse  = CreateFullscreenEffect( FullscreenEffectType::FET_MIX_CHANNELS );
+    auto fse  = CreateFullscreenEffectInstance( FullscreenEffectType::FET_MIX_CHANNELS );
 
     SetLogicComponents( logic, pre, fse, nullptr );
 

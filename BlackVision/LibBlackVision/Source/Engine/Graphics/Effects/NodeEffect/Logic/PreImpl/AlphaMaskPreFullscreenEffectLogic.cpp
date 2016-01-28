@@ -24,9 +24,9 @@ AlphaMaskPreFullscreenEffectLogic::AlphaMaskPreFullscreenEffectLogic    ( float 
 
 // *********************************
 //
-void    AlphaMaskPreFullscreenEffectLogic::Render                       ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > & outputs )
+void    AlphaMaskPreFullscreenEffectLogic::Render                       ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > * outputs )
 {
-    assert( outputs.size() == 1 );
+    assert( outputs && outputs->size() == 1 );
 
     auto alpha = m_alphaValue->GetValue();
     
@@ -37,7 +37,7 @@ void    AlphaMaskPreFullscreenEffectLogic::Render                       ( SceneN
     else if( alpha > m_minAlphaThreshold )  // Alpha mask rendering to a separate render target
     {
         auto mainRT = disableBoundRT( ctx );
-        auto outRT  = outputs[ 0 ];
+        auto outRT  = (*outputs)[ 0 ];
 
         enable( ctx, outRT );
         clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );

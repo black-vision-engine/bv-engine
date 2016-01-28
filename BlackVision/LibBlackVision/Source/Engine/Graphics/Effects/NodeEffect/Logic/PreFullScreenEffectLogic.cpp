@@ -42,8 +42,7 @@ bool    PreFullscreenEffectLogic::AllocateOutputRenderTargets   ( RenderLogicCon
 //
 void    PreFullscreenEffectLogic::FreeOutputRenderTargets   ( RenderLogicContext * ctx, const std::vector< RenderTarget * > * outputRtVec )
 {
-
-    if( outputRtVec->size() > 0 )
+    if( outputRtVec && outputRtVec->size() > 0 )
     {
         auto alc = allocator( ctx );
         // Always free
