@@ -7,9 +7,11 @@ namespace bv {
 
 class DefaultPreFullscreenEffectLogic : public PreFullscreenEffectLogic
 {
-public:
+protected:
 
-    virtual void                        Render                              ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > * outputs ) override;
+    virtual void                        RenderImpl                          ( SceneNode * node, RenderLogicContext * ctx, std::vector< RenderTarget * > & outputs ) override;
+
+public:
 
     virtual std::vector< IValuePtr >    GetValues                           () const override;
 

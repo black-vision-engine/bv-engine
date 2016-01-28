@@ -12,11 +12,11 @@ InterlacePreFullscreenEffectLogic::InterlacePreFullscreenEffectLogic        ( un
 
 // *********************************
 //
-void                        InterlacePreFullscreenEffectLogic::Render       ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > * outputs )
+void                        InterlacePreFullscreenEffectLogic::RenderImpl   ( SceneNode * node, RenderLogicContext * ctx, std::vector< RenderTarget * > & outputs )
 {
+    { outputs; }
     { node; }
     { ctx; }
-    { outputs; }
 
     // FIXME: implement using copies of frames
 }

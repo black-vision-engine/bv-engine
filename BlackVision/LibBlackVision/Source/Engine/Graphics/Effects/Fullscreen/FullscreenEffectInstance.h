@@ -20,20 +20,19 @@ private:
 
 public:
 
-                                        FullscreenEffectInstance    ( FullscreenEffectPtr effect );
-                                        ~FullscreenEffectInstance   ();
+                                FullscreenEffectInstance    ( FullscreenEffectPtr effect );
+                                ~FullscreenEffectInstance   ();
 
-    void                                Render                      ( RenderTarget * output, RenderLogicContext * ctx );
+    void                        Render                      ( RenderTarget * output, RenderLogicContext * ctx );
 
-    std::vector< RenderTarget * > *     AccessInputRenderTargets    ();
-    void                                SetSyncRequired             ( bool required );
+    void                        UpdateInputRenderTargets    ( const std::vector< RenderTarget * > & renderTargets );
 
-    std::vector< IValuePtr >            GetValues                   () const;
+    std::vector< IValuePtr >    GetValues                   () const;
 
 private:
 
-    void                                InitializeGuard             ( RenderLogicContext * ctx );
-    void                                RenderImpl                  ( RenderTarget * output, FullscreenEffectContext * ctx );
+    void                        InitializeGuard             ( RenderLogicContext * ctx );
+    void                        RenderImpl                  ( RenderTarget * output, FullscreenEffectContext * ctx );
 
 };
 

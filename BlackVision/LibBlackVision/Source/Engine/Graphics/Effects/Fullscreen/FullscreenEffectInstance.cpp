@@ -38,16 +38,12 @@ void        FullscreenEffectInstance::Render                ( RenderTarget * out
 
 // **************************
 //
-std::vector< RenderTarget * > *     FullscreenEffectInstance::AccessInputRenderTargets    ()
+void        FullscreenEffectInstance::UpdateInputRenderTargets  ( const std::vector< RenderTarget * > & renderTargets )
 {
-    return &m_inputRenderTargets;
-}
+    assert( m_inputRenderTargets.size() == renderTargets.size() );
 
-// **************************
-//
-void        FullscreenEffectInstance::SetSyncRequired       ( bool required )
-{
-    m_ctx.SetSyncRequired( required );
+    m_inputRenderTargets = renderTargets;
+    m_ctx.SetSyncRequired( true );
 }
 
 // **************************

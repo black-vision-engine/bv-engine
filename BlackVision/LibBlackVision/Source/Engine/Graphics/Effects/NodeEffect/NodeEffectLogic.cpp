@@ -144,26 +144,12 @@ void    NodeEffectLogic::RecreateValues              ( std::vector< IValuePtr > 
 //
 void    NodeEffectLogic::FSEInitializedGuard         ( RenderLogicContext * ctx )
 {
-    if( m_FSE )
+    if( m_FSE && m_preFSELogic )
     {
-        auto fseInputsVec = m_FSE->AccessInputRenderTargets();
-
-        if( !m_preFSELogic )
+        if( m_preFSELogic->AllocateOutputRenderTargets( ctx ) )
         {
-            assert( !fseInputsVec || fseInputsVec->size() == 0 );
+            m_FSE->UpdateInputRenderTargets( m_preFSELogic->GetOutputRenderTargets() );
         }
-        else if ( !fseInputsVec )
-        {
-            assert( m_preFSELogic->GetPreferredNumOutputs() == 0 );
-        }
-        else
-        {
-            assert( m_preFSELogic->GetPreferredNumOutputs() == fseInputsVec->size() );
-        }
-
-        auto changed = m_preFSELogic->AllocateOutputRenderTargets( ctx, fseInputsVec );
-
-        m_FSE->SetSyncRequired( changed );
     }
 }
 
@@ -173,14 +159,7 @@ void    NodeEffectLogic::PreFSERenderLogic          ( SceneNode * node, RenderLo
 {
     if( m_preFSELogic )
     {
-        std::vector< RenderTarget * > * outputs = nullptr;
-
-        if( m_FSE )
-        {
-            outputs = m_FSE->AccessInputRenderTargets();
-        }
-
-        m_preFSELogic->Render( node, ctx, outputs );
+        m_preFSELogic->Render( node, ctx );
     }
 }
 
@@ -208,7 +187,7 @@ void    NodeEffectLogic::PostFSERenderLogic          ( SceneNode * node, RenderL
     {
         if( m_FSE )
         {
-            m_preFSELogic->FreeOutputRenderTargets( ctx, m_FSE->AccessInputRenderTargets() );
+            m_preFSELogic->FreeOutputRenderTargets( ctx );
         }
     }
 

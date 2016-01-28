@@ -7,13 +7,13 @@ namespace bv {
 
 // *********************************
 //
-void                        RenderOffscreenPreFullscreenEffectLogic::Render     ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > * outputs )
+void                        RenderOffscreenPreFullscreenEffectLogic::RenderImpl ( SceneNode * node, RenderLogicContext * ctx, std::vector< RenderTarget * > & outputs )
 {
     assert( ctx->GetBoundRenderTarget() != nullptr );
-    assert( outputs && outputs->size() == 1 );
+    assert( outputs.size() == 1 );
 
     auto mainTarget = disableBoundRT( ctx );
-    enable( ctx, (*outputs)[ 0 ] );
+    enable( ctx, outputs[ 0 ] );
     clearBoundRT( ctx, glm::vec4( 0.f, 0.f, 0.f, 0.0f ) );
 
     logic( ctx )->DrawNode( node, ctx );

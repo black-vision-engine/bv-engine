@@ -17,7 +17,11 @@ public:
 
                                         InterlacePreFullscreenEffectLogic   ( unsigned int firstBufStartIdx );
 
-    virtual void                        Render                              ( SceneNode * node, RenderLogicContext * ctx, const std::vector< RenderTarget * > * outputs ) override;
+protected:
+
+    virtual void                        RenderImpl                          ( SceneNode * node, RenderLogicContext * ctx, std::vector< RenderTarget * > & outputs ) override;
+
+public:
 
     virtual std::vector< IValuePtr >    GetValues                           () const override;
 

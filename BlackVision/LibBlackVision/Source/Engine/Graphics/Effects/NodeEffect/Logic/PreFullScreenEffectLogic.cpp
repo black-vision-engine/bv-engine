@@ -20,19 +20,33 @@ PreFullscreenEffectLogic::~PreFullscreenEffectLogic     ()
 
 // *********************************
 //
-bool    PreFullscreenEffectLogic::AllocateOutputRenderTargets   ( RenderLogicContext * ctx, std::vector< RenderTarget * > * outputRtVec )
+void    PreFullscreenEffectLogic::Render                        ( SceneNode * node, RenderLogicContext * ctx )
+{
+    RenderImpl( node, ctx, m_outputRenderTargets );
+}
+
+// *********************************
+//
+bool    PreFullscreenEffectLogic::AllocateOutputRenderTargets   ( RenderLogicContext * ctx )
 {
     auto changed = false;
 
-    if ( outputRtVec )
+    auto numOutputs = GetPreferredNumOutputs();
+
+    if( numOutputs != (unsigned int) m_outputRenderTargets.size() )
+    {
+        m_outputRenderTargets.resize( numOutputs );
+    }
+
+    if( numOutputs > 0 )
     {
         auto alc = allocator( ctx );
 
         //FIXME: optimize (if necessary) by simply incrementing allocator inner index instead of calling full Allocate method
-        // Always allocate
-        for( unsigned int i = 0; i < outputRtVec->size(); ++i )
+        //Always allocate
+        for( unsigned int i = 0; i < numOutputs; ++i )
         {
-            (*outputRtVec)[ i ] = alc->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+            m_outputRenderTargets[ i ] = alc->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
         }
 
         changed = alc->GetTopIndex() != m_lastUsedRenderTargetNum;
@@ -45,16 +59,24 @@ bool    PreFullscreenEffectLogic::AllocateOutputRenderTargets   ( RenderLogicCon
 
 // *********************************
 //
-void    PreFullscreenEffectLogic::FreeOutputRenderTargets   ( RenderLogicContext * ctx, const std::vector< RenderTarget * > * outputRtVec )
+void    PreFullscreenEffectLogic::FreeOutputRenderTargets   ( RenderLogicContext * ctx )
 {
-    if( outputRtVec && outputRtVec->size() > 0 )
+    if( m_outputRenderTargets.size() > 0 )
     {
         auto alc = allocator( ctx );
+        
         // Always free
         assert( m_lastUsedRenderTargetNum == alc->GetTopIndex() );
 
-        alc->Free( (unsigned int) outputRtVec->size() );
+        alc->Free( (unsigned int) m_outputRenderTargets.size() );
     }
+}
+
+// *********************************
+//
+const std::vector< RenderTarget * > &   PreFullscreenEffectLogic::GetOutputRenderTargets    () const
+{
+    return m_outputRenderTargets;
 }
 
 // *********************************
