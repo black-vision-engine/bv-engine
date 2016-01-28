@@ -33,6 +33,7 @@ RenderLogic::RenderLogic     ( unsigned int width, unsigned int height, bool use
 
     unsigned int numFrameRenderTargets = videoCardEnabled || previewAsVideoCard ? 2 : 1;
 
+    m_blitEffectTr              = CreateFullscreenEffectInstance( FullscreenEffectType::FET_SIMPLE_BLIT );
     m_offscreenDisplay          = new OffscreenDisplay( &m_rtStackAllocator, numFrameRenderTargets, videoCardEnabled || previewAsVideoCard );
     m_videoOutputRenderLogic    = new VideoOutputRenderLogic( height ); // FIXME: interlace odd/even setup
 
@@ -101,6 +102,8 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
         prevRt = videoRt;
     }
    
+    //FIXME: blit to preview using effect instance here
+    //BlitToPreviewTr( renderer, prevRt );
     BlitToPreview( renderer, prevRt );
 
     if( m_useVideoCardOutput )
@@ -201,7 +204,7 @@ BlitFullscreenEffect *  RenderLogic::AccessBlitEffect   ( RenderTarget * rt )
 
 // *********************************
 //
-FullscreenEffect *      RenderLogic::AccessBlitEffectTr   ( Renderer * renderer, RenderTargetStackAllocator * allocator, RenderTarget * rt )
+FullscreenEffectInstance *  RenderLogic::AccessBlitEffectTr   ( Renderer * renderer, RenderTargetStackAllocator * allocator, RenderTarget * rt )
 {
     { rt; allocator; renderer; }
     // FIXME: Blit current render target - suxx a bit - there should be a separate initialization step

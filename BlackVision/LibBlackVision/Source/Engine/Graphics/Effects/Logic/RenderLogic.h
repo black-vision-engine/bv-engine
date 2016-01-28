@@ -19,6 +19,7 @@ class BlitFullscreenEffect;
 class VideoOutputRenderLogic;
 class RenderLogicContext;
 class SimpleFullscreenEffect;
+class FullscreenEffectInstance;
 
 class RenderLogic
 {
@@ -30,7 +31,7 @@ private:
     VideoOutputRenderLogic *        m_videoOutputRenderLogic;
         
     //FIXME: implement wrapper class which uses al three to implement an effect (thin accessors wrapper)
-    FullscreenEffect *              m_blitEffectTr;
+    FullscreenEffectInstance *      m_blitEffectTr;
     //FullscreenEffectContext         m_blitCtx;
     std::vector< RenderTarget * >   m_blitInputRt;
 
@@ -61,7 +62,7 @@ public:
 private:
 
     BlitFullscreenEffect *          AccessBlitEffect        ( RenderTarget * rt );
-    FullscreenEffect *              AccessBlitEffectTr      ( Renderer * renderer, RenderTargetStackAllocator * allocator, RenderTarget * rt );
+    FullscreenEffectInstance *      AccessBlitEffectTr      ( Renderer * renderer, RenderTargetStackAllocator * allocator, RenderTarget * rt );
 
     void                            BlitToPreview           ( Renderer * renderer, RenderTarget * rt );
     void                            BlitToPreviewTr         ( Renderer * renderer, RenderTarget * rt );
