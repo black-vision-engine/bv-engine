@@ -15,6 +15,10 @@
 
 namespace bv { namespace model {
 
+
+const std::string        DefaultTexturePlugin::BLEND_ENABLE = "blend enable";
+
+
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
 // *******************************
@@ -35,14 +39,20 @@ IPluginPtr              DefaultTexturePluginDesc::CreatePlugin              ( co
 //
 DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
+    ModelHelper helper( timeEvaluator );
+    helper.CreateVacModel();
+
     //Create all models
-    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
+    //DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
+    DefaultPluginParamValModelPtr model  = helper.GetModel();
     DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
     //Create all parameters and evaluators
     SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
+    
+    helper.AddSimpleParam( DefaultTexturePlugin::BLEND_ENABLE, true, true, true );
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
@@ -186,6 +196,15 @@ void                                DefaultTexturePlugin::Update                
 {
     BasePlugin::Update( t );
     
+    if( ParameterChanged( BLEND_ENABLE ) )
+    {
+        auto ctx = m_psc->GetRendererContext();
+        ctx->alphaCtx->blendEnabled = std::static_pointer_cast<ParamBool>( GetParameter( BLEND_ENABLE ) )->Evaluate();
+        
+        auto contextUpdateId = m_psc->GetRendererContextUpdateID();
+        m_psc->SetRendererContextUpdateID( contextUpdateId + 1 );
+    }
+
     HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
     if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
     {
