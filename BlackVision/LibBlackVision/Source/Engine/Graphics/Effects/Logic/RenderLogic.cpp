@@ -47,7 +47,6 @@ RenderLogic::~RenderLogic    ()
 {
     delete m_offscreenDisplay;
     delete m_blitEffect;
-    delete m_blitEffect;
     delete m_ctx;
 }
 
@@ -102,6 +101,8 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
 
         prevRt = videoRt;
     }
+    
+    BlitToPreview( renderer, prevRt );
 
     if( m_useVideoCardOutput )
     {
