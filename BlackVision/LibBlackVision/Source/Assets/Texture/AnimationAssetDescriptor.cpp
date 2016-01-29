@@ -2,6 +2,7 @@
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
 #include "Serialization/SerializationHelper.h"
+#include "Serialization/BV/BVSerializeContext.h"
 
 #include <cassert>
 
@@ -12,17 +13,19 @@ const std::string AnimationAssetDesc::uid = "ANIMATION_ASSET_DESC";
 
 // ***********************
 //
-void                AnimationAssetDesc::Serialize       ( ISerializer& sob ) const
+void                AnimationAssetDesc::Serialize       ( ISerializer& ser ) const
 {
-sob.EnterChild( "asset" );
-    sob.SetAttribute( "type", UID() );
-    sob.SetAttribute( "path", m_path );
-    
-    if( m_numFrames < std::numeric_limits<UInt32>::max() )
-        sob.SetAttribute( "numFrames", std::to_string( m_numFrames ) );
+    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
 
-    sob.SetAttribute( "filter", m_filter );
-sob.ExitChild();
+ser.EnterChild( "asset" );
+    ser.SetAttribute( "type", UID() );
+    ser.SetAttribute( "path", m_path );
+    
+    if( context->extendedAssetData )
+        ser.SetAttribute( "numFrames", std::to_string( m_numFrames ) );
+
+    ser.SetAttribute( "filter", m_filter );
+ser.ExitChild();
 }
 
 // ***********************

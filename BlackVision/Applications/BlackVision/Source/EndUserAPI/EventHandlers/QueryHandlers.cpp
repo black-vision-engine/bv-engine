@@ -426,6 +426,9 @@ void         QueryHandlers::GetAssetDescriptor      ( JsonSerializeObject & ser,
     auto pm = ProjectManager::GetInstance();
     auto desc = pm->GetAssetDesc( projectName, categoryName, path );
 
+    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+    context->extendedAssetData = true;      // Width, height, numFrames and so on
+
     if( desc )
     {
         PrepareResponseTemplate( ser, InfoEvent::Command::GetAssetDescriptor, eventID, true );
