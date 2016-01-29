@@ -106,6 +106,13 @@ protected:
         }
 
         template<>
+        inline void                             AddSimpleParam< bool > ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const bool& defaultValue, bool addValue, bool isState ) const
+        {
+            AddParam< BoolInterpolator, bool, ModelParamType::MPT_BOOL, ParamType::PT_BOOL, ParamBool >
+                ( model, timeEvaluator, name, defaultValue, addValue, isState );
+        }
+
+        template<>
         inline void                             AddSimpleParam< float > ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const float& defaultValue, bool addValue, bool isState ) const
         {
             AddParam< FloatInterpolator, float, ModelParamType::MPT_FLOAT, ParamType::PT_FLOAT1, ParamFloat >

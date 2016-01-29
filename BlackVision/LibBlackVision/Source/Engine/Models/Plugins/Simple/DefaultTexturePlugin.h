@@ -30,6 +30,10 @@ public:
 // ***************************** PLUGIN ********************************** 
 class DefaultTexturePlugin : public BasePlugin< IPlugin >
 {
+public:
+
+    static const std::string        BLEND_ENABLE;
+
 protected:
 
 	DefaultPixelShaderChannelPtr    m_psc;
