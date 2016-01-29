@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PdrVertexArrayObjectSingleVB.h"
 
 #include "Engine/Graphics/Resources/VertexArray.h"

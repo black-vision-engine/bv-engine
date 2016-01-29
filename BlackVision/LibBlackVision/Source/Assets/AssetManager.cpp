@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "AssetManager.h"
 #include "Assets.h"
 #include "Serialization/IDeserializer.h"

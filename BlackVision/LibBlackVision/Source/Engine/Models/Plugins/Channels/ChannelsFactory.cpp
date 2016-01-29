@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "ChannelsFactory.h"
 
 #include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"

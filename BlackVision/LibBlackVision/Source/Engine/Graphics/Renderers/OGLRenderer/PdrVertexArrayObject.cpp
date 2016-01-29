@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PdrVertexArrayObject.h"
 
 #include <cassert>

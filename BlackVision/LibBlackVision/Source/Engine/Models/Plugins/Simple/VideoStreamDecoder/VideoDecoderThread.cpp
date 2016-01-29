@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "VideoDecoderThread.h"
 
 #include "Tools/HRTimer.h"

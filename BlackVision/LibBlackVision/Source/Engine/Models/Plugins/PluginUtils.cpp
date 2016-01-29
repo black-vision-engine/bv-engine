@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PluginUtils.h"
 
 #include "Assets/Assets.h"

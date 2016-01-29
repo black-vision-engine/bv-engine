@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "RenderablePass.h"
 
 #include "Engine/Graphics/Shaders/PixelShader.h"

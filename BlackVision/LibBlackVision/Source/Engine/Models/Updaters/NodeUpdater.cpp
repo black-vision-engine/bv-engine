@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NodeUpdater.h"
 
 #include <cassert>

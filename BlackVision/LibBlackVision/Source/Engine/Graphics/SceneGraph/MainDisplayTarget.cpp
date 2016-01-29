@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "MainDisplayTarget.h"
 
 #include <cassert>

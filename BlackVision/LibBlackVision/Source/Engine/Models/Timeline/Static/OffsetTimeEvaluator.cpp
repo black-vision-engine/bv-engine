@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "OffsetTimeEvaluator.h"
 #include "Serialization/ISerializer.h"
 

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "JsonDeserializeObject.h"
 
 #include "../BV/BVDeserializeContext.h"

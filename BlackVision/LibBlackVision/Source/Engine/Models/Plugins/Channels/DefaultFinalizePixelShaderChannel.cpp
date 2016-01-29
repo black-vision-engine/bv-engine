@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultFinalizePixelShaderChannel.h"
 
 #include "Engine/Models/Plugins/Channels/ShaderChannel.h"

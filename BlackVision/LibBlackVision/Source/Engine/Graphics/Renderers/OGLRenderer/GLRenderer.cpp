@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Engine/Graphics/Renderers/Renderer.h"
 
 #include "BVGL.h"

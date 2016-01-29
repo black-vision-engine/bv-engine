@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "AssetDescriptor.h"
 
 #include <cassert>

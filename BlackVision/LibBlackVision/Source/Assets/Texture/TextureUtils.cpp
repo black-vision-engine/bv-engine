@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "TextureUtils.h"
 
 #include "MipMapBuilder.h"

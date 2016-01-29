@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "ConnectedComponent.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"

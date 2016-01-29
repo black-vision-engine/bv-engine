@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "CachedSimpleTypedParameters.h"
 
 namespace bv { namespace model {

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultFontDescriptor.h"
 
 namespace bv { namespace model {

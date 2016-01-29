@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "SamplerStateModel.h"
 
 #include "Engine/Types/Values/BaseValue.h"

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultCubePlugin.h"
 
 namespace bv { namespace model {

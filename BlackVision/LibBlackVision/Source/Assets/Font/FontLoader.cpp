@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "FontLoader.h"
 #include "Text.h"
 #include "Assets/Font/FontAssetDescriptor.h"

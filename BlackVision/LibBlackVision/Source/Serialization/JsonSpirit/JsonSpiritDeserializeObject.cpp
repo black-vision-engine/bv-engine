@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "JsonSpiritDeserializeObject.h"
 
 #include "../BV/BVDeserializeContext.h"

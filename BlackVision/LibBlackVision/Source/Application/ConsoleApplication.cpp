@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "ConsoleApplication.h"
 
 namespace bv {

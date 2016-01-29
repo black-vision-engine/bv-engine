@@ -2505,6 +2505,7 @@
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\AnimationAssetThumbnail.h">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">

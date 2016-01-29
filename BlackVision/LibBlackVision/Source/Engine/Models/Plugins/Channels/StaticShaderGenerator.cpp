@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "StaticShaderGenerator.h"
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"

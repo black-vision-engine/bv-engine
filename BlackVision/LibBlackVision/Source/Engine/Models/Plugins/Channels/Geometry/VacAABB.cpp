@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "VacAABB.h"
 
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannel.h"

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "RenderableArrayData.h"
 
 #include <cassert>

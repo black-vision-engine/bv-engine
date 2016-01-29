@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultCirclePlugin.h"
 
 #include "Mathematics/Defines.h"

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultRoundedRectPlugin.h"
 
 #include "Mathematics/Defines.h"

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultPieChartPlugin.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/DefaultGeometryVertexAttributeChannel.h"

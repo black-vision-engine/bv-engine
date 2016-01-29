@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PluginsManager.h"
 
 #include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "AssetLoader.h"
 
 namespace bv {

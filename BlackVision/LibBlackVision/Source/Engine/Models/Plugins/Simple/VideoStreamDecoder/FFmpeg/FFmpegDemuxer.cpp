@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "FFmpegDemuxer.h"
 
 #include <cassert>

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "TimeEvaluatorBase.h"
 
 #include "Dynamic/DefaultTimeline.h"

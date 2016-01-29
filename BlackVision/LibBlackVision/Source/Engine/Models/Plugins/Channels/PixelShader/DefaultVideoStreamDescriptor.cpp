@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultVideoStreamDescriptor.h"
 
 #include "Assets/AssetManager.h"

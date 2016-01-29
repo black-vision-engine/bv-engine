@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "TimeSegmentEvalImpl.h"
 
 #include <cassert>

@@ -1,3 +1,6 @@
+#include "stdafx.h"
+
+#include "stdafx.h"
 #include "XMLSerializer.h"
 
 #include <rapidxml/RapidXml.hpp>

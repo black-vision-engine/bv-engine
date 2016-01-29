@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "RenderableEffect.h"
 
 #include <cassert>

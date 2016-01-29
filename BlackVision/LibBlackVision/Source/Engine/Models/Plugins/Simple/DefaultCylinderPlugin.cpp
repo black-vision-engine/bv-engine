@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultCylinderPlugin.h"
 #include "glm/gtx/vector_angle.hpp"
 

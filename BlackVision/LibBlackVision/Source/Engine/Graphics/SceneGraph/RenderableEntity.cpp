@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "RenderableEntity.h"
 
 #include "Engine/Graphics/Resources/RenderableArrayData.h"

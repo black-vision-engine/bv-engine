@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "TimelineEventLoop.h"
 #include "Serialization/SerializationHelper.inl"
 

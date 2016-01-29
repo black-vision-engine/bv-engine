@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "TriangleMesh.h"
 
 #include <cassert>

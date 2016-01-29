@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultSimpleCubePlugin.h"
 #include "Mathematics/Defines.h"
 #include "..\HelperIndexedGeometryConverter.h"

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "ShaderParamMat2.h"
 
 

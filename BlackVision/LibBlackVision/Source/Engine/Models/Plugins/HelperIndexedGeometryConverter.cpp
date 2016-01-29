@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "HelperIndexedGeometryConverter.h"
 
 namespace bv { namespace model {

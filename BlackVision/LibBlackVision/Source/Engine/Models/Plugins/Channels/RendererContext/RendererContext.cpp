@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "RendererContext.h"
 
 #include "Serialization/SerializationHelper.h"

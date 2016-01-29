@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PdrRenderTarget.h"
 
 #include <cassert>

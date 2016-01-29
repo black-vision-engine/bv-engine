@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "HelperPixelShaderChannel.h"
 
 #include "Application/ApplicationContext.h"

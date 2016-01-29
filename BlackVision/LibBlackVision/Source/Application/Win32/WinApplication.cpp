@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Application/WindowedApplication.h"
 
 #include "System/InitSubsystem.h"

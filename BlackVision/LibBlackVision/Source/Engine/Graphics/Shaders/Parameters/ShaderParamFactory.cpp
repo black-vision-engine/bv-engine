@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "ShaderParamFactory.h"
 
 #include <cassert>

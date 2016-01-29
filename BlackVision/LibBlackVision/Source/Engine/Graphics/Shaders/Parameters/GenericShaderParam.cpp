@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #pragma once
 
 #include "GenericShaderParam.h"
