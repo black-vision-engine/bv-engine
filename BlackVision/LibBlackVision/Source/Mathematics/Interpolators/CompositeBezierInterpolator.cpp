@@ -330,7 +330,7 @@ void CompositeBezierInterpolator< TimeValueT, ValueT >::AddKey             ( Tim
 template< class TimeValueT, class ValueT >
 bool CompositeBezierInterpolator< TimeValueT, ValueT >::RemoveKey       ( TimeValueT t )
 {
-    if( keys.empty() )
+    if( keys.size() <= 1 )
         return false;
 
     // Find the proper key
@@ -343,6 +343,7 @@ bool CompositeBezierInterpolator< TimeValueT, ValueT >::RemoveKey       ( TimeVa
     }
     if( i == keysSize )
         return false;       // Key not found.
+
 
     if( i == 0 )
         interpolators.erase( interpolators.begin() );
@@ -357,6 +358,7 @@ bool CompositeBezierInterpolator< TimeValueT, ValueT >::RemoveKey       ( TimeVa
         // Insert new interpolator instead
         interpolators.insert( interpolators.begin() + ( i - 1 ), CreateDummyInterpolator( m_type, keys[ i - 1 ], keys[ i + 1 ], m_tolerance ) );
     }
+
     keys.erase( keys.begin() + i );
 
 // update interpolators
