@@ -8,6 +8,8 @@
 
 #include <thread>
 
+#include "win_sock.h"
+
 namespace bv
 {
 
