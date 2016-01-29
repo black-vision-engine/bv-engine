@@ -457,7 +457,7 @@ void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser,
     auto pm = ProjectManager::GetInstance();
     auto aps = pm->ListAssetsPaths( projectName, categoryName, path, true );
     
-    std::vector< ThumbnailConstPtr > thumbs;
+    std::vector< std::pair< ThumbnailConstPtr, AssetDescConstPtr > > thumbs;
 
     for( auto & ap : aps )
     {
@@ -467,7 +467,7 @@ void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser,
         if( desc )
         {
             auto thumb = AssetManager::GetInstance().LoadThumbnail( desc );
-            thumbs.push_back( thumb );
+            thumbs.push_back( std::make_pair( thumb, desc ) );
         }
     }
 
@@ -477,7 +477,8 @@ void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser,
 
     for( auto t : thumbs )
     {
-        t->Serialize( ser );
+        t.first->Serialize( ser );
+        t.second->Serialize( ser );
     }
 
     ser.ExitChild(); // thumbnails
