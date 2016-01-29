@@ -172,9 +172,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffectFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffectLogic.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffect.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectShaders.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectWithMask.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\FullscreenUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenDisplay.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderLogicContext.cpp" />
@@ -215,7 +213,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\Camera.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\MainDisplayTarget.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntity.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNode.cpp" />
@@ -500,9 +497,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Events\Queues\EventQueue.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\Queues\EventQueueConcurrent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\DefaultEffect.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectShaders.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectWithMask.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRendererData.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrConstants.h" />
@@ -535,7 +530,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\VertexBuffer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\VertexDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Camera.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\MainDisplayTarget.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntity.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneNode.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\TransformableEntity.h" />

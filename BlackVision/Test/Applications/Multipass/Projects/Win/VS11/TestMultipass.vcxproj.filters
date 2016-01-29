@@ -63,9 +63,6 @@
     <ClCompile Include="..\..\..\Source\VisualTester\RenderLogicTst.cpp">
       <Filter>VisualTester</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\VisualTester\OffscreenRenderLogicTst.cpp">
-      <Filter>VisualTester</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="VisualTester">
@@ -147,9 +144,6 @@
       <Filter>VisualTester</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\VisualTester\RenderLogicTst.h">
-      <Filter>VisualTester</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\VisualTester\OffscreenRenderLogicTst.h">
       <Filter>VisualTester</Filter>
     </ClInclude>
   </ItemGroup>

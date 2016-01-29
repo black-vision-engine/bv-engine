@@ -46,6 +46,8 @@ MemoryChunkConstPtr		GLBlurImage( const MemoryChunkConstPtr & in, UInt32 width, 
 {
     { bpp; }
 
+    assert( false );
+
     assert( in->Size() == width * height * bpp / 8 );
 	auto tex = std::make_shared< Texture2DImpl >( TextureFormat::F_A8R8G8B8, width, height );
 
@@ -56,13 +58,15 @@ MemoryChunkConstPtr		GLBlurImage( const MemoryChunkConstPtr & in, UInt32 width, 
 
 	auto effect = GetBlurEffect( blurLength, 1.f / width, 1.f / height, tex, TextureFilteringMode::TFM_POINT, TextureWrappingMode::TWM_CLAMP_EDGE, TextureWrappingMode::TWM_CLAMP_EDGE, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 
-	auto renderLogic = new EffectRenderLogic( width, height, effect, new Camera() );
+    // FIXME: REIMPLEMENT
+	//auto renderLogic = new EffectRenderLogic( width, height, effect, new Camera() );
 
-	renderLogic->Draw( GetRenderer() );
+	//renderLogic->Draw( GetRenderer() );
 
-	auto texOut = renderLogic->ReadTarget( GetRenderer() );
+	//auto texOut = renderLogic->ReadTarget( GetRenderer() );
 
-	return texOut->GetData();
+	//return texOut->GetData();
+    return nullptr;
 }
 
 

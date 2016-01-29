@@ -246,13 +246,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\DefaultEffect.cpp">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffect.cpp">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectShaders.cpp">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectWithMask.cpp">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRenderer.cpp">
@@ -349,9 +343,6 @@
       <Filter>Engine\Graphics\Resources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\Camera.cpp">
-      <Filter>Engine\Graphics\SceneGraph</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\MainDisplayTarget.cpp">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntity.cpp">
@@ -1124,13 +1115,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\DefaultEffect.h">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffect.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectShaders.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectWithMask.h">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRendererData.h">
@@ -1227,9 +1212,6 @@
       <Filter>Engine\Graphics\Resources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\Camera.h">
-      <Filter>Engine\Graphics\SceneGraph</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\MainDisplayTarget.h">
       <Filter>Engine\Graphics\SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\RenderableEntity.h">
