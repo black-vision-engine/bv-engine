@@ -210,10 +210,13 @@ std::string T2String( const bool& b )
         return "false";
 }
 
+template std::string T2String( const std::string& v );
+template std::string T2String( const std::wstring& v );
 template std::string T2String( const glm::vec2& v );
 template std::string T2String( const glm::vec3& v );
 template std::string T2String( const glm::vec4& v );
 template std::string T2String( const float& v );
+template std::string T2String( const double& v );
 template std::string T2String( const int& v );
 template std::string T2String( const unsigned int& v );
 template std::string T2String( const UInt64& v );

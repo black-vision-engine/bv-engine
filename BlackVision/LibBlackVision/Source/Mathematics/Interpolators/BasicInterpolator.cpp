@@ -173,8 +173,8 @@ template<class TimeValueT, class ValueT >
 void                Key<TimeValueT, ValueT>::Serialize       ( ISerializer& ser ) const
 {
     ser.EnterChild( "key" );
-    ser.SetAttribute( "time", std::to_string( t ) );
-    ser.SetAttribute( "val", std::to_string( val ) );
+	ser.SetAttribute( "time", SerializationHelper::T2String( t ) );
+    ser.SetAttribute( "val", SerializationHelper::T2String( val ) );
     ser.ExitChild();
 }
 
@@ -249,8 +249,8 @@ void                BasicInterpolator<TimeValueT, ValueT, FloatT>::Serialize    
     for( auto key : keys )
     {
         doc.EnterChild( "key" );
-        doc.SetAttribute( "time", std::to_string( key.t ) );
-        doc.SetAttribute( "val", std::to_string( key.val ) );
+        doc.SetAttribute( "time", SerializationHelper::T2String( key.t ) );
+        doc.SetAttribute( "val", SerializationHelper::T2String( key.val ) );
         doc.ExitChild();
     }
     doc.ExitChild();
