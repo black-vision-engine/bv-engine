@@ -1,6 +1,6 @@
 #include "LibEffect.h"
 
-#include "EffectRenderLogic.h"
+#include <cassert>
 
 #include "Application/WindowedApplication.h"
 
@@ -12,7 +12,6 @@
 
 #include "Engine/Graphics/Renderers/Renderer.h"
 
-#include <cassert>
 
 namespace bv { namespace effect
 {
