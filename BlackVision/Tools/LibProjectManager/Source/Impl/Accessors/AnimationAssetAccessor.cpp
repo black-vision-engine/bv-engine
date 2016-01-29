@@ -5,6 +5,8 @@
 #include "IO/FileIO.h"
 #include "IO/DirIO.h"
 
+#include "LibImage.h"
+
 #include "Tools/Logger/Logger.h"
 #define LOG_MODULE ModuleEnum::ME_LibBlackVision
 
@@ -45,10 +47,14 @@ AssetDescConstPtr AnimationAssetAccessor::GetAssetDesc( const Path & path ) cons
     {
         for( auto fe : m_fileExts )
         {
-            auto numFrames = Path::List( p, false, fe ).size();
+            auto pathList = Path::List( p, false, fe );
+            auto numFrames = pathList.size();
+
+            auto props = image::GetImageProps( pathList.at( 0 ).Str() );
+
             if( numFrames > 0 )
             {
-                return AnimationAssetDesc::Create( ( Path( "sequences" ) / path ).Str(), numFrames, fe );
+                return AnimationAssetDesc::Create( ( Path( "sequences" ) / path ).Str(), numFrames, props.width, props.height, fe );
             }
         }
     }

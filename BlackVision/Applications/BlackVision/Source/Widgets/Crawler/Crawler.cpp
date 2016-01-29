@@ -609,6 +609,10 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
         std::string newNode = eventSer.GetAttribute( "NodeName" );
         AddNext( newNode );
     }
+    else if( crawlAction == "AddPresetNode" )
+    {
+
+    }
     else if( crawlAction == "Reset" )
 	{
 		Reset();

@@ -41,18 +41,22 @@ public:
 
 	//const std::vector< TextureAssetDescConstPtr > &  GetFrames		() const;
 
+    static AnimationAssetDescConstPtr			Create ( const std::string & path, SizeType numFrames, UInt32 width, UInt32 height, const std::string & filter );
     static AnimationAssetDescConstPtr			Create ( const std::string & path, SizeType numFrames, const std::string & filter );
     //static AnimationAssetDescConstPtr			Create ( const std::vector< TextureAssetDescConstPtr > & frames );
 
 private:
-	explicit						AnimationAssetDesc	( const std::string & frames, SizeType numFrames, const std::string & filter );
+	explicit						AnimationAssetDesc	( const std::string & frames, SizeType numFrames, UInt32 width, UInt32 height, const std::string & filter );
     explicit						AnimationAssetDesc	( const std::string & frames, const std::string & filter );
 	//explicit						AnimationAssetDesc	( const std::vector< TextureAssetDescConstPtr > & frames );
 
     //std::vector< TextureAssetDescConstPtr > m_frames;
     std::string                             m_path;
     std::string                             m_filter;
+
     SizeType                                m_numFrames;
+    UInt32                                  m_width;
+    UInt32                                  m_height;
 };
 
 // ***********************

@@ -112,7 +112,7 @@ void SerializeAllEvents( const std::string& fileName )
     
     TextureAssetDescConstPtr    texAsset =      TextureAssetDesc::Create( std::string( "textures/poison.jpg" ), true );
     FontAssetDescConstPtr       fontAsset =     FontAssetDesc::Create( std::string( "filePath.jpg" ), 0, 0, 0, false );
-    AnimationAssetDescConstPtr  animAsset =     AnimationAssetDesc::Create( std::string( "filePath.jpg" ), 1, ".*" );
+    AnimationAssetDescConstPtr  animAsset =     AnimationAssetDesc::Create( std::string( "filePath.jpg" ), 1, 0, 0, ".*" );
     
     JsonSerializeObject serAssetTex;
     texAsset->Serialize( serAssetTex );

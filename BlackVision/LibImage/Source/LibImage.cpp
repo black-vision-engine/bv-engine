@@ -518,6 +518,7 @@ MemoryChunkConstPtr     SaveTGAToHandle ( const MemoryChunkConstPtr & in, UInt32
 MemoryChunkConstPtr     SwapChannels    ( const MemoryChunkConstPtr & in, UInt32 bpp, UInt32 b, UInt32 g, UInt32 r, UInt32 a )
 {
     assert( bpp == 32 );
+    { bpp; }
 
     auto out = MemoryChunk::Create( new char[ in->Size() ], in->Size() );
 
