@@ -178,12 +178,6 @@
     <Filter Include="Engine\Graphics\Effects\NodeEffect">
       <UniqueIdentifier>{2ab7cdfd-ddff-495c-988b-7db7fbae6cfd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\Effects\Fullscreen\Old">
-      <UniqueIdentifier>{20dbb99c-af71-4b58-a492-e683a2c45d1c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\Effects\Fullscreen\Old\Impl">
-      <UniqueIdentifier>{6cc37185-358f-415e-a2e5-7f122828dc63}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\Effects\Fullscreen\Impl">
       <UniqueIdentifier>{a063a712-c340-48d7-a9fc-b6b5352529c1}</UniqueIdentifier>
     </Filter>
@@ -244,9 +238,6 @@
       <Filter>Engine\Events\Queues</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\DefaultEffect.cpp">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectShaders.cpp">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRenderer.cpp">
@@ -921,23 +912,11 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.cpp">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\WireframeShaders.cpp">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.cpp">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceEffect.cpp">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsShaders.cpp">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectMixChannels.cpp">
       <Filter>Engine\Models\NodeEffects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsEffect.cpp">
-      <Filter>Engine\Graphics\Effects</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectFactory.cpp">
       <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
@@ -972,32 +951,8 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffectLogic.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\FullscreenEffectOld.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Old</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\Impl\BlitFullscreenEffect.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Old\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\Impl\MixChannelsFullscreenEffect.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Old\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\Impl\OverwriteAlphaFullscreenEffect.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Old\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\Impl\OverwriteChannelsFullscreenEffect.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Old\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\Impl\VideoOutputFullscreenEffect.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Old\Impl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShaders.cpp">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffect.cpp">
       <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\Impl\FullscreenRenderableEffectOld.cpp">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Old\Impl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffect.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
@@ -1113,9 +1068,6 @@
       <Filter>Engine\Events\Interfaces</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\DefaultEffect.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Texture2DEffectShaders.h">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\GLRendererData.h">
@@ -1967,23 +1919,11 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.h">
       <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeShaders.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceEffect.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsShaders.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectMixChannels.h">
       <Filter>Engine\Models\NodeEffects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\MixChannelsEffect.h">
-      <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectFactory.h">
       <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
@@ -2018,32 +1958,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffectLogic.h">
       <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\FullscreenEffectOld.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Old</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\Impl\BlitFullscreenEffect.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Old\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\Impl\MixChannelsFullscreenEffect.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Old\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\Impl\OverwriteAlphaFullscreenEffect.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Old\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\Impl\OverwriteChannelsFullscreenEffect.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Old\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\Impl\VideoOutputFullscreenEffect.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Old\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceShaders.h">
-      <Filter>Engine\Graphics\Effects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffect.h">
       <Filter>Engine\Graphics\Effects\Fullscreen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Old\Impl\FullscreenRenderableEffectOld.h">
-      <Filter>Engine\Graphics\Effects\Fullscreen\Old\Impl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffect.h">
       <Filter>Engine\Graphics\Effects\NodeEffect</Filter>

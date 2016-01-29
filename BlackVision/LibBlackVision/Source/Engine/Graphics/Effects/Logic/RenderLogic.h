@@ -58,10 +58,10 @@ private:
 
     RenderLogicContext *            GetContext              ( Renderer * renderer );
 
-    void                            BlitToPreview           ( Renderer * renderer, RenderTarget * rt );
+    void                            BlitToPreview           ( RenderTarget * rt, RenderLogicContext * ctx );
 
     void                            UpdateOffscreenState    ();
-    void                            OnVideoFrameRendered    ( Renderer * renderer );
+    void                            OnVideoFrameRendered    ( RenderLogicContext * ctx );
 
 public:
 

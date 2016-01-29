@@ -1,6 +1,7 @@
 #include "FullscreenEffectInstance.h"
 
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
+#include "Engine/Types/Values/TypedValues.h"
 
 
 namespace bv {
@@ -76,6 +77,42 @@ void                        FullscreenEffectInstance::SetRenderTarget           
     assert( i < m_inputRenderTargets.size() );
 
     m_inputRenderTargets[ i ] = rt;
+}
+
+// **************************
+//
+bool                        FullscreenEffectInstance::SetValue                    ( const std::string & name, int value )
+{
+    for( auto val : GetValues() )
+    {
+        if ( val->GetName() == name )
+        {
+            auto intVal = QueryTypedValue< ValueIntPtr  >( val );
+            intVal->SetValue( value );
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// **************************
+//
+bool                        FullscreenEffectInstance::SetValue                    ( const std::string & name, float value )
+{
+    for( auto val : GetValues() )
+    {
+        if ( val->GetName() == name )
+        {
+            auto floatVal = QueryTypedValue< ValueFloatPtr  >( val );
+            floatVal->SetValue( value );
+
+            return true;
+        }
+    }
+
+    return false;
 }
 
 // **************************

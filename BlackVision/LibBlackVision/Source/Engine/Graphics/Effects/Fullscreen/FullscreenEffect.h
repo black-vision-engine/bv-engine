@@ -18,6 +18,7 @@ enum class FullscreenEffectType : int
     FET_BLIT_WITH_ALPHA_MASK,
     FET_INTERLACE,
     FET_MIX_CHANNELS,
+    FET_VIDEO_OUTPUT,
     //FET_BLUR
     //FET_SHADOW
     //FET_OUTLINE

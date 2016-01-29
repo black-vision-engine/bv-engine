@@ -27,6 +27,7 @@ const ShaderSourceProvider *  ShaderSourceProvider::GetProvider ( ShaderCategory
 {
     static ShaderSourceProvider fullscreen( "Assets/Shaders/FullscreenEffects/" );
     static ShaderSourceProvider nodeeffect( "Assets/Shaders/NodeEffectsLogic/" );
+    static ShaderSourceProvider custom( "Assets/Shaders/Effects/" );
 
     switch( category )
     {
@@ -34,6 +35,8 @@ const ShaderSourceProvider *  ShaderSourceProvider::GetProvider ( ShaderCategory
             return &fullscreen;            
         case ShaderCategory::SC_NODEEFFECTLOGIC:
             return &nodeeffect;
+        case ShaderCategory::SC_CUSTOM:
+            return &custom;
         default:
             assert( false );
     }

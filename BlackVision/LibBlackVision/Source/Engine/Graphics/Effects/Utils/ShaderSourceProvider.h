@@ -9,6 +9,7 @@ enum class ShaderCategory : int
 {
     SC_FULLSCREENEFFECT = 0,
     SC_NODEEFFECTLOGIC,
+    SC_CUSTOM,
 
     SC_TOTAL
 };

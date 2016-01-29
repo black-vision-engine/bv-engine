@@ -12,9 +12,31 @@ ValueIntPtr         ValuesFactory::CreateValueInt    ( const std::string & name 
 
 // *******************************
 //
+ValueIntPtr         ValuesFactory::CreateValueInt    ( const std::string & name, int initVal )
+{
+    auto val = CreateValueInt( name );
+
+    val->SetValue( initVal );
+
+    return val;
+}
+
+// *******************************
+//
 ValueFloatPtr         ValuesFactory::CreateValueFloat    ( const std::string & name )
 {
-    return std::make_shared< ValueFloat >( name );
+   return std::make_shared< ValueFloat >( name );
+}
+
+// *******************************
+//
+ValueFloatPtr         ValuesFactory::CreateValueFloat    ( const std::string & name, float initVal )
+{
+    auto val = CreateValueFloat( name );
+
+    val ->SetValue( initVal );
+
+    return val;
 }
 
 // *******************************

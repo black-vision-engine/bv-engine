@@ -4,7 +4,7 @@
 
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"
 
-#include "Engine/Graphics/Effects/WireframeShaders.h"
+#include "Engine/Graphics/Effects/Utils/ShaderSourceProvider.h"
 
 
 namespace bv {
@@ -48,8 +48,8 @@ WireframeEffect::~WireframeEffect()
 //
 PixelShader *       WireframeEffect::CreatePS        ()
 {
-    //FIXM: register parameters here
-    auto shader = new PixelShader( GetWireframePixelShaderCode(), new ShaderParameters() );
+    //FIXM: register additional parameters here
+    auto shader = new PixelShader( FSEShaderSourceProvider->ReadShader( "wireframe.frag" ), new ShaderParameters() );
     
     return shader;
 }
@@ -63,7 +63,7 @@ VertexShader *      WireframeEffect::CreateVS        ()
     params->AddParameter( ShaderParamFactory::CreateMVPParameter() );
     params->AddParameter( ShaderParamFactory::CreateMVParameter() );
 
-    auto shader = new VertexShader( GetWireframeVertexShaderCode(), params );
+    auto shader = new VertexShader( FSEShaderSourceProvider->ReadShader( "wireframe.vert" ), params );
 
     return shader;
 }
@@ -76,7 +76,7 @@ GeometryShader *    WireframeEffect::CreateGS        ()
 
     params->AddParameter( ShaderParamFactory::CreateViewportMatrixParameter() );
 
-    auto shader = new GeometryShader( GetWireframeGeometryShaderCode(), params );
+    auto shader = new GeometryShader( FSEShaderSourceProvider->ReadShader( "wireframe.geom" ), params );
 
     return shader;
 }

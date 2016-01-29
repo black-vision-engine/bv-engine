@@ -7,14 +7,16 @@ namespace bv {
 
 class Renderer;
 class RenderTarget;
-class VideoOutputFullscreenEffect;
+class FullscreenEffectInstance;
+class RenderLogicContext;
 
 
 class VideoOutputRenderLogic
 {
 private:
 
-    VideoOutputFullscreenEffect *   m_effect;
+    FullscreenEffectInstance *      m_videoOutputEffect;
+    std::vector< RenderTarget * >   m_vidTargets;
 
     unsigned int                    m_height;
     bool                            m_interlaceOdd;
@@ -26,9 +28,9 @@ public:
     VideoOutputRenderLogic          ( unsigned int height, bool interlaceOdd = false );
     ~VideoOutputRenderLogic         ();
 
-    void    Render                  ( Renderer * renderer, RenderTarget * videoRenderTarget, RenderTarget * curFrameRenderTarget, RenderTarget * prevFrameRenderTarget );
+    void    Render                  ( RenderTarget * videoRenderTarget, RenderTarget * curFrameRenderTarget, RenderTarget * prevFrameRenderTarget, RenderLogicContext * ctx );
 
-    void    VideoFrameRendered      ( Renderer * renderer, RenderTarget * videoRenderTarget );
+    void    VideoFrameRendered      ( RenderTarget * videoRenderTarget, RenderLogicContext * ctx );
 
     void    SetChannelMapping       ( unsigned char rIdx, unsigned char gIdx, unsigned char bIdx, unsigned char aIdx );
     void    SetOverwriteAlpha       ( bool overwriteAlpha );
@@ -36,10 +38,6 @@ public:
     void    SetHeight               ( int height );
 
     Texture2DPtr GetLastVideoFrame  ();
-
-private:
-
-    VideoOutputFullscreenEffect *  AccessEffect  ( RenderTarget * curFrameRenderTarget, RenderTarget * prevFrameRenderTarget );
 
 };
 

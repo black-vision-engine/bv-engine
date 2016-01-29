@@ -48,12 +48,16 @@ void    SimpleFullscreenEffect::Render          ( FullscreenEffectContext * ctx 
 
     auto rendererCamera = renderer->GetCamera();
     renderer->SetCamera( m_fullscreenCamera );
+    //FIXME: decide if this RT should be bound or not - ion simple effect it may not be the case, but consider composite effects - either inner effects or graph implementation
+    //FIXME: would have to take care of setting valid render target
     // renderer->Enable( ctx->GetOutputRenderTarget() );
 
     SynchronizeInputData( ctx );
 
     renderer->Draw( m_fullscreenQuad );
 
+    //FIXME: decide if this RT should be bound or not - ion simple effect it may not be the case, but consider composite effects - either inner effects or graph implementation
+    //FIXME: would have to take care of setting valid render target
     // renderer->Disable( ctx->GetOutputRenderTarget() );
     renderer->SetCamera( rendererCamera );
 }

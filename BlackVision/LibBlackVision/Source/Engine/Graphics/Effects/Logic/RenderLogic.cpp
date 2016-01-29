@@ -6,16 +6,11 @@
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 #include "Engine/Graphics/Effects/Utils/OffscreenDisplay.h"
 
-#include "Engine/Graphics/Effects/FullScreen/Old/Impl/BlitFullscreenEffect.h"
 #include "Engine/Graphics/Effects/Logic/VideoOutputRendering/VideoOutputRenderLogic.h"
 
 #include "Tools/Profiler/HerarchicalProfiler.h"
 
 #include "Engine/Graphics/Effects/Fullscreen/FullscreenEffectFactory.h"
-
-//FIXME: remove
-#include "LibImage.h"
-#include "Engine/Graphics/Resources/Texture2DImpl.h"
 
 
 namespace bv {
@@ -90,6 +85,7 @@ void    RenderLogic::RenderFrameImpl ( Renderer * renderer, SceneNode * sceneRoo
 void    RenderLogic::FrameRendered   ( Renderer * renderer )
 {
     auto prevRt = m_offscreenDisplay->GetCurrentFrameRenderTarget();
+    auto ctx = GetContext( renderer );
 
     if( m_displayVideoCardPreview )
     {
@@ -97,16 +93,16 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
         auto curFrameRt = m_offscreenDisplay->GetCurrentFrameRenderTarget   ();
         auto prvFrameRt = m_offscreenDisplay->GetPreviousFrameRenderTarget  ();
 
-        m_videoOutputRenderLogic->Render( renderer, videoRt, curFrameRt, prvFrameRt );
+        m_videoOutputRenderLogic->Render( videoRt, curFrameRt, prvFrameRt, ctx );
 
         prevRt = videoRt;
     }
     
-    BlitToPreview( renderer, prevRt );
+    BlitToPreview( prevRt, ctx );
 
     if( m_useVideoCardOutput )
     {
-        OnVideoFrameRendered( renderer );
+        OnVideoFrameRendered( ctx );
     }
 }
 
@@ -194,14 +190,14 @@ RenderLogicContext *    RenderLogic::GetContext         ( Renderer * renderer )
 
 // *********************************
 //
-void                    RenderLogic::BlitToPreview          ( Renderer * renderer, RenderTarget * rt )
+void                    RenderLogic::BlitToPreview          ( RenderTarget * rt, RenderLogicContext * ctx )
 {
     if( m_blitEffect->GetRenderTarget( 0 ) != rt )
     {
         m_blitEffect->SetRenderTarget( 0, rt );
     }
 
-    m_blitEffect->Render( rt, GetContext( renderer ) );
+    m_blitEffect->Render( rt, ctx );
 }
 
 // *********************************
@@ -214,11 +210,11 @@ void                    RenderLogic::UpdateOffscreenState   ()
 
 // *********************************
 //
-void                    RenderLogic::OnVideoFrameRendered   ( Renderer * renderer )
+void                    RenderLogic::OnVideoFrameRendered   ( RenderLogicContext * ctx )
 {
     auto rt = m_offscreenDisplay->GetVideoRenderTarget();
 
-    m_videoOutputRenderLogic->VideoFrameRendered( renderer, rt );
+    m_videoOutputRenderLogic->VideoFrameRendered( rt, ctx );
 }
 
 // *********************************

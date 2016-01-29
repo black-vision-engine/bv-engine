@@ -33,6 +33,9 @@ public:
     const RenderTarget *        GetRenderTarget             ( unsigned int i ) const;
     void                        SetRenderTarget             ( unsigned int i, RenderTarget * rt );
 
+    bool                        SetValue                    ( const std::string & name, int value );
+    bool                        SetValue                    ( const std::string & name, float value );
+
 private:
 
     void                        InitializeGuard             ( RenderLogicContext * ctx );

@@ -95,16 +95,17 @@ FullscreenEffect *  CreateInterlaceFSE          ( const std::vector< IValuePtr >
 
     assert( values.size() == 0 );
 
-    auto val0 = ValuesFactory::CreateValueInt( "startEven" );
-    auto val1 = ValuesFactory::CreateValueInt( "height" );
-    val0->SetValue( 0 );
-    val1->SetValue( 1080 );
+    auto val0 = ValuesFactory::CreateValueInt( "startEven", 0 );
+    auto val1 = ValuesFactory::CreateValueInt( "height", 1080 );
 
     fseData.AppendInputTexture( nullptr, "Tex0" );
     fseData.AppendInputTexture( nullptr, "Tex1" );
+
     fseData.AppendValue( val0 );
     fseData.AppendValue( val1 );
+
     fseData.SetPixelShaderSource( src );
+
     fseData.SetBlendEnabled( false );
     fseData.SetCullEnabled( false );
     fseData.SetDepthTestEnabled( false );
@@ -121,13 +122,53 @@ FullscreenEffect *  CreateMixChannelsFSE        ( const std::vector< IValuePtr >
 
     assert( values.size() == 0 );
 
-    auto val0 = ValuesFactory::CreateValueInt( "channelMask" );
-
-    val0->SetValue( ( ( 3 & 0x3 ) << 6 ) | ( ( 2 & 0x3 ) << 4 ) | ( ( 1 & 0x3 ) << 2 ) | ( ( 0 & 0x3 ) << 0 ) );
+    // ( ( aIdx & 0x3 ) << 6 ) | ( ( bIdx & 0x3 ) << 4 ) | ( ( gIdx & 0x3 ) << 2 ) | ( ( rIdx & 0x3 ) << 0 );
+    auto val0 = ValuesFactory::CreateValueInt( "channelMask", ( ( 3 & 0x3 ) << 6 ) | ( ( 2 & 0x3 ) << 4 ) | ( ( 1 & 0x3 ) << 2 ) | ( ( 0 & 0x3 ) << 0 ) );
 
     fseData.AppendInputTexture( nullptr, "Tex0" );
+
     fseData.AppendValue( val0 );
+
     fseData.SetPixelShaderSource( src );
+
+    fseData.SetBlendEnabled( false );
+    fseData.SetCullEnabled( false );
+    fseData.SetDepthTestEnabled( false );
+
+    return new SimpleFullscreenEffect( fseData );
+}
+
+// **************************
+//
+FullscreenEffect *  CreateVideoOutputFSE        ( const std::vector< IValuePtr > & values )
+{
+    FullscreenEffectData fseData;
+    auto src = FSEShaderSourceProvider->ReadShader( "videooutput.frag" );
+
+    assert( values.size() == 0 );
+
+    // ( ( aIdx & 0x3 ) << 6 ) | ( ( bIdx & 0x3 ) << 4 ) | ( ( gIdx & 0x3 ) << 2 ) | ( ( rIdx & 0x3 ) << 0 );
+    int channelMask         = ( 3 << 6 ) | ( 2 << 4 ) | ( 1 << 2 ) | ( 0 << 0 );
+
+    auto useInterlaceVal    = ValuesFactory::CreateValueInt     ( "useInterlace", 1 );
+    auto startEvenVal       = ValuesFactory::CreateValueInt     ( "startEven", 0 );
+    auto heightVal          = ValuesFactory::CreateValueFloat   ( "height", 1080 );
+    auto channelMaskVal     = ValuesFactory::CreateValueInt     ( "channelMask", channelMask ); 
+    auto alphaVal           = ValuesFactory::CreateValueFloat   ( "alpha", 1.f );
+    auto overwriteAlphaVal  = ValuesFactory::CreateValueInt     ( "overwriteAlpha", 0 );
+
+    fseData.AppendInputTexture( nullptr, "Tex0" );
+    fseData.AppendInputTexture( nullptr, "Tex1" );
+
+    fseData.AppendValue( useInterlaceVal );
+    fseData.AppendValue( startEvenVal );
+    fseData.AppendValue( heightVal );
+    fseData.AppendValue( channelMaskVal );
+    fseData.AppendValue( alphaVal );
+    fseData.AppendValue( overwriteAlphaVal );
+
+    fseData.SetPixelShaderSource( src );
+
     fseData.SetBlendEnabled( false );
     fseData.SetCullEnabled( false );
     fseData.SetDepthTestEnabled( false );
@@ -162,6 +203,10 @@ FullscreenEffect *  CreateFullscreenEffect( FullscreenEffectType fseType, const 
         case FullscreenEffectType::FET_MIX_CHANNELS:
         {
             return CreateMixChannelsFSE( values );
+        }
+        case FullscreenEffectType::FET_VIDEO_OUTPUT:
+        {
+            return CreateVideoOutputFSE( values );
         }
         default:
             assert( false );
