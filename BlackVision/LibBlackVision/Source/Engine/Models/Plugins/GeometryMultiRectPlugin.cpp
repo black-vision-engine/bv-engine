@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "GeometryMultiRectPlugin.h"
 
 #include "Engine/Models/Plugins/PluginsFactory.h"

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "FontAssetDescriptor.h"
 #include <cassert>
 

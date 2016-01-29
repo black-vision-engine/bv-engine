@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultTexturesData.h"
 
 #include "Engine/Models/Plugins/Channels/PixelShader/DefaultTextureDescriptor.h"

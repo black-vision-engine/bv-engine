@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "ShaderChannel.h"
 
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "ShadowNodeEffect.h"
 
 #include "Engine/Types/Values/ValuesFactory.h"

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultFinalizeVertexShaderChannel.h"
 
 #include "Engine/Models/Plugins/Channels/ShaderChannel.h"

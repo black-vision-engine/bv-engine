@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "TextureAsset.h"
 
 namespace bv

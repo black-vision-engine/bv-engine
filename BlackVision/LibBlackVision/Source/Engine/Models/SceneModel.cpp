@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "SceneModel.h"
 
 #include "Assets/AssetDescsWithUIDs.h"

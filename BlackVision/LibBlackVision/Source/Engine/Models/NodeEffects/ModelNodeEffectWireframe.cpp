@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "ModelNodeEffectWireframe.h"
 
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "GlobalTimeline.h"
 
 namespace bv { namespace model {

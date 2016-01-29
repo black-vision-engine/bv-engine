@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "LightScatteringNodeEffect.h"
 
 #include "Engine/Types/Values/ValuesFactory.h"

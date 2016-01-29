@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "SingleTextureAssetDescriptor.h"
 
 #include <assert.h>

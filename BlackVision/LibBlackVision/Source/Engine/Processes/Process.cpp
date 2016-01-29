@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Process.h"
 
 #include <cassert>

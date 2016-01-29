@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "BVXMLDeserializer.h"
 
 #include "../BVDeserializeContext.h"

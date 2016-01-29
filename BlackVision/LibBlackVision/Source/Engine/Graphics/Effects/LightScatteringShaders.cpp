@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "WireframeShaders.h"
 
 #include <sstream>

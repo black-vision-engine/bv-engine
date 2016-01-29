@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "ShaderParamVec2.h"
 
 

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "TextureCubeArray.h"
 
 namespace bv {

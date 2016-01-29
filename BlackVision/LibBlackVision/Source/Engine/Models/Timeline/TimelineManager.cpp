@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "TimelineManager.h"
 
 #include "TimelineHelper.h"

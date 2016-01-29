@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "VideoStreamAsset.h"
 
 namespace bv

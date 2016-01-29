@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultTimeline.h"
 
 #include <cassert>

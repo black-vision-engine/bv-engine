@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "FontAssetThumbnail.h"
 
 #include "Tools/Base64.h"

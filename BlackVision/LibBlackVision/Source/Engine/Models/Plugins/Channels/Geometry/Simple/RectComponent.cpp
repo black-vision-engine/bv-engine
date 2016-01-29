@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "RectComponent.h"
 
 #include <cassert>

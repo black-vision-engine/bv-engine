@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultTransformChannel.h"
 
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"

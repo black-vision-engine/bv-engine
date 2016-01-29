@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "AnimationAssetThumbnail.h"
 
 #include "Tools/Base64.h"

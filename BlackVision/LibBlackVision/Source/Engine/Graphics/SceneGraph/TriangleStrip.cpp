@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "TriangleStrip.h"
 
 #include "Engine/Graphics/Resources/RenderableArrayDataArrays.h"

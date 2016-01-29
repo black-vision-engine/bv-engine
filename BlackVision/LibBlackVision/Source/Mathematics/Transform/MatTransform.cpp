@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Mathematics/Transform/MatTransform.h"
 
 #include "Serialization/ISerializer.h"
@@ -317,11 +319,11 @@ CompositeTransform *    CompositeTransform::Create      ( const IDeserializer & 
 
                 if( angleArray.size() != 1 )
                 {
-                    //LOG_MESSAGE( SeverityLevel::error ) << "CompositeTransform::Create failed, incorrect entry for angle in rotation";
+                    LOG_MESSAGE( SeverityLevel::error ) << "CompositeTransform::Create failed, incorrect entry for angle in rotation";
                 }
                 else if( rotAxisArray.size() != 1 )
                 {
-                    //LOG_MESSAGE( SeverityLevel::error ) << "CompositeTransform::Create failed, incorrect entry for rotAxis in rotation";
+                    LOG_MESSAGE( SeverityLevel::error ) << "CompositeTransform::Create failed, incorrect entry for rotAxis in rotation";
                 }
                 else
                 {
@@ -355,7 +357,7 @@ CompositeTransform *    CompositeTransform::Create      ( const IDeserializer & 
                 }
                 else
                 {
-                    //LOG_MESSAGE( SeverityLevel::error ) << "CompositeTransform::Create failed, incorrect number of interpolators in " << kindName;
+                    LOG_MESSAGE( SeverityLevel::error ) << "CompositeTransform::Create failed, incorrect number of interpolators in " << kindName;
                 }
             }
         } while( deser.NextChild() );

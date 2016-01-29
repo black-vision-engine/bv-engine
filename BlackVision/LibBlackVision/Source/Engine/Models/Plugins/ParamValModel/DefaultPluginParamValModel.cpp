@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultPluginParamValModel.h"
 
 #include <cassert>

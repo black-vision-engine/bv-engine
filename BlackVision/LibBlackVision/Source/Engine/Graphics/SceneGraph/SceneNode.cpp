@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "SceneNode.h"
 
 #include <cassert>

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Engine/Models/Builder/NodeLogicHolder.h"
 
 namespace bv

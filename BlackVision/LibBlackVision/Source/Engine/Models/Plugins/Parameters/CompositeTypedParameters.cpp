@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "CompositeTypedParameters.h"
 
 namespace bv { namespace model {

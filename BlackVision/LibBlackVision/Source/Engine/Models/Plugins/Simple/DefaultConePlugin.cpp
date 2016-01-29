@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultConePlugin.h"
 #include "glm/gtx/vector_angle.hpp"
 

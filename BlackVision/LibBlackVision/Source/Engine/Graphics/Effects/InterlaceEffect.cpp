@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "InterlaceEffect.h"
 
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"

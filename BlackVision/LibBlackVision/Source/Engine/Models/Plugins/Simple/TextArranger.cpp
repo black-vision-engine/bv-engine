@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "TextArranger.h"
 #include "Assets/Font/TextHelper.h"
 #include "Engine/Models/Plugins/Channels/Geometry/VacAABB.h"

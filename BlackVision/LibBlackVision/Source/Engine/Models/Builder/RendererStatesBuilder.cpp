@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "RendererStatesBuilder.h"
 
 #include "Engine/Graphics/State/RendererStateInstance.h"

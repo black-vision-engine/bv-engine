@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultPrismPlugin.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/PrismComponent.h"

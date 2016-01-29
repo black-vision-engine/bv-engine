@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultParamValModel.h"
 
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"

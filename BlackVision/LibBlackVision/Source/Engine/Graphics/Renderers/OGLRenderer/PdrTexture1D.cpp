@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PdrTexture1D.h"
 
 #include <cassert>

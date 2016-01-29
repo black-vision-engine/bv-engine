@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PdrConstants.h"
 
 namespace bv {

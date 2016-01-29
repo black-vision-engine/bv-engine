@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "GLRendererData.h"
 
 #include <cassert>

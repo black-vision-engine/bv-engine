@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultTimerPlugin.h"
 
 #include "Assets/Font/TextHelper.h"

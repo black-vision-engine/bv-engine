@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultEllipsePlugin.h"
 
 #include "Mathematics/Defines.h"

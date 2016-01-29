@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "AnimationAsset.h"
 
 namespace bv

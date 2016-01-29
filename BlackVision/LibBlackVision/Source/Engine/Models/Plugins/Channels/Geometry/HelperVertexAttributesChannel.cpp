@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "HelperVertexAttributesChannel.h"
 
 #include <cassert>

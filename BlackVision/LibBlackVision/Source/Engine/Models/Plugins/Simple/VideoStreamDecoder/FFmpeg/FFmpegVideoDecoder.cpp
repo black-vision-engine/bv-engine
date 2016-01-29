@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "FFmpegVideoDecoder.h"
 
 #include "FFmpegUtils.h"

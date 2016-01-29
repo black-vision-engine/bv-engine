@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "GeometryPluginRing.h"
 
 #include "Engine/Models/Plugins/PluginsFactory.h"

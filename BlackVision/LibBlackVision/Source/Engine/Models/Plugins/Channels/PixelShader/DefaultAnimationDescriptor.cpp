@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultAnimationDescriptor.h"
 
 #include "Assets/Texture/TextureLoader.h"

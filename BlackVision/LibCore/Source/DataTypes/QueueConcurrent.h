@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <queue>
+#include <condition_variable>
 
 #include "Threading/ScopedCriticalSection.h"
 
@@ -16,10 +17,10 @@ class QueueConcurrent
 {
 private:
 
-    mutable CriticalSection     m_criticalSection;
+    mutable std::condition_variable     m_conditionVariable;
+    mutable CriticalSection             m_criticalSection;
 
     std::queue< T >     m_queue;
-    HANDLE              m_dataPushed;
 
 public:
 
@@ -43,17 +44,13 @@ public:
 //
 template< typename T >
 QueueConcurrent< T >::QueueConcurrent     ()
-{
-    m_dataPushed = CreateEvent( NULL, TRUE, FALSE, NULL );
-}
+{}
 
 // *************************************
 //
 template< typename T >
 QueueConcurrent< T >::~QueueConcurrent    ()
-{
-    CloseHandle( m_dataPushed );
-}
+{}
 
 // *************************************
 //
@@ -80,13 +77,11 @@ size_t      QueueConcurrent< T >::Size                () const
 template< typename T >
 void        QueueConcurrent< T >::Push        ( const T & val )
 {
-    {
-        ScopedCriticalSection lock( m_criticalSection );
+    ScopedCriticalSection lock( m_criticalSection );
 
-        m_queue.push( val );
-    }
+    m_queue.push( val );
 
-    PulseEvent( m_dataPushed );
+    m_conditionVariable.notify_one();
 }
 
 // ***********************
@@ -94,13 +89,11 @@ void        QueueConcurrent< T >::Push        ( const T & val )
 template< typename T >
 void        QueueConcurrent< T >::Push                ( const T && val )
 {
-    {
-        ScopedCriticalSection lock( m_criticalSection );
+    ScopedCriticalSection lock( m_criticalSection );
+    
+    m_queue.push( val );
 
-        m_queue.push( val );
-    }
-
-    PulseEvent( m_dataPushed );
+    m_conditionVariable.notify_one();
 }
 
 // *************************************
@@ -126,12 +119,7 @@ bool        QueueConcurrent< T >::TryPop      ( T & val )
 template< typename T >
 void        QueueConcurrent< T >::WaitAndPop    ( T & val )
 {
-    ScopedCriticalSection lock( m_criticalSection );
-
-    while( m_queue.empty() )
-    {
-        WaitForSingleObject( m_dataPushed );
-    }
+    m_conditionVariable.wait();
 
     val = m_queue.front();
     m_queue.pop();
@@ -148,7 +136,6 @@ void        QueueConcurrent< T >::Clear         ()
     {
         auto val = m_queue.front();
         m_queue.pop();
-
     }
 }
 

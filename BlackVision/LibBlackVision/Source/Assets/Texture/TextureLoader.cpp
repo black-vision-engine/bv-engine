@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "TextureLoader.h"
 #include "LibImage.h"
 #include "TextureUtils.h"
