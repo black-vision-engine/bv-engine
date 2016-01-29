@@ -4,7 +4,6 @@
 
 #include "AssetDescriptor.h"
 #include "AssetManager.h"
-#include "Serialization/SerializationHelper.h"
 
 #include "Engine/Models/BasicNode.h" // FIXME this is only important for GetAssetsWithUIDs
 

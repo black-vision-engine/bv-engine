@@ -10,10 +10,9 @@
 // warning: unreferenced formal parameter x
 
 
-#include <boost/log/sources/severity_channel_logger.hpp>
-#include <boost\log\sources\record_ostream.hpp>
-//#include <boost\log\sinks\sync_frontend.hpp>
-#include <boost\log\sinks\async_frontend.hpp>
+#include "boost/log/sources/severity_channel_logger.hpp"
+#include "boost/log/sources/record_ostream.hpp"
+#include "boost/log/sinks/async_frontend.hpp"
 
 
 #include "LoggerEnums.h"

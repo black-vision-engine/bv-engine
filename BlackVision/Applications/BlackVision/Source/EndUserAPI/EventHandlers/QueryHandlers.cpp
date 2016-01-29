@@ -461,7 +461,7 @@ void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser,
 
     for( auto & ap : aps )
     {
-        ap = Path( ap.Str().substr( ap.Str().find_first_not_of( categoryName ) ) );
+        ap = Path( ap.Str().substr( ap.Str().find_first_not_of( categoryName ) ) ); // FIXME: Ugly part of code. Add some function parsing path to category name and path.
         auto desc = pm->GetAssetDesc( projectName, categoryName, ap );
 
         if( desc )

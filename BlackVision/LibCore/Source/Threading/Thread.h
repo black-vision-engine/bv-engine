@@ -1,10 +1,10 @@
 #pragma once
 
-#pragma warning(push)
-#pragma warning(disable : 4100)
-#include <boost/thread.hpp>
-#include <boost/date_time.hpp>
-#pragma warning(pop)
+// FORWARD DECLARATIONS
+namespace boost
+{
+class thread;
+} // boost
 
 namespace bv
 {
@@ -13,7 +13,7 @@ class Thread
 {
 private:
 
-    boost::thread   m_thread;
+    boost::thread * m_thread;
 
 private:
 
