@@ -48,12 +48,13 @@ AssetDescConstPtr AnimationAssetAccessor::GetAssetDesc( const Path & path ) cons
         for( auto fe : m_fileExts )
         {
             auto pathList = Path::List( p, false, fe );
-            auto numFrames = pathList.size();
 
-            auto props = image::GetImageProps( pathList.at( 0 ).Str() );
-
-            if( numFrames > 0 )
+            if( !pathList.empty() )
             {
+                auto numFrames = pathList.size();
+
+                auto props = image::GetImageProps( pathList[ 0 ].Str() );
+
                 return AnimationAssetDesc::Create( ( Path( "sequences" ) / path ).Str(), numFrames, props.width, props.height, fe );
             }
         }
@@ -234,16 +235,22 @@ void				AnimationAssetAccessor::ExportAll			( const Path & expAssetFilePath ) co
 //
 PathVec				AnimationAssetAccessor::ListAll				( const Path & path, bool recursive ) const
 {
+    PathVec ret;
+
+    if( PathContainsAnimation( m_rootPath / path ) )
+    {
+        ret.push_back( path );
+        return ret;
+    }
+
     auto pathList = Path::List( m_rootPath / path, recursive );
 
-    PathVec ret; 
 
     for( auto p : pathList )
     {
         if( Path::IsDir( p ) )
         {
-            auto ext = PathContainsAnimation( p );
-            if( !ext.empty() )
+            if( PathContainsAnimation( p ) )
             {
                 ret.push_back( p );
             }
@@ -277,7 +284,7 @@ PathVec				AnimationAssetAccessor::ListAllUnique		( const Path & path ) const
 
 // ********************************
 //
-std::string         AnimationAssetAccessor::PathContainsAnimation( const Path & path ) const
+bool                AnimationAssetAccessor::PathContainsAnimation( const Path & path ) const
 {
     for( auto fe : m_fileExts )
     {
@@ -285,11 +292,11 @@ std::string         AnimationAssetAccessor::PathContainsAnimation( const Path & 
 
         if( l.size() > 0 )
         {
-            return fe;
+            return true;
         }
     }
 
-    return "";
+    return false;
 }
 
 // ********************************

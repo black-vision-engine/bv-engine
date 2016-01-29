@@ -43,7 +43,7 @@ public:
 private:
     explicit                    AnimationAssetAccessor( const Path & rootPath, const StringVector & fileExts );
 
-    std::string                 PathContainsAnimation( const Path & path ) const;
+    bool                        PathContainsAnimation( const Path & path ) const;
 
     void				        CreateDir           () const;
 
