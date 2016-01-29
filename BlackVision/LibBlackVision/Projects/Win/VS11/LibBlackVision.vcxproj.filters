@@ -960,19 +960,10 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenDisplay.cpp">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenRenderLogic.cpp">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderLogicContext.cpp">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetEntryDesc.cpp">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetFactory.cpp">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetStack.cpp">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetStackAllocator.cpp">
@@ -2024,19 +2015,10 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenDisplay.h">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\OffscreenRenderLogic.h">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderLogicContext.h">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetEntryDesc.h">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetFactory.h">
-      <Filter>Engine\Graphics\Effects\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetStack.h">
       <Filter>Engine\Graphics\Effects\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetStackAllocator.h">
