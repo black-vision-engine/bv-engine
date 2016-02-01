@@ -219,8 +219,6 @@ inline void		NodeUpdater::UpdateTexturesData				()
         for( unsigned int i = 0; i < textures.size(); ++i, ++j )
         {
             auto texDesc    = textures[ i ];
-			auto samplerState = texDesc->GetSamplerState();
-			auto shaderSamplerParams = shaderParams->GetSamplerParameters( j );
 
 			if( m_texDataUpdateID[ txIdx ][ j ] < texDesc->GetUpdateID() )
             {
@@ -238,6 +236,9 @@ inline void		NodeUpdater::UpdateTexturesData				()
                 m_texDataUpdateID[ txIdx ][ j ] = texDesc->GetUpdateID();
             }
 
+			auto samplerState = texDesc->GetSamplerState();
+			auto shaderSamplerParams = shaderParams->GetSamplerParameters( j );
+
 			//update sampler values
 			shaderSamplerParams->SetWrappingModeX( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
 			shaderSamplerParams->SetWrappingModeY( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
@@ -251,12 +252,11 @@ inline void		NodeUpdater::UpdateTexturesData				()
         {
             auto tex2D   = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
             auto animDesc   = animations[ i ];
-			auto samplerState = animDesc->GetSamplerState();
-			auto shaderSamplerParams = shaderParams->GetSamplerParameters( j );
 
 			auto currFrame = animDesc->CurrentFrame();
 			auto numTextures = animDesc->NumTextures();
-			assert( currFrame <= numTextures );
+
+            assert( currFrame <= numTextures );
 
 			if( m_texDataUpdateID[ txIdx ][ j ] < animDesc->GetUpdateID() )
 			{
@@ -268,9 +268,11 @@ inline void		NodeUpdater::UpdateTexturesData				()
 				{
 					tex2D->ForceUpdate();
 				}
-
                 m_texDataUpdateID[ txIdx ][ j ] = animDesc->GetUpdateID();
 			}
+
+			auto samplerState = animDesc->GetSamplerState();
+			auto shaderSamplerParams = shaderParams->GetSamplerParameters( j );
 
 			//update sampler values
 			shaderSamplerParams->SetWrappingModeX( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );

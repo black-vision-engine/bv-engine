@@ -162,11 +162,14 @@ void                     DefaultAnimationDescriptor::AddBits            ( Textur
 //
 void                     DefaultAnimationDescriptor::SetCurrentFrame     ( unsigned int frameNum )
 {
-	if( m_curFrame != frameNum )
-	{
-		m_updateID = ApplicationContext::Instance().GetTimestamp() + 1;
-	}
-    m_curFrame = frameNum;
+    if( frameNum <= NumTextures() )
+    {
+	    if( m_curFrame != frameNum )
+	    {
+		    m_updateID = ApplicationContext::Instance().GetTimestamp() + 1;
+	    }
+        m_curFrame = frameNum;
+    }
 }
 
 // *******************************
