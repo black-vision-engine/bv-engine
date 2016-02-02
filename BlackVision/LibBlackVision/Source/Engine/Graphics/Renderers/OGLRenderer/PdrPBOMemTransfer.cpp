@@ -132,14 +132,16 @@ bool PdrPBOMemTransfer::PBORequired     ( DataBuffer::Semantic semantic )
 GLuint  PdrPBOMemTransfer::NumPBOs      ( DataBuffer::Semantic semantic ) const
 {
 #ifdef DISALLOW_ASYNC_PBO
-    return 1
+    return 1;
 #endif
 
-    if( semantic == DataBuffer::Semantic::S_DYNAMIC || semantic == DataBuffer::Semantic::S_TEXTURE_DYNAMIC )
+    //FIXME: temporary DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE don't use 2 pbos, it needs fixes in animation asset first
+    if( semantic == DataBuffer::Semantic::S_DYNAMIC || semantic == DataBuffer::Semantic::S_TEXTURE_DYNAMIC
+        || semantic == DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE )
     {
         return 1;
     }
-    else if ( semantic == DataBuffer::Semantic::S_TEXTURE_STREAMING_READ || semantic == DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE )
+    else if ( semantic == DataBuffer::Semantic::S_TEXTURE_STREAMING_READ )
     {
         return 2;
     }
