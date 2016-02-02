@@ -133,7 +133,7 @@ CompositeBezierInterpolator< TimeValueT, ValueT >*     CompositeBezierInterpolat
 				interpolator->AddKey( key->t, key->val );
 				if( key != keys.back() )
 				{
-					interpolator->SetCurveType( SerializationHelper::String2T< CurveType >( SerializationHelper::ct2s, deser.GetAttribute( "type" ) ) );
+					interpolator->SetAddedKeyCurveType( SerializationHelper::String2T< CurveType >( SerializationHelper::ct2s, deser.GetAttribute( "type" ) ) );
 					if( deser.NextChild() == false )
 						if( key == keys.end()[-2] ) // everything is OK, this is the end, we need to go out
 							deser.ExitChild();
@@ -162,7 +162,7 @@ CompositeBezierInterpolator< TimeValueT, ValueT >*     CompositeBezierInterpolat
         deser.ExitChild(); // exit "interpolations"
     }
 
-    interpolator->SetCurveType( SerializationHelper::String2T< CurveType >( SerializationHelper::ct2s, deser.GetAttribute( "curve_type" ) ) );
+    interpolator->SetAddedKeyCurveType( SerializationHelper::String2T< CurveType >( SerializationHelper::ct2s, deser.GetAttribute( "curve_type" ) ) );
     interpolator->SetWrapPreMethod( SerializationHelper::String2T< WrapMethod >( SerializationHelper::wm2s, deser.GetAttribute( "preMethod" ) ) );
     interpolator->SetWrapPostMethod( SerializationHelper::String2T< WrapMethod >( SerializationHelper::wm2s, deser.GetAttribute( "postMethod" ) ) );
 
@@ -550,7 +550,7 @@ const std::vector< IEvaluator< TimeValueT, ValueT >* > &                  Compos
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-void                                                CompositeBezierInterpolator< TimeValueT, ValueT >::SetCurveType( CurveType type )
+void                                                CompositeBezierInterpolator< TimeValueT, ValueT >::SetGlobalCurveType( CurveType type )
 {
     m_type = type;
     interpolators.clear();

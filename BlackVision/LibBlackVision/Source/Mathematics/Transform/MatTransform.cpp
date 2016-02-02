@@ -104,12 +104,12 @@ CompositeTransform::~CompositeTransform()
 
 // *************************************
 //
-void            CompositeTransform::SetCurveType        ( CurveType type )  
+void            CompositeTransform::SetGlobalCurveType        ( CurveType type )  
 { 
-    m_translationX.SetCurveType( type );  m_translationY.SetCurveType( type );  m_translationZ.SetCurveType( type ); 
-    m_rotationAxis.SetCurveType( type );  m_rotationAngle.SetCurveType( type ); 
-    m_scaleX.SetCurveType( type );  m_scaleY.SetCurveType( type );  m_scaleZ.SetCurveType( type ); 
-    m_centerX.SetCurveType( type );  m_centerY.SetCurveType( type );  m_centerZ.SetCurveType( type ); 
+    m_translationX.SetGlobalCurveType( type );  m_translationY.SetGlobalCurveType( type );  m_translationZ.SetGlobalCurveType( type ); 
+    m_rotationAxis.SetGlobalCurveType( type );  m_rotationAngle.SetGlobalCurveType( type ); 
+    m_scaleX.SetGlobalCurveType( type );  m_scaleY.SetGlobalCurveType( type );  m_scaleZ.SetGlobalCurveType( type ); 
+    m_centerX.SetGlobalCurveType( type );  m_centerY.SetGlobalCurveType( type );  m_centerZ.SetGlobalCurveType( type ); 
 }
 
 // *************************************

@@ -80,7 +80,7 @@ public:
 
     virtual         ~CompositeTransform ();
 
-    void            SetCurveType        ( CurveType type );
+    void            SetGlobalCurveType  ( CurveType type );
     void            SetAddedKeyCurveType ( CurveType type );
     void            SetWrapPostMethod   ( WrapMethod method );
     void            SetWrapPreMethod    ( WrapMethod method );
