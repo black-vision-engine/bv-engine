@@ -114,6 +114,16 @@ void            CompositeTransform::SetCurveType        ( CurveType type )
 
 // *************************************
 //
+void        CompositeTransform::SetAddedKeyCurveType    ( CurveType type )
+{
+    m_translationX.SetAddedKeyCurveType( type );  m_translationY.SetAddedKeyCurveType( type );  m_translationZ.SetAddedKeyCurveType( type ); 
+    m_rotationAxis.SetAddedKeyCurveType( type );  m_rotationAngle.SetAddedKeyCurveType( type ); 
+    m_scaleX.SetAddedKeyCurveType( type );  m_scaleY.SetAddedKeyCurveType( type );  m_scaleZ.SetAddedKeyCurveType( type ); 
+    m_centerX.SetAddedKeyCurveType( type );  m_centerY.SetAddedKeyCurveType( type );  m_centerZ.SetAddedKeyCurveType( type ); 
+}
+
+// *************************************
+//
 void            CompositeTransform::SetWrapPostMethod   ( WrapMethod method )
 {
     m_translationX.SetWrapPostMethod( method );  m_translationY.SetWrapPostMethod( method );  m_translationZ.SetWrapPostMethod( method ); 

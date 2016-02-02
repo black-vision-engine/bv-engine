@@ -570,6 +570,14 @@ void                                                CompositeBezierInterpolator<
 // *******************************
 //
 template< class TimeValueT, class ValueT >
+void                                                CompositeBezierInterpolator< TimeValueT, ValueT >::SetAddedKeyCurveType ( CurveType type )
+{
+    m_type = type;
+}
+
+// *******************************
+//
+template< class TimeValueT, class ValueT >
 CurveType                                           CompositeBezierInterpolator< TimeValueT, ValueT >::GetCurveType    ()
 {
     return m_type;

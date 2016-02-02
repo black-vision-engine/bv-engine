@@ -56,6 +56,7 @@ public:
     const std::vector< IEvaluator* > &                  GetInterpolators    ();
 
     void                                                SetCurveType        ( CurveType type );
+    void                                                SetAddedKeyCurveType ( CurveType type );
     CurveType                                           GetCurveType        ();
 
     void                                                SetWrapPostMethod   ( WrapMethod method );

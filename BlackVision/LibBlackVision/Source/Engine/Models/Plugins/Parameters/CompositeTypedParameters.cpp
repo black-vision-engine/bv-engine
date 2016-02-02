@@ -22,6 +22,13 @@ void                ParamTransform::SetGlobalCurveType    ( CurveType type )
 
 // *******************************
 // FIXME: reimplement with SQT paramter model
+void                ParamTransform::SetAddedKeyCurveType    ( CurveType type )
+{
+    m_transformModel.SetAddedKeyCurveType( type );
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
 CurveType           ParamTransform::GetCurveType    ()
 {
     assert( false );
