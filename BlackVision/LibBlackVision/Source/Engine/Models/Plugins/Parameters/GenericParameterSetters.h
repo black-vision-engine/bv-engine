@@ -52,7 +52,8 @@ bool    MoveCenterMassKey       ( IParameterPtr parameter, TimeType t, TimeType 
 bool                                                RemoveParameterKey ( IParameterPtr parameter, TimeType t );
 bool                                                MoveParameterKey   ( IParameterPtr parameter, TimeType t, TimeType newTime );
 
-bool                                                BezierSetCurveType ( IParameterPtr parameter, CurveType type );
+bool										        BezierSetAddedKeyCurveType ( IParameterPtr parameter, CurveType type );
+bool                                                BezierSetAllInterpolatorTypes ( IParameterPtr parameter, CurveType type );
 CurveType                                           BezierGetCurveType ( IParameterPtr parameter );
 
 bool                                                SetWrapPostMethod  ( IParameterPtr parameter, WrapMethod method );

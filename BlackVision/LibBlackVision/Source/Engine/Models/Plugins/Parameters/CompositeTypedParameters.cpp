@@ -15,7 +15,7 @@ ParamTransform::ParamTransform  ( const std::string & name, const CompositeTrans
 
 // *******************************
 // FIXME: reimplement with SQT paramter model
-void                ParamTransform::SetCurveType    ( CurveType type ) 
+void                ParamTransform::SetGlobalCurveType    ( CurveType type ) 
 { 
     m_transformModel.SetCurveType( type ); 
 }

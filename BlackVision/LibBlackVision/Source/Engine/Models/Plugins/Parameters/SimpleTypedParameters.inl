@@ -41,7 +41,7 @@ void                SimpleParameterImpl< InterpolatorType, ValueType, type >::Se
 // *******************************
 //
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
-void SimpleParameterImpl< InterpolatorType, ValueType, type >::SetCurveType    ( CurveType type )
+void SimpleParameterImpl< InterpolatorType, ValueType, type >::SetGlobalCurveType    ( CurveType type )
 { 
     m_interpolator.SetCurveType( type ); 
 }

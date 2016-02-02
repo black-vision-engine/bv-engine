@@ -967,7 +967,7 @@ model::BasicNodePtr CosineDemoRect( glm::vec3 offset, model::ITimeEvaluatorPtr t
 
     auto qParam = model::QueryTypedParam< model::ParamTransformPtr >( param );
     assert( qParam );
-    qParam->SetCurveType( type );
+    qParam->SetAddedKeyCurveType( type );
 
     model::SetParameterTranslation( param, 5.f, offset + glm::vec3( 0, -2, 0 ) );
     model::SetParameterTranslation( param, 1.f, offset );
