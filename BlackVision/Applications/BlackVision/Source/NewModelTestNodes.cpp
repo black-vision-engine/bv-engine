@@ -1817,7 +1817,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::ITimeEvaluatorP
 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 4.f / 1080.f );
 
-	success = model::LoadFont( node->GetPlugin( "timer" ), "Assets/Fonts/arial.ttf", 127, blurSize, 0, false );
+	success = model::LoadFont( node->GetPlugin( "timer" ), "fonts/proj00/arial.ttf", 127, blurSize, 0, false );
     assert( success );
 
     SetTimeTimerPlugin( node->GetPlugin( "timer" ), 0.0f );
@@ -1890,7 +1890,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTimerNode( model::ITimeEvalu
 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 4.f / 1080.f );
 
-	success = model::LoadFont( node->GetPlugin( "timer" ), "fonts/arial.ttf", 127, blurSize, 0, false );
+	success = model::LoadFont( node->GetPlugin( "timer" ), "fonts/proj00/arial.ttf", 127, blurSize, 0, false );
     assert( success );
 
     SetTimeTimerPlugin( node->GetPlugin( "timer" ), 0.0f );

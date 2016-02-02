@@ -178,7 +178,7 @@ void UpdateInterpolator( std::vector< IEvaluator<TimeValueT, ValueT > * > & inte
 {
     typedef Key< TimeValueT, ValueT > Key;
 
-    const float scale = 0.3f;
+    const float scale = 0.2f;
 
     auto iType = interpolators[ i ]->GetType();
 
