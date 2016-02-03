@@ -8,6 +8,8 @@
 
 #include "Serialization/ISerializable.h"
 
+#include "Key.h"
+
 namespace bv
 {
 

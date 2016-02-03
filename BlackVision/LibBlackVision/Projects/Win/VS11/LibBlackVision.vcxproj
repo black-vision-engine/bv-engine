@@ -421,8 +421,9 @@
     <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Core\MathFuncs.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp" />
-    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeBezierInterpolator.cpp" />
+    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.cpp" />
+    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Key.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\BVSerializeContext.cpp" />
@@ -813,13 +814,14 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Defines.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.h" />
-    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeBezierInterpolator.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\BezierFunction.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\ConstFunction.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\LinearFunction.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\PolynomialFunction.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\InterpolatorBasicTypes.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Key.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Rect.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Transform\MatTransform.h" />
     <ClInclude Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.h" />
@@ -872,6 +874,7 @@
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.inl" />
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.inl" />
     <None Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.inl" />
+    <None Include="..\..\..\Source\Mathematics\Interpolators\Key.inl" />
     <None Include="..\..\..\Source\Serialization\SerializationHelper.inl" />
   </ItemGroup>
   <ItemGroup>

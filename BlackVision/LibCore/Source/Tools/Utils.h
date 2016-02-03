@@ -31,4 +31,13 @@ std::string toString( const T & t )
 template<> 
 std::string toString< std::string >( const std::string & t );
 
+// *************************************
+//
+StringVector & split_( const std::string & s, char delim, StringVector & elems );
+
+
+// *************************************
+//
+StringVector split_ ( const std::string & s, char delim );
+
 } // bv

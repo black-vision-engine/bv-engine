@@ -876,9 +876,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.cpp">
       <Filter>Engine\Models\Timeline</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeBezierInterpolator.cpp">
-      <Filter>Mathematics\Interpolators</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.cpp">
       <Filter>Assets\Texture</Filter>
     </ClCompile>
@@ -1174,6 +1171,12 @@
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\stdafx.cpp" />
+    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.cpp">
+      <Filter>Mathematics\Interpolators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Key.cpp">
+      <Filter>Mathematics\Interpolators</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2013,9 +2016,6 @@
     <ClInclude Include="..\..\..\Source\Assets\AssetSerialization.h">
       <Filter>Assets</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeBezierInterpolator.h">
-      <Filter>Mathematics\Interpolators</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h">
       <Filter>Assets\Texture</Filter>
     </ClInclude>
@@ -2507,6 +2507,12 @@
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\stdafx.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.h">
+      <Filter>Mathematics\Interpolators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Key.h">
+      <Filter>Mathematics\Interpolators</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl">
@@ -2568,6 +2574,9 @@
     </None>
     <None Include="..\..\..\Source\Serialization\SerializationHelper.inl">
       <Filter>Serialization</Filter>
+    </None>
+    <None Include="..\..\..\Source\Mathematics\Interpolators\Key.inl">
+      <Filter>Mathematics\Interpolators</Filter>
     </None>
   </ItemGroup>
 </Project>

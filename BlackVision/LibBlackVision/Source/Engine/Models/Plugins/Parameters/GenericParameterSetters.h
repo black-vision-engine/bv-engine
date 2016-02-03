@@ -3,7 +3,7 @@
 #include "Engine/Models/Plugins/Parameters/CachedSimpleTypedParameters.h"
 #include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 
-#include "Mathematics/Interpolators/CompositeBezierInterpolator.h"
+#include "Mathematics/Interpolators/CompositeInterpolator.h"
 
 namespace bv { namespace model {
 
