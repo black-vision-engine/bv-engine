@@ -77,7 +77,7 @@ DefaultPluginParamValModelPtr   DefaultCylinderPluginDesc::CreateDefaultModel  (
     h.AddParam< IntInterpolator, DefaultPlugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
         ( PN::OPENANGLEMODE, DefaultPlugin::OpenAngleMode::CW, true, true );
    	h.AddParam< IntInterpolator, DefaultPlugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
-        ( PN::WEIGHTCENTERX, DefaultPlugin::WeightCenter::CENTER, true, true );\
+        ( PN::WEIGHTCENTERX, DefaultPlugin::WeightCenter::CENTER, true, true );
 	h.AddParam< IntInterpolator, DefaultPlugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
         ( PN::WEIGHTCENTERY, DefaultPlugin::WeightCenter::MIN, true, true );
 	h.AddParam< IntInterpolator, DefaultPlugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >

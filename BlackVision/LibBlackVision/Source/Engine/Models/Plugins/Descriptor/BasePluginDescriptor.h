@@ -58,6 +58,7 @@ protected:
 
         void                                    CreateVacModel      ();
         void                                    CreatePSModel       ();
+        void                                    CreatePluginModel   ();
 
 
         template< typename InterpolatorType, typename ValueType, ModelParamType MPT, ParamType PT, typename ParamImpl >
