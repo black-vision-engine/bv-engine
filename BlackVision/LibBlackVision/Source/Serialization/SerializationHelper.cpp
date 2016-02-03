@@ -2,6 +2,8 @@
 
 #include "SerializationHelper.h"
 
+#include "Tools/StringHeplers.h"
+
 #include <sstream>
 
 namespace bv {
@@ -54,22 +56,34 @@ glm::vec2               String2Vec2( const std::string & s )
         std::stof( vals[1] ) );
 }
 
-template<> Float32 _String2T( const std::string & s ) { return std::stof( s ); }
-template<> bool _String2T( const std::string & s ) { if( s == "true" ) return true; else if( s == "false" ) return false; assert( false ); return false; } // FIXME error handling
-template<> UInt32 _String2T( const std::string & s ) { return std::stoul( s ); }
-template<> Int32 _String2T( const std::string & s ) { return std::stoi( s ); }
-template<> UInt64 _String2T( const std::string & s ) { return std::stoull( s ); }
-template<> Int64 _String2T( const std::string & s ) { return std::stoll( s ); }
-template<> glm::vec2 _String2T( const std::string & s ) { return String2Vec2( s ); }
-template<> glm::vec3 _String2T( const std::string & s ) { return String2Vec3( s ); }
-template<> glm::vec4 _String2T( const std::string & s ) { return String2Vec4( s ); }
+//template<> Float32 _String2T( const std::string & s ) { return std::stof( s ); }
+//template<> bool _String2T( const std::string & s ) { if( s == "true" ) return true; else if( s == "false" ) return false; assert( false ); return false; } // FIXME error handling
+//template<> UInt32 _String2T( const std::string & s ) { return std::stoul( s ); }
+//template<> Int32 _String2T( const std::string & s ) { return std::stoi( s ); }
+//template<> UInt64 _String2T( const std::string & s ) { return std::stoull( s ); }
+//template<> Int64 _String2T( const std::string & s ) { return std::stoll( s ); }
+//template<> glm::vec2 _String2T( const std::string & s ) { return String2Vec2( s ); }
+//template<> glm::vec3 _String2T( const std::string & s ) { return String2Vec3( s ); }
+//template<> glm::vec4 _String2T( const std::string & s ) { return String2Vec4( s ); }
 
 
 // FIXME: are those three needed?
-template<> double _String2T( const std::string & s ) { return std::stod( s ); }
-template<> std::string _String2T( const std::string & s ) { return s; }
-template<> std::wstring _String2T( const std::string & s ) { return std::wstring( s.begin(), s.end() ); }
+//template<> double _String2T( const std::string & s ) { return std::stod( s ); }
+//template<> std::string _String2T( const std::string & s ) { return s; }
+//template<> std::wstring _String2T( const std::string & s ) { return std::wstring( s.begin(), s.end() ); }
 
+template<> Expected< Float64 >      String2T( const std::string & s ) { return std::stod( s ); }
+template<> Expected< Float32 >      String2T( const std::string & s ) { return std::stof( s ); }
+template<> Expected< bool >         String2T( const std::string & s ) { if( s == "true" ) return true; else if( s == "false" ) return false; assert( false ); return false; } // FIXME error handling
+template<> Expected< UInt32 >       String2T( const std::string & s ) { return std::stoul( s ); }
+template<> Expected< Int32 >        String2T( const std::string & s ) { return std::stoi( s ); }
+template<> Expected< UInt64 >       String2T( const std::string & s ) { return std::stoull( s ); }
+template<> Expected< Int64 >        String2T( const std::string & s ) { return std::stoll( s ); }
+template<> Expected< glm::vec2 >    String2T( const std::string & s ) { return String2Vec2( s ); }
+template<> Expected< glm::vec3 >    String2T( const std::string & s ) { return String2Vec3( s ); }
+template<> Expected< glm::vec4 >    String2T( const std::string & s ) { return String2Vec4( s ); }
+template<> Expected< std::string >  String2T( const std::string & s ) { return s; }
+template<> Expected< std::wstring > String2T( const std::string & s ) { return StringToWString( s ); }
 
 // *************************************
 //
@@ -212,8 +226,14 @@ std::string T2String( const bool& b )
         return "false";
 }
 
+template<>
+std::string T2String( const std::wstring& wstr )
+{
+    return WStringToString( wstr );
+}
+
+
 template std::string T2String( const std::string& v );
-template std::string T2String( const std::wstring& v );
 template std::string T2String( const glm::vec2& v );
 template std::string T2String( const glm::vec3& v );
 template std::string T2String( const glm::vec4& v );

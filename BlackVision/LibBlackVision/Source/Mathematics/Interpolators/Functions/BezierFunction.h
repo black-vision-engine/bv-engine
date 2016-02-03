@@ -87,13 +87,13 @@ public:
             assert( false );
 
         deser.EnterChild( "v1" );
-            v1.t = SerializationHelper::_String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
-            v1.val = SerializationHelper::_String2T< ValueT >( deser.GetAttribute( "dval" ) );
+            v1.t = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
+            v1.val = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "dval" ) );
         deser.ExitChild();
 
         deser.EnterChild( "v2" );
-            v2.t = SerializationHelper::_String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
-            v2.val = SerializationHelper::_String2T< ValueT >( deser.GetAttribute( "dval" ) );
+            v2.t = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "dt" ) );
+            v2.val = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "dval" ) );
         deser.ExitChild();
     }
 };
