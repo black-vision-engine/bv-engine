@@ -1173,6 +1173,7 @@
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\FontAssetThumbnail.cpp">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
