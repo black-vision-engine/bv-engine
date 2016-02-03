@@ -43,6 +43,9 @@
 #include "EndUserAPI/EventHandlers/RemoteEventsHandlers.h"
 #include "EndUserAPI/JsonCommandsListener/JsonCommandsListener.h"
 
+#include <thread>
+#include <chrono>
+
 //pablito
 #define XML
 #include "ConfigManager.h"
@@ -263,7 +266,7 @@ void BVAppLogic::SetStartTime       ( unsigned long millis )
 
 // *********************************
 //
-void BVAppLogic::OnUpdate           ( unsigned int millis, Renderer * renderer )
+void BVAppLogic::OnUpdate           ( unsigned long millis, Renderer * renderer )
 {
     HPROFILER_FUNCTION( "BVAppLogic::OnUpdate", PROFILER_THREAD1 );
 
@@ -400,10 +403,11 @@ void    BVAppLogic::PostFrameLogic   ( const SimpleTimer & timer, unsigned int m
 #endif
     }
 
-    unsigned long frameMillis = timer.ElapsedMillis() - millis;
+    auto frameMillis = timer.ElapsedMillis() - millis;
     if( frameMillis < DefaultConfig.FrameTimeMillis() )
     {
-        Sleep( DefaultConfig.FrameTimeMillis() - frameMillis );
+        std::this_thread::sleep_for( std::chrono::milliseconds( DefaultConfig.FrameTimeMillis() - frameMillis ) );
+        //Sleep( DefaultConfig.FrameTimeMillis() - frameMillis );
         //printf( "Sleeping: %d\n", DefaultConfig.FrameTimeMillis() - frameMillis );
     }
 }

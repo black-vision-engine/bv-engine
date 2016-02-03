@@ -6,6 +6,8 @@
 
 #include "System/InitSubsystem.h"
 
+#include "System/Time.h"
+
 #include "Engine/Graphics/Renderers/Renderer.h"
 
 #include "Engine/Graphics/SceneGraph/Camera.h"
@@ -87,8 +89,8 @@ void BasicWindowApp::OnPreidle  ()
 //
 void BasicWindowApp::OnIdle		()
 {
-    static DWORD curMillis = timeGetTime();
-	auto timeDiff = timeGetTime() - curMillis;
+    static auto curMillis = Time::Now();
+	auto timeDiff = Time::Now() - curMillis;
 
 	ApplicationContext::Instance().SetTimestamp( timeDiff );
 

@@ -107,6 +107,9 @@
     <ClInclude Include="..\..\..\Source\Tools\Base64.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\System\Time.h">
+      <Filter>System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">
@@ -168,6 +171,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Tools\Base64.cpp">
       <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\System\Time.cpp">
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

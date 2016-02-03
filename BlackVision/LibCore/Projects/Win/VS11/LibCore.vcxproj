@@ -30,6 +30,7 @@
     <ClInclude Include="..\..\..\Source\System\Env.h" />
     <ClInclude Include="..\..\..\Source\System\InitSubsystem.h" />
     <ClInclude Include="..\..\..\Source\System\Path.h" />
+    <ClInclude Include="..\..\..\Source\System\Time.h" />
     <ClInclude Include="..\..\..\Source\Threading\CriticalSection.h" />
     <ClInclude Include="..\..\..\Source\Threading\ScopedCriticalSection.h" />
     <ClInclude Include="..\..\..\Source\Threading\Thread.h" />
@@ -57,6 +58,7 @@
     <ClCompile Include="..\..\..\Source\System\Env.cpp" />
     <ClCompile Include="..\..\..\Source\System\InitSubsystem.cpp" />
     <ClCompile Include="..\..\..\Source\System\Path.cpp" />
+    <ClCompile Include="..\..\..\Source\System\Time.cpp" />
     <ClCompile Include="..\..\..\Source\Threading\CriticalSection.cpp" />
     <ClCompile Include="..\..\..\Source\Threading\ScopedCriticalSection.cpp" />
     <ClCompile Include="..\..\..\Source\Threading\Thread.cpp" />

@@ -94,7 +94,7 @@ public:
 	void			SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager);
 	FrameStatsCalculator* GetStatsCalculator(){return &m_statsCalculator;};
 
-    virtual void    OnUpdate        ( unsigned int millis, Renderer * renderer );
+    virtual void    OnUpdate        ( unsigned long millis, Renderer * renderer );
     virtual void    OnKey           ( unsigned char c );
     
     virtual void    ChangeState     ( BVAppState state );
