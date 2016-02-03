@@ -34,7 +34,7 @@ public:
     void                        SetH                ( float h, TimeType t = TimeType( 0.0 ) );
 
     void                        SetPosition         ( float x, float y, float z, TimeType t = TimeType( 0.0 ) );
-    void                        SetRotation         ( float x, float y, float z, float angle, TimeType t = TimeType( 0.0 ) );
+    void                        SetRotation         ( float x, float y, float z, TimeType t = TimeType( 0.0 ) );
     void                        SetScale            ( float sx, float sy, float sz, TimeType t = TimeType( 0.0 ) );
 
     virtual model::BasicNodePtr CreateNode          ( const std::string & name, bool resetToBuilderDefaults = false );

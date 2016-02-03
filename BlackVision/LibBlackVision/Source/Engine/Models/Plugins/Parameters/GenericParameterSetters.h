@@ -31,7 +31,7 @@ inline bool MoveParameterKey( IParameterPtr parameter, TimeType t, TimeType newT
 }
 
 
-bool    SetParameterRotation    ( IParameterPtr parameter, TimeType t, const glm::vec3 & rotAxis, float angle );
+bool    SetParameterRotation    ( IParameterPtr parameter, TimeType t, const glm::vec3 & eulerAngles );
 bool    SetParameterScale       ( IParameterPtr parameter, TimeType t, const glm::vec3 & scale );
 bool    SetParameterTranslation ( IParameterPtr parameter, TimeType t, const glm::vec3 & translation );
 bool    SetParameterCenterMass  ( IParameterPtr parameter, TimeType t, const glm::vec3 & center );

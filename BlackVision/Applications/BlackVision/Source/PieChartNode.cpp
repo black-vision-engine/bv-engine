@@ -9,7 +9,7 @@ void PieChartNode::Init( model::ITimeEvaluatorPtr timeEvaluator, const std::vect
 	auto simpleTransform = GetPlugin( "transform" )->GetParameter( "simple_transform" );
 	SetParameterScale( simpleTransform, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
 	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( 0, 0, -1.f) );
-	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 20.f, 0.f, 0.f ) );
 
 	float angle = 0;
 

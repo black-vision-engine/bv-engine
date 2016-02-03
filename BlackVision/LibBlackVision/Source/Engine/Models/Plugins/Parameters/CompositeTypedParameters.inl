@@ -5,9 +5,9 @@ namespace bv { namespace model {
 
 // *******************************
 // FIXME: reimplement with SQT paramter model
-inline   void       ParamTransform::SetRotation     ( const glm::vec3 & rotAxis, float angle, TimeType t )
+inline   void       ParamTransform::SetRotation     ( const glm::vec3 & eulerAngles, TimeType t )
 {
-    m_transformModel.SetRotation( rotAxis, angle, t );
+    m_transformModel.SetRotation( eulerAngles, t );
 }
 
 // *******************************

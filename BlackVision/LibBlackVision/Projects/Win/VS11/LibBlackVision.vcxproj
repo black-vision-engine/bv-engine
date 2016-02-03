@@ -424,6 +424,7 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeBezierInterpolator.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
+    <ClCompile Include="..\..\..\Source\Mathematics\Transform\SQTTransform.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\BVSerializeContext.cpp" />
     <ClCompile Include="..\..\..\Source\Serialization\BV\XML\BVXMLDeserializer.cpp" />
@@ -822,6 +823,7 @@
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Rect.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Transform\MatTransform.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Transform\SQTTransform.h" />
     <ClInclude Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.h" />
     <ClInclude Include="..\..\..\Source\Serialization\BV\BVSerializeContext.h" />
     <ClInclude Include="..\..\..\Source\Serialization\BV\CloneViaSerialization.h" />

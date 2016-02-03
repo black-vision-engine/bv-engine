@@ -8,12 +8,13 @@
 
 #include "UseLoggerLibBlackVision.h"
 
+
 namespace bv { 
 
 namespace SerializationHelper {
 
 std::pair< TransformKind, const char* > tk2s[] = {
-    std::make_pair( TransformKind::fwd_center, "fwd_center" ),
+    std::make_pair( TransformKind::center, "center" ),
     std::make_pair( TransformKind::rotation, "rotation" ),
     std::make_pair( TransformKind::scale, "scale" ),
     std::make_pair( TransformKind::translation, "translation" ),
@@ -93,7 +94,7 @@ void            CompositeTransform::InitializeDefaultSRT()
     auto v1 = 1.0f;
 
     SetTranslation( glm::vec3( v0, v0, v0 ), t );
-    SetRotation( glm::vec3( v0, v0, v1 ), v0, t );
+    SetRotation( glm::vec3( v0, v0, v0 ), t );
     SetScale( glm::vec3( v1, v1, v1 ), t );
     SetCenter( glm::vec3( v0, v0, v0 ), t );
 }
@@ -109,7 +110,7 @@ CompositeTransform::~CompositeTransform()
 void            CompositeTransform::SetCurveType        ( CurveType type )  
 { 
     m_translationX.SetCurveType( type );  m_translationY.SetCurveType( type );  m_translationZ.SetCurveType( type ); 
-    m_rotationAxis.SetCurveType( type );  m_rotationAngle.SetCurveType( type ); 
+    m_eulerPitch.SetCurveType( type );  m_eulerYaw.SetCurveType( type ); m_eulerRoll.SetCurveType( type ); 
     m_scaleX.SetCurveType( type );  m_scaleY.SetCurveType( type );  m_scaleZ.SetCurveType( type ); 
     m_centerX.SetCurveType( type );  m_centerY.SetCurveType( type );  m_centerZ.SetCurveType( type ); 
 }
@@ -119,7 +120,7 @@ void            CompositeTransform::SetCurveType        ( CurveType type )
 void            CompositeTransform::SetWrapPostMethod   ( WrapMethod method )
 {
     m_translationX.SetWrapPostMethod( method );  m_translationY.SetWrapPostMethod( method );  m_translationZ.SetWrapPostMethod( method ); 
-    m_rotationAxis.SetWrapPostMethod( method );  m_rotationAngle.SetWrapPostMethod( method ); 
+    m_eulerPitch.SetWrapPostMethod( method );  m_eulerYaw.SetWrapPostMethod( method ); m_eulerRoll.SetWrapPostMethod( method );
     m_scaleX.SetWrapPostMethod( method );  m_scaleY.SetWrapPostMethod( method );  m_scaleZ.SetWrapPostMethod( method ); 
     m_centerX.SetWrapPostMethod( method );  m_centerY.SetWrapPostMethod( method );  m_centerZ.SetWrapPostMethod( method ); 
 }
@@ -128,10 +129,10 @@ void            CompositeTransform::SetWrapPostMethod   ( WrapMethod method )
 //
 void            CompositeTransform::SetWrapPreMethod    ( WrapMethod method )
 {
-    m_translationX.SetWrapPreMethod( method );  m_translationY.SetWrapPreMethod( method );  m_translationZ.SetWrapPreMethod( method ); 
-    m_rotationAxis.SetWrapPreMethod( method );  m_rotationAngle.SetWrapPreMethod( method ); 
-    m_scaleX.SetWrapPreMethod( method );  m_scaleY.SetWrapPreMethod( method );  m_scaleZ.SetWrapPreMethod( method ); 
-    m_centerX.SetWrapPreMethod( method );  m_centerY.SetWrapPreMethod( method );  m_centerZ.SetWrapPreMethod( method ); 
+    m_translationX.SetWrapPreMethod( method ); m_translationY.SetWrapPreMethod( method ); m_translationZ.SetWrapPreMethod( method ); 
+    m_eulerPitch.SetWrapPreMethod( method ); m_eulerYaw.SetWrapPreMethod( method ); m_eulerRoll.SetWrapPreMethod( method );
+    m_scaleX.SetWrapPreMethod( method ); m_scaleY.SetWrapPreMethod( method ); m_scaleZ.SetWrapPreMethod( method ); 
+    m_centerX.SetWrapPreMethod( method ); m_centerY.SetWrapPreMethod( method ); m_centerZ.SetWrapPreMethod( method ); 
 }
 
 // *************************************
@@ -143,16 +144,9 @@ glm::vec3       CompositeTransform::GetTranslation      ( TimeType time ) const
 
 // *************************************
 //
-Float32         CompositeTransform::GetRotationAngle    ( TimeType time ) const
+glm::vec3       CompositeTransform::GetRotation         ( TimeType time ) const
 {
-    return m_rotationAngle.Evaluate( time );
-}
-
-// *************************************
-//
-glm::vec3       CompositeTransform::GetRotationAxis     ( TimeType time ) const
-{
-    return m_rotationAxis.Evaluate( time );
+    return glm::vec3( m_eulerPitch.Evaluate( time ), m_eulerYaw.Evaluate( time ), m_eulerRoll.Evaluate( time ) );
 }
 
 // *************************************
@@ -180,10 +174,11 @@ void            CompositeTransform::SetTranslation      ( const glm::vec3 & vec,
 
 // *************************************
 //
-void            CompositeTransform::SetRotation         ( const glm::vec3 & axis, Float32 angle, TimeType time )
+void            CompositeTransform::SetRotation         ( const glm::vec3 & vec, TimeType time )
 {
-    m_rotationAxis.AddKey( time, axis );
-    m_rotationAngle.AddKey( time, angle );
+    m_eulerPitch.AddKey( time, vec.x );
+    m_eulerYaw.AddKey( time, vec.y );
+    m_eulerRoll.AddKey( time, vec.z );
 }
 
 // *************************************
@@ -217,8 +212,9 @@ void            CompositeTransform::RemoveTranslation   ( TimeType time )
 //
 void            CompositeTransform::RemoveRotation      ( TimeType time )
 {
-    m_rotationAxis.RemoveKey( time );
-    m_rotationAngle.RemoveKey( time );
+    m_eulerPitch.RemoveKey( time );
+    m_eulerYaw.RemoveKey( time );
+    m_eulerRoll.RemoveKey( time );
 }
 
 // *************************************
@@ -258,9 +254,10 @@ bool            CompositeTransform::MoveRotation        ( TimeType time, TimeTyp
 {
     bool result = true;
 
-    result &= m_rotationAxis.MoveKey( time, newTime );
-    result &= m_rotationAngle.MoveKey( time, newTime );
-        
+    result &= m_eulerPitch.MoveKey( time, newTime );
+    result &= m_eulerYaw.MoveKey( time, newTime );
+    result &= m_eulerRoll.MoveKey( time, newTime );
+
     return result;
 }
 
@@ -301,8 +298,6 @@ CompositeTransform::CompositeTransform      ()
 //
 CompositeTransform *    CompositeTransform::Create      ( const IDeserializer & deser )
 {
-    //maintain serialization backward compatibility
-
     auto transform = new CompositeTransform();
 
     if( deser.EnterChild( "transform" ) )
@@ -312,53 +307,41 @@ CompositeTransform *    CompositeTransform::Create      ( const IDeserializer & 
             auto kindName = deser.GetAttribute( "kind" );
             auto kind = SerializationHelper::String2T< TransformKind >( kindName );
 
-            if( kind == TransformKind::rotation )
+            auto params = SerializationHelper::DeserializeArray< FloatInterpolator >( deser, "interpolators" );
+            if( params.size() == 3 )
             {
-                auto angleArray = SerializationHelper::DeserializeArray< FloatInterpolator >( deser, "angle", "interpolator" );
-                auto rotAxisArray = SerializationHelper::DeserializeArray< Vec3Interpolator >( deser, "rotaxis", "interpolator" );
-
-                if( angleArray.size() != 1 )
+                if( kind == TransformKind::center )
                 {
-                    LOG_MESSAGE( SeverityLevel::error ) << "CompositeTransform::Create failed, incorrect entry for angle in rotation";
+                    transform->m_centerX = *params[ 0 ];
+                    transform->m_centerY = *params[ 1 ];
+                    transform->m_centerZ = *params[ 2 ];
                 }
-                else if( rotAxisArray.size() != 1 )
+                else if( kind == TransformKind::translation )
                 {
-                    LOG_MESSAGE( SeverityLevel::error ) << "CompositeTransform::Create failed, incorrect entry for rotAxis in rotation";
+                    transform->m_translationX = *params[ 0 ];
+                    transform->m_translationY = *params[ 1 ];
+                    transform->m_translationZ = *params[ 2 ];
                 }
-                else
+                else if( kind == TransformKind::rotation )
                 {
-                    transform->m_rotationAngle = *angleArray[ 0 ];
-                    transform->m_rotationAxis = *rotAxisArray[ 0 ];
+                    auto iseuler = deser.GetAttribute( "iseuler" );
+                    if( iseuler == "true" )
+                    {
+                        transform->m_eulerPitch = *params[ 0 ];
+                        transform->m_eulerYaw = *params[ 1 ];
+                        transform->m_eulerRoll = *params[ 2 ];
+                    }
+                }
+                else if( kind == TransformKind::scale )
+                {
+                    transform->m_scaleX = *params[ 0 ];
+                    transform->m_scaleY = *params[ 1 ];
+                    transform->m_scaleZ = *params[ 2 ];
                 }
             }
             else
             {
-                auto params = SerializationHelper::DeserializeArray< FloatInterpolator >( deser, "interpolators" );
-                if( params.size() == 3 )
-                {
-                    if( kind == TransformKind::fwd_center )
-                    {
-                        transform->m_centerX = *params[ 0 ];
-                        transform->m_centerY = *params[ 1 ];
-                        transform->m_centerZ = *params[ 2 ];
-                    }
-                    else if( kind == TransformKind::translation )
-                    {
-                        transform->m_translationX = *params[ 0 ];
-                        transform->m_translationY = *params[ 1 ];
-                        transform->m_translationZ = *params[ 2 ];
-                    }
-                    else if( kind == TransformKind::scale )
-                    {
-                        transform->m_scaleX = *params[ 0 ];
-                        transform->m_scaleY = *params[ 1 ];
-                        transform->m_scaleZ = *params[ 2 ];
-                    }
-                }
-                else
-                {
-                    LOG_MESSAGE( SeverityLevel::error ) << "CompositeTransform::Create failed, incorrect number of interpolators in " << kindName;
-                }
+                //LOG_MESSAGE( SeverityLevel::error ) << "CompositeTransform::Create failed, incorrect number of interpolators in " << kindName;
             }
         } while( deser.NextChild() );
 
@@ -372,14 +355,11 @@ CompositeTransform *    CompositeTransform::Create      ( const IDeserializer & 
 //
 void                                CompositeTransform::Serialize               ( ISerializer & ser ) const
 {
-    //maintain serialization backward compatibility
-
     ser.EnterArray( "composite_transform" );
-
 
     //center
     ser.EnterChild( "transform" );
-    SerializationHelper::SerializeAttribute( ser, TransformKind::fwd_center, "kind" );
+    SerializationHelper::SerializeAttribute( ser, TransformKind::center, "kind" );
     ser.EnterArray( "interpolators" );
 
     m_centerX.Serialize( ser );
@@ -389,7 +369,6 @@ void                                CompositeTransform::Serialize               
     ser.ExitChild(); // interpolators
     ser.ExitChild(); // transform
     
-
     //translation
     ser.EnterChild( "transform" );
     SerializationHelper::SerializeAttribute( ser, TransformKind::translation, "kind" );
@@ -402,22 +381,18 @@ void                                CompositeTransform::Serialize               
     ser.ExitChild(); // interpolators
     ser.ExitChild(); // transform
 
-
     //rotation
     ser.EnterChild( "transform" );
     SerializationHelper::SerializeAttribute( ser, TransformKind::rotation, "kind" );
-    ser.SetAttribute( "isaxisvec3", "true" ); //?
+    ser.SetAttribute( "iseuler", "true" ); //?
+    ser.EnterArray( "interpolators" );
 
-    ser.EnterChild( "angle" );
-    m_rotationAngle.Serialize( ser );
-    ser.ExitChild();
+    m_eulerPitch.Serialize( ser );
+    m_eulerYaw.Serialize( ser );
+    m_eulerRoll.Serialize( ser );
 
-    ser.EnterChild( "rotaxis" );
-    m_rotationAxis.Serialize( ser );
-    ser.ExitChild();
-
+    ser.ExitChild(); // interpolators
     ser.ExitChild(); // transform
-
 
     //scale
     ser.EnterChild( "transform" );
@@ -431,7 +406,6 @@ void                                CompositeTransform::Serialize               
     ser.ExitChild(); // interpolators
     ser.ExitChild(); // transform
 
-
     ser.ExitChild(); // composite_transform
 }
 
@@ -439,15 +413,8 @@ void                                CompositeTransform::Serialize               
 //
 glm::mat4x4         CompositeTransform::Evaluate        ( TimeType t ) const
 {
-    glm::mat4x4 ret( 1.0f );
-
-    ret *= glm::translate( glm::mat4( 1.0f ), GetCenter( t ) );
-    ret *= glm::translate( glm::mat4( 1.0f ), GetTranslation( t ) );
-    ret *= glm::rotate( glm::mat4( 1.0f ), GetRotationAngle( t ), GetRotationAxis( t ) );
-    ret *= glm::scale( glm::mat4( 1.0f ), GetScale( t ) );
-    ret *= glm::translate( glm::mat4( 1.0f ), -GetCenter( t ) );
-
-    return ret; 
+    auto rotQuat = glm::quat( glm::radians( GetRotation( t ) ) );
+    return m_sqt.Evaluate( GetTranslation( t ), rotQuat, GetScale( t ), GetCenter( t ) );
 }
 
 } //bv
