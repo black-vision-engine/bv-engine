@@ -17,6 +17,24 @@
 
 namespace bv { namespace model {
 
+typedef ParamEnum< DefaultVideoStreamDecoderPlugin::DecoderMode > ParamEnumDC;
+
+// ***********************
+//
+template<>
+static IParameterPtr    ParametersFactory::CreateTypedParameter< DefaultVideoStreamDecoderPlugin::DecoderMode > ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return CreateParameterEnum< DefaultVideoStreamDecoderPlugin::DecoderMode >( name, timeline );
+}
+
+// ***********************
+//
+VoidPtr    ParamEnumDC::QueryParamTyped  ()
+{
+    return std::static_pointer_cast< void >( shared_from_this() );
+}
+
+
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
 // *******************************
@@ -45,7 +63,7 @@ DefaultPluginParamValModelPtr   DefaultVideoStreamDecoderPluginDesc::CreateDefau
     //Create all parameters and evaluators
     SimpleFloatEvaluatorPtr     alphaEvaluator		= ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator		= ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
-
+    
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
     psModel->RegisterAll( alphaEvaluator );
@@ -140,7 +158,7 @@ bool                            DefaultVideoStreamDecoderPlugin::LoadResource		(
 			auto txData = m_psc->GetTexturesDataImpl();
 			txData->SetTexture( 0, vsDesc );
 
-			SetAsset( 0, LAsset( vsDesc->GetName(), assetDescr, vsDesc->GetSamplerState() ) );
+			//SetAsset( 0, LAsset( vsDesc->GetName(), assetDescr, vsDesc->GetSamplerState() ) );
 
 			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
@@ -246,9 +264,8 @@ void									DefaultVideoStreamDecoderPlugin::InitVertexAttributesChannel		()
 			auto uvs = new model::Float2AttributeChannel( desc, DefaultVideoStreamDecoderPluginDesc::TextureName(), true );
 			auto uvsPtr = Float2AttributeChannelPtr( uvs );
 			
-			//FIXME: add helper to generate flipped uvs
 			Helper::UVGenerator::generateUV( reinterpret_cast< const glm::vec3 * >( posChannel->GetData() ), posChannel->GetNumEntries(),
-											uvsPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, 1.0, 0.0 ), true );
+											uvsPtr, glm::vec3( 1.0, 0.0, 0.0 ), glm::vec3( 0.0, -1.0, 0.0 ), true );
 
 			connComp->AddAttributeChannel( uvsPtr );
 		}
@@ -263,28 +280,40 @@ void									DefaultVideoStreamDecoderPlugin::InitVertexAttributesChannel		()
 //
 void								DefaultVideoStreamDecoderPlugin::Start		()
 {
-	m_decoder->Start();
+    if( m_decoder )
+    {
+	    m_decoder->Start();
+    }
 }
 
 // *************************************
 //
 void								DefaultVideoStreamDecoderPlugin::Pause		()
 {
-	m_decoder->Pause();
+    if( m_decoder )
+    {
+	    m_decoder->Pause();
+    }
 }
 
 // *************************************
 //
 void								DefaultVideoStreamDecoderPlugin::Stop		()
 {
-	m_decoder->Stop();
+    if( m_decoder )
+    {
+	    m_decoder->Stop();
+    }
 }
 
 // *************************************
 //
 void								DefaultVideoStreamDecoderPlugin::Seek		( Float64 time )
 {
-	m_decoder->Seek( time );
+    if( m_decoder )
+    {
+        m_decoder->Seek( time );
+    }
 }
 
 // *************************************
@@ -296,8 +325,8 @@ bool								DefaultVideoStreamDecoderPlugin::Start		( IPluginPtr plugin )
 		std::static_pointer_cast< DefaultVideoStreamDecoderPlugin >( plugin )->Start();
         return true;
     }
-    else
-        return false;
+
+    return false;
 }
 
 // *************************************
@@ -309,8 +338,8 @@ bool								DefaultVideoStreamDecoderPlugin::Pause		( IPluginPtr plugin )
 		std::static_pointer_cast< DefaultVideoStreamDecoderPlugin >( plugin )->Pause();
         return true;
     }
-    else
-        return false;
+    
+    return false;
 }
 
 // *************************************
@@ -322,8 +351,8 @@ bool								DefaultVideoStreamDecoderPlugin::Stop		( IPluginPtr plugin )
 		std::static_pointer_cast< DefaultVideoStreamDecoderPlugin >( plugin )->Stop();
         return true;
     }
-    else
-        return false;
+    
+    return false;
 }
 
 // *************************************
@@ -335,8 +364,9 @@ bool								DefaultVideoStreamDecoderPlugin::Seek		( IPluginPtr plugin, Float64 
 		std::static_pointer_cast< DefaultVideoStreamDecoderPlugin >( plugin )->Seek( time );
         return true;
     }
-    else
-        return false;
+    
+    return false;
 }
 
-} }
+} //model
+} //bv

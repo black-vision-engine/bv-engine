@@ -24,7 +24,7 @@ FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath )
 	error = avformat_find_stream_info( m_formatCtx, nullptr ) < 0;
 	//assert( !error ); //raw video
 
-	av_dump_format( m_formatCtx, 0, streamPath.c_str(), 0 );
+	av_dump_format( m_formatCtx, 0, streamPath.c_str(), 0 ); //log
 }
 
 // *******************************
@@ -60,14 +60,14 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 		Int32 currStream = -1;
 		while( currStream != streamIdx )
 		{
-			packet = new AVPacket();
+            packet = new AVPacket();
+
 			auto error = av_read_frame( m_formatCtx, packet );
 			if( error < 0 ) {
 				assert( error == AVERROR_EOF ); //error reading frame
 				
 				m_isEOF = true;
                 av_free_packet( packet );
-                delete packet;
                 return nullptr;
             }
 
@@ -76,18 +76,12 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 			{
                 if ( m_packetQueue.count( packet->stream_index ) > 0 )
 				{
-                    av_dup_packet( packet );
 					m_packetQueue[ packet->stream_index ].push_back( packet );
 				}
 				else
 				{
                     av_free_packet( packet );
-					delete packet;
                 }
-            }
-			else
-			{
-                av_dup_packet( packet );
             }
 		}
 	}

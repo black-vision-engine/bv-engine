@@ -11,6 +11,7 @@
 
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/FFmpeg/FFmpegVideoDecoder.h"
 
+
 namespace bv { namespace model {
 
 // ***************************** DESCRIPTOR **********************************
@@ -32,13 +33,24 @@ public:
 // ***************************** PLUGIN ********************************** 
 class DefaultVideoStreamDecoderPlugin : public BasePlugin< IPlugin >
 {
+public:
+
+    enum DecoderMode : int { PLAY, PAUSE, STOP };
+
 private:
-    DefaultPixelShaderChannelPtr    m_psc;
-    DefaultVertexShaderChannelPtr   m_vsc;
 
-    VertexAttributesChannelPtr      m_vaChannel;
+    typedef std::shared_ptr< ParamEnum< DecoderMode > >     DecoderModeParamPtr;
 
-	IVideoDecoderPtr				m_decoder;
+private:
+
+    DefaultPixelShaderChannelPtr        m_psc;
+    DefaultVertexShaderChannelPtr       m_vsc;
+
+    VertexAttributesChannelPtr          m_vaChannel;
+
+	IVideoDecoderPtr				    m_decoder;
+
+	DecoderModeParamPtr                 m_decoderMode;
 
 public:
 
@@ -71,7 +83,29 @@ public:
     static bool									Seek						( IPluginPtr plugin, Float64 time );
 
 private:
+
     void                                        InitVertexAttributesChannel ();
+
 };
 
-} }
+// ***********************
+//
+template<>
+inline bool SetParameter< DefaultVideoStreamDecoderPlugin::DecoderMode >( IParameterPtr param, TimeType t, const DefaultVideoStreamDecoderPlugin::DecoderMode & val )
+{
+    typedef ParamEnum< DefaultVideoStreamDecoderPlugin::DecoderMode > ParamType;
+
+    ParamType * typedParam = QueryTypedParam< std::shared_ptr< ParamType > >( param ).get();
+
+    if( typedParam == nullptr )
+    {
+        return false;
+    }
+
+    typedParam->SetVal( val, t );
+
+    return true;
+}
+
+} //model
+} //bv

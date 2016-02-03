@@ -60,6 +60,21 @@ protected:
         void                                    CreatePSModel       ();
 
 
+        //inline void                             AddTransformParam   ( std::string name, bool addValue = true ) const
+        //{
+        //    if( addValue )
+        //    {
+        //        auto evaluator = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( name, m_lastTimeEvaluator );
+        //        m_lastParamValModel->RegisterAll( evaluator );
+        //        evaluator->Parameter()->Transform().InitializeDefaultSRT();
+        //    }
+        //    else
+        //    {
+        //        auto param = ParametersFactory::CreateParameterTransform( name, m_lastTimeEvaluator );
+        //        m_lastParamValModel->AddParameter( param );
+        //    }                
+        //}
+
         template< typename InterpolatorType, typename ValueType, ModelParamType MPT, ParamType PT, typename ParamImpl >
         void                                    AddParam            ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const ValueType& defaultValue, bool addValue, bool isState ) const
         {
