@@ -17,9 +17,6 @@
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
 
-#include <sstream>
-#include <limits>
-
 namespace bv {
 
 namespace {
@@ -160,74 +157,6 @@ ValueT EvaluatePoint( const Key<TimeValueT, ValueT> & k0, const Key<TimeValueT, 
 }
 
 } //anonynous
-// *************************************
-//
-
-template<class TimeValueT, class ValueT >
-Key<TimeValueT, ValueT>::Key(TimeValueT t, ValueT val)
-    : t(t), val(val)
-{
-}
-
-// *************************************
-//
-template<class TimeValueT, class ValueT >
-void                Key<TimeValueT, ValueT>::Serialize       ( ISerializer& ser ) const
-{
-    ser.EnterChild( "key" );
-	ser.SetAttribute( "time", SerializationHelper::T2String( t ) );
-    ser.SetAttribute( "val", SerializationHelper::T2String( val ) );
-    ser.ExitChild();
-}
-
-// *************************************
-//
-template<class TimeValueT, class ValueT >
-ISerializablePtr     Key<TimeValueT, ValueT>::Create          ( const IDeserializer& deser )
-{
-    auto time = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "time" ) );
-    auto val = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "val" ) );
-
-    if( !time.isValid || !val.isValid )
-        assert( false ); // FIXME: error handling
-    
-    return std::make_shared< Key< TimeValueT, ValueT > >( time, val );
-}
-
-std::vector<std::string> &split_(const std::string &s, char delim, std::vector<std::string> &elems) { // FIXME: this "_" is so weak
-    std::stringstream ss(s);
-    std::string item;
-    while (std::getline(ss, item, delim)) {
-        elems.push_back(item);
-    }
-    return elems;
-}
-
-
-std::vector<std::string> split_(const std::string &s, char delim) { // FIXME: this "_" is so weak
-    std::vector<std::string> elems;
-    split_(s, delim, elems);
-    return elems;
-}
-
-// *************************************
-//
-template<>
-ISerializablePtr     Key< bv::TimeType, glm::vec3 >::Create          ( const IDeserializer& doc ) // FIXME: this is not a good place to do that
-{
-    auto time = doc.GetAttribute( "time" );
-    auto val_ = doc.GetAttribute( "val" );
-
-    auto vals = split_( val_, ',' );
-    assert( vals.size() == 3 );
-    glm::vec3 val( std::stof( vals[0] ), 
-        std::stof( vals[1] ), 
-        std::stof( vals[2] ) );
-
-
-    auto key = std::make_shared< Key< bv::TimeType, glm::vec3 > >( std::stof( time ), glm::vec3( val ) );
-    return key;
-}
 
 
 // *************************************
@@ -711,17 +640,6 @@ std::vector< Key< TimeValueT, ValueT > > &    BasicInterpolator<TimeValueT, Valu
 #define INSTANTIATE(TYPE) \
 template bv::BasicInterpolator<TYPE,TYPE>;
 
-INSTANTIATE(float)
-INSTANTIATE(double)
-INSTANTIATE(bv::TimeType)
-
-template bv::BasicInterpolator<bv::TimeType, bool>;
-template bv::BasicInterpolator<bv::TimeType, int>;
-template bv::BasicInterpolator<bv::TimeType, float>;
-template bv::BasicInterpolator<bv::TimeType, double>;
-template bv::BasicInterpolator<bv::TimeType, glm::vec2>;
-template bv::BasicInterpolator<bv::TimeType, glm::vec3>;
-template bv::BasicInterpolator<bv::TimeType, glm::vec4>;
 template bv::BasicInterpolator<bv::TimeType, std::string>;
 template bv::BasicInterpolator<bv::TimeType, std::wstring>;
 

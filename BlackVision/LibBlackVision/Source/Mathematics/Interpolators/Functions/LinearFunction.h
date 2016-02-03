@@ -1,3 +1,7 @@
+#pragma once
+
+#include "Mathematics/Interpolators/Key.h"
+
 namespace bv {
 
 // *******************************
@@ -43,12 +47,6 @@ public:
             assert( false );
     }
 };
-
-Key< bv::TimeType, bool > Key< bv::TimeType, bool >::operator+( const Key< bv::TimeType, bool > &/*that*/ ) const { assert( false ); return Key< bv::TimeType, bool >( 0, false ); }
-Key< bv::TimeType, bool > Key< bv::TimeType, bool >::operator-( const Key< bv::TimeType, bool > &/*that*/ ) const { assert( false ); return Key< bv::TimeType, bool >( 0, false ); }
-
-template<>
-Key< bv::TimeType, bool > operator*( const bv::TimeType & /*a*/, const Key< bv::TimeType, bool > &/*that*/ ) { assert( false ); return Key< bv::TimeType, bool >( 0, false ); }
 
 template<>
 bool LinearEvaluator< bv::TimeType, bool >::Evaluate( bv::TimeType t ) const

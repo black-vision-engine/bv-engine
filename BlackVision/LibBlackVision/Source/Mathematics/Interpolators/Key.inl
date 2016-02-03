@@ -1,0 +1,140 @@
+#pragma once
+
+#include "Key.h"
+
+#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
+
+#include "Tools/Utils.h"
+
+#include "CoreDEF.h"
+
+
+namespace bv
+{
+
+// *************************************
+//
+template<class TimeValueT, class ValueT >
+Key<TimeValueT, ValueT>::Key(TimeValueT t, ValueT val)
+    : t(t), val(val)
+{
+}
+
+// *************************************
+//
+template<class TimeValueT, class ValueT >
+void                Key<TimeValueT, ValueT>::Serialize       ( ISerializer& ser ) const
+{
+    ser.EnterChild( "key" );
+	ser.SetAttribute( "time", SerializationHelper::T2String( t ) );
+    ser.SetAttribute( "val", SerializationHelper::T2String( val ) );
+    ser.ExitChild();
+}
+
+// *************************************
+//
+template<class TimeValueT, class ValueT >
+ISerializablePtr    Key<TimeValueT, ValueT>::Create          ( const IDeserializer& deser )
+{
+    auto time = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "time" ) );
+    auto val = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "val" ) );
+
+    if( !time.isValid || !val.isValid )
+        assert( false ); // FIXME: error handling
+    
+    return std::make_shared< Key< TimeValueT, ValueT > >( time, val );
+}
+
+// *************************************
+//
+template< class TimeValueT, class ValueT >
+Key< TimeValueT, ValueT >   Key<TimeValueT, ValueT>::operator+   ( const Key< TimeValueT, ValueT > &that ) const
+{
+    return Key< TimeValueT, ValueT >( t + that.t, ValueT( val + that.val ) );
+}
+
+// *************************************
+//
+template< class TimeValueT, class ValueT >
+Key< TimeValueT, ValueT >   Key<TimeValueT, ValueT>::operator-   ( const Key< TimeValueT, ValueT > &that ) const 
+{
+    return Key< TimeValueT, ValueT >( t - that.t, ValueT( val - that.val ) );
+}
+
+// *************************************
+//
+template<>
+ISerializablePtr        Key< bv::TimeType, glm::vec3 >::Create          ( const IDeserializer& doc ) // FIXME: this is not a good place to do that
+{
+    auto time = doc.GetAttribute( "time" );
+    auto val_ = doc.GetAttribute( "val" );
+
+    auto vals = split_( val_, ',' );
+    assert( vals.size() == 3 );
+    glm::vec3 val( std::stof( vals[0] ), 
+        std::stof( vals[1] ), 
+        std::stof( vals[2] ) );
+
+
+    auto key = std::make_shared< Key< bv::TimeType, glm::vec3 > >( std::stof( time ), glm::vec3( val ) );
+    return key;
+}
+
+// *************************************
+//
+template<>
+Key< bv::TimeType, bool > Key< bv::TimeType, bool >::operator+( const Key< bv::TimeType, bool > &/*that*/ ) const
+{
+    assert( false ); return Key< bv::TimeType, bool >( 0, false );
+}
+
+// *************************************
+//
+template<>
+Key< bv::TimeType, bool > Key< bv::TimeType, bool >::operator-( const Key< bv::TimeType, bool > &/*that*/ ) const
+{
+    assert( false ); return Key< bv::TimeType, bool >( 0, false );
+}
+
+// *************************************
+//
+template<>
+Key< bv::TimeType, std::string > Key< bv::TimeType, std::string >::operator+( const Key< bv::TimeType, std::string > & ) const
+{
+    assert( false ); return Key< bv::TimeType, std::string >( 0, "" );
+}
+
+// *************************************
+//
+template<>
+Key< bv::TimeType, std::string > Key< bv::TimeType, std::string >::operator-( const Key< bv::TimeType, std::string > & ) const
+{
+    assert( false ); return Key< bv::TimeType, std::string >( 0, "" );
+}
+
+// *************************************
+//
+template<>
+Key< bv::TimeType, std::wstring > Key< bv::TimeType, std::wstring >::operator+( const Key< bv::TimeType, std::wstring > & ) const
+{
+    assert( false ); return Key< bv::TimeType, std::wstring >( 0, L"" );
+}
+
+// *************************************
+//
+template<>
+Key< bv::TimeType, std::wstring > Key< bv::TimeType, std::wstring >::operator-( const Key< bv::TimeType, std::wstring > & ) const
+{
+    assert( false ); return Key< bv::TimeType, std::wstring >( 0, L"" );
+}
+
+// *************************************
+//
+template<>
+Key< bv::TimeType, bool > operator*( const bv::TimeType & /*a*/, const Key< bv::TimeType, bool > &/*that*/ )
+{
+    assert( false ); return Key< bv::TimeType, bool >( 0, false );
+}
+
+} // bv

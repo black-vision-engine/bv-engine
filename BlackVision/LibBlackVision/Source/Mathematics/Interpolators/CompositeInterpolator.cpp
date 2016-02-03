@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "CompositeBezierInterpolator.h"
+#include "CompositeInterpolator.h"
 
 #include "Functions/ConstFunction.h"
 #include "Functions/LinearFunction.h"
@@ -65,7 +65,7 @@ template<> CurveType String2T( const std::string & s, const CurveType& default )
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-CompositeBezierInterpolator< TimeValueT, ValueT >::CompositeBezierInterpolator( float tolerance )
+CompositeInterpolator< TimeValueT, ValueT >::CompositeInterpolator( float tolerance )
     : m_type( CurveType::CT_LINEAR )
     //: m_type( CurveType::CT_COSINE_LIKE )
     //: m_type( CurveType::CT_POINT )
@@ -78,7 +78,7 @@ CompositeBezierInterpolator< TimeValueT, ValueT >::CompositeBezierInterpolator( 
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-CompositeBezierInterpolator< TimeValueT, ValueT >::CompositeBezierInterpolator( const CompositeBezierInterpolator& that )
+CompositeInterpolator< TimeValueT, ValueT >::CompositeInterpolator( const CompositeInterpolator& that )
 { 
     keys = that.keys; 
     interpolators = that.interpolators; 
@@ -88,12 +88,10 @@ CompositeBezierInterpolator< TimeValueT, ValueT >::CompositeBezierInterpolator( 
     m_postMethod = that.m_postMethod;
 }
 
-
-
 // *************************************
 //
 template< class TimeValueT, class ValueT >
-void                                        CompositeBezierInterpolator< TimeValueT, ValueT >::Serialize       ( ISerializer& ser ) const
+void                                        CompositeInterpolator< TimeValueT, ValueT >::Serialize       ( ISerializer& ser ) const
 {
     ser.EnterChild( "interpolator" );
 
@@ -117,9 +115,9 @@ void                                        CompositeBezierInterpolator< TimeVal
 // *************************************
 //
 template< class TimeValueT, class ValueT >
-CompositeBezierInterpolator< TimeValueT, ValueT >*     CompositeBezierInterpolator< TimeValueT, ValueT >::Create          ( const IDeserializer& deser )
+CompositeInterpolator< TimeValueT, ValueT >*     CompositeInterpolator< TimeValueT, ValueT >::Create          ( const IDeserializer& deser )
 {
-    auto interpolator = new CompositeBezierInterpolator< TimeValueT, ValueT >();
+    auto interpolator = new CompositeInterpolator< TimeValueT, ValueT >();
 
     auto keys = SerializationHelper::DeserializeArray< Key >( deser, "keys" );
 
@@ -256,7 +254,7 @@ IEvaluator<TimeValueT, ValueT >* CreateDummyInterpolator( CurveType type, Key< T
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-void CompositeBezierInterpolator< TimeValueT, ValueT >::AddKey             ( TimeValueT t, const ValueT & v ) 
+void CompositeInterpolator< TimeValueT, ValueT >::AddKey             ( TimeValueT t, const ValueT & v ) 
 { 
     if( keys.empty() )
     {
@@ -330,7 +328,7 @@ void CompositeBezierInterpolator< TimeValueT, ValueT >::AddKey             ( Tim
 // ***********************
 //
 template< class TimeValueT, class ValueT >
-bool CompositeBezierInterpolator< TimeValueT, ValueT >::RemoveKey       ( TimeValueT t )
+bool CompositeInterpolator< TimeValueT, ValueT >::RemoveKey       ( TimeValueT t )
 {
     if( keys.size() <= 1 )
         return false;
@@ -375,7 +373,7 @@ bool CompositeBezierInterpolator< TimeValueT, ValueT >::RemoveKey       ( TimeVa
 // ***********************
 //
 template< class TimeValueT, class ValueT >
-bool CompositeBezierInterpolator< TimeValueT, ValueT >::MoveKey             ( TimeValueT t, TimeValueT newTime )
+bool CompositeInterpolator< TimeValueT, ValueT >::MoveKey             ( TimeValueT t, TimeValueT newTime )
 {
     // Find key to move
     SizeType index = std::numeric_limits<SizeType>::max();
@@ -411,7 +409,7 @@ bool CompositeBezierInterpolator< TimeValueT, ValueT >::MoveKey             ( Ti
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-ValueT CompositeBezierInterpolator< TimeValueT, ValueT >::PreEvaluate( TimeValueT t ) const 
+ValueT CompositeInterpolator< TimeValueT, ValueT >::PreEvaluate( TimeValueT t ) const 
 { 
     TimeValueT tStart = keys.front().t;
     TimeValueT tEnd = keys.back().t;
@@ -451,7 +449,7 @@ ValueT CompositeBezierInterpolator< TimeValueT, ValueT >::PreEvaluate( TimeValue
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-ValueT CompositeBezierInterpolator< TimeValueT, ValueT >::PostEvaluate( TimeValueT t ) const 
+ValueT CompositeInterpolator< TimeValueT, ValueT >::PostEvaluate( TimeValueT t ) const 
 { 
     TimeValueT tStart = keys.front().t;
     TimeValueT tEnd = keys.back().t;
@@ -492,7 +490,7 @@ ValueT CompositeBezierInterpolator< TimeValueT, ValueT >::PostEvaluate( TimeValu
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-ValueT CompositeBezierInterpolator< TimeValueT, ValueT >::Evaluate         ( TimeValueT t ) const 
+ValueT CompositeInterpolator< TimeValueT, ValueT >::Evaluate         ( TimeValueT t ) const 
 { 
     if( keys.size() == 0 )
     {
@@ -520,7 +518,7 @@ ValueT CompositeBezierInterpolator< TimeValueT, ValueT >::Evaluate         ( Tim
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-int                          CompositeBezierInterpolator< TimeValueT, ValueT >::GetNumKeys()
+int                          CompositeInterpolator< TimeValueT, ValueT >::GetNumKeys()
 {
     return (int) keys.size();
 }
@@ -528,7 +526,7 @@ int                          CompositeBezierInterpolator< TimeValueT, ValueT >::
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-const std::vector< Key< TimeValueT, ValueT > > &                          CompositeBezierInterpolator< TimeValueT, ValueT >::GetKeys() const
+const std::vector< Key< TimeValueT, ValueT > > &                          CompositeInterpolator< TimeValueT, ValueT >::GetKeys() const
 {
     return keys;
 }
@@ -536,7 +534,7 @@ const std::vector< Key< TimeValueT, ValueT > > &                          Compos
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-std::vector< Key< TimeValueT, ValueT > > &                                CompositeBezierInterpolator< TimeValueT, ValueT >::GetKeys()
+std::vector< Key< TimeValueT, ValueT > > &                                CompositeInterpolator< TimeValueT, ValueT >::GetKeys()
 {
     return keys;
 }
@@ -544,7 +542,7 @@ std::vector< Key< TimeValueT, ValueT > > &                                Compos
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-const std::vector< IEvaluator< TimeValueT, ValueT >* > &                  CompositeBezierInterpolator< TimeValueT, ValueT >::GetInterpolators()
+const std::vector< IEvaluator< TimeValueT, ValueT >* > &                  CompositeInterpolator< TimeValueT, ValueT >::GetInterpolators()
 {
     return interpolators;
 }
@@ -552,7 +550,7 @@ const std::vector< IEvaluator< TimeValueT, ValueT >* > &                  Compos
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-void                                                CompositeBezierInterpolator< TimeValueT, ValueT >::SetCurveType( CurveType type )
+void                                                CompositeInterpolator< TimeValueT, ValueT >::SetCurveType( CurveType type )
 {
     m_type = type;
     interpolators.clear();
@@ -572,7 +570,7 @@ void                                                CompositeBezierInterpolator<
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-CurveType                                           CompositeBezierInterpolator< TimeValueT, ValueT >::GetCurveType    ()
+CurveType                                           CompositeInterpolator< TimeValueT, ValueT >::GetCurveType    ()
 {
     return m_type;
 }
@@ -580,7 +578,7 @@ CurveType                                           CompositeBezierInterpolator<
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-void                                                CompositeBezierInterpolator< TimeValueT, ValueT >::SetWrapPostMethod  ( WrapMethod method )
+void                                                CompositeInterpolator< TimeValueT, ValueT >::SetWrapPostMethod  ( WrapMethod method )
 {
     m_postMethod = method;
 }
@@ -588,7 +586,7 @@ void                                                CompositeBezierInterpolator<
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-void                                                CompositeBezierInterpolator< TimeValueT, ValueT >::SetWrapPreMethod   ( WrapMethod method )
+void                                                CompositeInterpolator< TimeValueT, ValueT >::SetWrapPreMethod   ( WrapMethod method )
 {
     m_preMethod = method;
 }
@@ -596,7 +594,7 @@ void                                                CompositeBezierInterpolator<
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-WrapMethod                                          CompositeBezierInterpolator< TimeValueT, ValueT >::GetWrapPostMethod  ()
+WrapMethod                                          CompositeInterpolator< TimeValueT, ValueT >::GetWrapPostMethod  ()
 {
     return m_postMethod;
 }
@@ -604,55 +602,55 @@ WrapMethod                                          CompositeBezierInterpolator<
 // *******************************
 //
 template< class TimeValueT, class ValueT >
-WrapMethod                                          CompositeBezierInterpolator< TimeValueT, ValueT >::GetWrapPreMethod   ()
+WrapMethod                                          CompositeInterpolator< TimeValueT, ValueT >::GetWrapPreMethod   ()
 {
     return m_preMethod;
 }
 
 
-// *******************************
+//// *******************************
+////
+//template< class TimeValueT, class ValueT >
+//void                                                CompositeInterpolator< TimeValueT, ValueT >::SetKey1( int i, Key key )
+//{
+//    assert( interpolators[ i ]->GetType() == EvaluatorType::ET_BEZIER );
+//    ( ( BezierEvaluator< TimeValueT, ValueT >* ) interpolators[ i ] )->key1 = key;
+//}
 //
-template< class TimeValueT, class ValueT >
-void                                                CompositeBezierInterpolator< TimeValueT, ValueT >::SetKey1( int i, Key key )
-{
-    assert( interpolators[ i ]->GetType() == EvaluatorType::ET_BEZIER );
-    ( ( BezierEvaluator< TimeValueT, ValueT >* ) interpolators[ i ] )->key1 = key;
-}
-
-// *******************************
+//// *******************************
+////
+//template< class TimeValueT, class ValueT >
+//void                                                CompositeInterpolator< TimeValueT, ValueT >::SetKey2( int i, Key key )
+//{
+//    assert( interpolators[ i ]->GetType() == EvaluatorType::ET_BEZIER );
+//    ( ( BezierEvaluator< TimeValueT, ValueT >* ) interpolators[ i ] )->key2 = key;
+//}
 //
-template< class TimeValueT, class ValueT >
-void                                                CompositeBezierInterpolator< TimeValueT, ValueT >::SetKey2( int i, Key key )
-{
-    assert( interpolators[ i ]->GetType() == EvaluatorType::ET_BEZIER );
-    ( ( BezierEvaluator< TimeValueT, ValueT >* ) interpolators[ i ] )->key2 = key;
-}
-
-// *******************************
+//// *******************************
+////
+//template< class TimeValueT, class ValueT >
+//void                                                CompositeInterpolator< TimeValueT, ValueT >::SetV1( int i, Key v )
+//{
+//    assert( interpolators[ i ]->GetType() == EvaluatorType::ET_BEZIER );
+//    ( ( BezierEvaluator< TimeValueT, ValueT >* ) interpolators[ i ] )->v1 = v;
+//}
 //
-template< class TimeValueT, class ValueT >
-void                                                CompositeBezierInterpolator< TimeValueT, ValueT >::SetV1( int i, Key v )
-{
-    assert( interpolators[ i ]->GetType() == EvaluatorType::ET_BEZIER );
-    ( ( BezierEvaluator< TimeValueT, ValueT >* ) interpolators[ i ] )->v1 = v;
-}
+//// *******************************
+////
+//template< class TimeValueT, class ValueT >
+//void                                                CompositeInterpolator< TimeValueT, ValueT >::SetV2( int i, Key v )
+//{
+//    assert( interpolators[ i ]->GetType() == EvaluatorType::ET_BEZIER );
+//    ( ( BezierEvaluator< TimeValueT, ValueT >* ) interpolators[ i ] )->v2 = v;
+//}
 
-// *******************************
-//
-template< class TimeValueT, class ValueT >
-void                                                CompositeBezierInterpolator< TimeValueT, ValueT >::SetV2( int i, Key v )
-{
-    assert( interpolators[ i ]->GetType() == EvaluatorType::ET_BEZIER );
-    ( ( BezierEvaluator< TimeValueT, ValueT >* ) interpolators[ i ] )->v2 = v;
-}
+template class CompositeInterpolator<TimeType, TimeType>;
+template class CompositeInterpolator<TimeType, bool>;
+template class CompositeInterpolator<TimeType, int>;
+template class CompositeInterpolator<TimeType, float>;
 
-template class CompositeBezierInterpolator<TimeType, TimeType>;
-template class CompositeBezierInterpolator<TimeType, bool>;
-template class CompositeBezierInterpolator<TimeType, int>;
-template class CompositeBezierInterpolator<TimeType, float>;
-
-template class CompositeBezierInterpolator<TimeType, glm::vec2>;
-template class CompositeBezierInterpolator<TimeType, glm::vec3>;
-template class CompositeBezierInterpolator<TimeType, glm::vec4>;
+template class CompositeInterpolator<TimeType, glm::vec2>;
+template class CompositeInterpolator<TimeType, glm::vec3>;
+template class CompositeInterpolator<TimeType, glm::vec4>;
 
 } // bv

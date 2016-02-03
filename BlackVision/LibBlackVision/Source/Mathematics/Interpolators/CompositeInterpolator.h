@@ -18,7 +18,7 @@ public:
 };
 
 template< class TimeValueT, class ValueT >
-class CompositeBezierInterpolator : public ISerializable
+class CompositeInterpolator : public ISerializable
 {
 private:
     typedef Key< TimeValueT, ValueT >                   Key;
@@ -39,11 +39,11 @@ public:
     typedef ValueT                      ValT;
 
 public:
-    explicit CompositeBezierInterpolator( float tolerance = 0.0001f );
-    CompositeBezierInterpolator         ( const CompositeBezierInterpolator & that );
+    explicit CompositeInterpolator( float tolerance = 0.0001f );
+    CompositeInterpolator         ( const CompositeInterpolator & that );
 
     virtual void                                        Serialize           ( ISerializer & ) const override;
-    static CompositeBezierInterpolator< TimeValueT, ValueT >* Create              ( const IDeserializer & );
+    static CompositeInterpolator< TimeValueT, ValueT >* Create              ( const IDeserializer & );
 
     void                                                AddKey              ( TimeValueT t, const ValueT & v );
     bool                                                RemoveKey           ( TimeValueT t );
@@ -63,10 +63,10 @@ public:
     WrapMethod                                          GetWrapPostMethod   ();
     WrapMethod                                          GetWrapPreMethod    ();
 
-    void                                                SetKey1             ( int i, Key key );
-    void                                                SetKey2             ( int i, Key key );
-    void                                                SetV1               ( int i, Key v );
-    void                                                SetV2               ( int i, Key v );
+    //void                                                SetKey1             ( int i, Key key );
+    //void                                                SetKey2             ( int i, Key key );
+    //void                                                SetV1               ( int i, Key v );
+    //void                                                SetV2               ( int i, Key v );
 
 // FIXME: below is to remove
     //const std::vector<Key> & AccessKeys() const { static std::vector<Key> ret; return ret; };

@@ -1,4 +1,4 @@
-#include "../CompositeBezierInterpolator.h"
+#include "../CompositeInterpolator.h"
 
 namespace bv {
 
