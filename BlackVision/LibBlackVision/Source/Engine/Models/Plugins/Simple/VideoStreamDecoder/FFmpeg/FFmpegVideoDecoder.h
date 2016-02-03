@@ -25,6 +25,7 @@ private:
 
 	AVFrame *						m_frame;
 	AVFrame *						m_outFrame;
+    uint8_t *                       m_outBuffer;
 
 	SizeType						m_frameSize;
 

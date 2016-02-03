@@ -48,6 +48,10 @@ FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder     ( VideoStreamAssetDescCon
 
 	assert( m_width > 0 );
 	assert( m_height > 0 );
+
+    auto ffmpegFormat = FFmpegUtils::ToFFmpegPixelFormat( desc->GetTextureFormat() );
+    m_swsCtx = sws_getCachedContext( m_swsCtx, m_width, m_height, m_codecCtx->pix_fmt,
+		m_width, m_height, ffmpegFormat, SWS_BILINEAR, nullptr, nullptr, nullptr );
 }
 
 // *******************************
@@ -56,7 +60,6 @@ FFmpegVideoStreamDecoder::~FFmpegVideoStreamDecoder    ()
 {
 	sws_freeContext( m_swsCtx );
 	avcodec_close( m_codecCtx );
-	av_freep( m_codecCtx );
 }
 
 // *******************************
@@ -75,10 +78,7 @@ bool				FFmpegVideoStreamDecoder::DecodePacket		( AVPacket * packet, AVFrame * f
 //
 void				FFmpegVideoStreamDecoder::ConvertFrame		( AVFrame * inFrame, AVFrame * outFrame )
 {
-	m_swsCtx = sws_getCachedContext( m_swsCtx, inFrame->width, inFrame->height, static_cast< AVPixelFormat >( inFrame->format ),
-		outFrame->width, outFrame->height, static_cast< AVPixelFormat >( outFrame->format ), SWS_BILINEAR, nullptr, nullptr, nullptr );
-	
-	sws_scale( m_swsCtx, ( const uint8_t ** const )inFrame->data, inFrame->linesize, 0,	inFrame->height, outFrame->data, outFrame->linesize );
+	sws_scale( m_swsCtx, inFrame->data, inFrame->linesize, 0, inFrame->height, outFrame->data, outFrame->linesize );
 }
 
 // *******************************

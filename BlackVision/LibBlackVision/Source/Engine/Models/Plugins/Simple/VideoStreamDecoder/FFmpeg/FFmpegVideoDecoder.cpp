@@ -29,9 +29,9 @@ FFmpegVideoDecoder::FFmpegVideoDecoder		( VideoStreamAssetDescConstPtr desc )
 	auto ffmpegFormat = FFmpegUtils::ToFFmpegPixelFormat( desc->GetTextureFormat() );
 	m_outFrame = av_frame_alloc();
 	auto numBytes = avpicture_get_size( ffmpegFormat, width, height );
-	auto buffer = ( uint8_t * )av_malloc( numBytes * sizeof( uint8_t ) );
-	avpicture_fill( ( AVPicture * )m_outFrame, buffer, ffmpegFormat, width, height );
-
+	m_outBuffer = ( uint8_t * )av_malloc( numBytes * sizeof( uint8_t ) );
+	avpicture_fill( ( AVPicture * )m_outFrame, m_outBuffer, ffmpegFormat, width, height );
+    
 	m_outFrame->width = width;
 	m_outFrame->height = height;
 	m_outFrame->format = ( int )ffmpegFormat;
@@ -54,10 +54,11 @@ FFmpegVideoDecoder::~FFmpegVideoDecoder		()
 	m_demuxer = nullptr;
 
 	av_frame_free( &m_frame );
+    av_free( m_outBuffer );
 
 	std::lock_guard< std::mutex > lock( m_mutex );
+
 	m_frameQueue.Clear();
-	av_frame_free( &m_outFrame );
 }
 
 // *********************************
@@ -68,7 +69,7 @@ void						FFmpegVideoDecoder::Start				()
 	{
 		m_decoderThread = std::unique_ptr< VideoDecoderThread >( new VideoDecoderThread( this ) );
 		m_decoderThread->Start();
-	} 
+	}
 	else if ( m_decoderThread->Stopped() )
 	{
 		Reset();
@@ -124,6 +125,8 @@ void					FFmpegVideoDecoder::NextFrameDataReady		()
 //
 bool					FFmpegVideoDecoder::DecodeNextFrame			()
 {
+    auto success = false;
+
 	std::lock_guard< std::mutex > lock( m_mutex );
 	auto packet = m_demuxer->GetPacket( m_vstreamDecoder->GetStreamIdx() );
 	if( packet != nullptr )
@@ -132,13 +135,13 @@ bool					FFmpegVideoDecoder::DecodeNextFrame			()
 			m_vstreamDecoder->DecodePacket( packet, m_frame ) )
 		{
 			m_vstreamDecoder->ConvertFrame( m_frame, m_outFrame );
-			return true;
+			success = true;
 		}
 		
-		av_free_packet( packet );
-		delete packet;
 	}
-	return false;
+	av_free_packet( packet );
+
+	return success;
 }
 
 // *********************************
