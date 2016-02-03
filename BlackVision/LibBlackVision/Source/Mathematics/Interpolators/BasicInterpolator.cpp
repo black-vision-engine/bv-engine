@@ -185,10 +185,13 @@ void                Key<TimeValueT, ValueT>::Serialize       ( ISerializer& ser 
 template<class TimeValueT, class ValueT >
 ISerializablePtr     Key<TimeValueT, ValueT>::Create          ( const IDeserializer& deser )
 {
-    auto time = deser.GetAttribute( "time" );
-    auto val = deser.GetAttribute( "val" );
+    auto time = SerializationHelper::String2T< TimeValueT >( deser.GetAttribute( "time" ) );
+    auto val = SerializationHelper::String2T< ValueT >( deser.GetAttribute( "val" ) );
+
+    if( !time.isValid || !val.isValid )
+        assert( false ); // FIXME: error handling
     
-    return std::make_shared< Key< TimeValueT, ValueT > >( SerializationHelper::_String2T< TimeValueT >( time ), SerializationHelper::_String2T< ValueT >( val ) );
+    return std::make_shared< Key< TimeValueT, ValueT > >( time, val );
 }
 
 std::vector<std::string> &split_(const std::string &s, char delim, std::vector<std::string> &elems) { // FIXME: this "_" is so weak
@@ -272,7 +275,9 @@ BasicInterpolator< TimeValueT, ValueT, FloatT >*     BasicInterpolator<TimeValue
         auto interpolator = new BasicInterpolator<TimeValueT, ValueT, FloatT>();
 
         for( auto key : keys )
+        {
             interpolator->AddKey( key->t, key->val );
+        }
 
         deser.ExitChild(); // keys
 
