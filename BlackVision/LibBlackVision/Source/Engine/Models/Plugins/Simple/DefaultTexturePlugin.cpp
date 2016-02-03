@@ -202,9 +202,10 @@ void                                DefaultTexturePlugin::Update                
     {
         auto ctx = m_psc->GetRendererContext();
         ctx->alphaCtx->blendEnabled = std::static_pointer_cast<ParamBool>( GetParameter( BLEND_ENABLE ) )->Evaluate();
-        
-        auto contextUpdateId = m_psc->GetRendererContextUpdateID();
-        m_psc->SetRendererContextUpdateID( contextUpdateId + 1 );
+
+        HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
+        //auto contextUpdateId = m_psc->GetRendererContextUpdateID();
+        //m_psc->SetRendererContextUpdateID( contextUpdateId + 1 );
     }
 
     HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
