@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultVertexShaderChannel.h"
 
 //FIXME: REMOVE after reimplementing access to values from shader channel implementation

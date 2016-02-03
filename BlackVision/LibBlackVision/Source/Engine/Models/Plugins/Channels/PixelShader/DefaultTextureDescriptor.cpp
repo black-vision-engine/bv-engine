@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultTextureDescriptor.h"
 
 #include "Assets/AssetManager.h"

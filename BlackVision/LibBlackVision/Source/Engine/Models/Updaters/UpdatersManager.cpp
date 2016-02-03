@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "UpdatersManager.h"
 
 #include "Engine/Models/Interfaces/IModelNode.h"

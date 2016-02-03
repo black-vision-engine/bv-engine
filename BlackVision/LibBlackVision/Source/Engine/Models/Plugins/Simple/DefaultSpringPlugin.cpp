@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultSpringPlugin.h"
 
 namespace bv { namespace model {

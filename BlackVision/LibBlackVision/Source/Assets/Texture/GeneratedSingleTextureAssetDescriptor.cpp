@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "GeneratedSingleTextureAssetDescriptor.h"
 
 namespace bv

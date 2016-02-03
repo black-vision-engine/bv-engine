@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "TextureAssetThumbnail.h"
 
 #include "tools/Base64.h"

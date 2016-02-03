@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "AssetTracker.h"
 
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"

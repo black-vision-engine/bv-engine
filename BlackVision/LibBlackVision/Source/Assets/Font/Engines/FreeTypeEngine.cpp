@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "FreeTypeEngine.h"
 
 #include "Assets/Font/Glyph.h"

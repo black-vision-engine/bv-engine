@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "WindowedApplication.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"

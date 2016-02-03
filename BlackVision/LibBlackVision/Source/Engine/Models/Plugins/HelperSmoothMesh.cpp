@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "HelperSmoothMesh.h"
 #include "Mathematics\Defines.h"
 

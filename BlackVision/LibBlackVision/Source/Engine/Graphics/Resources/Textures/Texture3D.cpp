@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Texture3D.h"
 
 namespace bv {

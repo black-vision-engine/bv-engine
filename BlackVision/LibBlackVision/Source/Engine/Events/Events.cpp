@@ -1,4 +1,6 @@
-﻿#include "Events.h"
+#include "stdafx.h"
+
+#include "Events.h"
 
 #include <cassert>
 

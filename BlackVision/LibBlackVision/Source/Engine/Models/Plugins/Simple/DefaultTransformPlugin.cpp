@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultTransformPlugin.h"
 
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"

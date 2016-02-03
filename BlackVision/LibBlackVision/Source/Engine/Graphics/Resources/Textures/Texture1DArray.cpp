@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Texture1DArray.h"
 
 namespace bv {

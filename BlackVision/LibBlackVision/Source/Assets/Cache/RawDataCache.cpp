@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "RawDataCache.h"
 #include "HardDriveRawDataCache.h"
 

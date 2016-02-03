@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "BasePluginDescriptor.h"
 
 namespace bv { namespace model {

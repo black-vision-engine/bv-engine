@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "AbstractModelParameter.h"
 #include "ParametersFactory.h"
 

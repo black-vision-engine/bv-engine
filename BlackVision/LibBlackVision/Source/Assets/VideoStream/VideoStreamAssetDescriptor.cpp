@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "VideoStreamAssetDescriptor.h"
 #include <cassert>			//@todo delete after implementing all functions
 

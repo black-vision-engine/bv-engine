@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultTorusPlugin.h"
 
 namespace bv { namespace model {

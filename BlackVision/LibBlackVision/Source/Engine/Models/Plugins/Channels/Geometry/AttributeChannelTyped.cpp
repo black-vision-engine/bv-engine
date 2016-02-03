@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "AttributeChannelTyped.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"

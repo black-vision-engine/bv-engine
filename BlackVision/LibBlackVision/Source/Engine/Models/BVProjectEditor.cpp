@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "BVProjectEditor.h"
 
 #include "Engine/Models/BVProject.h"

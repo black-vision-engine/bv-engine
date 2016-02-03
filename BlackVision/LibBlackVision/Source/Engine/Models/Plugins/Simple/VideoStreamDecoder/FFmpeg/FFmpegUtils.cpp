@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "FFmpegUtils.h"
 
 namespace bv

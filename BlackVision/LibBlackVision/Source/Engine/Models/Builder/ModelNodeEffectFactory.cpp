@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "ModelNodeEffectFactory.h"
 #include "Serialization/SerializationHelper.h"
 

@@ -97,6 +97,31 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetName>LibBlackVision</TargetName>
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <AdditionalOptions>-Zm111 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalOptions>-Zm111 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>-Zm111 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>-Zm111 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp" />
     <ClCompile Include="..\..\..\Source\Application\ApplicationContext.cpp" />
@@ -820,6 +845,7 @@
     <ClInclude Include="..\..\..\Source\Serialization\SerializeContext.h" />
     <ClInclude Include="..\..\..\Source\Serialization\XML\XMLDeserializer.h" />
     <ClInclude Include="..\..\..\Source\Serialization\XML\XMLSerializer.h" />
+    <ClInclude Include="..\..\..\Source\stdafx.h" />
     <ClInclude Include="..\..\..\Source\UseLoggerLibBlackVision.h" />
   </ItemGroup>
   <ItemGroup>

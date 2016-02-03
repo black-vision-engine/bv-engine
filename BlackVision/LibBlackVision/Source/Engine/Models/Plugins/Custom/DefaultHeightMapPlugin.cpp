@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultHeightMapPlugin.h"
 
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"

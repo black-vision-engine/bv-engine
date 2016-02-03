@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PdrTextureCubeArray.h"
 
 #include <cassert>

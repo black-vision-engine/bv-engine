@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "AssetDescsWithUIDs.h"
 
 namespace bv {

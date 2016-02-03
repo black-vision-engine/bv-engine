@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "TimelineHelper.h"
 
 #include "Engine/Models/Timeline/TimelineManager.h"

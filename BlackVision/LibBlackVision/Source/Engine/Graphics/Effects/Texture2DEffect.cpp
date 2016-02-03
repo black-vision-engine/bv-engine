@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Texture2DEffect.h"
 
 #include "Engine/Interfaces/IValue.h"

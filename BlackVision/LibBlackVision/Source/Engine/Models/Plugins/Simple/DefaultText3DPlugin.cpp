@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultText3DPlugin.h"
 
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"

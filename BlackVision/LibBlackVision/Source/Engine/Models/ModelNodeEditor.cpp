@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "ModelNodeEditor.h"
 
 #include "Engine/Models/BVProjectTools.h"

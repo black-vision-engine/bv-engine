@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultTexturePlugin.h"
 
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"

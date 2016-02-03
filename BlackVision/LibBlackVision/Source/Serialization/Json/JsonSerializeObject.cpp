@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "JsonSerializeObject.h"
 #include "Serialization/BV/BVSerializeContext.h"
 #include "Assets/AssetDescsWithUIDs.h"

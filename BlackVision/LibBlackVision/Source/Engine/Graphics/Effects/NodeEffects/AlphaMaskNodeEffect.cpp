@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "AlphaMaskNodeEffect.h"
 
 #include "Engine/Types/Values/ValuesFactory.h"

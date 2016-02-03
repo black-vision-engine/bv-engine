@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultGradientPlugin.h"
 
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"

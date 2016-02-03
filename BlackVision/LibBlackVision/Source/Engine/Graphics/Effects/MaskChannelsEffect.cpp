@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "MaskChannelsEffect.h"
 
 #include "Engine/Graphics/Shaders/Parameters/ShaderParamFactory.h"

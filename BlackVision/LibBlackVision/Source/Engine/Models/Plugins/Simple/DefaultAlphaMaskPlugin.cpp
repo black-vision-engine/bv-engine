@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultAlphaMaskPlugin.h"
 
 #include "Engine/Models/Plugins/Parameters/ParametersFactory.h"

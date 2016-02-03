@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "AABB.h"
 
 namespace bv { namespace mathematics {

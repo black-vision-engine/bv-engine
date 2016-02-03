@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "BaseEvent.h"
 
 namespace bv

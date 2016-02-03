@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "MipMapAssetDescriptor.h"
 #include "MipMapBuilder.h"
 #include "Serialization/ISerializer.h"

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "AnimationAssetDescriptor.h"
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"

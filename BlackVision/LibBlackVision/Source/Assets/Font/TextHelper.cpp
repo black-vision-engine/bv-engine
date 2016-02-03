@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "TextHelper.h"
 #include "TextAtlas.h"
 

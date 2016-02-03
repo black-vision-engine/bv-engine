@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PdrVertexBuffer.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"

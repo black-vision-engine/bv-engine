@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "BVSerializeContext.h"
 
 #include "Assets/AssetDescsWithUIDs.h"

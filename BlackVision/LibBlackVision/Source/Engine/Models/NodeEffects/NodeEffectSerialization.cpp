@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "ModelNodeEffectAlphaMask.h"
 #include "ModelNodeEffectDefault.h"
 #include "ModelNodeEffectNodeMask.h"

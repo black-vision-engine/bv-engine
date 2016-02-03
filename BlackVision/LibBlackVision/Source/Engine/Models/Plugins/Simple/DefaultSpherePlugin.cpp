@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultSpherePlugin.h"
 #include "Mathematics/Defines.h"
 

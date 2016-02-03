@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "BlurNodeEffect.h"
 
 #include "Engine/Types/Values/ValuesFactory.h"

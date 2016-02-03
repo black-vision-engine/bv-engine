@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "AtlasCache.h"
 
 #include "System/Path.h"

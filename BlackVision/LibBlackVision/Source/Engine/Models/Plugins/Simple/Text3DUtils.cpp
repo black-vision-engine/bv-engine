@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Text3dUtils.h"
 
 #include <ft2build.h>

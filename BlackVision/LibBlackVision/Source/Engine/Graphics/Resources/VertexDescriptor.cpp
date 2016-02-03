@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "VertexDescriptor.h"
 
 #include <cassert>

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultGeometryPluginBase.h"
 
 #include "Engine/Models/Plugins/Channels/Geometry/Simple/DefaultGeometryVertexAttributeChannel.h"
