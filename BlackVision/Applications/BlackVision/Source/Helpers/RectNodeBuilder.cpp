@@ -67,10 +67,10 @@ void    RectNodeBuilder::SetPosition ( float x, float y, float z, TimeType t )
 
 // ****************************
 //
-void    RectNodeBuilder::SetRotation ( float x, float y, float z, float angle, TimeType t )
+void    RectNodeBuilder::SetRotation ( float x, float y, float z, TimeType t )
 {
     assert( m_node );
-    bool success = model::SetParameterRotation( GetTRansformPlugin()->GetParameter( TransformParamName() ), t, glm::vec3( x, y, z ), angle );
+    bool success = model::SetParameterRotation( GetTRansformPlugin()->GetParameter( TransformParamName() ), t, glm::vec3( x, y, z ) );
     { success; } // FIXME: suppress unused warning
     assert( success );
 }

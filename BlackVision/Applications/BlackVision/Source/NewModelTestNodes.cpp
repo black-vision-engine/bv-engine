@@ -98,8 +98,8 @@ namespace {
         SetParameterScale ( param, 21.0f, glm::vec3( 1.f, 1.f, 1.f ) );
         SetParameterScale ( param, 25.0f, glm::vec3( 2.f, 2.f, 1.f ) );
 
-        SetParameterRotation ( param, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
-        SetParameterRotation ( param, 30.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
+        SetParameterRotation ( param, 0.0f, glm::vec3( 0.f, 0.f, 0.f ) );
+        SetParameterRotation ( param, 30.0f, glm::vec3( 0.f, 0.f, 360.f ) );
 
         SetParameterCenterMass( param, 0.f, glm::vec3( 1.5f, 1.5f, 0.f ) );
         SetParameterCenterMass( param, 10.f, glm::vec3( -.5f, -1.0f, 0.f ) );
@@ -489,8 +489,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOverrideAlphaTest  ( model::ITime
     bTex.SetW( .15f );
     bTex.SetH( 0.15f );
     bTex.SetPosition( 0.f, 0.f, 0.01f );
-    bTex.SetRotation( 0.f, 0.f, 1.f, 0.0f, 0.f );
-    bTex.SetRotation( 0.f, 0.f, 1.f, 360.0f, 15.f );
+    bTex.SetRotation( 0.f, 0.f, 0.0f, 0.f );
+    bTex.SetRotation( 0.f, 0.f, 360.0f, 15.f );
     auto c010 = bTex.CreateNode( "node010", true );
 
     root->AddChildToModelOnly( c0 );
@@ -705,8 +705,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::ITimeEvaluat
 	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 	simpleTransform->SetTimeEvaluator(offset3Timeline);
 
-	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
-	SetParameterRotation ( simpleTransform, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
+	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 0.f, 0.f, 0.f ) );
+	SetParameterRotation ( simpleTransform, 2.0f, glm::vec3( 0.f, 0.f, 360.f ) );
 
     auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
     assert( color );
@@ -783,7 +783,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::ITimeEvalu
 	SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
 	//SetParameterTranslation( simpleTransform, 10.0f, glm::vec3( 1.f, 1.0f, -100.f) );
-	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 20.f, 0.f, 0.f ) );
 	//SetParameterRotation ( simpleTransform, 10.0f, glm::vec3( 1.f, 0.f, 0.f ), 360.f );
 	//SetParameterRotation ( simpleTransform, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
 
@@ -846,7 +846,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPrismNode( model::ITi
 
 	SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
-	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 20.f, 0.f, 0.f ) );
 
 // LINEAR GRADIENT plugin
 	if( root->GetPlugin( "linear_gradient" ) )
@@ -907,7 +907,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPrismNode( model::ITim
 
 	SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
-	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 20.f, 0.f, 0.f ) );
 
 // LINEAR GRADIENT plugin
 	if( root->GetPlugin( "linear_gradient" ) )
@@ -973,7 +973,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::IT
 
 	SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
 	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
-	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 20.f, 0.f, 0.f ) );
 
 // LINEAR GRADIENT plugin
 	if( root->GetPlugin( "linear_gradient" ) )
@@ -2147,12 +2147,11 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 
 // ============================================ //
 // Tranformations
-	glm::vec3 rotation_axis( 1.0f, 0.0f, 0.0f );
 	glm::vec3 rotation_axis2( -1.f, 1.f, -1.f );
 
 	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, rotation_axis, 0.f );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 200.f, rotation_axis, 7200.f );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 0.0f, 0.0f ) );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 200.f, glm::vec3( 7200.f, 0.0f, 0.0f ) );
 	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 40.f, rotation_axis2, -720.f );
 	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0, glm::vec3( 0.0, 0.0, -2.0f ) );
 
@@ -2386,8 +2385,8 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::ITimeEvalua
 	glm::vec3 rotation_axis2( -1.f, 1.f, 0.f );
 
 	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, rotation_axis, 0.f );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 100.f, rotation_axis, -7200.f );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 0.f, 0.f ) );
+	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 100.f, glm::vec3( 0.f, -7200.f, 0.f ) );
 	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 40.f, rotation_axis2, 50.f );
 	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0, translation );
 

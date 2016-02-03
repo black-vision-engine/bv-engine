@@ -257,11 +257,10 @@ void                                    ShiftReplicationModifier::ApplyRotationD
         auto transformParamTyped = QueryTypedParam< ParamTransformPtr >( transformParam );
 
         auto dv = QueryTypedValue< ValueVec3Ptr >( delta.delta )->GetValue();
-        auto valAxis = transformParamTyped->GetTransform().GetRotationAxis( delta.startTime );
-        auto valAngle = transformParamTyped->GetTransform().GetRotationAngle( delta.startTime );
+        auto valAngles = transformParamTyped->GetTransform().GetRotation( delta.startTime );
 
         //FIXME: it might not work as original (previous) code
-        transformParamTyped->SetRotation( valAxis + dv, valAngle, delta.startTime + delta.deltaTime );
+        transformParamTyped->SetRotation( valAngles, delta.startTime + delta.deltaTime );
     }
 }
 

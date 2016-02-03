@@ -270,7 +270,7 @@ void  QueryPropertiesDefaultSceneConvenienceAPIParameterSetters ( const model::P
 
     bool success = true;
 
-    success &= SetParameterRotation( transform_p, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 90.f );
+    success &= SetParameterRotation( transform_p, 0.0f, glm::vec3( 0.f, 0.f, 90.f ) );
     success &= SetParameterScale( transform_p, 0.0f, glm::vec3( 1.f, 2.f, 1.f ) );
     success &= SetParameterTranslation( transform_p, 0.0f, glm::vec3( 0.f, 1.f, -2.f ) );
 
@@ -288,7 +288,7 @@ void  QueryPropertiesDefaultSceneConvenienceAPIParameterSettersNoErrorChecking (
 {
     auto  n = DefaultTestNodeNewNodeImpl( pluginsManager, timeEvaluator );
 
-    SetParameterRotation    ( n->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 90.f );
+    SetParameterRotation    ( n->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, 0.f, 90.f ) );
     SetParameterScale       ( n->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 1.f, 2.f, 1.f ) );
     SetParameterTranslation ( n->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.f, 1.f, -2.f ) );
 
@@ -798,7 +798,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrimitivePieChartTestScene     ( 
     auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
     SetParameterScale( simpleTransform, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
     SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( 0, 0, -1.f) );
-    SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+    SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 20.f, 0.f, 0.f ) );
 
 
     auto node1 = SimpleNodesFactory::CreateCreedColoredPieChartNode( timeEvaluator, 0 );
@@ -930,7 +930,7 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismBugTestScene     ( const mod
 
     SetParameterScale( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ),  0.f, glm::vec3( 1.f, 1.f, 1.f ) );
     SetParameterTranslation( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ),  0.f, glm::vec3( 0.f, -.5f, -10.f ) );
-    SetParameterRotation ( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 100.0f, glm::vec3( 1.f, 0.f, 0.f ), 10100.f );
+    SetParameterRotation ( prism2->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 100.0f, glm::vec3( 10100.f, 0.f, 0.f ) );
 
     model::SetParameter( prism2->GetPlugin( "prism" )->GetParameter( "n" ), 10.f, 10.f );
 
@@ -1109,7 +1109,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedConeTestScene     ( model::IT
     root->AddPlugin( "DEFAULT_TEXTURE", timeEvaluator );
 
     //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1, 0, 0 ), 0.f );
-    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 10.f, glm::vec3( 1, 0, 0 ), -90.f );
+    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 10.f, glm::vec3( -90.f, 0, 0 ) );
     //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1, 0, 0 ), -90.f );
     model::SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0, 0, -1 ) );
 
@@ -1139,7 +1139,7 @@ model::BasicNodePtr    TestScenesFactory::CreedBasicGeometryTestScene     ( mode
     //root->AddPlugin( "DEFAULT_RECTANGLE", timeEvaluator );
 
     //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1, 0, 0 ), 0.f );
-    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 1.f, glm::vec3( 0, 1, 0 ), 45.f );
+    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 1.f, glm::vec3( 0, 45.f, 0 ) );
     //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0, 0, 0 ), -90.f );
     model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1.5, 1.5, 1.5 ) );
     model::SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0, 0, -1 ) );
@@ -1172,7 +1172,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedTorusBasicGeometryTestScene  
     root->AddPlugin( "DEFAULT_TORUS", timeEvaluator );
 
     //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1, 0, 0 ), 0.f );
-    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 5.f, glm::vec3( 1, 0, 0 ), 90.f );
+    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 5.f, glm::vec3( 90.f, 0, 0 ) );
     //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1, 0, 0 ), -90.f );
     model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1.5, 1.5, 1.5 ) );
     SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0, 0, -4 ) );
@@ -1205,7 +1205,7 @@ model::BasicNodePtr    /*TestScenesFactory::*/CreedBasicGeometryTestScene     ( 
     root->AddPlugin( "DEFAULT_SPRING", timeEvaluator );
 
     //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1, 0, 0 ), 0.f );
-    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 5.f, glm::vec3( 1, 0, 0 ), 90.f );
+    model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 5.f, glm::vec3( 90.f, 0, 0 ) );
     //model::SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1, 0, 0 ), -90.f );
     model::SetParameterScale( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 1, 2, 1 ) );
     SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0, -1, -1 ) );

@@ -96,8 +96,8 @@ model::BasicNodePtr SolidRect( const model::PluginsManager * pluginsManager, mod
 
     auto simpleTransform = rootNode->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
-    SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
-    SetParameterRotation ( simpleTransform, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 20000.f );
+    SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 0.f, 0.f, 0.f ));
+    SetParameterRotation ( simpleTransform, 2.0f, glm::vec3( 0.f, 0.f, 20000.f ) );
 
     return rootNode;
 }
@@ -150,13 +150,13 @@ model::BasicNodePtr TwoTexturedRectangles       ( const model::PluginsManager * 
     bool success = true;
 
     success &= model::SetParameterTranslation( rootTransform, 0.0f, glm::vec3( -1.f, 0.f, -1.f ) );
-    success &= model::SetParameterRotation( rootTransform, 100.0f, glm::vec3( 0.f, 0.f, -1.f ), 5000.f );
+    success &= model::SetParameterRotation( rootTransform, 100.0f, glm::vec3( 0.f, 0.f, 5000.f ) );
     success &= model::SetParameterTranslation( childTransform, 0.0f, glm::vec3( 2.f, 0.f, 0.f ) );
-    success &= model::SetParameterRotation( childTransform, 100.0f, glm::vec3( 0.f, 0.f, -1.f ), 36000.f );
+    success &= model::SetParameterRotation( childTransform, 100.0f, glm::vec3( 0.f, 0.f, 36000.f ) );
 
     assert( success );
 
-    std::string txFileName = "0level.bmp";
+    std::string txFileName = "sand.jpg";
 
     success &= model::LoadTexture( rootNode->GetPlugin( "texture" ), txFileName );
     success &= model::LoadTexture( childNode->GetPlugin( "texture" ), txFileName );

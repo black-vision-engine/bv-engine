@@ -92,13 +92,13 @@ OrderTestCase::OrderTestCase	( const std::string & node, const std::string & tes
 //
 void					TestScene::InitTestEditor			()
 {
-	//InitTestModelSceneEditor();
+	InitTestModelSceneEditor();
 
 	//InitTimelinesTest();
 
 	//InitAssetsTest();
 
-    InitCopyNodeTest();
+    //InitCopyNodeTest();
 
 	//InitBasicColorPluginTest();
 	//InitOrderColorPluginTest();
@@ -344,7 +344,9 @@ void                    TestScene::InitTestModelSceneEditor ()
 
 		success &= ( editor->GetScene( SCENE_NAME ) != nullptr );
 		success &= ( editor->GetScene( "Copy_" + SCENE_NAME ) == nullptr );
-		success &= ( editor->GetScene( "Copy1_" + SCENE_NAME ) != nullptr );
+		success &= ( editor->GetScene( "Copy_Copy_" + SCENE_NAME ) != nullptr );
+
+        editor->RenameScene( "Copy_Copy_" + SCENE_NAME, "Copy1_" + SCENE_NAME );
 
 		assert( success );
 	});
@@ -2485,9 +2487,9 @@ void					TestScene::InitColoredGeometryTest		()
 			
 			auto time = m_timeEvaluator->GetLocalTime(); {time;}
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 0.f, 0.f, 0.f ) );
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 360.f, 360.f, 360.f ) );
 
 			auto root = scene->GetRootNode();
             editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2504,9 +2506,9 @@ void					TestScene::InitColoredGeometryTest		()
 			
 			auto time = m_timeEvaluator->GetLocalTime();
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 0.f, 0.f, 0.f ) );
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 360.f, 360.f, 360.f ) );
 
 			auto root = scene->GetRootNode();
 			editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2542,9 +2544,9 @@ void					TestScene::InitColoredGeometryTest		()
 				
 				auto time = m_timeEvaluator->GetLocalTime();
 				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 0.f, 0.f, 0.f ) );
 				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 360.f, 360.f, 360.f ) );
 
 				auto root = scene->GetRootNode();
 				editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2572,9 +2574,9 @@ void					TestScene::InitTexturedGeometryTest		()
 			
 			auto time = m_timeEvaluator->GetLocalTime();
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 0.f, 0.f, 0.f ) );
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 360.f, 360.f, 360.f ) );
 
 			auto root = scene->GetRootNode();
 			editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2591,9 +2593,9 @@ void					TestScene::InitTexturedGeometryTest		()
 			
 			auto time = m_timeEvaluator->GetLocalTime();
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 0.f, 0.f, 0.f ) );
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 360.f, 360.f, 360.f ) );
 
 			auto root = scene->GetRootNode();
 			editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2633,9 +2635,9 @@ void					TestScene::InitTexturedGeometryTest		()
 
 				auto time = m_timeEvaluator->GetLocalTime();
 				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 0.f, 0.f, 0.f ) );
 				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 360.f, 360.f, 360.f ) );
 
 				auto root = scene->GetRootNode();
 				editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2663,9 +2665,9 @@ void					TestScene::InitAnimatedGeometryTest		()
 			
 			auto time = m_timeEvaluator->GetLocalTime();
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 0.f, 0.f, 0.f ) );
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 360.f, 360.f, 360.f ) );
 
 			auto root = scene->GetRootNode();
 			editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2682,9 +2684,9 @@ void					TestScene::InitAnimatedGeometryTest		()
 			
 			auto time = m_timeEvaluator->GetLocalTime();
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 0.f, 0.f, 0.f ) );
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 360.f, 360.f, 360.f ) );
 
 			auto root = scene->GetRootNode();
 			editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2715,9 +2717,9 @@ void					TestScene::InitAnimatedGeometryTest		()
 
 				auto time = m_timeEvaluator->GetLocalTime();
 				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 0.f, 0.f, 0.f ) );
 				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 360.f, 360.f, 360.f ) );
 
 				auto root = scene->GetRootNode();
 			    editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2745,9 +2747,9 @@ void					TestScene::InitGradientGeometryTest		()
 			auto geom = TestSceneUtils::GradientGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 1.f, 0.f, 1.f, 1.f ) );
 			
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 0.f, 0.f, 0.f ) );
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 1.f, glm::vec3( 360.f, 360.f, 360.f ) );
 
 			auto root = scene->GetRootNode();
 			editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2764,9 +2766,9 @@ void					TestScene::InitGradientGeometryTest		()
 			auto geom = TestSceneUtils::GradientGeometry( editor->GetSceneDefaultTimeline( scene ), GEOM_NODE, plugin, glm::vec4( 1.f, 0.f, 0.f, 1.f ), glm::vec4( 1.f, 0.f, 1.f, 1.f ), TestSceneUtils::ALPHA_MASK_PATH );
 			
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 0.f, 0.f, 0.f ) );
 			SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+			SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 5.f, glm::vec3( 360.f, 360.f, 360.f ) );
 
 			auto root = scene->GetRootNode();
 			editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );
@@ -2798,9 +2800,9 @@ void					TestScene::InitGradientGeometryTest		()
 			
 				auto time = m_timeEvaluator->GetLocalTime();
 				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.0f, -0.1f, -2.f ) );
-				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 1.f, 0.f, 0.f ), 0.f );
+				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time, glm::vec3( 0.f, 0.f, 0.f ) );
 				SetParameterTranslation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 1.0f, -0.1f, -2.f ) );
-				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 1.f, 1.f, 1.f ), 360.f );
+				SetParameterRotation( geom->GetPlugin( "transform" )->GetParameter( "simple_transform" ), time + 3.f, glm::vec3( 360.f, 360.f, 360.f ) );
 
 				auto root = scene->GetRootNode();
 			    editor->DeleteChildNode( scene, root, root->GetChild( GEOM_NODE ) );

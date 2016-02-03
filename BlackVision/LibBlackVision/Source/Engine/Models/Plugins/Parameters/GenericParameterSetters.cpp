@@ -9,14 +9,14 @@ namespace {
 
 // *******************************
 //
-bool SetRotation                ( ParamTransformPtr pt, TimeType t, const glm::vec3 & rotAxis, float angle )
+bool SetRotation                ( ParamTransformPtr pt, TimeType t, const glm::vec3 & eulerAngles )
 {
     if( pt == nullptr )
     {
         return false;
     }
 
-    pt->SetRotation( rotAxis, angle, t );
+    pt->SetRotation( eulerAngles, t );
 
     return true;
 }
@@ -163,9 +163,9 @@ bool    MoveCenterMassKey     ( ParamTransformPtr parameter, TimeType t, TimeTyp
 
 // *******************************
 //
-bool    SetParameterRotation    ( IParameterPtr parameter, TimeType t, const glm::vec3 & rotAxis, float angle )
+bool    SetParameterRotation    ( IParameterPtr parameter, TimeType t, const glm::vec3 & eulerAngles )
 {
-    return SetRotation( QueryTypedParam< ParamTransformPtr >( parameter ), t, rotAxis, angle );
+    return SetRotation( QueryTypedParam< ParamTransformPtr >( parameter ), t, eulerAngles );
 }
 
 // *******************************

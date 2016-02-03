@@ -1,8 +1,6 @@
 #pragma once
 
-#include "Mathematics/glm_inc.h"
-#include <glm/gtc/matrix_transform.hpp>
-
+#include "Mathematics/Transform/SQTTransform.h"
 #include "Mathematics/Interpolators/Interpolators.h"
 
 
@@ -32,34 +30,29 @@ public:
 //maintain serialization backward compatibility
 enum class TransformKind : int
 {
-    fwd_center,
+    center,
     rotation,
     scale,
     translation,
 
     invalid
 };
-//bool  MoveValues    ( TimeType t, TimeType newTime )
-//    {
-//        bool result = true;
-//
-//        result = result && p0.MoveKey( t, newTime );
-//        result = result && p1.MoveKey( t, newTime );
-//        result = result && p2.MoveKey( t, newTime );
-//        
-//        return result;
-//    }
+
 // ******************* CompositeTransform **************** 
 class CompositeTransform : public ISerializable
 {
 private:
 
+    SQTTransform        m_sqt;
+
     FloatInterpolator   m_translationX;
     FloatInterpolator   m_translationY;
     FloatInterpolator   m_translationZ;
 
-    Vec3Interpolator    m_rotationAxis;
-    FloatInterpolator   m_rotationAngle;
+    /* stored in degrees */
+    FloatInterpolator   m_eulerPitch;
+    FloatInterpolator   m_eulerYaw;
+    FloatInterpolator   m_eulerRoll;
 
     FloatInterpolator   m_scaleX;
     FloatInterpolator   m_scaleY;
@@ -81,17 +74,17 @@ public:
     virtual         ~CompositeTransform ();
 
     void            SetCurveType        ( CurveType type );
+    void            SetAddedKeyCurveType( CurveType type );
     void            SetWrapPostMethod   ( WrapMethod method );
     void            SetWrapPreMethod    ( WrapMethod method );
 
     glm::vec3       GetTranslation      ( TimeType time ) const;
-    glm::vec3       GetRotationAxis     ( TimeType time ) const;
-    Float32         GetRotationAngle    ( TimeType time ) const;
+    glm::vec3       GetRotation         ( TimeType time ) const;
     glm::vec3       GetScale            ( TimeType time ) const;
     glm::vec3       GetCenter           ( TimeType time ) const;
 
     void            SetTranslation      ( const glm::vec3 & vec, TimeType time );
-    void            SetRotation         ( const glm::vec3 & axis, Float32 angle, TimeType time );
+    void            SetRotation         ( const glm::vec3 & vec, TimeType time );
     void            SetScale            ( const glm::vec3 & vec, TimeType time );
     void            SetCenter           ( const glm::vec3 & vec, TimeType time );
 

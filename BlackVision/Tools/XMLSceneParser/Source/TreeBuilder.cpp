@@ -375,7 +375,8 @@ namespace bv{
                     result = result && SetParameterTranslation (transform, tF, glm::vec3(x,y,z));
                 }else if(propertyName=="rotation")
                 {
-                    result = result && SetParameterRotation ( transform, tF, glm::vec3( x,y,z ), angle );
+                    assert( false ); //fixme? axis-angle changed to angles
+                    //result = result && SetParameterRotation ( transform, tF, glm::vec3( x,y,z ), angle );
                 }else if(propertyName=="scaling")
                 {
                     result = result && SetParameterScale (transform, tF, glm::vec3(x,y,z));

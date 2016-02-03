@@ -31,7 +31,7 @@ public:
 
     virtual int         GetNumKeys      ();
 
-    inline  void        SetRotation     ( const glm::vec3 & rotAxis, float angle, TimeType t );
+    inline  void        SetRotation     ( const glm::vec3 & eulerAngle, TimeType t );
     inline  void        SetScale        ( const glm::vec3 & scale, TimeType t );
     inline  void        SetTranslation  ( const glm::vec3 & translation, TimeType t );
     inline  void        SetCenter       ( const glm::vec3 & center, TimeType t );

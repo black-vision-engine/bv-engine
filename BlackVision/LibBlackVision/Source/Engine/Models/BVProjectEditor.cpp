@@ -1227,7 +1227,7 @@ std::string				BVProjectEditor::PrefixSceneName		( const std::string & name ) co
         }
     }
 
-    return PrefixHelper::ReplacePrefix( name, num + 1 );
+    return PrefixHelper::PrefixCopy( num + 1 ) + name;
 }
 
 // CUSTOM DEFAULTS

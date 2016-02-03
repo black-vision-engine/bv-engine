@@ -429,15 +429,10 @@ bool        PluginEventsHandlers::AddTransformKey        ( ParameterPtr & param,
         case TransformKind::translation:
             return SetParameterTranslation( param, keyTime, SerializationHelper::String2T( strValue, glm::vec3( 0.f ) ) );
         case TransformKind::rotation:
-        {
-            glm::vec4 rotAxisAngle = SerializationHelper::String2T( strValue, glm::vec4( 0.f ) );
-            glm::vec3 rotAxis = glm::vec3( rotAxisAngle );
-
-            return SetParameterRotation( param, keyTime, rotAxis, rotAxisAngle.w );
-        }
+            return SetParameterRotation( param, keyTime, SerializationHelper::String2T( strValue, glm::vec3( 0.f ) ) );
         case TransformKind::scale:
             return SetParameterScale( param, keyTime, SerializationHelper::String2T( strValue, glm::vec3( 1.f ) ) );
-        case TransformKind::fwd_center:
+        case TransformKind::center:
             return SetParameterCenterMass( param, keyTime, SerializationHelper::String2T( strValue, glm::vec3( 1.f ) ) );
         default:
             return false;;
@@ -458,7 +453,7 @@ bool        PluginEventsHandlers::RemoveTransformKey        ( ParameterPtr & par
             return RemoveRotationKey( param, keyTime );
         case TransformKind::scale:
             return RemoveScaleKey( param, keyTime );
-        case TransformKind::fwd_center:
+        case TransformKind::center:
             return RemoveCenterMassKey( param, keyTime );
         default:
             return false;
@@ -479,7 +474,7 @@ bool        PluginEventsHandlers::MoveTransformKey        ( ParameterPtr & param
             return MoveRotationKey( param, keyTime, newTime );
         case TransformKind::scale:
             return MoveScaleKey( param, keyTime, newTime );
-        case TransformKind::fwd_center:
+        case TransformKind::center:
             return MoveCenterMassKey( param, keyTime, newTime );
         default:
             return false;
