@@ -10,11 +10,11 @@ template< class TimeValueT, class ValueT >
 class IEvaluator : public ISerializable // FIXME perhaps not every evaluator has to be serializable
 {
 public:
-    virtual void                                Deserialize( const IDeserializer& deser ) = 0;
+    virtual void                                Deserialize( const IDeserializer& deser )   = 0;
     
-    virtual ValueT                              Evaluate( TimeValueT t ) const                      = 0;
-    virtual void                                SetValue( TimeValueT t, ValueT v )                  = 0;
-    virtual EvaluatorType                       GetType()                                           = 0;
+    virtual ValueT                              Evaluate( TimeValueT t ) const              = 0;
+    virtual void                                SetValue( TimeValueT t, ValueT v )          = 0;
+    virtual EvaluatorType                       GetType()                                   = 0;
 };
 
 template< class TimeValueT, class ValueT >
@@ -63,17 +63,20 @@ public:
     WrapMethod                                          GetWrapPostMethod   ();
     WrapMethod                                          GetWrapPreMethod    ();
 
-    //void                                                SetKey1             ( int i, Key key );
-    //void                                                SetKey2             ( int i, Key key );
-    //void                                                SetV1               ( int i, Key v );
-    //void                                                SetV2               ( int i, Key v );
-
-// FIXME: below is to remove
-    //const std::vector<Key> & AccessKeys() const { static std::vector<Key> ret; return ret; };
-
 private:
     ValueT                                              PreEvaluate         ( TimeValueT t ) const;
     ValueT                                              PostEvaluate        ( TimeValueT t ) const;
 };
+
+
+// *******************************
+//
+template<>
+CompositeInterpolator< bv::TimeType, std::string >::CompositeInterpolator( float tolerance );
+
+// *******************************
+//
+template<>
+CompositeInterpolator< bv::TimeType, std::wstring >::CompositeInterpolator( float tolerance );
 
 } // bv
