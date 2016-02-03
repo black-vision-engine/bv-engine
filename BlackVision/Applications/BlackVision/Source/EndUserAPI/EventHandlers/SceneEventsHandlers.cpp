@@ -275,8 +275,6 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
         if( !projectScenesNames.empty() )
         {
-            UpdatersManager::Get().RemoveAllUpdaters();
-                
             m_appLogic->LoadScenes( projectScenesNames );
             status = true;
         }
