@@ -63,8 +63,18 @@ void BasePluginDescriptor::ModelHelper::CreatePSModel         ()
 {
     auto psModel = std::make_shared< DefaultParamValModel >();
     m_model->SetPixelShaderChannelModel( psModel );
-    //m_lastParamValModel = psModel;
+    m_lastParamValModel = psModel;
 }
+
+// ***********************
+//
+void BasePluginDescriptor::ModelHelper::CreatePluginModel   ()
+{
+    auto psModel = std::make_shared< DefaultParamValModel >();
+    m_model->SetPluginModel( psModel );
+    m_lastParamValModel = psModel;
+}
+
 
 } //model
 } //bv

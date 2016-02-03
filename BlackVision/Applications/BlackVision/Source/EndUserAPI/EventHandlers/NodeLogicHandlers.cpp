@@ -9,6 +9,7 @@
 
 #include "Serialization/Json/JsonSerializeObject.h"
 #include "Serialization/Json/JsonDeserializeObject.h"
+#include "Serialization/BV/BVDeserializeContext.h"
 
 #include "Widgets/Crawler/CrawlerEvents.h"
 #include "Widgets/Counter/Counter.h"
@@ -67,6 +68,9 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
 		
     if( command == NodeLogicEvent::Command::AddNodeLogic )
     {
+        auto context = static_cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
+        context->SetSceneTimeline( std::static_pointer_cast< model::OffsetTimeEvaluator >( TimelineManager::GetInstance()->GetTimeEvaluator( sceneName ) ) );
+
         std::string timelinePath = deser.GetAttribute( "timelinePath" );
         auto timeline = editor->GetTimeEvaluator( timelinePath );
 

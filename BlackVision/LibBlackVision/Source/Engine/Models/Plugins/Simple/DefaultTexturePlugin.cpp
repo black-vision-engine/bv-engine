@@ -42,7 +42,6 @@ IPluginPtr              DefaultTexturePluginDesc::CreatePlugin              ( co
 DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     ModelHelper helper( timeEvaluator );
-    helper.CreateVacModel();
 
     //Create all models
     //DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
@@ -54,6 +53,7 @@ DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( IT
     SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
     
+    helper.CreatePluginModel();
     helper.AddSimpleParam( DefaultTexturePlugin::BLEND_ENABLE, true, true, true );
 
     //Register all parameters and evaloators in models

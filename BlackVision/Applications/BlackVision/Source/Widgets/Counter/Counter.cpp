@@ -36,9 +36,14 @@ bv::model::IParameterPtr        WidgetCounter::GetValueParam       ()
 WidgetCounter::WidgetCounter(bv::model::BasicNode * parent,bv::model:: ITimeEvaluatorPtr timeEvaluator): m_parentNode( parent )
 {
 	m_param = bv::model::ParametersFactory::CreateParameterFloat( "alpha", timeEvaluator );
+    SetParameter( m_param, (bv::TimeType)0.0f, 0.0f );
+    //SetParameter( m_param, (bv::TimeType)8.0f, 20.0f );
+
 	m_value = ValuesFactory::CreateValueFloat("alpha" );
 	m_isFinalized = true;
-    m_param->SetCurveType( CurveType::CT_COSINE_LIKE );
+
+    //m_param->SetCurveType( CurveType::CT_COSINE_LIKE );
+    m_param->SetCurveType( CurveType::CT_LINEAR );
 }
 
 
@@ -106,7 +111,7 @@ WidgetCounterPtr     WidgetCounter::Create          ( const IDeserializer& deser
             sceneTimeline = bv::model::TimelineManager::GetInstance()->GetRootTimeline();
         }
 
-        bv::model::ITimeEvaluatorPtr timeEvaluator = bv::model::TimelineHelper::GetTimeEvaluator( timeline, sceneTimeline );
+        timeEvaluator = bv::model::TimelineHelper::GetTimeEvaluator( timeline, sceneTimeline );
         if( timeEvaluator == nullptr ) 
         {
             assert( false );
@@ -120,6 +125,7 @@ WidgetCounterPtr     WidgetCounter::Create          ( const IDeserializer& deser
     {
         auto oldParam = std::static_pointer_cast<model::ParamFloat>( newCounter->GetValueParam() );
         auto newParam = std::static_pointer_cast<model::ParamFloat>( model::AbstractModelParameter::Create( deser ) );
+
         
         newParam->SetTimeEvaluator( oldParam->GetTimeEvaluator() );
         newParam->AccessInterpolator() = oldParam->AccessInterpolator();
