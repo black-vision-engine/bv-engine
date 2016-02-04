@@ -3,6 +3,7 @@
 #pragma once
 
 #include "BVDeserializeContext.h"
+#include "Engine/Models/BVProjectEditor.h"
 
 namespace bv
 {
@@ -13,6 +14,8 @@ BVDeserializeContext::BVDeserializeContext( model::OffsetTimeEvaluatorPtr timeli
 {
     SetAssets( assets );
     SetSceneTimeline( timeline );
+    SetSceneName( "" );
+    SetEditor( nullptr );
 }
 
 // ***********************
@@ -48,6 +51,36 @@ void                                BVDeserializeContext::SetAssets             
 {
     m_assets = assets;
 }
+
+// ***********************
+//
+BVProjectEditor *                   BVDeserializeContext::GetEditor               ()
+{
+    assert( m_projectEditor != nullptr );
+    return m_projectEditor;
+}
+
+// ***********************
+//
+void                                BVDeserializeContext::SetEditor               ( BVProjectEditor * editor )
+{
+    m_projectEditor = editor;
+}
+
+// ***********************
+//
+std::string &                       BVDeserializeContext::GetSceneName            ()
+{
+    return m_sceneName;
+}
+
+// ***********************
+//
+void                                BVDeserializeContext::SetSceneName            ( const std::string& sceneName )
+{
+    m_sceneName = sceneName;
+}
+
 
 // ***********************
 //
