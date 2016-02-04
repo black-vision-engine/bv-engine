@@ -4,11 +4,15 @@
 
 #include "Tools/StringHeplers.h"
 
+#include "Mathematics/glm_inc.h"
+
 #include <sstream>
 
 namespace bv {
 
 namespace SerializationHelper {
+
+namespace {
 
 inline std::vector<std::string> &_split(const std::string &s, char delim, std::vector<std::string> &elems) 
 {
@@ -27,34 +31,7 @@ inline std::vector<std::string> _split(const std::string &s, char delim)
     return elems;
 }
 
-std::vector<std::string> split(const std::string &s, char delim ) { return _split( s, delim ); }
-
-glm::vec4               String2Vec4( const std::string & s )
-{
-    auto vals = SerializationHelper::_split( s, ',' );
-    assert( vals.size() == 4 );
-    return glm::vec4( std::stof( vals[0] ), 
-        std::stof( vals[1] ), 
-        std::stof( vals[2] ), 
-        std::stof( vals[3] ) );
-}
-
-glm::vec3               String2Vec3( const std::string & s )
-{
-    auto vals = SerializationHelper::_split( s, ',' );
-    assert( vals.size() == 3 );
-    return glm::vec3( std::stof( vals[0] ), 
-        std::stof( vals[1] ), 
-        std::stof( vals[2] ) );
-}
-
-glm::vec2               String2Vec2( const std::string & s )
-{
-    auto vals = SerializationHelper::_split( s, ',' );
-    assert( vals.size() == 2 );
-    return glm::vec2( std::stof( vals[0] ), 
-        std::stof( vals[1] ) );
-}
+} // anonymous
 
 // *************************************
 // String2T-s

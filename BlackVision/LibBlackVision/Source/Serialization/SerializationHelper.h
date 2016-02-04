@@ -4,7 +4,7 @@
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
 
-#include "Mathematics/glm_inc.h"
+#include "Expected.h"
 
 namespace bv {
 
@@ -118,31 +118,8 @@ std::shared_ptr< T > Create( const IDeserializer& deser )
 
 // glm stuff
 
-glm::vec4               String2Vec4( const std::string & s );
-glm::vec3               String2Vec3( const std::string & s );
-glm::vec2               String2Vec2( const std::string & s );
-
 template< typename T >
 std::string T2String( const T & t );
-
-//template< typename T >
-//std::string T2String( const std::pair< T, const char* > t2s[], const T& t ); // include SerializationHelper.inl for the definition
-
-//template< typename T >
-//T String2T( const std::pair< T, const char* > t2s[], const std::string& s ); // include SerializationHelper.inl for the definition
-
-template< typename T >
-struct Expected
-{
-    T ham;
-    bool isValid;
-
-    Expected( T h ) : ham( h ), isValid( true ) {}
-    Expected() : isValid( false ) {}
-    bool operator==( const T& that ) { return isValid && ham==that; }
-    bool operator!=( const T& that ) { return !(*this==that); }
-    operator T&() { if( !isValid ) assert( false ); return ham; }
-};
 
 template< typename T >
 Expected<T> String2T( const std::string & s );
@@ -150,19 +127,5 @@ Expected<T> String2T( const std::string & s );
 template< typename T >
 T String2T( const std::string & s, const T & defaultVal );
 
-//template< typename T, typename U >
-//std::pair< T, U > String2Pair( std::string s ); // include SerializationHelper.inl for the definition
-
 } // SerializationHelper
 } // bv
-
-namespace std
-{
-    string to_string( const glm::vec2 & v );
-    string to_string( const glm::vec3 & v );
-    string to_string( const glm::vec4 & v );
-    string to_string( const std::string & val );
-    string to_string( const std::wstring & val );
-}
-
-#include "SerializationHelper.inl"

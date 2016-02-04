@@ -110,6 +110,7 @@
     <ClInclude Include="..\..\..\Source\System\Time.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Expected.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">

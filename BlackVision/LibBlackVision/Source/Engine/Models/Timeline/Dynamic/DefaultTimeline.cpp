@@ -35,7 +35,7 @@ std::pair< TimelineWrapMethod, const char* > TWM2S[] = {
 
 template<> std::string T2String( const TimelineWrapMethod& twm ) { return Enum2String( TWM2S, twm ); }
 
-template<> Expected< TimelineWrapMethod > String2T( const std::string & s ) { return String2T( TWM2S, s ); }
+template<> Expected< TimelineWrapMethod > String2T( const std::string & s ) { return String2Enum( TWM2S, s ); }
 
 } // SerializationHelper
 

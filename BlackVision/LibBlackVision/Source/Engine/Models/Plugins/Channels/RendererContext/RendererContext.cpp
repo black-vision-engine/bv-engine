@@ -31,7 +31,7 @@ std::pair< model::AlphaContext::SrcBlendMode, const char* > sbm2s[] =
 };
 
 template<> std::string T2String( const model::AlphaContext::SrcBlendMode& sbm ) { return Enum2String( sbm2s, sbm ); }
-template<> model::AlphaContext::SrcBlendMode String2Enum( std::string s ) { return String2T( sbm2s, s ); }
+template<> model::AlphaContext::SrcBlendMode String2Enum( std::string s ) { return String2Enum( sbm2s, s ); }
 
 
 std::pair< model::AlphaContext::DstBlendMode, const char* > dbm2s[] =
@@ -52,7 +52,7 @@ std::pair< model::AlphaContext::DstBlendMode, const char* > dbm2s[] =
 };
 
 template<> std::string T2String( const model::AlphaContext::DstBlendMode& dbm ) { return Enum2String( dbm2s, dbm ); }
-template<> model::AlphaContext::DstBlendMode String2Enum( std::string s ) { return String2T( dbm2s, s ); }
+template<> model::AlphaContext::DstBlendMode String2Enum( std::string s ) { return String2Enum( dbm2s, s ); }
 
 
 std::pair< model::FillContext::Mode, const char* > fcm2s[] =
@@ -63,7 +63,7 @@ std::pair< model::FillContext::Mode, const char* > fcm2s[] =
     , std::make_pair( model::FillContext::Mode::M_TOTAL, "" )
 };
 template<> std::string T2String( const model::FillContext::Mode& fcm ) { return Enum2String( fcm2s, fcm ); }
-template<> model::FillContext::Mode String2Enum( std::string s ) { return String2T( fcm2s, s ); }
+template<> model::FillContext::Mode String2Enum( std::string s ) { return String2Enum( fcm2s, s ); }
 
 }
    

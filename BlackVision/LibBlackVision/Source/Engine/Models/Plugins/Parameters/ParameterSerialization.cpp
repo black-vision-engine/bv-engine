@@ -8,11 +8,9 @@
 #include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Serialization/BVDeserializeContext.h"
 
-//#include "Serialization/SerializationObjects.inl"
 #include "Serialization/SerializationHelper.h"
+#include "Serialization/SerializationHelper.inl"
 #include "ParameterSerialization.h"
-//#include "Serialization/SerializationObjects.h"
-//#include "Serialization/SerializationObjects.inl"
 
 namespace bv { 
     
@@ -64,7 +62,7 @@ std::string T2String< bv::ParamType>( const bv::ParamType& t )
 template<>
 bv::ParamType         String2T< bv::ParamType>            ( const std::string& s, const bv::ParamType& defaultVal )
 {
-    auto result = SerializationHelper::String2T< bv::ParamType >( ParamTypeStringsArray, s );
+    auto result = SerializationHelper::String2Enum< bv::ParamType >( ParamTypeStringsArray, s );
     if( result == ParamType::PT_TOTAL )
         return defaultVal;
     return result;

@@ -2584,5 +2584,6 @@
     <None Include="..\..\..\Source\Mathematics\Interpolators\Key.inl">
       <Filter>Mathematics\Interpolators</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

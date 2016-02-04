@@ -5,6 +5,7 @@
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
 #include "Serialization/SerializationHelper.h"
+#include "Serialization/SerializationHelper.inl"
 
 #include "UseLoggerLibBlackVision.h"
 
@@ -27,7 +28,7 @@ template<> std::string T2String( const TransformKind& tk ) { return Enum2String(
 //
 template<> TransformKind String2T( const std::string & s, const TransformKind & defaultVal )
 {
-    auto transform = String2T( tk2s, s );
+    auto transform = String2Enum( tk2s, s );
     if( transform == TransformKind::invalid )
     {
         return defaultVal;
@@ -35,7 +36,7 @@ template<> TransformKind String2T( const std::string & s, const TransformKind & 
     return transform;
 }
 
-template<> Expected< TransformKind > String2T( const std::string & s ) { return String2T( tk2s, s ); }
+template<> Expected< TransformKind > String2T( const std::string & s ) { return String2Enum( tk2s, s ); }
 
 } // SerializationHelper
 

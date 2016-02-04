@@ -13,7 +13,7 @@ void SerializeAttribute( ISerializer& ser, const T& t, std::string name )
 template< typename T >
 std::string Enum2String( const std::pair< T, const char* > t2s[], const T& t )
 {
-    for( int i = 0; ; i++ ) // FIXME so much
+    for( int i = 0; ; i++ )
         if( t2s[i].first == t )
             return t2s[i].second;
         else if( strcmp( t2s[i].second, "" ) == 0 )
@@ -21,7 +21,7 @@ std::string Enum2String( const std::pair< T, const char* > t2s[], const T& t )
 }
 
 template< typename T >
-T String2T( const std::pair< T, const char* > t2s[], const std::string& s )
+T String2Enum( const std::pair< T, const char* > t2s[], const std::string& s )
 {
     int i = 0;
     while( strcmp( t2s[i].second, "" ) )
@@ -32,20 +32,5 @@ T String2T( const std::pair< T, const char* > t2s[], const std::string& s )
     }
     return t2s[i].first;
 }
-
-std::vector<std::string> split(const std::string &s, char delim);
-
-template< typename T >
-T _String2T( const std::string & s );
-
-template< typename T, typename U >
-std::pair< T, U > String2Pair( const std::string & s )
-{
-    auto ss = split( s, ',' );
-    assert( ss.size() == 2 );
-    return std::make_pair< T, U >(
-        _String2T< T >( ss[ 0 ] ),
-        _String2T< U >( ss[ 1 ] ) );
-};
 
 } }

@@ -1,5 +1,5 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
-#include "Serialization/SerializationHelper.inl"
+#include "Serialization/SerializationHelper.h"
 
 namespace bv { namespace model {
 

@@ -8,6 +8,7 @@
 #include <cassert>
 
 #include "Serialization/SerializationHelper.h"
+#include "Serialization/SerializationHelper.inl"
 #include "Serialization/BV/BVSerializeContext.h"
 
 namespace bv
@@ -33,28 +34,13 @@ std::pair< MipMapFilterType, const char* > mipmapFiltering[] =
 
 template<> MipMapFilterType         String2T      ( const std::string & s, const MipMapFilterType & defaultVal )
 {
-    auto filter = String2T( mipmapFiltering, s );
+    auto filter = String2Enum( mipmapFiltering, s );
     if( filter == MipMapFilterType::MMFT_TOTAL )
         return defaultVal;
     return filter;
 }
 
 template<> std::string              T2String      ( const MipMapFilterType& t )                         { return Enum2String( mipmapFiltering, t ); }
-
-
-// ***********************
-//
-MipMapFilterType String2Filter( std::string string ) // FIXME for God's sake
-{
-    MipMapFilterType filter = String2T( mipmapFiltering, string );
-
-    if( filter == MipMapFilterType::MMFT_TOTAL )
-    {
-        assert( false );
-        return (MipMapFilterType) std::stoi( string );
-    }
-    return filter;
-}
 
 
 // ***********************

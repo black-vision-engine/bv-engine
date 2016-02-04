@@ -31,7 +31,7 @@ template<> WrapMethod String2T( const std::string & s, const WrapMethod& default
     if( s == "" ) 
         return default; 
     else 
-        return String2T( wm2s, s );
+        return String2Enum( wm2s, s );
 }
 
 std::pair< CurveType, const char* > ct2s[] = 
@@ -57,7 +57,7 @@ template<> CurveType String2T( const std::string & s, const CurveType& default )
     if( s == "" ) 
         return default; 
     else 
-        return String2T( ct2s, s );
+        return String2Enum( ct2s, s );
 }
 
 }
@@ -133,7 +133,7 @@ CompositeInterpolator< TimeValueT, ValueT >*     CompositeInterpolator< TimeValu
 				interpolator->AddKey( key->t, key->val );
 				if( key != keys.back() )
 				{
-					interpolator->SetCurveType( SerializationHelper::String2T< CurveType >( SerializationHelper::ct2s, deser.GetAttribute( "type" ) ) );
+					interpolator->SetCurveType( SerializationHelper::String2Enum< CurveType >( SerializationHelper::ct2s, deser.GetAttribute( "type" ) ) );
 					if( deser.NextChild() == false )
 						if( key == keys.end()[-2] ) // everything is OK, this is the end, we need to go out
 							deser.ExitChild();
@@ -162,9 +162,9 @@ CompositeInterpolator< TimeValueT, ValueT >*     CompositeInterpolator< TimeValu
         deser.ExitChild(); // exit "interpolations"
     }
 
-    interpolator->SetCurveType( SerializationHelper::String2T< CurveType >( SerializationHelper::ct2s, deser.GetAttribute( "curve_type" ) ) );
-    interpolator->SetWrapPreMethod( SerializationHelper::String2T< WrapMethod >( SerializationHelper::wm2s, deser.GetAttribute( "preMethod" ) ) );
-    interpolator->SetWrapPostMethod( SerializationHelper::String2T< WrapMethod >( SerializationHelper::wm2s, deser.GetAttribute( "postMethod" ) ) );
+    interpolator->SetCurveType( SerializationHelper::String2Enum< CurveType >( SerializationHelper::ct2s, deser.GetAttribute( "curve_type" ) ) );
+    interpolator->SetWrapPreMethod( SerializationHelper::String2Enum< WrapMethod >( SerializationHelper::wm2s, deser.GetAttribute( "preMethod" ) ) );
+    interpolator->SetWrapPostMethod( SerializationHelper::String2Enum< WrapMethod >( SerializationHelper::wm2s, deser.GetAttribute( "postMethod" ) ) );
 
     assert( interpolator->GetNumKeys() > 0 );
 

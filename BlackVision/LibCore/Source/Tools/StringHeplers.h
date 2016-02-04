@@ -5,6 +5,8 @@
 #pragma warning ( push )
 #pragma warning ( disable : 4996 )
 
+#include "Expected.h"
+
 #include <string>
 #include <vector>
 
@@ -13,8 +15,8 @@ typedef std::vector< std::string > StrVec;
 
 namespace bv {
 
-std::wstring    StringToWString ( const std::string & data );
-std::string     WStringToString ( const std::wstring & data );
+Expected< std::wstring >   StringToWString ( const std::string & data );
+Expected< std::string >    WStringToString ( const std::wstring & data );
 
 StrVec          Split           ( const std::string & str, const std::string & sep );
 std::string     Join            ( const StrVec & strVec, const std::string & sep );
