@@ -207,7 +207,7 @@ ISerializablePtr BasePlugin< IPlugin >::Create                              ( co
         te = sceneTimeline;
     }
 
-    IPluginPtr plugin_ = PluginsManager::DefaultInstanceRef().CreatePlugin( pluginType, pluginName, te );
+    IPluginPtr plugin_ = PluginsManager::DefaultInstanceRef().CreatePlugin( pluginType, pluginName, te );           // FIXME Add to deserialization context
     std::shared_ptr< BasePlugin< IPlugin > > plugin = std::static_pointer_cast< BasePlugin< IPlugin > >( plugin_ );
 
     // params
