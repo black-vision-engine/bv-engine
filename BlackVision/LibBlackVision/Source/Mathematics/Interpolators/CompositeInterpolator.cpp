@@ -51,7 +51,11 @@ std::pair< CurveType, const char* > ct2s[] =
 };
 
 
-template<> std::string T2String< CurveType >( const CurveType& ct )         { return Enum2String( ct2s, ct ); }
+template<> std::string T2String< CurveType >( const CurveType& ct )
+{
+    return Enum2String( ct2s, ct );
+}
+
 template<> CurveType String2T( const std::string & s, const CurveType& default )
 {
     if( s == "" ) 
@@ -213,8 +217,20 @@ void UpdateInterpolator( std::vector< IEvaluator<TimeValueT, ValueT > * > & inte
 
 // *******************************
 //
+template<>
+void UpdateInterpolator< TimeType, std::string >( std::vector< IEvaluator< TimeType, std::string > * > & , size_t, CurveType )
+{}
+
+// *******************************
+//
+template<>
+void UpdateInterpolator< TimeType, std::wstring >( std::vector< IEvaluator< TimeType, std::wstring > * > &, size_t, CurveType )
+{}
+
+// *******************************
+//
 template< class TimeValueT, class ValueT >
-IEvaluator<TimeValueT, ValueT >* CreateDummyInterpolator( CurveType type, Key< TimeValueT, ValueT > k1, Key< TimeValueT, ValueT > k2, TimeValueT tolerance ) // FIXME maybe
+IEvaluator<TimeValueT, ValueT > * CreateDummyInterpolator( CurveType type, Key< TimeValueT, ValueT > k1, Key< TimeValueT, ValueT > k2, TimeValueT tolerance ) // FIXME maybe
 {
     if( type == CurveType::CT_POINT )
         return new ConstEvaluator< TimeValueT, ValueT >( k1.val );
@@ -251,6 +267,37 @@ IEvaluator<TimeValueT, ValueT >* CreateDummyInterpolator( CurveType type, Key< T
     }
 }
 
+// *******************************
+//
+template<>
+IEvaluator< TimeType, std::wstring > * CreateDummyInterpolator( CurveType type, Key< TimeType, std::wstring  > k1, Key< TimeType, std::wstring  >, TimeType ) // FIXME maybe
+{
+    if( type == CurveType::CT_POINT )
+    {
+        return new ConstEvaluator< TimeType, std::wstring >( k1.val );
+    }
+    else
+    {
+        assert( false );
+        return nullptr;
+    }
+}
+
+// *******************************
+//
+template<>
+IEvaluator< TimeType, std::string > * CreateDummyInterpolator( CurveType type, Key< TimeType, std::string  > k1, Key< TimeType, std::string  >, TimeType ) // FIXME maybe
+{
+    if( type == CurveType::CT_POINT )
+    {
+        return new ConstEvaluator< TimeType, std::string >( k1.val );
+    }
+    else
+    {
+        assert( false );
+        return nullptr;
+    }
+}
 // *******************************
 //
 template< class TimeValueT, class ValueT >
@@ -607,42 +654,25 @@ WrapMethod                                          CompositeInterpolator< TimeV
     return m_preMethod;
 }
 
+// *******************************
+//
+template<>
+CompositeInterpolator< bv::TimeType, std::string >::CompositeInterpolator( float tolerance )
+    : m_type( CurveType::CT_POINT )
+    , m_tolerance( tolerance )
+    , m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
+{
+}
 
-//// *******************************
-////
-//template< class TimeValueT, class ValueT >
-//void                                                CompositeInterpolator< TimeValueT, ValueT >::SetKey1( int i, Key key )
-//{
-//    assert( interpolators[ i ]->GetType() == EvaluatorType::ET_BEZIER );
-//    ( ( BezierEvaluator< TimeValueT, ValueT >* ) interpolators[ i ] )->key1 = key;
-//}
+// *******************************
 //
-//// *******************************
-////
-//template< class TimeValueT, class ValueT >
-//void                                                CompositeInterpolator< TimeValueT, ValueT >::SetKey2( int i, Key key )
-//{
-//    assert( interpolators[ i ]->GetType() == EvaluatorType::ET_BEZIER );
-//    ( ( BezierEvaluator< TimeValueT, ValueT >* ) interpolators[ i ] )->key2 = key;
-//}
-//
-//// *******************************
-////
-//template< class TimeValueT, class ValueT >
-//void                                                CompositeInterpolator< TimeValueT, ValueT >::SetV1( int i, Key v )
-//{
-//    assert( interpolators[ i ]->GetType() == EvaluatorType::ET_BEZIER );
-//    ( ( BezierEvaluator< TimeValueT, ValueT >* ) interpolators[ i ] )->v1 = v;
-//}
-//
-//// *******************************
-////
-//template< class TimeValueT, class ValueT >
-//void                                                CompositeInterpolator< TimeValueT, ValueT >::SetV2( int i, Key v )
-//{
-//    assert( interpolators[ i ]->GetType() == EvaluatorType::ET_BEZIER );
-//    ( ( BezierEvaluator< TimeValueT, ValueT >* ) interpolators[ i ] )->v2 = v;
-//}
+template<>
+CompositeInterpolator< bv::TimeType, std::wstring >::CompositeInterpolator( float tolerance )
+    : m_type( CurveType::CT_POINT )
+    , m_tolerance( tolerance )
+    , m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
+{
+}
 
 template class CompositeInterpolator<TimeType, TimeType>;
 template class CompositeInterpolator<TimeType, bool>;
@@ -652,5 +682,8 @@ template class CompositeInterpolator<TimeType, float>;
 template class CompositeInterpolator<TimeType, glm::vec2>;
 template class CompositeInterpolator<TimeType, glm::vec3>;
 template class CompositeInterpolator<TimeType, glm::vec4>;
+
+template class CompositeInterpolator< TimeType, std::string >;
+template class CompositeInterpolator< TimeType, std::wstring >;
 
 } // bv
