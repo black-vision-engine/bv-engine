@@ -542,7 +542,8 @@ CrawlerPtr      Crawler::Create          ( const IDeserializer & deser, bv::mode
 {
     mathematics::RectPtr rect = std::make_shared<mathematics::Rect>();
 
-    deser.EnterChild( "view" );
+    if( deser.EnterChild( "view" ) )
+    {
         bool empty = SerializationHelper::String2T( deser.GetAttribute( "empty" ), true );
         if( !empty )
         {
@@ -551,7 +552,8 @@ CrawlerPtr      Crawler::Create          ( const IDeserializer & deser, bv::mode
             rect->ymax = SerializationHelper::String2T( deser.GetAttribute( "ymax" ), 0.0f );
             rect->ymin = SerializationHelper::String2T( deser.GetAttribute( "ymin" ), 0.0f );
         }
-    deser.ExitChild();
+        deser.ExitChild(); // view
+    }
 
     float speed = SerializationHelper::String2T( deser.GetAttribute( "speed" ), 0.0f );
     float interspace = SerializationHelper::String2T( deser.GetAttribute( "interspace" ), 0.0f );
