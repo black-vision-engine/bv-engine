@@ -42,7 +42,7 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
         return;
 
 	bv::NodeLogicEventPtr widgetEvent = std::static_pointer_cast<bv::NodeLogicEvent>( evt );        
-    auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+    //auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
     
     auto root = m_appLogic->GetBVProject()->GetModelSceneRoot();
         
@@ -70,9 +70,6 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
     {
         auto context = static_cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
         context->SetSceneTimeline( std::static_pointer_cast< model::OffsetTimeEvaluator >( TimelineManager::GetInstance()->GetTimeEvaluator( sceneName ) ) );
-
-        std::string timelinePath = deser.GetAttribute( "timelinePath" );
-        auto timeline = editor->GetTimeEvaluator( timelinePath );
 
         deser.EnterChild( "logic" );
         

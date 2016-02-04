@@ -11,6 +11,7 @@
 #include "Serialization/BVDeserializeContext.h"
 
 #include "EndUserAPI/EventHandlers/EventHandlerHelpers.h"
+#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
 namespace bv {
 namespace nodelogic {
@@ -138,12 +139,12 @@ WidgetCounterPtr     WidgetCounter::Create          ( const IDeserializer& deser
 //
 bool                WidgetCounter::HandleEvent     ( IDeserializer& eventSer, ISerializer& response )
 {
-    std::string param = eventSer.GetAttribute( "Param" );
     float value = SerializationHelper::String2T( eventSer.GetAttribute( "Value" ), 1.0f );
     float time = SerializationHelper::String2T( eventSer.GetAttribute( "Time" ), std::numeric_limits<float>::quiet_NaN() );
 
+    std::string action = eventSer.GetAttribute( "Action" );
 
-    if( time == std::numeric_limits<float>::quiet_NaN() )
+    if( time != time )      // Checks if time is NaN. @note comparision time == std::numeric_limits<float>::quiet_NaN() doesn't work.
     {
         response.SetAttribute( ERROR_INFO_STRING, "Not valid time." );
         return false;
@@ -156,7 +157,12 @@ bool                WidgetCounter::HandleEvent     ( IDeserializer& eventSer, IS
         return false;
     }
 
-    SetParameter( paramPtr, (bv::TimeType)time, value );
+    if( action == "SetParam" )
+        SetParameter( paramPtr, (bv::TimeType)time, value );
+    else if( action == "RemoveParam" )
+        RemoveParameterKey( paramPtr, (bv::TimeType)time );
+    else
+        return false;
 
     return true;
 }
