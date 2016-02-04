@@ -9,7 +9,9 @@ namespace bv {
 // FORWARD DECLARATIONS
 
 class AssetDescsWithUIDs;
-DEFINE_PTR_TYPE( AssetDescsWithUIDs );    
+DEFINE_PTR_TYPE( AssetDescsWithUIDs );
+
+class BVProjectEditor;
 
 namespace model
 {
@@ -31,6 +33,9 @@ private:
     model::OffsetTimeEvaluatorPtr       m_sceneTimeline;
     AssetDescsWithUIDsPtr               m_assets;
 
+    std::string                         m_sceneName;
+    BVProjectEditor *                   m_projectEditor;
+
 public:
     BVDeserializeContext( model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets );
     virtual                             ~BVDeserializeContext   ();
@@ -40,6 +45,12 @@ public:
 
     AssetDescsWithUIDsPtr               GetAssets               ();
     void                                SetAssets               ( const AssetDescsWithUIDsPtr & assets );
+
+    BVProjectEditor *                   GetEditor               ();
+    void                                SetEditor               ( BVProjectEditor * editor );
+
+    std::string &                       GetSceneName            ();
+    void                                SetSceneName            ( const std::string& sceneName );
 
     void                                Push                    ( const model::RendererContextPtr & context );
     const model::RenderContextVec &     RendererContextes       () const;
