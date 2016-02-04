@@ -44,7 +44,7 @@ WidgetCounter::WidgetCounter(bv::model::BasicNode * parent,bv::model:: ITimeEval
 	m_isFinalized = true;
 
     //m_param->SetCurveType( CurveType::CT_COSINE_LIKE );
-    m_param->SetCurveType( CurveType::CT_LINEAR );
+    m_param->SetAddedKeyCurveType( CurveType::CT_LINEAR );
 }
 
 

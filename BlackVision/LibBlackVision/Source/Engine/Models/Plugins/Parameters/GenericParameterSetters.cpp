@@ -240,13 +240,13 @@ bool    MoveCenterMassKey     ( IParameterPtr parameter, TimeType t, TimeType ne
 
 // *******************************
 //
-bool                                                BezierSetCurveType( IParameterPtr parameter, CurveType type )
+bool                                                BezierSetAllInterpolatorTypes( IParameterPtr parameter, CurveType type )
 {
     auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
 
     if( abstract_parameter )
     {
-        abstract_parameter->SetCurveType( type );
+        abstract_parameter->SetGlobalCurveType( type );
         return true;
     }
     else
