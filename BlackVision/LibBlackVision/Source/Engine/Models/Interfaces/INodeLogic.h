@@ -5,7 +5,13 @@
 #include "Serialization/ISerializable.h"
 
 
-namespace bv { namespace model {
+namespace bv
+{
+
+class BVProjectEditor;
+    
+namespace model
+{
 
 class INodeLogic : public IUpdatable, public ISerializable
 {
@@ -15,7 +21,7 @@ public:
 	virtual void					Update			( TimeType t )	= 0;
 	virtual void					Deinitialize	()				= 0;
 
-    virtual bool                    HandleEvent     ( IDeserializer& eventStr, ISerializer& response ) = 0;
+    virtual bool                    HandleEvent     ( IDeserializer & eventStr, ISerializer & response, BVProjectEditor * editor ) = 0;
 
 };
 

@@ -9,7 +9,11 @@
 
 #include "CrawlerEvents.h"
 #include "Serialization/SerializationHelper.h"
+#include "Serialization/BV/BVDeserializeContext.h"
 #include "Engine/Events/EventHelpers.h"
+
+#include "ProjectManager.h"
+#include "Engine/Models/BVProjectEditor.h"
 
 #include <algorithm>
 #include <ctime>
@@ -589,9 +593,10 @@ CrawlerPtr      Crawler::Create          ( const IDeserializer & deser, bv::mode
 
 // ***********************
 //
-bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISerializer& /*response*/ )
+bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISerializer& response, BVProjectEditor * editor )
 {
     std::string crawlAction = eventSer.GetAttribute( "Action" );
+    auto context = static_cast<BVDeserializeContext*>( eventSer.GetDeserializeContext() );
 
 	if( crawlAction == "Stop" )
 	{
@@ -613,7 +618,37 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
     }
     else if( crawlAction == "AddPresetNode" )
     {
+        std::string newNodeName = eventSer.GetAttribute( "NewNodeName" );
+        std::string timelinePath = eventSer.GetAttribute( "TimelinePath" );
 
+        std::string projectName = eventSer.GetAttribute( "PresetProjectName" );
+        std::string presetPath = eventSer.GetAttribute( "PresetPath" );
+
+        auto timeline = editor->GetTimeEvaluator( timelinePath );
+        auto scene = editor->GetScene( context->GetSceneName() );
+
+        if( timeline == nullptr )
+        {
+            response.SetAttribute( "ErrorInfo", "Timeline not found" );
+            return false;
+        }
+
+        if( scene == nullptr )
+        {
+            response.SetAttribute( "ErrorInfo", "Scene not found" );
+            return false;
+        }
+
+        auto node = ProjectManager::GetInstance()->LoadPreset( projectName, presetPath, std::static_pointer_cast<bv::model::OffsetTimeEvaluator>( timeline ) );
+        if( node == nullptr )
+        {
+            response.SetAttribute( "ErrorInfo", "Preset not found" );
+            return false;
+        }
+
+        node->SetName( newNodeName );
+        if( !editor->AddChildNode( scene, m_parentNode->shared_from_this(), node ) )
+            return false;
     }
     else if( crawlAction == "Reset" )
 	{
@@ -633,6 +668,11 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
     {
         Finalize();
     }
+    else if( crawlAction == "Definalize" )
+    {
+        return false;
+    }
+
     return true;
 }
 

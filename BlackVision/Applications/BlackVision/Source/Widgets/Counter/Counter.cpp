@@ -137,7 +137,7 @@ WidgetCounterPtr     WidgetCounter::Create          ( const IDeserializer& deser
 
 // ***********************
 //
-bool                WidgetCounter::HandleEvent     ( IDeserializer& eventSer, ISerializer& response )
+bool                WidgetCounter::HandleEvent     ( IDeserializer& eventSer, ISerializer& response, BVProjectEditor * /*editor*/ )
 {
     float value = SerializationHelper::String2T( eventSer.GetAttribute( "Value" ), 1.0f );
     float time = SerializationHelper::String2T( eventSer.GetAttribute( "Time" ), std::numeric_limits<float>::quiet_NaN() );

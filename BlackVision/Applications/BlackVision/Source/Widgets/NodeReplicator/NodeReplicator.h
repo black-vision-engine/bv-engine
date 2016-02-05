@@ -26,7 +26,7 @@ public:
     virtual void                    Serialize       ( ISerializer& ser ) const override;
     static NodeReplicatorPtr        Create          ( const IDeserializer & deser, bv::model::BasicNode * parentNode );
 
-    virtual bool                    HandleEvent     ( IDeserializer& eventSer, ISerializer& response ) override;
+    virtual bool                    HandleEvent     ( IDeserializer& eventSer, ISerializer& response, BVProjectEditor * editor ) override;
 
 private:
     explicit                        NodeReplicator  ( BasicNode * node, SizeType repNum, const IReplicationModifierConstPtr & modifier = nullptr );

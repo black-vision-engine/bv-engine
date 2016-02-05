@@ -15,7 +15,6 @@ BVDeserializeContext::BVDeserializeContext( model::OffsetTimeEvaluatorPtr timeli
     SetAssets( assets );
     SetSceneTimeline( timeline );
     SetSceneName( "" );
-    SetEditor( nullptr );
 }
 
 // ***********************
@@ -52,20 +51,6 @@ void                                BVDeserializeContext::SetAssets             
     m_assets = assets;
 }
 
-// ***********************
-//
-BVProjectEditor *                   BVDeserializeContext::GetEditor               ()
-{
-    assert( m_projectEditor != nullptr );
-    return m_projectEditor;
-}
-
-// ***********************
-//
-void                                BVDeserializeContext::SetEditor               ( BVProjectEditor * editor )
-{
-    m_projectEditor = editor;
-}
 
 // ***********************
 //

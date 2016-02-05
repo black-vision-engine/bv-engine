@@ -34,7 +34,6 @@ private:
     AssetDescsWithUIDsPtr               m_assets;
 
     std::string                         m_sceneName;
-    BVProjectEditor *                   m_projectEditor;
 
 public:
     BVDeserializeContext( model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets );
@@ -45,9 +44,6 @@ public:
 
     AssetDescsWithUIDsPtr               GetAssets               ();
     void                                SetAssets               ( const AssetDescsWithUIDsPtr & assets );
-
-    BVProjectEditor *                   GetEditor               ();
-    void                                SetEditor               ( BVProjectEditor * editor );
 
     std::string &                       GetSceneName            ();
     void                                SetSceneName            ( const std::string& sceneName );

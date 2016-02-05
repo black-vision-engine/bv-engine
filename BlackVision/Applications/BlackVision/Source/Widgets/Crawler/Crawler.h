@@ -101,7 +101,7 @@ public:
     virtual void                Serialize       ( ISerializer& ser ) const override;
     static CrawlerPtr           Create          ( const IDeserializer & deser, bv::model::BasicNode * parentNode );
 
-    virtual bool                HandleEvent     ( IDeserializer& eventSer, ISerializer& response ) override;
+    virtual bool                HandleEvent     ( IDeserializer& eventSer, ISerializer& response, BVProjectEditor * editor ) override;
 };
 
 } 

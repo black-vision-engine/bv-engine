@@ -66,7 +66,6 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
     deser.Load( action );
 
     auto context = static_cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
-    context->SetEditor( editor );
     context->SetSceneName( sceneName );
 
 		
@@ -103,7 +102,7 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
             SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "NodeLogic not found" );
         }
 
-        bool result = logic->HandleEvent( deser, ser );
+        bool result = logic->HandleEvent( deser, ser, editor );
 
         PrepareResponseTemplate( ser, command, widgetEvent->SocketID, result );
         SendResponse( ser, widgetEvent->SocketID, widgetEvent->EventID );
