@@ -2,6 +2,8 @@
 
 #include "Serialization/DeserializeContext.h"
 
+#include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
+
 #include "CoreDEF.h"
 
 namespace bv {
@@ -20,8 +22,8 @@ namespace model
 
     typedef std::vector< RendererContextPtr > RenderContextVec;
 
-    class OffsetTimeEvaluator;
-    DEFINE_PTR_TYPE(OffsetTimeEvaluator);
+    //class OffsetTimeEvaluator;
+    //DEFINE_PTR_TYPE(OffsetTimeEvaluator);
 }; // model
 
 // ************************

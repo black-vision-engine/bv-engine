@@ -2,6 +2,8 @@
 
 #include "AssetDescsWithUIDs.h"
 
+#include "Serialization/SerializationHelper.h"
+
 namespace bv {
 
 class AssetDescWithUID : public ISerializable

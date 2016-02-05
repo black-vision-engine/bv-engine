@@ -36,7 +36,8 @@ public:
     virtual const std::string & GetName                 () const override;
     virtual ModelParamType      GetType                 () const override;
 
-    virtual void                SetCurveType            ( CurveType type ) = 0;
+    virtual void                SetAddedKeyCurveType    ( CurveType type ) = 0;
+    virtual void                SetGlobalCurveType      ( CurveType type ) = 0;
     virtual CurveType           GetCurveType            () = 0;
 
     virtual void                SetWrapPostMethod       ( WrapMethod method ) = 0;

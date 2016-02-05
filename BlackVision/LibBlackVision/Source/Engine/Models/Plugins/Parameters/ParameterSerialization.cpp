@@ -6,6 +6,7 @@
 #include <sstream>
 
 #include "Engine/Models/Timeline/TimelineHelper.h"
+#include "Engine/Models/Timeline/TimelineManager.h"
 #include "Serialization/BVDeserializeContext.h"
 
 #include "Serialization/SerializationHelper.h"

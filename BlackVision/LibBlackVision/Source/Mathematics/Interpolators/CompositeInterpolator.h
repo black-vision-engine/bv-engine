@@ -39,8 +39,8 @@ public:
     typedef ValueT                      ValT;
 
 public:
-    explicit CompositeInterpolator( float tolerance = 0.0001f );
-    CompositeInterpolator         ( const CompositeInterpolator & that );
+    explicit                                            CompositeInterpolator( float tolerance = 0.0001f );
+                                                        CompositeInterpolator( const CompositeInterpolator & that );
 
     virtual void                                        Serialize           ( ISerializer & ) const override;
     static CompositeInterpolator< TimeValueT, ValueT >* Create              ( const IDeserializer & );
@@ -55,7 +55,8 @@ public:
     std::vector< Key > &                                GetKeys             ();
     const std::vector< IEvaluator* > &                  GetInterpolators    ();
 
-    void                                                SetCurveType        ( CurveType type );
+    void                                                SetGlobalCurveType  ( CurveType type );
+    void                                                SetAddedKeyCurveType ( CurveType type );
     CurveType                                           GetCurveType        ();
 
     void                                                SetWrapPostMethod   ( WrapMethod method );

@@ -3,7 +3,6 @@
 #include "Engine/Models/Plugins/Parameters/CachedSimpleTypedParameters.h"
 #include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 
-
 namespace bv { namespace model {
 
 class ParametersFactory

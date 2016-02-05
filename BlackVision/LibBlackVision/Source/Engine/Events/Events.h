@@ -217,6 +217,7 @@ public:
         RemoveKey,
         MoveKey,
         SetInterpolatorType,
+        SetAddedInterpolatorType,
         SetInterpolatorPreWrapMethod,
         SetInterpolatorPostWrapMethod,
         AssignTimeline,

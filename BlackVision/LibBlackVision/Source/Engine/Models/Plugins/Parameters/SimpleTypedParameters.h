@@ -21,17 +21,18 @@ public:
 
 protected:
 
-    InterpolatorType        m_interpolator;
+    InterpolatorType            m_interpolator;
 
 public:
 
-    explicit                SimpleParameterImpl ( const std::string & name, const InterpolatorType & interpolator, ITimeEvaluatorPtr evaluator );
-                            ~SimpleParameterImpl();
+    explicit                    SimpleParameterImpl ( const std::string & name, const InterpolatorType & interpolator, ITimeEvaluatorPtr evaluator );
+                                ~SimpleParameterImpl();
 
-    void                    Serialize       ( ISerializer& doc ) const;
+    void                        Serialize               ( ISerializer& doc ) const;
 
-    virtual void            SetCurveType        ( CurveType type ) override;
-    virtual CurveType       GetCurveType        () override;
+    virtual void                SetAddedKeyCurveType    ( CurveType type ) override;
+    virtual void                SetGlobalCurveType      ( CurveType type ) override;
+    virtual CurveType           GetCurveType            () override;
 
     virtual void                SetWrapPostMethod       ( WrapMethod method );
     virtual void                SetWrapPreMethod        ( WrapMethod method );
@@ -40,16 +41,16 @@ public:
 
     virtual int                 GetNumKeys              ();
 
-    inline  ValueType       Evaluate            () const;
-    inline  void            SetVal              ( const ValueType & val, TimeType t );
-    inline  bool            RemoveVal           ( TimeType t );
-    inline  bool            MoveKey             ( TimeType t, TimeType newTime );
+    inline  ValueType           Evaluate                () const;
+    inline  void                SetVal                  ( const ValueType & val, TimeType t );
+    inline  bool                RemoveVal               ( TimeType t );
+    inline  bool                MoveKey                 ( TimeType t, TimeType newTime );
 
-	InterpolatorType &		AccessInterpolator	();
+	InterpolatorType &		    AccessInterpolator	    ();
 
-	virtual VoidPtr         QueryParamTyped     () override;
+	virtual VoidPtr             QueryParamTyped         () override;
 
-	inline static  ModelParamType  Type         ();
+	inline static  ModelParamType  Type                 ();
 
 };
 

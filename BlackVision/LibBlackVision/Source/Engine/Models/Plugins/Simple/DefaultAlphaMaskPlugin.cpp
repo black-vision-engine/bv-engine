@@ -10,7 +10,6 @@
 
 #include "Assets/DefaultAssets.h"
 
-
 namespace bv { namespace model {
 
 namespace {

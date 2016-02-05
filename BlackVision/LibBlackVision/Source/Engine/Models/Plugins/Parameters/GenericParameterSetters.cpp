@@ -2,7 +2,6 @@
 
 #include "GenericParameterSetters.h"
 
-
 namespace bv { namespace model {
 
 namespace {
@@ -240,13 +239,28 @@ bool    MoveCenterMassKey     ( IParameterPtr parameter, TimeType t, TimeType ne
 
 // *******************************
 //
-bool                                                BezierSetCurveType( IParameterPtr parameter, CurveType type )
+bool                                                BezierSetGlobalCurveType( IParameterPtr parameter, CurveType type )
 {
     auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
 
     if( abstract_parameter )
     {
-        abstract_parameter->SetCurveType( type );
+        abstract_parameter->SetGlobalCurveType( type );
+        return true;
+    }
+    else
+        return false;
+}
+
+// *******************************
+//
+bool                                                BezierSetAddedKeyCurveType( IParameterPtr parameter, CurveType type )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+    {
+        abstract_parameter->SetAddedKeyCurveType( type );
         return true;
     }
     else

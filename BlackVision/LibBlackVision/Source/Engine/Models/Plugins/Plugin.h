@@ -12,10 +12,11 @@
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/Transform/TransformChannel.h"
 
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.inl"
+
 #include "Engine/Models/IDGenerator.h"
 
 #include "Serialization/ISerializable.h"
-//#include "Engine/Models/Plugins/PluginsFactory.h"
 
 namespace bv { namespace model {
 

@@ -9,6 +9,8 @@
 
 #include "Assets/AssetDescsWithUIDs.h"
 
+#include "Serialization/SerializationHelper.h"
+
 #include <fstream>
 
 namespace bv

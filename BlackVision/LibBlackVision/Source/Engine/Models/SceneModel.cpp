@@ -11,7 +11,6 @@
 #include "Serialization/BV/CloneViaSerialization.h"
 #include "Serialization/BV/BVSerializeContext.h"
 
-
 namespace bv { namespace model {
 
 // *******************************
