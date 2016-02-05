@@ -624,7 +624,9 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
         std::string projectName = eventSer.GetAttribute( "PresetProjectName" );
         std::string presetPath = eventSer.GetAttribute( "PresetPath" );
 
-        auto timeline = editor->GetTimeEvaluator( timelinePath );
+        
+        //auto timeline = editor->GetTimeEvaluator( timelinePath );
+        auto timeline = editor->GetTimeEvaluator( context->GetSceneName() );
         auto scene = editor->GetScene( context->GetSceneName() );
 
         if( timeline == nullptr )
@@ -649,6 +651,8 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
         node->SetName( newNodeName );
         if( !editor->AddChildNode( scene, m_parentNode->shared_from_this(), node ) )
             return false;
+
+        AddNode( node );
     }
     else if( crawlAction == "Reset" )
 	{
