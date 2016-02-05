@@ -12,6 +12,7 @@
 #include "Serialization/SerializationHelper.h"
 #include "Engine/Events/EventManager.h"
 
+#include "Tools/StringHeplers.h"
 
 namespace bv
 {
@@ -167,6 +168,38 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
         param->SetTimeEvaluator( timeEval );
 
         result = true;
+    }
+    else if( command == ParamKeyEvent::Command::QuantizeCurve )
+    {
+        auto params = Split( stringValue, "," );
+        
+        if( params.size() == 3 )
+        {
+            auto start = SerializationHelper::String2T< TimeType >( params[ 0 ] );
+            auto end = SerializationHelper::String2T< TimeType >( params[ 1 ] );
+            auto steps = SerializationHelper::String2T< UInt32 >( params[ 2 ] );
+
+            if( start.isValid && end.isValid & steps.isValid )
+            {
+                JsonSerializeObject responseJSON;
+
+                responseJSON.EnterArray( "quants" );
+
+                for( UInt32 i = 0; i < steps; i++ )
+                {
+                    TimeType t = start + ( end - start ) / steps * i;
+                    responseJSON.EnterChild( "quant" );
+                    auto val = EvaluateParamToString( param, t );
+                    responseJSON.SetAttribute( "t", SerializationHelper::T2String( t ) );
+                    responseJSON.SetAttribute( "val", SerializationHelper::T2String( val ) );
+                    responseJSON.ExitChild(); // quant
+                }
+                responseJSON.ExitChild(); // quants
+
+                SendResponse( responseJSON, setParamEvent->SocketID, setParamEvent->EventID );
+            }
+        }
+        result = false;
     }
 
     if( result )

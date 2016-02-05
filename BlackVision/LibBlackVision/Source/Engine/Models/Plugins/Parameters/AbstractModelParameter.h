@@ -52,6 +52,8 @@ public:
 
     inline  TimeType            GetLocalEvaluationTime  () const;
 
+    virtual std::string         EvaluateToString        ( TimeType t ) const = 0;
+
 };
 
 } //model

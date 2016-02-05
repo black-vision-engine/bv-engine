@@ -118,6 +118,17 @@ inline ValueType SimpleParameterImpl< InterpolatorType, ValueType, type >::Evalu
 // *******************************
 //
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
+inline  std::string         SimpleParameterImpl< InterpolatorType, ValueType, type >::EvaluateToString        ( TimeType t ) const
+{
+    auto val = m_interpolator.Evaluate( t );
+
+    return SerializationHelper::T2String( val );
+}
+
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
 inline  void        SimpleParameterImpl< InterpolatorType, ValueType, type >::SetVal    ( const ValueType & val, TimeType t )
 {
     m_interpolator.AddKey( t, val );

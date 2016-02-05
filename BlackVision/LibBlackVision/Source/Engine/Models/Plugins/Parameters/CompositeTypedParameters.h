@@ -50,6 +50,7 @@ public:
     inline  CompositeTransform & Transform              ();
 
     inline  glm::mat4           Evaluate                () const;
+    inline  std::string         EvaluateToString        ( TimeType /*t*/ ) const { assert( false ); return ""; }
 
     virtual VoidPtr             QueryParamTyped         () override;
 

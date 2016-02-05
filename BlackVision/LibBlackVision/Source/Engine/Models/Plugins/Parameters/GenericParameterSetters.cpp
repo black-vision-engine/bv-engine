@@ -407,5 +407,20 @@ bool MoveParameterKey   ( IParameterPtr parameter, TimeType t, TimeType newTime 
     return false;
 }
 
+// ***********************
+//
+std::string                                         EvaluateParamToString( IParameterPtr parameter, TimeType t )
+{
+    auto abstract_parameter = std::dynamic_pointer_cast< AbstractModelParameter >( parameter ); // FIXME
+
+    if( abstract_parameter )
+        return abstract_parameter->EvaluateToString( t );
+    else
+    {
+        assert( false );
+        return "";
+    }
+}
+
 } //model
 } //bv

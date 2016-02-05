@@ -94,6 +94,7 @@ inline bool                                         BezierSetInterpolatorV2( IPa
     return false;
 }
 
+std::string                                         EvaluateParamToString( IParameterPtr parameter, TimeType t );
 
 } //model
 } //bv

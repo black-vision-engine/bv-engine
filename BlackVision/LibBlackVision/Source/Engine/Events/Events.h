@@ -221,6 +221,7 @@ public:
         SetInterpolatorPreWrapMethod,
         SetInterpolatorPostWrapMethod,
         AssignTimeline,
+        QuantizeCurve,
         Fail            ///< Wrong command
     } Command;
 
