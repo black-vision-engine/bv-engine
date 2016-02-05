@@ -7,6 +7,7 @@
 #include "Engine/Models/Plugins/Interfaces/IParamValEvaluator.h"
 
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.inl"
 #include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 
 namespace bv { namespace model {

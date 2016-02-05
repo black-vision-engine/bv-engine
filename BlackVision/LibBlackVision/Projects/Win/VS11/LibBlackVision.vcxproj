@@ -878,7 +878,6 @@
     <None Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.inl" />
     <None Include="..\..\..\Source\Mathematics\Interpolators\Key.inl" />
     <None Include="..\..\..\Source\Serialization\SerializationHelper.inl" />
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\LibBVGL\Projects\Win\VS11\LibBVGL.vcxproj">

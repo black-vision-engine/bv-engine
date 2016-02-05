@@ -132,6 +132,7 @@ std::pair< ParamKeyEvent::Command, const std::wstring > ParameterCommandMapping[
     , std::make_pair( ParamKeyEvent::Command::RemoveKey, L"RemoveKey" ) 
     , std::make_pair( ParamKeyEvent::Command::MoveKey, L"MoveKey" ) 
     , std::make_pair( ParamKeyEvent::Command::SetInterpolatorType, L"SetInterpolator" ) 
+    , std::make_pair( ParamKeyEvent::Command::SetAddedInterpolatorType, L"SetAddedInterpolatorType" ) 
     , std::make_pair( ParamKeyEvent::Command::SetInterpolatorPreWrapMethod, L"SetInterpolatorPreWrapMethod" )
     , std::make_pair( ParamKeyEvent::Command::SetInterpolatorPostWrapMethod, L"SetInterpolatorPostWrapMethod" )
     , std::make_pair( ParamKeyEvent::Command::AssignTimeline, L"AssignTimeline" )

@@ -144,7 +144,9 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
         }
     }
     else if( command == ParamKeyEvent::Command::SetInterpolatorType )
-        result = BezierSetAllInterpolatorTypes( param, SerializationHelper::String2T( stringValue, CurveType::CT_BEZIER ) );
+        result = BezierSetGlobalCurveType( param, SerializationHelper::String2T( stringValue, CurveType::CT_BEZIER ) );
+    else if( command == ParamKeyEvent::Command::SetAddedInterpolatorType )
+        result = BezierSetAddedKeyCurveType( param, SerializationHelper::String2T( stringValue, CurveType::CT_BEZIER ) );
     else if( command == ParamKeyEvent::Command::SetInterpolatorPreWrapMethod )
         result = SetWrapPreMethod( param, SerializationHelper::String2T( stringValue, WrapMethod::clamp ) );
     else if( command == ParamKeyEvent::Command::SetInterpolatorPostWrapMethod )

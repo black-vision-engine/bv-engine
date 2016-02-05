@@ -2,6 +2,8 @@
 
 #include "Serialization/DeserializeContext.h"
 
+#include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
+
 #include "CoreDEF.h"
 
 namespace bv {
@@ -9,7 +11,9 @@ namespace bv {
 // FORWARD DECLARATIONS
 
 class AssetDescsWithUIDs;
-DEFINE_PTR_TYPE( AssetDescsWithUIDs );    
+DEFINE_PTR_TYPE( AssetDescsWithUIDs );
+
+class BVProjectEditor;
 
 namespace model
 {
@@ -18,8 +22,8 @@ namespace model
 
     typedef std::vector< RendererContextPtr > RenderContextVec;
 
-    class OffsetTimeEvaluator;
-    DEFINE_PTR_TYPE(OffsetTimeEvaluator);
+    //class OffsetTimeEvaluator;
+    //DEFINE_PTR_TYPE(OffsetTimeEvaluator);
 }; // model
 
 // ************************
@@ -31,6 +35,8 @@ private:
     model::OffsetTimeEvaluatorPtr       m_sceneTimeline;
     AssetDescsWithUIDsPtr               m_assets;
 
+    std::string                         m_sceneName;
+
 public:
     BVDeserializeContext( model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets );
     virtual                             ~BVDeserializeContext   ();
@@ -40,6 +46,9 @@ public:
 
     AssetDescsWithUIDsPtr               GetAssets               ();
     void                                SetAssets               ( const AssetDescsWithUIDsPtr & assets );
+
+    std::string &                       GetSceneName            ();
+    void                                SetSceneName            ( const std::string& sceneName );
 
     void                                Push                    ( const model::RendererContextPtr & context );
     const model::RenderContextVec &     RendererContextes       () const;

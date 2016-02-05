@@ -42,7 +42,7 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
         return;
 
 	bv::NodeLogicEventPtr widgetEvent = std::static_pointer_cast<bv::NodeLogicEvent>( evt );        
-    //auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
+    auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
     
     auto root = m_appLogic->GetBVProject()->GetModelSceneRoot();
         
@@ -65,10 +65,12 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
     JsonDeserializeObject deser;
     deser.Load( action );
 
+    auto context = static_cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
+    context->SetSceneName( sceneName );
+
 		
     if( command == NodeLogicEvent::Command::AddNodeLogic )
     {
-        auto context = static_cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
         context->SetSceneTimeline( std::static_pointer_cast< model::OffsetTimeEvaluator >( TimelineManager::GetInstance()->GetTimeEvaluator( sceneName ) ) );
 
         deser.EnterChild( "logic" );
@@ -100,7 +102,7 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
             SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "NodeLogic not found" );
         }
 
-        bool result = logic->HandleEvent( deser, ser );
+        bool result = logic->HandleEvent( deser, ser, editor );
 
         PrepareResponseTemplate( ser, command, widgetEvent->SocketID, result );
         SendResponse( ser, widgetEvent->SocketID, widgetEvent->EventID );

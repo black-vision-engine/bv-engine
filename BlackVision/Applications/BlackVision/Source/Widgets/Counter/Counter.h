@@ -47,7 +47,7 @@ public:
     virtual void                Serialize       ( ISerializer& ser ) const override;
     static WidgetCounterPtr     Create          ( const IDeserializer& deser, bv::model::BasicNode * parent );
 
-    virtual bool                HandleEvent     ( IDeserializer& eventSer, ISerializer& response ) override;
+    virtual bool                HandleEvent     ( IDeserializer& eventSer, ISerializer& response, BVProjectEditor * editor  ) override;
 };
 
 }

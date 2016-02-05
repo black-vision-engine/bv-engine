@@ -2,6 +2,8 @@
 
 #include "CompositeTypedParameters.h"
 
+#include "Engine/Models/Timeline/TimelineManager.h"
+
 namespace bv { namespace model {
 
 // ******************************************************************************************

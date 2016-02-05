@@ -2,6 +2,7 @@
 
 #include "Engine/Models/Plugins/Parameters/CachedSimpleTypedParameters.h"
 #include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.inl"
 
 #include "Mathematics/Interpolators/CompositeInterpolator.h"
 
@@ -52,8 +53,8 @@ bool    MoveCenterMassKey       ( IParameterPtr parameter, TimeType t, TimeType 
 bool                                                RemoveParameterKey ( IParameterPtr parameter, TimeType t );
 bool                                                MoveParameterKey   ( IParameterPtr parameter, TimeType t, TimeType newTime );
 
-bool										        BezierSetAddedKeyCurveType ( IParameterPtr parameter, CurveType type );
-bool                                                BezierSetAllInterpolatorTypes ( IParameterPtr parameter, CurveType type );
+bool                                                BezierSetGlobalCurveType ( IParameterPtr parameter, CurveType type );
+bool                                                BezierSetAddedKeyCurveType ( IParameterPtr parameter, CurveType type );
 CurveType                                           BezierGetCurveType ( IParameterPtr parameter );
 
 bool                                                SetWrapPostMethod  ( IParameterPtr parameter, WrapMethod method );

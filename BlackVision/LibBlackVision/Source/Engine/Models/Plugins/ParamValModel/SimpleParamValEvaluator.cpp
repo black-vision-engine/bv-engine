@@ -2,6 +2,7 @@
 
 #include "SimpleParamValEvaluator.h"
 
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.inl"
 
 namespace bv { namespace model {
 

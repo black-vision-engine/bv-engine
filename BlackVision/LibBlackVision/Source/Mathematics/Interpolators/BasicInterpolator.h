@@ -84,7 +84,7 @@ public:
 
     int                                                 GetNumKeys      ();
 
-    void                                                SetGlobalCurveType    ( CurveType /*type*/ ) { assert( false ); }
+    void                                                SetGlobalCurveType  ( CurveType /*type*/ ) { assert( false ); }
     void                                                SetAddedKeyCurveType ( CurveType /*type*/ ) { assert( false ); }
     CurveType                                           GetCurveType    () { assert( false ); return CurveType::CT_TOTAL; }
 };

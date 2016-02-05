@@ -4,6 +4,7 @@
 #include "Serialization/ISerializable.h"
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
+#include "Engine/Models/Timeline/Static/OffsetTimeEvaluator.h"
 
 namespace bv { namespace model {
 

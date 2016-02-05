@@ -3,11 +3,13 @@
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/SceneModel.h"
 
-
 namespace bv {
 
 namespace model {
     class ModelSceneEditor;
+
+    class ITimeline;
+    DEFINE_PTR_TYPE( ITimeline );
 } // model
 
 class BVProject;

@@ -4,6 +4,8 @@
 
 #include "ShiftReplicationModifier.h"
 
+#include "Serialization/SerializationHelper.h"
+
 namespace bv{ namespace model {
 
 // *******************************
@@ -112,7 +114,7 @@ NodeReplicatorPtr    NodeReplicator::Create          ( const IDeserializer & des
 
 // ***********************
 //
-bool                NodeReplicator::HandleEvent     ( IDeserializer& /*eventSer*/, ISerializer& /*response*/ )
+bool                NodeReplicator::HandleEvent     ( IDeserializer& /*eventSer*/, ISerializer& /*response*/, BVProjectEditor * /*editor*/ )
 {
     // @todo Implement all posible interactions with this widget.
     return false;
