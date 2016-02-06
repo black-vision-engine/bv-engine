@@ -33,11 +33,11 @@ AnimationAssetThumbnail::AnimationAssetThumbnail    ( IDeserializer & deser )
 
     deser.EnterChild( "frames" );
     
-    if( deser.EnterChild( "" ) )
+    if( deser.EnterChild( "data" ) )
     {
         do
         {
-            m_data.push_back( DecodeBase64( deser.GetAttribute( "" ) ) );
+            m_data.push_back( DecodeBase64( deser.GetAttribute( "data" ) ) );
         }
         while( deser.NextChild() );
 
@@ -89,8 +89,8 @@ void                                AnimationAssetThumbnail::Serialize   ( ISeri
 
     for( auto d : m_data )
     {
-        ser.EnterChild( "" );
-        ser.SetAttribute( "", EncodeBase64( d ) );
+        ser.EnterChild( "data" );
+        ser.SetAttribute( "data", EncodeBase64( d ) );
         ser.ExitChild();
     }
 
