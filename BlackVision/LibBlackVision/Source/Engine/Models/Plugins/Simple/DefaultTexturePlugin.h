@@ -32,7 +32,8 @@ class DefaultTexturePlugin : public BasePlugin< IPlugin >
 {
 public:
 
-    static const std::string        BLEND_ENABLE;
+    static const std::string        PARAM_BLEND_ENABLE;
+    static const std::string        PARAM_ALPHA;
 
 protected:
 

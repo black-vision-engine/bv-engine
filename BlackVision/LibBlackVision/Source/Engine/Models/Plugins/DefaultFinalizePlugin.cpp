@@ -453,12 +453,13 @@ void								DefaultFinalizePlugin::UpdatePixelShaderChannel			() const
 
 		UpdateShaderChannelModel( psModel, txData, m_prevPlugin );
 
+		auto psChannel = DefaultPixelShaderChannel::Create( psModel, txData, renderCtx );
+
 		if( m_prevPlugin && m_prevPlugin->GetRendererContext() )
 		{
-			renderCtx = m_prevPlugin->GetRendererContext()->Clone();
+			psChannel->UpdateRendererContext( m_prevPlugin->GetRendererContext() );
 		}
 
-		auto psChannel = DefaultPixelShaderChannel::Create( psModel, txData, renderCtx );
         m_finalizePSC = std::make_shared< DefaultFinalizePixelShaderChannel >( psChannel, m_shadersDir );
         m_finalizePSC->RegenerateShaderSource( GetUIDS() );
 
@@ -473,7 +474,8 @@ void								DefaultFinalizePlugin::UpdatePixelShaderChannel			() const
 
 		if( HelperPixelShaderChannel::PropagateRendererContextUpdate( psc, m_prevPlugin ) && m_prevPlugin )
 		{
-			psc->SetRendererContext( m_prevPlugin->GetRendererContext()->Clone() );
+			psc->UpdateRendererContext( m_prevPlugin->GetRendererContext() );
+            psc->GetRendererContext()->SetStateChanged( true );
 		}
 	}
 }

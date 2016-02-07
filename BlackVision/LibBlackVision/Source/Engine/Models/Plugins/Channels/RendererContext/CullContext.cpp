@@ -23,5 +23,13 @@ CullContext *		CullContext::Clone			() const
 	return ctx;
 }
 
+// ******************************
+//
+void		        CullContext::SetContext	    ( const CullContext * ctx )
+{
+    enabled = ctx->enabled;
+    isCCWOrdered = ctx->isCCWOrdered;
+}
+
 } //model
 } //bv

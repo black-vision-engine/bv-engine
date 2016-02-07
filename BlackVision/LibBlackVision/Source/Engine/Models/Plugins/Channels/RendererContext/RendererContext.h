@@ -39,7 +39,9 @@ public:
     static RendererContextPtr   Create              ();
     static RendererContextPtr   CreateDefault       ();
 
-    RendererContextPtr		Clone				() const;
+    RendererContextPtr		    Clone				() const;
+
+    void		                SetContext		    ( RendererContextConstPtr & ctx );
     
     virtual void                Serialize       ( ISerializer& ser ) const;
     void                        Deserialize     ( const IDeserializer& deser );

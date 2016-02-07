@@ -18,7 +18,8 @@
 namespace bv { namespace model {
 
 
-const std::string        DefaultTexturePlugin::BLEND_ENABLE = "blend enable";
+const std::string        DefaultTexturePlugin::PARAM_BLEND_ENABLE   = "blend enable";
+const std::string        DefaultTexturePlugin::PARAM_ALPHA          = "alpha";
 
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
@@ -44,28 +45,25 @@ DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( IT
     ModelHelper helper( timeEvaluator );
 
     //Create all models
-    //DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
-    DefaultPluginParamValModelPtr model  = helper.GetModel();
-    DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
+    auto model  = helper.GetModel();
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
     //Create all parameters and evaluators
-    SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
     
     helper.CreatePluginModel();
-    helper.AddSimpleParam( DefaultTexturePlugin::BLEND_ENABLE, true, true, true );
+    helper.AddSimpleParam( DefaultTexturePlugin::PARAM_BLEND_ENABLE, true, true, true );
+
+    helper.CreatePSModel();
+    helper.AddSimpleParam( DefaultTexturePlugin::PARAM_ALPHA, 1.f, true ); 
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
-    psModel->RegisterAll( alphaEvaluator );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
-    model->SetPixelShaderChannelModel( psModel );
 
     //Set default values of all parameters
-    alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
 
     return model;
@@ -198,14 +196,12 @@ void                                DefaultTexturePlugin::Update                
 {
     BasePlugin::Update( t );
     
-    if( ParameterChanged( BLEND_ENABLE ) )
+    if( ParameterChanged( PARAM_BLEND_ENABLE ) )
     {
         auto ctx = m_psc->GetRendererContext();
-        ctx->alphaCtx->blendEnabled = std::static_pointer_cast<ParamBool>( GetParameter( BLEND_ENABLE ) )->Evaluate();
+        ctx->alphaCtx->blendEnabled = std::static_pointer_cast<ParamBool>( GetParameter( PARAM_BLEND_ENABLE ) )->Evaluate();
 
         HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
-        //auto contextUpdateId = m_psc->GetRendererContextUpdateID();
-        //m_psc->SetRendererContextUpdateID( contextUpdateId + 1 );
     }
 
     HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );

@@ -31,7 +31,8 @@ public:
     virtual RendererContextConstPtr         GetRendererContext  () const override;
     RendererContextPtr                      GetRendererContext  ();
 
-    void                                    SetRendererContext  ( RendererContextPtr ctx );
+    void                                    SetRendererContext      ( RendererContextPtr ctx );
+    void                                    UpdateRendererContext   ( RendererContextConstPtr ctx );
 
     virtual ITexturesDataConstPtr           GetTexturesData     () const override;
     DefaultTexturesDataPtr                  GetTexturesDataImpl ();

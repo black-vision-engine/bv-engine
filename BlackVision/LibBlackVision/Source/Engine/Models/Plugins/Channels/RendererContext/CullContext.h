@@ -15,6 +15,9 @@ public:
 							CullContext		();
 
     CullContext *			Clone			() const;
+
+    void			        SetContext	    ( const CullContext * ctx );
+
 };
 
 } //model

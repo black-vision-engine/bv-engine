@@ -31,5 +31,17 @@ AlphaContext *		AlphaContext::Clone		() const
 	return ctx;
 }
 
+// ******************************
+//
+void		        AlphaContext::SetContext ( const AlphaContext * ctx )
+{
+    blendEnabled = ctx->blendEnabled;
+    blendColor = ctx->blendColor;
+    srcRGBBlendMode = ctx->srcRGBBlendMode;
+    dstRGBBlendMode = ctx->dstRGBBlendMode;
+    srcAlphaBlendMode = ctx->srcAlphaBlendMode;
+    dstAlphaBlendMode = ctx->dstAlphaBlendMode;
+}
+
 } //model
 } //bv

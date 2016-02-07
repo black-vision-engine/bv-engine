@@ -25,6 +25,9 @@ public:
     FillContext();
 
     FillContext *			Clone			() const;
+
+    void			        SetContext	    ( const FillContext * ctx );
+
 };
 
 } //model

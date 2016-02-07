@@ -138,6 +138,16 @@ RendererContextPtr   RendererContext::Clone				() const
 
 // *****************************
 //
+void                    RendererContext::SetContext	    ( RendererContextConstPtr & ctx ) 
+{
+    alphaCtx->SetContext( ctx->alphaCtx );
+    cullCtx->SetContext( ctx->cullCtx );
+    depthCtx->SetContext( ctx->depthCtx );
+    fillCtx->SetContext( ctx->fillCtx );
+}
+
+// *****************************
+//
 void                RendererContext::Serialize       ( ISerializer& ser ) const
 {
 ser.EnterChild( "renderer_context" );

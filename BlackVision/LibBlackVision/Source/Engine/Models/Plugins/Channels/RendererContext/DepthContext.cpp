@@ -23,5 +23,13 @@ DepthContext *		DepthContext::Clone		() const
 	return ctx;
 }
 
+// ******************************
+//
+void		        DepthContext::SetContext ( const DepthContext * ctx )
+{
+    enabled = ctx->enabled;
+    writable = ctx->writable;
+}
+
 } //model
 } //bv

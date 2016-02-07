@@ -47,12 +47,18 @@ RendererContextPtr          DefaultPixelShaderChannel::GetRendererContext  ()
     return m_rendererContext;
 }
 
+// ******************************
+//
+void                        DefaultPixelShaderChannel::SetRendererContext       ( RendererContextPtr ctx )
+{
+    m_rendererContext = ctx;
+}
 
 // ******************************
 //
-void                        DefaultPixelShaderChannel::SetRendererContext  ( RendererContextPtr ctx )
+void                        DefaultPixelShaderChannel::UpdateRendererContext    ( RendererContextConstPtr ctx )
 {
-    m_rendererContext = ctx;
+    m_rendererContext->SetContext( ctx );
 }
 
 // ******************************

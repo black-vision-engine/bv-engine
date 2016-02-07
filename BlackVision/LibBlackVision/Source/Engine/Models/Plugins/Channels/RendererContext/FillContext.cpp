@@ -21,5 +21,12 @@ FillContext *		FillContext::Clone		() const
 	return ctx;
 }
 
+// ******************************
+//
+void		        FillContext::SetContext ( const FillContext * ctx )
+{
+    fillMode = ctx->fillMode;
+}
+
 } //model
 } //bv

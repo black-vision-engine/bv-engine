@@ -63,6 +63,8 @@ public:
 							AlphaContext	();
 
     AlphaContext *			Clone			() const;
+
+    void			        SetContext	    ( const AlphaContext * ctx );
 };
 
 } //model
