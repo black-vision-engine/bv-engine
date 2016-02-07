@@ -59,6 +59,15 @@ void BasePluginDescriptor::ModelHelper::CreateVacModel         ()
 
 // *********************************
 //
+void BasePluginDescriptor::ModelHelper::CreateVSModel         ()
+{
+    auto psModel = std::make_shared< DefaultParamValModel >();
+    m_model->SetVertexShaderChannelModel( psModel );
+    m_lastParamValModel = psModel;
+}
+
+// *********************************
+//
 void BasePluginDescriptor::ModelHelper::CreatePSModel         ()
 {
     auto psModel = std::make_shared< DefaultParamValModel >();

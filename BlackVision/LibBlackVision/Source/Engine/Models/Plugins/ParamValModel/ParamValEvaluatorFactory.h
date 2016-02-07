@@ -3,7 +3,6 @@
 #include <string>
 
 #include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.h"
-#include "Engine/Models/Plugins/ParamValModel/TransformParamValEvaluator.h"
 
 
 namespace bv { namespace model {
@@ -63,13 +62,7 @@ public:
     static SimpleTransformEvaluatorPtr  CreateSimpleTransformEvaluator  ( ParamTransformPtr param );
     static SimpleTransformEvaluatorPtr  CreateSimpleTransformEvaluator  ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator );
     static SimpleTransformEvaluatorPtr  CreateSimpleTransformEvaluator  ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName );
-
-    static TransformParamValEvaluatorPtr    CreateTransformEvaluator    ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, ValueMat4Ptr value );
-    static TransformParamValEvaluatorPtr    CreateTransformEvaluator    ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator );
-    static TransformParamValEvaluatorPtr    CreateTransformEvaluator    ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName );
-    static TransformParamValEvaluatorPtr    CreateTransformEvaluator    ( ParamTransformPtr param, ValueMat4Ptr values );
-    static TransformParamValEvaluatorPtr    CreateTransformEvaluator    ( ParamTransformPtr param, const std::string & valueName );
-    static TransformParamValEvaluatorPtr    CreateTransformEvaluator    ( ParamTransformPtr param );
+    static SimpleTransformEvaluatorPtr  CreateSimpleTransformEvaluator  ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, ValueMat4Ptr value );
 
     static SimpleStringEvaluatorPtr         CreateSimpleStringEvaluator ( ParamStringPtr param, ValueStringPtr value );
     static SimpleStringEvaluatorPtr         CreateSimpleStringEvaluator ( ParamStringPtr param, const std::string & valueName );

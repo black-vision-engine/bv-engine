@@ -19,33 +19,33 @@ void TestVideoStreamDecoderKeyboardHandler::HandleKey( unsigned char c, BVAppLog
 	auto node = editor->GetScene( "sceneFromEnv: VIDEO_STREAM_TEST_SCENE" )->GetRootNode();
 	if( c == 'q' )
     {
-		DefaultVideoStreamDecoderPlugin::Start( node->GetPlugin( "video_stream_decoder" ) );
+        SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 0.0f, DefaultVideoStreamDecoderPlugin::DecoderMode::PLAY );
     }
     else if( c == 'w' )
     {
-		DefaultVideoStreamDecoderPlugin::Pause( node->GetPlugin( "video_stream_decoder" ) );
+        SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 0.0f, DefaultVideoStreamDecoderPlugin::DecoderMode::PAUSE );
     }
 	else if( c == 'e' )
 	{
-		DefaultVideoStreamDecoderPlugin::Stop( node->GetPlugin( "video_stream_decoder" ) );
+        SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 0.0f, DefaultVideoStreamDecoderPlugin::DecoderMode::STOP );
     }
 	else if( c == 'a' )
     {
 		seekOffset -= 1;
 		if( seekOffset < 0 ) seekOffset = 0;
-		DefaultVideoStreamDecoderPlugin::Seek( node->GetPlugin( "video_stream_decoder" ), seekOffset );
+        SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "offset" ), 0.0f, (float)seekOffset );
     }
 	else if( c == 's' )
     {
 		seekOffset += 1;
-		DefaultVideoStreamDecoderPlugin::Seek( node->GetPlugin( "video_stream_decoder" ), seekOffset );
+        SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "offset" ), 0.0f, (float)seekOffset );
     }
 	else if( c == 'x' )
     {
-		DefaultVideoStreamDecoderPlugin::Stop( node->GetPlugin( "video_stream_decoder" ) );
+        SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 0.0f, DefaultVideoStreamDecoderPlugin::DecoderMode::STOP );
 		auto desc = VideoStreamAssetDesc::Create( "rsrcy/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4", TextureFormat::F_A8R8G8B8 );
         editor->LoadAsset( node->GetPlugin( "video_stream_decoder" ), desc );
-		model::DefaultVideoStreamDecoderPlugin::Start( node->GetPlugin( "video_stream_decoder" ) );
+        SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 0.0f, DefaultVideoStreamDecoderPlugin::DecoderMode::PLAY );
     }
 	else if( c == 'z' )
     {

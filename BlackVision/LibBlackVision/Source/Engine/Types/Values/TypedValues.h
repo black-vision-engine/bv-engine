@@ -34,8 +34,4 @@ DEFINE_PTR_TYPE(ValueMat4)
 DEFINE_PTR_TYPE(ValueString)
 DEFINE_PTR_TYPE(ValueWString)
 
-typedef std::vector< ValueMat4Ptr >                 ValueMat4PtrVec;
-typedef std::shared_ptr< const ValueMat4PtrVec >    ValueMat4PtrVecConstPtr;
-DEFINE_PTR_TYPE(ValueMat4PtrVec)
-
 } //bv

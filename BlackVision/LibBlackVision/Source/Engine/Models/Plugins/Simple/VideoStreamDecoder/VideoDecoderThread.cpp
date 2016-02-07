@@ -50,6 +50,14 @@ void				VideoDecoderThread::Pause		()
 
 // *******************************
 //
+bool				VideoDecoderThread::Paused		() const
+{
+	std::unique_lock< std::mutex > lock( m_mutex );
+	return m_paused;
+}
+
+// *******************************
+//
 bool				VideoDecoderThread::Stopped		() const
 {
 	std::unique_lock< std::mutex > lock( m_mutex );

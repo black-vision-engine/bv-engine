@@ -35,7 +35,15 @@ class DefaultVideoStreamDecoderPlugin : public BasePlugin< IPlugin >
 {
 public:
 
-    enum DecoderMode : int { PLAY, PAUSE, STOP };
+    enum DecoderMode : int { STOP, PLAY, PAUSE };
+
+    struct PARAM
+    {
+        static const std::string ALPHA;
+        static const std::string TX_MAT;
+        static const std::string DECODER_STATE;
+        static const std::string SEEK_OFFSET;
+    };
 
 private:
 
@@ -50,7 +58,12 @@ private:
 
 	IVideoDecoderPtr				    m_decoder;
 
-	DecoderModeParamPtr                 m_decoderMode;
+	DecoderModeParamPtr                 m_decoderModeParam;
+    DecoderMode                         m_prevDecoderMode;
+
+	/** time in seconds from the beginning of video */
+    ParamFloatPtr                       m_offsetParam;                 
+    Float32                             m_prevOffset;
 
 public:
 
@@ -69,18 +82,7 @@ public:
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 
-//---controlling events
-
-	void										Start						();
-	void										Pause						();
-	void										Stop						();
-	/** @param[time] in seconds from the beginning of video */
-	void										Seek						( Float64 time );
-
-    static bool									Start						( IPluginPtr plugin );
-    static bool									Pause						( IPluginPtr plugin );
-    static bool									Stop						( IPluginPtr plugin );
-    static bool									Seek						( IPluginPtr plugin, Float64 time );
+    void                                        HandleDecoder               ();
 
 private:
 

@@ -356,7 +356,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformParamValEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Plugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\PluginsFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\PluginUtils.cpp" />
@@ -743,7 +742,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\DefaultPluginParamValModel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformParamValEvaluator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Plugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\PluginsFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\PluginUtils.h" />

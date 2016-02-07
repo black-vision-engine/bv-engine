@@ -70,6 +70,10 @@ void						FFmpegVideoDecoder::Start				()
 		m_decoderThread = std::unique_ptr< VideoDecoderThread >( new VideoDecoderThread( this ) );
 		m_decoderThread->Start();
 	}
+	else if ( m_decoderThread->Paused() )
+    {
+		m_decoderThread->Start();
+    }
 	else if ( m_decoderThread->Stopped() )
 	{
 		Reset();

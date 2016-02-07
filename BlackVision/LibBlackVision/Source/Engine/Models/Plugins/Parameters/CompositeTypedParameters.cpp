@@ -16,6 +16,11 @@ ParamTransform::ParamTransform  ( const std::string & name, const CompositeTrans
 {
 }
 
+// *******************************
+//
+ParamTransform::~ParamTransform ()
+{
+}
 
 // *******************************
 // FIXME: reimplement with SQT paramter model
@@ -105,13 +110,6 @@ VoidPtr    ParamTransform::QueryParamTyped  ()
 const CompositeTransform &      ParamTransform::GetTransform   () const
 {
     return m_transformModel;
-}
-
-// *************************************
-//
-ModelParamType                  ParamTransform::Type            ()
-{
-    return ModelParamType::MPT_TRANSFORM;
 }
 
 } //model

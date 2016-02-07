@@ -2832,7 +2832,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			editor->DeleteChildNode( scene, root, root->GetChild( VSD_NODE ) );
 			editor->AddChildNode( scene, root, vsd );
 
-			model::DefaultVideoStreamDecoderPlugin::Start( vsd->GetPlugin( "video_stream_decoder" ) );
+            model::SetParameter( vsd->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 0.0f, 1 );
 		};
 
 		auto add1 = [ plugin, this ]
@@ -2846,7 +2846,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			editor->DeleteChildNode( scene, root, root->GetChild( VSD_NODE ) );
 			editor->AddChildNode( scene, root, vsd );
 
-			model::DefaultVideoStreamDecoderPlugin::Start( vsd->GetPlugin( "video_stream_decoder" ) );
+            model::SetParameter( vsd->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 0.0f, 1 );
 		};
 
 		m_testSteps.push_back( add0 );
@@ -2864,7 +2864,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 
 			auto editor = m_project->GetProjectEditor();
 			auto root = editor->GetScene( SCENE_NAME )->GetRootNode();
-			model::DefaultVideoStreamDecoderPlugin::Start( root->GetPlugin( "video_stream_decoder" ) );
+            model::SetParameter( root->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 0.0f, 1 );
 		} );
         Wait( 1 );
 		m_testSteps.push_back( [&]
@@ -2875,7 +2875,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			auto desc = VideoStreamAssetDesc::Create( TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
 			editor->LoadAsset( root->GetPlugin( "video_stream_decoder" ), desc );
 
-			model::DefaultVideoStreamDecoderPlugin::Start( root->GetPlugin( "video_stream_decoder" ) );
+            model::SetParameter( root->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 0.0f, 1 );
 		});
 		m_testSteps.push_back( [&]{ RestoreRoot( 2, "video_stream_decoder" ); } );
 
@@ -2887,7 +2887,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			auto desc = VideoStreamAssetDesc::Create( TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
 			editor->LoadAsset( root->GetPlugin( "video_stream_decoder" ), desc );
 
-			model::DefaultVideoStreamDecoderPlugin::Start( child->GetPlugin( "video_stream_decoder" ) );
+            model::SetParameter( child->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 0.0f, 1 );
 		});
 
 		auto pluginName = TestSceneUtils::PluginsNameArr[ i ];
@@ -2911,7 +2911,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			    editor->DeleteChildNode( scene, root, root->GetChild( VSD_NODE ) );
 				editor->AddChildNode( scene, root, vsd );
 
-				model::DefaultVideoStreamDecoderPlugin::Start( vsd->GetPlugin( "video_stream_decoder" ) );
+                model::SetParameter( vsd->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 0.0f, 1 );
 			});
 			InitOrderTest( test );
 		}
@@ -2927,7 +2927,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			editor->DeleteChildNode( scene, root, root->GetChild( VSD_NODE ) );
 			editor->AddChildNode( scene, root, vsd );
 
-			model::DefaultVideoStreamDecoderPlugin::Start( vsd->GetPlugin( "video_stream_decoder" ) );
+            model::SetParameter( vsd->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 0.0f, 1 );
 		});
 
 		m_testSteps.push_back( [&]{
@@ -2938,7 +2938,7 @@ void					TestScene::InitVideoStreamDecoderTest	()
 			auto desc = VideoStreamAssetDesc::Create( TestSceneUtils::VIDEO_PATH1, TextureFormat::F_A8R8G8B8 );
 			editor->LoadAsset( child->GetPlugin( "video_stream_decoder" ), desc );
 
-			model::DefaultVideoStreamDecoderPlugin::Start( child->GetPlugin( "video_stream_decoder" ) );
+            model::SetParameter( child->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 0.0f, 1 );
 		});
 
         Wait( 3 );

@@ -30,7 +30,7 @@ DefaultPluginParamValModelPtr   DefaultTransformPluginDesc::CreateDefaultModel  
 {
     DefaultPluginParamValModelPtr model         = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
     DefaultParamValModelPtr trModel             = std::make_shared< DefaultParamValModel >();
-    auto evaluator                              = ParamValEvaluatorFactory::CreateTransformEvaluator( "simple_transform", timeEvaluator );
+    auto evaluator                              = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "simple_transform", timeEvaluator );
 
     trModel->RegisterAll( evaluator );
     model->SetTransformChannelModel( trModel );

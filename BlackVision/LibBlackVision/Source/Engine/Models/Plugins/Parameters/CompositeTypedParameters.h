@@ -18,19 +18,20 @@ private:
 public:
 
     explicit                    ParamTransform          ( const std::string & name, const CompositeTransform & transform, ITimeEvaluatorPtr evaluator );
+                                ~ParamTransform         ();
 
-    void                        Serialize               ( ISerializer& doc ) const;
+    virtual void                Serialize               ( ISerializer& doc ) const override;
 
     virtual void                SetAddedKeyCurveType    ( CurveType type ) override;
     virtual void                SetGlobalCurveType      ( CurveType type ) override;
-    CurveType                   GetCurveType            ();
+    virtual CurveType           GetCurveType            () override;
 
-    virtual void                SetWrapPostMethod       ( WrapMethod method );
-    virtual void                SetWrapPreMethod        ( WrapMethod method );
-    virtual WrapMethod          GetWrapPostMethod       ();
-    virtual WrapMethod          GetWrapPreMethod        ();
+    virtual void                SetWrapPostMethod       ( WrapMethod method ) override;
+    virtual void                SetWrapPreMethod        ( WrapMethod method ) override;
+    virtual WrapMethod          GetWrapPostMethod       () override;
+    virtual WrapMethod          GetWrapPreMethod        () override;
 
-    virtual int                 GetNumKeys              ();
+    virtual int                 GetNumKeys              () override;
 
     inline  void                SetRotation             ( const glm::vec3 & eulerAngle, TimeType t );
     inline  void                SetScale                ( const glm::vec3 & scale, TimeType t );
@@ -50,13 +51,14 @@ public:
     inline  CompositeTransform & Transform              ();
 
     inline  glm::mat4           Evaluate                () const;
+
     inline  std::string         EvaluateToString        ( TimeType /*t*/ ) const { assert( false ); return ""; }
 
     virtual VoidPtr             QueryParamTyped         () override;
 
     const CompositeTransform &  GetTransform            () const;
 
-    static  ModelParamType      Type                    ();
+    inline static  ModelParamType   Type                    ();
 
 };
 

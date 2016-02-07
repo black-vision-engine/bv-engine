@@ -57,24 +57,24 @@ protected:
         DefaultPluginParamValModelPtr           GetModel() { return m_model; }
 
         void                                    CreateVacModel      ();
+        void                                    CreateVSModel       ();
         void                                    CreatePSModel       ();
         void                                    CreatePluginModel   ();
 
 
-        //inline void                             AddTransformParam   ( std::string name, bool addValue = true ) const
-        //{
-        //    if( addValue )
-        //    {
-        //        auto evaluator = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( name, m_lastTimeEvaluator );
-        //        m_lastParamValModel->RegisterAll( evaluator );
-        //        evaluator->Parameter()->Transform().InitializeDefaultSRT();
-        //    }
-        //    else
-        //    {
-        //        auto param = ParametersFactory::CreateParameterTransform( name, m_lastTimeEvaluator );
-        //        m_lastParamValModel->AddParameter( param );
-        //    }                
-        //}
+        inline void                             AddTransformParam   ( std::string name, bool addValue = true ) const
+        {
+            auto param = std::make_shared< ParamTransform >( name, CompositeTransform(), m_lastTimeEvaluator );
+            if( addValue )
+            {
+                auto evaluator = ParamValEvaluatorFactory::CreateSimpleEvaluator< CompositeTransform, glm::mat4, ModelParamType::MPT_TRANSFORM, ParamType::PT_MAT4, ParamTransform >( param );
+                m_lastParamValModel->RegisterAll( evaluator );
+            }
+            else
+            {
+                m_lastParamValModel->AddParameter( param );
+            }             
+        }
 
         template< typename InterpolatorType, typename ValueType, ModelParamType MPT, ParamType PT, typename ParamImpl >
         void                                    AddParam            ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const ValueType& defaultValue, bool addValue, bool isState ) const

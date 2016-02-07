@@ -34,6 +34,7 @@ public:
 	void						Pause				();
 	void						Stop				();
 
+	bool						Paused				() const;
 	bool						Stopped				() const;
 
 protected:

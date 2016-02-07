@@ -17,7 +17,14 @@
 
 namespace bv { namespace model {
 
-typedef ParamEnum< DefaultVideoStreamDecoderPlugin::DecoderMode > ParamEnumDC;
+
+const std::string        DefaultVideoStreamDecoderPlugin::PARAM::ALPHA          = "alpha";
+const std::string        DefaultVideoStreamDecoderPlugin::PARAM::TX_MAT         = "txMat";
+const std::string        DefaultVideoStreamDecoderPlugin::PARAM::DECODER_STATE  = "state";
+const std::string        DefaultVideoStreamDecoderPlugin::PARAM::SEEK_OFFSET    = "offset";
+
+typedef ParamEnum< DefaultVideoStreamDecoderPlugin::DecoderMode > ParamEnumDM;
+
 
 // ***********************
 //
@@ -29,10 +36,12 @@ static IParameterPtr    ParametersFactory::CreateTypedParameter< DefaultVideoStr
 
 // ***********************
 //
-VoidPtr    ParamEnumDC::QueryParamTyped  ()
+VoidPtr    ParamEnumDM::QueryParamTyped  ()
 {
     return std::static_pointer_cast< void >( shared_from_this() );
 }
+
+#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
 
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
@@ -55,26 +64,19 @@ IPluginPtr              DefaultVideoStreamDecoderPluginDesc::CreatePlugin       
 //
 DefaultPluginParamValModelPtr   DefaultVideoStreamDecoderPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    //Create all models
-    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
-    DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
-    DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
+    ModelHelper helper( timeEvaluator );
+    auto model  = helper.GetModel();
 
-    //Create all parameters and evaluators
-    SimpleFloatEvaluatorPtr     alphaEvaluator		= ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
-    SimpleTransformEvaluatorPtr trTxEvaluator		= ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
-    
-    //Register all parameters and evaloators in models
-    vsModel->RegisterAll( trTxEvaluator );
-    psModel->RegisterAll( alphaEvaluator );
+    helper.CreatePluginModel();
+    helper.AddParam< IntInterpolator, DefaultVideoStreamDecoderPlugin::DecoderMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumDM >
+        ( DefaultVideoStreamDecoderPlugin::PARAM::DECODER_STATE, DefaultVideoStreamDecoderPlugin::DecoderMode::STOP, true, true );
+    helper.AddSimpleParam( DefaultVideoStreamDecoderPlugin::PARAM::SEEK_OFFSET, 0.f, true );
 
-    //Set models structure
-    model->SetVertexShaderChannelModel( vsModel );
-    model->SetPixelShaderChannelModel( psModel );
+    helper.CreateVSModel();
+    helper.AddTransformParam( DefaultVideoStreamDecoderPlugin::PARAM::TX_MAT, true );
 
-    //Set default values of all parameters
-    alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
-    trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
+    helper.CreatePSModel();
+    helper.AddSimpleParam( DefaultVideoStreamDecoderPlugin::PARAM::ALPHA, 1.f, true );
 
     return model;
 }
@@ -125,6 +127,14 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
 	SetPrevPlugin( prev );
 
     LoadResource( DefaultAssets::Instance().GetDefaultDesc< VideoStreamAssetDesc >() );
+
+    m_decoderModeParam = QueryTypedParam< std::shared_ptr< ParamEnum< DecoderMode > > >( GetParameter( PARAM::DECODER_STATE ) );
+    m_decoderModeParam->SetGlobalCurveType( CurveType::CT_POINT );
+    m_prevDecoderMode = m_decoderModeParam->Evaluate();
+
+    m_offsetParam = QueryTypedParam< ParamFloatPtr >( GetParameter( PARAM::SEEK_OFFSET ) );
+    m_offsetParam->SetGlobalCurveType( CurveType::CT_POINT );
+    m_prevOffset = m_offsetParam->Evaluate();
 }
 
 // *************************************
@@ -195,6 +205,8 @@ IVertexShaderChannelConstPtr        DefaultVideoStreamDecoderPlugin::GetVertexSh
 void                                DefaultVideoStreamDecoderPlugin::Update                      ( TimeType t )
 {
    	BasePlugin::Update( t );
+
+    HandleDecoder();
 
 	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
 	if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
@@ -278,94 +290,33 @@ void									DefaultVideoStreamDecoderPlugin::InitVertexAttributesChannel		()
 
 // *************************************
 //
-void								DefaultVideoStreamDecoderPlugin::Start		()
+void                                DefaultVideoStreamDecoderPlugin::HandleDecoder  ()
 {
     if( m_decoder )
     {
-	    m_decoder->Start();
-    }
-}
+        auto mode =  m_decoderModeParam->Evaluate();
+        if( m_prevDecoderMode != mode )
+        {
+            switch( mode )
+            {
+            case DecoderMode::PLAY:
+                m_decoder->Start(); break;
+            case DecoderMode::STOP:
+                m_decoder->Stop(); break;
+            case DecoderMode::PAUSE:
+                m_decoder->Pause(); break;
+            }
 
-// *************************************
-//
-void								DefaultVideoStreamDecoderPlugin::Pause		()
-{
-    if( m_decoder )
-    {
-	    m_decoder->Pause();
-    }
-}
+            m_prevDecoderMode = mode;
+        }
 
-// *************************************
-//
-void								DefaultVideoStreamDecoderPlugin::Stop		()
-{
-    if( m_decoder )
-    {
-	    m_decoder->Stop();
+        auto offset =  m_offsetParam->Evaluate();
+        if( m_prevOffset != offset )
+        {
+            m_decoder->Seek( offset );
+            m_prevOffset = offset;
+        }
     }
-}
-
-// *************************************
-//
-void								DefaultVideoStreamDecoderPlugin::Seek		( Float64 time )
-{
-    if( m_decoder )
-    {
-        m_decoder->Seek( time );
-    }
-}
-
-// *************************************
-//
-bool								DefaultVideoStreamDecoderPlugin::Start		( IPluginPtr plugin )
-{
-	if( plugin->GetTypeUid() == DefaultVideoStreamDecoderPluginDesc::UID() )
-    {
-		std::static_pointer_cast< DefaultVideoStreamDecoderPlugin >( plugin )->Start();
-        return true;
-    }
-
-    return false;
-}
-
-// *************************************
-//
-bool								DefaultVideoStreamDecoderPlugin::Pause		( IPluginPtr plugin )
-{
-	if( plugin->GetTypeUid() == DefaultVideoStreamDecoderPluginDesc::UID() )
-    {
-		std::static_pointer_cast< DefaultVideoStreamDecoderPlugin >( plugin )->Pause();
-        return true;
-    }
-    
-    return false;
-}
-
-// *************************************
-//
-bool								DefaultVideoStreamDecoderPlugin::Stop		( IPluginPtr plugin )
-{
-	if( plugin->GetTypeUid() == DefaultVideoStreamDecoderPluginDesc::UID() )
-    {
-		std::static_pointer_cast< DefaultVideoStreamDecoderPlugin >( plugin )->Stop();
-        return true;
-    }
-    
-    return false;
-}
-
-// *************************************
-//
-bool								DefaultVideoStreamDecoderPlugin::Seek		( IPluginPtr plugin, Float64 time )
-{
-	if( plugin->GetTypeUid() == DefaultVideoStreamDecoderPluginDesc::UID() )
-    {
-		std::static_pointer_cast< DefaultVideoStreamDecoderPlugin >( plugin )->Seek( time );
-        return true;
-    }
-    
-    return false;
 }
 
 } //model

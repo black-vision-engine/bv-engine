@@ -88,19 +88,26 @@ inline  bool ParamTransform::MoveCenter        ( TimeType t, TimeType newTime )
 }
 
 // *******************************
-// FIXME: reimplement with SQT paramter model
+//
 inline  CompositeTransform & ParamTransform::Transform       ()
 {
     return m_transformModel;
 }
 
 // *******************************
-// FIXME: reimplement with SQT paramter model
+//
 inline  glm::mat4   ParamTransform::Evaluate        () const
 {
     auto t = AbstractModelParameter::GetLocalEvaluationTime();
 
     return m_transformModel.Evaluate( t );
+}
+
+// *************************************
+//
+inline ModelParamType ParamTransform::Type          ()
+{
+    return ModelParamType::MPT_TRANSFORM;
 }
 
 } //model

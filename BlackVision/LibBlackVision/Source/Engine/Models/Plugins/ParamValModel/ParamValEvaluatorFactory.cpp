@@ -289,49 +289,11 @@ SimpleTransformEvaluatorPtr   ParamValEvaluatorFactory::CreateSimpleTransformEva
     return CreateSimpleTransformEvaluator( ParametersFactory::CreateParameterTransform( paramName, timeEvaluator ), valueName );
 }
 
-
-// ************************************************************** TRANSFORM **************************************************************
-
 // *******************************
 //
-TransformParamValEvaluatorPtr   ParamValEvaluatorFactory::CreateTransformEvaluator  ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, ValueMat4Ptr value )
+SimpleTransformEvaluatorPtr   ParamValEvaluatorFactory::CreateSimpleTransformEvaluator  ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, ValueMat4Ptr value )
 {
-    return CreateTransformEvaluator( ParametersFactory::CreateParameterTransform( paramName, timeEvaluator ), value );
-}
-
-// *******************************
-//
-TransformParamValEvaluatorPtr   ParamValEvaluatorFactory::CreateTransformEvaluator  ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator )
-{
-    return CreateTransformEvaluator( paramName, timeEvaluator, paramName );
-}
-
-// *******************************
-//
-TransformParamValEvaluatorPtr   ParamValEvaluatorFactory::CreateTransformEvaluator  ( const std::string & paramName, ITimeEvaluatorPtr timeEvaluator, const std::string & valueName )
-{
-    return CreateTransformEvaluator( paramName, timeEvaluator, ValuesFactory::CreateValueMat4( valueName ) );    
-}
-
-// *******************************
-//
-TransformParamValEvaluatorPtr   ParamValEvaluatorFactory::CreateTransformEvaluator  ( ParamTransformPtr param, ValueMat4Ptr values )
-{
-    return std::make_shared< TransformParamValEvaluator >( param, values ); 
-}
-
-// *******************************
-//
-TransformParamValEvaluatorPtr   ParamValEvaluatorFactory::CreateTransformEvaluator  ( ParamTransformPtr param, const std::string & valueName )
-{
-    return CreateTransformEvaluator( param, ValuesFactory::CreateValueMat4( valueName ) );
-}
-
-// *******************************
-//
-TransformParamValEvaluatorPtr   ParamValEvaluatorFactory::CreateTransformEvaluator  ( ParamTransformPtr param )
-{
-    return CreateTransformEvaluator( param, ValuesFactory::CreateValueMat4( param->GetName() ) );
+    return CreateSimpleTransformEvaluator( ParametersFactory::CreateParameterTransform( paramName, timeEvaluator ), value );
 }
 
 

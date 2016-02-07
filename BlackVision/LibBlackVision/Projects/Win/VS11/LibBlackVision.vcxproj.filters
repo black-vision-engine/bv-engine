@@ -1161,9 +1161,6 @@
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\TextureAssetThumbnail.cpp">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformParamValEvaluator.cpp">
-      <Filter>Engine\Models\Plugins\ParamValModel</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\AnimationAssetThumbnail.cpp">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClCompile>
@@ -2502,9 +2499,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\FontAssetThumbnail.h">
       <Filter>Assets\Thumbnail\Impl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformParamValEvaluator.h">
-      <Filter>Engine\Models\Plugins\ParamValModel</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\AnimationAssetThumbnail.h">
       <Filter>Assets\Thumbnail\Impl</Filter>
