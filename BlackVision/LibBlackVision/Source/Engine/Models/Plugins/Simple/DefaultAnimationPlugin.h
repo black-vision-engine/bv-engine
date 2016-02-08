@@ -29,6 +29,12 @@ public:
 // ***************************** PLUGIN ********************************** 
 class DefaultAnimationPlugin : public BasePlugin< IPlugin >
 {
+public:
+
+    static const std::string        PARAM_BLEND_ENABLE;
+    static const std::string        PARAM_ALPHA;
+    static const std::string        PARAM_FRAME_NUM;
+
 private:
 
     DefaultPixelShaderChannelPtr    m_psc;

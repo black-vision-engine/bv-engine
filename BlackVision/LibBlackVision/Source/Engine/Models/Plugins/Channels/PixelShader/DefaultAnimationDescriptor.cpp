@@ -217,7 +217,8 @@ DefaultAnimationDescriptorPtr DefaultAnimationDescriptor::LoadAnimation  ( const
 
     if ( animRes == nullptr )
     {
-		assert(!"Should never be here");
+        // Can be here. Asset could not exist and we must handle it.
+		//assert(!"Should never be here");
         return nullptr;
     }
 

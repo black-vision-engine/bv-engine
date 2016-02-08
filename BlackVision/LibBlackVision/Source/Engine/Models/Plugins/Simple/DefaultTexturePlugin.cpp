@@ -55,7 +55,7 @@ DefaultPluginParamValModelPtr   DefaultTexturePluginDesc::CreateDefaultModel( IT
     helper.AddSimpleParam( DefaultTexturePlugin::PARAM_BLEND_ENABLE, true, true, true );
 
     helper.CreatePSModel();
-    helper.AddSimpleParam( DefaultTexturePlugin::PARAM_ALPHA, 1.f, true ); 
+    helper.AddSimpleParam( DefaultTexturePlugin::PARAM_ALPHA, 1.f, true );
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );

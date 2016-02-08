@@ -13,6 +13,10 @@
 
 namespace bv { namespace model {
 
+const std::string        DefaultAnimationPlugin::PARAM_BLEND_ENABLE   = "blend enable";
+const std::string        DefaultAnimationPlugin::PARAM_ALPHA          = "alpha";
+const std::string        DefaultAnimationPlugin::PARAM_FRAME_NUM      = "frameNum";
+
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
@@ -34,32 +38,50 @@ IPluginPtr              DefaultAnimationPluginDesc::CreatePlugin              ( 
 //
 DefaultPluginParamValModelPtr   DefaultAnimationPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
+    ModelHelper helper( timeEvaluator );
+
     //Create all models
-    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
-    DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
+    auto model  = helper.GetModel();
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
     //Create all parameters and evaluators
-    SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
+    
+    helper.CreatePluginModel();
+    helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_BLEND_ENABLE, true, true, true );
 
-    ParamFloatPtr  paramFrameNum      = ParametersFactory::CreateParameterFloat( "frameNum", timeEvaluator );
+    helper.CreatePSModel();
+    helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_ALPHA, 1.f, true );
+    helper.AddSimpleParam( DefaultAnimationPlugin::PARAM_FRAME_NUM, 0.f, true );    // FIXME: integer parmeters should be used here
+
+
+
+    ////Create all models
+    //DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
+    //DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
+    //DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
+
+    //Create all parameters and evaluators
+    //SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
+    //SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
+
+    //ParamFloatPtr  paramFrameNum      = ParametersFactory::CreateParameterFloat( "frameNum", timeEvaluator );
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
-    psModel->RegisterAll( alphaEvaluator );
-    psModel->AddParameter( paramFrameNum );
+    //psModel->RegisterAll( alphaEvaluator );
+    //psModel->AddParameter( paramFrameNum );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
-    model->SetPixelShaderChannelModel( psModel );
+    //model->SetPixelShaderChannelModel( psModel );
 
     //Set default values of all parameters
-    alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
+    //alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
 
     //FIXME: integer parmeters should be used here
-    paramFrameNum->SetVal( 0.f, TimeType( 0.f ) );
+    //paramFrameNum->SetVal( 0.f, TimeType( 0.f ) );
 
     return model;
 }
@@ -193,6 +215,14 @@ void                                DefaultAnimationPlugin::Update              
 
     unsigned int frameNum = ( unsigned int )m_paramFrameNum->Evaluate(); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
     m_texturesData->SetAnimationFrame( 0, frameNum ); // TODO: A to chyba juz nie potrzebne bo Update na modelu zrobiony
+
+    if( ParameterChanged( PARAM_BLEND_ENABLE ) )
+    {
+        auto ctx = m_psc->GetRendererContext();
+        ctx->alphaCtx->blendEnabled = std::static_pointer_cast<ParamBool>( GetParameter( PARAM_BLEND_ENABLE ) )->Evaluate();
+
+        HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
+    }
 
     HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
     if( HelperVertexAttributesChannel::PropagateTopologyUpdate( m_vaChannel, m_prevPlugin ) )
