@@ -16,6 +16,14 @@
 
 namespace bv { namespace model {
 
+const std::string        DefaultGradientPlugin::PARAM_BLEND_ENABLE  = "blend enable";
+const std::string        DefaultGradientPlugin::PARAM_ALPHA         = "alpha";
+
+const std::string        DefaultGradientPlugin::PARAM_POINT1        = "point1";
+const std::string        DefaultGradientPlugin::PARAM_POINT2        = "point2";
+const std::string        DefaultGradientPlugin::PARAM_COLOR1        = "color1";
+const std::string        DefaultGradientPlugin::PARAM_COLOR2        = "color2";
+
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
@@ -37,41 +45,35 @@ IPluginPtr              DefaultGradientPluginDesc::CreatePlugin              ( c
 //
 DefaultPluginParamValModelPtr   DefaultGradientPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
+    ModelHelper helper( timeEvaluator );
+
     //Create all models
-    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
-    DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
+    auto model  = helper.GetModel();
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
 
     //Create all parameters and evaluators
     SimpleTransformEvaluatorPtr trTxEvaluator    = ParamValEvaluatorFactory::CreateSimpleTransformEvaluator( "txMat", timeEvaluator );
+    
+    helper.CreatePluginModel();
+    helper.AddSimpleParam( DefaultGradientPlugin::PARAM_BLEND_ENABLE, true, true, true );
 
-	SimpleVec4EvaluatorPtr		color1Evaluator	 = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator("color1", timeEvaluator );
-	SimpleVec4EvaluatorPtr		color2Evaluator	 = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator("color2", timeEvaluator );
+    helper.CreatePSModel();
+    helper.AddSimpleParam( DefaultGradientPlugin::PARAM_ALPHA, 1.f, true );
 
-	SimpleVec2EvaluatorPtr		point1Evaluator	 = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator("point1", timeEvaluator );
-	SimpleVec2EvaluatorPtr		point2Evaluator	 = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator("point2", timeEvaluator );
-
-    SimpleFloatEvaluatorPtr     alphaEvaluator   = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
+    helper.AddSimpleParam( DefaultGradientPlugin::PARAM_POINT1, glm::vec2( 0.0f, 1.0f ), true );
+    helper.AddSimpleParam( DefaultGradientPlugin::PARAM_POINT2, glm::vec2( 0.0f, 0.0f ), true );
+    helper.AddSimpleParam( DefaultGradientPlugin::PARAM_COLOR1, glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), true );
+    helper.AddSimpleParam( DefaultGradientPlugin::PARAM_COLOR2, glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), true );
 
     //Register all parameters and evaloators in models
     vsModel->RegisterAll( trTxEvaluator );
-	psModel->RegisterAll( color1Evaluator );
-	psModel->RegisterAll( color2Evaluator );
-	psModel->RegisterAll( point1Evaluator );
-	psModel->RegisterAll( point2Evaluator );
-    psModel->RegisterAll( alphaEvaluator );
 
     //Set models structure
     model->SetVertexShaderChannelModel( vsModel );
-    model->SetPixelShaderChannelModel( psModel );
 
     //Set default values of all parameters
     trTxEvaluator->Parameter()->Transform().InitializeDefaultSRT();
-	color1Evaluator->Parameter()->SetVal( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
-	color2Evaluator->Parameter()->SetVal( glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ), TimeType( 0.0 ) );
-	point1Evaluator->Parameter()->SetVal( glm::vec2( 0.0f, 1.0f ), TimeType( 0.0 ) );
-	point2Evaluator->Parameter()->SetVal( glm::vec2( 0.0f, 0.0f ), TimeType( 0.0 ) );
-    alphaEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
+
 
     return model;
 }
@@ -149,6 +151,14 @@ IVertexShaderChannelConstPtr        DefaultGradientPlugin::GetVertexShaderChanne
 void                                DefaultGradientPlugin::Update                      ( TimeType t )
 {
 	BasePlugin::Update( t );
+
+    if( ParameterChanged( PARAM_BLEND_ENABLE ) )
+    {
+        auto ctx = m_psc->GetRendererContext();
+        ctx->alphaCtx->blendEnabled = std::static_pointer_cast<ParamBool>( GetParameter( PARAM_BLEND_ENABLE ) )->Evaluate();
+
+        HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
+    }
 	
 	if( HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin ) )
 	{

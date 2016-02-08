@@ -15,6 +15,8 @@
 
 namespace bv { namespace model {
 
+
+
 // ***************************** DESCRIPTOR **********************************
 class DefaultGradientPluginDesc : public BasePluginDescriptor
 {
@@ -34,6 +36,15 @@ public:
 // ***************************** PLUGIN ********************************** 
 class DefaultGradientPlugin : public BasePlugin< IPlugin >
 {
+public:
+    static const std::string        PARAM_BLEND_ENABLE;
+    static const std::string        PARAM_ALPHA;
+    
+    static const std::string        PARAM_POINT1;
+    static const std::string        PARAM_POINT2;
+    static const std::string        PARAM_COLOR1;
+    static const std::string        PARAM_COLOR2;
+
 private:
 
     DefaultPixelShaderChannelPtr    m_psc;
