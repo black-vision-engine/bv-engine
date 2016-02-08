@@ -27,6 +27,11 @@ public:
 // ***************************** PLUGIN ********************************** 
 class DefaultColorPlugin : public BasePlugin< IPlugin >
 {
+public:
+    
+    static const std::string        PARAM_BLEND_ENABLE;
+    static const std::string        PARAM_COLOR;
+
 private:
 
     DefaultPixelShaderChannelPtr            m_pixelShaderChannel;

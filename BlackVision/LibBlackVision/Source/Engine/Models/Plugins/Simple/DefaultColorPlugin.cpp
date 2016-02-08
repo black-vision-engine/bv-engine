@@ -10,6 +10,9 @@
 
 namespace bv { namespace model {
 
+const std::string        DefaultColorPlugin::PARAM_BLEND_ENABLE   = "blend enable";
+const std::string        DefaultColorPlugin::PARAM_COLOR          = "color";
+
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
 // *******************************
@@ -30,12 +33,25 @@ IPluginPtr              DefaultColorPluginDesc::CreatePlugin                ( co
 //
 DefaultPluginParamValModelPtr   DefaultColorPluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    START_MODEL( timeEvaluator )
-        ADD_PS_EVAL_PARAM( "color", glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ) )
-        //START_COMPOSITE_PS_EVAL_PARAM( "color" )
-        //    ADD_PS_PARAM( "r", 0.f )
-        //END_COMPOSITE_PS_PARAM()
-    END_MODEL()
+    //START_MODEL( timeEvaluator )
+    //    ADD_PS_EVAL_PARAM( "color", glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ) )
+    //    //START_COMPOSITE_PS_EVAL_PARAM( "color" )
+    //    //    ADD_PS_PARAM( "r", 0.f )
+    //    //END_COMPOSITE_PS_PARAM()
+    //END_MODEL()
+
+    ModelHelper helper( timeEvaluator );
+
+    //Create all models
+    auto model  = helper.GetModel();
+
+    helper.CreatePluginModel();
+    helper.AddSimpleParam( DefaultColorPlugin::PARAM_BLEND_ENABLE, true, true, true );
+
+    helper.CreatePSModel();
+    helper.AddSimpleParam( DefaultColorPlugin::PARAM_COLOR, glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ), true );
+
+    return helper.GetModel();
 }
 
 // *******************************
@@ -92,6 +108,14 @@ IPixelShaderChannelPtr              DefaultColorPlugin::GetPixelShaderChannel   
 void                                DefaultColorPlugin::Update                      ( TimeType t )
 {
 	BasePlugin::Update( t );
+
+    if( ParameterChanged( PARAM_BLEND_ENABLE ) )
+    {
+        auto ctx = m_pixelShaderChannel->GetRendererContext();
+        ctx->alphaCtx->blendEnabled = std::static_pointer_cast<ParamBool>( GetParameter( PARAM_BLEND_ENABLE ) )->Evaluate();
+
+        HelperPixelShaderChannel::SetRendererContextUpdate( m_pixelShaderChannel );
+    }
 
     m_pixelShaderChannel->PostUpdate();
 }
