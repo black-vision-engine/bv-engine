@@ -17,6 +17,7 @@
 
 #include "Assets/VideoStream/VideoStreamAssetDescriptor.h"
 #include "Assets/VideoStream/VideoStreamAsset.h"
+#include "Assets//VideoStream/VideoStreamLoader.h"
 
 #include "Assets/AssetManager.h"
 

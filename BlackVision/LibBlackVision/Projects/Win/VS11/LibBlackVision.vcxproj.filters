@@ -1177,6 +1177,9 @@
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Key.cpp">
       <Filter>Mathematics\Interpolators</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamLoader.cpp">
+      <Filter>Assets\VideoStream</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2512,6 +2515,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Key.h">
       <Filter>Mathematics\Interpolators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamLoader.h">
+      <Filter>Assets\VideoStream</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

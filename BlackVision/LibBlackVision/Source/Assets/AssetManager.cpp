@@ -146,6 +146,7 @@ void AssetManager::RegisterBasicLoaders()
 	AssetManager::GetInstance().RegisterLoader( TextureAssetDesc::UID(),	std::make_shared< TextureLoader >() );
 	AssetManager::GetInstance().RegisterLoader( FontAssetDesc::UID(),		std::make_shared< FontLoader >() );
 	AssetManager::GetInstance().RegisterLoader( AnimationAssetDesc::UID(),	std::make_shared< AnimationLoader >() );
+    AssetManager::GetInstance().RegisterLoader( VideoStreamAssetDesc::UID(),	std::make_shared< VideoStreamLoader >() );
 }
 
 

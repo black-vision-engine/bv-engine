@@ -521,8 +521,8 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
         node = TestScenesFactory::WSerializationTest( pluginsManager, timeline );
     }
     else if( scene == "VIDEO_STREAM_TEST_SCENE" )
-   {
- 	node = SimpleNodesFactory::CreateVideoStreamDecoderRectNode( timeline, false );
+    {
+ 	    node = SimpleNodesFactory::CreateVideoStreamDecoderRectNode( timeline, false );
     }
     else if( scene == "REMOTE_EVENTS_TEST_SCENE" )
     {
