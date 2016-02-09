@@ -71,9 +71,6 @@ template<> CurveType String2T( const std::string & s, const CurveType& default )
 template< class TimeValueT, class ValueT >
 CompositeInterpolator< TimeValueT, ValueT >::CompositeInterpolator( float tolerance )
     : m_type( CurveType::CT_LINEAR )
-    //: m_type( CurveType::CT_COSINE_LIKE )
-    //: m_type( CurveType::CT_POINT )
-    //: m_type( CurveType::CT_BEZIER )
     , m_tolerance( tolerance )
     , m_preMethod( WrapMethod::clamp ), m_postMethod( WrapMethod::clamp )
 {

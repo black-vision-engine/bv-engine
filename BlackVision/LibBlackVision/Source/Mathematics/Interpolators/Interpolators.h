@@ -21,8 +21,10 @@ typedef CompositeInterpolator<TimeType, glm::vec2>  Vec2Interpolator;
 typedef CompositeInterpolator<TimeType, glm::vec3>  Vec3Interpolator;
 typedef CompositeInterpolator<TimeType, glm::vec4>  Vec4Interpolator;
 
-typedef BasicInterpolator<TimeType, std::string> StringInterpolator;
-typedef BasicInterpolator<TimeType, std::wstring> WStringInterpolator;
+//typedef BasicInterpolator<TimeType, std::string> StringInterpolator;
+//typedef BasicInterpolator<TimeType, std::wstring> WStringInterpolator;
+typedef CompositeInterpolator<TimeType, std::string> StringInterpolator;
+typedef CompositeInterpolator<TimeType, std::wstring> WStringInterpolator;
 
 
 class InterpolatorsHelper
