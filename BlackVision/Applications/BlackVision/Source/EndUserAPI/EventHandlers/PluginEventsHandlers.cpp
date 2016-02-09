@@ -169,7 +169,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
 
         result = true;
     }
-    else if( command == ParamKeyEvent::Command::QuantizeCurve )
+    else if( command == ParamKeyEvent::Command::SampleCurve )
     {
         auto params = Split( stringValue, "," );
         
@@ -183,16 +183,16 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
             {
                 JsonSerializeObject responseJSON;
 
-                responseJSON.EnterArray( "quants" );
+                responseJSON.EnterArray( "samples" );
 
                 for( UInt32 i = 0; i < steps; i++ )
                 {
                     TimeType t = start + ( end - start ) / steps * i;
-                    responseJSON.EnterChild( "quant" );
+                    responseJSON.EnterChild( "sample" );
                     auto val = EvaluateParamToString( param, t );
                     responseJSON.SetAttribute( "t", SerializationHelper::T2String( t ) );
                     responseJSON.SetAttribute( "val", SerializationHelper::T2String( val ) );
-                    responseJSON.ExitChild(); // quant
+                    responseJSON.ExitChild(); // sample
                 }
                 responseJSON.ExitChild(); // quants
 

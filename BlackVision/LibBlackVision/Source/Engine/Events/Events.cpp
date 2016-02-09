@@ -136,7 +136,7 @@ std::pair< ParamKeyEvent::Command, const std::wstring > ParameterCommandMapping[
     , std::make_pair( ParamKeyEvent::Command::SetInterpolatorPreWrapMethod, L"SetInterpolatorPreWrapMethod" )
     , std::make_pair( ParamKeyEvent::Command::SetInterpolatorPostWrapMethod, L"SetInterpolatorPostWrapMethod" )
     , std::make_pair( ParamKeyEvent::Command::AssignTimeline, L"AssignTimeline" )
-    , std::make_pair( ParamKeyEvent::Command::QuantizeCurve, L"QuantizeCurve" )
+    , std::make_pair( ParamKeyEvent::Command::SampleCurve, L"SampleCurve" )
     , std::make_pair( ParamKeyEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
