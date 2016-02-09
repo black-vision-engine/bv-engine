@@ -599,6 +599,12 @@ const std::vector< IEvaluator< TimeValueT, ValueT >* > &                  Compos
 template< class TimeValueT, class ValueT >
 void                                                CompositeInterpolator< TimeValueT, ValueT >::SetGlobalCurveType( CurveType type )
 {
+    if( keys.size() == 0 )
+    {
+        assert( false && "Interpolators with no keys are evil" );
+        return;
+    }
+
     interpolators.clear();
     auto prevKey = keys.begin();
     auto nextKey = prevKey + 1;

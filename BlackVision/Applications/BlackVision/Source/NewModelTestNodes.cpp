@@ -1345,8 +1345,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::ITimeEva
 
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "4float.exr" );
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "4float.exr", MipMapFilterType::BILINEAR );
-	//success = model::LoadTexture( node->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );
-	success = model::LoadTexture( node->GetPlugin( "texture" ), "Desert.jpg", MipMapFilterType::BILINEAR );
+	success = model::LoadTexture( node->GetPlugin( "texture" ), "textures/sand.jpg", MipMapFilterType::BILINEAR );
+	//success = model::LoadTexture( node->GetPlugin( "texture" ), "Desert.jpg", MipMapFilterType::BILINEAR );
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "64bit.png" );
 
 	//success = model::LoadTexture( node->GetPlugin( "texture" ), "sand.jpg" );
