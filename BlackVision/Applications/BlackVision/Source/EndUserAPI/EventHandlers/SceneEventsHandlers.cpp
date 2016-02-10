@@ -245,13 +245,13 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
     auto pm = ProjectManager::GetInstance();
 
-    std::string& request = projectEvent->Request;
+    IDeserializer& request = *projectEvent->Request;
     auto command = projectEvent->ProjectCommand;
     int senderID = projectEvent->SocketID;
 
     if( command == ProjectEvent::Command::NewProject )
     {
-        auto name = GetRequestParamValue( request )[ "projectName" ].asString();
+        auto name = request.GetAttribute( "projectName" );
 
         pm->AddNewProject( name );
 
@@ -259,7 +259,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::SetCurrentProject )
     {
-        auto projName = GetRequestParamValue( request )[ "projectName" ].asString();
+        auto projName = request.GetAttribute( "projectName" );
 
         pm->SetCurrentProject( projName );
 
@@ -267,7 +267,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::LoadProject )
     {
-        auto projName = std::string( request.begin(), request.end() );
+        auto projName = request.GetAttribute( "projectName" );
 
         auto projectScenesNames = pm->ListScenesNames( projName, "", true );
 
@@ -286,10 +286,10 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::CopyAsset )
     {
-        auto categoryName = GetRequestParamValue( request )[ "category" ].asString();
+        auto categoryName = request.GetAttribute( "category" );
 
-        auto srcAssetName = GetRequestParamValue( request )[ "srcAssetName" ].asString();
-        auto dstAssetName = GetRequestParamValue( request )[ "dstAssetName" ].asString();
+        auto srcAssetName = request.GetAttribute( "srcAssetName" );
+        auto dstAssetName = request.GetAttribute( "dstAssetName" );
 
         pm->CopyAsset( "", categoryName, srcAssetName, "", dstAssetName );
 
@@ -297,10 +297,10 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::MoveAsset )
     {
-        auto categoryName = GetRequestParamValue( request )[ "category" ].asString();
+        auto categoryName = request.GetAttribute( "category" );
 
-        auto srcAssetName = GetRequestParamValue( request )[ "srcAssetName" ].asString();
-        auto dstAssetName = GetRequestParamValue( request )[ "dstAssetName" ].asString();
+        auto srcAssetName = request.GetAttribute( "srcAssetName" );
+        auto dstAssetName = request.GetAttribute( "dstAssetName" );
 
         pm->MoveAsset( "", categoryName, srcAssetName, "", dstAssetName );
 
@@ -308,9 +308,9 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::RemoveAsset )
     {
-        auto categoryName = GetRequestParamValue( request )[ "category" ].asString();
+        auto categoryName = request.GetAttribute( "category" );
 
-        auto assetName = GetRequestParamValue( request )[ "assetName" ].asString();
+        auto assetName = request.GetAttribute( "assetName" );
 
         pm->RemoveAsset( "", categoryName, assetName );
 
@@ -318,11 +318,11 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::ImportAsset )
     {
-        auto categoryName = GetRequestParamValue( request )[ "category" ].asString();
+        auto categoryName = request.GetAttribute( "category" );
 
-        auto assetFilePath = GetRequestParamValue( request )[ "assetFilePath" ].asString();
+        auto assetFilePath = request.GetAttribute( "assetFilePath" );
 
-        auto dstAssetPath = GetRequestParamValue( request )[ "dstAssetPath" ].asString();
+        auto dstAssetPath = request.GetAttribute( "dstAssetPath" );
 
         pm->ImportAssetFromFile( "", categoryName, dstAssetPath, assetFilePath );
 
@@ -330,11 +330,11 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::SaveScene )
     {
-        auto sceneName = GetRequestParamValue( request )[ "sceneName" ].asString();
+        auto sceneName = request.GetAttribute( "sceneName" );
 
-        auto saveTo = GetRequestParamValue( request )[ "saveTo" ].asString();
+        auto saveTo = request.GetAttribute( "saveTo" );
 
-        auto forceSaveStr = GetRequestParamValue( request )[ "forceSave" ].asString();
+        auto forceSaveStr = request.GetAttribute( "forceSave" );
 
         bool forceSave = false;
 
@@ -374,7 +374,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::LoadScene )
     {
-        auto sceneName = GetRequestParamValue( request )[ "sceneName" ].asString();
+        auto sceneName = request.GetAttribute( "sceneName" );
 
         auto scene = pm->LoadScene( "", sceneName );
 
@@ -390,8 +390,8 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::RemoveScene )
     {
-        auto sceneName = GetRequestParamValue( request )[ "sceneName" ].asString();
-        auto projectName = GetRequestParamValue( request )[ "projectName" ].asString();
+        auto sceneName = request.GetAttribute( "sceneName" );
+        auto projectName = request.GetAttribute( "projectName" );
 
         pm->RemoveScene( projectName, sceneName );
 
@@ -399,8 +399,8 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::CopyScene )
     {
-        auto sceneName = GetRequestParamValue( request )[ "sceneName" ].asString();
-        auto destSceneName = GetRequestParamValue( request )[ "destToSceneName" ].asString();
+        auto sceneName = request.GetAttribute( "sceneName" );
+        auto destSceneName = request.GetAttribute( "destToSceneName" );
 
         pm->CopyScene( "", sceneName, "", destSceneName );
 
@@ -408,8 +408,8 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::MoveScene )
     {
-        auto sceneName = GetRequestParamValue( request )[ "sceneName" ].asString();
-        auto destSceneName = GetRequestParamValue( request )[ "destSceneName" ].asString();
+        auto sceneName = request.GetAttribute( "sceneName" );
+        auto destSceneName = request.GetAttribute( "destSceneName" );
 
         pm->MoveScene( "", sceneName, "", destSceneName );
 
@@ -429,9 +429,9 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::AddExistingSceneToProject )
     {
-        auto inSceneName = GetRequestParamValue( request )[ "inSceneName" ].asString();
-        auto projectName = GetRequestParamValue( request )[ "projectName" ].asString();
-        auto outSceneName = GetRequestParamValue( request )[ "outSceneName" ].asString();
+        auto inSceneName = request.GetAttribute( "inSceneName" );
+        auto projectName = request.GetAttribute( "projectName" );
+        auto outSceneName = request.GetAttribute( "outSceneName" );
 
         pm->CopyScene( "", inSceneName, projectName, outSceneName );
 
@@ -439,8 +439,8 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::CreateSceneInProject )
     {
-        auto inSceneName = GetRequestParamValue( request )[ "inSceneName" ].asString();
-        auto projectName = GetRequestParamValue( request )[ "projectName" ].asString();
+        auto inSceneName = request.GetAttribute( "inSceneName" );
+        auto projectName = request.GetAttribute( "projectName" );
 
         auto scene = SceneModel::Create( ( Path( projectName ) / Path( inSceneName ) ).Str(), nullptr );
 
@@ -450,10 +450,10 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::SavePreset )
     {
-        auto destProjectName = GetRequestParamValue( request )[ "DestProjectName" ].asString();
-        auto destPath = GetRequestParamValue( request )[ "DestPath" ].asString();
-        auto sceneName = GetRequestParamValue( request )[ "SceneName" ].asString();
-        auto nodePath = GetRequestParamValue( request )[ "NodePath" ].asString();
+        auto destProjectName = request.GetAttribute( "DestProjectName" );
+        auto destPath = request.GetAttribute( "DestPath" );
+        auto sceneName = request.GetAttribute( "SceneName" );
+        auto nodePath = request.GetAttribute( "NodePath" );
 
         auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
@@ -467,10 +467,10 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::LoadPreset )
     {
-        auto projectName = GetRequestParamValue( request )[ "ProjectName" ].asString();
-        auto path = GetRequestParamValue( request )[ "Path" ].asString();
-        auto sceneName = GetRequestParamValue( request )[ "SceneName" ].asString();
-        auto nodePath = GetRequestParamValue( request )[ "NodePath" ].asString();
+        auto projectName = request.GetAttribute( "ProjectName" );
+        auto path = request.GetAttribute( "Path" );
+        auto sceneName = request.GetAttribute( "SceneName" );
+        auto nodePath = request.GetAttribute( "NodePath" );
 
         auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
@@ -502,11 +502,11 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::CreateFolder )
     {
-        auto categoryName = GetRequestParamValue( request )[ "categoryName" ].asString();
-        auto path = GetRequestParamValue( request )[ "path" ].asString();
+        auto categoryName = request.GetAttribute( "categoryName" );
+        auto path = request.GetAttribute( "path" );
 
         auto recursive = false;
-        auto recStr = GetRequestParamValue( request )[ "recursive" ].asString();
+        auto recStr = request.GetAttribute( "recursive" );
         if( recStr == "true" )
         {
             recursive = true;
@@ -518,8 +518,8 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     }
     else if( command == ProjectEvent::Command::DeleteFolder )
     {
-        auto categoryName = GetRequestParamValue( request )[ "categoryName" ].asString();
-        auto path = GetRequestParamValue( request )[ "path" ].asString();
+        auto categoryName = request.GetAttribute( "categoryName" );
+        auto path = request.GetAttribute( "path" );
 
         auto success = pm->RemoveAssetDir( categoryName, path );
 

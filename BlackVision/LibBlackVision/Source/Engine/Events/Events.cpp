@@ -1172,7 +1172,7 @@ EventType           PluginStructureEvent::GetEventType() const
 void                ProjectEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
-    ser.SetAttribute( SerializationHelper::REQUEST_STRING, Request );
+    ser.SetAttribute( SerializationHelper::REQUEST_STRING, "" );
     ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( ProjectCommand ) );
 }
 
@@ -1183,9 +1183,10 @@ IEventPtr                ProjectEvent::Create          ( IDeserializer& deser )
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
     {
         ProjectEventPtr newEvent            = std::make_shared<ProjectEvent>();
-        newEvent->Request                   = deser.GetAttribute( SerializationHelper::REQUEST_STRING );
         newEvent->ProjectCommand            = SerializationHelper::String2T<ProjectEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), ProjectEvent::Command::Fail );
         
+        newEvent->Request                   = deser.DetachBranch( SerializationHelper::REQUEST_STRING );
+
         return newEvent;
     }
     return nullptr;    

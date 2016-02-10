@@ -32,6 +32,8 @@ public:
 
     /**@brief Pop.*/
     virtual bool                ExitChild           () const = 0;
+
+    virtual IDeserializer*      DetachBranch        ( const std::string & name ) = 0;
 };
 
 

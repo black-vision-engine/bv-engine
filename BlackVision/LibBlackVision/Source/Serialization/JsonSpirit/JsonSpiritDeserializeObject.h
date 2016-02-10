@@ -39,6 +39,8 @@ public:
 
     bool                ExitChild           () const override;
 
+    IDeserializer*      DetachBranch        ( const std::string & /*name*/ ) override { return nullptr; }
+
 private:
     json_spirit::wObject::value_type::Value_type*   FindValue           ( const json_spirit::wObject& obj, const std::wstring& name ) const;
     bool                                            OnRootInit          ();

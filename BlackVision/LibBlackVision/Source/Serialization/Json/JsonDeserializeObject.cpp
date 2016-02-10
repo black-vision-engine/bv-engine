@@ -21,6 +21,15 @@ JsonDeserializeObject::JsonDeserializeObject()
 {
     m_currentNode = nullptr;
 }
+
+JsonDeserializeObject::JsonDeserializeObject       ( Json::Value && initValue )
+    :   m_root( initValue ),
+        m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
+{
+    m_currentNode = nullptr;
+    OnRootInit();
+}
+
 JsonDeserializeObject::~JsonDeserializeObject()
 {}
 
@@ -174,6 +183,22 @@ bool JsonDeserializeObject::NextChild           () const
         }
     }
     return false;
+}
+
+// ***********************
+//
+IDeserializer*      JsonDeserializeObject::DetachBranch        ( const std::string & name )
+{
+    assert( m_currentNode->isObject() );
+
+    auto& branch = (*m_currentNode)[ name ];
+    if( branch.isNull() )
+        return nullptr;
+
+    Json::Value nullValue( Json::nullValue );
+    branch.swap( nullValue );
+
+    return new JsonDeserializeObject( std::move( nullValue ) );
 }
 
 std::wstring        JsonDeserializeObject::GetAttribute        ( const std::wstring& /*name*/ ) const

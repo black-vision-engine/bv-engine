@@ -486,9 +486,10 @@ private:
     static std::string          m_sEventName;
 public:
     ProjectEvent::Command           ProjectCommand;
-    std::string                     Request;
+    IDeserializer*                  Request;
 public:
-    explicit                        ProjectEvent   () {}
+    explicit                        ProjectEvent   () { Request = nullptr; }
+                                    ~ProjectEvent   () { delete Request; }
 
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );
