@@ -20,7 +20,7 @@ public:
 				~AssetHandlers			();
 
     void        CacheHandler			( bv::IEventPtr evt );
-
+    void        LoadAsset               ( bv::IEventPtr eventPtr );
 };
 
 } //bv

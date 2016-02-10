@@ -843,8 +843,10 @@ void                LoadAssetEvent::Serialize            ( ISerializer& ser ) co
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
     ser.SetAttribute( SerializationHelper::NODE_NAME_STRING, NodeName );
     ser.SetAttribute( SerializationHelper::PLUGIN_NAME_STRING, PluginName );
-    ser.SetAttribute( SerializationHelper::ASSET_DATA_STRING, AssetData );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
+
+    ser.EnterChild( SerializationHelper::ASSET_DATA_STRING );
+    ser.ExitChild();
 }
 
 // *************************************
@@ -857,7 +859,7 @@ IEventPtr                LoadAssetEvent::Create          ( IDeserializer& deser 
         newEvent->PluginName        = deser.GetAttribute( SerializationHelper::PLUGIN_NAME_STRING );
         newEvent->NodeName          = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
         newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
-        newEvent->AssetData         = deser.GetAttribute( SerializationHelper::ASSET_DATA_STRING );
+        newEvent->AssetData         = deser.DetachBranch( SerializationHelper::ASSET_DATA_STRING );
         return newEvent;
     }
     return nullptr;
@@ -1172,8 +1174,10 @@ EventType           PluginStructureEvent::GetEventType() const
 void                ProjectEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
-    ser.SetAttribute( SerializationHelper::REQUEST_STRING, "" );
     ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( ProjectCommand ) );
+
+    ser.EnterChild( SerializationHelper::REQUEST_STRING );
+    ser.ExitChild();
 }
 
 // *************************************
@@ -1269,7 +1273,9 @@ void                InfoEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
     ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( InfoCommand ) );
-    ser.SetAttribute( SerializationHelper::REQUEST_STRING, "" );
+
+    ser.EnterChild( SerializationHelper::REQUEST_STRING );
+    ser.ExitChild();
 }
 
 // *************************************
@@ -1447,8 +1453,10 @@ void                NodeLogicEvent::Serialize            ( ISerializer& ser ) co
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
     ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( WidgetCommand ) );
     ser.SetAttribute( SerializationHelper::NODE_NAME_STRING, NodeName );
-    ser.SetAttribute( SerializationHelper::WIDGET_ACTION_STRING, Action );
     ser.SetAttribute( SerializationHelper::SCENE_NAME_STRING, SceneName );
+    
+    ser.EnterChild( SerializationHelper::WIDGET_ACTION_STRING );
+    ser.ExitChild();
 }
 
 // *************************************
@@ -1461,7 +1469,7 @@ IEventPtr                NodeLogicEvent::Create          ( IDeserializer& deser 
         newEvent->WidgetCommand     = SerializationHelper::String2T<NodeLogicEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), NodeLogicEvent::Command::Fail );
         newEvent->NodeName          = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
         newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
-        newEvent->Action            = deser.GetAttribute( SerializationHelper::WIDGET_ACTION_STRING );
+        newEvent->Action            = deser.DetachBranch( SerializationHelper::WIDGET_ACTION_STRING );
 
         return newEvent;
     }

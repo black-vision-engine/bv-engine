@@ -180,7 +180,7 @@ public:
 
 /* ASSETS */
 
-	bool					LoadAsset					( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, const std::string & serializedAssetData );
+    bool					LoadAsset					( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, IDeserializer & serializedAssetData );
 	bool					LoadAsset					( model::IPluginPtr plugin, AssetDescConstPtr assetDesc );
 
 private:

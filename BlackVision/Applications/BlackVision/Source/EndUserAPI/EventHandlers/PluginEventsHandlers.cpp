@@ -366,29 +366,6 @@ bool PluginEventsHandlers::AddParameter        ( std::shared_ptr< model::IParame
     return false;
 }
 
-// *********************************
-//
-void PluginEventsHandlers::LoadAsset( IEventPtr eventPtr )
-{
-    if( eventPtr->GetEventType() == LoadAssetEvent::Type() )
-    {
-        LoadAssetEventPtr eventLoadAsset = std::static_pointer_cast<LoadAssetEvent>( eventPtr );
-        
-        std::string & nodeName = eventLoadAsset->NodeName;
-        std::string & pluginName = eventLoadAsset->PluginName;
-        std::string & sceneName = eventLoadAsset->SceneName;
-        std::string & assetData = eventLoadAsset->AssetData;
-
-        bool result = m_projectEditor->LoadAsset( sceneName, nodeName, pluginName, assetData );
-
-        if( result )
-            LOG_MESSAGE( SeverityLevel::info ) << "Asset loaded succesfully. Node: [" + eventLoadAsset->NodeName + "] plugin [" + eventLoadAsset->PluginName + "]";
-        else
-            LOG_MESSAGE( SeverityLevel::error ) << "Failed to load asset. Node [" + eventLoadAsset->NodeName + "] plugin [" + eventLoadAsset->PluginName + "]\n" << assetData;
-
-        SendSimpleResponse( LoadAssetEvent::Command::LoadAsset, eventLoadAsset->EventID, eventLoadAsset->SocketID, result );
-    }
-}
 
 // ***********************
 //

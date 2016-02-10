@@ -184,7 +184,7 @@ public:
     std::string                     NodeName;
     std::string                     SceneName;
     std::string                     PluginName;
-    std::string                     AssetData;
+    IDeserializer *                 AssetData;
 
     int                             SockID;
 public:
@@ -715,10 +715,11 @@ public:
     Command                     WidgetCommand;
     std::string                 NodeName;
     std::string                 SceneName;
-	std::string                 Action;
+    IDeserializer *             Action;
 
 public:
-    explicit                        NodeLogicEvent			(){};
+    explicit                        NodeLogicEvent			(){ Action = nullptr; }
+                                    ~NodeLogicEvent			(){ delete Action; }
 
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );

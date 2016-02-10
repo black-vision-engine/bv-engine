@@ -23,8 +23,6 @@ public:
                             ~PluginEventsHandlers   ();
 
     void                    ParamHandler        ( bv::IEventPtr eventPtr );
-
-    void                    LoadAsset           ( bv::IEventPtr eventPtr );
     void                    TimerHandler        ( bv::IEventPtr eventPtr );
 
 private:

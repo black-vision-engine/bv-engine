@@ -64,7 +64,7 @@ void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic* appLogic )
     m_timelineHandlers  = new TimelineHandlers( appLogic );
     m_nodeLogicHandlers = new NodeLogicHandlers( appLogic );
 
-    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_pluginEvents, &PluginEventsHandlers::LoadAsset ), LoadAssetEvent::Type() );
+    
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_pluginEvents, &PluginEventsHandlers::ParamHandler ), ParamKeyEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_pluginEvents, &PluginEventsHandlers::TimerHandler ), TimerEvent::Type() );
 
@@ -75,7 +75,10 @@ void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic* appLogic )
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_queryEvents, &QueryHandlers::Info ), InfoEvent::Type() );
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_engineStateEvents, &EngineStateHandlers::RenderingModeEvent ), RenderingModeEvent::Type() );
+
 	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_assetEvents, &AssetHandlers::CacheHandler ), AssetEvent::Type() );
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_assetEvents, &AssetHandlers::LoadAsset ), LoadAssetEvent::Type() );
+
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_globalEffectEvents, &GlobalEffectHandler::GlobalEffectEventHandler ), GlobalEffectEvent::Type() );
 
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_timelineHandlers, &TimelineHandlers::TimelineKeyframe ), TimelineKeyframeEvent::Type() );
