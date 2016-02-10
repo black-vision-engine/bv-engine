@@ -36,7 +36,7 @@ RemoteController::RemoteController()
 // Returns nullptr if event is unregistered and sends message to log.
 IEventPtr RemoteController::DeserializeEvent         ( IDeserializer& deser )
 {
-    std::wstring command = deser.GetAttribute( L"Event" );
+    std::string command = deser.GetAttribute( "Event" );
     auto iter = m_eventsConverter.find( command );
     if( iter != m_eventsConverter.end() )
     {
@@ -54,8 +54,7 @@ IEventPtr RemoteController::DeserializeEvent         ( IDeserializer& deser )
 // Command name and event name are to separate things. Command names
 void RemoteController::RegisterEvent       ( const std::string& eventName, EventCreatorDelegate eventCreator )
 {
-    std::wstring commandName = std::wstring( eventName.begin(), eventName.end() );
-    m_eventsConverter[ commandName ] = eventCreator;
+    m_eventsConverter[ eventName ] = eventCreator;
 }
 
 

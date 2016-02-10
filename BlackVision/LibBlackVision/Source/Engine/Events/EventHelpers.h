@@ -81,7 +81,7 @@ namespace bv
 namespace SerializationHelper
 {
     static const std::wstring EMPTY_WSTRING = L"";
-    static const std::string EMPTY_STRING = "";
+    //static const char* EMPTY_STRING = "";
 
     // ***********************
     //

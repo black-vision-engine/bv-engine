@@ -1,7 +1,7 @@
 #include "JsonCommandsListener.h"
 
-#include "Serialization/JsonSpirit/JsonSpiritDeserializeObject.h"
-#include "Serialization/JsonSpirit/JsonSpiritSerializeObject.h"
+#include "Serialization/Json/JsonDeserializeObject.h"
+#include "Serialization/Json/JsonSerializeObject.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Engine/Events/EventHelpers.h"
 
@@ -32,43 +32,17 @@ JsonCommandsListener::~JsonCommandsListener()
 //
 /// @param[in] eventString String to parse.
 /// @param[in] socketID Event sender identifier.
-void                JsonCommandsListener::QueueEvent          ( const std::wstring& eventString, int socketID )
+void                JsonCommandsListener::QueueEvent          ( const std::string& eventString, int socketID )
 {
-    JsonSpiritDeserializeObject deser;
+    JsonDeserializeObject deser;
 
-    if( !deser.LoadWString( eventString ) )
+    if( !deser.Load( eventString ) )
     {
         LOG_MESSAGE( SeverityLevel::error ) << "Remote controller can't parse command: \n" + toString( eventString );
         return;
     }
 
     TryParseRegularEvent( deser, socketID );
-    TryParseEventsGroup( deser, socketID );
-}
-
-// ***********************
-//
-void                JsonCommandsListener::TryParseEventsGroup ( IDeserializer & deser, int socketID )
-{
-    if( deser.EnterChild( L"EventsGroups" ) )
-    {
-        unsigned int frameTrigger = std::stoul( deser.GetAttribute( L"FrameTrigger" ) );
-
-        if( deser.EnterChild( L"Events" ) )
-        {
-            do
-            {
-                RemoteEventPtr newEvent = std::static_pointer_cast< RemoteEvent >( DeserializeEvent( deser ) );
-                newEvent->SocketID = socketID;
-                newEvent->EventID = SerializationHelper::WString2T< int >( deser.GetAttribute( L"EventID" ), std::numeric_limits< int >::max() );
-
-                if( newEvent != nullptr )
-                    AddTriggeredEvent( frameTrigger, newEvent );
-            }
-            while( deser.NextChild() );
-            deser.ExitChild();
-        }
-    }
 }
 
 // ***********************
@@ -83,7 +57,10 @@ void                JsonCommandsListener::AddTriggeredEvent   ( unsigned int req
 //
 void                JsonCommandsListener::TryParseRegularEvent( IDeserializer & deser, int socketID )
 {
-    if( deser.EnterChild( L"Events" ) )
+    if( !deser.EnterChild( "Events" ) )
+        return;
+
+    if( deser.EnterChild( "Event" ) )
     {
         do
         {
@@ -92,14 +69,18 @@ void                JsonCommandsListener::TryParseRegularEvent( IDeserializer & 
             {
                 RemoteEventPtr newEventBase = std::static_pointer_cast< RemoteEvent >( newEvent );
                 newEventBase->SocketID = socketID;
-                newEventBase->EventID = SerializationHelper::WString2T< int >( deser.GetAttribute( L"EventID" ), std::numeric_limits< int >::max() );
+                newEventBase->EventID = SerializationHelper::String2T( deser.GetAttribute( "EventID" ), std::numeric_limits< int >::max() );
 
                 GetDefaultEventManager().ConcurrentQueueEvent( newEventBase );
             }
-        }
-        while( deser.NextChild() );
-        deser.ExitChild();
+
+        } while( deser.NextChild() );
+
+        deser.ExitChild();  // Event
     }
+        
+    deser.ExitChild();  // Events
+
 }
 
 // ***********************
@@ -112,7 +93,7 @@ void        JsonCommandsListener::SendResponse           ( const IEventPtr evt )
 
     ResponseMsg responseMessage;
     responseMessage.socketID = response->SocketID;
-    responseMessage.message = response->Response;   //std::move( response->Response );      // Maybe we could move this string... But we should guarantee only one listener lsitens to this event.
+    responseMessage.message = response->Response;   //std::move( response->Response );      // Maybe we could move this string... But we should guarantee only one listener listens to this event.
 
     m_eventServer->SendResponse( responseMessage );
 }

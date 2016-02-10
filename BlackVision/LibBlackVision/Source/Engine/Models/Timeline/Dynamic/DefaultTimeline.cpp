@@ -33,9 +33,9 @@ std::pair< TimelineWrapMethod, const char* > TWM2S[] = {
     std::make_pair( TimelineWrapMethod::TWM_REPEAT, "repeat" ),
     std::make_pair( TimelineWrapMethod::TWM_CLAMP, "" ) };
 
-template<> std::string T2String( const TimelineWrapMethod& twm ) { return Enum2String( TWM2S, twm ); }
-
-template<> Expected< TimelineWrapMethod > String2T( const std::string & s ) { return String2Enum( TWM2S, s ); }
+template<> std::string                      T2String    ( const TimelineWrapMethod& twm )                               { return Enum2String( TWM2S, twm ); }
+template<> TimelineWrapMethod               String2T    ( const std::string& s, const TimelineWrapMethod& defaultVal )  { return String2Enum( TWM2S, s, defaultVal ); }
+template<> Expected< TimelineWrapMethod >   String2T    ( const std::string & s )                                       { return String2Enum( TWM2S, s ); }
 
 } // SerializationHelper
 
@@ -551,7 +551,7 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
     ser.SetAttribute( "Time", toString( this->GetLocalTime() ) );
 
     ResponseEventPtr msg = std::make_shared<ResponseEvent>();
-    msg->Response = toWString( ser.GetString() );
+    msg->Response = ser.GetString();
     msg->SocketID = SEND_BROADCAST_EVENT;
     GetDefaultEventManager().QueueResponse( msg );
 }

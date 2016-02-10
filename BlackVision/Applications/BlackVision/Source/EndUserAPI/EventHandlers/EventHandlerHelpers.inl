@@ -56,7 +56,7 @@ inline void             SendResponse                ( JsonSerializeObject & ser,
     if( eventID != NO_RESPONSE_EVENT_ID )
     {
         ResponseEventPtr msg = std::make_shared< ResponseEvent >();
-        msg->Response = toWString( ser.GetString() );
+        msg->Response = ser.GetString();
         msg->SocketID = socketID;
         GetDefaultEventManager().QueueResponse( msg );
     }
@@ -67,8 +67,8 @@ inline void             SendResponse                ( JsonSerializeObject & ser,
 template< typename CommandType >
 inline void             PrepareResponseTemplate     ( ISerializer & ser, CommandType commandType, Int32 eventID, bool success )
 {
-    ser.SetAttribute( EVENT_ID_TYPE_STRING, toString( eventID ) );
-    ser.SetAttribute( COMMAND_TYPE_STRING, toString( SerializationHelper::T2WString( commandType ) ) );
+    ser.SetAttribute( EVENT_ID_TYPE_STRING, SerializationHelper::T2String( eventID ) );
+    ser.SetAttribute( COMMAND_TYPE_STRING, SerializationHelper::T2String( commandType ) );
     if( success )
     {
         ser.SetAttribute( COMMAND_SUCCESS_STRING, TRUE_STRING );

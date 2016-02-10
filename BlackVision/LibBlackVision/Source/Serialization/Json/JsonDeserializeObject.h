@@ -29,8 +29,8 @@ public:
     virtual DeserializeContext* GetDeserializeContext() const;
 
     bool                        LoadFile            ( const std::string& fileName );
-	void						Load                ( const std::string& jsonString );
-	void						Load                ( std::istream& stream );
+	bool						Load                ( const std::string& jsonString );
+	bool						Load                ( std::istream& stream );
 
     std::string                 GetAttribute        ( const std::string& name ) const override;
     std::string                 GetParentAttribute  ( const std::string& parentName, const std::string& attName ) const override;

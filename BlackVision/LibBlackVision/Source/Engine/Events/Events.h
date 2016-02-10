@@ -4,6 +4,7 @@
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 #include "Engine/Models/Interfaces/IModelNode.h"
 #include "Engine/Events/EventHelpers.h"
+#include "Serialization/SerializationHelper.inl"
 
 #include  "Mathematics/glm_inc.h"
 
@@ -201,8 +202,8 @@ public:
 };
 
 
-template<> LoadAssetEvent::Command  SerializationHelper::WString2T      ( const std::wstring& s, const LoadAssetEvent::Command& defaultVal );
-template<> const std::wstring&      SerializationHelper::T2WString      ( LoadAssetEvent::Command t );
+template<> LoadAssetEvent::Command  SerializationHelper::String2T      ( const std::string& s, const LoadAssetEvent::Command& defaultVal );
+template<> std::string              SerializationHelper::T2String      ( const LoadAssetEvent::Command & t );
 
 DEFINE_PTR_TYPE( LoadAssetEvent )
 
@@ -241,7 +242,7 @@ public:
     std::string                     ParamName;
     std::string                     ParamSubName;
     std::string                     SceneName;
-    std::wstring                    Value;
+    std::string                    Value;
 
     float                           Time;
     ParamKeyEvent::Command          ParamCommand;
@@ -260,11 +261,11 @@ public:
     static std::string&             Name                ();
 };
 
-template<> ParamKeyEvent::Command       SerializationHelper::WString2T      ( const std::wstring& s, const ParamKeyEvent::Command& defaultVal );
-template<> const std::wstring&          SerializationHelper::T2WString      ( ParamKeyEvent::Command t );
+template<> ParamKeyEvent::Command       SerializationHelper::String2T      ( const std::string& s, const ParamKeyEvent::Command& defaultVal );
+template<> std::string                  SerializationHelper::T2String      ( const ParamKeyEvent::Command & t );
 
-template<> ParamKeyEvent::TargetType    SerializationHelper::WString2T      ( const std::wstring& s, const ParamKeyEvent::TargetType& defaultVal );
-template<> const std::wstring&          SerializationHelper::T2WString      ( ParamKeyEvent::TargetType t );
+template<> ParamKeyEvent::TargetType    SerializationHelper::String2T      ( const std::string& s, const ParamKeyEvent::TargetType& defaultVal );
+template<> std::string                  SerializationHelper::T2String      ( const ParamKeyEvent::TargetType & t );
 
 DEFINE_PTR_TYPE( ParamKeyEvent )
 
@@ -303,8 +304,8 @@ public:
     static std::string&             Name                ();
 };
 
-template<> AssetEvent::Command SerializationHelper::WString2T   ( const std::wstring& s, const AssetEvent::Command& defaultVal );
-template<> const std::wstring& SerializationHelper::T2WString   ( AssetEvent::Command t );
+template<> AssetEvent::Command      SerializationHelper::String2T   ( const std::string& s, const AssetEvent::Command& defaultVal );
+template<> std::string              SerializationHelper::T2String   ( const AssetEvent::Command & t );
 
 DEFINE_PTR_TYPE( AssetEvent )
 
@@ -348,8 +349,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> SceneEvent::Command SerializationHelper::WString2T ( const std::wstring& s, const SceneEvent::Command& defaultVal );
-template<> const std::wstring& SerializationHelper::T2WString    ( SceneEvent::Command t );
+template<> SceneEvent::Command      SerializationHelper::String2T   ( const std::string& s, const SceneEvent::Command& defaultVal );
+template<> std::string              SerializationHelper::T2String   ( const SceneEvent::Command & t );
 
 DEFINE_PTR_TYPE( SceneEvent )
 
@@ -396,8 +397,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> NodeStructureEvent::Command      SerializationHelper::WString2T      ( const std::wstring& s, const NodeStructureEvent::Command& defaultVal );
-template<> const std::wstring&              SerializationHelper::T2WString      ( NodeStructureEvent::Command t );
+template<> NodeStructureEvent::Command      SerializationHelper::String2T      ( const std::string& s, const NodeStructureEvent::Command& defaultVal );
+template<> std::string                      SerializationHelper::T2String      ( const NodeStructureEvent::Command & t );
 
 DEFINE_PTR_TYPE( NodeStructureEvent )
 
@@ -441,8 +442,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> PluginStructureEvent::Command    SerializationHelper::WString2T( const std::wstring& s, const PluginStructureEvent::Command& defaultVal );
-template<> const std::wstring&              SerializationHelper::T2WString( PluginStructureEvent::Command t );
+template<> PluginStructureEvent::Command    SerializationHelper::String2T( const std::string& s, const PluginStructureEvent::Command& defaultVal );
+template<> std::string                      SerializationHelper::T2String( const PluginStructureEvent::Command & t );
 
 DEFINE_PTR_TYPE( PluginStructureEvent )
 
@@ -500,8 +501,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> ProjectEvent::Command    SerializationHelper::WString2T  ( const std::wstring& s, const ProjectEvent::Command& defaultVal );
-template<> const std::wstring&      SerializationHelper::T2WString  ( ProjectEvent::Command t );
+template<> ProjectEvent::Command    SerializationHelper::String2T  ( const std::string& s, const ProjectEvent::Command& defaultVal );
+template<> std::string              SerializationHelper::T2String  ( const ProjectEvent::Command & t );
 
 DEFINE_PTR_TYPE( ProjectEvent )
 
@@ -513,7 +514,7 @@ private:
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
 public:
-     std::wstring               Response;
+     std::string                Response;
 public:
     explicit                        ResponseEvent() {}
 
@@ -585,8 +586,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> InfoEvent::Command       SerializationHelper::WString2T       ( const std::wstring& s, const InfoEvent::Command& defaultVal );
-template<> const std::wstring&      SerializationHelper::T2WString       ( InfoEvent::Command t );
+template<> InfoEvent::Command       SerializationHelper::String2T       ( const std::string& s, const InfoEvent::Command& defaultVal );
+template<> std::string              SerializationHelper::T2String       ( const InfoEvent::Command & t );
 
 DEFINE_PTR_TYPE( InfoEvent )
 
@@ -644,8 +645,8 @@ public:
 
 };
 
-template<> TimeLineEvent::Command   SerializationHelper::WString2T  ( const std::wstring& s, const TimeLineEvent::Command& defaultVal );
-template<> const std::wstring &     SerializationHelper::T2WString  ( TimeLineEvent::Command t );
+template<> TimeLineEvent::Command   SerializationHelper::String2T  ( const std::string& s, const TimeLineEvent::Command& defaultVal );
+template<> std::string              SerializationHelper::T2String  ( const TimeLineEvent::Command & t );
 
 DEFINE_PTR_TYPE( TimeLineEvent )
 
@@ -689,8 +690,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> TimerEvent::Command      SerializationHelper::WString2T    ( const std::wstring& s, const TimerEvent::Command& defaultVal );
-template<> const std::wstring&      SerializationHelper::T2WString    ( TimerEvent::Command t );
+template<> TimerEvent::Command      SerializationHelper::String2T    ( const std::string& s, const TimerEvent::Command& defaultVal );
+template<> std::string              SerializationHelper::T2String    ( const TimerEvent::Command & t );
 
 DEFINE_PTR_TYPE( TimerEvent )
 
@@ -728,8 +729,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> NodeLogicEvent::Command     SerializationHelper::WString2T      ( const std::wstring& s, const NodeLogicEvent::Command& defaultVal );
-template<> const std::wstring&      SerializationHelper::T2WString      ( NodeLogicEvent::Command t );
+template<> NodeLogicEvent::Command      SerializationHelper::String2T      ( const std::string& s, const NodeLogicEvent::Command& defaultVal );
+template<> std::string                  SerializationHelper::T2String      ( const NodeLogicEvent::Command & t );
 
 DEFINE_PTR_TYPE( NodeLogicEvent )
 
@@ -784,7 +785,7 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> const std::wstring& SerializationHelper::T2WString   ( VideoCardEvent::Command t );
+template<> std::string              SerializationHelper::T2String   ( const VideoCardEvent::Command & t );
 
 DEFINE_PTR_TYPE( VideoCardEvent )
 
@@ -820,8 +821,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> RenderingModeEvent::Command  SerializationHelper::WString2T  ( const std::wstring& s, const RenderingModeEvent::Command& defaultVal );
-template<> const std::wstring&          SerializationHelper::T2WString  ( RenderingModeEvent::Command t );
+template<> RenderingModeEvent::Command  SerializationHelper::String2T  ( const std::string& s, const RenderingModeEvent::Command& defaultVal );
+template<> std::string                  SerializationHelper::T2String  ( const RenderingModeEvent::Command & t );
 
 DEFINE_PTR_TYPE( RenderingModeEvent )
 
@@ -859,8 +860,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> GlobalEffectEvent::Command   SerializationHelper::WString2T  ( const std::wstring& s, const GlobalEffectEvent::Command& defaultVal );
-template<> const std::wstring&          SerializationHelper::T2WString  ( GlobalEffectEvent::Command t );
+template<> GlobalEffectEvent::Command   SerializationHelper::String2T  ( const std::string& s, const GlobalEffectEvent::Command& defaultVal );
+template<> std::string                  SerializationHelper::T2String  ( const GlobalEffectEvent::Command & t );
 
 DEFINE_PTR_TYPE( GlobalEffectEvent )
 
@@ -912,11 +913,11 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> TimelineKeyframeEvent::Command   SerializationHelper::WString2T  ( const std::wstring& s, const TimelineKeyframeEvent::Command& defaultVal );
-template<> const std::wstring&              SerializationHelper::T2WString  ( TimelineKeyframeEvent::Command t );
+template<> TimelineKeyframeEvent::Command   SerializationHelper::String2T  ( const std::string& s, const TimelineKeyframeEvent::Command& defaultVal );
+template<> std::string                      SerializationHelper::T2String  ( const TimelineKeyframeEvent::Command & t );
 
-template<> TimelineKeyframeEvent::KeyframeType  SerializationHelper::WString2T   ( const std::wstring& s, const TimelineKeyframeEvent::KeyframeType& defaultVal );
-template<> const std::wstring&                  SerializationHelper::T2WString   ( TimelineKeyframeEvent::KeyframeType t );
+template<> TimelineKeyframeEvent::KeyframeType   SerializationHelper::String2T   ( const std::string& s, const TimelineKeyframeEvent::KeyframeType& defaultVal );
+template<> std::string                           SerializationHelper::T2String   ( const TimelineKeyframeEvent::KeyframeType & t );
 
 DEFINE_PTR_TYPE( TimelineKeyframeEvent )
 
@@ -961,8 +962,8 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> HightmapEvent::Command       SerializationHelper::WString2T      ( const std::wstring& s, const HightmapEvent::Command& defaultVal );
-template<> const std::wstring&          SerializationHelper::T2WString      ( HightmapEvent::Command t );
+template<> HightmapEvent::Command       SerializationHelper::String2T      ( const std::string& s, const HightmapEvent::Command& defaultVal );
+template<> std::string                  SerializationHelper::T2String      ( const HightmapEvent::Command & t );
 
 DEFINE_PTR_TYPE( HightmapEvent )
 

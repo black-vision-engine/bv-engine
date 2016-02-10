@@ -47,20 +47,28 @@ bool JsonDeserializeObject::LoadFile        ( const std::string& fileName )
 
 // ***********************
 //
-void JsonDeserializeObject::Load                ( const std::string& jsonString )
+bool JsonDeserializeObject::Load                ( const std::string& jsonString )
 {
 	Json::Reader reader;
-	reader.parse( jsonString, m_root );
-    OnRootInit();
+	if( reader.parse( jsonString, m_root ) )
+    {
+        OnRootInit();
+        return true;;
+    }
+    return false;
 }
 
 // ***********************
 //
-void JsonDeserializeObject::Load                ( std::istream& stream )
+bool JsonDeserializeObject::Load                ( std::istream& stream )
 {
 	Json::Reader reader;
-	reader.parse( stream, m_root );
-    OnRootInit();
+	if( reader.parse( stream, m_root ) )
+    {
+        OnRootInit();
+        return true;
+    }
+    return false;
 }
 
 // ***********************
