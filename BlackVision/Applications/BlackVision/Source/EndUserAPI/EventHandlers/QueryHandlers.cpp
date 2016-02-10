@@ -40,7 +40,7 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
         bv::InfoEventPtr infoEvent = std::static_pointer_cast<bv::InfoEvent>( evt );
 
         InfoEvent::Command command = infoEvent->InfoCommand;
-        auto & request = infoEvent->Request;
+        auto & request = *infoEvent->Request;
         auto eventID = infoEvent->EventID;
 
         JsonSerializeObject responseJSON;
@@ -101,15 +101,11 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
 
 // ***********************
 //
-void         QueryHandlers::ListSceneAssets          ( JsonSerializeObject & ser, const std::string & request, int eventID )
+void         QueryHandlers::ListSceneAssets          ( JsonSerializeObject & ser, IDeserializer & request, int eventID )
 {
-    JsonDeserializeObject deser;
+    auto bvDeserCo = Cast< BVDeserializeContext* >( request.GetDeserializeContext() );
 
-    auto bvDeserCo = Cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
-
-    deser.Load( request );
-
-    std::string category = deser.GetAttribute( "CategoryName" );
+    std::string category = request.GetAttribute( "CategoryName" );
 
     PrepareResponseTemplate( ser, InfoEvent::Command::ListSceneAssets, eventID, true );
 
@@ -137,7 +133,7 @@ void         QueryHandlers::ListSceneAssets          ( JsonSerializeObject & ser
 
 // ***********************
 //
-void         QueryHandlers::VideoCardsInfo               ( JsonSerializeObject & ser, const std::string & /*request*/, int eventID )
+void         QueryHandlers::VideoCardsInfo               ( JsonSerializeObject & ser, IDeserializer & /*request*/, int eventID )
 {
     PrepareResponseTemplate( ser, InfoEvent::Command::Videocards, eventID, true );
 
@@ -146,13 +142,10 @@ void         QueryHandlers::VideoCardsInfo               ( JsonSerializeObject &
 
 // ***********************
 //
-void         QueryHandlers::GetNodeInfo                  ( JsonSerializeObject & ser, const std::string & request, int eventID )
+void         QueryHandlers::GetNodeInfo                  ( JsonSerializeObject & ser, IDeserializer & request, int eventID )
 {
-    JsonDeserializeObject deser;
-    deser.Load( request );
-
-    std::string sceneName = deser.GetAttribute( "SceneName" );
-    std::string nodePath = deser.GetAttribute( "NodePath" );
+    std::string sceneName = request.GetAttribute( "SceneName" );
+    std::string nodePath = request.GetAttribute( "NodePath" );
     
     auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
     if( node )
@@ -176,12 +169,9 @@ void         QueryHandlers::GetNodeInfo                  ( JsonSerializeObject &
 
 // ***********************
 //
-void         QueryHandlers::GetMinimalSceneInfo          ( JsonSerializeObject & ser, const std::string & request, int eventID )
+void         QueryHandlers::GetMinimalSceneInfo          ( JsonSerializeObject & ser, IDeserializer & request, int eventID )
 {
-    JsonDeserializeObject deser;
-    deser.Load( request );
-
-    std::string sceneName = deser.GetAttribute( "SceneName" );
+    std::string sceneName = request.GetAttribute( "SceneName" );
     
     auto scene = m_appLogic->GetBVProject()->GetProjectEditor()->GetScene( sceneName );
     if( scene == nullptr )
@@ -200,7 +190,7 @@ void         QueryHandlers::GetMinimalSceneInfo          ( JsonSerializeObject &
 
 // ***********************
 //
-void         QueryHandlers::GetTimeLinesInfo         ( JsonSerializeObject & ser, const std::string & /*request*/, int eventID )
+void         QueryHandlers::GetTimeLinesInfo         ( JsonSerializeObject & ser, IDeserializer & /*request*/, int eventID )
 {
     PrepareResponseTemplate( ser, InfoEvent::Command::Timelines, eventID, true );
 
@@ -220,7 +210,7 @@ void         QueryHandlers::GetTimeLinesInfo         ( JsonSerializeObject & ser
 
 // ***********************
 //
-void         QueryHandlers::PerformanceInfo          ( JsonSerializeObject & ser, const std::string & /*request*/, int eventID )
+void         QueryHandlers::PerformanceInfo          ( JsonSerializeObject & ser, IDeserializer & /*request*/, int eventID )
 {       
     auto & frameStats = m_appLogic->FrameStats();
     auto & sections = frameStats.RegisteredSections();
@@ -250,7 +240,7 @@ void         QueryHandlers::PerformanceInfo          ( JsonSerializeObject & ser
 
 // ***********************
 //
-void         QueryHandlers::TreeStructureInfo    ( JsonSerializeObject & ser, const std::string & /*request*/, int eventID )
+void         QueryHandlers::TreeStructureInfo    ( JsonSerializeObject & ser, IDeserializer & /*request*/, int eventID )
 {
     PrepareResponseTemplate( ser, InfoEvent::Command::TreeStructure, eventID, true );
 
@@ -268,7 +258,7 @@ void         QueryHandlers::TreeStructureInfo    ( JsonSerializeObject & ser, co
 
 // ***********************
 //
-void         QueryHandlers::ListProjectNames     ( JsonSerializeObject & ser, const std::string & /*request*/, int eventID )
+void         QueryHandlers::ListProjectNames     ( JsonSerializeObject & ser, IDeserializer & /*request*/, int eventID )
 {
     PrepareResponseTemplate( ser, InfoEvent::Command::ListProjectNames, eventID, true );
 
@@ -287,17 +277,17 @@ void         QueryHandlers::ListProjectNames     ( JsonSerializeObject & ser, co
 
 // ***********************
 //
-void         QueryHandlers::ListScenes           ( JsonSerializeObject & ser, const std::string & request, int eventID )
+void         QueryHandlers::ListScenes           ( JsonSerializeObject & ser, IDeserializer & request, int eventID )
 {
     PrepareResponseTemplate( ser, InfoEvent::Command::ListScenes, eventID, true );
 
     auto pm = ProjectManager::GetInstance();
 
-    auto name = GetRequestParamValue( request )[ "projectName" ].asString();
-    auto path = GetRequestParamValue( request )[ "path" ].asString();
+    auto name = request.GetAttribute( "projectName" );
+    auto path = request.GetAttribute( "path" );
 
     auto recursive = false;
-    auto recStr = GetRequestParamValue( request )[ "recursive" ].asString();
+    auto recStr = request.GetAttribute( "recursive" );
     if( recStr == "true" )
     {
         recursive = true;
@@ -317,17 +307,17 @@ void         QueryHandlers::ListScenes           ( JsonSerializeObject & ser, co
 
 // ***********************
 //
-void         QueryHandlers::ListPresets           ( JsonSerializeObject & ser, const std::string & request, int eventID )
+void         QueryHandlers::ListPresets           ( JsonSerializeObject & ser, IDeserializer & request, int eventID )
 {
     PrepareResponseTemplate( ser, InfoEvent::Command::ListPresets, eventID, true );
 
     auto pm = ProjectManager::GetInstance();
 
-    auto name = GetRequestParamValue( request )[ "projectName" ].asString();
-    auto path = GetRequestParamValue( request )[ "path" ].asString();
+    auto name = request.GetAttribute( "projectName" );
+    auto path = request.GetAttribute( "path" );
 
     auto recursive = false;
-    auto recStr = GetRequestParamValue( request )[ "recursive" ].asString();
+    auto recStr = request.GetAttribute( "recursive" );
     if( recStr == "true" )
     {
         recursive = true;
@@ -347,18 +337,18 @@ void         QueryHandlers::ListPresets           ( JsonSerializeObject & ser, c
 
 // ***********************
 //
-void        QueryHandlers::ListAssetsPaths     ( JsonSerializeObject & ser, const std::string & request, int eventID )
+void        QueryHandlers::ListAssetsPaths     ( JsonSerializeObject & ser, IDeserializer & request, int eventID )
 {
     PrepareResponseTemplate( ser, InfoEvent::Command::ListAssetsPaths, eventID, true );
 
     auto pm = ProjectManager::GetInstance();
 
-    auto projName = GetRequestParamValue( request )[ "projectName" ].asString();
-    auto catName = GetRequestParamValue( request )[ "categoryName" ].asString();
-    auto path = GetRequestParamValue( request )[ "path" ].asString();
+    auto projName = request.GetAttribute( "projectName" );
+    auto catName = request.GetAttribute( "categoryName" );
+    auto path = request.GetAttribute( "path" );
 
     auto recursive = false;
-    auto recStr = GetRequestParamValue( request )[ "recursive" ].asString();
+    auto recStr = request.GetAttribute( "recursive" );
     if( recStr == "true" )
     {
         recursive = true;
@@ -379,7 +369,7 @@ void        QueryHandlers::ListAssetsPaths     ( JsonSerializeObject & ser, cons
 
 // ***********************
 //
-void        QueryHandlers::ListCategoriesNames ( JsonSerializeObject & ser, const std::string & /*request*/, int eventID )
+void        QueryHandlers::ListCategoriesNames ( JsonSerializeObject & ser, IDeserializer & /*request*/, int eventID )
 {
     PrepareResponseTemplate( ser, InfoEvent::Command::ListCategoriesNames, eventID, true );
 
@@ -396,7 +386,7 @@ void        QueryHandlers::ListCategoriesNames ( JsonSerializeObject & ser, cons
 
 // ***********************
 //
-void        QueryHandlers::ListProjects        ( JsonSerializeObject & ser, const std::string & /*request*/, int eventID )
+void        QueryHandlers::ListProjects        ( JsonSerializeObject & ser, IDeserializer & /*request*/, int eventID )
 {
     PrepareResponseTemplate( ser, InfoEvent::Command::ListProjects, eventID, true );
 
@@ -416,11 +406,11 @@ void        QueryHandlers::ListProjects        ( JsonSerializeObject & ser, cons
 
 // ***********************
 //
-void         QueryHandlers::GetAssetDescriptor      ( JsonSerializeObject & ser, const std::string & request, int eventID )
+void         QueryHandlers::GetAssetDescriptor      ( JsonSerializeObject & ser, IDeserializer & request, int eventID )
 {
-    auto projectName = GetRequestParamValue( request )[ "projectName" ].asString();
-    auto categoryName = GetRequestParamValue( request )[ "categoryName" ].asString();
-    auto path = GetRequestParamValue( request )[ "path" ].asString();
+    auto projectName = request.GetAttribute( "projectName" );
+    auto categoryName = request.GetAttribute( "categoryName" );
+    auto path = request.GetAttribute( "path" );
 
     auto pm = ProjectManager::GetInstance();
     auto desc = pm->GetAssetDesc( projectName, categoryName, path );
@@ -447,11 +437,11 @@ void         QueryHandlers::GetAssetDescriptor      ( JsonSerializeObject & ser,
 
 // ***********************
 //
-void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser, const std::string & request, int eventID )
+void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser, IDeserializer & request, int eventID )
 {
-    auto projectName = GetRequestParamValue( request )[ "projectName" ].asString();
-    auto categoryName = GetRequestParamValue( request )[ "categoryName" ].asString();
-    auto path = GetRequestParamValue( request )[ "path" ].asString();
+    auto projectName = request.GetAttribute( "projectName" );
+    auto categoryName = request.GetAttribute( "categoryName" );
+    auto path = request.GetAttribute( "path" );
 
     auto pm = ProjectManager::GetInstance();
     auto aps = pm->ListAssetsPaths( projectName, categoryName, path, true );
@@ -492,13 +482,10 @@ void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser,
 
 // ***********************
 //
-void         QueryHandlers::CheckTimelineTime    ( JsonSerializeObject & ser, const std::string & request, int eventID )
+void         QueryHandlers::CheckTimelineTime    ( JsonSerializeObject & ser, IDeserializer & request, int eventID )
 {
-    JsonDeserializeObject deser;
-    deser.Load( request );
-
-    std::string sceneName = deser.GetAttribute( "SceneName" );
-    std::string timelineName = deser.GetAttribute( "TimelineName" );
+    std::string sceneName = request.GetAttribute( "SceneName" );
+    std::string timelineName = request.GetAttribute( "TimelineName" );
 
     auto scene = m_appLogic->GetBVProject()->GetScene( sceneName );
     if( scene == nullptr )
@@ -524,7 +511,7 @@ void         QueryHandlers::CheckTimelineTime    ( JsonSerializeObject & ser, co
 
 // ***********************
 //
-void         QueryHandlers::MinimalTreeStructureInfo ( JsonSerializeObject & ser, const std::string & /*request*/, int eventID )
+void         QueryHandlers::MinimalTreeStructureInfo ( JsonSerializeObject & ser, IDeserializer & /*request*/, int eventID )
 {
     auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
     context->recursive = true;
@@ -547,15 +534,11 @@ void         QueryHandlers::MinimalTreeStructureInfo ( JsonSerializeObject & ser
 
 // ***********************
 //
-void         QueryHandlers::PluginInfo           ( JsonSerializeObject & ser, const std::string & request, int eventID )
+void         QueryHandlers::PluginInfo           ( JsonSerializeObject & ser, IDeserializer & request, int eventID )
 {
-    JsonDeserializeObject deser;
-    deser.Load( request );
-
-
-    std::string nodePath = deser.GetAttribute( "NodePath" );
-    std::string pluginName = deser.GetAttribute( "PluginName" );
-    std::string sceneName = deser.GetAttribute( "SceneName" );
+    std::string nodePath = request.GetAttribute( "NodePath" );
+    std::string pluginName = request.GetAttribute( "PluginName" );
+    std::string sceneName = request.GetAttribute( "SceneName" );
 
     auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
     if( node == nullptr )
@@ -579,12 +562,9 @@ void         QueryHandlers::PluginInfo           ( JsonSerializeObject & ser, co
 
 // ***********************
 //
-void         QueryHandlers::ListTimelineKeyframes    ( JsonSerializeObject & ser, const std::string& request, int eventID )
+void         QueryHandlers::ListTimelineKeyframes    ( JsonSerializeObject & ser, IDeserializer & request, int eventID )
 {
-    JsonDeserializeObject deser;
-    deser.Load( request );
-
-    std::string TimelinePath = deser.GetAttribute( "TimelinePath" );
+    std::string TimelinePath = request.GetAttribute( "TimelinePath" );
 
     auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
     auto timeEvaluator = editor->GetTimeEvaluator( TimelinePath );
@@ -616,12 +596,12 @@ void         QueryHandlers::ListTimelineKeyframes    ( JsonSerializeObject & ser
 
 // ***********************
 //
-void    QueryHandlers::ListAllFolders          ( JsonSerializeObject & ser, const std::string & request, int eventID )
+void    QueryHandlers::ListAllFolders          ( JsonSerializeObject & ser, IDeserializer & request, int eventID )
 {
     PrepareResponseTemplate( ser, InfoEvent::Command::ListAllFolders, eventID, true );
 
-    auto catName = GetRequestParamValue( request )[ "categoryName" ].asString();
-    auto path = GetRequestParamValue( request )[ "path" ].asString();
+    auto catName = request.GetAttribute( "categoryName" );
+    auto path = request.GetAttribute( "path" );
 
     auto pm = ProjectManager::GetInstance();
     auto sns = pm->ListAssetsDirs( catName, path );

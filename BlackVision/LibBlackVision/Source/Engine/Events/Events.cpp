@@ -1269,7 +1269,7 @@ void                InfoEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
     ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( InfoCommand ) );
-    ser.SetAttribute( SerializationHelper::REQUEST_STRING, Request );
+    ser.SetAttribute( SerializationHelper::REQUEST_STRING, "" );
 }
 
 // *************************************
@@ -1280,7 +1280,7 @@ IEventPtr                InfoEvent::Create          ( IDeserializer& deser )
     {
         InfoEventPtr newEvent   = std::make_shared<InfoEvent>();
         newEvent->InfoCommand   = SerializationHelper::String2T<InfoEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), InfoEvent::Command::Fail );
-        newEvent->Request       = deser.GetAttribute( SerializationHelper::REQUEST_STRING );
+        newEvent->Request       = deser.DetachBranch( SerializationHelper::REQUEST_STRING );
         
         return newEvent;
     }

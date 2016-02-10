@@ -571,10 +571,11 @@ private:
     static std::string          m_sEventName;
 public:
     InfoEvent::Command          InfoCommand;
-    std::string                 Request;
+    IDeserializer *             Request;
 
 public:
-    explicit                        InfoEvent   () {}
+    explicit                        InfoEvent   ()  { Request = nullptr; }
+                                    ~InfoEvent   () { delete Request; }
 
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );
