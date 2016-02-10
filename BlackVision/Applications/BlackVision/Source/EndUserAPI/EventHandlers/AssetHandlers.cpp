@@ -2,7 +2,6 @@
 
 #include "../../BVAppLogic.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
-#include "Engine/Events/EventHelpers.h"             // wstring to string conversions and vice versa
 #include "EventHandlerHelpers.h"
 
 

@@ -3,7 +3,6 @@
 #include "Engine/Events/BaseEvent.h"
 #include "Engine/Models/Plugins/Interfaces/IPlugin.h"
 #include "Engine/Models/Interfaces/IModelNode.h"
-#include "Engine/Events/EventHelpers.h"
 #include "Serialization/SerializationHelper.inl"
 
 #include  "Mathematics/glm_inc.h"

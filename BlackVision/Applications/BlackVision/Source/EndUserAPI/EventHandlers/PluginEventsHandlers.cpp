@@ -8,7 +8,6 @@
 #include "../../UseLoggerBVAppModule.h"
 
 #include "EventHandlerHelpers.h"
-#include "Engine/Events/EventHelpers.h"             // wstring to string conversions and vice versa
 #include "Serialization/SerializationHelper.h"
 #include "Engine/Events/EventManager.h"
 
@@ -201,7 +200,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
 
     if( result )
     {
-        LOG_MESSAGE( SeverityLevel::info ) << toString( SerializationHelper::T2WString( command ) ) + " Node [" + nodeName + "] Plugin [" + pluginName + "] Param [" + paramName + " " + paramSubName + "] : (" + toString( value ) + ") key: " + std::to_string( keyTime ) + " s";
+        LOG_MESSAGE( SeverityLevel::info ) << SerializationHelper::T2String( command ) + " Node [" + nodeName + "] Plugin [" + pluginName + "] Param [" + paramName + " " + paramSubName + "] : (" + SerializationHelper::T2String( value ) + ") key: " + SerializationHelper::T2String( keyTime ) + " s";
     }
 
     SendSimpleResponse( command, setParamEvent->EventID, setParamEvent->SocketID, result );

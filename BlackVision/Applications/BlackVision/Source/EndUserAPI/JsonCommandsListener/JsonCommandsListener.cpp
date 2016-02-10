@@ -3,7 +3,6 @@
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Serialization/Json/JsonSerializeObject.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
-#include "Engine/Events/EventHelpers.h"
 
 #include "Threading/ScopedCriticalSection.h"
 
@@ -38,7 +37,7 @@ void                JsonCommandsListener::QueueEvent          ( const std::strin
 
     if( !deser.Load( eventString ) )
     {
-        LOG_MESSAGE( SeverityLevel::error ) << "Remote controller can't parse command: \n" + toString( eventString );
+        LOG_MESSAGE( SeverityLevel::error ) << "Remote controller can't parse command: \n" + eventString;
         return;
     }
 

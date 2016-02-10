@@ -7,7 +7,7 @@
 #include "Serialization/IDeserializer.h"
 #include "Serialization/SerializationHelper.h"
 
-#include "Engine/Events/EventHelpers.h"     // toWString
+#include "Tools/StringHeplers.h"
 
 namespace bv
 {
@@ -89,7 +89,7 @@ IValuePtr CreateValue( const IDeserializer & deser, const std::string & name )
     case ParamType::PT_WSTRING:
     {
         auto iValuePtr = ValuesFactory::CreateValueWString( name );
-        std::wstring value = toWString( deser.GetAttribute( "value" ) );
+        std::wstring value = StringToWString( deser.GetAttribute( "value" ) );
         iValuePtr->SetValue( value );
         return iValuePtr;
     }
@@ -165,7 +165,7 @@ void                SerializeValue                      ( ISerializer & ser, IVa
     {
         auto iValuePtr = QueryTypedValue< ValueWStringPtr> ( val );
         std::wstring value = iValuePtr->GetValue();
-        ser.SetAttribute( "value", toString( value ) );
+        ser.SetAttribute( "value", SerializationHelper::T2String( value ) );
         break;
     }
     default:

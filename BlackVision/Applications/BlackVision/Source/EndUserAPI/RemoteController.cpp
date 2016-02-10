@@ -4,7 +4,7 @@
 #include "Engine/Events/Events.h"
 
 #include "../UseLoggerBVAppModule.h"
-#include "Engine/Events/EventHelpers.h"
+#include "Serialization/SerializationHelper.h"
 
 namespace bv
 {
@@ -45,7 +45,7 @@ IEventPtr RemoteController::DeserializeEvent         ( IDeserializer& deser )
     }
     else
     {
-        LOG_MESSAGE( SeverityLevel::error ) << "Unregistered event cannot be deserialized: " + toString( command );
+        LOG_MESSAGE( SeverityLevel::error ) << "Unregistered event cannot be deserialized: " + command;
         return nullptr;
     }
 }

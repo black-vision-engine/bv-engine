@@ -9,7 +9,6 @@
 
 #include "Serialization/ISerializer.h"
 #include "Serialization/IDeserializer.h"
-#include "EventHelpers.h"
 
 
 #include <limits>

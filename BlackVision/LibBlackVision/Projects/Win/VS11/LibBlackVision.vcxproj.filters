@@ -2232,9 +2232,6 @@
     <ClInclude Include="..\..\..\Source\Serialization\IDeserializer.h">
       <Filter>Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Events\EventHelpers.h">
-      <Filter>Engine\Events</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectWireframe.h">
       <Filter>Engine\Models\NodeEffects</Filter>
     </ClInclude>

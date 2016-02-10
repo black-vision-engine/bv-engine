@@ -544,11 +544,11 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 
     JsonSerializeObject ser;
     ser.SetAttribute( "cmd", "KeyframeEvent" );
-    ser.SetAttribute( "KeyframeType", toString( SerializationHelper::T2WString( keyframeType ) ) );      // @todo This conversion is stupid. We need to use only strings instead of wstrings.
+    ser.SetAttribute( "KeyframeType", SerializationHelper::T2String( keyframeType ) );      // @todo This conversion is stupid. We need to use only strings instead of wstrings.
     ser.SetAttribute( "KeyframeName", evt->GetName() );
     ser.SetAttribute( "Timeline", this->GetName() );
     ser.SetAttribute( "SceneName", TimelineHelper::GetSceneName( this ) );
-    ser.SetAttribute( "Time", toString( this->GetLocalTime() ) );
+    ser.SetAttribute( "Time", SerializationHelper::T2String( this->GetLocalTime() ) );
 
     ResponseEventPtr msg = std::make_shared<ResponseEvent>();
     msg->Response = ser.GetString();

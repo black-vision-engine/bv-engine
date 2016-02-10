@@ -5,7 +5,6 @@
 #include "Tools/IncludeJSON.h"
 #include "PerformanceMonitor.h"
 #include "Engine/Models/BasicNode.h"
-#include "Engine/Events/EventHelpers.h"             // wstring to string conversions and vice versa
 #include "EventHandlerHelpers.h"
 #include "Assets/AssetDescsWithUIDs.h"
 #include "ProjectManager.h"
@@ -230,20 +229,20 @@ void         QueryHandlers::PerformanceInfo          ( JsonSerializeObject & ser
 
     PrepareResponseTemplate( ser, InfoEvent::Command::Performance, eventID, true );
 
-    ser.SetAttribute( "fps", toString( PerformanceMonitor::Stats.fps ) );
-    ser.SetAttribute( "fps_avg", toString( PerformanceMonitor::Stats.fps_avg ) );
-    ser.SetAttribute( "ram", toString( PerformanceMonitor::Stats.ram ) );
-    ser.SetAttribute( "vram", toString( PerformanceMonitor::Stats.vram ) );
-    ser.SetAttribute( "cpu", toString( PerformanceMonitor::Stats.cpu ) );
+    ser.SetAttribute( "fps", SerializationHelper::T2String( PerformanceMonitor::Stats.fps ) );
+    ser.SetAttribute( "fps_avg", SerializationHelper::T2String( PerformanceMonitor::Stats.fps_avg ) );
+    ser.SetAttribute( "ram", SerializationHelper::T2String( PerformanceMonitor::Stats.ram ) );
+    ser.SetAttribute( "vram", SerializationHelper::T2String( PerformanceMonitor::Stats.vram ) );
+    ser.SetAttribute( "cpu", SerializationHelper::T2String( PerformanceMonitor::Stats.cpu ) );
 
     for( auto name : sections )
     {
         ser.EnterChild( name );
 
-        ser.SetAttribute( "average", toString( frameStats.ExpectedValue( name ) ) );
-        ser.SetAttribute( "minVal", toString( frameStats.MinVal( name ) ) );
-        ser.SetAttribute( "maxVal", toString( frameStats.MaxVal( name ) ) );
-        ser.SetAttribute( "variance", toString( frameStats.Variance( name ) ) );
+        ser.SetAttribute( "average", SerializationHelper::T2String( frameStats.ExpectedValue( name ) ) );
+        ser.SetAttribute( "minVal", SerializationHelper::T2String( frameStats.MinVal( name ) ) );
+        ser.SetAttribute( "maxVal", SerializationHelper::T2String( frameStats.MaxVal( name ) ) );
+        ser.SetAttribute( "variance", SerializationHelper::T2String( frameStats.Variance( name ) ) );
 
         ser.ExitChild();
     }
@@ -410,7 +409,7 @@ void        QueryHandlers::ListProjects        ( JsonSerializeObject & ser, cons
         auto scenesCount = pm->ListScenesNames( p, "", true ).size();
 
         ser.SetAttribute( "name", p.Str() );
-        ser.SetAttribute( "scenesCount", toString( scenesCount ) );
+        ser.SetAttribute( "scenesCount", SerializationHelper::T2String( scenesCount ) );
     }
     ser.ExitChild();
 }
@@ -518,7 +517,7 @@ void         QueryHandlers::CheckTimelineTime    ( JsonSerializeObject & ser, co
 
     PrepareResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, eventID, true );
     TimeType time = checkedTimeline->GetLocalTime();
-    ser.SetAttribute( "Time", toString( time ) );
+    ser.SetAttribute( "Time", SerializationHelper::T2String( time ) );
     ser.SetAttribute( "SceneName", sceneName );
     ser.SetAttribute( "TimelineName", timelineName );
 }
