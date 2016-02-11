@@ -23,8 +23,8 @@ public:
     explicit        AnimationAssetThumbnail   ( IDeserializer & deser );
 
 public:
-    virtual const char *                    Data        () const override;
-    virtual const char *                    DataBase64  () const override;
+    virtual MemoryChunkConstPtr             Data        () const override;
+    virtual const std::string &             DataBase64  () const override;
     const Hash &                            GetHash     () const;
 
     static AnimationAssetThumbnailConstPtr  Create      ( const MemoryChunkVector & data, const Hash & h );

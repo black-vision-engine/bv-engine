@@ -57,25 +57,25 @@ FontAssetThumbnailConstPtr       FontAssetThumbnail::Create      ( const MemoryC
 
 // ******************************
 //
-const char *                        FontAssetThumbnail::Data        () const
+MemoryChunkConstPtr                 FontAssetThumbnail::Data        () const
 {
     if( !m_data )
     {
         m_data = DecodeBase64( m_dataBase64 );
     }
-    return m_data->Get();
+    return m_data;
 }
 
 // ******************************
 //
-const char *                        FontAssetThumbnail::DataBase64  () const
+const std::string &                 FontAssetThumbnail::DataBase64  () const
 {
     if( m_dataBase64.empty() )
     {
         m_dataBase64 = m_data ? EncodeBase64( m_data ) : "";
     }
 
-    return m_dataBase64.c_str();
+    return m_dataBase64;
 }
 // ******************************
 //

@@ -25,8 +25,8 @@ private:
     explicit        TextureAssetThumbnail   ( IDeserializer & deser );
 
 public:
-    virtual const char *                    Data        () const override;
-    virtual const char *                    DataBase64  () const override;
+    virtual MemoryChunkConstPtr             Data        () const override;
+    virtual const std::string &             DataBase64  () const override;
     const Hash &                            GetHash     () const;
 
     static TextureAssetThumbnailConstPtr    Create      ( const MemoryChunkConstPtr & data, const Hash & h );

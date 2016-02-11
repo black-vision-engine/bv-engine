@@ -4,6 +4,12 @@
 
 #include "Tools/Base64.h"
 
+namespace {
+
+static std::string EMPTY_STRING = "";
+
+}
+
 namespace bv
 {
 // ******************************
@@ -58,16 +64,16 @@ AnimationAssetThumbnailConstPtr       AnimationAssetThumbnail::Create      ( con
 
 // ******************************
 //
-const char *                        AnimationAssetThumbnail::Data        () const
+MemoryChunkConstPtr                 AnimationAssetThumbnail::Data        () const
 {
     return nullptr;
 }
 
 // ******************************
 //
-const char *                        AnimationAssetThumbnail::DataBase64  () const
+const std::string &                 AnimationAssetThumbnail::DataBase64  () const
 {
-    return nullptr;
+    return EMPTY_STRING;
 }
 
 // ******************************

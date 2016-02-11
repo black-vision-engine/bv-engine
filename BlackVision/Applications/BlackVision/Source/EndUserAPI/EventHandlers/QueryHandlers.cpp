@@ -468,6 +468,7 @@ void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser,
         {
             auto thumb = AssetManager::GetInstance().LoadThumbnail( desc );
             thumbs.push_back( std::make_pair( thumb, desc ) );
+            //File::Write( thumb->Data()->Get(), thumb->Data()->Size(), "font.tga", false );
         }
     }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreDEF.h"
+#include "Memory/MemoryChunk.h"
 
 namespace bv
 {
@@ -13,8 +14,8 @@ public:
     explicit    Thumbnail   () {}
     virtual     ~Thumbnail  () {}
 
-    virtual const char *    Data        () const = 0;
-    virtual const char *    DataBase64  () const = 0;
+    virtual MemoryChunkConstPtr     Data        () const = 0;
+    virtual const std::string &     DataBase64  () const = 0;
 
     virtual void            Serialize   ( ISerializer & ) const
     { 
