@@ -419,6 +419,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\BaseValue.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp" />
+    <ClCompile Include="..\..\..\Source\Mathematics\BoundingVolume.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Core\MathFuncs.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.cpp" />
@@ -811,6 +812,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\TypedValues.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\AABB.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\BoundingVolume.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Box.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Core\MathFuncs.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Defines.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h" />

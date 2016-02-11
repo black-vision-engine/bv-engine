@@ -8,6 +8,8 @@
 #include "Engine/Models/Interfaces/INodeLogic.h"
 #include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
 
+#include "Mathematics/BoundingVolume.h"
+
 #include "Serialization/ISerializable.h"
 
 
@@ -82,6 +84,7 @@ public:
 
 	// axis-aligned bounding box
 	mathematics::Rect 						GetAABB					() const;
+	BoundingVolume 						    GetBoundingVolume		() const;
 
     BasicNodePtr                            GetChild                ( unsigned int i );
     const BasicNode *                       GetChild                ( unsigned int i ) const;
@@ -103,6 +106,7 @@ private:
 private:
 
 	mathematics::Rect 						GetAABB					( const glm::mat4 & currentTransformation ) const;
+	BoundingVolume 						    GetBoundingVolume		( const glm::mat4 & currentTransformation ) const;
 
 public:
 

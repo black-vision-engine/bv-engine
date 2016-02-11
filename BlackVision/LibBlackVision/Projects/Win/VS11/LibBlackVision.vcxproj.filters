@@ -1180,6 +1180,9 @@
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamLoader.cpp">
       <Filter>Assets\VideoStream</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Mathematics\BoundingVolume.cpp">
+      <Filter>Mathematics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2518,6 +2521,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamLoader.h">
       <Filter>Assets\VideoStream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\BoundingVolume.h">
+      <Filter>Mathematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Mathematics\Box.h">
+      <Filter>Mathematics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

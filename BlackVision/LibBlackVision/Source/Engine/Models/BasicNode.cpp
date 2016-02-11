@@ -29,6 +29,8 @@
 
 #include "UseLoggerLibBlackVision.h"
 
+#include "Mathematics/Box.h"
+#include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"
 
 namespace bv { 
     
@@ -428,6 +430,41 @@ mathematics::Rect 			BasicNode::GetAABB						( const glm::mat4 & parentTransform
     }
 
     return r;
+}
+
+// ********************************
+//
+BoundingVolume 						    BasicNode::GetBoundingVolume		() const
+{
+    mathematics::Box box;
+
+    auto vac = m_pluginList->GetFinalizePlugin()->GetVertexAttributesChannel();
+    for( auto comp : vac->GetComponents() )
+    {
+        for( auto channel : comp->GetAttributeChannels() )
+        {
+            auto desc = channel->GetDescriptor();
+            if( desc->GetSemantic() == AttributeSemantic::AS_POSITION )
+            {
+                assert( desc->GetType() == AttributeType::AT_FLOAT3 );
+                
+                const glm::vec3 * data = reinterpret_cast< const glm::vec3 * >( channel->GetData() );
+
+                for( UInt32 i = 0; i < channel->GetNumEntries(); i++ )
+                    box.Include( data[ i ] );
+            }
+        }
+    }
+
+    return box;
+}
+
+// ********************************
+//
+BoundingVolume 						    BasicNode::GetBoundingVolume		( const glm::mat4 & /*parentTransformation*/ ) const
+{
+    assert( false );
+    return BoundingVolume( mathematics::Box() );
 }
 
 // ********************************
