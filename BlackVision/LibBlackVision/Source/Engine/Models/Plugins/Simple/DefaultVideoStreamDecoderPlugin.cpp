@@ -68,9 +68,9 @@ DefaultPluginParamValModelPtr   DefaultVideoStreamDecoderPluginDesc::CreateDefau
     auto model  = helper.GetModel();
 
     helper.CreatePluginModel();
+    helper.AddSimpleParam( DefaultVideoStreamDecoderPlugin::PARAM::SEEK_OFFSET, glm::vec2( 0.f ), true );
     helper.AddParam< IntInterpolator, DefaultVideoStreamDecoderPlugin::DecoderMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumDM >
         ( DefaultVideoStreamDecoderPlugin::PARAM::DECODER_STATE, DefaultVideoStreamDecoderPlugin::DecoderMode::STOP, true, true );
-    helper.AddSimpleParam( DefaultVideoStreamDecoderPlugin::PARAM::SEEK_OFFSET, 0.f, true );
 
     helper.CreateVSModel();
     helper.AddTransformParam( DefaultVideoStreamDecoderPlugin::PARAM::TX_MAT, true );
@@ -120,6 +120,8 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
 	, m_vsc( nullptr )
 	, m_vaChannel( nullptr )
 	, m_decoder( nullptr )
+    , m_offsetCounter( 0 )
+    , m_prevOffsetCounter( 0 )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr );
 	m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
@@ -131,10 +133,9 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
     m_decoderModeParam = QueryTypedParam< std::shared_ptr< ParamEnum< DecoderMode > > >( GetParameter( PARAM::DECODER_STATE ) );
     m_decoderModeParam->SetGlobalCurveType( CurveType::CT_POINT );
     m_prevDecoderMode = m_decoderModeParam->Evaluate();
-
-    m_offsetParam = QueryTypedParam< ParamFloatPtr >( GetParameter( PARAM::SEEK_OFFSET ) );
+    
+    m_offsetParam = QueryTypedParam< ParamVec2Ptr >( GetParameter( PARAM::SEEK_OFFSET ) );
     m_offsetParam->SetGlobalCurveType( CurveType::CT_POINT );
-    m_prevOffset = m_offsetParam->Evaluate();
 }
 
 // *************************************
@@ -205,6 +206,7 @@ IVertexShaderChannelConstPtr        DefaultVideoStreamDecoderPlugin::GetVertexSh
 void                                DefaultVideoStreamDecoderPlugin::Update                      ( TimeType t )
 {
    	BasePlugin::Update( t );
+    MarkOffsetChanges();
 
     HandleDecoder();
 
@@ -294,7 +296,25 @@ void                                DefaultVideoStreamDecoderPlugin::HandleDecod
 {
     if( m_decoder )
     {
+        //order matters - update offset first then mode
+        auto offset = m_offsetParam->Evaluate();
         auto mode =  m_decoderModeParam->Evaluate();
+        auto decoderModeTime = m_decoderModeParam->GetLocalEvaluationTime();
+        //printf( "%f\n", decoderModeTime );
+        auto hasLoop = ( m_prevDecoderModeTime > decoderModeTime );
+        if( ( m_prevOffsetCounter != offset[ 1 ] ) || hasLoop )
+        {
+            m_decoder->Seek( offset[ 0 ] );
+            printf( "%f\n", offset[ 0 ] );
+            m_prevOffsetCounter = offset[ 1 ];
+
+            //edge case - eof
+            if( mode == DecoderMode::PLAY )
+            {
+                m_decoder->Start();
+            }
+        }
+
         if( m_prevDecoderMode != mode )
         {
             switch( mode )
@@ -310,12 +330,34 @@ void                                DefaultVideoStreamDecoderPlugin::HandleDecod
             m_prevDecoderMode = mode;
         }
 
-        auto offset =  m_offsetParam->Evaluate();
-        if( m_prevOffset != offset )
+        //edge case - loop
+        if( hasLoop && ( mode == DecoderMode::PLAY ) )
         {
-            m_decoder->Seek( offset );
-            m_prevOffset = offset;
+            m_decoder->Start();
         }
+
+        m_prevDecoderModeTime = decoderModeTime;
+    }
+}
+
+// *************************************
+//
+void                                DefaultVideoStreamDecoderPlugin::MarkOffsetChanges  ()
+{
+    const auto keys = m_offsetParam->AccessInterpolator().GetKeys();
+    std::map< TimeType, Float32 > keysToUpdate;
+    for( auto & key : keys )
+    {
+        if( key.val[ 1 ] == 0.f )
+        {
+            keysToUpdate[ key.t ] = key.val[ 0 ];
+        }
+    }
+
+    for( auto key : keysToUpdate )
+    {
+        m_offsetCounter += 1.f;
+        m_offsetParam->SetVal( glm::vec2( key.second, m_offsetCounter ), key.first );
     }
 }
 

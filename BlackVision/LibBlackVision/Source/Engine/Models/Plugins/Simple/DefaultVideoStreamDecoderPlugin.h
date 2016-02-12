@@ -58,12 +58,15 @@ private:
 
 	IVideoDecoderPtr				    m_decoder;
 
+    TimeType                            m_prevDecoderModeTime;
+
 	DecoderModeParamPtr                 m_decoderModeParam;
     DecoderMode                         m_prevDecoderMode;
 
 	/** time in seconds from the beginning of video */
-    ParamFloatPtr                       m_offsetParam;                 
-    Float32                             m_prevOffset;
+    ParamVec2Ptr                        m_offsetParam;                 
+    Float32                             m_prevOffsetCounter;
+    Float32                             m_offsetCounter;
 
 public:
 
@@ -82,11 +85,13 @@ public:
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 
-    void                                        HandleDecoder               ();
-
 private:
 
+    void                                        HandleDecoder               ();
+
     void                                        InitVertexAttributesChannel ();
+
+    void                                        MarkOffsetChanges           ();
 
 };
 
