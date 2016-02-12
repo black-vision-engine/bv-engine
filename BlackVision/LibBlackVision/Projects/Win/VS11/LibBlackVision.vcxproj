@@ -282,6 +282,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\IDGenerator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelNodeEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelSceneEditor.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\ModelState.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectAlphaMask.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectBase.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectBlur.cpp" />
@@ -482,6 +483,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Builder\ModelNodeEffectFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\IDGenerator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IFontDescriptor.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\ModelState.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectBlur.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectLightScattering.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectShadow.h" />

@@ -5,6 +5,7 @@
 #include "Engine/Models/Updaters/UpdatersManager.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Models/ModelState.h"
 
 #include "Tools/SimpleTimer.h"
 #include "Tools/Profiler/HerarchicalProfiler.h"
@@ -119,6 +120,8 @@ BVAppLogic::BVAppLogic              ( Renderer * renderer )
     m_renderLogic = new RenderLogic();
     m_remoteHandlers = new RemoteEventsHandlers;
     m_remoteController = new JsonCommandsListener;
+
+    model::ModelState::GetInstance().RegisterBVProject( m_bvProject.get() );
     //m_renderLogic = new FrameRenderLogic();
 }
 

@@ -35,7 +35,6 @@ class RenderLogic;
 class Renderer;
 class RemoteEventsHandlers;
 
-
 enum class BVAppState : int
 {
     BVS_INITALIZING = 0,
@@ -128,7 +127,6 @@ private:
     void                            InitializeRemoteCommunication();
 
     std::string                     GetEnvScene();
-
 };
 
 } //bv
