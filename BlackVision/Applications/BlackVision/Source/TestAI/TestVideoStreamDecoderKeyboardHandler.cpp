@@ -8,6 +8,11 @@
 #include "Engine/Models/Plugins/Simple/DefaultVideoStreamDecoderPlugin.h"
 #include "Engine/Models/Plugins/PluginUtils.h"
 
+#include "Engine/Models/BVProjectEditor.h"
+#include "Serialization/BV/XML/BVXMLSerializer.h"
+#include "Serialization/Json/JsonSerializeObject.h"
+
+
 namespace bv {
 
 // *********************************
@@ -50,6 +55,13 @@ void TestVideoStreamDecoderKeyboardHandler::HandleKey( unsigned char c, BVAppLog
 	else if( c == 'z' )
     {
 		editor->RemoveScene( "sceneFromEnv: VIDEO_STREAM_TEST_SCENE" );
+    }
+    else if( c == 'g' )
+    {
+        BVXMLSerializer ser;
+        //auto sob = new JsonSerializeObject();
+        logic->GetBVProject()->GetScenes()[ 0 ]->Serialize( ser );
+        ser.Save( "test.xml" );
     }
 }
 

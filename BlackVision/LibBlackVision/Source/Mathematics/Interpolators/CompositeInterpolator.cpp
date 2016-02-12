@@ -333,7 +333,7 @@ void CompositeInterpolator< TimeValueT, ValueT >::AddKey             ( TimeValue
     {
         keys[ i ].val = v;
 
-        if( i != 0 )
+        if( i != 0 && interpolators[ i-1 ]->GetType() != EvaluatorType::ET_CONSTANT ) // FIXME: think about cleaner solution (perhaps inside of SetValue)
         {
             interpolators[ i-1 ]->SetValue( t, v );
         }

@@ -17,6 +17,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultCylinderPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCubePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultCogWheelPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultVideoStreamDecoderPlugin.h"
 #include "Widgets/NodeReplicator/NodeReplicator.h"
 #include "Widgets/NodeReplicator/ShiftReplicationModifier.h"
 
@@ -1563,12 +1564,8 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
 {
 	{ useAlphaMask; }
     //Timeline stuff
-    auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimeline( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
-    
-    auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
-
-    someTimelineWithEvents->AddChild( localTimeline );
-    timeEvaluator->AddChild( someTimelineWithEvents );
+    auto localTimeline = model::TimelineHelper::CreateDefaultTimeline( "timeline0", 5.0f, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_REPEAT );
+    timeEvaluator->AddChild( localTimeline );
 
     std::vector< std::string > GSimplePluginsUIDS( GSimplePlugins7, GSimplePlugins7 + 3 );
 
@@ -1591,7 +1588,17 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
 	
 	//http://trace.eas.asu.edu/yuv/akiyo/akiyo_cif.7z
 	//success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/akiyo_cif.yuv", TextureFormat::F_A8R8G8B8, 352, 288, 25.0, VideoPixelFormat::VPF_YUV420P );
+
+    SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 0.0f, model::DefaultVideoStreamDecoderPlugin::DecoderMode::PLAY );
+    SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "offset" ), 0.0f, glm::vec2( 9.f, 0.f ) );
+    //SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "offset" ), 5.0f, glm::vec2( 0.f, 0.f ) );
+   // SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 5.0f, model::DefaultVideoStreamDecoderPlugin::DecoderMode::PLAY );
+    //SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "offset" ), 10.0f, glm::vec2( 7.f, 0.f ) );
+    //SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 15.0f, model::DefaultVideoStreamDecoderPlugin::DecoderMode::PLAY );
+    //SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "offset" ), 15.0f, glm::vec2( 0.f, 0.f ) );
 	
+    localTimeline->Play();
+
     assert( success );
 
     return node;    
