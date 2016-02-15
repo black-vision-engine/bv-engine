@@ -674,7 +674,9 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
     }
     else if( crawlAction == "Definalize" )
     {
-        return false;
+        // Hope it's enough.
+        m_started = false;
+        m_isFinalized = false;
     }
 
     return true;
