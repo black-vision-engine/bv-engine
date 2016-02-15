@@ -5,17 +5,21 @@
 
 #include "FFmpegDef.h"
 
-namespace bv
-{
+
+namespace bv {
 
 class FFmpegDemuxer
 {
 
 private:
+
 	typedef std::deque< AVPacket * >						PacketQueue;
 	typedef std::map< Int32, PacketQueue >					PacketQueueMap;
 
+    static const UInt32         SAFE_SEEK_FRAMES;
+
 private:
+
 	std::string					m_streamPath;
 
 	AVFormatContext *			m_formatCtx;
@@ -25,6 +29,7 @@ private:
 	bool						m_isEOF;
 
 public:
+
 								FFmpegDemuxer			( const std::string & streamPath );
 								~FFmpegDemuxer			();
 
@@ -40,9 +45,11 @@ public:
 	bool						IsEOF					() const;
 
 private:
+
 	void						ClearPacketQueue		();
 
     Int32						FindStreamIndex			( AVMediaType type, UInt32 idx = 0 ) const;
+
 };
 
 DEFINE_UPTR_TYPE( FFmpegDemuxer )

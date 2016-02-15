@@ -106,7 +106,8 @@ Float64					FFmpegVideoStreamDecoder::GetFrameRate		() const
 //
 Int64					FFmpegVideoStreamDecoder::ConvertTime		( Float64 time )
 {
-	return ( Int64 )( time / av_q2d( m_codecCtx->time_base ) );
+    auto timeBase = av_q2d( m_stream->time_base );
+	return ( Int64 )( time / timeBase );
 }
 
 // *******************************

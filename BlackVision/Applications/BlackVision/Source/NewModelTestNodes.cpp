@@ -1590,7 +1590,8 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
 	//success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/akiyo_cif.yuv", TextureFormat::F_A8R8G8B8, 352, 288, 25.0, VideoPixelFormat::VPF_YUV420P );
 
     SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 0.0f, model::DefaultVideoStreamDecoderPlugin::DecoderMode::PLAY );
-    SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "offset" ), 0.0f, glm::vec2( 9.f, 0.f ) );
+    SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "offset" ), 0.0f, glm::vec2( 5.f, 0.f ) );
+
     //SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "offset" ), 5.0f, glm::vec2( 0.f, 0.f ) );
    // SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 5.0f, model::DefaultVideoStreamDecoderPlugin::DecoderMode::PLAY );
     //SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "offset" ), 10.0f, glm::vec2( 7.f, 0.f ) );

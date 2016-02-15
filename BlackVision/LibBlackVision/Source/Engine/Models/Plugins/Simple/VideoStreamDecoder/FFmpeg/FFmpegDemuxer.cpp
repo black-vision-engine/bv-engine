@@ -7,6 +7,8 @@
 namespace bv
 {
 
+const UInt32         FFmpegDemuxer::SAFE_SEEK_FRAMES = 10;
+
 // *******************************
 //FIXME: pass which stream we want - now only video
 FFmpegDemuxer::FFmpegDemuxer     ( const std::string & streamPath )
@@ -93,7 +95,22 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 //
 void				FFmpegDemuxer::Seek					( Int64 timestamp, Int32 streamIdx )
 {
-	av_seek_frame( m_formatCtx, streamIdx, timestamp, AVSEEK_FLAG_ANY );
+    auto initialTS = timestamp - SAFE_SEEK_FRAMES;
+    if( initialTS < 0 )
+    {
+        initialTS = 0;
+    }
+
+	av_seek_frame( m_formatCtx, streamIdx, initialTS, AVSEEK_FLAG_BACKWARD );
+
+    Int64 currTS = 0;
+    while( currTS < timestamp )
+    {
+        auto packet = GetPacket( streamIdx );
+        currTS = packet->dts - m_formatCtx->start_time;
+        av_free_packet( packet );
+    }
+
 	ClearPacketQueue();
 }
 

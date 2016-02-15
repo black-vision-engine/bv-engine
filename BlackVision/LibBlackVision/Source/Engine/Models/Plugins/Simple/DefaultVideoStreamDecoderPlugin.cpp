@@ -120,8 +120,9 @@ DefaultVideoStreamDecoderPlugin::DefaultVideoStreamDecoderPlugin					( const std
 	, m_vsc( nullptr )
 	, m_vaChannel( nullptr )
 	, m_decoder( nullptr )
-    , m_offsetCounter( 0 )
     , m_prevOffsetCounter( 0 )
+    , m_prevDecoderModeTime( 0 )
+    , m_prevOffsetTime( 0 )
 {
     m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr );
 	m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
@@ -299,20 +300,20 @@ void                                DefaultVideoStreamDecoderPlugin::HandleDecod
         //order matters - update offset first then mode
         auto offset = m_offsetParam->Evaluate();
         auto mode =  m_decoderModeParam->Evaluate();
-        auto decoderModeTime = m_decoderModeParam->GetLocalEvaluationTime();
-        //printf( "%f\n", decoderModeTime );
-        auto hasLoop = ( m_prevDecoderModeTime > decoderModeTime );
-        if( ( m_prevOffsetCounter != offset[ 1 ] ) || hasLoop )
-        {
-            m_decoder->Seek( offset[ 0 ] );
-            printf( "%f\n", offset[ 0 ] );
-            m_prevOffsetCounter = offset[ 1 ];
 
+        auto decoderModeTime = m_decoderModeParam->GetLocalEvaluationTime();
+        auto offsetTime = m_offsetParam->GetLocalEvaluationTime();
+
+        if( ( m_prevOffsetCounter != offset[ 1 ] ) || ( m_prevOffsetTime > offsetTime ) )
+        {
             //edge case - eof
             if( mode == DecoderMode::PLAY )
             {
                 m_decoder->Start();
             }
+
+            m_decoder->Seek( offset[ 0 ] );
+            m_prevOffsetCounter = offset[ 1 ];
         }
 
         if( m_prevDecoderMode != mode )
@@ -331,7 +332,7 @@ void                                DefaultVideoStreamDecoderPlugin::HandleDecod
         }
 
         //edge case - loop
-        if( hasLoop && ( mode == DecoderMode::PLAY ) )
+        if( ( m_prevDecoderModeTime > decoderModeTime ) && ( mode == DecoderMode::PLAY ) )
         {
             m_decoder->Start();
         }
@@ -344,20 +345,11 @@ void                                DefaultVideoStreamDecoderPlugin::HandleDecod
 //
 void                                DefaultVideoStreamDecoderPlugin::MarkOffsetChanges  ()
 {
+    auto counter = 0;
     const auto keys = m_offsetParam->AccessInterpolator().GetKeys();
-    std::map< TimeType, Float32 > keysToUpdate;
     for( auto & key : keys )
     {
-        if( key.val[ 1 ] == 0.f )
-        {
-            keysToUpdate[ key.t ] = key.val[ 0 ];
-        }
-    }
-
-    for( auto key : keysToUpdate )
-    {
-        m_offsetCounter += 1.f;
-        m_offsetParam->SetVal( glm::vec2( key.second, m_offsetCounter ), key.first );
+        m_offsetParam->SetVal( glm::vec2( key.val[ 0 ], ++counter ), key.t );
     }
 }
 

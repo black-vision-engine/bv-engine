@@ -59,6 +59,7 @@ private:
 	IVideoDecoderPtr				    m_decoder;
 
     TimeType                            m_prevDecoderModeTime;
+    TimeType                            m_prevOffsetTime;
 
 	DecoderModeParamPtr                 m_decoderModeParam;
     DecoderMode                         m_prevDecoderMode;
@@ -66,7 +67,6 @@ private:
 	/** time in seconds from the beginning of video */
     ParamVec2Ptr                        m_offsetParam;                 
     Float32                             m_prevOffsetCounter;
-    Float32                             m_offsetCounter;
 
 public:
 
