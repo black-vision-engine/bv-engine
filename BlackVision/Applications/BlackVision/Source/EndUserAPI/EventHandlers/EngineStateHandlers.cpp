@@ -19,29 +19,29 @@ EngineStateHandlers::~EngineStateHandlers()
 
 // ***********************
 //
-void EngineStateHandlers::RenderingModeEvent( IEventPtr evt )
+void EngineStateHandlers::EngineStateHandler( IEventPtr evt )
 {
-    if( evt->GetEventType() != RenderingModeEvent::Type() )
+    if( evt->GetEventType() != EngineStateEvent::Type() )
         return;
 
-    bv::RenderingModeEventPtr modeEvent = std::static_pointer_cast<bv::RenderingModeEvent>( evt );
-    std::string& filePath = modeEvent->FilePath;
-    unsigned int numFrames = modeEvent->NumFrames;
-    float requestedFPS = modeEvent->FPS;
-    auto command = modeEvent->RenderingCommand;
+    bv::EngineStateEventPtr stateEvent = std::static_pointer_cast<bv::EngineStateEvent>( evt );
+    std::string& filePath = stateEvent->FilePath;
+    unsigned int numFrames = stateEvent->NumFrames;
+    float requestedFPS = stateEvent->FPS;
+    auto command = stateEvent->RenderingCommand;
 
     auto& renderMode = m_appLogic->GetRenderMode();
-    if( command == RenderingModeEvent::Command::ScreenShot )
+    if( command == EngineStateEvent::Command::ScreenShot )
         renderMode.MakeScreenShot( filePath );
-    else if( command == RenderingModeEvent::Command::RenderOffscreen )
+    else if( command == EngineStateEvent::Command::RenderOffscreen )
         renderMode.SetRenderToFileMode( filePath, requestedFPS, numFrames );
     else
     {
-        SendSimpleErrorResponse( command, modeEvent->EventID, modeEvent->SocketID, "Unknown command" );
+        SendSimpleErrorResponse( command, stateEvent->EventID, stateEvent->SocketID, "Unknown command" );
         return;
     }
 
-    SendSimpleResponse( command, modeEvent->EventID, modeEvent->SocketID, true );
+    SendSimpleResponse( command, stateEvent->EventID, stateEvent->SocketID, true );
 }
 
 

@@ -90,7 +90,7 @@ void SerializeAllEvents( const std::string& fileName )
     JsonSpiritSerializeObject*  ser = new JsonSpiritSerializeObject();
 
     HightmapEventPtr        heightmapEvent      = std::make_shared<HightmapEvent>();
-    RenderingModeEventPtr   renderingModeEvent  = std::make_shared<RenderingModeEvent>();
+    EngineStateEventPtr     engineStateEvent    = std::make_shared<EngineStateEvent>();
     VideoCardEventPtr       videoCardEvent      = std::make_shared<VideoCardEvent>();
     NodeLogicEventPtr       widgetEvent         = std::make_shared<NodeLogicEvent>();
     TimerEventPtr           timerEvent          = std::make_shared<TimerEvent>();
@@ -130,7 +130,7 @@ void SerializeAllEvents( const std::string& fileName )
         heightmapEvent->Serialize( *ser );
     ser->ExitChild();
     ser->EnterArray( L"Events" );
-        renderingModeEvent->Serialize( *ser );
+        engineStateEvent->Serialize( *ser );
     ser->ExitChild();
     ser->EnterArray( L"Events" );
         videoCardEvent->Serialize( *ser );

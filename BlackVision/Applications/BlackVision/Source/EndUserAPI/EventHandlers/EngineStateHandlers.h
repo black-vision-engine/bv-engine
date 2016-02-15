@@ -15,7 +15,7 @@ public:
     EngineStateHandlers( BVAppLogic* logic );
     ~EngineStateHandlers();
 
-    void    RenderingModeEvent       ( IEventPtr evt );
+    void    EngineStateHandler       ( IEventPtr evt );
 };
 
 } //bv

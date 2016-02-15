@@ -72,8 +72,8 @@ std::string VideoCardEvent::m_sEventName            = "VideoCardEvent";
 const EventType HightmapEvent::m_sEventType         = 0x30000014;
 std::string HightmapEvent::m_sEventName             = "HightmapEvent";
 
-const EventType RenderingModeEvent::m_sEventType       = 0x30000016;
-std::string RenderingModeEvent::m_sEventName           = "RenderingModeEvent";
+const EventType EngineStateEvent::m_sEventType       = 0x30000016;
+std::string EngineStateEvent::m_sEventName           = "EngineStateEvent";
 
 const EventType SceneEvent::m_sEventType			= 0x30000017;
 std::string SceneEvent::m_sEventName				= "SceneEvent";
@@ -454,21 +454,22 @@ template<> TimerEvent::Command WString2T    ( const std::wstring& s, const Timer
 template<> const std::wstring& T2WString    ( TimerEvent::Command t )                                           { return Enum2WString( TimerEventCommandMapping, t ); }
 
 // ========================================================================= //
-// RenderingModeEvent
+// EngineStateEvent
 // ========================================================================= //
 const std::wstring REQUESTED_FPS_WSTRING                = L"FPS";
 const std::wstring NUM_FRAMES_WSTRING                   = L"NumberFrames";
 const std::wstring RENDERING_FILE_PATH                  = L"FilePath";
 
-std::pair< RenderingModeEvent::Command, const std::wstring > RenderingModeEventCommandMapping[] = 
+std::pair< EngineStateEvent::Command, const std::wstring > EngineStateEventCommandMapping[] = 
 {
-    std::make_pair( RenderingModeEvent::Command::ScreenShot, L"ScreenShot" )
-    , std::make_pair( RenderingModeEvent::Command::RenderOffscreen, L"RenderOffscreen" ) 
-    , std::make_pair( RenderingModeEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
+    std::make_pair( EngineStateEvent::Command::ScreenShot, L"ScreenShot" )
+    , std::make_pair( EngineStateEvent::Command::RenderOffscreen, L"RenderOffscreen" )
+    , std::make_pair( EngineStateEvent::Command::CloseApplication, L"CloseApplication" )
+    , std::make_pair( EngineStateEvent::Command::Fail, SerializationHelper::EMPTY_WSTRING )      // default
 };
 
-template<> RenderingModeEvent::Command WString2T    ( const std::wstring& s, const RenderingModeEvent::Command& defaultVal )    { return WString2T( RenderingModeEventCommandMapping, s, defaultVal ); }
-template<> const std::wstring& T2WString            ( RenderingModeEvent::Command t )                                           { return Enum2WString( RenderingModeEventCommandMapping, t ); }
+template<> EngineStateEvent::Command WString2T    ( const std::wstring& s, const EngineStateEvent::Command& defaultVal )    { return WString2T( EngineStateEventCommandMapping, s, defaultVal ); }
+template<> const std::wstring& T2WString            ( EngineStateEvent::Command t )                                           { return Enum2WString( EngineStateEventCommandMapping, t ); }
 
 // ========================================================================= //
 // GlobalEffectEvent
@@ -1553,11 +1554,11 @@ EventType           VideoCardEvent::GetEventType() const
 {   return this->m_sEventType; }
 
 
-//******************* RenderingModeEvent *************
+//******************* EngineStateEvent *************
 
 // *************************************
 //
-void                RenderingModeEvent::Serialize            ( ISerializer& ser ) const
+void                EngineStateEvent::Serialize            ( ISerializer& ser ) const
 {
     ser.SetAttribute( SerializationHelper::EVENT_TYPE_WSTRING, toWString( m_sEventName ) );
     ser.SetAttribute( SerializationHelper::REQUESTED_FPS_WSTRING, toWString( FPS ) );
@@ -1568,15 +1569,15 @@ void                RenderingModeEvent::Serialize            ( ISerializer& ser 
 
 // *************************************
 //
-IEventPtr                RenderingModeEvent::Create          ( IDeserializer& deser )
+IEventPtr                EngineStateEvent::Create          ( IDeserializer& deser )
 {
     if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_WSTRING ) == toWString( m_sEventName ) )
     {
-        RenderingModeEventPtr newEvent  = std::make_shared<RenderingModeEvent>();
+        EngineStateEventPtr newEvent  = std::make_shared<EngineStateEvent>();
         newEvent->FilePath              = toString( deser.GetAttribute( SerializationHelper::RENDERING_FILE_PATH ) );
         newEvent->FPS                   = SerializationHelper::WString2T<float>( deser.GetAttribute( SerializationHelper::REQUESTED_FPS_WSTRING ), 60 );
         newEvent->NumFrames             = SerializationHelper::WString2T<int>( deser.GetAttribute( SerializationHelper::NUM_FRAMES_WSTRING ), 0 );
-        newEvent->RenderingCommand      = SerializationHelper::WString2T<RenderingModeEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), RenderingModeEvent::Command::Fail );
+        newEvent->RenderingCommand      = SerializationHelper::WString2T<EngineStateEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_WSTRING ), EngineStateEvent::Command::Fail );
 
         return newEvent;
     }
@@ -1584,24 +1585,24 @@ IEventPtr                RenderingModeEvent::Create          ( IDeserializer& de
 }
 // *************************************
 //
-IEventPtr               RenderingModeEvent::Clone             () const
-{   return IEventPtr( new RenderingModeEvent( *this ) );  }
+IEventPtr               EngineStateEvent::Clone             () const
+{   return IEventPtr( new EngineStateEvent( *this ) );  }
 
 // *************************************
 //
-EventType           RenderingModeEvent::Type()
+EventType           EngineStateEvent::Type()
 {   return m_sEventType;   }
 // *************************************
 //
-std::string&        RenderingModeEvent::Name()
+std::string&        EngineStateEvent::Name()
 {   return m_sEventName;   }
 // *************************************
 //
-const std::string&  RenderingModeEvent::GetName() const
+const std::string&  EngineStateEvent::GetName() const
 {   return Name();   }
 // *************************************
 //
-EventType           RenderingModeEvent::GetEventType() const
+EventType           EngineStateEvent::GetEventType() const
 {   return this->m_sEventType; }
 
 

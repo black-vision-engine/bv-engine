@@ -22,7 +22,7 @@ RemoteController::RemoteController()
     RegisterEvent( TimeLineEvent::Name(), TimeLineEvent::Create );
     RegisterEvent( TimerEvent::Name(), TimerEvent::Create );
     RegisterEvent( PluginStructureEvent::Name(), PluginStructureEvent::Create );
-    RegisterEvent( RenderingModeEvent::Name(), RenderingModeEvent::Create );
+    RegisterEvent( EngineStateEvent::Name(), EngineStateEvent::Create );
     RegisterEvent( VideoCardEvent::Name(), VideoCardEvent::Create );
     RegisterEvent( NodeLogicEvent::Name(), NodeLogicEvent::Create );
     RegisterEvent( HightmapEvent::Name(), HightmapEvent::Create );
