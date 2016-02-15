@@ -664,7 +664,7 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
 	}
     else if( crawlAction == "SetSpeed" )
 	{
-        std::string param = eventSer.GetAttribute( "Param" );
+        std::string param = eventSer.GetAttribute( "Speed" );
         float speed = SerializationHelper::String2T( param, 0.5f );
 		SetSpeed( speed );
 	}
