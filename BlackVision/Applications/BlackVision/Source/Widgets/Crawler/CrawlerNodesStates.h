@@ -25,6 +25,7 @@ struct CrawlerNodesStates
 
 	void Add			( bv::model::BasicNode * n );
 	void Acivate		( bv::model::BasicNode * n );
+    void Deacivate		( bv::model::BasicNode * n );
 	void Visible		( bv::model::BasicNode * n );
 	void NotVisible		( bv::model::BasicNode * n );
 

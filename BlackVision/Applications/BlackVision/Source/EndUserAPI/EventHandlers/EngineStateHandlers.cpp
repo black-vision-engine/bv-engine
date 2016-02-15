@@ -2,6 +2,7 @@
 
 #include "../../BVAppLogic.h"
 #include "EventHandlerHelpers.h"
+#include "ProjectManager.h"
 
 namespace bv
 {
@@ -30,11 +31,14 @@ void EngineStateHandlers::EngineStateHandler( IEventPtr evt )
     float requestedFPS = stateEvent->FPS;
     auto command = stateEvent->RenderingCommand;
 
+    // Converts to path inside project manager.
+    std::string path = ProjectManager::GetInstance()->ToAbsPath( filePath ).Str();
+
     auto& renderMode = m_appLogic->GetRenderMode();
     if( command == EngineStateEvent::Command::ScreenShot )
-        renderMode.MakeScreenShot( filePath );
+        renderMode.MakeScreenShot( path );
     else if( command == EngineStateEvent::Command::RenderOffscreen )
-        renderMode.SetRenderToFileMode( filePath, requestedFPS, numFrames );
+        renderMode.SetRenderToFileMode( path, requestedFPS, numFrames );
     else
     {
         SendSimpleErrorResponse( command, stateEvent->EventID, stateEvent->SocketID, "Unknown command" );

@@ -156,6 +156,22 @@ bool		Crawler::Finalize			()
 	return m_isFinalized;
 }
 
+// ***********************
+//
+bool        Crawler::Unfinalize          ()
+{
+    auto copy = m_nodesStates.m_nonActives;
+
+    for( auto n : copy )	
+		m_nodesStates.Deacivate( n );
+    
+    m_started = false;
+    m_isFinalized = false;
+
+    return true;
+}
+
+
 // *******************************
 //
 void		Crawler::SetInterspace		( Float32 interspace )
@@ -672,11 +688,9 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
     {
         Finalize();
     }
-    else if( crawlAction == "Definalize" )
+    else if( crawlAction == "Unfinalize" )
     {
-        // Hope it's enough.
-        m_started = false;
-        m_isFinalized = false;
+        Unfinalize();
     }
 
     return true;

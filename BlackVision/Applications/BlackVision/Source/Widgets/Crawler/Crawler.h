@@ -82,6 +82,7 @@ public:
     bool		AddNext				( Int32 nodeIdx );
     bool		AddNext				( const std::string& childNodeName );
 	bool		Finalize			();
+    bool        Unfinalize          ();
 
 	model::BasicNode *	GetNonActiveNode();
 	void		EnqueueNode			( model::BasicNode * n);
