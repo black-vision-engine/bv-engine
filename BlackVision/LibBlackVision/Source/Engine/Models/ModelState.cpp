@@ -76,7 +76,12 @@ bool                                ModelState::RegisterNode    ( const IModelNo
     {
         if( m_nodeStates.find( parent ) == m_nodeStates.end() )
         {
-            assert( "Parent must be registered" );
+            if( parent->GetName() == "main root" )
+            {
+                return true;
+            }
+
+            assert( !"Parent must be registered" );
             return false;
         }
     }

@@ -31,6 +31,7 @@
 
 #include "Mathematics/Box.h"
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"
+#include "ModelState.h"
 
 namespace bv { 
     
@@ -511,6 +512,8 @@ void            BasicNode::AddChildToModelOnly              ( BasicNodePtr n, UI
 	{
 		m_children.push_back( n );
 	}
+
+    ModelState::GetInstance().RegisterNode( n.get(), this );
 }
 
 // ********************************
@@ -522,6 +525,8 @@ void            BasicNode::DetachChildNodeOnly              ( BasicNodePtr n )
         if( m_children[ i ] == n )
         {
             m_children.erase( m_children.begin() + i );
+
+            ModelState::GetInstance().UnregisterNode( n.get() );
 
             return;
         }

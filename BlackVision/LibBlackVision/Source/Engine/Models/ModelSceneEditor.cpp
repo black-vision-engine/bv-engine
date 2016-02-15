@@ -2,7 +2,6 @@
 
 #include "ModelSceneEditor.h"
 
-
 namespace bv { namespace model {
 
 // ********************************

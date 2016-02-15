@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "BVProjectEditor.h"
+#include "ModelState.h"
 
 #include "Engine/Models/BVProject.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
@@ -75,6 +76,7 @@ void    BVProjectEditor::AddScene       ( model::SceneModelPtr scene )
         m_engineSceneEditor->AddChildNode( m_engineSceneEditor->GetRootNode(), sceneNode );
     }
 
+    model::ModelState::GetInstance().RegisterNode( scene->GetRootNode().get(), nullptr );
 }
 
 // *******************************
@@ -102,6 +104,8 @@ bool    BVProjectEditor::RemoveScene		( model::SceneModelPtr scene )
         
         m_engineSceneEditor->DeleteChildNode( m_engineSceneEditor->GetRootNode(), GetEngineNode( scene->GetRootNode() ) );
         MappingsCleanup( scene->GetRootNode() );
+
+        model::ModelState::GetInstance().UnregisterNode( scene->GetRootNode().get() );
 
         return true;
     }

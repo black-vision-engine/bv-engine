@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "SceneModel.h"
+#include "ModelState.h"
 
 #include "Assets/AssetDescsWithUIDs.h"
 #include "Engine/Models/ModelSceneEditor.h"
