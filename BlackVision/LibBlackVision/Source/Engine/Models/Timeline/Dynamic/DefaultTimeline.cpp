@@ -95,7 +95,7 @@ void                                DefaultTimeline::Serialize           ( ISeri
     {
         ser.SetAttribute( "loop", "true" );
         ser.SetAttribute( "loopPre", SerializationHelper::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPre() ) );
-        ser.SetAttribute( "loopPost", SerializationHelper::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPre() ) );
+        ser.SetAttribute( "loopPost", SerializationHelper::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPost() ) );
     }
 
     ser.EnterArray( "events" );

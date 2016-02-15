@@ -10,6 +10,9 @@
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.inl"
 #include "Engine/Models/Plugins/Parameters/CompositeTypedParameters.h"
 
+#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
+
+
 namespace bv { namespace model {
 
 // *******************************
@@ -164,7 +167,10 @@ void CopyParameter( IParameterPtr out, IParameterPtr in )
     }
     else if( out->GetType() == ModelParamType::MPT_ENUM )
     {
-        // FIXME so much :)
+        auto inTypedParam = QueryTypedParam< std::shared_ptr< ParamEnum< GenericEnumType > > >( in );
+        auto outTypedParam = QueryTypedParam< std::shared_ptr< ParamEnum< GenericEnumType > > >( out );
+
+        outTypedParam->AccessInterpolator() = inTypedParam->AccessInterpolator();
     }
     else if( out->GetType() == ModelParamType::MPT_STRING )
     {
