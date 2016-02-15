@@ -7,6 +7,7 @@
 #include "Impl/Accessors/TextureAssetAccessor.h"
 #include "Impl/Accessors/FontAssetAccessor.h"
 #include "Impl/Accessors/AnimationAssetAccessor.h"
+#include "Impl/Accessors/VideoStreamAssetAccessor.h"
 
 #include "IO/DirIO.h"
 
@@ -719,6 +720,16 @@ void				        ProjectManagerImpl::InitializeAssets	()
 
     auto faa = FontAssetAccessor::Create( GetRootDir() / "fonts", fontsExts );
 	RegisterCategory( AssetCategory::Create( "fonts", faa ) );
+
+    StringVector videoExts;
+	videoExts.push_back( ".*\\.bik" );
+    videoExts.push_back( ".*\\.mov" );
+    videoExts.push_back( ".*\\.MP4" );
+    videoExts.push_back( ".*\\.yuv" );
+    videoExts.push_back( ".*\\.avi" );
+
+    auto vsaa = VideoStreamAssetAccessor::Create( GetRootDir() / "video", videoExts );
+    RegisterCategory( AssetCategory::Create( "video", vsaa ) );
 }
 
 // ********************************
