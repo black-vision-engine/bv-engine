@@ -102,7 +102,12 @@ void JsonDeserializeObject::OnRootInit          ()
 //
 std::string JsonDeserializeObject::GetAttribute        ( const std::string& name ) const
 {
-    return (*m_currentNode)[ name ].asString();
+    auto & attribute = (*m_currentNode)[ name ];
+    
+    if( attribute.isNull() || attribute.isObject() || attribute.isArray() )
+        return "";
+
+    return attribute.asString();
 }
 
 // ***********************
