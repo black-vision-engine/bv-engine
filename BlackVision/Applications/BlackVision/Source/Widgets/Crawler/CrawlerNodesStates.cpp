@@ -28,17 +28,17 @@ void CrawlerNodesStates::Acivate		( bv::model::BasicNode * n )
 		}
 }
 
-//// *******************************
-////
-//void CrawlerNodesStates::Deacivate		( bv::model::BasicNode * n )
-//{
-//	for( SizeType i = 0; i < m_actives.size(); ++i )
-//		if( m_actives[ i ] == n )
-//		{
-//			m_nonActives.push_back( n );
-//			m_actives.erase( m_actives.begin() + i );
-//		}
-//}
+// *******************************
+//
+void CrawlerNodesStates::Deacivate		( bv::model::BasicNode * n )
+{
+	for( SizeType i = 0; i < m_actives.size(); ++i )
+		if( m_actives[ i ] == n )
+		{
+			m_nonActives.push_back( n );
+			m_actives.erase( m_actives.begin() + i );
+		}
+}
 
 // *******************************
 //

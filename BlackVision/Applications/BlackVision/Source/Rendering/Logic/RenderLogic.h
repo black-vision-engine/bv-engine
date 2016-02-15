@@ -36,7 +36,7 @@ private:
     BlitFullscreenEffect *          m_blitEffect;
     VideoOutputRenderLogic *        m_videoOutputRenderLogic;
 
-    ScreenShotLogic*                        m_screenShotLogic;
+    ScreenShotLogic*                m_screenShotLogic;
 
     bool                            m_displayVideoCardPreview;
     bool                            m_useVideoCardOutput;

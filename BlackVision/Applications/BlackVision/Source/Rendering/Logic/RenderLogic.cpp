@@ -44,7 +44,7 @@ RenderLogic::RenderLogic     ()
     m_displayVideoCardPreview   = previewAsVideoCard;
     m_useVideoCardOutput        = videoCardEnabled;
 
-	
+    m_screenShotLogic           = new ScreenShotLogic( 1 );
 }
 
 // *********************************
@@ -53,6 +53,8 @@ RenderLogic::~RenderLogic    ()
 {
     delete m_offscreenDisplay;
     delete m_blitEffect;
+
+    delete m_screenShotLogic;
 }
 
 // *********************************

@@ -788,27 +788,32 @@ template<> const std::wstring& SerializationHelper::T2WString   ( VideoCardEvent
 
 DEFINE_PTR_TYPE( VideoCardEvent )
 
-// ************************************* RenderingModeEvent *************************************
-class RenderingModeEvent : public RemoteEvent
+// ************************************* EngineStateEvent *************************************
+class EngineStateEvent : public RemoteEvent
 {
 public:
     typedef enum
     {
         RenderOffscreen,
         ScreenShot,
+        CloseApplication,
         Fail            ///< Wrong command
     } Command;
 private:
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
 public:
+
     float                       FPS;
     unsigned int                NumFrames;
     std::string                 FilePath;
     Command                     RenderingCommand;
+
+    //IDeserializer *             Request;
+
 public:
 
-    explicit                        RenderingModeEvent   () {};
+    explicit                        EngineStateEvent   () {};
 
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );
@@ -820,10 +825,10 @@ public:
     virtual EventType               GetEventType        () const;
 };
 
-template<> RenderingModeEvent::Command  SerializationHelper::WString2T  ( const std::wstring& s, const RenderingModeEvent::Command& defaultVal );
-template<> const std::wstring&          SerializationHelper::T2WString  ( RenderingModeEvent::Command t );
+template<> EngineStateEvent::Command  SerializationHelper::WString2T  ( const std::wstring& s, const EngineStateEvent::Command& defaultVal );
+template<> const std::wstring&          SerializationHelper::T2WString  ( EngineStateEvent::Command t );
 
-DEFINE_PTR_TYPE( RenderingModeEvent )
+DEFINE_PTR_TYPE( EngineStateEvent )
 
 
 // ************************************* ProjectEvent Event *************************************
