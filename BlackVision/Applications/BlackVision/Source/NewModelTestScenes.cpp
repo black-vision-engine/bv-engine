@@ -516,10 +516,6 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::AssetCacheTestScene( pluginsManager, timeline );
     }
-    else if( scene == "W_SERIALIZATION_TEST" )
-    {
-        node = TestScenesFactory::WSerializationTest( pluginsManager, timeline );
-    }
     else if( scene == "VIDEO_STREAM_TEST_SCENE" )
     {
  	    node = SimpleNodesFactory::CreateVideoStreamDecoderRectNode( timeline, false );
@@ -1302,96 +1298,6 @@ model::BasicNodePtr     TestScenesFactory::AssetCacheTestScene         ( const m
     return node0;
 }
 
-model::BasicNodePtr TestScenesFactory::WSerializationTest          ( const model::PluginsManager* pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
-{
-
-//#define __W_STRING_SERIALIZATION_TEST
-#ifdef __W_STRING_SERIALIZATION_TEST
-    #define MAKE_STR( s ) L##s
-    #define STRING std::wstring
-    #define Serializer JsonSpiritSerializeObject
-    #define Deserializer JsonSpiritDeserializeObject
-#else
-    #define MAKE_STR( s ) s
-    #define STRING std::string
-    #define Serializer JsonSerializeObject
-    #define Deserializer JsonDeserializeObject
-#endif
-
-    pluginsManager;
-    auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "textures/sand.jpg" );
-
-    Serializer serializeObject;
-    serializeObject.EnterChild( MAKE_STR("asset") );
-        serializeObject.SetAttribute( MAKE_STR("path"), MAKE_STR("sand.jpg") );
-        serializeObject.SetAttribute( MAKE_STR("type"), MAKE_STR("texture") );
-        serializeObject.EnterArray( MAKE_STR("mipmaps") );
-            serializeObject.EnterChild( MAKE_STR("mipmap") );
-                serializeObject.SetAttribute( MAKE_STR("path"), MAKE_STR("fire.jpg") );
-                serializeObject.SetAttribute( MAKE_STR("type"), MAKE_STR("texture") );
-            serializeObject.ExitChild();
-            serializeObject.EnterChild( MAKE_STR("mipmap") );
-                serializeObject.SetAttribute( MAKE_STR("path"), MAKE_STR("water.jpg") );
-                serializeObject.SetAttribute( MAKE_STR("type"), MAKE_STR("texture") );
-            serializeObject.ExitChild();
-            serializeObject.EnterChild( MAKE_STR("mipmap") );
-                serializeObject.SetAttribute( MAKE_STR("path"), MAKE_STR("fire.jpg") );
-                serializeObject.SetAttribute( MAKE_STR("type"), MAKE_STR("texture") );
-            serializeObject.ExitChild();
-            serializeObject.EnterChild( MAKE_STR("mipmap") );
-                serializeObject.SetAttribute( MAKE_STR("path"), MAKE_STR("poison.jpg") );
-                serializeObject.SetAttribute( MAKE_STR("type"), MAKE_STR("texture") );
-            serializeObject.ExitChild();
-        serializeObject.ExitChild();
-
-        serializeObject.EnterChild( MAKE_STR("RendererContext") );
-            serializeObject.SetAttribute( MAKE_STR("BackFaceCulling"), MAKE_STR("true") );
-        serializeObject.ExitChild();
-
-        // Shouldn't be added. RendererContext exists already. This causes assert.
-        serializeObject.EnterChild( MAKE_STR("RendererContext") );
-            serializeObject.SetAttribute( MAKE_STR("BackFaceCulling"), MAKE_STR("false") );
-        serializeObject.ExitChild();
-
-
-        // This should assert or report error
-        //serializeObject.EnterChild( MAKE_STR("mipmap") );
-        //    serializeObject.SetAttribute( MAKE_STR("path"), MAKE_STR("poison.jpg") );
-        //serializeObject.ExitChild();
-    serializeObject.ExitChild();
-
-    serializeObject.Save( "serialization/textureWSerialize.json", FormatStyle::FORMATSTYLE_READABLE );
-
-
-    Deserializer deserializeObject;
-    if( deserializeObject.LoadFile( "serialization/textureWSerialize.json" ) )
-    {
-        STRING result;
-        result;
-
-        deserializeObject.EnterChild( MAKE_STR("asset") );
-            result = deserializeObject.GetAttribute( MAKE_STR("path") );
-            result = deserializeObject.GetAttribute( MAKE_STR("type") );
-            if( deserializeObject.EnterChild( MAKE_STR("mipmap") ) )
-            {
-                do
-                {
-                    result = deserializeObject.GetAttribute( MAKE_STR("path") );
-                    result = deserializeObject.GetAttribute( MAKE_STR("type") );
-                } while( deserializeObject.NextChild() );
-                deserializeObject.ExitChild();      // mipmap
-            }
-        deserializeObject.ExitChild();          // asset
-    }
-
-    return node0;
-
-
-#undef MAKE_STR
-#undef Serializer
-#undef Deserializer
-#undef STRING
-}
 
 model::BasicNodePtr TestScenesFactory::RemoteEventsTestScene( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {

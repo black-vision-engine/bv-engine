@@ -186,9 +186,9 @@ public:
     std::string                     PluginName;
     IDeserializer *                 AssetData;
 
-    int                             SockID;
 public:
-    explicit                        LoadAssetEvent();
+    explicit                        LoadAssetEvent      () { AssetData = nullptr; }
+                                    ~LoadAssetEvent     () { delete AssetData; }
 
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );
@@ -241,7 +241,7 @@ public:
     std::string                     ParamName;
     std::string                     ParamSubName;
     std::string                     SceneName;
-    std::string                    Value;
+    std::string                     Value;
 
     float                           Time;
     ParamKeyEvent::Command          ParamCommand;
@@ -375,16 +375,17 @@ private:
     static const EventType      m_sEventType;
     static std::string          m_sEventName;
 public:
+    
     NodeStructureEvent::Command     SceneCommand;
     std::string                     SceneName;
     std::string                     NodePath;
     std::string                     NewNodeName;
 	UInt32							AttachIndex;
-    std::string                     Request;
+    IDeserializer *                 Request;
 
-    std::string                     TimelinePath; //not used
 public:
-    explicit                        NodeStructureEvent   () {}
+    explicit                        NodeStructureEvent    () { Request = nullptr; }
+                                    ~NodeStructureEvent   () { delete Request; }
 
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );
@@ -426,10 +427,12 @@ public:
     std::string                     PluginName;
     std::string                     PluginUID;
     std::string                     TimelinePath;
-	std::string						Request;
     unsigned int                    AttachIndex;
+    IDeserializer * 				Request;
+
 public:
-    explicit                        PluginStructureEvent    () {}
+    explicit                        PluginStructureEvent    () { Request = nullptr; }
+                                    ~PluginStructureEvent   () { delete Request; }
 
     virtual void                    Serialize           ( ISerializer& ser ) const;
     static IEventPtr                Create              ( IDeserializer& deser );
@@ -486,7 +489,7 @@ private:
     static std::string          m_sEventName;
 public:
     ProjectEvent::Command           ProjectCommand;
-    IDeserializer*                  Request;
+    IDeserializer *                 Request;
 public:
     explicit                        ProjectEvent   () { Request = nullptr; }
                                     ~ProjectEvent   () { delete Request; }

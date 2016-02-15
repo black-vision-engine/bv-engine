@@ -47,6 +47,14 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
     auto& action = *widgetEvent->Action;
     NodeLogicEvent::Command command = widgetEvent->WidgetCommand;
 
+    assert( widgetEvent->Action != nullptr );
+    if( widgetEvent->Action == nullptr )
+    {
+        SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "Wrong request" );
+        return;
+    }
+
+
     auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
     auto basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
     if( basicNode == nullptr )

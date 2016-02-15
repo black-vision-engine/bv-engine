@@ -101,12 +101,19 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 
 	std::string& sceneName		= structureEvent->SceneName;
     std::string& nodePath		= structureEvent->NodePath;
-    std::string& newNodeName	= structureEvent->NewNodeName;
-	std::string& request		= structureEvent->Request;
+    std::string& newNodeName	= structureEvent->NewNodeName;	
     auto attachIndex			= structureEvent->AttachIndex;
     auto eventID                = structureEvent->EventID;
+    auto command                = structureEvent->SceneCommand;
 
-    auto command = structureEvent->SceneCommand;
+    IDeserializer * request		= structureEvent->Request;
+
+    assert( structureEvent->Request != nullptr );
+    if( structureEvent->Request == nullptr )
+    {
+        SendSimpleErrorResponse( command, eventID, structureEvent->SocketID, "Wrong request" );
+        return;
+    }
 
     bool result = true;
 	auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
@@ -142,21 +149,21 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 	else if( command == NodeStructureEvent::Command::MoveNode )
 	{
 		//FIXME: replace with sth more generic
-		auto destSceneName = GetRequestParamValue( request )[ "DestSceneName" ].asString();
-		auto destNodePath = GetRequestParamValue( request )[ "DestPath" ].asString();
-        auto destIdx = SerializationHelper::String2T< UInt32 >( GetRequestParamValue( request )[ "DestIndex" ].asString(), 0 );
-		auto srcSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
-		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
+		auto destSceneName = request->GetAttribute( "DestSceneName" );
+		auto destNodePath = request->GetAttribute( "DestPath" );
+        auto destIdx = SerializationHelper::String2T< UInt32 >( request->GetAttribute( "DestIndex" ), 0 );
+		auto srcSceneName = request->GetAttribute( "SrcSceneName" );
+		auto srcNodePath = request->GetAttribute( "SrcPath" );
 		
 		result = editor->MoveNode( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath );
 	}
 	else if( command == NodeStructureEvent::Command::CopyNode )
 	{
 		//FIXME: replace with sth more generic
-		auto destSceneName = GetRequestParamValue( request )[ "DestSceneName" ].asString();
-		auto destNodePath = GetRequestParamValue( request )[ "DestPath" ].asString();
-		auto srcSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
-		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
+		auto destSceneName = request->GetAttribute( "DestSceneName" );
+		auto destNodePath = request->GetAttribute( "DestPath" );
+		auto srcSceneName = request->GetAttribute( "SrcSceneName" );
+		auto srcNodePath = request->GetAttribute( "SrcPath" );
 
 		auto copyPtr = editor->AddNodeCopy( destSceneName, destNodePath, srcSceneName, srcNodePath );
         if( copyPtr == nullptr )
@@ -180,10 +187,17 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
     std::string& pluginName		= structureEvent->PluginName;
     std::string& pluginUID		= structureEvent->PluginUID;
 	std::string& timelinePath	= structureEvent->TimelinePath;
-	std::string& request		= structureEvent->Request;
     unsigned int attachIndex	= structureEvent->AttachIndex;
     auto command				= structureEvent->PluginCommand;
     auto eventID                = structureEvent->EventID;
+    IDeserializer * request		= structureEvent->Request;
+
+    assert( structureEvent->Request != nullptr );
+    if( structureEvent->Request == nullptr )
+    {
+        SendSimpleErrorResponse( command, eventID, structureEvent->SocketID, "Wrong request" );
+        return;
+    }
 
     bool result = true;
 	auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
@@ -207,12 +221,12 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
     else if( command == PluginStructureEvent::Command::CopyPlugin )
 	{
 		//FIXME: replace with sth more generic
-		auto destSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
-		auto destNodePath = GetRequestParamValue( request )[ "DestPath" ].asString();
-        auto destIdx = SerializationHelper::String2T< UInt32 >( GetRequestParamValue( request )[ "DestIndex" ].asString(), 0 );
-		auto srcSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
-		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
-		auto srcPluginName = GetRequestParamValue( request )[ "SrcName" ].asString();
+        auto destSceneName = request->GetAttribute( "SrcSceneName" );
+		auto destNodePath = request->GetAttribute( "DestPath" );
+        auto destIdx = SerializationHelper::String2T< UInt32 >( request->GetAttribute( "DestIndex" ), 0 );
+		auto srcSceneName = request->GetAttribute( "SrcSceneName" );
+		auto srcNodePath = request->GetAttribute( "SrcPath" );
+		auto srcPluginName = request->GetAttribute( "SrcName" );
 
 		auto pluginPtr = editor->AddPluginCopy( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName );
         if( pluginPtr == nullptr )
@@ -221,12 +235,12 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
 	else if( command == PluginStructureEvent::Command::MovePlugin )
 	{
 		//FIXME: replace with sth more generic
-		auto destSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
-		auto destNodePath = GetRequestParamValue( request )[ "DestPath" ].asString();
-        auto destIdx = SerializationHelper::String2T< UInt32 >( GetRequestParamValue( request )[ "DestIndex" ].asString(), 0 );
-		auto srcSceneName = GetRequestParamValue( request )[ "SrcSceneName" ].asString();
-		auto srcNodePath = GetRequestParamValue( request )[ "SrcPath" ].asString();
-		auto srcPluginName = GetRequestParamValue( request )[ "SrcName" ].asString();
+		auto destSceneName = request->GetAttribute( "SrcSceneName" );
+		auto destNodePath = request->GetAttribute( "DestPath" );
+        auto destIdx = SerializationHelper::String2T< UInt32 >( request->GetAttribute( "DestIndex" ), 0 );
+		auto srcSceneName = request->GetAttribute( "SrcSceneName" );
+		auto srcNodePath = request->GetAttribute( "SrcPath" );
+		auto srcPluginName = request->GetAttribute( "SrcName" );
 
 		result = editor->MovePlugin( destSceneName, destNodePath, destIdx, srcSceneName, srcNodePath, srcPluginName );
 	}
@@ -248,6 +262,14 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
     IDeserializer& request = *projectEvent->Request;
     auto command = projectEvent->ProjectCommand;
     int senderID = projectEvent->SocketID;
+
+    assert( projectEvent->Request != nullptr );
+    if( projectEvent->Request == nullptr )
+    {
+        SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Wrong request" );
+        return;
+    }
+
 
     if( command == ProjectEvent::Command::NewProject )
     {

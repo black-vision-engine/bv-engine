@@ -833,9 +833,6 @@ unsigned char           KeyPressedEvent::GetChar             () const
 
 //******************* LoadAssetEvent *************
 
-LoadAssetEvent::LoadAssetEvent         () 
-{}
-
 // *************************************
 //
 void                LoadAssetEvent::Serialize            ( ISerializer& ser ) const
@@ -1060,9 +1057,10 @@ void                NodeStructureEvent::Serialize            ( ISerializer& ser 
     ser.SetAttribute( SerializationHelper::NODE_NAME_STRING, NodePath );
     ser.SetAttribute( SerializationHelper::NEW_NODE_NAME_STRING, NewNodeName );
     ser.SetAttribute( SerializationHelper::COMMAND_STRING, SerializationHelper::T2String( SceneCommand ) );
-    ser.SetAttribute( SerializationHelper::TIMELINE_NAME_STRING, TimelinePath );
-    ser.SetAttribute( SerializationHelper::REQUEST_STRING, Request );
     ser.SetAttribute( SerializationHelper::ATTACH_INDEX_STRING, SerializationHelper::T2String( AttachIndex ) );
+
+    ser.EnterChild( SerializationHelper::REQUEST_STRING );
+    ser.ExitChild();
 }
 
 // *************************************
@@ -1075,10 +1073,10 @@ IEventPtr                NodeStructureEvent::Create          ( IDeserializer& de
         newEvent->SceneName         = deser.GetAttribute( SerializationHelper::SCENE_NAME_STRING );
         newEvent->NodePath          = deser.GetAttribute( SerializationHelper::NODE_NAME_STRING );
         newEvent->NewNodeName       = deser.GetAttribute( SerializationHelper::NEW_NODE_NAME_STRING );
-        newEvent->TimelinePath      = deser.GetAttribute( SerializationHelper::TIMELINE_NAME_STRING );
         newEvent->SceneCommand      = SerializationHelper::String2T<NodeStructureEvent::Command>( deser.GetAttribute( SerializationHelper::COMMAND_STRING ), NodeStructureEvent::Command::Fail );
-        newEvent->Request           = deser.GetAttribute( SerializationHelper::REQUEST_STRING );
         newEvent->AttachIndex       = SerializationHelper::String2T<unsigned int>( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_STRING ), 0 );
+
+        newEvent->Request           = deser.DetachBranch( SerializationHelper::REQUEST_STRING );
         
         return newEvent;
     }
@@ -1121,7 +1119,9 @@ void                PluginStructureEvent::Serialize            ( ISerializer& se
     ser.SetAttribute( SerializationHelper::ATTACH_INDEX_STRING, SerializationHelper::T2String( AttachIndex ) );
     ser.SetAttribute( SerializationHelper::PLUGIN_UID_STRING, PluginUID );
     ser.SetAttribute( SerializationHelper::TIMELINE_NAME_STRING, TimelinePath );
-	ser.SetAttribute( SerializationHelper::REQUEST_STRING, Request );
+
+    ser.EnterChild( SerializationHelper::REQUEST_STRING );
+    ser.ExitChild();
 }
 
 // *************************************
@@ -1138,7 +1138,8 @@ IEventPtr                PluginStructureEvent::Create          ( IDeserializer& 
         newEvent->AttachIndex       = SerializationHelper::String2T<unsigned int>( deser.GetAttribute( SerializationHelper::ATTACH_INDEX_STRING ), 0 );
         newEvent->PluginUID         = deser.GetAttribute( SerializationHelper::PLUGIN_UID_STRING );
         newEvent->TimelinePath      = deser.GetAttribute( SerializationHelper::TIMELINE_NAME_STRING );
-        newEvent->Request			= deser.GetAttribute( SerializationHelper::REQUEST_STRING );
+
+        newEvent->Request			= deser.DetachBranch( SerializationHelper::REQUEST_STRING );
 
         return newEvent;
     }

@@ -43,6 +43,13 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
         auto & request = *infoEvent->Request;
         auto eventID = infoEvent->EventID;
 
+        assert( infoEvent->Request != nullptr );
+        if( infoEvent->Request == nullptr )
+        {
+            SendSimpleErrorResponse( command, eventID, infoEvent->SocketID, "Wrong request" );
+            return;
+        }
+
         JsonSerializeObject responseJSON;
 
         if( command == InfoEvent::Command::TreeStructure )
