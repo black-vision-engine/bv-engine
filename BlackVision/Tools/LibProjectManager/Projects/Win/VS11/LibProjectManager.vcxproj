@@ -25,6 +25,7 @@
     <ClCompile Include="..\..\..\Source\Impl\Accessors\PresetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\SceneAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\VideoStreamAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\ProjectManagerImpl.cpp" />
     <ClCompile Include="..\..\..\Source\Project.cpp" />
     <ClCompile Include="..\..\..\Source\ProjectManager.cpp" />
@@ -38,6 +39,7 @@
     <ClInclude Include="..\..\..\Source\Impl\Accessors\PresetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\SceneAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\VideoStreamAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\ProjectManagerImpl.h" />
     <ClInclude Include="..\..\..\Source\Project.h" />
     <ClInclude Include="..\..\..\Source\ProjectManager.h" />

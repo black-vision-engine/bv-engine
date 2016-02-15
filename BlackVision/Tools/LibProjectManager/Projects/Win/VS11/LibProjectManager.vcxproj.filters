@@ -31,6 +31,9 @@
     <ClCompile Include="..\..\..\Source\Impl\Accessors\PresetAccessor.cpp">
       <Filter>Impl\Accessors</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\VideoStreamAssetAccessor.cpp">
+      <Filter>Impl\Accessors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\AssetAccessor.h" />
@@ -54,6 +57,9 @@
       <Filter>Impl\Accessors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Impl\Accessors\PresetAccessor.h">
+      <Filter>Impl\Accessors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\VideoStreamAssetAccessor.h">
       <Filter>Impl\Accessors</Filter>
     </ClInclude>
   </ItemGroup>
