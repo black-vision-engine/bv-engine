@@ -199,12 +199,6 @@
     <Filter Include="Serialization\Json">
       <UniqueIdentifier>{9808fb8b-72bf-4e2b-9a3b-859201009653}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Serialization\JsonSpirit">
-      <UniqueIdentifier>{7932c36e-9f53-4586-a5cf-c67270fb11f3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Serialization\JsonSpirit\JsonSpiritSource">
-      <UniqueIdentifier>{3ff2194a-b846-4abc-a9c5-a29d2d702398}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assets\Thumbnail">
       <UniqueIdentifier>{7967207c-245f-44ac-9b20-e2f8846fba00}</UniqueIdentifier>
     </Filter>
@@ -1139,21 +1133,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Serialization\Json\JsonSerializeObject.cpp">
       <Filter>Serialization\Json</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritDeserializeObject.cpp">
-      <Filter>Serialization\JsonSpirit</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSerializeObject.cpp">
-      <Filter>Serialization\JsonSpirit</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_reader.cpp">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_value.cpp">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer.cpp">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Thumbnail.cpp">
       <Filter>Assets\Thumbnail</Filter>
@@ -2451,42 +2430,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Serialization\Json\JsonSerializeObject.h">
       <Filter>Serialization\Json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritDeserializeObject.h">
-      <Filter>Serialization\JsonSpirit</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSerializeObject.h">
-      <Filter>Serialization\JsonSpirit</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_error_position.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_reader.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_reader_template.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_stream_reader.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_utils.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_value.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer_options.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Serialization\JsonSpirit\JsonSpiritSource\json_spirit_writer_template.h">
-      <Filter>Serialization\JsonSpirit\JsonSpiritSource</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Thumbnail.h">
       <Filter>Assets\Thumbnail</Filter>

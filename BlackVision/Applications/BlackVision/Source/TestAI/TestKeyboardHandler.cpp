@@ -2,7 +2,6 @@
 
 #include "BVAppLogic.h"
 #include "Serialization/BV/XML/BVXMLSerializer.h"
-#include "Serialization/JsonSpirit/JsonSpiritSerializeObject.h"
 #include "Serialization/Json/JsonSerializeObject.h"
 
 #include "Assets/Font/FontAssetDescriptor.h"
@@ -87,7 +86,7 @@ namespace
 
 void SerializeAllEvents( const std::string& fileName )
 {
-    JsonSpiritSerializeObject*  ser = new JsonSpiritSerializeObject();
+    JsonSerializeObject*  ser = new JsonSerializeObject();
 
     HightmapEventPtr        heightmapEvent      = std::make_shared<HightmapEvent>();
     RenderingModeEventPtr   renderingModeEvent  = std::make_shared<RenderingModeEvent>();
