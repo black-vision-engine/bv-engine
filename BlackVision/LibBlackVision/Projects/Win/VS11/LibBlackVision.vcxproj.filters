@@ -1186,6 +1186,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelState.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\VideoStreamAssetThumbnail.cpp">
+      <Filter>Assets\Thumbnail\Impl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2533,6 +2536,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\ModelState.h">
       <Filter>Engine\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\VideoStreamAssetThumbnail.h">
+      <Filter>Assets\Thumbnail\Impl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
