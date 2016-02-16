@@ -1,13 +1,16 @@
 #include "stdafx.h"
 
+#include "Key.h"
 #include "Key.inl"
 
 #include "Serialization/SerializationHelper.h"
 
+#include "Mathematics/glm_inc.h"
+
 namespace bv
 {
 #define INSTANTIATE( TIME_TYPE, TYPE ) \
-template bv::Key< TIME_TYPE, TYPE >;
+template class bv::Key< TIME_TYPE, TYPE >;
 
 INSTANTIATE( TimeType, Float32 )
 INSTANTIATE( TimeType, glm::vec2 )
