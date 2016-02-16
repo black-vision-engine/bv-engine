@@ -37,10 +37,13 @@ ThumbnailConstPtr            VideoStreamUtils::LoadThumbnail                   (
 
     }
 
-    auto frameTex = LoadSingleFrame( desc, 3.0f );
+    auto frameTex = LoadSingleFrame( desc, 1.0f );
+    if( frameTex == nullptr )
+        return nullptr;
 
     auto resized = image::Resize( frameTex->GetData(), frameTex->GetWidth(), frameTex->GetHeight(), TextureUtils::ToBPP( frameTex->GetFormat() ), 128, 128, image::FilterType::FT_LANCZOS );
     auto compresed = image::SaveTGAToHandle( resized, 128, 128, 32 );
+
     auto thumb = VideoStreamAssetThumbnail::Create( compresed, h );
 
     JsonSerializeObject ser;
@@ -59,7 +62,11 @@ SingleTextureAssetConstPtr  VideoStreamUtils::LoadSingleFrame     ( const VideoS
     auto decoder = std::make_shared< FFmpegVideoDecoder >( desc );
 
     auto frameChunk = decoder->GetSingleFrame( frameTime );
-    return SingleTextureAsset::Create( frameChunk.frameData, desc->GetKey(), desc->GetWidth(), desc->GetHeight(), desc->GetTextureFormat() );
+    
+    if( frameChunk.frameData != nullptr )
+        return SingleTextureAsset::Create( frameChunk.frameData, desc->GetKey(), decoder->GetWidth(), decoder->GetHeight(), desc->GetTextureFormat() );
+
+    return nullptr;
 }
 
 

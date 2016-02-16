@@ -3,6 +3,11 @@
 #include "VideoStreamAssetDescriptor.h"
 #include <cassert>			//@todo delete after implementing all functions
 
+
+// Fixme: Hack. Path in VideoStream descriptor is used to load video.
+// There is no way to convert it to ProjectManager path.
+#include "ProjectManager.h"
+
 namespace bv
 {
 
@@ -34,6 +39,8 @@ ser.ExitChild();
 ISerializableConstPtr VideoStreamAssetDesc::Create          ( const IDeserializer& deser )
 {
 	auto path = deser.GetAttribute( "path" );
+    path = ProjectManager::GetInstance()->ToAbsPath( path ).Str();
+
 	auto format = static_cast< TextureFormat >( stoul( deser.GetAttribute( "format" ) ) );
 
 	return Create( path, format );

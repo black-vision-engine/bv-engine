@@ -467,7 +467,11 @@ void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser,
         if( desc )
         {
             auto thumb = AssetManager::GetInstance().LoadThumbnail( desc );
-            thumbs.push_back( std::make_pair( thumb, desc ) );
+            
+            if( thumb != nullptr )  // Fixme Inform editor that some thumbs can't be generated.
+                thumbs.push_back( std::make_pair( thumb, desc ) );
+
+
             //File::Write( thumb->Data()->Get(), thumb->Data()->Size(), "font.tga", false );
         }
     }
