@@ -65,25 +65,6 @@ Key< TimeValueT, ValueT >   Key<TimeValueT, ValueT>::operator-   ( const Key< Ti
 // *************************************
 //
 template<>
-ISerializablePtr        Key< bv::TimeType, glm::vec3 >::Create          ( const IDeserializer& doc ) // FIXME: this is not a good place to do that
-{
-    auto time = doc.GetAttribute( "time" );
-    auto val_ = doc.GetAttribute( "val" );
-
-    auto vals = split_( val_, ',' );
-    assert( vals.size() == 3 );
-    glm::vec3 val( std::stof( vals[0] ), 
-        std::stof( vals[1] ), 
-        std::stof( vals[2] ) );
-
-
-    auto key = std::make_shared< Key< bv::TimeType, glm::vec3 > >( std::stof( time ), glm::vec3( val ) );
-    return key;
-}
-
-// *************************************
-//
-template<>
 Key< bv::TimeType, bool > Key< bv::TimeType, bool >::operator+( const Key< bv::TimeType, bool > &/*that*/ ) const
 {
     assert( false ); return Key< bv::TimeType, bool >( 0, false );

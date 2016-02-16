@@ -2,8 +2,6 @@
 
 #include "Serialization/ISerializable.h"
 
-#include "Mathematics/glm_inc.h"
-
 namespace bv
 {
 
@@ -39,11 +37,6 @@ Key< TimeValueT, ValueT > operator*( const TimeValueT & a, const Key< TimeValueT
 //
 template<>
 Key< bv::TimeType, bool > operator*( const bv::TimeType & /*a*/, const Key< bv::TimeType, bool > &/*that*/ );
-
-// *************************************
-//
-template<>
-ISerializablePtr        Key< bv::TimeType, glm::vec3 >::Create          ( const IDeserializer& doc );
 
 // *************************************
 //

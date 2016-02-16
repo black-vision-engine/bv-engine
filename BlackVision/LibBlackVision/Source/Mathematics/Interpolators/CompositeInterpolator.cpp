@@ -15,6 +15,8 @@
 #include <array>
 //#include <initializer_list>
 
+#include "Mathematics/glm_inc.h"
+
 namespace bv {
 
 namespace SerializationHelper {
