@@ -165,6 +165,7 @@
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\BaseEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\EventManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\Events.cpp" />
@@ -472,6 +473,7 @@
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamLoader.h" />
+    <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\EventHelpers.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\DefaultMultipassEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\LightScatteringEffect.h" />

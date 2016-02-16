@@ -20,6 +20,9 @@ public:
     ThumbnailConstPtr   LoadThumbnail       ( const AssetDescConstPtr & desc ) const override;
 
     virtual ~VideoStreamLoader(){}
+
+private:
+    ThumbnailConstPtr   LoadThumbnail       ( const VideoStreamAssetDescConstPtr & desc );
 };
 
 

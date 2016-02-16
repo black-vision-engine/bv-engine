@@ -1,8 +1,12 @@
 #include "stdafx.h"
+
 #include "VideoStreamLoader.h"
+#include "VideoStreamUtils.h"
+
 
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "ProjectManager.h"
+
 
 
 namespace bv
@@ -34,10 +38,16 @@ AssetDescConstPtr	VideoStreamLoader::CreateDescriptor	    ( const IDeserializer&
 
 // ***********************
 //
-ThumbnailConstPtr   VideoStreamLoader::LoadThumbnail        ( const AssetDescConstPtr & /*desc*/ ) const
+ThumbnailConstPtr   VideoStreamLoader::LoadThumbnail        ( const AssetDescConstPtr & desc ) const
 {
-    return nullptr;     // Fixme Generating thumbnails
+    auto typedDesc = QueryTypedDesc< VideoStreamAssetDescConstPtr >( desc );
+
+	assert( typedDesc );
+
+    return VideoStreamUtils::LoadThumbnail( typedDesc );
 }
+
+
 
 
 } //bv

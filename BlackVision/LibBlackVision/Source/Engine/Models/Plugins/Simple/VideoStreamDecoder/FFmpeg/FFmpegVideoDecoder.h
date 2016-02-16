@@ -44,6 +44,7 @@ public:
 	virtual void				Stop					() override;
 
 	virtual VideoMediaData		GetVideoMediaData		() override;
+    virtual VideoMediaData		GetSingleFrame  		( TimeType frameTime) override;
 
 	virtual SizeType			GetFrameSize			() const override;
 

@@ -28,6 +28,7 @@ public:
 	virtual void					Stop					() = 0;
 
 	virtual VideoMediaData			GetVideoMediaData		() = 0;
+    virtual VideoMediaData			GetSingleFrame  		( TimeType frameTime) = 0;
 
 	virtual SizeType				GetFrameSize			() const = 0;
 

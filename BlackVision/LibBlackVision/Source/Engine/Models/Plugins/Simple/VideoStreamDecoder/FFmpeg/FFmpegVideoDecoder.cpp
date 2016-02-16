@@ -111,6 +111,23 @@ VideoMediaData			FFmpegVideoDecoder::GetVideoMediaData		()
 	return mediaData;
 }
 
+// ***********************
+// Jumps to frameTime. This function doesn't return to time before this function call.
+VideoMediaData		    FFmpegVideoDecoder::GetSingleFrame  		( TimeType frameTime)
+{
+    Seek( frameTime );
+    if( DecodeNextFrame() )
+    {
+        NextFrameDataReady();
+        return GetVideoMediaData();
+    }
+
+	VideoMediaData mediaData;
+	mediaData.frameIdx = 0;
+	mediaData.frameData = nullptr;
+    return mediaData;
+}
+
 // *********************************
 //
 void					FFmpegVideoDecoder::NextFrameDataReady		()
