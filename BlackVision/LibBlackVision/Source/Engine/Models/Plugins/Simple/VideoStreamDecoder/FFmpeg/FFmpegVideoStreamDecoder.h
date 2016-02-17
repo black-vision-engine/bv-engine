@@ -2,7 +2,7 @@
 
 #include "FFmpegDef.h"
 
-#include "Assets/VideoStream/VideoStreamAssetDescriptor.h"
+#include "Assets/VideoStream/VideoStreamAsset.h"
 
 namespace bv
 {
@@ -24,7 +24,7 @@ private:
 	Int32					m_streamIdx;
 
 public:
-							FFmpegVideoStreamDecoder	( VideoStreamAssetDescConstPtr desc, AVFormatContext * formatCtx, Int32 streamIdx );
+							FFmpegVideoStreamDecoder	( VideoStreamAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx );
 							~FFmpegVideoStreamDecoder	();
 
 	UInt32					GetWidth					() const;	

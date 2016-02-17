@@ -10,7 +10,7 @@ namespace bv
 
 // *******************************
 //
-FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder     ( VideoStreamAssetDescConstPtr desc, AVFormatContext * formatCtx, Int32 streamIdx )
+FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder     ( VideoStreamAssetConstPtr asset, AVFormatContext * formatCtx, Int32 streamIdx )
 	: m_stream( nullptr )
 	, m_codecCtx( nullptr )
 	, m_codec( nullptr )
@@ -32,13 +32,13 @@ FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder     ( VideoStreamAssetDescCon
 
 	if( m_codecCtx->width == 0 || m_codecCtx->height == 0 )
 	{
-		m_codecCtx->width = desc->GetWidth();
-		m_codecCtx->height = desc->GetHeight();
+		m_codecCtx->width = asset->GetWidth();
+		m_codecCtx->height = asset->GetHeight();
 
-		m_stream->avg_frame_rate = av_d2q( desc->GetFrameRate(), INT_MAX );
+		m_stream->avg_frame_rate = av_d2q( asset->GetFrameRate(), INT_MAX );
 		m_stream->time_base = av_inv_q( m_stream->avg_frame_rate );
 
-		m_codecCtx->pix_fmt = FFmpegUtils::ToFFmpegPixelFormat( desc->GetVideoFormat() );
+		m_codecCtx->pix_fmt = FFmpegUtils::ToFFmpegPixelFormat( asset->GetVideoFormat() );
 	}
 
 	m_width = ( UInt32 )m_codecCtx->width;
@@ -49,7 +49,7 @@ FFmpegVideoStreamDecoder::FFmpegVideoStreamDecoder     ( VideoStreamAssetDescCon
 	assert( m_width > 0 );
 	assert( m_height > 0 );
 
-    auto ffmpegFormat = FFmpegUtils::ToFFmpegPixelFormat( desc->GetTextureFormat() );
+    auto ffmpegFormat = FFmpegUtils::ToFFmpegPixelFormat( asset->GetTextureFormat() );
     m_swsCtx = sws_getCachedContext( m_swsCtx, m_width, m_height, m_codecCtx->pix_fmt,
 		m_width, m_height, ffmpegFormat, SWS_BILINEAR, nullptr, nullptr, nullptr );
 }

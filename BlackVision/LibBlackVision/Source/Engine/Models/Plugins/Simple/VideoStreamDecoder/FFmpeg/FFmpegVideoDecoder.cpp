@@ -11,22 +11,22 @@ const UInt32			FFmpegVideoDecoder::MAX_QUEUE_SIZE = 2;
 
 // *********************************
 //
-FFmpegVideoDecoder::FFmpegVideoDecoder		( VideoStreamAssetDescConstPtr desc )
+FFmpegVideoDecoder::FFmpegVideoDecoder		( VideoStreamAssetConstPtr asset )
 	: m_decoderThread( nullptr )
 {
-	auto path = desc->GetStreamPath();
+	auto path = asset->GetStreamPath();
 
 	m_demuxer = std::unique_ptr< FFmpegDemuxer >( new FFmpegDemuxer( path ) );
 
 	m_vstreamDecoder = std::unique_ptr< FFmpegVideoStreamDecoder >
-		( new FFmpegVideoStreamDecoder( desc, m_demuxer->GetFormatContext(), m_demuxer->GetStreamIndex( AVMEDIA_TYPE_VIDEO ) ) );
+		( new FFmpegVideoStreamDecoder( asset, m_demuxer->GetFormatContext(), m_demuxer->GetStreamIndex( AVMEDIA_TYPE_VIDEO ) ) );
 
 	m_frame = av_frame_alloc();
 
 	auto width = m_vstreamDecoder->GetWidth();
 	auto height = m_vstreamDecoder->GetHeight();
 	
-	auto ffmpegFormat = FFmpegUtils::ToFFmpegPixelFormat( desc->GetTextureFormat() );
+	auto ffmpegFormat = FFmpegUtils::ToFFmpegPixelFormat( asset->GetTextureFormat() );
 	m_outFrame = av_frame_alloc();
 	auto numBytes = avpicture_get_size( ffmpegFormat, width, height );
 	m_outBuffer = ( uint8_t * )av_malloc( numBytes * sizeof( uint8_t ) );

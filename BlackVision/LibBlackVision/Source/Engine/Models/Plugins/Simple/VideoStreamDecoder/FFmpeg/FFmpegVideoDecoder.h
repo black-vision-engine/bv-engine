@@ -2,6 +2,7 @@
 
 #include <mutex>
 
+#include "Assets/VideoStream/VideoStreamAsset.h"
 #include "Assets/VideoStream/VideoStreamAssetDescriptor.h"
 
 #include "Engine/Models/Plugins/Simple/VideoStreamDecoder/Interfaces/IVideoDecoder.h"
@@ -36,7 +37,7 @@ private:
 	static const UInt32				MAX_QUEUE_SIZE;
 
 public:
-								FFmpegVideoDecoder		( VideoStreamAssetDescConstPtr desc );
+								FFmpegVideoDecoder		( VideoStreamAssetConstPtr asset );
 	virtual						~FFmpegVideoDecoder		();
 
 	virtual void				Start					() override;

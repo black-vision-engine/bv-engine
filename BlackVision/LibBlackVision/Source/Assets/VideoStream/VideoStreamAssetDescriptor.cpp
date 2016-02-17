@@ -39,8 +39,6 @@ ser.ExitChild();
 ISerializableConstPtr VideoStreamAssetDesc::Create          ( const IDeserializer& deser )
 {
 	auto path = deser.GetAttribute( "path" );
-    path = ProjectManager::GetInstance()->ToAbsPath( path ).Str();
-
 	auto format = static_cast< TextureFormat >( stoul( deser.GetAttribute( "format" ) ) );
 
 	return Create( path, format );

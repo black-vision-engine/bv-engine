@@ -24,9 +24,9 @@ AssetConstPtr		VideoStreamLoader::LoadAsset			( const AssetDescConstPtr & desc )
     auto path = ProjectManager::GetInstance()->ToAbsPath( typedDesc->GetStreamPath() );
     
     if( !Path::IsFile( path ) )
-        return false;
+        return nullptr;
 
-    return std::make_shared<VideoStreamAsset>( typedDesc->GetStreamPath() );
+    return std::make_shared<VideoStreamAsset>( path.Str(), typedDesc->GetTextureFormat(), typedDesc->GetWidth(), typedDesc->GetHeight(), typedDesc->GetFrameRate(), typedDesc->GetVideoFormat() );
 }
 
 // ***********************

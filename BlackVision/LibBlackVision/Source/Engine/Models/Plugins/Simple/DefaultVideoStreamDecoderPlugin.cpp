@@ -160,22 +160,26 @@ bool                            DefaultVideoStreamDecoderPlugin::LoadResource		(
 
     if ( vstreamAssetDescr != nullptr )
     {
-		m_decoder = std::make_shared< FFmpegVideoDecoder >( vstreamAssetDescr );
+        auto asset = LoadTypedAsset<VideoStreamAsset>( assetDescr );
+        if( asset != nullptr )
+        {
+		    m_decoder = std::make_shared< FFmpegVideoDecoder >( asset );
 
-		auto vsDesc = std::make_shared< DefaultVideoStreamDescriptor >( DefaultVideoStreamDecoderPluginDesc::TextureName(), MemoryChunk::Create( m_decoder->GetFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), vstreamAssetDescr->GetTextureFormat(), DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE );
-        if( vsDesc != nullptr )
-		{
-			vsDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
+		    auto vsDesc = std::make_shared< DefaultVideoStreamDescriptor >( DefaultVideoStreamDecoderPluginDesc::TextureName(), MemoryChunk::Create( m_decoder->GetFrameSize() ), m_decoder->GetWidth(), m_decoder->GetHeight(), vstreamAssetDescr->GetTextureFormat(), DataBuffer::Semantic::S_TEXTURE_STREAMING_WRITE );
+            if( vsDesc != nullptr )
+		    {
+			    vsDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
 
-			auto txData = m_psc->GetTexturesDataImpl();
-			txData->SetTexture( 0, vsDesc );
+			    auto txData = m_psc->GetTexturesDataImpl();
+			    txData->SetTexture( 0, vsDesc );
 
-			SetAsset( 0, LAsset( vsDesc->GetName(), assetDescr, vsDesc->GetSamplerState() ) );
+			    SetAsset( 0, LAsset( vsDesc->GetName(), assetDescr, vsDesc->GetSamplerState() ) );
 
-			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
+			    HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
 
-			return true;
-		}
+			    return true;
+		    }
+        }
     }
 
     return false;
