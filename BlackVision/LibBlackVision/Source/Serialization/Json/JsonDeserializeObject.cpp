@@ -197,7 +197,11 @@ IDeserializer*      JsonDeserializeObject::DetachBranch        ( const std::stri
     assert( m_currentNode->isObject() );
 
     auto& branch = (*m_currentNode)[ name ];
-    if( branch.isNull() )
+    
+    // Uncomment this asert in future
+    //assert( branch.isObject() || branch.isNull() );
+
+    if( branch.isNull() || !branch.isObject() )
         return nullptr;
 
     Json::Value nullValue( Json::nullValue );

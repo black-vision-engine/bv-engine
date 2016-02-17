@@ -727,6 +727,7 @@ void				        ProjectManagerImpl::InitializeAssets	()
     videoExts.push_back( ".*\\.mp4" );
     videoExts.push_back( ".*\\.yuv" );
     videoExts.push_back( ".*\\.avi" );
+    videoExts.push_back( ".*\\.wmv" );
 
     auto vsaa = VideoStreamAssetAccessor::Create( GetRootDir() / "video", videoExts );
     RegisterCategory( AssetCategory::Create( "video", vsaa ) );
