@@ -29,6 +29,7 @@ RemoteController::RemoteController()
     RegisterEvent( AssetEvent::Name(), AssetEvent::Create );
     RegisterEvent( GlobalEffectEvent::Name(), GlobalEffectEvent::Create );
     RegisterEvent( TimelineKeyframeEvent::Name(), TimelineKeyframeEvent::Create );
+    RegisterEvent( MouseEvent::Name(), MouseEvent::Create );
 }
 
 

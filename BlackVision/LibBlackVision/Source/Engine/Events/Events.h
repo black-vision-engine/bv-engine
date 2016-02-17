@@ -837,7 +837,7 @@ template<> std::string                  SerializationHelper::T2String  ( const E
 DEFINE_PTR_TYPE( EngineStateEvent )
 
 
-// ************************************* ProjectEvent Event *************************************
+// ************************************* GlobalEffectEvent *************************************
 class GlobalEffectEvent : public RemoteEvent
 {
 public:
@@ -930,6 +930,43 @@ template<> TimelineKeyframeEvent::KeyframeType   SerializationHelper::String2T  
 template<> std::string                           SerializationHelper::T2String   ( const TimelineKeyframeEvent::KeyframeType & t );
 
 DEFINE_PTR_TYPE( TimelineKeyframeEvent )
+
+
+// ************************************* MouseEvent *************************************
+class MouseEvent : public RemoteEvent
+{
+public:
+    typedef enum
+    {
+        MouseUp,
+        MouseDown,
+        MouseMove,
+        Fail            ///< Wrong command
+    } Command;
+private:
+    static const EventType      m_sEventType;
+    static std::string          m_sEventName;
+
+public:
+    MouseEvent::Command             MouseCommand;
+
+public:
+    explicit                        MouseEvent          () {}
+
+    virtual void                    Serialize           ( ISerializer& ser ) const;
+    static IEventPtr                Create              ( IDeserializer& deser );
+    virtual IEventPtr               Clone               () const;
+
+    static EventType                Type                ();
+    static std::string&             Name                ();
+    virtual const std::string &     GetName             () const;
+    virtual EventType               GetEventType        () const;
+};
+
+template<> MouseEvent::Command          SerializationHelper::String2T  ( const std::string& s, const MouseEvent::Command& defaultVal );
+template<> std::string                  SerializationHelper::T2String  ( const MouseEvent::Command & t );
+
+DEFINE_PTR_TYPE( MouseEvent )
 
 
 // ************************************* HightmapEvent *************************************

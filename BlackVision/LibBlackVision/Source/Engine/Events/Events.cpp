@@ -82,12 +82,14 @@ const EventType AssetEvent::m_sEventType			= 0x30000018;
 std::string AssetEvent::m_sEventName				= "AssetEvent";
 
 
-const EventType GlobalEffectEvent::m_sEventType			= 0x30000019;
-std::string GlobalEffectEvent::m_sEventName				= "GlobalEffectEvent";
+const EventType GlobalEffectEvent::m_sEventType     = 0x30000019;
+std::string GlobalEffectEvent::m_sEventName         = "GlobalEffectEvent";
 
-const EventType TimelineKeyframeEvent::m_sEventType			= 0x30000020;
-std::string TimelineKeyframeEvent::m_sEventName				= "TimelineKeyframeEvent";
+const EventType TimelineKeyframeEvent::m_sEventType = 0x30000020;
+std::string TimelineKeyframeEvent::m_sEventName     = "TimelineKeyframeEvent";
 
+const EventType MouseEvent::m_sEventType			= 0x30000021;
+std::string MouseEvent::m_sEventName				= "MouseEvent";
 
 // ************************************* Events Serialization *****************************************
 
@@ -505,6 +507,22 @@ std::pair< TimelineKeyframeEvent::KeyframeType, const char* > KeyframeTypeMappin
 
 template<> TimelineKeyframeEvent::KeyframeType  String2T   ( const std::string& s, const TimelineKeyframeEvent::KeyframeType& defaultVal )      { return String2Enum( KeyframeTypeMapping, s, defaultVal ); }
 template<> std::string                          T2String   ( const TimelineKeyframeEvent::KeyframeType & t )                                    { return Enum2String( KeyframeTypeMapping, t ); }
+
+// ========================================================================= //
+// MouseEvent
+// ========================================================================= //
+
+std::pair< MouseEvent::Command, const char* > MouseEventCommandMapping[] = 
+{
+    std::make_pair( MouseEvent::Command::MouseUp, "MouseUp" )
+    , std::make_pair( MouseEvent::Command::MouseDown, "MouseDown" )
+    , std::make_pair( MouseEvent::Command::MouseMove, "MouseMove" )
+    , std::make_pair( MouseEvent::Command::Fail, SerializationHelper::EMPTY_STRING )      // default
+};
+
+template<> MouseEvent::Command      String2T   ( const std::string & s, const MouseEvent::Command & defaultVal )    { return String2Enum( MouseEventCommandMapping, s, defaultVal ); }
+template<> std::string              T2String   ( const MouseEvent::Command & t )                                    { return Enum2String( MouseEventCommandMapping, t ); }
+
 
 // ========================================================================= //
 // HightmapEvent
@@ -1718,6 +1736,51 @@ const std::string&  TimelineKeyframeEvent::GetName() const
 //
 EventType           TimelineKeyframeEvent::GetEventType() const
 {   return this->m_sEventType; }
+
+
+//******************* MouseEvent *************
+
+// *************************************
+//
+void                MouseEvent::Serialize            ( ISerializer& ser ) const
+{
+    ser.SetAttribute( SerializationHelper::EVENT_TYPE_STRING, m_sEventName );
+}
+
+// *************************************
+//
+IEventPtr                MouseEvent::Create          ( IDeserializer& deser )
+{
+    if( deser.GetAttribute( SerializationHelper::EVENT_TYPE_STRING ) == m_sEventName )
+    {
+        MouseEventPtr newEvent   = std::make_shared<MouseEvent>();
+
+        return newEvent;
+    }
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               MouseEvent::Clone             () const
+{   return IEventPtr( new MouseEvent( *this ) );  }
+
+// *************************************
+//
+EventType           MouseEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        MouseEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  MouseEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           MouseEvent::GetEventType() const
+{   return this->m_sEventType; }
+
 
 
 //******************* HightmapEvent *************
