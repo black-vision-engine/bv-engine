@@ -29,8 +29,8 @@ public:
     virtual DeserializeContext* GetDeserializeContext() const;
 
     bool                        LoadFile            ( const std::string& fileName );
-	void						Load                ( const std::string& jsonString );
-	void						Load                ( std::istream& stream );
+	bool						Load                ( const std::string& jsonString );
+	bool						Load                ( std::istream& stream );
 
     std::string                 GetAttribute        ( const std::string& name ) const override;
     std::string                 GetParentAttribute  ( const std::string& parentName, const std::string& attName ) const override;
@@ -44,8 +44,12 @@ public:
     std::wstring	        	GetParentAttribute  ( const std::wstring& parentName, const std::wstring& attName ) const override;
     bool                        EnterChild          ( const std::wstring& name ) const override;
 
+    virtual IDeserializer*      DetachBranch        ( const std::string & name ) override;
+
 private:
     void                        OnRootInit          ();
+
+    JsonDeserializeObject       ( Json::Value && initValue );
 };
 
 

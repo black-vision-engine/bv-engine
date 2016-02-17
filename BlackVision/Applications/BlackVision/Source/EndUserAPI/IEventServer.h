@@ -18,12 +18,12 @@ class RemoteController;
 
 struct ResponseMsg
 {
-    std::wstring    message;
+    std::string     message;
     int             socketID;
 };
 
 
-typedef fastdelegate::FastDelegate2<const std::wstring&, int> QueueEventCallback;
+typedef fastdelegate::FastDelegate2< const std::string&, int > QueueEventCallback;
 
 class IEventServer
 {

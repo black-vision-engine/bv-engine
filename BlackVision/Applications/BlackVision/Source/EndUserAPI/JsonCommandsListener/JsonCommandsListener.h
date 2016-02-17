@@ -22,15 +22,13 @@ public:
     JsonCommandsListener();
     ~JsonCommandsListener();
 
-    void                QueueEvent          ( const std::wstring& eventString, int socketID ) override;
+    void                QueueEvent          ( const std::string& eventString, int socketID ) override;
     bool                InitializeServer    ( int port ) override;
     void                DeinitializeServer  () override;
     void                SendResponse        ( const IEventPtr response ) override;
 
 private:
-    void                TryParseEventsGroup ( IDeserializer& deser, int socketID );
     void                TryParseRegularEvent( IDeserializer& deser, int socketID );
-
     void                AddTriggeredEvent   ( unsigned int requestedFrame, RemoteEventPtr& eventPtr );
 };
 

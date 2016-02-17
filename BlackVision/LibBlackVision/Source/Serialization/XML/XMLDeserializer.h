@@ -59,6 +59,8 @@ public:
     std::wstring	        	                    GetAttribute            ( const std::wstring & name ) const override;
     virtual std::wstring		                    GetParentAttribute      ( const std::wstring & parentName, const std::wstring & attName ) const override;
 	bool                                            EnterChild              ( const std::wstring & name ) const override;
+
+    virtual IDeserializer*                          DetachBranch            ( const std::string & /*name*/ ) override { return nullptr; }
 };
 
 } // bv

@@ -10,7 +10,7 @@
 #include "CrawlerEvents.h"
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/BV/BVDeserializeContext.h"
-#include "Engine/Events/EventHelpers.h"
+#include "Tools/StringHeplers.h"
 
 #include "ProjectManager.h"
 #include "Engine/Models/BVProjectEditor.h"
@@ -625,7 +625,7 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
     else if( crawlAction == "AddText" )
 	{
         std::string param = eventSer.GetAttribute( "Message" );
-		AddMessage( toWString( param ) );
+        AddMessage( StringToWString( param ) );
 	}
     else if( crawlAction == "AddNode" )
     {

@@ -33,9 +33,9 @@ std::pair< TimelineWrapMethod, const char* > TWM2S[] = {
     std::make_pair( TimelineWrapMethod::TWM_REPEAT, "repeat" ),
     std::make_pair( TimelineWrapMethod::TWM_CLAMP, "" ) };
 
-template<> std::string T2String( const TimelineWrapMethod& twm ) { return Enum2String( TWM2S, twm ); }
-
-template<> Expected< TimelineWrapMethod > String2T( const std::string & s ) { return String2Enum( TWM2S, s ); }
+template<> std::string                      T2String    ( const TimelineWrapMethod& twm )                               { return Enum2String( TWM2S, twm ); }
+template<> TimelineWrapMethod               String2T    ( const std::string& s, const TimelineWrapMethod& defaultVal )  { return String2Enum( TWM2S, s, defaultVal ); }
+template<> Expected< TimelineWrapMethod >   String2T    ( const std::string & s )                                       { return String2Enum( TWM2S, s ); }
 
 } // SerializationHelper
 
@@ -544,14 +544,14 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 
     JsonSerializeObject ser;
     ser.SetAttribute( "cmd", "KeyframeEvent" );
-    ser.SetAttribute( "KeyframeType", toString( SerializationHelper::T2WString( keyframeType ) ) );      // @todo This conversion is stupid. We need to use only strings instead of wstrings.
+    ser.SetAttribute( "KeyframeType", SerializationHelper::T2String( keyframeType ) );      // @todo This conversion is stupid. We need to use only strings instead of wstrings.
     ser.SetAttribute( "KeyframeName", evt->GetName() );
     ser.SetAttribute( "Timeline", this->GetName() );
     ser.SetAttribute( "SceneName", TimelineHelper::GetSceneName( this ) );
-    ser.SetAttribute( "Time", toString( this->GetLocalTime() ) );
+    ser.SetAttribute( "Time", SerializationHelper::T2String( this->GetLocalTime() ) );
 
     ResponseEventPtr msg = std::make_shared<ResponseEvent>();
-    msg->Response = toWString( ser.GetString() );
+    msg->Response = ser.GetString();
     msg->SocketID = SEND_BROADCAST_EVENT;
     GetDefaultEventManager().QueueResponse( msg );
 }

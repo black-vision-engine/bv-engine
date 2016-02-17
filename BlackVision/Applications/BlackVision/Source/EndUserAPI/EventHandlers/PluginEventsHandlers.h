@@ -23,14 +23,12 @@ public:
                             ~PluginEventsHandlers   ();
 
     void                    ParamHandler        ( bv::IEventPtr eventPtr );
-
-    void                    LoadAsset           ( bv::IEventPtr eventPtr );
     void                    TimerHandler        ( bv::IEventPtr eventPtr );
 
 private:
 
     //Helpers
-    bool                    AddParameter        ( ParameterPtr & param, const std::wstring & stringValue, TimeType keyTime );
+    bool                    AddParameter        ( ParameterPtr & param, const std::string & stringValue, TimeType keyTime );
     bool                    RemoveParameter     ( ParameterPtr & param, TimeType keyTime );
 
 

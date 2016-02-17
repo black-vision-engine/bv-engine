@@ -870,12 +870,9 @@ bool			BVProjectEditor::MovePlugin					( model::SceneModelPtr destScene, model::
 
 // *******************************
 //
-bool					BVProjectEditor::LoadAsset			( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, const std::string & serializedAssetData )
+bool					BVProjectEditor::LoadAsset			( const std::string & sceneName, const std::string & nodePath, const std::string & pluginName, IDeserializer & serializedAssetData )
 {
-    //not sure how to pass assets data
-    JsonDeserializeObject deserializer;
-    deserializer.Load( serializedAssetData );
-    auto assetDesc = AssetManager::GetInstance().CreateDesc( deserializer );
+    auto assetDesc = AssetManager::GetInstance().CreateDesc( serializedAssetData );
 
     auto node = GetNode( sceneName, nodePath );
     

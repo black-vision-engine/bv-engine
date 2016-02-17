@@ -8,7 +8,6 @@
 #include "../../UseLoggerBVAppModule.h"
 
 #include "EventHandlerHelpers.h"
-#include "Engine/Events/EventHelpers.h"             // wstring to string conversions and vice versa
 #include "Serialization/SerializationHelper.h"
 #include "Engine/Events/EventManager.h"
 
@@ -49,12 +48,9 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     std::string & paramName    = setParamEvent->ParamName;
     std::string & paramSubName = setParamEvent->ParamSubName;
     std::string & sceneName    = setParamEvent->SceneName;
-    std::wstring value         = setParamEvent->Value;
+    std::string & value        = setParamEvent->Value;
     
     
-    // In some cases this is waste of work. Buto in future we must get rid of wstrings.
-    std::string stringValue    = toString( value );
-
     TimeType keyTime           = setParamEvent->Time;
 
     IParameterPtr param = nullptr;
@@ -110,7 +106,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     {
         if( param->GetType() == ModelParamType::MPT_TRANSFORM ) //FIXME: special case for transform param
         {
-            result = AddTransformKey( param, paramSubName, keyTime, stringValue );
+            result = AddTransformKey( param, paramSubName, keyTime, value );
         }
         else
         {
@@ -130,7 +126,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     }
     else if( command == ParamKeyEvent::Command::MoveKey )
     {
-        TimeType newKeyTime = SerializationHelper::String2T( stringValue, std::numeric_limits<TimeType>::quiet_NaN() );
+        TimeType newKeyTime = SerializationHelper::String2T( value, std::numeric_limits<TimeType>::quiet_NaN() );
 
         if( newKeyTime != std::numeric_limits<TimeType>::quiet_NaN() )
         {
@@ -145,16 +141,16 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
         }
     }
     else if( command == ParamKeyEvent::Command::SetInterpolatorType )
-        result = BezierSetGlobalCurveType( param, SerializationHelper::String2T( stringValue, CurveType::CT_BEZIER ) );
+        result = BezierSetGlobalCurveType( param, SerializationHelper::String2T( value, CurveType::CT_BEZIER ) );
     else if( command == ParamKeyEvent::Command::SetAddedInterpolatorType )
-        result = BezierSetAddedKeyCurveType( param, SerializationHelper::String2T( stringValue, CurveType::CT_BEZIER ) );
+        result = BezierSetAddedKeyCurveType( param, SerializationHelper::String2T( value, CurveType::CT_BEZIER ) );
     else if( command == ParamKeyEvent::Command::SetInterpolatorPreWrapMethod )
-        result = SetWrapPreMethod( param, SerializationHelper::String2T( stringValue, WrapMethod::clamp ) );
+        result = SetWrapPreMethod( param, SerializationHelper::String2T( value, WrapMethod::clamp ) );
     else if( command == ParamKeyEvent::Command::SetInterpolatorPostWrapMethod )
-        result = SetWrapPostMethod( param, SerializationHelper::String2T( stringValue, WrapMethod::clamp ) );
+        result = SetWrapPostMethod( param, SerializationHelper::String2T( value, WrapMethod::clamp ) );
     else if( command == ParamKeyEvent::Command::AssignTimeline )
     {
-        auto timeEval = m_projectEditor->GetTimeEvaluator( stringValue );
+        auto timeEval = m_projectEditor->GetTimeEvaluator( value );
             
         //FIXME: logic below should be somewhere else - editor maybe
         //don't allow setting scene timeline or timeline from other scene
@@ -171,7 +167,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
     }
     else if( command == ParamKeyEvent::Command::SampleCurve )
     {
-        auto params = Split( stringValue, "," );
+        auto params = Split( value, "," );
         
         if( params.size() == 3 )
         {
@@ -204,7 +200,7 @@ void PluginEventsHandlers::ParamHandler( IEventPtr eventPtr )
 
     if( result )
     {
-        LOG_MESSAGE( SeverityLevel::info ) << toString( SerializationHelper::T2WString( command ) ) + " Node [" + nodeName + "] Plugin [" + pluginName + "] Param [" + paramName + " " + paramSubName + "] : (" + toString( value ) + ") key: " + std::to_string( keyTime ) + " s";
+        LOG_MESSAGE( SeverityLevel::info ) << SerializationHelper::T2String( command ) + " Node [" + nodeName + "] Plugin [" + pluginName + "] Param [" + paramName + " " + paramSubName + "] : (" + SerializationHelper::T2String( value ) + ") key: " + SerializationHelper::T2String( keyTime ) + " s";
     }
 
     SendSimpleResponse( command, setParamEvent->EventID, setParamEvent->SocketID, result );
@@ -303,10 +299,9 @@ ParameterPtr PluginEventsHandlers::GetResourceParameter    (    const std::strin
 
 // ***********************
 //
-bool PluginEventsHandlers::AddParameter        ( std::shared_ptr< model::IParameter > & param, const std::wstring & wstringValue, TimeType keyTime )
+bool PluginEventsHandlers::AddParameter        ( std::shared_ptr< model::IParameter > & param, const std::string & stringValue, TimeType keyTime )
 {
     auto paramType = param->GetType();
-    std::string stringValue = toString( wstringValue );
 
     switch( paramType )
     {
@@ -335,7 +330,10 @@ bool PluginEventsHandlers::AddParameter        ( std::shared_ptr< model::IParame
             return SetParameter( param, ( TimeType )keyTime, vec4Value );
         }
         case ModelParamType::MPT_WSTRING:
-            return SetParameter( param, ( TimeType )keyTime, wstringValue );
+        {
+            auto wstring = StringToWString( stringValue );
+            return SetParameter( param, ( TimeType )keyTime, wstring.ham );
+        }
         case ModelParamType::MPT_STRING:
             return SetParameter( param, ( TimeType )keyTime, stringValue );
         case ModelParamType::MPT_INT:
@@ -368,29 +366,6 @@ bool PluginEventsHandlers::AddParameter        ( std::shared_ptr< model::IParame
     return false;
 }
 
-// *********************************
-//
-void PluginEventsHandlers::LoadAsset( IEventPtr eventPtr )
-{
-    if( eventPtr->GetEventType() == LoadAssetEvent::Type() )
-    {
-        LoadAssetEventPtr eventLoadAsset = std::static_pointer_cast<LoadAssetEvent>( eventPtr );
-        
-        std::string & nodeName = eventLoadAsset->NodeName;
-        std::string & pluginName = eventLoadAsset->PluginName;
-        std::string & sceneName = eventLoadAsset->SceneName;
-        std::string & assetData = eventLoadAsset->AssetData;
-
-        bool result = m_projectEditor->LoadAsset( sceneName, nodeName, pluginName, assetData );
-
-        if( result )
-            LOG_MESSAGE( SeverityLevel::info ) << "Asset loaded succesfully. Node: [" + eventLoadAsset->NodeName + "] plugin [" + eventLoadAsset->PluginName + "]";
-        else
-            LOG_MESSAGE( SeverityLevel::error ) << "Failed to load asset. Node [" + eventLoadAsset->NodeName + "] plugin [" + eventLoadAsset->PluginName + "]\n" << assetData;
-
-        SendSimpleResponse( LoadAssetEvent::Command::LoadAsset, eventLoadAsset->EventID, eventLoadAsset->SocketID, result );
-    }
-}
 
 // ***********************
 //

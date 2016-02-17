@@ -33,4 +33,17 @@ T String2Enum( const std::pair< T, const char* > t2s[], const std::string& s )
     return t2s[i].first;
 }
 
+template< typename T >
+T String2Enum( const std::pair< T, const char* > t2s[], const std::string& s, const T& defaultVal )
+{
+    int i = 0;
+    while( strcmp( t2s[i].second, "" ) )
+    {
+        if( t2s[i].second == s )
+            return t2s[i].first;
+        ++i;
+    }
+    return defaultVal;
+}
+
 } }

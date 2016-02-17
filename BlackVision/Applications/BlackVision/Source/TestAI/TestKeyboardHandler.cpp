@@ -2,7 +2,6 @@
 
 #include "BVAppLogic.h"
 #include "Serialization/BV/XML/BVXMLSerializer.h"
-#include "Serialization/JsonSpirit/JsonSpiritSerializeObject.h"
 #include "Serialization/Json/JsonSerializeObject.h"
 
 #include "Assets/Font/FontAssetDescriptor.h"
@@ -87,7 +86,7 @@ namespace
 
 void SerializeAllEvents( const std::string& fileName )
 {
-    JsonSpiritSerializeObject*  ser = new JsonSpiritSerializeObject();
+    JsonSerializeObject*  ser = new JsonSerializeObject();
 
     HightmapEventPtr        heightmapEvent      = std::make_shared<HightmapEvent>();
     EngineStateEventPtr     engineStateEvent    = std::make_shared<EngineStateEvent>();
@@ -109,22 +108,24 @@ void SerializeAllEvents( const std::string& fileName )
 
     ResponseEventPtr        responseEvent       = std::make_shared<ResponseEvent>();
     
-    
-    TextureAssetDescConstPtr    texAsset =      TextureAssetDesc::Create( std::string( "textures/poison.jpg" ), true );
-    FontAssetDescConstPtr       fontAsset =     FontAssetDesc::Create( std::string( "filePath.jpg" ), 0, 0, 0, false );
-    AnimationAssetDescConstPtr  animAsset =     AnimationAssetDesc::Create( std::string( "filePath.jpg" ), 1, 0, 0, ".*" );
-    
-    JsonSerializeObject serAssetTex;
-    texAsset->Serialize( serAssetTex );
-    loadTextureEvent->AssetData = serAssetTex.GetString();
 
-    JsonSerializeObject serAssetFont;
-    fontAsset->Serialize( serAssetFont );
-    loadFontEvent->AssetData = serAssetFont.GetString();
+    assert( "Wrong assets serialization" );
 
-    JsonSerializeObject serAssetAnim;
-    animAsset->Serialize( serAssetAnim );
-    loadAnimEvent->AssetData = serAssetAnim.GetString();
+    //TextureAssetDescConstPtr    texAsset =      TextureAssetDesc::Create( std::string( "textures/poison.jpg" ), true );
+    //FontAssetDescConstPtr       fontAsset =     FontAssetDesc::Create( std::string( "filePath.jpg" ), 0, 0, 0, false );
+    //AnimationAssetDescConstPtr  animAsset =     AnimationAssetDesc::Create( std::string( "filePath.jpg" ), 1, 0, 0, ".*" );
+    //
+    //JsonSerializeObject* serAssetTex = new JsonSerializeObject();
+    //texAsset->Serialize( *serAssetTex );
+    //loadTextureEvent->AssetData = serAssetTex;
+
+    //JsonSerializeObject* serAssetFont = new JsonSerializeObject();
+    //fontAsset->Serialize( *serAssetFont );
+    //loadFontEvent->AssetData = serAssetFont;
+
+    //JsonSerializeObject* serAssetAnim = new JsonSerializeObject();
+    //animAsset->Serialize( *serAssetAnim );
+    //loadAnimEvent->AssetData = serAssetAnim;
 
     ser->EnterArray( L"Events" );
         heightmapEvent->Serialize( *ser );

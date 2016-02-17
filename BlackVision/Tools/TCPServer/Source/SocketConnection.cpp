@@ -48,15 +48,15 @@ void SocketConnection::InitThread          ()
 //
 void SocketConnection::MainThread()
 {
-	char buffer[1024];
-	int buffer_len = 512;
+#define BUFFER_LENGTH 2048
+
+	char buffer[ BUFFER_LENGTH + 1];
+	int bufferLen = BUFFER_LENGTH;
 	int bytecount;
 
 
-	memset(buffer, 0, buffer_len);
-	std::wstring temp;
-    std::string temp_s;
-	std::wstring cmd;
+    memset( buffer, 0, bufferLen );
+    std::string command;
 
 	const char START_TRANSMISSION = 0x02;
 	const char END_TRANSMISSION = 0x03;
@@ -90,7 +90,7 @@ void SocketConnection::MainThread()
                 responseJson[ "Message" ] = std::move( logMsg.message );
 
                 ResponseMsg response;
-                response.message = toWString( responseJson.toStyledString() );
+                response.message = responseJson.toStyledString();
                 response.socketID = (int)m_socketID;
 
                 QueueResponse( std::move( response ) );
@@ -102,35 +102,26 @@ void SocketConnection::MainThread()
         {
             if( response.socketID == (int)m_socketID || response.socketID == SEND_BROADCAST_EVENT )
             {
-				wchar_t CHAR_BEGIN = 0x02;
-				wchar_t CHAR_END = 0x03;
-                std::wstring toSend = CHAR_BEGIN + response.message + CHAR_END;
-                
-
-                // do the actual conversion
-                std::vector<char> buffer;
-                SizeType bufferSize = toSend.length()+1;
-                buffer.resize( bufferSize );
-
-                wcstombs_s( &bufferSize, buffer.data(), bufferSize, toSend.c_str(), _TRUNCATE );
+                std::string toSend = START_TRANSMISSION + response.message + END_TRANSMISSION;
+                SizeType bufferSize = toSend.length() + 1;
 
                 // send the data
                 int bufferSent = 0;
                 while ( bufferSent < (int)bufferSize )
                 {
-                    int sentSize = send( m_socketID, buffer.data() + bufferSent, (int)bufferSize - bufferSent, 0);
+                    int sentSize = send( m_socketID, toSend.c_str() + bufferSent, (int)bufferSize - bufferSent, 0);
                     if( sentSize < 0 )
                     {
-                        int error_code = WSAGetLastError();
-                        if(error_code==10054)
+                        int errorCode = WSAGetLastError();
+                        if( errorCode == 10054 )
                         {
-                            LOG_MESSAGE( SeverityLevel::info ) << "connection reset by client, WSA_error_code: "<<error_code;
+                            LOG_MESSAGE( SeverityLevel::info ) << "connection reset by client, WSA_errorCode: "<< errorCode;
                             OnEndMainThread();
                             break;
                         }
-                        LOG_MESSAGE( SeverityLevel::info ) << "send error ... -1 "<<error_code;
-                        if(error_code==10035)
-                            Sleep(100);
+                        LOG_MESSAGE( SeverityLevel::info ) << "send error ... -1 "<< errorCode;
+                        if( errorCode == 10035 )
+                            Sleep( 100 );
                         //OnEndMainThread();
                         //break;
                     }
@@ -141,9 +132,9 @@ void SocketConnection::MainThread()
 		}
 
 
-        if((bytecount = recv( m_socketID, (char*) buffer, buffer_len, 0))==SOCKET_ERROR)
+        if( ( bytecount = recv( m_socketID, (char*) buffer, bufferLen, 0 ) ) == SOCKET_ERROR )
         {
-            int ierr= WSAGetLastError();
+            int ierr = WSAGetLastError();
             if ( ierr == WSAEWOULDBLOCK )
             {  // currently no data available
                 Sleep(50);  // wait and try again
@@ -156,9 +147,9 @@ void SocketConnection::MainThread()
             return;
 		}
 
-		if(bytecount>0)
+		if( bytecount > 0 )
 			;
-		else if(bytecount==0)
+		else if( bytecount == 0 )
         {
 			LOG_MESSAGE( SeverityLevel::info ) << "Client disconnected";
 
@@ -166,28 +157,39 @@ void SocketConnection::MainThread()
 			return;
 		}
 
-		for(int i=0;i<bytecount;i++)
-		{
-			if(buffer[i]==START_TRANSMISSION)
-			{
-				temp=L"";
-                temp_s="";
-			}
-            else if(buffer[i]==END_TRANSMISSION)
-			{
-                std::wstring_convert <std::codecvt_utf8<wchar_t>,wchar_t> convert;
-                std::wstring str = convert.from_bytes((const char*)temp_s.c_str());
 
-                m_sendCommandCallback( str, (int)m_socketID );
+        int startOffset = 0;
+        int endOffset = 0;
+
+		for( ; endOffset < bytecount; endOffset++ )
+		{
+			if( buffer[ endOffset ] == START_TRANSMISSION )
+			{
+                startOffset = endOffset + 1;
+                command.clear();
 			}
-            else
-            {
-				temp += buffer[i];
-                temp_s+=buffer[i];
+            else if( buffer[ endOffset ] == END_TRANSMISSION )
+			{
+                buffer[ endOffset ] = '\0';             // Thanks to this replacement, we can pass buffer as null terminated string to command.
+                command += ( buffer + startOffset );    // Append all characters from start.
+
+                //std::wstring_convert < std::codecvt_utf8< wchar_t >, wchar_t > convert;
+                //std::wstring str = convert.from_bytes( (const char*)command.c_str() );
+
+                m_sendCommandCallback( command, (int)m_socketID );
+
+                startOffset = endOffset + 1;            // This prevents from coping buffer second time if loop end here.
 			}
 		}
+
+        if( startOffset < endOffset )
+        {
+            // Copy rest of buffer
+            buffer[ endOffset ] = '\0';             // Thanks to this replacement, we can pass buffer as null terminated string to command.
+            command += ( buffer + startOffset );    // Append all characters from start.
+        }
 			
-		memset(buffer, 0, buffer_len);
+		memset( buffer, 0, bufferLen );
 	}
     OnEndMainThread();
 }

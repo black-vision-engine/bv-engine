@@ -21,16 +21,12 @@ namespace bv
 //
 NodeLogicHandlers::NodeLogicHandlers( BVAppLogic* logic )
     : m_appLogic( logic )
-{
-}
+{}
 
 // ***********************
 //
 NodeLogicHandlers::~NodeLogicHandlers()
-{
-}
-
-
+{}
 
 
 
@@ -48,8 +44,16 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
         
     std::string& nodePath = widgetEvent->NodeName;
     std::string& sceneName = widgetEvent->SceneName;
-    std::string& action = widgetEvent->Action;
+    auto& action = *widgetEvent->Action;
     NodeLogicEvent::Command command = widgetEvent->WidgetCommand;
+
+    assert( widgetEvent->Action != nullptr );
+    if( widgetEvent->Action == nullptr )
+    {
+        SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "Wrong request" );
+        return;
+    }
+
 
     auto node = m_appLogic->GetBVProject()->GetProjectEditor()->GetNode( sceneName, nodePath );
     auto basicNode = std::static_pointer_cast< bv::model::BasicNode >( node );
@@ -60,12 +64,9 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
     }
 
 
-
     JsonSerializeObject ser;
-    JsonDeserializeObject deser;
-    deser.Load( action );
 
-    auto context = static_cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
+    auto context = static_cast< BVDeserializeContext* >( action.GetDeserializeContext() );
     context->SetSceneName( sceneName );
 
 		
@@ -73,11 +74,11 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
     {
         context->SetSceneTimeline( std::static_pointer_cast< model::OffsetTimeEvaluator >( TimelineManager::GetInstance()->GetTimeEvaluator( sceneName ) ) );
 
-        deser.EnterChild( "logic" );
+        action.EnterChild( "logic" );
         
-        auto logic = GetNodeLogicFactory()->CreateLogic( deser, basicNode.get() );
+        auto logic = GetNodeLogicFactory()->CreateLogic( action, basicNode.get() );
         
-        deser.ExitChild();  // nodeLogic
+        action.ExitChild();  // nodeLogic
 
         if( logic == nullptr)
         {
@@ -102,7 +103,7 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
             SendSimpleErrorResponse( command, widgetEvent->EventID, widgetEvent->SocketID, "NodeLogic not found" );
         }
 
-        bool result = logic->HandleEvent( deser, ser, editor );
+        bool result = logic->HandleEvent( action, ser, editor );
 
         PrepareResponseTemplate( ser, command, widgetEvent->SocketID, result );
         SendResponse( ser, widgetEvent->SocketID, widgetEvent->EventID );

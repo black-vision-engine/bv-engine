@@ -21,6 +21,15 @@ JsonDeserializeObject::JsonDeserializeObject()
 {
     m_currentNode = nullptr;
 }
+
+JsonDeserializeObject::JsonDeserializeObject       ( Json::Value && initValue )
+    :   m_root( initValue ),
+        m_context( std::unique_ptr< DeserializeContext >( new BVDeserializeContext( nullptr, nullptr ) ) )
+{
+    m_currentNode = nullptr;
+    OnRootInit();
+}
+
 JsonDeserializeObject::~JsonDeserializeObject()
 {}
 
@@ -47,20 +56,28 @@ bool JsonDeserializeObject::LoadFile        ( const std::string& fileName )
 
 // ***********************
 //
-void JsonDeserializeObject::Load                ( const std::string& jsonString )
+bool JsonDeserializeObject::Load                ( const std::string& jsonString )
 {
 	Json::Reader reader;
-	reader.parse( jsonString, m_root );
-    OnRootInit();
+	if( reader.parse( jsonString, m_root ) )
+    {
+        OnRootInit();
+        return true;;
+    }
+    return false;
 }
 
 // ***********************
 //
-void JsonDeserializeObject::Load                ( std::istream& stream )
+bool JsonDeserializeObject::Load                ( std::istream& stream )
 {
 	Json::Reader reader;
-	reader.parse( stream, m_root );
-    OnRootInit();
+	if( reader.parse( stream, m_root ) )
+    {
+        OnRootInit();
+        return true;
+    }
+    return false;
 }
 
 // ***********************
@@ -85,7 +102,12 @@ void JsonDeserializeObject::OnRootInit          ()
 //
 std::string JsonDeserializeObject::GetAttribute        ( const std::string& name ) const
 {
-    return (*m_currentNode)[ name ].asString();
+    auto & attribute = (*m_currentNode)[ name ];
+    
+    if( attribute.isNull() || attribute.isObject() || attribute.isArray() )
+        return "";
+
+    return attribute.asString();
 }
 
 // ***********************
@@ -166,6 +188,22 @@ bool JsonDeserializeObject::NextChild           () const
         }
     }
     return false;
+}
+
+// ***********************
+//
+IDeserializer*      JsonDeserializeObject::DetachBranch        ( const std::string & name )
+{
+    assert( m_currentNode->isObject() );
+
+    auto& branch = (*m_currentNode)[ name ];
+    if( branch.isNull() )
+        return nullptr;
+
+    Json::Value nullValue( Json::nullValue );
+    branch.swap( nullValue );
+
+    return new JsonDeserializeObject( std::move( nullValue ) );
 }
 
 std::wstring        JsonDeserializeObject::GetAttribute        ( const std::wstring& /*name*/ ) const
