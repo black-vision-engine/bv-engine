@@ -108,13 +108,6 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 
     IDeserializer * request		= structureEvent->Request;
 
-    assert( structureEvent->Request != nullptr );
-    if( structureEvent->Request == nullptr )
-    {
-        SendSimpleErrorResponse( command, eventID, structureEvent->SocketID, "Wrong request" );
-        return;
-    }
-
     bool result = true;
 	auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
 
@@ -148,6 +141,13 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 	}
 	else if( command == NodeStructureEvent::Command::MoveNode )
 	{
+        assert( request != nullptr );
+        if( request == nullptr )
+        {
+            SendSimpleErrorResponse( NodeStructureEvent::Command::MoveNode, eventID, structureEvent->SocketID, "Not valid request." );
+            return;
+        }
+
 		//FIXME: replace with sth more generic
 		auto destSceneName = request->GetAttribute( "DestSceneName" );
 		auto destNodePath = request->GetAttribute( "DestPath" );
@@ -159,6 +159,13 @@ void SceneEventsHandlers::NodeStructure      ( bv::IEventPtr evt )
 	}
 	else if( command == NodeStructureEvent::Command::CopyNode )
 	{
+        assert( request != nullptr );
+        if( request == nullptr )
+        {
+            SendSimpleErrorResponse( NodeStructureEvent::Command::CopyNode, eventID, structureEvent->SocketID, "Not valid request." );
+            return;
+        }
+
 		//FIXME: replace with sth more generic
 		auto destSceneName = request->GetAttribute( "DestSceneName" );
 		auto destNodePath = request->GetAttribute( "DestPath" );
@@ -192,12 +199,6 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
     auto eventID                = structureEvent->EventID;
     IDeserializer * request		= structureEvent->Request;
 
-    assert( structureEvent->Request != nullptr );
-    if( structureEvent->Request == nullptr )
-    {
-        SendSimpleErrorResponse( command, eventID, structureEvent->SocketID, "Wrong request" );
-        return;
-    }
 
     bool result = true;
 	auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
@@ -220,6 +221,13 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
 	}
     else if( command == PluginStructureEvent::Command::CopyPlugin )
 	{
+        assert( request != nullptr );
+        if( request == nullptr )
+        {
+            SendSimpleErrorResponse( PluginStructureEvent::Command::CopyPlugin, eventID, structureEvent->SocketID, "Not valid request." );
+            return;
+        }
+
 		//FIXME: replace with sth more generic
         auto destSceneName = request->GetAttribute( "SrcSceneName" );
 		auto destNodePath = request->GetAttribute( "DestPath" );
@@ -234,6 +242,13 @@ void SceneEventsHandlers::PluginStructure     ( bv::IEventPtr evt )
 	}
 	else if( command == PluginStructureEvent::Command::MovePlugin )
 	{
+        assert( request != nullptr );
+        if( request == nullptr )
+        {
+            SendSimpleErrorResponse( PluginStructureEvent::Command::MovePlugin, eventID, structureEvent->SocketID, "Not valid request." );
+            return;
+        }
+
 		//FIXME: replace with sth more generic
 		auto destSceneName = request->GetAttribute( "SrcSceneName" );
 		auto destNodePath = request->GetAttribute( "DestPath" );

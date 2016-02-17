@@ -43,13 +43,6 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
         auto request = infoEvent->Request;
         auto eventID = infoEvent->EventID;
 
-        //assert( infoEvent->Request != nullptr );
-        //if( infoEvent->Request == nullptr )
-        //{
-        //    SendSimpleErrorResponse( command, eventID, infoEvent->SocketID, "Wrong request" );
-        //    return;
-        //}
-
         JsonSerializeObject responseJSON;
 
         if( command == InfoEvent::Command::TreeStructure )
@@ -110,6 +103,13 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
 //
 void         QueryHandlers::ListSceneAssets          ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
 {
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::ListSceneAssets, eventID, "Not valid request." );
+        return;
+    }
+
     auto bvDeserCo = Cast< BVDeserializeContext* >( request->GetDeserializeContext() );
 
     std::string category = request->GetAttribute( "CategoryName" );
@@ -151,6 +151,13 @@ void         QueryHandlers::VideoCardsInfo               ( JsonSerializeObject &
 //
 void         QueryHandlers::GetNodeInfo                  ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
 {
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::NodeInfo, eventID, "Not valid request." );
+        return;
+    }
+
     std::string sceneName = request->GetAttribute( "SceneName" );
     std::string nodePath = request->GetAttribute( "NodePath" );
     
@@ -178,6 +185,13 @@ void         QueryHandlers::GetNodeInfo                  ( JsonSerializeObject &
 //
 void         QueryHandlers::GetMinimalSceneInfo          ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
 {
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::MinimalSceneInfo, eventID, "Not valid request." );
+        return;
+    }
+
     std::string sceneName = request->GetAttribute( "SceneName" );
     
     auto scene = m_appLogic->GetBVProject()->GetProjectEditor()->GetScene( sceneName );
@@ -286,6 +300,13 @@ void         QueryHandlers::ListProjectNames     ( JsonSerializeObject & ser, ID
 //
 void         QueryHandlers::ListScenes           ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
 {
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::ListScenes, eventID, "Not valid request." );
+        return;
+    }
+
     PrepareResponseTemplate( ser, InfoEvent::Command::ListScenes, eventID, true );
 
     auto pm = ProjectManager::GetInstance();
@@ -316,6 +337,13 @@ void         QueryHandlers::ListScenes           ( JsonSerializeObject & ser, ID
 //
 void         QueryHandlers::ListPresets           ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
 {
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::ListPresets, eventID, "Not valid request." );
+        return;
+    }
+
     PrepareResponseTemplate( ser, InfoEvent::Command::ListPresets, eventID, true );
 
     auto pm = ProjectManager::GetInstance();
@@ -346,6 +374,13 @@ void         QueryHandlers::ListPresets           ( JsonSerializeObject & ser, I
 //
 void        QueryHandlers::ListAssetsPaths     ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
 {
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::ListAssetsPaths, eventID, "Not valid request." );
+        return;
+    }
+
     PrepareResponseTemplate( ser, InfoEvent::Command::ListAssetsPaths, eventID, true );
 
     auto pm = ProjectManager::GetInstance();
@@ -415,6 +450,13 @@ void        QueryHandlers::ListProjects        ( JsonSerializeObject & ser, IDes
 //
 void         QueryHandlers::GetAssetDescriptor      ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
 {
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetDescriptor, eventID, "Not valid request." );
+        return;
+    }
+
     auto projectName = request->GetAttribute( "projectName" );
     auto categoryName = request->GetAttribute( "categoryName" );
     auto path = request->GetAttribute( "path" );
@@ -446,6 +488,13 @@ void         QueryHandlers::GetAssetDescriptor      ( JsonSerializeObject & ser,
 //
 void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
 {
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::GetAssetThumbnail, eventID, "Not valid request." );
+        return;
+    }
+
     auto projectName = request->GetAttribute( "projectName" );
     auto categoryName = request->GetAttribute( "categoryName" );
     auto path = request->GetAttribute( "path" );
@@ -496,6 +545,13 @@ void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser,
 //
 void         QueryHandlers::CheckTimelineTime    ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
 {
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::CheckTimelineTime, eventID, "Not valid request." );
+        return;
+    }
+
     std::string sceneName = request->GetAttribute( "SceneName" );
     std::string timelineName = request->GetAttribute( "TimelineName" );
 
@@ -548,6 +604,13 @@ void         QueryHandlers::MinimalTreeStructureInfo ( JsonSerializeObject & ser
 //
 void         QueryHandlers::PluginInfo           ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
 {
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::PluginInfo, eventID, "Not valid request." );
+        return;
+    }
+
     std::string nodePath = request->GetAttribute( "NodePath" );
     std::string pluginName = request->GetAttribute( "PluginName" );
     std::string sceneName = request->GetAttribute( "SceneName" );
@@ -576,6 +639,13 @@ void         QueryHandlers::PluginInfo           ( JsonSerializeObject & ser, ID
 //
 void         QueryHandlers::ListTimelineKeyframes    ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
 {
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::ListTimelineKeyframes, eventID, "Not valid request." );
+        return;
+    }
+
     std::string TimelinePath = request->GetAttribute( "TimelinePath" );
 
     auto editor = m_appLogic->GetBVProject()->GetProjectEditor();
@@ -610,6 +680,13 @@ void         QueryHandlers::ListTimelineKeyframes    ( JsonSerializeObject & ser
 //
 void    QueryHandlers::ListAllFolders          ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
 {
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::ListAllFolders, eventID, "Not valid request." );
+        return;
+    }
+
     PrepareResponseTemplate( ser, InfoEvent::Command::ListAllFolders, eventID, true );
 
     auto catName = request->GetAttribute( "categoryName" );
