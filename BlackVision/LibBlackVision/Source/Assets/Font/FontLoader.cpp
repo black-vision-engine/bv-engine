@@ -129,6 +129,7 @@ ThumbnailConstPtr FontLoader::LoadThumbnail     ( const AssetDescConstPtr & desc
     auto atlasTexture = text->GetAtlas()->GetAsset()->GetOriginal();
 
     auto swaped = image::SwapChannels( atlasTexture->GetData(), 32, 0xff000000, 0xff000000, 0xff000000, 0xff000000 );
+    swaped = image::FlipVertical( swaped, atlasTexture->GetWidth(), atlasTexture->GetHeight(), TextureUtils::ToBPP( atlasTexture->GetFormat() ) );
 
     auto tga = image::SaveTGAToHandle( swaped, atlasTexture->GetWidth(), atlasTexture->GetHeight(), TextureUtils::ToBPP( atlasTexture->GetFormat() ) );
 
