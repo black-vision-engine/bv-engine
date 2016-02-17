@@ -950,6 +950,9 @@ private:
 public:
     MouseEvent::Command             MouseCommand;
 
+    Int32                           MouseX;
+    Int32                           MouseY;
+
 public:
     explicit                        MouseEvent          () {}
 
