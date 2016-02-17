@@ -21,7 +21,7 @@ void                VideoStreamAssetDesc::Serialize       ( ISerializer& ser ) c
 ser.EnterChild( "asset" );
     ser.SetAttribute( "type", UID() );
 	ser.SetAttribute( "path", m_streamPath );
-	ser.SetAttribute( "format", std::to_string( static_cast< int >( m_textureFormat ) ) );
+	//ser.SetAttribute( "format", std::to_string( static_cast< int >( m_textureFormat ) ) );
 
 	//if( m_width != 0 && m_height != 0 )
 	//{
@@ -39,7 +39,9 @@ ser.ExitChild();
 ISerializableConstPtr VideoStreamAssetDesc::Create          ( const IDeserializer& deser )
 {
 	auto path = deser.GetAttribute( "path" );
-	auto format = static_cast< TextureFormat >( stoul( deser.GetAttribute( "format" ) ) );
+	
+    //auto format = static_cast< TextureFormat >( stoul( deser.GetAttribute( "format" ) ) );
+    auto format = TextureFormat::F_A8R8G8B8;
 
 	return Create( path, format );
 }

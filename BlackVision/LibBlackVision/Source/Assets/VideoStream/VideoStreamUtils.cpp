@@ -42,9 +42,10 @@ ThumbnailConstPtr            VideoStreamUtils::LoadThumbnail                   (
         return nullptr;
 
     auto resized = image::Resize( frameTex->GetData(), frameTex->GetWidth(), frameTex->GetHeight(), TextureUtils::ToBPP( frameTex->GetFormat() ), 128, 128, image::FilterType::FT_LANCZOS );
-    auto compresed = image::SaveTGAToHandle( resized, 128, 128, 32 );
+    auto flipped = image::FlipVertical( resized, 128, 128, 32 );
+    auto compresed = image::SaveTGAToHandle( flipped, 128, 128, 32 );
 
-    /*assert( image::SaveBMPImage( absTexPath.Str() + ".bmp", resized, 128, 128, 32 ) );*/
+    /*assert( image::SaveBMPImage( absTexPath.Str() + ".bmp", flipped, 128, 128, 32 ) );*/
 
     auto thumb = VideoStreamAssetThumbnail::Create( compresed, h );
 

@@ -724,7 +724,7 @@ void				        ProjectManagerImpl::InitializeAssets	()
     StringVector videoExts;
 	videoExts.push_back( ".*\\.bik" );
     videoExts.push_back( ".*\\.mov" );
-    videoExts.push_back( ".*\\.MP4" );
+    videoExts.push_back( ".*\\.mp4" );
     videoExts.push_back( ".*\\.yuv" );
     videoExts.push_back( ".*\\.avi" );
 

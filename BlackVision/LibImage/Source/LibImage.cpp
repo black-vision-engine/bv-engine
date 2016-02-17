@@ -415,6 +415,58 @@ char *		            BlurImageImpl	( const char * data, UInt32 width, UInt32 heig
     return out;
 }
 
+// ***********************
+//
+char *              FlipHorizontalImpl  ( const char * data, UInt32 width, UInt32 height, UInt32 bpp )
+{
+	FIBITMAP * copyInBitmap = nullptr;
+	if( bpp <= 32 )
+	{
+		copyInBitmap = FreeImage_Allocate( ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+	}
+	else
+	{
+		copyInBitmap = FreeImage_AllocateT( FIT_RGBAF, ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+	}
+
+    auto numBytes = width * height * bpp / 8;
+    memcpy( FreeImage_GetBits( copyInBitmap ), data, numBytes );
+
+    FreeImage_FlipHorizontal( copyInBitmap );
+
+    char * pixels = new char[ numBytes ];
+    memcpy( pixels, FreeImage_GetBits( copyInBitmap ), numBytes );
+
+    FreeImage_Unload( copyInBitmap );
+    return pixels;
+}
+
+// ***********************
+//
+char *                  FlipVerticalImpl    ( const char * data, UInt32 width, UInt32 height, UInt32 bpp )
+{
+	FIBITMAP * copyInBitmap = nullptr;
+	if( bpp <= 32 )
+	{
+		copyInBitmap = FreeImage_Allocate( ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+	}
+	else
+	{
+		copyInBitmap = FreeImage_AllocateT( FIT_RGBAF, ( int )width, ( int )height, bpp, FI_RGBA_RED_MASK, FI_RGBA_GREEN_MASK, FI_RGBA_BLUE_MASK );
+	}
+
+    auto numBytes = width * height * bpp / 8;
+    memcpy( FreeImage_GetBits( copyInBitmap ), data, numBytes );
+
+    FreeImage_FlipVertical( copyInBitmap );
+
+    char * pixels = new char[ numBytes ];
+    memcpy( pixels, FreeImage_GetBits( copyInBitmap ), numBytes );
+
+    FreeImage_Unload( copyInBitmap );
+    return pixels;
+}
+
 // *********************************
 //
 MemoryChunkConstPtr LoadImage( const std::string & filePath, UInt32 * width, UInt32 * height, UInt32 * bpp, UInt32 * channelNum, bool loadFromMemory )
@@ -467,6 +519,24 @@ MemoryChunkConstPtr		Resize( const MemoryChunkConstPtr & in, UInt32 width, UInt3
     auto pixels = ResizeImpl( in->Get(), width, height, bpp, newWidth, newHeight, ft );
 
 	return MemoryChunk::Create( pixels, numBytes );
+}
+
+// ***********************
+//
+MemoryChunkConstPtr		FlipHorizontal  ( MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp )
+{
+    auto pixels = FlipHorizontalImpl( data->Get(), width, height, bpp );
+
+    return MemoryChunk::Create( pixels, data->Size() );
+}
+
+// ***********************
+//
+MemoryChunkConstPtr		FlipVertical    ( MemoryChunkConstPtr data, UInt32 width, UInt32 height, UInt32 bpp )
+{
+    auto pixels = FlipVerticalImpl( data->Get(), width, height, bpp );
+
+    return MemoryChunk::Create( pixels, data->Size() );
 }
 
 // ******************************
