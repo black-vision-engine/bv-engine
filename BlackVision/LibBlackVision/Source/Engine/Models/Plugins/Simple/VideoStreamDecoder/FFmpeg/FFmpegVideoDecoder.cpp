@@ -198,8 +198,26 @@ Float64					FFmpegVideoDecoder::GetFrameRate			() const
 void					FFmpegVideoDecoder::Seek					( Float64 time ) 
 {
 	std::lock_guard< std::mutex > lock( m_mutex );
-	m_demuxer->Seek( m_vstreamDecoder->ConvertTime( time ), m_vstreamDecoder->GetStreamIdx() );
-	m_vstreamDecoder->Reset();
+    
+    auto ts = m_vstreamDecoder->ConvertTime( time );
+	m_demuxer->Seek( ts, m_vstreamDecoder->GetStreamIdx() );
+
+    Int64 currTs = 0;
+    while( currTs < ts )
+    {
+        auto packet = m_demuxer->GetPacket( m_vstreamDecoder->GetStreamIdx() );
+        if( packet != nullptr )
+        {
+	        m_vstreamDecoder->DecodePacket( packet, m_frame );
+            currTs = packet->dts;
+        }
+        else if( m_demuxer->IsEOF() )
+        {
+            break;
+        }
+        av_free_packet( packet );
+    }
+
 	m_frameQueue.Clear();
 }
 

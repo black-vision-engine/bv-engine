@@ -95,22 +95,13 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 //
 void				FFmpegDemuxer::Seek					( Int64 timestamp, Int32 streamIdx )
 {
-    auto initialTS = timestamp - SAFE_SEEK_FRAMES;
-    if( initialTS < 0 )
+    auto initTs = timestamp - SAFE_SEEK_FRAMES;
+    if( initTs < 0 )
     {
-        initialTS = 0;
+        initTs = 0;
     }
 
-	av_seek_frame( m_formatCtx, streamIdx, initialTS, AVSEEK_FLAG_BACKWARD );
-
-    Int64 currTS = 0;
-    while( currTS < timestamp )
-    {
-        auto packet = GetPacket( streamIdx );
-        currTS = packet->dts - m_formatCtx->start_time;
-        av_free_packet( packet );
-    }
-
+	av_seek_frame( m_formatCtx, streamIdx, initTs, AVSEEK_FLAG_BACKWARD );
 	ClearPacketQueue();
 }
 

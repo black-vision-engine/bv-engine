@@ -36,6 +36,9 @@ public:
 	virtual UInt32					GetHeight				() const = 0;
 	virtual Float64					GetFrameRate			() const = 0;
 
+	/** Accurate seeking.
+	@param[time] in seconds 
+    */
 	virtual void					Seek					( Float64 time ) = 0;
 
 	virtual void					Reset					() = 0;

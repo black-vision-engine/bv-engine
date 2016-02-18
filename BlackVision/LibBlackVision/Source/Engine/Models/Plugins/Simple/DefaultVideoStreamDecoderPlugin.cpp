@@ -308,6 +308,14 @@ void                                DefaultVideoStreamDecoderPlugin::HandleDecod
         auto decoderModeTime = m_decoderModeParam->GetLocalEvaluationTime();
         auto offsetTime = m_offsetParam->GetLocalEvaluationTime();
 
+        //edge case - loop
+        if( ( m_prevDecoderModeTime > decoderModeTime ) && ( mode == DecoderMode::PLAY ) )
+        {
+            m_decoder->Start();
+            m_prevOffsetCounter = 0;
+        }
+
+
         if( ( m_prevOffsetCounter != offset[ 1 ] ) || ( m_prevOffsetTime > offsetTime ) )
         {
             //edge case - eof
@@ -333,12 +341,6 @@ void                                DefaultVideoStreamDecoderPlugin::HandleDecod
             }
 
             m_prevDecoderMode = mode;
-        }
-
-        //edge case - loop
-        if( ( m_prevDecoderModeTime > decoderModeTime ) && ( mode == DecoderMode::PLAY ) )
-        {
-            m_decoder->Start();
         }
 
         m_prevDecoderModeTime = decoderModeTime;
