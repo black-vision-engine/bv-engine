@@ -21,8 +21,8 @@ public:
     {
         Alpha = 0,
         Normal,
-        Lighten,
-        Darken,
+        Lighten,        ///< Blend equation max needed
+        Darken,         ///< Blend equation max needed
         Multiply,
         Average,
         Add,
