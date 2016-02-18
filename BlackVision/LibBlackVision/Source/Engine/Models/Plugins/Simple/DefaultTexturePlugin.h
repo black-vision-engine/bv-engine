@@ -6,10 +6,13 @@
 
 #include "Engine/Models/Plugins/Descriptor/BasePluginDescriptor.h"
 #include "Engine/Models/Plugins/Plugin.h"
-
+#include "BlendingModeHelper.h"
 
 
 namespace bv { namespace model {
+
+
+
 
 // ***************************** DESCRIPTOR **********************************
 class DefaultTexturePluginDesc : public BasePluginDescriptor
@@ -70,6 +73,7 @@ private:
 
     virtual void								SetPrevPlugin               ( IPluginPtr plugin ) override;
 };
+
 
 } // model
 } // bv
