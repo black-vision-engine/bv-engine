@@ -3,7 +3,6 @@
 #include "Engine/Events/Interfaces/IEventManager.h"
 #include "Engine/Graphics/Renderers/Renderer.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"
-#include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/BVProjectEditor.h"
 #include "Engine/Models/ModelState.h"
 
@@ -14,8 +13,6 @@
 #include "ModelInteractionEvents.h"
 
 #include "Widgets/NodeLogicFactory.h"
-
-#include "Widgets/Crawler/CrawlerEvents.h"
 
 #include "System/Env.h"
 #include "BVConfig.h"
@@ -32,8 +29,6 @@
 
 #include "TestAI/TestVideoOutputKeyboardHandler.h"
 #include "testai/TestAIManager.h"
-#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
-#include "BVGL.h"
 //FIXME: end of remove
 
 #include"StatsFormatters.h"
