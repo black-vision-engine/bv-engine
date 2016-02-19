@@ -25,6 +25,9 @@ DEFINE_CONST_PTR_TYPE( WidgetCounter )
 class WidgetCounter:  public model::INodeLogic, public std::enable_shared_from_this< WidgetCounter >
 {
 private:
+    static const std::string        m_type;
+
+private:
 	bv::model::BasicNode *					m_parentNode;
 	bool									m_isFinalized;
 	bv::model::ParamFloatPtr				m_param;
@@ -39,6 +42,7 @@ public:
 	virtual void	Update			( TimeType t )	override;
 	virtual void	Deinitialize	()				override {}
 
+    virtual const std::string       GetType             () const override;
 
 	static WidgetCounterPtr         Create              ( bv::model::BasicNode * parent,bv::model:: ITimeEvaluatorPtr timeEvaluator);
 	bv::model::IParameterPtr        GetValueParam       ();

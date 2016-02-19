@@ -5,8 +5,20 @@
 #include "ShiftReplicationModifier.h"
 
 #include "Serialization/SerializationHelper.h"
+#include "Serialization/BV/BVSerializeContext.h"
+
 
 namespace bv{ namespace model {
+
+const std::string   NodeReplicator::m_type = "replicate";
+
+// ***********************
+//
+const std::string   NodeReplicator::GetType             () const
+{
+    return m_type;
+}
+
 
 // *******************************
 //
@@ -74,11 +86,17 @@ void					    NodeReplicator::Deinitialize()
 //
 void                NodeReplicator::Serialize       ( ISerializer& ser ) const
 {
-    ser.EnterChild( "logic" );
-        ser.SetAttribute( "type", "replicate" );
-        ser.SetAttribute( "numRepetitions", SerializationHelper::T2String( m_repNum ) );
+    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+    assert( context != nullptr );
 
-        m_repModifier->Serialize( ser );
+    ser.EnterChild( "logic" );
+        ser.SetAttribute( "type", m_type );
+
+        if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
+        {
+            ser.SetAttribute( "numRepetitions", SerializationHelper::T2String( m_repNum ) );
+            m_repModifier->Serialize( ser );
+        }
 
     ser.ExitChild();
 }
@@ -119,6 +137,7 @@ bool                NodeReplicator::HandleEvent     ( IDeserializer& /*eventSer*
     // @todo Implement all posible interactions with this widget.
     return false;
 }
+
 
 } // model
 } // bv

@@ -34,6 +34,10 @@ DEFINE_CONST_PTR_TYPE( Crawler )
 
 class Crawler : public model::INodeLogic, public std::enable_shared_from_this< Crawler >
 {
+private:
+    static const std::string        m_type;
+
+
 	typedef std::map< bv::model::BasicNode *, Float32 > NodeFloatMap;
 	typedef std::map< bv::model::BasicNode *, bool >	NodeBoolMap;
 
@@ -94,10 +98,13 @@ public:
 	virtual void	Update			( TimeType t )	override;
 	virtual void	Deinitialize	()				override {}
 
+
 	void			Start			();
 	void			Stop			();
 
 	static		CrawlerPtr Create	( bv::model::BasicNode * parent, const mathematics::RectConstPtr & view );
+
+    virtual const std::string   GetType         () const override;
 
     virtual void                Serialize       ( ISerializer& ser ) const override;
     static CrawlerPtr           Create          ( const IDeserializer & deser, bv::model::BasicNode * parentNode );

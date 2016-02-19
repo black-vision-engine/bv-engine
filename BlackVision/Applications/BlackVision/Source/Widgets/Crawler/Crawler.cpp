@@ -10,6 +10,7 @@
 #include "CrawlerEvents.h"
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/BV/BVDeserializeContext.h"
+#include "Serialization/BV/BVSerializeContext.h"
 #include "Tools/StringHeplers.h"
 
 #include "ProjectManager.h"
@@ -21,10 +22,18 @@
 namespace bv { namespace nodelogic {
 
 
+const std::string   Crawler::m_type = "crawler";
+
+// ***********************
+//
+const std::string   Crawler::GetType             () const
+{
+    return m_type;
+}
+
+
 namespace
 {
-
-
 // ***********************
 //
 bv::model::BasicNodePtr         GetNode     ( bv::model::BasicNode * parent, Int32 nodeIdx )
@@ -501,57 +510,64 @@ void		Crawler::EnqueueNode			( model::BasicNode * n)
 //
 void                Crawler::Serialize       ( ISerializer& ser ) const
 {
+    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+    assert( context != nullptr );
+
     ser.EnterChild( "logic" );
-        ser.SetAttribute( "type", "crawler" );
-        ser.EnterChild( "view" );
-            ser.SetAttribute( "empty", SerializationHelper::T2String( m_view->m_empty ) );
-            if( !m_view->m_empty )
-            {
-                ser.SetAttribute( "xmin", SerializationHelper::T2String( m_view->xmin ) );
-                ser.SetAttribute( "xmax", SerializationHelper::T2String( m_view->xmax ) );
-                ser.SetAttribute( "ymin", SerializationHelper::T2String( m_view->ymin ) );
-                ser.SetAttribute( "ymax", SerializationHelper::T2String( m_view->ymax ) );
-            }
-        ser.ExitChild(); // view
+        ser.SetAttribute( "type", m_type );
 
-        ser.SetAttribute( "speed", SerializationHelper::T2String( m_speed ) );
-        ser.SetAttribute( "interspace", SerializationHelper::T2String( m_interspace ) );
+        if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
+        {
+            ser.EnterChild( "view" );
+                ser.SetAttribute( "empty", SerializationHelper::T2String( m_view->m_empty ) );
+                if( !m_view->m_empty )
+                {
+                    ser.SetAttribute( "xmin", SerializationHelper::T2String( m_view->xmin ) );
+                    ser.SetAttribute( "xmax", SerializationHelper::T2String( m_view->xmax ) );
+                    ser.SetAttribute( "ymin", SerializationHelper::T2String( m_view->ymin ) );
+                    ser.SetAttribute( "ymax", SerializationHelper::T2String( m_view->ymax ) );
+                }
+            ser.ExitChild(); // view
+
+            ser.SetAttribute( "speed", SerializationHelper::T2String( m_speed ) );
+            ser.SetAttribute( "interspace", SerializationHelper::T2String( m_interspace ) );
 
 
-        // Node names aren't enough to identify node. Checking children indicies.
-        SizeType numChildren = m_parentNode->GetNumChildren();
-        std::vector<bv::model::BasicNode*>     childrenNodes;
-        childrenNodes.reserve( numChildren );
+            // Node names aren't enough to identify node. Checking children indicies.
+            SizeType numChildren = m_parentNode->GetNumChildren();
+            std::vector<bv::model::BasicNode*>     childrenNodes;
+            childrenNodes.reserve( numChildren );
         
-        // Copy all node's to vector
-        for( Int32 i = 0; i < numChildren; ++i )
-            childrenNodes.push_back( m_parentNode->GetChild( i ).get() );
+            // Copy all node's to vector
+            for( Int32 i = 0; i < numChildren; ++i )
+                childrenNodes.push_back( m_parentNode->GetChild( i ).get() );
 
 
-        ser.EnterArray( "crawlerNodes" );
-            for( auto& node : m_shifts )
-            {
-                ser.EnterChild( "crawlerNode" );
-                    ser.SetAttribute( "name", node.first->GetName() );
+            ser.EnterArray( "crawlerNodes" );
+                for( auto& node : m_shifts )
+                {
+                    ser.EnterChild( "crawlerNode" );
+                        ser.SetAttribute( "name", node.first->GetName() );
 
-                    // Find node index
-                    Int32  nodeIndex = -1;
-                    for( Int32 i = 0; i < numChildren; ++i )
-                    {
-                        if( childrenNodes[ i ] == node.first )
+                        // Find node index
+                        Int32  nodeIndex = -1;
+                        for( Int32 i = 0; i < numChildren; ++i )
                         {
-                            nodeIndex = i;
-                            break;
+                            if( childrenNodes[ i ] == node.first )
+                            {
+                                nodeIndex = i;
+                                break;
+                            }
                         }
-                    }
 
-                    assert( nodeIndex >= 0 );   // Node held by crawler exists in tree no more.
-                    ser.SetAttribute( "nodeIdx", SerializationHelper::T2String( nodeIndex ) );
+                        assert( nodeIndex >= 0 );   // Node held by crawler exists in tree no more.
+                        ser.SetAttribute( "nodeIdx", SerializationHelper::T2String( nodeIndex ) );
 
-                ser.ExitChild(); // node
-            }
+                    ser.ExitChild(); // node
+                }
 
-        ser.ExitChild(); // nodes
+            ser.ExitChild(); // nodes
+        }
 
     ser.ExitChild(); // logic
 }
@@ -700,6 +716,8 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
 
     return true;
 }
+
+
 
 } // nodelogic
 } // bv

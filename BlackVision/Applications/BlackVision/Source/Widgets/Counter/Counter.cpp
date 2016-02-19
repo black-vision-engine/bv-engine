@@ -9,12 +9,16 @@
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Serialization/BVDeserializeContext.h"
+#include "Serialization/BV/BVSerializeContext.h"
 
 #include "EndUserAPI/EventHandlers/EventHandlerHelpers.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
 namespace bv {
 namespace nodelogic {
+
+
+const std::string   WidgetCounter::m_type = "counter";
 
 	
 // *******************************
@@ -76,13 +80,20 @@ void		WidgetCounter::Update				( TimeType T)
 //
 void                WidgetCounter::Serialize       ( ISerializer& ser ) const
 {
+    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+    assert( context != nullptr );
+
     ser.EnterChild( "logic" );
 
-        ser.SetAttribute( "type", "counter" );
-        m_param->Serialize( ser );
+        ser.SetAttribute( "type", m_type );
 
-        auto timeline = bv::model::TimelineManager::GetInstance()->GetTimelinePath( m_param->GetTimeEvaluator() );
-        ser.SetAttribute( "timelinePath", timeline );
+        if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
+        {
+            m_param->Serialize( ser );
+
+            auto timeline = bv::model::TimelineManager::GetInstance()->GetTimelinePath( m_param->GetTimeEvaluator() );
+            ser.SetAttribute( "timelinePath", timeline );
+        }
 
     ser.ExitChild();
 }
@@ -165,6 +176,13 @@ bool                WidgetCounter::HandleEvent     ( IDeserializer& eventSer, IS
         return false;
 
     return true;
+}
+
+// ***********************
+//
+const std::string   WidgetCounter::GetType             () const
+{
+    return m_type;
 }
 
 }
