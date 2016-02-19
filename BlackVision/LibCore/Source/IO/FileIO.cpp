@@ -1,5 +1,6 @@
 #include "FileIO.h"
-
+#include "DirIO.h"
+#include "System/Path.h"
 #include <sys/stat.h>
 
 #include "boost/filesystem/path.hpp"
@@ -33,6 +34,8 @@ public:
     void                Write       ( const char * in , SizeType numBytes );
 	void                Write       ( const std::string & str );
 
+    bool                Good        () const;
+
 	std::fstream *		StreamBuf	();
 
     void                Close       ();
@@ -41,6 +44,7 @@ public:
 
     static bool         Exists      ( const std::string & fileName );
     static FileImpl *   Open        ( const std::string & fileName, File::OpenMode openMode );
+	static FileImpl *	OpenTmp     ( std::string * name );
     static SizeType     Read        ( std::ostream & out, const std::string & fileName );
     static SizeType     Read        ( char* out, const std::string & fileName );
     static SizeType     Write       ( std::istream & in, const std::string & fileName );
@@ -178,9 +182,23 @@ bool        FileImpl::Exists      ( const std::string & fileName )
 
 // *******************************
 //
+bool        FileImpl::Good        () const
+{
+    return m_fileHandle->good();
+}
+
+// *******************************
+//
 FileImpl *  FileImpl::Open        ( const std::string & fileName, File::OpenMode openMode )
 {
     FileImpl * impl = new FileImpl( fileName );
+
+    auto parent = boost::filesystem::path( fileName ).parent_path();
+
+    if( !parent.empty() && !boost::filesystem::exists( parent ) )
+    {
+        Dir::CreateDir( parent.string(), true );
+    }
 
     if( openMode == File::FOMReadOnly )
         impl->m_fileHandle = new std::fstream( fileName, std::ios::in | std::ios::binary );
@@ -194,6 +212,20 @@ FileImpl *  FileImpl::Open        ( const std::string & fileName, File::OpenMode
         std::cerr << "Cannot open file: " << fileName << std::endl;
         return impl;
     }
+}
+
+// *******************************
+//
+FileImpl *	FileImpl::OpenTmp     ( std::string * name )
+{
+	auto p = boost::filesystem::unique_path();
+
+	if( name )
+	{
+		*name = p.string();
+	}
+
+	return Open( p.string(), File::OpenMode::FOMReadWrite );
 }
 
 // *******************************
@@ -339,6 +371,13 @@ std::fstream *	File::StreamBuf	()
 
 // *******************************
 //
+bool             File::Good      () const
+{
+    return m_impl->Good();
+}
+
+// *******************************
+//
 SizeType    File::Size        ( const std::string & fileName )
 {
     return FileImpl::Size( fileName );
@@ -349,6 +388,13 @@ SizeType    File::Size        ( const std::string & fileName )
 File        File::Open        ( const std::string & fileName, OpenMode openMode )
 {
     return File( FileImpl::Open( fileName, openMode ) );
+}
+
+// *******************************
+//
+File         File::OpenTmp     ( std::string * name )
+{
+	return File( FileImpl::OpenTmp( name ) );
 }
 
 // *******************************
@@ -401,6 +447,17 @@ std::string  File::GetFileName ( const std::string & path )
 {
 	boost::filesystem::path p( path );
 	return p.stem().string();
+}
+
+// *******************************
+//
+void         File::Touch       ( const std::string & fileName )
+{
+    if( !Path::Exists( fileName ) )
+    {
+        auto f = File::Open( fileName, OpenMode::FOMReadWrite );
+        f.Close();
+    }
 }
 
 } //bv

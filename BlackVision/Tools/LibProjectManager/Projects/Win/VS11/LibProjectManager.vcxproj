@@ -20,18 +20,35 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\AssetCategory.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\AnimationAssetAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\FontAssetAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\PresetAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\SceneAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.cpp" />
+    <ClCompile Include="..\..\..\Source\Impl\Accessors\VideoStreamAssetAccessor.cpp" />
     <ClCompile Include="..\..\..\Source\Impl\ProjectManagerImpl.cpp" />
     <ClCompile Include="..\..\..\Source\Project.cpp" />
     <ClCompile Include="..\..\..\Source\ProjectManager.cpp" />
+    <ClCompile Include="..\..\..\Source\SceneDescriptor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\AssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\AssetCategory.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\AnimationAssetAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\FontAssetAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\PresetAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\SceneAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\Accessors\TextureAssetAccessor.h" />
+    <ClInclude Include="..\..\..\Source\Impl\Accessors\VideoStreamAssetAccessor.h" />
     <ClInclude Include="..\..\..\Source\Impl\ProjectManagerImpl.h" />
     <ClInclude Include="..\..\..\Source\Project.h" />
     <ClInclude Include="..\..\..\Source\ProjectManager.h" />
+    <ClInclude Include="..\..\..\Source\SceneDescriptor.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ConfigReader\Projects\Win\VS11\ConfigReader.vcxproj">
+      <Project>{00218970-e820-4bcc-b1da-48348059f6fe}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9FA5A3B8-FA25-4AA0-A3AC-DFCA1283D6D2}</ProjectGuid>
@@ -73,6 +90,7 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -80,6 +98,7 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -87,6 +106,7 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -94,6 +114,7 @@
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Common.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_CoreLibs.props" />
     <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_3rdParty.props" />
+    <Import Project="..\..\..\..\..\Projects\Win\VS11\CustomProperties\Inc_Tools.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -111,6 +132,16 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile />
     <ClCompile />
+    <ClCompile />
+    <ClCompile />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile />
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

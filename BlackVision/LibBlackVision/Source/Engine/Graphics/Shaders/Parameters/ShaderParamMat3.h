@@ -9,16 +9,17 @@ class ShaderParamMat3 : public GenericShaderParam
 {
 private:
 
-    const ValueMat3 *   m_valModel;
+    glm::mat3				m_val;
     
 public:
 
-                            ShaderParamMat3     ( const std::string & name, const ValueMat3 * value );
-                            ~ShaderParamMat3    ();
+                            ShaderParamMat3     ( const std::string & name, const glm::mat3 & value = glm::mat3( 0.f ) );
 
-    void                    SetModelValue       ( const ValueMat3 * value );
+    void                    SetValue			( const glm::mat3 & value );
 
-    virtual const void *    GetValuePtr         () const override;
+private:
+   
+	virtual const void *    GetValuePtr         () const override;
 
 };
 

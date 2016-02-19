@@ -20,6 +20,8 @@ enum class TextureFormat : int
 enum class TextureType : int
 {
     T_2D = 0        ,
+    T_3D = 0        ,
+    T_1D = 0        ,
     T_CUBE          ,
 
     T_TOTAL
@@ -38,6 +40,8 @@ enum class ParamType : int
     PT_INT,
     PT_BOOL,
     PT_ENUM,
+    PT_STRING,
+    PT_WSTRING,
     PT_TOTAL
 };
 
@@ -49,10 +53,11 @@ enum class ModelParamType : int
     MPT_VEC3,
     MPT_VEC4,
     MPT_TRANSFORM,
-    MPT_TRANSFORM_VEC,
     MPT_INT,
     MPT_BOOL,
     MPT_ENUM,
+    MPT_STRING,
+    MPT_WSTRING,
     MPT_TOTAL
 };
 
@@ -154,6 +159,15 @@ enum class PluginResourceType : int
     PRT_TOTAL
 };
 
+enum class TimelineType : int
+{
+    TT_DEFAULT = 0,
+    TT_OFFSET,
+    TT_CONST,
+
+    TT_TOTAL
+};
+
 enum class TimelineEventType : int
 {
     TET_STOP = 0,
@@ -196,7 +210,37 @@ enum class MipMapFilterType : int
 	B_SPLINE,
 	BICUBIC,
 	CATMULL_ROM,
-	LANCZOS
+	LANCZOS,
+
+    MMFT_TOTAL
+};
+
+enum class VideoPixelFormat : int 
+{
+	//RGB
+	VPF_RGBA = 0,
+	VPF_RGB24,
+	VPF_RGB8,
+	VPF_RGB4,
+	VPF_BGRA,
+	VPF_BGR24,
+	VPF_BGR8,
+	VPF_BGR4,
+
+	//planar YUV
+	VPF_YUV420P,
+	VPF_YUV422P,
+	VPF_YUV444P,
+	VPF_YUV410P,
+	VPF_YUV411P,
+	VPF_YUVA420P,
+	VPF_YUVA422P,
+	VPF_YUVA444P,
+
+	//packed YUV
+	VPF_YVYU422,
+	VPF_YUYV422,
+	VPF_UYVY422,
 };
 
 } // bv

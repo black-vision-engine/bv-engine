@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "VideoOutputRenderLogic.h"
 
 #include "Engine/Graphics/Resources/RenderTarget.h"

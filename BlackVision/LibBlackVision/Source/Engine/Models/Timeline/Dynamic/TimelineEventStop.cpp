@@ -1,5 +1,7 @@
-#include "TimelineEventStop.h"
+#include "stdafx.h"
 
+#include "TimelineEventStop.h"
+#include "Serialization/SerializationHelper.inl"
 
 namespace bv { namespace model {
 
@@ -14,6 +16,26 @@ TimelineEventStop::TimelineEventStop   ( const std::string & name, TimeType even
 //
 TimelineEventStop::~TimelineEventStop  ()
 {
+}
+
+// *********************************
+//
+void                TimelineEventStop::Serialize       ( ISerializer& ser ) const
+{
+ser.EnterChild( "event" );
+    ser.SetAttribute( "type", "stop" );
+    ser.SetAttribute( "name", GetName() );
+    SerializationHelper::SerializeAttribute( ser, GetEventTime(), "time" );
+ser.ExitChild();
+}
+
+// *********************************
+//
+TimelineEventStop*   TimelineEventStop::Create          ( const IDeserializer& deser, ITimeline* timeline )
+{
+    return new TimelineEventStop( deser.GetAttribute( "name" ),
+        SerializationHelper::String2T< TimeType >( deser.GetAttribute( "time" ), 0.f ),
+        timeline );
 }
 
 } //model

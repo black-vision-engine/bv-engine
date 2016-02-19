@@ -6,11 +6,15 @@
 
 #include "System/InitSubsystem.h"
 
+#include "System/Time.h"
+
 #include "Engine/Graphics/Renderers/Renderer.h"
 
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
 #include "Tools/HRTimer.h"
+
+#include "Application/ApplicationContext.h"
 
 namespace bv {
 
@@ -56,7 +60,7 @@ bool			BasicWindowApp::RegisterConsoleInitializer		()
 // *********************************
 //
 BasicWindowApp::BasicWindowApp	( CreateLogicFunc logicFunc, const char * title, int xOffset, int yOffset, int width, int height, bool fullScreen )
-    : WindowedApplication( title, xOffset, yOffset, width, height, fullScreen )
+    : WindowedApplication( title, xOffset, yOffset, width, height, fullScreen ? FULLSCREEN : WINDOWED, *(new bv::RendererInput) )  // FIXME: pablito
 	, CreateLogic( logicFunc )
 {
 }
@@ -85,9 +89,12 @@ void BasicWindowApp::OnPreidle  ()
 //
 void BasicWindowApp::OnIdle		()
 {
-    static DWORD curMillis = timeGetTime();
+    static auto curMillis = Time::Now();
+	auto timeDiff = Time::Now() - curMillis;
 
-    m_appLogic->Update( float( timeGetTime() - curMillis ) * 0.001f );
+	ApplicationContext::Instance().SetTimestamp( timeDiff );
+
+    m_appLogic->Update( float( timeDiff ) * 0.001f );
 
 	m_appLogic->Render();
 

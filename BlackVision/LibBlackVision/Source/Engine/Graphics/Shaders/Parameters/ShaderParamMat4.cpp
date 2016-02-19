@@ -1,36 +1,30 @@
-#include "ShaderParamMat4.h"
+#include "stdafx.h"
 
-#include <cassert>
+#include "ShaderParamMat4.h"
 
 
 namespace bv {
 
 // ****************************
 //
-ShaderParamMat4::ShaderParamMat4                ( const std::string & name, const ValueMat4 * value )
+ShaderParamMat4::ShaderParamMat4                ( const std::string & name, const glm::mat4 & value )
     : GenericShaderParam( ShaderParamTypeTraits< ValueMat4::ValueType >::paramType, name )
-    , m_valModel( value )
+    , m_val( value )
 {
 }
 
 // ****************************
 //
-ShaderParamMat4::~ShaderParamMat4               ()
+void            ShaderParamMat4::SetValue  ( const glm::mat4 & value )
 {
-}
-
-// ****************************
-//
-void            ShaderParamMat4::SetModelValue  ( const ValueMat4 * value )
-{
-    m_valModel = value;
+    m_val = value;
 }
 
 // ****************************
 //
 const void *    ShaderParamMat4::GetValuePtr    () const
 {
-    return &m_valModel->GetValue();
+    return &m_val;
 }
 
 } //bv

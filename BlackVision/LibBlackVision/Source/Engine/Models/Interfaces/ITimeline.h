@@ -14,6 +14,7 @@ class ITimeline : public ITimeEvaluator
 {
 public:
 
+    virtual void	                SetDuration         ( TimeType duration ) = 0;
     virtual TimeType                GetDuration         () const = 0;
 
     virtual void                    Restart             () = 0;
@@ -49,6 +50,7 @@ public:
 
     virtual                         ~ITimeline      () {}
 
+    virtual const std::string&      GetType         () = 0;
 };
 
 DEFINE_PTR_TYPE(ITimeline)

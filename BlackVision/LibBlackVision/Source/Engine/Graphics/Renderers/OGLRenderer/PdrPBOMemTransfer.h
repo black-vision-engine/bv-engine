@@ -8,67 +8,62 @@
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 
-
-//FIXME: implicitly assumes that Lock/Unlock pairs are called in a sane way (lockRT/unlockRT without mixing Texture/RT)
 namespace bv {
 
 class PdrPBOMemTransfer
 {
-private:
+protected:
 
-    GLuint          m_numPBOs;
+    GLuint					m_numPBOs;
 
-    GLuint          m_pboID[ 2 ];
+	std::vector< GLuint >	m_pboID;
 
-    GLenum          m_pboTarget;
-    GLenum          m_pboUsage;
+    GLenum					m_pboTarget;
+    GLenum					m_pboUsage;
 
-    GLenum          m_dataSize;
-    GLuint          m_index;
-
-    bool            m_writeLock;
-    void *          m_lockedMemoryPtr;
+    GLenum					m_dataSize;
+    GLuint					m_index;
 
 public:
+    static bool		PBORequired		( DataBuffer::Semantic semantic );
 
-            PdrPBOMemTransfer   ( DataBuffer::Semantic semantic, SizeType dataSize );
-            ~PdrPBOMemTransfer  ();
-    
-    void *  LockTexture         ( MemoryLockingType mlt, GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
-    void    UnlockTexture       ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
-
-    void *  LockRenderTarget    ( GLenum readBufferID, GLuint width, GLuint height, GLuint format, GLuint type );
-    void    UnlockRenderTarget  ();
-
-    void *  SyncLockTexture     ( MemoryLockingType mlt );
-    void    SyncUnlockTexture   ( GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
-
-    void *  AsyncLockTexture    ( MemoryLockingType mlt, GLuint textureID, GLuint width, GLuint height, GLuint format, GLuint type );
-    void    AsyncUnlockTexture  ();
-
-    void *  SyncLockRenderTarget    ( GLenum readBufferID, GLuint width, GLuint height, GLuint format, GLuint type );
-    void    SyncUnlockRenderTarget  ();
-
-    void *  AsyncLockRenderTarget   ( GLenum readBufferID, GLuint width, GLuint height, GLuint format, GLuint type );
-    void    AsyncUnlockRenderTarget ();
-
-    void    Flush               ( GLuint textureUnit );
-
-    GLuint  NumPBOs             () const;
-    GLuint  DataSize            () const;
-
-    static bool PBORequired     ( DataBuffer::Semantic semantic );
-
-private:
-
-    GLint       BindTexture     ( GLuint textureID );
+protected:
+				PdrPBOMemTransfer   ( DataBuffer::Semantic semantic, SizeType dataSize );
+    virtual		~PdrPBOMemTransfer  () = 0;
 
     GLuint      NumPBOs         ( DataBuffer::Semantic semantic ) const;
 
     GLenum      PBOTarget       ( DataBuffer::Semantic semantic ) const;
     GLenum      PBOUsage        ( DataBuffer::Semantic semantic ) const;
-    GLenum      PBOAccess       ( MemoryLockingType mlt ) const;
 
 };
+
+// ******************************
+//
+class PdrUploadPBO : public PdrPBOMemTransfer
+{
+public:
+			PdrUploadPBO		( DataBuffer::Semantic semantic, SizeType dataSize );
+
+	void 	LockUpload			( const char * source, SizeType dataSize );
+	void 	UnlockUpload		();
+
+};
+
+DEFINE_UPTR_TYPE( PdrUploadPBO )
+
+// ******************************
+//
+class PdrDownloadPBO : public PdrPBOMemTransfer
+{
+public:
+			PdrDownloadPBO		( DataBuffer::Semantic semantic, SizeType dataSize );
+
+	void 	LockDownload		();
+	void 	UnlockDownload		( char * dest, SizeType dataSize );
+
+};
+
+DEFINE_UPTR_TYPE( PdrDownloadPBO )
 
 } //bv

@@ -12,8 +12,6 @@
 
 namespace bv {
 
-typedef std::vector< Transform >    TTransformVec;
-
 class SimpleNodeBuilder
 {
 public:
@@ -25,7 +23,7 @@ protected:
 
     static RenderableEffectPtr  CreateRenderableEffect  ( ShaderDataSourceType sdst, const std::string & textureFile = "", const std::string & textureName = "" );
     static RenderableEntity *   CreateRenderableTriStrip( RenderableArrayDataArraysSingleVertexBuffer * vaobuf, RenderableEffectPtr effect );
-    static TTransformVec        DefaultTransform        ();
+    static Transform            DefaultTransform        ();
 
 };
 

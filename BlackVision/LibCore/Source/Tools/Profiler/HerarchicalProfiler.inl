@@ -1,5 +1,7 @@
 #include <assert.h>
 
+#include "System/Time.h"
+
 namespace bv
 {
 
@@ -45,11 +47,11 @@ inline  AutoFrameProfile::AutoFrameProfile    ( unsigned int threadID )
 //
 inline  AutoFrameProfile::~AutoFrameProfile   ()
 {
-    static unsigned long startMillis = timeGetTime();
+    static auto startMillis = Time::Now();
 
 	AutoProfile::EndFrame( m_threadID );
 
-    unsigned int timestamp = timeGetTime();
+    auto timestamp = Time::Now();
 
 	if( m_mode == ProfilerMode::PM_EVERY_FRAME )
 		m_showStats = true;			// Force display every frame

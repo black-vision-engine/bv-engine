@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "RendererStatesBuilder.h"
 
 #include "Engine/Graphics/State/RendererStateInstance.h"
@@ -143,8 +145,10 @@ void RendererStatesBuilder::Assign  ( AlphaStatePtr as, const model::AlphaContex
 {
     as->blendEnabled = ac->blendEnabled;
     as->blendColor = ac->blendColor;
-    as->srcBlendMode = GetAlphaSrcBlendMode( ac->srcBlendMode );
-    as->dstBlendMode = GetAlphaDstBlendMode( ac->dstBlendMode );
+    as->srcRGBBlendMode = GetAlphaSrcBlendMode( ac->srcRGBBlendMode );
+    as->dstRGBBlendMode = GetAlphaDstBlendMode( ac->dstRGBBlendMode );
+	as->srcAlphaBlendMode = GetAlphaSrcBlendMode( ac->srcAlphaBlendMode );
+	as->dstAlphaBlendMode = GetAlphaDstBlendMode( ac->dstAlphaBlendMode );
 }
 
 // *********************************

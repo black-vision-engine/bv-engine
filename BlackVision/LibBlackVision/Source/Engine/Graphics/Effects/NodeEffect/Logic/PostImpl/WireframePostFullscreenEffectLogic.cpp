@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "WireframePostFullscreenEffectLogic.h"
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"

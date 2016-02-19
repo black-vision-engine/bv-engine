@@ -16,4 +16,12 @@ std::string DefaultVideoInputResourceDescr::uid = "VIDEO_INPUT_DESC";
 //    return nullptr;
 //}
 
+// ***********************
+//
+SizeType        DefaultVideoInputResourceDescr::EstimateMemoryUsage () const
+{
+    return 0;
+}
+
+
 } }

@@ -1,5 +1,8 @@
 #include "SimpleTimer.h"
 
+#include "System/Time.h"
+
+#include "win_sock.h"
 
 namespace bv
 {
@@ -34,9 +37,9 @@ void  SimpleTimer::Start            ()
 	QueryPerformanceFrequency( &freq );
 	m_timerFrequency = (unsigned long)freq.QuadPart / 1000;
 
-	m_startMillis = queryMillis();		// Must be after query frequency.
+	m_startMillis = QueryMillis();		// Must be after query frequency.
 #else
-	m_startMillis = timeGetTime();
+	m_startMillis = Time::Now();
 #endif
 }
 
@@ -47,7 +50,7 @@ void  SimpleTimer::Pause            ()
     if ( !m_paused )
     {
         m_paused = true;
-        m_startPause = timeGetTime();
+        m_startPause = ( unsigned long )Time::Now();
     }
 }
 
@@ -59,12 +62,13 @@ void  SimpleTimer::UnPause         ()
     {
         m_paused = false;
 
-		m_totalPausedTime += queryMillis() - m_startPause;
+		m_totalPausedTime += QueryMillis() - m_startPause;
     }
 }
 
-
-unsigned long SimpleTimer::queryMillis() const
+// *********************************
+//
+unsigned long SimpleTimer::QueryMillis() const
 {
 #ifdef QPF_TIMER
 	LARGE_INTEGER currentTime;
@@ -72,7 +76,7 @@ unsigned long SimpleTimer::queryMillis() const
 
 	return unsigned long( currentTime.QuadPart / m_timerFrequency );
 #else
-	return timeGetTime();
+	return Time::Now();
 #endif
 }
 

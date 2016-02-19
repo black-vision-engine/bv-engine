@@ -1,8 +1,11 @@
+#include "stdafx.h"
+
 #include "DefaultTimeline.h"
 
 #include <cassert>
 #include <algorithm>
 
+#include "Engine/Models/Timeline/TimelineHelper.h"
 #include "Engine/Models/Interfaces/ITimelineEvent.h"
 #include "Engine/Models/Plugins/Interfaces/IParameter.h"
 
@@ -10,8 +13,33 @@
 #include "Engine/Models/Timeline/Dynamic/TimelineEventNull.h"
 #include "Engine/Models/Timeline/Dynamic/TimelineEventStop.h"
 
+#include "Serialization/IDeserializer.h"
+#include "Serialization/SerializationHelper.h"
+#include "Serialization/SerializationHelper.inl"
 
-namespace bv { namespace model {
+#include "Serialization/Json/JsonSerializeObject.h"
+#include "Engine/Events/EventManager.h"
+#include "Engine/Events/Events.h"
+#undef min
+#undef max
+
+namespace bv { 
+
+namespace SerializationHelper {
+
+std::pair< TimelineWrapMethod, const char* > TWM2S[] = {
+    std::make_pair( TimelineWrapMethod::TWM_CLAMP, "clamp" ),
+    std::make_pair( TimelineWrapMethod::TWM_MIRROR, "mirror" ),
+    std::make_pair( TimelineWrapMethod::TWM_REPEAT, "repeat" ),
+    std::make_pair( TimelineWrapMethod::TWM_CLAMP, "" ) };
+
+template<> std::string                      T2String    ( const TimelineWrapMethod& twm )                               { return Enum2String( TWM2S, twm ); }
+template<> TimelineWrapMethod               String2T    ( const std::string& s, const TimelineWrapMethod& defaultVal )  { return String2Enum( TWM2S, s, defaultVal ); }
+template<> Expected< TimelineWrapMethod >   String2T    ( const std::string & s )                                       { return String2Enum( TWM2S, s ); }
+
+} // SerializationHelper
+
+namespace model {
 
 namespace {
 
@@ -45,6 +73,106 @@ DefaultTimeline::~DefaultTimeline    ()
     {
         delete evt;
     }
+}
+
+// *********************************
+//
+void                                DefaultTimeline::Serialize           ( ISerializer& ser ) const
+{
+    ser.EnterChild( "timeline" );
+    ser.SetAttribute( "name", GetName() );
+    ser.SetAttribute( "type", "default" );
+
+    SerializationHelper::SerializeAttribute( ser, m_timeEvalImpl.GetLocalTime(), "local_time" );
+    SerializationHelper::SerializeAttribute( ser, m_timeEvalImpl.IsActive(), "play" );
+
+    ser.SetAttribute( "duration", std::to_string( m_timeEvalImpl.GetDuration() ) );
+    if( m_timeEvalImpl.GetWrapPre() == m_timeEvalImpl.GetWrapPost() )
+    {
+        ser.SetAttribute( "loop", SerializationHelper::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPre() ) );
+    }
+    else
+    {
+        ser.SetAttribute( "loop", "true" );
+        ser.SetAttribute( "loopPre", SerializationHelper::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPre() ) );
+        ser.SetAttribute( "loopPost", SerializationHelper::T2String< TimelineWrapMethod >( m_timeEvalImpl.GetWrapPost() ) );
+    }
+
+    ser.EnterArray( "events" );
+    for( auto event : m_keyFrameEvents )
+        event->Serialize( ser );
+    ser.ExitChild();
+
+    ser.EnterArray( "children" );
+    for( auto child : m_children )
+        child->Serialize( ser );
+    ser.ExitChild(); // children
+
+    ser.ExitChild();
+}
+
+
+// *********************************
+//
+DefaultTimeline *                     DefaultTimeline::Create              ( const IDeserializer& deser )
+{
+    auto name = deser.GetAttribute( "name" );
+
+    auto duration = SerializationHelper::String2T< float >( deser.GetAttribute( "duration" ), 777.f );
+
+    auto loop = deser.GetAttribute( "loop" );
+    TimelineWrapMethod preWrap, postWrap;
+    if( loop == "true" )
+    {
+        preWrap = SerializationHelper::String2T< TimelineWrapMethod >( deser.GetAttribute( "loopPre" ) );
+        postWrap = SerializationHelper::String2T< TimelineWrapMethod >( deser.GetAttribute( "loopPost" ) );
+    }
+    else
+    {
+        preWrap = postWrap = SerializationHelper::String2T< TimelineWrapMethod >( loop );
+    }
+
+    auto te = new DefaultTimeline( name, duration, preWrap, postWrap );
+
+    if( deser.EnterChild( "events" ) )
+    {
+        if( deser.EnterChild( "event" ) )
+        {
+            do
+            {
+                auto type = deser.GetAttribute( "type" );
+                if( type == "loop" )
+                    te->AddKeyFrame( TimelineEventLoop::Create( deser, te ) );
+                else if( type == "null" )
+                    te->AddKeyFrame( TimelineEventNull::Create( deser, te ) );
+                else if( type == "stop" )
+                    te->AddKeyFrame( TimelineEventStop::Create( deser, te ) );
+                else
+                    assert( false );
+
+            } while( deser.NextChild() );
+
+            deser.ExitChild(); // event
+        }
+        deser.ExitChild(); // events
+    }
+
+    auto children = SerializationHelper::DeserializeArray< TimeEvaluatorBase< ITimeEvaluator > >( deser, "children", "timeline" );
+
+    for( auto child : children )
+        te->AddChild( child );
+
+    if( SerializationHelper::String2T< bool >( deser.GetAttribute( "play" ), false ) )
+        te->Play();
+
+    return te;
+}
+
+// *********************************
+//
+void								DefaultTimeline::SetDuration        ( TimeType duration )
+{
+    m_timeEvalImpl.SetDuration( duration );
 }
 
 // *********************************
@@ -332,6 +460,7 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
 
     DeactivateEvent( evt );
 
+    TimelineKeyframeEvent::KeyframeType keyframeType = TimelineKeyframeEvent::KeyframeType::KeyframeTypeFail;
     switch( evt->GetType() )
     {
         case TimelineEventType::TET_STOP:
@@ -341,6 +470,9 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
             m_timeEvalImpl.Stop();
             //printf( "Event STOP %s prev: %.4f, cur: %.4f\n", evt->GetName().c_str(), prevTime, curTime );
             printf( "Event STOP %s \n", evt->GetName().c_str() );
+            
+            keyframeType = TimelineKeyframeEvent::KeyframeType::StopKeyframe;
+
             break;
         }
         case TimelineEventType::TET_LOOP:
@@ -359,6 +491,8 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
                     m_activeEvent->SetActive( true ); //Reset current event (forthcomming play will trigger its set of event problems - e.g. first event at 0.0 to pass by).
                     m_activeEvent = nullptr;
 
+                    keyframeType = TimelineKeyframeEvent::KeyframeType::LoopJumpKeyframe;
+
                     printf( "Event LOOP -> GOTO: %.4f %s\n", evtImpl->GetTargetTime(), evt->GetName().c_str() );
                     break;
                 case LoopEventAction::LEA_RESTART:
@@ -370,11 +504,16 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
                     m_activeEvent = nullptr;
 
                     Play(); //FIXME: really start or should we wait for the user to trigger this timeline?
+
+                    keyframeType = TimelineKeyframeEvent::KeyframeType::LoopRestartKeyframe;
+
                     printf( "Event LOOP -> RESTART %s\n", evt->GetName().c_str() );                    
                     break;
                 case LoopEventAction::LEA_REVERSE:
                     Reverse();
                     
+                    keyframeType = TimelineKeyframeEvent::KeyframeType::LoopReverseKeyframe;
+
                     printf( "Event LOOP -> REVERSE %s\n", evt->GetName().c_str() );
                     
                     break;
@@ -393,6 +532,8 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
             auto evtImpl = static_cast< TimelineEventNull * >( evt );
             evtImpl->SetActive( false );
 
+            keyframeType = TimelineKeyframeEvent::KeyframeType::NullKeyframe;
+
             printf( "Event NULL\n" );
 
             break;
@@ -400,6 +541,19 @@ void                                DefaultTimeline::TriggerEventStep       ( Ti
         default:
             assert( false );
     }
+
+    JsonSerializeObject ser;
+    ser.SetAttribute( "cmd", "KeyframeEvent" );
+    ser.SetAttribute( "KeyframeType", SerializationHelper::T2String( keyframeType ) );      // @todo This conversion is stupid. We need to use only strings instead of wstrings.
+    ser.SetAttribute( "KeyframeName", evt->GetName() );
+    ser.SetAttribute( "Timeline", this->GetName() );
+    ser.SetAttribute( "SceneName", TimelineHelper::GetSceneName( this ) );
+    ser.SetAttribute( "Time", SerializationHelper::T2String( this->GetLocalTime() ) );
+
+    ResponseEventPtr msg = std::make_shared<ResponseEvent>();
+    msg->Response = ser.GetString();
+    msg->SocketID = SEND_BROADCAST_EVENT;
+    GetDefaultEventManager().QueueResponse( msg );
 }
 
 // *********************************
@@ -417,6 +571,26 @@ void                                DefaultTimeline::PostUpdateEventStep    ()
             m_activeEvent = nullptr;
         }
     }
+}
+
+// ***********************
+//
+const std::string&        DefaultTimeline::GetType             ()
+{
+    return Type();
+}
+
+// ***********************
+//
+namespace {
+const std::string DefaultTimelineType = "DefaultTimeline";
+} //annonymous
+
+// ***********************
+//
+const std::string&        DefaultTimeline::Type                ()
+{
+    return DefaultTimelineType;
 }
 
 } //model

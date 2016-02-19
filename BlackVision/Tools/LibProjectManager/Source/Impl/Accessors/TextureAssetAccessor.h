@@ -6,14 +6,16 @@
 namespace bv
 {
 
-class ProjectManager;
+class TextureAssetAccessor;
+DEFINE_CONST_PTR_TYPE( TextureAssetAccessor )
 
 class TextureAssetAccessor : public AssetAccessor
 {
 
 public:
 
-	explicit					TextureAssetAccessor	( const ProjectManager * projectManager, const Path & rootPath, const StringVector & fileExts );
+	static TextureAssetAccessorConstPtr Create( const Path & rootPath, const StringVector & fileExts );
+
 								~TextureAssetAccessor	();
 
 	virtual AssetDescConstPtr	GetAssetDesc		( const Path & path ) const override;
@@ -33,19 +35,21 @@ public:
 	virtual void			 	ExportAll			( std::ostream & out ) const override;
     virtual void			 	ExportAll			( const Path & expAssetFilePath ) const override;
 
-    virtual PathVec	ListAll				( const Path & path ) const override;
+    virtual PathVec	ListAll				( const Path & path, bool recursive ) const override;
 
     virtual PathVec	ListAllUnique		( const Path & path ) const override;
 
 
 private:
 
+	explicit					TextureAssetAccessor	( const Path & rootPath, const StringVector & fileExts );
+
 	void						CreateDir			() const;
 
-	const ProjectManager *		m_projectManager;
 	Path						m_rootPath;
 	StringVector				m_fileExts;
 };
+
 
 
 } // bv

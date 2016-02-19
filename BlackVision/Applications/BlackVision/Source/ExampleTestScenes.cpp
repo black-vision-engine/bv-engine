@@ -79,10 +79,8 @@ model::BasicNodePtr CreateSingleTestNodeUidsOnly( const std::string & nodeName, 
 
 // *****************************
 //
-model::BasicNodePtr SolidRect( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr SolidRect( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    { timelineManager; } // FIXME: suppress unused warning
-
     auto rootNode =     CreateSingleTestNodeUidsOnly( "root", pluginsManager, timeEvaluator, 3,
                                                       "DEFAULT_TRANSFORM", 
                                                       "DEFAULT_RECTANGLE", 
@@ -98,18 +96,16 @@ model::BasicNodePtr SolidRect( const model::PluginsManager * pluginsManager, mod
 
     auto simpleTransform = rootNode->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
-    SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
-    SetParameterRotation ( simpleTransform, 0, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 20000.f );
+    SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 0.f, 0.f, 0.f ));
+    SetParameterRotation ( simpleTransform, 2.0f, glm::vec3( 0.f, 0.f, 20000.f ) );
 
     return rootNode;
 }
 
 // *****************************
 //
-model::BasicNodePtr TexturedTestRandomRect( const std::string & name, const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr TexturedTestRandomRect( const std::string & name, const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    { timelineManager; } // FIXME: suppress unused warning
-
     auto node =     CreateSingleTestNodeUidsOnly( name, pluginsManager, timeEvaluator, 3, "DEFAULT_TRANSFORM",  "DEFAULT_RECTANGLE",  "DEFAULT_TEXTURE" );
     assert( node );
 
@@ -121,7 +117,7 @@ model::BasicNodePtr TexturedTestRandomRect( const std::string & name, const mode
     float yt = simple_rnd( -1.f, 1.f );
     float zt = simple_rnd( -1.f, -5.f );
 
-    success &= model::SetParameterTranslation( transform, 0, 0.0f, glm::vec3( xt, yt, zt ) );
+    success &= model::SetParameterTranslation( transform, 0.0f, glm::vec3( xt, yt, zt ) );
 
     std::string txFileName = simple_rnd( -1.f, 1.f ) > 0.f ? "rsrcy/simless_01.jpg" : "rsrcy/simless_00.jpg";
 
@@ -134,10 +130,8 @@ model::BasicNodePtr TexturedTestRandomRect( const std::string & name, const mode
 
 // *****************************
 //
-model::BasicNodePtr TwoTexturedRectangles       ( const model::PluginsManager * pluginsManager, model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr TwoTexturedRectangles       ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
-    { timelineManager; } // FIXME: suppress unused warning
-
     auto rootNode =     CreateSingleTestNodeUidsOnly( "root", pluginsManager, timeEvaluator, 3,
                                                       "DEFAULT_TRANSFORM", 
                                                       "DEFAULT_RECTANGLE", 
@@ -155,14 +149,14 @@ model::BasicNodePtr TwoTexturedRectangles       ( const model::PluginsManager * 
 
     bool success = true;
 
-    success &= model::SetParameterTranslation( rootTransform, 0, 0.0f, glm::vec3( -1.f, 0.f, -1.f ) );
-    success &= model::SetParameterRotation( rootTransform, 0, 100.0f, glm::vec3( 0.f, 0.f, -1.f ), 5000.f );
-    success &= model::SetParameterTranslation( childTransform, 0, 0.0f, glm::vec3( 2.f, 0.f, 0.f ) );
-    success &= model::SetParameterRotation( childTransform, 0, 100.0f, glm::vec3( 0.f, 0.f, -1.f ), 36000.f );
+    success &= model::SetParameterTranslation( rootTransform, 0.0f, glm::vec3( -1.f, 0.f, -1.f ) );
+    success &= model::SetParameterRotation( rootTransform, 100.0f, glm::vec3( 0.f, 0.f, 5000.f ) );
+    success &= model::SetParameterTranslation( childTransform, 0.0f, glm::vec3( 2.f, 0.f, 0.f ) );
+    success &= model::SetParameterRotation( childTransform, 100.0f, glm::vec3( 0.f, 0.f, 36000.f ) );
 
     assert( success );
 
-    std::string txFileName = "rsrcy/simless_00.jpg";
+    std::string txFileName = "sand.jpg";
 
     success &= model::LoadTexture( rootNode->GetPlugin( "texture" ), txFileName );
     success &= model::LoadTexture( childNode->GetPlugin( "texture" ), txFileName );

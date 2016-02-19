@@ -1,3 +1,4 @@
+#pragma once
 #include <deque>
 #include <hash_map>
 
@@ -160,5 +161,6 @@ public:
 };
 
 } //bv
+
 
 #include "FrameStatsService.inl"

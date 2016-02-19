@@ -1,36 +1,30 @@
-#include "ShaderParamVec3.h"
+#include "stdafx.h"
 
-#include <cassert>
+#include "ShaderParamVec3.h"
 
 
 namespace bv {
 
 // ****************************
 //
-ShaderParamVec3::ShaderParamVec3                ( const std::string & name, const ValueVec3 * value )
+ShaderParamVec3::ShaderParamVec3                ( const std::string & name, const glm::vec3 & value )
     : GenericShaderParam( ShaderParamTypeTraits< ValueVec4::ValueType >::paramType, name )
-    , m_valModel( value )
+    , m_val( value )
 {
 }
 
 // ****************************
 //
-ShaderParamVec3::~ShaderParamVec3               ()
+void            ShaderParamVec3::SetValue  ( const glm::vec3 & value )
 {
-}
-
-// ****************************
-//
-void            ShaderParamVec3::SetModelValue  ( const ValueVec3 * value )
-{
-    m_valModel = value;
+    m_val = value;
 }
 
 // ****************************
 //
 const void *    ShaderParamVec3::GetValuePtr    () const
 {
-    return &m_valModel->GetValue();
+    return &m_val;
 }
 
 } //bv

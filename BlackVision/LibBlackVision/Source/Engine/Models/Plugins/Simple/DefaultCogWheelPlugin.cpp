@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultCogWheelPlugin.h"
 #include "Mathematics/Defines.h"
 #include "..\HelperIndexedGeometryConverter.h"
@@ -77,6 +79,7 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
 	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
         ( DefaultCogWheel::PN::WEIGHTCENTERZ, Plugin::WeightCenter::CENTER, true, true );
 
+    h.CreatePSModel();
 
     return h.GetModel();
 }

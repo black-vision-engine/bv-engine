@@ -3,7 +3,7 @@
 #include "CoreDEF.h"
 #include "Engine/Models/Interfaces/INodeLogic.h"
 #include "CrawlerNodesStates.h"
-
+#include <string>
 #include <vector>
 #include <map>
 
@@ -25,7 +25,7 @@ typedef std::shared_ptr< BasicNode > BasicNodePtr;
 } // model
 } // bv
 
-namespace bv { namespace widgets {
+namespace bv { namespace nodelogic {
 
 class Crawler;
 
@@ -38,7 +38,6 @@ class Crawler : public model::INodeLogic, public std::enable_shared_from_this< C
 	typedef std::map< bv::model::BasicNode *, bool >	NodeBoolMap;
 
 private:
-
 	bool									m_isFinalized;
 	bv::model::BasicNode *					m_parentNode;
 	CrawlerNodesStates						m_nodesStates;
@@ -49,6 +48,14 @@ private:
 	Float32									m_speed;
 	Float32									m_interspace;
 
+	//pawe³ek
+	std::vector<std::wstring>				m_messages_new;
+	std::vector<std::wstring>				m_messages_displayed;
+	std::wstring							m_promo_msg;
+	int										m_promo_freq;
+	int										m_displayed_index;
+	int										m_total_displayed_msgs;
+
 	void		LayoutNodes			();
 	void		UpdateTransforms	();
 	void		UpdateVisibility	( bv::model::BasicNode * );
@@ -56,14 +63,26 @@ private:
 	bool		IsActive			( bv::model::BasicNode * );
 	void		NotifyVisibilityChanged( bv::model::BasicNode *, bool );
 	void		NotifyNoMoreNodes	();
+	void		HackNoMoreNodes		();
+    
+    bool        AddNode             ( bv::model::BasicNodePtr node );
 
 public:
+
+	void		AddMessage			(std::wstring msg);
+	void		SetPromoMessage		(std::wstring msg);
+	void		Clear				();
+	void		Reset				();
+	void		SetPromoFrequency	(int freq);
 
 	explicit	Crawler				( bv::model::BasicNode * parent, const mathematics::RectConstPtr & view );
 				~Crawler			() {}
 
 	void		AddNext				( bv::model::BasicNodePtr node );
+    bool		AddNext				( Int32 nodeIdx );
+    bool		AddNext				( const std::string& childNodeName );
 	bool		Finalize			();
+    bool        Unfinalize          ();
 
 	model::BasicNode *	GetNonActiveNode();
 	void		EnqueueNode			( model::BasicNode * n);
@@ -79,6 +98,11 @@ public:
 	void			Stop			();
 
 	static		CrawlerPtr Create	( bv::model::BasicNode * parent, const mathematics::RectConstPtr & view );
+
+    virtual void                Serialize       ( ISerializer& ser ) const override;
+    static CrawlerPtr           Create          ( const IDeserializer & deser, bv::model::BasicNode * parentNode );
+
+    virtual bool                HandleEvent     ( IDeserializer& eventSer, ISerializer& response, BVProjectEditor * editor ) override;
 };
 
 } 

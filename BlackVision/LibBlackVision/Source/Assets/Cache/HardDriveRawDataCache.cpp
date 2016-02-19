@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "HardDriveRawDataCache.h"
 
 #include "System/Path.h"
@@ -28,8 +30,6 @@ void		HardDriveRawDataCache::ScanCacheDir	()
 	else
 	{
 		auto files = Dir::ListFiles( RAW_DATA_CACHE_DIR, "*" );
-
-		files.erase( files.begin() , files.begin() + 2 ); // Removing . and ..
 
 		for( auto f : files )
 		{

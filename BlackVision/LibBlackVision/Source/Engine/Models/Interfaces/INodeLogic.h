@@ -2,17 +2,26 @@
 
 #include "CoreDEF.h"
 #include "Engine/Interfaces/IUpdatable.h"
+#include "Serialization/ISerializable.h"
 
 
-namespace bv { namespace model {
+namespace bv
+{
 
-class INodeLogic : public IUpdatable
+class BVProjectEditor;
+    
+namespace model
+{
+
+class INodeLogic : public IUpdatable, public ISerializable
 {
 public:
 
 	virtual void					Initialize		()				= 0;
 	virtual void					Update			( TimeType t )	= 0;
 	virtual void					Deinitialize	()				= 0;
+
+    virtual bool                    HandleEvent     ( IDeserializer & eventStr, ISerializer & response, BVProjectEditor * editor ) = 0;
 
 };
 

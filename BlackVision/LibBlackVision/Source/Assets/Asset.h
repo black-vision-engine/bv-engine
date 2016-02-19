@@ -36,6 +36,4 @@ AssetTypeConstPtr  QueryTypedRes( AssetConstPtr asset )
 }
 
 
-
-
 } // bv

@@ -11,11 +11,15 @@ namespace bv { namespace model {
 class ModelNodeEditor
 {
 private:
-	BasicNodePtr		m_model;
+
+	BasicNode *	        m_node;
     IPluginPtr			m_detachedPlugin;
 
 public:
-                            ModelNodeEditor		( BasicNodePtr model ); 
+
+                            ModelNodeEditor		( BasicNode * node ); 
+
+    BasicNodePtr			CopyNode			();
 
     bool                    AddPlugin			( IPluginPtr plugin, unsigned int idx );
     bool                    DeletePlugin		( unsigned int idx );
@@ -26,10 +30,15 @@ public:
     bool                    DetachPlugin		( unsigned int idx );
     bool                    DetachPlugin		( const std::string & name );
 
+    IPluginPtr              CopyPlugin			( const std::string & name );
+
 	IPluginPtr				GetDetachedPlugin	();
     void                    ResetDetachedPlugin	();
 
-	void					RefreshNode			( SceneNode * sceneNode, Renderer * renderer );
+	IModelNodeEffectPtr		GetNodeEffect		();
+    void					SetNodeEffect		( IModelNodeEffectPtr nodeEffect );
+
+	void                    ReplaceTimeline		( const model::ITimeEvaluatorPtr & oldTimeline, model::ITimeEvaluatorPtr newTimeline );
 
 };
 

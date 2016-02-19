@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "WireframeEffect.h"
 
 #include "Engine/Models/Builder/RendererStatesBuilder.h"

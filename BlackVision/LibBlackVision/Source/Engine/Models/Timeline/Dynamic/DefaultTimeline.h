@@ -30,7 +30,11 @@ public:
                                                 DefaultTimeline     ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
                                                 ~DefaultTimeline    ();
 
+    virtual void                                Serialize           ( ISerializer& sob ) const;
+    static DefaultTimeline *                    Create              ( const IDeserializer& dob );
+
     //ITimeline
+    virtual void		                        SetDuration         ( TimeType duration ) override;
     virtual TimeType                            GetDuration         () const override;
 
     //ITimeEvaluator
@@ -75,6 +79,9 @@ private:
     void                                        TriggerEventStep    ( TimeType curTime, TimeType prevTime );
     void                                        PostUpdateEventStep ();
 
+public:
+    virtual const std::string&                  GetType             () override;
+    static const std::string&                   Type                ();
 };
 
 DEFINE_PTR_TYPE(DefaultTimeline)

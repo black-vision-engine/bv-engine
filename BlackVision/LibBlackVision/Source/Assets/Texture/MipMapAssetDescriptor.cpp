@@ -1,5 +1,9 @@
+#include "stdafx.h"
+
 #include "MipMapAssetDescriptor.h"
 #include "MipMapBuilder.h"
+#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 
 #include <sstream>
 #include <cassert>
@@ -9,6 +13,24 @@ namespace bv
 {
 
 const std::string MipMapAssetDesc::uid = "MIP_MAP_ASSET_DESC";
+
+// ***********************
+//
+void                MipMapAssetDesc::Serialize       ( ISerializer& ser ) const
+{
+ser.EnterArray( "mipmaps" );
+    for( auto desc : m_mipMapDescs )
+        desc->Serialize( ser );
+ser.ExitChild();
+}
+
+// ***********************
+//
+ISerializablePtr     MipMapAssetDesc::Create          ( IDeserializer& /*dob*/ )
+{
+    assert( !"implement me" );
+    return nullptr;
+}
 
 // *******************************
 //
@@ -104,6 +126,18 @@ const std::string &	MipMapAssetDesc::UID()
 {
 	return MipMapAssetDesc::uid;
 }
+
+// ***********************
+//
+SizeType            MipMapAssetDesc::EstimateMemoryUsage () const
+{
+    SizeType memUsage = 0;
+    for( auto & desc : m_mipMapDescs )
+        memUsage += desc->EstimateMemoryUsage();
+    
+    return memUsage;
+}
+
 
 
 // ******************************

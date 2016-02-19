@@ -16,6 +16,8 @@ public:
 
     virtual                                         ~IModelNodeEffect       () {};
 
+    virtual void                                    Serialize               ( ISerializer & ser ) const = 0;
+
     virtual void                                    Update                  ( TimeType t ) = 0;
     virtual NodeEffectType			                GetType			        () const = 0;
 

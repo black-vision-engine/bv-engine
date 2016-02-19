@@ -1,13 +1,11 @@
+#include "stdafx.h"
+
 #include "ParametersFactory.h"
+
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.inl"
 
 
 namespace bv { namespace model {
-
-    template<>
-    static IParameterPtr        ParametersFactory::CreateTypedParameter<int>                 ( const std::string & name, ITimeEvaluatorPtr timeline )
-    {
-        return CreateParameterInt( name, timeline );
-    }
 
 // *******************************
 //
@@ -46,17 +44,9 @@ ParamFloat                          ParametersFactory::CreateParameter          
 
 // *******************************
 //
-ParamTransform                      ParametersFactory::CreateParameter                     ( const std::string & name, const TransformF & interpolator, ITimeEvaluatorPtr timeline )
+ParamTransform                      ParametersFactory::CreateParameter                     ( const std::string & name, const CompositeTransform & interpolator, ITimeEvaluatorPtr timeline )
 {
     return ParamTransform( name, interpolator, timeline );
-}
-
-// *******************************
-//
-ParamTransformVec                   ParametersFactory::CreateParameter                     ( const std::string & name, const TransformF & interpolator, ITimeEvaluatorPtr timeline, int dummy )
-{
-    { dummy; } // FIXME: suppress unused variable
-    return ParamTransformVec( name, interpolator, timeline );
 }
 
 // *******************************
@@ -112,21 +102,53 @@ ParamFloatPtr                        ParametersFactory::CreateParameterFloat    
 //
 ParamTransformPtr                    ParametersFactory::CreateParameterTransform            ( const std::string & name, ITimeEvaluatorPtr timeline )
 {
-    return std::make_shared< ParamTransform >( name, TransformF(), timeline );
+    return std::make_shared< ParamTransform >( name, CompositeTransform(), timeline );
 }
 
 // *******************************
 //
-ParamTransformVecPtr                 ParametersFactory::CreateParameterTransformVec         ( const std::string & name, ITimeEvaluatorPtr timeline, int numTransforms )
+ParamStringPtr                      ParametersFactory::CreateParameterString               ( const std::string & name, ITimeEvaluatorPtr timeline )
 {
-    ParamTransformVecPtr ptv = std::make_shared< ParamTransformVec >( name, timeline );
+    return std::make_shared< ParamString >( name, StringInterpolator(), timeline );
+}
 
-    for( int i = 0; i < numTransforms; ++i )
-    {
-        ptv->AppendTransform( TransformF() );
-    }
+ParamWStringPtr                     ParametersFactory::CreateParameterWString              ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return std::make_shared< ParamWString >( name, WStringInterpolator(), timeline );
+}
 
-    return ptv;
+
+// *******************************
+//
+
+template<>
+static ParamIntPtr          ParametersFactory::CreateTypedSimpleParameter< ParamInt > (const std::string& name, ITimeEvaluatorPtr te )
+{
+    return CreateParameterInt( name, te );
+}
+
+template<>
+static ParamFloatPtr          ParametersFactory::CreateTypedSimpleParameter< ParamFloat > (const std::string& name, ITimeEvaluatorPtr te )
+{
+    return CreateParameterFloat( name, te );
+}
+
+template<>
+static ParamBoolPtr          ParametersFactory::CreateTypedSimpleParameter< ParamBool > (const std::string& name, ITimeEvaluatorPtr te )
+{
+    return CreateParameterBool( name, te );
+}
+
+template<>
+static ParamStringPtr        ParametersFactory::CreateTypedSimpleParameter< ParamString > (const std::string& name, ITimeEvaluatorPtr te )
+{
+    return CreateParameterString( name, te );
+}
+
+template<>
+static ParamWStringPtr       ParametersFactory::CreateTypedSimpleParameter< ParamWString > (const std::string& name, ITimeEvaluatorPtr te )
+{
+    return CreateParameterWString( name, te );
 }
 
 } // model

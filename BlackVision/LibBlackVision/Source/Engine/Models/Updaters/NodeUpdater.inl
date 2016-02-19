@@ -48,9 +48,10 @@ inline  void    NodeUpdater::UpdateTransform     ()
     //FIXME: rili rili
     m_renderable->ResetLocalTransform();
 
-    for( auto t : m_transformChannel->GetTransformValues() )
+    auto transform = m_transformChannel->GetTransformValue();
+    if( transform )
     {
-        const glm::mat4 & mat = t->GetValue();
+        const glm::mat4 & mat = transform->GetValue();
 
         m_renderable->SetLocalTransform( m_renderable->LocalTransform() * Transform( mat, glm::inverse( mat ) ) );
     }
@@ -60,15 +61,17 @@ inline  void    NodeUpdater::UpdateTransform     ()
 //
 inline  void    NodeUpdater::UpdateGeometry      ()
 {
-    if ( m_vertexAttributesChannel->NeedsAttributesUpdate() )
-    {
-        assert( !m_vertexAttributesChannel->NeedsTopologyUpdate() );
-        UpdatePositions();
-    }
-    else if ( m_vertexAttributesChannel->NeedsTopologyUpdate() )
-    {
+	if( m_vertexAttributesChannel->GetTopologyUpdateID() > m_topologyUpdateID )
+	{
         UpdateTopology();
-    }
+		m_topologyUpdateID = m_vertexAttributesChannel->GetTopologyUpdateID();
+		m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
+	}
+	else if( m_vertexAttributesChannel->GetAttributesUpdateID() > m_attributesUpdateID )
+	{
+        UpdatePositions();
+		m_attributesUpdateID = m_vertexAttributesChannel->GetAttributesUpdateID();
+	}
     else
     {
         RenderableArrayDataArraysSingleVertexBuffer * rad = static_cast< RenderableArrayDataArraysSingleVertexBuffer * >( m_renderable->GetRenderableArrayData() );
@@ -153,7 +156,7 @@ inline  void    NodeUpdater::UpdateTopology      ()
 
     if( components.empty() )
     {
-        assert( false ); //FIXME: at this point empty geometry is not allowed
+        //assert( false ); //FIXME: at this point empty geometry is not allowed
         return;
     }
 
@@ -190,10 +193,21 @@ inline  void    NodeUpdater::UpdateTopology      ()
 
 // *****************************
 //
-inline void    NodeUpdater::UpdateTexturesData  ()
+inline void     NodeUpdater::UpdateShaderParams				()
 {
-    for( auto txDataPair : m_texDataMappingVec )
+	for( auto & pair : m_paramsMappingVec )
+	{
+		UpdateShaderParam( pair.first, pair.second );
+	}
+}
+
+// *****************************
+//
+inline void		NodeUpdater::UpdateTexturesData				()
+{
+    for( unsigned int txIdx = 0; txIdx < ( unsigned int )m_texDataMappingVec.size(); ++txIdx )
     {
+		auto txDataPair		= m_texDataMappingVec [ txIdx ];
         auto texData        = txDataPair.first;
         auto shaderParams   = txDataPair.second;
     
@@ -206,48 +220,84 @@ inline void    NodeUpdater::UpdateTexturesData  ()
         {
             auto texDesc    = textures[ i ];
 
-            if ( texDesc->BitsChanged() )
+			if( m_texDataUpdateID[ txIdx ][ j ] < texDesc->GetUpdateID() )
             {
-                auto tex2D  = std::static_pointer_cast< Texture2DImpl >( shaderParams->GetTexture( j ) );
-
-                 //Stored in cache which means that proper 2D texture has to be created for current texDesc (possibly alread stored in the cache)
-                if( GTexture2DCache.IsStored( tex2D ) && tex2D != GTexture2DCache.GetTexture( texDesc ) )
+				auto tex2D  = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
+                if( GTexture2DCache.IsStored( tex2D ) && tex2D != GTexture2DCache.GetTexture( texDesc.get() ) )
                 {
-                    auto newTex2D = GTexture2DCache.GetTexture( texDesc );
-
+                    auto newTex2D = GTexture2DCache.GetTexture( texDesc.get() );
                     shaderParams->SetTexture( j, newTex2D );
                 }
                 else //Some other texture type which just requires contents to be swapped
                 {
-                    auto format = texDesc->GetFormat();
-
-					tex2D->SetRawData( texDesc->GetBits(), format, texDesc->GetWidth(), texDesc->GetHeight() );
+					tex2D->SetData( texDesc->GetBits(), texDesc->GetFormat(), texDesc->GetWidth(), texDesc->GetHeight(), texDesc->GetNumLevels() );
                 }
 
-                texDesc->ResetBitsChanged();
+                m_texDataUpdateID[ txIdx ][ j ] = texDesc->GetUpdateID();
             }
+
+			auto samplerState = texDesc->GetSamplerState();
+			auto shaderSamplerParams = shaderParams->GetSamplerParameters( j );
+
+			//update sampler values
+			shaderSamplerParams->SetWrappingModeX( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+			shaderSamplerParams->SetWrappingModeY( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+			shaderSamplerParams->SetWrappingModeZ( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+			shaderSamplerParams->SetFilteringMode( ( SamplerFilteringMode )samplerState->GetFilteringMode() );
+			shaderSamplerParams->SetBorderColor( samplerState->GetBorderColor() );
         }
+
 
         for( unsigned int i = 0; i < animations.size(); ++i, ++j )
         {
-            auto tex2DSeq   = std::static_pointer_cast< Texture2DSequenceImpl >( shaderParams->GetTexture( j ) );
+            auto tex2D   = std::static_pointer_cast< Texture2D >( shaderParams->GetTexture( j ) );
             auto animDesc   = animations[ i ];
 
-            if ( animDesc->CurrentFrame() != animDesc->PreviousFrame() )
-            {
-                tex2DSeq->SetActiveTexture( animDesc->CurrentFrame() );
-            }
-        }
+			auto currFrame = animDesc->CurrentFrame();
+			auto numTextures = animDesc->NumTextures();
 
+            assert( currFrame <= numTextures );
+
+			if( m_texDataUpdateID[ txIdx ][ j ] < animDesc->GetUpdateID() )
+			{
+				if( currFrame < numTextures )
+				{
+					tex2D->SetData( animDesc->GetBits( currFrame ), animDesc->GetFormat(), animDesc->GetWidth(), animDesc->GetHeight() );
+				}
+				else if ( currFrame == numTextures )
+				{
+					tex2D->ForceUpdate();
+				}
+                m_texDataUpdateID[ txIdx ][ j ] = animDesc->GetUpdateID();
+			}
+
+			auto samplerState = animDesc->GetSamplerState();
+			auto shaderSamplerParams = shaderParams->GetSamplerParameters( j );
+
+			//update sampler values
+			shaderSamplerParams->SetWrappingModeX( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+			shaderSamplerParams->SetWrappingModeY( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+			shaderSamplerParams->SetWrappingModeZ( ( SamplerWrappingMode )samplerState->GetWrappingModeX() );
+			shaderSamplerParams->SetFilteringMode( ( SamplerFilteringMode )samplerState->GetFilteringMode() );
+			shaderSamplerParams->SetBorderColor( samplerState->GetBorderColor() );
+        }
     }
 }
 
 // *******************************
 //
-template< typename ValType >
-void    NodeUpdater::UpdateTypedValue   ( IValueConstPtr source, IValuePtr dest )
+template< typename ValType, typename ShaderParamType >
+void	NodeUpdater::UpdateTypedShaderParam   ( IValueConstPtr source, GenericShaderParam * dest )
 {
-    QueryTypedValue< ValType >( dest )->SetValue( QueryTypedValue< ValType >( source )->GetValue() );
+	static_cast< ShaderParamType * >( dest )->SetValue( QueryTypedValue< ValType >( source )->GetValue() );
+}
+
+// *******************************
+//
+template< typename ValType >
+void	NodeUpdater::UpdateTypedValue   ( IValueConstPtr source, IValuePtr dest )
+{
+	QueryTypedValue< ValType >( dest )->SetValue( QueryTypedValue< ValType >( source )->GetValue() );
 }
 
 } //bv

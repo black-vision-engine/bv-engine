@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Interpolators.h"
 
 namespace bv

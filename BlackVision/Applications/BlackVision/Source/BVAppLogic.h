@@ -2,15 +2,29 @@
 
 #include "Engine/Models/Plugins/Manager/PluginsManager.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
-#include "Engine/Models/BVScene.h"
+#include "Engine/Models/BVProject.h"
+#include "System/Path.h"
 
 #include "Engine/Events/Events.h"
+#include "RenderMode.h"
 
 #include "TestAI/TestKeyboardHandler.h"
 
 #include "FrameStatsService.h"
 
+#include "EndUserAPI/RemoteController.h"
+
 //#define HIDE_PROFILE_STATS
+
+//pablito
+#include "Solution.h"
+#include "VideoCardManager.h"
+#include "structure/AssetManager.h"
+
+//hackvideoinput
+#include "VideoInput/DefaultVideoInputResourceDescr.h"
+#include "hack_videoinput/TestVideoInput.h"
+
 
 
 namespace bv
@@ -19,6 +33,7 @@ namespace bv
 class SimpleTimer;
 class RenderLogic;
 class Renderer;
+class RemoteEventsHandlers;
 
 enum class BVAppState : int
 {
@@ -34,22 +49,32 @@ class BVAppLogic
 {
 private:
 
+    //hackvideoinput
+    TestVideoInput*                  VideoInput;
+
     BVAppState                      m_state;
 
     FrameStatsCalculator            m_statsCalculator;
 
-    model::TimelineManager *        m_timelineManager;
     const model::PluginsManager *   m_pluginsManager;
-    model::OffsetTimeEvaluatorPtr   m_globalTimeline;
 
-    BVScenePtr                      m_bvScene;
+    BVProjectPtr                    m_bvProject;
 
     Renderer *                      m_renderer;
     RenderLogic *                   m_renderLogic;
     //FrameRenderLogic *              m_renderLogic;
     TestKeyboardHandler *           m_kbdHandler;
 
-    unsigned long                   m_startTime;
+    RemoteEventsHandlers*           m_remoteHandlers;
+    RemoteController*               m_remoteController;
+
+    RenderMode                      m_renderMode;
+
+	//pablito
+	Solution						m_solution;
+	bv::videocards::VideoCardManager* m_videoCardManager;
+    
+    void            RefreshVideoInputScene  ();
 
 public:
 
@@ -64,7 +89,11 @@ public:
 
     void            SetStartTime    ( unsigned long millis );
 
-    virtual void    OnUpdate        ( unsigned int millis, Renderer * renderer );
+	//pablito:
+	void			SetVideoCardManager(bv::videocards::VideoCardManager* videoCardManager);
+	FrameStatsCalculator* GetStatsCalculator(){return &m_statsCalculator;};
+
+    virtual void    OnUpdate        ( unsigned long millis, Renderer * renderer );
     virtual void    OnKey           ( unsigned char c );
     
     virtual void    ChangeState     ( BVAppState state );
@@ -72,33 +101,32 @@ public:
     virtual void    ShutDown        ();
 
     void            PostFrameLogic  ( const SimpleTimer & timer, unsigned int millis );
+    void            UpdateFrame     ( TimeType time, Renderer * renderer );
 
     const FrameStatsCalculator &     FrameStats () const;
 
     void            ResetScene      ();
     void            ReloadScene     ();
 
-private:
-
-    void            OnUpdateParam   ( IEventPtr evt );
-	void            OnNodeAppearing ( IEventPtr evt );
-	void            OnNodeLeaving   ( IEventPtr evt );
-	void            OnNoMoreNodes   ( IEventPtr evt );
+	void            GrabCurrentFrame(  const std::string & path );
 
 public:
 
     //Convenience API - generalized model accessors
-    model::TimelineManager *        GetTimelineManager  ();
-    model::OffsetTimeEvaluatorPtr   GetGlobalTimeline   ();
-    BVScenePtr                      GetBVScene          ();
+    BVProjectPtr                    GetBVProject          ();
     const model::PluginsManager *   GetPluginsManager   () const;
 
+    RenderMode&                     GetRenderMode       ()  { return m_renderMode; }
+
+    void            LoadScenes      ( const PathVec & pathVec );
     RenderLogic *                   GetRenderLogic      ();
 
 private:
 
     void                            InitializeKbdHandler();
+    void                            InitializeRemoteCommunication();
 
+    std::string                     GetEnvScene();
 };
 
 } //bv

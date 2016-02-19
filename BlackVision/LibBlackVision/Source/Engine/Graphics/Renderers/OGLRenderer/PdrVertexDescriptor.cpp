@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PdrVertexDescriptor.h"
 
 #include "Engine/Graphics/Resources/VertexDescriptor.h"

@@ -3,36 +3,28 @@
 #include "Mathematics/glm_inc.h"
 
 #include "Mathematics/Interpolators/BasicInterpolator.h"
-#include "Mathematics/Interpolators/CompositeBezierInterpolator.h"
+#include "Mathematics/Interpolators/CompositeInterpolator.h"
 #include "CoreDEF.h"
 
 
 namespace bv
 {
-    typedef CompositeBezierInterpolator<TimeType, TimeType>   TimeInterpolator;
 
-    typedef CompositeBezierInterpolator<TimeType, bool>       BoolInterpolator;
-    typedef CompositeBezierInterpolator<TimeType, int>        IntInterpolator;
+typedef CompositeInterpolator<TimeType, TimeType>   TimeInterpolator;
+
+typedef CompositeInterpolator<TimeType, bool>       BoolInterpolator;
+typedef CompositeInterpolator<TimeType, int>        IntInterpolator;
     
-    typedef CompositeBezierInterpolator<TimeType, float>      FloatInterpolator;
+typedef CompositeInterpolator<TimeType, float>      FloatInterpolator;
     
-    typedef CompositeBezierInterpolator<TimeType, glm::vec2>  Vec2Interpolator;
-    typedef CompositeBezierInterpolator<TimeType, glm::vec3>  Vec3Interpolator;
-    typedef CompositeBezierInterpolator<TimeType, glm::vec4>  Vec4Interpolator;
+typedef CompositeInterpolator<TimeType, glm::vec2>  Vec2Interpolator;
+typedef CompositeInterpolator<TimeType, glm::vec3>  Vec3Interpolator;
+typedef CompositeInterpolator<TimeType, glm::vec4>  Vec4Interpolator;
 
-
-    //typedef BasicInterpolator<TimeType, TimeType>   TimeInterpolator;
-
-    //typedef BasicInterpolator<TimeType, bool>       BoolInterpolator;
-    //typedef BasicInterpolator<TimeType, int>        IntInterpolator;
-    //
-    //typedef BasicInterpolator<TimeType, float>      FloatInterpolator;
-    //
-    //typedef BasicInterpolator<TimeType, glm::vec2>  Vec2Interpolator;
-    //typedef BasicInterpolator<TimeType, glm::vec3>  Vec3Interpolator;
-    //typedef BasicInterpolator<TimeType, glm::vec4>  Vec4Interpolator;
-
-//    typedef Interpolator<float>                     BaseInterpolator;
+//typedef BasicInterpolator<TimeType, std::string> StringInterpolator;
+//typedef BasicInterpolator<TimeType, std::wstring> WStringInterpolator;
+typedef CompositeInterpolator<TimeType, std::string> StringInterpolator;
+typedef CompositeInterpolator<TimeType, std::wstring> WStringInterpolator;
 
 
 class InterpolatorsHelper

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Shader.h"
 
 #include <cassert>
@@ -34,7 +36,7 @@ ShaderParameters *  Shader::GetParameters()
 
 // *********************************
 //
-void                Shader::AddTextureSampler( const TextureSampler * sampler )
+void                Shader::AddTextureSampler( TextureSampler * sampler )
 {
     m_textureSamplers.push_back( sampler );
 }
@@ -55,7 +57,7 @@ void                Shader::Update              ( RenderableEntity * renderable,
 
 // *********************************
 //
-const std::vector< const TextureSampler * > &  Shader::Samplers     () const
+const std::vector< TextureSampler * > &  Shader::Samplers     () const
 {
     return m_textureSamplers;
 }

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultTrianglePlugin.h"
 
 namespace bv { namespace model {
@@ -19,6 +21,8 @@ DefaultPluginParamValModelPtr   DefaultTrianglePluginDesc::CreateDefaultModel  (
 	h.AddSimpleParam( DefaultTrianglePlugin::PN_POINTA, glm::vec3( 0, 1, 0 ), true, true );
 	h.AddSimpleParam( DefaultTrianglePlugin::PN_POINTB, glm::vec3( 1, 0, 0 ), true, true );
 	h.AddSimpleParam( DefaultTrianglePlugin::PN_POINTC, glm::vec3( -1, 0, 0 ), true, true );
+
+    h.CreatePSModel();
 
 	return h.GetModel();
 }

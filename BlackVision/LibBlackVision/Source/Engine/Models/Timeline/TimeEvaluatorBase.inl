@@ -88,6 +88,14 @@ bool                                        TimeEvaluatorBase< ITimeEvaluatorIfa
 // *******************************
 //
 template< typename ITimeEvaluatorIface >
+void										TimeEvaluatorBase< ITimeEvaluatorIface >::SetName       ( std::string name )
+{
+    m_name = name;
+}
+
+// *******************************
+//
+template< typename ITimeEvaluatorIface >
 const std::string &                         TimeEvaluatorBase< ITimeEvaluatorIface >::GetName       () const
 {
     return m_name;

@@ -1,11 +1,17 @@
+#include "stdafx.h"
+
 #include "DefaultColorPlugin.h"
 
 #include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
 #include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
+#include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
 
 #include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
 
 namespace bv { namespace model {
+
+const std::string        DefaultColorPlugin::PARAM_BLEND_ENABLE   = "blend enable";
+const std::string        DefaultColorPlugin::PARAM_COLOR          = "color";
 
 // ************************************************************************* DESCRIPTOR *************************************************************************
 
@@ -27,12 +33,25 @@ IPluginPtr              DefaultColorPluginDesc::CreatePlugin                ( co
 //
 DefaultPluginParamValModelPtr   DefaultColorPluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    START_MODEL( timeEvaluator )
-        ADD_PS_EVAL_PARAM( "color", glm::vec4( 0.0f, 0.0f, 0.0f, 1.0f ) )
-        //START_COMPOSITE_PS_EVAL_PARAM( "color" )
-        //    ADD_PS_PARAM( "r", 0.f )
-        //END_COMPOSITE_PS_PARAM()
-    END_MODEL()
+    //START_MODEL( timeEvaluator )
+    //    ADD_PS_EVAL_PARAM( "color", glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ) )
+    //    //START_COMPOSITE_PS_EVAL_PARAM( "color" )
+    //    //    ADD_PS_PARAM( "r", 0.f )
+    //    //END_COMPOSITE_PS_PARAM()
+    //END_MODEL()
+
+    ModelHelper helper( timeEvaluator );
+
+    //Create all models
+    auto model  = helper.GetModel();
+
+    helper.CreatePluginModel();
+    helper.AddSimpleParam( DefaultColorPlugin::PARAM_BLEND_ENABLE, true, true, true );
+
+    helper.CreatePSModel();
+    helper.AddSimpleParam( DefaultColorPlugin::PARAM_COLOR, glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ), true );
+
+    return helper.GetModel();
 }
 
 // *******************************
@@ -45,6 +64,20 @@ std::string             DefaultColorPluginDesc::UID                         ()
 
 // ************************************************************************* PLUGIN ************************************************************************* 
 
+
+// *************************************
+// 
+void DefaultColorPlugin::SetPrevPlugin( IPluginPtr prev )
+{
+    BasePlugin::SetPrevPlugin( prev );
+
+	HelperPixelShaderChannel::CloneRenderContext( m_pixelShaderChannel, prev );
+    m_pixelShaderChannel->GetRendererContext()->alphaCtx->blendEnabled = true;
+    m_pixelShaderChannel->GetRendererContext()->cullCtx->enabled = false;
+	//HelperPixelShaderChannel::SetRendererContextUpdate( m_psc );
+}
+
+
 // *******************************
 //
 DefaultColorPlugin::DefaultColorPlugin  ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
@@ -52,8 +85,9 @@ DefaultColorPlugin::DefaultColorPlugin  ( const std::string & name, const std::s
     , m_pixelShaderChannel( nullptr )
     , m_paramValModel( model )
 { 
-    m_pixelShaderChannel = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
-    m_pixelShaderChannel->GetRendererContext()->alphaCtx->blendEnabled = true;
+    m_pixelShaderChannel = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
+
+	SetPrevPlugin( prev );
 }
 
 // *************************************
@@ -64,7 +98,7 @@ DefaultColorPlugin::~DefaultColorPlugin ()
 
 // *************************************
 //
-IPixelShaderChannelConstPtr         DefaultColorPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr              DefaultColorPlugin::GetPixelShaderChannel       () const
 {
     return m_pixelShaderChannel;    
 }
@@ -73,8 +107,16 @@ IPixelShaderChannelConstPtr         DefaultColorPlugin::GetPixelShaderChannel   
 //
 void                                DefaultColorPlugin::Update                      ( TimeType t )
 {
-    { t; } // FIXME: suppress unused variable
-    m_paramValModel->Update();
+	BasePlugin::Update( t );
+
+    if( ParameterChanged( PARAM_BLEND_ENABLE ) )
+    {
+        auto ctx = m_pixelShaderChannel->GetRendererContext();
+        ctx->alphaCtx->blendEnabled = std::static_pointer_cast<ParamBool>( GetParameter( PARAM_BLEND_ENABLE ) )->Evaluate();
+
+        HelperPixelShaderChannel::SetRendererContextUpdate( m_pixelShaderChannel );
+    }
+
     m_pixelShaderChannel->PostUpdate();
 }
 

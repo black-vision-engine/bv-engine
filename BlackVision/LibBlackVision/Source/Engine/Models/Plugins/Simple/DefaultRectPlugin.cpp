@@ -1,150 +1,169 @@
+#include "stdafx.h"
+
 #include "DefaultRectPlugin.h"
 
-#include "Engine/Models/Plugins/PluginsFactory.h"
-#include "Engine/Models/Plugins/Channels/ChannelsFactory.h"
-#include "Engine/Models/Plugins/ParamValModel/DefaultPluginParamValModel.h"
-#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
-#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
 
-#include "Engine/Models/Plugins/Descriptor/ModelHelper.h"
+namespace bv { namespace model { 
 
 
-namespace bv { namespace model {
-
-
-// ************************************************************************* DESCRIPTOR *************************************************************************
+typedef ParamEnum< DefaultRect::Plugin::WeightCenter > ParamEnumWC;
 
 // *******************************
 //
-DefaultRectPluginDesc::DefaultRectPluginDesc                                ()
-    : BasePluginDescriptor( UID(), "rectangle" )
+VoidPtr                 ParamEnumWC::QueryParamTyped            ()
+{
+    return std::static_pointer_cast< void >( shared_from_this() );
+}
+
+// *******************************
+//
+template<>
+static IParameterPtr    ParametersFactory::CreateTypedParameter< DefaultRect::Plugin::WeightCenter >                 ( const std::string & name, ITimeEvaluatorPtr timeline )
+{
+    return CreateParameterEnum< DefaultRect::Plugin::WeightCenter >( name, timeline );
+}
+
+#include "Engine/Models/Plugins/ParamValModel/SimpleParamValEvaluator.inl"
+
+namespace DefaultRect {
+
+
+const std::string PN::WIDTH = "width";
+const std::string PN::HEIGHT = "height";
+const std::string PN::WEIGHTCENTERX = "weight center x";
+const std::string PN::WEIGHTCENTERY = "weight center y";
+
+// *******************************
+//
+                                    PluginDesc::PluginDesc          ()
+    : DefaultGeometryPluginDescBase( UID(), "rectangle" )
 {
 }
 
 // *******************************
 //
-bool                            DefaultRectPluginDesc::CanBeAttachedTo      ( IPluginConstPtr plugin )  const
+DefaultPluginParamValModelPtr       PluginDesc::CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const
 {
-    if( !BasePluginDescriptor::CanBeAttachedTo( plugin ) )
-    {
-        return false;
-    }
+    ModelHelper h( timeEvaluator );
+    
+    h.CreateVacModel();
 
-    //Geometry generator cannot be attached to a plugin which generates geometry itself
-    if( plugin && plugin->GetVertexAttributesChannel() )
-    {
-        return false;
-    }
+    h.AddSimpleStatedParam( PN::WIDTH, 1.f );
+    h.AddSimpleStatedParam( PN::HEIGHT, 1.f );
 
-    return true;
+	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( DefaultRect::PN::WEIGHTCENTERX, Plugin::WeightCenter::CENTER, true, true );
+	h.AddParam< IntInterpolator, Plugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
+        ( DefaultRect::PN::WEIGHTCENTERY, Plugin::WeightCenter::CENTER, true, true );
+
+    h.CreatePSModel();
+
+    return h.GetModel();
 }
 
 // *******************************
 //
-IPluginPtr                      DefaultRectPluginDesc::CreatePlugin         ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
+IPluginPtr                          PluginDesc::CreatePlugin        ( const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreatePluginTyped< DefaultRectPlugin >( name, prev, timeEvaluator );
+    return CreatePluginTyped< Plugin >( name, prev, timeEvaluator );
 }
 
 // *******************************
 //
-DefaultPluginParamValModelPtr   DefaultRectPluginDesc::CreateDefaultModel   ( ITimeEvaluatorPtr timeEvaluator ) const
-{
-    START_MODEL( timeEvaluator )
-        ADD_VAC_PARAM( "width", 1.f );
-        ADD_VAC_STATED_PARAM( "height", 1.f );
-   //     ADD_VAC_PARAM_VAL( "param0", glm::vec2( .4f, 0.f ) );
-   //     START_COMPOSITE_PARAM( vec4(0,0,0,0) )
-   //         ADD_VAC_PARAM( "r", 1.f );
-   //         ADD_VAC_PARAM( "g", 1.f );
-   //         ADD_VAC_PARAM( "b", 1.f );
-   //         ADD_VAC_PARAM( "a", 1.f );
-   //     END_COMPOSITE_PARAM()
-   END_MODEL()
-
-    //ModelHelper h( timeEvaluator );
-    //
-    //h.CreateVacModel();
-    //h.AddSimpleStatedParam( "width", 1.f );
-    //h.AddSimpleStatedParam( "height", 1.f );
-    //
-    //return h.GetModel();
-}
-
-// *******************************
-//
-std::string                     DefaultRectPluginDesc::UID                  ()
+std::string                         PluginDesc::UID                 ()
 {
     return "DEFAULT_RECTANGLE";
 }
 
-
-// ************************************************************************* PLUGIN *************************************************************************
-
-// *************************************
+// *******************************
 //
-DefaultRectPlugin::DefaultRectPlugin    ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model, bool timeInvariantDimensions )
-    : BasePlugin( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
-    , m_vaChannel( nullptr )
-    , m_paramValModel( model )
-    , m_widthParam( nullptr )
-    , m_heightParam( nullptr )
+bool                                Plugin::NeedsTopologyUpdate     ()
 {
-    auto params = VertexAttributesChannelModel()->GetParameters();
-
-    assert( params.size() == 2 );
-
-    m_widthParam    = QueryTypedParam< ParamFloatPtr >( params[ 0 ] );
-    m_heightParam   = QueryTypedParam< ParamFloatPtr >( params[ 1 ] );
-
-    m_lastW = m_widthParam->Evaluate();
-    m_lastH = m_heightParam->Evaluate();
-
-    auto rect   = RectComponent::Create( m_lastW, m_lastH );
-    m_vaChannel = ChannelsFactory::CreateVertexAttributesChannel( rect, timeInvariantDimensions );
-
-    m_rct = rect;
+    return ParameterChanged( PN::WIDTH ) || 
+        ParameterChanged( PN::HEIGHT ) ||
+        ParameterChanged( PN::WEIGHTCENTERX )	||
+		ParameterChanged( PN::WEIGHTCENTERY );
 }
 
-// *************************************
+// *******************************
 //
-DefaultRectPlugin::~DefaultRectPlugin   ()
+                                    Generator::Generator            ( float w, float h, Plugin::WeightCenter wcx, Plugin::WeightCenter wcy )
+    : m_width( w )
+    , m_height( h )
+    , m_centerTranslate( GetWeightCenter( wcx, wcy ) )
 {
 }
 
-// *************************************
+// *******************************
 //
-IVertexAttributesChannelConstPtr    DefaultRectPlugin::GetVertexAttributesChannel  () const
-{
-    return m_vaChannel;
+IGeometryGenerator::Type            Generator::GetType              () 
+{ 
+    return IGeometryGenerator::Type::GEOMETRY_ONLY; 
 }
 
-// *************************************
+// *******************************
 //
-void                                DefaultRectPlugin::Update                      ( TimeType t )
+glm::vec2                           Generator::GetWeightCenter      ( Plugin::WeightCenter centerX, Plugin::WeightCenter centerY )
 {
-    { t; } // FIXME: suppress unused warning
-    //FIXME: reimplement va channel (no time, no explicit update and so on)
-    m_paramValModel->Update();
+	glm::vec2 centerTranslate;
 
-    //This code has to be executed in a plugin as only plugin knows how to translate its state to geometry representation
-    float w = m_widthParam->Evaluate();
-    float h = m_heightParam->Evaluate();
-
-    auto needssAttrsUpdate = false;
-
-    if( ( fabs( m_lastW - w ) + fabs( m_lastH - h ) ) > 0.001f )
+    if( centerX == Plugin::WeightCenter::MIN )
     {
-        m_rct->SetRectSize( w, h );
-
-        needssAttrsUpdate = true;
-
-        m_lastW = w;
-        m_lastH = h;
+		centerTranslate += glm::vec2( -m_width / 2.f, 0.f );
+    }
+	else if( centerX == Plugin::WeightCenter::MAX )
+    {
+		centerTranslate += glm::vec2( m_width / 2.f, 0.f );
     }
 
-    m_vaChannel->SetNeedsAttributesUpdate( needssAttrsUpdate );
+    if( centerY == Plugin::WeightCenter::MIN )
+    {
+		centerTranslate += glm::vec2( 0.f, -m_height / 2.f );
+    }
+	else if( centerY == Plugin::WeightCenter::MAX )
+    {
+		centerTranslate += glm::vec2( 0.f, m_height / 2.f );
+    }
+
+	return centerTranslate;
 }
 
+// *******************************
+//
+void                                Generator::GenerateGeometry     ( Float3AttributeChannelPtr verts ) 
+{
+    float w = m_width / 2.f;
+    float h = m_height / 2.f;
+
+    verts->AddAttribute( glm::vec3( -w + m_centerTranslate.x, -h + m_centerTranslate.y, 0.f ) );
+    verts->AddAttribute( glm::vec3(  w + m_centerTranslate.x, -h + m_centerTranslate.y, 0.f ) );
+    verts->AddAttribute( glm::vec3( -w + m_centerTranslate.x,  h + m_centerTranslate.y, 0.f ) );
+    verts->AddAttribute( glm::vec3(  w + m_centerTranslate.x,  h + m_centerTranslate.y, 0.f ) );
+}
+
+// *******************************
+//
+std::vector<IGeometryGeneratorPtr>    Plugin::GetGenerators()
+{
+    return std::vector< IGeometryGeneratorPtr >( 1, std::make_shared< Generator >
+        ( m_width->GetValue(), m_height->GetValue(), m_weightCenterX->Evaluate(), m_weightCenterY->Evaluate() ) );
+}
+
+// *******************************
+//
+Plugin::Plugin( const std::string & name, const std::string & uid, IPluginPtr prev, IPluginParamValModelPtr model )
+    : DefaultGeometryPluginBase( name, uid, prev, model )
+{
+    m_width = QueryTypedValue< ValueFloatPtr >( GetValue( PN::WIDTH ) );
+    m_height = QueryTypedValue< ValueFloatPtr >( GetValue( PN::HEIGHT ) );
+
+	m_weightCenterX = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERX ) );
+	m_weightCenterY = QueryTypedParam< std::shared_ptr< ParamEnum< WeightCenter > > >( GetParameter( PN::WEIGHTCENTERY ) );
+
+    m_pluginParamValModel->Update();
+    InitGeometry();
+}
+
+} // DefaultRect
 } // model
 } // bv

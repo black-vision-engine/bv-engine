@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "OffscreenDisplay.h"
 
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"

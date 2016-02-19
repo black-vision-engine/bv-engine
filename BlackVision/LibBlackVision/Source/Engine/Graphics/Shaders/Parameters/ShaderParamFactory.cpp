@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "ShaderParamFactory.h"
 
 #include <cassert>
@@ -34,21 +36,21 @@ GenericShaderParam *    ShaderParamFactory::CreateGenericParameter              
     switch( type )
     {
         case ParamType::PT_FLOAT1:
-            return new ShaderParamFloat( name, QueryTypedValue< ValueFloat >( value ) );
+			return new ShaderParamFloat( name, QueryTypedValue< ValueFloat >( value )->GetValue() );
         case ParamType::PT_FLOAT2:
-            return new ShaderParamVec2( name, QueryTypedValue< ValueVec2 >( value ) );
+            return new ShaderParamVec2( name, QueryTypedValue< ValueVec2 >( value )->GetValue() );
         case ParamType::PT_FLOAT3:
-            return new ShaderParamVec3( name, QueryTypedValue< ValueVec3 >( value ) );
+            return new ShaderParamVec3( name, QueryTypedValue< ValueVec3 >( value )->GetValue() );
         case ParamType::PT_FLOAT4:
-            return new ShaderParamVec4( name, QueryTypedValue< ValueVec4 >( value ) );
+            return new ShaderParamVec4( name, QueryTypedValue< ValueVec4 >( value )->GetValue() );
         case ParamType::PT_MAT2:
-            return new ShaderParamMat2( name, QueryTypedValue< ValueMat2 >( value ) );
+            return new ShaderParamMat2( name, QueryTypedValue< ValueMat2 >( value )->GetValue() );
         case ParamType::PT_MAT3:
-            return new ShaderParamMat3( name, QueryTypedValue< ValueMat3 >( value ) );
+            return new ShaderParamMat3( name, QueryTypedValue< ValueMat3 >( value )->GetValue() );
         case ParamType::PT_MAT4:
-            return new ShaderParamMat4( name, QueryTypedValue< ValueMat4 >( value ) );
+            return new ShaderParamMat4( name, QueryTypedValue< ValueMat4 >( value )->GetValue() );
 		case ParamType::PT_INT:
-			return new ShaderParamInt( name, QueryTypedValue< ValueInt >( value ) );
+			return new ShaderParamInt( name, QueryTypedValue< ValueInt >( value )->GetValue() );
     
         default:
             assert( false );
@@ -64,19 +66,19 @@ GenericShaderParam *    ShaderParamFactory::CreateGenericParameter              
     switch( paramType )
     {
         case ParamType::PT_FLOAT1:
-            return new ShaderParamFloat( name, nullptr );
+            return new ShaderParamFloat( name );
         case ParamType::PT_FLOAT2:
-            return new ShaderParamVec2( name, nullptr );
+            return new ShaderParamVec2( name );
         case ParamType::PT_FLOAT3:
-            return new ShaderParamVec3( name, nullptr );
+            return new ShaderParamVec3( name );
         case ParamType::PT_FLOAT4:
-            return new ShaderParamVec4( name, nullptr );
+            return new ShaderParamVec4( name );
         case ParamType::PT_MAT2:
-            return new ShaderParamMat2( name, nullptr );
+            return new ShaderParamMat2( name );
         case ParamType::PT_MAT3:
-            return new ShaderParamMat3( name, nullptr );
+            return new ShaderParamMat3( name );
         case ParamType::PT_MAT4:
-            return new ShaderParamMat4( name, nullptr );
+            return new ShaderParamMat4( name );
     
         default:
             assert( false );

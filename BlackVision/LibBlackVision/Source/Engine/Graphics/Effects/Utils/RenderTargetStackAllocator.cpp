@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "RenderTargetStackAllocator.h"
 
 #include <cassert>

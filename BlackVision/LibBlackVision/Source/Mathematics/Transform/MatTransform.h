@@ -1,19 +1,12 @@
 #pragma once
 
-#include <vector>
-#include <iostream>
-
-#include "Mathematics/glm_inc.h"
-#include <glm/gtc/matrix_transform.hpp>
-
+#include "Mathematics/Transform/SQTTransform.h"
 #include "Mathematics/Interpolators/Interpolators.h"
 
 
-namespace bv
-{
-namespace model
-{
+namespace bv { namespace model {
 
+// ******************* Transform **************** 
 class Transform
 {
 private:
@@ -34,205 +27,79 @@ public:
 
 }
 
-// ******************* TransformInterpolator **************** //
-
+//maintain serialization backward compatibility
 enum class TransformKind : int
 {
-    fwd_center,
+    center,
     rotation,
     scale,
     translation,
-    inv_center
+
+    invalid
 };
 
-template<typename ParamT>
-class SimpleTransform
-{
-protected:
-
-    TransformKind kind;
-
-    ParamT p0; 
-    ParamT p1;
-    ParamT p2;
-
-protected:
-
-    explicit SimpleTransform( const TransformKind kind, const ParamT p0, const ParamT p1, const ParamT p2 );
-    explicit SimpleTransform( TransformKind kind );
-
-public:
-    virtual void                SetCurveType        ( CurveType type );
-
-    virtual glm::mat4x4         Evaluate            ( typename ParamT::TimeT t ) const;
-    virtual SimpleTransform *   Clone               () const;
-
-    static SimpleTransform *    CreateScale         ( ParamT p0, ParamT p1, ParamT p2 )
-    {
-        return new SimpleTransform( TransformKind::scale, p0, p1, p2 );
-    }
-
-    static SimpleTransform *    CreateTranslation   ( ParamT p0, ParamT p1, ParamT p2, TransformKind tk = TransformKind::translation )
-    {
-        return new SimpleTransform( tk, p0, p1, p2 );
-    }
-
-    void  SetValues ( TimeType t, float v0, float v1, float v2 )
-    {
-        p0.AddKey( t, v0 );
-        p1.AddKey( t, v1 );
-        p2.AddKey( t, v2 );
-    }
-
-    void  SetVecVal ( TimeType t, const glm::vec3 & v )
-    {
-        SetValues( t, v[ 0 ], v[ 1 ], v[ 2 ] );
-    }
-
-    TransformKind		KindKurwaMac()
-    {
-        return kind;
-    }
-
-    ParamT &			GetP0MotylaNoga()// const
-    {
-        return p0;
-    }
-
-    ParamT &			GetP1MotylaNoga()// const
-    {
-        return p1;
-    }
-
-    ParamT &			GetP2MotylaNoga()// const
-    {
-        return p2;
-    }
-
-    const ParamT &		GetP0MotylaNoga() const
-    {
-        return p0;
-    }
-
-    const ParamT &      GetP1MotylaNoga() const
-    {
-        return p1;
-    }
-
-    const ParamT &		GetP2MotylaNoga() const
-    {
-        return p2;
-    }
-};
-
-template<typename ParamT>
-class Rotation : public SimpleTransform<ParamT>
+// ******************* CompositeTransform **************** 
+class CompositeTransform : public ISerializable
 {
 private:
 
-    bool                m_hasRotAxisInterpolator;
+    SQTTransform        m_sqt;
 
-    ParamT              m_angle;
-    Vec3Interpolator    m_rotationAxis;
+    FloatInterpolator   m_translationX;
+    FloatInterpolator   m_translationY;
+    FloatInterpolator   m_translationZ;
 
-public:
-    virtual void                SetCurveType        ( CurveType type );
+    /* stored in degrees */
+    FloatInterpolator   m_eulerPitch;
+    FloatInterpolator   m_eulerYaw;
+    FloatInterpolator   m_eulerRoll;
 
-    explicit                    Rotation    ( ParamT angle, const Vec3Interpolator & rotAxis );
-    explicit                    Rotation    ( ParamT angle, ParamT p0, ParamT p1, ParamT p2 );
+    FloatInterpolator   m_scaleX;
+    FloatInterpolator   m_scaleY;
+    FloatInterpolator   m_scaleZ;
 
-    virtual glm::mat4x4         Evaluate    ( typename ParamT::TimeT t ) const override;
-    virtual SimpleTransform *   Clone       () const;
-
-    void                        SetRotation ( TimeType t, const glm::vec3 & rotAxis, float angle_ )
-    {
-        m_angle.AddKey( t, angle_ );
-        m_rotationAxis.AddKey( t, rotAxis );
-    }
-
-	Vec3Interpolator &			AccessRotAxis	()
-	{
-		return m_rotationAxis;
-	}
-
-	ParamT	& 					AccessAngle		()
-	{
-		return m_angle;
-	}
-
-	bool						IsAxisVec3		() const
-	{
-		return m_hasRotAxisInterpolator;
-	}
-};
-
-template<typename ParamT>
-class CompositeTransform : public Interpolator<typename ParamT::TimeT>
-{
-private:
-
-    std::vector< SimpleTransform<ParamT> * > m_transformations;
-
-public:
-
-    static const int value_size = sizeof( glm::mat4x4 );
+    FloatInterpolator   m_centerX;
+    FloatInterpolator   m_centerY;
+    FloatInterpolator   m_centerZ;
 
 public:
 
     explicit        CompositeTransform  ();
-                    CompositeTransform  ( const CompositeTransform & src );
+
+    static CompositeTransform *  Create      ( const IDeserializer & dob );
+    virtual void                 Serialize   ( ISerializer & doc ) const;
 
     void            InitializeDefaultSRT();
 
     virtual         ~CompositeTransform ();
 
-    void            SetCurveType        ( CurveType type );
+    void            SetGlobalCurveType  ( CurveType type );
+    void            SetAddedKeyCurveType( CurveType type );
+    void            SetWrapPostMethod   ( WrapMethod method );
+    void            SetWrapPreMethod    ( WrapMethod method );
 
-    void            AddTranslation      ( ParamT x0, ParamT x1, ParamT x2 );
-    void            AddScale            ( ParamT s0, ParamT s1, ParamT s2 );
-    void            AddRotation         ( ParamT angle, ParamT r0, ParamT r1, ParamT r2 );
-    void            AddRotation         ( ParamT angle, const Vec3Interpolator & rotAxis );
-    void            AddTranslationCFwd  ( ParamT x0, ParamT x1, ParamT x2 );
-    void            AddTranslationCInv  ( ParamT x0, ParamT x1, ParamT x2 );
-    void            AddTransform        ( SimpleTransform<ParamT> * trans );
-    void            InsertTransform     ( int i, SimpleTransform<ParamT> * trans );
+    glm::vec3       GetTranslation      ( TimeType time ) const;
+    glm::vec3       GetRotation         ( TimeType time ) const;
+    glm::vec3       GetScale            ( TimeType time ) const;
+    glm::vec3       GetCenter           ( TimeType time ) const;
 
-    SizeType        Size                () const;
+    void            SetTranslation      ( const glm::vec3 & vec, TimeType time );
+    void            SetRotation         ( const glm::vec3 & vec, TimeType time );
+    void            SetScale            ( const glm::vec3 & vec, TimeType time );
+    void            SetCenter           ( const glm::vec3 & vec, TimeType time );
 
-    SimpleTransform<ParamT> *        operator[](unsigned int i);
-    const SimpleTransform<ParamT> *  operator[](unsigned int i) const;
+    void            RemoveTranslation   ( TimeType time );
+    void            RemoveRotation      ( TimeType time );
+    void            RemoveScale         ( TimeType time );
+    void            RemoveCenter        ( TimeType time );
 
-    glm::mat4x4     Evaluate            ( typename ParamT::TimeT t ) const;
+    bool            MoveTranslation     ( TimeType time, TimeType newTime );
+    bool            MoveRotation        ( TimeType time, TimeType newTime );
+    bool            MoveScale           ( TimeType time, TimeType newTime );
+    bool            MoveCenter          ( TimeType time, TimeType newTime );
 
-    int             EvalToCBuffer       ( typename ParamT::TimeT,char * ) const;
+    glm::mat4x4     Evaluate            ( TimeType t ) const;
 
 };
-
-// *************************************
-//
-template<typename ParamT>
-glm::mat4x4 Rotation<ParamT>::Evaluate(typename ParamT::TimeT t) const
-{
-    if( m_hasRotAxisInterpolator )
-    {
-        return glm::rotate( glm::mat4( 1.0f ), (float) m_angle.Evaluate( t ), m_rotationAxis.Evaluate( t ) );        
-    }
-    else
-    {
-        return glm::rotate( glm::mat4( 1.0f ), (float) m_angle.Evaluate( t ), glm::vec3( p0.Evaluate ( t ), p1.Evaluate( t ), p2.Evaluate( t ) ) );
-    }
-}
-
-// *************************************
-//
-template<typename ParamT>
-SimpleTransform<ParamT> *   Rotation<ParamT>::Clone       () const
-{
-    return new Rotation( *this );
-}
-
-typedef CompositeTransform<FloatInterpolator> TransformF;
-typedef SimpleTransform<FloatInterpolator> SimpleTransformF;
-typedef Rotation<FloatInterpolator> RotationF;
 
 }

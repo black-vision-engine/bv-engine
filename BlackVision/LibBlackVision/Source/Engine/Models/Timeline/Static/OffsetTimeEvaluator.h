@@ -16,18 +16,24 @@ private:
 private:
 
     TimeType        m_timeOffset;
+    TimeType        m_timeScale;
     TimeType        m_globalTime;
 
 public:
 
-            OffsetTimeEvaluator                     ( const std::string & name, TimeType offsetTime );
-            ~OffsetTimeEvaluator                    ();
+                                                    OffsetTimeEvaluator                     ( const std::string & name, TimeType offsetTime, TimeType scale = 1 );
+                                                    ~OffsetTimeEvaluator                    ();
 
-    void    SetTimeOffset                           ( TimeType t );
+    virtual void                                    Serialize                               ( ISerializer& sob ) const;
+    static OffsetTimeEvaluator *                    Create                                  ( const IDeserializer& dob );
 
-    virtual void                SetGlobalTimeImpl   ( TimeType t ) override;
-    virtual TimeType            GetLocalTime        () const override;
+    void                                            SetTimeOffset                           ( TimeType t );
 
+    virtual void                                    SetGlobalTimeImpl                       ( TimeType t ) override;
+    virtual TimeType                                GetLocalTime                            () const override;
+
+    virtual const std::string&                      GetType                                 () override;
+    static const std::string&                       Type                                    ();
 };
 
 DEFINE_PTR_TYPE(OffsetTimeEvaluator)

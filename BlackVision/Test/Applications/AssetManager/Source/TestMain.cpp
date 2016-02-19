@@ -2,11 +2,12 @@
 #include "Engine/Types/EnumsUtils.h"
 #include "DataTypes/Hash.h"
 
+#include "Tools/Base64.h"
 #include "LibImage.h"
 
 #include "gtest/gtest.h"
 
-#include <windows.h>
+#include "win_sock.h"
 
 
 namespace bv {
@@ -15,8 +16,19 @@ auto imagePath = "Assets/AssetManager/checkerboard2.png";
 auto imagePath_512x512 = "Assets/AssetManager/checkerboard2_512X512.png";
 auto AssetsPath = "Assets/AssetManager/";
 
+TEST(LoadingThumbnailsTest, LoadingThumbnails)
+{
+
+}
+
 TEST(HashTest, Hash)
 {
+    static char c[6] = {'a','a','a','a','a','a'};
+    auto m = MemoryChunk::Create( c , 6);
+    auto str = EncodeBase64( m );
+
+    auto d = DecodeBase64( str );
+
 	auto h0 = Hash::FromString( imagePath_512x512 );
 	auto h1 = Hash::FromString( imagePath );
 	auto h2 = Hash::FromString( AssetsPath + std::string("checkerboard2_512X512.png") );

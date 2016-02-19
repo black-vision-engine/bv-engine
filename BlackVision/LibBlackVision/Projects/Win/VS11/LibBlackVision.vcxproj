@@ -97,17 +97,46 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetName>LibBlackVision</TargetName>
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalOptions>-Zm111 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalOptions>-Zm111 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>-Zm111 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>-Zm111 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\Application\ApplicationBase.cpp" />
+    <ClCompile Include="..\..\..\Source\Application\ApplicationContext.cpp" />
     <ClCompile Include="..\..\..\Source\Application\ConsoleApplication.cpp" />
     <ClCompile Include="..\..\..\Source\Application\Win32\WinApplication.cpp" />
     <ClCompile Include="..\..\..\Source\Application\WindowedApplication.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\AssetCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\AssetDescriptor.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\AssetDescsWithUIDs.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\AssetLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\AssetManager.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Assets.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Cache\HardDriveRawDataCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Cache\RawDataCache.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\DefaultAssets.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\AtlasCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\Engines\FreeTypeEngine.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Font\FontAsset.cpp" />
@@ -126,9 +155,17 @@
     <ClCompile Include="..\..\..\Source\Assets\Texture\SingleTextureAssetDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureAsset.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureAssetDescriptor.cpp" />
-    <ClCompile Include="..\..\..\Source\Assets\Texture\TextureCache.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureLoader.cpp" />
     <ClCompile Include="..\..\..\Source\Assets\Texture\TextureUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\AnimationAssetThumbnail.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\FontAssetThumbnail.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\TextureAssetThumbnail.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\VideoStreamAssetThumbnail.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Thumbnail.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamAsset.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamAssetDescriptor.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamLoader.cpp" />
+    <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamUtils.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\BaseEvent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\EventManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Events\Events.cpp" />
@@ -176,26 +213,39 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrIndexBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrPBOMemTransfer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrRenderTarget.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrSampler.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrShader.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture1D.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture1DArray.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture2D.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture2DArray.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture3D.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCube.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCubeArray.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObject.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObjectSingleVB.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrVertexBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrVertexDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\Renderer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Renderers\WGLRenderer\WGLRenderer.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Rendering\Logic\OfflineRendering\ScreenShotLogic.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Rendering\SharedMemoryVideoBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\DataBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\IndexBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\RenderableArrayData.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\RenderableArrayDataArrays.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\RenderableArrayDataElements.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\RenderTarget.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Texture.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Texture2D.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Texture2DImpl.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Texture2DSequenceImpl.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\TextureBase.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1D.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1DArray.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2D.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2DArray.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2DCache.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture3D.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCube.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCubeArray.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexArray.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexBuffer.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Resources\VertexDescriptor.cpp" />
@@ -209,6 +259,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\SceneGraph\TriangleStrip.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\GeometryShader.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\GenericShaderParam.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\SamplerShaderParameters.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParameters.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamFloat.cpp" />
@@ -237,16 +288,21 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\State\RendererStateInstance.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\State\StencilState.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Types\Transform.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\AssetTracker.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BasicNode.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Builder\NodeLogicHolder.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Builder\RendererStatesBuilder.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\BVScene.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\BVSceneEditor.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\BVSceneTools.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\BVProject.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\BVProjectEditor.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\BVProjectTools.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\IDGenerator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelNodeEditor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelSceneEditor.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\ModelState.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\Effects\ModelNodeEffectMixChannels.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffect.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectFactory.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\NodeEffects\NodeEffectSerialization.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\ChannelsFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizeGeometryShaderChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizePixelShaderChannel.cpp" />
@@ -257,6 +313,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\AttributeChannelDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\AttributeChannelTyped.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\ConnectedComponent.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\HelperVertexAttributesChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\IndexChannelDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\AnimatedStripComponent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\DefaultGeometryVertexAttributeChannel.cpp" />
@@ -264,16 +321,19 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\RectComponent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\RingComponent.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelAnimatedVertices.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelVariableTopology.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\VacAABB.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannelDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannelUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\HelperPixelShaderChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultAnimationDescriptor.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultFontDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultTextureDescriptor.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultTextureParams.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultTexturesData.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\ResourceStateModel.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultVideoStreamDescriptor.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\SamplerStateModel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\RendererContext\AlphaContext.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\RendererContext\CullContext.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\RendererContext\DepthContext.cpp" />
@@ -284,7 +344,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\TranformChannel.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Custom\DefaultHeightMapPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\DefaultFinalizePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\DefaultPluginListFinalized.cpp" />
@@ -302,6 +361,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CompositeTypedParameters.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\GenericParameterSetters.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\ParameterSerialization.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\ParametersFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Parameters\SimpleTypedParameters.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\DefaultParamValModel.cpp" />
@@ -309,7 +369,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Plugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\PluginsFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\PluginUtils.cpp" />
@@ -332,6 +391,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSimpleCubePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSpherePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSpringPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultText3DPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTextPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTexturePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTimerPlugin.cpp" />
@@ -339,8 +399,15 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTrianglePlugin.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\SerializationObjects.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoStreamDecoderPlugin.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextArranger.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\Text3DUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoDecoder.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoStreamDecoder.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDemuxer.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\VideoDecoderThread.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\SceneModel.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\DefaultTimeline.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventLoop.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventNull.cpp" />
@@ -349,11 +416,11 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\SimpleIParamSet.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Static\ConstTimeEvaluator.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\Static\OffsetTimeEvaluator.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimelineHelper.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimelineManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\GeometryUpdater.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.cpp" />
-    <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\SequenceAnimationUpdater.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Updaters\UpdatersManager.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Processes\InitProcess.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Processes\Process.cpp" />
@@ -364,16 +431,48 @@
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\BaseValue.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp" />
+    <ClCompile Include="..\..\..\Source\Mathematics\BoundingVolume.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Core\MathFuncs.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp" />
-    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeBezierInterpolator.cpp" />
+    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.cpp" />
+    <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\Key.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Transform\MatTransform.cpp" />
+    <ClCompile Include="..\..\..\Source\Mathematics\Transform\SQTTransform.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\BV\BVSerializeContext.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\BV\XML\BVXMLDeserializer.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\BV\XML\BVXMLSerializer.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\Json\JsonSerializeObject.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\SerializationHelper.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\XML\XMLDeserializer.cpp" />
+    <ClCompile Include="..\..\..\Source\Serialization\XML\XMLSerializer.cpp" />
+    <ClCompile Include="..\..\..\Source\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Application\ApplicationContext.h" />
+    <ClInclude Include="..\..\..\Source\Assets\AssetCache.h" />
+    <ClInclude Include="..\..\..\Source\Assets\AssetDescsWithUIDs.h" />
+    <ClInclude Include="..\..\..\Source\Assets\AssetSerialization.h" />
+    <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.h" />
+    <ClInclude Include="..\..\..\Source\Assets\DefaultAssets.inl" />
     <ClInclude Include="..\..\..\Source\Assets\FwdDecls.h" />
+    <ClInclude Include="..\..\..\Source\Assets\LAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\GeneratedSingleTextureAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureUtils.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\AnimationAssetThumbnail.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\FontAssetThumbnail.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\TextureAssetThumbnail.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\VideoStreamAssetThumbnail.h" />
+    <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Thumbnail.h" />
+    <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamAsset.h" />
+    <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamAssetDescriptor.h" />
+    <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamLoader.h" />
+    <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamUtils.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectContext.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffectFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\FullscreenEffect.h" />
@@ -384,6 +483,16 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\FullscreenVSShader.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\FullscreenEffectGraph.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\Graph\FullscreenEffectGraphNode.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\Logic\OfflineRendering\ScreenShotLogic.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\SharedMemoryVideoBuffer.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Interfaces\ICloneable.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\AssetTracker.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Builder\NodeLogicHolder.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\IDGenerator.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IFontDescriptor.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\ModelState.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultFontDescriptor.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\DefaultVideoStreamDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Fullscreen\Impl\SimpleFullscreenEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\RenderLogic.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Logic\VideoOutputRendering\VideoOutputRenderLogic.h" />
@@ -406,12 +515,34 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\RenderTargetStackAllocator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\Utils\ShaderSourceProvider.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\SamplerShaderParameters.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\HelperVertexAttributesChannel.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\HelperPixelShaderChannel.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\ResourceStateModel.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\PixelShader\SamplerStateModel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\WireframeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelNodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\Effects\ModelNodeEffectMixChannels.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffect.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\NodeEffects\ModelNodeEffectFactory.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrSampler.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture1D.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture1DArray.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture2D.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture2DArray.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture3D.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCube.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTextureCubeArray.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1D.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture1DArray.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2D.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2DArray.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture3D.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCube.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\TextureCubeArray.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperIndexedGeometryConverter.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperSmoothMesh.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.h" />
@@ -425,6 +556,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IState.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Interfaces\IStateSet.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Parameters\CachedSimpleTypedParameters.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Parameters\ParameterSerialization.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleStateUpdater.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleTypedStates.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\CompositeVideoInputResourceDescr.h" />
@@ -458,7 +590,6 @@
     <ClInclude Include="..\..\..\Source\Assets\Texture\SingleTextureAssetDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureAsset.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureAssetDescriptor.h" />
-    <ClInclude Include="..\..\..\Source\Assets\Texture\TextureCache.h" />
     <ClInclude Include="..\..\..\Source\Assets\Texture\TextureLoader.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\BaseEvent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Events\EventManager.h" />
@@ -476,7 +607,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrPBOMemTransfer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrRenderTarget.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrShader.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrTexture2D.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObject.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrVertexArrayObjectSingleVB.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrVertexBuffer.h" />
@@ -490,11 +620,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\RenderableArrayDataArrays.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\RenderableArrayDataElements.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\RenderTarget.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Texture.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Texture2D.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Texture2DImpl.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Texture2DSequenceImpl.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\TextureBase.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2DCache.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\VertexArray.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\VertexBuffer.h" />
@@ -543,8 +668,8 @@
     <ClInclude Include="..\..\..\Source\Engine\Interfaces\IValueSet.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\BasicNode.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Builder\RendererStatesBuilder.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\BVSceneEditor.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\BVSceneTools.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\BVProjectEditor.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\BVProjectTools.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IAnimationDescriptor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelNode.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\INodeLogic.h" />
@@ -554,7 +679,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITimeEvaluator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITimeline.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\ITimelineEvent.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\BVScene.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\BVProject.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\ChannelsFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizeGeometryShaderChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizePixelShaderChannel.h" />
@@ -573,8 +698,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\RectComponent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\RingComponent.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\VariableTopologyStripComponent.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelAnimatedVertices.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\Simple\VertexAttributesChannelVariableTopology.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\VacAABB.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Geometry\VertexAttributesChannelDescriptor.h" />
@@ -593,7 +716,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\DefaultTransformChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\SimpleTransformChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\Transform\TransformChannel.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Channels\VertexShader\TextureVertexShaderChannel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Custom\DefaultHeightMapPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\DefaultFinalizePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\DefaultPluginListFinalized.h" />
@@ -636,7 +758,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\DefaultPluginParamValModel.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\ParamValEvaluatorFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\SimpleParamValEvaluator.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\ParamValModel\TransformVecParamValEvaluator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Plugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\PluginsFactory.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\PluginUtils.h" />
@@ -659,6 +780,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSimpleCubePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSpherePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultSpringPlugin.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultText3DPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTextPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTexturePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTimerPlugin.h" />
@@ -666,9 +788,17 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTransformPlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultTrianglePlugin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultRoundedRectPlugin.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\TextureInfo.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoStreamDecoderPlugin.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\TextArranger.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\Text3DUtils.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDef.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegUtils.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoDecoder.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegVideoStreamDecoder.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegDemuxer.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\Interfaces\IVideoDecoder.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\VideoDecoderThread.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\SceneModel.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\SerializationObjects.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\DefaultTimeline.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventBaseMixin.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Dynamic\TimelineEventLoop.h" />
@@ -679,11 +809,10 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Static\ConstTimeEvaluator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\Static\OffsetTimeEvaluator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimelineHelper.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimelineManager.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\GeometryUpdater.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\SequenceAnimationUpdater.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Updaters\UpdatersManager.h" />
     <ClInclude Include="..\..\..\Source\Engine\Processes\InitProcess.h" />
     <ClInclude Include="..\..\..\Source\Engine\Processes\Process.h" />
@@ -696,14 +825,40 @@
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\TypedValues.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\AABB.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\BoundingVolume.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Box.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Core\MathFuncs.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Defines.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\glm_inc.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.h" />
-    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeBezierInterpolator.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\BezierFunction.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\ConstFunction.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\LinearFunction.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Functions\PolynomialFunction.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\InterpolatorBasicTypes.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Interpolators.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Interpolators\Key.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Rect.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Transform\MatTransform.h" />
+    <ClInclude Include="..\..\..\Source\Mathematics\Transform\SQTTransform.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\BV\BVDeserializeContext.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\BV\BVSerializeContext.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\BV\CloneViaSerialization.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\BV\XML\BVXMLDeserializer.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\BV\XML\BVXMLSerializer.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\DeserializeContext.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\IDeserializer.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\ISerializable.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\ISerializer.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\Json\JsonDeserializeObject.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\Json\JsonSerializeObject.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\SerializationHelper.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\SerializeContext.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\XML\XMLDeserializer.h" />
+    <ClInclude Include="..\..\..\Source\Serialization\XML\XMLSerializer.h" />
+    <ClInclude Include="..\..\..\Source\stdafx.h" />
+    <ClInclude Include="..\..\..\Source\UseLoggerLibBlackVision.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\Engine\Graphics\Renderers\OGLRenderer\PdrGLSLProgram.inl" />
@@ -712,7 +867,6 @@
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\GenericShaderParam.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParameters.inl" />
     <None Include="..\..\..\Source\Engine\Graphics\Shaders\RenderableEffect.inl" />
-    <None Include="..\..\..\Source\Engine\Models\BVSceneEditor.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Channels\DefaultFinalizeShaderChannel.inl" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Descriptor\ModelHelper.h" />
     <None Include="..\..\..\Source\Engine\Models\Plugins\Parameters\AbstractModelParameter.inl" />
@@ -726,6 +880,8 @@
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeEvaluatorBase.inl" />
     <None Include="..\..\..\Source\Engine\Models\Timeline\TimeSegmentEvalImpl.inl" />
     <None Include="..\..\..\Source\Engine\Models\Updaters\NodeUpdater.inl" />
+    <None Include="..\..\..\Source\Mathematics\Interpolators\Key.inl" />
+    <None Include="..\..\..\Source\Serialization\SerializationHelper.inl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\LibBVGL\Projects\Win\VS11\LibBVGL.vcxproj">

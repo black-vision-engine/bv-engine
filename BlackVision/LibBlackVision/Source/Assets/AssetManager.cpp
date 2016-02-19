@@ -1,5 +1,8 @@
+#include "stdafx.h"
+
 #include "AssetManager.h"
 #include "Assets.h"
+#include "Serialization/IDeserializer.h"
 
 #include <memory>
 
@@ -8,20 +11,66 @@ namespace bv
 
 // ***********************
 //
-AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc ) const
+AssetDescConstPtr AssetManager::CreateDesc( const IDeserializer& deserializer )
+{
+    bool success = deserializer.EnterChild( "asset" );
+	if( !success )
+		return nullptr;
+
+    std::string assetUID  = deserializer.GetAttribute( "type" );
+
+	auto it = m_loaders.find( assetUID );
+
+	if( it != m_loaders.end() )
+    {
+        auto desc = it->second->CreateDescriptor( deserializer );
+        deserializer.ExitChild();
+        return desc;
+    }
+
+    deserializer.ExitChild();
+	return nullptr;
+}
+
+
+// ***********************
+//
+AssetConstPtr AssetManager::LoadAsset( const AssetDescConstPtr & desc )
+{
+	if( m_assetCache.Exists( desc ) )
+		return m_assetCache.Get( desc );
+	else
+	{
+		auto it = m_loaders.find( desc->GetUID() );
+
+		if( it != m_loaders.end() )
+		{
+			auto asset = it->second->LoadAsset( desc );
+			if( asset != nullptr )
+			{
+				m_assetCache.Add( desc, asset );
+				return asset;
+			}
+		}
+
+		return nullptr;
+	}
+}
+
+// ***********************
+//
+ThumbnailConstPtr   AssetManager::LoadThumbnail	( const AssetDescConstPtr & desc ) const
 {
 	auto it = m_loaders.find( desc->GetUID() );
 
 	if( it != m_loaders.end() )
 	{
-		auto asset = it->second->LoadAsset( desc );
-		if( asset != nullptr )
-		{
-			return asset;
-		}
+		return it->second->LoadThumbnail( desc );
 	}
-
-	return nullptr;
+    else
+    {
+        return nullptr;
+    }
 }
 
 // ***********************
@@ -58,6 +107,20 @@ bool AssetManager::UnregisterLoader( const std::string & assetDescUID )
 
 // ***********************
 //
+void AssetManager::AddToCache               ( AssetDescConstPtr& desc, AssetConstPtr asset )
+{
+    m_assetCache.Add( desc, asset );
+}
+
+// ***********************
+//
+AssetConstPtr AssetManager::GetFromCache    ( AssetDescConstPtr& desc )
+{
+    return m_assetCache.Get( desc );
+}
+
+// ***********************
+//
 AssetManager & AssetManager::GetInstance()
 {
 	static auto instance = AssetManager();
@@ -83,6 +146,7 @@ void AssetManager::RegisterBasicLoaders()
 	AssetManager::GetInstance().RegisterLoader( TextureAssetDesc::UID(),	std::make_shared< TextureLoader >() );
 	AssetManager::GetInstance().RegisterLoader( FontAssetDesc::UID(),		std::make_shared< FontLoader >() );
 	AssetManager::GetInstance().RegisterLoader( AnimationAssetDesc::UID(),	std::make_shared< AnimationLoader >() );
+    AssetManager::GetInstance().RegisterLoader( VideoStreamAssetDesc::UID(),	std::make_shared< VideoStreamLoader >() );
 }
 
 

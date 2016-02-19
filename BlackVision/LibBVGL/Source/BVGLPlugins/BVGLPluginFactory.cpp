@@ -16,7 +16,8 @@ BVGLResourceTrackingPlugin	resourceTrackingPlugin;
 //
 BVGLPlugin &		BVGLPluginFactory::BVGL	()
 {
-	return BVGL( BVGLPluginType::BVGL_RESOURCE_TRACKER );
+	return BVGL( BVGLPluginType::BVGL_DEFAULT );
+	// return BVGL( BVGLPluginType::BVGL_RESOURCE_TRACKER );
 }
 
 // *****************************

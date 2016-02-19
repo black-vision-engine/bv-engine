@@ -8,6 +8,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultGradientPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTexturePlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultAnimationPlugin.h"
+#include "Engine/Models/Plugins/Simple/DefaultVideoStreamDecoderPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 #include "Engine/Models/Plugins/Simple/DefaultAlphaMaskPlugin.h"
@@ -39,12 +40,13 @@ std::vector< IPluginDescriptor * >  DefaultBVPluginDescriptors  ()
     std::vector< IPluginDescriptor * > descriptors;
 
     descriptors.push_back( new DefaultTransformPluginDesc() );
-    descriptors.push_back( new DefaultRectPluginDesc() );
+    descriptors.push_back( new DefaultRect::PluginDesc() );
     descriptors.push_back( new DefaultColorPluginDesc() );
 	descriptors.push_back( new DefaultGradientPluginDesc() );
     descriptors.push_back( new DefaultTexturePluginDesc() );
 	descriptors.push_back( new DefaultNoPerspectiveTexturePluginDesc() );
     descriptors.push_back( new DefaultAnimationPluginDesc() );
+    descriptors.push_back( new DefaultVideoStreamDecoderPluginDesc() );
     descriptors.push_back( new DefaultTextPluginDesc() );
     descriptors.push_back( new DefaultAlphaMaskPluginDesc() );
     descriptors.push_back( new DefaultTimerPluginDesc() );

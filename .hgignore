@@ -7,6 +7,20 @@ syntax: glob
 BlackVision/_Builds/*
 BlackVision/_Temp/*
 *.nvuser
+app/cache/*
+*.orig
+*.cache
+*.tlog
+*.obj
+SimpleRender/x64/Release/vc110.pdb
+SimpleRender/x64/Release/SimpleRender.lastbuildstate
+SimpleRender/x64/Release/SimpleRender.log
+SimpleRender/x64/Release/SimpleRender.unsuccessfulbuild
+VideoCards/*
+app/Win32/*
+app/x64/*
+app/test.bmp
+app/testFreeType.bmp
 *.pyc
 workspace.xml
 BlackVision/_TestsResults/*
@@ -15,3 +29,4 @@ BlackVision/Applications/ProjectManagerPrototype/bv_media/*
 BlackVision/Test/Assets/Multipass/MultipassTestReferenceImage.png
 BlackVision/Assets/ModelNodeEditor/Desert.jpg
 BlackVision/Logs/DefaultLog.txt
+*.ipch

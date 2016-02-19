@@ -1,6 +1,6 @@
 #pragma once
 
-#include <windows.h>
+#include <mutex>          // std::mutex, std::unique_lock, std::defer_lock
 
 
 namespace bv
@@ -8,9 +8,10 @@ namespace bv
  
 class CriticalSection
 {
-protected:
+    std::mutex                      m_mtx;
 
-    mutable CRITICAL_SECTION    m_criticalSection;
+protected:
+    std::unique_lock<std::mutex>    m_criticalSection;
 
 private:
 

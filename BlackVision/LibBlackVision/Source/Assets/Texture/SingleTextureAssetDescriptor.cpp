@@ -1,9 +1,36 @@
+#include "stdafx.h"
+
 #include "SingleTextureAssetDescriptor.h"
+#include "TextureUtils.h"
+
+#include <assert.h>
+
+#include "Serialization/ISerializer.h"
 
 namespace bv
 {
 
 const std::string SingleTextureAssetDesc::uid = "SINGLE_TEXTURE_ASSET_DESC";
+
+// ***********************
+//
+void                SingleTextureAssetDesc::Serialize       ( ISerializer& ser ) const
+{
+ser.EnterChild( "asset" );
+    
+    ser.SetAttribute( "type", UID() );
+    ser.SetAttribute( "path", GetImagePath() );
+
+ser.ExitChild();
+}
+
+// ***********************
+//
+ISerializablePtr     SingleTextureAssetDesc::Create          ( IDeserializer& /*dob*/ )
+{
+    assert( !"implement me" );
+    return nullptr;
+}
 
 // ***********************
 //
@@ -83,6 +110,15 @@ TextureFormat SingleTextureAssetDesc::GetFormat() const
 {
 	return m_format;
 }
+
+// ***********************
+//
+SizeType        SingleTextureAssetDesc::EstimateMemoryUsage () const
+{
+    UInt32 pixelSize = TextureUtils::ToBPP( m_format ) / 8;
+    return m_width * m_height * pixelSize;
+}
+
 
 
 } // bv

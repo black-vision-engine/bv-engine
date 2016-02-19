@@ -1,4 +1,7 @@
+#include "stdafx.h"
+
 #include "ModelNodeEffect.h"
+#include "Serialization/SerializationHelper.h"
 
 
 namespace bv { namespace model {
@@ -16,6 +19,16 @@ ModelNodeEffect::ModelNodeEffect  ( NodeEffectType type )
 //
 ModelNodeEffect::~ModelNodeEffect  ()
 {
+}
+
+// ********************************
+//
+void                                        ModelNodeEffect::Serialize          ( ISerializer & ser ) const
+{
+    ser.EnterChild( "effect" );
+        ser.SetAttribute( "type", SerializationHelper::T2String< NodeEffectType >( GetType() ) );
+        m_paramValModel->Serialize( ser );
+    ser.ExitChild();
 }
 
 // ********************************

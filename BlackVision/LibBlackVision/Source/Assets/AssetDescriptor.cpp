@@ -1,6 +1,9 @@
+#include "stdafx.h"
+
 #include "AssetDescriptor.h"
 
 #include <cassert>
+#include <algorithm>
 
 namespace bv
 {
@@ -9,8 +12,35 @@ namespace bv
 //
 std::string			AssetDesc::GetKey		() const
 {
+    assert( false );
 	return "";
 }
+
+
+// *********************************
+//
+struct MatchPathSeparator
+{
+    bool operator()( char ch ) const
+    {
+        return ch == '/';
+    }
+};
+
+std::string GetBasename( std::string pathname )
+{
+    return std::string( 
+        std::find_if( pathname.rbegin(), pathname.rend(),
+                      MatchPathSeparator() ).base(),
+        pathname.end() );
+}
+
+std::string             AssetDesc::GetProposedShortKey () const
+{
+    auto key = GetKey();
+    return GetBasename( key );
+}
+
 
 // *********************************
 //

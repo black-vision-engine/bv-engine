@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultGeospherePlugin.h"
 
 #include "glm/gtx/vector_angle.hpp"
@@ -34,6 +36,8 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
     h.CreateVacModel();
     h.AddSimpleParam<int>( PN::TESSELATION, 6, true, true );
 	h.AddSimpleParam<float>( PN::RADIUS, 2.0f, true, true );
+
+    h.CreatePSModel();
 
     return h.GetModel();
 }

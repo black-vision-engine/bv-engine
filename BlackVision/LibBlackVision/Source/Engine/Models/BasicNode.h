@@ -8,7 +8,9 @@
 #include "Engine/Models/Interfaces/INodeLogic.h"
 #include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
 
-#include "Engine/Interfaces/ISerializable.h"
+#include "Mathematics/BoundingVolume.h"
+
+#include "Serialization/ISerializable.h"
 
 
 namespace bv { namespace model {
@@ -18,6 +20,7 @@ class PluginsManager;
 class BasicNode;
 DEFINE_PTR_TYPE(BasicNode)
 DEFINE_CONST_PTR_TYPE(BasicNode)
+typedef std::weak_ptr< BasicNode >  BasicNodeWeakPtr;
 
 typedef std::vector< BasicNodePtr > TNodeVec;
 
@@ -26,10 +29,6 @@ class ModelNodeEditor;
 
 class BasicNode : public IModelNode, public std::enable_shared_from_this< BasicNode >, public ISerializable
 {
-public:
-
-    //FIXME: hack
-    static std::hash_map< IModelNode *, SceneNode * >    ms_nodesMapping;
 
 private:
 
@@ -49,23 +48,31 @@ private:
 
 protected:
 
-    explicit BasicNode( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager = nullptr );
+    explicit BasicNode( const std::string & name, ITimeEvaluatorPtr, const PluginsManager * pluginsManager = nullptr );
 
 public:
 
     virtual ~BasicNode();
 
-    static BasicNodePtr                     Create                  ( const std::string & name, ITimeEvaluatorPtr timeEvaluator, const PluginsManager * pluginsManager = nullptr );
-    static ISerializablePtr                 Create                  ( DeserializeObject& doc );
-    virtual void                            Serialize               ( SerializeObject& /*doc*/ ) const { assert( !"implement" ); }
+    static BasicNodePtr                     Create                  ( const std::string & name, ITimeEvaluatorPtr, const PluginsManager * pluginsManager = nullptr );
+    static BasicNode *                      Create                  ( const IDeserializer& doc );
+    virtual void                            Serialize               ( ISerializer& doc ) const;
+
+	BasicNodePtr					        Clone					() const;
+
 
     virtual IPluginPtr                      GetPlugin               ( const std::string & name ) const override;
     virtual IFinalizePluginConstPtr         GetFinalizePlugin       () const override;
 
+    /** @param[ path ] relative path */
     virtual IModelNodePtr                   GetNode                 ( const std::string & path, const std::string & separator = "/" ) override;
     virtual IModelNodePtr                   GetChild                ( const std::string & name ) override;
+    
+	INodeLogicPtr							GetLogic				() const;
 
     virtual const IPluginListFinalized *    GetPluginList           () const override;
+    virtual std::vector< IParameterPtr >    GetParameters           () const override;
+	virtual std::vector< ITimeEvaluatorPtr >GetTimelines			( bool recursive ) const override;
 
     virtual unsigned int                    GetNumChildren          () const override;
 
@@ -77,15 +84,17 @@ public:
 
 	// axis-aligned bounding box
 	mathematics::Rect 						GetAABB					() const;
+	BoundingVolume 						    GetBoundingVolume		() const;
 
     BasicNodePtr                            GetChild                ( unsigned int i );
+    const BasicNode *                       GetChild                ( unsigned int i ) const;
     unsigned int                            GetNumPlugins           () const;
 
-    void                                    AddChildToModelOnly     ( BasicNodePtr n );
+	void                                    AddChildToModelOnly     ( BasicNodePtr n );
+	void                                    AddChildToModelOnly     ( BasicNodePtr n, UInt32 idx );
     void                                    DetachChildNodeOnly     ( BasicNodePtr n );
 
 	ModelNodeEditor *						GetModelNodeEditor		();
-	void									SetModelNodeEditor		( ModelNodeEditor * editor );
 
 	DefaultPluginListFinalizedPtr			GetPlugins				();
 
@@ -96,9 +105,8 @@ private:
 
 private:
 
-    void                                    NonNullPluginsListGuard ();
-
 	mathematics::Rect 						GetAABB					( const glm::mat4 & currentTransformation ) const;
+	BoundingVolume 						    GetBoundingVolume		( const glm::mat4 & currentTransformation ) const;
 
 public:
 
@@ -107,18 +115,25 @@ public:
     bool                                    AddPlugin               ( const std::string & uid, ITimeEvaluatorPtr timeEvaluator );
     bool                                    AddPlugin               ( const std::string & uid, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
     bool                                    AddPlugins              ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator );
-    bool                                    AddPlugins              ( const std::vector< std::string > & uids, const std::vector< std::string > & names, ITimeEvaluatorPtr timeEvaluator );
 
 	void									SetLogic				( INodeLogicPtr logic );
+    void                                    RemoveLogic             ();
 
     virtual void                            Update                  ( TimeType t ) override;
 
     virtual bool                            IsVisible               () const override;
     void                                    SetVisible              ( bool visible );
 
-private:
+public:
 
-    std::string                         SplitPrefix                     ( std::string & str, const std::string & separator = "/" ) const;
+    /**@brief Remove prefix from path.
+    @param[ path ] Returns path without prefix.
+    @return Returns prefix. */
+    static std::string                      SplitPrefix             ( std::string & path, const std::string & separator = "/" );
+
+    /**@brief Try to convert string to integer if it matches the pattern "[escapeChar][integer]" (e.g. "#0").
+    @return Returns parsed index or -1 if string didn't match the pattern. */
+    static Int32                            TryParseIndex           ( std::string & str, const char escapeChar = '#' );
 
 public:
 
@@ -128,4 +143,12 @@ public:
 
 
 } // model
+
+
+namespace CloneViaSerialization {
+
+    void                    UpdateTimelines ( model::BasicNode * obj, const std::string & prefix, const std::string & destScene, bool recursive );
+
+} //CloneViaSerialization
+
 } // bv

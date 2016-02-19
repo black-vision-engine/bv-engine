@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultConePlugin.h"
 #include "glm/gtx/vector_angle.hpp"
 
@@ -91,6 +93,8 @@ DefaultPluginParamValModelPtr   DefaultConePluginDesc::CreateDefaultModel  ( ITi
         ( DefaultCone::PN::WEIGHTCENTERZ, DefaultConePlugin::WeightCenter::CENTER, true, true );
   	h.AddParam< IntInterpolator, DefaultConePlugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
 		( PN::MAPPINGTYPE, DefaultConePlugin::MappingType::OLDSTYLE, true, true );
+
+    h.CreatePSModel();
 
     return h.GetModel();
 }

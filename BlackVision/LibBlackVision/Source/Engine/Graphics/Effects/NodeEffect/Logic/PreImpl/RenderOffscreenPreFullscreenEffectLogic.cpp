@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "RenderOffscreenPreFullscreenEffectLogic.h"
 
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"

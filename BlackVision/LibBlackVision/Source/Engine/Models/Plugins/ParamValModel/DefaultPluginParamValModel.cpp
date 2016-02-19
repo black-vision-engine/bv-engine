@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultPluginParamValModel.h"
 
 #include <cassert>
@@ -10,7 +12,8 @@ namespace bv { namespace model {
 
 // *******************************
 //
-DefaultPluginParamValModel::DefaultPluginParamValModel      ()
+DefaultPluginParamValModel::DefaultPluginParamValModel      ( ITimeEvaluatorPtr timeEvaluator )
+	: m_timeEvaluator( timeEvaluator )
 {
     m_pluginModel                   = nullptr;
     m_transformChannelModel         = nullptr;
@@ -89,6 +92,20 @@ IParamValModelPtr   DefaultPluginParamValModel::GetVertexShaderChannelModel     
 IParamValModelPtr   DefaultPluginParamValModel::GetGeometryShaderChannelModel   ()
 {
     return GeometryShaderChannelModelImpl();
+}
+
+// *******************************
+//
+void				DefaultPluginParamValModel::SetTimeEvaluator				( ITimeEvaluatorPtr timeEvaluator )
+{
+	m_timeEvaluator = timeEvaluator;
+}
+
+// *******************************
+//
+ITimeEvaluatorPtr   DefaultPluginParamValModel::GetTimeEvaluator				() const
+{
+	return m_timeEvaluator;
 }
 
 // *******************************

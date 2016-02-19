@@ -13,7 +13,7 @@ typedef std::shared_ptr< BasicNode > BasicNodePtr;
 } // model
 } // bv
 
-namespace bv { namespace widgets {
+namespace bv { namespace nodelogic {
 
 struct CrawlerNodesStates
 {
@@ -25,12 +25,15 @@ struct CrawlerNodesStates
 
 	void Add			( bv::model::BasicNode * n );
 	void Acivate		( bv::model::BasicNode * n );
+    void Deacivate		( bv::model::BasicNode * n );
 	void Visible		( bv::model::BasicNode * n );
 	void NotVisible		( bv::model::BasicNode * n );
 
 	bool IsVisible		( bv::model::BasicNode * n ) const;
 	bool IsActive		( bv::model::BasicNode * n ) const;
 	bool IsNonActive	( bv::model::BasicNode * n ) const;
+
+    bool Exist          ( bv::model::BasicNode * n ) const;
 
 	SizeType ActiveSize		() const;
 	SizeType NonActiveSize	() const;
@@ -41,5 +44,5 @@ struct CrawlerNodesStates
 	{}
 };
 
-} // widgets
+} // nodelogic
 } // bv

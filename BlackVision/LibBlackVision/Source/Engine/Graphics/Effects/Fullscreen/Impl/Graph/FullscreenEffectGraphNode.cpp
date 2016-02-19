@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "FullscreenEffectGraphNode.h"
 
 #include "Engine/Graphics/Effects/FullScreen/FullscreenEffect.h"

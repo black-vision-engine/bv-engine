@@ -1,4 +1,4 @@
-#include "Mathematics\defines.h"
+#include "Mathematics/defines.h"
 #include "Engine/Models/BasicNode.h"
 #include "Engine/Models/Timeline/TimelineManager.h"
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
@@ -24,7 +24,7 @@ class PieChartNode : public model::BasicNode // FIXME: separate file
 public:
 
     //PieChartNode( const std::string & name, model::ITimeEvaluatorPtr timeEvaluator, const model::PluginsManager * pluginsManager = nullptr );
-    PieChartNode( /*const std::string & name, */model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::vector< float > percents, const std::vector< float > offsets )
+    PieChartNode( /*const std::string & name, */model::ITimeEvaluatorPtr timeEvaluator, const std::vector< float > percents, const std::vector< float > offsets )
 		: BasicNode( "PieChartNode", timeEvaluator ) 
 	{ 
 		std::vector< PieChartSubnodeDesc > descs;
@@ -33,18 +33,18 @@ public:
 		for( SizeType i = 0; i < percents.size(); i++ )
 			descs.push_back( PieChartSubnodeDesc( percents[i], offsets[i] ) );
 
-		Init( timelineManager, timeEvaluator, descs );
+		Init( timeEvaluator, descs );
 	}
 
-	PieChartNode( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::vector< PieChartSubnodeDesc > descs )
+	PieChartNode( model::ITimeEvaluatorPtr timeEvaluator, const std::vector< PieChartSubnodeDesc > descs )
 		: BasicNode( "PieChartNode", timeEvaluator ) 
 	{ 
-		Init( timelineManager, timeEvaluator, descs );
+		Init( timeEvaluator, descs );
 	}
 
 private:
 
-	void Init( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::vector< PieChartSubnodeDesc > descs );
+	void Init( model::ITimeEvaluatorPtr timeEvaluator, const std::vector< PieChartSubnodeDesc > descs );
 
 };
 

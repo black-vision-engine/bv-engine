@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NodeEffectFactory.h"
 
 #include <cassert>
@@ -136,6 +138,7 @@ NodeEffectPtr       CreateNodeEffect( NodeEffectType nodeEffectType )
             return CreateWireframeNodeEffect();
         case NodeEffectType::NET_MIX_CHANNELS:
             return CreateMixchannelsNodeEffect();
+
         //Interlace and so on
         default:
             assert( false );

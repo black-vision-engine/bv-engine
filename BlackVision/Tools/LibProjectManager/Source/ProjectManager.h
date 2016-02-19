@@ -2,6 +2,9 @@
 
 #include "AssetCategory.h"
 #include "Project.h"
+#include "SceneDescriptor.h"
+
+#include "Engine/Models/BVProject.h"
 
 #include "Assets/FwdDecls.h"
 
@@ -10,14 +13,16 @@
 namespace bv
 {
 
+void ChangeProjectManagerInstanceTo( const std::string & );
+
 class Project;
 class AssetCategory;
-class SceneDesc;
 class ProjectManagerImpl;
 
 namespace model 
 {
 	class BasicNode;
+    class TimelineManager;
 } // model
 
 class ProjectManager
@@ -26,9 +31,9 @@ public:
 
 	// listing
 	PathVec					ListProjectsNames	() const;
-	PathVec					ListScenesNames		( const Path & projectName = Path("") ) const;
-	PathVec					ListCategoriesNames	() const;
-	PathVec					ListAssetsPaths		( const Path & projectName,  const std::string & categoryName = "" ) const;
+	PathVec					ListScenesNames		( const Path & projectName, const Path & path, bool recursive ) const;
+	StringVector			ListCategoriesNames	() const;
+	PathVec					ListAssetsPaths		( const Path & projectName,  const std::string & categoryName, const Path & path, bool recursive ) const;
 
 	PathVec					ListAllUsedAssets	() const;
 	PathVec					ListAllUnusedAssets	( const Path & projectName, const std::string & categoryName ) const;
@@ -48,12 +53,14 @@ public:
 	void					RemoveAsset			( const Path & projectName, const std::string & categoryName, const Path & path );
 	void					MoveAsset			( const Path & inProjectName, const std::string & inCategoryName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 	void					RemoveUnusedAssets	( const Path & projectName, const std::string & categoryName );
-	void					RemoveUnusedAssets	( const Path & projectName );
+    void					RemoveUnusedAssets	( const Path & projectName );
+	void					RemoveUnusedAssets	();
 
-	void					AddScene			( const model::BasicNode & sceneRootNode, const Path & projectName, const Path & outPath );
+	void					AddScene			( const model::SceneModelPtr & scene, const Path & projectName, const Path & outPath );
 	void					CopyScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
 	void					RemoveScene			( const Path & projectName, const Path & path );
 	void					MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath );
+    model::SceneModelPtr    LoadScene           ( const Path & projectName, const Path & path ) const;
 
 	// categories
 	void					RegisterCategory	( const AssetCategoryConstPtr & category);
@@ -72,7 +79,7 @@ public:
 
 	// projects
 	void					ExportProjectToFile	( const Path & projectName, const Path &  outputFilePath ) const;
-	void					ImportProjectFromFile( const Path & expFilePath, const Path & importToPath );
+	void					ImportProjectFromFile( const Path & expFilePath, const Path & projectName );
 
 	// *********************************
 	// getting scenes and assets descriptors
@@ -81,15 +88,41 @@ public:
 	AssetDescConstPtr		GetAssetDesc		( const Path & projectName, const std::string & categoryName, const Path & pathInProject ) const;
 
 	//SceneDesc				GetSceneDescLoc		( loc )
-	SceneDesc *				GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
+	SceneDescriptor			GetSceneDesc		( const Path & path ) const;
+	SceneDescriptor			GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const;
 
-	static ProjectManager *	GetInstance			( const Path & rootPath );
+	// *********************************
+	// loading, saving presets
+    model::BasicNodePtr     LoadPreset          ( const Path & projectName, const Path & path, const model::OffsetTimeEvaluatorPtr & timeline ) const;
+    void                    SavePreset          ( const model::BasicNodePtr & node, const Path & projectName, const Path & path ) const;
+    PathVec                 ListPresets         ( const Path & projectName, const Path & path, bool recursive ) const;
+    PathVec                 ListPresets         ( const Path & projectName ) const;
+    PathVec                 ListPresets         () const;
+
+    // *********************************
+	// handling directories
+    PathVec                 ListAssetsDirs      ( const std::string & categoryName, const Path & path ) const;
+    PathVec                 ListScenesDirs      ( const Path & path ) const;
+    bool                    CreateAssetDir      ( const std::string & categoryName, const Path & path, bool recursive ) const;
+    bool                    CreateSceneDir      ( const Path & path ) const;
+    bool                    RemoveAssetDir      ( const std::string & categoryName, const Path & path ) const;
+    bool                    RemoveSceneDir      ( const Path & path ) const;
+
+    Path                    ToAbsPath           ( const Path & path ) const;
+
+    static ProjectManager *	GetInstance			(  );
+
+	~ProjectManager	();
 
 private:
 	ProjectManagerImpl * m_impl;
 
 	ProjectManager	( const Path & rootPath );
-	~ProjectManager	();
+
+    static std::shared_ptr< ProjectManager > _instance;
+
+    static void             SetPMInstanceOnlyForTests( ProjectManager * inst );
+    friend void             bv::ChangeProjectManagerInstanceTo( const std::string & );
 };
 
 } // bv

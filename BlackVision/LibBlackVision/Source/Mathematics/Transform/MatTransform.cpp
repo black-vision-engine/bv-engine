@@ -1,331 +1,431 @@
+#include "stdafx.h"
+
 #include "Mathematics/Transform/MatTransform.h"
 
+#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
+#include "Serialization/SerializationHelper.h"
+#include "Serialization/SerializationHelper.inl"
 
-namespace bv { namespace model {
+#include "UseLoggerLibBlackVision.h"
 
-    // *************************************
-    //
-    Transform::Transform()
-        : m_mat( glm::mat4x4( 1.f ) )
+
+namespace bv { 
+
+namespace SerializationHelper {
+
+std::pair< TransformKind, const char* > tk2s[] = {
+    std::make_pair( TransformKind::center, "center" ),
+    std::make_pair( TransformKind::rotation, "rotation" ),
+    std::make_pair( TransformKind::scale, "scale" ),
+    std::make_pair( TransformKind::translation, "translation" ),
+    std::make_pair( TransformKind::invalid, "" ) };
+
+
+template<> std::string T2String( const TransformKind& tk ) { return Enum2String( tk2s, tk ); }
+
+// *************************************
+//
+template<> TransformKind String2T( const std::string & s, const TransformKind & defaultVal )
+{
+    auto transform = String2Enum( tk2s, s );
+    if( transform == TransformKind::invalid )
     {
+        return defaultVal;
     }
+    return transform;
+}
 
-    // *************************************
-    //
-    Transform::Transform( const glm::mat4x4 & m )
-        :   m_mat( m )
-    {
-    }
+template<> Expected< TransformKind > String2T( const std::string & s ) { return String2Enum( tk2s, s ); }
 
-    // *************************************
-    //
-    Transform               Transform::operator *    ( const Transform & m )    const
-    {
-        return Transform( m_mat * m.m_mat );
-    }
+} // SerializationHelper
 
-    // *************************************
-    //
-    void     Transform::SetMatrix   ( const glm::mat4x4 & m )
-    {
-        m_mat = m;
-    }
 
-    // *************************************
-    //
-    const glm::mat4x4 &      Transform::GetMatrix   ()                       const
-    {
-        return m_mat;
-    }
+// ******************* Transform **************** 
+
+namespace model {
+
+// *************************************
+//
+Transform::Transform()
+    : m_mat( glm::mat4x4( 1.f ) )
+{
+}
+
+// *************************************
+//
+Transform::Transform( const glm::mat4x4 & m )
+    :   m_mat( m )
+{
+}
+
+// *************************************
+//
+Transform               Transform::operator *    ( const Transform & m )    const
+{
+    return Transform( m_mat * m.m_mat );
+}
+
+// *************************************
+//
+void     Transform::SetMatrix   ( const glm::mat4x4 & m )
+{
+    m_mat = m;
+}
+
+// *************************************
+//
+const glm::mat4x4 &      Transform::GetMatrix   ()                       const
+{
+    return m_mat;
+}
 
 } // model
 
-// *************************************
-//
-template<typename ParamT>
-SimpleTransform<ParamT>::SimpleTransform( const TransformKind kind, const ParamT p0, const ParamT p1, const ParamT p2 )
-    : kind( kind ), p0( p0 ), p1( p1 ), p2 (p2 )
-{
-}
+
+// ******************* CompositeTransform **************** 
 
 // *************************************
 //
-template<typename ParamT>
-SimpleTransform<ParamT>::SimpleTransform( TransformKind kind )
-    : kind( kind )
-{
-}
-
-// *************************************
-//
-template<typename ParamT>
-void SimpleTransform<ParamT>::SetCurveType    ( CurveType type ) 
-{ 
-    p0.SetCurveType( type ); 
-    p1.SetCurveType( type ); 
-    p2.SetCurveType( type ); 
-}
-
-// *************************************
-//
-template<typename ParamT>
-Rotation<ParamT>::Rotation    ( ParamT angle, const Vec3Interpolator & rotAxis )
-    : SimpleTransform( TransformKind::rotation )
-    , m_angle( angle )
-    , m_hasRotAxisInterpolator( true )
-    , m_rotationAxis( rotAxis ) 
-{
-}
-
-// *************************************
-//
-template<typename ParamT>
-Rotation<ParamT>::Rotation( ParamT angle, ParamT p0, ParamT p1, ParamT p2 )
-    : SimpleTransform( TransformKind::rotation, p0, p1, p2 )
-    , m_angle( angle )
-    , m_hasRotAxisInterpolator( false )
-{
-}
-
-// *************************************
-//
-template<typename ParamT>
-void Rotation<ParamT>::SetCurveType( CurveType type )
-{
-    m_angle.SetCurveType( type );
-    m_rotationAxis.SetCurveType( type );
-}
-
-// *************************************
-//
-template<typename ParamT>
-void            CompositeTransform<ParamT>::InitializeDefaultSRT()
+void            CompositeTransform::InitializeDefaultSRT()
 {
     auto t =  TimeType( 0.0 );
 
-    for( auto tr : m_transformations )
-    {
-        delete tr;
-    }
+    auto v0 = 0.0f;
+    auto v1 = 1.0f;
 
-    ParamT ctx, cty, ctz;
-    ParamT ictx, icty, ictz;
-    ParamT sx, sy, sz;
-    ParamT angle;
-    ParamT tx, ty, tz;
-    Vec3Interpolator rotAxis;
-
-    ParamT::ValueType   v0  = ParamT::ValueType( 0.0 );
-    ParamT::ValueType   v1  = ParamT::ValueType( 1.0 );
-
-    ctx.AddKey( t, v0 ); cty.AddKey( t, v0 ); ctz.AddKey( t, v0 );
-    sx.AddKey( t, v1 ); sy.AddKey( t, v1 ); sz.AddKey( t, v1 );
-    angle.AddKey( t, v0 );
-    rotAxis.AddKey( t, glm::vec3( v0, v0, v1 ) );
-    tx.AddKey( t, v0 ); ty.AddKey( t, v0 ); tz.AddKey( t, v0 );
-    ictx.AddKey( t, v0 ); icty.AddKey( t, v0 ); ictz.AddKey( t, v0 );
-
-    AddTranslationCFwd( ctx, cty, ctz );
-    AddTranslation( tx, ty, tz );
-    AddRotation( angle, rotAxis );
-    AddScale( sx, sy, sz );
-    AddTranslationCInv( ictx, icty, ictz );
+    SetTranslation( glm::vec3( v0, v0, v0 ), t );
+    SetRotation( glm::vec3( v0, v0, v0 ), t );
+    SetScale( glm::vec3( v1, v1, v1 ), t );
+    SetCenter( glm::vec3( v0, v0, v0 ), t );
 }
 
 // *************************************
 //
-template<typename ParamT>
-CompositeTransform<ParamT>::~CompositeTransform()
+CompositeTransform::~CompositeTransform()
 {
-    for( auto t : m_transformations )
-    {
-        delete t;
-    }
 }
 
 // *************************************
 //
-template<typename ParamT>
-void CompositeTransform<ParamT>::SetCurveType        ( CurveType type )  
+void            CompositeTransform::SetGlobalCurveType        ( CurveType type )  
 { 
-    for( auto& trans : m_transformations ) 
-        trans->SetCurveType( type ); 
+    m_translationX.SetGlobalCurveType( type );  m_translationY.SetGlobalCurveType( type );  m_translationZ.SetGlobalCurveType( type ); 
+    m_eulerPitch.SetGlobalCurveType( type );  m_eulerYaw.SetGlobalCurveType( type ); m_eulerRoll.SetGlobalCurveType( type ); 
+    m_scaleX.SetGlobalCurveType( type );  m_scaleY.SetGlobalCurveType( type );  m_scaleZ.SetGlobalCurveType( type ); 
+    m_centerX.SetGlobalCurveType( type );  m_centerY.SetGlobalCurveType( type );  m_centerZ.SetGlobalCurveType( type ); 
 }
 
 // *************************************
 //
-template<typename ParamT>
-int CompositeTransform<ParamT>::EvalToCBuffer( typename ParamT::TimeT t, char * buf ) const
+void        CompositeTransform::SetAddedKeyCurveType    ( CurveType type )
 {
-    glm::mat4x4 val = Evaluate( t );
-
-    memcpy( buf, &val, value_size );
-
-    return value_size;
+    m_translationX.SetAddedKeyCurveType( type );  m_translationY.SetAddedKeyCurveType( type );  m_translationZ.SetAddedKeyCurveType( type ); 
+    m_eulerPitch.SetAddedKeyCurveType( type ); m_eulerYaw.SetAddedKeyCurveType( type ); m_eulerRoll.SetAddedKeyCurveType( type ); 
+    m_scaleX.SetAddedKeyCurveType( type );  m_scaleY.SetAddedKeyCurveType( type );  m_scaleZ.SetAddedKeyCurveType( type ); 
+    m_centerX.SetAddedKeyCurveType( type );  m_centerY.SetAddedKeyCurveType( type );  m_centerZ.SetAddedKeyCurveType( type ); 
 }
 
 // *************************************
 //
-template<typename ParamT>
-void CompositeTransform<ParamT>::AddTranslation( ParamT x0, ParamT x1, ParamT x2 )
+void            CompositeTransform::SetWrapPostMethod   ( WrapMethod method )
 {
-    m_transformations.push_back( SimpleTransform<ParamT>::CreateTranslation( x0, x1, x2 ) );
+    m_translationX.SetWrapPostMethod( method );  m_translationY.SetWrapPostMethod( method );  m_translationZ.SetWrapPostMethod( method ); 
+    m_eulerPitch.SetWrapPostMethod( method );  m_eulerYaw.SetWrapPostMethod( method ); m_eulerRoll.SetWrapPostMethod( method );
+    m_scaleX.SetWrapPostMethod( method );  m_scaleY.SetWrapPostMethod( method );  m_scaleZ.SetWrapPostMethod( method ); 
+    m_centerX.SetWrapPostMethod( method );  m_centerY.SetWrapPostMethod( method );  m_centerZ.SetWrapPostMethod( method ); 
 }
 
 // *************************************
 //
-template<typename ParamT>
-void CompositeTransform<ParamT>::AddScale( ParamT s0, ParamT s1, ParamT s2 )
+void            CompositeTransform::SetWrapPreMethod    ( WrapMethod method )
 {
-    m_transformations.push_back( SimpleTransform<ParamT>::CreateScale( s0, s1, s2 ) );
+    m_translationX.SetWrapPreMethod( method ); m_translationY.SetWrapPreMethod( method ); m_translationZ.SetWrapPreMethod( method ); 
+    m_eulerPitch.SetWrapPreMethod( method ); m_eulerYaw.SetWrapPreMethod( method ); m_eulerRoll.SetWrapPreMethod( method );
+    m_scaleX.SetWrapPreMethod( method ); m_scaleY.SetWrapPreMethod( method ); m_scaleZ.SetWrapPreMethod( method ); 
+    m_centerX.SetWrapPreMethod( method ); m_centerY.SetWrapPreMethod( method ); m_centerZ.SetWrapPreMethod( method ); 
 }
 
 // *************************************
 //
-template<typename ParamT>
-void CompositeTransform<ParamT>::AddRotation( ParamT angle, ParamT r0, ParamT r1, ParamT r2 )
+glm::vec3       CompositeTransform::GetTranslation      ( TimeType time ) const
 {
-    m_transformations.push_back( new Rotation<ParamT>( angle, r0, r1, r2 ) );
+    return glm::vec3( m_translationX.Evaluate( time ), m_translationY.Evaluate( time ), m_translationZ.Evaluate( time ) );
 }
 
 // *************************************
 //
-template<typename ParamT>
-void            CompositeTransform<ParamT>::AddRotation         ( ParamT angle, const Vec3Interpolator & rotAxis )
+glm::vec3       CompositeTransform::GetRotation         ( TimeType time ) const
 {
-    m_transformations.push_back( new Rotation<ParamT>( angle, rotAxis ) );    
+    return glm::vec3( m_eulerPitch.Evaluate( time ), m_eulerYaw.Evaluate( time ), m_eulerRoll.Evaluate( time ) );
 }
 
 // *************************************
 //
-template<typename ParamT>
-void            CompositeTransform<ParamT>::AddTranslationCFwd  ( ParamT x0, ParamT x1, ParamT x2 )
+glm::vec3       CompositeTransform::GetScale            ( TimeType time ) const
 {
-    m_transformations.push_back( SimpleTransform<ParamT>::CreateTranslation( x0, x1, x2, TransformKind::fwd_center ) );
+    return glm::vec3( m_scaleX.Evaluate( time ), m_scaleY.Evaluate( time ), m_scaleZ.Evaluate( time ) );
 }
 
 // *************************************
 //
-template<typename ParamT>
-void            CompositeTransform<ParamT>::AddTranslationCInv  ( ParamT x0, ParamT x1, ParamT x2 )
+glm::vec3       CompositeTransform::GetCenter           ( TimeType time ) const
 {
-    m_transformations.push_back( SimpleTransform<ParamT>::CreateTranslation( x0, x1, x2, TransformKind::inv_center ) );
+    return glm::vec3( m_centerX.Evaluate( time ), m_centerY.Evaluate( time ), m_centerZ.Evaluate( time ) );
 }
 
 // *************************************
 //
-template<typename ParamT>
-void CompositeTransform<ParamT>::AddTransform( SimpleTransform<ParamT> * trans )
+void            CompositeTransform::SetTranslation      ( const glm::vec3 & vec, TimeType time )
 {
-    m_transformations.push_back( trans );
+    m_translationX.AddKey( time, vec.x );
+    m_translationY.AddKey( time, vec.y );
+    m_translationZ.AddKey( time, vec.z );
 }
 
 // *************************************
 //
-template<typename ParamT>
-void CompositeTransform<ParamT>::InsertTransform     ( int i, SimpleTransform<ParamT> * trans )
+void            CompositeTransform::SetRotation         ( const glm::vec3 & vec, TimeType time )
 {
-    if( i < (int)m_transformations.size() )
+    m_eulerPitch.AddKey( time, vec.x );
+    m_eulerYaw.AddKey( time, vec.y );
+    m_eulerRoll.AddKey( time, vec.z );
+}
+
+// *************************************
+//
+void            CompositeTransform::SetScale            ( const glm::vec3 & vec, TimeType time )
+{
+    m_scaleX.AddKey( time, vec.x );
+    m_scaleY.AddKey( time, vec.y );
+    m_scaleZ.AddKey( time, vec.z );
+}
+
+// *************************************
+//
+void            CompositeTransform::SetCenter            ( const glm::vec3 & vec, TimeType time )
+{
+    m_centerX.AddKey( time, vec.x );
+    m_centerY.AddKey( time, vec.y );
+    m_centerZ.AddKey( time, vec.z );
+}
+
+// *************************************
+//
+void            CompositeTransform::RemoveTranslation   ( TimeType time )
+{
+    m_translationX.RemoveKey( time );
+    m_translationY.RemoveKey( time );
+    m_translationZ.RemoveKey( time );
+}
+
+// *************************************
+//
+void            CompositeTransform::RemoveRotation      ( TimeType time )
+{
+    m_eulerPitch.RemoveKey( time );
+    m_eulerYaw.RemoveKey( time );
+    m_eulerRoll.RemoveKey( time );
+}
+
+// *************************************
+//
+void            CompositeTransform::RemoveScale         ( TimeType time )
+{
+    m_scaleX.RemoveKey( time );
+    m_scaleY.RemoveKey( time );
+    m_scaleZ.RemoveKey( time );
+}
+
+// *************************************
+//
+void            CompositeTransform::RemoveCenter         ( TimeType time )
+{
+    m_centerX.RemoveKey( time );
+    m_centerY.RemoveKey( time );
+    m_centerZ.RemoveKey( time );
+}
+
+// *************************************
+//
+bool            CompositeTransform::MoveTranslation     ( TimeType time, TimeType newTime )
+{
+    bool result = true;
+
+    result &= m_translationX.MoveKey( time, newTime );
+    result &= m_translationY.MoveKey( time, newTime );
+    result &= m_translationZ.MoveKey( time, newTime );
+        
+    return result;
+}
+
+// *************************************
+//
+bool            CompositeTransform::MoveRotation        ( TimeType time, TimeType newTime )
+{
+    bool result = true;
+
+    result &= m_eulerPitch.MoveKey( time, newTime );
+    result &= m_eulerYaw.MoveKey( time, newTime );
+    result &= m_eulerRoll.MoveKey( time, newTime );
+
+    return result;
+}
+
+// *************************************
+//
+bool            CompositeTransform::MoveScale           ( TimeType time, TimeType newTime )
+{
+    bool result = true;
+
+    result &= m_scaleX.MoveKey( time, newTime );
+    result &= m_scaleY.MoveKey( time, newTime );
+    result &= m_scaleZ.MoveKey( time, newTime );
+        
+    return result;
+}
+
+// *************************************
+//
+bool            CompositeTransform::MoveCenter          ( TimeType time, TimeType newTime )
+{
+    bool result = true;
+
+    result &= m_centerX.MoveKey( time, newTime );
+    result &= m_centerY.MoveKey( time, newTime );
+    result &= m_centerZ.MoveKey( time, newTime );
+        
+    return result;
+}
+
+// *************************************
+//
+CompositeTransform::CompositeTransform      ()
+{
+    InitializeDefaultSRT();
+}
+
+// *************************************
+//
+CompositeTransform *    CompositeTransform::Create      ( const IDeserializer & deser )
+{
+    auto transform = new CompositeTransform();
+
+    if( deser.EnterChild( "transform" ) )
     {
-        auto it = m_transformations.begin();
-        m_transformations.insert( it + i - 1, trans );
-    }
-}
+        do
+        {
+            auto kindName = deser.GetAttribute( "kind" );
+            auto kind = SerializationHelper::String2T< TransformKind >( kindName );
 
-// *************************************
-//
-template<typename ParamT>
-CompositeTransform<ParamT>::CompositeTransform()
-{
-}
+            auto params = SerializationHelper::DeserializeArray< FloatInterpolator >( deser, "interpolators" );
+            if( params.size() == 3 )
+            {
+                if( kind == TransformKind::center )
+                {
+                    transform->m_centerX = *params[ 0 ];
+                    transform->m_centerY = *params[ 1 ];
+                    transform->m_centerZ = *params[ 2 ];
+                }
+                else if( kind == TransformKind::translation )
+                {
+                    transform->m_translationX = *params[ 0 ];
+                    transform->m_translationY = *params[ 1 ];
+                    transform->m_translationZ = *params[ 2 ];
+                }
+                else if( kind == TransformKind::rotation )
+                {
+                    auto iseuler = deser.GetAttribute( "iseuler" );
+                    if( iseuler == "true" )
+                    {
+                        transform->m_eulerPitch = *params[ 0 ];
+                        transform->m_eulerYaw = *params[ 1 ];
+                        transform->m_eulerRoll = *params[ 2 ];
+                    }
+                }
+                else if( kind == TransformKind::scale )
+                {
+                    transform->m_scaleX = *params[ 0 ];
+                    transform->m_scaleY = *params[ 1 ];
+                    transform->m_scaleZ = *params[ 2 ];
+                }
+            }
+            else
+            {
+                //LOG_MESSAGE( SeverityLevel::error ) << "CompositeTransform::Create failed, incorrect number of interpolators in " << kindName;
+            }
+        } while( deser.NextChild() );
 
-// *************************************
-//
-template<typename ParamT>
-CompositeTransform<ParamT>::CompositeTransform  ( const CompositeTransform & src )
-{
-    for ( auto t : m_transformations )
-    {
-        delete t;
-    }
-
-    m_transformations.clear();
-
-    for ( auto st : src.m_transformations )
-    {
-        m_transformations.push_back( st->Clone() );
-    }
-}
-
-// *************************************
-//
-template<typename ParamT>
-SizeType    CompositeTransform<ParamT>::Size() const
-{
-    return m_transformations.size();
-}
-
-// *************************************
-//
-template<typename ParamT>
-SimpleTransform<ParamT> * CompositeTransform<ParamT>::operator[]( unsigned int i )
-{
-    return m_transformations[ i ];
-}
-
-template<typename ParamT>
-const SimpleTransform<ParamT> * CompositeTransform<ParamT>::operator[]( unsigned int i ) const
-{
-    return m_transformations[ i ];
-}
-
-// *************************************
-//
-template<typename ParamT>
-glm::mat4x4 CompositeTransform<ParamT>::Evaluate( typename ParamT::TimeT t ) const
-{
-    glm::mat4x4 ret(1.0f);
-
-    for( unsigned int i = 0; i < m_transformations.size(); ++i )
-    {
-        ret *= m_transformations[ i ]->Evaluate( t );
+        deser.ExitChild();
     }
 
-    return ret; 
+    return transform;
 }
 
 // *************************************
 //
-template<typename ParamT>
-glm::mat4x4 SimpleTransform<ParamT>::Evaluate( typename ParamT::TimeT t ) const
+void                                CompositeTransform::Serialize               ( ISerializer & ser ) const
 {
-    switch( kind )
-    {
-    case TransformKind::translation:
-    case TransformKind::fwd_center:
-    case TransformKind::inv_center:
-        return glm::translate( glm::mat4( 1.0f ), glm::vec3( p0.Evaluate( t ), p1.Evaluate( t ), p2.Evaluate( t ) ) );
-    case TransformKind::scale:
-        return glm::scale( glm::mat4( 1.0f ), glm::vec3( p0.Evaluate( t ), p1.Evaluate( t ), p2.Evaluate( t ) ) );
-    case TransformKind::rotation:
-        assert( false );
-        return glm::mat4( 1.0f);
-    default:
-        assert( false );
-        return glm::mat4( 1.0f );
-    }
+    ser.EnterArray( "composite_transform" );
+
+    //center
+    ser.EnterChild( "transform" );
+    SerializationHelper::SerializeAttribute( ser, TransformKind::center, "kind" );
+    ser.EnterArray( "interpolators" );
+
+    m_centerX.Serialize( ser );
+    m_centerY.Serialize( ser );
+    m_centerZ.Serialize( ser );
+
+    ser.ExitChild(); // interpolators
+    ser.ExitChild(); // transform
+    
+    //translation
+    ser.EnterChild( "transform" );
+    SerializationHelper::SerializeAttribute( ser, TransformKind::translation, "kind" );
+    ser.EnterArray( "interpolators" );
+
+    m_translationX.Serialize( ser );
+    m_translationY.Serialize( ser );
+    m_translationZ.Serialize( ser );
+
+    ser.ExitChild(); // interpolators
+    ser.ExitChild(); // transform
+
+    //rotation
+    ser.EnterChild( "transform" );
+    SerializationHelper::SerializeAttribute( ser, TransformKind::rotation, "kind" );
+    ser.SetAttribute( "iseuler", "true" ); //?
+    ser.EnterArray( "interpolators" );
+
+    m_eulerPitch.Serialize( ser );
+    m_eulerYaw.Serialize( ser );
+    m_eulerRoll.Serialize( ser );
+
+    ser.ExitChild(); // interpolators
+    ser.ExitChild(); // transform
+
+    //scale
+    ser.EnterChild( "transform" );
+    SerializationHelper::SerializeAttribute( ser, TransformKind::scale, "kind" );
+    ser.EnterArray( "interpolators" );
+
+    m_scaleX.Serialize( ser );
+    m_scaleY.Serialize( ser );
+    m_scaleZ.Serialize( ser );
+
+    ser.ExitChild(); // interpolators
+    ser.ExitChild(); // transform
+
+    ser.ExitChild(); // composite_transform
 }
 
 // *************************************
 //
-template<typename ParamT>
-SimpleTransform<ParamT> * SimpleTransform<ParamT>::Clone() const
+glm::mat4x4         CompositeTransform::Evaluate        ( TimeType t ) const
 {
-    //return new SimpleTransform( *this );
-    return new SimpleTransform( kind, p0, p1, p2 );
+    auto rotQuat = glm::quat( glm::radians( GetRotation( t ) ) );
+    return m_sqt.Evaluate( GetTranslation( t ), rotQuat, GetScale( t ), GetCenter( t ) );
 }
 
 } //bv
-
-//explicit instantiation - this way class' implementation can be stored in cpp file (like here)
-template class bv::CompositeTransform<bv::FloatInterpolator>;

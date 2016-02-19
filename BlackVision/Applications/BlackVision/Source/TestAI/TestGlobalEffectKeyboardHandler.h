@@ -4,7 +4,7 @@
 #include "TestAI/TestKeyboardHandler.h"
 
 #include "Engine/Models/NodeEffects/ModelNodeEffect.h"
-#include "Engine/Models/BVSceneEditor.h"
+#include "Engine/Models/BVProjectEditor.h"
 
 
 namespace bv {
@@ -12,10 +12,12 @@ namespace bv {
 class TestGlobalEfectKeyboardHandler : public TestKeyboardHandler
 {
 private:
+	
+    BVProjectEditor *		 m_editor;
 
-	BVSceneEditor *		m_editor;
+    model::ITimeEvaluatorPtr m_timeEval;
 
-    NodeEffectType    m_curSelectedNode;
+    NodeEffectType           m_curSelectedNode;
     
     unsigned int            m_curWireframeNodeIdx;
     unsigned int            m_curMixChannelsPreset;

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PdrShader.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
@@ -7,13 +9,13 @@
 #include "Engine/Graphics/Shaders/GeometryShader.h"
 
 #include "Engine/Graphics/Shaders/TextureSampler.h"
-#include "Engine/Graphics/Resources/Texture.h"
+#include "Engine/Graphics/Resources/Textures/Texture.h"
 
 #include "Engine/Graphics/Renderers/OGLRenderer/PdrConstants.h"
 
 //FIXME: implement those textures
 //#include "Engine/Graphics/Resources/Texture1D.h"
-#include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 //#include "Engine/Graphics/Resources/Texture3D.h"
 //#include "Engine/Graphics/Resources/TextureCubic.h"
 
@@ -168,23 +170,23 @@ int     PdrShader::EnableTextureSamplers   ( Renderer * renderer, Shader * shade
 {
     if( shader != nullptr )
     {
-        auto samplers = shader->Samplers();
+        auto & samplers = shader->Samplers();
         auto params = shader->GetParameters();
 
         assert( samplers.size() == params->NumTextures() );
-
         for( unsigned int i = 0; i < samplers.size(); ++i )
         {
-            auto bc = params->GetParam( "borderColor" );
-            if( bc )
-                samplers[ i ]->SetBorderColor( bc->GenericGetValue<glm::vec4>() );
-			auto wrapX = params->GetParam( "wrapModeX" );
-			if( wrapX )
-				samplers[ i ]->SetWrappingMode( static_cast<bv::SamplerWrappingMode>( static_cast< int >( wrapX->GenericGetValue<float>() ) ), SamplerWrapDirection::SWD_S );
-			auto wrapY = params->GetParam( "wrapModeY" );
-			if( wrapY )
-				samplers[ i ]->SetWrappingMode(  static_cast<bv::SamplerWrappingMode>( static_cast< int >( wrapY->GenericGetValue<float>() ) ), SamplerWrapDirection::SWD_T );
-			
+			auto samplerParams = params->GetSamplerParameters( i );
+
+			if( samplerParams )
+			{
+				samplers[ i ]->SetWrappingMode( samplerParams->GetWrappingModeX(), SamplerWrapDirection::SWD_S );
+				samplers[ i ]->SetWrappingMode( samplerParams->GetWrappingModeY(), SamplerWrapDirection::SWD_T );
+				samplers[ i ]->SetWrappingMode( samplerParams->GetWrappingModeZ(), SamplerWrapDirection::SWD_R );
+				samplers[ i ]->SetFilteringMode( samplerParams->GetFilteringMode() );
+				samplers[ i ]->SetBorderColor( samplerParams->GetBorderColor() );
+			}
+
             EnableTextureSampler( renderer, samplers[ i ], params->GetTexture( i ).get(), i + firstAvailableSamplerIndex );
 
         }

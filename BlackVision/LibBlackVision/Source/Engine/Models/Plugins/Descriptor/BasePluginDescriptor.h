@@ -31,7 +31,6 @@ public:
     virtual const std::string &             DefaultPluginName   () const override;
     virtual const std::string &             GetPluginTypeAbbrv  () const override;
 
-    virtual bool                            CanBeAttachedTo     ( IPluginConstPtr plugin )  const override;
     virtual IPluginParamValModelPtr         CreateModel         ( ITimeEvaluatorPtr timeEvaluator ) const override;
 
     virtual DefaultPluginParamValModelPtr   CreateDefaultModel  ( ITimeEvaluatorPtr timeEvaluator ) const = 0;
@@ -54,11 +53,28 @@ protected:
         ITimeEvaluatorPtr                       m_lastTimeEvaluator;
 
     public:
-        ModelHelper(  ITimeEvaluatorPtr te ) : m_lastTimeEvaluator( te ) { m_model = std::make_shared< DefaultPluginParamValModel >(); }
+        ModelHelper(  ITimeEvaluatorPtr te ) : m_lastTimeEvaluator( te ) { m_model = std::make_shared< DefaultPluginParamValModel >( te ); }
         DefaultPluginParamValModelPtr           GetModel() { return m_model; }
 
         void                                    CreateVacModel      ();
+        void                                    CreateVSModel       ();
+        void                                    CreatePSModel       ();
+        void                                    CreatePluginModel   ();
 
+
+        inline void                             AddTransformParam   ( std::string name, bool addValue = true ) const
+        {
+            auto param = std::make_shared< ParamTransform >( name, CompositeTransform(), m_lastTimeEvaluator );
+            if( addValue )
+            {
+                auto evaluator = ParamValEvaluatorFactory::CreateSimpleEvaluator< CompositeTransform, glm::mat4, ModelParamType::MPT_TRANSFORM, ParamType::PT_MAT4, ParamTransform >( param );
+                m_lastParamValModel->RegisterAll( evaluator );
+            }
+            else
+            {
+                m_lastParamValModel->AddParameter( param );
+            }             
+        }
 
         template< typename InterpolatorType, typename ValueType, ModelParamType MPT, ParamType PT, typename ParamImpl >
         void                                    AddParam            ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const ValueType& defaultValue, bool addValue, bool isState ) const
@@ -103,6 +119,13 @@ protected:
         inline void                             AddSimpleParam      ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string, const ValueType&, bool = false, bool = false ) const
         {
             assert( false );
+        }
+
+        template<>
+        inline void                             AddSimpleParam< bool > ( const DefaultParamValModelPtr& model, ITimeEvaluatorPtr timeEvaluator, std::string name, const bool& defaultValue, bool addValue, bool isState ) const
+        {
+            AddParam< BoolInterpolator, bool, ModelParamType::MPT_BOOL, ParamType::PT_BOOL, ParamBool >
+                ( model, timeEvaluator, name, defaultValue, addValue, isState );
         }
 
         template<>

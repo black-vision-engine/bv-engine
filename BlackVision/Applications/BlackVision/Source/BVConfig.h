@@ -3,7 +3,9 @@
 #include <string>
 
 #include "Mathematics/glm_inc.h"
+#include "ConfigManager.h"  
 
+#include "Application/WindowedApplication.h" // enum WindowMode
 
 namespace bv
 {
@@ -15,8 +17,13 @@ private:
     int             m_defaultWindowWidth;
     int             m_defaultWindowHeight;
 
+
     int             m_defaultWidth;
     int             m_defaultHeight;
+
+	//pablito
+	WindowMode      m_windowMode;
+	RendererInput	m_RendererInput;
 
     unsigned int    m_eventLoopUpdateMillis;
     unsigned int    m_fps;
@@ -26,6 +33,7 @@ private:
     bool            m_readbackOn;
     bool            m_displayVideoCardOutput;
     bool            m_isCameraPerspective;
+	bool			m_renderToSharedMemory;
 
     float           m_defaultFOV;
     float           m_defaultNearClippingPlane;
@@ -61,10 +69,13 @@ public:
     inline int                  DefaultWidth            () const;
     inline int                  DefaultHeight           () const;
 
-    inline bool                 FullScreenMode          () const;
+    inline WindowMode           GetWindowMode	        () const;
+	inline RendererInput        GetRendererInput	        () const;
+	inline bool                 FullScreenMode          () const;
     inline bool                 ReadbackFlag            () const;
     inline bool                 DisplayVideoCardOutput  () const;
     inline bool                 IsCameraPerspactive     () const;
+	inline bool                 RenderToSharedMemory    () const;
 
     inline unsigned int         EventLoopUpdateMillis   () const;
     inline unsigned int         FPS                     () const;

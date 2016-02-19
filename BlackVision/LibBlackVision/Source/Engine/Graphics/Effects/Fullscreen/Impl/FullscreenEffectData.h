@@ -5,7 +5,7 @@
 
 #include "Engine/Interfaces/IValue.h"
 
-#include "Engine/Graphics/Resources/Texture2D.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 
 namespace bv {

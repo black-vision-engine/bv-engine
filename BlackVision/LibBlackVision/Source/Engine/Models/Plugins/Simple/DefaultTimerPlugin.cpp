@@ -1,19 +1,25 @@
+#include "stdafx.h"
+
 #include "DefaultTimerPlugin.h"
 
 #include "Assets/Font/TextHelper.h"
-#include "Engine/Models/Plugins/Channels/Geometry/ConnectedComponent.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
-#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
-#include "Engine/Models/Plugins/ParamValModel/DefaultParamValModel.h"
+
+#include "Engine/Models/Plugins/Channels/Geometry/HelperVertexAttributesChannel.h"
+#include "Engine/Models/Plugins/Channels/HelperPixelShaderChannel.h"
+#include "Engine/Models/Plugins/Channels/PixelShader/DefaultFontDescriptor.h"
+
 #include "Assets/Font/FontLoader.h"
 #include "Assets/Font/Text.h"
 #include "Assets/Font/Glyph.h"
 #include "Assets/Font/FontAssetDescriptor.h"
+#include "Assets/DefaultAssets.h"
+
+#include "Application/ApplicationContext.h"
 
 #include <algorithm>
 
-#include <Windows.h>
+#include "win_sock.h"
 
 namespace bv { namespace model {
 
@@ -38,14 +44,13 @@ IPluginPtr              DefaultTimerPluginDesc::CreatePlugin             ( const
 DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITimeEvaluatorPtr timeEvaluator ) const
 {
     //Create all models
-    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >();
+    DefaultPluginParamValModelPtr model  = std::make_shared< DefaultPluginParamValModel >( timeEvaluator );
     DefaultParamValModelPtr psModel      = std::make_shared< DefaultParamValModel >();
     DefaultParamValModelPtr vsModel      = std::make_shared< DefaultParamValModel >();
     DefaultParamValModelPtr plModel      = std::make_shared< DefaultParamValModel >();
 
 
     //Create all parameters and evaluators
-    SimpleVec4EvaluatorPtr      borderColorEvaluator    = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "borderColor", timeEvaluator );
     SimpleFloatEvaluatorPtr     alphaEvaluator          = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
     SimpleFloatEvaluatorPtr     fontSizeEvaluator       = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "fontSize", timeEvaluator );
 
@@ -58,7 +63,6 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
     SimpleFloatEvaluatorPtr     precisionEvaluator      = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "precision", timeEvaluator );
 
     //Register all parameters and evaloators in models
-    psModel->RegisterAll( borderColorEvaluator );
     psModel->RegisterAll( alphaEvaluator );
 	plModel->RegisterAll( blurSizeEvaluator );
     plModel->RegisterAll( outlineSizeEvaluator );
@@ -77,30 +81,11 @@ DefaultPluginParamValModelPtr   DefaultTimerPluginDesc::CreateDefaultModel( ITim
     blurSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
 	outlineSizeEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     spacingEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
-    borderColorEvaluator->Parameter()->SetVal( glm::vec4( 0.f, 0.f, 0.f, 0.f ), TimeType( 0.f ) );
     fontSizeEvaluator->Parameter()->SetVal( 8.f, TimeType( 0.f ) );
     alignmentEvaluator->Parameter()->SetVal( 0.f, TimeType( 0.0 ) );
     precisionEvaluator->Parameter()->SetVal( 1.f, TimeType( 0.0 ) );
 
     return model;
-}
-
-// *******************************
-//
-bool                   DefaultTimerPluginDesc::CanBeAttachedTo   ( IPluginConstPtr plugin ) const
-{
-    if ( plugin == nullptr )
-    {
-        return true;
-    }
-
-    auto  vac = plugin->GetVertexAttributesChannel();
-    if ( vac != nullptr )
-    {
-        return false;
-    }
-
-    return true;
 }
 
 // *******************************
@@ -220,10 +205,23 @@ TimeValue::TimeValue( double time, int accuracy )
 }
 
 // *************************************
+// 
+void		DefaultTimerPlugin::SetPrevPlugin		( IPluginPtr prev )
+{
+    BasePlugin::SetPrevPlugin( prev );
+
+	HelperPixelShaderChannel::CloneRenderContext( m_psc, prev );
+	auto ctx = m_psc->GetRendererContext();
+    ctx->cullCtx->enabled = false;
+    ctx->alphaCtx->blendEnabled = true;
+    ctx->alphaCtx->srcRGBBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
+    ctx->alphaCtx->dstRGBBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
+}
+
+// *************************************
 //
 DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::string & uid, IPluginPtr prev, DefaultPluginParamValModelPtr model )
-    : BasePlugin< IPlugin >( name, uid, prev, std::static_pointer_cast< IPluginParamValModel >( model ) )
-    , m_paramValModel( model )
+    : BasePlugin< IPlugin >( name, uid, prev, model )
     , m_textAtlas()
     , m_timePatern( )
     , m_globalStartTime( 0 )
@@ -233,51 +231,23 @@ DefaultTimerPlugin::DefaultTimerPlugin  ( const std::string & name, const std::s
     , m_secSeparator(L'.')
     , m_widestGlyph( L'0' ) 
     , m_started(false)
+    , m_fontSize( 0 )
+    , m_blurSize( 0 )
+    , m_outlineSize( 0 )
 {
-    auto colorParam = prev->GetParameter( "color" );
-
-    if ( colorParam == nullptr )
-    {
-        auto bcParam = this->GetParameter( "borderColor" );
-        SimpleVec4EvaluatorPtr      colorEvaluator = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", bcParam->GetTimeEvaluator() );
-        std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( colorEvaluator );
-        colorEvaluator->Parameter()->SetVal( glm::vec4( 1.f, 1.f, 1.f, 1.f ), TimeType( 0.f ) );
-    }
-    else
-    {
-        auto evaluators = prev->GetPluginParamValModel()->GetPixelShaderChannelModel()->GetEvaluators();
-        for( unsigned int i = 0; i < evaluators.size(); ++i )
-        {
-            auto colorParam = evaluators[ i ]->GetParameter( "color" );
-            if( colorParam != nullptr )
-            {
-                //FIXME: upewnic sie, ze to nie hack (wszystko sie raczej zwalania, jesli sa ptry, ale jednak)
-                std::static_pointer_cast< DefaultParamValModel >( m_paramValModel->GetPixelShaderChannelModel() )->RegisterAll( evaluators[ i ] );
-                break;
-            }
-        }
-        
-    }
-
-
     m_spacingParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
 
-    m_psc = DefaultPixelShaderChannelPtr( DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel(), nullptr ) );
-    m_vsc = DefaultVertexShaderChannelPtr( DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() ) );
+    m_psc = DefaultPixelShaderChannel::Create( model->GetPixelShaderChannelModel() );
+    m_vsc = DefaultVertexShaderChannel::Create( model->GetVertexShaderChannelModel() );
+	m_vaChannel = TextHelper::CreateEmptyVACForText();
+	
+	SetPrevPlugin( prev );
 
-    auto ctx = m_psc->GetRendererContext();
-    ctx->cullCtx->enabled = false;
-    ctx->alphaCtx->blendEnabled = true;
-
-    ctx->alphaCtx->srcBlendMode = model::AlphaContext::SrcBlendMode::SBM_ONE;
-    ctx->alphaCtx->dstBlendMode = model::AlphaContext::DstBlendMode::DBM_ONE_MINUS_SRC_ALPHA;
-
-    m_fontSizeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "fontSize" ) );
-    m_blurSizeParam     = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "blurSize" ) );
-	m_outlineSizeParam  = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "outlineSize" ) );
     m_spacingParam      = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "spacing" ) );
     m_alignmentParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "alignment" ) );
     m_precisionParam    = QueryTypedParam< ParamFloatPtr >( GetPluginParamValModel()->GetPluginModel()->GetParameter( "precision" ) );
+    
+    LoadResource( DefaultAssets::Instance().GetDefaultDesc< FontAssetDesc >() );
 }
 
 // *************************************
@@ -300,13 +270,6 @@ inline EnumClassType EvaluateAsInt( ParamFloatPtr param )
 
 } //anonymous
 
-
-// *************************************
-//
-void DefaultTimerPlugin::InitAttributesChannel( IPluginPtr prev )
-{
-}
-
 // *************************************
 // 
 bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr )
@@ -316,9 +279,6 @@ bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr
     // FIXME: dodac tutaj API pozwalajace tez ustawiac parametry dodawanej tekstury (normalny load z dodatkowymi parametrami)
     if ( txAssetDescr != nullptr )
     {
-        auto txData = m_psc->GetTexturesDataImpl();
-        assert( txData->GetTextures().size() <= 1 );
-
 		auto fontResource = LoadTypedAsset<FontAsset>( txAssetDescr );
 
         m_textAtlas = TextHelper::GetAtlas( fontResource );
@@ -327,31 +287,33 @@ bool            DefaultTimerPlugin::LoadResource  ( AssetDescConstPtr assetDescr
 
 		auto textureResource = m_textAtlas->GetAsset();
 
-        //FIXME: use some better API to handle resources in general and textures in this specific case
-        auto txDesc = new DefaultTextureDescriptor(     textureResource
-                                                    ,   DefaultTimerPluginDesc::TextureName()
-                                                    ,   TextureWrappingMode::TWM_CLAMP_BORDER
-                                                    ,   TextureWrappingMode::TWM_CLAMP_BORDER
-                                                    ,   TextureFilteringMode::TFM_LINEAR
-                                                    ,   glm::vec4( 0.f, 0.f, 0.f, 0.f )
-                                                    ,   DataBuffer::Semantic::S_TEXTURE_STATIC );
+        m_fontSize = txAssetDescr->GetFontSize();
+        m_blurSize = txAssetDescr->GetBlurSize();
+        m_outlineSize = txAssetDescr->GetOutlineSize();
 
+        //FIXME: use some better API to handle resources in general and textures in this specific case
+		auto txDesc = std::make_shared< DefaultTextureDescriptor >( textureResource, DefaultTimerPluginDesc::TextureName(), DataBuffer::Semantic::S_TEXTURE_STATIC );
         if( txDesc != nullptr )
         {
-            if( txData->GetTextures().size() == 0 )
-            {
-                txData->AddTexture( txDesc );
-            }
-            else
-            {
-                txData->SetTexture( 0, txDesc );
-            }
+			txDesc->SetSamplerState( SamplerStateModel::Create( m_pluginParamValModel->GetTimeEvaluator() ) );
+			
+			auto txData = m_psc->GetTexturesDataImpl();
+			txData->SetTexture( 0, txDesc );
 
-            m_vaChannel = VertexAttributesChannelPtr( TextHelper::CreateEmptyVACForText() );
+			//FIXME: on runtime reload it will add another descriptor instead of replacing the old one
+			txData->SetFont( 0, std::make_shared< DefaultFontDescriptor >( txDesc, txDesc->GetName() ) );
+
+			HelperPixelShaderChannel::SetTexturesDataUpdate( m_psc );
+
+            m_timePatern = L""; // force reseting time patern. New font's loading.
 
             SetTimePatern( GenerateTimePatern( 0.f ) );
 
             SetTime(0.);
+
+			auto fonts = m_psc->GetTexturesDataImpl()->GetFonts();
+			assert( fonts.size() == 1 );
+            SetAsset( 0, LAsset( txDesc->GetName(), assetDescr, fonts[ 0 ]->GetStateModel() ) );
 
             return true;
         }
@@ -369,7 +331,7 @@ IVertexAttributesChannelConstPtr    DefaultTimerPlugin::GetVertexAttributesChann
 
 // *************************************
 // 
-IPixelShaderChannelConstPtr         DefaultTimerPlugin::GetPixelShaderChannel       () const
+IPixelShaderChannelPtr              DefaultTimerPlugin::GetPixelShaderChannel       () const
 {
     return m_psc;
 }
@@ -383,18 +345,23 @@ IVertexShaderChannelConstPtr        DefaultTimerPlugin::GetVertexShaderChannel  
 
 // *************************************
 // 
-void                                DefaultTimerPlugin::Update                      ( TimeType )
+void                                DefaultTimerPlugin::Update                      ( TimeType t )
 {
     //FIXME: UPDATER TO FIX
     if( m_started )
     {
         m_currentLocalTime = m_localStartTime + (GetTickCount() -  m_globalStartTime);
+        /*m_currentLocalTime = m_localStartTime + ((unsigned long)( t * 1000.0f ) -  m_globalStartTime);*/
     }
 
     SetTime( m_currentLocalTime / 1000.f );
 
-    m_paramValModel->Update();
+	BasePlugin::Update( t );
 
+	//assumption that text plugin provides vertices, so no need for backward topology propagation
+	HelperVertexAttributesChannel::PropagateAttributesUpdate( m_vaChannel, m_prevPlugin );
+	HelperPixelShaderChannel::PropagateUpdate( m_psc, m_prevPlugin );
+	
     m_vsc->PostUpdate();
     m_psc->PostUpdate();    
 }
@@ -476,13 +443,13 @@ void                                DefaultTimerPlugin::SetTimePatern  ( const s
 
     auto timerInit = toTimerInit( m_timePatern, m_widestGlyph );
 
-    m_vaChannel->ClearConnectedComponent();
+    m_vaChannel->ClearAll();
 
     auto alignType =  EvaluateAsInt< TextAlignmentType >( m_alignmentParam );
 
-    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, unsigned int( m_blurSizeParam->Evaluate() ), m_spacingParam->Evaluate(), alignType, false );
- 
-    m_vaChannel->SetNeedsTopologyUpdate( true );
+	auto viewWidth  = ApplicationContext::Instance().GetWidth();
+    auto viewHeight = ApplicationContext::Instance().GetHeight();
+    TextHelper::BuildVACForText( m_vaChannel.get(), m_textAtlas, timerInit, m_blurSize, m_spacingParam->Evaluate(), alignType, false, viewWidth, viewHeight );
 }
 
 ////////////////////////////
@@ -577,7 +544,7 @@ void                                DefaultTimerPlugin::Refresh         ( bool i
     }
 
     shift = m_timePaternInfo.fosPHStart;
-    int fosPHSize = m_timePaternInfo.fracOfSecondsPlaceholderSize;
+    int fosPHSize = 1;//m_timePaternInfo.fracOfSecondsPlaceholderSize;
 
     int prec =  EvaluateAsInt< int >( m_precisionParam );
 
@@ -636,9 +603,8 @@ void                                DefaultTimerPlugin::SetValue       ( unsigne
         {
             if( comps[ connComp ]->GetNumVertices() == 4 )
             {
-                auto channels = comps[ connComp ]->GetAttributeChannels();
-
-                auto uvChannel = std::static_pointer_cast< Float2AttributeChannel >( AttributeChannel::GetUVChannel( channels, 1 ) );
+				auto prevConnComp = std::static_pointer_cast< const model::ConnectedComponent >( comps[ connComp ] );
+                auto uvChannel = std::static_pointer_cast< Float2AttributeChannel >( prevConnComp->GetAttrChannel( AttributeSemantic::AS_TEXCOORD ) );
 
                 auto& verts = uvChannel->GetVertices();
 
@@ -724,8 +690,11 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
         ret.append( L"MM" );
         ret.push_back( m_defaultSeparator );
         ret.append( L"SS" );
-        ret.push_back( m_secSeparator );
-        ret.append( L"ss" );
+		int prec =  EvaluateAsInt< int >( m_precisionParam );
+		if(prec>0){
+				ret.push_back( m_secSeparator );
+				ret.append( L"s" );
+			}
     }
     else
     {
@@ -739,8 +708,13 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
 
             ret.push_back( m_defaultSeparator );
             ret.append( L"SS" );
-            ret.push_back( m_secSeparator );
-            ret.append( L"ss" );
+			
+            auto prec =  EvaluateAsInt< int >( m_precisionParam );
+            if( prec > 0 )
+            {
+				ret.push_back( m_secSeparator );
+				ret.append( L"s" );
+			}
         }
         else
         {
@@ -751,8 +725,12 @@ std::wstring                        DefaultTimerPlugin::GenerateTimePatern( doub
             else
                 ret.push_back( L'S' );
 
-            ret.push_back( m_secSeparator );
-            ret.append( L"ss" );
+			auto prec =  EvaluateAsInt< int >( m_precisionParam );
+            if( prec > 0 )
+            {
+				ret.push_back( m_secSeparator );
+				ret.append( L"s" );
+			}
         }
     }
 
@@ -771,10 +749,7 @@ void                                DefaultTimerPlugin::SetTime        ( TimeTyp
         SetTimePatern( GenerateTimePatern( time ) );
         m_currentTimeValue = newTime;
         Refresh( !m_started );
-        if( ! m_vaChannel->NeedsTopologyUpdate() )
-        {
-            m_vaChannel->SetNeedsAttributesUpdate( true );
-        }
+		HelperVertexAttributesChannel::SetTopologyUpdate( m_vaChannel );
     }
 }
 

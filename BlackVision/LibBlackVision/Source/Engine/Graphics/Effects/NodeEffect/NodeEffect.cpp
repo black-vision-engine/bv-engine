@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "NodeEffect.h"
 
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffectLogic.h"

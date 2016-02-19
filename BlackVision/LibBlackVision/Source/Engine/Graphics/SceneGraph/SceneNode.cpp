@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "SceneNode.h"
 
 #include <cassert>
@@ -43,6 +45,20 @@ SizeType                SceneNode::NumChildNodes        () const
 void                    SceneNode::AddChildNode         ( SceneNode * child )
 {
     m_sceneNodes.push_back( child );
+}
+
+// ********************************
+//
+void                    SceneNode::AddChildNode         ( SceneNode * child, UInt32 idx )
+{
+	if( idx < m_sceneNodes.size() )
+	{
+	    m_sceneNodes.insert( m_sceneNodes.begin() + idx, child );
+	}
+	else
+	{
+		m_sceneNodes.push_back( child );
+	}
 }
 
 // ********************************
@@ -142,15 +158,15 @@ void            SceneNode::DeleteTransformable  ()
 
 // ********************************
 //
-void            SceneNode::Update               ( const std::vector< Transform > & parentTransforms )
+void            SceneNode::Update               ( const Transform & parentTransform )
 {
-    m_transformable->UpdateTransforms( parentTransforms );
+    m_transformable->UpdateTransform( parentTransform );
 
-    const std::vector< Transform > & worldTransforms = m_transformable->WorldTransforms();
+    auto worldTransform = m_transformable->WorldTransform();
 
     for ( auto node : m_sceneNodes )
     {
-        node->Update( worldTransforms );
+        node->Update( worldTransform );
     }
 }
 

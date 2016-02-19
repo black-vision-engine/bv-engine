@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "InitProcess.h"
 
 namespace bv

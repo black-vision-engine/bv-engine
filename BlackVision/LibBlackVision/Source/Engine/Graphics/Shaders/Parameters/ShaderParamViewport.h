@@ -22,9 +22,11 @@ public:
                             ShaderParamViewport     ( const std::string & name );
                             ~ShaderParamViewport    ();
 
-    virtual const void *    GetValuePtr             () const override;
-
     virtual void            Update                  ( RenderableEntity * renderable, Camera * camera ) override;
+
+private:
+    
+	virtual const void *    GetValuePtr             () const override;
 
 };
 

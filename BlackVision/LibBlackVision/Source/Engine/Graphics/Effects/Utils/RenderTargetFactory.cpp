@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "RenderTargetFactory.h"
 
 #include <cassert>

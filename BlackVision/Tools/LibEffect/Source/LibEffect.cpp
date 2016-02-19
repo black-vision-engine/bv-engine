@@ -6,7 +6,7 @@
 
 #include "Effects/BlurEffect.h"
 
-#include "Engine/Graphics/Resources/Texture2DImpl.h"
+#include "Engine/Graphics/Resources/Textures/Texture2D.h"
 
 #include "Engine/Graphics/SceneGraph/Camera.h"
 
@@ -43,17 +43,15 @@ RenderableEffectPtr GetBlurEffect( UInt32 blurLength, Float32 pixelWidth, Float3
 // Bluring image with GPU
 MemoryChunkConstPtr		GLBlurImage( const MemoryChunkConstPtr & in, UInt32 width, UInt32 height, UInt32 bpp, UInt32 blurLength )
 {
+
     { bpp; }
 
     assert( false );
 
     assert( in->Size() == width * height * bpp / 8 );
-	auto tex = std::make_shared< Texture2DImpl >( TextureFormat::F_A8R8G8B8, width, height );
+	auto tex = std::make_shared< Texture2D >( TextureFormat::F_A8R8G8B8, width, height, DataBuffer::Semantic::S_TEXTURE_STATIC, 1 );
 
-	std::vector< MemoryChunkConstPtr > d;
-	d.push_back( in );
-
-	tex->SetRawData( d, TextureFormat::F_A8R8G8B8, width, height );
+	tex->SetData( in );
 
 	auto effect = GetBlurEffect( blurLength, 1.f / width, 1.f / height, tex, TextureFilteringMode::TFM_POINT, TextureWrappingMode::TWM_CLAMP_EDGE, TextureWrappingMode::TWM_CLAMP_EDGE, glm::vec4( 0.f, 0.f, 0.f, 0.f ) );
 

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "ShaderParamMV.h"
 
 
@@ -33,8 +35,7 @@ void            ShaderParamMV::Update       ( RenderableEntity * renderable, Cam
     {
         assert( renderable != nullptr );
 
-        //FIXME: add proper loop here
-        m_mv = renderable->WorldTransforms()[ 0 ].Matrix(); //FIXME: instancing to be added here
+        m_mv = renderable->WorldTransform().Matrix();
     }
 }
 

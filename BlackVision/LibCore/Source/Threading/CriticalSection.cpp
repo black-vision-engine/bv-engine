@@ -7,29 +7,27 @@ namespace bv
 // *************************************
 //
 CriticalSection::CriticalSection()
-{ 
-    InitializeCriticalSection( &m_criticalSection ); 
-}
+    : m_mtx()
+    , m_criticalSection( m_mtx, std::defer_lock )
+{}
  
 // *************************************
 //
 CriticalSection::~CriticalSection()
-{
-    DeleteCriticalSection( &m_criticalSection ); 
-}
+{}
 
 // *************************************
 //
 void CriticalSection::Lock()
 { 
-    EnterCriticalSection( &m_criticalSection ); 
+    m_criticalSection.lock();
 }
 
 // *************************************
 //
 void CriticalSection::Unlock()
 { 
-    LeaveCriticalSection( &m_criticalSection ); 
+    m_criticalSection.unlock();
 }
 
 } //bv

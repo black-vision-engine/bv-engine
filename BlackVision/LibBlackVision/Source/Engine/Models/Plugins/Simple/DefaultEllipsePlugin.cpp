@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultEllipsePlugin.h"
 
 #include "Mathematics/Defines.h"
@@ -42,6 +44,8 @@ DefaultPluginParamValModelPtr   DefaultEllipsePluginDesc::CreateDefaultModel  ( 
     h.AddSimpleParam( DefaultEllipsePlugin::PN_OPEN_ANGLE, 0.f, true, true );
 	h.AddParam< IntInterpolator, DefaultEllipsePlugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
         ( DefaultEllipsePlugin::PN_OPEN_ANGLE_MODE, DefaultEllipsePlugin::OpenAngleMode::CW, true, true );
+    
+    h.CreatePSModel();
 
     return h.GetModel();
 }

@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-namespace bv { namespace widgets { 
+namespace bv { namespace nodelogic { 
 
 // *******************************
 //
@@ -28,17 +28,17 @@ void CrawlerNodesStates::Acivate		( bv::model::BasicNode * n )
 		}
 }
 
-//// *******************************
-////
-//void CrawlerNodesStates::Deacivate		( bv::model::BasicNode * n )
-//{
-//	for( SizeType i = 0; i < m_actives.size(); ++i )
-//		if( m_actives[ i ] == n )
-//		{
-//			m_nonActives.push_back( n );
-//			m_actives.erase( m_actives.begin() + i );
-//		}
-//}
+// *******************************
+//
+void CrawlerNodesStates::Deacivate		( bv::model::BasicNode * n )
+{
+	for( SizeType i = 0; i < m_actives.size(); ++i )
+		if( m_actives[ i ] == n )
+		{
+			m_nonActives.push_back( n );
+			m_actives.erase( m_actives.begin() + i );
+		}
+}
 
 // *******************************
 //
@@ -120,6 +120,24 @@ bool CrawlerNodesStates::IsNonActive	( bv::model::BasicNode * n ) const
 	return false;
 }
 
+// ***********************
+//
+bool CrawlerNodesStates::Exist          ( bv::model::BasicNode * n ) const
+{
+	for( SizeType i = 0; i < m_nonActives.size(); ++i )
+		if( m_nonActives[ i ] == n )
+		{
+			assert(! IsVisible( n ) );
+			return true;
+		}
+
+	for( SizeType i = 0; i < m_actives.size(); ++i )
+		if( m_actives[ i ] == n )
+			return true;
+    
+    return false;
+}
+
 // *******************************
 //
 SizeType CrawlerNodesStates::ActiveSize		() const
@@ -141,5 +159,5 @@ SizeType CrawlerNodesStates::VisibleSize	() const
 	return m_visibles.size();
 }
 
-} // widgets
+} // nodelogic
 } // bv

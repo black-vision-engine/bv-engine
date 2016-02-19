@@ -20,6 +20,8 @@ public:
                                         ModelNodeEffect     ( NodeEffectType type );
                                         ~ModelNodeEffect    ();
 
+    virtual void                        Serialize           ( ISerializer & ser ) const override;
+
     virtual void                        Update              ( TimeType t ) override;
     
     virtual NodeEffectType			    GetType		        () const override;

@@ -1,5 +1,11 @@
 #include "Thread.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4100)
+#include <boost/thread.hpp>
+#include <boost/date_time.hpp>
+#pragma warning(pop)
+
 namespace bv
 {
 
@@ -21,20 +27,21 @@ Thread::Thread  ()
 Thread::~Thread ()
 {
     Join();
+    delete m_thread;
 }
 
 // *******************************
 //
 void Thread::Start   ()
 {
-    m_thread = boost::thread( &Thread::RunnerFunc, this );
+    m_thread = new boost::thread( &Thread::RunnerFunc, this );
 }
 
 // *******************************
 //
 void Thread::Join    ()
 {
-    m_thread.join();
+    m_thread->join();
 }
 
 } //bv

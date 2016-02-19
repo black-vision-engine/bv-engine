@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PdrGLSLProgram.h"
 
 #include <sys/stat.h>

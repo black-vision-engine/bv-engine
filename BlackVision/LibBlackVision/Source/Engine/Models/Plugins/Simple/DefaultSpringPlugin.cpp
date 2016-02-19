@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultSpringPlugin.h"
 
 namespace bv { namespace model {
@@ -80,6 +82,7 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
 	h.AddParam< IntInterpolator, Plugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
 		( PN::MAPPINGTYPE, Plugin::MappingType::DOUBLETEXTURE, true, true );
 
+    h.CreatePSModel();
 
     return h.GetModel();
 }

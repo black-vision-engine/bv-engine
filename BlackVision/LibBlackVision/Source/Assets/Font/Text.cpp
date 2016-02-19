@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "Text.h"
 #include "TextAtlas.h"
 
@@ -43,8 +45,8 @@ TextConstPtr Text::Create(const std::wstring& supportedCharsSet
 
 // *********************************
 //
-Text::Text( const std::wstring& supportedCharsSet, const std::string& fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool withMipmaps )
-    : m_supportedCharsSet( supportedCharsSet )
+Text::Text( const std::wstring & supportedCharsSetFile, const std::string& fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool withMipmaps )
+    : m_supportedCharsSetFile( supportedCharsSetFile )
     , m_fontFile( fontFile )
     , m_fontSize( fontSize )
     , m_blurSize( blurSize )
@@ -66,7 +68,7 @@ TextAtlasConstPtr Text::LoadFromCache()
     boost::filesystem::path fontPath( m_fontFile );
     auto fontName = fontPath.filename().string();
 
-	auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_outlineWidth, m_withMipmaps );
+	auto entry = fac->GetEntry( fontName, m_fontSize, this->m_blurSize, m_outlineWidth, m_withMipmaps, m_supportedCharsSetFile );
 
     if( entry != nullptr )
 	{
@@ -89,7 +91,7 @@ void				Text::AddToCache()
 
 	auto mmLevelsNum = m_atlas->m_textureAsset->GetMipMaps() ? m_atlas->m_textureAsset->GetMipMaps()->GetLevelsNum() : 0;
 
-	auto entry = new FontAtlasCacheEntry( m_atlas, fontName, m_fontSize, m_blurSize, m_outlineWidth, m_fontFile, ( UInt32 )mmLevelsNum );
+    auto entry = new FontAtlasCacheEntry( m_atlas, fontName, m_fontSize, m_blurSize, m_outlineWidth, m_fontFile, ( UInt32 )mmLevelsNum, m_supportedCharsSetFile );
     fac->AddEntry( *entry );
 }
 
@@ -137,7 +139,7 @@ void Text::BuildAtlas        ()
 
 	auto  padding = CalculatePadding( m_fontSize, m_blurSize, m_withMipmaps ); // Update padding in case of bluring the atlas.
 
-	m_atlas = m_fontEngine->CreateAtlas( padding, m_outlineWidth, m_supportedCharsSet, m_withMipmaps );
+	m_atlas = m_fontEngine->CreateAtlas( padding, m_outlineWidth, m_supportedCharsSetFile, m_withMipmaps );
 
 	BlurAtlas();
 
@@ -182,7 +184,7 @@ void Text::AddTexturesKey()
 
 	UInt32 levelsNum = m_withMipmaps ? GetMMLevelsNum( m_fontSize ) : 0;
 
-	auto atlasAssetDesc = TextAtlas::GenerateTextAtlasAssetDescriptor( m_fontFile, atlasW, atlasH, m_fontSize, m_blurSize, m_outlineWidth, levelsNum );
+    auto atlasAssetDesc = TextAtlas::GenerateTextAtlasAssetDescriptor( m_fontFile, atlasW, atlasH, m_fontSize, m_blurSize, m_outlineWidth, levelsNum, m_supportedCharsSetFile );
 
 	auto origKey = atlasAssetDesc->GetOrigTextureDesc()->GetKey();
 

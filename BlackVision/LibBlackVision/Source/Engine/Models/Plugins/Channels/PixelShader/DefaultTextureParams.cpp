@@ -1,27 +1,29 @@
+#include "stdafx.h"
+
 #include "DefaultTextureParams.h"
+
+#include "Engine/Models/Plugins/Interfaces/IParameter.h"
+#include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 
 namespace bv { namespace model {
 
 // **************************
 //
 DefaultTextureParams::DefaultTextureParams ()
+	: m_samplerState( nullptr )
 {
 }
 
 // **************************
 //
-DefaultTextureParams::DefaultTextureParams ( const std::string & name, UInt32 w, UInt32 h, UInt32 z, TextureFormat fmt, TextureWrappingMode wmx, TextureWrappingMode wmy, TextureWrappingMode wmz, TextureFilteringMode fm, const glm::vec4 & bc )
+DefaultTextureParams::DefaultTextureParams ( const std::string & name, UInt32 w, UInt32 h, UInt32 z, TextureFormat fmt )
+	: m_samplerState( nullptr )
 {
     SetName( name );
     SetWidth( w );
     SetHeight( h );
 	SetDepth( z );
     SetFormat( fmt );
-    SetWrappingModeX( wmx );
-    SetWrappingModeY( wmy );
-	SetWrappingModeZ( wmz );
-    SetFilteringMode( fm );
-    SetBorderColor( bc );
 }
 
 // **************************
@@ -67,37 +69,9 @@ TextureFormat           DefaultTextureParams::GetFormat         () const
 
 // **************************
 //
-TextureWrappingMode     DefaultTextureParams::GetWrappingModeX  () const
+SamplerStateModelPtr	DefaultTextureParams::GetSamplerState () const
 {
-    return m_wrappingModeX;
-}
-
-// **************************
-//
-TextureWrappingMode     DefaultTextureParams::GetWrappingModeY  () const
-{
-    return m_wrappingModeY;
-}
-
-// **************************
-//
-TextureWrappingMode     DefaultTextureParams::GetWrappingModeZ  () const
-{
-    return m_wrappingModeZ;
-}
-
-// **************************
-//
-TextureFilteringMode    DefaultTextureParams::GetFilteringMode  () const
-{
-    return m_filteringMode;
-}
-
-// **************************
-//
-glm::vec4               DefaultTextureParams::BorderColor       () const
-{
-    return m_borderColor;
+	return m_samplerState;
 }
 
 // **************************
@@ -136,37 +110,9 @@ void                    DefaultTextureParams::SetFormat         ( TextureFormat 
 
 // **************************
 //
-void                    DefaultTextureParams::SetWrappingModeX  ( TextureWrappingMode wm )
+void                    DefaultTextureParams::SetSamplerState   ( SamplerStateModelPtr samplerState )
 {
-    m_wrappingModeX = wm;
-}
-
-// **************************
-//
-void                    DefaultTextureParams::SetWrappingModeY  ( TextureWrappingMode wm )
-{
-    m_wrappingModeY = wm;
-}
-
-// **************************
-//
-void                    DefaultTextureParams::SetWrappingModeZ  ( TextureWrappingMode wm )
-{
-    m_wrappingModeZ = wm;
-}
-
-// **************************
-//
-void                    DefaultTextureParams::SetFilteringMode  ( TextureFilteringMode fm )
-{
-    m_filteringMode = fm;
-}
-
-// **************************
-//
-void                    DefaultTextureParams::SetBorderColor    ( const glm::vec4 & bc )
-{
-    m_borderColor = bc;
+	m_samplerState = samplerState;
 }
 
 } //model

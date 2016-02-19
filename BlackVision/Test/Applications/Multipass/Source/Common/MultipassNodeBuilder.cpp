@@ -81,8 +81,8 @@ RenderableEffectPtr MultipassNodeBuilder::CreateMultipassRenderableEffect( Shade
 		AlphaState alfaState;
 		alfaState.blendEnabled = true;
 		alfaState.blendColor = glm::vec4( alfa, alfa, alfa, alfa );
-		alfaState.dstBlendMode = AlphaDstBlendMode::ADBM_ONE_MINUS_SRC_ALPHA;
-		alfaState.srcBlendMode = AlphaSrcBlendMode::ASBM_SRC_ALPHA;
+		alfaState.dstRGBBlendMode = AlphaDstBlendMode::ADBM_ONE_MINUS_SRC_ALPHA;
+		alfaState.srcRGBBlendMode = AlphaSrcBlendMode::ASBM_SRC_ALPHA;
 		
 		//stateInstance->SetState( std::make_shared<AlphaState>( alfaState ) );
 	}

@@ -1,5 +1,6 @@
-#include "ModelSceneEditor.h"
+#include "stdafx.h"
 
+#include "ModelSceneEditor.h"
 
 namespace bv { namespace model {
 
@@ -13,25 +14,28 @@ ModelSceneEditor::ModelSceneEditor                          ( BasicNodePtr & roo
 
 // ********************************
 //
-void                    ModelSceneEditor::SetRootNode       ( BasicNodePtr rootNode )
+void                    ModelSceneEditor::SetRootNode       ( BasicNodePtr mainRootNode, BasicNodePtr rootNode )
 {
-	if( m_rootNode != rootNode )
+	if( m_rootNode && m_rootNode.get() != rootNode.get() )
 	{
-		if( m_rootNode != nullptr )
-		{
-			m_rootNode = nullptr;
-		}
+		mainRootNode->DetachChildNodeOnly( m_rootNode );
 	}
 
 	m_rootNode = rootNode;
+
+	if( rootNode != nullptr )
+	{
+		mainRootNode->AddChildToModelOnly( rootNode );
+	}
 }
 
 // ********************************
 //
-bool                    ModelSceneEditor::DeleteRootNode     ()
+bool                    ModelSceneEditor::DeleteRootNode     ( BasicNodePtr mainRootNode )
 {
     if( m_rootNode )
     {
+		mainRootNode->DetachChildNodeOnly( m_rootNode );
         m_rootNode = nullptr;
 
         return true;
@@ -52,18 +56,13 @@ void                    ModelSceneEditor::AddChildNode       ( BasicNodePtr pare
 
 // ********************************
 //
-bool                    ModelSceneEditor::DeleteChildNode    ( BasicNodePtr parentNode, const std::string & childNodeName )
+bool                    ModelSceneEditor::DeleteChildNode    ( BasicNodePtr parentNode, BasicNodePtr childNode )
 {
-    if( parentNode )
+    if( parentNode && childNode )
     {
-        auto childNode = std::static_pointer_cast< BasicNode >( parentNode->GetChild( childNodeName ) );
+        parentNode->DetachChildNodeOnly( childNode );
 
-        if( childNode )
-        {
-            parentNode->DetachChildNodeOnly( childNode );
-
-            return true;
-        }
+        return true;
     }
 
     return false;
@@ -97,9 +96,16 @@ bool                    ModelSceneEditor::DetachRootNode     ()
 //
 bool                    ModelSceneEditor::AttachChildNode    ( BasicNodePtr parent )
 {
+	return AttachChildNode( parent, ( UInt32 )parent->GetNumChildren() );
+}
+
+// ********************************
+//
+bool                    ModelSceneEditor::AttachChildNode    ( BasicNodePtr parent, UInt32 destIdx )
+{
     if( parent && m_detachedNode )
     {
-        parent->AddChildToModelOnly( m_detachedNode );
+        parent->AddChildToModelOnly( m_detachedNode, destIdx );
 
         m_detachedNode = nullptr;
 
@@ -111,20 +117,15 @@ bool                    ModelSceneEditor::AttachChildNode    ( BasicNodePtr pare
 
 // ********************************
 //
-bool                    ModelSceneEditor::DetachChildNode    ( BasicNodePtr parent, const std::string & nodeToDetach )
+bool                    ModelSceneEditor::DetachChildNode    ( BasicNodePtr parent, BasicNodePtr nodeToDetach )
 {
-    if( parent )
+    if( parent && nodeToDetach )
     {
-        auto childNode = std::static_pointer_cast< BasicNode >( parent->GetChild( nodeToDetach ) );
+        parent->DetachChildNodeOnly( nodeToDetach );
 
-        if( childNode )
-        {
-            parent->DetachChildNodeOnly( childNode );
+        m_detachedNode = nodeToDetach;
 
-            m_detachedNode = childNode;
-
-            return true;
-        }
+        return true;
     }
 
     return false;
@@ -132,23 +133,42 @@ bool                    ModelSceneEditor::DetachChildNode    ( BasicNodePtr pare
 
 // ********************************
 //
-BasicNodePtr     ModelSceneEditor::GetDetachedNode    ()
+BasicNodePtr    ModelSceneEditor::GetDetachedNode   () const
 {
     return m_detachedNode;
 }
 
 // ********************************
 //
-void                    ModelSceneEditor::DeleteDetachedNode ()
+void            ModelSceneEditor::DeleteDetachedNode()
 {
     m_detachedNode = nullptr;
 }
 
 // ********************************
 //
-BasicNodePtr     ModelSceneEditor::GetRootNode        ()
+BasicNodePtr    ModelSceneEditor::GetRootNode       () const
 {
     return m_rootNode;
+}
+
+// ********************************
+//
+IModelNodePtr   ModelSceneEditor::GetNode           ( const std::string & path, const std::string & separator ) const
+{
+    if( m_rootNode )
+    {
+        std::string childPath = path;
+        auto rootName = BasicNode::SplitPrefix( childPath, separator );
+        auto rootIdx = BasicNode::TryParseIndex( rootName );
+
+        if( ( rootIdx == 0 ) || ( rootIdx < 0 && ( m_rootNode->GetName() == rootName ) ) )
+        {
+            return m_rootNode->GetNode( childPath, separator );
+        }
+    }
+
+    return nullptr;
 }
 
 } // model

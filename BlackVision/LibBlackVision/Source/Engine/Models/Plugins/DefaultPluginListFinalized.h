@@ -21,7 +21,7 @@ public:
     virtual     ~DefaultPluginListFinalized     ();
 
     virtual IPluginPtr              GetPlugin           ( const std::string & name ) const override;
-    virtual IPluginPtr              GetPlugin           ( unsigned int idx ) const override;
+    virtual IPluginPtr              GetPlugin           ( UInt32 idx ) const override;
     virtual IPluginPtr              GetLastPlugin       () const override;
 
     virtual unsigned int            NumPlugins          () const override;
@@ -31,11 +31,11 @@ public:
     virtual void                    Update              ( TimeType t ) override;
 
     IPluginPtr                      GetPlugin           ( const std::string & name );
-    IPluginPtr                      GetPlugin           ( unsigned int idx );
+    IPluginPtr                      GetPlugin           ( UInt32 idx );
 
     void                            AttachPlugin        ( IPluginPtr plugin );
-    bool                            AttachPlugin        ( IPluginPtr plugin, unsigned int idx );
-    IPluginPtr                      DetachPlugin        ( unsigned int idx );
+    bool                            AttachPlugin        ( IPluginPtr plugin, UInt32 idx );
+    IPluginPtr                      DetachPlugin        ( UInt32 idx );
     IPluginPtr                      DetachPlugin        ( const std::string & name );
 
 };

@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #pragma once
 
 #include "GenericShaderParam.h"
@@ -41,12 +43,6 @@ void    GenericShaderParam::Update          ( RenderableEntity * renderable, Cam
 {
     { camera; renderable; } // FIXME: suppress unused variable
     //Intentionally left empty
-}
-
-//FIXME: temporary, REMOVE
-void *  GenericShaderParam::AccessValuePtr  ()
-{
-    return nullptr;
 }
 
 } //bv

@@ -17,7 +17,7 @@ DEFINE_CONST_PTR_TYPE(Text)
 class Text
 {
 private:
-    std::wstring                        m_supportedCharsSet;
+    std::wstring                        m_supportedCharsSetFile;
     std::string                         m_fontFile;
     TextAtlasConstPtr                   m_atlas;
     UInt32								m_fontSize;

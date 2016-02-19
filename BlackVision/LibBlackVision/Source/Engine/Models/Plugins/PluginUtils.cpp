@@ -1,6 +1,10 @@
+#include "stdafx.h"
+
 #include "PluginUtils.h"
 
 #include "Assets/Assets.h"
+
+#include "ProjectManager.h"
 
 namespace bv { namespace model {
 
@@ -33,9 +37,37 @@ bool    LoadTexture     ( IPluginPtr plugin, const std::string & textureFile, co
 
 // *******************************
 //
-bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, const std::string & filter )
+bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, const std::string & )
 {
-	auto desc = AnimationAssetDesc::CreateFromDirFrames( animationPath, filter );
+    auto desc = ProjectManager::GetInstance()->GetAssetDesc( "", "sequences", animationPath );
+
+    if( desc == nullptr )
+    {
+        return false;
+    }
+
+    return plugin->LoadResource( desc );
+}
+
+// *******************************
+//
+bool    LoadVideoStream ( IPluginPtr plugin, const std::string & streamPath, TextureFormat textureFormat )
+{
+	auto desc = VideoStreamAssetDesc::Create( streamPath, textureFormat );
+
+    if( desc == nullptr )
+    {
+        return false;
+    }
+
+    return plugin->LoadResource( desc );
+}
+
+// *******************************
+//
+bool    LoadVideoStream ( IPluginPtr plugin, const std::string & streamPath, TextureFormat textureFormat, UInt32 width, UInt32 height, Float64 frameRate, VideoPixelFormat videoFormat )
+{
+	auto desc = VideoStreamAssetDesc::Create( streamPath, textureFormat, width, height, frameRate, videoFormat );
 
     if( desc == nullptr )
     {
@@ -49,7 +81,7 @@ bool    LoadAnimation   ( IPluginPtr plugin, const std::string & animationPath, 
 //
 bool    LoadFont        ( IPluginPtr plugin, const std::string & fontFile, UInt32 fontSize, UInt32 blurSize, UInt32 outlineSize, bool generateMipmaps )
 {
-	auto desc = FontAssetDesc::Create( fontFile, fontSize, blurSize, outlineSize, generateMipmaps );
+	auto desc = FontAssetDesc::Create( fontFile, fontSize, blurSize, outlineSize, generateMipmaps, SUPPROTED_CHARS_FILE );
 
     return plugin->LoadResource( desc );
 }

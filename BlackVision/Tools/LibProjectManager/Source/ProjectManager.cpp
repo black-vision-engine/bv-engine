@@ -1,8 +1,11 @@
 #include "ProjectManager.h"
 #include "Impl/ProjectManagerImpl.h"
+#include "ConfigManager.h"
 
 namespace bv
 {
+std::shared_ptr< ProjectManager > ProjectManager::_instance = nullptr;
+
 // ********************************
 //
 ProjectManager::ProjectManager	( const Path & rootPath )
@@ -25,21 +28,31 @@ namespace
 
 // ********************************
 //
-ProjectManager *			ProjectManager::GetInstance		( const Path & rootPath )
+ProjectManager *	        ProjectManager::GetInstance		()
 {
-	auto it = g_pms.find( rootPath.Str() );
+    auto pmRootFolder = ConfigManager::GetString( "PMFolder" );
 
-	if( it != g_pms.end() )
-	{
-		return it->second;
-	}
-	else
-	{
-		auto npm = new ProjectManager( rootPath );
-		g_pms[ rootPath.Str() ] = npm;
-		return npm;
-	}
+    if( pmRootFolder.empty() )
+    {
+        pmRootFolder = "DefaultPMDir";
+    }
+
+    if( !_instance )
+    {
+        _instance = std::shared_ptr< ProjectManager >( new ProjectManager( pmRootFolder ) );
+    }
+
+    return _instance.get();
 }
+
+
+// ********************************
+// DO NOT USE, IF NOT TESTING MORE THAN ONE PM
+void                        ProjectManager::SetPMInstanceOnlyForTests( ProjectManager * inst )
+{
+    ProjectManager::_instance = std::shared_ptr< ProjectManager >( inst );
+}
+
 
 // ********************************
 //
@@ -50,23 +63,23 @@ PathVec			ProjectManager::ListProjectsNames	() const
 
 // ********************************
 //
-PathVec			ProjectManager::ListScenesNames		( const Path & projectName ) const
+PathVec			ProjectManager::ListScenesNames		( const Path & projectName, const Path & path, bool recursive ) const
 {
-	return m_impl->ListScenesNames( projectName );
+	return m_impl->ListScenesNames( projectName, path, recursive );
 }
 
 // ********************************
 //
-PathVec			ProjectManager::ListCategoriesNames	() const
+StringVector	ProjectManager::ListCategoriesNames	() const
 {
 	return m_impl->ListCategoriesNames();
 }
 
 // ********************************
 //
-PathVec			ProjectManager::ListAssetsPaths		( const Path & projectName,  const std::string & categoryName ) const
+PathVec			ProjectManager::ListAssetsPaths		( const Path & projectName,  const std::string & categoryName, const Path & path, bool recursive ) const
 {
-	return m_impl->ListAssetsPaths( projectName, categoryName );
+	return m_impl->ListAssetsPaths( projectName, categoryName, path, recursive );
 }
 
 // ********************************
@@ -141,9 +154,16 @@ void						ProjectManager::RemoveUnusedAssets	( const Path & projectName )
 
 // ********************************
 //
-void						ProjectManager::AddScene			( const model::BasicNode & sceneRootNode, const Path & projectName, const Path & outPath )
+void						ProjectManager::RemoveUnusedAssets	()
 {
-	m_impl->AddScene( sceneRootNode, projectName, outPath );
+	m_impl->RemoveUnusedAssets();
+}
+
+// ********************************
+//
+void						ProjectManager::AddScene			( const model::SceneModelPtr & scene, const Path & projectName, const Path & outPath )
+{
+	m_impl->AddScene( scene, projectName, outPath );
 }
 
 // ********************************
@@ -165,6 +185,13 @@ void						ProjectManager::RemoveScene			( const Path & projectName, const Path &
 void						ProjectManager::MoveScene			( const Path & inProjectName, const Path & inPath, const Path & outProjectName, const Path & outPath )
 {
 	m_impl->MoveScene( inProjectName, inPath, outProjectName, outPath );
+}
+
+// ********************************
+//
+model::SceneModelPtr        ProjectManager::LoadScene           ( const Path & projectName, const Path & path ) const
+{
+	return m_impl->LoadScene( projectName, path );
 }
 
 // ********************************
@@ -211,9 +238,9 @@ void						ProjectManager::ExportProjectToFile	( const Path & projectName, const 
 
 // ********************************
 //
-void						ProjectManager::ImportProjectFromFile( const Path & expFilePath, const Path & importToPath )
+void						ProjectManager::ImportProjectFromFile( const Path & expFilePath, const Path & projectName )
 {
-	m_impl->ImportProjectFromFile( expFilePath, importToPath );
+	m_impl->ImportProjectFromFile( expFilePath, projectName );
 }
 
 // ********************************
@@ -225,10 +252,102 @@ AssetDescConstPtr			ProjectManager::GetAssetDesc		( const Path & projectName, co
 
 // ********************************
 //
-SceneDesc *					ProjectManager::GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const
+SceneDescriptor				ProjectManager::GetSceneDesc		( const Path & projectName, const Path & pathInProject ) const
 {
 	return m_impl->GetSceneDesc( projectName, pathInProject );
 }
+
+// ********************************
+//
+SceneDescriptor			    ProjectManager::GetSceneDesc		( const Path & path ) const
+{
+    return m_impl->GetSceneDesc( path );
+}
+
+// ********************************
+//
+model::BasicNodePtr        ProjectManager::LoadPreset          ( const Path & projectName, const Path & path, const model::OffsetTimeEvaluatorPtr & timeline ) const
+{
+    return m_impl->LoadPreset( projectName, path, timeline );
+}
+
+// ********************************
+//
+void                        ProjectManager::SavePreset          ( const model::BasicNodePtr & node, const Path & projectName, const Path & path ) const
+{
+    m_impl->SavePreset( node, projectName, path );
+}
+
+// ********************************
+//
+PathVec                     ProjectManager::ListPresets         ( const Path & projectName, const Path & path, bool recursive ) const
+{
+    return m_impl->ListPresets( projectName, path, recursive );
+}
+
+// ********************************
+//
+PathVec                     ProjectManager::ListPresets         ( const Path & projectName ) const
+{
+    return m_impl->ListPresets( projectName );
+}
+
+// ********************************
+//
+PathVec                     ProjectManager::ListPresets         () const
+{
+    return m_impl->ListPresets();
+}
+
+// ********************************
+//
+PathVec                     ProjectManager::ListAssetsDirs      ( const std::string & categoryName, const Path & path ) const
+{
+    return m_impl->ListAssetsDirs( categoryName, path );
+}
+
+// ********************************
+//
+PathVec                     ProjectManager::ListScenesDirs      ( const Path & path ) const
+{
+    return m_impl->ListScenesDirs( path );
+}
+
+// ********************************
+//
+bool                        ProjectManager::CreateAssetDir      ( const std::string & categoryName, const Path & path, bool recursive ) const
+{
+    return m_impl->CreateAssetDir( categoryName, path, recursive );
+}
+
+// ********************************
+//
+bool                        ProjectManager::CreateSceneDir      ( const Path & path ) const
+{
+    return m_impl->CreateSceneDir( path );
+}
+
+// ********************************
+//
+bool                        ProjectManager::RemoveAssetDir      ( const std::string & categoryName, const Path & path ) const
+{
+    return m_impl->RemoveAssetDir( categoryName, path );
+}
+
+// ********************************
+//
+bool                        ProjectManager::RemoveSceneDir      ( const Path & path ) const
+{
+    return m_impl->RemoveSceneDir( path );
+}
+
+// ********************************
+//
+Path                        ProjectManager::ToAbsPath           ( const Path & path ) const
+{
+    return m_impl->ToAbsPath( path );
+}
+
 
 } // bv
 

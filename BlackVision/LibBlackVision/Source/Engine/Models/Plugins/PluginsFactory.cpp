@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PluginsFactory.h"
 
 #include "Engine/Models/Plugins/GeometryPluginRing.h"
@@ -152,7 +154,7 @@ GeometryRectPlugin *         PluginsFactory::CreateGeometryRectPlugin           
 //    return new model::SimpleGeometryShaderPlugin( prevPlugin, shaderPath );
 //}
 
-ParamTransformVecPtr						GetCurrentParamTransform( const IPlugin * pl )
+ParamTransformPtr					    GetCurrentParamTransform( const IPlugin * pl )
 {
 	if( pl )
 	{	

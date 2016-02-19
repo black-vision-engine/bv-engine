@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "PluginsManager.h"
 
 #include "Engine/Models/Plugins/Interfaces/IPluginDescriptor.h"
@@ -79,39 +81,28 @@ const IPluginDescriptor *                           PluginsManager::GetDescripto
 
 // *********************************
 //
-bool                                                PluginsManager::CanBeAttachedTo         ( const std::string & uid, IPluginPtr prev ) const
-{
-    if( !IsRegistered( uid ) )
-    {
-        std::cout << uid + " is not a registered plugin" << std::endl;
-        return false;
-    }
-
-    return GetDescriptor( uid )->CanBeAttachedTo( prev );
-}
-
-// *********************************
-//
 IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, const std::string & name, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    if( !CanBeAttachedTo( uid, prev ) )
+    auto desc = GetDescriptor( uid );
+    if( desc )
     {
-        return nullptr;
+        return desc->CreatePlugin( name, prev, timeEvaluator );
     }
 
-    return GetDescriptor( uid )->CreatePlugin( name, prev, timeEvaluator );
+    return nullptr;
 }
 
 // *********************************
 //
 IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, IPluginPtr prev, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    if( !CanBeAttachedTo( uid, prev ) )
+    auto desc = GetDescriptor( uid );
+    if( desc )
     {
-        return nullptr;
+        return CreatePlugin( uid, desc->DefaultPluginName(), prev, timeEvaluator );
     }
-
-    return CreatePlugin( uid, GetDescriptor( uid )->DefaultPluginName(), prev, timeEvaluator );
+    
+    return nullptr;
 }
 
 // *********************************
@@ -125,16 +116,26 @@ const std::vector< const IPluginDescriptor * > &    PluginsManager::GetRegistere
 //
 IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, const std::string & name, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    assert( IsRegistered( uid ) );
+    auto desc = GetDescriptor( uid );
+    if( desc )
+    {
+        return desc->CreatePlugin( name, nullptr, timeEvaluator );
+    }
 
-    return GetDescriptor( uid )->CreatePlugin( name, nullptr, timeEvaluator );
+    return nullptr;
 }
 
 // *********************************
 //
 IPluginPtr                                          PluginsManager::CreatePlugin            ( const std::string & uid, ITimeEvaluatorPtr timeEvaluator ) const
 {
-    return CreatePlugin( uid, GetDescriptor( uid )->DefaultPluginName(), nullptr, timeEvaluator );
+    auto desc = GetDescriptor( uid );
+    if( desc )
+    {
+        return CreatePlugin( uid, desc->DefaultPluginName(), nullptr, timeEvaluator );
+    }
+    
+    return nullptr;
 }
 
 // *********************************
@@ -217,15 +218,6 @@ DefaultPluginListFinalized *                        PluginsManager::CreatePlugin
         if( !IsRegistered( uid ) )
         {
             printf( "PLUGIN UID %s not registered\n", uid.c_str() );
-            return nullptr;
-        }
-    
-        if( !CanBeAttachedTo( uid, prev ) )
-        {
-            std::string prevpl = prev ? prev->GetName() : "NULL";
-
-            printf( "PLIUGIN with UID %s cannot be attached to %s\n", uid.c_str(), prevpl.c_str() );
-
             return nullptr;
         }
     

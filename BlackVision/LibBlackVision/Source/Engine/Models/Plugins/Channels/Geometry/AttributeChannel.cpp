@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "AttributeChannel.h"
 
 #include <cassert>
@@ -52,36 +54,6 @@ std::string                                 AttributeChannel::GetName           
 {
     return m_name;
 }
-
-// *************************************
-//
-IAttributeChannelPtr                         AttributeChannel::GetPositionChannel( const std::vector< IAttributeChannelPtr > & channels )
-{
-    if( !channels.empty() )
-    {
-        // try to guess
-        if( channels[ 0 ]->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_POSITION )
-            return channels[ 0 ];
-
-        for( auto ch : channels )
-            if( ch->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_POSITION )
-                return ch;
-    }
-
-    return nullptr;
-}
-
-// *************************************
-//
-IAttributeChannelPtr                         AttributeChannel::GetUVChannel( const std::vector< IAttributeChannelPtr >& channels, SizeType index )
-{
-    assert( !channels.empty() );
-    assert( channels.size() > index );
-    assert( channels[index]->GetDescriptor()->GetSemantic() == AttributeSemantic::AS_TEXCOORD );
-
-    return channels[index];
-}
-
 
 } // model
 } // bv

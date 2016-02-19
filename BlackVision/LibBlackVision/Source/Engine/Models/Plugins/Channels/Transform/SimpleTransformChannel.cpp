@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "SimpleTransformChannel.h"
 
 
@@ -6,15 +8,10 @@ namespace bv { namespace model
 
 // ******************************
 //
-SimpleTransformChannel::SimpleTransformChannel  ( const ParamTransformVec & paramTransformVec )
-    : m_transformParams( paramTransformVec )
+SimpleTransformChannel::SimpleTransformChannel  ( const ParamTransform & paramTransform )
+    : m_transformParam( paramTransform )
 {
-    for( unsigned int i = 0; i < paramTransformVec.NumTransforms(); ++i )
-    {
-        m_transformations.push_back( TransformPtr( new Transform() ) );
-    }
-
-    assert( paramTransformVec.NumTransforms() == m_transformations.size() );
+    m_transformation = std::make_shared< Transform >();
 }
 
 // ******************************
@@ -22,19 +19,15 @@ SimpleTransformChannel::SimpleTransformChannel  ( const ParamTransformVec & para
 void                                    SimpleTransformChannel::Update( TimeType t )
 {
     { t; } // FIXME: suppress unused variable
-    assert( m_transformParams.NumTransforms() == m_transformations.size() );
 
-    for( unsigned int i = 0; i < m_transformations.size(); ++i )
-    {
-        m_transformations[ i ]->SetMatrix( m_transformParams.Evaluate( i ) );
-    }
+    m_transformation->SetMatrix( m_transformParam.Evaluate() );
 }
 
 // ******************************
 //
-ParamTransformVec *                     SimpleTransformChannel::GetParamTransformVec    ()
+ParamTransform *                        SimpleTransformChannel::GetParamTransform    ()
 {
-    return &m_transformParams;
+    return &m_transformParam;
 }
 
 } // model

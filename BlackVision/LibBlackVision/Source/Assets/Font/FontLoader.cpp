@@ -1,10 +1,18 @@
+#include "stdafx.h"
+
 #include "FontLoader.h"
 #include "Text.h"
 #include "Assets/Font/FontAssetDescriptor.h"
 #include "Assets/Font/FontAsset.h"
+#include "Assets/Thumbnail/Impl/FontAssetThumbnail.h"
+#include "Assets/Texture/TextureUtils.h"
+#include "Serialization/Json/JsonDeserializeObject.h"
+#include "Serialization/Json/JsonSerializeObject.h"
+#include "DataTypes/Hash.h"
 #include "System/Path.h"
 #include "IO/FileIO.h"
-
+#include "ProjectManager.h"
+#include "LibImage.h"
 
 #include <boost/filesystem/convenience.hpp>
 #include <assert.h>
@@ -19,7 +27,7 @@ AssetConstPtr FontLoader::LoadAsset( const bv::AssetDescConstPtr & desc ) const
 
 	assert( typedDesc );
 
-	auto filePath			= typedDesc->GetFontFileName();
+    auto filePath			= ProjectManager::GetInstance()->ToAbsPath( typedDesc->GetFontFileName() ).Str();
     auto atlasCharSetFile	= typedDesc->GetAtlasCharSetFile();
     auto fontSize			= typedDesc->GetFontSize();
     auto blurSize			= typedDesc->GetBlurSize();
@@ -43,50 +51,9 @@ namespace
 
 // *******************************
 //
-size_t GetSizeOfFile( const std::wstring& path )
-{
-	struct _stat fileinfo;
-	_wstat(path.c_str(), &fileinfo);
-	return fileinfo.st_size;
-}
-
-// *******************************
-//
-std::wstring LoadUtf8FileToString(const std::wstring& filename)
-{
-	std::wstring buffer;            // stores file contents
-	FILE* f = nullptr;
-    _wfopen_s(&f, filename.c_str(), L"rtS, ccs=UTF-8");
-
-	// Failed to open file
-	if (f == NULL)
-	{
-		// ...handle some error...
-		return buffer;
-	}
-
-	size_t filesize = GetSizeOfFile(filename);
-
-	// Read entire file contents in to memory
-	if (filesize > 0)
-	{
-		buffer.resize(filesize);
-		size_t wchars_read = fread(&(buffer.front()), sizeof(wchar_t), filesize, f);
-		buffer.resize(wchars_read);
-		buffer.shrink_to_fit();
-	}
-
-	fclose(f);
-
-	return buffer;
-}
-
-// *******************************
-//
 TextConstPtr        LoadFontFile( const std::string & file, UInt32 size, UInt32 blurSize, UInt32 outlineSize, bool generateMipMaps, const std::wstring & atlasCharSetFile )
 {
-    auto t = LoadUtf8FileToString( atlasCharSetFile );
-	return Text::Create( t, file, size, blurSize, outlineSize, generateMipMaps ); // FIXME: Text constructor makes to much.
+	return Text::Create( atlasCharSetFile, file, size, blurSize, outlineSize, generateMipMaps ); // FIXME: Text constructor makes to much.
 }
 
 // *******************************
@@ -115,6 +82,66 @@ TextConstPtr		FontLoader::TryLoadFont( const std::string & file, UInt32 size, UI
     {
         return nullptr;
     }
+}
+
+
+///////////////////////////////
+//
+AssetDescConstPtr FontLoader::CreateDescriptor	( const IDeserializer& deserializeObject ) const
+{
+	return std::static_pointer_cast<const AssetDesc>( FontAssetDesc::Create( deserializeObject ) );
+}
+
+///////////////////////////////
+//
+ThumbnailConstPtr FontLoader::LoadThumbnail     ( const AssetDescConstPtr & desc ) const
+{
+    auto typedDesc = QueryTypedDesc< FontAssetDescConstPtr >( desc );
+
+	assert( typedDesc );
+
+    auto filePath = ProjectManager::GetInstance()->ToAbsPath( typedDesc->GetFontFileName() ).Str();
+
+    auto thumbFilePath = filePath + ".bvthumb";
+
+    auto charSetFilePath = ProjectManager::GetInstance()->ToAbsPath( "fonts/ThumbnailCharSet.txt" ).Str();
+
+    auto hChSet = Hash::FromFile( charSetFilePath );
+    auto hData = Hash::FromFile( filePath );
+
+    auto h = Hash::FromString( hChSet.Get() + hData.Get() );
+
+    if( Path::Exists( thumbFilePath ) )
+    {
+        JsonDeserializeObject deser;
+        deser.LoadFile( thumbFilePath );
+
+        auto thumb = FontAssetThumbnail::Create( deser );
+
+        if( thumb->GetHash() == h )
+        {
+            return thumb;
+        }
+    }
+
+    auto text = LoadFontFile( filePath, 10, 0, 0, false, L"fonts/ThumbnailCharSet.txt" );
+
+    auto atlasTexture = text->GetAtlas()->GetAsset()->GetOriginal();
+
+    auto swaped = image::SwapChannels( atlasTexture->GetData(), 32, 0xff000000, 0xff000000, 0xff000000, 0xff000000 );
+    swaped = image::FlipVertical( swaped, atlasTexture->GetWidth(), atlasTexture->GetHeight(), TextureUtils::ToBPP( atlasTexture->GetFormat() ) );
+
+    auto tga = image::SaveTGAToHandle( swaped, atlasTexture->GetWidth(), atlasTexture->GetHeight(), TextureUtils::ToBPP( atlasTexture->GetFormat() ) );
+
+    auto thumb =  FontAssetThumbnail::Create( tga, h );
+
+    JsonSerializeObject ser;
+
+    thumb->Serialize( ser );
+
+    ser.Save( thumbFilePath );
+
+    return thumb;
 }
 
 } // bv

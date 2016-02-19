@@ -39,6 +39,7 @@ public:
     SizeType                NumChildNodes       () const;
 
     void                    AddChildNode        ( SceneNode * child );
+    void                    AddChildNode        ( SceneNode * child, UInt32 idx );
     void                    DetachChildNode     ( SceneNode * node );
     SceneNode *             DetachChildNode     ( unsigned int idx );
 
@@ -57,13 +58,13 @@ private:
 
 public:
 
-    void                    Update              ( const std::vector< Transform > & parentTransforms );
+    void                    Update              ( const Transform & parentTransform );
 
     bool                    IsVisible           () const;
     void                    SetVisible          ( bool visible );
 
     // FIXME: think of some better approach to dynamic node state manipulation
-    friend class BVSceneTools;
+    friend class BVProjectTools;
 };
 
 } // bv

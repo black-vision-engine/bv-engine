@@ -1,7 +1,12 @@
+#include "stdafx.h"
+
 #include "EventManager.h"
+
+#include "System/Time.h"
 
 #include <cassert>
 #include <list>
+#include <chrono>
 
 namespace bv
 {
@@ -156,8 +161,8 @@ bool    EventManager::AbortEvent            ( const EventType & type, bool allOf
 //
 bool    EventManager::Update                ( unsigned long maxEvaluationMillis )
 {
-	unsigned long curMillis = timeGetTime();
-    unsigned long maxMillis = ( ( maxEvaluationMillis == IEventManager::millisINFINITE ) ? ( IEventManager::millisINFINITE ) : ( curMillis + maxEvaluationMillis ) );
+    auto curMillis = Time::Now();
+    auto maxMillis = ( ( maxEvaluationMillis == IEventManager::millisINFINITE ) ? ( IEventManager::millisINFINITE ) : ( curMillis + maxEvaluationMillis ) );
 
     //Multithreaded part
     unsigned int activeConcurrentQueue = m_activeconcurrentQueue;
@@ -171,7 +176,7 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
     {
         QueueEvent( concurrentEvent );
         
-        curMillis = timeGetTime();
+        curMillis = Time::Now();
 
         if ( maxEvaluationMillis != IEventManager::millisINFINITE && curMillis >= maxMillis )
         {
@@ -199,7 +204,7 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
             listener( evt );
         }
 
-        curMillis = timeGetTime();
+        curMillis = Time::Now();
 
         if ( maxEvaluationMillis != IEventManager::millisINFINITE && curMillis >= maxMillis )
         {
@@ -237,6 +242,15 @@ bool    EventManager::Update                ( unsigned long maxEvaluationMillis 
 
     return pendingEvents;
 }
+
+// *******************************
+//
+void EventManager::QueueResponse       ( const IEventPtr evt )
+{
+    ConcurrentQueueEvent( evt );
+}
+
+
 
 //FIXME: hack - should be created by means of Engine object or some global object responsible for application state and services
 IEventManager &     GetDefaultEventManager  ()

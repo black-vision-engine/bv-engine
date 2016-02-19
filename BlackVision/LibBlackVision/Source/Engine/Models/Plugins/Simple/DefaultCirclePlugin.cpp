@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultCirclePlugin.h"
 
 #include "Mathematics/Defines.h"
@@ -39,6 +41,8 @@ DefaultPluginParamValModelPtr   DefaultCirclePluginDesc::CreateDefaultModel  ( I
     h.AddSimpleParam( DefaultCirclePlugin::PN_TESSELATION, 10, true, true );
     h.AddParam< IntInterpolator, DefaultCirclePlugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
         ( DefaultCirclePlugin::PN_OPEN_ANGLE_MODE, DefaultCirclePlugin::OpenAngleMode::CW, true, true );
+    
+    h.CreatePSModel();
 
     return h.GetModel();
 }

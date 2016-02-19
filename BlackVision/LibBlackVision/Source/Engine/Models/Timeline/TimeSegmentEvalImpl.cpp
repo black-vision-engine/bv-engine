@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "TimeSegmentEvalImpl.h"
 
 #include <cassert>
@@ -16,6 +18,8 @@ TimeSegmentEvalImpl::TimeSegmentEvalImpl ( TimeType duration, TimelinePlayDirect
     , m_playDirection( direction )
     , m_globalTime( TimeType( 0.0 ) )
     , m_startTime( TimeType( 0.0 ) )
+    , m_wrapPreBehavior( preMethod ) // FIXME just for serialization actually
+    , m_wrapPostBehavior( postMethod ) // FIXME just for serialization actually
 {
     assert( duration > TimeType( 0.0 ) );
 
@@ -143,6 +147,7 @@ TimeType    TimeSegmentEvalImpl::GlobalToLocal      ( TimeType t ) const
 void        TimeSegmentEvalImpl::SetWrapBehaviorPre  ( TimelineWrapMethod method )
 {
     SetWrapEvaluatorPre( method );
+	m_wrapPreBehavior = method;
 }
 
 // *********************************
@@ -150,6 +155,7 @@ void        TimeSegmentEvalImpl::SetWrapBehaviorPre  ( TimelineWrapMethod method
 void        TimeSegmentEvalImpl::SetWrapBehaviorPost ( TimelineWrapMethod method )
 {
     SetWrapEvaluatorPost( method );
+	m_wrapPostBehavior = method;
 }
 
 // *********************************
@@ -172,6 +178,13 @@ TimelineWrapMethod      TimeSegmentEvalImpl::GetWrapPre          () const
 TimelineWrapMethod      TimeSegmentEvalImpl::GetWrapPost         () const
 {
     return m_wrapPostBehavior;
+}
+
+// *********************************
+//
+void		TimeSegmentEvalImpl::SetDuration         ( TimeType duration )
+{
+    m_duration = duration;
 }
 
 // *********************************

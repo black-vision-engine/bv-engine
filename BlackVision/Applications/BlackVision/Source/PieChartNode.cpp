@@ -2,14 +2,14 @@
 
 namespace bv {
 
-void PieChartNode::Init( model::TimelineManager * timelineManager, model::ITimeEvaluatorPtr timeEvaluator, const std::vector< PieChartSubnodeDesc > descs )
+void PieChartNode::Init( model::ITimeEvaluatorPtr timeEvaluator, const std::vector< PieChartSubnodeDesc > descs )
 {
 	AddPlugin( "DEFAULT_TRANSFORM", timeEvaluator );
 
 	auto simpleTransform = GetPlugin( "transform" )->GetParameter( "simple_transform" );
-	SetParameterScale( simpleTransform, 0, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
-	SetParameterTranslation( simpleTransform, 0, 0.0f, glm::vec3( 0, 0, -1.f) );
-	SetParameterRotation ( simpleTransform, 0, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+	SetParameterScale( simpleTransform, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
+	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( 0, 0, -1.f) );
+	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 20.f, 0.f, 0.f ) );
 
 	float angle = 0;
 
@@ -20,9 +20,9 @@ void PieChartNode::Init( model::TimelineManager * timelineManager, model::ITimeE
 
 		model::BasicNodePtr node = NULL;
 		if( desc.type == PieChartSubnodeDesc::SubnodeType::COLORED)
-			node = SimpleNodesFactory::CreateCreedColoredPieChartNode( timelineManager, timeEvaluator, 0 );
+			node = SimpleNodesFactory::CreateCreedColoredPieChartNode( timeEvaluator, 0 );
 		else if( desc.type == PieChartSubnodeDesc::SubnodeType::LINEAR_GRADIENTED)
-			node = SimpleNodesFactory::CreateCreedGradedPieChartNode( timelineManager, timeEvaluator, 0 );
+			node = SimpleNodesFactory::CreateCreedGradedPieChartNode( timeEvaluator, 0 );
 		assert( node );
 
 		SetParameter( node->GetPlugin( "piechart" )->GetParameter( "angleStart" ), 0.f, angle );
@@ -34,7 +34,7 @@ void PieChartNode::Init( model::TimelineManager * timelineManager, model::ITimeE
 		glm::vec3 vecOffset = glm::vec3( cos( angleMid ), 0, sin( angleMid ) );
 		vecOffset *= offset;
 
-		SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0, 0.0f, vecOffset );
+		SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, vecOffset );
 	}
 }
 

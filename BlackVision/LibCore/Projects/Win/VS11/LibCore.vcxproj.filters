@@ -73,10 +73,8 @@
     <ClInclude Include="..\..\..\Source\Tools\Utils.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\win_sock.h" />
     <ClInclude Include="..\..\..\Source\Tools\Logger\Logger.h">
-      <Filter>Tools\Logger</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Tools\Logger\UseLogger.h">
       <Filter>Tools\Logger</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\Profiler\HerarchicalProfiler.h">
@@ -85,12 +83,34 @@
     <ClInclude Include="..\..\..\Source\System\Path.h">
       <Filter>System</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\IncludeJSON.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\Source\IO\NamedPipe.h">
       <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Logger\QueueSink.h">
+      <Filter>Tools\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Logger\LogMsgStruct.h">
+      <Filter>Tools\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Logger\LoggerEnums.h">
+      <Filter>Tools\Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\PrefixHelper.h">
+      <Filter>Tools</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Tools\PrintGuard.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Tools\Base64.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\System\Time.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Expected.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\DataTypes\Hash.cpp">
@@ -144,8 +164,17 @@
     <ClCompile Include="..\..\..\Source\IO\NamedPipe.cpp">
       <Filter>IO</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\PrefixHelper.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Source\Tools\PrintGuard.cpp">
       <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Tools\Base64.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\System\Time.cpp">
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

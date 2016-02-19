@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Assets/AssetDescriptor.h"
+#include "Serialization/ISerializer.h"
+#include "Serialization/IDeserializer.h"
 
 #include "CoreDEF.h"
 
@@ -10,7 +12,7 @@
 namespace bv
 {
 
-#define SUPPROTED_CHARS_FILE L"Assets/Fonts/SupportedChars.txt" // FIXME: Sucks as a vacuum
+#define SUPPROTED_CHARS_FILE L"fonts/SupportedChars.txt" // FIXME: Sucks as a vacuum
 
 class FontAssetDesc;
 DEFINE_CONST_PTR_TYPE( FontAssetDesc )
@@ -24,6 +26,10 @@ protected:
 	virtual const std::string &			GetUID				() const override;
 
 public:
+    virtual void						Serialize       ( ISerializer& sob ) const;
+    //virtual void                        Deserialize     ( const IDeserializer& sob );
+    static ISerializableConstPtr		Create          ( const IDeserializer& dob );
+
 	virtual bool						IsCacheable			() const override;
 
 	virtual VoidConstPtr				QueryThis			() const override;
@@ -34,6 +40,11 @@ public:
 	UInt32								GetOutlineSize		() const;
 	bool								GetGenerateMipmaps	() const;
 	const std::wstring &				GetAtlasCharSetFile () const;
+
+	virtual std::string					GetKey				() const override;
+    virtual std::string                 GetProposedShortKey () const override;
+
+    virtual SizeType                    EstimateMemoryUsage () const override;
 
 	static FontAssetDescConstPtr		Create				(	const std::string & fontFileName,
 																UInt32 fontSize,
@@ -59,7 +70,16 @@ private:
 	UInt32			m_outlineSize;
 	bool			m_generateMipmaps;
 	std::wstring	m_atlasCharSetFile;
-
 };
+
+// ***********************
+/// Returns AssetDescriptor UID for Asset in template parameter.
+/// @note AssetDescriptor uid and Asset uid are different strings.
+template<> inline const std::string& GetAssetDescUID<FontAsset>()
+{
+    return FontAssetDesc::UID();
+}
+
+
 
 } // bv

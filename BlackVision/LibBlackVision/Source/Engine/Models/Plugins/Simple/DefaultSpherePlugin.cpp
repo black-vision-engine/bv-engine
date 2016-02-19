@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultSpherePlugin.h"
 #include "Mathematics/Defines.h"
 
@@ -71,6 +73,8 @@ DefaultPluginParamValModelPtr   PluginDesc::CreateDefaultModel  ( ITimeEvaluator
 		( DefaultSphere::PN::OPEN_ANGLE_MODE, Plugin::OpenAngleMode::CW, true, true );
 	h.AddParam< IntInterpolator, Plugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
 		( DefaultSphere::PN::MAPPING_TYPE, Plugin::MappingType::DOUBLETEXTURE, true, true );
+
+    h.CreatePSModel();
 
     return h.GetModel();
 }

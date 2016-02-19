@@ -19,9 +19,15 @@ namespace bv
 
 // ********************************
 //
-TextureAssetAccessor::TextureAssetAccessor				( const ProjectManager * projectManager, const Path & rootPath, const StringVector & fileExts )
-	: m_projectManager( projectManager )
-	, m_rootPath( rootPath )
+TextureAssetAccessorConstPtr TextureAssetAccessor::Create( const Path & rootPath, const StringVector & fileExts )
+{
+	return TextureAssetAccessorConstPtr( new TextureAssetAccessor( rootPath, fileExts ) );
+}
+
+// ********************************
+//
+TextureAssetAccessor::TextureAssetAccessor				( const Path & rootPath, const StringVector & fileExts )
+	: m_rootPath( rootPath )
 	, m_fileExts( fileExts )
 {
 	CreateDir();
@@ -38,9 +44,19 @@ AssetDescConstPtr	TextureAssetAccessor::GetAssetDesc	( const Path & path ) const
 {
 	auto p = m_rootPath / path;
 
-	auto props = image::GetImageProps( p.Str() );
+	if( Path::Exists( p ) )
+	{
+		auto props = image::GetImageProps( p.Str() );
+	
+		auto origTextureDesc = SingleTextureAssetDesc::Create( ( Path( "textures" ) / path ).Str(), props.width, props.height, EnumsUtils::Convert( props.format ), true );
 
-	return SingleTextureAssetDesc::Create( p.Str(), props.width, props.height, EnumsUtils::Convert( props.format ), true );
+        return TextureAssetDesc::Create( origTextureDesc );
+	}
+	else
+	{
+		LOG_MESSAGE( SeverityLevel::warning ) << "Asset '" << p.Str() << "' doesn't exist.";
+		return nullptr;
+	}
 }
 
 // ********************************
@@ -101,11 +117,11 @@ void			 	TextureAssetAccessor::ExportAsset	( std::ostream & out, const Path & in
 		auto assetFile = File::Open( absPath.Str(), File::OpenMode::FOMReadOnly );
 
 		out << internalPath.Str();
-		out << File::Size( absPath.Str() );
+        out << '\n';
+		out << std::to_string( File::Size( absPath.Str() ) );
+        out << '\n';
 
-		auto in = assetFile.StreamBuf();
-
-		out << *in;
+        assetFile.Read( out );
 
 		assetFile.Close();
 	}
@@ -134,13 +150,20 @@ void				TextureAssetAccessor::ImportAsset	( std::istream & in, const Path &  imp
 
 	auto assetFile = File::Open( absPath.Str(), File::OpenMode::FOMReadWrite );
 
-	std::string filename;
-	bv::SizeType fileSize;
-	
-	in >> filename;
-	in >> fileSize;
+	std::stringbuf buf;
 
-	*assetFile.StreamBuf() << in;
+    in.get( buf, '\n' );
+    in.ignore();
+
+    Path path = buf.str();
+
+    buf.str("");
+    in.get( buf, '\n' );
+    in.ignore();
+
+    SizeType size = stoul( buf.str() );
+
+	assetFile.Write( in, size );
 
 	assetFile.Close();
 }
@@ -170,12 +193,18 @@ void			 	TextureAssetAccessor::ExportAll		( const Path & expAssetFilePath ) cons
 
 // ********************************
 //
-PathVec	TextureAssetAccessor::ListAll		( const Path & path ) const
+PathVec	TextureAssetAccessor::ListAll		( const Path & path, bool recursive ) const
 {
 	PathVec ret;
 	for( auto ext : m_fileExts )
 	{
-		auto l = Path::List( path, ext );
+		auto l = Path::List( m_rootPath / path, recursive, ext );
+
+        for( auto & p : l )
+        {
+            p = Path::RelativePath( p, m_rootPath );
+        }
+
 		ret.insert( ret.end(), l.begin(), l.end() );
 	}
 	
@@ -184,23 +213,11 @@ PathVec	TextureAssetAccessor::ListAll		( const Path & path ) const
 
 // ********************************
 //
-namespace
-{
-
-bool PathCompare( const Path & a, const Path & b ) 
-{
-    return a.Str() < b.Str();
-}
-
-}
-
-// ********************************
-//
 PathVec	TextureAssetAccessor::ListAllUnique	( const Path & path ) const
 {
-	auto l = ListAll( path );
+	auto l = ListAll( path, true );
 
-	std::set< Path, bool (*)( const Path & a, const Path & b )  > unique( PathCompare );
+	std::set< Path  > unique;
 
 	for( auto p : l )
 	{

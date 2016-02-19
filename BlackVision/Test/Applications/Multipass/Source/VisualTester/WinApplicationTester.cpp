@@ -45,7 +45,7 @@
 //
 //
 //WinApplicationTester::WinApplicationTester()
-//	:	WindowedApplication( "Rendering test", 0, 0, DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight(), DefaultConfig.FullScreenMode() )
+//	:	WindowedApplication( "Rendering test", 0, 0, DefaultConfig.DefaultwindowWidth(), DefaultConfig.DefaultWindowHeight(),bv::WindowMode::WINDOWED,*(new bv::RendererInput) )
 //{
 //	application = this;
 //}
@@ -99,20 +99,16 @@
 //@param[in] fileName Reference image to compare (or create depending on parameter makeReferenceImage). See description above, how to make a name.
 //@param[in] node Scene node to render.
 //@param[in] makeReferenceImage By setting true you can render reference image instead of making test. Default: false.*/
-//void WinApplicationTester::testRender( const std::string fileName, SceneNode * node, bool makeReferenceImage )
+//void WinApplicationTester::testRender( const std::string fileName, SceneNode* node, bool makeReferenceImage )
 //{
 //	if( makeReferenceImage )
-//    {
 //		m_renderLogic->renderReferenceImage( m_Renderer, node, fileName );
-//    }
 //	else
-//    {
 //		m_renderLogic->renderCompareWithReferenceImage( m_Renderer, node, fileName );
-//    }
 //}
 //
 //
-//Renderer * WinApplicationTester::getRenderer()
+//Renderer* WinApplicationTester::getRenderer()
 //{
 //	return m_Renderer;
 //}

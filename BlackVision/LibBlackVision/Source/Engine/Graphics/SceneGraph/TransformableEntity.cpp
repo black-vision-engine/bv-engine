@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "TransformableEntity.h"
 
 
@@ -17,21 +19,16 @@ TransformableEntity::~TransformableEntity                               ()
 
 // *********************************
 //
-void   TransformableEntity::UpdateTransforms                            ( const std::vector< Transform > & transforms )
+void                TransformableEntity::UpdateTransform                ( const Transform & transform )
 {
-    UpdateSetWorldTransform( transforms );
+    UpdateSetWorldTransform( transform );
 }
 
 // *********************************
 //
-void                TransformableEntity::UpdateSetWorldTransform        ( const std::vector< Transform > & parentTransforms )
+void                TransformableEntity::UpdateSetWorldTransform        ( const Transform & parentTransform )
 {
-    assert( parentTransforms.size() == m_worldTransforms.size() );
-
-    for( unsigned int i = 0; i < m_worldTransforms.size(); ++i )
-    {
-        m_worldTransforms[ i ] = parentTransforms[ i ] * m_localTransform;
-    }
+    m_worldTransform = parentTransform * m_localTransform;
 }
 
 } //bv

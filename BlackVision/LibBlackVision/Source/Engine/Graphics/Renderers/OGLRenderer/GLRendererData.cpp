@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "GLRendererData.h"
 
 #include <cassert>
@@ -63,13 +65,15 @@ void    RendererData::RenderState::InitializeAlphaState     ( AlphaStateConstPtr
 {
     assert( as );
 
-    GLuint srcBlend = ConstantsMapper::GLConstant( as->srcBlendMode );
-    GLuint dstBlend = ConstantsMapper::GLConstant( as->dstBlendMode );
+    GLuint srcBlend = ConstantsMapper::GLConstant( as->srcRGBBlendMode );
+    GLuint dstBlend = ConstantsMapper::GLConstant( as->dstRGBBlendMode );
+	GLuint srcAlphaBlend = ConstantsMapper::GLConstant( as->srcAlphaBlendMode );
+	GLuint dstAlphaBlend = ConstantsMapper::GLConstant( as->dstAlphaBlendMode );
 
     const glm::vec4 & blendColor = as->blendColor;
 
     EnableDisable( as->blendEnabled, GL_BLEND );
-    BVGL::bvglBlendFunc( srcBlend, dstBlend );
+    BVGL::bvglBlendFuncSeparate( srcBlend, dstBlend, srcAlphaBlend, dstAlphaBlend );
     
     BVGL::bvglBlendColor( blendColor[ 0 ], blendColor[ 1 ], blendColor[ 2 ], blendColor[ 3 ] );
 }

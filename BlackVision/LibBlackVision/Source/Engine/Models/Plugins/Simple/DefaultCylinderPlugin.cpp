@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "DefaultCylinderPlugin.h"
 #include "glm/gtx/vector_angle.hpp"
 
@@ -75,7 +77,7 @@ DefaultPluginParamValModelPtr   DefaultCylinderPluginDesc::CreateDefaultModel  (
     h.AddParam< IntInterpolator, DefaultPlugin::OpenAngleMode, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumOAM >
         ( PN::OPENANGLEMODE, DefaultPlugin::OpenAngleMode::CW, true, true );
    	h.AddParam< IntInterpolator, DefaultPlugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
-        ( PN::WEIGHTCENTERX, DefaultPlugin::WeightCenter::CENTER, true, true );\
+        ( PN::WEIGHTCENTERX, DefaultPlugin::WeightCenter::CENTER, true, true );
 	h.AddParam< IntInterpolator, DefaultPlugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
         ( PN::WEIGHTCENTERY, DefaultPlugin::WeightCenter::MIN, true, true );
 	h.AddParam< IntInterpolator, DefaultPlugin::WeightCenter, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumWC >
@@ -83,6 +85,7 @@ DefaultPluginParamValModelPtr   DefaultCylinderPluginDesc::CreateDefaultModel  (
 	h.AddParam< IntInterpolator, DefaultPlugin::MappingType, ModelParamType::MPT_ENUM, ParamType::PT_ENUM, ParamEnumMT >
 		( PN::MAPPINGTYPE, DefaultPlugin::MappingType::GOODMAPPING, true, true );
 
+    h.CreatePSModel();
 
     return h.GetModel();
 }

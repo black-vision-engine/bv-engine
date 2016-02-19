@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "EngineConstantsMapper.h"
 
 namespace bv {

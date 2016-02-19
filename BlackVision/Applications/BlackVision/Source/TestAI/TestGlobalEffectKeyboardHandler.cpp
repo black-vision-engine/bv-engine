@@ -22,6 +22,7 @@ TestGlobalEfectKeyboardHandler::TestGlobalEfectKeyboardHandler  ()
     m_wireframeDisabled = true;
 
     m_editor = nullptr;
+    m_timeEval = nullptr;
 }
 
 // *********************************
@@ -30,12 +31,13 @@ void    TestGlobalEfectKeyboardHandler::HandleKey( unsigned char c, BVAppLogic *
 {
     if( !m_editor ) 
 	{
-        m_editor = logic->GetBVScene()->GetSceneEditor();
+        m_editor = logic->GetBVProject()->GetProjectEditor();
+        m_timeEval = TimelineManager::GetInstance()->GetRootTimeline();
     }
 
     if( !m_defaultEffect )
     {
-        m_defaultEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_DEFAULT, "default", logic->GetGlobalTimeline() );
+        m_defaultEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_DEFAULT, "default", m_timeEval );
     }
 
     switch( c )
@@ -153,7 +155,7 @@ void                    TestGlobalEfectKeyboardHandler::HandleIncrement     ( BV
             auto nextNode = GetWireframeNode( logic, m_curWireframeNodeIdx );
 
             m_editor->SetNodeEffect( curNode, m_defaultEffect );
-            auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_WIREFRAME, "wireframe", logic->GetGlobalTimeline() );
+            auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_WIREFRAME, "wireframe", m_timeEval );
             m_editor->SetNodeEffect( nextNode, newEffect );
         }        
     }
@@ -208,7 +210,7 @@ void                    TestGlobalEfectKeyboardHandler::HandleDecrement     ( BV
             auto nextNode = GetWireframeNode( logic, m_curWireframeNodeIdx );
 
             m_editor->SetNodeEffect( curNode, m_defaultEffect );
-            auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_WIREFRAME, "wireframe", logic->GetGlobalTimeline() );
+            auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_WIREFRAME, "wireframe", m_timeEval );
             m_editor->SetNodeEffect( nextNode, newEffect );
         }
     }
@@ -357,7 +359,7 @@ void                    TestGlobalEfectKeyboardHandler::HandleMixChannels   ( BV
 
         if( !m_mixChannelsEffect )
         {
-            m_mixChannelsEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_MIX_CHANNELS, "mixChannels", logic->GetGlobalTimeline() );
+            m_mixChannelsEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_MIX_CHANNELS, "mix channels", m_timeEval );
         }
 
         m_editor->SetNodeEffect( root, m_mixChannelsEffect );
@@ -390,10 +392,7 @@ void                    TestGlobalEfectKeyboardHandler::SetNextMixChannelsPreset
 //
 model::BasicNodePtr     TestGlobalEfectKeyboardHandler::GetRootNode         ( BVAppLogic * logic )
 {
-    auto scene = logic->GetBVScene();
-    auto root = scene->GetModelSceneRoot();
-
-    return root;
+    return logic->GetBVProject()->GetModelSceneRoot();
 }
 
 // *********************************
@@ -450,7 +449,7 @@ model::IModelNodeEffectPtr TestGlobalEfectKeyboardHandler::GetAlphaMaskNodeEffec
 
     if (!effect) // || effect->GetType() != NodeEffectType::NET_ALPHA_MASK )
     {
-        auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_ALPHA_MASK, "alphamask", logic->GetGlobalTimeline() );
+        auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_ALPHA_MASK, "alphamask", m_timeEval );
         m_editor->SetNodeEffect( node, newEffect );
     }
 
@@ -466,7 +465,7 @@ model::IModelNodeEffectPtr  TestGlobalEfectKeyboardHandler::GetNodeMaskNodeEffec
 
     if (!effect) // || effect->GetType() != NodeEffectType::NET_NODE_MASK )
     {
-        auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_NODE_MASK, "nodemask", logic->GetGlobalTimeline() );
+        auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_NODE_MASK, "nodemask", m_timeEval );
         m_editor->SetNodeEffect( node, newEffect );
     }
 
@@ -482,7 +481,7 @@ model::IModelNodeEffectPtr  TestGlobalEfectKeyboardHandler::GetNodeWireframeEffe
 
     if (!effect) // || effect->GetType() != NodeEffectType::NET_WIREFRAME )
     {
-        auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_WIREFRAME, "wireframe", logic->GetGlobalTimeline() );
+        auto newEffect = model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_WIREFRAME, "wireframe", m_timeEval );
         m_editor->SetNodeEffect( node, newEffect );
     }
 

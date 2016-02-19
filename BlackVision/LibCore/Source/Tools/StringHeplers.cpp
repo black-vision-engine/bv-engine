@@ -16,16 +16,21 @@ namespace bv {
 
 // *******************************
 //
-std::wstring StringToWString( const std::string & data )
+Expected< std::wstring > StringToWString( const std::string & data )
 {
-    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+    try{
+        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+        return converter.from_bytes( data );
+    }catch(...)
+    {
+        return Expected< std::wstring >();
+    };
     
-    return converter.from_bytes( data );
 }
 
 // *******************************
 //
-std::string WStringToString( const std::wstring & data )
+Expected< std::string > WStringToString( const std::wstring & data )
 {
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
 
@@ -48,6 +53,16 @@ StrVec          Split           ( const std::string & str, const std::string & s
 std::string     Join            ( const StrVec & strVec, const std::string & sep )
 {
     return boost::algorithm::join( strVec, sep );
+}
+
+// *******************************
+//
+std::string     Trim            ( const std::string & str, const std::string & mark )
+{
+    auto ret = str;
+    ret.erase( ret.find_last_not_of( mark ) + 1 );
+    ret.erase( 0, ret.find_first_not_of( mark ) );
+    return ret;
 }
 
 } //bv

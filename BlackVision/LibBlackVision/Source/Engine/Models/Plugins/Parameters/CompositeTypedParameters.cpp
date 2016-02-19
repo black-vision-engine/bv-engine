@@ -1,4 +1,8 @@
+#include "stdafx.h"
+
 #include "CompositeTypedParameters.h"
+
+#include "Engine/Models/Timeline/TimelineManager.h"
 
 namespace bv { namespace model {
 
@@ -6,17 +10,92 @@ namespace bv { namespace model {
 
 // *******************************
 //
-ParamTransform::ParamTransform  ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator )
+ParamTransform::ParamTransform  ( const std::string & name, const CompositeTransform & transform, ITimeEvaluatorPtr evaluator )
     : AbstractModelParameter( name, ModelParamType::MPT_TRANSFORM, evaluator )
     , m_transformModel( transform )
 {
 }
 
 // *******************************
+//
+ParamTransform::~ParamTransform ()
+{
+}
+
+// *******************************
 // FIXME: reimplement with SQT paramter model
-void                ParamTransform::SetCurveType    ( CurveType type ) 
+void                ParamTransform::SetGlobalCurveType    ( CurveType type ) 
 { 
-    m_transformModel.SetCurveType( type ); 
+    m_transformModel.SetGlobalCurveType( type ); 
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+void                ParamTransform::SetAddedKeyCurveType    ( CurveType type )
+{
+    m_transformModel.SetAddedKeyCurveType( type );
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+CurveType           ParamTransform::GetCurveType    ()
+{
+    assert( false );
+    return CurveType::CT_TOTAL;
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+void        ParamTransform::SetWrapPostMethod ( WrapMethod method )
+{
+    m_transformModel.SetWrapPostMethod( method );
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+void        ParamTransform::SetWrapPreMethod ( WrapMethod method )
+{
+    m_transformModel.SetWrapPreMethod( method );
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+WrapMethod  ParamTransform::GetWrapPostMethod ()
+{
+    assert( false );
+    return WrapMethod( -1 );
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+WrapMethod  ParamTransform::GetWrapPreMethod ()
+{
+    assert( false );
+    return WrapMethod( -1 );
+}
+
+// *******************************
+// FIXME: reimplement with SQT paramter model
+int         ParamTransform::GetNumKeys      ()
+{
+    assert( false );
+    return -1;
+}
+
+// *******************************
+//
+void    ParamTransform::Serialize       ( ISerializer& ser ) const
+{
+    ser.EnterChild( "param" );
+    ser.SetAttribute( "name", GetName() );
+    ser.SetAttribute( "type", "transform" );
+
+    auto timeline = TimelineManager::GetInstance()->GetTimelinePath( m_timeEvaluator );
+    ser.SetAttribute( "timeline", timeline );
+
+    m_transformModel.Serialize( ser );
+
+    ser.ExitChild();
 }
 
 // *******************************
@@ -26,44 +105,11 @@ VoidPtr    ParamTransform::QueryParamTyped  ()
     return std::static_pointer_cast< void >( shared_from_this() );
 }
 
-
-// ******************************************************************************************
-
-// *******************************
+// *************************************
 //
-ParamTransformVec::ParamTransformVec                ( const std::string & name, const TransformF & transform, ITimeEvaluatorPtr evaluator )
-    : AbstractModelParameter( name, ModelParamType::MPT_TRANSFORM_VEC, evaluator )
+const CompositeTransform &      ParamTransform::GetTransform   () const
 {
-    AppendTransform( transform );
-}
-
-// *******************************
-//
-ParamTransformVec::ParamTransformVec                ( const std::string & name, ITimeEvaluatorPtr evaluator )
-    : AbstractModelParameter( name, ModelParamType::MPT_TRANSFORM_VEC, evaluator )
-{
-}
-
-// *******************************
-//
-void ParamTransformVec::SetCurveType        ( CurveType type ) 
-{ 
-    for( auto& trans : m_transformModelVec ) 
-        trans.SetCurveType( type ); 
-}
-
-// *******************************
-//
-void    ParamTransformVec::AppendTransform          ( const TransformF & transform )
-{
-    m_transformModelVec.push_back( transform );
-}
-
-// *******************************
-//
-VoidPtr         ParamTransformVec::QueryParamTyped  ()
-{
-    return std::static_pointer_cast< void >( shared_from_this() );
+    return m_transformModel;
 }
 
 } //model

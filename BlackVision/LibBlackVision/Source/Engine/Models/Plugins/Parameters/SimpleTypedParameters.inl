@@ -1,3 +1,8 @@
+#pragma once
+
+#include "Engine/Models/Timeline/TimelineManager.h"
+#include "Serialization/SerializationHelper.h"
+
 namespace bv { namespace model {
 
 // *******************************
@@ -16,12 +21,87 @@ SimpleParameterImpl< InterpolatorType, ValueType, type >::~SimpleParameterImpl  
 {
 }
 
+// ********************************************************************************************************************
+
+std::string Type2String( ModelParamType type ); // FIXME
+
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+void                SimpleParameterImpl< InterpolatorType, ValueType, type >::Serialize       ( ISerializer& ser ) const
+{
+    ser.EnterChild( "param" );
+    ser.SetAttribute( "name", GetName() );
+    ser.SetAttribute( "type", SerializationHelper::T2String< ModelParamType >( GetType() ) );
+    
+    auto timeline = TimelineManager::GetInstance()->GetTimelinePath( m_timeEvaluator );
+    ser.SetAttribute( "timeline", timeline );
+
+    m_interpolator.Serialize( ser );
+
+    ser.ExitChild();
+}
+
+// ***********************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+void            SimpleParameterImpl< InterpolatorType, ValueType, type >::SetAddedKeyCurveType    ( CurveType type )
+{
+    m_interpolator.SetAddedKeyCurveType( type ); 
+}
+
 // *******************************
 //
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
-void SimpleParameterImpl< InterpolatorType, ValueType, type >::SetCurveType    ( CurveType type )
+void SimpleParameterImpl< InterpolatorType, ValueType, type >::SetGlobalCurveType    ( CurveType type )
 { 
-    m_interpolator.SetCurveType( type ); 
+    m_interpolator.SetGlobalCurveType( type ); 
+}
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+CurveType       SimpleParameterImpl< InterpolatorType, ValueType, type >::GetCurveType        ()
+{
+    return m_interpolator.GetCurveType();
+}
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+void                SimpleParameterImpl< InterpolatorType, ValueType, type >::SetWrapPostMethod       ( WrapMethod method )
+{
+    m_interpolator.SetWrapPostMethod( method );
+}
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+void                SimpleParameterImpl< InterpolatorType, ValueType, type >::SetWrapPreMethod        ( WrapMethod method )
+{
+    m_interpolator.SetWrapPreMethod( method );
+}
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+WrapMethod          SimpleParameterImpl< InterpolatorType, ValueType, type >::GetWrapPostMethod       ()
+{
+    return m_interpolator.GetWrapPostMethod();
+}
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+WrapMethod          SimpleParameterImpl< InterpolatorType, ValueType, type >::GetWrapPreMethod        ()
+{
+    return m_interpolator.GetWrapPreMethod();
+}
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+int                 SimpleParameterImpl< InterpolatorType, ValueType, type >::GetNumKeys              ()
+{
+    return m_interpolator.GetNumKeys();
 }
 
 
@@ -38,9 +118,36 @@ inline ValueType SimpleParameterImpl< InterpolatorType, ValueType, type >::Evalu
 // *******************************
 //
 template< typename InterpolatorType, typename ValueType, ModelParamType type >
+inline  std::string         SimpleParameterImpl< InterpolatorType, ValueType, type >::EvaluateToString        ( TimeType t ) const
+{
+    auto val = m_interpolator.Evaluate( t );
+
+    return SerializationHelper::T2String( val );
+}
+
+
+// *******************************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
 inline  void        SimpleParameterImpl< InterpolatorType, ValueType, type >::SetVal    ( const ValueType & val, TimeType t )
 {
     m_interpolator.AddKey( t, val );
+}
+
+// ***********************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+inline  bool        SimpleParameterImpl< InterpolatorType, ValueType, type >::RemoveVal ( TimeType t )
+{
+    return m_interpolator.RemoveKey( t );
+}
+
+// ***********************
+//
+template< typename InterpolatorType, typename ValueType, ModelParamType type >
+inline  bool        SimpleParameterImpl< InterpolatorType, ValueType, type >::MoveKey             ( TimeType t, TimeType newTime )
+{
+    return m_interpolator.MoveKey( t, newTime );
 }
 
 // *******************************
@@ -66,25 +173,6 @@ inline ModelParamType  SimpleParameterImpl< InterpolatorType, ValueType, type >:
 {
     return type;
 }
-
-//// *******************************
-////
-//template< typename InterpolatorType, typename ValueType, ModelParamType type >
-//void                SimpleParameterImpl< InterpolatorType, ValueType, type >::SetInterpolationMethod ( IParameter::InterpolationMethod method )
-//{
-//    __super::SetInterpolationMethod( method );
-//    m_interpolator.SetInterpolationMethod( method );
-//}
-//
-//// *******************************
-////
-//template< typename InterpolatorType, typename ValueType, ModelParamType type >
-//IParameter::InterpolationMethod SimpleParameterImpl< InterpolatorType, ValueType, type >::GetInterpolationMethod () const
-//{
-//    assert( __super::GetInterpolationMethod() == m_interpolator.GetInterpolationMethod() ); // just to make sure we're consistent
-//    return __super::GetInterpolationMethod();
-//}
-
 
 // *******************************
 //
