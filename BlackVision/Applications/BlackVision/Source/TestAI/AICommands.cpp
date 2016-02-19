@@ -6,8 +6,6 @@
 #include "Engine/Models/Plugins/Interfaces/IPixelShaderChannel.h"
 #include "Engine/Models/Plugins/Channels/RendererContext/RendererContext.h"
 
-#include "Engine/Models/NodeEffects/ModelNodeEffectAlphaMask.h"
-
 #include "Engine/Models/Plugins/PluginUtils.h"
 
 #include "BVAppLogic.h"
@@ -326,8 +324,7 @@ bool        AICommandEnableOverridenAlpha::TriggerImpl          ( TimeType t )
 
         if( effect->GetType() == NodeEffectType::NET_ALPHA_MASK )
         {
-            auto alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( effect );
-            auto alpha = alphaMaskEffect->GetParamAlpha();
+            auto alpha = effect->GetParameter( "alpha" );
 
             SetParameter( alpha, t, 1.f );
             SetParameter( alpha, t + 2.5f, 0.f );
@@ -430,8 +427,7 @@ bool        AICommandEnableOverridenAlphaNM::TriggerImpl            ( TimeType t
 
         if( effect->GetType() == NodeEffectType::NET_ALPHA_MASK )
         {
-            auto alphaMaskEffect = std::static_pointer_cast< model::ModelNodeEffectAlphaMask >( effect );
-            auto alpha = alphaMaskEffect->GetParamAlpha();
+            auto alpha = effect->GetParameter( "alpha" );
 
             SetParameter( alpha, t, 1.f );
             SetParameter( alpha, t + 2.5f, 0.f );

@@ -322,4 +322,19 @@ SceneNode *             BVSceneEditor::GetEngineNode        ( model::IModelNodeP
     return m_nodesMapping[ node.get() ];
 }
 
+// *******************************
+//
+bool					BVSceneEditor::SetNodeEffect	( model::IModelNodePtr node, model::IModelNodeEffectPtr nodeEffect )
+{
+    if( node && nodeEffect )
+    {
+        auto modelNode = QueryTyped( node );
+        modelNode->SetNodeEffect( nodeEffect );
+        BVSceneTools::UpdateSceneNodeEffect( GetEngineNode( node ), modelNode );
+        return true;
+    }
+
+    return false;
+}
+
 } //bv
