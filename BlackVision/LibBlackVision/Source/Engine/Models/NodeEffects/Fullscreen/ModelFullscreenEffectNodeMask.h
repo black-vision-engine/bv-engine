@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Models/NodeEffects/ModelSimpleFullscreenEffect.h"
+#include "Engine/Models/NodeEffects/Fullscreen/ModelSimpleFullscreenEffect.h"
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 
 
@@ -22,8 +22,6 @@ public:
 
                                     ModelFullscreenEffectNodeMask   ( const std::string & name, ITimeEvaluatorPtr timeEvaluator ); 
     
-    virtual NodeEffectType          GetType                 () const override;
-
     ParamIntPtr                     GetParamBgIdx           () const;
     ParamIntPtr                     GetParamFgIdx           () const;
     ParamFloatPtr                   GetParamAlpha           () const;

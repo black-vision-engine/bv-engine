@@ -1,6 +1,6 @@
 #include "ModelFullscreenEffectAlphaMask.h"
 
-#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
+#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 
 
 namespace bv { namespace model {
@@ -12,19 +12,9 @@ ModelFullscreenEffectAlphaMask::ModelFullscreenEffectAlphaMask( const std::strin
     : ModelSimpleFullscreenEffect( name )
     , m_alphaVal( 1.f )
 {
-    auto alphaEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
-    alphaEval->Parameter()->SetVal( m_alphaVal, 0.f );
-
-    m_paramValModel->RegisterAll( alphaEval );
-
-    m_paramAlpha = alphaEval->Parameter();
-}
-
-// ********************************
-//
-NodeEffectType    ModelFullscreenEffectAlphaMask::GetType() const
-{
-    return NodeEffectType::NET_ALPHA_MASK;
+    m_paramAlpha = ParametersFactory::CreateParameterFloat( "alpha", timeEvaluator );
+    m_paramAlpha->SetVal( m_alphaVal, 0.f );
+    m_paramValModel->AddParameter( m_paramAlpha );
 }
 
 // ********************************

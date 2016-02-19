@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Models/NodeEffects/ModelSimpleFullscreenEffect.h"
+#include "Engine/Models/NodeEffects/Fullscreen/ModelSimpleFullscreenEffect.h"
 
 
 namespace bv { namespace model {
@@ -10,8 +10,6 @@ class ModelFullscreenEffectDefault : public ModelSimpleFullscreenEffect
 public:
 
                                 ModelFullscreenEffectDefault  ( const std::string & name, ITimeEvaluatorPtr timeEvaluator );
-
-    virtual NodeEffectType      GetType         () const override;
 
 };
 

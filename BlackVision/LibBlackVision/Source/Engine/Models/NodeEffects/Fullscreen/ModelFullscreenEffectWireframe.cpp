@@ -12,12 +12,5 @@ ModelFullscreenEffectWireframe::ModelFullscreenEffectWireframe  ( const std::str
     { timeEvaluator; }
 }
 
-// ********************************
-//
-NodeEffectType    ModelFullscreenEffectWireframe::GetType   () const
-{
-    return NodeEffectType::NET_WIREFRAME;
-}
-
 } // model
 } // bv

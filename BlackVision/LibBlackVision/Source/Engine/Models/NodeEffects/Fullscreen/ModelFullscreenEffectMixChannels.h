@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Models/NodeEffects/ModelSimpleFullscreenEffect.h"
+#include "Engine/Models/NodeEffects/Fullscreen/ModelSimpleFullscreenEffect.h"
 
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
 
@@ -20,8 +20,6 @@ private:
 public:
 
                                     ModelFullscreenEffectMixChannels    ( const std::string & name, ITimeEvaluatorPtr timeEvaluator );
-
-    virtual NodeEffectType          GetType                 () const override;
 
     ParamIntPtr                     GetParamChannelMixMask  () const;
     ParamVec4Ptr                    GetParamChannelMaskMask () const;

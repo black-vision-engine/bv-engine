@@ -12,12 +12,5 @@ ModelFullscreenEffectDefault::ModelFullscreenEffectDefault  ( const std::string 
     { timeEvaluator; }
 }
 
-// ********************************
-//
-NodeEffectType    ModelFullscreenEffectDefault::GetType   () const
-{
-    return NodeEffectType::NET_DEFAULT;
-}
-
 } // model
 } // bv

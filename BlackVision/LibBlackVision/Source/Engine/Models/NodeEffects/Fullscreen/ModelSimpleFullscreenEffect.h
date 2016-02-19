@@ -22,10 +22,10 @@ public:
 
     virtual void                            Update          ( TimeType t ) override;
 
-    IParameterPtr                           GetParameter    ( const std::string & name ) const override;
-    const std::vector< IParameterPtr > &    GetParameters   () const override;
+    virtual IParameterPtr                           GetParameter    ( const std::string & name ) const override;
+    virtual const std::vector< IParameterPtr > &    GetParameters   () const override;
 
-    const std::vector< IValueConstPtr > &   GetValues       () const override;
+    virtual const std::vector< IValueConstPtr > &   GetValues       () const override;
 
 };
 

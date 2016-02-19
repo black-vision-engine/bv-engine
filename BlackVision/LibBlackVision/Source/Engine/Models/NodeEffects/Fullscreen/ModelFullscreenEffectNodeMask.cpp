@@ -1,6 +1,6 @@
 #include "ModelFullscreenEffectNodeMask.h"
 
-#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
+#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 
 
 namespace bv { namespace model {
@@ -14,28 +14,17 @@ ModelFullscreenEffectNodeMask::ModelFullscreenEffectNodeMask( const std::string 
 	, m_fgVal( 1 )
 	, m_alphaVal( 1.f )
 { 
-	auto bgIdxEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "maskIdx", timeEvaluator );
-	auto fgIdxEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "fgIdx", timeEvaluator );
-	auto alphaEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "alpha", timeEvaluator );
+	m_paramBgIdx = ParametersFactory::CreateParameterInt( "maskIdx", timeEvaluator );
+    m_paramFgIdx = ParametersFactory::CreateParameterInt( "fgIdx", timeEvaluator );
+	m_paramAlpha = ParametersFactory::CreateParameterFloat( "alpha", timeEvaluator );
 
-    bgIdxEval->Parameter()->SetVal( m_bgVal, 0.f );
-    fgIdxEval->Parameter()->SetVal( m_fgVal, 0.f );
-    alphaEval->Parameter()->SetVal( m_alphaVal, 0.f );
+    m_paramBgIdx->SetVal( m_bgVal, 0.f );
+    m_paramFgIdx->SetVal( m_fgVal, 0.f );
+    m_paramAlpha->SetVal( m_alphaVal, 0.f );
 
-	m_paramValModel->RegisterAll( bgIdxEval );
-	m_paramValModel->RegisterAll( fgIdxEval );
-	m_paramValModel->RegisterAll( alphaEval );
-
-	m_paramBgIdx = bgIdxEval->Parameter();
-	m_paramFgIdx = fgIdxEval->Parameter();
-	m_paramAlpha = alphaEval->Parameter();
-}
-
-// ********************************
-//
-NodeEffectType    ModelFullscreenEffectNodeMask::GetType() const
-{
-    return NodeEffectType::NET_NODE_MASK;
+    m_paramValModel->AddParameter( m_paramBgIdx );
+    m_paramValModel->AddParameter( m_paramFgIdx );
+    m_paramValModel->AddParameter( m_paramAlpha );
 }
 
 // ********************************

@@ -1,6 +1,6 @@
 #include "ModelFullscreenEffectMixChannels.h"
 
-#include "Engine/Models/Plugins/ParamValModel/ParamValEvaluatorFactory.h"
+#include "Engine/Models/Plugins/Parameters/ParametersFactory.h"
 
 
 namespace bv { namespace model {
@@ -13,24 +13,14 @@ ModelFullscreenEffectMixChannels::ModelFullscreenEffectMixChannels( const std::s
     , m_channelMixMask( GetChannelMixMask( 0, 1, 2, 3 ) )
     , m_channelMaskMask( 1.f, 1.f, 1.f, 1.f )
 {
-    auto channelMixMaskEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "channelMixMask", timeEvaluator );
-    auto channelMaskMaskEval = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "channelMaskMask", timeEvaluator );
+    m_paramChannelMixMask = ParametersFactory::CreateParameterInt( "channelMixMask", timeEvaluator );
+    m_paramChannelMaskMask = ParametersFactory::CreateParameterVec4( "channelMaskMask", timeEvaluator );
     
-    m_paramValModel->RegisterAll( channelMixMaskEval );
-    m_paramValModel->RegisterAll( channelMaskMaskEval );
-
-    m_paramChannelMixMask = channelMixMaskEval->Parameter();
-    m_paramChannelMaskMask = channelMaskMaskEval->Parameter();
-
     m_paramChannelMixMask->SetVal( m_channelMixMask, 0.f );
     m_paramChannelMaskMask->SetVal( m_channelMaskMask, 0.f );
-}
 
-// ********************************
-//
-NodeEffectType    ModelFullscreenEffectMixChannels::GetType() const
-{
-    return NodeEffectType::NET_MIX_CHANNELS;
+    m_paramValModel->AddParameter( m_paramChannelMixMask );
+    m_paramValModel->AddParameter( m_paramChannelMaskMask );
 }
 
 // ********************************
