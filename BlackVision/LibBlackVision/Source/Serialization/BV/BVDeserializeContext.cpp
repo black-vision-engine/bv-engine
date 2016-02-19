@@ -66,6 +66,19 @@ void                                BVDeserializeContext::SetSceneName          
     m_sceneName = sceneName;
 }
 
+// ***********************
+//
+std::string &                       BVDeserializeContext::GetNodePath             ()
+{
+    return m_nodePath;
+}
+
+// ***********************
+//
+void                                BVDeserializeContext::SetNodePath             ( const std::string& sceneName )
+{
+    m_nodePath = sceneName;
+}
 
 // ***********************
 //

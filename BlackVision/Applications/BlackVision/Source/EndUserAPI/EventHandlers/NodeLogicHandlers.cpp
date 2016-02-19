@@ -68,6 +68,7 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
 
     auto context = static_cast< BVDeserializeContext* >( action.GetDeserializeContext() );
     context->SetSceneName( sceneName );
+    context->SetNodePath( nodePath );
 
 		
     if( command == NodeLogicEvent::Command::AddNodeLogic )

@@ -669,6 +669,11 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
             return false;
 
         AddNode( node );
+
+        // Prepare response. Send path to new node.
+        std::string addedNodePath = context->GetNodePath() + "/#" + SerializationHelper::T2String( m_parentNode->GetNumChildren() - 1 );
+        response.SetAttribute( "AddedNodePath", addedNodePath );
+
     }
     else if( crawlAction == "Reset" )
 	{
