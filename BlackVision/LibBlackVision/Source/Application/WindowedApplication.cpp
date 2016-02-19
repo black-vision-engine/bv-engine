@@ -234,9 +234,10 @@ void	WindowedApplication::OnDisplay				()
 
 // *********************************
 //
-void	WindowedApplication::OnIdle					()
+bool	WindowedApplication::OnIdle					()
 {
     //To be implemented in derived classes
+    return false;
 }
 
 // *********************************

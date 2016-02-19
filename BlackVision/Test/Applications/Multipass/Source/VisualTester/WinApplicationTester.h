@@ -40,7 +40,7 @@ protected:
 	~WinApplicationTester();
 
 	virtual int		MainFun( int argc, char ** argv ) override;
-	virtual void	OnIdle();
+	virtual bool	OnIdle();
 	virtual bool	OnInitialize();
 
 	void InitCamera( unsigned int w, unsigned int h );

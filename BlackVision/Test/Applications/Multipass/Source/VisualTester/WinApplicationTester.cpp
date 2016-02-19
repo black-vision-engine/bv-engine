@@ -417,9 +417,10 @@ int WinApplicationTester::MainFun( int argc, char ** argv )
 }
 
 
-void WinApplicationTester::OnIdle()
+bool WinApplicationTester::OnIdle()
 {
 	RUN_ALL_TESTS();
+    return true;
 }
 
 //

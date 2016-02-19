@@ -87,7 +87,7 @@ void BasicWindowApp::OnPreidle  ()
 
 // *********************************
 //
-void BasicWindowApp::OnIdle		()
+bool BasicWindowApp::OnIdle		()
 {
     static auto curMillis = Time::Now();
 	auto timeDiff = Time::Now() - curMillis;
@@ -100,6 +100,7 @@ void BasicWindowApp::OnIdle		()
 
     m_Renderer->DisplayColorBuffer();
 	
+    return true;
 }
 
 // *********************************

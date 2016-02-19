@@ -39,6 +39,7 @@ enum class BVAppState : int
 {
     BVS_INITALIZING = 0,
     BVS_RUNNING,
+    BVS_CLOSING,
     BVS_INVALID,
 
     BVS_TOTAL
@@ -95,8 +96,6 @@ public:
 
     virtual void    OnUpdate        ( unsigned long millis, Renderer * renderer );
     virtual void    OnKey           ( unsigned char c );
-    
-    virtual void    ChangeState     ( BVAppState state );
 
     virtual void    ShutDown        ();
 
@@ -109,6 +108,9 @@ public:
     void            ReloadScene     ();
 
 	void            GrabCurrentFrame(  const std::string & path );
+
+    virtual void            ChangeState     ( BVAppState state );
+    virtual BVAppState      GetState        ();
 
 public:
 

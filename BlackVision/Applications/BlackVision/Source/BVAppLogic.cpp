@@ -363,6 +363,13 @@ void BVAppLogic::ChangeState     ( BVAppState state )
     m_state = state;
 }
 
+// ***********************
+//
+BVAppState      BVAppLogic::GetState        ()
+{
+    return m_state;
+}
+
 // *********************************
 //
 void BVAppLogic::ShutDown           ()

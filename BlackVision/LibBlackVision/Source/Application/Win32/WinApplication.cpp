@@ -299,7 +299,8 @@ int WindowedApplication::MainFun	( int argc, char ** argv )
             }
             else
             {
-                app->OnIdle();
+                // Returns false if application wants to quit itself.
+                quit = !app->OnIdle();
             }
         }
     }
