@@ -23,6 +23,7 @@ public:
 	virtual std::string				GetKey		() const;
     virtual std::string             GetProposedShortKey () const;
 
+    virtual SizeType                EstimateMemoryUsage () const = 0;
 
 	template< typename DescTypeConstPtr >
 	friend DescTypeConstPtr  QueryTypedDesc( AssetDescConstPtr desc );

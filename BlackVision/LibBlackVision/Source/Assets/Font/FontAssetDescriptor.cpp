@@ -1,6 +1,8 @@
 #include "stdafx.h"
 
 #include "FontAssetDescriptor.h"
+#include "Serialization/SerializationHelper.h"
+
 #include <cassert>
 
 namespace bv
@@ -19,9 +21,9 @@ void                FontAssetDesc::Serialize       ( ISerializer& sob ) const
 
     sob.SetAttribute( "type", GetUID() );
     sob.SetAttribute( "path", m_fontFileName );
-    sob.SetAttribute( "size", std::to_string( m_fontSize ) );
-    sob.SetAttribute( "blur", std::to_string( m_blurSize ) );
-    sob.SetAttribute( "outline", std::to_string( m_outlineSize ) );
+    sob.SetAttribute( "size", SerializationHelper::T2String( m_fontSize ) );
+    sob.SetAttribute( "blur", SerializationHelper::T2String( m_blurSize ) );
+    sob.SetAttribute( "outline", SerializationHelper::T2String( m_outlineSize ) );
     sob.SetAttribute( "mipmaps", m_generateMipmaps ? "true" : "false" );
 
     sob.ExitChild();
@@ -41,9 +43,9 @@ ISerializableConstPtr FontAssetDesc::Create          ( const IDeserializer& dob 
     assert( dob.GetAttribute( "type" ) == UID() );
 
     auto path = dob.GetAttribute( "path" );
-    auto size = stoul( dob.GetAttribute( "size" ) );
-    auto blurSize = stoul( dob.GetAttribute( "blur" ) );
-    auto outSize = stoul( dob.GetAttribute( "outline" ) );
+    auto size = SerializationHelper::String2T( dob.GetAttribute( "size" ), 10 );
+    auto blurSize = SerializationHelper::String2T( dob.GetAttribute( "blur" ), 0 );
+    auto outSize = SerializationHelper::String2T( dob.GetAttribute( "outline" ), 0 );
     auto mipmaps = dob.GetAttribute( "mipmaps" ) == "true" ? true : false;
 
     return FontAssetDesc::Create( path, size, blurSize, outSize, mipmaps );
@@ -156,6 +158,15 @@ std::string             FontAssetDesc::GetProposedShortKey () const
 {
     return GetKey();
 }
+
+// ***********************
+//
+SizeType                FontAssetDesc::EstimateMemoryUsage () const
+{
+    return 0;
+}
+
+
 
 } // bv
 

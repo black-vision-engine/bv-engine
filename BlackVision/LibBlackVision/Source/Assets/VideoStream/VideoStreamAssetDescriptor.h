@@ -50,6 +50,7 @@ public:
 	virtual bool								IsCacheable					() const override;
 	
     virtual std::string							GetKey						() const override;
+    virtual SizeType                            EstimateMemoryUsage         () const override;
 
 	static const std::string &					UID							();
 

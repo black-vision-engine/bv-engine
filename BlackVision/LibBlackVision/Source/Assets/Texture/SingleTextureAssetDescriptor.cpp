@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "SingleTextureAssetDescriptor.h"
+#include "TextureUtils.h"
 
 #include <assert.h>
 
@@ -109,6 +110,15 @@ TextureFormat SingleTextureAssetDesc::GetFormat() const
 {
 	return m_format;
 }
+
+// ***********************
+//
+SizeType        SingleTextureAssetDesc::EstimateMemoryUsage () const
+{
+    UInt32 pixelSize = TextureUtils::ToBPP( m_format ) / 8;
+    return m_width * m_height * pixelSize;
+}
+
 
 
 } // bv

@@ -3,6 +3,7 @@
 #include "VideoStreamAssetDescriptor.h"
 #include <cassert>			//@todo delete after implementing all functions
 
+#include "Assets/Texture/TextureUtils.h"
 
 // Fixme: Hack. Path in VideoStream descriptor is used to load video.
 // There is no way to convert it to ProjectManager path.
@@ -79,6 +80,16 @@ std::string				VideoStreamAssetDesc::GetKey      () const
 {
     return m_streamPath;
 }
+
+// ***********************
+//
+SizeType                VideoStreamAssetDesc::EstimateMemoryUsage () const
+{
+    UInt32 pixelSize = TextureUtils::ToBPP( m_textureFormat ) / 8;
+
+    return 4 * pixelSize * m_height * m_width;
+}
+
 
 // ***********************
 //

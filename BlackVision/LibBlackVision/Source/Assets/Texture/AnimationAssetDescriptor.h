@@ -29,6 +29,8 @@ public:
 
 	static const std::string &		UID			();
 
+    virtual SizeType                EstimateMemoryUsage () const override;
+
 public:
                                                 
                                                 ~AnimationAssetDesc	();

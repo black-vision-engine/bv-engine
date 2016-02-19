@@ -44,6 +44,8 @@ public:
 	virtual std::string					GetKey				() const override;
     virtual std::string                 GetProposedShortKey () const override;
 
+    virtual SizeType                    EstimateMemoryUsage () const override;
+
 	static FontAssetDescConstPtr		Create				(	const std::string & fontFileName,
 																UInt32 fontSize,
 																UInt32 blurSize,

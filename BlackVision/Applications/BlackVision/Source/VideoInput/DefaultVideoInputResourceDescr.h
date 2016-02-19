@@ -16,6 +16,7 @@ namespace bv { namespace model {
 		virtual PluginResourceType      GetResourceType () const { return PluginResourceType::PRT_VIDEOINPUT; }
 
 		virtual  DefaultTextureDescriptorPtr     GetITextureDescriptor  () const /*override*/ { return descr; }
+        virtual  SizeType                        EstimateMemoryUsage    () const override;
 
 		//virtual void Update() const override { input->Update(); }
 

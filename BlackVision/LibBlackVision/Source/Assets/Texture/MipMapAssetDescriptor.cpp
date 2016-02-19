@@ -127,6 +127,18 @@ const std::string &	MipMapAssetDesc::UID()
 	return MipMapAssetDesc::uid;
 }
 
+// ***********************
+//
+SizeType            MipMapAssetDesc::EstimateMemoryUsage () const
+{
+    SizeType memUsage = 0;
+    for( auto & desc : m_mipMapDescs )
+        memUsage += desc->EstimateMemoryUsage();
+    
+    return memUsage;
+}
+
+
 
 // ******************************
 //

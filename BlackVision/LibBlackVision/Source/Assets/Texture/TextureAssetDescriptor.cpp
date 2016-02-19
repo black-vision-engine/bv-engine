@@ -4,6 +4,7 @@
 #include "LibImage.h"
 #include "Engine/Types/EnumsUtils.h"
 #include "Tools/Utils.h"
+#include "TextureUtils.h"
 #include "ProjectManager.h"
 #include <cassert>
 
@@ -75,6 +76,7 @@ ser.EnterChild( "asset" );
     {
         ser.SetAttribute( "width", SerializationHelper::T2String( m_originalTextureDesc->GetWidth() ) );
         ser.SetAttribute( "height", SerializationHelper::T2String( m_originalTextureDesc->GetHeight() ) );
+        ser.SetAttribute( "estimatedMemoryUsage", SerializationHelper::T2String( EstimateMemoryUsage() ) );
     }
 
     if( m_mipMapsDescs )
@@ -333,6 +335,35 @@ std::string             TextureAssetDesc::GetProposedShortKey () const
     auto basename = AssetDesc::GetProposedShortKey();
     return basename.substr( 0, basename.find( '.' ) );
 }
+
+// ***********************
+//
+SizeType                TextureAssetDesc::EstimateMemoryUsage () const
+{
+    SizeType assetSize = 0;
+    UInt32 pixelSize = TextureUtils::ToBPP( m_originalTextureDesc->GetFormat() ) / 8;
+
+    if( m_loadingType == TextureAssetLoadingType::LOAD_ORIGINAL_TEXTURE_AND_GENERATE_MIP_MAPS )
+    {
+        // Generating mip maps changes size of tezture.
+        auto newWidth = RoundUpToPowerOfTwo( m_originalTextureDesc->GetWidth() );
+        auto newHeight = RoundUpToPowerOfTwo( m_originalTextureDesc->GetHeight() );
+
+        // Estimate mip maps size as the same as original texture size.
+        assetSize += 2 * pixelSize * newWidth * newHeight;
+    }
+    else
+    {
+        if( m_originalTextureDesc != nullptr )
+            assetSize += m_originalTextureDesc->EstimateMemoryUsage();
+
+        if( m_mipMapsDescs != nullptr )
+            assetSize += m_mipMapsDescs->EstimateMemoryUsage();
+    }
+
+    return assetSize;
+}
+
 // ***********************
 //
 SingleTextureAssetDescConstPtr TextureAssetDesc::GetOrigTextureDesc() const

@@ -48,6 +48,8 @@ public:
 	virtual std::string					GetKey				() const override;
     virtual std::string                 GetProposedShortKey () const override;
 
+    virtual SizeType                    EstimateMemoryUsage () const override;
+
 	TextureAssetLoadingType				GetLoadingType		() const;
 	SingleTextureAssetDescConstPtr		GetOrigTextureDesc	() const;
 	MipMapAssetDescConstPtr				GetMipMapsDesc		() const;

@@ -170,4 +170,13 @@ SizeType             AnimationAssetDesc::GetNumFrames() const
     return m_numFrames;
 }
 
+// ***********************
+//
+SizeType            AnimationAssetDesc::EstimateMemoryUsage () const
+{
+    // I assume that textures have 4 bytes per pixel.
+    return 4 * m_width * m_height * m_numFrames;
+}
+
+
 } //bv
