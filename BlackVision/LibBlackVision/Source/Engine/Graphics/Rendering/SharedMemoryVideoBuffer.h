@@ -1,8 +1,7 @@
-#include <windows.h>
-#include <stdio.h>
-#include <conio.h>
-#include <tchar.h>
+#pragma once
 
+#include <windows.h>
+#include <conio.h>
 
 #include "Engine/Graphics/Resources/Textures/Texture2D.h"
 

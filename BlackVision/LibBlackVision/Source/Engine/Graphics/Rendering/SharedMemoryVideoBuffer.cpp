@@ -1,4 +1,7 @@
+#include "stdafx.h"
+
 #include "SharedMemoryVideoBuffer.h"
+
 
 namespace bv
 {
