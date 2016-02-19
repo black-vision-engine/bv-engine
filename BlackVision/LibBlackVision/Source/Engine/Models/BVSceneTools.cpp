@@ -72,32 +72,14 @@ SceneNode *         BVSceneTools::BuildEngineSceneNode                  ( model:
 void                BVSceneTools::UpdateSceneNodeEffect                 ( SceneNode * node, model::BasicNodePtr modelNode )
 {
     auto modelNodeEffect = modelNode->GetNodeEffect();
+    auto nodeEffectType = NodeEffectType::NET_DEFAULT;
 
-    if ( !modelNodeEffect || modelNodeEffect->GetType() == NodeEffectType::NET_DEFAULT )
+    if ( modelNodeEffect )
     {
-        auto sceneNodeDefaultEffect = CreateNodeEffect( NodeEffectType::NET_DEFAULT );
-        node->SetNodeEffect( sceneNodeDefaultEffect );
+        nodeEffectType = modelNodeEffect->GetType();
     }
-    else if( modelNodeEffect->GetType() == NodeEffectType::NET_ALPHA_MASK )
-    {
-        auto sceneNodeAMEffect = CreateNodeEffect( NodeEffectType::NET_ALPHA_MASK );
-        node->SetNodeEffect( sceneNodeAMEffect );
-    }
-    else if( modelNodeEffect->GetType() == NodeEffectType::NET_NODE_MASK )
-    {
-        auto sceneNodeNMEffect = CreateNodeEffect( NodeEffectType::NET_NODE_MASK );
-        node->SetNodeEffect( sceneNodeNMEffect );
-    }
-    else if( modelNodeEffect->GetType() ==  NodeEffectType::NET_WIREFRAME )
-    {
-        auto sceneNodeWireframeEffect = CreateNodeEffect( NodeEffectType::NET_WIREFRAME );
-        node->SetNodeEffect( sceneNodeWireframeEffect );
-    }
-    else
-    {
-        //Did you forget to implement an additional effect
-        assert( false );
-    }
+
+    node->SetNodeEffect( CreateNodeEffect( nodeEffectType ) );
 }
 
 // *******************************

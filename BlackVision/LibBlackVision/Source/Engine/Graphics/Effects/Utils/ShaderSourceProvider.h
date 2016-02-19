@@ -34,5 +34,6 @@ public:
 };
 
 #define FSEShaderSourceProvider ShaderSourceProvider::GetProvider( ShaderCategory::SC_FULLSCREENEFFECT )
+#define CustomShaderSourceProvider ShaderSourceProvider::GetProvider( ShaderCategory::SC_CUSTOM )
 
 } //bv
