@@ -36,6 +36,7 @@ private:
     AssetDescsWithUIDsPtr               m_assets;
 
     std::string                         m_sceneName;
+    std::string                         m_nodePath;
 
 public:
     BVDeserializeContext( model::OffsetTimeEvaluatorPtr timeline, AssetDescsWithUIDsPtr assets );
@@ -49,6 +50,9 @@ public:
 
     std::string &                       GetSceneName            ();
     void                                SetSceneName            ( const std::string& sceneName );
+
+    std::string &                       GetNodePath             ();
+    void                                SetNodePath             ( const std::string& sceneName );
 
     void                                Push                    ( const model::RendererContextPtr & context );
     const model::RenderContextVec &     RendererContextes       () const;

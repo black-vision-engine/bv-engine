@@ -124,7 +124,7 @@ void                            BasicNode::Serialize               ( ISerializer
     if( context->detailedInfo && m_modelNodeEffect )
         m_modelNodeEffect->Serialize( ser );
 
-    if( context->detailedInfo && m_nodeLogic )
+    if( m_nodeLogic )  // Logic chooses by itself, what to write as detailed info.
         m_nodeLogic->Serialize( ser );
 
     if( context->recursive )

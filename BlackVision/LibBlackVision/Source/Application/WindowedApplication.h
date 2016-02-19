@@ -86,7 +86,7 @@ public:
     virtual bool	OnPrecreate     ();
     virtual void	OnPreidle	    ();
     virtual void	OnDisplay	    ();
-    virtual void	OnIdle		    ();
+    virtual bool	OnIdle		    ();
     virtual void    OnPreMainLoop   ();
 
 protected:

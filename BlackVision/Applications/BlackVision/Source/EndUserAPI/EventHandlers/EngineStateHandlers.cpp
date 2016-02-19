@@ -36,9 +36,17 @@ void EngineStateHandlers::EngineStateHandler( IEventPtr evt )
 
     auto& renderMode = m_appLogic->GetRenderMode();
     if( command == EngineStateEvent::Command::ScreenShot )
+    {
         renderMode.MakeScreenShot( path );
+    }
     else if( command == EngineStateEvent::Command::RenderOffscreen )
+    {
         renderMode.SetRenderToFileMode( path, requestedFPS, numFrames );
+    }
+    else if( command == EngineStateEvent::Command::CloseApplication )
+    {
+        m_appLogic->ChangeState( BVAppState::BVS_CLOSING );
+    }
     else
     {
         SendSimpleErrorResponse( command, stateEvent->EventID, stateEvent->SocketID, "Unknown command" );

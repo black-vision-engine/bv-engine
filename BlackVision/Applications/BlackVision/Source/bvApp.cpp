@@ -88,7 +88,7 @@ void BlackVisionApp::OnPreidle  ()
 
 // *********************************
 //
-void BlackVisionApp::OnIdle		()
+bool BlackVisionApp::OnIdle		()
 {
     HPROFILER_NEW_FRAME( PROFILER_THREAD1 );
     HPROFILER_FUNCTION( "BlackVisionApp::OnIdle", PROFILER_THREAD1 );
@@ -102,6 +102,10 @@ void BlackVisionApp::OnIdle		()
     m_app->OnUpdate( millis, m_Renderer );
 
     PostFrame( millis );
+
+    if( m_app->GetState() == BVAppState::BVS_CLOSING )
+        return false;
+    return true;
 }
 
 // *********************************

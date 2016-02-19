@@ -14,6 +14,9 @@ DEFINE_CONST_PTR_TYPE( NodeReplicator )
 
 class NodeReplicator : public model::INodeLogic, public std::enable_shared_from_this< NodeReplicator >
 {
+private:
+    static const std::string        m_type;
+
 public:
 
     virtual void					Initialize		()				override;
@@ -21,6 +24,8 @@ public:
 	virtual void					Deinitialize	()				override;
 
     static NodeReplicatorPtr        Create          ( BasicNode * node, SizeType repNum, const IReplicationModifierConstPtr & modifier );
+
+    virtual const std::string       GetType         () const override;
 
 
     virtual void                    Serialize       ( ISerializer & ser ) const override;

@@ -21,6 +21,7 @@ public:
 	virtual void					Update			( TimeType t )	= 0;
 	virtual void					Deinitialize	()				= 0;
 
+    virtual const std::string       GetType         () const        = 0;
     virtual bool                    HandleEvent     ( IDeserializer & eventStr, ISerializer & response, BVProjectEditor * editor ) = 0;
 
 };
