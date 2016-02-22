@@ -1360,6 +1360,9 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Rendering\Logic\OfflineRendering\ScreenShotLogic.cpp">
       <Filter>Engine\Graphics\Rendering\Logic\OfflineRendering</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\SceneThumbnail.cpp">
+      <Filter>Assets\Thumbnail\Impl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -3430,6 +3433,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\Logic\OfflineRendering\ScreenShotLogic.h">
       <Filter>Engine\Graphics\Rendering\Logic\OfflineRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\SceneThumbnail.h">
+      <Filter>Assets\Thumbnail\Impl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
