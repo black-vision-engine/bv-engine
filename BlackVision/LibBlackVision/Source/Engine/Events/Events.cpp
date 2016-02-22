@@ -33,6 +33,9 @@ std::string TransformSetEvent::m_sEventName         = "Event_TransformSet";
 const EventType KeyPressedEvent::m_sEventType       = 0x00000005;
 std::string KeyPressedEvent::m_sEventName           = "Event_KeyPressedEvent";
 
+const EventType ScreenShotRenderedEvent::m_sEventType       = 0x00000006;
+std::string ScreenShotRenderedEvent::m_sEventName           = "ScreenShotRenderedEvent";
+
 // FIXME: MORE EVENTS IN CrawlerEvents.cpp. VERY VERY BAD IDEA. WE NEED EVENTS REGISTER SYSTEM ASAP.
 
 
@@ -852,6 +855,48 @@ void                    KeyPressedEvent::SetChar             ( unsigned char  c 
 unsigned char           KeyPressedEvent::GetChar             () const
 {    return m_char; }
 
+
+// ************************************* ScreenShotRenderedEvent *************************************
+
+
+// *************************************
+//
+ScreenShotRenderedEvent::ScreenShotRenderedEvent        ()
+{}
+
+// *************************************
+//
+void                ScreenShotRenderedEvent::Serialize            ( ISerializer& ser ) const
+{    assert( !"Should not be serialized" );  }
+
+// *************************************
+//
+IEventPtr                ScreenShotRenderedEvent::Create          ( IDeserializer& deser )
+{
+    assert( !"Should not be deserialized" );
+    return nullptr;    
+}
+// *************************************
+//
+IEventPtr               ScreenShotRenderedEvent::Clone             () const
+{   return IEventPtr( new ScreenShotRenderedEvent( *this ) );  }
+
+// *************************************
+//
+EventType           ScreenShotRenderedEvent::Type()
+{   return m_sEventType;   }
+// *************************************
+//
+std::string&        ScreenShotRenderedEvent::Name()
+{   return m_sEventName;   }
+// *************************************
+//
+const std::string&  ScreenShotRenderedEvent::GetName() const
+{   return Name();   }
+// *************************************
+//
+EventType           ScreenShotRenderedEvent::GetEventType() const
+{   return this->m_sEventType; }
 
 //******************* LoadAssetEvent *************
 

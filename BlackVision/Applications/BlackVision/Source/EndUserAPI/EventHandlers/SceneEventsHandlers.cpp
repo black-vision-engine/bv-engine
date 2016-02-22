@@ -21,7 +21,9 @@ namespace bv
 //
 SceneEventsHandlers::SceneEventsHandlers( BVAppLogic* logic )
     : m_appLogic( logic )
-{}
+{
+    GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( this, &SceneEventsHandlers::ThumbnailRendered ), ScreenShotRenderedEvent::Type() );
+}
 
 SceneEventsHandlers::~SceneEventsHandlers()
 {}
@@ -396,6 +398,11 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
                 }
 
                 SendSimpleResponse( command, projectEvent->EventID, senderID, true );
+                
+                Path sceneScreenShot( saveTo );
+                sceneScreenShot = sceneScreenShot / scene->GetName();
+                sceneScreenShot = ProjectManager::GetInstance()->ToAbsPath( sceneScreenShot );
+                m_appLogic->GetRenderMode().MakeScreenShot( sceneScreenShot.Str() ); 
             }
             else
             {
@@ -569,6 +576,19 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
 
 }
 
+// ***********************
+//
+void        SceneEventsHandlers::ThumbnailRendered   ( bv::IEventPtr evt )
+{
+    if( evt->GetEventType() != bv::ScreenShotRenderedEvent::Type() )
+        return;
+    
+    ScreenShotRenderedEventPtr screenShotEvent = std::static_pointer_cast< ScreenShotRenderedEvent >( evt );
 
+    if( screenShotEvent->Result )
+    {
+        // FIXME: Load image, resize to 128,128 and create thumbnail
+    }
+}
 
 } //bv

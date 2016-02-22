@@ -48,7 +48,7 @@ void RenderMode::SetRenderToFileMode( const std::string & filePath, float reques
 
     if( m_renderLogic )
 	{
-        m_renderLogic->MakeScreenShot( filePath, numFrames );
+        m_renderLogic->MakeScreenShot( filePath, numFrames, false );
 	}
 
     if( m_renderer )
@@ -63,11 +63,11 @@ void RenderMode::SetRenderToFileMode( const std::string & filePath, float reques
 
 // ***********************
 //
-void RenderMode::MakeScreenShot( const std::string & filePath )
+void RenderMode::MakeScreenShot( const std::string & filePath, bool onRenderedEvent )
 {
     if( m_renderLogic )
 	{
-        m_renderLogic->MakeScreenShot( filePath, 1 );
+        m_renderLogic->MakeScreenShot( filePath, 1, onRenderedEvent );
 	}
 }
 
