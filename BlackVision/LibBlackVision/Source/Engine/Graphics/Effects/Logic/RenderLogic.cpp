@@ -453,9 +453,9 @@ VideoOutputRenderLogic *    RenderLogic::GedVideoOutputRenderLogic  ()
 
 // *********************************
 //
-void                        RenderLogic::MakeScreenShot  ( const std::string& path, unsigned int numFrames )
+void                        RenderLogic::MakeScreenShot  ( const std::string& path, unsigned int numFrames, bool onRenderedEvent )
 {
-    m_screenShotLogic->MakeScreenShot( path, numFrames );
+    m_screenShotLogic->MakeScreenShot( path, numFrames, onRenderedEvent );
 }
 
 } //bv
