@@ -402,7 +402,7 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
                 Path sceneScreenShot( saveTo );
                 sceneScreenShot = sceneScreenShot / scene->GetName();
                 sceneScreenShot = ProjectManager::GetInstance()->ToAbsPath( sceneScreenShot );
-                m_appLogic->GetRenderMode().MakeScreenShot( sceneScreenShot.Str() ); 
+                m_appLogic->GetRenderMode().MakeScreenShot( sceneScreenShot.Str(), true ); 
             }
             else
             {

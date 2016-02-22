@@ -30,7 +30,7 @@ void SaveImageToFileFunction    ( const std::string & filePath, MemoryChunkConst
         renderedEvent->FilePath = filePath;
         renderedEvent->Result = result;
 
-        GetDefaultEventManager().QueueEvent( renderedEvent );
+        GetDefaultEventManager().ConcurrentQueueEvent( renderedEvent );
     }
 }
 
