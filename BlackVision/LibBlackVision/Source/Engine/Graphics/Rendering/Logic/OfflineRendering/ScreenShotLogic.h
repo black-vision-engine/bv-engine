@@ -6,8 +6,9 @@
 
 namespace bv
 {
-class OffscreenRenderLogic;
+class RenderLogicContext;
 class Renderer;
+class RenderTarget;
 
 class ScreenShotLogic
 {
@@ -25,7 +26,7 @@ public:
 
     void        MakeScreenShot  ( const std::string& filePath, unsigned int numFrames = 1 );
 
-    void        FrameRendered   ( Renderer* renderer, OffscreenRenderLogic* offscreenRenderLogic );
+    void        FrameRendered   ( RenderTarget * videoRenderTarget, RenderLogicContext * ctx );
     bool        ReadbackNeeded  ();
 };
 

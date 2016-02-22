@@ -25,11 +25,11 @@ void EngineStateHandlers::EngineStateHandler( IEventPtr evt )
     if( evt->GetEventType() != EngineStateEvent::Type() )
         return;
 
-    bv::EngineStateEventPtr stateEvent = std::static_pointer_cast<bv::EngineStateEvent>( evt );
-    std::string& filePath = stateEvent->FilePath;
-    unsigned int numFrames = stateEvent->NumFrames;
-    float requestedFPS = stateEvent->FPS;
-    auto command = stateEvent->RenderingCommand;
+    bv::EngineStateEventPtr stateEvent  = std::static_pointer_cast<bv::EngineStateEvent>( evt );
+    std::string& filePath               = stateEvent->FilePath;
+    unsigned int numFrames              = stateEvent->NumFrames;
+    float requestedFPS                  = stateEvent->FPS;
+    auto command                        = stateEvent->RenderingCommand;
 
     // Converts to path inside project manager.
     std::string path = ProjectManager::GetInstance()->ToAbsPath( filePath ).Str();

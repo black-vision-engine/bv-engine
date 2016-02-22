@@ -1197,9 +1197,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultVideoStreamDecoderPlugin.cpp">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\LightScatteringNodeEffect.cpp">
-      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\NodeEffect.cpp">
       <Filter>Engine\Graphics\Effects\NodeEffect</Filter>
     </ClCompile>
@@ -3282,15 +3279,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Resources\Textures\Texture2D.h">
       <Filter>Engine\Graphics\Resources\Textures</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\AlphaMaskNodeEffect.h">
-      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeEffect.h">
-      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffects\NodeMaskNodeEffect.h">
-      <Filter>Engine\Graphics\Effects\NodeEffects</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IModelNodeEffect.h">
       <Filter>Engine\Models\Interfaces</Filter>
     </ClInclude>
@@ -3299,9 +3287,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamViewport.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\InterlaceEffect.h">
-      <Filter>Engine\Graphics\Effects</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg\FFmpegUtils.h">
       <Filter>Engine\Models\Plugins\Simple\VideoStreamDecoder\FFmpeg</Filter>

@@ -3,6 +3,9 @@
 #include "ScreenShotLogic.h"
 
 #include "Engine/Graphics/Renderers/Renderer.h"
+#include "Engine/Graphics/Resources/RenderTarget.h"
+#include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
+
 #include "LibImage.h"
 
 #include "System/Path.h"
@@ -35,15 +38,10 @@ void ScreenShotLogic::MakeScreenShot( const std::string& filePath, unsigned int 
     m_filePath = filePath;
 
     Path file( filePath );
-    auto directories = file.Split();
+    auto directory = file.ParentPath();
 
-    // Create directory for screenshots
-    std::string directory = "";
-    for( int i = 0; i < directories.size() - 1; ++i )
-        directory += directories[ i ];
-
-    if( directory != "" && !Dir::Exists( directory ) )
-        Dir::CreateDir( directory, true );
+    if( directory != "" && !Dir::Exists( directory.Str() ) )
+        Dir::CreateDir( directory.Str(), true );
 
     m_remainingFrames = numFrames;
     m_allFrames = numFrames;
@@ -51,41 +49,30 @@ void ScreenShotLogic::MakeScreenShot( const std::string& filePath, unsigned int 
 
 // ***********************
 //
-void ScreenShotLogic::FrameRendered   (  Renderer* renderer, OffscreenRenderLogic* offscreenRenderLogic )
+void ScreenShotLogic::FrameRendered   ( RenderTarget * renderTarget, RenderLogicContext * ctx )
 {
     HPROFILER_SECTION( "ScreenShot Logic", PROFILER_THREAD1 );
-    
-    //FIXME
-    { renderer; offscreenRenderLogic; }
-    assert( false );
 
-    //offscreenRenderLogic->DrawWithAllVideoEffects( renderer );
-    //offscreenRenderLogic->DrawDisplayRenderTarget( renderer );
+    if( ReadbackNeeded() )
+    {
+        std::string newFilePath = m_filePath + std::to_string( m_allFrames - m_remainingFrames ) + ".bmp";
 
-    //if( ReadbackNeeded() )
-    //{
-    //    std::string newFilePath = m_filePath + std::to_string( m_allFrames - m_remainingFrames ) + ".bmp";
+        Texture2DPtr frame;
+        {
+            HPROFILER_SECTION( "Frame Readback", PROFILER_THREAD1 );
 
-    //    Texture2DConstPtr frame;
-    //    {
-    //        HPROFILER_SECTION( "Frame Readback", PROFILER_THREAD1 );
-    //        if( m_asyncWrites[ m_curReadbackFrame ].valid() )
-    //            m_asyncWrites[ m_curReadbackFrame ].get();      // Wait until frame will be written.
+            renderer( ctx )->ReadColorTexture( 0, renderTarget, frame );
+        }
 
-    //        frame = offscreenRenderLogic->ReadDisplayTarget( renderer, m_curReadbackFrame );
-    //        m_curReadbackFrame = ( m_curReadbackFrame + 1 ) % offscreenRenderLogic->NumReadBuffersPerRT();
-    //    }
+        {
+            HPROFILER_SECTION( "Write to file", PROFILER_THREAD1 );
+            auto chunk = frame->GetData();
 
-    //    {
-    //        HPROFILER_SECTION( "Write to file", PROFILER_THREAD1 );
-    //        auto chunk = frame->GetData();
+            m_asyncWrites[ m_curReadbackFrame ] = std::async( image::SaveBMPImage, newFilePath, chunk, frame->GetWidth(), frame->GetHeight(), 32 );
 
-    //        m_asyncWrites[ m_curReadbackFrame ] = std::async( image::SaveBMPImage, newFilePath, chunk, frame->GetWidth(), frame->GetHeight(), 32 );
-
-    //        --m_remainingFrames;
-    //    }
-    //}
-    //offscreenRenderLogic->SwapDisplayRenderTargets();
+            --m_remainingFrames;
+        }
+    }
 }
 
 // ***********************
