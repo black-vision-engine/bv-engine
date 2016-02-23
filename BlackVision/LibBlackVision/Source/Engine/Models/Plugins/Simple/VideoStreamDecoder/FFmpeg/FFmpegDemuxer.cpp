@@ -69,7 +69,7 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 				assert( error == AVERROR_EOF ); //error reading frame
 				
 				m_isEOF = true;
-                av_free_packet( packet );
+                av_packet_unref( packet );
                 return nullptr;
             }
 
@@ -82,7 +82,7 @@ AVPacket *			FFmpegDemuxer::GetPacket				( Int32 streamIdx )
 				}
 				else
 				{
-                    av_free_packet( packet );
+                    av_packet_unref( packet );
                 }
             }
 		}
@@ -146,8 +146,7 @@ void				FFmpegDemuxer::ClearPacketQueue		()
 
 		for( auto qit = queue.begin(); qit != queue.end(); ++qit )
 		{
-			av_free_packet( *qit );
-			delete *qit;
+			av_packet_unref( *qit );
 		}
 
 		queue.clear();

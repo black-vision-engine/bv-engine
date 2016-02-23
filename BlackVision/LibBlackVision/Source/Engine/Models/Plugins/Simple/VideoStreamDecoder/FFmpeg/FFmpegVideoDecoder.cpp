@@ -28,14 +28,13 @@ FFmpegVideoDecoder::FFmpegVideoDecoder		( VideoStreamAssetConstPtr asset )
 	
 	auto ffmpegFormat = FFmpegUtils::ToFFmpegPixelFormat( asset->GetTextureFormat() );
 	m_outFrame = av_frame_alloc();
-	auto numBytes = avpicture_get_size( ffmpegFormat, width, height );
+	auto numBytes = av_image_get_buffer_size( ffmpegFormat, width, height, 1 );
 	m_outBuffer = ( uint8_t * )av_malloc( numBytes * sizeof( uint8_t ) );
-	avpicture_fill( ( AVPicture * )m_outFrame, m_outBuffer, ffmpegFormat, width, height );
-    
+    av_image_fill_arrays( ( uint8_t ** ) m_outFrame->data, m_outFrame->linesize, m_outBuffer, ffmpegFormat, width, height, 1 );
 	m_outFrame->width = width;
 	m_outFrame->height = height;
 	m_outFrame->format = ( int )ffmpegFormat;
-	m_frameSize = avpicture_get_size( static_cast< AVPixelFormat >( m_outFrame->format ), m_outFrame->width, m_outFrame->height );
+	m_frameSize = av_image_get_buffer_size( static_cast< AVPixelFormat >( m_outFrame->format ), m_outFrame->width, m_outFrame->height, 1 );
 }
 
 // *********************************
@@ -160,7 +159,11 @@ bool					FFmpegVideoDecoder::DecodeNextFrame			()
 		}
 		
 	}
-	av_free_packet( packet );
+
+    if( packet )
+    {
+	    av_packet_unref( packet );
+    }
 
 	return success;
 }
@@ -215,7 +218,7 @@ void					FFmpegVideoDecoder::Seek					( Float64 time )
         {
             break;
         }
-        av_free_packet( packet );
+        av_packet_unref( packet );
     }
 
 	m_frameQueue.Clear();
