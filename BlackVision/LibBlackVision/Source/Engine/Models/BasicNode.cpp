@@ -38,9 +38,6 @@
 
 namespace bv { 
     
-// serialization stuff
-//template std::shared_ptr< model::BasicNode >                                        DeserializeObjectLoadImpl( const IDeserializer& pimpl, std::string name );
-    
 namespace model {
 
 namespace {
@@ -69,7 +66,7 @@ BasicNode::BasicNode( const std::string & name, ITimeEvaluatorPtr, const Plugins
     , m_pluginList( std::make_shared< DefaultPluginListFinalized >() )
     , m_pluginsManager( pluginsManager )
     , m_visible( true )
-	, m_modelNodeEditor ( new ModelNodeEditor( this ) )
+    , m_modelNodeEditor ( new ModelNodeEditor( this ) )
     , m_modelNodeEffect( nullptr )
 {
     if( pluginsManager == nullptr )
@@ -96,7 +93,7 @@ BasicNodePtr                    BasicNode::Create                   ( const std:
         {
         }
     };
-	return std::make_shared< make_shared_enabler_BasicNode >( name, timeEvaluator, pluginsManager );
+    return std::make_shared< make_shared_enabler_BasicNode >( name, timeEvaluator, pluginsManager );
 }
 
 // ********************************
@@ -158,7 +155,7 @@ BasicNode * BasicNode::Create( const IDeserializer& deser )
         return nullptr;
     }
 
-	//FIXME: nullptr because timeEvaluator is not used in BasicNode
+    //FIXME: nullptr because timeEvaluator is not used in BasicNode
     //auto node = Create( name, nullptr );
     auto node = new BasicNode( name, nullptr );
 
@@ -226,11 +223,11 @@ BasicNode * BasicNode::Create( const IDeserializer& deser )
 //
 BasicNodePtr					BasicNode::Clone			() const
 {
-	auto assets = std::make_shared< AssetDescsWithUIDs >();
-	//FIXME: const hack
-	GetAssetsWithUIDs( *assets, this );
+    auto assets = std::make_shared< AssetDescsWithUIDs >();
+    //FIXME: const hack
+    GetAssetsWithUIDs( *assets, this );
 
-	return BasicNodePtr( CloneViaSerialization::Clone( this, "node", assets, nullptr ) );
+    return BasicNodePtr( CloneViaSerialization::Clone( this, "node", assets, nullptr ) );
 }
 
 // ********************************
@@ -254,9 +251,9 @@ IModelNodePtr           BasicNode::GetNode                          ( const std:
     std::string childPath = path;
 
     if( childPath.empty() )
-	{
-		return shared_from_this();
-	}
+    {
+        return shared_from_this();
+    }
 
     auto childName = SplitPrefix( childPath, separator );
     auto childIdx = TryParseIndex( childName );
@@ -271,13 +268,13 @@ IModelNodePtr           BasicNode::GetNode                          ( const std:
         return nullptr;
     }
 
-	for( auto & child : m_children )
-	{
+    for( auto & child : m_children )
+    {
         if( child->GetName() == childName )
-		{
+        {
             return child->GetNode( childPath, separator );
         }
-	}
+    }
 
     return nullptr;
 }
@@ -313,7 +310,7 @@ std::vector< IParameterPtr >    BasicNode::GetParameters           () const
         ret.insert( ret.end(), params.begin(), params.end() );
     }
 
-	auto effect = GetNodeEffect();
+    auto effect = GetNodeEffect();
     if( effect )
     {
         auto params =  effect->GetParameters();
@@ -328,7 +325,7 @@ std::vector< IParameterPtr >    BasicNode::GetParameters           () const
 //
 std::vector< ITimeEvaluatorPtr >    BasicNode::GetTimelines			( bool recursive ) const
 {
-	std::set< ITimeEvaluatorPtr > timelines;
+    std::set< ITimeEvaluatorPtr > timelines;
 
     auto params = GetParameters();
 
@@ -347,14 +344,14 @@ std::vector< ITimeEvaluatorPtr >    BasicNode::GetTimelines			( bool recursive )
         }
     }
 
-	if( recursive )
-	{
-		for( auto child : m_children )
-		{
-			auto ts = child->GetTimelines( true );
-			timelines.insert( ts.begin(), ts.end() ); // FIXME: remove duplicates
-		}
-	}
+    if( recursive )
+    {
+        for( auto child : m_children )
+        {
+            auto ts = child->GetTimelines( true );
+            timelines.insert( ts.begin(), ts.end() ); // FIXME: remove duplicates
+        }
+    }
 
     return std::vector< ITimeEvaluatorPtr >( timelines.begin(), timelines.end() );
 }
@@ -476,21 +473,21 @@ unsigned int    BasicNode::GetNumPlugins                    () const
 //
 void            BasicNode::AddChildToModelOnly              ( BasicNodePtr n )
 {
-	m_children.push_back( n );
+    m_children.push_back( n );
 }
 
 // ********************************
 //
 void            BasicNode::AddChildToModelOnly              ( BasicNodePtr n, UInt32 idx )
 {
-	if( idx < m_children.size() )
-	{
-		m_children.insert( m_children.begin() + idx, n );
-	}
-	else
-	{
-		m_children.push_back( n );
-	}
+    if( idx < m_children.size() )
+    {
+        m_children.insert( m_children.begin() + idx, n );
+    }
+    else
+    {
+        m_children.push_back( n );
+    }
 
     ModelState::GetInstance().RegisterNode( n.get(), this );
 }
@@ -598,28 +595,11 @@ void            BasicNode::RemoveLogic              ()
 
 namespace {
 
-mathematics::Box GetBoundingBox( IVertexAttributesChannelConstPtr vac )
+mathematics::Box    GetBoundingBox( IVertexAttributesChannelConstPtr vac_ )
 {
-    mathematics::Box box;
+    auto vac = Cast< const VertexAttributesChannel* >( vac_.get() );
 
-    for( auto comp : vac->GetComponents() )
-    {
-        for( auto channel : comp->GetAttributeChannels() )
-        {
-            auto desc = channel->GetDescriptor();
-            if( desc->GetSemantic() == AttributeSemantic::AS_POSITION )
-            {
-                assert( desc->GetType() == AttributeType::AT_FLOAT3 );
-                
-                const glm::vec3 * data = reinterpret_cast< const glm::vec3 * >( channel->GetData() );
-
-                for( UInt32 i = 0; i < channel->GetNumEntries(); i++ )
-                    box.Include( data[ i ] );
-            }
-        }
-    }
-
-    return box;
+    return vac->GetBoundingBox();
 }
 
 void AddBoxToVAC( const IVertexAttributesChannel* vac_, mathematics::Box box )
@@ -687,17 +667,19 @@ void BasicNode::Update( TimeType t )
 
         m_pluginList->Update( t );
 
-// FIXME: add better place to insert bounding box
+// FIXME: find better place to insert bounding box
         auto vac = m_pluginList->GetFinalizePlugin()->GetVertexAttributesChannel();
-        if( vac )
+        static UInt64 lastID = 1;
+        if( vac && lastID != vac->GetAttributesUpdateID() )
         {
+            lastID = vac->GetAttributesUpdateID();
             auto box = GetBoundingBox( vac );
             AddBoxToVAC( vac.get(), box );
         }
 
-		if( m_nodeLogic )
+        if( m_nodeLogic )
         {
-		    m_nodeLogic->Update( t );
+            m_nodeLogic->Update( t );
         }
 
         for( auto ch : m_children )
@@ -810,16 +792,16 @@ void                    UpdateTimelines ( model::BasicNode * obj, const std::str
         {
             auto timelinePath = model::TimelineHelper::CombineTimelinePath( destScene, prefix + pluginModel->GetTimeEvaluator()->GetName() );
             auto timeline = model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );
-			//FIXME: cast
-			std::static_pointer_cast< model::DefaultPluginParamValModel >( pluginModel )->SetTimeEvaluator( timeline );
+            //FIXME: cast
+            std::static_pointer_cast< model::DefaultPluginParamValModel >( pluginModel )->SetTimeEvaluator( timeline );
         }
     }
 
-	if( recursive )
+    if( recursive )
     {
-		for( unsigned int i = 0; i < obj->GetNumChildren(); i++ )
+        for( unsigned int i = 0; i < obj->GetNumChildren(); i++ )
         {
-			UpdateTimelines( obj->GetChild( i ).get(), prefix, destScene, true );
+            UpdateTimelines( obj->GetChild( i ).get(), prefix, destScene, true );
         }
     }
 }

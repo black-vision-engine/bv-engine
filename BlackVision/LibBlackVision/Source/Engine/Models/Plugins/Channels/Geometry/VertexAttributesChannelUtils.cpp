@@ -11,7 +11,6 @@
 
 #include "Engine/Models/Plugins/Interfaces/IAttributeChannel.h"
 
-
 namespace bv { namespace model {
 
 // *********************************
@@ -65,6 +64,31 @@ void        ChannelFromConnectedComponents  ( VertexAttributesChannelPtr channel
 
     va_end( args );
 }
+
+mathematics::Box    CalculateBoundingBox( IVertexAttributesChannelConstPtr vac )
+{
+    mathematics::Box box;
+
+    for( auto comp : vac->GetComponents() )
+    {
+        for( auto channel : comp->GetAttributeChannels() )
+        {
+            auto desc = channel->GetDescriptor();
+            if( desc->GetSemantic() == AttributeSemantic::AS_POSITION )
+            {
+                assert( desc->GetType() == AttributeType::AT_FLOAT3 );
+                
+                const glm::vec3 * data = reinterpret_cast< const glm::vec3 * >( channel->GetData() );
+
+                for( UInt32 i = 0; i < channel->GetNumEntries(); i++ )
+                    box.Include( data[ i ] );
+            }
+        }
+    }
+
+    return box;
+}
+
 
 }
 }

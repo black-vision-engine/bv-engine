@@ -2,6 +2,8 @@
 
 #include "win_sock.h"
 
+#undef min // FIXME properly
+#undef max // FIXME properly
 
 namespace bv
 {
@@ -19,7 +21,7 @@ private:
     LARGE_INTEGER m_StopRe;
 
 public:
-	
+    
     HighResolutionTimer     ();
 
     void    Reinitialize    ();
@@ -43,8 +45,8 @@ public:
     }
 
     void    StartTimer      ();
-	void    StopTimer       ();
-	
+    void    StopTimer       ();
+    
     inline void Timestamp   ( LARGE_INTEGER * timestamp ) const;
 
     inline double CurElapsed( const LARGE_INTEGER & timestamp ) const;

@@ -2,6 +2,9 @@
 
 #include "win_sock.h"
 
+#undef min // FIXME properly
+#undef max // FIXME properly
+
 namespace bv
 {
 
@@ -13,9 +16,9 @@ public:
     HDC		m_RendererDC;
     int		m_PixelFormat;
     bool	m_DisableVerticalSync;
-	bool	m_EnableGLFinish;
-	bool	m_EnableGLFlush;
-	int		m_VerticalBufferFrameCount;
+    bool	m_EnableGLFinish;
+    bool	m_EnableGLFlush;
+    int		m_VerticalBufferFrameCount;
 
 };
 
