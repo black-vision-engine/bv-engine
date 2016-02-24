@@ -193,6 +193,9 @@ void		Crawler::SetInterspace		( Float32 interspace )
 //
 void		Crawler::SetSpeed			( Float32 speed )
 {
+    if( speed < 0.0f )
+        speed = 0.0f;
+
 	m_speed = speed;
 }
 
@@ -659,6 +662,7 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
 	{
         std::string param = eventSer.GetAttribute( "Speed" );
         float speed = SerializationHelper::String2T( param, 0.5f );
+
 		SetSpeed( speed );
 	}
     else if( crawlAction == "GetSpeed" )
@@ -693,13 +697,11 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
 
 // ***********************
 //
-bool            Crawler::AddPreset           ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
+model::BasicNodePtr Crawler::CreatePreset    ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
 {
     auto context = static_cast<BVDeserializeContext*>( eventSer.GetDeserializeContext() );
 
     std::string newNodeName = eventSer.GetAttribute( "NewNodeName" );
-    std::string timelinePath = eventSer.GetAttribute( "TimelinePath" );
-
     std::string projectName = eventSer.GetAttribute( "PresetProjectName" );
     std::string presetPath = eventSer.GetAttribute( "PresetPath" );
 
@@ -711,23 +713,31 @@ bool            Crawler::AddPreset           ( IDeserializer & eventSer, ISerial
     if( timeline == nullptr )
     {
         response.SetAttribute( "ErrorInfo", "Timeline not found" );
-        return false;
-    }
-
-    if( scene == nullptr )
-    {
-        response.SetAttribute( "ErrorInfo", "Scene not found" );
-        return false;
+        return nullptr;
     }
 
     auto node = ProjectManager::GetInstance()->LoadPreset( projectName, presetPath, std::static_pointer_cast<bv::model::OffsetTimeEvaluator>( timeline ) );
     if( node == nullptr )
     {
         response.SetAttribute( "ErrorInfo", "Preset not found" );
-        return false;
+        return nullptr;
     }
 
     node->SetName( newNodeName );
+    return node;
+}
+
+bool            Crawler::AddPresetToScene( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor, model::BasicNodePtr node )
+{
+    auto context = static_cast<BVDeserializeContext*>( eventSer.GetDeserializeContext() );
+    auto scene = editor->GetScene( context->GetSceneName() );
+
+    if( scene == nullptr )
+    {
+        response.SetAttribute( "ErrorInfo", "Scene not found" );
+        return nullptr;
+    }
+
     if( !editor->AddChildNode( scene, m_parentNode->shared_from_this(), node ) )
         return false;
 
@@ -743,21 +753,27 @@ bool            Crawler::AddPreset           ( IDeserializer & eventSer, ISerial
 
 // ***********************
 //
+bool            Crawler::AddPreset           ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
+{
+    auto node = CreatePreset( eventSer, response, editor );
+    if( node == nullptr )
+        return false;
+
+    return AddPresetToScene( eventSer, response, editor, node );
+}
+
+// ***********************
+//
 bool            Crawler::AddPresetAndMessages( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
 {
-    bool result = AddPreset( eventSer, response, editor );
+    auto addedNode = CreatePreset( eventSer, response, editor );
+    if( addedNode == nullptr )
+        return false;
 
-    if( result )
-    {
-        auto addedNode = m_nodesStates.m_nonActives.back();
+    AddTexts( eventSer, response, editor, addedNode );
+    AddImages( eventSer, response, editor, addedNode );
 
-        AddTexts( eventSer, response, editor, addedNode->shared_from_this() );
-        AddImages( eventSer, response, editor, addedNode->shared_from_this() );
-
-        return true;
-    }
-
-    return false;
+    return AddPresetToScene( eventSer, response, editor, addedNode );
 }
 
 // ***********************
@@ -797,9 +813,35 @@ void            Crawler::AddTexts            ( IDeserializer & eventSer, ISerial
 
 // ***********************
 //
-void            Crawler::AddImages           ( IDeserializer & /*eventSer*/, ISerializer & /*response*/, BVProjectEditor * /*editor*/, model::BasicNodePtr /*node*/ )
+void            Crawler::AddImages           ( IDeserializer & eventSer, ISerializer & /*response*/, BVProjectEditor * editor, model::BasicNodePtr node )
 {
+    UInt32 imgCounter = 1;
+    if( eventSer.EnterChild( "ImagesArray" ) )
+    {
+        if( eventSer.EnterChild( "Image" ) )
+        {
+            do
+            {
+                std::string texPath = eventSer.GetAttribute( "TexturePath" );
+                std::string searchedNode = "image_" + SerializationHelper::T2String( imgCounter );
 
+                auto foundNode = editor->FindNode( node, searchedNode );
+                if( foundNode != nullptr )
+                {
+                    auto texturePlugin = foundNode->GetPlugin( "texture" );
+                    if( texturePlugin != nullptr )
+                    {
+                        auto textDesc = ProjectManager::GetInstance()->GetAssetDesc( "", "textures", texPath );
+                        editor->LoadAsset( texturePlugin, textDesc );
+                    }
+                }
+
+                imgCounter++;
+            } while( eventSer.NextChild() );
+            eventSer.ExitChild();  // Text
+        }
+        eventSer.ExitChild();   // TextsArray
+    }
 }
 
 // ***********************
