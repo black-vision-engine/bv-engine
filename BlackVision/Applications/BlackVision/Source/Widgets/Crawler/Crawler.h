@@ -34,6 +34,18 @@ DEFINE_CONST_PTR_TYPE( Crawler )
 
 class Crawler : public model::INodeLogic, public std::enable_shared_from_this< Crawler >
 {
+public:
+
+    enum CrawlDirection
+    {
+        CD_Up,
+        CD_Down,
+        CD_Left,
+        CD_Right,
+        
+        CD_Total
+    };
+
 private:
     static const std::string        m_type;
 
@@ -45,7 +57,8 @@ private:
 	bool									m_isFinalized;
 	bv::model::BasicNode *					m_parentNode;
 	CrawlerNodesStates						m_nodesStates;
-	NodeFloatMap							m_shifts;	
+	NodeFloatMap							m_shifts;
+    CrawlDirection                          m_crawlDirection;
 	UInt64									m_currTime;
 
     mathematics::RectConstPtr				m_view;
@@ -129,6 +142,7 @@ public:
     bool            GetStatus           ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor );
 
 private:
+
     void            AddTexts            ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor, model::BasicNodePtr node );
     void            AddImages           ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor, model::BasicNodePtr node );
 

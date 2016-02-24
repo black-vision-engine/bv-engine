@@ -9,9 +9,12 @@
 
 #include "CrawlerEvents.h"
 #include "Serialization/SerializationHelper.h"
+#include "Serialization/SerializationHelper.inl"
 #include "Serialization/BV/BVDeserializeContext.h"
 #include "Serialization/BV/BVSerializeContext.h"
 #include "Tools/StringHeplers.h"
+
+#include "Mathematics/glm_inc.h"
 
 #include "ProjectManager.h"
 #include "Engine/Models/BVProjectEditor.h"
@@ -19,7 +22,25 @@
 #include <algorithm>
 #include <ctime>
 
-namespace bv { namespace nodelogic {
+namespace bv {
+    
+namespace SerializationHelper {
+
+
+std::pair< bv::nodelogic::Crawler::CrawlDirection, const char* > CrawlDirectionMapping[] = 
+    { std::make_pair( bv::nodelogic::Crawler::CrawlDirection::CD_Down, "CrawlDown" )
+    , std::make_pair( bv::nodelogic::Crawler::CrawlDirection::CD_Up, "CrawlUp" )
+    , std::make_pair( bv::nodelogic::Crawler::CrawlDirection::CD_Left, "CrawlLeft" )
+    , std::make_pair( bv::nodelogic::Crawler::CrawlDirection::CD_Right, "CrawlRight" )
+    , std::make_pair( bv::nodelogic::Crawler::CrawlDirection::CD_Total, "" )      // default
+};
+
+template<> bv::nodelogic::Crawler::CrawlDirection   String2T        ( const std::string & s, const bv::nodelogic::Crawler::CrawlDirection & defaultVal )    { return String2Enum( CrawlDirectionMapping, s, defaultVal ); }
+template<> std::string                              T2String        ( const bv::nodelogic::Crawler::CrawlDirection & t )                                    { return Enum2String( CrawlDirectionMapping, t ); }
+    
+}   // SerializationHelper
+    
+namespace nodelogic {
 
 
 const std::string   Crawler::m_type = "crawler";
@@ -48,6 +69,22 @@ bv::model::BasicNodePtr         GetNode     ( bv::model::BasicNode * parent, con
     return std::static_pointer_cast<bv::model::BasicNode>( parent->GetNode( nodeName ) );
 }
 
+glm::vec3       CrawlerShiftToVec   ( Crawler::CrawlDirection crawlDirection )
+{
+    glm::vec3 shiftDirection;
+    if( crawlDirection == Crawler::CrawlDirection::CD_Down )
+        shiftDirection = glm::vec3( 0.0, -1.0, 0.0 );
+    else if( crawlDirection == Crawler::CrawlDirection::CD_Up )
+        shiftDirection = glm::vec3( 0.0, 1.0, 0.0 );
+    else if( crawlDirection == Crawler::CrawlDirection::CD_Right )
+        shiftDirection = glm::vec3( 1.0, 0.0, 0.0 );
+    else if( crawlDirection == Crawler::CrawlDirection::CD_Left )
+        shiftDirection = glm::vec3( -1.0, 0.0, 0.0 );
+    else
+        shiftDirection = glm::vec3( 0.0, 0.0, 0.0 );
+
+    return shiftDirection;
+}
 
 } // anonymous
 
@@ -70,6 +107,7 @@ Crawler::Crawler						( bv::model::BasicNode * parent, const mathematics::RectCo
 	, m_speed( 0.f )
 	, m_interspace( 0.0f )
     , m_paused( false )
+    , m_crawlDirection( CrawlDirection::CD_Left )
 {}
 
 
@@ -336,6 +374,8 @@ void		Crawler::Update				( TimeType )
 //
 void		Crawler::UpdateTransforms	()
 {
+    glm::vec3 shiftDirection = CrawlerShiftToVec( m_crawlDirection );
+
 	for( auto elem : m_shifts )
 	{
 		if( IsActive( elem.first ) )
@@ -344,7 +384,7 @@ void		Crawler::UpdateTransforms	()
 			if( trPlugin )
 			{
 				auto trParam = trPlugin->GetParameter( "simple_transform" );
-				model::SetParameterTranslation( trParam, 0.0f, glm::vec3( elem.second, 0.0f, 0.0f ) );
+				model::SetParameterTranslation( trParam, 0.0f, shiftDirection * -elem.second );
 			}
 		}
 	}
@@ -672,6 +712,14 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
     else if( crawlAction == "GetStatus" )
     {
         return GetStatus( eventSer, response, editor );
+    }
+    else if( crawlAction == "SetCrawlDirection" )
+    {
+        m_crawlDirection = SerializationHelper::String2T( eventSer.GetAttribute( "CrawlDirection" ), CrawlDirection::CD_Left );
+    }
+    else if( crawlAction == "GetCrawlDirection" )
+    {
+        response.SetAttribute( "CrawlDirection", SerializationHelper::T2String( m_crawlDirection ) );
     }
     // Deprecated
     else if( crawlAction == "Finalize" )
