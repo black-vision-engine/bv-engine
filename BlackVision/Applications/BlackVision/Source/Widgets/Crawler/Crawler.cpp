@@ -69,6 +69,7 @@ Crawler::Crawler						( bv::model::BasicNode * parent, const mathematics::RectCo
 	, m_currTime( 0 )
 	, m_speed( 0.f )
 	, m_interspace( 0.0f )
+    , m_paused( false )
 {}
 
 
@@ -628,7 +629,6 @@ CrawlerPtr      Crawler::Create          ( const IDeserializer & deser, bv::mode
 bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISerializer& response, BVProjectEditor * editor )
 {
     std::string crawlAction = eventSer.GetAttribute( "Action" );
-    auto context = static_cast<BVDeserializeContext*>( eventSer.GetDeserializeContext() );
 
 	if( crawlAction == "Stop" )
 	{
@@ -638,66 +638,22 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
 	{
 		Start();
 	}
-    else if( crawlAction == "AddText" )
-	{
-        std::string param = eventSer.GetAttribute( "Message" );
-        AddMessage( StringToWString( param ) );
-	}
     else if( crawlAction == "AddNode" )
     {
         std::string newNode = eventSer.GetAttribute( "NodeName" );
         AddNext( newNode );
     }
-    else if( crawlAction == "AddPresetNode" )
+    else if( crawlAction == "AddPreset" )
     {
-        std::string newNodeName = eventSer.GetAttribute( "NewNodeName" );
-        std::string timelinePath = eventSer.GetAttribute( "TimelinePath" );
-
-        std::string projectName = eventSer.GetAttribute( "PresetProjectName" );
-        std::string presetPath = eventSer.GetAttribute( "PresetPath" );
-
-        
-        //auto timeline = editor->GetTimeEvaluator( timelinePath );
-        auto timeline = editor->GetTimeEvaluator( context->GetSceneName() );
-        auto scene = editor->GetScene( context->GetSceneName() );
-
-        if( timeline == nullptr )
-        {
-            response.SetAttribute( "ErrorInfo", "Timeline not found" );
-            return false;
-        }
-
-        if( scene == nullptr )
-        {
-            response.SetAttribute( "ErrorInfo", "Scene not found" );
-            return false;
-        }
-
-        auto node = ProjectManager::GetInstance()->LoadPreset( projectName, presetPath, std::static_pointer_cast<bv::model::OffsetTimeEvaluator>( timeline ) );
-        if( node == nullptr )
-        {
-            response.SetAttribute( "ErrorInfo", "Preset not found" );
-            return false;
-        }
-
-        node->SetName( newNodeName );
-        if( !editor->AddChildNode( scene, m_parentNode->shared_from_this(), node ) )
-            return false;
-
-        AddNode( node );
-
-        // Prepare response. Send path to new node.
-        std::string addedNodePath = context->GetNodePath() + "/#" + SerializationHelper::T2String( m_parentNode->GetNumChildren() - 1 );
-        response.SetAttribute( "AddedNodePath", addedNodePath );
-
+        return AddPreset( eventSer, response, editor );
+    }
+    else if( crawlAction == "AddPresetAndFillWithData" )
+    {
+        return AddPresetAndMessages( eventSer, response, editor );
     }
     else if( crawlAction == "Reset" )
 	{
 		Reset();
-	}
-	else if( crawlAction == "Clear" )
-	{
-		Clear();
 	}
     else if( crawlAction == "SetSpeed" )
 	{
@@ -705,6 +661,15 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
         float speed = SerializationHelper::String2T( param, 0.5f );
 		SetSpeed( speed );
 	}
+    else if( crawlAction == "GetSpeed" )
+    {
+        response.SetAttribute( "Speed", SerializationHelper::T2String( m_speed ) );
+    }
+    else if( crawlAction == "GetStatus" )
+    {
+        return GetStatus( eventSer, response, editor );
+    }
+    // Deprecated
     else if( crawlAction == "Finalize" )
     {
         Finalize();
@@ -713,7 +678,146 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
     {
         Unfinalize();
     }
+    else if( crawlAction == "AddText" )
+	{
+        std::string param = eventSer.GetAttribute( "Message" );
+        AddMessage( StringToWString( param ) );
+	}
+	else if( crawlAction == "Clear" )
+	{
+		Clear();
+	}
 
+    return true;
+}
+
+// ***********************
+//
+bool            Crawler::AddPreset           ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
+{
+    auto context = static_cast<BVDeserializeContext*>( eventSer.GetDeserializeContext() );
+
+    std::string newNodeName = eventSer.GetAttribute( "NewNodeName" );
+    std::string timelinePath = eventSer.GetAttribute( "TimelinePath" );
+
+    std::string projectName = eventSer.GetAttribute( "PresetProjectName" );
+    std::string presetPath = eventSer.GetAttribute( "PresetPath" );
+
+        
+    //auto timeline = editor->GetTimeEvaluator( timelinePath );
+    auto timeline = editor->GetTimeEvaluator( context->GetSceneName() );
+    auto scene = editor->GetScene( context->GetSceneName() );
+
+    if( timeline == nullptr )
+    {
+        response.SetAttribute( "ErrorInfo", "Timeline not found" );
+        return false;
+    }
+
+    if( scene == nullptr )
+    {
+        response.SetAttribute( "ErrorInfo", "Scene not found" );
+        return false;
+    }
+
+    auto node = ProjectManager::GetInstance()->LoadPreset( projectName, presetPath, std::static_pointer_cast<bv::model::OffsetTimeEvaluator>( timeline ) );
+    if( node == nullptr )
+    {
+        response.SetAttribute( "ErrorInfo", "Preset not found" );
+        return false;
+    }
+
+    node->SetName( newNodeName );
+    if( !editor->AddChildNode( scene, m_parentNode->shared_from_this(), node ) )
+        return false;
+
+    if( AddNode( node ) )
+    {
+        // Prepare response. Send path to new node.
+        std::string addedNodePath = context->GetNodePath() + "/#" + SerializationHelper::T2String( m_parentNode->GetNumChildren() - 1 );
+        response.SetAttribute( "AddedNodePath", addedNodePath );
+        return true;
+    }
+    return false;
+}
+
+// ***********************
+//
+bool            Crawler::AddPresetAndMessages( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
+{
+    bool result = AddPreset( eventSer, response, editor );
+
+    if( result )
+    {
+        auto addedNode = m_nodesStates.m_nonActives.back();
+
+        AddTexts( eventSer, response, editor, addedNode->shared_from_this() );
+        AddImages( eventSer, response, editor, addedNode->shared_from_this() );
+
+        return true;
+    }
+
+    return false;
+}
+
+// ***********************
+//
+void            Crawler::AddTexts            ( IDeserializer & eventSer, ISerializer & /*response*/, BVProjectEditor * editor, model::BasicNodePtr node )
+{
+    UInt32 textsCounter = 1;
+    if( eventSer.EnterChild( "TextsArray" ) )
+    {
+        if( eventSer.EnterChild( "Text" ) )
+        {
+            do
+            {
+                std::string setText = eventSer.GetAttribute( "Text" );
+                std::string searchedNode = "text_" + SerializationHelper::T2String( textsCounter );
+
+                auto foundNode = editor->FindNode( node, searchedNode );
+                if( foundNode != nullptr )
+                {
+                    auto textPlugin = foundNode->GetPlugin( "text" );
+                    if( textPlugin != nullptr )
+                    {
+                        auto textParam = textPlugin->GetParameter( "text" );
+                        assert( textParam != nullptr );
+
+                        model::SetParameter( textParam, (TimeType)0.0f, StringToWString( setText ).ham );
+                    }
+                }
+
+                textsCounter++;
+            } while( eventSer.NextChild() );
+            eventSer.ExitChild();  // Text
+        }
+        eventSer.ExitChild();   // TextsArray
+    }
+}
+
+// ***********************
+//
+void            Crawler::AddImages           ( IDeserializer & /*eventSer*/, ISerializer & /*response*/, BVProjectEditor * /*editor*/, model::BasicNodePtr /*node*/ )
+{
+
+}
+
+// ***********************
+//
+bool            Crawler::GetStatus           ( IDeserializer & /*eventSer*/, ISerializer & response, BVProjectEditor * /*editor*/ )
+{
+    if( m_started && !m_paused )
+    {
+        response.SetAttribute( "Status", "Running" );
+    }
+    else if( m_started && m_paused )
+    {
+        response.SetAttribute( "Status", "Paused" );
+    }
+    else
+    {
+        response.SetAttribute( "Status", "Stopped" );
+    }
     return true;
 }
 

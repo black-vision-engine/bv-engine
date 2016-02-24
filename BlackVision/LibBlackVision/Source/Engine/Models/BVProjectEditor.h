@@ -73,6 +73,9 @@ public:
 
     model::IModelNodePtr	GetNode             ( const std::string & sceneName, const std::string & nodePath, const std::string & separator = "/" ) const;
 	model::IModelNodePtr	GetParentNode       ( const std::string & sceneName, const std::string & nodePath, const std::string & separator = "/" ) const;
+    
+    // Find node with nodeName in substree
+    model::IModelNodePtr	FindNode            ( model::BasicNodePtr node, const std::string & nodeName ) const;
 
 	/* paths */
     bool                    AddChildNode        ( const std::string & sceneName, const std::string & parentPath, const std::string & newNodeName );
