@@ -62,7 +62,7 @@ struct Box
 		{
 			xmin = std::min( xmin, point.x );
 			ymin = std::min( ymin, point.y );
-            zmin = std::min( ymin, point.z );
+            zmin = std::min( zmin, point.z );
 			xmax = std::max( xmax, point.x );
 			ymax = std::max( ymax, point.y );
             zmax = std::max( zmax, point.z );
