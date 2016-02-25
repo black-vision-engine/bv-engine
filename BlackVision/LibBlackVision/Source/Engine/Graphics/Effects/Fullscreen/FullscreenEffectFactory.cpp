@@ -95,7 +95,7 @@ FullscreenEffect *  CreateInterlaceFSE          ( const std::vector< IValuePtr >
     FullscreenEffectData fseData;
     auto src = FSEShaderSourceProvider->ReadShader( "interlace.frag" );
 
-    assert( values.size() == 0 );
+    assert( values.size() == 0 );   { values; }
 
     auto val0 = ValuesFactory::CreateValueInt( "startEven", 0 );
     auto val1 = ValuesFactory::CreateValueInt( "height", 1080 );
@@ -122,7 +122,7 @@ FullscreenEffect *  CreateMixChannelsFSE        ( const std::vector< IValuePtr >
     FullscreenEffectData fseData;
     auto src = FSEShaderSourceProvider->ReadShader( "mixchannels.frag" );
 
-    assert( values.size() == 0 );
+    assert( values.size() == 0 );   { values; }
 
     // ( ( aIdx & 0x3 ) << 6 ) | ( ( bIdx & 0x3 ) << 4 ) | ( ( gIdx & 0x3 ) << 2 ) | ( ( rIdx & 0x3 ) << 0 );
     auto val0 = ValuesFactory::CreateValueInt( "channelMask", ( ( 3 & 0x3 ) << 6 ) | ( ( 2 & 0x3 ) << 4 ) | ( ( 1 & 0x3 ) << 2 ) | ( ( 0 & 0x3 ) << 0 ) );
@@ -147,7 +147,7 @@ FullscreenEffect *  CreateVideoOutputFSE        ( const std::vector< IValuePtr >
     FullscreenEffectData fseData;
     auto src = FSEShaderSourceProvider->ReadShader( "videooutput.frag" );
 
-    assert( values.size() == 0 );
+    assert( values.size() == 0 );   { values; }
 
     // ( ( aIdx & 0x3 ) << 6 ) | ( ( bIdx & 0x3 ) << 4 ) | ( ( gIdx & 0x3 ) << 2 ) | ( ( rIdx & 0x3 ) << 0 );
     int channelMask         = ( 3 << 6 ) | ( 2 << 4 ) | ( 1 << 2 ) | ( 0 << 0 );

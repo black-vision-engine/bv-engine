@@ -69,17 +69,15 @@ bv::model::BasicNodePtr         GetNode     ( bv::model::BasicNode * parent, con
     return std::static_pointer_cast<bv::model::BasicNode>( parent->GetNode( nodeName ) );
 }
 
+// ***********************
+//
 glm::vec3       CrawlerShiftToVec   ( Crawler::CrawlDirection crawlDirection )
 {
     glm::vec3 shiftDirection;
-    if( crawlDirection == Crawler::CrawlDirection::CD_Down )
-        shiftDirection = glm::vec3( 0.0, -1.0, 0.0 );
-    else if( crawlDirection == Crawler::CrawlDirection::CD_Up )
+    if( crawlDirection == Crawler::CrawlDirection::CD_Down || crawlDirection == Crawler::CrawlDirection::CD_Up )
         shiftDirection = glm::vec3( 0.0, 1.0, 0.0 );
-    else if( crawlDirection == Crawler::CrawlDirection::CD_Right )
+    else if( crawlDirection == Crawler::CrawlDirection::CD_Right || crawlDirection == Crawler::CrawlDirection::CD_Left )
         shiftDirection = glm::vec3( 1.0, 0.0, 0.0 );
-    else if( crawlDirection == Crawler::CrawlDirection::CD_Left )
-        shiftDirection = glm::vec3( -1.0, 0.0, 0.0 );
     else
         shiftDirection = glm::vec3( 0.0, 0.0, 0.0 );
 
@@ -166,6 +164,72 @@ bool        Crawler::AddNode             ( bv::model::BasicNodePtr node )
     return false;
 }
 
+// ***********************
+//
+Float32     Crawler::InitialShift        ( model::BasicNode * node )
+{
+    Float32 shift;
+    if( m_crawlDirection == Crawler::CrawlDirection::CD_Down )
+    {
+        shift = m_view->ymax + node->GetAABB().Height() / 2.0f + m_interspace;
+    }
+    else if( m_crawlDirection == Crawler::CrawlDirection::CD_Up )
+    {
+        shift = m_view->ymin - node->GetAABB().Height() / 2.0f - m_interspace;
+    }
+    else if( m_crawlDirection == Crawler::CrawlDirection::CD_Right )
+    {
+        shift = m_view->xmin - node->GetAABB().Width() - m_interspace;
+    }
+    else if( m_crawlDirection == Crawler::CrawlDirection::CD_Left )
+    {
+        shift = m_view->xmax + m_interspace;
+    }
+    else
+    {
+        shift = 0.0f;
+    }
+
+    return shift;
+}
+
+// ***********************
+//
+Float32     Crawler::ShiftStep           ( model::BasicNode * prevNode, model::BasicNode * curNode )
+{
+    Float32 shift;
+    if( m_crawlDirection == Crawler::CrawlDirection::CD_Down )
+    {
+        shift = ( prevNode->GetAABB().Height() + curNode->GetAABB().Height() ) / 2.0f + m_interspace;
+    }
+    else if( m_crawlDirection == Crawler::CrawlDirection::CD_Up )
+    {
+        shift = ( prevNode->GetAABB().Height() + curNode->GetAABB().Height() ) / 2.0f - m_interspace;
+    }
+    else if( m_crawlDirection == Crawler::CrawlDirection::CD_Right )
+    {
+        shift = -curNode->GetAABB().Width() - m_interspace;
+    }
+    else if( m_crawlDirection == Crawler::CrawlDirection::CD_Left )
+    {
+        shift = prevNode->GetAABB().Width() + m_interspace;
+    }
+    else
+    {
+        shift = 0.0f;
+    }
+
+    return shift;
+}
+
+// ***********************
+//
+Float32     Crawler::SignedShift         ( Float32 shift )
+{
+    if( m_crawlDirection == Crawler::CrawlDirection::CD_Down || m_crawlDirection == Crawler::CrawlDirection::CD_Left )
+        return -shift;
+    return shift;
+}
 
 // *******************************
 //
@@ -180,30 +244,32 @@ bool		Crawler::Finalize			()
 		auto copy = m_nodesStates.m_nonActives;
 		for( auto n : copy )
 		{
-			m_shifts[ n ] = m_view->xmax;
+            //m_shifts[ n ] = InitialShift( n );
 			UpdateVisibility( n );
-			auto trPlugin = n->GetPlugin( "transform" );
-			if( trPlugin )
-			{
-				auto trParam = trPlugin->GetParameter( "simple_transform" );
-                assert( trParam != nullptr );
+			//auto trPlugin = n->GetPlugin( "transform" );
+			//if( trPlugin )
+			//{
+			//	auto trParam = trPlugin->GetParameter( "simple_transform" );
+   //             assert( trParam != nullptr );
 
-				model::SetParameterTranslation( trParam, 0.0f, glm::vec3( 5.0f, 0.0f, 0.0f ) );
-			}
+			//	model::SetParameterTranslation( trParam, 0.0f, glm::vec3( 5.0f, 0.0f, 0.0f ) );
+			//}
 		}
 		//m_shifts[ 0 ]+=m_interspace;
-		for( auto elem : m_shifts )
-		{
-			//if( IsActive( elem.first ) )
-			{
-				auto trPlugin = elem.first->GetPlugin( "transform" );
-				if( trPlugin )
-				{
-					auto trParam = trPlugin->GetParameter( "simple_transform" );
-					model::SetParameterTranslation( trParam, 0.0f, shiftDirection * -elem.second );
-				}
-			}
-		}
+
+
+		//for( auto elem : m_shifts )
+		//{
+		//	//if( IsActive( elem.first ) )
+		//	{
+		//		auto trPlugin = elem.first->GetPlugin( "transform" );
+		//		if( trPlugin )
+		//		{
+		//			auto trParam = trPlugin->GetParameter( "simple_transform" );
+		//			model::SetParameterTranslation( trParam, 0.0f, shiftDirection * -elem.second );
+		//		}
+		//	}
+		//}
 		for( auto n : copy )	
 			SetActiveNode( n );
 
@@ -237,13 +303,13 @@ void		Crawler::LayoutNodes		()
 	auto length = m_nodesStates.ActiveSize();
 	if( length > 0 )
 	{
-		Float32 currShift = m_view->xmax + m_interspace;
+		Float32 currShift = InitialShift( m_nodesStates.m_actives[ 0 ] );
 
 		m_shifts[ m_nodesStates.m_actives[ 0 ] ] = currShift;
 
 		for( SizeType i = 1; i < length; ++i )
 		{
-			currShift += m_nodesStates.m_actives[ i - 1 ]->GetAABB().Width() + m_interspace;
+            currShift += ShiftStep( m_nodesStates.m_actives[ i - 1 ], m_nodesStates.m_actives[ i ] );
 
 			m_shifts[ m_nodesStates.m_actives[ i ] ] = currShift;
 		}
@@ -338,7 +404,7 @@ void		Crawler::Update				( TimeType )
 		if( shift > 0.f )
 		{
 			for( auto elem : m_shifts )
-				m_shifts[ elem.first ] -= shift;
+				m_shifts[ elem.first ] += SignedShift( shift );
 
 			UpdateTransforms();
 		}
@@ -359,7 +425,7 @@ void		Crawler::UpdateTransforms	()
 			if( trPlugin )
 			{
 				auto trParam = trPlugin->GetParameter( "simple_transform" );
-				model::SetParameterTranslation( trParam, 0.0f, shiftDirection * -elem.second );
+				model::SetParameterTranslation( trParam, 0.0f, shiftDirection * elem.second );
 			}
 		}
 	}

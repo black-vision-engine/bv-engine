@@ -77,7 +77,11 @@ private:
 	int										m_total_displayed_msgs;
 
 
+private:
 
+    Float32     InitialShift        ( model::BasicNode * node );
+    Float32     ShiftStep           ( model::BasicNode * prevNode, model::BasicNode * node );
+    Float32     SignedShift         ( Float32 shift );
 
 	void		LayoutNodes			();
 	void		UpdateTransforms	();
