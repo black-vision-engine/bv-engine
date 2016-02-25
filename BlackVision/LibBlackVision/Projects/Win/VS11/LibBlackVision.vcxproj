@@ -550,7 +550,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\HelperUVGenerator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\SceneGraph\SceneEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h" />
-    <ClInclude Include="..\..\..\Source\Engine\Interfaces\ISerializable.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\ModelNodeEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\ModelSceneEditor.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\IndexedGeometry.h" />
