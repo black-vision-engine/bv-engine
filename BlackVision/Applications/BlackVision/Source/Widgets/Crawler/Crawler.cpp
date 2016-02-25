@@ -375,8 +375,8 @@ void		Crawler::UpdateTransforms	()
 	for( auto n : copy )
 		UpdateVisibility( n );
 
-	if( m_nodesStates.NonActiveSize() > 0 && m_nodesStates.ActiveSize() == m_nodesStates.VisibleSize() )
-		NotifyNoMoreNodes();
+	//if( m_nodesStates.NonActiveSize() > 0 && m_nodesStates.ActiveSize() == m_nodesStates.VisibleSize() )
+	//	NotifyNoMoreNodes();
 }
 
 // *******************************
@@ -426,9 +426,14 @@ void		Crawler::NotifyVisibilityChanged( bv::model::BasicNode * n, bool visibilit
 //
 void		Crawler::NotifyNoMoreNodes( )
 {
-	auto & eventManager = GetDefaultEventManager();
-	eventManager.TriggerEvent( std::make_shared< NoMoreNodesCrawlerEvent >( shared_from_this() ) );
-	HackNoMoreNodes();
+    if( m_enableEvents )
+    {
+        JsonSerializeObject ser;
+        ser.SetAttribute( "CrawlerPath", m_crawlerNodePath );
+        ser.SetAttribute( "Event", "AllItemsOffScreen" );
+
+        SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
+    }
 }
 
 // *******************************
@@ -728,6 +733,15 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventDeser, ISeria
     {
         response.SetAttribute( "CrawlDirection", SerializationHelper::T2String( m_crawlDirection ) );
     }
+    else if( crawlAction == "GetEnableEvents" )
+    {
+        response.SetAttribute( "EnableEvents", SerializationHelper::T2String( m_enableEvents ) );
+    }
+    else if( crawlAction == "SetEnableEvents" )
+    {
+        m_enableEvents = SerializationHelper::String2T( eventDeser.GetAttribute( "CrawlDirection" ), false );
+    }
+    // Deprecated
     else if( crawlAction == "AddText" )
 	{
         std::string param = eventDeser.GetAttribute( "Message" );
@@ -740,8 +754,6 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventDeser, ISeria
 
     return true;
 }
-
-
 
 // *******************************
 //
