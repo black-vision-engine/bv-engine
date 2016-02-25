@@ -5,6 +5,8 @@
 
 #include <algorithm>
 
+#undef min // FIXME properly
+#undef max // FIXME properly
 
 namespace bv { namespace mathematics {
 

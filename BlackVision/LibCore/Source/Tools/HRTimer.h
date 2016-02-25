@@ -1,9 +1,6 @@
 #pragma once
 
-#include "win_sock.h"
-
-#undef min // FIXME properly
-#undef max // FIXME properly
+#include "win_sock.h" // FIXME for God's sake
 
 namespace bv
 {
