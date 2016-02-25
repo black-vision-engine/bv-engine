@@ -13,6 +13,7 @@
 #include "Serialization/BV/BVDeserializeContext.h"
 #include "Serialization/BV/BVSerializeContext.h"
 #include "Tools/StringHeplers.h"
+#include "EndUserAPI/EventHandlers/EventHandlerHelpers.h"
 
 #include "Mathematics/glm_inc.h"
 
@@ -106,6 +107,7 @@ Crawler::Crawler						( bv::model::BasicNode * parent, const mathematics::RectCo
 	, m_interspace( 0.0f )
     , m_paused( false )
     , m_crawlDirection( CrawlDirection::CD_Left )
+    , m_enableEvents( true )
 {}
 
 
@@ -242,34 +244,6 @@ bool		Crawler::Finalize			()
         glm::vec3 shiftDirection = CrawlerShiftToVec( m_crawlDirection );
 
 		auto copy = m_nodesStates.m_nonActives;
-		for( auto n : copy )
-		{
-            //m_shifts[ n ] = InitialShift( n );
-			UpdateVisibility( n );
-			//auto trPlugin = n->GetPlugin( "transform" );
-			//if( trPlugin )
-			//{
-			//	auto trParam = trPlugin->GetParameter( "simple_transform" );
-   //             assert( trParam != nullptr );
-
-			//	model::SetParameterTranslation( trParam, 0.0f, glm::vec3( 5.0f, 0.0f, 0.0f ) );
-			//}
-		}
-		//m_shifts[ 0 ]+=m_interspace;
-
-
-		//for( auto elem : m_shifts )
-		//{
-		//	//if( IsActive( elem.first ) )
-		//	{
-		//		auto trPlugin = elem.first->GetPlugin( "transform" );
-		//		if( trPlugin )
-		//		{
-		//			auto trParam = trPlugin->GetParameter( "simple_transform" );
-		//			model::SetParameterTranslation( trParam, 0.0f, shiftDirection * -elem.second );
-		//		}
-		//	}
-		//}
 		for( auto n : copy )	
 			SetActiveNode( n );
 
@@ -284,7 +258,7 @@ bool		Crawler::Finalize			()
 //
 bool        Crawler::Unfinalize          ()
 {
-    auto copy = m_nodesStates.m_nonActives;
+    auto copy = m_nodesStates.m_actives;
 
     for( auto n : copy )	
 		m_nodesStates.Deacivate( n );
@@ -336,47 +310,6 @@ void		Crawler::Clear()
 }
 
 
-// *******************************
-//
-void		Crawler::Reset()
-{
-	//m_nodesStates.m_visibles.clear();
-	///*while(m_nodesStates.m_actives.size()>0)
-	//{
-	//	BasicNode *node = m_nodesStates.m_actives.push_back();
-
-
-	//}*/
-
-	//m_nodesStates.m_nonActives.insert(m_nodesStates.m_nonActives.end(), m_nodesStates.m_actives.begin(), m_nodesStates.m_actives.end());
-
-	//m_nodesStates.m_actives.clear();
-	//m_nodesStates.m_visibles.clear();
-
-
-	//for( auto elem : m_shifts )
-	//{
-	//	
-	//		auto trPlugin = elem.first->GetPlugin( "transform" );
-	//		if( trPlugin )
-	//		{
-	//			auto trParam = trPlugin->GetParameter( "simple_transform" );
-	//			model::SetParameterTranslation( trParam, 0.0f, glm::vec3( 5.0f, 0.0f, 0.0f ) );
-	//		}
-	//		UpdateVisibility(elem.first );
-	//	
-	//}
-
-	//
-	//	
-	//Finalize();
-
-    Unfinalize();
-    Finalize();
-
-    m_started = false;
-    m_paused = false;
-}
 
 // *******************************
 //
@@ -473,15 +406,20 @@ void		Crawler::UpdateVisibility	( bv::model::BasicNode * n )
 //
 void		Crawler::NotifyVisibilityChanged( bv::model::BasicNode * n, bool visibility )
 {
-	auto & eventManager = GetDefaultEventManager();
+    if( m_enableEvents )
+    {
+        JsonSerializeObject ser;
+        ser.SetAttribute( "CrawlerPath", m_crawlerNodePath );
+        ser.SetAttribute( "NodeName", n->GetName() );
 
-	if( visibility )
-		eventManager.TriggerEvent( std::make_shared< NodeAppearingCrawlerEvent >( shared_from_this(), n ) );
-	else
-		eventManager.TriggerEvent( std::make_shared< NodeLeavingCrawlerEvent >( shared_from_this(), n ) );
+	    if( visibility )
+            ser.SetAttribute( "Event", "ItemOnScreen" );
+	    else
+		    ser.SetAttribute( "Event", "ItemOffScreen" );
 
-	//printf( "Visibility of %p changed on %i \n", n, visibility );
-	//printf( "Active : %i NonActive: %i Visible %i \n", m_nodesStates.ActiveSize(), m_nodesStates.NonActiveSize(), m_nodesStates.VisibleSize() );
+        SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
+    }
+
 }
 
 // *******************************
@@ -724,42 +662,52 @@ CrawlerPtr      Crawler::Create          ( const IDeserializer & deser, bv::mode
 
 // ***********************
 //
-bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISerializer& response, BVProjectEditor * editor )
+bool                Crawler::HandleEvent     ( IDeserializer& eventDeser, ISerializer& response, BVProjectEditor * editor )
 {
-    std::string crawlAction = eventSer.GetAttribute( "Action" );
+    std::string crawlAction = eventDeser.GetAttribute( "Action" );
 
 	if( crawlAction == "Stop" )
 	{
-		Stop();
+		return Stop();
 	}
 	else if( crawlAction == "Start" )
 	{
-		Start();
+        if( m_crawlerNodePath == "" )
+        {
+            // Fixme: This should be done in create function, but deserialization from XML doesn't provide
+            // node path. Instead we save this path when crawler first time starts.
+            auto context = static_cast<BVDeserializeContext*>( eventDeser.GetDeserializeContext() );
+            assert( context != nullptr );
+
+            SetNodePath( context->GetNodePath() );
+        }
+
+		return Start();
 	}
     else if( crawlAction == "Reset" )
 	{
-		Reset();
+		return Reset();
 	}
     else if( crawlAction == "Pause" )
     {
-        Pause();
+        return Pause();
     }
     else if( crawlAction == "AddNode" )
     {
-        std::string newNode = eventSer.GetAttribute( "NodeName" );
+        std::string newNode = eventDeser.GetAttribute( "NodeName" );
         AddNext( newNode );
     }
     else if( crawlAction == "AddPreset" )
     {
-        return AddPreset( eventSer, response, editor );
+        return AddPreset( eventDeser, response, editor );
     }
     else if( crawlAction == "AddPresetAndFillWithData" )
     {
-        return AddPresetAndMessages( eventSer, response, editor );
+        return AddPresetAndMessages( eventDeser, response, editor );
     }
     else if( crawlAction == "SetSpeed" )
 	{
-        std::string param = eventSer.GetAttribute( "Speed" );
+        std::string param = eventDeser.GetAttribute( "Speed" );
         float speed = SerializationHelper::String2T( param, 0.5f );
 
 		SetSpeed( speed );
@@ -770,28 +718,19 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
     }
     else if( crawlAction == "GetStatus" )
     {
-        return GetStatus( eventSer, response, editor );
+        return GetStatus( eventDeser, response, editor );
     }
     else if( crawlAction == "SetCrawlDirection" )
     {
-        m_crawlDirection = SerializationHelper::String2T( eventSer.GetAttribute( "CrawlDirection" ), CrawlDirection::CD_Left );
+        m_crawlDirection = SerializationHelper::String2T( eventDeser.GetAttribute( "CrawlDirection" ), CrawlDirection::CD_Left );
     }
     else if( crawlAction == "GetCrawlDirection" )
     {
         response.SetAttribute( "CrawlDirection", SerializationHelper::T2String( m_crawlDirection ) );
     }
-    // Deprecated
-    else if( crawlAction == "Finalize" )
-    {
-        Finalize();
-    }
-    else if( crawlAction == "Unfinalize" )
-    {
-        Unfinalize();
-    }
     else if( crawlAction == "AddText" )
 	{
-        std::string param = eventSer.GetAttribute( "Message" );
+        std::string param = eventDeser.GetAttribute( "Message" );
         AddMessage( StringToWString( param ) );
 	}
 	else if( crawlAction == "Clear" )
@@ -806,7 +745,7 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
 
 // *******************************
 //
-void		Crawler::Start			()
+bool		Crawler::Start			()
 {
 	if( !m_started )
 	{
@@ -816,33 +755,53 @@ void		Crawler::Start			()
         m_paused = false;
         m_currTime = std::clock();
 	}
-    else
+    else if( m_paused )
     {
-        assert( m_paused );
         m_paused = false;
     }
+    else
+        return false;
+
+    return true;
 }
 
 // *******************************
 //
-void		Crawler::Stop			()
+bool		Crawler::Stop			()
 {
-	m_started = false;
-    m_paused = false;
-
-    Unfinalize();
+    return Reset();
 }
 
 // ***********************
 //
-void        Crawler::Pause               ()
+bool        Crawler::Pause               ()
 {
     m_paused = true;
+    return true;
+}
+
+// *******************************
+//
+bool		Crawler::Reset()
+{
+    // Temporary copy node's to active node's and than set proper layout.
+    // Layout is set only for active node's, thats why we have to avtivate them
+    auto copy = m_nodesStates.m_nonActives;
+    for( auto n : copy )	
+        m_nodesStates.Acivate( n );
+
+    LayoutNodes();
+    Unfinalize();       // Unfinalize will deactivate all node's.
+
+    m_started = false;
+    m_paused = false;
+
+    return true;
 }
 
 // ***********************
 //
-bool            Crawler::GetStatus           ( IDeserializer & /*eventSer*/, ISerializer & response, BVProjectEditor * /*editor*/ )
+bool        Crawler::GetStatus           ( IDeserializer & /*eventSer*/, ISerializer & response, BVProjectEditor * /*editor*/ )
 {
     if( m_started && !m_paused )
     {
@@ -864,6 +823,13 @@ bool            Crawler::GetStatus           ( IDeserializer & /*eventSer*/, ISe
 void		Crawler::SetInterspace		( Float32 interspace )
 {
 	m_interspace = interspace;
+}
+
+// ***********************
+//
+void        Crawler::SetNodePath         ( std::string nodePath )
+{
+    m_crawlerNodePath = nodePath;
 }
 
 // *******************************

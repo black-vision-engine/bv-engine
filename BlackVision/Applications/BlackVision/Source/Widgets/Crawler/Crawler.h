@@ -54,6 +54,9 @@ private:
 	typedef std::map< bv::model::BasicNode *, bool >	NodeBoolMap;
 
 private:
+
+    std::string                             m_crawlerNodePath;
+
 	bool									m_isFinalized;
 	bv::model::BasicNode *					m_parentNode;
 	CrawlerNodesStates						m_nodesStates;
@@ -115,6 +118,7 @@ public:
 
 	void		SetSpeed			( Float32 speed );
 	void		SetInterspace		( Float32 interspace );
+    void        SetNodePath         ( std::string nodePath );
 
 	virtual void	Initialize		()				override {}
 	virtual void	Update			( TimeType t )	override;
@@ -132,10 +136,10 @@ public:
 
 public:
     // Event handler funtions
-	void			Start			    ();
-	void			Stop			    ();
-	void		    Reset				();
-    void            Pause               ();
+	bool			Start			    ();
+	bool			Stop			    ();
+	bool		    Reset				();
+    bool            Pause               ();
 
     bool            SmoothStart         ();
     bool            SmoothPause         ();
