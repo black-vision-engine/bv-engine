@@ -5,6 +5,9 @@
 
 namespace bv { namespace model {
 
+class ConstTimeEvaluator;
+DEFINE_PTR_TYPE(ConstTimeEvaluator)
+
 class ConstTimeEvaluator : public TimeEvaluatorBase< ITimeEvaluator >
 {
 private:
@@ -15,24 +18,24 @@ private:
 
     TimeType        m_timeVal;
 
+                                    ConstTimeEvaluator  ( const std::string & name, TimeType val );
+
 public:
 
-            ConstTimeEvaluator                      ( const std::string & name, TimeType val );
-            ~ConstTimeEvaluator                     ();
+    static ConstTimeEvaluatorPtr    Create  ( const std::string & name, TimeType val );
+                                    ~ConstTimeEvaluator ();
 
-    virtual void                Serialize           ( ISerializer& sob ) const;
-    static ConstTimeEvaluator * Create              ( const IDeserializer& dob );
+    virtual void                    Serialize           ( ISerializer & sob ) const;
+    static ConstTimeEvaluatorPtr    Create              ( const IDeserializer & dob );
 
-    void    SetConstTimeValue                       ( TimeType t );
+    void                            SetConstTimeValue   ( TimeType t );
 
-    virtual void                SetGlobalTimeImpl   ( TimeType t ) override;
-    virtual TimeType            GetLocalTime        () const override;
+    virtual void                    SetGlobalTimeImpl   ( TimeType t ) override;
+    virtual TimeType                GetLocalTime        () const override;
 
-    virtual const std::string&  GetType             () override;
-    static const std::string&   Type                ();
+    virtual const std::string &     GetType             () override;
+    static const std::string &      Type                ();
 };
-
-DEFINE_PTR_TYPE(ConstTimeEvaluator)
 
 } //model
 } //bv

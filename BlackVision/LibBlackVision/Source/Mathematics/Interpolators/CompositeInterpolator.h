@@ -39,11 +39,16 @@ public:
     typedef ValueT                      ValT;
 
 public:
-    explicit                                            CompositeInterpolator( float tolerance = 0.0001f );
                                                         CompositeInterpolator( const CompositeInterpolator & that );
+    explicit                                            CompositeInterpolator( float tolerance = 0.0001f );
+
+    static std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >
+                                                        Create              ( float tolerance = 0.0001f );
 
     virtual void                                        Serialize           ( ISerializer & ) const override;
-    static CompositeInterpolator< TimeValueT, ValueT >* Create              ( const IDeserializer & );
+
+    static std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > > 
+                                                        Create              ( const IDeserializer & );
 
     void                                                AddKey              ( TimeValueT t, const ValueT & v );
     bool                                                RemoveKey           ( TimeValueT t );

@@ -47,7 +47,7 @@ const TimeType GEvtTimeSeparation = TimeType( 0.2 ); //FIXME: some config (defau
 
 // *********************************
 //
-bool timelineEventComparator    ( ITimelineEvent * e0, ITimelineEvent * e1 )
+bool timelineEventComparator    ( const ITimelineEventPtr & e0, const ITimelineEventPtr & e1 )
 {
     return e0->GetEventTime() < e1->GetEventTime();
 }
@@ -68,12 +68,7 @@ DefaultTimeline::DefaultTimeline     ( const std::string & name, TimeType durati
 // *********************************
 //
 DefaultTimeline::~DefaultTimeline    ()
-{
-    for( auto evt : m_keyFrameEvents )
-    {
-        delete evt;
-    }
-}
+{}
 
 // *********************************
 //
@@ -111,10 +106,16 @@ void                                DefaultTimeline::Serialize           ( ISeri
     ser.ExitChild();
 }
 
+// *********************************
+//
+DefaultTimelinePtr                  DefaultTimeline::Create     ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod )
+{
+    return DefaultTimelinePtr( new DefaultTimeline( name, duration, preMethod, postMethod ) );
+}
 
 // *********************************
 //
-DefaultTimeline *                     DefaultTimeline::Create              ( const IDeserializer& deser )
+DefaultTimelinePtr                    DefaultTimeline::Create   ( const IDeserializer & deser )
 {
     auto name = deser.GetAttribute( "name" );
 
@@ -132,7 +133,7 @@ DefaultTimeline *                     DefaultTimeline::Create              ( con
         preWrap = postWrap = SerializationHelper::String2T< TimelineWrapMethod >( loop );
     }
 
-    auto te = new DefaultTimeline( name, duration, preWrap, postWrap );
+    auto te = DefaultTimeline::Create( name, duration, preWrap, postWrap );
 
     if( deser.EnterChild( "events" ) )
     {
@@ -142,11 +143,11 @@ DefaultTimeline *                     DefaultTimeline::Create              ( con
             {
                 auto type = deser.GetAttribute( "type" );
                 if( type == "loop" )
-                    te->AddKeyFrame( TimelineEventLoop::Create( deser, te ) );
+                    te->AddKeyFrame( TimelineEventLoop::Create( deser, te.get() ) );
                 else if( type == "null" )
-                    te->AddKeyFrame( TimelineEventNull::Create( deser, te ) );
+                    te->AddKeyFrame( TimelineEventNull::Create( deser, te.get() ) );
                 else if( type == "stop" )
-                    te->AddKeyFrame( TimelineEventStop::Create( deser, te ) );
+                    te->AddKeyFrame( TimelineEventStop::Create( deser, te.get() ) );
                 else
                     assert( false );
 
@@ -318,9 +319,9 @@ SizeType                            DefaultTimeline::NumKeyFrames       () const
 
 // *********************************
 //
-bool                                DefaultTimeline::AddKeyFrame        ( ITimelineEvent * evt )
+bool                                DefaultTimeline::AddKeyFrame        ( const ITimelineEventPtr & evt )
 {
-    if( !CanBeInserted( evt ) )
+    if( !CanBeInserted( evt.get() ) )
     {
         return false;
     }
@@ -340,7 +341,7 @@ const ITimelineEvent *              DefaultTimeline::GetKeyFrameEvent   ( const 
     {
         if ( e->GetName() == name )
         {
-            return e;
+            return e.get();
         }
     }
 
@@ -356,7 +357,7 @@ const ITimelineEvent *              DefaultTimeline::GetKeyFrameEvent   ( unsign
         return nullptr;
     }
 
-    return m_keyFrameEvents[ idx ];
+    return m_keyFrameEvents[ idx ].get();
 }
 
 // *********************************
@@ -417,7 +418,7 @@ ITimelineEvent *                    DefaultTimeline::CurrentEvent       ( TimeTy
 
             if( eventTime >= t0 && eventTime <= t1 )
             {
-                return evt;
+                return evt.get();
             }
         }
     }

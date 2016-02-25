@@ -55,7 +55,7 @@ public:
     virtual ~BasicNode();
 
     static BasicNodePtr                     Create                  ( const std::string & name, ITimeEvaluatorPtr, const PluginsManager * pluginsManager = nullptr );
-    static BasicNode *                      Create                  ( const IDeserializer& doc );
+    static BasicNodePtr                     Create                  ( const IDeserializer& doc );
     virtual void                            Serialize               ( ISerializer& doc ) const;
 
 	BasicNodePtr					        Clone					() const;

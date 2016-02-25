@@ -118,9 +118,18 @@ void                                        CompositeInterpolator< TimeValueT, V
 // *************************************
 //
 template< class TimeValueT, class ValueT >
-CompositeInterpolator< TimeValueT, ValueT >*     CompositeInterpolator< TimeValueT, ValueT >::Create          ( const IDeserializer& deser )
+std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >
+CompositeInterpolator< TimeValueT, ValueT >::Create              ( float tolerance )
 {
-    auto interpolator = new CompositeInterpolator< TimeValueT, ValueT >();
+    return std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >( new CompositeInterpolator< TimeValueT, ValueT >( tolerance ) );
+}
+
+// *************************************
+//
+template< class TimeValueT, class ValueT >
+std::shared_ptr< CompositeInterpolator< TimeValueT, ValueT > >     CompositeInterpolator< TimeValueT, ValueT >::Create          ( const IDeserializer& deser )
+{
+    auto interpolator = CompositeInterpolator< TimeValueT, ValueT >::Create();
 
     auto keys = SerializationHelper::DeserializeArray< Key >( deser, "keys" );
 

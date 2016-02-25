@@ -7,6 +7,10 @@
 
 namespace bv { namespace model {
 
+class OffsetTimeEvaluator;
+DEFINE_PTR_TYPE(OffsetTimeEvaluator)
+
+
 class OffsetTimeEvaluator : public TimeEvaluatorBase< ITimeEvaluator >
 {
 private:
@@ -19,13 +23,15 @@ private:
     TimeType        m_timeScale;
     TimeType        m_globalTime;
 
+                                                    OffsetTimeEvaluator                     ( const std::string & name, TimeType offsetTime, TimeType scale );
 public:
 
-                                                    OffsetTimeEvaluator                     ( const std::string & name, TimeType offsetTime, TimeType scale = 1 );
                                                     ~OffsetTimeEvaluator                    ();
 
+    static OffsetTimeEvaluatorPtr                   Create                                  ( const std::string & name, TimeType offsetTime, TimeType scale = 1 );
+
     virtual void                                    Serialize                               ( ISerializer& sob ) const;
-    static OffsetTimeEvaluator *                    Create                                  ( const IDeserializer& dob );
+    static OffsetTimeEvaluatorPtr                   Create                                  ( const IDeserializer& dob );
 
     void                                            SetTimeOffset                           ( TimeType t );
 
@@ -35,8 +41,6 @@ public:
     virtual const std::string&                      GetType                                 () override;
     static const std::string&                       Type                                    ();
 };
-
-DEFINE_PTR_TYPE(OffsetTimeEvaluator)
 
 } //model
 } //bv

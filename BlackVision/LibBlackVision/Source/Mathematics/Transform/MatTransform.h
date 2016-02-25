@@ -38,6 +38,9 @@ enum class TransformKind : int
     invalid
 };
 
+class CompositeTransform;
+DEFINE_PTR_TYPE(CompositeTransform)
+
 // ******************* CompositeTransform **************** 
 class CompositeTransform : public ISerializable
 {
@@ -62,13 +65,14 @@ private:
     FloatInterpolator   m_centerY;
     FloatInterpolator   m_centerZ;
 
+    
 public:
+    static CompositeTransformPtr Create     ();
 
-    explicit        CompositeTransform  ();
-
-    static CompositeTransform *  Create      ( const IDeserializer & dob );
+    static CompositeTransformPtr Create      ( const IDeserializer & dob );
     virtual void                 Serialize   ( ISerializer & doc ) const;
 
+    explicit        CompositeTransform   ();
     void            InitializeDefaultSRT();
 
     virtual         ~CompositeTransform ();

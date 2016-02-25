@@ -9,6 +9,9 @@
 
 namespace bv {
 
+class AssetDescsWithUIDs;
+DEFINE_PTR_TYPE( AssetDescsWithUIDs );
+
 class AssetDescsWithUIDs : public ISerializable
 {
     static AssetDescsWithUIDs instance;
@@ -24,7 +27,8 @@ public:
     //static void                                             SetInstance( AssetDescsWithUIDs & i ) { instance = i; }
 
     virtual void                                            Serialize       ( ISerializer & ser ) const;
-    static AssetDescsWithUIDs *                             Create          ( const IDeserializer & deser );
+    static AssetDescsWithUIDsPtr                            Create          ( const IDeserializer & deser );
+    static AssetDescsWithUIDsPtr                            Create          ();
 
     void                                                    AddAssetDesc( AssetDescConstPtr asset );
 

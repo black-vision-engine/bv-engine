@@ -126,14 +126,14 @@ TestAI *        TestAIManager::PreparePreset    ( unsigned int idx, BVAppLogic *
 //
 TestAI *        TestAIManager::PreparePreset0   () const
 {
-    auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 0", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ) );
-    timeline->AddKeyFrame( new model::TimelineEventLoop( "reverse 2 at 0.0 ", TimeType( 0.0 ), LoopEventAction::LEA_REVERSE, 2, TimeType( 1.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop at 2.0      ", TimeType( 2.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventLoop( "reverse 1 at 4.0 ", TimeType( 4.0 ), LoopEventAction::LEA_REVERSE, 1, TimeType( 1.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop at 6.0      ", TimeType( 6.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventLoop( "restart 1 at 9.0 ", TimeType( 9.0 ), LoopEventAction::LEA_RESTART, 1, TimeType( 1.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventLoop( "reverse 1 at 12.0", TimeType( 12.0 ), LoopEventAction::LEA_REVERSE, 1, TimeType( 1.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop at 15.0     ", TimeType( 15.0 ), timeline.get() ) );
+    auto timeline = model::DefaultTimeline::Create( "timeline preset 0", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    timeline->AddKeyFrame( model::TimelineEventLoop::Create( "reverse 2 at 0.0 ", TimeType( 0.0 ), LoopEventAction::LEA_REVERSE, 2, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( model::TimelineEventStop::Create( "stop at 2.0      ", TimeType( 2.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( model::TimelineEventLoop::Create( "reverse 1 at 4.0 ", TimeType( 4.0 ), LoopEventAction::LEA_REVERSE, 1, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( model::TimelineEventStop::Create( "stop at 6.0      ", TimeType( 6.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( model::TimelineEventLoop::Create( "restart 1 at 9.0 ", TimeType( 9.0 ), LoopEventAction::LEA_RESTART, 1, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( model::TimelineEventLoop::Create( "reverse 1 at 12.0", TimeType( 12.0 ), LoopEventAction::LEA_REVERSE, 1, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( model::TimelineEventStop::Create( "stop at 15.0     ", TimeType( 15.0 ), timeline.get() ) );
 
     //auto c0 = new AICommandSetTimeAndPlay( timeline, TimeType( 1.0 ), TimeType( 2.0 ) );
     auto c0 = new AICommandPlay( timeline, TimeType( 1.0 ) );
@@ -173,14 +173,14 @@ TestAI *        TestAIManager::PreparePreset0   () const
 //FIXME: test and fix in runtime
 TestAI *        TestAIManager::PreparePreset1   () const
 {
-    auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 0", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ) );
-    timeline->AddKeyFrame( new model::TimelineEventLoop( "reverse 2 at 0.0 ", TimeType( 0.0 ), LoopEventAction::LEA_REVERSE, 2, TimeType( 1.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop at 2.0      ", TimeType( 2.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventLoop( "reverse 1 at 4.0 ", TimeType( 4.0 ), LoopEventAction::LEA_REVERSE, 1, TimeType( 1.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop at 6.0      ", TimeType( 6.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventLoop( "restart 1 at 9.0 ", TimeType( 9.0 ), LoopEventAction::LEA_RESTART, 1, TimeType( 1.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventLoop( "reverse 1 at 12.0", TimeType( 12.0 ), LoopEventAction::LEA_REVERSE, 1, TimeType( 1.0 ), timeline.get() ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop at 15.0     ", TimeType( 15.0 ), timeline.get() ) );
+    auto timeline = model::DefaultTimeline::Create( "timeline preset 0", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
+    timeline->AddKeyFrame( model::TimelineEventLoop::Create( "reverse 2 at 0.0 ", TimeType( 0.0 ), LoopEventAction::LEA_REVERSE, 2, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( model::TimelineEventStop::Create( "stop at 2.0      ", TimeType( 2.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( model::TimelineEventLoop::Create( "reverse 1 at 4.0 ", TimeType( 4.0 ), LoopEventAction::LEA_REVERSE, 1, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( model::TimelineEventStop::Create( "stop at 6.0      ", TimeType( 6.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( model::TimelineEventLoop::Create( "restart 1 at 9.0 ", TimeType( 9.0 ), LoopEventAction::LEA_RESTART, 1, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( model::TimelineEventLoop::Create( "reverse 1 at 12.0", TimeType( 12.0 ), LoopEventAction::LEA_REVERSE, 1, TimeType( 1.0 ), timeline.get() ) );
+    timeline->AddKeyFrame( model::TimelineEventStop::Create( "stop at 15.0     ", TimeType( 15.0 ), timeline.get() ) );
 
     //auto c0 = new AICommandSetTimeAndPlay( timeline, TimeType( 1.0 ), TimeType( 2.0 ) );
     auto c0 = new AICommandPlay( timeline, TimeType( 1.0 ) );
@@ -232,8 +232,8 @@ TestAI *        TestAIManager::PreparePreset1   () const
 //
 TestAI *        TestAIManager::PreparePreset2   () const
 {
-    auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 0", TimeType( 20.0 ), TimelineWrapMethod::TWM_REPEAT, TimelineWrapMethod::TWM_CLAMP ) );
-    timeline->AddKeyFrame( new model::TimelineEventStop( "stop0", TimeType( 2.0 ), timeline.get() ) );
+    auto timeline = model::DefaultTimeline::Create( "timeline preset 0", TimeType( 20.0 ), TimelineWrapMethod::TWM_REPEAT, TimelineWrapMethod::TWM_CLAMP );
+    timeline->AddKeyFrame( model::TimelineEventStop::Create( "stop0", TimeType( 2.0 ), timeline.get() ) );
     auto c1 = new AICommandPlay( timeline, TimeType( 0.2 ) );
     auto c3 = new AICommandSetTimeAndStop( timeline, TimeType( 0.5 ), TimeType( 7.5 ) );
     //auto c4 = new AICommandSetTimeAndStop( timeline, TimeType( 3.0 ), TimeType( 3.5 ) );
@@ -278,7 +278,7 @@ TestAI *        TestAIManager::PreparePreset2   () const
 //
 TestAI *        TestAIManager::PreparePreset3   ( model::IModelNodePtr node ) const
 {
-    auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 0", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ) );
+    auto timeline = model::DefaultTimeline::Create( "timeline preset 0", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
 
     TestAI * ai = new TestAI( timeline, node );
     
@@ -328,7 +328,7 @@ TestAI *        TestAIManager::PreparePreset3   ( model::IModelNodePtr node ) co
 //
 TestAI *        TestAIManager::PreparePreset4   ( BVAppLogic * logic ) const
 {    
-    auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 1", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ) );
+    auto timeline = model::DefaultTimeline::Create( "timeline preset 1", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
 
     TestAI * ai = new TestAI( timeline, nullptr );
 
@@ -347,7 +347,7 @@ TestAI *        TestAIManager::PreparePreset4   ( BVAppLogic * logic ) const
 //
 TestAI *        TestAIManager::PreparePreset5   ( BVAppLogic * logic ) const
 {
-    auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 5", TimeType( 130.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ) );
+    auto timeline = model::DefaultTimeline::Create( "timeline preset 5", TimeType( 130.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
 
     auto c0 = new AICommandReloadTexture( logic, 3.f, "Root", "texture", "alfai00.tga" );
     auto c1 = new AICommandReloadTexture( logic, 4.f, "Root", "texture", "simless_01.jpg" );
@@ -378,7 +378,7 @@ TestAI *        TestAIManager::PreparePreset5   ( BVAppLogic * logic ) const
 //
 TestAI *        TestAIManager::PreparePreset6   ( model::IModelNodePtr node ) const
 {
-    auto timeline = model::DefaultTimelinePtr( new model::DefaultTimeline( "timeline preset 0", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP ) );
+    auto timeline = model::DefaultTimeline::Create( "timeline preset 0", TimeType( 30.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
 
     TestAI * ai = new TestAI( timeline, node );
     

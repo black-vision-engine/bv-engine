@@ -46,7 +46,7 @@ BVProject::BVProject    ( Renderer * renderer )
     : m_renderer( renderer )
     , m_engineSceneRoot( nullptr )
 	, m_timelineManager( std::make_shared < model::TimelineManager >() )
-    , m_globalTimeline( new model::OffsetTimeEvaluator( GLOBAL_TIMELINE_NAME, TimeType( 0.0 ) ) )
+    , m_globalTimeline( model::OffsetTimeEvaluator::Create( GLOBAL_TIMELINE_NAME, TimeType( 0.0 ) ) )
 {
 	m_timelineManager->RegisterRootTimeline( m_globalTimeline );
     model::TimelineManager::SetInstance( m_timelineManager.get() );

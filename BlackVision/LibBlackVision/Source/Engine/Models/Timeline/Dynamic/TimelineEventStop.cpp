@@ -20,20 +20,27 @@ TimelineEventStop::~TimelineEventStop  ()
 
 // *********************************
 //
-void                TimelineEventStop::Serialize       ( ISerializer& ser ) const
+void                    TimelineEventStop::Serialize        ( ISerializer & ser ) const
 {
-ser.EnterChild( "event" );
+    ser.EnterChild( "event" );
     ser.SetAttribute( "type", "stop" );
     ser.SetAttribute( "name", GetName() );
     SerializationHelper::SerializeAttribute( ser, GetEventTime(), "time" );
-ser.ExitChild();
+    ser.ExitChild(); // "event"
 }
 
 // *********************************
 //
-TimelineEventStop*   TimelineEventStop::Create          ( const IDeserializer& deser, ITimeline* timeline )
+TimelineEventStopPtr    TimelineEventStop::Create           ( const std::string & name, TimeType eventTime, const ITimeline * owner )
 {
-    return new TimelineEventStop( deser.GetAttribute( "name" ),
+    return TimelineEventStopPtr( new TimelineEventStop( name, eventTime, owner ) );
+}
+
+// *********************************
+//
+TimelineEventStopPtr    TimelineEventStop::Create           ( const IDeserializer & deser, const ITimeline * timeline )
+{
+    return TimelineEventStop::Create( deser.GetAttribute( "name" ),
         SerializationHelper::String2T< TimeType >( deser.GetAttribute( "time" ), 0.f ),
         timeline );
 }

@@ -25,7 +25,7 @@ SceneModelPtr    SceneModel::Create		( const std::string & name, Camera * camera
 //
 				SceneModel::SceneModel	( const std::string & name, Camera * camera )
     : m_name( name )
-    , m_timeline( new model::OffsetTimeEvaluator( name, TimeType( 0.0 ) ) )
+    , m_timeline( model::OffsetTimeEvaluator::Create( name, TimeType( 0.0 ) ) )
 	, m_camera( camera )
 	, m_modelSceneEditor( nullptr )
 {
@@ -73,16 +73,16 @@ void            SceneModel::Serialize           ( ISerializer & ser) const
 
 // *******************************
 //
-SceneModel *        SceneModel::Create          ( const IDeserializer & deser )
+SceneModelPtr        SceneModel::Create          ( const IDeserializer & deser )
 {
     auto bvDeserCo = Cast< BVDeserializeContext* >( deser.GetDeserializeContext() );
 // assets
-    auto assets = SerializationHelper::DeserializeObjectPtr< AssetDescsWithUIDs >( deser, "assets" );
+    auto assets = SerializationHelper::DeserializeObject< AssetDescsWithUIDs >( deser, "assets" );
     bvDeserCo->SetAssets( assets );
 
 	//FIXME: pass nullptr as camera because we don't have camera model yet
     auto sceneName = deser.GetAttribute( "name" );
-    auto obj = new SceneModel( sceneName, nullptr );
+    auto obj = SceneModel::Create( sceneName, nullptr );
 
     // Add scene name to context
     bvDeserCo->SetSceneName( sceneName );
@@ -99,7 +99,7 @@ SceneModel *        SceneModel::Create          ( const IDeserializer & deser )
 	bvDeserCo->SetSceneTimeline( sceneTimeline );
 
 // nodes
-    auto node = SerializationHelper::DeserializeObjectPtr< model::BasicNode >( deser, "node" );
+    auto node = SerializationHelper::DeserializeObject< model::BasicNode >( deser, "node" );
 
     if( node )
     {
@@ -111,7 +111,7 @@ SceneModel *        SceneModel::Create          ( const IDeserializer & deser )
 
 // *******************************
 //
-model::SceneModel *		SceneModel::Clone		() const
+model::SceneModelPtr		SceneModel::Clone		() const
 {
 	return CloneViaSerialization::Clone( this, "scene", nullptr, nullptr ); // FIXME probably
 }

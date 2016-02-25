@@ -33,10 +33,10 @@ public:
     virtual					~SceneModel			();
 
     static SceneModelPtr    Create              ( const std::string & name, Camera * camera );
-    static SceneModel *     Create              ( const IDeserializer & deser );
+    static SceneModelPtr    Create              ( const IDeserializer & deser );
     virtual void            Serialize           ( ISerializer & doc) const override;
 
-    model::SceneModel * 	Clone				() const;
+    model::SceneModelPtr 	Clone				() const;
 
     void					SetRootNode			( BasicNodePtr rootNode );
     BasicNodePtr			GetRootNode			() const;

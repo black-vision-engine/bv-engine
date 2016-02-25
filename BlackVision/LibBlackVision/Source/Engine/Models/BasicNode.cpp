@@ -140,7 +140,7 @@ void                            BasicNode::Serialize               ( ISerializer
 
 // ********************************
 //
-BasicNode * BasicNode::Create( const IDeserializer& deser )
+BasicNodePtr BasicNode::Create( const IDeserializer& deser )
 {
     //assert( deser.GetName() == "node" ); FIXME
 
@@ -157,7 +157,7 @@ BasicNode * BasicNode::Create( const IDeserializer& deser )
 
 	//FIXME: nullptr because timeEvaluator is not used in BasicNode
     //auto node = Create( name, nullptr );
-    auto node = new BasicNode( name, nullptr );
+    auto node = BasicNode::Create( name, nullptr );
 
     node->m_visible = deser.GetAttribute( "visible" ) == "false" ? false : true;
 

@@ -15,7 +15,7 @@ public:
     virtual ~NodeLogicFactory() {}
 
     virtual model::INodeLogicPtr        CreateLogic  (  const IDeserializer &   deser,
-                                                        model::BasicNode *      logicParent
+                                                        model::BasicNodePtr     logicParent
                                                      )  override;
 };
 

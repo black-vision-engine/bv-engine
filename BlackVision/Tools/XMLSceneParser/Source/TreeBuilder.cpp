@@ -654,7 +654,7 @@ namespace bv{
 		bool autostart=false;
 		if(crawl->autostart=="true")autostart=true;
 
-		auto crawler = nodelogic::Crawler::Create( node.get(), mathematics::Rect::Create( -2.2f, -1.f, 2.2f, 1.f ) );
+		auto crawler = nodelogic::Crawler::Create( node, mathematics::Rect::Create( -2.2f, -1.f, 2.2f, 1.f ) );
 
 		node->SetLogic(crawler);
 		

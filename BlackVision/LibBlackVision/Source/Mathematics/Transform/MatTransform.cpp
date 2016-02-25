@@ -307,9 +307,17 @@ CompositeTransform::CompositeTransform      ()
 
 // *************************************
 //
-CompositeTransform *    CompositeTransform::Create      ( const IDeserializer & deser )
+CompositeTransformPtr   CompositeTransform::Create      ()
+
 {
-    auto transform = new CompositeTransform();
+    return CompositeTransformPtr( new CompositeTransform() );
+}
+
+// *************************************
+//
+CompositeTransformPtr    CompositeTransform::Create      ( const IDeserializer & deser )
+{
+    auto transform = CompositeTransform::Create();
 
     if( deser.EnterChild( "transform" ) )
     {

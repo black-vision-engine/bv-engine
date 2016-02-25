@@ -55,7 +55,7 @@ private:
 
 private:
 	bool									m_isFinalized;
-	bv::model::BasicNode *					m_parentNode;
+	bv::model::BasicNodePtr					m_parentNode;
 	CrawlerNodesStates						m_nodesStates;
 	NodeFloatMap							m_shifts;
     CrawlDirection                          m_crawlDirection;
@@ -97,7 +97,7 @@ public:
 	void		SetPromoFrequency	(int freq);
     void		Clear				();
 
-	explicit	Crawler				( bv::model::BasicNode * parent, const mathematics::RectConstPtr & view );
+	explicit	Crawler				( bv::model::BasicNodePtr parent, const mathematics::RectConstPtr & view );
 				~Crawler			() {}
 
 	void		AddNext				( bv::model::BasicNodePtr node );
@@ -117,12 +117,12 @@ public:
 	virtual void	Deinitialize	()				override {}
 
 
-	static		CrawlerPtr Create	( bv::model::BasicNode * parent, const mathematics::RectConstPtr & view );
+	static		CrawlerPtr Create	( bv::model::BasicNodePtr parent, const mathematics::RectConstPtr & view );
 
     virtual const std::string   GetType         () const override;
 
     virtual void                Serialize       ( ISerializer& ser ) const override;
-    static CrawlerPtr           Create          ( const IDeserializer & deser, bv::model::BasicNode * parentNode );
+    static CrawlerPtr           Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode );
 
     virtual bool                HandleEvent     ( IDeserializer& eventSer, ISerializer& response, BVProjectEditor * editor ) override;
 

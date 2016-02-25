@@ -91,14 +91,14 @@ glm::vec3       CrawlerShiftToVec   ( Crawler::CrawlDirection crawlDirection )
 
 // *******************************
 //
-CrawlerPtr	Crawler::Create				( bv::model::BasicNode * parent, const mathematics::RectConstPtr & view )
+CrawlerPtr	Crawler::Create				( bv::model::BasicNodePtr parent, const mathematics::RectConstPtr & view )
 {
 	return std::make_shared< Crawler >( parent, view );
 }
 
 // *******************************
 //
-Crawler::Crawler						( bv::model::BasicNode * parent, const mathematics::RectConstPtr & view )
+Crawler::Crawler						( bv::model::BasicNodePtr parent, const mathematics::RectConstPtr & view )
 	: m_parentNode( parent )
 	, m_isFinalized( false )
 	, m_view( view )
@@ -128,7 +128,7 @@ void		Crawler::AddNext			( bv::model::BasicNodePtr node )
 //
 bool		Crawler::AddNext            ( Int32 nodeIdx )
 {
-    auto newNode = GetNode( m_parentNode, nodeIdx );
+    auto newNode = GetNode( m_parentNode.get(), nodeIdx );
     return AddNode( newNode );
 }
 
@@ -136,7 +136,7 @@ bool		Crawler::AddNext            ( Int32 nodeIdx )
 //
 bool		Crawler::AddNext				( const std::string& childNodeName )
 {
-    auto newNode = GetNode( m_parentNode, childNodeName );
+    auto newNode = GetNode( m_parentNode.get(), childNodeName );
     return AddNode( newNode );
 }
 
@@ -618,7 +618,7 @@ void                Crawler::Serialize       ( ISerializer& ser ) const
 
 // ***********************
 //
-CrawlerPtr      Crawler::Create          ( const IDeserializer & deser, bv::model::BasicNode * parent )
+CrawlerPtr      Crawler::Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parent )
 {
     mathematics::RectPtr rect = std::make_shared<mathematics::Rect>();
 

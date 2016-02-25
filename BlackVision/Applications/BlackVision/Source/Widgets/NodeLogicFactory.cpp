@@ -10,14 +10,14 @@
 namespace bv
 {
 
-model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer & deser, model::BasicNode* logicParent )
+model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer & deser, model::BasicNodePtr logicParent )
 {
     const std::string& logicType = deser.GetAttribute( "type" );
 
     if( logicType == "crawler" )
         return nodelogic::Crawler::Create( deser, logicParent );
     else if( logicType == "counter" )
-        return nodelogic::WidgetCounter::Create( deser, logicParent );
+        return nodelogic::WidgetCounter::Create( deser, logicParent.get() );
     else if( logicType == "replicate" )
         return model::NodeReplicator::Create( deser, logicParent );
 
