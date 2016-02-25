@@ -29,12 +29,9 @@
 
 #include "UseLoggerLibBlackVision.h"
 
-#include "Mathematics/Box.h"
-#include "Engine/Models/Plugins/Interfaces/IAttributeChannelDescriptor.h"
-#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelDescriptor.h"
-#include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 #include "ModelState.h"
+
+#include "Engine/Models/BoundingVolume.h"
 
 namespace bv { 
     
@@ -533,11 +530,28 @@ void            BasicNode::SetPlugins                       ( DefaultPluginListF
     m_pluginList = plugins;
 }
 
+namespace {
+
+BoundingVolumePtr CreateBoundingVolume( DefaultPluginListFinalizedPtr pluginList )
+{
+    auto vac_ = pluginList->GetFinalizePlugin()->GetVertexAttributesChannel();
+    if( vac_ )
+    {
+        auto vac = Cast< VertexAttributesChannel * >( RemoveConst( vac_.get() ) ); // FIXME
+        return std::make_shared< BoundingVolume >( vac );
+    }
+    else
+        return nullptr;
+}
+
+}
+
 // ********************************
 //
 bool            BasicNode::AddPlugin                        ( IPluginPtr plugin )
 {
     m_pluginList->AttachPlugin( plugin );
+    m_boundingVolume = CreateBoundingVolume( m_pluginList );
 
     return true;
 }
@@ -548,6 +562,7 @@ bool            BasicNode::AddPlugin                        ( const std::string 
 {
     IPluginPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
     m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, prev, timeEvaluator ) );
+    m_boundingVolume = CreateBoundingVolume( m_pluginList );
 
     return true;
 }
@@ -559,6 +574,7 @@ bool            BasicNode::AddPlugin                    ( const std::string & ui
     IPluginPtr prev = m_pluginList->NumPlugins() > 0 ? m_pluginList->GetLastPlugin() : nullptr;
 
     m_pluginList->AttachPlugin( m_pluginsManager->CreatePlugin( uid, name, prev, timeEvaluator ) );
+    m_boundingVolume = CreateBoundingVolume( m_pluginList );
 
     return true;
 }
@@ -593,67 +609,6 @@ void            BasicNode::RemoveLogic              ()
     m_nodeLogic = nullptr;
 }
 
-namespace {
-
-mathematics::Box    GetBoundingBox( IVertexAttributesChannelConstPtr vac_ )
-{
-    auto vac = Cast< const VertexAttributesChannel* >( vac_.get() );
-
-    return vac->GetBoundingBox();
-}
-
-void AddBoxToVAC( const IVertexAttributesChannel* vac_, mathematics::Box box )
-{
-    auto vac = RemoveConst( Cast< const VertexAttributesChannel* >( vac_ ) );
-
-    ConnectedComponentPtr comp = ConnectedComponent::Create();
-
-    auto desc = vac->GetDescriptor();
-
-    assert( desc->GetAttrChannelDescriptor( 0 )->GetSemantic() == AttributeSemantic::AS_POSITION );
-    assert( desc->GetAttrChannelDescriptor( 0 )->GetType() == AttributeType::AT_FLOAT3 );
-
-    auto compVertDesc = Cast< const AttributeChannelDescriptor* >( desc->GetAttrChannelDescriptor( 0 ) );
-
-    Float3AttributeChannelPtr vertArrtF3 = std::make_shared< Float3AttributeChannel >( compVertDesc, "boundingBox", false );
-
-    comp->AddAttributeChannel( vertArrtF3 );
-
-    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmin ) );
-    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmin ) );
-    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmin ) );
-    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmin ) );
-    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymin, box.zmax ) );
-    vertArrtF3->AddAttribute( glm::vec3( box.xmax, box.ymax, box.zmax ) );
-    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymin, box.zmax ) );
-    vertArrtF3->AddAttribute( glm::vec3( box.xmin, box.ymax, box.zmax ) );
-
-    for( UInt32 i = 1; i < desc->GetNumVertexChannels(); i++ ) // FIXME so much when new VAC model arrives
-    {
-        auto attrDesc = Cast< const AttributeChannelDescriptor* >( desc->GetAttrChannelDescriptor( i ) );
-        if( attrDesc->GetType() == AttributeType::AT_FLOAT3 )
-        {
-            auto attr = std::make_shared< Float3AttributeChannel >( attrDesc, "dummy", false );
-            for( int j = 0; j < 8; j++ ) attr->AddAttribute( glm::vec3( 0, 0, 0 ) );
-            comp->AddAttributeChannel( attr );
-        }
-        else if( attrDesc->GetType() == AttributeType::AT_FLOAT2 )
-        {
-            auto attr = std::make_shared< Float2AttributeChannel >( attrDesc, "dummy", false );
-            for( int j = 0; j < 8; j++ ) attr->AddAttribute( glm::vec2( 0, 0 ) );
-            comp->AddAttributeChannel( attr );
-        }
-        else
-            assert( false );
-    }
-
-    vac->AddConnectedComponent( comp );
-
-    box;
-}
-
-} // anonymous
-
 // ********************************
 //
 void BasicNode::Update( TimeType t )
@@ -667,15 +622,8 @@ void BasicNode::Update( TimeType t )
 
         m_pluginList->Update( t );
 
-// FIXME: find better place to insert bounding box
-        auto vac = m_pluginList->GetFinalizePlugin()->GetVertexAttributesChannel();
-        static UInt64 lastID = 1;
-        if( vac && lastID != vac->GetAttributesUpdateID() )
-        {
-            lastID = vac->GetAttributesUpdateID();
-            auto box = GetBoundingBox( vac );
-            AddBoxToVAC( vac.get(), box );
-        }
+        if( m_boundingVolume )
+            m_boundingVolume->Update();
 
         if( m_nodeLogic )
         {
@@ -691,15 +639,9 @@ void BasicNode::Update( TimeType t )
 
 // ********************************
 //
-BoundingVolume 						    BasicNode::GetBoundingVolume		() const
+BoundingVolumeConstPtr              BasicNode::GetBoundingVolume		() const
 {
-    auto vac = m_pluginList->GetFinalizePlugin()->GetVertexAttributesChannel();
-
-    auto box = GetBoundingBox( vac );
-
-// FIXME: transformation should be applied here
-
-    return BoundingVolume( box );
+    return m_boundingVolume;
 }
 
 // ********************************

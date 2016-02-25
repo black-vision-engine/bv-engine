@@ -1342,9 +1342,6 @@
     <ClCompile Include="..\..\..\Source\Assets\VideoStream\VideoStreamLoader.cpp">
       <Filter>Assets\VideoStream</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Mathematics\BoundingVolume.cpp">
-      <Filter>Mathematics</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\Engine\Models\ModelState.cpp">
       <Filter>Engine\Models</Filter>
     </ClCompile>
@@ -1362,6 +1359,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\SceneThumbnail.cpp">
       <Filter>Assets\Thumbnail\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Models\BoundingVolume.cpp">
+      <Filter>Engine\Models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3413,9 +3413,6 @@
     <ClInclude Include="..\..\..\Source\Assets\VideoStream\VideoStreamLoader.h">
       <Filter>Assets\VideoStream</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Mathematics\BoundingVolume.h">
-      <Filter>Mathematics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Mathematics\Box.h">
       <Filter>Mathematics</Filter>
     </ClInclude>
@@ -3436,6 +3433,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\SceneThumbnail.h">
       <Filter>Assets\Thumbnail\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Models\BoundingVolume.h">
+      <Filter>Engine\Models</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

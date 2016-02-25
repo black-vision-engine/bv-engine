@@ -8,8 +8,6 @@
 #include "Engine/Models/Interfaces/INodeLogic.h"
 #include "Engine/Models/Plugins/DefaultPluginListFinalized.h"
 
-#include "Mathematics/BoundingVolume.h"
-
 #include "Serialization/ISerializable.h"
 
 
@@ -26,6 +24,10 @@ typedef std::vector< BasicNodePtr > TNodeVec;
 
 class ModelNodeEditor;
 
+class BoundingVolume;
+DEFINE_PTR_TYPE(BoundingVolume)
+DEFINE_CONST_PTR_TYPE(BoundingVolume)
+
 
 class BasicNode : public IModelNode, public std::enable_shared_from_this< BasicNode >, public ISerializable
 {
@@ -40,8 +42,9 @@ private:
     TNodeVec                        m_children;
 
     DefaultPluginListFinalizedPtr   m_pluginList;
+    BoundingVolumePtr               m_boundingVolume;
 
-	INodeLogicPtr					m_nodeLogic;
+    INodeLogicPtr					m_nodeLogic;
     IModelNodeEffectPtr             m_modelNodeEffect;
 
     ModelNodeEditor *				m_modelNodeEditor;
@@ -58,7 +61,7 @@ public:
     static BasicNode *                      Create                  ( const IDeserializer& doc );
     virtual void                            Serialize               ( ISerializer& doc ) const;
 
-	BasicNodePtr					        Clone					() const;
+    BasicNodePtr					        Clone					() const;
 
 
     virtual IPluginPtr                      GetPlugin               ( const std::string & name ) const override;
@@ -68,11 +71,11 @@ public:
     virtual IModelNodePtr                   GetNode                 ( const std::string & path, const std::string & separator = "/" ) override;
     virtual IModelNodePtr                   GetChild                ( const std::string & name ) override;
     
-	INodeLogicPtr							GetLogic				() const;
+    INodeLogicPtr							GetLogic				() const;
 
     virtual const IPluginListFinalized *    GetPluginList           () const override;
     virtual std::vector< IParameterPtr >    GetParameters           () const override;
-	virtual std::vector< ITimeEvaluatorPtr >GetTimelines			( bool recursive ) const override;
+    virtual std::vector< ITimeEvaluatorPtr >GetTimelines			( bool recursive ) const override;
 
     virtual unsigned int                    GetNumChildren          () const override;
 
@@ -82,21 +85,21 @@ public:
     virtual const std::string &             GetName                 () const override;
     void                                    SetName                 ( const std::string & name );
 
-	// axis-aligned bounding box
-	mathematics::Rect 						GetAABB					() const;
-	BoundingVolume 						    GetBoundingVolume		() const;
+    // axis-aligned bounding box
+    mathematics::Rect 						GetAABB					() const;
+    BoundingVolumeConstPtr				    GetBoundingVolume		() const;
 
     BasicNodePtr                            GetChild                ( unsigned int i );
     const BasicNode *                       GetChild                ( unsigned int i ) const;
     unsigned int                            GetNumPlugins           () const;
 
-	void                                    AddChildToModelOnly     ( BasicNodePtr n );
-	void                                    AddChildToModelOnly     ( BasicNodePtr n, UInt32 idx );
+    void                                    AddChildToModelOnly     ( BasicNodePtr n );
+    void                                    AddChildToModelOnly     ( BasicNodePtr n, UInt32 idx );
     void                                    DetachChildNodeOnly     ( BasicNodePtr n );
 
-	ModelNodeEditor *						GetModelNodeEditor		();
+    ModelNodeEditor *						GetModelNodeEditor		();
 
-	DefaultPluginListFinalizedPtr			GetPlugins				();
+    DefaultPluginListFinalizedPtr			GetPlugins				();
 
 private:
 
@@ -105,8 +108,8 @@ private:
 
 private:
 
-	mathematics::Rect 						GetAABB					( const glm::mat4 & currentTransformation ) const;
-	BoundingVolume 						    GetBoundingVolume		( const glm::mat4 & currentTransformation ) const;
+    mathematics::Rect 						GetAABB					( const glm::mat4 & currentTransformation ) const;
+    BoundingVolumeConstPtr 				    GetBoundingVolume		( const glm::mat4 & currentTransformation ) const;
 
 public:
 
@@ -116,7 +119,7 @@ public:
     bool                                    AddPlugin               ( const std::string & uid, const std::string & name, ITimeEvaluatorPtr timeEvaluator );
     bool                                    AddPlugins              ( const std::vector< std::string > & uids, ITimeEvaluatorPtr timeEvaluator );
 
-	void									SetLogic				( INodeLogicPtr logic );
+    void									SetLogic				( INodeLogicPtr logic );
     void                                    RemoveLogic             ();
 
     virtual void                            Update                  ( TimeType t ) override;
