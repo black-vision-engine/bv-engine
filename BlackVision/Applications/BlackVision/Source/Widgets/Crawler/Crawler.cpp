@@ -111,6 +111,11 @@ Crawler::Crawler						( bv::model::BasicNode * parent, const mathematics::RectCo
 {}
 
 
+// ========================================================================= //
+// Node managing
+// ========================================================================= //
+
+
 // *******************************
 //
 void		Crawler::AddNext			( bv::model::BasicNodePtr node )
@@ -161,6 +166,7 @@ bool        Crawler::AddNode             ( bv::model::BasicNodePtr node )
     return false;
 }
 
+
 // *******************************
 //
 bool		Crawler::Finalize			()
@@ -169,6 +175,8 @@ bool		Crawler::Finalize			()
 		;//assert(!"Crawler: Already finalized!");
 	else
 	{
+        glm::vec3 shiftDirection = CrawlerShiftToVec( m_crawlDirection );
+
 		auto copy = m_nodesStates.m_nonActives;
 		for( auto n : copy )
 		{
@@ -178,6 +186,8 @@ bool		Crawler::Finalize			()
 			if( trPlugin )
 			{
 				auto trParam = trPlugin->GetParameter( "simple_transform" );
+                assert( trParam != nullptr );
+
 				model::SetParameterTranslation( trParam, 0.0f, glm::vec3( 5.0f, 0.0f, 0.0f ) );
 			}
 		}
@@ -190,7 +200,7 @@ bool		Crawler::Finalize			()
 				if( trPlugin )
 				{
 					auto trParam = trPlugin->GetParameter( "simple_transform" );
-					model::SetParameterTranslation( trParam, 0.0f, glm::vec3( elem.second, 0.0f, 0.0f ) );
+					model::SetParameterTranslation( trParam, 0.0f, shiftDirection * -elem.second );
 				}
 			}
 		}
@@ -219,23 +229,6 @@ bool        Crawler::Unfinalize          ()
     return true;
 }
 
-
-// *******************************
-//
-void		Crawler::SetInterspace		( Float32 interspace )
-{
-	m_interspace = interspace;
-}
-
-// *******************************
-//
-void		Crawler::SetSpeed			( Float32 speed )
-{
-    if( speed < 0.0f )
-        speed = 0.0f;
-
-	m_speed = speed;
-}
 
 // *******************************
 //
@@ -333,27 +326,9 @@ void		Crawler::SetPromoFrequency			(int freq)
 
 // *******************************
 //
-void		Crawler::Start			()
-{
-	if(! m_started )
-	{
-		m_started = true;
-        m_currTime = std::clock();
-	}
-}
-
-// *******************************
-//
-void		Crawler::Stop			()
-{
-	m_started = false;
-}
-
-// *******************************
-//
 void		Crawler::Update				( TimeType )
 {
-	if( m_started )
+    if( m_started && !m_paused )
 	{
         auto t = std::clock();
 		auto shift = m_speed * ( ( t - m_currTime ) / 1000.f );
@@ -549,6 +524,9 @@ void		Crawler::EnqueueNode			( model::BasicNode * n)
 	}
 }
 
+// ========================================================================= //
+// Serialization and deserialization
+// ========================================================================= //
 
 // ***********************
 //
@@ -667,6 +645,10 @@ CrawlerPtr      Crawler::Create          ( const IDeserializer & deser, bv::mode
     return crawler;
 }
 
+// ========================================================================= //
+// Communication with outer world
+// ========================================================================= //
+
 // ***********************
 //
 bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISerializer& response, BVProjectEditor * editor )
@@ -681,6 +663,14 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
 	{
 		Start();
 	}
+    else if( crawlAction == "Reset" )
+	{
+		Reset();
+	}
+    else if( crawlAction == "Pause" )
+    {
+        Pause();
+    }
     else if( crawlAction == "AddNode" )
     {
         std::string newNode = eventSer.GetAttribute( "NodeName" );
@@ -694,10 +684,6 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
     {
         return AddPresetAndMessages( eventSer, response, editor );
     }
-    else if( crawlAction == "Reset" )
-	{
-		Reset();
-	}
     else if( crawlAction == "SetSpeed" )
 	{
         std::string param = eventSer.GetAttribute( "Speed" );
@@ -743,6 +729,105 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventSer, ISeriali
     return true;
 }
 
+
+
+// *******************************
+//
+void		Crawler::Start			()
+{
+	if( !m_started )
+	{
+        Finalize();
+
+		m_started = true;
+        m_paused = false;
+        m_currTime = std::clock();
+	}
+    else
+    {
+        assert( m_paused );
+        m_paused = false;
+    }
+}
+
+// *******************************
+//
+void		Crawler::Stop			()
+{
+	m_started = false;
+
+    Unfinalize();
+}
+
+// ***********************
+//
+void        Crawler::Pause               ()
+{
+    m_paused = true;
+}
+
+// ***********************
+//
+bool            Crawler::GetStatus           ( IDeserializer & /*eventSer*/, ISerializer & response, BVProjectEditor * /*editor*/ )
+{
+    if( m_started && !m_paused )
+    {
+        response.SetAttribute( "Status", "Running" );
+    }
+    else if( m_started && m_paused )
+    {
+        response.SetAttribute( "Status", "Paused" );
+    }
+    else
+    {
+        response.SetAttribute( "Status", "Stopped" );
+    }
+    return true;
+}
+
+// *******************************
+//
+void		Crawler::SetInterspace		( Float32 interspace )
+{
+	m_interspace = interspace;
+}
+
+// *******************************
+//
+void		Crawler::SetSpeed			( Float32 speed )
+{
+    if( speed < 0.0f )
+        speed = 0.0f;
+
+	m_speed = speed;
+}
+
+
+// ***********************
+//
+bool            Crawler::AddPreset           ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
+{
+    auto node = CreatePreset( eventSer, response, editor );
+    if( node == nullptr )
+        return false;
+
+    return AddPresetToScene( eventSer, response, editor, node );
+}
+
+// ***********************
+//
+bool            Crawler::AddPresetAndMessages( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
+{
+    auto addedNode = CreatePreset( eventSer, response, editor );
+    if( addedNode == nullptr )
+        return false;
+
+    AddTexts( eventSer, response, editor, addedNode );
+    AddImages( eventSer, response, editor, addedNode );
+
+    return AddPresetToScene( eventSer, response, editor, addedNode );
+}
+
 // ***********************
 //
 model::BasicNodePtr Crawler::CreatePreset    ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
@@ -775,6 +860,8 @@ model::BasicNodePtr Crawler::CreatePreset    ( IDeserializer & eventSer, ISerial
     return node;
 }
 
+// ***********************
+//
 bool            Crawler::AddPresetToScene( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor, model::BasicNodePtr node )
 {
     auto context = static_cast<BVDeserializeContext*>( eventSer.GetDeserializeContext() );
@@ -797,31 +884,6 @@ bool            Crawler::AddPresetToScene( IDeserializer & eventSer, ISerializer
         return true;
     }
     return false;
-}
-
-// ***********************
-//
-bool            Crawler::AddPreset           ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
-{
-    auto node = CreatePreset( eventSer, response, editor );
-    if( node == nullptr )
-        return false;
-
-    return AddPresetToScene( eventSer, response, editor, node );
-}
-
-// ***********************
-//
-bool            Crawler::AddPresetAndMessages( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
-{
-    auto addedNode = CreatePreset( eventSer, response, editor );
-    if( addedNode == nullptr )
-        return false;
-
-    AddTexts( eventSer, response, editor, addedNode );
-    AddImages( eventSer, response, editor, addedNode );
-
-    return AddPresetToScene( eventSer, response, editor, addedNode );
 }
 
 // ***********************
@@ -890,25 +952,6 @@ void            Crawler::AddImages           ( IDeserializer & eventSer, ISerial
         }
         eventSer.ExitChild();   // TextsArray
     }
-}
-
-// ***********************
-//
-bool            Crawler::GetStatus           ( IDeserializer & /*eventSer*/, ISerializer & response, BVProjectEditor * /*editor*/ )
-{
-    if( m_started && !m_paused )
-    {
-        response.SetAttribute( "Status", "Running" );
-    }
-    else if( m_started && m_paused )
-    {
-        response.SetAttribute( "Status", "Paused" );
-    }
-    else
-    {
-        response.SetAttribute( "Status", "Stopped" );
-    }
-    return true;
 }
 
 
