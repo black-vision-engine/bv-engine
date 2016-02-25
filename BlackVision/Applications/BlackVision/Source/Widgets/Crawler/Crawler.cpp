@@ -340,39 +340,42 @@ void		Crawler::Clear()
 //
 void		Crawler::Reset()
 {
-	m_nodesStates.m_visibles.clear();
-	/*while(m_nodesStates.m_actives.size()>0)
-	{
-		BasicNode *node = m_nodesStates.m_actives.push_back();
+	//m_nodesStates.m_visibles.clear();
+	///*while(m_nodesStates.m_actives.size()>0)
+	//{
+	//	BasicNode *node = m_nodesStates.m_actives.push_back();
 
 
-	}*/
+	//}*/
 
-	m_nodesStates.m_nonActives.insert(m_nodesStates.m_nonActives.end(), m_nodesStates.m_actives.begin(), m_nodesStates.m_actives.end());
+	//m_nodesStates.m_nonActives.insert(m_nodesStates.m_nonActives.end(), m_nodesStates.m_actives.begin(), m_nodesStates.m_actives.end());
 
-	m_nodesStates.m_actives.clear();
-	m_nodesStates.m_visibles.clear();
-
-
-	for( auto elem : m_shifts )
-	{
-		
-			auto trPlugin = elem.first->GetPlugin( "transform" );
-			if( trPlugin )
-			{
-				auto trParam = trPlugin->GetParameter( "simple_transform" );
-				model::SetParameterTranslation( trParam, 0.0f, glm::vec3( 5.0f, 0.0f, 0.0f ) );
-			}
-			UpdateVisibility(elem.first );
-		
-	}
-
-	
-		
-	Finalize();
+	//m_nodesStates.m_actives.clear();
+	//m_nodesStates.m_visibles.clear();
 
 
+	//for( auto elem : m_shifts )
+	//{
+	//	
+	//		auto trPlugin = elem.first->GetPlugin( "transform" );
+	//		if( trPlugin )
+	//		{
+	//			auto trParam = trPlugin->GetParameter( "simple_transform" );
+	//			model::SetParameterTranslation( trParam, 0.0f, glm::vec3( 5.0f, 0.0f, 0.0f ) );
+	//		}
+	//		UpdateVisibility(elem.first );
+	//	
+	//}
 
+	//
+	//	
+	//Finalize();
+
+    Unfinalize();
+    Finalize();
+
+    m_started = false;
+    m_paused = false;
 }
 
 // *******************************
@@ -394,20 +397,24 @@ void		Crawler::SetPromoFrequency			(int freq)
 //
 void		Crawler::Update				( TimeType )
 {
-    if( m_started && !m_paused )
+    if( m_started )
 	{
         auto t = std::clock();
-		auto shift = m_speed * ( ( t - m_currTime ) / 1000.f );
 
-		m_currTime = t;
+        if( !m_paused )
+        {
+		    auto shift = m_speed * ( ( t - m_currTime ) / 1000.f );
 
-		if( shift > 0.f )
-		{
-			for( auto elem : m_shifts )
-				m_shifts[ elem.first ] += SignedShift( shift );
+		    if( shift > 0.f )
+		    {
+			    for( auto elem : m_shifts )
+				    m_shifts[ elem.first ] += SignedShift( shift );
 
-			UpdateTransforms();
-		}
+			    UpdateTransforms();
+		    }
+        }
+
+        m_currTime = t;
 	}
 }
 
@@ -821,6 +828,7 @@ void		Crawler::Start			()
 void		Crawler::Stop			()
 {
 	m_started = false;
+    m_paused = false;
 
     Unfinalize();
 }

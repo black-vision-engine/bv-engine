@@ -278,7 +278,7 @@ void    RenderLogic::FrameRendered   ( Renderer * renderer )
     
     BlitToPreview( prevRt, ctx );
 
-    // FIXME: Optimize. Screenshot and video card output make to readbacks.
+    // FIXME: Optimize. Screenshot and video card output make 2 readbacks.
     if( m_screenShotLogic->ReadbackNeeded() )
     {
         auto rt = m_offscreenDisplay->GetVideoRenderTarget();
