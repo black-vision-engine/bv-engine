@@ -1197,6 +1197,23 @@ model::IModelNodePtr    BVProjectEditor::GetParentNode		( const std::string & sc
 
 // ***********************
 //
+model::IModelNodePtr	BVProjectEditor::FindNode            ( model::BasicNodePtr node, const std::string & nodeName ) const
+{
+    if( node->GetName() == nodeName )
+        return node;
+
+    for( unsigned int i = 0; i < node->GetNumChildren(); ++i )
+    {
+        auto foundNode = FindNode( node->GetChild( i ), nodeName );
+        if( foundNode != nullptr )
+            return foundNode;
+    }
+
+    return nullptr;
+}
+
+// ***********************
+//
 model::ITimeEvaluatorPtr    BVProjectEditor::GetTimeEvaluator           ( const std::string & timelinePath ) const
 {
     return model::TimelineManager::GetInstance()->GetTimeEvaluator( timelinePath );

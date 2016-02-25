@@ -505,9 +505,15 @@ void SceneEventsHandlers::ProjectStructure    ( bv::IEventPtr evt )
         assert( std::dynamic_pointer_cast< model::BasicNode >( n ) );
         auto bn = std::static_pointer_cast< model::BasicNode >( n );
 
-        pm->SavePreset( bn, destProjectName, destPath );
-
-        SendSimpleResponse( command, projectEvent->EventID, senderID, true );
+        if( bn != nullptr )
+        {
+            pm->SavePreset( bn, destProjectName, destPath );
+            SendSimpleResponse( command, projectEvent->EventID, senderID, true );
+        }
+        else
+        {
+            SendSimpleErrorResponse( command, projectEvent->EventID, senderID, "Node not found." );
+        }
     }
     else if( command == ProjectEvent::Command::LoadPreset )
     {
