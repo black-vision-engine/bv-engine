@@ -21,7 +21,7 @@ class ShiftReplicationModifier : public IReplicationModifier
 {
 public:
 
-    virtual void                            Apply               ( const BasicNodeConstPtr & prev, const BasicNodePtr & next ) const override;
+    virtual void                            Apply               ( const BasicNodeConstPtr & prev, const BasicNodePtr & next, BVProjectEditor * editor ) const override;
 
     void                                    AddParamShift       ( const std::string & pluginName, const std::string & paramName, const ParamValDelta & shift );
 

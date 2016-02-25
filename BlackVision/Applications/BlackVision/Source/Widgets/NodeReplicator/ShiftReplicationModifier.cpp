@@ -129,7 +129,7 @@ void ApplyParamDelta( IParameterPtr param, ParamValDelta delta )
 
 // *******************************
 //
-void                            ShiftReplicationModifier::Apply( const BasicNodeConstPtr &, const BasicNodePtr & next ) const
+void                            ShiftReplicationModifier::Apply( const BasicNodeConstPtr &, const BasicNodePtr & next, BVProjectEditor * /* editor */ ) const
 {
     for( auto it : m_paramsShifts )
     {

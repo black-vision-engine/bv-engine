@@ -10,6 +10,11 @@
 namespace bv { namespace model {
 
 class ITimeline;
+DEFINE_CONST_PTR_TYPE(ITimeline)
+
+class ITimelineEvent;
+DEFINE_PTR_TYPE(ITimelineEvent)
+DEFINE_CONST_PTR_TYPE(ITimelineEvent)
 
 // **********************************
 class ITimelineEvent : public ISerializable

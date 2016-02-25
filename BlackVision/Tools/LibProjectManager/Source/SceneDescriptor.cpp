@@ -103,7 +103,7 @@ model::SceneModelPtr	SceneDescriptor::LoadScene		( std::istream & in, SizeType n
 
     auto scene = SerializationHelper::DeserializeObject< model::SceneModel >( deser, "scene" );
 
-    return model::SceneModelPtr( scene );
+    return scene;
 }
 
 // ********************************

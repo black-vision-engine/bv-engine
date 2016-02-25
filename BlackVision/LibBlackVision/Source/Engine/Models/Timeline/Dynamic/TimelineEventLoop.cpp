@@ -52,9 +52,17 @@ ser.ExitChild();
 
 // *********************************
 //
-TimelineEventLoop* TimelineEventLoop::Create            ( const IDeserializer& deser, ITimeline* timeline )
+TimelineEventLoopPtr TimelineEventLoop::Create          ( const std::string & name, TimeType eventTime, LoopEventAction action, unsigned int totalLoopCount, TimeType targetTime, const ITimeline * owner )
 {
-    return new TimelineEventLoop( deser.GetAttribute( "name" ),
+    return TimelineEventLoopPtr( new TimelineEventLoop( name, eventTime, action, totalLoopCount, targetTime, owner ) );
+}
+
+
+// *********************************
+//
+TimelineEventLoopPtr TimelineEventLoop::Create          ( const IDeserializer & deser, const ITimeline * timeline )
+{
+    return TimelineEventLoop::Create( deser.GetAttribute( "name" ),
         SerializationHelper::String2T< TimeType >( "time", 0.f ),
         SerializationHelper::String2Enum< LoopEventAction >( SerializationHelper::lea2s, "action" ),
         SerializationHelper::String2T< unsigned int >( "loopCount", 0 ),

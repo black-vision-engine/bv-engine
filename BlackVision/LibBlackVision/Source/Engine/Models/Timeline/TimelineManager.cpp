@@ -80,7 +80,7 @@ bool                    TimelineManager::AddStopEventToTimeline          ( ITime
 {
     assert( timeline != nullptr );
 
-    return timeline->AddKeyFrame( new model::TimelineEventStop( eventName, stopTime, timeline.get() ) );
+    return timeline->AddKeyFrame( model::TimelineEventStop::Create( eventName, stopTime, timeline.get() ) );
 }
 
 // *********************************
@@ -89,7 +89,7 @@ bool                    TimelineManager::AddLoopReverseEventToTimeline   ( ITime
 {
     assert( timeline != nullptr );
 
-    return timeline->AddKeyFrame( new model::TimelineEventLoop( eventName, eventTime, LoopEventAction::LEA_REVERSE, totalLoopCount, TimeType( 0.0 ), timeline.get() ) );
+    return timeline->AddKeyFrame( model::TimelineEventLoop::Create( eventName, eventTime, LoopEventAction::LEA_REVERSE, totalLoopCount, TimeType( 0.0 ), timeline.get() ) );
 }
 
 // *********************************
@@ -98,7 +98,7 @@ bool                    TimelineManager::AddLoopJumpEventToTimeline      ( ITime
 {
     assert( timeline != nullptr );
 
-    return timeline->AddKeyFrame( new model::TimelineEventLoop( eventName, eventTime, LoopEventAction::LEA_GOTO, totalLoopCount, jumpToTime, timeline.get() ) );
+    return timeline->AddKeyFrame( model::TimelineEventLoop::Create( eventName, eventTime, LoopEventAction::LEA_GOTO, totalLoopCount, jumpToTime, timeline.get() ) );
 }
 
 // *********************************
@@ -107,7 +107,7 @@ bool                    TimelineManager::AddLoopRestartEventToTimeline   ( ITime
 {
     assert( timeline != nullptr );
 
-    return timeline->AddKeyFrame( new model::TimelineEventLoop( eventName, eventTime, LoopEventAction::LEA_RESTART, totalLoopCount, TimeType( 0.0 ), timeline.get() ) );
+    return timeline->AddKeyFrame( model::TimelineEventLoop::Create( eventName, eventTime, LoopEventAction::LEA_RESTART, totalLoopCount, TimeType( 0.0 ), timeline.get() ) );
 }
 
 // *********************************
@@ -116,7 +116,7 @@ bool                    TimelineManager::AddNullEventToTimeline     ( ITimelineP
 {
     assert( timeline != nullptr );
 
-    return timeline->AddKeyFrame( new model::TimelineEventNull( eventName, eventTime, timeline.get() ) );
+    return timeline->AddKeyFrame( model::TimelineEventNull::Create( eventName, eventTime, timeline.get() ) );
 }
 
 // *********************************

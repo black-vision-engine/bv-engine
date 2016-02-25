@@ -22,7 +22,7 @@ ConstTimeEvaluator::~ConstTimeEvaluator                     ()
 
 // *******************************
 //
-void                ConstTimeEvaluator::Serialize           ( ISerializer& sob ) const
+void                ConstTimeEvaluator::Serialize           ( ISerializer & sob ) const
 {
     sob.EnterChild( "timeline" );
     sob.SetAttribute( "name", GetName() );
@@ -32,7 +32,14 @@ void                ConstTimeEvaluator::Serialize           ( ISerializer& sob )
 
 // *******************************
 //
-ConstTimeEvaluator *     ConstTimeEvaluator::Create              ( const IDeserializer& dob )
+ConstTimeEvaluatorPtr    ConstTimeEvaluator::Create         ( const std::string & name, TimeType val )
+{
+    return ConstTimeEvaluatorPtr( new ConstTimeEvaluator( name, val ) );
+}
+
+// *******************************
+//
+ConstTimeEvaluatorPtr     ConstTimeEvaluator::Create         ( const IDeserializer & dob )
 {
     assert( false );
     dob; return nullptr;

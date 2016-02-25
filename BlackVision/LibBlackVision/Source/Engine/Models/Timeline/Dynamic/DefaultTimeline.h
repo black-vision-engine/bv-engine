@@ -10,6 +10,9 @@
 
 namespace bv { namespace model {
 
+class DefaultTimeline;
+DEFINE_PTR_TYPE(DefaultTimeline)
+
 class DefaultTimeline : public TimeEvaluatorBase< ITimeline >
 {
 private:
@@ -23,15 +26,18 @@ private:
 
     ITimelineEvent *                m_activeEvent;
 
-    std::vector< ITimelineEvent * > m_keyFrameEvents;
+    std::vector< ITimelineEventPtr > m_keyFrameEvents;
+
+                                                DefaultTimeline     ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
 
 public:
 
-                                                DefaultTimeline     ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
+    static DefaultTimelinePtr                   Create              ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod );
+
                                                 ~DefaultTimeline    ();
 
-    virtual void                                Serialize           ( ISerializer& sob ) const;
-    static DefaultTimeline *                    Create              ( const IDeserializer& dob );
+    virtual void                                Serialize           ( ISerializer & sob ) const;
+    static DefaultTimelinePtr                   Create              ( const IDeserializer & dob );
 
     //ITimeline
     virtual void		                        SetDuration         ( TimeType duration ) override;
@@ -61,7 +67,7 @@ public:
 
     virtual SizeType                            NumKeyFrames        () const override;
 
-    virtual bool                                AddKeyFrame         ( ITimelineEvent * evt ) override;
+    virtual bool                                AddKeyFrame         ( const ITimelineEventPtr & evt ) override;
 
     virtual const ITimelineEvent *              GetKeyFrameEvent    ( const std::string & name ) const override;
     virtual const ITimelineEvent *              GetKeyFrameEvent    ( unsigned int idx ) const override;
@@ -80,11 +86,9 @@ private:
     void                                        PostUpdateEventStep ();
 
 public:
-    virtual const std::string&                  GetType             () override;
-    static const std::string&                   Type                ();
+    virtual const std::string &                 GetType             () override;
+    static const std::string &                  Type                ();
 };
-
-DEFINE_PTR_TYPE(DefaultTimeline)
 
 } //model
 } //bv

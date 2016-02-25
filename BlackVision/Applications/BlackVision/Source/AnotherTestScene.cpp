@@ -844,7 +844,7 @@ model::SceneModelPtr LoadSceneFromFile( std::string filename )
     //deser.Load( filename );
     BVXMLDeserializer deser( filename, nullptr, nullptr );
 
-    auto model = SerializationHelper::DeserializeObjectPtr< SceneModel >( deser, "scene" );
+    auto model = SerializationHelper::DeserializeObject< SceneModel >( deser, "scene" );
 
 	//auto teClone = CloneViaSerialization::Clone( model::TimelineManager::GetInstance(), "timelines" );
     //auto plClone = model->GetRootNode()->GetPlugins()->GetPlugin( 2 )->Clone();

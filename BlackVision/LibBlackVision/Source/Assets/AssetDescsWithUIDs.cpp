@@ -37,7 +37,7 @@ public:
 
 // *******************************
 //
-void GetAssetsWithUIDs( AssetDescsWithUIDs& map, const model::BasicNode * root, bool recursive )
+void GetAssetsWithUIDs( AssetDescsWithUIDs & map, const model::BasicNode * root, bool recursive )
 {
     if( root )
     {
@@ -63,7 +63,7 @@ void GetAssetsWithUIDs( AssetDescsWithUIDs& map, const model::BasicNode * root, 
 
 // *******************************
 //
-void GetAssetsWithUIDs( AssetDescsWithUIDs& map, const model::IPlugin * plugin )
+void GetAssetsWithUIDs( AssetDescsWithUIDs & map, const model::IPlugin * plugin )
 {
     auto lassets = plugin->GetLAssets();
     for( auto lasset : lassets )
@@ -74,19 +74,29 @@ void GetAssetsWithUIDs( AssetDescsWithUIDs& map, const model::IPlugin * plugin )
 
 // *******************************
 //
-AssetDescsWithUIDs *                                 AssetDescsWithUIDs::Create          ( const IDeserializer& deser )
+AssetDescsWithUIDsPtr                          AssetDescsWithUIDs::Create          ()
+{
+    return AssetDescsWithUIDsPtr( new AssetDescsWithUIDs() );
+}
+
+// *******************************
+//
+AssetDescsWithUIDsPtr                          AssetDescsWithUIDs::Create          ( const IDeserializer & deser )
 {
     auto assetsWithUIDs = SerializationHelper::DeserializeProperties< AssetDescWithUID >( deser, "uid" );
 
-    auto assets = new AssetDescsWithUIDs();
+    auto assets = AssetDescsWithUIDs::Create();
     for( auto asset : assetsWithUIDs )
+    {
         assets->AddAssetDescWithUID( asset->GetDesc(), asset->GetUID() );
+    }
+
     return assets;
 }
 
 // *******************************
 //
-void                                            AssetDescsWithUIDs::Serialize       ( ISerializer& ser ) const
+void                                            AssetDescsWithUIDs::Serialize       ( ISerializer & ser ) const
 {
     ser.EnterArray( "assets" );
     for( auto asset : m_uid2asset )
@@ -103,7 +113,7 @@ AssetDescsWithUIDs AssetDescsWithUIDs::instance;
 
 // ********************************
 //
-void                                                    AssetDescsWithUIDs::AddAssetDesc( AssetDescConstPtr asset )
+void                                              AssetDescsWithUIDs::AddAssetDesc( AssetDescConstPtr asset )
 {
     if( m_key2uid.find( asset->GetKey() ) != m_key2uid.end() )
         return;

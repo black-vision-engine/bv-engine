@@ -33,14 +33,14 @@ ITimeEvaluatorPtr       TimelineHelper::CreateTimeEvaluator             ( const 
 //
 OffsetTimeEvaluatorPtr	TimelineHelper::CreateOffsetTimeEvaluator       ( const std::string & name, TimeType startTime )
 {
-    return std::make_shared< OffsetTimeEvaluator >( name, -startTime ); 
+    return OffsetTimeEvaluator::Create( name, -startTime ); 
 }
 
 // *********************************
 //
 ConstTimeEvaluatorPtr	TimelineHelper::CreateConstTimeEvaluator        ( const std::string & name, TimeType timeVal )
 {
-    return std::make_shared< ConstTimeEvaluator >( name, timeVal ); 
+    return ConstTimeEvaluator::Create( name, timeVal ); 
 }
 
 // *********************************
@@ -48,7 +48,7 @@ ConstTimeEvaluatorPtr	TimelineHelper::CreateConstTimeEvaluator        ( const st
 DefaultTimelinePtr		TimelineHelper::CreateDefaultTimeline           ( const std::string & name, TimeType duration, TimelineWrapMethod preMethod, TimelineWrapMethod postMethod )
 {
     assert( duration > TimeType( 0.0 ) );
-    return std::make_shared< DefaultTimeline >( name, duration, preMethod, postMethod );
+    return DefaultTimeline::Create( name, duration, preMethod, postMethod );
 }
 
 // *********************************

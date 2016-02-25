@@ -77,7 +77,7 @@ void NodeLogicHandlers::WidgetHandler       ( bv::IEventPtr evt )
 
         action.EnterChild( "logic" );
         
-        auto logic = GetNodeLogicFactory()->CreateLogic( action, basicNode.get() );
+        auto logic = GetNodeLogicFactory()->CreateLogic( action, basicNode );
         
         action.ExitChild();  // nodeLogic
 

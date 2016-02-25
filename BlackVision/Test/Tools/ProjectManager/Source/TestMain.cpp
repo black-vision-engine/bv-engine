@@ -100,7 +100,7 @@ TEST( CleanAll, ProjectManager )
 
 TEST( CreatingPM, ProjectManager )
 {
-    model::TimelineManager::GetInstance()->RegisterRootTimeline( model::OffsetTimeEvaluatorPtr( new model::OffsetTimeEvaluator( "global timeline", TimeType( 0.0 ) ) ) );
+    model::TimelineManager::GetInstance()->RegisterRootTimeline( model::OffsetTimeEvaluator::Create( "global timeline", TimeType( 0.0 ) ) );
 
     ChangeProjectManagerInstanceTo( "d:\\bv_media" );
 

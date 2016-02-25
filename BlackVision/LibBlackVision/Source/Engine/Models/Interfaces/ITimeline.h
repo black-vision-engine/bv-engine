@@ -8,6 +8,7 @@
 namespace bv { namespace model {
 
 class ITimelineEvent;
+DEFINE_PTR_TYPE(ITimelineEvent)
 class IParameter;
 
 class ITimeline : public ITimeEvaluator
@@ -37,7 +38,7 @@ public:
 
     virtual SizeType                NumKeyFrames        () const = 0;
 
-    virtual bool                    AddKeyFrame         ( ITimelineEvent * evt ) = 0;
+    virtual bool                    AddKeyFrame         ( const ITimelineEventPtr & evt ) = 0;
 
     virtual const ITimelineEvent *  GetKeyFrameEvent    ( const std::string & name ) const = 0;
     virtual const ITimelineEvent *  GetKeyFrameEvent    ( unsigned int idx ) const = 0;
@@ -54,6 +55,7 @@ public:
 };
 
 DEFINE_PTR_TYPE(ITimeline)
+DEFINE_CONST_PTR_TYPE(ITimeline)
 
 } //model
 } //bv

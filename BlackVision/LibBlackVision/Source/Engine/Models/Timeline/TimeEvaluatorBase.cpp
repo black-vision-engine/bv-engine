@@ -20,7 +20,7 @@ namespace model {
 
 // *******************************
 //
-ITimeEvaluator*            TimeEvaluatorBase< ITimeEvaluator >::Create              ( const IDeserializer& dob )
+ITimeEvaluatorPtr            TimeEvaluatorBase< ITimeEvaluator >::Create              ( const IDeserializer& dob )
 {
     auto type = dob.GetAttribute( "type" );
 
@@ -39,18 +39,32 @@ ITimeEvaluator*            TimeEvaluatorBase< ITimeEvaluator >::Create          
 
 // *******************************
 //
-ITimeEvaluator*            TimeEvaluatorBase< ITimeEvaluator >::Clone               () const
+ITimeEvaluatorPtr           TimeEvaluatorBase< ITimeEvaluator >::CloneTyped    () const
 {
     return CloneViaSerialization::Clone( this, "timeline", nullptr, nullptr );
 }
 
 // *******************************
 //
-ITimeEvaluator*            TimeEvaluatorBase< ITimeline >::Clone               () const
+ICloneablePtr               TimeEvaluatorBase< ITimeEvaluator >::Clone          () const
+{
+    return CloneTyped();
+}
+
+// *******************************
+//
+ITimeEvaluatorPtr           TimeEvaluatorBase< ITimeline >::CloneTyped          () const
 {
     auto thisTE = reinterpret_cast< const TimeEvaluatorBase< ITimeEvaluator >* >( this );
     auto clone = CloneViaSerialization::Clone< TimeEvaluatorBase< ITimeEvaluator > >( thisTE, "timeline", nullptr, nullptr );
     return clone;
+}
+
+// *******************************
+//
+ICloneablePtr               TimeEvaluatorBase< ITimeline >::Clone               () const
+{
+    return Clone();
 }
 
 

@@ -426,7 +426,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateNodeReplicatorTest       ( model:
 
     shiftRepMod->AddParamShift( "transform", "translation", delta );
 
-    auto repLogic = model::NodeReplicator::Create( root.get(), 5, shiftRepMod );
+    auto repLogic = model::NodeReplicator::Create( root, 5, shiftRepMod );
 
     auto image = bTex.CreateNode( "piateczka", true );
 
@@ -1708,7 +1708,7 @@ model::BasicNodePtr	SimpleNodesFactory::CrawlerNodeTestScene( model::ITimeEvalua
 
 	auto node = CreateGreenRectNode( timeEvaluator, "green rect"); 
 
-	auto crawler = nodelogic::Crawler::Create( node.get(), mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
+	auto crawler = nodelogic::Crawler::Create( node, mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
 
 	node->SetLogic( crawler );
 

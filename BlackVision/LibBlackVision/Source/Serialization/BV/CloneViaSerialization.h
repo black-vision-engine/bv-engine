@@ -11,7 +11,7 @@ namespace bv {
 namespace CloneViaSerialization {
 
 template< typename T >
-T*                              Clone( const T* obj, std::string name, AssetDescsWithUIDsPtr assets, model::OffsetTimeEvaluatorPtr sceneTimeline )
+std::shared_ptr< T >                              Clone( const T* obj, std::string name, AssetDescsWithUIDsPtr assets, model::OffsetTimeEvaluatorPtr sceneTimeline )
 {
     BVXMLSerializer ser( assets );
     

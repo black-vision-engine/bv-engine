@@ -13,7 +13,7 @@ namespace SerializationHelper {
 // *************************************
 //
 template< typename T >
-T*                                                          DeserializeObject( const IDeserializer& deser, std::string name )
+std::shared_ptr< T >                                        DeserializeObject( const IDeserializer& deser, std::string name )
 {
     auto sucess = deser.EnterChild( name );
 
@@ -21,7 +21,7 @@ T*                                                          DeserializeObject( c
     {
         auto obj = T::Create( deser );
         deser.ExitChild();
-        return static_cast< T* >( obj );
+        return std::static_pointer_cast< T >( obj );
     }
     else
     {
@@ -29,13 +29,13 @@ T*                                                          DeserializeObject( c
     }
 }
 
-// *************************************
-//
-template< typename T >
-std::shared_ptr< T >                                        DeserializeObjectPtr( const IDeserializer& deser, std::string name )
-{
-    return std::shared_ptr< T >( DeserializeObject< T >( deser, name ) );
-}
+//// *************************************
+////
+//template< typename T >
+//std::shared_ptr< T >                                        DeserializeObjectPtr( const IDeserializer& deser, std::string name )
+//{
+//    return std::shared_ptr< T >( DeserializeObject< T >( deser, name ) );
+//}
 
 // *************************************
 //
