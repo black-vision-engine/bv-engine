@@ -28,16 +28,16 @@ namespace bv {
 namespace SerializationHelper {
 
 
-std::pair< bv::nodelogic::Scroller::CrawlDirection, const char* > CrawlDirectionMapping[] = 
-    { std::make_pair( bv::nodelogic::Scroller::CrawlDirection::CD_Down, "CrawlDown" )
-    , std::make_pair( bv::nodelogic::Scroller::CrawlDirection::CD_Up, "CrawlUp" )
-    , std::make_pair( bv::nodelogic::Scroller::CrawlDirection::CD_Left, "CrawlLeft" )
-    , std::make_pair( bv::nodelogic::Scroller::CrawlDirection::CD_Right, "CrawlRight" )
-    , std::make_pair( bv::nodelogic::Scroller::CrawlDirection::CD_Total, "" )      // default
+std::pair< bv::nodelogic::Scroller::ScrollDirection, const char* > ScrollDirectionMapping[] = 
+    { std::make_pair( bv::nodelogic::Scroller::ScrollDirection::SD_Down, "ScrollDown" )
+    , std::make_pair( bv::nodelogic::Scroller::ScrollDirection::SD_Up, "ScrollUp" )
+    , std::make_pair( bv::nodelogic::Scroller::ScrollDirection::SD_Left, "ScrollLeft" )
+    , std::make_pair( bv::nodelogic::Scroller::ScrollDirection::SD_Right, "ScrollRight" )
+    , std::make_pair( bv::nodelogic::Scroller::ScrollDirection::SD_Total, "" )      // default
 };
 
-template<> bv::nodelogic::Scroller::CrawlDirection   String2T        ( const std::string & s, const bv::nodelogic::Scroller::CrawlDirection & defaultVal )    { return String2Enum( CrawlDirectionMapping, s, defaultVal ); }
-template<> std::string                              T2String        ( const bv::nodelogic::Scroller::CrawlDirection & t )                                    { return Enum2String( CrawlDirectionMapping, t ); }
+template<> bv::nodelogic::Scroller::ScrollDirection String2T        ( const std::string & s, const bv::nodelogic::Scroller::ScrollDirection & defaultVal )    { return String2Enum( ScrollDirectionMapping, s, defaultVal ); }
+template<> std::string                              T2String        ( const bv::nodelogic::Scroller::ScrollDirection & t )                                    { return Enum2String( ScrollDirectionMapping, t ); }
     
 }   // SerializationHelper
     
@@ -79,12 +79,12 @@ bv::model::BasicNodePtr         GetNode     ( bv::model::BasicNode * parent, con
 
 // ***********************
 //
-glm::vec3       ScrollerShiftToVec   ( Scroller::CrawlDirection crawlDirection )
+glm::vec3       ScrollerShiftToVec   ( Scroller::ScrollDirection crawlDirection )
 {
     glm::vec3 shiftDirection;
-    if( crawlDirection == Scroller::CrawlDirection::CD_Down || crawlDirection == Scroller::CrawlDirection::CD_Up )
+    if( crawlDirection == Scroller::ScrollDirection::SD_Down || crawlDirection == Scroller::ScrollDirection::SD_Up )
         shiftDirection = glm::vec3( 0.0, 1.0, 0.0 );
-    else if( crawlDirection == Scroller::CrawlDirection::CD_Right || crawlDirection == Scroller::CrawlDirection::CD_Left )
+    else if( crawlDirection == Scroller::ScrollDirection::SD_Right || crawlDirection == Scroller::ScrollDirection::SD_Left )
         shiftDirection = glm::vec3( 1.0, 0.0, 0.0 );
     else
         shiftDirection = glm::vec3( 0.0, 0.0, 0.0 );
@@ -113,8 +113,8 @@ Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::Rec
 	, m_speed( 0.f )
 	, m_interspace( 0.0f )
     , m_paused( false )
-    , m_crawlDirection( CrawlDirection::CD_Left )
-    , m_enableEvents( true )
+    , m_scrollDirection( ScrollDirection::SD_Left )
+    , m_enableEvents( false )
 {}
 
 
@@ -178,19 +178,19 @@ bool        Scroller::AddNode             ( bv::model::BasicNodePtr node )
 Float32     Scroller::InitialShift        ( model::BasicNode * node )
 {
     Float32 shift;
-    if( m_crawlDirection == Scroller::CrawlDirection::CD_Down )
+    if( m_scrollDirection == Scroller::ScrollDirection::SD_Down )
     {
         shift = m_view->ymax + node->GetAABB().Height() / 2.0f + m_interspace;
     }
-    else if( m_crawlDirection == Scroller::CrawlDirection::CD_Up )
+    else if( m_scrollDirection == Scroller::ScrollDirection::SD_Up )
     {
         shift = m_view->ymin - node->GetAABB().Height() / 2.0f - m_interspace;
     }
-    else if( m_crawlDirection == Scroller::CrawlDirection::CD_Right )
+    else if( m_scrollDirection == Scroller::ScrollDirection::SD_Right )
     {
         shift = m_view->xmin - node->GetAABB().Width() - m_interspace;
     }
-    else if( m_crawlDirection == Scroller::CrawlDirection::CD_Left )
+    else if( m_scrollDirection == Scroller::ScrollDirection::SD_Left )
     {
         shift = m_view->xmax + m_interspace;
     }
@@ -207,19 +207,19 @@ Float32     Scroller::InitialShift        ( model::BasicNode * node )
 Float32     Scroller::ShiftStep           ( model::BasicNode * prevNode, model::BasicNode * curNode )
 {
     Float32 shift;
-    if( m_crawlDirection == Scroller::CrawlDirection::CD_Down )
+    if( m_scrollDirection == Scroller::ScrollDirection::SD_Down )
     {
         shift = ( prevNode->GetAABB().Height() + curNode->GetAABB().Height() ) / 2.0f + m_interspace;
     }
-    else if( m_crawlDirection == Scroller::CrawlDirection::CD_Up )
+    else if( m_scrollDirection == Scroller::ScrollDirection::SD_Up )
     {
         shift = ( prevNode->GetAABB().Height() + curNode->GetAABB().Height() ) / 2.0f - m_interspace;
     }
-    else if( m_crawlDirection == Scroller::CrawlDirection::CD_Right )
+    else if( m_scrollDirection == Scroller::ScrollDirection::SD_Right )
     {
         shift = -curNode->GetAABB().Width() - m_interspace;
     }
-    else if( m_crawlDirection == Scroller::CrawlDirection::CD_Left )
+    else if( m_scrollDirection == Scroller::ScrollDirection::SD_Left )
     {
         shift = prevNode->GetAABB().Width() + m_interspace;
     }
@@ -235,7 +235,7 @@ Float32     Scroller::ShiftStep           ( model::BasicNode * prevNode, model::
 //
 Float32     Scroller::SignedShift         ( Float32 shift )
 {
-    if( m_crawlDirection == Scroller::CrawlDirection::CD_Down || m_crawlDirection == Scroller::CrawlDirection::CD_Left )
+    if( m_scrollDirection == Scroller::ScrollDirection::SD_Down || m_scrollDirection == Scroller::ScrollDirection::SD_Left )
         return -shift;
     return shift;
 }
@@ -248,7 +248,7 @@ bool		Scroller::Finalize			()
 		;//assert(!"Scroller: Already finalized!");
 	else
 	{
-        glm::vec3 shiftDirection = ScrollerShiftToVec( m_crawlDirection );
+        glm::vec3 shiftDirection = ScrollerShiftToVec( m_scrollDirection );
 
 		auto copy = m_nodesStates.m_nonActives;
 		for( auto n : copy )	
@@ -362,7 +362,7 @@ void		Scroller::Update				( TimeType )
 //
 void		Scroller::UpdateTransforms	()
 {
-    glm::vec3 shiftDirection = ScrollerShiftToVec( m_crawlDirection );
+    glm::vec3 shiftDirection = ScrollerShiftToVec( m_scrollDirection );
 
 	for( auto elem : m_shifts )
 	{
@@ -427,8 +427,8 @@ void		Scroller::NotifyVisibilityChanged( bv::model::BasicNode * n, bool visibili
         SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
     }
 
-    //if( m_nodesStates.
-
+    if( m_nodesStates.m_visibles.empty() )
+        NotifyNoMoreNodes();
 }
 
 // *******************************
@@ -590,10 +590,10 @@ void                Scroller::Serialize       ( ISerializer& ser ) const
                 childrenNodes.push_back( m_parentNode->GetChild( i ).get() );
 
 
-            ser.EnterArray( "ScrollerNodes" );
+            ser.EnterArray( "scrollerNodes" );
                 for( auto& node : m_shifts )
                 {
-                    ser.EnterChild( "ScrollerNode" );
+                    ser.EnterChild( "scrollerNode" );
                         ser.SetAttribute( "name", node.first->GetName() );
 
                         // Find node index
@@ -646,10 +646,10 @@ ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, bv::mo
     Scroller->SetInterspace( interspace );
 
 
-    if( !deser.EnterChild( "ScrollerNodes" ) )
+    if( !deser.EnterChild( "scrollerNodes" ) )
         return Scroller;
     
-    if( deser.EnterChild( "ScrollerNode" ) )
+    if( deser.EnterChild( "scrollerNode" ) )
     {
         do
         {
@@ -678,13 +678,13 @@ ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, bv::mo
 //
 bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISerializer& response, BVProjectEditor * editor )
 {
-    std::string crawlAction = eventDeser.GetAttribute( "Action" );
+    std::string scrollAction = eventDeser.GetAttribute( "Action" );
 
-	if( crawlAction == "Stop" )
+	if( scrollAction == "Stop" )
 	{
 		return Stop();
 	}
-	else if( crawlAction == "Start" )
+	else if( scrollAction == "Start" )
 	{
         if( m_ScrollerNodePath == "" )
         {
@@ -698,65 +698,65 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
 
 		return Start();
 	}
-    else if( crawlAction == "Reset" )
+    else if( scrollAction == "Reset" )
 	{
 		return Reset();
 	}
-    else if( crawlAction == "Pause" )
+    else if( scrollAction == "Pause" )
     {
         return Pause();
     }
-    else if( crawlAction == "AddNode" )
+    else if( scrollAction == "AddNode" )
     {
         std::string newNode = eventDeser.GetAttribute( "NodeName" );
         AddNext( newNode );
     }
-    else if( crawlAction == "AddPreset" )
+    else if( scrollAction == "AddPreset" )
     {
         return AddPreset( eventDeser, response, editor );
     }
-    else if( crawlAction == "AddPresetAndFillWithData" )
+    else if( scrollAction == "AddPresetAndFillWithData" )
     {
         return AddPresetAndMessages( eventDeser, response, editor );
     }
-    else if( crawlAction == "SetSpeed" )
+    else if( scrollAction == "SetSpeed" )
 	{
         std::string param = eventDeser.GetAttribute( "Speed" );
         float speed = SerializationHelper::String2T( param, 0.5f );
 
 		SetSpeed( speed );
 	}
-    else if( crawlAction == "GetSpeed" )
+    else if( scrollAction == "GetSpeed" )
     {
         response.SetAttribute( "Speed", SerializationHelper::T2String( m_speed ) );
     }
-    else if( crawlAction == "GetStatus" )
+    else if( scrollAction == "GetStatus" )
     {
         return GetStatus( eventDeser, response, editor );
     }
-    else if( crawlAction == "SetCrawlDirection" )
+    else if( scrollAction == "SetScrollDirection" )
     {
-        m_crawlDirection = SerializationHelper::String2T( eventDeser.GetAttribute( "CrawlDirection" ), CrawlDirection::CD_Left );
+        m_scrollDirection = SerializationHelper::String2T( eventDeser.GetAttribute( "ScrollDirection" ), ScrollDirection::SD_Left );
     }
-    else if( crawlAction == "GetCrawlDirection" )
+    else if( scrollAction == "GetScrollDirection" )
     {
-        response.SetAttribute( "CrawlDirection", SerializationHelper::T2String( m_crawlDirection ) );
+        response.SetAttribute( "ScrollDirection", SerializationHelper::T2String( m_scrollDirection ) );
     }
-    else if( crawlAction == "GetEnableEvents" )
+    else if( scrollAction == "GetEnableEvents" )
     {
         response.SetAttribute( "EnableEvents", SerializationHelper::T2String( m_enableEvents ) );
     }
-    else if( crawlAction == "SetEnableEvents" )
+    else if( scrollAction == "SetEnableEvents" )
     {
-        m_enableEvents = SerializationHelper::String2T( eventDeser.GetAttribute( "CrawlDirection" ), false );
+        m_enableEvents = SerializationHelper::String2T( eventDeser.GetAttribute( "ScrollDirection" ), false );
     }
     // Deprecated
-    else if( crawlAction == "AddText" )
+    else if( scrollAction == "AddText" )
 	{
         std::string param = eventDeser.GetAttribute( "Message" );
         AddMessage( StringToWString( param ) );
 	}
-	else if( crawlAction == "Clear" )
+	else if( scrollAction == "Clear" )
 	{
 		Clear();
 	}

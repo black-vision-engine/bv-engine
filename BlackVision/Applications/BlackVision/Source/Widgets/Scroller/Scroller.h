@@ -36,14 +36,14 @@ class Scroller : public model::INodeLogic, public std::enable_shared_from_this< 
 {
 public:
 
-    enum CrawlDirection
+    enum ScrollDirection
     {
-        CD_Up,
-        CD_Down,
-        CD_Left,
-        CD_Right,
+        SD_Up,
+        SD_Down,
+        SD_Left,
+        SD_Right,
         
-        CD_Total
+        SD_Total
     };
 
 private:
@@ -61,7 +61,7 @@ private:
 	bv::model::BasicNodePtr					m_parentNode;
 	ScrollerNodesStates						m_nodesStates;
 	NodeFloatMap							m_shifts;
-    CrawlDirection                          m_crawlDirection;
+    ScrollDirection                         m_scrollDirection;
 	UInt64									m_currTime;
 
     mathematics::RectConstPtr				m_view;
