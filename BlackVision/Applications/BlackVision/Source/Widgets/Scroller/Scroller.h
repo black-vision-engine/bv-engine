@@ -55,7 +55,7 @@ private:
 
 private:
 
-    std::string                             m_ScrollerNodePath;
+    std::string                             m_scrollerNodePath;
 
 	bool									m_isFinalized;
 	bv::model::BasicNodePtr					m_parentNode;
@@ -67,6 +67,10 @@ private:
     mathematics::RectConstPtr				m_view;
 	Float32									m_speed;
 	Float32									m_interspace;
+    
+    bool                                    m_lowBufferNotified;
+    Float32                                 m_lowBufferMultiplier;  /// Determines when to notify LowBuffer.
+
 	bool									m_started;
     bool                                    m_paused;
     bool                                    m_enableEvents;
@@ -91,8 +95,14 @@ private:
 	void		UpdateVisibility	( bv::model::BasicNode * );
 	void		SetActiveNode		( bv::model::BasicNode * );
 	bool		IsActive			( bv::model::BasicNode * );
-	void		NotifyVisibilityChanged( bv::model::BasicNode *, bool );
-	void		NotifyNoMoreNodes	();
+    bool        CheckLowBuffer      ();
+
+    void		OnNotifyVisibilityChanged       ( bv::model::BasicNode * n, bool visibility );
+	void		NotifyVisibilityChanged         ( bv::model::BasicNode *, bool );
+	void		NotifyNoMoreNodes	            ();
+    void        NotifyLowBuffer                 ();
+
+
 	void		HackNoMoreNodes		();
     
     bool        AddNode             ( bv::model::BasicNodePtr node );
@@ -119,6 +129,7 @@ public:
 	void		SetSpeed			( Float32 speed );
 	void		SetInterspace		( Float32 interspace );
     void        SetNodePath         ( std::string nodePath );
+    void        SetLowBufferMult    ( Float32 lowBufferVal );
 
 	virtual void	Initialize		()				override {}
 	virtual void	Update			( TimeType t )	override;

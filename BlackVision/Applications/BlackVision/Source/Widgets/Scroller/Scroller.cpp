@@ -115,6 +115,7 @@ Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::Rec
     , m_paused( false )
     , m_scrollDirection( ScrollDirection::SD_Left )
     , m_enableEvents( false )
+    , m_lowBufferMultiplier( 3.5 )
 {}
 
 
@@ -351,6 +352,9 @@ void		Scroller::Update				( TimeType )
 				    m_shifts[ elem.first ] += SignedShift( shift );
 
 			    UpdateTransforms();
+
+                if( CheckLowBuffer() )
+                    NotifyLowBuffer();
 		    }
         }
 
@@ -381,9 +385,6 @@ void		Scroller::UpdateTransforms	()
 
 	for( auto n : copy )
 		UpdateVisibility( n );
-
-	//if( m_nodesStates.NonActiveSize() > 0 && m_nodesStates.ActiveSize() == m_nodesStates.VisibleSize() )
-	//	NotifyNoMoreNodes();
 }
 
 // *******************************
@@ -399,50 +400,74 @@ void		Scroller::UpdateVisibility	( bv::model::BasicNode * n )
 		if( newVisibility )
 		{
 			m_nodesStates.Visible( n );
-			NotifyVisibilityChanged( n, newVisibility );
+			OnNotifyVisibilityChanged( n, newVisibility );
 		}
 		else if( IsActive( n ) )
 		{
 			m_nodesStates.NotVisible( n );
-			NotifyVisibilityChanged( n, newVisibility );
+			OnNotifyVisibilityChanged( n, newVisibility );
 		}
 	}
 }
 
-// *******************************
+// ***********************
 //
-void		Scroller::NotifyVisibilityChanged( bv::model::BasicNode * n, bool visibility )
+void		Scroller::OnNotifyVisibilityChanged     ( bv::model::BasicNode * n, bool visibility )
 {
     if( m_enableEvents )
     {
-        JsonSerializeObject ser;
-        ser.SetAttribute( "ScrollerPath", m_ScrollerNodePath );
-        ser.SetAttribute( "NodeName", n->GetName() );
+        NotifyVisibilityChanged( n, visibility );
 
-	    if( visibility )
-            ser.SetAttribute( "Event", "ItemOnScreen" );
-	    else
-		    ser.SetAttribute( "Event", "ItemOffScreen" );
+        if( m_nodesStates.m_visibles.empty() )
+            NotifyNoMoreNodes();
 
-        SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
+        //if( CheckLowBuffer() )
+        //    NotifyLowBuffer();
     }
-
-    if( m_nodesStates.m_visibles.empty() )
-        NotifyNoMoreNodes();
 }
 
 // *******************************
 //
-void		Scroller::NotifyNoMoreNodes( )
+void		Scroller::NotifyVisibilityChanged       ( bv::model::BasicNode * n, bool visibility )
 {
-    if( m_enableEvents )
-    {
-        JsonSerializeObject ser;
-        ser.SetAttribute( "ScrollerPath", m_ScrollerNodePath );
-        ser.SetAttribute( "Event", "AllItemsOffScreen" );
+    assert( m_scrollerNodePath != "" );
 
-        SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
-    }
+    JsonSerializeObject ser;
+    ser.SetAttribute( "ScrollerPath", m_scrollerNodePath );
+    ser.SetAttribute( "NodeName", n->GetName() );
+
+	if( visibility )
+        ser.SetAttribute( "Event", "ItemOnScreen" );
+	else
+		ser.SetAttribute( "Event", "ItemOffScreen" );
+
+    SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
+}
+
+// *******************************
+//
+void		Scroller::NotifyNoMoreNodes ()
+{
+    assert( m_scrollerNodePath != "" );
+
+    JsonSerializeObject ser;
+    ser.SetAttribute( "ScrollerPath", m_scrollerNodePath );
+    ser.SetAttribute( "Event", "AllItemsOffScreen" );
+
+    SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
+}
+
+// ***********************
+//
+void        Scroller::NotifyLowBuffer         ()
+{
+    assert( m_scrollerNodePath != "" );
+
+    JsonSerializeObject ser;
+    ser.SetAttribute( "ScrollerPath", m_scrollerNodePath );
+    ser.SetAttribute( "Event", "LowBuffer" );
+
+    SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
 }
 
 // *******************************
@@ -507,6 +532,40 @@ void		Scroller::SetActiveNode		( bv::model::BasicNode * n )
 bool		Scroller::IsActive			( bv::model::BasicNode * n )
 {
 	return m_nodesStates.IsActive( n );
+}
+
+// ***********************
+//
+bool        Scroller::CheckLowBuffer      ()
+{
+    Int32 numActive = (Int32)m_nodesStates.m_actives.size();
+    if( numActive > 0 )
+    {
+        auto lastShift = m_shifts[ m_nodesStates.m_actives[ numActive - 1 ] ];
+
+        Float32 rectCenter;
+        Float32 rectDim;
+
+        if( m_scrollDirection == Scroller::ScrollDirection::SD_Down || m_scrollDirection == Scroller::ScrollDirection::SD_Up )
+        {
+            rectCenter = ( m_view->ymin + m_view->ymax ) / 2;
+            rectDim = m_view->Height();
+        }
+        else // ( m_scrollDirection == Scroller::ScrollDirection::SD_Right || m_scrollDirection == Scroller::ScrollDirection::SD_Left )
+        {
+            rectCenter = ( m_view->xmin + m_view->xmax ) / 2;
+            rectDim = m_view->Width();
+        }
+
+        bool shouldNotify = abs( rectCenter - lastShift ) < m_lowBufferMultiplier * rectDim;
+
+        if( shouldNotify && !m_lowBufferNotified )
+        {
+            m_lowBufferNotified = true;
+            return true;
+        }
+    }
+    return false;
 }
 
 // *******************************
@@ -686,7 +745,7 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
 	}
 	else if( scrollAction == "Start" )
 	{
-        if( m_ScrollerNodePath == "" )
+        if( m_scrollerNodePath == "" )
         {
             // Fixme: This should be done in create function, but deserialization from XML doesn't provide
             // node path. Instead we save this path when Scroller first time starts.
@@ -774,6 +833,7 @@ bool		Scroller::Start			()
 
 		m_started = true;
         m_paused = false;
+        m_lowBufferNotified = false;
         m_currTime = std::clock();
 	}
     else if( m_paused )
@@ -850,7 +910,14 @@ void		Scroller::SetInterspace		( Float32 interspace )
 //
 void        Scroller::SetNodePath         ( std::string nodePath )
 {
-    m_ScrollerNodePath = nodePath;
+    m_scrollerNodePath = nodePath;
+}
+
+// ***********************
+//
+void        Scroller::SetLowBufferMult  ( Float32 lowBufferMult )
+{
+    m_lowBufferMultiplier = lowBufferMult;
 }
 
 // *******************************
