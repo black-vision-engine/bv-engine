@@ -13,14 +13,13 @@ namespace bv {
 namespace mathematics {
 
 struct Rect;
-typedef std::shared_ptr< const Rect > RectConstPtr;
-
+DEFINE_PTR_TYPE( Rect )
 }
 
 namespace model {
 
 class BasicNode;
-typedef std::shared_ptr< BasicNode > BasicNodePtr;
+DEFINE_PTR_TYPE( BasicNode )
 
 } // model
 } // bv
@@ -55,7 +54,7 @@ private:
 
 private:
 
-    std::string                             m_ScrollerNodePath;
+    std::string                             m_scrollerNodePath;
 
 	bool									m_isFinalized;
 	bv::model::BasicNodePtr					m_parentNode;
@@ -64,9 +63,13 @@ private:
     ScrollDirection                         m_scrollDirection;
 	UInt64									m_currTime;
 
-    mathematics::RectConstPtr				m_view;
+    mathematics::RectPtr				    m_view;
 	Float32									m_speed;
 	Float32									m_interspace;
+    
+    bool                                    m_lowBufferNotified;
+    Float32                                 m_lowBufferMultiplier;  /// Determines when to notify LowBuffer.
+
 	bool									m_started;
     bool                                    m_paused;
     bool                                    m_enableEvents;
@@ -91,8 +94,14 @@ private:
 	void		UpdateVisibility	( bv::model::BasicNode * );
 	void		SetActiveNode		( bv::model::BasicNode * );
 	bool		IsActive			( bv::model::BasicNode * );
-	void		NotifyVisibilityChanged( bv::model::BasicNode *, bool );
-	void		NotifyNoMoreNodes	();
+    bool        CheckLowBuffer      ();
+
+    void		OnNotifyVisibilityChanged       ( bv::model::BasicNode * n, bool visibility );
+	void		NotifyVisibilityChanged         ( bv::model::BasicNode *, bool );
+	void		NotifyNoMoreNodes	            ();
+    void        NotifyLowBuffer                 ();
+
+
 	void		HackNoMoreNodes		();
     
     bool        AddNode             ( bv::model::BasicNodePtr node );
@@ -104,7 +113,7 @@ public:
 	void		SetPromoFrequency	(int freq);
     void		Clear				();
 
-	explicit	Scroller				( bv::model::BasicNodePtr parent, const mathematics::RectConstPtr & view );
+	explicit	Scroller				( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view );
 				~Scroller			() {}
 
 	void		AddNext				( bv::model::BasicNodePtr node );
@@ -119,13 +128,14 @@ public:
 	void		SetSpeed			( Float32 speed );
 	void		SetInterspace		( Float32 interspace );
     void        SetNodePath         ( std::string nodePath );
+    void        SetLowBufferMult    ( Float32 lowBufferVal );
 
 	virtual void	Initialize		()				override {}
 	virtual void	Update			( TimeType t )	override;
 	virtual void	Deinitialize	()				override {}
 
 
-	static		ScrollerPtr Create	( bv::model::BasicNodePtr parent, const mathematics::RectConstPtr & view );
+	static ScrollerPtr          Create	        ( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view );
 
     virtual const std::string   GetType         () const override;
     static const std::string    Type            ();
