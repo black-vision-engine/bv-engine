@@ -500,7 +500,7 @@ void        QueryHandlers::GetAssetThumbnail        ( JsonSerializeObject & ser,
     auto path = request->GetAttribute( "path" );
 
     auto pm = ProjectManager::GetInstance();
-    auto aps = pm->ListAssetsPaths( projectName, categoryName, path, true );
+    auto aps = pm->ListAssetsPaths( projectName, categoryName, path, false );
     
     std::vector< std::pair< ThumbnailConstPtr, AssetDescConstPtr > > thumbs;
 
