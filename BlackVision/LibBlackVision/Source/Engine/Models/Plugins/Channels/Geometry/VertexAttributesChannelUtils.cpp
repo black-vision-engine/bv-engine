@@ -65,7 +65,7 @@ void        ChannelFromConnectedComponents  ( VertexAttributesChannelPtr channel
     va_end( args );
 }
 
-mathematics::Box    CalculateBoundingBox( IVertexAttributesChannelConstPtr vac )
+mathematics::Box    CalculateBoundingBox( IVertexAttributesChannel * vac )
 {
     mathematics::Box box;
 

@@ -5,6 +5,8 @@
 #include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Channels/Geometry/AttributeChannelTyped.h"
 
+#include "Engine/Models/Plugins/Channels/Geometry/VertexAttributesChannelUtils.h"
+
 //#include <glm/gtc/matrix_transform.hpp>
 
 namespace bv { namespace model {
@@ -87,11 +89,14 @@ void                    BoundingVolume::Update                  ()
 {
     if( m_lastAttribuetesID < m_vac->GetAttributesUpdateID() )
     {
+        assert( false );
     }
     else if( m_lastTopologyID < m_vac->GetTopologyUpdateID() )
     {
-        m_box = m_vac->GetBoundingBox();
-        AddBoxToVAC( m_vac, m_box );
+        m_box = CalculateBoundingBox( m_vac );
+        AddBoxToVAC( m_vac, m_box ); // FIXME: update and not add
+        m_lastTopologyID = m_vac->GetTopologyUpdateID();
+        assert( m_lastAttribuetesID == m_vac->GetAttributesUpdateID() );
     }
 }
 
