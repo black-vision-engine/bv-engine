@@ -21,6 +21,8 @@ class BoundingVolume {
 public:
                                 BoundingVolume          ( VertexAttributesChannel * vac );
 
+    void                        SetVAC                  ( VertexAttributesChannel * vac );
+
     void                        Update                  ();
 };
 

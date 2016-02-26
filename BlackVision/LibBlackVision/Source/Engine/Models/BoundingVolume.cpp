@@ -13,17 +13,8 @@ namespace bv { namespace model {
 
 namespace {
 
-mathematics::Box    GetBoundingBox( IVertexAttributesChannelConstPtr vac_ )
+void AddBoxToVAC( VertexAttributesChannel * vac, mathematics::Box box )
 {
-    auto vac = Cast< const VertexAttributesChannel* >( vac_.get() );
-
-    return vac->GetBoundingBox();
-}
-
-void AddBoxToVAC( const IVertexAttributesChannel* vac_, mathematics::Box box )
-{
-    auto vac = RemoveConst( Cast< const VertexAttributesChannel* >( vac_ ) );
-
     ConnectedComponentPtr comp = ConnectedComponent::Create();
 
     auto desc = vac->GetDescriptor();
@@ -70,6 +61,25 @@ void AddBoxToVAC( const IVertexAttributesChannel* vac_, mathematics::Box box )
     box;
 }
 
+void UpdateBoxInVAC( VertexAttributesChannel * vac, mathematics::Box box )
+{
+    auto comp = vac->GetConnectedComponent( unsigned int( vac->GetComponents().size()-1 ) );
+
+    auto channel = Cast< Float3AttributeChannel * >( comp->GetAttrChannel( AttributeSemantic::AS_POSITION ).get() );
+    
+    auto verts = channel->GetVertices();
+    assert( verts.size() == 8 );
+
+    verts[ 0 ] = glm::vec3( box.xmin, box.ymin, box.zmin );
+    verts[ 1 ] = glm::vec3( box.xmin, box.ymax, box.zmin );
+    verts[ 2 ] = glm::vec3( box.xmax, box.ymin, box.zmin );
+    verts[ 3 ] = glm::vec3( box.xmax, box.ymax, box.zmin );
+    verts[ 4 ] = glm::vec3( box.xmax, box.ymin, box.zmax );
+    verts[ 5 ] = glm::vec3( box.xmax, box.ymax, box.zmax );
+    verts[ 6 ] = glm::vec3( box.xmin, box.ymin, box.zmax );
+    verts[ 7 ] = glm::vec3( box.xmin, box.ymax, box.zmax );
+}
+
 } // anonymous
 
 
@@ -79,7 +89,7 @@ BoundingVolume::BoundingVolume          ( VertexAttributesChannel * vac )
     , m_lastAttribuetesID( 0 )
     , m_lastTopologyID( 0 )
 {
-    m_box = m_vac->GetBoundingBox();
+    m_box = CalculateBoundingBox( m_vac );
     AddBoxToVAC( m_vac, m_box );
     //m_transform *= glm::translate( glm::mat4( 1.0f ), glm::vec3( box.xmin, box.ymin, box.zmin ) );
     //m_transform *= glm::scale( glm::mat4( 1.0f ), glm::vec3( box.xmax - box.xmin, box.ymax - box.ymin, box.zmax - box.zmin ) );
@@ -89,12 +99,12 @@ void                    BoundingVolume::Update                  ()
 {
     if( m_lastAttribuetesID < m_vac->GetAttributesUpdateID() )
     {
-        assert( false );
+        UpdateBoxInVAC( m_vac, m_box );
     }
     else if( m_lastTopologyID < m_vac->GetTopologyUpdateID() )
     {
         m_box = CalculateBoundingBox( m_vac );
-        AddBoxToVAC( m_vac, m_box ); // FIXME: update and not add
+        AddBoxToVAC( m_vac, m_box );
         m_lastTopologyID = m_vac->GetTopologyUpdateID();
         assert( m_lastAttribuetesID == m_vac->GetAttributesUpdateID() );
     }

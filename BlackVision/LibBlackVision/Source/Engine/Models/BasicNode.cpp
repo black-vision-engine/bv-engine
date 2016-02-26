@@ -623,7 +623,9 @@ void BasicNode::Update( TimeType t )
         m_pluginList->Update( t );
 
         if( m_boundingVolume )
+        {
             m_boundingVolume->Update();
+        }
 
         if( m_nodeLogic )
         {

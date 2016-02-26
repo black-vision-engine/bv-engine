@@ -98,37 +98,6 @@ void                                VertexAttributesChannel::SetTopologyUpdateID
     m_topologyUpdateID = updateID;
 }
 
-// ***********************
-//
-void                                                VertexAttributesChannel::UpdateBoundingBox       ()
-{
-    m_boundingBox.m_empty = true;
-
-    for( auto comp : GetComponents() )
-    {
-        for( auto channel : comp->GetAttributeChannels() )
-        {
-            auto desc = channel->GetDescriptor();
-            if( desc->GetSemantic() == AttributeSemantic::AS_POSITION )
-            {
-                assert( desc->GetType() == AttributeType::AT_FLOAT3 );
-                
-                const glm::vec3 * data = reinterpret_cast< const glm::vec3 * >( channel->GetData() );
-
-                for( UInt32 i = 0; i < channel->GetNumEntries(); i++ )
-                    m_boundingBox.Include( data[ i ] );
-            }
-        }
-    }
-}
-
-// ***********************
-//
-mathematics::Box                                    VertexAttributesChannel::GetBoundingBox          () const
-{
-    return m_boundingBox;
-}
-
 // *********************************
 //
 unsigned int                            VertexAttributesChannel::TotalNumVertices       ()          const

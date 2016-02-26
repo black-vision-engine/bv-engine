@@ -25,7 +25,6 @@ protected:
 
     PrimitiveType                                   m_primitiveType;
     std::vector< ConnectedComponentPtr >            m_connectedComponents;
-    mathematics::Box                                m_boundingBox;
 
     bool                                            m_isReadOnly;
     bool                                            m_isTimeInvariant;
