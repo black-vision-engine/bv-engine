@@ -13,14 +13,13 @@ namespace bv {
 namespace mathematics {
 
 struct Rect;
-typedef std::shared_ptr< const Rect > RectConstPtr;
-
+DEFINE_PTR_TYPE( Rect )
 }
 
 namespace model {
 
 class BasicNode;
-typedef std::shared_ptr< BasicNode > BasicNodePtr;
+DEFINE_PTR_TYPE( BasicNode )
 
 } // model
 } // bv
@@ -64,7 +63,7 @@ private:
     ScrollDirection                         m_scrollDirection;
 	UInt64									m_currTime;
 
-    mathematics::RectConstPtr				m_view;
+    mathematics::RectPtr				    m_view;
 	Float32									m_speed;
 	Float32									m_interspace;
     
@@ -114,7 +113,7 @@ public:
 	void		SetPromoFrequency	(int freq);
     void		Clear				();
 
-	explicit	Scroller				( bv::model::BasicNodePtr parent, const mathematics::RectConstPtr & view );
+	explicit	Scroller				( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view );
 				~Scroller			() {}
 
 	void		AddNext				( bv::model::BasicNodePtr node );
@@ -136,7 +135,7 @@ public:
 	virtual void	Deinitialize	()				override {}
 
 
-	static		ScrollerPtr Create	( bv::model::BasicNodePtr parent, const mathematics::RectConstPtr & view );
+	static ScrollerPtr          Create	        ( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view );
 
     virtual const std::string   GetType         () const override;
     static const std::string    Type            ();

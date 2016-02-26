@@ -39,6 +39,45 @@ std::pair< bv::nodelogic::Scroller::ScrollDirection, const char* > ScrollDirecti
 template<> bv::nodelogic::Scroller::ScrollDirection String2T        ( const std::string & s, const bv::nodelogic::Scroller::ScrollDirection & defaultVal )    { return String2Enum( ScrollDirectionMapping, s, defaultVal ); }
 template<> std::string                              T2String        ( const bv::nodelogic::Scroller::ScrollDirection & t )                                    { return Enum2String( ScrollDirectionMapping, t ); }
     
+
+// ***********************
+//
+mathematics::RectPtr        CreateRect      ( const IDeserializer & deser )
+{
+    mathematics::RectPtr rect = std::make_shared<mathematics::Rect>();
+
+    if( deser.EnterChild( "view" ) )
+    {
+        bool empty = SerializationHelper::String2T( deser.GetAttribute( "empty" ), true );
+        if( !empty )
+        {
+            rect->xmin = SerializationHelper::String2T( deser.GetAttribute( "xmin" ), 0.0f );
+            rect->xmax = SerializationHelper::String2T( deser.GetAttribute( "xmax" ), 0.0f );
+            rect->ymax = SerializationHelper::String2T( deser.GetAttribute( "ymax" ), 0.0f );
+            rect->ymin = SerializationHelper::String2T( deser.GetAttribute( "ymin" ), 0.0f );
+        }
+        deser.ExitChild(); // view
+    }
+
+    return rect;
+}
+
+// ***********************
+//
+void                        SerializeRect       ( ISerializer & ser, mathematics::RectPtr view )
+{
+    ser.EnterChild( "view" );
+        ser.SetAttribute( "empty", SerializationHelper::T2String( view->m_empty ) );
+        if( !view->m_empty )
+        {
+            ser.SetAttribute( "xmin", SerializationHelper::T2String( view->xmin ) );
+            ser.SetAttribute( "xmax", SerializationHelper::T2String( view->xmax ) );
+            ser.SetAttribute( "ymin", SerializationHelper::T2String( view->ymin ) );
+            ser.SetAttribute( "ymax", SerializationHelper::T2String( view->ymax ) );
+        }
+    ser.ExitChild(); // view
+}
+
 }   // SerializationHelper
     
 namespace nodelogic {
@@ -97,14 +136,14 @@ glm::vec3       ScrollerShiftToVec   ( Scroller::ScrollDirection crawlDirection 
 
 // *******************************
 //
-ScrollerPtr	Scroller::Create				( bv::model::BasicNodePtr parent, const mathematics::RectConstPtr & view )
+ScrollerPtr	Scroller::Create				( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view )
 {
 	return std::make_shared< Scroller >( parent, view );
 }
 
 // *******************************
 //
-Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::RectConstPtr & view )
+Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view )
 	: m_parentNode( parent )
 	, m_isFinalized( false )
 	, m_view( view )
@@ -624,16 +663,7 @@ void                Scroller::Serialize       ( ISerializer& ser ) const
 
         if( context->detailedInfo )     // Without detailed info, we need to serialize only logic type.
         {
-            ser.EnterChild( "view" );
-                ser.SetAttribute( "empty", SerializationHelper::T2String( m_view->m_empty ) );
-                if( !m_view->m_empty )
-                {
-                    ser.SetAttribute( "xmin", SerializationHelper::T2String( m_view->xmin ) );
-                    ser.SetAttribute( "xmax", SerializationHelper::T2String( m_view->xmax ) );
-                    ser.SetAttribute( "ymin", SerializationHelper::T2String( m_view->ymin ) );
-                    ser.SetAttribute( "ymax", SerializationHelper::T2String( m_view->ymax ) );
-                }
-            ser.ExitChild(); // view
+            SerializationHelper::SerializeRect( ser, m_view );
 
             ser.SetAttribute( "speed", SerializationHelper::T2String( m_speed ) );
             ser.SetAttribute( "interspace", SerializationHelper::T2String( m_interspace ) );
@@ -682,20 +712,7 @@ void                Scroller::Serialize       ( ISerializer& ser ) const
 //
 ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parent )
 {
-    mathematics::RectPtr rect = std::make_shared<mathematics::Rect>();
-
-    if( deser.EnterChild( "view" ) )
-    {
-        bool empty = SerializationHelper::String2T( deser.GetAttribute( "empty" ), true );
-        if( !empty )
-        {
-            rect->xmin = SerializationHelper::String2T( deser.GetAttribute( "xmin" ), 0.0f );
-            rect->xmax = SerializationHelper::String2T( deser.GetAttribute( "xmax" ), 0.0f );
-            rect->ymax = SerializationHelper::String2T( deser.GetAttribute( "ymax" ), 0.0f );
-            rect->ymin = SerializationHelper::String2T( deser.GetAttribute( "ymin" ), 0.0f );
-        }
-        deser.ExitChild(); // view
-    }
+    mathematics::RectPtr rect = SerializationHelper::CreateRect( deser );
 
     float speed = SerializationHelper::String2T( deser.GetAttribute( "speed" ), 0.0f );
     float interspace = SerializationHelper::String2T( deser.GetAttribute( "interspace" ), 0.0f );
@@ -781,7 +798,7 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
     else if( scrollAction == "SetSpeed" )
 	{
         std::string param = eventDeser.GetAttribute( "Speed" );
-        float speed = SerializationHelper::String2T( param, 0.5f );
+        float speed = SerializationHelper::String2T( param, 0.0f );
 
 		SetSpeed( speed );
 	}
@@ -808,6 +825,14 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
     else if( scrollAction == "SetEnableEvents" )
     {
         m_enableEvents = SerializationHelper::String2T( eventDeser.GetAttribute( "ScrollDirection" ), false );
+    }
+    else if( scrollAction == "SetSpacing" )
+    {
+        m_interspace = SerializationHelper::String2T( eventDeser.GetAttribute( "Spacing" ), 0.0f );
+    }
+    else if( scrollAction == "GetSpacing" )
+    {
+        response.SetAttribute( "Spacing", SerializationHelper::T2String( m_interspace ) );
     }
     // Deprecated
     else if( scrollAction == "AddText" )
