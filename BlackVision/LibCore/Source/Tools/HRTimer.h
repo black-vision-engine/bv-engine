@@ -1,7 +1,6 @@
 #pragma once
 
-#include "win_sock.h"
-
+#include "win_sock.h" // FIXME for God's sake
 
 namespace bv
 {
@@ -19,7 +18,7 @@ private:
     LARGE_INTEGER m_StopRe;
 
 public:
-	
+    
     HighResolutionTimer     ();
 
     void    Reinitialize    ();
@@ -43,8 +42,8 @@ public:
     }
 
     void    StartTimer      ();
-	void    StopTimer       ();
-	
+    void    StopTimer       ();
+    
     inline void Timestamp   ( LARGE_INTEGER * timestamp ) const;
 
     inline double CurElapsed( const LARGE_INTEGER & timestamp ) const;
