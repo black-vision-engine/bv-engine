@@ -1,7 +1,7 @@
 #include "TimelineHandlers.h"
 #include "EventHandlerHelpers.h"
 #include "Engine/Models/BVProjectEditor.h"
-#include "../../BVAppLogic.h"
+#include "BVAppLogic.h"
 
 
 namespace bv

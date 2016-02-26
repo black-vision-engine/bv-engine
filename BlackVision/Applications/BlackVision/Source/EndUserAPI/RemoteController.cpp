@@ -3,7 +3,7 @@
 #include "Serialization/IDeserializer.h"
 #include "Engine/Events/Events.h"
 
-#include "../UseLoggerBVAppModule.h"
+#include "UseLoggerBVAppModule.h"
 #include "Serialization/SerializationHelper.h"
 
 namespace bv

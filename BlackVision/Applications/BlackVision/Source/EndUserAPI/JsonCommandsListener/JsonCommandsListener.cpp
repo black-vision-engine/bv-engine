@@ -6,7 +6,7 @@
 
 #include "Threading/ScopedCriticalSection.h"
 
-#include "../../UseLoggerBVAppModule.h"
+#include "UseLoggerBVAppModule.h"
 
 #undef CreateEvent
 #undef max

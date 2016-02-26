@@ -1,10 +1,10 @@
 #include "NodeLogicHandlers.h"
 
 #include "Engine/Models/BVProjectEditor.h"
-#include "../../BVAppLogic.h"
-#include "../../UseLoggerBVAppModule.h"
+#include "BVAppLogic.h"
+#include "UseLoggerBVAppModule.h"
 #include "EventHandlerHelpers.h"
-#include "../../Widgets/NodeLogicFactory.h"
+#include "Widgets/NodeLogicFactory.h"
 #include "Engine/Models/BasicNode.h"
 
 #include "Serialization/Json/JsonSerializeObject.h"

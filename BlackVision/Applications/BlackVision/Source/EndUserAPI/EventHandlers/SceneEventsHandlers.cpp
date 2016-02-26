@@ -1,8 +1,8 @@
 #include "SceneEventsHandlers.h"
 
 #include "Engine/Models/BVProjectEditor.h"
-#include "../../BVAppLogic.h"
-#include "../../UseLoggerBVAppModule.h"
+#include "BVAppLogic.h"
+#include "UseLoggerBVAppModule.h"
 
 #include "ProjectManager.h"
 #include "Engine/Models/Updaters/UpdatersManager.h"

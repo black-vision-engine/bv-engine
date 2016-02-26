@@ -1,6 +1,6 @@
 #include "EngineStateHandlers.h"
 
-#include "../../BVAppLogic.h"
+#include "BVAppLogic.h"
 #include "EventHandlerHelpers.h"
 #include "ProjectManager.h"
 

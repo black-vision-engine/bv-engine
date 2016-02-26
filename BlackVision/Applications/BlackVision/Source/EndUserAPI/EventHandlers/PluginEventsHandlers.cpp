@@ -4,8 +4,8 @@
 #include "Engine/Models/Plugins/Simple/DefaultTimerPlugin.h"
 
 #include "Engine/Models/BVProjectEditor.h"
-#include "../../BVAppLogic.h"
-#include "../../UseLoggerBVAppModule.h"
+#include "BVAppLogic.h"
+#include "UseLoggerBVAppModule.h"
 
 #include "EventHandlerHelpers.h"
 #include "Serialization/SerializationHelper.h"

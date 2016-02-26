@@ -420,6 +420,8 @@ void		Crawler::NotifyVisibilityChanged( bv::model::BasicNode * n, bool visibilit
         SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
     }
 
+    //if( m_nodesStates.
+
 }
 
 // *******************************

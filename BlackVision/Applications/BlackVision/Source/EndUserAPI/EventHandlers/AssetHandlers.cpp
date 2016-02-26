@@ -1,6 +1,6 @@
 #include "AssetHandlers.h"
 
-#include "../../BVAppLogic.h"
+#include "BVAppLogic.h"
 #include "Engine/Models/BVProjectEditor.h"
 #include "Engine/Graphics/Resources/Textures/Texture2DCache.h"
 #include "EventHandlerHelpers.h"
