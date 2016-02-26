@@ -36,7 +36,7 @@ std::string KeyPressedEvent::m_sEventName           = "Event_KeyPressedEvent";
 const EventType ScreenShotRenderedEvent::m_sEventType       = 0x00000006;
 std::string ScreenShotRenderedEvent::m_sEventName           = "ScreenShotRenderedEvent";
 
-// FIXME: MORE EVENTS IN CrawlerEvents.cpp. VERY VERY BAD IDEA. WE NEED EVENTS REGISTER SYSTEM ASAP.
+// FIXME: MORE EVENTS IN ScrollerEvents.cpp. VERY VERY BAD IDEA. WE NEED EVENTS REGISTER SYSTEM ASAP.
 
 
 const EventType LoadAssetEvent::m_sEventType        = 0x30000013;

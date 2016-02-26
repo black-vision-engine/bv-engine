@@ -32,7 +32,7 @@
 #include "Engine/Models/BasicNode.h"
 
 #include "testai/TestAIManager.h"
-#include "Widgets/Crawler/Crawler.h"
+#include "Widgets/Scroller/Scroller.h"
 #include "Helpers/RectNodeBuilder.h"
 
 #include "Engine/Models/Plugins/Parameters/SimpleTypedParameters.h"
@@ -1701,41 +1701,41 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::ITimeEvaluatorPt
 
 // *****************************
 //
-model::BasicNodePtr	SimpleNodesFactory::CrawlerNodeTestScene( model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr	SimpleNodesFactory::ScrollerNodeTestScene( model::ITimeEvaluatorPtr timeEvaluator )
 {
 	//model::BasicNode::Create( "Root", timeEvaluator );
 	//node->AddPlugin( "DEFAULT_TRANSFORM", "transform", timeEvaluator );
 
 	auto node = CreateGreenRectNode( timeEvaluator, "green rect"); 
 
-	auto crawler = nodelogic::Crawler::Create( node, mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
+	auto Scroller = nodelogic::Scroller::Create( node, mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
 
-	node->SetLogic( crawler );
+	node->SetLogic( Scroller );
 
 	auto texture = CreateTexturedRectNode( timeEvaluator, false );
 	texture->AddChildToModelOnly( CreateTextNode( timeEvaluator, 0, false ) );
-	crawler->AddNext( texture );
+	Scroller->AddNext( texture );
 	texture = CreateTexturedRectNode( timeEvaluator, false );
 	texture->AddChildToModelOnly( CreateTextNode( timeEvaluator, 0, false ) );
-	crawler->AddNext( texture );
+	Scroller->AddNext( texture );
 	texture = CreateTexturedRectNode( timeEvaluator, false );
 	texture->AddChildToModelOnly( CreateTextNode( timeEvaluator, 0, false ) );
-	crawler->AddNext( texture );
+	Scroller->AddNext( texture );
 	texture = CreateTexturedRectNode( timeEvaluator, false );
 	texture->AddChildToModelOnly( CreateTextNode( timeEvaluator, 0, false ) );
-	crawler->AddNext( texture );
-	//crawler->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
-	//crawler->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
-	//crawler->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
-	//crawler->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
-	//crawler->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
-	//crawler->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
+	Scroller->AddNext( texture );
+	//Scroller->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
+	//Scroller->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
+	//Scroller->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
+	//Scroller->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
+	//Scroller->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
+	//Scroller->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
 
-	crawler->SetSpeed( 0.1f );
-	crawler->SetInterspace( 0.4f );
+	Scroller->SetSpeed( 0.1f );
+	Scroller->SetInterspace( 0.4f );
 
-	crawler->Finalize();
-	crawler->Start();
+	Scroller->Finalize();
+	Scroller->Start();
 
 	return node;
 }
@@ -2461,59 +2461,59 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextCacheTest         ( model::ITi
 
 
 
-model::BasicNodePtr  SimpleNodesFactory::CreateCrawlerTestNode       ( model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr  SimpleNodesFactory::CreateScrollerTestNode       ( model::ITimeEvaluatorPtr timeEvaluator )
 {
     glm::vec3 nodeTranslation( 0.0, 0.0, 0.0 );
     glm::vec4 color( 1.0, 0.7, 0.0, 1.0 );
 
 	auto node = CreateTextCacheTest( timeEvaluator, "Dummy0", nodeTranslation, color, L"", "fonts/StarWars.ttf" );
 
-	//auto crawler = nodelogic::Crawler::Create( node.get(), mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
+	//auto Scroller = nodelogic::Scroller::Create( node.get(), mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
 
-	//node->SetLogic( crawler );
+	//node->SetLogic( Scroller );
 
     
-    //crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt1", "fonts/StarWars.ttf" ) );
-	//crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy2", nodeTranslation, color, L"Teskt2", "fonts/StarWars.ttf" ) );
-	//crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy3", nodeTranslation, color, L"Teskt3", "fonts/StarWars.ttf" ) );
-	//crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy4", nodeTranslation, color, L"Teskt4", "fonts/StarWars.ttf" ) );
-	//crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy5", nodeTranslation, color, L"Teskt5", "fonts/StarWars.ttf" ) );
-	//crawler->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy6", nodeTranslation, color, L"Teskt6", "fonts/StarWars.ttf" ) );
+    //Scroller->AddNext( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt1", "fonts/StarWars.ttf" ) );
+	//Scroller->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy2", nodeTranslation, color, L"Teskt2", "fonts/StarWars.ttf" ) );
+	//Scroller->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy3", nodeTranslation, color, L"Teskt3", "fonts/StarWars.ttf" ) );
+	//Scroller->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy4", nodeTranslation, color, L"Teskt4", "fonts/StarWars.ttf" ) );
+	//Scroller->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy5", nodeTranslation, color, L"Teskt5", "fonts/StarWars.ttf" ) );
+	//Scroller->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy6", nodeTranslation, color, L"Teskt6", "fonts/StarWars.ttf" ) );
 
     auto texture = CreateTexturedRectNode( timeEvaluator, false );
 	texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt1", "fonts/StarWars.ttf" ) );
-	//crawler->AddNext( texture );
+	//Scroller->AddNext( texture );
     node->AddChildToModelOnly( texture );
 
 	texture = CreateTexturedRectNode( timeEvaluator, false );
 	texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt2", "fonts/StarWars.ttf" ) );
-	//crawler->AddNext( texture );
+	//Scroller->AddNext( texture );
     node->AddChildToModelOnly( texture );
 
 	texture = CreateTexturedRectNode( timeEvaluator, false );
 	texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt3", "fonts/StarWars.ttf" ) );
-	//crawler->AddNext( texture );
+	//Scroller->AddNext( texture );
     node->AddChildToModelOnly( texture );
 
 	texture = CreateTexturedRectNode( timeEvaluator, false );
 	texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt4", "fonts/StarWars.ttf" ) );
-	//crawler->AddNext( texture );
+	//Scroller->AddNext( texture );
     node->AddChildToModelOnly( texture );
 
 
 
- //   crawler->AddMessage( L"Message 1" );
- //   crawler->AddMessage( L"Message 2" );
- //   crawler->AddMessage( L"Message 3" );
- //   crawler->AddMessage( L"Message 4" );
- //   crawler->AddMessage( L"Message 5" );
- //   crawler->AddMessage( L"Message 6" );
+ //   Scroller->AddMessage( L"Message 1" );
+ //   Scroller->AddMessage( L"Message 2" );
+ //   Scroller->AddMessage( L"Message 3" );
+ //   Scroller->AddMessage( L"Message 4" );
+ //   Scroller->AddMessage( L"Message 5" );
+ //   Scroller->AddMessage( L"Message 6" );
 
-	//crawler->SetSpeed( 400000.0f );
-	//crawler->SetInterspace( 1.0f );
+	//Scroller->SetSpeed( 400000.0f );
+	//Scroller->SetInterspace( 1.0f );
 
-	//crawler->Finalize();
-	//crawler->Start();
+	//Scroller->Finalize();
+	//Scroller->Start();
 
 	return node;
 }

@@ -78,7 +78,7 @@ public:
     virtual std::vector< LAsset >               GetLAssets                  () const = 0;
 
 
-    virtual ParamTransformPtr				    GetParamTransform			() const = 0; //FIXME: BArdzo brzydki hack zeby zadzialal crawler
+    virtual ParamTransformPtr				    GetParamTransform			() const = 0; //FIXME: BArdzo brzydki hack zeby zadzialal Scroller
 
     virtual std::vector< ITimeEvaluatorPtr >	GetTimelines				() const = 0;
 

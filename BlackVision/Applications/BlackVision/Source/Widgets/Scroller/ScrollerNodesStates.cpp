@@ -1,4 +1,4 @@
-#include "CrawlerNodesStates.h"
+#include "ScrollerNodesStates.h"
 
 #include <cassert>
 
@@ -6,7 +6,7 @@ namespace bv { namespace nodelogic {
 
 // *******************************
 //
-void CrawlerNodesStates::Add			( bv::model::BasicNode * n )
+void ScrollerNodesStates::Add			( bv::model::BasicNode * n )
 {
 	m_nonActives.push_back( n );
 	m_nodesCount++;
@@ -15,7 +15,7 @@ void CrawlerNodesStates::Add			( bv::model::BasicNode * n )
 
 // *******************************
 //
-void CrawlerNodesStates::Acivate		( bv::model::BasicNode * n )
+void ScrollerNodesStates::Acivate		( bv::model::BasicNode * n )
 {
 	assert( ActiveSize() + NonActiveSize() == m_nodesCount );
 	for( SizeType i = 0; i < m_nonActives.size(); ++i )
@@ -30,7 +30,7 @@ void CrawlerNodesStates::Acivate		( bv::model::BasicNode * n )
 
 // *******************************
 //
-void CrawlerNodesStates::Deacivate		( bv::model::BasicNode * n )
+void ScrollerNodesStates::Deacivate		( bv::model::BasicNode * n )
 {
 	for( SizeType i = 0; i < m_actives.size(); ++i )
 		if( m_actives[ i ] == n )
@@ -42,7 +42,7 @@ void CrawlerNodesStates::Deacivate		( bv::model::BasicNode * n )
 
 // *******************************
 //
-void CrawlerNodesStates::Visible		( bv::model::BasicNode * n )
+void ScrollerNodesStates::Visible		( bv::model::BasicNode * n )
 {
 	assert( ActiveSize() + NonActiveSize() == m_nodesCount );
 	for( SizeType i = 0; i < m_actives.size(); ++i )
@@ -56,7 +56,7 @@ void CrawlerNodesStates::Visible		( bv::model::BasicNode * n )
 
 // *******************************
 //
-void CrawlerNodesStates::NotVisible		( bv::model::BasicNode * n )
+void ScrollerNodesStates::NotVisible		( bv::model::BasicNode * n )
 {
 	assert( ActiveSize() + NonActiveSize() == m_nodesCount );
 	for( SizeType i = 0; i < m_visibles.size(); ++i )
@@ -80,7 +80,7 @@ void CrawlerNodesStates::NotVisible		( bv::model::BasicNode * n )
 
 // *******************************
 //
-bool CrawlerNodesStates::IsVisible		( bv::model::BasicNode * n ) const
+bool ScrollerNodesStates::IsVisible		( bv::model::BasicNode * n ) const
 {
 	assert( ActiveSize() + NonActiveSize() == m_nodesCount );
 	for( SizeType i = 0; i < m_visibles.size(); ++i )
@@ -94,7 +94,7 @@ bool CrawlerNodesStates::IsVisible		( bv::model::BasicNode * n ) const
 
 // *******************************
 //
-bool CrawlerNodesStates::IsActive		( bv::model::BasicNode * n ) const
+bool ScrollerNodesStates::IsActive		( bv::model::BasicNode * n ) const
 {
 	assert( ActiveSize() + NonActiveSize() == m_nodesCount );
 	for( SizeType i = 0; i < m_actives.size(); ++i )
@@ -105,7 +105,7 @@ bool CrawlerNodesStates::IsActive		( bv::model::BasicNode * n ) const
 
 // *******************************
 //
-bool CrawlerNodesStates::IsNonActive	( bv::model::BasicNode * n ) const
+bool ScrollerNodesStates::IsNonActive	( bv::model::BasicNode * n ) const
 {
 	assert( ActiveSize() + NonActiveSize() == m_nodesCount );
 	for( SizeType i = 0; i < m_nonActives.size(); ++i )
@@ -122,7 +122,7 @@ bool CrawlerNodesStates::IsNonActive	( bv::model::BasicNode * n ) const
 
 // ***********************
 //
-bool CrawlerNodesStates::Exist          ( bv::model::BasicNode * n ) const
+bool ScrollerNodesStates::Exist          ( bv::model::BasicNode * n ) const
 {
 	for( SizeType i = 0; i < m_nonActives.size(); ++i )
 		if( m_nonActives[ i ] == n )
@@ -140,21 +140,21 @@ bool CrawlerNodesStates::Exist          ( bv::model::BasicNode * n ) const
 
 // *******************************
 //
-SizeType CrawlerNodesStates::ActiveSize		() const
+SizeType ScrollerNodesStates::ActiveSize		() const
 {
 	return m_actives.size();
 }
 
 // *******************************
 //
-SizeType CrawlerNodesStates::NonActiveSize	() const
+SizeType ScrollerNodesStates::NonActiveSize	() const
 {
 	return m_nonActives.size();
 }
 
 // *******************************
 //
-SizeType CrawlerNodesStates::VisibleSize	() const
+SizeType ScrollerNodesStates::VisibleSize	() const
 {
 	return m_visibles.size();
 }

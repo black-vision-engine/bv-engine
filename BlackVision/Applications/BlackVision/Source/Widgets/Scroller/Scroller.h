@@ -2,7 +2,7 @@
 
 #include "CoreDEF.h"
 #include "Engine/Models/Interfaces/INodeLogic.h"
-#include "CrawlerNodesStates.h"
+#include "ScrollerNodesStates.h"
 #include <string>
 #include <vector>
 #include <map>
@@ -27,12 +27,12 @@ typedef std::shared_ptr< BasicNode > BasicNodePtr;
 
 namespace bv { namespace nodelogic {
 
-class Crawler;
+class Scroller;
 
-DEFINE_PTR_TYPE( Crawler )
-DEFINE_CONST_PTR_TYPE( Crawler )
+DEFINE_PTR_TYPE( Scroller )
+DEFINE_CONST_PTR_TYPE( Scroller )
 
-class Crawler : public model::INodeLogic, public std::enable_shared_from_this< Crawler >
+class Scroller : public model::INodeLogic, public std::enable_shared_from_this< Scroller >
 {
 public:
 
@@ -55,11 +55,11 @@ private:
 
 private:
 
-    std::string                             m_crawlerNodePath;
+    std::string                             m_ScrollerNodePath;
 
 	bool									m_isFinalized;
 	bv::model::BasicNodePtr					m_parentNode;
-	CrawlerNodesStates						m_nodesStates;
+	ScrollerNodesStates						m_nodesStates;
 	NodeFloatMap							m_shifts;
     CrawlDirection                          m_crawlDirection;
 	UInt64									m_currTime;
@@ -104,8 +104,8 @@ public:
 	void		SetPromoFrequency	(int freq);
     void		Clear				();
 
-	explicit	Crawler				( bv::model::BasicNodePtr parent, const mathematics::RectConstPtr & view );
-				~Crawler			() {}
+	explicit	Scroller				( bv::model::BasicNodePtr parent, const mathematics::RectConstPtr & view );
+				~Scroller			() {}
 
 	void		AddNext				( bv::model::BasicNodePtr node );
     bool		AddNext				( Int32 nodeIdx );
@@ -125,12 +125,13 @@ public:
 	virtual void	Deinitialize	()				override {}
 
 
-	static		CrawlerPtr Create	( bv::model::BasicNodePtr parent, const mathematics::RectConstPtr & view );
+	static		ScrollerPtr Create	( bv::model::BasicNodePtr parent, const mathematics::RectConstPtr & view );
 
     virtual const std::string   GetType         () const override;
+    static const std::string    Type            ();
 
     virtual void                Serialize       ( ISerializer& ser ) const override;
-    static CrawlerPtr           Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode );
+    static ScrollerPtr          Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parentNode );
 
     virtual bool                HandleEvent     ( IDeserializer& eventSer, ISerializer& response, BVProjectEditor * editor ) override;
 

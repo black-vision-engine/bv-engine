@@ -1,20 +1,20 @@
 #include "Engine/Events/BaseEvent.h"
-#include "Crawler.h"
+#include "Scroller.h"
 
 namespace bv { namespace nodelogic {
 
-class CrawlerEvent : public BaseEvent
+class ScrollerEvent : public BaseEvent
 {
 protected:
-	CrawlerPtr				m_crawler;
+	ScrollerPtr				m_Scroller;
 public:
-	explicit 				CrawlerEvent			( CrawlerPtr crawler );
+	explicit 				ScrollerEvent			( ScrollerPtr Scroller );
 
-	CrawlerConstPtr			GetCrawler				() const	{ return m_crawler; }
-	CrawlerPtr				GetCrawler				()			{ return m_crawler; }
+	ScrollerConstPtr			GetScroller				() const	{ return m_Scroller; }
+	ScrollerPtr				GetScroller				()			{ return m_Scroller; }
 };
 
-class NodeAppearingCrawlerEvent : public CrawlerEvent
+class NodeAppearingScrollerEvent : public ScrollerEvent
 {
 private:
 	model::BasicNode *				m_node;
@@ -23,11 +23,11 @@ private:
     static std::string				m_sEventName;
 
 public:
-									NodeAppearingCrawlerEvent	( CrawlerPtr crawler, model::BasicNode * node )
-										: CrawlerEvent( crawler ), m_node( node )
+									NodeAppearingScrollerEvent	( ScrollerPtr Scroller, model::BasicNode * node )
+										: ScrollerEvent( Scroller ), m_node( node )
 									{}
 
-									~NodeAppearingCrawlerEvent  () {}
+									~NodeAppearingScrollerEvent  () {}
 
     virtual IEventPtr               Clone           () const	override;
 
@@ -40,7 +40,7 @@ public:
 	model::BasicNode *				GetNode			()			{ return m_node; }
 };
 
-class NodeLeavingCrawlerEvent : public CrawlerEvent
+class NodeLeavingScrollerEvent : public ScrollerEvent
 {
 private:
 	model::BasicNode *				m_node;
@@ -48,11 +48,11 @@ private:
 	static const EventType			m_sEventType;
     static std::string				m_sEventName;
 public:
-									NodeLeavingCrawlerEvent		( CrawlerPtr crawler, model::BasicNode * node )
-										: CrawlerEvent( crawler ), m_node( node )
+									NodeLeavingScrollerEvent		( ScrollerPtr Scroller, model::BasicNode * node )
+										: ScrollerEvent( Scroller ), m_node( node )
 									{}
 
-									~NodeLeavingCrawlerEvent	() {}
+									~NodeLeavingScrollerEvent	() {}
 
     virtual IEventPtr               Clone           () const                            override;
 
@@ -66,17 +66,17 @@ public:
 
 };
 
-class NoMoreNodesCrawlerEvent : public CrawlerEvent
+class NoMoreNodesScrollerEvent : public ScrollerEvent
 {
 private:
 	static const EventType			m_sEventType;
     static std::string				m_sEventName;
 public:
-									NoMoreNodesCrawlerEvent		( CrawlerPtr crawler )
-										: CrawlerEvent( crawler )
+									NoMoreNodesScrollerEvent		( ScrollerPtr Scroller )
+										: ScrollerEvent( Scroller )
 									{}
 
-									~NoMoreNodesCrawlerEvent	() {}
+									~NoMoreNodesScrollerEvent	() {}
 
     virtual IEventPtr               Clone           () const                            override;
 

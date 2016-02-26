@@ -542,9 +542,9 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::TimerTestScene( pluginsManager, timeline );
     }
-    else if( scene == "CRAWLER_TEST_SCENE" )
+    else if( scene == "Scroller_TEST_SCENE" )
     {
-        node = TestScenesFactory::CrawlerNodeTestScene( pluginsManager, timeline );
+        node = TestScenesFactory::ScrollerNodeTestScene( pluginsManager, timeline );
     }
     else if( scene == "REPLICATOR_TEST_SCENE" )
     {
@@ -658,10 +658,10 @@ model::BasicNodePtr     TestScenesFactory::TimerTestScene  ( const model::Plugin
     return SimpleNodesFactory::CreateTimerNode( timeEvaluator, 0, false );
 }
 
-model::BasicNodePtr     TestScenesFactory::CrawlerNodeTestScene   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
+model::BasicNodePtr     TestScenesFactory::ScrollerNodeTestScene   ( const model::PluginsManager * pluginsManager, model::ITimeEvaluatorPtr timeEvaluator )
 {
     { pluginsManager; }
-    return SimpleNodesFactory::CrawlerNodeTestScene( timeEvaluator );
+    return SimpleNodesFactory::ScrollerNodeTestScene( timeEvaluator );
 }
 
 // *****************************
@@ -678,7 +678,7 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene        ( const mode
 {
     { pluginsManager; } // FIXME: suppress unused warning
     //return SimpleNodesFactory::CreateHeightMapNode( timelineManager, timeEvaluator );
-    //return SimpleNodesFactory::CreateCrawlerNode( timeEvaluator );
+    //return SimpleNodesFactory::CreateScrollerNode( timeEvaluator );
     auto node0 = SimpleNodesFactory::CreateBasicShapesTestNode( timeEvaluator );
     //auto node0 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
     //auto node1 = SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
@@ -714,7 +714,7 @@ model::BasicNodePtr     TestScenesFactory::NewModelTestScene        ( const mode
     //return SimpleNodesFactory::CreateGreenRectNodeNoAssert( timelineManager, timeEvaluator, true );
     //return SimpleNodesFactory::CreateTexturedRectNode( timelineManager, timeEvaluator, false );
     //return SimpleNodesFactory::CreateTextureAnimationRectNode( timelineManager, timeEvaluator, true );
-    return SimpleNodesFactory::CreateCrawlerNode( timelineManager, timeEvaluator );
+    return SimpleNodesFactory::CreateScrollerNode( timelineManager, timeEvaluator );
     return SimpleNodesFactory::CreateTextNode( timelineManager, timeEvaluator, 0, false );
     //return SimpleNodesFactory::CreateTextWithShadowNode( timelineManager, timeEvaluator, 5, glm::vec3( 0.005f, -0.005f, -0.001f ) );
     auto root = SimpleNodesFactory::CreateTimerNode( timelineManager, timeEvaluator, 0, false );
@@ -1318,7 +1318,7 @@ model::BasicNodePtr TestScenesFactory::FontTestScene( const model::PluginsManage
     glm::vec3 nextTranslation( 0.0, -0.1, 0.0 );
     glm::vec4 color( 1.0, 0.7, 0.0, 1.0 );
 
-    auto node0 = SimpleNodesFactory::CreateCrawlerTestNode( timeEvaluator );
+    auto node0 = SimpleNodesFactory::CreateScrollerTestNode( timeEvaluator );
     //auto node0 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, "Dummy", nodeTranslation, color, L"", "fonts/StarWars.ttf" );
 
     //auto rootPath = ProjectManager::GetInstance()->GetRootDir();

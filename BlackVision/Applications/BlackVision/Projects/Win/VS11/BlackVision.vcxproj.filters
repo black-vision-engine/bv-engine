@@ -13,9 +13,6 @@
     <Filter Include="Widgets">
       <UniqueIdentifier>{a40b34a5-8104-4523-b976-a18c9886873d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Widgets\Crawler">
-      <UniqueIdentifier>{a5c51410-4f01-4c1b-a9e6-c93795ac17ba}</UniqueIdentifier>
-    </Filter>
     <Filter Include="VideoInput">
       <UniqueIdentifier>{f67ab42f-30e0-4d7a-90ee-0cfaed68a769}</UniqueIdentifier>
     </Filter>
@@ -39,6 +36,9 @@
     </Filter>
     <Filter Include="Widgets\NodeReplicator">
       <UniqueIdentifier>{92c97574-2f51-4596-bcfa-ef1caae4425d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Widgets\Scroller">
+      <UniqueIdentifier>{a5c51410-4f01-4c1b-a9e6-c93795ac17ba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -70,15 +70,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\TestAI\TestAIManager.cpp">
       <Filter>TestAI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\Crawler\Crawler.cpp">
-      <Filter>Widgets\Crawler</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerEvents.cpp">
-      <Filter>Widgets\Crawler</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.cpp">
-      <Filter>Widgets\Crawler</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\PieChartNode.cpp">
       <Filter>PieCharts</Filter>
@@ -170,6 +161,15 @@
     <ClCompile Include="..\..\..\Source\Widgets\NodeLogicHelper.cpp">
       <Filter>Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\Scroller\Scroller.cpp">
+      <Filter>Widgets\Scroller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerEvents.cpp">
+      <Filter>Widgets\Scroller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.cpp">
+      <Filter>Widgets\Scroller</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\bvApp.h" />
@@ -202,15 +202,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\TestAI\TestAIManager.h">
       <Filter>TestAI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\Crawler\Crawler.h">
-      <Filter>Widgets\Crawler</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerEvents.h">
-      <Filter>Widgets\Crawler</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Source\Widgets\Crawler\CrawlerNodesStates.h">
-      <Filter>Widgets\Crawler</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\PieChartNode.h">
       <Filter>PieCharts</Filter>
@@ -311,6 +302,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Widgets\NodeLogicHelper.h">
       <Filter>Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\Scroller\Scroller.h">
+      <Filter>Widgets\Scroller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\Scroller\ScrollerEvents.h">
+      <Filter>Widgets\Scroller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Widgets\Scroller\ScrollerNodesStates.h">
+      <Filter>Widgets\Scroller</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

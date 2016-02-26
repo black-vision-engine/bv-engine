@@ -18,7 +18,7 @@
 
 #include "Assets/Font/TextHelper.h"
 //FIXME: as you can see - THIS IS A HACK
-#include "../../../../Applications/BlackVision/Source/Widgets/Crawler/Crawler.h"
+#include "../../../../Applications/BlackVision/Source/Widgets/Scroller/Scroller.h"
 #include "../../../../Applications/BlackVision/Source/Widgets/Counter/Counter.h"
 //#include "Helpers/RectNodeBuilder.h"
 
@@ -654,15 +654,15 @@ namespace bv{
 		bool autostart=false;
 		if(crawl->autostart=="true")autostart=true;
 
-		auto crawler = nodelogic::Crawler::Create( node, mathematics::Rect::Create( -2.2f, -1.f, 2.2f, 1.f ) );
+		auto Scroller = nodelogic::Scroller::Create( node, mathematics::Rect::Create( -2.2f, -1.f, 2.2f, 1.f ) );
 
-		node->SetLogic(crawler);
+		node->SetLogic(Scroller);
 		
 
-		crawler->SetSpeed( speed );
-		crawler->SetPromoFrequency(freq);
-		crawler->SetPromoMessage(crawl->promo_msg);
-		crawler->SetInterspace( interspace );
+		Scroller->SetSpeed( speed );
+		Scroller->SetPromoFrequency(freq);
+		Scroller->SetPromoMessage(crawl->promo_msg);
+		Scroller->SetInterspace( interspace );
 		for(int i=0;i<count;i++)
 		{
 
@@ -700,13 +700,13 @@ namespace bv{
 
 			separatorNode->AddChildToModelOnly(textNode);
 
-			crawler->AddNext(separatorNode);
+			Scroller->AddNext(separatorNode);
 		}
 
-	    crawler->Finalize();
+	    Scroller->Finalize();
 
 	    if(autostart)
-		    crawler->Start();
+		    Scroller->Start();
 
         return true;
 	}

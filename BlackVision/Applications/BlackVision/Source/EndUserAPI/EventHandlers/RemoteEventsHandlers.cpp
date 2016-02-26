@@ -11,7 +11,7 @@
 #include "NodeLogicHandlers.h"
 
 #include "Engine/Events/EventManager.h"
-#include "Widgets/Crawler/CrawlerEvents.h"
+#include "Widgets/Scroller/ScrollerEvents.h"
 
 
 namespace bv
@@ -88,8 +88,8 @@ void RemoteEventsHandlers::InitializeHandlers      ( BVAppLogic* appLogic )
     GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_nodeLogicHandlers, &NodeLogicHandlers::WidgetHandler ), NodeLogicEvent::Type() );
 
 
-	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_nodeLogicHandlers, &NodeLogicHandlers::OnNodeAppearing ), nodelogic::NodeAppearingCrawlerEvent::Type() );
-	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_nodeLogicHandlers, &NodeLogicHandlers::OnNodeLeaving ), nodelogic::NodeLeavingCrawlerEvent::Type() );
+	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_nodeLogicHandlers, &NodeLogicHandlers::OnNodeAppearing ), nodelogic::NodeAppearingScrollerEvent::Type() );
+	GetDefaultEventManager().AddListener( fastdelegate::MakeDelegate( m_nodeLogicHandlers, &NodeLogicHandlers::OnNodeLeaving ), nodelogic::NodeLeavingScrollerEvent::Type() );
 }
 
 // ***********************

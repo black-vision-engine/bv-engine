@@ -2,7 +2,7 @@
 
 
 #include "Counter/Counter.h"
-#include "Crawler/Crawler.h"
+#include "Scroller/Scroller.h"
 #include "NodeReplicator/NodeReplicator.h"
 
 
@@ -14,11 +14,11 @@ model::INodeLogicPtr        NodeLogicFactory::CreateLogic  ( const IDeserializer
 {
     const std::string& logicType = deser.GetAttribute( "type" );
 
-    if( logicType == "crawler" )
-        return nodelogic::Crawler::Create( deser, logicParent );
-    else if( logicType == "counter" )
+    if( logicType == nodelogic::Scroller::Type() )
+        return nodelogic::Scroller::Create( deser, logicParent );
+    else if( logicType == nodelogic::WidgetCounter::Type() )
         return nodelogic::WidgetCounter::Create( deser, logicParent.get() );
-    else if( logicType == "replicate" )
+    else if( logicType == model::NodeReplicator::Type() )
         return model::NodeReplicator::Create( deser, logicParent );
 
     return nullptr;

@@ -15,7 +15,7 @@ typedef std::shared_ptr< BasicNode > BasicNodePtr;
 
 namespace bv { namespace nodelogic {
 
-struct CrawlerNodesStates
+struct ScrollerNodesStates
 {
 	std::vector< bv::model::BasicNode * > m_nonActives;
 	std::vector< bv::model::BasicNode * > m_actives;
@@ -39,7 +39,7 @@ struct CrawlerNodesStates
 	SizeType NonActiveSize	() const;
 	SizeType VisibleSize	() const;
 
-	CrawlerNodesStates()
+	ScrollerNodesStates()
 		: m_nodesCount( 0 )
 	{}
 };

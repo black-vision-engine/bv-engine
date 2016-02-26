@@ -11,7 +11,7 @@
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Serialization/BV/BVDeserializeContext.h"
 
-#include "Widgets/Crawler/CrawlerEvents.h"
+#include "Widgets/Scroller/ScrollerEvents.h"
 #include "Widgets/Counter/Counter.h"
 
 namespace bv
@@ -165,9 +165,9 @@ namespace
 //
 void NodeLogicHandlers::OnNoMoreNodes       ( IEventPtr evt )
 {
-	auto typedEvent = std::static_pointer_cast< nodelogic::NoMoreNodesCrawlerEvent >( evt );
+	auto typedEvent = std::static_pointer_cast< nodelogic::NoMoreNodesScrollerEvent >( evt );
 	// Remove code below. Only for testing.
-	auto n = typedEvent->GetCrawler()->GetNonActiveNode();
+	auto n = typedEvent->GetScroller()->GetNonActiveNode();
 	if( n )
 	{
 
@@ -183,7 +183,7 @@ void NodeLogicHandlers::OnNoMoreNodes       ( IEventPtr evt )
                 SetParameter( pl->GetParameter( "text" ), 0.0, L"nowa wiadomoœæ "+to_wstring(examplesIndex) );
                 examplesIndex=(examplesIndex+1)%20;
 
-				typedEvent->GetCrawler()->EnqueueNode( n );
+				typedEvent->GetScroller()->EnqueueNode( n );
 			}
 		}
 	}

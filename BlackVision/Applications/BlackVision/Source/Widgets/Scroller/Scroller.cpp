@@ -1,4 +1,4 @@
-#include "Crawler.h"
+#include "Scroller.h"
 
 #include "Engine/Models/BasicNode.h"
 
@@ -7,7 +7,7 @@
 #include "Engine/Models/Plugins/Simple/DefaultTextPlugin.h"
 #include "Engine/Events/Interfaces/IEventManager.h"
 
-#include "CrawlerEvents.h"
+#include "ScrollerEvents.h"
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/SerializationHelper.inl"
 #include "Serialization/BV/BVDeserializeContext.h"
@@ -28,29 +28,36 @@ namespace bv {
 namespace SerializationHelper {
 
 
-std::pair< bv::nodelogic::Crawler::CrawlDirection, const char* > CrawlDirectionMapping[] = 
-    { std::make_pair( bv::nodelogic::Crawler::CrawlDirection::CD_Down, "CrawlDown" )
-    , std::make_pair( bv::nodelogic::Crawler::CrawlDirection::CD_Up, "CrawlUp" )
-    , std::make_pair( bv::nodelogic::Crawler::CrawlDirection::CD_Left, "CrawlLeft" )
-    , std::make_pair( bv::nodelogic::Crawler::CrawlDirection::CD_Right, "CrawlRight" )
-    , std::make_pair( bv::nodelogic::Crawler::CrawlDirection::CD_Total, "" )      // default
+std::pair< bv::nodelogic::Scroller::CrawlDirection, const char* > CrawlDirectionMapping[] = 
+    { std::make_pair( bv::nodelogic::Scroller::CrawlDirection::CD_Down, "CrawlDown" )
+    , std::make_pair( bv::nodelogic::Scroller::CrawlDirection::CD_Up, "CrawlUp" )
+    , std::make_pair( bv::nodelogic::Scroller::CrawlDirection::CD_Left, "CrawlLeft" )
+    , std::make_pair( bv::nodelogic::Scroller::CrawlDirection::CD_Right, "CrawlRight" )
+    , std::make_pair( bv::nodelogic::Scroller::CrawlDirection::CD_Total, "" )      // default
 };
 
-template<> bv::nodelogic::Crawler::CrawlDirection   String2T        ( const std::string & s, const bv::nodelogic::Crawler::CrawlDirection & defaultVal )    { return String2Enum( CrawlDirectionMapping, s, defaultVal ); }
-template<> std::string                              T2String        ( const bv::nodelogic::Crawler::CrawlDirection & t )                                    { return Enum2String( CrawlDirectionMapping, t ); }
+template<> bv::nodelogic::Scroller::CrawlDirection   String2T        ( const std::string & s, const bv::nodelogic::Scroller::CrawlDirection & defaultVal )    { return String2Enum( CrawlDirectionMapping, s, defaultVal ); }
+template<> std::string                              T2String        ( const bv::nodelogic::Scroller::CrawlDirection & t )                                    { return Enum2String( CrawlDirectionMapping, t ); }
     
 }   // SerializationHelper
     
 namespace nodelogic {
 
 
-const std::string   Crawler::m_type = "crawler";
+const std::string   Scroller::m_type = "scroller";
 
 // ***********************
 //
-const std::string   Crawler::GetType             () const
+const std::string    Scroller::Type            ()
 {
     return m_type;
+}
+
+// ***********************
+//
+const std::string   Scroller::GetType             () const
+{
+    return Type();
 }
 
 
@@ -72,12 +79,12 @@ bv::model::BasicNodePtr         GetNode     ( bv::model::BasicNode * parent, con
 
 // ***********************
 //
-glm::vec3       CrawlerShiftToVec   ( Crawler::CrawlDirection crawlDirection )
+glm::vec3       ScrollerShiftToVec   ( Scroller::CrawlDirection crawlDirection )
 {
     glm::vec3 shiftDirection;
-    if( crawlDirection == Crawler::CrawlDirection::CD_Down || crawlDirection == Crawler::CrawlDirection::CD_Up )
+    if( crawlDirection == Scroller::CrawlDirection::CD_Down || crawlDirection == Scroller::CrawlDirection::CD_Up )
         shiftDirection = glm::vec3( 0.0, 1.0, 0.0 );
-    else if( crawlDirection == Crawler::CrawlDirection::CD_Right || crawlDirection == Crawler::CrawlDirection::CD_Left )
+    else if( crawlDirection == Scroller::CrawlDirection::CD_Right || crawlDirection == Scroller::CrawlDirection::CD_Left )
         shiftDirection = glm::vec3( 1.0, 0.0, 0.0 );
     else
         shiftDirection = glm::vec3( 0.0, 0.0, 0.0 );
@@ -90,14 +97,14 @@ glm::vec3       CrawlerShiftToVec   ( Crawler::CrawlDirection crawlDirection )
 
 // *******************************
 //
-CrawlerPtr	Crawler::Create				( bv::model::BasicNodePtr parent, const mathematics::RectConstPtr & view )
+ScrollerPtr	Scroller::Create				( bv::model::BasicNodePtr parent, const mathematics::RectConstPtr & view )
 {
-	return std::make_shared< Crawler >( parent, view );
+	return std::make_shared< Scroller >( parent, view );
 }
 
 // *******************************
 //
-Crawler::Crawler						( bv::model::BasicNodePtr parent, const mathematics::RectConstPtr & view )
+Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::RectConstPtr & view )
 	: m_parentNode( parent )
 	, m_isFinalized( false )
 	, m_view( view )
@@ -118,7 +125,7 @@ Crawler::Crawler						( bv::model::BasicNodePtr parent, const mathematics::RectC
 
 // *******************************
 //
-void		Crawler::AddNext			( bv::model::BasicNodePtr node )
+void		Scroller::AddNext			( bv::model::BasicNodePtr node )
 {
 	if(! m_isFinalized )
 	{
@@ -126,12 +133,12 @@ void		Crawler::AddNext			( bv::model::BasicNodePtr node )
 		m_nodesStates.Add( node.get() );
 	}
 	else
-		assert(!"Crawler: Cannot add node after finalization!");
+		assert(!"Scroller: Cannot add node after finalization!");
 }
 
 // ***********************
 //
-bool		Crawler::AddNext            ( Int32 nodeIdx )
+bool		Scroller::AddNext            ( Int32 nodeIdx )
 {
     auto newNode = GetNode( m_parentNode.get(), nodeIdx );
     return AddNode( newNode );
@@ -139,7 +146,7 @@ bool		Crawler::AddNext            ( Int32 nodeIdx )
 
 // ***********************
 //
-bool		Crawler::AddNext				( const std::string& childNodeName )
+bool		Scroller::AddNext				( const std::string& childNodeName )
 {
     auto newNode = GetNode( m_parentNode.get(), childNodeName );
     return AddNode( newNode );
@@ -147,7 +154,7 @@ bool		Crawler::AddNext				( const std::string& childNodeName )
 
 // ***********************
 //
-bool        Crawler::AddNode             ( bv::model::BasicNodePtr node )
+bool        Scroller::AddNode             ( bv::model::BasicNodePtr node )
 {
     if(! m_isFinalized )
 	{
@@ -161,29 +168,29 @@ bool        Crawler::AddNode             ( bv::model::BasicNodePtr node )
         }
 	}
 	else
-		assert(!"Crawler: Cannot add node after finalization!");
+		assert(!"Scroller: Cannot add node after finalization!");
 
     return false;
 }
 
 // ***********************
 //
-Float32     Crawler::InitialShift        ( model::BasicNode * node )
+Float32     Scroller::InitialShift        ( model::BasicNode * node )
 {
     Float32 shift;
-    if( m_crawlDirection == Crawler::CrawlDirection::CD_Down )
+    if( m_crawlDirection == Scroller::CrawlDirection::CD_Down )
     {
         shift = m_view->ymax + node->GetAABB().Height() / 2.0f + m_interspace;
     }
-    else if( m_crawlDirection == Crawler::CrawlDirection::CD_Up )
+    else if( m_crawlDirection == Scroller::CrawlDirection::CD_Up )
     {
         shift = m_view->ymin - node->GetAABB().Height() / 2.0f - m_interspace;
     }
-    else if( m_crawlDirection == Crawler::CrawlDirection::CD_Right )
+    else if( m_crawlDirection == Scroller::CrawlDirection::CD_Right )
     {
         shift = m_view->xmin - node->GetAABB().Width() - m_interspace;
     }
-    else if( m_crawlDirection == Crawler::CrawlDirection::CD_Left )
+    else if( m_crawlDirection == Scroller::CrawlDirection::CD_Left )
     {
         shift = m_view->xmax + m_interspace;
     }
@@ -197,22 +204,22 @@ Float32     Crawler::InitialShift        ( model::BasicNode * node )
 
 // ***********************
 //
-Float32     Crawler::ShiftStep           ( model::BasicNode * prevNode, model::BasicNode * curNode )
+Float32     Scroller::ShiftStep           ( model::BasicNode * prevNode, model::BasicNode * curNode )
 {
     Float32 shift;
-    if( m_crawlDirection == Crawler::CrawlDirection::CD_Down )
+    if( m_crawlDirection == Scroller::CrawlDirection::CD_Down )
     {
         shift = ( prevNode->GetAABB().Height() + curNode->GetAABB().Height() ) / 2.0f + m_interspace;
     }
-    else if( m_crawlDirection == Crawler::CrawlDirection::CD_Up )
+    else if( m_crawlDirection == Scroller::CrawlDirection::CD_Up )
     {
         shift = ( prevNode->GetAABB().Height() + curNode->GetAABB().Height() ) / 2.0f - m_interspace;
     }
-    else if( m_crawlDirection == Crawler::CrawlDirection::CD_Right )
+    else if( m_crawlDirection == Scroller::CrawlDirection::CD_Right )
     {
         shift = -curNode->GetAABB().Width() - m_interspace;
     }
-    else if( m_crawlDirection == Crawler::CrawlDirection::CD_Left )
+    else if( m_crawlDirection == Scroller::CrawlDirection::CD_Left )
     {
         shift = prevNode->GetAABB().Width() + m_interspace;
     }
@@ -226,22 +233,22 @@ Float32     Crawler::ShiftStep           ( model::BasicNode * prevNode, model::B
 
 // ***********************
 //
-Float32     Crawler::SignedShift         ( Float32 shift )
+Float32     Scroller::SignedShift         ( Float32 shift )
 {
-    if( m_crawlDirection == Crawler::CrawlDirection::CD_Down || m_crawlDirection == Crawler::CrawlDirection::CD_Left )
+    if( m_crawlDirection == Scroller::CrawlDirection::CD_Down || m_crawlDirection == Scroller::CrawlDirection::CD_Left )
         return -shift;
     return shift;
 }
 
 // *******************************
 //
-bool		Crawler::Finalize			()
+bool		Scroller::Finalize			()
 {
 	if( m_isFinalized )
-		;//assert(!"Crawler: Already finalized!");
+		;//assert(!"Scroller: Already finalized!");
 	else
 	{
-        glm::vec3 shiftDirection = CrawlerShiftToVec( m_crawlDirection );
+        glm::vec3 shiftDirection = ScrollerShiftToVec( m_crawlDirection );
 
 		auto copy = m_nodesStates.m_nonActives;
 		for( auto n : copy )	
@@ -256,7 +263,7 @@ bool		Crawler::Finalize			()
 
 // ***********************
 //
-bool        Crawler::Unfinalize          ()
+bool        Scroller::Unfinalize          ()
 {
     auto copy = m_nodesStates.m_actives;
 
@@ -272,7 +279,7 @@ bool        Crawler::Unfinalize          ()
 
 // *******************************
 //
-void		Crawler::LayoutNodes		()
+void		Scroller::LayoutNodes		()
 {
 	auto length = m_nodesStates.ActiveSize();
 	if( length > 0 )
@@ -294,7 +301,7 @@ void		Crawler::LayoutNodes		()
 
 // *******************************
 //
-void		Crawler::AddMessage			(std::wstring msg)
+void		Scroller::AddMessage			(std::wstring msg)
 {
 	m_messages_new.push_back(msg);
 	
@@ -302,7 +309,7 @@ void		Crawler::AddMessage			(std::wstring msg)
 }
 // *******************************
 //
-void		Crawler::Clear()
+void		Scroller::Clear()
 {
 	m_messages_new.clear();
 	m_messages_displayed.clear();
@@ -313,14 +320,14 @@ void		Crawler::Clear()
 
 // *******************************
 //
-void		Crawler::SetPromoMessage			(std::wstring msg)
+void		Scroller::SetPromoMessage			(std::wstring msg)
 {
 	m_promo_msg = msg;
 }
 
 // *******************************
 //
-void		Crawler::SetPromoFrequency			(int freq)
+void		Scroller::SetPromoFrequency			(int freq)
 {
 	m_promo_freq = freq;
 }
@@ -328,7 +335,7 @@ void		Crawler::SetPromoFrequency			(int freq)
 
 // *******************************
 //
-void		Crawler::Update				( TimeType )
+void		Scroller::Update				( TimeType )
 {
     if( m_started )
 	{
@@ -353,9 +360,9 @@ void		Crawler::Update				( TimeType )
 
 // *******************************
 //
-void		Crawler::UpdateTransforms	()
+void		Scroller::UpdateTransforms	()
 {
-    glm::vec3 shiftDirection = CrawlerShiftToVec( m_crawlDirection );
+    glm::vec3 shiftDirection = ScrollerShiftToVec( m_crawlDirection );
 
 	for( auto elem : m_shifts )
 	{
@@ -381,7 +388,7 @@ void		Crawler::UpdateTransforms	()
 
 // *******************************
 //
-void		Crawler::UpdateVisibility	( bv::model::BasicNode * n )
+void		Scroller::UpdateVisibility	( bv::model::BasicNode * n )
 {
 	auto currVisibility = m_nodesStates.IsVisible( n );
 	auto nAABB = n->GetAABB();
@@ -404,12 +411,12 @@ void		Crawler::UpdateVisibility	( bv::model::BasicNode * n )
 
 // *******************************
 //
-void		Crawler::NotifyVisibilityChanged( bv::model::BasicNode * n, bool visibility )
+void		Scroller::NotifyVisibilityChanged( bv::model::BasicNode * n, bool visibility )
 {
     if( m_enableEvents )
     {
         JsonSerializeObject ser;
-        ser.SetAttribute( "CrawlerPath", m_crawlerNodePath );
+        ser.SetAttribute( "ScrollerPath", m_ScrollerNodePath );
         ser.SetAttribute( "NodeName", n->GetName() );
 
 	    if( visibility )
@@ -426,12 +433,12 @@ void		Crawler::NotifyVisibilityChanged( bv::model::BasicNode * n, bool visibilit
 
 // *******************************
 //
-void		Crawler::NotifyNoMoreNodes( )
+void		Scroller::NotifyNoMoreNodes( )
 {
     if( m_enableEvents )
     {
         JsonSerializeObject ser;
-        ser.SetAttribute( "CrawlerPath", m_crawlerNodePath );
+        ser.SetAttribute( "ScrollerPath", m_ScrollerNodePath );
         ser.SetAttribute( "Event", "AllItemsOffScreen" );
 
         SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
@@ -440,7 +447,7 @@ void		Crawler::NotifyNoMoreNodes( )
 
 // *******************************
 //
-void		Crawler::HackNoMoreNodes( )
+void		Scroller::HackNoMoreNodes( )
 {
 	auto n = this->GetNonActiveNode();
 	std::wstring	 message	=	L"";
@@ -490,21 +497,21 @@ void		Crawler::HackNoMoreNodes( )
 
 // *******************************
 //
-void		Crawler::SetActiveNode		( bv::model::BasicNode * n )
+void		Scroller::SetActiveNode		( bv::model::BasicNode * n )
 {
 	m_nodesStates.Acivate( n );
 }
 
 // *******************************
 //
-bool		Crawler::IsActive			( bv::model::BasicNode * n )
+bool		Scroller::IsActive			( bv::model::BasicNode * n )
 {
 	return m_nodesStates.IsActive( n );
 }
 
 // *******************************
 //
-model::BasicNode *	Crawler::GetNonActiveNode()
+model::BasicNode *	Scroller::GetNonActiveNode()
 {
 	if ( m_nodesStates.NonActiveSize() > 0 )
 		return m_nodesStates.m_nonActives[ 0 ];
@@ -514,7 +521,7 @@ model::BasicNode *	Crawler::GetNonActiveNode()
 
 // *******************************
 //
-void		Crawler::EnqueueNode			( model::BasicNode * n)
+void		Scroller::EnqueueNode			( model::BasicNode * n)
 {
 	if( m_nodesStates.IsNonActive( n ) )
 	{
@@ -548,7 +555,7 @@ void		Crawler::EnqueueNode			( model::BasicNode * n)
 
 // ***********************
 //
-void                Crawler::Serialize       ( ISerializer& ser ) const
+void                Scroller::Serialize       ( ISerializer& ser ) const
 {
     auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
     assert( context != nullptr );
@@ -583,10 +590,10 @@ void                Crawler::Serialize       ( ISerializer& ser ) const
                 childrenNodes.push_back( m_parentNode->GetChild( i ).get() );
 
 
-            ser.EnterArray( "crawlerNodes" );
+            ser.EnterArray( "ScrollerNodes" );
                 for( auto& node : m_shifts )
                 {
-                    ser.EnterChild( "crawlerNode" );
+                    ser.EnterChild( "ScrollerNode" );
                         ser.SetAttribute( "name", node.first->GetName() );
 
                         // Find node index
@@ -600,7 +607,7 @@ void                Crawler::Serialize       ( ISerializer& ser ) const
                             }
                         }
 
-                        assert( nodeIndex >= 0 );   // Node held by crawler exists in tree no more.
+                        assert( nodeIndex >= 0 );   // Node held by Scroller exists in tree no more.
                         ser.SetAttribute( "nodeIdx", SerializationHelper::T2String( nodeIndex ) );
 
                     ser.ExitChild(); // node
@@ -614,7 +621,7 @@ void                Crawler::Serialize       ( ISerializer& ser ) const
 
 // ***********************
 //
-CrawlerPtr      Crawler::Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parent )
+ScrollerPtr      Scroller::Create          ( const IDeserializer & deser, bv::model::BasicNodePtr parent )
 {
     mathematics::RectPtr rect = std::make_shared<mathematics::Rect>();
 
@@ -634,15 +641,15 @@ CrawlerPtr      Crawler::Create          ( const IDeserializer & deser, bv::mode
     float speed = SerializationHelper::String2T( deser.GetAttribute( "speed" ), 0.0f );
     float interspace = SerializationHelper::String2T( deser.GetAttribute( "interspace" ), 0.0f );
 
-    auto crawler = Crawler::Create( parent, rect );
-    crawler->SetSpeed( speed );
-    crawler->SetInterspace( interspace );
+    auto Scroller = Scroller::Create( parent, rect );
+    Scroller->SetSpeed( speed );
+    Scroller->SetInterspace( interspace );
 
 
-    if( !deser.EnterChild( "crawlerNodes" ) )
-        return crawler;
+    if( !deser.EnterChild( "ScrollerNodes" ) )
+        return Scroller;
     
-    if( deser.EnterChild( "crawlerNode" ) )
+    if( deser.EnterChild( "ScrollerNode" ) )
     {
         do
         {
@@ -651,16 +658,16 @@ CrawlerPtr      Crawler::Create          ( const IDeserializer & deser, bv::mode
             assert( nodeIdx >= 0 && nodeIdx < parent->GetNumChildren() );
             if( nodeIdx >= 0 && nodeIdx < parent->GetNumChildren() )
             {
-                crawler->AddNext( nodeIdx );
+                Scroller->AddNext( nodeIdx );
             }
 
         } while( deser.NextChild() );
-        deser.ExitChild(); // crawlerNode
+        deser.ExitChild(); // ScrollerNode
     }
 
-    deser.ExitChild(); // crawlerNodes
+    deser.ExitChild(); // ScrollerNodes
 
-    return crawler;
+    return Scroller;
 }
 
 // ========================================================================= //
@@ -669,7 +676,7 @@ CrawlerPtr      Crawler::Create          ( const IDeserializer & deser, bv::mode
 
 // ***********************
 //
-bool                Crawler::HandleEvent     ( IDeserializer& eventDeser, ISerializer& response, BVProjectEditor * editor )
+bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISerializer& response, BVProjectEditor * editor )
 {
     std::string crawlAction = eventDeser.GetAttribute( "Action" );
 
@@ -679,10 +686,10 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventDeser, ISeria
 	}
 	else if( crawlAction == "Start" )
 	{
-        if( m_crawlerNodePath == "" )
+        if( m_ScrollerNodePath == "" )
         {
             // Fixme: This should be done in create function, but deserialization from XML doesn't provide
-            // node path. Instead we save this path when crawler first time starts.
+            // node path. Instead we save this path when Scroller first time starts.
             auto context = static_cast<BVDeserializeContext*>( eventDeser.GetDeserializeContext() );
             assert( context != nullptr );
 
@@ -759,7 +766,7 @@ bool                Crawler::HandleEvent     ( IDeserializer& eventDeser, ISeria
 
 // *******************************
 //
-bool		Crawler::Start			()
+bool		Scroller::Start			()
 {
 	if( !m_started )
 	{
@@ -781,14 +788,14 @@ bool		Crawler::Start			()
 
 // *******************************
 //
-bool		Crawler::Stop			()
+bool		Scroller::Stop			()
 {
     return Reset();
 }
 
 // ***********************
 //
-bool        Crawler::Pause               ()
+bool        Scroller::Pause               ()
 {
     m_paused = true;
     return true;
@@ -796,7 +803,7 @@ bool        Crawler::Pause               ()
 
 // *******************************
 //
-bool		Crawler::Reset()
+bool		Scroller::Reset()
 {
     // Temporary copy node's to active node's and than set proper layout.
     // Layout is set only for active node's, thats why we have to avtivate them
@@ -815,7 +822,7 @@ bool		Crawler::Reset()
 
 // ***********************
 //
-bool        Crawler::GetStatus           ( IDeserializer & /*eventSer*/, ISerializer & response, BVProjectEditor * /*editor*/ )
+bool        Scroller::GetStatus           ( IDeserializer & /*eventSer*/, ISerializer & response, BVProjectEditor * /*editor*/ )
 {
     if( m_started && !m_paused )
     {
@@ -834,21 +841,21 @@ bool        Crawler::GetStatus           ( IDeserializer & /*eventSer*/, ISerial
 
 // *******************************
 //
-void		Crawler::SetInterspace		( Float32 interspace )
+void		Scroller::SetInterspace		( Float32 interspace )
 {
 	m_interspace = interspace;
 }
 
 // ***********************
 //
-void        Crawler::SetNodePath         ( std::string nodePath )
+void        Scroller::SetNodePath         ( std::string nodePath )
 {
-    m_crawlerNodePath = nodePath;
+    m_ScrollerNodePath = nodePath;
 }
 
 // *******************************
 //
-void		Crawler::SetSpeed			( Float32 speed )
+void		Scroller::SetSpeed			( Float32 speed )
 {
     if( speed < 0.0f )
         speed = 0.0f;
@@ -859,7 +866,7 @@ void		Crawler::SetSpeed			( Float32 speed )
 
 // ***********************
 //
-bool            Crawler::AddPreset           ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
+bool            Scroller::AddPreset           ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
 {
     auto node = CreatePreset( eventSer, response, editor );
     if( node == nullptr )
@@ -870,7 +877,7 @@ bool            Crawler::AddPreset           ( IDeserializer & eventSer, ISerial
 
 // ***********************
 //
-bool            Crawler::AddPresetAndMessages( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
+bool            Scroller::AddPresetAndMessages( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
 {
     auto addedNode = CreatePreset( eventSer, response, editor );
     if( addedNode == nullptr )
@@ -884,7 +891,7 @@ bool            Crawler::AddPresetAndMessages( IDeserializer & eventSer, ISerial
 
 // ***********************
 //
-model::BasicNodePtr Crawler::CreatePreset    ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
+model::BasicNodePtr Scroller::CreatePreset    ( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor )
 {
     auto context = static_cast<BVDeserializeContext*>( eventSer.GetDeserializeContext() );
 
@@ -916,7 +923,7 @@ model::BasicNodePtr Crawler::CreatePreset    ( IDeserializer & eventSer, ISerial
 
 // ***********************
 //
-bool            Crawler::AddPresetToScene( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor, model::BasicNodePtr node )
+bool            Scroller::AddPresetToScene( IDeserializer & eventSer, ISerializer & response, BVProjectEditor * editor, model::BasicNodePtr node )
 {
     auto context = static_cast<BVDeserializeContext*>( eventSer.GetDeserializeContext() );
     auto scene = editor->GetScene( context->GetSceneName() );
@@ -942,7 +949,7 @@ bool            Crawler::AddPresetToScene( IDeserializer & eventSer, ISerializer
 
 // ***********************
 //
-void            Crawler::AddTexts            ( IDeserializer & eventSer, ISerializer & /*response*/, BVProjectEditor * editor, model::BasicNodePtr node )
+void            Scroller::AddTexts            ( IDeserializer & eventSer, ISerializer & /*response*/, BVProjectEditor * editor, model::BasicNodePtr node )
 {
     UInt32 textsCounter = 1;
     if( eventSer.EnterChild( "TextsArray" ) )
@@ -977,7 +984,7 @@ void            Crawler::AddTexts            ( IDeserializer & eventSer, ISerial
 
 // ***********************
 //
-void            Crawler::AddImages           ( IDeserializer & eventSer, ISerializer & /*response*/, BVProjectEditor * editor, model::BasicNodePtr node )
+void            Scroller::AddImages           ( IDeserializer & eventSer, ISerializer & /*response*/, BVProjectEditor * editor, model::BasicNodePtr node )
 {
     UInt32 imgCounter = 1;
     if( eventSer.EnterChild( "ImagesArray" ) )
