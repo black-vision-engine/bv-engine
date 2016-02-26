@@ -29,6 +29,8 @@
 #include "Engine/Models/ModelSceneEditor.h"
 #include "Engine/Models/BVProject.h"
 
+#include "Engine/Models/NodeEffects/ModelNodeEffectFactory.h"
+
 #include "System/Env.h"
 #include "BVConfig.h"
 
@@ -494,14 +496,14 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     {
         node = TestScenesFactory::CreateTestScene( pluginsManager, timeline, TestScenesFactory::TestSceneSelector::TSS_ANIMATION_RECTANGLE );
     }
-	else if( scene == "ALL_BASIC_SHAPES_SHOW" )
-	{
-		node = TestScenesFactory::BasicShapesShowScene( pluginsManager, timeline );
-	}
-	else if( scene == "BASIC_SHAPES_TEST_SCENE" )
-	{
-		node = TestScenesFactory::BasicShapesTest(  pluginsManager, timeline );
-	}
+    else if( scene == "ALL_BASIC_SHAPES_SHOW" )
+    {
+        node = TestScenesFactory::BasicShapesShowScene( pluginsManager, timeline );
+    }
+    else if( scene == "BASIC_SHAPES_TEST_SCENE" )
+    {
+        node = TestScenesFactory::BasicShapesTest(  pluginsManager, timeline );
+    }
     else if( scene == "INTERPOLATION_TEST_SCENE" )
     {
         node = TestScenesFactory::CreedCosineDemoScene( pluginsManager, timeline );
@@ -516,7 +518,7 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     }
     else if( scene == "VIDEO_STREAM_TEST_SCENE" )
     {
- 	    node = SimpleNodesFactory::CreateVideoStreamDecoderRectNode( timeline, false );
+        node = SimpleNodesFactory::CreateVideoStreamDecoderRectNode( timeline, false );
     }
     else if( scene == "REMOTE_EVENTS_TEST_SCENE" )
     {
@@ -575,7 +577,7 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
         node = TestScenesFactory::CreateTestScene( pluginsManager, timeline, TestScenesFactory::TestSceneSelector::TSS_TEXT );
     }
 
-	return node;
+    return node;
 }
 
 // *****************************
@@ -1303,6 +1305,8 @@ model::BasicNodePtr TestScenesFactory::RemoteEventsTestScene( const model::Plugi
     auto node0 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CONE", glm::vec3( 0.0, 0.0, -4.0 ), "textures/water.jpg" );
     auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "textures/sand.jpg" );
     auto node2 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, "Text", glm::vec3( 0.0, -0.4, 0.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Long time ago in a galaxy", "fonts/StarWars.ttf" );
+
+    node0->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_WIREFRAME, "wireframe", timeEvaluator ) );
 
     node0->AddChildToModelOnly( node1 );
     node0->AddChildToModelOnly( node2 );
