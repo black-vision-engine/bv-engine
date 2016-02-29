@@ -86,14 +86,17 @@ IModelNodeEffectPtr         CreateBlurModelNodeEffect               ( const std:
     auto blurSizeEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
     auto normalizeEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "normalize", timeEvaluator );
     auto blurKernelTypeEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "blurKernelType", timeEvaluator );
+    auto isVerticalEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "isVertical", timeEvaluator );
     
     blurSizeEval->Parameter()->SetVal( 5.5f, 0.f );
     normalizeEval->Parameter()->SetVal( 1, 0.f );
     blurKernelTypeEval->Parameter()->SetVal( 1, 0.f );
+    isVerticalEval->Parameter()->SetVal( 2, 0.f );
 
     effect->RegisterEvaluator( blurSizeEval );
     effect->RegisterEvaluator( normalizeEval );
     effect->RegisterEvaluator( blurKernelTypeEval );
+    effect->RegisterEvaluator( isVerticalEval );
 
     return effect;
 }

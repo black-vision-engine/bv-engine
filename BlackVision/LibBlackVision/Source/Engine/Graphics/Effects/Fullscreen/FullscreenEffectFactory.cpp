@@ -178,6 +178,38 @@ FullscreenEffect *  CreateVideoOutputFSE        ( const std::vector< IValuePtr >
     return new SimpleFullscreenEffect( fseData );
 }
 
+// **************************
+//
+FullscreenEffect *  CreateBlurFSE               ( const std::vector< IValuePtr > & values )
+{
+    FullscreenEffectData fseData;
+    auto src = FSEShaderSourceProvider->ReadShader( "blur.frag" );
+
+    assert( values.size() == 0 );   { values; }
+
+    auto blurSizeVal        = ValuesFactory::CreateValueFloat( "blurSize" );
+    auto textureSize        = ValuesFactory::CreateValueVec2( "textureSize" );
+    auto verticalVal        = ValuesFactory::CreateValueInt( "vertical", 0 );
+    auto normalizeVal       = ValuesFactory::CreateValueInt( "normalize", 1 );
+    auto blurKernelTypeVal  = ValuesFactory::CreateValueInt( "blurKernelType", 0 );
+
+    fseData.AppendInputTexture( nullptr, "Tex0" );
+
+    fseData.AppendValue( blurSizeVal );
+    fseData.AppendValue( textureSize );
+    fseData.AppendValue( verticalVal );
+    fseData.AppendValue( normalizeVal );
+    fseData.AppendValue( blurKernelTypeVal );
+
+    fseData.SetPixelShaderSource( src );
+
+    fseData.SetBlendEnabled( false );
+    fseData.SetCullEnabled( false );
+    fseData.SetDepthTestEnabled( false );
+
+    return new SimpleFullscreenEffect( fseData );
+}
+
 } // anonymous
 
 // **************************
@@ -210,6 +242,10 @@ FullscreenEffect *  CreateFullscreenEffect( FullscreenEffectType fseType, const 
         {
             return CreateVideoOutputFSE( values );
         }
+        case FullscreenEffectType::FET_BLUR:
+        {
+            return CreateBlurFSE( values );
+        }        
         default:
             assert( false );
     }
