@@ -74,7 +74,8 @@ private:
     BVProjectEditor *                       m_editor;
 
     // Smooth
-    bool                                    m_smooth;
+    bool                                    m_smoothStart;
+    bool                                    m_smoothPause;
     UInt64                                  m_smoothTime;
     UInt64                                  m_smoothStartTime;
 

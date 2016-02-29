@@ -162,7 +162,8 @@ Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::Rec
 	, m_started( false )
 	, m_currTime( 0 )
     , m_smoothTime( 3000 )
-    , m_smooth( false )
+    , m_smoothStart( false )
+    , m_smoothPause( false )
 	, m_speed( 0.f )
 	, m_interspace( 0.0f )
     , m_paused( false )
@@ -299,19 +300,32 @@ Float32     Scroller::SignedShift         ( Float32 shift )
 //
 Float32     Scroller::Smooth              ( UInt64 time, Float32 shift )
 {
-    double timeDiff = (double)( time - m_smoothStartTime );
-    double smoothTime = (double)m_smoothTime;
-
-    auto interpolate = glm::clamp( timeDiff / smoothTime, 0.0, 1.0 );
-    Float32 newShift = static_cast< Float32 >( shift * sin( glm::half_pi<double>() * interpolate ) );
-
-    // Just for now
-    if( timeDiff >= smoothTime )
+    if( m_smoothStart || m_smoothPause )
     {
-        m_smooth = false;
+        double timeDiff = (double)( time - m_smoothStartTime );
+        double smoothTime = (double)m_smoothTime;
+
+        auto interpolate = timeDiff / smoothTime;
+        Float32 newShift = static_cast< Float32 >( shift * sin( glm::half_pi<double>() * interpolate ) );
+
+        // End of smooth start
+        if( m_smoothStart && timeDiff >= smoothTime )
+        {
+            m_smoothStart = false;
+        }
+
+        // End of smooth pause
+        if( m_smoothPause && timeDiff >= 2 * smoothTime )   // 2 * smoothTime - Check initial conditions to understand.
+        {
+            m_smoothPause = false;
+            m_paused = true;
+        }
+
+        return newShift;
     }
 
-    return newShift;
+    // No smooth applied
+    return shift;
 }
 
 // *******************************
@@ -418,9 +432,7 @@ void		Scroller::Update				( TimeType )
         if( !m_paused )
         {
 		    auto shift = m_speed * ( ( t - m_currTime ) / 1000.f );
-            
-            if( m_smooth )
-                shift = Smooth( t, shift );
+            shift = Smooth( t, shift );
 
 		    if( shift > 0.f )
 		    {
@@ -925,6 +937,19 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
     {
         m_offscreenNodeBehavior = SerializationHelper::String2T( eventDeser.GetAttribute( "OffscreenNodeBehavior" ), OffscreenNodeBehavior::ONB_SetNonActive );
     }
+    else if( scrollAction == "SetSmoothTime" )
+    {
+        m_smoothTime = (UInt64)SerializationHelper::String2T( eventDeser.GetAttribute( "SmoothTime" ), 1.0f ) * 1000;
+        if( m_smoothTime <= 0 )
+        {
+            m_smoothTime = 1;
+            return false;
+        }
+    }
+    else if( scrollAction == "GetSmoothTime" )
+    {
+        response.SetAttribute( "SmoothTime", SerializationHelper::T2String( static_cast< UInt64 >( m_smoothTime / 1000 ) ) );
+    }
     // Deprecated
     else if( scrollAction == "AddText" )
 	{
@@ -1000,7 +1025,11 @@ bool		Scroller::Reset()
 //
 bool        Scroller::SmoothStart         ()
 {
-    m_smooth = true;
+    // Prevent from making new smooth start/pause, before ending previous.
+    if( m_smoothStart || m_smoothPause )
+        return false;
+
+    m_smoothStart = true;
     m_smoothStartTime = Time::Now();
 
     return Start();
@@ -1010,7 +1039,14 @@ bool        Scroller::SmoothStart         ()
 //
 bool        Scroller::SmoothPause         ()
 {
-    return false;
+    // Prevent from making new smooth start/pause, before ending previous.
+    if( m_smoothStart || m_smoothPause || m_paused )
+        return false;
+
+    m_smoothPause = true;
+    m_smoothStartTime = Time::Now() - m_smoothTime;
+
+    return true;
 }
 
 // ***********************
