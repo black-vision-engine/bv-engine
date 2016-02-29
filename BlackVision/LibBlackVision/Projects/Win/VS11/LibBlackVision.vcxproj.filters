@@ -1363,6 +1363,9 @@
     <ClCompile Include="..\..\..\Source\Assets\Thumbnail\Impl\SceneThumbnail.cpp">
       <Filter>Assets\Thumbnail\Impl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\BlurPreFullscreenEffectLogic.cpp">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Application\ApplicationBase.h">
@@ -2943,9 +2946,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Shaders\Parameters\ShaderParamInt.h">
       <Filter>Engine\Graphics\Shaders\Parameters</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\Engine\Interfaces\ISerializable.h">
-      <Filter>Engine\Interfaces</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Source\Engine\Models\Plugins\Simple\DefaultCogWheelPlugin.h">
       <Filter>Engine\Models\Plugins\Simple</Filter>
     </ClInclude>
@@ -3433,6 +3433,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Assets\Thumbnail\Impl\SceneThumbnail.h">
       <Filter>Assets\Thumbnail\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Engine\Graphics\Effects\NodeEffect\Logic\PreImpl\BlurPreFullscreenEffectLogic.h">
+      <Filter>Engine\Graphics\Effects\NodeEffect\Logic\PreImpl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
