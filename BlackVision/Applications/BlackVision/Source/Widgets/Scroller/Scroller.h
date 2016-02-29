@@ -73,6 +73,11 @@ private:
 	UInt64									m_currTime;
     BVProjectEditor *                       m_editor;
 
+    // Smooth
+    bool                                    m_smooth;
+    UInt64                                  m_smoothTime;
+    UInt64                                  m_smoothStartTime;
+
     mathematics::RectPtr				    m_view;
 	Float32									m_speed;
 	Float32									m_interspace;
@@ -101,6 +106,7 @@ private:
     Float32     InitialShift        ( model::BasicNode * node );
     Float32     ShiftStep           ( model::BasicNode * prevNode, model::BasicNode * node );
     Float32     SignedShift         ( Float32 shift );
+    Float32     Smooth              ( UInt64 time, Float32 shift );
 
 	void		LayoutNodes			();
 	void		UpdateTransforms	();

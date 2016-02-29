@@ -21,7 +21,7 @@
 #include "Engine/Models/BVProjectEditor.h"
 
 #include <algorithm>
-#include <ctime>
+#include "System/Time.h"
 
 namespace bv {
     
@@ -161,6 +161,8 @@ Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::Rec
 	, m_view( view )
 	, m_started( false )
 	, m_currTime( 0 )
+    , m_smoothTime( 3000 )
+    , m_smooth( false )
 	, m_speed( 0.f )
 	, m_interspace( 0.0f )
     , m_paused( false )
@@ -293,6 +295,25 @@ Float32     Scroller::SignedShift         ( Float32 shift )
     return shift;
 }
 
+// ***********************
+//
+Float32     Scroller::Smooth              ( UInt64 time, Float32 shift )
+{
+    double timeDiff = (double)( time - m_smoothStartTime );
+    double smoothTime = (double)m_smoothTime;
+
+    auto interpolate = glm::clamp( timeDiff / smoothTime, 0.0, 1.0 );
+    Float32 newShift = static_cast< Float32 >( shift * sin( glm::half_pi<double>() * interpolate ) );
+
+    // Just for now
+    if( timeDiff >= smoothTime )
+    {
+        m_smooth = false;
+    }
+
+    return newShift;
+}
+
 // *******************************
 //
 bool		Scroller::Finalize			()
@@ -392,11 +413,14 @@ void		Scroller::Update				( TimeType )
 {
     if( m_started )
 	{
-        auto t = std::clock();
+        auto t = Time::Now();
 
         if( !m_paused )
         {
 		    auto shift = m_speed * ( ( t - m_currTime ) / 1000.f );
+            
+            if( m_smooth )
+                shift = Smooth( t, shift );
 
 		    if( shift > 0.f )
 		    {
@@ -804,24 +828,25 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
 {
     std::string scrollAction = eventDeser.GetAttribute( "Action" );
 
+    if( m_scrollerNodePath == "" )
+    {
+        // Fixme: This should be done in create function, but deserialization from XML doesn't provide
+        // node path. Instead we save this path when Scroller first time starts.
+        auto context = static_cast<BVDeserializeContext*>( eventDeser.GetDeserializeContext() );
+        assert( context != nullptr );
+
+        SetNodePath( context->GetNodePath() );
+        m_sceneName = context->GetSceneName();
+        m_editor = editor;
+    }
+
+
 	if( scrollAction == "Stop" )
 	{
 		return Stop();
 	}
 	else if( scrollAction == "Start" )
 	{
-        if( m_scrollerNodePath == "" )
-        {
-            // Fixme: This should be done in create function, but deserialization from XML doesn't provide
-            // node path. Instead we save this path when Scroller first time starts.
-            auto context = static_cast<BVDeserializeContext*>( eventDeser.GetDeserializeContext() );
-            assert( context != nullptr );
-
-            SetNodePath( context->GetNodePath() );
-            m_sceneName = context->GetSceneName();
-            m_editor = editor;
-        }
-
 		return Start();
 	}
     else if( scrollAction == "Reset" )
@@ -831,6 +856,14 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
     else if( scrollAction == "Pause" )
     {
         return Pause();
+    }
+    else if( scrollAction == "SmoothStart" )
+    {
+        return SmoothStart();
+    }
+    else if( scrollAction == "SmoothPause" )
+    {
+        return SmoothPause();
     }
     else if( scrollAction == "AddNode" )
     {
@@ -917,7 +950,7 @@ bool		Scroller::Start			()
 		m_started = true;
         m_paused = false;
         m_lowBufferNotified = false;
-        m_currTime = std::clock();
+        m_currTime = Time::Now();
 	}
     else if( m_paused )
     {
@@ -961,6 +994,23 @@ bool		Scroller::Reset()
     m_paused = false;
 
     return true;
+}
+
+// ***********************
+//
+bool        Scroller::SmoothStart         ()
+{
+    m_smooth = true;
+    m_smoothStartTime = Time::Now();
+
+    return Start();
+}
+
+// ***********************
+//
+bool        Scroller::SmoothPause         ()
+{
+    return false;
 }
 
 // ***********************
