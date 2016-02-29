@@ -13,6 +13,33 @@ void ScrollerNodesStates::Add			( bv::model::BasicNode * n )
 	assert( ActiveSize() + NonActiveSize() == m_nodesCount );
 }
 
+// ***********************
+//
+void ScrollerNodesStates::Remove         ( bv::model::BasicNode * n )
+{
+    m_nodesCount--;
+
+	for( SizeType i = 0; i < m_nonActives.size(); ++i )
+    {
+		if( m_nonActives[ i ] == n )
+			m_nonActives.erase( m_nonActives.begin() + i );
+    }
+
+    for( SizeType i = 0; i < m_actives.size(); ++i )
+    {
+		if( m_actives[ i ] == n )
+			m_actives.erase( m_actives.begin() + i );
+    }
+
+    for( SizeType i = 0; i < m_visibles.size(); ++i )
+	{
+        if( m_visibles[ i ] == n )
+			m_visibles.erase( m_visibles.begin() + i );
+    }
+
+    assert( ActiveSize() + NonActiveSize() == m_nodesCount );
+}
+
 // *******************************
 //
 void ScrollerNodesStates::Acivate		( bv::model::BasicNode * n )

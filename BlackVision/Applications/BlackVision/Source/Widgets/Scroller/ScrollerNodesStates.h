@@ -24,6 +24,7 @@ struct ScrollerNodesStates
 	SizeType			m_nodesCount;
 
 	void Add			( bv::model::BasicNode * n );
+    void Remove         ( bv::model::BasicNode * n );
 	void Acivate		( bv::model::BasicNode * n );
     void Deacivate		( bv::model::BasicNode * n );
 	void Visible		( bv::model::BasicNode * n );

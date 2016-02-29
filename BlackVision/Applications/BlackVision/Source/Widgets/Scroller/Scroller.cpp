@@ -40,6 +40,17 @@ template<> bv::nodelogic::Scroller::ScrollDirection String2T        ( const std:
 template<> std::string                              T2String        ( const bv::nodelogic::Scroller::ScrollDirection & t )                                    { return Enum2String( ScrollDirectionMapping, t ); }
     
 
+std::pair< bv::nodelogic::Scroller::OffscreenNodeBehavior, const char* > OffscreenNodeBehaviorMapping[] = 
+{   std::make_pair( bv::nodelogic::Scroller::OffscreenNodeBehavior::ONB_Looping, "Looping" )
+    , std::make_pair( bv::nodelogic::Scroller::OffscreenNodeBehavior::ONB_DeleteNode, "DeleteNode" )
+    , std::make_pair( bv::nodelogic::Scroller::OffscreenNodeBehavior::ONB_SetNonActive, "SetNonActive" )
+    , std::make_pair( bv::nodelogic::Scroller::OffscreenNodeBehavior::ONB_Total, "" )      // default
+};
+
+template<> bv::nodelogic::Scroller::OffscreenNodeBehavior   String2T        ( const std::string & s, const bv::nodelogic::Scroller::OffscreenNodeBehavior & defaultVal )    { return String2Enum( OffscreenNodeBehaviorMapping, s, defaultVal ); }
+template<> std::string                                      T2String        ( const bv::nodelogic::Scroller::OffscreenNodeBehavior & t )                                    { return Enum2String( OffscreenNodeBehaviorMapping, t ); }
+    
+
 // ***********************
 //
 mathematics::RectPtr        CreateRect      ( const IDeserializer & deser )
@@ -145,6 +156,7 @@ ScrollerPtr	Scroller::Create				( bv::model::BasicNodePtr parent, const mathemat
 //
 Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view )
 	: m_parentNode( parent )
+    , m_editor( nullptr )
 	, m_isFinalized( false )
 	, m_view( view )
 	, m_started( false )
@@ -155,6 +167,7 @@ Scroller::Scroller						( bv::model::BasicNodePtr parent, const mathematics::Rec
     , m_scrollDirection( ScrollDirection::SD_Left )
     , m_enableEvents( false )
     , m_lowBufferMultiplier( 3.5 )
+    , m_offscreenNodeBehavior( OffscreenNodeBehavior::ONB_SetNonActive )
 {}
 
 
@@ -459,10 +472,45 @@ void		Scroller::OnNotifyVisibilityChanged     ( bv::model::BasicNode * n, bool v
 
         if( m_nodesStates.m_visibles.empty() )
             NotifyNoMoreNodes();
-
-        //if( CheckLowBuffer() )
-        //    NotifyLowBuffer();
     }
+
+    if( !visibility )
+        OnNotifyNodeOffscreen( n );
+}
+
+// ***********************
+//
+void		Scroller::OnNotifyNodeOffscreen         ( bv::model::BasicNode * n )
+{
+    if( m_offscreenNodeBehavior == OffscreenNodeBehavior::ONB_Looping )
+    {
+        m_nodesStates.Acivate( n );
+
+        Int32 lastIdx = (Int32)m_nodesStates.ActiveSize() - 1;
+        assert( lastIdx > 0 );
+
+        if( lastIdx > 1 )
+        {
+            Float32 currShift = m_shifts[ m_nodesStates.m_actives[ lastIdx - 1 ] ];
+            currShift += ShiftStep( m_nodesStates.m_actives[ lastIdx - 1 ], m_nodesStates.m_actives[ lastIdx ] );
+		    m_shifts[ m_nodesStates.m_actives[ lastIdx ] ] = currShift;
+        }
+        else
+            m_shifts[ m_nodesStates.m_actives[ lastIdx ] ] = InitialShift( m_nodesStates.m_actives[ lastIdx ] );
+    }
+    else if( m_offscreenNodeBehavior == OffscreenNodeBehavior::ONB_SetNonActive )
+    {
+        // Function m_nodesStates.NotVisible is called in UpdateVisibility and has already
+        // deactivated this node.
+        //m_nodesStates.Deacivate( n );
+    }
+    else if( m_offscreenNodeBehavior == OffscreenNodeBehavior::ONB_DeleteNode )
+    {
+        m_nodesStates.Remove( n );
+        m_editor->DeleteChildNode( m_editor->GetScene( m_sceneName ), m_parentNode, n->shared_from_this() );
+    }
+    else
+        assert( false );
 }
 
 // *******************************
@@ -770,6 +818,8 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
             assert( context != nullptr );
 
             SetNodePath( context->GetNodePath() );
+            m_sceneName = context->GetSceneName();
+            m_editor = editor;
         }
 
 		return Start();
@@ -833,6 +883,14 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
     else if( scrollAction == "GetSpacing" )
     {
         response.SetAttribute( "Spacing", SerializationHelper::T2String( m_interspace ) );
+    }
+    else if( scrollAction == "GetOffscreenNodeBehavior" )
+    {
+        response.SetAttribute( "OffscreenNodeBehavior", SerializationHelper::T2String( m_offscreenNodeBehavior ) );
+    }
+    else if( scrollAction == "SetOffscreenNodeBehavior" )
+    {
+        m_offscreenNodeBehavior = SerializationHelper::String2T( eventDeser.GetAttribute( "OffscreenNodeBehavior" ), OffscreenNodeBehavior::ONB_SetNonActive );
     }
     // Deprecated
     else if( scrollAction == "AddText" )
@@ -955,6 +1013,12 @@ void		Scroller::SetSpeed			( Float32 speed )
 	m_speed = speed;
 }
 
+// ***********************
+//
+void        Scroller::SetOffscreenNodeBehavior    ( OffscreenNodeBehavior behavior )
+{
+    m_offscreenNodeBehavior = behavior;
+}
 
 // ***********************
 //

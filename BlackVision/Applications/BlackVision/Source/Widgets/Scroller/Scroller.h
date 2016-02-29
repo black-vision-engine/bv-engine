@@ -45,6 +45,15 @@ public:
         SD_Total
     };
 
+    enum OffscreenNodeBehavior
+    {
+        ONB_Looping,
+        ONB_DeleteNode,
+        ONB_SetNonActive,
+
+        ONB_Total
+    };
+
 private:
     static const std::string        m_type;
 
@@ -55,18 +64,22 @@ private:
 private:
 
     std::string                             m_scrollerNodePath;
+    std::string                             m_sceneName;
 
 	bool									m_isFinalized;
 	bv::model::BasicNodePtr					m_parentNode;
 	ScrollerNodesStates						m_nodesStates;
 	NodeFloatMap							m_shifts;
-    ScrollDirection                         m_scrollDirection;
 	UInt64									m_currTime;
+    BVProjectEditor *                       m_editor;
 
     mathematics::RectPtr				    m_view;
 	Float32									m_speed;
 	Float32									m_interspace;
     
+    ScrollDirection                         m_scrollDirection;
+    OffscreenNodeBehavior                   m_offscreenNodeBehavior;
+
     bool                                    m_lowBufferNotified;
     Float32                                 m_lowBufferMultiplier;  /// Determines when to notify LowBuffer.
 
@@ -97,6 +110,7 @@ private:
     bool        CheckLowBuffer      ();
 
     void		OnNotifyVisibilityChanged       ( bv::model::BasicNode * n, bool visibility );
+    void		OnNotifyNodeOffscreen           ( bv::model::BasicNode * n );
 	void		NotifyVisibilityChanged         ( bv::model::BasicNode *, bool );
 	void		NotifyNoMoreNodes	            ();
     void        NotifyLowBuffer                 ();
@@ -113,7 +127,7 @@ public:
 	void		SetPromoFrequency	(int freq);
     void		Clear				();
 
-	explicit	Scroller				( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view );
+	explicit	Scroller            ( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view );
 				~Scroller			() {}
 
 	void		AddNext				( bv::model::BasicNodePtr node );
@@ -129,6 +143,7 @@ public:
 	void		SetInterspace		( Float32 interspace );
     void        SetNodePath         ( std::string nodePath );
     void        SetLowBufferMult    ( Float32 lowBufferVal );
+    void        SetOffscreenNodeBehavior    ( OffscreenNodeBehavior behavior );
 
 	virtual void	Initialize		()				override {}
 	virtual void	Update			( TimeType t )	override;
