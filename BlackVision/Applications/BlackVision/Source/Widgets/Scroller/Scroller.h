@@ -93,15 +93,6 @@ private:
     bool                                    m_paused;
     bool                                    m_enableEvents;
 
-	//pawe³ek
-	std::vector<std::wstring>				m_messages_new;
-	std::vector<std::wstring>				m_messages_displayed;
-	std::wstring							m_promo_msg;
-	int										m_promo_freq;
-	int										m_displayed_index;
-	int										m_total_displayed_msgs;
-
-
 private:
 
     Float32     InitialShift        ( model::BasicNode * node );
@@ -123,17 +114,9 @@ private:
     void        NotifyLowBuffer                 ();
 
 
-	void		HackNoMoreNodes		();
-    
     bool        AddNode             ( bv::model::BasicNodePtr node );
 
 public:
-
-	void		AddMessage			(std::wstring msg);
-	void		SetPromoMessage		(std::wstring msg);
-	void		SetPromoFrequency	(int freq);
-    void		Clear				();
-
 	explicit	Scroller            ( bv::model::BasicNodePtr parent, const mathematics::RectPtr & view );
 				~Scroller			() {}
 

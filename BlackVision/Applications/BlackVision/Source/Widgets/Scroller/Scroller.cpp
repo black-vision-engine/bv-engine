@@ -389,40 +389,6 @@ void		Scroller::LayoutNodes		()
 
 // *******************************
 //
-void		Scroller::AddMessage			(std::wstring msg)
-{
-	m_messages_new.push_back(msg);
-	
-	
-}
-// *******************************
-//
-void		Scroller::Clear()
-{
-	m_messages_new.clear();
-	m_messages_displayed.clear();
-
-}
-
-
-
-// *******************************
-//
-void		Scroller::SetPromoMessage			(std::wstring msg)
-{
-	m_promo_msg = msg;
-}
-
-// *******************************
-//
-void		Scroller::SetPromoFrequency			(int freq)
-{
-	m_promo_freq = freq;
-}
-
-
-// *******************************
-//
 void		Scroller::Update				( TimeType )
 {
     if( m_started )
@@ -593,55 +559,6 @@ void        Scroller::NotifyLowBuffer         ()
     SendResponse( ser, SEND_BROADCAST_EVENT, 0 );
 }
 
-// *******************************
-//
-void		Scroller::HackNoMoreNodes( )
-{
-	auto n = this->GetNonActiveNode();
-	std::wstring	 message	=	L"";
-
-	if(m_total_displayed_msgs % m_promo_freq == 0)
-	{
-		message = m_promo_msg;
-	}else if(m_messages_new.size()>0)
-	{
-		message = m_messages_new[0];
-		m_messages_displayed.push_back(message);
-		m_messages_new.erase(m_messages_new.begin());
-	}else
-		if(m_messages_displayed.size()>0)
-		{
-			if((SizeType)m_displayed_index >= m_messages_displayed.size())
-			{
-				m_displayed_index = 0;
-			}
-
-			message = m_messages_displayed[m_displayed_index];
-			m_displayed_index++;
-		
-	}else{
-		message = m_promo_msg;
-	}
-
-	if( n && message!=L"")
-	{
-		auto textNode = n->GetChild( "Text" );
-		if( textNode )
-		{
-			auto pl = textNode->GetPlugin( "text" );
-
-			if( pl )
-			{
-                SetParameter( pl->GetParameter( "text" ), 0.0, message );
-                this->EnqueueNode( n );
-			}
-		}
-	}
-	m_total_displayed_msgs++;
-
-
-	
-}
 
 // *******************************
 //
@@ -701,35 +618,6 @@ model::BasicNode *	Scroller::GetNonActiveNode()
 		return nullptr;
 }
 
-// *******************************
-//
-void		Scroller::EnqueueNode			( model::BasicNode * n)
-{
-	if( m_nodesStates.IsNonActive( n ) )
-	{
-		auto activeSize = m_nodesStates.ActiveSize();
-		if( activeSize > 0 )
-		{
-			auto lastActiveNode = m_nodesStates.m_actives[ activeSize - 1 ];
-
-			auto nodeShift = m_shifts[ lastActiveNode ] + lastActiveNode->GetAABB().Width() + m_interspace;
-
-			//nodeShift = max( nodeShift, m_view->xmax );
-
-			m_shifts[ n ] = nodeShift;
-			m_nodesStates.Acivate( n );
-			UpdateTransforms();
-		}
-		else
-		{
-			auto nodeShift = m_view->xmax+m_interspace;
-
-			m_shifts[ n ] = nodeShift;
-			m_nodesStates.Acivate( n );
-			UpdateTransforms();
-		}
-	}
-}
 
 // ========================================================================= //
 // Serialization and deserialization
@@ -950,16 +838,6 @@ bool                Scroller::HandleEvent     ( IDeserializer& eventDeser, ISeri
     {
         response.SetAttribute( "SmoothTime", SerializationHelper::T2String( static_cast< UInt64 >( m_smoothTime / 1000 ) ) );
     }
-    // Deprecated
-    else if( scrollAction == "AddText" )
-	{
-        std::string param = eventDeser.GetAttribute( "Message" );
-        AddMessage( StringToWString( param ) );
-	}
-	else if( scrollAction == "Clear" )
-	{
-		Clear();
-	}
 
     return true;
 }
@@ -1017,6 +895,8 @@ bool		Scroller::Reset()
 
     m_started = false;
     m_paused = false;
+    m_smoothPause = false;
+    m_smoothStart = false;
 
     return true;
 }

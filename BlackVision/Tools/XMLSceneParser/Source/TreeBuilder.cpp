@@ -649,7 +649,7 @@ namespace bv{
 		//float size = (float)atof(crawl->size.c_str());
 		float interspace = (float)atof(crawl->interspace.c_str());
 		float speed = (float)atof(crawl->speed.c_str());
-		int	freq = (int)atoi(crawl->promo_freq.c_str());
+		//int	freq = (int)atoi(crawl->promo_freq.c_str());
 		int count = (int)atoi(crawl->count.c_str());
 		bool autostart=false;
 		if(crawl->autostart=="true")autostart=true;
@@ -660,8 +660,8 @@ namespace bv{
 		
 
 		Scroller->SetSpeed( speed );
-		Scroller->SetPromoFrequency(freq);
-		Scroller->SetPromoMessage(crawl->promo_msg);
+		//Scroller->SetPromoFrequency(freq);
+		//Scroller->SetPromoMessage(crawl->promo_msg);
 		Scroller->SetInterspace( interspace );
 		for(int i=0;i<count;i++)
 		{

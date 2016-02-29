@@ -17,10 +17,6 @@ public:
 
 
     void        WidgetHandler       ( bv::IEventPtr evt );
-
-	void        OnNodeAppearing     ( IEventPtr evt );
-	void        OnNodeLeaving       ( IEventPtr evt );
-	void        OnNoMoreNodes       ( IEventPtr evt );
 };
 
 
