@@ -47,6 +47,7 @@ private:
     void     PluginInfo              ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     
     void     ListTimelineKeyframes   ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
+    void     ListTimelinesParams     ( JsonSerializeObject & ser, IDeserializer * request, int eventID );
     void     MinimalTreeStructureInfo( JsonSerializeObject & ser, IDeserializer * request, int eventID );
 
 };
