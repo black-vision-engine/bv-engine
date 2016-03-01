@@ -18,6 +18,7 @@
 
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffectFactory.h"
 
+#include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
 namespace bv {
 
@@ -303,5 +304,46 @@ void                    BVProjectTools::AddVertexDataToVBO                    ( 
         }
     }
 }
+
+namespace {
+
+// ***********************
+//
+void GetParamsOfTimelinesRecursively                ( model::BasicNodePtr modelNode, ParamsOfTimelinesMap & map )
+{
+    auto params = modelNode->GetParameters();
+
+    for( auto param : params )
+    {
+        if( BezierParameterGetNumKeys( param ) > 1 )
+        {
+            auto te = param->GetTimeEvaluator();
+            assert( map.find( te ) != map.end() ); // a little bit of defensive programming
+            map[ te ].push_back( param );
+        }
+    }
+
+    for( unsigned int i = 0; i < modelNode->GetNumChildren(); i++ )
+        GetParamsOfTimelinesRecursively( modelNode->GetChild( i ), map );
+}
+
+} // anonymous
+
+// ***********************
+//
+ParamsOfTimelinesMap BVProjectTools::GetParamsOfTimelines                ( model::BasicNodePtr modelNode, model::ITimelinePtr sceneTimeline )
+{
+    ParamsOfTimelinesMap ret;
+
+    for( auto timeline : sceneTimeline->GetChildren() )
+    {
+        ret.at( timeline );
+    }
+
+    GetParamsOfTimelinesRecursively( modelNode, ret );
+
+    return ret;
+}
+
 
 } //bv
