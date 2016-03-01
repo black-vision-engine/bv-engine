@@ -20,6 +20,7 @@
 //POST
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PostImpl/DefaultPostFullscreenEffectLogic.h"
 #include "Engine/Graphics/Effects/NodeEffect/Logic/PostImpl/WireframePostFullscreenEffectLogic.h"
+#include "Engine/Graphics/Effects/NodeEffect/Logic/PostImpl/BoundingBoxPostFullscreenEffectLogic.h"
 
 
 namespace bv {
@@ -119,6 +120,20 @@ NodeEffectPtr       CreateMixchannelsNodeEffect()
     return CreateNodeEffect( logic, NodeEffectType::NET_MIX_CHANNELS );
 }
  
+// **************************
+//
+NodeEffectPtr       CreateBoundingBoxNodeEffect()
+{
+    auto logic = CreateNodeEffectLogic();
+
+    auto pre  = new DefaultPreFullscreenEffectLogic();
+    auto post = new BoundingBoxPostFullscreenEffectLogic();
+
+    SetLogicComponents( logic, pre, nullptr, post );
+
+    return CreateNodeEffect( logic, NodeEffectType::NET_BOUNDING_BOX );
+}
+
 } // anonoymnous
 
 
@@ -138,6 +153,8 @@ NodeEffectPtr       CreateNodeEffect( NodeEffectType nodeEffectType )
             return CreateWireframeNodeEffect();
         case NodeEffectType::NET_MIX_CHANNELS:
             return CreateMixchannelsNodeEffect();
+        case NodeEffectType::NET_BOUNDING_BOX:
+            return CreateBoundingBoxNodeEffect();
 
         //Interlace and so on
         default:

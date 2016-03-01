@@ -115,14 +115,14 @@ IModelNodeEffectPtr         CreateLightScatteringModelNodeEffect    ( const std:
     auto lightPositionOnScreenEval = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "lightPositionOnScreen", timeEvaluator );
     auto numSamplesEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "numSamples", timeEvaluator );
 
-	exposureEval->Parameter()->SetVal( 0.005f, 0.f );
-	weightEval->Parameter()->SetVal( 2.65f, 0.f );
-	decayEval->Parameter()->SetVal( 1.0f, 0.f );
-	densityEval->Parameter()->SetVal( 0.2f, 0.f );
-	lightPositionOnScreenEval->Parameter()->SetVal( glm::vec2( 0.1f, 0.4f ), 0.f );
-	lightPositionOnScreenEval->Parameter()->SetVal( glm::vec2( 0.4f, 0.6f ), 5.f );
-	lightPositionOnScreenEval->Parameter()->SetVal( glm::vec2( 0.5f, 0.4f ), 10.f );
-	lightPositionOnScreenEval->Parameter()->SetVal( glm::vec2( 0.4f, 0.1f ), 15.f );
+    exposureEval->Parameter()->SetVal( 0.005f, 0.f );
+    weightEval->Parameter()->SetVal( 2.65f, 0.f );
+    decayEval->Parameter()->SetVal( 1.0f, 0.f );
+    densityEval->Parameter()->SetVal( 0.2f, 0.f );
+    lightPositionOnScreenEval->Parameter()->SetVal( glm::vec2( 0.1f, 0.4f ), 0.f );
+    lightPositionOnScreenEval->Parameter()->SetVal( glm::vec2( 0.4f, 0.6f ), 5.f );
+    lightPositionOnScreenEval->Parameter()->SetVal( glm::vec2( 0.5f, 0.4f ), 10.f );
+    lightPositionOnScreenEval->Parameter()->SetVal( glm::vec2( 0.4f, 0.1f ), 15.f );
     numSamplesEval->Parameter()->SetVal( 100.f, 0.f );
 
     effect->RegisterEvaluator( exposureEval );
@@ -143,8 +143,8 @@ IModelNodeEffectPtr         CreateShadowModelNodeEffect    ( const std::string &
     auto effect = ModelNodeEffect::Create( NodeEffectType::NET_SHADOW );
  
     auto colorEval = ParamValEvaluatorFactory::CreateSimpleVec4Evaluator( "color", timeEvaluator );
-	auto shiftEval = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "shift", timeEvaluator );
-	auto blurSizeEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
+    auto shiftEval = ParamValEvaluatorFactory::CreateSimpleVec2Evaluator( "shift", timeEvaluator );
+    auto blurSizeEval = ParamValEvaluatorFactory::CreateSimpleFloatEvaluator( "blurSize", timeEvaluator );
     auto normalizeEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "normalize", timeEvaluator );
     auto innerEval = ParamValEvaluatorFactory::CreateSimpleIntEvaluator( "inner", timeEvaluator );
 
@@ -161,6 +161,14 @@ IModelNodeEffectPtr         CreateShadowModelNodeEffect    ( const std::string &
     effect->RegisterEvaluator( innerEval );
 
     return effect;
+}
+
+// **************************
+//
+IModelNodeEffectPtr         CreateBoundingBoxModelNodeEffect          ( const std::string & name, ITimeEvaluatorPtr timeEvaluator )
+{
+    { name; }
+    return ModelNodeEffect::Create( NodeEffectType::NET_BOUNDING_BOX );
 }
 
 // ********************************
@@ -185,6 +193,8 @@ IModelNodeEffectPtr         ModelNodeEffectFactory::CreateModelNodeEffect     ( 
             return CreateLightScatteringModelNodeEffect( name, timeEvaluator );
         case NodeEffectType::NET_SHADOW:
             return CreateShadowModelNodeEffect( name, timeEvaluator );
+        case NodeEffectType::NET_BOUNDING_BOX:
+            return CreateBoundingBoxModelNodeEffect( name, timeEvaluator );
         default:
             assert( false );
     }

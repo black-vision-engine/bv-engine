@@ -1306,7 +1306,7 @@ model::BasicNodePtr TestScenesFactory::RemoteEventsTestScene( const model::Plugi
     auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "textures/sand.jpg" );
     auto node2 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, "Text", glm::vec3( 0.0, -0.4, 0.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Long time ago in a galaxy", "fonts/StarWars.ttf" );
 
-    node0->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_WIREFRAME, "wireframe", timeEvaluator ) );
+    node0->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "wireframe", timeEvaluator ) );
 
     node0->AddChildToModelOnly( node1 );
     node0->AddChildToModelOnly( node2 );

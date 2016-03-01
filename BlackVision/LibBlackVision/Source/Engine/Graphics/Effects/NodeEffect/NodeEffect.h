@@ -17,6 +17,8 @@ enum class NodeEffectType : int
     NET_SHADOW,
     NET_BLUR,
 
+    NET_BOUNDING_BOX,
+
     NET_TOTAL
 };
 
