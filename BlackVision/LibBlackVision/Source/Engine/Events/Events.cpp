@@ -311,6 +311,7 @@ std::pair< InfoEvent::Command, const char* > InfoEventCommandMapping[] =
     , std::make_pair( InfoEvent::Command::Timelines, "TimeLines" ) 
     , std::make_pair( InfoEvent::Command::ListTimelineKeyframes, "ListTimelineKeyframes" ) 
     , std::make_pair( InfoEvent::Command::CheckTimelineTime, "CheckTimelineTime" )
+    , std::make_pair( InfoEvent::Command::ListTimelinesParams, "ListTimelinesParams" )
 
     , std::make_pair( InfoEvent::Command::Performance, "Performance" )
     , std::make_pair( InfoEvent::Command::Videocards, "VideoCards" )

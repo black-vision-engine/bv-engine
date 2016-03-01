@@ -20,6 +20,8 @@
 
 #include "Engine/Models/Plugins/Parameters/GenericParameterSetters.h"
 
+#include "Engine/Models/Plugins/Plugin.h"
+
 namespace bv {
 
 // *******************************
@@ -309,38 +311,92 @@ namespace {
 
 // ***********************
 //
-void GetParamsOfTimelinesRecursively                ( model::BasicNodePtr modelNode, ParamsOfTimelinesMap & map )
+void GetParamsOfTimelinesRecursively                ( const std::string & nodePath, model::BasicNodePtr modelNode, ParamsOfTimelinesMap & map )
 {
     auto params = modelNode->GetParameters();
+    
+    // Adding plugin parameters to map.
+    TimelineParamInfo timelineParamInfo;
+    timelineParamInfo.nodePath = nodePath;
 
-    for( auto param : params )
+    auto pluginListFinalize = modelNode->GetPlugins();
+    for( UInt32 i = 0; i < pluginListFinalize->NumPlugins(); ++i )
     {
-        if( BezierParameterGetNumKeys( param ) > 1 )
+        auto plugin = pluginListFinalize->GetPlugin( i );
+        timelineParamInfo.pluginName = plugin->GetName();
+
+        // Begin with plugin model parameters.
+        timelineParamInfo.paramOwner = ParamOwner::PO_Plugin;
+
+        for( auto & param : plugin->GetParameters() )
         {
+            timelineParamInfo.param = param;
+
             auto te = param->GetTimeEvaluator();
             assert( map.find( te ) != map.end() ); // a little bit of defensive programming
-            map[ te ].push_back( param );
+            map[ te ].push_back( timelineParamInfo );
+        }
+
+        // Add plugin resource parameters.
+        timelineParamInfo.paramOwner = ParamOwner::PO_Resource;
+
+        auto basePlugin = std::static_pointer_cast< model::BasePlugin< model::IPlugin > >( plugin );
+        auto assets = basePlugin->GetLAssets();
+
+        for( auto & asset : assets )
+        {
+            timelineParamInfo.paramSubName = asset.name;
+
+            for( auto & param : asset.rsm->GetParameters() )
+            {
+                timelineParamInfo.param = param;
+
+                auto te = param->GetTimeEvaluator();
+                assert( map.find( te ) != map.end() ); // a little bit of defensive programming
+                map[ te ].push_back( timelineParamInfo );
+            }
         }
     }
 
+    // Add node effect parameters.
+    timelineParamInfo.paramOwner = ParamOwner::PO_GlobalEffect;
+
+    auto effect = modelNode->GetNodeEffect();
+
+    if( effect != nullptr )
+    {
+        for( auto param : effect->GetParameters() )
+        {
+            auto te = param->GetTimeEvaluator();
+            assert( map.find( te ) != map.end() ); // a little bit of defensive programming
+            map[ te ].push_back( timelineParamInfo );
+        }
+    }
+
+    // Process node children.
     for( unsigned int i = 0; i < modelNode->GetNumChildren(); i++ )
-        GetParamsOfTimelinesRecursively( modelNode->GetChild( i ), map );
+    {
+        std::string childNodePath = nodePath + "/#" + SerializationHelper::T2String( i );
+        GetParamsOfTimelinesRecursively( childNodePath, modelNode->GetChild( i ), map );
+    }
 }
 
 } // anonymous
 
 // ***********************
 //
-ParamsOfTimelinesMap BVProjectTools::GetParamsOfTimelines                ( model::BasicNodePtr modelNode, model::ITimelinePtr sceneTimeline )
+ParamsOfTimelinesMap BVProjectTools::GetParamsOfTimelines                ( model::BasicNodePtr modelNode, model::ITimeEvaluatorPtr sceneTimeline )
 {
     ParamsOfTimelinesMap ret;
+    std::string nodePath = modelNode->GetName();
 
+    ret[ sceneTimeline ];
     for( auto timeline : sceneTimeline->GetChildren() )
     {
-        ret.at( timeline );
+        ret[ timeline ];
     }
 
-    GetParamsOfTimelinesRecursively( modelNode, ret );
+    GetParamsOfTimelinesRecursively( nodePath, modelNode, ret );
 
     return ret;
 }

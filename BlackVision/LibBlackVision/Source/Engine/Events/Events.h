@@ -591,6 +591,7 @@ public:
         Timelines,
         CheckTimelineTime,
         ListTimelineKeyframes,
+        ListTimelinesParams,
 
         Performance,
         Videocards,

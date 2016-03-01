@@ -20,9 +20,28 @@ class RenderableArrayDataArraysSingleVertexBuffer;
 class VertexDescriptor;
 
 
-typedef std::vector< Transform >                                                    TransformVec;
+typedef std::vector< model::Transform >                                                    TransformVec;
 
-typedef std::map< model::ITimeEvaluatorPtr, std::vector< model::IParameterPtr > >        ParamsOfTimelinesMap;
+
+enum ParamOwner : int
+{
+    PO_Plugin,
+    PO_GlobalEffect,
+    PO_Resource,
+
+    PO_Total
+};
+
+struct TimelineParamInfo
+{
+    std::string             nodePath;
+    std::string             pluginName;
+    std::string             paramSubName;
+    model::IParameterPtr    param;
+    ParamOwner              paramOwner;
+};
+
+typedef std::map< model::ITimeEvaluatorPtr, std::vector< TimelineParamInfo > >   ParamsOfTimelinesMap;
 
 class BVProjectTools
 {
@@ -41,7 +60,7 @@ public:
     
     static void                 ReleaseUnusedResources              ( Renderer * renderer );
 
-    static ParamsOfTimelinesMap GetParamsOfTimelines                ( model::BasicNodePtr modelNode, model::ITimelinePtr sceneTimeline );
+    static ParamsOfTimelinesMap GetParamsOfTimelines                ( model::BasicNodePtr modelNode, model::ITimeEvaluatorPtr sceneTimeline );
 
 private:
 
