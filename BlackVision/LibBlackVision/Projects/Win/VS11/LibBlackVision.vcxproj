@@ -292,6 +292,7 @@
     <ClCompile Include="..\..\..\Source\Engine\Graphics\Types\Transform.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\AssetTracker.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BasicNode.cpp" />
+    <ClCompile Include="..\..\..\Source\Engine\Models\BoundingVolume.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Builder\NodeLogicHolder.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\Builder\RendererStatesBuilder.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Models\BVProject.cpp" />
@@ -433,7 +434,6 @@
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\BaseValue.cpp" />
     <ClCompile Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\AABB.cpp" />
-    <ClCompile Include="..\..\..\Source\Mathematics\BoundingVolume.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Core\MathFuncs.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\BasicInterpolator.cpp" />
     <ClCompile Include="..\..\..\Source\Mathematics\Interpolators\CompositeInterpolator.cpp" />
@@ -491,6 +491,7 @@
     <ClInclude Include="..\..\..\Source\Engine\Graphics\Rendering\SharedMemoryVideoBuffer.h" />
     <ClInclude Include="..\..\..\Source\Engine\Interfaces\ICloneable.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\AssetTracker.h" />
+    <ClInclude Include="..\..\..\Source\Engine\Models\BoundingVolume.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Builder\NodeLogicHolder.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\IDGenerator.h" />
     <ClInclude Include="..\..\..\Source\Engine\Models\Interfaces\IFontDescriptor.h" />
@@ -828,7 +829,6 @@
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\TypedValues.h" />
     <ClInclude Include="..\..\..\Source\Engine\Types\Values\ValuesFactory.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\AABB.h" />
-    <ClInclude Include="..\..\..\Source\Mathematics\BoundingVolume.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Box.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Core\MathFuncs.h" />
     <ClInclude Include="..\..\..\Source\Mathematics\Defines.h" />

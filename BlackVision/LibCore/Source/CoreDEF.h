@@ -61,7 +61,7 @@ DestType Cast( SrcType * ptr )
 template< class Type >
 Type * RemoveConst( const Type * ptr )
 {
-    return const_cast< Type * >( DeserializeContext );
+    return const_cast< Type * >( ptr );
 }
 
 } //bv

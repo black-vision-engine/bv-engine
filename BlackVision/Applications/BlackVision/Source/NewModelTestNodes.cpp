@@ -378,27 +378,27 @@ model::BasicNodePtr  SimpleNodesFactory::CreateMultiShadowTest          ( model:
     auto n1 = CreateShadowTest( timeEvaluator );
 
     auto simpleTransform = n1->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-	simpleTransform->SetTimeEvaluator( timeEvaluator );
+    simpleTransform->SetTimeEvaluator( timeEvaluator );
 
-	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( 0.f, 0.2f, 0.f ) );
+    SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( 0.f, 0.2f, 0.f ) );
 
     root->AddChildToModelOnly( n1 );
 
     auto n2 = CreateShadowTest( timeEvaluator );
 
     simpleTransform = n2->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-	simpleTransform->SetTimeEvaluator( timeEvaluator );
+    simpleTransform->SetTimeEvaluator( timeEvaluator );
 
-	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( 0.f, 0.4f, 0.f ) );
+    SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( 0.f, 0.4f, 0.f ) );
 
     root->AddChildToModelOnly( n2 );
     
     auto n3 = CreateShadowTest( timeEvaluator );
 
     simpleTransform = n3->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-	simpleTransform->SetTimeEvaluator( timeEvaluator );
+    simpleTransform->SetTimeEvaluator( timeEvaluator );
 
-	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( 0.f, 0.6f, 0.f ) );
+    SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( 0.f, 0.6f, 0.f ) );
 
     root->AddChildToModelOnly( n3 );
 
@@ -683,12 +683,12 @@ model::BasicNodePtr  SimpleNodesFactory::CreateGreenRectNodeNoAssert( model::ITi
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::ITimeEvaluatorPtr timeEvaluator)
 {
-	auto offset5Timeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
-	auto offset3Timeline  = model::TimelineHelper::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
-	timeEvaluator->AddChild(offset5Timeline);
-	timeEvaluator->AddChild(offset3Timeline);
+    auto offset5Timeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
+    auto offset3Timeline  = model::TimelineHelper::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
+    timeEvaluator->AddChild(offset5Timeline);
+    timeEvaluator->AddChild(offset3Timeline);
 
-	//Plugin list
+    //Plugin list
     std::vector< std::string > uids;
 
     uids.push_back( "DEFAULT_TRANSFORM" );
@@ -701,11 +701,11 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::ITimeEvaluat
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
 
-	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-	simpleTransform->SetTimeEvaluator(offset3Timeline);
+    auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+    simpleTransform->SetTimeEvaluator(offset3Timeline);
 
-	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 0.f, 0.f, 0.f ) );
-	SetParameterRotation ( simpleTransform, 2.0f, glm::vec3( 0.f, 0.f, 360.f ) );
+    SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 0.f, 0.f, 0.f ) );
+    SetParameterRotation ( simpleTransform, 2.0f, glm::vec3( 0.f, 0.f, 360.f ) );
 
     auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
     assert( color );
@@ -713,8 +713,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::ITimeEvaluat
     auto w = root->GetPlugin( "rectangle" )->GetParameter( "width" );
     auto h = root->GetPlugin( "rectangle" )->GetParameter( "height" );
 
-	h->SetTimeEvaluator(offset5Timeline);
-	w->SetTimeEvaluator(offset5Timeline);
+    h->SetTimeEvaluator(offset5Timeline);
+    w->SetTimeEvaluator(offset5Timeline);
 
     success &= SetParameter( w, 0.f, 2.f );
     success &= SetParameter( h, 0.f, 1.f );
@@ -723,7 +723,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::ITimeEvaluat
     success &= SetParameter( h, 7.f, 2.f );
 
     success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
-	success &= SetParameter( color, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
+    success &= SetParameter( color, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
 
     assert( success );
 
@@ -734,19 +734,19 @@ model::BasicNodePtr  SimpleNodesFactory::CreateOlafRectNode( model::ITimeEvaluat
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
-	auto offset5Timeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
-	auto offset3Timeline  = model::TimelineHelper::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
-	timeEvaluator->AddChild(offset5Timeline);
-	timeEvaluator->AddChild(offset3Timeline);
+    auto offset5Timeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
+    auto offset3Timeline  = model::TimelineHelper::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
+    timeEvaluator->AddChild(offset5Timeline);
+    timeEvaluator->AddChild(offset3Timeline);
 
-	//Plugin list
+    //Plugin list
     std::vector< std::string > uids;
 
     uids.push_back( "DEFAULT_TRANSFORM" );
     uids.push_back( "DEFAULT_PRISM" );
     //uids.push_back( "DEFAULT_COLOR" );
-	//uids.push_back( "DEFAULT_TEXTURE" );
-	uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
+    //uids.push_back( "DEFAULT_TEXTURE" );
+    uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
 
     //Create a model
     model::BasicNodePtr root = model::BasicNode::Create( "rectNode", timeEvaluator );
@@ -754,63 +754,63 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedPrismNode( model::ITimeEvalu
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
 
-	//auto n = root->GetPlugin( "prism" )->GetParameter( "n" );
-	//success &= SetParameter( n, 0.f, 5.f );
-	//assert( success );
+    //auto n = root->GetPlugin( "prism" )->GetParameter( "n" );
+    //success &= SetParameter( n, 0.f, 5.f );
+    //assert( success );
 
-	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-	//simpleTransform->SetTimeEvaluator(offset3Timeline);
+    auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+    //simpleTransform->SetTimeEvaluator(offset3Timeline);
 
 // TEXTURE plugin
-	if( root->GetPlugin( "texture" ) )
-	{
-		success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
-		success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
-		assert( success );
-	}
+    if( root->GetPlugin( "texture" ) )
+    {
+        success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
+        success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
+        assert( success );
+    }
 
 // COLOR plugin
-	if( root->GetPlugin( "solid color" ) )
-	{
-		auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
-		success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
-		assert( success );
-	}
+    if( root->GetPlugin( "solid color" ) )
+    {
+        auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
+        success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+        assert( success );
+    }
 
 // TRANSFORM plugin
 
-	SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
-	//SetParameterTranslation( simpleTransform, 10.0f, glm::vec3( 1.f, 1.0f, -100.f) );
-	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 20.f, 0.f, 0.f ) );
-	//SetParameterRotation ( simpleTransform, 10.0f, glm::vec3( 1.f, 0.f, 0.f ), 360.f );
-	//SetParameterRotation ( simpleTransform, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
+    SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
+    //SetParameterTranslation( simpleTransform, 10.0f, glm::vec3( 1.f, 1.0f, -100.f) );
+    SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 20.f, 0.f, 0.f ) );
+    //SetParameterRotation ( simpleTransform, 10.0f, glm::vec3( 1.f, 0.f, 0.f ), 360.f );
+    //SetParameterRotation ( simpleTransform, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
 
 // LINEAR GRADIENT plugin
-	if( root->GetPlugin( "linear_gradient" ) )
-	{
-		auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
-		assert( color1 );
-		success &= SetParameter( color1, 0.f, glm::vec4( 1.0f, 0.f, 0.f, 1.f ) );
-		//success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
-		assert( success );
-		auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
-		assert( color2 );
-		success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 1.0f, 1.f, 1.f ) );
-		//success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.5f) );
-		assert( success );
+    if( root->GetPlugin( "linear_gradient" ) )
+    {
+        auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
+        assert( color1 );
+        success &= SetParameter( color1, 0.f, glm::vec4( 1.0f, 0.f, 0.f, 1.f ) );
+        //success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
+        assert( success );
+        auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
+        assert( color2 );
+        success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 1.0f, 1.f, 1.f ) );
+        //success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.5f) );
+        assert( success );
 
-		root->GetPlugin( "linear_gradient" )->GetRendererContext()->cullCtx->enabled = false;
-	}
+        root->GetPlugin( "linear_gradient" )->GetRendererContext()->cullCtx->enabled = false;
+    }
 
-	return root;
+    return root;
 }
 
 // *****************************
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPrismNode( model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
-	//Plugin list
+    //Plugin list
     std::vector< std::string > uids;
 
     uids.push_back( "DEFAULT_TRANSFORM" );
@@ -823,55 +823,55 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPrismNode( model::ITi
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
 
-	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+    auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
 // TEXTURE plugin
-	if( root->GetPlugin( "texture" ) )
-	{
-		success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
-		success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
-		assert( success );
-	}
+    if( root->GetPlugin( "texture" ) )
+    {
+        success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
+        success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
+        assert( success );
+    }
 
 // COLOR plugin
-	if( root->GetPlugin( "solid color" ) )
-	{
-		auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
-		success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
-		assert( success );
-	}
+    if( root->GetPlugin( "solid color" ) )
+    {
+        auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
+        success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+        assert( success );
+    }
 
 // TRANSFORM plugin
 
-	SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
-	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 20.f, 0.f, 0.f ) );
+    SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
+    SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 20.f, 0.f, 0.f ) );
 
 // LINEAR GRADIENT plugin
-	if( root->GetPlugin( "linear_gradient" ) )
-	{
-		auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
-		assert( color1 );
-		success &= SetParameter( color1, 0.f, glm::vec4( 1.0f, 0.f, 0.f, 1.f ) );
-		//success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
-		assert( success );
-		auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
-		assert( color2 );
-		success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 1.0f, 1.f, 1.f ) );
-		//success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.5f) );
-		assert( success );
+    if( root->GetPlugin( "linear_gradient" ) )
+    {
+        auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
+        assert( color1 );
+        success &= SetParameter( color1, 0.f, glm::vec4( 1.0f, 0.f, 0.f, 1.f ) );
+        //success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
+        assert( success );
+        auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
+        assert( color2 );
+        success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 1.0f, 1.f, 1.f ) );
+        //success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.5f) );
+        assert( success );
 
-		root->GetPlugin( "linear_gradient" )->GetRendererContext()->cullCtx->enabled = false;
-	}
+        root->GetPlugin( "linear_gradient" )->GetRendererContext()->cullCtx->enabled = false;
+    }
 
-	return root;
+    return root;
 }
 
 // *****************************
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPrismNode( model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
-	//Plugin list
+    //Plugin list
     std::vector< std::string > uids;
 
     uids.push_back( "DEFAULT_TRANSFORM" );
@@ -884,59 +884,59 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPrismNode( model::ITim
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
 
-	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+    auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
 // TEXTURE plugin
-	if( root->GetPlugin( "texture" ) )
-	{
-		success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
-		success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
-		assert( success );
-	}
+    if( root->GetPlugin( "texture" ) )
+    {
+        success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
+        success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
+        assert( success );
+    }
 
 // COLOR plugin
-	if( root->GetPlugin( "solid color" ) )
-	{
-		auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
-		success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
-		assert( success );
-	}
+    if( root->GetPlugin( "solid color" ) )
+    {
+        auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
+        success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+        assert( success );
+    }
 
 // TRANSFORM plugin
 
-	SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
-	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 20.f, 0.f, 0.f ) );
+    SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
+    SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 20.f, 0.f, 0.f ) );
 
 // LINEAR GRADIENT plugin
-	if( root->GetPlugin( "linear_gradient" ) )
-	{
+    if( root->GetPlugin( "linear_gradient" ) )
+    {
         auto param = root->GetPlugin( "prism" )->GetParameter( "uv_type" );
         assert( param );
         SetParameter( param, 0.f, float( model::PrismComponent::PrismUVType::LINGRADED ) );
 
-		auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
-		assert( color1 );
-		success &= SetParameter( color1, 0.f, glm::vec4( 0.0f, 0.f, 1.f, 1.f ) );
-		//success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
-		assert( success );
-		auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
-		assert( color2 );
-		success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 1.0f, 0.f, 1.f ) );
-		//success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.5f) );
-		assert( success );
+        auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
+        assert( color1 );
+        success &= SetParameter( color1, 0.f, glm::vec4( 0.0f, 0.f, 1.f, 1.f ) );
+        //success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
+        assert( success );
+        auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
+        assert( color2 );
+        success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 1.0f, 0.f, 1.f ) );
+        //success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.5f) );
+        assert( success );
 
-		root->GetPlugin( "linear_gradient" )->GetRendererContext()->cullCtx->enabled = false;
-	}
+        root->GetPlugin( "linear_gradient" )->GetRendererContext()->cullCtx->enabled = false;
+    }
 
-	return root;
+    return root;
 }
 
 // *****************************
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
-	//Plugin list
+    //Plugin list
     std::vector< std::string > uids;
 
     uids.push_back( "DEFAULT_TRANSFORM" );
@@ -949,49 +949,49 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::IT
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
 
-	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+    auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
 // TEXTURE plugin
-	if( root->GetPlugin( "texture" ) )
-	{
-		success = model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
+    if( root->GetPlugin( "texture" ) )
+    {
+        success = model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
         SetParameter( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 1, 0, 1 ) );
-		root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
-		assert( success );
-	}
+        root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
+        assert( success );
+    }
 
 // COLOR plugin
-	if( root->GetPlugin( "solid color" ) )
-	{
-		auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
-		success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
-		assert( success );
-	}
+    if( root->GetPlugin( "solid color" ) )
+    {
+        auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
+        success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+        assert( success );
+    }
 
 // TRANSFORM plugin
 
-	SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-	SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
-	SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 20.f, 0.f, 0.f ) );
+    SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
+    SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 20.f, 0.f, 0.f ) );
 
 // LINEAR GRADIENT plugin
-	if( root->GetPlugin( "linear_gradient" ) )
-	{
-		auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
-		assert( color1 );
-		success &= SetParameter( color1, 0.f, glm::vec4( 1.0f, 0.f, 0.f, 1.f ) );
-		//success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
-		assert( success );
-		auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
-		assert( color2 );
-		success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 1.0f, 1.f, 1.f ) );
-		//success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.5f) );
-		assert( success );
+    if( root->GetPlugin( "linear_gradient" ) )
+    {
+        auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
+        assert( color1 );
+        success &= SetParameter( color1, 0.f, glm::vec4( 1.0f, 0.f, 0.f, 1.f ) );
+        //success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
+        assert( success );
+        auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
+        assert( color2 );
+        success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 1.0f, 1.f, 1.f ) );
+        //success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.5f) );
+        assert( success );
 
-		root->GetPlugin( "linear_gradient" )->GetRendererContext()->cullCtx->enabled = false;
-	}
+        root->GetPlugin( "linear_gradient" )->GetRendererContext()->cullCtx->enabled = false;
+    }
 
-	return root;
+    return root;
 }
 
 // *****************************
@@ -999,7 +999,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::IT
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPieChartNode( model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
     { offset; } // FIXME: suppress unuse warning
-	//Plugin list
+    //Plugin list
     std::vector< std::string > uids;
 
     uids.push_back( "DEFAULT_TRANSFORM" );
@@ -1012,55 +1012,55 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPieChartNode( model::
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
 
-	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+    auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
 // TEXTURE plugin
-	if( root->GetPlugin( "texture" ) )
-	{
-		success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
-		success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
-		assert( success );
-	}
+    if( root->GetPlugin( "texture" ) )
+    {
+        success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
+        success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
+        assert( success );
+    }
 
 // COLOR plugin
-	if( root->GetPlugin( "solid color" ) )
-	{
-		auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
-		success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
-		assert( success );
-		root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
-	}
+    if( root->GetPlugin( "solid color" ) )
+    {
+        auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
+        success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+        assert( success );
+        root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
+    }
 
 // TRANSFORM plugin
 
 // TRANSFORM plugin
 
-	//SetParameterScale( simpleTransform, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
-	//SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, 0, -1.f) );
-	//SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+    //SetParameterScale( simpleTransform, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
+    //SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, 0, -1.f) );
+    //SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
 
-	////SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
-	//SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
-	//SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+    ////SetParameterScale( simpleTransform, 0.0f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+    //SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, -.3f, 0.f) );
+    //SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
 
 // LINEAR GRADIENT plugin
-	if( root->GetPlugin( "linear_gradient" ) )
-	{
-		auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
-		assert( color1 );
-		success &= SetParameter( color1, 0.f, glm::vec4( 1.0f, 0.f, 0.f, 1.f ) );
-		//success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
-		assert( success );
-		auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
-		assert( color2 );
-		success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 1.0f, 1.f, 1.f ) );
-		//success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.5f) );
-		assert( success );
+    if( root->GetPlugin( "linear_gradient" ) )
+    {
+        auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
+        assert( color1 );
+        success &= SetParameter( color1, 0.f, glm::vec4( 1.0f, 0.f, 0.f, 1.f ) );
+        //success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
+        assert( success );
+        auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
+        assert( color2 );
+        success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 1.0f, 1.f, 1.f ) );
+        //success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.5f) );
+        assert( success );
 
-		root->GetPlugin( "linear_gradient" )->GetRendererContext()->cullCtx->enabled = false;
-	}
+        root->GetPlugin( "linear_gradient" )->GetRendererContext()->cullCtx->enabled = false;
+    }
 
-	return root;
+    return root;
 }
 
 // *****************************
@@ -1068,7 +1068,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPieChartNode( model::
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPieChartNode( model::ITimeEvaluatorPtr timeEvaluator, float offset )
 {
     { offset; } // FIXME: suppress unuse warning
-	//Plugin list
+    //Plugin list
     std::vector< std::string > uids;
 
     uids.push_back( "DEFAULT_TRANSFORM" );
@@ -1081,65 +1081,65 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPieChartNode( model::I
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
 
-	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+    auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
 
-	//auto aeParam = root->GetPlugin( "piechart" )->GetParameter( "angleEnd" );
-	//SetParameter( aeParam, 1.f, 3.14f );
+    //auto aeParam = root->GetPlugin( "piechart" )->GetParameter( "angleEnd" );
+    //SetParameter( aeParam, 1.f, 3.14f );
 
 // TEXTURE plugin
-	if( root->GetPlugin( "texture" ) )
-	{
-		success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
-		success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
-		assert( success );
-	}
+    if( root->GetPlugin( "texture" ) )
+    {
+        success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
+        success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
+        assert( success );
+    }
 
 // COLOR plugin
-	if( root->GetPlugin( "solid color" ) )
-	{
-		auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
-		success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
-		assert( success );
-		root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
-	}
+    if( root->GetPlugin( "solid color" ) )
+    {
+        auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
+        success &= SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
+        assert( success );
+        root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
+    }
 
 // TRANSFORM plugin
 
-	//SetParameterScale( simpleTransform, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
-	//SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, 0, -1.f) );
-	//SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
+    //SetParameterScale( simpleTransform, 0.0f, glm::vec3( 1.f, .2f, 1.f ) );
+    //SetParameterTranslation( simpleTransform, 0.0f, glm::vec3( offset, 0, -1.f) );
+    //SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 1.f, 0.f, 0.f ), 20.f );
 
 // LINEAR GRADIENT plugin
-	if( root->GetPlugin( "linear_gradient" ) )
-	{
-		auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
-		assert( color1 );
-		success &= SetParameter( color1, 0.f, glm::vec4( 0.0f, 0.f, 0.f, 1.f ) );
-		//success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
-		assert( success );
-		auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
-		assert( color2 );
-		success &= SetParameter( color2, 0.f, glm::vec4( 1.f, 1.0f, 1.f, 1.f ) );
-		//success &= SetParameter( color2, 0.f, glm::vec4( 10.f, 10.0f, 10.f, 1.f ) );
-		//success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.5f) );
-		assert( success );
+    if( root->GetPlugin( "linear_gradient" ) )
+    {
+        auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
+        assert( color1 );
+        success &= SetParameter( color1, 0.f, glm::vec4( 0.0f, 0.f, 0.f, 1.f ) );
+        //success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
+        assert( success );
+        auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
+        assert( color2 );
+        success &= SetParameter( color2, 0.f, glm::vec4( 1.f, 1.0f, 1.f, 1.f ) );
+        //success &= SetParameter( color2, 0.f, glm::vec4( 10.f, 10.0f, 10.f, 1.f ) );
+        //success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.5f) );
+        assert( success );
 
-		root->GetPlugin( "linear_gradient" )->GetRendererContext()->cullCtx->enabled = false;
-	}
+        root->GetPlugin( "linear_gradient" )->GetRendererContext()->cullCtx->enabled = false;
+    }
 
-	return root;
+    return root;
 }
 
 // *****************************
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::ITimeEvaluatorPtr timeEvaluator)
 {
-	auto offset5Timeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
-	auto offset3Timeline  = model::TimelineHelper::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
-	timeEvaluator->AddChild(offset5Timeline);
-	timeEvaluator->AddChild(offset3Timeline);
+    auto offset5Timeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
+    auto offset3Timeline  = model::TimelineHelper::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
+    timeEvaluator->AddChild(offset5Timeline);
+    timeEvaluator->AddChild(offset3Timeline);
 
-	//Plugin list
+    //Plugin list
     std::vector< std::string > uids;
 
     //uids.push_back( "DEFAULT_TRANSFORM" );
@@ -1152,9 +1152,9 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::ITimeEvalua
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
 
-	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-	simpleTransform->SetTimeEvaluator(offset3Timeline);
-	//SetParameterScale( simpleTransform, 0.f, glm::vec3( 0, 0, 0 ) );
+    auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+    simpleTransform->SetTimeEvaluator(offset3Timeline);
+    //SetParameterScale( simpleTransform, 0.f, glm::vec3( 0, 0, 0 ) );
 
 // RECT plugin
 
@@ -1169,17 +1169,17 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::ITimeEvalua
  //   auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
  //   assert( color1 );
  //   success &= SetParameter( color1, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
-	//success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
+    //success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
  //   assert( success );
-	//auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
+    //auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
  //   assert( color2 );
  //   success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 0.5f, 0.f, 1.f ) );
-	//success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.9f) );
+    //success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 0.9f) );
  //   assert( success );
 
 
-	//root->GetPlugin( "linear_gradient" )->GetRendererContext()->alphaCtx->blendEnabled = true;
-	//root->GetPlugin( "linear_gradient" )->GetRendererContext()->->blendEnabled = true;
+    //root->GetPlugin( "linear_gradient" )->GetRendererContext()->alphaCtx->blendEnabled = true;
+    //root->GetPlugin( "linear_gradient" )->GetRendererContext()->->blendEnabled = true;
 
     return root;
 }
@@ -1188,21 +1188,21 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedRectNode( model::ITimeEvalua
 //
 model::BasicNodePtr  SimpleNodesFactory::CreateCreedTextNode( model::ITimeEvaluatorPtr timeEvaluator)
 {
-	auto offset5Timeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
-	auto offset3Timeline  = model::TimelineHelper::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
-	timeEvaluator->AddChild(offset5Timeline);
-	timeEvaluator->AddChild(offset3Timeline);
+    auto offset5Timeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "5secoffset", TimeType( 5.0 ) ); 
+    auto offset3Timeline  = model::TimelineHelper::CreateOffsetTimeEvaluator( "3secoffset", TimeType( 3.0 ) );
+    timeEvaluator->AddChild(offset5Timeline);
+    timeEvaluator->AddChild(offset3Timeline);
 
-	//Plugin list
+    //Plugin list
     std::vector< std::string > uids;
 
     uids.push_back( "DEFAULT_TRANSFORM" );
     //uids.push_back( "DEFAULT_RECTANGLE" );
     //uids.push_back( "DEFAULT_COLOR" );
-	uids.push_back( "DEFAULT_TEXT" );
+    uids.push_back( "DEFAULT_TEXT" );
     uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
-	//uids.push_back( "DEFAULT_ALPHA_MASK" );
-	//uids.push_back( "DEFAULT_TEXTURE" );
+    //uids.push_back( "DEFAULT_ALPHA_MASK" );
+    //uids.push_back( "DEFAULT_TEXTURE" );
 
     //Create a model
     model::BasicNodePtr root = model::BasicNode::Create( "rectNode", timeEvaluator );
@@ -1210,21 +1210,21 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTextNode( model::ITimeEvalua
     bool success = root->AddPlugins( uids, timeEvaluator );
     assert( success );
 
-	auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-	simpleTransform->SetTimeEvaluator(offset3Timeline);
+    auto simpleTransform = root->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+    simpleTransform->SetTimeEvaluator(offset3Timeline);
 
 // TRANSFORM plugin
 
-	//SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
-	//SetParameterRotation ( simpleTransform, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
+    //SetParameterRotation ( simpleTransform, 0.0f, glm::vec3( 0.f, 0.f, 1.f ), 0.f );
+    //SetParameterRotation ( simpleTransform, 2.0f, glm::vec3( 0.f, 0.f, 1.f ), 360.f );
 
 // RECT plugin
 
     //auto w = root->GetPlugin( "rectangle" )->GetParameter( "width" );
     //auto h = root->GetPlugin( "rectangle" )->GetParameter( "height" );
 
-	//h->SetTimeEvaluator(offset5Timeline);
-	//w->SetTimeEvaluator(offset5Timeline);
+    //h->SetTimeEvaluator(offset5Timeline);
+    //w->SetTimeEvaluator(offset5Timeline);
 
     //success &= SetParameter( w, 0.f, 2.f );
     //success &= SetParameter( h, 0.f, 1.f );
@@ -1234,11 +1234,11 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTextNode( model::ITimeEvalua
 
 // COLOR plugin
 
-	//SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 0.f, 0.5f, 0.f, 1.f ) );
+    //SetParameter( root->GetPlugin( "solid color" )->GetParameter( "color" ), 0.f, glm::vec4( 0.f, 0.5f, 0.f, 1.f ) );
 
 // TEXT plugin
 
-	auto node = root;
+    auto node = root;
     //SetParameter( node->GetPlugin( "text" )->GetParameter( "fontSize" ), TimeType( 0.0 ), 423.0f );
     //SetParameter( node->GetPlugin( "text" )->GetParameter( "blurSize" ), TimeType( 0.0 ), float( 0 ) );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.0f );
@@ -1255,12 +1255,12 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTextNode( model::ITimeEvalua
     auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
     assert( color1 );
     success &= SetParameter( color1, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
-	success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
+    success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
     assert( success );
-	auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
+    auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
     assert( color2 );
     success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 0.5f, 0.f, 1.f ) );
-	success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 1.f) );
+    success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 1.f) );
     assert( success );
     node->GetPlugin( "linear_gradient" )->Update( TimeType( 0.f ) ); //Regenerate all necessary geometry and channels
 
@@ -1305,12 +1305,12 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::ITimeEva
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
 
-	SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.05f, 0.05f, 1.f ) );
-	//SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 1.f, 0.f ), 0.f );
-	//SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 5.f, glm::vec3( 0.f, 1.f, 0.f ), 70.f );
-	//SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 100.f, glm::vec3( 0.f, 1.f, 0.f ), -70.f );
-	//SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 20.0f, glm::vec3( 1.f/15.f, 1.f/15.f, 1.f ) );
-	//SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 40.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+    SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 0.05f, 0.05f, 1.f ) );
+    //SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 1.f, 0.f ), 0.f );
+    //SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 5.f, glm::vec3( 0.f, 1.f, 0.f ), 70.f );
+    //SetParameterRotation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 100.f, glm::vec3( 0.f, 1.f, 0.f ), -70.f );
+    //SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 20.0f, glm::vec3( 1.f/15.f, 1.f/15.f, 1.f ) );
+    //SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 40.0f, glm::vec3( 1.f, 1.f, 1.f ) );
 
     node->GetPlugin( "transform" )->GetParameter( "simple_transform" )->SetTimeEvaluator( timeEvaluator );
 
@@ -1342,16 +1342,16 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::ITimeEva
     model::SetParameter( node->GetPlugin( "texture" )->GetParameter( "alpha" ), TimeType( 3.f ),   1.f );
     */
 
-	//success = model::LoadTexture( node->GetPlugin( "texture" ), "4float.exr" );
-	//success = model::LoadTexture( node->GetPlugin( "texture" ), "4float.exr", MipMapFilterType::BILINEAR );
-	success = model::LoadTexture( node->GetPlugin( "texture" ), "textures/sand.jpg", MipMapFilterType::BILINEAR );
-	//success = model::LoadTexture( node->GetPlugin( "texture" ), "Desert.jpg", MipMapFilterType::BILINEAR );
-	//success = model::LoadTexture( node->GetPlugin( "texture" ), "64bit.png" );
+    //success = model::LoadTexture( node->GetPlugin( "texture" ), "4float.exr" );
+    //success = model::LoadTexture( node->GetPlugin( "texture" ), "4float.exr", MipMapFilterType::BILINEAR );
+    success = model::LoadTexture( node->GetPlugin( "texture" ), "textures/sand.jpg", MipMapFilterType::BILINEAR );
+    //success = model::LoadTexture( node->GetPlugin( "texture" ), "Desert.jpg", MipMapFilterType::BILINEAR );
+    //success = model::LoadTexture( node->GetPlugin( "texture" ), "64bit.png" );
 
-	//success = model::LoadTexture( node->GetPlugin( "texture" ), "sand.jpg" );
+    //success = model::LoadTexture( node->GetPlugin( "texture" ), "sand.jpg" );
 
-	//success = model::LoadTexture( node->GetPlugin( "texture" ), "0level.bmp", MipMapFilterType::BILINEAR );
-	//success = model::LoadTexture( node->GetPlugin( "texture" ), "0level.bmp" );
+    //success = model::LoadTexture( node->GetPlugin( "texture" ), "0level.bmp", MipMapFilterType::BILINEAR );
+    //success = model::LoadTexture( node->GetPlugin( "texture" ), "0level.bmp" );
 
     //success = model::LoadTexture( node->GetPlugin( "texture" ), "Untitled drawing.png" );
     assert( success );
@@ -1368,11 +1368,11 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedRectNode( model::ITimeEva
         //model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),   2.f * scl );
         //model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), wf * 2.f * scl );
 
-		auto rectPlugin = node->GetPlugin( "rectangle" );
+        auto rectPlugin = node->GetPlugin( "rectangle" );
         SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ),  float(2 * height)/1080.f );
         SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ),   float(2 * width)/1080.f );
 
-		rectPlugin->Update( TimeType( 0.f ) );
+        rectPlugin->Update( TimeType( 0.f ) );
     }
 
     if( useAlphaMask )
@@ -1413,16 +1413,16 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTexturedTextNode( model::ITimeEva
     //    GSimplePluginsUIDS.push_back( "DEFAULT_ALPHA_MASK" );
     //}
 
-	//Plugin list
+    //Plugin list
     std::vector< std::string > GSimplePluginsUIDS;
 
     GSimplePluginsUIDS.push_back( "DEFAULT_TRANSFORM" );
     //uids.push_back( "DEFAULT_RECTANGLE" );
     //uids.push_back( "DEFAULT_COLOR" );
-	GSimplePluginsUIDS.push_back( "DEFAULT_TEXT" );
+    GSimplePluginsUIDS.push_back( "DEFAULT_TEXT" );
     //uids.push_back( "DEFAULT_LINEAR_GRADIENT" );
-	//uids.push_back( "DEFAULT_ALPHA_MASK" );
-	GSimplePluginsUIDS.push_back( "DEFAULT_TEXTURE" );
+    //uids.push_back( "DEFAULT_ALPHA_MASK" );
+    GSimplePluginsUIDS.push_back( "DEFAULT_TEXTURE" );
 
 
     auto node = model::BasicNode::Create( "Root", timeEvaluator );
@@ -1535,7 +1535,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::I
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 1.f );
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
 
-	success = model::LoadAnimation( node->GetPlugin( "animation" ), "FullHD/alfai", ".*tga" );      // @fixme Set proper regular expression for filter
+    success = model::LoadAnimation( node->GetPlugin( "animation" ), "FullHD/alfai", ".*tga" );      // @fixme Set proper regular expression for filter
     //success = model::LoadAnimation( node->GetPlugin( "animation" ), "d:/src/media/sequences/FullHD/alfai/", "*.tga" );
     assert( success );
 
@@ -1560,7 +1560,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextureAnimationRectNode( model::I
 //
 model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model::ITimeEvaluatorPtr timeEvaluator, bool useAlphaMask )
 {
-	{ useAlphaMask; }
+    { useAlphaMask; }
     //Timeline stuff
     auto localTimeline = model::TimelineHelper::CreateDefaultTimeline( "timeline0", 5.0f, TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_REPEAT );
     timeEvaluator->AddChild( localTimeline );
@@ -1575,17 +1575,17 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "height" ), TimeType( 0.f ), 1.f );
     model::SetParameter( node->GetPlugin( "rectangle" )->GetParameter( "width" ), TimeType( 0.f ), 2.5f );
 
-	//http://samples.ffmpeg.org/game-formats/bink/ActivisionLogo.bik
-	//success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/ActivisionLogo.bik", TextureFormat::F_A8R8G8B8 );
+    //http://samples.ffmpeg.org/game-formats/bink/ActivisionLogo.bik
+    //success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/ActivisionLogo.bik", TextureFormat::F_A8R8G8B8 );
 
-	//http://www.cinemartin.com/cinec/_Sample_Videos/Samsung_Galaxy_Note_3/20140117_142047_CINEC_ProRes4444.mov
-	success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/20140117_142047_CINEC_ProRes4444.mov", TextureFormat::F_A8R8G8B8 );
+    //http://www.cinemartin.com/cinec/_Sample_Videos/Samsung_Galaxy_Note_3/20140117_142047_CINEC_ProRes4444.mov
+    success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/20140117_142047_CINEC_ProRes4444.mov", TextureFormat::F_A8R8G8B8 );
 
-	//http://download.openbricks.org/sample/H264/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4
-	//success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4", TextureFormat::F_A8R8G8B8 );
-	
-	//http://trace.eas.asu.edu/yuv/akiyo/akiyo_cif.7z
-	//success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/akiyo_cif.yuv", TextureFormat::F_A8R8G8B8, 352, 288, 25.0, VideoPixelFormat::VPF_YUV420P );
+    //http://download.openbricks.org/sample/H264/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4
+    //success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/big_buck_bunny_480p_H264_AAC_25fps_1800K_short.MP4", TextureFormat::F_A8R8G8B8 );
+    
+    //http://trace.eas.asu.edu/yuv/akiyo/akiyo_cif.7z
+    //success = model::LoadVideoStream( node->GetPlugin( "video_stream_decoder" ), "rsrcy/akiyo_cif.yuv", TextureFormat::F_A8R8G8B8, 352, 288, 25.0, VideoPixelFormat::VPF_YUV420P );
 
     SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 0.0f, model::DefaultVideoStreamDecoderPlugin::DecoderMode::PLAY );
     SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "offset" ), 0.0f, glm::vec2( 5.f, 0.f ) );
@@ -1595,7 +1595,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateVideoStreamDecoderRectNode( model:
     //SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "offset" ), 10.0f, glm::vec2( 7.f, 0.f ) );
     //SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "state" ), 15.0f, model::DefaultVideoStreamDecoderPlugin::DecoderMode::PLAY );
     //SetParameter( node->GetPlugin( "video_stream_decoder" )->GetParameter( "offset" ), 15.0f, glm::vec2( 0.f, 0.f ) );
-	
+    
     localTimeline->Play();
 
     assert( success );
@@ -1628,7 +1628,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::ITimeEvaluatorPt
 
     auto node = model::BasicNode::Create( "Text", timeEvaluator );
 
-	
+    
 
     auto success = node->AddPlugins( GSimplePluginsUIDS, localTimeline );
     assert( success );
@@ -1639,33 +1639,33 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::ITimeEvaluatorPt
     auto param = plugin->GetParameter( "simple_transform" );
 
     //SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.f, 0.f, 0.f ) );
-	//SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.1f, 0.f, 0.f ) );
+    //SetParameterTranslation( param, 0, 0.0f, glm::vec3( 0.1f, 0.f, 0.f ) );
 
-	//SetParameterScale ( param, 0, 0.0f, glm::vec3( 2.f, 2.f, 1.f ) );
-	//SetParameterScale ( param, 0, 30.0f, glm::vec3( 12.f, 12.f, 1.f ) );
-	//SetParameterScale ( param, 0, 15.0f, glm::vec3( 1.f, 1.f, 1.f ) );
-	////SetParameterScale ( param, 0, 30.0f, glm::vec3( 1.5f, 1.5f, 1.f ) );
-	//SetParameterScale ( param, 0, 7.5f, glm::vec3( 0.1f, 0.1f, 1.f ) );
-	//SetParameterScale ( param, 0, 0.0f, glm::vec3( 0.002f, 0.002f, 1.f ) );
+    //SetParameterScale ( param, 0, 0.0f, glm::vec3( 2.f, 2.f, 1.f ) );
+    //SetParameterScale ( param, 0, 30.0f, glm::vec3( 12.f, 12.f, 1.f ) );
+    //SetParameterScale ( param, 0, 15.0f, glm::vec3( 1.f, 1.f, 1.f ) );
+    ////SetParameterScale ( param, 0, 30.0f, glm::vec3( 1.5f, 1.5f, 1.f ) );
+    //SetParameterScale ( param, 0, 7.5f, glm::vec3( 0.1f, 0.1f, 1.f ) );
+    //SetParameterScale ( param, 0, 0.0f, glm::vec3( 0.002f, 0.002f, 1.f ) );
 
 
-	//SetParameterRotation ( param, 0, 10.0f, glm::vec3( 0.0f, 0.0f, 1.f ), 360 );
+    //SetParameterRotation ( param, 0, 10.0f, glm::vec3( 0.0f, 0.0f, 1.f ), 360 );
 
-	node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( timeEvaluator );
-	node->GetPlugin( "text" )->GetParameter( "outlineColor" )->SetTimeEvaluator( timeEvaluator );
+    node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( timeEvaluator );
+    node->GetPlugin( "text" )->GetParameter( "outlineColor" )->SetTimeEvaluator( timeEvaluator );
 
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 1.0f, 1.0f ) );
-	//SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 0.0 ), glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ) );
-	//SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 10.0 ), glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ) );
-	//SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 10.0 ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ) );
+    //SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 0.0 ), glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ) );
+    //SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 10.0 ), glm::vec4( 0.0f, 1.0f, 0.0f, 1.0f ) );
+    //SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 10.0 ), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f ) );
 
     SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
 
-	//SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
-	node->GetPlugin( "text" )->GetParameter( "maxTextLenght" )->SetTimeEvaluator( timeEvaluator );
+    //SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
+    node->GetPlugin( "text" )->GetParameter( "maxTextLenght" )->SetTimeEvaluator( timeEvaluator );
     //SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 0.0 ), 0.2f );
-	//SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 5.0 ), 0.1f );
-	//SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 10.0 ), 0.5f );
+    //SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 5.0 ), 0.1f );
+    //SetParameter( node->GetPlugin( "text" )->GetParameter( "maxTextLenght" ), TimeType( 10.0 ), 0.5f );
 
 
     //success = model::LoadFont( node->GetPlugin( "text" ), "../dep/Media/fonts/courbi.ttf" );
@@ -1678,7 +1678,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::ITimeEvaluatorPt
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAAAA\nBBBBCCCC\nDDDDDDDDD" );
     //model::SetTextPluginContent( node->GetPlugin( "text" ), L"AV::11A-AAAA\nBBBBCCCC\nDDD333DD88\nAAAAAAAA\nB3BBCCCC\nDDDD888DDD" );
 //    model::SetTextPluginContent( node->GetPlugin( "text" ), L"AAAAAABBBBCCCCDDDD" );
-	//model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"AV::11A-AAAABBBBCCCCDDD333DD88AAAAAAAAB3BBCCCCDDDD888DDD" );
+    //model::DefaultTextPlugin::SetText( node->GetPlugin( "text" ), L"AV::11A-AAAABBBBCCCCDDD333DD88AAAAAAAAB3BBCCCCDDDD888DDD" );
     SetParameter( node->GetPlugin("text")->GetParameter( "text" ), 0.0, std::wstring( L"1234567890000000000000000000000000000000000" ) );
 
     if( useAlphaMask )
@@ -1703,41 +1703,41 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTextNode( model::ITimeEvaluatorPt
 //
 model::BasicNodePtr	SimpleNodesFactory::ScrollerNodeTestScene( model::ITimeEvaluatorPtr timeEvaluator )
 {
-	//model::BasicNode::Create( "Root", timeEvaluator );
-	//node->AddPlugin( "DEFAULT_TRANSFORM", "transform", timeEvaluator );
+    //model::BasicNode::Create( "Root", timeEvaluator );
+    //node->AddPlugin( "DEFAULT_TRANSFORM", "transform", timeEvaluator );
 
-	auto node = CreateGreenRectNode( timeEvaluator, "green rect"); 
+    auto node = CreateGreenRectNode( timeEvaluator, "green rect"); 
 
-	auto Scroller = nodelogic::Scroller::Create( node, mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
+    auto Scroller = nodelogic::Scroller::Create( node, mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
 
-	node->SetLogic( Scroller );
+    node->SetLogic( Scroller );
 
-	auto texture = CreateTexturedRectNode( timeEvaluator, false );
-	texture->AddChildToModelOnly( CreateTextNode( timeEvaluator, 0, false ) );
-	Scroller->AddNext( texture );
-	texture = CreateTexturedRectNode( timeEvaluator, false );
-	texture->AddChildToModelOnly( CreateTextNode( timeEvaluator, 0, false ) );
-	Scroller->AddNext( texture );
-	texture = CreateTexturedRectNode( timeEvaluator, false );
-	texture->AddChildToModelOnly( CreateTextNode( timeEvaluator, 0, false ) );
-	Scroller->AddNext( texture );
-	texture = CreateTexturedRectNode( timeEvaluator, false );
-	texture->AddChildToModelOnly( CreateTextNode( timeEvaluator, 0, false ) );
-	Scroller->AddNext( texture );
-	//Scroller->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
-	//Scroller->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
-	//Scroller->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
-	//Scroller->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
-	//Scroller->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
-	//Scroller->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
+    auto texture = CreateTexturedRectNode( timeEvaluator, false );
+    texture->AddChildToModelOnly( CreateTextNode( timeEvaluator, 0, false ) );
+    Scroller->AddNext( texture );
+    texture = CreateTexturedRectNode( timeEvaluator, false );
+    texture->AddChildToModelOnly( CreateTextNode( timeEvaluator, 0, false ) );
+    Scroller->AddNext( texture );
+    texture = CreateTexturedRectNode( timeEvaluator, false );
+    texture->AddChildToModelOnly( CreateTextNode( timeEvaluator, 0, false ) );
+    Scroller->AddNext( texture );
+    texture = CreateTexturedRectNode( timeEvaluator, false );
+    texture->AddChildToModelOnly( CreateTextNode( timeEvaluator, 0, false ) );
+    Scroller->AddNext( texture );
+    //Scroller->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
+    //Scroller->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
+    //Scroller->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
+    //Scroller->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
+    //Scroller->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
+    //Scroller->AddNext( CreateTextNode( timeEvaluator, 0, false ) );
 
-	Scroller->SetSpeed( 0.1f );
-	Scroller->SetInterspace( 0.4f );
+    Scroller->SetSpeed( 0.1f );
+    Scroller->SetInterspace( 0.4f );
 
-	Scroller->Finalize();
-	Scroller->Start();
+    Scroller->Finalize();
+    Scroller->Start();
 
-	return node;
+    return node;
 }
 
 // *****************************
@@ -1823,7 +1823,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateTimerNode( model::ITimeEvaluatorP
 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 4.f / 1080.f );
 
-	success = model::LoadFont( node->GetPlugin( "timer" ), "fonts/proj00/arial.ttf", 127, blurSize, 0, false );
+    success = model::LoadFont( node->GetPlugin( "timer" ), "fonts/proj00/arial.ttf", 127, blurSize, 0, false );
     assert( success );
 
     SetTimeTimerPlugin( node->GetPlugin( "timer" ), 0.0f );
@@ -1896,7 +1896,7 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTimerNode( model::ITimeEvalu
 
     SetParameter( node->GetPlugin( "timer" )->GetParameter( "spacing" ), TimeType( 0.0 ), 4.f / 1080.f );
 
-	success = model::LoadFont( node->GetPlugin( "timer" ), "fonts/proj00/arial.ttf", 127, blurSize, 0, false );
+    success = model::LoadFont( node->GetPlugin( "timer" ), "fonts/proj00/arial.ttf", 127, blurSize, 0, false );
     assert( success );
 
     SetTimeTimerPlugin( node->GetPlugin( "timer" ), 0.0f );
@@ -1919,18 +1919,18 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTimerNode( model::ITimeEvalu
     ai->SetTimeline( someTimelineWithEvents );
 
 // LINEAR GRADIENT plugin
-	auto root = node;
+    auto root = node;
     auto color1 = root->GetPlugin( "linear_gradient" )->GetParameter( "color1" );
     assert( color1 );
     success &= SetParameter( color1, 0.f, glm::vec4( 0.5f, 0.f, 0.f, 1.f ) );
-	success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
+    success &= SetParameter( color1, 5.f, glm::vec4( 0.f, 0.f,  0.5f, 1.f) );
     assert( success );
-	auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
+    auto color2 = root->GetPlugin( "linear_gradient" )->GetParameter( "color2" );
     assert( color2 );
     success &= SetParameter( color2, 0.f, glm::vec4( 0.f, 0.5f, 0.f, 1.f ) );
-	success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 1.f) );
+    success &= SetParameter( color2, 5.f, glm::vec4( 0.5f, 0.f,  0.5f, 1.f) );
     assert( success );
-	
+    
     node->GetPlugin( "linear_gradient" )->Update( TimeType( 0.f ) ); //Regenerate all necessary geometry and channels
 
     return node;    
@@ -2076,7 +2076,7 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 //#define SHOW_SIMPLE_CUBE
 //#define SHOW_COGWHEEL
 
-	  //Timeline stuff
+      //Timeline stuff
     auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimeline( "evt timeline", TimeType( 20.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
     model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop0", TimeType( 5.0 ) );
     model::TimelineManager::GetInstance()->AddStopEventToTimeline( someTimelineWithEvents, "stop1", TimeType( 10.0 ) );
@@ -2088,62 +2088,62 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 
 // ============================================ //
 // Plugins stuff
-	std::vector< std::string > uids;
-	uids.push_back( "DEFAULT_TRANSFORM" );
+    std::vector< std::string > uids;
+    uids.push_back( "DEFAULT_TRANSFORM" );
 
 // ============================================ //
 // Geometry plugins
 #ifdef SHOW_SPHERE
-	uids.push_back( "DEFAULT_SPHERE" );
+    uids.push_back( "DEFAULT_SPHERE" );
 #endif
 #ifdef SHOW_GEOSPHERE
     uids.push_back( "DEFAULT_GEOSPHERE" );
 #endif
 #ifdef SHOW_SIMPLE_CUBE
-	uids.push_back( "DEFAULT_SIMPLE_CUBE" );
+    uids.push_back( "DEFAULT_SIMPLE_CUBE" );
 #endif
 #ifdef SHOW_CIRCLE
-	uids.push_back( "DEFAULT_CIRCLE" );
+    uids.push_back( "DEFAULT_CIRCLE" );
 #endif
 #ifdef SHOW_CUBE
-	uids.push_back( "DEFAULT_CUBE" );
+    uids.push_back( "DEFAULT_CUBE" );
 #endif
 #ifdef SHOW_CYLINDER
-	uids.push_back( "DEFAULT_CYLINDER" );
+    uids.push_back( "DEFAULT_CYLINDER" );
 #endif
 #ifdef SHOW_CONE
-	uids.push_back( "DEFAULT_CONE" );
+    uids.push_back( "DEFAULT_CONE" );
 #endif
 #ifdef SHOW_ELLIPSE
-	uids.push_back( "DEFAULT_ELLIPSE" );
+    uids.push_back( "DEFAULT_ELLIPSE" );
 #endif
 #ifdef SHOW_ROUNDEDRECT
-	uids.push_back( "DEFAULT_ROUNDEDRECT" );
+    uids.push_back( "DEFAULT_ROUNDEDRECT" );
 #endif
 #ifdef SHOW_TRIANGLE
-	uids.push_back( "DEFAULT_TRIANGLE" );
+    uids.push_back( "DEFAULT_TRIANGLE" );
 #endif
 #ifdef SHOW_TORUS
-	uids.push_back( "DEFAULT_TORUS" );
+    uids.push_back( "DEFAULT_TORUS" );
 #endif
 #ifdef SHOW_SPRING
-	uids.push_back( "DEFAULT_SPRING" );
+    uids.push_back( "DEFAULT_SPRING" );
 #endif
 #ifdef SHOW_COGWHEEL
-	uids.push_back( "DEFAULT_COGWHEEL" );
+    uids.push_back( "DEFAULT_COGWHEEL" );
 #endif
 
 // ============================================ //
 // Color or texture plugin
 #ifdef VERSION_COLOR
-	uids.push_back( "DEFAULT_COLOR" );
+    uids.push_back( "DEFAULT_COLOR" );
 #endif
 #ifdef VERSION_TEXTURE
-	#ifdef NO_PERSPECTIVE
-		uids.push_back( "DEFAULT_NO_PERSPECTIVE_TEXTURE" );
-	#else
-		uids.push_back( "DEFAULT_TEXTURE" );
-	#endif
+    #ifdef NO_PERSPECTIVE
+        uids.push_back( "DEFAULT_NO_PERSPECTIVE_TEXTURE" );
+    #else
+        uids.push_back( "DEFAULT_TEXTURE" );
+    #endif
 #endif
 
     auto root = model::BasicNode::Create( "Root", timeEvaluator );
@@ -2153,188 +2153,188 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapesTestNode( model::ITimeE
 
 // ============================================ //
 // Tranformations
-	glm::vec3 rotation_axis2( -1.f, 1.f, -1.f );
+    glm::vec3 rotation_axis2( -1.f, 1.f, -1.f );
 
-	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 0.0f, 0.0f ) );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 200.f, glm::vec3( 7200.f, 0.0f, 0.0f ) );
-	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 40.f, rotation_axis2, -720.f );
-	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0, glm::vec3( 0.0, 0.0, -2.0f ) );
+    SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
+    SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 0.0f, 0.0f ) );
+    SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 200.f, glm::vec3( 7200.f, 0.0f, 0.0f ) );
+    //SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 40.f, rotation_axis2, -720.f );
+    SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0, glm::vec3( 0.0, 0.0, -2.0f ) );
 
 
 // ============================================ //
 // Geometry parameters
 #ifdef SHOW_CIRCLE
-	auto plugin = root->GetPlugin( "circle" );
-	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultCirclePlugin::CW );
-	model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultCirclePlugin::CCW );
-	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultCirclePlugin::SYMMETRIC );
-	model::SetParameter( plugin->GetParameter( "outer radius" ), 0.0f, 1.0f );
-	model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 0.3f );
-	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 20 );
-	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 360.0f );
+    auto plugin = root->GetPlugin( "circle" );
+    //model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultCirclePlugin::CW );
+    model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultCirclePlugin::CCW );
+    //model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultCirclePlugin::SYMMETRIC );
+    model::SetParameter( plugin->GetParameter( "outer radius" ), 0.0f, 1.0f );
+    model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 0.3f );
+    model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 20 );
+    model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 360.0f );
 #endif
 #ifdef SHOW_CONE
-	auto plugin = root->GetPlugin( "cone" );
-	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 16 );
-	model::SetParameter( plugin->GetParameter( "rounded tip height" ), 0.0f, 0.0f );
-	model::SetParameter( plugin->GetParameter( "rounded tip height" ), 10.0f, 0.3f );
-	model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 0.2f );
-	model::SetParameter( plugin->GetParameter( "outer radius" ), 0.0f, 0.8f );
-	model::SetParameter( plugin->GetParameter( "inner height" ), 0.0f, 0.2f );
-	model::SetParameter( plugin->GetParameter( "height" ), 0.0f, 0.8f );
-	model::SetParameter( plugin->GetParameter( "bevel tesselation" ), 0.0f, 4 );
-	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 00.0f );
+    auto plugin = root->GetPlugin( "cone" );
+    model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 16 );
+    model::SetParameter( plugin->GetParameter( "rounded tip height" ), 0.0f, 0.0f );
+    model::SetParameter( plugin->GetParameter( "rounded tip height" ), 10.0f, 0.3f );
+    model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 0.2f );
+    model::SetParameter( plugin->GetParameter( "outer radius" ), 0.0f, 0.8f );
+    model::SetParameter( plugin->GetParameter( "inner height" ), 0.0f, 0.2f );
+    model::SetParameter( plugin->GetParameter( "height" ), 0.0f, 0.8f );
+    model::SetParameter( plugin->GetParameter( "bevel tesselation" ), 0.0f, 4 );
+    model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 00.0f );
 
-	// Enums
-	model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::WeightCenter::CENTER );
-	model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::WeightCenter::CENTER );
-	model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::WeightCenter::CENTER );
+    // Enums
+    model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::WeightCenter::CENTER );
+    model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::WeightCenter::CENTER );
+    model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::WeightCenter::CENTER );
 
-	model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::SYMMETRIC );
-	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CCW );
-	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CW );
+    model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::SYMMETRIC );
+    //model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CCW );
+    //model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CW );
 
-	model::SetParameter( plugin->GetParameter( "mapping type" ), 0.0, bv::model::DefaultCylinder::DefaultPlugin::MappingType::GOODMAPPING );
+    model::SetParameter( plugin->GetParameter( "mapping type" ), 0.0, bv::model::DefaultCylinder::DefaultPlugin::MappingType::GOODMAPPING );
 #endif
 #ifdef SHOW_CYLINDER
-	auto plugin = root->GetPlugin( "cylinder" );
-	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 16 );
-	model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 0.0f );
-	model::SetParameter( plugin->GetParameter( "inner radius" ), 10.0f, 0.78f );
-	model::SetParameter( plugin->GetParameter( "outer radius" ), 0.0f, 0.8f );
-	model::SetParameter( plugin->GetParameter( "height" ), 0.0f, 0.8f );
-	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 0.0f );
-	//model::SetParameter( plugin->GetParameter( "open angle" ), 10.0f, 360.0f );
+    auto plugin = root->GetPlugin( "cylinder" );
+    model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 16 );
+    model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 0.0f );
+    model::SetParameter( plugin->GetParameter( "inner radius" ), 10.0f, 0.78f );
+    model::SetParameter( plugin->GetParameter( "outer radius" ), 0.0f, 0.8f );
+    model::SetParameter( plugin->GetParameter( "height" ), 0.0f, 0.8f );
+    model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 0.0f );
+    //model::SetParameter( plugin->GetParameter( "open angle" ), 10.0f, 360.0f );
 
-	model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::SYMMETRIC );
-	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CCW );
-	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CW );
+    model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::SYMMETRIC );
+    //model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CCW );
+    //model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CW );
 
-	model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultCylinder::DefaultPlugin::WeightCenter::CENTER );
-	model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCylinder::DefaultPlugin::WeightCenter::CENTER );
-	model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultCylinder::DefaultPlugin::WeightCenter::CENTER );
+    model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultCylinder::DefaultPlugin::WeightCenter::CENTER );
+    model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCylinder::DefaultPlugin::WeightCenter::CENTER );
+    model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultCylinder::DefaultPlugin::WeightCenter::CENTER );
 
-	model::SetParameter( plugin->GetParameter( "mapping type" ), 0.0, bv::model::DefaultCylinder::DefaultPlugin::MappingType::GOODMAPPING );
+    model::SetParameter( plugin->GetParameter( "mapping type" ), 0.0, bv::model::DefaultCylinder::DefaultPlugin::MappingType::GOODMAPPING );
 #endif
 #ifdef SHOW_SPHERE
-	auto plugin = root->GetPlugin( "sphere" );
-	model::SetParameter( plugin->GetParameter( "vertical stripes" ), 0.0f, 30 );
-	model::SetParameter( plugin->GetParameter( "horizontal stripes" ), 0.0f, 30 );
-	model::SetParameter( plugin->GetParameter( "radius" ), 0.0f, 0.5f );
-	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 0.0f );
-	model::SetParameter( plugin->GetParameter( "open angle" ), 10.0f, 360.0f );
+    auto plugin = root->GetPlugin( "sphere" );
+    model::SetParameter( plugin->GetParameter( "vertical stripes" ), 0.0f, 30 );
+    model::SetParameter( plugin->GetParameter( "horizontal stripes" ), 0.0f, 30 );
+    model::SetParameter( plugin->GetParameter( "radius" ), 0.0f, 0.5f );
+    model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 0.0f );
+    model::SetParameter( plugin->GetParameter( "open angle" ), 10.0f, 360.0f );
 
-	model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::SYMMETRIC );
-	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CCW );
-	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CW );
+    model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::SYMMETRIC );
+    //model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CCW );
+    //model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultCone::DefaultConePlugin::OpenAngleMode::CW );
 #endif
 #ifdef SHOW_ELLIPSE
-	auto plugin = root->GetPlugin( "ellipse" );
-	model::SetParameter( plugin->GetParameter( "outer radius 1" ), 0.0f, 1.0f );
-	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 1.0f );
-	model::SetParameter( plugin->GetParameter( "outer radius 2" ), 0.0f, 3.0f );
-	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 0.0f );
-	model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultEllipsePlugin::OpenAngleMode::CCW );
-	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultEllipsePlugin::OpenAngleMode::CW );
-	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultEllipsePlugin::OpenAngleMode::SYMMETRIC );
+    auto plugin = root->GetPlugin( "ellipse" );
+    model::SetParameter( plugin->GetParameter( "outer radius 1" ), 0.0f, 1.0f );
+    model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 1.0f );
+    model::SetParameter( plugin->GetParameter( "outer radius 2" ), 0.0f, 3.0f );
+    model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 0.0f );
+    model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultEllipsePlugin::OpenAngleMode::CCW );
+    //model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultEllipsePlugin::OpenAngleMode::CW );
+    //model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0f, bv::model::DefaultEllipsePlugin::OpenAngleMode::SYMMETRIC );
 #endif
 #ifdef SHOW_CUBE
-	auto plugin = root->GetPlugin( "cube" );
-	model::SetParameter( plugin->GetParameter( "bevel" ), 0.0f, 0.2f );
-	model::SetParameter( plugin->GetParameter( "dimensions" ), 0.0f, glm::vec3( 1.0, 1.0, 1.0 ) );
-	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 0 );
-	model::SetParameter( plugin->GetParameter( "tesselation" ), 100.0f, 100 );
+    auto plugin = root->GetPlugin( "cube" );
+    model::SetParameter( plugin->GetParameter( "bevel" ), 0.0f, 0.2f );
+    model::SetParameter( plugin->GetParameter( "dimensions" ), 0.0f, glm::vec3( 1.0, 1.0, 1.0 ) );
+    model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 0 );
+    model::SetParameter( plugin->GetParameter( "tesselation" ), 100.0f, 100 );
 
-	model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::CENTER );
-	model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::CENTER );
-	model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::CENTER );
+    model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::CENTER );
+    model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::CENTER );
+    model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultCube::Plugin::WeightCenter::CENTER );
 #endif
 #ifdef SHOW_ROUNDEDRECT
-	auto plugin = root->GetPlugin( "rounded rect" );
-	model::SetParameter( plugin->GetParameter( "bevels" ), 0.0f, glm::vec4( 0.4f, 0.2f, 0.2f, 0.2f ) );
-	model::SetParameter( plugin->GetParameter( "size" ), 0.0f, glm::vec2( 2.0, 0.9 ) );
+    auto plugin = root->GetPlugin( "rounded rect" );
+    model::SetParameter( plugin->GetParameter( "bevels" ), 0.0f, glm::vec4( 0.4f, 0.2f, 0.2f, 0.2f ) );
+    model::SetParameter( plugin->GetParameter( "size" ), 0.0f, glm::vec2( 2.0, 0.9 ) );
 #endif
 #ifdef SHOW_TRIANGLE
-	auto plugin = root->GetPlugin( "triangle" );
-	model::SetParameter( plugin->GetParameter( "point a" ), 0.0f, glm::vec3( 0.0, 1.0, 0.0 ) );
-	model::SetParameter( plugin->GetParameter( "point b" ), 0.0f, glm::vec3( -1.0, 0.0, 0.0 ) );
-	model::SetParameter( plugin->GetParameter( "point c" ), 0.0f, glm::vec3( 1.0, .0, 0.0 ) );
+    auto plugin = root->GetPlugin( "triangle" );
+    model::SetParameter( plugin->GetParameter( "point a" ), 0.0f, glm::vec3( 0.0, 1.0, 0.0 ) );
+    model::SetParameter( plugin->GetParameter( "point b" ), 0.0f, glm::vec3( -1.0, 0.0, 0.0 ) );
+    model::SetParameter( plugin->GetParameter( "point c" ), 0.0f, glm::vec3( 1.0, .0, 0.0 ) );
 #endif
 #ifdef SHOW_TORUS
-	auto plugin = root->GetPlugin( "torus" );
-	model::SetParameter( plugin->GetParameter( "radius" ), 0.0f, 0.4f );
-	model::SetParameter( plugin->GetParameter( "radius2" ), 0.0f, 0.1f );
-	model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 0.0f );
-	model::SetParameter( plugin->GetParameter( "open angle" ), 10.0f, 360.0f );
-	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 15 );
+    auto plugin = root->GetPlugin( "torus" );
+    model::SetParameter( plugin->GetParameter( "radius" ), 0.0f, 0.4f );
+    model::SetParameter( plugin->GetParameter( "radius2" ), 0.0f, 0.1f );
+    model::SetParameter( plugin->GetParameter( "open angle" ), 0.0f, 0.0f );
+    model::SetParameter( plugin->GetParameter( "open angle" ), 10.0f, 360.0f );
+    model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 15 );
 
-	model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultTorus::Plugin::WeightCenter::CENTER );
-	model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultTorus::Plugin::WeightCenter::CENTER );
-	model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultTorus::Plugin::WeightCenter::CENTER );
+    model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultTorus::Plugin::WeightCenter::CENTER );
+    model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultTorus::Plugin::WeightCenter::CENTER );
+    model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultTorus::Plugin::WeightCenter::CENTER );
 
-	model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultTorus::Plugin::OpenAngleMode::SYMMETRIC );
-	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultTorus::Plugin::OpenAngleMode::CCW );
-	//model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultTorus::Plugin::OpenAngleMode::CW );
+    model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultTorus::Plugin::OpenAngleMode::SYMMETRIC );
+    //model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultTorus::Plugin::OpenAngleMode::CCW );
+    //model::SetParameter( plugin->GetParameter( "open angle mode" ), 0.0, bv::model::DefaultTorus::Plugin::OpenAngleMode::CW );
 #endif
 #ifdef SHOW_SPRING
-	auto plugin = root->GetPlugin( "spring" );
-	model::SetParameter( plugin->GetParameter( "radius" ), 0.0f, 0.5f );
-	model::SetParameter( plugin->GetParameter( "radius2" ), 0.0f, 0.1f );
-	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 100 );
-	model::SetParameter( plugin->GetParameter( "tesselation2" ), 0.0f, 15 );
-	model::SetParameter( plugin->GetParameter( "delta" ), 0.0f, 1.0f );
-	model::SetParameter( plugin->GetParameter( "turns" ), 0.0f, 6 );
+    auto plugin = root->GetPlugin( "spring" );
+    model::SetParameter( plugin->GetParameter( "radius" ), 0.0f, 0.5f );
+    model::SetParameter( plugin->GetParameter( "radius2" ), 0.0f, 0.1f );
+    model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 100 );
+    model::SetParameter( plugin->GetParameter( "tesselation2" ), 0.0f, 15 );
+    model::SetParameter( plugin->GetParameter( "delta" ), 0.0f, 1.0f );
+    model::SetParameter( plugin->GetParameter( "turns" ), 0.0f, 6 );
 
-	model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultSpring::Plugin::WeightCenter::CENTER );
-	model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultSpring::Plugin::WeightCenter::CENTER );
-	model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultSpring::Plugin::WeightCenter::CENTER );
+    model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultSpring::Plugin::WeightCenter::CENTER );
+    model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultSpring::Plugin::WeightCenter::CENTER );
+    model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultSpring::Plugin::WeightCenter::CENTER );
 
-	model::SetParameter( plugin->GetParameter( "mapping type" ), 0.0, bv::model::DefaultSpring::Plugin::MappingType::DOUBLETEXTURE );
+    model::SetParameter( plugin->GetParameter( "mapping type" ), 0.0, bv::model::DefaultSpring::Plugin::MappingType::DOUBLETEXTURE );
 #endif
 #ifdef SHOW_SIMPLE_CUBE
-	auto plugin = root->GetPlugin( "simple cube" );
-	model::SetParameter( plugin->GetParameter( "dimensions" ), 0.0f, glm::vec3( 1.0, 1.0, 1.0 ) );
+    auto plugin = root->GetPlugin( "simple cube" );
+    model::SetParameter( plugin->GetParameter( "dimensions" ), 0.0f, glm::vec3( 1.0, 1.0, 1.0 ) );
 #endif
 #ifdef SHOW_COGWHEEL
-	auto plugin = root->GetPlugin( "cog wheel" );
-	model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 1 );
-	model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 0.2f );
-	model::SetParameter( plugin->GetParameter( "outer radius" ), 0.0f, 0.8f );
-	model::SetParameter( plugin->GetParameter( "height" ), 0.0f, 0.5f );
-	model::SetParameter( plugin->GetParameter( "bevel" ), 0.0f, 0.1f );
-	model::SetParameter( plugin->GetParameter( "tooth height" ), 0.0f, 0.2f );
-	model::SetParameter( plugin->GetParameter( "tooth base length" ), 0.0f, 0.20f );
-	model::SetParameter( plugin->GetParameter( "tooth top length" ), 0.0f, 0.02f );
-	model::SetParameter( plugin->GetParameter( "teeth number" ), 0.0f, 3 );
+    auto plugin = root->GetPlugin( "cog wheel" );
+    model::SetParameter( plugin->GetParameter( "tesselation" ), 0.0f, 1 );
+    model::SetParameter( plugin->GetParameter( "inner radius" ), 0.0f, 0.2f );
+    model::SetParameter( plugin->GetParameter( "outer radius" ), 0.0f, 0.8f );
+    model::SetParameter( plugin->GetParameter( "height" ), 0.0f, 0.5f );
+    model::SetParameter( plugin->GetParameter( "bevel" ), 0.0f, 0.1f );
+    model::SetParameter( plugin->GetParameter( "tooth height" ), 0.0f, 0.2f );
+    model::SetParameter( plugin->GetParameter( "tooth base length" ), 0.0f, 0.20f );
+    model::SetParameter( plugin->GetParameter( "tooth top length" ), 0.0f, 0.02f );
+    model::SetParameter( plugin->GetParameter( "teeth number" ), 0.0f, 3 );
 
-	model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultCogWheel::Plugin::WeightCenter::CENTER );
-	model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCogWheel::Plugin::WeightCenter::CENTER );
-	model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultCogWheel::Plugin::WeightCenter::CENTER );
+    model::SetParameter( plugin->GetParameter( "weight center x" ), 0.0, bv::model::DefaultCogWheel::Plugin::WeightCenter::CENTER );
+    model::SetParameter( plugin->GetParameter( "weight center y" ), 0.0, bv::model::DefaultCogWheel::Plugin::WeightCenter::CENTER );
+    model::SetParameter( plugin->GetParameter( "weight center z" ), 0.0, bv::model::DefaultCogWheel::Plugin::WeightCenter::CENTER );
 #endif
 
 
 // ============================================ //
 // Color, texture plugins parameters
 #ifdef VERSION_COLOR
-	auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
-	SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 1.f, 1.f ) );
-	//root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
-	//root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
+    auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
+    SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 1.f, 1.f ) );
+    //root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
+    //root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
 #endif
-	
+    
 #ifdef VERSION_TEXTURE
-	auto texDesc = TextureAssetDesc::Create( "textures/sand.jpg", MipMapFilterType::BILINEAR, true );
+    auto texDesc = TextureAssetDesc::Create( "textures/sand.jpg", MipMapFilterType::BILINEAR, true );
     root->GetPlugin( "texture" )->LoadResource( std::static_pointer_cast<const AssetDesc>( texDesc ) );
 
-	model::SetParameter( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
-	model::SetParameter( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+    model::SetParameter( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+    model::SetParameter( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
 
-	//success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );	//, MipMapFilterType::BOX
+    //success = model::LoadTexture( root->GetPlugin( "texture" ), "sand.jpg", MipMapFilterType::BILINEAR );	//, MipMapFilterType::BOX
 #endif
 
 
-	return root;
+    return root;
 
 #undef VERSION_TEXTURE
 #undef NO_PERSPECTIVE
@@ -2353,31 +2353,31 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::ITimeEvalua
         //Timeline stuff
     auto someTimelineWithEvents = model::TimelineHelper::CreateDefaultTimeline( "evt timeline", TimeType( 1000.0 ), TimelineWrapMethod::TWM_CLAMP, TimelineWrapMethod::TWM_CLAMP );
 
-	  //Timeline stuff
+      //Timeline stuff
     //auto localTimeline = model::TimelineHelper::CreateOffsetTimeEvaluator( "timeline0" , TimeType( 0.0 ) );
 
     timeEvaluator->AddChild( someTimelineWithEvents );
 
 // ============================================ //
 // Plugins stuff
-	std::vector< std::string > uids;
-	uids.push_back( "DEFAULT_TRANSFORM" );
+    std::vector< std::string > uids;
+    uids.push_back( "DEFAULT_TRANSFORM" );
 
 // ============================================ //
 //  Geometry plugin
-	uids.push_back( uid );
+    uids.push_back( uid );
 
 // ============================================ //
 // Color or texture plugin
 #ifdef VERSION_COLOR
-	uids.push_back( "DEFAULT_COLOR" );
+    uids.push_back( "DEFAULT_COLOR" );
 #endif
 #ifdef VERSION_TEXTURE
-	#ifdef NO_PERSPECTIVE
-		uids.push_back( "DEFAULT_NO_PERSPECTIVE_TEXTURE" );
-	#else
-		uids.push_back( "DEFAULT_TEXTURE" );
-	#endif
+    #ifdef NO_PERSPECTIVE
+        uids.push_back( "DEFAULT_NO_PERSPECTIVE_TEXTURE" );
+    #else
+        uids.push_back( "DEFAULT_TEXTURE" );
+    #endif
 #endif
 
     auto root = model::BasicNode::Create( uid, timeEvaluator );
@@ -2387,34 +2387,34 @@ model::BasicNodePtr	SimpleNodesFactory::CreateBasicShapeShow( model::ITimeEvalua
 
 // ============================================ //
 // Tranformations
-	glm::vec3 rotation_axis( 0.f, 1.f, 0.f );
-	glm::vec3 rotation_axis2( -1.f, 1.f, 0.f );
+    glm::vec3 rotation_axis( 0.f, 1.f, 0.f );
+    glm::vec3 rotation_axis2( -1.f, 1.f, 0.f );
 
-	SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 0.f, 0.f ) );
-	SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 100.f, glm::vec3( 0.f, -7200.f, 0.f ) );
-	//SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 40.f, rotation_axis2, 50.f );
-	SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0, translation );
+    SetParameterScale ( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.f, 2.f, 2.f ) );
+    SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.f, glm::vec3( 0.f, 0.f, 0.f ) );
+    SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 100.f, glm::vec3( 0.f, -7200.f, 0.f ) );
+    //SetParameterRotation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 40.f, rotation_axis2, 50.f );
+    SetParameterTranslation( root->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0, translation );
 
 // ============================================ //
 // Color, texture plugins parameters
 #ifdef VERSION_COLOR
-	auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
-	SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 1.f, 1.f ) );
-	//root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
-	root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
+    auto color = root->GetPlugin( "solid color" )->GetParameter( "color" );
+    SetParameter( color, 0.f, glm::vec4( 0.5f, 0.f, 1.f, 1.f ) );
+    //root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
+    root->GetPlugin( "solid color" )->GetRendererContext()->cullCtx->enabled = false;
 #endif
-	
+    
 #ifdef VERSION_TEXTURE
-	success = model::LoadTexture( root->GetPlugin( "texture" ), texturePath, MipMapFilterType::BILINEAR );
-	assert( success );
-	auto texturePlugin =  root->GetPlugin( "texture" );
-	model::SetParameter( texturePlugin->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
-	model::SetParameter( texturePlugin->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
-	//root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
+    success = model::LoadTexture( root->GetPlugin( "texture" ), texturePath, MipMapFilterType::BILINEAR );
+    assert( success );
+    auto texturePlugin =  root->GetPlugin( "texture" );
+    model::SetParameter( texturePlugin->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeX" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+    model::SetParameter( texturePlugin->GetResourceStateModel( "Tex0" )->GetParameter( "wrapModeY" ), 0.0, (float) TextureWrappingMode::TWM_MIRROR );
+    //root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->isCCWOrdered = false;
 #endif
 
-	return root;
+    return root;
 
 
 #undef VERSION_TEXTURE
@@ -2430,7 +2430,7 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextCacheTest         ( model::ITi
 
     //Plugin stuff
     std::vector< std::string > uids;
-	uids.push_back( "DEFAULT_TRANSFORM" );
+    uids.push_back( "DEFAULT_TRANSFORM" );
     uids.push_back( "DEFAULT_COLOR" );
     uids.push_back( "DEFAULT_TEXT" );
 
@@ -2440,16 +2440,16 @@ model::BasicNodePtr SimpleNodesFactory::CreateTextCacheTest         ( model::ITi
     assert( success );
 
     SetParameterTranslation( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, translation );
-	SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.f, 2.f, 1.f ) );
+    SetParameterScale ( node->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 0.0f, glm::vec3( 2.f, 2.f, 1.f ) );
     
 
-	//node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( timeEvaluator );
-	//node->GetPlugin( "text" )->GetParameter( "outlineColor" )->SetTimeEvaluator( timeEvaluator );
+    //node->GetPlugin( "solid color" )->GetParameter( "color" )->SetTimeEvaluator( timeEvaluator );
+    //node->GetPlugin( "text" )->GetParameter( "outlineColor" )->SetTimeEvaluator( timeEvaluator );
 
     SetParameter( node->GetPlugin( "solid color" )->GetParameter( "color" ), TimeType( 0.0 ), color );
-	SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 0.0f, 1.0f ) );
+    SetParameter( node->GetPlugin( "text" )->GetParameter( "outlineColor" ), TimeType( 0.0 ), glm::vec4( 1.0f, 1.0f, 0.0f, 1.0f ) );
     SetParameter( node->GetPlugin( "text" )->GetParameter( "spacing" ), TimeType( 0.0 ), 0.f );
-	SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
+    SetParameter( node->GetPlugin( "text" )->GetParameter( "alignment" ), TimeType( 0.0 ), float( TextAlignmentType::Center ) );
 
     success = model::LoadFont( node->GetPlugin( "text" ), fontName, 30, 0, 0, true );
     assert( success );
@@ -2466,38 +2466,38 @@ model::BasicNodePtr  SimpleNodesFactory::CreateScrollerTestNode       ( model::I
     glm::vec3 nodeTranslation( 0.0, 0.0, 0.0 );
     glm::vec4 color( 1.0, 0.7, 0.0, 1.0 );
 
-	auto node = CreateTextCacheTest( timeEvaluator, "Dummy0", nodeTranslation, color, L"", "fonts/StarWars.ttf" );
+    auto node = CreateTextCacheTest( timeEvaluator, "Dummy0", nodeTranslation, color, L"", "fonts/StarWars.ttf" );
 
-	//auto Scroller = nodelogic::Scroller::Create( node.get(), mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
+    //auto Scroller = nodelogic::Scroller::Create( node.get(), mathematics::Rect::Create( -1.f, -1.f, 1.f, 1.f ) );
 
-	//node->SetLogic( Scroller );
+    //node->SetLogic( Scroller );
 
     
     //Scroller->AddNext( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt1", "fonts/StarWars.ttf" ) );
-	//Scroller->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy2", nodeTranslation, color, L"Teskt2", "fonts/StarWars.ttf" ) );
-	//Scroller->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy3", nodeTranslation, color, L"Teskt3", "fonts/StarWars.ttf" ) );
-	//Scroller->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy4", nodeTranslation, color, L"Teskt4", "fonts/StarWars.ttf" ) );
-	//Scroller->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy5", nodeTranslation, color, L"Teskt5", "fonts/StarWars.ttf" ) );
-	//Scroller->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy6", nodeTranslation, color, L"Teskt6", "fonts/StarWars.ttf" ) );
+    //Scroller->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy2", nodeTranslation, color, L"Teskt2", "fonts/StarWars.ttf" ) );
+    //Scroller->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy3", nodeTranslation, color, L"Teskt3", "fonts/StarWars.ttf" ) );
+    //Scroller->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy4", nodeTranslation, color, L"Teskt4", "fonts/StarWars.ttf" ) );
+    //Scroller->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy5", nodeTranslation, color, L"Teskt5", "fonts/StarWars.ttf" ) );
+    //Scroller->AddNext( CreateTextCacheTest( timeEvaluator, "Dummy6", nodeTranslation, color, L"Teskt6", "fonts/StarWars.ttf" ) );
 
     auto texture = CreateTexturedRectNode( timeEvaluator, false );
-	texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt1", "fonts/StarWars.ttf" ) );
-	//Scroller->AddNext( texture );
+    texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt1", "fonts/StarWars.ttf" ) );
+    //Scroller->AddNext( texture );
     node->AddChildToModelOnly( texture );
 
-	texture = CreateTexturedRectNode( timeEvaluator, false );
-	texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt2", "fonts/StarWars.ttf" ) );
-	//Scroller->AddNext( texture );
+    texture = CreateTexturedRectNode( timeEvaluator, false );
+    texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt2", "fonts/StarWars.ttf" ) );
+    //Scroller->AddNext( texture );
     node->AddChildToModelOnly( texture );
 
-	texture = CreateTexturedRectNode( timeEvaluator, false );
-	texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt3", "fonts/StarWars.ttf" ) );
-	//Scroller->AddNext( texture );
+    texture = CreateTexturedRectNode( timeEvaluator, false );
+    texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt3", "fonts/StarWars.ttf" ) );
+    //Scroller->AddNext( texture );
     node->AddChildToModelOnly( texture );
 
-	texture = CreateTexturedRectNode( timeEvaluator, false );
-	texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt4", "fonts/StarWars.ttf" ) );
-	//Scroller->AddNext( texture );
+    texture = CreateTexturedRectNode( timeEvaluator, false );
+    texture->AddChildToModelOnly( CreateTextCacheTest( timeEvaluator, "Text", nodeTranslation, color, L"Teskt4", "fonts/StarWars.ttf" ) );
+    //Scroller->AddNext( texture );
     node->AddChildToModelOnly( texture );
 
 
@@ -2509,13 +2509,13 @@ model::BasicNodePtr  SimpleNodesFactory::CreateScrollerTestNode       ( model::I
  //   Scroller->AddMessage( L"Message 5" );
  //   Scroller->AddMessage( L"Message 6" );
 
-	//Scroller->SetSpeed( 400000.0f );
-	//Scroller->SetInterspace( 1.0f );
+    //Scroller->SetSpeed( 400000.0f );
+    //Scroller->SetInterspace( 1.0f );
 
-	//Scroller->Finalize();
-	//Scroller->Start();
+    //Scroller->Finalize();
+    //Scroller->Start();
 
-	return node;
+    return node;
 }
 
 // *****************************
@@ -2523,89 +2523,89 @@ model::BasicNodePtr  SimpleNodesFactory::CreateScrollerTestNode       ( model::I
 void					SimpleNodesFactory::TestTypedParamQueries	( model::ITimeEvaluatorPtr timeEvaluator )
 {
     assert( false ); timeEvaluator;
-	//auto node = CreateSolidRectNode( "rect_node", 1.0f, 1.0f, glm::vec3( 0.f, 0.f, 0.f ), glm::vec4( 1.f, 1.f, 1.f, 1.f ), timelineManager, timeEvaluator );
+    //auto node = CreateSolidRectNode( "rect_node", 1.0f, 1.0f, glm::vec3( 0.f, 0.f, 0.f ), glm::vec4( 1.f, 1.f, 1.f, 1.f ), timelineManager, timeEvaluator );
 
-	/////////////////////////////////////////////////////
-	//// Acessing simple interpolator and time evaluator for float parmameter
+    /////////////////////////////////////////////////////
+    //// Acessing simple interpolator and time evaluator for float parmameter
  //   auto paramWidth					= node->GetPlugin( "rectangle" )->GetParameter( "width" );
-	//auto paramWidth_Float			= model::QueryTypedParam< model::ParamFloatPtr >( paramWidth );
-	//auto & paramWidth_Interpolator	= paramWidth_Float->AccessInterpolator(); // auto & is necessary as AccessInterpolator returns reference to the interpolator
-	//auto paramWidt_timeline			= paramWidth_Float->GetTimeEvaluator();
-	//
-	//paramWidth_Interpolator.AddKey( 0.f, 3.f );
-	//auto & keys = paramWidth_Interpolator.AccessKeys(); // returns const reference to keys, to change keys use: paramWidth_Interpolator.AddKey(...)
+    //auto paramWidth_Float			= model::QueryTypedParam< model::ParamFloatPtr >( paramWidth );
+    //auto & paramWidth_Interpolator	= paramWidth_Float->AccessInterpolator(); // auto & is necessary as AccessInterpolator returns reference to the interpolator
+    //auto paramWidt_timeline			= paramWidth_Float->GetTimeEvaluator();
+    //
+    //paramWidth_Interpolator.AddKey( 0.f, 3.f );
+    //auto & keys = paramWidth_Interpolator.AccessKeys(); // returns const reference to keys, to change keys use: paramWidth_Interpolator.AddKey(...)
 
-	//auto & key_val	= keys.at( 0 ); // equal to: keys[ 0 ]
-	//TimeType time	= key_val.t;
-	//float value		= key_val.val;
+    //auto & key_val	= keys.at( 0 ); // equal to: keys[ 0 ]
+    //TimeType time	= key_val.t;
+    //float value		= key_val.val;
 
-	/////////////////////////////////////////////////////
-	//// Acessing simple interpolator for vec4 parmameter
+    /////////////////////////////////////////////////////
+    //// Acessing simple interpolator for vec4 parmameter
  //   auto paramColor					= node->GetPlugin( "solid color" )->GetParameter( "color" );
-	//auto paramColor_Float			= model::QueryTypedParam< model::ParamVec4Ptr >( paramColor );
-	//auto & paramColor_Interpolator	= paramColor_Float->AccessInterpolator();
+    //auto paramColor_Float			= model::QueryTypedParam< model::ParamVec4Ptr >( paramColor );
+    //auto & paramColor_Interpolator	= paramColor_Float->AccessInterpolator();
 
-	//auto & paramColor_keys			= paramColor_Interpolator.AccessKeys();
-	//
-	//// inspect the first key (TimeType, glm::vec4)
-	//TimeType paramColor_keys_0_t	= paramColor_keys[ 0 ].t;
-	//glm::vec4 paramColor_keys_0_val = paramColor_keys[ 0 ].val;
+    //auto & paramColor_keys			= paramColor_Interpolator.AccessKeys();
+    //
+    //// inspect the first key (TimeType, glm::vec4)
+    //TimeType paramColor_keys_0_t	= paramColor_keys[ 0 ].t;
+    //glm::vec4 paramColor_keys_0_val = paramColor_keys[ 0 ].val;
 
 
-	/////////////////////////////////////////////////////
-	//// Acessing simple interpolator for transform parameter
-	//auto paramTrans					= node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
-	//auto paramTrans_TV				= model::QueryTypedParam< model::ParamTransformVecPtr >( paramTrans );
-	//
-	//auto & transform				= paramTrans_TV->Transform( 0 );
-	//auto translation				= transform[ 1 ];								// translation
-	//auto rotation					= static_cast<RotationF *>( transform[ 2 ] );	// rotation transform[ 2 ] == SimpleTransformF * but can be cast to RotationF, as it is a rotation by default
+    /////////////////////////////////////////////////////
+    //// Acessing simple interpolator for transform parameter
+    //auto paramTrans					= node->GetPlugin( "transform" )->GetParameter( "simple_transform" );
+    //auto paramTrans_TV				= model::QueryTypedParam< model::ParamTransformVecPtr >( paramTrans );
+    //
+    //auto & transform				= paramTrans_TV->Transform( 0 );
+    //auto translation				= transform[ 1 ];								// translation
+    //auto rotation					= static_cast<RotationF *>( transform[ 2 ] );	// rotation transform[ 2 ] == SimpleTransformF * but can be cast to RotationF, as it is a rotation by default
 
-	//auto & transform_x_interpolator = translation->GetP0MotylaNoga();
-	//auto & transform_y_interpolator = translation->GetP1MotylaNoga();
-	//auto & transform_z_interpolator = translation->GetP2MotylaNoga();
+    //auto & transform_x_interpolator = translation->GetP0MotylaNoga();
+    //auto & transform_y_interpolator = translation->GetP1MotylaNoga();
+    //auto & transform_z_interpolator = translation->GetP2MotylaNoga();
 
-	//auto & t_x_keys					= transform_x_interpolator.AccessKeys();
+    //auto & t_x_keys					= transform_x_interpolator.AccessKeys();
 
-	//// inspect the first key (TimeType, float)
-	//TimeType t_x_0_key_time			= t_x_keys[ 0 ].t;
-	//float	 t_x_0_key_val			= t_x_keys[ 0 ].val;
+    //// inspect the first key (TimeType, float)
+    //TimeType t_x_0_key_time			= t_x_keys[ 0 ].t;
+    //float	 t_x_0_key_val			= t_x_keys[ 0 ].val;
 
-	//// Make sure that vec4 interpolator is used for rotation axis interpolation
-	//assert( rotation->IsAxisVec3() );
+    //// Make sure that vec4 interpolator is used for rotation axis interpolation
+    //assert( rotation->IsAxisVec3() );
 
-	//auto & rot_angle_interpolator	= rotation->AccessAngle();
-	//auto & rot_angle_keys			= rot_angle_interpolator.AccessKeys();
+    //auto & rot_angle_interpolator	= rotation->AccessAngle();
+    //auto & rot_angle_keys			= rot_angle_interpolator.AccessKeys();
 
-	//// inspect the first key (TimeType, float)
-	//TimeType rot_angle_key_0_time	= rot_angle_keys[ 0 ].t; 
-	//float rot_angle_key_0_value		= rot_angle_keys[ 0 ].val; 
-	//
-	//auto & rot_axis_interpolator	= rotation->AccessRotAxis();
-	//auto & rot_axis_keys			= rot_axis_interpolator.AccessKeys();
+    //// inspect the first key (TimeType, float)
+    //TimeType rot_angle_key_0_time	= rot_angle_keys[ 0 ].t; 
+    //float rot_angle_key_0_value		= rot_angle_keys[ 0 ].val; 
+    //
+    //auto & rot_axis_interpolator	= rotation->AccessRotAxis();
+    //auto & rot_axis_keys			= rot_axis_interpolator.AccessKeys();
 
-	//// inspect the first key (TimeType, glm::vec3)
-	//TimeType rot_axis_key_0_time	= rot_axis_keys[ 0 ].t; 
-	//glm::vec3 rot_axis_key_0_value	= rot_axis_keys[ 0 ].val; 
-	//
-	//// suppress warnings
-	//{ transform_y_interpolator; }
-	//{ transform_z_interpolator; }
+    //// inspect the first key (TimeType, glm::vec3)
+    //TimeType rot_axis_key_0_time	= rot_axis_keys[ 0 ].t; 
+    //glm::vec3 rot_axis_key_0_value	= rot_axis_keys[ 0 ].val; 
+    //
+    //// suppress warnings
+    //{ transform_y_interpolator; }
+    //{ transform_z_interpolator; }
 
-	//{ time; }
-	//{ value; }
+    //{ time; }
+    //{ value; }
 
-	//{ t_x_0_key_time; }
-	//{ t_x_0_key_val; }
+    //{ t_x_0_key_time; }
+    //{ t_x_0_key_val; }
 
-	//{ paramColor_keys_0_t; }
-	//{ paramColor_keys_0_val; }
+    //{ paramColor_keys_0_t; }
+    //{ paramColor_keys_0_val; }
 
-	//{ rot_angle_key_0_time; }
-	//{ rot_angle_key_0_value; }
+    //{ rot_angle_key_0_time; }
+    //{ rot_angle_key_0_value; }
 
-	//{ rot_axis_key_0_time; }
-	//{ rot_axis_key_0_value; }
+    //{ rot_axis_key_0_time; }
+    //{ rot_axis_key_0_value; }
 }
 
 } //bv
