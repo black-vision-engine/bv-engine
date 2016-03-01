@@ -18,6 +18,7 @@
 
 #include "Engine/Graphics/Effects/NodeEffect/NodeEffectFactory.h"
 
+#include "Engine/Models/BoundingVolume.h"
 
 namespace bv {
 
@@ -139,9 +140,9 @@ RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( mode
                 //FIXME: this long type name suggests that something wrong is happening here (easier to name design required)
                 RenderableArrayDataArraysSingleVertexBuffer * radasvb = CreateRenderableArrayDataTriStrip( modelNode, finalizer );
 
-                if( radasvb )
+                if( radasvb ) 
                 {
-                    renderable = new TriangleStrip( radasvb, effect );
+                    renderable = new TriangleStrip( radasvb, modelNode->GetBoundingVolume()->GetBoundingBox(), effect );
                 }
                 break;
             }
@@ -154,7 +155,7 @@ RenderableEntity *  BVProjectTools::CreateRenderableEntity                ( mode
     }
     else
     {
-        renderable = new TriangleStrip( nullptr, nullptr );
+        renderable = new TriangleStrip( nullptr, nullptr, nullptr );
     }
 
 

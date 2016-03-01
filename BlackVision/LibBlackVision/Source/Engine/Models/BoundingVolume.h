@@ -21,7 +21,9 @@ class BoundingVolume {
 public:
                                 BoundingVolume          ( VertexAttributesChannel * vac );
 
-    void                        SetVAC                  ( VertexAttributesChannel * vac );
+    //void                        SetVAC                  ( VertexAttributesChannel * vac );
+
+    const mathematics::Box *    GetBoundingBox          () const;
 
     void                        Update                  ();
 };

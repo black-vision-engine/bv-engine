@@ -11,7 +11,7 @@ namespace bv
 // *********************************
 //
 TriangleMesh::TriangleMesh   ()
-    : Triangles( nullptr, nullptr, RenderableType::RT_TRIANGLE_MESH )
+    : Triangles( nullptr, nullptr, nullptr, RenderableType::RT_TRIANGLE_MESH )
 {
     assert( false );
 }

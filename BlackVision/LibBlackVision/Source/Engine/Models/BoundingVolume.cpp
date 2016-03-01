@@ -110,4 +110,12 @@ void                    BoundingVolume::Update                  ()
     }
 }
 
+// ***********************
+//
+const mathematics::Box *           BoundingVolume::GetBoundingBox          () const
+{
+    return &m_box;
+}
+
+
 } }

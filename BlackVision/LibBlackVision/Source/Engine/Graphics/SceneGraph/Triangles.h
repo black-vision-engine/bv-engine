@@ -8,16 +8,22 @@ namespace bv {
 class RenderableArrayDataArraysSingleVertexBuffer;
 class RenderableEffect;
 
+namespace mathematics {
+struct Box;
+}
+
 class Triangles : public RenderableEntity
 {
-
+    const mathematics::Box *        m_boundingBox;
 public:
 
-            Triangles               ( RenderableArrayDataSingleVertexBuffer * rad, RenderableEffectPtr effect, RenderableType type = RenderableType::RT_TRIANGLES );
-            ~Triangles              ();
+                                    Triangles               ( RenderableArrayDataSingleVertexBuffer * rad, const mathematics::Box * boundingBox, RenderableEffectPtr effect, RenderableType type = RenderableType::RT_TRIANGLES );
+                                    ~Triangles              ();
 
-    virtual int     NumTriangles    ( unsigned int ccNum ) const = 0;
-    virtual int     NumVertices     ( unsigned int ccNum ) const = 0;
+    virtual int                     NumTriangles    ( unsigned int ccNum ) const = 0;
+    virtual int                     NumVertices     ( unsigned int ccNum ) const = 0;
+
+    virtual const mathematics::Box * GetBoundingBox  () const;
 
     //TODO:
     //virtual GetVertex
