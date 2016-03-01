@@ -29,6 +29,16 @@ CompositeFullscreenEffect::~CompositeFullscreenEffect  ()
 
 // ****************************
 //
+void    CompositeFullscreenEffect::Update                      ()
+{
+    for( auto n : m_graph->GetSourceNodes() )
+    {
+        n->GetEffect()->Update();
+    }
+}
+
+// ****************************
+//
 void    CompositeFullscreenEffect::Render                      ( FullscreenEffectContext * ctx )
 {
     SynchronizeInputData( ctx );

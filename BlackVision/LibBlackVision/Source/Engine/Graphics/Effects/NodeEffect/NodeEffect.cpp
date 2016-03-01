@@ -58,4 +58,11 @@ IValuePtr       NodeEffect::GetValue                    ( const std::string & na
     return m_logic->GetValue( name );
 }
 
+// *********************************
+//
+void            NodeEffect::Update                      ()
+{
+    m_logic->Update();
+}
+
 } //bv

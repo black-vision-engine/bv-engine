@@ -34,6 +34,8 @@ public:
 
     virtual                             ~FullscreenEffect       ();
 
+    virtual void                        Update                  ()                                  = 0;
+
     virtual void                        Render                  ( FullscreenEffectContext * ctx )   = 0;
 
     virtual unsigned int                GetNumInputs            () const                            = 0;

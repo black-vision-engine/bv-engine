@@ -23,6 +23,7 @@ public:
                                 FullscreenEffectInstance    ( FullscreenEffectPtr effect );
                                 ~FullscreenEffectInstance   ();
 
+    void                        Update                      ();
     void                        Render                      ( RenderTarget * output, RenderLogicContext * ctx );
 
     void                        UpdateInputRenderTargets    ( const std::vector< RenderTarget * > & renderTargets );

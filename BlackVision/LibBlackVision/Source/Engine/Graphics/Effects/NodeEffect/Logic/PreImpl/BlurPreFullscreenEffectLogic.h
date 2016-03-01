@@ -13,10 +13,10 @@ class BlurPreFullscreenEffectLogic : public PreFullscreenEffectLogic
 {
 private:
 
-    ValueFloatPtr m_blurSize;
-    ValueBoolPtr  m_isVertical;
-    ValueBoolPtr  m_normalize;
-    ValueIntPtr   m_blurKernelTypeVal;
+    ValueFloatPtr   m_blurSize;
+    ValueIntPtr     m_isVertical;
+    ValueIntPtr     m_normalize;
+    ValueIntPtr     m_blurKernelTypeVal;
 
 public:
                 BlurPreFullscreenEffectLogic        ();

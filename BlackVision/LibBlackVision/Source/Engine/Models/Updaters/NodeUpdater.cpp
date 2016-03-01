@@ -166,6 +166,8 @@ void    NodeUpdater::UpdateNodeEffect       ()
 		{
 			UpdateValue( val, sceneNodeEffect->GetValue( val->GetName() ) );
 		}
+
+        sceneNodeEffect->Update();
     }
 }
 

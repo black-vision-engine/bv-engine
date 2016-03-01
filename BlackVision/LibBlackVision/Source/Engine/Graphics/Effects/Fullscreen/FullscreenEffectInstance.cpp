@@ -145,4 +145,11 @@ void                        FullscreenEffectInstance::RenderImpl                
     ctx->SetSyncRequired( false );
 }
 
+// **************************
+//
+void                        FullscreenEffectInstance::Update                      ()
+{
+    m_effect->Update();
+}
+
 } //bv

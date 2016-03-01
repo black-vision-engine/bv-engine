@@ -188,7 +188,9 @@ FullscreenEffect *  CreateBlurFSE               ( const std::vector< IValuePtr >
     assert( values.size() == 0 );   { values; }
 
     auto blurSizeVal        = ValuesFactory::CreateValueFloat( "blurSize" );
+    blurSizeVal->SetValue( 5.5 );
     auto textureSize        = ValuesFactory::CreateValueVec2( "textureSize" );
+    textureSize->SetValue(glm::vec2( 1920, 1080 ));
     auto verticalVal        = ValuesFactory::CreateValueInt( "vertical", 0 );
     auto normalizeVal       = ValuesFactory::CreateValueInt( "normalize", 1 );
     auto blurKernelTypeVal  = ValuesFactory::CreateValueInt( "blurKernelType", 0 );

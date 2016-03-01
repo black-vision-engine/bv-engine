@@ -20,6 +20,7 @@ public:
                             CompositeFullscreenEffect   ( FullscreenEffectGraph * graph );
                             ~CompositeFullscreenEffect  ();
 
+    virtual void            Update                      () override;
     virtual void            Render                      ( FullscreenEffectContext * ctx ) override;
 
     virtual unsigned int    GetNumInputs                () const override;

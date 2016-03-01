@@ -36,7 +36,7 @@ public:
                     NodeEffect                  ( NodeEffectLogic * logic,  NodeEffectType nodeEffectType );
                     ~NodeEffect                 ();
 
-    
+    void            Update                      ();
     void            Render                      ( SceneNode * node, RenderLogicContext * ctx );
 
     //FIXME: remove when transition is finished - this doesn't seem to be required in this model
