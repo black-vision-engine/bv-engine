@@ -19,5 +19,8 @@ void main()
     // Determine the mix factor with the line color
     float mixVal = smoothstep( lineWidth - 1, lineWidth + 1, d );
 
+	if( mixVal > 0.99 )
+		discard;
+	
     FragColor = mix( lineColor, mainColor, mixVal );
 }
