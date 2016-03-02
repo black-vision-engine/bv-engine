@@ -18,7 +18,7 @@ DEFINE_CONST_PTR_TYPE( Box )
 namespace
 {
 
-inline void        ComponentWiseMinMaxVector   ( glm::vec3 srcVec1, glm::vec3 srcVec2, glm::vec3 & dstMin, glm::vec3 & dstMax );
+inline void        ComponentWiseMinMaxVector    ( glm::vec3 srcVec1, glm::vec3 srcVec2, glm::vec3 & dstMin, glm::vec3 & dstMax );
 
 }   //  annonymous
 

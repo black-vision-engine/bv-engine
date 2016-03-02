@@ -9,8 +9,6 @@
 #include "Engine/Models/Plugins/Interfaces/IVertexAttributesChannel.h"
 #include "Engine/Models/Plugins/Interfaces/IConnectedComponent.h"
 
-#include "Mathematics/Box.h"
-
 namespace bv { namespace model
 {
 
@@ -63,8 +61,6 @@ public:
 
     virtual int                                         GetNumPrimitives        ( IConnectedComponentPtr cc ) const override;
     virtual std::vector< IConnectedComponentPtr >       GetComponents           () const override;
-
-    mathematics::Box                                    GetBoundingBox          () const;
 
     //virtual bool                                      CanBeConnectedTo        ( IPlugin * plugin ) const;
     virtual bool                                        CanBeConnectedTo        ( IVertexAttributesChannelPtr channel ) const override;

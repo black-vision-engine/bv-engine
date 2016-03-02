@@ -23,23 +23,23 @@ VertexAttributesChannelDescriptor::VertexAttributesChannelDescriptor    ()
 //
 VertexAttributesChannelDescriptor::VertexAttributesChannelDescriptor	( const VertexAttributesChannelDescriptor & other )
 {
-	for( auto attDesc : other.m_attributeChannelDescriptors )
-	{
-		AddAttrChannelDesc( attDesc->GetType(), attDesc->GetSemantic(), attDesc->GetChannelRole()  );
-	}
+    for( auto attDesc : other.m_attributeChannelDescriptors )
+    {
+        AddAttrChannelDesc( attDesc->GetType(), attDesc->GetSemantic(), attDesc->GetChannelRole()  );
+    }
 
-	m_indexChannelDescriptor = nullptr;
-	if( other.m_indexChannelDescriptor )
-	{
-		SetIndexChannelDesc( other.m_indexChannelDescriptor->GetType() );
-	}
+    m_indexChannelDescriptor = nullptr;
+    if( other.m_indexChannelDescriptor )
+    {
+        SetIndexChannelDesc( other.m_indexChannelDescriptor->GetType() );
+    }
 }
 
 // ************************************
 //
 VertexAttributesChannelDescriptor::~VertexAttributesChannelDescriptor   ()
 {
-	//FIXME this really needs fixing..
+    //FIXME this really needs fixing..
     //FIXME make sure that this is the owner of all descriptors
     //delete m_indexChannelDescriptor;
 
@@ -149,21 +149,21 @@ void    VertexAttributesChannelDescriptor::SetIndexChannelDesc     ( IndexChanne
 //
 const AttributeChannelDescriptor *      VertexAttributesChannelDescriptor::GetAttrChannelDescriptor	( AttributeSemantic semantic, Int32 occuranceIdx ) const
 {
-	const AttributeChannelDescriptor * ret = nullptr;
+    const AttributeChannelDescriptor * ret = nullptr;
     if( !m_attributeChannelDescriptors.empty() )
     {
         for( auto desc : m_attributeChannelDescriptors )
-		{
+        {
             if( desc->GetSemantic() == semantic )
-			{
-				if( occuranceIdx == 0 )
-				{
-					return desc;
-				}
-				ret = desc;
-				occuranceIdx--;
-			}
-		}
+            {
+                if( occuranceIdx == 0 )
+                {
+                    return desc;
+                }
+                ret = desc;
+                occuranceIdx--;
+            }
+        }
     }
     return ret;
 }

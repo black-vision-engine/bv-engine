@@ -3,12 +3,13 @@
 #include "BoundingBoxPostFullscreenEffectLogic.h"
 
 #include "Engine/Graphics/SceneGraph/SceneNode.h"
-#include "Engine/Graphics/SceneGraph/RenderableEntity.h"
+#include "Engine/Graphics/SceneGraph/RenderableEntityWithBoundingBox.h"
 
 #include "Engine/Graphics/Effects/BoundingBoxEffect.h"
 
 #include "Engine/Graphics/Effects/Utils/RenderLogicContext.h"
 
+#include "Engine/Models/BVProjectTools.h"
 
 namespace bv {
 
@@ -32,10 +33,15 @@ void                        BoundingBoxPostFullscreenEffectLogic::Render        
 {
     assert( ctx->GetBoundRenderTarget() != nullptr );
 
-    node; ctx;
+    renderer( ctx )->Enable( m_effect->GetPass( 0 ), static_cast< bv::RenderableEntity * >( node->GetTransformable() ) );
 
-    EnableBoundingBoxEffect( renderer( ctx ), node );
-    DrawWirefreameNodeOnly( renderer( ctx ), node );
+    auto box = static_cast< bv::RenderableEntityWithBoundingBox * >( node->GetTransformable() )->GetBoundingBox();
+
+    auto renderable = BVProjectTools::BuildRenderableBoundingBox( box );
+
+    renderer( ctx )->DrawRenderable( renderable );
+
+    delete renderable; // FIXME OMG this sucks so much (does it?)
 }
 
 // *********************************
@@ -59,7 +65,7 @@ void    BoundingBoxPostFullscreenEffectLogic::EnableBoundingBoxEffect           
 //
 void    BoundingBoxPostFullscreenEffectLogic::DrawWirefreameNodeOnly              ( Renderer * renderer, SceneNode * node )
 {
-    auto renderable = static_cast< bv::RenderableEntity * >( node->GetTransformable() );
+    auto renderable = static_cast< bv::RenderableEntityWithBoundingBox * >( node->GetTransformable() );
 
     renderer->DrawRenderable( renderable );
 }
