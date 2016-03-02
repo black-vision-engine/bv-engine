@@ -10,6 +10,7 @@
 
 #include "Engine/Graphics/Effects/FullScreen/Impl/Graph/FullscreenEffectGraph.h"
 
+#include <set>
 
 namespace bv {
 
@@ -54,7 +55,7 @@ unsigned int    CompositeFullscreenEffect::GetNumInputs                () const
 
     for( auto node : m_graph->GetSourceNodes() )
     {
-        sum += node->GetNumInputNodes();
+        sum += node->GetEffect()->GetNumInputs();
     }
 
     return sum;
@@ -107,6 +108,33 @@ void    CompositeFullscreenEffect::RenderGraphNode             ( FullscreenEffec
     renderer->Enable( outputRenderTarget );
     effect->Render( &ctx );
     renderer->Disable( outputRenderTarget );
+}
+
+// ****************************
+//
+std::vector< IValuePtr > CompositeFullscreenEffect::GetValues       () const
+{
+    auto sinkInputNodes = m_graph->GetSinkNode()->GetInputVec();
+
+    std::set< IValuePtr > valuesSet;
+
+    for( auto n :  sinkInputNodes )
+    {
+        for( auto v : n->GetEffect()->GetValues() )
+        {
+            valuesSet.insert( v );
+        }
+    }
+
+
+    auto values = m_graph->GetSinkNode()->GetEffect()->GetValues();
+
+    for( auto v : values )
+    {
+        valuesSet.insert( v );
+    }
+
+    return std::vector< IValuePtr >( valuesSet.begin(), valuesSet.end() );
 }
 
 } //bv

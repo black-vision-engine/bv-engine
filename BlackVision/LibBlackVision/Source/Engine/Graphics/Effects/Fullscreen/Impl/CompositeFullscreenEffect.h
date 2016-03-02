@@ -27,6 +27,8 @@ public:
 
     virtual void            SynchronizeInputData        ( FullscreenEffectContext * ctx ) override;
 
+    virtual std::vector< IValuePtr >    GetValues       () const override;
+
 private:
 
     void            RenderGraphNode             ( FullscreenEffectGraphNodePtr node, Renderer * renderer, RenderTarget * outputRenderTarget, RenderTargetStackAllocator * allocator );

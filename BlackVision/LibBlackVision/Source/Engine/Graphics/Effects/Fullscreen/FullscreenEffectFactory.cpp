@@ -5,6 +5,8 @@
 #include <cassert>
 
 #include "Engine/Graphics/Effects/Fullscreen/Impl/SimpleFullscreenEffect.h"
+#include "Engine/Graphics/Effects/Fullscreen/Impl/CompositeFullscreenEffect.h"
+#include "Engine/Graphics/Effects/Fullscreen/Impl/Graph/FullscreenEffectGraph.h"
 
 #include "Engine/Types/Values/ValuesFactory.h"
 
@@ -180,6 +182,103 @@ FullscreenEffect *  CreateVideoOutputFSE        ( const std::vector< IValuePtr >
 
 // **************************
 //
+FullscreenEffect *  CreateBlurFSECompositeOne            ( const std::vector< IValuePtr > & values )
+{
+    FullscreenEffectData fseData;
+    auto src = FSEShaderSourceProvider->ReadShader( "blur.frag" );
+
+    assert( values.size() == 2 );
+
+    auto verticalVal        = ValuesFactory::CreateValueInt( "vertical", 0 );
+    auto normalizeVal       = ValuesFactory::CreateValueInt( "normalize", 1 );
+    auto blurKernelTypeVal  = ValuesFactory::CreateValueInt( "blurKernelType", 0 );
+
+    fseData.AppendInputTexture( nullptr, "Tex0" );
+
+    AppendValues( &fseData, values );
+    fseData.AppendValue( verticalVal );
+    fseData.AppendValue( normalizeVal );
+    fseData.AppendValue( blurKernelTypeVal );
+
+    fseData.SetPixelShaderSource( src );
+
+    fseData.SetBlendEnabled( false );
+    fseData.SetCullEnabled( false );
+    fseData.SetDepthTestEnabled( false );
+
+    auto firstPass = new SimpleFullscreenEffect( fseData );
+
+    auto firstPassNode = std::shared_ptr< FullscreenEffectGraphNode >( new FullscreenEffectGraphNode( firstPass ) );
+
+    auto graph = new FullscreenEffectGraph();
+
+    std::vector< FullscreenEffectGraphNodePtr > predecessors;
+
+    graph->InsertNode( firstPassNode, predecessors );
+
+    auto compositeEffect = new CompositeFullscreenEffect( graph );
+
+    graph->SetSinkNode( firstPassNode );
+    //graph->MarkSourceNode( firstPassNode );
+
+    return compositeEffect;
+}
+
+// **************************
+//
+FullscreenEffect *  CreateBlurFSEComposite            ( const std::vector< IValuePtr > & values )
+{
+    FullscreenEffectData fseData;
+    auto src = FSEShaderSourceProvider->ReadShader( "blur.frag" );
+
+    assert( values.size() == 2 );
+
+    auto verticalVal        = ValuesFactory::CreateValueInt( "vertical", 0 );
+    auto normalizeVal       = ValuesFactory::CreateValueInt( "normalize", 1 );
+    auto blurKernelTypeVal  = ValuesFactory::CreateValueInt( "blurKernelType", 0 );
+
+    fseData.AppendInputTexture( nullptr, "Tex0" );
+
+    AppendValues( &fseData, values );
+    fseData.AppendValue( verticalVal );
+    fseData.AppendValue( normalizeVal );
+    fseData.AppendValue( blurKernelTypeVal );
+
+    fseData.SetPixelShaderSource( src );
+
+    fseData.SetBlendEnabled( false );
+    fseData.SetCullEnabled( false );
+    fseData.SetDepthTestEnabled( false );
+
+    auto firstPass = new SimpleFullscreenEffect( fseData );
+
+    auto firstPassNode = std::shared_ptr< FullscreenEffectGraphNode >( new FullscreenEffectGraphNode( firstPass ) );
+
+    auto secondPass = new SimpleFullscreenEffect( fseData );
+
+    auto secondPassNode = std::shared_ptr< FullscreenEffectGraphNode >( new FullscreenEffectGraphNode( secondPass ) );
+
+    auto graph = new FullscreenEffectGraph();
+
+    std::vector< FullscreenEffectGraphNodePtr > predecessors;
+
+    graph->InsertNode( firstPassNode, predecessors );
+
+    predecessors.push_back( firstPassNode );
+
+    graph->InsertNode( secondPassNode, predecessors );
+    
+    auto compositeEffect = new CompositeFullscreenEffect( graph );
+
+    graph->SetSinkNode( secondPassNode );
+    graph->MarkSourceNode( firstPassNode );
+
+    return compositeEffect;
+}
+
+
+// **************************
+//
 FullscreenEffect *  CreateBlurFSE               ( const std::vector< IValuePtr > & values )
 {
     FullscreenEffectData fseData;
@@ -241,7 +340,9 @@ FullscreenEffect *  CreateFullscreenEffect( FullscreenEffectType fseType, const 
         }
         case FullscreenEffectType::FET_BLUR:
         {
-            return CreateBlurFSE( values );
+            //return CreateBlurFSEComposite( values );
+            return CreateBlurFSECompositeOne( values );
+            //return CreateBlurFSE( values );
         }        
         default:
             assert( false );
