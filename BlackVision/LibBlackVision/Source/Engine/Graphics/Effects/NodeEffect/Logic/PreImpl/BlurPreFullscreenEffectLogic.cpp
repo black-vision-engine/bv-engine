@@ -14,7 +14,8 @@ namespace bv {
 //
 BlurPreFullscreenEffectLogic::BlurPreFullscreenEffectLogic              ()
 {
-    m_blurSize = ValuesFactory::CreateValueFloat( "blurSize", 0.f );
+    m_blurSize      = ValuesFactory::CreateValueFloat( "blurSize", 0.f );
+    m_textureSize   = ValuesFactory::CreateValueVec2( "textureSize" );
 }
 
 // *********************************
@@ -37,6 +38,8 @@ void                        BlurPreFullscreenEffectLogic::RenderImpl    ( SceneN
 
     logic( ctx )->DrawNode( node, ctx );
 
+    m_textureSize->SetValue( glm::vec2( outRT->Width(), outRT->Height() ) );
+
     disableBoundRT( ctx );
 
     enable( ctx, mainRT );
@@ -46,9 +49,10 @@ void                        BlurPreFullscreenEffectLogic::RenderImpl    ( SceneN
 //
 std::vector< IValuePtr >    BlurPreFullscreenEffectLogic::GetValues     () const
 {
-    std::vector< IValuePtr > res( 1 );
+    std::vector< IValuePtr > res( 2 );
 
     res[ 0 ] = m_blurSize;
+    res[ 1 ] = m_textureSize;
 
     return res;
 }

@@ -185,10 +185,8 @@ FullscreenEffect *  CreateBlurFSE               ( const std::vector< IValuePtr >
     FullscreenEffectData fseData;
     auto src = FSEShaderSourceProvider->ReadShader( "blur.frag" );
 
-    assert( values.size() == 1 );
+    assert( values.size() == 2 );
 
-    auto textureSize        = ValuesFactory::CreateValueVec2( "textureSize" );
-    textureSize->SetValue(glm::vec2( 1920, 1080 ));
     auto verticalVal        = ValuesFactory::CreateValueInt( "vertical", 0 );
     auto normalizeVal       = ValuesFactory::CreateValueInt( "normalize", 1 );
     auto blurKernelTypeVal  = ValuesFactory::CreateValueInt( "blurKernelType", 0 );
@@ -196,7 +194,6 @@ FullscreenEffect *  CreateBlurFSE               ( const std::vector< IValuePtr >
     fseData.AppendInputTexture( nullptr, "Tex0" );
 
     AppendValues( &fseData, values );
-    fseData.AppendValue( textureSize );
     fseData.AppendValue( verticalVal );
     fseData.AppendValue( normalizeVal );
     fseData.AppendValue( blurKernelTypeVal );

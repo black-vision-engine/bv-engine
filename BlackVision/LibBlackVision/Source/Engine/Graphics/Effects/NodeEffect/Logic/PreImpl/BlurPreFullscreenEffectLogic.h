@@ -14,6 +14,7 @@ class BlurPreFullscreenEffectLogic : public PreFullscreenEffectLogic
 private:
 
     ValueFloatPtr   m_blurSize;
+    ValueVec2Ptr    m_textureSize;
 
 public:
                 BlurPreFullscreenEffectLogic        ();
