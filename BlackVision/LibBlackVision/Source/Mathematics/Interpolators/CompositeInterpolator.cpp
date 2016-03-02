@@ -9,6 +9,7 @@
 
 #include "Serialization/SerializationHelper.h"
 #include "Serialization/SerializationHelper.inl"
+#include "Serialization/BV/BVSerializeContext.h"
 
 #include "Mathematics/Core/mathfuncs.h"
 #include <vector>
@@ -96,21 +97,29 @@ CompositeInterpolator< TimeValueT, ValueT >::CompositeInterpolator( const Compos
 template< class TimeValueT, class ValueT >
 void                                        CompositeInterpolator< TimeValueT, ValueT >::Serialize       ( ISerializer& ser ) const
 {
+    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+
     ser.EnterChild( "interpolator" );
 
-        ser.SetAttribute( "curve_type", SerializationHelper::Enum2String< CurveType >( SerializationHelper::ct2s, m_type ) );
-        SerializationHelper::SerializeAttribute( ser, m_preMethod, "preMethod" );
-        SerializationHelper::SerializeAttribute( ser, m_postMethod, "postMethod" );
+        if( context->detailedInfo )
+        {
+            ser.SetAttribute( "curve_type", SerializationHelper::Enum2String< CurveType >( SerializationHelper::ct2s, m_type ) );
+            SerializationHelper::SerializeAttribute( ser, m_preMethod, "preMethod" );
+            SerializationHelper::SerializeAttribute( ser, m_postMethod, "postMethod" );
+        }
 
         ser.EnterArray( "keys" );
             for( size_t i = 0; i < keys.size(); i++ )
                 keys[ i ].Serialize( ser );
         ser.ExitChild();
 
-        ser.EnterArray( "interpolations" );
-            for( size_t i = 0; i < interpolators.size(); i++ )
-                interpolators[ i ]->Serialize( ser );
-        ser.ExitChild();
+        if( context->detailedInfo )
+        {
+            ser.EnterArray( "interpolations" );
+                for( size_t i = 0; i < interpolators.size(); i++ )
+                    interpolators[ i ]->Serialize( ser );
+            ser.ExitChild();
+        }
 
     ser.ExitChild();
 }

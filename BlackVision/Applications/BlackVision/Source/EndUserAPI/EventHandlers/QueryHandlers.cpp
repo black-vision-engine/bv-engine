@@ -9,6 +9,7 @@
 #include "Assets/AssetDescsWithUIDs.h"
 #include "ProjectManager.h"
 #include "Engine/Models/BVProjectEditor.h"
+#include "Engine/Models/BVProjectTools.h"
 
 #include "Serialization/Json/JsonDeserializeObject.h"
 #include "Serialization/BV/BVSerializeContext.h"
@@ -79,6 +80,8 @@ void QueryHandlers::Info        ( bv::IEventPtr evt )
             GetTimeLinesInfo( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::ListTimelineKeyframes )
             ListTimelineKeyframes( responseJSON, request, eventID );
+        else if( command == InfoEvent::Command::ListTimelinesParams )
+            ListTimelinesParams( responseJSON, request, eventID );
         else if( command == InfoEvent::Command::NodeInfo )
             GetNodeInfo( responseJSON, request, eventID );
         else if ( command == InfoEvent::Command::PluginInfo )
@@ -674,6 +677,73 @@ void         QueryHandlers::ListTimelineKeyframes    ( JsonSerializeObject & ser
     ser.ExitChild();
 
     ser.SetAttribute( "TimelinePath", TimelinePath );
+}
+
+// ***********************
+//
+void    QueryHandlers::ListTimelinesParams     ( JsonSerializeObject & ser, IDeserializer * request, int eventID )
+{
+    auto context = static_cast<BVSerializeContext*>( ser.GetSerializeContext() );
+    context->recursive = false;
+    context->detailedInfo = false;
+    context->sceneNameInTimeline = true;
+
+    assert( request != nullptr );
+    if( request == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::ListTimelinesParams, eventID, "Not valid request." );
+        return;
+    }
+
+    std::string sceneName = request->GetAttribute( "SceneName" );
+    auto scene = m_appLogic->GetBVProject()->GetProjectEditor()->GetScene( sceneName );
+    if( scene == nullptr )
+    {
+        ErrorResponseTemplate( ser, InfoEvent::Command::ListTimelinesParams, eventID, "Scene not found" );
+        return;
+    }
+
+    auto rootNode = scene->GetRootNode();
+    assert( rootNode != nullptr );
+
+    auto timelineParamsMap = BVProjectTools::GetParamsOfTimelines( rootNode, scene->GetTimeline() );
+
+    PrepareResponseTemplate( ser, InfoEvent::Command::ListTimelinesParams, eventID, true );
+
+    ser.EnterArray( "Timelines" );
+
+    for( auto& timelineParams : timelineParamsMap )
+    {
+        ser.EnterChild( "Mapping" );
+            ser.SetAttribute( "TimelinePath", timelineParams.first->GetName() );
+
+            ser.EnterArray( "Params" );
+
+            for( auto& timelineParamInfo : timelineParams.second )
+            {
+                ser.EnterChild( "Param" );
+                    ser.SetAttribute( "NodePath", timelineParamInfo.nodePath );
+                    ser.SetAttribute( "PluginName", timelineParamInfo.pluginName );
+                    ser.SetAttribute( "ParamSubName", timelineParamInfo.paramSubName );
+                
+                    if( timelineParamInfo.paramOwner == ParamOwner::PO_Plugin )
+                        ser.SetAttribute( "ParamOwner", SerializationHelper::T2String( ParamKeyEvent::TargetType::PluginParam ) );
+                    else if( timelineParamInfo.paramOwner == ParamOwner::PO_Resource )
+                        ser.SetAttribute( "ParamOwner", SerializationHelper::T2String( ParamKeyEvent::TargetType::ResourceParam ) );
+                    else if( timelineParamInfo.paramOwner == ParamOwner::PO_GlobalEffect )
+                        ser.SetAttribute( "ParamOwner", SerializationHelper::T2String( ParamKeyEvent::TargetType::GlobalEffectParam ) );
+                
+                    timelineParamInfo.param->Serialize( ser );
+                ser.ExitChild();    //  Param
+            }
+
+            ser.ExitChild();    //  Params
+
+        ser.ExitChild();    //  Mapping
+    }
+
+    ser.ExitChild();    //  Timelines
+
 }
 
 // ***********************
