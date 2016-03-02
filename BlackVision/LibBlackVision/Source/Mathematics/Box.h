@@ -15,6 +15,15 @@ struct Box;
 DEFINE_PTR_TYPE( Box )
 DEFINE_CONST_PTR_TYPE( Box )
 
+namespace
+{
+
+inline void        ComponentWiseMinMaxVector   ( glm::vec3 srcVec1, glm::vec3 srcVec2, glm::vec3 & dstMin, glm::vec3 & dstMax );
+
+}   //  annonymous
+
+
+
 struct Box
 {
     Float32	xmin;
@@ -48,7 +57,7 @@ struct Box
     //	return std::make_shared< Box >( left, top, right, bottom, near, far );
     //}
 
-    void	Include					( const glm::vec3 & point )
+    void        Include					( const glm::vec3 & point )
     {
         if( m_empty )
         {
@@ -69,6 +78,48 @@ struct Box
             ymax = std::max( ymax, point.y );
             zmax = std::max( zmax, point.z );
         }
+    }
+
+    // ***********************
+    // Parameter rayDirection should be normalized ray vector
+    // Returns distance to intersection point and infinity or -infinity if there's no intersection.
+    // If box is behind rayPoint return value is negative.
+    Float32   RayIntersection         ( glm::vec3 rayPoint, glm::vec3 rayDirection )
+    {
+        glm::vec3 inverseRayDir = glm::vec3( 1.0 / rayDirection.x, 1.0 / rayDirection.y, 1.0 / rayDirection.z );
+        
+        // Compute distances from rayPoint to minimal box corner and maximal box corner.
+        glm::vec3 minBoxPointDist = inverseRayDir * ( glm::vec3( xmin, ymin, zmin ) - rayPoint );
+        glm::vec3 maxBoxPointDist = inverseRayDir * ( glm::vec3( xmax, ymax, zmax ) - rayPoint );
+
+        // Compute distances to nearest planes.
+        glm::vec3 nearestPlanesDist;
+        glm::vec3 farthestPlanesDist;
+        ComponentWiseMinMaxVector( minBoxPointDist, maxBoxPointDist, nearestPlanesDist, farthestPlanesDist );
+
+        // We have distances of 3 nearest planes of the box (nearestPlanesDist). The furthest from theese
+        // planes should be point of intersection, if this intersection exist.
+        // Intersection exists only if neither of the farthestPlanesDist is nearer than any of nearestPlanesDist.
+        Float32 maxMinPlane = glm::max( glm::max( nearestPlanesDist.x, nearestPlanesDist.y ), nearestPlanesDist.z );
+        Float32 minMaxPlane = glm::min( glm::min( farthestPlanesDist.x, farthestPlanesDist.y ), farthestPlanesDist.z );
+
+        // Box is behind rayPoint.
+        if( minMaxPlane < 0.0f )
+        {
+            // No intersection behind rayPoint
+            if( maxMinPlane > minMaxPlane )
+                return -std::numeric_limits< Float32 >::infinity();
+
+            // Returns intersection dinstance behind raypoint.
+            return minMaxPlane;
+        }
+
+        // No intersection in front of rayPoint
+        if( maxMinPlane > minMaxPlane )
+            return std::numeric_limits< Float32 >::infinity();
+
+        // Returns intersection distance.
+        return maxMinPlane;
     }
 
     //void	Include					( const Box & Box )
@@ -105,9 +156,51 @@ struct Box
     //			);
     //}
 
-    //Float32		Width				() const	{ return xmax - xmin; }
-    //Float32		Height				() const	{ return ymax - ymin; }
+    Float32		Width				() const	{ return xmax - xmin; }
+    Float32		Height				() const	{ return ymax - ymin; }
+    Float32     Depth               () const    { return zmax - zmin; }
 };
+
+namespace
+{
+
+inline void        ComponentWiseMinMaxVector   ( glm::vec3 srcVec1, glm::vec3 srcVec2, glm::vec3 & dstMin, glm::vec3 & dstMax )
+{
+    if( srcVec1.x < srcVec2.x )
+    {
+        dstMin.x = srcVec1.x;
+        dstMax.x = srcVec2.x;
+    }
+    else
+    {
+        dstMin.x = srcVec2.x;
+        dstMax.x = srcVec1.x;
+    }
+
+    if( srcVec1.y < srcVec2.y )
+    {
+        dstMin.y = srcVec1.y;
+        dstMax.y = srcVec2.y;
+    }
+    else
+    {
+        dstMin.y = srcVec2.y;
+        dstMax.y = srcVec1.y;
+    }
+
+    if( srcVec1.z < srcVec2.z )
+    {
+        dstMin.z = srcVec1.z;
+        dstMax.z = srcVec2.z;
+    }
+    else
+    {
+        dstMin.z = srcVec2.z;
+        dstMax.z = srcVec1.z;
+    }
+}
+
+}   //  annonymous
 
 } // mathematics
 } // bv
