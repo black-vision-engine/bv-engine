@@ -482,7 +482,8 @@ model::BasicNodePtr		    TestScenesFactory::CreateSceneFromEnv       ( const std
     }
     else if( scene == "CREED_TEST_SCENE" )
     {
-        node = TestScenesFactory::CreedPieChartTestScene( pluginsManager, timeline );
+        //node = TestScenesFactory::CreedPieChartTestScene( pluginsManager, timeline );
+        node = TestScenesFactory::CreedPrismTestScene( pluginsManager, timeline );
     }
     else if( scene == "VIDEO_INPUT_TEST_SCENE" )
     {
@@ -880,6 +881,11 @@ model::BasicNodePtr    TestScenesFactory::CreedPrismTestScene     ( const model:
     SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ),  8.f, glm::vec3( 0.25f,  .0f, 0.25f ) );
     SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 11.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
     SetParameterScale( prism4->GetPlugin( "transform" )->GetParameter( "simple_transform" ), 20.f, glm::vec3( 0.25f, 1.0f, 0.25f ) );
+
+    prism->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "bounding box", timeEvaluator ) );
+    prism2->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "bounding box", timeEvaluator ) );
+    prism3->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "bounding box", timeEvaluator ) );
+    prism4->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "bounding box", timeEvaluator ) );
 
     root->AddChildToModelOnly( prism );
     root->AddChildToModelOnly( prism2 );
@@ -1308,7 +1314,9 @@ model::BasicNodePtr TestScenesFactory::RemoteEventsTestScene( const model::Plugi
     auto node1 = SimpleNodesFactory::CreateBasicShapeShow( timeEvaluator, "DEFAULT_CUBE", glm::vec3( 0.0, 2.0, 4.0 ), "textures/sand.jpg" );
     auto node2 = SimpleNodesFactory::CreateTextCacheTest( timeEvaluator, "Text", glm::vec3( 0.0, -0.4, 0.0 ), glm::vec4( 1.0, 0.7, 0.0, 1.0 ), L"Long time ago in a galaxy", "fonts/StarWars.ttf" );
 
-    node0->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "wireframe", timeEvaluator ) );
+    node0->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "bb", timeEvaluator ) );
+    node1->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "bb", timeEvaluator ) );
+    node2->SetNodeEffect( model::ModelNodeEffectFactory::CreateModelNodeEffect( NodeEffectType::NET_BOUNDING_BOX, "bb", timeEvaluator ) );
 
     node0->AddChildToModelOnly( node1 );
     node0->AddChildToModelOnly( node2 );

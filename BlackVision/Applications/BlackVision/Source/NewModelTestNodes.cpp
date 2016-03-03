@@ -828,8 +828,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedColoredPrismNode( model::ITi
 // TEXTURE plugin
     if( root->GetPlugin( "texture" ) )
     {
-        success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
-        success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
+        success = model::LoadTexture( root->GetPlugin( "texture" ), "textures/sand.jpg" );
+        //success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
         assert( success );
     }
 
@@ -889,8 +889,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedGradedPrismNode( model::ITim
 // TEXTURE plugin
     if( root->GetPlugin( "texture" ) )
     {
-        success = model::LoadTexture( root->GetPlugin( "texture" ), "caption_white.png" );
-        success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
+        success = model::LoadTexture( root->GetPlugin( "texture" ), "textures/sand.jpg" );
+        //success = model::LoadTexture( root->GetPlugin( "texture" ), "time_zones_4.jpg" );
         assert( success );
     }
 
@@ -954,7 +954,8 @@ model::BasicNodePtr  SimpleNodesFactory::CreateCreedTexturedPrismNode( model::IT
 // TEXTURE plugin
     if( root->GetPlugin( "texture" ) )
     {
-        success = model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
+        success = model::LoadTexture( root->GetPlugin( "texture" ), "textures/sand.jpg" );
+        //success = model::LoadTexture( root->GetPlugin( "texture" ), "Assets/Textures/time_zones_4.jpg" );
         SetParameter( root->GetPlugin( "texture" )->GetResourceStateModel( "Tex0" )->GetParameter( "borderColor" ), 0.f, glm::vec4( 1, 1, 0, 1 ) );
         root->GetPlugin( "texture" )->GetRendererContext()->cullCtx->enabled = false;
         assert( success );
