@@ -9,6 +9,7 @@
 #include "Engine/Graphics/Effects/Utils/RenderTargetStackAllocator.h"
 
 #include "Engine/Graphics/Effects/FullScreen/Impl/Graph/FullscreenEffectGraph.h"
+#include "Engine/Graphics/Effects/FullScreen/Impl/Graph/InputFullscreenEffectGraphNode.h"
 
 #include <set>
 
@@ -32,10 +33,22 @@ CompositeFullscreenEffect::~CompositeFullscreenEffect  ()
 //
 void    CompositeFullscreenEffect::Update                      ()
 {
-    for( auto n : m_graph->GetSourceNodes() )
+	auto sinkNode = m_graph->GetSinkNode();
+
+	for( auto n : sinkNode->GetInputVec() )
     {
-        n->GetEffect()->Update();
+		auto eff = n->GetEffect();
+        if( eff != nullptr )
+		{
+			eff->Update();
+		}
     }
+
+	auto eff = sinkNode->GetEffect();
+	if( eff != nullptr )
+	{
+		eff->Update();
+	}
 }
 
 // ****************************
@@ -43,8 +56,8 @@ void    CompositeFullscreenEffect::Update                      ()
 void    CompositeFullscreenEffect::Render                      ( FullscreenEffectContext * ctx )
 {
     SynchronizeInputData( ctx );
-
-    RenderGraphNode( m_graph->GetSinkNode(), ctx->GetRenderer(), ctx->GetOutputRenderTarget(), ctx->GetRenderTargetAllocator() );
+    //->GetRenderer(), ctx->GetOutputRenderTarget(), ctx->GetRenderTargetAllocator()
+    RenderGraphNode( m_graph->GetSinkNode(), ctx );
 }
 
 // ****************************
@@ -55,7 +68,7 @@ unsigned int    CompositeFullscreenEffect::GetNumInputs                () const
 
     for( auto node : m_graph->GetSourceNodes() )
     {
-        sum += node->GetEffect()->GetNumInputs();
+        sum += node->GetNumInputNodes();
     }
 
     return sum;
@@ -65,6 +78,8 @@ unsigned int    CompositeFullscreenEffect::GetNumInputs                () const
 //
 void    CompositeFullscreenEffect::SynchronizeInputData        ( FullscreenEffectContext * ctx )
 {
+	//->GetRenderer(), ctx->GetOutputRenderTarget(), ctx->GetRenderTargetAllocator()
+
     assert( ctx->AccessInputRenderTargets() != nullptr );
     assert( GetNumInputs() <= ( ctx->AccessInputRenderTargets()->size() - ctx->GetFirstRenderTargetIndex() ) );
     
@@ -73,9 +88,14 @@ void    CompositeFullscreenEffect::SynchronizeInputData        ( FullscreenEffec
 
     for( auto node : m_graph->GetSourceNodes() )
     {
-        assert( node->GetNumInputNodes() == 0 );
-
         auto effect = node->GetEffect();
+        if( node->GetNumInputNodes() != 0 )
+        {
+            for( auto in : node->GetInputVec() )
+            {
+                assert( in->GetEffect() == nullptr );
+            }
+        }
         
         ctx->SetFirstRenderTargetIndex( curIdx );
         effect->SynchronizeInputData( ctx );
@@ -86,28 +106,51 @@ void    CompositeFullscreenEffect::SynchronizeInputData        ( FullscreenEffec
 
 // ****************************
 //
-void    CompositeFullscreenEffect::RenderGraphNode             ( FullscreenEffectGraphNodePtr node, Renderer * renderer, RenderTarget * outputRenderTarget, RenderTargetStackAllocator * allocator )
+void    CompositeFullscreenEffect::RenderGraphNode             ( FullscreenEffectGraphNodePtr node, FullscreenEffectContext * ctx )
 {
-    std::vector< RenderTarget * >   inputResults( node->GetNumInputNodes() );
+	auto renderer = ctx->GetRenderer();
+	auto outputRenderTarget = ctx->GetOutputRenderTarget();
+	auto allocator = ctx->GetRenderTargetAllocator();
+
+    std::vector< RenderTarget * >   inputResults;
 
     for( auto it : node->GetInputVec() )
     {
-        auto nodeOutRt = allocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
-        RenderGraphNode( it, renderer, nodeOutRt, allocator );
+        if( it->GetEffect() != nullptr )
+        {
+            auto nodeOutRt = allocator->Allocate( RenderTarget::RTSemantic::S_DRAW_ONLY );
+			auto inputCtx = FullscreenEffectContext( renderer, nodeOutRt, allocator, 0 );
+			inputCtx.SetInputRenderTargets( ctx->AccessInputRenderTargets() );
+            RenderGraphNode( it, &inputCtx );
         
-        inputResults.push_back( nodeOutRt );
+            inputResults.push_back( nodeOutRt );
 
-        allocator->Free();
+            allocator->Free();
+        }
     }
 
     auto effect = node->GetEffect();
 
-    auto ctx = FullscreenEffectContext( renderer, outputRenderTarget, allocator, 0 );
-    ctx.SetInputRenderTargets( &inputResults );
+    if( effect != nullptr )
+    {
+		if( m_graph->IsSourceNode( node ) )
+		{
+			if( node->GetNumInputNodes() > 0 )
+			{
+				auto ctxInputRenderTargets = ctx->AccessInputRenderTargets();
+				assert( ctxInputRenderTargets->size() == node->GetNumInputNodes() );
 
-    renderer->Enable( outputRenderTarget );
-    effect->Render( &ctx );
-    renderer->Disable( outputRenderTarget );
+				inputResults.insert( inputResults.begin(), ctxInputRenderTargets->begin(), ctxInputRenderTargets->end() );
+			}
+		}
+
+        auto ctx = FullscreenEffectContext( renderer, outputRenderTarget, allocator, 0 );
+        ctx.SetInputRenderTargets( &inputResults );
+
+        renderer->Enable( outputRenderTarget );
+        effect->Render( &ctx );
+        renderer->Disable( outputRenderTarget );
+    }
 }
 
 // ****************************
@@ -120,9 +163,14 @@ std::vector< IValuePtr > CompositeFullscreenEffect::GetValues       () const
 
     for( auto n :  sinkInputNodes )
     {
-        for( auto v : n->GetEffect()->GetValues() )
+        auto effect = n->GetEffect();
+
+        if( effect != nullptr )
         {
-            valuesSet.insert( v );
+            for( auto v : effect->GetValues() )
+            {
+                valuesSet.insert( v );
+            }
         }
     }
 
@@ -141,9 +189,24 @@ std::vector< IValuePtr > CompositeFullscreenEffect::GetValues       () const
 //
 bool            CompositeFullscreenEffect::AddAdditionalPreLogicInputs ( SizeType numAddFSELoginInputs )
 {
-    { numAddFSELoginInputs; }
-    return true;
-    //m_graph->GetSourceNodes()
+    auto sourceNodes = m_graph->GetSourceNodes();
+
+    if( sourceNodes.size() > 0 )
+    {
+        for( auto sn : m_graph->GetSourceNodes() )
+        {
+            for( SizeType i = 0; i < numAddFSELoginInputs; ++i )
+            {
+                sn->AddInput( std::shared_ptr< InputFullscreenEffectGraphNode >( new InputFullscreenEffectGraphNode() ) );
+            }
+        }
+        
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 } //bv
